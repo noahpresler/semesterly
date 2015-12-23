@@ -1,0 +1,9 @@
+/semesterly/local_settings.py
+*.pyc
+env/
+dev_env/
+prod_env/
+dev_requirements.txt
+node_modules
+deploy.sh
+.DS_Store
