@@ -1,4 +1,4 @@
-var gulp = require('gulp');
+const gulp = require('gulp');
 const babel = require('gulp-babel');
 const react = require('gulp-react');
 const watch = require('gulp-watch');
