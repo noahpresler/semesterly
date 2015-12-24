@@ -1,0 +1,7 @@
+.fc-time-grid .fc-slats td {
+   height: 2em;
+   border-bottom: 0;
+}
+#calendar {
+	height: 100% !important;
+}
