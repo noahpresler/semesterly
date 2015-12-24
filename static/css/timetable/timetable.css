@@ -596,12 +596,6 @@ body {
 	}
 
 }
-@media screen and (max-width: 913px) {
-	.pure-container{
-		display:none;
-	}
-
-}
 
 @media screen and (max-width: 595px) {
 	.conflict-msg{
