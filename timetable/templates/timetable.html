@@ -59,7 +59,7 @@
           fjs.parentNode.insertBefore(js, fjs);
         }(document, 'script', 'facebook-jssdk'));
         </script>
-        <div class="pure-container" data-effect="pure-effect-scaleRotate"> 
+        <div class="pure-container" data-effect="pure-effect-bounce"> 
             <input type="checkbox" id="pure-toggle-left" class="pure-toggle" data-toggle="left" />
             <label class="pure-toggle-label" for="pure-toggle-left" data-toggle-label="left"> 
                 <span class="pure-toggle-icon"></span> 
@@ -86,7 +86,7 @@
         <thead>
           <tr>
             <td class="fc-widget-header">
-              <div class="fc-row fc-widget-header" style="border-right-width: 1px; margin-right: 14px;">
+              <div class="fc-row fc-widget-header" style="border-right-width: 1px;">
                 <table>
                   <thead>
                     <tr>
@@ -126,18 +126,18 @@
                   </div>
                 </div>
               </div>
-              <div class="fc-time-grid-container fc-scroller" style="height: 960px;">
+              <div class="fc-time-grid-container fc-scroller" id="calendar-inner">
                 <div class="fc-time-grid">
                   <div class="fc-bg">
                     <table>
                       <tbody>
                         <tr>
                           <td class="fc-axis fc-widget-content" style="width: 42px;"></td>
-                          <td class="fc-day fc-widget-content fc-mon fc-past"></td>
-                          <td class="fc-day fc-widget-content fc-tue fc-past"></td>
-                          <td class="fc-day fc-widget-content fc-wed fc-past"></td>
-                          <td class="fc-day fc-widget-content fc-thu fc-today fc-state-highlight"></td>
-                          <td class="fc-day fc-widget-content fc-fri fc-future"></td>
+                          <td class="fc-day fc-widget-content fc-mon"></td>
+                          <td class="fc-day fc-widget-content fc-tue"></td>
+                          <td class="fc-day fc-widget-content fc-wed"></td>
+                          <td class="fc-day fc-widget-content fc-thu"></td>
+                          <td class="fc-day fc-widget-content fc-fri"></td>
                         </tr>
                       </tbody>
                     </table>
