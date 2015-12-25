@@ -1,3 +1,7 @@
+body {
+    font-family: 'Lato', serif;
+    font-weight:200;
+}
 .fc-time-grid .fc-slats td {
    height: 30px;
    border-bottom: 0;
@@ -8,7 +12,7 @@
 	margin-right:100px;
 }
 #calendar-inner {
-	height: 1000px;
+	height: 995px;
 }
 .pure-pusher-container {
 	margin-bottom:50px;
@@ -18,14 +22,13 @@
 	width:98%;
 }
 .slot {
-    border-color: rgb(0, 115, 183);
     z-index: 1;
     left: 0px;
     right: 0px;
-    background-color: rgb(0, 115, 183);
-    min-width: 100%!important;
+    min-width: 95%!important;
     float: left;
     margin-left:0px !important;
+    padding-left:1%;
 }
 
 .fc-axis {
