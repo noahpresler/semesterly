@@ -6,7 +6,7 @@ const concat = require('gulp-concat');
 const batch = require('gulp-batch');
 
 gulp.task('transform', function() {
-  return gulp.src('static/js/timetable/*.jsx')
+  return gulp.src('static/js/new_timetable/*.jsx')
   .pipe(babel({
         presets: ['es2015', 'react']
     }))
@@ -14,7 +14,7 @@ gulp.task('transform', function() {
   .pipe(gulp.dest('static/js/gulp'));
 });
 gulp.task('watcher', function () {
-    watch('static/js/timetable/*.jsx', batch(function(events, done) {
+    watch('static/js/new_timetable/*.jsx', batch(function(events, done) {
         gulp.start('transform', done);
     }));
 });

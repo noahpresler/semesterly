@@ -59,7 +59,7 @@
           fjs.parentNode.insertBefore(js, fjs);
         }(document, 'script', 'facebook-jssdk'));
         </script>
-        <div class="pure-container" data-effect="pure-effect-slide"> 
+        <div class="pure-container" data-effect="pure-effect-scaleRotate"> 
             <input type="checkbox" id="pure-toggle-left" class="pure-toggle" data-toggle="left" />
             <label class="pure-toggle-label" for="pure-toggle-left" data-toggle-label="left"> 
                 <span class="pure-toggle-icon"></span> 
@@ -126,7 +126,7 @@
                   </div>
                 </div>
               </div>
-              <div class="fc-time-grid-container fc-scroller" style="height: 554px;">
+              <div class="fc-time-grid-container fc-scroller" style="height: 960px;">
                 <div class="fc-time-grid">
                   <div class="fc-bg">
                     <table>
@@ -277,56 +277,8 @@
                     </table>
                   </div>
                   <hr class="fc-widget-header" style="display: none;">
-                  <div class="fc-content-skeleton">
-                    <table>
-                      <tbody>
-                        <tr>
-                          <td class="fc-axis" style="width:42px"></td>
-                          <td>
-                            <div class="fc-event-container">
-                            </div>
-                          </td>
-                          <td>
-                            <div class="fc-event-container">
-                            </div>
-                          </td>
-                          <td>
-                            <div class="fc-event-container"></div>
-                          </td>
-                          <td>
-                            <div class="fc-event-container"></div>
-                          </td>
-                          <td>
-                            <div class="fc-event-container" style="left: 37px;">
-                              <a class="fc-time-grid-event fc-event fc-start fc-end fc-draggable fc-resizable" style="border-color: rgb(0, 115, 183); top: 465px;  z-index: 1; left: 0%; right: 0%; background-color: rgb(0, 115, 183); min-width:100%!important;">
-                                <div class="fc-content">
-                                  <div class="fc-time"><span>4:00</span></div>
-                                  <div class="fc-title">Meeting</div>
-                                </div>
-                                <div class="fc-bg"></div>
-                                <div class="fc-resizer"></div>
-                              </a>
-                              <a class="fc-time-grid-event fc-event fc-start fc-end fc-draggable fc-resizable" style="border-color: rgb(0, 192, 239); top: 527px; bottom: -615px; z-index: 2; left: 50%; right: 0%; background-color: rgb(0, 192, 239);">
-                                <div class="fc-content">
-                                  <div class="fc-time" data-start="12:00" data-full="12:00 PM - 2:00 PM"><span>12:00 - 2:00</span></div>
-                                  <div class="fc-title">Lunch</div>
-                                </div>
-                                <div class="fc-bg"></div>
-                                <div class="fc-resizer"></div>
-                              </a>
-                            </div>
-                          </td>
-                          <td>
-                            <div class="fc-event-container">
-                              
-                            </div>
-                          </td>
-                          <td>
-                            <div class="fc-event-container"></div>
-                          </td>
-                        </tr>
-                      </tbody>
-                    </table>
+                  <div class="fc-content-skeleton" id="slot-manager">
+                   
                   </div>
                 </div>
               </div>
@@ -344,10 +296,6 @@
             </label> 
         </div>
         
-    
-        
-
-
 
         <!-- Libraries -->
         <script type="text/javascript" src="{% static 'js/hashids/hashids.js' %}"></script>
@@ -360,7 +308,7 @@
         <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
 
         <!-- ReactJS compiled files -->
-        <!--<script type="text/javascript" src="{% static 'js/gulp/application.js'%}"></script>-->
+        <script type="text/javascript" src="{% static 'js/gulp/application.js'%}"></script>
 
         <script type="text/javascript" src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
 
