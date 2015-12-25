@@ -32,7 +32,7 @@ var Slot = React.createClass({
             end_minute   = parseInt(this.props.end_time.split(":")[1]);
 
         var duration = end_hour*60 + end_minute - (start_hour*60 + start_minute) + (end_hour - start_hour - 1);
-        var top = (start_hour - 8)*62;
+        var top = (start_hour - 8)*62 + start_minute;
         var bottom = (end_hour - 8)*62;
         var height = bottom - top - start_minute + end_minute - 2;
         return {top: top, height: height};
@@ -61,7 +61,7 @@ var SlotManager = React.createClass({
                   </td>
                   <td>
                     <div className="fc-event-container">
-                        <Slot start_time={"14:00"} end_time={"15:15"} title={"Meeting"}/>
+                        <Slot start_time={"16:45"} end_time={"18:07"} title={"Meeting"}/>
                     </div>
                   </td>
                   <td>
