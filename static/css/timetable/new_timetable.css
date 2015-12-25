@@ -4,7 +4,14 @@
 }
 #calendar {
 	height: 100% !important;
-	margin-bottom:20px;
+	margin-left:100px;
+	margin-right:100px;
+}
+#calendar-inner {
+	height: 1000px;
+}
+.pure-pusher-container {
+	margin-bottom:50px;
 }
 .fc-event-container {
 	left:0px !important;
