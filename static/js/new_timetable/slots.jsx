@@ -33,7 +33,9 @@ var Slot = React.createClass({
 
         var duration = end_hour*60 + end_minute - (start_hour*60 + start_minute) + (end_hour - start_hour - 1);
         var top = (start_hour - 8)*62;
-        return {top: top, height: duration};
+        var bottom = (end_hour - 8)*62;
+        var height = bottom - top - start_minute + end_minute - 2;
+        return {top: top, height: height};
 
     },
 
@@ -48,7 +50,7 @@ var SlotManager = React.createClass({
                   <td className="fc-axis"></td>
                   <td>
                     <div className="fc-event-container">
-                        <Slot start_time={"8:00"} end_time={"9:00"} title={"Hello"}/>
+                        <Slot start_time={"8:00"} end_time={"9:45"} title={"Hello"}/>
                     </div>
                   </td>
                   <td>
@@ -68,7 +70,10 @@ var SlotManager = React.createClass({
                     </div>
                   </td>
                   <td>
-                    <div className="fc-event-container"></div>
+                    <div className="fc-event-container">
+                        <Slot start_time={"10:00"} end_time={"12:00"} title={"Hello"}/>
+
+                    </div>
                   </td>
                 </tr>
               </tbody>
