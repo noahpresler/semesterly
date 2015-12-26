@@ -1,0 +1,78 @@
+/* Navbar */
+html, body {
+  margin: 0px;
+  padding: 0px;
+}
+
+hr {
+  margin: 0px;
+}
+
+/*.navbar-collapse {
+  background: rgb(232,232,232) ;
+}
+*/
+.navbar-header {
+  display: flex;
+  flex-grow: 1;
+}
+
+.navbar-brand {
+  padding-left: 12px;
+  width: 40%;
+}
+
+.navbar-form {
+  width: 60%;
+  margin: 0px 0px 0px 0px;
+  padding-right: 12px;
+}
+
+#menu-toggle {
+  padding-top: inherit;
+  margin: 0px;
+}
+
+#collapse-hr {
+  margin-top:10px;
+}
+
+/*Menu*/
+
+.preference-item {
+  display: flex;
+}
+
+.preference-item li, .profile-text li {
+  color: rgb(26, 188, 156);
+  font-weight: bolder;
+  display: inline;
+  flex-grow: 1;
+}
+
+.preference-text, .profile-text {
+  margin: 0px;
+  width: 60%;
+}
+
+.preference-toggle {
+  float: right;
+  margin: 0px;
+  width: 40%;
+}
+
+/*Calendar*/
+#calendar {
+  margin: 0px;
+}
+/*Footer*/
+.footer {
+  position: relative;
+  margin-top: 50px;
+  margin-bottom: 0px;
+}
+
+.footer .nav-pills {
+  float: right;
+  position: relative !important; /* overwrite bootstrap fixed footer */
+}
