@@ -20,11 +20,11 @@ var test_timetable = [{
     lecture_section: 'L0101',
     title: 'Linear Algebra Methodology',
     slots: [{
-        day: 'Monday',
+        day: 'M',
         start_time: '14:00',
         end_time: '16:00'
     }, {
-        day: 'Wednesday',
+        day: 'W',
         start_time: '10:00',
         end_time: '12:15'
     }]
@@ -33,11 +33,11 @@ var test_timetable = [{
     lecture_section: 'L5001',
     title: 'Introduction to Computer Programming',
     slots: [{
-        day: 'Tuesday',
+        day: 'T',
         start_time: '13:00',
         end_time: '15:20'
     }, {
-        day: 'Friday',
+        day: 'F',
         start_time: '9:45',
         end_time: '10:45'
     }]
@@ -46,7 +46,7 @@ var test_timetable = [{
     lecture_section: 'L2001',
     title: 'English Words',
     slots: [{
-        day: 'Thursday',
+        day: 'R',
         start_time: '12:00',
         end_time: '15:00'
     }]
@@ -55,7 +55,7 @@ var test_timetable = [{
     lecture_section: 'L0101',
     title: 'Chocolate Inquiries',
     slots: [{
-        day: 'Wednesday',
+        day: 'W',
         start_time: '17:00',
         end_time: '18:30'
     }]
@@ -135,11 +135,11 @@ var SlotManager = React.createClass({
 
     getInitialState: function getInitialState() {
         var slots_by_day = {
-            'Monday': [],
-            'Tuesday': [],
-            'Wednesday': [],
-            'Thursday': [],
-            'Friday': []
+            'M': [],
+            'T': [],
+            'W': [],
+            'R': [],
+            'F': []
         };
         for (var course in test_timetable) {
             var crs = test_timetable[course];
@@ -156,7 +156,7 @@ var SlotManager = React.createClass({
     },
 
     render: function render() {
-        var days = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"];
+        var days = ["M", "T", "W", "R", "F"];
         var slots_by_day = this.state.slots_by_day;
         var all_slots = days.map(function (day) {
             var day_slots = slots_by_day[day].map(function (slot) {

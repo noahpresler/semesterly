@@ -25,7 +25,6 @@
     <link rel="stylesheet" type="text/css" href="http://fonts.googleapis.com/css?family=Lato">
 
 
-    <link href="{% static 'css/layout.css' %}" rel="stylesheet">
 
     <link rel="stylesheet" href="{% static 'css/timetable/drawer.css' %}">
 
@@ -61,20 +60,16 @@
           fjs.parentNode.insertBefore(js, fjs);
         }(document, 'script', 'facebook-jssdk'));
         </script>
-        <div class="pure-container" data-effect="pure-effect-bounce"> 
-            <input type="checkbox" id="pure-toggle-left" class="pure-toggle" data-toggle="left" />
-            <label class="pure-toggle-label" for="pure-toggle-left" data-toggle-label="left"> 
-                <span class="pure-toggle-icon"></span> 
-            </label> 
 
-            <div class="pure-drawer" data-position="left" style="color:#fff">
-                <!-- Menu Content Here -->
+        <div id="top-bar-container">
+            <div id="top-bar">
+                  <input type="text" value="" placeholder="Search by code, title, description, professor, degree" id="search-bar" />
 
-            </div> 
-            <div class="pure-pusher-container"> 
-                <div class="pure-pusher"> 
 
-<div id="calendar" class="fc fc-ltr fc-unthemed">
+            </div>
+        </div>
+
+        <div id="calendar" class="fc fc-ltr fc-unthemed">
   <div class="fc-toolbar">
 
     <div class="fc-center">
@@ -291,13 +286,6 @@
     </div>
   </div>
 </div>
-
-                </div> 
-            </div> 
-            <label class="pure-overlay" for="pure-toggle-left" data-overlay="left">  
-            </label> 
-        </div>
-        
 
         <!-- Libraries -->
         <script type="text/javascript" src="{% static 'js/hashids/hashids.js' %}"></script>
