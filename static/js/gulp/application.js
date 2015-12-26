@@ -1,7 +1,15 @@
 "use strict";
 
 //             [blue,    bright red,  purple,    teal,       green,    yellow,      pink,      grey]
-var colour_list = ["#3A539B", "#D24D57", "#66C3A3", "#26ADA1", "#8ec165", "#f0ad4e", "#FF6699", "#6E6E6E"];
+var colour_list = ["#E26A6A", "#67809F", "#90C695", "#83D6DE", "#8ec165", "#f0ad4e", "#FF6699", "#6E6E6E"];
+
+var colour_to_highlight = {
+    "#E26A6A": "#FF6766",
+    "#67809F": "#76B0D4",
+    "#90C695": "#95DC94",
+    "#83D6DE": "#70E7E8"
+};
+
 // flat UI colours:
 // colour_list = ["#3498db", "#e74c3c", "#8e44ad", "#1abc9c", "#2ecc71", "#f39c12"]
 // how big a slot of half an hour would be, in pixels
@@ -42,6 +50,15 @@ var test_timetable = [{
         start_time: '12:00',
         end_time: '15:00'
     }]
+}, {
+    code: 'SMC438H1',
+    lecture_section: 'L0101',
+    title: 'Chocolate Inquiries',
+    slots: [{
+        day: 'Wednesday',
+        start_time: '17:00',
+        end_time: '18:30'
+    }]
 }];
 
 var Slot = React.createClass({
@@ -51,7 +68,11 @@ var Slot = React.createClass({
         var slot_style = this.getSlotStyle();
         return React.createElement(
             "div",
-            { className: "fc-time-grid-event fc-event slot", style: slot_style },
+            {
+                onMouseEnter: this.highlightSiblings,
+                onMouseLeave: this.unhighlightSiblings,
+                className: "fc-time-grid-event fc-event slot slot-" + this.props.code,
+                style: slot_style },
             React.createElement(
                 "div",
                 { className: "fc-content" },
@@ -61,30 +82,30 @@ var Slot = React.createClass({
                     React.createElement(
                         "span",
                         null,
-                        this.props.course.start_time,
+                        this.props.start_time,
                         " – ",
-                        this.props.course.end_time
+                        this.props.end_time
                     )
                 ),
                 React.createElement(
                     "div",
                     { className: "fc-title" },
-                    this.props.course.code
+                    this.props.code
                 ),
                 React.createElement(
                     "div",
                     { className: "fc-title" },
-                    this.props.course.title
+                    this.props.title
                 )
             )
         );
     },
 
     getSlotStyle: function getSlotStyle() {
-        var start_hour = parseInt(this.props.course.start_time.split(":")[0]),
-            start_minute = parseInt(this.props.course.start_time.split(":")[1]),
-            end_hour = parseInt(this.props.course.end_time.split(":")[0]),
-            end_minute = parseInt(this.props.course.end_time.split(":")[1]);
+        var start_hour = parseInt(this.props.start_time.split(":")[0]),
+            start_minute = parseInt(this.props.start_time.split(":")[1]),
+            end_hour = parseInt(this.props.end_time.split(":")[0]),
+            end_minute = parseInt(this.props.end_time.split(":")[1]);
 
         var top = (start_hour - 8) * 62 + start_minute;
         var bottom = (end_hour - 8) * 62 + end_minute;
@@ -92,8 +113,19 @@ var Slot = React.createClass({
         return {
             top: top,
             height: height,
-            backgroundColor: this.props.course.colour,
-            border: "1px solid " + this.props.course.colour };
+            backgroundColor: this.props.colour,
+            border: "1px solid " + this.props.colour };
+    },
+
+    highlightSiblings: function highlightSiblings() {
+        this.updateColours(colour_to_highlight[this.props.colour]);
+    },
+    unhighlightSiblings: function unhighlightSiblings() {
+        this.updateColours(this.props.colour);
+    },
+
+    updateColours: function updateColours(colour) {
+        $(".slot-" + this.props.code).css('background-color', colour).css('border-color', colour);
     }
 
 });
@@ -128,7 +160,7 @@ var SlotManager = React.createClass({
         var slots_by_day = this.state.slots_by_day;
         var all_slots = days.map(function (day) {
             var day_slots = slots_by_day[day].map(function (slot) {
-                return React.createElement(Slot, { course: slot });
+                return React.createElement(Slot, slot);
             });
             return React.createElement(
                 "td",

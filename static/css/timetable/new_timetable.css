@@ -10,6 +10,8 @@ body {
 	height: 100% !important;
 	margin-left:100px;
 	margin-right:100px;
+	min-width:300px;
+
 }
 #calendar-inner {
 	height: 995px;
