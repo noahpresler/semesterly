@@ -6,10 +6,12 @@ body {
    height: 30px;
    border-bottom: 0;
 }
+
 #calendar {
 	height: 100% !important;
-	margin-left:100px;
-	margin-right:100px;
+	margin-left:70px;
+	margin-right:70px;
+	min-width:300px;
 }
 #calendar-inner {
 	height: 995px;
@@ -30,10 +32,59 @@ body {
     margin-left:0px !important;
     padding-left:1%;
 }
+#top-bar-container {
+	width:100%;
+	height:100px;
+	padding-top:25px;
+}
+#top-bar {
 
+	
+}
+#search-bar {
+	position:relative !important;
+	width:50%;
+	margin-left: auto;
+	margin-right: auto;
+
+}
 .fc-axis {
 	width:42px;
 }
+input[type="text"] {
+  display: block;
+  margin: 0;
+  font-family: sans-serif;
+  font-size: 13px;
+  appearance: none;
+  box-shadow: none;
+  border-radius: 3px;
+  padding:10px;
+  border:2px solid #ccc;
+  transition: all 0.3s;
+  background-color:#F7F6F6;
+}
+
+input[type="text"]:focus {
+	outline:none;
+	border:2px solid #18A98C;
+    background-color:#fff;
+
+}
+
+
+
+
+
+
+
+
+::-webkit-input-placeholder::before { font-family: fontAwesome; content:'\f002  '; color: #69f }
+::-moz-placeholder::before  { font-family: fontAwesome; content:'\f002  '; color: #69f } /* firefox 19+ */
+:-ms-input-placeholder::before  { font-family: fontAwesome; content:'\f002  '; color: #69f } /* ie */
+input:-moz-placeholder::before  { font-family: fontAwesome; content:'\f002  '; color: #69f }
+
+
 @media screen and (max-width: 987px) {
 	.fc-event-container {
 		width:97.5% !important;
@@ -64,3 +115,4 @@ body {
 
 	}
 }
+
