@@ -18,10 +18,10 @@ To run the server, execute the command
 ```sh
 $ python manage.py runserver 
 ```
-Your local version of Semesterly will be available at [127.0.0.1:8000](http://127.0.0.1:8000/)
+Your local version of Semesterly will be available at [127.0.0.1:8000](http://127.0.0.1:8000/).
 
 ### Gulp
-Gulp will combine all our JSX files into one JavaScript file (`application.js`). Keep a terminal
+[Gulp](http://gulpjs.com/) will combine all our JSX files into one JavaScript file (`application.js`). Keep a terminal
 tab or window open and run 
 ```sh
 $ gulp
