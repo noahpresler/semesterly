@@ -1,12 +1,10 @@
-
-//             [blue,    bright red,  purple,    teal,       green,    yellow,      pink,      grey]
-var colour_list = ["#E26A6A", "#67809F", "#90C695", "#83D6DE", "#8ec165", "#f0ad4e", "#FF6699", "#6E6E6E"];
-
+// maps base colour of slot to colour on highlight
 var colour_to_highlight = {
-    "#E26A6A" : "#FF6766",
+    "#E26A6A" : "#FD7473",
     "#67809F" : "#76B0D4",
     "#90C695" : "#95DC94",
-    "#83D6DE" : "#70E7E8"
+    "#ACA46F" : "#D6C761",
+    "#7356C9" : "#8870FF",
 }
 
 // flat UI colours:
@@ -73,7 +71,19 @@ var test_timetable =
                 end_time: '18:30'
             },
         ],
-    },   
+    },
+    {
+        code: 'OPT315H1',
+        lecture_section: 'L0101',
+        title:'Optimizing Semesterly',
+        slots: [
+            {
+                day: 'F',
+                start_time: '15:30',
+                end_time: '17:00'
+            },
+        ],
+    },    
 ];
 
 var Slot = React.createClass({
@@ -110,7 +120,8 @@ var Slot = React.createClass({
             top: top, 
             height: height,
             backgroundColor: this.props.colour,
-            border: "1px solid " + this.props.colour};
+            border: "1px solid " + this.props.colour
+        };
     },
 
     highlightSiblings: function() {
@@ -141,7 +152,7 @@ var SlotManager = React.createClass({
             var crs = test_timetable[course];
             for (var slot_id in crs.slots) {
                 var slot = crs.slots[slot_id];
-                slot["colour"] = colour_list[course];
+                slot["colour"] = Object.keys(colour_to_highlight)[course];
                 slot["code"] = crs.code;
                 slot["title"] = crs.title;
                 slot["lecture_section"] = crs.lecture_section;
