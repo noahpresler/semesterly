@@ -1,7 +1,32 @@
-# Semesterly
-A Dynamic Timetable Generator for Students.
-Using this generator, you can have a schedule made for you based on your preference and
+# [Semesterly](http://semester.ly)
+A dynamic timetable generator for students.
+Find the perfect schedule based on your preferences and
 the courses you choose.
 
-To get started, add a "local_settings.py" into the inner semesterly/ directory, and add your database settings.
-[Further instructions to contribute coming soon]
+##Contribute
+
+To get started, simply run
+```sh
+$ npm install 
+```
+in the root directory of the project (where `package.json`) is located. This can take a few minutes to complete.
+
+Finally, add a "local_settings.py" into the inner `semesterly/` directory, and update your database settings.
+
+### Run
+To run the server, execute the command
+```sh
+$ python manage.py runserver 
+```
+
+### Gulp
+Gulp will combine all our JSX files into one JavaScript file (`application.js`). Keep a terminal
+tab or window open and run 
+```sh
+$ gulp
+```
+Gulp will wait for changes in the JSX files, and update `application.js` accordingly. If you find that
+it has stopped transforming , restart the process.
+
+### Further Instructions
+Coming soon.
