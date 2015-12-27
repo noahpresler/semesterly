@@ -1,3 +1,4 @@
+semesterly/local_settings.py
 *.pyc
 env/
 dev_env/
