@@ -53,6 +53,7 @@ input[type="text"]:focus {
     margin-left:0px !important;
     padding-left:1%;
     font-size:12.5px;
+    transition:all 0.5s;
 }
 #top-bar-container {
 	width:100%;
