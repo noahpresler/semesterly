@@ -29,18 +29,17 @@
 
     <link href="{% static 'css/layout.css' %}" rel="stylesheet">
 
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/flat-ui/2.2.2/css/flat-ui.css">
     <link rel="stylesheet" href="{% static 'css/timetable/drawer.css' %}">
 
     <link rel="stylesheet" href="{% static 'css/timetable/tutorial.css' %}">
 
     <link rel="stylesheet" href="{% static 'css/timetable/fullcalendar.min.css' %}">
+    <link rel="stylesheet" href="{% static 'css/timetable/mobile.css' %}">
 
     <link rel="stylesheet" href="{% static 'css/timetable/new_timetable.css' %}">
 
-    <link rel="stylesheet" href="{% static 'css/timetable/flat-ui.css' %}">
-    <link rel="stylesheet" media="screen and (max-width:500px)" href="{% static 'css/timetable/mobile.css' %}">
-    <link rel="stylesheet" media="screen and (min-width:500px) and (max-width:699px)" href="{% static 'css/timetable/tablet.css' %}">
-    <link rel="stylesheet" media="screen and (min-width:700px)" href="{% static 'css/timetable/mobile.css' %}">
+
 
 
     <!-- Google analytics script -->
@@ -55,27 +54,22 @@
 
     </script>
   </head>
-    <body>
+  <body>
 
-      <!-- Top navbar -->
-      <nav class="navbar" id="mobile-navbar" role="navigation">
-        <div class="navbar-header">
-          <a class="navbar-brand" href="#">Semesterly</a>
-          <form class="navbar-form" action="#" role="search">
-            <div class="form-group">
-              <div class="input-group">
-                <input class="form-control" id="navbarInput-01" type="search" placeholder="Search">
-                <span class="input-group-btn">
-                  <button type="button" class="btn navbar-toggle" data-toggle="collapse" data-target="#navbar-collapse-01" id="menu-toggle"></button>
-                </span>
+
+        <div id="top-bar-container">
+            <div id="top-bar">
+              <div class="input-combine" >
+                <input type="text" value="" placeholder="Search by code, title, description, professor, degree" id="search-bar" />
+                <button data-toggle="collapse" data-target="#demo" id="menu-btn"><i class="fa fa-bars fa-2x"></i></button>
               </div>
             </div>
-          </form>
+
         </div>
-        <hr>
-        <!-- top navbar collapse -->
-        <div class="collapse navbar-collapse" id="navbar-collapse-01">
-          <ul class="nav navbar-nav">
+
+        <div id="demo" class="collapse">
+                  <div class="navbar-collapse" >
+          <ul class="nav navbar-nav" id="menu">
             <li><a href="#fakelink">Preferences</a>
               <ul>
                 <div class="preference-item">
@@ -115,22 +109,21 @@
                 <div class="profile-text"><li>Sign Out</li></div>
               </ul>
           </ul>
-        <hr id="collapse-hr">
         </div><!-- /.navbar-collapse -->
-      </nav><!-- /top navbar -->
+        </div>
 
-      <!-- content -->
-      <div class="container">
+
         <!-- calendar container -->
         <div class="cal-container">
           <div id="calendar" class="fc fc-ltr fc-unthemed">
             <div class="fc-toolbar">
 
               <div class="fc-center">
-                <h2>Fall 2016</h2>
+                <h2 class="light">Fall 2016</h2>
               </div>
               <div class="fc-clear"></div>
             </div>
+
             <div class="fc-view-container" style="">
               <div class="fc-view fc-agendaWeek-view fc-agenda-view">
                 <table>
@@ -350,6 +343,21 @@
         </ul>
       </footer>
 
+
+      <script>
+// $(document).on('click', '.panel-heading span.clickable', function(e){
+//     var $this = $(this);
+//   if(!$this.hasClass('panel-collapsed')) {
+//     $this.parents('.panel').find('.panel-body').slideUp();
+//     $this.addClass('panel-collapsed');
+//     $this.find('i').removeClass('glyphicon-chevron-up').addClass('glyphicon-chevron-down');
+//   } else {
+//     $this.parents('.panel').find('.panel-body').slideDown();
+//     $this.removeClass('panel-collapsed');
+//     $this.find('i').removeClass('glyphicon-chevron-down').addClass('glyphicon-chevron-up');
+//   }
+// })
+      </script>
       <!-- Libraries -->
       <script type="text/javascript" src="{% static 'js/hashids/hashids.js' %}"></script>
 
