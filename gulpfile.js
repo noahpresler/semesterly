@@ -5,13 +5,14 @@ const gulp = require('gulp');
 // const concat = require('gulp-concat');
 // const batch = require('gulp-batch');
 
-// new
+/* new */
 
 const gutil = require('gulp-util');
 const source = require('vinyl-source-stream');
 const browserify = require('browserify');
 const watchify = require('watchify');
 const reactify = require('reactify');
+// const babelify = require('babelify');
 
 
 gulp.task('default', function() {

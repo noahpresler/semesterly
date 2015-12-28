@@ -1,17 +1,12 @@
+var SearchBar = require('./search_bar');
+
 module.exports = React.createClass({
 
   render: function() {
     return (
       <div id="control-bar">
-        <div id="top-bar-container">
-          <div id="top-bar">
-            <div className="input-combine" >
-              <input type="text" placeholder="Search by code, title, description, professor, degree" id="search-bar" />
-              <button data-toggle="collapse" data-target="#menu-container" id="menu-btn">
-                <i className="fa fa-bars fa-2x"></i>
-              </button>
-            </div>
-          </div>
+        <div id="search-bar-container">
+          <SearchBar toggleModal={this.props.toggleModal} />
         </div>
         <div id="menu-container" className="collapse">
           <div className="navbar-collapse" >
