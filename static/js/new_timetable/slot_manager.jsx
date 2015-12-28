@@ -88,7 +88,6 @@ var test_timetable =
 
 var Slot = React.createClass({
     render: function() {
-
         var slot_style = this.getSlotStyle();
         return (
             <div 
@@ -109,8 +108,6 @@ var Slot = React.createClass({
             </div>
         );
     },
-
-
 
     getSlotStyle: function() {
         var start_hour   = parseInt(this.props.start_time.split(":")[0]),
@@ -168,14 +165,13 @@ module.exports = React.createClass({
     },
 
     render: function() {
-        var Modal = Boron['OutlineModal'];
         var days = ["M", "T", "W", "R", "F"];
         var slots_by_day = this.state.slots_by_day;
         var i = 0;
         var all_slots = days.map(function(day) {
             var day_slots = slots_by_day[day].map(function(slot) {
                 i+=1;
-                return <Slot {...slot} toggleModal={this.toggleModal} key={i}/>
+                return <Slot {...slot} toggleModal={this.props.toggleModal} key={i}/>
             }.bind(this));
             return (
                     <td key={i}>
@@ -187,33 +183,18 @@ module.exports = React.createClass({
         }.bind(this));
 
         return (
-            <div>
-                <table>
-                  <tbody>
-                    <tr>
-                      <td className="fc-axis"></td>
-                      {all_slots}
-                    </tr>
-                  </tbody>
+            <table>
+              <tbody>
+                <tr>
+                  <td className="fc-axis"></td>
+                  {all_slots}
+                </tr>
+              </tbody>
+            </table>
 
-                </table>
-                <div id="modal-container">
-                    <Modal ref='OutlineModal'>
-                        <div id="modal-content">
-
-                        </div>
-                    </Modal>
-                </div>
-            </div>
         );
     },
-
-    toggleModal: function() {
-       return function() {
-            this.refs['OutlineModal'].toggle();
-        }.bind(this) 
-    },
-
+   
     componentDidMount: function() {
         var days = {1: 'mon', 2: 'tue', 3: 'wed', 4: 'thu', 5: 'fri'};
         var d = new Date();

@@ -362,7 +362,7 @@ module.exports = {
     getModalStyle: function(willHidden) {
         return appendVendorPrefix({
             position: "fixed",
-            width: "50%",
+            width: "60%",
             transform: "translate3d(-50%, -50%, 0)",
             top: "50%",
             left: "50%",
@@ -467,7 +467,7 @@ module.exports = {
         return appendVendorPrefix({
             zIndex: 1050,
             position: "fixed",
-            width: "50%",
+            width: "60%",
             transform: "translate3d(-50%, -50%, 0)",
             top: "50%",
             left: "50%"
@@ -582,7 +582,7 @@ module.exports = {
         return appendVendorPrefix({
             zIndex: 1050,
             position: "fixed",
-            width: "50%",
+            width: "60%",
             transform: "translate3d(-50%, -50%, 0)",
             top: "50%",
             left: "50%"
@@ -730,7 +730,7 @@ module.exports = {
         return appendVendorPrefix({
             zIndex: 1050,
             position: "fixed",
-            width: "50%",
+            width: "60%",
             transform: "translate3d(-50%, -50%, 0)",
             top: "50%",
             left: "50%"
@@ -832,7 +832,7 @@ module.exports = {
         return appendVendorPrefix({
             zIndex: 1050,
             position: "fixed",
-            width: "50%",
+            width: "60%",
             transform: "translate3d(-50%, -50%, 0)",
             top: "50%",
             left: "50%"
@@ -1075,7 +1075,7 @@ module.exports = {
         return appendVendorPrefix({
             zIndex: 1050,
             position: "fixed",
-            width: "50%",
+            width: "60%",
             transform: "translate3d(-50%, -50%, 0)",
             top: "50%",
             left: "50%"
