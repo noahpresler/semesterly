@@ -171,16 +171,19 @@ var TimetablePage = React.createClass({
 			initial_conflict = false;
 		}
 
-		return {school: school_, 
+		return {
+				school: school_, 
 				all_tts: [], current_tt_id: null, all_slots: [], semester: 'S',
 				all_f_tts: [], all_s_tts: [], current_f_tt_id: 0, current_s_tt_id: 0,
 				all_f_slots: [], all_s_slots: [],
 				course_to_colour: [], f_course_to_colour: [], s_course_to_colour: [],
 				used_colours: [], f_used_colours: [], s_used_colours: [],
 				loading: false, conflict: false, retry: false,
-				campuses: [1, 3, 5], none_before: false, none_after: false, grouped: false, do_ranking: false, long_weekend: false, with_conflicts: initial_conflict,
+				campuses: [1, 3, 5], none_before: false, none_after: false, grouped: false, do_ranking: false, 
+				long_weekend: false, with_conflicts: initial_conflict,
 				courses: [], f_courses: [], s_courses: [], selected_sections: {},
-				search: true}; // search == true => search bar + search results show. false => side menu shows
+				search: true
+			}; // search == true => search bar + search results show. false => side menu shows
 	},
 
 	hasSearchResults: function(has_results) {
