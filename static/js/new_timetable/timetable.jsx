@@ -6,7 +6,6 @@ module.exports = React.createClass({
       return (
           <div id="calendar" className="fc fc-ltr fc-unthemed">
               <div className="fc-toolbar">
-
                 <div className="fc-center">
                   <h2 className="light">Fall 2016</h2>
                 </div>
@@ -210,7 +209,7 @@ module.exports = React.createClass({
                               </div>
                               <hr className="fc-widget-header" id="widget-hr" />
                               <div className="fc-content-skeleton" id="slot-manager">
-                                 <SlotManager />
+                                 <SlotManager toggleModal={this.props.toggleModal} />
                               </div>
                             </div>
                           </div>
