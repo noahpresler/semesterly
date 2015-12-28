@@ -88,9 +88,11 @@ var test_timetable =
 
 var Slot = React.createClass({
     render: function() {
+
         var slot_style = this.getSlotStyle();
         return (
             <div 
+                onClick={this.props.toggleModal()}
                 onMouseEnter={this.highlightSiblings}
                 onMouseLeave={this.unhighlightSiblings}
                 className={"fc-time-grid-event fc-event slot slot-" + this.props.code} 
@@ -103,9 +105,12 @@ var Slot = React.createClass({
                   <div className="fc-title">{this.props.title}</div>
 
                 </div>
+
             </div>
         );
     },
+
+
 
     getSlotStyle: function() {
         var start_hour   = parseInt(this.props.start_time.split(":")[0]),
@@ -139,7 +144,7 @@ var Slot = React.createClass({
 
 });
 
-var SlotManager = React.createClass({
+module.exports = React.createClass({
     getInitialState: function() {
         var slots_by_day = {
             'M': [],
@@ -163,30 +168,50 @@ var SlotManager = React.createClass({
     },
 
     render: function() {
+        var Modal = Boron['OutlineModal'];
         var days = ["M", "T", "W", "R", "F"];
         var slots_by_day = this.state.slots_by_day;
+        var i = 0;
         var all_slots = days.map(function(day) {
             var day_slots = slots_by_day[day].map(function(slot) {
-                return <Slot {...slot} />
-            });
+                i+=1;
+                return <Slot {...slot} toggleModal={this.toggleModal} key={i}/>
+            }.bind(this));
             return (
-                    <td>
+                    <td key={i}>
                         <div className="fc-event-container">
                             {day_slots}
                         </div>
                     </td>
             );
-        });
+        }.bind(this));
+
         return (
-            <table>
-              <tbody>
-                <tr>
-                  <td className="fc-axis"></td>
-                  {all_slots}
-                </tr>
-              </tbody>
-            </table>
+            <div>
+                <table>
+                  <tbody>
+                    <tr>
+                      <td className="fc-axis"></td>
+                      {all_slots}
+                    </tr>
+                  </tbody>
+
+                </table>
+                <div id="modal-container">
+                    <Modal ref='OutlineModal'>
+                        <div id="modal-content">
+
+                        </div>
+                    </Modal>
+                </div>
+            </div>
         );
+    },
+
+    toggleModal: function() {
+       return function() {
+            this.refs['OutlineModal'].toggle();
+        }.bind(this) 
     },
 
     componentDidMount: function() {
@@ -197,8 +222,3 @@ var SlotManager = React.createClass({
     },
 
 });
-
-ReactDOM.render(
-  <SlotManager />,
-  document.getElementById('slot-manager')
-);
