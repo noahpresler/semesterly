@@ -11,10 +11,10 @@ module.exports = React.createClass({
     return (
       <div id="root">
         <div id="control-bar-container">
-          <ControlBar />
+          <ControlBar toggleModal={this.toggleCourseModal}/>
         </div>
         <div id="modal-container">
-          <Modal ref='OutlineModal'>
+          <Modal ref='OutlineModal' className="course-modal">
               <div id="modal-content">
               </div>
           </Modal>
@@ -26,8 +26,10 @@ module.exports = React.createClass({
     );
   },
   toggleCourseModal: function() {
-   return function() {
+    return function() {
         this.refs['OutlineModal'].toggle();
-    }.bind(this) 
+    }.bind(this); 
   },
+
+
 });

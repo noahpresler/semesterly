@@ -1,0 +1,113 @@
+var results = [
+  {
+    code: "CSC108H1",
+    title: "Introduction to Computer Programming",
+    in_roster: true,
+  },
+  {
+    code: "MAT223H1",
+    title: "Linear Algebra Methodology",
+    in_roster: false,
+  },
+  {
+    code: "LIN203H1",
+    title: "English Words",
+    in_roster: false,
+  },
+];
+
+
+var SearchResult = React.createClass({
+  render: function() {
+    var li_class = "", icon_class = "fui-plus";
+    if (this.props.in_roster) {
+      li_class = "todo-done";
+      icon_class= "fui-check";
+    }
+    return (
+      <li className={li_class} onMouseDown={this.showModal}>
+        <div className="todo-content">
+          <h4 className="todo-name">
+            {this.props.code}
+          </h4>
+          {this.props.title}
+        </div>
+        <span className={"search-result-action " + icon_class} 
+          onMouseDown={this.toggleCourse}>
+        </span>
+
+      </li>
+    );
+  },
+
+  showModal: function(e) {
+    this.props.toggleModal()();
+  },
+
+  toggleCourse: function(e) {
+    e.preventDefault();  // stop input from triggering onBlur and thus hiding results
+    e.stopPropagation(); // stop parent from opening modal
+  },
+
+});
+
+module.exports = React.createClass({
+
+  getInitialState: function() {
+    return {
+      focused: false,
+    };
+  },
+
+  render: function() {
+    var search_results_div = this.getSearchResultsComponent();
+    return (
+      <div id="search-bar">
+        <div className="input-combine" >
+          <input 
+            type="text" 
+            placeholder="Search by code, title, description, professor, degree" 
+            id="search-input" 
+            ref="input" 
+            onFocus={this.focus} onBlur={this.blur} />
+          <button data-toggle="collapse" data-target="#menu-container" id="menu-btn">
+            <i className="fa fa-bars fa-2x"></i>
+          </button>
+          {search_results_div}
+        </div>
+      </div>
+    );
+  },
+
+  getSearchResultsComponent: function() {
+    if (!this.state.focused) {return null;}
+    var i = 0;
+    var search_results = results.map(function(r) {
+      i++;
+      return (
+        <SearchResult {...r} key={i} toggleModal={this.props.toggleModal}/>
+      );
+    }.bind(this));
+    return (
+      <div id="search-results-container">
+        <div className="todo mrm">
+            <ul id="search-results">
+              {search_results}
+
+
+            </ul>
+          </div>
+      </div>
+    );
+  },
+
+  focus: function() {
+    this.setState({focused: true});
+  },
+
+  blur: function() {
+    this.setState({focused: false});
+  },
+
+
+});
