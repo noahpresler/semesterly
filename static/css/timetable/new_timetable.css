@@ -62,17 +62,10 @@ input[type="text"]:focus {
 	z-index:2000;
 
 }
-.slot-inner .fa {
+.button-surround {
 	font-size:18px;
 	color:#ecf0f1;
-
-}
-.slot-inner .fa:hover {
-	color:#fff;
-
-}
-.button-surround {
-	background-color:#34495e;
+	background-color:rgba(52,73,94,0.9);
 	margin-bottom:1px;
 	padding:4px;
 	border-radius:6px;
@@ -81,6 +74,7 @@ input[type="text"]:focus {
 
 }
 .button-surround:hover {
+	color:#fff !important;
 	background-color:#1A3552;
 }
 #search-bar-container {

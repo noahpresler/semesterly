@@ -23,12 +23,7 @@ var Slot = React.createClass({
         var buttons = null;
         var slot_style = this.getSlotStyle();
         if (this.state.show_buttons) {
-            var buttons = (
-            <div className="slot-inner" onClick={this.pinCourse} >
-              <div className="button-surround">
-                <span className="fa fa-thumb-tack"></span>
-              </div>
-            </div>);
+            var buttons = null;
         }
 
     return (
