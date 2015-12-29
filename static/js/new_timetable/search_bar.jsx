@@ -28,7 +28,7 @@ var SearchResult = React.createClass({
     var li_class = "search-result", icon_class = "fui-plus";
     if (this.props.in_roster) {
       li_class += " todo-done";
-      icon_class= "fui-check";
+      icon_class = "fui-check";
     }
     return (
       <li className={li_class} onMouseDown={this.showModal}>

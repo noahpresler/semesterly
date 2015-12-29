@@ -13,94 +13,30 @@ var colour_to_highlight = {
 // how big a slot of half an hour would be, in pixels
 var HALF_HOUR_HEIGHT = 30;
 
-var test_timetable = 
-[ 
-    {
-        code: 'MAT223H1',
-        lecture_section: 'L0101',
-        title:'Linear Algebra Methodology',
-        slots: [
-                {
-                    day: 'M',
-                    start_time: '14:00',
-                    end_time: '16:00'
-                },
-                {
-                    day: 'W',
-                    start_time: '10:00',
-                    end_time: '12:15'
-                },
-            ],
-    },
-    {
-        code: 'CSC148H1',
-        lecture_section: 'L5001',
-        title:'Introduction to Computer Programming',
-        slots: [
-                {
-                    day: 'T',
-                    start_time: '13:00',
-                    end_time: '15:20'
-                },
-                {
-                    day: 'F',
-                    start_time: '9:45',
-                    end_time: '10:45'
-                },
-            ],
-    },
-    {
-        code: 'LIN203H1',
-        lecture_section: 'L2001',
-        title:'English Words',
-        slots: [
-            {
-                day: 'R',
-                start_time: '12:00',
-                end_time: '15:00'
-            },
-        ],
-    },      
-    {
-        code: 'SMC438H1',
-        lecture_section: 'L0101',
-        title:'Chocolate Inquiries',
-        slots: [
-            {
-                day: 'W',
-                start_time: '17:00',
-                end_time: '18:30'
-            },
-        ],
-    },
-    {
-        code: 'OPT315H1',
-        lecture_section: 'L0101',
-        title:'Optimizing Semesterly',
-        slots: [
-            {
-                day: 'F',
-                start_time: '15:30',
-                end_time: '17:00'
-            },
-            {
-                day: 'M',
-                start_time: '10:30',
-                end_time: '11:50'
-            },
-        ],
-    },    
-];
 
 var Slot = React.createClass({
+    getInitialState: function() {
+        return {show_buttons: false};
+    },
+
     render: function() {
+        var buttons = null;
         var slot_style = this.getSlotStyle();
-        return (
+        if (this.state.show_buttons) {
+            var buttons = (
+            <div className="slot-inner" onClick={this.pinCourse} >
+              <div className="button-surround">
+                <span className="fa fa-thumb-tack"></span>
+              </div>
+            </div>);
+        }
+
+    return (
             <div 
                 onClick={this.props.toggleModal()}
                 onMouseEnter={this.highlightSiblings}
                 onMouseLeave={this.unhighlightSiblings}
-                className={"fc-time-grid-event fc-event slot slot-" + this.props.code} 
+                className={"slot-outer fc-time-grid-event fc-event slot slot-" + this.props.code} 
                 style={slot_style}>
                 <div className="fc-content">
                   <div className="fc-time">
@@ -110,7 +46,7 @@ var Slot = React.createClass({
                   <div className="fc-title">{this.props.title}</div>
 
                 </div>
-
+                {buttons}            
             </div>
         );
     },
@@ -133,10 +69,15 @@ var Slot = React.createClass({
     },
 
     highlightSiblings: function() {
+        this.setState({show_buttons: true});
         this.updateColours(colour_to_highlight[this.props.colour]);
     },
     unhighlightSiblings: function() {
+        this.setState({show_buttons: false});
         this.updateColours(this.props.colour);
+    },
+    pinCourse: function(e) {
+        e.stopPropagation();
     },
 
     updateColours: function(colour) {
