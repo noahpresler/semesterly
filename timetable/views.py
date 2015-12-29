@@ -145,11 +145,11 @@ def is_empty_query(search_query):
 def is_department_code(search_query):
     return len(search_query) <= 3
 
-def convert_courses_to_json(courses, sem):
+def convert_courses_to_json(courses, sem, limit=50):
     cs = []
     result_count = 0    # limiting the number of results one search query can provide to 50
     for course in courses:
-        if result_count == 50: break
+        if result_count == limit: break
         if has_offering(course, sem):
             cs.append(course)
             result_count += 1
@@ -758,3 +758,23 @@ def construct_preference_tt():
         tt.append(break_possibilities)
 
     return tt
+
+
+
+
+
+
+
+
+
+
+
+
+def get_all_courses(request):
+    global SCHOOL
+    SCHOOL = "jhu"
+    course_objects = HopkinsCourse.objects.all()
+    json_data = convert_courses_to_json(course_objects, "F", 50000)
+    return HttpResponse(json.dumps(json_data), content_type="application/json")
+
+

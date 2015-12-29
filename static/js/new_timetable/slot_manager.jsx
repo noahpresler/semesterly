@@ -1,11 +1,12 @@
 // maps base colour of slot to colour on highlight
 var colour_to_highlight = {
-    "#E26A6A" : "#FD7473",
-    "#67809F" : "#76B0D4",
-    "#90C695" : "#95DC94",
-    "#ACA46F" : "#D6C761",
-    "#7356C9" : "#8870FF",
+    "#FD7473" : "#E26A6A",
+    "#44BBFF" : "#28A4EA",
+    "#4CD4B0" : "#3DBB9A",
+    "#E7F76D" : "#C4D44D",
+    "#8870FF" : "#7059E6",
 }
+// consider #CF000F
 
 // flat UI colours:
 // colour_list = ["#3498db", "#e74c3c", "#8e44ad", "#1abc9c", "#2ecc71", "#f39c12"]
@@ -81,6 +82,11 @@ var test_timetable =
                 day: 'F',
                 start_time: '15:30',
                 end_time: '17:00'
+            },
+            {
+                day: 'M',
+                start_time: '10:30',
+                end_time: '11:50'
             },
         ],
     },    

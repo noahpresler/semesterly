@@ -17,15 +17,13 @@ input[type="text"] {
 }
 input[type="text"]:focus {
 	outline:none;
-	border:2px solid #18A98C;
+	border:2px solid #18A98C; /* #3D546B */
     background-color:#fff;
-
 }
 .fc-time-grid .fc-slats td {
    height: 30px;
    border-bottom: 0;
 }
-
 
 
 #calendar {
@@ -80,15 +78,19 @@ input[type="text"]:focus {
 	width:99%;
 	border:2px solid #222;
 	border-top:0px;
-	overflow:auto;
+	overflow: hidden;
+	max-height:487px;
 }
 
 #search-results {
 	border-radius:0px;
 }
 .search-result {
-	cursor:pointer;
-	background-color:red;
+/*	cursor:pointer;
+*/
+}
+.search-result:hover {
+	background-color: #3D546B;
 }
 .mrm {
 	margin-right:0px;
