@@ -14,14 +14,20 @@ var results = [
     title: "English Words",
     in_roster: false,
   },
+  {
+    code: "GGR203H1",
+    title: "Georgraphy Words",
+    in_roster: false,
+  },
 ];
+
 
 
 var SearchResult = React.createClass({
   render: function() {
-    var li_class = "", icon_class = "fui-plus";
+    var li_class = "search-result", icon_class = "fui-plus";
     if (this.props.in_roster) {
-      li_class = "todo-done";
+      li_class += " todo-done";
       icon_class= "fui-check";
     }
     return (
@@ -30,7 +36,7 @@ var SearchResult = React.createClass({
           <h4 className="todo-name">
             {this.props.code}
           </h4>
-          {this.props.title}
+          {this.props.name}
         </div>
         <span className={"search-result-action " + icon_class} 
           onMouseDown={this.toggleCourse}>
@@ -54,8 +60,11 @@ var SearchResult = React.createClass({
 module.exports = React.createClass({
 
   getInitialState: function() {
+    courses = require('../../jhu-f.json');
     return {
       focused: false,
+      in_roster: [],
+      results: [],
     };
   },
 
@@ -63,13 +72,14 @@ module.exports = React.createClass({
     var search_results_div = this.getSearchResultsComponent();
     return (
       <div id="search-bar">
-        <div className="input-combine" >
+        <div className="input-combine">
           <input 
             type="text" 
             placeholder="Search by code, title, description, professor, degree" 
             id="search-input" 
             ref="input" 
-            onFocus={this.focus} onBlur={this.blur} />
+            onFocus={this.focus} onBlur={this.blur} 
+            onInput={this.queryChanged}/>
           <button data-toggle="collapse" data-target="#menu-container" id="menu-btn">
             <i className="fa fa-bars fa-2x"></i>
           </button>
@@ -80,12 +90,13 @@ module.exports = React.createClass({
   },
 
   getSearchResultsComponent: function() {
-    if (!this.state.focused) {return null;}
+    if (!this.state.focused || this.state.results.length == 0) {return null;}
     var i = 0;
-    var search_results = results.map(function(r) {
+    var search_results = this.state.results.map(function(r) {
       i++;
+      var in_roster = r.code.indexOf("61") > -1;
       return (
-        <SearchResult {...r} key={i} toggleModal={this.props.toggleModal}/>
+        <SearchResult {...r} key={i} in_roster={in_roster} toggleModal={this.props.toggleModal}/>
       );
     }.bind(this));
     return (
@@ -93,8 +104,6 @@ module.exports = React.createClass({
         <div className="todo mrm">
             <ul id="search-results">
               {search_results}
-
-
             </ul>
           </div>
       </div>
@@ -107,6 +116,22 @@ module.exports = React.createClass({
 
   blur: function() {
     this.setState({focused: false});
+  },
+
+  queryChanged: function(event) {
+    var query = event.target.value.toLowerCase();
+
+    var filtered = query.length <= 1 ? [] : this.filterCourses(query);
+
+    this.setState({results: filtered});
+  },
+
+  filterCourses: function(query) {
+    var results = courses.filter(function(c) {
+      return c.code.toLowerCase().indexOf(query) > -1 ||
+             c.name.toLowerCase().indexOf(query) > -1
+    });
+    return results;
   },
 
 

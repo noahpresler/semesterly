@@ -35,5 +35,6 @@ urlpatterns = patterns('',
 	url(r'^live_user_data/*$', 'analytics.views.get_live_user_data'),
 	url(r'^reason/*$', 'analytics.views.verify_password'),
 
+	url(r'^search/*$', 'timetable.views.get_all_courses'),
 
 )
