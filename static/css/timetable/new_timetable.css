@@ -195,7 +195,6 @@ input[type="text"]:focus {
 	font-weight:300;
 }
 
-
 footer {
 	background-color: #2b303b;
 	border-radius:0 !important;
@@ -215,7 +214,7 @@ div {
 	display:none;
 }
 #custom-widget-header {
-	border-right-width: 1px;
+	border-right-width:1px;
 	margin-right:14px;
 }
 .course-modal {
