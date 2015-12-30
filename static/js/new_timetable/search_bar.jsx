@@ -60,11 +60,12 @@ var SearchResult = React.createClass({
 module.exports = React.createClass({
 
   getInitialState: function() {
-    courses = require('../../jhu-f.json');
+    this.getCourses("jhu", "s");
     return {
-      focused: false,
+      courses: [],
       in_roster: [],
       results: [],
+      focused: false,
     };
   },
 
@@ -87,6 +88,15 @@ module.exports = React.createClass({
         </div>
       </div>
     );
+  },
+
+  getCourses: function(school, semester) {
+    $.get("/courses/" + school + "/" + semester, 
+        {}, 
+        function(courses) {
+          this.setState({courses: courses});
+        }.bind(this)
+      );
   },
 
   getSearchResultsComponent: function() {
@@ -127,7 +137,7 @@ module.exports = React.createClass({
   },
 
   filterCourses: function(query) {
-    var results = courses.filter(function(c) {
+    var results = this.state.courses.filter(function(c) {
       return c.code.toLowerCase().indexOf(query) > -1 ||
              c.name.toLowerCase().indexOf(query) > -1
     });
