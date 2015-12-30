@@ -21,6 +21,7 @@ from hashids import Hashids
 
 from collections import OrderedDict, defaultdict
 import json, copy, re, operator, itertools, functools
+import os
 
 MAX_RETURN = 60 # Max number of timetables we want to consider
 
@@ -761,20 +762,39 @@ def construct_preference_tt():
 
 
 
+def write_courses_to_json(request, school, sem):
+    school = school.lower()
+    sem = sem.upper()
+    if (school not in ["jhu", "uoft"]) or (sem not in ["F", "S"]):
+        json_data = []
+    else:
+        module_dir = os.path.dirname(__file__)  # get current directory
+        file_path = os.path.join(module_dir, school + "-" + sem + ".json")
+
+        global SCHOOL
+        SCHOOL = school
+        C, Co = get_correct_models(school)[0], get_correct_models(school)[1]
+        course_objs = C.objects.all()
+        json_data = convert_courses_to_json(course_objs, sem, 50000)
+        with open(file_path, 'w') as outfile:
+            json.dump(json_data, outfile)
+
+    return HttpResponse(json.dumps(json_data), content_type="application/json")
 
 
 
+def get_courses(request, school, sem):
+    school = school.lower()
+    sem = sem.upper()
+    if (school not in ["jhu", "uoft"]) or (sem not in ["F", "S"]):
+        json_data = []
+    else:
+        module_dir = os.path.dirname(__file__)  # get current directory
+        file_path = os.path.join(module_dir, 
+            "courses_json/" + school + "-" + sem + ".json")
+        data = open(file_path).read()
+        json_data = json.loads(data)
 
-
-
-
-
-
-def get_all_courses(request):
-    global SCHOOL
-    SCHOOL = "jhu"
-    course_objects = HopkinsCourse.objects.all()
-    json_data = convert_courses_to_json(course_objects, "F", 50000)
     return HttpResponse(json.dumps(json_data), content_type="application/json")
 
 
