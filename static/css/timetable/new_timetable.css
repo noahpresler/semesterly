@@ -226,7 +226,8 @@ div {
 	height:500px;
 	outline-width: 0;
 	padding-top:1px;
-}
+/*	background-color:#BD5C5C ;
+*/}
 ::-webkit-input-placeholder::before { font-family: fontAwesome; content:'\f002  '; color: #69f }
 ::-moz-placeholder::before  { font-family: fontAwesome; content:'\f002  '; color: #69f } /* firefox 19+ */
 :-ms-input-placeholder::before  { font-family: fontAwesome; content:'\f002  '; color: #69f } /* ie */
