@@ -73,7 +73,7 @@ input[type="text"]:focus {
 	border:1px solid #222;
 
 }
-.button-surround:hover {
+.button-surround:hover, .pinned {
 	color:#fff !important;
 	background-color:#1A3552;
 }
