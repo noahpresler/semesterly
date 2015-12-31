@@ -84,13 +84,10 @@ def save_search_analytics(sid, search_query, sem, str_campuses):
         pass
 
 def get_correct_models(school):
-    if not school:
-        school = "uoft"
-
-    if school == 'uoft':
-        return (Course, CourseOffering, SearchQuery, Timetable)
-    elif school == 'jhu':
+    if school == 'jhu':
         return (HopkinsCourse, HopkinsCourseOffering, HopkinsSearchQuery, HopkinsTimetable)
+    else:
+        return (Course, CourseOffering, SearchQuery, Timetable)
 
 def get_granularity(school):
     if school == 'uoft':
@@ -200,57 +197,38 @@ def is_lecture(meeting_section_name):
 
 @csrf_exempt
 def view_timetable(request):
-    global SCHOOL
+    global SCHOOL, LOCKED_SECTIONS
     """Generate best timetables given the user's selected courses"""
-    if 'courses[]' in request.POST:
-        SCHOOL = request.POST['school']
-        SchoolCourse, SchoolCourseOffering, SchoolQuery, SchoolTimetable = get_correct_models(SCHOOL)   
-        try:
-            course_list = [SchoolCourse.objects.get(id=hashid.decrypt(key)[0]) 
-                            for key in request.POST.getlist('courses[]')]
-            set_locked_sections_preferences(request)
-        except:  # invalid data passed in from URL
-            return HttpResponse(json.dumps([]), content_type="application/json")
-        if course_list == []: 
-            return HttpResponse(json.dumps([]), content_type="application/json")
+    if not request.POST:
+        return render_to_response('timetable.html', {}, 
+                                    context_instance=RequestContext(request))
+    params = json.loads(request.body)
+    try:
+        SCHOOL = params['school']   
+        SchoolCourse, SchoolCourseOffering, SchoolQuery, SchoolTimetable = get_correct_models(SCHOOL)
+        course_ids = params['course_to_section'].keys()
+        courses = [SchoolCourse.objects.get(id=cid) for cid in course_ids]
 
-        set_tt_preferences(request)
-        result = courses_to_timetables(course_list, request.POST['semester'])
+        LOCKED_SECTIONS = params['course_to_section']
+        set_tt_preferences(params['preferences'])
 
-        if returned_conflict(result, request): # Conflict in courses passed from URL
-            return HttpResponse(json.dumps([]), content_type="application/json") 
-        else:
-            # save_tt_analytics(request, course_list, result)
-            return HttpResponse(json.dumps(result), content_type="application/json")
-    return render_to_response('timetable.html', {}, 
-        context_instance=RequestContext(request))
 
-def set_locked_sections_preferences(request):
-    for key in request.POST.getlist('courses[]'):
-        if contains_locked_sections(request, key):
-            add_locked_sections(request, key)
+    except: # error occured
+        #TODO save info in error log?
+        return HttpResponse(json.dumps([]), content_type="application/json")
+    result = courses_to_timetables(courses, params['semester'])
+    return HttpResponse(json.dumps(result), content_type='application/json')
 
-def contains_locked_sections(request, key):
-    return request.POST['sections[{0!s}]'.format(hashid.decrypt(key)[0])]
-
-def add_locked_sections(request, key):
-    global LOCKED_SECTIONS
-    LOCKED_SECTIONS.append((hashid.decrypt(key)[0], 
-                            request.POST['sections[{0!s}]'.format(hashid.decrypt(key)[0])]))
-
-def returned_conflict(tt, request):
-    return tt == [None] and request.POST['novel']=='true'
-
-def set_tt_preferences(request):
+def set_tt_preferences(preferences):
     global NO_CLASSES_BEFORE, NO_CLASSES_AFTER, SORT_BY_SPREAD, LONG_WEEKEND
     global SPREAD, WITH_CONFLICTS
     slots_per_hour = 60 / get_granularity(SCHOOL)
-    NO_CLASSES_BEFORE = 0 if request.POST['no_classes_before'] == "false" else slots_per_hour * 2 - 1
-    NO_CLASSES_AFTER = slots_per_hour * 14 if request.POST['no_classes_after'] == "false" else slots_per_hour * 10 + 1
-    LONG_WEEKEND = True if request.POST['long_weekend'] == 'true' else False
-    SPREAD = False if request.POST['grouped'] == 'true' else True
-    SORT_BY_SPREAD = True if request.POST['do_ranking'] == 'true' else False
-    WITH_CONFLICTS = True if request.POST['try_with_conflicts'] == 'true' else False
+    NO_CLASSES_BEFORE = 0 if preferences['no_classes_before'] == "false" else slots_per_hour * 2 - 1
+    NO_CLASSES_AFTER = slots_per_hour * 14 if preferences['no_classes_after'] == "false" else slots_per_hour * 10 + 1
+    LONG_WEEKEND = True if preferences['long_weekend'] == 'true' else False
+    SPREAD = False if preferences['grouped'] == 'true' else True
+    SORT_BY_SPREAD = True if preferences['do_ranking'] == 'true' else False
+    WITH_CONFLICTS = True if preferences['try_with_conflicts'] == 'true' else False
 
 def save_tt_analytics(request, course_list, result):
     SchoolCourse, SchoolCourseOffering, SchoolQuery, SchoolTimetable = get_correct_models(SCHOOL)   
@@ -259,7 +237,7 @@ def save_tt_analytics(request, course_list, result):
         analytics_tt.save()
         for c in course_list: 
             analytics_tt.courses.add(c)
-        analytics_tt.is_conflict = True if result == [None] else False
+        analytics_tt.is_conflict = True if not result else False
         analytics_tt.save()
     except:
         pass
@@ -272,7 +250,7 @@ def courses_to_timetables(courses, semester):
     timetables = get_best_timetables(courses, semester)
     reset_preferences()
     result = [convert_tt_to_dict(tt) for tt in timetables]
-    return result if not contains_conflict(timetables, courses) else [None]
+    return result
 
 def reset_preferences():
     global WITH_CONFLICTS, LOCKED_SECTIONS
@@ -280,21 +258,20 @@ def reset_preferences():
     LOCKED_SECTIONS = []
 
 def convert_tt_to_dict(timetable):
-    return [get_section_info(section) for section in timetable]
+    tt_obj = {}
+    tt_obj['courses'] = [get_section_info(section) for section in timetable]
+    return tt_obj
 
 def get_section_info(section):
-    SchoolCourse, SchoolCourseOffering, SchoolQuery, SchoolTimetable = get_correct_models(SCHOOL)   
+    SchoolCourse = get_correct_models(SCHOOL)[0] # model containing courses
 
     section_id, section_code, course_offerings = section
-    course_dict = model_to_dict(SchoolCourse.objects.get(id=section_id), 
-                                fields=['code', 'name', 'id'])
-    co_dicts = [get_offering_dict(co, course_dict['code'], 
-                                course_dict['name'], course_dict['id']) 
-                for co in course_offerings]
-    return [course_dict, section_code, co_dicts]
-
-def contains_conflict(timetables, courses):
-    return timetables == [] and len(courses) > 1
+    course_obj = model_to_dict(SchoolCourse.objects.get(id=section_id), 
+                                fields=['code', 'name'])
+    slot_objects = [create_offering_object(co) for co in course_offerings]
+    course_obj['section_code'] = section_code
+    course_obj['slots'] = slot_objects
+    return course_obj
 
 def get_best_timetables(courses, semester):
     with_preferences = get_timetables_with_all_preferences(courses, semester)
@@ -399,84 +376,15 @@ def get_break_cost(day_to_usage):
 def day_use(day_to_usage, *days):
     return sum([1 for day in days if any(day_to_usage[day])])
 
-
-# TODO ROHAN: move some of this work to front end
-# TODO ROHAN: Add docstring, break into smaller functions
-def get_offering_dict(co_pair, code, name, course_id):
-    co = co_pair[0]
-    start_hour, start_minute = get_hours_minutes(co.time_start)
-    end_hour, end_minute = get_hours_minutes(co.time_end)
-
-    start_index = get_time_index(start_hour, start_minute)
-    end_index = get_time_index(end_hour, end_minute)
-
-    full_start = get_12hr_time(start_hour, start_minute)
-    full_end = get_12hr_time(end_hour, end_minute)
-
-    new = {}
-    new['start_index'] = get_frontend_index(start_index)
-    new['end_index'] = get_frontend_index(end_index)
-    new['duration'] = (end_hour + end_minute / 60.0) - \
-                        (start_hour + start_minute / 60.0) 
-    new['full_time'] = full_start + " - " + full_end
-    new['code'] = code  
-    new['name'] = name
-    new['course_id'] = course_id
-
-    # stuff directly from the course offering itself
-    new['id'] = co.id
-    new['section'] = co.meeting_section
-    new['location'] = co.location
-    new['day'] = co.day
-    new['instructors'] = co.instructors
-    new['depth_level'] = co_pair[1][0]
-    new['num_conflicts'] = co_pair[1][1]
-    new['shift_index'] = co_pair[1][2]
-
-    return [new]
-
-def get_hours_minutes(time_string):
-    """
-    Return tuple of two integers representing the hour and the time 
-    given a string representation of time.
-    e.g. '14:20' -> (14, 20)
-    """
-    return (get_hour_from_string_time(time_string), 
-        get_minute_from_string_time(time_string))
-
-def get_hour_from_string_time(time_string):
-    """Get hour as an int from time as a string."""
-    return int(time_string[:time_string.index(':')]) if ':' in time_string \
-                                                    else int(time_string)
-
-def get_minute_from_string_time(time_string):
-    """Get minute as an int from time as a string."""
-    return int(time_string[time_string.index(':') + 1:] if ':' in time_string \
-                                                        else 0)
-
-def get_12hr_time(hours, minutes):
-    """Convert hours and minutes to time string in 12hr format"""
-    hour_str = str(hours - 12) if hours > 12 else str(hours)
-    minute_str = '' if minutes == 0 else ':' + str(minutes)
-    return hour_str + minute_str
-
-# NOTE: currently assumes that the minute is a multiple of 5
-def get_time_index(hours, minutes):
-    """Take number of hours and minutes, and return the corresponding time slot index"""
-    # earliest possible hour is 8, so we get the number of hours past 8am
-    return (hours - 8) * (60 / get_granularity(SCHOOL)) + \
-            minutes / get_granularity(SCHOOL)
-
-def get_frontend_index(index):
-    """
-    Take a backend time index (e.g. 12, out of a size 28 array for uoft) and
-    calculate the number of half hour slots needed to represent it on the frontend
-    """
-    return index * 2 / (60 / get_granularity(SCHOOL))
-
-def get_time_index_from_string(s):
-    """Find the time index based on course offering string (e.g. 8:30 -> 2)"""
-    return get_time_index(*get_hours_minutes(s))
+def create_offering_object(co_pair):
+    """Return CourseOffering object augmented with its conflict information."""
+    slot_obj = {}
+    for attribute in ['id', 'location', 'day', 'instructors', 'time_start', 'time_end']:
+        slot_obj[attribute] = eval('co_pair[0].' + attribute) # short term solution...
+    slot_obj['depth_level'] = co_pair[1][0]
+    slot_obj['num_conflicts'] = co_pair[1][1]
+    slot_obj['shift_index'] = co_pair[1][2]
+    return slot_obj
 
 # ******************************************************************************
 # ****************** 3. OFFERINGS -> TIMETABLES ********************************
@@ -552,9 +460,6 @@ def update_conflict_info(day_to_usage):
     for day in day_to_usage.keys():
         day_to_usage[day] = [sort_slot_by_startend(slot) for slot in day_to_usage[day]]
         update_day_conflicts(day_to_usage[day], 0, 14 * 60 / get_granularity(SCHOOL), 0, [])
-        # if day =='W':
-        #   for slot in day_to_usage[day]:
-        #       print slot
 
 def update_day_conflicts(day_bitarray, start, end, current_level, ignore_list):
     """
@@ -700,7 +605,8 @@ def get_section_to_offering_map(offerings):
     return section_to_offerings
 
 def get_locked_section(course_id, section_codes):
-    for cid, section_code in LOCKED_SECTIONS:
+    print LOCKED_SECTIONS
+    for cid, section_codes in LOCKED_SECTIONS.iteritems():
         if course_id == cid and section_code in section_codes:
             return section_code
     else:
@@ -760,6 +666,34 @@ def construct_preference_tt():
 
     return tt
 
+def get_time_index_from_string(s):
+    """Find the time index based on course offering string (e.g. 8:30 -> 2)"""
+    return get_time_index(*get_hours_minutes(s))
+
+def get_time_index(hours, minutes):
+    """Take number of hours and minutes, and return the corresponding time slot index"""
+    # earliest possible hour is 8, so we get the number of hours past 8am
+    return (hours - 8) * (60 / get_granularity(SCHOOL)) + \
+            minutes / get_granularity(SCHOOL)
+
+def get_hours_minutes(time_string):
+    """
+    Return tuple of two integers representing the hour and the time 
+    given a string representation of time.
+    e.g. '14:20' -> (14, 20)
+    """
+    return (get_hour_from_string_time(time_string), 
+        get_minute_from_string_time(time_string))
+
+def get_hour_from_string_time(time_string):
+    """Get hour as an int from time as a string."""
+    return int(time_string[:time_string.index(':')]) if ':' in time_string \
+                                                    else int(time_string)
+
+def get_minute_from_string_time(time_string):
+    """Get minute as an int from time as a string."""
+    return int(time_string[time_string.index(':') + 1:] if ':' in time_string \
+                                                        else 0)
 
 
 def write_courses_to_json(request, school, sem):
