@@ -1,4 +1,4 @@
-var actions = require('./actions/update_timetables.js');
+var timetable_actions = require('./actions/update_timetables.js');
 
 var SearchResult = React.createClass({
   render: function() {
@@ -8,7 +8,7 @@ var SearchResult = React.createClass({
       icon_class = "fui-check";
     }
     return (
-      <li className={li_class} onMouseDown={this.showModal}>
+      <li className={li_class} onMouseDown={this.props.toggleModal(1234)}>
         <div className="todo-content">
           <h4 className="todo-name">
             {this.props.code}
@@ -23,12 +23,8 @@ var SearchResult = React.createClass({
     );
   },
 
-  showModal: function(e) {
-    this.props.toggleModal()();
-  },
-
   toggleCourse: function(e) {
-    actions.updateTimetables();
+    timetable_actions.updateTimetables();
     e.preventDefault();  // stop input from triggering onBlur and thus hiding results
     e.stopPropagation(); // stop parent from opening modal
   },
@@ -106,8 +102,8 @@ module.exports = React.createClass({
 
   filterCourses: function(query) {
     var results = courses.filter(function(c) {
-      return c.code.toLowerCase().indexOf(query) > -1 ||
-             c.name.toLowerCase().indexOf(query) > -1
+      return (c.code.toLowerCase().indexOf(query) > -1 ||
+             c.name.toLowerCase().indexOf(query) > -1);
     });
     return results;
   },
