@@ -5,15 +5,10 @@ var colour_to_highlight = {
     "#4CD4B0" : "#3DBB9A",
     "#E7F76D" : "#C4D44D",
     "#8870FF" : "#7059E6",
-}
+} // consider #CF000F
+
 // how big a slot of half an hour would be, in pixels
 var HALF_HOUR_HEIGHT = 30;
-
-// consider #CF000F
-
-// flat UI colours:
-// colour_list = ["#3498db", "#e74c3c", "#8e44ad", "#1abc9c", "#2ecc71", "#f39c12"]
-
 
 var Slot = React.createClass({
     getInitialState: function() {
@@ -42,7 +37,7 @@ var Slot = React.createClass({
 
     return (
             <div 
-                onClick={this.props.toggleModal()}
+                onClick={this.props.toggleModal(4291)}
                 onMouseEnter={this.highlightSiblings}
                 onMouseLeave={this.unhighlightSiblings}
                 className={"slot-outer fc-time-grid-event fc-event slot slot-" + this.props.code} 

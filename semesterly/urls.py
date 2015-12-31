@@ -34,6 +34,7 @@ urlpatterns = patterns('',
 
 	url(r'^live_user_data/*$', 'analytics.views.get_live_user_data'),
 	url(r'^reason/*$', 'analytics.views.verify_password'),
-	url(r'^courses/(?P<school>.+?)/(?P<sem>.+?)/*$', 'timetable.views.get_courses'),
+	url(r'^courses/(?P<school>.+?)/(?P<sem>[fFsS]{1}?)/*$', 'timetable.views.get_courses'),
+	url(r'^courses/(?P<school>.+?)/id/(?P<id>[0-9]+)/*$', 'timetable.views.get_course'),
 
 )
