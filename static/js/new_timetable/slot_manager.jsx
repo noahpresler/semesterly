@@ -31,6 +31,14 @@ var Slot = React.createClass({
                </div>
             </div>);
         }
+        if (this.props.pinned) {
+            buttons = (
+            <div className="slot-inner" onClick={this.unpinCourse} >
+                <div className="button-surround pinned">
+                    <span className="fa fa-thumb-tack"></span>
+               </div>
+            </div>);
+        }
 
     return (
             <div 
@@ -78,6 +86,9 @@ var Slot = React.createClass({
         this.updateColours(this.props.colour);
     },
     pinCourse: function(e) {
+        e.stopPropagation();
+    },
+    unpinCourse: function(e) {
         e.stopPropagation();
     },
 
