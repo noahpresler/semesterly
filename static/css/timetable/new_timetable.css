@@ -101,7 +101,7 @@ input[type="text"]:focus {
 	border:2px solid #222;
 	border-top:0px;
 	overflow: hidden;
-	max-height:487px;
+	max-height:480px;
 }
 
 #search-results {
@@ -113,7 +113,9 @@ input[type="text"]:focus {
 }
 .search-result:hover {
 	background-color: #3D546B;
+	color: #fff;
 }
+
 .mrm {
 	margin-right:0px;
 }
@@ -133,6 +135,7 @@ input[type="text"]:focus {
     right: 22px;
     margin-top: -20px;
     background-color: #ddd;
+    color:#777;
     border-radius: 50%;
     font-family: "Flat-Ui-Icons";
     text-align: center;
@@ -218,11 +221,11 @@ div {
 	margin-right:14px;
 }
 .course-modal {
-	
 }
 #modal-content {
 	height:500px;
 	outline-width: 0;
+	padding-top:1px;
 }
 ::-webkit-input-placeholder::before { font-family: fontAwesome; content:'\f002  '; color: #69f }
 ::-moz-placeholder::before  { font-family: fontAwesome; content:'\f002  '; color: #69f } /* firefox 19+ */

@@ -6,12 +6,13 @@ var colour_to_highlight = {
     "#E7F76D" : "#C4D44D",
     "#8870FF" : "#7059E6",
 }
+// how big a slot of half an hour would be, in pixels
+var HALF_HOUR_HEIGHT = 30;
+
 // consider #CF000F
 
 // flat UI colours:
 // colour_list = ["#3498db", "#e74c3c", "#8e44ad", "#1abc9c", "#2ecc71", "#f39c12"]
-// how big a slot of half an hour would be, in pixels
-var HALF_HOUR_HEIGHT = 30;
 
 
 var Slot = React.createClass({
@@ -89,46 +90,22 @@ var Slot = React.createClass({
 });
 
 module.exports = React.createClass({
-    getInitialState: function() {
-        var slots_by_day = {
-            'M': [],
-            'T': [],
-            'W': [],
-            'R': [],
-            'F': []
-        };
-        for (var course in test_timetable) {
-            var crs = test_timetable[course];
-            for (var slot_id in crs.slots) {
-                var slot = crs.slots[slot_id];
-                slot["colour"] = Object.keys(colour_to_highlight)[course];
-                slot["code"] = crs.code;
-                slot["title"] = crs.title;
-                slot["lecture_section"] = crs.lecture_section;
-                slots_by_day[slot.day].push(slot);
-            }
-        }
-        return {slots_by_day: slots_by_day};
-    },
 
     render: function() {
         var days = ["M", "T", "W", "R", "F"];
-        var slots_by_day = this.state.slots_by_day;
-        var i = 0;
+        var slots_by_day = this.getSlotsByDay();
         var all_slots = days.map(function(day) {
             var day_slots = slots_by_day[day].map(function(slot) {
-                i+=1;
-                return <Slot {...slot} toggleModal={this.props.toggleModal} key={i}/>
+                return <Slot {...slot} toggleModal={this.props.toggleModal} key={slot.id}/>
             }.bind(this));
             return (
-                    <td key={i}>
+                    <td key={day}>
                         <div className="fc-event-container">
                             {day_slots}
                         </div>
                     </td>
             );
         }.bind(this));
-
         return (
             <table>
               <tbody>
@@ -147,6 +124,28 @@ module.exports = React.createClass({
         var d = new Date();
         var selector = ".fc-" + days[d.getDay()];
         // $(selector).addClass("fc-today");
+    },
+
+    getSlotsByDay: function() {
+        var slots_by_day = {
+            'M': [],
+            'T': [],
+            'W': [],
+            'R': [],
+            'F': []
+        };
+        for (var course in this.props.timetables) {
+            var crs = this.props.timetables[course];
+            for (var slot_id in crs.slots) {
+                var slot = crs.slots[slot_id];
+                slot["colour"] = Object.keys(colour_to_highlight)[course];
+                slot["code"] = crs.code;
+                slot["title"] = crs.title;
+                slot["lecture_section"] = crs.lecture_section;
+                slots_by_day[slot.day].push(slot);
+            }
+        }
+        return slots_by_day;
     },
 
 });

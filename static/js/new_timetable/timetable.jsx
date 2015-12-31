@@ -1,6 +1,8 @@
 var SlotManager = require('./slot_manager');
+var update_timetables_store = require('./stores/update_timetables');
 
 module.exports = React.createClass({
+  mixins: [Reflux.connect(update_timetables_store)],
 
   render: function() {
       return (
@@ -209,7 +211,8 @@ module.exports = React.createClass({
                               </div>
                               <hr className="fc-widget-header" id="widget-hr" />
                               <div className="fc-content-skeleton" id="slot-manager">
-                                 <SlotManager toggleModal={this.props.toggleModal} />
+                                 <SlotManager toggleModal={this.props.toggleModal} 
+                                  timetables={this.state.timetables}/>
                               </div>
                             </div>
                           </div>

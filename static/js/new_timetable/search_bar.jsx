@@ -1,27 +1,4 @@
-var results = [
-  {
-    code: "CSC108H1",
-    title: "Introduction to Computer Programming",
-    in_roster: true,
-  },
-  {
-    code: "MAT223H1",
-    title: "Linear Algebra Methodology",
-    in_roster: false,
-  },
-  {
-    code: "LIN203H1",
-    title: "English Words",
-    in_roster: false,
-  },
-  {
-    code: "GGR203H1",
-    title: "Georgraphy Words",
-    in_roster: false,
-  },
-];
-
-
+var actions = require('./actions/update_timetables.js');
 
 var SearchResult = React.createClass({
   render: function() {
@@ -51,6 +28,7 @@ var SearchResult = React.createClass({
   },
 
   toggleCourse: function(e) {
+    actions.updateTimetables();
     e.preventDefault();  // stop input from triggering onBlur and thus hiding results
     e.stopPropagation(); // stop parent from opening modal
   },
@@ -60,9 +38,7 @@ var SearchResult = React.createClass({
 module.exports = React.createClass({
 
   getInitialState: function() {
-    this.getCourses("jhu", "s");
     return {
-      courses: [],
       in_roster: [],
       results: [],
       focused: false,
@@ -70,6 +46,7 @@ module.exports = React.createClass({
   },
 
   render: function() {
+
     var search_results_div = this.getSearchResultsComponent();
     return (
       <div id="search-bar">
@@ -88,15 +65,6 @@ module.exports = React.createClass({
         </div>
       </div>
     );
-  },
-
-  getCourses: function(school, semester) {
-    $.get("/courses/" + school + "/" + semester, 
-        {}, 
-        function(courses) {
-          this.setState({courses: courses});
-        }.bind(this)
-      );
   },
 
   getSearchResultsComponent: function() {
@@ -137,7 +105,7 @@ module.exports = React.createClass({
   },
 
   filterCourses: function(query) {
-    var results = this.state.courses.filter(function(c) {
+    var results = courses.filter(function(c) {
       return c.code.toLowerCase().indexOf(query) > -1 ||
              c.name.toLowerCase().indexOf(query) > -1
     });
