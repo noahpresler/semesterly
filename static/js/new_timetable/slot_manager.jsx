@@ -64,8 +64,8 @@ var Slot = React.createClass({
             end_hour     = parseInt(this.props.time_end.split(":")[0]),
             end_minute   = parseInt(this.props.time_end.split(":")[1]);
 
-        var top = (start_hour - 8)*62 + start_minute;
-        var bottom = (end_hour - 8)*62 + end_minute - 1;
+        var top = (start_hour - 8)*52 + (start_minute)*(26/30);
+        var bottom = (end_hour - 8)*52 + (end_minute)*(26/30) - 1;
         var height = bottom - top - 2;
         return {
             top: top, 
