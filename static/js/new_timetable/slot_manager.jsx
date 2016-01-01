@@ -21,16 +21,16 @@ var Slot = React.createClass({
         var slot_style = this.getSlotStyle();
         if (this.state.show_buttons) {
             buttons = (
-            <div className="slot-inner" onClick={this.pinCourse} >
-                <div className="button-surround">
+            <div className="slot-inner">
+                <div className="button-surround" onClick={this.pinCourse} >
                     <span className="fa fa-thumb-tack"></span>
                </div>
             </div>);
         }
         if (this.props.pinned) {
             buttons = (
-            <div className="slot-inner" onClick={this.unpinCourse} >
-                <div className="button-surround pinned">
+            <div className="slot-inner">
+                <div className="button-surround pinned" onClick={this.unpinCourse} >
                     <span className="fa fa-thumb-tack"></span>
                </div>
             </div>);
