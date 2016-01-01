@@ -34,20 +34,19 @@ var Slot = React.createClass({
                </div>
             </div>);
         }
-
     return (
             <div 
-                onClick={this.props.toggleModal(4291)}
+                onClick={this.props.toggleModal(this.props.course_id)}
                 onMouseEnter={this.highlightSiblings}
                 onMouseLeave={this.unhighlightSiblings}
-                className={"slot-outer fc-time-grid-event fc-event slot slot-" + this.props.code} 
+                className={"slot-outer fc-time-grid-event fc-event slot slot-" + this.props.course_id} 
                 style={slot_style}>
                 <div className="fc-content">
                   <div className="fc-time">
-                    <span>{this.props.start_time} – {this.props.end_time}</span>
+                    <span>{this.props.time_start} – {this.props.time_end}</span>
                   </div>
                   <div className="fc-title">{this.props.code}</div>
-                  <div className="fc-title">{this.props.title}</div>
+                  <div className="fc-title">{this.props.name}</div>
 
                 </div>
                 {buttons}            
@@ -56,10 +55,10 @@ var Slot = React.createClass({
     },
 
     getSlotStyle: function() {
-        var start_hour   = parseInt(this.props.start_time.split(":")[0]),
-            start_minute = parseInt(this.props.start_time.split(":")[1]),
-            end_hour     = parseInt(this.props.end_time.split(":")[0]),
-            end_minute   = parseInt(this.props.end_time.split(":")[1]);
+        var start_hour   = parseInt(this.props.time_start.split(":")[0]),
+            start_minute = parseInt(this.props.time_start.split(":")[1]),
+            end_hour     = parseInt(this.props.time_end.split(":")[0]),
+            end_minute   = parseInt(this.props.time_end.split(":")[1]);
 
         var top = (start_hour - 8)*62 + start_minute;
         var bottom = (end_hour - 8)*62 + end_minute;
@@ -88,7 +87,7 @@ var Slot = React.createClass({
     },
 
     updateColours: function(colour) {
-        $(".slot-" + this.props.code)
+        $(".slot-" + this.props.course_id)
           .css('background-color', colour)
           .css('border-color', colour);
     },
@@ -140,14 +139,15 @@ module.exports = React.createClass({
             'R': [],
             'F': []
         };
-        for (var course in this.props.timetables) {
-            var crs = this.props.timetables[course];
+        for (var course in this.props.timetables.courses) {
+            var crs = this.props.timetables.courses[course];
             for (var slot_id in crs.slots) {
                 var slot = crs.slots[slot_id];
                 slot["colour"] = Object.keys(colour_to_highlight)[course];
-                slot["code"] = crs.code;
-                slot["title"] = crs.title;
-                slot["lecture_section"] = crs.lecture_section;
+                slot["code"] = crs.code.trim();
+                slot["course_id"] = crs.id;
+                slot["name"] = crs.name;
+                slot["meeting_section"] = crs.meeting_section;
                 slots_by_day[slot.day].push(slot);
             }
         }

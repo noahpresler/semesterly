@@ -1,100 +1,47 @@
 var actions = require('../actions/update_timetables.js');
 
-test_timetable = 
-[ 
-    {
-        code: 'MAT223H1',
-        lecture_section: 'L0101',
-        title:'Linear Algebra Methodology',
-        slots: [
-                {
-                    day: 'M',
-                    start_time: '14:00',
-                    end_time: '16:00',
-                    id: 1
-                },
-                {
-                    day: 'W',
-                    start_time: '10:00',
-                    end_time: '12:15',
-                    id: 2
-                },
-            ],
-    },
-    {
-        code: 'CSC148H1',
-        lecture_section: 'L5001',
-        title:'Introduction to Computer Programming',
-        slots: [
-                {
-                    day: 'T',
-                    start_time: '13:00',
-                    end_time: '15:20',
-                    id: 5
-                },
-                {
-                    day: 'F',
-                    start_time: '9:45',
-                    end_time: '10:45',
-                    id: 6
-                },
-            ],
-    },
-    {
-        code: 'LIN203H1',
-        lecture_section: 'L2001',
-        title:'English Words',
-        slots: [
-            {
-                day: 'R',
-                start_time: '12:00',
-                end_time: '15:00',
-                id: 7
-            },
-        ],
-    },      
-    {
-        code: 'SMC438H1',
-        lecture_section: 'L0101',
-        title:'Business Innovation',
-        slots: [
-            {
-                day: 'W',
-                start_time: '16:00',
-                end_time: '18:30',
-                id: 8
-            },
-        ],
-    },
-    {
-        code: 'OPT315H1',
-        lecture_section: 'L0101',
-        title:'Optimizing Semesterly',
-        slots: [
-            {
-                day: 'F',
-                start_time: '15:30',
-                end_time: '17:00',
-                id: 9
-            },
-            {
-                day: 'M',
-                start_time: '10:30',
-                end_time: '11:50',
-                id: 10
-            },
-        ],
-    },    
-];
+
+var obj = {
+  school: "jhu",
+  semester: "F",
+  course_to_section: {},
+  preferences: {
+    'no_classes_before': false,
+    'no_classes_after': false,
+    'long_weekend': false,
+    'grouped': false,
+    'do_ranking': false,
+    'try_with_conflicts': false
+  }
+}
 
 module.exports = Reflux.createStore({
   listenables: [actions],
+  course_to_section: {},
 
-  updateTimetables: function(new_timetables) {
-    this.trigger({timetables: test_timetable});
+  updateTimetables: function(new_course_id) {
+    console.log(this);
+    c_to_s = $.extend(true, {}, this.course_to_section); // deep copy of this.course_to_section
+    if (c_to_s[new_course_id] == null) { // adding course
+      c_to_s[new_course_id] = [];
+    }
+    else { // removing course
+      delete c_to_s[new_course_id];
+    }
+
+    obj.course_to_section = c_to_s; // to make the POST request
+    $.post('/timetable/', JSON.stringify(obj), function(response) {
+        if (response.length > 0) {
+            this.course_to_section = c_to_s;
+            this.trigger({
+                timetables: response,
+                course_to_section: this.course_to_section
+            });
+        }
+    }.bind(this));
   },
 
   getInitialState: function() {
-    return {timetables: test_timetable};
+    return {timetables: [], course_to_section: {}};
   }
 });

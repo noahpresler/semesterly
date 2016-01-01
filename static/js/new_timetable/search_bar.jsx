@@ -1,4 +1,5 @@
-var timetable_actions = require('./actions/update_timetables.js');
+var TimetableActions = require('./actions/update_timetables.js');
+var TimetableStore = require('./stores/update_timetables.js');
 
 var SearchResult = React.createClass({
   render: function() {
@@ -8,7 +9,7 @@ var SearchResult = React.createClass({
       icon_class = "fui-check";
     }
     return (
-      <li className={li_class} onMouseDown={this.props.toggleModal(1234)}>
+      <li className={li_class} onMouseDown={this.props.toggleModal(this.props.id)}>
         <div className="todo-content">
           <h4 className="todo-name">
             {this.props.code}
@@ -18,13 +19,12 @@ var SearchResult = React.createClass({
         <span className={"search-result-action " + icon_class} 
           onMouseDown={this.toggleCourse}>
         </span>
-
       </li>
     );
   },
 
   toggleCourse: function(e) {
-    timetable_actions.updateTimetables();
+    TimetableActions.updateTimetables(this.props.id);
     e.preventDefault();  // stop input from triggering onBlur and thus hiding results
     e.stopPropagation(); // stop parent from opening modal
   },
@@ -32,6 +32,7 @@ var SearchResult = React.createClass({
 });
 
 module.exports = React.createClass({
+  mixins: [Reflux.connect(TimetableStore)],
 
   getInitialState: function() {
     return {
@@ -42,7 +43,6 @@ module.exports = React.createClass({
   },
 
   render: function() {
-
     var search_results_div = this.getSearchResultsComponent();
     return (
       <div id="search-bar">
@@ -68,7 +68,7 @@ module.exports = React.createClass({
     var i = 0;
     var search_results = this.state.results.map(function(r) {
       i++;
-      var in_roster = r.code.indexOf("61") > -1;
+      var in_roster = this.state.course_to_section[r.id] != null;
       return (
         <SearchResult {...r} key={i} in_roster={in_roster} toggleModal={this.props.toggleModal}/>
       );
