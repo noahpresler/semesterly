@@ -1,21 +1,46 @@
 var SlotManager = require('./slot_manager');
-var update_timetables_store = require('./stores/update_timetables');
+var Pagination = require('./pagination');
+var UpdateTimetablesStore = require('./stores/update_timetables');
 
 module.exports = React.createClass({
-  mixins: [Reflux.connect(update_timetables_store)],
+  mixins: [Reflux.connect(UpdateTimetablesStore)],
+
+  nextTimetable: function() {
+    if (this.state.current_index + 1 < this.state.timetables.length) {
+      this.setState({current_index: this.state.current_index + 1});
+    }
+  },
+
+  prevTimetable: function() {
+    if (this.state.current_index > 0) {
+      this.setState({current_index: this.state.current_index - 1});
+    }    
+  },
+
+  setIndex: function(new_index) {
+    return(function () {
+      this.setState({current_index: new_index});
+    }.bind(this));
+  },
 
   render: function() {
       var slot_manager = this.state.timetables.length == 0 ? null :
        (<SlotManager toggleModal={this.props.toggleModal} 
-                     timetables={this.state.timetables[0]}/>);
+                     timetables={this.state.timetables[this.state.current_index]}/>);
       return (
           <div id="calendar" className="fc fc-ltr fc-unthemed">
               <div className="fc-toolbar">
                 <div className="fc-center">
-                  <h2 className="light">Fall 2016</h2>
+                  <h2 className="light semester-display">Fall 2016</h2>
                 </div>
                 <div className="fc-clear"></div>
               </div>
+              <Pagination 
+                count={this.state.timetables.length} 
+                next={this.nextTimetable} 
+                prev={this.prevTimetable}
+                setIndex={this.setIndex}
+                current_index={this.state.current_index}/>
 
               <div className="fc-view-container">
                 <div className="fc-view fc-agendaWeek-view fc-agenda-view">
@@ -227,5 +252,6 @@ module.exports = React.createClass({
             </div>
       );
   },
+
 
 });
