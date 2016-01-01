@@ -41,156 +41,6 @@ LOCKED_SECTIONS = []
 hashid = Hashids("x98as7dhg&h*askdj^has!kj?xz<!9")
 
 # ******************************************************************************
-# ******************************** COURSE SEARCH *******************************
-# ******************************************************************************
-
-def tt_course_search(request):
-    """Query the database for a user's search terms"""
-    if 'searchQuery' in request.GET:
-        return get_results(request)
-    else:
-        raise Http404
-
-def get_results(request):
-    global SCHOOL # currently, either the string 'uoft' or 'jhu'
-
-    SCHOOL = request.GET['school']
-    search_query = request.GET['searchQuery']
-    sem = request.GET['semester']
-    sid = request.GET['u_sid']
-
-
-    campuses = [str(c) for c in request.GET.getlist('campuses[]')]
-    
-    # Analytics
-    str_campuses = ' '.join(map(str, campuses))
-    # save_search_analytics(sid, search_query, sem, str_campuses)
-    # End analytics
-    course_objects = get_courses_from_db(search_query, campuses)
-    json_data = convert_courses_to_json(course_objects, sem)
-    return HttpResponse(json.dumps(json_data), content_type="application/json")
-
-def save_search_analytics(sid, search_query, sem, str_campuses):
-    SchoolCourse, SchoolCourseOffering, SchoolQuery, SchoolTimetable = get_correct_models(SCHOOL)   
-
-    try:
-        s = SchoolQuery(session=Session.objects.get(session_id=sid),
-                        query = search_query[:20],
-                        cur_semester=sem,
-                        cur_campuses=str_campuses)
-        s.save()
-    except:
-        pass
-
-def get_correct_models(school):
-    if school == 'jhu':
-        return (HopkinsCourse, HopkinsCourseOffering, HopkinsSearchQuery, HopkinsTimetable)
-    else:
-        return (Course, CourseOffering, SearchQuery, Timetable)
-
-def get_granularity(school):
-    if school == 'uoft':
-        return 30
-    elif school == 'jhu':
-        return 5
-
-def get_courses_from_db(search_query, campuses):
-    if is_empty_query(search_query):
-        return []
-    elif is_department_code(search_query):
-        return search_by_dept_code(search_query, campuses)
-    else:
-        return do_full_search(search_query, campuses)
-
-def search_by_dept_code(search_query, campuses):
-    code_startswith_query = Q(code__istartswith=search_query)
-    code_contains_query = Q(code__icontains=search_query)
-    name_contains_query = Q(name__icontains=search_query)
-    is_valid_campus = reduce(operator.or_, (Q(campus=c) for c in campuses))
-
-    SchoolCourse, SchoolCourseOffering, SchoolQuery, SchoolTimetable = get_correct_models(SCHOOL)   
-
-    quick_results = SchoolCourse.objects.filter(code_startswith_query &\
-                                                is_valid_campus)\
-                                                .order_by('code')
-    if len(quick_results) > 0:
-        return quick_results
-    else:
-        return SchoolCourse.objects.filter((code_contains_query | name_contains_query) &\
-                                    is_valid_campus)\
-                                    .order_by('code') \
-
-def do_full_search(search_query, campuses):
-    SchoolCourse, SchoolCourseOffering, SchoolQuery, SchoolTimetable = get_correct_models(SCHOOL)   
-
-    any_contains_query = Q(code__icontains=search_query) |\
-                        Q(name__icontains=search_query)
-    description_only_query = Q(description__icontains=search_query)
-    is_valid_campus = reduce(operator.or_, (Q(campus=c) for c in campuses))
-    title_matches = SchoolCourse.objects.filter(any_contains_query &\
-                                is_valid_campus)\
-                                .order_by('code')
-    description_matches = SchoolCourse.objects.filter(description_only_query &\
-                                is_valid_campus)\
-                                .order_by('code')
-    return list(itertools.chain(title_matches,description_matches))
-
-
-def is_empty_query(search_query):
-    return len(search_query) == 0
-
-def is_department_code(search_query):
-    return len(search_query) <= 3
-
-def convert_courses_to_json(courses, sem, limit=50):
-    cs = []
-    result_count = 0    # limiting the number of results one search query can provide to 50
-    for course in courses:
-        if result_count == limit: break
-        if has_offering(course, sem):
-            cs.append(course)
-            result_count += 1
-    return [get_course_dict(course, sem) for course in cs]
-
-def filter_empty_courses(courses, sem):
-    """Filter out courses which have no offerings in the database."""
-    return filter(functools.partial(has_offering, sem=sem), courses)
-
-def has_offering(course, sem):
-    SchoolCourse, SchoolCourseOffering, SchoolQuery, SchoolTimetable = get_correct_models(SCHOOL)   
-
-    try:
-        res = SchoolCourseOffering.objects.filter(~Q(time_start__iexact='TBA'), 
-                                            (Q(semester=sem) | Q(semester='Y')),
-                                            course_id=course.id)
-        for offering in res:
-            day = offering.day
-            if day == 'S' or day == 'U':
-                return False
-        return True if len(res) > 0 else False
-    except:
-        return False
-
-def get_course_dict(course, sem):
-    d = model_to_dict(course)
-    d['sections'] = get_meeting_sections(course, sem)
-    return d
-
-def get_meeting_sections(course, semester):
-    SchoolCourse, SchoolCourseOffering, SchoolQuery, SchoolTimetable = get_correct_models(SCHOOL)   
-    offering_objs = SchoolCourseOffering.objects.filter((Q(semester=semester) | Q(semester='Y')), 
-                                                    course=course)          
-    sections = []
-    for o in offering_objs:
-        if o.meeting_section not in sections:
-            sections.append(o.meeting_section)
-    sections.sort()
-    return sections
-
-def is_lecture(meeting_section_name):
-    return meeting_section_name[0] not in ['T', 'P']
-
-# ******************************************************************************
 # ******************************** GENERATE TTs ********************************
 # ******************************************************************************
 
@@ -205,16 +55,16 @@ def view_timetable(request):
     try:
         SCHOOL = params['school']   
         SchoolCourse, SchoolCourseOffering, SchoolQuery, SchoolTimetable = get_correct_models(SCHOOL)
+
         course_ids = params['courses_to_sections'].keys()
         courses = [SchoolCourse.objects.get(id=cid) for cid in course_ids]
-
-        LOCKED_SECTIONS = params['courses_to_sections']
-        set_tt_preferences(params['preferences'])
 
 
     except: # error occured
         #TODO save info in error log?
         return HttpResponse(json.dumps([]), content_type="application/json")
+    LOCKED_SECTIONS = params['courses_to_sections']
+    set_tt_preferences(params['preferences'])
     result = courses_to_timetables(courses, params['semester'])
     return HttpResponse(json.dumps(result), content_type='application/json')
 
@@ -241,6 +91,17 @@ def save_tt_analytics(request, course_list, result):
     except:
         pass
 
+def get_correct_models(school):
+    if school == 'jhu':
+        return (HopkinsCourse, HopkinsCourseOffering, HopkinsSearchQuery, HopkinsTimetable)
+    else:
+        return (Course, CourseOffering, SearchQuery, Timetable)
+
+def get_granularity(school):
+    if school == 'uoft':
+        return 30
+    elif school == 'jhu':
+        return 5
 # ******************************************************************************
 # ************************** COURSES -> TTs ************************************
 # ******************************************************************************
