@@ -68,7 +68,7 @@ module.exports = React.createClass({
     var i = 0;
     var search_results = this.state.results.map(function(r) {
       i++;
-      var in_roster = this.state.course_to_section[r.id] != null;
+      var in_roster = this.state.courses_to_sections[r.id] != null;
       return (
         <SearchResult {...r} key={i} in_roster={in_roster} toggleModal={this.props.toggleModal}/>
       );

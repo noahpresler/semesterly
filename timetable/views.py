@@ -52,17 +52,13 @@ def view_timetable(request):
         return render_to_response('timetable.html', {}, 
                                     context_instance=RequestContext(request))
     params = json.loads(request.body)
-    try:
-        SCHOOL = params['school']   
-        SchoolCourse, SchoolCourseOffering, SchoolQuery, SchoolTimetable = get_correct_models(SCHOOL)
+    print params
+    SCHOOL = params['school']   
+    SchoolCourse, SchoolCourseOffering, SchoolQuery, SchoolTimetable = get_correct_models(SCHOOL)
 
-        course_ids = params['courses_to_sections'].keys()
-        courses = [SchoolCourse.objects.get(id=cid) for cid in course_ids]
+    course_ids = params['courses_to_sections'].keys()
+    courses = [SchoolCourse.objects.get(id=cid) for cid in course_ids]
 
-
-    except: # error occured
-        #TODO save info in error log?
-        return HttpResponse(json.dumps([]), content_type="application/json")
     LOCKED_SECTIONS = params['courses_to_sections']
     set_tt_preferences(params['preferences'])
     result = courses_to_timetables(courses, params['semester'])
