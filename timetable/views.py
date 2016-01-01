@@ -621,7 +621,6 @@ def get_section_to_offering_map(offerings):
     return section_to_offerings
 
 def get_locked_section(course_id, section_codes):
-    print LOCKED_SECTIONS
     for cid, section_codes in LOCKED_SECTIONS.iteritems():
         if course_id == cid and section_code in section_codes:
             return section_code
