@@ -64,7 +64,7 @@ input[type="text"]:focus {
 	position:absolute;
 	bottom:0px;
 	z-index:2000;
-
+	width:100%;
 }
 
 .button-surround {
@@ -76,11 +76,14 @@ input[type="text"]:focus {
 	border-radius:6px;
 	z-index:2000;
 	border:1px solid #222;
+	float:right;
 
+	margin-right:5px;
+	transition:all 0.3s;
 }
 .button-surround:hover, .pinned {
 	color:#fff !important;
-	background-color:#1A3552;
+	background-color:#143454;
 }
 #search-bar-container {
 	width:100%;
