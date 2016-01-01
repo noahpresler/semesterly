@@ -7,3 +7,4 @@ dev_requirements.txt
 node_modules
 deploy.sh
 .DS_Store
+timetable/courses_json/
