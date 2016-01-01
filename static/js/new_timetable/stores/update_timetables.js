@@ -22,7 +22,7 @@ module.exports = Reflux.createStore({
   updateTimetables: function(new_course_id) {
     var c_to_s = $.extend(true, {}, this.courses_to_sections); // deep copy of this.courses_to_sections
     if (c_to_s[new_course_id] == null) { // adding course
-      c_to_s[new_course_id] = {'L': '', 'T': '', 'P': ''};
+      c_to_s[new_course_id] = {'L': '', 'T': '', 'P': '', 'C': ''};
     }
     else { // removing course
       delete c_to_s[new_course_id];

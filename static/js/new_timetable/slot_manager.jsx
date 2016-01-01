@@ -37,10 +37,10 @@ var Slot = React.createClass({
         }
     return (
             <div 
-                onClick={this.props.toggleModal(this.props.course_id)}
+                onClick={this.props.toggleModal(this.props.course)}
                 onMouseEnter={this.highlightSiblings}
                 onMouseLeave={this.unhighlightSiblings}
-                className={"slot-outer fc-time-grid-event fc-event slot slot-" + this.props.course_id} 
+                className={"slot-outer fc-time-grid-event fc-event slot slot-" + this.props.course} 
                 style={slot_style}>
                 <div className="fc-content">
                   <div className="fc-time">
@@ -88,7 +88,7 @@ var Slot = React.createClass({
     },
 
     updateColours: function(colour) {
-        $(".slot-" + this.props.course_id)
+        $(".slot-" + this.props.course)
           .css('background-color', colour)
           .css('border-color', colour);
     },
@@ -146,7 +146,6 @@ module.exports = React.createClass({
                 var slot = crs.slots[slot_id];
                 slot["colour"] = Object.keys(colour_to_highlight)[course];
                 slot["code"] = crs.code.trim();
-                slot["course_id"] = crs.id;
                 slot["name"] = crs.name;
                 slot["meeting_section"] = crs.meeting_section;
                 slots_by_day[slot.day].push(slot);

@@ -2,7 +2,7 @@ var Root = require('./root');
 
 courses = [];
 _SCHOOL = "jhu";
-_SEMESTER = "F";
+_SEMESTER = "S";
 
 ReactDOM.render(
   <Root />,
