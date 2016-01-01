@@ -6,7 +6,6 @@ from django.conf import settings
 from django.template import RequestContext
 from django.contrib import messages
 import datetime, math
-from itertools import chain
 
 from django.contrib.auth.decorators import login_required
 from django.views.decorators.csrf import csrf_exempt
@@ -134,7 +133,7 @@ def do_full_search(search_query, campuses):
     description_matches = SchoolCourse.objects.filter(description_only_query &\
                                 is_valid_campus)\
                                 .order_by('code')
-    return list(chain(title_matches,description_matches))
+    return list(itertools.chain(title_matches,description_matches))
 
 
 def is_empty_query(search_query):
@@ -206,10 +205,10 @@ def view_timetable(request):
     try:
         SCHOOL = params['school']   
         SchoolCourse, SchoolCourseOffering, SchoolQuery, SchoolTimetable = get_correct_models(SCHOOL)
-        course_ids = params['course_to_section'].keys()
+        course_ids = params['courses_to_sections'].keys()
         courses = [SchoolCourse.objects.get(id=cid) for cid in course_ids]
 
-        LOCKED_SECTIONS = params['course_to_section']
+        LOCKED_SECTIONS = params['courses_to_sections']
         set_tt_preferences(params['preferences'])
 
 
@@ -258,36 +257,23 @@ def reset_preferences():
     LOCKED_SECTIONS = []
 
 def convert_tt_to_dict(timetable):
-    SchoolCourse = get_correct_models(SCHOOL)[0] # model containing courses
-    tt_obj = {'courses': []}
-    course_ids = []
-    for x in timetable:
-        if x[0] not in course_ids:
-            course_ids.append(x[0])
-    for course in course_ids:
-        course_obj = model_to_dict(SchoolCourse.objects.get(id=course), 
-                                fields=['code', 'name', 'id'])
-
-        relevant_items = filter(lambda item: item[0] == course, timetable)
-        relevant_cos = []
-        for item in relevant_items:
-            for thing in item[2]:
-                relevant_cos.append(thing[0])
-        course_obj['slots'] = [model_to_dict(co) for co in relevant_cos]
-        tt_obj['courses'].append(course_obj)
-
+    tt_obj = {}
+    grouped = itertools.groupby(timetable, get_course_dict)
+    tt_obj['courses'] = list(itertools.starmap(get_course_obj, grouped))
     return tt_obj
 
-def get_section_info(section):
+def get_course_dict(section):
     SchoolCourse = get_correct_models(SCHOOL)[0] # model containing courses
+    model = SchoolCourse.objects.get(id=section[0])
+    return model_to_dict(model, fields=['code', 'name'])
 
-    section_id, section_code, course_offerings = section
-    course_obj = model_to_dict(SchoolCourse.objects.get(id=section_id), 
-                                fields=['code', 'name'])
-    slot_objects = [create_offering_object(co) for co in course_offerings]
-    course_obj['section_code'] = section_code
-    course_obj['slots'] = slot_objects
-    return course_obj
+def get_course_obj(course_dict, sections):
+    sections = list(sections)
+    slot_objects = [create_offering_object(co) for _, _, course_offerings in sections
+                                               for co in course_offerings]
+    course_dict['enrolled_sections'] = [section_code for _, section_code, _ in sections]
+    course_dict['slots'] = slot_objects
+    return course_dict
 
 def get_best_timetables(courses, semester):
     with_preferences = get_timetables_with_all_preferences(courses, semester)
@@ -394,12 +380,11 @@ def day_use(day_to_usage, *days):
 
 def create_offering_object(co_pair):
     """Return CourseOffering object augmented with its conflict information."""
-    slot_obj = {}
-    for attribute in ['id', 'location', 'day', 'instructors', 'time_start', 'time_end']:
-        slot_obj[attribute] = eval('co_pair[0].' + attribute) # short term solution...
-    slot_obj['depth_level'] = co_pair[1][0]
-    slot_obj['num_conflicts'] = co_pair[1][1]
-    slot_obj['shift_index'] = co_pair[1][2]
+    co, conflict_info = co_pair
+    slot_obj = model_to_dict(co)
+    slot_obj['depth_level'] = conflict_info[0]
+    slot_obj['num_conflicts'] = conflict_info[1]
+    slot_obj['shift_index'] = conflict_info[2]
     return slot_obj
 
 # ******************************************************************************
@@ -586,11 +571,11 @@ def courses_to_offerings(courses, sem, plist=[]):
                                                                     plist, \
                                                                     c.id)
         for section_type in section_type_to_sections:
-            section_codes = [sid for cid, sid, colist in section_type_to_sections[section_type]]
-            s = get_locked_section(c.id, section_codes)
-            if s: # this section is locked, only append the locked one
-                sections.append([[c.id, s, section_to_offerings[s]]])
-            else: 
+            locked_section = LOCKED_SECTIONS[str(c.id)][section_type]
+            if locked_section: # there is a pinned offering for this section of the course
+                pinned = [c.id, locked_section, section_to_offerings[locked_section]]
+                sections.append([pinned])
+            else:
                 sections.append(section_type_to_sections[section_type])
     # sections.sort(key = lambda l: len(l), reverse=False)
     return sections
@@ -619,13 +604,6 @@ def get_section_to_offering_map(offerings):
         else: # new section
             section_to_offerings[section_code] = [[offering, [0, 1, 0]]]
     return section_to_offerings
-
-def get_locked_section(course_id, section_codes):
-    for cid, section_codes in LOCKED_SECTIONS.iteritems():
-        if course_id == cid and section_code in section_codes:
-            return section_code
-    else:
-        return None 
 
 def check_co_against_preferences(preference_list, co):
     """
