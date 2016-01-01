@@ -39,13 +39,14 @@ module.exports = Reflux.createStore({
             this.course_to_section = c_to_s;
             this.trigger({
                 timetables: response,
-                course_to_section: this.course_to_section
+                course_to_section: this.course_to_section,
+                current_index: 0
             });
         }
     }.bind(this));
   },
 
   getInitialState: function() {
-    return {timetables: [], course_to_section: {}};
+    return {timetables: [], course_to_section: {}, current_index: -1};
   }
 });
