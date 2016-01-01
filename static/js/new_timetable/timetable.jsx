@@ -5,6 +5,9 @@ module.exports = React.createClass({
   mixins: [Reflux.connect(update_timetables_store)],
 
   render: function() {
+      var slot_manager = this.state.timetables.length == 0 ? null :
+       (<SlotManager toggleModal={this.props.toggleModal} 
+                     timetables={this.state.timetables[0]}/>);
       return (
           <div id="calendar" className="fc fc-ltr fc-unthemed">
               <div className="fc-toolbar">
@@ -211,8 +214,7 @@ module.exports = React.createClass({
                               </div>
                               <hr className="fc-widget-header" id="widget-hr" />
                               <div className="fc-content-skeleton" id="slot-manager">
-                                 <SlotManager toggleModal={this.props.toggleModal} 
-                                  timetables={this.state.timetables}/>
+                                {slot_manager}
                               </div>
                             </div>
                           </div>

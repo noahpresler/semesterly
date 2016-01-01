@@ -258,8 +258,24 @@ def reset_preferences():
     LOCKED_SECTIONS = []
 
 def convert_tt_to_dict(timetable):
-    tt_obj = {}
-    tt_obj['courses'] = [get_section_info(section) for section in timetable]
+    SchoolCourse = get_correct_models(SCHOOL)[0] # model containing courses
+    tt_obj = {'courses': []}
+    course_ids = []
+    for x in timetable:
+        if x[0] not in course_ids:
+            course_ids.append(x[0])
+    for course in course_ids:
+        course_obj = model_to_dict(SchoolCourse.objects.get(id=course), 
+                                fields=['code', 'name', 'id'])
+
+        relevant_items = filter(lambda item: item[0] == course, timetable)
+        relevant_cos = []
+        for item in relevant_items:
+            for thing in item[2]:
+                relevant_cos.append(thing[0])
+        course_obj['slots'] = [model_to_dict(co) for co in relevant_cos]
+        tt_obj['courses'].append(course_obj)
+
     return tt_obj
 
 def get_section_info(section):

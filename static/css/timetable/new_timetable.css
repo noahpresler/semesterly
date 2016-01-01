@@ -158,12 +158,13 @@ input[type="text"]:focus {
 	background-color: #66CCB8;
 }
 
-
+#search-input, #menu-btn {
+	height:46px;
+}
 #menu-btn {
 	border:2px solid #B9BBBB;
 	border-left:none;
 	background-color:#FFF;
-	height:46px;
 	width:9%;
 	border-top-right-radius: 3px;
 }
@@ -266,7 +267,7 @@ input:-moz-placeholder::before  { font-family: fontAwesome; content:'\f002  ';
 	input[type="text"] {
 		font-size:10px;
 	}
-	#menu-btn {
+	#menu-btn, #search-input {
 		height:41px;
 	}
 	.slot {

@@ -35,6 +35,7 @@ module.exports = React.createClass({
         course_actions.getCourseInfo(course_id);
     }.bind(this); 
   },
+
   getCourses: function() {
     $.get("/courses/" + _SCHOOL + "/" + _SEMESTER, 
         {}, 
