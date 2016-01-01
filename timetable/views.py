@@ -544,6 +544,12 @@ def get_minute_from_string_time(time_string):
     """Get minute as an int from time as a string."""
     return int(time_string[time_string.index(':') + 1:] if ':' in time_string \
                                                         else 0)
+def do_all(request):
+    write_courses_to_json(request, "uoft", "F")
+    write_courses_to_json(request, "uoft", "S")
+    write_courses_to_json(request, "jhu", "F")
+    write_courses_to_json(request, "jhu", "S")
+    return HttpResponse("Success!")
 
 
 def write_courses_to_json(request, school, sem):
@@ -553,7 +559,7 @@ def write_courses_to_json(request, school, sem):
         json_data = []
     else:
         module_dir = os.path.dirname(__file__)  # get current directory
-        file_path = os.path.join(module_dir, school + "-" + sem + ".json")
+        file_path = os.path.join(module_dir, "courses_json/" + school + "-" + sem + ".json")
 
         global SCHOOL
         SCHOOL = school
@@ -563,7 +569,6 @@ def write_courses_to_json(request, school, sem):
         with open(file_path, 'w') as outfile:
             json.dump(json_data, outfile)
 
-    return HttpResponse(json.dumps(json_data), content_type="application/json")
 
 
 def get_courses(request, school, sem):
@@ -600,3 +605,43 @@ def get_course(request, school, id):
 
     return HttpResponse(json.dumps(json_data), content_type="application/json")
 
+def convert_courses_to_json(courses, sem, limit=50):
+    cs = []
+    result_count = 0    # limiting the number of results one search query can provide to 50
+    for course in courses:
+        if result_count == limit: break
+        if has_offering(course, sem):
+            cs.append(course)
+            result_count += 1
+    return [get_course_serializable(course, sem) for course in cs]
+
+def get_course_serializable(course, sem):
+    d = model_to_dict(course)
+    d['sections'] = get_meeting_sections(course, sem)
+    return d
+
+def get_meeting_sections(course, semester):
+    SchoolCourse, SchoolCourseOffering, SchoolQuery, SchoolTimetable = get_correct_models(SCHOOL)   
+    offering_objs = SchoolCourseOffering.objects.filter((Q(semester=semester) | Q(semester='Y')), 
+                                                    course=course)          
+    sections = []
+    for o in offering_objs:
+        if o.meeting_section not in sections:
+            sections.append(o.meeting_section)
+    sections.sort()
+    return sections
+
+def has_offering(course, sem):
+    SchoolCourse, SchoolCourseOffering, SchoolQuery, SchoolTimetable = get_correct_models(SCHOOL)   
+
+    try:
+        res = SchoolCourseOffering.objects.filter(~Q(time_start__iexact='TBA'), 
+                                            (Q(semester=sem) | Q(semester='Y')),
+                                            course_id=course.id)
+        for offering in res:
+            day = offering.day
+            if day == 'S' or day == 'U':
+                return False
+        return True if len(res) > 0 else False
+    except:
+        return False
