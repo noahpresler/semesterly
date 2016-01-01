@@ -24,6 +24,7 @@ module.exports = React.createClass({
               <a className="fui-arrow-right pagination-btn"
                 onClick={this.props.next}></a>
             </li>
+
           </ul>
         </div>
       </div>
