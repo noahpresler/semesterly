@@ -8,6 +8,7 @@ var colour_to_highlight = {
     "#D4DBC8" : "#B5BFA3",
     "#E7F76D" : "#C4D44D",
     "#F182B4" : "#DE699D",
+    "#7499A2" : "#668B94",
 } // consider #CF000F, #e8fac3
 
 // how big a slot of half an hour would be, in pixels

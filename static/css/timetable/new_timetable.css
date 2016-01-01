@@ -116,6 +116,7 @@ input[type="text"]:focus {
 	border-radius:0px;
 }
 .search-result {
+	max-height:78px;
 /*	cursor:pointer;
 */
 }
@@ -323,7 +324,9 @@ input:-moz-placeholder::before  { font-family: fontAwesome; content:'\f002  ';
 
 }
 
-.pagination li a:hover{
+.pagination li a:hover, 
+.next-double:hover,
+.prev-double:hover {
 	background-color:#8FA8F6 !important;
 }
 .pagination-minimal > ul > li > a:hover {
@@ -348,13 +351,18 @@ input:-moz-placeholder::before  { font-family: fontAwesome; content:'\f002  ';
 
 .pagination-minimal > ul > li > a:active,
 .pagination-minimal > ul > li.next > a:active,
-.pagination-minimal > ul > li.previous > a:active {
+.pagination-minimal > ul > li.previous > a:active,
+.pagination-minimal > ul > li.next-double:active,
+.pagination-minimal > ul > li.prev-double:active {
 	background-color: #7790DE !important;
 }
 .pagination-minimal > ul > li > a:active {
 	border: 5px solid #7790DE;
 }
-
+.pagination-minimal > ul > li.next > a,
+.pagination-minimal > ul > li.previous > a {
+	border-radius:0px;
+}
 .pagination-minimal > ul > li.active > a,
 .pagination-minimal > ul > li.active > a:hover,
 .pagination-minimal > ul > li.active > a:active {
@@ -364,6 +372,35 @@ input:-moz-placeholder::before  { font-family: fontAwesome; content:'\f002  ';
     color: #FFF;
     margin: 9px 5px 9px;
 }
+.next-double, .prev-double{
+	font-size:18px;
+	font-weight:700;
+	font-weight:bold;
+	cursor:pointer;
+	padding: 5px 15px 5px 15px;
+	transition: background-color 0.3s;
+	z-index:100;
+}
+.next-double {
+	margin-left:3px !important;
+}
+.prev-double {
+	margin-right:0px !important;
+}
+li.next {
+	border-right:2px solid #e4e7ea;
+}
+li.previous {
+	border-left:2px solid #e4e7ea !important;
+}
+
+
+
+
+
+
+
+
 
 
 .cmn-toggle {
