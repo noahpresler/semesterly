@@ -4,8 +4,10 @@ var colour_to_highlight = {
     "#44BBFF" : "#28A4EA",
     "#4CD4B0" : "#3DBB9A",
     "#8870FF" : "#7059E6",
-    "#FF9F55" : "#FF8B55",
+    "#F9AE74" : "#F7954A",
+    "#D4DBC8" : "#B5BFA3",
     "#E7F76D" : "#C4D44D",
+    "#F182B4" : "#DE699D",
 } // consider #CF000F, #e8fac3
 
 // how big a slot of half an hour would be, in pixels
@@ -62,7 +64,7 @@ var Slot = React.createClass({
             end_minute   = parseInt(this.props.time_end.split(":")[1]);
 
         var top = (start_hour - 8)*62 + start_minute;
-        var bottom = (end_hour - 8)*62 + end_minute;
+        var bottom = (end_hour - 8)*62 + end_minute - 1;
         var height = bottom - top - 2;
         return {
             top: top, 
