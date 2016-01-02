@@ -27,7 +27,9 @@ input[type="text"]:focus {
    height: 25px;
    border-bottom: 0;
 }
-
+.course-name {
+	font-size:11px;
+}
 
 #calendar {
 	height: 100% !important;

@@ -1,3 +1,7 @@
+var TimetableActions = require('./actions/update_timetables.js');
+var TimetableStore = require('./stores/update_timetables.js');
+
+
 // maps base colour of slot to colour on highlight
 var colour_to_highlight = {
     "#FD7473" : "#E26A6A",
@@ -49,9 +53,8 @@ var Slot = React.createClass({
                   <div className="fc-time">
                     <span>{this.props.time_start} – {this.props.time_end}</span>
                   </div>
-                  <div className="fc-title">{this.props.code}</div>
-                  <div className="fc-title">{this.props.name}</div>
-
+                  <div className="fc-title course-name">{this.props.code}</div>
+                  <div className="fc-title course-name">{this.props.name}</div>
                 </div>
                 {buttons}            
             </div>
@@ -84,9 +87,15 @@ var Slot = React.createClass({
         this.updateColours(this.props.colour);
     },
     pinCourse: function(e) {
+        TimetableActions.updateTimetables({id: this.props.course, 
+            section: this.props.meeting_section, 
+            removing: false});
         e.stopPropagation();
     },
     unpinCourse: function(e) {
+        TimetableActions.updateTimetables({id: this.props.course, 
+            section: '', 
+            removing: false});
         e.stopPropagation();
     },
 
@@ -105,7 +114,8 @@ module.exports = React.createClass({
         var slots_by_day = this.getSlotsByDay();
         var all_slots = days.map(function(day) {
             var day_slots = slots_by_day[day].map(function(slot) {
-                return <Slot {...slot} toggleModal={this.props.toggleModal} key={slot.id}/>
+                var p = this.props.courses_to_sections[slot.course]['C'] == slot.meeting_section;
+                return <Slot {...slot} toggleModal={this.props.toggleModal} key={slot.id} pinned={p}/>
             }.bind(this));
             return (
                     <td key={day}>
@@ -150,7 +160,6 @@ module.exports = React.createClass({
                 slot["colour"] = Object.keys(colour_to_highlight)[course];
                 slot["code"] = crs.code.trim();
                 slot["name"] = crs.name;
-                slot["meeting_section"] = crs.meeting_section;
                 slots_by_day[slot.day].push(slot);
             }
         }
