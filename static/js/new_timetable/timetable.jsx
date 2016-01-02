@@ -26,7 +26,8 @@ module.exports = React.createClass({
   render: function() {
       var slot_manager = this.state.timetables.length == 0 ? null :
        (<SlotManager toggleModal={this.props.toggleModal} 
-                     timetables={this.state.timetables[this.state.current_index]}/>);
+                     timetables={this.state.timetables[this.state.current_index]}
+                     courses_to_sections={this.state.courses_to_sections}/>);
       return (
           <div id="calendar" className="fc fc-ltr fc-unthemed">
               <div className="fc-toolbar">

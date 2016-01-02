@@ -19,10 +19,12 @@ module.exports = Reflux.createStore({
   listenables: [actions],
   courses_to_sections: {},
 
-  updateTimetables: function(new_course_id) {
+  updateTimetables: function(new_course_with_section) {
+    var removing = new_course_with_section.removing;
+    var new_course_id = new_course_with_section.id;
     var c_to_s = $.extend(true, {}, this.courses_to_sections); // deep copy of this.courses_to_sections
-    if (c_to_s[new_course_id] == null) { // adding course
-      c_to_s[new_course_id] = {'L': '', 'T': '', 'P': '', 'C': ''};
+    if (!removing) { // adding course
+      c_to_s[new_course_id] = {'L': '', 'T': '', 'P': '', 'C': new_course_with_section.section};
     }
     else { // removing course
       delete c_to_s[new_course_id];
@@ -32,7 +34,6 @@ module.exports = Reflux.createStore({
           return;  
       }
     }
-
     obj.courses_to_sections = c_to_s; // to make the POST request
     $.post('/timetable/', JSON.stringify(obj), function(response) {
         if (response.length > 0) {
