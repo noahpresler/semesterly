@@ -1,3 +1,20 @@
+#pagination-container {
+	margin-top:-10px;
+}
+/* pagination colour #ff6462 */
+.pagination {
+	margin-top:0px;
+	text-align:center;
+	position: relative !important;
+	min-width:100%;
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
 .pagination li a:hover, 
 .next-double:hover,
 .prev-double:hover {
