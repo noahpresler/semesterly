@@ -66,12 +66,12 @@ def set_tt_preferences(preferences):
     global NO_CLASSES_BEFORE, NO_CLASSES_AFTER, SORT_BY_SPREAD, LONG_WEEKEND
     global SPREAD, WITH_CONFLICTS
     slots_per_hour = 60 / get_granularity(SCHOOL)
-    NO_CLASSES_BEFORE = 0 if preferences['no_classes_before'] == "false" else slots_per_hour * 2 - 1
-    NO_CLASSES_AFTER = slots_per_hour * 14 if preferences['no_classes_after'] == "false" else slots_per_hour * 10 + 1
-    LONG_WEEKEND = True if preferences['long_weekend'] == 'true' else False
-    SPREAD = False if preferences['grouped'] == 'true' else True
-    SORT_BY_SPREAD = True if preferences['do_ranking'] == 'true' else False
-    WITH_CONFLICTS = True if preferences['try_with_conflicts'] == 'true' else False
+    NO_CLASSES_BEFORE = 0 if not preferences['no_classes_before'] else slots_per_hour * 2 - 1
+    NO_CLASSES_AFTER = slots_per_hour * 14 if not preferences['no_classes_after'] else slots_per_hour * 10 + 1
+    LONG_WEEKEND = preferences['long_weekend']
+    SPREAD = not preferences['grouped']
+    SORT_BY_SPREAD = preferences['do_ranking']
+    WITH_CONFLICTS = preferences['try_with_conflicts']
 
 def save_tt_analytics(request, course_list, result):
     SchoolCourse, SchoolCourseOffering, SchoolQuery, SchoolTimetable = get_correct_models(SCHOOL)   
@@ -436,7 +436,9 @@ def courses_to_offerings(courses, sem, plist=[]):
     return sections
 
 def get_section_type_to_sections_map(section_to_offerings, plist, cid):
+    """Return map: section_type -> [cid, section, [offerings]] """
     section_type_to_sections = {offerings[0][0].section_type: [] for section, offerings in section_to_offerings.iteritems()}
+    i = 0
     for section, offerings in section_to_offerings.iteritems():
         if not violates_any_preferences(offerings, plist):
             # section_type for all offerings for a given section should be the same,
@@ -445,16 +447,18 @@ def get_section_type_to_sections_map(section_to_offerings, plist, cid):
             section_type_to_sections[section_type].append([cid, \
                                                         section, \
                                                         section_to_offerings[section]])
+        i += 1
     return section_type_to_sections
 
 def violates_any_preferences(offerings, plist):
     return any([check_co_against_preferences(plist, co) for co in offerings])
 
 def get_section_to_offering_map(offerings):
+    """ Return map: section_code -> [offerings] """
     section_to_offerings = OrderedDict()
     for offering in offerings:
         section_code = offering.meeting_section
-        if section_to_offerings.get(section_code): # section already in dict
+        if section_code in section_to_offerings:
             section_to_offerings[section_code].append([offering, [0, 1, 0]])
         else: # new section
             section_to_offerings[section_code] = [[offering, [0, 1, 0]]]
