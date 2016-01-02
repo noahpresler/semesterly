@@ -53,8 +53,8 @@ var Slot = React.createClass({
                   <div className="fc-time">
                     <span>{this.props.time_start} – {this.props.time_end}</span>
                   </div>
-                  <div className="fc-title course-name">{this.props.code}</div>
-                  <div className="fc-title course-name">{this.props.name}</div>
+                  <div className="fc-title slot-text-row">{this.props.code}</div>
+                  <div className="fc-title slot-text-row">{this.props.name}</div>
                 </div>
                 {buttons}            
             </div>

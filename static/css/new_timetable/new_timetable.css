@@ -27,7 +27,7 @@ input[type="text"]:focus {
    height: 25px;
    border-bottom: 0;
 }
-.course-name {
+.slot-text-row {
 	font-size:11px;
 }
 
@@ -305,6 +305,10 @@ input:-moz-placeholder::before  { font-family: fontAwesome; content:'\f002  ';
 	.slot {
 		font-size:10px;
 	}
+	#calendar {
+		margin-left:0px !important;
+		margin-right:0px !important;
+	}
 }
 @media screen and (max-width: 540px) {
 	.fc-event-container {
@@ -326,75 +330,6 @@ input:-moz-placeholder::before  { font-family: fontAwesome; content:'\f002  ';
 
 }
 
-.pagination li a:hover, 
-.next-double:hover,
-.prev-double:hover {
-	background-color:#8FA8F6 !important;
-}
-.pagination-minimal > ul > li > a:hover {
-	border: 5px solid #8FA8F6;
-}
-.pagination-minimal > ul > li.next > a:hover {
-	border-left: 2px solid #e4e7ea;
-    border-right: none;
-    
-}
-.pagination-minimal > ul > li.previous > a:hover {
-	border-right: 2px solid #e4e7ea;
-    border-left: none; 
-}
-
-.pagination-minimal > ul > li.next > a:hover, 
-.pagination-minimal > ul > li.previous > a:hover {
-	background-color: #8FA8F6 !important;
-	border-top:0px;
-	border-bottom:0px;
-}
-
-.pagination-minimal > ul > li > a:active,
-.pagination-minimal > ul > li.next > a:active,
-.pagination-minimal > ul > li.previous > a:active,
-.pagination-minimal > ul > li.next-double:active,
-.pagination-minimal > ul > li.prev-double:active {
-	background-color: #7790DE !important;
-}
-.pagination-minimal > ul > li > a:active {
-	border: 5px solid #7790DE;
-}
-.pagination-minimal > ul > li.next > a,
-.pagination-minimal > ul > li.previous > a {
-	border-radius:0px;
-}
-.pagination-minimal > ul > li.active > a,
-.pagination-minimal > ul > li.active > a:hover,
-.pagination-minimal > ul > li.active > a:active {
-    background-color: #7790DE;
-    border-color: #7790DE;
-    border-width: 4.9px !important;
-    color: #FFF;
-    margin: 9px 5px 9px;
-}
-.next-double, .prev-double{
-	font-size:18px;
-	font-weight:700;
-	font-weight:bold;
-	cursor:pointer;
-	padding: 5px 15px 5px 15px;
-	transition: background-color 0.3s;
-	z-index:100;
-}
-.next-double {
-	margin-left:3px !important;
-}
-.prev-double {
-	margin-right:0px !important;
-}
-li.next {
-	border-right:2px solid #e4e7ea;
-}
-li.previous {
-	border-left:2px solid #e4e7ea !important;
-}
 
 
 
