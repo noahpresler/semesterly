@@ -64,13 +64,13 @@ class EvaluationParser:
 	 			course=course,
 	 			score=score,
 	 			summary=summary,
-	 			course_code=code[:9],
+	 			course_code=code[:20],
 	 			professor=prof,
 	 			year=year)
 	 		if created:
-	 			print "Evaluation Object CREATED for: " + code[:9]
+	 			print "Evaluation Object CREATED for: " + code[:20]
 	 		else:
-	 			print "Evaluation Object FOUND for: " + code[:9]
+	 			print "Evaluation Object FOUND for: " + code[:20]
 		return
 
 	def get_code_partial(self,code):
