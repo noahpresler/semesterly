@@ -1,4 +1,5 @@
 import os
+import re
 os.environ['DJANGO_SETTINGS_MODULE'] = 'semesterly.settings'
 from django.db import models
 
@@ -83,7 +84,21 @@ class HopkinsCourse(models.Model):
 	def get_exclusions(self):
 		return self.exclusions
 
+class HopkinsTextbook(models.Model):
+	isbn = models.CharField(max_length=13)
+	is_required = models.BooleanField(default=False)
+
+	def __unicode__(self):
+		return "ISBN:" + self.isbn + " - Required:" + str(self.is_required)
+
+	def get_isbn(self):
+		return self.isbn
+
+	def get_is_required(self):
+		return self.is_required
+
 class HopkinsCourseOffering(models.Model):
+	textbooks = models.ManyToManyField(HopkinsTextbook)
 	course = models.ForeignKey(HopkinsCourse)
 	semester = models.CharField(max_length=2)
 	meeting_section = models.CharField(max_length=25)
@@ -100,8 +115,27 @@ class HopkinsCourseOffering(models.Model):
 	section_type = models.CharField(max_length=5, default='C')
 	can_be_locked = models.BooleanField(default=True)
 
+	def get_course_code(self):
+		return self.course.code + self.meeting_section
+
+	def get_course_tag(self):
+		return '<course dept="' + self.get_dept().strip() + '" num="' + self.get_course().strip() + '" sect="' + self.get_section().strip() + '" term="W16"/>'
+
+	def get_dept(self):
+		code_pattern = pattern = re.compile(r".*\.(.*)\.(.*)\s\((.*)\)")
+		matches = re.search(code_pattern,self.get_course_code())
+		return str(matches.group(1))
+
+	def get_course(self):
+		code_pattern = pattern = re.compile(r".*\.(.*)\.(.*)\s\((.*)\)")
+		matches = re.search(code_pattern,self.get_course_code())
+		return str(matches.group(2))
+
+	def get_section(self):
+		code_pattern = pattern = re.compile(r".*\.(.*)\.(.*)\s\((.*)\)")
+		matches = re.search(code_pattern,self.get_course_code())
+		return str(matches.group(3))
 
 	def __unicode__(self):
 		# return "Semester: %s, Section: %s, Time: %s" % (self.semester, self.meeting_section, self.time)
 		return "Day: %s, Time: %s - %s" % (self.day, self.time_start, self.time_end)
-
