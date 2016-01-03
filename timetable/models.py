@@ -84,6 +84,14 @@ class HopkinsCourse(models.Model):
 	def get_exclusions(self):
 		return self.exclusions
 
+class HopkinsCourseEvaluation(models.Model):
+	score = models.FloatField(default=5.0)
+	summary = models.TextField(max_length=1500)
+	professor = models.CharField(max_length=250)
+	course_code = models.CharField(max_length=20)
+	course = models.ForeignKey(HopkinsCourse)
+	year = models.CharField(max_length=200)
+
 class HopkinsTextbook(models.Model):
 	isbn = models.CharField(max_length=13)
 	is_required = models.BooleanField(default=False)
