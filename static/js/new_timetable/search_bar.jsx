@@ -94,9 +94,7 @@ module.exports = React.createClass({
 
   queryChanged: function(event) {
     var query = event.target.value.toLowerCase();
-
     var filtered = query.length <= 1 ? [] : this.filterCourses(query);
-
     this.setState({results: filtered});
   },
 

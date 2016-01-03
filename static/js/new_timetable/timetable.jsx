@@ -28,8 +28,18 @@ module.exports = React.createClass({
        (<SlotManager toggleModal={this.props.toggleModal} 
                      timetables={this.state.timetables[this.state.current_index]}
                      courses_to_sections={this.state.courses_to_sections}/>);
+      var loader = this.state.loading ? null :
+      (  <div className="spinner">
+            <div className="rect1"></div>
+            <div className="rect2"></div>
+            <div className="rect3"></div>
+            <div className="rect4"></div>
+            <div className="rect5"></div>
+        </div>)
       return (
+
           <div id="calendar" className="fc fc-ltr fc-unthemed">
+              {loader}
               <div className="fc-toolbar">
                 <div className="fc-center">
                   <h2 className="light semester-display">Fall 2016</h2>
@@ -66,6 +76,7 @@ module.exports = React.createClass({
                         </td>
                       </tr>
                     </thead>
+
                     <tbody>
                       <tr>
                         <td className="fc-widget-content">
