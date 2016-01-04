@@ -78,9 +78,9 @@ class Coursefinder:
                         times = section['times']
                         for time in times:
                             day = day_to_letter_map[time['day'].lower()]
-                            if ":" not in time['start']:
+                            if ":" not in str(time['start']):
                                 time['start'] = str(time['start']) + ":00"
-                            if ":" not in time['end']:
+                            if ":" not in str(time['end']):
                                 time['end'] = str(time['end']) + ":00"
                             try:
                                 prev = CourseOffering.objects.filter(course=course, 
