@@ -58,6 +58,7 @@ class HopkinsCourse(models.Model):
 	code = models.CharField(max_length=25)
 	name = models.CharField(max_length=250)
 	description = models.TextField(max_length=1500)
+	unstopped_description = models.TextField(max_length=1500)
 	campus = models.IntegerField()
 	breadths = models.CharField(max_length=5, default='')
 	prerequisites = models.TextField(max_length=1000, default='')
