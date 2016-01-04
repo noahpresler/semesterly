@@ -64,29 +64,36 @@ input[type="text"]:focus {
 
 .slot-inner {	
 	position:absolute;
-	bottom:0px;
 	z-index:2000;
 	width:100%;
 }
 
 .button-surround {
 	font-size:18px;
-	color:#ecf0f1;
-	background-color:rgba(52,73,94,0.9);
+	color:rgba(52,73,94,0.9);
 	margin-bottom:1px;
-	padding:4px;
+	padding:1px;
+	padding-bottom:0px;
 	border-radius:6px;
 	z-index:2000;
-	border:1px solid #222;
 	float:right;
-
+	margin-top:-5px !important;
 	margin-right:5px;
 	transition:all 0.3s;
 }
-.button-surround:hover, .pinned {
-	color:#fff !important;
-	background-color:#143454;
+.bottom {
+	bottom:0px;
 }
+.button-surround:hover {
+	color:#DFE5EC !important;
+}
+
+.remove{
+	top:0;
+	font-size:14px;
+	margin-top:-20px !important;
+}
+
 /*.fa-thumb-tack {
 	color:rgba(52,73,94,0.8);
 }
