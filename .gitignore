@@ -8,3 +8,5 @@ node_modules
 deploy.sh
 .DS_Store
 timetable/courses_json/*.json
+TextbookParserOutput.txt
+workfile.html
