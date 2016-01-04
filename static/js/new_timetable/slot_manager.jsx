@@ -24,24 +24,30 @@ var Slot = React.createClass({
     },
 
     render: function() {
-        var buttons = null;
+        var pin = null, remove_button = null;
         var slot_style = this.getSlotStyle();
         if (this.state.show_buttons) {
-            buttons = (
-            <div className="slot-inner">
+            pin = (
+            <div className="slot-inner bottom">
                 <div className="button-surround" onClick={this.pinCourse} >
                     <span className="fa fa-thumb-tack"></span>
                </div>
             </div>);
+            remove_button = ( <div className="slot-inner">
+                <div className="button-surround" onClick={this.removeCourse} >
+                    <span className="fa fa-times remove"></span>
+               </div>
+            </div>);
         }
         if (this.props.pinned) {
-            buttons = (
-            <div className="slot-inner">
+            pin = (
+            <div className="slot-inner bottom">
                 <div className="button-surround pinned" onClick={this.unpinCourse} >
                     <span className="fa fa-thumb-tack"></span>
                </div>
             </div>);
         }
+
     return (
             <div 
                 onClick={this.props.toggleModal(this.props.course)}
@@ -49,6 +55,7 @@ var Slot = React.createClass({
                 onMouseLeave={this.unhighlightSiblings}
                 className={"slot-outer fc-time-grid-event fc-event slot slot-" + this.props.course} 
                 style={slot_style}>
+                {remove_button}
                 <div className="fc-content">
                   <div className="fc-time">
                     <span>{this.props.time_start} – {this.props.time_end}</span>
@@ -56,7 +63,7 @@ var Slot = React.createClass({
                   <div className="fc-title slot-text-row">{this.props.code + " " + this.props.meeting_section}</div>
                   <div className="fc-title slot-text-row">{this.props.name}</div>
                 </div>
-                {buttons}            
+                {pin}            
             </div>
         );
     },
@@ -96,6 +103,12 @@ var Slot = React.createClass({
         TimetableActions.updateTimetables({id: this.props.course, 
             section: '', 
             removing: false});
+        e.stopPropagation();
+    },
+    removeCourse: function(e) {
+        TimetableActions.updateTimetables({id: this.props.course, 
+            section: '', 
+            removing: true});
         e.stopPropagation();
     },
 
