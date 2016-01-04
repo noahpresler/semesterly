@@ -114,7 +114,7 @@ module.exports = React.createClass({
         var slots_by_day = this.getSlotsByDay();
         var all_slots = days.map(function(day) {
             var day_slots = slots_by_day[day].map(function(slot) {
-                var p = this.props.courses_to_sections[slot.course]['C'] == slot.meeting_section;
+                var p = this.isPinned(slot);
                 return <Slot {...slot} toggleModal={this.props.toggleModal} key={slot.id} pinned={p}/>
             }.bind(this));
             return (
@@ -143,6 +143,15 @@ module.exports = React.createClass({
         var d = new Date();
         var selector = ".fc-" + days[d.getDay()];
         // $(selector).addClass("fc-today");
+    },
+
+    isPinned: function(slot) {
+        var comparator = this.props.courses_to_sections[slot.course]['C'];
+        if (_SCHOOL == "uoft") {
+            comparator = this.props.courses_to_sections[slot.course][slot.meeting_section[0]];
+        }
+        return comparator == slot.meeting_section;
+
     },
 
     getSlotsByDay: function() {

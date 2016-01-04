@@ -24,9 +24,25 @@ module.exports = Reflux.createStore({
 
     var removing = new_course_with_section.removing;
     var new_course_id = new_course_with_section.id;
+    var section = new_course_with_section.section;
     var c_to_s = $.extend(true, {}, this.courses_to_sections); // deep copy of this.courses_to_sections
+    
     if (!removing) { // adding course
-      c_to_s[new_course_id] = {'L': '', 'T': '', 'P': '', 'C': new_course_with_section.section};
+      if (obj.school == "jhu") {
+        c_to_s[new_course_id] = {'L': '', 'T': '', 'P': '', 'C': new_course_with_section.section};
+      }
+      else if (obj.school == "uoft") {
+        var locked_sections = {'L': '', 'T': '', 'P': '', 'C': ''} // this is what we want to send if not locking
+        if (section) { // locking
+          if (c_to_s[new_course_id] != null) {
+            locked_sections = c_to_s[new_course_id]; // copy the old mapping
+            // in case some sections were already locked for this course,
+            // and now we're about to lock a new one.
+          }
+          locked_sections[section[0]] = section;
+        }
+        c_to_s[new_course_id] = locked_sections;
+      }
     }
     else { // removing course
       delete c_to_s[new_course_id];
