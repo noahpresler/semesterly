@@ -62,6 +62,7 @@ class HopkinsCourse(models.Model):
 	breadths = models.CharField(max_length=5, default='')
 	prerequisites = models.TextField(max_length=1000, default='')
 	exclusions = models.TextField(max_length=1000, default='')
+	related_courses = models.ManyToManyField("self", blank=True)
 	
 	def __unicode__(self):
 		return self.code + ": " + self.name
