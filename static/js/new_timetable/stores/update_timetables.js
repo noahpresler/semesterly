@@ -20,6 +20,8 @@ module.exports = Reflux.createStore({
   courses_to_sections: {},
 
   updateTimetables: function(new_course_with_section) {
+    this.trigger({loading:true});
+
     var removing = new_course_with_section.removing;
     var new_course_id = new_course_with_section.id;
     var c_to_s = $.extend(true, {}, this.courses_to_sections); // deep copy of this.courses_to_sections
@@ -41,13 +43,21 @@ module.exports = Reflux.createStore({
             this.trigger({
                 timetables: response,
                 courses_to_sections: this.courses_to_sections,
-                current_index: 0
+                current_index: 0,
+                loading: false
             });
+        }
+        else {
+          this.trigger({loading: false});
         }
     }.bind(this));
   },
 
   getInitialState: function() {
-    return {timetables: [], courses_to_sections: {}, current_index: -1};
+    return {
+      timetables: [], 
+      courses_to_sections: {}, 
+      current_index: -1, 
+      loading: false};
   }
 });
