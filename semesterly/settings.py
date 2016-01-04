@@ -19,7 +19,7 @@ PROJECT_DIRECTORY = os.getcwd()
 # See https://docs.djangoproject.com/en/1.6/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = '-_^5#l6kf0pnf7!s%-1w1*()85zyger%2&sofe47*8uw!x&8n$'
+SECRET_KEY = '***REMOVED***'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -40,7 +40,7 @@ INSTALLED_APPS = (
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'timetable',
-    'analytics',
+    'analytics'
 )
 
 MIDDLEWARE_CLASSES = (
