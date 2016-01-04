@@ -87,7 +87,7 @@ class HopkinsCourse(models.Model):
 
 	def get_exclusions(self):
 		return self.exclusions
-
+		
 	def get_dept_matches(self):
 		code_pattern = re.compile(r"(.*\..*)\.(.*)")
 		department = re.search(code_pattern,self.get_code()).group(1)
