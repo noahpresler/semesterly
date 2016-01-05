@@ -589,7 +589,6 @@ def get_courses(request, school, sem):
 
 def get_course(request, school, id):
     from time import sleep
-    sleep (2)
     global SCHOOL
     school = school.lower()
     if school in ["uoft", "jhu"]:
@@ -601,7 +600,10 @@ def get_course(request, school, id):
         json_data = model_to_dict(course)
         json_data['sections_F'] = get_meeting_sections(course, 'F')
         json_data['sections_S'] = get_meeting_sections(course, 'S')
+        json_data['textbook_info'] = course.get_all_textbook_info()
     except:
+        import traceback
+        traceback.print_exc()
         json_data = {}
 
 
