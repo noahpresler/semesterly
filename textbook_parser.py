@@ -174,16 +174,43 @@ class HopkinsTextbookFinder:
                 co.textbooks.add(textbook)
                 co.save()
 
+    def get_detail_page(self,result):
+        try:
+            return smart_str(result.Items.Item.DetailPageURL)
+        except:
+            return "Cannot Be Found"
+
+    def get_image_url(self,result):
+        try:
+            return smart_str(result.Items.Item.MediumImage.URL)
+        except:
+            return "Cannot Be Found"
+
+    def get_author(self,result):
+        try:
+            return smart_str(result.Items.Item.ItemAttributes.Author)
+        except:
+            return "Cannot Be Found"
+
+    def get_title(self,result):
+        try:
+            return smart_str(result.Items.Item.ItemAttributes.Title)
+        except:
+            return "Cannot Be Found"
+
+
     def get_amazon_fields(self,isbn):
         try:
-            result = api.item_lookup(isbn, IdType='ISBN', SearchIndex='Books', ResponseGroup='Large')
+            result = api.item_lookup(isbn.strip(), IdType='ISBN', SearchIndex='Books', ResponseGroup='Large')
             info = {
-                "DetailPageURL" : smart_str(result.Items.Item.DetailPageURL),
-                "ImageURL" : smart_str(result.Items.Item.MediumImage.URL),
-                "Author" : smart_str(result.Items.Item.ItemAttributes.Author),
-                "Title" : smart_str(result.Items.Item.ItemAttributes.Title)
+                "DetailPageURL" : self.get_detail_page(result),
+                "ImageURL" : self.get_image_url(result),
+                "Author" : self.get_author(result),
+                "Title" : self.get_title(result)
             }
         except:
+            import traceback
+            traceback.print_exc()
             info = {
                 "DetailPageURL" : "Cannot be found",
                 "ImageURL" : "Cannot be found",
