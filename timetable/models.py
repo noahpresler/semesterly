@@ -111,6 +111,13 @@ class HopkinsCourse(models.Model):
 			eval_info.append(model_to_dict(e))
 		return eval_info
 
+	def get_related_course_info(self):
+		info = []
+		related = self.related_courses.all()
+		for c in related:
+			info.append(model_to_dict(c))
+		return info
+
 
 class HopkinsCourseEvaluation(models.Model):
 	score = models.FloatField(default=5.0)
