@@ -26,7 +26,11 @@ import smtplib
 from email.mime.text import MIMEText
 from timeout import timeout
 import errno
+from django.utils.encoding import smart_str, smart_unicode
 from fake_useragent import UserAgent
+from amazonproduct import API
+api = API(locale='us')
+
 
 N_CLASSES = 99
 django.setup()
@@ -74,7 +78,7 @@ class HopkinsTextbookFinder:
                 if self.last_num_found == 0:
                     self.wait_retry(request)
                 request='http://johns-hopkins.bncollege.com/webapp/wcs/stores/servlet/TBListView?storeId=18053&catalogId=10001&langId=-1&termMapping=N&courseXml=<?xml version="1.0" encoding="UTF-8"?><textbookorder><courses>'
-                sleep(randint(10,30))
+                sleep(randint(20,45))
             else:
                 request += self.course_tags[i]
         print "Parse Completed"
@@ -82,7 +86,7 @@ class HopkinsTextbookFinder:
 
     def wait_retry(self,request):
         print "Retrying request..."
-        sleep(randint(120,180))
+        sleep(randint(180,240))
         self.randomize_ua()
         f = open('workfile.html', 'w')
         html = self.get_bn_html(request)
@@ -145,9 +149,14 @@ class HopkinsTextbookFinder:
             except:
                 pass
         if textbook is None:
+            info = self.get_amazon_fields(isbn_number)
             textbook = HopkinsTextbook(
                 isbn = isbn_number,
-                is_required = is_required)
+                is_required = is_required,
+                detail_url = info['DetailPageURL'],
+                image_url = info["ImageURL"],
+                author = info["Author"],
+                title = info["Title"])
             textbook.save()
             self.create_count +=1
             try:
@@ -164,6 +173,24 @@ class HopkinsTextbookFinder:
             if not co.textbooks.filter(isbn=isbn_number).exists():
                 co.textbooks.add(textbook)
                 co.save()
+
+    def get_amazon_fields(self,isbn):
+        try:
+            result = api.item_lookup(isbn, IdType='ISBN', SearchIndex='Books', ResponseGroup='Large')
+            info = {
+                "DetailPageURL" : smart_str(result.Items.Item.DetailPageURL),
+                "ImageURL" : smart_str(result.Items.Item.MediumImage.URL),
+                "Author" : smart_str(result.Items.Item.ItemAttributes.Author),
+                "Title" : smart_str(result.Items.Item.ItemAttributes.Title)
+            }
+        except:
+            info = {
+                "DetailPageURL" : "Cannot be found",
+                "ImageURL" : "Cannot be found",
+                "Author" : "Cannot be found",
+                "Title" : "Cannot be found"
+            }
+        return info
 
     def check_required(self,html):
         if html.find("REQUIRED") != -1:

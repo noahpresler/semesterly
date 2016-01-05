@@ -98,11 +98,15 @@ class HopkinsCourse(models.Model):
 		textbook_info = []
 		for co in HopkinsCourseOffering.objects.filter(course=self):
 			tb = {
-				"section" : co.meeting_section,
-				"textbooks" : co.get_textbooks()
+			"section" : co.meeting_section,
+			"textbooks" : co.get_textbooks()
 			}
 			textbook_info.append(tb)
-		return textbook_info
+		final = []
+		for i in textbook_info:
+			if not any(d['section'] == i['section'] for d in final):
+				final.append(i)
+		return final
 
 	def get_eval_info(self):
 		eval_info = []
@@ -130,6 +134,10 @@ class HopkinsCourseEvaluation(models.Model):
 class HopkinsTextbook(models.Model):
 	isbn = models.CharField(max_length=13)
 	is_required = models.BooleanField(default=False)
+	detail_url = models.URLField(max_length=1000)
+	image_url = models.URLField(max_length=1000)
+	author = models.CharField(max_length=500)
+	title = models.CharField(max_length=1500)
 
 	def __unicode__(self):
 		return "ISBN:" + self.isbn + " - Required:" + str(self.is_required)
@@ -140,11 +148,8 @@ class HopkinsTextbook(models.Model):
 	def get_is_required(self):
 		return self.is_required
 
-	def get_tuple(self):
-		return {
-			"isbn" : self.isbn,
-			"required" : self.is_required
-		}
+	def get_info(self):
+		return model_to_dict(self)
 
 class HopkinsCourseOffering(models.Model):
 	textbooks = models.ManyToManyField(HopkinsTextbook)
@@ -191,7 +196,8 @@ class HopkinsCourseOffering(models.Model):
 
 	def get_textbooks(self):
 		textbooks = []
+		temp = []
 		tbs = self.textbooks.all()
 		for tb in tbs:
-			textbooks.append(tb.get_tuple())
+			textbooks.append(tb.get_info())
 		return textbooks
