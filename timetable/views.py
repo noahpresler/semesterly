@@ -602,6 +602,7 @@ def get_course(request, school, id):
         json_data['sections_S'] = get_meeting_sections(course, 'S')
         json_data['textbook_info'] = course.get_all_textbook_info()
         json_data['eval_info'] = course.get_eval_info()
+        json_data['related_course_info'] = course.get_related_course_info()
     except:
         import traceback
         traceback.print_exc()
