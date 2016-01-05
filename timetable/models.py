@@ -84,6 +84,16 @@ class HopkinsCourse(models.Model):
 	def get_exclusions(self):
 		return self.exclusions
 
+	def get_all_textbook_info(self):
+		textbook_info = []
+		for co in HopkinsCourseOffering.objects.filter(course=self):
+			tb = {
+				"section" : co.meeting_section,
+				"textbooks" : co.get_textbooks()
+			}
+			textbook_info.append(tb)
+		return textbook_info
+
 class HopkinsCourseEvaluation(models.Model):
 	score = models.FloatField(default=5.0)
 	summary = models.TextField(max_length=1500)
@@ -104,6 +114,12 @@ class HopkinsTextbook(models.Model):
 
 	def get_is_required(self):
 		return self.is_required
+
+	def get_tuple(self):
+		return {
+			"isbn" : self.isbn,
+			"required" : self.is_required
+		}
 
 class HopkinsCourseOffering(models.Model):
 	textbooks = models.ManyToManyField(HopkinsTextbook)
@@ -147,3 +163,10 @@ class HopkinsCourseOffering(models.Model):
 	def __unicode__(self):
 		# return "Semester: %s, Section: %s, Time: %s" % (self.semester, self.meeting_section, self.time)
 		return "Day: %s, Time: %s - %s" % (self.day, self.time_start, self.time_end)
+
+	def get_textbooks(self):
+		textbooks = []
+		tbs = self.textbooks.all()
+		for tb in tbs:
+			textbooks.append(tb.get_tuple())
+		return textbooks
