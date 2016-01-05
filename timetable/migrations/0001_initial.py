@@ -53,6 +53,7 @@ class Migration(migrations.Migration):
                 ('breadths', models.CharField(default=b'', max_length=5)),
                 ('prerequisites', models.TextField(default=b'', max_length=1000)),
                 ('exclusions', models.TextField(default=b'', max_length=1000)),
+                ('related_courses', models.ManyToManyField(related_name='related_courses_rel_+', to='timetable.HopkinsCourse', blank=True)),
             ],
         ),
         migrations.CreateModel(
