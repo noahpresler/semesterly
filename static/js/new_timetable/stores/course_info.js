@@ -8,6 +8,7 @@ module.exports = Reflux.createStore({
          {}, 
          function(response) {
             this.trigger({loading: false, course_info: response});
+            console.log(response)
          }.bind(this)
     );
 
