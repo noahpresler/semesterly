@@ -9,10 +9,12 @@ class Course(models.Model):
 	code = models.CharField(max_length=20)
 	name = models.CharField(max_length=250)
 	description = models.TextField(max_length=1500)
+	unstopped_description = models.TextField(max_length=1500)
 	campus = models.IntegerField()
 	breadths = models.CharField(max_length=5, default='')
 	prerequisites = models.TextField(max_length=1000, default='')
 	exclusions = models.TextField(max_length=1000, default='')
+	related_courses = models.ManyToManyField("self", blank=True)
 	
 	def __unicode__(self):
 		return self.code + ": " + self.name
@@ -59,10 +61,12 @@ class HopkinsCourse(models.Model):
 	code = models.CharField(max_length=25)
 	name = models.CharField(max_length=250)
 	description = models.TextField(max_length=1500)
+	unstopped_description = models.TextField(max_length=1500)
 	campus = models.IntegerField()
 	breadths = models.CharField(max_length=5, default='')
 	prerequisites = models.TextField(max_length=1000, default='')
 	exclusions = models.TextField(max_length=1000, default='')
+	related_courses = models.ManyToManyField("self", blank=True)
 	
 	def __unicode__(self):
 		return self.code + ": " + self.name
@@ -84,6 +88,11 @@ class HopkinsCourse(models.Model):
 
 	def get_exclusions(self):
 		return self.exclusions
+		
+	def get_dept_matches(self):
+		code_pattern = re.compile(r"(.*\..*)\.(.*)")
+		department = re.search(code_pattern,self.get_code()).group(1)
+		return HopkinsCourse.objects.filter(code__contains=department)
 
 	def get_all_textbook_info(self):
 		textbook_info = []
