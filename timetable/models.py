@@ -2,6 +2,7 @@ import os
 import re
 os.environ['DJANGO_SETTINGS_MODULE'] = 'semesterly.settings'
 from django.db import models
+from django.forms.models import model_to_dict
 
 # Create your models here.
 class Course(models.Model):
@@ -93,6 +94,14 @@ class HopkinsCourse(models.Model):
 			}
 			textbook_info.append(tb)
 		return textbook_info
+
+	def get_eval_info(self):
+		eval_info = []
+		evals = HopkinsCourseEvaluation.objects.filter(course=self)
+		for e in evals:
+			eval_info.append(model_to_dict(e))
+		return eval_info
+
 
 class HopkinsCourseEvaluation(models.Model):
 	score = models.FloatField(default=5.0)
