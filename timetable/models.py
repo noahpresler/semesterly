@@ -113,7 +113,11 @@ class HopkinsCourse(models.Model):
 		evals = HopkinsCourseEvaluation.objects.filter(course=self)
 		for e in evals:
 			eval_info.append(model_to_dict(e))
-		return eval_info
+		final = []
+		for i in eval_info:
+			if not any(d['year'] == i['year'] for d in final):
+				final.append(i)
+		return sorted(final, key=lambda k: k['year']) 
 
 	def get_related_course_info(self):
 		info = []
