@@ -249,7 +249,7 @@ div {
 .course-modal {
 }
 #modal-content {
-	height:500px;
+	height:700px;
 	outline-width: 0;
 	padding-top:1px;
 /*	background-color:#BD5C5C ;
@@ -392,4 +392,15 @@ input.cmn-toggle-round:checked + label:after {
 }
 .fui-check:before, .fui-plus:before {
 	margin-left:1px;
+}
+
+
+/* Modal Styles */
+.modal-header {
+	background-color: #F8F6F7;
+	border: 1px solid #D4D4D4;
+}
+
+#modal-content .modal-entry {
+	border-bottom: 1px solid #D4D4D4;
 }
