@@ -473,7 +473,8 @@ input.cmn-toggle-round:checked + label:after {
 
 #eval-wrapper #prof {
 	display: inline-block;
-	margin: 10px;
+    margin: 0 auto;
+    margin-top: 10px;
 	text-align: center;
 }
 
