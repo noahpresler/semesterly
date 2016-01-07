@@ -112,24 +112,23 @@ module.exports = React.createClass({
 	},
 
 	getSections: function() {
-		// var F = this.state.course_info.sections_S.map(function(f){
-		// 	return (<div>
-		// 		{f}
-		// 	</div>)
-		// }.bind(this));
-		// var S = this.state.course_info.sections_F.map(function(s){
-		// 	return (<div>
-		// 		{s}
-		// 	</div>)
-		// }.bind(this));
-		// var sections = 
-		// 	(<div className="modal-entry" id="course-sections">
-		// 		<h6>Course Sections:</h6>
-		// 		{F}
-		// 		{S}
-		// 	</div>)
-		// return sections
-		return null
+		var F = this.state.course_info.sections_S.map(function(f){
+			return (<div>
+				{f}
+			</div>)
+		}.bind(this));
+		var S = this.state.course_info.sections_F.map(function(s){
+			return (<div>
+				{s}
+			</div>)
+		}.bind(this));
+		var sections = 
+			(<div className="modal-entry" id="course-sections">
+				<h6>Course Sections:</h6>
+				{F}
+				{S}
+			</div>)
+		return sections
 	},
 
 
