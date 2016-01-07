@@ -1,5 +1,6 @@
 var Loader = require('./loader');
 var course_info_store = require('./stores/course_info');
+var EvaluationManager = require('./evaluations.jsx');
 
 module.exports = React.createClass({
 	mixins: [Reflux.connect(course_info_store)],
@@ -42,29 +43,7 @@ module.exports = React.createClass({
 	},
 
 	getEvaluations: function() {
-		var eval_items = this.state.course_info.eval_info.map(function(e) {
-			return (
-				<div className="eval-item">
-					<div className="year">{e.year}</div>
-					<div className="rating-wrapper">
-						<div className="star-ratings-sprite"><span style={{width: 100*e.score/5 + "%"}} className="rating"></span></div>
-						<div className="numeric-rating">{"(" + e.score + ")"}</div>
-					</div>
-				</div>
-				)
-		}.bind(this));
-		evals = (
-			<div className="eval-wrapper">
-				{eval_items}
-			</div>)
-		var click_notice = this.state.course_info.eval_info.length == 0 ? (<div id="empty-intro">No course evaluations for this course yet</div>) : (<div id="click-intro">Click an evaluation item above to read the comments</div>)
-		var evaluations = 
-			(<div className="modal-entry" id="course-evaluations">
-				<h6>Course Evaluations:</h6>
-				{evals}
-				{click_notice}
-			</div>)
-		return evaluations
+		return <EvaluationManager eval_info={this.state.course_info.eval_info} />
 	},
 
 	getRecomendations: function() {

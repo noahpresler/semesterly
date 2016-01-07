@@ -454,6 +454,15 @@ input.cmn-toggle-round:checked + label:after {
 	margin-bottom: 10px;
 	text-align: center;
 	margin: 3px;
+	-webkit-transition: width .5s;
+}
+
+.selected {
+	width: 100% !important;
+}
+
+.eval-item #details {
+	margin: 5px;
 }
 
 #center-wrapper {
