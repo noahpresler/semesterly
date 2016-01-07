@@ -27,8 +27,11 @@ module.exports = React.createClass({
 
 	getHeader: function() {
 		var header = (<div className="modal-header">
-			<div id="name">{this.state.course_info.name}</div>
-			<div id="code">{this.state.course_info.code}</div>
+			<div id="course-info-wrapper">
+				<div id="name">{this.state.course_info.name}</div>
+				<div id="code">{this.state.course_info.code}</div>
+			</div>
+			<span className="fui-plus"/>
 		</div>)
 		return header
 	},
