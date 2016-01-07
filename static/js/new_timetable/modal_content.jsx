@@ -57,8 +57,7 @@ module.exports = React.createClass({
 			<div className="eval-wrapper">
 				{eval_items}
 			</div>)
-		var click_notice = this.state.course_info.eval_info.length == 0 ? null : (
-			<div id="eval-intro">Click an evaluation item above to read the comments</div>)
+		var click_notice = this.state.course_info.eval_info.length == 0 ? (<div id="empty-intro">No course evaluations for this course yet</div>) : (<div id="click-intro">Click an evaluation item above to read the comments</div>)
 		var evaluations = 
 			(<div className="modal-entry" id="course-evaluations">
 				<h6>Course Evaluations:</h6>
@@ -72,13 +71,15 @@ module.exports = React.createClass({
 		var related = this.state.course_info.related_courses.slice(0,3).map(function(rc) {
             return (
             	<div id="recomendation">
-            		<div id="rec-wrapper">
-	            		<div id="name">{rc.name}</div>
-	            		<div id="code">{rc.code}</div>
-	            	</div>
+            		<div id="center-wrapper">
+	            		<div id="rec-wrapper">
+		            		<div id="name">{rc.name}</div>
+		            		<div id="code">{rc.code}</div>
+		            	</div>
+		            </div>
             	</div>)
         }.bind(this));
-		var recomendations = 
+		var recomendations = this.state.course_info.related_courses.length == 0 ? null :
 			(<div className="modal-entry">
 				<h6>Courses You Might Like:</h6>
 				<div id="course-recomendations">
@@ -86,6 +87,10 @@ module.exports = React.createClass({
 				</div>
 			</div>)
 		return recomendations
+	},
+
+	expandRecomendations: function() {
+
 	},
 
 	getTextbooks: function() {
@@ -101,34 +106,37 @@ module.exports = React.createClass({
             		</a>
             	</div>)
         }.bind(this));
-		var textbooks = 
+		var textbooks = this.state.course_info.textbook_info[0].textbooks.length == 0 ? (<div id="empty-intro">No textbooks yet for this course</div>) :
+				(<div id="textbooks">
+	            	{textbook_elements}
+	            </div>)
+		var ret = 
 			(<div className="modal-entry" id="course-textbooks">
 				<h6>Textbooks:</h6>
-				<div id="textbooks">
-	            	{textbook_elements}
-	            </div>
+				{textbooks}
 			</div>)
-		return textbooks
+		return ret
 	},
 
 	getSections: function() {
-		var F = this.state.course_info.sections_S.map(function(f){
-			return (<div>
-				{f}
-			</div>)
-		}.bind(this));
-		var S = this.state.course_info.sections_F.map(function(s){
-			return (<div>
-				{s}
-			</div>)
-		}.bind(this));
-		var sections = 
-			(<div className="modal-entry" id="course-sections">
-				<h6>Course Sections:</h6>
-				{F}
-				{S}
-			</div>)
-		return sections
+		// var F = this.state.course_info.sections_S.map(function(f){
+		// 	return (<div>
+		// 		{f}
+		// 	</div>)
+		// }.bind(this));
+		// var S = this.state.course_info.sections_F.map(function(s){
+		// 	return (<div>
+		// 		{s}
+		// 	</div>)
+		// }.bind(this));
+		// var sections = 
+		// 	(<div className="modal-entry" id="course-sections">
+		// 		<h6>Course Sections:</h6>
+		// 		{F}
+		// 		{S}
+		// 	</div>)
+		// return sections
+		return null
 	},
 
 
