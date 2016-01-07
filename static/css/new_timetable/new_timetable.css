@@ -461,6 +461,29 @@ input.cmn-toggle-round:checked + label:after {
 	width: 100% !important;
 }
 
+.selected .year {
+	text-align: left;
+	margin: 10px;
+	float:left;
+}
+
+#eval-wrapper {
+	height: 40px;
+}
+
+#eval-wrapper #prof {
+	display: inline-block;
+	margin: 10px;
+	text-align: center;
+}
+
+.selected .rating-wrapper {
+	margin :10px;
+	text-align: right;
+	display: inline-block;
+	float:right;
+}
+
 .eval-item #details {
 	margin: 5px;
 }

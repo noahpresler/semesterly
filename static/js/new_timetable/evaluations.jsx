@@ -4,14 +4,20 @@ var Evaluation = React.createClass({
 		var details = !this.props.selected ? null : (
 			<div id="details">{this.props.eval_data.summary.replace(/\u00a0/g, " ")}</div>
 			)
+		var prof = !this.props.selected ? null : (
+			<div id="prof">Professor: {this.props.eval_data.professor}</div>
+			)
 		return (
 		<div className={classes} onClick={this.props.selectionCallback} >
-			<div className="year">{this.props.eval_data.year}</div>
-			<div className="rating-wrapper">
-				<div className="star-ratings-sprite">
-					<span style={{width: 100*this.props.eval_data.score/5 + "%"}} className="rating"></span>
+			<div id="eval-wrapper">
+				<div className="year">{this.props.eval_data.year}</div>
+				{prof}
+				<div className="rating-wrapper">
+					<div className="star-ratings-sprite">
+						<span style={{width: 100*this.props.eval_data.score/5 + "%"}} className="rating"></span>
+					</div>
+					<div className="numeric-rating">{"(" + this.props.eval_data.score + ")"}</div>
 				</div>
-				<div className="numeric-rating">{"(" + this.props.eval_data.score + ")"}</div>
 			</div>
 			{details}
 		</div>);
