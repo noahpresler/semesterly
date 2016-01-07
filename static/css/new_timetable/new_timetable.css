@@ -250,7 +250,8 @@ div {
 	width: 70% !important;
 }
 #modal-content {
-	height:826px;
+	height: 80vh;
+	position:relative;
 	outline-width: 0;
 	padding-top:1px;
 	overflow-y:scroll;
