@@ -517,6 +517,11 @@ input.cmn-toggle-round:checked + label:after {
     margin-top: 15px;
 }
 
+.modal-header .fui-plus:hover {
+	background-color: #c4c4c4;
+	color: #222;
+}
+
 #course-info-wrapper {
     float: left;
     display: inline-block;
