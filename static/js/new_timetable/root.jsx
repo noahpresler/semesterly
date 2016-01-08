@@ -26,7 +26,6 @@ module.exports = React.createClass({
         <div id="cal-container">
           <Timetable toggleModal={this.toggleCourseModal} />
         </div>
-        <div id="side-bar"/>
       </div>
     );
   },
