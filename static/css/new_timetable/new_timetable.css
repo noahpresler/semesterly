@@ -251,7 +251,7 @@ div {
 	width: 70% !important;
 }
 #modal-content {
-	height: 90vh;
+	max-height: 90vh;
 	position:relative;
 	outline-width: 0;
 	padding-top:1px;
