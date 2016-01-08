@@ -41,17 +41,15 @@ module.exports = React.createClass({
           <div id="calendar" className="fc fc-ltr fc-unthemed">
               {loader}
               <div className="fc-toolbar">
-                <div className="fc-center">
-                  <h2 className="light semester-display">Fall 2016</h2>
-                </div>
+                <Pagination 
+                  count={this.state.timetables.length} 
+                  next={this.nextTimetable} 
+                  prev={this.prevTimetable}
+                  setIndex={this.setIndex}
+                  current_index={this.state.current_index}/>
+                  {/*<h2 className="light semester-display">Fall 2016</h2>*/}
                 <div className="fc-clear"></div>
               </div>
-              <Pagination 
-                count={this.state.timetables.length} 
-                next={this.nextTimetable} 
-                prev={this.prevTimetable}
-                setIndex={this.setIndex}
-                current_index={this.state.current_index}/>
 
               <div className="fc-view-container">
                 <div className="fc-view fc-agendaWeek-view fc-agenda-view">

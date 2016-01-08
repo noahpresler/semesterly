@@ -77,3 +77,9 @@ hr {
   float: right;
   position: relative !important; /* overwrite bootstrap fixed footer */
 }
+
+@media screen and (max-width: 1478px) { 
+  #semesterly-name {
+    display:none !important;
+  }
+}

@@ -23,6 +23,26 @@ input[type="text"]:focus {
 	border:2px solid #18A98C; /* #3D546B */
     background-color:#fff;
 }
+
+.fc-toolbar {
+	height: 60px;
+    background-color: #F8F6F7;
+    border: 1px solid #D4D4D4;
+    margin: 0px;
+    margin-top: 30px;
+}
+
+#semesterly-name {
+    font-family: lato;
+    font-weight: bold;
+    display: inline-block;
+    float: left;
+    margin-top: -1px;
+    font-size: 53px;
+    height: 46px;
+    margin-left: 70px;
+}
+
 .fc-time-grid .fc-slats td {
    height: 25px;
    border-bottom: 0;
@@ -104,6 +124,7 @@ input[type="text"]:focus {
 	width:100%;
 	height:100px;
 	padding-top:25px;
+	border: 1px solid #D4D4D4;
 }
 #search-bar {
 
@@ -260,7 +281,7 @@ div {
 }
 .semester-display {
 	font-size:30px;
-
+	width: 122px;
 }
 
 

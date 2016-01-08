@@ -14,6 +14,7 @@ module.exports = React.createClass({
 
     return (
       <div id="root">
+        <div id="semesterly-name">Semester.ly</div>
         <div id="control-bar-container">
           <ControlBar toggleModal={this.toggleCourseModal}/>
         </div>
@@ -25,6 +26,7 @@ module.exports = React.createClass({
         <div id="cal-container">
           <Timetable toggleModal={this.toggleCourseModal} />
         </div>
+        <div id="side-bar"/>
       </div>
     );
   },
