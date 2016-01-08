@@ -23,8 +23,11 @@ module.exports = React.createClass({
               <ModalContent />
           </Modal>
         </div>
-        <div id="cal-container">
-          <Timetable toggleModal={this.toggleCourseModal} />
+        <div id="all-cols-container">
+          <div id="side-container">Side div</div>
+          <div id="cal-container">
+            <Timetable toggleModal={this.toggleCourseModal} />
+          </div>
         </div>
       </div>
     );
