@@ -1,8 +1,12 @@
+#load {
+  padding-top:100px;
+  padding-bottom:130px;
+  padding-left:40px;
+}
 .sk-cube-grid {
   width: 100px;
   height: 100px;
   margin: 100px auto;
-  margin-top:175px;
 }
 
 .sk-cube-grid .sk-cube {
