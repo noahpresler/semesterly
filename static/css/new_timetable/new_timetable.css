@@ -247,17 +247,17 @@ div {
 	margin-right:14px;
 }
 .course-modal {
+	max-width: 630px;
 	width: 70% !important;
 }
 #modal-content {
-	height: 80vh;
+	height: 90vh;
 	position:relative;
 	outline-width: 0;
 	padding-top:1px;
 	overflow-y:scroll;
 	font-size: 15px;
-/*	background-color:#BD5C5C ;
-*/}
+}
 .semester-display {
 	font-size:30px;
 
