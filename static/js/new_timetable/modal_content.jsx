@@ -2,6 +2,7 @@ var Loader = require('./loader');
 var course_info_store = require('./stores/course_info');
 var EvaluationManager = require('./evaluations.jsx');
 var TimetableActions = require('./actions/update_timetables.js');
+var course_actions = require('./actions/course_actions');
 
 module.exports = React.createClass({
 	mixins: [Reflux.connect(course_info_store)],
@@ -43,6 +44,12 @@ module.exports = React.createClass({
 		}.bind(this));
 	},
 
+	openRecomendation: function(course_id) {
+		return (function() {
+			course_actions.getCourseInfo(course_id)
+		}.bind(this));
+	},
+
 	getDescription: function() {
 		var description = 
 			(<div className="modal-entry" id="course-description">
@@ -58,8 +65,9 @@ module.exports = React.createClass({
 
 	getRecomendations: function() {
 		var related = this.state.course_info.related_courses.slice(0,3).map(function(rc) {
+			console.log(rc.id)
             return (
-            	<div id="recomendation">
+            	<div id="recomendation" onClick={this.openRecomendation(rc.id)}>
             		<div id="center-wrapper">
 	            		<div id="rec-wrapper">
 		            		<div id="name">{rc.name}</div>

@@ -558,12 +558,24 @@ input.cmn-toggle-round:checked + label:after {
 	background-color: #BDAEFF;
 }
 
+.modal-entry #recomendation:nth-of-type(1) #center-wrapper:hover {
+	background-color: #a895ff;
+}
+
 .modal-entry #recomendation:nth-of-type(2) #center-wrapper {
 	background-color: #9AE7D3;
 }
 
+.modal-entry #recomendation:nth-of-type(2) #center-wrapper:hover {
+	background-color: #85e2ca;
+}
+
 .modal-entry #recomendation:nth-of-type(3) #center-wrapper {
 	background-color: #FFB0B3;
+}
+
+.modal-entry #recomendation:nth-of-type(3) #center-wrapper:hover {
+	background-color: #ff979a;
 }
 
 .star-ratings-sprite {
