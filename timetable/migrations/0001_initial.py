@@ -17,11 +17,16 @@ class Migration(migrations.Migration):
                 ('code', models.CharField(max_length=20)),
                 ('name', models.CharField(max_length=250)),
                 ('description', models.TextField(max_length=1500)),
+                ('unstopped_description', models.TextField(max_length=1500)),
                 ('campus', models.IntegerField()),
                 ('breadths', models.CharField(default=b'', max_length=5)),
                 ('prerequisites', models.TextField(default=b'', max_length=1000)),
                 ('exclusions', models.TextField(default=b'', max_length=1000)),
+                ('related_courses', models.ManyToManyField(related_name='related_courses_rel_+', to='timetable.Course', blank=True)),
             ],
+            options={
+            },
+            bases=(models.Model,),
         ),
         migrations.CreateModel(
             name='CourseOffering',
@@ -41,6 +46,9 @@ class Migration(migrations.Migration):
                 ('can_be_locked', models.BooleanField(default=False)),
                 ('course', models.ForeignKey(to='timetable.Course')),
             ],
+            options={
+            },
+            bases=(models.Model,),
         ),
         migrations.CreateModel(
             name='HopkinsCourse',
@@ -49,12 +57,16 @@ class Migration(migrations.Migration):
                 ('code', models.CharField(max_length=25)),
                 ('name', models.CharField(max_length=250)),
                 ('description', models.TextField(max_length=1500)),
+                ('unstopped_description', models.TextField(max_length=1500)),
                 ('campus', models.IntegerField()),
                 ('breadths', models.CharField(default=b'', max_length=5)),
                 ('prerequisites', models.TextField(default=b'', max_length=1000)),
                 ('exclusions', models.TextField(default=b'', max_length=1000)),
                 ('related_courses', models.ManyToManyField(related_name='related_courses_rel_+', to='timetable.HopkinsCourse', blank=True)),
             ],
+            options={
+            },
+            bases=(models.Model,),
         ),
         migrations.CreateModel(
             name='HopkinsCourseEvaluation',
@@ -67,6 +79,9 @@ class Migration(migrations.Migration):
                 ('year', models.CharField(max_length=200)),
                 ('course', models.ForeignKey(to='timetable.HopkinsCourse')),
             ],
+            options={
+            },
+            bases=(models.Model,),
         ),
         migrations.CreateModel(
             name='HopkinsCourseOffering',
@@ -87,6 +102,9 @@ class Migration(migrations.Migration):
                 ('can_be_locked', models.BooleanField(default=True)),
                 ('course', models.ForeignKey(to='timetable.HopkinsCourse')),
             ],
+            options={
+            },
+            bases=(models.Model,),
         ),
         migrations.CreateModel(
             name='HopkinsTextbook',
@@ -94,11 +112,19 @@ class Migration(migrations.Migration):
                 ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
                 ('isbn', models.CharField(max_length=13)),
                 ('is_required', models.BooleanField(default=False)),
+                ('detail_url', models.URLField(max_length=1000)),
+                ('image_url', models.URLField(max_length=1000)),
+                ('author', models.CharField(max_length=500)),
+                ('title', models.CharField(max_length=1500)),
             ],
+            options={
+            },
+            bases=(models.Model,),
         ),
         migrations.AddField(
             model_name='hopkinscourseoffering',
             name='textbooks',
             field=models.ManyToManyField(to='timetable.HopkinsTextbook'),
+            preserve_default=True,
         ),
     ]

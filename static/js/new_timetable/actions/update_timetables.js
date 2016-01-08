@@ -1,3 +1,4 @@
 module.exports = Reflux.createActions(
-  ["updateTimetables"]
+  ["updateCourses",
+  "updatePreferences"]
 );
