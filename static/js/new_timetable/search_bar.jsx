@@ -25,7 +25,7 @@ var SearchResult = React.createClass({
 
   toggleCourse: function(e) {
     var removing = this.props.in_roster;
-    TimetableActions.updateTimetables({id: this.props.id, section: '', removing: removing});
+    TimetableActions.updateCourses({id: this.props.id, section: '', removing: removing});
     e.preventDefault();  // stop input from triggering onBlur and thus hiding results
     e.stopPropagation(); // stop parent from opening modal
   },

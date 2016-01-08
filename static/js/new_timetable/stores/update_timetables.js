@@ -1,7 +1,7 @@
 var actions = require('../actions/update_timetables.js');
 
 
-var obj = {
+var tt_state = {
   school: "jhu",
   semester: "S",
   courses_to_sections: {},
@@ -19,7 +19,12 @@ module.exports = Reflux.createStore({
   listenables: [actions],
   courses_to_sections: {},
 
-  updateTimetables: function(new_course_with_section) {
+ /**
+  * Update tt_state with new course roster
+  * @param {object} new_course_with_section contains 
+  * @return {void} does not return anything, just updates tt_state
+  */
+  updateCourses: function(new_course_with_section) {
     this.trigger({loading:true});
 
     var removing = new_course_with_section.removing;
@@ -28,10 +33,10 @@ module.exports = Reflux.createStore({
     var c_to_s = $.extend(true, {}, this.courses_to_sections); // deep copy of this.courses_to_sections
     
     if (!removing) { // adding course
-      if (obj.school == "jhu") {
+      if (tt_state.school == "jhu") {
         c_to_s[new_course_id] = {'L': '', 'T': '', 'P': '', 'C': new_course_with_section.section};
       }
-      else if (obj.school == "uoft") {
+      else if (tt_state.school == "uoft") {
         var locked_sections = {'L': '', 'T': '', 'P': '', 'C': ''} // this is what we want to send if not locking
         if (section) { // locking
           if (c_to_s[new_course_id] != null) {
@@ -52,8 +57,23 @@ module.exports = Reflux.createStore({
           return;  
       }
     }
-    obj.courses_to_sections = c_to_s; // to make the POST request
-    $.post('/timetable/', JSON.stringify(obj), function(response) {
+    tt_state.courses_to_sections = c_to_s; // to make the POST request
+    this.makeRequest(c_to_s);
+  },
+
+ /**
+  * Update tt_state with new preferences
+  * @param
+  * @return {void} doesn't return anything, just updates tt_state
+  */
+  updatePreferences: function() {
+    console.log('hello');
+    return
+  },
+
+  // Makes a POST request to the backend with tt_state
+  makeRequest: function(c_to_s) {
+    $.post('/timetable/', JSON.stringify(tt_state), function(response) {
         if (response.length > 0) {
             this.courses_to_sections = c_to_s;
             this.trigger({

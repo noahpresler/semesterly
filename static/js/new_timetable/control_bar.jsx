@@ -1,6 +1,9 @@
 var SearchBar = require('./search_bar');
+var TimetableActions = require('./actions/update_timetables.js');
+var TimetableStore = require('./stores/update_timetables.js');
 
 module.exports = React.createClass({
+  mixins: [Reflux.connect(TimetableStore)],
 
   render: function() {
     return (
@@ -42,7 +45,7 @@ module.exports = React.createClass({
                     </div>
                     <div className="preference-toggle">
                       <div className="switch">
-                        <input id="cmn-toggle-3" defaultChecked className="cmn-toggle cmn-toggle-round" type="checkbox" />
+                        <input id="cmn-toggle-3" defaultChecked className="cmn-toggle cmn-toggle-round" type="checkbox" onClick={TimetableActions.updatePreferences}/>
                         <label htmlFor="cmn-toggle-3"></label>
                       </div>
                     </div>

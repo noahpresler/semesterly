@@ -94,19 +94,19 @@ var Slot = React.createClass({
         this.updateColours(this.props.colour);
     },
     pinCourse: function(e) {
-        TimetableActions.updateTimetables({id: this.props.course, 
+        TimetableActions.updateCourses({id: this.props.course, 
             section: this.props.meeting_section, 
             removing: false});
         e.stopPropagation();
     },
     unpinCourse: function(e) {
-        TimetableActions.updateTimetables({id: this.props.course, 
+        TimetableActions.updateCourses({id: this.props.course, 
             section: '', 
             removing: false});
         e.stopPropagation();
     },
     removeCourse: function(e) {
-        TimetableActions.updateTimetables({id: this.props.course, 
+        TimetableActions.updateCourses({id: this.props.course, 
             section: '', 
             removing: true});
         e.stopPropagation();
