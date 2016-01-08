@@ -24,6 +24,20 @@ input[type="text"]:focus {
     background-color:#fff;
 }
 
+#side-container {
+    float: right;
+    width: 30%;
+    max-width: 300px;
+    height: 100%;
+    border: 0px 0px 0px 2px solid #ccc;
+    height: 100vh;
+    border-left: 1px solid #ccc;
+}
+
+#cal-container {
+	overflow: hidden
+}
+
 .fc-toolbar {
 	height: 60px;
     background-color: #F8F6F7;
@@ -53,8 +67,8 @@ input[type="text"]:focus {
 
 #calendar {
 	height: 100% !important;
-	margin-left:70px !important;
-	margin-right:70px !important;
+	margin-left:40px !important;
+	margin-right:40px !important;
 	min-width:300px;
 	margin-top:-7px !important;
 }
