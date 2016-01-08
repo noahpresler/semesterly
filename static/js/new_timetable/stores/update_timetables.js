@@ -21,7 +21,7 @@ module.exports = Reflux.createStore({
 
  /**
   * Update tt_state with new course roster
-  * @param {object} new_course_with_section contains 
+  * @param {object} new_course_with_section contains attributed id, section, removing
   * @return {void} does not return anything, just updates tt_state
   */
   updateCourses: function(new_course_with_section) {
@@ -30,7 +30,7 @@ module.exports = Reflux.createStore({
     var removing = new_course_with_section.removing;
     var new_course_id = new_course_with_section.id;
     var section = new_course_with_section.section;
-    var c_to_s = $.extend(true, {}, this.courses_to_sections); // deep copy of this.courses_to_sections
+    var c_to_s = $.extend(true, {}, tt_state.courses_to_sections); // deep copy of tt_state.courses_to_sections
     
     if (!removing) { // adding course
       if (tt_state.school == "jhu") {
@@ -52,7 +52,7 @@ module.exports = Reflux.createStore({
     else { // removing course
       delete c_to_s[new_course_id];
       if (Object.keys(c_to_s).length == 0) { // removed last course
-          this.courses_to_sections = {};
+          tt_state.courses_to_sections = {};
           this.trigger(this.getInitialState());
           return;  
       }
@@ -63,25 +63,26 @@ module.exports = Reflux.createStore({
 
  /**
   * Update tt_state with new preferences
-  * @param
+  * @param {string} preference: the preference that is being updated
+  * @param new_value: the new value of the specified preference
   * @return {void} doesn't return anything, just updates tt_state
   */
-  updatePreferences: function() {
-    console.log('hello');
-    return
+  updatePreferences: function(preference, new_value) {
+    tt_state.preferences[preference] = new_value;
+    this.makeRequest();
   },
 
   // Makes a POST request to the backend with tt_state
-  makeRequest: function(c_to_s) {
+  makeRequest: function() {
     $.post('/timetable/', JSON.stringify(tt_state), function(response) {
         if (response.length > 0) {
-            this.courses_to_sections = c_to_s;
-            this.trigger({
-                timetables: response,
-                courses_to_sections: this.courses_to_sections,
-                current_index: 0,
-                loading: false
-            });
+          console.log('hello');
+          this.trigger({
+              timetables: response,
+              courses_to_sections: tt_state.courses_to_sections,
+              current_index: 0,
+              loading: false
+          });
         }
         else {
           this.trigger({loading: false});
