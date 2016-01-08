@@ -56,7 +56,7 @@ module.exports = React.createClass({
 				<h6>Description:</h6>
 				{this.state.course_info.description}
 			</div>)
-		return description
+		return description;
 	},
 
 	getEvaluations: function() {
@@ -65,9 +65,8 @@ module.exports = React.createClass({
 
 	getRecomendations: function() {
 		var related = this.state.course_info.related_courses.slice(0,3).map(function(rc) {
-			console.log(rc.id)
             return (
-            	<div id="recomendation" onClick={this.openRecomendation(rc.id)}>
+            	<div id="recomendation" onClick={this.openRecomendation(rc.id)} key={rc.id}>
             		<div id="center-wrapper">
 	            		<div id="rec-wrapper">
 		            		<div id="name">{rc.name}</div>

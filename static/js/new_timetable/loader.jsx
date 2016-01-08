@@ -1,7 +1,6 @@
 module.exports = React.createClass({
 
 	render: function() {
-
 		return (
             <div id="load">
                 <div className="sk-cube-grid">

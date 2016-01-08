@@ -282,7 +282,6 @@ div {
 	margin-right:14px;
 }
 .course-modal {
-	max-width: 630px;
 	width: 70% !important;
 }
 #modal-content {
@@ -593,22 +592,22 @@ input.cmn-toggle-round:checked + label:after {
 }
 
 .star-ratings-sprite {
-  background: url("https://s3-us-west-2.amazonaws.com/s.cdpn.io/2605/star-rating-sprite.png") repeat-x;
+  background: url("../../img/star.png") repeat-x;
   font-size: 0;
-  height: 21px;
+  height: 24px;
   line-height: 0;
   overflow: hidden;
   text-indent: -999em;
-  width: 110px;
+  width: 120px;
   margin: 0 auto;
   float:left;
 }
 
 .rating {
-	background: url("https://s3-us-west-2.amazonaws.com/s.cdpn.io/2605/star-rating-sprite.png") repeat-x;
+	background: url("../../img/rating.png") repeat-x;
 	background-position: 0 100%;
 	float: left;
-	height: 21px;
+	height: 24px;
 	display:block;
 }
 
