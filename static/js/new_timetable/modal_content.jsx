@@ -1,6 +1,7 @@
 var Loader = require('./loader');
 var course_info_store = require('./stores/course_info');
 var EvaluationManager = require('./evaluations.jsx');
+var TimetableActions = require('./actions/update_timetables.js');
 
 module.exports = React.createClass({
 	mixins: [Reflux.connect(course_info_store)],
@@ -31,9 +32,15 @@ module.exports = React.createClass({
 				<div id="name">{this.state.course_info.name}</div>
 				<div id="code">{this.state.course_info.code}</div>
 			</div>
-			<span className="fui-plus"/>
+			<span className="course-action fui-plus" onClick={this.addCourse()}/>
 		</div>)
 		return header
+	},
+
+	addCourse: function() {
+		return (function() {
+			TimetableActions.updateTimetables({id: this.state.course_info.id, section: '', removing: false});
+		}.bind(this));
 	},
 
 	getDescription: function() {
