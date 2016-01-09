@@ -53,8 +53,12 @@ module.exports = React.createClass({
                   setIndex={this.setIndex}
                   current_index={this.state.current_index}/>
                   {/*<h2 className="light semester-display">Fall 2016</h2>*/}
+                <a className="btn btn-primary right calendar-function"
+                   onClick={this.getShareLink}>
+                  <span className="fui-clip"></span>
+                </a>
                 <div className="fc-clear"></div>
-                              <a onClick={this.getShareLink} className="right">Share</a>
+
 
               </div>
 
