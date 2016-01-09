@@ -12,6 +12,7 @@
     user-select: none;
     margin:0;
     margin-top:8px;
+    margin-left:5px;
 }
 
 .pagination li a:hover, 
