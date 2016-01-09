@@ -23,7 +23,9 @@ input[type="text"]:focus {
 	border:2px solid #18A98C; /* #3D546B */
     background-color:#fff;
 }
-
+.right {
+	float: right;
+}
 #side-container {
     float: right;
     width: 30%;

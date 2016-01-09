@@ -34,8 +34,38 @@ class Course(models.Model):
 	def get_prereqs(self):
 		return self.prerequisites
 
+	def get_all_textbook_info(self):
+		# Implement
+		textbook_info = []
+		for co in CourseOffering.objects.filter(course=self):
+			tb = {
+			"section" : co.meeting_section,
+			"textbooks" : co.get_textbooks()
+			}
+			textbook_info.append(tb)
+		return textbook_info
+
+	def get_related_course_info(self):
+		info = []
+		related = self.related_courses.all()
+		for c in related:
+			info.append(model_to_dict(c))
+		return info
+
+	def get_eval_info(self):
+		# implement
+		return []
+
 	def get_exclusions(self):
 		return self.exclusions
+
+class Textbook(models.Model):
+	isbn = models.CharField(max_length=13)
+	is_required = models.BooleanField(default=False)
+	detail_url = models.URLField(max_length=1000)
+	image_url = models.URLField(max_length=1000)
+	author = models.CharField(max_length=500)
+	title = models.CharField(max_length=1500)
 
 class CourseOffering(models.Model):
 	course = models.ForeignKey(Course)
@@ -51,11 +81,19 @@ class CourseOffering(models.Model):
 	alternates = models.BooleanField(default=False)
 	section_type = models.CharField(max_length=5)
 	can_be_locked = models.BooleanField(default=False)
+	textbooks = models.ManyToManyField(Textbook)
 
 	def __unicode__(self):
 		# return "Semester: %s, Section: %s, Time: %s" % (self.semester, self.meeting_section, self.time)
 		return "Day: %s, Time: %s - %s" % (self.day, self.time_start, self.time_end)
-
+	
+	def get_textbooks(self):
+		textbooks = []
+		temp = []
+		tbs = self.textbooks.all()
+		for tb in tbs:
+			textbooks.append(tb.get_info())
+		return textbooks
 
 class HopkinsCourse(models.Model):
 	code = models.CharField(max_length=25)
