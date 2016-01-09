@@ -33,7 +33,8 @@ module.exports = React.createClass({
         var dayAndTimes = this.getDaysAndTimes(cos);
         var sect = <div id="section-num">{cos[0].meeting_section}</div>
         var prof = <div id="profs">{cos[0].instructors}</div>
-        return <div id="section-wrapper">{sect}{prof}{dayAndTimes}</div>
+        var sect_prof = <div id="sect-prof">{sect}{prof}</div>
+        return <div id="section-wrapper">{sect_prof}{dayAndTimes}</div>
     },
 
     getRelatedCourseOfferings: function() {
