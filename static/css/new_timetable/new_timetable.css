@@ -86,7 +86,6 @@ input[type="text"]:focus {
     z-index: 1;
     left: 0px;
     right: 0px;
-    min-width: 95%!important;
     float: left;
     margin-left:0px !important;
     padding-left:1%;
@@ -629,4 +628,10 @@ input.cmn-toggle-round:checked + label:after {
 
 #click-intro {
 	text-align: center;
+}
+
+
+/* Slot styles */
+#slot-container {
+  display: flex !important;
 }

@@ -30,7 +30,8 @@ module.exports = Reflux.createStore({
     var removing = new_course_with_section.removing;
     var new_course_id = new_course_with_section.id;
     var section = new_course_with_section.section;
-    var c_to_s = $.extend(true, {}, tt_state.courses_to_sections); // deep copy of tt_state.courses_to_sections
+    var new_state = $.extend(true, {}, tt_state); // deep copy of tt_state
+    var c_to_s = new_state.courses_to_sections;
     
     if (!removing) { // adding course
       if (tt_state.school == "jhu") {
@@ -57,8 +58,7 @@ module.exports = Reflux.createStore({
           return;  
       }
     }
-    tt_state.courses_to_sections = c_to_s; // to make the POST request
-    this.makeRequest(c_to_s);
+    this.makeRequest(new_state);
   },
 
  /**
@@ -68,23 +68,28 @@ module.exports = Reflux.createStore({
   * @return {void} doesn't return anything, just updates tt_state
   */
   updatePreferences: function(preference, new_value) {
-    tt_state.preferences[preference] = new_value;
-    this.makeRequest();
+    var new_state = $.extend(true, {}, tt_state); // deep copy of tt_state
+    new_state.preferences[preference] = new_value;
+    this.makeRequest(new_state);
   },
 
   // Makes a POST request to the backend with tt_state
-  makeRequest: function() {
-    $.post('/timetable/', JSON.stringify(tt_state), function(response) {
+  makeRequest: function(new_state) {
+    $.post('/timetable/', JSON.stringify(new_state), function(response) {
         if (response.length > 0) {
-          console.log('hello');
+          tt_state = new_state; //only update state if successful
           this.trigger({
               timetables: response,
               courses_to_sections: tt_state.courses_to_sections,
               current_index: 0,
               loading: false
           });
-        }
-        else {
+        } else if (tt_state.courses_to_sections != {}) {
+          this.trigger({
+            loading: false,
+            conflict_error: true
+          });
+        } else {
           this.trigger({loading: false});
         }
     }.bind(this));
@@ -95,6 +100,7 @@ module.exports = Reflux.createStore({
       timetables: [], 
       courses_to_sections: {}, 
       current_index: -1, 
+      conflict_error: false,
       loading: false};
   }
 });
