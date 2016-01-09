@@ -117,20 +117,18 @@ module.exports = React.createClass({
 
 	getSections: function() {
 		var F = this.state.course_info.sections_F.map(function(f){
-			return (<div>
-				<SectionSlot key={s.id} all_sections={this.state.course_info.sections_F_objs} section={s}/>
-			</div>)
+			return (<SectionSlot key={s.id} all_sections={this.state.course_info.sections_F_objs} section={s}/>)
 		}.bind(this));
 		var S = this.state.course_info.sections_S.map(function(s){
-			return (<div>
-				<SectionSlot key={s.id} all_sections={this.state.course_info.sections_S_objs} section={s}/>
-			</div>)
+			return (<SectionSlot key={s.id} all_sections={this.state.course_info.sections_S_objs} section={s}/>)
 		}.bind(this));
 		var sections = 
 			(<div className="modal-entry" id="course-sections">
 				<h6>Course Sections:</h6>
-				{F}
-				{S}
+				<div id="all-sections-wrapper">
+					{F}
+					{S}
+				</div>
 			</div>)
 		return sections
 	},

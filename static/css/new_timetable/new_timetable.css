@@ -630,3 +630,18 @@ input.cmn-toggle-round:checked + label:after {
 #click-intro {
 	text-align: center;
 }
+
+#section-wrapper {
+	display: inline-block;
+	height:auto;
+	width:auto;
+	margin-right:10px;
+}
+
+#section-wrapper #section-num {
+	float:left;
+}
+
+#section-wrapper #profs {
+	float: right;
+}
