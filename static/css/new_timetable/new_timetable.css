@@ -35,7 +35,7 @@ input[type="text"]:focus {
 }
 
 #cal-container {
-	overflow: hidden
+	overflow: hidden;
 }
 
 .fc-toolbar {
