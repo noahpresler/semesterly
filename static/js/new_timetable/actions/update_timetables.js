@@ -1,4 +1,8 @@
 module.exports = Reflux.createActions(
-  ["updateCourses",
-  "updatePreferences"]
+  [
+  "updateCourses",
+  "updatePreferences",
+  "getTimetableLink",
+  "loadPresetTimetable",
+  ]
 );

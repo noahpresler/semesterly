@@ -1,6 +1,7 @@
 var SlotManager = require('./slot_manager');
 var Pagination = require('./pagination');
 var UpdateTimetablesStore = require('./stores/update_timetables');
+var TimetableActions = require('./actions/update_timetables');
 
 module.exports = React.createClass({
   mixins: [Reflux.connect(UpdateTimetablesStore)],
@@ -21,6 +22,10 @@ module.exports = React.createClass({
     return(function () {
       this.setState({current_index: new_index});
     }.bind(this));
+  },
+
+  getShareLink: function() {
+    TimetableActions.getTimetableLink(this.state.current_index);
   },
 
   render: function() {
@@ -49,6 +54,8 @@ module.exports = React.createClass({
                   current_index={this.state.current_index}/>
                   {/*<h2 className="light semester-display">Fall 2016</h2>*/}
                 <div className="fc-clear"></div>
+                              <a onClick={this.getShareLink} className="right">Share</a>
+
               </div>
 
               <div className="fc-view-container">
@@ -262,6 +269,8 @@ module.exports = React.createClass({
             </div>
       );
   },
+
+
 
 
 });
