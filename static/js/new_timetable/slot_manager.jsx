@@ -26,6 +26,7 @@ var Slot = React.createClass({
     render: function() {
         var pin = null, remove_button = null;
         var slot_style = this.getSlotStyle();
+
         if (this.state.show_buttons) {
             pin = (
             <div className="slot-inner bottom">
@@ -49,25 +50,30 @@ var Slot = React.createClass({
         }
 
     return (
-            <div 
-                onClick={this.props.toggleModal(this.props.course)}
-                onMouseEnter={this.highlightSiblings}
-                onMouseLeave={this.unhighlightSiblings}
-                className={"slot-outer fc-time-grid-event fc-event slot slot-" + this.props.course} 
-                style={slot_style}>
-                {remove_button}
-                <div className="fc-content">
-                  <div className="fc-time">
-                    <span>{this.props.time_start} – {this.props.time_end}</span>
-                  </div>
-                  <div className="fc-title slot-text-row">{this.props.code + " " + this.props.meeting_section}</div>
-                  <div className="fc-title slot-text-row">{this.props.name}</div>
-                </div>
-                {pin}            
+        <div 
+            onClick={this.props.toggleModal(this.props.course)}
+            onMouseEnter={this.highlightSiblings}
+            onMouseLeave={this.unhighlightSiblings}
+            className={"slot-outer fc-time-grid-event fc-event slot slot-" + this.props.course} 
+            style={slot_style}>
+            {remove_button}
+            <div className="fc-content">
+              <div className="fc-time">
+                <span>{this.props.time_start} – {this.props.time_end}</span>
+              </div>
+              <div className="fc-title slot-text-row">{this.props.code + " " + this.props.meeting_section}</div>
+              <div className="fc-title slot-text-row">{this.props.name}</div>
             </div>
+            {pin}            
+        </div>
         );
     },
 
+   /**
+    * Return an object containing style of a specific slot. Should specify at
+    * least the top y-coordinate and height of the slot, as well as backgroundColor
+    * while taking into account if there's an overlapping conflict
+    */
     getSlotStyle: function() {
         var start_hour   = parseInt(this.props.time_start.split(":")[0]),
             start_minute = parseInt(this.props.time_start.split(":")[1]),
@@ -77,11 +83,22 @@ var Slot = React.createClass({
         var top = (start_hour - 8)*52 + (start_minute)*(26/30);
         var bottom = (end_hour - 8)*52 + (end_minute)*(26/30) - 1;
         var height = bottom - top - 2;
+
+        // the cumulative width of this slot and all of the slots it is conflicting with
+        var total_slot_widths = 98 - (5 * this.props.depth_level);
+        // the width of this particular slot
+        var slot_width_percentage = total_slot_widths / this.props.num_conflicts;
+        // the amount of left margin of this particular slot, in percentage
+        var push_left = (this.props.shift_index * slot_width_percentage) + 5 * this.props.depth_level;
+        console.log(this.props.meeting_section, slot_width_percentage, push_left);
         return {
-            top: top, 
+            width: slot_width_percentage + "%",
+            top: top,
             height: height,
             backgroundColor: this.props.colour,
-            border: "1px solid " + this.props.colour
+            border: "1px solid " + this.props.colour,
+            left: push_left + "%",
+            "z-index": 100 * this.props.depth_level
         };
     },
 
@@ -164,7 +181,6 @@ module.exports = React.createClass({
             comparator = this.props.courses_to_sections[slot.course][slot.meeting_section[0]];
         }
         return comparator == slot.meeting_section;
-
     },
 
     getSlotsByDay: function() {
@@ -175,8 +191,8 @@ module.exports = React.createClass({
             'R': [],
             'F': []
         };
-        for (var course in this.props.timetables.courses) {
-            var crs = this.props.timetables.courses[course];
+        for (var course in this.props.timetable.courses) {
+            var crs = this.props.timetable.courses[course];
             for (var slot_id in crs.slots) {
                 var slot = crs.slots[slot_id];
                 slot["colour"] = Object.keys(colour_to_highlight)[course];

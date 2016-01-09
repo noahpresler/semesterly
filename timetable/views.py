@@ -598,8 +598,10 @@ def get_course(request, school, id):
         C, Co = models[0], models[1]
         course = C.objects.get(id=id)
         json_data = model_to_dict(course)
-        json_data['sections_F'] = get_meeting_sections(course, 'F')
-        json_data['sections_S'] = get_meeting_sections(course, 'S')
+        json_data['sections_F'] = get_meeting_sections(course,'F')
+        json_data['sections_S'] = get_meeting_sections(course,'S')
+        json_data['sections_F_objs'] = get_meeting_sections_objects(course, 'F')
+        json_data['sections_S_objs'] = get_meeting_sections_objects(course, 'S')
         json_data['textbook_info'] = course.get_all_textbook_info()
         json_data['eval_info'] = course.get_eval_info()
         json_data['related_courses'] = course.get_related_course_info()
@@ -634,6 +636,17 @@ def get_meeting_sections(course, semester):
     for o in offering_objs:
         if o.meeting_section not in sections:
             sections.append(o.meeting_section)
+    sections.sort()
+    return sections
+
+def get_meeting_sections_objects(course, semester):
+    SchoolCourse, SchoolCourseOffering, SchoolQuery, SchoolTimetable = get_correct_models(SCHOOL)   
+    offering_objs = SchoolCourseOffering.objects.filter((Q(semester=semester) | Q(semester='Y')), 
+                                                    course=course)          
+    sections = []
+    for o in offering_objs:
+        if o.meeting_section not in sections:
+            sections.append(model_to_dict(o))
     sections.sort()
     return sections
 
