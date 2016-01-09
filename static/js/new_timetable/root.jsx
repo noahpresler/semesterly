@@ -1,9 +1,13 @@
 var ControlBar = require('./control_bar');
 var Timetable = require('./timetable');
 var ModalContent = require('./modal_content');
+var TimetableStore = require('./stores/update_timetables.js')
 var course_actions = require('./actions/course_actions');
+var ConflictMsg = require('./conflict_msg.jsx');
     
 module.exports = React.createClass({
+  mixins: [Reflux.connect(TimetableStore)],
+
   getInitialState:function() {
     this.getCourses();
 
@@ -26,6 +30,7 @@ module.exports = React.createClass({
         <div id="all-cols-container">
           <div id="side-container">Side div</div>
           <div id="cal-container">
+            <ConflictMsg visible={this.state.conflict_error}/>
             <Timetable toggleModal={this.toggleCourseModal} />
           </div>
         </div>
