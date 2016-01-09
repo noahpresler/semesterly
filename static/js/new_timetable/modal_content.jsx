@@ -3,6 +3,7 @@ var course_info_store = require('./stores/course_info');
 var EvaluationManager = require('./evaluations.jsx');
 var TimetableActions = require('./actions/update_timetables.js');
 var course_actions = require('./actions/course_actions');
+var SectionSlot = require('./section_slot.jsx')
 
 module.exports = React.createClass({
 	mixins: [Reflux.connect(course_info_store)],
@@ -115,24 +116,23 @@ module.exports = React.createClass({
 	},
 
 	getSections: function() {
-		// var F = this.state.course_info.sections_S.map(function(f){
-		// 	return (<div>
-		// 		{f}
-		// 	</div>)
-		// }.bind(this));
-		// var S = this.state.course_info.sections_F.map(function(s){
-		// 	return (<div>
-		// 		{s}
-		// 	</div>)
-		// }.bind(this));
-		// var sections = 
-		// 	(<div className="modal-entry" id="course-sections">
-		// 		<h6>Course Sections:</h6>
-		// 		{F}
-		// 		{S}
-		// 	</div>)
-		// return sections
-		return null
+		var F = this.state.course_info.sections_F.map(function(f){
+			return (<div>
+				<SectionSlot key={s.id} all_sections={this.state.course_info.sections_F_objs} section={s}/>
+			</div>)
+		}.bind(this));
+		var S = this.state.course_info.sections_S.map(function(s){
+			return (<div>
+				<SectionSlot key={s.id} all_sections={this.state.course_info.sections_S_objs} section={s}/>
+			</div>)
+		}.bind(this));
+		var sections = 
+			(<div className="modal-entry" id="course-sections">
+				<h6>Course Sections:</h6>
+				{F}
+				{S}
+			</div>)
+		return sections
 	},
 
 
