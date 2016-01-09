@@ -5,6 +5,7 @@ body {
 a {
 	cursor:pointer;
 }
+
 input[type="text"] {
   display: block;
   margin: 0;
@@ -88,7 +89,6 @@ input[type="text"]:focus {
     z-index: 1;
     left: 0px;
     right: 0px;
-    min-width: 95%!important;
     float: left;
     margin-left:0px !important;
     padding-left:1%;
@@ -297,6 +297,13 @@ div {
 .semester-display {
 	font-size:30px;
 	width: 122px;
+}
+
+.calendar-function {
+	position:static;
+	margin-right:5px;
+	right:0;
+    margin-top:10px;
 }
 
 

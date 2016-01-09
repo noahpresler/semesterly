@@ -9,3 +9,4 @@ ReactDOM.render(
   document.getElementById('page')
 );
 
+TimetableActions.loadPresetTimetable("3&4511&4592+(01)&4945");

@@ -29,7 +29,6 @@ module.exports = React.createClass({
     }
 
     return (
-      <div id="pagination-container">
         <div className="pagination pagination-minimal">
           <ul>
             <li className="prev-double" onClick={this.changePage(-1)}>
@@ -52,7 +51,6 @@ module.exports = React.createClass({
             </li>
           </ul>
         </div>
-      </div>
     );
   },
   
