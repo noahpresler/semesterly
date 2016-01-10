@@ -30,9 +30,9 @@ module.exports = React.createClass({
               <ModalContent />
           </Modal>
         </div>
-        <div id="all-cols-container">
+        <div className="all-cols-container">
           <Sidebar toggleModal={this.toggleCourseModal}/>
-          <div id="cal-container">
+          <div className="cal-container">
             <Timetable toggleModal={this.toggleCourseModal} />
           </div>
         </div>
@@ -67,13 +67,17 @@ module.exports = React.createClass({
   },
 
   expandSideModal: function() {
-    $('.side-container').removeClass('slide-out collapsed');
-    $('.side-container').addClass('slide-in deployed');
+    $('.cal-container').removeClass('squeeze-out full-cal');
+    $('.side-container').removeClass('slide-out side-collapsed');
+    $('.side-container').addClass('slide-in side-deployed');
+    $('.cal-container').addClass('squeeze-in squeezed-cal');
   },
 
   collapseSideModal: function() {
-    $('.side-container').removeClass('slide-in deployed');
-    $('.side-container').addClass('slide-out collapsed');
+    $('.side-container').removeClass('slide-in side-deployed');
+    $('.cal-container').removeClass('squeeze-in squeezed-cal');
+    $('.side-container').addClass('slide-out side-collapsed');
+    $('.cal-container').addClass('squeeze-out full-cal');
   }
 
 

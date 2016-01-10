@@ -60,9 +60,7 @@ module.exports = React.createClass({
 
   render: function() {
     return (
-      <div ref="sidebar" className="side-container collapsed">
-        <div className="sidebar-open-button" onClick={this.toggleSideModal}>
-        </div>
+      <div ref="sidebar" className="side-container side-collapsed flexzone">
         <CourseRoster toggleModal={this.props.toggleModal}/>
         <TextbookRoster />
       </div>
