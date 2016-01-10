@@ -21,7 +21,7 @@ body {
 	color:#fff;
 	padding:15px;
 	z-index:100;
-    animation: slide 1s;
+    animation: slide 4.5s;
     font-size:13px;
     text-align:center;
     word-wrap:break-word;
@@ -29,10 +29,15 @@ body {
 }
 @keyframes slide {
   0% {
-    transform: translate(0, 90px);    
+    transform: translate(0px, 100px);    
   }
-
+  25% {
+  	transform: translate(0px, 0px);
+  }
+  75% {
+  	transform: translate(0px, 0px);
+  }
   100% {
-    transform: translate(0px, 0px);
+    transform: translate(0px, -400px);
   }
 }

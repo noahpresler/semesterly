@@ -14,7 +14,7 @@ module.exports = React.createClass({
 			if (this._reactInternalInstance) { // if mounted still
 				this.setState({visible: false});
 			}
-		}.bind(this), 3500);
+		}.bind(this), 4000);
 	},
 
 });
