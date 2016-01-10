@@ -18,7 +18,6 @@ urlpatterns = patterns('',
 	# url(r'^admin/', include(admin.site.urls)),
 
 	# index
-	url(r'^/*$', 'timetable.views.view_timetable'),
 	url(r'^timetable/*$', 'timetable.views.view_timetable'),
 	url(r'^timetable/.+$', 'timetable.views.view_timetable'),
 	url(r'^tt_course_search/*$', 'timetable.views.tt_course_search'),
@@ -37,5 +36,6 @@ urlpatterns = patterns('',
 	url(r'^courses/(?P<school>.+?)/(?P<sem>[fFsS]{1}?)/*$', 'timetable.views.get_courses'),
 	url(r'^courses/(?P<school>.+?)/id/(?P<id>[0-9]+)/*$', 'timetable.views.get_course'),
 	url(r'^populate/*$', 'timetable.views.do_all'),
+	url(r'^/*.*$', 'timetable.views.view_timetable'),
 
 )

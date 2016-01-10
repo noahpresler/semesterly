@@ -2,6 +2,7 @@ var SlotManager = require('./slot_manager');
 var Pagination = require('./pagination');
 var UpdateTimetablesStore = require('./stores/update_timetables');
 var TimetableActions = require('./actions/update_timetables');
+var ToastActions = require('./actions/toast_actions');
 
 module.exports = React.createClass({
   mixins: [Reflux.connect(UpdateTimetablesStore)],
@@ -25,8 +26,22 @@ module.exports = React.createClass({
   },
 
   getShareLink: function() {
-    TimetableActions.getTimetableLink(this.state.current_index);
+    var link = window.location.host + "/" + this.state.current_index + "&";
+    var c_to_s = this.state.courses_to_sections;
+    for (var course_id in c_to_s) {
+      link += course_id;
+      var mapping = c_to_s[course_id];
+      for (var section_heading in mapping) { // i.e 'L', 'T', 'P', 'S'
+        if (mapping[section_heading] != "") {
+          link += "+" + mapping[section_heading]; // delimiter for sections locked
+        }
+      }
+      link += "&"; // delimiter for courses
+    }
+    link = link.slice(0, -1);
+    return link;
   },
+
 
   render: function() {
       var slot_manager = this.state.timetables.length == 0 ? null :
@@ -54,7 +69,7 @@ module.exports = React.createClass({
                   current_index={this.state.current_index}/>
                   {/*<h2 className="light semester-display">Fall 2016</h2>*/}
                 <a className="btn btn-primary right calendar-function"
-                   onClick={this.getShareLink}>
+                   data-clipboard-text={this.getShareLink()}>
                   <span className="fui-clip"></span>
                 </a>
                 <div className="fc-clear"></div>
@@ -96,8 +111,6 @@ module.exports = React.createClass({
                                   <tbody>
                                     <tr>
                                       <td className="fc-axis"></td>
-                                      <td></td>
-                                      <td></td>
                                       <td></td>
                                       <td></td>
                                       <td></td>
@@ -272,6 +285,13 @@ module.exports = React.createClass({
               </div>
             </div>
       );
+  },
+
+  componentDidMount: function() {
+    var clip = new Clipboard('.calendar-function');
+    clip.on('success', function(e) {
+      ToastActions.createToast("Link copied to clipboard!");
+    });
   },
 
 

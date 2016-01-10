@@ -1,4 +1,5 @@
 var actions = require('../actions/update_timetables.js');
+var ToastActions = require('../actions/toast_actions.js');
 
 
 var tt_state = {
@@ -78,21 +79,54 @@ module.exports = Reflux.createStore({
     $.post('/timetable/', JSON.stringify(new_state), function(response) {
         if (response.length > 0) {
           tt_state = new_state; //only update state if successful
+          var index = 0;
+          if (new_state.index) {
+            index = new_state.index;
+            delete new_state['index'];
+          }
           this.trigger({
               timetables: response,
               courses_to_sections: tt_state.courses_to_sections,
-              current_index: 0,
+              current_index: index,
               loading: false
           });
-        } else if (tt_state.courses_to_sections != {}) {
+        } else if (tt_state.courses_to_sections != {}) { // conflict
           this.trigger({
             loading: false,
             conflict_error: true
           });
+          ToastActions.createToast("That course caused a conflict! Try again with the Allow Conflicts preference turned on.");
+
         } else {
           this.trigger({loading: false});
         }
     }.bind(this));
+  },
+
+
+  loadPresetTimetable: function(url_data) {
+    this.trigger({loading: true});
+    var courses = url_data.split("&");
+    tt_state.index = parseInt(courses.shift());
+    var school = tt_state.school;
+    for (var i = 0; i < courses.length; i++) {
+      var c = parseInt(courses[i]);
+      var course_info = courses[i].split("+");
+      course_info.shift(); // removes first element
+      tt_state.courses_to_sections[c] = {'L': '', 'T': '', 'P': '', 'C': ''};
+      if (course_info.length > 0) {
+        for (var j = 0; j < course_info.length; j++) {
+          var section = course_info[j];
+          if (school == "uoft") {
+            tt_state.courses_to_sections[c][section[0]] = section;
+          }
+          else if (school == "jhu") {
+            tt_state.courses_to_sections[c]['C'] = section;
+          }
+        }
+      }
+    }
+    this.makeRequest(tt_state);
   },
 
   getInitialState: function() {
