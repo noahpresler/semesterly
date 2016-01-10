@@ -28,15 +28,15 @@ module.exports = React.createClass({
 	
 	getInitialState: function() {
 		return {
-			indexSelected: null
-		}
+			index_selected: null
+		};
 	},
 
 	render: function() {
 		var i = 0;
 		var evals = this.props.eval_info.map(function(e) {
 			i++;
-			var selected = i == this.state.indexSelected;
+			var selected = i == this.state.index_selected;
 			return (<Evaluation eval_data={e} key={e.id} selectionCallback={this.changeSelected(i)} selected={selected} />);
 		}.bind(this));
 		var click_notice = this.props.eval_info.length == 0 ? (<div id="empty-intro">No course evaluations for this course yet</div>) : (<div id="click-intro">Click an evaluation item above to read the comments</div>);
@@ -52,10 +52,10 @@ module.exports = React.createClass({
 
 	changeSelected: function(e_index) {
 		return (function() {
-			if (this.state.indexSelected == e_index) 
-				this.setState({indexSelected: null});
+			if (this.state.index_selected == e_index) 
+				this.setState({index_selected: null});
 			else
-				this.setState({indexSelected: e_index});
+				this.setState({index_selected: e_index});
 		}.bind(this));
 	}
 });
