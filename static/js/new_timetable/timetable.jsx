@@ -288,21 +288,16 @@ module.exports = React.createClass({
   componentDidUpdate: function() {
     if(typeof(Storage) !== "undefined") {
       if (this.state.timetables.length > 0) {
-      // save newly generated courses to local storage
-      var new_data = Util.getLinkData(this.state.courses_to_sections, 
-        this.state.current_index);
-      localStorage.setItem('data', new_data);
-
-
-      }
-      else {
+        // save newly generated courses to local storage
+        var new_data = Util.getLinkData(this.state.courses_to_sections, 
+          this.state.current_index);
+        localStorage.setItem('data', new_data);
+      } else {
         localStorage.removeItem('data');
       }
     } 
 
   },
-
-
 
 
 });
