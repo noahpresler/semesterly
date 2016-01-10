@@ -24,20 +24,22 @@ input[type="text"]:focus {
   border:2px solid #18A98C; /* #3D546B */
     background-color:#fff;
 }
+
+.flexzone {
+  display: flex;
+  flex-wrap: wrap;
+}
+
 .right {
 	float: right;
 }
-#side-container {
-    float: right;
-    width: 30%;
-    max-width: 300px;
-    height: 100%;
-    border: 0px 0px 0px 2px solid #ccc;
-    height: 100vh;
-    border-left: 1px solid #ccc;
+
+.all-cols-container {
+  overflow: hidden;
 }
 
-#cal-container {
+.cal-container {
+  width: 100%;
   overflow: hidden;
 }
 
@@ -660,7 +662,7 @@ input.cmn-toggle-round:checked + label:after {
   text-align: center;
 }
 
-/* Slot styles */
+/* Slot styles ----------------------------*/
 #slot-container {
   display: flex !important;
 }
@@ -680,25 +682,36 @@ input.cmn-toggle-round:checked + label:after {
   float: right;
 }
 
-/* Sidebar */
+/* Sidebar -----------------------------------*/
+
 .roster-header {
   text-align: center;
 }
 
 .side-container {
+    position: absolute;
     float: right;
+    width: 15%;
     max-width: 300px;
-    width: 0%;
     height: 100%;
     border: 0px 0px 0px 2px solid #ccc;
     height: 100vh;
     border-left: 1px solid #ccc;
 }
 
-.collapsed {
-  width: 0%;
+/* ----Sidebar animations */
+
+/* -------------collapsed state settings*/
+.squeezed-cal {
+  width: 85%;
 }
 
+.side-collapsed {
+  left: 100%;
+}
+
+/* -------------deploy animations*/
+/* ---------------------for sidebar*/
 .slide-in {
   animation-duration: 1s;
   animation-name: slidein;
@@ -706,14 +719,40 @@ input.cmn-toggle-round:checked + label:after {
 
 @keyframes slidein {
   from {
-    width: 0%;
+    left: 100%;
   }
 
   to {
-    width: 30%;
+    left: 85%;
   }
 }
 
+
+/* ---------------------for calendar*/
+.squeeze-in {
+  animation-duration: 1s;
+  animation-name: squeezein;
+}
+
+@keyframes squeezein {
+  from {
+    width: 100%;
+  }
+  to {
+    width: 85%
+  }
+}
+
+/* -------------expanded state settings*/
+.full-cal {
+  width: 100%;
+}
+
+.side-deployed {
+  left: 85%;
+}
+/* -------------collapse animations*/
+/* ---------------------for sidebar*/
 .slide-out {
   animation-duration: 1s;
   animation-name: slideout;
@@ -721,24 +760,24 @@ input.cmn-toggle-round:checked + label:after {
 
 @keyframes slideout {
   from {
-    width: 30%;
+    left: 85%;
   }
   to {
-    width: 0%;
+    left: 100%;
+  }
+}
+/* ---------------------for calendar*/
+.squeeze-out {
+  animation-duration: 1s;
+  animation-name: squeezeout;
+}
+
+@keyframes squeezeout {
+  from {
+    width: 85%;
+  }
+  to {
+    width: 100%
   }
 }
 
-.deployed {
-  width: 30%;
-}
-
-.sidebar-open-button {
-    float: right;
-    max-width: 300px;
-    width: 5%;
-    height: 100%;
-    border: 0px 0px 0px 2px solid #ccc;
-    height: 100vh;
-    border-left: 1px solid #ccc;
-    background-color: black;
-}
