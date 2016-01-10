@@ -1,12 +1,12 @@
 var ControlBar = require('./control_bar');
 var Timetable = require('./timetable');
 var ModalContent = require('./modal_content');
-var TimetableStore = require('./stores/update_timetables.js')
+var ToastStore = require('./stores/toast_store.js');
+var TimetableStore = require('./stores/update_timetables.js');
 var course_actions = require('./actions/course_actions');
-var ConflictMsg = require('./conflict_msg.jsx');
-    
+
 module.exports = React.createClass({
-  mixins: [Reflux.connect(TimetableStore)],
+  mixins: [Reflux.connect(TimetableStore), Reflux.connect(ToastStore)],
 
   getInitialState:function() {
     this.getCourses();
@@ -18,6 +18,7 @@ module.exports = React.createClass({
 
     return (
       <div id="root">
+        <div id="toast-container"></div>
         <div id="semesterly-name">Semester.ly</div>
         <div id="control-bar-container">
           <ControlBar toggleModal={this.toggleCourseModal}/>
@@ -29,10 +30,9 @@ module.exports = React.createClass({
         </div>
         <div id="all-cols-container">
           <div id="side-container">Side div</div>
-          <div id="cal-container">
-            <ConflictMsg visible={this.state.conflict_error}/>
-            <Timetable toggleModal={this.toggleCourseModal} />
-          </div>
+            <div id="cal-container">
+              <Timetable toggleModal={this.toggleCourseModal} />
+            </div>
         </div>
       </div>
     );

@@ -9,4 +9,7 @@ ReactDOM.render(
   document.getElementById('page')
 );
 
-TimetableActions.loadPresetTimetable("3&4511&4592+(01)&4945");
+var data = window.location.pathname.substring(1); // loading timetable data from url
+if (data) {
+	TimetableActions.loadPresetTimetable(data);
+}
