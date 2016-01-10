@@ -90,6 +90,7 @@ var Slot = React.createClass({
         var slot_width_percentage = total_slot_widths / this.props.num_conflicts;
         // the amount of left margin of this particular slot, in percentage
         var push_left = (this.props.shift_index * slot_width_percentage) + 5 * this.props.depth_level;
+
         return {
             width: slot_width_percentage + "%",
             top: top,
