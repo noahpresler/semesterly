@@ -4,9 +4,11 @@ var ModalContent = require('./modal_content');
 var TimetableStore = require('./stores/update_timetables.js')
 var course_actions = require('./actions/course_actions');
 var ConflictMsg = require('./conflict_msg.jsx');
+var Sidebar = require('./side_bar.jsx');
     
 module.exports = React.createClass({
   mixins: [Reflux.connect(TimetableStore)],
+  sidebar_collapsed: true,
 
   getInitialState:function() {
     this.getCourses();
@@ -18,7 +20,7 @@ module.exports = React.createClass({
 
     return (
       <div id="root">
-        <div id="semesterly-name">Semester.ly</div>
+        <div id="semesterly-name" onClick={this.toggleSideModal}>Semester.ly</div>
         <div id="control-bar-container">
           <ControlBar toggleModal={this.toggleCourseModal}/>
         </div>
@@ -28,7 +30,7 @@ module.exports = React.createClass({
           </Modal>
         </div>
         <div id="all-cols-container">
-          <div id="side-container">Side div</div>
+          <Sidebar toggleModal={this.toggleCourseModal}/>
           <div id="cal-container">
             <ConflictMsg visible={this.state.conflict_error}/>
             <Timetable toggleModal={this.toggleCourseModal} />
@@ -53,5 +55,26 @@ module.exports = React.createClass({
         }.bind(this)
     );
   },
+
+  toggleSideModal: function(){
+    if (this.sidebar_collapsed) {
+      this.expandSideModal();
+      this.sidebar_collapsed = false;
+    } else {
+      this.collapseSideModal();
+      this.sidebar_collapsed = true;
+    }
+  },
+
+  expandSideModal: function() {
+    $('.side-container').removeClass('slide-out collapsed');
+    $('.side-container').addClass('slide-in deployed');
+  },
+
+  collapseSideModal: function() {
+    $('.side-container').removeClass('slide-in deployed');
+    $('.side-container').addClass('slide-out collapsed');
+  }
+
 
 });

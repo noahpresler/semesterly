@@ -41,7 +41,7 @@ module.exports = React.createClass({
 
 	addCourse: function() {
 		return (function() {
-			TimetableActions.updateTimetables({id: this.state.course_info.id, section: '', removing: false});
+			TimetableActions.updateCourses({id: this.state.course_info.id, section: '', removing: false});
 		}.bind(this));
 	},
 
