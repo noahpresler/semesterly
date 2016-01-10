@@ -13,6 +13,7 @@ module.exports = {
 	      data += "&"; // delimiter for courses
 	    }
 	    data = data.slice(0, -1);
+	    if (data.length < 3) {data = "";}
 	    return data;
 	},
 }
