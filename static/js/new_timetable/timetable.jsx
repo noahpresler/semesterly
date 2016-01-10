@@ -53,7 +53,7 @@ module.exports = React.createClass({
           <div id="calendar" className="fc fc-ltr fc-unthemed">
               {loader}
               <div className="fc-toolbar">
-                <NewPagination 
+                <Pagination 
                   count={this.state.timetables.length} 
                   next={this.nextTimetable} 
                   prev={this.prevTimetable}

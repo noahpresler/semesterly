@@ -7,9 +7,7 @@
     -moz-user-select: none;
     -ms-user-select: none;
     user-select: none;
-    max-width:70% !important;
     padding:0;
-    position:static;
 }
 .fc .fc-toolbar>*>* {
 	margin-left:0;
@@ -30,7 +28,7 @@
 	padding-top:5px;
     white-space:nowrap;
     word-wrap:break-word;
-    max-width:290px;
+    max-width:30%;
 }
 
 .sem-page {
