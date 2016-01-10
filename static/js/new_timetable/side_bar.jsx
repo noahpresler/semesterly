@@ -4,7 +4,7 @@ var RosterSlot = React.createClass({
   render: function() {
     return (
       <div
-        onClick={this.props.toggleModal(this.props.code)}
+        onClick={this.props.toggleModal(this.props.id)}
         className={"slot-outer fc-time-grid-event fc-event slot slot-" + this.props.course}>
         <div className="fc-content">
           <div className="fc-title slot-text-row">{this.props.name}</div>

@@ -49,6 +49,7 @@ var Slot = React.createClass({
             </div>);
         }
 
+    console.log(this.props.course);
     return (
         <div 
             onClick={this.props.toggleModal(this.props.course)}
