@@ -3,11 +3,12 @@ module.exports = React.createClass({
 		return {visible: true};
 	},		
 	render: function() {
-		var toast = this.state.visible ? 
-				(<div className="sem-toast-wrapper toasting">
-					<div className="sem-toast">{this.props.content}</div>
-				</div>) : null;
-		return toast;
+		if (!this.state.visible) {return null;}
+		return (
+		<div className="sem-toast-wrapper toasting">
+			<div className="sem-toast">{this.props.content}</div>
+		</div>
+		);
 	},
 	componentDidMount: function() {
 		setTimeout(function() {

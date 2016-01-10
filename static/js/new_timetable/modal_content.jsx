@@ -1,12 +1,12 @@
 var Loader = require('./loader');
-var course_info_store = require('./stores/course_info');
+var CourseInfoStore = require('./stores/course_info');
 var EvaluationManager = require('./evaluations.jsx');
 var TimetableActions = require('./actions/update_timetables.js');
-var course_actions = require('./actions/course_actions');
+var CourseActions = require('./actions/course_actions');
 var SectionSlot = require('./section_slot.jsx')
 
 module.exports = React.createClass({
-	mixins: [Reflux.connect(course_info_store)],
+	mixins: [Reflux.connect(CourseInfoStore)],
 
 	render: function() {
 		var loader = this.state.loading ? <Loader /> : null;
@@ -47,7 +47,7 @@ module.exports = React.createClass({
 
 	openRecomendation: function(course_id) {
 		return (function() {
-			course_actions.getCourseInfo(course_id)
+			CourseActions.getCourseInfo(course_id)
 		}.bind(this));
 	},
 
@@ -93,7 +93,7 @@ module.exports = React.createClass({
 	getTextbooks: function() {
 		var textbook_elements = this.state.course_info.textbook_info[0].textbooks.map(function(tb) {
             return (
-            	<div className="textbook">
+            	<div className="textbook" key={tb.id}>
             		<img height="125" src={tb.image_url}/>
             		<h6>{tb.title}</h6>
             		<div>{tb.author}</div>
@@ -101,18 +101,18 @@ module.exports = React.createClass({
             		<a href={tb.detail_url} target="_blank">
             			<img src="https://images-na.ssl-images-amazon.com/images/G/01/associates/remote-buy-box/buy5._V192207739_.gif" width="120" height="28" border="0"/>
             		</a>
-            	</div>)
+            	</div>);
         }.bind(this));
 		var textbooks = this.state.course_info.textbook_info[0].textbooks.length == 0 ? (<div id="empty-intro">No textbooks yet for this course</div>) :
 				(<div id="textbooks">
 	            	{textbook_elements}
-	            </div>)
+	            </div>);
 		var ret = 
 			(<div className="modal-entry" id="course-textbooks">
 				<h6>Textbooks:</h6>
 				{textbooks}
-			</div>)
-		return ret
+			</div>);
+		return ret;
 	},
 
 	getSections: function() {

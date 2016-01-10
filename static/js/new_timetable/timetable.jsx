@@ -4,6 +4,7 @@ var UpdateTimetablesStore = require('./stores/update_timetables');
 var TimetableActions = require('./actions/update_timetables');
 var ToastActions = require('./actions/toast_actions');
 var Util = require('./util/timetable_util');
+var NewPagination = require('./new_pagination');
 
 module.exports = React.createClass({
   mixins: [Reflux.connect(UpdateTimetablesStore)],
@@ -52,13 +53,12 @@ module.exports = React.createClass({
           <div id="calendar" className="fc fc-ltr fc-unthemed">
               {loader}
               <div className="fc-toolbar">
-                <Pagination 
+                <NewPagination 
                   count={this.state.timetables.length} 
                   next={this.nextTimetable} 
                   prev={this.prevTimetable}
                   setIndex={this.setIndex}
                   current_index={this.state.current_index}/>
-                  {/*<h2 className="light semester-display">Fall 2016</h2>*/}
                 <a className="btn btn-primary right calendar-function"
                    data-clipboard-text={this.getShareLink()}>
                   <span className="fui-clip"></span>

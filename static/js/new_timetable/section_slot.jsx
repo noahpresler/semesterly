@@ -14,8 +14,6 @@ var colour_to_highlight = {
     "#7499A2" : "#668B94",
 } // consider #CF000F, #e8fac3
 
-// how big a slot of half an hour would be, in pixels
-var HALF_HOUR_HEIGHT = 30;
 
 var day_to_letter = {
     'M':  'M', 
@@ -25,16 +23,16 @@ var day_to_letter = {
     'F':  'F',
     'S': 'Sa',
     'U': 'S'
-}
+};
 
 module.exports = React.createClass({
     render: function() {
-        var cos = this.getRelatedCourseOfferings()
+        var cos = this.getRelatedCourseOfferings();
         var dayAndTimes = this.getDaysAndTimes(cos);
-        var sect = <div id="section-num">{cos[0].meeting_section}</div>
-        var prof = <div id="profs">{cos[0].instructors}</div>
-        var sect_prof = <div id="sect-prof">{sect}{prof}</div>
-        return <div id="section-wrapper">{sect_prof}{dayAndTimes}</div>
+        var sect = <div id="section-num">{cos[0].meeting_section}</div>;
+        var prof = <div id="profs">{cos[0].instructors}</div>;
+        var sect_prof = <div id="sect-prof">{sect}{prof}</div>;
+        return <div id="section-wrapper">{sect_prof}{dayAndTimes}</div>;
     },
 
     getRelatedCourseOfferings: function() {
@@ -50,7 +48,7 @@ module.exports = React.createClass({
 
     getDaysAndTimes: function(cos) {
         var dayAndTimes = cos.map(function(o) {
-            return (<div id="day-time">{day_to_letter[o.day] + " " + o.time_start + "-" + o.time_end}</div>);
+            return (<div id="day-time" key={o.id}>{day_to_letter[o.day] + " " + o.time_start + "-" + o.time_end}</div>);
         }.bind(this));
         return ( <div id="dt-container">
                 {dayAndTimes}

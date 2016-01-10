@@ -5,7 +5,7 @@ var ToastStore = require('./stores/toast_store.js');
 var TimetableStore = require('./stores/update_timetables.js');
 var course_actions = require('./actions/course_actions');
 var Sidebar = require('./side_bar.jsx');
-    
+
 module.exports = React.createClass({
   mixins: [Reflux.connect(TimetableStore), Reflux.connect(ToastStore)],
   sidebar_collapsed: true,
