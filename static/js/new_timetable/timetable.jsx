@@ -3,6 +3,7 @@ var Pagination = require('./pagination');
 var UpdateTimetablesStore = require('./stores/update_timetables');
 var TimetableActions = require('./actions/update_timetables');
 var ToastActions = require('./actions/toast_actions');
+var Util = require('./util/timetable_util');
 
 module.exports = React.createClass({
   mixins: [Reflux.connect(UpdateTimetablesStore)],
@@ -26,20 +27,10 @@ module.exports = React.createClass({
   },
 
   getShareLink: function() {
-    var link = window.location.host + "/" + this.state.current_index + "&";
-    var c_to_s = this.state.courses_to_sections;
-    for (var course_id in c_to_s) {
-      link += course_id;
-      var mapping = c_to_s[course_id];
-      for (var section_heading in mapping) { // i.e 'L', 'T', 'P', 'S'
-        if (mapping[section_heading] != "") {
-          link += "+" + mapping[section_heading]; // delimiter for sections locked
-        }
-      }
-      link += "&"; // delimiter for courses
-    }
-    link = link.slice(0, -1);
-    return link;
+    var link = window.location.host + "/";
+    var data = Util.getLinkData(this.state.courses_to_sections,
+      this.state.current_index);
+    return link + data;
   },
 
 
@@ -292,6 +283,23 @@ module.exports = React.createClass({
     clip.on('success', function(e) {
       ToastActions.createToast("Link copied to clipboard!");
     });
+  },
+
+  componentDidUpdate: function() {
+    if(typeof(Storage) !== "undefined") {
+      if (this.state.timetables.length > 0) {
+      // save newly generated courses to local storage
+      var new_data = Util.getLinkData(this.state.courses_to_sections, 
+        this.state.current_index);
+      localStorage.setItem('data', new_data);
+
+
+      }
+      else {
+        localStorage.removeItem('data');
+      }
+    } 
+
   },
 
 

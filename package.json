@@ -17,7 +17,6 @@
     "gulp-util": "^3.0.7",
     "gulp-watch": "^4.3.5",
     "react": "^0.14.3",
-    "react-toastr": "^2.3.0",
     "reactify": "^1.1.1",
     "vinyl-source-stream": "^1.1.0",
     "watchify": "^3.6.1"

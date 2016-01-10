@@ -33,7 +33,6 @@ module.exports = React.createClass({
         <div id="all-cols-container">
           <Sidebar toggleModal={this.toggleCourseModal}/>
           <div id="cal-container">
-            <ConflictMsg visible={this.state.conflict_error}/>
             <Timetable toggleModal={this.toggleCourseModal} />
           </div>
         </div>
