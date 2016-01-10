@@ -691,7 +691,7 @@ input.cmn-toggle-round:checked + label:after {
 .side-container {
     position: absolute;
     float: right;
-    width: 15%;
+    max-width: 15%;
     max-width: 300px;
     height: 100%;
     border: 0px 0px 0px 2px solid #ccc;
@@ -703,7 +703,7 @@ input.cmn-toggle-round:checked + label:after {
 
 /* -------------collapsed state settings*/
 .squeezed-cal {
-  width: 85%;
+  width: 82%;
 }
 
 .side-collapsed {
@@ -723,7 +723,7 @@ input.cmn-toggle-round:checked + label:after {
   }
 
   to {
-    left: 85%;
+    left: 82%;
   }
 }
 
@@ -739,7 +739,7 @@ input.cmn-toggle-round:checked + label:after {
     width: 100%;
   }
   to {
-    width: 85%
+    width: 82%
   }
 }
 
@@ -749,7 +749,7 @@ input.cmn-toggle-round:checked + label:after {
 }
 
 .side-deployed {
-  left: 85%;
+  left: 82%;
 }
 /* -------------collapse animations*/
 /* ---------------------for sidebar*/
@@ -760,7 +760,7 @@ input.cmn-toggle-round:checked + label:after {
 
 @keyframes slideout {
   from {
-    left: 85%;
+    left: 82%;
   }
   to {
     left: 100%;
@@ -774,7 +774,7 @@ input.cmn-toggle-round:checked + label:after {
 
 @keyframes squeezeout {
   from {
-    width: 85%;
+    width: 82%;
   }
   to {
     width: 100%
