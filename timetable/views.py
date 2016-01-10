@@ -123,7 +123,7 @@ def convert_tt_to_dict(timetable):
 def get_course_dict(section):
     SchoolCourse = get_correct_models(SCHOOL)[0] # model containing courses
     model = SchoolCourse.objects.get(id=section[0])
-    return model_to_dict(model, fields=['code', 'name'])
+    return model_to_dict(model, fields=['code', 'name', 'id'])
 
 def get_course_obj(course_dict, sections):
     sections = list(sections)
