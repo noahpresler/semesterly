@@ -56,10 +56,13 @@ def view_timetable(request):
     SchoolCourse, SchoolCourseOffering, SchoolQuery, SchoolTimetable = get_correct_models(SCHOOL)
 
     course_ids = params['courses_to_sections'].keys()
-    courses = [SchoolCourse.objects.get(id=cid) for cid in course_ids]
-    LOCKED_SECTIONS = params['courses_to_sections']
-    set_tt_preferences(params['preferences'])
-    result = courses_to_timetables(courses, params['semester'])
+    try:
+        courses = [SchoolCourse.objects.get(id=cid) for cid in course_ids]
+        LOCKED_SECTIONS = params['courses_to_sections']
+        set_tt_preferences(params['preferences'])
+        result = courses_to_timetables(courses, params['semester'])
+    except:
+        result = {'error': True}
     return HttpResponse(json.dumps(result), content_type='application/json')
 
 def set_tt_preferences(preferences):
