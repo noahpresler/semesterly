@@ -17,6 +17,7 @@ class Migration(migrations.Migration):
                 ('code', models.CharField(max_length=20)),
                 ('name', models.CharField(max_length=250)),
                 ('description', models.TextField(max_length=1500)),
+                ('unstopped_description', models.TextField(max_length=1500)),
                 ('campus', models.IntegerField()),
                 ('breadths', models.CharField(default=b'', max_length=5)),
                 ('prerequisites', models.TextField(default=b'', max_length=1000)),
@@ -92,6 +93,18 @@ class Migration(migrations.Migration):
         ),
         migrations.CreateModel(
             name='HopkinsTextbook',
+            fields=[
+                ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
+                ('isbn', models.CharField(max_length=13)),
+                ('is_required', models.BooleanField(default=False)),
+                ('detail_url', models.URLField(max_length=1000)),
+                ('image_url', models.URLField(max_length=1000)),
+                ('author', models.CharField(max_length=500)),
+                ('title', models.CharField(max_length=1500)),
+            ],
+        ),
+        migrations.CreateModel(
+            name='Textbook',
             fields=[
                 ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
                 ('isbn', models.CharField(max_length=13)),
