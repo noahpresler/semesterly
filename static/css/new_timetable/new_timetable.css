@@ -701,6 +701,22 @@ input.cmn-toggle-round:checked + label:after {
   height:auto;
   width:auto;
   margin-right:10px;
+  margin-bottom:10px;
+  background-color:#8870FF;
+  border-radius: 6px;
+  color: white;
+  padding: 10px;
+  width: 138px;
+  height: 90px;
+  vertical-align: middle;
+}
+
+#dt-container {
+	clear: both;
+}
+
+#section-wrapper #sect-prof {
+	font-weight: bold;
 }
 
 #section-wrapper #section-num {
