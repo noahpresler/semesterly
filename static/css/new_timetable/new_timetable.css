@@ -319,11 +319,11 @@ input[type="text"]:focus {
 }
 
 footer {
-  background-color: #2b303b;
+  background-color: #34495E;
   border-radius:0 !important;
 }
 footer a {
-  color:#C94E50;
+  color: white;
 }
 footer a:hover,footer a:focus {
   color:#FFFFFF;
