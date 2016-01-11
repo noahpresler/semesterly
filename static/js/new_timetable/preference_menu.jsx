@@ -38,7 +38,6 @@ module.exports = React.createClass({
         <div className="navbar-collapse" >
           <ul className="nav navbar-nav" id="menu">
             <li>
-              <a href="#fakelink">Preferences</a>
               <ul>
                 <BinaryPreference text="Avoid early classes" 
                                   name="no_classes_before"
@@ -51,22 +50,6 @@ module.exports = React.createClass({
                                   toggle_id={this.get_next_toggle_id()} />
               </ul>
             </li>
-            <li><a href="#fakelink">Profile</a></li>
-            <ul>
-              <div className="profile-text">
-                <li>Favorites</li>
-              </div>
-            </ul>
-            <ul>
-              <div className="profile-text">
-                <li>Friends</li>
-              </div>
-            </ul>
-            <ul>
-              <div className="profile-text">
-                <li>Sign Out</li>
-              </div>
-            </ul>
           </ul>
         </div>
       </div>

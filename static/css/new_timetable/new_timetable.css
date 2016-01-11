@@ -237,13 +237,14 @@ input[type="text"]:focus {
   height:46px;
 }
 #menu-btn {
+  width: 46px;
   border:2px solid #B9BBBB;
   border-left:none;
   background-color:#FFF;
-  width:9%;
   border-top-right-radius: 3px;
   transition: all 0.3s;
 }
+
 #menu-btn:focus {
   outline-width: 0;
 }
@@ -493,6 +494,29 @@ input.cmn-toggle-round:checked + label:after {
 
 #modal-content .modal-entry {
   border-bottom: 1px solid #D4D4D4;
+}
+
+.calendar-function {
+	background-color: #D6DBDF;
+	height: 40px;
+	width: 40px;
+	text-align: center;
+	padding: 0px;
+	margin-right:12px;
+}
+
+.calendar-function:hover {
+	background-color: #34495E;
+}
+
+.calendar-function span {
+	width: 100%;
+}
+
+.calendar-function span:before {
+	width: 100%;
+	line-height: 40px;
+	margin: 0 auto;
 }
 
 .modal-entry .textbook{
