@@ -120,4 +120,9 @@ class Migration(migrations.Migration):
             name='textbooks',
             field=models.ManyToManyField(to='timetable.HopkinsTextbook'),
         ),
+        migrations.AddField(
+            model_name='courseoffering',
+            name='textbooks',
+            field=models.ManyToManyField(to='timetable.Textbook'),
+        ),
     ]
