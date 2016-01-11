@@ -21,10 +21,11 @@ module.exports = React.createClass({
     return (
       <div id="root">
         <div id="toast-container"></div>
-        <div id="semesterly-name" onClick={this.toggleSideModal}>Semester.ly</div>
+        <div id="semesterly-name">Semester.ly</div>
         <div id="control-bar-container">
           <ControlBar toggleModal={this.toggleCourseModal}/>
         </div>
+        <div id="navicon" onClick={this.toggleSideModal}><span></span><span></span><span></span></div>
         <div id="modal-container">
           <Modal ref='OutlineModal' className="course-modal">
               <ModalContent />
