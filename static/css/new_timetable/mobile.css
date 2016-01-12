@@ -42,10 +42,11 @@ hr {
 
 .preference-item {
   display: flex;
+  float: left;
 }
 
 .preference-item li, .profile-text li {
-  color: rgb(26, 188, 156);
+  color: #34495E;
   font-weight: bolder;
   display: inline;
   flex-grow: 1;
@@ -54,6 +55,24 @@ hr {
 .preference-text, .profile-text {
   margin: 0px;
   width: 60%;
+}
+
+#menu li {
+
+}
+
+.navbar-nav li {
+  float: none;
+}
+
+.navbar-nav {
+  float: none;
+  display:inline-block;
+}
+
+.navbar-collapse {
+    width: 100%;
+    text-align: center;
 }
 
 .preference-toggle {
