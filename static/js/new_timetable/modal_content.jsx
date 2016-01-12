@@ -95,7 +95,7 @@ module.exports = React.createClass({
             return (
             	<div className="textbook" key={tb.id}>
             		<img height="125" src={tb.image_url}/>
-            		<h6>{tb.title}</h6>
+            		<h6 className="line-clamp">{tb.title}</h6>
             		<div>{tb.author}</div>
             		<div>ISBN:{tb.isbn}</div>
             		<a href={tb.detail_url} target="_blank">
