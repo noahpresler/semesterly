@@ -818,10 +818,11 @@ input.cmn-toggle-round:checked + label:after {
   text-align: center;
 }
 
-.textbook h6 {
+.roster-container .textbook h6 {
   width: 100%;
   margin-bottom: -1px;
   font-size:15px;
+  height: 47px;
 }
 
 .course-roster {
