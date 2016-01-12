@@ -19,7 +19,6 @@ var CourseRoster = React.createClass({
   render: function() {
     // use the timetable for slots because it contains the most information
     if (this.props.timetables.length > 0) {
-      // console.log(this.props.timetables[0].courses)
       var slots = this.props.timetables[0].courses.map(function(course) {
         return <RosterSlot {...course} toggleModal={this.props.toggleModal} key={course.code}/>
       }.bind(this));
@@ -48,7 +47,6 @@ var TextbookRoster = React.createClass({
       textbooks = []
        for (i=0; i < this.state.timetables[0].courses.length; i++)  {
           for(j=0; j < this.state.timetables[0].courses[i].textbooks.length; j++) {
-            console.log('here')
             textbooks.push(this.state.timetables[0].courses[i].textbooks[j])
           }
        }
@@ -57,8 +55,6 @@ var TextbookRoster = React.createClass({
             <div className="textbook" key={tb['id']}>
                 <img height="125" src={tb['image_url']}/>
                 <h6>{tb['title']}</h6>
-                <div>{tb['author']}</div>
-                <div>ISBN:{tb['isbn']}</div>
                 <a href={tb['detail_url']} target="_blank">
                   <img src="https://images-na.ssl-images-amazon.com/images/G/01/associates/remote-buy-box/buy5._V192207739_.gif" width="120" height="28" border="0"/>
                 </a>
