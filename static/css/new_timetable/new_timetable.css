@@ -342,7 +342,7 @@ div {
 }
 .course-modal {
   width: 70%;
-  max-width: 900px;
+  max-width: 629px;
 }
 #modal-content {
   max-height: 90vh;
@@ -554,8 +554,12 @@ input.cmn-toggle-round:checked + label:after {
 }
 
 .modal-header #name {
+  width: 532px;
   font-size: 30px;
   font-family: lato;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
 }
 
 .modal-entry {
