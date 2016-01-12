@@ -27,8 +27,8 @@ module.exports = React.createClass({
       <div id="root">
         {school_selector}
         <div id="toast-container"></div>
-        <div id="control-bar-container" className="flexzone">
-          <div id="semesterly-name">Semester.ly</div>
+        <div id="semesterly-name">Semester.ly</div>
+        <div id="control-bar-container">
           <ControlBar toggleModal={this.toggleCourseModal}/>
         </div>
         <div id="navicon" onClick={this.toggleSideModal}>
