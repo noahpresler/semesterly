@@ -73,11 +73,13 @@
             transform: scale3D(0, 0, 1);
   } 
 }
-/* timetable loader */
+
+/* Timetable loader */
 .spinner {
- margin: 100px auto;
+  margin: 100px auto;
+  margin-top:6px !important;
   width: 15%;
-  height: 80px;
+  height: 60px;
   text-align: center;
   font-size: 10px;
   position:absolute;
@@ -88,7 +90,7 @@
 }
 
 .spinner > div {
-  background-color: #0F3057;
+  background-color: #34495E;
   height: 100%;
   width: 5%;
   max-width:8px;

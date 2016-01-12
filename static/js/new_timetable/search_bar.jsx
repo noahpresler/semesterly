@@ -37,9 +37,28 @@ module.exports = React.createClass({
 
   getInitialState: function() {
     return {
+      courses:[],
       results: [],
       focused: false,
     };
+  },
+
+  componentWillUpdate: function(new_props, new_state) {
+    if (new_state.school != this.state.school) {
+      this.getCourses(new_state.school);
+    }
+
+  },
+  getCourses: function(school) {
+    TimetableActions.setLoading();
+    $.get("/courses/" + school + "/" + _SEMESTER, 
+        {}, 
+        function(response) {
+          this.setState({courses: response});
+          TimetableActions.setDoneLoading();
+
+        }.bind(this)
+    );
   },
 
   render: function() {
@@ -99,7 +118,7 @@ module.exports = React.createClass({
   },
 
   filterCourses: function(query) {
-    var results = courses.filter(function(c) {
+    var results = this.state.courses.filter(function(c) {
       return (c.code.toLowerCase().indexOf(query) > -1 ||
              c.name.toLowerCase().indexOf(query) > -1);
     });

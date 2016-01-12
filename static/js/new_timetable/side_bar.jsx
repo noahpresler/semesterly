@@ -15,19 +15,18 @@ var RosterSlot = React.createClass({
 })
 
 var CourseRoster = React.createClass({
-  mixins: [Reflux.connect(TimetableStore)],
 
   render: function() {
     // use the timetable for slots because it contains the most information
-    if (this.state.timetables.length > 0) {
-      // console.log(this.state.timetables[0].courses)
-      var slots = this.state.timetables[0].courses.map(function(course) {
+    if (this.props.timetables.length > 0) {
+      // console.log(this.props.timetables[0].courses)
+      var slots = this.props.timetables[0].courses.map(function(course) {
         return <RosterSlot {...course} toggleModal={this.props.toggleModal} key={course.code}/>
       }.bind(this));
     } else {
       slots = null;
     }
-    var tt = this.state.timetables.length > 0 ? this.state.timetables[0] : null;
+    var tt = this.props.timetables.length > 0 ? this.props.timetables[0] : null;
     return (
       <div className="roster-container">
         <div className="roster-header">
@@ -57,11 +56,12 @@ var TextbookRoster = React.createClass({
 })
 
 module.exports = React.createClass({
+  mixins: [Reflux.connect(TimetableStore)],
 
   render: function() {
     return (
       <div ref="sidebar" className="side-container side-collapsed flexzone">
-        <CourseRoster toggleModal={this.props.toggleModal}/>
+        <CourseRoster toggleModal={this.props.toggleModal} timetables={this.state.timetables}/>
         <TextbookRoster />
       </div>
     )

@@ -9,27 +9,18 @@ var NewPagination = require('./new_pagination');
 module.exports = React.createClass({
   mixins: [Reflux.connect(UpdateTimetablesStore)],
 
-  nextTimetable: function() {
-    if (this.state.current_index + 1 < this.state.timetables.length) {
-      this.setState({current_index: this.state.current_index + 1});
-    }
-  },
-
-  prevTimetable: function() {
-    if (this.state.current_index > 0) {
-      this.setState({current_index: this.state.current_index - 1});
-    }    
-  },
-
   setIndex: function(new_index) {
     return(function () {
-      this.setState({current_index: new_index});
+      if (new_index >= 0 && new_index < this.state.timetables.length) {
+        TimetableActions.setCurrentIndex(new_index);
+      }
     }.bind(this));
   },
 
   getShareLink: function() {
     var link = window.location.host + "/";
-    var data = Util.getLinkData(this.state.courses_to_sections,
+    var data = Util.getLinkData(this.state.school,
+      this.state.courses_to_sections,
       this.state.current_index);
     return link + data;
   },
@@ -39,7 +30,8 @@ module.exports = React.createClass({
       var slot_manager = this.state.timetables.length == 0 ? null :
        (<SlotManager toggleModal={this.props.toggleModal} 
                      timetable={this.state.timetables[this.state.current_index]}
-                     courses_to_sections={this.state.courses_to_sections}/>);
+                     courses_to_sections={this.state.courses_to_sections}
+                     school={this.state.school}/>);
       var loader = !this.state.loading ? null :
       (  <div className="spinner">
             <div className="rect1"></div>
@@ -55,8 +47,8 @@ module.exports = React.createClass({
               <div className="fc-toolbar">
                 <Pagination 
                   count={this.state.timetables.length} 
-                  next={this.nextTimetable} 
-                  prev={this.prevTimetable}
+                  next={this.setIndex(this.state.current_index + 1)} 
+                  prev={this.setIndex(this.state.current_index - 1)}
                   setIndex={this.setIndex}
                   current_index={this.state.current_index}/>
                 <a className="btn btn-primary right calendar-function"
@@ -289,7 +281,8 @@ module.exports = React.createClass({
     if(typeof(Storage) !== "undefined") {
       if (this.state.timetables.length > 0) {
         // save newly generated courses to local storage
-        var new_data = Util.getLinkData(this.state.courses_to_sections, 
+        var new_data = Util.getLinkData(this.state.school, 
+          this.state.courses_to_sections, 
           this.state.current_index);
         localStorage.setItem('data', new_data);
       } else {
