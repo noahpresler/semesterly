@@ -366,8 +366,8 @@ def get_overlapping_slots(day_bitarray, current_slot, ignore_list):
     then by latest end time.
     """
     overlapping = []
-    for i in range(current_slot, 60 / get_granularity(SCHOOL)):
-        overlapping += [pair for pair in day_bitarray[i] if pair not in ignore_list and
+    for i in range(60 / get_granularity(SCHOOL)):
+        overlapping += [pair for pair in day_bitarray[current_slot + i] if pair not in ignore_list and
                         pair not in overlapping]
     return sort_slot_by_startend(overlapping)
 
