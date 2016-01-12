@@ -54,7 +54,9 @@ var TextbookRoster = React.createClass({
           return ( 
             <div className="textbook" key={tb['id']}>
                 <img height="125" src={tb['image_url']}/>
-                <h6>{tb['title']}</h6>
+                <div className="module">
+                  <h6 className="line-clamp">{tb['title']}</h6>
+                  </div>
                 <a href={tb['detail_url']} target="_blank">
                   <img src="https://images-na.ssl-images-amazon.com/images/G/01/associates/remote-buy-box/buy5._V192207739_.gif" width="120" height="28" border="0"/>
                 </a>
@@ -67,9 +69,9 @@ var TextbookRoster = React.createClass({
       <div className="roster-container">
         <div className="roster-header">
           <h4>Your Textbooks</h4>
-          {tb_elements}
         </div>
         <div className="course-roster">
+            {tb_elements}
         </div>
       </div>
     )
