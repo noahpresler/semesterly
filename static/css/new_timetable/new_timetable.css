@@ -568,7 +568,10 @@ input.cmn-toggle-round:checked + label:after {
 }
 
 .textbook h6 {
+  width: 100%;
   margin-bottom: -1px;
+  height: 47px;
+  overflow: hidden;
 }
 
 .modal-entry .recommendation {
