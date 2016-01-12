@@ -571,7 +571,6 @@ input.cmn-toggle-round:checked + label:after {
 }
 
 .textbook h6 {
-  display: inline-block;
   margin-bottom: -1px;
 }
 
@@ -788,22 +787,36 @@ input.cmn-toggle-round:checked + label:after {
 
 /* Sidebar -----------------------------------*/
 
+.module {
+  width: 100%;
+  overflow: hidden;
+}
+
+.line-clamp {
+  display: -webkit-box;
+  -webkit-line-clamp: 3 !important;
+  -webkit-box-orient: vertical;  
+}
+
 .roster-container .textbook{
   width: 130px;
   display: inline-block;
   margin-bottom: 10px;
+  margin-right: -1px;
   text-align: center;
 }
 
 .textbook h6 {
-  display: inline-block;
+  width: 100%;
   margin-bottom: -1px;
-  text-overflow: ellipsis;
   font-size:15px;
 }
 
+.course-roster {
+	padding: 20px;
+}
+
 .roster-container {
-	padding: 15px;
 	width: 100%;
 }
 
@@ -828,6 +841,7 @@ input.cmn-toggle-round:checked + label:after {
 
 .roster-header {
   text-align: center;
+  border-bottom: 1px solid #D4D4D4;
 }
 
 .side-container {
