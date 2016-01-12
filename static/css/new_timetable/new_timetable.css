@@ -789,7 +789,7 @@ input.cmn-toggle-round:checked + label:after {
 /* Sidebar -----------------------------------*/
 
 .roster-container .textbook{
-  width: 198px;
+  width: 130px;
   display: inline-block;
   margin-bottom: 10px;
   text-align: center;
@@ -798,6 +798,8 @@ input.cmn-toggle-round:checked + label:after {
 .textbook h6 {
   display: inline-block;
   margin-bottom: -1px;
+  text-overflow: ellipsis;
+  font-size:15px;
 }
 
 .roster-container {
