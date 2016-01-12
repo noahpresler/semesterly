@@ -16,10 +16,29 @@ var tt_state = {
   }
 }
 
+SCHOOL_LIST = ["jhu", "uoft"];
+
+
 module.exports = Reflux.createStore({
   listenables: [actions],
   courses_to_sections: {},
+  getInitialState: function() {
+    return {
+      timetables: [], 
+      courses_to_sections: {}, 
+      current_index: -1, 
+      conflict_error: false,
+      loading: false,
+      school: ""};
+  },
 
+  setSchool: function(new_school) {
+    var school = SCHOOL_LIST.indexOf(new_school) > -1 ? new_school : "";
+    var new_state = this.getInitialState();
+    tt_state.school = school;
+    new_state.school = school;
+    this.trigger(new_state);
+  },
  /**
   * Update tt_state with new course roster
   * @param {object} new_course_with_section contains attributed id, section, removing
@@ -55,7 +74,9 @@ module.exports = Reflux.createStore({
       delete c_to_s[new_course_id];
       if (Object.keys(c_to_s).length == 0) { // removed last course
           tt_state.courses_to_sections = {};
-          this.trigger(this.getInitialState());
+          var replaced = this.getInitialState();
+          replaced.school = tt_state.school;
+          this.trigger(replaced);
           return;  
       }
     }
@@ -76,11 +97,14 @@ module.exports = Reflux.createStore({
 
   // Makes a POST request to the backend with tt_state
   makeRequest: function(new_state) {
+    this.trigger({loading: true});
     $.post('/timetable/', JSON.stringify(new_state), function(response) {
         if (response.error) { // error from URL or local storage
           localStorage.removeItem('data');
           tt_state.courses_to_sections = {};
-          this.trigger(this.getInitialState());
+          var replaced = this.getInitialState();
+          replaced.school = tt_state.school;
+          this.trigger(replaced);
           return; // stop processing here
         }
         if (response.length > 0) {
@@ -111,10 +135,11 @@ module.exports = Reflux.createStore({
 
 
   loadPresetTimetable: function(url_data) {
-    this.trigger({loading: true});
     var courses = url_data.split("&");
+    var school = courses.shift();
+    this.trigger({loading: true, school: school});
+    tt_state.school = school;
     tt_state.index = parseInt(courses.shift());
-    var school = tt_state.school;
     for (var i = 0; i < courses.length; i++) {
       var c = parseInt(courses[i]);
       var course_info = courses[i].split("+");
@@ -135,12 +160,16 @@ module.exports = Reflux.createStore({
     this.makeRequest(tt_state);
   },
 
-  getInitialState: function() {
-    return {
-      timetables: [], 
-      courses_to_sections: {}, 
-      current_index: -1, 
-      conflict_error: false,
-      loading: false};
-  }
+  setLoading: function() {
+    this.trigger({loading: true});
+  },
+  setDoneLoading: function() {
+    this.trigger({loading: false});
+  },
+
+  setCurrentIndex: function(new_index) {
+    this.trigger({current_index: new_index});
+  },
+
+
 });

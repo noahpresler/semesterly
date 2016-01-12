@@ -177,7 +177,7 @@ module.exports = React.createClass({
 
     isPinned: function(slot) {
         var comparator = this.props.courses_to_sections[slot.course]['C'];
-        if (_SCHOOL == "uoft") {
+        if (this.props.school == "uoft") {
             comparator = this.props.courses_to_sections[slot.course][slot.meeting_section[0]];
         }
         return comparator == slot.meeting_section;

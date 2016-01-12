@@ -47,7 +47,7 @@ module.exports = React.createClass({
 
 	openRecomendation: function(course_id) {
 		return (function() {
-			CourseActions.getCourseInfo(course_id)
+			CourseActions.getCourseInfo(this.props.school, course_id);
 		}.bind(this));
 	},
 

@@ -34,6 +34,7 @@ input[type="text"]:focus {
     background-color:#fff;
 }
 
+
 .flexzone {
   display: flex;
   flex-wrap: wrap;
@@ -337,12 +338,12 @@ div {
   display:none;
 }
 #custom-widget-header {
-  border-right-width:1px;
-  margin-right:14px;
+/*  border-right-width:1px;
+  margin-right:14px;*/
 }
 .course-modal {
-  width: 70% !important;
-  max-width: 630px;
+  width: 70%;
+  max-width: 900px;
 }
 #modal-content {
   max-height: 90vh;
@@ -392,6 +393,9 @@ input:-moz-placeholder::before  { font-family: fontAwesome; content:'\f002  ';
   }
 }
 @media screen and (max-width:767px) {
+  .simple-modal-header {
+    font-size:18px;
+  }
   input[type="text"] {
     font-size:10px;
   }
