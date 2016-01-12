@@ -501,7 +501,7 @@ input.cmn-toggle-round + label:after {
   transition: margin 0.4s;
 }
 input.cmn-toggle-round:checked + label:before {
-  background-color: #1ABC9C;
+  background-color: #7790DE;
 }
 input.cmn-toggle-round:checked + label:after {
   margin-left: 30px;
