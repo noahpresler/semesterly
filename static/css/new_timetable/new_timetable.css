@@ -70,6 +70,7 @@ input[type="text"]:focus {
     font-size: 53px;
     height: 46px;
     margin-left: 70px;
+    margin-right: 70px;
 }
 
 .fc-time-grid .fc-slats td {
@@ -197,8 +198,7 @@ input[type="text"]:focus {
 /*  border: 1px solid #D4D4D4;
 */}
 #search-bar {
-
-  
+  width: 100%;
 }
 #search-input { 
   width:90%;
@@ -206,6 +206,7 @@ input[type="text"]:focus {
   border-radius:0;
   border-top-left-radius: 3px;
 }
+
 #search-results-container {
   position:absolute;
   background-color:#fefefe;
@@ -295,7 +296,7 @@ input[type="text"]:focus {
   position: relative !important;
   margin-left: auto;
   margin-right:auto;
-  width:50%;
+  max-width: 80%;
   display:block;
   min-width:218px;
 }
@@ -754,6 +755,10 @@ input.cmn-toggle-round:checked + label:after {
     background-color: #F8F6F7;
     border-bottom: 1px solid #ccc;
     margin-top: -10px;
+}
+
+#control-bar {
+  width: 60%;
 }
 
 /* Slot styles ----------------------------*/
