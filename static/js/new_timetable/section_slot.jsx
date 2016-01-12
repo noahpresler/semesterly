@@ -1,19 +1,6 @@
 var TimetableActions = require('./actions/update_timetables.js');
 var TimetableStore = require('./stores/update_timetables.js');
 
-// maps base colour of slot to colour on highlight
-var colour_to_highlight = {
-    "#FD7473" : "#E26A6A",
-    "#44BBFF" : "#28A4EA",
-    "#4CD4B0" : "#3DBB9A",
-    "#8870FF" : "#7059E6",
-    "#F9AE74" : "#F7954A",
-    "#D4DBC8" : "#B5BFA3",
-    "#E7F76D" : "#C4D44D",
-    "#F182B4" : "#DE699D",
-    "#7499A2" : "#668B94",
-} // consider #CF000F, #e8fac3
-
 
 var day_to_letter = {
     'M':  'M', 

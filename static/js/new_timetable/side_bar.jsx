@@ -2,16 +2,35 @@ var TimetableStore = require('./stores/update_timetables.js')
 
 var RosterSlot = React.createClass({
   render: function() {
+    var styles={backgroundColor: this.props.colour, borderColor: this.props.colour};
     return (
       <div
         onClick={this.props.toggleModal(this.props.id)}
-        className={"slot-outer fc-time-grid-event fc-event slot slot-" + this.props.course}>
+        style={styles}
+        onMouseEnter={this.highlightSiblings}
+        onMouseLeave={this.unhighlightSiblings}
+        className={"slot-outer fc-time-grid-event fc-event slot slot-" + this.props.id}>
         <div className="fc-content">
           <div className="fc-title slot-text-row">{this.props.name}</div>
         </div>
       </div>
     );
-  }
+  },
+
+  componentDidMount: function() {
+  },
+  highlightSiblings: function() {
+      this.updateColours(COLOUR_TO_HIGHLIGHT[this.props.colour]);
+  },
+  unhighlightSiblings: function() {
+      this.updateColours(this.props.colour);
+  },
+  updateColours: function(colour) {
+    $(".slot-" + this.props.id)
+      .css('background-color', colour)
+      .css('border-color', colour);
+  },
+
 })
 
 var CourseRoster = React.createClass({
@@ -20,7 +39,9 @@ var CourseRoster = React.createClass({
     // use the timetable for slots because it contains the most information
     if (this.props.timetables.length > 0) {
       var slots = this.props.timetables[0].courses.map(function(course) {
-        return <RosterSlot {...course} toggleModal={this.props.toggleModal} key={course.code}/>
+        var colour =  COURSE_TO_COLOUR[course.code];
+
+        return <RosterSlot {...course} toggleModal={this.props.toggleModal} key={course.code} colour={colour}/>
       }.bind(this));
     } else {
       slots = null;
