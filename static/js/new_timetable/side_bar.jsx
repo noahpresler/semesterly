@@ -18,6 +18,7 @@ var CourseRoster = React.createClass({
   mixins: [Reflux.connect(TimetableStore)],
 
   render: function() {
+    console.log(this.state)
     // use the timetable for slots because it contains the most information
     if (this.state.timetables.length > 0) {
       // console.log(this.state.timetables[0].courses)

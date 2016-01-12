@@ -126,10 +126,18 @@ def get_course_dict(section):
     return model_to_dict(model, fields=['code', 'name', 'id'])
 
 def get_course_obj(course_dict, sections):
+    SchoolCourse, SchoolCourseOffering, SchoolQuery, SchoolTimetable = get_correct_models(SCHOOL)  
     sections = list(sections)
     slot_objects = [create_offering_object(co) for _, _, course_offerings in sections
                                                for co in course_offerings]
     course_dict['enrolled_sections'] = [section_code for _, section_code, _ in sections]
+    try:
+        c = SchoolCourse.objects.get(id=course_dict['id'])
+        co = SchoolCourseOffering.objects.filter(meeting_section=course_dict['enrolled_sections'][0], course=c)[0]
+        course_dict['textbooks'] = co.get_textbooks()
+    except:
+        import traceback
+        traceback.print_exc()
     course_dict['slots'] = slot_objects
     return course_dict
 
