@@ -45,9 +45,9 @@ var TextbookRoster = React.createClass({
   render: function() {
      if (this.state.timetables.length > 0) {
       textbooks = []
-       for (i=0; i < this.state.timetables[0].courses.length; i++)  {
-          for(j=0; j < this.state.timetables[0].courses[i].textbooks.length; j++) {
-            textbooks.push(this.state.timetables[0].courses[i].textbooks[j])
+       for (i=0; i < this.state.timetables[this.state.current_index].courses.length; i++)  {
+          for(j=0; j < this.state.timetables[this.state.current_index].courses[i].textbooks.length; j++) {
+            textbooks.push(this.state.timetables[this.state.current_index].courses[i].textbooks[j])
           }
        }
        var tb_elements = textbooks.map(function(tb) {
