@@ -806,6 +806,30 @@ input.cmn-toggle-round:checked + label:after {
 
 /* Sidebar -----------------------------------*/
 
+.roster-container {
+	padding: 15px;
+	width: 100%;
+}
+
+.roster-container .slot-outer {
+	width:100%;
+	height: 50px;
+	margin-bottom: 5px;
+	text-align: center;
+}
+
+.roster-container .fc-content {
+	height:100%;
+	width:100%;
+}
+
+.roster-container .fc-title {
+	height:100%;
+	width:100%;
+	text-align: center;
+}
+
+
 .roster-header {
   text-align: center;
 }
