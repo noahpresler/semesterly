@@ -3,7 +3,7 @@ var TimetableStore = require('./stores/update_timetables.js');
 
 
 // maps base colour of slot to colour on highlight
-var colour_to_highlight = {
+COLOUR_TO_HIGHLIGHT = {
     "#FD7473" : "#E26A6A",
     "#44BBFF" : "#28A4EA",
     "#4CD4B0" : "#3DBB9A",
@@ -14,7 +14,7 @@ var colour_to_highlight = {
     "#F182B4" : "#DE699D",
     "#7499A2" : "#668B94",
 } // consider #CF000F, #e8fac3
-
+COURSE_TO_COLOUR = {}
 // how big a slot of half an hour would be, in pixels
 var HALF_HOUR_HEIGHT = 30;
 
@@ -104,7 +104,7 @@ var Slot = React.createClass({
 
     highlightSiblings: function() {
         this.setState({show_buttons: true});
-        this.updateColours(colour_to_highlight[this.props.colour]);
+        this.updateColours(COLOUR_TO_HIGHLIGHT[this.props.colour]);
     },
     unhighlightSiblings: function() {
         this.setState({show_buttons: false});
@@ -191,16 +191,20 @@ module.exports = React.createClass({
             'R': [],
             'F': []
         };
+        COURSE_TO_COLOUR = {};
         for (var course in this.props.timetable.courses) {
             var crs = this.props.timetable.courses[course];
             for (var slot_id in crs.slots) {
                 var slot = crs.slots[slot_id];
-                slot["colour"] = Object.keys(colour_to_highlight)[course];
+                var colour = Object.keys(COLOUR_TO_HIGHLIGHT)[course];
+                slot["colour"] = colour;
                 slot["code"] = crs.code.trim();
                 slot["name"] = crs.name;
                 slots_by_day[slot.day].push(slot);
+                COURSE_TO_COLOUR[crs.code] = colour;
             }
         }
+        console.log(COURSE_TO_COLOUR);
         return slots_by_day;
     },
 
