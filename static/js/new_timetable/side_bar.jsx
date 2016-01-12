@@ -41,12 +41,37 @@ var CourseRoster = React.createClass({
 })
 
 var TextbookRoster = React.createClass({
+  mixins: [Reflux.connect(TimetableStore)],
 
   render: function() {
+     if (this.state.timetables.length > 0) {
+      textbooks = []
+       for (i=0; i < this.state.timetables[0].courses.length; i++)  {
+          for(j=0; j < this.state.timetables[0].courses[i].textbooks.length; j++) {
+            console.log('here')
+            textbooks.push(this.state.timetables[0].courses[i].textbooks[j])
+          }
+       }
+       var tb_elements = textbooks.map(function(tb) {
+          return ( 
+            <div className="textbook" key={tb['id']}>
+                <img height="125" src={tb['image_url']}/>
+                <h6>{tb['title']}</h6>
+                <div>{tb['author']}</div>
+                <div>ISBN:{tb['isbn']}</div>
+                <a href={tb['detail_url']} target="_blank">
+                  <img src="https://images-na.ssl-images-amazon.com/images/G/01/associates/remote-buy-box/buy5._V192207739_.gif" width="120" height="28" border="0"/>
+                </a>
+            </div>);
+       }.bind(this));
+    } else {
+      var tb_elements = null;
+    }
     return (
       <div className="roster-container">
         <div className="roster-header">
           <h4>Your Textbooks</h4>
+          {tb_elements}
         </div>
         <div className="course-roster">
         </div>

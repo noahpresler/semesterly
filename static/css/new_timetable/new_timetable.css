@@ -788,6 +788,18 @@ input.cmn-toggle-round:checked + label:after {
 
 /* Sidebar -----------------------------------*/
 
+.roster-container .textbook{
+  width: 198px;
+  display: inline-block;
+  margin-bottom: 10px;
+  text-align: center;
+}
+
+.textbook h6 {
+  display: inline-block;
+  margin-bottom: -1px;
+}
+
 .roster-container {
 	padding: 15px;
 	width: 100%;
