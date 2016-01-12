@@ -95,7 +95,7 @@ module.exports = React.createClass({
             return (
             	<div className="textbook" key={tb.id}>
             		<img height="125" src={tb.image_url}/>
-            		<h6>{tb.title}</h6>
+            		<h6 className="line-clamp">{tb.title}</h6>
             		<div>{tb.author}</div>
             		<div>ISBN:{tb.isbn}</div>
             		<a href={tb.detail_url} target="_blank">
@@ -116,21 +116,40 @@ module.exports = React.createClass({
 	},
 
 	getSections: function() {
+		console.log(this.state)
 		var F = this.state.course_info.sections_F.map(function(s){
 			return (<SectionSlot key={s.id} all_sections={this.state.course_info.sections_F_objs} section={s}/>)
 		}.bind(this));
 		var S = this.state.course_info.sections_S.map(function(s){
 			return (<SectionSlot key={s.id} all_sections={this.state.course_info.sections_S_objs} section={s}/>)
 		}.bind(this));
-		var sections = 
-			(<div className="modal-entry" id="course-sections">
-				<h6>Course Sections:</h6>
+		if (this.state.show_sections === this.state.course_info.code) {
+			var sec_display = (
 				<div id="all-sections-wrapper">
 					{F}
 					{S}
-				</div>
+				</div>)
+		} else {
+			var sec_display = (<div id="numSections" onClick={this.setShowSections(this.state.course_info.code)}>This course has <b>{this.state.course_info.sections_S.length + this.state.course_info.sections_F.length}</b> setions. Click to view them.</div>)
+		}
+		var sections = 
+			(<div className="modal-entry" id="course-sections">
+				<h6>Course Sections:</h6>
+				{sec_display}
 			</div>)
 		return sections
+	},
+
+	getInitialState: function() {
+		return {
+			show_sections: 0
+		};
+	},
+
+	setShowSections: function(id) {
+		return (function() {
+			this.setState({show_sections: id});
+		}.bind(this));
 	},
 
 

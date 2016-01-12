@@ -102,3 +102,41 @@ hr {
     display:none !important;
   }
 }
+
+/* -------------expanded state settings*/
+.full-cal {
+  width: 100%;
+}
+
+.side-deployed {
+  left: 82%;
+}
+/* -------------collapse animations*/
+/* ---------------------for sidebar*/
+.slide-out {
+  animation-duration: 1s;
+  animation-name: slideout;
+}
+
+@keyframes slideout {
+  from {
+    left: 82%;
+  }
+  to {
+    left: 100%;
+  }
+}
+/* ---------------------for calendar*/
+.squeeze-out {
+  animation-duration: 1s;
+  animation-name: squeezeout;
+}
+
+@keyframes squeezeout {
+  from {
+    width: 82%;
+  }
+  to {
+    width: 100%
+  }
+}
