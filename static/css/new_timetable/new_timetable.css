@@ -562,6 +562,10 @@ input.cmn-toggle-round:checked + label:after {
   overflow: hidden;
 }
 
+#numSections {
+	text-align: center;
+}
+
 .modal-entry {
   line-height: 99.5%;
     padding-bottom: 10px;
