@@ -1,0 +1,95 @@
+.simple-modal {
+  position:absolute;
+  top: 50%;
+  left: 50%;
+  width:50%;
+  transform: translate(-50%, -50%);
+  z-index:3000;
+  min-width:250px;
+  max-width:600px;
+  border-radius:4px;
+  opacity: 1.0 !important;
+  padding: 0 20px 20px 20px;
+  color :#ddd;
+  text-align:center;
+      -webkit-animation: fadein 1s; /* Safari, Chrome and Opera > 12.1 */
+       -moz-animation: fadein 1s; /* Firefox < 16 */
+        -ms-animation: fadein 1s; /* Internet Explorer */
+         -o-animation: fadein 1s; /* Opera < 12.1 */
+            animation: fadein 1s;
+}
+@keyframes fadein {
+    from { top: 0%;}
+    to   { top: 50%;}
+}
+
+/* Firefox < 16 */
+@-moz-keyframes fadein {
+    from { top: 0%; }
+    to   { top: 50%; }
+}
+
+/* Safari, Chrome and Opera > 12.1 */
+@-webkit-keyframes fadein {
+    from { top: 0%; }
+    to   { top: 50%; }
+}
+
+/* Internet Explorer */
+@-ms-keyframes fadein {
+    from { top: 0%; }
+    to   { top: 50%; }
+}
+
+/* Opera < 12.1 */
+@-o-keyframes fadein {
+    from { top: 0%; }
+    to   { top: 50%; }
+}
+.simple-modal-header{
+  transition:font-size .7s;
+}
+.simple-modal-separator {
+  border:0;
+  border-top: 1px solid #ccc;
+  padding:0;
+  margin-bottom:40px;
+}
+.school-list {
+}
+.school-picker {
+  cursor:pointer;
+  margin-bottom:50px;
+  transition: background-color 0.25s;
+  border-radius:4px;
+}
+.school-picker:hover {
+  background-color:#ccc;
+}
+.school-picker:active {
+  background-color:#777;
+}
+.school-logo {  
+  width:80%;
+}
+.school-uoft {
+  padding-bottom:5%;
+}
+.school-jhu {
+  padding-top:10%;
+  padding-bottom:10%;
+}
+.pull-up {
+  margin-bottom:-50px;
+}
+#dim-screen{
+    position:fixed;
+    padding:0;
+    margin:0;
+    top:0;
+    left:0;
+    width: 100%;
+    height: 100%;
+    background:rgba(11,11,11,0.8);
+    z-index:2999;
+}
