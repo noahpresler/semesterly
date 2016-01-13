@@ -202,6 +202,7 @@ input[type="text"]:focus {
   
 }
 #search-input { 
+  font-size: 18px;
   width:90%;
   float:left;
   border-radius:0;
@@ -925,7 +926,7 @@ input.cmn-toggle-round:checked + label:after {
 .side-container {
     position: absolute;
     float: right;
-    max-width: 18%;
+    width: 18%;
     height: 100%;
     border: 0px 0px 0px 2px solid #ccc;
     height: 100vh;
@@ -948,4 +949,12 @@ input.cmn-toggle-round:checked + label:after {
   -ms-transform: translateX(100%);
   transform: translateX(100%);
 }
-
+.cal-container.less-cal {
+  width: 82%;
+}
+.side-container.less-cal {
+  -webkit-transform: translateX(0%);
+  -moz-transform: translateX(0%);
+  -ms-transform: translateX(0%);
+  transform: translateX(0%);
+}

@@ -70,13 +70,11 @@ module.exports = React.createClass({
   },
 
   expandSideModal: function() {
-    $('.cal-container').removeClass('full-cal');
-    $('.side-container').removeClass('full-cal');
+    $('.cal-container, .side-container').removeClass('full-cal').addClass('less-cal');
   },
 
   collapseSideModal: function() {
-    $('.side-container').addClass('full-cal');
-    $('.cal-container').addClass('full-cal');
+    $('.cal-container, .side-container').removeClass('less-cal').addClass('full-cal');
   }
 
 
