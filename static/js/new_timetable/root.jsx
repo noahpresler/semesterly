@@ -10,7 +10,7 @@ var SchoolList = require('./school_list');
 
 module.exports = React.createClass({
   mixins: [Reflux.connect(TimetableStore), Reflux.connect(ToastStore)],
-  sidebar_collapsed: true,
+  sidebar_collapsed: false,
 
 
   render: function() {
@@ -70,17 +70,13 @@ module.exports = React.createClass({
   },
 
   expandSideModal: function() {
-    $('.cal-container').removeClass('squeeze-out full-cal');
-    $('.side-container').removeClass('slide-out side-collapsed');
-    $('.side-container').addClass('slide-in side-deployed');
-    $('.cal-container').addClass('squeeze-in squeezed-cal');
+    $('.cal-container').removeClass('full-cal');
+    $('.side-container').removeClass('full-cal');
   },
 
   collapseSideModal: function() {
-    $('.side-container').removeClass('slide-in side-deployed');
-    $('.cal-container').removeClass('squeeze-in squeezed-cal');
-    $('.side-container').addClass('slide-out side-collapsed');
-    $('.cal-container').addClass('squeeze-out full-cal');
+    $('.side-container').addClass('full-cal');
+    $('.cal-container').addClass('full-cal');
   }
 
 

@@ -914,6 +914,13 @@ input.cmn-toggle-round:checked + label:after {
   border-bottom: 1px solid #D4D4D4;
 }
 
+.cal-container {
+  width: 82%;
+  overflow: hidden;
+  -webkit-transition: width .3s;
+  -moz-transition: width .3s;
+  transition: width .3s;
+}
 .side-container {
     position: absolute;
     float: right;
@@ -922,87 +929,22 @@ input.cmn-toggle-round:checked + label:after {
     border: 0px 0px 0px 2px solid #ccc;
     height: 100vh;
     border-left: 1px solid #ccc;
-}
-
-/* ----Sidebar animations */
-
-/* -------------collapsed state settings*/
-.squeezed-cal {
-  width: 82%;
-}
-
-.side-collapsed {
-  left: 100%;
-}
-
-/* -------------deploy animations*/
-/* ---------------------for sidebar*/
-.slide-in {
-  animation-duration: 1s;
-  animation-name: slidein;
-}
-
-@keyframes slidein {
-  from {
-    left: 100%;
-  }
-
-  to {
     left: 82%;
-  }
+    -webkit-transform: translateX(0%);
+    -moz-transform: translateX(0%);
+    -ms-transform: translateX(0%);
+    transform: translateX(0%);
+    -webkit-transition: transform .3s;
+    -moz-transition: transform .3s;
+    transition: transform .3s;
 }
-
-
-/* ---------------------for calendar*/
-.squeeze-in {
-  animation-duration: 1s;
-  animation-name: squeezein;
-}
-
-@keyframes squeezein {
-  from {
-    width: 100%;
-  }
-  to {
-    width: 82%
-  }
-}
-
-/* -------------expanded state settings*/
-.full-cal {
+.cal-container.full-cal {
   width: 100%;
 }
-
-.side-deployed {
-  left: 82%;
-}
-/* -------------collapse animations*/
-/* ---------------------for sidebar*/
-.slide-out {
-  animation-duration: 1s;
-  animation-name: slideout;
-}
-
-@keyframes slideout {
-  from {
-    left: 82%;
-  }
-  to {
-    left: 100%;
-  }
-}
-/* ---------------------for calendar*/
-.squeeze-out {
-  animation-duration: 1s;
-  animation-name: squeezeout;
-}
-
-@keyframes squeezeout {
-  from {
-    width: 82%;
-  }
-  to {
-    width: 100%
-  }
+.side-container.full-cal {
+  -webkit-transform: translateX(100%);
+  -moz-transform: translateX(100%);
+  -ms-transform: translateX(100%);
+  transform: translateX(100%);
 }
 
