@@ -94,7 +94,7 @@ module.exports = React.createClass({
 		var textbook_elements = this.state.course_info.textbook_info[0].textbooks.map(function(tb) {
             return (
             	<div className="textbook" key={tb.id}>
-            		<img height="125" src={tb.image_url}/>
+            		<img height="95" src={tb.image_url}/>
             		<h6 className="line-clamp">{tb.title}</h6>
             		<div>{tb.author}</div>
             		<div>ISBN:{tb.isbn}</div>
