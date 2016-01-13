@@ -34,6 +34,9 @@ class Course(models.Model):
 	def get_prereqs(self):
 		return self.prerequisites
 
+	def get_dept(self):
+		return self.code[:3]
+
 	def get_all_textbook_info(self):
 		# Implement
 		textbook_info = []
