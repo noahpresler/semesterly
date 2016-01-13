@@ -1,6 +1,11 @@
 module.exports = {
-	getLinkData: function(school, courses_to_sections, index) {
-	    var data = school + "&" + index + "&";
+	getLinkData: function(school, courses_to_sections, index, preferences) {
+	    var data = school + "&";
+	    for (var pref in preferences) {
+	    	data += pref + "=" + preferences[pref] + ";";
+	    }
+	    data = data.slice(0, -1);
+	    data += "&" + index + "&";
 	    var c_to_s = courses_to_sections;
 	    for (var course_id in c_to_s) {
 	      data += course_id;
@@ -15,6 +20,7 @@ module.exports = {
 	    }
 	    data = data.slice(0, -1);
 	    if (data.length < 3) {data = "";}
+
 	    return data;
 	},
 }
