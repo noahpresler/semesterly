@@ -914,6 +914,8 @@ input.cmn-toggle-round:checked + label:after {
 	height:100%;
 	width:100%;
 	text-align: center;
+    white-space: initial;
+    font-size: 15px;
 }
 
 
