@@ -117,13 +117,30 @@ module.exports = React.createClass({
     this.setState({results: filtered});
   },
 
+  isSubsequence: function(result,query) {
+      result = query.split(" ").every(function(s) {
+          if (result.indexOf(s) > -1) {
+            return true;
+          } else {
+            return false;
+          }
+      }.bind(this));
+      return result;
+  },
+
   filterCourses: function(query) {
+    var opt_query = query.replace("intro","introduction")
+    that = this
     var results = this.state.courses.filter(function(c) {
-      return (c.code.toLowerCase().indexOf(query) > -1 ||
+      return (that.isSubsequence(c.name.toLowerCase(),query) || 
+             that.isSubsequence(c.name.toLowerCase(),opt_query) ||
+             c.code.toLowerCase().indexOf(opt_query) > -1 ||
+             c.name.toLowerCase().indexOf(opt_query) > -1 ||
              c.name.toLowerCase().indexOf(query) > -1);
     });
     return results;
   },
+
 
 
 });
