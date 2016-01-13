@@ -66,10 +66,15 @@ input[type="text"]:focus {
     font-weight: bold;
     display: inline-block;
     float: left;
-    margin-top: -1px;
-    font-size: 53px;
+    margin-top: 22px;
+    font-size: 3vw;
+    line-height: 46px;
     height: 46px;
     margin-left: 70px;
+}
+
+#semesterly-logo {
+	display: none;
 }
 
 .fc-time-grid .fc-slats td {
@@ -642,7 +647,7 @@ input.cmn-toggle-round:checked + label:after {
 .textbook h6 {
   width: 100%;
   margin-bottom: -1px;
-  height: 47px;
+  height: 33px;
   overflow: hidden;
 }
 
@@ -909,6 +914,8 @@ input.cmn-toggle-round:checked + label:after {
 	height:100%;
 	width:100%;
 	text-align: center;
+    white-space: initial;
+    font-size: 15px;
 }
 
 

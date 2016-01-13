@@ -98,13 +98,25 @@ hr {
   position: relative !important; /* overwrite bootstrap fixed footer */
 }
 
-@media screen and (max-width: 1478px) { 
+@media screen and (max-width: 1000px) { 
   #semesterly-name {
     display:none !important;
   }
+
+  #semesterly-logo {
+    display: inline-block;
+    height: 46px;
+    margin-left: 45px;
+    float: left;
+    margin-top: 20px;
+  }
+
+  #navicon {
+    right: 9px;
+  }
 }
 
-@media (max-width: 766px) {
+@media (max-width: 1099px) {
   .cal-container {
     width: 100%;
   }
