@@ -106,9 +106,13 @@ hr {
   #semesterly-logo {
     display: inline-block;
     height: 46px;
-    margin-left: 70px;
+    margin-left: 45px;
     float: left;
     margin-top: 20px;
+  }
+
+  #navicon {
+    right: 9px;
   }
 }
 
