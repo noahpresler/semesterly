@@ -373,13 +373,13 @@ input[type="text"]:focus {
 #sliders span:nth-child(3) .box {
   left: 25%;
 }
-#sliders:hover span:nth-child(1) .box {
+#menu-btn:hover span:nth-child(1) .box {
   left: 75%;
 }
-#sliders:hover span:nth-child(2) .box {
+#menu-btn:hover span:nth-child(2) .box {
   left: 25%;
 }
-#sliders:hover span:nth-child(3) .box {
+#menu-btn:hover span:nth-child(3) .box {
   left: 75%;
 }
 /* End Sliders */
