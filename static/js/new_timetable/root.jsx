@@ -27,8 +27,9 @@ module.exports = React.createClass({
       <div id="root">
         {school_selector}
         <div id="toast-container"></div>
-        <div id="semesterly-name">Semester.ly</div>
         <div id="control-bar-container">
+          <div id="semesterly-name">Semester.ly</div>
+          <img id="semesterly-logo" src="/static/img/logo2.0.png"/>
           <ControlBar toggleModal={this.toggleCourseModal}/>
         </div>
         <div id="navicon" onClick={this.toggleSideModal}>

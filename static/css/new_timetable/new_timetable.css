@@ -66,10 +66,15 @@ input[type="text"]:focus {
     font-weight: bold;
     display: inline-block;
     float: left;
-    margin-top: -1px;
-    font-size: 53px;
+    margin-top: 22px;
+    font-size: 3vw;
+    line-height: 46px;
     height: 46px;
     margin-left: 70px;
+}
+
+#semesterly-logo {
+	display: none;
 }
 
 .fc-time-grid .fc-slats td {
