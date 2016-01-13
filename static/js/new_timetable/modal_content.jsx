@@ -130,7 +130,7 @@ module.exports = React.createClass({
 					{S}
 				</div>)
 		} else {
-			var sec_display = (<div id="numSections" onClick={this.setShowSections(this.state.course_info.code)}>This course has <b>{this.state.course_info.sections_S.length + this.state.course_info.sections_F.length}</b> setions. Click to view them.</div>)
+			var sec_display = (<div id="numSections" onClick={this.setShowSections(this.state.course_info.code)}>This course has <b>{this.state.course_info.sections_S.length + this.state.course_info.sections_F.length}</b> sections. Click to view them.</div>)
 		}
 		var sections = 
 			(<div className="modal-entry" id="course-sections">
