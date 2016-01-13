@@ -31,7 +31,7 @@ var Slot = React.createClass({
             pin = (
             <div className="slot-inner bottom">
                 <div className="button-surround" onClick={this.pinCourse} >
-                    <span className="fa fa-thumb-tack"></span>
+                    <span className="fa fa-lock"></span>
                </div>
             </div>);
             remove_button = ( <div className="slot-inner">
@@ -44,7 +44,7 @@ var Slot = React.createClass({
             pin = (
             <div className="slot-inner bottom">
                 <div className="button-surround pinned" onClick={this.unpinCourse} >
-                    <span className="fa fa-thumb-tack"></span>
+                    <span className="fa fa-lock"></span>
                </div>
             </div>);
         }

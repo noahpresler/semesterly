@@ -409,6 +409,7 @@ div {
 }
 .course-modal {
   width: 80%;
+  max-width: 629px
 }
 #modal-content {
   max-height: 90vh;
