@@ -99,6 +99,9 @@ hr {
 }
 
 @media screen and (max-width: 1000px) { 
+  #search-input {
+    font-size:15px;
+  }
   #semesterly-name {
     display:none !important;
   }
@@ -106,7 +109,8 @@ hr {
   #semesterly-logo {
     display: inline-block;
     height: 46px;
-    margin-left: 45px;
+    margin-left: 25px;
+
     float: left;
     margin-top: 20px;
   }
@@ -116,7 +120,10 @@ hr {
   }
 }
 
-@media (max-width: 766px) {
+@media (max-width: 767px) {
+  #search-input {
+    font-size:13px;
+  }
   .cal-container {
     width: 100%;
   }

@@ -19,10 +19,13 @@ module.exports = React.createClass({
 
   getShareLink: function() {
     var link = window.location.host + "/";
-    var data = Util.getLinkData(this.state.school,
-      this.state.courses_to_sections,
-      this.state.current_index);
+    var data = this.getData();
     return link + data;
+  },
+  getData: function() {
+  return Util.getLinkData(this.state.school,
+      this.state.courses_to_sections,
+      this.state.current_index, TT_STATE.preferences);
   },
 
 
@@ -39,7 +42,7 @@ module.exports = React.createClass({
             <div className="rect3"></div>
             <div className="rect4"></div>
             <div className="rect5"></div>
-        </div>)
+        </div>);
       return (
 
           <div id="calendar" className="fc fc-ltr fc-unthemed">
@@ -281,9 +284,7 @@ module.exports = React.createClass({
     if(typeof(Storage) !== "undefined") {
       if (this.state.timetables.length > 0) {
         // save newly generated courses to local storage
-        var new_data = Util.getLinkData(this.state.school, 
-          this.state.courses_to_sections, 
-          this.state.current_index);
+        var new_data = this.getData();
         localStorage.setItem('data', new_data);
       } else {
         localStorage.removeItem('data');

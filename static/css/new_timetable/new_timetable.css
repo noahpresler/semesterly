@@ -223,6 +223,7 @@ input[type="text"]:focus {
   border-top:0px;
   overflow: hidden;
   max-height:480px;
+  margin-top:-5px;
 }
 
 #search-results {
@@ -932,6 +933,8 @@ input.cmn-toggle-round:checked + label:after {
   transition: width .3s;
 }
 .side-container {
+    background:#fff;
+    z-index:4000;
     position: absolute;
     float: right;
     width: 18%;
