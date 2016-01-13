@@ -34,6 +34,9 @@ input[type="text"]:focus {
     background-color:#fff;
 }
 
+#root {
+	overflow: hidden;
+}
 
 .flexzone {
   display: flex;
@@ -46,6 +49,7 @@ input[type="text"]:focus {
 
 .all-cols-container {
   overflow: hidden;
+  position: relative;
 }
 
 .cal-container {
