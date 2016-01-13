@@ -207,7 +207,6 @@ module.exports = React.createClass({
                 COURSE_TO_COLOUR[crs.code] = colour;
             }
         }
-        console.log(COURSE_TO_COLOUR);
         return slots_by_day;
     },
 
