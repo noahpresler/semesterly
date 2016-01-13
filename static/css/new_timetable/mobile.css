@@ -98,9 +98,17 @@ hr {
   position: relative !important; /* overwrite bootstrap fixed footer */
 }
 
-@media screen and (max-width: 1478px) { 
+@media screen and (max-width: 1000px) { 
   #semesterly-name {
     display:none !important;
+  }
+
+  #semesterly-logo {
+    display: inline-block;
+    height: 46px;
+    margin-left: 70px;
+    float: left;
+    margin-top: 20px;
   }
 }
 
