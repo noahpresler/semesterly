@@ -148,4 +148,15 @@ hr {
     -ms-transform: translateX(0%);
     transform: translateX(0%);
   }
+
+  .course-modal {
+    width: 90% !important;
+  }
+
+}
+
+@media (max-width: 700px) {
+  .course-modal {
+    width: 100% !important;
+  }
 }
