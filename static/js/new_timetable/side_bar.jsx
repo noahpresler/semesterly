@@ -72,11 +72,21 @@ var TextbookRoster = React.createClass({
           }
        }
        var tb_elements = textbooks.map(function(tb) {
+          if (tb['image_url'] === "Cannot be found") {
+            var img = '/static/img/default_cover.jpg'
+          } else {
+            var img = tb['image_url']
+          }
+          if (tb['title'] == "Cannot be found") {
+            var title = "#" +  tb['isbn']
+          } else {
+            var title = tb['title']
+          }
           return ( 
             <div className="textbook" key={tb['id']}>
-                <img height="125" src={tb['image_url']}/>
+                <img height="125" src={img}/>
                 <div className="module">
-                  <h6 className="line-clamp">{tb['title']}</h6>
+                  <h6 className="line-clamp">{title}</h6>
                   </div>
                 <a href={tb['detail_url']} target="_blank">
                   <img src="https://images-na.ssl-images-amazon.com/images/G/01/associates/remote-buy-box/buy5._V192207739_.gif" width="120" height="28" border="0"/>
