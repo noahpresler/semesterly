@@ -320,6 +320,71 @@ input[type="text"]:focus {
   font-weight:300;
 }
 
+/* Sliders */
+#sliders {
+  width: 27.5px;
+  height: 32px;
+  position: relative;
+  cursor: pointer;
+  margin: 0 auto;
+}
+#sliders span {
+  width: 100%;
+  height: 2px;
+  display: block;
+  background-color: #000;
+  position: absolute;
+  -webkit-transform: translateY(-50%);
+  -moz-transform: translateY(-50%);
+  -ms-transform: translateY(-50%);
+  transform: translateY(-50%);
+}
+#sliders span:nth-child(1) {
+  top: 25%;
+}
+#sliders span:nth-child(2) {
+  top: 50%;
+}
+#sliders span:nth-child(3) {
+  top: 75%;
+}
+#sliders .box {
+  width: 7px;
+  height: 7px;
+  border-radius: 2px;
+  border: 1px solid #eee;
+  background-color: #000;
+  position: absolute;
+  top: 50%;
+  -webkit-transform: translate(-50%, -50%);
+  -moz-transform: translate(-50%, -50%);
+  -ms-transform: translate(-50%, -50%);
+  transform: translate(-50%, -50%);
+  -webkit-transition: left .3s;
+  -moz-transition: left .3s;
+  transition: left .3s;
+}
+#sliders span:nth-child(1) .box {
+  left: 25%;
+}
+#sliders span:nth-child(2) .box {
+  left: 75%;
+}
+#sliders span:nth-child(3) .box {
+  left: 25%;
+}
+#sliders:hover span:nth-child(1) .box {
+  left: 75%;
+}
+#sliders:hover span:nth-child(2) .box {
+  left: 25%;
+}
+#sliders:hover span:nth-child(3) .box {
+  left: 75%;
+}
+/* End Sliders */
+
+
 footer {
   background-color: #F8F6F7;
   border-radius:0 !important;

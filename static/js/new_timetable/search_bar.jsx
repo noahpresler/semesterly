@@ -74,7 +74,17 @@ module.exports = React.createClass({
             onFocus={this.focus} onBlur={this.blur} 
             onInput={this.queryChanged}/>
           <button data-toggle="collapse" data-target="#menu-container" id="menu-btn">
-            <i className="fa fa-sliders fa-2x menu-icon"></i>
+            <div id="sliders">
+              <span>
+                <div className="box"></div>
+              </span>
+              <span>
+                <div className="box"></div>
+              </span>
+              <span>
+                <div className="box"></div>
+              </span>
+            </div>
           </button>
           {search_results_div}
         </div>
