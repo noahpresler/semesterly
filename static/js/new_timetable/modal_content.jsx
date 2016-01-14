@@ -30,11 +30,11 @@ module.exports = React.createClass({
 
 	getHeader: function() {
 		var header = (<div className="modal-header">
+			<span className="course-action fui-plus" onClick={this.addCourse()}/>
 			<div id="course-info-wrapper">
 				<div id="name">{this.state.course_info.name}</div>
 				<div id="code">{this.state.course_info.code}</div>
 			</div>
-			<span className="course-action fui-plus" onClick={this.addCourse()}/>
 		</div>)
 		return header
 	},
