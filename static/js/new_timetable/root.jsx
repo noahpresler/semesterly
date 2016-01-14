@@ -71,7 +71,7 @@ module.exports = React.createClass({
   toggleSideModal: function(){
     if (this.sidebar_collapsed == 'neutral') {
       var bodyw = $(window).width();
-      if (bodyw > 1099) {
+      if (bodyw > 999) {
         this.collapseSideModal();
         this.sidebar_collapsed = 'open';
       } else {
