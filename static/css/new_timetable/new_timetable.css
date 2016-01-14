@@ -624,7 +624,7 @@ input.cmn-toggle-round:checked + label:after {
 }
 
 .modal-entry .textbook{
-  width: 198px;
+  width: 33.3%;
   display: inline-block;
   margin-bottom: 10px;
   text-align: center;

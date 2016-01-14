@@ -129,38 +129,42 @@ hr {
     font-size: 14px;
   }
 }
+@media (max-width: 766px) {
+  .modal-entry .textbook{
+    width: 50%;
+  }
+}
 
-@media (max-width: 1099px) {
+@media (max-width: 999px) {
   .cal-container {
     width: 100%;
   }
   .side-container {
     width: 100%;
-    left: 0%;
-    -webkit-transform: translateX(100%);
-    -moz-transform: translateX(100%);
-    -ms-transform: translateX(100%);
-    transform: translateX(100%);
+    left: 100%;
+    -webkit-transform: translateX(0%);
+    -moz-transform: translateX(0%);
+    -ms-transform: translateX(0%);
+    transform: translateX(0%);
   }
   .cal-container.full-cal {
     width: 100%;
   }
   .side-container.full-cal {
-    -webkit-transform: translateX(100%);
-    -moz-transform: translateX(100%);
-    -ms-transform: translateX(100%);
-    transform: translateX(100%);
+    -webkit-transform: translateX(0%);
+    -moz-transform: translateX(0%);
+    -ms-transform: translateX(0%);
+    transform: translateX(0%);
   }
   .cal-container.less-cal {
     width: 0%;
   }
   .side-container.less-cal {
     width: 100%;
-    left: 0%;
-    -webkit-transform: translateX(0%);
-    -moz-transform: translateX(0%);
-    -ms-transform: translateX(0%);
-    transform: translateX(0%);
+    -webkit-transform: translateX(-100%);
+    -moz-transform: translateX(-100%);
+    -ms-transform: translateX(-100%);
+    transform: translateX(-100%);
   }
 
   .course-modal {
