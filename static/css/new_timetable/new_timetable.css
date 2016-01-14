@@ -630,7 +630,7 @@ input.cmn-toggle-round:checked + label:after {
 }
 
 .modal-header #name {
-  width: 532px;
+  padding-right: 5px;
   font-size: 30px;
   font-family: lato;
   text-overflow: ellipsis;
@@ -731,18 +731,19 @@ input.cmn-toggle-round:checked + label:after {
 
 .modal-header .course-action {
   display: block;
-    width: 50px;
-    height: 50px;
-    background-color: #ddd;
-    color: #777;
-    border-radius: 50%;
-    font-family: "Flat-Ui-Icons";
-    text-align: center;
-    line-height: 50px;
-    font-size: 20px;
-    transition: all 0.3s;
-    float: right;
-    margin-top: 15px;
+  width: 50px;
+  height: 50px;
+  background-color: #ddd;
+  color: #777;
+  border-radius: 50%;
+  font-family: "Flat-Ui-Icons";
+  text-align: center;
+  line-height: 50px;
+  font-size: 20px;
+  transition: color .3s, background-color .3s;
+  float: right;
+  margin-top: 15px;
+  cursor: pointer;
 }
 
 .modal-header .fui-plus:hover {
@@ -751,8 +752,7 @@ input.cmn-toggle-round:checked + label:after {
 }
 
 #course-info-wrapper {
-    float: left;
-    display: inline-block;
+
 }
 
 .rec-wrapper {
