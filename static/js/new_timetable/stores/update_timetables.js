@@ -22,6 +22,8 @@ SCHOOL_LIST = ["jhu", "uoft"];
 module.exports = Reflux.createStore({
   listenables: [actions],
   courses_to_sections: {},
+  loading: false,
+
   getInitialState: function() {
     return {
       timetables: [], 
@@ -29,7 +31,8 @@ module.exports = Reflux.createStore({
       courses_to_sections: {}, 
       current_index: -1, 
       conflict_error: false,
-      loading: false,
+      loading: false, // timetables loading
+      courses_loading: false,
       school: ""};
   },
 
@@ -46,6 +49,8 @@ module.exports = Reflux.createStore({
   * @return {void} does not return anything, just updates TT_STATE
   */
   updateCourses: function(new_course_with_section) {
+    if (this.loading) {return;} // if loading, don't process.
+    this.loading = true;
     this.trigger({loading:true});
 
     var removing = new_course_with_section.removing;
@@ -101,6 +106,7 @@ module.exports = Reflux.createStore({
   makeRequest: function(new_state) {
     this.trigger({loading: true});
     $.post('/timetable/', JSON.stringify(new_state), function(response) {
+        this.loading = false;
         if (response.error) { // error from URL or local storage
           localStorage.removeItem('data');
           TT_STATE.courses_to_sections = {};
@@ -172,11 +178,11 @@ module.exports = Reflux.createStore({
     this.makeRequest(TT_STATE);
   },
 
-  setLoading: function() {
-    this.trigger({loading: true});
+  setCoursesLoading: function() {
+    this.trigger({courses_loading: true});
   },
-  setDoneLoading: function() {
-    this.trigger({loading: false});
+  setCoursesDoneLoading: function() {
+    this.trigger({courses_loading: false});
   },
 
   setCurrentIndex: function(new_index) {

@@ -116,7 +116,6 @@ module.exports = React.createClass({
 	},
 
 	getSections: function() {
-		console.log(this.state)
 		var F = this.state.course_info.sections_F.map(function(s){
 			return (<SectionSlot key={s.id} all_sections={this.state.course_info.sections_F_objs} section={s}/>)
 		}.bind(this));
