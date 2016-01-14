@@ -25,6 +25,7 @@ module.exports = Reflux.createStore({
   getInitialState: function() {
     return {
       timetables: [], 
+      preferences: TT_STATE.preferences,
       courses_to_sections: {}, 
       current_index: -1, 
       conflict_error: false,
@@ -92,6 +93,7 @@ module.exports = Reflux.createStore({
   updatePreferences: function(preference, new_value) {
     var new_state = $.extend(true, {}, TT_STATE); // deep copy of TT_STATE
     new_state.preferences[preference] = new_value;
+    this.trigger({preferences: new_state.preferences});
     this.makeRequest(new_state);
   },
 
@@ -146,8 +148,8 @@ module.exports = Reflux.createStore({
       var val = pref_with_val[1];
       pref_obj[pref] = (val === 'true');
     }
+    this.trigger({loading: true, school: school, preferences:pref_obj});
     TT_STATE.preferences = pref_obj;
-    this.trigger({loading: true, school: school});
     TT_STATE.school = school;
     TT_STATE.index = parseInt(courses.shift());
     for (var i = 0; i < courses.length; i++) {

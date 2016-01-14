@@ -598,6 +598,7 @@ input.cmn-toggle-round:checked + label:after {
 	text-align: center;
 	padding: 0px;
 	margin-right:12px;
+  margin-top:8px;
 }
 
 .calendar-function:hover {

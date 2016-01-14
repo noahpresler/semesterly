@@ -124,6 +124,8 @@ hr {
   #search-input {
     font-size:13px;
   }
+}
+@media (max-width: 1099px) {
   .cal-container {
     width: 100%;
   }

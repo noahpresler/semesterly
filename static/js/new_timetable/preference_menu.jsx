@@ -15,6 +15,7 @@ var BinaryPreference = React.createClass({
           <div className="switch">
             <input ref="checkbox_elem" id={toggle_label} 
                    className="cmn-toggle cmn-toggle-round" type="checkbox" 
+                   checked={this.state.preferences[this.props.name]}
                    onClick={this.togglePreference}/>
             <label htmlFor={toggle_label}></label>
           </div>
@@ -24,7 +25,7 @@ var BinaryPreference = React.createClass({
   },
 
   togglePreference: function() {
-    var new_value = this.refs.checkbox_elem.checked;
+    var new_value = !this.state.preferences[this.props.name];
     TimetableActions.updatePreferences(this.props.name, new_value);
   }
 });

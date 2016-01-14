@@ -85,7 +85,7 @@ var Slot = React.createClass({
         var height = bottom - top - 2;
 
         if (this.props.num_conflicts > 1) {
-            console.log(this.props.time_start, this.props.time_end, this.props.num_conflicts)
+            // console.log(this.props.time_start, this.props.time_end, this.props.num_conflicts)
         }
         // the cumulative width of this slot and all of the slots it is conflicting with
         var total_slot_widths = 98 - (5 * this.props.depth_level);
