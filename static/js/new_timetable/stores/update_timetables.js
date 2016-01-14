@@ -82,6 +82,7 @@ module.exports = Reflux.createStore({
           TT_STATE.courses_to_sections = {};
           var replaced = this.getInitialState();
           replaced.school = TT_STATE.school;
+          this.loading = false;
           this.trigger(replaced);
           return;  
       }
