@@ -25,7 +25,7 @@ module.exports = React.createClass({
   getData: function() {
   return Util.getLinkData(this.state.school,
       this.state.courses_to_sections,
-      this.state.current_index, TT_STATE.preferences);
+      this.state.current_index, this.state.preferences);
   },
 
 
