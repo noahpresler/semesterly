@@ -106,13 +106,19 @@ hr {
   #semesterly-logo {
     display: inline-block;
     height: 46px;
-    margin-left: 45px;
+    margin-left: 25px;
     float: left;
     margin-top: 20px;
   }
 
   #navicon {
     right: 9px;
+  }
+}
+
+@media (max-width: 766px) {
+  #search-input { 
+    font-size: 14px;
   }
 }
 

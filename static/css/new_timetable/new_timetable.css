@@ -202,19 +202,25 @@ input[type="text"]:focus {
 
   
 }
+.input-wrapper {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 46px;
+}
 #search-input { 
+  width: 100%;
   font-size: 18px;
-  width:90%;
-  float:left;
   border-radius:0;
   border-top-left-radius: 3px;
 }
 #search-results-container {
   position:absolute;
+  top: 46px;
   background-color:#fefefe;
   color:#222222;
   z-index:1000;
-  width:99%;
+  width:100%;
   border:2px solid #222;
   border-top:0px;
   overflow: hidden;
@@ -283,7 +289,10 @@ input[type="text"]:focus {
   height:46px;
 }
 #menu-btn {
-  width: 9%;
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 46px;
   border:2px solid #B9BBBB;
   border-left:none;
   background-color:#FFF;
