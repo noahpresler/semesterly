@@ -1,6 +1,11 @@
 module.exports = React.createClass({
   getInitialState: function() {
-    return {first_displayed: 0};
+    var num_bubbles = this.getNumBubbles();
+    return {first_displayed: 0, num_bubbles: num_bubbles};
+  },
+  getNumBubbles: function() {
+    var bubbles = $(window).width() > 700 ? 9 : 4;
+    return bubbles;
   },
 
   changePage: function(direction) {
@@ -8,7 +13,7 @@ module.exports = React.createClass({
        var current = this.props.current_index,
            count = this.props.count;
        // calculate the new first_displayed button (timetable)
-       var new_first = current + (9*direction) - (current % 9);
+       var new_first = current + (this.state.num_bubbles*direction) - (current % this.state.num_bubbles);
        if (new_first >= 0 && new_first < count) {
         this.props.setIndex(new_first)();
        }
@@ -18,8 +23,8 @@ module.exports = React.createClass({
   render: function() {
     var options = [], count = this.props.count, current = this.props.current_index;
     if (count <= 1) { return null; } // don't display if there aren't enough schedules
-    var first = current - (current % 9); // round down to nearest multiple of this.props.numBubbles
-    var limit = Math.min(first + 9, count);
+    var first = current - (current % this.state.num_bubbles); // round down to nearest multiple of this.props.numBubbles
+    var limit = Math.min(first + this.state.num_bubbles, count);
     for (var i = first; i < limit; i++) {
       var className = this.props.current_index == i ? "active" : "";
       options.push(
@@ -52,6 +57,12 @@ module.exports = React.createClass({
           </ul>
         </div>
     );
+  },
+
+  componentDidMount: function() {
+    $(window).resize(function() {
+      this.setState({num_bubbles: this.getNumBubbles()});
+    }.bind(this));
   },
   
 
