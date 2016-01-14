@@ -43,6 +43,7 @@ module.exports = React.createClass({
             <div className="rect4"></div>
             <div className="rect5"></div>
         </div>);
+
       return (
 
           <div id="calendar" className="fc fc-ltr fc-unthemed">
@@ -53,6 +54,7 @@ module.exports = React.createClass({
                   next={this.setIndex(this.state.current_index + 1)} 
                   prev={this.setIndex(this.state.current_index - 1)}
                   setIndex={this.setIndex}
+                  numBubbles={numBubbles}
                   current_index={this.state.current_index}/>
                 <a className="btn btn-primary right calendar-function"
                    data-clipboard-text={this.getShareLink()}>

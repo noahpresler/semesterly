@@ -8,7 +8,7 @@ var SearchResult = React.createClass({
       li_class += " todo-done";
       icon_class = "fui-check";
     }
-    return (
+    var bodyw = $(window).width();    return (
       <li className={li_class} onMouseDown={this.props.toggleModal(this.props.id)}>
         <div className="todo-content">
           <h4 className="todo-name">
@@ -66,13 +66,15 @@ module.exports = React.createClass({
     return (
       <div id="search-bar">
         <div className="input-combine">
-          <input 
-            type="text" 
-            placeholder="Search by code, title, description, professor, degree" 
-            id="search-input" 
-            ref="input" 
-            onFocus={this.focus} onBlur={this.blur} 
-            onInput={this.queryChanged}/>
+          <div className="input-wrapper">
+            <input 
+              type="text" 
+              placeholder="Search by code, title, description, professor, degree" 
+              id="search-input" 
+              ref="input" 
+              onFocus={this.focus} onBlur={this.blur} 
+              onInput={this.queryChanged}/>
+            </div>
           <button data-toggle="collapse" data-target="#menu-container" id="menu-btn">
             <div id="sliders">
               <span>
