@@ -119,20 +119,17 @@ hr {
   }
 }
 
-<<<<<<< HEAD
 @media (max-width: 767px) {
   #search-input {
     font-size:13px;
   }
 }
-=======
 @media (max-width: 766px) {
   #search-input { 
     font-size: 14px;
   }
 }
 
->>>>>>> ddef62ff356346557b6dc2fa04dc3f63512aa480
 @media (max-width: 1099px) {
   .cal-container {
     width: 100%;
@@ -165,9 +162,6 @@ hr {
     -ms-transform: translateX(0%);
     transform: translateX(0%);
   }
-<<<<<<< HEAD
-}
-=======
 
   .course-modal {
     width: 90% !important;
@@ -180,4 +174,3 @@ hr {
     width: 100% !important;
   }
 }
->>>>>>> ddef62ff356346557b6dc2fa04dc3f63512aa480
