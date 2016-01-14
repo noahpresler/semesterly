@@ -35,11 +35,6 @@ input[type="text"]:focus {
 }
 
 
-.flexzone {
-  display: flex;
-  flex-wrap: wrap;
-}
-
 .right {
 	float: right;
 }
@@ -880,15 +875,24 @@ input.cmn-toggle-round:checked + label:after {
   -webkit-box-orient: vertical;  
 }
 
-.roster-container .textbook{
+.course-list {
+  min-height: 138px;
+}
+.textbook-list {
+  flex: 1;
+  min-height: 0px;
+  overflow: auto;
+}
+
+.course-roster .textbook{
   width: 130px;
-  display: inline-block;
+  float: left;
   margin-bottom: 10px;
   margin-right: -1px;
   text-align: center;
 }
 
-.roster-container .textbook h6 {
+.course-roster .textbook h6 {
   width: 100%;
   margin-bottom: -1px;
   font-size:15px;
@@ -899,23 +903,23 @@ input.cmn-toggle-round:checked + label:after {
 	padding: 20px;
 }
 
-.roster-container {
+.course-roster {
 	width: 100%;
 }
 
-.roster-container .slot-outer {
+.course-roster .slot-outer {
 	width:100%;
 	height: 50px;
 	margin-bottom: 5px;
 	text-align: center;
 }
 
-.roster-container .fc-content {
+.course-roster .fc-content {
 	height:100%;
 	width:100%;
 }
 
-.roster-container .fc-title {
+.course-roster .fc-title {
 	height:100%;
 	width:100%;
 	text-align: center;
@@ -923,11 +927,11 @@ input.cmn-toggle-round:checked + label:after {
     font-size: 15px;
 }
 
-
 .roster-header {
   text-align: center;
   border-bottom: 1px solid #D4D4D4;
 }
+
 
 .cal-container {
   width: calc(100% - 300px);
@@ -937,12 +941,14 @@ input.cmn-toggle-round:checked + label:after {
   transition: width .3s;
 }
 .side-container {
+    display: flex;
+    flex-direction: column;
+
     position: absolute;
     float: right;
     width: 300px;
     height: 100%;
     border: 0px 0px 0px 2px solid #ccc;
-    height: 100vh;
     border-left: 1px solid #ccc;
     left: calc(100% - 300px);
     -webkit-transform: translateX(0%);

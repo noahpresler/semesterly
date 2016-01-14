@@ -48,11 +48,8 @@ var CourseRoster = React.createClass({
     }
     var tt = this.props.timetables.length > 0 ? this.props.timetables[0] : null;
     return (
-      <div className="roster-container">
-        <div className="roster-header">
-          <h4>Your Semester</h4>
-        </div>
-        <div className="course-roster">
+      <div className="course-roster course-list">
+        <div className="clearfix">
           {slots}
         </div>
       </div>
@@ -97,12 +94,9 @@ var TextbookRoster = React.createClass({
       var tb_elements = null;
     }
     return (
-      <div className="roster-container">
-        <div className="roster-header">
-          <h4>Your Textbooks</h4>
-        </div>
-        <div className="course-roster">
-            {tb_elements}
+      <div className="course-roster textbook-list">
+        <div className="clearfix">
+          {tb_elements}
         </div>
       </div>
     )
@@ -114,8 +108,14 @@ module.exports = React.createClass({
 
   render: function() {
     return (
-      <div ref="sidebar" className="side-container side-collapsed flexzone">
+      <div ref="sidebar" className="side-container side-collapsed">
+        <div className="roster-header">
+          <h4>Your Semester</h4>
+        </div>
         <CourseRoster toggleModal={this.props.toggleModal} timetables={this.state.timetables}/>
+        <div className="roster-header">
+          <h4>Your Textbooks</h4>
+        </div>
         <TextbookRoster />
       </div>
     )
