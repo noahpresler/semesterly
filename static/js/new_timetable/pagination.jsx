@@ -8,7 +8,7 @@ module.exports = React.createClass({
        var current = this.props.current_index,
            count = this.props.count;
        // calculate the new first_displayed button (timetable)
-       var new_first = current + (this.props.numBubbles*direction) - (current % this.props.numBubbles);
+       var new_first = current + (9*direction) - (current % 9);
        if (new_first >= 0 && new_first < count) {
         this.props.setIndex(new_first)();
        }
@@ -18,8 +18,8 @@ module.exports = React.createClass({
   render: function() {
     var options = [], count = this.props.count, current = this.props.current_index;
     if (count <= 1) { return null; } // don't display if there aren't enough schedules
-    var first = current - (current % this.props.numBubbles); // round down to nearest multiple of this.props.numBubbles
-    var limit = Math.min(first + this.props.numBubbles, count);
+    var first = current - (current % 9); // round down to nearest multiple of this.props.numBubbles
+    var limit = Math.min(first + 9, count);
     for (var i = first; i < limit; i++) {
       var className = this.props.current_index == i ? "active" : "";
       options.push(
