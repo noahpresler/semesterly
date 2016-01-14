@@ -895,7 +895,7 @@ input.cmn-toggle-round:checked + label:after {
 }
 
 .course-roster .textbook{
-  width: 130px;
+  width: 123px;
   float: left;
   margin-bottom: 10px;
   margin-right: -1px;
