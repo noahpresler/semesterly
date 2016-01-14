@@ -2,5 +2,4 @@
 – Correct conflict display (Felix)
 – Location Info on slots
 – Ending timetable 1 hour after class ends
-– The loading icon appears when the page is first loaded, because courses for the school are being loaded to the frontend. However, the loader also appears if previous timetables exist, because it's calculating timetables to display. Thus, if one of these operations finishes first, the load icon disappears making it seem like no processing is going on, even though there is. Fix this (Rohan)
 – Add remove button to RosterSlots

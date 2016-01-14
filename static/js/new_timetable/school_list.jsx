@@ -5,15 +5,15 @@ module.exports = React.createClass({
 	render: function() {
 		return 	(
 			<div className="school-list">
-				<div className="school-picker school-jhu">
+				<div className="school-picker school-jhu" 
+					onClick={this.setSchool("jhu")}>
 					<img src="/static/img/school_logos/jhu_logo.png" 
-						className="school-logo"
-			             onClick={this.setSchool("jhu")}/>
+						className="school-logo"/>
 				</div>
-				<div className="school-picker school-uoft">
+				<div className="school-picker school-uoft" 
+					onClick={this.setSchool("uoft")}>
 					<img src="/static/img/school_logos/uoft_logo.png" 
-						className="school-logo"
-			             onClick={this.setSchool("uoft")}/>
+						className="school-logo"/>
 				</div>
 			</div>);
 	},

@@ -131,7 +131,11 @@ input[type="text"]:focus {
   margin-top:25px !important;
 }
 #calendar-inner {
-  height: 835px;
+  /*
+    5pm: 520px;
+    6pm: ;
+  */
+  height: 572px;
   overflow-y:hidden;
 }
 .pure-pusher-container {
@@ -952,7 +956,7 @@ input.cmn-toggle-round:checked + label:after {
 }
 .side-container {
     background:#fff;
-    z-index:4000;
+    z-index:100;
     display: flex;
     flex-direction: column;
     position: absolute;

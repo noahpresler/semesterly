@@ -27,19 +27,72 @@ module.exports = React.createClass({
       this.state.courses_to_sections,
       this.state.current_index, this.state.preferences);
   },
+  getEndHour: function() {
+    // gets the end hour of the current timetable
+    var max_end_hour = 18;
+    if (!this.hasTimetables()) {
+      return max_end_hour;
+    }
+    var courses = this.state.timetables[this.state.current_index].courses;
+    for (var course_index in courses) {
+      var course = courses[course_index];
+      for (var slot_index in course.slots) {
+        var slot = course.slots[slot_index];
+        var end_hour = parseInt(slot.time_end.split(":")[0]);
+        max_end_hour = Math.max(max_end_hour, end_hour);
+      }
+    }
+    return max_end_hour;
 
+  },
+
+  getHourRows: function() {
+    var max_end_hour = this.getEndHour();
+    var rows = [];
+    for (var i = 8; i <= max_end_hour; i++) { // one row for each hour, starting from 8am
+      var time = i + "am";
+      if (i >= 12) { // the pm hours
+        var hour = (i - 12) > 0 ? i - 12 : i;
+        time = hour + "pm";
+      }
+      rows.push(
+          (<tr key={time}>
+              <td className="fc-axis fc-time fc-widget-content"><span>{time}</span></td>
+              <td className="fc-widget-content"></td>
+          </tr>)
+      );  
+      // for the half hour row
+      rows.push(
+          (<tr className="fc-minor" key={time + "-half"}>
+              <td className="fc-axis fc-time fc-widget-content"></td>
+              <td className="fc-widget-content"></td>
+          </tr>)
+      );
+
+    }
+
+    return rows;
+  },
+
+
+  hasTimetables: function() {
+    return this.state.timetables.length > 0;
+  },
 
   render: function() {
-      var slot_manager = this.state.timetables.length == 0 ? null :
+      var has_timetables = this.hasTimetables();
+      var slot_manager = !has_timetables ? null :
        (<SlotManager toggleModal={this.props.toggleModal} 
                      timetable={this.state.timetables[this.state.current_index]}
                      courses_to_sections={this.state.courses_to_sections}
                      school={this.state.school}/>);
 
-      var styles = this.state.loading ? {opacity: "0.5"} : {};
+      var hours = this.getHourRows();
+      var opacity = this.state.loading ? {opacity: "0.5"} : {};
+      var height = (572 + (this.getEndHour() - 18)*52) + "px";
       return (
 
-          <div id="calendar" className="fc fc-ltr fc-unthemed" style={styles}>
+          <div id="calendar" className="fc fc-ltr fc-unthemed" style={opacity}>
               <div className="fc-toolbar">
                 <Pagination 
                   count={this.state.timetables.length} 
@@ -100,7 +153,7 @@ module.exports = React.createClass({
                                 </table>
                               </div>
                             </div>
-                          <div className="fc-time-grid-container fc-scroller" id="calendar-inner">
+                          <div className="fc-time-grid-container fc-scroller" id="calendar-inner" style={{height: height}}>
                             <div className="fc-time-grid">
                               <div className="fc-bg">
                                 <table>
@@ -119,134 +172,7 @@ module.exports = React.createClass({
                               <div className="fc-slats">
                                 <table>
                                   <tbody>
-                                    <tr>
-                                      <td className="fc-axis fc-time fc-widget-content"><span>8am</span></td>
-                                      <td className="fc-widget-content"></td>
-                                    </tr>
-                                    <tr className="fc-minor">
-                                      <td className="fc-axis fc-time fc-widget-content"></td>
-                                      <td className="fc-widget-content"></td>
-                                    </tr>
-                                    <tr>
-                                      <td className="fc-axis fc-time fc-widget-content"><span>9am</span></td>
-                                      <td className="fc-widget-content"></td>
-                                    </tr>
-                                    <tr className="fc-minor">
-                                      <td className="fc-axis fc-time fc-widget-content"></td>
-                                      <td className="fc-widget-content"></td>
-                                    </tr>
-                                    <tr>
-                                      <td className="fc-axis fc-time fc-widget-content"><span>10am</span></td>
-                                      <td className="fc-widget-content"></td>
-                                    </tr>
-                                    <tr className="fc-minor">
-                                      <td className="fc-axis fc-time fc-widget-content"></td>
-                                      <td className="fc-widget-content"></td>
-                                    </tr>
-                                    <tr>
-                                      <td className="fc-axis fc-time fc-widget-content"><span>11am</span></td>
-                                      <td className="fc-widget-content"></td>
-                                    </tr>
-                                    <tr className="fc-minor">
-                                      <td className="fc-axis fc-time fc-widget-content"></td>
-                                      <td className="fc-widget-content"></td>
-                                    </tr>
-                                    <tr>
-                                      <td className="fc-axis fc-time fc-widget-content"><span>12pm</span></td>
-                                      <td className="fc-widget-content"></td>
-                                    </tr>
-                                    <tr className="fc-minor">
-                                      <td className="fc-axis fc-time fc-widget-content"></td>
-                                      <td className="fc-widget-content"></td>
-                                    </tr>
-                                    <tr>
-                                      <td className="fc-axis fc-time fc-widget-content"><span>1pm</span></td>
-                                      <td className="fc-widget-content"></td>
-                                    </tr>
-                                    <tr className="fc-minor">
-                                      <td className="fc-axis fc-time fc-widget-content"></td>
-                                      <td className="fc-widget-content"></td>
-                                    </tr>
-                                    <tr>
-                                      <td className="fc-axis fc-time fc-widget-content"><span>2pm</span></td>
-                                      <td className="fc-widget-content"></td>
-                                    </tr>
-                                    <tr className="fc-minor">
-                                      <td className="fc-axis fc-time fc-widget-content"></td>
-                                      <td className="fc-widget-content"></td>
-                                    </tr>
-                                    <tr>
-                                      <td className="fc-axis fc-time fc-widget-content"><span>3pm</span></td>
-                                      <td className="fc-widget-content"></td>
-                                    </tr>
-                                    <tr className="fc-minor">
-                                      <td className="fc-axis fc-time fc-widget-content"></td>
-                                      <td className="fc-widget-content"></td>
-                                    </tr>
-                                    <tr>
-                                      <td className="fc-axis fc-time fc-widget-content"><span>4pm</span></td>
-                                      <td className="fc-widget-content"></td>
-                                    </tr>
-                                    <tr className="fc-minor">
-                                      <td className="fc-axis fc-time fc-widget-content"></td>
-                                      <td className="fc-widget-content"></td>
-                                    </tr>
-                                    <tr>
-                                      <td className="fc-axis fc-time fc-widget-content"><span>5pm</span></td>
-                                      <td className="fc-widget-content"></td>
-                                    </tr>
-                                    <tr className="fc-minor">
-                                      <td className="fc-axis fc-time fc-widget-content"></td>
-                                      <td className="fc-widget-content"></td>
-                                    </tr>
-                                    <tr>
-                                      <td className="fc-axis fc-time fc-widget-content"><span>6pm</span></td>
-                                      <td className="fc-widget-content"></td>
-                                    </tr>
-                                    <tr className="fc-minor">
-                                      <td className="fc-axis fc-time fc-widget-content"></td>
-                                      <td className="fc-widget-content"></td>
-                                    </tr>
-                                    <tr>
-                                      <td className="fc-axis fc-time fc-widget-content"><span>7pm</span></td>
-                                      <td className="fc-widget-content"></td>
-                                    </tr>
-                                    <tr className="fc-minor">
-                                      <td className="fc-axis fc-time fc-widget-content"></td>
-                                      <td className="fc-widget-content"></td>
-                                    </tr>
-                                    <tr>
-                                      <td className="fc-axis fc-time fc-widget-content"><span>8pm</span></td>
-                                      <td className="fc-widget-content"></td>
-                                    </tr>
-                                    <tr className="fc-minor">
-                                      <td className="fc-axis fc-time fc-widget-content"></td>
-                                      <td className="fc-widget-content"></td>
-                                    </tr>
-                                    <tr>
-                                      <td className="fc-axis fc-time fc-widget-content"><span>9pm</span></td>
-                                      <td className="fc-widget-content"></td>
-                                    </tr>
-                                    <tr className="fc-minor">
-                                      <td className="fc-axis fc-time fc-widget-content"></td>
-                                      <td className="fc-widget-content"></td>
-                                    </tr>
-                                    <tr>
-                                      <td className="fc-axis fc-time fc-widget-content"><span>10pm</span></td>
-                                      <td className="fc-widget-content"></td>
-                                    </tr>
-                                    <tr className="fc-minor">
-                                      <td className="fc-axis fc-time fc-widget-content"></td>
-                                      <td className="fc-widget-content"></td>
-                                    </tr>
-                                    <tr>
-                                      <td className="fc-axis fc-time fc-widget-content"><span>11pm</span></td>
-                                      <td className="fc-widget-content"></td>
-                                    </tr>
-                                    <tr className="fc-minor">
-                                      <td className="fc-axis fc-time fc-widget-content"></td>
-                                      <td className="fc-widget-content"></td>
-                                    </tr>
+                                    {hours}
                                   </tbody>
                                 </table>
                               </div>
