@@ -246,3 +246,6 @@ class HopkinsCourseOffering(models.Model):
 		for tb in tbs:
 			textbooks.append(tb.get_info())
 		return textbooks
+
+	def get_evaluations(self):
+		return self.course.get_eval_info()

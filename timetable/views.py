@@ -141,6 +141,7 @@ def get_course_obj(course_dict, sections):
         c = SchoolCourse.objects.get(id=course_dict['id'])
         co = SchoolCourseOffering.objects.filter(meeting_section=course_dict['enrolled_sections'][0], course=c)[0]
         course_dict['textbooks'] = co.get_textbooks()
+        course_dict['evaluations'] = co.get_evaluations()
     except:
         import traceback
         traceback.print_exc()
