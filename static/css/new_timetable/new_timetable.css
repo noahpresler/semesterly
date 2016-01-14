@@ -42,7 +42,7 @@ input[type="text"]:focus {
 .all-cols-container {
   overflow: hidden;
   position: relative;
-  min-height: calc(100vh - 175px);
+  min-height: calc(100vh - 150px);
 }
 
 .cal-container {
