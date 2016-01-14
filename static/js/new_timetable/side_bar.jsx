@@ -47,19 +47,22 @@ var CourseRoster = React.createClass({
       slots = null;
     }
     var tt = this.props.timetables.length > 0 ? this.props.timetables[0] : null;
-    // var numCourses = 0;
-    // var totalScore = 0;
-    // for (i=0;i<this.props.timetables[0];i++) {
-    //   for (j=0;j<this.props.timetables[0].courses[i];j++) {
-    //     numCourses +=
-    //   }
-    // }
+    var numCourses = 0;
+    var totalScore = 0;
+    if (this.props.timetables.length > 0 && this.props.timetables[0].courses.length > 0 ) {
+      for (j=0;j<this.props.timetables[0].courses.length;j++) {
+          for (k=0;k<this.props.timetables[0].courses[j].evaluations.length;k++) {
+            numCourses++;
+            totalScore += this.props.timetables[0].courses[j].evaluations[k].score;
+          }
+      }
+    }
     var avgScoreContent = this.props.timetables.length > 0 ? (
       <div className="rating-wrapper">
           <p>Average Course Rating:</p>
           <div className="sub-rating-wrapper">
             <div className="star-ratings-sprite">
-              <span style={{width: 100*5/5 + "%"}} className="rating"></span>
+              <span style={{width: 100*totalScore/(5*numCourses) + "%"}} className="rating"></span>
             </div>
           </div>
         </div>) : null;
