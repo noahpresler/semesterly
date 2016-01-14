@@ -16,7 +16,14 @@ module.exports = React.createClass({
   render: function() {
     var Modal = Boron['OutlineModal'];
     var school_selector = null;
-
+    var loader = !(this.state.loading || this.state.courses_loading) ? null :
+      (  <div className="spinner">
+            <div className="rect1"></div>
+            <div className="rect2"></div>
+            <div className="rect3"></div>
+            <div className="rect4"></div>
+            <div className="rect5"></div>
+        </div>);
     if (this.state.school == "") {
       school_selector = (
       <SimpleModal header={"Semester.ly | Welcome"}
@@ -26,6 +33,7 @@ module.exports = React.createClass({
     return (
       <div id="root">
         {school_selector}
+        {loader}
         <div id="toast-container"></div>
         <div id="control-bar-container">
           <div id="semesterly-name">Semester.ly</div>

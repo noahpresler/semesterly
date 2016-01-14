@@ -35,19 +35,11 @@ module.exports = React.createClass({
                      timetable={this.state.timetables[this.state.current_index]}
                      courses_to_sections={this.state.courses_to_sections}
                      school={this.state.school}/>);
-      var loader = !this.state.loading ? null :
-      (  <div className="spinner">
-            <div className="rect1"></div>
-            <div className="rect2"></div>
-            <div className="rect3"></div>
-            <div className="rect4"></div>
-            <div className="rect5"></div>
-        </div>);
 
+      var styles = this.state.loading ? {opacity: "0.5"} : {};
       return (
 
-          <div id="calendar" className="fc fc-ltr fc-unthemed">
-              {loader}
+          <div id="calendar" className="fc fc-ltr fc-unthemed" style={styles}>
               <div className="fc-toolbar">
                 <Pagination 
                   count={this.state.timetables.length} 

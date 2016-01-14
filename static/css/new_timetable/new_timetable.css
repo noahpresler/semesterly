@@ -225,7 +225,6 @@ input[type="text"]:focus {
   border-top:0px;
   overflow: hidden;
   max-height:480px;
-  margin-top:-5px;
 }
 
 #search-results {

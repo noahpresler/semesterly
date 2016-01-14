@@ -4,8 +4,8 @@ module.exports = Reflux.createActions(
   "updatePreferences",
   "loadPresetTimetable",
   "setSchool",
-  "setLoading",
-  "setDoneLoading",
+  "setCoursesLoading",
+  "setCoursesDoneLoading",
   "setCurrentIndex",
   ]
 );

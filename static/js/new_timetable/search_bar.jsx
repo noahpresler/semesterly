@@ -50,12 +50,12 @@ module.exports = React.createClass({
 
   },
   getCourses: function(school) {
-    TimetableActions.setLoading();
+    TimetableActions.setCoursesLoading();
     $.get("/courses/" + school + "/" + _SEMESTER, 
         {}, 
         function(response) {
           this.setState({courses: response});
-          TimetableActions.setDoneLoading();
+          TimetableActions.setCoursesDoneLoading();
 
         }.bind(this)
     );
