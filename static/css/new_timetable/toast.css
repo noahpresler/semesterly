@@ -17,14 +17,15 @@ body {
 	background-color:#222;
 	opacity:0.8;
 	width:16%;
+  min-width: 200px;
 	border-radius:4px;
 	color:#fff;
 	padding:15px;
 	z-index:5000;
-    animation: slide 4.5s;
-    font-size:13px;
-    text-align:center;
-    word-wrap:break-word;
+  animation: slide 4.5s;
+  font-size:13px;
+  text-align:center;
+  word-wrap:break-word;
 
 }
 @keyframes slide {
@@ -39,5 +40,11 @@ body {
   }
   100% {
     transform: translate(0px, -400px);
+  }
+}
+
+@media (max-width: 766px) {
+  .sem-toast {
+    opacity: 1;
   }
 }

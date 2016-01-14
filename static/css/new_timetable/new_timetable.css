@@ -35,17 +35,13 @@ input[type="text"]:focus {
 }
 
 
-.flexzone {
-  display: flex;
-  flex-wrap: wrap;
-}
-
 .right {
 	float: right;
 }
 
 .all-cols-container {
   overflow: hidden;
+  position: relative;
 }
 
 .cal-container {
@@ -206,19 +202,25 @@ input[type="text"]:focus {
 
   
 }
+.input-wrapper {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 46px;
+}
 #search-input { 
+  width: 100%;
   font-size: 18px;
-  width:90%;
-  float:left;
   border-radius:0;
   border-top-left-radius: 3px;
 }
 #search-results-container {
   position:absolute;
+  top: 46px;
   background-color:#fefefe;
   color:#222222;
   z-index:1000;
-  width:99%;
+  width:100%;
   border:2px solid #222;
   border-top:0px;
   overflow: hidden;
@@ -288,7 +290,10 @@ input[type="text"]:focus {
   height:46px;
 }
 #menu-btn {
-  width: 9%;
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 46px;
   border:2px solid #B9BBBB;
   border-left:none;
   background-color:#FFF;
@@ -435,6 +440,10 @@ div {
 	margin-right:5px;
 	right:0;
     margin-top:10px;
+}
+
+.pagination > ul {
+	overflow: hidden;
 }
 
 
@@ -623,7 +632,7 @@ input.cmn-toggle-round:checked + label:after {
 }
 
 .modal-header #name {
-  width: 532px;
+  padding-right: 5px;
   font-size: 30px;
   font-family: lato;
   text-overflow: ellipsis;
@@ -724,18 +733,19 @@ input.cmn-toggle-round:checked + label:after {
 
 .modal-header .course-action {
   display: block;
-    width: 50px;
-    height: 50px;
-    background-color: #ddd;
-    color: #777;
-    border-radius: 50%;
-    font-family: "Flat-Ui-Icons";
-    text-align: center;
-    line-height: 50px;
-    font-size: 20px;
-    transition: all 0.3s;
-    float: right;
-    margin-top: 15px;
+  width: 50px;
+  height: 50px;
+  background-color: #ddd;
+  color: #777;
+  border-radius: 50%;
+  font-family: "Flat-Ui-Icons";
+  text-align: center;
+  line-height: 50px;
+  font-size: 20px;
+  transition: color .3s, background-color .3s;
+  float: right;
+  margin-top: 15px;
+  cursor: pointer;
 }
 
 .modal-header .fui-plus:hover {
@@ -744,8 +754,7 @@ input.cmn-toggle-round:checked + label:after {
 }
 
 #course-info-wrapper {
-    float: left;
-    display: inline-block;
+
 }
 
 .rec-wrapper {
@@ -877,15 +886,24 @@ input.cmn-toggle-round:checked + label:after {
   -webkit-box-orient: vertical;  
 }
 
-.roster-container .textbook{
+.course-list {
+  min-height: 138px;
+}
+.textbook-list {
+  flex: 1;
+  min-height: 0px;
+  overflow: auto;
+}
+
+.course-roster .textbook{
   width: 130px;
-  display: inline-block;
+  float: left;
   margin-bottom: 10px;
   margin-right: -1px;
   text-align: center;
 }
 
-.roster-container .textbook h6 {
+.course-roster .textbook h6 {
   width: 100%;
   margin-bottom: -1px;
   font-size:15px;
@@ -896,23 +914,23 @@ input.cmn-toggle-round:checked + label:after {
 	padding: 20px;
 }
 
-.roster-container {
+.course-roster {
 	width: 100%;
 }
 
-.roster-container .slot-outer {
+.course-roster .slot-outer {
 	width:100%;
 	height: 50px;
 	margin-bottom: 5px;
 	text-align: center;
 }
 
-.roster-container .fc-content {
+.course-roster .fc-content {
 	height:100%;
 	width:100%;
 }
 
-.roster-container .fc-title {
+.course-roster .fc-title {
 	height:100%;
 	width:100%;
 	text-align: center;
@@ -920,14 +938,14 @@ input.cmn-toggle-round:checked + label:after {
     font-size: 15px;
 }
 
-
 .roster-header {
   text-align: center;
   border-bottom: 1px solid #D4D4D4;
 }
 
+
 .cal-container {
-  width: 82%;
+  width: calc(100% - 300px);
   overflow: hidden;
   -webkit-transition: width .3s;
   -moz-transition: width .3s;
@@ -936,14 +954,15 @@ input.cmn-toggle-round:checked + label:after {
 .side-container {
     background:#fff;
     z-index:4000;
+    display: flex;
+    flex-direction: column;
     position: absolute;
     float: right;
-    width: 18%;
+    width: 300px;
     height: 100%;
     border: 0px 0px 0px 2px solid #ccc;
-    height: 100vh;
     border-left: 1px solid #ccc;
-    left: 82%;
+    left: calc(100% - 300px);
     -webkit-transform: translateX(0%);
     -moz-transform: translateX(0%);
     -ms-transform: translateX(0%);
@@ -962,7 +981,7 @@ input.cmn-toggle-round:checked + label:after {
   transform: translateX(100%);
 }
 .cal-container.less-cal {
-  width: 82%;
+  width: calc(100% - 300px);
 }
 .side-container.less-cal {
   -webkit-transform: translateX(0%);
