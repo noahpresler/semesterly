@@ -8,7 +8,7 @@ var SearchResult = React.createClass({
       li_class += " todo-done";
       icon_class = "fui-check";
     }
-    return (
+    var bodyw = $(window).width();    return (
       <li className={li_class} onMouseDown={this.props.toggleModal(this.props.id)}>
         <div className="todo-content">
           <h4 className="todo-name">

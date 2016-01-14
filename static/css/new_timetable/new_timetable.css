@@ -513,6 +513,7 @@ input:-moz-placeholder::before  { font-family: fontAwesome; content:'\f002  ';
 
 	.pagination > ul {
 		max-width:320px;
+		overflow: hidden;
 	}
   .fc-event-container {
     width:95% !important;
