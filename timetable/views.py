@@ -606,7 +606,6 @@ def get_courses(request, school, sem):
     return HttpResponse(json.dumps(json_data), content_type="application/json")
 
 def get_course(request, school, id):
-    from time import sleep
     global SCHOOL
     school = school.lower()
     if school in ["uoft", "jhu"]:
