@@ -40,6 +40,12 @@ LOCKED_SECTIONS = []
 
 hashid = Hashids("x98as7dhg&h*askdj^has!kj?xz<!9")
 
+
+
+def redirect_to_home(request):
+    return HttpResponseRedirect("/")
+
+
 # ******************************************************************************
 # ******************************** GENERATE TTs ********************************
 # ******************************************************************************
@@ -675,3 +681,4 @@ def has_offering(course, sem):
         return True if len(res) > 0 else False
     except:
         return False
+
