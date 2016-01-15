@@ -58,7 +58,7 @@ var CourseRoster = React.createClass({
           }
       }
     }
-    var avgScoreContent = this.props.timetables.length > 0 ? (
+    var avgScoreContent = this.props.timetables.length > 0 && totalScore > 0  ? (
       <div className="rating-wrapper">
           <p>Average Course Rating:</p>
           <div className="sub-rating-wrapper">
