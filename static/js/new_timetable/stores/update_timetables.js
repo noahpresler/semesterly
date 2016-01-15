@@ -1,5 +1,6 @@
 var actions = require('../actions/update_timetables.js');
 var ToastActions = require('../actions/toast_actions.js');
+var Util = require('../util/timetable_util');
 
 
 TT_STATE = {
@@ -145,28 +146,29 @@ module.exports = Reflux.createStore({
 
   loadPresetTimetable: function(url_data) {
     var courses = url_data.split("&");
-    var school = courses.shift();
+    var school = Util.getUnhashedString(courses.shift());
     var prefs = courses.shift();
     var preferences_array = prefs.split(";");
     var pref_obj = {};
     for (var k in preferences_array) {
-      var pref_with_val = preferences_array[k].split("=");
-      var pref = pref_with_val[0];
-      var val = pref_with_val[1];
-      pref_obj[pref] = (val === 'true');
+      var pref_with_val = preferences_array[k].split("="); //e.g. ["allow_conflicts", "false"]
+      var pref = Util.getUnhashedString(pref_with_val[0]);
+      var val = Boolean(Util.getUnhashedString(pref_with_val[1]) === "true");
+
+      pref_obj[pref] = (val);
     }
     this.trigger({loading: true, school: school, preferences:pref_obj});
     TT_STATE.preferences = pref_obj;
     TT_STATE.school = school;
-    TT_STATE.index = parseInt(courses.shift());
+    TT_STATE.index = parseInt(Util.getUnhashedString(courses.shift()));
     for (var i = 0; i < courses.length; i++) {
-      var c = parseInt(courses[i]);
       var course_info = courses[i].split("+");
-      course_info.shift(); // removes first element
+      var c = parseInt(Util.getUnhashedString(course_info.shift()));
+
       TT_STATE.courses_to_sections[c] = {'L': '', 'T': '', 'P': '', 'C': ''};
       if (course_info.length > 0) {
         for (var j = 0; j < course_info.length; j++) {
-          var section = course_info[j];
+          var section = Util.getUnhashedString(course_info[j]);
           if (school == "uoft") {
             TT_STATE.courses_to_sections[c][section[0]] = section;
           }
@@ -185,10 +187,8 @@ module.exports = Reflux.createStore({
   setCoursesDoneLoading: function() {
     this.trigger({courses_loading: false});
   },
-
   setCurrentIndex: function(new_index) {
     this.trigger({current_index: new_index});
   },
-
 
 });
