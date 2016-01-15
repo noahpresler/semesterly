@@ -30,7 +30,7 @@ var Slot = React.createClass({
         if (this.state.show_buttons) {
             pin = (
             <div className="slot-inner bottom">
-                <div className="button-surround" onClick={this.pinCourse} >
+                <div className="button-surround" onClick={this.pinOrUnpinCourse} >
                     <span className="fa fa-lock"></span>
                </div>
             </div>);
@@ -43,7 +43,7 @@ var Slot = React.createClass({
         if (this.props.pinned) {
             pin = (
             <div className="slot-inner bottom">
-                <div className="button-surround pinned" onClick={this.unpinCourse} >
+                <div className="button-surround pinned" onClick={this.pinOrUnpinCourse} >
                     <span className="fa fa-lock"></span>
                </div>
             </div>);
@@ -112,15 +112,9 @@ var Slot = React.createClass({
         this.setState({show_buttons: false});
         this.updateColours(this.props.colour);
     },
-    pinCourse: function(e) {
+    pinOrUnpinCourse: function(e) {
         TimetableActions.updateCourses({id: this.props.course, 
             section: this.props.meeting_section, 
-            removing: false});
-        e.stopPropagation();
-    },
-    unpinCourse: function(e) {
-        TimetableActions.updateCourses({id: this.props.course, 
-            section: '', 
             removing: false});
         e.stopPropagation();
     },
