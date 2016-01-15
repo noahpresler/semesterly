@@ -133,6 +133,10 @@ hr {
   .modal-entry .textbook{
     width: 50%;
   }
+
+  .modal-entry .eval-item {
+    width: 185px;
+  }
 }
 
 @media (max-width: 999px) {
