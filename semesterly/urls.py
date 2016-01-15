@@ -18,11 +18,9 @@ urlpatterns = patterns('',
 	# url(r'^admin/', include(admin.site.urls)),
 
 	# index
-	url(r'^timetable/*$', 'timetable.views.view_timetable'),
-	url(r'^timetable/.+$', 'timetable.views.view_timetable'),
+	url(r'^timetable/*$', 'timetable.views.redirect_to_home'),
+	url(r'^timetable/.+$', 'timetable.views.redirect_to_home'),
 	url(r'^tt_course_search/*$', 'timetable.views.tt_course_search'),
-
-	url(r'^timetable/.+$', 'timetable.views.view_timetable'),
 
 	url(r'^AX82mA2jjQ3r1z/*$', 'analytics.views.handle_user_info_request'),
 	url(r'^exit/*$', 'analytics.views.handle_exit'),

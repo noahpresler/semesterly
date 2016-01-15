@@ -110,7 +110,7 @@ module.exports = Reflux.createStore({
   // Makes a POST request to the backend with TT_STATE
   makeRequest: function(new_state) {
     this.trigger({loading: true});
-    $.post('/timetable/', JSON.stringify(new_state), function(response) {
+    $.post('/', JSON.stringify(new_state), function(response) {
         this.loading = false;
         if (response.error) { // error from URL or local storage
           localStorage.removeItem('data');
