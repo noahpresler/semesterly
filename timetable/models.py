@@ -98,6 +98,10 @@ class CourseOffering(models.Model):
 			textbooks.append(tb.get_info())
 		return textbooks
 
+	def get_evaluations(self):
+		return self.course.get_eval_info()
+
+
 class HopkinsCourse(models.Model):
 	code = models.CharField(max_length=25)
 	name = models.CharField(max_length=250)
