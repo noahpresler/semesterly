@@ -81,6 +81,7 @@ input[type="text"]:focus {
 
 .fc-time-grid .fc-slats td {
    height: 25px;
+   line-height:25px;
    border-bottom: 0;
 }
 .slot-text-row {
