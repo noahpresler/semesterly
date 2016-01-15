@@ -54,7 +54,7 @@ def get_meeting_sections(course, semester, school):
 
 def write_courses_to_json(school, sem): 
     module_dir = os.path.dirname(__file__)  # get current directory
-    file_path = os.path.join(module_dir, "courses_json/" + school + "-" + sem + ".json")
+    file_path = os.path.join(module_dir, "timetable/courses_json/" + school + "-" + sem + ".json")
     C, Co = get_correct_models(school)[0], get_correct_models(school)[1]
     course_objs = C.objects.all()
     json_data = convert_courses_to_json(course_objs, sem, school, 50000)
@@ -72,7 +72,7 @@ if __name__  == "__main__":
     if (school not in ["jhu", "uoft"]) or (sem not in ["F", "S"]):
         print "Invalid school or semester provided"
         exit(1)
-    print "Starting parser for " + school + " " + sem
+    print "Starting populator for " + school + " " + sem
     write_courses_to_json(school, sem)
     print "Done!"
 
