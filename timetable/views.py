@@ -11,7 +11,6 @@ from django.contrib.auth.decorators import login_required
 from django.views.decorators.csrf import csrf_exempt
 
 from timetable.models import Course, CourseOffering, HopkinsCourse, HopkinsCourseOffering
-from analytics.models import *
 
 from django.forms.models import model_to_dict
 
@@ -59,7 +58,7 @@ def view_timetable(request):
                                     context_instance=RequestContext(request))
     params = json.loads(request.body)
     SCHOOL = params['school']   
-    SchoolCourse, SchoolCourseOffering, SchoolQuery, SchoolTimetable = get_correct_models(SCHOOL)
+    SchoolCourse, SchoolCourseOffering = get_correct_models(SCHOOL)
 
     course_ids = params['courses_to_sections'].keys()
     try:
@@ -82,23 +81,12 @@ def set_tt_preferences(preferences):
     SORT_BY_SPREAD = preferences['do_ranking']
     WITH_CONFLICTS = preferences['try_with_conflicts']
 
-def save_tt_analytics(request, course_list, result):
-    SchoolCourse, SchoolCourseOffering, SchoolQuery, SchoolTimetable = get_correct_models(SCHOOL)   
-    try:
-        analytics_tt = SchoolTimetable(session=Session.objects.get(session_id=request.POST['u_sid']))
-        analytics_tt.save()
-        for c in course_list: 
-            analytics_tt.courses.add(c)
-        analytics_tt.is_conflict = True if not result else False
-        analytics_tt.save()
-    except:
-        pass
 
 def get_correct_models(school):
     if school == 'jhu':
-        return (HopkinsCourse, HopkinsCourseOffering, HopkinsSearchQuery, HopkinsTimetable)
+        return (HopkinsCourse, HopkinsCourseOffering)
     else:
-        return (Course, CourseOffering, SearchQuery, Timetable)
+        return (Course, CourseOffering)
 
 def get_granularity(school):
     if school == 'uoft':
@@ -132,7 +120,7 @@ def get_course_dict(section):
     return model_to_dict(model, fields=['code', 'name', 'id'])
 
 def get_course_obj(course_dict, sections):
-    SchoolCourse, SchoolCourseOffering, SchoolQuery, SchoolTimetable = get_correct_models(SCHOOL)  
+    SchoolCourse, SchoolCourseOffering = get_correct_models(SCHOOL)  
     sections = list(sections)
     slot_objects = [create_offering_object(co) for _, _, course_offerings in sections
                                                for co in course_offerings]
@@ -432,7 +420,7 @@ def courses_to_offerings(courses, sem, plist=[]):
     elements are courseoffering objects and the second elements are lists used to keep 
     track of conflict information for that specific courseoffering.
     """
-    SchoolCourse, SchoolCourseOffering, SchoolQuery, SchoolTimetable = get_correct_models(SCHOOL)   
+    SchoolCourse, SchoolCourseOffering = get_correct_models(SCHOOL)   
     sections = []
 
     for c in courses:
@@ -646,7 +634,7 @@ def get_course_serializable(course, sem):
     return d
 
 def get_meeting_sections(course, semester):
-    SchoolCourse, SchoolCourseOffering, SchoolQuery, SchoolTimetable = get_correct_models(SCHOOL)   
+    SchoolCourse, SchoolCourseOffering = get_correct_models(SCHOOL)   
     offering_objs = SchoolCourseOffering.objects.filter((Q(semester=semester) | Q(semester='Y')), 
                                                     course=course)          
     sections = []
@@ -657,7 +645,7 @@ def get_meeting_sections(course, semester):
     return sections
 
 def get_meeting_sections_objects(course, semester):
-    SchoolCourse, SchoolCourseOffering, SchoolQuery, SchoolTimetable = get_correct_models(SCHOOL)   
+    SchoolCourse, SchoolCourseOffering = get_correct_models(SCHOOL)   
     offering_objs = SchoolCourseOffering.objects.filter((Q(semester=semester) | Q(semester='Y')), 
                                                     course=course)          
     sections = []
@@ -668,7 +656,7 @@ def get_meeting_sections_objects(course, semester):
     return sections
 
 def has_offering(course, sem):
-    SchoolCourse, SchoolCourseOffering, SchoolQuery, SchoolTimetable = get_correct_models(SCHOOL)   
+    SchoolCourse, SchoolCourseOffering = get_correct_models(SCHOOL)   
 
     try:
         res = SchoolCourseOffering.objects.filter(~Q(time_start__iexact='TBA'), 
