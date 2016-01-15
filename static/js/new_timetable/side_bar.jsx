@@ -46,6 +46,7 @@ var CourseRoster = React.createClass({
     } else {
       slots = null;
     }
+    console.log(this.props)
     var tt = this.props.timetables.length > 0 ? this.props.timetables[0] : null;
     var numCourses = 0;
     var totalScore = 0;
