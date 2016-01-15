@@ -119,17 +119,11 @@ hr {
   }
 }
 
-@media (max-width: 767px) {
-  #search-input {
-    font-size:13px;
-  }
-}
+
 @media (max-width: 766px) {
   #search-input { 
-    font-size: 14px;
+    font-size: 13px;
   }
-}
-@media (max-width: 766px) {
   .modal-entry .textbook{
     width: 50%;
   }
@@ -137,6 +131,10 @@ hr {
   .modal-entry .eval-item {
     width: 185px;
   }
+  #search-results-container {
+    margin-top:-5px;
+  }
+
 }
 
 @media (max-width: 999px) {
