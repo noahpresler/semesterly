@@ -90,6 +90,7 @@ hr {
   border-top: 1px solid #D4D4D4;
   position: relative;
   margin-bottom: 0px;
+  overflow: hidden;
 }
 
 .footer .nav-pills {
@@ -180,4 +181,10 @@ hr {
   .course-modal {
     width: 100% !important;
   }
+}
+
+
+.fb-like {
+    margin-top: 10px;
+    margin-left: 10px;
 }

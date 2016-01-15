@@ -55,12 +55,22 @@
     </script>
   </head>
   <body>
+  <div id="fb-root"></div>
+      <div id="fb-root"></div>
+      <script>(function(d, s, id) {
+        var js, fjs = d.getElementsByTagName(s)[0];
+        if (d.getElementById(id)) return;
+        js = d.createElement(s); js.id = id;
+        js.src = "//connect.facebook.net/en_US/sdk.js#xfbml=1&version=v2.5&appId=1650567028525136";
+        fjs.parentNode.insertBefore(js, fjs);
+      }(document, 'script', 'facebook-jssdk'));</script>
       <div id="page">
       </div>
        
 
       <!-- footer -->
       <footer class="footer navbar">
+      <div class="fb-like" data-href="https://www.facebook.com/semesterly/" data-layout="button_count" data-action="like" data-show-faces="true" data-share="false"></div>
         <ul class="nav nav-pills">
           <li role="presentation"><a href="#">Contact us</a></li>
           <li role="presentation"><a href="#">Press</a></li>
