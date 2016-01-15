@@ -1,8 +1,8 @@
 const gulp = require('gulp');
 // const babel = require('gulp-babel');
-// const react = require('gulp-react');
+const react = require('gulp-react');
 // const watch = require('gulp-watch');
-// const concat = require('gulp-concat');
+const concat = require('gulp-concat');
 // const batch = require('gulp-batch');
 
 /* new */
@@ -38,6 +38,13 @@ gulp.task('default', function() {
 	};
 	build();
 	bundler.on('update', build);
+});
+
+gulp.task('once', function () {
+return gulp.src('./static/js/new_timetable/**')
+    .pipe(concat('application.js'))
+    .pipe(react())
+    .pipe(gulp.dest('static/js/gulp'));
 });
 
 // gulp.task('transform', function() {
