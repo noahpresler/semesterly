@@ -8,7 +8,7 @@ var SearchResult = React.createClass({
       li_class += " todo-done";
       icon_class = "fui-check";
     }
-    var bodyw = $(window).width();    return (
+    return (
       <li className={li_class} onMouseDown={this.props.toggleModal(this.props.id)}>
         <div className="todo-content">
           <h4 className="todo-name">
@@ -69,7 +69,7 @@ module.exports = React.createClass({
           <div className="input-wrapper">
             <input 
               type="text" 
-              placeholder="Search by code, title, description, professor, degree" 
+              placeholder="Search by code, title, description, degree" 
               id="search-input" 
               ref="input" 
               onFocus={this.focus} onBlur={this.blur} 
@@ -141,8 +141,8 @@ module.exports = React.createClass({
   },
 
   filterCourses: function(query) {
-    var opt_query = query.replace("intro","introduction")
-    that = this
+    var opt_query = query.replace("intro","introduction");
+    that = this;
     var results = this.state.courses.filter(function(c) {
       return (that.isSubsequence(c.name.toLowerCase(),query) || 
              that.isSubsequence(c.name.toLowerCase(),opt_query) ||
