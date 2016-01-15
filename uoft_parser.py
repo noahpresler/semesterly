@@ -8,9 +8,10 @@ import json
 import os
 import sys
 import django
+os.environ.setdefault("DJANGO_SETTINGS_MODULE", "semesterly.settings")
+django.setup()
 from timetable.models import *
 
-django.setup()
 
 class Coursefinder:
     """A scraper for UofT's Course Finder web service.
