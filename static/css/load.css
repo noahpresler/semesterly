@@ -85,7 +85,7 @@
   position:absolute;
   z-index:10000;
   top:0;
-  right:0;
+  right: 10%;
 }
 
 .spinner > div {
