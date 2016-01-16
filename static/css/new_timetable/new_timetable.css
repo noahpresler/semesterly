@@ -1008,3 +1008,8 @@ input.cmn-toggle-round:checked + label:after {
   -ms-transform: translateX(0%);
   transform: translateX(0%);
 }
+
+/* Footer -----------------------------------*/
+.fb-like {
+  float: left;
+}
