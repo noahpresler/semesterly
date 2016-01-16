@@ -128,7 +128,7 @@ module.exports = React.createClass({
 
   render: function() {
     return (
-      <div ref="sidebar" className="side-container side-collapsed">
+      <div ref="sidebar" className="side-container full-cal">
         <div className="roster-header">
           <h4>Your Semester</h4>
         </div>

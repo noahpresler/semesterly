@@ -981,7 +981,7 @@ input.cmn-toggle-round:checked + label:after {
     height: 100%;
     border: 0px 0px 0px 2px solid #ccc;
     border-left: 1px solid #ccc;
-    left: calc(100% - 300px);
+    left: 100%;
     -webkit-transform: translateX(0%);
     -moz-transform: translateX(0%);
     -ms-transform: translateX(0%);
@@ -994,19 +994,19 @@ input.cmn-toggle-round:checked + label:after {
   width: 100%;
 }
 .side-container.full-cal {
-  -webkit-transform: translateX(100%);
-  -moz-transform: translateX(100%);
-  -ms-transform: translateX(100%);
-  transform: translateX(100%);
+  -webkit-transform: translateX(0%);
+  -moz-transform: translateX(0%);
+  -ms-transform: translateX(0%);
+  transform: translateX(0%);
 }
 .cal-container.less-cal {
   width: calc(100% - 300px);
 }
 .side-container.less-cal {
-  -webkit-transform: translateX(0%);
-  -moz-transform: translateX(0%);
-  -ms-transform: translateX(0%);
-  transform: translateX(0%);
+  -webkit-transform: translateX(-100%);
+  -moz-transform: translateX(-100%);
+  -ms-transform: translateX(-100%);
+  transform: translateX(-100%);
 }
 
 /* Footer -----------------------------------*/
