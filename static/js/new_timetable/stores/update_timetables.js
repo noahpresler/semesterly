@@ -27,6 +27,8 @@ TT_STATE = {
 
 SCHOOL_LIST = ["jhu", "uoft"];
 
+// flag to check if the user just turned conflicts off
+CONFLICT_OFF = false;
 
 module.exports = Reflux.createStore({
   listenables: [actions],
@@ -110,6 +112,9 @@ module.exports = Reflux.createStore({
   */
   updatePreferences: function(preference, new_value) {
     var new_state = $.extend(true, {}, TT_STATE); // deep copy of TT_STATE
+    if (preference == 'try_with_conflicts' && new_value == false) {
+      CONFLICT_OFF = true;
+    }
     new_state.preferences[preference] = new_value;
     this.trigger({preferences: new_state.preferences});
     this.makeRequest(new_state);
@@ -139,18 +144,29 @@ module.exports = Reflux.createStore({
               timetables: response,
               courses_to_sections: TT_STATE.courses_to_sections,
               current_index: index,
-              loading: false
+              loading: false,
+              preferences: TT_STATE.preferences
           });
         } else if (TT_STATE.courses_to_sections != {}) { // conflict
-          this.trigger({
-            loading: false,
-            conflict_error: true
-          });
-          ToastActions.createToast("That course caused a conflict! Try again with the Allow Conflicts preference turned on.");
-
+          // if turning conflicts off led to a conflict, reprompt user
+          if (CONFLICT_OFF) {
+            this.trigger({
+              loading: false,
+              conflict_error: false,
+              preferences: TT_STATE.preferences
+            })
+            ToastActions.createToast("Please remove some courses before turning off Allow Conflicts");
+          } else {
+            this.trigger({
+              loading: false,
+              conflict_error: true
+            });
+            ToastActions.createToast("That course caused a conflict! Try again with the Allow Conflicts preference turned on.");
+          }
         } else {
           this.trigger({loading: false});
         }
+        CONFLICT_OFF = false;
     }.bind(this));
   },
 

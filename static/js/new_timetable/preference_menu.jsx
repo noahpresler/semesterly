@@ -14,7 +14,8 @@ var BinaryPreference = React.createClass({
         <div className="preference-toggle">
           <div className="switch">
             <input ref="checkbox_elem" id={toggle_label} 
-                   className="cmn-toggle cmn-toggle-round" type="checkbox" 
+                   className={"cmn-toggle cmn-toggle-round " + this.props.name} 
+                   type="checkbox" 
                    checked={this.state.preferences[this.props.name]}
                    onClick={this.togglePreference}/>
             <label htmlFor={toggle_label}></label>
