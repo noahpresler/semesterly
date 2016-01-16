@@ -21,6 +21,8 @@ from collections import OrderedDict, defaultdict
 import json, copy, re, operator, itertools, functools
 import os
 
+from analytics.views import *
+
 MAX_RETURN = 60 # Max number of timetables we want to consider
 
 # TODO: pass preferences in from frontend
@@ -44,6 +46,17 @@ hashid = Hashids("x98as7dhg&h*askdj^has!kj?xz<!9")
 def redirect_to_home(request):
     return HttpResponseRedirect("/")
 
+def mark_request(request, sid):
+    create_session_for_request(request, sid)
+
+def save_analytics_data(key, args):
+    try:
+        if key == "timetables":
+            save_timetable_data(args['sid'], args['school'], args['courses'], args['count'])
+
+
+    except:
+        pass
 
 # ******************************************************************************
 # ******************************** GENERATE TTs ********************************
@@ -51,13 +64,19 @@ def redirect_to_home(request):
 
 @csrf_exempt
 def view_timetable(request):
+
     global SCHOOL, LOCKED_SECTIONS
     """Generate best timetables given the user's selected courses"""
     if not request.POST:
         return render_to_response('timetable.html', {}, 
                                     context_instance=RequestContext(request))
+   
+
     params = json.loads(request.body)
-    SCHOOL = params['school']   
+    sid = params['sid']
+    mark_request(request, sid)
+
+    SCHOOL = params['school']
     SchoolCourse, SchoolCourseOffering = get_correct_models(SCHOOL)
 
     course_ids = params['courses_to_sections'].keys()
@@ -66,8 +85,15 @@ def view_timetable(request):
         LOCKED_SECTIONS = params['courses_to_sections']
         set_tt_preferences(params['preferences'])
         result = courses_to_timetables(courses, params['semester'])
+        # analytics
+        save_analytics_data('timetables', {'sid': sid, 'school': SCHOOL, 'courses': courses, 'count': len(result)})
+        # end analytics
+
     except:
         result = {'error': True}
+
+
+
     return HttpResponse(json.dumps(result), content_type='application/json')
 
 def set_tt_preferences(preferences):

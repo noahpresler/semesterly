@@ -22,10 +22,11 @@ urlpatterns = patterns('',
 	url(r'^timetable/.+$', 'timetable.views.redirect_to_home'),
 	url(r'^tt_course_search/*$', 'timetable.views.tt_course_search'),
 
-	url(r'^AX82mA2jjQ3r1z/*$', 'analytics.views.handle_user_info_request'),
 	url(r'^exit/*$', 'analytics.views.handle_exit'),
 
 	url(r'^analytics/*$', 'analytics.views.view_analytics_dashboard'),
+	url(r'^analytics/get_num_generated$', 'analytics.views.get_num_generated'),
+
 	url(r'^analytics_data/*$', 'analytics.views.get_analytics_data'),
 	url(r'^timetable_data/*$', 'analytics.views.get_timetable_data'),
 
