@@ -32,37 +32,52 @@ def verify_password(request):
 
 
 @csrf_exempt
-def handle_user_info_request(request):
+def create_session_for_request(request, sid):
 	# get ip address and information about the address
-	try: 
-		ip = request.META.get('REMOTE_ADDR')
-		ip_info = json.loads(urllib2.urlopen("http://ipinfo.io/" + ip + "/json").read())
-	except:
+	try:
+		try:
+			s = Session.objects.get(session_id=sid)
+		except:
+			# did not exist
+			ip = request.META.get('REMOTE_ADDR')
+
+			ip_info = json.loads(urllib2.urlopen("http://ipinfo.io/" + ip + "/json").read())
+
+			session = Session(session_id=sid,
+				ip=ip_info.get('ip', "N/A"),
+				lat_long=ip_info.get('loc', "N/A"),
+				city=ip_info.get('city', "N/A"),
+				country=ip_info.get('country', "N/A"))
+
+			session.save()
+	except Exception as e:
 		pass
 
-	# store this info
-	try:
-		r = request.POST
-		if ip in ['']: # so we can filter out our own stuff from being tracked
-			return HttpResponse(status=200)
-			
-		session = Session(session_id=r['sid'],
-			ip=ip_info['ip'],
-			lat_long=ip_info['loc'],
-			city=ip_info['city'],
-			country=ip_info['country'])
-		session.save()
-		return HttpResponse(status=200)
-	except:
-		return HttpResponse(status=200)
+def get_analytics_models(school):
+	if school == "jhu":
+		return (HopkinsSearchQuery, HopkinsTimetable)
+	else:
+		return (SearchQuery, Timetable)
 
+def save_timetable_data(sid, school, courses, count):
+	SchoolQuery, SchoolTimetable = get_analytics_models(school)	
+	try:
+		analytics_tt = SchoolTimetable(session=Session.objects.get(session_id=sid))
+		analytics_tt.save()
+		for c in courses: 
+			analytics_tt.courses.add(c)
+		analytics_tt.is_conflict = count == 0 # change this
+		analytics_tt.num_generated = count
+		analytics_tt.save()
+	except:
+		pass
 
 
 
 @csrf_exempt
 def handle_exit(request):
 	try:
-		session = Session.objects.get(session_id=request.POST['u_sid'])
+		session = Session.objects.get(session_id=request.POST['sid'])
 		session.end_time=datetime.datetime.now()
 		session.save()
 		return HttpResponse(status=200)
@@ -103,7 +118,15 @@ def get_analytics_data(request):
 
 	return HttpResponse(json.dumps(result), content_type="application/json")
 
+def get_num_generated(request):
+	result = {
+		'jhu_generated': HopkinsTimetable.objects.all().count(), 
+		'uoft_generated': Timetable.objects.all().count()
+	}
 
+	return HttpResponse(json.dumps(result), content_type="application/json")
+
+	pass
 @csrf_exempt
 def get_timetable_data(request):
 	return_obj = {'recent_tt_data': []}

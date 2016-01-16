@@ -40,9 +40,9 @@ gulp.task('default', function() {
 	bundler.on('update', build);
 });
 
-gulp.task('once', function () {
-return gulp.src('./static/js/new_timetable/**')
-    .pipe(concat('application.js'))
+gulp.task('analytics', function () {
+return gulp.src('./static/js/analytics/**')
+    .pipe(concat('analytics_application.js'))
     .pipe(react())
     .pipe(gulp.dest('static/js/gulp'));
 });

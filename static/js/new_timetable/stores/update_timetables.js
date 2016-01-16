@@ -2,6 +2,13 @@ var actions = require('../actions/update_timetables.js');
 var ToastActions = require('../actions/toast_actions.js');
 var Util = require('../util/timetable_util');
 
+function randomString(length, chars) {
+    var result = '';
+    for (var i = length; i > 0; --i) result += chars[Math.floor(Math.random() * chars.length)];
+    return result;
+}
+
+SID = randomString(30, '!?()*&^%$#@![]0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ');
 
 TT_STATE = {
   school: "jhu",
@@ -14,7 +21,8 @@ TT_STATE = {
     'grouped': false,
     'do_ranking': false,
     'try_with_conflicts': false
-  }
+  },
+  sid: SID,
 }
 
 SCHOOL_LIST = ["jhu", "uoft"];
@@ -195,3 +203,13 @@ module.exports = Reflux.createStore({
   },
 
 });
+
+$(window).on('beforeunload', function() {
+  $.ajax({
+      type: 'POST',
+      async: false,
+      url: '/exit',
+      data: {sid: SID}
+  });
+});
+
