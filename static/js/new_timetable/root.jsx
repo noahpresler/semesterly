@@ -10,7 +10,7 @@ var SchoolList = require('./school_list');
 
 module.exports = React.createClass({
   mixins: [Reflux.connect(TimetableStore), Reflux.connect(ToastStore)],
-  sidebar_collapsed: 'closed',
+  sidebar_collapsed: 'neutral',
 
 
   render: function() {
@@ -50,7 +50,7 @@ module.exports = React.createClass({
         </div>
         <div className="all-cols-container">
           <Sidebar toggleModal={this.toggleCourseModal}/>
-          <div className="cal-container full-cal">
+          <div className="cal-container">
             <Timetable toggleModal={this.toggleCourseModal} />
           </div>
         </div>
@@ -69,6 +69,16 @@ module.exports = React.createClass({
 
 
   toggleSideModal: function(){
+    if (this.sidebar_collapsed == 'neutral') {
+      var bodyw = $(window).width();
+      if (bodyw > 999) {
+        this.collapseSideModal();
+        this.sidebar_collapsed = 'open';
+      } else {
+        this.expandSideModal();
+        this.sidebar_collapsed = 'closed';
+      }
+    }
     if (this.sidebar_collapsed == 'closed') {
       this.expandSideModal();
       this.sidebar_collapsed = 'open';
