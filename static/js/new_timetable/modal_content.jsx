@@ -20,6 +20,7 @@ module.exports = React.createClass({
 		var sections = loading ? null : this.getSections();
 		return (
 			<div id="modal-content">
+				<i className="right fa fa-2x fa-times close-course-modal" onClick={this.props.hide}></i>
                 {loader}
                 {header}
                 {description}
