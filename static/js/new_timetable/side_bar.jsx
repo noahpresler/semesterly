@@ -1,4 +1,5 @@
-var TimetableStore = require('./stores/update_timetables.js')
+var TimetableActions = require('./actions/update_timetables.js');
+var TimetableStore = require('./stores/update_timetables.js');
 
 var RosterSlot = React.createClass({
   render: function() {
@@ -10,8 +11,13 @@ var RosterSlot = React.createClass({
         onMouseEnter={this.highlightSiblings}
         onMouseLeave={this.unhighlightSiblings}
         className={"slot-outer fc-time-grid-event fc-event slot slot-" + this.props.id}>
+
         <div className="fc-content">
-          <div className="fc-title slot-text-row">{this.props.name}</div>
+
+          <div className="fc-title slot-text-row">
+            <i className="right fa fa-times remove-course-icon" onClick={this.removeCourse}></i>
+            {this.props.name}
+          </div>
         </div>
       </div>
     );
@@ -30,8 +36,14 @@ var RosterSlot = React.createClass({
       .css('background-color', colour)
       .css('border-color', colour);
   },
+  removeCourse: function(e) {
+    TimetableActions.updateCourses({id: this.props.id, 
+            section: '', 
+            removing: true});
+    e.stopPropagation();
+  },
 
-})
+});
 
 var CourseRoster = React.createClass({
 

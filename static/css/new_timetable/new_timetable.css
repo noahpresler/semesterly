@@ -601,13 +601,24 @@ input.cmn-toggle-round:checked + label:after {
 .fui-check:before, .fui-plus:before {
   margin-left:1px;
 }
-.close-course-modal {
+.close-course-modal, .remove-course-icon {
   cursor:pointer;
-  font-size:22px;
   transition: color 0.3s;
 }
 .close-course-modal:hover {
   color:#999;
+}
+.close-course-modal{
+  font-size:22px;
+}
+
+.remove-course-icon {
+  display:inline;
+
+  font-size:20px;
+}
+.remove-course-icon:hover {
+  color:#222;
 }
 
 /* Modal Styles */
