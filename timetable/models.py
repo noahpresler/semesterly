@@ -37,6 +37,10 @@ class Course(models.Model):
 	def get_dept(self):
 		return self.code[:3]
 
+	def get_dept_matches(self):
+		department = self.get_dept()
+		return Course.objects.filter(code__contains=department)
+
 	def get_all_textbook_info(self):
 		# Implement
 		textbook_info = []
