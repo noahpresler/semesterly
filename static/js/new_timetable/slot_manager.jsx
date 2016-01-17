@@ -10,9 +10,9 @@ COLOUR_TO_HIGHLIGHT = {
     "#8870FF" : "#7059E6",
     "#F9AE74" : "#F7954A",
     "#D4DBC8" : "#B5BFA3",
-    "#E7F76D" : "#C4D44D",
     "#F182B4" : "#DE699D",
     "#7499A2" : "#668B94",
+    "#E7F76D" : "#C4D44D",
 } // consider #CF000F, #e8fac3
 COURSE_TO_COLOUR = {}
 // how big a slot of half an hour would be, in pixels

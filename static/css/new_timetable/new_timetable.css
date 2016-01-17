@@ -291,11 +291,11 @@ input[type="text"]:focus {
 .todo li:after, .todo li.todo-done:after {
     content:none;
 }
-.todo-done .search-result-action {
+.todo-done .search-result-action, .course-action.fui-check {
     background: #1abc9c;
     color: #2c3e50;
 }
-.todo-done .search-result-action:hover {
+.todo-done .search-result-action:hover, .course-action.fui-check:hover {
   background-color: #66CCB8;
 }
 
@@ -443,6 +443,7 @@ div {
   overflow-y:scroll;
   font-size: 15px;
 }
+
 .semester-display {
   font-size:30px;
   width: 122px;
@@ -760,7 +761,10 @@ input.cmn-toggle-round:checked + label:after {
   margin-top: 15px;
   cursor: pointer;
 }
-
+.course-action.fui-check {
+    background: #1abc9c;
+    color: #2c3e50;
+}
 .modal-header .fui-plus:hover {
   background-color: #c4c4c4;
   color: #222;

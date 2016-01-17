@@ -2,6 +2,7 @@ var Loader = require('./loader');
 var CourseInfoStore = require('./stores/course_info');
 var EvaluationManager = require('./evaluations.jsx');
 var TimetableActions = require('./actions/update_timetables.js');
+var UpdateTimetablesStore = require('./stores/update_timetables.js');
 var CourseActions = require('./actions/course_actions');
 var SectionSlot = require('./section_slot.jsx')
 
@@ -9,13 +10,14 @@ module.exports = React.createClass({
 	mixins: [Reflux.connect(CourseInfoStore)],
 
 	render: function() {
-		var loader = this.state.loading ? <Loader /> : null;
-		var header = this.state.loading ? null : this.getHeader()
-		var description = this.state.loading ? null : this.getDescription()
-		var evaluations = this.state.loading ? null : this.getEvaluations()
-		var recomendations = this.state.loading ? null : this.getRecomendations()
-		var textbooks =this.state.loading ? null : this.getTextbooks()
-		var sections = this.state.loading ? null : this.getSections()
+		var loading = this.state.info_loading;
+		var loader = loading ? <Loader /> : null;
+		var header = loading ? null : this.getHeader();
+		var description = loading ? null : this.getDescription();
+		var evaluations = loading ? null : this.getEvaluations();
+		var recomendations = loading ? null : this.getRecomendations();
+		var textbooks = loading ? null : this.getTextbooks();
+		var sections = loading ? null : this.getSections();
 		return (
 			<div id="modal-content">
                 {loader}
@@ -29,22 +31,26 @@ module.exports = React.createClass({
 	},
 
 	getHeader: function() {
+		var course_id = this.state.course_info.id;
+		var c_to_s = this.props.courses_to_sections;
+		var add_or_remove = Object.keys(c_to_s).indexOf(String(course_id)) > -1 ?
+		(<span className="course-action fui-check" onClick={this.toggleCourse(true)}/>) : 
+		(<span className="course-action fui-plus" onClick={this.toggleCourse(false)}/>);
 		var header = (<div className="modal-header">
-			<span className="course-action fui-plus" onClick={this.addCourse()}/>
+			{add_or_remove}
 			<div id="course-info-wrapper">
 				<div id="name">{this.state.course_info.name}</div>
 				<div id="code">{this.state.course_info.code}</div>
 			</div>
-		</div>)
-		return header
+		</div>);
+		return header;
 	},
-
-	addCourse: function() {
-		return (function() {
-			TimetableActions.updateCourses({id: this.state.course_info.id, section: '', removing: false});
+	toggleCourse: function(removing) {
+		// if removing is true, we're removing the course, if false, we're adding it
+		return (function () {
+			TimetableActions.updateCourses({id: this.state.course_info.id, section: '', removing: removing});
 		}.bind(this));
 	},
-
 	openRecomendation: function(course_id) {
 		return (function() {
 			CourseActions.getCourseInfo(this.props.school, course_id);
