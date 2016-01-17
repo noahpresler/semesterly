@@ -45,7 +45,9 @@ module.exports = React.createClass({
         </div>
         <div id="modal-container">
           <Modal closeOnClick={true} ref='OutlineModal' className="course-modal">
-              <ModalContent school={this.state.school} courses_to_sections={this.state.courses_to_sections}/>
+              <ModalContent school={this.state.school} 
+                            courses_to_sections={this.state.courses_to_sections} 
+                            hide={this.hideCourseModal} />
           </Modal>
         </div>
         <div className="all-cols-container">
@@ -58,13 +60,15 @@ module.exports = React.createClass({
     );
   },
 
-
-
   toggleCourseModal: function(course_id) {
     return function() {
         this.refs['OutlineModal'].toggle();
         course_actions.getCourseInfo(this.state.school, course_id);
     }.bind(this); 
+  },
+
+  hideCourseModal: function() {
+    this.refs['OutlineModal'].hide();
   },
 
 
@@ -95,6 +99,5 @@ module.exports = React.createClass({
   collapseSideModal: function() {
     $('.cal-container, .side-container').removeClass('less-cal').addClass('full-cal');
   }
-
 
 });

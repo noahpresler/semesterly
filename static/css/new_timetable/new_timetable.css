@@ -601,14 +601,20 @@ input.cmn-toggle-round:checked + label:after {
 .fui-check:before, .fui-plus:before {
   margin-left:1px;
 }
-
+.close-course-modal {
+  cursor:pointer;
+  font-size:22px;
+  transition: color 0.3s;
+}
+.close-course-modal:hover {
+  color:#999;
+}
 
 /* Modal Styles */
 .modal-header {
   background-color: #F8F6F7;
-  border: 1px solid #D4D4D4;
-  height: 86px;
-  padding-top:0px !important;
+  height: 100px;
+  padding-top:5px !important;
 }
 
 #modal-content .modal-entry {
@@ -760,7 +766,7 @@ input.cmn-toggle-round:checked + label:after {
   font-size: 20px;
   transition: color .3s, background-color .3s;
   float: right;
-  margin-top: 15px;
+  margin-top: 30px;
   cursor: pointer;
 }
 .course-action.fui-check {
