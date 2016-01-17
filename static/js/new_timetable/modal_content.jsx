@@ -123,17 +123,17 @@ module.exports = React.createClass({
 
 	getSections: function() {
 		var F = this.state.course_info.sections_F.map(function(s){
-			return (<SectionSlot key={s.id} all_sections={this.state.course_info.sections_F_objs} section={s}/>)
+			return (<SectionSlot key={s} all_sections={this.state.course_info.sections_F_objs} section={s}/>)
 		}.bind(this));
 		var S = this.state.course_info.sections_S.map(function(s){
-			return (<SectionSlot key={s.id} all_sections={this.state.course_info.sections_S_objs} section={s}/>)
+			return (<SectionSlot key={s} all_sections={this.state.course_info.sections_S_objs} section={s}/>)
 		}.bind(this));
 		if (this.state.show_sections === this.state.course_info.code) {
 			var sec_display = (
 				<div id="all-sections-wrapper">
 					{F}
 					{S}
-				</div>)
+				</div>);
 		} else {
 			var sec_display = (<div id="numSections" onClick={this.setShowSections(this.state.course_info.code)}>This course has <b>{this.state.course_info.sections_S.length + this.state.course_info.sections_F.length}</b> sections. Click to view them.</div>)
 		}
@@ -141,8 +141,8 @@ module.exports = React.createClass({
 			(<div className="modal-entry" id="course-sections">
 				<h6>Course Sections:</h6>
 				{sec_display}
-			</div>)
-		return sections
+			</div>);
+		return sections;
 	},
 
 	getInitialState: function() {
