@@ -32,28 +32,41 @@ module.exports = React.createClass({
               <a onClick={this.props.setIndex(i)}>{i + 1}</a>
         </li>);
     }
+    var prev_double = (
+      <li className="prev-double" onClick={this.changePage(-1)}>
+        <div className="pagination-btn">
+          <span className="fa fa-angle-double-left"></span>
+        </div>
+      </li>
+    );
+    var next_double = (
+      <li className="next-double" onClick={this.changePage(1)}>
+        <div className="pagination-btn">
+          <span className="fa fa-angle-double-right"></span>
+        </div>
+      </li>
+    );
+    if (count < (this.state.num_bubbles + 1)) {
+      prev_double = null;
+      next_double = null;
+    }
 
     return (
         <div className="pagination pagination-minimal">
           <ul>
-            <li className="prev-double" onClick={this.changePage(-1)}>
-              <div className="pagination-btn">
-                <span className="fa fa-angle-double-left"></span></div>
-            </li>
+            {prev_double}
             <li className="previous">
               <a className="fui-arrow-left pagination-btn" 
                 onClick={this.props.prev}></a>
             </li>
+
             {options}
-            
+          
             <li className="next">
               <a className="fui-arrow-right pagination-btn"
                 onClick={this.props.next}></a>
             </li>
-            <li className="next-double" onClick={this.changePage(1)}>
-              <div className="pagination-btn">
-                <span className="fa fa-angle-double-right"></span></div>
-            </li>
+            {next_double}
           </ul>
         </div>
     );
