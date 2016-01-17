@@ -45,7 +45,7 @@ module.exports = React.createClass({
         </div>
         <div id="modal-container">
           <Modal closeOnClick={true} ref='OutlineModal' className="course-modal">
-              <ModalContent school={this.state.school}/>
+              <ModalContent school={this.state.school} courses_to_sections={this.state.courses_to_sections}/>
           </Modal>
         </div>
         <div className="all-cols-container">

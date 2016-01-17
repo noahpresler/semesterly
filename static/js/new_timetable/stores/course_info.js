@@ -8,13 +8,13 @@ module.exports = Reflux.createStore({
     $.get("/courses/"+ school + "/id/" + course_id, 
          {}, 
          function(response) {
-            this.trigger({loading: false, course_info: response});
+            this.trigger({info_loading: false, course_info: response});
          }.bind(this)
     );
 
   },
 
   getInitialState: function() {
-    return {course_info: null, loading: true};
+    return {course_info: null, info_loading: true};
   }
 });
