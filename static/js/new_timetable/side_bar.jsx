@@ -1,5 +1,6 @@
 var TimetableActions = require('./actions/update_timetables.js');
 var TimetableStore = require('./stores/update_timetables.js');
+var SimpleModal = require('./simple_modal');
 
 var RosterSlot = React.createClass({
   render: function() {
@@ -133,23 +134,36 @@ var TextbookRoster = React.createClass({
       </div>
     )
   }
-})
+});
 
 module.exports = React.createClass({
   mixins: [Reflux.connect(TimetableStore)],
-
+  getInitialState: function() {
+    return {show: false};
+  },
   render: function() {
     return (
+
       <div ref="sidebar" className="side-container">
+        <SimpleModal header={"Example Modal With State Variable"}
+                   key="textbook"
+                   ref="sweg"
+                   styles={{backgroundColor: "#FDF5FF", color: "#000"}} 
+                   allow_disable={true}
+                   content={<a onClick={this.toggle}>Nice example! Click to disable</a> }/>
         <div className="roster-header">
           <h4>Your Semester</h4>
         </div>
         <CourseRoster toggleModal={this.props.toggleModal} timetables={this.state.timetables}/>
         <div className="roster-header">
-          <h4>Your Textbooks</h4>
+          <h4>Your Textbooks</h4><a onClick={this.toggle}>Toggle Modal </a>
         </div>
         <TextbookRoster />
       </div>
     )
-  }
+  },
+  toggle: function() {
+    this.refs.sweg.toggle();
+  },
+
 });
