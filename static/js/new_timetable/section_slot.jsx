@@ -15,11 +15,18 @@ var day_to_letter = {
 module.exports = React.createClass({
     render: function() {
         var cos = this.getRelatedCourseOfferings();
-        var dayAndTimes = this.getDaysAndTimes(cos);
-        var sect = <div id="section-num">{cos[0].meeting_section}</div>;
-        var prof = <div id="profs">{cos[0].instructors}</div>;
-        var sect_prof = <div id="sect-prof">{sect}{prof}</div>;
-        return <div id="section-wrapper">{sect_prof}{dayAndTimes}</div>;
+        var day_and_times = this.getDaysAndTimes(cos);
+        var section_and_prof = (
+            <div className="sect-prof">
+                <div className="section-num">{cos[0].meeting_section}</div>
+                <div className="profs">{cos[0].instructors}</div>
+            </div>
+        );
+        return (
+            <div className="section-wrapper">
+                {section_and_prof}
+                {day_and_times}
+            </div>);
     },
 
     getRelatedCourseOfferings: function() {
@@ -37,7 +44,7 @@ module.exports = React.createClass({
         var dayAndTimes = cos.map(function(o) {
             return (<div key={this.props.key} id="day-time" key={o.id}>{day_to_letter[o.day] + " " + o.time_start + "-" + o.time_end}</div>);
         }.bind(this));
-        return ( <div key={this.props.key} id="dt-container">
+        return ( <div key={this.props.key} className="dt-container">
                 {dayAndTimes}
             </div> )
     }
