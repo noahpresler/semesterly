@@ -15,7 +15,6 @@ module.exports = React.createClass({
 
   render: function() {
     var Modal = Boron['OutlineModal'];
-    var school_selector = null;
     var loader = !(this.state.loading || this.state.courses_loading) ? null :
       (  <div className="spinner">
             <div className="rect1"></div>
@@ -24,15 +23,16 @@ module.exports = React.createClass({
             <div className="rect4"></div>
             <div className="rect5"></div>
         </div>);
-    if (this.state.school == "") {
-      school_selector = (
-      <SimpleModal header={"Semester.ly | Welcome"}
+    var school_selector = (
+      <SimpleModal header="Semester.ly | Welcome"
+                   key="school"
+                   ref="school_modal"
+                   allow_disable={false}
                    styles={{backgroundColor: "#FDF5FF", color: "#000"}} 
-                   content={<SchoolList setSchool={this.setSchool}/> }/>
-      );}
+                   content={<SchoolList setSchool={this.setSchool}/> }/>);
+      
     return (
       <div id="root">
-        {school_selector}
         {loader}
         <div id="toast-container"></div>
         <div id="control-bar-container">
@@ -56,8 +56,21 @@ module.exports = React.createClass({
             <Timetable toggleModal={this.toggleCourseModal} />
           </div>
         </div>
+        {school_selector}
       </div>
     );
+  },
+
+  componentDidMount: function() {
+    if (this.state.school == "" && this.props.data == null) {
+      this.showSchoolModal();
+    }
+  },
+
+  componentDidUpdate: function() {
+    if (this.state.school != "") {
+      this.hideSchoolModal();
+    }
   },
 
   toggleCourseModal: function(course_id) {
@@ -71,6 +84,12 @@ module.exports = React.createClass({
     this.refs['OutlineModal'].hide();
   },
 
+  showSchoolModal: function() {
+      this.refs.school_modal.show();
+  },
+  hideSchoolModal: function() {
+      this.refs.school_modal.hide();
+  },
 
   toggleSideModal: function(){
     if (this.sidebar_collapsed == 'neutral') {

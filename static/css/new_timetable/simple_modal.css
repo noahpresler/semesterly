@@ -12,11 +12,11 @@
   padding: 0 20px 20px 20px;
   color :#ddd;
   text-align:center;
-      -webkit-animation: fadein 1s; /* Safari, Chrome and Opera > 12.1 */
-       -moz-animation: fadein 1s; /* Firefox < 16 */
-        -ms-animation: fadein 1s; /* Internet Explorer */
-         -o-animation: fadein 1s; /* Opera < 12.1 */
-            animation: fadein 1s;
+      -webkit-animation: fadein 1.5s; /* Safari, Chrome and Opera > 12.1 */
+       -moz-animation: fadein 1.5s; /* Firefox < 16 */
+        -ms-animation: fadein 1.5s; /* Internet Explorer */
+         -o-animation: fadein 1.5s; /* Opera < 12.1 */
+            animation: fadein 1.5s;
 }
 @keyframes fadein {
     from { top: 0%;}
@@ -83,13 +83,16 @@
   margin-bottom:-50px;
 }
 #dim-screen{
-    position:fixed;
+    position:absolute;
     padding:0;
     margin:0;
     top:0;
     left:0;
-    width: 100%;
-    height: 100%;
+    right:0;
+    width: 100vw;
+    height: 100vh;
+    min-height:100vh;
+
     background:rgba(11,11,11,0.8);
     z-index:6000;
 }
