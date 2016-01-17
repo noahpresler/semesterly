@@ -87,7 +87,7 @@ var Slot = React.createClass({
             // console.log(this.props.time_start, this.props.time_end, this.props.num_conflicts)
         }
         // the cumulative width of this slot and all of the slots it is conflicting with
-        var total_slot_widths = 98 - (5 * this.props.depth_level);
+        var total_slot_widths = 99 - (5 * this.props.depth_level);
         // the width of this particular slot
         var slot_width_percentage = total_slot_widths / this.props.num_conflicts;
         // the amount of left margin of this particular slot, in percentage
