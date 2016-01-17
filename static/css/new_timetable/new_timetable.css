@@ -609,12 +609,12 @@ input.cmn-toggle-round:checked + label:after {
   color:#999;
 }
 .close-course-modal{
+  color:#555;
   font-size:22px;
 }
 
 .remove-course-icon {
   display:inline;
-
   font-size:20px;
 }
 .remove-course-icon:hover {
