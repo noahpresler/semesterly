@@ -109,7 +109,7 @@ module.exports = React.createClass({
             		</a>
             	</div>);
         }.bind(this));
-		var textbooks = this.state.course_info.textbook_info[0].textbooks.length == 0 ? (<div id="empty-intro">No textbooks yet for this course</div>) :
+		var textbooks = this.state.course_info.textbook_info[0].textbooks.length == 0 ? (<div id="empty-intro">No textbooks for this course yet.</div>) :
 				(<div id="textbooks">
 	            	{textbook_elements}
 	            </div>);
@@ -135,7 +135,9 @@ module.exports = React.createClass({
 					{S}
 				</div>);
 		} else {
-			var sec_display = (<div id="numSections" onClick={this.setShowSections(this.state.course_info.code)}>This course has <b>{this.state.course_info.sections_S.length + this.state.course_info.sections_F.length}</b> sections. Click to view them.</div>)
+			var sections_count = this.state.course_info.sections_S.length + this.state.course_info.sections_F.length;
+			var sections_grammar = sections_count > 1 ? "sections" : "section";
+			var sec_display = (<div id="numSections" onClick={this.setShowSections(this.state.course_info.code)}>This course has <b>{sections_count}</b> {sections_grammar}. Click here to view.</div>)
 		}
 		var sections = 
 			(<div className="modal-entry" id="course-sections">

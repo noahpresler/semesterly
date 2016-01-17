@@ -1,6 +1,7 @@
 var hashids = new Hashids("x98as7dhg&h*askdj^has!kj?xz<!9");
 module.exports = {
 	getLinkData: function(school, courses_to_sections, index, preferences) {
+		if (Object.keys(courses_to_sections).length == 0) {return "";}
 	    var data = this.getHashedString(school) + "&";
 	    for (var pref in preferences) {
 	    	var encoded_p = this.getHashedString(pref);

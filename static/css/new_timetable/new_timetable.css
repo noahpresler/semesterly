@@ -433,7 +433,8 @@ div {
 }
 .course-modal {
   width: 80%;
-  max-width: 629px
+  max-width: 660px;
+  color: black;
 }
 #modal-content {
   max-height: 90vh;
@@ -656,11 +657,12 @@ input.cmn-toggle-round:checked + label:after {
 
 #numSections {
 	text-align: center;
+  cursor:pointer;
 }
 
 .modal-entry {
   line-height: 99.5%;
-    padding-bottom: 10px;
+    padding-bottom: 20px;
     padding-left: 10px;
   padding-right: 10px;
 }
@@ -862,13 +864,18 @@ input.cmn-toggle-round:checked + label:after {
 .course-roster .star-ratings-sprite{
 	float: none;
 }
+#course-description {    
+    font-family: Lato;
+    line-height: 160%;
+    letter-spacing: 0.1px;
+}
 
 /* Slot styles ----------------------------*/
 #slot-container {
   display: flex !important;
 }
 
-#section-wrapper {
+.section-wrapper {
   display: inline-block;
   height:auto;
   width:auto;
@@ -878,25 +885,32 @@ input.cmn-toggle-round:checked + label:after {
   border-radius: 6px;
   color: white;
   padding: 10px;
-  width: 138px;
+  width: 145px;
   height: 90px;
   vertical-align: middle;
 }
 
-#dt-container {
-	clear: both;
-}
 
-#section-wrapper #sect-prof {
+
+.section-wrapper .sect-prof {
 	font-weight: bold;
+  font-size:14px;
+  padding-bottom:5px;
+  text-overflow:ellipsis;
+  white-space:nowrap;
 }
 
-#section-wrapper #section-num {
+.section-wrapper .section-num {
   float:left;
 }
 
-#section-wrapper #profs {
+.section-wrapper .profs {
   float: right;
+}
+.dt-container {
+  clear: both;
+  margin-top:15px;
+  font-size:13.5px;
 }
 
 /* Sidebar -----------------------------------*/
