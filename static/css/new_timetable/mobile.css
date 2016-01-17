@@ -97,8 +97,31 @@ hr {
   float: right;
   position: relative !important; /* overwrite bootstrap fixed footer */
 }
+@media (max-width: 1335px) {
+  .fc-ltr .fc-time-grid .fc-event-container {
+    margin-left:0.5%;
+  }
+}
+@media (max-width: 1275px) {
+  .fc-ltr .fc-time-grid .fc-event-container {
+    margin-left:0.4%;
+  }
+}
+@media (max-width: 1225px) {
+  .fc-ltr .fc-time-grid .fc-event-container {
+    margin-left:0.35%;
+  }
+}
+@media (max-width: 1205px) {
+  .fc-ltr .fc-time-grid .fc-event-container {
+    margin-left:0.34%;
+  }
+}
 
 @media screen and (max-width: 1000px) { 
+  .fc-ltr .fc-time-grid .fc-event-container {
+    margin-left:0.5%;
+  }
   #search-input {
     font-size:15px;
   }
@@ -178,6 +201,9 @@ hr {
 @media (max-width: 700px) {
   .course-modal {
     width: 100% !important;
+  }
+  .fc-ltr .fc-time-grid .fc-event-container {
+    margin-left:1.2%;
   }
 }
 

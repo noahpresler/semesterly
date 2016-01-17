@@ -33,7 +33,10 @@ input[type="text"]:focus {
   border:2px solid #8FA8F6; /* #3D546B */
     background-color:#fff;
 }
-
+.fc-ltr .fc-time-grid .fc-event-container {
+  margin-left:0.6%;
+  margin-right:0px;
+}
 .course-roster p {
 	text-align: center;
     margin-bottom: 0px;
