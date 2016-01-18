@@ -143,7 +143,7 @@ var TextbookRoster = React.createClass({
         <SimpleModal header={"Your Textbooks"}
            key="textbook"
            ref="tbs"
-           styles={{backgroundColor: "#FDF5FF", color: "#000"}} 
+           styles={{backgroundColor: "#FDF5FF", color: "#000", height:"775px", maxWidth:"650px", overflowY: "scroll"}} 
            allow_disable={true}
            content={<TextbookList courses={courses}/>}/>
         {modal}
@@ -159,7 +159,7 @@ var TextbookRoster = React.createClass({
     this.refs.tbs.toggle();
   },
 
-})
+});
 
 module.exports = React.createClass({
   mixins: [Reflux.connect(TimetableStore)],
