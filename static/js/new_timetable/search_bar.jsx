@@ -150,7 +150,8 @@ module.exports = React.createClass({
              c.name.toLowerCase().indexOf(opt_query) > -1 ||
              that.isSubsequence(c.name.toLowerCase(),and_query) ||
              c.name.toLowerCase().indexOf(and_query) > -1 ||
-             c.name.toLowerCase().indexOf(query) > -1);
+             c.name.toLowerCase().indexOf(query) > -1 || 
+             c.code.toLowerCase().indexOf(query) > -1);
     });
     return results;
   },
