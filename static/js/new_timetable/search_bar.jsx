@@ -142,12 +142,14 @@ module.exports = React.createClass({
 
   filterCourses: function(query) {
     var opt_query = query.replace("intro","introduction");
+    var and_query = query.replace("&","and");
     that = this;
     var results = this.state.courses.filter(function(c) {
       return (that.isSubsequence(c.name.toLowerCase(),query) || 
              that.isSubsequence(c.name.toLowerCase(),opt_query) ||
-             c.code.toLowerCase().indexOf(opt_query) > -1 ||
              c.name.toLowerCase().indexOf(opt_query) > -1 ||
+             that.isSubsequence(c.name.toLowerCase(),and_query) ||
+             c.name.toLowerCase().indexOf(and_query) > -1 ||
              c.name.toLowerCase().indexOf(query) > -1);
     });
     return results;
