@@ -134,7 +134,7 @@ var TextbookRoster = React.createClass({
                    content={null}/>
     }
     var see_all = null;
-    if (tb_elements != null) {
+    if (tb_elements != null && tb_elements.length > 0) {
       see_all = (<div className="view-tbs" onClick={this.toggle}>View All Textbooks</div>)
     }
     var courses = this.state.timetables.length > 0 ? this.state.timetables[this.state.current_index].courses : null
