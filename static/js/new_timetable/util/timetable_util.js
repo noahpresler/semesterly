@@ -46,4 +46,14 @@ module.exports = {
 		return string;
 	},
 
+	browserSupportsLocalStorage: function() {
+		try {
+   			localStorage.setItem("test", "test");
+   			localStorage.removeItem("test");
+   			return true;
+  		} catch (exception) {
+   			return false;
+ 		}
+	},
+
 }
