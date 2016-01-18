@@ -200,7 +200,7 @@ module.exports = React.createClass({
   },
 
   componentDidUpdate: function() {
-    if(typeof(Storage) !== "undefined") {
+    if(Util.browserSupportsLocalStorage()) {
       if (this.state.timetables.length > 0) {
         // save newly generated courses to local storage
         var new_data = this.getData();

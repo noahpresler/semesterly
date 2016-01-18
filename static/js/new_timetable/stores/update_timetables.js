@@ -126,7 +126,7 @@ module.exports = Reflux.createStore({
     $.post('/', JSON.stringify(new_state), function(response) {
         this.loading = false;
         if (response.error) { // error from URL or local storage
-          if(typeof(Storage) !== "undefined") {
+          if(Util.browserSupportsLocalStorage()) {
             localStorage.removeItem('data');
           }
           TT_STATE.courses_to_sections = {};
