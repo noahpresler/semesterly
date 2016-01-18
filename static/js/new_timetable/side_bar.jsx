@@ -143,7 +143,7 @@ var TextbookRoster = React.createClass({
         <SimpleModal header={"Your Textbooks"}
            key="textbook"
            ref="tbs"
-           styles={{backgroundColor: "#FDF5FF", color: "#000", height:"825px", maxWidth:"650px", overflowY: "scroll"}} 
+           styles={{backgroundColor: "#FDF5FF", color: "#000", maxHeight:"825px", maxWidth:"650px", overflowY: "scroll"}} 
            allow_disable={true}
            content={<TextbookList courses={courses}/>}/>
         {modal}
