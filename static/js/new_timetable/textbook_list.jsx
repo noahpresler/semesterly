@@ -35,11 +35,11 @@ module.exports = React.createClass({
   		var price = <h6 className="price">{item.price}</h6>
   		var prime_logo = item.prime_eligible ? <img className="prime" height="15px" src="/static/img/prime.png"/> : null
   		return (
-  			<div className="addon">
-  				<a href={item.link}> 
+  			<div className="addon custom-addon">
+  				<a href={item.link} target="_blank"> 
 	  				{img}
 	  				{title}
-	  				<div id="price-prime-container">
+	  				<div className="price-prime-container">
 		  				{price}
 		  				{prime_logo}
 		  			</div>

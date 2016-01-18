@@ -210,6 +210,11 @@ hr {
     margin-left:1.2%;
   }
 }
+@media (max-width: 460px) {
+  .custom-addon {
+    margin-left:25%;
+  }
+}
 
 
 .fb-like {
