@@ -1078,3 +1078,51 @@ input.cmn-toggle-round:checked + label:after {
   background-color:#FFDF66;
 }
 
+.textbook-list-entry h6 {
+  margin: 0px;
+}
+
+.textbook-list-entry .addon h6 {
+  color:black;
+  font-size: 15px;
+}
+
+.textbook-list-entry .addon .title {
+  width: 100%;
+  margin-bottom: 5px;
+  margin-top: 10px;
+  color: #48A3C6;
+  font-weight: 500;
+}
+
+.addon {
+    width: 150px;
+    text-align: center;
+    float: left;
+    margin-right: 13px;
+    margin-bottom: 13px;
+}
+
+.addon-wrapper {
+  width: 88%;
+  margin: 0 auto;
+  margin-top: 20px;
+}
+
+.addon .price-prime-container {
+  clear: both;
+}
+
+.addon .price {
+  float: left;
+}
+
+.addon .prime {
+  float: right;
+}
+
+.addon .line-clamp {
+  display: -webkit-box;
+  -webkit-line-clamp: 1 !important;
+  -webkit-box-orient: vertical;  
+}
