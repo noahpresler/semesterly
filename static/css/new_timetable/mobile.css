@@ -196,6 +196,10 @@ hr {
     width: 90% !important;
   }
 
+  .simple-modal {
+    width: 95% !important;
+  }
+
 }
 
 @media (max-width: 700px) {
