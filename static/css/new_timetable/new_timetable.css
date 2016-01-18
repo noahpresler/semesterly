@@ -1051,3 +1051,24 @@ input.cmn-toggle-round:checked + label:after {
 .fb-like {
   float: left;
 }
+
+.view-tbs {
+  background-color: #FFCC66;
+  /* border: #000066; */
+  width: 148px;
+  border-radius: 6px;
+  border: 1px solid #34495E;
+  color: #34495E;
+  font-weight: bold;
+  margin: 0 auto;
+  margin-bottom: 15px;
+  /* height: 25px; */
+  padding: 3px;
+  text-align: center;
+  height: 32px;
+  font-size: 15px;
+  /* vertical-align: middle; */
+  -moz-box-shadow: inset 2px 2px 2px rgba(255, 255, 255, .4), inset -2px -2px 2px rgba(0, 0, 0, .4);
+  inset: 0px -1px 1px rgba(0,0,0,0.5);
+  box-shadow: 1px 4px 3px -2px #ccc;
+}

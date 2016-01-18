@@ -1,6 +1,7 @@
 var TimetableActions = require('./actions/update_timetables.js');
 var TimetableStore = require('./stores/update_timetables.js');
 var SimpleModal = require('./simple_modal');
+var TextbookList = require('./textbook_list')
 
 var RosterSlot = React.createClass({
   render: function() {
@@ -126,15 +127,39 @@ var TextbookRoster = React.createClass({
     } else {
       var tb_elements = null;
     }
+    var modal = null;
+    if (this.state.show_modal) {
+        modal = <SimpleModal header={"Your Textbooks"}
+                   styles={{backgroundColor: "#FDF5FF", color: "#000"}} 
+                   content={null}/>
+    }
+    var see_all = null;
+    if (tb_elements != null) {
+      see_all = (<div className="view-tbs" onClick={this.toggle}>View All Textbooks</div>)
+    }
+    var courses = this.state.timetables.length > 0 ? this.state.timetables[this.state.current_index].courses : null
     return (
       <div className="course-roster textbook-list">
+        <SimpleModal header={"Your Textbooks"}
+           key="textbook"
+           ref="tbs"
+           styles={{backgroundColor: "#FDF5FF", color: "#000"}} 
+           allow_disable={true}
+           content={<TextbookList courses={courses}/>}/>
+        {modal}
         <div className="clearfix">
+          {see_all}
           {tb_elements}
         </div>
       </div>
     )
-  }
-});
+  },
+
+  toggle: function() {
+    this.refs.tbs.toggle();
+  },
+
+})
 
 module.exports = React.createClass({
   mixins: [Reflux.connect(TimetableStore)],
@@ -145,25 +170,15 @@ module.exports = React.createClass({
     return (
 
       <div ref="sidebar" className="side-container">
-        <SimpleModal header={"Example Modal With State Variable"}
-                   key="textbook"
-                   ref="sweg"
-                   styles={{backgroundColor: "#FDF5FF", color: "#000"}} 
-                   allow_disable={true}
-                   content={<a onClick={this.toggle}>Nice example! Click to disable</a> }/>
         <div className="roster-header">
           <h4>Your Semester</h4>
         </div>
         <CourseRoster toggleModal={this.props.toggleModal} timetables={this.state.timetables}/>
         <div className="roster-header">
-          <h4>Your Textbooks</h4><a onClick={this.toggle}>Toggle Modal </a>
+          <h4>Your Textbooks</h4>
         </div>
         <TextbookRoster />
       </div>
     )
   },
-  toggle: function() {
-    this.refs.sweg.toggle();
-  },
-
 });
