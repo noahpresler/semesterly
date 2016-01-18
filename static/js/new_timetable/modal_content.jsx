@@ -50,7 +50,11 @@ module.exports = React.createClass({
 		// if removing is true, we're removing the course, if false, we're adding it
 		return (function () {
 			TimetableActions.updateCourses({id: this.state.course_info.id, section: '', removing: removing});
+			if (!removing) {
+				this.props.hide();
+			}
 		}.bind(this));
+
 	},
 	openRecomendation: function(course_id) {
 		return (function() {
@@ -90,7 +94,7 @@ module.exports = React.createClass({
 					{related}
 				</div>
 			</div>)
-		return recomendations
+		return recomendations;
 	},
 
 	expandRecomendations: function() {
