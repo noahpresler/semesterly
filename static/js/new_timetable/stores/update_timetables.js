@@ -149,7 +149,7 @@ module.exports = Reflux.createStore({
               loading: false,
               preferences: TT_STATE.preferences
           });
-        } else if (TT_STATE.courses_to_sections != {}) { // conflict
+        } else if (!$.isEmptyObject(TT_STATE.courses_to_sections)) { // conflict
           // if turning conflicts off led to a conflict, reprompt user
           if (CONFLICT_OFF) {
             this.trigger({
