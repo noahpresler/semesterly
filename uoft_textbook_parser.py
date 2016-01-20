@@ -79,9 +79,9 @@ class UofTTextbookParser:
             course = Course.objects.get(code=matches.group(1))
             course_offerings = CourseOffering.objects.filter(course=course, meeting_section=matches.group(2))
             for textbook_info in all_textbooks_info:
-                title = textbook_info.find('span', class_="book-title").text
-                author = textbook_info.find('span', class_="book-author").text
                 try:
+                    title = textbook_info.find('span', class_="book-title").text
+                    author = textbook_info.find('span', class_="book-author").text
                     isbn = textbook_info.find('span', class_="isbn").text.replace("-", "")
                 except: 
                     continue
