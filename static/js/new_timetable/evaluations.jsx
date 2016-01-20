@@ -39,7 +39,8 @@ module.exports = React.createClass({
 			var selected = i == this.state.index_selected;
 			return (<Evaluation eval_data={e} key={e.id} selectionCallback={this.changeSelected(i)} selected={selected} />);
 		}.bind(this));
-		var click_notice = this.props.eval_info.length == 0 ? (<div id="empty-intro">No course evaluations for this course yet</div>) : (<div id="click-intro">Click an evaluation item above to read the comments</div>);
+		var click_notice = this.props.eval_info.length == 0 ? (<div id="empty-intro">No course evaluations for this course yet.</div>) 
+		: (<div id="click-intro">Click an evaluation item above to read the comments.</div>);
 		return (
 		<div className="modal-entry" id="course-evaluations">
 			<h6>Course Evaluations:</h6>

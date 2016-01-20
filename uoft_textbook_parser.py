@@ -70,8 +70,11 @@ class UofTTextbookParser:
         available_courses = []
         available_textbooks = []
         for section_header in section_headers:
-            sibling = section_header.find_next_sibling()
-            if "not been informed" in sibling.text.lower(): # filter out the textbook-less sections
+            try:
+                sibling = section_header.find_next_sibling()
+                if "not been informed" in sibling.text.lower(): # filter out the textbook-less sections
+                    continue
+            except:
                 continue
             matches = re.search("- (.+)[YS], section (.+?) ", section_header.text)
             all_textbooks_info = sibling.find_all('td', class_="book-desc")
