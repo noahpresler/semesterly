@@ -152,8 +152,14 @@ def get_course_obj(course_dict, sections):
                                                for co in course_offerings]
     course_dict['enrolled_sections'] = [section_code for _, section_code, _ in sections]
     try:
+        section = course_dict['enrolled_sections'][0]
+        if (SCHOOL == "uoft"):
+            sections = filter(lambda x: x[0] == "L", course_dict['enrolled_sections'])
+            if len(sections) != 0:
+                section = sections[0]
+
         c = SchoolCourse.objects.get(id=course_dict['id'])
-        co = SchoolCourseOffering.objects.filter(meeting_section=course_dict['enrolled_sections'][0], course=c)[0]
+        co = SchoolCourseOffering.objects.filter(meeting_section=section, course=c)[0]
         course_dict['textbooks'] = co.get_textbooks()
         course_dict['evaluations'] = co.get_evaluations()
     except:

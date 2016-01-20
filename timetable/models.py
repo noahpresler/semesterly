@@ -44,10 +44,12 @@ class Course(models.Model):
 	def get_all_textbook_info(self):
 		# Implement
 		textbook_info = []
-		for co in CourseOffering.objects.filter(course=self):
+		for co in CourseOffering.objects.filter(course=self, meeting_section__contains="L"):
+			texts = co.get_textbooks()
+			print texts
 			tb = {
 			"section" : co.meeting_section,
-			"textbooks" : co.get_textbooks()
+			"textbooks" : texts
 			}
 			textbook_info.append(tb)
 		return textbook_info
@@ -73,6 +75,15 @@ class Textbook(models.Model):
 	image_url = models.URLField(max_length=1000)
 	author = models.CharField(max_length=500)
 	title = models.CharField(max_length=1500)
+
+	def get_isbn(self):
+		return self.isbn
+
+	def get_is_required(self):
+		return self.is_required
+
+	def get_info(self):
+		return model_to_dict(self)
 
 class CourseOffering(models.Model):
 	course = models.ForeignKey(Course)
