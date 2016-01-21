@@ -223,7 +223,7 @@ def start():
             'campus_id': '40',
             'term': '547'
         },
-        'Mississauaga': {
+        'Mississauga': {
             'name': 'Mississauga',
             'ending': '5',
             'campus_id': '39',
@@ -231,7 +231,7 @@ def start():
         }
     }
 
-    for campus in campus_to_info_map:
+    for campus in ["St. George", "Mississauga", "Scarborough"]:
         process_campus(campus_to_info_map[campus])
 
     print "Hooray! I'm done!"

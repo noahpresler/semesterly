@@ -74,9 +74,12 @@ module.exports = React.createClass({
 	                </a>
 	            </div>);
   			}.bind(this));
+        var header = this.state.school == "uoft" ? (
+              <h6>{c.code}: {c.name}</h6> ) : 
+             (<h6>{c.name}</h6>);
 	  		return (
 	  			<div className="textbook-list-entry">
-	  				<h6>{c.name}</h6>
+	  				{header}
 	  				 <div className="course-roster textbook-list">
 	  					{inner_html}
 	  				</div>
