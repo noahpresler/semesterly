@@ -1,5 +1,5 @@
 .sem-pagination {
-	margin-left:10px;
+	margin-left:8px;
 	margin-top:7px;
     -webkit-touch-callout: none;
     -webkit-user-select: none;
@@ -8,6 +8,7 @@
     -ms-user-select: none;
     user-select: none;
     padding:0;
+    float:left;
 }
 .fc .fc-toolbar>*>* {
 	margin-left:0;
@@ -28,7 +29,7 @@
 	padding-top:5px;
     white-space:nowrap;
     word-wrap:break-word;
-    max-width:30%;
+    max-width:290px;
 }
 
 .sem-page {
@@ -47,6 +48,9 @@
 	line-height:15px;
 	margin: 0px 4px 4px 0px;
 
+}
+.sem-page > a{
+	color: #fff;
 }
 .sem-page:hover, .sem-page.active {
 	background-color:#8FA8F6;
