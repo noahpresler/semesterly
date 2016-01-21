@@ -124,8 +124,10 @@ var TextbookRoster = React.createClass({
                 </a>
             </div>);
        }.bind(this));
+       var addToCart = this.getAddButton(textbooks)
     } else {
       var tb_elements = null;
+      var addToCart = null
     }
     var modal = null;
     if (this.state.show_modal) {
@@ -145,7 +147,7 @@ var TextbookRoster = React.createClass({
            ref="tbs"
            styles={{backgroundColor: "#FDF5FF", color: "#000", maxHeight:"90%", maxWidth:"650px", overflowY: "scroll"}} 
            allow_disable={true}
-           content={<TextbookList courses={courses}/>}/>
+           content={<TextbookList addToCart={addToCart} courses={courses}/>}/>
         {modal}
         <div className="clearfix">
           {see_all}
@@ -159,6 +161,24 @@ var TextbookRoster = React.createClass({
     this.refs.tbs.toggle();
   },
 
+  getAddButton: function(textbooks) {
+    var entries = textbooks.map(function(tb,i) {
+      var asin = (/.*ASIN%3D(.*)/.exec(tb['detail_url']))[1]
+      return (<div>
+      <input type="hidden" name={"ASIN." + i + 1} value={asin}/>
+      <input type="hidden" name={"Quantity."+ i + 1} value="1"/></div>)
+    }.bind(this));
+    var ret = (
+    <form method="GET" action="http://www.amazon.com/gp/aws/cart/add.html" target="_blank"> 
+      <input type="hidden" name="AWSAccessKeyId" value="AKIAJGUOXN3COOYBPTHQ" /> 
+      <input type="hidden" name="AssociateTag" value="semesterly-20" />
+      <button className="view-tbs" type="submit">
+        <i className="fa fa-shopping-cart"></i> Add All to Cart
+      </button>
+      {entries}
+    </form>)
+    return ret;
+  },
 });
 
 module.exports = React.createClass({
