@@ -4,7 +4,11 @@ module.exports = React.createClass({
     return {num_bubbles: num_bubbles};
   },
   getNumBubbles: function() {
-    var bubbles = $(window).width() > 700 ? 9 : 4;
+    var width = $(window).width();
+    var bubbles = width > 700 ? 9 : 4;
+    if (width < 400) {
+      bubbles = 2;
+    }
     return bubbles;
   },
 
