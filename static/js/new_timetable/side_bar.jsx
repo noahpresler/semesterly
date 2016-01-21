@@ -164,7 +164,7 @@ var TextbookRoster = React.createClass({
   getAddButton: function(textbooks) {
     var entries = textbooks.map(function(tb,i) {
       var asin = (/.*ASIN%3D(.*)/.exec(tb['detail_url']))[1]
-      return (<div>
+      return (<div key={i}>
       <input type="hidden" name={"ASIN." + i + 1} value={asin}/>
       <input type="hidden" name={"Quantity."+ i + 1} value="1"/></div>)
     }.bind(this));
