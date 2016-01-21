@@ -88,6 +88,7 @@ module.exports = React.createClass({
   	}.bind(this));
     return (
     	<div className="textbook-list-wrapper">
+        {this.props.addToCart}
     		{html}
     		<div className="textbook-list-entry">
   				<h6>Popular Addons</h6>
