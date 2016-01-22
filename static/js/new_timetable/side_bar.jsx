@@ -147,7 +147,10 @@ var TextbookRoster = React.createClass({
            ref="tbs"
            styles={{backgroundColor: "#FDF5FF", color: "#000", maxHeight:"90%", maxWidth:"650px", overflowY: "scroll"}} 
            allow_disable={true}
-           content={<TextbookList addToCart={addToCart} courses={courses}/>}/>
+           content={<TextbookList 
+            addToCart={addToCart} 
+            courses={courses} 
+            school={this.state.school}/>}/>
         {modal}
         <div className="clearfix">
           {see_all}
@@ -164,7 +167,7 @@ var TextbookRoster = React.createClass({
   getAddButton: function(textbooks) {
     var entries = textbooks.map(function(tb,i) {
       var asin = (/.*ASIN%3D(.*)/.exec(tb['detail_url']))[1]
-      return (<div>
+      return (<div key={i}>
       <input type="hidden" name={"ASIN." + i + 1} value={asin}/>
       <input type="hidden" name={"Quantity."+ i + 1} value="1"/></div>)
     }.bind(this));
