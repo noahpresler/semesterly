@@ -147,7 +147,10 @@ var TextbookRoster = React.createClass({
            ref="tbs"
            styles={{backgroundColor: "#FDF5FF", color: "#000", maxHeight:"90%", maxWidth:"650px", overflowY: "scroll"}} 
            allow_disable={true}
-           content={<TextbookList addToCart={addToCart} courses={courses}/>}/>
+           content={<TextbookList 
+            addToCart={addToCart} 
+            courses={courses} 
+            school={this.state.school}/>}/>
         {modal}
         <div className="clearfix">
           {see_all}

@@ -29,13 +29,13 @@ module.exports = React.createClass({
   			prime_eligible: true
   		}
   	]
-  	var addonsHTML = addons.map(function(item) {
+  	var addonsHTML = addons.map(function(item, i) {
   		var img = <img height="125" src={item.img}/>
   		var title = <h6 className="line-clamp title">{item.title}</h6>
   		var price = <h6 className="price">{item.price}</h6>
   		var prime_logo = item.prime_eligible ? <img className="prime" height="15px" src="/static/img/prime.png"/> : null
   		return (
-  			<div className="addon custom-addon">
+  			<div className="addon custom-addon" key={i}>
   				<a href={item.link} target="_blank"> 
 	  				{img}
 	  				{title}
@@ -50,7 +50,7 @@ module.exports = React.createClass({
   },
 
   render: function() {
-  	var html = this.props.courses.map(function(c) {
+  	var html = this.props.courses.map(function(c, i) {
   		if ( c.textbooks.length > 0 ) {
   		  var inner_html = c.textbooks.map(function(tb) {
 	  		  if (tb['image_url'] === "Cannot be found") {
@@ -74,11 +74,11 @@ module.exports = React.createClass({
 	                </a>
 	            </div>);
   			}.bind(this));
-        var header = this.state.school == "uoft" ? (
+        var header = this.props.school == "uoft" ? (
               <h6>{c.code}: {c.name}</h6> ) : 
              (<h6>{c.name}</h6>);
 	  		return (
-	  			<div className="textbook-list-entry">
+	  			<div className="textbook-list-entry" key={i}>
 	  				{header}
 	  				 <div className="course-roster textbook-list">
 	  					{inner_html}
