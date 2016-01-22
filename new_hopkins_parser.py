@@ -102,6 +102,8 @@ class HopkinsCourseFinder:
 			class_rows = self.merge_lists(even_class_rows,odd_class_rows) 
 			self.generate_courses(class_rows)
 			self.driver.execute_script("__doPostBack('ctl00$content$ucPageNumbersBottom$lbNext','')")
+		self.safe_print("Courses: [" + str(self.course_updates) + "/" + str(self.course_creates) + "] [Updated/Created]")
+		self.safe_print("Offerings: [" + str(self.offering_updates) + "/" + str(self.offering_creates) + "] [Updated/Created]")
 
 	def get_detail_html(self, url):
 		html = None
@@ -139,19 +141,52 @@ class HopkinsCourseFinder:
 			class_instructors = self.get_class_instructors(pieces).text.replace('\n', '')
 			class_description = self.get_class_description(details)
 			class_name = self.get_class_name(pieces)
-			self.safe_print("Class Name :" + class_name)
-			self.safe_print("School :" + school_name)
-			self.safe_print("Class # :" + class_number)
-			self.safe_print("Course Code :" + course_code)
-			self.safe_print("Class Term:" + class_term)
-			self.safe_print("Raw Class Time :" + raw_class_time)
-			self.safe_print("Section Code :" + section_code)
-			self.safe_print("Time Data :" + str(time_data))
-			self.safe_print("Location :" + class_location)
-			self.safe_print("Instructors :" + class_instructors)
-			self.safe_print("Description :" + class_description)
-			self.safe_print("-------------------------")
-			# print "Adding " + course_code + " "
+
+			# self.safe_print("Class Name :" + class_name)
+			# self.safe_print("School :" + school_name)
+			# self.safe_print("Class # :" + class_number)
+			# self.safe_print("Course Code :" + course_code)
+			# self.safe_print("Class Term:" + class_term)
+			# self.safe_print("Raw Class Time :" + raw_class_time)
+			# self.safe_print("Section Code :" + section_code)
+			# self.safe_print("Time Data :" + str(time_data))
+			# self.safe_print("Location :" + class_location)
+			# self.safe_print("Instructors :" + class_instructors)
+			# self.safe_print("Description :" + class_description)
+			# self.safe_print("-------------------------")
+
+			course, CourseCreated = HopkinsCourse.objects.get_or_create(
+				code=course_code,
+				campus=1)
+			course.name=class_name
+			course.description=class_description
+			if CourseCreated:
+				self.safe_print("CREATED " + course_code + " ==> " + class_name)
+			else:
+				course.save()
+				self.safe_print("UPDATED " + course_code + " ==> " + class_name)
+				self.course_updates+=1
+
+			for time in time_data:
+				offering, OfferingCreated = HopkinsCourseOffering.objects.get_or_create(
+					course=course,
+					semester=self.semester[0].upper(),
+					meeting_section=section_code,
+					day=time['day'],
+					time_start=time['start'],
+					time_end=time['end'],
+					instructors=class_instructors)
+				offering.location='' #TODO
+				offering.size=0     #TODO
+				offering.enrolment=0    #TODO
+				offering.alternates=''
+				offering.save()
+				if OfferingCreated:
+					self.offering_creates+=1
+				else:
+					self.offering_updates+=1
+
+
 
 	def process_times(self,class_time):
 		day_to_letter_map = {'m': 'M', 
