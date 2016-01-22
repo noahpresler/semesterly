@@ -46,7 +46,6 @@ class Course(models.Model):
 		textbook_info = []
 		for co in CourseOffering.objects.filter(course=self, meeting_section__contains="L"):
 			texts = co.get_textbooks()
-			print texts
 			tb = {
 			"section" : co.meeting_section,
 			"textbooks" : texts

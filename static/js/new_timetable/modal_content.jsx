@@ -102,6 +102,7 @@ module.exports = React.createClass({
 	},
 
 	getTextbooks: function() {
+		if(this.state.course_info.textbook_info[0] == undefined) {return null;}
 		var textbook_elements = this.state.course_info.textbook_info[0].textbooks.map(function(tb) {
             return (
             	<div className="textbook" key={tb.id}>
