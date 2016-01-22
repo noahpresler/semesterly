@@ -948,6 +948,12 @@ input.cmn-toggle-round:checked + label:after {
 .course-list {
   min-height: 138px;
 }
+.textbook {
+  color: #222;
+}
+.textbook:hover {
+  color: #0D9278;
+}
 .textbook-list {
   flex: 1;
   min-height: 0px;
