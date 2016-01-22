@@ -114,15 +114,13 @@ var TextbookRoster = React.createClass({
             var title = tb['title']
           }
           return ( 
-            <div className="textbook" key={tb['id']}>
+            <a className="textbook" key={tb['id']} href={tb['detail_url']} target="_blank">
                 <img height="125" src={img}/>
                 <div className="module">
                   <h6 className="line-clamp">{title}</h6>
                   </div>
-                <a href={tb['detail_url']} target="_blank">
-                  <img src="https://images-na.ssl-images-amazon.com/images/G/01/associates/remote-buy-box/buy5._V192207739_.gif" width="120" height="28" border="0"/>
-                </a>
-            </div>);
+                <img src="https://images-na.ssl-images-amazon.com/images/G/01/associates/remote-buy-box/buy5._V192207739_.gif" width="120" height="28" border="0"/>
+            </a>);
        }.bind(this));
        var addToCart = this.getAddButton(textbooks)
     } else {
