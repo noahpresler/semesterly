@@ -1079,6 +1079,9 @@ input.cmn-toggle-round:checked + label:after {
 .view-tbs:hover {
   background-color:#FFDF66;
 }
+.view-tbs:focus {
+  outline:none;
+}
 
 .textbook-list-entry h6 {
   margin: 0px;
