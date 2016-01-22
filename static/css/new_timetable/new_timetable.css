@@ -638,8 +638,10 @@ input.cmn-toggle-round:checked + label:after {
 	width: 40px;
 	text-align: center;
 	padding: 0px;
-	margin-right:12px;
-  margin-top:8px;
+	margin-right:8px;
+  margin-top:9px;
+  right:0;
+  position:static;
 }
 
 .calendar-function:hover {
@@ -1076,6 +1078,9 @@ input.cmn-toggle-round:checked + label:after {
 }
 .view-tbs:hover {
   background-color:#FFDF66;
+}
+.view-tbs:focus {
+  outline:none;
 }
 
 .textbook-list-entry h6 {
