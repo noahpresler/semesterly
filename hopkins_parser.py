@@ -56,8 +56,8 @@ class HopkinsCourseFinder:
 		self.s = requests.Session()
 		self.cookies = cookielib.CookieJar()
 		self.headers = {
-            'User-Agent': 'My User Agent 1.0'
-        }
+			'User-Agent': 'My User Agent 1.0'
+		}
 
 		if len(sys.argv) != 2 or (sys.argv[1] != "spring" and sys.argv[1] != "fall"):
 			self.safe_print("You must supply a semester either spring or fall to parse.")
@@ -107,13 +107,14 @@ class HopkinsCourseFinder:
 	def get_detail_html(self, url):
 		html = None
 		while html is None:
-		    try:
-		        r = self.s.get(url,cookies=self.cookies,headers=self.headers)
-		        if r.status_code == 200:
-		            html = r.text
-		    except (requests.exceptions.Timeout,
-		            requests.exceptions.ConnectionError):
-		        continue
+			try:
+				self.randomize_ua()
+				r = self.s.get(url,cookies=self.cookies,headers=self.headers)
+				if r.status_code == 200:
+					html = r.text
+			except (requests.exceptions.Timeout,
+					requests.exceptions.ConnectionError):
+				continue
 		return html.encode('utf-8')
 
 	def generate_courses(self, course_rows):
@@ -135,19 +136,6 @@ class HopkinsCourseFinder:
 			class_description = self.get_class_description(details)
 			class_name = self.get_class_name(pieces)
 
-			# self.safe_print("Class Name :" + class_name)
-			# self.safe_print("School :" + school_name)
-			# self.safe_print("Class # :" + class_number)
-			# self.safe_print("Course Code :" + course_code)
-			# self.safe_print("Class Term:" + class_term)
-			# self.safe_print("Raw Class Time :" + raw_class_time)
-			# self.safe_print("Section Code :" + section_code)
-			# self.safe_print("Time Data :" + str(time_data))
-			# self.safe_print("Location :" + class_location)
-			# self.safe_print("Instructors :" + class_instructors)
-			# self.safe_print("Description :" + class_description)
-			# self.safe_print("-------------------------")
-
 			course, CourseCreated = HopkinsCourse.objects.get_or_create(
 				code=course_code,
 				campus=1)
@@ -160,6 +148,17 @@ class HopkinsCourseFinder:
 				self.safe_print("UPDATED " + course_code + " ==> " + class_name)
 				self.course_updates+=1
 
+			cos = HopkinsCourseOffering.objects.filter(
+				course=course,
+				semester=self.semester[0].upper(),
+				meeting_section=section_code)
+			try:
+				tbs = list(cos[0].textbooks.all())
+			except:
+				tbs = []
+
+			cos.delete()
+
 			for time in time_data:
 				offering, OfferingCreated = HopkinsCourseOffering.objects.get_or_create(
 					course=course,
@@ -169,11 +168,13 @@ class HopkinsCourseFinder:
 					time_start=time['start'],
 					time_end=time['end'],
 					instructors=class_instructors)
+				offering.save()
+				offering.textbooks.add(*tbs)
+				offering.save()
 				offering.location='' #TODO
 				offering.size=0     #TODO
 				offering.enrolment=0    #TODO
 				offering.alternates=''
-				offering.save()
 				if OfferingCreated:
 					self.offering_creates+=1
 				else:
@@ -183,69 +184,69 @@ class HopkinsCourseFinder:
 
 	def process_times(self,class_time):
 		day_to_letter_map = {'m': 'M', 
-		    't': 'T', 
-		    'w': 'W',
+			't': 'T', 
+			'w': 'W',
 
-		    'th': 'R',
-		    'f': 'F',
-		    'sa': 'S',
-		    's': 'U'}
+			'th': 'R',
+			'f': 'F',
+			'sa': 'S',
+			's': 'U'}
 
 		time_data = []
 		for time in class_time.split(','):
-		    if len(time) > 0:
+			if len(time) > 0:
 				time_pieces = re.search(r"([^\s]+)\s(\d?\d):(\d\d)([AP])M\s-\s(\d?\d):(\d\d)([AP])M",time)
 
-		        #Regex:______________________________
-		        #   |           |                   |
-		        #   |  Groups # |      Function     |
-		        #   |___________|___________________|
-		        #   |   1       |       Day         |
-		        #   |   2       |    Start Hour     |
-		        #   |   3       |    Start Minute   |
-		        #   |   4       |  Start A/P (AM/PM)|
-		        #   |   5       |     End Hour      |
-		        #   |   6       |   End Minutes     |
-		        #   |   7       |  End A/P (AM/PM)  |
-		        #   |_______________________________|
-		        #
+				#Regex:______________________________
+				#   |           |                   |
+				#   |  Groups # |      Function     |
+				#   |___________|___________________|
+				#   |   1       |       Day         |
+				#   |   2       |    Start Hour     |
+				#   |   3       |    Start Minute   |
+				#   |   4       |  Start A/P (AM/PM)|
+				#   |   5       |     End Hour      |
+				#   |   6       |   End Minutes     |
+				#   |   7       |  End A/P (AM/PM)  |
+				#   |_______________________________|
+				#
 
 				hours = [None] * 2
 				start_hour = int(time_pieces.group(2))
 				end_hour = int(time_pieces.group(5))
 				if time_pieces.group(4).upper() == "P" and time_pieces.group(2) != "12":
-				    start_hour += 12
+					start_hour += 12
 				if time_pieces.group(7).upper() == "P" and time_pieces.group(5) != "12":
-				    end_hour += 12
+					end_hour += 12
 				hours[0] = str(start_hour) + ":" + time_pieces.group(3)
 				hours[1] = str(end_hour) + ":" + time_pieces.group(6)
 				duration = (end_hour) - (start_hour) #TODO: FIX THIS
 				days = time_pieces.group(1)
 				if days != "TBA" and days !="None":
-				    for day_letter in re.findall(r"([A-Z][a-z]*)+?",days):
-				        day = day_to_letter_map[day_letter.lower()]
-				        time_data.append(OrderedDict([
-				            ("day", day),
-				            ("start", hours[0]),
-				            ("end", hours[1]),
-				            ("duration", ""),
-				            ("location", "TODO")
-				    ]))
+					for day_letter in re.findall(r"([A-Z][a-z]*)+?",days):
+						day = day_to_letter_map[day_letter.lower()]
+						time_data.append(OrderedDict([
+							("day", day),
+							("start", hours[0]),
+							("end", hours[1]),
+							("duration", ""),
+							("location", "TODO")
+					]))
 		return time_data
 
 	def merge_lists(self, evens,odds):
 		courses = []
 		while evens:
-		    if odds:
-		        courses.insert(0,odds.pop())
-		    courses.insert(0,evens.pop())
+			if odds:
+				courses.insert(0,odds.pop())
+			courses.insert(0,evens.pop())
 
 		if odds:
-		    courses.insert(0,odds.pop())
+			courses.insert(0,odds.pop())
 		return courses
 
 	def get_class_name(self, td):
-         return td[2].text.replace('\n', '').rstrip().replace('[+]','').strip()
+		 return td[2].text.replace('\n', '').rstrip().replace('[+]','').strip()
 
 	def get_school_name(self, td):
 		return td[0]
