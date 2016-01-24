@@ -343,6 +343,7 @@ def add_meeting_and_check_conflict(day_to_usage, new_meeting):
         offering = course_offerings[i][0]
         day = offering.day
         offering_conflict = False
+        # pprint.pprint(find_slots_to_fill(offering.time_start, offering.time_end))
         for slot in find_slots_to_fill(offering.time_start, offering.time_end):
             if day_to_usage[day][slot]:
                 exists_conflict = True
@@ -377,10 +378,10 @@ def update_day_conflicts(day_bitarray, start, end, current_level, ignore_list):
                 # if next_hour_index < end and exists_more_classes(overlapping, day_bitarray[next_hour_index]):
                     # recursively update the rest of slots in overlapping
                 tail = update_day_conflicts(day_bitarray, next_hour_index, \
-                                            tail, \
+                                            tail - (60 / get_granularity(SCHOOL)), \
                                             current_level + 1, \
                                             overlapping + ignore_list)
-                i = tail + 1
+                i = tail + (60 / get_granularity(SCHOOL)) + 1
             else:
                 i += 1
         else:
