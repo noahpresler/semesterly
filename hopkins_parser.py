@@ -28,7 +28,7 @@ WEBDRIVER_CHROME = '/root/chromedriver_executable/chromedriver' # e.g. '/home/li
 
 
 #===========================================FOR DEVELOPMENT USE=======================================
-WEBDRIVER_CHROME = '/home/linoah/chromedriver' # e.g. '/home/linoah/chromedriver'
+WEBDRIVER_CHROME = None # e.g. '/home/linoah/chromedriver'
 #=====================================================================================================
 
 django.setup()
@@ -54,7 +54,6 @@ class HopkinsCourseFinder:
 		self.offering_creates = 0
 
 		self.s = requests.Session()
-		self.ua = UserAgent()
 		self.cookies = cookielib.CookieJar()
 		self.headers = {
             'User-Agent': 'My User Agent 1.0'
@@ -109,7 +108,6 @@ class HopkinsCourseFinder:
 		html = None
 		while html is None:
 		    try:
-		    	self.randomize_ua()
 		        r = self.s.get(url,cookies=self.cookies,headers=self.headers)
 		        if r.status_code == 200:
 		            html = r.text
@@ -117,11 +115,6 @@ class HopkinsCourseFinder:
 		            requests.exceptions.ConnectionError):
 		        continue
 		return html.encode('utf-8')
-
-	def randomize_ua(self):
-		self.headers = {
-			'User-Agent': self.ua.random
-		}
 
 	def generate_courses(self, course_rows):
 		for row in course_rows:
