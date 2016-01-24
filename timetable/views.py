@@ -21,6 +21,8 @@ from collections import OrderedDict, defaultdict
 import json, copy, re, operator, itertools, functools
 import os
 
+import pprint
+
 from analytics.views import *
 
 MAX_RETURN = 60 # Max number of timetables we want to consider
@@ -179,8 +181,7 @@ def get_timetables_with_all_preferences(courses, semester):
 
     for pref_combination in itertools.product(*preference_timetable):
         possible_offerings = courses_to_offerings(courses, semester, pref_combination)
-        with_conflicts = False # When trying to apply all preference, try first with NO conflicts
-        new_timetables = create_timetable_from_offerings(possible_offerings, with_conflicts)
+        new_timetables = create_timetable_from_offerings(possible_offerings)
         if new_timetables: valid_timetables += new_timetables
         if len(valid_timetables) > MAX_RETURN:
             break
@@ -199,9 +200,9 @@ def get_timetables_with_some_preferences(courses, semester):
     return s
 
 # currently doesn't work for any constructor other than the iterative one
-def create_timetable_from_offerings(offerings, with_conflicts):
+def create_timetable_from_offerings(offerings):
     timetables = []
-    for timetable in offerings_to_timetables(offerings, with_conflicts):
+    for timetable in offerings_to_timetables(offerings):
         if len(timetables) > MAX_RETURN:
             break
         timetables.append(timetable)
@@ -284,7 +285,7 @@ def create_offering_object(co_pair):
 # ****************** 3. OFFERINGS -> TIMETABLES ********************************
 # ******************************************************************************
 
-def offerings_to_timetables(sections, with_conflicts):
+def offerings_to_timetables(sections):
     """
     Generate timetables in a depth-first manner based on a list of sections.
     sections: a list of sections, where each section is a list of offerings
@@ -298,7 +299,6 @@ def offerings_to_timetables(sections, with_conflicts):
     """
     num_offerings, num_permutations_remaining = get_xproduct_indicies(sections)
     total_num_permutations = num_permutations_remaining.pop(0)
-
     for p in xrange(total_num_permutations): # for each possible tt
         current_tt = []
         day_to_usage = {'M': [[] for i in range(14 * 60 / get_granularity(SCHOOL))], 
@@ -310,7 +310,7 @@ def offerings_to_timetables(sections, with_conflicts):
         for i in xrange(len(sections)): # add an offering for the next section
             j = (p/num_permutations_remaining[i]) % num_offerings[i]
             day_to_usage, conflict, new_meeting = add_meeting_and_check_conflict(day_to_usage, sections[i][j])
-            if conflict and not with_conflicts: # there's a conflict and we don't want to consider it
+            if conflict and not WITH_CONFLICTS: # there's a conflict and we don't want to consider it
                 no_conflicts = False
                 break
             current_tt.append(new_meeting)
