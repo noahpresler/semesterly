@@ -82,17 +82,14 @@ def view_timetable(request):
     SchoolCourse, SchoolCourseOffering = get_correct_models(SCHOOL)
 
     course_ids = params['courses_to_sections'].keys()
-    try:
-        courses = [SchoolCourse.objects.get(id=cid) for cid in course_ids]
-        LOCKED_SECTIONS = params['courses_to_sections']
-        set_tt_preferences(params['preferences'])
-        result = courses_to_timetables(courses, params['semester'])
-        # analytics
-        save_analytics_data('timetables', {'sid': sid, 'school': SCHOOL, 'courses': courses, 'count': len(result)})
-        # end analytics
+    courses = [SchoolCourse.objects.get(id=cid) for cid in course_ids]
+    LOCKED_SECTIONS = params['courses_to_sections']
+    set_tt_preferences(params['preferences'])
+    result = courses_to_timetables(courses, params['semester'])
+    # analytics
+    save_analytics_data('timetables', {'sid': sid, 'school': SCHOOL, 'courses': courses, 'count': len(result)})
+    # end analytics
 
-    except:
-        result = {'error': True}
 
 
 
@@ -195,7 +192,7 @@ def get_timetables_with_some_preferences(courses, semester):
     and return timetables ranked by # of preferences satisfied.
     """
     all_offerings = courses_to_offerings(courses, semester, [])
-    timetables = create_timetable_from_offerings(all_offerings, WITH_CONFLICTS)
+    timetables = create_timetable_from_offerings(all_offerings)
     s = sorted(timetables, key=functools.partial(get_rank_score, metric=get_preference_score))
     return s
 
