@@ -53,8 +53,8 @@
 	color: #fff;
 }
 .sem-page:hover, .sem-page.active {
-	background-color:#8FA8F6;
-	border:5px solid #8FA8F6;
+	background-color:#285684;
+	border:5px solid #285684;
 }
 
 .sem-pagination-nav {
@@ -70,7 +70,7 @@
 
 }
 .sem-pagination-nav:hover {
-	background-color:#8FA8F6;
+	background-color:#285684;
 }
 .nav-double {
 	border:none;
@@ -90,11 +90,11 @@
 }
 
 .sem-pagination-nav:active {
-	background-color:#5170D4;
+	background-color:#143B63;
 }
 .sem-page:active {
-	background-color:#5170D4;
-	border:5px solid #5170D4;
+	background-color:#143B63;
+	border:5px solid #143B63;
 }
 
 
