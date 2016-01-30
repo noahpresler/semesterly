@@ -517,6 +517,10 @@ input:-moz-placeholder::before  { font-family: fontAwesome; content:'\f002  ';
   .remove {
     margin-right:-1px;
   }
+  .copy-content {
+    right:0px !important;
+
+  }
 
 }
 @media screen and (max-width: 690px) {
@@ -621,6 +625,79 @@ input.cmn-toggle-round:checked + label:after {
   color:#222;
 }
 
+.calendar-function {
+  background-color: #D6DBDF;
+  height: 40px;
+  width: 40px;
+  text-align: center;
+  padding: 0px;
+  margin-right:8px;
+  margin-top:9px;
+  right:0;
+  position:static;
+  float: right !important;
+  transition: background-color 0.2s;
+}
+
+.calendar-function:hover {
+  background-color: #285684; /* #34495E */
+}
+.calendar-function:active {
+  background-color:#143B63 !important;
+}
+
+.calendar-function span {
+  width: 100%;
+}
+
+.calendar-function span:before {
+  width: 100%;
+  line-height: 40px;
+  margin: 0 auto;
+}
+.copy-button {
+  position:relative;
+}
+.copy-arrow-up, .copy-content {
+  clear:both;
+  display:inline-block;
+  z-index:6000;
+  position:absolute;
+}
+.copy-content {
+  background-color:#285684;
+  width:300px;
+  height:133px;
+  margin-top:10px;
+  font-size:12px;
+  padding: 5px 5px 0px 5px;
+  top:48px;
+  right:-30px;
+  border:1px solid #143B63;
+  color:#fff;
+}
+.copy-text {
+  width:250px;
+  height:65px;
+  font-size:10px;
+  margin-bottom:0px;
+  resize:none;
+  margin-top:10px;
+  outline-width:3px;
+  outline-color:#fff;
+  color:#222;
+}
+.copy-arrow-up {
+  width: 0; 
+  height: 0; 
+  border-left: 7px solid transparent;
+  border-right: 7px solid transparent;
+  right:18px;
+  border-bottom: 7px solid #285684;
+  top:51px;
+}
+
+
 /* Modal Styles */
 .modal-header {
   background-color: #F8F6F7;
@@ -632,31 +709,6 @@ input.cmn-toggle-round:checked + label:after {
   border-bottom: 1px solid #D4D4D4;
 }
 
-.calendar-function {
-	background-color: #D6DBDF;
-	height: 40px;
-	width: 40px;
-	text-align: center;
-	padding: 0px;
-	margin-right:8px;
-  margin-top:9px;
-  right:0;
-  position:static;
-}
-
-.calendar-function:hover {
-	background-color: #34495E;
-}
-
-.calendar-function span {
-	width: 100%;
-}
-
-.calendar-function span:before {
-	width: 100%;
-	line-height: 40px;
-	margin: 0 auto;
-}
 
 .modal-entry .textbook{
   width: 33.3%;

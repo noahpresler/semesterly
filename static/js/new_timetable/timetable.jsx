@@ -5,6 +5,7 @@ var TimetableActions = require('./actions/update_timetables');
 var ToastActions = require('./actions/toast_actions');
 var Util = require('./util/timetable_util');
 var NewPagination = require('./new_pagination');
+var CopyButton = require('./copy_button');
 
 module.exports = React.createClass({
   mixins: [Reflux.connect(UpdateTimetablesStore)],
@@ -17,11 +18,6 @@ module.exports = React.createClass({
     }.bind(this));
   },
 
-  getShareLink: function() {
-    var link = window.location.host + "/";
-    var data = this.getData();
-    return link + data;
-  },
   getData: function() {
   return Util.getLinkData(this.state.school,
       this.state.courses_to_sections,
@@ -100,10 +96,7 @@ module.exports = React.createClass({
                   prev={this.setIndex(this.state.current_index - 1)}
                   setIndex={this.setIndex}
                   current_index={this.state.current_index}/>
-                <a className="btn btn-primary right calendar-function"
-                   data-clipboard-text={this.getShareLink()}>
-                  <span className="fui-clip"></span>
-                </a>
+                <CopyButton getData={this.getData} />
                 <div className="fc-clear"></div>
 
 
@@ -190,13 +183,6 @@ module.exports = React.createClass({
               </div>
             </div>
       );
-  },
-
-  componentDidMount: function() {
-    var clip = new Clipboard('.calendar-function');
-    clip.on('success', function(e) {
-      ToastActions.createToast("Link copied to clipboard!");
-    });
   },
 
   componentDidUpdate: function() {
