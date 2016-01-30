@@ -640,7 +640,7 @@ input.cmn-toggle-round:checked + label:after {
 }
 
 .calendar-function:hover {
-  background-color: #285684; /* #34495E */
+  background-color: #3A4C5F; /* #34495E */
 }
 .calendar-function:active {
   background-color:#143B63 !important;
