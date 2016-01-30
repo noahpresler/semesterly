@@ -673,6 +673,7 @@ input.cmn-toggle-round:checked + label:after {
   top:58px;
   right:-30px;
   border:1px solid #143B63;
+  border-radius:3px;
   color:#fff;
 }
 .copy-text {
