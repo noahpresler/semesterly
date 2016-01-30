@@ -667,11 +667,10 @@ input.cmn-toggle-round:checked + label:after {
 .copy-content {
   background-color:#285684;
   width:300px;
-  height:133px;
-  margin-top:10px;
-  font-size:12px;
+  height:140px;
+  font-size:14px;
   padding: 5px 5px 0px 5px;
-  top:48px;
+  top:58px;
   right:-30px;
   border:1px solid #143B63;
   color:#fff;
@@ -679,10 +678,10 @@ input.cmn-toggle-round:checked + label:after {
 .copy-text {
   width:250px;
   height:65px;
-  font-size:10px;
+  font-size:13px;
   margin-bottom:0px;
   resize:none;
-  margin-top:10px;
+  margin-top:8px;
   outline-width:3px;
   outline-color:#fff;
   color:#222;
