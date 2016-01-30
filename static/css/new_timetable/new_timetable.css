@@ -665,7 +665,7 @@ input.cmn-toggle-round:checked + label:after {
   position:absolute;
 }
 .copy-content {
-  background-color:#285684;
+  background-color:#3A4C5F;
   width:300px;
   height:140px;
   font-size:14px;
@@ -692,7 +692,7 @@ input.cmn-toggle-round:checked + label:after {
   border-left: 7px solid transparent;
   border-right: 7px solid transparent;
   right:18px;
-  border-bottom: 7px solid #285684;
+  border-bottom: 7px solid #3A4C5F;
   top:51px;
 }
 
