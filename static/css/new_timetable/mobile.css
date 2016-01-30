@@ -215,7 +215,11 @@ hr {
     margin-left:25%;
   }
 }
-
+@media (max-width: 360px) {
+  .nav-double-next, .nav-double-prev {
+    display:none;
+  }
+}
 
 .fb-like {
     margin-top: 10px;
