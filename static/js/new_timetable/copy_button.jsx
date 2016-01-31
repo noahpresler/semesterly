@@ -20,7 +20,9 @@ module.exports = React.createClass({
             <div className="copy-arrow-up"></div>
 			<div className="copy-content">
 				The link for this timetable is below. Copy it to easily share your schedule with friends.
-				<textarea onClick={this.highlightAll} ref="link" className="copy-text" value={this.getShareLink()} readOnly></textarea>
+				<input onClick={this.highlightAll} 
+				ref="link" className="copy-text" 
+				value={this.getShareLink()} readOnly></input>
 			</div>
 		</div>) :
 		null;
