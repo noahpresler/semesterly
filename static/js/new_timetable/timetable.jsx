@@ -25,7 +25,7 @@ module.exports = React.createClass({
   },
   getEndHour: function() {
     // gets the end hour of the current timetable
-    var max_end_hour = 18;
+    var max_end_hour = 17;
     if (!this.hasTimetables()) {
       return max_end_hour;
     }
@@ -45,6 +45,7 @@ module.exports = React.createClass({
   getHourRows: function() {
     var max_end_hour = this.getEndHour();
     var rows = [];
+    var row_style = {borderColor: "#E0DFDF"};
     for (var i = 8; i <= max_end_hour; i++) { // one row for each hour, starting from 8am
       var time = i + "am";
       if (i >= 12) { // the pm hours
@@ -53,15 +54,15 @@ module.exports = React.createClass({
       }
       rows.push(
           (<tr key={time}>
-              <td className="fc-axis fc-time fc-widget-content"><span>{time}</span></td>
-              <td className="fc-widget-content"></td>
+              <td className="fc-axis fc-time fc-widget-content" style={row_style}><span>{time}</span></td>
+              <td className="fc-widget-content" style={row_style}></td>
           </tr>)
       );  
       // for the half hour row
       rows.push(
           (<tr className="fc-minor" key={time + "-half"}>
-              <td className="fc-axis fc-time fc-widget-content"></td>
-              <td className="fc-widget-content"></td>
+              <td className="fc-axis fc-time fc-widget-content" style={row_style}></td>
+              <td className="fc-widget-content" style={row_style}></td>
           </tr>)
       );
 

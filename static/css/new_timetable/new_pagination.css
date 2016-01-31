@@ -29,7 +29,7 @@
 	padding-top:5px;
     white-space:nowrap;
     word-wrap:break-word;
-    max-width:290px;
+    max-width:317px;
 }
 
 .sem-page {
@@ -53,8 +53,8 @@
 	color: #fff;
 }
 .sem-page:hover, .sem-page.active {
-	background-color:#285684;
-	border:5px solid #285684;
+	background-color:#34495e;
+	border:5px solid #34495e;
 }
 
 .sem-pagination-nav {
@@ -70,7 +70,7 @@
 
 }
 .sem-pagination-nav:hover {
-	background-color:#285684;
+	background-color:#34495e;
 }
 .nav-double {
 	border:none;
