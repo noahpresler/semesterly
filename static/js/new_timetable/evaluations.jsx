@@ -19,7 +19,7 @@ var Evaluation = React.createClass({
 				<div className="year"><b>{year}</b></div>
 				{prof}
 				<div className="rating-wrapper">
-					<div className="star-ratings-sprite">
+					<div className="star-ratings-sprite eval-stars">
 						<span style={{width: 100*this.props.eval_data.score/5 + "%"}} className="rating"></span>
 					</div>
 					<div className="numeric-rating"><b>{"(" + this.props.eval_data.score + ")"}</b></div>
