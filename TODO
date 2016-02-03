@@ -1,4 +1,3 @@
-– Horizontal scrolling for modal (sections, textbooks, etc)
 – Correct conflict display (Felix)
-– Location Info on slots
-– Add remove button to RosterSlots
+– Figure out close button on modal positioning
+– Deal with side scroll for large numbers of scrollables (positioning of bullets is off here)
