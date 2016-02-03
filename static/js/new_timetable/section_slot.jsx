@@ -23,7 +23,7 @@ module.exports = React.createClass({
             </div>
         );
         return (
-            <div className="section-wrapper">
+            <div className="section-wrapper" style={this.props.styles}>
                 {section_and_prof}
                 {day_and_times}
             </div>);
