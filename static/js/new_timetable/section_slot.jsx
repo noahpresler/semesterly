@@ -22,15 +22,16 @@ module.exports = React.createClass({
                 <div className="profs">{cos[0].instructors}</div>
             </div>
         );
+
         return (
-            <div className="section-wrapper" style={this.props.styles}>
+            <div className={"section-wrapper sec-" + this.props.unique} ref="main_slot">
                 {section_and_prof}
                 {day_and_times}
             </div>);
     },
 
     getRelatedCourseOfferings: function() {
-        co_objects = []
+        co_objects = [];
         for (var i = 0; i < this.props.all_sections.length; i++) {
             var o = this.props.all_sections[i];
             if (o.meeting_section == this.props.section) {
@@ -41,11 +42,11 @@ module.exports = React.createClass({
     },
 
     getDaysAndTimes: function(cos) {
-        var dayAndTimes = cos.map(function(o) {
-            return (<div key={this.props.key} id="day-time" key={o.id}>{day_to_letter[o.day] + " " + o.time_start + "-" + o.time_end}</div>);
+        var dayAndTimes = cos.map(function(o, j) {
+            return (<div key={j} id="day-time" key={o.id}>{day_to_letter[o.day] + " " + o.time_start + "-" + o.time_end}</div>);
         }.bind(this));
-        return ( <div key={this.props.key} className="dt-container">
+        return ( <div className="dt-container">
                 {dayAndTimes}
-            </div> )
+            </div> );
     }
 });

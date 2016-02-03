@@ -206,10 +206,18 @@ hr {
   .course-modal {
     width: 100% !important;
   }
+
   .fc-ltr .fc-time-grid .fc-event-container {
     margin-left:1.2%;
   }
+
 }
+@media (max-width: 600px) {
+  .eval-item {
+    font-size:12px;
+  }
+}
+
 @media (max-width: 460px) {
   .custom-addon {
     margin-left:25%;

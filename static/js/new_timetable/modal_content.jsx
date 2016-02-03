@@ -136,12 +136,11 @@ module.exports = React.createClass({
 
 	getSections: function() {
 		var count = this.state.course_info.sections_S.length;
-		var S = this.state.course_info.sections_S.map(function(s){
-			var styles = count > 1 ? {marginLeft: "74.7%"} : {marginLeft: "0%"};
-			return (<SectionSlot key={s} 
+		var S = this.state.course_info.sections_S.map(function(s, i){
+			return (<SectionSlot key={i}
+				unique={i}
 				all_sections={this.state.course_info.sections_S_objs} 
-				section={s}
-				styles={styles}/>)
+				section={s}/>)
 		}.bind(this));
 		var section_scroller = (<div className="empty-intro">No sections found for this course.</div>);
 		if (S.length > 0) {
