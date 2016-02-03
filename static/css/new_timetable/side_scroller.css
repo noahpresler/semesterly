@@ -6,38 +6,47 @@
 
 .slider-decorator-2 {
 	margin-bottom: -52px;
-
+}
+.slider-decorator-2 > ul > li > button{
+	padding:2px !important;
 }
 .slider-decorator-1 {
-	margin-right:4px;
+	margin-right:-14px !important;
+	padding:6px;
 	width:8%;
 }
 .slider-decorator-0 {
+	padding:6px;
 	margin-left:-1px;
 	width:8%;
 }
 
-
+#modal-content {
+	overflow-x: hidden;
+}
 
 
 @media screen and (max-width: 600px) {
-	.section-wrapper {
-		margin-left:68%;
-	}
 
 	.slider-decorator-0 {
  		margin-left:-13px !important;
  	}
 	.slider-decorator-1 {
-		margin-right:16px !important;
+		margin-right:-9px !important;
 	}
 	.slider-decorator-2 > ul > li > button{
 		padding:2px !important;
 	}
+
 }
+
 
 @media screen and (max-width: 467px) {
 	.slider-decorator-2 > ul > li > button{
 		padding:0px !important;
 	}
+	.slider-decorator-1 {
+		margin-right:1px !important;
+	}
+
 }

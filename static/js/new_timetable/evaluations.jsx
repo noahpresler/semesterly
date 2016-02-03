@@ -48,7 +48,6 @@ module.exports = React.createClass({
 		var custom_class = "";
 		if (evals.length > 0) {
 			evaluation_scroller = (<SideScroller 
-			slidesToShow={1}
 			content={evals}/>);
 			custom_class = "spacious-entry";
 		}
