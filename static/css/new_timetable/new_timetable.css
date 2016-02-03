@@ -963,7 +963,7 @@ input.cmn-toggle-round:checked + label:after {
   width:auto;
   margin-right:10px;
   margin-bottom:10px;
-  background-color:#8870FF;
+  background-color:#44BBFF; /* old: #8870FF */
   border-radius: 6px;
   color: white;
   padding: 10px;
