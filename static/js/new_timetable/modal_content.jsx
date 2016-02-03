@@ -4,7 +4,11 @@ var EvaluationManager = require('./evaluations.jsx');
 var TimetableActions = require('./actions/update_timetables.js');
 var UpdateTimetablesStore = require('./stores/update_timetables.js');
 var CourseActions = require('./actions/course_actions');
-var SectionSlot = require('./section_slot.jsx')
+var SectionSlot = require('./section_slot.jsx');
+var Carousel = require('nuka-carousel');
+
+var SideScroller = require('./side_scroller.jsx');
+
 
 module.exports = React.createClass({
 	mixins: [Reflux.connect(CourseInfoStore)],
@@ -15,6 +19,7 @@ module.exports = React.createClass({
 		var header = loading ? null : this.getHeader();
 		var description = loading ? null : this.getDescription();
 		var evaluations = loading ? null : this.getEvaluations();
+
 		var recomendations = loading ? null : this.getRecomendations();
 		var textbooks = loading ? null : this.getTextbooks();
 		var sections = loading ? null : this.getSections();
@@ -24,8 +29,8 @@ module.exports = React.createClass({
                 {loader}
                 {header}
                 {description}
-                {evaluations}
                 {sections}
+                {evaluations}
                 {textbooks}
                 {recomendations}
             </div>);
@@ -128,27 +133,24 @@ module.exports = React.createClass({
 	},
 
 	getSections: function() {
-		var F = this.state.course_info.sections_F.map(function(s){
-			return (<SectionSlot key={s} all_sections={this.state.course_info.sections_F_objs} section={s}/>)
-		}.bind(this));
+		var count = this.state.course_info.sections_S.length;
 		var S = this.state.course_info.sections_S.map(function(s){
-			return (<SectionSlot key={s} all_sections={this.state.course_info.sections_S_objs} section={s}/>)
+			var styles = count > 1 ? {marginLeft: "74.7%"} : {marginLeft: "0%"};
+			return (<SectionSlot key={s} 
+				all_sections={this.state.course_info.sections_S_objs} 
+				section={s}
+				styles={styles}/>)
 		}.bind(this));
-		if (this.state.show_sections === this.state.course_info.code) {
-			var sec_display = (
-				<div id="all-sections-wrapper">
-					{F}
-					{S}
-				</div>);
-		} else {
-			var sections_count = this.state.course_info.sections_S.length + this.state.course_info.sections_F.length;
-			var sections_grammar = sections_count > 1 ? "sections" : "section";
-			var sec_display = (<div id="numSections" onClick={this.setShowSections(this.state.course_info.code)}>This course has <b>{sections_count}</b> {sections_grammar}. Click here to view.</div>)
+		var section_scroller = (<div className="empty-intro">No sections found for this course.</div>);
+		if (S.length > 0) {
+			section_scroller = (<SideScroller 
+			slidesToShow={2}
+			content={S}/>);
 		}
 		var sections = 
-			(<div className="modal-entry" id="course-sections">
+			(<div className="modal-entry spacious-entry" id="course-sections">
 				<h6>Course Sections:</h6>
-				{sec_display}
+				{section_scroller}
 			</div>);
 		return sections;
 	},

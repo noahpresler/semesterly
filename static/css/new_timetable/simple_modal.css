@@ -12,39 +12,38 @@
   padding: 0 20px 20px 20px;
   color :#ddd;
   text-align:center;
-      -webkit-animation: fadein 1.5s; /* Safari, Chrome and Opera > 12.1 */
-       -moz-animation: fadein 1.5s; /* Firefox < 16 */
-        -ms-animation: fadein 1.5s; /* Internet Explorer */
-         -o-animation: fadein 1.5s; /* Opera < 12.1 */
-            animation: fadein 1.5s;
+      -webkit-animation: fadein 1.1s; /* Safari, Chrome and Opera > 12.1 */
+       -moz-animation: fadein 1.1s; /* Firefox < 16 */
+        -ms-animation: fadein 1.1s; /* Internet Explorer */
+         -o-animation: fadein 1.1s; /* Opera < 12.1 */
+            animation: fadein 1.1s;
 }
 @keyframes fadein {
-    from { top: 0%;}
+    from { top: -20%;}
     to   { top: 50%;}
 }
 
 /* Firefox < 16 */
 @-moz-keyframes fadein {
-    from { top: 0%; }
-    to   { top: 50%; }
+    from { top: -20%;}
+    to   { top: 50%;}
 }
-
 /* Safari, Chrome and Opera > 12.1 */
 @-webkit-keyframes fadein {
-    from { top: 0%; }
-    to   { top: 50%; }
+    from { top: -20%;}
+    to   { top: 50%;}
 }
 
 /* Internet Explorer */
 @-ms-keyframes fadein {
-    from { top: 0%; }
-    to   { top: 50%; }
+    from { top: -20%;}
+    to   { top: 50%;}
 }
 
 /* Opera < 12.1 */
 @-o-keyframes fadein {
-    from { top: 0%; }
-    to   { top: 50%; }
+    from { top: -20%;}
+    to   { top: 50%;}
 }
 .simple-modal-header{
   transition:font-size .7s;
