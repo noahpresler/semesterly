@@ -905,9 +905,10 @@ input.cmn-toggle-round:checked + label:after {
   width: 120px;
   margin: 0 auto;
   float:left;
-  margin-right:5px;
 }
-
+.eval-stars {
+    margin-right:5px;
+}
 .rating {
   background: url("../../img/rating.png") repeat-x;
   background-position: 0 100%;
