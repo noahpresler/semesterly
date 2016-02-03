@@ -433,7 +433,7 @@ div {
 }
 .course-modal {
   width: 80%;
-  max-width: 660px;
+  max-width: 720px;
   color: black;
 }
 #modal-content {
@@ -764,7 +764,7 @@ input.cmn-toggle-round:checked + label:after {
 
 
 .modal-entry .eval-item {
-  background-color: #F8F6F7;
+  background-color: #FBFFFD;
   border: 1px solid #D4D4D4;
   width: 192px;
   display: inline-block;
@@ -773,9 +773,13 @@ input.cmn-toggle-round:checked + label:after {
   margin: 3px;
   -webkit-transition: width .5s;
 }
-
+.spacious-entry {
+  padding-bottom:40px;
+}
 .selected {
-  width: 100% !important;
+  width: 80% !important;
+  margin-left: 10% !important;
+  margin-bottom:30px;
 }
 
 .selected .year {
@@ -801,7 +805,9 @@ input.cmn-toggle-round:checked + label:after {
   display: inline-block;
   float:right;
 }
-
+.empty-intro {
+  padding-top:15px;
+}
 .eval-item #details {
   margin: 5px;
 }
@@ -899,6 +905,7 @@ input.cmn-toggle-round:checked + label:after {
   width: 120px;
   margin: 0 auto;
   float:left;
+  margin-right:5px;
 }
 
 .rating {
@@ -911,8 +918,8 @@ input.cmn-toggle-round:checked + label:after {
 
 .numeric-rating {
   float: left;
-    position: relative;
-    top: 5px;
+  position: relative;
+  top: 1px;
 }
 
 .rating-wrapper {
@@ -939,7 +946,7 @@ input.cmn-toggle-round:checked + label:after {
 .course-roster .star-ratings-sprite{
 	float: none;
 }
-#course-description {    
+#course-description, .eval-item {    
     font-family: Lato;
     line-height: 160%;
     letter-spacing: 0.1px;
@@ -960,8 +967,8 @@ input.cmn-toggle-round:checked + label:after {
   border-radius: 6px;
   color: white;
   padding: 10px;
-  width: 145px;
-  height: 90px;
+  width: 170px;
+  height: 100px;
   vertical-align: middle;
 }
 
