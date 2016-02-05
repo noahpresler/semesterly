@@ -5,7 +5,7 @@ var decorators = require('./decorators');
 var assign = require('./object-assign');
 var ExecutionEnvironment = require('./exenv');
 
-const addEvent = function(elem, type, eventHandle) {
+var addEvent = function(elem, type, eventHandle) {
   if (elem === null || typeof (elem) === 'undefined') {
   return;
   }
@@ -18,7 +18,7 @@ const addEvent = function(elem, type, eventHandle) {
   }
 };
 
-const removeEvent = function(elem, type, eventHandle) {
+var removeEvent = function(elem, type, eventHandle) {
   if (elem === null || typeof (elem) === 'undefined') {
     return;
   }
@@ -31,7 +31,7 @@ const removeEvent = function(elem, type, eventHandle) {
   }
 };
 
-const Carousel = React.createClass({
+var Carousel = React.createClass({
   displayName: 'Carousel',
 
   mixins: [tweenState.Mixin],
