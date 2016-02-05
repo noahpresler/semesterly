@@ -45,12 +45,13 @@ module.exports = React.createClass({
       }
       nav_items = <div className="scroll-nav">{navs}</div>;
     }
-
+    var slide_index = this.props.slideIndex ? this.props.slideIndex : 0;
     return (
       <div>
         {nav_items}
         <Carousel ref="carousel" data={this.setCarouselData.bind(this, 'carousel')}
           slidesToShow={this.state.slides_shown_count} 
+          slideIndex={slide_index}
           dragging={true}
           cellSpacing={30}
           id={this.props.id}>
@@ -71,9 +72,6 @@ module.exports = React.createClass({
     var length = this.props.content.length;
     if (length > 1) {
       this.updateNumItems();
-      if (length > 2 && this.props.id == "sections-carousel") {
-        $(".slider-decorator-1 > .sections-carousel").click() // make third section default to middle of slider
-      }
     }
 
     $(window).resize(function() {
