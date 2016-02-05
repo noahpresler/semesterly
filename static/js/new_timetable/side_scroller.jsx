@@ -1,4 +1,4 @@
-var Carousel = require('nuka-carousel');
+var Carousel = require('./modules/nuka-carousel/carousel');
 
 module.exports = React.createClass({
   mixins: [Carousel.ControllerMixin],
