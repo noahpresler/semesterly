@@ -1,7 +1,7 @@
 'use strict';
 
 
-const DefaultDecorators = [
+var DefaultDecorators = [
   {
     component: React.createClass({
       render() {
