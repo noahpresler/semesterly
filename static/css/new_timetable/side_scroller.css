@@ -24,8 +24,53 @@
 #modal-content {
 	overflow-x: hidden;
 }
-
-
+@media screen and (max-width: 1174px) {
+	.scroll-nav {
+		margin-left:0%;
+		width:95%;
+	}
+}
+@media screen and (max-width: 1115px) {
+	.scroll-nav {
+		width:110%;
+	}
+}
+@media screen and (max-width: 1015px) {
+	.scroll-nav {
+		margin-left:-3%;
+		width:110%;
+	}
+}
+@media screen and (max-width: 1000px) {
+	.scroll-nav {
+		margin-left:6%;
+		width:90%;
+	}
+}
+@media screen and (max-width: 762px) {
+	.scroll-nav {
+		margin-left:0%;
+		width:95%;
+	}
+}
+@media screen and (max-width: 725px) {
+	.scroll-nav {
+		margin-left:-3%;
+		width:110%;
+	}
+}
+@media screen and (max-width: 699px) {
+	.scroll-nav {
+		margin-left:3%;
+		width:95%;
+	}
+}
+@media screen and (max-width: 452px) {
+	.scroll-nav {
+		margin-left:-3%;
+		width:110%;
+	}
+}
 @media screen and (max-width: 600px) {
 
 	.slider-decorator-0 {

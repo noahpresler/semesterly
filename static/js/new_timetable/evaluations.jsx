@@ -3,19 +3,25 @@ var SideScroller = require('./side_scroller.jsx');
 
 var Evaluation = React.createClass({
 	render: function() {
-		var classes = "eval-item selected";
-		var details = (
-			<div id="details">{this.props.eval_data.summary.replace(/\u00a0/g, " ")}</div>
-		);
-		var prof = (
-			<div id="prof"><b>Professor: {this.props.eval_data.professor}</b></div>
-		);
+		var classes = this.props.mini ? "eval-item eval-mini" : "eval-item selected";
+		var details = prof = null;
+
+		if (!this.props.mini) { // only show extra information if this eval isn't mini
+			// (i.e. full evaluation, not nav item for full evaluations)
+			var details = (
+				<div id="details">{this.props.eval_data.summary.replace(/\u00a0/g, " ")}</div>
+			);
+			var prof = (
+				<div id="prof"><b>Professor: {this.props.eval_data.professor}</b></div>
+			);
+		}	
+ 		
 		var year = this.props.eval_data.year.indexOf(":") > -1 ? 
 		(this.props.eval_data.year.replace(":", " ")) :
 		(this.props.eval_data.year);
 		return (
 		<div className={classes}>
-			<div id="eval-wrapper">
+			<div className="eval-wrapper">
 				<div className="year"><b>{year}</b></div>
 				{prof}
 				<div className="rating-wrapper">
@@ -30,16 +36,21 @@ var Evaluation = React.createClass({
 	},
 });
 
+
+
 module.exports = React.createClass({
 	
 
 	render: function() {
 
-		var i = 0;
-		var evals = this.props.eval_info.map(function(e) {
-			i++;
-			return (<Evaluation eval_data={e} key={e.id} selected={true} />);
+		var navs = this.props.eval_info.map(function(e) {
+			return (<Evaluation eval_data={e} key={e.id} mini={true} />);
 		}.bind(this));
+
+		var evals = this.props.eval_info.map(function(e) {
+			return (<Evaluation eval_data={e} key={e.id} />);
+		}.bind(this));
+
 		var click_notice = this.props.eval_info.length == 0 ? (<div id="empty-intro">No course evaluations for this course yet.</div>) 
 		: (<div id="click-intro">Click an evaluation item above to read the comments.</div>);
 		
@@ -48,10 +59,11 @@ module.exports = React.createClass({
 		var custom_class = "";
 		if (evals.length > 0) {
 			evaluation_scroller = (<SideScroller 
-			content={evals}/>);
+			nav_items={navs}
+			content={evals}
+			id={"evaluations-carousel"}/>);
 			custom_class = "spacious-entry";
 		}
-
 
 		return (
 		<div className={"modal-entry " + custom_class} id="course-evaluations">
