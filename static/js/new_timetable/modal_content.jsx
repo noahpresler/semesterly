@@ -142,10 +142,13 @@ module.exports = React.createClass({
 		}.bind(this));
 		var section_scroller = (<div className="empty-intro">No sections found for this course.</div>);
 		if (S.length > 0) {
-			section_scroller = (<SideScroller 
-			slidesToShow={2}
-			content={S}
-			id={"sections-carousel"}/>);
+			var start_slide = S.length > 2 ? 1 : 0;
+			section_scroller = (
+			<SideScroller 
+				slideIndex={start_slide}
+				slidesToShow={2}
+				content={S}
+				id={"sections-carousel"}/>);
 		}
 		var sections = 
 			(<div className="modal-entry spacious-entry" id="course-sections">

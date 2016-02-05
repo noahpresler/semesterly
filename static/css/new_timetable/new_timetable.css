@@ -943,17 +943,12 @@ input.cmn-toggle-round:checked + label:after {
   margin-bottom: 10px;
 }
 .eval-mini {
-  height:57px;
+  height:56px;
   background-color: #fff !important;
+  font-size:13.5px;
+  padding-top:2px;
 }
-.scroll-nav {
-  margin-left:6%;
-  width:90%;
-  margin-bottom:20px;
-}
-.nav-item {
-  cursor:pointer;
-}
+
 #click-intro {
   text-align: center;
 }
@@ -978,6 +973,7 @@ input.cmn-toggle-round:checked + label:after {
 #slot-container {
   display: flex !important;
 }
+
 
 .section-wrapper {
   display: inline-block;
