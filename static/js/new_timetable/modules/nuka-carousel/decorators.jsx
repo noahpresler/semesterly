@@ -34,7 +34,6 @@ const DefaultDecorators = [
       render() {
         var disabled = (this.props.currentSlide + this.props.slidesToScroll >= this.props.slideCount) ?
         "disabled" : "available";
-        console.log(disabled);
         return (
           <button
             className={disabled}
