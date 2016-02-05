@@ -337,6 +337,9 @@ input[type="text"]:focus {
 .fc-day-header {
   font-weight:400;
 }
+.day-time {
+  padding-top:2px;
+}
 #menu {
   margin: 0 auto;
 }
@@ -762,7 +765,6 @@ input.cmn-toggle-round:checked + label:after {
   font-weight:300;
 }
 
-
 .modal-entry .eval-item {
   background-color: #FBFFFD;
   border: 1px solid #D4D4D4;
@@ -775,6 +777,10 @@ input.cmn-toggle-round:checked + label:after {
   transition: all 0.3s;
 
 }
+.nav-item-active .eval-item {
+  border: 1px solid #34495E;
+}
+
 .spacious-entry {
   padding-bottom:40px;
 }
@@ -790,11 +796,9 @@ input.cmn-toggle-round:checked + label:after {
   float:left;
 }
 
-#eval-wrapper {
-  height: 40px;
-}
 
-#eval-wrapper #prof {
+
+.eval-wrapper #prof {
   display: inline-block;
     margin: 0 auto;
     margin-top: 10px;
@@ -938,7 +942,18 @@ input.cmn-toggle-round:checked + label:after {
 .eval-wrapper {
   margin-bottom: 10px;
 }
-
+.eval-mini {
+  height:57px;
+  background-color: #fff !important;
+}
+.scroll-nav {
+  margin-left:6%;
+  width:90%;
+  margin-bottom:20px;
+}
+.nav-item {
+  cursor:pointer;
+}
 #click-intro {
   text-align: center;
 }
@@ -975,13 +990,15 @@ input.cmn-toggle-round:checked + label:after {
   color: white;
   padding: 10px;
   width: 170px;
-  height: 100px;
+  height: 110px;
   vertical-align: middle;
+  letter-spacing:.2px;
 }
 
 
 
 .section-wrapper .sect-prof {
+  margin-top:-4px;
 	font-weight: bold;
   font-size:14px;
   padding-bottom:5px;
@@ -989,17 +1006,20 @@ input.cmn-toggle-round:checked + label:after {
   white-space:nowrap;
 }
 
-.section-wrapper .section-num {
-  float:left;
-}
 
 .section-wrapper .profs {
-  float: right;
+  margin-top:5px;
+  margin-bottom:0px;
+  max-width:110%;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  font-size:13.5px;
 }
 .dt-container {
   clear: both;
-  margin-top:15px;
-  font-size:13.5px;
+  margin-top:-2px;
+  font-size:12px;
 }
 
 /* Sidebar -----------------------------------*/

@@ -5,8 +5,6 @@ var TimetableActions = require('./actions/update_timetables.js');
 var UpdateTimetablesStore = require('./stores/update_timetables.js');
 var CourseActions = require('./actions/course_actions');
 var SectionSlot = require('./section_slot.jsx');
-var Carousel = require('nuka-carousel');
-
 var SideScroller = require('./side_scroller.jsx');
 
 
@@ -146,7 +144,8 @@ module.exports = React.createClass({
 		if (S.length > 0) {
 			section_scroller = (<SideScroller 
 			slidesToShow={2}
-			content={S}/>);
+			content={S}
+			id={"sections-carousel"}/>);
 		}
 		var sections = 
 			(<div className="modal-entry spacious-entry" id="course-sections">

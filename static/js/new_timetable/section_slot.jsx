@@ -16,10 +16,12 @@ module.exports = React.createClass({
     render: function() {
         var cos = this.getRelatedCourseOfferings();
         var day_and_times = this.getDaysAndTimes(cos);
+        var profs_text = cos[0].instructors ? "Prof: " + cos[0].instructors : "-";
+
         var section_and_prof = (
             <div className="sect-prof">
                 <div className="section-num">{cos[0].meeting_section}</div>
-                <div className="profs">{cos[0].instructors}</div>
+                <div className="profs">{profs_text}</div>
             </div>
         );
 
@@ -43,7 +45,7 @@ module.exports = React.createClass({
 
     getDaysAndTimes: function(cos) {
         var dayAndTimes = cos.map(function(o, j) {
-            return (<div key={j} id="day-time" key={o.id}>{day_to_letter[o.day] + " " + o.time_start + "-" + o.time_end}</div>);
+            return (<div key={j} className="day-time" key={o.id}>{day_to_letter[o.day] + " " + o.time_start + " - " + o.time_end}</div>);
         }.bind(this));
         return ( <div className="dt-container">
                 {dayAndTimes}
