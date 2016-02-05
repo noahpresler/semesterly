@@ -62,9 +62,7 @@ module.exports = React.createClass({
   // changes the currently selected slide to slide i (indexed starting at 0)
   changeSlide: function(i) {
     return function() {
-      var new_carousels = jQuery.extend(true, {}, this.state.carousels);
-      new_carousels.carousel.state.currentSlide = i;
-      this.setState({carousels: new_carousels});
+      this.state.carousels.carousel.goToSlide(i);
     }.bind(this);
 
   },
