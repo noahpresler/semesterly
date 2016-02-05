@@ -766,7 +766,7 @@ input.cmn-toggle-round:checked + label:after {
 }
 
 .modal-entry .eval-item {
-  background-color: #FBFFFD;
+  background-color: #FFF;
   border: 1px solid #D4D4D4;
   width: 192px;
   display: inline-block;
