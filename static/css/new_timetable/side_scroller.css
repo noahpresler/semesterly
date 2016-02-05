@@ -32,7 +32,6 @@
 	opacity:0.8;
 }
 .slider-decorator-0 > .disabled, .slider-decorator-1 > .disabled {
-	background-color:black;
 	opacity:0.2 !important;
 }
 .scroll-nav {
