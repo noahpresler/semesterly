@@ -1,52 +1,25 @@
 'use strict';
 
-Object.defineProperty(exports, '__esModule', {
-  value: true
-});
+var tweenState = require('./react-tween-state');
+var decorators = require('./decorators');
+var assign = require('./object-assign');
+var ExecutionEnvironment = require('./exenv');
 
-var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
-
-var _react = React;
-
-var _react2 = _interopRequireDefault(_react);
-
-var _reactDom = ReactDOM;
-
-var _reactDom2 = _interopRequireDefault(_reactDom);
-
-var _reactTweenState = require('./react-tween-state');
-
-var _reactTweenState2 = _interopRequireDefault(_reactTweenState);
-
-var _decorators = require('./decorators');
-
-var _decorators2 = _interopRequireDefault(_decorators);
-
-var _objectAssign = require('./object-assign');
-
-var _objectAssign2 = _interopRequireDefault(_objectAssign);
-
-var _exenv = require('./exenv');
-
-var _exenv2 = _interopRequireDefault(_exenv);
-
-var addEvent = function addEvent(elem, type, eventHandle) {
-  if (elem === null || typeof elem === 'undefined') {
-    return;
+const addEvent = function(elem, type, eventHandle) {
+  if (elem === null || typeof (elem) === 'undefined') {
+  return;
   }
   if (elem.addEventListener) {
     elem.addEventListener(type, eventHandle, false);
   } else if (elem.attachEvent) {
     elem.attachEvent('on' + type, eventHandle);
   } else {
-    elem['on' + type] = eventHandle;
+    elem['on'+type] = eventHandle;
   }
 };
 
-var removeEvent = function removeEvent(elem, type, eventHandle) {
-  if (elem === null || typeof elem === 'undefined') {
+const removeEvent = function(elem, type, eventHandle) {
+  if (elem === null || typeof (elem) === 'undefined') {
     return;
   }
   if (elem.removeEventListener) {
@@ -54,144 +27,176 @@ var removeEvent = function removeEvent(elem, type, eventHandle) {
   } else if (elem.detachEvent) {
     elem.detachEvent('on' + type, eventHandle);
   } else {
-    elem['on' + type] = null;
+    elem['on'+type] = null;
   }
 };
 
-var Carousel = _react2['default'].createClass({
+const Carousel = React.createClass({
   displayName: 'Carousel',
 
-  mixins: [_reactTweenState2['default'].Mixin],
+  mixins: [tweenState.Mixin],
 
   propTypes: {
-    cellAlign: _react2['default'].PropTypes.oneOf(['left', 'center', 'right']),
-    cellSpacing: _react2['default'].PropTypes.number,
-    data: _react2['default'].PropTypes.func,
-    decorators: _react2['default'].PropTypes.array,
-    dragging: _react2['default'].PropTypes.bool,
-    easing: _react2['default'].PropTypes.string,
-    edgeEasing: _react2['default'].PropTypes.string,
-    framePadding: _react2['default'].PropTypes.string,
-    initialSlideHeight: _react2['default'].PropTypes.number,
-    initialSlideWidth: _react2['default'].PropTypes.number,
-    slidesToShow: _react2['default'].PropTypes.number,
-    slidesToScroll: _react2['default'].PropTypes.oneOfType([_react2['default'].PropTypes.number, _react2['default'].PropTypes.oneOf(['auto'])]),
-    slideWidth: _react2['default'].PropTypes.oneOfType([_react2['default'].PropTypes.string, _react2['default'].PropTypes.number]),
-    speed: _react2['default'].PropTypes.number,
-    vertical: _react2['default'].PropTypes.bool,
-    width: _react2['default'].PropTypes.string
+    afterSlide: React.PropTypes.func,
+    beforeSlide: React.PropTypes.func,
+    cellAlign: React.PropTypes.oneOf(['left', 'center', 'right']),
+    cellSpacing: React.PropTypes.number,
+    data: React.PropTypes.func,
+    decorators: React.PropTypes.arrayOf(
+      React.PropTypes.shape({
+        component: React.PropTypes.func,
+        position: React.PropTypes.oneOf([
+          'TopLeft',
+          'TopCenter',
+          'TopRight',
+          'CenterLeft',
+          'CenterCenter',
+          'CenterRight',
+          'BottomLeft',
+          'BottomCenter',
+          'BottomRight'
+        ]),
+        style: React.PropTypes.object
+      })
+    ),
+    dragging: React.PropTypes.bool,
+    easing: React.PropTypes.string,
+    edgeEasing: React.PropTypes.string,
+    framePadding: React.PropTypes.string,
+    initialSlideHeight: React.PropTypes.number,
+    initialSlideWidth: React.PropTypes.number,
+    slideIndex: React.PropTypes.number,
+    slidesToShow: React.PropTypes.number,
+    slidesToScroll: React.PropTypes.oneOfType([
+      React.PropTypes.number,
+      React.PropTypes.oneOf(['auto'])
+    ]),
+    slideWidth: React.PropTypes.oneOfType([
+      React.PropTypes.string,
+      React.PropTypes.number
+    ]),
+    speed: React.PropTypes.number,
+    vertical: React.PropTypes.bool,
+    width: React.PropTypes.string
   },
 
-  getDefaultProps: function getDefaultProps() {
+  getDefaultProps() {
     return {
+      afterSlide: function(){},
+      beforeSlide: function(){},
       cellAlign: 'left',
       cellSpacing: 0,
-      data: function data() {},
-      decorators: _decorators2['default'],
+      data: function() {},
+      decorators: decorators,
       dragging: true,
       easing: 'easeOutCirc',
       edgeEasing: 'easeOutElastic',
       framePadding: '0px',
+      slideIndex: 0,
       slidesToShow: 1,
       slidesToScroll: 1,
       slideWidth: 1,
       speed: 500,
       vertical: false,
       width: '100%'
-    };
+    }
   },
 
-  getInitialState: function getInitialState() {
+  getInitialState() {
     return {
-      currentSlide: 0,
+      currentSlide: this.props.slideIndex,
       dragging: false,
       frameWidth: 0,
       left: 0,
-      top: 0,
       slideCount: 0,
+      slidesToScroll: this.props.slidesToScroll,
       slideWidth: 0,
-      slidesToScroll: this.props.slidesToScroll
-    };
+      top: 0
+    }
   },
 
-  componentWillMount: function componentWillMount() {
+  componentWillMount() {
     this.setInitialDimensions();
   },
 
-  componentDidMount: function componentDidMount() {
+  componentDidMount() {
     this.setDimensions();
     this.bindEvents();
     this.setExternalData();
   },
 
-  componentWillReceiveProps: function componentWillReceiveProps(nextProps) {
+  componentWillReceiveProps(nextProps) {
     this.setDimensions();
   },
 
-  componentWillUnmount: function componentWillUnmount() {
+  componentWillUnmount() {
     this.unbindEvents();
   },
 
-  render: function render() {
+  render() {
     var self = this;
-    var children = _react2['default'].Children.count(this.props.children) > 1 ? this.formatChildren(this.props.children) : this.props.children;
-    return _react2['default'].createElement(
-      'div',
-      { className: ['slider', this.props.className || ''].join(' '), ref: 'slider', style: (0, _objectAssign2['default'])(this.getSliderStyles(), this.props.style || {}) },
-      _react2['default'].createElement(
-        'div',
-        _extends({ className: 'slider-frame',
-          ref: 'frame',
-          style: this.getFrameStyles()
-        }, this.getTouchEvents(), this.getMouseEvents(), {
-          onClick: this.handleClick }),
-        _react2['default'].createElement(
-          'ul',
-          { className: 'slider-list', ref: 'list', style: this.getListStyles() },
-          children
-        )
-      ),
-      this.props.decorators ? this.props.decorators.map(function (Decorator, index) {
-        return _react2['default'].createElement(
-          'div',
-          {
-            style: (0, _objectAssign2['default'])(self.getDecoratorStyles(Decorator.position), Decorator.style || {}),
-            className: 'slider-decorator-' + index,
-            key: index },
-          _react2['default'].createElement(Decorator.component, {
-            currentSlide: self.state.currentSlide,
-            slideCount: self.state.slideCount,
-            frameWidth: self.state.frameWidth,
-            slideWidth: self.state.slideWidth,
-            slidesToScroll: self.state.slidesToScroll,
-            cellSpacing: self.props.cellSpacing,
-            slidesToShow: self.props.slidesToShow,
-            nextSlide: self.nextSlide,
-            previousSlide: self.previousSlide,
-            goToSlide: self.goToSlide,
-            id: self.props.id })
-        );
-      }) : null,
-      _react2['default'].createElement('style', { type: 'text/css', dangerouslySetInnerHTML: { __html: self.getStyleTagStyles() } })
-    );
+    var children = React.Children.count(this.props.children) > 1 ? this.formatChildren(this.props.children) : this.props.children;
+    return (
+      <div className={['slider', this.props.className || ''].join(' ')} ref="slider" style={assign(this.getSliderStyles(), this.props.style || {})}>
+        <div className="slider-frame"
+          ref="frame"
+          style={this.getFrameStyles()}
+          {...this.getTouchEvents()}
+          {...this.getMouseEvents()}
+          onClick={this.handleClick}>
+          <ul className="slider-list" ref="list" style={this.getListStyles()}>
+            {children}
+          </ul>
+        </div>
+        {this.props.decorators ?
+          this.props.decorators.map(function(Decorator, index) {
+            return (
+              <div
+                style={assign(self.getDecoratorStyles(Decorator.position), Decorator.style || {})}
+                className={'slider-decorator-' + index}
+                key={index}>
+                <Decorator.component
+                  currentSlide={self.state.currentSlide}
+                  slideCount={self.state.slideCount}
+                  frameWidth={self.state.frameWidth}
+                  slideWidth={self.state.slideWidth}
+                  slidesToScroll={self.state.slidesToScroll}
+                  cellSpacing={self.props.cellSpacing}
+                  slidesToShow={self.props.slidesToShow}
+                  nextSlide={self.nextSlide}
+                  previousSlide={self.previousSlide}
+                  goToSlide={self.goToSlide}
+                  id={self.props.id} />
+              </div>
+            )
+          })
+        : null}
+        <style type="text/css" dangerouslySetInnerHTML={{__html: self.getStyleTagStyles()}}/>
+      </div>
+    )
   },
 
   // Touch Events
 
   touchObject: {},
 
-  getTouchEvents: function getTouchEvents() {
+  getTouchEvents() {
     var self = this;
 
     return {
-      onTouchStart: function onTouchStart(e) {
+      onTouchStart(e) {
         self.touchObject = {
           startX: e.touches[0].pageX,
           startY: e.touches[0].pageY
-        };
+        }
       },
-      onTouchMove: function onTouchMove(e) {
-        var direction = self.swipeDirection(self.touchObject.startX, e.touches[0].pageX, self.touchObject.startY, e.touches[0].pageY);
+      onTouchMove(e) {
+        var direction = self.swipeDirection(
+          self.touchObject.startX,
+          e.touches[0].pageX,
+          self.touchObject.startY,
+          e.touches[0].pageY
+        );
 
         if (direction !== 0) {
           e.preventDefault();
@@ -204,25 +209,25 @@ var Carousel = _react2['default'].createClass({
           endY: e.touches[0].pageY,
           length: Math.round(Math.sqrt(Math.pow(e.touches[0].pageX - self.touchObject.startX, 2))),
           direction: direction
-        };
+        }
 
         self.setState({
-          left: self.props.vertical ? 0 : (self.state.slideWidth * self.state.currentSlide + self.touchObject.length * self.touchObject.direction) * -1,
-          top: self.props.vertical ? (self.state.slideWidth * self.state.currentSlide + self.touchObject.length * self.touchObject.direction) * -1 : 0
+          left: self.props.vertical ? 0 : (self.state.slideWidth * self.state.currentSlide + (self.touchObject.length * self.touchObject.direction)) * -1,
+          top: self.props.vertical ? (self.state.slideWidth * self.state.currentSlide + (self.touchObject.length * self.touchObject.direction)) * -1 : 0
         });
       },
-      onTouchEnd: function onTouchEnd(e) {
+      onTouchEnd(e) {
         self.handleSwipe(e);
       },
-      onTouchCancel: function onTouchCancel(e) {
+      onTouchCancel(e) {
         self.handleSwipe(e);
       }
-    };
+    }
   },
 
   clickSafe: true,
 
-  getMouseEvents: function getMouseEvents() {
+  getMouseEvents() {
     var self = this;
 
     if (this.props.dragging === false) {
@@ -230,28 +235,34 @@ var Carousel = _react2['default'].createClass({
     }
 
     return {
-      onMouseDown: function onMouseDown(e) {
+      onMouseDown(e) {
         self.touchObject = {
-          startX: e.clientX,
-          startY: e.clientY
+            startX: e.clientX,
+            startY: e.clientY
         };
 
         self.setState({
           dragging: true
         });
       },
-      onMouseMove: function onMouseMove(e) {
+      onMouseMove(e) {
         if (!self.state.dragging) {
           return;
         }
 
-        var direction = self.swipeDirection(self.touchObject.startX, e.clientX, self.touchObject.startY, e.clientY);
+        var direction = self.swipeDirection(
+          self.touchObject.startX,
+          e.clientX,
+          self.touchObject.startY,
+          e.clientY
+        );
 
         if (direction !== 0) {
           e.preventDefault();
         }
 
-        var length = self.props.vertical ? Math.round(Math.sqrt(Math.pow(e.clientY - self.touchObject.startY, 2))) : Math.round(Math.sqrt(Math.pow(e.clientX - self.touchObject.startX, 2)));
+        var length = self.props.vertical ? Math.round(Math.sqrt(Math.pow(e.clientY - self.touchObject.startY, 2)))
+                                         : Math.round(Math.sqrt(Math.pow(e.clientX - self.touchObject.startX, 2)))
 
         self.touchObject = {
           startX: self.touchObject.startX,
@@ -267,24 +278,24 @@ var Carousel = _react2['default'].createClass({
           top: self.props.vertical ? self.getTargetLeft(self.touchObject.length * self.touchObject.direction) : 0
         });
       },
-      onMouseUp: function onMouseUp(e) {
+      onMouseUp(e) {
         if (!self.state.dragging) {
           return;
         }
 
         self.handleSwipe(e);
       },
-      onMouseLeave: function onMouseLeave(e) {
+      onMouseLeave(e) {
         if (!self.state.dragging) {
           return;
         }
 
         self.handleSwipe(e);
       }
-    };
+    }
   },
 
-  handleClick: function handleClick(e) {
+  handleClick(e) {
     if (this.clickSafe === true) {
       e.preventDefault();
       e.stopPropagation();
@@ -292,23 +303,23 @@ var Carousel = _react2['default'].createClass({
     }
   },
 
-  handleSwipe: function handleSwipe(e) {
-    if (typeof this.touchObject.length !== 'undefined' && this.touchObject.length > 44) {
+  handleSwipe(e) {
+    if (typeof (this.touchObject.length) !== 'undefined' && this.touchObject.length > 44) {
       this.clickSafe = true;
     } else {
       this.clickSafe = false;
     }
 
-    if (this.touchObject.length > this.state.slideWidth / this.props.slidesToShow / 5) {
+    if (this.touchObject.length > (this.state.slideWidth / this.props.slidesToShow) / 5) {
       if (this.touchObject.direction === 1) {
-        if (this.state.currentSlide >= _react2['default'].Children.count(this.props.children) - this.state.slidesToScroll) {
-          this.animateSlide(_reactTweenState2['default'].easingTypes[this.props.edgeEasing]);
+        if (this.state.currentSlide >= React.Children.count(this.props.children) - this.state.slidesToScroll) {
+          this.animateSlide(tweenState.easingTypes[this.props.edgeEasing]);
         } else {
           this.nextSlide();
         }
       } else if (this.touchObject.direction === -1) {
         if (this.state.currentSlide <= 0) {
-          this.animateSlide(_reactTweenState2['default'].easingTypes[this.props.edgeEasing]);
+          this.animateSlide(tweenState.easingTypes[this.props.edgeEasing]);
         } else {
           this.previousSlide();
         }
@@ -324,7 +335,7 @@ var Carousel = _react2['default'].createClass({
     });
   },
 
-  swipeDirection: function swipeDirection(x1, x2, y1, y2) {
+  swipeDirection(x1, x2, y1, y2) {
 
     var xDist, yDist, r, swipeAngle;
 
@@ -336,97 +347,89 @@ var Carousel = _react2['default'].createClass({
     if (swipeAngle < 0) {
       swipeAngle = 360 - Math.abs(swipeAngle);
     }
-    if (swipeAngle <= 45 && swipeAngle >= 0) {
+    if ((swipeAngle <= 45) && (swipeAngle >= 0)) {
       return 1;
     }
-    if (swipeAngle <= 360 && swipeAngle >= 315) {
+    if ((swipeAngle <= 360) && (swipeAngle >= 315)) {
       return 1;
     }
-    if (swipeAngle >= 135 && swipeAngle <= 225) {
+    if ((swipeAngle >= 135) && (swipeAngle <= 225)) {
       return -1;
     }
     if (this.props.vertical === true) {
-      if (swipeAngle >= 35 && swipeAngle <= 135) {
+      if ((swipeAngle >= 35) && (swipeAngle <= 135)) {
         return 1;
       } else {
         return -1;
       }
     }
     return 0;
+
   },
 
   // Action Methods
 
-  goToSlide: function goToSlide(index) {
+  goToSlide(index) {
     var self = this;
-    if (index >= _react2['default'].Children.count(this.props.children) || index < 0) {
+    if (index >= React.Children.count(this.props.children) || index < 0) {
       return;
     }
+    this.props.beforeSlide(this.state.currentSlide, index);
+
     this.setState({
       currentSlide: index
-    }, function () {
+    }, function() {
       self.animateSlide();
+      this.props.afterSlide(index);
       self.setExternalData();
     });
   },
 
-  nextSlide: function nextSlide() {
+  nextSlide() {
     var self = this;
-    if (this.state.currentSlide + this.state.slidesToScroll >= _react2['default'].Children.count(this.props.children)) {
+    if ((this.state.currentSlide + this.state.slidesToScroll) >= React.Children.count(this.props.children)) {
       return;
     }
-    this.setState({
-      currentSlide: this.state.currentSlide + this.state.slidesToScroll
-    }, function () {
-      self.animateSlide();
-      self.setExternalData();
-    });
+
+    this.goToSlide(this.state.currentSlide + this.state.slidesToScroll);
   },
 
-  previousSlide: function previousSlide() {
+  previousSlide() {
     var self = this;
-    if (this.state.currentSlide - this.state.slidesToScroll < 0) {
+    if ((this.state.currentSlide - this.state.slidesToScroll) < 0) {
       return;
     }
-    this.setState({
-      currentSlide: this.state.currentSlide - this.state.slidesToScroll
-    }, function () {
-      self.animateSlide();
-      self.setExternalData();
-    });
+    this.goToSlide(this.state.currentSlide - this.state.slidesToScroll);
   },
 
   // Animation
 
-  animateSlide: function animateSlide(easing, duration, endValue) {
+  animateSlide(easing, duration, endValue) {
     this.tweenState(this.props.vertical ? 'top' : 'left', {
-      easing: easing || _reactTweenState2['default'].easingTypes[this.props.easing],
+      easing: easing || tweenState.easingTypes[this.props.easing],
       duration: duration || this.props.speed,
       endValue: endValue || this.getTargetLeft()
     });
   },
 
-  getTargetLeft: function getTargetLeft(touchOffset) {
+  getTargetLeft(touchOffset) {
     var offset;
     switch (this.props.cellAlign) {
-      case 'left':
-        {
-          offset = 0;
-          offset -= this.props.cellSpacing * this.state.currentSlide;
-          break;
-        }
-      case 'center':
-        {
-          offset = (this.state.frameWidth - this.state.slideWidth) / 2;
-          offset -= this.props.cellSpacing * this.state.currentSlide;
-          break;
-        }
-      case 'right':
-        {
-          offset = this.state.frameWidth - this.state.slideWidth;
-          offset -= this.props.cellSpacing * this.state.currentSlide;
-          break;
-        }
+      case 'left': {
+        offset = 0;
+        offset -= this.props.cellSpacing * (this.state.currentSlide);
+        break;
+      }
+      case 'center': {
+        offset = (this.state.frameWidth - this.state.slideWidth) / 2;
+        offset -= this.props.cellSpacing * (this.state.currentSlide);
+        break;
+      }
+      case 'right': {
+        offset = this.state.frameWidth - this.state.slideWidth;
+        offset -= this.props.cellSpacing * (this.state.currentSlide);
+        break;
+      }
     }
 
     if (this.props.vertical) {
@@ -435,79 +438,72 @@ var Carousel = _react2['default'].createClass({
 
     offset -= touchOffset || 0;
 
-    return (this.state.slideWidth * this.state.currentSlide - offset) * -1;
+    return ((this.state.slideWidth * this.state.currentSlide) - offset) * -1;
   },
 
   // Bootstrapping
 
-  bindEvents: function bindEvents() {
+  bindEvents() {
     var self = this;
-    if (_exenv2['default'].canUseDOM) {
+    if (ExecutionEnvironment.canUseDOM) {
       addEvent(window, 'resize', self.onResize);
       addEvent(document, 'readystatechange', self.onReadyStateChange);
     }
   },
 
-  onResize: function onResize() {
+  onResize() {
     this.setDimensions();
   },
 
-  onReadyStateChange: function onReadyStateChange() {
+  onReadyStateChange() {
     this.setDimensions();
   },
 
-  unbindEvents: function unbindEvents() {
+  unbindEvents() {
     var self = this;
-    if (_exenv2['default'].canUseDOM) {
+    if (ExecutionEnvironment.canUseDOM) {
       removeEvent(window, 'resize', self.onResize);
       removeEvent(document, 'readystatechange', self.onReadyStateChange);
     }
   },
 
-  formatChildren: function formatChildren(children) {
+  formatChildren(children) {
     var self = this;
-    return _react2['default'].Children.map(children, function (child, index) {
-      return _react2['default'].createElement(
-        'li',
-        { className: 'slider-slide', style: self.getSlideStyles(), key: index },
-        child
-      );
+    return React.Children.map(children, function(child, index) {
+      return <li className="slider-slide" style={self.getSlideStyles()} key={index}>{child}</li>
     });
   },
 
-  setInitialDimensions: function setInitialDimensions() {
-    var self = this,
-        slideWidth,
-        frameHeight,
-        slideHeight;
+  setInitialDimensions() {
+    var self = this, slideWidth, frameHeight, slideHeight;
 
-    slideWidth = this.props.vertical ? this.props.initialSlideHeight || 0 : this.props.initialSlideWidth || 0;
+    slideWidth = this.props.vertical ? (this.props.initialSlideHeight || 0) : (this.props.initialSlideWidth || 0);
     slideHeight = this.props.initialSlideHeight ? this.props.initialSlideHeight * this.props.slidesToShow : 0;
 
-    frameHeight = slideHeight + this.props.cellSpacing / 2 * (this.props.slidesToShow - 1);
+    frameHeight = slideHeight + ((this.props.cellSpacing / 2) * (this.props.slidesToShow - 1));
 
     this.setState({
       frameWidth: this.props.vertical ? frameHeight : '100%',
-      slideCount: _react2['default'].Children.count(this.props.children),
+      slideCount: React.Children.count(this.props.children),
       slideWidth: slideWidth
-    }, function () {
+    }, function() {
       self.setLeft();
       self.setExternalData();
     });
   },
 
-  setDimensions: function setDimensions() {
+  setDimensions() {
     var self = this,
-        slideWidth,
-        slidesToScroll,
-        firstSlide,
-        frame,
-        frameWidth,
-        frameHeight,
-        slideHeight;
+      slideWidth,
+      slidesToScroll,
+      firstSlide,
+      frame,
+      frameWidth,
+      frameHeight,
+      slideHeight;
 
     slidesToScroll = this.props.slidesToScroll;
-    frame = _reactDom2['default'].findDOMNode(this.refs.frame);
+    frame = ReactDOM.findDOMNode(this.refs.frame);
     firstSlide = frame.childNodes[0].childNodes[0];
     if (firstSlide) {
       firstSlide.style.height = 'auto';
@@ -520,17 +516,17 @@ var Carousel = _react2['default'].createClass({
       slideWidth = parseInt(this.props.slideWidth);
     } else {
       if (this.props.vertical) {
-        slideWidth = slideHeight / this.props.slidesToShow * this.props.slideWidth;
+        slideWidth = (slideHeight / this.props.slidesToShow) * this.props.slideWidth;
       } else {
-        slideWidth = frame.offsetWidth / this.props.slidesToShow * this.props.slideWidth;
+        slideWidth = (frame.offsetWidth / this.props.slidesToShow) * this.props.slideWidth;
       }
     }
 
     if (!this.props.vertical) {
-      slideWidth -= this.props.cellSpacing * ((100 - 100 / this.props.slidesToShow) / 100);
+      slideWidth -= this.props.cellSpacing * ((100 - (100 / this.props.slidesToShow)) / 100);
     }
 
-    frameHeight = slideHeight + this.props.cellSpacing / 2 * (this.props.slidesToShow - 1);
+    frameHeight = slideHeight + ((this.props.cellSpacing / 2) * (this.props.slidesToShow - 1));
     frameWidth = this.props.vertical ? frameHeight : frame.offsetWidth;
 
     if (this.props.slidesToScroll === 'auto') {
@@ -539,26 +535,26 @@ var Carousel = _react2['default'].createClass({
 
     this.setState({
       frameWidth: frameWidth,
-      slideCount: _react2['default'].Children.count(this.props.children),
+      slideCount: React.Children.count(this.props.children),
       slideWidth: slideWidth,
       slidesToScroll: slidesToScroll,
       left: this.props.vertical ? 0 : this.getTargetLeft(),
       top: this.props.vertical ? this.getTargetLeft() : 0
-    }, function () {
-      self.setLeft();
+    }, function() {
+      self.setLeft()
     });
   },
 
-  setLeft: function setLeft() {
+  setLeft() {
     this.setState({
       left: this.props.vertical ? 0 : this.getTargetLeft(),
       top: this.props.vertical ? this.getTargetLeft() : 0
-    });
+    })
   },
 
   // Data
 
-  setExternalData: function setExternalData() {
+  setExternalData() {
     if (this.props.data) {
       this.props.data();
     }
@@ -566,15 +562,16 @@ var Carousel = _react2['default'].createClass({
 
   // Styles
 
-  getListStyles: function getListStyles() {
-    var listWidth = this.state.slideWidth * _react2['default'].Children.count(this.props.children);
-    var spacingOffset = this.props.cellSpacing * _react2['default'].Children.count(this.props.children);
+  getListStyles() {
+    var listWidth = this.state.slideWidth * React.Children.count(this.props.children);
+    var spacingOffset = this.props.cellSpacing * React.Children.count(this.props.children);
     return {
       position: 'relative',
       display: 'block',
       top: this.getTweeningValue('top'),
       left: this.getTweeningValue('left'),
-      margin: this.props.vertical ? this.props.cellSpacing / 2 * -1 + 'px 0px' : '0px ' + this.props.cellSpacing / 2 * -1 + 'px',
+      margin: this.props.vertical ? (this.props.cellSpacing / 2) * -1 + 'px 0px'
+                                  : '0px ' + (this.props.cellSpacing / 2) * -1 + 'px',
       padding: 0,
       height: this.props.vertical ? listWidth + spacingOffset : 'auto',
       width: this.props.vertical ? 'auto' : listWidth + spacingOffset,
@@ -583,10 +580,10 @@ var Carousel = _react2['default'].createClass({
       WebkitTransform: 'translate3d(0, 0, 0)',
       boxSizing: 'border-box',
       MozBoxSizing: 'border-box'
-    };
+    }
   },
 
-  getFrameStyles: function getFrameStyles() {
+  getFrameStyles() {
     return {
       position: 'relative',
       display: 'block',
@@ -598,10 +595,10 @@ var Carousel = _react2['default'].createClass({
       WebkitTransform: 'translate3d(0, 0, 0)',
       boxSizing: 'border-box',
       MozBoxSizing: 'border-box'
-    };
+    }
   },
 
-  getSlideStyles: function getSlideStyles() {
+  getSlideStyles() {
     return {
       display: this.props.vertical ? 'block' : 'inline-block',
       listStyleType: 'none',
@@ -614,10 +611,10 @@ var Carousel = _react2['default'].createClass({
       marginRight: this.props.vertical ? 'auto' : this.props.cellSpacing / 2,
       marginTop: this.props.vertical ? this.props.cellSpacing / 2 : 'auto',
       marginBottom: this.props.vertical ? this.props.cellSpacing / 2 : 'auto'
-    };
+    }
   },
 
-  getSliderStyles: function getSliderStyles() {
+  getSliderStyles() {
     return {
       position: 'relative',
       display: 'block',
@@ -626,124 +623,113 @@ var Carousel = _react2['default'].createClass({
       boxSizing: 'border-box',
       MozBoxSizing: 'border-box',
       visibility: this.state.slideWidth ? 'visible' : 'hidden'
-    };
+    }
   },
 
-  getStyleTagStyles: function getStyleTagStyles() {
-    return '.slider-slide > img {width: 100%; display: block;}';
+  getStyleTagStyles() {
+    return '.slider-slide > img {width: 100%; display: block;}'
   },
 
-  getDecoratorStyles: function getDecoratorStyles(position) {
+  getDecoratorStyles(position) {
     switch (position) {
-      case 'TopLeft':
-        {
-          return {
-            position: 'absolute',
-            top: 0,
-            left: 0
-          };
+      case 'TopLeft': {
+        return {
+          position: 'absolute',
+          top: 0,
+          left: 0
         }
-      case 'TopCenter':
-        {
-          return {
-            position: 'absolute',
-            top: 0,
-            left: '50%',
-            transform: 'translateX(-50%)',
-            WebkitTransform: 'translateX(-50%)'
-          };
+      }
+      case 'TopCenter': {
+        return {
+          position: 'absolute',
+          top: 0,
+          left: '50%',
+          transform: 'translateX(-50%)',
+          WebkitTransform: 'translateX(-50%)'
         }
-      case 'TopRight':
-        {
-          return {
-            position: 'absolute',
-            top: 0,
-            right: 0
-          };
+      }
+      case 'TopRight': {
+        return {
+          position: 'absolute',
+          top: 0,
+          right: 0
         }
-      case 'CenterLeft':
-        {
-          return {
-            position: 'absolute',
-            top: '50%',
-            left: 0,
-            transform: 'translateY(-50%)',
-            WebkitTransform: 'translateY(-50%)'
-          };
+      }
+      case 'CenterLeft': {
+        return {
+          position: 'absolute',
+          top: '50%',
+          left: 0,
+          transform: 'translateY(-50%)',
+          WebkitTransform: 'translateY(-50%)'
         }
-      case 'CenterCenter':
-        {
-          return {
-            position: 'absolute',
-            top: '50%',
-            left: '50%',
-            transform: 'translate(-50%,-50%)',
-            WebkitTransform: 'translate(-50%, -50%)'
-          };
+      }
+      case 'CenterCenter': {
+        return {
+          position: 'absolute',
+          top: '50%',
+          left: '50%',
+          transform: 'translate(-50%,-50%)',
+          WebkitTransform: 'translate(-50%, -50%)'
         }
-      case 'CenterRight':
-        {
-          return {
-            position: 'absolute',
-            top: '50%',
-            right: 0,
-            transform: 'translateY(-50%)',
-            WebkitTransform: 'translateY(-50%)'
-          };
+      }
+      case 'CenterRight': {
+        return {
+          position: 'absolute',
+          top: '50%',
+          right: 0,
+          transform: 'translateY(-50%)',
+          WebkitTransform: 'translateY(-50%)'
         }
-      case 'BottomLeft':
-        {
-          return {
-            position: 'absolute',
-            bottom: 0,
-            left: 0
-          };
+      }
+      case 'BottomLeft': {
+        return {
+          position: 'absolute',
+          bottom: 0,
+          left: 0
         }
-      case 'BottomCenter':
-        {
-          return {
-            position: 'absolute',
-            bottom: 0,
-            left: '50%',
-            transform: 'translateX(-50%)',
-            WebkitTransform: 'translateX(-50%)'
-          };
+      }
+      case 'BottomCenter': {
+        return {
+          position: 'absolute',
+          bottom: 0,
+          left: '50%',
+          transform: 'translateX(-50%)',
+          WebkitTransform: 'translateX(-50%)'
         }
-      case 'BottomRight':
-        {
-          return {
-            position: 'absolute',
-            bottom: 0,
-            right: 0
-          };
+      }
+      case 'BottomRight': {
+        return {
+          position: 'absolute',
+          bottom: 0,
+          right: 0
         }
-      default:
-        {
-          return {
-            position: 'absolute',
-            top: 0,
-            left: 0
-          };
+      }
+      default: {
+        return {
+          position: 'absolute',
+          top: 0,
+          left: 0
         }
+      }
     }
   }
 
 });
 
 Carousel.ControllerMixin = {
-  getInitialState: function getInitialState() {
+  getInitialState() {
     return {
       carousels: {}
-    };
+    }
   },
-  setCarouselData: function setCarouselData(carousel) {
+  setCarouselData(carousel) {
     var data = this.state.carousels;
     data[carousel] = this.refs[carousel];
     this.setState({
       carousels: data
     });
   }
-};
+}
 
-exports['default'] = Carousel;
-module.exports = exports['default'];
+module.exports = Carousel;
