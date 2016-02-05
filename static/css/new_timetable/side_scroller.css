@@ -24,15 +24,16 @@
 }
 .slider-decorator-0 > button, .slider-decorator-1 > button {
 	background-color: #34495E;
-	opacity:0.7;
+	opacity:0.3;
 	transition:all 0.3s;
 }
 .slider-decorator-0 > button:hover, .slider-decorator-1 > button:hover {
 	background-color: #34495E;
-	opacity:1.0;
+	opacity:0.8;
 }
 .slider-decorator-0 > .disabled, .slider-decorator-1 > .disabled {
-	opacity:0.3 !important;
+	background-color:black;
+	opacity:0.2 !important;
 }
 .scroll-nav {
   margin-left:6%;
