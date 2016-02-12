@@ -55,8 +55,6 @@ def save_analytics_data(key, args):
     try:
         if key == "timetables":
             save_timetable_data(args['sid'], args['school'], args['courses'], args['count'])
-
-
     except:
         pass
 
@@ -72,8 +70,6 @@ def view_timetable(request):
     if not request.POST:
         return render_to_response('timetable.html', {}, 
                                     context_instance=RequestContext(request))
-   
-
     params = json.loads(request.body)
     sid = params['sid']
     mark_request(request, sid)
@@ -86,13 +82,8 @@ def view_timetable(request):
     LOCKED_SECTIONS = params['courses_to_sections']
     set_tt_preferences(params['preferences'])
     result = courses_to_timetables(courses, params['semester'])
-    # analytics
-    save_analytics_data('timetables', {'sid': sid, 'school': SCHOOL, 'courses': courses, 'count': len(result)})
-    # end analytics
-
-
-
-
+    save_analytics_data('timetables', {'sid': sid, 'school': SCHOOL, 
+                                    'courses': courses, 'count': len(result)})
     return HttpResponse(json.dumps(result), content_type='application/json')
 
 def set_tt_preferences(preferences):
