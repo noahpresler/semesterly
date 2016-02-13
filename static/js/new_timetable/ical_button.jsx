@@ -509,6 +509,7 @@ var ics = function() {
     ].join(SEPARATOR);
     var calendarEnd = SEPARATOR + 'END:VCALENDAR';
     var BYDAY_VALUES = ['SU', 'MO', 'TU', 'WE', 'TH', 'FR', 'SA'];
+    var UID = 1;
 
     return {
         /**
@@ -654,16 +655,16 @@ var ics = function() {
 
             var calendarEvent = [
                 'BEGIN:VEVENT',
-                'CLASS:PUBLIC',
                 'DESCRIPTION:' + description,
                 'DTSTART:' + start,
                 'DTEND:' + end,
                 'DTSTAMP:' + stamp.substring(0, stamp.length - 13).replace(/[-]/g, '') + '000000Z',
                 'LOCATION:' + location,
                 'SUMMARY;LANGUAGE=en-us:' + subject,
-                'TRANSP:TRANSPARENT',
+                'UID:' + UID + '@semester.ly',
                 'END:VEVENT'
             ];
+            UID = UID + 1;
 
             if (rruleString) {
               calendarEvent.splice(4, 0, rruleString);
