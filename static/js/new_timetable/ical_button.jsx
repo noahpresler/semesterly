@@ -707,22 +707,24 @@ var ics = function() {
 
 module.exports = React.createClass({
   mixins: [Reflux.connect(TimetableStore)],
-	
-	render: function() {
+  
+ getInitialState: function() {
+    return {
+      startDate: moment('01/01/2016'),
+      endDate: moment('06/01/2016')};
+  },
+
+  render: function() {
     var downloadButton = (
             <div>
             <h6 style={{marginTop:"-25px"}}>When do your classes start?</h6>
             <DatePicker
-                  minDate=''
-                  maxDate=''
-                  date={'2016-01-01'}
+                  selected={this.state.startDate}
                   onChange={this.setStartDate}
               />
               <h6>When do your classes end?</h6>
               <DatePicker
-                  minDate=''
-                  maxDate=''
-                  date={'2016-06-01'}
+                  selected={this.state.endDate}
                   onChange={this.setEndDate}
               />
               <button className="view-tbs dl-ics" onClick={this.downloadIcs()}>
@@ -730,37 +732,27 @@ module.exports = React.createClass({
               </button>
             </div>
             )
-		return (
-			<div>
+    return (
+      <div>
         <SimpleModal header={"Download to Calendar"}
          key="calendar"
          ref="cal"
          styles={{backgroundColor: "#FDF5FF", color: "#000", maxHeight:"90%", maxWidth:"650px", overflowY: "scroll"}} 
          allow_disable={true}
          content={downloadButton} />
-			  <a className="btn btn-primary calendar-function" onClick={this.toggle}>
+        <a className="btn btn-primary calendar-function" onClick={this.toggle}>
           <span className="fui-calendar"></span>
         </a>
-			</div>
-			)
-	},
-
- getInitialState: function() {
-    return {
-      startDate: '01/01/2016',
-      endDate: '06/01/2016'};
+      </div>
+      )
   },
 
   setStartDate: function(dateString, moment) {
-    return (function() {
-      this.setState({startDate: moment.calendar()});
-    }.bind(this));
+    this.setState({startDate: moment});
   },
 
   setEndDate: function(dateString, moment) {
-    return (function() {
-      this.setState({endDate: moment.calendar()});
-    }.bind(this));
+    this.setState({endDate: moment});
   },
 
   toggle: function() {
@@ -776,8 +768,9 @@ module.exports = React.createClass({
       'S':'SA',
       'U':'SU'}
 		return (function() {
-      var start_date = this.state.startDate;
-      var end_date = this.state.endDate;
+      var start_date = this.state.startDate.format("DD/MM/YY");
+      var end_date = this.state.endDate.format("DD/MM/YY");
+      console.log('start: ' + start_date + ' end: ' + end_date)
       var cal = ics();
       for (course_idx=0;course_idx<this.props.courses.length;course_idx++) {
         for (slot_idx=0;slot_idx<this.props.courses[course_idx].slots.length;slot_idx++) {
