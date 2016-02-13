@@ -6,6 +6,10 @@ var ToastActions = require('./actions/toast_actions');
 var Util = require('./util/timetable_util');
 var NewPagination = require('./new_pagination');
 var CopyButton = require('./copy_button');
+var CalButton = require('./ical_button');
+var React = require('react');
+var DatePicker = require('react-datepicker');
+var moment = require('moment');
 
 module.exports = React.createClass({
   mixins: [Reflux.connect(UpdateTimetablesStore)],
@@ -87,6 +91,7 @@ module.exports = React.createClass({
       var hours = this.getHourRows();
       var opacity = this.state.loading ? {opacity: "0.5"} : {};
       var height = (572 + (this.getEndHour() - 18)*52) + "px";
+      var ical_button = (this.state.timetables.length > 0 ) ? <CalButton courses={this.state.timetables[this.state.current_index].courses}/> : null;
       return (
 
           <div id="calendar" className="fc fc-ltr fc-unthemed" style={opacity}>
@@ -98,6 +103,7 @@ module.exports = React.createClass({
                   setIndex={this.setIndex}
                   current_index={this.state.current_index}/>
                 <CopyButton getData={this.getData} />
+                {ical_button}
                 <div className="fc-clear"></div>
 
 

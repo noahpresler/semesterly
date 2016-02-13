@@ -1168,6 +1168,11 @@ input.cmn-toggle-round:checked + label:after {
   box-shadow: 1px 4px 3px -2px #ccc;
   transition: all 0.3s;
 }
+
+.dl-ics {
+  margin-top: 10px;
+}
+
 .view-tbs:hover {
   background-color:#FFDF66;
 }
