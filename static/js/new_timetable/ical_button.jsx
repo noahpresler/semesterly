@@ -696,7 +696,7 @@ var ics = function() {
             } else { // ie
                 var bb = new BlobBuilder();
                 bb.append(calendar);
-                blob = bb.getBlob('text/x-vCalendar;charset=' + document.characterSet);
+                blob = bb.getBlob('text/calendar; charset=utf-8');
             }
             saveAs(blob, filename + ext);
             return calendar;
