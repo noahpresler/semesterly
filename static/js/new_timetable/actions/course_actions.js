@@ -1,3 +1,6 @@
 module.exports = Reflux.createActions(
-  ["getCourseInfo"]
+  [
+  "getCourseInfo",
+  "getCourseId",
+  ]
 );
