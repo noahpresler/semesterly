@@ -7,9 +7,11 @@ var course_actions = require('./actions/course_actions');
 var Sidebar = require('./side_bar');
 var SimpleModal = require('./simple_modal');
 var SchoolList = require('./school_list');
+var TimetableActions = require('./actions/update_timetables');
+var CodeToIdStore = require('./stores/code_to_id');
 
 module.exports = React.createClass({
-  mixins: [Reflux.connect(TimetableStore), Reflux.connect(ToastStore)],
+  mixins: [Reflux.connect(TimetableStore), Reflux.connect(ToastStore), Reflux.connect(CodeToIdStore)],
   sidebar_collapsed: 'neutral',
 
 
@@ -62,8 +64,23 @@ module.exports = React.createClass({
   },
 
   componentDidMount: function() {
-    if (this.state.school == "" && this.props.data == null) {
+    var full_pattern = new RegExp("(jhu|uoft)\/([fFsS]{1}?)\/(.*)")
+    if (this.props.data != null && this.props.data.match(full_pattern)) {
+      matches = this.props.data.match(full_pattern)
+      TimetableActions.setSchool(matches[1])
+      $.get("/courses/"+ matches[1] + "/" + matches[2] +  "/code/" + matches[3], 
+         {}, 
+         function(response) {
+            if (response.id !== undefined) {
+              this.refs['OutlineModal'].toggle();
+              course_actions.getCourseInfo(matches[1], response.id);
+            }
+         }.bind(this)
+      );
+    } else if (this.state.school == "" && this.props.data == null) {
       this.showSchoolModal();
+    } else if (this.props.data != null) {
+      TimetableActions.loadPresetTimetable(this.props.data);
     }
   },
 
