@@ -639,6 +639,24 @@ def get_course(request, school, id):
 
     return HttpResponse(json.dumps(json_data), content_type="application/json")
 
+@csrf_exempt
+def get_course_id(request, school, sem, code):
+    global SCHOOL
+    school = school.lower()
+    if school in ["uoft", "jhu"]:
+        SCHOOL = school
+    try:
+        models = get_correct_models(school)
+        C, Co = models[0], models[1]
+        course = C.objects.filter(Q(code__icontains=code))[0]
+        json_data = {"id": course.id}
+    except:
+        import traceback
+        traceback.print_exc()
+        json_data = {}
+
+    return HttpResponse(json.dumps(json_data), content_type="application/json")
+
 def convert_courses_to_json(courses, sem, limit=50):
     cs = []
     result_count = 0    # limiting the number of results one search query can provide to 50

@@ -1,5 +1,6 @@
 var Root = require('./root');
 var TimetableActions = require('./actions/update_timetables');
+var course_actions = require('./actions/course_actions');
 _SEMESTER = "S";
 
 var data = window.location.pathname.substring(1); // loading timetable data from url
@@ -12,9 +13,3 @@ ReactDOM.render(
   document.getElementById('page')
 );
 
-
-
-
-if (data) {
-	TimetableActions.loadPresetTimetable(data);
-}
