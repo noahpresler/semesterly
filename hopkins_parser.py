@@ -108,7 +108,7 @@ class HopkinsCourseFinder:
 		html = None
 		while html is None:
 			try:
-				self.randomize_ua()
+				# self.randomize_ua()
 				r = self.s.get(url,cookies=self.cookies,headers=self.headers)
 				if r.status_code == 200:
 					html = r.text
