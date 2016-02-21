@@ -54,6 +54,7 @@ module.exports = Reflux.createStore({
     new_state.school = school;
     this.trigger(new_state);
   },
+
  /**
   * Update TT_STATE with new course roster
   * @param {object} new_course_with_section contains attributed id, section, removing
