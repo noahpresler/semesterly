@@ -94,7 +94,7 @@ module.exports = React.createClass({
   toggleCourseModal: function(course_id) {
     return function() {
         this.refs['OutlineModal'].toggle();
-        course_actions.getCourseInfo(school, course_id);
+        course_actions.getCourseInfo(this.state.school, course_id);
     }.bind(this); 
   },
 

@@ -9,7 +9,6 @@ module.exports = React.createClass({
 	},
 
   	getShareLink: function() {
-  		console.log(this.state.school);
     	var link = window.location.host + "/"
     	link += this.props.school + "/"
     	link += this.state.semester + "/"
