@@ -35,6 +35,7 @@ module.exports = React.createClass({
 		return (
 			<div className="copy-link-wrapper">
 			<a className="copy-link" onClick={this.toggleLinkPopover}>
+				<i class="fa fa-share-alt"></i>
 				Click to share
             </a>
             {pop}
