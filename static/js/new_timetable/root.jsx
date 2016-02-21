@@ -64,10 +64,7 @@ module.exports = React.createClass({
   },
 
   componentDidMount: function() {
-    if (this.props.data == "load-course") {
-
-    }
-    else if (this.props.data != null) {
+    if (this.props.data != null) {
       TimetableActions.loadPresetTimetable(this.props.data);
     }
     else if (this.state.school == "") {
@@ -77,7 +74,7 @@ module.exports = React.createClass({
 
   componentWillUpdate: function(new_props, new_state) {
 
-    if (this.props.data == "load-course" && this.state.school == "" && new_state.school != "") {
+    if (this.props.dataType == "load-course" && this.state.school == "" && new_state.school != "") {
         this.refs['OutlineModal'].toggle();
         course_actions.getCourseInfo(new_state.school, this.props.initial_course_id);
     }
