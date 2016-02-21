@@ -233,3 +233,31 @@ hr {
     margin-top: 10px;
     margin-left: 10px;
 }
+
+@media (max-width: 600px) {
+  .copy-link-wrapper {
+    position: absolute;
+    top: 57px;
+    left: 50%;
+    -webkit-transform: translateX(-50%);
+    -moz-transform: translateX(-50%);
+    -ms-transform: translateX(-50%);
+    transform: translateX(-50%);
+  }
+
+  .copy-link-wrapper .copy-arrow-up {
+    left: 50%;
+    -webkit-transform: translateX(-50%);
+    -moz-transform: translateX(-50%);
+    -ms-transform: translateX(-50%);
+    transform: translateX(-50%);
+  }
+
+  .copy-link-wrapper .copy-content {
+    left: 50%;
+    -webkit-transform: translateX(-50%);
+    -moz-transform: translateX(-50%);
+    -ms-transform: translateX(-50%);
+    transform: translateX(-50%);
+  }
+}
