@@ -7,5 +7,8 @@ module.exports = Reflux.createActions(
   "setCoursesLoading",
   "setCoursesDoneLoading",
   "setCurrentIndex",
-  ]
+  ],
+  {
+  	sync: true
+  }
 );
