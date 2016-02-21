@@ -9,10 +9,10 @@ module.exports = React.createClass({
 	},
 
   	getShareLink: function() {
-  		console.log("share link set")
     	var link = window.location.host + "/"
-    	link += this.state.school
-    	link += "/" + this.props.code
+    	link += this.state.school + "/"
+    	link += this.state.semester + "/"
+    	link += this.props.code
     	return link;
   	},
 
