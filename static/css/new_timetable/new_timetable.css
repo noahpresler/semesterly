@@ -733,6 +733,24 @@ input.cmn-toggle-round:checked + label:after {
   overflow: hidden;
 }
 
+.copy-link-wrapper {
+  position: relative;
+  top: -25px;
+  left: 100px;
+  display: inline-block;
+}
+
+.copy-link-wrapper .copy-arrow-up {
+  left: 0;
+  top: 30px;
+}
+
+.copy-link-wrapper .copy-content {
+  left: -33px;
+  top: 36px;
+  text-align: center;
+}
+
 #numSections {
 	text-align: center;
   cursor:pointer;
