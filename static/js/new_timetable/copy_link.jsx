@@ -33,9 +33,9 @@ module.exports = React.createClass({
 		</div>) :
 		null;
 		return (
-			<div className="right copy-button">
-			<a className="btn btn-primary calendar-function" onClick={this.toggleLinkPopover}>
-              <span className="fui-clip"></span>
+			<div className="copy-link-wrapper">
+			<a className="copy-link" onClick={this.toggleLinkPopover}>
+				Click to share
             </a>
             {pop}
 
