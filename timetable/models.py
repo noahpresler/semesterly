@@ -1,71 +1,9 @@
 import os
 import re
 os.environ['DJANGO_SETTINGS_MODULE'] = 'semesterly.settings'
-from django.db import models
 from django.forms.models import model_to_dict
+from django.db import models
 
-# Create your models here.
-class Course(models.Model):
-  code = models.CharField(max_length=20)
-  name = models.CharField(max_length=250)
-  description = models.TextField(max_length=1500)
-  unstopped_description = models.TextField(max_length=1500)
-  campus = models.IntegerField()
-  breadths = models.CharField(max_length=5, default='')
-  prerequisites = models.TextField(max_length=1000, default='')
-  exclusions = models.TextField(max_length=1000, default='')
-  related_courses = models.ManyToManyField("self", blank=True)
-  
-  def __unicode__(self):
-    return self.code + ": " + self.name
-
-  def get_code(self):
-    return self.code
-
-  def get_name(self):
-    return self.name
-
-  def get_description(self):
-    return self.description
-
-  def get_breadths(self):
-    return map(int, sorted(self.breadths))
-
-  def get_prereqs(self):
-    return self.prerequisites
-
-  def get_dept(self):
-    return self.code[:3]
-
-  def get_dept_matches(self):
-    department = self.get_dept()
-    return Course.objects.filter(code__contains=department)
-
-  def get_all_textbook_info(self):
-    # Implement
-    textbook_info = []
-    for co in CourseOffering.objects.filter(course=self, meeting_section__contains="L"):
-      texts = co.get_textbooks()
-      tb = {
-      "section" : co.meeting_section,
-      "textbooks" : texts
-      }
-      textbook_info.append(tb)
-    return textbook_info
-
-  def get_related_course_info(self):
-    info = []
-    related = self.related_courses.all()
-    for c in related:
-      info.append(model_to_dict(c))
-    return info
-
-  def get_eval_info(self):
-    # implement
-    return []
-
-  def get_exclusions(self):
-    return self.exclusions
 
 class Textbook(models.Model):
   isbn = models.CharField(max_length=13)
@@ -75,87 +13,33 @@ class Textbook(models.Model):
   author = models.CharField(max_length=500)
   title = models.CharField(max_length=1500)
 
-  def get_isbn(self):
-    return self.isbn
-
-  def get_is_required(self):
-    return self.is_required
-
   def get_info(self):
     return model_to_dict(self)
 
-class CourseOffering(models.Model):
-  course = models.ForeignKey(Course)
-  semester = models.CharField(max_length=2)
-  meeting_section = models.CharField(max_length=20)
-  instructors = models.CharField(max_length=100)
-  day = models.CharField(max_length=1)
-  time_start = models.CharField(max_length=15)
-  time_end = models.CharField(max_length=15)
-  location = models.CharField(max_length=200)
-  size = models.IntegerField(default=0)
-  enrolment = models.IntegerField(default=0)
-  alternates = models.BooleanField(default=False)
-  section_type = models.CharField(max_length=5)
-  can_be_locked = models.BooleanField(default=False)
-  textbooks = models.ManyToManyField(Textbook)
 
-  def __unicode__(self):
-    # return "Semester: %s, Section: %s, Time: %s" % (self.semester, self.meeting_section, self.time)
-    return "Day: %s, Time: %s - %s" % (self.day, self.time_start, self.time_end)
-  
-  def get_textbooks(self):
-    textbooks = []
-    temp = []
-    tbs = self.textbooks.all()
-    for tb in tbs:
-      textbooks.append(tb.get_info())
-    return textbooks
-
-  def get_evaluations(self):
-    return self.course.get_eval_info()
-
-
-class HopkinsCourse(models.Model):
-  code = models.CharField(max_length=25)
+#----------- Abstract Models  ----------------
+class BaseCourse(models.Model):
+  code = models.CharField(max_length=20)
   name = models.CharField(max_length=250)
-  description = models.TextField(max_length=1500)
-  unstopped_description = models.TextField(max_length=1500)
-  campus = models.IntegerField()
-  breadths = models.CharField(max_length=5, default='')
+  description = models.TextField(max_length=1500, default='')
+  unstopped_description = models.TextField(max_length=1500, default='')
+  campus = models.TextField(max_length=300, default='')
   prerequisites = models.TextField(max_length=1000, default='')
   exclusions = models.TextField(max_length=1000, default='')
-  related_courses = models.ManyToManyField("self", blank=True)
   
   def __unicode__(self):
     return self.code + ": " + self.name
 
-  def get_code(self):
-    return self.code
+  def get_related_course_info(self):
+    info = []
+    related = self.related_courses.all()
+    for c in related:
+      info.append(model_to_dict(c))
+    return info
 
-  def get_name(self):
-    return self.name
-
-  def get_description(self):
-    return self.description
-
-  def get_breadths(self):
-    return map(int, sorted(self.breadths))
-
-  def get_prereqs(self):
-    return self.prerequisites
-
-  def get_exclusions(self):
-    return self.exclusions
-    
-  def get_dept_matches(self):
-    code_pattern = re.compile(r"(.*\..*)\.(.*)")
-    department = re.search(code_pattern,self.get_code()).group(1)
-    return HopkinsCourse.objects.filter(code__contains=department)
-
-  def get_all_textbook_info(self):
+  def base_get_all_textbook_info(self, co_model):
     textbook_info = []
-    for co in HopkinsCourseOffering.objects.filter(course=self):
+    for co in co_model.objects.filter(course=self):
       tb = {
       "section" : co.meeting_section,
       "textbooks" : co.get_textbooks()
@@ -167,9 +51,9 @@ class HopkinsCourse(models.Model):
         final.append(i)
     return final
 
-  def get_eval_info(self):
+  def base_get_eval_info(self, eval_model):
     eval_info = []
-    evals = HopkinsCourseEvaluation.objects.filter(course=self)
+    evals = eval_model.objects.filter(course=self)
     for e in evals:
       eval_info.append(model_to_dict(e))
     final = []
@@ -178,59 +62,108 @@ class HopkinsCourse(models.Model):
         final.append(i)
     return sorted(final, key=lambda k: k['year']) 
 
-  def get_related_course_info(self):
-    info = []
-    related = self.related_courses.all()
-    for c in related:
-      info.append(model_to_dict(c))
-    return info
+  class Meta:
+    abstract = True
 
 
-class HopkinsCourseEvaluation(models.Model):
+class BaseCourseOffering(models.Model):
+  semester = models.CharField(max_length=2)
+  meeting_section = models.CharField(max_length=20)
+  instructors = models.CharField(max_length=100, default='TBA')
+  day = models.CharField(max_length=1)
+  time_start = models.CharField(max_length=15)
+  time_end = models.CharField(max_length=15)
+  location = models.CharField(max_length=200, default='TBA')
+  size = models.IntegerField(default=-1)
+  enrolment = models.IntegerField(default=-1)
+  # if no section_type is specified, we assume it's a lecture
+  section_type = models.CharField(max_length=5, default='L')
+  textbooks = models.ManyToManyField(Textbook)
+
+  def get_textbooks(self):
+    textbooks = []
+    temp = []
+    tbs = self.textbooks.all()
+    for tb in tbs:
+      textbooks.append(tb.get_info())
+    return textbooks
+
+  def __unicode__(self):
+    # return "Semester: %s, Section: %s, Time: %s" % (self.semester, self.meeting_section, self.time)
+    return "Day: %s, Time: %s - %s" % (self.day, self.time_start, self.time_end)
+
+  def get_evaluations(self):
+    return self.course.get_eval_info()
+
+  class Meta:
+    abstract = True
+
+
+class BaseCourseEvaluation(models.Model):
   score = models.FloatField(default=5.0)
   summary = models.TextField(max_length=1500)
   professor = models.CharField(max_length=250)
   course_code = models.CharField(max_length=20)
-  course = models.ForeignKey(HopkinsCourse)
   year = models.CharField(max_length=200)
 
-class HopkinsTextbook(models.Model):
-  isbn = models.CharField(max_length=13)
-  is_required = models.BooleanField(default=False)
-  detail_url = models.URLField(max_length=1000)
-  image_url = models.URLField(max_length=1000)
-  author = models.CharField(max_length=500)
-  title = models.CharField(max_length=1500)
+  class Meta:
+    abstract = True
 
-  def __unicode__(self):
-    return "ISBN:" + self.isbn + " - Required:" + str(self.is_required)
+#-----------------------  University of Toronto ------------------------------
+class Course(BaseCourse):
+  """Uoft Course object"""
+  # a course may have multiple breadths - each character represents one
+  breadths = models.CharField(max_length=5, default='')
+  related_courses = models.ManyToManyField("self", blank=True)
 
-  def get_isbn(self):
-    return self.isbn
+  def get_dept(self):
+    return self.code[:3]
 
-  def get_is_required(self):
-    return self.is_required
+  def get_dept_matches(self):
+    department = self.get_dept()
+    return Course.objects.filter(code__contains=department)
 
-  def get_info(self):
-    return model_to_dict(self)
+  def get_all_textbook_info(self):
+    return self.base_get_all_textbook_info(CourseOffering)
 
-class HopkinsCourseOffering(models.Model):
-  textbooks = models.ManyToManyField(HopkinsTextbook)
-  course = models.ForeignKey(HopkinsCourse)
-  semester = models.CharField(max_length=2)
-  meeting_section = models.CharField(max_length=25)
-  instructors = models.CharField(max_length=100)
-  day = models.CharField(max_length=1)
-  time_start = models.CharField(max_length=15)
-  time_end = models.CharField(max_length=15)
-  location = models.CharField(max_length=250)
-  size = models.IntegerField(default=0)
-  enrolment = models.IntegerField(default=0)
+  def get_eval_info(self):
+    return [] # TODO
+
+  def get_breadths(self):
+    return map(int, sorted(self.breadths))
+
+
+class CourseOffering(BaseCourseOffering):
+  """Uoft CourseOffering"""
+  course = models.ForeignKey(Course)
   alternates = models.BooleanField(default=False)
-  evaluation_score = models.FloatField(default=0)
-  # all courseofferings are the same type, we pick an aribtrary name
-  section_type = models.CharField(max_length=5, default='C')
-  can_be_locked = models.BooleanField(default=True)
+
+
+#---------------------- John Hopkins University ----------------------------
+class HopkinsCourse(BaseCourse):
+  related_courses = models.ManyToManyField("self", blank=True)
+
+  def get_dept(self):
+    pass
+
+  def get_dept_matches(self):
+    code_pattern = re.compile(r"(.*\..*)\.(.*)")
+    department = re.search(code_pattern, self.code).group(1)
+    return HopkinsCourse.objects.filter(code__contains=department)
+
+  def get_all_textbook_info(self):
+    return self.base_get_all_textbook_info(HopkinsCourseOffering)
+
+  def get_eval_info(self):
+    return self.base_get_eval_info(HopkinsCourseEvaluation)
+
+
+class HopkinsCourseEvaluation(BaseCourseEvaluation):
+	course = models.ForeignKey(HopkinsCourse)
+
+
+class HopkinsCourseOffering(BaseCourseOffering):
+  course = models.ForeignKey(HopkinsCourse)
 
   def get_course_code(self):
     return self.course.code + self.meeting_section
@@ -253,17 +186,7 @@ class HopkinsCourseOffering(models.Model):
     matches = re.search(code_pattern,self.get_course_code())
     return str(matches.group(3))
 
+
   def __unicode__(self):
     # return "Semester: %s, Section: %s, Time: %s" % (self.semester, self.meeting_section, self.time)
     return "Day: %s, Time: %s - %s" % (self.day, self.time_start, self.time_end)
-
-  def get_textbooks(self):
-    textbooks = []
-    temp = []
-    tbs = self.textbooks.all()
-    for tb in tbs:
-      textbooks.append(tb.get_info())
-    return textbooks
-
-  def get_evaluations(self):
-    return self.course.get_eval_info()

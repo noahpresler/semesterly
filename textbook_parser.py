@@ -135,7 +135,7 @@ class HopkinsTextbookFinder:
         except UnicodeEncodeError:
             pass
 
-    def make_textbook(self,parent,is_required,isbn_number):
+    def make_textbook(self, parent, is_required, isbn_number):
         raw_code = parent.findAll('h1')[0]
         stripped_code = "".join(raw_code.get_text().split())[:8]
         course_code = stripped_code[:3] + "." + stripped_code[3:6]
@@ -150,7 +150,7 @@ class HopkinsTextbookFinder:
                 pass
         if textbook is None:
             info = self.get_amazon_fields(isbn_number)
-            textbook = HopkinsTextbook(
+            textbook = Textbook(
                 isbn = isbn_number,
                 is_required = is_required,
                 detail_url = info['DetailPageURL'],

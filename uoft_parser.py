@@ -106,8 +106,7 @@ class Coursefinder:
                                                         size=section['size'],
                                                         enrolment=section['enrolment'],
                                                         alternates=section['alternates'],
-                                                        section_type=section['code'][0],
-                                                        can_be_locked=(section['code'][0] == 'L'))
+                                                        section_type=section['code'][0])
                                     co.save()
                                     off_count += 1
                                 except Exception as e:
