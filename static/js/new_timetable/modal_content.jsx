@@ -6,6 +6,7 @@ var UpdateTimetablesStore = require('./stores/update_timetables.js');
 var CourseActions = require('./actions/course_actions');
 var SectionSlot = require('./section_slot.jsx');
 var SideScroller = require('./side_scroller.jsx');
+var CopyLink = require('./copy_link.jsx');
 
 
 module.exports = React.createClass({
@@ -44,7 +45,8 @@ module.exports = React.createClass({
 			{add_or_remove}
 			<div id="course-info-wrapper">
 				<div id="name">{this.state.course_info.name}</div>
-				<div id="code">{this.state.course_info.code}</div>
+				<div id="code`">{this.state.course_info.code}</div>
+				<CopyLink code={this.state.course_info.code} />
 			</div>
 		</div>);
 		return header;
