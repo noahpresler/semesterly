@@ -32,10 +32,11 @@ module.exports = React.createClass({
                    allow_disable={false}
                    styles={{backgroundColor: "#FDF5FF", color: "#000"}} 
                    content={<SchoolList setSchool={this.setSchool}/> }/>);
-      
     return (
       <div id="root">
         {loader}
+        {school_selector}
+
         <div id="toast-container"></div>
         <div id="control-bar-container">
           <div id="semesterly-name">Semester.ly</div>
@@ -58,33 +59,33 @@ module.exports = React.createClass({
             <Timetable toggleModal={this.toggleCourseModal} />
           </div>
         </div>
-        {school_selector}
       </div>
     );
   },
 
   componentDidMount: function() {
-    var full_pattern = new RegExp("(jhu|uoft)\/([fFsS]{1}?)\/(.*)")
-    if (this.props.data != null && this.props.data.match(full_pattern)) {
-      matches = this.props.data.match(full_pattern)
-      TimetableActions.setSchool(matches[1])
-      $.get("/courses/"+ matches[1] + "/" + matches[2] +  "/code/" + matches[3], 
-         {}, 
-         function(response) {
-            if (response.id !== undefined) {
-              this.refs['OutlineModal'].toggle();
-              course_actions.getCourseInfo(matches[1], response.id);
-            }
-         }.bind(this)
-      );
-    } else if (this.state.school == "" && this.props.data == null) {
-      this.showSchoolModal();
-    } else if (this.props.data != null) {
+    if (this.props.data == "load-course") {
+
+    }
+    else if (this.props.data != null) {
       TimetableActions.loadPresetTimetable(this.props.data);
+    }
+    else if (this.state.school == "") {
+      this.showSchoolModal();
     }
   },
 
+  componentWillUpdate: function(new_props, new_state) {
+
+    if (this.props.data == "load-course" && this.state.school == "" && new_state.school != "") {
+        this.refs['OutlineModal'].toggle();
+        course_actions.getCourseInfo(new_state.school, this.props.initial_course_id);
+    }
+
+  },
+
   componentDidUpdate: function() {
+
     if (this.state.school != "") {
       this.hideSchoolModal();
     }
@@ -93,7 +94,7 @@ module.exports = React.createClass({
   toggleCourseModal: function(course_id) {
     return function() {
         this.refs['OutlineModal'].toggle();
-        course_actions.getCourseInfo(this.state.school, course_id);
+        course_actions.getCourseInfo(school, course_id);
     }.bind(this); 
   },
 
