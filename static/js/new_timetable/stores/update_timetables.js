@@ -26,6 +26,7 @@ TT_STATE = {
 }
 
 SCHOOL_LIST = ["jhu", "uoft"];
+SEMESTER_LIST = ["S","F"]
 
 // flag to check if the user just turned conflicts off
 CONFLICT_OFF = false;
@@ -44,6 +45,7 @@ module.exports = Reflux.createStore({
       conflict_error: false,
       loading: false, // timetables loading
       courses_loading: false,
+      semester: "S",
       school: ""};
   },
 
@@ -52,6 +54,14 @@ module.exports = Reflux.createStore({
     var new_state = this.getInitialState();
     TT_STATE.school = school;
     new_state.school = school;
+    this.trigger(new_state);
+  },
+
+  setSemester: function(new_semester) {
+    var semester = SEMESTER_LIST.indexOf(new_semester) > -1 ? new_semester : "";
+    var new_state = this.getInitialState();
+    TT_STATE.semester = semester;
+    new_state.semester = semester;
     this.trigger(new_state);
   },
 
