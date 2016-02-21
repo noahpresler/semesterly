@@ -10,3 +10,4 @@ deploy.sh
 timetable/courses_json/*.json
 TextbookParserOutput.txt
 workfile.html
+semes/
