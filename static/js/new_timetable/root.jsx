@@ -68,6 +68,7 @@ module.exports = React.createClass({
     if (this.props.data != null && this.props.data.match(full_pattern)) {
       matches = this.props.data.match(full_pattern)
       TimetableActions.setSchool(matches[1])
+      TimetableActions.setSemester(matches[2])
       $.get("/courses/"+ matches[1] + "/" + matches[2] +  "/code/" + matches[3], 
          {}, 
          function(response) {
