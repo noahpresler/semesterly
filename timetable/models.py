@@ -16,6 +16,17 @@ class Textbook(models.Model):
   def get_info(self):
     return model_to_dict(self)
 
+class HopkinsTextbook(models.Model):
+  isbn = models.CharField(max_length=13)
+  is_required = models.BooleanField(default=False)
+  detail_url = models.URLField(max_length=1000)
+  image_url = models.URLField(max_length=1000)
+  author = models.CharField(max_length=500)
+  title = models.CharField(max_length=1500)
+
+  def get_info(self):
+    return model_to_dict(self)
+
 
 #----------- Abstract Models  ----------------
 class BaseCourse(models.Model):
@@ -78,7 +89,6 @@ class BaseCourseOffering(models.Model):
   enrolment = models.IntegerField(default=-1)
   # if no section_type is specified, we assume it's a lecture
   section_type = models.CharField(max_length=5, default='L')
-  textbooks = models.ManyToManyField(Textbook)
 
   def get_textbooks(self):
     textbooks = []
@@ -115,6 +125,7 @@ class Course(BaseCourse):
   # a course may have multiple breadths - each character represents one
   breadths = models.CharField(max_length=5, default='')
   related_courses = models.ManyToManyField("self", blank=True)
+  textbooks = models.ManyToManyField(Textbook)
 
   def get_dept(self):
     return self.code[:3]
@@ -142,6 +153,7 @@ class CourseOffering(BaseCourseOffering):
 #---------------------- John Hopkins University ----------------------------
 class HopkinsCourse(BaseCourse):
   related_courses = models.ManyToManyField("self", blank=True)
+  textbooks = models.ManyToManyField(HopkinsTextbook)
 
   def get_dept(self):
     pass
