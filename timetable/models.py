@@ -4,21 +4,9 @@ os.environ['DJANGO_SETTINGS_MODULE'] = 'semesterly.settings'
 from django.forms.models import model_to_dict
 from django.db import models
 
-
+#----------- Global Models  ----------------
 class Textbook(models.Model):
-  isbn = models.CharField(max_length=13)
-  is_required = models.BooleanField(default=False)
-  detail_url = models.URLField(max_length=1000)
-  image_url = models.URLField(max_length=1000)
-  author = models.CharField(max_length=500)
-  title = models.CharField(max_length=1500)
-
-  def get_info(self):
-    return model_to_dict(self)
-
-class HopkinsTextbook(models.Model):
-  isbn = models.CharField(max_length=13)
-  is_required = models.BooleanField(default=False)
+  isbn = models.BigIntegerField(max_length=13, primary_key=True)
   detail_url = models.URLField(max_length=1000)
   image_url = models.URLField(max_length=1000)
   author = models.CharField(max_length=500)
@@ -29,6 +17,14 @@ class HopkinsTextbook(models.Model):
 
 
 #----------- Abstract Models  ----------------
+class TextbookLink(Models.model):
+  textbook = models.ForeignKey(Textbook)
+  is_required = models.BooleanField(default=False)
+
+  class Meta:
+    abstract = True
+
+
 class BaseCourse(models.Model):
   code = models.CharField(max_length=20)
   name = models.CharField(max_length=250)
@@ -125,7 +121,6 @@ class Course(BaseCourse):
   # a course may have multiple breadths - each character represents one
   breadths = models.CharField(max_length=5, default='')
   related_courses = models.ManyToManyField("self", blank=True)
-  textbooks = models.ManyToManyField(Textbook)
 
   def get_dept(self):
     return self.code[:3]
@@ -148,12 +143,16 @@ class CourseOffering(BaseCourseOffering):
   """Uoft CourseOffering"""
   course = models.ForeignKey(Course)
   alternates = models.BooleanField(default=False)
+  textbooks = models.ManyToManyField(Textbook, through='Link')
+
+
+class Link(TextbookLink):
+  courseoffering = models.ForeignKey(CourseOffering)
 
 
 #---------------------- John Hopkins University ----------------------------
 class HopkinsCourse(BaseCourse):
   related_courses = models.ManyToManyField("self", blank=True)
-  textbooks = models.ManyToManyField(HopkinsTextbook)
 
   def get_dept(self):
     pass
@@ -171,11 +170,12 @@ class HopkinsCourse(BaseCourse):
 
 
 class HopkinsCourseEvaluation(BaseCourseEvaluation):
-	course = models.ForeignKey(HopkinsCourse)
+  course = models.ForeignKey(HopkinsCourse)
 
 
 class HopkinsCourseOffering(BaseCourseOffering):
   course = models.ForeignKey(HopkinsCourse)
+  textbooks = models.ManyToManyField(Textbook, through='HopkinsLink')
 
   def get_course_code(self):
     return self.course.code + self.meeting_section
@@ -198,7 +198,9 @@ class HopkinsCourseOffering(BaseCourseOffering):
     matches = re.search(code_pattern,self.get_course_code())
     return str(matches.group(3))
 
-
   def __unicode__(self):
     # return "Semester: %s, Section: %s, Time: %s" % (self.semester, self.meeting_section, self.time)
     return "Day: %s, Time: %s - %s" % (self.day, self.time_start, self.time_end)
+
+class HopkinsLink(TextbookLink):
+  courseoffering = models.ForeignKey(HopkinsCourseOffering)
