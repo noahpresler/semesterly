@@ -4,8 +4,27 @@ os.environ['DJANGO_SETTINGS_MODULE'] = 'semesterly.settings'
 from django.forms.models import model_to_dict
 from django.db import models
 
+#----------- Global Models  ----------------
+class Textbook(models.Model):
+  isbn = models.BigIntegerField(max_length=13, primary_key=True)
+  detail_url = models.URLField(max_length=1000)
+  image_url = models.URLField(max_length=1000)
+  author = models.CharField(max_length=500)
+  title = models.CharField(max_length=1500)
+
+  def get_info(self):
+    return model_to_dict(self)
+
 
 #----------- Abstract Models  ----------------
+class TextbookLink(models.Model):
+  textbook = models.ForeignKey(Textbook)
+  is_required = models.BooleanField(default=False)
+
+  class Meta:
+    abstract = True
+
+
 class BaseCourse(models.Model):
   code = models.CharField(max_length=20)
   name = models.CharField(max_length=250)
@@ -24,6 +43,20 @@ class BaseCourse(models.Model):
     for c in related:
       info.append(model_to_dict(c))
     return info
+
+  def base_get_all_textbook_info(self, co_model):
+    textbook_info = []
+    for co in co_model.objects.filter(course=self):
+      tb = {
+      "section" : co.meeting_section,
+      "textbooks" : co.get_textbooks()
+      }
+      textbook_info.append(tb)
+    final = []
+    for i in textbook_info:
+      if not any(d['section'] == i['section'] for d in final):
+        final.append(i)
+    return final
 
   def base_get_eval_info(self, eval_model):
     eval_info = []
@@ -52,6 +85,14 @@ class BaseCourseOffering(models.Model):
   enrolment = models.IntegerField(default=-1)
   # if no section_type is specified, we assume it's a lecture
   section_type = models.CharField(max_length=5, default='L')
+
+  def get_textbooks(self):
+    textbooks = []
+    temp = []
+    tbs = self.textbooks.all()
+    for tb in tbs:
+      textbooks.append(tb.get_info())
+    return textbooks
 
   def __unicode__(self):
     # return "Semester: %s, Section: %s, Time: %s" % (self.semester, self.meeting_section, self.time)
@@ -88,6 +129,9 @@ class Course(BaseCourse):
     department = self.get_dept()
     return Course.objects.filter(code__contains=department)
 
+  def get_all_textbook_info(self):
+    return self.base_get_all_textbook_info(CourseOffering)
+
   def get_eval_info(self):
     return [] # TODO
 
@@ -99,6 +143,12 @@ class CourseOffering(BaseCourseOffering):
   """Uoft CourseOffering"""
   course = models.ForeignKey(Course)
   alternates = models.BooleanField(default=False)
+  textbooks = models.ManyToManyField(Textbook, through='Link')
+
+
+class Link(TextbookLink):
+  courseoffering = models.ForeignKey(CourseOffering)
+
 
 #---------------------- John Hopkins University ----------------------------
 class HopkinsCourse(BaseCourse):
@@ -112,6 +162,9 @@ class HopkinsCourse(BaseCourse):
     department = re.search(code_pattern, self.code).group(1)
     return HopkinsCourse.objects.filter(code__contains=department)
 
+  def get_all_textbook_info(self):
+    return self.base_get_all_textbook_info(HopkinsCourseOffering)
+
   def get_eval_info(self):
     return self.base_get_eval_info(HopkinsCourseEvaluation)
 
@@ -122,6 +175,7 @@ class HopkinsCourseEvaluation(BaseCourseEvaluation):
 
 class HopkinsCourseOffering(BaseCourseOffering):
   course = models.ForeignKey(HopkinsCourse)
+  textbooks = models.ManyToManyField(Textbook, through='HopkinsLink')
 
   def get_course_code(self):
     return self.course.code + self.meeting_section
@@ -147,3 +201,6 @@ class HopkinsCourseOffering(BaseCourseOffering):
   def __unicode__(self):
     # return "Semester: %s, Section: %s, Time: %s" % (self.semester, self.meeting_section, self.time)
     return "Day: %s, Time: %s - %s" % (self.day, self.time_start, self.time_end)
+
+class HopkinsLink(TextbookLink):
+  courseoffering = models.ForeignKey(HopkinsCourseOffering)
