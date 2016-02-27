@@ -10,7 +10,7 @@ api = API(locale='us')
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "semesterly.settings")
 django.setup()
 
-from timetable.models import Course, CourseOffering, Textbook
+from timetable.models import Course, CourseOffering, Textbook, Link
 
 SESSION = requests.Session()
 
@@ -73,7 +73,6 @@ def parse_results(source):
             except:
                 textbook = Textbook(
                     isbn=isbn,
-                    is_required=(req.strip().lower() == "required"),
                     detail_url=info['DetailPageURL'],
                     image_url=info["ImageURL"],
                     author=info["Author"],
@@ -84,8 +83,9 @@ def parse_results(source):
             for offering in course_offerings:
                 if offering.textbooks.filter(isbn=isbn).exists():
                     continue
-                offering.textbooks.add(textbook)
-                offering.save()
+                new_link = Link(courseoffering=offering, textbook=textbook,
+                                is_required=(req.strip().lower() == "required"))
+                new_link.save()
 
             print "\t\t\t %s by: %s." % (title, author)
             print "\t\t\t ISBN: %s, Book is %s. Saved!" % (isbn, req)
