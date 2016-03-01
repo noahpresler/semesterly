@@ -1,15 +1,32 @@
 import unittest, time
 
 from django.test import TestCase
-# from timetable.models import Course, CourseOffering
+from timetable.models import Course, CourseOffering
 # from timetable.views import *
 
 class Conflicts(TestCase):
   def setUp(self):
     self.start_time = time.time()
-    # Course.objects.create(code='C1', name='Course One')
-    # CourseOffering.objects.create()
-    # Course.objects.create(code='C2', name='Course Two')
+
+    # create first course offering
+    Course.objects.create(code='C1', name='Course One')
+    c1 = Course.objects.get(code='C1')
+    CourseOffering.objects.create(course=c1,
+                                  semester='S',
+                                  meeting_section='CO1',
+                                  day='M',
+                                  time_start='',
+                                  time_end='')
+
+    # create second course offering
+    Course.objects.create(code='C2', name='Course Two')
+    c2 = Course.objects.get(code='C2')
+    CourseOffering.objects.create(course=c1,
+                                  semester='S',
+                                  meeting_section='CO1',
+                                  day='M',
+                                  time_start='',
+                                  time_end='')
 
 
   def tearDown(self):
