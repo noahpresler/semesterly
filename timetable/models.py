@@ -204,3 +204,100 @@ class HopkinsCourseOffering(BaseCourseOffering):
 
 class HopkinsLink(TextbookLink):
   courseoffering = models.ForeignKey(HopkinsCourseOffering)
+
+
+#---------------------- University of Maryland ----------------------------
+class UmdCourse(BaseCourse):
+  related_courses = models.ManyToManyField("self", blank=True)
+
+  def get_dept(self):
+    pass
+
+  def get_dept_matches(self):
+    pass
+
+  def get_all_textbook_info(self):
+    return self.base_get_all_textbook_info(UmdCourseEvaluation)
+
+  def get_eval_info(self):
+    return self.base_get_eval_info(UmdCourseEvaluation)
+
+
+class UmdCourseEvaluation(BaseCourseEvaluation):
+  course = models.ForeignKey(UmdCourse)
+
+
+class UmdCourseOffering(BaseCourseOffering):
+  course = models.ForeignKey(UmdCourse)
+  textbooks = models.ManyToManyField(Textbook, through='UmdLink')
+
+  def get_course_code(self):
+    pass
+
+  def get_course_tag(self):
+    pass
+
+  def get_dept(self):
+    pass
+
+  def get_course(self):
+    pass
+
+  def get_section(self):
+    pass
+
+  def __unicode__(self):
+    # return "Semester: %s, Section: %s, Time: %s" % (self.semester, self.meeting_section, self.time)
+    return "Day: %s, Time: %s - %s" % (self.day, self.time_start, self.time_end)
+
+class UmdLink(TextbookLink):
+  courseoffering = models.ForeignKey(UmdCourseOffering)
+
+
+#---------------------- University of Ottawa ----------------------------
+class OttawaCourse(BaseCourse):
+  related_courses = models.ManyToManyField("self", blank=True)
+
+  def get_dept(self):
+    pass
+
+  def get_dept_matches(self):
+    pass
+
+  def get_all_textbook_info(self):
+    return self.base_get_all_textbook_info(OttawaCourseEvaluation)
+
+  def get_eval_info(self):
+    return self.base_get_eval_info(OttawaCourseEvaluation)
+
+
+class OttawaCourseEvaluation(BaseCourseEvaluation):
+  course = models.ForeignKey(OttawaCourse)
+
+
+class OttawaCourseOffering(BaseCourseOffering):
+  course = models.ForeignKey(OttawaCourse)
+  textbooks = models.ManyToManyField(Textbook, through='OttawaLink')
+
+  def get_course_code(self):
+    pass
+
+  def get_course_tag(self):
+    pass
+
+  def get_dept(self):
+    pass
+
+  def get_course(self):
+    pass
+
+  def get_section(self):
+    pass
+
+  def __unicode__(self):
+    # return "Semester: %s, Section: %s, Time: %s" % (self.semester, self.meeting_section, self.time)
+    return "Day: %s, Time: %s - %s" % (self.day, self.time_start, self.time_end)
+
+class OttawaLink(TextbookLink):
+  courseoffering = models.ForeignKey(OttawaCourseOffering)
+

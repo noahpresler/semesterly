@@ -148,15 +148,14 @@ class HopkinsCourseFinder:
 				self.safe_print("UPDATED " + course_code + " ==> " + class_name)
 				self.course_updates+=1
 
+			# get the textbooks for this course before deleting the course offerings
 			cos = HopkinsCourseOffering.objects.filter(
 				course=course,
 				semester=self.semester[0].upper(),
 				meeting_section=section_code)
-			try:
-				tbs = list(cos[0].textbooks.all())
-			except:
-				tbs = []
-
+			links = []
+			for co in cos:
+				links += HopkinsLink.objects.filter(courseoffering=co)
 			cos.delete()
 
 			for time in time_data:
@@ -169,12 +168,13 @@ class HopkinsCourseFinder:
 					time_end=time['end'],
 					instructors=class_instructors)
 				offering.save()
-				offering.textbooks.add(*tbs)
+				for l in links:
+					l.courseoffering = offering
+					l.save()
 				offering.save()
 				offering.location='' #TODO
 				offering.size=0     #TODO
 				offering.enrolment=0    #TODO
-				offering.alternates=''
 				if OfferingCreated:
 					self.offering_creates+=1
 				else:
