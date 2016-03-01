@@ -34,8 +34,8 @@ class Coursefinder:
     def update_files(self):
         """Update the local JSON files for this scraper."""
 
-        CourseOffering.objects.all().delete()
-        Course.objects.all().delete()
+        # CourseOffering.objects.all().delete()
+        # Course.objects.all().delete()
         dups = 0
         off_count = 0
 
