@@ -45,8 +45,8 @@ module.exports = React.createClass({
 			{add_or_remove}
 			<div id="course-info-wrapper">
 				<div id="name">{this.state.course_info.name}</div>
-				<div id="code`">{this.state.course_info.code}</div>
-				<CopyLink code={this.state.course_info.code} />
+				<div id="code">{this.state.course_info.code}</div>
+				<CopyLink code={this.state.course_info.code} school={this.props.school}/>
 			</div>
 		</div>);
 		return header;
