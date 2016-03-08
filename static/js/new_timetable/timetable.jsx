@@ -8,7 +8,6 @@ var NewPagination = require('./new_pagination');
 var CopyButton = require('./copy_button');
 var CalButton = require('./ical_button');
 var React = require('react');
-var DatePicker = require('react-datepicker');
 var moment = require('moment');
 
 module.exports = React.createClass({

@@ -10,7 +10,7 @@ module.exports = React.createClass({
 
   	getShareLink: function() {
     	var link = window.location.host + "/"
-    	link += this.state.school + "/"
+    	link += this.props.school + "/"
     	link += this.state.semester + "/"
     	link += this.props.code
     	return link;
@@ -33,9 +33,10 @@ module.exports = React.createClass({
 		</div>) :
 		null;
 		return (
-			<div className="right copy-button">
-			<a className="btn btn-primary calendar-function" onClick={this.toggleLinkPopover}>
-              <span className="fui-clip"></span>
+			<div className="copy-link-wrapper">
+			<a className="copy-link" onClick={this.toggleLinkPopover}>
+				<i class="fa fa-share-alt"></i>
+				Click to share
             </a>
             {pop}
 
