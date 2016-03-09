@@ -1,7 +1,36 @@
 import sys
+import re
+import os
 import requests, cookielib
 from bs4 import BeautifulSoup
-import re
+
+import django
+os.environ.setdefault("DJANGO_SETTINGS_MODULE", "semesterly.settings")
+django.setup()
+from timetable.models import UmdCourse, UmdCourseOffering
+
+import warnings
+warnings.filterwarnings("ignore")
+
+def get_valid_time(time):
+	"""Take convert time to 24hr format and remove trailing am/pm."""
+	if not time:
+		return time
+	if time[-2:] == 'am':
+		return time[:-2]
+	else:
+		time = time[:-2]
+		hour, minute = time.split(':')
+		hour = int(hour) + 12
+		return str(hour) + ':' + minute
+
+def get_profs(profs):
+	"""Take a list of profs and return them as a string."""
+	return ', '.join(map(shorten_name, list(set(profs))))
+
+def shorten_name(prof):
+	return prof[12:] if prof.startswith('Instructor: ')\
+													else prof
 
 
 class umdSection:
@@ -161,9 +190,9 @@ class umd:
 			soup = BeautifulSoup(html, "html.parser")
 			course_div = soup.findAll(class_="course")
 			courses = []
+			num_created, num_updated = 0, 0
 			for c in course_div:
 				cid = self.find_content("course-id", c)
-				print(cid)
 				partial_url = self.find_url("toggle-sections-link", c)
 				if (partial_url == ''):
 					continue
@@ -180,6 +209,45 @@ class umd:
 				geneds = self.find_gens("course-subcategory", c)
 
 				courses.append(umdCourse(cid, title, credits, description, sections, cores, geneds))
+
+				# save courses
+				course_data = {
+					'name': title,
+					'description': description,
+					'cores': ', '.join(cores),
+					'geneds': ', '.join(geneds),
+					'num_credits': int(credits)
+				}
+				course, created = UmdCourse.objects.update_or_create(code=cid, defaults=course_data)
+
+				if created:
+					print "CREATED " + cid
+					num_created += 1
+				else:
+					print "UPDATED " + cid
+					num_updated += 1
+
+				for section in sections:
+					enrolment = int(section.total_seats) - int(section.open_seats) if \
+											section.total_seats else -1
+					section_data = {
+						'instructors': get_profs(section.profs),
+						'time_end': get_valid_time(section.end_time),
+						'location': section.building + section.room,
+						'size': section.total_seats,
+						'enrolment': int(section.total_seats) - int(section.open_seats),
+						'section_type': 'R',
+					}
+					days = section.day.replace('Tu', 'T').replace('Th', 'R')
+					for day in days:
+						co = UmdCourseOffering.objects.update_or_create(course=course,
+																								 semester='S',
+																								 meeting_section=section.id,
+																								 day=day,
+																								 time_start=get_valid_time(section.start_time),
+																								 defaults=section_data)
+
+		print "Created/updated: [{0!s}/{1!s}]".format(num_created, num_updated)
 		return courses
 
 
@@ -191,6 +259,6 @@ class umd:
 
 
 u = umd()
-u.parse_courses()
+courses = u.parse_courses()
 #print(u.get_sections("https://ntst.umd.edu/soc/201601/ECON/ECON454"))
 
