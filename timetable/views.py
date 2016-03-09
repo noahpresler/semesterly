@@ -24,6 +24,7 @@ import os
 import pprint
 
 from analytics.views import *
+from school_mappers import *
 
 MAX_RETURN = 60 # Max number of timetables we want to consider
 
@@ -42,20 +43,6 @@ SCHOOL = ""
 LOCKED_SECTIONS = []
 
 hashid = Hashids("x98as7dhg&h*askdj^has!kj?xz<!9")
-
-school_to_models = {
-    'jhu': (HopkinsCourse, HopkinsCourseOffering),
-    'uoft': (Course, CourseOffering),
-    'umd': (UmdCourse, UmdCourseOffering),
-    'uo': (OttawaCourse, OttawaCourseOffering)
-}
-
-# the smallest number of minutes needed to describe start/end times
-# e.g. uoft classes only start on the hour or half hour, so granularity is 30min
-school_to_granularity = {
-    'jhu': 5,
-    'uoft': 30,
-}
 
 def redirect_to_home(request):
     return HttpResponseRedirect("/")
