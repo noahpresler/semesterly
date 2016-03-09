@@ -87,7 +87,7 @@ def view_timetable(request):
     mark_request(request, sid)
 
     SCHOOL = params['school']
-    SchoolCourse, SchoolCourseOffering = get_correct_models(SCHOOL)
+    SchoolCourse, SchoolCourseOffering = school_to_models[SCHOOL]
 
     course_ids = params['courses_to_sections'].keys()
     courses = [SchoolCourse.objects.get(id=cid) for cid in course_ids]
@@ -101,7 +101,7 @@ def view_timetable(request):
 def set_tt_preferences(preferences):
     global NO_CLASSES_BEFORE, NO_CLASSES_AFTER, SORT_BY_SPREAD, LONG_WEEKEND
     global SPREAD, WITH_CONFLICTS
-    slots_per_hour = 60 / get_granularity(SCHOOL)
+    slots_per_hour = 60 / school_to_granularity[SCHOOL]
     NO_CLASSES_BEFORE = 0 if not preferences['no_classes_before'] else slots_per_hour * 2 - 1
     NO_CLASSES_AFTER = slots_per_hour * 14 if not preferences['no_classes_after'] else slots_per_hour * 10 + 1
     LONG_WEEKEND = preferences['long_weekend']
@@ -109,11 +109,6 @@ def set_tt_preferences(preferences):
     SORT_BY_SPREAD = preferences['do_ranking']
     WITH_CONFLICTS = preferences['try_with_conflicts']
 
-def get_granularity(school):
-    if school == 'uoft':
-        return 30
-    elif school == 'jhu':
-        return 5
 # ******************************************************************************
 # ************************** COURSES -> TTs ************************************
 # ******************************************************************************
@@ -136,12 +131,12 @@ def convert_tt_to_dict(timetable):
     return tt_obj
 
 def get_course_dict(section):
-    SchoolCourse = get_correct_models(SCHOOL)[0] # model containing courses
+    SchoolCourse = school_to_models[SCHOOL][0] # model containing courses
     model = SchoolCourse.objects.get(id=section[0])
     return model_to_dict(model, fields=['code', 'name', 'id'])
 
 def get_course_obj(course_dict, sections):
-    SchoolCourse, SchoolCourseOffering = get_correct_models(SCHOOL)  
+    SchoolCourse, SchoolCourseOffering = school_to_models[SCHOOL]  
     sections = list(sections)
     slot_objects = [create_offering_object(co) for _, _, course_offerings in sections
                                                for co in course_offerings]
@@ -208,11 +203,11 @@ def rank_by_spread(timetables):
 
 def get_rank_score(timetable, metric):
     """Get score for a timetable. The higher the score, the more grouped it is."""
-    day_to_usage = {'M': [False for i in range(14 * 60 / get_granularity(SCHOOL))], 
-                    'T': [False for i in range(14 * 60 / get_granularity(SCHOOL))], 
-                    'W': [False for i in range(14 * 60 / get_granularity(SCHOOL))], 
-                    'R': [False for i in range(14 * 60 / get_granularity(SCHOOL))], 
-                    'F': [False for i in range(14 * 60 / get_granularity(SCHOOL))]}
+    day_to_usage = {'M': [False for i in range(14 * 60 / school_to_granularity[SCHOOL])], 
+                    'T': [False for i in range(14 * 60 / school_to_granularity[SCHOOL])], 
+                    'W': [False for i in range(14 * 60 / school_to_granularity[SCHOOL])], 
+                    'R': [False for i in range(14 * 60 / school_to_granularity[SCHOOL])], 
+                    'F': [False for i in range(14 * 60 / school_to_granularity[SCHOOL])]}
     conflict_cost = 0
     for meeting in timetable:
         for co, conflict in meeting[2]:
@@ -294,11 +289,11 @@ def offerings_to_timetables(sections):
     total_num_permutations = num_permutations_remaining.pop(0)
     for p in xrange(total_num_permutations): # for each possible tt
         current_tt = []
-        day_to_usage = {'M': [[] for i in range(14 * 60 / get_granularity(SCHOOL))], 
-                        'T': [[] for i in range(14 * 60 / get_granularity(SCHOOL))], 
-                        'W': [[] for i in range(14 * 60 / get_granularity(SCHOOL))], 
-                        'R': [[] for i in range(14 * 60 / get_granularity(SCHOOL))], 
-                        'F': [[] for i in range(14 * 60 / get_granularity(SCHOOL))]}
+        day_to_usage = {'M': [[] for i in range(14 * 60 / school_to_granularity[SCHOOL])], 
+                        'T': [[] for i in range(14 * 60 / school_to_granularity[SCHOOL])], 
+                        'W': [[] for i in range(14 * 60 / school_to_granularity[SCHOOL])], 
+                        'R': [[] for i in range(14 * 60 / school_to_granularity[SCHOOL])], 
+                        'F': [[] for i in range(14 * 60 / school_to_granularity[SCHOOL])]}
         no_conflicts = True
         for i in xrange(len(sections)): # add an offering for the next section
             j = (p/num_permutations_remaining[i]) % num_offerings[i]
@@ -347,7 +342,7 @@ def add_meeting_and_check_conflict(day_to_usage, new_meeting):
 def update_conflict_info(day_to_usage):
     for day in day_to_usage.keys():
         day_to_usage[day] = [sort_slot_by_startend(slot) for slot in day_to_usage[day]]
-        update_day_conflicts(day_to_usage[day], 0, 14 * 60 / get_granularity(SCHOOL), 0, [])
+        update_day_conflicts(day_to_usage[day], 0, 14 * 60 / school_to_granularity[SCHOOL], 0, [])
 
 def update_day_conflicts(day_bitarray, start, end, current_level, ignore_list):
     """
@@ -367,14 +362,14 @@ def update_day_conflicts(day_bitarray, start, end, current_level, ignore_list):
             if overlapping:
                 update_slots_conflict_info(overlapping, current_level)
                 tail = find_latest_slot(overlapping)
-                next_hour_index = i + 60 / get_granularity(SCHOOL)
+                next_hour_index = i + 60 / school_to_granularity[SCHOOL]
                 # if next_hour_index < end and exists_more_classes(overlapping, day_bitarray[next_hour_index]):
                     # recursively update the rest of slots in overlapping
                 tail = update_day_conflicts(day_bitarray, next_hour_index, \
-                                            tail - (60 / get_granularity(SCHOOL)), \
+                                            tail - (60 / school_to_granularity[SCHOOL]), \
                                             current_level + 1, \
                                             overlapping + ignore_list)
-                i = tail + (60 / get_granularity(SCHOOL)) + 1
+                i = tail + (60 / school_to_granularity[SCHOOL]) + 1
             else:
                 i += 1
         else:
@@ -387,7 +382,7 @@ def get_overlapping_slots(day_bitarray, current_slot, ignore_list):
     then by latest end time.
     """
     overlapping = []
-    for i in range(60 / get_granularity(SCHOOL)):
+    for i in range(60 / school_to_granularity[SCHOOL]):
         overlapping += [pair for pair in day_bitarray[current_slot + i] if pair not in ignore_list and
                         pair not in overlapping]
     return sort_slot_by_startend(overlapping)
@@ -421,7 +416,7 @@ def find_slots_to_fill(start, end):
     return [i for i in range(get_time_index(start_hour, start_minute), get_time_index(end_hour, end_minute))]
 
 def sort_slot_by_startend(slot):
-    return sorted(slot, key=lambda pair: (get_hour(pair[0].time_start), 14 * 60 / get_granularity(SCHOOL) - get_hour(pair[0].time_end)))
+    return sorted(slot, key=lambda pair: (get_hour(pair[0].time_start), 14 * 60 / school_to_granularity[SCHOOL] - get_hour(pair[0].time_end)))
 
 def get_hour(str_time):
     si = str_time.index(':') if ':' in str_time else len(str_time)
@@ -446,7 +441,7 @@ def courses_to_offerings(courses, sem, plist=[]):
     elements are courseoffering objects and the second elements are lists used to keep 
     track of conflict information for that specific courseoffering.
     """
-    SchoolCourse, SchoolCourseOffering = get_correct_models(SCHOOL)   
+    SchoolCourse, SchoolCourseOffering = school_to_models[SCHOOL]   
     sections = []
 
     for c in courses:
@@ -524,7 +519,7 @@ def construct_preference_tt():
     """
     tt = []
     # early/late class preference
-    if (NO_CLASSES_BEFORE > 0 or NO_CLASSES_AFTER < 14 * 60/get_granularity(SCHOOL)):
+    if (NO_CLASSES_BEFORE > 0 or NO_CLASSES_AFTER < 14 * 60/school_to_granularity[SCHOOL]):
         tt.append([lambda co: not (get_time_index_from_string(co[0].time_start) > NO_CLASSES_BEFORE \
                             and get_time_index_from_string(co[0].time_end) < NO_CLASSES_AFTER)])
 
@@ -557,8 +552,8 @@ def get_time_index_from_string(s):
 def get_time_index(hours, minutes):
     """Take number of hours and minutes, and return the corresponding time slot index"""
     # earliest possible hour is 8, so we get the number of hours past 8am
-    return (hours - 8) * (60 / get_granularity(SCHOOL)) + \
-            minutes / get_granularity(SCHOOL)
+    return (hours - 8) * (60 / school_to_granularity[SCHOOL]) + \
+            minutes / school_to_granularity[SCHOOL]
 
 def get_hours_minutes(time_string):
     """
@@ -597,7 +592,7 @@ def write_courses_to_json(request, school, sem):
 
         global SCHOOL
         SCHOOL = school
-        C, Co = get_correct_models(school)[0], get_correct_models(school)[1]
+        C, Co = school_to_models[school][0], school_to_models[school][1]
         course_objs = C.objects.all()
         json_data = convert_courses_to_json(course_objs, sem, 50000)
         with open(file_path, 'w') as outfile:
@@ -625,7 +620,7 @@ def get_course(request, school, id):
     if school in ["uoft", "jhu"]:
         SCHOOL = school
     try:
-        models = get_correct_models(school)
+        models = school_to_models[school]
         C, Co = models[0], models[1]
         course = C.objects.get(id=id)
         json_data = model_to_dict(course)
@@ -651,7 +646,7 @@ def get_course_id(request, school, sem, code):
     if school in ["uoft", "jhu"]:
         SCHOOL = school
     try:
-        models = get_correct_models(school)
+        models = school_to_models[school]
         C, Co = models[0], models[1]
         course = C.objects.filter(Q(code__icontains=code))[0]
         json_data = {"id": course.id}
@@ -678,7 +673,7 @@ def get_course_serializable(course, sem):
     return d
 
 def get_meeting_sections(course, semester):
-    SchoolCourse, SchoolCourseOffering = get_correct_models(SCHOOL)   
+    SchoolCourse, SchoolCourseOffering = school_to_models[SCHOOL]   
     offering_objs = SchoolCourseOffering.objects.filter((Q(semester=semester) | Q(semester='Y')), 
                                                     course=course)          
     sections = []
@@ -689,7 +684,7 @@ def get_meeting_sections(course, semester):
     return sections
 
 def get_meeting_sections_objects(course, semester):
-    SchoolCourse, SchoolCourseOffering = get_correct_models(SCHOOL)   
+    SchoolCourse, SchoolCourseOffering = school_to_models[SCHOOL]   
     offering_objs = SchoolCourseOffering.objects.filter((Q(semester=semester) | Q(semester='Y')), 
                                                     course=course)          
     sections = []
@@ -700,7 +695,7 @@ def get_meeting_sections_objects(course, semester):
     return sections
 
 def has_offering(course, sem):
-    SchoolCourse, SchoolCourseOffering = get_correct_models(SCHOOL)   
+    SchoolCourse, SchoolCourseOffering = school_to_models[SCHOOL]   
 
     try:
         res = SchoolCourseOffering.objects.filter(~Q(time_start__iexact='TBA'), 
