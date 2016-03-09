@@ -218,7 +218,10 @@ class umd:
 					'geneds': ', '.join(geneds),
 					'num_credits': int(credits)
 				}
-				course, created = UmdCourse.objects.update_or_create(code=cid, defaults=course_data)
+				try:
+					course, created = UmdCourse.objects.update_or_create(code=cid, defaults=course_data)
+				except:
+					print cid, course_data
 
 				if created:
 					print "CREATED " + cid
@@ -240,12 +243,15 @@ class umd:
 					}
 					days = section.day.replace('Tu', 'T').replace('Th', 'R')
 					for day in days:
-						co = UmdCourseOffering.objects.update_or_create(course=course,
-																								 semester='S',
-																								 meeting_section=section.id,
-																								 day=day,
-																								 time_start=get_valid_time(section.start_time),
-																								 defaults=section_data)
+						try:
+							co = UmdCourseOffering.objects.update_or_create(course=course,
+																									 semester='S',
+																									 meeting_section=section.id,
+																									 day=day,
+																									 time_start=get_valid_time(section.start_time),
+																									 defaults=section_data)
+						except:
+							print meeting_section, day, time_start, section_data
 
 		print "Created/updated: [{0!s}/{1!s}]".format(num_created, num_updated)
 		return courses
