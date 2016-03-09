@@ -16,7 +16,7 @@ def get_valid_time(time):
 	"""Take convert time to 24hr format and remove trailing am/pm."""
 	if not time:
 		return time
-	if time[-2:] == 'am':
+	if time[-2:] == 'am' or time[:2] == '12':
 		return time[:-2]
 	else:
 		time = time[:-2]
@@ -185,12 +185,12 @@ class umd:
 
 
 	def get_courses(self, department_urls):
+		num_created, num_updated = 0, 0
 		for department_url in department_urls:
 			html = self.get_html(department_url)
 			soup = BeautifulSoup(html, "html.parser")
 			course_div = soup.findAll(class_="course")
 			courses = []
-			num_created, num_updated = 0, 0
 			for c in course_div:
 				cid = self.find_content("course-id", c)
 				partial_url = self.find_url("toggle-sections-link", c)
