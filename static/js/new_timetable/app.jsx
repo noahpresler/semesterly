@@ -1,4 +1,5 @@
 var Root = require('./root');
+var ReactDOM = require('react-dom')
 var TimetableActions = require('./actions/update_timetables');
 var course_actions = require('./actions/course_actions');
 _SEMESTER = "S";
