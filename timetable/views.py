@@ -10,7 +10,7 @@ import datetime, math
 from django.contrib.auth.decorators import login_required
 from django.views.decorators.csrf import csrf_exempt
 
-from timetable.models import Course, CourseOffering, HopkinsCourse, HopkinsCourseOffering
+from timetable.models import *
 
 from django.forms.models import model_to_dict
 
@@ -43,7 +43,19 @@ LOCKED_SECTIONS = []
 
 hashid = Hashids("***REMOVED***")
 
+school_to_models = {
+    'jhu': (HopkinsCourse, HopkinsCourseOffering),
+    'uoft': (Course, CourseOffering),
+    'umd': (UmdCourse, UmdCourseOffering),
+    'uo': (OttawaCourse, OttawaCourseOffering)
+}
 
+# the smallest number of minutes needed to describe start/end times
+# e.g. uoft classes only start on the hour or half hour, so granularity is 30min
+school_to_granularity = {
+    'jhu': 5,
+    'uoft': 30,
+}
 
 def redirect_to_home(request):
     return HttpResponseRedirect("/")
@@ -96,13 +108,6 @@ def set_tt_preferences(preferences):
     SPREAD = not preferences['grouped']
     SORT_BY_SPREAD = preferences['do_ranking']
     WITH_CONFLICTS = preferences['try_with_conflicts']
-
-
-def get_correct_models(school):
-    if school == 'jhu':
-        return (HopkinsCourse, HopkinsCourseOffering)
-    else:
-        return (Course, CourseOffering)
 
 def get_granularity(school):
     if school == 'uoft':
