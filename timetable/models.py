@@ -210,8 +210,8 @@ class HopkinsLink(TextbookLink):
 #---------------------- University of Maryland ----------------------------
 class UmdCourse(BaseCourse):
   related_courses = models.ManyToManyField("self", blank=True)
-  cores = models.CharField(max_length=20, default='')
-  geneds = models.CharField(max_length=20, default='')
+  cores = models.CharField(max_length=50, default='')
+  geneds = models.CharField(max_length=50, default='')
   num_credits = models.IntegerField(default=-1)
 
   def get_dept(self):
