@@ -83,6 +83,7 @@ class BaseCourseOffering(models.Model):
   location = models.CharField(max_length=200, default='TBA')
   size = models.IntegerField(default=-1)
   enrolment = models.IntegerField(default=-1)
+  waitlist = models.IntegerField(default=0)
   # if no section_type is specified, we assume it's a lecture
   section_type = models.CharField(max_length=5, default='L')
 
@@ -209,6 +210,9 @@ class HopkinsLink(TextbookLink):
 #---------------------- University of Maryland ----------------------------
 class UmdCourse(BaseCourse):
   related_courses = models.ManyToManyField("self", blank=True)
+  cores = models.CharField(max_length=20, default='')
+  geneds = models.CharField(max_length=20, default='')
+  num_credits = models.IntegerField(default=-1)
 
   def get_dept(self):
     pass
@@ -221,6 +225,12 @@ class UmdCourse(BaseCourse):
 
   def get_eval_info(self):
     return self.base_get_eval_info(UmdCourseEvaluation)
+
+  def get_cores(self):
+    return self.cores.split(',')
+
+  def get_geneds(self):
+    return self.geneds.split(',')
 
 
 class UmdCourseEvaluation(BaseCourseEvaluation):
