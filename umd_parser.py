@@ -83,9 +83,10 @@ class umdCourse:
 		)
 
 
-class umd:
+class UMDParser:
 
 	def __init__(self):
+		self.school = "umd"
 		self.s = requests.Session()
 		self.cookies = cookielib.CookieJar()
 		self.headers = {
@@ -93,6 +94,8 @@ class umd:
 		}
 		self.base_url = "https://ntst.umd.edu/soc/"
 
+	def get_school_name(self):
+		return self.school
 	def find_content(self, div_class, parent):
 	 	try: 
 			return parent.find(class_=div_class).contents[0].strip()
@@ -257,14 +260,13 @@ class umd:
 		return courses
 
 
-	def parse_courses(self):
+	def start(self):
 		department_urls = self.get_departments()
 		courses = self.get_courses(department_urls)
 		return courses
 
 
-
-u = umd()
-courses = u.parse_courses()
+if __name__ == "__main__":
+	parser = UMDParser()
+	parser.start()
 #print(u.get_sections("https://ntst.umd.edu/soc/201601/ECON/ECON454"))
-

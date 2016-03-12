@@ -42,3 +42,4 @@ class Conflicts(TestCase):
 if __name__ == '__main__':
   suite = unittest.TestLoader().loadTestsFromTestCase(Conflicts)
   unittest.TextTestRunner(verbosity=0).run(suite)
+  

@@ -13,12 +13,13 @@ django.setup()
 from timetable.models import *
 
 
-class Coursefinder:
+class UofTParser:
     """A scraper for UofT's Course Finder web service.
     Course Finder is located at http://coursefinder.utoronto.ca/.
     """
 
     def __init__(self):
+        self.school = "uoft"
         self.host = 'http://coursefinder.utoronto.ca/course-search/search'
         self.urls = None
         self.cookies = cookielib.CookieJar()
@@ -27,11 +28,10 @@ class Coursefinder:
         self.count = 0
         self.total = 0
 
-        os.chdir(os.path.dirname(os.path.abspath(__file__)))
-        if not os.path.exists('json'):
-            os.makedirs('json')
+    def get_school_name(self):
+        return self.school
 
-    def update_files(self):
+    def start(self):
         """Update the local JSON files for this scraper."""
 
         # CourseOffering.objects.all().delete()
@@ -52,10 +52,7 @@ class Coursefinder:
             #    outfile.write(html.decode('utf-8'))
             data = self.parse_course_html(course_id, html) if not summer else None
             if data:
-                with open('json/%s.json' % course_id, 'w+') as outfile:
-                    json.dump(data, outfile)
-                # with open('../calendar/json/%s.json' % code, 'w+')
-                # as outfile: json.dump(data[1], outfile)
+
                 try:
                     try:
                         course = Course.objects.get(code=code)
@@ -342,5 +339,5 @@ class Coursefinder:
 
 
 if __name__ == "__main__":
-    cf = Coursefinder()
-    cf.update_files()
+    parser = UofTParser()
+    parser.start()
