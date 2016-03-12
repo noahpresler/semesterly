@@ -316,4 +316,4 @@ class Updates(models.Model):
   update_field = models.CharField(max_length=100) #e.g. 'textbook', 'course'
   last_updated = models.DateTimeField(auto_now=True)
   reason = models.CharField(max_length=200, default='Scheduled Update')
-
+  

@@ -15,19 +15,18 @@ for parser_class in [UofTParser, HopkinsParser, UMDParser]:
 		print message
 		logging.exception(message)
 		parser.start()
-		# set the last_updated information for the school's courses
-		update = Updates.objects.get_or_create(
-				school=school,
-				update_field="Course"
-		)
-		update.last_updated = datetime.datetime.now()
 		# populate the JSON files in timetables/courses_json
 		start_json_populator(school, "F")
 		start_json_populator(school, "S")
-		# save the model
-		update.save()
+
+		# set the last_updated information for the school's courses
+		update_object, created = Updates.objects.update_or_create(
+			school=school,
+			update_field="Course",
+			defaults={'last_updated': datetime.datetime.now()}
+		)
+
 	except Exception as e:
-		logging.exception(("Error while parsing %s:\n\n" % school) +  str(e) + "\n")
+		logging.exception("Error while parsing %s:\n\n%s\n" % (school, str(e)))
 
 print "Finished!"
-
