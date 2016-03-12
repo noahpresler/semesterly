@@ -50,7 +50,7 @@ WEBDRIVER_CHROME = '/root/chromedriver_executable/chromedriver' # e.g. '/home/li
 
 
 #===========================================FOR DEVELOPMENT USE=======================================
-WEBDRIVER_CHROME = '/home/linoah/chromedriver'
+WEBDRIVER_CHROME = None
 #=====================================================================================================
 
 

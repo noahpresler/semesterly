@@ -12,4 +12,4 @@ timetable/courses_json/*.json
 TextbookParserOutput.txt
 workfile.html
 semes/
-json/
+documentation/build
