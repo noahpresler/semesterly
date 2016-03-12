@@ -29,18 +29,42 @@ import errno
 from django.utils.encoding import smart_str, smart_unicode
 from fake_useragent import UserAgent
 from amazonproduct import API
-api = API(locale='us')
+import traceback
+api = API(locale='us')  
 
-
-N_CLASSES = 99
+N_CLASSES = 16
 django.setup()
+
+
+'''#==========================================FOR PRODUCTION USE======================================
+chrome_options = Options()
+chrome_options.add_argument("--disable-extensions")
+
+display=Display(visible=0, size=(800, 600))
+display.start()
+
+# If the Chrome Webdriver is not already in your $PATH, change this to 
+# represent its filepath
+WEBDRIVER_CHROME = '/root/chromedriver_executable/chromedriver' # e.g. '/home/linoah/chromedriver'
+#====================================================================================================='''
+
+
+#===========================================FOR DEVELOPMENT USE=======================================
+WEBDRIVER_CHROME = '/home/linoah/chromedriver'
+#=====================================================================================================
 
 
 class HopkinsTextbookFinder: 
 
     def __init__(self):
+        if not WEBDRIVER_CHROME:
+            self.driver = webdriver.Chrome()
+        else: 
+            self.driver = webdriver.Chrome(WEBDRIVER_CHROME)
+        self.driver.set_page_load_timeout(90)
+        self.driver.set_script_timeout(90)
         self.s = requests.Session()
-        self.isbn_pattern = pattern = re.compile(r"ISBN:((?:97(?:8|9))?\d{9}(?:\d|X))$", re.MULTILINE)
+        self.isbn_pattern = pattern = re.compile(r"((?:97(?:8|9))?\d{9}(?:\d|X))$", re.MULTILINE)
         self.code_pattern = pattern = re.compile(r".*\.(.*)\.(.*)\s\((.*)\)")
         self.cookies = cookielib.CookieJar()
         self.create_count = 0
@@ -70,15 +94,12 @@ class HopkinsTextbookFinder:
             if i > 1 and (i % N_CLASSES == 0 or i == len(self.course_tags) - 1):
                 request += '</courses></textbookorder>'
                 self.randomize_ua()
-                f = open('workfile.html', 'w')
                 html = self.get_bn_html(request)
-                f.write(html)
-                f.close()
                 self.parse_textbooks(html)
                 if self.last_num_found == 0:
                     self.wait_retry(request)
                 request='http://johns-hopkins.bncollege.com/webapp/wcs/stores/servlet/TBListView?storeId=18053&catalogId=10001&langId=-1&termMapping=N&courseXml=<?xml version="1.0" encoding="UTF-8"?><textbookorder><courses>'
-                sleep(randint(20,45))
+                sleep(randint(5,20))
             else:
                 request += self.course_tags[i]
         print "Parse Completed"
@@ -88,23 +109,22 @@ class HopkinsTextbookFinder:
         print "Retrying request..."
         sleep(randint(180,240))
         self.randomize_ua()
-        f = open('workfile.html', 'w')
         html = self.get_bn_html(request)
-        f.write(html)
-        f.close()
-        self.parse_textbooks(html)
+        self.parse_textbooks(html) 
 
     def get_bn_html(self, url):
-        html = None
-        while html is None:
+        self.driver.get(url)
+        sleep(1)
+        while True:
             try:
-                r = self.s.get(url,cookies=self.cookies,headers=self.headers)
-                if r.status_code == 200:
-                    html = r.text
-            except (requests.exceptions.Timeout,
-                    requests.exceptions.ConnectionError):
-                continue
-        return html.encode('utf-8')
+                results = self.driver.find_elements_by_class_name("book_sec")
+                print len(results)
+                if len(results) >= N_CLASSES -1 or (self.index == len(self.course_tags) - 1 and len(results) >= 1):
+                    break
+            except:
+                sleep(.01)
+        print "HTML recieved"
+        return self.driver.page_source
 
     def remove_duplicates(self,l):
         return list(set(l))
@@ -118,28 +138,30 @@ class HopkinsTextbookFinder:
 
     def parse_textbooks(self,html):
         soup = BeautifulSoup(html)
-        textbooks = soup.findAll('li', class_='book_c2')
+        textbooks = soup.findAll('div', class_='book_details')
         self.last_num_found = len(textbooks)/2
+        textbook_sections = soup.findAll('div',class_="book_sec")
         try:
-            print "( Request #: " + str(int(self.index/N_CLASSES)) + ") " + str(len(textbooks)/2) + " textbooks found."
+            print "( Request #: " + str(int(self.index/N_CLASSES)) + ") " + str(len(textbooks)) + " textbooks found."
         except UnicodeEncodeError:
             pass
-        for tb in textbooks:
-            match = re.findall(self.isbn_pattern,"".join(tb.get_text().split()))
-            if len(match) > 0:
-                isbn_number = match[0]
-                is_required = self.check_required(tb.parent.parent.find(class_='recommendBookType'))
-                self.make_textbook(tb.parent.parent.parent.parent.parent.parent,is_required,isbn_number)
+        for tbsec in textbook_sections:
+            raw_code = tbsec.findAll('h1')[0]
+            stripped_code = "".join(raw_code.get_text().split())[:8]
+            course_code = stripped_code[:3] + "." + stripped_code[3:6]
+            section = "(" + stripped_code[6:8] + ")"
+            for tb in tbsec.findAll('div',class_="book_details"):
+                match = re.findall(self.isbn_pattern,"".join(tb.get_text()))
+                if len(match) > 0:
+                    isbn_number = match[0]
+                    is_required = self.check_required(tb.find('span', class_="recommendBookType").get_text())
+                    self.make_textbook(is_required, isbn_number, course_code, section)
         try:
             print "\n"
         except UnicodeEncodeError:
             pass
 
-    def make_textbook(self, parent, is_required, isbn_number):
-        raw_code = parent.findAll('h1')[0]
-        stripped_code = "".join(raw_code.get_text().split())[:8]
-        course_code = stripped_code[:3] + "." + stripped_code[3:6]
-        section = "(" + stripped_code[6:8] + ")"
+    def make_textbook(self, is_required, isbn_number, course_code, section):
         course = HopkinsCourse.objects.filter(code__contains=course_code)[0]
         course_offerings = HopkinsCourseOffering.objects.filter(course=course,meeting_section = section)
         textbook = None
