@@ -50,7 +50,7 @@ WEBDRIVER_CHROME = '/root/chromedriver_executable/chromedriver' # e.g. '/home/li
 
 
 #===========================================FOR DEVELOPMENT USE=======================================
-WEBDRIVER_CHROME = None
+WEBDRIVER_CHROME = '/home/linoah/chromedriver'
 #=====================================================================================================
 
 
@@ -127,7 +127,6 @@ class HopkinsTextbookFinder:
         while True:
             try:
                 results = self.driver.find_elements_by_class_name("book_sec")
-                print len(results)
                 if len(results) >= N_CLASSES -1 or (self.index == len(self.course_tags) - 1 and len(results) >= 1):
                     break
             except:
