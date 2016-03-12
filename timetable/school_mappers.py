@@ -14,4 +14,5 @@ school_to_models = {
 school_to_granularity = {
     'jhu': 5,
     'uoft': 30,
+    'umd': 5
 }

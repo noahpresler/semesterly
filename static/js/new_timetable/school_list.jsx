@@ -15,6 +15,11 @@ module.exports = React.createClass({
 					<img src="/static/img/school_logos/uoft_logo.png" 
 						className="school-logo"/>
 				</div>
+				<div className="school-picker school-umd"
+					onClick={this.setSchool("umd")}>
+					<img src="/static/img/school_logos/umd_logo_white.png"
+						className="school-log"/>
+				</div>
 			</div>);
 	},
 

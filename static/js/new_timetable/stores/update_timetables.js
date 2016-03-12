@@ -25,7 +25,7 @@ TT_STATE = {
   sid: SID,
 }
 
-SCHOOL_LIST = ["jhu", "uoft"];
+SCHOOL_LIST = ["jhu", "uoft", "umd"];
 SEMESTER_LIST = ["S","F"]
 
 // flag to check if the user just turned conflicts off
@@ -67,7 +67,8 @@ module.exports = Reflux.createStore({
 
  /**
   * Update TT_STATE with new course roster
-  * @param {object} new_course_with_section contains attributed id, section, removing
+  * @param {object} new_course_with_section contains attributed id, section 
+                    (if being locked), removing
   * @return {void} does not return anything, just updates TT_STATE
   */
   updateCourses: function(new_course_with_section) {
