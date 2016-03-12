@@ -103,6 +103,7 @@ class HopkinsTextbookFinder:
             else:
                 request += self.course_tags[i]
         print "Parse Completed"
+        self.driver.quit()
         print str(self.create_count) + " Textbooks Created | " + str(self.identified_count) + "Textbooks Identified, Not Created"
 
     def wait_retry(self,request):
