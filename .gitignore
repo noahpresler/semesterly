@@ -4,6 +4,7 @@ env/
 dev_env/
 prod_env/
 dev_requirements.txt
+parsing_errors.log
 node_modules
 deploy.sh
 .DS_Store
