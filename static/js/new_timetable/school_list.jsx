@@ -7,17 +7,17 @@ module.exports = React.createClass({
 			<div className="school-list">
 				<div className="school-picker school-jhu" 
 					onClick={this.setSchool("jhu")}>
-					<img src="/static/img/school_logos/jhu_logo.png" 
+					<img width="80%" src="/static/img/school_logos/jhu_logo.png" 
 						className="school-logo"/>
 				</div>
 				<div className="school-picker school-uoft" 
 					onClick={this.setSchool("uoft")}>
-					<img src="/static/img/school_logos/uoft_logo.png" 
+					<img width="80%" src="/static/img/school_logos/uoft_logo.png" 
 						className="school-logo"/>
 				</div>
 				<div className="school-picker school-umd"
 					onClick={this.setSchool("umd")}>
-					<img src="/static/img/school_logos/umd_logo_white.png"
+					<img width="80%" src="/static/img/school_logos/umd_logo_white.png"
 						className="school-log"/>
 				</div>
 			</div>);

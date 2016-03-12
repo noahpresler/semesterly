@@ -4,7 +4,7 @@ var course_actions = require('./actions/course_actions');
 _SEMESTER = "S";
 
 var data = window.location.pathname.substring(1); // loading timetable data from url
-var full_pattern = new RegExp("(jhu|uoft)\/([fFsS]{1}?)\/(.*)");
+var full_pattern = new RegExp("(jhu|uoft|umd)\/([fFsS]{1}?)\/(.*)");
 if (data != null && data.match(full_pattern)) {
   matches = data.match(full_pattern);
   data = null
