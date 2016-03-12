@@ -16,8 +16,8 @@ for parser_class in [UofTParser, HopkinsParser, UMDParser]:
 		logging.exception(message)
 		parser.start()
 		# populate the JSON files in timetables/courses_json
-		start_json_populator(school, "F")
-		start_json_populator(school, "S")
+		start_JSON_populator(school, "F")
+		start_JSON_populator(school, "S")
 
 		# set the last_updated information for the school's courses
 		update_object, created = Updates.objects.update_or_create(
