@@ -101,6 +101,7 @@ class HopkinsParser:
             self.driver.execute_script("__doPostBack('ctl00$content$ucPageNumbersBottom$lbNext','')")
         self.safe_print("Courses: [" + str(self.course_updates) + "/" + str(self.course_creates) + "] [Updated/Created]")
         self.safe_print("Offerings: [" + str(self.offering_updates) + "/" + str(self.offering_creates) + "] [Updated/Created]")
+        self.driver.quit()
 
     def get_detail_html(self, url):
         html = None
