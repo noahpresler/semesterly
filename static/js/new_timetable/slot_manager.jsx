@@ -172,11 +172,19 @@ module.exports = React.createClass({
     },
 
     isPinned: function(slot) {
-        var comparator = this.props.courses_to_sections[slot.course]['C'];
-        if (this.props.school == "uoft") {
-            comparator = this.props.courses_to_sections[slot.course][slot.meeting_section[0]];
+        // object that maps section_type to locked section (codes) for that type
+        type_to_locked = this.props.courses_to_sections[slot.course]
+
+        // search for the meeting section code in the locked sections
+        for (var section_type in type_to_locked) {
+            if (type_to_locked.hasOwnProperty(section_type)) {
+                if (slot.meeting_section == type_to_locked[section_type]) {
+                    return true;
+                }
+            }
         }
-        return comparator == slot.meeting_section;
+        // if we can't find it, it musn't be pinned
+        return false;
     },
 
     getSlotsByDay: function() {

@@ -82,25 +82,28 @@ module.exports = Reflux.createStore({
     var new_state = $.extend(true, {}, TT_STATE); // deep copy of TT_STATE
     var c_to_s = new_state.courses_to_sections;
     if (!removing) { // adding course
-      if (TT_STATE.school == "jhu") {
-        if (c_to_s[new_course_id]) {
-          var new_section = c_to_s[new_course_id]['C'] != "" ? "" : section;
-          c_to_s[new_course_id]['C'] = new_section;
-        }
-        else {
-          c_to_s[new_course_id] = {'L': '', 'T': '', 'P': '', 'C': section};
-        }
-      }
-      else if (TT_STATE.school == "uoft") {
-        var locked_sections = c_to_s[new_course_id] == null ? {'L': '', 'T': '', 'P': '', 'C': ''} : // this is what we want to send if not locking
-          c_to_s[new_course_id];
-        if (section && section != "") {
-          var new_section = section;
-          if (c_to_s[new_course_id][section[0]] != "") {new_section = "";} // unlocking since section previously existed
-          locked_sections[section[0]] = new_section;
-        }
-        c_to_s[new_course_id] = locked_sections;
-      }
+      // if (TT_STATE.school == "jhu") {
+      //   if (c_to_s[new_course_id]) { // course already in roster
+      //     // if previously locked, unlock. otherwise, set to section
+      //     var new_section = c_to_s[new_course_id]['C'] != "" ? "" : section;
+      //     c_to_s[new_course_id]['C'] = new_section; 
+      //   }
+      //   else {
+      //     c_to_s[new_course_id] = {'L': '', 'T': '', 'P': '', 'C': section};
+      //   }
+      // }
+      // else if (TT_STATE.school == "uoft") {
+      //   var locked_sections = c_to_s[new_course_id] == null ? {'L': '', 'T': '', 'P': '', 'C': ''} : // this is what we want to send if not locking
+      //     c_to_s[new_course_id];
+      //   if (section && section != "") {
+      //     var new_section = section;
+      //     if (c_to_s[new_course_id][section[0]] != "") {new_section = "";} // unlocking since section previously existed
+      //     locked_sections[section[0]] = new_section;
+      //   }
+      //   c_to_s[new_course_id] = locked_sections;
+      // }
+      new_state['updated_course'] = {'course_id': new_course_id,
+                                   'section_code': section}
     }
     else { // removing course
       delete c_to_s[new_course_id];
@@ -113,6 +116,7 @@ module.exports = Reflux.createStore({
           return;  
       }
     }
+    console.log(new_state);
     this.makeRequest(new_state);
   },
 
@@ -147,15 +151,18 @@ module.exports = Reflux.createStore({
           this.trigger(replaced);
           return; // stop processing here
         }
-        if (response.length > 0) {
-          TT_STATE = new_state; //only update state if successful
+        timetables = response['timetable']
+        if (timetables.length > 0) { // we have received a timetable
+          delete new_state['added_course']
+          new_state['courses_to_sections'] = response['new_c_to_s'] 
+          TT_STATE = new_state; // update state since successful
           var index = 0;
-          if (new_state.index && new_state.index < response.length) {
+          if (new_state.index && new_state.index < timetables.length) {
             index = new_state.index;
             delete new_state['index'];
           }
           this.trigger({
-              timetables: response,
+              timetables: timetables,
               courses_to_sections: TT_STATE.courses_to_sections,
               current_index: index,
               loading: false,
