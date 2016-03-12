@@ -114,13 +114,15 @@ class HopkinsTextbookFinder:
         self.parse_textbooks(html) 
 
     def get_bn_html(self, url):
+        retries = 10
         while True:
             try:
                 self.driver.get(url)
                 break
             except: 
-                print "retrying in 10 seconds"
-                sleep(10)
+                print "retrying in "  + str(retries) + " seconds"
+                sleep(retries)
+                retries = retries*5
         sleep(1)
         while True:
             try:
