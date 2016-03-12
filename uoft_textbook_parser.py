@@ -68,18 +68,15 @@ def parse_results(source):
             info = get_amazon_fields(isbn)
             if info is None:
                 continue
-            try:
-                textbook = Textbook.objects.get(isbn=isbn)
-            except:
-                textbook = Textbook(
-                    isbn=isbn,
-                    detail_url=info['DetailPageURL'],
-                    image_url=info["ImageURL"],
-                    author=info["Author"],
-                    title=info["Title"])
-                textbook.save()
-                textbooks_found_count += 1
-
+            textbook_data = {
+                'detail_url': info['DetailPageURL'],
+                'image_url': info["ImageURL"],
+                'author': info["Author"],
+                'title': info["Title"]
+            }
+            textbook, created = Textbook.objects.update_or_create(isbn=isbn,
+                                                        defaults=textbook_data)
+            textbooks_found_count += int(created)
             for offering in course_offerings:
                 if offering.textbooks.filter(isbn=isbn).exists():
                     continue

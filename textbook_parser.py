@@ -50,7 +50,7 @@ WEBDRIVER_CHROME = '/root/chromedriver_executable/chromedriver' # e.g. '/home/li
 
 
 #===========================================FOR DEVELOPMENT USE=======================================
-WEBDRIVER_CHROME = '/home/linoah/chromedriver'
+WEBDRIVER_CHROME = None
 #=====================================================================================================
 
 
@@ -164,37 +164,39 @@ class HopkinsTextbookFinder:
     def make_textbook(self, is_required, isbn_number, course_code, section):
         course = HopkinsCourse.objects.filter(code__contains=course_code)[0]
         course_offerings = HopkinsCourseOffering.objects.filter(course=course,meeting_section = section)
-        textbook = None
+        info = self.get_amazon_fields(isbn_number)
+
+        # update/create textbook
+        textbook_data = {
+            'detail_url': info['DetailPageURL'],
+            'image_url': info["ImageURL"],
+            'author': info["Author"],
+            'title': info["Title"]
+        }
+        textbook, created = Textbook.objects.update_or_create(isbn=isbn_number,
+                                                        defaults=textbook_data)
+        self.create_count += int(created)
+
+        # link to all course offerings
         for co in course_offerings:
+            if co.textbooks.filter(isbn=isbn_number).exists():
+                continue
+            new_link = HopkinsLink(courseoffering=co, textbook=textbook,
+                            is_required=is_required)
+            new_link.save()
+
+        # print results
+        if created:
             try:
-                textbook = co.textbooks.get(isbn=isbn_number)
-            except:
-                pass
-        if textbook is None:
-            info = self.get_amazon_fields(isbn_number)
-            textbook = Textbook(
-                isbn = isbn_number,
-                is_required = is_required,
-                detail_url = info['DetailPageURL'],
-                image_url = info["ImageURL"],
-                author = info["Author"],
-                title = info["Title"])
-            textbook.save()
-            self.create_count +=1
-            try:
-                print "Textbook created: " + str(textbook)
+                print "Textbook created: " + str(textbook.title)
             except UnicodeEncodeError:
                 pass
         else:
             self.identified_count += 1
             try:
-                print "Textbook found, not created: " + str(textbook)
+                print "Textbook found, not created: " + str(textbook.title)
             except UnicodeEncodeError:
                 pass
-        for co in course_offerings:
-            if not co.textbooks.filter(isbn=isbn_number).exists():
-                co.textbooks.add(textbook)
-                co.save()
 
     def get_detail_page(self,result):
         try:
