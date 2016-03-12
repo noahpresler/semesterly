@@ -118,7 +118,7 @@ class HopkinsParser:
     def generate_courses(self, course_rows):
         for row in course_rows:
             pieces = row.findAll('td')
-            school_name = self.get_school_name(pieces).text
+            campus_name = self.get_campus_name(pieces).text
             class_number = self.get_class_number(pieces).text
             section_number = re.search(r"\(([A-Za-z0-9_.]+)\)",class_number)
             course_code = class_number[:-1*len(section_number.group(0))]
@@ -246,7 +246,7 @@ class HopkinsParser:
     def get_class_name(self, td):
          return td[2].text.replace('\n', '').rstrip().replace('[+]','').strip()
 
-    def get_school_name(self, td):
+    def get_campus_name(self, td):
         return td[0]
 
     def get_class_number(self, td):
