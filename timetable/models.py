@@ -6,7 +6,7 @@ from django.db import models
 
 #----------- Global Models  ----------------
 class Textbook(models.Model):
-  isbn = models.BigIntegerField(max_length=13, primary_key=True)
+  isbn = models.BigIntegerField(primary_key=True)
   detail_url = models.URLField(max_length=1000)
   image_url = models.URLField(max_length=1000)
   author = models.CharField(max_length=500)
@@ -310,4 +310,10 @@ class OttawaCourseOffering(BaseCourseOffering):
 
 class OttawaLink(TextbookLink):
   courseoffering = models.ForeignKey(OttawaCourseOffering)
+
+class Updates(models.Model):
+  school = models.CharField(max_length=100)
+  update_field = models.CharField(max_length=100) #e.g. 'textbook', 'course'
+  last_updated = models.DateTimeField(auto_now=True)
+  reason = models.CharField(max_length=200, default='Scheduled Update')
 
