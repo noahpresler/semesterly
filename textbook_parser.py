@@ -50,7 +50,7 @@ WEBDRIVER_CHROME = '/root/chromedriver_executable/chromedriver' # e.g. '/home/li
 
 
 #===========================================FOR DEVELOPMENT USE=======================================
-WEBDRIVER_CHROME = None
+WEBDRIVER_CHROME = '/home/linoah/chromedriver'
 #=====================================================================================================
 
 
@@ -114,7 +114,13 @@ class HopkinsTextbookFinder:
         self.parse_textbooks(html) 
 
     def get_bn_html(self, url):
-        self.driver.get(url)
+        while True:
+            try:
+                self.driver.get(url)
+                break
+            except: 
+                print "retrying in 10 seconds"
+                sleep(10)
         sleep(1)
         while True:
             try:
