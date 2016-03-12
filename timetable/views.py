@@ -78,12 +78,26 @@ def view_timetable(request):
 
     course_ids = params['courses_to_sections'].keys()
     courses = [SchoolCourse.objects.get(id=cid) for cid in course_ids]
-    LOCKED_SECTIONS = params['courses_to_sections']
+    locked_sections = params['courses_to_sections']
+    if 'updated_course' in params: # if we are updating, check for locked sections
+        cid = str(params['updated_course']['course_id'])
+        locked_sections[cid] = locked_sections.get(cid, {})
+        if cid not in course_ids:
+            courses.append(SchoolCourse.objects.get(id=int(cid)))
+
+        locked_section = params['updated_course']['section_code']
+        if locked_section:
+            update_locked_sections(locked_sections, cid, 
+                                    locked_section, SchoolCourseOffering)
+    LOCKED_SECTIONS = locked_sections
+
     set_tt_preferences(params['preferences'])
     result = courses_to_timetables(courses, params['semester'])
     save_analytics_data('timetables', {'sid': sid, 'school': SCHOOL, 
                                     'courses': courses, 'count': len(result)})
-    return HttpResponse(json.dumps(result), content_type='application/json')
+    # updated roster object 
+    response = {'timetable': result, 'new_c_to_s': locked_sections}
+    return HttpResponse(json.dumps(response), content_type='application/json')
 
 def set_tt_preferences(preferences):
     global NO_CLASSES_BEFORE, NO_CLASSES_AFTER, SORT_BY_SPREAD, LONG_WEEKEND
@@ -95,6 +109,20 @@ def set_tt_preferences(preferences):
     SPREAD = not preferences['grouped']
     SORT_BY_SPREAD = preferences['do_ranking']
     WITH_CONFLICTS = preferences['try_with_conflicts']
+
+def get_section_type(cid, section_code, offering_table):
+    """Query offering table to get section type of provided section."""
+    co = offering_table.objects.filter(course=int(cid), 
+                                        meeting_section=section_code)[0]
+    return co.section_type
+
+def update_locked_sections(locked_sections, cid, locked_section, offering_table):
+    """
+    Take cid of new course, and locked section for that course
+    and updated the locked_sections dictionary with new course.
+    """
+    section_type = get_section_type(cid, locked_section, offering_table)
+    locked_sections[cid][section_type] = locked_section
 
 # ******************************************************************************
 # ************************** COURSES -> TTs ************************************
@@ -429,7 +457,6 @@ def courses_to_offerings(courses, sem, plist=[]):
     """
     SchoolCourse, SchoolCourseOffering = school_to_models[SCHOOL]   
     sections = []
-
     for c in courses:
         offerings = SchoolCourseOffering.objects.filter(~Q(time_start__iexact='TBA'), \
                                                 (Q(semester=sem) | Q(semester='Y')), \
@@ -439,8 +466,8 @@ def courses_to_offerings(courses, sem, plist=[]):
                                                                     plist, \
                                                                     c.id)
         for section_type in section_type_to_sections:
-            locked_section = LOCKED_SECTIONS[str(c.id)][section_type]
-            if locked_section: # there is a pinned offering for this section of the course
+            if section_type in LOCKED_SECTIONS[str(c.id)]:
+                locked_section = LOCKED_SECTIONS[str(c.id)][section_type]
                 pinned = [c.id, locked_section, section_to_offerings[locked_section]]
                 sections.append([pinned])
             else:
