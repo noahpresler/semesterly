@@ -27,7 +27,7 @@ for parser_class in [UofTParser, HopkinsParser, UMDParser]:
 		# save the model
 		update.save()
 	except Exception as e:
-		logging.exception(("Error while parsing %s:\n\n" % school) +  str(e) + "\n")
+		logging.exception("Error while parsing %s:\n\n%s\n" % (school, str(e)))
 
 print "Finished!"
 
