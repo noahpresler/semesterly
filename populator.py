@@ -7,7 +7,7 @@ from django.db.models import Q
 
 from timetable.school_mappers import school_to_models
 
-def write_courses_to_json(school, sem): 
+def start_JSON_populator(school, sem): 
     module_dir = os.path.dirname(__file__)  # get current directory
     file_path = os.path.join(module_dir, "timetable/courses_json/" + school + "-" + sem + ".json")
     C, Co = school_to_models[school]
@@ -67,7 +67,7 @@ if __name__  == "__main__":
         print "Invalid school or semester provided"
         exit(1)
     print "Starting populator for " + school + " " + sem
-    write_courses_to_json(school, sem)
+    start_JSON_populator(school, sem)
     print "Done!"
 
 
