@@ -318,7 +318,6 @@ def add_meeting_and_check_conflict(day_to_usage, new_meeting):
         offering = course_offerings[i][0]
         day = offering.day
         offering_conflict = False
-        # pprint.pprint(find_slots_to_fill(offering.time_start, offering.time_end))
         for slot in find_slots_to_fill(offering.time_start, offering.time_end):
             if day_to_usage[day][slot]:
                 exists_conflict = True
@@ -590,7 +589,7 @@ def write_courses_to_json(request, school, sem):
 def get_courses(request, school, sem):
     school = school.lower()
     sem = sem.upper()
-    if (school not in ["jhu", "uoft"]) or (sem not in ["F", "S"]):
+    if (school not in school_to_models) or (sem not in ["F", "S"]):
         json_data = []
     else:
         module_dir = os.path.dirname(__file__)  # get current directory
@@ -604,7 +603,7 @@ def get_courses(request, school, sem):
 def get_course(request, school, id):
     global SCHOOL
     school = school.lower()
-    if school in ["uoft", "jhu"]:
+    if school in school_to_models:
         SCHOOL = school
     try:
         models = school_to_models[school]
@@ -630,7 +629,7 @@ def get_course(request, school, id):
 def get_course_id(request, school, sem, code):
     global SCHOOL
     school = school.lower()
-    if school in ["uoft", "jhu"]:
+    if school in school_to_models:
         SCHOOL = school
     try:
         models = school_to_models[school]
