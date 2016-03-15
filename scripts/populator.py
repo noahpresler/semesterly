@@ -9,7 +9,7 @@ from timetable.school_mappers import school_to_models
 
 def start_JSON_populator(school, sem): 
     module_dir = os.path.dirname(__file__)  # get current directory
-    file_path = os.path.join(module_dir, "timetable/courses_json/" + school + "-" + sem + ".json")
+    file_path = os.path.join(module_dir, "../timetable/courses_json/" + school + "-" + sem + ".json")
     C, Co = school_to_models[school]
     course_objs = C.objects.all()
     json_data = convert_courses_to_json(course_objs, sem, school, 50000)
