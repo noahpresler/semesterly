@@ -7,7 +7,7 @@ import datetime, logging
 
 logging.basicConfig(level=logging.ERROR, filename='parsing_errors.log')
 
-for parser_class in [UofTParser, HopkinsParser, UMDParser]:
+for parser_class in [UMDParser, HopkinsParser, UofTParser]:
 	parser = parser_class()
 	school = parser.get_school_name()
 	try:
