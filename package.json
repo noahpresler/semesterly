@@ -14,11 +14,13 @@
     "gulp-batch": "^1.0.5",
     "gulp-concat": "^2.6.0",
     "gulp-react": "^3.1.0",
+    "gulp-uglify": "^1.5.3",
     "gulp-util": "^3.0.7",
     "gulp-watch": "^4.3.5",
     "moment": "^2.11.2",
     "react-date-picker": "^4.0.8",
     "reactify": "^1.1.1",
+    "vinyl-buffer": "^1.0.0",
     "vinyl-source-stream": "^1.1.0",
     "watchify": "^3.6.1"
   },

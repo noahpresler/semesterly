@@ -2,7 +2,6 @@ var Root = require('./root');
 var TimetableActions = require('./actions/update_timetables');
 var course_actions = require('./actions/course_actions');
 _SEMESTER = "S";
-
 var data = window.location.pathname.substring(1); // loading timetable data from url
 var full_pattern = new RegExp("(jhu|uoft|umd)\/([fFsS]{1}?)\/(.*)");
 if (data != null && data.match(full_pattern)) {
@@ -33,5 +32,3 @@ else {
 	  document.getElementById('page')
 	);
 }
-
-
