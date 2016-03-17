@@ -13,7 +13,9 @@ const browserify = require('browserify');
 const watchify = require('watchify');
 const reactify = require('reactify');
 // const babelify = require('babelify');
-
+const uglify = require('gulp-uglify');
+const vbuffer = require('vinyl-buffer');
+// const streamify = require('gulp-streamify');
 
 gulp.task('default', function() {
 	var bundler = watchify(browserify({
@@ -32,6 +34,8 @@ gulp.task('default', function() {
 		.bundle()
 		.on('error', gutil.log.bind(gutil, 'Browserify Error'))
 		.pipe(source('application.js'))
+		.pipe(vbuffer())
+		.pipe(uglify().on('error', gutil.log.bind(gutil, 'Uglify Error')))
 		.pipe(gulp.dest('static/js/gulp'));
 		gutil.log('Compilation complete');
 		return result;
