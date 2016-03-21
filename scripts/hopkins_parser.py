@@ -10,11 +10,16 @@ from collections import OrderedDict
 import re
 from bs4 import BeautifulSoup
 from selenium.webdriver.support.ui import Select
+
+import django
+os.environ.setdefault("DJANGO_SETTINGS_MODULE", "semesterly.settings")
+django.setup()
 from timetable.models import *
+
 import urllib2
 from fake_useragent import UserAgent
 
-'''#==========================================FOR PRODUCTION USE======================================
+#==========================================FOR PRODUCTION USE======================================
 chrome_options = Options()
 chrome_options.add_argument("--disable-extensions")
 
@@ -24,14 +29,13 @@ display.start()
 # If the Chrome Webdriver is not already in your $PATH, change this to 
 # represent its filepath
 WEBDRIVER_CHROME = '/root/chromedriver_executable/chromedriver' # e.g. '/home/linoah/chromedriver'
-#====================================================================================================='''
+#=====================================================================================================
 
-
+'''
 #===========================================FOR DEVELOPMENT USE=======================================
 WEBDRIVER_CHROME = None # e.g. '/home/linoah/chromedriver'
 #=====================================================================================================
-
-django.setup()
+'''
 
 class HopkinsParser:
 
