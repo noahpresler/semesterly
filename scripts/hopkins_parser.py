@@ -10,6 +10,7 @@ from collections import OrderedDict
 import re
 from bs4 import BeautifulSoup
 from selenium.webdriver.support.ui import Select
+from selenium.webdriver.chrome.options import Options
 
 import django
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "semesterly.settings")
