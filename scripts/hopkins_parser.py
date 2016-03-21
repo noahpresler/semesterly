@@ -11,6 +11,7 @@ import re
 from bs4 import BeautifulSoup
 from selenium.webdriver.support.ui import Select
 from selenium.webdriver.chrome.options import Options
+from pyvirtualdisplay import Display
 
 import django
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "semesterly.settings")
