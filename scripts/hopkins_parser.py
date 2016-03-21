@@ -30,7 +30,7 @@ display.start()
 
 # If the Chrome Webdriver is not already in your $PATH, change this to 
 # represent its filepath
-WEBDRIVER_CHROME = '~/chromedriver' # e.g. '/home/linoah/chromedriver'
+WEBDRIVER_CHROME = '/root/chromedriver' # e.g. '/home/linoah/chromedriver'
 #=====================================================================================================
 
 '''
