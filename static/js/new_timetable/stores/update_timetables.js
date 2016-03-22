@@ -80,7 +80,11 @@ module.exports = Reflux.createStore({
     var new_course_id = new_course_with_section.id;
     var section = new_course_with_section.section;
     var new_state = $.extend(true, {}, TT_STATE); // deep copy of TT_STATE
+    if (section == "") { // unlocking
+      new_state.courses_to_sections[new_course_id] = {};
+    }
     var c_to_s = new_state.courses_to_sections;
+
     if (!removing) { // adding/updating course
       new_state['updated_course'] = {'course_id': new_course_id,
                                    'section_code': section}
@@ -96,7 +100,6 @@ module.exports = Reflux.createStore({
           return;  
       }
     }
-    console.log(new_state);
     this.makeRequest(new_state);
   },
 
@@ -193,7 +196,7 @@ module.exports = Reflux.createStore({
       var course_info = courses[i].split("+");
       var c = parseInt(Util.getUnhashedString(course_info.shift()));
 
-      TT_STATE.courses_to_sections[c] = {'L': '', 'T': '', 'P': '', 'C': ''};
+      TT_STATE.courses_to_sections[c] = {};
       if (course_info.length > 0) {
         for (var j = 0; j < course_info.length; j++) {
           var section = Util.getUnhashedString(course_info[j]);
