@@ -459,7 +459,6 @@ def courses_to_offerings(courses, sem, plist=[]):
     """
     SchoolCourse, SchoolCourseOffering = school_to_models[SCHOOL]   
     sections = []
-    pprint.pprint(LOCKED_SECTIONS)
     for c in courses:
         offerings = SchoolCourseOffering.objects.filter(~Q(time_start__iexact='TBA'), \
                                                 (Q(semester=sem) | Q(semester='Y')), \
