@@ -10,8 +10,6 @@ from collections import OrderedDict
 import re
 from bs4 import BeautifulSoup
 from selenium.webdriver.support.ui import Select
-from selenium.webdriver.chrome.options import Options
-from pyvirtualdisplay import Display
 
 import django
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "semesterly.settings")
@@ -21,7 +19,10 @@ from timetable.models import *
 import urllib2
 from fake_useragent import UserAgent
 
+'''
 #==========================================FOR PRODUCTION USE======================================
+from selenium.webdriver.chrome.options import Options
+from pyvirtualdisplay import Display
 chrome_options = Options()
 chrome_options.add_argument("--disable-extensions")
 
@@ -35,9 +36,8 @@ WEBDRIVER_CHROME = '/root/chromedriver' # e.g. '/home/linoah/chromedriver'
 
 '''
 #===========================================FOR DEVELOPMENT USE=======================================
-WEBDRIVER_CHROME = None # e.g. '/home/linoah/chromedriver'
+WEBDRIVER_CHROME = '/home/linoah/chromedriver'
 #=====================================================================================================
-'''
 
 class HopkinsParser:
 
@@ -47,7 +47,7 @@ class HopkinsParser:
         except UnicodeEncodeError:
             print "Print statement omitted for UnicodeEncodeError."
 
-    def __init__(self, sem="S"):
+    def __init__(self, sem="fall"):
         self.school = "jhu"
         self.html = None
         self.soup = None
@@ -72,12 +72,12 @@ class HopkinsParser:
             self.driver = webdriver.Chrome(WEBDRIVER_CHROME)
         self.driver.get("https://isis.jhu.edu/classes/")
         sleep(1)
-        if self.semester == "spring":
+        if self.semester == "fall":
             while True:
                 try: 
                     selector = Select(self.driver.find_element_by_id("ctl00_content_lbTerms"))
                     selector.deselect_all()
-                    selector.select_by_value("Spring 2016")
+                    selector.select_by_value("Fall 2016")
                     break
                 except:
                     self.safe_print("Waiting for page load")
@@ -104,7 +104,10 @@ class HopkinsParser:
             even_class_rows = self.soup.findAll('tr', class_="even")
             class_rows = self.merge_lists(even_class_rows,odd_class_rows) 
             self.generate_courses(class_rows)
-            self.driver.execute_script("__doPostBack('ctl00$content$ucPageNumbersBottom$lbNext','')")
+            try:
+                self.driver.execute_script("__doPostBack('ctl00$content$ucPageNumbersBottom$lbNext','')")
+            except:
+                break
         self.safe_print("Courses: [" + str(self.course_updates) + "/" + str(self.course_creates) + "] [Updated/Created]")
         self.safe_print("Offerings: [" + str(self.offering_updates) + "/" + str(self.offering_creates) + "] [Updated/Created]")
         self.driver.quit()
@@ -148,6 +151,7 @@ class HopkinsParser:
             course.description=class_description
             if CourseCreated:
                 self.safe_print("CREATED " + course_code + " ==> " + class_name)
+                course.save()
             else:
                 course.save()
                 self.safe_print("UPDATED " + course_code + " ==> " + class_name)
@@ -176,10 +180,10 @@ class HopkinsParser:
                 for l in links:
                     l.courseoffering = offering
                     l.save()
-                offering.save()
                 offering.location='' #TODO
                 offering.size=0     #TODO
                 offering.enrolment=0    #TODO
+                offering.save()
                 if OfferingCreated:
                     self.offering_creates+=1
                 else:
