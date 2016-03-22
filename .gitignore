@@ -13,4 +13,4 @@ TextbookParserOutput.txt
 workfile.html
 semes/
 documentation/build
-static/js/gulp
+static/js/gulp/*
