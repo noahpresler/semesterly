@@ -36,7 +36,7 @@ WEBDRIVER_CHROME = '/root/chromedriver' # e.g. '/home/linoah/chromedriver'
 
 '''
 #===========================================FOR DEVELOPMENT USE=======================================
-WEBDRIVER_CHROME = '/home/linoah/chromedriver'
+WEBDRIVER_CHROME = None
 #=====================================================================================================
 
 class HopkinsParser:

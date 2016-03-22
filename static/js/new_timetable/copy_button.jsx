@@ -22,7 +22,7 @@ module.exports = React.createClass({
 				The link for this timetable is below. Copy it to easily share your schedule with friends.
 				<input onClick={this.highlightAll} 
 				ref="link" className="copy-text" 
-				value={this.getShareLink()}></input>
+				defaultValue={this.getShareLink()}></input>
 			</div>
 		</div>) :
 		null;
