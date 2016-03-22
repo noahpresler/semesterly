@@ -79,14 +79,13 @@ def view_timetable(request):
     course_ids = params['courses_to_sections'].keys()
     courses = [SchoolCourse.objects.get(id=cid) for cid in course_ids]
     locked_sections = params['courses_to_sections']
-    if 'updated_course' in params: # if we are updating, check for locked sections
-        cid = str(params['updated_course']['course_id'])
+    for updated_course in params.get('updated_courses', []): 
+        cid = str(updated_course['course_id'])
         locked_sections[cid] = locked_sections.get(cid, {})
         if cid not in course_ids:
             courses.append(SchoolCourse.objects.get(id=int(cid)))
 
-        locked_section = params['updated_course']['section_code']
-        if locked_section:
+        for locked_section in filter(bool, updated_course['section_codes']):
             update_locked_sections(locked_sections, cid, 
                                     locked_section, SchoolCourseOffering)
     LOCKED_SECTIONS = locked_sections
@@ -119,10 +118,13 @@ def get_section_type(cid, section_code, offering_table):
 def update_locked_sections(locked_sections, cid, locked_section, offering_table):
     """
     Take cid of new course, and locked section for that course
-    and updated the locked_sections dictionary with new course.
+    and toggle its locked status (ie if was locked, unlock and vice versa.
     """
     section_type = get_section_type(cid, locked_section, offering_table)
-    locked_sections[cid][section_type] = locked_section
+    if locked_sections[cid].get(section_type, '') == locked_section: # already locked
+        locked_sections[cid][section_type] = '' # unlock that section_type
+    else: # add as locked section for that section_type
+        locked_sections[cid][section_type] = locked_section
 
 # ******************************************************************************
 # ************************** COURSES -> TTs ************************************
@@ -457,6 +459,7 @@ def courses_to_offerings(courses, sem, plist=[]):
     """
     SchoolCourse, SchoolCourseOffering = school_to_models[SCHOOL]   
     sections = []
+    pprint.pprint(LOCKED_SECTIONS)
     for c in courses:
         offerings = SchoolCourseOffering.objects.filter(~Q(time_start__iexact='TBA'), \
                                                 (Q(semester=sem) | Q(semester='Y')), \
@@ -466,7 +469,8 @@ def courses_to_offerings(courses, sem, plist=[]):
                                                                     plist, \
                                                                     c.id)
         for section_type in section_type_to_sections:
-            if section_type in LOCKED_SECTIONS[str(c.id)]:
+            # if there are any locked sections for given type, course
+            if str(c.id) in LOCKED_SECTIONS and LOCKED_SECTIONS[str(c.id)].get(section_type, False):
                 locked_section = LOCKED_SECTIONS[str(c.id)][section_type]
                 pinned = [c.id, locked_section, section_to_offerings[locked_section]]
                 sections.append([pinned])
