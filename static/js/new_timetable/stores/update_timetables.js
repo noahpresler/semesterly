@@ -82,8 +82,8 @@ module.exports = Reflux.createStore({
     var new_state = $.extend(true, {}, TT_STATE); // deep copy of TT_STATE
     var c_to_s = new_state.courses_to_sections;
     if (!removing) { // adding/updating course
-      new_state['updated_course'] = {'course_id': new_course_id,
-                                   'section_code': section}
+      new_state['updated_courses'] = [{'course_id': new_course_id,
+                                      'section_codes': [section]}]
     }
     else { // removing course
       delete c_to_s[new_course_id];
@@ -96,7 +96,6 @@ module.exports = Reflux.createStore({
           return;  
       }
     }
-    console.log(new_state);
     this.makeRequest(new_state);
   },
 
@@ -173,6 +172,7 @@ module.exports = Reflux.createStore({
 
 
   loadPresetTimetable: function(url_data) {
+    // parse out general timetable info
     var courses = url_data.split("&");
     var school = Util.getUnhashedString(courses.shift());
     var prefs = courses.shift();
@@ -189,23 +189,24 @@ module.exports = Reflux.createStore({
     TT_STATE.preferences = pref_obj;
     TT_STATE.school = school;
     TT_STATE.index = parseInt(Util.getUnhashedString(courses.shift()));
+
+    // parse out courses, locked sections
+    var locked_sections = [];
     for (var i = 0; i < courses.length; i++) {
       var course_info = courses[i].split("+");
-      var c = parseInt(Util.getUnhashedString(course_info.shift()));
+      var course_id = parseInt(Util.getUnhashedString(course_info.shift()));
 
-      TT_STATE.courses_to_sections[c] = {'L': '', 'T': '', 'P': '', 'C': ''};
+      var locked_sections_for_course = [];
       if (course_info.length > 0) {
         for (var j = 0; j < course_info.length; j++) {
           var section = Util.getUnhashedString(course_info[j]);
-          if (school == "uoft") {
-            TT_STATE.courses_to_sections[c][section[0]] = section;
-          }
-          else if (school == "jhu") {
-            TT_STATE.courses_to_sections[c]['C'] = section;
-          }
+          locked_sections_for_course.push(section);
         }
       }
+      locked_sections.push({'course_id': course_id,
+                            'section_codes': locked_sections_for_course})
     }
+    TT_STATE['updated_courses'] = locked_sections
     this.makeRequest(TT_STATE);
   },
 
