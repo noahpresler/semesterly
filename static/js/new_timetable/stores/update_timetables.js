@@ -135,7 +135,7 @@ module.exports = Reflux.createStore({
         timetables = response['timetable']
         if (timetables.length > 0) { // we have received a timetable
           new_state['courses_to_sections'] = response['new_c_to_s'] 
-          delete new_state['updated_courses']
+          delete new_state['updated_courses'] // reset updated_courses
           TT_STATE = new_state; // update state since successful
           var index = 0;
           if (new_state.index && new_state.index < timetables.length) {
