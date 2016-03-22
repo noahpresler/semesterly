@@ -76,7 +76,7 @@ class BaseCourse(models.Model):
 class BaseCourseOffering(models.Model):
   semester = models.CharField(max_length=2)
   meeting_section = models.CharField(max_length=20)
-  instructors = models.CharField(max_length=100, default='TBA')
+  instructors = models.CharField(max_length=500, default='TBA')
   day = models.CharField(max_length=1)
   time_start = models.CharField(max_length=15)
   time_end = models.CharField(max_length=15)
