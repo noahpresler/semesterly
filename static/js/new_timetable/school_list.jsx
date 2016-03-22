@@ -15,11 +15,7 @@ module.exports = React.createClass({
 					<img width="80%" src="/static/img/school_logos/uoft_logo.png" 
 						className="school-logo"/>
 				</div>
-				<div className="school-picker school-umd"
-					onClick={this.setSchool("umd")}>
-					<img width="80%" src="/static/img/school_logos/umd_logo_white.png"
-						className="school-log"/>
-				</div>
+				
 			</div>);
 	},
 
@@ -31,3 +27,11 @@ module.exports = React.createClass({
 
 });
 
+/*
+UMD
+<div className="school-picker school-umd"
+					onClick={this.setSchool("umd")}>
+					<img width="80%" src="/static/img/school_logos/umd_logo_white.png"
+						className="school-log"/>
+				</div>
+*/
