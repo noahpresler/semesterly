@@ -13,14 +13,20 @@ if (data != null && data.match(full_pattern)) {
      {}, 
      function(response) {
         if (response.id !== undefined) {
-          	ReactDOM.render(<Root school={matches[1]} sem={matches[2]} dataType={"load-course"} code={matches[3]} data={data} initial_course_id={response.id}/>, document.getElementById('page'));
+          	ReactDOM.render(<Root school={matches[1]} 
+                                  sem={matches[2]} 
+                                  dataType={"load-course"} 
+                                  code={matches[3]} 
+                                  data={data} 
+                                  initial_course_id={response.id}/>, 
+                            document.getElementById('page'));
    		    TimetableActions.setSchool(matches[1]);
         }
      }.bind(this)
   );
 } 
 else if (!data && typeof(Storage) !== "undefined") { // didn't find in URL, try local storage
-    data = localStorage.getItem('data');
+  data = localStorage.getItem('data');
 	ReactDOM.render(
 	  <Root data={data}/>,
 	  document.getElementById('page')
