@@ -35,7 +35,7 @@ gulp.task('default', function() {
 		.on('error', gutil.log.bind(gutil, 'Browserify Error'))
 		.pipe(source('application.js'))
 		.pipe(vbuffer())
-		// .pipe(uglify().on('error', gutil.log.bind(gutil, 'Uglify Error')))
+		.pipe(uglify().on('error', gutil.log.bind(gutil, 'Uglify Error')))
 		.pipe(gulp.dest('static/js/gulp'));
 		gutil.log('Compilation complete');
 		return result;
