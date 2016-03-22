@@ -12,7 +12,7 @@ SID = randomString(30, '!?()*&^%$#@![]0123456789abcdefghijklmnopqrstuvwxyzABCDEF
 
 TT_STATE = {
   school: "jhu",
-  semester: "S",
+  semester: "F",
   courses_to_sections: {},
   preferences: {
     'no_classes_before': false,
@@ -45,7 +45,7 @@ module.exports = Reflux.createStore({
       conflict_error: false,
       loading: false, // timetables loading
       courses_loading: false,
-      semester: "S",
+      semester: "F",
       school: ""};
   },
 
