@@ -114,7 +114,7 @@ var Slot = React.createClass({
     },
     pinOrUnpinCourse: function(e) {
         TimetableActions.updateCourses({id: this.props.course, 
-            section: this.props.pinned ? "" : this.props.meeting_section, 
+            section: this.props.meeting_section, 
             removing: false});
         e.stopPropagation();
     },
