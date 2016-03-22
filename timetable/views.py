@@ -77,11 +77,9 @@ def view_timetable(request):
     SchoolCourse, SchoolCourseOffering = school_to_models[SCHOOL]
 
     course_ids = params['courses_to_sections'].keys()
-    print course_ids
     courses = [SchoolCourse.objects.get(id=cid) for cid in course_ids]
     locked_sections = params['courses_to_sections']
     for updated_course in params.get('updated_courses', []): 
-        pprint.pprint(updated_course)
         cid = str(updated_course['course_id'])
         locked_sections[cid] = locked_sections.get(cid, {})
         if cid not in course_ids:
