@@ -25,7 +25,7 @@ module.exports = React.createClass({
 		(<div>
             <div className="copy-arrow-up"></div>
 			<div className="copy-content">
-				The link for this course is below. Copy it to easily share your schedule with friends.
+				The link for this course is below – copy to easily share it with friends!
 				<input onClick={this.highlightAll} 
 				ref="link" className="copy-text" 
 				value={this.getShareLink()}></input>
@@ -35,7 +35,6 @@ module.exports = React.createClass({
 		return (
 			<div className="copy-link-wrapper">
 			<a className="copy-link" onClick={this.toggleLinkPopover}>
-				<i class="fa fa-share-alt"></i>
 				Click to share
             </a>
             {pop}
