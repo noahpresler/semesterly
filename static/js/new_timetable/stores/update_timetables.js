@@ -80,9 +80,7 @@ module.exports = Reflux.createStore({
     var new_course_id = new_course_with_section.id;
     var section = new_course_with_section.section;
     var new_state = $.extend(true, {}, TT_STATE); // deep copy of TT_STATE
-    if (section == "") { // unlocking
-      new_state.courses_to_sections[new_course_id] = {};
-    }
+
     var c_to_s = new_state.courses_to_sections;
 
     if (!removing) { // adding/updating course
@@ -136,7 +134,7 @@ module.exports = Reflux.createStore({
         }
         timetables = response['timetable']
         if (timetables.length > 0) { // we have received a timetable
-          delete new_state['added_course']
+          delete new_state['updated_courses']
           new_state['courses_to_sections'] = response['new_c_to_s'] 
           TT_STATE = new_state; // update state since successful
           var index = 0;
