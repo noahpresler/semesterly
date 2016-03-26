@@ -5,18 +5,26 @@ module.exports = React.createClass({
 	render: function() {
 		return 	(
 			<div className="school-list">
-				<div className="school-picker school-jhu" 
-					onClick={this.setSchool("jhu")}>
-					<img width="80%" src="/static/img/school_logos/jhu_logo.png" 
-						className="school-logo"/>
-				</div>
-				<div className="school-picker school-uoft" 
-					onClick={this.setSchool("uoft")}>
-					<img width="80%" src="/static/img/school_logos/uoft_logo.png" 
-						className="school-logo"/>
-				</div>
-				
+				<SchoolButton school="jhu"/>
+				<SchoolButton school="uoft"/>
+				<SchoolButton school="umd"/>
 			</div>);
+	},
+
+});
+
+var SchoolButton = React.createClass({
+	render: function() {
+		var classes = "school-picker school-" + this.props.school
+		//expect logo to be in static/img/school_logos/[school name]_logo.png
+		var logo_path = "/static/img/school_logos/" + this.props.school + "_logo.png"
+		return (
+				<div className={classes}
+					onClick={this.setSchool(this.props.school)}>
+					<img width="80%" src={logo_path}
+						className="school-logo"/>
+				</div>
+			);
 	},
 
 	setSchool: function(new_school) {
@@ -24,14 +32,4 @@ module.exports = React.createClass({
 			TimetableActions.setSchool(new_school);
 		}.bind(this));
 	},
-
 });
-
-/*
-UMD
-<div className="school-picker school-umd"
-					onClick={this.setSchool("umd")}>
-					<img width="80%" src="/static/img/school_logos/umd_logo_white.png"
-						className="school-log"/>
-				</div>
-*/
