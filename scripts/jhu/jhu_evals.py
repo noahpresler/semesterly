@@ -7,7 +7,7 @@ from bs4 import BeautifulSoup
 
 django.setup()
 
-class EvaluationParser:
+class HopkinsEvalParser:
 	def __init__(self):
 		self.code_pattern = re.compile(r"^.*\..*\..*\..*$")
 		self.score_pattern = re.compile(r".*(\d\.\d\d).*")
@@ -16,7 +16,7 @@ class EvaluationParser:
 		self.code_cap_pattern = re.compile(r"^.*\.(.*\..*)\..*$")
 		self.current_year = None
 
-	def pasrse_evals(self):
+	def parse_evals(self):
 		for fn in os.listdir('./HopkinsEvaluations'):
 			print "PARSING DATA FOR: " + os.path.splitext(fn)[0]
 			self.current_year = os.path.splitext(fn)[0]
@@ -81,5 +81,5 @@ class EvaluationParser:
 	    html = urllib.urlopen(file_name).read()
 	    return html
 
-ep = EvaluationParser()
-ep.pasrse_evals()
+ep = HopkinsEvalParser()
+ep.parse_evals()
