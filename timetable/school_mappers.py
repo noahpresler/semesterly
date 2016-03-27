@@ -1,23 +1,14 @@
 """This file contains all dicts which map a school to its associated object"""
-from uoft_parser import UofTParser
-from hopkins_parser import HopkinsParser
-from umd_parser import UMDParser
 from timetable.models import *
+from StringIO import StringIO
+import sys
 
 school_to_models = {
     'jhu': (HopkinsCourse, HopkinsCourseOffering),
     'uoft': (Course, CourseOffering),
     'umd': (UmdCourse, UmdCourseOffering),
     'rutgers': (RutgersCourse, RutgersCourseOffering),
-    'uo': (OttawaCourse, OttawaCourseOffering)
-}
-
-school_to_parser = {
-	'jhu': HopkinsParser,
-    'uoft': UofTParser,
-    'umd': UMDParser,
-    'rutgers': None,
-    'uo': None
+    #'uo': (OttawaCourse, OttawaCourseOffering)
 }
 
 # the smallest number of minutes needed to describe start/end times
@@ -29,29 +20,37 @@ school_to_granularity = {
     'rutgers': 5
 }
 
-# assumes all parser follow the same naming conventions: [schoolname]_[parsertype]
-# where parsertype can be courses, evals, or textbooks
+
+# suppress output for parser class constructors by redirecting stdout
+# sys.stdout = StringIO()
+# stdout = sys.stdout
+
+# do the imports: assumes all parser follow the same naming conventions: 
+# schoolname_parsertype where parsertype can be courses, evals, or textbooks
+types = ['courses', 'evals', 'textbooks']
 for school in school_to_models:
-  for p_type in ['courses', 'evals', 'textbooks']:
+  for p_type in types:
     exec "from scripts.{0}.{0}_{1} import *".format(school, p_type)
 
-school_to_course_parser = {
-  'jhu': HopkinsParser().start,
+course_parsers = {
+  'jhu': lambda: HopkinsParser().start(), # avoid calling constructor lazily
   'uoft': UofTParser().start,
   'umd': UMDParser().start,
   'rutgers': parse_rutgers
 }
 
-school_to_eval_parser = {
-  'jhu': HopkinsEvalParser().parse_evals,
+eval_parsers = {
+  'jhu': lambda: HopkinsEvalParser().parse_evals(),
   'uoft': lambda: None,
   'umd': umdReview().parse_reviews,
   'rutgers': lambda: None
 }
 
-school_to_textbook_parser = {
-  'jhu': HopkinsTextbookFinder().parse_classes,
+textbook_parsers = {
+  'jhu': lambda: HopkinsTextbookFinder().parse_classes(),
   'uoft': parse_uoft_textbooks,
   'umd': lambda: None,
   'rutgers': lambda: None
 }
+
+# sys.stdout = stdout

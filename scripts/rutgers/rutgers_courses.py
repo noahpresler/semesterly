@@ -125,4 +125,7 @@ def parse_rutgers():
   print "Finished parsing in {0} minutes".format(int(seconds_elapsed)/60)
   print "{0} udpated and {1} created courses in total".format(num_updated,
                                                               num_created)
+
+if __name__ == '__main__':
+  parse_rutgers()
   
