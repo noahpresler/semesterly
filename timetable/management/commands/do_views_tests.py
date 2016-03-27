@@ -52,3 +52,4 @@ class CoursesToOfferings(unittest.TestCase):
 
   def get_cid(self, course_code):
     return str(Course.objects.get(code=course_code).id)
+    
