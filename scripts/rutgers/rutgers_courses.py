@@ -9,10 +9,10 @@ from itertools import product
 from string import capwords
 
 import django
-from timetable.models import *
-
-
+os.environ.setdefault("DJANGO_SETTINGS_MODULE", "semesterly.settings")
 django.setup()
+from timetable.models import RutgersCourse, RutgersCourseOffering
+
 
 class InvalidSemesterException(Exception):
   pass
