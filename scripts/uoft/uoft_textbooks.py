@@ -204,7 +204,7 @@ def process_campus(campus_info):
 
     print "Finished processing textbooks for %s." % (campus_info['name'])
 
-def start():
+def parse_uoft_textbooks():
     # campus_id and term for each campus are retrieved from the requests sent at
     # http://uoftbookstore.com/buy_courselisting.asp
     campus_to_info_map = {
@@ -235,6 +235,6 @@ def start():
 
 
 if __name__ == "__main__":
-    start()
+    parse_uoft_textbooks()
 
 
