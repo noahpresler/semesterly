@@ -14,6 +14,9 @@ module.exports = React.createClass({
   mixins: [Reflux.connect(TimetableStore), Reflux.connect(ToastStore), Reflux.connect(CodeToIdStore)],
   sidebar_collapsed: 'neutral',
 
+  getInitialState: function() {
+    return {last_updated: null};
+  },
 
   render: function() {
     var Modal = Boron['OutlineModal'];
@@ -25,6 +28,7 @@ module.exports = React.createClass({
             <div className="rect4"></div>
             <div className="rect5"></div>
         </div>);
+    var last_updated = this.state.last_updated ? <div className="last-updated">Data last updated on: {this.state.last_updated}</div> : null;
     var school_selector = (
       <SimpleModal header="Semester.ly | Welcome"
                    key="school"
@@ -41,7 +45,7 @@ module.exports = React.createClass({
         <div id="control-bar-container">
           <div id="semesterly-name">Semester.ly</div>
           <img id="semesterly-logo" src="/static/img/logo2.0.png"/>
-          <ControlBar toggleModal={this.toggleCourseModal}/>
+          <ControlBar toggleModal={this.toggleCourseModal} setLastUpdated={this.setLastUpdated}/>
         </div>
         <div id="navicon" onClick={this.toggleSideModal}>
           <span></span><span></span><span></span>
@@ -58,7 +62,9 @@ module.exports = React.createClass({
           <div className="cal-container">
             <Timetable toggleModal={this.toggleCourseModal} />
           </div>
+          {last_updated}
         </div>
+
       </div>
     );
   },
@@ -132,6 +138,10 @@ module.exports = React.createClass({
 
   collapseSideModal: function() {
     $('.cal-container, .side-container').removeClass('less-cal').addClass('full-cal');
+  },
+
+  setLastUpdated: function(new_last_updated) {
+    this.setState({last_updated: new_last_updated});
   }
 
 });

@@ -157,6 +157,9 @@ hr {
   #search-results-container {
     margin-top:-5px;
   }
+  .last-updated{
+    margin-left:1px;
+  }
 
 }
 
