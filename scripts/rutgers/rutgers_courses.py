@@ -26,7 +26,7 @@ def parse_time(start, end, pm):
   if pm == 'A' and end < start: # start is am but end is pm
     return parse_am(start), parse_pm(end)
   elif pm == 'A': # both am
-    return parse_am(start), parse_pm(end)
+    return parse_am(start), parse_am(end)
   else:
     return parse_pm(start), parse_pm(end)
 
