@@ -181,6 +181,6 @@ class umdReview:
         #     print(professor)
 
 
-
-u = umdReview()
-profs = u.parse_reviews()
+if __name__ == "__main__":
+    u = umdReview()
+    profs = u.parse_reviews()

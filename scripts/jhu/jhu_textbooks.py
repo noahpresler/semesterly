@@ -50,7 +50,7 @@ WEBDRIVER_CHROME = '/root/chromedriver_executable/chromedriver' # e.g. '/home/li
 
 
 #===========================================FOR DEVELOPMENT USE=======================================
-WEBDRIVER_CHROME = '/home/linoah/chromedriver'
+WEBDRIVER_CHROME = None
 #=====================================================================================================
 
 
@@ -257,6 +257,7 @@ class HopkinsTextbookFinder:
         else:
             return False
 
-cf = HopkinsTextbookFinder()
-cf.parse_classes()
+if __name__ == '__main__':
+    cf = HopkinsTextbookFinder()
+    cf.parse_classes()
 
