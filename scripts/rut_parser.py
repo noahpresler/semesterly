@@ -123,7 +123,7 @@ for subject in subjects:
 
 end_time = time.time()
 seconds_elapsed = end_time - start_time
-print "Finished parsing in " + str(datetime.timedelta(seconds_elapsed))
+print "Finished parsing in {0} minutes".format(int(seconds_elapsed)/60)
 print "{0} udpated and {1} created courses in total".format(num_updated,
                                                             num_created)
   
