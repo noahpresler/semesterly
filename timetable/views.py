@@ -25,6 +25,7 @@ import pprint
 
 from analytics.views import *
 from school_mappers import school_to_models, school_to_granularity
+from pytz import timezone
 
 MAX_RETURN = 60 # Max number of timetables we want to consider
 
@@ -627,8 +628,16 @@ def get_courses(request, school, sem):
             "courses_json/" + school + "-" + sem + ".json")
         data = open(file_path).read()
         json_data = json.loads(data)
-
-    return HttpResponse(json.dumps(json_data), content_type="application/json")
+        try:
+            update_obj = Updates.objects.get(school=school,update_field="Course").last_updated.astimezone(timezone('US/Eastern'))
+            last_updated = update_obj.strftime('%Y-%m-%d %H:%M') + " " + update_obj.tzname()
+        except:
+            last_updated = None
+            
+    return HttpResponse(json.dumps({
+                            'last_updated': last_updated, 
+                            'courses':json_data}), 
+            content_type="application/json")
 
 def get_course(request, school, id):
     global SCHOOL
