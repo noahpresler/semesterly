@@ -1,5 +1,7 @@
 """This file contains all dicts which map a school to its associated object"""
-
+from uoft_parser import UofTParser
+from hopkins_parser import HopkinsParser
+from umd_parser import UMDParser
 from timetable.models import *
 
 school_to_models = {
@@ -8,6 +10,14 @@ school_to_models = {
     'umd': (UmdCourse, UmdCourseOffering),
     'rutgers': (RutgersCourse, RutgersCourseOffering),
     'uo': (OttawaCourse, OttawaCourseOffering)
+}
+
+school_to_parser = {
+	'jhu': HopkinsParser,
+    'uoft': UofTParser,
+    'umd': UMDParser,
+    'rutgers': None,
+    'uo': None
 }
 
 # the smallest number of minutes needed to describe start/end times
