@@ -4,11 +4,16 @@ import os
 import requests, cookielib
 import datetime
 from bs4 import BeautifulSoup
+from sys import argv
 
 import django
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "semesterly.settings")
 django.setup()
 from timetable.models import UmdCourse, UmdCourseOffering
+
+# suppress warnings for not verifying SSL certificate 
+import warnings
+warnings.filterwarnings("ignore")
 
 def get_valid_time(time):
   """Take convert time to 24hr format and remove trailing am/pm."""
@@ -203,6 +208,7 @@ class umd:
 
 
   def get_courses(self, department_urls, semester='S'):
+    semester = 'F' if semester == 'fall' else 'S'
     num_created, num_updated = 0, 0
     for department_url in department_urls:
       html = self.get_html(department_url)
@@ -260,7 +266,7 @@ class umd:
           for day in days:
             try:
               co = UmdCourseOffering.objects.update_or_create(course=course,
-                 semester='S',
+                 semester=semester,
                  meeting_section=section.id,
                  day=day,
                  time_start=get_valid_time(section.start_time),
@@ -295,5 +301,7 @@ if __name__ == '__main__':
   # u.parse_courses()
 
   # Get all courses from the specified year and semester
-  u.parse_courses("fall", 2016)
-  u.parse_courses("spring", 2016)
+  if len(argv) < 2 or sys.argv[1] not in ['fall', 'spring']:
+    print "please specify either fall or spring as semester"
+  else:
+    u.parse_courses(sys.argv[1], 2016)
