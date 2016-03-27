@@ -13,6 +13,7 @@ Contents:
 
    onboarding.rst
    locking.rst
+   parsing.rst
 
 
 Indices and tables
