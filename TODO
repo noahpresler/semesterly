@@ -1,4 +1,0 @@
-– Correct conflict display (Felix)
-– Figure out close button on modal positioning
-– Deal with side scroll for large numbers of scrollables (positioning of bullets is off here)
-– Clean up static folder (especially static/calendar)
