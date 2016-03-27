@@ -54,7 +54,8 @@ module.exports = React.createClass({
     $.get("/courses/" + school + "/" + _SEMESTER, 
         {}, 
         function(response) {
-          this.setState({courses: response});
+          this.setState({courses: response.courses});
+          this.props.setLastUpdated(response.last_updated);
           TimetableActions.setCoursesDoneLoading();
 
         }.bind(this)
@@ -63,6 +64,7 @@ module.exports = React.createClass({
 
   render: function() {
     var search_results_div = this.getSearchResultsComponent();
+    var last_updated = this.state.last_updated ? <div className="last-updated">Last updated: {this.state.last_updated}</div> : null;
     return (
       <div id="search-bar">
         <div className="input-combine">
@@ -88,6 +90,8 @@ module.exports = React.createClass({
               </span>
             </div>
           </button>
+          {last_updated}
+
           {search_results_div}
         </div>
       </div>

@@ -7,7 +7,7 @@ module.exports = React.createClass({
     return (
       <div id="control-bar">
         <div id="search-bar-container">
-          <SearchBar toggleModal={this.props.toggleModal} />
+          <SearchBar {...this.props}/>
         </div>
         <PreferenceMenu />
       </div>
