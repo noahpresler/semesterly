@@ -1,4 +1,8 @@
 from django.core.management.base import BaseCommand, CommandError
+import os
+import django
+os.environ.setdefault("DJANGO_SETTINGS_MODULE", "semesterly.settings")
+django.setup()
 from timetable.models import Updates
 from timetable.school_mappers import course_parsers
 from scripts.populator import *
