@@ -226,7 +226,7 @@ class UmdCourse(BaseCourse):
     pass
 
   def get_all_textbook_info(self):
-    return self.base_get_all_textbook_info(UmdCourseEvaluation)
+    return self.base_get_all_textbook_info(UmdCourseOffering)
 
   def get_eval_info(self):
     return self.base_get_eval_info(UmdCourseEvaluation)
@@ -280,7 +280,7 @@ class OttawaCourse(BaseCourse):
     pass
 
   def get_all_textbook_info(self):
-    return self.base_get_all_textbook_info(OttawaCourseEvaluation)
+    return self.base_get_all_textbook_info(OttawaCourseOffering)
 
   def get_eval_info(self):
     return self.base_get_eval_info(OttawaCourseEvaluation)
@@ -327,7 +327,7 @@ class RutgersCourse(BaseCourse):
     pass
 
   def get_all_textbook_info(self):
-    return self.base_get_all_textbook_info(RutgersCourseEvaluation)
+    return self.base_get_all_textbook_info(RutgersCourseOffering)
 
   def get_eval_info(self):
     return self.base_get_eval_info(RutgersCourseEvaluation)
