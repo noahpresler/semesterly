@@ -18,3 +18,30 @@ school_to_granularity = {
     'umd': 5,
     'rutgers': 5
 }
+
+# assumes all parser follow the same naming conventions: [schoolname]_[parsertype]
+# where parsertype can be courses, evals, or textbooks
+for school in school_to_models:
+  for p_type in ['courses', 'evals', 'textbooks']:
+    exec "from scripts.{0}.{0}_{1} import *".format(school, p_type)
+
+school_to_course_parser = {
+  'jhu': HopkinsParser().start,
+  'uoft': UofTParser().start,
+  'umd': UMDParser().start,
+  'rutgers': parse_rutgers
+}
+
+school_to_eval_parser = {
+  'jhu': HopkinsEvalParser().parse_evals,
+  'uoft': lambda: None,
+  'umd': umdReview().parse_reviews,
+  'rutgers': lambda: None
+}
+
+school_to_textbook_parser = {
+  'jhu': HopkinsTextbookFinder().parse_classes,
+  'uoft': parse_uoft_textbooks,
+  'umd': lambda: None,
+  'rutgers': lambda: None
+}
