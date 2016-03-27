@@ -1,4 +1,5 @@
 """This file contains all dicts which map a school to its associated object"""
+import os
 import django
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "semesterly.settings")
 django.setup()
