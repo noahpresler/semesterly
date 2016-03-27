@@ -58,7 +58,6 @@
 }
 .school-picker {
   cursor:pointer;
-  margin-bottom:50px;
   transition: background-color 0.25s;
   border-radius:4px;
 }
@@ -72,11 +71,17 @@
   width:80%;
 }
 .school-uoft {
-  padding-bottom:5%;
+  margin-bottom:50px;
 }
 .school-jhu {
-  padding-top:10%;
-  padding-bottom:10%;
+  margin-top:35px;
+  margin-bottom:35px;
+}
+.school-umd {
+  margin-bottom:65px;
+}
+.school-rutgers{
+  margin-bottom:50px;
 }
 .pull-up {
   margin-bottom:-50px;
