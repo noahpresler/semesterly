@@ -6,6 +6,7 @@ module.exports = React.createClass({
 			<div className="school-list">
 				<SchoolButton school="jhu"/>
 				<SchoolButton school="uoft"/>
+				<SchoolButton school="umd"/>
 			</div>);
 	},
 });
