@@ -25,7 +25,10 @@ In order for all components to link up properly, the process should be as follow
 4. Implement your parser in the relevant file. There must be some function which
    when run, performs all the parsing. This function should have a non generic 
    name (not something like parse()), since all parser functions get imported
-   into the same namespace.
+   into the same namespace. This also means that it's important to wrap any
+   calls to the parsing function in a __name__ == '__main__' statement.
+   Also, since calls to the parser will be made from the project root, import
+   statements should be relative to the project root as well.
 5. Update the dictionaries in school_mappers.py with your new parsers. Each
    dict should map the chosen code name to the function mentioned in 4. If 
    a given file/parser has not yet been implemented, this can just be a dummy

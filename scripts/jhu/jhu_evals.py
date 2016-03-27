@@ -81,5 +81,6 @@ class HopkinsEvalParser:
 	    html = urllib.urlopen(file_name).read()
 	    return html
 
-ep = HopkinsEvalParser()
-ep.parse_evals()
+if __name__ == '__main__':
+	ep = HopkinsEvalParser()
+	ep.parse_evals()

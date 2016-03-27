@@ -24,7 +24,7 @@ import os
 import pprint
 
 from analytics.views import *
-from school_mappers import *
+from school_mappers import school_to_models, school_to_granularity
 
 MAX_RETURN = 60 # Max number of timetables we want to consider
 
