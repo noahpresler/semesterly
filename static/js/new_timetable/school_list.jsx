@@ -1,7 +1,6 @@
 TimetableActions = require('./actions/update_timetables');
 
 module.exports = React.createClass({
-
 	render: function() {
 		return 	(
 			<div className="school-list">
@@ -11,7 +10,6 @@ module.exports = React.createClass({
 				<SchoolButton school="rutgers"/>
 			</div>);
 	},
-
 });
 
 var SchoolButton = React.createClass({
