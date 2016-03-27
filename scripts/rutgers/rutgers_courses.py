@@ -64,9 +64,8 @@ def parse_rutgers():
   print "parsing courses"
   start_time = time.time()
 
-  campus = 'NB'
-  for subject, campus, semester in itertools.product(subjects, campuses, semesters):
-    session = semester + year
+  for subject, campus, semester in product(subjects, campuses, semesters):
+    session = ('9' if semester == 'F' else '1') + year
     response = requests.get(api_url.format(api_key, session, subject, 'NB'))
     courses = response.json()
     if not courses:
