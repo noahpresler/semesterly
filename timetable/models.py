@@ -15,6 +15,11 @@ class Textbook(models.Model):
   def get_info(self):
     return model_to_dict(self)
 
+class Updates(models.Model):
+  school = models.CharField(max_length=100)
+  update_field = models.CharField(max_length=100) #e.g. 'textbook', 'course'
+  last_updated = models.DateTimeField(auto_now=True)
+  reason = models.CharField(max_length=200, default='Scheduled Update')
 
 #----------- Abstract Models  ----------------
 class TextbookLink(models.Model):
@@ -85,7 +90,7 @@ class BaseCourseOffering(models.Model):
   enrolment = models.IntegerField(default=-1)
   waitlist = models.IntegerField(default=0)
   # if no section_type is specified, we assume it's a lecture
-  section_type = models.CharField(max_length=5, default='L')
+  section_type = models.CharField(max_length=50, default='L')
 
   def get_textbooks(self):
     textbooks = []
@@ -311,9 +316,50 @@ class OttawaCourseOffering(BaseCourseOffering):
 class OttawaLink(TextbookLink):
   courseoffering = models.ForeignKey(OttawaCourseOffering)
 
-class Updates(models.Model):
-  school = models.CharField(max_length=100)
-  update_field = models.CharField(max_length=100) #e.g. 'textbook', 'course'
-  last_updated = models.DateTimeField(auto_now=True)
-  reason = models.CharField(max_length=200, default='Scheduled Update')
+#---------------------- Rutgers University ----------------------------
+class RutgersCourse(BaseCourse):
+  related_courses = models.ManyToManyField("self", blank=True)
+
+  def get_dept(self):
+    pass
+
+  def get_dept_matches(self):
+    pass
+
+  def get_all_textbook_info(self):
+    return self.base_get_all_textbook_info(RutgersCourseEvaluation)
+
+  def get_eval_info(self):
+    return self.base_get_eval_info(RutgersCourseEvaluation)
+
+
+class RutgersCourseEvaluation(BaseCourseEvaluation):
+  course = models.ForeignKey(RutgersCourse)
+
+
+class RutgersCourseOffering(BaseCourseOffering):
+  course = models.ForeignKey(RutgersCourse)
+  textbooks = models.ManyToManyField(Textbook, through='RutgersLink')
+
+  def get_course_code(self):
+    pass
+
+  def get_course_tag(self):
+    pass
+
+  def get_dept(self):
+    pass
+
+  def get_course(self):
+    pass
+
+  def get_section(self):
+    pass
+
+  def __unicode__(self):
+    # return "Semester: %s, Section: %s, Time: %s" % (self.semester, self.meeting_section, self.time)
+    return "Day: %s, Time: %s - %s" % (self.day, self.time_start, self.time_end)
+
+class RutgersLink(TextbookLink):
+  courseoffering = models.ForeignKey(RutgersCourseOffering)
   
