@@ -55,7 +55,7 @@ api_url = "http://sauron.rutgers.edu/~rfranknj/soc/api.php?key={0}" + \
           "&semester={1}&subj={2}&campus={3}&level=U"
 
 
-# find subject numbers by just looking for numbers surrounded by spaces
+# find subject numbers by just looking for 3 number seqs surrounded by spaces
 # works well but maybe not very robust if they change the html
 print "retrieving subject codes"
 html = urlopen(subjects_url).read()
