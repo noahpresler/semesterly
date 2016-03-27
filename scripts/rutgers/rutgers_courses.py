@@ -19,10 +19,26 @@ class InvalidSemesterException(Exception):
   pass
 
 
-def parse_time(time):
-  """Convert hhmm to h:mm."""
+def parse_time(start, end, pm):
+  """
+  Convert time in hhmm 12hr format to [h]h:mm 24hr format. pm is 'A' if 
+  start is AM and 'P' if stsart is PM"""
+  if pm == 'A' and end < start: # start is am but end is pm
+    return parse_am(start), parse_pm(end)
+  elif pm == 'A': # both am
+    return parse_am(start), parse_am(end)
+  else:
+    return parse_pm(start), parse_pm(end)
+
+def parse_am(time):
+  """Same as above but for a single time string, which is in am."""
   parsed = time[:2] + ':' + time[2:]
   return parsed[1:] if parsed[0] == '0' else parsed
+
+def parse_pm(time):
+  """Same as above but for a single time string, which is in pm."""
+  hr, mn = str(int(time[:2]) + 12), time[2:]
+  return '12' + ':' + mn if hr == '24' else hr + ':' + mn
 
 def parse_location(campus, building, room):
   if not campus or not building or not room:
@@ -98,10 +114,13 @@ def parse_rutgers():
                   offering['endTime']):
             print "SKIPPED offering with no set time"
             continue
+          start, end = parse_time(offering['startTime'],
+                                  offering['endTime'],
+                                  offering['pmCode'])
           o_data = {
             'day': parse_day(offering['meetingDay']),
-            'time_start': parse_time(offering['startTime']),
-            'time_end': parse_time(offering['endTime']),
+            'time_start': start,
+            'time_end': end,
             'instructors': ', '.join(map(parse_instructor, instructors)),
             'location': parse_location(offering['campusAbbrev'] or 'TBD',
                                        offering['buildingCode'] or 'TBD',
