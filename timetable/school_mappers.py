@@ -35,7 +35,7 @@ for school in school_to_models:
 course_parsers = {
   'jhu': lambda: HopkinsParser().start(), # avoid calling constructor lazily
   'uoft': UofTParser().start,
-  'umd': UMDParser().start,
+  'umd': parse_umd,
   'rutgers': parse_rutgers
 }
 

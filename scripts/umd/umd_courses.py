@@ -2,6 +2,7 @@ import sys
 import re
 import os
 import requests, cookielib
+import datetime
 from bs4 import BeautifulSoup
 
 import django
@@ -281,6 +282,12 @@ class umd:
     courses = self.get_courses(department_urls, semester)
     return courses
 
+def parse_umd():
+  """Parse courses for both semester of the current year."""
+  year = str(datetime.datetime.now().year)
+  u = umd()
+  u.parse_courses("fall", year)
+  u.parse_courses("spring", year)
 
 if __name__ == '__main__':
   u = umd()
