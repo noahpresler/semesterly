@@ -71,14 +71,16 @@
   width:80%;
 }
 .school-uoft {
-  margin-bottom:50px;
+  padding-bottom:25px;
 }
 .school-jhu {
-  margin-top:35px;
-  margin-bottom:35px;
+  padding-top: 35px;
+  padding-bottom: 35px;
+  margin-top: -25px;
 }
 .school-umd {
-  margin-bottom:65px;
+  padding-bottom: 45px;
+  padding-top: 30px;
 }
 .school-rutgers{
   margin-bottom:50px;
