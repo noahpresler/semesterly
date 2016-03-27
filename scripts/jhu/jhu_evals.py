@@ -17,10 +17,10 @@ class HopkinsEvalParser:
 		self.current_year = None
 
 	def parse_evals(self):
-		for fn in os.listdir('./HopkinsEvaluations'):
+		for fn in os.listdir('./scripts/jhu/HopkinsEvaluations'):
 			print "PARSING DATA FOR: " + os.path.splitext(fn)[0]
 			self.current_year = os.path.splitext(fn)[0]
-			html = self.get_eval_html(os.getcwd() + '/HopkinsEvaluations/' + fn)
+			html = self.get_eval_html(os.getcwd() + '/scripts/jhu/HopkinsEvaluations/' + fn)
 			soup = BeautifulSoup(html,"html.parser")
 			self.process_soup(soup)
 
