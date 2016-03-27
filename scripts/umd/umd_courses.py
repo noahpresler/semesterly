@@ -128,7 +128,7 @@ class umd:
     html = None
     while html is None:
       try:
-        r = self.s.get(url,cookies=self.cookies,headers=self.headers)
+        r = self.s.get(url,cookies=self.cookies,headers=self.headers,verify=False)
         if r.status_code == 200:
           html = r.text
       except (requests.exceptions.Timeout,
