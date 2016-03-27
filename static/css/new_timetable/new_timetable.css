@@ -814,7 +814,10 @@ input.cmn-toggle-round:checked + label:after {
   float:left;
 }
 
-
+.last-updated {
+  font-size:12px;
+  margin-left:40px;
+}
 
 .eval-wrapper #prof {
   display: inline-block;
