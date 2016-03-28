@@ -3,8 +3,11 @@ import requests, cookielib
 from bs4 import BeautifulSoup
 import re
 import datetime
-from timetable.models import *
 import django
+import os
+os.environ.setdefault("DJANGO_SETTINGS_MODULE", "semesterly.settings")
+django.setup()
+from timetable.models import UmdCourse, UmdCourseOffering,UmdCourseEvaluation
 
 django.setup()
 
