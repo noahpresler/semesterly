@@ -16,54 +16,76 @@ const reactify = require('reactify');
 const uglify = require('gulp-uglify');
 const vbuffer = require('vinyl-buffer');
 // const streamify = require('gulp-streamify');
+const minifyCSS = require('gulp-minify-css');
 
-gulp.task('default', function() {
-	var bundler = watchify(browserify({
-		entries: ['./static/js/new_timetable/app.jsx'],
-		transform: [reactify],
-		extensions: ['.jsx'],
-		debug: true,
-		cache: {},
-		packageCache: {},
-		fullPaths: true
-	}));
 
-	function build(file) {
-		if (file) gutil.log('Recompiling ' + file);
-		var result = bundler
-		.bundle()
-		.on('error', gutil.log.bind(gutil, 'Browserify Error'))
-		.pipe(source('application.js'))
-		.pipe(vbuffer())
+var staticDirectory = './static/',
+
+    // Source and target JS files for Browserify
+    jsMainFile      = staticDirectory + 'js/new_timetable/app.jsx',
+    jsBundleFile    = 'application.js',
+    jsDest          = staticDirectory + 'js/gulp',
+
+    // Source and target LESS files
+    cssMainFile     = staticDirectory + 'less/styles.less',
+    cssFiles        = staticDirectory + 'css/new_timetable/*.css';
+
+
+// Browserify bundler, configured for reactify with sources having a .jsx extension
+var bundler = browserify({
+    entries: [jsMainFile],
+    transform: [reactify],
+    extensions: ['.jsx'],
+    debug: true,
+    cache: {}, packageCache: {}, fullPaths: true // for watchify
+});
+
+// Build JavaScript using Browserify
+gulp.task('js', function() {
+    return bundler
+        .bundle()
+        .pipe(source(jsMainFile))
+        .pipe(vbuffer())
+        .pipe(uglify())
+        .pipe(gulp.dest(jsDest));
+});
+
+gulp.task('css', function(){
+    return gulp.src('static/css/new_timetable/*')
+        .pipe(minifyCSS())
+        .pipe(gulp.dest('static/css/gulp'));
+});
+
+gulp.task('watchify', function() {
+    var watcher  = watchify(bundler);
+    return watcher
+    .on('error', gutil.log.bind(gutil, 'Browserify Error'))
+    .on('update', function () {
+        watcher.bundle()
+        .pipe(source(jsBundleFile))
+        .pipe(vbuffer())
 		.pipe(uglify().on('error', gutil.log.bind(gutil, 'Uglify Error')))
-		.pipe(gulp.dest('static/js/gulp'));
-		gutil.log('Compilation complete');
-		return result;
-	};
-	build();
-	bundler.on('update', build);
+        .pipe(gulp.dest(jsDest));
+        gutil.log("Javascript compilation complete!");
+    })
+    .bundle() // Create the initial bundle when starting the task
+    .pipe(source(jsBundleFile))
+    .pipe(gulp.dest(jsDest));
 });
 
-gulp.task('analytics', function () {
-return gulp.src('./static/js/analytics/**')
-    .pipe(concat('analytics_application.js'))
-    .pipe(react())
-    .pipe(gulp.dest('static/js/gulp'));
+gulp.task('csswatch', function () {
+    gulp.watch(cssFiles, ['css']);
 });
 
-// gulp.task('transform', function() {
-//   return gulp.src('static/js/new_timetable/*.jsx')
-//   .pipe(babel({
-//         presets: ['es2015', 'react']
-//     }))
-//   .pipe(concat('application.js'))
-//   .pipe(gulp.dest('static/js/gulp'));
-// });
-// gulp.task('watcher', functi on () {
-//     watch('static/js/new_timetable/*.jsx', batch(function(events, done) {
-//         gulp.start('transform', done);
-//     }));
-// });
+gulp.task('watch', ['watchify', 'csswatch']);
+gulp.task('default', ['watch']);
 
-// gulp.task('default', ['watcher', 'transform'], function(){});
+
+
+// gulp.task('analytics', function () {
+// return gulp.src('./static/js/analytics/**')
+//     .pipe(concat('analytics_application.js'))
+//     .pipe(react())
+//     .pipe(gulp.dest('static/js/gulp'));
+// });
 
