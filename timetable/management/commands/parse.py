@@ -23,6 +23,8 @@ class Command(BaseCommand):
 		self.stdout.write(message)
 
   def handle(self, *args, **options):
+  	logging.basicConfig(level=logging.ERROR, filename='parse_errors.log')
+
   	VALID_SCHOOLS=['jhu', 'umd', 'rutgers', 'uoft']
 
   	schools = VALID_SCHOOLS
