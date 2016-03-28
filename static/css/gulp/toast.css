@@ -1,0 +1,4 @@
+/*!
+ *  React Toast CSS 0.1 by Semesterly - http://semester.ly
+ *  License - MIT
+ */body{overflow-x:hidden}.sem-toast{position:absolute;right:0;margin-top:20px;margin-right:20px;background-color:#222;opacity:.8;width:16%;min-width:200px;border-radius:4px;color:#fff;padding:15px;z-index:5000;animation:slide 4.5s;font-size:13px;text-align:center;word-wrap:break-word}@keyframes slide{0%{transform:translate(0,100px)}25%,75%{transform:translate(0,0)}100%{transform:translate(0,-400px)}}@media (max-width:766px){.sem-toast{opacity:1}}
