@@ -86,7 +86,7 @@ class umdReview:
                 continue
         return html.encode('utf-8')
 
-    def get_reviews(self, url, professor):
+    def get_reviews(self, url, name):
         html = self.get_html(self.base_url + url)
         soup = BeautifulSoup(html,"html.parser")
         content = soup.find("div", {"id": "body"})
@@ -140,7 +140,7 @@ class umdReview:
                 text += str(paragraph.encode('utf-8').decode('ascii', 'ignore'))
 
             text = text.replace("<br/>", "")
-            professor.reviews.append(Review(reviewer, rating, course, year, text, professor.name))
+            Review(reviewer, rating, course, year, text, name)
 
     def get_professors(self, url):
         html = self.get_html(self.base_url + url)
@@ -165,11 +165,7 @@ class umdReview:
 
             num_reviews = prof[4]
 
-            professor = Professor(name, rank, rating, num_reviews)
-
-            self.professors.append(professor)
-
-            self.get_reviews(review_url, professor)
+            self.get_reviews(review_url, name)
 
     def parse_reviews(self):
         url = "viewreviews/?all"
