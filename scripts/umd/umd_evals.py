@@ -140,7 +140,8 @@ class umdReview:
                 text += str(paragraph.encode('utf-8').decode('ascii', 'ignore'))
 
             text = text.replace("<br/>", "")
-            Review(reviewer, rating, course, year, text, name)
+            if course:
+                Review(reviewer, rating, course, year, text, name)
 
     def get_professors(self, url):
         html = self.get_html(self.base_url + url)
