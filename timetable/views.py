@@ -590,32 +590,6 @@ def get_minute_from_string_time(time_string):
     """Get minute as an int from time as a string."""
     return int(time_string[time_string.index(':') + 1:] if ':' in time_string \
                                                         else 0)
-def do_all(request):
-    write_courses_to_json(request, "uoft", "F")
-    write_courses_to_json(request, "uoft", "S")
-    write_courses_to_json(request, "jhu", "F")
-    write_courses_to_json(request, "jhu", "S")
-    return HttpResponse("Success!")
-
-
-def write_courses_to_json(request, school, sem):
-    school = school.lower()
-    sem = sem.upper()
-    if (school not in ["jhu", "uoft"]) or (sem not in ["F", "S"]):
-        json_data = []
-    else:
-        module_dir = os.path.dirname(__file__)  # get current directory
-        file_path = os.path.join(module_dir, "courses_json/" + school + "-" + sem + ".json")
-
-        global SCHOOL
-        SCHOOL = school
-        C, Co = school_to_models[school][0], school_to_models[school][1]
-        course_objs = C.objects.all()
-        json_data = convert_courses_to_json(course_objs, sem, 50000)
-        with open(file_path, 'w') as outfile:
-            json.dump(json_data, outfile)
-
-
 
 def get_courses(request, school, sem):
     school = school.lower()
