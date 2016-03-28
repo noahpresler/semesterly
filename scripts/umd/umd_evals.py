@@ -12,12 +12,12 @@ from timetable.models import UmdCourse, UmdCourseOffering,UmdCourseEvaluation
 django.setup()
 
 class Professor:
-    def __init__(self, name, rank, average_rating, num_reviews, reviews):
+    def __init__(self, name, rank, average_rating, num_reviews):
         self.name = name
         self.rank = rank
         self.average_rating = average_rating
         self.num_reviews = num_reviews
-        self.reviews = reviews
+        self.reviews = []
 
     def __str__(self):
         ret = (
@@ -72,6 +72,7 @@ class umdReview:
             'User-Agent': 'My User Agent 1.0'
         }
         self.base_url = "http://www.ourumd.com/"
+        self.professors = []
 
     def get_html(self, url):
         html = None
@@ -85,8 +86,7 @@ class umdReview:
                 continue
         return html.encode('utf-8')
 
-    def get_reviews(self, url, prof):
-        reviews = []
+    def get_reviews(self, url, professor):
         html = self.get_html(self.base_url + url)
         soup = BeautifulSoup(html,"html.parser")
         content = soup.find("div", {"id": "body"})
@@ -140,13 +140,9 @@ class umdReview:
                 text += str(paragraph.encode('utf-8').decode('ascii', 'ignore'))
 
             text = text.replace("<br/>", "")
-
-            reviews.append(Review(reviewer, rating, course, year, text, prof))
-
-        return reviews
+            professor.reviews.append(Review(reviewer, rating, course, year, text, professor.name))
 
     def get_professors(self, url):
-        professors = []
         html = self.get_html(self.base_url + url)
         soup = BeautifulSoup(html,"html.parser")
         content = soup.find("div", {"id": "body"})
@@ -169,18 +165,19 @@ class umdReview:
 
             num_reviews = prof[4]
 
-            reviews = self.get_reviews(review_url, name)
+            professor = Professor(name, rank, rating, num_reviews)
 
-            professors.append(Professor(name, rank, rating, num_reviews, reviews))
+            self.professors.append(professor)
 
-        return professors
-
+            self.get_reviews(review_url, professor)
 
     def parse_reviews(self):
         url = "viewreviews/?all"
-        professors = self.get_professors(url)
-        return professors
-        # for professor in professors:
+        self.get_professors(url)
+        return self.professors
+
+        # Un-comment if needed.
+        # for professor in self.professors:
         #     print(professor)
 
 
