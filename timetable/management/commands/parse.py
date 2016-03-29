@@ -23,7 +23,7 @@ class Command(BaseCommand):
   def handle(self, *args, **options):
   	logging.basicConfig(level=logging.ERROR, filename='parse_errors.log')
 
-  	VALID_SCHOOLS=['jhu', 'umd', 'rutgers', 'uoft']
+  	VALID_SCHOOLS = course_parsers.keys()
 
   	schools = VALID_SCHOOLS
   	if options['school']:
