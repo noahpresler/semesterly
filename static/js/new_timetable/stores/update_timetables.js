@@ -25,7 +25,7 @@ TT_STATE = {
   sid: SID,
 }
 
-SCHOOL_LIST = ["jhu", "uoft", "umd", "rutgers"];
+SCHOOL_LIST = ["jhu", "uoft", "umd", "rutgers", "uo"];
 SEMESTER_LIST = ["S","F"]
 
 // flag to check if the user just turned conflicts off
