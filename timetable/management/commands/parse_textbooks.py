@@ -1,15 +1,17 @@
 from django.core.management.base import BaseCommand, CommandError
-import os
-import django
 from timetable.models import Updates
-from timetable.school_mappers import course_parsers
-from scripts.populator import *
-import datetime, logging, os, sys
-
+from timetable.school_mappers import textbook_parsers
+from amazonproduct import API
+from amazonproduct.errors import InvalidParameterValue
+from fake_useragent import UserAgent
+from bs4 import BeautifulSoup
+from django.db.models import Q
+from django.utils.encoding import smart_str
+import datetime, logging, os, sys, cookielib, requests, time, re
 
 class Command(BaseCommand):
-  help = "Initiates specified parsers for specified schools. If no school \
-  is provided, starts parsers for all schools."
+  help = "Initiates textbook parsers for specified schools. If no school \
+  is provided, starts textbook parsers for all schools."
   def add_arguments(self, parser):
   	 	# optional argument to specify parser for specific school
   	 	parser.add_argument('school', nargs='?', default='')
@@ -23,7 +25,7 @@ class Command(BaseCommand):
   def handle(self, *args, **options):
   	logging.basicConfig(level=logging.ERROR, filename='parse_errors.log')
 
-  	VALID_SCHOOLS=['jhu', 'umd', 'rutgers', 'uoft']
+  	VALID_SCHOOLS=textbook_parsers.keys()
 
   	schools = VALID_SCHOOLS
   	if options['school']:
@@ -34,25 +36,23 @@ class Command(BaseCommand):
 			exit(1)
 
 
-	for school, do_parse in course_parsers.iteritems():
+	for school, do_parse in textbook_parsers.iteritems():
   		if school in schools:
 			try:
 
-				message = "Starting parser for %s.\n" % (school)
-				self.success_print(message)
+				message = "parser for %s.\n" % (school)
+				self.success_print("Starting " + message)
 				logging.exception(message)
 
 				do_parse()
-				# populate the JSON files in timetables/courses_json
-				start_JSON_populator(school, "F")
-				start_JSON_populator(school, "S")
-
-				# set the last_updated information for the school's courses
+				
+				# set the last_updated information for the school's textbooks
 				update_object, created = Updates.objects.update_or_create(
 					school=school,
-					update_field="Course",
+					update_field="Textbook",
 					defaults={'last_updated': datetime.datetime.now()}
 				)
+				self.success_print("Finished " + message + "\n")
 
 			except Exception as e:
 				error = "Error while parsing %s:\n\n%s\n" % (school, str(e))
