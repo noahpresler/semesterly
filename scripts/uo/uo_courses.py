@@ -103,6 +103,9 @@ class ottawa_parser:
 	      self.parse_course_row(row)
 	      self.num_parsed += 1
 	      bar.update(self.num_parsed)
+	    return True
+	  else:
+	  	return False
 
   def to_cookielib_cookie(self,selenium_cookie):
     return cookielib.Cookie(
@@ -198,7 +201,9 @@ class ottawa_parser:
     num_results = result_soup.find('div', class_="result").text.split()[0]
     bar = progressbar.ProgressBar(max_value=int(num_results) + 1)
     while True:
-      self.parse_page_results(html, bar)
+      success = self.parse_page_results(html, bar)
+      if not success:
+      	break
       self.driver.execute_script("__doPostBack('ctl00$MainContentPlaceHolder$ctl03','')")
       html = self.driver.page_source
 
