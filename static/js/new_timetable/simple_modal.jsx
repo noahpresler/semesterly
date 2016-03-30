@@ -34,7 +34,7 @@ module.exports = React.createClass({
 			</div>),
   			document.getElementById('semesterly-modal')
 		);
-		$("#dim-screen").height($(document).height())
+		$("#dim-screen").height($(document).height());
 		this.setState({shown: true});
 	},
 
@@ -66,7 +66,4 @@ module.exports = React.createClass({
 		this.setState({shown: false});
 
 	},
-
-
-
 });
