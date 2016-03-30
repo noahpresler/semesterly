@@ -50,7 +50,7 @@ WEBDRIVER_CHROME = '/root/chromedriver_executable/chromedriver' # e.g. '/home/li
 
 
 #===========================================FOR DEVELOPMENT USE=======================================
-WEBDRIVER_CHROME = None
+WEBDRIVER_CHROME = '/home/linoah/chromedriver'
 #=====================================================================================================
 
 
@@ -61,8 +61,8 @@ class HopkinsTextbookFinder:
             self.driver = webdriver.Chrome()
         else: 
             self.driver = webdriver.Chrome(WEBDRIVER_CHROME)
-        self.driver.set_page_load_timeout(90)
-        self.driver.set_script_timeout(90)
+        self.driver.set_page_load_timeout(120)
+        self.driver.set_script_timeout(120)
         self.s = requests.Session()
         self.isbn_pattern = pattern = re.compile(r"((?:97(?:8|9))?\d{9}(?:\d|X))$", re.MULTILINE)
         self.code_pattern = pattern = re.compile(r".*\.(.*)\.(.*)\s\((.*)\)")
@@ -108,7 +108,7 @@ class HopkinsTextbookFinder:
 
     def wait_retry(self,request):
         print "Retrying request..."
-        sleep(randint(180,240))
+        sleep(randint(300,400))
         self.randomize_ua()
         html = self.get_bn_html(request)
         self.parse_textbooks(html) 
@@ -119,10 +119,23 @@ class HopkinsTextbookFinder:
             try:
                 self.driver.get(url)
                 break
-            except: 
-                print "retrying in "  + str(retries) + " seconds"
-                sleep(retries)
-                retries = retries*5
+            except Exception,e: 
+                while True:
+                    try: 
+                        print "Exception caught: " + str(e)
+                        print "Retrying in "  + str(retries) + " seconds"
+                        self.driver.quit()
+                        if not WEBDRIVER_CHROME:
+                            self.driver = webdriver.Chrome()
+                        else: 
+                            self.driver = webdriver.Chrome(WEBDRIVER_CHROME)
+                        sleep(retries)
+                        retries = retries*5
+                        break
+                    except Exception,e: 
+                        print "Exception caught: " + str(e)
+                        print "Reloading the driver to mitigate. "
+
         sleep(1)
         while True:
             try:
@@ -147,12 +160,12 @@ class HopkinsTextbookFinder:
     def parse_textbooks(self,html):
         soup = BeautifulSoup(html)
         textbooks = soup.findAll('div', class_='book_details')
-        self.last_num_found = len(textbooks)/2
         textbook_sections = soup.findAll('div',class_="book_sec")
         try:
             print "( Request #: " + str(int(self.index/N_CLASSES)) + ") " + str(len(textbooks)) + " textbooks found."
         except UnicodeEncodeError:
             pass
+        self.last_num_found = len(textbooks)
         for tbsec in textbook_sections:
             raw_code = tbsec.findAll('h1')[0]
             stripped_code = "".join(raw_code.get_text().split())[:8]
