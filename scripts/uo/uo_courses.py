@@ -98,14 +98,14 @@ class ottawa_parser:
     soup = BeautifulSoup(page_html)
     table = soup.find('table', class_="result-table")
     if table is not None:
-	    rows = table.findAll('tr', {'class': self.row_cond})
-	    for row in rows:
-	      self.parse_course_row(row)
-	      self.num_parsed += 1
-	      bar.update(self.num_parsed)
-	    return True
-	  else:
-	  	return False
+      rows = table.findAll('tr', {'class': self.row_cond})
+      for row in rows:
+        self.parse_course_row(row)
+        self.num_parsed += 1
+        bar.update(self.num_parsed)
+      return True
+    else:
+      return False
 
   def to_cookielib_cookie(self,selenium_cookie):
     return cookielib.Cookie(
@@ -166,7 +166,7 @@ class ottawa_parser:
 
         start, end, day = self.process_time(date_time)
         if day in ['S', 'TBD']: # skip weekends, undefined times
-        	continue
+          continue
         prof = self.process_prof(prof)
         # meet_type example: Lecture 1, section_id example: BIO1001 A (random junk)
         # section_type example: Lecture, section_code example: A Lecture 1
@@ -203,7 +203,7 @@ class ottawa_parser:
     while True:
       success = self.parse_page_results(html, bar)
       if not success:
-      	break
+        break
       self.driver.execute_script("__doPostBack('ctl00$MainContentPlaceHolder$ctl03','')")
       html = self.driver.page_source
 
