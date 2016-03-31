@@ -12,9 +12,3 @@ const counter = (state = 0, action) => {
 const { createStore } = Redux;
 const store = createStore(counter);
 console.log(store.getState());
-
-// ReactDOM.render(
-//  <div>LMFAO</div>,
-//  document.getElementById('page')
-// );
-
