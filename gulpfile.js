@@ -67,15 +67,3 @@ gulp.task('build', function() { return compile(); });
 gulp.task('jswatch', function() { return watch(); });
 
 gulp.task('default', ['jswatch', 'csswatch']);
-
-
-// /* CSS */
-
-
-
-// gulp.task('watch', ['watchify', 'csswatch']);
-// gulp.task('default', ['watch']);
-
-
-
-
