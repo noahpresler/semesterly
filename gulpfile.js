@@ -1,54 +1,57 @@
-const gulp = require('gulp');
-// const babel = require('gulp-babel');
-const react = require('gulp-react');
-// const watch = require('gulp-watch');
-const concat = require('gulp-concat');
-// const batch = require('gulp-batch');
+var gulp = require('gulp');
+var gutil = require('gulp-util');
+var sourcemaps = require('gulp-sourcemaps');
+var source = require('vinyl-source-stream');
+var buffer = require('vinyl-buffer');
+var browserify = require('browserify');
+var watchify = require('watchify');
+var babel = require('babelify');
+var minifyCSS = require('gulp-minify-css');
 
-/* new */
+const STATIC_DIR = 'static/';
+const APP_LOCATION = STATIC_DIR + 'js/redux/app.jsx';
+const COMPILED_NAME = 'application.js';
+const COMPILED_LOCATION = STATIC_DIR + 'js/gulp';
 
-const gutil = require('gulp-util');
-const source = require('vinyl-source-stream');
-const browserify = require('browserify');
-const watchify = require('watchify');
-const reactify = require('reactify');
-// const babelify = require('babelify');
-const uglify = require('gulp-uglify');
-const vbuffer = require('vinyl-buffer');
-// const streamify = require('gulp-streamify');
-const minifyCSS = require('gulp-minify-css');
+const CSS_FILES = STATIC_DIR + 'css/new_timetable/*.css';
 
+function compile(watch) {
+    bundler = watchify(
+        browserify({
+            entries: [APP_LOCATION],
+            debug: true,
+            // Allow importing from the following extensions
+            extensions: [' ', 'js', 'jsx']
+        }).transform(babel.configure({
+            // Use all of the ES2015 spec
+            presets: ["es2015", "react"]
+        }))
+    );
 
-var staticDirectory = './static/',
+  function rebundle() {
+    bundler.bundle()
+      .on('error', function(err) { console.error(err); this.emit('end'); })
+      .pipe(source(COMPILED_NAME))
+      .pipe(buffer())
+      .pipe(sourcemaps.init({ loadMaps: true }))
+      .pipe(sourcemaps.write('./'))
+      .pipe(gulp.dest(COMPILED_LOCATION));
+  }
 
-    // Source and target JS files for Browserify
-    jsMainFile      = staticDirectory + 'js/new_timetable/app.jsx',
-    jsBundleFile    = 'application.js',
-    jsDest          = staticDirectory + 'js/gulp',
+  if (watch) {
+    bundler.on('update', function() {
+    gutil.log(gutil.colors.magenta('Recompiling Javascript...'));
+      rebundle();
+    gutil.log(gutil.colors.green('Compilation complete!'));
+    });
+  }
 
-    // Source and target LESS files
-    cssMainFile     = staticDirectory + 'less/styles.less',
-    cssFiles        = staticDirectory + 'css/new_timetable/*.css';
+  rebundle();
+}
 
-
-// Browserify bundler, configured for reactify with sources having a .jsx extension
-var bundler = browserify({
-    entries: [jsMainFile],
-    transform: [reactify],
-    extensions: ['.jsx'],
-    debug: true,
-    cache: {}, packageCache: {}, fullPaths: true // for watchify
-});
-
-// Build JavaScript using Browserify
-gulp.task('js', function() {
-    return bundler
-        .bundle()
-        .pipe(source(jsMainFile))
-        .pipe(vbuffer())
-        .pipe(uglify())
-        .pipe(gulp.dest(jsDest));
-});
+function watch() {
+  return compile(true);
+};
 
 gulp.task('css', function(){
     return gulp.src('static/css/new_timetable/*')
@@ -56,36 +59,23 @@ gulp.task('css', function(){
         .pipe(gulp.dest('static/css/gulp'));
 });
 
-gulp.task('watchify', function() {
-    var watcher  = watchify(bundler);
-    return watcher
-    .on('error', gutil.log.bind(gutil, 'Browserify Error'))
-    .on('update', function () {
-        watcher.bundle()
-        .pipe(source(jsBundleFile))
-        .pipe(vbuffer())
-		.pipe(uglify().on('error', gutil.log.bind(gutil, 'Uglify Error')))
-        .pipe(gulp.dest(jsDest));
-        gutil.log("Javascript compilation complete!");
-    })
-    .bundle() // Create the initial bundle when starting the task
-    .pipe(source(jsBundleFile))
-    .pipe(gulp.dest(jsDest));
-});
-
 gulp.task('csswatch', function () {
-    gulp.watch(cssFiles, ['css']);
+    gulp.watch(CSS_FILES, ['css']);
 });
 
-gulp.task('watch', ['watchify', 'csswatch']);
-gulp.task('default', ['watch']);
+gulp.task('build', function() { return compile(); });
+gulp.task('jswatch', function() { return watch(); });
+
+gulp.task('default', ['jswatch', 'csswatch']);
+
+
+// /* CSS */
 
 
 
-// gulp.task('analytics', function () {
-// return gulp.src('./static/js/analytics/**')
-//     .pipe(concat('analytics_application.js'))
-//     .pipe(react())
-//     .pipe(gulp.dest('static/js/gulp'));
-// });
+// gulp.task('watch', ['watchify', 'csswatch']);
+// gulp.task('default', ['watch']);
+
+
+
 
