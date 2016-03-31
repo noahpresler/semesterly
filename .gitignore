@@ -14,3 +14,5 @@ workfile.html
 semes/
 documentation/build
 parse_errors.log
+static/js/gulp/*
+analytics/migrations/
