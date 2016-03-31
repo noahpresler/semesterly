@@ -59,15 +59,6 @@
     </script>
   </head>
   <body id="dad-bod">
-  <div id="fb-root"></div>
-      <div id="fb-root"></div>
-      <script>(function(d, s, id) {
-        var js, fjs = d.getElementsByTagName(s)[0];
-        if (d.getElementById(id)) return;
-        js = d.createElement(s); js.id = id;
-        js.src = "//connect.facebook.net/en_US/sdk.js#xfbml=1&version=v2.5&appId=1650567028525136";
-        fjs.parentNode.insertBefore(js, fjs);
-      }(document, 'script', 'facebook-jssdk'));</script>
       <div id="semesterly-modal">
       </div>
       <div id="page">
@@ -91,16 +82,17 @@
       <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.8.3/underscore-min.js"></script>
       <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
       <script type="text/javascript" src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
-      <script type="text/javascript" src="https://cdn.jsdelivr.net/refluxjs/0.2.11/reflux.min.js"></script>
       <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
       <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/datejs/1.0/date.min.js"></script>
       <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/react-slick/0.9.3/react-slick.min.js"></script>
-
+      <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/redux/3.3.1/redux.min.js"></script>
       <!-- Modules -->
       <script type="text/javascript" src="{% static 'js/new_timetable/modules/boron.js' %}"></script>
       <script type="text/javascript" src="{% static 'js/hashids/hashids.js' %}"></script>
+
       <!-- ReactJS compiled files -->
       <script type="text/javascript" src="{% static 'js/gulp/application.js'%}"></script>
+
 
     </body>
 </html>
