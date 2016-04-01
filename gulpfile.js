@@ -53,6 +53,10 @@ function watch() {
   return compile(true);
 };
 
+gulp.task('jswatch', function() { 
+  return watch(); 
+});
+
 gulp.task('css', function(){
     return gulp.src('static/css/new_timetable/*')
         .pipe(minifyCSS())
@@ -63,7 +67,6 @@ gulp.task('csswatch', function () {
     gulp.watch(CSS_FILES, ['css']);
 });
 
-gulp.task('build', function() { return compile(); });
-gulp.task('jswatch', function() { return watch(); });
 
+gulp.task('build', function() { return compile(); });
 gulp.task('default', ['jswatch', 'csswatch']);
