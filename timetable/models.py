@@ -318,6 +318,8 @@ class OttawaLink(TextbookLink):
 
 #---------------------- Rutgers University ----------------------------
 class RutgersCourse(BaseCourse):
+  cores = models.CharField(max_length=200, default='')
+  num_credits = models.FloatField(default=-1)
   related_courses = models.ManyToManyField("self", blank=True)
 
   def get_dept(self):
@@ -338,6 +340,7 @@ class RutgersCourseEvaluation(BaseCourseEvaluation):
 
 
 class RutgersCourseOffering(BaseCourseOffering):
+  exam_code = models.CharField(max_length=10, default='')
   course = models.ForeignKey(RutgersCourse)
   textbooks = models.ManyToManyField(Textbook, through='RutgersLink')
 
