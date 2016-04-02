@@ -77,9 +77,9 @@ def view_timetable(request):
     SCHOOL = params['school']
     SchoolCourse, SchoolCourseOffering = school_to_models[SCHOOL]
 
-    course_ids = params['courses_to_sections'].keys()
+    course_ids = params['course_sections'].keys()
     courses = [SchoolCourse.objects.get(id=cid) for cid in course_ids]
-    locked_sections = params['courses_to_sections']
+    locked_sections = params['course_sections']
     for updated_course in params.get('updated_courses', []): 
         cid = str(updated_course['course_id'])
         locked_sections[cid] = locked_sections.get(cid, {})

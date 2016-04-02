@@ -2,14 +2,16 @@ var gulp = require('gulp');
 var gutil = require('gulp-util');
 var sourcemaps = require('gulp-sourcemaps');
 var source = require('vinyl-source-stream');
+var streamify = require('gulp-streamify');
 var buffer = require('vinyl-buffer');
 var browserify = require('browserify');
 var watchify = require('watchify');
+var uglify = require('gulp-uglify');
 var babel = require('babelify');
 var minifyCSS = require('gulp-minify-css');
 
 const STATIC_DIR = 'static/';
-const APP_LOCATION = STATIC_DIR + 'js/redux/app.jsx';
+const APP_LOCATION = STATIC_DIR + 'js/redux/init.jsx';
 const COMPILED_NAME = 'application.js';
 const COMPILED_LOCATION = STATIC_DIR + 'js/gulp';
 
