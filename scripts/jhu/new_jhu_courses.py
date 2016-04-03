@@ -13,6 +13,7 @@ from timetable.models import *
 import urllib2
 import json
 from fake_useragent import UserAgent
+from pprint import pprint
 
 
 API_URL = 'https://isis.jhu.edu/api/classes/'
@@ -61,6 +62,7 @@ class HopkinsParser:
 
 	def parse_school(self,school):
 		courses = self.get_courses(school)
+		print self.schools
 		for course in courses:
 			section = self.get_section(course)
 			self.process_place_times(course,section)
@@ -80,8 +82,31 @@ class HopkinsParser:
 		self.departments = self.get_json(url)
 
 	def process_place_times(self,course,section):
-		print section[0]
-		# handle the duplicate 'Meetings' key here. If we can get the first 'Meetings' value with room and bldg and what not, we are gucci
+		#TODO handle credits
+		pprint(section)
+		SectionDetails = section[0]['SectionDetails']
+		Meetings = SectionDetails[0]['Meetings']
+		SectionCode = section[0]['SectionName']
+		Description = SectionDetails[0]['Description']
+		PreReqs = ''
+		try:
+			PreReqs = SectionDetails[0]['Prerequisites'][0]['Description']
+		except:
+			pass
+		CourseModel = self.get_create_course(course,Description,PreReqs)
+
+	def get_create_course(self,courseJson,description,prereqs):
+		course, CourseCreated = HopkinsCourse.objects.get_or_create(
+			code=courseJson['OfferingName'],
+			campus=1)
+		course.name=courseJson['Title']
+		course.description=description
+		course.prerequisites=prereqs
+		if CourseCreated:
+			course.save()
+		else:
+			course.save()
+
 
 	def get_json(self, url):
 		while True:
