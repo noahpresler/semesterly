@@ -36,6 +36,7 @@ function compile(watch) {
       .pipe(source(COMPILED_NAME))
       .pipe(buffer())
       .pipe(sourcemaps.init({ loadMaps: true }))
+      .pipe(streamify(uglify()))
       .pipe(sourcemaps.write('./'))
       .pipe(gulp.dest(COMPILED_LOCATION));
   }
