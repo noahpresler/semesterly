@@ -17,3 +17,19 @@ const Semesterly = combineReducers({
 });
 
 const store = createStore(Semesterly);
+const AddCourse = ({ onRequest }) => (
+       <div>
+           <button onClick={onRequest}>+</button>
+       </div>
+);
+const render = () => {
+       ReactDOM.render(<AddCourse
+                   onRequest={() =>
+                   store.dispatch({type:'ADD_COURSE'})}
+               />,
+               document.getElementById('page')
+       );
+       console.log(store.getState());
+};
+render();
+store.subscribe(render);
