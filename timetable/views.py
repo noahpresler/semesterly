@@ -708,3 +708,5 @@ def has_offering(course, sem):
     except:
         return False
 
+def jhu_timer(request):
+    return render(request, "jhu_timer.html")
