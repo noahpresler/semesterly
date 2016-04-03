@@ -35,7 +35,7 @@ var SemesterlyTimer = React.createClass({displayName: "SemesterlyTimer",
 		     	    
 				), 
 				React.createElement("div", {className: "go"}, 
-	        			React.createElement("a", {href: "http://semester.ly"}, "Plan Your Schedule!", 
+	        			React.createElement("a", {href: "http://semester.ly"}, "Back to Semester.ly", 
 	        			React.createElement("i", {className: "fa fa-long-arrow-right go-arrow"})
 
 	        			)
@@ -74,6 +74,6 @@ var SemesterlyTimer = React.createClass({displayName: "SemesterlyTimer",
 ReactDOM.render(
  	React.createElement(SemesterlyTimer, {
  		deadline: "April 4 2016 07:00:00 GMT-04:00", 
- 		event: "JHU Senior Registration"}),
+ 		event: "Rising Senior Registration Begins In:"}),
   document.getElementById('page')
 );
