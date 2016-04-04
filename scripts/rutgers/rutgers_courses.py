@@ -37,12 +37,12 @@ class RutgersParser(BaseParser):
   def __init__(self, semester, campuses=['NB', 'NK', 'CM'], driver=None):
     BaseParser.__init__(self, RutgersCourse, 
                               RutgersCourseOffering,
-                              "https://sis.rutgers.edu/soc/",
                               semester,
                               driver)
     self.semester = semester
     self.campuses = campuses
     self.get_element = self.driver.find_element_by_css_selector
+    self.entry_url = "https://sis.rutgers.edu/soc/"
     self.driver = webdriver.Chrome(driver) if driver else webdriver.Chrome()
     # intialize state variables for parser
     self.campus = None
