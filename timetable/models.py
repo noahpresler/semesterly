@@ -151,7 +151,6 @@ class CourseOffering(BaseCourseOffering):
   alternates = models.BooleanField(default=False)
   textbooks = models.ManyToManyField(Textbook, through='Link')
 
-
 class Link(TextbookLink):
   courseoffering = models.ForeignKey(CourseOffering)
 
@@ -159,6 +158,7 @@ class Link(TextbookLink):
 #---------------------- John Hopkins University ----------------------------
 class HopkinsCourse(BaseCourse):
   related_courses = models.ManyToManyField("self", blank=True)
+  num_credits = models.IntegerField(default=-1)
 
   def get_dept(self):
     pass

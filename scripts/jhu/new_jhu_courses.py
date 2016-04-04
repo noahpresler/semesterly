@@ -19,12 +19,12 @@ from pprint import pprint
 API_URL = 'https://isis.jhu.edu/api/classes/'
 KEY = '***REMOVED***'
 DAY_TO_LETTER_MAP = {'m': 'M',
-        't': 'T',
-        'w': 'W',
-        'th': 'R',
-        'f': 'F',
-        'sa': 'S',
-        's': 'U'}
+		't': 'T',
+		'w': 'W',
+		'th': 'R',
+		'f': 'F',
+		'sa': 'S',
+		's': 'U'}
 
 
 
@@ -62,7 +62,6 @@ class HopkinsParser:
 
 	def parse_school(self,school):
 		courses = self.get_courses(school)
-		print self.schools
 		for course in courses:
 			section = self.get_section(course)
 			self.process_place_times(course,section)
@@ -82,8 +81,6 @@ class HopkinsParser:
 		self.departments = self.get_json(url)
 
 	def process_place_times(self,course,section):
-		#TODO handle credits
-		pprint(section)
 		SectionDetails = section[0]['SectionDetails']
 		Meetings = SectionDetails[0]['Meetings']
 		SectionCode = section[0]['SectionName']
@@ -94,6 +91,58 @@ class HopkinsParser:
 		except:
 			pass
 		CourseModel = self.get_create_course(course,Description,PreReqs)
+		self.create_course_offerings(course,CourseModel,SectionDetails,Meetings,SectionCode)
+
+	def create_course_offerings(self,course,CourseModel,SectionDetails,Meetings,SectionCode):
+		for Meeting in Meetings:
+			time = Meeting['Times']
+			if len(time) > 0:
+				time_pieces = re.search(r"(\d\d):(\d\d) ([AP])M - (\d\d):(\d\d) ([AP])M",time)
+				hours = [None] * 2
+				start_hour = int(time_pieces.group(1))
+				end_hour = int(time_pieces.group(4))
+				if time_pieces.group(3).upper() == "P" and time_pieces.group(1) != "12":
+					start_hour += 12
+				if time_pieces.group(6).upper() == "P" and time_pieces.group(4) != "12":
+					end_hour += 12
+				start = str(start_hour) + ":" + time_pieces.group(2)
+				end = str(end_hour) + ":" + time_pieces.group(5)
+				days = Meeting['DOW']
+				if days != "TBA" and days !="None":
+					for day_letter in re.findall(r"([A-Z][a-z]*)+?",days):
+						day = DAY_TO_LETTER_MAP[day_letter.lower()]
+						cos = HopkinsCourseOffering.objects.filter(
+							course=CourseModel,
+							semester=self.semester[0].upper(),
+							meeting_section=SectionCode)
+						links = []
+						for co in cos:
+							links += HopkinsLink.objects.filter(courseoffering=co)
+						cos.delete()
+						offering, OfferingCreated = HopkinsCourseOffering.objects.get_or_create(
+							course=CourseModel,
+							semester=self.semester[0].upper(),
+							meeting_section=SectionCode,
+							day=day,
+							time_start=start,
+							time_end=end,
+							instructors=course['Instructors'])
+						offering.save()
+						for l in links:
+							l.courseoffering = offering
+							l.save()
+						offering.location=Meeting['Building'] + ' ' + Meeting['Room']
+						try:
+							offering.size=int(course['MaxSeats'])
+						except:
+							offering.size=0
+						try:
+							offering.enrolment=int(course['SeatsAvailable'].split("/")[0])
+						except:
+							offering.enrolment=0
+						offering.save()
+
+
 
 	def get_create_course(self,courseJson,description,prereqs):
 		course, CourseCreated = HopkinsCourse.objects.get_or_create(
@@ -102,10 +151,15 @@ class HopkinsParser:
 		course.name=courseJson['Title']
 		course.description=description
 		course.prerequisites=prereqs
+		try:
+			course.num_credits=int(float(courseJson['Credits']))
+		except:
+			course.num_credits=0
 		if CourseCreated:
 			course.save()
 		else:
 			course.save()
+		return course
 
 
 	def get_json(self, url):
