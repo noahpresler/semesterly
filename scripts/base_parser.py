@@ -5,7 +5,7 @@ import progressbar
 class BaseParser:
   __metaclass__ = abc.ABCMeta
 
-  def __init__(self, course_model, offering_model, entry_url, semester, driver):
+  def __init__(self, course_model, offering_model, semester):
     self.update_or_create_course = course_model.objects.update_or_create
     self.update_or_create_offering = offering_model.objects.update_or_create
     self.semesters = semester
