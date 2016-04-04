@@ -2,9 +2,6 @@ import abc
 import time
 import progressbar
 
-from selenium import webdriver
-
-
 class BaseParser:
   __metaclass__ = abc.ABCMeta
 
@@ -14,7 +11,6 @@ class BaseParser:
     self.entry_url = entry_url
     self.semesters = semester
     self.num_courses = None
-    self.driver = webdriver.Chrome(driver) if driver else webdriver.Chrome()
 
   def parse_courses(self):
     """Update database with courses and offerings for given semester."""

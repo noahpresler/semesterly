@@ -8,7 +8,7 @@ import time
 from itertools import product
 from urllib2 import urlopen
 from string import capwords
-import selenium
+from selenium.common.exceptions import WebDriverException
 from selenium import webdriver
 from selenium.webdriver.support.ui import Select
 from bs4 import BeautifulSoup
@@ -43,6 +43,7 @@ class RutgersParser(BaseParser):
     self.semester = semester
     self.campuses = campuses
     self.get_element = self.driver.find_element_by_css_selector
+    self.driver = webdriver.Chrome(driver) if driver else webdriver.Chrome()
     # intialize state variables for parser
     self.campus = None
 
@@ -182,7 +183,7 @@ def try_until_success(f):
       success = f()
       if success:
         break
-  except selenium.common.exceptions.WebDriverException:
+  except WebDriverException:
     time.sleep(0.5)
 
 def parse_rutgers():
