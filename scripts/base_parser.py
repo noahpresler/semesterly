@@ -8,7 +8,6 @@ class BaseParser:
   def __init__(self, course_model, offering_model, entry_url, semester, driver):
     self.update_or_create_course = course_model.objects.update_or_create
     self.update_or_create_offering = offering_model.objects.update_or_create
-    self.entry_url = entry_url
     self.semesters = semester
     self.num_courses = None
 
