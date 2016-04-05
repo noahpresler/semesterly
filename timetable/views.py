@@ -590,7 +590,7 @@ def get_minute_from_string_time(time_string):
     """Get minute as an int from time as a string."""
     return int(time_string[time_string.index(':') + 1:] if ':' in time_string \
                                                         else 0)
-
+@csrf_exempt
 def get_courses(request, school, sem):
     school = school.lower()
     sem = sem.upper()
