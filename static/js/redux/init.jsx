@@ -1,6 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { createStore, combineReducers } from 'redux';
+import { createStore, combineReducers, applyMiddleware } from 'redux';
+import thunkMiddleware from 'redux-thunk';
 import { school } from './reducers/school_reducer.jsx';
 import { semester } from './reducers/semester_reducer.jsx';
 import { courseSections } from './reducers/course_sections_reducer.jsx';
@@ -16,7 +17,7 @@ const Semesterly = combineReducers({
 	sid: SID
 });
 
-const store = createStore(Semesterly);
+const store = createStore(Semesterly, applyMiddleware(thunkMiddleware));
 const AddCourse = ({ onRequest }) => (
        <div>
            <button onClick={onRequest}>+</button>

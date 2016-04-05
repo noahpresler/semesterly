@@ -1,3 +1,5 @@
+import fetch from 'isomorphic-fetch';
+
 export function requestTimetables(state) {
   return {
     type: REQUEST_TIMETABLES,
