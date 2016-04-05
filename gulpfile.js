@@ -1,5 +1,6 @@
 var gulp = require('gulp');
 var gutil = require('gulp-util');
+var envify = require('loose-envify');
 var sourcemaps = require('gulp-sourcemaps');
 var source = require('vinyl-source-stream');
 var streamify = require('gulp-streamify');
@@ -23,13 +24,12 @@ function compile(watch) {
             entries: [APP_LOCATION],
             debug: true,
             // Allow importing from the following extensions
-            extensions: [' ', 'js', 'jsx']
-        }).transform(babel.configure({
-            // Use all of the ES2015 spec
-            presets: ["es2015", "react"]
-        }))
+            extensions: [' ', 'js', 'jsx'],
+            transform: [
+              [babel, {presets: ["es2015", "react"]} ],
+              [envify, {global: true, NODE_ENV: 'production'}]]
+        })
     );
-
   function rebundle() {
     bundler.bundle()
       .on('error', function(err) { console.error(err); this.emit('end'); })
