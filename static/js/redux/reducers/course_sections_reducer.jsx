@@ -3,7 +3,7 @@ export const courseSections = (state = {}, action) => {
 		case 'ADD_COURSE':
 			// create copy of course_sections (aka @state here) and assign it new values,
 			// so that original course_sections remains unchanged
-			return {343: 'test'};
+			return {35244: 'test'};
 		default:
 			return state;
 	}
