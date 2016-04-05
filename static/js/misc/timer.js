@@ -73,7 +73,7 @@ var SemesterlyTimer = React.createClass({displayName: "SemesterlyTimer",
 
 ReactDOM.render(
  	React.createElement(SemesterlyTimer, {
- 		deadline: "April 5 2016 07:00:00 GMT-04:00", 
+ 		deadline: "April 6 2016 07:00:00 GMT-04:00", 
  		event: "Rising Junior Registration Begins In:"}),
   document.getElementById('page')
 );
