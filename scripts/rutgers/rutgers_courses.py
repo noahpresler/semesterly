@@ -37,8 +37,7 @@ class RutgersParser(BaseParser):
   def __init__(self, semester, campuses=['NB', 'NK', 'CM'], driver=None):
     BaseParser.__init__(self, RutgersCourse, 
                               RutgersCourseOffering,
-                              semester,
-                              driver)
+                              semester)
     self.semester = semester
     self.campuses = campuses
     self.get_element = self.driver.find_element_by_css_selector
