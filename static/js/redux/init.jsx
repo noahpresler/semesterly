@@ -8,35 +8,59 @@ import { semester } from './reducers/semester_reducer.jsx';
 import { courses } from './reducers/courses.jsx';
 import { courseSections } from './reducers/course_sections_reducer.jsx';
 import { preferences } from './reducers/preferences_reducer.jsx';
-import { randomString } from './util.jsx';
 import { fetchCourses } from './actions/course_actions.jsx'
+import { fetchTimetables } from './actions/timetable_actions.jsx'
 
-var SID = randomString(30);
-const Semesterly = combineReducers({
-	school,
-	semester,
+
+var data = combineReducers({
+  school,
+  semester,
   courses,
-	courseSections,
-	preferences,
-	sid: SID
+  courseSections,
+  preferences,
+});
+
+const Semesterly = combineReducers({
+  data
 });
 
 const store = createStore(Semesterly, applyMiddleware(thunkMiddleware));
-const AddCourse = ({ onRequest }) => (
+const AddCourse = ({ onRequest, onRequestTimetables, onAddCourse }) => (
        <div>
-           <button onClick={onRequest}>+</button>
+           <button onClick={onRequest}>Get Courses then -></button>
+           <button onClick={onAddCourse}>Add Course then -></button>
+           <button onClick={() => store.dispatch(
+              {
+                type: "SET_SCHOOL",
+                school: "uoft"
+              })
+           }>Set School then -></button>
+           <button onClick={() => store.dispatch(
+              {
+                type: "SET_SEMESTER",
+                semester: "F"
+              })
+           }>Set Semester then -></button>
+           <button onClick={onRequestTimetables}>Finally, Get Timetables!</button>
+
        </div>
+
 );
 const render = () => {
        let state = store.getState();
-       console.log(state);
+       console.log("State updated to:", state);
+
        ReactDOM.render(<AddCourse
-                   onRequest={() =>
-                   //store.dispatch(fetchCourses(state.school, state.semester))}
-                   store.dispatch(fetchCourses("uoft", "F"))}
-               />,
-               document.getElementById('page')
+           onRequest={() =>
+           //store.dispatch(fetchCourses(state.school, state.semester))}
+           store.dispatch(fetchCourses("uoft", "F"))}
+           onRequestTimetables={() =>
+           store.dispatch(fetchTimetables(state.data))}
+           onAddCourse={() => store.dispatch({type:"ADD_COURSE"})}
+         />,
+         document.getElementById('page')
        );
 };
 render();
 store.subscribe(render);
+
