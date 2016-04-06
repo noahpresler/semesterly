@@ -1,1 +1,1 @@
-body{background-color:#fff}#calendar{margin-bottom:50px;max-width:90%;margin-left:5%}.cal-row{width:49px}.fc-time-grid .fc-slats td{height:30px}
+.slot,.slot:hover{color:#222}body{background-color:#fff;line-height:1.4}#calendar{margin-bottom:50px;max-width:90%;margin-left:5%}.cal-row{width:49px;font-size:14px}.fc-time-grid .fc-slats td{height:25px}.slot-bar{width:5px!important;height:100%;z-index:0;position:absolute}.fc-content{margin-left:8px;margin-top:2px}.slot{cursor:pointer;background-color:#C8F7C5;font-size:13px}

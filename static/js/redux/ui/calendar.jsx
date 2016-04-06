@@ -1,12 +1,10 @@
 import React from 'react';
+import { SlotManager } from './slot.jsx';
+
 
 export class Calendar extends React.Component {
-	getInitialState() {
-		return {};
-	}
-  	getCalendarRows() {
 
-	                              
+  	getCalendarRows() {
 	    let rows = [];
 	    for (let i = 8; i <= 20; i++) { // one row for each hour, starting from 8am
 	      let time = i + ":00";
@@ -18,7 +16,6 @@ export class Calendar extends React.Component {
                     <td className="fc-widget-content" />
                 </tr>)
 	      );  
-
 	      // for the half hour row
 	      rows.push(
 	          (<tr key={time + ".5"} className="fc-minor">
@@ -26,13 +23,14 @@ export class Calendar extends React.Component {
 	            	<td className="fc-widget-content" />
           	  </tr>)
 	      );
-
 	    }
 
     	return rows;
   	}
 
+
 	render() { 
+
 		return (
 
 	      <div id="calendar" className="fc fc-ltr fc-unthemed">
@@ -68,40 +66,6 @@ export class Calendar extends React.Component {
 	              <tbody className="fc-body">
 	                <tr>
 	                  <td className="fc-widget-content">
-	                    <div className="fc-day-grid">
-	                      <div className="fc-row fc-week fc-widget-content">
-	                        <div className="fc-bg">
-	                          <table>
-	                            <tbody>
-	                              <tr>
-	                                <td className="fc-axis fc-widget-content" style={{width: 49}}>
-	                                	<span></span>
-	                                </td>
-	                                <td className="fc-day fc-widget-content fc-mon" />
-	                                <td className="fc-day fc-widget-content fc-tue" />
-	                                <td className="fc-day fc-widget-content fc-wed" />
-	                                <td className="fc-day fc-widget-content fc-thu" />
-	                                <td className="fc-day fc-widget-content fc-fri" />
-	                              </tr>
-	                            </tbody>
-	                          </table>
-	                        </div>
-	                        <div className="fc-content-skeleton">
-	                          <table>
-	                            <tbody>
-	                              <tr>
-	                                <td className="fc-axis" style={{width: 49}} />
-	                                <td />
-	                                <td />
-	                                <td />
-	                                <td />
-	                                <td />
-	                              </tr>
-	                            </tbody>
-	                          </table>
-	                        </div>
-	                      </div>
-	                    </div>
 	                    <hr className="fc-divider fc-widget-header" />
 	                    <div className="fc-time-grid-container">
 	                      <div className="fc-time-grid">
@@ -110,7 +74,7 @@ export class Calendar extends React.Component {
 	                            <tbody>
 	                              <tr>
 	                                <td className="fc-axis fc-widget-content" style={{width: 49}} />
-	                                <td className="fc-day fc-widget-content fc-mon fc-past" />
+	                                <td className="fc-day fc-widget-content fc-mon" />
 	                                <td className="fc-day fc-widget-content fc-tue" />
 	                                <td className="fc-day fc-widget-content fc-wed" />
 	                                <td className="fc-day fc-widget-content fc-thu" />
@@ -127,58 +91,7 @@ export class Calendar extends React.Component {
 	                          </table>
 	                        </div>
 	                        <div className="fc-content-skeleton">
-	                          <table>
-	                            <tbody>
-	                              <tr>
-	                                <td className="fc-axis" style={{width: 49}} />
-	                                <td>
-	                                  <div className="fc-content-col">
-	                                    <div className="fc-event-container fc-helper-container" />
-	                                    <div className="fc-event-container" />
-	                                    <div className="fc-highlight-container" />
-	                                    <div className="fc-bgevent-container" />
-	                                    <div className="fc-business-container" />
-	                                  </div>
-	                                </td>
-	                                <td>
-	                                  <div className="fc-content-col">
-	                                    <div className="fc-event-container fc-helper-container" />
-	                                    <div className="fc-event-container" />
-	                                    <div className="fc-highlight-container" />
-	                                    <div className="fc-bgevent-container" />
-	                                    <div className="fc-business-container" />
-	                                  </div>
-	                                </td>
-	                                <td>
-	                                  <div className="fc-content-col">
-	                                    <div className="fc-event-container fc-helper-container" />
-	                                    <div className="fc-event-container" />
-	                                    <div className="fc-highlight-container" />
-	                                    <div className="fc-bgevent-container" />
-	                                    <div className="fc-business-container" />
-	                                  </div>
-	                                </td>
-	                                <td>
-	                                  <div className="fc-content-col">
-	                                    <div className="fc-event-container fc-helper-container" />
-	                                    <div className="fc-event-container" />
-	                                    <div className="fc-highlight-container" />
-	                                    <div className="fc-bgevent-container" />
-	                                    <div className="fc-business-container" />
-	                                  </div>
-	                                </td>
-	                                <td>
-	                                  <div className="fc-content-col">
-	                                    <div className="fc-event-container fc-helper-container" />
-	                                    <div className="fc-event-container" />
-	                                    <div className="fc-highlight-container" />
-	                                    <div className="fc-bgevent-container" />
-	                                    <div className="fc-business-container" />
-	                                  </div>
-	                                </td>
-	                              </tr>
-	                            </tbody>
-	                          </table>
+	                          <SlotManager />
 	                        </div>
 	                        <hr className="fc-divider fc-widget-header" style={{display: 'none'}} />
 	                      </div>
