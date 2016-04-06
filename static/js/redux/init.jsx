@@ -66,4 +66,15 @@ const render = () => {
 };
 render();
 store.subscribe(render);
-
+store.dispatch(
+		{
+			type: "SET_SCHOOL",
+			school: "uoft"
+		}
+);
+export const getSchool = () => {
+	return store.getState().data.school;
+}
+export const getSemester = () => {
+	return store.getState().data.semester;
+}

@@ -19,7 +19,7 @@ class Slot extends React.Component {
 	render() {
 		return (
 			<div className="fc-event-container">
-                <div className="fc-time-grid-event fc-event slot" style={this.getSlotStyles()} onClick={() => renderCourseModal(this.props.code, false)}>
+                <div className="fc-time-grid-event fc-event slot" style={this.getSlotStyles()} onClick={() => renderCourseModal(this.props.id, false)}>
     				<div className="slot-bar" style={{backgroundColor: COLOUR_DATA[this.props.colour].border}}/>
                     <div className="fc-content">
                         <div className="fc-time"><span>{this.props.time_start} – {this.props.time_end}</span></div>
@@ -96,7 +96,7 @@ export class SlotManager extends React.Component {
         };
 
         var slot = {
-        	id: 123,
+        	id: 38619,
         	course: "fkingwin",
         	code: 'MAT301H1',
         	meeting_section: 'L0101',
@@ -109,7 +109,7 @@ export class SlotManager extends React.Component {
 
 
         var slot2 = {
-        	id: 1234,
+        	id: 38392,
         	course: "fkingwin",
         	code: 'MAT301H1',
         	meeting_section: 'L0101',
@@ -122,29 +122,29 @@ export class SlotManager extends React.Component {
 
 
         var slot3 = {
-        	id: 12345,
+        	id: 35574,
         	course: "fkingwin",
-        	code: 'MAT301H1',
+        	code: 'BIO255H1',
         	meeting_section: 'L0101',
-        	name: 'Introduction to Archaeology',
+        	name: 'Cell & Molecular Biology',
         	location: 'AP130',
         	time_start: '16:00',
         	time_end: '19:15',
         	colour: "#C8F7C5"
         }
         var slot4 = {
-            id: 123456,
+            id: 36235,
             course: "fkingwin",
-            code: 'MAT246H1',
+            code: 'CSC373H1',
             meeting_section: 'L5101',
-            name: 'Abstract Mathematics',
+            name: 'Algorithm Design, Analysis and Complexity',
             location: 'BA1160',
             time_start: '14:00',
             time_end: '15:20',
             colour: "#8870FF"
         }
         var slot5 = {
-            id: 123457,
+            id: 36241,
             course: "fkingwin",
             code: 'ESS105H1',
             meeting_section: 'L0201',
