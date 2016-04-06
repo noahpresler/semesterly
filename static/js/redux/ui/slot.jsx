@@ -1,4 +1,5 @@
 import React from 'react';
+import { renderCourseModal } from './course_modal.jsx';
 export const HALF_HOUR_HEIGHT = 25;
 let COLOUR_DATA = {
     "#FD7473" : {highlight: "#E26A6A", border: "#6C7A89"},
@@ -18,7 +19,7 @@ class Slot extends React.Component {
 	render() {
 		return (
 			<div className="fc-event-container">
-                <div className="fc-time-grid-event fc-event slot" style={this.getSlotStyles()}>
+                <div className="fc-time-grid-event fc-event slot" style={this.getSlotStyles()} onClick={() => renderCourseModal(this.props.code, false)}>
     				<div className="slot-bar" style={{backgroundColor: COLOUR_DATA[this.props.colour].border}}/>
                     <div className="fc-content">
                         <div className="fc-time"><span>{this.props.time_start} – {this.props.time_end}</span></div>

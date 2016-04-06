@@ -1,27 +1,36 @@
 import React from 'react';
+import ReactDOM from 'react-dom';
+
 let Modal = require('boron/WaveModal');
-export class CourseModal extends React.Component {
+class CourseModal extends React.Component {
 	constructor(props) {
 		super(props);
 	}
     showModal() {
-    	console.log("show", this);
         this.refs.modal.show();
     }
     hideModal() {
-    	console.log(this);
         this.refs.modal.hide();
     }
     render() {
-    	console.log(this);
         return (
-            <div>
-                <button onClick={() => this.refs.modal.show()}>Open</button>
-                <Modal ref="modal">
-                    <h2>I am a dialog</h2>
-                    <button onClick={() => this.refs.modal.hide()}>Close</button>
-                </Modal>
-            </div>
+            <Modal ref="modal" onHide={() => 
+                ReactDOM.unmountComponentAtNode(document.getElementById(this.props.mountNode))}>
+                <h2>I am a dialog: {this.props.code}</h2>
+                <h3>In Roster? {String(this.props.in_roster)}</h3>
+                <button onClick={() => this.refs.modal.hide()}>Close</button>
+            </Modal>
         );
     }
+    componentDidMount() {
+        this.showModal();
+    }
 }
+
+export const renderCourseModal = (code, inRoster) => {
+    let mountNode = "semesterly-modal";
+    ReactDOM.render(<CourseModal code={code} inRoster={inRoster} mountNode={mountNode}/>, 
+        document.getElementById(mountNode));
+};
+
+// renderCourseModal("CSC343H1");
