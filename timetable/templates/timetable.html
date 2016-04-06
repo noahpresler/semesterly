@@ -19,31 +19,17 @@
 
     <title>Semester.ly: Textbooks, Course Finding & More</title>
     <link rel="shortcut icon" type="image/x-icon" href="{% static 'img/favicon.ico' %}" />
-    <link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
 
     <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet" integrity="sha256-7s5uDGW3AHqw6xtJmNNtr+OBRJUlgkNJEo78P4b0yRw= sha512-nNo+yCHEyn0smMxSswnf/OnX6/KwJuZTlNZBjauKhTK0c+zT+q5JOCx0UFhXQ6rJR9jg6Es8gPuD2uZcYDLqSw==" crossorigin="anonymous">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css">
-    <link rel="stylesheet" type="text/css" href="http://fonts.googleapis.com/css?family=Lato">
 
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/flat-ui/2.2.2/css/flat-ui.min.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.5.1/animate.min.css">
-    <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.5.9/slick.min.css" />
+    <link rel="stylesheet" href="{% static 'css/full-calendar.min.css'%}">
+
+    <link rel="stylesheet" href="{% static 'css/gulp/style.min.css'%}">
+
     
-    <link rel="stylesheet" href="{% static 'css/timetable/tutorial.css' %}">
-    <link rel="stylesheet" href="{% static 'css/timetable/fullcalendar.min.css' %}">
 
-    <link rel="stylesheet" href="{% static 'css/gulp/index.css' %}">
-    <link rel="stylesheet" href="{% static 'css/gulp/pagination.css' %}">
-    <link rel="stylesheet" href="{% static 'css/gulp/new_pagination.css' %}">
-    <link rel="stylesheet" href="{% static 'css/gulp/simple_modal.css' %}">
-
-    <link rel="stylesheet" href="{% static 'css/gulp/new_timetable.css' %}">
-    <link rel="stylesheet" href="{% static 'css/gulp/toast.css' %}">
-    <link rel="stylesheet" href="{% static 'css/gulp/mobile.css' %}">
-    <link rel="stylesheet" href="{% static 'css/gulp/side_scroller.css' %}">
-
-
-    <link rel="stylesheet" href="{% static 'css/load.css' %}">
 
 
     <!-- Google analytics script -->
@@ -59,32 +45,19 @@
     </script>
   </head>
   <body id="dad-bod">
-      <div id="semesterly-modal">
-      </div>
+
       <div id="page">
       </div>
        
 
-      <!-- footer -->
-      <footer class="footer navbar">
-      <div class="fb-like" data-href="https://www.facebook.com/semesterly/" data-layout="button_count" data-action="like" data-show-faces="true" data-share="false"></div>
-        <ul class="nav nav-pills">
-          <li role="presentation"><a TARGET="_blank" href="mailto:semesterly.contact@gmail.com?Subject=Semesterly">Contact us</a></li>
-          <li role="presentation"><a TARGET="_blank" href="https://www.facebook.com/semesterly/">Press</a></li>
-          <li role="presentation"><a TARGET="_blank" href="https://www.facebook.com/semesterly/">Facebook</a></li>
-        </ul>
-      </footer>
+    
 
       <!-- Libraries -->
 
       <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.8.3/underscore-min.js"></script>
       <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
-      <script type="text/javascript" src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
-      <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
-      <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/datejs/1.0/date.min.js"></script>
-      <!-- Modules -->
 
-      <script type="text/javascript" src="{% static 'js/hashids/hashids.js' %}"></script>
+
 
       <!-- ReactJS compiled files -->
       <script type="text/javascript" src="{% static 'js/gulp/application.js'%}"></script>

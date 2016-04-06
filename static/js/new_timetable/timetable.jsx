@@ -73,8 +73,6 @@ module.exports = React.createClass({
 
     return rows;
   },
-
-
   hasTimetables: function() {
     return this.state.timetables.length > 0;
   },

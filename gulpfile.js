@@ -10,13 +10,14 @@ var watchify = require('watchify');
 var uglify = require('gulp-uglify');
 var babel = require('babelify');
 var minifyCSS = require('gulp-minify-css');
+var concat = require('gulp-concat');
 
 const STATIC_DIR = 'static/';
 const APP_LOCATION = STATIC_DIR + 'js/redux/init.jsx';
 const COMPILED_NAME = 'application.js';
 const COMPILED_LOCATION = STATIC_DIR + 'js/gulp';
 
-const CSS_FILES = STATIC_DIR + 'css/new_timetable/*.css';
+const CSS_FILES = STATIC_DIR + 'css/timetable/**/*.css';
 
 function compile(watch) {
     bundler = watchify(
@@ -61,8 +62,9 @@ gulp.task('jswatch', function() {
 });
 
 gulp.task('css', function(){
-    return gulp.src('static/css/new_timetable/*')
+    return gulp.src(CSS_FILES)
         .pipe(minifyCSS())
+        .pipe(concat('style.min.css'))
         .pipe(gulp.dest('static/css/gulp'));
 });
 
