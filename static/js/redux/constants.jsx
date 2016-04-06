@@ -7,9 +7,11 @@ export const RECEIVE_TIMETABLES = "RECEIVE_TIMETABLES";
 
 /* server endpoints */
 export const getCoursesEndpoint = (school, semester) => {
-	return "courses/" + school + "/" + semester
+	return "courses/" + school + "/" + semester;
 };
-/* server endpoints */
+export const getCourseInfoEndpoint = (school, course_id) => {
+	return "courses/"+ school + "/id/" + course_id;
+};
 export const getTimetablesEndpoint = () => {
 	return "/";
 };
