@@ -46,7 +46,6 @@ const store = createStore(Semesterly, applyMiddleware(thunkMiddleware));
 //        </div>
 
 // );
-
 // tester render function contents:
 // ReactDOM.render(<AddCourse
 //           onRequest={() =>
