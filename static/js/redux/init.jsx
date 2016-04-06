@@ -62,8 +62,7 @@ const store = createStore(Semesterly, applyMiddleware(thunkMiddleware));
 //       );
 // }
 const render = () => {
-	console.log(store.getState());
-    ReactDOM.render(<div><CourseModal /><Calendar /></div>, document.getElementById("page"));
+    ReactDOM.render(<Calendar />, document.getElementById("page"));
 };
 render();
 store.subscribe(render);
