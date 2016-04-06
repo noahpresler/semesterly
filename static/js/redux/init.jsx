@@ -12,14 +12,13 @@ import { fetchCourses } from './actions/course_actions.jsx';
 import { fetchTimetables } from './actions/timetable_actions.jsx';
 import { Calendar } from './ui/calendar.jsx';
 //test
-var data = combineReducers({
+let data = combineReducers({
   school,
   semester,
   courses,
   courseSections,
   preferences,
 });
-
 const Semesterly = combineReducers({
   data
 });
