@@ -11,7 +11,8 @@ import { preferences } from './reducers/preferences_reducer.jsx';
 import { fetchCourses } from './actions/course_actions.jsx';
 import { fetchTimetables } from './actions/timetable_actions.jsx';
 import { Calendar } from './ui/calendar.jsx';
-//test
+import { CourseModal } from './ui/course_modal.jsx';
+
 let data = combineReducers({
   school,
   semester,
@@ -45,8 +46,11 @@ const store = createStore(Semesterly, applyMiddleware(thunkMiddleware));
 //        </div>
 
 // );
-// tester render function contents:
-// ReactDOM.render(<AddCourse
+// // tester render function contents:
+// const render = () => {
+// 	console.log(store.getState());
+// 	let state = store.getState();
+// 	ReactDOM.render(<AddCourse
 //           onRequest={() =>
 //           //store.dispatch(fetchCourses(state.school, state.semester))}
 //           store.dispatch(fetchCourses("uoft", "F"))}
@@ -56,8 +60,10 @@ const store = createStore(Semesterly, applyMiddleware(thunkMiddleware));
 //         />,
 //         document.getElementById('page')
 //       );
+// }
 const render = () => {
-    ReactDOM.render(<Calendar />, document.getElementById("page"));
+	console.log(store.getState());
+    ReactDOM.render(<div><CourseModal /><Calendar /></div>, document.getElementById("page"));
 };
 render();
 store.subscribe(render);
