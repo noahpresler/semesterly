@@ -21,7 +21,6 @@ export function receiveTimetables(json) {
 Returns the body of the request used to get new timetables
 */
 function getReqBody(dataState){
-
 	return {
 		school: dataState.school,
 		semester: dataState.semester,
@@ -36,7 +35,6 @@ function getReqBody(dataState){
       
 export function fetchTimetables(state) {
 	return (dispatch) => {
-		console.log("Making request with request body:", getReqBody(state));
 		// mark that we are now requesting timetables (asynchronously)
 		dispatch(requestTimetables());
 		// send a request (via fetch) to the appropriate endpoint with
