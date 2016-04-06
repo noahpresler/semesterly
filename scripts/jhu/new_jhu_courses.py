@@ -94,53 +94,54 @@ class HopkinsParser:
 		self.create_course_offerings(course,CourseModel,SectionDetails,Meetings,SectionCode)
 
 	def create_course_offerings(self,course,CourseModel,SectionDetails,Meetings,SectionCode):
+		cos = HopkinsCourseOffering.objects.filter(
+			course=CourseModel,
+			semester=self.semester[0].upper(),
+			meeting_section=SectionCode)
+		links = []
+		for co in cos:
+			links += HopkinsLink.objects.filter(courseoffering=co)
+		cos.delete()
 		for Meeting in Meetings:
-			time = Meeting['Times']
-			if len(time) > 0:
-				time_pieces = re.search(r"(\d\d):(\d\d) ([AP])M - (\d\d):(\d\d) ([AP])M",time)
-				hours = [None] * 2
-				start_hour = int(time_pieces.group(1))
-				end_hour = int(time_pieces.group(4))
-				if time_pieces.group(3).upper() == "P" and time_pieces.group(1) != "12":
-					start_hour += 12
-				if time_pieces.group(6).upper() == "P" and time_pieces.group(4) != "12":
-					end_hour += 12
-				start = str(start_hour) + ":" + time_pieces.group(2)
-				end = str(end_hour) + ":" + time_pieces.group(5)
-				days = Meeting['DOW']
-				if days != "TBA" and days !="None":
-					for day_letter in re.findall(r"([A-Z][a-z]*)+?",days):
-						day = DAY_TO_LETTER_MAP[day_letter.lower()]
-						cos = HopkinsCourseOffering.objects.filter(
-							course=CourseModel,
-							semester=self.semester[0].upper(),
-							meeting_section=SectionCode)
-						links = []
-						for co in cos:
-							links += HopkinsLink.objects.filter(courseoffering=co)
-						cos.delete()
-						offering, OfferingCreated = HopkinsCourseOffering.objects.get_or_create(
-							course=CourseModel,
-							semester=self.semester[0].upper(),
-							meeting_section=SectionCode,
-							day=day,
-							time_start=start,
-							time_end=end,
-							instructors=course['Instructors'])
-						offering.save()
-						for l in links:
-							l.courseoffering = offering
-							l.save()
-						offering.location=Meeting['Building'] + ' ' + Meeting['Room']
-						try:
-							offering.size=int(course['MaxSeats'])
-						except:
-							offering.size=0
-						try:
-							offering.enrolment=int(course['SeatsAvailable'].split("/")[0])
-						except:
-							offering.enrolment=0
-						offering.save()
+			times = Meeting['Times']
+			for time in times.split(','):
+				if len(time) > 0:
+					time_pieces = re.search(r"(\d\d):(\d\d) ([AP])M - (\d\d):(\d\d) ([AP])M",time)
+					hours = [None] * 2
+					start_hour = int(time_pieces.group(1))
+					end_hour = int(time_pieces.group(4))
+					if time_pieces.group(3).upper() == "P" and time_pieces.group(1) != "12":
+						start_hour += 12
+					if time_pieces.group(6).upper() == "P" and time_pieces.group(4) != "12":
+						end_hour += 12
+					start = str(start_hour) + ":" + time_pieces.group(2)
+					end = str(end_hour) + ":" + time_pieces.group(5)
+					days = Meeting['DOW']
+					if days != "TBA" and days !="None":
+						for day_letter in re.findall(r"([A-Z][a-z]*)+?",days):
+							day = DAY_TO_LETTER_MAP[day_letter.lower()]
+							offering, OfferingCreated = HopkinsCourseOffering.objects.get_or_create(
+								course=CourseModel,
+								semester=self.semester[0].upper(),
+								meeting_section=SectionCode,
+								day=day,
+								time_start=start,
+								time_end=end,
+								instructors=course['Instructors'])
+							offering.save()
+							for l in links:
+								l.courseoffering = offering
+								l.save()
+							offering.location=Meeting['Building'] + ' ' + Meeting['Room']
+							try:
+								offering.size=int(course['MaxSeats'])
+							except:
+								offering.size=0
+							try:
+								offering.enrolment=int(course['SeatsAvailable'].split("/")[0])
+							except:
+								offering.enrolment=0
+							offering.save()
 
 
 
