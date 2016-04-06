@@ -67,7 +67,7 @@ def view_timetable(request):
 
     global SCHOOL, LOCKED_SECTIONS
     """Generate best timetables given the user's selected courses"""
-    if not request.POST:
+    if not request.body:
         return render_to_response('timetable.html', {}, 
                                     context_instance=RequestContext(request))
     params = json.loads(request.body)
