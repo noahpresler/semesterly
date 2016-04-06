@@ -147,11 +147,15 @@ class HopkinsParser:
 
 	def get_create_course(self,courseJson,description,prereqs):
 		course, CourseCreated = HopkinsCourse.objects.get_or_create(
-			code=courseJson['OfferingName'],
+			code__contains=courseJson['OfferingName'],
 			campus=1)
 		course.name=courseJson['Title']
 		course.description=description
 		course.prerequisites=prereqs
+		areas = courseJson['Areas'].replace('^',',')
+		if courseJson['IsWritingIntensive'] == "yes":
+			areas = areas + ' Writing Intensive'
+		course.areas=areas
 		try:
 			course.num_credits=int(float(courseJson['Credits']))
 		except:
