@@ -13,7 +13,7 @@ let COLOUR_DATA = {
     "#C8F7C5" : {highlight: "#C4D44D", border: "#6C7A89"}
 
 } // consider #CF000F, #e8fac3, #C8F7C5
-
+var lol;
 class Slot extends React.Component {
 	render() {
 		return (
