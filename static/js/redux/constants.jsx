@@ -13,5 +13,5 @@ export const getCourseInfoEndpoint = (school, course_id) => {
 	return "courses/"+ school + "/id/" + course_id;
 };
 export const getTimetablesEndpoint = () => {
-	return "/";
+	return "get_timetables/";
 };
