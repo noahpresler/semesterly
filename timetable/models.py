@@ -159,7 +159,7 @@ class Link(TextbookLink):
 class HopkinsCourse(BaseCourse):
   related_courses = models.ManyToManyField("self", blank=True)
   num_credits = models.IntegerField(default=-1)
-  areas = models.CharField(max_length=100, default='')
+  areas = models.CharField(max_length=300, default='')
 
   def get_dept(self):
     pass
