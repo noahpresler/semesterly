@@ -58,18 +58,26 @@ def save_analytics_data(key, args):
     except:
         pass
 
+def validate_subdomain(view_func):
+    def wrapper(request, *args, **kwargs):
+        if request.subdomain is None:
+            return render(request, 'index.html')
+        else:
+            return view_func(request, *args, **kwargs)
+    return wrapper
 # ******************************************************************************
 # ******************************** GENERATE TTs ********************************
 # ******************************************************************************
 
-@csrf_exempt
+@validate_subdomain
 def view_timetable(request):
+    return render(request, 'timetable.html')
 
-    global SCHOOL, LOCKED_SECTIONS
+@csrf_exempt
+def get_timetables(request):
     """Generate best timetables given the user's selected courses"""
-    if not request.body:
-        return render_to_response('timetable.html', {}, 
-                                    context_instance=RequestContext(request))
+    global SCHOOL, LOCKED_SECTIONS
+
     params = json.loads(request.body)
     sid = params['sid']
     mark_request(request, sid)

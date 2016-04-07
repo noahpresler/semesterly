@@ -6,6 +6,8 @@ django.setup()
 from timetable.models import *
 import sys
 
+VALID_SCHOOLS = ['jhu', 'uoft', 'umd', 'rutgers', 'uo']
+
 school_to_models = {
     'jhu': (HopkinsCourse, HopkinsCourseOffering),
     'uoft': (Course, CourseOffering),

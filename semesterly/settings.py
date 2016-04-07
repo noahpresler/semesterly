@@ -51,6 +51,7 @@ MIDDLEWARE_CLASSES = (
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'semesterly.middleware.subdomain_middleware.SubdomainMiddleware',
 )
 
 ROOT_URLCONF = 'semesterly.urls'
