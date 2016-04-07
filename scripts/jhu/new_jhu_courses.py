@@ -156,6 +156,7 @@ class HopkinsParser:
 		if courseJson['IsWritingIntensive'] == "yes":
 			areas = areas + ' Writing Intensive'
 		course.areas=areas
+		print areas
 		try:
 			course.num_credits=int(float(courseJson['Credits']))
 		except:
