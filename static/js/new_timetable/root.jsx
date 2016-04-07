@@ -9,6 +9,7 @@ var SimpleModal = require('./simple_modal');
 var SchoolList = require('./school_list');
 var TimetableActions = require('./actions/update_timetables');
 var CodeToIdStore = require('./stores/code_to_id');
+var FacebookButton = require('./facebook_button');
 
 module.exports = React.createClass({
   mixins: [Reflux.connect(TimetableStore), Reflux.connect(ToastStore), Reflux.connect(CodeToIdStore)],
@@ -46,6 +47,7 @@ module.exports = React.createClass({
           <div id="semesterly-name">Semester.ly</div>
           <img id="semesterly-logo" src="/static/img/logo2.0.png"/>
           <ControlBar toggleModal={this.toggleCourseModal} setLastUpdated={this.setLastUpdated}/>
+          <FacebookButton />
         </div>
         <div id="navicon" onClick={this.toggleSideModal}>
           <span></span><span></span><span></span>
