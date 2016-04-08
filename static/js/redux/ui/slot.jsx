@@ -37,8 +37,8 @@ class Slot extends React.Component {
             end_hour     = parseInt(this.props.time_end.split(":")[0]),
             end_minute   = parseInt(this.props.time_end.split(":")[1]);
 
-        var top = (start_hour - 8)*52 + (start_minute)*(HALF_HOUR_HEIGHT/30);
-        var bottom = (end_hour - 8)*52 + (end_minute)*(HALF_HOUR_HEIGHT/30) - 1;
+        var top = (start_hour - 8)*(HALF_HOUR_HEIGHT*2 + 2) + (start_minute)*(HALF_HOUR_HEIGHT/30);
+        var bottom = (end_hour - 8)*(HALF_HOUR_HEIGHT*2 + 2) + (end_minute)*(HALF_HOUR_HEIGHT/30) - 1;
         var height = bottom - top - 2;
         // the cumulative width of this slot and all of the slots it is conflicting with
         var total_slot_widths = 99 - (5 * this.props.depth_level);

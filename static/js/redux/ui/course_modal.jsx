@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom';
 import fetch from 'isomorphic-fetch';
 import { getCourseInfoEndpoint } from '../constants.jsx';
 import { getSchool } from '../init.jsx';
-let Modal = require('boron/WaveModal');
+let Modal = require('boron/DropModal');
 class CourseModal extends React.Component {
 	constructor(props) {
 		super(props);
@@ -47,4 +47,3 @@ export const renderCourseModal = (id, inRoster) => {
         id={id} inRoster={inRoster} mountNode={mountNode} />, 
         document.getElementById(mountNode));
 };
-
