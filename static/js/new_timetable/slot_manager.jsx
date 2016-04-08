@@ -124,13 +124,11 @@ var Slot = React.createClass({
             removing: true});
         e.stopPropagation();
     },
-
     updateColours: function(colour) {
         $(".slot-" + this.props.course)
           .css('background-color', colour)
           .css('border-color', colour);
     },
-
 });
 
 module.exports = React.createClass({
