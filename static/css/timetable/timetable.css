@@ -44,4 +44,7 @@ body {
 	width:80% !important;
 	max-width:700px;
 }
+.course-modal div {
+	outline:none;
+}
 
