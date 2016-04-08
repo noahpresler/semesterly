@@ -10,30 +10,38 @@ export function requestTimetables() {
   }
 }
 
-export function receiveTimetables(json) {
+export function receiveTimetables(timetables) {
+  // console.log("Timetables are:", timetables);
   return {
     type: "RECEIVE_TIMETABLES",
-    courses: json.courses,
-    lastUpdated: json.last_updated
+    timetables: timetables,
+  }
+}
+export function receiveCourseSections(newCourseSections) {
+  return {
+    type: "RECEIVE_COURSE_SECTIONS",
+    courseSections: newCourseSections,
   }
 }
 /* 
 Returns the body of the request used to get new timetables
 */
-function getReqBody(dataState){
+function getReqBody(dataState, newCourse){
+	let cs = dataState.courseSections;
+	cs[newCourse.id] = {};
 	return {
 		school: dataState.school,
 		semester: dataState.semester,
 		courseSections: dataState.courseSections,
 		preferences: dataState.preferences,
-		updated_courses: [{'course_id': 35485,
+		updated_courses: [{'course_id': newCourse.id,
                           'section_codes': ['']}],
         index: 0,
 		sid: SID
 	}
 }
-      
-export function fetchTimetables(state) {
+
+export function fetchTimetables(state, newCourse) {
 	return (dispatch) => {
 		// mark that we are now requesting timetables (asynchronously)
 		dispatch(requestTimetables());
@@ -41,12 +49,13 @@ export function fetchTimetables(state) {
 		// relevant data as contained in @state (including courses, preferences, etc)
 		fetch(getTimetablesEndpoint(), {
       		method: 'POST',
-      		body: JSON.stringify(getReqBody(state))
+      		body: JSON.stringify(getReqBody(state, newCourse))
     	})
 		.then(response => response.json()) // TODO(rohan): error-check the response
 		.then(json => {
-			// mark that timetables have been received
-			dispatch(receiveTimetables(json));
+			// mark that timetables and a new courseSections have been received
+			dispatch(receiveTimetables(json.timetables));
+			dispatch(receiveCourseSections(json.new_c_to_s));
 		});
 	}
 }

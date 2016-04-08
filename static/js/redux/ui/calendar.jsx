@@ -30,7 +30,7 @@ export class Calendar extends React.Component {
 
 
 	render() { 
-
+		let timetable = this.props.timetables[0] || []; // First operand if it exists, second if not. #justjavascriptthings
 		return (
 
 	      <div id="calendar" className="fc fc-ltr fc-unthemed">
@@ -91,7 +91,7 @@ export class Calendar extends React.Component {
 	                          </table>
 	                        </div>
 	                        <div className="fc-content-skeleton">
-	                          <SlotManager />
+	                          <SlotManager timetable={timetable} />
 	                        </div>
 	                        <hr className="fc-divider fc-widget-header" style={{display: 'none'}} />
 	                      </div>

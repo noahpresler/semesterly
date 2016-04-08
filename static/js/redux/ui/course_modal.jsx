@@ -4,6 +4,7 @@ import fetch from 'isomorphic-fetch';
 import { getCourseInfoEndpoint } from '../constants.jsx';
 import { getSchool } from '../init.jsx';
 let Modal = require('boron/DropModal');
+
 class CourseModal extends React.Component {
 	constructor(props) {
 		super(props);
@@ -16,20 +17,20 @@ class CourseModal extends React.Component {
         this.refs.modal.hide();
     }
     fetchCourseInfo() {
-        fetch(getCourseInfoEndpoint(getSchool(), this.props.id))
+        fetch(getCourseInfoEndpoint(this.props.id))
         .then(response => response.json()) // TODO(rohan): error-check the response
         .then(json => {
             this.setState({loading: false, data: json});
         });
     }
     render() {
-        let content = this.state.loading ? <div className="loader">Loading...</div> :
+        let content = !this.state.loading ? <div className="modal-loader"></div> :
         (<div>
             <h2>Course: {this.state.data.code}</h2><h3>In Roster? {String(this.props.inRoster)}</h3>
         </div>);
         return (
             <Modal ref="modal" className="course-modal" onHide={() => 
-                ReactDOM.unmountComponentAtNode(document.getElementById(this.props.mountNode))}>
+                ReactDOM.unmountComponentAtNode(this.props.mountNode)}>
                 {content}
                 <button onClick={() => this.refs.modal.hide()}>Close</button>
             </Modal>
@@ -42,8 +43,8 @@ class CourseModal extends React.Component {
 }
 
 export const renderCourseModal = (id, inRoster) => {
-    let mountNode = "semesterly-modal";
+    let mountNode = document.getElementById("semesterly-modal");
     ReactDOM.render(<CourseModal 
         id={id} inRoster={inRoster} mountNode={mountNode} />, 
-        document.getElementById(mountNode));
+        mountNode);
 };
