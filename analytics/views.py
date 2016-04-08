@@ -1,7 +1,6 @@
 from django.shortcuts import render_to_response, render
 from django.http import HttpResponse, HttpResponseRedirect, Http404
 from django.template import RequestContext
-from django.core.context_processors import csrf
 from django.views.decorators.csrf import csrf_exempt
 
 from django.db.models import Q

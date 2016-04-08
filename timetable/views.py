@@ -1,31 +1,17 @@
+from collections import OrderedDict
 from django.shortcuts import render_to_response, render
 from django.http import HttpResponse, HttpResponseRedirect, Http404
-from django.core.context_processors import csrf
-from django.utils import timezone
-from django.conf import settings
-from django.template import RequestContext
-from django.contrib import messages
-import datetime, math
-
-from django.contrib.auth.decorators import login_required
 from django.views.decorators.csrf import csrf_exempt
-
-from timetable.models import *
-
 from django.forms.models import model_to_dict
-
 from django.db.models import Q
 from hashids import Hashids
-
-from collections import OrderedDict, defaultdict
-import json, copy, re, operator, itertools, functools
-import os
-
-import pprint
+from pytz import timezone
+from school_mappers import school_to_models, school_to_granularity
+import copy, functools, itertools, json, logging, os 
 
 from analytics.views import *
-from school_mappers import school_to_models, school_to_granularity
-from pytz import timezone
+from timetable.models import *
+
 
 MAX_RETURN = 60 # Max number of timetables we want to consider
 
@@ -43,7 +29,8 @@ WITH_CONFLICTS = False
 SCHOOL = ""
 LOCKED_SECTIONS = []
 
-hashid = Hashids("***REMOVED***")
+# hashid = Hashids("***REMOVED***")
+logger = logging.getLogger(__name__)
 
 def redirect_to_home(request):
     return HttpResponseRedirect("/")

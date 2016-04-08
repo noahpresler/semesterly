@@ -1,5 +1,3 @@
-############################# LOCAL SETTINGS ##############################
-
 """
 Django settings for the semesterly project.
 
@@ -22,7 +20,7 @@ PROJECT_DIRECTORY = os.getcwd()
 SECRET_KEY = '***REMOVED***'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 TEMPLATE_DEBUG = DEBUG
 
@@ -65,13 +63,71 @@ WSGI_APPLICATION = 'semesterly.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'rch',
-        'USER': 'Felix',
+        'NAME': '',
+        'USER': '',
         'PASSWORD': '',
         'HOST': 'localhost',
         'PORT': '5432',                     
     }
 }
+
+# Logging
+
+LOGFILE = PROJECT_DIRECTORY + '/logfile.txt'
+
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'formatters': {
+        'verbose': {
+            'format': '%(levelname)s %(asctime)s %(module)s %(process)d %(thread)d %(message)s'
+        },
+        'simple': {
+            'format': '%(levelname)s %(asctime)s %(message)s'
+        },
+    },
+    'handlers': {
+        'file': {
+            'level': 'INFO',
+            'class': 'logging.FileHandler',
+            'filename': LOGFILE,
+            'formatter': 'verbose'
+        },
+        'mail_admins': {
+            'level': 'ERROR',
+            'class': 'django.utils.log.AdminEmailHandler',
+        }
+    },
+    'loggers': {
+        '': {
+            'handlers': ['file'],
+            'level': 'ERROR',
+            'propagate': True,
+        },
+        'timetable.views': {
+            'handlers': ['mail_admins'],
+            'level': 'ERROR',
+            'propagate': True,
+        },
+        'django.request': { 
+            'handlers': ['mail_admins'], 
+            'level': 'ERROR', 
+            'propagate': False, 
+        }
+    },
+}
+
+ADMINS = [
+    ('Rohan Das', 'das.rohan1993@gmail.com'), 
+    ('Felix Zhu', 'felix.czhu@gmail.com'),
+    ('Noah Presler', 'noah@presler.me')
+]
+
+EMAIL_USE_TLS = True
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_PORT = 587
+
+DEFAULT_FROM_EMAIL = 'semesterly.contact@gmail.com'
 
 # Internationalization
 # https://docs.djangoproject.com/en/1.6/topics/i18n/
@@ -114,5 +170,6 @@ TEMPLATE_DIRS = (
 
 try:
     from local_settings import *
+    from sensitive import *
 except:
     pass
