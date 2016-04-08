@@ -16,3 +16,5 @@ documentation/build
 parse_errors.log
 static/js/gulp/*
 analytics/migrations/
+logfile.txt
+semesterly/sensitive.py
