@@ -1,0 +1,11 @@
+.search-course {
+	cursor:pointer;
+}
+
+.search-section {
+	cursor:pointer;
+	margin-right:10px;
+}
+.search-section:hover {
+	background-color:#FFDBBE;
+}
