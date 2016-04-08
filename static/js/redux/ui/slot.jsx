@@ -1,30 +1,29 @@
 import React from 'react';
 import { renderCourseModal } from './course_modal.jsx';
 export const HALF_HOUR_HEIGHT = 25;
-let COLOUR_DATA = {
-    "#FD7473" : {highlight: "#E26A6A", border: "#6C7A89"},
-    "#5AC8FB" : {highlight: "#28A4EA", border: "#6C7A89"},
-    "#4CD4B0" : {highlight: "#3DBB9A", border: "#6C7A89"},
-    "#8870FF" : {highlight: "#7059E6", border: "#6C7A89"},
-    "#FFBF8D" : {highlight: "#F7954A", border: "#6C7A89"},
-    "#D4DBC8" : {highlight: "#B5BFA3", border: "#6C7A89"},
-    "#F182B4" : {highlight: "#DE699D", border: "#6C7A89"},
-    "#7499A2" : {highlight: "#668B94", border: "#6C7A89"},
-    "#E7F76D" : {highlight: "#C4D44D", border: "#6C7A89"},
-    "#C8F7C5" : {highlight: "#C4D44D", border: "#6C7A89"}
+let COLOUR_DATA = [
+    {background: "#FD7473", highlight: "#E26A6A", border: "#963838", font: "#222"},
+    {background: "#5AC8FB", highlight: "#28A4EA", border: "#1B6B90", font: "#222"},
+    {background: "#4CD4B0", highlight: "#3DBB9A", border: "#1E755E", font: "#222"},
+    {background: "#8870FF", highlight: "#7059E6", border: "#382694", font: "#222"},
+    {background: "#FFBF8D", highlight: "#F7954A", border: "#AF5E20", font: "#222"},
+    {background: "#D4DBC8", highlight: "#B5BFA3", border: "#6C7A89", font: "#222"},
+    {background: "#F182B4", highlight: "#DE699D", border: "#6C7A89", font: "#222"},
+    {background: "#7499A2", highlight: "#668B94", border: "#6C7A89", font: "#222"},
+    {background: "#E7F76D", highlight: "#C4D44D", border: "#6C7A89", font: "#222"},
+    {background: "#C8F7C5", highlight: "#C4D44D", border: "#548A50", font: "#222"}
+] // consider #CF000F, #e8fac3, #C8F7C5
 
-} // consider #CF000F, #e8fac3, #C8F7C5
-var lol;
 class Slot extends React.Component {
 	render() {
 		return (
 			<div className="fc-event-container">
                 <div className="fc-time-grid-event fc-event slot" style={this.getSlotStyles()} onClick={() => renderCourseModal(this.props.id, false)}>
-    				<div className="slot-bar" style={{backgroundColor: COLOUR_DATA[this.props.colour].border}}/>
+    				<div className="slot-bar" style={{backgroundColor: COLOUR_DATA[this.props.colour_id].border}}/>
                     <div className="fc-content">
                         <div className="fc-time"><span>{this.props.time_start} – {this.props.time_end}</span></div>
                         <div className="fc-title">{this.props.name}</div>
-                        <div className="fc-title">{this.props.location}</div>
+                        <div className="fc-title">{this.props.location} </div>
 
                     </div>
                 </div>
@@ -55,20 +54,25 @@ class Slot extends React.Component {
         //     left: push_left + "%",
         //     zIndex: 100 * this.props.depth_level
         // };
-		return {top: top, bottom: -bottom, zIndex: 1, left: '0%', right: '0%', backgroundColor: this.props.colour,
-                width: '100%'};
+		return {
+            top: top, bottom: -bottom, zIndex: 1, left: '0%', right: '0%', 
+            backgroundColor: COLOUR_DATA[this.props.colour_id].background,
+            color: COLOUR_DATA[this.props.colour_id].font,
+            width: '100%'
+        };
 	}
 }
 
 export class SlotManager extends React.Component {
+
 	render() {
         var days = ["M", "T", "W", "R", "F"];
         var slots_by_day = this.getSlotsByDay();
-        var all_slots = days.map(function(day) {
-            var day_slots = slots_by_day[day].map(function(slot) {
+        var all_slots = days.map((day) => {
+            var day_slots = slots_by_day[day].map((slot) => {
                 var p = false;
                 return <Slot {...slot} key={slot.id} pinned={p}/>
-            }.bind(this));
+            });
             return (
                     <td key={day}>
                         <div className="fc-content-col">
@@ -76,7 +80,7 @@ export class SlotManager extends React.Component {
                         </div>
                     </td>
             );
-        }.bind(this));
+        });
         return (
             <table>
 			    <tbody>
@@ -89,76 +93,26 @@ export class SlotManager extends React.Component {
 
         );
     }
-
+    addCourseWithSection(courseWithSection) {
+        this.props.timetables.courses.push(courseWithSection);
+    }
     getSlotsByDay() {
     	var slots_by_day = {
             'M': [], 'T': [], 'W': [], 'R': [], 'F': []
         };
-
-        var slot = {
-        	id: 38619,
-        	course: "fkingwin",
-        	code: 'MAT301H1',
-        	meeting_section: 'L0101',
-        	name: 'Groups and Symmetry',
-        	location: 'MP202',
-        	time_start: '11:00',
-        	time_end: '13:10',
-        	colour: "#FD7473"
+        if (this.props.timetable.courses ) {
+            // console.log(this.props.timetable.courses[0]);
+        }   
+        for (var course in this.props.timetable.courses) {
+            var crs = this.props.timetable.courses[course];
+            for (var slot_id in crs.slots) {
+                var slot = crs.slots[slot_id];
+                slot["colour_id"] = course;
+                slot["code"] = crs.code;
+                slot["name"] = crs.name;
+                slots_by_day[slot.day].push(slot);
+            }
         }
-
-
-        var slot2 = {
-        	id: 38392,
-        	course: "fkingwin",
-        	code: 'MAT301H1',
-        	meeting_section: 'L0101',
-        	name: 'Database Implementation',
-        	location: 'BA1102',
-        	time_start: '08:00',
-        	time_end: '14:00',
-        	colour: "#5AC8FB"
-        }
-
-
-        var slot3 = {
-        	id: 35574,
-        	course: "fkingwin",
-        	code: 'BIO255H1',
-        	meeting_section: 'L0101',
-        	name: 'Cell & Molecular Biology',
-        	location: 'AP130',
-        	time_start: '16:00',
-        	time_end: '19:15',
-        	colour: "#C8F7C5"
-        }
-        var slot4 = {
-            id: 36235,
-            course: "fkingwin",
-            code: 'CSC373H1',
-            meeting_section: 'L5101',
-            name: 'Algorithm Design, Analysis and Complexity',
-            location: 'BA1160',
-            time_start: '14:00',
-            time_end: '15:20',
-            colour: "#8870FF"
-        }
-        var slot5 = {
-            id: 36241,
-            course: "fkingwin",
-            code: 'ESS105H1',
-            meeting_section: 'L0201',
-            name: 'Earth: Our Home Planet',
-            location: 'BA1160',
-            time_start: '12:00',
-            time_end: '15:00',
-            colour: "#FFBF8D"
-        }
-        slots_by_day['W'].push(slot);
-        slots_by_day['M'].push(slot2);
-        slots_by_day['F'].push(slot3);
-        slots_by_day['T'].push(slot4);
-        slots_by_day['R'].push(slot5);
 
         return slots_by_day;
     }
