@@ -16,11 +16,13 @@ handler404 = 'timetable.views.custom_404'
 
 urlpatterns = patterns('',
 	# url(r'^admin/', include(admin.site.urls)),
+	url('', include('social.apps.django_app.urls', namespace='social')),
+	url('', include('django.contrib.auth.urls', namespace='auth')),
+	url(r'^/complete/facebook/.*$', 'timetable.views.view_timetable'),
 
 	# index
 	url(r'^timetable/*$', 'timetable.views.redirect_to_home'),
 	url(r'^timetable/.+$', 'timetable.views.redirect_to_home'),
-	url(r'^tt_course_search/*$', 'timetable.views.tt_course_search'),
 
 	url(r'^exit/*$', 'analytics.views.handle_exit'),
 
