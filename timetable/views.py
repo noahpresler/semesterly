@@ -64,6 +64,23 @@ def save_analytics_data(key, args):
 
 @csrf_exempt
 def view_timetable(request):
+    # if request.user.is_authenticated():
+    #     print "AUTHENTICATED"
+    # else:
+    #     print "NOT"
+    # social_user = request.user.social_auth.filter(
+    #     provider='facebook',
+    # ).first()
+    # if social_user:
+    #     url = u'https://graph.facebook.com/{0}/' \
+    #           u'friends?fields=id,name,location,picture' \
+    #           u'&access_token={1}'.format(
+    #               social_user.uid,
+    #               social_user.extra_data['access_token'],
+    #           )
+    #     request = urllib2.Request(url)
+    #     friends = json.loads(urllib2.urlopen(request).read()).get('data')
+    #     pprint.pprint(friends)
 
     global SCHOOL, LOCKED_SECTIONS
     """Generate best timetables given the user's selected courses"""
