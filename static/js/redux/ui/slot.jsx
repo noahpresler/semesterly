@@ -106,10 +106,9 @@ export class SlotManager extends React.Component {
         for (var course in this.props.timetable.courses) {
             var crs = this.props.timetable.courses[course];
             for (var slot_id in crs.slots) {
-                var slot = crs.slots[slot_id];
-                slot["colour_id"] = course;
-                slot["code"] = crs.code;
-                slot["name"] = crs.name;
+                var slot = Object.assign(crs.slots[slot_id], {
+                            'colour_id': course, 'code': crs.code, 'name': crs.name, 'id': crs.id});
+                // lol
                 slots_by_day[slot.day].push(slot);
             }
         }
@@ -117,6 +116,3 @@ export class SlotManager extends React.Component {
         return slots_by_day;
     }
 }
-
-
-
