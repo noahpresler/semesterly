@@ -36,8 +36,7 @@ def create_student(strategy, details, response, user, *args, **kwargs):
         
         #TODO: how can I query Student by where has USER which has social user with uid?
         for friend in friends:
-        	friend_social_user = SocialAuthUser.objects.get(uid=friend['id'])
-        	friend_student = friend_social_user.student
+        	freind_student = Student.objects.filter(user__social_auth_user__uid="facebook_uid_here")
         	if not new_student.friends.filter(user=friend_student.user):
         		new_student.friends.add(friend_student)
 
