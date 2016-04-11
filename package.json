@@ -33,7 +33,11 @@
     "vinyl-source-stream": "^1.1.0",
     "watchify": "^3.6.1"
   },
-  "devDependencies": {},
+  "devDependencies": {
+    "babel-plugin-react-transform": "^2.0.2",
+    "livereactload": "^2.2.2",
+    "react-proxy": "^1.1.8"
+  },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
