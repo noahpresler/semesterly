@@ -723,25 +723,25 @@ def course_search(request, school, sem, query):
 
     SchoolCourse, SchoolCourseOffering = school_to_models[school]
 
+    course_match_objs = SchoolCourse.objects.filter((Q(code__icontains=query) | Q(description__icontains=query) | Q(name__icontains=query)))
+
     # We want to filter based on whether the course has an offering in this semester or not.
     # This part needs to be executed case-by-case because of Django's ORM.
     # Notice that each call to filter uses the appropriate "courseoffering" 
     # class name in the filter.
-
     if school == "uoft":
-        course_match_objs = Course.objects.filter(
-            Q(code__icontains=query), 
-            (Q(courseoffering__semester__icontains=sem) | Q(courseoffering__semester__icontains='Y'))).distinct('code')[:10]
+        course_match_objs = course_match_objs.filter(
+            (Q(courseoffering__semester__icontains=sem) | Q(courseoffering__semester__icontains='Y')))
     elif school == "jhu":
-        course_match_objs = HopkinsCourse.objects.filter(
-            Q(code__icontains=query), 
-            (Q(hopkinscourseoffering__semester__icontains=sem) | Q(hopkinscourseoffering__semester__icontains='Y'))).distinct('code')[:10]
+        course_match_objs = course_match_objs.filter( 
+            (Q(hopkinscourseoffering__semester__icontains=sem) | Q(hopkinscourseoffering__semester__icontains='Y')))
     elif school == "umd":
-        course_match_objs = UmdCourse.objects.filter(
-            Q(code__icontains=query), 
-            (Q(umdcourseoffering__semester__icontains=sem) | Q(umdcourseoffering__semester__icontains='Y'))).distinct('code')[:10]
+        course_match_objs = course_match_objs.filter( 
+            (Q(umdcourseoffering__semester__icontains=sem) | Q(umdcourseoffering__semester__icontains='Y')))
     else:
         raise Http404
+
+    course_match_objs = course_match_objs.distinct('code')[:4]
 
     course_matches = [my_model_to_dict(course, SchoolCourseOffering, sem) for course in course_match_objs]
     json_data = {'results': course_matches}

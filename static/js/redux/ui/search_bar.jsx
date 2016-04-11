@@ -18,7 +18,7 @@ export class SearchBar extends React.Component {
         });
     }
     maybeFetchCourses() {
-    	if (this.refs.input.value === "") {
+    	if (this.refs.input.value.length < 2) {
     		this.setState({loading: false, courses: []});
     	}
     	else {
@@ -34,13 +34,15 @@ export class SearchBar extends React.Component {
         else {
             unHoverCourse();
         }
-       
+    }
+    addCourse(c, section) {
+        c.section = section;
+        this.props.addCourse(c);
     }
     render() {
-
-    	var results = this.state.courses.map(c => {
-        		return (<li key={c.id} className="search-course">
-        			{c.code} <i onClick={() => this.props.addCourse(c)} className="fa fa-plus"></i>
+    	let results = this.state.courses.map(c => 
+        		(<li key={c.id} className="search-course">
+        			{c.code} : {c.name} <i onClick={() => this.props.addCourse(c)} className="fa fa-plus"></i>
         			<div>
         				{
         					Object.keys(c.slots).map(sec => 
@@ -48,12 +50,12 @@ export class SearchBar extends React.Component {
                                     className="search-section" 
                                     onMouseEnter={() => this.toggleHover(c, sec, true)}
                                     onMouseLeave={() => this.toggleHover(c, sec, false)} 
+                                    onClick={() => this.addCourse(c, sec)}
                                 >{sec} </span>
         					) 
         				}
         			</div>
-        		</li>);
-            }
+        		</li>)
     	);
     	return (
     	<div>

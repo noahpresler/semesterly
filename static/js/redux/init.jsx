@@ -13,7 +13,6 @@ import { fetchTimetables } from './actions/timetable_actions.jsx';
 import { Calendar } from './ui/calendar.jsx';
 import { SearchBar } from './ui/search_bar.jsx';
 
-
 let data = combineReducers({
   school,
   semester,
@@ -29,6 +28,7 @@ const store = createStore(Semesterly, applyMiddleware(thunkMiddleware));
 
 const render = () => {
     let state = store.getState();
+    // console.log("State is now", state);
     ReactDOM.render(
       <div>
         <SearchBar addCourse={
@@ -42,7 +42,7 @@ store.subscribe(render);
 store.dispatch(
 		{
 			type: "SET_SCHOOL",
-			school: "uoft"
+			school: window.location.hostname.split(".")[0]
 		}
 );
 store.dispatch(
@@ -68,4 +68,3 @@ export const unHoverCourse = () => {
     type: "UNHOVER_COURSE",
   });
 }
-
