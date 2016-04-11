@@ -11,6 +11,7 @@ var uglify = require('gulp-uglify');
 var babel = require('babelify');
 var minifyCSS = require('gulp-minify-css');
 var concat = require('gulp-concat');
+var lrload = require('livereactload');
 
 const STATIC_DIR = 'static/';
 const APP_LOCATION = STATIC_DIR + 'js/redux/init.jsx';
@@ -26,6 +27,7 @@ function compile(watch) {
             debug: true,
             // Allow importing from the following extensions
             extensions: [' ', 'js', 'jsx'],
+            plugin: [ lrload ],
             transform: [
               [babel, {presets: ["es2015", "react"]} ],
               [envify, {global: true, NODE_ENV: 'production'}]]
