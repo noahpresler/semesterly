@@ -28,7 +28,7 @@ export class SearchBar extends React.Component {
 
     render() {
     	let results = this.state.courses.map(c => 
-        		<SearchResult course={c} addCourse={this.props.addCourse} />
+        		<SearchResult course={c} addCourse={this.props.addCourse} key={c.code}/>
     	);
     	return (
     	<div>
