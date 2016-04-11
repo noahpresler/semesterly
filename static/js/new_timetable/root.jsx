@@ -47,7 +47,6 @@ module.exports = React.createClass({
           <div id="semesterly-name">Semester.ly</div>
           <img id="semesterly-logo" src="/static/img/logo2.0.png"/>
           <ControlBar toggleModal={this.toggleCourseModal} setLastUpdated={this.setLastUpdated}/>
-          <FacebookButton />
         </div>
         <div id="navicon" onClick={this.toggleSideModal}>
           <span></span><span></span><span></span>
