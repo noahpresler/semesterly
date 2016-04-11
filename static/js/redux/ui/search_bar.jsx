@@ -25,7 +25,24 @@ export class SearchBar extends React.Component {
     		this.fetchCourses();
     	}
     }
-    toggleHover(c, section, on=false) {
+
+    render() {
+    	let results = this.state.courses.map(c => 
+        		<SearchResult course={c} addCourse={this.props.addCourse} />
+    	);
+    	return (
+    	<div>
+    		<input ref="input" onInput={this.maybeFetchCourses.bind(this)} />
+    		<ul className="search-results">
+    		 {results}
+    		</ul>
+    	</div>
+    	);
+    }
+}
+
+class SearchResult extends React.Component {
+    toggleHoverSection(c, section, on=false) {
         if (on) {
             let courseWithSection = $.extend({}, c);
             courseWithSection.slots = c.slots[section];
@@ -35,37 +52,29 @@ export class SearchBar extends React.Component {
             unHoverCourse();
         }
     }
-    addCourse(c, section) {
-        c.section = section;
-        this.props.addCourse(c);
+    addSection(course, section) {
+        course.section = section;
+        this.props.addCourse(course);
     }
     render() {
-    	let results = this.state.courses.map(c => 
-        		(<li key={c.id} className="search-course">
-        			{c.code} : {c.name} <i onClick={() => this.props.addCourse(c)} className="fa fa-plus"></i>
-        			<div>
-        				{
-        					Object.keys(c.slots).map(sec => 
-        						<span key={c.id + sec} 
-                                    className="search-section" 
-                                    onMouseEnter={() => this.toggleHover(c, sec, true)}
-                                    onMouseLeave={() => this.toggleHover(c, sec, false)} 
-                                    onClick={() => this.addCourse(c, sec)}
-                                >{sec} </span>
-        					) 
-        				}
-        			</div>
-        		</li>)
-    	);
-    	return (
-    	<div>
-    		<input ref="input" onInput={this.maybeFetchCourses.bind(this)} />
-    		<ul>
-    		 {
-    		 	results
-    		 }
-    		</ul>
-    	</div>
-    	);
+        let course = this.props.course;
+        let sections = Object.keys(course.slots).map(sec => 
+            <span key={course.id + sec} 
+                className="search-section" 
+                onMouseEnter={() => this.toggleHoverSection(course, sec, true)}
+                onMouseLeave={() => this.toggleHoverSection(course, sec, false)} 
+                onClick={() => this.addSection(course, sec)}
+            >{sec} </span>
+        );
+        return (
+        <li key={course.id} className="search-course">
+            {course.code} : {course.name + " "} 
+            <i onClick={() => this.props.addCourse(course)} className="fa fa-plus"></i>
+            <div>
+                {sections}
+            </div>
+        </li>);
     }
+
 }
+

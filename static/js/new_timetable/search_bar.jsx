@@ -57,7 +57,6 @@ module.exports = React.createClass({
           this.setState({courses: response.courses});
           this.props.setLastUpdated(response.last_updated);
           TimetableActions.setCoursesDoneLoading();
-
         }.bind(this)
     );
   },
@@ -159,7 +158,4 @@ module.exports = React.createClass({
     });
     return results;
   },
-
-
-
 });

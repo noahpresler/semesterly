@@ -1,7 +1,9 @@
 .search-course {
 	cursor:pointer;
 }
-
+.fa-plus:hover{
+	background-color:#3ee3f3;
+}
 .search-section {
 	cursor:pointer;
 	margin-right:10px;
@@ -9,3 +11,6 @@
 .search-section:hover {
 	background-color:#FFDBBE;
 }
+.search-results {
+/*	background-color:#ffe3e1;
+*/}
