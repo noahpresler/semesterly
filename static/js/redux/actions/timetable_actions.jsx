@@ -27,15 +27,15 @@ export function receiveCourseSections(newCourseSections) {
 Returns the body of the request used to get new timetables
 */
 function getReqBody(dataState, newCourse){
-	let cs = dataState.courseSections;
-	cs[newCourse.id] = {};
+	let section = newCourse.section || '';
+
 	return {
 		school: dataState.school,
 		semester: dataState.semester,
 		courseSections: dataState.courseSections,
 		preferences: dataState.preferences,
 		updated_courses: [{'course_id': newCourse.id,
-                          'section_codes': ['']}],
+                          'section_codes': [section]}],
         index: 0,
 		sid: SID
 	}

@@ -13,6 +13,7 @@ body {
     -ms-user-select: none;       /* IE/Edge */
     user-select: none;           /* non-prefixed version, currently */
 }
+
 .cal-row {
 	width: 49px;
 	font-size: 14px;
