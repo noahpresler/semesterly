@@ -36,10 +36,11 @@ def create_student(strategy, details, response, user, *args, **kwargs):
         friends = json.loads(urllib2.urlopen(request).read()).get('data')
         
         for friend in friends:
-          friend_student = Student.objects.get(fbook_uid=friend['id'])
-          if not new_student.friends.filter(user=friend_student.user).exists():
-            new_student.friends.add(friend_student)
-            new_student.save()
-            friend_student.save()
+          if Student.objects.filter(fbook_uid=friend['id']).exists():
+            friend_student = Student.objects.get(fbook_uid=friend['id'])
+            if not new_student.friends.filter(user=friend_student.user).exists():
+              new_student.friends.add(friend_student)
+              new_student.save()
+              friend_student.save()
 
     return kwargs
