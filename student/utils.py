@@ -24,6 +24,7 @@ def create_student(strategy, details, response, user, *args, **kwargs):
         request = urllib2.Request(url)
         data = json.loads(urllib2.urlopen(request).read())
         new_student.img_url = data['picture']['data']['url']
+        new_student.fbook_uid = social_user.uid
         new_student.save()
         url = u'https://graph.facebook.com/{0}/' \
               u'friends?fields=id' \
@@ -34,10 +35,11 @@ def create_student(strategy, details, response, user, *args, **kwargs):
         request = urllib2.Request(url)
         friends = json.loads(urllib2.urlopen(request).read()).get('data')
         
-        #TODO: how can I query Student by where has USER which has social user with uid?
         for friend in friends:
-        	freind_student = Student.objects.filter(user__social_auth_user__uid="facebook_uid_here")
-        	if not new_student.friends.filter(user=friend_student.user):
-        		new_student.friends.add(friend_student)
+          friend_student = Student.objects.get(fbook_uid=friend['id'])
+          if not new_student.friends.filter(user=friend_student.user).exists():
+            new_student.friends.add(friend_student)
+            new_student.save()
+            friend_student.save()
 
     return kwargs
