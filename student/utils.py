@@ -14,12 +14,13 @@ def create_student(strategy, details, response, user, *args, **kwargs):
     social_user = user.social_auth.filter(
         provider='facebook',
     ).first()
+    access_token = json.loads(social_user.extra_data)["access_token"]
     if social_user:
         url = u'https://graph.facebook.com/{0}/' \
               u'?fields=picture&type=large' \
               u'&access_token={1}'.format(
                   social_user.uid,
-                  social_user.extra_data['access_token'],
+                  access_token,
               )
         request = urllib2.Request(url)
         data = json.loads(urllib2.urlopen(request).read())
@@ -30,7 +31,7 @@ def create_student(strategy, details, response, user, *args, **kwargs):
               u'friends?fields=id' \
               u'&access_token={1}'.format(
                   social_user.uid,
-                  social_user.extra_data['access_token'],
+                  access_token,
               )
         request = urllib2.Request(url)
         friends = json.loads(urllib2.urlopen(request).read()).get('data')
