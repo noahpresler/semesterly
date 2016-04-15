@@ -35,8 +35,8 @@ function getReqBody(dataState, newCourse){
 		courseSections: dataState.courseSections,
 		preferences: dataState.preferences,
 		updated_courses: [{'course_id': newCourse.id,
-                          'section_codes': [section]}],
-        index: 0,
+                        'section_codes': [section]}],
+    index: 0,
 		sid: SID
 	}
 }
