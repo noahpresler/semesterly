@@ -19,19 +19,27 @@ export const timetables = (state = initialState, action) => {
 			if (current_courses.some(course => course.fake)) { // only one "fake" (hovered course) at a time
 				return state;
 			}
-			let new_state = $.extend({}, state);
+			let new_items = Object.assign({}, state.items);
 			action.course.fake = true;
-			new_state.items[state.current].courses.push(action.course);
-			return new_state;
+			new_items[state.current].courses.push(action.course);
+			return {
+				isFetching: false,
+				items: new_items,
+				current: state.current
+			};
 		case 'UNHOVER_COURSE':
-			let new_s = $.extend({}, state);
-			let courses = new_s.items[state.current].courses;
+			let updated_items = Object.assign({}, state.items);
+			let courses = state.items[state.current].courses;
 			for (let i = 0; i < courses.length; i++) {
 				if (courses[i].fake) {
-					new_s.items[state.current].courses.splice(i, 1);
+					updated_items[state.current].courses.splice(i, 1);
 				}
 			}
-			return new_s;
+			return {
+				isFetching: false,
+				items: updated_items,
+				current: state.current
+			};
 		default:
 			return state;
 	}

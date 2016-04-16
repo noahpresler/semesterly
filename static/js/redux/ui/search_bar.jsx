@@ -5,53 +5,26 @@ import { getCourseSearchEndpoint } from '../constants.jsx';
 import { hoverCourse, unHoverCourse } from '../init.jsx';
 
 export class SearchBar extends React.Component {
-	constructor(props) {
-		super(props);
-        this.state = {query: '', loading: false, courses: []};
-	}
-	fetchCourses() {
-		this.setState({loading: true});
-        fetch(getCourseSearchEndpoint(this.refs.input.value))
-        .then(response => response.json()) // TODO(rohan): error-check the response
-        .then(json => {
-            this.setState({loading: false, courses: json.results});
-        });
+    fetchSearchResults() {
+        let query = this.refs.input.value;
+        this.props.fetchCourses(query);
     }
-    maybeFetchCourses() {
-    	if (this.refs.input.value.length < 2) {
-    		this.setState({loading: false, courses: []});
-    	}
-    	else {
-    		this.fetchCourses();
-    	}
-    }
-
     render() {
-    	let results = this.state.courses.map(c => 
-        		<SearchResult course={c} addCourse={this.props.addCourse} key={c.code}/>
+    	let results = this.props.searchResults.map(c => 
+    		<SearchResult {...this.props} course={c}  key={c.code} />
     	);
     	return (
-    	<div>
-    		<input ref="input" onInput={this.maybeFetchCourses.bind(this)} />
-    		<ul className="search-results">
-    		 {results}
-    		</ul>
-    	</div>
+        	<div>
+        		<input ref="input" onInput={this.fetchSearchResults.bind(this)} />
+        		<ul className="search-results">
+        		 {results}
+        		</ul>
+        	</div>
     	);
     }
 }
 
 class SearchResult extends React.Component {
-    toggleHoverSection(c, section, on=false) {
-        if (on) {
-            let courseWithSection = $.extend({}, c);
-            courseWithSection.slots = c.slots[section];
-            hoverCourse(courseWithSection);
-        }
-        else {
-            unHoverCourse();
-        }
-    }
     addSection(course, section) {
         course.section = section;
         this.props.addCourse(course);
@@ -59,12 +32,9 @@ class SearchResult extends React.Component {
     render() {
         let course = this.props.course;
         let sections = Object.keys(course.slots).map(sec => 
-            <span key={course.id + sec} 
-                className="search-section" 
-                onMouseEnter={() => this.toggleHoverSection(course, sec, true)}
-                onMouseLeave={() => this.toggleHoverSection(course, sec, false)} 
-                onClick={() => this.addSection(course, sec)}
-            >{sec} </span>
+            <SearchResultSection key={course.id + sec} course={course} section={sec} hoverCourse={this.props.hoverCourse}
+                unhoverCourse={this.props.unhoverCourse} 
+            />
         );
         return (
         <li key={course.id} className="search-course">
@@ -75,6 +45,16 @@ class SearchResult extends React.Component {
             </div>
         </li>);
     }
-
 }
+
+const SearchResultSection = ({ course, section, hoverCourse, unhoverCourse }) => {
+    return (
+    <span
+        className="search-section" 
+        onMouseEnter={() => hoverCourse(course, section)}
+        onMouseLeave={unhoverCourse} 
+    >
+        {section}
+    </span>);
+};
 

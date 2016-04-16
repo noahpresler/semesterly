@@ -1,6 +1,7 @@
 import fetch from 'isomorphic-fetch';
 import { getTimetablesEndpoint } from '../constants.jsx';
 import { randomString } from '../util.jsx';
+import { store } from '../init.jsx';
 
 export const SID = randomString(30);
 
@@ -26,14 +27,15 @@ export function receiveCourseSections(newCourseSections) {
 /* 
 Returns the body of the request used to get new timetables
 */
-function getReqBody(dataState, newCourse){
+function getReqBody(newCourse){
+	let state = store.getState();
 	let section = newCourse.section || '';
 
 	return {
-		school: dataState.school,
-		semester: dataState.semester,
-		courseSections: dataState.courseSections,
-		preferences: dataState.preferences,
+		school: state.school,
+		semester: state.semester,
+		courseSections: state.courseSections,
+		preferences: state.preferences,
 		updated_courses: [{'course_id': newCourse.id,
                           'section_codes': [section]}],
         index: 0,
@@ -41,7 +43,7 @@ function getReqBody(dataState, newCourse){
 	}
 }
 
-export function fetchTimetables(state, newCourse) {
+export function fetchTimetables(newCourse) {
 	return (dispatch) => {
 		// mark that we are now requesting timetables (asynchronously)
 		dispatch(requestTimetables());
@@ -49,7 +51,7 @@ export function fetchTimetables(state, newCourse) {
 		// relevant data as contained in @state (including courses, preferences, etc)
 		fetch(getTimetablesEndpoint(), {
       		method: 'POST',
-      		body: JSON.stringify(getReqBody(state, newCourse))
+      		body: JSON.stringify(getReqBody(newCourse))
     	})
 		.then(response => response.json()) // TODO(rohan): error-check the response
 		.then(json => {
