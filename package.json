@@ -25,6 +25,7 @@
     "react": "^15.0.0",
     "react-date-picker": "^4.0.8",
     "react-dom": "^15.0.0",
+    "react-redux": "^4.4.5",
     "reactify": "^1.1.1",
     "redux": "^3.3.1",
     "redux-thunk": "^2.0.1",

@@ -1,6 +1,7 @@
 import React from 'react';
 import { renderCourseModal } from './course_modal.jsx';
-export const HALF_HOUR_HEIGHT = 25;
+import { HALF_HOUR_HEIGHT } from '../constants.jsx';
+
 let COLOUR_DATA = [
     {background: "#FD7473", highlight: "#E26A6A", border: "#963838", font: "#222"},
     {background: "#5AC8FB", highlight: "#28A4EA", border: "#1B6B90", font: "#222"},
@@ -100,15 +101,14 @@ export class SlotManager extends React.Component {
     	var slots_by_day = {
             'M': [], 'T': [], 'W': [], 'R': [], 'F': []
         };
-        if (this.props.timetable.courses ) {
+        if (this.props.timetable.courses) {
             // console.log(this.props.timetable.courses[0]);
         }   
         for (var course in this.props.timetable.courses) {
             var crs = this.props.timetable.courses[course];
             for (var slot_id in crs.slots) {
                 var slot = Object.assign(crs.slots[slot_id], {
-                            'colour_id': course, 'code': crs.code, 'name': crs.name, 'id': crs.id});
-                // lol
+                            'colour_id': course, 'code': crs.code, 'name': crs.name});
                 slots_by_day[slot.day].push(slot);
             }
         }
