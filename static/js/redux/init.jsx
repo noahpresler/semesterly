@@ -16,16 +16,16 @@ render(
     //<Calendar timetables={state.timetables.items} />
 
 store.dispatch(
-		{
-			type: "SET_SCHOOL",
-			school: window.location.hostname.split(".")[0]
-		}
+	{
+		type: "SET_SCHOOL",
+		school: window.location.hostname.split(".")[0]
+	}
 );
 store.dispatch(
-    {
-      type: "SET_SEMESTER",
-      semester: "F"
-    }
+  {
+    type: "SET_SEMESTER",
+    semester: "F"
+  }
 );
 export const getSchool = () => {
 	return store.getState().school;
