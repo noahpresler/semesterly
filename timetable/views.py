@@ -183,7 +183,7 @@ def get_timetables_with_all_preferences(courses, semester):
         possible_offerings = courses_to_offerings(courses, semester, pref_combination)
         new_timetables = create_timetable_from_offerings(possible_offerings)
         if new_timetables: valid_timetables += new_timetables
-        if len(valid_timetables) > MAX_RETURN:
+        if len(valid_timetables) >= MAX_RETURN:
             break
 
     if not valid_timetables: valid_timetables = [()]
@@ -203,7 +203,7 @@ def get_timetables_with_some_preferences(courses, semester):
 def create_timetable_from_offerings(offerings):
     timetables = []
     for timetable in offerings_to_timetables(offerings):
-        if len(timetables) > MAX_RETURN:
+        if len(timetables) >= MAX_RETURN:
             break
         timetables.append(timetable)
     return timetables

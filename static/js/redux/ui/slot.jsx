@@ -26,27 +26,26 @@ class Slot extends React.Component {
                             <span>{this.props.time_start} – {this.props.time_end}</span></div>
                         <div className="fc-time">{this.props.name}</div>
                         <div className="fc-time">{this.props.location} </div>
-
                     </div>
                 </div>
             </div>
 		);
 	}
 	getSlotStyles() {
-        var start_hour   = parseInt(this.props.time_start.split(":")[0]),
+        let start_hour   = parseInt(this.props.time_start.split(":")[0]),
             start_minute = parseInt(this.props.time_start.split(":")[1]),
             end_hour     = parseInt(this.props.time_end.split(":")[0]),
             end_minute   = parseInt(this.props.time_end.split(":")[1]);
 
-        var top = (start_hour - 8)*(HALF_HOUR_HEIGHT*2 + 2) + (start_minute)*(HALF_HOUR_HEIGHT/30);
-        var bottom = (end_hour - 8)*(HALF_HOUR_HEIGHT*2 + 2) + (end_minute)*(HALF_HOUR_HEIGHT/30) - 1;
-        var height = bottom - top - 2;
+        let top = (start_hour - 8)*(HALF_HOUR_HEIGHT*2 + 2) + (start_minute)*(HALF_HOUR_HEIGHT/30);
+        let bottom = (end_hour - 8)*(HALF_HOUR_HEIGHT*2 + 2) + (end_minute)*(HALF_HOUR_HEIGHT/30) - 1;
+        let height = bottom - top - 2;
         // the cumulative width of this slot and all of the slots it is conflicting with
-        var total_slot_widths = 99 - (5 * this.props.depth_level);
+        let total_slot_widths = 99 - (5 * this.props.depth_level);
         // the width of this particular slot
-        var slot_width_percentage = total_slot_widths / this.props.num_conflicts;
+        let slot_width_percentage = total_slot_widths / this.props.num_conflicts;
         // the amount of left margin of this particular slot, in percentage
-        var push_left = (this.props.shift_index * slot_width_percentage) + 5 * this.props.depth_level;
+        let push_left = (this.props.shift_index * slot_width_percentage) + 5 * this.props.depth_level;
         // return {
         //     width: slot_width_percentage + "%",
         //     top: top,
@@ -68,11 +67,11 @@ class Slot extends React.Component {
 export class SlotManager extends React.Component {
 
 	render() {
-        var days = ["M", "T", "W", "R", "F"];
-        var slots_by_day = this.getSlotsByDay();
-        var all_slots = days.map((day) => {
-            var day_slots = slots_by_day[day].map((slot) => {
-                var p = false;
+        let days = ["M", "T", "W", "R", "F"];
+        let slots_by_day = this.getSlotsByDay();
+        let all_slots = days.map((day) => {
+            let day_slots = slots_by_day[day].map((slot) => {
+                let p = false;
                 return <Slot {...slot} key={slot.id} pinned={p}/>
             });
             return (
@@ -99,16 +98,16 @@ export class SlotManager extends React.Component {
         this.props.timetables.courses.push(courseWithSection);
     }
     getSlotsByDay() {
-    	var slots_by_day = {
+    	let slots_by_day = {
             'M': [], 'T': [], 'W': [], 'R': [], 'F': []
         };
         if (this.props.timetable.courses) {
             // console.log(this.props.timetable.courses[0]);
         }   
-        for (var course in this.props.timetable.courses) {
-            var crs = this.props.timetable.courses[course];
-            for (var slot_id in crs.slots) {
-                var slot = Object.assign(crs.slots[slot_id], {
+        for (let course in this.props.timetable.courses) {
+            let crs = this.props.timetable.courses[course];
+            for (let slot_id in crs.slots) {
+                let slot = Object.assign(crs.slots[slot_id], {
                             'colour_id': course, 'code': crs.code, 'name': crs.name});
                 slots_by_day[slot.day].push(slot);
             }
