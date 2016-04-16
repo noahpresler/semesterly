@@ -19,12 +19,13 @@ class Slot extends React.Component {
 	render() {
 		return (
 			<div className="fc-event-container">
-                <div className="fc-time-grid-event fc-event slot" style={this.getSlotStyles()} onClick={() => renderCourseModal(this.props.id, false)}>
+                <div className="fc-time-grid-event fc-event slot" style={this.getSlotStyles()} onClick={() => renderCourseModal(this.props.course, false)}>
     				<div className="slot-bar" style={{backgroundColor: COLOUR_DATA[this.props.colour_id].border}}/>
                     <div className="fc-content">
-                        <div className="fc-time"><span>{this.props.time_start} – {this.props.time_end}</span></div>
-                        <div className="fc-title">{this.props.name}</div>
-                        <div className="fc-title">{this.props.location} </div>
+                        <div className="fc-time">
+                            <span>{this.props.time_start} – {this.props.time_end}</span></div>
+                        <div className="fc-time">{this.props.name}</div>
+                        <div className="fc-time">{this.props.location} </div>
 
                     </div>
                 </div>
