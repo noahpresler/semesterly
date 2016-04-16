@@ -1,6 +1,6 @@
 import React from 'react';
 import { SlotManager } from './slot.jsx';
-
+import { Pagination } from './pagination.jsx';
 
 export class Calendar extends React.Component {
 
@@ -29,16 +29,24 @@ export class Calendar extends React.Component {
   	}
 
 
-	render() { 
-		let timetable = this.props.timetables[0] || []; // First operand if it exists, second if not. #justjavascriptthings
+	render() {
+		let timetables = this.props.items;
+		let active = this.props.active;
+		let timetable = timetables[active] || []; // First operand if it exists, second if not. #justjavascriptthings
 		return (
 
 	      <div id="calendar" className="fc fc-ltr fc-unthemed">
+	      <Pagination 
+	        	count={timetables.length} 
+	        	active={active} 
+	        	setActive={this.props.setActive}
+	        />
 	        <div className="fc-toolbar">
 	          <div className="fc-left" />
 	          <div className="fc-right" />
 	          <div className="fc-center" />
 	          <div className="fc-clear" />
+
 	        </div>
 	        <div className="fc-view-container" style={{}}>
 	          <div className="fc-view fc-settimana-view fc-agenda-view">
