@@ -9,12 +9,12 @@ const Bubble = ({index, active, setActive}) =>
 export class Pagination extends React.Component{
   constructor(props) {
     super(props);
-    this.state = {num_bubbles: this.getNumBubbles()};
+    this.state = {numBubbles: this.getNumBubbles()};
     this.prev = this.prev.bind(this);
     this.next = this.next.bind(this);
   }
   getNumBubbles() {
-    let bubbles = $(window).width() > 700 ? 9 : 4;
+    let bubbles = $(window).width() > 700 ? 10 : 4;
     return bubbles;
   }
   prev() {
@@ -32,8 +32,8 @@ export class Pagination extends React.Component{
     let options = [], count = this.props.count, current = this.props.active;
 
     if (count <= 1) { return null; } // don't display if there aren't enough schedules
-    let first = current - (current % this.state.num_bubbles); // round down to nearest multiple of this.props.numBubbles
-    let limit = Math.min(first + this.state.num_bubbles, count);
+    let first = current - (current % this.state.numBubbles); // round down to nearest multiple of this.props.numBubbles
+    let limit = Math.min(first + this.state.numBubbles, count);
     for (let i = first; i < limit; i++) {
       options.push(
       	 <Bubble key={i} index={i} 
@@ -57,8 +57,8 @@ export class Pagination extends React.Component{
   }
 
   componentDidMount() {
-    $(window).resize(() => 
-      this.setState({num_bubbles: this.getNumBubbles()})
+    window.addEventListener('resize', () => 
+      this.setState({numBubbles: this.getNumBubbles()})
     );
   }
 }
