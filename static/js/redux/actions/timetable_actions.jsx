@@ -37,8 +37,8 @@ function getReqBody(newCourse){
 		courseSections: state.courseSections,
 		preferences: state.preferences,
 		updated_courses: [{'course_id': newCourse.id,
-                          'section_codes': [section]}],
-        index: 0,
+                        'section_codes': [section]}],
+    index: 0,
 		sid: SID
 	}
 }
