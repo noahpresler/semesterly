@@ -31,9 +31,3 @@ export function fetchSearchResults(query) {
 		});
 	}
 }
-
-	// return (dispatch) => fetch("http://127.0.0.1:8000/courses/jhu/F", {
- //      method: 'POST',
- //      body: JSON.stringify({"email": "lmao"})
- //    })
-
