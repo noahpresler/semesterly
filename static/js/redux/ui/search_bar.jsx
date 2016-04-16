@@ -2,7 +2,6 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import fetch from 'isomorphic-fetch';
 import { getCourseSearchEndpoint } from '../constants.jsx';
-import { hoverCourse, unHoverCourse } from '../init.jsx';
 
 export class SearchBar extends React.Component {
     fetchSearchResults() {
@@ -32,8 +31,10 @@ class SearchResult extends React.Component {
     render() {
         let course = this.props.course;
         let sections = Object.keys(course.slots).map(sec => 
-            <SearchResultSection key={course.id + sec} course={course} section={sec} hoverCourse={this.props.hoverCourse}
+            <SearchResultSection key={course.id + sec} course={course} section={sec} 
+                hoverCourse={this.props.hoverCourse}
                 unhoverCourse={this.props.unhoverCourse} 
+                onClick={() => this.addSection(course, sec)}
             />
         );
         return (
@@ -47,10 +48,11 @@ class SearchResult extends React.Component {
     }
 }
 
-const SearchResultSection = ({ course, section, hoverCourse, unhoverCourse }) => {
+const SearchResultSection = ({ course, section, hoverCourse, unhoverCourse, onClick }) => {
     return (
     <span
         className="search-section" 
+        onClick={onClick}
         onMouseEnter={() => hoverCourse(course, section)}
         onMouseLeave={unhoverCourse} 
     >

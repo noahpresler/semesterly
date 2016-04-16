@@ -58,7 +58,7 @@ export class Pagination extends React.Component{
 
   componentDidMount() {
     window.addEventListener('resize', () => 
-      this.setState({numBubbles: this.getNumBubbles()})
+      this.setState({ numBubbles: this.getNumBubbles() })
     );
   }
 }
