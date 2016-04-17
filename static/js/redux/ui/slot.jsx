@@ -72,7 +72,7 @@ export class SlotManager extends React.Component {
         let all_slots = days.map((day) => {
             let day_slots = slots_by_day[day].map((slot) => {
                 let p = false;
-                return <Slot {...slot} key={slot.id} pinned={p}/>
+                return <Slot {...slot} key={slot.fake ? -slot.id : slot.id} pinned={p}/>
             });
             return (
                     <td key={day}>
@@ -108,7 +108,11 @@ export class SlotManager extends React.Component {
             let crs = this.props.timetable.courses[course];
             for (let slot_id in crs.slots) {
                 let slot = Object.assign(crs.slots[slot_id], {
-                            'colour_id': course, 'code': crs.code, 'name': crs.name});
+                            'colour_id': course, 
+                            'code': crs.code, 
+                            'name': crs.name,
+                            'fake': crs.fake,
+                        });
                 slots_by_day[slot.day].push(slot);
             }
         }
