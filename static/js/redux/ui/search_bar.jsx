@@ -24,10 +24,11 @@ export class SearchBar extends React.Component {
 }
 
 export class SearchResult extends React.Component {
-    addSection(course, section) {
+    addCourse(course, section) {
         course.section = section;
         this.props.addCourse(course);
     }
+
     render() {
         let course = this.props.course;
         let sections = Object.keys(course.slots).map(sec => 
@@ -35,13 +36,13 @@ export class SearchResult extends React.Component {
                 locked={this.props.isSectionLocked(course.id, sec)}
                 hoverCourse={() => this.props.hoverCourse(course, sec)}
                 unhoverCourse={this.props.unhoverCourse} 
-                onClick={() => this.addSection(course, sec)}
+                onClick={() => this.addCourse(course, sec)}
             />
         );
         return (
         <li key={course.id} className="search-course" style={this.props.inRoster ? {backgroundColor:"#4DFDBD"} : {}}>
             {course.code} : {course.name + " "} 
-            <i onClick={() => this.props.addCourse(course)} className="fa fa-plus"></i>
+            <i onClick={() => this.addCourse(course)} className="fa fa-plus"></i>
             <div>
                 {sections}
             </div>

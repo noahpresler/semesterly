@@ -29,18 +29,30 @@ Returns the body of the request used to get new timetables
 */
 function getReqBody(newCourse){
 	let state = store.getState();
-	let section = newCourse.section || '';
-
-	return {
+	let lockingSection = newCourse.section || '';
+	let removing = state.courseSections[newCourse.id] !== undefined && lockingSection === '';
+	let reqBody = {
 		school: state.school,
 		semester: state.semester,
 		courseSections: state.courseSections,
 		preferences: state.preferences,
-		updated_courses: [{'course_id': newCourse.id,
-                        'section_codes': [section]}],
-    index: 0,
+    	index: 0,
 		sid: SID
 	}
+	if (removing) {
+		let updatedCourseSections = Object.assign({}, state.courseSections);
+		delete updatedCourseSections[newCourse.id]; // remove it from courseSections
+		reqBody.courseSections = updatedCourseSections;
+	}
+	else { // adding a course
+		Object.assign(reqBody, {
+			updated_courses: [{
+				'course_id': newCourse.id,
+        		'section_codes': [lockingSection]
+        	}]
+        });
+	}
+	return reqBody;
 }
 
 export function fetchTimetables(newCourse) {
