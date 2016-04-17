@@ -10,7 +10,7 @@ export class SearchBar extends React.Component {
     }
     render() {
     	let results = this.props.searchResults.map(c => 
-    		<SearchResult {...this.props} course={c}  key={c.code} />
+    		<SearchResult {...this.props} course={c}  key={c.code} inRoster={this.props.isCourseInRoster(c.id)} />
     	);
     	return (
         	<div>
@@ -23,7 +23,7 @@ export class SearchBar extends React.Component {
     }
 }
 
-class SearchResult extends React.Component {
+export class SearchResult extends React.Component {
     addSection(course, section) {
         course.section = section;
         this.props.addCourse(course);
@@ -32,13 +32,14 @@ class SearchResult extends React.Component {
         let course = this.props.course;
         let sections = Object.keys(course.slots).map(sec => 
             <SearchResultSection key={course.id + sec} course={course} section={sec} 
-                hoverCourse={this.props.hoverCourse}
+                locked={this.props.isSectionLocked(course.id, sec)}
+                hoverCourse={() => this.props.hoverCourse(course, sec)}
                 unhoverCourse={this.props.unhoverCourse} 
                 onClick={() => this.addSection(course, sec)}
             />
         );
         return (
-        <li key={course.id} className="search-course">
+        <li key={course.id} className="search-course" style={this.props.inRoster ? {backgroundColor:"#4DFDBD"} : {}}>
             {course.code} : {course.name + " "} 
             <i onClick={() => this.props.addCourse(course)} className="fa fa-plus"></i>
             <div>
@@ -48,12 +49,20 @@ class SearchResult extends React.Component {
     }
 }
 
-const SearchResultSection = ({ course, section, hoverCourse, unhoverCourse, onClick }) => {
+const SearchResultSection = ({ section, locked, hoverCourse, unhoverCourse, onClick }) => {
+    if (locked) {
+        return <span
+            className="search-section" 
+            onClick={onClick}
+        >
+        {section} <i className="fa fa-lock"></i>
+        </span>        
+    }
     return (
     <span
         className="search-section" 
         onClick={onClick}
-        onMouseEnter={() => hoverCourse(course, section)}
+        onMouseEnter={hoverCourse}
         onMouseLeave={unhoverCourse} 
     >
         {section}
