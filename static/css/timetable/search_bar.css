@@ -12,5 +12,6 @@
 	background-color:#FFDBBE;
 }
 .search-results {
-/*	background-color:#ffe3e1;
-*/}
+/*	background-color:#ffe3e1;*/
+	max-width:600px;
+}
