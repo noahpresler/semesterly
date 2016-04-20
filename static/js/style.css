@@ -1,12 +1,71 @@
-* {
-	-webkit-box-sizing: border-box;
-	-moz-box-sizing: border-box;
-	box-sizing: border-box;
+#wrapper {
+	padding: 50px;
+}
+.slot,
+.master-slot {
+	float: left;
+	position: relative;
+	background-color: #fd7473;
+	font-size: 12px;
+	color: #fff;
+	padding: 5px;
+	width: 25%;
+	border-radius: 5px;
+}
+.slot-content h3,
+.master-slot-content h3 {
+	margin: 0;
+	white-space: nowrap;
+    text-overflow: ellipsis;
+    width: 100%;
+    overflow: hidden;
+}
+.slot-friends h3 {
+	margin: 0;
+	float: left;
+	line-height: 15px;
+}
+h3.master-slot-credits {
+	margin: 0;
+	line-height: 15px;
+}
+.slot-friends i {
+	margin-left: 5px;
+	line-height: 15px;
+}
+.slot i.fa-times {
+	position: absolute;
+	top: 5px;
+	right: 5px;
+	cursor: pointer;
+	opacity: .75;
+	transition: transform .3s, opacity .3s;
+}
+.slot i.fa-times:hover,
+.master-slot-actions i:hover {
+	transform: scale(1.2);
+	opacity: 1;
+}
+.slot i.fa-lock {
+	position: absolute;
+	bottom: 5px;
+	right: 5px;
+}
+.master-slot-actions {
+	position: absolute;
+	top: 5px;
+	right: 5px;
+	text-align: right;
+}
+.master-slot-actions i {
+	display: inline-block;
+	margin-left: 5px;
+	vertical-align: top;
+	line-height: 15px;
+	cursor: pointer;
+	opacity: .75;
+	transition: transform .3s, opacity .3s;
 }
 
-body, html {
-	margin: 0;
-	padding: 0;
-	width: 100%;
-	height: 100%;
-}
+
+
