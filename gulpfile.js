@@ -80,5 +80,22 @@ gulp.task('csswatch', function () {
 });
 
 
+gulp.task('watch', ['watchify', 'csswatch']);
+gulp.task('default', ['watch']);
+
+gulp.task('timer', function () {
+return gulp.src('./static/js/misc/jhu_timer.jsx')
+    .pipe(concat('timer.js'))
+    .pipe(react())
+    .pipe(gulp.dest('static/js/misc'));
+});
+
+// gulp.task('analytics', function () {
+// return gulp.src('./static/js/analytics/**')
+//     .pipe(concat('analytics_application.js'))
+//     .pipe(react())
+//     .pipe(gulp.dest('static/js/gulp'));
+// });
+
 gulp.task('build', function() { return compile(); });
 gulp.task('default', ['jswatch', 'csswatch']);

@@ -9,6 +9,7 @@ var SimpleModal = require('./simple_modal');
 var SchoolList = require('./school_list');
 var TimetableActions = require('./actions/update_timetables');
 var CodeToIdStore = require('./stores/code_to_id');
+var FacebookButton = require('./facebook_button');
 
 module.exports = React.createClass({
   mixins: [Reflux.connect(TimetableStore), Reflux.connect(ToastStore), Reflux.connect(CodeToIdStore)],
