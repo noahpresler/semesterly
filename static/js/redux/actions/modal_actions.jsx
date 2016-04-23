@@ -17,7 +17,7 @@ export function requestCourseInfo() {
 export function setCourseId(id) {
 	return {
 		type: "SET_COURSE_ID",
-		data: id
+		id: id
 	}
 }
 
