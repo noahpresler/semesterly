@@ -19,6 +19,7 @@ urlpatterns = patterns('',
 	url('', include('social.apps.django_app.urls', namespace='social')),
 	url('', include('django.contrib.auth.urls', namespace='auth')),
 	url(r'^/complete/facebook/.*$', 'timetable.views.view_timetable'),
+	url(r'^$', 'timetable.views.view_timetable'),
 
 	# index
 	url(r'^timetable/*$', 'timetable.views.redirect_to_home'),
