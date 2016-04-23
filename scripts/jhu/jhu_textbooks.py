@@ -11,7 +11,6 @@ from collections import OrderedDict
 import re
 import urllib2
 from selenium.webdriver.support.ui import Select
-from timetable.models import *
 from selenium.webdriver.common.action_chains import ActionChains
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.support.ui import WebDriverWait
@@ -32,6 +31,11 @@ from amazonproduct import API
 import traceback
 api = API(locale='us')  
 
+import django
+os.environ.setdefault("DJANGO_SETTINGS_MODULE", "semesterly.settings")
+django.setup()
+from timetable.models import *
+
 N_CLASSES = 16
 django.setup()
 
@@ -50,7 +54,7 @@ WEBDRIVER_CHROME = '/root/chromedriver_executable/chromedriver' # e.g. '/home/li
 
 
 #===========================================FOR DEVELOPMENT USE=======================================
-WEBDRIVER_CHROME = '/home/linoah/chromedriver'
+WEBDRIVER_CHROME = '/Users/ericcalder/chromedriver'
 #=====================================================================================================
 
 
