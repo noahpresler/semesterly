@@ -14,7 +14,7 @@ def create_student(strategy, details, response, user, *args, **kwargs):
     social_user = user.social_auth.filter(
         provider='facebook',
     ).first()
-    access_token = json.loads(social_user.extra_data)["access_token"]
+    access_token = social_user.extra_data["access_token"]
     if social_user:
         url = u'https://graph.facebook.com/{0}/' \
               u'?fields=picture&type=large' \

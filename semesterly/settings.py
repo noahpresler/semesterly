@@ -31,7 +31,6 @@ SOCIAL_AUTH_FACEBOOK_SECRET = '***REMOVED***'
 SOCIAL_AUTH_FACEBOOK_SCOPE = [
     'email',
     'user_friends',
-    'gender',
 ]
 SOCIAL_AUTH_FACEBOOK_PROFILE_EXTRA_PARAMS = {
     'fields': 'id,name,email,gender'

@@ -701,7 +701,6 @@ def has_offering(course, sem):
     except:
         return False
 
-<<<<<<< HEAD
 
 ### COURSE SEARCH ###
 def my_model_to_dict(course, SchoolCourseOffering, sem):
