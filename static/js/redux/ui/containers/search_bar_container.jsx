@@ -2,6 +2,7 @@ import { connect } from 'react-redux';
 import { fetchSearchResults } from '../../actions/search_actions.jsx';
 import { fetchTimetables } from '../../actions/timetable_actions.jsx';
 import { SearchBar } from '../search_bar.jsx';
+import { fetchCourseInfo } from '../../actions/modal_actions.jsx'
 
 const mapStateToProps = (state) => {
 	return {
@@ -33,7 +34,8 @@ const mapDispatchToProps = (dispatch) => {
 			dispatch({
 				type: "UNHOVER_COURSE",
 			});
-		}
+		},
+		fetchCourseInfo: (id) => dispatch(fetchCourseInfo(id))
 	}
 }
 
