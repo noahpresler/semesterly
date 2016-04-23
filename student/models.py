@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
+from timetable.models import *
 
 class Student(models.Model):
     FRESHMAN = 'FR'
@@ -22,3 +23,24 @@ class Student(models.Model):
     major = models.CharField(max_length=255, default='')
     social_courses = models.BooleanField(default=False)
     social_offerings = models.BooleanField(default=False)
+
+class PersonalTimetable(models.Model):
+    semester = models.CharField(max_length=2)
+    time_updated = models.DateTimeField(auto_now_add=True)
+    # user = models.ForeignKey(Student)
+
+    class Meta:
+        abstract = True
+
+
+class UofTPersonalTimetable(PersonalTimetable):
+    course_offerings = models.ManyToManyField(CourseOffering)
+
+class HopkinsPersonalTimetable(PersonalTimetable):
+    course_offerings = models.ManyToManyField(HopkinsCourseOffering)
+
+class UmdPersonalTimetable(PersonalTimetable):
+    course_offerings = models.ManyToManyField(UmdCourseOffering)
+
+class RutgersPersonalTimetable(PersonalTimetable):
+    course_offerings = models.ManyToManyField(RutgersCourseOffering)
