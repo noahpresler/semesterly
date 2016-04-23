@@ -33,9 +33,10 @@ SOCIAL_AUTH_FACEBOOK_SECRET = '0eac3d0db71f27b07f03d7fd6a760a33'
 SOCIAL_AUTH_FACEBOOK_SCOPE = [
     'email',
     'user_friends',
+    'gender',
 ]
 SOCIAL_AUTH_FACEBOOK_PROFILE_EXTRA_PARAMS = {
-    'fields': 'id,name,email'
+    'fields': 'id,name,email,gender'
 }
 SOCIAL_AUTH_LOGIN_REDIRECT_URL = '/'
 

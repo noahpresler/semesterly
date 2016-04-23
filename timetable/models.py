@@ -185,7 +185,7 @@ class HopkinsCourseOffering(BaseCourseOffering):
   textbooks = models.ManyToManyField(Textbook, through='HopkinsLink')
 
   def get_course_code(self):
-    return self.course.code + self.meeting_section
+    return self.course.code +  ' ' + self.meeting_section
 
   def get_course_tag(self):
     return '<course dept="' + self.get_dept().strip() + '" num="' + self.get_course().strip() + '" sect="' + self.get_section().strip() + '" term="W16"/>'

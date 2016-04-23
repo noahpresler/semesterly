@@ -14,3 +14,4 @@ workfile.html
 semes/
 documentation/build
 parse_errors.log
+semesterly-venv/
