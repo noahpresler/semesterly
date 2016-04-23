@@ -3,8 +3,6 @@ import { renderCourseModal } from './course_modal.jsx';
 import { HALF_HOUR_HEIGHT } from '../constants.jsx';
 import { index as IntervalTree, matches01 as getIntersections } from 'static-interval-tree'
 
-export const HALF_HOUR_HEIGHT = 25;
-
 let COLOUR_DATA = [
     {background: "#FD7473", highlight: "#E26A6A", border: "#963838", font: "#222"},
     {background: "#5AC8FB", highlight: "#28A4EA", border: "#1B6B90", font: "#222"},
@@ -58,7 +56,6 @@ class Slot extends React.Component {
         let slot_width_percentage = total_slot_widths / this.props.num_conflicts;
         // the amount of left margin of this particular slot, in percentage
         let push_left = (this.props.shift_index * slot_width_percentage) + 5 * this.props.depth_level;
-        var push_left = (this.props.shift_index * slot_width_percentage) + 5 * this.props.depth_level;
 
 		return {
             top: top, bottom: -bottom, zIndex: 1, left: '0%', right: '0%', 
@@ -118,6 +115,8 @@ export class SlotManager extends React.Component {
                             'name': crs.name,
                             'fake': crs.fake,
                         });
+            }
+        }
         for (var course in this.props.timetable.courses) {
             var crs = this.props.timetable.courses[course];
             for (var slot_id in crs.slots) {
@@ -126,7 +125,6 @@ export class SlotManager extends React.Component {
                 slots_by_day[slot.day].push(slot);
             }
         }
-
         return this.getConflictStyles(slots_by_day)
     }
     getConflictStyles(slots_by_day) {
@@ -177,8 +175,8 @@ export class SlotManager extends React.Component {
                     direct_conflicts.sort((a, b) => (intervals[b.id].end - intervals[b.id].start) - (intervals[a.id].end - intervals[a.id].start))
                     for (var j = 0; j < direct_conflicts.length; j++) {
                         let slot_id = direct_conflicts[j].id
-                        day_slots[slot_id].num_conflicts = direct_conflicts.length
-                        day_slots[slot_id].shift_index = j
+                        day_slots[slot_id]['num_conflicts'] = direct_conflicts.length
+                        day_slots[slot_id]['shift_index'] = j
                     }
                 }
             }
