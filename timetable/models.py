@@ -151,7 +151,6 @@ class CourseOffering(BaseCourseOffering):
   alternates = models.BooleanField(default=False)
   textbooks = models.ManyToManyField(Textbook, through='Link')
 
-
 class Link(TextbookLink):
   courseoffering = models.ForeignKey(CourseOffering)
 
@@ -159,6 +158,8 @@ class Link(TextbookLink):
 #---------------------- John Hopkins University ----------------------------
 class HopkinsCourse(BaseCourse):
   related_courses = models.ManyToManyField("self", blank=True)
+  num_credits = models.IntegerField(default=-1)
+  areas = models.CharField(max_length=300, default='')
 
   def get_dept(self):
     pass
@@ -184,7 +185,7 @@ class HopkinsCourseOffering(BaseCourseOffering):
   textbooks = models.ManyToManyField(Textbook, through='HopkinsLink')
 
   def get_course_code(self):
-    return self.course.code + self.meeting_section
+    return self.course.code +  ' ' + self.meeting_section
 
   def get_course_tag(self):
     return '<course dept="' + self.get_dept().strip() + '" num="' + self.get_course().strip() + '" sect="' + self.get_section().strip() + '" term="W16"/>'
@@ -318,6 +319,8 @@ class OttawaLink(TextbookLink):
 
 #---------------------- Rutgers University ----------------------------
 class RutgersCourse(BaseCourse):
+  cores = models.CharField(max_length=200, default='')
+  num_credits = models.FloatField(default=-1)
   related_courses = models.ManyToManyField("self", blank=True)
 
   def get_dept(self):
@@ -338,6 +341,7 @@ class RutgersCourseEvaluation(BaseCourseEvaluation):
 
 
 class RutgersCourseOffering(BaseCourseOffering):
+  exam_code = models.CharField(max_length=10, default='')
   course = models.ForeignKey(RutgersCourse)
   textbooks = models.ManyToManyField(Textbook, through='RutgersLink')
 

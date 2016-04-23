@@ -701,6 +701,7 @@ def has_offering(course, sem):
     except:
         return False
 
+<<<<<<< HEAD
 
 ### COURSE SEARCH ###
 def my_model_to_dict(course, SchoolCourseOffering, sem):
@@ -746,3 +747,6 @@ def course_search(request, school, sem, query):
     course_matches = [my_model_to_dict(course, SchoolCourseOffering, sem) for course in course_match_objs]
     json_data = {'results': course_matches}
     return HttpResponse(json.dumps(json_data), content_type="application/json")
+
+def jhu_timer(request):
+    return render(request, "jhu_timer.html")

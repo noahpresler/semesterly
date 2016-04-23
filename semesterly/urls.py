@@ -16,11 +16,14 @@ handler404 = 'timetable.views.custom_404'
 
 urlpatterns = patterns('',
 	# url(r'^admin/', include(admin.site.urls)),
+	url('', include('social.apps.django_app.urls', namespace='social')),
+	url('', include('django.contrib.auth.urls', namespace='auth')),
+	url(r'^/complete/facebook/.*$', 'timetable.views.view_timetable'),
+	url(r'^$', 'timetable.views.view_timetable'),
 
 	# index
 	url(r'^timetable/*$', 'timetable.views.redirect_to_home'),
 	url(r'^timetable/.+$', 'timetable.views.redirect_to_home'),
-	url(r'^tt_course_search/*$', 'timetable.views.tt_course_search'),
 
 	url(r'^exit/*$', 'analytics.views.handle_exit'),
 
@@ -33,6 +36,7 @@ urlpatterns = patterns('',
 	url(r'^live_user_data/*$', 'analytics.views.get_live_user_data'),
 	url(r'^courses/(?P<school>.+?)/(?P<sem>[fFsS]{1}?)/code/(?P<code>.+)/*$', 'timetable.views.get_course_id'),
 	url(r'^reason/*$', 'analytics.views.verify_password'),
+	url(r'^jhu/countdown/*$', 'timetable.views.jhu_timer'),
 	url(r'^courses/(?P<school>.+?)/(?P<sem>[fFsS]{1}?)/*$', 'timetable.views.get_courses'),
 	url(r'^courses/(?P<school>.+?)/id/(?P<id>[0-9]+)/*$', 'timetable.views.get_course'),
 	url(r'^$', 'timetable.views.view_timetable'),
