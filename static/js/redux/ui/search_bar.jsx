@@ -40,7 +40,7 @@ export class SearchResult extends React.Component {
             />
         );
         return (
-        <li key={course.id} className="search-course" style={this.props.inRoster ? {backgroundColor:"#4DFDBD"} : {}}>
+        <li key={course.id} className="search-course" onClick={() => this.props.fetchCourseInfo(course.id)} style={this.props.inRoster ? {backgroundColor:"#4DFDBD"} : {}}>
             {course.code} : {course.name + " "} 
             <i onClick={() => this.addCourse(course)} className="fa fa-plus"></i>
             <div>
