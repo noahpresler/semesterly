@@ -19,7 +19,7 @@ class Slot extends React.Component {
 	render() {
 		return (
 			<div className="fc-event-container">
-                <div className="fc-time-grid-event fc-event slot" style={this.getSlotStyles()} onClick={() => renderCourseModal(this.props.course, false)}>
+                <div className="fc-time-grid-event fc-event slot" style={this.getSlotStyles()} onClick={() => this.props.fetchCourseInfo(this.props.course)}>
     				<div className="slot-bar" style={{backgroundColor: COLOUR_DATA[this.props.colour_id].border}}/>
                     <div className="fc-content">
                         <div className="fc-time">
@@ -72,7 +72,7 @@ export class SlotManager extends React.Component {
         let all_slots = days.map((day) => {
             let day_slots = slots_by_day[day].map((slot) => {
                 let p = false;
-                return <Slot {...slot} key={slot.fake ? -slot.id : slot.id} pinned={p}/>
+                return <Slot {...slot} key={slot.fake ? -slot.id : slot.id} pinned={p} fetchCourseInfo={this.props.fetchCourseInfo}/>
             });
             return (
                     <td key={day}>
