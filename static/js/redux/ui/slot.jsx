@@ -16,20 +16,15 @@ let COLOUR_DATA = [
     {background: "#C8F7C5", highlight: "#C4D44D", border: "#548A50", font: "#222"}
 ] // consider #CF000F, #e8fac3, #C8F7C5
 
+// todo(rohan): Don't allow people to hover over sections they're already in
+
 class Slot extends React.Component {
-    constructor(props){
-        super(props);
-        this.handleClick = this.handleClick.bind(this);
-    }
-    handleClick() {
-        return (event) => {
-            this.props.fetchCourseInfo(this.props.course);
-        }
-    }
 	render() {
 		return (
 			<div className="fc-event-container">
-                <div className="fc-time-grid-event fc-event slot" style={this.getSlotStyles()} onClick={this.handleClick}>
+                <div className="fc-time-grid-event fc-event slot" 
+                     style={this.getSlotStyles()} 
+                     onClick={() => this.props.fetchCourseInfo(this.props.course)}>
     				<div className="slot-bar" style={{backgroundColor: COLOUR_DATA[this.props.colour_id].border}}/>
                     <div className="fc-content">
                         <div className="fc-time">
@@ -51,7 +46,7 @@ class Slot extends React.Component {
         let bottom = (end_hour - 8)*(HALF_HOUR_HEIGHT*2 + 2) + (end_minute)*(HALF_HOUR_HEIGHT/30) - 1;
         let height = bottom - top - 2;
         // the cumulative width of this slot and all of the slots it is conflicting with
-        let total_slot_widths = 99 - (5 * this.props.depth_level);
+        let total_slot_widths = 100 - (5 * this.props.depth_level);
         // the width of this particular slot
         let slot_width_percentage = total_slot_widths / this.props.num_conflicts;
         // the amount of left margin of this particular slot, in percentage
@@ -117,10 +112,10 @@ export class SlotManager extends React.Component {
                         });
             }
         }
-        for (var course in this.props.timetable.courses) {
-            var crs = this.props.timetable.courses[course];
-            for (var slot_id in crs.slots) {
-                var slot = Object.assign(crs.slots[slot_id], {
+        for (let course in this.props.timetable.courses) {
+            let crs = this.props.timetable.courses[course];
+            for (let slot_id in crs.slots) {
+                let slot = Object.assign(crs.slots[slot_id], {
                             'colour_id': course, 'code': crs.code, 'name': crs.name});
                 slots_by_day[slot.day].push(slot);
             }
@@ -128,7 +123,7 @@ export class SlotManager extends React.Component {
         return this.getConflictStyles(slots_by_day)
     }
     getConflictStyles(slots_by_day) {
-        for (var day in slots_by_day) {
+        for (let day in slots_by_day) {
             let day_slots = slots_by_day[day]
             // sort by start time
             day_slots.sort((a, b) => this.getMinutes(a.time_start) - this.getMinutes(b.time_start))
@@ -141,39 +136,39 @@ export class SlotManager extends React.Component {
                     id: index // use day_slot index to map back to the slot object
                 }
             })
-            var tree = IntervalTree(intervals)
+            let tree = IntervalTree(intervals)
 
             // build interval tree with part of slot that should not be overlayed (first hour)
-            var info_intervals = intervals.map((s) => {
+            let info_intervals = intervals.map((s) => {
                 return {
                     start: s.start,
                     end: Math.min(s.start + 60, s.end),
                     id: s.id
                 }
             })
-            var info_slots = IntervalTree(info_intervals)
+            let info_slots = IntervalTree(info_intervals)
 
             // bit map to store if slot has already been processed
-            var seen = day_slots.map(() => false)
+            let seen = day_slots.map(() => false)
 
             // get num_conflicts + shift_index
-            for (var i = 0; i < info_intervals.length; i++) {
+            for (let i = 0; i < info_intervals.length; i++) {
                 if (!seen[i]) { // if not seen, perform dfs search on conflicts
-                    var direct_conflicts = [];
-                    var frontier = [info_intervals[i]];
+                    let direct_conflicts = [];
+                    let frontier = [info_intervals[i]];
                     while (frontier.length > 0) {
-                        var next = frontier.pop()
+                        let next = frontier.pop()
                         seen[next.id] = true
                         direct_conflicts.push(next)
-                        var neighbors = getIntersections(info_slots, next)
-                        for (var k = 0; k < neighbors.length; k++) {
+                        let neighbors = getIntersections(info_slots, next)
+                        for (let k = 0; k < neighbors.length; k++) {
                             if (!seen[neighbors[k].id]) {
                                 frontier.push(neighbors[k])
                             }
                         }
                     }
                     direct_conflicts.sort((a, b) => (intervals[b.id].end - intervals[b.id].start) - (intervals[a.id].end - intervals[a.id].start))
-                    for (var j = 0; j < direct_conflicts.length; j++) {
+                    for (let j = 0; j < direct_conflicts.length; j++) {
                         let slot_id = direct_conflicts[j].id
                         day_slots[slot_id]['num_conflicts'] = direct_conflicts.length
                         day_slots[slot_id]['shift_index'] = j
@@ -182,7 +177,7 @@ export class SlotManager extends React.Component {
             }
 
             // build interval tree with part of slot that should not be overlayed
-            var over_slots = IntervalTree(intervals.filter((s) => s.end - s.start > 60).map((s) => {
+            let over_slots = IntervalTree(intervals.filter((s) => s.end - s.start > 60).map((s) => {
                 return {
                     start: s.start + 60,
                     end: s.end,
@@ -191,7 +186,7 @@ export class SlotManager extends React.Component {
             }))
 
             // get depth_level
-            for (var i = 0; i < info_intervals.length; i++) {
+            for (let i = 0; i < info_intervals.length; i++) {
                 let conflicts = getIntersections(over_slots, info_intervals[i])
                 conflicts.sort((a, b) => (b.start - a.start))
                 day_slots[i]['depth_level'] = conflicts.length > 0 ? day_slots[conflicts[0].id].depth_level + 1 : 0

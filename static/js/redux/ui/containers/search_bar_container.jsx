@@ -22,7 +22,10 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch) => {
 	return {
 	  	fetchCourses: (query) => dispatch(fetchSearchResults(query)),
-	  	addCourse: (course) => dispatch(fetchTimetables(course)),
+	  	addCourse: (course, section = '') => {
+	  		course.section = section;
+	  		dispatch(fetchTimetables(course));
+	  	},
 	  	hoverCourse: (course, section) => {
 			dispatch({
 				type: "HOVER_COURSE",
