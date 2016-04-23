@@ -315,7 +315,6 @@ def offerings_to_timetables(sections):
                 break
             current_tt.append(new_meeting)
         if no_conflicts and len(current_tt) != 0:
-            if WITH_CONFLICTS: update_conflict_info(day_to_usage)
             yield tuple(current_tt)
 
 def get_xproduct_indicies(lists):
@@ -350,69 +349,6 @@ def add_meeting_and_check_conflict(day_to_usage, new_meeting):
             day_to_usage[day][slot].append(course_offerings[i])
     return (day_to_usage, exists_conflict, (course_id, section_code, course_offerings))
 
-def update_conflict_info(day_to_usage):
-    for day in day_to_usage.keys():
-        day_to_usage[day] = [sort_slot_by_startend(slot) for slot in day_to_usage[day]]
-        update_day_conflicts(day_to_usage[day], 0, 14 * 60 / school_to_granularity[SCHOOL], 0, [])
-
-def update_day_conflicts(day_bitarray, start, end, current_level, ignore_list):
-    """
-    Take a day_bitarray and update the conflict_info lists in that bit array
-    to reflect the conflicts present.
-    start: the time that the function starts looking from (it looks from early to late)
-    end: the time that the functino stops looking at.
-    current_level: the current_level that the offerings between start and end are at.
-    ignore_list: 
-    """
-    i = start
-    while i < end:
-        if day_bitarray[i]:
-            overlapping = get_overlapping_slots(day_bitarray, i, ignore_list)
-
-            # set correct values for the next two
-            if overlapping:
-                update_slots_conflict_info(overlapping, current_level)
-                tail = find_latest_slot(overlapping)
-                next_hour_index = i + 60 / school_to_granularity[SCHOOL]
-                # if next_hour_index < end and exists_more_classes(overlapping, day_bitarray[next_hour_index]):
-                    # recursively update the rest of slots in overlapping
-                tail = update_day_conflicts(day_bitarray, next_hour_index, \
-                                            tail - (60 / school_to_granularity[SCHOOL]), \
-                                            current_level + 1, \
-                                            overlapping + ignore_list)
-                i = tail + (60 / school_to_granularity[SCHOOL]) + 1
-            else:
-                i += 1
-        else:
-            i += 1
-    return i
-
-def get_overlapping_slots(day_bitarray, current_slot, ignore_list):
-    """
-    Retrieve the overlapping slots in a given hour, sorted by earliest start time
-    then by latest end time.
-    """
-    overlapping = []
-    for i in range(60 / school_to_granularity[SCHOOL]):
-        overlapping += [pair for pair in day_bitarray[current_slot + i] if pair not in ignore_list and
-                        pair not in overlapping]
-    return sort_slot_by_startend(overlapping)
-
-
-def update_slots_conflict_info(overlapping, current_level):
-    """ Update the conflict info for a list of overlapping slots. """
-    for index, pair in enumerate(overlapping):
-        pair[1] = [current_level, len(overlapping), index]
-
-def exists_more_classes(current_slots, next_slots):
-    """Determine if there is a class in next that doesn't appear in current."""
-
-    return bool(set(pair[0] for pair in next_slots) - set(pair[0] for pair in current_slots))
-
-def find_latest_slot(overlapping):
-    all_slot_lists = [find_slots_to_fill(co.time_start, co.time_end) for co, info in overlapping]
-    return max([slots[-1] for slots in all_slot_lists])
-
 def find_slots_to_fill(start, end):
     """
     Take a @start and @end time in the format found in the coursefinder (e.g. 9:00, 16:30), 
@@ -425,9 +361,6 @@ def find_slots_to_fill(start, end):
     end_hour, end_minute = get_hours_minutes(end)
 
     return [i for i in range(get_time_index(start_hour, start_minute), get_time_index(end_hour, end_minute))]
-
-def sort_slot_by_startend(slot):
-    return sorted(slot, key=lambda pair: (get_hour(pair[0].time_start), 14 * 60 / school_to_granularity[SCHOOL] - get_hour(pair[0].time_end)))
 
 def get_hour(str_time):
     si = str_time.index(':') if ':' in str_time else len(str_time)
