@@ -16,10 +16,20 @@ let COLOUR_DATA = [
 ] // consider #CF000F, #e8fac3, #C8F7C5
 
 class Slot extends React.Component {
+    constructor(props){
+        super(props);
+        this.handleClick = this.handleClick.bind(this);
+    }
+    handleClick() {
+        console.log("fking wot");
+        return (event) => {
+            this.props.fetchCourseInfo(this.props.course);
+        }
+    }
 	render() {
 		return (
 			<div className="fc-event-container">
-                <div className="fc-time-grid-event fc-event slot" style={this.getSlotStyles()} onClick={() => this.props.fetchCourseInfo(this.props.course)}>
+                <div className="fc-time-grid-event fc-event slot" style={this.getSlotStyles()} onClick={this.handleClick}>
     				<div className="slot-bar" style={{backgroundColor: COLOUR_DATA[this.props.colour_id].border}}/>
                     <div className="fc-content">
                         <div className="fc-time">
