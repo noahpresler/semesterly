@@ -13,7 +13,7 @@ export const courseInfo = (state = {isFetching: true, data: {}, id: null}, actio
 				id: state.id
 			};
 		case ("SET_COURSE_ID"):
-			return Object.assign({}, state, {id: action.data})
+			return Object.assign({}, state, {id: action.id})
 		default: 
 			return state;
 	}

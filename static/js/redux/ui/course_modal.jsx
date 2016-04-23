@@ -5,9 +5,6 @@ import { getSchool } from '../init.jsx';
 let Modal = require('boron/DropModal');
 
 export class CourseModal extends React.Component {
-    hideModal() {
-        this.refs.modal.hide();
-    }
     componentWillReceiveProps(nextProps) { 
         if (nextProps.id != null) {
             this.refs.modal.show();
