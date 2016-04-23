@@ -6,7 +6,7 @@ export class Calendar extends React.Component {
 
   	getCalendarRows() {
 	    let rows = [];
-	    for (let i = 8; i <= 20; i++) { // one row for each hour, starting from 8am
+	    for (let i = 8; i <= 22; i++) { // one row for each hour, starting from 8am
 	      let time = i + ":00";
 	      rows.push(
 	          ( <tr key={time}>
