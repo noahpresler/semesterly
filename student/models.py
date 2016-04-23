@@ -20,6 +20,7 @@ class Student(models.Model):
     img_url = models.CharField(max_length=300, default=-1)
     friends = models.ManyToManyField("self", blank=True)
     fbook_uid = models.CharField(max_length=255, default='')
+    gender = models.CharField(max_length=255, default='')
     major = models.CharField(max_length=255, default='')
     social_courses = models.BooleanField(default=False)
     social_offerings = models.BooleanField(default=False)
