@@ -8,9 +8,10 @@ export function setCourseInfo(json) {
 	};
 }
 
-export function requestCourseInfo() {
+export function requestCourseInfo(id) {
   return {
     type: "REQUEST_COURSE_INFO",
+    id: id,
   }
 }
 
@@ -24,7 +25,7 @@ export function setCourseId(id) {
 export function fetchCourseInfo(courseId) {
 	return (dispatch) => {
 
-		dispatch(requestCourseInfo());
+		dispatch(requestCourseInfo(courseId));
 
 		fetch(getCourseInfoEndpoint(courseId))
 		    .then(response => response.json()) // TODO(rohan): error-check the response

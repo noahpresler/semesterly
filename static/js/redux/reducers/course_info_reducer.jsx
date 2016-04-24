@@ -10,7 +10,7 @@ export const courseInfo = (state = {isFetching: true, data: {}, id: null}, actio
 			return {
 				isFetching: true,
 				data: {},
-				id: state.id
+				id: action.id
 			};
 		case ("SET_COURSE_ID"):
 			return Object.assign({}, state, {id: action.id})
