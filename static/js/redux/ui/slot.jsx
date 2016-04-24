@@ -51,7 +51,9 @@ class Slot extends React.Component {
         let slot_width_percentage = total_slot_widths / this.props.num_conflicts;
         // the amount of left margin of this particular slot, in percentage
         let push_left = (this.props.shift_index * slot_width_percentage) + 5 * this.props.depth_level;
-
+        if(push_left == 50) {
+            push_left += .5;
+        }
 		return {
             top: top, bottom: -bottom, zIndex: 1, left: '0%', right: '0%', 
             backgroundColor: COLOUR_DATA[this.props.colour_id].background,
