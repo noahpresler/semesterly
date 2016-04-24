@@ -50,14 +50,6 @@ export class SearchResult extends React.Component {
 }
 
 const SearchResultSection = ({ section, locked, hoverCourse, unhoverCourse, onClick }) => {
-    if (locked) {
-        return <span
-            className="search-section" 
-            onClick={onClick}
-        >
-        {section} <i className="fa fa-lock"></i>
-        </span>        
-    }
     return (
     <span
         className="search-section" 
