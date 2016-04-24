@@ -24,13 +24,16 @@ export function receiveCourseSections(newCourseSections) {
     courseSections: newCourseSections,
   }
 }
+export function receiveConflict(){
+	return {
+		type: "RECEIVE_CONFLICT"
+	}
+}
+
 /* 
 Returns the body of the request used to get new timetables
 */
-function getReqBody(newCourse){
-	let state = store.getState();
-	let lockingSection = newCourse.section || '';
-	let removing = state.courseSections[newCourse.id] !== undefined && lockingSection === '';
+function getReqBody(newCourse, lockingSection, removing, state){
 	let reqBody = {
 		school: state.school,
 		semester: state.semester,
@@ -61,15 +64,24 @@ export function fetchTimetables(newCourse) {
 		dispatch(requestTimetables());
 		// send a request (via fetch) to the appropriate endpoint with
 		// relevant data as contained in @state (including courses, preferences, etc)
+		let state = store.getState();
+		let lockingSection = newCourse.section || '';
+		let removing = state.courseSections[newCourse.id] !== undefined && lockingSection === '';
+
 		fetch(getTimetablesEndpoint(), {
       		method: 'POST',
-      		body: JSON.stringify(getReqBody(newCourse))
+      		body: JSON.stringify(getReqBody(newCourse, lockingSection, removing, state))
     	})
 		.then(response => response.json()) // TODO(rohan): error-check the response
 		.then(json => {
-			// mark that timetables and a new courseSections have been received
-			dispatch(receiveTimetables(json.timetables));
-			dispatch(receiveCourseSections(json.new_c_to_s));
+			if (removing || json.timetables.length > 0) {
+				// mark that timetables and a new courseSections have been received
+				dispatch(receiveTimetables(json.timetables));
+				dispatch(receiveCourseSections(json.new_c_to_s));
+			}
+			else {
+				dispatch(receiveConflict());
+			}
 		});
 	}
 }

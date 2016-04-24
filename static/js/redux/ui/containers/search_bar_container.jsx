@@ -27,6 +27,7 @@ const mapDispatchToProps = (dispatch) => {
 	  		dispatch(fetchTimetables(course));
 	  	},
 	  	hoverCourse: (course, section) => {
+	  		course.section = section;
 			dispatch({
 				type: "HOVER_COURSE",
 				course: Object.assign({}, course, { slots: course.slots[section] })

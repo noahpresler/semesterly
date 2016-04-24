@@ -4,7 +4,7 @@ export const timetables = (state = initialState, action) => {
 		case 'REQUEST_TIMETABLES':
 			return {
 				isFetching: true, 
-				items: state.items,
+				items: [...state.items],
 				active: 0,
 			};
 		case 'RECEIVE_TIMETABLES':
@@ -15,8 +15,14 @@ export const timetables = (state = initialState, action) => {
 				active: 0
 			};
 		case 'HOVER_COURSE':
+			let new_course = action.course;
 			let current_courses = state.items[state.active].courses;
-			if (current_courses.some(course => course.fake)) { // only one "fake" (hovered course) at a time
+			console.log(current_courses);
+			// if there's already a hovered course on the timetable, or
+			// if the user is hovering over a section that they've already added 
+			// to their timetable, we don't want to show any new slots on the timetable
+			if (current_courses.some(course => course.fake || 
+			(course.code == new_course.code && course.enrolled_sections.indexOf(new_course.section) > -1))) { // only one "fake" (hovered course) at a time
 				return state;
 			}
 			let new_items = [...state.items];
