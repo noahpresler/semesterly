@@ -80,6 +80,8 @@ export function fetchTimetables(newCourse) {
 				dispatch(receiveCourseSections(json.new_c_to_s));
 			}
 			else {
+				// course added by the user resulted in a conflict, so no timetables
+				// were received
 				dispatch(receiveConflict());
 			}
 		});
