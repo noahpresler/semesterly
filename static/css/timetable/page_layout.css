@@ -33,8 +33,10 @@
 }
 
 #top-bar {
+    background-color: #F8F6F7;
 	min-height: 50px;
 	border-bottom: 1px solid #ccc;
+
 }
 
 #main-bar.full-cal {
@@ -89,6 +91,49 @@
     transform: translateX(-100%);
   }
 }
+
+
+/* Logo & name */
+
+#semesterly-name {
+    font-family: lato;
+    font-weight: bold;
+    display: inline-block;
+    float: left;
+    font-size: 2.5vw;
+    line-height: 46px;
+    height: 46px;
+    margin-left: 35px;
+}
+
+#semesterly-logo {
+    display: none;
+}
+
+@media screen and (max-width: 1000px) { 
+  .fc-ltr .fc-time-grid .fc-event-container {
+    margin-left:0.5%;
+  }
+  #search-input {
+    font-size:15px;
+  }
+  #semesterly-name {
+    display:none !important;
+  }
+
+  #semesterly-logo {
+    display: inline-block;
+    height: 40px;
+    margin-top: 5px;
+    margin-left: 25px;
+    float: left;
+  }
+
+  #navicon {
+    right: 9px;
+  }
+}
+/* end Logo & name */
 
 /* Navicon */
 #navicon {

@@ -12,12 +12,13 @@ export class SearchBar extends React.Component {
     	let results = this.props.searchResults.map(c => 
     		<SearchResult {...this.props} course={c}  key={c.code} inRoster={this.props.isCourseInRoster(c.id)} />
     	);
+        let result_container = results.length == 0 ? null : (<ul className="search-results">
+                 {results}
+                </ul>)
     	return (
-        	<div>
+        	<div id="search-bar">
         		<input ref="input" onInput={this.fetchSearchResults.bind(this)} />
-        		<ul className="search-results">
-        		 {results}
-        		</ul>
+                {result_container}
         	</div>
     	);
     }

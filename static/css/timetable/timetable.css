@@ -1,6 +1,7 @@
 body {
 	background-color:#ffffff;
 	line-height:1.4;
+	overflow: hidden;
 }
 #calendar {
 	margin-bottom:50px;

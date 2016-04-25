@@ -14,4 +14,19 @@
 .search-results {
 /*	background-color:#ffe3e1;*/
 	max-width:600px;
+	position: absolute;
+	z-index: 100;
+	border: 1px solid #ccc;
+	background-color: white;
+}
+
+#search-bar {
+    margin-top: 10px;
+    left: calc((100% - 350px) / 2);
+    position: absolute;
+    width: 350px;
+}
+
+#search-bar input {
+	width: 100%;
 }
