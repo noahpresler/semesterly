@@ -6,7 +6,7 @@ export class Calendar extends React.Component {
 
   	getCalendarRows() {
 	    let rows = [];
-	    for (let i = 8; i <= 22; i++) { // one row for each hour, starting from 8am
+	    for (let i = 8; i <= this.getMaxHour(); i++) { // one row for each hour, starting from 8am
 	      let time = i + ":00";
 	      rows.push(
 	          ( <tr key={time}>
@@ -27,7 +27,28 @@ export class Calendar extends React.Component {
 
     	return rows;
   	}
+	getMaxHour() {
+    	// gets the end hour of the current timetable, based on the class that ends latest
+	    let max_end_hour = 17;
+	    if (!this.hasTimetables()) {
+	      return max_end_hour;
+	    }
 
+	    let courses = this.props.items[this.props.active].courses;
+	    for (let course_index in courses) {
+	      let course = courses[course_index];
+	      for (let slot_index in course.slots) {
+	        let slot = course.slots[slot_index];
+	        let end_hour = parseInt(slot.time_end.split(":")[0]);
+	        max_end_hour = Math.max(max_end_hour, end_hour);
+	      }
+	    }
+	    return max_end_hour;
+
+  	}
+  	hasTimetables() {
+  		return this.props.items[this.props.active].courses.length > 0;
+  	}
 
 	render() {
 		let timetables = this.props.items;
@@ -115,9 +136,9 @@ export class Calendar extends React.Component {
   	}
 
   	componentDidMount() {
-	    // var days = {1: 'mon', 2: 'tue', 3: 'wed', 4: 'thu', 5: 'fri'};
-	    // var d = new Date();
-	    // var selector = ".fc-" + days[d.getDay()];
+	    // let days = {1: 'mon', 2: 'tue', 3: 'wed', 4: 'thu', 5: 'fri'};
+	    // let d = new Date();
+	    // let selector = ".fc-" + days[d.getDay()];
 	    // $(selector).addClass("fc-today");
   	}
 

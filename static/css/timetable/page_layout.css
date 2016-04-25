@@ -5,8 +5,8 @@
 	height: 100%;
 	float: right;
 	transition: transform .3s;
-    border: 0 solid #ccc;
-    border-left: 1px solid #ccc;
+    border: 0 solid #E4E0E0;
+    border-left: 1px solid #E4E0E0;
 }
 
 #main-bar {
@@ -23,5 +23,5 @@
 
 #top-bar {
 	height: 100%;
-	border-bottom: 1px solid #ccc;
+	border-bottom: 1px solid #E4E0E0;
 }

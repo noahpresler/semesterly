@@ -17,7 +17,6 @@ export const timetables = (state = initialState, action) => {
 		case 'HOVER_COURSE':
 			let new_course = action.course;
 			let current_courses = state.items[state.active].courses;
-			console.log(current_courses);
 			// if there's already a hovered course on the timetable, or
 			// if the user is hovering over a section that they've already added 
 			// to their timetable, we don't want to show any new slots on the timetable
