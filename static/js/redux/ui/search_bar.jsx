@@ -57,7 +57,8 @@ const SearchResultSection = ({ section, locked, hoverCourse, unhoverCourse, onCl
         onMouseEnter={hoverCourse}
         onMouseLeave={unhoverCourse} 
     >
-        {section}
+        {section + " "}
+        { locked ? <i className="fa fa-lock"></i> : null}
     </span>);
 };
 
