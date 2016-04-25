@@ -42,6 +42,8 @@ class Semesterly extends React.Component {
 		return (
 			<div id="page-wrapper">
 				<div id="top-bar">
+					<div id="semesterly-name">Semester.ly</div>
+					<img id="semesterly-logo" src="/static/img/logo2.0.png"/>
 					<SearchBarContainer />
 					<CourseModalContainer />
 					<div id="navicon" onClick={this.toggleSideBar}>
