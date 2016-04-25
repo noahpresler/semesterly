@@ -1,0 +1,27 @@
+#side-bar {
+	position: absolute;
+	left: calc(100% - 300px);
+	width: 300px;
+	height: 100%;
+	float: right;
+	transition: transform .3s;
+    border: 0 solid #ccc;
+    border-left: 1px solid #ccc;
+}
+
+#main-bar {
+	width: calc(100% - 300px);
+	float:left;
+	height:100%;
+}
+
+#all-cols {
+	clear: both;
+	width: 100%;
+	height: 100%;
+}
+
+#top-bar {
+	height: 100%;
+	border-bottom: 1px solid #ccc;
+}
