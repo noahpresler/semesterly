@@ -24,8 +24,8 @@ class Semesterly extends React.Component {
 	}
 	showAlert(alert, type, delay=5000){
 	    this.msg.show(alert, {
-	      time: delay,
 	      type: type,
+	      time: delay,
 	    });
     }
 	toggleSideBar() {
@@ -63,7 +63,6 @@ class Semesterly extends React.Component {
 					<div id="semesterly-name">Semester.ly</div>
 					<img id="semesterly-logo" src="/static/img/logo2.0.png"/>
 					<AlertBox ref={a => this.msg = a} {...this.alertOptions} />
-					
 					<SearchBarContainer />
 					<CourseModalContainer />
 					<div id="navicon" onClick={this.toggleSideBar}>
