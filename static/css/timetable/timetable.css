@@ -1,6 +1,7 @@
 body {
 	background-color:#ffffff;
 	line-height:1.4;
+	overflow: hidden;
 }
 #calendar {
 	margin-bottom:50px;
@@ -37,6 +38,7 @@ body {
 	background-color: #C8F7C5;
 	color:#222;
 	font-size:13px;
+	transition:all 0.3s;
 }
 .slot:hover {
 	color:#222;
