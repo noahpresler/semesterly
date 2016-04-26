@@ -176,12 +176,12 @@ class TimetableGenerator:
     if not valid_timetables: valid_timetables = [()]
     return rank_by_spread(valid_timetables) if self.sort_by_spread else valid_timetables
 
-  def get_timetables_with_some_preferences(courses, semester):
+  def get_timetables_with_some_preferences(self, courses):
     """
     Generate timetables from all offerings (no pre-filtering of course offerings), 
     and return timetables ranked by # of preferences satisfied.
     """
-    all_offerings = courses_to_offerings(courses, semester, [])
+    all_offerings = self.courses_to_offerings(courses)
     timetables = self.create_timetable_from_offerings(all_offerings)
     s = sorted(timetables, key=functools.partial(get_rank_score, metric=get_preference_score))
     return s
