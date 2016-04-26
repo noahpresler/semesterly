@@ -521,13 +521,9 @@ def get_courses(request, school, sem):
       content_type="application/json")
 
 def get_course(request, school, id):
-  global SCHOOL
   school = school.lower()
-  if school in school_to_models:
-    SCHOOL = school
   try:
-    models = school_to_models[school]
-    C, Co = models[0], models[1]
+    C, Co = school_to_models[school]
     course = C.objects.get(id=id)
     json_data = model_to_dict(course)
     json_data['sections_F'] = get_meeting_sections(course,'F')
@@ -542,15 +538,11 @@ def get_course(request, school, id):
     traceback.print_exc()
     json_data = {}
 
-
   return HttpResponse(json.dumps(json_data), content_type="application/json")
 
 @csrf_exempt
 def get_course_id(request, school, sem, code):
-  global SCHOOL
   school = school.lower()
-  if school in school_to_models:
-    SCHOOL = school
   try:
     models = school_to_models[school]
     C, Co = models[0], models[1]
@@ -601,7 +593,6 @@ def get_meeting_sections_objects(course, semester):
 
 def has_offering(course, sem):
   SchoolCourse, SchoolCourseOffering = school_to_models[SCHOOL]   
-
   try:
     res = SchoolCourseOffering.objects.filter(~Q(time_start__iexact='TBA'), 
                       (Q(semester=sem) | Q(semester='Y')),
