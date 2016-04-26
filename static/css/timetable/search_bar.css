@@ -10,6 +10,7 @@
 }
 .search-section:hover {
 	background-color:#FFDBBE;
+	color: rgba(52, 73, 94, 1);
 }
 .search-results {
 /*	background-color:#ffe3e1;*/
@@ -29,4 +30,12 @@
 
 #search-bar input {
 	width: 100%;
+}
+
+.trans50 {
+	background-color: rgba(255, 255, 255, 0.4);
+}
+
+.trans50 li {
+	color: rgba(52, 73, 94, .4);
 }
