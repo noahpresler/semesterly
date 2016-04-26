@@ -2,17 +2,32 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import fetch from 'isomorphic-fetch';
 import { getCourseSearchEndpoint } from '../constants.jsx';
+var classNames = require('classnames');
 
 export class SearchBar extends React.Component {
+    constructor(props){
+        super(props);
+        this.state = {sectionHovered: false};
+        this.sectionHoverOff = this.sectionHoverOff.bind(this);
+        this.sectionHoverOn = this.sectionHoverOn.bind(this);
+        this.render = this.render.bind(this);
+    }
+    sectionHoverOn() {
+        this.setState({sectionHovered: true});
+    }
+    sectionHoverOff() {
+        this.setState({sectionHovered: false});
+    }
     fetchSearchResults() {
         let query = this.refs.input.value;
         this.props.fetchCourses(query);
     }
     render() {
+        let res_class = classNames({'search-results' : true, 'trans50' : this.state.sectionHovered})
     	let results = this.props.searchResults.map(c => 
-    		<SearchResult {...this.props} course={c}  key={c.code} inRoster={this.props.isCourseInRoster(c.id)} />
+    		<SearchResult {...this.props} sectionHoverOn={this.sectionHoverOn} sectionHoverOff={this.sectionHoverOff} course={c}  key={c.code} inRoster={this.props.isCourseInRoster(c.id)} />
     	);
-        let result_container = results.length == 0 ? null : (<ul className="search-results">
+        let result_container = results.length == 0 ? null : (<ul className={res_class} >
                  {results}
                 </ul>)
     	return (
@@ -40,7 +55,7 @@ export class SearchResult extends React.Component {
             />
         );
         return (
-        <li key={course.id} className="search-course" onClick={() => this.props.fetchCourseInfo(course.id)} style={this.props.inRoster ? {backgroundColor:"#4DFDBD"} : {}}>
+        <li key={course.id} className="search-course" onMouseOver={this.props.sectionHoverOn} onMouseOut={this.props.sectionHoverOff} onClick={() => this.props.fetchCourseInfo(course.id)} style={this.props.inRoster ? {backgroundColor:"#4DFDBD"} : {}}>
             {course.code} : {course.name + " "} 
             <i onClick={this.addCourse.bind(this, course, '')} className="fa fa-plus"></i>
             <div>
