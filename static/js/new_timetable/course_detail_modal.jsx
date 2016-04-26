@@ -22,11 +22,9 @@ var styles = {
   }
 }
 
-
 var Example = React.createClass({
 
     toggleDialog: function(ref){
-
         return function(){
             this.refs[ref].toggle();
         }.bind(this)

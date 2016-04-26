@@ -24,9 +24,9 @@ export function receiveCourseSections(newCourseSections) {
     courseSections: newCourseSections,
   }
 }
-export function receiveConflict(){
+export function alertConflict(){
 	return {
-		type: "RECEIVE_CONFLICT"
+		type: "ALERT_CONFLICT"
 	}
 }
 
@@ -62,12 +62,12 @@ export function fetchTimetables(newCourse) {
 	return (dispatch) => {
 		// mark that we are now requesting timetables (asynchronously)
 		dispatch(requestTimetables());
-		// send a request (via fetch) to the appropriate endpoint with
-		// relevant data as contained in @state (including courses, preferences, etc)
+
 		let state = store.getState();
 		let lockingSection = newCourse.section || '';
 		let removing = state.courseSections[newCourse.id] !== undefined && lockingSection === '';
-
+		// send a request (via fetch) to the appropriate endpoint with
+		// relevant data as contained in @state (including courses, preferences, etc)
 		fetch(getTimetablesEndpoint(), {
       		method: 'POST',
       		body: JSON.stringify(getReqBody(newCourse, lockingSection, removing, state))
@@ -82,7 +82,7 @@ export function fetchTimetables(newCourse) {
 			else {
 				// course added by the user resulted in a conflict, so no timetables
 				// were received
-				dispatch(receiveConflict());
+				dispatch(alertConflict());
 			}
 		});
 	}

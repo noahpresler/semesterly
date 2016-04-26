@@ -81,4 +81,3 @@ const SearchResultSection = ({ section, locked, hoverCourse, unhoverCourse, onCl
         { locked ? <i className="fa fa-lock"></i> : null}
     </span>);
 };
-

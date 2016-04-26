@@ -7,6 +7,9 @@ export const preferences = (state = {
     'try_with_conflicts': false
   }, action) => {
 	switch (action.type) {
+        case 'SET_CONFLICTS':
+            console.log("HERE");
+            return Object.assign({}, state, {'try_with_conflicts': action.value});
 		default:
 			return state;
 	}
