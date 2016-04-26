@@ -33,12 +33,12 @@
 }
 
 .trans50 {
-	background-color: rgba(255, 255, 255, 0.05);
+	background-color: rgba(255, 255, 255, 0.25);
 	border: 1px solid rgba(255,255,255,0);
 }
 
 .trans50 li {
-	color: rgba(52, 73, 94, .05);
+	color: rgba(52, 73, 94, .25);
 	transition: background-color 0.2s ease;
 	transition: color 0.2s ease;
 }
