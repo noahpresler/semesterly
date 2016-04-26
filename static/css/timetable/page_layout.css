@@ -92,12 +92,11 @@
   }
 }
 
-
 /* Logo & name */
 
 #semesterly-name {
     font-family: lato;
-    font-weight: bold;
+    font-weight: 400;
     display: inline-block;
     float: left;
     font-size: 2.5vw;
