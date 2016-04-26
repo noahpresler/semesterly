@@ -19,8 +19,6 @@
 	z-index: 100;
 	border: 1px solid #ccc;
 	background-color: white;
-	transition: background-color 0.6s ease;
-	transition: color 0.6s ease;
 }
 
 #search-bar {
@@ -35,13 +33,12 @@
 }
 
 .trans50 {
-	background-color: rgba(255, 255, 255, 0.4);
-	transition: background-color 0.6s ease;
-	transition: color 0.6s ease;
+	background-color: rgba(255, 255, 255, 0.05);
+	border: 1px solid rgba(255,255,255,0);
 }
 
 .trans50 li {
-	color: rgba(52, 73, 94, .4);
-	transition: background-color 0.6s ease;
-	transition: color 0.6s ease;
+	color: rgba(52, 73, 94, .05);
+	transition: background-color 0.2s ease;
+	transition: color 0.2s ease;
 }
