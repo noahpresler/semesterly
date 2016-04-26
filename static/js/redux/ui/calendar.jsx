@@ -1,12 +1,12 @@
 import React from 'react';
 import { SlotManager } from './slot.jsx';
-
+import { Pagination } from './pagination.jsx';
 
 export class Calendar extends React.Component {
 
   	getCalendarRows() {
 	    let rows = [];
-	    for (let i = 8; i <= 20; i++) { // one row for each hour, starting from 8am
+	    for (let i = 8; i <= this.getMaxHour(); i++) { // one row for each hour, starting from 8am
 	      let time = i + ":00";
 	      rows.push(
 	          ( <tr key={time}>
@@ -27,18 +27,47 @@ export class Calendar extends React.Component {
 
     	return rows;
   	}
+	getMaxHour() {
+    	// gets the end hour of the current timetable, based on the class that ends latest
+	    let max_end_hour = 17;
+	    if (!this.hasTimetables()) {
+	      return max_end_hour;
+	    }
 
+	    let courses = this.props.items[this.props.active].courses;
+	    for (let course_index in courses) {
+	      let course = courses[course_index];
+	      for (let slot_index in course.slots) {
+	        let slot = course.slots[slot_index];
+	        let end_hour = parseInt(slot.time_end.split(":")[0]);
+	        max_end_hour = Math.max(max_end_hour, end_hour);
+	      }
+	    }
+	    return max_end_hour;
 
-	render() { 
-		let timetable = this.props.timetables[0] || []; // First operand if it exists, second if not. #justjavascriptthings
+  	}
+  	hasTimetables() {
+  		return this.props.items[this.props.active].courses.length > 0;
+  	}
+
+	render() {
+		let timetables = this.props.items;
+		let active = this.props.active;
+		let timetable = timetables[active] || []; // First operand if it exists, second if not. #justjavascriptthings
 		return (
 
 	      <div id="calendar" className="fc fc-ltr fc-unthemed">
+	      <Pagination 
+	        	count={timetables.length} 
+	        	active={active} 
+	        	setActive={this.props.setActive}
+	        />
 	        <div className="fc-toolbar">
 	          <div className="fc-left" />
 	          <div className="fc-right" />
 	          <div className="fc-center" />
 	          <div className="fc-clear" />
+
 	        </div>
 	        <div className="fc-view-container" style={{}}>
 	          <div className="fc-view fc-settimana-view fc-agenda-view">
@@ -91,7 +120,7 @@ export class Calendar extends React.Component {
 	                          </table>
 	                        </div>
 	                        <div className="fc-content-skeleton">
-	                          <SlotManager timetable={timetable} />
+	                          <SlotManager timetable={timetable} fetchCourseInfo={this.props.fetchCourseInfo}/>
 	                        </div>
 	                        <hr className="fc-divider fc-widget-header" style={{display: 'none'}} />
 	                      </div>
@@ -107,9 +136,9 @@ export class Calendar extends React.Component {
   	}
 
   	componentDidMount() {
-	    // var days = {1: 'mon', 2: 'tue', 3: 'wed', 4: 'thu', 5: 'fri'};
-	    // var d = new Date();
-	    // var selector = ".fc-" + days[d.getDay()];
+	    // let days = {1: 'mon', 2: 'tue', 3: 'wed', 4: 'thu', 5: 'fri'};
+	    // let d = new Date();
+	    // let selector = ".fc-" + days[d.getDay()];
 	    // $(selector).addClass("fc-today");
   	}
 
