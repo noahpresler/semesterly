@@ -14,19 +14,7 @@ from timetable.models import *
 
 MAX_RETURN = 60 # Max number of timetables we want to consider
 
-# TODO: pass preferences in from frontend
-NO_CLASSES_BEFORE = 4 # No classes before 10
-NO_CLASSES_AFTER = 20 # No classes after 6
-LONG_WEEKEND = False
-LEAST_DAYS = False
-BREAK_DAYS = ['M', 'T', 'W', 'R', 'F']
-BREAK_TIMES = [] # [8, 9, 2]
-BREAK_LENGTH = 2
-SORT_BY_SPREAD = False
-SPREAD = False
-WITH_CONFLICTS = False
 SCHOOL = ""
-LOCKED_SECTIONS = []
 
 # hashid = Hashids("x98as7dhg&h*askdj^has!kj?xz<!9")
 logger = logging.getLogger(__name__)
@@ -85,7 +73,6 @@ def get_timetables(request):
                   locked_section, SchoolCourseOffering)
   LOCKED_SECTIONS = locked_sections
 
-  set_tt_preferences(params['preferences'])
   generator = TimetableGenerator(params['semester'], 
                   params['school'],
                   locked_sections,
@@ -96,17 +83,6 @@ def get_timetables(request):
   # updated roster object 
   response = {'timetables': result, 'new_c_to_s': locked_sections}
   return HttpResponse(json.dumps(response), content_type='application/json')
-
-def set_tt_preferences(preferences):
-  global NO_CLASSES_BEFORE, NO_CLASSES_AFTER, SORT_BY_SPREAD, LONG_WEEKEND
-  global SPREAD, WITH_CONFLICTS
-  slots_per_hour = 60 / school_to_granularity[SCHOOL]
-  NO_CLASSES_BEFORE = 0 if not preferences['no_classes_before'] else slots_per_hour * 2 - 1
-  NO_CLASSES_AFTER = slots_per_hour * 14 if not preferences['no_classes_after'] else slots_per_hour * 10 + 1
-  LONG_WEEKEND = preferences['long_weekend']
-  SPREAD = not preferences['grouped']
-  SORT_BY_SPREAD = preferences['do_ranking']
-  WITH_CONFLICTS = preferences['try_with_conflicts']
 
 def get_section_type(cid, section_code, offering_table):
   """Query offering table to get section type of provided section."""
