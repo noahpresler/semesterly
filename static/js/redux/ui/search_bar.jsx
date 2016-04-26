@@ -52,10 +52,12 @@ export class SearchResult extends React.Component {
                 hoverCourse={() => this.props.hoverCourse(course, sec)}
                 unhoverCourse={this.props.unhoverCourse} 
                 onClick={this.addCourse.bind(this, course, sec)}
+                sectionHoverOn={this.props.sectionHoverOn}
+                sectionHoverOff={this.props.sectionHoverOff}
             />
         );
         return (
-        <li key={course.id} className="search-course" onMouseOver={this.props.sectionHoverOn} onMouseOut={this.props.sectionHoverOff} onClick={() => this.props.fetchCourseInfo(course.id)} style={this.props.inRoster ? {backgroundColor:"#4DFDBD"} : {}}>
+        <li key={course.id} className="search-course" onClick={() => this.props.fetchCourseInfo(course.id)} style={this.props.inRoster ? {backgroundColor:"#4DFDBD"} : {}}>
             {course.code} : {course.name + " "} 
             <i onClick={this.addCourse.bind(this, course, '')} className="fa fa-plus"></i>
             <div>
@@ -65,13 +67,15 @@ export class SearchResult extends React.Component {
     }
 }
 
-const SearchResultSection = ({ section, locked, hoverCourse, unhoverCourse, onClick }) => {
+const SearchResultSection = ({ section, locked, hoverCourse, unhoverCourse, onClick, sectionHoverOn, sectionHoverOff }) => {
     return (
     <span
         className="search-section" 
         onClick={onClick}
         onMouseEnter={hoverCourse}
-        onMouseLeave={unhoverCourse} 
+        onMouseLeave={unhoverCourse}
+        onMouseOver={sectionHoverOn}
+        onMouseOut={sectionHoverOff}
     >
         {section + " "}
         { locked ? <i className="fa fa-lock"></i> : null}
