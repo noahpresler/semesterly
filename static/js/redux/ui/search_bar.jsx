@@ -2,79 +2,83 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import fetch from 'isomorphic-fetch';
 import { getCourseSearchEndpoint } from '../constants.jsx';
-import { hoverCourse, unHoverCourse } from '../init.jsx';
+var classNames = require('classnames');
 
 export class SearchBar extends React.Component {
-	constructor(props) {
-		super(props);
-        this.state = {query: '', loading: false, courses: []};
-	}
-	fetchCourses() {
-		this.setState({loading: true});
-        fetch(getCourseSearchEndpoint(this.refs.input.value))
-        .then(response => response.json()) // TODO(rohan): error-check the response
-        .then(json => {
-            this.setState({loading: false, courses: json.results});
-        });
+    constructor(props){
+        super(props);
+        this.state = {sectionHovered: false};
+        this.sectionHoverOff = this.sectionHoverOff.bind(this);
+        this.sectionHoverOn = this.sectionHoverOn.bind(this);
+        this.render = this.render.bind(this);
     }
-    maybeFetchCourses() {
-    	if (this.refs.input.value.length < 2) {
-    		this.setState({loading: false, courses: []});
-    	}
-    	else {
-    		this.fetchCourses();
-    	}
+    sectionHoverOn() {
+        this.setState({sectionHovered: true});
     }
-
+    sectionHoverOff() {
+        this.setState({sectionHovered: false});
+    }
+    fetchSearchResults() {
+        let query = this.refs.input.value;
+        this.props.fetchCourses(query);
+    }
     render() {
-    	let results = this.state.courses.map(c => 
-        		<SearchResult course={c} addCourse={this.props.addCourse} key={c.code}/>
+        let res_class = classNames({'search-results' : true, 'trans50' : this.state.sectionHovered})
+    	let results = this.props.searchResults.map(c => 
+    		<SearchResult {...this.props} sectionHoverOn={this.sectionHoverOn} sectionHoverOff={this.sectionHoverOff} course={c}  key={c.code} inRoster={this.props.isCourseInRoster(c.id)} />
     	);
+        let result_container = results.length == 0 ? null : (<ul className={res_class} >
+                 {results}
+                </ul>)
     	return (
-    	<div>
-    		<input ref="input" onInput={this.maybeFetchCourses.bind(this)} />
-    		<ul className="search-results">
-    		 {results}
-    		</ul>
-    	</div>
+        	<div id="search-bar">
+        		<input ref="input" onInput={this.fetchSearchResults.bind(this)} />
+                {result_container}
+        	</div>
     	);
     }
 }
 
-class SearchResult extends React.Component {
-    toggleHoverSection(c, section, on=false) {
-        if (on) {
-            let courseWithSection = $.extend({}, c);
-            courseWithSection.slots = c.slots[section];
-            hoverCourse(courseWithSection);
-        }
-        else {
-            unHoverCourse();
-        }
-    }
-    addSection(course, section) {
-        course.section = section;
-        this.props.addCourse(course);
+export class SearchResult extends React.Component {
+    addCourse(course, sec, event) {
+        event.stopPropagation();
+        this.props.addCourse(course, sec);
     }
     render() {
         let course = this.props.course;
         let sections = Object.keys(course.slots).map(sec => 
-            <span key={course.id + sec} 
-                className="search-section" 
-                onMouseEnter={() => this.toggleHoverSection(course, sec, true)}
-                onMouseLeave={() => this.toggleHoverSection(course, sec, false)} 
-                onClick={() => this.addSection(course, sec)}
-            >{sec} </span>
+            <SearchResultSection key={course.id + sec} course={course} section={sec} 
+                locked={this.props.isSectionLocked(course.id, sec)}
+                hoverCourse={() => this.props.hoverCourse(course, sec)}
+                unhoverCourse={this.props.unhoverCourse} 
+                onClick={this.addCourse.bind(this, course, sec)}
+                sectionHoverOn={this.props.sectionHoverOn}
+                sectionHoverOff={this.props.sectionHoverOff}
+            />
         );
         return (
-        <li key={course.id} className="search-course">
+        <li key={course.id} className="search-course" onClick={() => this.props.fetchCourseInfo(course.id)} style={this.props.inRoster ? {backgroundColor:"#4DFDBD"} : {}}>
             {course.code} : {course.name + " "} 
-            <i onClick={() => this.props.addCourse(course)} className="fa fa-plus"></i>
+            <i onClick={this.addCourse.bind(this, course, '')} className="fa fa-plus"></i>
             <div>
                 {sections}
             </div>
         </li>);
     }
-
 }
+
+const SearchResultSection = ({ section, locked, hoverCourse, unhoverCourse, onClick, sectionHoverOn, sectionHoverOff }) => {
+    return (
+    <span
+        className="search-section" 
+        onClick={onClick}
+        onMouseEnter={hoverCourse}
+        onMouseLeave={unhoverCourse}
+        onMouseOver={sectionHoverOn}
+        onMouseOut={sectionHoverOff}
+    >
+        {section + " "}
+        { locked ? <i className="fa fa-lock"></i> : null}
+    </span>);
+};
 

@@ -1,37 +1,52 @@
-let initialState = {isFetching: false, items: [{courses: []}], current: 0};
+let initialState = {isFetching: false, items: [{courses: []}], active: 0};
 export const timetables = (state = initialState, action) => {
 	switch(action.type) {
 		case 'REQUEST_TIMETABLES':
 			return {
 				isFetching: true, 
-				items: state.items,
-				current: 0,
+				items: [...state.items],
+				active: 0,
 			};
 		case 'RECEIVE_TIMETABLES':
 			let timetables = action.timetables.length > 0 ? action.timetables : initialState.items;
 			return {
 				isFetching: false, 
 				items: timetables,
-				current: 0
+				active: 0
 			};
 		case 'HOVER_COURSE':
-			let current_courses = state.items[state.current].courses;
-			if (current_courses.some(course => course.fake)) { // only one "fake" (hovered course) at a time
+			let new_course = action.course;
+			let current_courses = state.items[state.active].courses;
+			// if there's already a hovered course on the timetable, or
+			// if the user is hovering over a section that they've already added 
+			// to their timetable, we don't want to show any new slots on the timetable
+			if (current_courses.some(course => course.fake || 
+			(course.code == new_course.code && course.enrolled_sections.indexOf(new_course.section) > -1))) { // only one "fake" (hovered course) at a time
 				return state;
 			}
-			let new_state = $.extend({}, state);
+			let new_items = [...state.items];
 			action.course.fake = true;
-			new_state.items[state.current].courses.push(action.course);
-			return new_state;
+			new_items[state.active].courses.push(action.course);
+			return {
+				isFetching: false,
+				items: new_items,
+				active: state.active
+			};
 		case 'UNHOVER_COURSE':
-			let new_s = $.extend({}, state);
-			let courses = new_s.items[state.current].courses;
+			let updated_items = [...state.items]
+			let courses = state.items[state.active].courses;
 			for (let i = 0; i < courses.length; i++) {
 				if (courses[i].fake) {
-					new_s.items[state.current].courses.splice(i, 1);
+					updated_items[state.active].courses.splice(i, 1);
 				}
 			}
-			return new_s;
+			return {
+				isFetching: false,
+				items: updated_items,
+				active: state.active
+			};
+		case 'CHANGE_ACTIVE_TIMETABLE':
+			return Object.assign({}, state, { active: action.new_active });
 		default:
 			return state;
 	}

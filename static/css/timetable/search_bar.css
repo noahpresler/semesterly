@@ -10,7 +10,38 @@
 }
 .search-section:hover {
 	background-color:#FFDBBE;
+	color: rgba(52, 73, 94, 1);
 }
 .search-results {
-/*	background-color:#ffe3e1;
-*/}
+/*	background-color:#ffe3e1;*/
+	max-width:600px;
+	position: absolute;
+	z-index: 100;
+	border: 1px solid #ccc;
+	background-color: white;
+	transition: background-color 0.6s ease;
+	transition: color 0.6s ease;
+}
+
+#search-bar {
+    margin-top: 10px;
+    left: calc((100% - 350px) / 2);
+    position: absolute;
+    width: 350px;
+}
+
+#search-bar input {
+	width: 100%;
+}
+
+.trans50 {
+	background-color: rgba(255, 255, 255, 0.4);
+	transition: background-color 0.6s ease;
+	transition: color 0.6s ease;
+}
+
+.trans50 li {
+	color: rgba(52, 73, 94, .4);
+	transition: background-color 0.6s ease;
+	transition: color 0.6s ease;
+}

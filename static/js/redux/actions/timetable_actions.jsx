@@ -1,6 +1,7 @@
 import fetch from 'isomorphic-fetch';
 import { getTimetablesEndpoint } from '../constants.jsx';
 import { randomString } from '../util.jsx';
+import { store } from '../init.jsx';
 
 export const SID = randomString(30);
 
@@ -23,39 +24,66 @@ export function receiveCourseSections(newCourseSections) {
     courseSections: newCourseSections,
   }
 }
-/* 
-Returns the body of the request used to get new timetables
-*/
-function getReqBody(dataState, newCourse){
-	let section = newCourse.section || '';
-
+export function receiveConflict(){
 	return {
-		school: dataState.school,
-		semester: dataState.semester,
-		courseSections: dataState.courseSections,
-		preferences: dataState.preferences,
-		updated_courses: [{'course_id': newCourse.id,
-                        'section_codes': [section]}],
-    index: 0,
-		sid: SID
+		type: "RECEIVE_CONFLICT"
 	}
 }
 
-export function fetchTimetables(state, newCourse) {
+/* 
+Returns the body of the request used to get new timetables
+*/
+function getReqBody(newCourse, lockingSection, removing, state){
+	let reqBody = {
+		school: state.school,
+		semester: state.semester,
+		courseSections: state.courseSections,
+		preferences: state.preferences,
+    	index: 0,
+		sid: SID
+	}
+	if (removing) {
+		let updatedCourseSections = Object.assign({}, state.courseSections);
+		delete updatedCourseSections[newCourse.id]; // remove it from courseSections
+		reqBody.courseSections = updatedCourseSections;
+	}
+	else { // adding a course
+		Object.assign(reqBody, {
+			updated_courses: [{
+				'course_id': newCourse.id,
+        		'section_codes': [lockingSection]
+        	}]
+        });
+	}
+	return reqBody;
+}
+
+export function fetchTimetables(newCourse) {
 	return (dispatch) => {
 		// mark that we are now requesting timetables (asynchronously)
 		dispatch(requestTimetables());
 		// send a request (via fetch) to the appropriate endpoint with
 		// relevant data as contained in @state (including courses, preferences, etc)
+		let state = store.getState();
+		let lockingSection = newCourse.section || '';
+		let removing = state.courseSections[newCourse.id] !== undefined && lockingSection === '';
+
 		fetch(getTimetablesEndpoint(), {
       		method: 'POST',
-      		body: JSON.stringify(getReqBody(state, newCourse))
+      		body: JSON.stringify(getReqBody(newCourse, lockingSection, removing, state))
     	})
 		.then(response => response.json()) // TODO(rohan): error-check the response
 		.then(json => {
-			// mark that timetables and a new courseSections have been received
-			dispatch(receiveTimetables(json.timetables));
-			dispatch(receiveCourseSections(json.new_c_to_s));
+			if (removing || json.timetables.length > 0) {
+				// mark that timetables and a new courseSections have been received
+				dispatch(receiveTimetables(json.timetables));
+				dispatch(receiveCourseSections(json.new_c_to_s));
+			}
+			else {
+				// course added by the user resulted in a conflict, so no timetables
+				// were received
+				dispatch(receiveConflict());
+			}
 		});
 	}
 }
