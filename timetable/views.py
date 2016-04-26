@@ -101,10 +101,6 @@ def update_locked_sections(locked_sections, cid, locked_section, offering_table)
   else: # add as locked section for that section_type
     locked_sections[cid][section_type] = locked_section
 
-# ******************************************************************************
-# ************************** COURSES -> TTs ************************************
-# ******************************************************************************
-
 class TimetableGenerator:
   def __init__(self, semester, school, locked_sections, preferences):
     self.school = school
