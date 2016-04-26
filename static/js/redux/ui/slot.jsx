@@ -1,7 +1,7 @@
 import React from 'react';
 import { renderCourseModal } from './course_modal.jsx';
-import { HALF_HOUR_HEIGHT } from '../constants.jsx';
 import { index as IntervalTree, matches01 as getIntersections } from 'static-interval-tree'
+import { HALF_HOUR_HEIGHT } from '../constants.jsx';
 
 let COLOUR_DATA = [
     {background: "#FD7473", highlight: "#E26A6A", border: "#963838", font: "#222"},
@@ -16,7 +16,6 @@ let COLOUR_DATA = [
     {background: "#C8F7C5", highlight: "#C4D44D", border: "#548A50", font: "#222"}
 ] // consider #CF000F, #e8fac3, #C8F7C5
 
-// todo(rohan): Don't allow people to hover over sections they're already in
 
 class Slot extends React.Component {
 	render() {
@@ -102,7 +101,6 @@ export class SlotManager extends React.Component {
     	let slots_by_day = {
             'M': [], 'T': [], 'W': [], 'R': [], 'F': []
         };
- 
         for (let course in this.props.timetable.courses) {
             let crs = this.props.timetable.courses[course];
             for (let slot_id in crs.slots) {
@@ -197,7 +195,6 @@ export class SlotManager extends React.Component {
         }
         return slots_by_day
     }
-
     getMinutes(time_string) {
         let l = time_string.split(':')
         return (+l[0]) * 60 + (+l[1])
