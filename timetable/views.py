@@ -90,7 +90,7 @@ def get_timetables(request):
                   params['school'],
                   locked_sections,
                   params['preferences']) 
-  result = courses_to_timetables(courses, params['semester'])
+  result = generator.courses_to_timetables(courses)
   save_analytics_data('timetables', {'sid': sid, 'school': SCHOOL, 
                   'courses': courses, 'count': len(result)})
   # updated roster object 
@@ -131,6 +131,7 @@ def update_locked_sections(locked_sections, cid, locked_section, offering_table)
 
 class TimetableGenerator:
   def __init__(self, semester, school, locked_sections, preferences):
+    self.school = school
     self.slots_per_hour = 60 / school_to_granularity[school]
     self.course_model = school_to_models[school][0]
     self.offering_model = school_to_models[school][1]
@@ -147,8 +148,7 @@ class TimetableGenerator:
     self.locked_sections = locked_sections
 
   def courses_to_timetables(self, courses):
-    timetables = get_best_timetables(courses)
-    reset_preferences()
+    timetables = self.get_best_timetables(courses)
     result = [self.convert_tt_to_dict(tt) for tt in timetables]
     return result
 
@@ -189,7 +189,7 @@ class TimetableGenerator:
     return with_preferences if with_preferences[0] != () \
                 else self.get_timetables_with_some_preferences(courses)
 
-  def get_timetables_with_all_preferences(courses, semester):
+  def get_timetables_with_all_preferences(self, courses):
     preference_timetable = [p for p in self.construct_preference_tt() if p]
     valid_timetables = []
 
@@ -335,80 +335,6 @@ class TimetableGenerator:
 
     return tt
 
-def courses_to_timetables(courses, semester):
-  timetables = get_best_timetables(courses, semester)
-  reset_preferences()
-  result = [convert_tt_to_dict(tt) for tt in timetables]
-  return result
-
-def reset_preferences():
-  global WITH_CONFLICTS, LOCKED_SECTIONS
-  WITH_CONFLICTS = False
-  LOCKED_SECTIONS = []
-
-def convert_tt_to_dict(timetable):
-  tt_obj = {}
-  grouped = itertools.groupby(timetable, get_course_dict)
-  tt_obj['courses'] = list(itertools.starmap(get_course_obj, grouped))
-  return tt_obj
-
-def get_course_dict(section):
-  SchoolCourse = school_to_models[SCHOOL][0] # model containing courses
-  model = SchoolCourse.objects.get(id=section[0])
-  return model_to_dict(model, fields=['code', 'name', 'id'])
-
-def get_course_obj(course_dict, sections):
-  SchoolCourse, SchoolCourseOffering = school_to_models[SCHOOL]  
-  sections = list(sections)
-  slot_objects = [create_offering_object(co) for _, _, course_offerings in sections
-                         for co in course_offerings]
-  course_dict['enrolled_sections'] = [section_code for _, section_code, _ in sections]
-  try:
-    section = course_dict['enrolled_sections'][0]
-    if (SCHOOL == "uoft"):
-      sections = filter(lambda x: x[0] == "L", course_dict['enrolled_sections'])
-      if len(sections) != 0:
-        section = sections[0]
-
-    c = SchoolCourse.objects.get(id=course_dict['id'])
-    co = SchoolCourseOffering.objects.filter(meeting_section=section, course=c)[0]
-    course_dict['textbooks'] = co.get_textbooks()
-    course_dict['evaluations'] = co.get_evaluations()
-  except:
-    import traceback
-    traceback.print_exc()
-  course_dict['slots'] = slot_objects
-  return course_dict
-
-def get_best_timetables(courses, semester):
-  with_preferences = get_timetables_with_all_preferences(courses, semester)
-  return with_preferences if with_preferences[0] != () \
-              else get_timetables_with_some_preferences(courses, semester)
-
-def get_timetables_with_all_preferences(courses, semester):
-  preference_timetable = [p for p in construct_preference_tt() if p]
-  valid_timetables = []
-
-  for pref_combination in itertools.product(*preference_timetable):
-    possible_offerings = courses_to_offerings(courses, semester, pref_combination)
-    new_timetables = create_timetable_from_offerings(possible_offerings)
-    if new_timetables: valid_timetables += new_timetables
-    if len(valid_timetables) >= MAX_RETURN:
-      break
-
-  if not valid_timetables: valid_timetables = [()]
-  return rank_by_spread(valid_timetables) if SORT_BY_SPREAD else valid_timetables
-
-def get_timetables_with_some_preferences(courses, semester):
-  """
-  Generate timetables from all offerings (no pre-filtering of course offerings), 
-  and return timetables ranked by # of preferences satisfied.
-  """
-  all_offerings = courses_to_offerings(courses, semester, [])
-  timetables = create_timetable_from_offerings(all_offerings)
-  s = sorted(timetables, key=functools.partial(get_rank_score, metric=get_preference_score))
-  return s
-
 def rank_by_spread(timetables):
   return sorted(timetables, 
         key=functools.partial(get_rank_score, metric=get_spread_score), 
@@ -466,7 +392,6 @@ def get_time_cost(day_bitarray):
                  day_bitarray[NO_CLASSES_AFTER:]) 
           if slot])
 
-# TODO
 def get_break_cost(day_to_usage):
   return 0
 
@@ -481,42 +406,6 @@ def create_offering_object(co_pair):
   slot_obj['num_conflicts'] = conflict_info[1]
   slot_obj['shift_index'] = conflict_info[2]
   return slot_obj
-
-# ******************************************************************************
-# ****************** 3. OFFERINGS -> TIMETABLES ********************************
-# ******************************************************************************
-
-def offerings_to_timetables(sections):
-  """
-  Generate timetables in a depth-first manner based on a list of sections.
-  sections: a list of sections, where each section is a list of offerings
-        corresponding to that section. Each offering consists of three
-        elements: the course id (the key in the course table), the meeting
-        section code (meeting section in the courseoffering table), and a
-        list of courseoffering objects which specify the times that the
-        offering in question meets. An example section:
-        [[27, 'L5101', [<CourseOffering>], [27, 'L1001', [<CourseOffering>]]]
-  with_conflicts: True if you want to consider conflicts, False otherwise.
-  """
-  num_offerings, num_permutations_remaining = get_xproduct_indicies(sections)
-  total_num_permutations = num_permutations_remaining.pop(0)
-  for p in xrange(total_num_permutations): # for each possible tt
-    current_tt = []
-    day_to_usage = {'M': [[] for i in range(14 * 60 / school_to_granularity[SCHOOL])], 
-            'T': [[] for i in range(14 * 60 / school_to_granularity[SCHOOL])], 
-            'W': [[] for i in range(14 * 60 / school_to_granularity[SCHOOL])], 
-            'R': [[] for i in range(14 * 60 / school_to_granularity[SCHOOL])], 
-            'F': [[] for i in range(14 * 60 / school_to_granularity[SCHOOL])]}
-    no_conflicts = True
-    for i in xrange(len(sections)): # add an offering for the next section
-      j = (p/num_permutations_remaining[i]) % num_offerings[i]
-      day_to_usage, conflict, new_meeting = add_meeting_and_check_conflict(day_to_usage, sections[i][j])
-      if conflict and not WITH_CONFLICTS: # there's a conflict and we don't want to consider it
-        no_conflicts = False
-        break
-      current_tt.append(new_meeting)
-    if no_conflicts and len(current_tt) != 0:
-      yield tuple(current_tt)
 
 def get_xproduct_indicies(lists):
   """
@@ -567,46 +456,6 @@ def get_hour(str_time):
   si = str_time.index(':') if ':' in str_time else len(str_time)
   return int(str_time[:si])
 
-# ******************************************************************************************************
-# ***************************************** 4. COURSE -> OFFERINGS *************************************
-# ******************************************************************************************************
-
-def courses_to_offerings(courses, sem, plist=[]):
-  """
-  Takes a list of courses as input, and returns a list r such as:
-  > [
-    [[2, u'L5101', [[<CourseOffering> []], [<CourseOffering> []]]],
-    [[2, u'P5101', [[<CourseOffering> []], [<CourseOffering> []]]],
-    [[2, u'T0101', [[<CourseOffering> []]]], [2, u'T0201', [[<CourseOffering> []]]]],
-    [[37, u'L1001', [[<CourseOffering> []], [<CourseOffering> []]]], [37, u'L2001', [[<CourseOffering> []]]]],
-    etc...
-    ]
-  where r is a list of lists representing the meeting sections across all courses.
-  Each list contains the course id, meeting section, and pairs where the first 
-  elements are courseoffering objects and the second elements are lists used to keep 
-  track of conflict information for that specific courseoffering.
-  """
-  SchoolCourse, SchoolCourseOffering = school_to_models[SCHOOL]   
-  sections = []
-  for c in courses:
-    offerings = SchoolCourseOffering.objects.filter(~Q(time_start__iexact='TBA'), \
-                        (Q(semester=sem) | Q(semester='Y')), \
-                        course=c)
-    section_to_offerings = get_section_to_offering_map(offerings)
-    section_type_to_sections = get_section_type_to_sections_map(section_to_offerings, \
-                                  plist, \
-                                  c.id)
-    for section_type in section_type_to_sections:
-      # if there are any locked sections for given type, course
-      if str(c.id) in LOCKED_SECTIONS and LOCKED_SECTIONS[str(c.id)].get(section_type, False):
-        locked_section = LOCKED_SECTIONS[str(c.id)][section_type]
-        pinned = [c.id, locked_section, section_to_offerings[locked_section]]
-        sections.append([pinned])
-      else:
-        sections.append(section_type_to_sections[section_type])
-  # sections.sort(key = lambda l: len(l), reverse=False)
-  return sections
-
 def get_section_type_to_sections_map(section_to_offerings, plist, cid):
   """Return map: section_type -> [cid, section, [offerings]] """
   section_type_to_sections = {offerings[0][0].section_type: [] for section, offerings in section_to_offerings.iteritems()}
@@ -643,60 +492,6 @@ def check_co_against_preferences(preference_list, co):
   and returns True if any of the preferences are violated and False otherwise.
   """
   return any(map(lambda f: f(co), preference_list))
-
-def construct_preference_tt():
-  """
-  Constructs a preference "timetable" based on the input preferences.
-  Assumes that the inputs are always defined. A preference "timetable"
-  is a list of lists consisting of predicates. Each sublist represents 
-  a specific preference which is satisfied if any one of the predicates in 
-  the sublist returns false. For example, in the following "tt":
-  [
-    [lambda co: co.time_start > 3 or co.time_end < 21], 
-    [lambda co: co.day == 'M', lambda co: co.day == 'F']
-  ]
-  The first sublist represents the preference of starting and ending between
-  10am and 6pm, and the second represents the preference of having a long 
-  weekend (i.e. either no classes monday or no classes friday). 
-  The reason this is similar to a timetable is because the set of all preferences are satisfied 
-  if there is some combination of preferences (one from each sublist) that
-  returns is False.
-  """
-  tt = []
-  # early/late class preference
-  if (NO_CLASSES_BEFORE > 0 or NO_CLASSES_AFTER < 14 * 60/school_to_granularity[SCHOOL]):
-    tt.append([lambda co: not (get_time_index_from_string(co[0].time_start) > NO_CLASSES_BEFORE \
-              and get_time_index_from_string(co[0].time_end) < NO_CLASSES_AFTER)])
-
-  # long weekend preference 
-  if LEAST_DAYS:
-    tt.append([(lambda co: co[0].day == 'T'), \
-          (lambda co: co[0].day == 'W'), \
-          (lambda co: co[0].day == 'R'), \
-          (lambda co: co[0].day == 'M'), \
-          (lambda co: co[0].day == 'F')])
-  
-  elif LONG_WEEKEND:
-    tt.append([(lambda co: co[0].day == 'M'), \
-          (lambda co: co[0].day == 'F')])
-
-  # break time preference
-  if BREAK_TIMES:
-    break_periods = [BREAK_TIMES[i:i+BREAK_LENGTH] for i in range(len(BREAK_TIMES) - BREAK_LENGTH + 1)]
-    break_possibilities = [(lambda co: not (get_time_index_from_string(co[0].time_start) > periods[-1] \
-                      and get_time_index_from_string(co[0].time_end) < periods[0])) \
-                for periods in break_periods]
-    tt.append(break_possibilities)
-
-  return tt
-
-def create_timetable_from_offerings(offerings):
-  timetables = []
-  for timetable in offerings_to_timetables(offerings):
-    if len(timetables) >= MAX_RETURN:
-      break
-    timetables.append(timetable)
-  return timetables
 
 def get_time_index_from_string(s):
   """Find the time index based on course offering string (e.g. 8:30 -> 2)"""
