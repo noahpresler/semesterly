@@ -5,6 +5,7 @@ import CourseModalContainer from './containers/course_modal_container.jsx';
 import AlertBox from './alert_box.jsx';
 import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
 import ConflictAlertContainer from './alerts/conflict_alert_container.jsx';
+import TimetableLoaderContainer from './containers/timetable_loader_container.jsx';
 
 class Semesterly extends React.Component {
 	constructor(props){
@@ -15,7 +16,7 @@ class Semesterly extends React.Component {
 	componentWillReceiveProps(nextProps) {
 		if (nextProps != this.props) {
 			if (nextProps.alert_conflict) {
-				this.showAlert(<ConflictAlertContainer />, 'info', 7000);
+				this.showAlert(<ConflictAlertContainer />, 'info', 10000);
 			}
 			else {
 				this.msg.removeAll();
@@ -62,7 +63,7 @@ class Semesterly extends React.Component {
 				<div id="top-bar">
 					<div id="semesterly-name">Semester.ly</div>
 					<img id="semesterly-logo" src="/static/img/logo2.0.png"/>
-					<AlertBox ref={a => this.msg = a} {...this.alertOptions} />
+			        <TimetableLoaderContainer />
 					<SearchBarContainer />
 					<CourseModalContainer />
 					<div id="navicon" onClick={this.toggleSideBar}>
@@ -71,6 +72,8 @@ class Semesterly extends React.Component {
 						<span></span>
 					</div>
 				</div>
+				<AlertBox ref={a => this.msg = a} {...this.alertOptions} />
+
 				<div id="all-cols">
 					<div id="main-bar">
 						<CalendarContainer />
