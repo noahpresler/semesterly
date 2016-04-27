@@ -12,5 +12,4 @@ const TimetableLoader = ({ loading }) => {
 		}
 	
 }
-console.log("lmaoswag", TimetableLoader);
 export default TimetableLoader;

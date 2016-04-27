@@ -10,7 +10,6 @@ export class SearchBar extends React.Component {
         this.state = {sectionHovered: false, focused: false};
         this.sectionHoverOff = this.sectionHoverOff.bind(this);
         this.sectionHoverOn = this.sectionHoverOn.bind(this);
-        this.render = this.render.bind(this);
     }
     sectionHoverOn() {
         this.setState({sectionHovered: true});
