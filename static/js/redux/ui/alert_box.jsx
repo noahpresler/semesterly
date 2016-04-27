@@ -119,7 +119,7 @@ class AlertBox extends React.Component {
         break;
       case 'top right':
         position = {
-          top: -15,
+          top: -16,
           right: -5,
           bottom: 'auto',
           left: 'auto'

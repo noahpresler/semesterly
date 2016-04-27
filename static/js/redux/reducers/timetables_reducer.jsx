@@ -2,11 +2,7 @@ let initialState = {isFetching: false, items: [{courses: []}], active: 0};
 export const timetables = (state = initialState, action) => {
 	switch(action.type) {
 		case 'REQUEST_TIMETABLES':
-			return {
-				isFetching: true, 
-				items: [...state.items],
-				active: 0,
-			};
+			return Object.assign({}, state, {isFetching: true});
 		case 'RECEIVE_TIMETABLES':
 			let timetables = action.timetables.length > 0 ? action.timetables : initialState.items;
 			return {
@@ -47,6 +43,8 @@ export const timetables = (state = initialState, action) => {
 			};
 		case 'CHANGE_ACTIVE_TIMETABLE':
 			return Object.assign({}, state, { active: action.new_active });
+		case 'ALERT_CONFLICT':
+			return Object.assign({}, state, {isFetching: false});
 		default:
 			return state;
 	}
