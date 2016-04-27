@@ -2,12 +2,12 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import fetch from 'isomorphic-fetch';
 import { getCourseSearchEndpoint } from '../constants.jsx';
-var classNames = require('classnames');
+import classNames from 'classnames';
 
 export class SearchBar extends React.Component {
     constructor(props){
         super(props);
-        this.state = {sectionHovered: false};
+        this.state = {sectionHovered: false, focused: false};
         this.sectionHoverOff = this.sectionHoverOff.bind(this);
         this.sectionHoverOn = this.sectionHoverOn.bind(this);
         this.render = this.render.bind(this);
@@ -30,9 +30,13 @@ export class SearchBar extends React.Component {
         let result_container = results.length == 0 ? null : (<ul className={res_class} >
                  {results}
                 </ul>)
+
     	return (
         	<div id="search-bar">
-        		<input ref="input" onInput={this.fetchSearchResults.bind(this)} />
+        		<input ref="input" onInput={this.fetchSearchResults.bind(this)} 
+                onFocus={() => this.setState({focused: true})}
+                onBlur={() => this.setState({focused: false})}/>
+
                 {result_container}
         	</div>
     	);
