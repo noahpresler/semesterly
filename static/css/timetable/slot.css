@@ -1,7 +1,7 @@
 #wrapper {
 	padding: 50px;
 }
-.slot,
+/*.slot,
 .master-slot {
 	float: left;
 	position: relative;
@@ -11,7 +11,7 @@
 	padding: 5px;
 	width: 25%;
 	border-radius: 5px;
-}
+}*/
 .slot-content h3,
 .master-slot-content h3 {
 	margin: 0;
@@ -35,18 +35,20 @@ h3.master-slot-credits {
 }
 .slot i.fa-times {
 	position: absolute;
-	top: 2px;
-	right: 4px;
+	top: 1px;
+	right: 3.5px;
 	cursor: pointer;
 	opacity: .75;
 	transition: transform .3s, opacity .3s;
+	z-index:9999;
 }
+
 .slot i.fa-times:hover,
 .master-slot-actions i:hover {
 	transform: scale(1.2);
 	opacity: 1;
-	color:yellow;
-	background-color:aliceblue;
+	z-index:9999;
+
 }
 .slot i.fa-lock {
 	position: absolute;

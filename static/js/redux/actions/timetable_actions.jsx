@@ -12,7 +12,6 @@ export function requestTimetables() {
 }
 
 export function receiveTimetables(timetables) {
-  // console.log("Timetables are:", timetables);
   return {
     type: "RECEIVE_TIMETABLES",
     timetables: timetables,
