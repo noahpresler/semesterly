@@ -1,5 +1,5 @@
 import React from 'react';
-import { SlotManager } from './slot.jsx';
+import SlotManagerContainer from './containers/slot_manager_container.jsx';
 import { Pagination } from './pagination.jsx';
 
 export class Calendar extends React.Component {
@@ -53,7 +53,6 @@ export class Calendar extends React.Component {
 	render() {
 		let timetables = this.props.items;
 		let active = this.props.active;
-		let timetable = timetables[active] || []; // First operand if it exists, second if not. #justjavascriptthings
 		return (
 
 	      <div id="calendar" className="fc fc-ltr fc-unthemed">
@@ -120,9 +119,7 @@ export class Calendar extends React.Component {
 	                          </table>
 	                        </div>
 	                        <div className="fc-content-skeleton">
-	                          <SlotManager timetable={timetable} 
-	                          	fetchCourseInfo={this.props.fetchCourseInfo}
-	                          	removeCourse={this.props.removeCourse}/>
+	                          <SlotManagerContainer />
 	                        </div>
 	                        <hr className="fc-divider fc-widget-header" style={{display: 'none'}} />
 	                      </div>
@@ -145,6 +142,3 @@ export class Calendar extends React.Component {
   	}
 
 }
-
-
-
