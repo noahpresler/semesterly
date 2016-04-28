@@ -120,7 +120,9 @@ export class Calendar extends React.Component {
 	                          </table>
 	                        </div>
 	                        <div className="fc-content-skeleton">
-	                          <SlotManager timetable={timetable} fetchCourseInfo={this.props.fetchCourseInfo}/>
+	                          <SlotManager timetable={timetable} 
+	                          	fetchCourseInfo={this.props.fetchCourseInfo}
+	                          	removeCourse={this.props.removeCourse}/>
 	                        </div>
 	                        <hr className="fc-divider fc-widget-header" style={{display: 'none'}} />
 	                      </div>

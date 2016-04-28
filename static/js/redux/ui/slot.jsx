@@ -18,13 +18,28 @@ let COLOUR_DATA = [
 
 
 class Slot extends React.Component {
+    constructor(props) {
+        super(props);
+        this.state = { hovered: false };
+        this.removeCourse = this.removeCourse.bind(this);
+    }
+    removeCourse(event) {
+        this.props.removeCourse();
+        event.stopPropagation();
+    }
 	render() {
+        let remove_button = this.state.hovered ? 
+            <i className="fa fa-times" onClick={this.removeCourse}></i> : null;
 		return (
 			<div className="fc-event-container">
                 <div className="fc-time-grid-event fc-event slot" 
                      style={this.getSlotStyles()} 
-                     onClick={() => this.props.fetchCourseInfo(this.props.course)}>
-    				<div className="slot-bar" style={{backgroundColor: COLOUR_DATA[this.props.colour_id].border}}/>
+                     onClick={() => this.props.fetchCourseInfo(this.props.course)}
+                     onMouseEnter={() => this.setState({ hovered: true })}
+                     onMouseLeave={() => this.setState({ hovered: false })}>
+    				<div className="slot-bar" 
+                         style={{ backgroundColor: COLOUR_DATA[this.props.colour_id].border }}/>
+                    {remove_button}
                     <div className="fc-content">
                         <div className="fc-time">
                             <span>{this.props.time_start} – {this.props.time_end}</span></div>
@@ -72,7 +87,8 @@ export class SlotManager extends React.Component {
         let all_slots = days.map((day) => {
             let day_slots = slots_by_day[day].map((slot) => {
                 let p = false;
-                return <Slot {...slot} key={slot.fake ? -slot.id : slot.id} pinned={p} fetchCourseInfo={this.props.fetchCourseInfo}/>
+                return <Slot {...slot} key={slot.fake ? -slot.id : slot.id} pinned={p} fetchCourseInfo={this.props.fetchCourseInfo}
+                    removeCourse={() => this.props.removeCourse(slot.course)}/>
             });
             return (
                     <td key={day}>

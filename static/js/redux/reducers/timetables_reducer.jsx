@@ -4,7 +4,7 @@ export const timetables = (state = initialState, action) => {
 		case 'REQUEST_TIMETABLES':
 			return Object.assign({}, state, {isFetching: true});
 		case 'RECEIVE_TIMETABLES':
-			let timetables = action.timetables.length > 0 ? action.timetables : initialState.items;
+			let timetables = action.timetables.length > 0 ? action.timetables : [{courses: []}];
 			return {
 				isFetching: false, 
 				items: timetables,
