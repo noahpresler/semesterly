@@ -82,7 +82,6 @@ class Slot extends React.Component {
 class SlotManager extends React.Component {
 
 	render() {
-
         let days = ["M", "T", "W", "R", "F"];
         let slots_by_day = this.getSlotsByDay();
         let all_slots = days.map((day) => {
