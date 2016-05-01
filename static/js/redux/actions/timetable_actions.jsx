@@ -49,6 +49,9 @@ locked. Otherwise, no section is locked.
 */
 export function addOrRemoveCourse(newCourseId, lockingSection = '') {
 	let state = store.getState();
+	if (state.timetables.isFetching) {
+		return;
+	}
 	let reqBody = getBaseReqBody(state);
 	// user must be removing this course if it's already in roster,
 	// and they're not trying to lock a new section).
