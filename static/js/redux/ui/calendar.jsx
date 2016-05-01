@@ -1,12 +1,11 @@
 import React from 'react';
+import PaginationContainer  from './containers/pagination_container.jsx';
 import SlotManagerContainer from './containers/slot_manager_container.jsx';
-import { Pagination } from './pagination.jsx';
 
-export class Calendar extends React.Component {
-
+class Calendar extends React.Component {
   	getCalendarRows() {
 	    let rows = [];
-	    for (let i = 8; i <= this.getMaxHour(); i++) { // one row for each hour, starting from 8am
+	    for (let i = 8; i <= this.props.endHour; i++) { // one row for each hour, starting from 8am
 	      let time = i + ":00";
 	      rows.push(
 	          ( <tr key={time}>
@@ -27,41 +26,12 @@ export class Calendar extends React.Component {
 
     	return rows;
   	}
-	getMaxHour() {
-    	// gets the end hour of the current timetable, based on the class that ends latest
-	    let max_end_hour = 17;
-	    if (!this.hasTimetables()) {
-	      return max_end_hour;
-	    }
-
-	    let courses = this.props.items[this.props.active].courses;
-	    for (let course_index in courses) {
-	      let course = courses[course_index];
-	      for (let slot_index in course.slots) {
-	        let slot = course.slots[slot_index];
-	        let end_hour = parseInt(slot.time_end.split(":")[0]);
-	        max_end_hour = Math.max(max_end_hour, end_hour);
-	      }
-	    }
-	    return max_end_hour;
-
-  	}
-  	hasTimetables() {
-  		return this.props.items[this.props.active].courses.length > 0;
-  	}
 
 	render() {
-		let timetables = this.props.items;
-		let active = this.props.active;
-		let timetable = timetables[active] || []; // First operand if it exists, second if not. #justjavascriptthings
 		return (
 
 	      <div id="calendar" className="fc fc-ltr fc-unthemed">
-	      <Pagination 
-	        	count={timetables.length} 
-	        	active={active} 
-	        	setActive={this.props.setActive}
-	        />
+	      	<PaginationContainer />
 	        <div className="fc-toolbar">
 	          <div className="fc-left" />
 	          <div className="fc-right" />
@@ -137,9 +107,11 @@ export class Calendar extends React.Component {
 
   	componentDidMount() {
 	    // let days = {1: 'mon', 2: 'tue', 3: 'wed', 4: 'thu', 5: 'fri'};
-	    // let d = new Date();
+	    // let d = new Date("October 13, 2014 11:13:00");
 	    // let selector = ".fc-" + days[d.getDay()];
 	    // $(selector).addClass("fc-today");
   	}
 
 }
+
+export default Calendar;
