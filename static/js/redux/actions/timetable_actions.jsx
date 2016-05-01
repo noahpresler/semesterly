@@ -36,7 +36,7 @@ function getBaseReqBody(state){
 	return {
 		school: state.school,
 		semester: state.semester,
-		courseSections: state.courseSections,
+		courseSections: state.courseSections.objects,
 		preferences: state.preferences,
 		sid: SID
 	}
@@ -56,10 +56,10 @@ export function addOrRemoveCourse(newCourseId, lockingSection = '') {
 	// user must be removing this course if it's already in roster,
 	// and they're not trying to lock a new section).
 	// otherwise, they're adding it
-	let removing = state.courseSections[newCourseId] !== undefined && lockingSection === '';
+	let removing = state.courseSections.objects[newCourseId] !== undefined && lockingSection === '';
 	if (removing) {
-		let updatedCourseSections = Object.assign({}, state.courseSections);
-		delete updatedCourseSections[newCourseId]; // remove it from courseSections
+		let updatedCourseSections = Object.assign({}, state.courseSections.objects);
+		delete updatedCourseSections[newCourseId]; // remove it from courseSections.objects
 		reqBody.courseSections = updatedCourseSections;
 	}
 	else { // adding a course

@@ -8,7 +8,7 @@ const mapStateToProps = (state) => {
 		isFetching: state.courseInfo.isFetching,
 		data: state.courseInfo.data,
 		id: state.courseInfo.id,
-		inRoster: state.courseSections[state.courseInfo.id] !== undefined
+		inRoster: state.courseSections.objects[state.courseInfo.id] !== undefined
 	}
 }
 

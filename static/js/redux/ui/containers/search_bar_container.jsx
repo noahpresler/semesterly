@@ -7,13 +7,13 @@ import { fetchCourseInfo } from '../../actions/modal_actions.jsx'
 const mapStateToProps = (state) => {
 	return {
     	searchResults: state.searchResults.items,
-    	isCourseInRoster: (course_id) => state.courseSections[course_id] !== undefined,
+    	isCourseInRoster: (course_id) => state.courseSections.objects[course_id] !== undefined,
     	isSectionLocked: (course_id, section) => {
-    		if (state.courseSections[course_id] === undefined) {
+    		if (state.courseSections.objects[course_id] === undefined) {
     			return false;
     		}
-    		return Object.keys(state.courseSections[course_id]).some( 
-    			(type) => state.courseSections[course_id][type] == section
+    		return Object.keys(state.courseSections.objects[course_id]).some( 
+    			(type) => state.courseSections.objects[course_id][type] == section
 			)
     	}
 	}
