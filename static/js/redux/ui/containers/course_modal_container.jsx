@@ -1,6 +1,6 @@
 import { connect } from 'react-redux';
 import { CourseModal } from '../course_modal.jsx';
-import { fetchTimetables } from '../../actions/timetable_actions.jsx';
+import { addOrRemoveCourse } from '../../actions/timetable_actions.jsx';
 import { setCourseId } from '../../actions/modal_actions.jsx'
 
 const mapStateToProps = (state) => {
@@ -14,7 +14,7 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
 	return {
-		addCourse: (course) => dispatch(fetchTimetables(course)),
+		addCourse: addOrRemoveCourse,
 		hideModal: () => dispatch(setCourseId(null))
 	}
 }

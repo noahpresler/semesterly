@@ -32,44 +32,53 @@ export function alertConflict(){
 /* 
 Returns the body of the request used to get new timetables
 */
-function getReqBody(newCourse, lockingSection, removing, state){
-	let reqBody = {
+function getBaseReqBody(state){
+	return {
 		school: state.school,
 		semester: state.semester,
 		courseSections: state.courseSections,
 		preferences: state.preferences,
-    	index: 0,
 		sid: SID
 	}
+}
+
+/*
+Attempts to add the course represented by newCourseId
+to the user's roster. If a section is provided, that section is 
+locked. Otherwise, no section is locked.
+*/
+export function addOrRemoveCourse(newCourseId, lockingSection = '') {
+	let state = store.getState();
+	let reqBody = getBaseReqBody(state);
+	// user must be removing this course if it's already in roster,
+	// and they're not trying to lock a new section).
+	// otherwise, they're adding it
+	let removing = state.courseSections[newCourseId] !== undefined && lockingSection === '';
 	if (removing) {
 		let updatedCourseSections = Object.assign({}, state.courseSections);
-		delete updatedCourseSections[newCourse.id]; // remove it from courseSections
+		delete updatedCourseSections[newCourseId]; // remove it from courseSections
 		reqBody.courseSections = updatedCourseSections;
 	}
 	else { // adding a course
 		Object.assign(reqBody, {
 			updated_courses: [{
-				'course_id': newCourse.id,
+				'course_id': newCourseId,
         		'section_codes': [lockingSection]
         	}]
         });
 	}
-	return reqBody;
+	store.dispatch(fetchTimetables(reqBody, removing));
 }
 
-export function fetchTimetables(newCourse) {
+function fetchTimetables(requestBody, removing) {
 	return (dispatch) => {
-		// mark that we are now requesting timetables (asynchronously)
+		// mark that we are now asynchronously requesting timetables
 		dispatch(requestTimetables());
-
-		let state = store.getState();
-		let lockingSection = newCourse.section || '';
-		let removing = state.courseSections[newCourse.id] !== undefined && lockingSection === '';
 		// send a request (via fetch) to the appropriate endpoint with
 		// relevant data as contained in @state (including courses, preferences, etc)
 		fetch(getTimetablesEndpoint(), {
       		method: 'POST',
-      		body: JSON.stringify(getReqBody(newCourse, lockingSection, removing, state))
+      		body: JSON.stringify(requestBody)
     	})
 		.then(response => response.json()) // TODO(rohan): error-check the response
 		.then(json => {
