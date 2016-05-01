@@ -1,6 +1,6 @@
 import { connect } from 'react-redux';
 import { fetchSearchResults } from '../../actions/search_actions.jsx';
-import { fetchTimetables } from '../../actions/timetable_actions.jsx';
+import { addOrRemoveCourse } from '../../actions/timetable_actions.jsx';
 import { SearchBar } from '../search_bar.jsx';
 import { fetchCourseInfo } from '../../actions/modal_actions.jsx'
 
@@ -22,10 +22,7 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch) => {
 	return {
 	  	fetchCourses: (query) => dispatch(fetchSearchResults(query)),
-	  	addCourse: (course, section = '') => {
-	  		course.section = section;
-	  		dispatch(fetchTimetables(course));
-	  	},
+	  	addCourse: addOrRemoveCourse,
 	  	hoverCourse: (course, section) => {
 	  		course.section = section;
 			dispatch({

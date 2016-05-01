@@ -1,21 +1,31 @@
 import { connect } from 'react-redux';
 import { fetchCourseInfo } from '../../actions/modal_actions.jsx'
-import { fetchTimetables } from '../../actions/timetable_actions.jsx'
+import { addOrRemoveCourse } from '../../actions/timetable_actions.jsx'
 import SlotManager from '../slot.jsx';
 
 const mapStateToProps = (state) => {
+	let activeTimetable = state.timetables.items[state.timetables.active];
 	return {
-		timetable: state.timetables.items[state.timetables.active] || [],
+		timetable: activeTimetable || [],
+		isLocked: (courseId, section) => {
+			// check the courseSections state variable, which tells us
+			// precisely which courses have which sections locked, if any
+	        let typeToLocked = state.courseSections[courseId]
+			for (let sectionType in typeToLocked) {
+                if (section == typeToLocked[sectionType]) {
+                    return true;
+                }
+	        }
+	        // couldn't find a match, so the course isn't locked for this section
+			return false;
+		},
 	}
 }
 
 const mapDispatchToProps = (dispatch) => {
 	return {
-		fetchCourseInfo: (course) => dispatch(fetchCourseInfo(course)),
-		removeCourse: (course_id) => {
-	  		let course = { id: course_id }
-	  		dispatch(fetchTimetables(course));
-	  	},
+		fetchCourseInfo: (courseId) => dispatch(fetchCourseInfo(courseId)),
+		addOrRemoveCourse: addOrRemoveCourse
 	}
 }
 
