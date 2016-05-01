@@ -18,3 +18,16 @@ export const getCourseSearchEndpoint = (query) => {
 export const getTimetablesEndpoint = () => {
 	return "get_timetables/";
 };
+
+export const getPrimaryDisplay = (school) => {
+	switch(school) {
+		case "uoft":
+			return "code";
+		case "jhu":
+			return "name";
+		case "umd":
+			return "name"
+		default:
+			return "code"
+	}
+}
