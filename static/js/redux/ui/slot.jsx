@@ -4,17 +4,21 @@ import { index as IntervalTree, matches01 as getIntersections } from 'static-int
 import { HALF_HOUR_HEIGHT } from '../constants.jsx';
 
 let COLOUR_DATA = [
-    {background: "#FD7473", highlight: "#E26A6A", border: "#963838", font: "#222"},
-    {background: "#5AC8FB", highlight: "#28A4EA", border: "#1B6B90", font: "#222"},
-    {background: "#4CD4B0", highlight: "#3DBB9A", border: "#1E755E", font: "#222"},
-    {background: "#8870FF", highlight: "#7059E6", border: "#382694", font: "#222"},
-    {background: "#FFBF8D", highlight: "#F7954A", border: "#AF5E20", font: "#222"},
-    {background: "#D4DBC8", highlight: "#B5BFA3", border: "#6C7A89", font: "#222"},
-    {background: "#F182B4", highlight: "#DE699D", border: "#6C7A89", font: "#222"},
-    {background: "#7499A2", highlight: "#668B94", border: "#6C7A89", font: "#222"},
-    {background: "#E7F76D", highlight: "#C4D44D", border: "#6C7A89", font: "#222"},
-    {background: "#C8F7C5", highlight: "#C4D44D", border: "#548A50", font: "#222"}
+    { background: "#FD7473", highlight: "#E26A6A", border: "#963838", font: "#222" },
+    { background: "#5AC8FB", highlight: "#28A4EA", border: "#1B6B90", font: "#222" },
+    { background: "#4CD4B0", highlight: "#3DBB9A", border: "#1E755E", font: "#222" },
+    { background: "#8870FF", highlight: "#7059E6", border: "#382694", font: "#222" },
+    { background: "#FFBF8D", highlight: "#F7954A", border: "#AF5E20", font: "#222" },
+    { background: "#D4DBC8", highlight: "#B5BFA3", border: "#6C7A89", font: "#222" },
+    { background: "#F182B4", highlight: "#DE699D", border: "#6C7A89", font: "#222" },
+    { background: "#7499A2", highlight: "#668B94", border: "#6C7A89", font: "#222" },
+    { background: "#E7F76D", highlight: "#C4D44D", border: "#6C7A89", font: "#222" },
+    { background: "#C8F7C5", highlight: "#C4D44D", border: "#548A50", font: "#222" }
 ] // consider #CF000F, #e8fac3, #C8F7C5
+
+let COURSE_TO_COLOUR_ID = {
+
+}
 
 class Slot extends React.Component {
     constructor(props) {
@@ -51,7 +55,7 @@ class Slot extends React.Component {
                      onMouseEnter={ () => this.setState({ hovered: true }) }
                      onMouseLeave={ () => this.setState({ hovered: false }) }>
     				<div className="slot-bar" 
-                         style={ { backgroundColor: COLOUR_DATA[this.props.colour_id].border } }/>
+                         style={ { backgroundColor: COLOUR_DATA[this.props.colourId].border } }/>
                     { removeButton }
                     { lockButton }
                     <div className="fc-content">
@@ -87,8 +91,8 @@ class Slot extends React.Component {
         }
 		return {
             top: top, bottom: -bottom, zIndex: 1, left: '0%', right: '0%', 
-            backgroundColor: COLOUR_DATA[this.props.colour_id].background,
-            color: COLOUR_DATA[this.props.colour_id].font,
+            backgroundColor: COLOUR_DATA[this.props.colourId].background,
+            color: COLOUR_DATA[this.props.colourId].font,
             width: slot_width_percentage + "%",
             left: push_left + "%",
             zIndex: 100 * this.props.depth_level
@@ -139,22 +143,33 @@ class SlotManager extends React.Component {
     	let slots_by_day = {
             'M': [], 'T': [], 'W': [], 'R': [], 'F': []
         };
-        for (let course in this.props.timetable.courses) {
-            let crs = this.props.timetable.courses[course];
-            for (let slot_id in crs.slots) {
-                let slot = Object.assign(crs.slots[slot_id], {
-                            'colour_id': course, 
-                            'code': crs.code, 
-                            'name': crs.name,
-                            'fake': crs.fake,
-                        });
+        let courses = this.props.timetable.courses;
+
+        // update COURSE_TO_COLOUR_ID by removing invalid entries,
+        // that is, courses that are no longer in the user's roster
+        for (let courseId in COURSE_TO_COLOUR_ID) {
+            if (!courses.some(c => c.id == courseId)) {
+                delete COURSE_TO_COLOUR_ID[courseId];
             }
         }
-        for (let course in this.props.timetable.courses) {
-            let crs = this.props.timetable.courses[course];
-            for (let slot_id in crs.slots) {
-                let slot = Object.assign(crs.slots[slot_id], {
-                            'colour_id': course, 'code': crs.code, 'name': crs.name});
+
+        for (let i in courses) {
+            let crs = courses[i];
+            for (let slotId in crs.slots) {
+                let slotObj = crs.slots[slotId];
+                // first assume this course already has a colour (was added previously)
+                let colourId = COURSE_TO_COLOUR_ID[slotObj.course];
+                if (colourId === undefined) {
+                    let usedColourIds = Object.values(COURSE_TO_COLOUR_ID);
+                    // if it doesn't already have one, assign it the smallest available one
+                    colourId = _.range(COLOUR_DATA.length).find((i) => 
+                            !usedColourIds.some((x) => x === i)
+                        );
+                    COURSE_TO_COLOUR_ID[slotObj.course] = colourId;
+
+                }
+                let slot = Object.assign(slotObj, {
+                            'colourId': colourId, 'code': crs.code, 'name': crs.name});
                 slots_by_day[slot.day].push(slot);
             }
         }
@@ -207,9 +222,9 @@ class SlotManager extends React.Component {
                     }
                     direct_conflicts.sort((a, b) => (intervals[b.id].end - intervals[b.id].start) - (intervals[a.id].end - intervals[a.id].start))
                     for (let j = 0; j < direct_conflicts.length; j++) {
-                        let slot_id = direct_conflicts[j].id
-                        day_slots[slot_id]['num_conflicts'] = direct_conflicts.length
-                        day_slots[slot_id]['shift_index'] = j
+                        let slotId = direct_conflicts[j].id
+                        day_slots[slotId]['num_conflicts'] = direct_conflicts.length
+                        day_slots[slotId]['shift_index'] = j
                     }
                 }
             }
