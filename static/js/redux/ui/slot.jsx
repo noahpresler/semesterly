@@ -59,7 +59,9 @@ class Slot extends React.Component {
                         <div className="fc-time">
                             <span>{ this.props.time_start } – { this.props.time_end }</span>
                         </div>
-                        <div className="fc-time">{ this.props.name }</div>
+                        <div className="fc-time">
+                            { this.props[this.props.primaryDisplayAttribute] + " " + this.props.meeting_section}
+                        </div>
                         <div className="fc-time">{ this.props.location } </div>
                     </div>
                 </div>
@@ -110,6 +112,7 @@ class SlotManager extends React.Component {
                     locked={ locked } 
                     lockOrUnlockSection={ () => this.props.addOrRemoveCourse(courseId, slot.meeting_section) }
                     removeCourse={ () => this.props.addOrRemoveCourse(courseId) }
+                    primaryDisplayAttribute={this.props.primaryDisplayAttribute}
                     />
             });
             return (
