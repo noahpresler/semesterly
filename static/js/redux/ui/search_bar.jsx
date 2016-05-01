@@ -45,7 +45,7 @@ export class SearchBar extends React.Component {
 export class SearchResult extends React.Component {
     addCourse(course, sec, event) {
         event.stopPropagation();
-        this.props.addCourse(course, sec);
+        this.props.addCourse(course.id, sec);
     }
     render() {
         let course = this.props.course;

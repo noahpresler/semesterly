@@ -21,30 +21,46 @@ class Slot extends React.Component {
     constructor(props) {
         super(props);
         this.state = { hovered: false };
-        this.removeCourse = this.removeCourse.bind(this);
+        this.stopPropagation = this.stopPropagation.bind(this);
     }
-    removeCourse(event) {
-        this.props.removeCourse();
+    stopPropagation(callback, event) {
         event.stopPropagation();
+        callback();
     }
 	render() {
-        let remove_button = this.state.hovered ? 
-            <i className="fa fa-times" onClick={this.removeCourse}></i> : null;
+        let removeButton = this.state.hovered ? 
+            <i className="fa fa-times" 
+               onClick={ (event) => this.stopPropagation(this.props.removeCourse, event) }></i> : null;
+
+        let lockButton = null;
+        if (this.props.locked) {
+            lockButton = <i className="fa fa-lock" 
+                            onClick={ (event) => this.stopPropagation(this.props.lockOrUnlockSection, event) }></i>;
+        }
+        else { // not a locked section
+            if (this.state.hovered) { // show unlock icon on hover
+                lockButton = <i className="fa fa-unlock" 
+                                onClick={ (event) => this.stopPropagation(this.props.lockOrUnlockSection, event) }></i>;
+            }
+        }
+
 		return (
 			<div className="fc-event-container">
                 <div className="fc-time-grid-event fc-event slot" 
-                     style={this.getSlotStyles()} 
-                     onClick={() => this.props.fetchCourseInfo(this.props.course)}
-                     onMouseEnter={() => this.setState({ hovered: true })}
-                     onMouseLeave={() => this.setState({ hovered: false })}>
+                     style={ this.getSlotStyles() } 
+                     onClick={ this.props.fetchCourseInfo }
+                     onMouseEnter={ () => this.setState({ hovered: true }) }
+                     onMouseLeave={ () => this.setState({ hovered: false }) }>
     				<div className="slot-bar" 
-                         style={{ backgroundColor: COLOUR_DATA[this.props.colour_id].border }}/>
-                    {remove_button}
+                         style={ { backgroundColor: COLOUR_DATA[this.props.colour_id].border } }/>
+                    { removeButton }
+                    { lockButton }
                     <div className="fc-content">
                         <div className="fc-time">
-                            <span>{this.props.time_start} – {this.props.time_end}</span></div>
-                        <div className="fc-time">{this.props.name}</div>
-                        <div className="fc-time">{this.props.location} </div>
+                            <span>{ this.props.time_start } – { this.props.time_end }</span>
+                        </div>
+                        <div className="fc-time">{ this.props.name }</div>
+                        <div className="fc-time">{ this.props.location } </div>
                     </div>
                 </div>
             </div>
@@ -65,7 +81,7 @@ class Slot extends React.Component {
         let slot_width_percentage = total_slot_widths / this.props.num_conflicts;
         // the amount of left margin of this particular slot, in percentage
         let push_left = (this.props.shift_index * slot_width_percentage) + 5 * this.props.depth_level;
-        if(push_left == 50) {
+        if (push_left == 50) {
             push_left += .5;
         }
 		return {
@@ -86,9 +102,15 @@ class SlotManager extends React.Component {
         let slots_by_day = this.getSlotsByDay();
         let all_slots = days.map((day) => {
             let day_slots = slots_by_day[day].map((slot) => {
-                let p = false;
-                return <Slot {...slot} key={slot.fake ? -slot.id : slot.id} pinned={p} fetchCourseInfo={this.props.fetchCourseInfo}
-                    removeCourse={() => this.props.removeCourse(slot.course)}/>
+                let courseId = slot.course;
+                let locked = this.props.isLocked(courseId, slot.meeting_section);
+                return <Slot {...slot} 
+                    fetchCourseInfo={ () => this.props.fetchCourseInfo(courseId) }
+                    key={ slot.fake ? -slot.id : slot.id } 
+                    locked={ locked } 
+                    lockOrUnlockSection={ () => this.props.addOrRemoveCourse(courseId, slot.meeting_section) }
+                    removeCourse={ () => this.props.addOrRemoveCourse(courseId) }
+                    />
             });
             return (
                     <td key={day}>
@@ -110,9 +132,7 @@ class SlotManager extends React.Component {
 
         );
     }
-    addCourseWithSection(courseWithSection) {
-        this.props.timetables.courses.push(courseWithSection);
-    }
+
     getSlotsByDay() {
     	let slots_by_day = {
             'M': [], 'T': [], 'W': [], 'R': [], 'F': []
