@@ -6,7 +6,7 @@ const Bubble = ({index, active, setActive}) =>
       	{index + 1}
      </li>;
 
-export class Pagination extends React.Component{
+export class Pagination extends React.Component {
   constructor(props) {
     super(props);
     this.state = {numBubbles: this.getNumBubbles()};
