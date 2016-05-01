@@ -1,5 +1,5 @@
 import update from 'react/lib/update';
-let initialState = {isFetching: false, items: [{courses: []}], active: 0};
+let initialState = { isFetching: false, items: [{courses: []}], active: 0 };
 
 export const timetables = (state = initialState, action) => {
 	switch(action.type) {
@@ -58,7 +58,7 @@ export const timetables = (state = initialState, action) => {
 			return Object.assign({}, state, { active: action.newActive });
 
 		case 'ALERT_CONFLICT':
-			return Object.assign({}, state, {isFetching: false});
+			return Object.assign({}, state, { isFetching: false });
 
 		default:
 			return state;

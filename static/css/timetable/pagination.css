@@ -1,5 +1,6 @@
 .sem-pagination {
 	margin-top:7px;
+	margin-bottom:-7px;
     -webkit-touch-callout: none;
     -webkit-user-select: none;
     -khtml-user-select: none;

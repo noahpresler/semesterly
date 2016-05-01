@@ -11,7 +11,7 @@ const mapStateToProps = (state) => {
 		isLocked: (courseId, section) => {
 			// check the courseSections state variable, which tells us
 			// precisely which courses have which sections locked, if any
-	        let typeToLocked = state.courseSections[courseId]
+	        let typeToLocked = state.courseSections.objects[courseId]
 			for (let sectionType in typeToLocked) {
                 if (section == typeToLocked[sectionType]) {
                     return true;

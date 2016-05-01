@@ -16,7 +16,6 @@ let COLOUR_DATA = [
     {background: "#C8F7C5", highlight: "#C4D44D", border: "#548A50", font: "#222"}
 ] // consider #CF000F, #e8fac3, #C8F7C5
 
-
 class Slot extends React.Component {
     constructor(props) {
         super(props);
