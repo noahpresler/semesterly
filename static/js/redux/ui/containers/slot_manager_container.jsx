@@ -1,6 +1,7 @@
 import { connect } from 'react-redux';
 import { fetchCourseInfo } from '../../actions/modal_actions.jsx'
 import { addOrRemoveCourse } from '../../actions/timetable_actions.jsx'
+import { getPrimaryDisplay } from '../../constants.jsx';
 import SlotManager from '../slot.jsx';
 
 const mapStateToProps = (state) => {
@@ -19,6 +20,7 @@ const mapStateToProps = (state) => {
 	        // couldn't find a match, so the course isn't locked for this section
 			return false;
 		},
+		primaryDisplayAttribute: getPrimaryDisplay(state.school)
 	}
 }
 
