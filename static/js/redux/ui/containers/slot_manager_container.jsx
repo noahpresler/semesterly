@@ -13,7 +13,7 @@ const mapDispatchToProps = (dispatch) => {
 	return {
 		fetchCourseInfo: (course) => dispatch(fetchCourseInfo(course)),
 		removeCourse: (course_id) => {
-	  		let course = {id: course_id}
+	  		let course = { id: course_id }
 	  		dispatch(fetchTimetables(course));
 	  	},
 	}

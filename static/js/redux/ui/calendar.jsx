@@ -1,5 +1,5 @@
 import React from 'react';
-import SlotManager from './slot.jsx';
+import SlotManagerContainer from './containers/slot_manager_container.jsx';
 import { Pagination } from './pagination.jsx';
 
 export class Calendar extends React.Component {
@@ -120,9 +120,7 @@ export class Calendar extends React.Component {
 	                          </table>
 	                        </div>
 	                        <div className="fc-content-skeleton">
-	                          <SlotManager timetable={timetable} 		                         
- 	                          	fetchCourseInfo={this.props.fetchCourseInfo}		
-	                          	removeCourse={this.props.removeCourse}/>
+	                          <SlotManagerContainer />
 	                        </div>
 	                        <hr className="fc-divider fc-widget-header" style={{display: 'none'}} />
 	                      </div>
