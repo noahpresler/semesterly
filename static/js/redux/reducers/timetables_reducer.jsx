@@ -36,7 +36,9 @@ export const timetables = (state = initialState, action) => {
 			});
 			
 		case 'UNHOVER_COURSE':
-			let fakeCourseIndex = state.items[state.active].courses.length - 1;
+			// find fake course index; delete it
+			let fakeCourseIndex = state.items[state.active].courses.findIndex(c => c.fake);
+			if (fakeCourseIndex < 0) { return state; }
 			return update(state, {
 				items:	{
 					[state.active]: {
