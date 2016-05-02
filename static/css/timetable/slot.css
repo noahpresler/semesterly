@@ -29,6 +29,9 @@ h3.master-slot-credits {
 	margin: 0;
 	line-height: 15px;
 }
+.slot i {
+	color:#fff;
+}
 .slot-friends i {
 	margin-left: 5px;
 	line-height: 15px;
