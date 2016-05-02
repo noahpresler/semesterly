@@ -25,10 +25,25 @@ class Slot extends React.Component {
         super(props);
         this.state = { hovered: false };
         this.stopPropagation = this.stopPropagation.bind(this);
+        this.onSlotHover = this.onSlotHover.bind(this);
+        this.onSlotUnhover = this.onSlotUnhover.bind(this);
     }
     stopPropagation(callback, event) {
         event.stopPropagation();
         callback();
+    }
+    onSlotHover() {
+        this.setState({ hovered : true});
+        this.updateColours(COLOUR_DATA[this.props.colourId].highlight);
+    }
+    onSlotUnhover() {
+        this.setState({ hovered : false});
+        this.updateColours(COLOUR_DATA[this.props.colourId].background);
+    }
+    updateColours(colour) {
+        // update sibling slot colours (i.e. the slots for the same course)
+        $(".slot-" + this.props.course)
+          .css('background-color', colour)
     }
 	render() {
         let removeButton = this.state.hovered ? 
@@ -49,11 +64,11 @@ class Slot extends React.Component {
 
 		return (
 			<div className="fc-event-container">
-                <div className="fc-time-grid-event fc-event slot" 
+                <div className={"fc-time-grid-event fc-event slot slot-" + this.props.course}
                      style={ this.getSlotStyles() } 
                      onClick={ this.props.fetchCourseInfo }
-                     onMouseEnter={ () => this.setState({ hovered: true }) }
-                     onMouseLeave={ () => this.setState({ hovered: false }) }>
+                     onMouseEnter={ this.onSlotHover }
+                     onMouseLeave={ this.onSlotUnhover }>
     				<div className="slot-bar" 
                          style={ { backgroundColor: COLOUR_DATA[this.props.colourId].border } }/>
                     { removeButton }
@@ -175,6 +190,7 @@ class SlotManager extends React.Component {
         }
         return this.getConflictStyles(slots_by_day)
     }
+    
     getConflictStyles(slots_by_day) {
         for (let day in slots_by_day) {
             let day_slots = slots_by_day[day]
