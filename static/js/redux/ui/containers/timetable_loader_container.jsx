@@ -3,7 +3,7 @@ import TimetableLoader from '../timetable_loader.jsx';
 
 const mapStateToProps = (state) => {
 	return {
-    	loading: state.searchResults.isFetching || state.timetables.isFetching
+    	loading: state.timetables.isFetching
 	}
 }
 const TimetableLoaderContainer = connect(
