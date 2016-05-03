@@ -615,7 +615,6 @@ def my_model_to_dict(course, SchoolCourseOffering, sem):
     d['slots'][section] = [model_to_dict(offering) for offering in res.filter(meeting_section=section)]
   return d
 
-Course.objects.filter(courseoffering__semester__contains="F")[:20]
 @csrf_exempt
 def course_search(request, school, sem, query):
   if school not in VALID_SCHOOLS:
