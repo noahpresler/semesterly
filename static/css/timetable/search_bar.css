@@ -42,3 +42,7 @@
 	transition: background-color 0.2s ease;
 	transition: color 0.2s ease;
 }
+
+.results-loading-gif {
+ 	background: url('/static/img/search-results-loader.gif') no-repeat right center;
+}

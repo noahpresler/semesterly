@@ -7,6 +7,7 @@ import { fetchCourseInfo } from '../../actions/modal_actions.jsx'
 const mapStateToProps = (state) => {
 	return {
     	searchResults: state.searchResults.items,
+    	isFetching: state.searchResults.isFetching,
     	isCourseInRoster: (course_id) => state.courseSections.objects[course_id] !== undefined,
     	isSectionLocked: (course_id, section) => {
     		if (state.courseSections.objects[course_id] === undefined) {

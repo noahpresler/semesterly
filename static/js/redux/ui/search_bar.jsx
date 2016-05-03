@@ -37,9 +37,11 @@ export class SearchBar extends React.Component {
 
     	return (
         	<div id="search-bar">
-        		<input ref="input" onInput={this.fetchSearchResults.bind(this)} 
-                onFocus={() => this.setState({focused: true})}
-                onBlur={() => this.setState({focused: false})}/>
+        		<input ref="input" 
+                       className={this.props.isFetching ? 'results-loading-gif' : ''} 
+                       onInput={this.fetchSearchResults.bind(this)} 
+                       onFocus={() => this.setState({focused: true})}
+                       onBlur={() => this.setState({focused: false})}/>
 
                 {result_container}
         	</div>
