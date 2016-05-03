@@ -16,7 +16,7 @@ export function receiveCourses(json) {
 
 export function fetchSearchResults(query) {
 	return (dispatch) => {
-		if (query.length == 0) {
+		if (query.length <= 1) {
 			dispatch(receiveCourses({results: []}));
 			return;
 		}
