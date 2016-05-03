@@ -10,6 +10,7 @@ export class SearchBar extends React.Component {
         this.state = {sectionHovered: false, focused: false};
         this.sectionHoverOff = this.sectionHoverOff.bind(this);
         this.sectionHoverOn = this.sectionHoverOn.bind(this);
+        this.changeTimer = false;
     }
     sectionHoverOn() {
         this.setState({sectionHovered: true});
@@ -18,8 +19,12 @@ export class SearchBar extends React.Component {
         this.setState({sectionHovered: false});
     }
     fetchSearchResults() {
+        if (this.changeTimer) clearTimeout(this.changeTimer);
         let query = this.refs.input.value;
-        this.props.fetchCourses(query);
+        this.changeTimer = setTimeout(function() {
+            this.props.fetchCourses(query);
+            this.changeTimer = false;
+        }.bind(this), 100);
     }
     render() {
         let res_class = classNames({'search-results' : true, 'trans50' : this.state.sectionHovered})
