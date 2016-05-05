@@ -7,7 +7,7 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch) => {
 	return {
     	dismissSelf: () => dispatch({type: "DISMISS_ALERT_CONFLICT"}),
-    	turnConflictsOn: () => dispatch({type: "SET_CONFLICTS", value: true}),
+    	turnConflictsOn: () => dispatch({ type: "SET_PREFERENCE", key: 'try_with_conflicts', value: true }),
 	}
 }
 
