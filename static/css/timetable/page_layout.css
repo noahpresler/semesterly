@@ -36,7 +36,7 @@
     background-color: #F8F6F7;
 	min-height: 50px;
 	border-bottom: 1px solid #ccc;
-
+  position: relative;
 }
 
 #main-bar.full-cal {
