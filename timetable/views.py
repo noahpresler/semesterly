@@ -615,6 +615,26 @@ def my_model_to_dict(course, SchoolCourseOffering, sem):
     d['slots'][section] = [model_to_dict(offering) for offering in res.filter(meeting_section=section)]
   return d
 
+### Organizing result sections by section type ###
+# def my_model_to_dict(course, SchoolCourseOffering, sem):
+#   fields=['code','name', 'id', 'description']
+#   d = model_to_dict(course, fields)
+#   d['sections'] = {}
+
+#   res = SchoolCourseOffering.objects.filter(~Q(time_start__iexact='TBA'),
+#                       (Q(semester=sem) | Q(semester='Y')),
+#                       course_id=course.id)
+#   section_list = res.values_list('meeting_section')
+#   section_type_list = res.values_list('section_type').distinct()
+#   for section_type, in section_type_list:
+#     d['sections'][section_type] = {}
+#   for co in res:
+#     section_code = co.meeting_section
+#     if section_code not in d['sections'][co.section_type]:
+#       d['sections'][co.section_type][section_code] = []
+#     d['sections'][co.section_type][section_code].append(model_to_dict(co))
+#   return d
+
 @csrf_exempt
 def course_search(request, school, sem, query):
   if school not in VALID_SCHOOLS:
