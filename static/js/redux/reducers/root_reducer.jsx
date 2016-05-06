@@ -7,6 +7,7 @@ import { searchResults } from './search_results_reducer.jsx';
 import { preferences } from './preferences_reducer.jsx';
 import { courseInfo } from './course_info_reducer.jsx';
 import { alerts } from './alerts_reducer.jsx';
+import { ui } from './ui.jsx'
 
 export const rootReducer = combineReducers({
   school,
