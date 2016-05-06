@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom';
 import fetch from 'isomorphic-fetch';
 import { getCourseSearchEndpoint } from '../constants.jsx';
 import classNames from 'classnames';
-import SearchSideBarContainer from '../containers/search_side_bar_container'
+import SearchSideBarContainer from './containers/search_side_bar_container.jsx'
 
 export class SearchBar extends React.Component {
     constructor(props){
@@ -43,7 +43,8 @@ export class SearchBar extends React.Component {
             <ul className={res_class} >
                 {results}
                 <SearchSideBarContainer />
-            )
+            </ul>
+        );
 
     	return (
         	<div id="search-bar">
