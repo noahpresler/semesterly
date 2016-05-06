@@ -98,14 +98,18 @@
     font-weight: 400;
     display: inline-block;
     float: left;
-    font-size: 2.5vw;
-    line-height: 46px;
-    height: 46px;
-    margin-left: 35px;
+    font-size: 32px;
+    line-height: 50px;
+    height: 50px;
+    margin-left: 10px;
 }
 
 #semesterly-logo {
-    display: none;
+    display: inline-block;
+    height: 32px;
+    margin-top: 9px;
+    margin-left: 35px;
+    float: left;
 }
 
 @media screen and (max-width: 1000px) { 
@@ -116,17 +120,8 @@
     font-size:15px;
   }
   #semesterly-name {
-    display:none !important;
+    display: none;
   }
-
-  #semesterly-logo {
-    display: inline-block;
-    height: 40px;
-    margin-top: 5px;
-    margin-left: 25px;
-    float: left;
-  }
-
   #navicon {
     right: 9px;
   }

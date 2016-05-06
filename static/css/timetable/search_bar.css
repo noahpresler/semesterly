@@ -1,14 +1,9 @@
 #search-bar {
-    /*margin-top: 10px;
-    left: calc((100% - 350px) / 2);
-    position: absolute;
-    width: 350px*/;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
+    top: 10px;
+    left: 260px;
     position: absolute;
     max-width: 600px;
-    width: 50%;
+    width: 60%;
     z-index: 100;
 }
 #search-bar input {
@@ -17,26 +12,34 @@
 	font-size: 16px;
 	line-height: 16px;
 	border: 1px solid #ccc;
-    border-bottom: none;
+}
+
+@media (max-width: 1000px) { 
+	#search-bar {
+		left: 50%;
+		transform: translateX(-50%);
+	}
 }
 
 .search-results {
 /*	background-color:#ffe3e1;*/
-	max-width:600px;
-	width: 100%;
+	width: 150%;
 	position: absolute;
+	top: 29px;
 	z-index: 100;
 	border: 1px solid #ccc;
 	background-color: white;
 	padding: 0;
+	margin: 0;
 }
 
 /* Each Course that is listed in the Search Results */
 .search-course {
+	max-width: 600px;
 	position: relative;
 	cursor: pointer;
 	list-style-type: none;
-	padding: 10px 60px 10px 5px;
+	padding: 10px 110px 10px 5px;
 	transition: background-color .2s, color .2s;
 }
 .search-course:hover {
@@ -47,10 +50,11 @@
 	margin: 0;
 	padding-left: 5px;
 }
-.search-course .search-course-add {
+.search-course .search-course-add,
+.search-course .search-course-save {
 	position: absolute;
 	top: 50%;
-	right: 5px;
+	right: 10px;
 	line-height: 40px;
 	width: 40px;
 	height: 40px;
@@ -59,6 +63,9 @@
 	text-align: center;
 	transform: translateY(-50%);
 	transition: background-color .2s;
+}
+.search-course .search-course-save {
+	right: 60px;
 }
 .search-course .fa-plus {
 	position: absolute;
@@ -85,6 +92,9 @@
 }
 .search-course .search-course-add:hover {
 	background-color: #A6DEFF;
+}
+.search-course .search-course-save:hover {
+	background-color: #7BE68D;
 }
 /*.search-course .search-course-add:hover .fa-plus {
 	opacity: 0;
@@ -158,4 +168,15 @@
 
 .results-loading-gif {
  	background: url('/static/img/search-results-loader.gif') no-repeat right center;
+}
+
+/* Side Bar in Search Results */
+#search-bar-side {
+	height: 100%;
+	min-height: 240px;
+	width: 300px;
+	position: absolute;
+	right: 0;
+	top: 0;
+	background-color: #fff;
 }

@@ -31,9 +31,17 @@ export class SearchBar extends React.Component {
     	let results = this.props.searchResults.map(c => 
     		<SearchResult {...this.props} sectionHoverOn={this.sectionHoverOn} sectionHoverOff={this.sectionHoverOff} course={c}  key={c.code} inRoster={this.props.isCourseInRoster(c.id)} />
     	);
-        let result_container = results.length == 0 ? null : (<ul className={res_class} >
-                 {results}
-                </ul>)
+        let result_container = results.length == 0 ? null : (
+            <ul className={res_class} >
+                {results}
+                <div id="search-bar-side">
+                    <div id="search-bar-side-sections">
+                        <h5 className="sb-side-sections">T0201</h5>
+                        <h5 className="sb-side-sections">L2001</h5>
+                        <h5 className="sb-side-sections">T0301</h5>
+                    </div>
+                </div>
+            </ul>)
 
     	return (
         	<div id="search-bar">
@@ -69,10 +77,12 @@ export class SearchResult extends React.Component {
         return (
         <li key={course.id} className="search-course" onClick={() => this.props.fetchCourseInfo(course.id)} style={this.props.inRoster ? {backgroundColor:"#4DFDBD"} : {}}>
             <h3>{course.code} : {course.name + " "} </h3>
+            <span className="search-course-save">
+                <i className="fa fa-bookmark"></i>
+            </span>
             <span className="search-course-add" onClick={this.addCourse.bind(this, course, '')}>
                 <i className="fa fa-plus"></i>
             </span>
-            <h6>Try All Sections</h6>
             <div className="search-sections">
                 {sections}
             </div>
