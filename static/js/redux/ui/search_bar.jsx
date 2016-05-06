@@ -28,16 +28,16 @@ export class SearchBar extends React.Component {
     }
     render() {
         let res_class = classNames({'search-results' : true, 'trans50' : this.state.sectionHovered})
-    	let results = this.props.searchResults.map(c, i => 
-    		<SearchResult {...this.props}
+    	let results = this.props.searchResults.map( (c, i) => {
+            return (<SearchResult {...this.props}
                 sectionHoverOn={this.sectionHoverOn}
                 sectionHoverOff={this.sectionHoverOff}
                 course={c} 
                 key={c.code}
                 inRoster={this.props.isCourseInRoster(c.id)}
                 position={i}
-                />
-    	);
+                />)
+    	});
         let result_container = results.length == 0 ? null : (
             <ul className={res_class} >
                 {results}
@@ -139,8 +139,8 @@ export class SearchResult extends React.Component {
         <li key={course.id}
             className="search-course"
             onClick={() => this.props.fetchCourseInfo(course.id)} style={this.props.inRoster ? {backgroundColor:"#4DFDBD"} : {}}
-            onMouseOver={() => this.props.hoverSearchResult(this.props.position)}>
-
+            onMouseOver={() => this.props.hoverSearchResult(this.props.position)}
+            >
             <h3>{course.code} : {course.name + " "} </h3>
             <span className="search-course-save">
                 <i className="fa fa-bookmark"></i>

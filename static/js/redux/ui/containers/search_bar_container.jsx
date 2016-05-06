@@ -37,7 +37,13 @@ const mapDispatchToProps = (dispatch) => {
 				type: "UNHOVER_COURSE",
 			});
 		},
-		fetchCourseInfo: (id) => dispatch(fetchCourseInfo(id))
+		fetchCourseInfo: (id) => dispatch(fetchCourseInfo(id)), 
+		hoverSearchResult: (pos) => {
+			dispatch({
+				type: "HOVER_SEARCH_RESULT",
+				position: pos
+			});
+		}
 	}
 }
 
