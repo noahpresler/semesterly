@@ -14,6 +14,7 @@
 	border: 1px solid #ccc;
 }
 
+
 @media (max-width: 1000px) { 
 	#search-bar {
 		left: 50%;
