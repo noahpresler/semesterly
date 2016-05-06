@@ -3,6 +3,7 @@ import ReactDOM from 'react-dom';
 import fetch from 'isomorphic-fetch';
 import { getCourseSearchEndpoint } from '../constants.jsx';
 import classNames from 'classnames';
+import SearchSideBarContainer from '../containers/search_side_bar_container'
 
 export class SearchBar extends React.Component {
     constructor(props){
@@ -41,68 +42,8 @@ export class SearchBar extends React.Component {
         let result_container = results.length == 0 ? null : (
             <ul className={res_class} >
                 {results}
-                <div id="search-bar-side">
-                    <div id="search-bar-side-sections">
-                        <h4>Lecture Sections</h4>
-                        <h5 className="sb-side-sections">L0201</h5>
-                        <h5 className="sb-side-sections">L0202</h5>
-                        <h5 className="sb-side-sections">L0203</h5>
-                        <h5 className="sb-side-sections">L0204</h5>
-                        <h5 className="sb-side-sections">L0205</h5>
-                        <h5 className="sb-side-sections">L0206</h5>
-                        <h5 className="sb-side-sections">L0204</h5>
-                        <h5 className="sb-side-sections">L0205</h5>
-                        <h5 className="sb-side-sections">L0206</h5>
-                        <h5 className="sb-side-sections">L0203</h5>
-                        <h5 className="sb-side-sections">L0204</h5>
-                        <h5 className="sb-side-sections">L0205</h5>
-                        <h5 className="sb-side-sections">L0206</h5>
-                        <h5 className="sb-side-sections">L0204</h5>
-                        <h5 className="sb-side-sections">L0205</h5>
-                        <h5 className="sb-side-sections">L0206</h5>
-                        <h5 className="sb-side-sections">L0203</h5>
-                        <h5 className="sb-side-sections">L0204</h5>
-                        <h5 className="sb-side-sections">L0205</h5>
-                        <h5 className="sb-side-sections">L0206</h5>
-                        <h5 className="sb-side-sections">L0204</h5>
-                        <h5 className="sb-side-sections">L0205</h5>
-                        <h5 className="sb-side-sections">L0206</h5>
-                        <h5 className="sb-side-sections">L0203</h5>
-                        <h5 className="sb-side-sections">L0204</h5>
-                        <h5 className="sb-side-sections">L0205</h5>
-                        <h5 className="sb-side-sections">L0206</h5>
-                        <h5 className="sb-side-sections">L0204</h5>
-                        <h5 className="sb-side-sections">L0205</h5>
-                        <h5 className="sb-side-sections">L0206</h5>
-                        <h5 className="sb-side-sections">L0203</h5>
-                        <h5 className="sb-side-sections">L0204</h5>
-                        <h5 className="sb-side-sections">L0205</h5>
-                        <h5 className="sb-side-sections">L0206</h5>
-                        <h5 className="sb-side-sections">L0204</h5>
-                        <h5 className="sb-side-sections">L0205</h5>
-                        <h5 className="sb-side-sections">L0206</h5>
-                        <h5 className="sb-side-sections">L0203</h5>
-                        <h5 className="sb-side-sections">L0204</h5>
-                        <h5 className="sb-side-sections">L0205</h5>
-                        <h5 className="sb-side-sections">L0206</h5>
-                        <h5 className="sb-side-sections">L0204</h5>
-                        <h5 className="sb-side-sections">L0205</h5>
-                        <h5 className="sb-side-sections">L0206</h5>
-                        <h4>Tutorial Sections</h4>
-                        <h5 className="sb-side-sections">T0201</h5>
-                        <h5 className="sb-side-sections">T0202</h5>
-                        <h5 className="sb-side-sections">T0203</h5>
-                        <h5 className="sb-side-sections">T0204</h5>
-                        <h5 className="sb-side-sections">T0205</h5>
-                        <h5 className="sb-side-sections">T0206</h5>
-                        <h4>Practicals</h4>
-                        <h5 className="sb-side-sections">P0203</h5>
-                        <h5 className="sb-side-sections">P0204</h5>
-                        <h5 className="sb-side-sections">P0205</h5>
-                        <h5 className="sb-side-sections">P0206</h5>
-                    </div>
-                </div>
-            </ul>)
+                <SearchSideBarContainer />
+            )
 
     	return (
         	<div id="search-bar">
