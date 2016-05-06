@@ -17,5 +17,6 @@ export const rootReducer = combineReducers({
   courseSections,
   preferences,
   courseInfo,
-  alerts
+  alerts,
+  ui
 });

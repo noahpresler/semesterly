@@ -1,12 +1,12 @@
 import { connect } from 'react-redux';
-import SearchSideBar from '../SearchSideBar.jsx';
+import { SearchSideBar } from '../search_side_bar.jsx';
 
 const mapStateToProps = (state) => {
 	let hovered = state.searchResults.items[state.ui.searchHover];
 	let slots = hovered.slots;
 	return {
-    	hovered: hovered,
-      slots: slots
+		hovered: hovered,
+		slots: slots
 	}
 }
 
