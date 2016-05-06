@@ -1,10 +1,10 @@
 #side-bar {
   position: absolute;
-  z-index: 100;
+  z-index: 99;
 	left: calc(100% - 300px);
 	width: 300px;
-	height: 100%;
-	float: right;
+	top: 50px;
+  bottom: 0;
 	transition: transform .3s;
     border: 0 solid #ccc;
     border-left: 1px solid #ccc;
