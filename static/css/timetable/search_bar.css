@@ -13,6 +13,11 @@
 }
 #search-bar input {
 	width: 100%;
+	padding: 5px 10px;
+	font-size: 16px;
+	line-height: 16px;
+	border: 1px solid #ccc;
+    border-bottom: none;
 }
 
 .search-results {
@@ -31,51 +36,124 @@
 	position: relative;
 	cursor: pointer;
 	list-style-type: none;
-	padding: 12px 30px 12px 10px;
-	transition: background-color .3s;
+	padding: 10px 60px 10px 5px;
+	transition: background-color .2s, color .2s;
 }
 .search-course:hover {
-	background-color: #eee;
+	background-color: #f3f3f3;
 }
 .search-course h3 {
 	font-size: 14px;
 	margin: 0;
 	padding-left: 5px;
 }
-.search-course .fa-plus {
+.search-course .search-course-add {
 	position: absolute;
 	top: 50%;
 	right: 5px;
-	line-height: 20px;
-	width: 20px;
+	line-height: 40px;
+	width: 40px;
+	height: 40px;
+	border-radius: 100%;
+	background-color: #d7d7d7;
 	text-align: center;
 	transform: translateY(-50%);
+	transition: background-color .2s;
 }
-.search-course .fa-plus:hover {
-	background-color:#3ee3f3;
+.search-course .fa-plus {
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	opacity: 1;
+	visibility: visible;
+	transform: translate(-50%, -50%);
+	transition: transform .3s, opacity .3s, visibility .3s;
 }
+.search-course .search-course-add h6 {
+	margin: 0;
+    font-size: 12px;
+    color: #00A1FF;
+    text-align: center;
+    width: 56px;
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    opacity: 0;
+    visibility: hidden;
+    transform: translate(-50%, -75%);
+    transition: transform .3s, opacity .3s, visibility .3s;
+}
+.search-course .search-course-add:hover {
+	background-color: #A6DEFF;
+}
+/*.search-course .search-course-add:hover .fa-plus {
+	opacity: 0;
+	visibility: hidden;
+	transform: translate(-50%, -25%);
+}
+.search-course .search-course-add:hover h6 {
+	opacity: 1;
+	visibility: visible;
+	transform: translate(-50%, -50%);
+}*/
 
 /* Section Listings per Course */
+.search-course h6 {
+	font-size: 12px;
+	position: absolute;
+	margin: 0;
+	padding: 5px;
+	color: #777;
+	opacity: 0;
+	visibility: hidden;
+	transition: opacity .3s, visibility .3s;
+}
+.search-sections {
+	opacity: 1;
+	visibility: visible;
+	transition: opacity .3s, visibility .3s;
+}
 .search-section {
 	cursor: pointer;
 	font-size: 12px;
 	padding: 2px 5px;
 	vertical-align: middle;
+	color: #777;
 }
 .search-section:hover {
 	background-color: #FFDBBE;
 	color: rgba(52, 73, 94, 1);
 }
-
-.trans50 {
-	background-color: rgba(255, 255, 255, 0.25);
-	border: 1px solid rgba(255,255,255,0);
+.search-course .search-course-add:hover + h6 {
+	visibility: visible;
+	opacity: 1;
+}
+.search-course .search-course-add:hover + h6 + .search-sections {
+	opacity: 0;
+	visibility: hidden;
 }
 
-.trans50 li {
-	color: rgba(52, 73, 94, .25);
-	transition: background-color 0.2s ease;
-	transition: color 0.2s ease;
+.trans50 {
+	/* This makes it semi transparent */
+	/*background-color: rgba(255, 255, 255, 0.25);*/
+	/*This makes is fully transparent*/
+	background-color: rgba(255, 255, 255, 0);
+	border: 1px solid rgba(255,255,255,0);
+}
+.trans50 li,
+.trans50 .search-section {
+	/* This makes it semi transparent */
+	/*color: rgba(52, 73, 94, .25);*/
+	/*This makes is fully transparent*/
+	color: rgba(52, 73, 94, 0);
+}
+.trans50 .search-section:hover {
+	background-color: #FFDBBE;
+	color: rgba(52, 73, 94, 1);
+}
+.trans50 .search-course,
+.trans50 .search-course-add {
+	background-color: transparent;
 }
 
 .results-loading-gif {
