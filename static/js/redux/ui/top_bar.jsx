@@ -39,8 +39,8 @@ class TopBar extends React.Component {
 	render() {
 		return (
 		<div id="top-bar">
-			<div id="semesterly-name">Semester.ly</div>
 			<img id="semesterly-logo" src="/static/img/logo2.0.png"/>
+			<div id="semesterly-name">Semester.ly</div>
 		    <TimetableLoaderContainer />
 			<SearchBarContainer />
 			<CourseModalContainer />
