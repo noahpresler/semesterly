@@ -18,6 +18,9 @@ export const getCourseSearchEndpoint = (query) => {
 export const getTimetablesEndpoint = () => {
 	return "get_timetables/";
 };
+export const getUserInfoEndpoint = (course_id) => {
+	return "user/info";
+};
 
 export const getPrimaryDisplay = (school) => {
 	switch(school) {
