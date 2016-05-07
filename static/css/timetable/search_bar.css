@@ -245,6 +245,7 @@
 @media (max-width: 766px) {
 	#search-bar {
 		width: auto;
+		left: 57px;
 		right: 122px;
 	}
 	.search-results {
@@ -264,7 +265,7 @@
 	}
 	#search-bar-wrapper {
 		width: auto;
-	    left: 82px;
+	    left: 57px;
 	    right: 122px;
 	    position: absolute;
 	}
