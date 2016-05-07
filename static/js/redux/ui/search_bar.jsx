@@ -64,8 +64,8 @@ export class SearchResult extends React.Component {
         let course = this.props.course;
         return (
         <li key={course.id}
-            className="search-course"
-            onClick={() => this.props.fetchCourseInfo(course.id)} style={this.props.inRoster ? {backgroundColor:"#4DFDBD"} : {}}
+            className='search-course'
+            onClick={() => this.props.fetchCourseInfo(course.id)}
             onMouseOver={() => this.props.hoverSearchResult(this.props.position)}
             >
             <h3>{course.name} </h3>
@@ -73,7 +73,7 @@ export class SearchResult extends React.Component {
                 <i className="fa fa-bookmark"></i>
             </span>
             <span className="search-course-add" onClick={this.addCourse.bind(this, course, '')}>
-                <i className="fa fa-plus"></i>
+                <i className={classNames({'fa fa-plus' : !this.props.inRoster, 'fa fa-check' : this.props.inRoster})}></i>
             </span>
             <h4>{course.code}</h4>
         </li>);
