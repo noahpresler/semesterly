@@ -5,6 +5,24 @@
     max-width: 600px;
     width: 49%;
 }
+#search-bar-wrapper {
+	width: 100%;
+}
+#search-bar-semester {
+	float: left;
+	font-size: 14px;
+	font-weight: 400;
+	color: #777;
+	line-height: 18px;
+	padding: 5px 10px;
+	border: 1px solid #ccc;
+	border-right: none;
+	background-color: #fff;
+}
+#search-bar-input-wrapper {
+	width: auto;
+	overflow: hidden;
+}
 #search-bar input {
 	width: 100%;
 	padding: 5px 10px;
@@ -237,7 +255,7 @@
 		left: 0;
 		width: 100%;
 	}
-	#search-bar input {
+	#search-bar-wrapper {
 		width: auto;
 	    left: 82px;
 	    right: 82px;
