@@ -15,7 +15,7 @@ const mapStateToProps = (state) => {
 			return Object.keys(state.courseSections.objects[course_id]).some( 
 				(type) => state.courseSections.objects[course_id][type] == section
 			)
-		}
+		},
 	}
 }
 
