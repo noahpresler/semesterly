@@ -4,7 +4,7 @@ export const userInfo = (state = {isLoggedIn: false, userImg: null, userFirstNam
 			return {
 				isFetching: false,
 				userImg: action.userImg,
-				isLogedIn: action.isLogedIn,
+				isLogegdIn: action.isLoggedIn,
 				userFirstName: action.userFirstName,
 			};
 		case ("REQUEST_USER_INFO"):
