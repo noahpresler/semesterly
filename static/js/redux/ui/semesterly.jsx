@@ -4,6 +4,7 @@ import AlertBox from './alert_box.jsx';
 import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
 import ConflictAlertContainer from './alerts/conflict_alert_container.jsx';
 import TopBar from './top_bar.jsx';
+import SideBar from './side_bar.jsx';
 
 class Semesterly extends React.Component {
 	componentWillReceiveProps(nextProps) {
@@ -32,9 +33,7 @@ class Semesterly extends React.Component {
 					<div id="main-bar">
 						<CalendarContainer />
 					</div>
-					<div id="side-bar">
-						I am the sidebar
-					</div>
+					<SideBar/>
 				</div>
 			</div>);
 	}
