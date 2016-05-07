@@ -39,7 +39,7 @@ export class SearchBar extends React.Component {
     	return (
         	<div id="search-bar">
                 <div id="search-bar-wrapper">
-                    <div id="search-bar-semester">Fall 2016</div>
+                    <div id="search-bar-semester">{ this.props.semester }</div>
                     <div id="search-bar-input-wrapper">
                         <input ref="input" 
                                className={this.props.isFetching ? 'results-loading-gif' : ''} 
