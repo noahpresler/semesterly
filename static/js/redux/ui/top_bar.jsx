@@ -3,6 +3,7 @@ import classNames from 'classnames';
 import SearchBarContainer from './containers/search_bar_container.jsx';
 import CourseModalContainer from './containers/course_modal_container.jsx';
 import TimetableLoaderContainer from './containers/timetable_loader_container.jsx';
+import SocialProfileContainer from './containers/social_profile_container.jsx';
 
 export const expandSideBar = () => {
 	$('#main-bar, #side-bar').removeClass('full-cal').addClass('less-cal');
@@ -38,9 +39,6 @@ class TopBar extends React.Component {
 		}
 	}
 	render() {
-		let divStyle = {
-			backgroundImage: 'url(' + ')',
-		};
 		return (
 		<div id="top-bar">
 			<img id="semesterly-logo" src="/static/img/logo2.0.png"/>
@@ -48,18 +46,7 @@ class TopBar extends React.Component {
 		    <TimetableLoaderContainer />
 			<SearchBarContainer />
 			<CourseModalContainer />
-			<div id="social">
-				<div id="social-pro-pic" style={divStyle}></div>
-				<h2>Rohan</h2>
-				<div id="social-dropdown">
-					<div className="tip-border"></div>
-					<div className="tip"></div>
-					<li>
-						<i className="fa fa-sign-out"></i>
-						<span>Sign out</span>
-					</li>
-				</div>
-			</div>
+			<SocialProfileContainer />
 			<div id="navicon" onClick={this.toggleSideBar}>
 				<span></span>
 				<span></span>
