@@ -51,3 +51,8 @@ body {
 	outline:none;
 }
 
+.fc-toolbar {
+    border: 1px solid #ccc;
+    border-bottom: 0px;
+    margin-top: 20px;
+}
