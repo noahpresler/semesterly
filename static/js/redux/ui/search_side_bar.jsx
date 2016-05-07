@@ -7,7 +7,7 @@ export class SearchSideBar extends React.Component {
                 locked={this.props.isSectionLocked(this.props.hovered.id, sec)}
                 hoverCourse={() => this.props.hoverCourse(this.props.hovered, sec)}
                 unhoverCourse={this.props.unhoverCourse} 
-                onClick={this.props.addCourse.bind(this.props.hovered.id, sec)}
+                onClick={this.props.addCourse.bind(this,this.props.hovered.id, sec)}
                 sectionHoverOn={this.props.sectionHoverOn}
                 sectionHoverOff={this.props.sectionHoverOff}
             />
