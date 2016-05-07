@@ -29,7 +29,7 @@ export class SearchBar extends React.Component {
                 position={i}
             />)
     	});
-        let result_container = results.length == 0 ? null : (
+        let result_container = !this.state.focused || results.length == 0 ? null : (
             <ul className={res_class} >
                 {results}
                 <SearchSideBarContainer />
@@ -44,8 +44,8 @@ export class SearchBar extends React.Component {
                         <input ref="input" 
                                className={this.props.isFetching ? 'results-loading-gif' : ''} 
                                onInput={this.fetchSearchResults.bind(this)} 
-                               onFocus={() => this.setState({focused: true})}
-                               onBlur={() => this.setState({focused: false})}
+                               onFocus={() => this.setState({ focused: true })}
+                               onBlur={() => this.setState({ focused: false })}
                         />
                     </div>
                 </div>
@@ -56,8 +56,13 @@ export class SearchBar extends React.Component {
 }
 
 export class SearchResult extends React.Component {
-    addCourse(course, sec, event) {
-        event.stopPropagation();
+    constructor(props) {
+        super(props);
+        this.addCourseWrapper = this.addCourseWrapper.bind(this);
+    }
+    addCourseWrapper(course, sec, event) {
+        event.stopPropagation(); // stops modal from popping up
+        event.preventDefault(); // stops search bar from blurring (losing focus)
         this.props.addCourse(course.id, sec);
     }
     render() {
@@ -65,14 +70,14 @@ export class SearchResult extends React.Component {
         return (
         <li key={course.id}
             className='search-course'
-            onClick={() => this.props.fetchCourseInfo(course.id)}
+            onMouseDown={(event) => this.props.fetchCourseInfo(course.id)}
             onMouseOver={() => this.props.hoverSearchResult(this.props.position)}
             >
             <h3>{course.name} </h3>
             <span className="search-course-save">
                 <i className="fa fa-bookmark"></i>
             </span>
-            <span className="search-course-add" onClick={this.addCourse.bind(this, course, '')}>
+            <span className="search-course-add" onMouseDown={(event) => this.addCourseWrapper(course, '', event)}>
                 <i className={classNames({'fa fa-plus' : !this.props.inRoster, 'fa fa-check' : this.props.inRoster})}></i>
             </span>
             <h4>{course.code}</h4>
