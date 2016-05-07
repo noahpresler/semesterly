@@ -7,6 +7,7 @@ import { fetchCourseInfo } from '../../actions/modal_actions.jsx'
 const mapStateToProps = (state) => {
 	let courseSections = state.courseSections.objects;
 	return {
+		semester: state.semester == "F" ? "Fall 2016" : "Winter 2017",
     	searchResults: state.searchResults.items,
     	isFetching: state.searchResults.isFetching,
     	isCourseInRoster: (course_id) => courseSections[course_id] !== undefined,
