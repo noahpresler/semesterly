@@ -8,6 +8,7 @@ import { preferences } from './preferences_reducer.jsx';
 import { courseInfo } from './course_info_reducer.jsx';
 import { alerts } from './alerts_reducer.jsx';
 import { ui } from './ui.jsx'
+import { userInfo } from './user_info_reducer.jsx'
 
 export const rootReducer = combineReducers({
   school,
