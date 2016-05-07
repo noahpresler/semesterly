@@ -16,7 +16,8 @@ const mapStateToProps = (state) => {
     		return Object.keys(state.courseSections.objects[course_id]).some( 
     			(type) => state.courseSections.objects[course_id][type] == section
 			)
-    	}
+    	},
+		hasHoveredResult: state.timetables.items[state.timetables.active].courses.some(course => course.fake)
 	}
 }
 
