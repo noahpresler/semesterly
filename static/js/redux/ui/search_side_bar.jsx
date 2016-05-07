@@ -1,6 +1,15 @@
 import React from 'react';
 
 export class SearchSideBar extends React.Component {
+    constructor(props){
+        super(props);
+        this.lockSectionWrapper = this.lockSectionWrapper.bind(this);
+    }
+    lockSectionWrapper(section, event) {
+        event.preventDefault();
+        event.stopPropagation();
+        this.props.addCourse(this.props.hovered.id, section);
+    }
     mapSectionsToSlots(sections) {
         if (sections === undefined) {
             return [];
@@ -10,7 +19,7 @@ export class SearchSideBar extends React.Component {
                 locked={this.props.isSectionLocked(this.props.hovered.id, sec)}
                 hoverCourse={() => this.props.hoverCourse(this.props.hovered, sec)}
                 unhoverCourse={this.props.unhoverCourse} 
-                onClick={this.props.addCourse.bind(this,this.props.hovered.id, sec)}
+                onMouseDown={(event) => this.lockSectionWrapper(sec, event)}
             />
         );
     }
@@ -41,11 +50,11 @@ export class SearchSideBar extends React.Component {
         );
     }
 }
-const SearchResultSection = ({ section, locked, hoverCourse, unhoverCourse, onClick }) => {
+const SearchResultSection = ({ section, locked, hoverCourse, unhoverCourse, onMouseDown }) => {
     return (
     <h5
         className="sb-side-sections"
-        onClick={onClick}
+        onMouseDown={onMouseDown}
         onMouseEnter={hoverCourse}
         onMouseLeave={unhoverCourse}
     >
