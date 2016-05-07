@@ -27,7 +27,7 @@ export class SearchBar extends React.Component {
                 key={c.code}
                 inRoster={this.props.isCourseInRoster(c.id)}
                 position={i}
-                />)
+            />)
     	});
         let result_container = results.length == 0 ? null : (
             <ul className={res_class} >
@@ -46,7 +46,7 @@ export class SearchBar extends React.Component {
                                onInput={this.fetchSearchResults.bind(this)} 
                                onFocus={() => this.setState({focused: true})}
                                onBlur={() => this.setState({focused: false})}
-                               />
+                        />
                     </div>
                 </div>
                 {result_container}
