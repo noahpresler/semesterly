@@ -5,8 +5,7 @@ body {
 }
 #calendar {
 	margin-bottom:50px;
-	max-width:90%;
-	margin-left:5%;
+	width: 100%;
     -webkit-touch-callout: none; /* iOS Safari */
     -webkit-user-select: none;   /* Chrome/Safari/Opera */
     -khtml-user-select: none;    /* Konqueror */
