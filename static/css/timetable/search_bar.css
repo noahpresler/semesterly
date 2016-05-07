@@ -3,7 +3,7 @@
     left: 260px;
     position: absolute;
     max-width: 600px;
-    width: 50%;
+    width: 49%;
     z-index: 100;
 }
 #search-bar input {
@@ -17,8 +17,8 @@
 
 @media (max-width: 1000px) { 
 	#search-bar {
-		left: 50%;
-		transform: translateX(-50%);
+		left: 82px;
+		width: 55%;
 	}
 }
 
@@ -206,3 +206,23 @@
 .sb-side-sections:hover {
 	background-color: #A5D5FF;
 }
+@media (max-width: 1000px) { 
+	.sb-side-sections {
+		width: 25%;
+	}
+}
+@media (max-width: 766px) {
+	#search-bar {
+		width: auto;
+		right: 82px;
+	}
+	.search-results {
+		width: 100%;
+	}
+	.search-course {
+		width: 100%;
+	}
+	#search-bar-side {
+		display: none;
+	}
+} 
