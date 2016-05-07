@@ -15,6 +15,7 @@ semes/
 documentation/build
 parse_errors.log
 static/js/gulp/*
+static/css/gulp/*
 analytics/migrations/
 logfile.txt
 semesterly/sensitive.py
