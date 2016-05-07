@@ -12,6 +12,17 @@
 	width: 25%;
 	border-radius: 5px;
 }*/
+.slot {
+	cursor:pointer;
+	background-color: #C8F7C5;
+	color:#222;
+	font-size:13px;
+	transition:all 0.3s;
+	border-radius:3px;
+}
+.slot:hover {
+	color:#222;
+}
 .slot-content h3,
 .master-slot-content h3 {
 	margin: 0;
