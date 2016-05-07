@@ -44,6 +44,13 @@
 	margin: 0;
 	padding-left: 5px;
 }
+.search-course h4 {
+	font-size: 12px;
+	font-weight: 400;
+	color: #777;
+	padding-left: 5px;
+	margin: 5px 0;
+}
 .search-course .search-course-add,
 .search-course .search-course-save {
 	position: absolute;
@@ -145,7 +152,8 @@
 	border: 1px solid rgba(255,255,255,0);
 }
 .trans50 li,
-.trans50 .search-section {
+.trans50 .search-section,
+.trans50 .search-course h4 {
 	/* This makes it semi transparent */
 	/*color: rgba(52, 73, 94, .25);*/
 	/*This makes is fully transparent*/
@@ -156,7 +164,9 @@
 	color: rgba(52, 73, 94, 1);
 }
 .trans50 .search-course,
-.trans50 .search-course-add {
+.trans50 .search-course-add,
+.trans50 .search-course-save,
+.trans50 #search-bar-side {
 	background-color: transparent;
 }
 
