@@ -4,10 +4,10 @@ export class SearchSideBar extends React.Component {
     render() {
         let sections = Object.keys(this.props.slots).map(sec => 
             <SearchResultSection key={this.props.hovered.id + sec} course={this.props.hovered} section={sec} 
-                // locked={this.props.isSectionLocked(this.props.hovered.id, sec)}
-                // hoverCourse={() => this.props.hoverCourse(this.props.hovered, sec)}
+                locked={this.props.isSectionLocked(this.props.hovered.id, sec)}
+                hoverCourse={() => this.props.hoverCourse(this.props.hovered, sec)}
                 unhoverCourse={this.props.unhoverCourse} 
-                // onClick={this.addCourse.bind(this, course, sec)}
+                onClick={this.props.addCourse}
                 sectionHoverOn={this.props.sectionHoverOn}
                 sectionHoverOff={this.props.sectionHoverOff}
             />
