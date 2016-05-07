@@ -20,3 +20,4 @@ def get_user(request):
 		'userImg': 'https://scontent-iad3-1.xx.fbcdn.net/v/t1.0-9/11264970_1439031266401179_48567503498271249_n.jpg?oh=d3da18464d8ea16e280934b1faafb206&oe=57AA84F0'
 	}
 	return HttpResponse(json.dumps(response), content_type='application/json')
+	
