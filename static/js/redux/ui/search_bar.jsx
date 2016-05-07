@@ -8,16 +8,8 @@ import SearchSideBarContainer from './containers/search_side_bar_container.jsx'
 export class SearchBar extends React.Component {
     constructor(props){
         super(props);
-        this.state = {sectionHovered: false, focused: false};
-        this.sectionHoverOff = this.sectionHoverOff.bind(this);
-        this.sectionHoverOn = this.sectionHoverOn.bind(this);
+        this.state = {focused: false};
         this.changeTimer = false;
-    }
-    sectionHoverOn() {
-        this.setState({sectionHovered: true});
-    }
-    sectionHoverOff() {
-        this.setState({sectionHovered: false});
     }
     fetchSearchResults() {
         if (this.changeTimer) clearTimeout(this.changeTimer);
@@ -28,11 +20,9 @@ export class SearchBar extends React.Component {
         }.bind(this), 100);
     }
     render() {
-        let res_class = classNames({'search-results' : true, 'trans50' : this.state.sectionHovered})
+        let res_class = classNames({'search-results' : true, 'trans50' : this.props.hasHoveredResult})
     	let results = this.props.searchResults.map( (c, i) => {
             return (<SearchResult {...this.props}
-                sectionHoverOn={this.sectionHoverOn}
-                sectionHoverOff={this.sectionHoverOff}
                 course={c} 
                 key={c.code}
                 inRoster={this.props.isCourseInRoster(c.id)}
@@ -72,16 +62,6 @@ export class SearchResult extends React.Component {
     }
     render() {
         let course = this.props.course;
-        let sections = Object.keys(course.slots).map(sec => 
-            <SearchResultSection key={course.id + sec} course={course} section={sec} 
-                locked={this.props.isSectionLocked(course.id, sec)}
-                hoverCourse={() => this.props.hoverCourse(course, sec)}
-                unhoverCourse={this.props.unhoverCourse} 
-                onClick={this.addCourse.bind(this, course, sec)}
-                sectionHoverOn={this.props.sectionHoverOn}
-                sectionHoverOff={this.props.sectionHoverOff}
-            />
-        );
         return (
         <li key={course.id}
             className="search-course"
@@ -96,24 +76,6 @@ export class SearchResult extends React.Component {
                 <i className="fa fa-plus"></i>
             </span>
             <h4>{course.code}</h4>
-            <div className="search-sections">
-                {sections}
-            </div>
         </li>);
     }
 }
-
-const SearchResultSection = ({ section, locked, hoverCourse, unhoverCourse, onClick, sectionHoverOn, sectionHoverOff }) => {
-    return (
-    <span
-        className="search-section" 
-        onClick={onClick}
-        onMouseEnter={hoverCourse}
-        onMouseLeave={unhoverCourse}
-        onMouseOver={sectionHoverOn}
-        onMouseOut={sectionHoverOff}
-    >
-        {section + " "}
-        { locked ? <i className="fa fa-lock"></i> : null}
-    </span>);
-};
