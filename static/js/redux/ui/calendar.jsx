@@ -31,9 +31,10 @@ class Calendar extends React.Component {
 		return (
 
 	      <div id="calendar" className="fc fc-ltr fc-unthemed">
-	      	<PaginationContainer />
 	        <div className="fc-toolbar">
-	          <div className="fc-left" />
+	          <div className="fc-left">
+	      		<PaginationContainer />
+	      	  </div>
 	          <div className="fc-right" />
 	          <div className="fc-center" />
 	          <div className="fc-clear" />

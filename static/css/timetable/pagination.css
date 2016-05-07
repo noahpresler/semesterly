@@ -1,6 +1,7 @@
 .sem-pagination {
 	margin-top:7px;
 	margin-bottom:-7px;
+    margin-left: 7px;
     -webkit-touch-callout: none;
     -webkit-user-select: none;
     -khtml-user-select: none;
@@ -8,6 +9,7 @@
     -ms-user-select: none;
     user-select: none;
     padding:0;
+    padding-left: 7px;
     float:left;
 }
 .fc .fc-toolbar>*>* {
@@ -30,6 +32,7 @@
     white-space:nowrap;
     word-wrap:break-word;
     max-width:317px;
+    margin-bottom: 7px;
 }
 
 .sem-page {
