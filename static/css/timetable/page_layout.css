@@ -1,6 +1,6 @@
 #side-bar {
   position: absolute;
-  z-index: 99;
+  z-index: 100;
 	left: calc(100% - 300px);
 	width: 300px;
 	top: 50px;
