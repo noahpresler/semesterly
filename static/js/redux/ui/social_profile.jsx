@@ -12,13 +12,16 @@ export class SocialProfile extends React.Component {
     	this.setState({showDropdown: !this.state.showDropdown});
     }
     render() {
-		let divStyle = {
+		let profileImage = {
 			backgroundImage: 'url(' + this.props.userImg + ')',
 		};
-    	return(
-			<div id="social">
+		let blankImage = {
+			backgroundImage: 'url(/static/img/blank.jpg)',
+		};
+		let loggedIn = (
+			<div>
 				<div onMouseDown={this.toggleDropdown.bind(this)}>
-					<div id="social-pro-pic" style={divStyle}></div>
+					<div id="social-pro-pic" style={profileImage}></div>
 					<h2>{this.props.userFirstName}</h2>
 				</div>
 				<div id="social-dropdown"
@@ -31,6 +34,19 @@ export class SocialProfile extends React.Component {
 						<span>Sign out</span>
 					</a>
 				</div>
-			</div>);
+			</div>
+		);
+		let loggedOut = (
+			<a href="/login/facebook">
+				<div id="social-pro-pic" style={blankImage}></div>
+				<h2>Login with Facebook</h2>
+			</a>
+		);
+		let social = this.props.isLoggedin ? loggedIn : loggedOut;
+    	return(
+			<div id="social">
+				{social}
+			</div>
+		);
     }
 }
