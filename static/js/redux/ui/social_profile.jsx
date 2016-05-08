@@ -23,6 +23,7 @@ export class SocialProfile extends React.Component {
 				<div onMouseDown={this.toggleDropdown.bind(this)}>
 					<div id="social-pro-pic" style={profileImage}></div>
 					<h2>{this.props.userFirstName}</h2>
+					<span className={classNames("tip-down", {'down' : this.state.showDropdown})}></span>
 				</div>
 				<div id="social-dropdown"
 					className={classNames({'down' : this.state.showDropdown})}

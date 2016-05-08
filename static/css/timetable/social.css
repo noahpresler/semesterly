@@ -24,7 +24,28 @@
     vertical-align: middle;
     display: inline-block;
     cursor: pointer;
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none; 
+    user-select: none;
 }
+.tip-down {
+    display: inline-block;
+    border-color: transparent;
+    border-top-color: #34495e; 
+    border-style: dashed dashed solid;
+    border-width: 6.5px 6.5px 0;
+    margin-left: 5px;
+    z-index: 1;
+    height: 0;
+    width: 0;
+}
+.tip-down.down {
+    transform: rotate(180deg);
+}
+
 #social-dropdown {
     position: absolute;
     top: 49px;
@@ -61,24 +82,43 @@
 #social-dropdown a i {
     color: #777;
 }
+
 a#social-login,
 a#social-login:link,
 a#social-login:active,
 a#social-login:visited {
-    color: #777;
+    color: #3b5998;
     transition: color .3s;
+    padding: 3px 5px;
+    position: relative;
 }
 #social-login h2 {
-    font-size: 14px;
-    font-weight: 400;
+    font-size: 15px;
+    font-weight: 500;
 }
 #social-login i {
-    font-size: 18px;
+    font-size: 17px;
     margin-left: 3px;
 }
 a#social-login:hover {
     color: #3b5998;
 }
+a#social-login:before {
+    content: "";
+    display: block;
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    height: 1px;
+    width: 0;
+    background-color: rgba(59, 89, 152, 0.5);
+    transition: width .3s;
+}
+a#social-login:hover:before {
+    width: 100%;
+}
+
 .tip-border {
     border-color: transparent;
     border-style: dashed dashed solid;
