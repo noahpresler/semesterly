@@ -77,6 +77,10 @@
   border: 1px solid #E8E8E8;
   box-shadow: 0 2px 10px rgba(0,0,0,.2);
   z-index: 100;
+  display: none;
+}
+#social-dropdown.down {
+  display: block;
 }
 #social-dropdown li {
   padding: 10px 12px;
