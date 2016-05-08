@@ -82,21 +82,21 @@
 #social-dropdown.down {
   display: block;
 }
-#social-dropdown li {
+#social-dropdown a {
   padding: 10px 12px;
-  list-style-type: none;
+  display: block;
   cursor: pointer;
   margin: 0;
 }
-#social-dropdown li i,
-#social-dropdown li span {
+#social-dropdown a i,
+#social-dropdown a span {
   display: inline-block;
   vertical-align: middle;
   line-height: 18px;
   font-size: 14px;
   margin-right: 5px;
 }
-#social-dropdown li i {
+#social-dropdown a i {
   color: #777;
 }
 .tip-border {
