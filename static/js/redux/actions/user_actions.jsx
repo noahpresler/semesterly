@@ -21,7 +21,7 @@ export function fetchUserInfo() {
 
 		dispatch(requestUserInfo());
 
-		fetch(getUserInfoEndpoint())
+		fetch(getUserInfoEndpoint(), {credentials: 'include'})
 		    .then(response => response.json()) // TODO(rohan): error-check the response
 		    .then(json => {
 		        dispatch(getUserInfo(json))
