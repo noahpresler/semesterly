@@ -1,4 +1,11 @@
+import copy
+import functools
+import itertools
+import json
+import logging
+import os
 from collections import OrderedDict
+
 from django.shortcuts import render_to_response, render
 from django.http import HttpResponse, HttpResponseRedirect, Http404
 from django.views.decorators.csrf import csrf_exempt
@@ -6,11 +13,11 @@ from django.forms.models import model_to_dict
 from django.db.models import Q
 from hashids import Hashids
 from pytz import timezone
-from school_mappers import school_to_models, school_to_granularity, VALID_SCHOOLS
-import copy, functools, itertools, json, logging, os
 
 from analytics.views import *
 from timetable.models import *
+from school_mappers import school_to_models, school_to_granularity, VALID_SCHOOLS
+
 
 MAX_RETURN = 60 # Max number of timetables we want to consider
 
@@ -493,6 +500,12 @@ def get_minute_from_string_time(time_string):
   """Get minute as an int from time as a string."""
   return int(time_string[time_string.index(':') + 1:] if ':' in time_string \
                             else 0)
+
+
+# -----------------------------------------------------------------------------
+# --------------------TODO: move to separate file------------------------------
+# -----------------------------------------------------------------------------
+
 @csrf_exempt
 def get_courses(request, school, sem):
   school = school.lower()
