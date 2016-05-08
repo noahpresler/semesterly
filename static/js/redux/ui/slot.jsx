@@ -185,7 +185,9 @@ class SlotManager extends React.Component {
                 }
                 let slot = Object.assign(slotObj, {
                             'colourId': colourId, 'code': crs.code, 'name': crs.name});
-                slots_by_day[slot.day].push(slot);
+                if (slots_by_day[slot.day]) {
+                    slots_by_day[slot.day].push(slot);
+                }
             }
         }
         return this.getConflictStyles(slots_by_day)
