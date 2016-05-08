@@ -35,6 +35,8 @@ urlpatterns = patterns('',
 
 	#User,Auth,User Info
 	url(r'^user/info.+$', 'student.views.get_user'),
+	url(r'^user/logout/$', 'django.contrib.auth.views.logout',{'next_page': '/'}),
+
 
 	url(r'^live_user_data/*$', 'analytics.views.get_live_user_data'),
 	url(r'^courses/(?P<school>.+?)/(?P<sem>[fFsS]{1}?)/code/(?P<code>.+)/*$', 'timetable.views.get_course_id'),
