@@ -24,6 +24,7 @@
     -webkit-transition: width .3s;
     -moz-transition: width .3s;
     transition: width .3s;
+  padding: 20px 35px;
 }
 
 #all-cols {
@@ -177,6 +178,19 @@
   }
 }
 
+
+@media (max-width: 766px) {
+    #main-bar {
+        padding: 10px;
+    }
+}
+
+@media (max-width: 500px) {
+    #main-bar {
+        padding: 0px;
+    }
+}
+
 /* Logo & name */
 
 #semesterly-name {
@@ -198,7 +212,7 @@
     float: left;
 }
 
-@media screen and (max-width: 1000px) { 
+@media (max-width: 1000px) { 
   .fc-ltr .fc-time-grid .fc-event-container {
     margin-left:0.5%;
   }
@@ -211,6 +225,11 @@
   #navicon {
     right: 9px;
   }
+}
+@media (max-width: 766px) {
+    #semesterly-logo {
+        margin-left: 10px;
+    }
 }
 /* end Logo & name */
 

@@ -27,12 +27,16 @@ class UofTParser:
         self.courses = None
         self.count = 0
         self.total = 0
+        self.departments = set(map(lambda x: x[:3], Course.objects.values_list('code', flat=True)))
+        self.DAY_MAP = {'MO': 'M', 'TU': 'T', 'WE': 'W', 'TH': 'R', 'FR': 'F', None: ''}
+        self.errors = 0
 
     def get_school_name(self):
         return self.school
 
     def start(self):
         """Update the local JSON files for this scraper."""
+
 
         # CourseOffering.objects.all().delete()
         # Course.objects.all().delete()
@@ -118,6 +122,8 @@ class UofTParser:
                     print f
         print "Done!"
         print "Finished all! Found %d total courses, %d total offerings and %d duplicate offerings." % (self.count, off_count, dups)
+        print "Now running new parser..."
+        self.new_start()
 
     def search(self, query='', requirements=''):
         """Perform a search and return the data as a dict."""
@@ -336,6 +342,63 @@ class UofTParser:
 
         # return [course, basic_course]
         return course
+    def new_start(self):
+        for department in self.departments:
+            print "Parsing department: {}".format(department)
+            request_url = "https://timetable.iit.artsci.utoronto.ca/api/courses?org=&code={}".format(department)
+            data = json.loads(self.s.get(url=request_url, cookies=self.cookies).text)
+            for key in data:
+                try:
+                    course_data = data[key]
+                    course_code = course_data['code']
+                    C, created = Course.objects.update_or_create(code=course_code, defaults={
+                            'name': course_data['courseTitle'],
+                            'description': BeautifulSoup(course_data['courseDescription']).p.get_text(),
+                            'campus': course_code[-1],
+                            'breadths': course_data['breadthCategories'][-3:],
+                            'prerequisites': course_data['prerequisite'],
+                            'exclusions': course_data['exclusion']
+                        })
+                    print "Course:", C, "New?:", created
+                    meetings = course_data['meetings']
+                    semester = course_data['section']
+                    C.courseoffering_set.all().delete()
+                    for section_key in meetings:
+                        section = section_key.split("-")[0][0] + section_key.split("-")[-1]
+                        section_data = meetings[section_key]
+                        schedule = section_data['schedule']
+                        instructor_data = section_data['instructors']
+                        instructors = ""
+                        for instructor in instructor_data:
+                            instructor_info = instructor_data[instructor]
+                            instructors += instructor_info['firstName'] + " " + instructor_info['lastName']
+                        if instructors and instructors[-1] == ",": 
+                            instructors = instructors[:-1]
+                        for offering in schedule:
+                            offering_data = schedule[offering]
+                            try:
+                                CO = CourseOffering(course=C, 
+                                    semester=semester,
+                                    meeting_section=section,
+                                    instructors=instructors,
+                                    day=self.DAY_MAP[offering_data['meetingDay']],
+                                    time_start=offering_data['meetingStartTime'],
+                                    time_end=offering_data['meetingEndTime'],
+                                    location='',
+                                    size=section_data['enrollmentCapacity'],
+                                    enrolment=0,
+                                    alternates=False,
+                                    section_type=section[0])
+                                CO.save()
+                            except Exception as e:
+                                print e
+                                self.errors += 1
+                                continue
+                except Exception as f:
+                    import traceback
+                    traceback.print_exc()
+
+        print "Total errors:", self.errors
 
 
 if __name__ == "__main__":
