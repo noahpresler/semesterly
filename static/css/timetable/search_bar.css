@@ -121,6 +121,12 @@
 .search-course .search-course-save:hover {
 	background-color: #7BE68D;
 }
+.search-course-add.in-roster{
+	background-color:#2DD6B5;
+}
+.search-course-add.in-roster:hover{
+	background-color:#56ECCF;
+}
 /*.search-course .search-course-add:hover .fa-plus {
 	opacity: 0;
 	visibility: hidden;
