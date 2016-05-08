@@ -16,7 +16,7 @@ export class SocialProfile extends React.Component {
 			backgroundImage: 'url(' + this.props.userImg + ')',
 		};
 		let blankImage = {
-			backgroundImage: 'url(../../../blank.jpg)',
+			backgroundImage: 'url(/static/img/blank.jpg)',
 		};
 		let loggedIn = (
 			<div>
