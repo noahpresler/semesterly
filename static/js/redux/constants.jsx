@@ -34,3 +34,12 @@ export const getPrimaryDisplay = (school) => {
 			return "code"
 	}
 }
+
+export const getSemesterName = (semester) => {
+	switch(semester) {
+		case "F":
+			return "Fall 2016";
+		case "S":
+			return "Spring 2016"
+	}
+}

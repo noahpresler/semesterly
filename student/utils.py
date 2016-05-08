@@ -54,3 +54,4 @@ def create_student(strategy, details, response, user, *args, **kwargs):
               friend_student.save()
 
     return kwargs
+    
