@@ -5,8 +5,7 @@ body {
 }
 #calendar {
 	margin-bottom:50px;
-	max-width:90%;
-	margin-left:5%;
+	width: 100%;
     -webkit-touch-callout: none; /* iOS Safari */
     -webkit-user-select: none;   /* Chrome/Safari/Opera */
     -khtml-user-select: none;    /* Konqueror */
@@ -32,16 +31,6 @@ body {
 .fc-content {
 	margin-left: 8px;
 	margin-top: 2px;
-}
-.slot {
-	cursor:pointer;
-	background-color: #C8F7C5;
-	color:#222;
-	font-size:13px;
-	transition:all 0.3s;
-}
-.slot:hover {
-	color:#222;
 }
 .course-modal {
 	width:80% !important;

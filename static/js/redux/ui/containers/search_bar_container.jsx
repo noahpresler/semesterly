@@ -7,6 +7,7 @@ import { fetchCourseInfo } from '../../actions/modal_actions.jsx'
 const mapStateToProps = (state) => {
 	let courseSections = state.courseSections.objects;
 	return {
+		semester: state.semester == "F" ? "Fall 2016" : "Winter 2017",
     	searchResults: state.searchResults.items,
     	isFetching: state.searchResults.isFetching,
     	isCourseInRoster: (course_id) => courseSections[course_id] !== undefined,
@@ -27,10 +28,10 @@ const mapDispatchToProps = (dispatch) => {
 	  	fetchCourses: (query) => dispatch(fetchSearchResults(query)),
 	  	addCourse: addOrRemoveCourse,
 		fetchCourseInfo: (id) => dispatch(fetchCourseInfo(id)), 
-		hoverSearchResult: (pos) => {
+		hoverSearchResult: (position) => {
 			dispatch({
 				type: "HOVER_SEARCH_RESULT",
-				position: pos
+				position
 			});
 		}
 	}
