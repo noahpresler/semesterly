@@ -6,6 +6,7 @@ from django.db import models
 
 
 def create_student(strategy, details, response, user, *args, **kwargs):
+    print "UTILS USER AUTH? " + str(user.is_authenticated())
     if Student.objects.filter(user=user).exists():
     	new_student = Student.objects.get(user=user)
     else:
