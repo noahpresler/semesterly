@@ -39,6 +39,9 @@
 	border-bottom: 1px solid #E8E8E8;
   position: relative;
 }
+.la-ball-clip-rotate-multiple {
+  float: right;
+}
 
 #main-bar.full-cal {
 	width: 100%;
