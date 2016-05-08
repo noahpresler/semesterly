@@ -67,6 +67,12 @@ export class SearchResult extends React.Component {
     }
     render() {
         let course = this.props.course;
+        let inRoster = this.props.inRoster;
+        let addRemoveButton = 
+            <span className={classNames('search-course-add', {'in-roster': inRoster})} 
+              onMouseDown={(event) => this.addCourseWrapper(course, '', event)}>
+                <i className={classNames('fa', {'fa-plus' : !inRoster, 'fa-check' : inRoster})}></i>
+            </span>;
         return (
         <li key={course.id}
             className='search-course'
@@ -77,9 +83,7 @@ export class SearchResult extends React.Component {
             <span className="search-course-save">
                 <i className="fa fa-bookmark"></i>
             </span>
-            <span className="search-course-add" onMouseDown={(event) => this.addCourseWrapper(course, '', event)}>
-                <i className={classNames({'fa fa-plus' : !this.props.inRoster, 'fa fa-check' : this.props.inRoster})}></i>
-            </span>
+            {addRemoveButton}
             <h4>{course.code}</h4>
         </li>);
     }
