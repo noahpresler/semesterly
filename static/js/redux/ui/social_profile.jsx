@@ -26,10 +26,10 @@ export class SocialProfile extends React.Component {
 					>
 					<div className="tip-border"></div>
 					<div className="tip"></div>
-					<li>
+					<a href="/user/logout">
 						<i className="fa fa-sign-out"></i>
 						<span>Sign out</span>
-					</li>
+					</a>
 				</div>
 			</div>);
     }
