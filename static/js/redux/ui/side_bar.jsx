@@ -5,6 +5,9 @@ class SideBar extends React.Component {
     render() {
         return (
             <div id="side-bar">
+                <div className="side-bar-header">
+                  <h4>Your Semester</h4>
+                </div>
                 <input ref="input"
                     defaultValue="Fall 2016 v1"
                     />
