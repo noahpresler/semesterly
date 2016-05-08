@@ -37,9 +37,8 @@ export class SocialProfile extends React.Component {
 			</div>
 		);
 		let loggedOut = (
-			<a href="/login/facebook">
-				<div id="social-pro-pic" style={blankImage}></div>
-				<h2>Login with Facebook</h2>
+			<a id="social-login" href="/login/facebook">
+				<h2>Signup/Login <i className="fa fa-facebook-square"></i></h2>
 			</a>
 		);
 		let social = this.props.isLoggedin ? loggedIn : loggedOut;

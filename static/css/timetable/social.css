@@ -61,6 +61,24 @@
 #social-dropdown a i {
     color: #777;
 }
+a#social-login,
+a#social-login:link,
+a#social-login:active,
+a#social-login:visited {
+    color: #777;
+    transition: color .3s;
+}
+#social-login h2 {
+    font-size: 14px;
+    font-weight: 400;
+}
+#social-login i {
+    font-size: 18px;
+    margin-left: 3px;
+}
+a#social-login:hover {
+    color: #3b5998;
+}
 .tip-border {
     border-color: transparent;
     border-style: dashed dashed solid;
