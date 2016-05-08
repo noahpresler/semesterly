@@ -43,10 +43,10 @@ class TopBar extends React.Component {
 		<div id="top-bar">
 			<img id="semesterly-logo" src="/static/img/logo2.0.png"/>
 			<div id="semesterly-name">Semester.ly</div>
-		    <TimetableLoaderContainer />
 			<SearchBarContainer />
 			<CourseModalContainer />
 			<SocialProfileContainer />
+		    <TimetableLoaderContainer />
 			<div id="navicon" onClick={this.toggleSideBar}>
 				<span></span>
 				<span></span>

@@ -23,6 +23,7 @@ export class SocialProfile extends React.Component {
 				<div onMouseDown={this.toggleDropdown.bind(this)}>
 					<div id="social-pro-pic" style={profileImage}></div>
 					<h2>{this.props.userFirstName}</h2>
+					<span className={classNames("tip-down", {'down' : this.state.showDropdown})}></span>
 				</div>
 				<div id="social-dropdown"
 					className={classNames({'down' : this.state.showDropdown})}
@@ -37,12 +38,11 @@ export class SocialProfile extends React.Component {
 			</div>
 		);
 		let loggedOut = (
-			<a href="/login/facebook">
-				<div id="social-pro-pic" style={blankImage}></div>
-				<h2>Login with Facebook</h2>
+			<a id="social-login" href="/login/facebook">
+				<h2>Signup/Login <i className="fa fa-facebook-square"></i></h2>
 			</a>
 		);
-		let social = this.props.isLoggedin ? loggedIn : loggedOut;
+		let social = this.props.isLoggedIn ? loggedIn : loggedOut;
     	return(
 			<div id="social">
 				{social}
