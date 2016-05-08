@@ -22,7 +22,7 @@ export class SocialProfile extends React.Component {
 					<h2>{this.props.userFirstName}</h2>
 				</div>
 				<div id="social-dropdown"
-					className={classNames({'down' : this.props.inRoster})}
+					className={classNames({'down' : this.state.showDropdown})}
 					>
 					<div className="tip-border"></div>
 					<div className="tip"></div>
