@@ -9,7 +9,6 @@ const mapStateToProps = (state) => {
 	}
 }
 
-
 const SocialProfileContainer = connect(
 	mapStateToProps
 )(SocialProfile);
