@@ -7,7 +7,7 @@ from django.db.models import Q
 from hashids import Hashids
 from pytz import timezone
 from school_mappers import school_to_models, school_to_granularity, VALID_SCHOOLS
-import copy, functools, itertools, json, logging, os 
+import copy, functools, itertools, json, logging, os
 
 from analytics.views import *
 from timetable.models import *
