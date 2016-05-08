@@ -1,3 +1,46 @@
+#side-bar {
+	padding: 10px;
+}
+#side-bar input {
+	padding: 5px;
+	outline: 0;
+	font-weight: 700;
+	border: 1px solid #fff;
+	transition: border .3s;
+}
+#side-bar input:focus,
+#side-bar input:focus:hover {
+	border: 1px solid #0095FF;
+}
+#side-bar input:hover {
+	border: 1px solid #ddd;
+}
+#side-bar h3 {
+	font-weight: 400;
+	margin: 5px;
+	font-size: 14px;
+	color: #777;
+}
+
+/* Star Ratings */
+.star-ratings-sprite {
+    background: url(../../img/star.png) repeat-x;
+    font-size: 0;
+    height: 24px;
+    line-height: 0;
+    overflow: hidden;
+    text-indent: -999em;
+    width: 120px;
+    margin: 0 auto;
+}
+.rating {
+    background: url(../../img/rating.png) 0 100% repeat-x;
+    float: left;
+    height: 24px;
+    display: block;
+}
+
+
 .side-bar-header {
 	margin-bottom: 5px;
     border-bottom: 1px solid #E8E8E8;
