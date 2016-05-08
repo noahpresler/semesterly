@@ -1,5 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+import classNames from 'classnames';
 
 export class SocialProfile extends React.Component {
     constructor(props){
@@ -16,9 +17,13 @@ export class SocialProfile extends React.Component {
 		};
     	return(
 			<div id="social">
-				<div id="social-pro-pic" style={divStyle}></div>
-				<h2>{this.props.userFirstName}</h2>
-				<div id="social-dropdown">
+				<div onMouseDown={this.toggleDropdown.bind(this)}>
+					<div id="social-pro-pic" style={divStyle}></div>
+					<h2>{this.props.userFirstName}</h2>
+				</div>
+				<div id="social-dropdown"
+					className={classNames({'down' : this.props.inRoster})}
+					>
 					<div className="tip-border"></div>
 					<div className="tip"></div>
 					<li>
