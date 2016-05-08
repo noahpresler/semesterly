@@ -91,15 +91,6 @@
 .search-course .search-course-save {
 	right: 55px;
 }
-.search-course .fa-plus {
-	position: absolute;
-	top: 50%;
-	left: 50%;
-	opacity: 1;
-	visibility: visible;
-	transform: translate(-50%, -50%);
-	transition: transform .3s, opacity .3s, visibility .3s;
-}
 
 .search-course .search-course-add h6 {
 	margin: 0;
