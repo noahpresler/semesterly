@@ -1,15 +1,20 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import fetch from 'isomorphic-fetch';
-import { getCourseSearchEndpoint } from '../constants.jsx';
+import { getCourseSearchEndpoint, getSemesterName } from '../constants.jsx';
 import classNames from 'classnames';
 import SearchSideBarContainer from './containers/search_side_bar_container.jsx'
+
 
 export class SearchBar extends React.Component {
     constructor(props){
         super(props);
-        this.state = {focused: false};
+        this.state = { focused: false, showDropdown: false };
+        this.toggleDropdown = this.toggleDropdown.bind(this);
         this.changeTimer = false;
+    }
+    toggleDropdown() {
+        this.setState({ showDropdown: !this.state.showDropdown });
     }
     fetchSearchResults() {
         if (this.changeTimer) clearTimeout(this.changeTimer);
@@ -18,6 +23,10 @@ export class SearchBar extends React.Component {
             this.props.fetchCourses(query);
             this.changeTimer = false;
         }.bind(this), 100);
+    }
+    setSemester(semester) {
+        this.setState({ showDropdown: false });
+        this.props.setSemester(semester);
     }
     render() {
         let res_class = classNames({'search-results' : true, 'trans50' : this.props.hasHoveredResult})
@@ -35,11 +44,20 @@ export class SearchBar extends React.Component {
                 <SearchSideBarContainer />
             </ul>
         );
-
+        let availableSemesters = this.props.availableSemesters.map(s => 
+            <div className="semester-option" onMouseDown={ () => this.setSemester(s)}> { getSemesterName(s) } </div>
+        );
     	return (
         	<div id="search-bar">
                 <div id="search-bar-wrapper">
-                    <div id="search-bar-semester">{ this.props.semester }</div>
+                    <div id="search-bar-semester" onMouseDown={this.toggleDropdown.bind(this)}>{ getSemesterName(this.props.semester) }</div>
+                    <div id="semester-picker"
+                         className={classNames({'down' : this.state.showDropdown})}
+                    >
+                    <div className="tip-border"></div>
+                    <div className="tip"></div>
+                        { availableSemesters }
+                    </div>
                     <div id="search-bar-input-wrapper">
                         <input ref="input" 
                                className={this.props.isFetching ? 'results-loading-gif' : ''} 
