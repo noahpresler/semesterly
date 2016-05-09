@@ -17,12 +17,15 @@ export const getCourseSearchEndpoint = (query) => {
 export const getTimetablesEndpoint = () => {
 	return "get_timetables/";
 };
-export const getUserInfoEndpoint = (course_id) => {
+export const getUserInfoEndpoint = () => {
 	return "user/info";
 };
-export const getSaveTimetableEndpoint = (course_id) => {
+export const getSaveTimetableEndpoint = () => {
 	return "user/save_timetable/";
 };
+export const getSaveSettingsEndpoint = () => {
+	return "user/save_settings/"
+}
 
 export const getPrimaryDisplay = (school) => {
 	switch(school) {

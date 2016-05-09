@@ -1,5 +1,11 @@
-export const userInfo = (state = {data: {isLoggedIn: false}}, action) => {
+export const userInfo = (state = {data: {isLoggedIn: false}, saving: false}, action) => {
 	switch (action.type) {
+		case 'REQUEST_SAVE_USER_INFO':
+			return Object.assign( {}, state, { saving: true });
+		case 'CHANGE_USER_INFO':
+			return Object.assign( {}, state, { data: action.data });
+		case 'RECEIVE_USER_INFO_SAVED':
+			return Object.assign( {}, state, { saving: false });
 		case ("USER_INFO_RECEIVED"):
 			return {
 				data: action.data
