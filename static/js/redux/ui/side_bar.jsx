@@ -15,7 +15,7 @@ class SideBar extends React.Component {
                   <h4>Your Semester</h4>
                 </div>
                 <input ref="input"
-                    defaultValue="Fall 2016 v1"
+                    defaultValue={this.props.name}
                     onInput={this.changeName.bind(this)}
                     />
                 { saveButton }
