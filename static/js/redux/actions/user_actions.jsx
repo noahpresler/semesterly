@@ -70,7 +70,7 @@ export function saveTimetable() {
 			type: "RECEIVE_TIMETABLES",
 			timetables: [activeTimetable]
 		});
-		// edit the state courseSections, so that future requests to add/remove/unlock
+		// edit the state's courseSections, so that future requests to add/remove/unlock
 		// courses are handled correctly. in the new courseSections, every currently active
 		// section will be locked
 		dispatch({
