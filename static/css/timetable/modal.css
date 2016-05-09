@@ -1,6 +1,8 @@
 .course-modal {
-	width: 80%;
 	max-width: 1000px;
+	height: 80%;
+	min-height: 500px;
+	max-height: 900px;
 }
 .course-modal div {
 	outline: none;
