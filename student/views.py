@@ -46,3 +46,15 @@ def save_timetable(request):
 			personal_timetable.course_offerings.add(SchoolCourseOffering.objects.get(id=course_offering['id']))
 	personal_timetable.save()
 	return HttpResponse("success")
+
+
+@csrf_exempt
+def save_settings(request):
+	student = Student.objects.get(user=request.user)
+	params = json.loads(request.body)['userInfo']
+	student.social_offerings = params['social_offerings']
+	student.social_courses = params['social_courses']
+	student.major = params['major']
+	student.class_year = params['class_year']
+	student.save()
+	return HttpResponse("success")
