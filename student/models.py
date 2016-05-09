@@ -34,12 +34,16 @@ class PersonalTimetable(models.Model):
 
 class UofTPersonalTimetable(PersonalTimetable):
     course_offerings = models.ManyToManyField(CourseOffering)
+    courses = models.ManyToManyField(Course)
 
 class HopkinsPersonalTimetable(PersonalTimetable):
     course_offerings = models.ManyToManyField(HopkinsCourseOffering)
+    courses = models.ManyToManyField(HopkinsCourse)
 
 class UmdPersonalTimetable(PersonalTimetable):
     course_offerings = models.ManyToManyField(UmdCourseOffering)
+    courses = models.ManyToManyField(UmdCourse)
 
 class RutgersPersonalTimetable(PersonalTimetable):
     course_offerings = models.ManyToManyField(RutgersCourseOffering)
+    courses = models.ManyToManyField(RutgersCourse)
