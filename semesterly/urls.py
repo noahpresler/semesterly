@@ -46,7 +46,7 @@ urlpatterns = patterns('',
 	url(r'^reason/*$', 'analytics.views.verify_password'),
 	url(r'^jhu/countdown/*$', 'timetable.views.jhu_timer'),
 	url(r'^courses/(?P<school>.+?)/(?P<sem>[fFsS]{1}?)/*$', 'timetable.views.get_courses'),
-	url(r'^courses/(?P<school>.+?)/id/(?P<id>[0-9]+)/*$', 'timetable.views.get_course'),
+	url(r'^courses/(?P<school>.+?)/(?P<sem>[fFsS]{1}?)/id/(?P<id>[0-9]+)/*$', 'timetable.views.get_course'),
 	url(r'^$', 'timetable.views.view_timetable'),
 	url(r'^get_timetables/$', 'timetable.views.get_timetables'),
 
