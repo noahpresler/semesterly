@@ -30,6 +30,7 @@ class PersonalTimetable(models.Model):
     semester = models.CharField(max_length=2)
     time_updated = models.DateTimeField(auto_now_add=True)
     student = models.ForeignKey(Student)
+    school = models.CharField(max_length=50)
 
 class UofTPersonalTimetable(PersonalTimetable):
     course_offerings = models.ManyToManyField(CourseOffering)
