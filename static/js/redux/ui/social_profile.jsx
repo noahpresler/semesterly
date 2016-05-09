@@ -13,7 +13,7 @@ export class SocialProfile extends React.Component {
     }
     render() {
 		let profileImage = {
-			backgroundImage: 'url(' + this.props.userImg + ')',
+			backgroundImage: 'url(' + this.props.userInfo.img_url + ')',
 		};
 		let blankImage = {
 			backgroundImage: 'url(/static/img/blank.jpg)',
@@ -42,7 +42,7 @@ export class SocialProfile extends React.Component {
 				<h2>Signup/Login <i className="fa fa-facebook-square"></i></h2>
 			</a>
 		);
-		let social = this.props.isLoggedIn ? loggedIn : loggedOut;
+		let social = this.props.userInfo.isLoggedIn ? loggedIn : loggedOut;
     	return(
 			<div id="social">
 				{social}
