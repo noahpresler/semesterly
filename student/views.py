@@ -29,3 +29,13 @@ def get_user(request):
 			'isLoggedIn': logged
 		}
 	return HttpResponse(json.dumps(response), content_type='application/json')
+
+@csrf_exempt
+def save_timetable(request):
+	courses = json.loads(request.body)['timetable']['courses']
+	course_offerings = []
+	for course in courses:
+		for course_offering in course['slots']:
+			course_offerings.append(CourseOffering.objects.get(id=course_offering['id']))
+	print course_offerings
+	return HttpResponse("success")

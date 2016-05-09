@@ -7,7 +7,6 @@ export const REQUEST_TIMETABLES = "REQUEST_TIMETABLES";
 export const RECEIVE_TIMETABLES = "RECEIVE_TIMETABLES";
 export const HALF_HOUR_HEIGHT = 25;
 
-
 /* server endpoints */
 export const getCourseInfoEndpoint = (course_id) => {
 	return "courses/"+ getSchool() + "/id/" + course_id;
@@ -20,6 +19,9 @@ export const getTimetablesEndpoint = () => {
 };
 export const getUserInfoEndpoint = (course_id) => {
 	return "user/info";
+};
+export const getSaveTimetableEndpoint = (course_id) => {
+	return "user/save_timetable/";
 };
 
 export const getPrimaryDisplay = (school) => {
