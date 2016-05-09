@@ -6,6 +6,7 @@ export const courseSections = (state = { objects: {}, active: 0 }, action) => {
 	switch(action.type) {
 		case 'RECEIVE_COURSE_SECTIONS':
 			saveLocalTimetable(action.courseSections, state.active);
+			console.log(action.courseSections);
 			return Object.assign({}, state, { objects: action.courseSections });
 		case 'CHANGE_ACTIVE_TIMETABLE':
 			saveLocalTimetable(state.courseSections, action.newActive);

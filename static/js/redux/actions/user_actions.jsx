@@ -38,16 +38,29 @@ function getSaveTimetablesRequestBody() {
 	}
 }
 
-/* Locks all the active timetable's sections */
-function getActiveTimetable() {
-	let timetableState = store.getState().timetables;
-	let activeTimetable = timetableState.items[timetableState.active];
-	let newActive = Object.assign({}, activeTimetable);
-	return newActive;
+/* Returns the currently active timetable */
+function getActiveTimetable(timetableState) {
+	return timetableState.items[timetableState.active];
+}
+/* Returns the currently active timetable */
+function lockActiveSections(activeTimetable) {
+	let courseSections = {};
+	let courses = activeTimetable.courses;
+	for (let i = 0; i < courses.length; i++) {
+		let course = courses[i];
+		let slots = course.slots;
+		courseSections[course.id] = {}
+		for (let j = 0; j < slots.length; j++) {
+			let slot = slots[j];
+			courseSections[course.id][slot.section_type] = slot.meeting_section
+		}
+	}
+	return courseSections;
 }
 
 export function saveTimetable() {
 	return (dispatch) => {
+		let activeTimetable = getActiveTimetable(store.getState().timetables);
 		// mark that we're now trying to save this timetable
 		dispatch({
 			type: "REQUEST_SAVE_TIMETABLE"
@@ -55,15 +68,15 @@ export function saveTimetable() {
 		// mark that the current timetable is now the only available one
 		dispatch({
 			type: "RECEIVE_TIMETABLES",
-			timetables: [getActiveTimetable()]
+			timetables: [activeTimetable]
 		});
 		// edit the state courseSections, so that future requests to add/remove/unlock
 		// courses are handled correctly. in the new courseSections, every currently active
 		// section will be locked
-		// dispatch({
-		// 	type: "RECEIVE_COURSE_SECTIONS",
-		// 	courseSections: {}
-		// });
+		dispatch({
+			type: "RECEIVE_COURSE_SECTIONS",
+			courseSections: lockActiveSections(activeTimetable)
+		});
 		fetch(getSaveTimetableEndpoint(), {
       		method: 'POST',
       		body: JSON.stringify(getSaveTimetablesRequestBody()),
