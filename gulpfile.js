@@ -5,6 +5,7 @@ var envify = require('loose-envify');
 var sourcemaps = require('gulp-sourcemaps');
 var source = require('vinyl-source-stream');
 var streamify = require('gulp-streamify');
+var livereload = require('gulp-livereload');
 var buffer = require('vinyl-buffer');
 var browserify = require('browserify');
 var watchify = require('watchify');
@@ -72,10 +73,12 @@ gulp.task('css', function(){
     return gulp.src(CSS_FILES)
         .pipe(minifyCSS())
         .pipe(concat('style.min.css'))
-        .pipe(gulp.dest('static/css/gulp'));
+        .pipe(gulp.dest('static/css/gulp'))
+        .pipe(livereload());
 });
 
 gulp.task('csswatch', function () {
+    livereload.listen();
     gulp.watch(CSS_FILES, ['css']);
 });
 
