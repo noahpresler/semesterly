@@ -1,4 +1,4 @@
-export const savingTimetable = (state = { name: "", saving: false }, action) => {
+export const savingTimetable = (state = { name: "Untitled Schedule", saving: false }, action) => {
 	switch (action.type) {
 		case 'REQUEST_SAVE_TIMETABLE':
 			return Object.assign( {}, state, { saving: true });
@@ -10,4 +10,3 @@ export const savingTimetable = (state = { name: "", saving: false }, action) => 
 			return state;
 	}
 }
-
