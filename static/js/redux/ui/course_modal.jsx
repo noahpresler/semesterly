@@ -45,15 +45,29 @@ export class CourseModal extends React.Component {
             </div>
             <div id="modal-body" className="cf">
                 <div className="col-1-4">
-                    <h3>5</h3>
-                    <h4>quantitative</h4>
+                    <div className="credits">
+                        <h3>3</h3>
+                        <h4>credits</h4>
+                    </div>
+                    <div className="rating-module">
+                        <h4>Average Course Rating</h4>
+                        <div className="sub-rating-wrapper">
+                            <div className="star-ratings-sprite">
+                                <span></span>
+                            </div>
+                        </div>
+                    </div>
                     <p>{this.props.data.prerequisites}</p>
                 </div>
                 <div className="col-1-2">
                     <p>{this.props.data.description}</p>
                 </div>
-                <div className="col-1-4">
-
+                <div id="modal-section-lists"
+                    className="col-1-4">
+                    <h3>Lecture Sections</h3>
+                    <div className="modal-section"></div>
+                    <h3>Tutorial Sections</h3>
+                    <h3>Practicals Sections</h3>
                 </div>
             </div>
         </div>);
