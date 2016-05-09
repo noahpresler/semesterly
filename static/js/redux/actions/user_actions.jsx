@@ -4,9 +4,7 @@ import { getUserInfoEndpoint } from '../constants.jsx';
 export function getUserInfo(json) {
 	return {
 		type: "USER_INFO_RECEIVED",
-		userImg: json.userImg,
-		isLoggedIn: json.isLoggedIn,
-		userFirstName: json.userFirstName
+		data: json
 	};
 }
 

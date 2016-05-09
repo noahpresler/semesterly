@@ -10,20 +10,16 @@ import copy, functools, itertools, json, logging, os
 from analytics.views import *
 from timetable.models import *
 from student.models import *
+from django.forms.models import model_to_dict
 
 def get_user(request):
 	logged = request.user.is_authenticated()
 	if logged:
 		student = Student.objects.get(user=request.user)
-		firstName = request.user.first_name
-		lastName = request.user.last_name
-		usrImg = student.img_url
-		response = {
-			'userFirstName': firstName,
-			'userLastName': lastName,
-			'isLoggedIn': logged,
-			'userImg': usrImg
-		}
+		response = model_to_dict(student)
+		response['userFirstName'] = request.user.first_name
+		response['userLastName'] = request.user.last_name
+		response['isLoggedIn'] = logged
 	else:
 		response = {
 			'isLoggedIn': logged

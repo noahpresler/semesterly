@@ -3,9 +3,7 @@ import { SocialProfile } from '../social_profile.jsx';
 
 const mapStateToProps = (state) => {
 	return {
-		isLoggedIn: state.userInfo.isLoggedIn,
-		userImg: state.userInfo.userImg,
-		userFirstName: state.userInfo.userFirstName
+		userInfo: state.userInfo.data
 	}
 }
 
