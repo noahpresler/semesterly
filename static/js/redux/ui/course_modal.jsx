@@ -11,12 +11,23 @@ export class CourseModal extends React.Component {
         }
     }
     render() {
+        let modalStyle = {
+            width: '100%',
+            heigh: '80%'
+        };
         let content = this.props.isFetching ? <div className="modal-loader"></div> :
-        (<div>
-            <h2>Course: {this.props.data.code}</h2><h3>In Roster? {String(this.props.inRoster)}</h3>
+        (<div id="modal-content">
+            <div id="modal-header">
+                <h2>Course: {this.props.data.code}</h2>
+                <h3>In Roster? {String(this.props.inRoster)}</h3>
+            </div>
         </div>);
         return (
-            <Modal ref="modal" className="course-modal" onHide={this.props.hideModal}>
+            <Modal ref="modal"
+                className="course-modal"
+                modalStyle={modalStyle}
+                onHide={this.props.hideModal}
+                >
                 {content}
                 <button onClick={() => this.refs.modal.hide()}>Close</button>
             </Modal>
