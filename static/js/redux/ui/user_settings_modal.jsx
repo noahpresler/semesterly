@@ -15,7 +15,7 @@ export class UserSettingsModal extends React.Component {
         this.props.changeUserInfo(userSettings)
     }
     componentWillReceiveProps(nextProps) {
-        if (nextProps.userInfo.isLoggedIn && (nextProps.userInfo.social_offerings == null || nextProps.userInfo.social_courses == null || nextProps.userInfo.social_offerings == null || nextProps.userInfo.major == "")) {
+        if (nextProps.userInfo.isLoggedIn && (nextProps.userInfo.social_offerings == null || nextProps.userInfo.social_courses == null || nextProps.userInfo.major == null)) {
             this.refs.modal.show();
         }
     }
