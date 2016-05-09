@@ -1,7 +1,130 @@
+/* Modal Styles */
 .course-modal {
-	width: 80%;
-	max-width: 1000px;
+	max-width: 1200px;
+	height: 80%;
+	min-height: 500px;
+	max-height: 900px;
 }
 .course-modal div {
 	outline: none;
+}
+
+/* Modal Content Styles */
+#modal-header {
+	position: relative;
+	padding: 20px 10px 10px;
+	background-color: #f3f3f3;
+	border-bottom: 1px solid #E8E8E8;;
+}
+#modal-header h1 {
+	margin: 0;
+	font-size: 36px;
+	padding-right: 85px;
+}
+#modal-header h2 {
+	margin: 10px 0;
+	font-size: 16px;
+	color: #777;
+	font-weight: 400;
+}
+
+/* Modal Corner Actions */
+#modal-close,
+#modal-share,
+#modal-save {
+	position: absolute;
+	top: 5px;
+	width: 20px;
+	height: 20px;
+	color: #777;
+	cursor: pointer;
+	transition: color .3s, transform .3s;
+}
+#modal-close i,
+#modal-share i,
+#modal-save i {
+	line-height: 20px;
+	font-size: 20px;
+}
+#modal-close {
+	right: 5px;
+}
+#modal-share {
+	right: 30px;
+}
+#modal-save {
+	right: 55px;
+}
+#modal-close:hover {
+	color: #ff4523;
+	transform: scale(1.2);
+}
+#modal-share:hover {
+	color: #5B99CE;
+	transform: scale(1.2);
+}
+#modal-save:hover {
+	color: #5BCE84;
+	transform: scale(1.2);
+}
+
+/* Modal Add */
+#modal-add {
+	position: absolute;
+	bottom: -35px;
+	right: 10%;
+	border-radius: 100%;
+	width: 60px;
+	height: 60px;
+	background-color: #34495E;
+	cursor: pointer;
+	transition: background-color .3s
+}
+#modal-add i {
+	text-align: center;
+	width: 100%;
+	line-height: 60px;
+	color: #fff;
+	font-size: 24px;
+}
+#modal-add:hover {
+	background-color: #1858BB;
+}
+#modal-add.in-roster{
+	background-color: #2DD6B5;
+}
+#modal-add.in-roster:hover{
+	background-color: #56ECCF;
+}
+
+/* Modal Body */
+#modal-body [class^="col-"] {
+	padding: 30px 10px;
+}
+#modal-body p {
+	font-size: 16px;
+	line-height: 22px;
+	color: #555;
+}
+#modal-body .credits h3 {
+	text-align: center;
+	font-weight: 200;
+	margin: 0;
+	font-size: 60px;
+	line-height: 66px;
+}
+#modal-body .credits h4 {
+	text-align: center;
+	color: #D4D4D4;
+	margin: 0 auto 20px;
+	line-height: 30px;
+	font-size: 30px;
+	font-weight: 200;
+}
+#modal-body .rating-module h4 {
+	color: #777;
+	text-align: center;
+	font-size: 14px;
+	font-weight: 400;
+	margin: 0 auto 5px;
 }
