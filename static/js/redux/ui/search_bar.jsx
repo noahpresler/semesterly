@@ -19,10 +19,10 @@ export class SearchBar extends React.Component {
     fetchSearchResults() {
         if (this.changeTimer) clearTimeout(this.changeTimer);
         let query = this.refs.input.value;
-        this.changeTimer = setTimeout(function() {
+        this.changeTimer = setTimeout( () => {
             this.props.fetchCourses(query);
             this.changeTimer = false;
-        }.bind(this), 100);
+        }, 200);
     }
     setSemester(semester) {
         this.setState({ showDropdown: false });
@@ -45,7 +45,7 @@ export class SearchBar extends React.Component {
             </ul>
         );
         let availableSemesters = this.props.availableSemesters.map(s => 
-            <div className="semester-option" onMouseDown={ () => this.setSemester(s)}> { getSemesterName(s) } </div>
+            <div key={s} className="semester-option" onMouseDown={ () => this.setSemester(s) }> { getSemesterName(s) } </div>
         );
     	return (
         	<div id="search-bar">

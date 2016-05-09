@@ -14,24 +14,21 @@ class Student(models.Model):
         (SENIOR, 'Senior'),
     )
     class_year = models.CharField(max_length=2,
-                                      choices=YEAR_IN_SCHOOL_CHOICES,
-                                      default=FRESHMAN)
+                                    choices=YEAR_IN_SCHOOL_CHOICES,
+                                    blank=True)
     user = models.OneToOneField(User)
     img_url = models.CharField(max_length=300, default=-1)
     friends = models.ManyToManyField("self", blank=True)
     fbook_uid = models.CharField(max_length=255, default='')
     gender = models.CharField(max_length=255, default='')
     major = models.CharField(max_length=255, default='')
-    social_courses = models.BooleanField(default=False)
-    social_offerings = models.BooleanField(default=False)
+    social_courses = models.NullBooleanField(null=True)
+    social_offerings = models.NullBooleanField(null=True)
 
 class PersonalTimetable(models.Model):
     semester = models.CharField(max_length=2)
     time_updated = models.DateTimeField(auto_now_add=True)
     # user = models.ForeignKey(Student)
-
-    class Meta:
-        abstract = True
 
 
 class UofTPersonalTimetable(PersonalTimetable):

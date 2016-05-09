@@ -74,9 +74,6 @@ class BaseCourse(models.Model):
         final.append(i)
     return sorted(final, key=lambda k: k['year']) 
 
-  class Meta:
-    abstract = True
-
 
 class BaseCourseOffering(models.Model):
   semester = models.CharField(max_length=2)
@@ -106,9 +103,6 @@ class BaseCourseOffering(models.Model):
 
   def get_evaluations(self):
     return self.course.get_eval_info()
-
-  class Meta:
-    abstract = True
 
 
 class BaseCourseEvaluation(models.Model):

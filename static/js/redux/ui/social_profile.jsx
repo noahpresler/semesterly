@@ -13,7 +13,7 @@ export class SocialProfile extends React.Component {
     }
     render() {
 		let profileImage = {
-			backgroundImage: 'url(' + this.props.userImg + ')',
+			backgroundImage: 'url(' + this.props.userInfo.img_url + ')',
 		};
 		let blankImage = {
 			backgroundImage: 'url(/static/img/blank.jpg)',
@@ -22,7 +22,7 @@ export class SocialProfile extends React.Component {
 			<div>
 				<div onMouseDown={this.toggleDropdown.bind(this)}>
 					<div id="social-pro-pic" style={profileImage}></div>
-					<h2>{this.props.userFirstName}</h2>
+					<h2>{this.props.userInfo.userFirstName}</h2>
 					<span className={classNames("tip-down", {'down' : this.state.showDropdown})}></span>
 				</div>
 				<div id="social-dropdown"
@@ -42,7 +42,7 @@ export class SocialProfile extends React.Component {
 				<h2>Signup/Login <i className="fa fa-facebook-square"></i></h2>
 			</a>
 		);
-		let social = this.props.isLoggedIn ? loggedIn : loggedOut;
+		let social = this.props.userInfo.isLoggedIn ? loggedIn : loggedOut;
     	return(
 			<div id="social">
 				{social}

@@ -5,7 +5,7 @@ import { getSchool } from '../init.jsx';
 import Modal from 'boron/DropModal';
 
 export class CourseModal extends React.Component {
-    componentWillReceiveProps(nextProps) { 
+    componentWillReceiveProps(nextProps) {
         if (nextProps.id != null) {
             this.refs.modal.show();
         }
