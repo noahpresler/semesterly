@@ -15,13 +15,22 @@ export class CourseModal extends React.Component {
         this.props.addCourse(this.props.id);
         this.refs.modal.hide();
     }
+    sizeItUp() {
+        let h = $("#modal-header").outerHeight();
+        $("#modal-body").css("top", h);
+    }
+    componentDidMount() {
+        $(window).resize(this.sizeItUp);
+    }
+    componentDidUpdate() {
+        this.sizeItUp();
+    }
     render() {
         console.log(this.props.data);
         let modalStyle = {
             width: '100%',
             heigh: '80%'
         };
-
         let inRoster = this.props.inRoster;
         let content = this.props.isFetching ? <div className="modal-loader"></div> :
         (<div id="modal-content">
@@ -43,31 +52,43 @@ export class CourseModal extends React.Component {
                     <i className={classNames('fa', {'fa-plus' : !inRoster, 'fa-check' : inRoster})}></i>
                 </div>
             </div>
-            <div id="modal-body" className="cf">
-                <div className="col-1-4">
-                    <div className="credits">
-                        <h3>3</h3>
-                        <h4>credits</h4>
-                    </div>
-                    <div className="rating-module">
-                        <h4>Average Course Rating</h4>
-                        <div className="sub-rating-wrapper">
-                            <div className="star-ratings-sprite">
-                                <span></span>
+            <div id="modal-body">
+                <div className="cf">
+                    <div className="col-1-4">
+                        <div className="credits">
+                            <h3>3</h3>
+                            <h4>credits</h4>
+                        </div>
+                        <div className="rating-module">
+                            <h4>Average Course Rating</h4>
+                            <div className="sub-rating-wrapper">
+                                <div className="star-ratings-sprite">
+                                    <span></span>
+                                </div>
                             </div>
                         </div>
+                        <p>{this.props.data.prerequisites}</p>
                     </div>
-                    <p>{this.props.data.prerequisites}</p>
-                </div>
-                <div className="col-1-2">
-                    <p>{this.props.data.description}</p>
-                </div>
-                <div id="modal-section-lists"
-                    className="col-1-4">
-                    <h3>Lecture Sections</h3>
-                    <div className="modal-section"></div>
-                    <h3>Tutorial Sections</h3>
-                    <h3>Practicals Sections</h3>
+                    <div className="col-1-2">
+                        <div>
+                            <p>{this.props.data.description}</p>
+                        </div>
+                        <div>
+                            <h3>Course Evaluations</h3>
+
+                        </div>
+                    </div>
+                    <div id="modal-section-lists"
+                        className="col-1-4">
+                        <h3>Lecture Sections</h3>
+                        <div className="modal-section">
+                            <h4>LT20192</h4>
+                            <h5>Ryan Bumberjadf</h5>
+                            <h6>Gilman Hall</h6>
+                        </div>
+                        <h3>Tutorial Sections</h3>
+                        <h3>Practicals Sections</h3>
+                    </div>
                 </div>
             </div>
         </div>);
