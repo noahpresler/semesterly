@@ -16,7 +16,6 @@ export class CourseModal extends React.Component {
         this.refs.modal.hide();
     }
     render() {
-        console.log(this.props.data);
         let modalStyle = {
             width: '100%',
             heigh: '80%'
