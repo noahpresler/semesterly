@@ -30,9 +30,6 @@ class PersonalTimetable(models.Model):
     time_updated = models.DateTimeField(auto_now_add=True)
     # user = models.ForeignKey(Student)
 
-    class Meta:
-        abstract = True
-
 
 class UofTPersonalTimetable(PersonalTimetable):
     course_offerings = models.ManyToManyField(CourseOffering)
