@@ -37,6 +37,8 @@ urlpatterns = patterns('',
 	url(r'^user/info.+$', 'student.views.get_user'),
 	url(r'^user/logout/$', 'django.contrib.auth.views.logout', {'next_page': '/'}),
 	url(r'^user/save_timetable/$', 'student.views.save_timetable'),
+	url(r'^user/save_settings/$', 'student.views.save_settings'),
+
 
 
 	url(r'^live_user_data/*$', 'analytics.views.get_live_user_data'),
