@@ -63,7 +63,7 @@ def get_timetables(request):
   sid = params['sid']
   mark_request(request, sid)
 
-  SCHOOL = params['school']
+  SCHOOL = request.subdomain
   SchoolCourse, SchoolCourseOffering = school_to_models[SCHOOL]
 
   course_ids = params['courseSections'].keys()
@@ -530,7 +530,8 @@ def get_courses(request, school, sem):
       content_type="application/json")
 
 def get_course(request, school, id):
-  school = school.lower()
+  global SCHOOL
+  SCHOOL = school.lower()
   try:
     C, Co = school_to_models[school]
     course = C.objects.get(id=id)

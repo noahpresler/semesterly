@@ -30,10 +30,10 @@ def get_user(request):
 
 @csrf_exempt
 def save_timetable(request):
+	school = request.subdomain
 	params = json.loads(request.body)
 	courses = params['timetable']['courses']
 	name = params['name']
-	school = params['school']
 	SchoolCourseOffering = school_to_models[school][1]
 	student = Student.objects.get(user=request.user)
 	personal_timetable, created = school_to_personal_timetables[school].objects.get_or_create(
