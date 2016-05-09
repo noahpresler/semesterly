@@ -26,7 +26,6 @@ export class CourseModal extends React.Component {
         this.sizeItUp();
     }
     render() {
-        console.log(this.props.data);
         let modalStyle = {
             width: '100%',
             heigh: '80%'
