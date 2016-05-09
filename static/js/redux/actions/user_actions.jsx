@@ -1,5 +1,6 @@
 import fetch from 'isomorphic-fetch';
-import { getUserInfoEndpoint } from '../constants.jsx';
+import { getUserInfoEndpoint, getSaveTimetableEndpoint } from '../constants.jsx';
+import { store } from '../init.jsx';
 
 export function getUserInfo(json) {
 	return {
@@ -21,10 +22,35 @@ export function fetchUserInfo() {
 
 		dispatch(requestUserInfo());
 
-		fetch(getUserInfoEndpoint(), {credentials: 'include'})
+		fetch(getUserInfoEndpoint(), { credentials: 'include' })
 		    .then(response => response.json()) // TODO(rohan): error-check the response
 		    .then(json => {
 		        dispatch(getUserInfo(json))
 		    });
 	}
 }
+
+function getSaveTimetablesRequestBody() {
+	let state = store.getState();
+	let timetableState = state.timetables;
+	let name = state.savingTimetable.name;
+	return {
+		timetable: timetableState.items[timetableState.active],
+		name
+	}
+}
+
+export function saveTimetable() {
+	return (dispatch) => {
+		dispatch({
+			type: "REQUEST_SAVE_TIMETABLE"
+		});
+		fetch(getSaveTimetableEndpoint(), {
+      		method: 'POST',
+      		body: JSON.stringify(getSaveTimetablesRequestBody())
+    	})
+		.then(response => dispatch({
+			type: "RECEIVE_TIMETABLE_SAVED"
+		}));
+	}
+}	

@@ -14,8 +14,8 @@ class Student(models.Model):
         (SENIOR, 'Senior'),
     )
     class_year = models.CharField(max_length=2,
-                                      choices=YEAR_IN_SCHOOL_CHOICES,
-                                      default=FRESHMAN)
+                                    choices=YEAR_IN_SCHOOL_CHOICES,
+                                    default=FRESHMAN)
     user = models.OneToOneField(User)
     img_url = models.CharField(max_length=300, default=-1)
     friends = models.ManyToManyField("self", blank=True)

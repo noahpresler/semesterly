@@ -2,7 +2,13 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 
 class SideBar extends React.Component {
+    changeName() {
+        this.props.changeName(this.refs.input.value);
+    }
     render() {
+        let saveButton = this.props.savingTimetable ? <i className = "fa fa-spin fa-cog" /> :
+        <button className="save-timetable" onMouseDown={ this.props.saveTimetable }>Save</button>;
+
         return (
             <div id="side-bar">
                 <div className="side-bar-header">
@@ -10,7 +16,9 @@ class SideBar extends React.Component {
                 </div>
                 <input ref="input"
                     defaultValue="Fall 2016 v1"
+                    onInput={this.changeName.bind(this)}
                     />
+                { saveButton }
                 <div className="col-1-2">
                     <h3>Average</h3>
                     <div className="sub-rating-wrapper">
