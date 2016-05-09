@@ -16,7 +16,7 @@ from pytz import timezone
 
 from analytics.views import *
 from timetable.models import *
-from school_mappers import school_to_models, school_to_granularity, VALID_SCHOOLS
+from timetable.school_mappers import school_to_models, school_to_granularity, VALID_SCHOOLS
 
 
 MAX_RETURN = 60 # Max number of timetables we want to consider
