@@ -17,8 +17,15 @@ from timetable.school_mappers import school_to_models, school_to_personal_timeta
 def get_user(request):
 	logged = request.user.is_authenticated()
 	if logged:
+		school = request.subdomain
 		student = Student.objects.get(user=request.user)
+		school = request.subdomain
+		tts = school_to_personal_timetables[school].objects.filter(student=student)
+		tt_dict = []
+		for tt in tts:
+			tt_dict.append(model_to_dict(tt))
 		response = model_to_dict(student, exclude=['user','id','fbook_uid', 'friends'])
+		response['timetables'] = tt_dict
 		response['userFirstName'] = request.user.first_name
 		response['userLastName'] = request.user.last_name
 		response['isLoggedIn'] = logged
@@ -37,7 +44,7 @@ def save_timetable(request):
 	SchoolCourseOffering = school_to_models[school][1]
 	student = Student.objects.get(user=request.user)
 	personal_timetable, created = school_to_personal_timetables[school].objects.get_or_create(
-		student=student, name=name)
+		student=student, name=name, school=school)
 	# delete currently existing offerings for this timetable
 	personal_timetable.course_offerings.clear()
 	personal_timetable.save()
