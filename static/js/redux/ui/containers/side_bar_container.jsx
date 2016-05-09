@@ -3,9 +3,7 @@ import SideBar from '../side_bar.jsx';
 import { saveTimetable } from '../../actions/user_actions.jsx'
 
 const mapStateToProps = (state) => {
-	return {
-    	savingTimetable: state.savingTimetable.saving
-	}
+	return state.savingTimetable
 }
 
 const mapDispatchToProps = (dispatch) => {
