@@ -5,6 +5,7 @@ import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
 import ConflictAlertContainer from './alerts/conflict_alert_container.jsx';
 import TopBar from './top_bar.jsx';
 import SideBarContainer from './containers/side_bar_container.jsx';
+import UserSettingsModalContainer from './containers/user_settings_modal_container.jsx';
 
 class Semesterly extends React.Component {
 	componentWillReceiveProps(nextProps) {
@@ -28,6 +29,7 @@ class Semesterly extends React.Component {
 		return (
 			<div id="page-wrapper">
 				<TopBar />
+				<UserSettingsModalContainer />
 				<AlertBox ref={a => this.msg = a} {...this.alertOptions} />
 				<div id="all-cols">
 					<div id="main-bar">

@@ -15,15 +15,15 @@ class Student(models.Model):
     )
     class_year = models.CharField(max_length=2,
                                     choices=YEAR_IN_SCHOOL_CHOICES,
-                                    default=FRESHMAN)
+                                    blank=True)
     user = models.OneToOneField(User)
     img_url = models.CharField(max_length=300, default=-1)
     friends = models.ManyToManyField("self", blank=True)
     fbook_uid = models.CharField(max_length=255, default='')
     gender = models.CharField(max_length=255, default='')
     major = models.CharField(max_length=255, default='')
-    social_courses = models.BooleanField(default=False)
-    social_offerings = models.BooleanField(default=False)
+    social_courses = models.NullBooleanField(null=True)
+    social_offerings = models.NullBooleanField(null=True)
 
 class PersonalTimetable(models.Model):
     name = models.CharField(max_length=100)
