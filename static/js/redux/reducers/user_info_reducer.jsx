@@ -7,12 +7,9 @@ export const userInfo = (state = {data: {isLoggedIn: false}, saving: false, isFe
 		case 'RECEIVE_USER_INFO_SAVED':
 			return Object.assign( {}, state, { saving: false });
 		case ("USER_INFO_RECEIVED"):
-			return {
-				data: action.data,
-				isFetching: false
-			};
+			return Object.assign({}, state, { data: action.data, isFetching: false });
 		case ("REQUEST_USER_INFO"):
-			Object.assign({}, state, {isFetching: true});
+			return Object.assign({}, state, {isFetching: true});
 		default:
 			return state;
 	}
