@@ -106,18 +106,25 @@
 	line-height: 22px;
 	color: #555;
 }
-#modal-body h3 {
+#modal-body .credits h3 {
 	text-align: center;
 	font-weight: 200;
 	margin: 0;
 	font-size: 60px;
 	line-height: 66px;
 }
-#modal-body h4 {
+#modal-body .credits h4 {
 	text-align: center;
 	color: #D4D4D4;
-	margin: 0;
+	margin: 0 auto 20px;
 	line-height: 30px;
 	font-size: 30px;
 	font-weight: 200;
+}
+#modal-body .rating-module h4 {
+	color: #777;
+	text-align: center;
+	font-size: 14px;
+	font-weight: 400;
+	margin: 0 auto 5px;
 }
