@@ -4,20 +4,16 @@ import fetch from 'isomorphic-fetch';
 import { getSchool } from '../init.jsx';
 import Modal from 'boron/DropModal';
 
-export class CourseModal extends React.Component {
+export class UserSettingsModal extends React.Component {
     componentWillReceiveProps(nextProps) {
-        if (nextProps.id != null) {
+        if (nextProps.userInfo.isLoggedIn && (nextProps.userInfo.social_offerings == null || nextProps.userInfo.social_courses == null || nextProps.userInfo.social_courses || nextProps.userInfo.major == "")) {
             this.refs.modal.show();
         }
     }
     render() {
-        let content = this.props.isFetching ? <div className="modal-loader"></div> :
-        (<div>
-            <h2>Course: {this.props.data.code}</h2><h3>In Roster? {String(this.props.inRoster)}</h3>
-        </div>);
         return (
             <Modal ref="modal" className="course-modal" onHide={this.props.hideModal}>
-                {content}
+                "YO"
                 <button onClick={() => this.refs.modal.hide()}>Close</button>
             </Modal>
         );

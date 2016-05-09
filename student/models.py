@@ -22,8 +22,8 @@ class Student(models.Model):
     fbook_uid = models.CharField(max_length=255, default='')
     gender = models.CharField(max_length=255, default='')
     major = models.CharField(max_length=255, default='')
-    social_courses = models.BooleanField(default=False)
-    social_offerings = models.BooleanField(default=False)
+    social_courses = models.NullBooleanField(null=True)
+    social_offerings = models.NullBooleanField(null=True)
 
 class PersonalTimetable(models.Model):
     semester = models.CharField(max_length=2)
