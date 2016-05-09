@@ -34,7 +34,7 @@ function getSaveTimetablesRequestBody() {
 	let name = state.savingTimetable.name;
 	return {
 		timetable: timetableState.items[timetableState.active],
-		name
+		name,
 	}
 }
 
@@ -45,7 +45,8 @@ export function saveTimetable() {
 		});
 		fetch(getSaveTimetableEndpoint(), {
       		method: 'POST',
-      		body: JSON.stringify(getSaveTimetablesRequestBody())
+      		body: JSON.stringify(getSaveTimetablesRequestBody()),
+      		credentials: 'include',
     	})
 		.then(response => dispatch({
 			type: "RECEIVE_TIMETABLE_SAVED"
