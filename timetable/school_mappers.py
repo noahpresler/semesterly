@@ -4,6 +4,7 @@ import django
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "semesterly.settings")
 django.setup()
 from timetable.models import *
+from student.models import *
 import sys
 
 VALID_SCHOOLS = ['jhu', 'uoft', 'umd', 'rutgers', 'uo']
@@ -26,7 +27,11 @@ school_to_granularity = {
     'uo': 5
 }
 
-
+school_to_personal_timetables = {
+  'uoft': UofTPersonalTimetable,
+  'jhu': HopkinsPersonalTimetable,
+  'umd': UmdPersonalTimetable,
+}
 # do the imports: assumes all parser follow the same naming conventions: 
 # schoolname_parsertype where parsertype can be courses, evals, or textbooks
 types = ['courses', 'evals', 'textbooks']

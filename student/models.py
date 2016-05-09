@@ -26,10 +26,10 @@ class Student(models.Model):
     social_offerings = models.BooleanField(default=False)
 
 class PersonalTimetable(models.Model):
+    name = models.CharField(max_length=100)
     semester = models.CharField(max_length=2)
     time_updated = models.DateTimeField(auto_now_add=True)
-    # user = models.ForeignKey(Student)
-
+    student = models.ForeignKey(Student)
 
 class UofTPersonalTimetable(PersonalTimetable):
     course_offerings = models.ManyToManyField(CourseOffering)
