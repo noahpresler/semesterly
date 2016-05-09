@@ -18,7 +18,7 @@ def get_user(request):
 	logged = request.user.is_authenticated()
 	if logged:
 		student = Student.objects.get(user=request.user)
-		response = model_to_dict(student)
+		response = model_to_dict(student, exclude=['user','id','fbook_uid', 'friends'])
 		response['userFirstName'] = request.user.first_name
 		response['userLastName'] = request.user.last_name
 		response['isLoggedIn'] = logged
