@@ -57,7 +57,7 @@ def view_timetable(request):
 @csrf_exempt
 def get_timetables(request):
   """Generate best timetables given the user's selected courses"""
-  global SCHOOL, LOCKED_SECTIONS
+  global SCHOOL
 
   params = json.loads(request.body)
   sid = params['sid']
@@ -78,13 +78,18 @@ def get_timetables(request):
     for locked_section in filter(bool, updated_course['section_codes']):
       update_locked_sections(locked_sections, cid, 
                   locked_section, SchoolCourseOffering)
-  LOCKED_SECTIONS = locked_sections
 
+  # temp optional course implementation
+  opt_course_ids = params['optionCourses'] if 'optionCourses' in params else []
+  k = params['numOptionCourses'] if 'numOptionCourses' in params else 0
+  optional_courses = [SchoolCourse.objects.get(id=cid) for cid in opt_course_ids]
+  optional_course_subsets = itertools.combinations(optional_courses, k) or [[]]
   generator = TimetableGenerator(params['semester'], 
                   params['school'],
                   locked_sections,
-                  params['preferences']) 
-  result = generator.courses_to_timetables(courses)
+                  params['preferences'])
+  result = [timetable for opt_courses in optional_course_subsets \
+      for timetable in generator.courses_to_timetables(courses + list(opt_courses))]
   save_analytics_data('timetables', {'sid': sid, 'school': SCHOOL, 
                   'courses': courses, 'count': len(result)})
   # updated roster object 
@@ -127,6 +132,7 @@ class TimetableGenerator:
     self.locked_sections = locked_sections
 
   def courses_to_timetables(self, courses):
+    print courses
     timetables = self.get_best_timetables(courses)
     result = [self.convert_tt_to_dict(tt) for tt in timetables]
     return result
