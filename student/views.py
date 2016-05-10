@@ -106,6 +106,7 @@ def get_classmates(request):
 		courses = []
 		for course_id in course_ids:
 			courses.append(get_classmates_from_course_id(school, student, course_id))
+		print courses
 		return HttpResponse(json.dumps(courses), content_type='application/json')
 	else:
 		return HttpResponse("Must have social_courses enabled")
@@ -115,19 +116,19 @@ def get_classmates_from_course_id(school, student, course_id):
 	#All friends with social courses/sharing enabled
 	friends = student.friends.filter(social_courses=True)
 	course = { 'course_id': course_id, 'classmates': [] }
-	SchoolCourseOffering = school_to_models[school][1]
 	for friend in friends:
 		classmate = model_to_dict(friend)
-		has_ovelap = False
+		has_overlap = False
+		# print friend.personaltimetable_set.all()
 		for tt in school_to_personal_timetables[school].objects.filter(student=friend):
 			if tt.courses.filter(id=course_id).exists():
-				has_ovelap = True
+				has_overlap = True
 				if student.social_offerings and friend.social_offerings:
-					friend_cos = filter(lambda co: co.course.id == course.id, tt.course_offerings.all())
+					friend_cos = filter(lambda co: co.course.id == course_id, tt.course_offerings.all())
 					sections_set = set()
 					for co in friend_cos:
 						sections_set.add(co.meeting_section)
-					classmate['sections'] = sections_set
+					classmate['sections'] = list(sections_set)
 		if has_ovelap:
 			course['classmates'].append(classmate)
 	return course
