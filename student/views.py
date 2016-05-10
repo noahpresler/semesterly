@@ -20,7 +20,6 @@ def get_user(request):
 	if logged:
 		school = request.subdomain
 		student = Student.objects.get(user=request.user)
-		school = request.subdomain
 		
 		tts = school_to_personal_timetables[school].objects.filter(student=student)
 		tts_dict = [] #aka titty dick
@@ -33,16 +32,22 @@ def get_user(request):
 			for co in tt.course_offerings.all():
 				c = co.course # get the co's course
 				c_dict = model_to_dict(c)
+
 				if c.id not in course_ids: #if not in courses, add to course dictionary with co
 					courses.append(c_dict)
 					course_ids.append(c.id)
-					courses[-1]['course_offerings'] = [model_to_dict(co, exclude=['basecourseoffering_ptr'])]
+					courses[-1]['slots'] = [model_to_dict(co, exclude=['basecourseoffering_ptr'])]
+					courses[-1]['enrolled_sections'] = [co.meeting_section]
 				else: # already in the dictionary, add the co to it
+					index = course_ids.index(c.id)
 					co_dict = model_to_dict(tt,exclude=['personaltimetable_ptr'])
-					courses[course_ids.index(c.id)]['course_offerings'].append(model_to_dict(co, exclude=['basecourseoffering_ptr']))
+					courses[index]['slots'].append(model_to_dict(co, exclude=['basecourseoffering_ptr']))
+					if co.meeting_section not in courses[index]['enrolled_sections']:
+						courses[index]['enrolled_sections'].append(co.meeting_section)
+
 			tt_dict['courses'] = courses
 			tts_dict.append(tt_dict)
-		
+
 		response = model_to_dict(student, exclude=['user','id','fbook_uid', 'friends'])
 		response['timetables'] = tts_dict
 		response['userFirstName'] = request.user.first_name
@@ -65,10 +70,12 @@ def save_timetable(request):
 	student = Student.objects.get(user=request.user)
 	personal_timetable, created = school_to_personal_timetables[school].objects.get_or_create(
 		student=student, name=name, school=school)
-	# delete currently existing offerings for this timetable
+	# delete currently existing courses and course offerings for this timetable
+	personal_timetable.courses.clear()
 	personal_timetable.course_offerings.clear()
 	personal_timetable.save()
 	for course in courses:
+		personal_timetable.courses.add(Course.objects.get(id=course['id']))
 		for course_offering in course['slots']:
 			personal_timetable.course_offerings.add(SchoolCourseOffering.objects.get(id=course_offering['id']))
 	personal_timetable.save()
@@ -87,17 +94,40 @@ def save_settings(request):
 	student.save()
 	return HttpResponse("success")
 
-# @csrf_exempt
-# @login_required
-# def get_classmates(request):
-# 	school = request.subdomain
-# 	student = Student.objects.get(user=request.user)
-# 	params = json.loads(request.body)
-# 	course = Course.get(id=params['course_id'])
-# 	friends = student.friends.all()
-# 	classmates = []
-# 	SchoolCourseOffering = school_to_models[school][1]
-# 	for friend in friends:
-# 		for tt in school_to_personal_timetables[school].filter(student=friend):
-# 			if 
-# 	return HttpResponse("success")
+
+@csrf_exempt
+@login_required
+def get_classmates(request):
+	school = request.subdomain
+	student = Student.objects.get(user=request.user)
+	course_ids = json.loads(request.body)['course_ids']
+	# user opted in to sharing courses
+	if student.social_courses:
+		courses = []
+		for course_id in course_ids:
+			courses.append(get_classmates_from_course_id(school, student, course_id))
+		return HttpResponse(json.dumps(courses), content_type='application/json')
+	else:
+		return HttpResponse("Must have social_courses enabled")
+
+
+def get_classmates_from_course_id(school, student, course_id):
+	#All friends with social courses/sharing enabled
+	friends = student.friends.filter(social_courses=True)
+	course = { 'course_id': course_id, 'classmates': [] }
+	for friend in friends:
+		classmate = model_to_dict(friend, exclude=['user','id','fbook_uid', 'friends'])
+		has_overlap = False
+		# print friend.personaltimetable_set.all()
+		for tt in school_to_personal_timetables[school].objects.filter(student=friend):
+			if tt.courses.filter(id=course_id).exists():
+				has_overlap = True
+				if student.social_offerings and friend.social_offerings:
+					friend_cos = filter(lambda co: co.course.id == course_id, tt.course_offerings.all())
+					sections_set = set()
+					for co in friend_cos:
+						sections_set.add(co.meeting_section)
+					classmate['sections'] = list(sections_set)
+		if has_ovelap:
+			course['classmates'].append(classmate)
+	return course
