@@ -48,10 +48,12 @@
 .sem-page > a{
 	color: #fff;
 }
-.sem-page:hover, .sem-page.active {
+.sem-page:hover,
+.sem-page:active,
+.sem-page.active {
 	color: #fff;
-	background-color: #777;
-	border:5px solid #777;
+	background-color: #143B63;
+	border:5px solid #143B63;
 }
 
 .sem-pagination-nav {
@@ -85,8 +87,4 @@
 
 .sem-pagination-icon {
 	color: #777;
-}
-.sem-page:active {
-	background-color:#143B63;
-	border:5px solid #143B63;
 }
