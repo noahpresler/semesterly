@@ -2,6 +2,8 @@ import fetch from 'isomorphic-fetch';
 import { getTimetablesEndpoint } from '../constants.jsx';
 import { randomString } from '../util.jsx';
 import { store } from '../init.jsx';
+import { getClassmatesEndpoint } from '../constants.jsx'
+import { lockActiveSections } from './user_actions.jsx';
 
 export const SID = randomString(30);
 
@@ -27,6 +29,23 @@ export function alertConflict(){
 	return {
 		type: "ALERT_CONFLICT"
 	}
+}
+
+export function loadTimetable(timetable) {
+	let dispatch = store.dispatch;
+	dispatch({
+		type: "CHANGE_ACTIVE_SAVED_TIMETABLE",
+		timetable,
+	});
+	dispatch({
+		type: "RECEIVE_TIMETABLES",
+		timetables: [timetable],
+		preset: true
+	});
+	dispatch({
+		type: "RECEIVE_COURSE_SECTIONS",
+		courseSections: lockActiveSections(timetable)
+	});
 }
 
 /* 
@@ -95,6 +114,39 @@ function fetchTimetables(requestBody, removing) {
 				// were received
 				dispatch(alertConflict());
 			}
+		})
+		.then(json => {
+			if (store.getState().userInfo.data.isLoggedIn)
+					dispatch(fetchClassmates(json.timetables[0].courses.map( c => c['id'])))
+
 		});
+	}
+}
+
+export function getClassmates(json) {
+	return {
+		type: "CLASSMATES_RECEIVED",
+		courses: json
+	};
+}
+
+export function requestClassmates(id) {
+  return {
+    type: "REQUEST_CLASSMATES",
+  }
+}
+
+function fetchClassmates(courses) {
+	return (dispatch) => {
+		dispatch(requestClassmates());
+		fetch(getClassmatesEndpoint(), {
+			credentials: 'include',
+			method: 'POST',
+			body: JSON.stringify({course_ids: courses})
+		})
+			    .then(response => response.json())
+			    .then(json => {
+			    	dispatch(getClassmates(json))
+			    });
 	}
 }
