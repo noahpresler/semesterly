@@ -114,11 +114,12 @@ function fetchTimetables(requestBody, removing) {
 				// were received
 				dispatch(alertConflict());
 			}
+			return json;
 		})
 		.then(json => {
-			if (store.getState().userInfo.data.isLoggedIn)
-					dispatch(fetchClassmates(json.timetables[0].courses.map( c => c['id'])))
-
+			if (store.getState().userInfo.data.isLoggedIn && json.timetables[0]) {
+				dispatch(fetchClassmates(json.timetables[0].courses.map( c => c['id'])))
+			}
 		});
 	}
 }
@@ -136,7 +137,7 @@ export function requestClassmates(id) {
   }
 }
 
-function fetchClassmates(courses) {
+export function fetchClassmates(courses) {
 	return (dispatch) => {
 		dispatch(requestClassmates());
 		fetch(getClassmatesEndpoint(), {
