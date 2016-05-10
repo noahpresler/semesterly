@@ -1,24 +1,25 @@
 import { connect } from 'react-redux';
 import SideBar from '../side_bar.jsx';
-import { saveTimetable, lockActiveSections } from '../../actions/user_actions.jsx'
+import { lockActiveSections } from '../../actions/user_actions.jsx';
 
 const mapStateToProps = (state) => {
 	return Object.assign({}, state.savingTimetable, {
-		savedTimetables: state.userInfo.data.timetables
+		savedTimetables: state.userInfo.data.timetables,
 	});
 }
 
 const mapDispatchToProps = (dispatch) => {
 	return {
-		saveTimetable: () => dispatch(saveTimetable()),
-		changeName: (name) => dispatch({
-			type: "CHANGE_TIMETABLE_NAME",
-			name,
-		}),
+		changeName: (name) => {},
 		loadTimetable: (timetable) => {
 			dispatch({
+				type: "CHANGE_ACTIVE_SAVED_TIMETABLE",
+				timetable,
+			});
+			dispatch({
 				type: "RECEIVE_TIMETABLES",
-				timetables: [timetable]
+				timetables: [timetable],
+				preset: true
 			});
 			dispatch({
 				type: "RECEIVE_COURSE_SECTIONS",
