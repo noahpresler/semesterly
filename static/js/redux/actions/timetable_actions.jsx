@@ -108,14 +108,17 @@ function fetchTimetables(requestBody, removing) {
 				// mark that timetables and a new courseSections have been received
 				dispatch(receiveTimetables(json.timetables));
 				dispatch(receiveCourseSections(json.new_c_to_s));
-				if (json.timetables != undefined)
-					dispatch(fetchClassmates(json.timetables[0].courses.map( c => c['id'])))
 			}
 			else {
 				// course added by the user resulted in a conflict, so no timetables
 				// were received
 				dispatch(alertConflict());
 			}
+		})
+		.then(json => {
+			if (store.getState().userInfo.data.isLoggedIn)
+					dispatch(fetchClassmates(json.timetables[0].courses.map( c => c['id'])))
+
 		});
 	}
 }
