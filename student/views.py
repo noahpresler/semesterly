@@ -27,7 +27,7 @@ def get_user(request):
 		response['isLoggedIn'] = logged
 	else:
 		response = {
-			'isLoggedIn': logged
+			'isLoggedIn': False
 		}
 	return HttpResponse(json.dumps(response), content_type='application/json')
 

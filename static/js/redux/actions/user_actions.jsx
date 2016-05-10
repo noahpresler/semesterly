@@ -1,7 +1,7 @@
 import fetch from 'isomorphic-fetch';
 import { getUserInfoEndpoint, getSaveTimetableEndpoint, getSaveSettingsEndpoint } from '../constants.jsx';
 import { store } from '../init.jsx';
-import { loadTimetable } from './timetable_actions.jsx';
+import { loadTimetable, fetchClassmates } from './timetable_actions.jsx';
 
 export function getUserInfo(json) {
 	return {
@@ -27,7 +27,13 @@ export function fetchUserInfo() {
 		        if (user.timetables && user.timetables.length > 0) {
 		        	loadTimetable(user.timetables[0]);
 		        }
-		    });
+		        return user;
+		    })
+		    .then(user => {
+				if (user.isLoggedIn && user.timetables[0]) {
+					dispatch(fetchClassmates(user.timetables[0].courses.map( c => c['id'])))
+				}
+			});
 	}
 }
 
@@ -101,6 +107,12 @@ export function saveTimetable() {
 				type: "RECEIVE_SAVED_TIMETABLES",
 				timetables: json.timetables
 			});
+			return json;
+		})
+		.then(json => {
+			if (store.getState().userInfo.data.isLoggedIn && json.timetables[0]) {
+				dispatch(fetchClassmates(json.timetables[0].courses.map( c => c['id'])))
+			}
 		});
 	}
 }	
