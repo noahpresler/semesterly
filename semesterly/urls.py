@@ -38,11 +38,10 @@ urlpatterns = patterns('',
 	url(r'^user/logout/$', 'django.contrib.auth.views.logout', {'next_page': '/'}),
 	url(r'^user/save_timetable/$', 'student.views.save_timetable'),
 	url(r'^user/save_settings/$', 'student.views.save_settings'),
-
-
+	url(r'^user/get_classmates/$', 'student.views.get_classmates'),
 
 	url(r'^live_user_data/*$', 'analytics.views.get_live_user_data'),
-	url(r'^courses/(?P<school>.+?)/(?P<sem>[fFsS]{1}?)/code/(?P<code>.+)/*$', 'timetable.views.get_course_id'),
+	url(r'^courses/(?P<school>.+?)/(?P<sem>[fFsS]{1}?)/code/(?P<course_id>.+)/*$', 'timetable.views.get_course_id'),
 	url(r'^reason/*$', 'analytics.views.verify_password'),
 	url(r'^jhu/countdown/*$', 'timetable.views.jhu_timer'),
 	url(r'^courses/(?P<school>.+?)/(?P<sem>[fFsS]{1}?)/*$', 'timetable.views.get_courses'),
