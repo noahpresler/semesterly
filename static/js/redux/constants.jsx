@@ -26,6 +26,9 @@ export const getSaveTimetableEndpoint = () => {
 export const getSaveSettingsEndpoint = () => {
 	return "user/save_settings/"
 }
+export const getClassmatesEndpoint = () => {
+	return "user/get_classmates/"
+}
 
 export const getPrimaryDisplay = (school) => {
 	switch(school) {
