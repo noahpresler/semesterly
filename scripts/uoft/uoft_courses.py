@@ -403,4 +403,4 @@ class UofTParser:
 
 if __name__ == "__main__":
     parser = UofTParser()
-    parser.start()
+    parser.new_start()
