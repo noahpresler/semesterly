@@ -1,13 +1,12 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+import classnames from 'classnames';
 
 class SideBar extends React.Component {
     changeName() {
         this.props.changeName(this.refs.input.value);
     }
     render() {
-        let saveButton = this.props.saving ? <i className = "fa fa-spin fa-cog" /> :
-        <button className="save-timetable" onMouseDown={ this.props.saveTimetable }>Save</button>;
         let savedTimetables = this.props.savedTimetables ? this.props.savedTimetables.map(t => {
             return <div key={t.id} onClick={() => this.props.loadTimetable(t)}>{t.name}</div>
         }) : null;
@@ -16,11 +15,10 @@ class SideBar extends React.Component {
                 <div className="side-bar-header">
                   <h4>Your Semester</h4>
                 </div>
-                <input ref="input"
-                    defaultValue={this.props.name}
-                    onInput={this.changeName.bind(this)}
+                <input ref="input" className={classnames({"unsaved": !this.props.upToDate})}
+                    placeholder={this.props.activeTimetable.name}
+                    onChange={this.changeName.bind(this)}
                     />
-                { saveButton }
                 { savedTimetables }
                 <div className="col-1-2">
                     <h3>Average</h3>

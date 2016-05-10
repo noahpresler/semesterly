@@ -28,6 +28,8 @@ class Calendar extends React.Component {
   	}
 
 	render() {
+		let saveButton = this.props.saving ? <i className = "fa fa-spin fa-2x fa-cog" /> :
+        <button className="save-timetable" onMouseDown={ this.props.saveTimetable }>Save</button>;
 		return (
 
 	      <div id="calendar" className="fc fc-ltr fc-unthemed">
@@ -35,7 +37,9 @@ class Calendar extends React.Component {
 	          <div className="fc-left">
 	      		<PaginationContainer />
 	      	  </div>
-	          <div className="fc-right" />
+	          <div className="fc-right">
+	          	{saveButton}
+	          </div>
 	          <div className="fc-center" />
 	          <div className="fc-clear" />
 
