@@ -120,15 +120,12 @@ def get_classmates_from_course_id(school, student, course_id):
 	for friend in friends:
 		classmate = model_to_dict(friend, exclude=['user','id','fbook_uid', 'friends'])
 		has_overlap = False
-		for tt in school_to_personal_timetables[school].objects.filter(student=friend):
-			if tt.courses.filter(id=course_id).exists():
-				has_overlap = True
-				if student.social_offerings and friend.social_offerings:
-					friend_cos = filter(lambda co: co.course.id == course_id, tt.course_offerings.all())
-					sections_set = set()
-					for co in friend_cos:
-						sections_set.add(co.meeting_section)
-					classmate['sections'] = list(sections_set)
+		for tt in school_to_personal_timetables[school].objects.filter(student=friend,courses__id__exact=course_id):
+			has_overlap = True
+			if student.social_offerings and friend.social_offerings:
+				friend_cos = tt.course_offerings.all().filter(course__id__exact=course_id)
+				sections = friend_cos.values('meeting_section').distinct()
+				classmate['sections'] = list(map(lambda d: d['meeting_section'], sections))
 		if has_overlap:
 			course['classmates'].append(classmate)
 	return course

@@ -1,79 +1,74 @@
 .sem-pagination {
-	margin-top:7px;
-	margin-bottom:-7px;
-    margin-left: 7px;
+	margin: 0;
+    padding: 0;
+    float: left;
     -webkit-touch-callout: none;
     -webkit-user-select: none;
     -khtml-user-select: none;
     -moz-user-select: none;
     -ms-user-select: none;
     user-select: none;
-    padding:0;
-    padding-left: 7px;
-    float:left;
 }
 .fc .fc-toolbar>*>* {
 	margin-left:0;
 	margin-bottom:0;
 }
 .sem-pages, .sem-pagination-nav {
-	background-color:#d6dbdf;
-	height:45px;
-	line-height:43px;
+	background-color: #eee;
+	height: 30px;
+	line-height: 30px;
 }
 .sem-pages {
-	position:relative;
-	list-style-type:none;
-	display:inline-block;
-	padding:0;
-	padding-left:15px;
-	padding-right:10px;
-	padding-top:0px;
-    white-space:nowrap;
+	list-style-type: none;
+	display: inline-block;
+	padding: 0 15px 0 10px;
+    white-spac e: nowrap;
     word-wrap:break-word;
-    max-width:317px;
-    margin-bottom: 7px;
+    max-width: 317px;
+    margin-bottom: 0;
 }
 
 .sem-page {
-	position:relative;
-	cursor:pointer;
-	display:inline-block;
-	font-size:12px;
-	border-radius:50%;
-	color:#fff;
-	background-color:#fff;
-	width:25px;
-	height:25px;
-	border:5px solid #d6dbdf;
-	text-align:center;
-	transition: all 0.3s;
-	line-height:15px;
-	margin: 0px 4px 4px 0px;
+	cursor: pointer;
+	display: inline-block;
+	vertical-align: middle;
+	font-size: 12px;
+	border-radius: 50%;
+	color: #aaa;
+	background-color:#aaa;
+	width: 20px;
+	height: 20px;
+	border: 5px solid #eee;
+	text-align: center;
+	transition: all .3s;
+	line-height: 10px;
+	margin: 0px 4px 0 0;
 
 }
 .sem-page > a{
 	color: #fff;
 }
 .sem-page:hover, .sem-page.active {
-	background-color:#34495e;
-	border:5px solid #34495e;
+	color: #fff;
+	background-color: #777;
+	border:5px solid #777;
 }
 
 .sem-pagination-nav {
-	position:relative;
-	cursor:pointer;
-	display:inline-block;
-	width:50px;
-	text-align:center;
-	transition:all 0.3s;
-	border:2px solid #fafafa;
-	border-top:0px;
-	border-bottom:0px;
-
+	cursor: pointer;
+	display: inline-block;
+	width: 34px;
+	text-align: center;
+	transition: all  .3s;
+	border: 2px solid #fafafa;
+	border-top: 0px;
+	border-bottom: 0px;
 }
 .sem-pagination-nav:hover {
-	background-color:#34495e;
+	background-color: #ddd;
+}
+.sem-pagination-nav:active {
+	background-color: #ccc;
 }
 .nav-double {
 	border:none;
@@ -89,11 +84,7 @@
 }
 
 .sem-pagination-icon {
-	color:#fff;
-}
-
-.sem-pagination-nav:active {
-	background-color:#143B63;
+	color: #777;
 }
 .sem-page:active {
 	background-color:#143B63;
