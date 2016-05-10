@@ -11,7 +11,8 @@ export const userInfo = (state = {data: {isLoggedIn: false}, saving: false, isFe
 		case "REQUEST_USER_INFO":
 			return Object.assign({}, state, { isFetching: true });
 		case "RECEIVE_SAVED_TIMETABLES":
-			return Object.assign({}, state, {data: Object.assign({}, state.data, {timetables: action.timetables})});
+			let newData = Object.assign({}, state.data, { timetables: action.timetables });
+			return Object.assign({}, state, { data: newData });
 		default:
 			return state;
 	}
