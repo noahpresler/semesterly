@@ -1,5 +1,6 @@
 import { connect } from 'react-redux';
 import Calendar from '../calendar.jsx';
+import { saveTimetable } from '../../actions/user_actions.jsx';
 
 /*
 gets the end hour of the current timetable, based on the class that ends latest
@@ -27,12 +28,19 @@ const mapStateToProps = (state) => {
 	let active = state.timetables.active;
 	let hasTimetables = timetables[active].courses.length > 0 
 	return {
-    	endHour: getMaxEndHour(timetables[active], hasTimetables)
+    	endHour: getMaxEndHour(timetables[active], hasTimetables),
+      saving: state.savingTimetable.saving
 	}
+}
+const mapDispatchToProps = (dispatch) => {
+  return {
+    saveTimetable: () => dispatch(saveTimetable()),
+  }
 }
 
 const CalendarContainer = connect(
-	mapStateToProps
+	mapStateToProps,
+  mapDispatchToProps
 )(Calendar);
 
 export default CalendarContainer;
