@@ -17,7 +17,6 @@ export function requestUserInfo(id) {
 
 export function fetchUserInfo() {
 	return (dispatch) => {
-
 		dispatch(requestUserInfo());
 
 		fetch(getUserInfoEndpoint(), { credentials: 'include' })
@@ -43,7 +42,7 @@ function getActiveTimetable(timetableState) {
 	return timetableState.items[timetableState.active];
 }
 /* Returns the currently active timetable */
-function lockActiveSections(activeTimetable) {
+export function lockActiveSections(activeTimetable) {
 	let courseSections = {};
 	let courses = activeTimetable.courses;
 	for (let i = 0; i < courses.length; i++) {
@@ -61,6 +60,10 @@ function lockActiveSections(activeTimetable) {
 export function saveTimetable() {
 	return (dispatch) => {
 		let activeTimetable = getActiveTimetable(store.getState().timetables);
+		// current timetable is empty, don't save it
+		if (activeTimetable.courses.length === 0) {
+			return;
+		}
 		// mark that we're now trying to save this timetable
 		dispatch({
 			type: "REQUEST_SAVE_TIMETABLE"
