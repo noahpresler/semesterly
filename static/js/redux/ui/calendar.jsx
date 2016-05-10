@@ -28,7 +28,7 @@ class Calendar extends React.Component {
   	}
 
 	render() {
-		let saveIcon = this.props.saving ? <i className = "fa fa-spin fa-cog" /> :
+		let saveIcon = this.props.saving ? <i className = "fa fa-spin fa-circle-o-notch" /> :
 			<i className="fa fa-floppy-o"></i>
 		let saveButton = (
 	        <button className="save-timetable" onMouseDown={ this.props.saveTimetable }>
