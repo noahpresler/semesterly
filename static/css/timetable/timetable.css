@@ -20,6 +20,7 @@ button.save-timetable {
     background-color: #eee;
     height: 30px;
     line-height: 30px;
+    color: #777;
     transition: background-color .3s;
 }
 button.save-timetable:hover {
