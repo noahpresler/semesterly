@@ -69,8 +69,13 @@ def save_timetable(request):
 	name = params['name']
 	SchoolCourseOffering = school_to_models[school][1]
 	student = Student.objects.get(user=request.user)
-	personal_timetable, created = school_to_personal_timetables[school].objects.get_or_create(
-		student=student, name=name, school=school)
+	if params['id']:
+		personal_timetable = school_to_personal_timetables[school].objects.get(
+			student=student, id=params['id'], school=school)
+		personal_timetable.name = name
+	else:
+		personal_timetable = school_to_personal_timetables[school].objects.create(
+			student=student, name=name, school=school)
 	# delete currently existing courses and course offerings for this timetable
 	personal_timetable.courses.clear()
 	personal_timetable.course_offerings.clear()
