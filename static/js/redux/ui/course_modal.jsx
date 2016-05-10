@@ -140,11 +140,13 @@ export class CourseModal extends React.Component {
 }
 
 const SearchResultSection = ({ section }) => {
+    // following classname in "h6 span" Red for no seats left, green for available seats
     return (
     <div className="modal-section">
         <h4>{section}</h4>
         <h5>Johns Smithson</h5>
-        <h6>Gilman Hall</h6>
+        <h5>Gilman Hall</h5>
+        <h6><span className="red">0 open</span> / 365 seats</h6>
     </div>
     );
 };
