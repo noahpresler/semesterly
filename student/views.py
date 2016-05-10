@@ -70,10 +70,12 @@ def save_timetable(request):
 	student = Student.objects.get(user=request.user)
 	personal_timetable, created = school_to_personal_timetables[school].objects.get_or_create(
 		student=student, name=name, school=school)
-	# delete currently existing offerings for this timetable
+	# delete currently existing courses and course offerings for this timetable
+	personal_timetable.courses.clear()
 	personal_timetable.course_offerings.clear()
 	personal_timetable.save()
 	for course in courses:
+		personal_timetable.courses.add(Course.objects.get(id=course['id']))
 		for course_offering in course['slots']:
 			personal_timetable.course_offerings.add(SchoolCourseOffering.objects.get(id=course_offering['id']))
 	personal_timetable.save()
