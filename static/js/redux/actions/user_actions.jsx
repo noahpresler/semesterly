@@ -1,6 +1,7 @@
 import fetch from 'isomorphic-fetch';
 import { getUserInfoEndpoint, getSaveTimetableEndpoint, getSaveSettingsEndpoint } from '../constants.jsx';
 import { store } from '../init.jsx';
+import { loadTimetable } from './timetable_actions.jsx';
 
 export function getUserInfo(json) {
 	return {
@@ -21,8 +22,11 @@ export function fetchUserInfo() {
 
 		fetch(getUserInfoEndpoint(), { credentials: 'include' })
 		    .then(response => response.json()) // TODO(rohan): error-check the response
-		    .then(json => {
-		        dispatch(getUserInfo(json))
+		    .then(user => {
+		        dispatch(getUserInfo(user));
+		        if (user.timetables && user.timetables.length > 0) {
+		        	loadTimetable(user.timetables[0]);
+		        }
 		    });
 	}
 }
@@ -73,7 +77,8 @@ export function saveTimetable() {
 		// mark that the current timetable is now the only available one
 		dispatch({
 			type: "RECEIVE_TIMETABLES",
-			timetables: [activeTimetable]
+			timetables: [activeTimetable],
+			preset: true
 		});
 		// edit the state's courseSections, so that future requests to add/remove/unlock
 		// courses are handled correctly. in the new courseSections, every currently active
