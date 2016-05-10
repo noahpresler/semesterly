@@ -106,7 +106,6 @@ def get_classmates(request):
 		courses = []
 		for course_id in course_ids:
 			courses.append(get_classmates_from_course_id(school, student, course_id))
-		print courses
 		return HttpResponse(json.dumps(courses), content_type='application/json')
 	else:
 		return HttpResponse("Must have social_courses enabled")
@@ -117,7 +116,7 @@ def get_classmates_from_course_id(school, student, course_id):
 	friends = student.friends.filter(social_courses=True)
 	course = { 'course_id': course_id, 'classmates': [] }
 	for friend in friends:
-		classmate = model_to_dict(friend)
+		classmate = model_to_dict(friend, exclude=['user','id','fbook_uid', 'friends'])
 		has_overlap = False
 		# print friend.personaltimetable_set.all()
 		for tt in school_to_personal_timetables[school].objects.filter(student=friend):
