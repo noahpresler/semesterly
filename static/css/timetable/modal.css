@@ -204,6 +204,9 @@ h3.modal-module-header:after {
 .modal-section h6 .green {
 	color: #0AA98A;
 }
+.modal-section h6 .yellow {
+	color: #D29842;
+}
 .modal-section h6 .red {
 	color: #D21616;
 }
