@@ -10,6 +10,7 @@ import { alerts } from './alerts_reducer.jsx';
 import { ui } from './ui_reducer.jsx'
 import { userInfo } from './user_info_reducer.jsx'
 import { savingTimetable } from './saving_timetable_reducer.jsx';
+import { classmates } from './classmates_reducer.jsx';
 
 export const rootReducer = combineReducers({
   school,
@@ -22,5 +23,6 @@ export const rootReducer = combineReducers({
   alerts,
   ui,
   userInfo,
-  savingTimetable
+  savingTimetable,
+  classmates
 });

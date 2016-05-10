@@ -2,6 +2,7 @@ import fetch from 'isomorphic-fetch';
 import { getTimetablesEndpoint } from '../constants.jsx';
 import { randomString } from '../util.jsx';
 import { store } from '../init.jsx';
+import { getClassmatesEndpoint } from '../constants.jsx'
 
 export const SID = randomString(30);
 
@@ -89,6 +90,8 @@ function fetchTimetables(requestBody, removing) {
 				// mark that timetables and a new courseSections have been received
 				dispatch(receiveTimetables(json.timetables));
 				dispatch(receiveCourseSections(json.new_c_to_s));
+				if (json.timetables != undefined)
+					dispatch(fetchClassmates(json.timetables[0].courses.map( c => c['id'])))
 			}
 			else {
 				// course added by the user resulted in a conflict, so no timetables
@@ -96,5 +99,33 @@ function fetchTimetables(requestBody, removing) {
 				dispatch(alertConflict());
 			}
 		});
+	}
+}
+
+export function getClassmates(json) {
+	return {
+		type: "CLASSMATES_RECEIVED",
+		courses: json
+	};
+}
+
+export function requestClassmates(id) {
+  return {
+    type: "REQUEST_CLASSMATES",
+  }
+}
+
+function fetchClassmates(courses) {
+	return (dispatch) => {
+		dispatch(requestClassmates());
+		fetch(getClassmatesEndpoint(), {
+			credentials: 'include',
+			method: 'POST',
+			body: JSON.stringify({course_ids: courses})
+		})
+			    .then(response => response.json())
+			    .then(json => {
+			    	dispatch(getClassmates(json))
+			    });
 	}
 }
