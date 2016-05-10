@@ -17,7 +17,7 @@ from timetable.school_mappers import school_to_models, school_to_personal_timeta
 
 def get_user(request):
 	logged = request.user.is_authenticated()
-	if logged:
+	if logged and Student.objects.filter(user=request.user).exists():
 		school = request.subdomain
 		student = Student.objects.get(user=request.user)
 		response = model_to_dict(student, exclude=['user','id','fbook_uid', 'friends'])
