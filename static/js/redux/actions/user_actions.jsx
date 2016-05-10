@@ -17,7 +17,6 @@ export function requestUserInfo(id) {
 
 export function fetchUserInfo() {
 	return (dispatch) => {
-
 		dispatch(requestUserInfo());
 
 		fetch(getUserInfoEndpoint(), { credentials: 'include' })
@@ -43,7 +42,7 @@ function getActiveTimetable(timetableState) {
 	return timetableState.items[timetableState.active];
 }
 /* Returns the currently active timetable */
-function lockActiveSections(activeTimetable) {
+export function lockActiveSections(activeTimetable) {
 	let courseSections = {};
 	let courses = activeTimetable.courses;
 	for (let i = 0; i < courses.length; i++) {

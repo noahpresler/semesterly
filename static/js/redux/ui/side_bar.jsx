@@ -8,7 +8,9 @@ class SideBar extends React.Component {
     render() {
         let saveButton = this.props.savingTimetable ? <i className = "fa fa-spin fa-cog" /> :
         <button className="save-timetable" onMouseDown={ this.props.saveTimetable }>Save</button>;
-
+        let savedTimetables = this.props.savedTimetables ? this.props.savedTimetables.map(t => {
+            return <div key={t.id} onClick={() => this.props.loadTimetable(t)}>{t.name}</div>
+        }) : null;
         return (
             <div id="side-bar">
                 <div className="side-bar-header">
@@ -19,6 +21,7 @@ class SideBar extends React.Component {
                     onInput={this.changeName.bind(this)}
                     />
                 { saveButton }
+                { savedTimetables }
                 <div className="col-1-2">
                     <h3>Average</h3>
                     <div className="sub-rating-wrapper">
