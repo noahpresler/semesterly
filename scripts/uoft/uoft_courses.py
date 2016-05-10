@@ -27,7 +27,7 @@ class UofTParser:
         self.courses = None
         self.count = 0
         self.total = 0
-        self.departments = set(map(lambda x: x[:3], Course.objects.values_list('code', flat=True)))
+        self.departments = set(map(lambda x: x[:3], list(Course.objects.values_list('code', flat=True))))
         self.DAY_MAP = {'MO': 'M', 'TU': 'T', 'WE': 'W', 'TH': 'R', 'FR': 'F', None: ''}
         self.errors = 0
 

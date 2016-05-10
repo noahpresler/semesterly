@@ -96,6 +96,10 @@ export class CourseModal extends React.Component {
                         </div>
                         <p>{this.props.data.prerequisites}</p>
                         <div>
+                            <h3 className="modal-module-header">Prerequisites</h3>
+
+                        </div>
+                        <div>
                             <h3 className="modal-module-header">Similar Courses</h3>
 
                         </div>
@@ -115,7 +119,7 @@ export class CourseModal extends React.Component {
                         </div>
                     </div>
                     <div id="modal-section-lists"
-                        className="col-5-16">
+                        className="col-5-16 cf">
                         {lectureSections}
                         {tutorialSections}
                         {practicalSections}
