@@ -87,17 +87,40 @@ def save_settings(request):
 	student.save()
 	return HttpResponse("success")
 
-# @csrf_exempt
-# @login_required
-# def get_classmates(request):
-# 	school = request.subdomain
-# 	student = Student.objects.get(user=request.user)
-# 	params = json.loads(request.body)
-# 	course = Course.get(id=params['course_id'])
-# 	friends = student.friends.all()
-# 	classmates = []
-# 	SchoolCourseOffering = school_to_models[school][1]
-# 	for friend in friends:
-# 		for tt in school_to_personal_timetables[school].filter(student=friend):
-# 			if 
-# 	return HttpResponse("success")
+
+@csrf_exempt
+@login_required
+def get_classmates(request):
+	school = request.subdomain
+	student = Student.objects.get(user=request.user)
+	course_ids = json.loads(request.body)['course_ids']
+	# user opted in to sharing courses
+	if student.social_courses:
+		courses = []
+		for course_id in course_ids:
+			courses.append(get_classmates_from_course_id(school, student, course_id))
+		return HttpResponse(json.dumps(courses), content_type='application/json')
+	else:
+		return HttpResponse("Must have social_courses enabled")
+
+
+def get_classmates_from_course_id(school, student, course_id):
+	#All friends with social courses/sharing enabled
+	friends = student.friends.filter(social_courses=True)
+	course = { 'course_id': course_id, 'classmates': [] }
+	SchoolCourseOffering = school_to_models[school][1]
+	for friend in friends:
+		classmate = model_to_dict(friend)
+		has_ovelap = False
+		for tt in school_to_personal_timetables[school].objects.filter(student=friend):
+			if tt.courses.filter(id=course_id).exists():
+				has_ovelap = True
+				if student.social_offerings and friend.social_offerings:
+					friend_cos = filter(lambda co: co.course.id == course.id, tt.course_offerings.all())
+					sections_set = set()
+					for co in friend_cos:
+						sections_set.add(co.meeting_section)
+					classmate['sections'] = sections_set
+		if has_ovelap:
+			course['classmates'].append(classmate)
+	return course
