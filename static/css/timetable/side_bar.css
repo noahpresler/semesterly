@@ -22,6 +22,18 @@
 	color: #777;
 }
 
+#side-bar .unsaved::-webkit-input-placeholder { 
+    font-style: italic;
+
+}
+#side-bar .unsaved::-ms-input-placeholder { 
+    font-style: italic;
+
+}
+#side-bar .unsaved::-moz-placeholder { 
+    font-style: italic;
+
+}
 /* Star Ratings */
 .star-ratings-sprite {
     background: url(../../img/star.png) repeat-x;

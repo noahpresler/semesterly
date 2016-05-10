@@ -30,7 +30,7 @@ export function fetchUserInfo() {
 function getSaveTimetablesRequestBody() {
 	let state = store.getState();
 	let timetableState = state.timetables;
-	let name = state.savingTimetable.name;
+	let name = state.savingTimetable.activeTimetable.name;
 	return {
 		timetable: timetableState.items[timetableState.active],
 		name,
@@ -85,9 +85,10 @@ export function saveTimetable() {
       		body: JSON.stringify(getSaveTimetablesRequestBody()),
       		credentials: 'include',
     	})
-		.then(response => dispatch({
-			type: "RECEIVE_TIMETABLE_SAVED"
-		}));
+		.then(response => {
+			dispatch({
+			type: "RECEIVE_TIMETABLE_SAVED"});
+		});
 	}
 }	
 
