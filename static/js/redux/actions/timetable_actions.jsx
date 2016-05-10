@@ -137,7 +137,7 @@ export function requestClassmates(id) {
   }
 }
 
-function fetchClassmates(courses) {
+export function fetchClassmates(courses) {
 	return (dispatch) => {
 		dispatch(requestClassmates());
 		fetch(getClassmatesEndpoint(), {
