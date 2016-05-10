@@ -3,8 +3,17 @@ import ReactDOM from 'react-dom';
 import classnames from 'classnames';
 
 class SideBar extends React.Component {
-    changeName() {
-        this.props.changeName(this.refs.input.value);
+    constructor(props) {
+        super(props);
+        this.timer = false;
+        this.changeTimetableName = this.changeTimetableName.bind(this);
+    }
+    changeTimetableName() {
+        if (this.timer) clearTimeout(this.timer);
+        this.timer = setTimeout( () => {
+            this.props.changeTimetableName(this.refs.input.value);
+            this.timer = false;
+        }, 200);
     }
     render() {
         let savedTimetables = this.props.savedTimetables ? this.props.savedTimetables.map(t => {
@@ -17,7 +26,7 @@ class SideBar extends React.Component {
                 </div>
                 <input ref="input" className={classnames({"unsaved": !this.props.upToDate})}
                     placeholder={this.props.activeTimetable.name}
-                    onChange={this.changeName.bind(this)}
+                    onChange={this.changeTimetableName}
                     />
                 { savedTimetables }
                 <div className="col-1-2">

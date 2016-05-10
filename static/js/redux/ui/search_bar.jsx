@@ -11,6 +11,7 @@ export class SearchBar extends React.Component {
         super(props);
         this.state = { focused: false, showDropdown: false };
         this.toggleDropdown = this.toggleDropdown.bind(this);
+        this.fetchSearchResults = this.fetchSearchResults.bind(this);
         this.changeTimer = false;
     }
     toggleDropdown() {
@@ -61,7 +62,7 @@ export class SearchBar extends React.Component {
                     <div id="search-bar-input-wrapper">
                         <input ref="input" 
                                className={this.props.isFetching ? 'results-loading-gif' : ''} 
-                               onInput={this.fetchSearchResults.bind(this)} 
+                               onInput={this.fetchSearchResults} 
                                onFocus={() => this.setState({ focused: true, showDropdown: false })}
                                onBlur={() => this.setState({ focused: false })}
                         />
