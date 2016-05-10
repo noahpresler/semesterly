@@ -20,7 +20,6 @@ def get_user(request):
 	if logged:
 		school = request.subdomain
 		student = Student.objects.get(user=request.user)
-		school = request.subdomain
 		
 		tts = school_to_personal_timetables[school].objects.filter(student=student)
 		tts_dict = [] #aka titty dick
@@ -33,16 +32,22 @@ def get_user(request):
 			for co in tt.course_offerings.all():
 				c = co.course # get the co's course
 				c_dict = model_to_dict(c)
+
 				if c.id not in course_ids: #if not in courses, add to course dictionary with co
 					courses.append(c_dict)
 					course_ids.append(c.id)
-					courses[-1]['course_offerings'] = [model_to_dict(co, exclude=['basecourseoffering_ptr'])]
+					courses[-1]['slots'] = [model_to_dict(co, exclude=['basecourseoffering_ptr'])]
+					courses[-1]['enrolled_sections'] = [co.meeting_section]
 				else: # already in the dictionary, add the co to it
+					index = course_ids.index(c.id)
 					co_dict = model_to_dict(tt,exclude=['personaltimetable_ptr'])
-					courses[course_ids.index(c.id)]['course_offerings'].append(model_to_dict(co, exclude=['basecourseoffering_ptr']))
+					courses[index]['slots'].append(model_to_dict(co, exclude=['basecourseoffering_ptr']))
+					if co.meeting_section not in courses[index]['enrolled_sections']:
+						courses[index]['enrolled_sections'].append(co.meeting_section)
+
 			tt_dict['courses'] = courses
 			tts_dict.append(tt_dict)
-		
+
 		response = model_to_dict(student, exclude=['user','id','fbook_uid', 'friends'])
 		response['timetables'] = tts_dict
 		response['userFirstName'] = request.user.first_name
