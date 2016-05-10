@@ -8,11 +8,18 @@ import { rootReducer } from './reducers/root_reducer.jsx';
 import SemesterlyContainer from './ui/containers/semesterly_container.jsx';
 import { fetchUserInfo } from './actions/user_actions.jsx'
 import { getLocalTimetable } from './util.jsx';
+import { getClassmatesEndpoint } from './constants.jsx'
 export const store = createStore(rootReducer, applyMiddleware(thunkMiddleware));
 
 store.dispatch(
   fetchUserInfo()
 );
+
+fetch(getClassmatesEndpoint(), {
+    method: 'POST',
+    body: JSON.stringify({course_ids: [828]}),
+    credentials: 'include',
+})
 
 render(
   <Provider store={store}>
