@@ -3,7 +3,7 @@ import React from 'react';
 const Bubble = ({index, active, setActive}) => 
 	   <li onClick={() => setActive(index)}
          className={ active ? "sem-page active" : "sem-page"}>
-      	{index + 1}
+      	<span>{index + 1}</span>
      </li>;
 
 export class Pagination extends React.Component {

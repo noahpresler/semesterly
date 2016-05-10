@@ -31,19 +31,22 @@ export class CourseModal extends React.Component {
         }
         return Object.keys(sections).map(sec =>{
             let slots = sections[sec];
-            let instructors = "";
-            slots.map(slot => instructors += slot.instructors);
+            let instructors = new Set();
+            for (let s of slots) {
+                if (!instructors.has(s.instructors)) {
+                    instructors.add(s.instructors);
+                }
+            }
+            let instructString = Array.from(instructors).join(', ');
             let enrolled = slots[0].enrolled || 0;
-            let waitlist = slots[0].waitlist;
-            let size = slots[0].size;
             return <SearchResultSection 
                     key={sec}
                     section={slots}
                     secName={sec}
-                    instr={instructors}
+                    instr={instructString}
                     enrolled={enrolled}
-                    waitlist={waitlist}
-                    size={size}
+                    waitlist={slots[0].waitlist}
+                    size={slots[0].size}
                 />
         });
     }
