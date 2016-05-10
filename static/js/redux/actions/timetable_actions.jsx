@@ -3,6 +3,7 @@ import { getTimetablesEndpoint } from '../constants.jsx';
 import { randomString } from '../util.jsx';
 import { store } from '../init.jsx';
 import { getClassmatesEndpoint } from '../constants.jsx'
+import { lockActiveSections } from './user_actions.jsx';
 
 export const SID = randomString(30);
 
@@ -28,6 +29,23 @@ export function alertConflict(){
 	return {
 		type: "ALERT_CONFLICT"
 	}
+}
+
+export function loadTimetable(timetable) {
+	let dispatch = store.dispatch;
+	dispatch({
+		type: "CHANGE_ACTIVE_SAVED_TIMETABLE",
+		timetable,
+	});
+	dispatch({
+		type: "RECEIVE_TIMETABLES",
+		timetables: [timetable],
+		preset: true
+	});
+	dispatch({
+		type: "RECEIVE_COURSE_SECTIONS",
+		courseSections: lockActiveSections(timetable)
+	});
 }
 
 /* 
