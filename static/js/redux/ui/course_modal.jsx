@@ -25,12 +25,40 @@ export class CourseModal extends React.Component {
     componentDidUpdate() {
         this.sizeItUp();
     }
+    mapSectionsToSlots(sections) {
+        if (sections === undefined) {
+            return [];
+        }
+        console.log(sections);
+        // srs = []
+        // for key in Object.keys(sections):
+        //     srs.append(<SearchResultSection section={sec} />)
+
+        return Object.keys(sections).map(sec =>
+            <SearchResultSection section={sec} />
+        );
+    }
     render() {
         let modalStyle = {
             width: '100%',
             heigh: '80%'
         };
         let inRoster = this.props.inRoster;
+        let lecs = this.mapSectionsToSlots(this.props.lectureSections);
+        let tuts = this.mapSectionsToSlots(this.props.tutorialSections);
+        let pracs = this.mapSectionsToSlots(this.props.practicalSections);
+        let lectureSections = null;
+        let tutorialSections = null;
+        let practicalSections = null;
+        if (lecs.length > 0) {
+            lectureSections = <div><h3 className="modal-module-header">Lecture Sections</h3>{lecs}</div>
+        }
+        if (tuts.length > 0) {
+            tutorialSections = <div><h3 className="modal-module-header">Tutorial Sections</h3>{tuts}</div>
+        }
+        if (pracs.length > 0) {
+            practicalSections = <div><h3 className="modal-module-header">Practical Sections</h3>{pracs}</div>
+        }
         let content = this.props.isFetching ? <div className="modal-loader"></div> :
         (<div id="modal-content">
             <div id="modal-header">
@@ -53,7 +81,7 @@ export class CourseModal extends React.Component {
             </div>
             <div id="modal-body">
                 <div className="cf">
-                    <div className="col-1-4">
+                    <div className="col-3-16">
                         <div className="credits">
                             <h3>3</h3>
                             <h4>credits</h4>
@@ -67,26 +95,30 @@ export class CourseModal extends React.Component {
                             </div>
                         </div>
                         <p>{this.props.data.prerequisites}</p>
-                    </div>
-                    <div className="col-1-2">
                         <div>
+                            <h3 className="modal-module-header">Similar Courses</h3>
+
+                        </div>
+                    </div>
+                    <div className="col-8-16">
+                        <div>
+                            <h3 className="modal-module-header">Course Description</h3>
                             <p>{this.props.data.description}</p>
                         </div>
                         <div>
-                            <h3>Course Evaluations</h3>
+                            <h3 className="modal-module-header">Course Evaluations</h3>
+
+                        </div>
+                        <div>
+                            <h3 className="modal-module-header">Textbook</h3>
 
                         </div>
                     </div>
                     <div id="modal-section-lists"
-                        className="col-1-4">
-                        <h3>Lecture Sections</h3>
-                        <div className="modal-section">
-                            <h4>LT20192</h4>
-                            <h5>Ryan Bumberjadf</h5>
-                            <h6>Gilman Hall</h6>
-                        </div>
-                        <h3>Tutorial Sections</h3>
-                        <h3>Practicals Sections</h3>
+                        className="col-5-16">
+                        {lectureSections}
+                        {tutorialSections}
+                        {practicalSections}
                     </div>
                 </div>
             </div>
@@ -102,3 +134,13 @@ export class CourseModal extends React.Component {
         );
     }
 }
+
+const SearchResultSection = ({ section }) => {
+    return (
+    <div className="modal-section">
+        <h4>{section}</h4>
+        <h5>Johns Smithson</h5>
+        <h6>Gilman Hall</h6>
+    </div>
+    );
+};
