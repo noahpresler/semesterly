@@ -2,7 +2,6 @@
 .course-modal {
 	max-width: 1200px;
 	height: 85%;
-	min-height: 500px;
 	max-height: 900px;
 }
 .course-modal > div {
@@ -32,6 +31,7 @@
 	font-size: 16px;
 	color: #777;
 	font-weight: 400;
+	padding-right: 15%;
 }
 
 /* Modal Corner Actions */
@@ -84,7 +84,8 @@
 	height: 60px;
 	background-color: #34495E;
 	cursor: pointer;
-	transition: background-color .3s
+	transition: background-color .3s;
+	z-index: 1;
 }
 #modal-add i {
 	text-align: center;
@@ -194,4 +195,75 @@ h3.modal-module-header:after {
 	margin: 0;
 	line-height: 16px;
 	color: #777;
+}
+
+@media (max-width: 766px) {
+	#modal-header h1 {
+		font-size: 32px;
+	}
+	#modal-header h2 {
+		font-size: 14px;
+	}
+}
+
+@media (max-width: 500px) { 
+	.course-modal {
+		position: static;
+	}
+	#modal-header {
+		padding-bottom: 30px;
+	}
+	#modal-header h1 {
+		font-size: 20px;
+	}
+	#modal-header h2 {
+		font-size: 14px;
+	}
+	#modal-body {
+		padding-top: 20px;
+	}
+	#modal-add,
+	#modal-share,
+	#modal-save {
+		position: absolute;
+		top: auto;
+		bottom: -34px;
+		border-radius: 100%;
+		width: 60px;
+		height: 60px;
+		background-color: #34495E;
+		cursor: pointer;
+		transition: background-color .3s;
+		z-index: 1;
+		transform: translateX(-50%);
+	}
+	#modal-add i,
+	#modal-share i,
+	#modal-save i {
+		text-align: center;
+		width: 100%;
+		line-height: 60px;
+		color: #fff;
+		font-size: 24px;
+	}
+	#modal-share {
+		left: 25%;
+	}
+	#modal-save {
+		left: 50%;
+	}
+	#modal-add {
+		left: 75%;
+	}
+	#modal-add:hover,
+	#modal-share:hover,
+	#modal-save:hover {
+		transform: scale(1) translateX(-50%);
+	}
+	#modal-share:hover {
+		background-color: #5B99CE;
+	}
+	#modal-save:hover {
+		background-color: #5BCE84;
+	}
 }
