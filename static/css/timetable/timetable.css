@@ -14,6 +14,22 @@ body {
     user-select: none;           /* non-prefixed version, currently */
 }
 
+button.save-timetable {
+    border: none;
+    outline: none;
+    background-color: #eee;
+    height: 30px;
+    line-height: 30px;
+    color: #777;
+    transition: background-color .3s;
+}
+button.save-timetable:hover {
+    background-color: #ddd;
+}
+button.save-timetable:active {
+    background-color: #ccc;
+}
+
 .cal-row {
 	width: 49px;
 	font-size: 14px;
@@ -36,5 +52,6 @@ body {
 .fc-toolbar {
     border: 1px solid #ccc;
     border-bottom: 0px;
+    padding: 5px;
     margin-top: 20px;
 }
