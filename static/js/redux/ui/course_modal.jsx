@@ -29,13 +29,13 @@ export class CourseModal extends React.Component {
         if (sections === undefined) {
             return [];
         }
-        console.log(sections);
+        // console.log(sections);
         // srs = []
         // for key in Object.keys(sections):
         //     srs.append(<SearchResultSection section={sec} />)
 
         return Object.keys(sections).map(sec =>
-            <SearchResultSection section={sec} />
+            <SearchResultSection key={sec} section={sec} />
         );
     }
     render() {
