@@ -20,7 +20,18 @@ def get_user(request):
 	if logged:
 		school = request.subdomain
 		student = Student.objects.get(user=request.user)
-		
+		response = model_to_dict(student, exclude=['user','id','fbook_uid', 'friends'])
+		response['timetables'] = get_student_tts(student,school)
+		response['userFirstName'] = request.user.first_name
+		response['userLastName'] = request.user.last_name
+		response['isLoggedIn'] = logged
+	else:
+		response = {
+			'isLoggedIn': logged
+		}
+	return HttpResponse(json.dumps(response), content_type='application/json')
+
+def get_student_tts(student,school):
 		tts = school_to_personal_timetables[school].objects.filter(student=student)
 		tts_dict = [] #aka titty dick
 		#for each personal timetable
@@ -47,17 +58,7 @@ def get_user(request):
 
 			tt_dict['courses'] = courses
 			tts_dict.append(tt_dict)
-
-		response = model_to_dict(student, exclude=['user','id','fbook_uid', 'friends'])
-		response['timetables'] = tts_dict
-		response['userFirstName'] = request.user.first_name
-		response['userLastName'] = request.user.last_name
-		response['isLoggedIn'] = logged
-	else:
-		response = {
-			'isLoggedIn': logged
-		}
-	return HttpResponse(json.dumps(response), content_type='application/json')
+		return tts_dict
 
 @csrf_exempt
 @login_required
@@ -79,7 +80,8 @@ def save_timetable(request):
 		for course_offering in course['slots']:
 			personal_timetable.course_offerings.add(SchoolCourseOffering.objects.get(id=course_offering['id']))
 	personal_timetable.save()
-	return HttpResponse("success")
+	response = {'timetables': get_student_tts(student,school)}
+	return HttpResponse(json.dumps(response), content_type='application/json')
 
 
 @csrf_exempt
@@ -118,7 +120,6 @@ def get_classmates_from_course_id(school, student, course_id):
 	for friend in friends:
 		classmate = model_to_dict(friend, exclude=['user','id','fbook_uid', 'friends'])
 		has_overlap = False
-		# print friend.personaltimetable_set.all()
 		for tt in school_to_personal_timetables[school].objects.filter(student=friend):
 			if tt.courses.filter(id=course_id).exists():
 				has_overlap = True
