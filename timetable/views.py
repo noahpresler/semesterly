@@ -529,20 +529,17 @@ def get_courses(request, school, sem):
               'courses':json_data}), 
       content_type="application/json")
 
-def get_course(request, school, id):
+def get_course(request, school, sem, id):
   global SCHOOL
   SCHOOL = school.lower()
   try:
     C, Co = school_to_models[school]
     course = C.objects.get(id=id)
-    json_data = model_to_dict(course)
-    json_data['sections_F'] = get_meeting_sections(course,'F')
-    json_data['sections_S'] = get_meeting_sections(course,'S')
-    json_data['sections_F_objs'] = get_meeting_sections_objects(course, 'F')
-    json_data['sections_S_objs'] = get_meeting_sections_objects(course, 'S')
+    json_data = my_model_to_dict(course, Co, sem)
     json_data['textbook_info'] = course.get_all_textbook_info()
     json_data['eval_info'] = course.get_eval_info()
     json_data['related_courses'] = course.get_related_course_info()
+
   except:
     import traceback
     traceback.print_exc()
