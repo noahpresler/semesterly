@@ -29,14 +29,23 @@ export class CourseModal extends React.Component {
         if (sections === undefined) {
             return [];
         }
-        // console.log(sections);
-        // srs = []
-        // for key in Object.keys(sections):
-        //     srs.append(<SearchResultSection section={sec} />)
-
-        return Object.keys(sections).map(sec =>
-            <SearchResultSection key={sec} section={sec} />
-        );
+        return Object.keys(sections).map(sec =>{
+            let slots = sections[sec];
+            let instructors = "";
+            slots.map(slot => instructors += slot.instructors);
+            let enrolled = slots[0].enrolled || 0;
+            let waitlist = slots[0].waitlist;
+            let size = slots[0].size;
+            return <SearchResultSection 
+                    key={sec}
+                    section={slots}
+                    secName={sec}
+                    instr={instructors}
+                    enrolled={enrolled}
+                    waitlist={waitlist}
+                    size={size}
+                />
+        });
     }
     render() {
         let modalStyle = {
@@ -139,14 +148,20 @@ export class CourseModal extends React.Component {
     }
 }
 
-const SearchResultSection = ({ section }) => {
-    // following classname in "h6 span" Red for no seats left, green for available seats
+const SearchResultSection = ({ section, secName, instr , enrolled, waitlist, size}) => {
+    let seats = size - enrolled;
+    let seatStatus = waitlist > 0 ? (waitlist + " waitlist") : (seats + " open");
+    let benchmark = "green";
+    if (waitlist > 0) {
+        benchmark = "red";
+    } else if (seats < size/10) {
+        benchmark = "yellow";
+    }
     return (
     <div className="modal-section">
-        <h4>{section}</h4>
-        <h5>Johns Smithson</h5>
-        <h5>Gilman Hall</h5>
-        <h6><span className="red">0 open</span> / 365 seats</h6>
+        <h4>{secName}</h4>
+        <h5>{instr}</h5>
+        <h6><span className={benchmark}>{seatStatus}</span> / {size} seats</h6>
     </div>
     );
 };
