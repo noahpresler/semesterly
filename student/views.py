@@ -128,6 +128,6 @@ def get_classmates_from_course_id(school, student, course_id):
 					for co in friend_cos:
 						sections_set.add(co.meeting_section)
 					classmate['sections'] = list(sections_set)
-		if has_ovelap:
+		if has_overlap:
 			course['classmates'].append(classmate)
 	return course
