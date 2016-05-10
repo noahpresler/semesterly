@@ -60,6 +60,10 @@ export function lockActiveSections(activeTimetable) {
 export function saveTimetable() {
 	return (dispatch) => {
 		let activeTimetable = getActiveTimetable(store.getState().timetables);
+		// current timetable is empty, don't save it
+		if (activeTimetable.courses.length === 0) {
+			return;
+		}
 		// mark that we're now trying to save this timetable
 		dispatch({
 			type: "REQUEST_SAVE_TIMETABLE"

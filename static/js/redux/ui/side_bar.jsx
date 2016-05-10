@@ -6,7 +6,7 @@ class SideBar extends React.Component {
         this.props.changeName(this.refs.input.value);
     }
     render() {
-        let saveButton = this.props.savingTimetable ? <i className = "fa fa-spin fa-cog" /> :
+        let saveButton = this.props.saving ? <i className = "fa fa-spin fa-cog" /> :
         <button className="save-timetable" onMouseDown={ this.props.saveTimetable }>Save</button>;
         let savedTimetables = this.props.savedTimetables ? this.props.savedTimetables.map(t => {
             return <div key={t.id} onClick={() => this.props.loadTimetable(t)}>{t.name}</div>
