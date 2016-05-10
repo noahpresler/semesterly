@@ -1,9 +1,11 @@
 import { connect } from 'react-redux';
 import SideBar from '../side_bar.jsx';
-import { saveTimetable } from '../../actions/user_actions.jsx'
+import { saveTimetable, lockActiveSections } from '../../actions/user_actions.jsx'
 
 const mapStateToProps = (state) => {
-	return state.savingTimetable
+	return Object.assign({}, state.savingTimetable, {
+		savedTimetables: state.userInfo.data.timetables
+	});
 }
 
 const mapDispatchToProps = (dispatch) => {
@@ -13,6 +15,16 @@ const mapDispatchToProps = (dispatch) => {
 			type: "CHANGE_TIMETABLE_NAME",
 			name,
 		}),
+		loadTimetable: (timetable) => {
+			dispatch({
+				type: "RECEIVE_TIMETABLES",
+				timetables: [timetable]
+			});
+			dispatch({
+				type: "RECEIVE_COURSE_SECTIONS",
+				courseSections: lockActiveSections(timetable)
+			});
+		}
 	}
 }
 
