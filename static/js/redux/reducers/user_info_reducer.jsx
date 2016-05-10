@@ -7,9 +7,10 @@ export const userInfo = (state = {data: {isLoggedIn: false}, saving: false, isFe
 		case 'RECEIVE_USER_INFO_SAVED':
 			return Object.assign( {}, state, { saving: false });
 		case ("USER_INFO_RECEIVED"):
+			// console.log({courses: action.data.timetables[0].courses});
 			return Object.assign({}, state, { data: action.data, isFetching: false });
 		case ("REQUEST_USER_INFO"):
-			return Object.assign({}, state, {isFetching: true});
+			return Object.assign({}, state, { isFetching: true });
 		default:
 			return state;
 	}

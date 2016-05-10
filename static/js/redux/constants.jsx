@@ -9,7 +9,7 @@ export const HALF_HOUR_HEIGHT = 25;
 
 /* server endpoints */
 export const getCourseInfoEndpoint = (course_id) => {
-	return "courses/"+ getSchool() + "/id/" + course_id;
+	return "courses/" + getSchool() + "/" + getSemester() + "/id/" + course_id;
 };
 export const getCourseSearchEndpoint = (query) => {
 	return "search/" + getSchool() + "/" + getSemester() + "/" + query;
