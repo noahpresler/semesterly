@@ -1,20 +1,26 @@
 /* Modal Styles */
 .course-modal {
 	max-width: 1200px;
-	height: 80%;
+	height: 85%;
 	min-height: 500px;
 	max-height: 900px;
 }
-.course-modal div {
+.course-modal > div {
 	outline: none;
+	width: 100%;
+	height: 100%;
 }
 
 /* Modal Content Styles */
+#modal-content {
+	width: 100%;
+	height: 100%;
+}
 #modal-header {
 	position: relative;
 	padding: 20px 10px 10px;
 	background-color: #f3f3f3;
-	border-bottom: 1px solid #E8E8E8;;
+	border-bottom: 1px solid #E8E8E8;
 }
 #modal-header h1 {
 	margin: 0;
@@ -71,7 +77,7 @@
 /* Modal Add */
 #modal-add {
 	position: absolute;
-	bottom: -35px;
+	bottom: -34px;
 	right: 10%;
 	border-radius: 100%;
 	width: 60px;
@@ -98,13 +104,42 @@
 }
 
 /* Modal Body */
+#modal-body {
+	overflow-y: auto;
+	position: absolute;
+	top: 107px;
+	bottom: 0;
+	left: 0;
+	width: 100%;
+}
 #modal-body [class^="col-"] {
-	padding: 30px 10px;
+	padding: 30px 15px;
+}
+h3.modal-module-header {
+	font-size: 14px;
+	padding: 10px 5px;
+	margin: 0;
+	color: #777;
+	font-weight: 200;
+	clear: both;
+	position: relative;
+}
+h3.modal-module-header:after {
+	content: "";
+	display: block;
+	position: absolute;
+	bottom: 5px;
+	left: 0;
+	width: 100%;
+	height: 1px;
+	background-color: #ddd;
 }
 #modal-body p {
 	font-size: 16px;
 	line-height: 22px;
 	color: #555;
+	padding: 0 5px;
+	margin: 7px 0;
 }
 #modal-body .credits h3 {
 	text-align: center;
@@ -127,4 +162,36 @@
 	font-size: 14px;
 	font-weight: 400;
 	margin: 0 auto 5px;
+}
+
+/* Modal Sections */
+.modal-section {
+	padding: 7px;
+	width: 50%;
+	float: left;
+	cursor: pointer;
+	transition: background-color .3s;
+}
+.modal-section:hover {
+	background-color: #eee;
+}
+.modal-section h4 {
+	font-size: 16px;
+	font-weight: 400;
+	line-height: 18px;
+	margin: 0;
+}
+.modal-section h5 {
+	font-size: 13px;
+	font-weight: 400;
+	margin: 0;
+	line-height: 16px;
+	color: #777;
+}
+.modal-section h6 {
+	font-size: 13px;
+	font-weight: 400;
+	margin: 0;
+	line-height: 16px;
+	color: #777;
 }
