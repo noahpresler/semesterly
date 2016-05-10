@@ -31,9 +31,11 @@ function getSaveTimetablesRequestBody() {
 	let state = store.getState();
 	let timetableState = state.timetables;
 	let name = state.savingTimetable.activeTimetable.name;
+	let id = state.savingTimetable.activeTimetable.id || 0;
 	return {
 		timetable: timetableState.items[timetableState.active],
 		name,
+		id,
 	}
 }
 
@@ -85,9 +87,15 @@ export function saveTimetable() {
       		body: JSON.stringify(getSaveTimetablesRequestBody()),
       		credentials: 'include',
     	})
-		.then(response => {
+		.then(response => response.json()) // TODO(rohan): error-check the response
+		.then(json => {
 			dispatch({
-			type: "RECEIVE_TIMETABLE_SAVED"});
+				type: "RECEIVE_TIMETABLE_SAVED"
+			});
+			dispatch({
+				type: "RECEIVE_SAVED_TIMETABLES",
+				timetables: json.timetables
+			});
 		});
 	}
 }	
