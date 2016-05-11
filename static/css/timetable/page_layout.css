@@ -84,120 +84,120 @@
 		-ms-transform: translateX(0%);
 		transform: translateX(0%);
 	}
-  #main-bar.full-cal {
-    width: 100%;
-  }
-  #side-bar.full-cal {
-    -webkit-transform: translateX(0%);
-    -moz-transform: translateX(0%);
-    -ms-transform: translateX(0%);
-    transform: translateX(0%);
-  }
-  #main-bar.less-cal {
-    width: 0%;
-  }
-  #side-bar.less-cal {
-    width: 100%;
-    -webkit-transform: translateX(-100%);
-    -moz-transform: translateX(-100%);
-    -ms-transform: translateX(-100%);
-    transform: translateX(-100%);
-  }
+	#main-bar.full-cal {
+		width: 100%;
+	}
+	#side-bar.full-cal {
+		-webkit-transform: translateX(0%);
+		-moz-transform: translateX(0%);
+		-ms-transform: translateX(0%);
+		transform: translateX(0%);
+	}
+	#main-bar.less-cal {
+		width: 0%;
+	}
+	#side-bar.less-cal {
+		width: 100%;
+		-webkit-transform: translateX(-100%);
+		-moz-transform: translateX(-100%);
+		-ms-transform: translateX(-100%);
+		transform: translateX(-100%);
+	}
 }
 
 
 @media (max-width: 766px) {
-    #main-bar {
-        padding: 10px;
-    }
+	#main-bar {
+		 padding: 10px;
+	}
 }
 
 @media (max-width: 500px) {
-    #main-bar {
-        padding: 0px;
-    }
+	#main-bar {
+		padding: 0px;
+	}
 }
 
 /* Logo & name */
 
 #semesterly-name {
-    font-family: lato;
-    font-weight: 400;
-    display: inline-block;
-    float: left;
-    font-size: 32px;
-    line-height: 50px;
-    height: 50px;
-    margin-left: 10px;
+	font-family: lato;
+	font-weight: 400;
+	display: inline-block;
+	float: left;
+	font-size: 32px;
+	line-height: 50px;
+	height: 50px;
+	margin-left: 10px;
 }
 
 #semesterly-logo {
-    display: inline-block;
-    height: 32px;
-    margin-top: 9px;
-    margin-left: 35px;
-    float: left;
+	display: inline-block;
+	height: 32px;
+	margin-top: 9px;
+	margin-left: 35px;
+	float: left;
 }
 
 @media (max-width: 1000px) { 
-  .fc-ltr .fc-time-grid .fc-event-container {
-    margin-left:0.5%;
-  }
-  #search-input {
-    font-size:15px;
-  }
-  #semesterly-name {
-    display: none;
-  }
-  #navicon {
-    right: 9px;
-  }
+	.fc-ltr .fc-time-grid .fc-event-container {
+		margin-left:0.5%;
+	}
+	#search-input {
+		font-size:15px;
+	}
+	#semesterly-name {
+		display: none;
+	}
+	#navicon {
+		right: 9px;
+	}
 }
 @media (max-width: 766px) {
-    #semesterly-logo {
-        margin-left: 10px;
-    }
+	#semesterly-logo {
+		margin-left: 10px;
+	}
 }
 /* end Logo & name */
 
 /* Navicon */
 #navicon {
-    position: absolute;
-    top: 10px;
-    right: 10px;
-    width: 20px;
-    height: 30px;
-    cursor: pointer;
-    z-index: 3;
+	position: absolute;
+	top: 10px;
+	right: 10px;
+	width: 20px;
+	height: 30px;
+	cursor: pointer;
+	z-index: 3;
 }
 #navicon span {
-    height: 3px;
-    display: block;
-    position: absolute;
-    right: 0;
-    background-color:#34495E;
-    -webkit-transform: translateY(-50%);
-    -moz-transform: translateY(-50%);
-    -ms-transform: translateY(-50%);
-    transform: translateY(-50%);
-    -webkit-transition: width .3s;
-    -moz-transition: width .3s;
-    transition: width .3s;
+	height: 3px;
+	display: block;
+	position: absolute;
+	right: 0;
+	background-color:#34495E;
+	-webkit-transform: translateY(-50%);
+	-moz-transform: translateY(-50%);
+	-ms-transform: translateY(-50%);
+	transform: translateY(-50%);
+	-webkit-transition: width .3s;
+	-moz-transition: width .3s;
+	transition: width .3s;
 }
 #navicon span:nth-child(1) {
-    top: 25%;
-    width: 15px;
+	top: 25%;
+	width: 15px;
 }
 #navicon span:nth-child(2) {
-    top: 50%;
-    width: 20px;
+	top: 50%;
+	width: 20px;
 }
 #navicon span:nth-child(3) {
-    top: 75%;
-    width: 15px;
+	top: 75%;
+	width: 15px;
 }
 #navicon:hover span:nth-child(1),
 #navicon:hover span:nth-child(3) {
-    width: 20px;
+	width: 20px;
 }
 /* End Navicon */
