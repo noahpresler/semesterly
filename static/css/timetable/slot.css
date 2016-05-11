@@ -23,8 +23,7 @@
 .slot:hover {
 	color:#222;
 }
-.slot-content h3,
-.master-slot-content h3 {
+.slot-content h3 {
 	margin: 0;
 	white-space: nowrap;
     text-overflow: ellipsis;
@@ -34,10 +33,6 @@
 .slot-friends h3 {
 	margin: 0;
 	float: left;
-	line-height: 15px;
-}
-h3.master-slot-credits {
-	margin: 0;
 	line-height: 15px;
 }
 /*.slot i {
@@ -58,7 +53,6 @@ h3.master-slot-credits {
 }
 
 .slot i.fa-times:hover,
-.master-slot-actions i:hover, 
 .slot i.fa-lock:hover,
 .slot i.fa-unlock:hover {
 	transform: scale(1.4);
@@ -72,21 +66,6 @@ h3.master-slot-credits {
 	opacity: .75;
 	transition: transform .2s, opacity .2s;
 	z-index:9999;
-}
-.master-slot-actions {
-	position: absolute;
-	top: 5px;
-	right: 5px;
-	text-align: right;
-}
-.master-slot-actions i {
-	display: inline-block;
-	margin-left: 5px;
-	vertical-align: top;
-	line-height: 15px;
-	cursor: pointer;
-	opacity: .75;
-	transition: transform .3s, opacity .3s;
 }
 
 
