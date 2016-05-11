@@ -25,7 +25,9 @@ export function fetchUserInfo() {
 		    .then(user => {
 		        dispatch(getUserInfo(user));
 		        if (user.timetables && user.timetables.length > 0) {
+		        	// loading one of the user's timetables (after initial page load)
 		        	loadTimetable(user.timetables[0]);
+		        	dispatch({type: "RECEIVE_TIMETABLE_SAVED"});
 		        }
 		        return user;
 		    })
@@ -77,7 +79,6 @@ export function saveTimetable() {
 		if (activeTimetable.courses.length === 0 || state.savingTimetable.upToDate) {
 			return;
 		}
-
 		// mark that we're now trying to save this timetable
 		dispatch({
 			type: "REQUEST_SAVE_TIMETABLE"
