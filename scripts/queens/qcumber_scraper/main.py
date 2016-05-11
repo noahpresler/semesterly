@@ -97,11 +97,7 @@ class JobManager(object):
                 import cProfile
                 cProfile.runctx("SolusScraper(session, job, self.db).start()", globals(), locals())
             else:
-                if self.db:
-                    for course in SolusScraper(session, job, self.db).start():
-                        yield course
-                else:
-                    SolusScraper(session, job, self.db).start()
+                SolusScraper(session, job, self.db).start()
                 
 
     def start_jobs(self):
@@ -115,6 +111,23 @@ class JobManager(object):
         for t in threads:
             t.join()
 
+    def parse_courses(self):
+        """Course object generator matching interface for BaseParser."""
+        # Setup the logger before any logging happens
+        _init_logging()
+
+        try:
+            session = SolusSession(self.user, self.passwd)
+        except EnvironmentError as e:
+            logging.critical(e)
+            # Can't log in, therefore can't do any jobs
+            # As long as at least 1 of the threads can log in,
+            # the scraper will still work
+            return
+
+        for course in SolusScraper(session, ScrapeJob(), True).start():
+            yield course
+
 
 def _init_logging():
 
@@ -126,14 +139,6 @@ def _init_logging():
     root_logger.setLevel(logging.INFO)
 
     logging.getLogger("requests").setLevel(logging.WARNING)
-
-def parse_courses():
-    try:
-        from queens_config import USER, PASS
-    except ImportError:
-        logging.critical("No credientials found. Create a queens_config.py file with USER, PASS, and PROFILE constants")
-    for course in JobManager(USER, PASS, SAVE_TO_DB, config).start():
-        yield course
 
 if __name__ == "__main__":
 
