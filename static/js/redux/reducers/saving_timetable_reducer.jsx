@@ -19,7 +19,13 @@ export const savingTimetable = (state = { activeTimetable: { name: String("Untit
 			return Object.assign( {}, state, { activeTimetable: action.timetable });
 
 		case 'CHANGE_ACTIVE_SAVED_TIMETABLE_NAME':
-			return Object.assign( {}, state, { activeTimetable: Object.assign({}, state.activeTimetable, {name: action.name}) });
+			return Object.assign( {}, state, { 
+				activeTimetable: 
+					Object.assign({}, state.activeTimetable, {name: action.name}) 
+			}, 
+			{
+				upToDate: false,
+			});
 		default:
 			return state;
 	}
