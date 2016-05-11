@@ -277,7 +277,7 @@
 	#search-bar {
 		width: auto;
 		left: 57px;
-		right: 122px;
+		right: 107px;
 	}
 	.search-results {
 		width: 100%;
@@ -297,7 +297,7 @@
 	#search-bar-wrapper {
 		width: auto;
 	    left: 57px;
-	    right: 122px;
+	    right: 107px;
 	    position: absolute;
 	}
 	.search-results {
