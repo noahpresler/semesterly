@@ -19,12 +19,7 @@ export function receiveTimetables(timetables) {
     timetables: timetables,
   }
 }
-export function receiveCourseSections(newCourseSections) {
-  return {
-    type: "RECEIVE_COURSE_SECTIONS",
-    courseSections: newCourseSections,
-  }
-}
+
 export function alertConflict(){
 	return {
 		type: "ALERT_CONFLICT"
@@ -38,13 +33,13 @@ export function loadTimetable(timetable) {
 		timetable,
 	});
 	dispatch({
+		type: "RECEIVE_COURSE_SECTIONS",
+		courseSections: lockActiveSections(timetable)
+	});
+	dispatch({
 		type: "RECEIVE_TIMETABLES",
 		timetables: [timetable],
 		preset: true
-	});
-	dispatch({
-		type: "RECEIVE_COURSE_SECTIONS",
-		courseSections: lockActiveSections(timetable)
 	});
 }
 
@@ -107,7 +102,10 @@ function fetchTimetables(requestBody, removing) {
 			if (removing || json.timetables.length > 0) {
 				// mark that timetables and a new courseSections have been received
 				dispatch(receiveTimetables(json.timetables));
-				dispatch(receiveCourseSections(json.new_c_to_s));
+				dispatch({
+   					type: "RECEIVE_COURSE_SECTIONS",
+    				courseSections: json.new_c_to_s,
+  				});
 			}
 			else {
 				// course added by the user resulted in a conflict, so no timetables
