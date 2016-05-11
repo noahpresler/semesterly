@@ -33,22 +33,55 @@ export class ExplorationModal extends React.Component {
 	                <div className="cf">
 	                    <div id="exp-filters" 
 	                    	className="col-4-16">
-	                        <div>
-	                            <h3 className="exp-header">Filter by Departments</h3>
-
+	                        <div className="exp-filter-section">
+								<h3 className="exp-header">
+									<span>Departments Filter</span>
+									<i className="fa fa-plus"></i>
+								</h3>
+								<h6>
+									<i className="fa fa-times"></i>
+									<span>Computer Science</span>
+								</h6>
 	                        </div>
-	                        <div>
-	                            <h3 className="exp-header">Filter by Areas</h3>
-
+	                        <div className="exp-filter-section">
+	                            <h3 className="exp-header">
+									<span>Areas Filter</span>
+									<i className="fa fa-plus"></i>
+								</h3>
+								<h6>
+									<i className="fa fa-times"></i>
+									<span>Humanities</span>
+								</h6>
+								<h6>
+									<i className="fa fa-times"></i>
+									<span>Writing Intensive</span>
+								</h6>
 	                        </div>
-	                        <div>
-	                            <h3 className="exp-header">Filter by Times</h3>
-
+	                        <div className="exp-filter-section">
+	                            <h3 className="exp-header">
+									<span>Times Filter</span>
+									<i className="fa fa-plus"></i>
+								</h3>
+								<h6>
+									<i className="fa fa-times"></i>
+									<span>M 9am-5pm</span>
+								</h6>
+	                        </div>
+	                        <div className="exp-filter-section">
+	                            <h3 className="exp-header">
+									<span>Course Level Filter</span>
+									<i className="fa fa-plus"></i>
+								</h3>
+								<h6>
+									<i className="fa fa-times"></i>
+									<span>200</span>
+								</h6>
 	                        </div>
 	                    </div>
-	                    <div className="col-6-16">
+	                    <div id="exp-search-results" 
+	                    	className="col-6-16">
 	                    	<p>returned 157 Search Results</p>
-	                        <div className="exp-search-results">
+	                        <div>
 								<div className="exp-s-result">
 									<h4>Discrete Mathematics</h4>
 									<h5>EN.650.113, Applied Mathematics & Statistics</h5>
