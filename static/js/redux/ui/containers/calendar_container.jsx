@@ -37,9 +37,6 @@ const mapDispatchToProps = (dispatch) => {
     saveTimetable: () => dispatch(saveTimetable()),
     createTimetable: () => {
       loadTimetable({ name: "Untitled Schedule", courses: [] });
-      if ($("#side-bar.less-cal").length > 0) {
-        $(".timetable-name").focus();
-      }
     }
   }
 }
