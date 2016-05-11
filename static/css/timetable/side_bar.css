@@ -72,15 +72,15 @@ h4.sb-header:after {
 }
 #sb-credits h3 {
     color: #34495E;
-    font-size: 60px;
+    font-size: 30px;
     font-weight: 200;
-    line-height: 66px;
+    line-height: 36px;
     margin: 0;
 }
 #sb-credits h4 {
-    font-size: 30px;
+    font-size: 14px;
     color: #D4D4D4;
-    line-height: 30px;
+    line-height: 14px;
     margin: 0;
     font-weight: 200;
 }
@@ -98,6 +98,10 @@ h4.sb-header:after {
     border-radius: 5px;
     overflow: hidden;
     margin-bottom: 5px;
+    cursor: pointer;
+}
+.master-slot.optional {
+    opacity: .5;
 }
 .master-slot .slot-bar {
     background-color: rgb(150, 56, 56);
@@ -160,4 +164,11 @@ h3.master-slot-credits {
     line-height: 22px;
     text-align: left;
     padding-left: 7px;
+}
+.ms-friend:first-child {
+    cursor: pointer;
+    transition: background-color .3s;
+}
+.ms-friend:first-child:hover {
+    background-color: rgba(0,0,0,.5);
 }
