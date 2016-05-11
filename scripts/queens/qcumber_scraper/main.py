@@ -34,12 +34,13 @@ class ScrapeJob(dict):
 class JobManager(object):
     """Handles dividing up the scraping work and starting the scraper threads"""
 
-    def __init__(self, user, passwd, config):
+    def __init__(self, user, passwd, save_to_db, config):
         """Divide the work up into ScrapeJobs"""
 
         self.user = user
         self.passwd = passwd
         self.config = config
+        self.save = save_to_db
         self.jobs = Queue()
 
         # Enforce a range of 1 - 10 threads with a default of 5
@@ -94,9 +95,14 @@ class JobManager(object):
             # Run the job
             if PROFILE:
                 import cProfile
-                cProfile.runctx("SolusScraper(session, job).start()", globals(), locals())
+                cProfile.runctx("SolusScraper(session, job, self.db).start()", globals(), locals())
             else:
-                SolusScraper(session, job).start()
+                if self.db:
+                    for course in SolusScraper(session, job, self.db).start():
+                        yield course
+                else:
+                    SolusScraper(session, job, self.db).start()
+                
 
     def start_jobs(self):
         """Start the threads that perform the jobs"""
@@ -121,6 +127,13 @@ def _init_logging():
 
     logging.getLogger("requests").setLevel(logging.WARNING)
 
+def parse_courses():
+    try:
+        from queens_config import USER, PASS
+    except ImportError:
+        logging.critical("No credientials found. Create a queens_config.py file with USER, PASS, and PROFILE constants")
+    for course in JobManager(USER, PASS, SAVE_TO_DB, config).start():
+        yield course
 
 if __name__ == "__main__":
 
@@ -129,17 +142,17 @@ if __name__ == "__main__":
 
     # Get credientials
     try:
-        from config import USER, PASS, PROFILE
+        from queens_config import USER, PASS, PROFILE, SAVE_TO_DB
     except ImportError:
-        logging.critical("No credientials found. Create a config.py file with USER, PASS, and PROFILE constants")
+        logging.critical("No credientials found. Create a queens_config.py file with USER, PASS, and PROFILE constants")
 
     config = dict(
         name = "Shallow scrape with threading",
         description = "Scrapes the entire catalog using multiple threads",
-        threads = 1,
+        threads = 5,
         job = ScrapeJob(letters="ABCDEFGHIJKLMNOPQRSTUVWXYZ", deep=False),
         threads_per_letter = 1,
     )
 
     # Start scraping
-    JobManager(USER, PASS, config).start()
+    JobManager(USER, PASS, SAVE_TO_DB, config).start()

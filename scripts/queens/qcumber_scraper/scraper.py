@@ -4,11 +4,12 @@ import writer
 class SolusScraper(object):
     """The class that coordinates the actual scraping"""
 
-    def __init__(self, session, job):
+    def __init__(self, session, job, save):
         """Store the session to use and the scrape job to perform"""
 
         self.session = session
         self.job = job
+        self.save_to_db = save
 
     def start(self):
         """Starts running the scrape outlined in the job"""
@@ -16,8 +17,11 @@ class SolusScraper(object):
         logging.info(u"Starting job: {0}".format(self.job))
 
         try:
-            for course in self.scrape_letters():
-                yield course
+            if self.save_to_db:
+                for course in self.scrape_letters():
+                    yield course
+            else:
+                self.scrape_letters()
         except Exception as e:
             logging.debug(e)
             self.session.parser.dump_html()
@@ -31,8 +35,11 @@ class SolusScraper(object):
             # Go to the letter
             self.session.select_alphanum(letter)
 
-            for course in self.scrape_subjects():
-                yield course
+            if self.save_to_db:
+                for course in self.scrape_subjects():
+                    yield course
+            else:
+                self.scrape_subjects()
 
     def scrape_subjects(self):
         """Scrape all the subjects"""
@@ -50,12 +57,16 @@ class SolusScraper(object):
 
             logging.info(u"--Subject: {abbreviation} - {title}".format(**subject))
 
-            writer.write_subject(subject)
+            if not self.save_to_db:
+                writer.write_subject(subject)
 
             self.session.dropdown_subject(subject["_unique"])
 
-            for course in self.scrape_courses(subject):
-                yield course
+            if self.save_to_db:
+                for course in self.scrape_courses(subject):
+                    yield course
+            else:
+                self.scrape_courses(subject)
 
             self.session.rollup_subject(subject["_unique"])
 
@@ -78,6 +89,8 @@ class SolusScraper(object):
 
             logging.info(u"----Course: {number} - {title}".format(**course_attrs['basic']))
 
+            if not self.save_to_db:
+                writer.write_course(course_attrs)
             try:
                 self.session.show_sections()
             except Exception as e:
@@ -85,8 +98,11 @@ class SolusScraper(object):
                 logging.error(e)
                 raise
 
-            course_attrs['sections'] = self.scrape_terms(course_attrs)
-            yield course_attrs
+            if self.save_to_db:
+                course_attrs['sections'] = self.scrape_terms(course_attrs)
+                yield course_attrs
+            else:
+                self.scrape_terms(course_attrs)
             self.session.return_from_course()
             
 
@@ -100,8 +116,11 @@ class SolusScraper(object):
             self.session.switch_to_term(term["_unique"])
 
             self.session.view_all_sections()
-            for section in self.scrape_sections(course, term):
-                yield section
+            if self.save_to_db:
+                for section in self.scrape_sections(course, term):
+                    yield section
+            else:
+                self.scrape_sections(course, term)
 
     def scrape_sections(self, course, term):
         """Scrape sections"""
@@ -135,5 +154,8 @@ class SolusScraper(object):
             section['basic']['year'] = term['year']
             section['basic']['season'] = term['season']
 
-            yield section
+            if not self.save_to_db: # If not saving to DB, write to JSON
+                writer.write_section(section)
+            else:
+                yield section
 
