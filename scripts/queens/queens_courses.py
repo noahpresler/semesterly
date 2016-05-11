@@ -38,7 +38,7 @@ class QueensParser(BaseParser):
 
   def get_section_elements(self, course_element):
     for section in course_element['sections']:
-      if section['basic']['season'] != 'Summer': # ignore summer courses for now
+      if valid_section(section):
         yield section
 
   def parse_section_element(self, section_element):
@@ -63,22 +63,27 @@ class QueensParser(BaseParser):
       yield meeting
 
   def parse_meeting_element(self, meeting_element):
-    missing_info = not all([meeting_element[info] for info in ['day_of_week', 'end_time', 'start_time']])
     weekend_meeting = int(meeting_element['day_of_week'] or 6) > 5
-    if missing_info or weekend_meeting:
+    if missing_info(meeting_element) or weekend_meeting:
       return False
 
     meeting_data = {
-      'day': days.index(meeting_element['day_of_week']),
+      'day': days[int(meeting_element['day_of_week'])],
       'time_start': process_time(meeting_element['start_time']),
       'time_end': process_time(meeting_element['end_time']),
       'location': meeting_element['location']
     }
-    return meeting_data
 
 def process_time(s):
   """HH:MM:SS -> ?H:MM"""
   return s[1:-3] if s[0] == '0' else s[:-3]
+
+def valid_section(section_element):
+  summer = section_element['basic']['season'] != 'Summer'
+  return summer or any((missing_info(me) for me in section_element['classes']))
+
+def missing_info(meeting_element):
+  return not all([meeting_element[info] for info in ['day_of_week', 'end_time', 'start_time']])
 
 if __name__ == '__main__':
   QueensParser().parse_courses()
