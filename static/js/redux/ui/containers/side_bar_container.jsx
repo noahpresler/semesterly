@@ -18,7 +18,7 @@ const mapDispatchToProps = (dispatch) => {
 				type: "CHANGE_ACTIVE_SAVED_TIMETABLE_NAME",
 				name,
 			})
-			dispatch(saveTimetable(true));
+			dispatch(saveTimetable());
 		},
 		loadTimetable
 	}
