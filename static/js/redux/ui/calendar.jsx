@@ -39,8 +39,9 @@ class Calendar extends React.Component {
 			onClick={this.props.createTimetable} className="save-timetable add-button"><i className="fa fa-plus" /></button>
 		let shareButton = <button 
 			className="save-timetable add-button"><i className="fa fa-share-alt" /></button>
-		let downloadButton = <button 
-			className="save-timetable add-button"><i className="fa fa-download" /></button>
+		// let downloadButton = <button 
+		// 	className="save-timetable add-button"><i className="fa fa-download" /></button>
+		let downloadButton = null;
 		return (
 
 	      <div id="calendar" className="fc fc-ltr fc-unthemed">
