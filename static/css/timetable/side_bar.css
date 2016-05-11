@@ -3,12 +3,19 @@
 }
 
 /* Timetable Title */
+#sb-name {
+    position: relative;
+    padding-right: 35px;
+}
 #side-bar input {
 	padding: 5px;
 	outline: 0;
 	font-weight: 700;
 	border: 1px solid #fff;
 	transition: border .3s;
+    font-size: 18px;
+    line-height: 25px;
+    width: 100%;
 }
 #side-bar input:focus,
 #side-bar input:focus:hover {
@@ -20,7 +27,49 @@
 #side-bar .unsaved { 
     font-style: italic;
 }
+#sb-name .tip-down {
+    position: absolute;
+    top: 15px;
+    right: 13px;
+}
 
+/* Timetable Name Dropdowns */
+#timetable-names-dropdown {
+    position: absolute;
+    top: 35px;
+    left: 0;
+    width: 100%;
+    background-color: #fff;
+    border: 1px solid #E8E8E8;
+    box-shadow: 0 2px 10px rgba(0,0,0,.2);
+    z-index: 100;
+}
+#timetable-names-dropdown .tip-border {
+    top: -8px;
+    right: 10px;
+}
+#timetable-names-dropdown .tip {
+    top: -7px;
+    right: 10px;
+}
+#timetable-names-dropdown h4 {
+    font-size: 12px;
+    color: #777;
+    margin: 0;
+    padding: 10px 5px 5px 10px;
+}
+.tt-name {
+    padding: 5px 5px 5px 20px;
+    font-size: 12px;
+    cursor: pointer;
+    background-color: #fff;
+    transition: background-color .3s;
+}
+.tt-name:hover {
+    background-color: #eee;
+}
+
+/* Side Bar Section Name Headers */
 h4.sb-header {
     font-size: 14px;
     padding: 10px 5px;
