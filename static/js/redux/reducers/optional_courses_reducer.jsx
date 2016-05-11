@@ -3,8 +3,6 @@ import update from 'react/lib/update';
 export const optionalCourses = (state = { ids: [], numRequired: 0}, action) => {
 	switch(action.type) {
 
-		//Remove bookmark button if in roster, create is in roster method
-
 		case 'ADD_REMOVE_OPTIONAL_COURSE':
 			let idx = state.ids.indexOf(action.newCourseId)
 			if ( idx != -1) {
