@@ -5,15 +5,25 @@ import classnames from 'classnames';
 class SideBar extends React.Component {
     constructor(props) {
         super(props);
-        this.timer = false;
-        this.changeTimetableName = this.changeTimetableName.bind(this);
+        this.alterTimetableName = this.alterTimetableName.bind(this);
+        this.setTimetableName = this.setTimetableName.bind(this);
+        this.state = { activeTimetableName: this.props.activeTimetable.name };
     }
-    changeTimetableName() {
-        if (this.timer) clearTimeout(this.timer);
-        this.timer = setTimeout( () => {
-            this.props.changeTimetableName(this.refs.input.value);
-            this.timer = false;
-        }, 200);
+    componentWillReceiveProps(nextProps){
+        this.setState({ activeTimetableName: nextProps.activeTimetable.name });
+    }
+    alterTimetableName(event) {
+        let newName = event.target.value;
+        this.setState({ activeTimetableName: event.target.value });
+    }
+    setTimetableName() {
+        let newName = this.state.activeTimetableName;
+        if (newName.length === 0) {
+            this.setState({ activeTimetableName: this.props.activeTimetable.name });
+        }
+        else {
+            this.props.changeTimetableName(newName);
+        }
     }
     render() {
         let savedTimetables = this.props.savedTimetables ? this.props.savedTimetables.map(t => {
@@ -25,8 +35,9 @@ class SideBar extends React.Component {
                   <h4>Your Semester</h4>
                 </div>
                 <input ref="input" className={classnames({"unsaved": !this.props.upToDate})}
-                    placeholder={this.props.activeTimetable.name}
-                    onChange={this.changeTimetableName}
+                    value={this.state.activeTimetableName}
+                    onChange={this.alterTimetableName}
+                    onBlur={this.setTimetableName}
                     />
                 { savedTimetables }
                 <div className="col-1-2">

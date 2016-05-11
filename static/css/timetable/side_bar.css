@@ -22,17 +22,16 @@
 	color: #777;
 }
 
-#side-bar .unsaved::-webkit-input-placeholder { 
+#side-bar .unsaved { 
     font-style: italic;
 
 }
-#side-bar .unsaved::-ms-input-placeholder { 
+#side-bar .unsaved { 
     font-style: italic;
 
 }
-#side-bar .unsaved::-moz-placeholder { 
+#side-bar .unsaved { 
     font-style: italic;
-
 }
 /* Star Ratings */
 .star-ratings-sprite {
