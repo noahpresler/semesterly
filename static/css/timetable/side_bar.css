@@ -17,13 +17,7 @@
 #side-bar input:hover {
 	border: 1px solid #ddd;
 }
-#side-bar .unsaved::-webkit-input-placeholder { 
-    font-style: italic;
-}
-#side-bar .unsaved::-ms-input-placeholder { 
-    font-style: italic;
-}
-#side-bar .unsaved::-moz-placeholder { 
+#side-bar .unsaved { 
     font-style: italic;
 }
 
