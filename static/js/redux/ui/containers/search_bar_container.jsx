@@ -33,6 +33,7 @@ const mapDispatchToProps = (dispatch) => {
 	  		newCourseId: id
 	  	}),
 		fetchCourseInfo: (id) => dispatch(fetchCourseInfo(id)), 
+		toggleExplorationModal: () => {dispatch({type: "TOGGLE_EXPLORATION_MODAL"})},
 		hoverSearchResult: (position) => {
 			dispatch({
 				type: "HOVER_SEARCH_RESULT",

@@ -1,4 +1,4 @@
-/* Modal Styles */
+/* Course Modal Styles */
 .course-modal {
 	max-width: 1200px;
 	height: 85%;
@@ -14,7 +14,7 @@
 	background-color: transparent;
 }
 
-/* Modal Content Styles */
+/* Course Modal Content Styles */
 #modal-content {
 	width: 100%;
 	height: 100%;
@@ -38,7 +38,7 @@
 	padding-right: 15%;
 }
 
-/* Modal Corner Actions */
+/* Course Modal Corner Actions */
 #modal-close,
 #modal-share,
 #modal-save {
@@ -78,7 +78,7 @@
 	transform: scale(1.2);
 }
 
-/* Modal Add */
+/* Course Modal Add */
 #modal-add {
 	position: absolute;
 	bottom: -34px;
@@ -108,7 +108,7 @@
 	background-color: #56ECCF;
 }
 
-/* Modal Body */
+/* Course Modal Body */
 #modal-body {
 	overflow-y: auto;
 	position: absolute;
@@ -169,7 +169,7 @@ h3.modal-module-header:after {
 	margin: 0 auto 5px;
 }
 
-/* Modal Sections */
+/* Course Modal Sections */
 .modal-section {
 	padding: 7px;
 	width: 50%;
