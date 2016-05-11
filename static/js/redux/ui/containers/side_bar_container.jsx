@@ -1,5 +1,6 @@
 import { connect } from 'react-redux';
 import SideBar from '../side_bar.jsx';
+import { fetchCourseInfo } from '../../actions/modal_actions.jsx'
 import { loadTimetable } from '../../actions/timetable_actions.jsx';
 import { saveTimetable } from '../../actions/user_actions.jsx';
 import { MAX_TIMETABLE_NAME_LENGTH } from '../../constants.jsx';
@@ -28,6 +29,8 @@ const mapDispatchToProps = (dispatch) => {
 			})
 			dispatch(saveTimetable());
 		},
+		fetchCourseInfo: (courseId) => dispatch(fetchCourseInfo(courseId)),
+
 		loadTimetable
 	}
 }
