@@ -36,14 +36,23 @@ class SideBar extends React.Component {
         let savedTimetables = this.props.savedTimetables ? this.props.savedTimetables.map(t => {
             return <div className="tt-name" key={t.id} onClick={() => this.props.loadTimetable(t)}>{t.name}</div>
         }) : null;
-        let masterSlots = this.props.liveTimetableCourses ? 
+        let masterSlots = this.props.liveTimetableCourses ?
             this.props.liveTimetableCourses.map(c => {
                 let colourIndex= this.props.courseToColourIndex[c.id] || 0;
-                return <MasterSlot 
-                        key={c.id} 
-                        colourIndex={colourIndex} 
-                        course={c} 
+                return <MasterSlot
+                        key={c.id}
+                        colourIndex={colourIndex}
+                        course={c}
                         fetchCourseInfo={() => this.props.fetchCourseInfo(c.id)}/>
+        }) : null;
+        let optionalSlots = this.props.liveTimetableCourses ? this.props.optionalCourses.map(id => {
+                let c = this.props.liveTimetableCourses.find(course => course.id === id);
+                let colourIndex= this.props.courseToColourIndex[id] || 0;
+                return <MasterSlot
+                        key={id}
+                        colourIndex={colourIndex}
+                        course={c}
+                        fetchCourseInfo={() => this.props.fetchCourseInfo(id)}/>
         }) : null;
         return (
             <div id="side-bar">
@@ -84,25 +93,7 @@ class SideBar extends React.Component {
                 </div>
                 <h4 className="sb-header">Optional Courses</h4>
                 <div id="sb-optional-slots">
-                    <div className="master-slot optional">
-                        <div className="slot-bar"></div>
-                        <div className="master-slot-content">
-                            <h3>EN.650.311</h3>
-                            <h3>Discrete Mathematics</h3>
-                            <h3>Baryl Castello</h3>
-                            <h3>4 credits</h3>
-                        </div>
-                        <div className="master-slot-actions">
-                            <i className="fa fa-share-alt"></i>
-                            <i className="fa fa-times"></i>
-                        </div>
-                        <div className="master-slot-friends">
-                            <div className="ms-friend">5+</div>
-                            <div className="ms-friend" style={{backgroundImage: 'url(/static/img/blank.jpg)' }}></div>
-                            <div className="ms-friend" style={{backgroundImage: 'url(/static/img/blank.jpg)' }}></div>
-                            <div className="ms-friend" style={{backgroundImage: 'url(/static/img/blank.jpg)' }}></div>
-                        </div>
-                    </div>
+                    {optionalSlots}
                 </div>
                 <h4 className="sb-header">Textbooks</h4>
                 <div className="side-bar-section">
