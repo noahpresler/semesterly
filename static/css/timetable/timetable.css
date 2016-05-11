@@ -29,6 +29,9 @@ button.save-timetable:hover {
 button.save-timetable:active {
     background-color: #ccc;
 }
+button.save-timetable.add-button {
+    margin-right: 5px;
+}
 
 .cal-row {
 	width: 49px;
