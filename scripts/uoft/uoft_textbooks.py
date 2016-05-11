@@ -1,5 +1,4 @@
 from amazonproduct import API
-from amazonproduct.errors import InvalidParameterValue
 from fake_useragent import UserAgent
 from bs4 import BeautifulSoup
 from django.db.models import Q
