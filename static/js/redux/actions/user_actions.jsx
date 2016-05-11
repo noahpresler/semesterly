@@ -101,19 +101,26 @@ export function saveTimetable() {
       		body: JSON.stringify(getSaveTimetablesRequestBody()),
       		credentials: 'include',
     	})
-		.then(response => response.json()) // TODO(rohan): error-check the response
+		.then(response => response.json())
 		.then(json => {
+			if (json.error) {
+				dispatch({
+					type: "ALERT_TIMETABLE_EXISTS"
+				});
+			}
+			else {
+				dispatch({
+					type: "RECEIVE_SAVED_TIMETABLES",
+					timetables: json.timetables
+				});
+			}
 			dispatch({
 				type: "RECEIVE_TIMETABLE_SAVED"
-			});
-			dispatch({
-				type: "RECEIVE_SAVED_TIMETABLES",
-				timetables: json.timetables
 			});
 			return json;
 		})
 		.then(json => {
-			if (state.userInfo.data.isLoggedIn && json.timetables[0]) {
+			if (!json.error && state.userInfo.data.isLoggedIn && json.timetables[0]) {
 				dispatch(fetchClassmates(json.timetables[0].courses.map( c => c['id'])))
 			}
 		});
