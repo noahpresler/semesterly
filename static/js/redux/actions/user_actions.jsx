@@ -69,11 +69,13 @@ export function lockActiveSections(activeTimetable) {
 	return courseSections;
 }
 
-export function saveTimetable() {
+export function saveTimetable(nameChanged = false) {
 	return (dispatch) => {
-		let activeTimetable = getActiveTimetable(store.getState().timetables);
-		// current timetable is empty, don't save it
-		if (activeTimetable.courses.length === 0) {
+		let state = store.getState();
+		let activeTimetable = getActiveTimetable(state.timetables);
+		// current timetable is empty or we're already in saved state, don't save this timetable
+		if (!nameChanged && (activeTimetable.courses.length === 0 || 
+			state.savingTimetable.upToDate)) {
 			return;
 		}
 		// mark that we're now trying to save this timetable
@@ -110,17 +112,16 @@ export function saveTimetable() {
 			return json;
 		})
 		.then(json => {
-			if (store.getState().userInfo.data.isLoggedIn && json.timetables[0]) {
+			if (state.userInfo.data.isLoggedIn && json.timetables[0]) {
 				dispatch(fetchClassmates(json.timetables[0].courses.map( c => c['id'])))
 			}
 		});
 	}
-}	
+}
 
 function getSaveSettingsRequestBody() {
-	let state = store.getState();
 	return {
-		userInfo: state.userInfo.data
+		userInfo: store.getState().userInfo.data
 	}
 }
 
