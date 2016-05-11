@@ -46,10 +46,30 @@
 #show-exploration {
 	position: absolute;
 	top: 0;
-	left: 100%;
+	right: -90px;
+	width: 85px;
+	height: 30px;
+	cursor: pointer;
+	transition: transform .3s;
+}
+#show-exploration:hover {
+	transform: scale(1.05);
+}
+#show-exploration i {
+	font-size: 22px;
+	line-height: 30px;
+	display: inline-block;
+	vertical-align:	middle;
 }
 #show-exploration span {
-
+	display: inline-block;
+	margin-left: 4px;
+	font-size: 12px;
+	padding: 3px 0;
+	line-height: 12px;
+	width: 60px;
+	text-align: left;
+	vertical-align:	middle;
 }
 
 #main-bar.full-cal {
