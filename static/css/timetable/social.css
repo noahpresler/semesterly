@@ -41,6 +41,7 @@
     z-index: 1;
     height: 0;
     width: 0;
+    cursor: pointer;
 }
 .tip-down.down {
     transform: rotate(180deg);
