@@ -2,6 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import classnames from 'classnames';
 import MasterSlot from './master_slot.jsx';
+import classNames from 'classnames';
 
 class SideBar extends React.Component {
     constructor(props) {
@@ -9,6 +10,11 @@ class SideBar extends React.Component {
         this.alterTimetableName = this.alterTimetableName.bind(this);
         this.setTimetableName = this.setTimetableName.bind(this);
         this.state = { activeTimetableName: this.props.activeLoadedTimetable.name };
+        this.stateDropdown = {showDropdown: false};
+        this.toggleDropdown = this.toggleDropdown.bind(this);
+    }
+    toggleDropdown() {
+    	this.setState({showDropdown: !this.state.showDropdown});
     }
     componentWillReceiveProps(nextProps) {
         this.setState({ activeTimetableName: nextProps.activeLoadedTimetable.name });
@@ -39,13 +45,17 @@ class SideBar extends React.Component {
         return (
             <div id="side-bar">
                 <div id="sb-name">
-                    <input ref="input" type="Text" className={classnames("timetable-name", {"unsaved": !this.props.upToDate})}
+                    <input ref="input" className={classnames("timetable-name", {"unsaved": !this.props.upToDate})}
                         value={this.state.activeTimetableName}
                         onChange={this.alterTimetableName}
                         onBlur={this.setTimetableName}
                         />
-                    <span className="tip-down"></span>
+                    <div id="timetable-drop-it-down"
+                    	onMouseDown={this.toggleDropdown.bind(this)}>
+                        <span className={classNames("tip-down", {'down' : this.state.showDropdown})}></span>
+                    </div>
                     <div id="timetable-names-dropdown"
+                    	className={classNames({'down' : this.state.showDropdown})}
                         >
                         <div className="tip-border"></div>
                         <div className="tip"></div>
