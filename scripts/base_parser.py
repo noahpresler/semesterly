@@ -112,10 +112,13 @@ class BaseParser:
 
 # TEMPLATE FOR BASEPARSER SUBCLASS:
 """
+import os
+
 import django
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "semesterly.settings")
 django.setup()
 from timetable.models import SchoolCourse, SchoolCourseOffering
+from scripts.base_parser import BaseParser
 
 
 class SchoolParser(BaseParser):
