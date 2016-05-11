@@ -20,7 +20,9 @@ const mapStateToProps = (state) => {
 	        // couldn't find a match, so the course isn't locked for this section
 			return false;
 		},
-		primaryDisplayAttribute: getPrimaryDisplay(state.school)
+		primaryDisplayAttribute: getPrimaryDisplay(state.school),
+		courseToColourIndex: state.ui.courseToColourIndex
+
 	}
 }
 
