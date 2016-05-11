@@ -1,30 +1,30 @@
 #side-bar {
-  position: absolute;
-  z-index: 99;
+	position: absolute;
+	z-index: 99;
 	left: calc(100% - 300px);
 	width: 300px;
 	top: 50px;
-  bottom: 0;
+	bottom: 0;
 	transition: transform .3s;
-    border: 0 solid #E8E8E8;
-    border-left: 1px solid #E8E8E8;
-    -webkit-transform: translateX(0);
-    -moz-transform: translateX(0);
-    -ms-transform: translateX(0);
-    transform: translateX(0);
-    -webkit-transition: transform .3s;
-    -moz-transition: transform .3s;
-    background-color: white;
+	border: 0 solid #E8E8E8;
+	border-left: 1px solid #E8E8E8;
+	-webkit-transform: translateX(0);
+	-moz-transform: translateX(0);
+	-ms-transform: translateX(0);
+	transform: translateX(0);
+	-webkit-transition: transform .3s;
+	-moz-transition: transform .3s;
+	background-color: white;
 }
 
 #main-bar {
 	width: calc(100% - 300px);
 	float:left;
 	height:100%;
-    -webkit-transition: width .3s;
-    -moz-transition: width .3s;
-    transition: width .3s;
-  padding: 20px 35px;
+	-webkit-transition: width .3s;
+	-moz-transition: width .3s;
+	transition: width .3s;
+	padding: 20px 35px;
 }
 
 #all-cols {
@@ -34,14 +34,22 @@
 }
 
 #top-bar {
-  background-color: #F8F6F7;
+	background-color: #F8F6F7;
 	min-height: 50px;
 	border-bottom: 1px solid #E8E8E8;
-  position: relative;
+	position: relative;
 }
 .la-ball-clip-rotate-multiple {
-  float: right;
-  margin-right: 0;
+	float: right;
+	margin-right: 0;
+}
+#show-exploration {
+	position: absolute;
+	top: 0;
+	left: 100%;
+}
+#show-exploration span {
+
 }
 
 #main-bar.full-cal {
@@ -66,16 +74,16 @@
 
 @media (max-width: 999px) {
 	#main-bar{
-    width: 100%;
-  }
-  #side-bar {
-    width: 100%;
-    left: 100%;
-    -webkit-transform: translateX(0%);
-    -moz-transform: translateX(0%);
-    -ms-transform: translateX(0%);
-    transform: translateX(0%);
-  }
+		width: 100%;
+	}
+	#side-bar {
+		width: 100%;
+		left: 100%;
+		-webkit-transform: translateX(0%);
+		-moz-transform: translateX(0%);
+		-ms-transform: translateX(0%);
+		transform: translateX(0%);
+	}
   #main-bar.full-cal {
     width: 100%;
   }
