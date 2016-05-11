@@ -31,6 +31,7 @@ class MasterSlot extends React.Component {
 					onMouseEnter={ this.onMasterSlotHover }
                     onMouseLeave={ this.onMasterSlotUnhover }
                     style={ { backgroundColor: COLOUR_DATA[this.props.colourIndex].background }}
+                    onClick={this.props.fetchCourseInfo}
                >
                     
 		        <div className="slot-bar"
