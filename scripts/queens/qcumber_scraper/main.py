@@ -42,6 +42,7 @@ class JobManager(object):
         self.config = config
         self.save = save_to_db
         self.jobs = Queue()
+        self.semesters = config.get('semesters', None)
 
         # Enforce a range of 1 - 10 threads with a default of 5
         self.config["threads"] = max(min(self.config.get("threads", 5), 10), 1)
@@ -125,7 +126,7 @@ class JobManager(object):
             # the scraper will still work
             return
 
-        for course in SolusScraper(session, ScrapeJob(), True).start():
+        for course in SolusScraper(session, ScrapeJob(), True, self.semesters).start():
             yield course
 
 
