@@ -75,8 +75,9 @@ class QueensParser(BaseParser):
     }
 
 def process_time(s):
-  """HH:MM:SS -> ?H:MM"""
-  return s[1:-3] if s[0] == '0' else s[:-3]
+  """datetime.time -> ?H:MM"""
+  string = s.strftime('%H:%M')
+  return string[1:] if string[0] == '0' else string
 
 def valid_section(section_element):
   summer = section_element['basic']['season'] != 'Summer'
