@@ -5,9 +5,17 @@ import { saveTimetable } from '../../actions/user_actions.jsx';
 import { MAX_TIMETABLE_NAME_LENGTH } from '../../constants.jsx';
 
 const mapStateToProps = (state) => {
-	return Object.assign({}, state.savingTimetable, {
+	let savingTimetable = state.savingTimetable;
+	// don't pass fake courses as part of roster
+	let activeTimetable = state.timetables.items[state.timetables.active];
+	return { 
+		activeLoadedTimetable: savingTimetable.activeTimetable, // the user's saved timetable object that they are currently editing
+		liveTimetableCourses: activeTimetable.courses.filter(c => !c.fake),
+		saving: savingTimetable.saving, 
+		upToDate: savingTimetable.upToDate,
 		savedTimetables: state.userInfo.data.timetables,
-	});
+		courseToColourIndex: state.ui.courseToColourIndex
+	}
 }
 
 const mapDispatchToProps = (dispatch) => {
