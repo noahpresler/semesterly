@@ -120,9 +120,8 @@ export function saveTimetable(nameChanged = false) {
 }
 
 function getSaveSettingsRequestBody() {
-	let state = store.getState();
 	return {
-		userInfo: state.userInfo.data
+		userInfo: store.getState().userInfo.data
 	}
 }
 
