@@ -23,7 +23,7 @@ class QueensParser(BaseParser):
               " USER and PASS constants"
         return
 
-    for course in JobManager(USER, PASS, True, {}).parse_courses():
+    for course in JobManager(USER, PASS, True, {'semesters': [('Fall', '2016')]}).parse_courses():
       yield course
 
   def parse_course_element(self, course_element):
@@ -56,6 +56,15 @@ class QueensParser(BaseParser):
       'section_type': se['basic']['type'],
       'instructors': '; '.join(instructors) if instructors else 'TBD',
     }
+
+    if 'availability' in section_element:
+      avail_data = {
+        'class_size': int(se['availability']['class_max']),
+        'waitlist_size': int(se['availability']['wait_max']),
+        'num_enrolled': int(se['availability']['class_curr']),
+        'num_waitlist': int(se['availability']['wait_curr'])
+      }
+      section_data.update(avail_data)
     return section_code, section_data
 
   def get_meeting_elements(self, section_element):
@@ -73,6 +82,7 @@ class QueensParser(BaseParser):
       'time_end': process_time(meeting_element['end_time']),
       'location': meeting_element['location']
     }
+    return meeting_data
 
 def process_time(s):
   """datetime.time -> ?H:MM"""
