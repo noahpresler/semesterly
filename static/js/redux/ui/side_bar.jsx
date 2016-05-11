@@ -48,11 +48,13 @@ class SideBar extends React.Component {
         let optionalSlots = this.props.liveTimetableCourses ? this.props.optionalCourses.map(id => {
                 let c = this.props.liveTimetableCourses.find(course => course.id === id);
                 let colourIndex= this.props.courseToColourIndex[id] || 0;
-                return <MasterSlot
-                        key={id}
-                        colourIndex={colourIndex}
-                        course={c}
-                        fetchCourseInfo={() => this.props.fetchCourseInfo(id)}/>
+                if (c !== undefined){
+                    return <MasterSlot
+                            key={id}
+                            colourIndex={colourIndex}
+                            course={c}
+                            fetchCourseInfo={() => this.props.fetchCourseInfo(id)}/>
+                }
         }) : null;
         return (
             <div id="side-bar">
