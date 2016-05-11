@@ -5,7 +5,6 @@ import { getCourseSearchEndpoint, getSemesterName } from '../constants.jsx';
 import classNames from 'classnames';
 import SearchSideBarContainer from './containers/search_side_bar_container.jsx'
 
-
 export class SearchBar extends React.Component {
     constructor(props){
         super(props);
@@ -66,6 +65,11 @@ export class SearchBar extends React.Component {
                                onFocus={() => this.setState({ focused: true, showDropdown: false })}
                                onBlur={() => this.setState({ focused: false })}
                         />
+                    </div>
+                    <div id="show-exploration"
+                        onMouseDown={this.props.toggleExplorationModal}>
+                        <i className="fa fa-compass"></i>
+                        <span>Advanced Search</span>
                     </div>
                 </div>
                 {result_container}
