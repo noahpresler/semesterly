@@ -1,0 +1,71 @@
+import django
+os.environ.setdefault("DJANGO_SETTINGS_MODULE", "semesterly.settings")
+django.setup()
+from timetable.models import QueensCourse, QueensCourseOffering
+
+from qcumber_scraper.main import parse_courses
+
+days = [_, 'M', 'T', 'W', 'R', 'F']
+
+class QueensParser(BaseParser):
+  def __init__(self):
+    BaseParser.__init__(self, QueensCourse,
+                              QueensCourseOffering)
+
+  def get_course_elements(self):
+    for course in parse_courses():
+      yield course
+
+  def parse_course_element(self, course_element):
+    ce = course_element
+    course_code = ce['basic']['subject'] + ' ' + ce['basic']['number']
+    course_data = {
+      'name': ce['basic']['title'],
+      'description': ce['basic']['description'],
+      'num_credits': int(ce['extra']['units'])
+    }
+    return course_code, course_data
+
+  def get_section_elements(self, course_element):
+    for section in course_element['sections']:
+      if section['basic']['season'] != 'Summer': # ignore summer courses for now
+        yield section
+
+  def parse_section_element(self, section_element):
+    se = section_element
+
+    # get list of instructors
+    instructors = set()
+    for meeting in section_element['classes']:
+      for instructor in (meeting['instructors'] or []):
+        instructors.add(instructor)
+
+    section_code = se['_unique']
+    section_data = {
+      'semester': 'F' if se['basic']['season'] == 'Fall' else 'S',
+      'section_type': se['basic']['type'],
+      'instructors': '; '.join(instructors) if instructors else 'TBD',
+    }
+    return section_code, section_data
+
+  def get_meeting_elements(self, section_element):
+    for meeting in section_element['classes']:
+      yield meeting
+
+  def parse_meeting_element(self, meeting_element):
+    missing_info = not all([meeting_element[info] for info in ['day_of_week', 'end_time', 'start_time']])
+    weekend_meeting = int(meeting_element['day_of_week']) > 5
+    if missing_info or weekend_meeting:
+      return False
+
+    meeting_data = {
+      'day': days.index(meeting_element['day_of_week']),
+      'time_start': process_time(meeting_element['start_time']),
+      'time_end': process_time(meeting_element['end_time']),
+      'location': meeting_element['location']
+    }
+    return meeting_data
+
+def process_time(s):
+  """HH:MM:SS -> ?H:MM"""
+  return s[1:-3] if s[0] == '0' else s[:-3]
