@@ -52,3 +52,15 @@ export const getSemesterName = (semester) => {
 			return "Spring 2016"
 	}
 }
+export const COLOUR_DATA = [
+    { background: "#FD7473", highlight: "#E26A6A", border: "#963838", font: "#222" },
+    { background: "#5AC8FB", highlight: "#28A4EA", border: "#1B6B90", font: "#222" },
+    { background: "#4CD4B0", highlight: "#3DBB9A", border: "#1E755E", font: "#222" },
+    { background: "#8870FF", highlight: "#7059E6", border: "#382694", font: "#222" },
+    { background: "#FFBF8D", highlight: "#F7954A", border: "#AF5E20", font: "#222" },
+    { background: "#D4DBC8", highlight: "#B5BFA3", border: "#6C7A89", font: "#222" },
+    { background: "#F182B4", highlight: "#DE699D", border: "#6C7A89", font: "#222" },
+    { background: "#7499A2", highlight: "#668B94", border: "#6C7A89", font: "#222" },
+    { background: "#E7F76D", highlight: "#C4D44D", border: "#6C7A89", font: "#222" },
+    { background: "#C8F7C5", highlight: "#C4D44D", border: "#548A50", font: "#222" }
+] // consider #CF000F, #e8fac3, #C8F7C5

@@ -148,6 +148,7 @@ h4.sb-header:after {
     overflow: hidden;
     margin-bottom: 5px;
     cursor: pointer;
+    transition: all 0.3s;
 }
 .master-slot.optional {
     opacity: .5;
