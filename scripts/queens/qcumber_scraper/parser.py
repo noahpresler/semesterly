@@ -3,7 +3,7 @@ import os
 import bs4
 from datetime import datetime
 import logging
-from config import LOG_DIR
+from queens_config import LOG_DIR
 
 class SolusParser(object):
     """Parses SOLUS's crappy HTML"""

@@ -110,6 +110,10 @@ export function saveTimetable() {
 			}
 			else {
 				dispatch({
+					type: "CHANGE_ACTIVE_SAVED_TIMETABLE",
+					timetable: json.saved_timetable
+				});
+				dispatch({
 					type: "RECEIVE_SAVED_TIMETABLES",
 					timetables: json.timetables
 				});
