@@ -37,6 +37,10 @@ class Calendar extends React.Component {
 		);
 		let addButton = <button 
 			onClick={this.props.createTimetable} className="save-timetable add-button"><i className="fa fa-plus" /></button>
+		let shareButton = <button 
+			className="save-timetable add-button"><i className="fa fa-share-alt" /></button>
+		let downloadButton = <button 
+			className="save-timetable add-button"><i className="fa fa-download" /></button>
 		return (
 
 	      <div id="calendar" className="fc fc-ltr fc-unthemed">
@@ -45,6 +49,8 @@ class Calendar extends React.Component {
 	      		<PaginationContainer />
 	      	  </div>
 	          <div className="fc-right">
+	          	{ downloadButton }
+	          	{ shareButton }
 	          	{ addButton }
 	          	{ saveButton }
 	          </div>

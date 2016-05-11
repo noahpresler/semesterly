@@ -19,9 +19,20 @@ button.save-timetable {
     outline: none;
     background-color: #eee;
     height: 30px;
+    width: 30px;
     line-height: 30px;
     color: #777;
+    position: relative;
     transition: background-color .3s;
+    border: 1px solid #ddd;
+}
+button.save-timetable i {
+    position: absolute;
+    width: 100%;
+    top: 0;
+    left: 0;
+    line-height: 30px;
+    font-size: 18px;
 }
 button.save-timetable:hover {
     background-color: #ddd;
@@ -30,7 +41,7 @@ button.save-timetable:active {
     background-color: #ccc;
 }
 button.save-timetable.add-button {
-    margin-right: 5px;
+    margin-right: 2px;
 }
 
 .cal-row {
