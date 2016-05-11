@@ -27,16 +27,25 @@ class SideBar extends React.Component {
     }
     render() {
         let savedTimetables = this.props.savedTimetables ? this.props.savedTimetables.map(t => {
-            return <div key={t.id} onClick={() => this.props.loadTimetable(t)}>{t.name}</div>
+            return <div className="tt-name" key={t.id} onClick={() => this.props.loadTimetable(t)}>{t.name}</div>
         }) : null;
         return (
             <div id="side-bar">
-                <input ref="input" className={classnames("timetable-name", {"unsaved": !this.props.upToDate})}
-                    value={this.state.activeTimetableName}
-                    onChange={this.alterTimetableName}
-                    onBlur={this.setTimetableName}
-                    />
-                { savedTimetables }
+                <div id="sb-name">
+                    <input ref="input" className={classnames("timetable-name", {"unsaved": !this.props.upToDate})}
+                        value={this.state.activeTimetableName}
+                        onChange={this.alterTimetableName}
+                        onBlur={this.setTimetableName}
+                        />
+                    <span className="tip-down"></span>
+                    <div id="timetable-names-dropdown"
+                        >
+                        <div className="tip-border"></div>
+                        <div className="tip"></div>
+                        <h4>Fall 2016</h4>
+                        { savedTimetables }
+                    </div>
+                </div>
                 <div id="sb-credits" className="col-1-3">
                     <h3>16</h3>
                     <h4>credits</h4>
