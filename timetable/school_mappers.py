@@ -14,7 +14,8 @@ school_to_models = {
     'uoft': (Course, CourseOffering),
     'umd': (UmdCourse, UmdCourseOffering),
     'rutgers': (RutgersCourse, RutgersCourseOffering),
-    'uo': (OttawaCourse, OttawaCourseOffering)
+    'uo': (OttawaCourse, OttawaCourseOffering),
+    'queens': (QueensCourse, QueensCourseOffering)
 }
 
 # the smallest block size (in minutes) needed to describe start/end times
@@ -24,7 +25,8 @@ school_to_granularity = {
     'uoft': 30,
     'umd': 5,
     'rutgers': 5,
-    'uo': 5
+    'uo': 5,
+    'queens': 30
 }
 
 school_to_personal_timetables = {
@@ -44,7 +46,8 @@ course_parsers = {
   'uoft': lambda: UofTParser().start(),
   'umd': parse_umd,
   'rutgers': parse_rutgers,
-  'uo': parse_ottawa
+  'uo': parse_ottawa,
+  'queens': lambda: QueensParser().parse_courses()
 }
 
 eval_parsers = {
@@ -52,7 +55,8 @@ eval_parsers = {
   'uoft': lambda: None,
   'umd': lambda: umdReview().parse_reviews,
   'rutgers': lambda: None,
-  'uo': lambda: None
+  'uo': lambda: None,
+  'queens': lambda: None
 }
 
 textbook_parsers = {
@@ -60,5 +64,6 @@ textbook_parsers = {
   'uoft': parse_uoft_textbooks,
   'umd': lambda: None,
   'rutgers': lambda: None,
-  'uo': lambda: None
+  'uo': lambda: None,
+  'queens': lambda: None
 }
