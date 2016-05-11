@@ -25,7 +25,7 @@ class TextbookScraper(object):
         else:
             return None
 
-    def scrape(self):
+    def scrape(self, save_to_db=False):
 
         logging.info("Starting textbook scrape")
 
@@ -120,15 +120,17 @@ class TextbookScraper(object):
                 # Add the textbook
                 if textbook_attrs["isbn_10"] or textbook_attrs["isbn_13"]:
 
-                    write_textbook(subject, course, textbook_attrs)
+                    if not save_to_db: # export as JSON instead
+                        write_textbook(subject, course, textbook_attrs)
+                    else:
+                        yield textbook_attrs
                     try:
                         logging.info("----Parsed book: {title} by {authors} ({isbn_13})".format(**textbook_attrs))
                     except:
                         logging.info("----Parsed book.")
 
 
-if __name__ == '__main__':
-
+def main(save_to_db):
     root_logger = logging.getLogger()
 
     handler = logging.StreamHandler(sys.stdout)
@@ -144,3 +146,7 @@ if __name__ == '__main__':
     )
     scraper = TextbookScraper(config)
     scraper.scrape()
+
+
+if __name__ == '__main__':
+    main(False)
