@@ -360,4 +360,52 @@ class RutgersCourseOffering(BaseCourseOffering):
 
 class RutgersLink(TextbookLink):
   courseoffering = models.ForeignKey(RutgersCourseOffering)
+
+#---------------------- Queens University ----------------------------
+class QueensCourse(BaseCourse):
+  num_credits = models.FloatField(default=-1)
+  related_courses = models.ManyToManyField("self", blank=True)
+
+  def get_dept(self):
+    pass
+
+  def get_dept_matches(self):
+    pass
+
+  def get_all_textbook_info(self):
+    return self.base_get_all_textbook_info(QueensCourseOffering)
+
+  def get_eval_info(self):
+    return self.base_get_eval_info(QueensCourseEvaluation)
+
+
+# class QueensCourseEvaluation(BaseCourseEvaluation):
+#   course = models.ForeignKey(QueensCourse)
+
+
+class QueensCourseOffering(BaseCourseOffering):
+  course = models.ForeignKey(QueensCourse)
+  textbooks = models.ManyToManyField(Textbook, through='QueensLink')
+
+  def get_course_code(self):
+    pass
+
+  def get_course_tag(self):
+    pass
+
+  def get_dept(self):
+    pass
+
+  def get_course(self):
+    pass
+
+  def get_section(self):
+    pass
+
+  def __unicode__(self):
+    # return "Semester: %s, Section: %s, Time: %s" % (self.semester, self.meeting_section, self.time)
+    return "Day: %s, Time: %s - %s" % (self.day, self.time_start, self.time_end)
+
+class QueensLink(TextbookLink):
+  courseoffering = models.ForeignKey(QueensCourseOffering)
   

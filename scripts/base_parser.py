@@ -5,10 +5,10 @@ import progressbar
 class BaseParser:
   __metaclass__ = abc.ABCMeta
 
-  def __init__(self, course_model, offering_model, semester):
+  def __init__(self, course_model, offering_model, semester=None):
     self.update_or_create_course = course_model.objects.update_or_create
     self.update_or_create_offering = offering_model.objects.update_or_create
-    self.semesters = semester
+    self.semester = semester
     self.num_courses = None
 
   def parse_courses(self):
@@ -38,12 +38,15 @@ class BaseParser:
     """
     section_code, section_data = self.parse_section_element(section_element)
     if section_code:
+      semester = section_data.get('semester', None)
+      if semester in section_data:
+        del section_data[semester]
       for meeting_element in self.get_meeting_elements(section_element):
         self.parse_and_save_meeting(meeting_element, section_data, section_code, 
-                                    course_obj)
+                                    course_obj, semester)
 
   def parse_and_save_meeting(self, meeting_element, section_data, section_code, 
-                                    course_obj):
+                                    course_obj, semester):
     """
     Update database with new offering corresponding to the given bs4 element 
     and other data.
@@ -52,7 +55,7 @@ class BaseParser:
     if meeting_data:
       meeting_data.update(section_data)
       self.update_or_create_offering(course=course_obj,
-                                      semester=self.semester,
+                                      semester=self.semester or semester,
                                       meeting_section=section_code,
                                       defaults=meeting_data)
 
@@ -106,4 +109,56 @@ class BaseParser:
     should match the column names in the model for the section (e.g. day, 
     time_start, time_end, location, etc.). If invalid data, return None.
     """
+
+# TEMPLATE FOR BASEPARSER SUBCLASS:
+"""
+import os
+
+import django
+os.environ.setdefault("DJANGO_SETTINGS_MODULE", "semesterly.settings")
+django.setup()
+from timetable.models import SchoolCourse, SchoolCourseOffering
+from scripts.base_parser import BaseParser
+
+
+class SchoolParser(BaseParser):
+  def __init__(self):
+    BaseParser.__init__(self, SchoolCourse,
+                              SchoolCourseOffering)
+
+  def get_course_elements(self):
+    pass
+
+  def parse_course_element(self, course_element):
+    coures_code = None
+    course_data = {
+      'name': None, 
+      'description': None,
+      'num_credits': None
+    }
+    return course_code, course_data
+
+  def get_section_elements(self, course_element):
+    pass
+
+  def parse_section_element(self, section_element):
+    section_code = None
+    section_data = {
+      'section_type': None,
+      'instructors': None
+    }
+    return section_code, section_data
+
+  def get_meeting_elements(self, section_element):
+    pass
+
+  def parse_meeting_element(self, meeting_element):
+    meeting_data = {
+      'day': None,
+      'time_start': None,
+      'time_end': None,
+      'location': None
+    }
+    return meeting_data
+"""
 
