@@ -4,7 +4,7 @@ import SearchBarContainer from './containers/search_bar_container.jsx';
 import CourseModalContainer from './containers/course_modal_container.jsx';
 import TimetableLoaderContainer from './containers/timetable_loader_container.jsx';
 import SocialProfileContainer from './containers/social_profile_container.jsx';
-import { ExplorationModal } from './exploration_modal.jsx';
+import ExplorationModalContainer from './containers/exploration_modal_container.jsx';
 
 export const expandSideBar = () => {
 	$('#main-bar, #side-bar').removeClass('full-cal').addClass('less-cal');
@@ -46,7 +46,7 @@ class TopBar extends React.Component {
 			<div id="semesterly-name">Semester.ly</div>
 			<SearchBarContainer />
 			<CourseModalContainer />
-			<ExplorationModal />
+			<ExplorationModalContainer />
 			<SocialProfileContainer />
 		    <TimetableLoaderContainer />
 			<div id="navicon" onClick={this.toggleSideBar}>
