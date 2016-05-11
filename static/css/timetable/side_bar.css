@@ -6,6 +6,7 @@
 #sb-name {
     position: relative;
     padding-right: 35px;
+    margin-bottom: 10px;
 }
 #side-bar input {
 	padding: 5px;
@@ -27,10 +28,23 @@
 #side-bar .unsaved { 
     font-style: italic;
 }
-#sb-name .tip-down {
+#timetable-drop-it-down {
     position: absolute;
-    top: 15px;
-    right: 13px;
+    top: 0;
+    right: 0;
+    height: 37px;
+    width: 37px;
+    cursor: pointer;
+}
+#timetable-drop-it-down .tip-down {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    margin: 0;
+    transform: translate(-50%, -50%);
+}
+#timetable-drop-it-down .tip-down.down {
+    transform: translate(-50%, -50%) rotate(180deg);
 }
 
 /* Timetable Name Dropdowns */
@@ -43,14 +57,18 @@
     border: 1px solid #E8E8E8;
     box-shadow: 0 2px 10px rgba(0,0,0,.2);
     z-index: 100;
+    display: none;
+}
+#timetable-names-dropdown.down {
+    display: block;
 }
 #timetable-names-dropdown .tip-border {
     top: -8px;
-    right: 10px;
+    right: 9px;
 }
 #timetable-names-dropdown .tip {
     top: -7px;
-    right: 10px;
+    right: 9px;
 }
 #timetable-names-dropdown h4 {
     font-size: 12px;
@@ -117,6 +135,7 @@ h4.sb-header:after {
 
 /* credits */
 #sb-credits {
+    margin-bottom: 10px;
     text-align: center;
 }
 #sb-credits h3 {
