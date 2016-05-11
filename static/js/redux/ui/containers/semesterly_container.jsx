@@ -3,7 +3,8 @@ import Semesterly from '../semesterly.jsx';
 
 const mapStateToProps = (state) => {
 	return {
-    	alert_conflict: state.alerts.alert_conflict
+    	alertConflict: state.alerts.alertConflict,
+    	alertTimetableExists: state.alerts.alertTimetableExists
 	}
 }
 
