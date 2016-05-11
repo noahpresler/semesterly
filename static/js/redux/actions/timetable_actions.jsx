@@ -66,6 +66,14 @@ export function addOrRemoveCourse(newCourseId, lockingSection = '') {
 	if (state.timetables.isFetching) {
 		return;
 	}
+	if (!removing && state.optionalCourses.ids.indexOf(newCourseId) !== -1) {
+		let dispatch = store.dispatch;
+		dispatch({
+	  		type: "ADD_REMOVE_OPTIONAL_COURSE",
+	  		newCourseId: newCourseId
+	  	});
+	  	state = store.getState();
+	}
 	let reqBody = getBaseReqBody(state);
 	// user must be removing this course if it's already in roster,
 	// and they're not trying to lock a new section).
@@ -112,6 +120,7 @@ function fetchTimetables(requestBody, removing) {
 			else {
 				// course added by the user resulted in a conflict, so no timetables
 				// were received
+				console.log(json)
 				dispatch(alertConflict());
 			}
 			return json;
@@ -149,5 +158,21 @@ export function fetchClassmates(courses) {
 			    .then(json => {
 			    	dispatch(getClassmates(json))
 			    });
+	}
+}
+
+export function addOrRemoveOptionalCourse(id) {
+	return (dispatch) => {
+		dispatch({
+	  		type: "ADD_REMOVE_OPTIONAL_COURSE",
+	  		newCourseId: id
+	  	});
+	  	let state = store.getState();
+	  	let reqBody = getBaseReqBody(state);
+		Object.assign(reqBody, {
+        	'optionCourses': state.optionalCourses.ids,
+        	'numOptionCourses': state.optionalCourses.numRequired
+        });
+		store.dispatch(fetchTimetables(reqBody, false));
 	}
 }
