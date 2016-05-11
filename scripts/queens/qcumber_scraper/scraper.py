@@ -55,7 +55,7 @@ class SolusScraper(object):
         # Iterate over all subjects
         for subject in all_subjects:
 
-            logging.info(u"--Subject: {abbreviation} - {title}".format(**subject))
+            # logging.info(u"--Subject: {abbreviation} - {title}".format(**subject))
 
             if not self.save_to_db:
                 writer.write_subject(subject)
@@ -87,7 +87,7 @@ class SolusScraper(object):
             course_attrs = self.session.parser.course_attrs()
             course_attrs['basic']['subject'] = subject['abbreviation']
 
-            logging.info(u"----Course: {number} - {title}".format(**course_attrs['basic']))
+            # logging.info(u"----Course: {number} - {title}".format(**course_attrs['basic']))
 
             if not self.save_to_db:
                 writer.write_course(course_attrs)
@@ -112,7 +112,7 @@ class SolusScraper(object):
         # Get all terms on the page and iterate over them
         all_terms = self.session.parser.all_terms()
         for term in all_terms:
-            logging.info(u"------Term: {year} - {season}".format(**term))
+            # logging.info(u"------Term: {year} - {season}".format(**term))
             self.session.switch_to_term(term["_unique"])
 
             self.session.view_all_sections()
@@ -131,7 +131,7 @@ class SolusScraper(object):
 
         if logging.getLogger().isEnabledFor(logging.INFO):
             for section in all_sections:
-                logging.info(u"--------Section: {class_num}-{type} ({solus_id}) -- {status}".format(**section["basic"]))
+                # logging.info(u"--------Section: {class_num}-{type} ({solus_id}) -- {status}".format(**section["basic"]))
                 if not self.job["deep"]:
                     logging.debug(u"SECTION CLASS DATA: {0}".format(section["classes"]))
 
