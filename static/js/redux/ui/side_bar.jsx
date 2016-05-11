@@ -1,5 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+import classnames from 'classnames';
+import MasterSlot from './master_slot.jsx';
 import classNames from 'classnames';
 
 class SideBar extends React.Component {
@@ -7,7 +9,7 @@ class SideBar extends React.Component {
         super(props);
         this.alterTimetableName = this.alterTimetableName.bind(this);
         this.setTimetableName = this.setTimetableName.bind(this);
-        this.state = { activeTimetableName: this.props.activeTimetable.name };
+        this.state = { activeTimetableName: this.props.activeLoadedTimetable.name };
         this.stateDropdown = {showDropdown: false};
         this.toggleDropdown = this.toggleDropdown.bind(this);
     }
@@ -15,7 +17,7 @@ class SideBar extends React.Component {
     	this.setState({showDropdown: !this.state.showDropdown});
     }
     componentWillReceiveProps(nextProps) {
-        this.setState({ activeTimetableName: nextProps.activeTimetable.name });
+        this.setState({ activeTimetableName: nextProps.activeLoadedTimetable.name });
     }
     alterTimetableName(event) {
         let newName = event.target.value;
@@ -24,7 +26,7 @@ class SideBar extends React.Component {
     setTimetableName() {
         let newName = this.state.activeTimetableName;
         if (newName.length === 0) {
-            this.setState({ activeTimetableName: this.props.activeTimetable.name });
+            this.setState({ activeTimetableName: this.props.activeLoadedTimetable.name });
         }
         else {
             this.props.changeTimetableName(newName);
@@ -34,10 +36,19 @@ class SideBar extends React.Component {
         let savedTimetables = this.props.savedTimetables ? this.props.savedTimetables.map(t => {
             return <div className="tt-name" key={t.id} onClick={() => this.props.loadTimetable(t)}>{t.name}</div>
         }) : null;
+        let masterSlots = this.props.liveTimetableCourses ? 
+            this.props.liveTimetableCourses.map(c => {
+                let colourIndex= this.props.courseToColourIndex[c.id] || 0;
+                return <MasterSlot 
+                        key={c.id} 
+                        colourIndex={colourIndex} 
+                        course={c} 
+                        fetchCourseInfo={() => this.props.fetchCourseInfo(c.id)}/>
+        }) : null;
         return (
             <div id="side-bar">
                 <div id="sb-name">
-                    <input ref="input" className={classNames("timetable-name", {"unsaved": !this.props.upToDate})}
+                    <input ref="input" className={classnames("timetable-name", {"unsaved": !this.props.upToDate})}
                         value={this.state.activeTimetableName}
                         onChange={this.alterTimetableName}
                         onBlur={this.setTimetableName}
@@ -69,25 +80,7 @@ class SideBar extends React.Component {
                 </div>
                 <h4 className="sb-header">Current Courses</h4>
                 <div id="sb-master-slots">
-                    <div className="master-slot">
-                        <div className="slot-bar"></div>
-                        <div className="master-slot-content">
-                            <h3>EN.650.311</h3>
-                            <h3>Discrete Mathematics</h3>
-                            <h3>Baryl Castello</h3>
-                            <h3>4 credits</h3>
-                        </div>
-                        <div className="master-slot-actions">
-                            <i className="fa fa-share-alt"></i>
-                            <i className="fa fa-times"></i>
-                        </div>
-                        <div className="master-slot-friends">
-                            <div className="ms-friend">5+</div>
-                            <div className="ms-friend" style={{backgroundImage: 'url(/static/img/blank.jpg)' }}></div>
-                            <div className="ms-friend" style={{backgroundImage: 'url(/static/img/blank.jpg)' }}></div>
-                            <div className="ms-friend" style={{backgroundImage: 'url(/static/img/blank.jpg)' }}></div>
-                        </div>
-                    </div>
+                    { masterSlots }
                 </div>
                 <h4 className="sb-header">Optional Courses</h4>
                 <div id="sb-optional-slots">
