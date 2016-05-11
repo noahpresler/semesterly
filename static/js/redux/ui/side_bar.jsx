@@ -33,14 +33,17 @@ class SideBar extends React.Component {
         }
     }
     render() {
-        // console.log("hi", this.props);
         let savedTimetables = this.props.savedTimetables ? this.props.savedTimetables.map(t => {
             return <div className="tt-name" key={t.id} onClick={() => this.props.loadTimetable(t)}>{t.name}</div>
         }) : null;
         let masterSlots = this.props.liveTimetableCourses ? 
             this.props.liveTimetableCourses.map(c => {
                 let colourIndex= this.props.courseToColourIndex[c.id] || 0;
-                return <MasterSlot key={c.id} colourIndex={colourIndex} course={c} />
+                return <MasterSlot 
+                        key={c.id} 
+                        colourIndex={colourIndex} 
+                        course={c} 
+                        fetchCourseInfo={() => this.props.fetchCourseInfo(c.id)}/>
         }) : null;
         return (
             <div id="side-bar">

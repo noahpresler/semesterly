@@ -1,30 +1,30 @@
 #side-bar {
-  position: absolute;
-  z-index: 99;
+	position: absolute;
+	z-index: 99;
 	left: calc(100% - 300px);
 	width: 300px;
 	top: 50px;
-  bottom: 0;
+	bottom: 0;
 	transition: transform .3s;
-    border: 0 solid #E8E8E8;
-    border-left: 1px solid #E8E8E8;
-    -webkit-transform: translateX(0);
-    -moz-transform: translateX(0);
-    -ms-transform: translateX(0);
-    transform: translateX(0);
-    -webkit-transition: transform .3s;
-    -moz-transition: transform .3s;
-    background-color: white;
+	border: 0 solid #E8E8E8;
+	border-left: 1px solid #E8E8E8;
+	-webkit-transform: translateX(0);
+	-moz-transform: translateX(0);
+	-ms-transform: translateX(0);
+	transform: translateX(0);
+	-webkit-transition: transform .3s;
+	-moz-transition: transform .3s;
+	background-color: white;
 }
 
 #main-bar {
 	width: calc(100% - 300px);
 	float:left;
 	height:100%;
-    -webkit-transition: width .3s;
-    -moz-transition: width .3s;
-    transition: width .3s;
-  padding: 20px 35px;
+	-webkit-transition: width .3s;
+	-moz-transition: width .3s;
+	transition: width .3s;
+	padding: 20px 35px;
 }
 
 #all-cols {
@@ -34,14 +34,42 @@
 }
 
 #top-bar {
-  background-color: #F8F6F7;
+	background-color: #F8F6F7;
 	min-height: 50px;
 	border-bottom: 1px solid #E8E8E8;
-  position: relative;
+	position: relative;
 }
 .la-ball-clip-rotate-multiple {
-  float: right;
-  margin-right: 0;
+	float: right;
+	margin-right: 0;
+}
+#show-exploration {
+	position: absolute;
+	top: 0;
+	right: -90px;
+	width: 85px;
+	height: 30px;
+	cursor: pointer;
+	transition: transform .3s;
+}
+#show-exploration:hover {
+	transform: scale(1.05);
+}
+#show-exploration i {
+	font-size: 22px;
+	line-height: 30px;
+	display: inline-block;
+	vertical-align:	middle;
+}
+#show-exploration span {
+	display: inline-block;
+	margin-left: 4px;
+	font-size: 12px;
+	padding: 3px 0;
+	line-height: 12px;
+	width: 60px;
+	text-align: left;
+	vertical-align:	middle;
 }
 
 #main-bar.full-cal {
@@ -66,130 +94,130 @@
 
 @media (max-width: 999px) {
 	#main-bar{
-    width: 100%;
-  }
-  #side-bar {
-    width: 100%;
-    left: 100%;
-    -webkit-transform: translateX(0%);
-    -moz-transform: translateX(0%);
-    -ms-transform: translateX(0%);
-    transform: translateX(0%);
-  }
-  #main-bar.full-cal {
-    width: 100%;
-  }
-  #side-bar.full-cal {
-    -webkit-transform: translateX(0%);
-    -moz-transform: translateX(0%);
-    -ms-transform: translateX(0%);
-    transform: translateX(0%);
-  }
-  #main-bar.less-cal {
-    width: 0%;
-  }
-  #side-bar.less-cal {
-    width: 100%;
-    -webkit-transform: translateX(-100%);
-    -moz-transform: translateX(-100%);
-    -ms-transform: translateX(-100%);
-    transform: translateX(-100%);
-  }
+		width: 100%;
+	}
+	#side-bar {
+		width: 100%;
+		left: 100%;
+		-webkit-transform: translateX(0%);
+		-moz-transform: translateX(0%);
+		-ms-transform: translateX(0%);
+		transform: translateX(0%);
+	}
+	#main-bar.full-cal {
+		width: 100%;
+	}
+	#side-bar.full-cal {
+		-webkit-transform: translateX(0%);
+		-moz-transform: translateX(0%);
+		-ms-transform: translateX(0%);
+		transform: translateX(0%);
+	}
+	#main-bar.less-cal {
+		width: 0%;
+	}
+	#side-bar.less-cal {
+		width: 100%;
+		-webkit-transform: translateX(-100%);
+		-moz-transform: translateX(-100%);
+		-ms-transform: translateX(-100%);
+		transform: translateX(-100%);
+	}
 }
 
 
 @media (max-width: 766px) {
-    #main-bar {
-        padding: 10px;
-    }
+	#main-bar {
+		 padding: 10px;
+	}
 }
 
 @media (max-width: 500px) {
-    #main-bar {
-        padding: 0px;
-    }
+	#main-bar {
+		padding: 0px;
+	}
 }
 
 /* Logo & name */
 
 #semesterly-name {
-    font-family: lato;
-    font-weight: 400;
-    display: inline-block;
-    float: left;
-    font-size: 32px;
-    line-height: 50px;
-    height: 50px;
-    margin-left: 10px;
+	font-family: lato;
+	font-weight: 400;
+	display: inline-block;
+	float: left;
+	font-size: 32px;
+	line-height: 50px;
+	height: 50px;
+	margin-left: 10px;
 }
 
 #semesterly-logo {
-    display: inline-block;
-    height: 32px;
-    margin-top: 9px;
-    margin-left: 35px;
-    float: left;
+	display: inline-block;
+	height: 32px;
+	margin-top: 9px;
+	margin-left: 35px;
+	float: left;
 }
 
 @media (max-width: 1000px) { 
-  .fc-ltr .fc-time-grid .fc-event-container {
-    margin-left:0.5%;
-  }
-  #search-input {
-    font-size:15px;
-  }
-  #semesterly-name {
-    display: none;
-  }
-  #navicon {
-    right: 9px;
-  }
+	.fc-ltr .fc-time-grid .fc-event-container {
+		margin-left:0.5%;
+	}
+	#search-input {
+		font-size:15px;
+	}
+	#semesterly-name {
+		display: none;
+	}
+	#navicon {
+		right: 9px;
+	}
 }
 @media (max-width: 766px) {
-    #semesterly-logo {
-        margin-left: 10px;
-    }
+	#semesterly-logo {
+		margin-left: 10px;
+	}
 }
 /* end Logo & name */
 
 /* Navicon */
 #navicon {
-    position: absolute;
-    top: 10px;
-    right: 10px;
-    width: 20px;
-    height: 30px;
-    cursor: pointer;
-    z-index: 3;
+	position: absolute;
+	top: 10px;
+	right: 10px;
+	width: 20px;
+	height: 30px;
+	cursor: pointer;
+	z-index: 3;
 }
 #navicon span {
-    height: 3px;
-    display: block;
-    position: absolute;
-    right: 0;
-    background-color:#34495E;
-    -webkit-transform: translateY(-50%);
-    -moz-transform: translateY(-50%);
-    -ms-transform: translateY(-50%);
-    transform: translateY(-50%);
-    -webkit-transition: width .3s;
-    -moz-transition: width .3s;
-    transition: width .3s;
+	height: 3px;
+	display: block;
+	position: absolute;
+	right: 0;
+	background-color:#34495E;
+	-webkit-transform: translateY(-50%);
+	-moz-transform: translateY(-50%);
+	-ms-transform: translateY(-50%);
+	transform: translateY(-50%);
+	-webkit-transition: width .3s;
+	-moz-transition: width .3s;
+	transition: width .3s;
 }
 #navicon span:nth-child(1) {
-    top: 25%;
-    width: 15px;
+	top: 25%;
+	width: 15px;
 }
 #navicon span:nth-child(2) {
-    top: 50%;
-    width: 20px;
+	top: 50%;
+	width: 20px;
 }
 #navicon span:nth-child(3) {
-    top: 75%;
-    width: 15px;
+	top: 75%;
+	width: 15px;
 }
 #navicon:hover span:nth-child(1),
 #navicon:hover span:nth-child(3) {
-    width: 20px;
+	width: 20px;
 }
 /* End Navicon */
