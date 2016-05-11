@@ -9,7 +9,7 @@ class SideBar extends React.Component {
         this.setTimetableName = this.setTimetableName.bind(this);
         this.state = { activeTimetableName: this.props.activeTimetable.name };
     }
-    componentWillReceiveProps(nextProps){
+    componentWillReceiveProps(nextProps) {
         this.setState({ activeTimetableName: nextProps.activeTimetable.name });
     }
     alterTimetableName(event) {
@@ -31,7 +31,7 @@ class SideBar extends React.Component {
         }) : null;
         return (
             <div id="side-bar">
-                <input ref="input" className={classnames({"unsaved": !this.props.upToDate})}
+                <input ref="input" className={classnames("timetable-name", {"unsaved": !this.props.upToDate})}
                     value={this.state.activeTimetableName}
                     onChange={this.alterTimetableName}
                     onBlur={this.setTimetableName}
