@@ -12,6 +12,7 @@ const mapStateToProps = (state) => {
     	searchResults: state.searchResults.items,
     	isFetching: state.searchResults.isFetching,
     	isCourseInRoster: (course_id) => courseSections[course_id] !== undefined,
+    	isCourseOptional: (course_id) => state.optionalCourses.ids.indexOf(course_id) !== -1,
     	isSectionLocked: (course_id, section) => {
     		if (courseSections[course_id] === undefined) {
     			return false;
