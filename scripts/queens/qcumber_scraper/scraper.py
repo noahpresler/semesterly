@@ -16,7 +16,8 @@ class SolusScraper(object):
         logging.info(u"Starting job: {0}".format(self.job))
 
         try:
-            self.scrape_letters()
+            for course in self.scrape_letters():
+                yield course
         except Exception as e:
             logging.debug(e)
             self.session.parser.dump_html()
@@ -30,7 +31,8 @@ class SolusScraper(object):
             # Go to the letter
             self.session.select_alphanum(letter)
 
-            self.scrape_subjects()
+            for course in self.scrape_subjects():
+                yield course
 
     def scrape_subjects(self):
         """Scrape all the subjects"""
@@ -52,7 +54,8 @@ class SolusScraper(object):
 
             self.session.dropdown_subject(subject["_unique"])
 
-            self.scrape_courses(subject)
+            for course in self.scrape_courses(subject):
+                yield course
 
             self.session.rollup_subject(subject["_unique"])
 
@@ -75,7 +78,6 @@ class SolusScraper(object):
 
             logging.info(u"----Course: {number} - {title}".format(**course_attrs['basic']))
 
-            writer.write_course(course_attrs)
             try:
                 self.session.show_sections()
             except Exception as e:
@@ -83,7 +85,8 @@ class SolusScraper(object):
                 logging.error(e)
                 raise
 
-            self.scrape_terms(course_attrs)
+            course_attrs['sections'] = self.scrape_terms(course_attrs)
+            yield course_attrs
             self.session.return_from_course()
             
 
@@ -97,7 +100,8 @@ class SolusScraper(object):
             self.session.switch_to_term(term["_unique"])
 
             self.session.view_all_sections()
-            self.scrape_sections(course, term)
+            for section in self.scrape_sections(course, term):
+                yield section
 
     def scrape_sections(self, course, term):
         """Scrape sections"""
@@ -131,5 +135,5 @@ class SolusScraper(object):
             section['basic']['year'] = term['year']
             section['basic']['season'] = term['season']
 
-            writer.write_section(section)
+            yield section
 
