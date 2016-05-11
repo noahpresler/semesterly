@@ -84,14 +84,25 @@ export class SearchResult extends React.Component {
         event.preventDefault(); // stops search bar from blurring (losing focus)
         this.props.addCourse(course.id, sec);
     }
+    addOptionalCourseWrapper(course, event) {
+        event.stopPropagation(); // stops modal from popping up
+        event.preventDefault(); // stops search bar from blurring (losing focus)
+        this.props.addRemoveOptionalCourse(course.id);
+    }
     render() {
         let course = this.props.course;
         let inRoster = this.props.inRoster;
-        let addRemoveButton = 
+        let addRemoveButton =
             <span className={classNames('search-course-add', {'in-roster': inRoster})} 
               onMouseDown={(event) => this.addCourseWrapper(course, '', event)}>
                 <i className={classNames('fa', {'fa-plus' : !inRoster, 'fa-check' : inRoster})}></i>
             </span>;
+        let addOptionalCourseButton =
+            <span className="search-course-save"
+                onMouseDown={(event) => this.addOptionalCourseWrapper(course, event)}
+                >
+                <i className="fa fa-bookmark"></i>
+            </span>
         return (
         <li key={course.id}
             className='search-course'
@@ -99,9 +110,7 @@ export class SearchResult extends React.Component {
             onMouseOver={() => this.props.hoverSearchResult(this.props.position)}
             >
             <h3>{course.name} </h3>
-            <span className="search-course-save">
-                <i className="fa fa-bookmark"></i>
-            </span>
+            {addOptionalCourseButton}
             {addRemoveButton}
             <h4>{course.code}</h4>
         </li>);

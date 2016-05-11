@@ -28,6 +28,10 @@ const mapDispatchToProps = (dispatch) => {
 	return {
 	  	fetchCourses: (query) => dispatch(fetchSearchResults(query)),
 	  	addCourse: addOrRemoveCourse,
+	  	addRemoveOptionalCourse: (id) => dispatch({
+	  		type: "ADD_REMOVE_OPTIONAL_COURSE",
+	  		newCourseId: id
+	  	}),
 		fetchCourseInfo: (id) => dispatch(fetchCourseInfo(id)), 
 		hoverSearchResult: (position) => {
 			dispatch({
