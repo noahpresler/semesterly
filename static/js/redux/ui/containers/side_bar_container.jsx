@@ -1,6 +1,8 @@
 import { connect } from 'react-redux';
 import SideBar from '../side_bar.jsx';
 import { loadTimetable } from '../../actions/timetable_actions.jsx';
+import { saveTimetable } from '../../actions/user_actions.jsx';
+import { MAX_TIMETABLE_NAME_LENGTH } from '../../constants.jsx';
 
 const mapStateToProps = (state) => {
 	return Object.assign({}, state.savingTimetable, {
@@ -10,11 +12,13 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
 	return {
-		changeName: (name) => {
+		changeTimetableName: (name) => {
+			if (name.length === 0 || name.length > MAX_TIMETABLE_NAME_LENGTH) { return; }
 			dispatch({
 				type: "CHANGE_ACTIVE_SAVED_TIMETABLE_NAME",
 				name,
 			})
+			dispatch(saveTimetable(true));
 		},
 		loadTimetable
 	}

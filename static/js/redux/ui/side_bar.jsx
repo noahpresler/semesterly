@@ -3,8 +3,27 @@ import ReactDOM from 'react-dom';
 import classnames from 'classnames';
 
 class SideBar extends React.Component {
-    changeName() {
-        this.props.changeName(this.refs.input.value);
+    constructor(props) {
+        super(props);
+        this.alterTimetableName = this.alterTimetableName.bind(this);
+        this.setTimetableName = this.setTimetableName.bind(this);
+        this.state = { activeTimetableName: this.props.activeTimetable.name };
+    }
+    componentWillReceiveProps(nextProps){
+        this.setState({ activeTimetableName: nextProps.activeTimetable.name });
+    }
+    alterTimetableName(event) {
+        let newName = event.target.value;
+        this.setState({ activeTimetableName: event.target.value });
+    }
+    setTimetableName() {
+        let newName = this.state.activeTimetableName;
+        if (newName.length === 0) {
+            this.setState({ activeTimetableName: this.props.activeTimetable.name });
+        }
+        else {
+            this.props.changeTimetableName(newName);
+        }
     }
     render() {
         let savedTimetables = this.props.savedTimetables ? this.props.savedTimetables.map(t => {
@@ -13,8 +32,9 @@ class SideBar extends React.Component {
         return (
             <div id="side-bar">
                 <input ref="input" className={classnames({"unsaved": !this.props.upToDate})}
-                    placeholder={this.props.activeTimetable.name}
-                    onChange={this.changeName.bind(this)}
+                    value={this.state.activeTimetableName}
+                    onChange={this.alterTimetableName}
+                    onBlur={this.setTimetableName}
                     />
                 { savedTimetables }
                 <div id="sb-rating" className="col-1-2">
