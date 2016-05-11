@@ -50,7 +50,7 @@ class TextbookScraper(object):
         logging.info("Parsing courses")
         for subject, course, link in temp:
 
-            logging.info('Book for {} {}'.format(subject, course))
+            # logging.info('Book for {} {}'.format(subject, course))
 
             response = requests.get(link)
             b = BeautifulSoup(response.text)
@@ -124,10 +124,10 @@ class TextbookScraper(object):
                         write_textbook(subject, course, textbook_attrs)
                     else:
                         yield textbook_attrs
-                    try:
-                        logging.info("----Parsed book: {title} by {authors} ({isbn_13})".format(**textbook_attrs))
-                    except:
-                        logging.info("----Parsed book.")
+                    # try:
+                        # logging.info("----Parsed book: {title} by {authors} ({isbn_13})".format(**textbook_attrs))
+                    # except:
+                        # logging.info("----Parsed book.")
 
 
 def main(save_to_db):
@@ -145,7 +145,11 @@ def main(save_to_db):
         letters='ABCDEFGHIJKLMNOPQRSTUVWXYZ'
     )
     scraper = TextbookScraper(config)
-    scraper.scrape()
+    if save_to_db:
+        for tb in scraper.scrape(save_to_db):
+            yield tb
+    else:
+        scraper.scrape(save_to_db)
 
 
 if __name__ == '__main__':
