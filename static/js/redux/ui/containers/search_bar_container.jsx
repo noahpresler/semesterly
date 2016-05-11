@@ -1,6 +1,6 @@
 import { connect } from 'react-redux';
 import { fetchSearchResults } from '../../actions/search_actions.jsx';
-import { addOrRemoveCourse } from '../../actions/timetable_actions.jsx';
+import { addOrRemoveCourse, addOrRemoveOptionalCourse } from '../../actions/timetable_actions.jsx';
 import { SearchBar } from '../search_bar.jsx';
 import { fetchCourseInfo } from '../../actions/modal_actions.jsx'
 
@@ -29,10 +29,7 @@ const mapDispatchToProps = (dispatch) => {
 	return {
 	  	fetchCourses: (query) => dispatch(fetchSearchResults(query)),
 	  	addCourse: addOrRemoveCourse,
-	  	addRemoveOptionalCourse: (id) => dispatch({
-	  		type: "ADD_REMOVE_OPTIONAL_COURSE",
-	  		newCourseId: id
-	  	}),
+	  	addRemoveOptionalCourse: (id) => dispatch(addOrRemoveOptionalCourse(id)),
 		fetchCourseInfo: (id) => dispatch(fetchCourseInfo(id)), 
 		toggleExplorationModal: () => {dispatch({type: "TOGGLE_EXPLORATION_MODAL"})},
 		hoverSearchResult: (position) => {
