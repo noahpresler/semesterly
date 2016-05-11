@@ -81,7 +81,9 @@ export function addOrRemoveCourse(newCourseId, lockingSection = '') {
 			updated_courses: [{
 				'course_id': newCourseId,
         		'section_codes': [lockingSection]
-        	}]
+        	}],
+        	'optionCourses': state.optionalCourses.ids,
+        	'numOptionCourses': state.optionalCourses.numRequired
         });
 	}
 	store.dispatch(fetchTimetables(reqBody, removing));
