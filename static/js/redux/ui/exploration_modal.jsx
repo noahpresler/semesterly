@@ -2,6 +2,11 @@ import React from 'react';
 import Modal from 'boron/DropModal';
 
 export class ExplorationModal extends React.Component {
+	componentWillReceiveProps(nextProps) { 
+        if (this.props.isVisible) {
+            this.refs.modal.show();
+        }
+    }
 	render() {
         let modalStyle = {
             width: '100%',
@@ -12,7 +17,8 @@ export class ExplorationModal extends React.Component {
 	            <div id="exploration-header">
 	                <h1></h1>
 	                <h2></h2>
-	                <div id="exploration-close">
+	                <div id="exploration-close"
+	                	onMouseDown={() => this.refs.modal.hide()}>
 	                    <i className="fa fa-times"></i>
 	                </div>
 	            </div>
@@ -66,11 +72,10 @@ export class ExplorationModal extends React.Component {
             <Modal ref="modal"
                 className="exploration-modal"
                 modalStyle={modalStyle}
-                onHide={this.props.hideModal}
+                onHide={this.props.toggleExplorationModal}
                 >
                 {content}
             </Modal>
         );
     }
 }
-export default ExplorationModal;
