@@ -363,7 +363,6 @@ class RutgersLink(TextbookLink):
 
 #---------------------- Queens University ----------------------------
 class QueensCourse(BaseCourse):
-  cores = models.CharField(max_length=200, default='')
   num_credits = models.FloatField(default=-1)
   related_courses = models.ManyToManyField("self", blank=True)
 
