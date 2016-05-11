@@ -386,6 +386,10 @@ class QueensCourse(BaseCourse):
 class QueensCourseOffering(BaseCourseOffering):
   course = models.ForeignKey(QueensCourse)
   textbooks = models.ManyToManyField(Textbook, through='QueensLink')
+  class_size = models.IntegerField(default=-1)
+  waitlist_size = models.IntegerField(default=-1)
+  num_enrolled = models.IntegerField(default=-1)
+  num_waitlist = models.IntegerField(default=-1)
 
   def get_course_code(self):
     pass
