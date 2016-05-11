@@ -14,7 +14,6 @@ from django.forms.models import model_to_dict
 from django.contrib.auth.decorators import login_required
 from timetable.school_mappers import school_to_models, school_to_personal_timetables
 
-
 def get_user(request):
 	logged = request.user.is_authenticated()
 	if logged and Student.objects.filter(user=request.user).exists():
@@ -71,7 +70,8 @@ def save_timetable(request):
 	PT = school_to_personal_timetables[school]
 	student = Student.objects.get(user=request.user)
 	error = {'error': 'Timetable with name already exists'}
-	tempId = params['id'] if params['id'] else 0
+	print params['id']
+	tempId = params['id'] if params['id'] else -1
 	# don't allow people to save timetables with the same name
 	# two cases: 
 	# 1. the user is creating a new timetable with the given name,
@@ -98,7 +98,10 @@ def save_timetable(request):
 		for course_offering in course['slots']:
 			personal_timetable.course_offerings.add(SchoolCourseOffering.objects.get(id=course_offering['id']))
 	personal_timetable.save()
-	response = {'timetables': get_student_tts(student,school)}
+	timetables = get_student_tts(student,school)
+	saved_timetable = (x for x in timetables if x['id'] == personal_timetable.id).next()
+	response = {'timetables': timetables, 'saved_timetable': saved_timetable}
+
 	return HttpResponse(json.dumps(response), content_type='application/json')
 
 
