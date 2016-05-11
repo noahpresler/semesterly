@@ -65,5 +65,5 @@ textbook_parsers = {
   'umd': lambda: None,
   'rutgers': lambda: None,
   'uo': lambda: None,
-  'queens': lambda: None
+  'queens': parse_queens_textbooks
 }

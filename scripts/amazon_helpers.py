@@ -1,5 +1,8 @@
 """Helper functions for accessing Amazon API for textbooks"""
 
+from amazonproduct.errors import InvalidParameterValue
+
+
 def get_amazon_fields(isbn, api):
     try:
         result = api.item_lookup(isbn.strip(),
