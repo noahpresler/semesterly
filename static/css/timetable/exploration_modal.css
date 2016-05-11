@@ -19,7 +19,7 @@
 	background-color: #eee;
 	padding: 15px;
 	position: relative;
-	border-bottom: 1px solid #E8E8E8;
+	border-bottom: 1px solid #B6D2FD;
 }
 #exp-title i {
 	font-size: 22px;
@@ -89,4 +89,63 @@ h3.exp-header:after {
 #exploration-body p {
 	color: #777;
 	font-size: 12px;
+}
+
+/* Exploration Filters */
+.exp-filter-section {
+	padding: 0 0 20px;
+}
+h3.exp-header {
+	font-size: 14px;
+}
+h3.exp-header i {
+	float: right;
+	cursor: pointer;
+	color: #999;
+	transition: color .3s;
+}
+h3.exp-header i:hover {
+	color: #7E88DC;
+}
+#exp-filters h6 {
+	font-size: 16px;
+	padding: 5px;
+	margin: 0 5px 3px;
+	border-radius: 3px;
+	font-weight: 400;
+}
+#exp-filters h6 i {
+	margin-right: 5px;
+	cursor: pointer;
+	transition: transform .3s, color .3s;
+}
+#exp-filters h6 i:hover {
+	color: #ff4523;
+	transform: scale(1.1);
+}
+
+/* Exploration Search Results */
+#exploration-body #exp-search-results {
+	padding: 15px 0
+}
+#exp-search-results p {
+	padding-left: 10px;
+}
+.exp-s-result {
+	padding: 10px 110px 10px 10px;
+	background-color: #fff;
+	transition: background-color .3s;
+}
+.exp-s-result:hover {
+	background-color: #eee;
+}
+.exp-s-result h4 {
+	font-size: 14px;
+	margin: 0;
+}
+.exp-s-result h5 {
+	font-size: 12px;
+	font-weight: 400;
+	color: #777;
+	margin: 5px 0;
 }
