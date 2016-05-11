@@ -26,12 +26,14 @@
     word-wrap:break-word;
     max-width: 317px;
     margin-bottom: 0;
+    border: 1px solid #ddd;
+    margin-right: 2px;
 }
 
 .sem-page {
 	cursor: pointer;
 	display: inline-block;
-	vertical-align: middle;
+	vertical-align: text-top;
 	font-size: 12px;
 	border-radius: 50%;
 	color: transparent;
@@ -67,12 +69,13 @@
 .sem-pagination-nav {
 	cursor: pointer;
 	display: inline-block;
-	width: 34px;
+	width: 30px;
 	text-align: center;
-	transition: all  .3s;
-	border: 2px solid #fafafa;
-	border-top: 0px;
-	border-bottom: 0px;
+	transition: all .3s;
+	border: 1px solid #ddd;
+	margin-right: 2px;
+	font-size: 18px;
+	line-height: 30px;
 }
 .sem-pagination-nav:hover {
 	background-color: #ddd;
