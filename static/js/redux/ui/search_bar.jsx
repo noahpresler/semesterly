@@ -32,9 +32,10 @@ export class SearchBar extends React.Component {
         let res_class = classNames({'search-results' : true, 'trans50' : this.props.hasHoveredResult})
     	let results = this.props.searchResults.map( (c, i) => {
             return (<SearchResult {...this.props}
-                course={c} 
+                course={c}
                 key={c.code}
                 inRoster={this.props.isCourseInRoster(c.id)}
+                inOptionRoster={this.props.isCourseOptional(c.id)}
                 position={i}
             />)
     	});
@@ -96,16 +97,17 @@ export class SearchResult extends React.Component {
     render() {
         let course = this.props.course;
         let inRoster = this.props.inRoster;
+        let inOptionRoster = this.props.inOptionRoster;
         let addRemoveButton =
             <span className={classNames('search-course-add', {'in-roster': inRoster})} 
               onMouseDown={(event) => this.addCourseWrapper(course, '', event)}>
                 <i className={classNames('fa', {'fa-plus' : !inRoster, 'fa-check' : inRoster})}></i>
             </span>;
-        let addOptionalCourseButton =
-            <span className="search-course-save"
+        let addOptionalCourseButton = this.props.inRoster ? null :
+            <span className={classNames('search-course-save', {'in-roster': inOptionRoster})} 
                 onMouseDown={(event) => this.addOptionalCourseWrapper(course, event)}
                 >
-                <i className="fa fa-bookmark"></i>
+                <i className={classNames('fa', {'fa-bookmark' : !inOptionRoster, 'fa-check' : inOptionRoster})}></i>
             </span>
         return (
         <li key={course.id}
