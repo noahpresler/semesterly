@@ -4,12 +4,13 @@ import writer
 class SolusScraper(object):
     """The class that coordinates the actual scraping"""
 
-    def __init__(self, session, job, save):
+    def __init__(self, session, job, save, semesters=None):
         """Store the session to use and the scrape job to perform"""
 
         self.session = session
         self.job = job
         self.save_to_db = save
+        self.semesters = semesters
 
     def start(self):
         """Starts running the scrape outlined in the job"""
@@ -112,6 +113,8 @@ class SolusScraper(object):
         # Get all terms on the page and iterate over them
         all_terms = self.session.parser.all_terms()
         for term in all_terms:
+            if self.semesters and (term['season'], term['year']) not in self.semesters:
+                continue
             # logging.info(u"------Term: {year} - {season}".format(**term))
             self.session.switch_to_term(term["_unique"])
 
