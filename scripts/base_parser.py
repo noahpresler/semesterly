@@ -5,10 +5,10 @@ import progressbar
 class BaseParser:
   __metaclass__ = abc.ABCMeta
 
-  def __init__(self, course_model, offering_model, semester):
+  def __init__(self, course_model, offering_model, semester=None):
     self.update_or_create_course = course_model.objects.update_or_create
     self.update_or_create_offering = offering_model.objects.update_or_create
-    self.semesters = semester
+    self.semester = semester
     self.num_courses = None
 
   def parse_courses(self):
@@ -38,12 +38,15 @@ class BaseParser:
     """
     section_code, section_data = self.parse_section_element(section_element)
     if section_code:
+      semester = section_data.get('semester', None)
+      if semester in section_data:
+        del section_data[semester]
       for meeting_element in self.get_meeting_elements(section_element):
         self.parse_and_save_meeting(meeting_element, section_data, section_code, 
-                                    course_obj)
+                                    course_obj, semester)
 
   def parse_and_save_meeting(self, meeting_element, section_data, section_code, 
-                                    course_obj):
+                                    course_obj, semester):
     """
     Update database with new offering corresponding to the given bs4 element 
     and other data.
@@ -52,7 +55,7 @@ class BaseParser:
     if meeting_data:
       meeting_data.update(section_data)
       self.update_or_create_offering(course=course_obj,
-                                      semester=self.semester,
+                                      semester=self.semester or semester,
                                       meeting_section=section_code,
                                       defaults=meeting_data)
 
