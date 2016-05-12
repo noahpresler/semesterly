@@ -9,15 +9,17 @@
 	width: 100%;
 	height: 100%;
 }
-.course-modal.trans {
-	color: transparent;
+.course-modal.trans #modal-header,
+.course-modal.trans #modal-header h2 {
 	background-color: transparent;
+	color: transparent;
 }
 
 /* Course Modal Content Styles */
 #modal-content {
 	width: 100%;
 	height: 100%;
+	background-color: #fff;
 }
 #modal-header {
 	position: relative;

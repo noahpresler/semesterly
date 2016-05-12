@@ -20,7 +20,9 @@ const mapStateToProps = (state) => {
 		lectureSections: lectureSections,
 		tutorialSections: tutorialSections,
 		practicalSections: practicalSections,
-		hasHoveredResult: state.timetables.items[state.timetables.active].courses.some(course => course.fake)
+		hasHoveredResult: state.timetables.items[state.timetables.active].courses.some(course => course.fake),
+		prerequisites: state.courseInfo.data.prerequisites,
+		description: state.courseInfo.data.description
 	}
 }
 
