@@ -22,7 +22,12 @@ const mapStateToProps = (state) => {
 		},
 		primaryDisplayAttribute: getPrimaryDisplay(state.school),
 		courseToColourIndex: state.ui.courseToColourIndex,
-		custom: state.customSlots
+		custom: state.customSlots,
+		classmates: (id,sec) => {
+			let cm = state.classmates.courseToClassmates ? state.classmates.courseToClassmates.find(course => course.course_id === id) : [];
+			return cm ? cm.classmates.filter(friend => friend.sections.find(s => s === sec) !== undefined) : [];
+		}
+
 	}
 }
 
