@@ -691,6 +691,7 @@ def course_page(request, code):
   SchoolCourse, SchoolCourseOffering = school_to_models[school]
   try:
     course = SchoolCourse.objects.filter(code=code)[0]
-    return render_to_response("course_page.html", {'school': school, 'course': course}, context_instance=RequestContext(request))
+    section = my_model_to_dict(course, SchoolCourseOffering, "F")
+    return render_to_response("course_page.html", {'school': school, 'course': course, 'section': section}, context_instance=RequestContext(request))
   except Exception as e:
     return HttpResponse(str(e))
