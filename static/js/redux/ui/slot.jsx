@@ -46,6 +46,12 @@ class Slot extends React.Component {
                                 onClick={ (event) => this.stopPropagation(this.props.lockOrUnlockSection, event) }></i>;
             }
         }
+        let friends = this.props.classmates.length !== 0 ? (
+            <div className="slot-friends">
+                <h3>{this.props.classmates.length}</h3>
+                <i className="fa fa-user"></i>
+                <span> , </span>
+            </div>) : null;
 
 		return (
 			<div className="fc-event-container">
@@ -64,11 +70,7 @@ class Slot extends React.Component {
                             { this.props[this.props.primaryDisplayAttribute] + " " + this.props.meeting_section}
                         </div>
                         <div className="fc-time">
-                            <div className="slot-friends">
-                                <h3>4</h3>
-                                <i className="fa fa-user"></i>
-                                <span> , </span>
-                            </div>
+                            {friends}
                             { this.props.location }
                         </div>
                     </div>
@@ -177,7 +179,8 @@ class SlotManager extends React.Component {
                 <Slot {...slot} 
                     fetchCourseInfo={ () => this.props.fetchCourseInfo(courseId) }
                     key={ slot.fake ? -slot.id : slot.id } 
-                    locked={ locked } 
+                    locked={ locked }
+                    classmates={this.props.classmates(courseId)}
                     lockOrUnlockSection={ () => this.props.addOrRemoveCourse(courseId, slot.meeting_section) }
                     removeCourse={ () => this.props.addOrRemoveCourse(courseId) }
                     primaryDisplayAttribute={this.props.primaryDisplayAttribute}/>
@@ -189,8 +192,7 @@ class SlotManager extends React.Component {
                         </div>
                     </td>
             );
-        });
-        return (
+        });        return (
             <table>
 			    <tbody>
 			        <tr>
