@@ -13,15 +13,15 @@
 	border-radius: 5px;
 }*/
 .slot {
-	cursor:pointer;
 	background-color: #C8F7C5;
-	color:#222;
-	font-size:13px;
-	transition:all 0.3s;
-	border-radius:3px;
+	color: #222;
+	font-size: 13px;
+	border-radius: 3px;
+	cursor: pointer;
+	transition: color 0.3s;
 }
 .slot:hover {
-	color:#222;
+	color: #222;
 }
 .slot-content h3 {
 	margin: 0;
@@ -30,17 +30,22 @@
     width: 100%;
     overflow: hidden;
 }
+.slot-friends {
+	display: inline;
+}
 .slot-friends h3 {
 	margin: 0;
 	float: left;
 	line-height: 15px;
+	font-size: 13px;
 }
 /*.slot i {
 	color:#fff;
 }*/
 .slot-friends i {
-	margin-left: 5px;
+	margin-left: 2px;
 	line-height: 15px;
+	font-size: 13px;
 }
 .slot i.fa-times {
 	position: absolute;
