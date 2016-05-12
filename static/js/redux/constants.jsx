@@ -1,5 +1,5 @@
 import { getSchool, getSemester } from './init.jsx';
-export const VALID_SCHOOLS = ["uoft", "jhu", "umd", "uo", "rutgers"];
+export const VALID_SCHOOLS = ["uoft", "jhu", "umd", "uo", "rutgers", "queens"];
 export const VALID_SEMESTERS = ["F", "S"];
 export const SET_SCHOOL = "SET_SCHOOL";
 export const SET_SEMESTER = "SET_SEMESTER";

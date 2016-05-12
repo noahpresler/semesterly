@@ -34,6 +34,7 @@ store.dispatch(
 );
 
 export const getSchool = () => {
+  console.log(store.getState());
 	return store.getState().school;
 }
 export const getSemester = () => {
