@@ -28,7 +28,7 @@
 }
 #exp-title i {
 	font-size: 22px;
-	line-height: 20px;
+	line-height: 30px;
 	margin-right: 5px;
 	display: inline-block;
 	vertical-align: middle;
@@ -37,6 +37,7 @@
 	font-size: 18px;
 	margin: 0;
 	color: #777;
+	line-height: 30px;
 	display: inline-block;
 	vertical-align: middle;
 }
@@ -139,6 +140,55 @@ h3.exp-header i:hover {
 #exp-filters h6 i:hover {
 	color: #ff4523;
 	transform: scale(1.1);
+}
+
+/* Filter Out Pop */
+.filter-pop-out {
+	position: absolute;
+	top: 10px;
+	width: 200px;
+	left: 25%;
+	background-color: #fff;
+	border: 1px solid #E8E8E8;
+    box-shadow: 0 2px 10px rgba(0,0,0,.2);
+    z-index: 1;
+    display: none;
+}
+.filter-pop-out.open {
+	display: block;
+}
+.filter-pop-out input {
+	border: none;
+	outline: 0;
+	padding: 0 5px 0 25px;
+	font-size: 12px;
+	width: 100%;
+	line-height: 36px;
+}
+.fpo-list {
+	padding: 0;
+	max-height: 400px;
+	overflow-y: auto;
+}
+.fpo-list ul {
+	padding: 0;
+	margin: 0;
+}
+.fpo-list li {
+	position: relative;
+	padding: 0 5px 0 45px;
+	list-style-type: none;
+}
+.fpo-list i {
+	display: inline-block;
+	position: absolute;
+	left: 10px;
+}
+.fpo-list h6 {
+	display: inline-block;
+	font-size: 12px;
+	margin: 0;
+	line-height: 25px;
 }
 
 /* Exploration Search Results */
