@@ -1,5 +1,6 @@
 import React from 'react';
 import { COLOUR_DATA } from '../constants.jsx';
+import classNames from 'classnames';
 
 class MasterSlot extends React.Component {
 	constructor(props) {
@@ -30,7 +31,9 @@ class MasterSlot extends React.Component {
         let friendCircles = this.props.classmates && this.props.classmates.classmates ? this.props.classmates.classmates.map(c => {
             return <div className="ms-friend" key={c.img_url} style={{backgroundImage: 'url(' + c.img_url + ')'}}></div>;
         }) : null;
-		return <div className={"master-slot slot-" + this.props.course.id}
+        let masterSlotClass = 'master-slot slot-' + this.props.course.id
+        masterSlotClass = this.props.onTimetable ? masterSlotClass : masterSlotClass + ' optional';
+		return <div className={masterSlotClass}
 					onMouseEnter={ this.onMasterSlotHover }
                     onMouseLeave={ this.onMasterSlotUnhover }
                     style={ { backgroundColor: COLOUR_DATA[this.props.colourIndex].background }}

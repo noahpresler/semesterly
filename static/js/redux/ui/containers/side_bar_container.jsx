@@ -6,6 +6,7 @@ import { saveTimetable } from '../../actions/user_actions.jsx';
 import { MAX_TIMETABLE_NAME_LENGTH } from '../../constants.jsx';
 
 const mapStateToProps = (state) => {
+	let courseSections = state.courseSections.objects;
 	let savingTimetable = state.savingTimetable;
 	// don't pass fake courses as part of roster
 	let activeTimetable = state.timetables.items[state.timetables.active];
@@ -17,7 +18,8 @@ const mapStateToProps = (state) => {
 		savedTimetables: state.userInfo.data.timetables,
 		courseToColourIndex: state.ui.courseToColourIndex,
 		optionalCourses: state.optionalCourses.courses,
-		classmates: state.classmates.courseToClassmates
+		classmates: state.classmates.courseToClassmates,
+		isCourseInRoster: (course_id) => courseSections[course_id] !== undefined
 	}
 }
 
