@@ -21,7 +21,7 @@ class SlotManager extends React.Component {
                     fetchCourseInfo={ () => this.props.fetchCourseInfo(courseId) }
                     key={ slot.fake ? -slot.id : slot.id }
                     locked={ locked }
-                    classmates={this.props.classmates(courseId)}
+                    classmates={this.props.classmates(courseId, slot.meeting_section)}
                     lockOrUnlockSection={ () => this.props.addOrRemoveCourse(courseId, slot.meeting_section) }
                     removeCourse={ () => this.props.addOrRemoveCourse(courseId) }
                     primaryDisplayAttribute={this.props.primaryDisplayAttribute}/>
