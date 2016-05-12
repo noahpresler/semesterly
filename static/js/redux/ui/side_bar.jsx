@@ -40,11 +40,14 @@ class SideBar extends React.Component {
         }) : null;
         let masterSlots = this.props.liveTimetableCourses ?
             this.props.liveTimetableCourses.map(c => {
-                let colourIndex= this.props.courseToColourIndex[c.id] || 0;
+                let colourIndex = this.props.courseToColourIndex[c.id] || 0;
+                let classmates = this.props.classmates ? this.props.classmates.find(course => course.course_id === c.id) : [];
+                classmates = classmates ? classmates : [];
                 if (!this.props.optionalCourses.find(i => i.id === c.id)) {
                     return <MasterSlot
                             key={c.id}
                             colourIndex={colourIndex}
+                            classmates={classmates}
                             onTimetable={true}
                             course={c}
                             fetchCourseInfo={() => this.props.fetchCourseInfo(c.id)}/>
@@ -52,6 +55,7 @@ class SideBar extends React.Component {
         }) : null;
         let optionalSlots = this.props.liveTimetableCourses ? this.props.optionalCourses.map(c => {
             let colourIndex;
+            let classmates = this.props.classmates ? this.props.classmates.find(course => course.course_id === c.id) : [];
             if (this.props.liveTimetableCourses.find(course => course.id === c.id) === undefined) {
                 let usedColourIndices = Object.values(this.props.courseToColourIndex);
                 colourIndex = _.range(COLOUR_DATA.length).find((i) =>
