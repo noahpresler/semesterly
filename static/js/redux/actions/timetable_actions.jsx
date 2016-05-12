@@ -26,11 +26,12 @@ export function alertConflict(){
 	}
 }
 
-export function loadTimetable(timetable) {
+export function loadTimetable(timetable, created=false) {
 	let dispatch = store.dispatch;
 	dispatch({
 		type: "CHANGE_ACTIVE_SAVED_TIMETABLE",
 		timetable,
+		created
 	});
 	dispatch({
 		type: "RECEIVE_COURSE_SECTIONS",
@@ -39,7 +40,7 @@ export function loadTimetable(timetable) {
 	dispatch({
 		type: "RECEIVE_TIMETABLES",
 		timetables: [timetable],
-		preset: true
+		preset: created === false
 	});
 }
 
