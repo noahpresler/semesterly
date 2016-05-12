@@ -36,7 +36,9 @@ class SideBar extends React.Component {
                             classmates={classmates}
                             onTimetable={this.props.isCourseInRoster(c.id)}
                             course={c}
-                            fetchCourseInfo={() => this.props.fetchCourseInfo(c.id)}/>
+                            fetchCourseInfo={() => this.props.fetchCourseInfo(c.id)}
+                            removeCourse={() => this.props.removeCourse(c.id)}
+                            />
                 }
         }) : null;
         let optionalSlots = this.props.liveTimetableCourses ? this.props.optionalCourses.map(c => {

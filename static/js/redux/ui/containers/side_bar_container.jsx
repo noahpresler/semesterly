@@ -1,7 +1,7 @@
 import { connect } from 'react-redux';
 import SideBar from '../side_bar.jsx';
 import { fetchCourseInfo } from '../../actions/modal_actions.jsx'
-import { loadTimetable } from '../../actions/timetable_actions.jsx';
+import { addOrRemoveCourse, loadTimetable } from '../../actions/timetable_actions.jsx';
 
 const mapStateToProps = (state) => {
 	let courseSections = state.courseSections.objects;
@@ -21,7 +21,8 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch) => {
 	return {
 		fetchCourseInfo: (courseId) => dispatch(fetchCourseInfo(courseId)),
-		loadTimetable
+		loadTimetable,
+        removeCourse: (courseId) => addOrRemoveCourse(courseId),
 	}
 }
 
