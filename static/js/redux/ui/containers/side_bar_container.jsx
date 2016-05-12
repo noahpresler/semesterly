@@ -9,14 +9,14 @@ const mapStateToProps = (state) => {
 	let savingTimetable = state.savingTimetable;
 	// don't pass fake courses as part of roster
 	let activeTimetable = state.timetables.items[state.timetables.active];
-	return { 
+	return {
 		activeLoadedTimetable: savingTimetable.activeTimetable, // the user's saved timetable object that they are currently editing
 		liveTimetableCourses: activeTimetable.courses.filter(c => !c.fake),
-		saving: savingTimetable.saving, 
+		saving: savingTimetable.saving,
 		upToDate: savingTimetable.upToDate,
 		savedTimetables: state.userInfo.data.timetables,
 		courseToColourIndex: state.ui.courseToColourIndex,
-		optionalCourses: state.optionalCourses.ids
+		optionalCourses: state.optionalCourses.courses
 	}
 }
 

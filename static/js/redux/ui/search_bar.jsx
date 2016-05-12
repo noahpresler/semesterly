@@ -92,7 +92,7 @@ export class SearchResult extends React.Component {
     addOptionalCourseWrapper(course, event) {
         event.stopPropagation(); // stops modal from popping up
         event.preventDefault(); // stops search bar from blurring (losing focus)
-        this.props.addRemoveOptionalCourse(course.id);
+        this.props.addRemoveOptionalCourse(course);
     }
     render() {
         let course = this.props.course;

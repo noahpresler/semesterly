@@ -66,11 +66,11 @@ export function addOrRemoveCourse(newCourseId, lockingSection = '') {
 	if (state.timetables.isFetching) {
 		return;
 	}
-	if (!removing && state.optionalCourses.ids.indexOf(newCourseId) !== -1) {
+	if (!removing && state.optionalCourses.courses.some(c => c.id === newCourseId)) {
 		let dispatch = store.dispatch;
 		dispatch({
-	  		type: "ADD_REMOVE_OPTIONAL_COURSE",
-	  		newCourseId: newCourseId
+	  		type: "REMOVE_OPTIONAL_COURSE_BY_ID",
+	  		courseId: newCourseId
 	  	});
 	  	state = store.getState();
 	}
@@ -90,7 +90,7 @@ export function addOrRemoveCourse(newCourseId, lockingSection = '') {
 				'course_id': newCourseId,
         		'section_codes': [lockingSection]
         	}],
-        	'optionCourses': state.optionalCourses.ids,
+        	'optionCourses': state.optionalCourses.courses.map(c => c.id),
         	'numOptionCourses': state.optionalCourses.numRequired
         });
 	}
@@ -120,7 +120,6 @@ function fetchTimetables(requestBody, removing) {
 			else {
 				// course added by the user resulted in a conflict, so no timetables
 				// were received
-				console.log(json)
 				dispatch(alertConflict());
 			}
 			return json;
@@ -161,16 +160,16 @@ export function fetchClassmates(courses) {
 	}
 }
 
-export function addOrRemoveOptionalCourse(id) {
+export function addOrRemoveOptionalCourse(course) {
 	return (dispatch) => {
 		dispatch({
 	  		type: "ADD_REMOVE_OPTIONAL_COURSE",
-	  		newCourseId: id
+	  		newCourse: course
 	  	});
 	  	let state = store.getState();
 	  	let reqBody = getBaseReqBody(state);
 		Object.assign(reqBody, {
-        	'optionCourses': state.optionalCourses.ids,
+        	'optionCourses': state.optionalCourses.courses.map(c => c.id),
         	'numOptionCourses': state.optionalCourses.numRequired
         });
 		store.dispatch(fetchTimetables(reqBody, false));
