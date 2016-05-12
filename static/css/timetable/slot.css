@@ -18,7 +18,7 @@
 	font-size: 13px;
 	border-radius: 3px;
 	cursor: pointer;
-	transition: color 0.3s;
+	transition: color .3s, background-color .3s;
 }
 .slot:hover {
 	color: #222;

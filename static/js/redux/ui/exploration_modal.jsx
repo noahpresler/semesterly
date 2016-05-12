@@ -145,8 +145,7 @@ export class ExplorationModal extends React.Component {
 								</h6>
 	                        </div>
 	                    </div>
-	                    <div id="exp-search-results" 
-	                    	className="col-6-16">
+	                    <div id="exp-search-results">
 	                        <div id="exp-search-list">
 	                    		<p>returned 157 Search Results</p>
 								<div className="exp-s-result">
@@ -248,8 +247,7 @@ export class ExplorationModal extends React.Component {
 	                        </div>
 	                    </div>
 	                    { departmentFilter }
-	                    <div id="exp-modal"
-	                        className="col-6-16 cf">
+	                    <div id="exp-modal">
 	                        { courseModal }
 	                    </div>
 	                </div>
