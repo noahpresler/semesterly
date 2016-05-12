@@ -40,6 +40,9 @@ const mapDispatchToProps = (dispatch) => {
     },
     addCustomSlot: (timeStart, timeEnd, day) => {
       addCustomSlot(timeStart, timeEnd, day)
+    },
+    moveCustomSlot: (timeStart, timeEnd, day, id) => {
+      moveCustomSlot(timeStart, timeEnd, day, id)
     }
   }
 }
