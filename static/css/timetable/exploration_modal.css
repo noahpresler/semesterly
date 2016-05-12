@@ -19,6 +19,13 @@
 	position: relative;
 }
 
+@media (max-width: 766px) {
+	.exploration-modal,
+	.exploration-modal + div {
+		display: none;
+	}
+}
+
 /* Exploration Header */
 #exploration-header {
 	background-color: #eee;
@@ -161,9 +168,9 @@ h3.exp-header i:hover {
 	border: none;
 	outline: 0;
 	padding: 0 5px 0 25px;
-	font-size: 12px;
+	font-size: 16px;
 	width: 100%;
-	line-height: 36px;
+	line-height: 42px;
 }
 .fpo-list {
 	padding: 0;
@@ -178,17 +185,27 @@ h3.exp-header i:hover {
 	position: relative;
 	padding: 0 5px 0 45px;
 	list-style-type: none;
+	cursor: pointer;
+	background-color: #fff;
+	transition: background-color .3s
+}
+.fpo-list li:hover {
+	background-color: #eee;
 }
 .fpo-list i {
 	display: inline-block;
 	position: absolute;
 	left: 10px;
+	line-height: 42px;
+	vertical-align: middle;
 }
 .fpo-list h6 {
 	display: inline-block;
-	font-size: 12px;
+	font-size: 14px;
 	margin: 0;
-	line-height: 25px;
+	padding: 14px 0;
+	line-height: 14px;
+	vertical-align: middle;
 }
 
 /* Exploration Search Results */
@@ -230,4 +247,23 @@ h3.exp-header i:hover {
 	font-weight: 400;
 	color: #777;
 	margin: 5px 0;
+}
+
+/* Exploration Course Content */
+#exp-modal {
+	width: 37.5%;
+	height: 100%;
+	position: absolute;
+	left: 62.5%;
+	top: 0;
+	overflow-y: auto;
+}
+#exp-modal #modal-header {
+	background-color: #fff;
+}
+#exp-modal h1 {
+	font-size: 22px;
+}
+#exp-modal h2 {
+	font-size: 14px;
 }
