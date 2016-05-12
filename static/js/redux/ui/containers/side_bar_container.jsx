@@ -16,7 +16,8 @@ const mapStateToProps = (state) => {
 		upToDate: savingTimetable.upToDate,
 		savedTimetables: state.userInfo.data.timetables,
 		courseToColourIndex: state.ui.courseToColourIndex,
-		optionalCourses: state.optionalCourses.courses
+		optionalCourses: state.optionalCourses.courses,
+		classmates: state.classmates.courseToClassmates
 	}
 }
 
