@@ -260,10 +260,37 @@ h3.exp-header i:hover {
 }
 #exp-modal #modal-header {
 	background-color: #fff;
+	padding: 20px 10px 20px;
 }
 #exp-modal h1 {
 	font-size: 22px;
+	padding: 0;
 }
 #exp-modal h2 {
 	font-size: 14px;
+	padding: 0 20% 0 0;
+}
+#exp-modal #modal-share {
+	top: auto;
+	position: absolute;
+	bottom: -34px;
+	right: 10%;
+	border-radius: 100%;
+	width: 60px;
+	height: 60px;
+	background-color: #B6D2FD;
+	cursor: pointer;
+	transition: background-color .3s;
+	z-index: 1;
+}
+#exp-modal #modal-share i {
+	text-align: center;
+	width: 100%;
+	line-height: 60px;
+	color: #fff;
+	font-size: 24px;
+}
+#exp-modal #modal-share:hover {
+	background-color: #1858BB;
+	transform: scale(1);
 }
