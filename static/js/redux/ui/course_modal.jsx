@@ -54,7 +54,6 @@ export class CourseModal extends React.Component {
         });
     }
     render() {
-
         let modalStyle = {
             width: '100%',
             backgroundColor: 'transparent'
