@@ -56,8 +56,6 @@ class Slot extends React.Component {
                      onMouseLeave={ this.onSlotUnhover }>
     				<div className="slot-bar" 
                          style={ { backgroundColor: COLOUR_DATA[this.props.colourId].border } }/>
-                    { removeButton }
-                    { lockButton }
                     <div className="fc-content">
                         <div className="fc-time">
                             <span>{ this.props.time_start } – { this.props.time_end }</span>
@@ -65,8 +63,17 @@ class Slot extends React.Component {
                         <div className="fc-time">
                             { this.props[this.props.primaryDisplayAttribute] + " " + this.props.meeting_section}
                         </div>
-                        <div className="fc-time">{ this.props.location } </div>
+                        <div className="fc-time">
+                            <div className="slot-friends">
+                                <h3>4</h3>
+                                <i className="fa fa-user"></i>
+                                <span> , </span>
+                            </div>
+                            { this.props.location }
+                        </div>
                     </div>
+                    { removeButton }
+                    { lockButton }
                 </div>
             </div>
 		);
