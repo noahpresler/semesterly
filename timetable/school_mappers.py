@@ -18,6 +18,7 @@ school_to_models = {
 }
 VALID_SCHOOLS = school_to_models.keys()
 
+VALID_SCHOOLS = school_to_models.keys()
 # the smallest block size (in minutes) needed to describe start/end times
 # e.g. uoft classes only start on the hour or half hour, so granularity is 30min
 school_to_granularity = {
