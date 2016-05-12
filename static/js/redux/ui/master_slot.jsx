@@ -27,6 +27,9 @@ class MasterSlot extends React.Component {
     }
 
 	render() {
+        let friendCircles = this.props.classmates && this.props.classmates.classmates ? this.props.classmates.classmates.map(c => {
+            return <div className="ms-friend" key={c.img_url} style={{backgroundImage: 'url(' + c.img_url + ')'}}></div>;
+        }) : null;
 		return <div className={"master-slot slot-" + this.props.course.id}
 					onMouseEnter={ this.onMasterSlotHover }
                     onMouseLeave={ this.onMasterSlotUnhover }
@@ -48,10 +51,7 @@ class MasterSlot extends React.Component {
 		            <i className="fa fa-times"></i>
 		        </div>
 		        <div className="master-slot-friends">
-		            <div className="ms-friend">5+</div>
-		            <div className="ms-friend" style={{backgroundImage: 'url(/static/img/blank.jpg)' }}></div>
-		            <div className="ms-friend" style={{backgroundImage: 'url(/static/img/blank.jpg)' }}></div>
-		            <div className="ms-friend" style={{backgroundImage: 'url(/static/img/blank.jpg)' }}></div>
+                    {friendCircles}
 		        </div>
     	</div>
     }
