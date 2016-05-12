@@ -4,6 +4,7 @@ import fetch from 'isomorphic-fetch';
 import { getCourseSearchEndpoint, getSemesterName } from '../constants.jsx';
 import classNames from 'classnames';
 import SearchSideBarContainer from './containers/search_side_bar_container.jsx'
+import ClickOutHandler from 'react-onclickout';
 
 export class SearchBar extends React.Component {
     constructor(props){
@@ -24,12 +25,15 @@ export class SearchBar extends React.Component {
             this.changeTimer = false;
         }, 200);
     }
+    onClickOut(e) {
+        this.setState({ showDropdown: false });
+    }
     setSemester(semester) {
         this.setState({ showDropdown: false });
         this.props.setSemester(semester);
     }
     render() {
-        let res_class = classNames({'search-results' : true, 'trans50' : this.props.hasHoveredResult})
+        let resClass = classNames({'search-results' : true, 'trans50' : this.props.hasHoveredResult})
     	let results = this.props.searchResults.map( (c, i) => {
             return (<SearchResult {...this.props}
                 course={c}
@@ -40,7 +44,7 @@ export class SearchBar extends React.Component {
             />)
     	});
         let result_container = !this.state.focused || results.length == 0 ? null : (
-            <ul className={res_class} >
+            <ul className={resClass} >
                 {results}
                 <SearchSideBarContainer />
             </ul>
@@ -51,14 +55,16 @@ export class SearchBar extends React.Component {
     	return (
         	<div id="search-bar">
                 <div id="search-bar-wrapper">
-                    <div id="search-bar-semester" onMouseDown={this.toggleDropdown.bind(this)}>{ getSemesterName(this.props.semester) }</div>
-                    <div id="semester-picker"
-                         className={classNames({'down' : this.state.showDropdown})}
-                    >
-                    <div className="tip-border"></div>
-                    <div className="tip"></div>
-                        { availableSemesters }
-                    </div>
+                    <ClickOutHandler onClickOut={this.onClickOut.bind(this)}>
+                        <div id="search-bar-semester" onMouseDown={this.toggleDropdown.bind(this)}>{ getSemesterName(this.props.semester) }</div>
+                        <div id="semester-picker"
+                             className={classNames({'down' : this.state.showDropdown})}
+                        >
+                        <div className="tip-border"></div>
+                        <div className="tip"></div>
+                            { availableSemesters }
+                        </div>
+                    </ClickOutHandler>
                     <div id="search-bar-input-wrapper">
                         <input ref="input" 
                                className={this.props.isFetching ? 'results-loading-gif' : ''} 
@@ -116,8 +122,8 @@ export class SearchResult extends React.Component {
             onMouseOver={() => this.props.hoverSearchResult(this.props.position)}
             >
             <h3>{course.name} </h3>
-            {addOptionalCourseButton}
-            {addRemoveButton}
+            { addOptionalCourseButton}
+            { addRemoveButton }
             <h4>{course.code}</h4>
         </li>);
     }
