@@ -132,6 +132,14 @@ function fetchTimetables(requestBody, removing) {
 	}
 }
 
+export function addCustomSlot(timeStart, timeEnd) {
+	return {
+		type: "ADD_CUSTOM_SLOT",
+		timeStart: timeStart,
+		timeEnd: timeEnd
+	}
+}
+
 export function getClassmates(json) {
 	return {
 		type: "CLASSMATES_RECEIVED",
