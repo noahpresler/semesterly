@@ -21,8 +21,8 @@ const mapStateToProps = (state) => {
 			return false;
 		},
 		primaryDisplayAttribute: getPrimaryDisplay(state.school),
-		courseToColourIndex: state.ui.courseToColourIndex
-
+		courseToColourIndex: state.ui.courseToColourIndex,
+		custom: state.customSlots
 	}
 }
 
