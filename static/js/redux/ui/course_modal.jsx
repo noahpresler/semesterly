@@ -101,7 +101,6 @@ export class CourseModal extends React.Component {
                 className={classNames('course-modal', {'trans' : this.props.hasHoveredResult})}                 
                 modalStyle={modalStyle}
                 onHide={this.props.hideModal}
-
                 >
                 {content}
             </Modal>
