@@ -2,6 +2,19 @@ import React from 'react';
 import PaginationContainer  from './containers/pagination_container.jsx';
 import SlotManagerContainer from './containers/slot_manager_container.jsx';
 
+
+const Row = ({ time, show }) => {
+	let time_text = show ? <span>{time}</span> : null;
+	return (
+		<tr key={time}>
+        <td className="fc-axis fc-time fc-widget-content cal-row">
+        	{time_text}
+        </td>
+        <td className="fc-widget-content" />
+    </tr>
+	)
+}
+
 class Calendar extends React.Component {
   	getCalendarRows() {
 	    let rows = [];
