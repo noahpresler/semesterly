@@ -7,7 +7,6 @@ from timetable.models import *
 from student.models import *
 import sys
 
-VALID_SCHOOLS = ['jhu', 'uoft', 'umd', 'rutgers', 'uo']
 
 school_to_models = {
     'jhu': (HopkinsCourse, HopkinsCourseOffering),
@@ -17,6 +16,7 @@ school_to_models = {
     'uo': (OttawaCourse, OttawaCourseOffering),
     'queens': (QueensCourse, QueensCourseOffering)
 }
+VALID_SCHOOLS = school_to_models.keys()
 
 # the smallest block size (in minutes) needed to describe start/end times
 # e.g. uoft classes only start on the hour or half hour, so granularity is 30min
