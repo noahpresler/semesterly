@@ -367,7 +367,7 @@ class QueensCourse(BaseCourse):
   related_courses = models.ManyToManyField("self", blank=True)
 
   def get_dept(self):
-    pass
+    return self.course_code[:4]
 
   def get_dept_matches(self):
     pass
