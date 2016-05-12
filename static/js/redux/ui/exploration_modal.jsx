@@ -45,7 +45,7 @@ export class ExplorationModal extends React.Component {
 					<ul>
 						<li>
 							<i className="fa fa-check"></i>
-							<h6>Computer Science</h6>
+							<h6>Applied Mathematics and Statistics</h6>
 						</li>
 						<li>
 							<i className="fa fa-check"></i>
@@ -60,6 +60,58 @@ export class ExplorationModal extends React.Component {
 							<h6>Computer Science</h6>
 						</li>
 					</ul>
+				</div>
+			</div>
+		);
+		let courseModal = (
+			<div id="modal-content">
+				<div id="modal-header">
+					<h1>Discrete Mathematics</h1>
+					<h2>AS.122.123, Applied Mathematics and Statistics </h2>
+					<div id="modal-share">
+						<i className="fa fa-share-alt"></i>
+					</div>
+				</div>
+				<div id="modal-body">
+					<div className="cf">
+						<div className="col-3-16">
+						    <div className="credits">
+						        <h3>3</h3>
+						        <h4>credits</h4>
+						    </div>
+						    <div className="rating-module">
+						        <h4>Average Course Rating</h4>
+						        <div className="sub-rating-wrapper">
+						            <div className="star-ratings-sprite">
+						                <span></span>
+						            </div>
+						        </div>
+						    </div>
+						    <p></p>
+						    <div>
+						        <h3 className="modal-module-header">Prerequisites</h3>
+
+						    </div>
+						    <div>
+						        <h3 className="modal-module-header">Similar Courses</h3>
+
+						    </div>
+						</div>
+						<div className="col-8-16">
+						    <div>
+						        <h3 className="modal-module-header">Course Description</h3>
+						        <p> njkdlsandjkslanfjdklsancdklsjancd sallndsjla kncdkls ancdjklsa ncjkdlsa ncjkals ncjkadls ckslacjkdlsa cjdklsa cijldksa cijldksacklads cijsladk cildksa idjslak ijdlsakijdsal nijdls nijdsl anvdisla nvipan vdijvl a </p>
+						    </div>
+						    <div>
+						        <h3 className="modal-module-header">Course Evaluations</h3>
+
+						    </div>
+						    <div>
+						        <h3 className="modal-module-header">Textbook</h3>
+
+						    </div>
+						</div>
+					</div>
 				</div>
 			</div>
 		);
@@ -237,7 +289,7 @@ export class ExplorationModal extends React.Component {
 	                    { departmentFilter }
 	                    <div id="exp-modal"
 	                        className="col-6-16 cf">
-
+	                        { courseModal }
 	                    </div>
 	                </div>
 	            </div>
