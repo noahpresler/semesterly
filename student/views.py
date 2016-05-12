@@ -70,7 +70,8 @@ def save_timetable(request):
 	PT = school_to_personal_timetables[school]
 	student = Student.objects.get(user=request.user)
 	error = {'error': 'Timetable with name already exists'}
-	print params['id']
+	# if not params['id'] (or params['id'] == 0) then this is a request to create a new timetable,
+	# since an ID has not been created for this timetable yet
 	tempId = params['id'] if params['id'] else -1
 	# don't allow people to save timetables with the same name
 	# two cases: 
@@ -79,7 +80,7 @@ def save_timetable(request):
 	# 2. the user is editing the name of an existing timetbale, in which 
 	# case tempId is the ID of that timetable, as passed from the frontend.
 	# we check if a timetable with a different id has that name
-	if PT.objects.filter(~Q(id=tempId), name=params['name']).exists():
+	if PT.objects.filter(~Q(id=tempId), student=student, name=params['name']).exists():
 		return HttpResponse(json.dumps(error), content_type='application/json')
 
 	if params['id']:
