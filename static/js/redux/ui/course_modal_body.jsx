@@ -62,10 +62,9 @@ export class CourseModalBody extends React.Component {
                                 </div>
                             </div>
                         </div>
-                        <p>{this.props.prerequisites}</p>
                         <div>
                             <h3 className="modal-module-header">Prerequisites</h3>
-
+                            <p>{this.props.prerequisites}</p>
                         </div>
                         <div>
                             <h3 className="modal-module-header">Similar Courses</h3>
