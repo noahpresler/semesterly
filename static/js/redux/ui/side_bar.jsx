@@ -10,7 +10,7 @@ class SideBar extends React.Component {
         this.alterTimetableName = this.alterTimetableName.bind(this);
         this.setTimetableName = this.setTimetableName.bind(this);
         this.state = { activeTimetableName: this.props.activeLoadedTimetable.name };
-        this.stateDropdown = {showDropdown: false};
+        this.stateDropdown = { showDropdown: false };
         this.toggleDropdown = this.toggleDropdown.bind(this);
     }
     toggleDropdown() {
@@ -28,7 +28,7 @@ class SideBar extends React.Component {
         if (newName.length === 0) {
             this.setState({ activeTimetableName: this.props.activeLoadedTimetable.name });
         }
-        else {
+        else if (newName != this.props.activeLoadedTimetable.name) {
             this.props.changeTimetableName(newName);
         }
     }
