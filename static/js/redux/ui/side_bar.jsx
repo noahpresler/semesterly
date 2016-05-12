@@ -3,6 +3,8 @@ import ReactDOM from 'react-dom';
 import classnames from 'classnames';
 import MasterSlot from './master_slot.jsx';
 import classNames from 'classnames';
+import { COLOUR_DATA } from '../constants.jsx';
+
 
 class SideBar extends React.Component {
     constructor(props) {
@@ -49,12 +51,21 @@ class SideBar extends React.Component {
                 }
         }) : null;
         let optionalSlots = this.props.liveTimetableCourses ? this.props.optionalCourses.map(c => {
-                return <MasterSlot
-                        key={c.id}
-                        onTimetable={true}
-                        colourIndex={0}
-                        course={c}
-                        fetchCourseInfo={() => this.props.fetchCourseInfo(c.id)}/>
+            let colourIndex;
+            if (this.props.liveTimetableCourses.find(course => course.id === c.id) === undefined) {
+                let usedColourIndices = Object.values(this.props.courseToColourIndex);
+                colourIndex = _.range(COLOUR_DATA.length).find((i) =>
+                        !usedColourIndices.some((x) => x === i)
+                );
+            } else {
+                 colourIndex = this.props.courseToColourIndex[c.id]
+             }
+            return <MasterSlot
+                    key={c.id}
+                    onTimetable={true}
+                    colourIndex={colourIndex}
+                    course={c}
+                    fetchCourseInfo={() => this.props.fetchCourseInfo(c.id)}/>
         }) : null;
         return (
             <div id="side-bar">
