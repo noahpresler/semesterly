@@ -1,8 +1,5 @@
 import React from 'react';
-import { renderCourseModal } from './course_modal.jsx';
-import { index as IntervalTree, matches01 as getIntersections } from 'static-interval-tree'
 import { HALF_HOUR_HEIGHT, COLOUR_DATA } from '../constants.jsx';
-
 
 
 class Slot extends React.Component {
@@ -30,7 +27,7 @@ class Slot extends React.Component {
         $(".slot-" + this.props.course)
           .css('background-color', colour)
     }
-	render() {
+  render() {
         let removeButton = this.state.hovered ? 
             <i className="fa fa-times" 
                onClick={ (event) => this.stopPropagation(this.props.removeCourse, event) }></i> : null;
@@ -53,15 +50,17 @@ class Slot extends React.Component {
                 <span> , </span>
             </div>) : null;
 
-		return (
-			<div className="fc-event-container">
+    return (
+      <div className="fc-event-container">
                 <div className={"fc-time-grid-event fc-event slot slot-" + this.props.course}
                      style={ this.getSlotStyles() } 
                      onClick={ this.props.fetchCourseInfo }
                      onMouseEnter={ this.onSlotHover }
                      onMouseLeave={ this.onSlotUnhover }>
-    				<div className="slot-bar" 
+            <div className="slot-bar" 
                          style={ { backgroundColor: COLOUR_DATA[this.props.colourId].border } }/>
+                    { removeButton }
+                    { lockButton }
                     <div className="fc-content">
                         <div className="fc-time">
                             <span>{ this.props.time_start } – { this.props.time_end }</span>
@@ -74,13 +73,11 @@ class Slot extends React.Component {
                             { this.props.location }
                         </div>
                     </div>
-                    { removeButton }
-                    { lockButton }
                 </div>
             </div>
-		);
-	}
-	getSlotStyles() {
+    );
+  }
+  getSlotStyles() {
         let start_hour   = parseInt(this.props.time_start.split(":")[0]),
             start_minute = parseInt(this.props.time_start.split(":")[1]),
             end_hour     = parseInt(this.props.time_end.split(":")[0]),
@@ -98,7 +95,7 @@ class Slot extends React.Component {
         if (push_left == 50) {
             push_left += .5;
         }
-		return {
+    return {
             top: top, bottom: -bottom, zIndex: 1, left: '0%', right: '0%', 
             backgroundColor: COLOUR_DATA[this.props.colourId].background,
             color: COLOUR_DATA[this.props.colourId].font,
@@ -319,4 +316,4 @@ class SlotManager extends React.Component {
     }
 }
 
-export default SlotManager;
+export default Slot;

@@ -2,7 +2,7 @@ import { connect } from 'react-redux';
 import { fetchCourseInfo } from '../../actions/modal_actions.jsx'
 import { addOrRemoveCourse } from '../../actions/timetable_actions.jsx'
 import { getPrimaryDisplay } from '../../constants.jsx';
-import SlotManager from '../slot.jsx';
+import SlotManager from '../slot_manager.jsx';
 
 const mapStateToProps = (state) => {
 	let activeTimetable = state.timetables.items[state.timetables.active];
