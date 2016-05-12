@@ -4,6 +4,7 @@ import SlotManagerContainer from './containers/slot_manager_container.jsx';
 
 
 const Row = ({ time, show }) => {
+	console.log(time, show);
 	let time_text = show ? <span>{time}</span> : null;
 	return (
 		<tr key={time}>
@@ -20,21 +21,8 @@ class Calendar extends React.Component {
 	    let rows = [];
 	    for (let i = 8; i <= this.props.endHour; i++) { // one row for each hour, starting from 8am
 	      let time = i + ":00";
-	      rows.push(
-	          ( <tr key={time}>
-                    <td className="fc-axis fc-time fc-widget-content cal-row">
-                    	<span>{time}</span>
-                    </td>
-                    <td className="fc-widget-content" />
-                </tr>)
-	      );  
-	      // for the half hour row
-	      rows.push(
-	          (<tr key={time + ".5"} className="fc-minor">
-	            	<td className="fc-axis fc-time fc-widget-content cal-row"/>
-	            	<td className="fc-widget-content" />
-          	  </tr>)
-	      );
+	      rows.push(<Row time={time} show={true} />);
+	      rows.push(<Row time={time + ".5"} show={false} />);
 	    }
 
     	return rows;
