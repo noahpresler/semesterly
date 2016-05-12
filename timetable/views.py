@@ -69,14 +69,14 @@ def get_timetables(request):
   course_ids = params['courseSections'].keys()
   courses = [SchoolCourse.objects.get(id=cid) for cid in course_ids]
   locked_sections = params['courseSections']
-  for updated_course in params.get('updated_courses', []): 
+  for updated_course in params.get('updated_courses', []):
     cid = str(updated_course['course_id'])
     locked_sections[cid] = locked_sections.get(cid, {})
     if cid not in course_ids:
       courses.append(SchoolCourse.objects.get(id=int(cid)))
 
     for locked_section in filter(bool, updated_course['section_codes']):
-      update_locked_sections(locked_sections, cid, 
+      update_locked_sections(locked_sections, cid,
                   locked_section, SchoolCourseOffering)
 
   # temp optional course implementation
@@ -84,21 +84,21 @@ def get_timetables(request):
   k = params['numOptionCourses'] if 'numOptionCourses' in params else 0
   optional_courses = [SchoolCourse.objects.get(id=cid) for cid in opt_course_ids]
   optional_course_subsets = itertools.combinations(optional_courses, k) or [[]]
-  generator = TimetableGenerator(params['semester'], 
+  generator = TimetableGenerator(params['semester'],
                   params['school'],
                   locked_sections,
                   params['preferences'])
   result = [timetable for opt_courses in optional_course_subsets \
       for timetable in generator.courses_to_timetables(courses + list(opt_courses))]
-  save_analytics_data('timetables', {'sid': sid, 'school': SCHOOL, 
+  save_analytics_data('timetables', {'sid': sid, 'school': SCHOOL,
                   'courses': courses, 'count': len(result)})
-  # updated roster object 
+  # updated roster object
   response = {'timetables': result, 'new_c_to_s': locked_sections}
   return HttpResponse(json.dumps(response), content_type='application/json')
 
 def get_section_type(cid, section_code, offering_table):
   """Query offering table to get section type of provided section."""
-  co = offering_table.objects.filter(course=int(cid), 
+  co = offering_table.objects.filter(course=int(cid),
                     meeting_section=section_code)[0]
   return co.section_type
 
@@ -181,7 +181,7 @@ class TimetableGenerator:
     for pref_combination in itertools.product(*preference_timetable):
       possible_offerings = self.courses_to_offerings(courses, pref_combination)
       new_timetables = self.create_timetable_from_offerings(possible_offerings)
-      if new_timetables: 
+      if new_timetables:
         valid_timetables += new_timetables
       if len(valid_timetables) >= MAX_RETURN:
         break
@@ -191,7 +191,7 @@ class TimetableGenerator:
 
   def get_timetables_with_some_preferences(self, courses):
     """
-    Generate timetables from all offerings (no pre-filtering of course offerings), 
+    Generate timetables from all offerings (no pre-filtering of course offerings),
     and return timetables ranked by # of preferences satisfied.
     """
     all_offerings = self.courses_to_offerings(courses)
@@ -223,10 +223,10 @@ class TimetableGenerator:
     total_num_permutations = num_permutations_remaining.pop(0)
     for p in xrange(total_num_permutations): # for each possible tt
       current_tt = []
-      day_to_usage = {'M': [[] for i in range(14 * 60 / school_to_granularity[SCHOOL])], 
-              'T': [[] for i in range(14 * 60 / school_to_granularity[SCHOOL])], 
-              'W': [[] for i in range(14 * 60 / school_to_granularity[SCHOOL])], 
-              'R': [[] for i in range(14 * 60 / school_to_granularity[SCHOOL])], 
+      day_to_usage = {'M': [[] for i in range(14 * 60 / school_to_granularity[SCHOOL])],
+              'T': [[] for i in range(14 * 60 / school_to_granularity[SCHOOL])],
+              'W': [[] for i in range(14 * 60 / school_to_granularity[SCHOOL])],
+              'R': [[] for i in range(14 * 60 / school_to_granularity[SCHOOL])],
               'F': [[] for i in range(14 * 60 / school_to_granularity[SCHOOL])]}
       no_conflicts = True
       for i in xrange(len(sections)): # add an offering for the next section
@@ -250,8 +250,8 @@ class TimetableGenerator:
       etc...
       ]
     where r is a list of lists representing the meeting sections across all courses.
-    Each list contains the course id, meeting section, and pairs where the first 
-    elements are courseoffering objects and the second elements are lists used to keep 
+    Each list contains the course id, meeting section, and pairs where the first
+    elements are courseoffering objects and the second elements are lists used to keep
     track of conflict information for that specific courseoffering.
     """
     sections = []
@@ -278,17 +278,17 @@ class TimetableGenerator:
     """
     Constructs a preference "timetable" based on the input preferences.
     Assumes that the inputs are always defined. A preference "timetable"
-    is a list of lists consisting of predicates. Each sublist represents 
-    a specific preference which is satisfied if any one of the predicates in 
+    is a list of lists consisting of predicates. Each sublist represents
+    a specific preference which is satisfied if any one of the predicates in
     the sublist returns false. For example, in the following "tt":
     [
-      [lambda co: co.time_start > 3 or co.time_end < 21], 
+      [lambda co: co.time_start > 3 or co.time_end < 21],
       [lambda co: co.day == 'M', lambda co: co.day == 'F']
     ]
     The first sublist represents the preference of starting and ending between
-    10am and 6pm, and the second represents the preference of having a long 
-    weekend (i.e. either no classes monday or no classes friday). 
-    The reason this is similar to a timetable is because the set of all preferences are satisfied 
+    10am and 6pm, and the second represents the preference of having a long
+    weekend (i.e. either no classes monday or no classes friday).
+    The reason this is similar to a timetable is because the set of all preferences are satisfied
     if there is some combination of preferences (one from each sublist) that
     returns is False.
     """
@@ -298,14 +298,14 @@ class TimetableGenerator:
       tt.append([lambda co: not (get_time_index_from_string(co[0].time_start) > self.no_classes_before \
                 and get_time_index_from_string(co[0].time_end) < self.no_classes_after)])
 
-    # long weekend preference 
+    # long weekend preference
     if self.least_days:
       tt.append([(lambda co: co[0].day == 'T'), \
             (lambda co: co[0].day == 'W'), \
             (lambda co: co[0].day == 'R'), \
             (lambda co: co[0].day == 'M'), \
             (lambda co: co[0].day == 'F')])
-    
+
     elif self.long_weekend:
       tt.append([(lambda co: co[0].day == 'M'), \
             (lambda co: co[0].day == 'F')])
@@ -321,16 +321,16 @@ class TimetableGenerator:
     return tt
 
 def rank_by_spread(timetables):
-  return sorted(timetables, 
-        key=functools.partial(get_rank_score, metric=get_spread_score), 
+  return sorted(timetables,
+        key=functools.partial(get_rank_score, metric=get_spread_score),
         reverse=SPREAD)
 
 def get_rank_score(timetable, metric):
   """Get score for a timetable. The higher the score, the more grouped it is."""
-  day_to_usage = {'M': [False for i in range(14 * 60 / school_to_granularity[SCHOOL])], 
-          'T': [False for i in range(14 * 60 / school_to_granularity[SCHOOL])], 
-          'W': [False for i in range(14 * 60 / school_to_granularity[SCHOOL])], 
-          'R': [False for i in range(14 * 60 / school_to_granularity[SCHOOL])], 
+  day_to_usage = {'M': [False for i in range(14 * 60 / school_to_granularity[SCHOOL])],
+          'T': [False for i in range(14 * 60 / school_to_granularity[SCHOOL])],
+          'W': [False for i in range(14 * 60 / school_to_granularity[SCHOOL])],
+          'R': [False for i in range(14 * 60 / school_to_granularity[SCHOOL])],
           'F': [False for i in range(14 * 60 / school_to_granularity[SCHOOL])]}
   conflict_cost = 0
   for meeting in timetable:
@@ -374,7 +374,7 @@ def get_day_cost(day_to_usage):
 def get_time_cost(day_bitarray):
   """Cost of having early/late classes, based on the user's preferences."""
   return sum([1 for slot in (day_bitarray[:NO_CLASSES_BEFORE] +
-                 day_bitarray[NO_CLASSES_AFTER:]) 
+                 day_bitarray[NO_CLASSES_AFTER:])
           if slot])
 
 def get_break_cost(day_to_usage):
@@ -407,8 +407,8 @@ def get_xproduct_indicies(lists):
 
 def add_meeting_and_check_conflict(day_to_usage, new_meeting):
   """
-  Takes a @day_to_usage dictionary and a @new_meeting section and 
-  returns a tuple of the updated day_to_usage dict and a boolean 
+  Takes a @day_to_usage dictionary and a @new_meeting section and
+  returns a tuple of the updated day_to_usage dict and a boolean
   which is True if conflict, False otherwise.
   """
   course_id, section_code, course_offerings = copy.deepcopy(new_meeting)
@@ -426,8 +426,8 @@ def add_meeting_and_check_conflict(day_to_usage, new_meeting):
 
 def find_slots_to_fill(start, end):
   """
-  Take a @start and @end time in the format found in the coursefinder (e.g. 9:00, 16:30), 
-  and return the indices of the slots in thet array which represents times from 8:00am 
+  Take a @start and @end time in the format found in the coursefinder (e.g. 9:00, 16:30),
+  and return the indices of the slots in thet array which represents times from 8:00am
   to 10pm that would be filled by the given @start and @end. For example, for uoft
   input: '10:30', '13:00'
   output: [5, 6, 7, 8, 9]
@@ -490,11 +490,11 @@ def get_time_index(hours, minutes):
 
 def get_hours_minutes(time_string):
   """
-  Return tuple of two integers representing the hour and the time 
+  Return tuple of two integers representing the hour and the time
   given a string representation of time.
   e.g. '14:20' -> (14, 20)
   """
-  return (get_hour_from_string_time(time_string), 
+  return (get_hour_from_string_time(time_string),
     get_minute_from_string_time(time_string))
 
 def get_hour_from_string_time(time_string):
@@ -520,7 +520,7 @@ def get_courses(request, school, sem):
     json_data = []
   else:
     module_dir = os.path.dirname(__file__)  # get current directory
-    file_path = os.path.join(module_dir, 
+    file_path = os.path.join(module_dir,
       "courses_json/" + school + "-" + sem + ".json")
     data = open(file_path).read()
     json_data = json.loads(data)
@@ -529,10 +529,10 @@ def get_courses(request, school, sem):
       last_updated = update_obj.strftime('%Y-%m-%d %H:%M') + " " + update_obj.tzname()
     except:
       last_updated = None
-      
+
   return HttpResponse(json.dumps({
-              'last_updated': last_updated, 
-              'courses':json_data}), 
+              'last_updated': last_updated,
+              'courses':json_data}),
       content_type="application/json")
 
 def get_course(request, school, sem, id):
@@ -584,9 +584,9 @@ def get_course_serializable(course, sem):
   return d
 
 def get_meeting_sections(course, semester):
-  SchoolCourse, SchoolCourseOffering = school_to_models[SCHOOL]   
-  offering_objs = SchoolCourseOffering.objects.filter((Q(semester=semester) | Q(semester='Y')), 
-                          course=course)          
+  SchoolCourse, SchoolCourseOffering = school_to_models[SCHOOL]
+  offering_objs = SchoolCourseOffering.objects.filter((Q(semester=semester) | Q(semester='Y')),
+                          course=course)
   sections = []
   for o in offering_objs:
     if o.meeting_section not in sections:
@@ -595,8 +595,8 @@ def get_meeting_sections(course, semester):
   return sections
 
 def get_meeting_sections_objects(course, semester):
-  SchoolCourse, SchoolCourseOffering = school_to_models[SCHOOL]   
-  offering_objs = SchoolCourseOffering.objects.filter((Q(semester=semester) | Q(semester='Y')), course=course)          
+  SchoolCourse, SchoolCourseOffering = school_to_models[SCHOOL]
+  offering_objs = SchoolCourseOffering.objects.filter((Q(semester=semester) | Q(semester='Y')), course=course)
   sections = []
   for o in offering_objs:
     if o.meeting_section not in sections:
@@ -605,9 +605,9 @@ def get_meeting_sections_objects(course, semester):
   return sections
 
 def has_offering(course, sem):
-  SchoolCourse, SchoolCourseOffering = school_to_models[SCHOOL]   
+  SchoolCourse, SchoolCourseOffering = school_to_models[SCHOOL]
   try:
-    res = SchoolCourseOffering.objects.filter(~Q(time_start__iexact='TBA'), 
+    res = SchoolCourseOffering.objects.filter(~Q(time_start__iexact='TBA'),
                       (Q(semester=sem) | Q(semester='Y')),
                       course_id=course.id)
     for offering in res:
@@ -663,16 +663,16 @@ def course_search(request, school, sem, query):
 
   # We want to filter based on whether the course has an offering in this semester or not.
   # This part needs to be executed case-by-case because of Django's ORM.
-  # Notice that each call to filter uses the appropriate "courseoffering" 
+  # Notice that each call to filter uses the appropriate "courseoffering"
   # class name in the filter.
   if school == "uoft":
     course_match_objs = course_match_objs.filter(
       (Q(courseoffering__semester__icontains=sem) | Q(courseoffering__semester__icontains='Y')))
   elif school == "jhu":
-    course_match_objs = course_match_objs.filter( 
+    course_match_objs = course_match_objs.filter(
       (Q(hopkinscourseoffering__semester__icontains=sem) | Q(hopkinscourseoffering__semester__icontains='Y')))
   elif school == "umd":
-    course_match_objs = course_match_objs.filter( 
+    course_match_objs = course_match_objs.filter(
       (Q(umdcourseoffering__semester__icontains=sem) | Q(umdcourseoffering__semester__icontains='Y')))
   else:
     raise Http404
