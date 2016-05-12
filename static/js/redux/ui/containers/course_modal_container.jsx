@@ -19,14 +19,30 @@ const mapStateToProps = (state) => {
 		inRoster: state.courseSections.objects[state.courseInfo.id] !== undefined,
 		lectureSections: lectureSections,
 		tutorialSections: tutorialSections,
-		practicalSections: practicalSections
+		practicalSections: practicalSections,
+		hasHoveredResult: state.timetables.items[state.timetables.active].courses.some(course => course.fake),
+		prerequisites: state.courseInfo.data.prerequisites,
+		description: state.courseInfo.data.description
 	}
 }
 
 const mapDispatchToProps = (dispatch) => {
 	return {
 		addCourse: addOrRemoveCourse,
-		hideModal: () => dispatch(setCourseId(null))
+		hideModal: () => dispatch(setCourseId(null)),
+		hoverCourse: (course, section) => {
+	  		let availableSections = Object.assign({}, course.sections['L'], course.sections['T'], course.sections['P']);
+	  		course.section = section;
+			dispatch({
+				type: "HOVER_COURSE",
+				course: Object.assign({}, course, { slots: availableSections[section] })
+			});
+		},
+		unhoverCourse: () => {
+			dispatch({
+				type: "UNHOVER_COURSE",
+			});
+		}
 	}
 }
 
