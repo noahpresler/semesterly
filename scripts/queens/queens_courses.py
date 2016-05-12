@@ -59,10 +59,10 @@ class QueensParser(BaseParser):
 
     if 'availability' in section_element:
       avail_data = {
-        'class_size': int(se['availability']['class_max']),
+        'size': int(se['availability']['class_max']),
         'waitlist_size': int(se['availability']['wait_max']),
-        'num_enrolled': int(se['availability']['class_curr']),
-        'num_waitlist': int(se['availability']['wait_curr'])
+        'enrolment': int(se['availability']['class_curr']),
+        'waitlist': int(se['availability']['wait_curr'])
       }
       section_data.update(avail_data)
     return section_code, section_data

@@ -29,7 +29,7 @@ export class SearchBar extends React.Component {
         this.props.setSemester(semester);
     }
     render() {
-        let res_class = classNames({'search-results' : true, 'trans50' : this.props.hasHoveredResult})
+        let resClass = classNames({'search-results' : true, 'trans50' : this.props.hasHoveredResult})
     	let results = this.props.searchResults.map( (c, i) => {
             return (<SearchResult {...this.props}
                 course={c}
@@ -40,7 +40,7 @@ export class SearchBar extends React.Component {
             />)
     	});
         let result_container = !this.state.focused || results.length == 0 ? null : (
-            <ul className={res_class} >
+            <ul className={resClass} >
                 {results}
                 <SearchSideBarContainer />
             </ul>
@@ -116,8 +116,8 @@ export class SearchResult extends React.Component {
             onMouseOver={() => this.props.hoverSearchResult(this.props.position)}
             >
             <h3>{course.name} </h3>
-            {addOptionalCourseButton}
-            {addRemoveButton}
+            { addOptionalCourseButton}
+            { addRemoveButton }
             <h4>{course.code}</h4>
         </li>);
     }
