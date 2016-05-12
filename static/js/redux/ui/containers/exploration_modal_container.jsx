@@ -3,7 +3,8 @@ import { ExplorationModal } from '../exploration_modal.jsx';
 
 const mapStateToProps = (state) => {
 	return {
-		isVisible: state.explorationModal.isVisible
+		isVisible: state.explorationModal.isVisible,
+		course: state.timetables.items[state.timetables.active].courses[0]
 	}
 }
 
