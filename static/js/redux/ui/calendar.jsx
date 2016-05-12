@@ -42,6 +42,21 @@ class Calendar extends React.Component {
 		// let downloadButton = <button 
 		// 	className="save-timetable add-button"><i className="fa fa-download" /></button>
 		let downloadButton = null;
+		// let customSlotButton = (
+		// 	<div className="dropdown">
+		// 		<button className="save-timetable add-button" 
+		// 						id="dLabel"
+		// 						data-toggle="dropdown"
+		// 						aria-haspopup="true"
+		// 						aria-expanded="false">
+		// 			<i className="fa fa-futbol-o" />
+		// 		</button>
+		// 		<ul className="dropdown-menu" aria-labelledby="dLabel">
+		// 			<li>Test</li>
+		// 		</ul>
+		// 	</div>
+		// )
+		let customSlotButton = null;
 		return (
 
 	      <div id="calendar" className="fc fc-ltr fc-unthemed">
@@ -50,6 +65,7 @@ class Calendar extends React.Component {
 	      		<PaginationContainer />
 	      	  </div>
 	          <div className="fc-right">
+	          	{ customSlotButton }
 	          	{ downloadButton }
 	          	{ shareButton }
 	          	{ addButton }
