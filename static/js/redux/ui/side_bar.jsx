@@ -5,39 +5,20 @@ import MasterSlot from './master_slot.jsx';
 import classNames from 'classnames';
 import { COLOUR_DATA } from '../constants.jsx';
 import ClickOutHandler from 'react-onclickout';
-
+import TimetableNameInputContainer from './containers/timetable_name_input_container.jsx';
 
 class SideBar extends React.Component {
     constructor(props) {
         super(props);
-        this.alterTimetableName = this.alterTimetableName.bind(this);
-        this.setTimetableName = this.setTimetableName.bind(this);
-        this.state = { activeTimetableName: this.props.activeLoadedTimetable.name, showDropdown: false };
+        this.state = { showDropdown: false };
         this.toggleDropdown = this.toggleDropdown.bind(this);
         this.hideDropdown = this.hideDropdown.bind(this);
-
     }
     hideDropdown() {
         this.setState({ showDropdown: false });
     }
     toggleDropdown() {
     	this.setState({ showDropdown: !this.state.showDropdown });
-    }
-    componentWillReceiveProps(nextProps) {
-        this.setState({ activeTimetableName: nextProps.activeLoadedTimetable.name });
-    }
-    alterTimetableName(event) {
-        let newName = event.target.value;
-        this.setState({ activeTimetableName: event.target.value });
-    }
-    setTimetableName() {
-        let newName = this.state.activeTimetableName;
-        if (newName.length === 0) {
-            this.setState({ activeTimetableName: this.props.activeLoadedTimetable.name });
-        }
-        else if (newName != this.props.activeLoadedTimetable.name) {
-            this.props.changeTimetableName(newName);
-        }
     }
     render() {
         let savedTimetables = this.props.savedTimetables ? this.props.savedTimetables.map(t => {
@@ -79,11 +60,7 @@ class SideBar extends React.Component {
         return (
             <div id="side-bar">
                 <div id="sb-name">
-                    <input ref="input" className={classnames("timetable-name", {"unsaved": !this.props.upToDate})}
-                        value={this.state.activeTimetableName}
-                        onChange={this.alterTimetableName}
-                        onBlur={this.setTimetableName}
-                    />
+                    <TimetableNameInputContainer />
                     <ClickOutHandler onClickOut={this.hideDropdown}>
                         <div id="timetable-drop-it-down"
                         	onMouseDown={this.toggleDropdown.bind(this)}>
