@@ -25,8 +25,7 @@ const mapStateToProps = (state) => {
 		custom: state.customSlots,
 		classmates: (id) => {
 			let cm = state.classmates.courseToClassmates ? state.classmates.courseToClassmates.find(course => course.course_id === id) : [];
-			let cms = cm ? cm.classmates : [];
-			return cms;
+			return cm ? cm.classmates : [];
 		}
 
 	}
