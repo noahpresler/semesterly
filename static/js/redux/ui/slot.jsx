@@ -223,10 +223,10 @@ class SlotManager extends React.Component {
 
         // custom slots
         for (let i in this.props.custom) {
-            let custom_slot = this.props.custom[i];
-            custom_slot['custom'] = true;
-            custom_slot['key'] = i; // TODO: Find better unique key
-            slots_by_day[custom_slot.day].push(custom_slot)
+            let customSlot = this.props.custom[i];
+            customSlot['custom'] = true;
+            customSlot['key'] = i; // TODO: Find better unique key
+            slots_by_day[customSlot.day].push(customSlot)
         }
         return this.getConflictStyles(slots_by_day)
     }
