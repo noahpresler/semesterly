@@ -1,24 +1,33 @@
 import update from 'react/lib/update';
 
-export const optionalCourses = (state = { ids: [], numRequired: 0}, action) => {
+export const optionalCourses = (state = { courses: [], numRequired: 0}, action) => {
 	switch(action.type) {
-
 		case 'ADD_REMOVE_OPTIONAL_COURSE':
-			let idx = state.ids.indexOf(action.newCourseId)
+			let idx = state.courses.indexOf(action.newCourse)
 			if ( idx != -1) {
-				let newIds = [
-					...state.ids.slice(0,idx),
-					...state.ids.slice(idx + 1)
+				let newCourses = [
+					...state.courses.slice(0,idx),
+					...state.courses.slice(idx + 1)
 				]
-				return Object.assign({}, state, {ids: newIds, numRequired: newIds.length});
+				return Object.assign({}, state, {courses: newCourses, numRequired: newCourses.length});
 			} else {
 				let newState = update(state, {
-					ids: {
-						$push: [action.newCourseId]
+					courses: {
+						$push: [action.newCourse]
 					}
 				});
-				return Object.assign({}, newState, { numRequired: newState.ids.length });
+				return Object.assign({}, newState, { numRequired: newState.courses.length });
 			}
+		case 'REMOVE_OPTIONAL_COURSE_BY_ID':
+			let index = state.courses.findIndex(c => c.id === action.courseId)
+			if ( index != -1) {
+				let newCourses = [
+					...state.courses.slice(0,index),
+					...state.courses.slice(index + 1)
+				]
+				return Object.assign({}, state, {courses: newCourses, numRequired: newCourses.length});
+			}
+			return state;
 		default:
 			return state;
 	}
