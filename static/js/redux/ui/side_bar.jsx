@@ -10,7 +10,7 @@ class SideBar extends React.Component {
         this.alterTimetableName = this.alterTimetableName.bind(this);
         this.setTimetableName = this.setTimetableName.bind(this);
         this.state = { activeTimetableName: this.props.activeLoadedTimetable.name };
-        this.stateDropdown = {showDropdown: false};
+        this.stateDropdown = { showDropdown: false };
         this.toggleDropdown = this.toggleDropdown.bind(this);
     }
     toggleDropdown() {
@@ -28,7 +28,7 @@ class SideBar extends React.Component {
         if (newName.length === 0) {
             this.setState({ activeTimetableName: this.props.activeLoadedTimetable.name });
         }
-        else {
+        else if (newName != this.props.activeLoadedTimetable.name) {
             this.props.changeTimetableName(newName);
         }
     }
@@ -39,22 +39,22 @@ class SideBar extends React.Component {
         let masterSlots = this.props.liveTimetableCourses ?
             this.props.liveTimetableCourses.map(c => {
                 let colourIndex= this.props.courseToColourIndex[c.id] || 0;
+                if (!this.props.optionalCourses.find(i => i.id === c.id)) {
+                    return <MasterSlot
+                            key={c.id}
+                            colourIndex={colourIndex}
+                            onTimetable={true}
+                            course={c}
+                            fetchCourseInfo={() => this.props.fetchCourseInfo(c.id)}/>
+                }
+        }) : null;
+        let optionalSlots = this.props.liveTimetableCourses ? this.props.optionalCourses.map(c => {
                 return <MasterSlot
                         key={c.id}
-                        colourIndex={colourIndex}
+                        onTimetable={true}
+                        colourIndex={0}
                         course={c}
                         fetchCourseInfo={() => this.props.fetchCourseInfo(c.id)}/>
-        }) : null;
-        let optionalSlots = this.props.liveTimetableCourses ? this.props.optionalCourses.map(id => {
-                let c = this.props.liveTimetableCourses.find(course => course.id === id);
-                let colourIndex= this.props.courseToColourIndex[id] || 0;
-                if (c !== undefined){
-                    return <MasterSlot
-                            key={id}
-                            colourIndex={colourIndex}
-                            course={c}
-                            fetchCourseInfo={() => this.props.fetchCourseInfo(id)}/>
-                }
         }) : null;
         return (
             <div id="side-bar">
@@ -94,8 +94,8 @@ class SideBar extends React.Component {
                     { masterSlots }
                 </div>
                 <h4 className="sb-header">Optional Courses</h4>
+                    { optionalSlots }
                 <div id="sb-optional-slots">
-                    {optionalSlots}
                 </div>
                 <h4 className="sb-header">Textbooks</h4>
                 <div className="side-bar-section">
