@@ -13,6 +13,11 @@
 	color: transparent;
 	background-color: transparent;
 }
+#exploration-content {
+	width: 100%;
+	height: 100%;
+	position: relative;
+}
 
 /* Exploration Header */
 #exploration-header {
@@ -64,8 +69,12 @@
 }
 
 /* Exploration Body */
-#exploration-body [class^="col-"] {
-	padding: 15px;
+#exploration-body {
+	position: absolute;
+	top: 61px;
+	left: 0;
+	width: 100%;
+	bottom: 0;
 }
 h3.exp-header {
 	font-size: 14px;
@@ -92,6 +101,13 @@ h3.exp-header:after {
 }
 
 /* Exploration Filters */
+#exp-filters {
+	width: 25%;
+	position: absolute;
+	top: 0;
+	left: 0;
+	padding: 15px;
+}
 .exp-filter-section {
 	padding: 0 0 20px;
 }
@@ -113,6 +129,7 @@ h3.exp-header i:hover {
 	margin: 0 5px 3px;
 	border-radius: 3px;
 	font-weight: 400;
+	/*background-color: #eee;*/
 }
 #exp-filters h6 i {
 	margin-right: 5px;
@@ -125,11 +142,26 @@ h3.exp-header i:hover {
 }
 
 /* Exploration Search Results */
-#exploration-body #exp-search-results {
-	padding: 15px 0
+#exp-search-results {
+	padding: 15px;
+	position: absolute;
+	width: 37.5%;
+	left: 25%;
+	height: 100%;
+	overflow-y: auto;
+	-webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none; 
+    user-select: none;
 }
 #exp-search-results p {
 	padding-left: 10px;
+}
+#exp-search-list {
+	width: 100%;
+	height: 100%;
 }
 .exp-s-result {
 	padding: 10px 110px 10px 10px;
