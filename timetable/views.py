@@ -674,6 +674,9 @@ def course_search(request, school, sem, query):
   elif school == "umd":
     course_match_objs = course_match_objs.filter(
       (Q(umdcourseoffering__semester__icontains=sem) | Q(umdcourseoffering__semester__icontains='Y')))
+  elif school == "queens":
+    course_match_objs = course_match_objs.filter(
+      (Q(queenscourseoffering__semester__icontains=sem) | Q(queenscourseoffering__semester__icontains='Y')))
   else:
     raise Http404
 
