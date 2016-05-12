@@ -60,9 +60,6 @@ export const timetables = (state = initialState, action) => {
 		case 'ALERT_CONFLICT':
 			return Object.assign({}, state, { isFetching: false });
 
-		case 'ADD_CUSTOM_SLOT':
-			console.log(state)
-		
 		default:
 			return state;
 	}
