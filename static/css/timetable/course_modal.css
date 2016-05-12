@@ -210,7 +210,9 @@ h3.modal-module-header:after {
 .modal-section h6 .red {
 	color: #D21616;
 }
-
+.hidden-modal{
+	color: rgba(52, 73, 94, 0);
+}
 @media (max-width: 766px) {
 	#modal-header h1 {
 		font-size: 32px;

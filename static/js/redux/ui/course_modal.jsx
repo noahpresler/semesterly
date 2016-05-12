@@ -47,10 +47,13 @@ export class CourseModal extends React.Component {
                     enrolled={enrolled}
                     waitlist={slots[0].waitlist}
                     size={slots[0].size}
+                    hoverCourse={() => this.props.hoverCourse(this.props.data, sec)}
+                    unhoverCourse={this.props.unhoverCourse} 
                 />
         });
     }
     render() {
+
         let modalStyle = {
             width: '100%',
             heigh: '80%'
@@ -141,9 +144,10 @@ export class CourseModal extends React.Component {
         </div>);
         return (
             <Modal ref="modal"
-                className="course-modal"
+                className={classNames('course-modal', {'trans' : this.props.hasHoveredResult})}                 
                 modalStyle={modalStyle}
                 onHide={this.props.hideModal}
+
                 >
                 {content}
             </Modal>
@@ -151,7 +155,7 @@ export class CourseModal extends React.Component {
     }
 }
 
-const SearchResultSection = ({ section, secName, instr , enrolled, waitlist, size}) => {
+const SearchResultSection = ({ section, secName, instr , enrolled, waitlist, size, hoverCourse, unhoverCourse}) => {
     let seats = size - enrolled;
     let seatStatus = waitlist > 0 ? (waitlist + " waitlist") : (seats + " open");
     let benchmark = "green";
@@ -161,7 +165,7 @@ const SearchResultSection = ({ section, secName, instr , enrolled, waitlist, siz
         benchmark = "yellow";
     }
     return (
-    <div className="modal-section">
+    <div className="modal-section" onMouseEnter={hoverCourse} onMouseLeave={unhoverCourse}>
         <h4>{secName}</h4>
         <h5>{instr}</h5>
         <h6><span className={benchmark}>{seatStatus}</span> / {size} seats</h6>
