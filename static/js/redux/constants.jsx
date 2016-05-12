@@ -49,7 +49,7 @@ export const getSemesterName = (semester) => {
 		case "F":
 			return "Fall 2016";
 		case "S":
-			return "Spring 2016"
+			return "Spring 2017"
 	}
 }
 export const COLOUR_DATA = [
