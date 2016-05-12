@@ -46,14 +46,17 @@
 #show-exploration {
 	position: absolute;
 	top: 0;
-	right: -90px;
+	right: -95px;
 	width: 85px;
 	height: 30px;
 	cursor: pointer;
 	transition: transform .3s;
-}
-#show-exploration:hover {
-	transform: scale(1.05);
+	-webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none; 
+    user-select: none;
 }
 #show-exploration i {
 	font-size: 22px;
@@ -129,6 +132,9 @@
 @media (max-width: 766px) {
 	#main-bar {
 		 padding: 10px;
+	}
+	#show-exploration {
+		display: none;
 	}
 }
 
