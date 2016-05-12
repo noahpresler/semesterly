@@ -1,4 +1,4 @@
-export const classmates = (state = {courseToClassmates: {}, isFetching: false}, action) => {
+export const classmates = (state = {courseToClassmates: [], isFetching: false}, action) => {
 	switch (action.type) {
 		case ("CLASSMATES_RECEIVED"):
 			return Object.assign({}, state, { courseToClassmates: action.courses, isFetching: false });
