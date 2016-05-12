@@ -48,7 +48,7 @@ class SideBar extends React.Component {
                             key={c.id}
                             colourIndex={colourIndex}
                             classmates={classmates}
-                            onTimetable={true}
+                            onTimetable={this.props.isCourseInRoster(c.id)}
                             course={c}
                             fetchCourseInfo={() => this.props.fetchCourseInfo(c.id)}/>
                 }
@@ -66,7 +66,7 @@ class SideBar extends React.Component {
              }
             return <MasterSlot
                     key={c.id}
-                    onTimetable={true}
+                    onTimetable={this.props.isCourseInRoster(c.id)}
                     colourIndex={colourIndex}
                     course={c}
                     fetchCourseInfo={() => this.props.fetchCourseInfo(c.id)}/>
