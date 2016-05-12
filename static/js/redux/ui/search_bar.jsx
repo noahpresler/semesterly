@@ -4,6 +4,7 @@ import fetch from 'isomorphic-fetch';
 import { getCourseSearchEndpoint, getSemesterName } from '../constants.jsx';
 import classNames from 'classnames';
 import SearchSideBarContainer from './containers/search_side_bar_container.jsx'
+import ClickOutHandler from 'react-onclickout';
 
 export class SearchBar extends React.Component {
     constructor(props){
@@ -23,6 +24,9 @@ export class SearchBar extends React.Component {
             this.props.fetchCourses(query);
             this.changeTimer = false;
         }, 200);
+    }
+    onClickOut(e) {
+        this.setState({ showDropdown: false });
     }
     setSemester(semester) {
         this.setState({ showDropdown: false });
@@ -51,14 +55,16 @@ export class SearchBar extends React.Component {
     	return (
         	<div id="search-bar">
                 <div id="search-bar-wrapper">
-                    <div id="search-bar-semester" onMouseDown={this.toggleDropdown.bind(this)}>{ getSemesterName(this.props.semester) }</div>
-                    <div id="semester-picker"
-                         className={classNames({'down' : this.state.showDropdown})}
-                    >
-                    <div className="tip-border"></div>
-                    <div className="tip"></div>
-                        { availableSemesters }
-                    </div>
+                    <ClickOutHandler onClickOut={this.onClickOut.bind(this)}>
+                        <div id="search-bar-semester" onMouseDown={this.toggleDropdown.bind(this)}>{ getSemesterName(this.props.semester) }</div>
+                        <div id="semester-picker"
+                             className={classNames({'down' : this.state.showDropdown})}
+                        >
+                        <div className="tip-border"></div>
+                        <div className="tip"></div>
+                            { availableSemesters }
+                        </div>
+                    </ClickOutHandler>
                     <div id="search-bar-input-wrapper">
                         <input ref="input" 
                                className={this.props.isFetching ? 'results-loading-gif' : ''} 

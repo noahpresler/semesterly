@@ -4,6 +4,7 @@ import classnames from 'classnames';
 import MasterSlot from './master_slot.jsx';
 import classNames from 'classnames';
 import { COLOUR_DATA } from '../constants.jsx';
+import ClickOutHandler from 'react-onclickout';
 
 
 class SideBar extends React.Component {
@@ -11,12 +12,16 @@ class SideBar extends React.Component {
         super(props);
         this.alterTimetableName = this.alterTimetableName.bind(this);
         this.setTimetableName = this.setTimetableName.bind(this);
-        this.state = { activeTimetableName: this.props.activeLoadedTimetable.name };
-        this.stateDropdown = { showDropdown: false };
+        this.state = { activeTimetableName: this.props.activeLoadedTimetable.name, showDropdown: false };
         this.toggleDropdown = this.toggleDropdown.bind(this);
+        this.hideDropdown = this.hideDropdown.bind(this);
+
+    }
+    hideDropdown() {
+        this.setState({ showDropdown: false });
     }
     toggleDropdown() {
-    	this.setState({showDropdown: !this.state.showDropdown});
+    	this.setState({ showDropdown: !this.state.showDropdown });
     }
     componentWillReceiveProps(nextProps) {
         this.setState({ activeTimetableName: nextProps.activeLoadedTimetable.name });
@@ -78,19 +83,21 @@ class SideBar extends React.Component {
                         value={this.state.activeTimetableName}
                         onChange={this.alterTimetableName}
                         onBlur={this.setTimetableName}
-                        />
-                    <div id="timetable-drop-it-down"
-                    	onMouseDown={this.toggleDropdown.bind(this)}>
-                        <span className={classNames("tip-down", {'down' : this.state.showDropdown})}></span>
-                    </div>
-                    <div id="timetable-names-dropdown"
-                    	className={classNames({'down' : this.state.showDropdown})}
-                        >
-                        <div className="tip-border"></div>
-                        <div className="tip"></div>
-                        <h4>Fall 2016</h4>
-                        { savedTimetables }
-                    </div>
+                    />
+                    <ClickOutHandler onClickOut={this.hideDropdown}>
+                        <div id="timetable-drop-it-down"
+                        	onMouseDown={this.toggleDropdown.bind(this)}>
+                            <span className={classNames("tip-down", {'down' : this.state.showDropdown})}></span>
+                        </div>
+                        <div id="timetable-names-dropdown"
+                        	className={classNames({'down' : this.state.showDropdown})}
+                            >
+                            <div className="tip-border"></div>
+                            <div className="tip"></div>
+                            <h4>Fall 2016</h4>
+                            { savedTimetables }
+                        </div>
+                    </ClickOutHandler>
                 </div>
                 <div id="sb-credits" className="col-1-3">
                     <h3>16</h3>
