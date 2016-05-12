@@ -3,30 +3,38 @@ import PaginationContainer  from './containers/pagination_container.jsx';
 import SlotManagerContainer from './containers/slot_manager_container.jsx';
 
 
-const Row = ({ time, show }) => {
-	console.log(time, show);
-	let time_text = show ? <span>{time}</span> : null;
-	return (
-		<tr key={time}>
-        <td className="fc-axis fc-time fc-widget-content cal-row">
-        	{time_text}
-        </td>
-        <td className="fc-widget-content" />
-    </tr>
-	)
+class Row extends React.Component {
+	moveSlotToHere(clickEvent) {
+		console.log(clickEvent);
+		console.log($(".week-col").offset().left);
+		console.log($(".week-col").width());
+	}
+
+	render() {
+		let time_text = this.props.show ? <span>{this.props.time}</span> : null;
+		return (
+			<tr key={this.props.time}>
+	        <td className="fc-axis fc-time fc-widget-content cal-row">
+	        	{time_text}
+	        </td>
+	        <td className="fc-widget-content week-col" 
+	        		onClick={() => this.moveSlotToHere(event)} />
+	    </tr>
+		)
+	}
 }
 
 class Calendar extends React.Component {
-  	getCalendarRows() {
-	    let rows = [];
-	    for (let i = 8; i <= this.props.endHour; i++) { // one row for each hour, starting from 8am
-	      let time = i + ":00";
-	      rows.push(<Row time={time} show={true} />);
-	      rows.push(<Row time={time + ".5"} show={false} />);
-	    }
+	getCalendarRows() {
+    let rows = [];
+    for (let i = 8; i <= this.props.endHour; i++) { // one row for each hour, starting from 8am
+      let time = i + ":00";
+      rows.push(<Row time={time} show={true} />);
+      rows.push(<Row time={time + ".5"} show={false} />);
+    }
 
-    	return rows;
-  	}
+  	return rows;
+	}
 
 	render() {
 		let saveIcon = this.props.saving ? <i className = "fa fa-spin fa-circle-o-notch" /> :
