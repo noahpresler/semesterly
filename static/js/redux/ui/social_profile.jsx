@@ -1,15 +1,20 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import classNames from 'classnames';
+import ClickOutHandler from 'react-onclickout';
 
 export class SocialProfile extends React.Component {
     constructor(props){
         super(props);
-        this.state = {showDropdown: false};
+        this.state = { showDropdown: false };
         this.toggleDropdown = this.toggleDropdown.bind(this);
+        this.hideDropDown = this.hideDropDown.bind(this);
     }
     toggleDropdown() {
-    	this.setState({showDropdown: !this.state.showDropdown});
+    	this.setState({ showDropdown: !this.state.showDropdown });
+    }
+    hideDropDown() {
+    	this.setState({ showDropdown: false });
     }
     render() {
 		let profileImage = {
@@ -19,23 +24,26 @@ export class SocialProfile extends React.Component {
 			backgroundImage: 'url(/static/img/blank.jpg)',
 		};
 		let loggedIn = (
-			<div>
-				<div onMouseDown={this.toggleDropdown.bind(this)}>
-					<div id="social-pro-pic" style={profileImage}></div>
-					<h2>{this.props.userInfo.userFirstName}</h2>
-					<span className={classNames("tip-down", {'down' : this.state.showDropdown})}></span>
+			<ClickOutHandler onClickOut={this.hideDropDown}>
+				<div>
+					<div onMouseDown={this.toggleDropdown.bind(this)}>
+						<div id="social-pro-pic" style={profileImage}></div>
+						<h2>{this.props.userInfo.userFirstName}</h2>
+						<span className={classNames("tip-down", {'down' : this.state.showDropdown})}></span>
+					</div>
+						<div id="social-dropdown"
+							className={classNames({'down' : this.state.showDropdown})}
+							>
+							<div className="tip-border"></div>
+							<div className="tip"></div>
+							<a href="/user/logout">
+								<i className="fa fa-sign-out"></i>
+								<span>Sign out</span>
+							</a>
+						</div>
 				</div>
-				<div id="social-dropdown"
-					className={classNames({'down' : this.state.showDropdown})}
-					>
-					<div className="tip-border"></div>
-					<div className="tip"></div>
-					<a href="/user/logout">
-						<i className="fa fa-sign-out"></i>
-						<span>Sign out</span>
-					</a>
-				</div>
-			</div>
+			</ClickOutHandler>
+
 		);
 		let loggedOut = (
 			<a id="social-login" href="/login/facebook">
