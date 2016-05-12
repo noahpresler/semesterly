@@ -137,12 +137,25 @@ export function addCustomSlot(timeStart, timeEnd, day) {
 	let dispatch = store.dispatch;
 	dispatch({
 		type: "ADD_CUSTOM_SLOT",
-		new_custom_slot: {
+		newCustomSlot: {
 			time_start: timeStart, // match backend slot attribute names
 			time_end: timeEnd,
 			day: day,
 			name: "New Custom Event"
 		}
+	})
+}
+
+export function moveCustomSlot(newtimeStart, newtimeEnd, newDay, id) {
+	let dispatch = store.dispatch;
+	dispatch({
+		type: "MOVE_CUSTOM_SLOT",
+		newTimes: {
+			time_start: newtimeStart, // match backend slot attribute names
+			time_end: newtimeEnd,
+			day: newday,
+		},
+		id: id
 	})
 }
 
