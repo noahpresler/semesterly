@@ -8,9 +8,9 @@ export const customSlots = (state = [{'time_start': '10:00', 'time_end': '12:00'
       let first_missing = ids.findIndex((id, index) => id != index)
       let next_id = first_missing == -1 ? ids.length : first_missing;
 
-      action.new_custom_slot['id'] = next_id
+      action.newCustomSlot['id'] = next_id
       return update(state, {
-        $push: [action.new_custom_slot]
+        $push: [action.newCustomSlot]
       });
 
     case 'MOVE_CUSTOM_SLOT':
@@ -18,12 +18,8 @@ export const customSlots = (state = [{'time_start': '10:00', 'time_end': '12:00'
       if (slotIndex == -1) {
         return state; // invalid id
       }
-      let new_slot = {
-        'time_start': action.newTimeStart,
-        'time_end': action.newTimeEnd,
-        'id': action.id
-      }
-      return [...state.slice(0, slotIndex), new_slot, ...state.slice(slotIndex, state.length)]
+      let newSlot = Object.assign({}, state[slotIndex], action.newTimes)
+      return [...state.slice(0, slotIndex), newSlot, ...state.slice(slotIndex, state.length)]
 
     default:
       return state;
