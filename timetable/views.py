@@ -688,3 +688,12 @@ def course_search(request, school, sem, query):
 
 def jhu_timer(request):
   return render(request, "jhu_timer.html")
+
+def course_page(request, code):
+  school = request.subdomain
+  SchoolCourse, SchoolCourseOffering = school_to_models[school]
+  try:
+    course = SchoolCourse.objects.filter(code=code)[0]
+    return render_to_response("course_page.html", {'school': school, 'course': course}, context_instance=RequestContext(request))
+  except Exception as e:
+    return HttpResponse(str(e))
