@@ -55,7 +55,23 @@ function getBaseReqBody(state){
 		sid: SID
 	}
 }
-
+export function hoverSection (dispatch) {
+	return (course, section) => {
+		let availableSections = Object.assign({}, course.sections['L'], course.sections['T'], course.sections['P']);
+		course.section = section;
+		dispatch({
+			type: "HOVER_COURSE",
+			course: Object.assign({}, course, { slots: availableSections[section] })
+		});
+	}
+}
+export function unhoverSection (dispatch) {
+	return () => {
+		dispatch({
+			type: "UNHOVER_COURSE",
+		});
+	}
+}
 /*
 Attempts to add the course represented by newCourseId
 to the user's roster. If a section is provided, that section is 
