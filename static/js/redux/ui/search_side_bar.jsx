@@ -17,8 +17,8 @@ export class SearchSideBar extends React.Component {
         return Object.keys(sections).map(sec => 
             <SearchResultSection key={this.props.hovered.id + sec} course={this.props.hovered} section={sec} 
                 locked={this.props.isSectionLocked(this.props.hovered.id, sec)}
-                hoverCourse={() => this.props.hoverCourse(this.props.hovered, sec)}
-                unhoverCourse={this.props.unhoverCourse} 
+                hoverSection={() => this.props.hoverSection(this.props.hovered, sec)}
+                unhoverSection={this.props.unhoverSection} 
                 onMouseDown={(event) => this.lockSectionWrapper(sec, event)}
             />
         );
@@ -50,13 +50,13 @@ export class SearchSideBar extends React.Component {
         );
     }
 }
-const SearchResultSection = ({ section, locked, hoverCourse, unhoverCourse, onMouseDown }) => {
+const SearchResultSection = ({ section, locked, hoverSection, unhoverSection, onMouseDown }) => {
     return (
     <h5
         className="sb-side-sections"
         onMouseDown={onMouseDown}
-        onMouseEnter={hoverCourse}
-        onMouseLeave={unhoverCourse}
+        onMouseEnter={hoverSection}
+        onMouseLeave={unhoverSection}
     >
         {section + " "}
         { locked ? <i className="fa fa-lock"></i> : null}

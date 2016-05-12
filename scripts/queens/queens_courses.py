@@ -23,7 +23,8 @@ class QueensParser(BaseParser):
               " USER and PASS constants"
         return
 
-    for course in JobManager(USER, PASS, True, {'semesters': [('Fall', '2016')]}).parse_courses():
+    # valid "seasons": Fall, Winter, Summer
+    for course in JobManager(USER, PASS, True, {'semesters': [('Winter', '2016')]}).parse_courses():
       yield course
 
   def parse_course_element(self, course_element):
