@@ -12,7 +12,7 @@ const mapStateToProps = (state) => {
     	searchResults: state.searchResults.items,
     	isFetching: state.searchResults.isFetching,
     	isCourseInRoster: (course_id) => courseSections[course_id] !== undefined,
-    	isCourseOptional: (course_id) => state.optionalCourses.ids.indexOf(course_id) !== -1,
+    	isCourseOptional: (course_id) => state.optionalCourses.courses.some(c => c.id === course_id),
     	isSectionLocked: (course_id, section) => {
     		if (courseSections[course_id] === undefined) {
     			return false;
@@ -29,7 +29,7 @@ const mapDispatchToProps = (dispatch) => {
 	return {
 	  	fetchCourses: (query) => dispatch(fetchSearchResults(query)),
 	  	addCourse: addOrRemoveCourse,
-	  	addRemoveOptionalCourse: (id) => dispatch(addOrRemoveOptionalCourse(id)),
+	  	addRemoveOptionalCourse: (course) => dispatch(addOrRemoveOptionalCourse(course)),
 		fetchCourseInfo: (id) => dispatch(fetchCourseInfo(id)), 
 		toggleExplorationModal: () => {dispatch({type: "TOGGLE_EXPLORATION_MODAL"})},
 		hoverSearchResult: (position) => {
