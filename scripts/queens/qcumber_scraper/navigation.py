@@ -9,7 +9,7 @@ from time import sleep
 from parser import SolusParser
 
 try:
-    from config import MAX_RETRIES, RETRY_SLEEP_SECONDS
+    from queens_config import MAX_RETRIES, RETRY_SLEEP_SECONDS
 except ImportError:
     MAX_RETRIES = 5
     RETRY_SLEEP_SECONDS = 10
