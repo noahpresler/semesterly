@@ -30,6 +30,7 @@
     "react-alert": "^1.0.14",
     "react-date-picker": "^4.0.8",
     "react-dom": "^15.0.1",
+    "react-onclickout": "^2.0.4",
     "react-redux": "^4.4.5",
     "reactify": "^1.1.1",
     "redux": "^3.3.1",
