@@ -5,7 +5,11 @@ import { HALF_HOUR_HEIGHT, COLOUR_DATA } from '../constants.jsx';
 
 const dragSlotSource = {
     beginDrag(props) {
+        console.log('oowee look at me')
         return {}
+    },
+    endDrag(props) {
+        console.log('end')
     }
 }
 
@@ -72,3 +76,4 @@ class CustomSlot extends React.Component {
 }
 
 export default DragSource('DRAG', dragSlotSource, collect)(CustomSlot);
+// export default CustomSlot
