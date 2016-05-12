@@ -91,7 +91,8 @@ export function addOrRemoveCourse(newCourseId, lockingSection = '') {
         		'section_codes': [lockingSection]
         	}],
         	'optionCourses': state.optionalCourses.courses.map(c => c.id),
-        	'numOptionCourses': state.optionalCourses.numRequired
+        	'numOptionCourses': state.optionalCourses.numRequired,
+        	'customSlots': state.customSlots
         });
 	}
 	store.dispatch(fetchTimetables(reqBody, removing));
@@ -130,6 +131,19 @@ function fetchTimetables(requestBody, removing) {
 			}
 		});
 	}
+}
+
+export function addCustomSlot(timeStart, timeEnd, day) {
+	let dispatch = store.dispatch;
+	dispatch({
+		type: "ADD_CUSTOM_SLOT",
+		new_custom_slot: {
+			time_start: timeStart, // match backend slot attribute names
+			time_end: timeEnd,
+			day: day,
+			name: "New Custom Event"
+		}
+	})
 }
 
 export function getClassmates(json) {

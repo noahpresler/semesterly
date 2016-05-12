@@ -80,11 +80,12 @@ def get_timetables(request):
                   locked_section, SchoolCourseOffering)
 
   # temp optional course implementation
-  opt_course_ids = params['optionCourses'] if 'optionCourses' in params else []
-  k = params['numOptionCourses'] if 'numOptionCourses' in params else 0
+  opt_course_ids = params.get('optionCourses', [])
+  max_optional = params.get('numOptionCourses', 0)
   optional_courses = [SchoolCourse.objects.get(id=cid) for cid in opt_course_ids]
-  optional_course_subsets = itertools.combinations(optional_courses, k) or [[]]
-  generator = TimetableGenerator(params['semester'],
+  optional_course_subsets = [subset for k in range(max_optional, -1, -1)\
+                                    for subset in itertools.combinations(optional_courses, k)]
+  generator = TimetableGenerator(params['semester'], 
                   params['school'],
                   locked_sections,
                   params['preferences'])
@@ -132,7 +133,6 @@ class TimetableGenerator:
     self.locked_sections = locked_sections
 
   def courses_to_timetables(self, courses):
-    print courses
     timetables = self.get_best_timetables(courses)
     result = [self.convert_tt_to_dict(tt) for tt in timetables]
     return result
