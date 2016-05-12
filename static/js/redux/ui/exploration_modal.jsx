@@ -31,8 +31,7 @@ export class ExplorationModal extends React.Component {
 	            </div>
 	            <div id="exploration-body">
 	                <div className="cf">
-	                    <div id="exp-filters" 
-	                    	className="col-4-16">
+	                    <div id="exp-filters">
 	                        <div className="exp-filter-section">
 								<h3 className="exp-header">
 									<span>Departments Filter</span>
@@ -80,8 +79,96 @@ export class ExplorationModal extends React.Component {
 	                    </div>
 	                    <div id="exp-search-results" 
 	                    	className="col-6-16">
-	                    	<p>returned 157 Search Results</p>
-	                        <div>
+	                        <div id="exp-search-list">
+	                    		<p>returned 157 Search Results</p>
+								<div className="exp-s-result">
+									<h4>Discrete Mathematics</h4>
+									<h5>EN.650.113, Applied Mathematics & Statistics</h5>
+								</div>
+								<div className="exp-s-result">
+									<h4>Discrete Mathematics</h4>
+									<h5>EN.650.113, Applied Mathematics & Statistics</h5>
+								</div>
+								<div className="exp-s-result">
+									<h4>Discrete Mathematics</h4>
+									<h5>EN.650.113, Applied Mathematics & Statistics</h5>
+								</div>
+								<div className="exp-s-result">
+									<h4>Discrete Mathematics</h4>
+									<h5>EN.650.113, Applied Mathematics & Statistics</h5>
+								</div>
+								<div className="exp-s-result">
+									<h4>Discrete Mathematics</h4>
+									<h5>EN.650.113, Applied Mathematics & Statistics</h5>
+								</div>
+								<div className="exp-s-result">
+									<h4>Discrete Mathematics</h4>
+									<h5>EN.650.113, Applied Mathematics & Statistics</h5>
+								</div>
+								<div className="exp-s-result">
+									<h4>Discrete Mathematics</h4>
+									<h5>EN.650.113, Applied Mathematics & Statistics</h5>
+								</div>
+								<div className="exp-s-result">
+									<h4>Discrete Mathematics</h4>
+									<h5>EN.650.113, Applied Mathematics & Statistics</h5>
+								</div>
+								<div className="exp-s-result">
+									<h4>Discrete Mathematics</h4>
+									<h5>EN.650.113, Applied Mathematics & Statistics</h5>
+								</div>
+								<div className="exp-s-result">
+									<h4>Discrete Mathematics</h4>
+									<h5>EN.650.113, Applied Mathematics & Statistics</h5>
+								</div>
+								<div className="exp-s-result">
+									<h4>Discrete Mathematics</h4>
+									<h5>EN.650.113, Applied Mathematics & Statistics</h5>
+								</div>
+								<div className="exp-s-result">
+									<h4>Discrete Mathematics</h4>
+									<h5>EN.650.113, Applied Mathematics & Statistics</h5>
+								</div>
+								<div className="exp-s-result">
+									<h4>Discrete Mathematics</h4>
+									<h5>EN.650.113, Applied Mathematics & Statistics</h5>
+								</div>
+								<div className="exp-s-result">
+									<h4>Discrete Mathematics</h4>
+									<h5>EN.650.113, Applied Mathematics & Statistics</h5>
+								</div>
+								<div className="exp-s-result">
+									<h4>Discrete Mathematics</h4>
+									<h5>EN.650.113, Applied Mathematics & Statistics</h5>
+								</div>
+								<div className="exp-s-result">
+									<h4>Discrete Mathematics</h4>
+									<h5>EN.650.113, Applied Mathematics & Statistics</h5>
+								</div>
+								<div className="exp-s-result">
+									<h4>Discrete Mathematics</h4>
+									<h5>EN.650.113, Applied Mathematics & Statistics</h5>
+								</div>
+								<div className="exp-s-result">
+									<h4>Discrete Mathematics</h4>
+									<h5>EN.650.113, Applied Mathematics & Statistics</h5>
+								</div>
+								<div className="exp-s-result">
+									<h4>Discrete Mathematics</h4>
+									<h5>EN.650.113, Applied Mathematics & Statistics</h5>
+								</div>
+								<div className="exp-s-result">
+									<h4>Discrete Mathematics</h4>
+									<h5>EN.650.113, Applied Mathematics & Statistics</h5>
+								</div>
+								<div className="exp-s-result">
+									<h4>Discrete Mathematics</h4>
+									<h5>EN.650.113, Applied Mathematics & Statistics</h5>
+								</div>
+								<div className="exp-s-result">
+									<h4>Discrete Mathematics</h4>
+									<h5>EN.650.113, Applied Mathematics & Statistics</h5>
+								</div>
 								<div className="exp-s-result">
 									<h4>Discrete Mathematics</h4>
 									<h5>EN.650.113, Applied Mathematics & Statistics</h5>
