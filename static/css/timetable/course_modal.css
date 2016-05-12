@@ -9,10 +9,35 @@
 	width: 100%;
 	height: 100%;
 }
+.course-modal + div {
+	/* using important to override boron default style */
+	/* can't declare in javascript either, cuz need hover */
+	background-color: rgba(0,0,0,.8) !important;
+}
+.course-modal.trans + div {
+	/* using important to override boron default style */
+	/* can't declare in javascript either, cuz need hover */
+	background-color: transparent !important;	
+}
+.course-modal.trans #modal-content,
 .course-modal.trans #modal-header,
-.course-modal.trans #modal-header h2 {
+.course-modal.trans #modal-header h2,
+.course-modal.trans h3.modal-module-header,
+.course-modal.trans h3.modal-module-header:after,
+.course-modal.trans #modal-body p,
+.course-modal.trans #modal-body .credits h4,
+.course-modal.trans #modal-body .rating-module h4 {
 	background-color: transparent;
 	color: transparent;
+	border-color: transparent;
+}
+.course-modal.trans #modal-close,
+.course-modal.trans #modal-share,
+.course-modal.trans #modal-save,
+.course-modal.trans #modal-add,
+.course-modal.trans #modal-body .rating-module {
+	opacity: 0;
+	visibility: hidden;
 }
 
 /* Course Modal Content Styles */
@@ -50,6 +75,8 @@
 	height: 20px;
 	color: #777;
 	cursor: pointer;
+	opacity: 1;
+	visibility: visible;
 	transition: color .3s, transform .3s;
 }
 #modal-close i,
@@ -90,6 +117,8 @@
 	height: 60px;
 	background-color: #34495E;
 	cursor: pointer;
+	opacity: 1;
+	visibility: visible;
 	transition: background-color .3s;
 	z-index: 1;
 }
@@ -163,6 +192,10 @@ h3.modal-module-header:after {
 	font-size: 30px;
 	font-weight: 200;
 }
+#modal-body .rating-module {
+	opacity: 1;
+	visibility: visible;
+}
 #modal-body .rating-module h4 {
 	color: #777;
 	text-align: center;
@@ -178,6 +211,7 @@ h3.modal-module-header:after {
 	float: left;
 	cursor: pointer;
 	position: relative;
+	background-color: rgba(255,255,255,.8);
 	transition: background-color .3s;
 }
 .modal-section:hover {
@@ -188,6 +222,7 @@ h3.modal-module-header:after {
 	font-weight: 400;
 	line-height: 20px;
 	margin: 0;
+	color: #34495E;
 }
 .modal-section h5 {
 	font-size: 13px;
