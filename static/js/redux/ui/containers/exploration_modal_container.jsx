@@ -36,13 +36,12 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
 	return {
-		toggleExplorationModal: () => dispatch({ type: "TOGGLE_EXPLORATION_MODAL" }),
+		hideExplorationModal: () => dispatch({ type: "HIDE_EXPLORATION_MODAL" }),
 	  	fetchAdvancedSearchResults: (query) => dispatch(fetchAdvancedSearchResults(query)),
 	  	setAdvancedSearchResultIndex: (i) => dispatch({ type: "SET_ACTIVE_RESULT", active: i }),
 		hoverSection: hoverSection(dispatch),
 		unhoverSection: unhoverSection(dispatch),
 		addOrRemoveCourse,
-
 	}
 }
 

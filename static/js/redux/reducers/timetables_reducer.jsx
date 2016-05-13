@@ -2,6 +2,7 @@ import update from 'react/lib/update';
 let initialState = { isFetching: false, items: [{courses: []}], active: 0 };
 
 export const timetables = (state = initialState, action) => {
+
 	switch(action.type) {
 		
 		case 'REQUEST_TIMETABLES':
@@ -42,6 +43,7 @@ export const timetables = (state = initialState, action) => {
 			});
 			
 		case 'UNHOVER_COURSE':
+
 			// find fake course index; delete it
 			let fakeCourseIndex = state.items[state.active].courses.findIndex(c => c.fake);
 			if (fakeCourseIndex < 0) { return state; }
