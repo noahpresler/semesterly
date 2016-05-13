@@ -13,14 +13,6 @@ const mapStateToProps = (state) => {
     	isFetching: state.searchResults.isFetching,
     	isCourseInRoster: (course_id) => courseSections[course_id] !== undefined,
     	isCourseOptional: (course_id) => state.optionalCourses.courses.some(c => c.id === course_id),
-    	isSectionLocked: (course_id, section) => {
-    		if (courseSections[course_id] === undefined) {
-    			return false;
-    		}
-    		return Object.keys(courseSections[course_id]).some( 
-    			(type) => courseSections[course_id][type] == section
-			)
-    	},
 		hasHoveredResult: state.timetables.items[state.timetables.active].courses.some(course => course.fake)
 	}
 }
