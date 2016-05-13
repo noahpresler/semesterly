@@ -28,6 +28,7 @@ const dragTarget = {
       time_end: convertToStr(newEndHour),
       day: props.day
     }
+    console.log(id);
     props.updateCustomSlot(newValues, id);
   },
   // TODO:
@@ -46,14 +47,17 @@ function collectDragDrop(connect, monitor) { // inject props as drop target
 const createSource = {
   beginDrag(props) {
     console.log('oh me oh my')
+    let newSlotId = new Date().getTime()
     // props.addCustomSlot(props.time, 
     //   convertToStr(convertToHalfHours(props.time) + 1), 
     //   props.day, 
-    //   true
+    //   true,
+    //   newSlotId
     // )
     return {
       timeStart: props.time,
-      'day': props.day
+      day: props.day,
+      id: newSlotId
     }
   }
 }
@@ -68,22 +72,26 @@ function collectCreateBegin(connect, monitor) { // inject props as drag target
 // ------------------ create target:
 const createTarget = {
   drop(props, monitor) {
-    let { timeStart }  = monitor.getItem()
+    let { timeStart, id }  = monitor.getItem()
     let timeEnd = props.time
     if (timeStart > timeEnd) {
       [timeStart, timeEnd] = [timeEnd, timeStart]
     }
-    props.addCustomSlot(timeStart, timeEnd, props.day, false)
+    props.addCustomSlot(timeStart, timeEnd, props.day, false, new Date().getTime())
+    // props.updateCustomSlot({preview: false}, id)
   },
   canDrop(props, monitor) { // new custom slot must start and end on the same day
     let { day } = monitor.getItem();
     return day == props.day
   },
   hover(props, monitor) {
-    let { timeStart, day } = monitor.getItem()
-    if (day != props.day) {
-      return
-    }
+    console.log('????')
+    // let { timeStart, id } = monitor.getItem()
+    // let timeEnd = props.time
+    // if (timeStart > timeEnd) {
+    //   [timeStart, timeEnd] = [timeEnd, timeStart]
+    // }
+    // props.updateCustomSlot({time_start: timeStart, time_end: timeEnd}, id)
   }
 }
 
