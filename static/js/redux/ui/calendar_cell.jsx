@@ -1,6 +1,6 @@
 import React from 'react';
 import { DAYS, DRAGTYPES } from '../constants.jsx';
-import { DropTarget } from 'react-dnd';
+import { DropTarget, DragSource } from 'react-dnd';
 
 function convertToHalfHours(str) {
   let start = parseInt(str.split(':')[0])
@@ -12,14 +12,9 @@ function convertToStr(halfHours) {
   return halfHours % 2 ? num_hours + ':30' : num_hours + ':00' 
 }
 
-function collect(connect, monitor) {
-  return {
-    connectDropTarget: connect.dropTarget(),
-  };
-}
-
-const dragCellTarget = {
-  drop(props, monitor) {
+// ---------------  drag target:
+const dragTarget = {
+  drop(props, monitor) { // move it to current location on drop
     let { timeStart, timeEnd, id } = monitor.getItem();
 
     let startHalfhour = convertToHalfHours(timeStart)
@@ -28,7 +23,6 @@ const dragCellTarget = {
     let newStartHour = convertToHalfHours(props.time)
     let newEndHour = newStartHour + (endHalfhour - startHalfhour)
 
-    // console.log(props.time, convertToStr(newEndHour))
     props.moveCustomSlot(props.time, convertToStr(newEndHour), props.day, id);
   },
   // TODO:
@@ -37,6 +31,64 @@ const dragCellTarget = {
   // }
 }
 
-const Cell = (props) => props.connectDropTarget(<div className='cal-cell'></div>)
+function collectDragDrop(connect, monitor) { // inject props as drop target
+  return {
+    connectDragTarget: connect.dropTarget(),
+  };
+}
 
-export default DropTarget(DRAGTYPES.DRAG, dragCellTarget, collect)(Cell)
+// ----------------- create source:
+const createSource = {
+  beginDrag(props) {
+    console.log('oh me oh my')
+    return {
+      timeStart: props.time,
+      'day': props.day
+    }
+  }
+}
+
+function collectCreateBegin(connect, monitor) { // inject props as drag target
+  return {
+    connectCreateSource: connect.dragSource(),
+    connectCreatePreview: connect.dragPreview()
+  }
+}
+
+// ------------------ create target:
+const createTarget = {
+  drop(props, monitor) {
+    let { timeStart }  = monitor.getItem()
+    let timeEnd = props.time
+    if (timeStart > timeEnd) {
+      [timeStart, timeEnd] = [timeEnd, timeStart]
+    }
+    props.addCustomSlot(timeStart, timeEnd, props.day)
+  },
+  canDrop(props, monitor) { // new custom slot must start and end on the same day
+    let { day } = monitor.getItem();
+    return day == props.day
+  }
+}
+
+function collectCreateDrop(connect, monitor) {
+  return {
+    connectCreateTarget: connect.dropTarget()
+  };
+}
+
+const Cell = (props) => props.connectDragTarget(
+  props.connectCreateTarget(
+    props.connectCreateSource(
+      <div className='cal-cell'></div>
+    )
+  )
+)
+
+export default DragSource(DRAGTYPES.CREATE, createSource, collectCreateBegin)(
+  DropTarget(DRAGTYPES.CREATE, createTarget, collectCreateDrop)(
+    DropTarget(DRAGTYPES.DRAG, dragTarget, collectDragDrop)(Cell)
+  )
+)
+
+
