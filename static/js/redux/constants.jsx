@@ -65,4 +65,10 @@ export const COLOUR_DATA = [
     { background: "#C8F7C5", highlight: "#C4D44D", border: "#548A50", font: "#222" }
 ] // consider #CF000F, #e8fac3, #C8F7C5
 
-export const DAYS = ['M', 'T', 'W', 'R', 'F'] // currently used in custom slot dnd
+export const DAYS = ['M', 'T', 'W', 'R', 'F']
+
+export const DRAGTYPES = {
+  DRAG: 'drag', // drag a custom slot to a new location
+  EXTEND: 'extend', // extend the length of a custom slot
+  CREATE: 'create' // create a new custom slot
+}
