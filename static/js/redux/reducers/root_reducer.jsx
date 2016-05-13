@@ -14,6 +14,7 @@ import { classmates } from './classmates_reducer.jsx';
 import { optionalCourses } from './optional_courses_reducer.jsx';
 import { explorationModal } from './exploration_modal_reducer.jsx';
 import { customSlots } from './custom_slots_reducer.jsx'
+import { signupModal } from './signup_modal_reducer.jsx';
 
 export const rootReducer = combineReducers({
   school,
@@ -30,5 +31,6 @@ export const rootReducer = combineReducers({
   classmates,
   optionalCourses,
   explorationModal,
-  customSlots
+  customSlots,
+  signupModal
 });
