@@ -1,5 +1,13 @@
 import update from 'react/lib/update';
 
+// slot fields:
+//   time_start: 'HH:MM',
+//   time_end: 'HH:MM',
+//   day: one of MTWRF
+//   name: slot's title
+//   id
+//   preview: whether the slot is just a preview or has been added
+
 export const customSlots = (state = [], action) => {
   switch(action.type) {
     case 'ADD_CUSTOM_SLOT':
@@ -7,6 +15,14 @@ export const customSlots = (state = [], action) => {
       return update(state, {
         $push: [action.newCustomSlot]
       });
+
+    case 'TOGGLE_SLOT_PREVIEW':
+      let tslotindex = state.findIndex((s) => s.id == action.id);
+      if (tslotindex == -1) {
+        return state; // invalid id
+      }
+      let toggledSlot = Object.assign({}, state[slotIndex], { preview: !state[slotIndex].preview })
+      return [...state.slice(0, slotIndex), movedSlot, ...state.slice(slotIndex + 1, state.length)]
 
     case 'REMOVE_CUSTOM_SLOT':
       let dslotIndex = state.findIndex((s) => s.id == action.id);
@@ -20,8 +36,8 @@ export const customSlots = (state = [], action) => {
       if (slotIndex == -1) {
         return state; // invalid id
       }
-      let newSlot = Object.assign({}, state[slotIndex], action.newTimes)
-      return [...state.slice(0, slotIndex), newSlot, ...state.slice(slotIndex + 1, state.length)]
+      let movedSlot = Object.assign({}, state[slotIndex], action.newTimes)
+      return [...state.slice(0, slotIndex), movedSlot, ...state.slice(slotIndex + 1, state.length)]
 
     default:
       return state;
