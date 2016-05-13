@@ -4,6 +4,8 @@ os.environ['DJANGO_SETTINGS_MODULE'] = 'semesterly.settings'
 from django.forms.models import model_to_dict
 from django.db import models
 
+
+
 #----------- Global Models  ----------------
 class Textbook(models.Model):
   isbn = models.BigIntegerField(primary_key=True)
@@ -119,6 +121,30 @@ class BaseCourseEvaluation(models.Model):
 
   class Meta:
     abstract = True
+
+class Reaction(models.Model):
+  MUST_TAKE = '\uD83D\uDD25'
+  LOVE = '\uD83D\uDE0D'
+  CRAP = '\uD83D\uDCA9'
+  OKAY = '\uD83D\uDE10'
+  BORING = '\uD83D\uDE34'
+  HARD = '\uD83D\uDE29'
+  TEARS = '\uD83D\uDE22'
+  INTERESTING = '\uD83E\uDD13'
+
+  REACTION_CHOICES = (
+    (MUST_TAKE, 'FIRE'),
+    (LOVE, 'LOVE'),
+    (CRAP, 'CRAP'),
+    (OKAY, 'OKAY'),
+    (BORING, 'BORING'),
+    (HARD, 'HARD'),
+    (TEARS, 'TEARS'),
+    (INTERESTING, 'INTERESTING'),
+  )
+  course = models.ManyToManyField(BaseCourse)
+  title = models.CharField(max_length=50, choices=REACTION_CHOICES)
+
 
 #-----------------------  University of Toronto ------------------------------
 class Course(BaseCourse):
