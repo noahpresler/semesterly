@@ -133,7 +133,7 @@ function fetchTimetables(requestBody, removing) {
 	}
 }
 
-export function addCustomSlot(timeStart, timeEnd, day) {
+export function addCustomSlot(timeStart, timeEnd, day, preview) {
 	let dispatch = store.dispatch;
 	dispatch({
 		type: "ADD_CUSTOM_SLOT",
@@ -141,7 +141,8 @@ export function addCustomSlot(timeStart, timeEnd, day) {
 			time_start: timeStart, // match backend slot attribute names
 			time_end: timeEnd,
 			day: day,
-			name: "New Custom Event"
+			name: "New Custom Event",
+			preview: preview
 		}
 	})
 }
