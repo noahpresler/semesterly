@@ -51,6 +51,6 @@ urlpatterns = patterns('',
 
 	url(r'^search/(?P<school>.+?)/(?P<sem>.+?)/(?P<query>.+?)/', 'timetable.views.course_search'),
 	url(r'^advanced_search/(?P<school>.+?)/(?P<sem>.+?)/(?P<query>.+?)/', 'timetable.views.advanced_course_search'),
-
+	url(r'^school_info/(?P<school>.+?)/', 'timetable.views.school_info'),
 	url(r'c/(?P<code>.+?)$', 'timetable.views.course_page')
 )

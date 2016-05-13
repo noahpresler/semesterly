@@ -7,13 +7,17 @@ import Modal from 'boron/DropModal';
 import { CourseModalBody } from './course_modal_body.jsx'
 
 export class CourseModal extends React.Component {
+    constructor(props) {
+        super(props);
+        this.addOrRemoveCourse = this.addOrRemoveCourse.bind(this);
+    }
     componentWillReceiveProps(nextProps) { 
         if (nextProps.id != null) {
             this.refs.modal.show();
         }
     }
-    addCourse() {
-        this.props.addCourse(this.props.id);
+    addOrRemoveCourse(id, section='') {
+        this.props.addOrRemoveCourse(id, section);
         this.refs.modal.hide();
     }
     sizeItUp() {
@@ -49,11 +53,11 @@ export class CourseModal extends React.Component {
                 </div>
                 <div id="modal-add" 
                     className={classNames('search-course-add', {'in-roster': inRoster})}
-                    onClick={this.addCourse.bind(this)}>
+                    onClick={() => this.addOrRemoveCourse(this.props.id)}>
                     <i className={classNames('fa', {'fa-plus' : !inRoster, 'fa-check' : inRoster})}></i>
                 </div>
             </div>
-            <CourseModalBody {...this.props} />
+            <CourseModalBody {...this.props} addOrRemoveCourse={this.addOrRemoveCourse}/>
         </div>);
         return (
             <Modal ref="modal"

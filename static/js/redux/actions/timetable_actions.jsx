@@ -2,10 +2,17 @@ import fetch from 'isomorphic-fetch';
 import { getTimetablesEndpoint } from '../constants.jsx';
 import { randomString } from '../util.jsx';
 import { store } from '../init.jsx';
-import { getClassmatesEndpoint } from '../constants.jsx'
+import { getClassmatesEndpoint, getSchoolInfoEndpoint } from '../constants.jsx'
 import { lockActiveSections } from './user_actions.jsx';
 
 export const SID = randomString(30);
+
+export function fetchSchoolInfo() {
+	return (dispatch) => {
+		fetch(getSchoolInfoEndpoint())
+	    .then(response => response.json())
+	}
+}
 
 export function requestTimetables() {
   return {
@@ -28,6 +35,10 @@ export function alertConflict(){
 
 export function loadTimetable(timetable, created=false) {
 	let dispatch = store.dispatch;
+	let state = store.getState();
+	if (!state.userInfo.data.isLoggedIn) {
+		return dispatch({type: 'TOGGLE_SIGNUP_MODAL'})
+	}
 	dispatch({
 		type: "CHANGE_ACTIVE_SAVED_TIMETABLE",
 		timetable,
@@ -184,10 +195,10 @@ export function fetchClassmates(courses) {
 			method: 'POST',
 			body: JSON.stringify({course_ids: courses})
 		})
-			    .then(response => response.json())
-			    .then(json => {
-			    	dispatch(getClassmates(json))
-			    });
+	    .then(response => response.json())
+	    .then(json => {
+	    	dispatch(getClassmates(json))
+	    });
 	}
 }
 
