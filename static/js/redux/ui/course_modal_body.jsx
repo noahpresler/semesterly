@@ -100,7 +100,7 @@ export class CourseModalBody extends React.Component {
     }
 }
 
-const SearchResultSection = ({ section, secName, instr , enrolled, waitlist, size, hoverSection, unhoverSection, locked, inRoster, lockOrUnlock}) => {
+const SearchResultSection = ({ section, secName, instr, enrolled, waitlist, size, hoverSection, unhoverSection, locked, inRoster, lockOrUnlock}) => {
     let seats = size - enrolled;
     let seatStatus = waitlist > 0 ? (waitlist + " waitlist") : (seats + " open");
     let benchmark = "green";
