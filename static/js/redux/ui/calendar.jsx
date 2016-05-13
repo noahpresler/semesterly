@@ -26,8 +26,8 @@ class Calendar extends React.Component {
 	getCalendarRows() {
     let rows = [];
     for (let i = 8; i <= this.props.endHour; i++) { // one row for each hour, starting from 8am
-      rows.push(<Row time={i + ':00'} show={true} />);
-      rows.push(<Row time={i + ':30'} show={false} />);
+      rows.push(<Row time={i + ':00'} show={true} key={i}/>);
+      rows.push(<Row time={i + ':30'} show={false} key={i + 0.5}/>);
       // rows.push(
       //     ( <tr key={time}>
       //             <td className="fc-axis fc-time fc-widget-content cal-row">
