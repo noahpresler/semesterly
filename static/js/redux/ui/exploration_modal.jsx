@@ -17,7 +17,7 @@ export class ExplorationModal extends React.Component {
         this.toggleTimes = this.toggleTimes.bind(this);
         this.toggleLevels = this.toggleLevels.bind(this);
     }
-	componentWillReceiveProps(nextProps) { 
+	componentDidUpdate(nextProps) {
 		if (this.props.isVisible) {
 			this.refs.modal.show();
 		}
