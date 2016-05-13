@@ -3,7 +3,7 @@ let initialState = { isFetching: false, items: [{courses: []}], active: 0 };
 
 export const timetables = (state = initialState, action) => {
 	switch(action.type) {
-
+		
 		case 'REQUEST_TIMETABLES':
 			return Object.assign({}, state, {isFetching: true});
 
