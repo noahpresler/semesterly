@@ -1,6 +1,6 @@
 import React, { PropTypes } from 'react';
 import { DragSource } from 'react-dnd'
-import { HALF_HOUR_HEIGHT, COLOUR_DATA } from '../constants.jsx';
+import { HALF_HOUR_HEIGHT, DRAGTYPES } from '../constants.jsx';
 
 
 const dragSlotSource = {
@@ -12,8 +12,8 @@ const dragSlotSource = {
             id: props.id
         }
     },
-    endDrag(props) {
-        console.log('end')
+    endDrag(props, monitor) {
+        console.log('end');
     }
 }
 
@@ -92,5 +92,5 @@ class CustomSlot extends React.Component {
 //     id: PropTypes.number.isRequired
 // }
 
-export default DragSource('DRAG', dragSlotSource, collect)(CustomSlot);
+export default DragSource(DRAGTYPES.DRAG, dragSlotSource, collect)(CustomSlot);
 // export default CustomSlot
