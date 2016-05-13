@@ -64,6 +64,7 @@ class SideBar extends React.Component {
                 onMouseDown={this.toggleDropdown.bind(this)}>
                 <span className={classNames("tip-down", {'down' : this.state.showDropdown})}></span>
             </div> : null;
+        let numCredits = this.props.liveTimetableCourses.length > 0 ? this.props.liveTimetableCourses.reduce((prev,c) => c.num_credits + prev, 0) : 0;
         return (
             <div id="side-bar">
                 <div id="sb-name">
@@ -81,7 +82,7 @@ class SideBar extends React.Component {
                     </ClickOutHandler>
                 </div>
                 <div id="sb-credits" className="col-1-3">
-                    <h3>16</h3>
+                    <h3>{numCredits}</h3>
                     <h4>credits</h4>
                 </div>
                 <div id="sb-rating" className="col-2-3">
