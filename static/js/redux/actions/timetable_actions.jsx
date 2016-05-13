@@ -133,7 +133,7 @@ function fetchTimetables(requestBody, removing) {
 	}
 }
 
-export function addCustomSlot(timeStart, timeEnd, day, preview) {
+export function addCustomSlot(timeStart, timeEnd, day, preview, id) {
 	let dispatch = store.dispatch;
 	dispatch({
 		type: "ADD_CUSTOM_SLOT",
@@ -142,24 +142,18 @@ export function addCustomSlot(timeStart, timeEnd, day, preview) {
 			time_end: timeEnd,
 			day: day,
 			name: "New Custom Event",
+			id: id,
 			preview: preview
 		}
 	})
 }
 
 export function updateCustomSlot(newValues, id) {
+	console.log('ok')
 	let dispatch = store.dispatch;
 	dispatch({
 		type: "UPDATE_CUSTOM_SLOT",
 		newValues: newValues,
-		id: id
-	})
-}
-
-export function removeCustomSlot(id) {
-	let dispatch = store.dispatch;
-	dispatch({
-		type: "REMOVE_CUSTOM_SLOT",
 		id: id
 	})
 }
