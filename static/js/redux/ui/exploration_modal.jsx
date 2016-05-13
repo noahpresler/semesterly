@@ -102,11 +102,10 @@ export class ExplorationModal extends React.Component {
 					</div>
 				</div>
 				<CourseModalBody {...course} 
+					{...this.props}
 					lectureSections={lectureSections}
 					tutorialSections={tutorialSections}
 					practicalSections={practicalSections}
-					hoverSection={this.props.hoverSection}
-					unhoverSection={this.props.unhoverSection}
 					data={course}
 				/>
 			</div>

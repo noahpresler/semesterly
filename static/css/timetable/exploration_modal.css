@@ -262,7 +262,7 @@ h3.exp-header i:hover {
 }
 #exp-modal #modal-header {
 	background-color: #fff;
-	padding: 20px 10px 20px;
+	padding: 20px 10px 10px 10px;
 }
 #exp-modal h1 {
 	font-size: 22px;
