@@ -159,6 +159,14 @@ export function moveCustomSlot(newtimeStart, newtimeEnd, newDay, id) {
 	})
 }
 
+export function removeCustomSlot(id) {
+	let dispatch = store.dispatch;
+	dispatch({
+		type: "REMOVE_CUSTOM_SLOT",
+		id: id
+	})
+}
+
 export function getClassmates(json) {
 	return {
 		type: "CLASSMATES_RECEIVED",
