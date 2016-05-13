@@ -1,13 +1,15 @@
 import React from 'react';
 import PaginationContainer  from './containers/pagination_container.jsx';
 import SlotManagerContainer from './containers/slot_manager_container.jsx';
+import { DAYS } from '../constants.jsx'
 
 
 class Row extends React.Component {
 	moveSlotToHere(clickEvent) {
-		console.log(clickEvent);
-		console.log($(".week-col").offset().left);
-		console.log($(".week-col").width());
+		let calOffset = clickEvent.clientX - $(".week-col").offset().left
+		let dayWidth = $(".week-col").width()/5;
+		let clickedDay = DAYS[Math.floor(calOffset/dayWidth)]
+		this.props.moveCustomSlot('10:00', '12:00', clickedDay, 0)
 	}
 
 	render() {
@@ -18,7 +20,7 @@ class Row extends React.Component {
 	        	{time_text}
 	        </td>
 	        <td className="fc-widget-content week-col" 
-	        		onClick={() => this.moveSlotToHere(event)} />
+	        		onClick={(event) => this.moveSlotToHere(event)} />
 	    </tr>
 		)
 	}
@@ -29,8 +31,8 @@ class Calendar extends React.Component {
     let rows = [];
     for (let i = 8; i <= this.props.endHour; i++) { // one row for each hour, starting from 8am
       let time = i + ":00";
-      rows.push(<Row time={time} show={true} />);
-      rows.push(<Row time={time + ".5"} show={false} />);
+      rows.push(<Row time={time} show={true} moveCustomSlot={this.props.moveCustomSlot} />);
+      rows.push(<Row time={time + ".5"} show={false} moveCustomSlot={this.props.moveCustomSlot} />);
     }
 
   	return rows;

@@ -64,3 +64,5 @@ export const COLOUR_DATA = [
     { background: "#E7F76D", highlight: "#C4D44D", border: "#6C7A89", font: "#222" },
     { background: "#C8F7C5", highlight: "#C4D44D", border: "#548A50", font: "#222" }
 ] // consider #CF000F, #e8fac3, #C8F7C5
+
+export const DAYS = ['M', 'T', 'W', 'R', 'F'] // currently used in custom slot dnd
