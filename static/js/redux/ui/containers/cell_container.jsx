@@ -1,7 +1,8 @@
 import { connect } from 'react-redux';
-import Calendar from '../calendar.jsx';
-import { saveTimetable } from '../../actions/user_actions.jsx';
-import { loadTimetable } from '../../actions/timetable_actions.jsx';
+import Cell from '../calendar_cell.jsx';
+import { addCustomSlot, updateCustomSlot } from '../../actions/timetable_actions.jsx';
+
+
 /*
 gets the end hour of the current timetable, based on the class that ends latest
 */
@@ -21,29 +22,27 @@ const getMaxEndHour = (timetable, hasCourses) => {
       }
     }
     return max_end_hour;
+}
 
-}
 const mapStateToProps = (state) => {
-	let timetables = state.timetables.items;
-	let active = state.timetables.active;
-	let hasTimetables = timetables[active].courses.length > 0 
-	return {
-    	endHour: getMaxEndHour(timetables[active], hasTimetables),
-      saving: state.savingTimetable.saving,
-	}
-}
-const mapDispatchToProps = (dispatch) => {
+  let timetables = state.timetables.items;
+  let active = state.timetables.active;
+  let hasTimetables = timetables[active].courses.length > 0 
   return {
-    saveTimetable: () => dispatch(saveTimetable()),
-    createTimetable: () => {
-      loadTimetable({ name: "Untitled Schedule", courses: [] });
-    }
+      endHour: getMaxEndHour(timetables[active], hasTimetables),
   }
 }
 
-const CalendarContainer = connect(
-	mapStateToProps,
-  mapDispatchToProps
-)(Calendar);
+const mapDispatchToProps = (dispatch) => {
+  return {
+    addCustomSlot: addCustomSlot,
+    updateCustomSlot: updateCustomSlot
+  }
+}
 
-export default CalendarContainer;
+const CellContainer = connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(Cell);
+
+export default CellContainer;
