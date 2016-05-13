@@ -7,12 +7,12 @@
     width: 100%;
     max-width: 1280px;
     padding: 0 10px;
-    margin: 0 auto; 
+    margin: 0 auto;
 }
 
 [class^="col-"] {
     display: block;
-    width: 100%; 
+    width: 100%;
 }
 
 @media (min-width: 767px){
@@ -23,7 +23,7 @@
         padding: 0 40px;
     }
     .col-1-16 {
-      width: 6.25%; 
+      width: 6.25%;
     }
     .col-2-16 {
       width: 12.5%;
@@ -109,7 +109,7 @@
         }
     /* @group push */
         .push-1 {
-          margin-left: 6.25%; 
+          margin-left: 6.25%;
         }
         .push-2 {
           margin-left: 12.5%;
