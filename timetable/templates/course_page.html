@@ -64,8 +64,40 @@
 				<div class="grid cf">
 					<div id="card">
 						<h1>{{ course.name }}</h1>
-						<p>{{ section.description }}</p>
-						{{ section.sections }}
+						<p>{{ description }}</p>
+						{{ tutorials }}
+						<div id="sections">
+							{% if lectures %}
+								<h3>Lecture Sections</h3>
+								{% for l in lectures %}
+									<div class="section"
+										data-waitlist="{{ l.0.waitlist }}"
+										data-enrolment="{{ l.0.enrolment }}"
+										data-size="{{ l.0.size }}"
+										>
+										<h4>{{ l.0.meeting_section }}</h4>
+										<h5>{{ l.0.location }}</h5>
+										<h5>{{ l.0.time_start }} - {{ l.0.time_end }}</h5>
+									</div>
+								{% endfor %}
+							{% endif %}
+							{% if tutorials %}
+								<h3>Tutorial Sections</h3>
+								{% for t in tutorials %}
+									<div class="section">
+										{{ t }}
+									</div>
+								{% endfor %}
+							{% endif %}
+							{% if practicals %}
+								<h3>Practical Sections</h3>
+								{% for p in practicals %}
+									<div class="section">
+										{{ p }}
+									</div>
+								{% endfor %}
+							{% endif %}
+						</div>
 					</div>
 				</div>
 			</div>

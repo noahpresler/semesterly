@@ -1,4 +1,4 @@
-export const explorationModal = (state = { isVisible: false, advancedSearchResults: [], isFetching: false, active: 0 }, action) => {
+export const explorationModal = (state = { isVisible: false, advancedSearchResults: [], isFetching: false, active: 0, schoolInfoLoaded: false }, action) => {
 	switch (action.type) {
 		case 'TOGGLE_EXPLORATION_MODAL':
 			return Object.assign({}, state, { isVisible: !state.isVisible });
