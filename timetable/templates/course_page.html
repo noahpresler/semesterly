@@ -64,38 +64,58 @@
 				<div class="grid cf">
 					<div id="card">
 						<h1>{{ course.name }}</h1>
-						<p>{{ description }}</p>
-						{{ tutorials }}
-						<div id="sections">
+						<p>{{ course.description }}</p>
+						<div id="sections" class="cf">
 							{% if lectures %}
-								<h3>Lecture Sections</h3>
-								{% for l in lectures %}
-									<div class="section"
-										data-waitlist="{{ l.0.waitlist }}"
-										data-enrolment="{{ l.0.enrolment }}"
-										data-size="{{ l.0.size }}"
-										>
-										<h4>{{ l.0.meeting_section }}</h4>
-										<h5>{{ l.0.location }}</h5>
-										<h5>{{ l.0.time_start }} - {{ l.0.time_end }}</h5>
-									</div>
-								{% endfor %}
+								<div class="section-group cf">
+									<h3>Lecture Sections</h3>
+									{% for l in lectures %}
+										<div class="section"
+											data-waitlist="{{ l.0.waitlist }}"
+											data-enrolment="{{ l.0.enrolment }}"
+											data-size="{{ l.0.size }}"
+											>
+											<h4>{{ l.0.meeting_section }}</h4>
+											<h5>{{ l.0.location }}</h5>
+											<h5>{{ l.0.time_start }} - {{ l.0.time_end }}</h5>
+											<h5 class="enrollment"></h5>
+										</div>
+									{% endfor %}
+								</div>
 							{% endif %}
 							{% if tutorials %}
-								<h3>Tutorial Sections</h3>
-								{% for t in tutorials %}
-									<div class="section">
-										{{ t }}
-									</div>
-								{% endfor %}
+								<div class="section-group cf">
+									<h3>Tutorial Sections</h3>
+									{% for t in tutorials %}
+										<div class="section"
+											data-waitlist="{{ t.0.waitlist }}"
+											data-enrolment="{{ t.0.enrolment }}"
+											data-size="{{ t.0.size }}"
+											>
+											<h4>{{ t.0.meeting_section }}</h4>
+											<h5>{{ t.0.location }}</h5>
+											<h5>{{ t.0.time_start }} - {{ t.0.time_end }}</h5>
+											<h5 class="enrollment"></h5>
+										</div>
+									{% endfor %}
+								</div>
 							{% endif %}
 							{% if practicals %}
-								<h3>Practical Sections</h3>
-								{% for p in practicals %}
-									<div class="section">
-										{{ p }}
-									</div>
-								{% endfor %}
+								<div class="section-group cf">
+									<h3>Practical Sections</h3>
+									{% for p in practicals %}
+										<div class="section"
+											data-waitlist="{{ p.0.waitlist }}"
+											data-enrolment="{{ p.0.enrolment }}"
+											data-size="{{ p.0.size }}"
+											>
+											<h4>{{ p.0.meeting_section }}</h4>
+											<h5>{{ p.0.location }}</h5>
+											<h5>{{ p.0.time_start }} - {{ p.0.time_end }}</h5>
+											<h5 class="enrollment"></h5>
+										</div>
+									{% endfor %}
+								</div>
 							{% endif %}
 						</div>
 					</div>
@@ -117,5 +137,6 @@
 		ga('create', 'UA-68704308-1', 'auto');
 		ga('send', 'pageview');
 		</script>
+		<script type='text/javascript' src='/static/js/course-page.js'></script>
 	</body>
 </html>
