@@ -1,6 +1,49 @@
 import React from 'react';
-import { HALF_HOUR_HEIGHT, COLOUR_DATA } from '../constants.jsx';
+import { DropTarget } from 'react-dnd'
+import { HALF_HOUR_HEIGHT, COLOUR_DATA, DRAGTYPES } from '../constants.jsx';
 
+function convertToHalfHours(str) {
+    console.log(str)
+    let start = parseInt(str.split(':')[0])
+    return str.split(':')[1] == '30' ? start*2 + 1 : start * 2;
+}
+
+function convertToStr(halfHours) {
+    let num_hours = Math.floor(halfHours/2)
+    return halfHours % 2 ? num_hours + ':30' : num_hours + ':00' 
+}
+
+const dragSlotTarget = {
+  drop(props, monitor) { // move it to current location on drop
+    let { timeStart, timeEnd, id } = monitor.getItem();
+
+    let startHalfhour = convertToHalfHours(timeStart)
+    let endHalfhour = convertToHalfHours(timeEnd)
+
+    let slotStart = props.time_start
+    let slotTop = $('#' + props.id).offset().top
+    // number half hours from slot start
+    let n = Math.floor((monitor.getClientOffset().y - slotTop)/HALF_HOUR_HEIGHT)
+
+    let newStartHour = convertToHalfHours(props.time_start) + n
+    let newEndHour = newStartHour + (endHalfhour - startHalfhour)
+
+    console.log(slotTop, monitor.getClientOffset().y)
+    console.log((monitor.getClientOffset().y - slotTop))
+    let newValues = {
+      time_start: convertToStr(newStartHour),
+      time_end: convertToStr(newEndHour),
+      day: props.day
+    }
+    props.updateCustomSlot(newValues, id);
+  },
+}
+
+function collectDragDrop(connect, monitor) { // inject props as drop target
+  return {
+    connectDragTarget: connect.dropTarget(),
+  };
+}
 
 class Slot extends React.Component {
     constructor(props) {
@@ -44,7 +87,7 @@ class Slot extends React.Component {
             }
         }
 
-    return (
+    return this.connectDragTarget(
       <div className="fc-event-container" >
                 <div className={"fc-time-grid-event fc-event slot slot-" + this.props.course}
                      style={ this.getSlotStyles() } 
@@ -98,4 +141,4 @@ class Slot extends React.Component {
   }
 }
 
-export default Slot;
+export default DropTarget(DRAGTYPES.DRAG, dragSlotTarget, collectDragDrop)(Slot);
