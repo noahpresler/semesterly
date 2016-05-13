@@ -1,7 +1,7 @@
 export const explorationModal = (state = { isVisible: false }, action) => {
 	switch (action.type) {
 		case 'TOGGLE_EXPLORATION_MODAL':
-			return Object.assign( {}, state, { isVisible: !state.isVisible } );
+			return {isVisible: !state.isVisible}
 		default:
 			return state;
 	}

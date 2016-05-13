@@ -70,7 +70,6 @@ export function lockActiveSections(activeTimetable) {
 	}
 	return courseSections;
 }
-
 export function saveTimetable() {
 	return (dispatch) => {
 		let state = store.getState();
