@@ -686,6 +686,7 @@ def course_search(request, school, sem, query):
   return HttpResponse(json.dumps(json_data), content_type="application/json")
 
 
+
 # ADVANCED SEARCH
 @csrf_exempt
 def advanced_course_search(request, school, sem, query):
@@ -722,8 +723,6 @@ def advanced_course_search(request, school, sem, query):
 
 
 
-
-
 def jhu_timer(request):
   return render(request, "jhu_timer.html")
 
@@ -746,3 +745,13 @@ def course_page(request, code):
     context_instance=RequestContext(request))
   except Exception as e:
     return HttpResponse(str(e))
+
+
+def school_info(request, school):
+  if school not in VALID_SCHOOLS:
+    return HttpResponse("School not found")
+  SchoolCourse, SchoolCourseOffering = school_to_models[school]
+  json_data = { # TODO(rohan): Get areas once models are updated
+    'areas': []
+  }
+  return HttpResponse(json.dumps(json_data), content_type="application/json")
