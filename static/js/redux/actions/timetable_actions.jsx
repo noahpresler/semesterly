@@ -153,7 +153,7 @@ export function moveCustomSlot(newtimeStart, newtimeEnd, newDay, id) {
 		newTimes: {
 			time_start: newtimeStart, // match backend slot attribute names
 			time_end: newtimeEnd,
-			day: newday,
+			day: newDay,
 		},
 		id: id
 	})
