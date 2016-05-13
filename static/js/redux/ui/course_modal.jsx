@@ -12,7 +12,7 @@ export class CourseModal extends React.Component {
         this.addOrRemoveCourse = this.addOrRemoveCourse.bind(this);
         this.hide = this.hide.bind(this);
     }
-    componentWillReceiveProps(nextProps) { 
+    componentWillReceiveProps(nextProps) {
         if (nextProps.id != null) {
             this.refs.modal.show();
         }
@@ -36,7 +36,7 @@ export class CourseModal extends React.Component {
         this.props.hideModal();
         this.refs.modal.hide();
     }
-   
+
     render() {
         let modalStyle = {
             width: '100%',
@@ -57,7 +57,7 @@ export class CourseModal extends React.Component {
                 <div id="modal-save">
                     <i className="fa fa-bookmark"></i>
                 </div>
-                <div id="modal-add" 
+                <div id="modal-add"
                     className={classNames('search-course-add', {'in-roster': inRoster})}
                     onClick={() => this.addOrRemoveCourse(this.props.id)}>
                     <i className={classNames('fa', {'fa-plus' : !inRoster, 'fa-check' : inRoster})}></i>
@@ -67,7 +67,7 @@ export class CourseModal extends React.Component {
         </div>);
         return (
             <Modal ref="modal"
-                className={classNames('course-modal', {'trans' : this.props.hasHoveredResult})}                 
+                className={classNames('course-modal', {'trans' : this.props.hasHoveredResult})}
                 modalStyle={modalStyle}
                 onHide={this.hide}
                 >
