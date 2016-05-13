@@ -59,13 +59,16 @@ class QueensParser(BaseParser):
     }
 
     if 'availability' in section_element:
-      avail_data = {
-        'size': int(se['availability']['class_max']),
-        'waitlist_size': int(se['availability']['wait_max']),
-        'enrolment': int(se['availability']['class_curr']),
-        'waitlist': int(se['availability']['wait_curr'])
-      }
-      section_data.update(avail_data)
+      try:
+        avail_data = {
+          'size': int(se['availability']['class_max']),
+          'waitlist_size': int(se['availability']['wait_max']),
+          'enrolment': int(se['availability']['class_curr']),
+          'waitlist': int(se['availability']['wait_curr'])
+        }
+        section_data.update(avail_data)
+      except KeyError:
+        pass
     return section_code, section_data
 
   def get_meeting_elements(self, section_element):
