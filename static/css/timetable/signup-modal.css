@@ -1,7 +1,6 @@
 .signup-modal {
 	max-width: 500px;
-	height: 85%;
-	max-height: 550px;
+	height: 550px;
 }
 
 .signup-modal #modal-header {

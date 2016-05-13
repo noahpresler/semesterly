@@ -17,7 +17,12 @@ export class ExplorationModal extends React.Component {
         this.toggleTimes = this.toggleTimes.bind(this);
         this.toggleLevels = this.toggleLevels.bind(this);
         this.fetchAdvancedSearchResults = this.fetchAdvancedSearchResults.bind(this);
+        this.addOrRemoveCourse = this.addOrRemoveCourse.bind(this);
         this.changeTimer = false;
+    }
+    addOrRemoveCourse(id, section='') {
+        this.props.addOrRemoveCourse(id, section);
+        this.refs.modal.hide();
     }
 	componentDidUpdate(nextProps) {
 		if (this.props.isVisible) {
@@ -102,12 +107,12 @@ export class ExplorationModal extends React.Component {
 					</div>
 				</div>
 				<CourseModalBody {...course} 
+					{...this.props}
 					lectureSections={lectureSections}
 					tutorialSections={tutorialSections}
 					practicalSections={practicalSections}
-					hoverSection={this.props.hoverSection}
-					unhoverSection={this.props.unhoverSection}
 					data={course}
+					addOrRemoveCourse={this.addOrRemoveCourse}
 				/>
 			</div>
 		}

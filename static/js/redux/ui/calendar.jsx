@@ -27,7 +27,7 @@ class Calendar extends React.Component {
                     </td>
                     <td className="fc-widget-content" />
                 </tr>)
-	      );  
+	      );
 	      // for the half hour row
 	      rows.push(
 	          (<tr key={time + ".5"} className="fc-minor">
@@ -48,15 +48,15 @@ class Calendar extends React.Component {
 	        	{saveIcon}
 	        </button>
 		);
-		let addButton = <button 
+		let addButton = <button
 			onClick={this.props.createTimetable} className="save-timetable add-button"><i className="fa fa-plus" /></button>
-		let shareButton = <button 
+		let shareButton = <button
 			className="save-timetable add-button"><i className="fa fa-share-alt" /></button>
-		// let downloadButton = <button 
+		// let downloadButton = <button
 		// 	className="save-timetable add-button"><i className="fa fa-download" /></button>
 		let downloadButton = null;
 		// let customSlotButton = (
-		// 		<button className="save-timetable add-button" 
+		// 		<button className="save-timetable add-button"
 		// 						onClick={this.props.addCustomSlot}>
 		// 			<i className="fa fa-futbol-o" />
 		// 		</button>
