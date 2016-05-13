@@ -9,15 +9,22 @@
 	width: 100%;
 	height: 100%;
 }
-.exploration-modal.trans {
-	color: transparent;
-	background-color: transparent;
-}
 #exploration-content {
 	width: 100%;
 	height: 100%;
 	position: relative;
 	background: #fff;
+}
+.exploration-modal + div {
+	/* using important to override boron default style */
+	/* can't declare in javascript either, cuz need hover */
+	background-color: rgba(0,0,0,.8) !important;
+	transition: background-color .2s;
+}
+.exploration-modal.trans + div {
+	/* using important to override boron default style */
+	/* can't declare in javascript either, cuz need hover */
+	background-color: transparent !important;	
 }
 
 @media (max-width: 766px) {
@@ -25,6 +32,36 @@
 	.exploration-modal + div {
 		display: none;
 	}
+}
+
+.exploration-modal.trans,
+.trans #exploration-content,
+.trans #exploration-header,
+.trans #exp-title h1,
+.trans #exploration-header input,
+.trans #exploration-close,
+.trans h3.exp-header,
+.trans h3.exp-header:after,
+.trans h3.exp-header i,
+.trans #exploration-body p,
+.trans #exp-modal #modal-header,
+.trans #exp-modal #modal-header h1,
+.trans #exp-modal #modal-header h2,
+.trans #exp-modal #modal-content,
+.trans #modal-body .credits h4,
+.trans #exp-modal #modal-share,
+.trans #exp-modal #modal-share i,
+.trans h3.modal-module-header,
+.trans h3.modal-module-header:after {
+	color: transparent;
+	background-color: transparent;
+	border-color: transparent;
+}
+
+.trans #exp-search-results,
+.trans #modal-body .rating-module {
+	opacity: 0;
+	visibility: hidden;
 }
 
 /* Exploration Header */
@@ -217,12 +254,8 @@ h3.exp-header i:hover {
 	left: 25%;
 	height: 100%;
 	overflow-y: auto;
-	-webkit-touch-callout: none;
-    -webkit-user-select: none;
-    -khtml-user-select: none;
-    -moz-user-select: none;
-    -ms-user-select: none; 
-    user-select: none;
+    opacity: 1;
+    visibility: visible;
 }
 #exp-search-results p {
 	padding-left: 10px;
