@@ -30,7 +30,11 @@ const dragCellTarget = {
 
     // console.log(props.time, convertToStr(newEndHour))
     props.moveCustomSlot(props.time, convertToStr(newEndHour), props.day, id);
-  }
+  },
+  // TODO:
+  // canDrop(props, monitor) {
+  //   return Math.floor(convertToHalfHours(monitor.getItem().timeEnd)/2) < props.endHour
+  // }
 }
 
 const Cell = (props) => props.connectDropTarget(<div className='cal-cell'></div>)
