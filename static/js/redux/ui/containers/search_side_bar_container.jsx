@@ -1,6 +1,6 @@
 import { connect } from 'react-redux';
 import { SearchSideBar } from '../search_side_bar.jsx';
-import { addOrRemoveCourse } from '../../actions/timetable_actions.jsx';
+import { addOrRemoveCourse, hoverSection, unhoverSection } from '../../actions/timetable_actions.jsx';
 
 const mapStateToProps = (state) => {
 	let courseSections = state.courseSections.objects;
@@ -9,6 +9,7 @@ const mapStateToProps = (state) => {
 	let lectureSections = sectionTypeToSections['L'];
 	let tutorialSections = sectionTypeToSections['T'];
 	let practicalSections = sectionTypeToSections['P'];
+	let activeTimetable = state.timetables.items[state.timetables.active];
 
 	return {
 		hovered,
@@ -23,25 +24,17 @@ const mapStateToProps = (state) => {
 				(type) => courseSections[course_id][type] == section
 			)
 		},
+		isSectionOnActiveTimetable: (courseId, section) => {
+			return activeTimetable.courses.some(course => course.id === courseId && course.enrolled_sections.some(sec => sec == section));
+		}
 	}
 }
 
 const mapDispatchToProps = (dispatch) => {
 	return {
 	  	addCourse: addOrRemoveCourse,
-	  	hoverCourse: (course, section) => {
-	  		let availableSections = Object.assign({}, course.sections['L'], course.sections['T'], course.sections['P']);
-	  		course.section = section;
-			dispatch({
-				type: "HOVER_COURSE",
-				course: Object.assign({}, course, { slots: availableSections[section] })
-			});
-		},
-		unhoverCourse: () => {
-			dispatch({
-				type: "UNHOVER_COURSE",
-			});
-		}
+		hoverSection: hoverSection(dispatch),
+		unhoverSection: unhoverSection(dispatch)
 	}
 }
 

@@ -13,14 +13,6 @@ const mapStateToProps = (state) => {
     	isFetching: state.searchResults.isFetching,
     	isCourseInRoster: (course_id) => courseSections[course_id] !== undefined,
     	isCourseOptional: (course_id) => state.optionalCourses.courses.some(c => c.id === course_id),
-    	isSectionLocked: (course_id, section) => {
-    		if (courseSections[course_id] === undefined) {
-    			return false;
-    		}
-    		return Object.keys(courseSections[course_id]).some( 
-    			(type) => courseSections[course_id][type] == section
-			)
-    	},
 		hasHoveredResult: state.timetables.items[state.timetables.active].courses.some(course => course.fake)
 	}
 }
@@ -31,7 +23,7 @@ const mapDispatchToProps = (dispatch) => {
 	  	addCourse: addOrRemoveCourse,
 	  	addRemoveOptionalCourse: (course) => dispatch(addOrRemoveOptionalCourse(course)),
 		fetchCourseInfo: (id) => dispatch(fetchCourseInfo(id)), 
-		toggleExplorationModal: () => dispatch({type: "TOGGLE_EXPLORATION_MODAL"}),
+		showExplorationModal: () => dispatch({type: 'SHOW_EXPLORATION_MODAL'}),
 		hoverSearchResult: (position) => {
 			dispatch({
 				type: "HOVER_SEARCH_RESULT",

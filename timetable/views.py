@@ -145,7 +145,7 @@ class TimetableGenerator:
 
   def get_course_dict(self, section):
     model = self.course_model.objects.get(id=section[0])
-    return model_to_dict(model, fields=['code', 'name', 'id'])
+    return model_to_dict(model, fields=['code', 'name', 'id', 'num_credits'])
 
   def get_course_obj(self, course_dict, sections):
     sections = list(sections)
@@ -654,8 +654,9 @@ def my_model_to_dict(course, SchoolCourseOffering, sem):
 
 @csrf_exempt
 def course_search(request, school, sem, query):
+
   if school not in VALID_SCHOOLS:
-    raise Http404
+    return HttpResponse("School not found")
 
   SchoolCourse, SchoolCourseOffering = school_to_models[school]
 
@@ -674,8 +675,9 @@ def course_search(request, school, sem, query):
   elif school == "umd":
     course_match_objs = course_match_objs.filter(
       (Q(umdcourseoffering__semester__icontains=sem) | Q(umdcourseoffering__semester__icontains='Y')))
-  else:
-    raise Http404
+  elif school == "queens":
+    course_match_objs = course_match_objs.filter(
+      (Q(queenscourseoffering__semester__icontains=sem) | Q(queenscourseoffering__semester__icontains='Y')))
 
   course_match_objs = course_match_objs.distinct('code')[:4]
 
@@ -683,5 +685,73 @@ def course_search(request, school, sem, query):
   json_data = {'results': course_matches}
   return HttpResponse(json.dumps(json_data), content_type="application/json")
 
+
+
+# ADVANCED SEARCH
+@csrf_exempt
+def advanced_course_search(request, school, sem, query):
+  if school not in VALID_SCHOOLS:
+    return HttpResponse("School not found")
+
+  SchoolCourse, SchoolCourseOffering = school_to_models[school]
+
+  course_match_objs = SchoolCourse.objects.filter((Q(code__icontains=query) | Q(description__icontains=query) | Q(name__icontains=query)))
+
+  # We want to filter based on whether the course has an offering in this semester or not.
+  # This part needs to be executed case-by-case because of Django's ORM.
+  # Notice that each call to filter uses the appropriate "courseoffering"
+  # class name in the filter.
+  if school == "uoft":
+    course_match_objs = course_match_objs.filter(
+      (Q(courseoffering__semester__icontains=sem) | Q(courseoffering__semester__icontains='Y')))
+  elif school == "jhu":
+    course_match_objs = course_match_objs.filter(
+      (Q(hopkinscourseoffering__semester__icontains=sem) | Q(hopkinscourseoffering__semester__icontains='Y')))
+  elif school == "umd":
+    course_match_objs = course_match_objs.filter(
+      (Q(umdcourseoffering__semester__icontains=sem) | Q(umdcourseoffering__semester__icontains='Y')))
+  elif school == "queens":
+    course_match_objs = course_match_objs.filter(
+      (Q(queenscourseoffering__semester__icontains=sem) | Q(queenscourseoffering__semester__icontains='Y')))
+
+  course_match_objs = course_match_objs.distinct('code')[:50]
+
+  json_data = [my_model_to_dict(course, SchoolCourseOffering, sem) for course in course_match_objs]
+
+  return HttpResponse(json.dumps(json_data), content_type="application/json")
+
+
+
+
 def jhu_timer(request):
   return render(request, "jhu_timer.html")
+
+def course_page(request, code):
+  school = request.subdomain
+  SchoolCourse, SchoolCourseOffering = school_to_models[school]
+  try:
+    course_obj = SchoolCourse.objects.filter(code__iexact=code)[0]
+    course_dict = my_model_to_dict(course_obj, SchoolCourseOffering, "F")
+    l = course_dict.get('sections').get('L').values() if course_dict.get('sections').get('L') else None
+    t = course_dict.get('sections').get('T').values() if course_dict.get('sections').get('T') else None
+    p = course_dict.get('sections').get('P').values() if course_dict.get('sections').get('P') else None
+    return render_to_response("course_page.html", 
+      {'school': school, 
+       'course': course_dict,
+       'lectures': l,
+       'tutorials': t,
+       'practicals': p,
+       }, 
+    context_instance=RequestContext(request))
+  except Exception as e:
+    return HttpResponse(str(e))
+
+
+def school_info(request, school):
+  if school not in VALID_SCHOOLS:
+    return HttpResponse("School not found")
+  SchoolCourse, SchoolCourseOffering = school_to_models[school]
+  json_data = { # TODO(rohan): Get areas once models are updated
+    'areas': []
+  }
+  return HttpResponse(json.dumps(json_data), content_type="application/json")

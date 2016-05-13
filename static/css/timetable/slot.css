@@ -18,7 +18,7 @@
 	font-size: 13px;
 	border-radius: 3px;
 	cursor: pointer;
-	transition: color .3s, background-color .3s;
+	transition: color .3s, background-color .3s, width .3s, left .3s;
 }
 .slot:hover {
 	color: #222;
@@ -37,7 +37,7 @@
 	margin: 0;
 	float: left;
 	line-height: 15px;
-	font-size: 13px;
+	font-size: 12px;
 }
 /*.slot i {
 	color:#fff;
@@ -45,7 +45,6 @@
 .slot-friends i {
 	margin-left: 2px;
 	line-height: 15px;
-	font-size: 13px;
 }
 .slot i.fa-times {
 	position: absolute;
