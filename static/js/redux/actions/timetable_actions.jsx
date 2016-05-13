@@ -149,11 +149,18 @@ export function addCustomSlot(timeStart, timeEnd, day, preview, id) {
 }
 
 export function updateCustomSlot(newValues, id) {
-	console.log('ok')
 	let dispatch = store.dispatch;
 	dispatch({
 		type: "UPDATE_CUSTOM_SLOT",
 		newValues: newValues,
+		id: id
+	})
+}
+
+export function removeCustomSlot(id) {
+	let dispatch = store.dispatch;
+	dispatch({
+		type: "REMOVE_CUSTOM_SLOT",
 		id: id
 	})
 }
