@@ -1,4 +1,5 @@
 import React from 'react';
+import classnames from 'classnames';
 
 export class SearchSideBar extends React.Component {
     constructor(props){
@@ -17,6 +18,7 @@ export class SearchSideBar extends React.Component {
         return Object.keys(sections).map(sec => 
             <SearchResultSection key={this.props.hovered.id + sec} course={this.props.hovered} section={sec} 
                 locked={this.props.isSectionLocked(this.props.hovered.id, sec)}
+                isOnActiveTimetable={this.props.isSectionOnActiveTimetable(this.props.hovered.id, sec)}
                 hoverSection={() => this.props.hoverSection(this.props.hovered, sec)}
                 unhoverSection={this.props.unhoverSection} 
                 onMouseDown={(event) => this.lockSectionWrapper(sec, event)}
@@ -50,10 +52,11 @@ export class SearchSideBar extends React.Component {
         );
     }
 }
-const SearchResultSection = ({ section, locked, hoverSection, unhoverSection, onMouseDown }) => {
+const SearchResultSection = ({ section, locked, hoverSection, unhoverSection, onMouseDown, isOnActiveTimetable }) => {
     return (
     <h5
-        className="sb-side-sections"
+        className={classnames("sb-side-sections", {'on-active-timetable': isOnActiveTimetable})}
+
         onMouseDown={onMouseDown}
         onMouseEnter={hoverSection}
         onMouseLeave={unhoverSection}
