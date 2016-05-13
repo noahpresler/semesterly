@@ -35,9 +35,13 @@ const mapDispatchToProps = (dispatch) => {
 		toggleExplorationModal: () => dispatch({ type: "TOGGLE_EXPLORATION_MODAL" }),
 	  	fetchAdvancedSearchResults: (query) => dispatch(fetchAdvancedSearchResults(query)),
 	  	setAdvancedSearchResultIndex: (i) => dispatch({ type: "SET_ACTIVE_RESULT", active: i }),
+		addOrRemoveCourse: (id, section) => {
+			dispatch({ type: "UNHOVER_COURSE" });
+			return addOrRemoveCourse(id, section);
+		},
 		hoverSection: hoverSection(dispatch),
 		unhoverSection: unhoverSection(dispatch),
-		addOrRemoveCourse,
+
 	}
 }
 
