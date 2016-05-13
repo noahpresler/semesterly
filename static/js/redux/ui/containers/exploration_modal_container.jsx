@@ -36,7 +36,8 @@ const mapDispatchToProps = (dispatch) => {
 	  	fetchAdvancedSearchResults: (query) => dispatch(fetchAdvancedSearchResults(query)),
 	  	setAdvancedSearchResultIndex: (i) => dispatch({ type: "SET_ACTIVE_RESULT", active: i }),
 		hoverSection: hoverSection(dispatch),
-		unhoverSection: unhoverSection(dispatch)
+		unhoverSection: unhoverSection(dispatch),
+		addOrRemoveCourse,
 	}
 }
 
