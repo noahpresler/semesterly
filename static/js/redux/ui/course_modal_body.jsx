@@ -119,7 +119,11 @@ const SearchResultSection = ({ section, secName, instr, enrolled, waitlist, size
             <i className="fa fa-calendar-check-o"></i>
         </h4>
         <h5>{instr}</h5>
-        <h6><span className={benchmark}>{seatStatus}</span> / {size} seats</h6>
+        <h6>
+            <span className={benchmark}>{seatStatus}</span>
+            <span> / </span>
+            <span className="total-seats">{size} seats</span>
+        </h6>
         <i className="fa fa-lock"></i>
     </div>
     );
