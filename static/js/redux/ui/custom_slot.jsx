@@ -20,6 +20,7 @@ const dragSlotSource = {
 function collect(connect, monitor) {
     return {
         connectDragSource: connect.dragSource(),
+        connectDragPreview: connect.dragPreview(),
         isDragging: monitor.isDragging()
     }
 }
@@ -31,6 +32,25 @@ class CustomSlot extends React.Component {
     stopPropagation(callback, event) {
         event.stopPropagation();
         callback();
+    }
+    componentDidMount() {
+        // provide drag preview, which should just be the regular slot at half opacity
+        this.props.connectDragPreview(
+            <div className="fc-event-container">
+                <div className={"fc-time-grid-event fc-event slot"}
+                     style={ this.getPreviewStyles() }>
+                    <div className="slot-bar" />
+                    <div className="fc-content">
+                        <div className="fc-time">
+                            <span>{ this.props.time_start } – { this.props.time_end }</span>
+                        </div>
+                        <div className="fc-time">
+                            { this.props.name }
+                        </div>
+                    </div>
+                </div>
+            </div>
+        )
     }
     render() {
         return this.props.connectDragSource(
@@ -74,8 +94,27 @@ class CustomSlot extends React.Component {
             backgroundColor: 'black',
             width: slot_width_percentage + "%",
             left: push_left + "%",
-            zIndex: 100 * this.props.depth_level,
-            opacity: this.props.isDragging ? 0.5 : 1
+            zIndex: 10 * this.props.depth_level,
+            opacity: this.props.isDragging ? 0 : 1 // hide while dragging
+        };
+    }
+
+    getPreviewStyles() {
+        let start_hour   = parseInt(this.props.time_start.split(":")[0]),
+            start_minute = parseInt(this.props.time_start.split(":")[1]),
+            end_hour     = parseInt(this.props.time_end.split(":")[0]),
+            end_minute   = parseInt(this.props.time_end.split(":")[1]);
+        
+        let top = (start_hour - 8)*(HALF_HOUR_HEIGHT*2 + 2) + (start_minute)*(HALF_HOUR_HEIGHT/30);
+        let bottom = (end_hour - 8)*(HALF_HOUR_HEIGHT*2 + 2) + (end_minute)*(HALF_HOUR_HEIGHT/30) - 1;
+        let height = bottom - top - 2;
+        return {
+            top: top, bottom: -bottom, zIndex: 1, left: '0%', right: '0%', 
+            backgroundColor: 'black',
+            width: '100%',
+            left: 0,
+            zIndex: 100,
+            opacity: 0.5
         };
     }
 }
