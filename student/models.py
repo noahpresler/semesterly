@@ -48,3 +48,4 @@ class UmdPersonalTimetable(PersonalTimetable):
 class RutgersPersonalTimetable(PersonalTimetable):
     course_offerings = models.ManyToManyField(RutgersCourseOffering)
     courses = models.ManyToManyField(RutgersCourse)
+    
