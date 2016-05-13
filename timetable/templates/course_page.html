@@ -34,18 +34,41 @@
 					<span id="logo"></span>
 					<h1>Semester.ly</h1>
 				</a>
-
+				<div id="social">
+					<div id="social-card">
+						<div id="social-pro-pic" style="background-image: url();"></div>
+						<h2>Max</h2>
+						<span class="tip-down"></span>
+					</div>
+					<div id="social-dropdown">
+						<div class="tip-border"></div>
+						<div class="tip"></div>
+						<a href="/user/logout">
+							<i class="fa fa-sign-out"></i>
+							<span>Sign out</span>
+						</a>
+					</div>
+					<!-- <a id="social-login" href="/login/facebook">
+						<h2>Signup/Login <i className="fa fa-facebook-square"></i></h2>
+					</a> -->
+				</div>
 			</div>
 		</header>
 		<div id="page">
 			<div id="top">
-				<h1>{{ course.name }}</h1>
-				<h1>{{ course.code }}</h1>
-				<h2>{{ school }}</h2>
+				<div class="grid cf">
+					<h1>{{ school }} | {{ course.code }}</h1>
+				</div>
 			</div>
-			<div id="">
-			{{ section.description }}
-			{{ section.sections }}
+			<div id="content">
+				<div class="grid cf">
+					<div id="card">
+						<h1>{{ course.name }}</h1>
+						<p>{{ section.description }}</p>
+						{{ section.sections }}
+					</div>
+				</div>
+			</div>
 		</div>
 
 		<footer>
