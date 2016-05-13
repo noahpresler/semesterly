@@ -1,6 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import classNames from 'classnames';
+import classnames from 'classnames';
 
 export class CourseModalBody extends React.Component {
     mapSectionsToSlots(sections) {
@@ -25,8 +25,12 @@ export class CourseModalBody extends React.Component {
                     enrolled={enrolled}
                     waitlist={slots[0].waitlist}
                     size={slots[0].size}
-                    hoverCourse={() => this.props.hoverCourse(this.props.data, sec)}
-                    unhoverCourse={this.props.unhoverCourse} 
+                    locked={this.props.isSectionLocked(this.props.data.id, sec)}
+                    isOnActiveTimetable={this.props.isSectionOnActiveTimetable(this.props.data.id, sec)}
+                    lockOrUnlock={() => this.props.addOrRemoveCourse(this.props.data.id, sec)}
+                    hoverSection={() => this.props.hoverSection(this.props.data, sec)}
+                    unhoverSection={this.props.unhoverSection} 
+                    inRoster={this.props.inRoster}
                 />
         });
     }
@@ -78,11 +82,9 @@ export class CourseModalBody extends React.Component {
                         </div>
                         <div>
                             <h3 className="modal-module-header">Course Evaluations</h3>
-
                         </div>
                         <div>
                             <h3 className="modal-module-header">Textbook</h3>
-
                         </div>
                     </div>
                     <div id="modal-section-lists"
@@ -97,7 +99,7 @@ export class CourseModalBody extends React.Component {
     }
 }
 
-const SearchResultSection = ({ section, secName, instr , enrolled, waitlist, size, hoverCourse, unhoverCourse}) => {
+const SearchResultSection = ({ section, secName, instr, enrolled, waitlist, size, hoverSection, unhoverSection, locked, inRoster, lockOrUnlock, isOnActiveTimetable}) => {
     let seats = size - enrolled;
     let seatStatus = waitlist > 0 ? (waitlist + " waitlist") : (seats + " open");
     let benchmark = "green";
@@ -107,10 +109,21 @@ const SearchResultSection = ({ section, secName, instr , enrolled, waitlist, siz
         benchmark = "yellow";
     }
     return (
-    <div className="modal-section" onMouseEnter={hoverCourse} onMouseLeave={unhoverCourse}>
-        <h4>{secName}</h4>
+    <div className={classnames("modal-section", {"locked": locked, "on-active-timetable": isOnActiveTimetable})}
+        onMouseDown={lockOrUnlock}
+        onMouseEnter={hoverSection} 
+        onMouseLeave={unhoverSection}>
+        <h4>
+            <span>{secName}</span>
+            <i className="fa fa-calendar-check-o"></i>
+        </h4>
         <h5>{instr}</h5>
-        <h6><span className={benchmark}>{seatStatus}</span> / {size} seats</h6>
+        <h6>
+            <span className={benchmark}>{seatStatus}</span>
+            <span> / </span>
+            <span className="total-seats">{size} seats</span>
+        </h6>
+        <i className="fa fa-lock"></i>
     </div>
     );
 };

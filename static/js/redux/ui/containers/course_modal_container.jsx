@@ -1,8 +1,7 @@
 import { connect } from 'react-redux';
 import { CourseModal } from '../course_modal.jsx';
-import { addOrRemoveCourse } from '../../actions/timetable_actions.jsx';
+import { hoverSection, unhoverSection, addOrRemoveCourse } from '../../actions/timetable_actions.jsx';
 import { setCourseId } from '../../actions/modal_actions.jsx'
-
 const mapStateToProps = (state) => {
 	let lectureSections = [];
 	let tutorialSections = [];
@@ -12,37 +11,39 @@ const mapStateToProps = (state) => {
 		tutorialSections = state.courseInfo.data.sections['T'];
 		practicalSections = state.courseInfo.data.sections['P'];
 	}
+	let courseSections = state.courseSections.objects;
+	let activeTimetable = state.timetables.items[state.timetables.active];
 	return {
 		isFetching: state.courseInfo.isFetching,
 		data: state.courseInfo.data,
 		id: state.courseInfo.id,
-		inRoster: state.courseSections.objects[state.courseInfo.id] !== undefined,
 		lectureSections: lectureSections,
 		tutorialSections: tutorialSections,
 		practicalSections: practicalSections,
-		hasHoveredResult: state.timetables.items[state.timetables.active].courses.some(course => course.fake),
+		hasHoveredResult: activeTimetable.courses.some(course => course.fake),
 		prerequisites: state.courseInfo.data.prerequisites,
-		description: state.courseInfo.data.description
+		description: state.courseInfo.data.description,
+		inRoster: courseSections[state.courseInfo.id] !== undefined,
+		isSectionLocked: (courseId, section) => {
+			if (courseSections[courseId] === undefined) {
+				return false;
+			}
+			return Object.keys(courseSections[courseId]).some( 
+				(type) => courseSections[courseId][type] == section
+			)
+		},
+		isSectionOnActiveTimetable: (courseId, section) => {
+			return activeTimetable.courses.some(course => course.id === courseId && course.enrolled_sections.some(sec => sec == section));
+		}
 	}
 }
 
 const mapDispatchToProps = (dispatch) => {
 	return {
-		addCourse: addOrRemoveCourse,
 		hideModal: () => dispatch(setCourseId(null)),
-		hoverCourse: (course, section) => {
-	  		let availableSections = Object.assign({}, course.sections['L'], course.sections['T'], course.sections['P']);
-	  		course.section = section;
-			dispatch({
-				type: "HOVER_COURSE",
-				course: Object.assign({}, course, { slots: availableSections[section] })
-			});
-		},
-		unhoverCourse: () => {
-			dispatch({
-				type: "UNHOVER_COURSE",
-			});
-		}
+		hoverSection: hoverSection(dispatch),
+		unhoverSection: unhoverSection(dispatch),
+		addOrRemoveCourse,
 	}
 }
 

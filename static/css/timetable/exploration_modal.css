@@ -32,7 +32,7 @@
 	background-color: #eee;
 	padding: 15px;
 	position: relative;
-	border-bottom: 1px solid #B6D2FD;
+	border-bottom: 1px solid #ddd;
 }
 #exp-title i {
 	font-size: 22px;
@@ -235,6 +235,7 @@ h3.exp-header i:hover {
 	padding: 10px 110px 10px 10px;
 	background-color: #fff;
 	transition: background-color .3s;
+	cursor: pointer;
 }
 .exp-s-result:hover {
 	background-color: #eee;
@@ -261,7 +262,7 @@ h3.exp-header i:hover {
 }
 #exp-modal #modal-header {
 	background-color: #fff;
-	padding: 20px 10px 20px;
+	padding: 20px 10px 10px 10px;
 }
 #exp-modal h1 {
 	font-size: 22px;

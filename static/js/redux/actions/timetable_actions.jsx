@@ -2,10 +2,17 @@ import fetch from 'isomorphic-fetch';
 import { getTimetablesEndpoint } from '../constants.jsx';
 import { randomString } from '../util.jsx';
 import { store } from '../init.jsx';
-import { getClassmatesEndpoint } from '../constants.jsx'
+import { getClassmatesEndpoint, getSchoolInfoEndpoint } from '../constants.jsx'
 import { lockActiveSections } from './user_actions.jsx';
 
 export const SID = randomString(30);
+
+export function fetchSchoolInfo() {
+	return (dispatch) => {
+		fetch(getSchoolInfoEndpoint())
+	    .then(response => response.json())
+	}
+}
 
 export function requestTimetables() {
   return {
@@ -26,11 +33,16 @@ export function alertConflict(){
 	}
 }
 
-export function loadTimetable(timetable) {
+export function loadTimetable(timetable, created=false) {
 	let dispatch = store.dispatch;
+	let state = store.getState();
+	if (!state.userInfo.data.isLoggedIn) {
+		return dispatch({type: 'TOGGLE_SIGNUP_MODAL'})
+	}
 	dispatch({
 		type: "CHANGE_ACTIVE_SAVED_TIMETABLE",
 		timetable,
+		created
 	});
 	dispatch({
 		type: "RECEIVE_COURSE_SECTIONS",
@@ -39,8 +51,12 @@ export function loadTimetable(timetable) {
 	dispatch({
 		type: "RECEIVE_TIMETABLES",
 		timetables: [timetable],
-		preset: true
+		preset: created === false
 	});
+	let userInfo = state.userInfo.data;
+	if (userInfo.isLoggedIn) {
+		dispatch(fetchClassmates(timetable.courses.map( c => c['id'])))
+	}
 }
 
 /* 
@@ -55,7 +71,23 @@ function getBaseReqBody(state){
 		sid: SID
 	}
 }
-
+export function hoverSection (dispatch) {
+	return (course, section) => {
+		let availableSections = Object.assign({}, course.sections['L'], course.sections['T'], course.sections['P']);
+		course.section = section;
+		dispatch({
+			type: "HOVER_COURSE",
+			course: Object.assign({}, course, { slots: availableSections[section] })
+		});
+	}
+}
+export function unhoverSection (dispatch) {
+	return () => {
+		dispatch({
+			type: "UNHOVER_COURSE",
+		});
+	}
+}
 /*
 Attempts to add the course represented by newCourseId
 to the user's roster. If a section is provided, that section is 
@@ -180,16 +212,17 @@ export function requestClassmates(id) {
 
 export function fetchClassmates(courses) {
 	return (dispatch) => {
+
 		dispatch(requestClassmates());
 		fetch(getClassmatesEndpoint(), {
 			credentials: 'include',
 			method: 'POST',
 			body: JSON.stringify({course_ids: courses})
 		})
-			    .then(response => response.json())
-			    .then(json => {
-			    	dispatch(getClassmates(json))
-			    });
+	    .then(response => response.json())
+	    .then(json => {
+	    	dispatch(getClassmates(json))
+	    });
 	}
 }
 

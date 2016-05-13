@@ -31,6 +31,7 @@ class PersonalTimetable(models.Model):
     time_updated = models.DateTimeField(auto_now_add=True)
     student = models.ForeignKey(Student)
     school = models.CharField(max_length=50)
+    last_updated = models.DateTimeField(auto_now=True)
 
 class UofTPersonalTimetable(PersonalTimetable):
     course_offerings = models.ManyToManyField(CourseOffering)

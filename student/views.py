@@ -31,13 +31,14 @@ def get_user(request):
 	return HttpResponse(json.dumps(response), content_type='application/json')
 
 def get_student_tts(student,school):
-		tts = school_to_personal_timetables[school].objects.filter(student=student)
+		tts = school_to_personal_timetables[school].objects.filter(student=student).order_by('-last_updated')
 		tts_dict = [] #aka titty dick
 		#for each personal timetable
 		for tt in tts:
 			courses = []
 			course_ids = []
 			tt_dict = model_to_dict(tt,exclude=['personaltimetable_ptr'])
+			tt_dict['last_updated'] = str(tt.last_updated)
 			#for each co in the personal timetable
 			for co in tt.course_offerings.all():
 				c = co.course # get the co's course
