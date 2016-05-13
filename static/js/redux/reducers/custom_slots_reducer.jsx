@@ -1,6 +1,13 @@
 import update from 'react/lib/update';
 
-export const customSlots = (state = [{'time_start': '10:00', 'time_end': '12:00', 'day': 'M'}], action) => {
+let test = [{
+  'time_start': '10:00', 
+  'time_end': '12:00', 
+  'day': 'M', 
+  'id': 0,
+  'name': "Untitle Event"
+}]
+export const customSlots = (state = test, action) => {
   switch(action.type) {
     case 'ADD_CUSTOM_SLOT':
       // get smallest available id
@@ -19,7 +26,7 @@ export const customSlots = (state = [{'time_start': '10:00', 'time_end': '12:00'
         return state; // invalid id
       }
       let newSlot = Object.assign({}, state[slotIndex], action.newTimes)
-      return [...state.slice(0, slotIndex), newSlot, ...state.slice(slotIndex, state.length)]
+      return [...state.slice(0, slotIndex), newSlot, ...state.slice(slotIndex + 1, state.length)]
 
     default:
       return state;
