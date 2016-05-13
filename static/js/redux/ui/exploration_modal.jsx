@@ -16,6 +16,8 @@ export class ExplorationModal extends React.Component {
         this.toggleAreas = this.toggleAreas.bind(this);
         this.toggleTimes = this.toggleTimes.bind(this);
         this.toggleLevels = this.toggleLevels.bind(this);
+        this.fetchAdvancedSearchResults = this.fetchAdvancedSearchResults.bind(this);
+        this.changeTimer = false;
     }
 	componentDidUpdate(nextProps) {
 		if (this.props.isVisible) {
@@ -23,22 +25,31 @@ export class ExplorationModal extends React.Component {
 		}
 	}
 	toggleDepartments() {
-    	this.setState({showDepartments: !this.state.showDepartments});
+    	this.setState({ showDepartments: !this.state.showDepartments });
     }
 	toggleAreas() {
-    	this.setState({showAreas: !this.state.showAreas});
+    	this.setState({ showAreas: !this.state.showAreas });
     }
 	toggleTimes() {
-    	this.setState({showTimes: !this.state.showTimes});
+    	this.setState({ showTimes: !this.state.showTimes });
     }
 	toggleLevels() {
-    	this.setState({showLevels: !this.state.showLevels});
+    	this.setState({ showLevels: !this.state.showLevels });
+    }
+    fetchAdvancedSearchResults() {
+        if (this.changeTimer) clearTimeout(this.changeTimer);
+        let query = this.refs.input.value;
+        this.changeTimer = setTimeout( () => {
+            this.props.fetchAdvancedSearchResults(query);
+            this.changeTimer = false;
+        }, 200);
     }
 	render() {
 		let modalStyle = {
 			width: '100%',
 			backgroundColor: 'transparent'
 		};
+
 		let departmentFilter = (
 			<div className={classNames("filter-pop-out", {'open' : this.state.showDepartments})}>
 				<input placeholder="Department Search"/>
@@ -64,18 +75,43 @@ export class ExplorationModal extends React.Component {
 				</div>
 			</div>
 		);
-		let courseModal = (
-			<div id="modal-content">
+		let { advancedSearchResults, course } = this.props;
+		let numSearchResults = advancedSearchResults.length > 0 ? 
+		<p>returned { advancedSearchResults.length } Search Results</p> : null;
+		let searchResults = advancedSearchResults.map( (c, i) => {
+			return <ExplorationSearchResult 
+					key={i} code={c.code} name={c.name} 
+					onClick={() => this.props.setAdvancedSearchResultIndex(i)}/>
+		});
+		let courseModal = null;
+		if (course) {
+			let lectureSections = [];
+			let tutorialSections = [];
+			let practicalSections = [];
+			if (course.sections) {
+				lectureSections = course.sections['L'];
+				tutorialSections = course.sections['T'];
+				practicalSections = course.sections['P'];
+			}
+			courseModal = <div id="modal-content">
 				<div id="modal-header">
-					<h1>Discrete Mathematics</h1>
-					<h2>AS.122.123, Applied Mathematics and Statistics </h2>
+					<h1>{ course.name }</h1>
+					<h2>{ course.code }</h2>
 					<div id="modal-share">
 						<i className="fa fa-share-alt"></i>
 					</div>
 				</div>
-				<CourseModalBody {...this.props.course} />
+				<CourseModalBody {...course} 
+					lectureSections={lectureSections}
+					tutorialSections={tutorialSections}
+					practicalSections={practicalSections}
+					hoverSection={this.props.hoverSection}
+					unhoverSection={this.props.unhoverSection}
+					data={course}
+				/>
 			</div>
-		);
+		}
+
         let content = (
 			<div id="exploration-content">
 				<div id="exploration-header"
@@ -86,7 +122,7 @@ export class ExplorationModal extends React.Component {
 						<h1>Course Discovery</h1>
 					</div>
 					<div className="col-6-16">
-						<input />
+						<input ref="input" onInput={this.fetchAdvancedSearchResults} />
 					</div>
 	                <div id="exploration-close"
 	                	onMouseDown={() => this.refs.modal.hide()}>
@@ -147,103 +183,8 @@ export class ExplorationModal extends React.Component {
 	                    </div>
 	                    <div id="exp-search-results">
 	                        <div id="exp-search-list">
-	                    		<p>returned 157 Search Results</p>
-								<div className="exp-s-result">
-									<h4>Discrete Mathematics</h4>
-									<h5>EN.650.113, Applied Mathematics & Statistics</h5>
-								</div>
-								<div className="exp-s-result">
-									<h4>Discrete Mathematics</h4>
-									<h5>EN.650.113, Applied Mathematics & Statistics</h5>
-								</div>
-								<div className="exp-s-result">
-									<h4>Discrete Mathematics</h4>
-									<h5>EN.650.113, Applied Mathematics & Statistics</h5>
-								</div>
-								<div className="exp-s-result">
-									<h4>Discrete Mathematics</h4>
-									<h5>EN.650.113, Applied Mathematics & Statistics</h5>
-								</div>
-								<div className="exp-s-result">
-									<h4>Discrete Mathematics</h4>
-									<h5>EN.650.113, Applied Mathematics & Statistics</h5>
-								</div>
-								<div className="exp-s-result">
-									<h4>Discrete Mathematics</h4>
-									<h5>EN.650.113, Applied Mathematics & Statistics</h5>
-								</div>
-								<div className="exp-s-result">
-									<h4>Discrete Mathematics</h4>
-									<h5>EN.650.113, Applied Mathematics & Statistics</h5>
-								</div>
-								<div className="exp-s-result">
-									<h4>Discrete Mathematics</h4>
-									<h5>EN.650.113, Applied Mathematics & Statistics</h5>
-								</div>
-								<div className="exp-s-result">
-									<h4>Discrete Mathematics</h4>
-									<h5>EN.650.113, Applied Mathematics & Statistics</h5>
-								</div>
-								<div className="exp-s-result">
-									<h4>Discrete Mathematics</h4>
-									<h5>EN.650.113, Applied Mathematics & Statistics</h5>
-								</div>
-								<div className="exp-s-result">
-									<h4>Discrete Mathematics</h4>
-									<h5>EN.650.113, Applied Mathematics & Statistics</h5>
-								</div>
-								<div className="exp-s-result">
-									<h4>Discrete Mathematics</h4>
-									<h5>EN.650.113, Applied Mathematics & Statistics</h5>
-								</div>
-								<div className="exp-s-result">
-									<h4>Discrete Mathematics</h4>
-									<h5>EN.650.113, Applied Mathematics & Statistics</h5>
-								</div>
-								<div className="exp-s-result">
-									<h4>Discrete Mathematics</h4>
-									<h5>EN.650.113, Applied Mathematics & Statistics</h5>
-								</div>
-								<div className="exp-s-result">
-									<h4>Discrete Mathematics</h4>
-									<h5>EN.650.113, Applied Mathematics & Statistics</h5>
-								</div>
-								<div className="exp-s-result">
-									<h4>Discrete Mathematics</h4>
-									<h5>EN.650.113, Applied Mathematics & Statistics</h5>
-								</div>
-								<div className="exp-s-result">
-									<h4>Discrete Mathematics</h4>
-									<h5>EN.650.113, Applied Mathematics & Statistics</h5>
-								</div>
-								<div className="exp-s-result">
-									<h4>Discrete Mathematics</h4>
-									<h5>EN.650.113, Applied Mathematics & Statistics</h5>
-								</div>
-								<div className="exp-s-result">
-									<h4>Discrete Mathematics</h4>
-									<h5>EN.650.113, Applied Mathematics & Statistics</h5>
-								</div>
-								<div className="exp-s-result">
-									<h4>Discrete Mathematics</h4>
-									<h5>EN.650.113, Applied Mathematics & Statistics</h5>
-								</div>
-								<div className="exp-s-result">
-									<h4>Discrete Mathematics</h4>
-									<h5>EN.650.113, Applied Mathematics & Statistics</h5>
-								</div>
-								<div className="exp-s-result">
-									<h4>Discrete Mathematics</h4>
-									<h5>EN.650.113, Applied Mathematics & Statistics</h5>
-								</div>
-								<div className="exp-s-result">
-									<h4>Discrete Mathematics</h4>
-									<h5>EN.650.113, Applied Mathematics & Statistics</h5>
-								</div>
-								<div className="exp-s-result">
-									<h4>Discrete Mathematics</h4>
-									<h5>EN.650.113, Applied Mathematics & Statistics</h5>
-								</div>
+	                    		{ numSearchResults }
+								{ searchResults }
 	                        </div>
 	                    </div>
 	                    { departmentFilter }
@@ -256,7 +197,7 @@ export class ExplorationModal extends React.Component {
         );
         return (
             <Modal ref="modal"
-                className="exploration-modal"
+                className={classNames("exploration-modal", {"trans": this.props.hasHoveredResult})}
                 modalStyle={modalStyle}
                 onHide={this.props.toggleExplorationModal}
                 >
@@ -265,3 +206,10 @@ export class ExplorationModal extends React.Component {
         );
     }
 }
+
+const ExplorationSearchResult = ({name, code, onClick}) => (
+	<div className="exp-s-result" onClick={onClick}>
+		<h4>{ name }</h4>
+		<h5>{ code }</h5>
+	</div>
+);

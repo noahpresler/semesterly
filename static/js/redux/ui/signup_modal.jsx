@@ -1,7 +1,6 @@
 import React from 'react';
 import Modal from 'boron/DropModal';
 import classNames from 'classnames';
-import emoji from 'node-emoji';
 
 export class SignupModal extends React.Component {
 	componentDidUpdate(nextProps) {
