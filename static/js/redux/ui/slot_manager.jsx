@@ -14,7 +14,9 @@ class SlotManager extends React.Component {
                 let courseId = slot.course;
                 let locked = this.props.isLocked(courseId, slot.meeting_section);
                 return slot.custom ?
-                <CustomSlot {...slot} key={ slot.id }/>
+                <CustomSlot {...slot}
+                    key={ slot.id }
+                    removeCustomSlot={ () => this.props.removeCustomSlot(slot.id) }/>
                 :
                 <Slot {...slot} 
                     fetchCourseInfo={ () => this.props.fetchCourseInfo(courseId) }

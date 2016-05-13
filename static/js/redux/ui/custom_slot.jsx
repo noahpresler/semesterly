@@ -33,6 +33,10 @@ class CustomSlot extends React.Component {
         event.stopPropagation();
         callback();
     }
+    stopPropagation(callback, event) {
+        event.stopPropagation();
+        callback();
+    }
     componentDidMount() {
         // provide drag preview, which should just be the regular slot at half opacity
         this.props.connectDragPreview(
@@ -52,16 +56,13 @@ class CustomSlot extends React.Component {
             </div>
         )
     }
-    removeSlot() {
-        console.log('removed')
-    }
     render() {
         return this.props.connectDragSource(
             <div className="fc-event-container">
                 <div className={"fc-time-grid-event fc-event slot"}
                      style={ this.getSlotStyles() }>
                     <div className="slot-bar" />
-                        <i className="fa fa-times" onClick={ this.props.removeSlot }></i>
+                        <i className="fa fa-times" onClick={ (e) => this.stopPropagation(this.props.removeCustomSlot, e) }></i>
                     <div className="fc-content">
                         <div className="fc-time">
                             <span>{ this.props.time_start } – { this.props.time_end }</span>
