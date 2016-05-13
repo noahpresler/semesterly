@@ -5,7 +5,6 @@ from django.forms.models import model_to_dict
 from django.db import models
 
 
-
 #----------- Global Models  ----------------
 class Textbook(models.Model):
   isbn = models.BigIntegerField(primary_key=True)
@@ -127,7 +126,6 @@ class BaseCourseEvaluation(models.Model):
     abstract = True
 
 class Reaction(models.Model):
-  
   REACTION_CHOICES = (
     ('FIRE', 'FIRE'),
     ('LOVE', 'LOVE'),
@@ -138,6 +136,7 @@ class Reaction(models.Model):
     ('TEARS', 'TEARS'),
     ('INTERESTING', 'INTERESTING'),
   )
+  student = models.ForeignKey('student.Student')
   course = models.ManyToManyField(BaseCourse)
   title = models.CharField(max_length=50, choices=REACTION_CHOICES)
 
