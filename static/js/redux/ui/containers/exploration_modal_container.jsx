@@ -11,6 +11,7 @@ const mapStateToProps = (state) => {
 	if (course) {
 		inRoster = courseSections[course.id] !== undefined
 	}
+	let activeTimetable = state.timetables.items[state.timetables.active];
 	return {
 		isVisible,
     	isFetching,
@@ -18,7 +19,7 @@ const mapStateToProps = (state) => {
 		active,
 		course,
 		inRoster,
-		hasHoveredResult: state.timetables.items[state.timetables.active].courses.some(course => course.fake),
+		hasHoveredResult: activeTimetable.courses.some(course => course.fake),
 		isSectionLocked: (courseId, section) => {
 			if (courseSections[courseId] === undefined) {
 				return false;
@@ -27,21 +28,20 @@ const mapStateToProps = (state) => {
 				(type) => courseSections[courseId][type] == section
 			)
 		},
+		isSectionOnActiveTimetable: (courseId, section) => {
+			return activeTimetable.courses.some(course => course.id === courseId && course.enrolled_sections.some(sec => sec == section));
+		}
 	}
 }
 
 const mapDispatchToProps = (dispatch) => {
 	return {
-		toggleExplorationModal: () => dispatch({ type: "TOGGLE_EXPLORATION_MODAL" }),
+		hideExplorationModal: () => dispatch({ type: "HIDE_EXPLORATION_MODAL" }),
 	  	fetchAdvancedSearchResults: (query) => dispatch(fetchAdvancedSearchResults(query)),
 	  	setAdvancedSearchResultIndex: (i) => dispatch({ type: "SET_ACTIVE_RESULT", active: i }),
-		addOrRemoveCourse: (id, section) => {
-			dispatch({ type: "UNHOVER_COURSE" });
-			return addOrRemoveCourse(id, section);
-		},
 		hoverSection: hoverSection(dispatch),
 		unhoverSection: unhoverSection(dispatch),
-
+		addOrRemoveCourse,
 	}
 }
 

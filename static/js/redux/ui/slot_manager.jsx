@@ -3,19 +3,22 @@ import { renderCourseModal } from './course_modal.jsx';
 import Slot from './slot.jsx'
 import CustomSlot from './custom_slot.jsx'
 import { index as IntervalTree, matches01 as getIntersections } from 'static-interval-tree'
-import { HALF_HOUR_HEIGHT, COLOUR_DATA } from '../constants.jsx';
+import { HALF_HOUR_HEIGHT, COLOUR_DATA, DAYS } from '../constants.jsx';
 
 class SlotManager extends React.Component {
 
 	render() {
-        let days = ["M", "T", "W", "R", "F"];
         let slots_by_day = this.getSlotsByDay();
-        let all_slots = days.map((day) => {
-            let day_slots = slots_by_day[day].map((slot) => {
+        let all_slots = DAYS.map((day, i) => {
+            let day_slots = slots_by_day[day].map((slot, j) => {
                 let courseId = slot.course;
                 let locked = this.props.isLocked(courseId, slot.meeting_section);
                 return slot.custom ?
-                <CustomSlot {...slot}/>
+                <CustomSlot {...slot}
+                    key={ i.toString() + j.toString() }
+                    removeCustomSlot={ () => this.props.removeCustomSlot(slot.id) }
+                    updateCustomSlot={ this.props.updateCustomSlot } 
+                    addCustomSlot={ this.props.addCustomSlot } />
                 :
                 <Slot {...slot}
                     fetchCourseInfo={ () => this.props.fetchCourseInfo(courseId) }
@@ -24,7 +27,9 @@ class SlotManager extends React.Component {
                     classmates={this.props.classmates(courseId, slot.meeting_section)}
                     lockOrUnlockSection={ () => this.props.addOrRemoveCourse(courseId, slot.meeting_section) }
                     removeCourse={ () => this.props.addOrRemoveCourse(courseId) }
-                    primaryDisplayAttribute={this.props.primaryDisplayAttribute}/>
+                    primaryDisplayAttribute={this.props.primaryDisplayAttribute}
+                    updateCustomSlot={ this.props.updateCustomSlot } 
+                    addCustomSlot={ this.props.addCustomSlot } />
             });
             return (
                     <td key={day}>
@@ -76,7 +81,7 @@ class SlotManager extends React.Component {
         for (let i in this.props.custom) {
             let custom_slot = this.props.custom[i];
             custom_slot['custom'] = true;
-            custom_slot['key'] = i; // TODO: Find better unique key
+            custom_slot['key'] = custom_slot.id;
             slots_by_day[custom_slot.day].push(custom_slot)
         }
         return this.getConflictStyles(slots_by_day)

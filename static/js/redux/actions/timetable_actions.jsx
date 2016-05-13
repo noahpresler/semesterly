@@ -53,6 +53,10 @@ export function loadTimetable(timetable, created=false) {
 		timetables: [timetable],
 		preset: created === false
 	});
+	let userInfo = state.userInfo.data;
+	if (userInfo.isLoggedIn) {
+		dispatch(fetchClassmates(timetable.courses.map( c => c['id'])))
+	}
 }
 
 /* 
@@ -161,16 +165,35 @@ function fetchTimetables(requestBody, removing) {
 	}
 }
 
-export function addCustomSlot(timeStart, timeEnd, day) {
+export function addCustomSlot(timeStart, timeEnd, day, preview, id) {
 	let dispatch = store.dispatch;
 	dispatch({
 		type: "ADD_CUSTOM_SLOT",
-		new_custom_slot: {
+		newCustomSlot: {
 			time_start: timeStart, // match backend slot attribute names
 			time_end: timeEnd,
 			day: day,
-			name: "New Custom Event"
+			name: "New Custom Event",
+			id: id,
+			preview: preview
 		}
+	})
+}
+
+export function updateCustomSlot(newValues, id) {
+	let dispatch = store.dispatch;
+	dispatch({
+		type: "UPDATE_CUSTOM_SLOT",
+		newValues: newValues,
+		id: id
+	})
+}
+
+export function removeCustomSlot(id) {
+	let dispatch = store.dispatch;
+	dispatch({
+		type: "REMOVE_CUSTOM_SLOT",
+		id: id
 	})
 }
 
@@ -189,6 +212,7 @@ export function requestClassmates(id) {
 
 export function fetchClassmates(courses) {
 	return (dispatch) => {
+
 		dispatch(requestClassmates());
 		fetch(getClassmatesEndpoint(), {
 			credentials: 'include',

@@ -1,6 +1,91 @@
 import React from 'react';
-import { HALF_HOUR_HEIGHT, COLOUR_DATA } from '../constants.jsx';
+import { DropTarget } from 'react-dnd'
+import { HALF_HOUR_HEIGHT, COLOUR_DATA, DRAGTYPES } from '../constants.jsx';
 
+function convertToHalfHours(str) {
+    let start = parseInt(str.split(':')[0])
+    return str.split(':')[1] == '30' ? start*2 + 1 : start * 2;
+}
+
+function convertToStr(halfHours) {
+    let num_hours = Math.floor(halfHours/2)
+    return halfHours % 2 ? num_hours + ':30' : num_hours + ':00' 
+}
+
+const dragSlotTarget = {
+  drop(props, monitor) { // move it to current location on drop
+    let { timeStart, timeEnd, id } = monitor.getItem();
+
+    let startHalfhour = convertToHalfHours(timeStart)
+    let endHalfhour = convertToHalfHours(timeEnd)
+
+    let slotStart = props.time_start
+    let slotTop = $('#' + props.id).offset().top
+    // number half hours from slot start
+    let n = Math.floor((monitor.getClientOffset().y - slotTop)/HALF_HOUR_HEIGHT)
+
+    let newStartHour = convertToHalfHours(props.time_start) + n
+    let newEndHour = newStartHour + (endHalfhour - startHalfhour)
+    let newValues = {
+      time_start: convertToStr(newStartHour),
+      time_end: convertToStr(newEndHour),
+      day: props.day
+    }
+    props.updateCustomSlot(newValues, id);
+  },
+}
+
+function collectDragDrop(connect, monitor) { // inject props as drop target
+  return {
+    connectDragTarget: connect.dropTarget(),
+  };
+}
+
+var lastPreview = null
+const createSlotTarget = {
+    drop(props, monitor) { // move it to current location on drop
+        let { timeStart, id } = monitor.getItem();
+
+        // get the time that the mouse dropped on
+        let slotStart = props.time_start
+        let slotTop = $('#' + props.id).offset().top
+        let n = Math.floor((monitor.getClientOffset().y - slotTop)/HALF_HOUR_HEIGHT)
+        let timeEnd = convertToStr(convertToHalfHours(props.time_start) + n)
+
+        if (timeStart > timeEnd) {
+            [timeStart, timeEnd] = [timeEnd, timeStart]
+        }
+        // props.addCustomSlot(timeStart, timeEnd, props.day, false, new Date().getTime());
+        props.updateCustomSlot({preview: false}, id);
+    },
+    canDrop(props, monitor) { // new custom slot must start and end on the same day
+        let { day } = monitor.getItem();
+        return day == props.day
+    },
+    hover(props, monitor) {
+        let { timeStart, id } = monitor.getItem()
+
+        // get the time that the mouse dropped on
+        let slotStart = props.time_start
+        let slotTop = $('#' + props.id).offset().top
+        let n = Math.floor((monitor.getClientOffset().y - slotTop)/HALF_HOUR_HEIGHT)
+        if (n == lastPreview) {
+            return
+        }
+        let timeEnd = convertToStr(convertToHalfHours(props.time_start) + n)
+        if (convertToHalfHours(timeStart) > convertToHalfHours(timeEnd)) {
+          [timeStart, timeEnd] = [timeEnd, timeStart]
+        }
+        lastPreview = n
+        props.updateCustomSlot({time_start: timeStart, time_end: timeEnd}, id)
+    }
+}
+
+function collectCreateDrop(connect, monitor) { // inject props as drop target
+  return {
+    connectCreateTarget: connect.dropTarget(),
+  };
+}
 
 class Slot extends React.Component {
     constructor(props) {
@@ -50,13 +135,14 @@ class Slot extends React.Component {
                 <span>{this.props.location && this.props.location !== "" ? " , " : null}</span>
             </div>) : null;
 
-    return (
-      <div className="fc-event-container">
+    return this.props.connectCreateTarget(this.props.connectDragTarget(
+      <div className="fc-event-container" >
                 <div className={"fc-time-grid-event fc-event slot slot-" + this.props.course}
                      style={ this.getSlotStyles() } 
                      onClick={ this.props.fetchCourseInfo }
                      onMouseEnter={ this.onSlotHover }
-                     onMouseLeave={ this.onSlotUnhover }>
+                     onMouseLeave={ this.onSlotUnhover }
+                     id={ this.props.id }>
             <div className="slot-bar" 
                          style={ { backgroundColor: COLOUR_DATA[this.props.colourId].border } }/>
                     { removeButton }
@@ -75,7 +161,7 @@ class Slot extends React.Component {
                     </div>
                 </div>
             </div>
-    );
+    ));
   }
   getSlotStyles() {
         let start_hour   = parseInt(this.props.time_start.split(":")[0]),
@@ -96,12 +182,12 @@ class Slot extends React.Component {
             push_left += .5;
         }
     return {
-            top: top, bottom: -bottom, zIndex: 1, left: '0%', right: '0%', 
+            top: top, bottom: -bottom, right: '0%', 
             backgroundColor: COLOUR_DATA[this.props.colourId].background,
             color: COLOUR_DATA[this.props.colourId].font,
             width: slot_width_percentage + "%",
             left: push_left + "%",
-            zIndex: 100 * this.props.depth_level
+            zIndex: 10 * this.props.depth_level
         };
 	}
 }
@@ -161,4 +247,6 @@ class CustomSlot extends React.Component {
     }
 }
 
-export default Slot;
+export default DropTarget(DRAGTYPES.CREATE, createSlotTarget, collectCreateDrop)(
+    DropTarget(DRAGTYPES.DRAG, dragSlotTarget, collectDragDrop)(Slot)
+)
