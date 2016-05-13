@@ -12,24 +12,24 @@ class CreditTicker extends React.Component {
     }
 	componentWillReceiveProps(nextProps) {
 		if (nextProps.numCredits > this.props.numCredits)
-			this.interval = setInterval(this.incCredits, 5);
+			this.interval = setInterval(this.incCredits, 8);
 		else
-			this.interval = setInterval(this.decCredits, 5);
+			this.interval = setInterval(this.decCredits, 8);
     }
     incCredits() {
-    	if (this.props.numCredits.toFixed(2) == this.state.numCredits.toFixed(2))
+    	if (this.props.numCredits.toFixed(2) <= this.state.numCredits.toFixed(2))
     		return clearInterval(this.interval)
     	this.setState({ numCredits: this.state.numCredits + .05})
     }
     decCredits() {
-    	if (this.props.numCredits.toFixed(2) == this.state.numCredits.toFixed(2))
+    	if (this.props.numCredits.toFixed(2) >= this.state.numCredits.toFixed(2))
     		return clearInterval(this.interval)
     	this.setState({ numCredits: this.state.numCredits - .05})
     }
 	render() {
 		return (
 			<div id="sb-credits" className="col-1-3">
-                <h3>{this.state.numCredits.toFixed(2)}</h3>
+                <h3>{Math.abs(this.state.numCredits).toFixed(2)}</h3>
                 <h4>credits</h4>
             </div>
         );
