@@ -145,7 +145,7 @@ class TimetableGenerator:
 
   def get_course_dict(self, section):
     model = self.course_model.objects.get(id=section[0])
-    return model_to_dict(model, fields=['code', 'name', 'id'])
+    return model_to_dict(model, fields=['code', 'name', 'id', 'num_credits'])
 
   def get_course_obj(self, course_dict, sections):
     sections = list(sections)
