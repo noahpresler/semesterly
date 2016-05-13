@@ -459,3 +459,36 @@ a#social-login:hover:before {
 #content p {
 	font-size: 14px;
 }
+#sections h3 {
+	clear: both;
+	margin-top: 40px;
+}
+.section-group {
+	
+}
+.section {
+	margin: 15px 0;
+	width: 33.33%;
+	float: left;
+}
+.section h4 {
+	font-size: 16px;
+	line-height: 22px;
+	margin: 0 0 5px;
+	color: #222;
+}
+.section h5 {
+	font-size: 14px;
+	line-height: 16px;
+	color: #777;
+	margin: 0;
+}
+.section.green h5.enrollment span {
+	color: #0AA98A;
+}
+.section.yellow h5.enrollment span {
+	color: #D29842;
+}
+.section.red h5.enrollment span {
+	color: #D21616;
+}
