@@ -6,6 +6,7 @@ class TimetableNameInput extends React.Component {
         super(props);
         this.alterTimetableName = this.alterTimetableName.bind(this);
         this.setTimetableName = this.setTimetableName.bind(this);
+        this.showSignupModal = this.showSignupModal.bind(this);
         this.state = { name: this.props.activeLoadedTimetableName };
     }
     componentWillReceiveProps(nextProps) {
@@ -13,6 +14,11 @@ class TimetableNameInput extends React.Component {
     }
     alterTimetableName(event) {
         this.setState({ name: event.target.value });
+    }
+    showSignupModal() {
+        if (!this.props.isLoggedIn) {
+            return this.props.openSignupModal();
+        }
     }
     setTimetableName() {
         let newName = this.state.name;
@@ -28,6 +34,7 @@ class TimetableNameInput extends React.Component {
             value={this.state.name}
             onChange={this.alterTimetableName}
             onBlur={this.setTimetableName}
+            onClick={this.showSignupModal}
         />
     }
 }
