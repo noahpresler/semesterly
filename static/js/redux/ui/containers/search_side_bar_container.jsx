@@ -9,6 +9,7 @@ const mapStateToProps = (state) => {
 	let lectureSections = sectionTypeToSections['L'];
 	let tutorialSections = sectionTypeToSections['T'];
 	let practicalSections = sectionTypeToSections['P'];
+	let activeTimetable = state.timetables.items[state.timetables.active];
 
 	return {
 		hovered,
@@ -23,6 +24,9 @@ const mapStateToProps = (state) => {
 				(type) => courseSections[course_id][type] == section
 			)
 		},
+		isSectionOnActiveTimetable: (courseId, section) => {
+			return activeTimetable.courses.some(course => course.id === courseId && course.enrolled_sections.some(sec => sec == section));
+		}
 	}
 }
 

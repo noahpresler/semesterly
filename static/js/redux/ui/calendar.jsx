@@ -1,44 +1,37 @@
 import React from 'react';
 import PaginationContainer  from './containers/pagination_container.jsx';
 import SlotManagerContainer from './containers/slot_manager_container.jsx';
+import CellContainer from './containers/cell_container.jsx'
+import { DAYS, DRAGTYPES } from '../constants.jsx';
+import { DropTarget } from 'react-dnd';
 
-
-const Row = ({ time, show }) => {
-	let time_text = show ? <span>{time}</span> : null;
+const Row = (props) => {
+	let timeText = props.show ? <span>{props.time}</span> : null;
+	let dayCells = DAYS.map(day => <CellContainer day={day} time={props.time} key={day+props.time} />)
 	return (
-		<tr key={time}>
+		<tr key={props.time}>
         <td className="fc-axis fc-time fc-widget-content cal-row">
-        	{time_text}
+        	{timeText}
         </td>
-        <td className="fc-widget-content" />
+        <td className="fc-widget-content">
+          <div className="week-col">
+        	{dayCells}
+          </div>
+        </td>
     </tr>
 	)
 }
 
 class Calendar extends React.Component {
-  	getCalendarRows() {
-	    let rows = [];
-	    for (let i = 8; i <= this.props.endHour; i++) { // one row for each hour, starting from 8am
-	      let time = i + ":00";
-	      rows.push(
-	          ( <tr key={time}>
-                    <td className="fc-axis fc-time fc-widget-content cal-row">
-                    	<span>{time}</span>
-                    </td>
-                    <td className="fc-widget-content" />
-                </tr>)
-	      );
-	      // for the half hour row
-	      rows.push(
-	          (<tr key={time + ".5"} className="fc-minor">
-	            	<td className="fc-axis fc-time fc-widget-content cal-row"/>
-	            	<td className="fc-widget-content" />
-          	  </tr>)
-	      );
-	    }
+	getCalendarRows() {
+    let rows = [];
+    for (let i = 8; i <= this.props.endHour; i++) { // one row for each hour, starting from 8am
+      rows.push(<Row time={i + ':00'} show={true} key={i}/>);
+      rows.push(<Row time={i + ':30'} show={false} key={i + 0.5}/>);
+    }
 
-    	return rows;
-  	}
+  	return rows;
+	}
 
 	render() {
 		let saveIcon = this.props.saving ? <i className = "fa fa-spin fa-circle-o-notch" /> :
@@ -54,14 +47,7 @@ class Calendar extends React.Component {
 			className="save-timetable add-button"><i className="fa fa-share-alt" /></button>
 		// let downloadButton = <button
 		// 	className="save-timetable add-button"><i className="fa fa-download" /></button>
-		let downloadButton = null;
-		// let customSlotButton = (
-		// 		<button className="save-timetable add-button"
-		// 						onClick={this.props.addCustomSlot}>
-		// 			<i className="fa fa-futbol-o" />
-		// 		</button>
-		// )
-		let customSlotButton = null;
+    let downloadButton = null
 		return (
 
 	      <div id="calendar" className="fc fc-ltr fc-unthemed">
@@ -70,7 +56,6 @@ class Calendar extends React.Component {
 	      		<PaginationContainer />
 	      	  </div>
 	          <div className="fc-right">
-	          	{ customSlotButton }
 	          	{ downloadButton }
 	          	{ shareButton }
 	          	{ addButton }
