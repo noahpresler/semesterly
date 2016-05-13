@@ -3,13 +3,16 @@ import PaginationContainer  from './containers/pagination_container.jsx';
 import SlotManagerContainer from './containers/slot_manager_container.jsx';
 import { DAYS } from '../constants.jsx'
 
-
+// TODO: separate into container and UI
 class Row extends React.Component {
 	moveSlotToHere(clickEvent) {
 		let calOffset = clickEvent.clientX - $(".week-col").offset().left
 		let dayWidth = $(".week-col").width()/5;
 		let clickedDay = DAYS[Math.floor(calOffset/dayWidth)]
-		this.props.moveCustomSlot('10:00', '12:00', clickedDay, 0)
+		let withinBounds = true // TODO
+		if (withinBounds) {
+			this.props.moveCustomSlot('10:00', '12:00', clickedDay, 0)
+		}
 	}
 
 	render() {
