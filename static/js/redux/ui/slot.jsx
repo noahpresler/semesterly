@@ -42,24 +42,42 @@ function collectDragDrop(connect, monitor) { // inject props as drop target
 }
 
 const createSlotTarget = {
-  drop(props, monitor) { // move it to current location on drop
-    let { timeStart, id } = monitor.getItem();
+    drop(props, monitor) { // move it to current location on drop
+        let { timeStart, id } = monitor.getItem();
 
-    // get the time that the mouse dropped on
-    let slotStart = props.time_start
-    let slotTop = $('#' + props.id).offset().top
-    let n = Math.floor((monitor.getClientOffset().y - slotTop)/HALF_HOUR_HEIGHT)
-    let timeEnd = convertToStr(convertToHalfHours(props.time_start) + n)
+        // get the time that the mouse dropped on
+        let slotStart = props.time_start
+        let slotTop = $('#' + props.id).offset().top
+        let n = Math.floor((monitor.getClientOffset().y - slotTop)/HALF_HOUR_HEIGHT)
+        let timeEnd = convertToStr(convertToHalfHours(props.time_start) + n)
 
-    if (timeStart > timeEnd) {
-        [timeStart, timeEnd] = [timeEnd, timeStart]
+        if (timeStart > timeEnd) {
+            [timeStart, timeEnd] = [timeEnd, timeStart]
+        }
+        // props.addCustomSlot(timeStart, timeEnd, props.day, false, new Date().getTime());
+        props.updateCustomSlot({preview: false}, id);
+    },
+    canDrop(props, monitor) { // new custom slot must start and end on the same day
+        let { day } = monitor.getItem();
+        return day == props.day
+    },
+    hover(props, monitor) {
+        let { timeStart, id } = monitor.getItem()
+        
+        // get the time that the mouse dropped on
+        let slotStart = props.time_start
+        let slotTop = $('#' + props.id).offset().top
+        let n = Math.floor((monitor.getClientOffset().y - slotTop)/HALF_HOUR_HEIGHT)
+        let timeEnd = convertToStr(convertToHalfHours(props.time_start) + n)
+
+        if (timeStart > timeEnd) {
+            [timeStart, timeEnd] = [timeEnd, timeStart]
+        }
+        if (timeStart > timeEnd) {
+          [timeStart, timeEnd] = [timeEnd, timeStart]
+        }
+        props.updateCustomSlot({time_start: timeStart, time_end: timeEnd}, id)
     }
-    props.addCustomSlot(timeStart, timeEnd, props.day, false, new Date().getTime());
-  },
-  canDrop(props, monitor) { // new custom slot must start and end on the same day
-    let { day } = monitor.getItem();
-    return day == props.day
-  },
 }
 
 function collectCreateDrop(connect, monitor) { // inject props as drop target

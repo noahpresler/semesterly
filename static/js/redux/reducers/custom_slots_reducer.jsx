@@ -21,10 +21,7 @@ export const customSlots = (state = [], action) => {
         return state; // invalid id
       }
       let newSlot = Object.assign({}, state[tslotindex], action.newValues)
-      console.log(action.newValues, action.id)
-      console.log('before', state)
       let temp = [...state.slice(0, tslotindex), newSlot, ...state.slice(tslotindex + 1, state.length)]
-      console.log('after', temp)
       return temp
 
     case 'REMOVE_CUSTOM_SLOT':
@@ -35,7 +32,6 @@ export const customSlots = (state = [], action) => {
       return [...state.slice(0, dslotIndex), ...state.slice(dslotIndex + 1, state.length)]
 
     default:
-      console.log("Received unknown type ", action.type)
       return state;
   }
 }
