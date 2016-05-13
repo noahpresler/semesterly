@@ -237,6 +237,17 @@ h3.modal-module-header:after {
 	margin: 0;
 	color: #34495E;
 }
+.modal-section h4 span {
+	margin-right: 3px;
+	display: inline-block;
+	vertical-align: middle;
+}
+.modal-section h4 i {
+	display: inline-block;
+	vertical-align: middle;
+	font-size: 14px;
+	line-height: 20px;
+}
 .modal-section h5 {
 	font-size: 13px;
 	font-weight: 400;
@@ -263,6 +274,30 @@ h3.modal-module-header:after {
 .hidden-modal{
 	color: rgba(52, 73, 94, 0);
 }
+.modal-section .fa-calendar-check-o {
+	opacity: 0;
+	visibility: hidden;
+	transition: opacity .3s, visibility .3s;
+}
+.modal-section.in-roster .fa-calendar-check-o,
+.modal-section.locked .fa-lock {
+	opacity: 1;
+	visibility: visible;
+}
+.modal-section .fa-lock  {
+	position: absolute;
+	bottom: 7px;
+	right: 7px;
+	font-size: 14px;
+	line-height: 20px;
+	width: 20px;
+	text-align: center;
+	color: #34495E;
+	opacity: 0;
+	visibility: hidden;
+	transition: opacity .3s, visibility .3s;
+}
+
 @media (max-width: 766px) {
 	#modal-header h1 {
 		font-size: 32px;
