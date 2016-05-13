@@ -20,10 +20,11 @@ class SlotManager extends React.Component {
                     updateCustomSlot={ this.props.updateCustomSlot } 
                     addCustomSlot={ this.props.addCustomSlot } />
                 :
-                <Slot {...slot} 
+                <Slot {...slot}
                     fetchCourseInfo={ () => this.props.fetchCourseInfo(courseId) }
-                    key={ slot.fake ? -slot.id : slot.id } 
-                    locked={ locked } 
+                    key={ slot.fake ? -slot.id : slot.id }
+                    locked={ locked }
+                    classmates={this.props.classmates(courseId, slot.meeting_section)}
                     lockOrUnlockSection={ () => this.props.addOrRemoveCourse(courseId, slot.meeting_section) }
                     removeCourse={ () => this.props.addOrRemoveCourse(courseId) }
                     primaryDisplayAttribute={this.props.primaryDisplayAttribute}
@@ -63,7 +64,7 @@ class SlotManager extends React.Component {
             for (let slotId in crs.slots) {
                 let slotObj = crs.slots[slotId];
                 // first assume this course already has a colour (was added previously)
-                let colourIndex = _.range(COLOUR_DATA.length).find((i) => 
+                let colourIndex = _.range(COLOUR_DATA.length).find((i) =>
                             !Object.values(this.props.courseToColourIndex).some( x => x === i)
                     );
                 let colourId = this.props.courseToColourIndex[slotObj.course] === undefined ? colourIndex : this.props.courseToColourIndex[slotObj.course];
@@ -85,7 +86,7 @@ class SlotManager extends React.Component {
         }
         return this.getConflictStyles(slots_by_day)
     }
-    
+
     getConflictStyles(slots_by_day) {
         for (let day in slots_by_day) {
             let day_slots = slots_by_day[day]

@@ -7,14 +7,19 @@ import Modal from 'boron/DropModal';
 import { CourseModalBody } from './course_modal_body.jsx'
 
 export class CourseModal extends React.Component {
+    constructor(props) {
+        super(props);
+        this.addOrRemoveCourse = this.addOrRemoveCourse.bind(this);
+        this.hide = this.hide.bind(this);
+    }
     componentWillReceiveProps(nextProps) { 
         if (nextProps.id != null) {
             this.refs.modal.show();
         }
     }
-    addCourse() {
-        this.props.addCourse(this.props.id);
-        this.refs.modal.hide();
+    addOrRemoveCourse(id, section='') {
+        this.props.addOrRemoveCourse(id, section);
+        this.hide();
     }
     sizeItUp() {
         let h = $("#modal-header").outerHeight();
@@ -26,54 +31,18 @@ export class CourseModal extends React.Component {
     componentDidUpdate() {
         this.sizeItUp();
     }
-    mapSectionsToSlots(sections) {
-        if (sections === undefined) {
-            return [];
-        }
-        return Object.keys(sections).map(sec =>{
-            let slots = sections[sec];
-            let instructors = new Set();
-            for (let s of slots) {
-                if (!instructors.has(s.instructors)) {
-                    instructors.add(s.instructors);
-                }
-            }
-            let instructString = Array.from(instructors).join(', ');
-            let enrolled = slots[0].enrolled || 0;
-            return <SearchResultSection 
-                    key={sec}
-                    section={slots}
-                    secName={sec}
-                    instr={instructString}
-                    enrolled={enrolled}
-                    waitlist={slots[0].waitlist}
-                    size={slots[0].size}
-                    hoverCourse={() => this.props.hoverCourse(this.props.data, sec)}
-                    unhoverCourse={this.props.unhoverCourse} 
-                />
-        });
+    hide() {
+        this.props.unhoverSection();
+        this.props.hideModal();
+        this.refs.modal.hide();
     }
+   
     render() {
         let modalStyle = {
             width: '100%',
             backgroundColor: 'transparent'
         };
         let inRoster = this.props.inRoster;
-        let lecs = this.mapSectionsToSlots(this.props.lectureSections);
-        let tuts = this.mapSectionsToSlots(this.props.tutorialSections);
-        let pracs = this.mapSectionsToSlots(this.props.practicalSections);
-        let lectureSections = null;
-        let tutorialSections = null;
-        let practicalSections = null;
-        if (lecs.length > 0) {
-            lectureSections = <div><h3 className="modal-module-header">Lecture Sections</h3>{lecs}</div>
-        }
-        if (tuts.length > 0) {
-            tutorialSections = <div><h3 className="modal-module-header">Tutorial Sections</h3>{tuts}</div>
-        }
-        if (pracs.length > 0) {
-            practicalSections = <div><h3 className="modal-module-header">Practical Sections</h3>{pracs}</div>
-        }
         let content = this.props.isFetching ? <div className="modal-loader"></div> :
         (<div id="modal-content">
             <div id="modal-header">
@@ -90,38 +59,20 @@ export class CourseModal extends React.Component {
                 </div>
                 <div id="modal-add" 
                     className={classNames('search-course-add', {'in-roster': inRoster})}
-                    onClick={this.addCourse.bind(this)}>
+                    onClick={() => this.addOrRemoveCourse(this.props.id)}>
                     <i className={classNames('fa', {'fa-plus' : !inRoster, 'fa-check' : inRoster})}></i>
                 </div>
             </div>
-            <CourseModalBody {...this.props} />
+            <CourseModalBody {...this.props} addOrRemoveCourse={this.addOrRemoveCourse}/>
         </div>);
         return (
             <Modal ref="modal"
                 className={classNames('course-modal', {'trans' : this.props.hasHoveredResult})}                 
                 modalStyle={modalStyle}
-                onHide={this.props.hideModal}
+                onHide={this.hide}
                 >
                 {content}
             </Modal>
         );
     }
 }
-
-const SearchResultSection = ({ section, secName, instr , enrolled, waitlist, size, hoverCourse, unhoverCourse}) => {
-    let seats = size - enrolled;
-    let seatStatus = waitlist > 0 ? (waitlist + " waitlist") : (seats + " open");
-    let benchmark = "green";
-    if (waitlist > 0) {
-        benchmark = "red";
-    } else if (seats < size/10) {
-        benchmark = "yellow";
-    }
-    return (
-    <div className="modal-section" onMouseEnter={hoverCourse} onMouseLeave={unhoverCourse}>
-        <h4>{secName}</h4>
-        <h5>{instr}</h5>
-        <h6><span className={benchmark}>{seatStatus}</span> / {size} seats</h6>
-    </div>
-    );
-};

@@ -10,6 +10,7 @@ const mapStateToProps = (state) => {
 		activeLoadedTimetableName: savingTimetable.activeTimetable.name, // the name of the user's "being-edited" saved timetable
 		saving: savingTimetable.saving,
 		upToDate: savingTimetable.upToDate,
+		isLoggedIn: state.userInfo.data.isLoggedIn
 	}
 }
 
@@ -23,6 +24,7 @@ const mapDispatchToProps = (dispatch) => {
 			})
 			dispatch(saveTimetable());
 		},
+		openSignupModal: () => dispatch({type: 'TOGGLE_SIGNUP_MODAL'})
 	}
 }
 

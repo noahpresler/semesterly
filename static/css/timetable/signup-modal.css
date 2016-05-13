@@ -1,0 +1,103 @@
+.signup-modal {
+	max-width: 500px;
+	height: 550px;
+	outline: none;
+}
+
+.signup-modal #modal-header {
+	background-color: #eee;
+	padding: 25px 25px;
+	position: relative;
+	border-bottom: 1px solid #ddd;
+}
+
+.pro-pic {
+	height: 80px;
+	width: 80px;
+	background-size: cover;
+	border-radius: 100%;
+	background-position: center;
+	background-repeat: no-repeat;
+	position: absolute;
+	right: 10%;
+	bottom: -30px;
+	border: 1px solid #ddd;
+}
+
+.signup-modal #features{
+	padding: 40px 20px 20px 20px;
+	width: 100%;
+	font-size: 17px;
+}
+
+.signup-modal h1 {
+	font-style: italic;
+}
+
+#feature-highlight {
+	margin-top: 25px;
+	font-size: 14px;
+}
+
+#feature-highlight .fa-check {
+	color: #1abc9c;
+}
+
+.emoji {
+	height: 20px;
+	width: 20px;
+	float: left;
+	margin-right: 10px;
+}
+
+.sample-slot {
+	width: 85%;
+	margin: 15px;
+}
+
+.signup-modal [class^="col-"] {
+    float: left;
+    width: 50%;
+}
+
+.row {
+	clear: both;
+	padding: 5px 10px 10px 20px;
+}
+
+#feature-highlight h1 {
+	color: #ddd;
+	font-size: 30px;
+	text-align: center;
+}
+
+#call-to-action {
+	text-align: center;
+}
+
+.disclaimer {
+	color: #777;
+	font-size: 12px;
+}
+
+.signup-button {
+	padding: 8px 20px 8px 20px;
+	display: inline-block;
+    color: #fff;
+    text-align: center;
+    text-shadow: 0 1px 2px rgba(0,0,0,.25);
+    background-color: #1abc9c;
+    border: 0;
+    border-bottom: 2px solid #12ab8d;
+    cursor: pointer;
+    -webkit-box-shadow: inset 0 -2px #12ab8d;
+    box-shadow: inset 0 -2px #12ab8d;
+    margin-top: 18px;
+}
+
+.signup-button:hover {
+	background-color: #12ab8d;
+	border-bottom: 2px solid #0e8870;
+	-webkit-box-shadow: inset 0 -2px #0e8870;
+    box-shadow: inset 0 -2px #0e8870;
+}

@@ -36,7 +36,9 @@ class SideBar extends React.Component {
                             classmates={classmates}
                             onTimetable={this.props.isCourseInRoster(c.id)}
                             course={c}
-                            fetchCourseInfo={() => this.props.fetchCourseInfo(c.id)}/>
+                            fetchCourseInfo={() => this.props.fetchCourseInfo(c.id)}
+                            removeCourse={() => this.props.removeCourse(c.id)}
+                            />
                 }
         }) : null;
         let optionalSlots = this.props.liveTimetableCourses ? this.props.optionalCourses.map(c => {
@@ -57,15 +59,18 @@ class SideBar extends React.Component {
                     course={c}
                     fetchCourseInfo={() => this.props.fetchCourseInfo(c.id)}/>
         }) : null;
+        let dropItDown = savedTimetables && savedTimetables.length !== 0 ?
+             <div id="timetable-drop-it-down"
+                onMouseDown={this.toggleDropdown.bind(this)}>
+                <span className={classNames("tip-down", {'down' : this.state.showDropdown})}></span>
+            </div> : null;
+        let numCredits = this.props.liveTimetableCourses.length > 0 ? this.props.liveTimetableCourses.reduce((prev,c) => c.num_credits + prev, 0) : 0;
         return (
             <div id="side-bar">
                 <div id="sb-name">
                     <TimetableNameInputContainer />
                     <ClickOutHandler onClickOut={this.hideDropdown}>
-                        <div id="timetable-drop-it-down"
-                        	onMouseDown={this.toggleDropdown.bind(this)}>
-                            <span className={classNames("tip-down", {'down' : this.state.showDropdown})}></span>
-                        </div>
+                        {dropItDown}
                         <div id="timetable-names-dropdown"
                         	className={classNames({'down' : this.state.showDropdown})}
                             >
@@ -77,7 +82,7 @@ class SideBar extends React.Component {
                     </ClickOutHandler>
                 </div>
                 <div id="sb-credits" className="col-1-3">
-                    <h3>16</h3>
+                    <h3>{numCredits}</h3>
                     <h4>credits</h4>
                 </div>
                 <div id="sb-rating" className="col-2-3">
