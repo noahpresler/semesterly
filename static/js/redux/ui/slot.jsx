@@ -87,7 +87,7 @@ class Slot extends React.Component {
             }
         }
 
-    return this.connectDragTarget(
+    return this.props.connectDragTarget(
       <div className="fc-event-container" >
                 <div className={"fc-time-grid-event fc-event slot slot-" + this.props.course}
                      style={ this.getSlotStyles() } 
