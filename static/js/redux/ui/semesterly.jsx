@@ -7,6 +7,7 @@ import TimetableExistsAlertContainer from './alerts/timetable_exists_alert_conta
 import TopBar from './top_bar.jsx';
 import SideBarContainer from './containers/side_bar_container.jsx';
 import UserSettingsModalContainer from './containers/user_settings_modal_container.jsx';
+import ExplorationModalContainer from './containers/exploration_modal_container.jsx';
 
 class Semesterly extends React.Component {
 	componentWillReceiveProps(nextProps) {
@@ -34,6 +35,7 @@ class Semesterly extends React.Component {
 			<div id="page-wrapper">
 				<TopBar />
 				<UserSettingsModalContainer />
+				<ExplorationModalContainer />
 				<AlertBox ref={a => this.msg = a} {...this.alertOptions} />
 				<div id="all-cols">
 					<div id="main-bar">
