@@ -3,7 +3,6 @@ import { DropTarget } from 'react-dnd'
 import { HALF_HOUR_HEIGHT, COLOUR_DATA, DRAGTYPES } from '../constants.jsx';
 
 function convertToHalfHours(str) {
-    console.log(str)
     let start = parseInt(str.split(':')[0])
     return str.split(':')[1] == '30' ? start*2 + 1 : start * 2;
 }
@@ -27,9 +26,6 @@ const dragSlotTarget = {
 
     let newStartHour = convertToHalfHours(props.time_start) + n
     let newEndHour = newStartHour + (endHalfhour - startHalfhour)
-
-    console.log(slotTop, monitor.getClientOffset().y)
-    console.log((monitor.getClientOffset().y - slotTop))
     let newValues = {
       time_start: convertToStr(newStartHour),
       time_end: convertToStr(newEndHour),
