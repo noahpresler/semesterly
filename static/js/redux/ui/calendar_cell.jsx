@@ -47,7 +47,8 @@ const createSource = {
   beginDrag(props) {
     console.log('oh me oh my')
     let newSlotId = new Date().getTime()
-    props.addCustomSlot(props.time, 
+    props.addCustomSlot(
+      props.time, 
       props.time, 
       props.day, 
       true,
@@ -69,6 +70,7 @@ function collectCreateBegin(connect, monitor) { // inject props as drag target
 }
 
 // ------------------ create target:
+var lastPreview = null
 const createTarget = {
   drop(props, monitor) {
     let { timeStart, id }  = monitor.getItem()
@@ -84,12 +86,15 @@ const createTarget = {
     return day == props.day
   },
   hover(props, monitor) {
-    console.log('????')
+    if (props.time == lastPreview) {
+      return
+    }
     let { timeStart, id } = monitor.getItem()
     let timeEnd = props.time
-    if (timeStart > timeEnd) {
+    if (convertToHalfHours(timeStart) > convertToHalfHours(timeEnd)) {
       [timeStart, timeEnd] = [timeEnd, timeStart]
     }
+    lastPreview = props.time
     props.updateCustomSlot({time_start: timeStart, time_end: timeEnd}, id)
   }
 }
