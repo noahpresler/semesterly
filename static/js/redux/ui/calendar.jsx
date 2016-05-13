@@ -13,8 +13,10 @@ const Row = (props) => {
         <td className="fc-axis fc-time fc-widget-content cal-row">
         	{timeText}
         </td>
-        <td className="fc-widget-content week-col">
-        		{dayCells}
+        <td className="fc-widget-content">
+          <div className="week-col">
+        	{dayCells}
+          </div>
         </td>
     </tr>
 	)

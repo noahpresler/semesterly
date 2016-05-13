@@ -38,23 +38,25 @@ class CustomSlot extends React.Component {
         callback();
     }
     componentDidMount() {
+        console.log('ok')
         // provide drag preview, which should just be the regular slot at half opacity
-        this.props.connectDragPreview(
-            <div className="fc-event-container">
-                <div className={"fc-time-grid-event fc-event slot"}
-                     style={ this.getPreviewStyles() }>
-                    <div className="slot-bar" />
-                    <div className="fc-content">
-                        <div className="fc-time">
-                            <span>{ this.props.time_start } – { this.props.time_end }</span>
-                        </div>
-                        <div className="fc-time">
-                            { this.props.name }
-                        </div>
-                    </div>
-                </div>
-            </div>
-        )
+        // this.props.connectDragPreview(
+        //     <div className="fc-event-container">
+        //         <div className={"fc-time-grid-event fc-event slot"}
+        //              style={ this.getPreviewStyles() }>
+        //             <div className="slot-bar" />
+        //             <div className="fc-content">
+        //                 <div className="fc-time">
+        //                     <span>{ this.props.time_start } – { this.props.time_end }</span>
+        //                 </div>
+        //                 <div className="fc-time">
+        //                     { this.props.name }
+        //                 </div>
+        //             </div>
+        //         </div>
+        //     </div>
+        // )
+        this.props.connectDragPreview(<div><p>YOOYOYOYOYOY</p></div>)
     }
     render() {
         return this.props.connectDragSource(
@@ -68,7 +70,7 @@ class CustomSlot extends React.Component {
                             <span>{ this.props.time_start } – { this.props.time_end }</span>
                         </div>
                         <div className="fc-time">
-                            <input type="text" name="eventName" value={ this.props.name } />
+                            <input type="text" name="eventName" style={ {backgroundColor: "#C8F7C5"} } value={ this.props.name } />
                         </div>
                     </div>
                 </div>
