@@ -40,7 +40,7 @@
 }
 
 #feature-highlight .fa-check {
-	color: green;
+	color: #1abc9c;
 }
 
 .emoji {
@@ -53,6 +53,11 @@
 .sample-slot {
 	width: 85%;
 	margin: 15px;
+}
+
+.signup-modal [class^="col-"] {
+    float: left;
+    width: 50%;
 }
 
 .row {
