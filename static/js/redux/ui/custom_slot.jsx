@@ -68,6 +68,34 @@ function collectDragDrop(connect, monitor) { // inject props as drop target
   };
 }
 
+//df l;adjs
+const createSlotTarget = {
+  drop(props, monitor) { // move it to current location on drop
+    let { timeStart, id } = monitor.getItem();
+
+    // get the time that the mouse dropped on
+    let slotStart = props.time_start
+    let slotTop = $('#' + props.id).offset().top
+    let n = Math.floor((monitor.getClientOffset().y - slotTop)/HALF_HOUR_HEIGHT)
+    let timeEnd = convertToStr(convertToHalfHours(props.time_start) + n)
+
+    if (timeStart > timeEnd) {
+        [timeStart, timeEnd] = [timeEnd, timeStart]
+    }
+    props.addCustomSlot(timeStart, timeEnd, props.day, false, new Date().getTime());
+  },
+  canDrop(props, monitor) { // new custom slot must start and end on the same day
+    let { day } = monitor.getItem();
+    return day == props.day
+  },
+}
+
+function collectCreateDrop(connect, monitor) { // inject props as drop target
+  return {
+    connectCreateTarget: connect.dropTarget(),
+  };
+}
+
 // TODO: set connectDragPreview
 class CustomSlot extends React.Component {
     constructor(props) {
@@ -85,7 +113,7 @@ class CustomSlot extends React.Component {
         this.props.updateCustomSlot({ name: event.target.value }, this.props.id)
     }
     render() {
-        return this.props.connectDragTarget(this.props.connectDragSource(
+        return this.props.connectCreateTarget(this.props.connectDragTarget(this.props.connectDragSource(
             <div className="fc-event-container">
                 <div className={"fc-time-grid-event fc-event slot"}
                      style={ this.getSlotStyles() }
@@ -106,7 +134,7 @@ class CustomSlot extends React.Component {
                     </div>
                 </div>
             </div>
-        ));
+        )));
     }
     // TODO: move this out
     getSlotStyles() {
@@ -163,6 +191,8 @@ CustomSlot.propTypes = {
 }
 
 export default DropTarget(DRAGTYPES.DRAG, dragSlotTarget, collectDragDrop)(
-    DragSource(DRAGTYPES.DRAG, dragSlotSource, collectDragSource)(CustomSlot)
+    DropTarget(DRAGTYPES.CREATE, createSlotTarget, collectCreateDrop)(
+        DragSource(DRAGTYPES.DRAG, dragSlotSource, collectDragSource)(CustomSlot)
+    )
 )
 // export default CustomSlot

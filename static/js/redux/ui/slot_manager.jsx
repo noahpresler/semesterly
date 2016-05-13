@@ -17,7 +17,8 @@ class SlotManager extends React.Component {
                 <CustomSlot {...slot}
                     key={ i.toString() + j.toString() }
                     removeCustomSlot={ () => this.props.removeCustomSlot(slot.id) }
-                    updateCustomSlot={ this.props.updateCustomSlot } />
+                    updateCustomSlot={ this.props.updateCustomSlot } 
+                    addCustomSlot={ this.props.addCustomSlot } />
                 :
                 <Slot {...slot} 
                     fetchCourseInfo={ () => this.props.fetchCourseInfo(courseId) }
@@ -25,7 +26,9 @@ class SlotManager extends React.Component {
                     locked={ locked } 
                     lockOrUnlockSection={ () => this.props.addOrRemoveCourse(courseId, slot.meeting_section) }
                     removeCourse={ () => this.props.addOrRemoveCourse(courseId) }
-                    primaryDisplayAttribute={this.props.primaryDisplayAttribute}/>
+                    primaryDisplayAttribute={this.props.primaryDisplayAttribute}
+                    updateCustomSlot={ this.props.updateCustomSlot } 
+                    addCustomSlot={ this.props.addCustomSlot } />
             });
             return (
                     <td key={day}>
