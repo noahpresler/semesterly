@@ -53,6 +53,10 @@ export function loadTimetable(timetable, created=false) {
 		timetables: [timetable],
 		preset: created === false
 	});
+	let userInfo = state.userInfo.data;
+	if (userInfo.isLoggedIn) {
+		dispatch(fetchClassmates(timetable.courses.map( c => c['id'])))
+	}
 }
 
 /* 
@@ -189,6 +193,7 @@ export function requestClassmates(id) {
 
 export function fetchClassmates(courses) {
 	return (dispatch) => {
+
 		dispatch(requestClassmates());
 		fetch(getClassmatesEndpoint(), {
 			credentials: 'include',
