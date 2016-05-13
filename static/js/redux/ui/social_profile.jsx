@@ -31,16 +31,16 @@ export class SocialProfile extends React.Component {
 						<h2>{this.props.userInfo.userFirstName}</h2>
 						<span className={classNames("tip-down", {'down' : this.state.showDropdown})}></span>
 					</div>
-						<div id="social-dropdown"
-							className={classNames({'down' : this.state.showDropdown})}
-							>
-							<div className="tip-border"></div>
-							<div className="tip"></div>
-							<a href="/user/logout">
-								<i className="fa fa-sign-out"></i>
-								<span>Sign out</span>
-							</a>
-						</div>
+					<div id="social-dropdown"
+						className={classNames({'down' : this.state.showDropdown})}
+						>
+						<div className="tip-border"></div>
+						<div className="tip"></div>
+						<a href="/user/logout">
+							<i className="fa fa-sign-out"></i>
+							<span>Sign out</span>
+						</a>
+					</div>
 				</div>
 			</ClickOutHandler>
 
