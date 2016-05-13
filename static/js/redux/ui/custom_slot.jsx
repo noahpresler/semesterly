@@ -52,18 +52,22 @@ class CustomSlot extends React.Component {
             </div>
         )
     }
+    removeSlot() {
+        console.log('removed')
+    }
     render() {
         return this.props.connectDragSource(
             <div className="fc-event-container">
                 <div className={"fc-time-grid-event fc-event slot"}
                      style={ this.getSlotStyles() }>
                     <div className="slot-bar" />
+                        <i className="fa fa-times" onClick={ this.props.removeSlot }></i>
                     <div className="fc-content">
                         <div className="fc-time">
                             <span>{ this.props.time_start } – { this.props.time_end }</span>
                         </div>
                         <div className="fc-time">
-                            { this.props.name }
+                            <input type="text" name="eventName" value={ this.props.name } />
                         </div>
                     </div>
                 </div>
@@ -91,7 +95,7 @@ class CustomSlot extends React.Component {
         }
         return {
             top: top, bottom: -bottom, zIndex: 1, left: '0%', right: '0%', 
-            backgroundColor: 'black',
+            backgroundColor: "#C8F7C5",
             width: slot_width_percentage + "%",
             left: push_left + "%",
             zIndex: 10 * this.props.depth_level,
@@ -110,7 +114,8 @@ class CustomSlot extends React.Component {
         let height = bottom - top - 2;
         return {
             top: top, bottom: -bottom, zIndex: 1, left: '0%', right: '0%', 
-            backgroundColor: 'black',
+            backgroundColor: "#C8F7C5",
+            color: "#222",
             width: '100%',
             left: 0,
             zIndex: 100,
@@ -119,17 +124,17 @@ class CustomSlot extends React.Component {
     }
 }
 
-// CustomSlot.propTypes = {
-//     connectDragSource: PropTypes.func.isRequired,
-//     isDragging: PropTypes.bool.isRequired,
-//     time_start: PropTypes.string.isRequired,
-//     time_end: PropTypes.string.isRequired,
-//     depth_level: PropTypes.number.isRequired,
-//     num_conflicts: PropTypes.number.isRequired,
-//     shift_index: PropTypes.number.isRequired,
-//     name: PropTypes.string.isRequired,
-//     id: PropTypes.number.isRequired
-// }
+CustomSlot.propTypes = {
+    connectDragSource: PropTypes.func.isRequired,
+    isDragging: PropTypes.bool.isRequired,
+    time_start: PropTypes.string.isRequired,
+    time_end: PropTypes.string.isRequired,
+    depth_level: PropTypes.number.isRequired,
+    num_conflicts: PropTypes.number.isRequired,
+    shift_index: PropTypes.number.isRequired,
+    name: PropTypes.string.isRequired,
+    id: PropTypes.number.isRequired
+}
 
 export default DragSource(DRAGTYPES.DRAG, dragSlotSource, collect)(CustomSlot);
 // export default CustomSlot
