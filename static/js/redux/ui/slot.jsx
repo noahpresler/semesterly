@@ -41,6 +41,7 @@ function collectDragDrop(connect, monitor) { // inject props as drop target
   };
 }
 
+var lastPreview = null
 const createSlotTarget = {
     drop(props, monitor) { // move it to current location on drop
         let { timeStart, id } = monitor.getItem();
@@ -63,19 +64,19 @@ const createSlotTarget = {
     },
     hover(props, monitor) {
         let { timeStart, id } = monitor.getItem()
-        
+
         // get the time that the mouse dropped on
         let slotStart = props.time_start
         let slotTop = $('#' + props.id).offset().top
         let n = Math.floor((monitor.getClientOffset().y - slotTop)/HALF_HOUR_HEIGHT)
-        let timeEnd = convertToStr(convertToHalfHours(props.time_start) + n)
-
-        if (timeStart > timeEnd) {
-            [timeStart, timeEnd] = [timeEnd, timeStart]
+        if (n == lastPreview) {
+            return
         }
-        if (timeStart > timeEnd) {
+        let timeEnd = convertToStr(convertToHalfHours(props.time_start) + n)
+        if (convertToHalfHours(timeStart) > convertToHalfHours(timeEnd)) {
           [timeStart, timeEnd] = [timeEnd, timeStart]
         }
+        lastPreview = n
         props.updateCustomSlot({time_start: timeStart, time_end: timeEnd}, id)
     }
 }
