@@ -45,7 +45,7 @@ class Slot extends React.Component {
         }
 
     return (
-      <div className="fc-event-container">
+      <div className="fc-event-container" id={ this.props.id } >
                 <div className={"fc-time-grid-event fc-event slot slot-" + this.props.course}
                      style={ this.getSlotStyles() } 
                      onClick={ this.props.fetchCourseInfo }

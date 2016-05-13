@@ -1,7 +1,17 @@
 import React, { PropTypes } from 'react';
-import { DragSource } from 'react-dnd'
+import { DragSource, DropTarget } from 'react-dnd'
 import { HALF_HOUR_HEIGHT, DRAGTYPES } from '../constants.jsx';
 
+
+function convertToHalfHours(str) {
+  let start = parseInt(str.split(':')[0])
+  return str.split(':')[1] == '30' ? start*2 + 1 : start * 2;
+}
+
+function convertToStr(halfHours) {
+  let num_hours = Math.floor(halfHours/2)
+  return halfHours % 2 ? num_hours + ':30' : num_hours + ':00' 
+}
 
 const dragSlotSource = {
     beginDrag(props) {
@@ -17,12 +27,41 @@ const dragSlotSource = {
     }
 }
 
-function collect(connect, monitor) {
+function collectDragSource(connect, monitor) {
     return {
         connectDragSource: connect.dragSource(),
         connectDragPreview: connect.dragPreview(),
         isDragging: monitor.isDragging()
     }
+}
+
+const dragSlotTarget = {
+  drop(props, monitor) { // move it to current location on drop
+    let { timeStart, timeEnd, id } = monitor.getItem();
+
+    let startHalfhour = convertToHalfHours(timeStart)
+    let endHalfhour = convertToHalfHours(timeEnd)
+
+    let newStartHour = convertToHalfHours(props.time)
+    let newEndHour = newStartHour + (endHalfhour - startHalfhour)
+
+    let slotStart = props.time_start
+    let slotTop = $('#' + props.id).offset().top
+    let n = Math.floor((monitor.getClientOffset().y - slotTop)/HALF_HOUR_HEIGHT)
+    console.log(n)
+    let newValues = {
+      time_start: props.time,
+      time_end: convertToStr(newEndHour),
+      day: props.day
+    }
+    props.updateCustomSlot(newValues, id);
+  },
+}
+
+function collectDragDrop(connect, monitor) { // inject props as drop target
+  return {
+    connectDragTarget: connect.dropTarget(),
+  };
 }
 
 // TODO: set connectDragPreview
@@ -42,8 +81,8 @@ class CustomSlot extends React.Component {
         this.props.updateCustomSlot({ name: event.target.value }, this.props.id)
     }
     render() {
-        return this.props.connectDragSource(
-            <div className="fc-event-container">
+        return this.props.connectDragTarget(this.props.connectDragSource(
+            <div className="fc-event-container" id={ this.props.id }>
                 <div className={"fc-time-grid-event fc-event slot"}
                      style={ this.getSlotStyles() }>
                     <div className="slot-bar" />
@@ -62,7 +101,7 @@ class CustomSlot extends React.Component {
                     </div>
                 </div>
             </div>
-        );
+        ));
     }
     // TODO: move this out
     getSlotStyles() {
@@ -107,6 +146,7 @@ class CustomSlot extends React.Component {
 
 CustomSlot.propTypes = {
     connectDragSource: PropTypes.func.isRequired,
+    connectDragTarget: PropTypes.func.isRequired,
     isDragging: PropTypes.bool.isRequired,
     time_start: PropTypes.string.isRequired,
     time_end: PropTypes.string.isRequired,
@@ -117,5 +157,7 @@ CustomSlot.propTypes = {
     id: PropTypes.number.isRequired
 }
 
-export default DragSource(DRAGTYPES.DRAG, dragSlotSource, collect)(CustomSlot);
+export default DropTarget(DRAGTYPES.DRAG, dragSlotTarget, collectDragDrop)(
+    DragSource(DRAGTYPES.DRAG, dragSlotSource, collectDragSource)(CustomSlot)
+)
 // export default CustomSlot
