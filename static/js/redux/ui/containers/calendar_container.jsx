@@ -36,7 +36,7 @@ const mapDispatchToProps = (dispatch) => {
   return {
     saveTimetable: () => dispatch(saveTimetable()),
     createTimetable: () => {
-      loadTimetable({ name: "Untitled Schedule", courses: [] });
+      loadTimetable({ name: "Untitled Schedule", courses: [] }, true);
     },
     addCustomSlot: (timeStart, timeEnd, day) => {
       addCustomSlot(timeStart, timeEnd, day)
