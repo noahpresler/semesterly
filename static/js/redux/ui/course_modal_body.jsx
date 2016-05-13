@@ -82,11 +82,9 @@ export class CourseModalBody extends React.Component {
                         </div>
                         <div>
                             <h3 className="modal-module-header">Course Evaluations</h3>
-
                         </div>
                         <div>
                             <h3 className="modal-module-header">Textbook</h3>
-
                         </div>
                     </div>
                     <div id="modal-section-lists"

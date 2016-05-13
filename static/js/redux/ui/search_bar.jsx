@@ -74,7 +74,7 @@ export class SearchBar extends React.Component {
                         />
                     </div>
                     <div id="show-exploration"
-                        onMouseDown={this.props.toggleExplorationModal}>
+                        onMouseDown={this.props.showExplorationModal}>
                         <i className="fa fa-compass"></i>
                         <span>Advanced Search</span>
                     </div>

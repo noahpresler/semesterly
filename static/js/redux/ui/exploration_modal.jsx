@@ -19,10 +19,11 @@ export class ExplorationModal extends React.Component {
         this.fetchAdvancedSearchResults = this.fetchAdvancedSearchResults.bind(this);
         this.addOrRemoveCourse = this.addOrRemoveCourse.bind(this);
         this.changeTimer = false;
+        this.hide = this.hide.bind(this);
     }
     addOrRemoveCourse(id, section='') {
         this.props.addOrRemoveCourse(id, section);
-        this.refs.modal.hide();
+        this.hide();
     }
 	componentDidUpdate(nextProps) {
 		if (this.props.isVisible) {
@@ -40,6 +41,11 @@ export class ExplorationModal extends React.Component {
     }
 	toggleLevels() {
     	this.setState({ showLevels: !this.state.showLevels });
+    }
+    hide() {
+        this.props.unhoverSection();
+        this.props.hideExplorationModal();
+        this.refs.modal.hide();
     }
     fetchAdvancedSearchResults() {
         if (this.changeTimer) clearTimeout(this.changeTimer);
@@ -204,7 +210,7 @@ export class ExplorationModal extends React.Component {
             <Modal ref="modal"
                 className={classNames("exploration-modal", {"trans": this.props.hasHoveredResult})}
                 modalStyle={modalStyle}
-                onHide={this.props.toggleExplorationModal}
+                onHide={this.props.hideExplorationModal}
                 >
                 {content}
             </Modal>
