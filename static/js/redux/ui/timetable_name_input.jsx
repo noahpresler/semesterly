@@ -8,6 +8,9 @@ class TimetableNameInput extends React.Component {
         this.setTimetableName = this.setTimetableName.bind(this);
         this.state = { name: this.props.activeLoadedTimetableName };
     }
+    componentWillReceiveProps(nextProps) {
+        this.setState({ name: nextProps.activeLoadedTimetableName });
+    }
     alterTimetableName(event) {
         this.setState({ name: event.target.value });
     }
