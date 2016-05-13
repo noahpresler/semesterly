@@ -92,7 +92,7 @@ class Slot extends React.Component {
             color: COLOUR_DATA[this.props.colourId].font,
             width: slot_width_percentage + "%",
             left: push_left + "%",
-            zIndex: 100 * this.props.depth_level
+            zIndex: 10 * this.props.depth_level
         };
   }
 }
