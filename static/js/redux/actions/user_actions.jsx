@@ -73,6 +73,9 @@ export function lockActiveSections(activeTimetable) {
 export function saveTimetable() {
 	return (dispatch) => {
 		let state = store.getState();
+		if (!state.userInfo.data.isLoggedIn) {
+			return dispatch({type: 'TOGGLE_SIGNUP_MODAL'})
+		}
 		let activeTimetable = getActiveTimetable(state.timetables);
 		// current timetable is empty or we're already in saved state, don't save this timetable
 		if (activeTimetable.courses.length === 0 || state.savingTimetable.upToDate) {
