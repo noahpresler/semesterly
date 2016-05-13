@@ -14,16 +14,20 @@ export class SignupModal extends React.Component {
             <div id="modal-content">
                 <div id="modal-header">
                     <div className="pro-pic" style={{backgroundImage: 'url(/static/img/blank.jpg)'}}></div>
-                    <h1>Sorry...</h1>
+                    <h1>Signup now...</h1>
                 </div>
             </div>
+        let modalStyle = {
+            width: '100%'
+        };
         return (
             <Modal ref="modal"
                 className="signup-modal"
+                modalStyle={modalStyle}
                 onHide={this.props.toggleSignupModal}>
                 {modalHeader}
                 <div id="features">
-                    That feature requires an account, why not give one a spin?
+                    That feature requires an account.
                     <div id="feature-highlight">
                         <div className="row">
                             <div className="col-1-2">
