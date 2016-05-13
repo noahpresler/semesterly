@@ -68,7 +68,6 @@ function collectDragDrop(connect, monitor) { // inject props as drop target
   };
 }
 
-//df l;adjs
 const createSlotTarget = {
   drop(props, monitor) { // move it to current location on drop
     let { timeStart, id } = monitor.getItem();
