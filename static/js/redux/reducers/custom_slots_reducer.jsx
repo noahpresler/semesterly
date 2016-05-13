@@ -1,13 +1,6 @@
 import update from 'react/lib/update';
 
-let test = [{
-  'time_start': '10:00', 
-  'time_end': '12:00', 
-  'day': 'M', 
-  'id': 0,
-  'name': "Untitle Event"
-}]
-export const customSlots = (state = test, action) => {
+export const customSlots = (state = [], action) => {
   switch(action.type) {
     case 'ADD_CUSTOM_SLOT':
       action.newCustomSlot['id'] = new Date().getTime()
