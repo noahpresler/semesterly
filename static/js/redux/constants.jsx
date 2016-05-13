@@ -71,6 +71,41 @@ export const COLOUR_DATA = [
     { background: "#C8F7C5", highlight: "#C4D44D", border: "#548A50", font: "#222" }
 ] // consider #CF000F, #e8fac3, #C8F7C5
 
+export const REACTION_MAP = {
+  FIRE: {
+  	unicode: '\uD83D\uDD25',
+  	name: 'MUST TAKE'
+  },
+  LOVE: {
+  	unicode: '\uD83D\uDE0D',
+  	name: 'LOVE'
+  },
+  CRAP: {
+  	unicode: '\uD83D\uDCA9',
+  	name: 'CRAP'
+  },
+  OKAY: {
+  	unicode: '\uD83D\uDE10',
+  	name: 'OKAY'
+  },
+  BORING: {
+  	unicode: '\uD83D\uDE34',
+  	name: 'BORING'
+  },
+  HARD: {
+  	unicode: '\uD83D\uDE29',
+  	name: 'HARD'
+  },
+  TEARS: {
+  	unicode: '\uD83D\uDE22',
+  	name: 'TEARS'
+  },
+  INTERESTING: {
+  	unicode: '\uD83E\uDD13',
+  	name: 'INTERESTING'
+  }
+}
+
 export const DAYS = ['M', 'T', 'W', 'R', 'F']
 
 export const DRAGTYPES = {
