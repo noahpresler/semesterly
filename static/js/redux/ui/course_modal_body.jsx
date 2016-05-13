@@ -114,9 +114,13 @@ const SearchResultSection = ({ section, secName, instr, enrolled, waitlist, size
         onMouseDown={lockOrUnlock}
         onMouseEnter={hoverSection} 
         onMouseLeave={unhoverSection}>
-        <h4>{secName}</h4>
+        <h4>
+            <span>{secName}</span>
+            <i className="fa fa-calendar-check-o"></i>
+        </h4>
         <h5>{instr}</h5>
         <h6><span className={benchmark}>{seatStatus}</span> / {size} seats</h6>
+        <i className="fa fa-lock"></i>
     </div>
     );
 };
