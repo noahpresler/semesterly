@@ -1,6 +1,7 @@
 .signup-modal {
 	max-width: 500px;
 	height: 550px;
+	outline: none;
 }
 
 .signup-modal #modal-header {
@@ -92,4 +93,11 @@
     -webkit-box-shadow: inset 0 -2px #12ab8d;
     box-shadow: inset 0 -2px #12ab8d;
     margin-top: 18px;
+}
+
+.signup-button:hover {
+	background-color: #12ab8d;
+	border-bottom: 2px solid #0e8870;
+	-webkit-box-shadow: inset 0 -2px #0e8870;
+    box-shadow: inset 0 -2px #0e8870;
 }
