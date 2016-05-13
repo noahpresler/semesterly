@@ -25,6 +25,7 @@ function collect(connect, monitor) {
     }
 }
 
+// TODO: set connectDragPreview
 class CustomSlot extends React.Component {
     constructor(props) {
         super(props);
@@ -37,8 +38,8 @@ class CustomSlot extends React.Component {
         event.stopPropagation();
         callback();
     }
-    componentDidMount() {
-        // TODO: set connectDragPreview
+    updateName(event) {
+        this.props.updateCustomSlot({ name: event.target.value }, this.props.id)
     }
     render() {
         return this.props.connectDragSource(
@@ -52,7 +53,11 @@ class CustomSlot extends React.Component {
                             <span>{ this.props.time_start } – { this.props.time_end }</span>
                         </div>
                         <div className="fc-time">
-                            <input type="text" name="eventName" style={ {backgroundColor: "#C8F7C5"} } value={ this.props.name } />
+                            <input type="text" 
+                                    name="eventName" 
+                                    style={ {backgroundColor: "#C8F7C5"} } 
+                                    value={ this.props.name } 
+                                    onChange={ (event) => this.updateName(event) }/>
                         </div>
                     </div>
                 </div>

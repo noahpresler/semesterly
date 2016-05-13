@@ -11,7 +11,6 @@ import update from 'react/lib/update';
 export const customSlots = (state = [], action) => {
   switch(action.type) {
     case 'ADD_CUSTOM_SLOT':
-      action.newCustomSlot['id'] = new Date().getTime()
       return update(state, {
         $push: [action.newCustomSlot]
       });
@@ -21,8 +20,12 @@ export const customSlots = (state = [], action) => {
       if (tslotindex == -1) {
         return state; // invalid id
       }
-      let toggledSlot = Object.assign({}, state[tslotindex], action.newValues)
-      return [...state.slice(0, tslotindex), toggledSlot, ...state.slice(tslotindex + 1, state.length)]
+      let newSlot = Object.assign({}, state[tslotindex], action.newValues)
+      console.log(action.newValues, action.id)
+      console.log('before', state)
+      let temp = [...state.slice(0, tslotindex), newSlot, ...state.slice(tslotindex + 1, state.length)]
+      console.log('after', temp)
+      return temp
 
     case 'REMOVE_CUSTOM_SLOT':
       let dslotIndex = state.findIndex((s) => s.id == action.id);
