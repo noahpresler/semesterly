@@ -21,10 +21,12 @@ export const customSlots = (state = test, action) => {
       });
 
     case 'MOVE_CUSTOM_SLOT':
+      console.log(action)
       let slotIndex = state.findIndex((s) => s.id == action.id);
       if (slotIndex == -1) {
         return state; // invalid id
       }
+      console.log(slotIndex)
       let newSlot = Object.assign({}, state[slotIndex], action.newTimes)
       return [...state.slice(0, slotIndex), newSlot, ...state.slice(slotIndex + 1, state.length)]
 
