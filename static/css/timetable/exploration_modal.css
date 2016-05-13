@@ -235,6 +235,7 @@ h3.exp-header i:hover {
 	padding: 10px 110px 10px 10px;
 	background-color: #fff;
 	transition: background-color .3s;
+	cursor: pointer;
 }
 .exp-s-result:hover {
 	background-color: #eee;
