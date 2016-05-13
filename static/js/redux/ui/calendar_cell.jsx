@@ -28,7 +28,6 @@ const dragTarget = {
       time_end: convertToStr(newEndHour),
       day: props.day
     }
-    console.log(id);
     props.updateCustomSlot(newValues, id);
   },
   // TODO:
@@ -85,7 +84,7 @@ const createTarget = {
     return day == props.day
   },
   hover(props, monitor) {
-    console.log('????')
+    // console.log('????')
     // let { timeStart, id } = monitor.getItem()
     // let timeEnd = props.time
     // if (timeStart > timeEnd) {
