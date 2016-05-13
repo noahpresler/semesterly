@@ -19,6 +19,7 @@ export const timetables = (state = initialState, action) => {
 			// add the course to the current timetable, but mark it as "fake", so we can
 			// identify it to remove upon unhover
 			let newCourse = Object.assign({}, action.course, { fake: true });
+			newCourse.enrolled_sections = [];
 			let currentCourses = state.items[state.active].courses;
 			// if there's already a hovered course on the timetable, or
 			// if the user is hovering over a section that they've already added 
