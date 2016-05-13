@@ -39,10 +39,7 @@ const mapDispatchToProps = (dispatch) => {
 		hideModal: () => dispatch(setCourseId(null)),
 		hoverSection: hoverSection(dispatch),
 		unhoverSection: unhoverSection(dispatch),
-		addOrRemoveCourse: (id, section) => {
-			dispatch({ type: "UNHOVER_COURSE" });
-			return addOrRemoveCourse(id, section);
-		},
+		addOrRemoveCourse,
 	}
 }
 
