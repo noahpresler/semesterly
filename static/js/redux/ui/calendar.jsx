@@ -28,21 +28,6 @@ class Calendar extends React.Component {
     for (let i = 8; i <= this.props.endHour; i++) { // one row for each hour, starting from 8am
       rows.push(<Row time={i + ':00'} show={true} key={i}/>);
       rows.push(<Row time={i + ':30'} show={false} key={i + 0.5}/>);
-      // rows.push(
-      //     ( <tr key={time}>
-      //             <td className="fc-axis fc-time fc-widget-content cal-row">
-      //             	<span>{time}</span>
-      //             </td>
-      //             <td className="fc-widget-content" />
-      //         </tr>)
-      // );  
-      // // for the half hour row
-      // rows.push(
-      //     (<tr key={time + ".5"} className="fc-minor">
-      //       	<td className="fc-axis fc-time fc-widget-content cal-row"/>
-      //       	<td className="fc-widget-content" />
-      //   	  </tr>)
-      // );
     }
 
   	return rows;
@@ -56,11 +41,11 @@ class Calendar extends React.Component {
 	        	{saveIcon}
 	        </button>
 		);
-		let addButton = <button 
+		let addButton = <button
 			onClick={this.props.createTimetable} className="save-timetable add-button"><i className="fa fa-plus" /></button>
-		let shareButton = <button 
+		let shareButton = <button
 			className="save-timetable add-button"><i className="fa fa-share-alt" /></button>
-		// let downloadButton = <button 
+		// let downloadButton = <button
 		// 	className="save-timetable add-button"><i className="fa fa-download" /></button>
     let downloadButton = null
 		return (

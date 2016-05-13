@@ -6,7 +6,8 @@ import { DragDropContext } from 'react-dnd';
 const mapStateToProps = (state) => {
 	return {
     	alertConflict: state.alerts.alertConflict,
-    	alertTimetableExists: state.alerts.alertTimetableExists
+    	alertTimetableExists: state.alerts.alertTimetableExists,
+    	explorationModalIsVisible: state.explorationModal.isVisible
 	}
 }
 

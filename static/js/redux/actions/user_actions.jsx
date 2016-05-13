@@ -70,10 +70,12 @@ export function lockActiveSections(activeTimetable) {
 	}
 	return courseSections;
 }
-
 export function saveTimetable() {
 	return (dispatch) => {
 		let state = store.getState();
+		if (!state.userInfo.data.isLoggedIn) {
+			return dispatch({type: 'TOGGLE_SIGNUP_MODAL'})
+		}
 		let activeTimetable = getActiveTimetable(state.timetables);
 		// current timetable is empty or we're already in saved state, don't save this timetable
 		if (activeTimetable.courses.length === 0 || state.savingTimetable.upToDate) {
@@ -87,7 +89,8 @@ export function saveTimetable() {
 		dispatch({
 			type: "RECEIVE_TIMETABLES",
 			timetables: [activeTimetable],
-			preset: true
+			preset: true,
+			saving: true
 		});
 		// edit the state's courseSections, so that future requests to add/remove/unlock
 		// courses are handled correctly. in the new courseSections, every currently active
