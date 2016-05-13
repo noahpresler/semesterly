@@ -15,6 +15,9 @@ export const getCourseInfoEndpoint = (course_id) => {
 export const getCourseSearchEndpoint = (query) => {
 	return "search/" + getSchool() + "/" + getSemester() + "/" + query;
 };
+export const getAdvancedSearchEndpoint = (query) => {
+	return "advanced_search/" + getSchool() + "/" + getSemester() + "/" + query;
+};
 export const getTimetablesEndpoint = () => {
 	return "get_timetables/";
 };
