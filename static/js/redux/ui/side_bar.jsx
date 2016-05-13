@@ -6,6 +6,8 @@ import classNames from 'classnames';
 import { COLOUR_DATA } from '../constants.jsx';
 import ClickOutHandler from 'react-onclickout';
 import TimetableNameInputContainer from './containers/timetable_name_input_container.jsx';
+import CreditTickerContainer from './containers/credit_ticker_container.jsx';
+
 
 class SideBar extends React.Component {
     constructor(props) {
@@ -64,7 +66,6 @@ class SideBar extends React.Component {
                 onMouseDown={this.toggleDropdown.bind(this)}>
                 <span className={classNames("tip-down", {'down' : this.state.showDropdown})}></span>
             </div> : null;
-        let numCredits = this.props.liveTimetableCourses.length > 0 ? this.props.liveTimetableCourses.reduce((prev,c) => c.num_credits + prev, 0) : 0;
         return (
             <div id="side-bar">
                 <div id="sb-name">
@@ -81,10 +82,7 @@ class SideBar extends React.Component {
                         </div>
                     </ClickOutHandler>
                 </div>
-                <div id="sb-credits" className="col-1-3">
-                    <h3>{numCredits}</h3>
-                    <h4>credits</h4>
-                </div>
+                <CreditTickerContainer />
                 <div id="sb-rating" className="col-2-3">
                     <h3>Average Course Rating</h3>
                     <div className="sub-rating-wrapper">
