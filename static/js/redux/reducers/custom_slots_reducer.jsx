@@ -10,12 +10,7 @@ let test = [{
 export const customSlots = (state = test, action) => {
   switch(action.type) {
     case 'ADD_CUSTOM_SLOT':
-      // get smallest available id (TODO: use creation time as ID?)
-      let ids = state.map(s => s.id).sort((a, b) => a - b)
-      let first_missing = ids.findIndex((id, index) => id != index)
-      let next_id = first_missing == -1 ? ids.length : first_missing;
-
-      action.newCustomSlot['id'] = next_id
+      action.newCustomSlot['id'] = new Date().getTime()
       return update(state, {
         $push: [action.newCustomSlot]
       });
