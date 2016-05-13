@@ -47,12 +47,12 @@ const createSource = {
   beginDrag(props) {
     console.log('oh me oh my')
     let newSlotId = new Date().getTime()
-    // props.addCustomSlot(props.time, 
-    //   convertToStr(convertToHalfHours(props.time) + 1), 
-    //   props.day, 
-    //   true,
-    //   newSlotId
-    // )
+    props.addCustomSlot(props.time, 
+      props.time, 
+      props.day, 
+      true,
+      newSlotId
+    )
     return {
       timeStart: props.time,
       day: props.day,
@@ -76,21 +76,21 @@ const createTarget = {
     if (timeStart > timeEnd) {
       [timeStart, timeEnd] = [timeEnd, timeStart]
     }
-    props.addCustomSlot(timeStart, timeEnd, props.day, false, new Date().getTime())
-    // props.updateCustomSlot({preview: false}, id)
+    // props.addCustomSlot(timeStart, timeEnd, props.day, false, new Date().getTime())
+    props.updateCustomSlot({preview: false}, id)
   },
   canDrop(props, monitor) { // new custom slot must start and end on the same day
     let { day } = monitor.getItem();
     return day == props.day
   },
   hover(props, monitor) {
-    // console.log('????')
-    // let { timeStart, id } = monitor.getItem()
-    // let timeEnd = props.time
-    // if (timeStart > timeEnd) {
-    //   [timeStart, timeEnd] = [timeEnd, timeStart]
-    // }
-    // props.updateCustomSlot({time_start: timeStart, time_end: timeEnd}, id)
+    console.log('????')
+    let { timeStart, id } = monitor.getItem()
+    let timeEnd = props.time
+    if (timeStart > timeEnd) {
+      [timeStart, timeEnd] = [timeEnd, timeStart]
+    }
+    props.updateCustomSlot({time_start: timeStart, time_end: timeEnd}, id)
   }
 }
 
