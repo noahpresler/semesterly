@@ -26,6 +26,7 @@ export class CourseModalBody extends React.Component {
                     waitlist={slots[0].waitlist}
                     size={slots[0].size}
                     locked={this.props.isSectionLocked(this.props.data.id, sec)}
+                    isOnActiveTimetable={this.props.isSectionOnActiveTimetable(this.props.data.id, sec)}
                     lockOrUnlock={() => this.props.addOrRemoveCourse(this.props.data.id, sec)}
                     hoverSection={() => this.props.hoverSection(this.props.data, sec)}
                     unhoverSection={this.props.unhoverSection} 
@@ -100,7 +101,7 @@ export class CourseModalBody extends React.Component {
     }
 }
 
-const SearchResultSection = ({ section, secName, instr, enrolled, waitlist, size, hoverSection, unhoverSection, locked, inRoster, lockOrUnlock}) => {
+const SearchResultSection = ({ section, secName, instr, enrolled, waitlist, size, hoverSection, unhoverSection, locked, inRoster, lockOrUnlock, isOnActiveTimetable}) => {
     let seats = size - enrolled;
     let seatStatus = waitlist > 0 ? (waitlist + " waitlist") : (seats + " open");
     let benchmark = "green";
@@ -110,7 +111,7 @@ const SearchResultSection = ({ section, secName, instr, enrolled, waitlist, size
         benchmark = "yellow";
     }
     return (
-    <div className={classnames("modal-section", {"locked": locked, "in-roster": inRoster})}
+    <div className={classnames("modal-section", {"locked": locked, "on-active-timetable": isOnActiveTimetable})}
         onMouseDown={lockOrUnlock}
         onMouseEnter={hoverSection} 
         onMouseLeave={unhoverSection}>

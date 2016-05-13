@@ -139,10 +139,10 @@
 #modal-add:hover {
 	background-color: #1858BB;
 }
-#modal-add.in-roster{
+#modal-add.on-active-timetable{
 	background-color: #2DD6B5;
 }
-#modal-add.in-roster:hover{
+#modal-add.on-active-timetable:hover{
 	background-color: #56ECCF;
 }
 
@@ -279,7 +279,7 @@ h3.modal-module-header:after {
 	visibility: hidden;
 	transition: opacity .3s, visibility .3s;
 }
-.modal-section.in-roster .fa-calendar-check-o,
+.modal-section.on-active-timetable .fa-calendar-check-o,
 .modal-section.locked .fa-lock {
 	opacity: 1;
 	visibility: visible;
