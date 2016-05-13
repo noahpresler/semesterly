@@ -49,6 +49,8 @@ urlpatterns = patterns('',
 	url(r'^$', 'timetable.views.view_timetable'),
 	url(r'^get_timetables/$', 'timetable.views.get_timetables'),
 
-	url(r'search/(?P<school>.+?)/(?P<sem>.+?)/(?P<query>.+?)/', 'timetable.views.course_search'),
+	url(r'^search/(?P<school>.+?)/(?P<sem>.+?)/(?P<query>.+?)/', 'timetable.views.course_search'),
+	url(r'^advanced_search/(?P<school>.+?)/(?P<sem>.+?)/(?P<query>.+?)/', 'timetable.views.advanced_course_search'),
+
 	url(r'c/(?P<code>.+?)$', 'timetable.views.course_page')
 )
