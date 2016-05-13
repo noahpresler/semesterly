@@ -1,74 +1,24 @@
 import React from 'react';
 import PaginationContainer  from './containers/pagination_container.jsx';
 import SlotManagerContainer from './containers/slot_manager_container.jsx';
+import CellContainer from './containers/cell_container.jsx'
 import { DAYS, DRAGTYPES } from '../constants.jsx';
 import { DropTarget } from 'react-dnd';
 
-function convertToHalfHours(str) {
-	let start = parseInt(str.split(':')[0])
-	return str.split(':')[1] == '30' ? start*2 + 1 : start * 2;
+const Row = (props) => {
+	let timeText = props.show ? <span>{props.time}</span> : null;
+	let dayCells = DAYS.map(day => <CellContainer day={day} time={props.time} key={day+props.time} />)
+	return (
+		<tr key={props.time}>
+        <td className="fc-axis fc-time fc-widget-content cal-row">
+        	{timeText}
+        </td>
+        <td className="fc-widget-content week-col">
+        		{dayCells}
+        </td>
+    </tr>
+	)
 }
-
-function convertToStr(halfHours) {
-	let num_hours = Math.floor(halfHours/2)
-	return halfHours % 2 ? num_hours + ':30' : num_hours + ':00' 
-}
-
-function collect(connect, monitor) {
-  return {
-    connectDropTarget: connect.dropTarget(),
-  };
-}
-
-const dragCellTarget = {
-	drop(props, monitor) {
-		let { timeStart, timeEnd, id } = monitor.getItem();
-
-    let startHalfhour = convertToHalfHours(timeStart)
-    let endHalfhour = convertToHalfHours(timeEnd)
-
-    let newStartHour = convertToHalfHours(props.time)
-    let newEndHour = newStartHour + (endHalfhour - startHalfhour)
-
-    // console.log(props.time, convertToStr(newEndHour))
-		props.moveCustomSlot(props.time, convertToStr(newEndHour), props.day, id);
-	}
-}
-
-// TODO: separate into container and UI
-class Row extends React.Component {
-	moveSlotToHere(clickEvent) {
-		let calOffset = clickEvent.clientX - $(".week-col").offset().left
-		let dayWidth = $(".week-col").width()/5;
-		let clickedDay = DAYS[Math.floor(calOffset/dayWidth)]
-		let withinBounds = true // TODO
-		if (withinBounds) {
-			this.props.moveCustomSlot('10:00', '12:00', clickedDay, 0)
-		}
-	}
-
-	render() {
-		let timeText = this.props.show ? <span>{this.props.time}</span> : null;
-		let dayCells = DAYS.map(day => <Cell day={day} time={this.props.time} moveCustomSlot={this.props.moveCustomSlot} key={day+this.props.time} />)
-		return (
-			<tr key={this.props.time}>
-	        <td className="fc-axis fc-time fc-widget-content cal-row">
-	        	{timeText}
-	        </td>
-	        <td className="fc-widget-content week-col" 
-	        		onClick={(event) => this.moveSlotToHere(event)}>
-	        		{dayCells}
-	        </td>
-	    </tr>
-		)
-	}
-}
-
-const Cell = DropTarget(DRAGTYPES.DRAG, dragCellTarget, collect)((props) => props.connectDropTarget(<div className='cal-cell'></div>))
-// const Cell = (props) => {
-// 	console.log(props)
-// 	return props.connectDropTarget(<div className='cal-cell'></div>)
-// }
 
 class Calendar extends React.Component {
 	getCalendarRows() {
