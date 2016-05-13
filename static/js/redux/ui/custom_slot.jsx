@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { PropTypes } from 'react';
 import { DragSource } from 'react-dnd'
 import { HALF_HOUR_HEIGHT, COLOUR_DATA } from '../constants.jsx';
 
@@ -6,7 +6,11 @@ import { HALF_HOUR_HEIGHT, COLOUR_DATA } from '../constants.jsx';
 const dragSlotSource = {
     beginDrag(props) {
         console.log('oowee look at me')
-        return {}
+        return {
+            timeStart: props.time_start,
+            timeEnd: props.time_end,
+            id: props.id
+        }
     },
     endDrag(props) {
         console.log('end')
@@ -15,7 +19,8 @@ const dragSlotSource = {
 
 function collect(connect, monitor) {
     return {
-        isDragging: monitor.isDragging
+        connectDragSource: connect.dragSource(),
+        isDragging: monitor.isDragging()
     }
 }
 
@@ -28,7 +33,7 @@ class CustomSlot extends React.Component {
         callback();
     }
     render() {
-        return (
+        return this.props.connectDragSource(
             <div className="fc-event-container">
                 <div className={"fc-time-grid-event fc-event slot"}
                      style={ this.getSlotStyles() }>
@@ -74,6 +79,18 @@ class CustomSlot extends React.Component {
         };
     }
 }
+
+// CustomSlot.propTypes = {
+//     connectDragSource: PropTypes.func.isRequired,
+//     isDragging: PropTypes.bool.isRequired,
+//     time_start: PropTypes.string.isRequired,
+//     time_end: PropTypes.string.isRequired,
+//     depth_level: PropTypes.number.isRequired,
+//     num_conflicts: PropTypes.number.isRequired,
+//     shift_index: PropTypes.number.isRequired,
+//     name: PropTypes.string.isRequired,
+//     id: PropTypes.number.isRequired
+// }
 
 export default DragSource('DRAG', dragSlotSource, collect)(CustomSlot);
 // export default CustomSlot
