@@ -12,6 +12,7 @@ const mapStateToProps = (state) => {
 		practicalSections = state.courseInfo.data.sections['P'];
 	}
 	let courseSections = state.courseSections.objects;
+	let activeTimetable = state.timetables.items[state.timetables.active];
 	return {
 		isFetching: state.courseInfo.isFetching,
 		data: state.courseInfo.data,
@@ -19,18 +20,21 @@ const mapStateToProps = (state) => {
 		lectureSections: lectureSections,
 		tutorialSections: tutorialSections,
 		practicalSections: practicalSections,
-		hasHoveredResult: state.timetables.items[state.timetables.active].courses.some(course => course.fake),
+		hasHoveredResult: activeTimetable.courses.some(course => course.fake),
 		prerequisites: state.courseInfo.data.prerequisites,
 		description: state.courseInfo.data.description,
 		inRoster: courseSections[state.courseInfo.id] !== undefined,
-		isSectionLocked: (course_id, section) => {
-			if (courseSections[course_id] === undefined) {
+		isSectionLocked: (courseId, section) => {
+			if (courseSections[courseId] === undefined) {
 				return false;
 			}
-			return Object.keys(courseSections[course_id]).some( 
-				(type) => courseSections[course_id][type] == section
+			return Object.keys(courseSections[courseId]).some( 
+				(type) => courseSections[courseId][type] == section
 			)
 		},
+		isSectionOnActiveTimetable: (courseId, section) => {
+			return activeTimetable.courses.some(course => course.id === courseId && course.enrolled_sections.some(sec => sec == section));
+		}
 	}
 }
 
