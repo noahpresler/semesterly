@@ -10,6 +10,7 @@ export class CourseModal extends React.Component {
     constructor(props) {
         super(props);
         this.addOrRemoveCourse = this.addOrRemoveCourse.bind(this);
+        this.hide = this.hide.bind(this);
     }
     componentWillReceiveProps(nextProps) { 
         if (nextProps.id != null) {
@@ -18,7 +19,7 @@ export class CourseModal extends React.Component {
     }
     addOrRemoveCourse(id, section='') {
         this.props.addOrRemoveCourse(id, section);
-        this.refs.modal.hide();
+        this.hide();
     }
     sizeItUp() {
         let h = $("#modal-header").outerHeight();
@@ -29,6 +30,11 @@ export class CourseModal extends React.Component {
     }
     componentDidUpdate() {
         this.sizeItUp();
+    }
+    hide() {
+        this.props.unhoverSection();
+        this.props.hideModal();
+        this.refs.modal.hide();
     }
    
     render() {
@@ -63,7 +69,7 @@ export class CourseModal extends React.Component {
             <Modal ref="modal"
                 className={classNames('course-modal', {'trans' : this.props.hasHoveredResult})}                 
                 modalStyle={modalStyle}
-                onHide={this.props.hideModal}
+                onHide={this.hide}
                 >
                 {content}
             </Modal>

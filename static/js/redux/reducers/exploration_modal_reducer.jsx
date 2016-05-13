@@ -1,7 +1,9 @@
 export const explorationModal = (state = { isVisible: false, advancedSearchResults: [], isFetching: false, active: 0, schoolInfoLoaded: false }, action) => {
 	switch (action.type) {
-		case 'TOGGLE_EXPLORATION_MODAL':
-			return Object.assign({}, state, { isVisible: !state.isVisible });
+		case 'SHOW_EXPLORATION_MODAL':
+			return Object.assign({}, state, { isVisible: true });
+		case 'HIDE_EXPLORATION_MODAL':
+			return Object.assign({}, state, { isVisible: false });
 		case 'REQUEST_ADVANCED_SEARCH_RESULTS':
 			return Object.assign({}, state, { isFetching: true });
 		case 'RECEIVE_ADVANCED_SEARCH_RESULTS':
