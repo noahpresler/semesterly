@@ -63,7 +63,7 @@ const createTarget = {
     if (timeStart > timeEnd) {
       [timeStart, timeEnd] = [timeEnd, timeStart]
     }
-    props.addCustomSlot(timeStart, timeEnd, props.day)
+    props.addCustomSlot(timeStart, timeEnd, props.day, false)
   },
   canDrop(props, monitor) { // new custom slot must start and end on the same day
     let { day } = monitor.getItem();

@@ -1,7 +1,7 @@
 import { connect } from 'react-redux';
 import Calendar from '../calendar.jsx';
 import { saveTimetable } from '../../actions/user_actions.jsx';
-import { loadTimetable, addCustomSlot, moveCustomSlot } from '../../actions/timetable_actions.jsx';
+import { loadTimetable } from '../../actions/timetable_actions.jsx';
 /*
 gets the end hour of the current timetable, based on the class that ends latest
 */

@@ -87,7 +87,7 @@ class Slot extends React.Component {
             push_left += .5;
         }
     return {
-            top: top, bottom: -bottom, zIndex: 1, left: '0%', right: '0%', 
+            top: top, bottom: -bottom, right: '0%', 
             backgroundColor: COLOUR_DATA[this.props.colourId].background,
             color: COLOUR_DATA[this.props.colourId].font,
             width: slot_width_percentage + "%",
