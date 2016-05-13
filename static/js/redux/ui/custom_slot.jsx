@@ -4,13 +4,14 @@ import { HALF_HOUR_HEIGHT, DRAGTYPES } from '../constants.jsx';
 
 
 function convertToHalfHours(str) {
-  let start = parseInt(str.split(':')[0])
-  return str.split(':')[1] == '30' ? start*2 + 1 : start * 2;
+    console.log(str)
+    let start = parseInt(str.split(':')[0])
+    return str.split(':')[1] == '30' ? start*2 + 1 : start * 2;
 }
 
 function convertToStr(halfHours) {
-  let num_hours = Math.floor(halfHours/2)
-  return halfHours % 2 ? num_hours + ':30' : num_hours + ':00' 
+    let num_hours = Math.floor(halfHours/2)
+    return halfHours % 2 ? num_hours + ':30' : num_hours + ':00' 
 }
 
 const dragSlotSource = {
@@ -42,15 +43,17 @@ const dragSlotTarget = {
     let startHalfhour = convertToHalfHours(timeStart)
     let endHalfhour = convertToHalfHours(timeEnd)
 
-    let newStartHour = convertToHalfHours(props.time)
-    let newEndHour = newStartHour + (endHalfhour - startHalfhour)
-
     let slotStart = props.time_start
     let slotTop = $('#' + props.id).offset().top
-    let n = Math.floor((monitor.getClientOffset().y - slotTop)/HALF_HOUR_HEIGHT)
+    // number half hours from slot start
+    let n = Math.floor((monitor.getClientOffset().y - slotTop)/HALF_HOUR_HEIGHT) - 5
+
+    let newStartHour = convertToHalfHours(props.time_start) + n
+    let newEndHour = newStartHour + (endHalfhour - startHalfhour)
+    console.log(convertToStr(newStartHour), convertToStr(newEndHour))
     console.log(n)
     let newValues = {
-      time_start: props.time,
+      time_start: convertToStr(newStartHour),
       time_end: convertToStr(newEndHour),
       day: props.day
     }
