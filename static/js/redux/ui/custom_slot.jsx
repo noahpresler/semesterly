@@ -46,12 +46,13 @@ const dragSlotTarget = {
     let slotStart = props.time_start
     let slotTop = $('#' + props.id).offset().top
     // number half hours from slot start
-    let n = Math.floor((monitor.getClientOffset().y - slotTop)/HALF_HOUR_HEIGHT) - 5
+    let n = Math.floor((monitor.getClientOffset().y - slotTop)/HALF_HOUR_HEIGHT)
 
     let newStartHour = convertToHalfHours(props.time_start) + n
     let newEndHour = newStartHour + (endHalfhour - startHalfhour)
-    console.log(convertToStr(newStartHour), convertToStr(newEndHour))
-    console.log(n)
+
+    console.log(slotTop, monitor.getClientOffset().y)
+    console.log((monitor.getClientOffset().y - slotTop))
     let newValues = {
       time_start: convertToStr(newStartHour),
       time_end: convertToStr(newEndHour),
@@ -85,9 +86,10 @@ class CustomSlot extends React.Component {
     }
     render() {
         return this.props.connectDragTarget(this.props.connectDragSource(
-            <div className="fc-event-container" id={ this.props.id }>
+            <div className="fc-event-container">
                 <div className={"fc-time-grid-event fc-event slot"}
-                     style={ this.getSlotStyles() }>
+                     style={ this.getSlotStyles() }
+                     id={ this.props.id }>
                     <div className="slot-bar" />
                         <i className="fa fa-times" onClick={ (e) => this.stopPropagation(this.props.removeCustomSlot, e) }></i>
                     <div className="fc-content">

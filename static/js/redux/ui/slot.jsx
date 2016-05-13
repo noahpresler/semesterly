@@ -45,12 +45,13 @@ class Slot extends React.Component {
         }
 
     return (
-      <div className="fc-event-container" id={ this.props.id } >
+      <div className="fc-event-container" >
                 <div className={"fc-time-grid-event fc-event slot slot-" + this.props.course}
                      style={ this.getSlotStyles() } 
                      onClick={ this.props.fetchCourseInfo }
                      onMouseEnter={ this.onSlotHover }
-                     onMouseLeave={ this.onSlotUnhover }>
+                     onMouseLeave={ this.onSlotUnhover }
+                     id={ this.props.id }>
             <div className="slot-bar" 
                          style={ { backgroundColor: COLOUR_DATA[this.props.colourId].border } }/>
                     { removeButton }
