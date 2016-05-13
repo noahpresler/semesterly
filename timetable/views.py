@@ -85,9 +85,12 @@ def get_timetables(request):
   optional_courses = [SchoolCourse.objects.get(id=cid) for cid in opt_course_ids]
   optional_course_subsets = [subset for k in range(max_optional, -1, -1)\
                                     for subset in itertools.combinations(optional_courses, k)]
+
+  custom_events = params.get('customSlots', [])
   generator = TimetableGenerator(params['semester'], 
                   params['school'],
                   locked_sections,
+                  custom_events,
                   params['preferences'])
   result = [timetable for opt_courses in optional_course_subsets \
       for timetable in generator.courses_to_timetables(courses + list(opt_courses))]
@@ -115,7 +118,7 @@ def update_locked_sections(locked_sections, cid, locked_section, offering_table)
     locked_sections[cid][section_type] = locked_section
 
 class TimetableGenerator:
-  def __init__(self, semester, school, locked_sections, preferences):
+  def __init__(self, semester, school, locked_sections, custom_events, preferences):
     self.school = school
     self.slots_per_hour = 60 / school_to_granularity[school]
     self.course_model = school_to_models[school][0]
@@ -131,6 +134,7 @@ class TimetableGenerator:
     self.sort_by_spread = preferences['do_ranking']
     self.with_conflicts = preferences['try_with_conflicts']
     self.locked_sections = locked_sections
+    self.custom_events = custom_events
 
   def courses_to_timetables(self, courses):
     timetables = self.get_best_timetables(courses)
@@ -223,11 +227,7 @@ class TimetableGenerator:
     total_num_permutations = num_permutations_remaining.pop(0)
     for p in xrange(total_num_permutations): # for each possible tt
       current_tt = []
-      day_to_usage = {'M': [[] for i in range(14 * 60 / school_to_granularity[SCHOOL])],
-              'T': [[] for i in range(14 * 60 / school_to_granularity[SCHOOL])],
-              'W': [[] for i in range(14 * 60 / school_to_granularity[SCHOOL])],
-              'R': [[] for i in range(14 * 60 / school_to_granularity[SCHOOL])],
-              'F': [[] for i in range(14 * 60 / school_to_granularity[SCHOOL])]}
+      day_to_usage = self.get_day_to_usage()
       no_conflicts = True
       for i in xrange(len(sections)): # add an offering for the next section
         j = (p/num_permutations_remaining[i]) % num_offerings[i]
@@ -238,6 +238,18 @@ class TimetableGenerator:
         current_tt.append(new_meeting)
       if no_conflicts and len(current_tt) != 0:
         yield tuple(current_tt)
+
+  def get_day_to_usage(self):
+    """Initialize day_to_usage dictionary, which has custom events blocked out."""
+    day_to_usage = {'M': [[] for i in range(14 * 60 / school_to_granularity[SCHOOL])],
+            'T': [[] for i in range(14 * 60 / school_to_granularity[SCHOOL])],
+            'W': [[] for i in range(14 * 60 / school_to_granularity[SCHOOL])],
+            'R': [[] for i in range(14 * 60 / school_to_granularity[SCHOOL])],
+            'F': [[] for i in range(14 * 60 / school_to_granularity[SCHOOL])]}
+    for event in self.custom_events:
+      for slot in find_slots_to_fill(event['time_start'], event['time_end']):
+        day_to_usage[event['day']][slot].append('custom_slot')
+    return day_to_usage
 
   def courses_to_offerings(self, courses, plist=[]):
     """
