@@ -53,7 +53,7 @@
 	position: relative;
 	padding: 20px 10px 10px;
 	background-color: #f3f3f3;
-	border-bottom: 1px solid #B6D2FD;
+	border-bottom: 1px solid #ddd;
 	transition: background-color .2s, color .2s;
 }
 #modal-header h1 {
