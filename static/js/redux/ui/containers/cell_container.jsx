@@ -1,6 +1,6 @@
 import { connect } from 'react-redux';
 import Cell from '../calendar_cell.jsx';
-import { addCustomSlot, moveCustomSlot } from '../../actions/timetable_actions.jsx';
+import { addCustomSlot, updateCustomSlot } from '../../actions/timetable_actions.jsx';
 
 
 /*
@@ -36,7 +36,7 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch) => {
   return {
     addCustomSlot: addCustomSlot,
-    moveCustomSlot: moveCustomSlot
+    updateCustomSlot: updateCustomSlot
   }
 }
 
