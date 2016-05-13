@@ -49,6 +49,10 @@ class BaseCourse(models.Model):
   def __unicode__(self):
     return self.code + ": " + self.name
 
+  def get_reactions(self):
+    return self.reaction_set.values('title') \
+      .annotate(count=models.Count('title')).distinct()
+
   def get_related_course_info(self):
     info = []
     related = self.related_courses.all()
@@ -123,28 +127,19 @@ class BaseCourseEvaluation(models.Model):
     abstract = True
 
 class Reaction(models.Model):
-  MUST_TAKE = '\uD83D\uDD25'
-  LOVE = '\uD83D\uDE0D'
-  CRAP = '\uD83D\uDCA9'
-  OKAY = '\uD83D\uDE10'
-  BORING = '\uD83D\uDE34'
-  HARD = '\uD83D\uDE29'
-  TEARS = '\uD83D\uDE22'
-  INTERESTING = '\uD83E\uDD13'
-
+  
   REACTION_CHOICES = (
-    (MUST_TAKE, 'FIRE'),
-    (LOVE, 'LOVE'),
-    (CRAP, 'CRAP'),
-    (OKAY, 'OKAY'),
-    (BORING, 'BORING'),
-    (HARD, 'HARD'),
-    (TEARS, 'TEARS'),
-    (INTERESTING, 'INTERESTING'),
+    ('FIRE', 'FIRE'),
+    ('LOVE', 'LOVE'),
+    ('CRAP', 'CRAP'),
+    ('OKAY', 'OKAY'),
+    ('BORING', 'BORING'),
+    ('HARD', 'HARD'),
+    ('TEARS', 'TEARS'),
+    ('INTERESTING', 'INTERESTING'),
   )
   course = models.ManyToManyField(BaseCourse)
   title = models.CharField(max_length=50, choices=REACTION_CHOICES)
-
 
 #-----------------------  University of Toronto ------------------------------
 class Course(BaseCourse):
