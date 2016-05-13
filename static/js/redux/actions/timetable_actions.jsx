@@ -28,6 +28,10 @@ export function alertConflict(){
 
 export function loadTimetable(timetable, created=false) {
 	let dispatch = store.dispatch;
+	let state = store.getState();
+	if (!state.userInfo.data.isLoggedIn) {
+		return dispatch({type: 'TOGGLE_SIGNUP_MODAL'})
+	}
 	dispatch({
 		type: "CHANGE_ACTIVE_SAVED_TIMETABLE",
 		timetable,

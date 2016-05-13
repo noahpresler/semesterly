@@ -59,15 +59,17 @@ class SideBar extends React.Component {
                     course={c}
                     fetchCourseInfo={() => this.props.fetchCourseInfo(c.id)}/>
         }) : null;
+        let dropItDown = savedTimetables && savedTimetables.length !== 0 ?
+             <div id="timetable-drop-it-down"
+                onMouseDown={this.toggleDropdown.bind(this)}>
+                <span className={classNames("tip-down", {'down' : this.state.showDropdown})}></span>
+            </div> : null;
         return (
             <div id="side-bar">
                 <div id="sb-name">
                     <TimetableNameInputContainer />
                     <ClickOutHandler onClickOut={this.hideDropdown}>
-                        <div id="timetable-drop-it-down"
-                        	onMouseDown={this.toggleDropdown.bind(this)}>
-                            <span className={classNames("tip-down", {'down' : this.state.showDropdown})}></span>
-                        </div>
+                        {dropItDown}
                         <div id="timetable-names-dropdown"
                         	className={classNames({'down' : this.state.showDropdown})}
                             >
