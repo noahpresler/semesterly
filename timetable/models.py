@@ -38,6 +38,11 @@ class BaseCourse(models.Model):
   campus = models.TextField(max_length=300, default='')
   prerequisites = models.TextField(max_length=1000, default='')
   exclusions = models.TextField(max_length=1000, default='')
+  num_credits = models.FloatField(default=-1)
+  areas = models.CharField(max_length=300, default='', null=True)
+  department = models.CharField(max_length=250, default='', null=True)
+  related_courses = models.ManyToManyField("self", blank=True)
+
   
   def __unicode__(self):
     return self.code + ": " + self.name
@@ -120,7 +125,6 @@ class Course(BaseCourse):
   """Uoft Course object"""
   # a course may have multiple breadths - each character represents one
   breadths = models.CharField(max_length=5, default='')
-  related_courses = models.ManyToManyField("self", blank=True)
 
   def get_dept(self):
     return self.code[:3]
@@ -151,9 +155,6 @@ class Link(TextbookLink):
 
 #---------------------- John Hopkins University ----------------------------
 class HopkinsCourse(BaseCourse):
-  related_courses = models.ManyToManyField("self", blank=True)
-  num_credits = models.IntegerField(default=-1)
-  areas = models.CharField(max_length=300, default='')
 
   def get_dept(self):
     pass
@@ -209,10 +210,8 @@ class HopkinsLink(TextbookLink):
 
 #---------------------- University of Maryland ----------------------------
 class UmdCourse(BaseCourse):
-  related_courses = models.ManyToManyField("self", blank=True)
   cores = models.CharField(max_length=50, default='')
   geneds = models.CharField(max_length=50, default='')
-  num_credits = models.IntegerField(default=-1)
 
   def get_dept(self):
     pass
@@ -266,7 +265,6 @@ class UmdLink(TextbookLink):
 
 #---------------------- University of Ottawa ----------------------------
 class OttawaCourse(BaseCourse):
-  related_courses = models.ManyToManyField("self", blank=True)
 
   def get_dept(self):
     pass
@@ -314,8 +312,6 @@ class OttawaLink(TextbookLink):
 #---------------------- Rutgers University ----------------------------
 class RutgersCourse(BaseCourse):
   cores = models.CharField(max_length=200, default='')
-  num_credits = models.FloatField(default=-1)
-  related_courses = models.ManyToManyField("self", blank=True)
 
   def get_dept(self):
     pass
@@ -363,8 +359,6 @@ class RutgersLink(TextbookLink):
 
 #---------------------- Queens University ----------------------------
 class QueensCourse(BaseCourse):
-  num_credits = models.FloatField(default=-1)
-  related_courses = models.ManyToManyField("self", blank=True)
 
   def get_dept(self):
     return self.course_code[:4]
