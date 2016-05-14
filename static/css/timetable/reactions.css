@@ -9,7 +9,7 @@
    -moz-transition: -webkit-transform .3s ease-out;
 	-webkit-transition: -moz-transform .3s ease-out;
    -o-transition: -o-transform .3s ease-out;
-    transition: transform .3s ease-out;
+	transition: transform .3s ease-out;
 }
 
 #reactions .reaction:hover {
@@ -110,4 +110,36 @@
 	opacity: 0;
 	visibility: hidden;
 	transition: visibility 0s linear 300ms, opacity 300ms;
+}
+
+#reaction-dropdown {
+	position: absolute;
+	top: 56px;
+	font-size: 10px;
+	width: 60px;
+	left: -15%;
+	border-radius: 8px;
+	background-color: #a1a1a1;
+	opacity: 0;
+	visibility: hidden;
+	color: white;
+	transition: visibility 0s linear 300ms, opacity 300ms;
+}
+
+#reaction-dropdown .tip-border {
+	top: -4px;
+	left: 20px;
+	border-color: transparent transparent #a1a1a1;
+	border-bottom-color: rgba(0,0,0,.2);
+}
+
+#reaction-dropdown .tip {
+   top: -4px;
+	left: 20px;
+	border-color: transparent transparent #a1a1a1;
+}
+.reaction:hover #reaction-dropdown {
+	opacity: .8;
+	visibility: visible;
+	transition: visibility 0s linear 0ms, opacity 300ms;
 }
