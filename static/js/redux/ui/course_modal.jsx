@@ -43,11 +43,14 @@ export class CourseModal extends React.Component {
             backgroundColor: 'transparent'
         };
         let inRoster = this.props.inRoster;
+        let courseAndDept = this.props.data.code;
+        courseAndDept = this.props.data.department && this.props.data.department != "" ?
+        courseAndDept + ", " + this.props.data.department : courseAndDept;
         let content = this.props.isFetching ? <div className="modal-loader"></div> :
         (<div id="modal-content">
             <div id="modal-header">
                 <h1>{this.props.data.name}</h1>
-                <h2>{this.props.data.code}, Applied Mathematics and Statistics </h2>
+                <h2>{courseAndDept}</h2>
                 <div id="modal-close" onClick={() => this.refs.modal.hide()}>
                     <i className="fa fa-times"></i>
                 </div>
