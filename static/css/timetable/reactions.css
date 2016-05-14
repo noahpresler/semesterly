@@ -31,7 +31,7 @@
 
 #reactions {
 	display: inline-block;
-	background-color: #efefef;
+	background-color: #f3f3f3;
 	border-radius: 60px;
 	padding: 0px 3px 0px 3px;
 	border: 1px solid #dedede;
@@ -42,7 +42,23 @@
 	text-align: center;
 }
 
-#emoji-action {
+.emoji-count {
+	position: absolute;
+	bottom: 10px;
+	right: 0px;
+	height: 15px;
+	padding: 0px 2px 0px 2px;
+	border-radius: 30%;
+	font-size: 14px;
+	font-weight: 700;
+	color: white;
+	background-color: #a1a1a1;
+	opacity: .7;
+	visibility: visible;
+	transition: visibility 0s linear 0ms, opacity 300ms;
+}
+
+.emoji-action {
 	position: absolute;
 	bottom: 10px;
 	right: 0px;
@@ -57,8 +73,41 @@
 	transition: visibility 0s linear 300ms, opacity 300ms;
 }
 
-.reaction:hover #emoji-action {
+.reaction:hover .emoji-action {
 	opacity: 1;
 	visibility: visible;
-	transition: visibility 0s linear 0s, opacity 300ms;
+	transition: visibility 0s linear 0ms, opacity 300ms;
+}
+
+.reaction:hover .emoji-count {
+	opacity: 0;
+	visibility: hidden;
+	transition: visibility 0s linear 300ms, opacity 300ms;
+}
+
+.emoji-check {
+	position: absolute;
+	bottom: 10px;
+	right: 0px;
+	height: 15px;
+	width: 15px;
+	border-radius: 50%;
+	font-size: 14px;
+	color: white;
+	background-color: #1abc9c;
+	visibility: hidden;
+	opacity: 0;
+	transition: visibility 0s linear 300ms, opacity 300ms;
+}
+
+.selected .emoji-check {
+	opacity: 1;
+	visibility: visible;
+	transition: visibility 0s linear 0ms, opacity 300ms;
+}
+
+.selected .emoji-count {
+	opacity: 0;
+	visibility: hidden;
+	transition: visibility 0s linear 300ms, opacity 300ms;
 }
