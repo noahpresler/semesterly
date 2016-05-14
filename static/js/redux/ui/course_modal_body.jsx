@@ -56,7 +56,7 @@ export class CourseModalBody extends React.Component {
                 <div className="cf">
                     <div className="col-3-16">
                         <div className="credits">
-                            <h3>3</h3>
+                            <h3>{this.props.data.num_credits}</h3>
                             <h4>credits</h4>
                         </div>
                         <div className="rating-module">
