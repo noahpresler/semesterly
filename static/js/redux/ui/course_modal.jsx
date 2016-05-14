@@ -66,7 +66,7 @@ export class CourseModal extends React.Component {
                     <i className={classNames('fa', {'fa-plus' : !inRoster, 'fa-check' : inRoster})}></i>
                 </div>
             </div>
-            <CourseModalBody {...this.props} addOrRemoveCourse={this.addOrRemoveCourse}/>
+            <CourseModalBody {...this.props} hideModal={this.hide} addOrRemoveCourse={this.addOrRemoveCourse}/>
         </div>);
         return (
             <Modal ref="modal"
