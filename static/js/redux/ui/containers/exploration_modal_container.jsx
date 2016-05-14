@@ -2,6 +2,7 @@ import { connect } from 'react-redux';
 import { ExplorationModal } from '../exploration_modal.jsx';
 import { fetchAdvancedSearchResults } from '../../actions/search_actions.jsx';
 import { hoverSection, unhoverSection, addOrRemoveCourse } from '../../actions/timetable_actions.jsx';
+import { react } from '../../actions/modal_actions.jsx';
 
 const mapStateToProps = (state) => {
 	let { isVisible, advancedSearchResults, isFetching, active } = state.explorationModal;
@@ -42,6 +43,7 @@ const mapDispatchToProps = (dispatch) => {
 		hoverSection: hoverSection(dispatch),
 		unhoverSection: unhoverSection(dispatch),
 		addOrRemoveCourse,
+		react,
 	}
 }
 
