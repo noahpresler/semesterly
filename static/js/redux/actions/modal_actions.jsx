@@ -26,8 +26,9 @@ export function fetchCourseInfo(courseId) {
 	return (dispatch) => {
 
 		dispatch(requestCourseInfo(courseId));
-
-		fetch(getCourseInfoEndpoint(courseId))
+		fetch(getCourseInfoEndpoint(courseId), {
+				'credentials': 'include'
+			})
 		    .then(response => response.json()) // TODO(rohan): error-check the response
 		    .then(json => {
 		        dispatch(setCourseInfo(json))
@@ -48,10 +49,10 @@ export function react(cid, title) {
 		    .then(response => response.json()) // TODO(rohan): error-check the response
 		    .then(json => {
 		    	if (!json.error) {
-			        // store.dispatch({
-			        // 	type: "SET_COURSE_REACTIONS",
-			        // 	reactions: json.reactions
-		        	// });
+			        store.dispatch({
+			        	type: "SET_COURSE_REACTIONS",
+			        	reactions: json.reactions
+		        	});
 	        	}
 		});
     }
