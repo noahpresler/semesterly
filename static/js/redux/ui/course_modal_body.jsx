@@ -61,7 +61,6 @@ export class CourseModalBody extends React.Component {
         let reactionsDisplay = Object.keys(REACTION_MAP).map(title => {
             let reaction = reactions.find(r => r.title === title);
             if (reaction) {
-                console.log(reaction);
                 return <Reaction 
                         key={title} react={this.props.react(cid, title)} emoji={title} count={reaction.count} total={totalReactions}
                             selected={reaction.reacted}/>
