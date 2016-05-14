@@ -6,13 +6,26 @@
 	height: 62px;
 	width: 40px;
 	margin: 0 2px;
+ 	transition: all 0.5s cubic-bezier(.36,-0.64,.34,1.76);
    -moz-transition: -webkit-transform .3s ease-out;
 	-webkit-transition: -moz-transform .3s ease-out;
    -o-transition: -o-transform .3s ease-out;
 	transition: transform .3s ease-out;
 }
+.swing {
+	opacity: 0;
+	perspective: 100px;
+	transform: rotateY(-90deg);
+	transition: all 0.5s cubic-bezier(.36,-0.64,.34,1.76);
+}
 
-#reactions .reaction:hover {
+.swing.reaction.no-animate {
+	opacity: 1;
+	transform: none;
+	transition: all 0.5s cubic-bezier(.36,-0.64,.34,1.76);
+}
+
+#reactions .reaction:hover.no-animate {
 	moz-transform: scale(1.2);
 	-webkit-transform: scale(1.2);
 	o-transform: scale(1.2);
