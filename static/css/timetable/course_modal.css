@@ -37,7 +37,8 @@
 .course-modal.trans #modal-share,
 .course-modal.trans #modal-save,
 .course-modal.trans #modal-add,
-.course-modal.trans #modal-body .rating-module {
+.course-modal.trans #modal-body .rating-module,
+.trans #reactions-wrapper {
 	opacity: 0;
 	visibility: hidden;
 }
@@ -48,6 +49,8 @@
 	height: 100%;
 	background-color: #fff;
 	transition: background-color .2s, color .2s;
+	display: flex;
+	flex-direction: column;
 }
 #modal-header {
 	position: relative;
@@ -149,10 +152,7 @@
 /* Course Modal Body */
 #modal-body {
 	overflow-y: auto;
-	position: absolute;
-	top: 107px;
-	bottom: 0;
-	left: 0;
+	flex: 1;
 	width: 100%;
 }
 #modal-body [class^="col-"] {
