@@ -1,7 +1,8 @@
 import { connect } from 'react-redux';
 import { CourseModal } from '../course_modal.jsx';
 import { hoverSection, unhoverSection, addOrRemoveCourse } from '../../actions/timetable_actions.jsx';
-import { setCourseId } from '../../actions/modal_actions.jsx'
+import { setCourseId, react } from '../../actions/modal_actions.jsx';
+
 const mapStateToProps = (state) => {
 	let lectureSections = [];
 	let tutorialSections = [];
@@ -44,6 +45,7 @@ const mapDispatchToProps = (dispatch) => {
 		hoverSection: hoverSection(dispatch),
 		unhoverSection: unhoverSection(dispatch),
 		addOrRemoveCourse,
+		react,
 	}
 }
 

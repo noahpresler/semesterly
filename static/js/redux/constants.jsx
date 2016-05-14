@@ -36,6 +36,9 @@ export const getClassmatesEndpoint = () => {
 export const getSchoolInfoEndpoint = () => {
 	return "school_info/" + getSchool()
 }
+export const getReactToCourseEndpoint = () => {
+  return "react/";
+}
 
 export const getPrimaryDisplay = (school) => {
 	switch(school) {
