@@ -1,29 +1,64 @@
-.reaction .emoji {
-	height: 22px;
-	width: 22px;
-}
-
 #reactions .reaction {
 	text-align: center;
-	height: 22px;
+	position: relative;
+	display: inline-block;
+	vertical-align: middle;
+	height: 62px;
 	width: 40px;
-	margin-left: 12px;
-	float: left;
-	background-color: #eee;
-	border-radius: 10px;
+	margin: 0 6px;
+   -moz-transition: -webkit-transform .3s ease-out; 
+	-webkit-transition: -moz-transform .3s ease-out; 
+   -o-transition: -o-transform .3s ease-out; 
+    transition: transform .3s ease-out; 
 }
 
-.reaction span {
-	float: left;
-	margin-left: -5px;
-	font-size: 15px;
+#reactions .reaction:hover {
+	moz-transform: scale(1.2);
+	-webkit-transform: scale(1.2);
+	o-transform: scale(1.2);
+	ransform: scale(1.2);
+	cursor: pointer;
+}
+
+.reaction .emoji {
+	height: 100%;
+	width: 100%;
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%, -50%);
 }
 
 #reactions {
 	display: inline-block;
+	background-color: #efefef;
+	border-radius: 60px;
+	padding: 0px 3px 0px 3px;
+	border: 1px solid #dedede;
 }
 
 #reactions-wrapper {
 	width: 100%;
 	text-align: center;
+}
+
+#emoji-action {
+	position: absolute;
+	bottom: 10px;
+	right: 0px;
+	height: 15px;
+	width: 15px;
+	border-radius: 50%;
+	font-size: 14px;
+	color: white;
+	background-color: #1abc9c;
+	visibility: hidden;
+	opacity: 0;
+	transition: visibility 0s linear 300ms, opacity 300ms;
+}
+
+.reaction:hover #emoji-action {
+	opacity: 1;
+	visibility: visible;
+	transition: visibility 0s linear 0s, opacity 300ms;
 }
