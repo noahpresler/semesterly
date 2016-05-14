@@ -38,6 +38,7 @@ export function fetchCourseInfo(courseId) {
 
 export function react(cid, title) {
 	return () => {
+		console.log("REACT")
 		fetch(getReactToCourseEndpoint(), {
 				method: 'POST',
 				body: JSON.stringify({
