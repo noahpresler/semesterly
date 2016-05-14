@@ -61,13 +61,15 @@ class UofTParser:
                     try:
                         course = Course.objects.get(code=code)
                     except:
+                        num_credits = 1 if code[6].upper() == 'Y' else 0.5
                         course = Course(code=code, 
                                         name=data['name'], 
                                         description=data['description'],
                                         campus=code[-1],
                                         breadths=data['breadths'],
                                         prerequisites=data['prerequisites'],
-                                        exclusions=data['exclusions'])
+                                        exclusions=data['exclusions'],
+                                        num_credits=num_credits)
                         course.save()
 
                     day_to_letter_map = {'monday': 'M', 
@@ -349,15 +351,19 @@ class UofTParser:
             data = json.loads(self.s.get(url=request_url, cookies=self.cookies).text)
             for key in data:
                 try:
+
                     course_data = data[key]
                     course_code = course_data['code']
+                    num_credits = 1 if course_code[6].upper() == 'Y' else 0.5
+
                     C, created = Course.objects.update_or_create(code=course_code, defaults={
                             'name': course_data['courseTitle'],
                             'description': BeautifulSoup(course_data['courseDescription']).p.get_text(),
                             'campus': course_code[-1],
                             'breadths': course_data['breadthCategories'][-3:],
                             'prerequisites': course_data['prerequisite'],
-                            'exclusions': course_data['exclusion']
+                            'exclusions': course_data['exclusion'],
+                            'num_credits': num_credits
                         })
                     print "Course:", C, "New?:", created
                     meetings = course_data['meetings']
