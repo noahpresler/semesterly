@@ -13,6 +13,9 @@ export const courseInfo = (state = {isFetching: true, data: {}, id: null}, actio
 				id: action.id
 			};
 		case "SET_COURSE_REACTIONS":
+			if (state.id === null) {
+				return state;
+			}
 			return Object.assign({}, state,
 			{
 				data: Object.assign({}, state.data, {

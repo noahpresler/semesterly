@@ -43,11 +43,11 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch) => {
 	return {
 		hideModal: () => dispatch(setCourseId(null)),
+		openSignupModal: () => dispatch({type: 'TOGGLE_SIGNUP_MODAL'}),
 		hoverSection: hoverSection(dispatch),
 		unhoverSection: unhoverSection(dispatch),
 		addOrRemoveCourse,
 		react,
-		openSignupModal: () => dispatch({type: 'TOGGLE_SIGNUP_MODAL'})
 	}
 }
 
