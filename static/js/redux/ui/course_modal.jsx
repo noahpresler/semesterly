@@ -21,16 +21,16 @@ export class CourseModal extends React.Component {
         this.props.addOrRemoveCourse(id, section);
         this.hide();
     }
-    sizeItUp() {
-        let h = $("#modal-header").outerHeight();
-        $("#modal-body").css("top", h);
-    }
-    componentDidMount() {
-        $(window).resize(this.sizeItUp);
-    }
-    componentDidUpdate() {
-        this.sizeItUp();
-    }
+    // sizeItUp() {
+    //     let h = $("#modal-header").outerHeight();
+    //     $("#modal-body").css("top", h);
+    // }
+    // componentDidMount() {
+    //     $(window).resize(this.sizeItUp);
+    // }
+    // componentDidUpdate() {
+    //     this.sizeItUp();
+    // }
     hide() {
         this.props.unhoverSection();
         this.props.hideModal();
