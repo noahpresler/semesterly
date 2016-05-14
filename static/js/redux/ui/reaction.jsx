@@ -10,6 +10,7 @@ class Reaction extends React.Component {
 		this.toggleSelected = this.toggleSelected.bind(this);
 	}
 	toggleSelected() {
+		console.log("ASDF")
 		this.props.react();
 		this.setState({ didSelect: !this.state.didSelect });
 	}
