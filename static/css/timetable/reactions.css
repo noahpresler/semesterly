@@ -1,0 +1,29 @@
+.reaction .emoji {
+	height: 22px;
+	width: 22px;
+}
+
+#reactions .reaction {
+	text-align: center;
+	height: 22px;
+	width: 40px;
+	margin-left: 12px;
+	float: left;
+	background-color: #eee;
+	border-radius: 10px;
+}
+
+.reaction span {
+	float: left;
+	margin-left: -5px;
+	font-size: 15px;
+}
+
+#reactions {
+	display: inline-block;
+}
+
+#reactions-wrapper {
+	width: 100%;
+	text-align: center;
+}
