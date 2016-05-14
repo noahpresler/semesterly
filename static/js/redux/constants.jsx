@@ -74,35 +74,35 @@ export const COLOUR_DATA = [
 export const REACTION_MAP = {
   FIRE: {
   	unicode: '\uD83D\uDD25',
-  	name: 'MUST TAKE'
+  	name: 'Must Take'
   },
   LOVE: {
   	unicode: '\uD83D\uDE0D',
-  	name: 'LOVE'
+  	name: 'Love It'
   },
   CRAP: {
   	unicode: '\uD83D\uDCA9',
-  	name: 'CRAP'
+  	name: 'Crap Class'
   },
   OKAY: {
   	unicode: '\uD83D\uDE10',
-  	name: 'OKAY'
+  	name: "It's Aight"
   },
   BORING: {
   	unicode: '\uD83D\uDE34',
-  	name: 'BORING'
+  	name: 'Boring'
   },
   HARD: {
   	unicode: '\uD83D\uDE29',
-  	name: 'HARD'
+  	name: 'Hard'
   },
   TEARS: {
   	unicode: '\uD83D\uDE2D',
-  	name: 'TEARS'
+  	name: 'Tears'
   },
   INTERESTING: {
   	unicode: '\uD83E\uDD13',
-  	name: 'INTERESTING'
+  	name: 'Interesting'
   }
 }
 
