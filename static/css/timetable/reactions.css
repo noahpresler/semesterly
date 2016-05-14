@@ -5,11 +5,11 @@
 	vertical-align: middle;
 	height: 62px;
 	width: 40px;
-	margin: 0 6px;
-   -moz-transition: -webkit-transform .3s ease-out; 
-	-webkit-transition: -moz-transform .3s ease-out; 
-   -o-transition: -o-transform .3s ease-out; 
-    transition: transform .3s ease-out; 
+	margin: 0 2px;
+   -moz-transition: -webkit-transform .3s ease-out;
+	-webkit-transition: -moz-transform .3s ease-out;
+   -o-transition: -o-transform .3s ease-out;
+    transition: transform .3s ease-out;
 }
 
 #reactions .reaction:hover {
@@ -33,7 +33,7 @@
 	display: inline-block;
 	background-color: #f3f3f3;
 	border-radius: 60px;
-	padding: 0px 3px 0px 3px;
+	padding: 0px 10px 0px 10px;
 	border: 1px solid #dedede;
 }
 
