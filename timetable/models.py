@@ -63,8 +63,8 @@ class BaseCourse(models.Model):
     textbook_info = []
     for co in co_model.objects.filter(course=self):
       tb = {
-      "section" : co.meeting_section,
-      "textbooks" : co.get_textbooks()
+        "section" : co.meeting_section,
+        "textbooks" : co.get_textbooks()
       }
       textbook_info.append(tb)
     final = []
