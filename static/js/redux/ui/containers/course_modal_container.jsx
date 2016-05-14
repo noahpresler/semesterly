@@ -25,6 +25,7 @@ const mapStateToProps = (state) => {
 		prerequisites: state.courseInfo.data.prerequisites,
 		description: state.courseInfo.data.description,
 		inRoster: courseSections[state.courseInfo.id] !== undefined,
+		isLoggedIn: state.userInfo.data.isLoggedIn,
 		isSectionLocked: (courseId, section) => {
 			if (courseSections[courseId] === undefined) {
 				return false;
@@ -46,6 +47,7 @@ const mapDispatchToProps = (dispatch) => {
 		unhoverSection: unhoverSection(dispatch),
 		addOrRemoveCourse,
 		react,
+		openSignupModal: () => dispatch({type: 'TOGGLE_SIGNUP_MODAL'})
 	}
 }
 

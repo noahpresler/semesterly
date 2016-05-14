@@ -4,6 +4,23 @@ import classnames from 'classnames';
 import Reaction from './reaction.jsx'
 import { REACTION_MAP } from '../constants.jsx';
 export class CourseModalBody extends React.Component {
+    constructor(props) {
+        super(props);
+        this.sendReact = this.sendReact.bind(this);
+    }
+
+    sendReact(cid,title) {
+        return () => {
+            if (this.props.isLoggedIn){
+                this.props.react(cid, title);
+            }
+            else {
+                this.props.hideModal();
+                this.props.openSignupModal();
+            }
+        }
+    }
+
     mapSectionsToSlots(sections) {
         if (sections === undefined) {
             return [];
@@ -18,7 +35,7 @@ export class CourseModalBody extends React.Component {
             }
             let instructString = Array.from(instructors).join(', ');
             let enrolled = slots[0].enrolled || 0;
-            return <SearchResultSection 
+            return <SearchResultSection
                     key={sec}
                     section={slots}
                     secName={sec}
@@ -30,7 +47,7 @@ export class CourseModalBody extends React.Component {
                     isOnActiveTimetable={this.props.isSectionOnActiveTimetable(this.props.data.id, sec)}
                     lockOrUnlock={() => this.props.addOrRemoveCourse(this.props.data.id, sec)}
                     hoverSection={() => this.props.hoverSection(this.props.data, sec)}
-                    unhoverSection={this.props.unhoverSection} 
+                    unhoverSection={this.props.unhoverSection}
                     inRoster={this.props.inRoster}
                 />
         });
@@ -61,16 +78,15 @@ export class CourseModalBody extends React.Component {
         let reactionsDisplay = Object.keys(REACTION_MAP).map(title => {
             let reaction = reactions.find(r => r.title === title);
             if (reaction) {
-                return <Reaction 
-                        key={title} react={this.props.react(cid, title)} emoji={title} count={reaction.count} total={totalReactions}
-                            selected={reaction.reacted}/>
+                return <Reaction
+                        key={title} react={this.sendReact(cid, title)} emoji={title} count={reaction.count} total={totalReactions}/>
             }
             else { // noone has reacted with this emoji yet
-            return <Reaction 
-                    key={title} react={this.props.react(cid, title)} emoji={title} count={0} total={totalReactions}/>
+            return <Reaction
+                    key={title} react={this.sendReact(cid, title)} emoji={title} count={0} total={totalReactions}/>
             }
         });
-        reactionsDisplay.sort((r1, r2) => {return r1.props.count < r2.props.count});        
+        reactionsDisplay.sort((r1, r2) => {return r1.props.count < r2.props.count});
         return (
         <div id="modal-body">
                 <div className="cf">
@@ -137,7 +153,7 @@ const SearchResultSection = ({ section, secName, instr, enrolled, waitlist, size
     return (
     <div className={classnames("modal-section", {"locked": locked, "on-active-timetable": isOnActiveTimetable})}
         onMouseDown={lockOrUnlock}
-        onMouseEnter={hoverSection} 
+        onMouseEnter={hoverSection}
         onMouseLeave={unhoverSection}>
         <h4>
             <span>{secName}</span>
