@@ -12,7 +12,7 @@ export function getUserInfo(json) {
 
 export function requestUserInfo(id) {
   return {
-    type: "REQUEST_USER_INFO",
+	type: "REQUEST_USER_INFO",
   }
 }
 
@@ -21,17 +21,17 @@ export function fetchUserInfo() {
 		dispatch(requestUserInfo());
 
 		fetch(getUserInfoEndpoint(), { credentials: 'include' })
-		    .then(response => response.json()) // TODO(rohan): error-check the response
-		    .then(user => {
-		        dispatch(getUserInfo(user));
-		        if (user.timetables && user.timetables.length > 0) {
-		        	// loading one of the user's timetables (after initial page load)
-		        	loadTimetable(user.timetables[0]);
-		        	dispatch({type: "RECEIVE_TIMETABLE_SAVED"});
-		        }
-		        return user;
-		    })
-		    .then(user => {
+			.then(response => response.json()) // TODO(rohan): error-check the response
+			.then(user => {
+				dispatch(getUserInfo(user));
+				if (user.timetables && user.timetables.length > 0) {
+					// loading one of the user's timetables (after initial page load)
+					loadTimetable(user.timetables[0]);
+					dispatch({type: "RECEIVE_TIMETABLE_SAVED"});
+				}
+				return user;
+			})
+			.then(user => {
 				if (user.isLoggedIn && user.timetables[0]) {
 					dispatch(fetchClassmates(user.timetables[0].courses.map( c => c['id'])))
 				}
@@ -100,10 +100,10 @@ export function saveTimetable() {
 			courseSections: lockActiveSections(activeTimetable)
 		});
 		fetch(getSaveTimetableEndpoint(), {
-      		method: 'POST',
-      		body: JSON.stringify(getSaveTimetablesRequestBody()),
-      		credentials: 'include',
-    	})
+			method: 'POST',
+			body: JSON.stringify(getSaveTimetablesRequestBody()),
+			credentials: 'include',
+		})
 		.then(response => response.json())
 		.then(json => {
 			if (json.error) {
@@ -146,10 +146,10 @@ export function saveSettings() {
 			type: "REQUEST_SAVE_USER_INFO"
 		});
 		fetch(getSaveSettingsEndpoint(), {
-      		method: 'POST',
-      		body: JSON.stringify(getSaveSettingsRequestBody()),
-      		credentials: 'include',
-    	})
+			method: 'POST',
+			body: JSON.stringify(getSaveSettingsRequestBody()),
+			credentials: 'include',
+		})
 		.then(response => dispatch({
 			type: "RECEIVE_USER_INFO_SAVED"
 		}));
