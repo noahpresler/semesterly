@@ -75,10 +75,10 @@ def save_timetable(request):
 	# since an ID has not been created for this timetable yet
 	tempId = params['id'] if params['id'] else -1
 	# don't allow people to save timetables with the same name
-	# two cases: 
+	# two cases:
 	# 1. the user is creating a new timetable with the given name,
 	# in which case tempId will be 0 from above
-	# 2. the user is editing the name of an existing timetbale, in which 
+	# 2. the user is editing the name of an existing timetbale, in which
 	# case tempId is the ID of that timetable, as passed from the frontend.
 	# we check if a timetable with a different id has that name
 	if PT.objects.filter(~Q(id=tempId), student=student, name=params['name']).exists():
