@@ -1,6 +1,6 @@
 import fetch from 'isomorphic-fetch';
-import { getCourseInfoEndpoint } from '../constants.jsx';
-
+import { getCourseInfoEndpoint, getReactToCourseEndpoint } from '../constants.jsx';
+import { store } from '../init.jsx';
 export function setCourseInfo(json) {
 	return {
 		type: "COURSE_INFO_RECEIVED",
@@ -33,4 +33,26 @@ export function fetchCourseInfo(courseId) {
 		        dispatch(setCourseInfo(json))
 		    });
 	}
+}
+
+export function react(cid, title) {
+	return () => {
+		fetch(getReactToCourseEndpoint(), {
+				method: 'POST',
+				body: JSON.stringify({
+					cid,
+					title
+				}),
+				credentials: 'include',
+			})
+		    .then(response => response.json()) // TODO(rohan): error-check the response
+		    .then(json => {
+		    	if (!json.error) {
+			        // store.dispatch({
+			        // 	type: "SET_COURSE_REACTIONS",
+			        // 	reactions: json.reactions
+		        	// });
+	        	}
+		});
+    }
 }
