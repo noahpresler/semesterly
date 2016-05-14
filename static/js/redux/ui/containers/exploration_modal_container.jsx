@@ -20,6 +20,7 @@ const mapStateToProps = (state) => {
 		active,
 		course,
 		inRoster,
+		isLoggedIn: state.userInfo.data.isLoggedIn,
 		hasHoveredResult: activeTimetable.courses.some(course => course.fake),
 		isSectionLocked: (courseId, section) => {
 			if (courseSections[courseId] === undefined) {
@@ -37,7 +38,8 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
 	return {
-		hideExplorationModal: () => dispatch({ type: "HIDE_EXPLORATION_MODAL" }),
+		hideModal: () => dispatch({ type: "HIDE_EXPLORATION_MODAL" }),
+		openSignupModal: () => dispatch({ type: "TOGGLE_SIGNUP_MODAL" }),
 	  	fetchAdvancedSearchResults: (query) => dispatch(fetchAdvancedSearchResults(query)),
 	  	setAdvancedSearchResultIndex: (i) => dispatch({ type: "SET_ACTIVE_RESULT", active: i }),
 		hoverSection: hoverSection(dispatch),
