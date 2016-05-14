@@ -36,6 +36,7 @@ class MasterSlot extends React.Component {
             friendCircles = [<div className="ms-friend" key={4}>{plusMore}</div>].concat(friendCircles.slice(0,3))
         }
         let masterSlotClass = 'master-slot slot-' + this.props.course.id;
+        // let professors = 
         masterSlotClass = this.props.onTimetable ? masterSlotClass : masterSlotClass + ' optional';
 		return <div className={masterSlotClass}
 					onMouseEnter={ this.onMasterSlotHover }
@@ -50,7 +51,7 @@ class MasterSlot extends React.Component {
 		        <div className="master-slot-content">
 		            <h3>{ this.props.course.code }</h3>
 		            <h3>{ this.props.course.name }</h3>
-		            <h3>Baryl Castello</h3>
+		            <h3>{ this.props.professors }</h3>
 		            <h3>4 credits</h3>
 		        </div>
 		        <div className="master-slot-actions">
