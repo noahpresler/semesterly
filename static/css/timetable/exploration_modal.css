@@ -301,10 +301,8 @@ h3.exp-header i:hover {
 	font-size: 14px;
 	padding: 0 20% 0 0;
 }
-#modal-body {
+#exp-modal #modal-body {
 	padding-top: 20px;
-	flex: 1;
-	position: static;
 }
 #exp-modal [class^="col-"] {
 	width: 100%;
