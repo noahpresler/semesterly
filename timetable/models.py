@@ -48,9 +48,14 @@ class BaseCourse(models.Model):
   def __unicode__(self):
     return self.code + ": " + self.name
 
-  def get_reactions(self):
-    return self.reaction_set.values('title') \
-      .annotate(count=models.Count('title')).distinct()
+  def get_reactions(self, student=None):
+    result = list(self.reaction_set.values('title') \
+      .annotate(count=models.Count('title')).distinct().all())
+    if not student:
+      return result
+    for i, r in enumerate(result):
+      result[i]['reacted'] = self.reaction_set.filter(student=student,title=r['title']).exists()
+    return result
 
   def get_related_course_info(self):
     info = []
