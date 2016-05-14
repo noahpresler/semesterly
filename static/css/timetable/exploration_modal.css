@@ -51,6 +51,10 @@
 .trans #modal-body .credits h4,
 .trans #exp-modal #modal-share,
 .trans #exp-modal #modal-share i,
+.trans #exp-modal #modal-add,
+.trans #exp-modal #modal-add i,
+.trans #exp-modal #modal-save,
+.trans #exp-modal #modal-save i,
 .trans h3.modal-module-header,
 .trans h3.modal-module-header:after {
 	color: transparent;
@@ -68,7 +72,9 @@
 #exploration-header {
 	background-color: #eee;
 	padding: 15px;
-	position: relative;
+	width: 100%;
+	position: absolute;
+	z-index: 1;
 	border-bottom: 1px solid #ddd;
 }
 #exp-title i {
@@ -117,10 +123,11 @@
 /* Exploration Body */
 #exploration-body {
 	position: absolute;
-	top: 61px;
+	top: 0;
 	left: 0;
+	height: 100%;
 	width: 100%;
-	bottom: 0;
+	padding: 61px 0 0;
 }
 h3.exp-header {
 	font-size: 14px;
@@ -148,10 +155,6 @@ h3.exp-header:after {
 
 /* Exploration Filters */
 #exp-filters {
-	width: 25%;
-	position: absolute;
-	top: 0;
-	left: 0;
 	padding: 15px;
 }
 .exp-filter-section {
@@ -249,9 +252,6 @@ h3.exp-header i:hover {
 /* Exploration Search Results */
 #exp-search-results {
 	padding: 15px;
-	position: absolute;
-	width: 37.5%;
-	left: 25%;
 	height: 100%;
 	overflow-y: auto;
     opacity: 1;
@@ -260,15 +260,12 @@ h3.exp-header i:hover {
 #exp-search-results p {
 	padding-left: 10px;
 }
-#exp-search-list {
-	width: 100%;
-	height: 100%;
-}
 .exp-s-result {
-	padding: 10px 110px 10px 10px;
+	padding: 10px;
 	background-color: #fff;
 	transition: background-color .3s;
 	cursor: pointer;
+	position: relative;
 }
 .exp-s-result:hover {
 	background-color: #eee;
@@ -286,16 +283,15 @@ h3.exp-header i:hover {
 
 /* Exploration Course Content */
 #exp-modal {
-	width: 37.5%;
 	height: 100%;
-	position: absolute;
-	left: 62.5%;
-	top: 0;
-	overflow-y: auto;
+}
+#exp-modal #modal-content {
+	display: flex;
+	flex-direction: column;
 }
 #exp-modal #modal-header {
 	background-color: #fff;
-	padding: 20px 10px 10px 10px;
+	padding: 20px 10px 30px 10px;
 }
 #exp-modal h1 {
 	font-size: 22px;
@@ -305,30 +301,64 @@ h3.exp-header i:hover {
 	font-size: 14px;
 	padding: 0 20% 0 0;
 }
-#exp-modal #modal-share {
-	top: auto;
+#modal-body {
+	padding-top: 20px;
+	flex: 1;
+	position: static;
+}
+#exp-modal [class^="col-"] {
+	width: 100%;
+}
+#exp-modal #modal-share,
+#exp-modal #modal-add,
+#exp-modal #modal-save {
 	position: absolute;
+	top: auto;
 	bottom: -34px;
-	right: 10%;
 	border-radius: 100%;
 	width: 60px;
 	height: 60px;
-	background-color: #B6D2FD;
+	background-color: #34495E;
 	cursor: pointer;
 	transition: background-color .3s;
 	z-index: 1;
+	transform: translateX(-50%);
 }
-#exp-modal #modal-share i {
+#exp-modal #modal-share i,
+#exp-modal #modal-add i,
+#exp-modal #modal-save i {
 	text-align: center;
 	width: 100%;
 	line-height: 60px;
 	color: #fff;
 	font-size: 24px;
 }
-#exp-modal #modal-share:hover {
-	background-color: #1858BB;
-	transform: scale(1);
+#exp-modal #modal-share {
+	left: 25%;
 }
-#exp-modal [class^="col-"] {
-	width: 100%;
+#exp-modal #modal-save {
+	left: 50%;
+}
+#exp-modal #modal-add {
+	left: 75%;
+}
+#exp-modal #modal-add:hover,
+#exp-modal #modal-share:hover,
+#exp-modal #modal-save:hover {
+	transform: scale(1) translateX(-50%);
+}
+#exp-modal #modal-share:hover {
+	background-color: #5B99CE;
+}
+#exp-modal #modal-save:hover {
+	background-color: #5BCE84;
+}
+#exp-modal #modal-add:hover {
+	background-color: #1858BB;
+}
+#exp-modal #modal-add.on-active-timetable{
+	background-color: #2DD6B5;
+}
+#exp-modal #modal-add.on-active-timetable:hover{
+	background-color: #56ECCF;
 }

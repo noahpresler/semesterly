@@ -5,56 +5,56 @@ import { CourseModalBody } from './course_modal_body.jsx';
 
 export class ExplorationModal extends React.Component {
 	constructor(props){
-        super(props);
-        this.state = {
+		super(props);
+		this.state = {
 			showDepartments: false,
 			showAreas: false,
 			showTimes: false,
 			showLevels: false
 		};
-        this.toggleDepartments = this.toggleDepartments.bind(this);
-        this.toggleAreas = this.toggleAreas.bind(this);
-        this.toggleTimes = this.toggleTimes.bind(this);
-        this.toggleLevels = this.toggleLevels.bind(this);
-        this.fetchAdvancedSearchResults = this.fetchAdvancedSearchResults.bind(this);
-        this.addOrRemoveCourse = this.addOrRemoveCourse.bind(this);
-        this.changeTimer = false;
-        this.hide = this.hide.bind(this);
-    }
-    addOrRemoveCourse(id, section='') {
-        this.props.addOrRemoveCourse(id, section);
-        this.hide();
-    }
+		this.toggleDepartments = this.toggleDepartments.bind(this);
+		this.toggleAreas = this.toggleAreas.bind(this);
+		this.toggleTimes = this.toggleTimes.bind(this);
+		this.toggleLevels = this.toggleLevels.bind(this);
+		this.fetchAdvancedSearchResults = this.fetchAdvancedSearchResults.bind(this);
+		this.addOrRemoveCourse = this.addOrRemoveCourse.bind(this);
+		this.changeTimer = false;
+		this.hide = this.hide.bind(this);
+	}
+	addOrRemoveCourse(id, section='') {
+		this.props.addOrRemoveCourse(id, section);
+		this.hide();
+	}
 	componentDidUpdate(nextProps) {
 		if (this.props.isVisible) {
 			this.refs.modal.show();
 		}
 	}
 	toggleDepartments() {
-    	this.setState({ showDepartments: !this.state.showDepartments });
-    }
+		this.setState({ showDepartments: !this.state.showDepartments });
+	}
 	toggleAreas() {
-    	this.setState({ showAreas: !this.state.showAreas });
-    }
+		this.setState({ showAreas: !this.state.showAreas });
+	}
 	toggleTimes() {
-    	this.setState({ showTimes: !this.state.showTimes });
-    }
+		this.setState({ showTimes: !this.state.showTimes });
+	}
 	toggleLevels() {
-    	this.setState({ showLevels: !this.state.showLevels });
-    }
-    hide() {
-        this.props.unhoverSection();
-        this.props.hideExplorationModal();
-        this.refs.modal.hide();
-    }
-    fetchAdvancedSearchResults() {
-        if (this.changeTimer) clearTimeout(this.changeTimer);
-        let query = this.refs.input.value;
-        this.changeTimer = setTimeout( () => {
-            this.props.fetchAdvancedSearchResults(query);
-            this.changeTimer = false;
-        }, 200);
-    }
+		this.setState({ showLevels: !this.state.showLevels });
+	}
+	hide() {
+		this.props.unhoverSection();
+		this.props.hideExplorationModal();
+		this.refs.modal.hide();
+	}
+	fetchAdvancedSearchResults() {
+		if (this.changeTimer) clearTimeout(this.changeTimer);
+		let query = this.refs.input.value;
+		this.changeTimer = setTimeout( () => {
+			this.props.fetchAdvancedSearchResults(query);
+			this.changeTimer = false;
+		}, 200);
+	}
 	render() {
 		let modalStyle = {
 			width: '100%',
@@ -111,6 +111,12 @@ export class ExplorationModal extends React.Component {
 					<div id="modal-share">
 						<i className="fa fa-share-alt"></i>
 					</div>
+					<div id="modal-save">
+						<i className="fa fa-save"></i>
+					</div>
+					<div id="modal-add">
+						<i className="fa fa-plus"></i>
+					</div>
 				</div>
 				<CourseModalBody {...course} 
 					{...this.props}
@@ -123,7 +129,7 @@ export class ExplorationModal extends React.Component {
 			</div>
 		}
 
-        let content = (
+		let content = (
 			<div id="exploration-content">
 				<div id="exploration-header"
 					className="cf">
@@ -132,7 +138,7 @@ export class ExplorationModal extends React.Component {
 						<i className="fa fa-compass"></i>
 						<h1>Course Discovery</h1>
 					</div>
-					<div className="col-6-16">
+					<div className="col-5-16">
 						<input ref="input" onInput={this.fetchAdvancedSearchResults} />
 					</div>
 	                <div id="exploration-close"
@@ -141,68 +147,66 @@ export class ExplorationModal extends React.Component {
 	                </div>
 	            </div>
 	            <div id="exploration-body">
-	                <div className="cf">
-	                    <div id="exp-filters">
-	                        <div className={classNames("exp-filter-section", {'open' : this.state.showDepartments})}>
-								<h3 className="exp-header">
-									<span>Departments Filter</span>
-									<i className="fa fa-plus"
-										onMouseDown={this.toggleDepartments.bind(this)}></i>
-								</h3>
-								<h6>
-									<i className="fa fa-times"></i>
-									<span>Computer Science</span>
-								</h6>
-	                        </div>
-	                        <div className={classNames("exp-filter-section", {'open' : this.state.showAreas})}>
-	                            <h3 className="exp-header">
-									<span>Areas Filter</span>
-									<i className="fa fa-plus"
-										onMouseDown={this.toggleAreas.bind(this)}></i>
-								</h3>
-								<h6>
-									<i className="fa fa-times"></i>
-									<span>Humanities</span>
-								</h6>
-								<h6>
-									<i className="fa fa-times"></i>
-									<span>Writing Intensive</span>
-								</h6>
-	                        </div>
-	                        <div className={classNames("exp-filter-section", {'open' : this.state.showTimes})}>
-	                            <h3 className="exp-header">
-									<span>Times Filter</span>
-									<i className="fa fa-plus"
-										onMouseDown={this.toggleTimes.bind(this)}></i>
-								</h3>
-								<h6>
-									<i className="fa fa-times"></i>
-									<span>M 9am-5pm</span>
-								</h6>
-	                        </div>
-	                        <div className={classNames("exp-filter-section", {'open' : this.state.showLevels})}>
-	                            <h3 className="exp-header">
-									<span>Course Level Filter</span>
-									<i className="fa fa-plus"
-										onMouseDown={this.toggleLevels.bind(this)}></i>
-								</h3>
-								<h6>
-									<i className="fa fa-times"></i>
-									<span>200</span>
-								</h6>
-	                        </div>
-	                    </div>
-	                    <div id="exp-search-results">
-	                        <div id="exp-search-list">
-	                    		{ numSearchResults }
-								{ searchResults }
-	                        </div>
-	                    </div>
-	                    { departmentFilter }
-	                    <div id="exp-modal">
-	                        { courseModal }
-	                    </div>
-	                </div>
+                    <div id="exp-filters" className="col-4-16">
+                        <div className={classNames("exp-filter-section", {'open' : this.state.showDepartments})}>
+							<h3 className="exp-header">
+								<span>Departments Filter</span>
+								<i className="fa fa-plus"
+									onMouseDown={this.toggleDepartments.bind(this)}></i>
+							</h3>
+							<h6>
+								<i className="fa fa-times"></i>
+								<span>Computer Science</span>
+							</h6>
+                        </div>
+                        <div className={classNames("exp-filter-section", {'open' : this.state.showAreas})}>
+                            <h3 className="exp-header">
+								<span>Areas Filter</span>
+								<i className="fa fa-plus"
+									onMouseDown={this.toggleAreas.bind(this)}></i>
+							</h3>
+							<h6>
+								<i className="fa fa-times"></i>
+								<span>Humanities</span>
+							</h6>
+							<h6>
+								<i className="fa fa-times"></i>
+								<span>Writing Intensive</span>
+							</h6>
+                        </div>
+                        <div className={classNames("exp-filter-section", {'open' : this.state.showTimes})}>
+                            <h3 className="exp-header">
+								<span>Times Filter</span>
+								<i className="fa fa-plus"
+									onMouseDown={this.toggleTimes.bind(this)}></i>
+							</h3>
+							<h6>
+								<i className="fa fa-times"></i>
+								<span>M 9am-5pm</span>
+							</h6>
+                        </div>
+                        <div className={classNames("exp-filter-section", {'open' : this.state.showLevels})}>
+                            <h3 className="exp-header">
+								<span>Course Level Filter</span>
+								<i className="fa fa-plus"
+									onMouseDown={this.toggleLevels.bind(this)}></i>
+							</h3>
+							<h6>
+								<i className="fa fa-times"></i>
+								<span>200</span>
+							</h6>
+                        </div>
+                    </div>
+                    <div id="exp-search-results" className="col-5-16">
+                        <div id="exp-search-list">
+                    		{ numSearchResults }
+							{ searchResults }
+                        </div>
+                    </div>
+                    { departmentFilter }
+                    <div id="exp-modal" className="col-7-16">
+                        { courseModal }
+                    </div>
 	            </div>
 	        </div>
         );
