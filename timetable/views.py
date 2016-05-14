@@ -646,7 +646,7 @@ def has_offering(course, sem):
 #   return d
 
 ## Organizing result sections by section type ###
-def my_model_to_dict(course, SchoolCourseOffering, sem):
+def my_model_to_dict(course, SchoolCourseOffering, sem, include_reactions=False):
   fields=['code','name', 'id', 'description']
   d = model_to_dict(course, fields)
   d['sections'] = {}
@@ -663,6 +663,8 @@ def my_model_to_dict(course, SchoolCourseOffering, sem):
     if section_code not in d['sections'][co.section_type]:
       d['sections'][co.section_type][section_code] = []
     d['sections'][co.section_type][section_code].append(model_to_dict(co))
+  if include_reactions:
+    d['reactions'] = list(course.get_reactions())
   return d
 
 @csrf_exempt
@@ -699,7 +701,6 @@ def course_search(request, school, sem, query):
   return HttpResponse(json.dumps(json_data), content_type="application/json")
 
 
-
 # ADVANCED SEARCH
 @csrf_exempt
 def advanced_course_search(request, school, sem, query):
@@ -729,11 +730,10 @@ def advanced_course_search(request, school, sem, query):
 
   course_match_objs = course_match_objs.distinct('code')[:50]
 
-  json_data = [my_model_to_dict(course, SchoolCourseOffering, sem) for course in course_match_objs]
+  json_data = [my_model_to_dict(course, SchoolCourseOffering, sem, True) for course in course_match_objs]
+
 
   return HttpResponse(json.dumps(json_data), content_type="application/json")
-
-
 
 
 def jhu_timer(request):
