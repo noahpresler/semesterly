@@ -79,14 +79,14 @@ export class CourseModalBody extends React.Component {
                     <div className="col-8-16">
                         <div id="reactions-wrapper">
                             <div id="reactions">
-                                <Reaction emoji="FIRE" count={5} />
-                                <Reaction emoji="LOVE" count={5} />
-                                <Reaction emoji="CRAP" count={5} />
-                                <Reaction emoji="OKAY" count={5} />
-                                <Reaction emoji="BORING" count={5} />
-                                <Reaction emoji="HARD" count={5} />
-                                <Reaction emoji="TEARS" count={5} />
-                                <Reaction emoji="INTERESTING" count={5} />
+                                <Reaction emoji="FIRE" count={100} total={230}/>
+                                <Reaction emoji="LOVE" count={50} total={230} />
+                                <Reaction emoji="CRAP" count={30} total={230} />
+                                <Reaction emoji="OKAY" count={20} total={230} />
+                                <Reaction emoji="BORING" count={10} total={230} />
+                                <Reaction emoji="HARD" count={10} total={230} />
+                                <Reaction emoji="TEARS" count={5} total={230} />
+                                <Reaction emoji="INTERESTING" count={5} total={230} />
                             </div>
                         </div>
                         <div>
