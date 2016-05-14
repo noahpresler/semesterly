@@ -37,24 +37,21 @@ export function fetchCourseInfo(courseId) {
 }
 
 export function react(cid, title) {
-	return () => {
-		console.log("REACT")
-		fetch(getReactToCourseEndpoint(), {
-				method: 'POST',
-				body: JSON.stringify({
-					cid,
-					title
-				}),
-				credentials: 'include',
-			})
-		    .then(response => response.json()) // TODO(rohan): error-check the response
-		    .then(json => {
-		    	if (!json.error) {
-			        store.dispatch({
-			        	type: "SET_COURSE_REACTIONS",
-			        	reactions: json.reactions
-		        	});
-	        	}
-		});
-    }
+	fetch(getReactToCourseEndpoint(), {
+			method: 'POST',
+			body: JSON.stringify({
+				cid,
+				title
+			}),
+			credentials: 'include',
+		})
+	    .then(response => response.json()) // TODO(rohan): error-check the response
+	    .then(json => {
+	    	if (!json.error) {
+		        store.dispatch({
+		        	type: "SET_COURSE_REACTIONS",
+		        	reactions: json.reactions
+	        	});
+        	}
+	});
 }
