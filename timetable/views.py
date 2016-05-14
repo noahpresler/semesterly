@@ -153,7 +153,7 @@ class TimetableGenerator:
 
   def get_course_obj(self, course_dict, sections):
     sections = list(sections)
-    slot_objects = [create_offering_object(co) for _, _, course_offerings in sections
+    slot_objects = [model_to_dict(co) for _, _, course_offerings in sections
                            for co in course_offerings]
     course_dict['enrolled_sections'] = [section_code for _, section_code, _ in sections]
     try:
@@ -231,11 +231,11 @@ class TimetableGenerator:
       no_conflicts = True
       for i in xrange(len(sections)): # add an offering for the next section
         j = (p/num_permutations_remaining[i]) % num_offerings[i]
-        day_to_usage, conflict, new_meeting = add_meeting_and_check_conflict(day_to_usage, sections[i][j])
+        conflict = add_meeting_and_check_conflict(day_to_usage, sections[i][j])
         if conflict and not self.with_conflicts: # there's a conflict and we don't want to consider it
           no_conflicts = False
           break
-        current_tt.append(new_meeting)
+        current_tt.append(sections[i][j])
       if no_conflicts and len(current_tt) != 0:
         yield tuple(current_tt)
 
@@ -395,15 +395,6 @@ def get_break_cost(day_to_usage):
 def day_use(day_to_usage, *days):
   return sum([1 for day in days if any(day_to_usage[day])])
 
-def create_offering_object(co_pair):
-  """Return CourseOffering object augmented with its conflict information."""
-  co, conflict_info = co_pair
-  slot_obj = model_to_dict(co)
-  slot_obj['depth_level'] = conflict_info[0]
-  slot_obj['num_conflicts'] = conflict_info[1]
-  slot_obj['shift_index'] = conflict_info[2]
-  return slot_obj
-
 def get_xproduct_indicies(lists):
   """
   Takes a list of lists and returns two lists of indicies needed to iterate
@@ -423,18 +414,15 @@ def add_meeting_and_check_conflict(day_to_usage, new_meeting):
   returns a tuple of the updated day_to_usage dict and a boolean
   which is True if conflict, False otherwise.
   """
-  course_id, section_code, course_offerings = copy.deepcopy(new_meeting)
+  course_offerings = new_meeting[2]
   exists_conflict = False
-  for i in range(len(course_offerings)): # use index to avoid referencing copies
-    offering = course_offerings[i][0]
+  for offering in course_offerings: # use index to avoid referencing copies
     day = offering.day
-    offering_conflict = False
     for slot in find_slots_to_fill(offering.time_start, offering.time_end):
       if day_to_usage[day][slot]:
         exists_conflict = True
-        offering_conflict = True
-      day_to_usage[day][slot].append(course_offerings[i])
-  return (day_to_usage, exists_conflict, (course_id, section_code, course_offerings))
+      day_to_usage[day][slot] = True
+  return exists_conflict
 
 def find_slots_to_fill(start, end):
   """
@@ -455,13 +443,13 @@ def get_hour(str_time):
 
 def get_section_type_to_sections_map(section_to_offerings, plist, cid):
   """Return map: section_type -> [cid, section, [offerings]] """
-  section_type_to_sections = {offerings[0][0].section_type: [] for section, offerings in section_to_offerings.iteritems()}
+  section_type_to_sections = {offerings[0].section_type: [] for section, offerings in section_to_offerings.iteritems()}
   i = 0
   for section, offerings in section_to_offerings.iteritems():
     if not violates_any_preferences(offerings, plist):
       # section_type for all offerings for a given section should be the same,
       # so we just take the first one
-      section_type = offerings[0][0].section_type
+      section_type = offerings[0].section_type
       section_type_to_sections[section_type].append([cid, \
                             section, \
                             section_to_offerings[section]])
@@ -477,9 +465,9 @@ def get_section_to_offering_map(offerings):
   for offering in offerings:
     section_code = offering.meeting_section
     if section_code in section_to_offerings:
-      section_to_offerings[section_code].append([offering, [0, 1, 0]])
+      section_to_offerings[section_code].append(offering)
     else: # new section
-      section_to_offerings[section_code] = [[offering, [0, 1, 0]]]
+      section_to_offerings[section_code] = [offering]
   return section_to_offerings
 
 def check_co_against_preferences(preference_list, co):
