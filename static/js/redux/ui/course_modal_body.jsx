@@ -77,7 +77,7 @@ export class CourseModalBody extends React.Component {
             let reaction = reactions.find(r => r.title === title);
             if (reaction) {
                 return <Reaction
-                        key={title} react={() => this.sendReact(cid, title)} emoji={title} count={reaction.count} total={totalReactions}/>
+                        key={title} selected={reaction.reacted} react={() => this.sendReact(cid, title)} emoji={title} count={reaction.count} total={totalReactions}/>
             }
             else { // noone has reacted with this emoji yet
             return <Reaction
