@@ -6,21 +6,35 @@ import classNames from 'classnames';
 class Reaction extends React.Component {
 	constructor(props) {
 		super(props);
-		this.state = {didSelect: this.props.selected === true};
+		this.state = {didSelect: this.props.selected === true, animating: true};
 		this.toggleSelected = this.toggleSelected.bind(this);
+		this.animate = this.animate.bind(this);
 	}
 	toggleSelected() {
+		console.log("toggle")
+		this.setState({animating: true});
+		this.animate()
 		this.props.react();
-		this.setState({ 
-			didSelect: !this.state.didSelect 
+		this.setState({
+			didSelect: !this.state.didSelect
 		});
+	}
+	componentDidMount() {
+		console.log("CDM")
+		this.animate()
+	}
+	animate() {
+		console.log("ANIMATE");
+		setTimeout(() => {
+			this.setState({animating: false});
+		}, 300);
 	}
 	render() {
 		let size = 20 + this.props.count/this.props.total * 45;
 		let actionSize = 15 + 45*(this.props.count/this.props.total);
 		let emojiStyle = {height: size, width: size};
 		return (
-			<div className="reaction" onClick={this.toggleSelected}>
+			<div className={classNames({"swing": true, "reaction": true, "no-animate": !this.state.animating})} onClick={this.toggleSelected}>
 				<div className="emoji" style={emojiStyle}
 					dangerouslySetInnerHTML={{__html: twemoji.parse(REACTION_MAP[this.props.emoji].unicode)}}/>
 				<div className={classNames({'action-container' : true, 'selected': this.state.didSelect})}>
