@@ -127,17 +127,18 @@
 }
 
 #reaction-dropdown .tip-border {
-	top: -4px;
+	top: -5px;
 	left: 20px;
 	border-color: transparent transparent #a1a1a1;
 	border-bottom-color: rgba(0,0,0,.2);
 }
 
 #reaction-dropdown .tip {
-   top: -4px;
+   top: -5px;
 	left: 20px;
 	border-color: transparent transparent #a1a1a1;
 }
+
 .reaction:hover #reaction-dropdown {
 	opacity: .8;
 	visibility: visible;
