@@ -46,7 +46,9 @@ export function fetchAdvancedSearchResults(query) {
 			type: "REQUEST_ADVANCED_SEARCH_RESULTS",
 		});
 		// send a request (via fetch) to the appropriate endpoint to get courses
-		fetch(getAdvancedSearchEndpoint(query))
+		fetch(getAdvancedSearchEndpoint(query), {
+			'credentials': 'include',
+		})
 		.then(response => response.json()) // TODO(rohan): error-check the response
 		.then(json => {
 			// indicate that courses have been received

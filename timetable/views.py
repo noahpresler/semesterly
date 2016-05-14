@@ -544,12 +544,14 @@ def get_courses(request, school, sem):
 
   return HttpResponse(json.dumps({
               'last_updated': last_updated,
-              'courses':json_data}),
+              'courses':json_data
+        }),
       content_type="application/json")
 
 def get_course(request, school, sem, id):
   global SCHOOL
   SCHOOL = school.lower()
+
   try:
     C, Co = school_to_models[school]
     course = C.objects.get(id=id)
@@ -557,7 +559,11 @@ def get_course(request, school, sem, id):
     json_data['textbook_info'] = course.get_all_textbook_info()
     json_data['eval_info'] = course.get_eval_info()
     json_data['related_courses'] = course.get_related_course_info()
-    json_data['reactions'] = list(course.get_reactions().all())
+    student = None
+    logged = request.user.is_authenticated()
+    if logged and Student.objects.filter(user=request.user).exists():
+      student = Student.objects.get(user=request.user)
+    json_data['reactions'] = course.get_reactions(student)
 
   except:
     import traceback
@@ -664,7 +670,7 @@ def my_model_to_dict(course, SchoolCourseOffering, sem, include_reactions=False)
       d['sections'][co.section_type][section_code] = []
     d['sections'][co.section_type][section_code].append(model_to_dict(co))
   if include_reactions:
-    d['reactions'] = list(course.get_reactions())
+    d['reactions'] = course.get_reactions()
   return d
 
 @csrf_exempt
@@ -792,7 +798,8 @@ def react_to_course(request):
         r.save()
         c.reaction_set.add(r)
       c.save()
-      json_data['reactions'] = list(c.get_reactions())
+      json_data['reactions'] = c.get_reactions(student=s)
+
     else:
       json_data['error'] = 'Must be logged in to rate'
 
@@ -801,8 +808,5 @@ def react_to_course(request):
 
   
   return HttpResponse(json.dumps(json_data), content_type="application/json")
-
-
-
 
 
