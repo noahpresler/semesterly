@@ -10,7 +10,6 @@ class Reaction extends React.Component {
 		this.toggleSelected = this.toggleSelected.bind(this);
 	}
 	toggleSelected() {
-		console.log(this.state.didSelect);
 		this.setState({didSelect: !this.state.didSelect});
 	}
 	render() {
