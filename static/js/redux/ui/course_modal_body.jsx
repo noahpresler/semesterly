@@ -57,6 +57,7 @@ export class CourseModalBody extends React.Component {
 
         let cid = this.props.data.id;
         let totalReactions = reactions.map(r => r.count).reduce( (x, y) => x + y, 0);
+        if (totalReactions === 0) { totalReactions = 20; }
         let reactionsDisplay = Object.keys(REACTION_MAP).map(title => {
             let reaction = reactions.find(r => r.title === title);
             if (reaction) {
