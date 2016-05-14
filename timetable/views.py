@@ -149,7 +149,7 @@ class TimetableGenerator:
 
   def get_course_dict(self, section):
     model = self.course_model.objects.get(id=section[0])
-    return model_to_dict(model, fields=['code', 'name', 'id', 'num_credits'])
+    return model_to_dict(model, fields=['code', 'name', 'id', 'num_credits', 'department'])
 
   def get_course_obj(self, course_dict, sections):
     sections = list(sections)
@@ -647,7 +647,7 @@ def has_offering(course, sem):
 
 ## Organizing result sections by section type ###
 def my_model_to_dict(course, SchoolCourseOffering, sem, include_reactions=False):
-  fields=['code','name', 'id', 'description']
+  fields=['code','name', 'id', 'description', 'department', 'num_credits']
   d = model_to_dict(course, fields)
   d['sections'] = {}
 
