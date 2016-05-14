@@ -652,7 +652,7 @@ def has_offering(course, sem):
 #   return d
 
 ## Organizing result sections by section type ###
-def my_model_to_dict(course, SchoolCourseOffering, sem, include_reactions=False):
+def my_model_to_dict(course, SchoolCourseOffering, sem, include_reactions=False, student=None):
   fields=['code','name', 'id', 'description', 'department', 'num_credits']
   d = model_to_dict(course, fields)
   d['sections'] = {}
@@ -670,7 +670,7 @@ def my_model_to_dict(course, SchoolCourseOffering, sem, include_reactions=False)
       d['sections'][co.section_type][section_code] = []
     d['sections'][co.section_type][section_code].append(model_to_dict(co))
   if include_reactions:
-    d['reactions'] = course.get_reactions()
+    d['reactions'] = course.get_reactions(student)
   return d
 
 @csrf_exempt
@@ -735,9 +735,11 @@ def advanced_course_search(request, school, sem, query):
       (Q(queenscourseoffering__semester__icontains=sem) | Q(queenscourseoffering__semester__icontains='Y')))
 
   course_match_objs = course_match_objs.distinct('code')[:50]
-
-  json_data = [my_model_to_dict(course, SchoolCourseOffering, sem, True) for course in course_match_objs]
-
+  s = None
+  logged = request.user.is_authenticated()
+  if logged and Student.objects.filter(user=request.user).exists():
+      s = Student.objects.get(user=request.user)
+  json_data = [my_model_to_dict(course, SchoolCourseOffering, sem, True, s) for course in course_match_objs]
 
   return HttpResponse(json.dumps(json_data), content_type="application/json")
 
