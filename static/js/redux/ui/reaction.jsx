@@ -6,7 +6,7 @@ import classNames from 'classnames';
 class Reaction extends React.Component {
 	constructor(props) {
 		super(props);
-		this.state = {didSelect: false};
+		this.state = {didSelect: this.props.selected === true};
 		this.toggleSelected = this.toggleSelected.bind(this);
 	}
 	toggleSelected() {
