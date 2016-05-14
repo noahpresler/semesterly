@@ -17,7 +17,7 @@ from pytz import timezone
 from analytics.views import *
 from timetable.models import *
 from timetable.school_mappers import school_to_models, school_to_granularity, VALID_SCHOOLS
-
+from student.models import Student
 
 MAX_RETURN = 60 # Max number of timetables we want to consider
 
@@ -768,3 +768,41 @@ def school_info(request, school):
     'areas': []
   }
   return HttpResponse(json.dumps(json_data), content_type="application/json")
+
+@csrf_exempt
+def react_to_course(request):
+  json_data = {}
+  school = request.subdomain
+  if school not in VALID_SCHOOLS:
+    return HttpResponse("School not found")
+  try:
+    logged = request.user.is_authenticated()
+    params = json.loads(request.body)
+    cid = params['cid']
+    title = params['title']
+    if logged and Student.objects.filter(user=request.user).exists():
+      s = Student.objects.get(user=request.user)
+      SchoolCourse, SchoolCourseOffering = school_to_models[school]
+      c = SchoolCourse.objects.get(id=cid)
+      if c.reaction_set.filter(title=title, student=s).exists():
+        r = c.reaction_set.get(title=title, student=s)
+        c.reaction_set.remove(r)
+      else:
+        r = Reaction(student=s, title=title)
+        r.save()
+        c.reaction_set.add(r)
+      c.save()
+      json_data['reactions'] = list(c.get_reactions())
+    else:
+      json_data['error'] = 'Must be logged in to rate'
+
+  except Exception as e:
+      json_data['error'] = 'Unknown error'
+
+  
+  return HttpResponse(json.dumps(json_data), content_type="application/json")
+
+
+
+
+
