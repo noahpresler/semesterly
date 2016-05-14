@@ -1,6 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import classnames from 'classnames';
+import Reaction from './reaction.jsx'
 
 export class CourseModalBody extends React.Component {
     mapSectionsToSlots(sections) {
@@ -76,6 +77,18 @@ export class CourseModalBody extends React.Component {
                         </div>
                     </div>
                     <div className="col-8-16">
+                        <div id="reactions-wrapper">
+                            <div id="reactions">
+                                <Reaction emoji="FIRE" count={100} total={230}/>
+                                <Reaction emoji="LOVE" count={50} total={230} />
+                                <Reaction emoji="CRAP" count={30} total={230} />
+                                <Reaction emoji="OKAY" count={20} total={230} />
+                                <Reaction emoji="BORING" count={10} total={230} />
+                                <Reaction emoji="HARD" count={10} total={230} />
+                                <Reaction emoji="TEARS" count={5} total={230} />
+                                <Reaction emoji="INTERESTING" count={5} total={230} />
+                            </div>
+                        </div>
                         <div>
                             <h3 className="modal-module-header">Course Description</h3>
                             <p>{this.props.description}</p>
