@@ -9,7 +9,7 @@ export class CourseModalBody extends React.Component {
         this.sendReact = this.sendReact.bind(this);
     }
 
-    sendReact(cid,title) {
+    sendReact(cid, title) {
         if (this.props.isLoggedIn){
             this.props.react(cid, title);
         }
@@ -77,11 +77,11 @@ export class CourseModalBody extends React.Component {
             let reaction = reactions.find(r => r.title === title);
             if (reaction) {
                 return <Reaction
-                        key={title} react={() => {this.sendReact(cid, title)}} emoji={title} count={reaction.count} total={totalReactions}/>
+                        key={title} react={() => this.sendReact(cid, title)} emoji={title} count={reaction.count} total={totalReactions}/>
             }
             else { // noone has reacted with this emoji yet
             return <Reaction
-                    key={title} react={() => {this.sendReact(cid, title)}} emoji={title} count={0} total={totalReactions}/>
+                    key={title} react={() => this.sendReact(cid, title)} emoji={title} count={0} total={totalReactions}/>
             }
         });
         reactionsDisplay.sort((r1, r2) => {return r1.props.count < r2.props.count});
