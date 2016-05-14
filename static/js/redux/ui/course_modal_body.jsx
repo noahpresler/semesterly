@@ -2,7 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import classnames from 'classnames';
 import Reaction from './reaction.jsx'
-
+import { REACTION_MAP } from '../constants.jsx';
 export class CourseModalBody extends React.Component {
     mapSectionsToSlots(sections) {
         if (sections === undefined) {
@@ -35,6 +35,7 @@ export class CourseModalBody extends React.Component {
                 />
         });
     }
+
     render() {
         let lecs = this.mapSectionsToSlots(this.props.lectureSections);
         let tuts = this.mapSectionsToSlots(this.props.tutorialSections);
@@ -51,6 +52,23 @@ export class CourseModalBody extends React.Component {
         if (pracs.length > 0) {
             practicalSections = <div><h3 className="modal-module-header">Practical Sections</h3>{pracs}</div>
         }
+        let { reactions } = this.props.data;
+        // reactions.sort((r1, r2) => {return r1.count < r2.count});
+
+        let cid = this.props.data.id;
+        let totalReactions = reactions.map(r => r.count).reduce( (x, y) => x + y, 0);
+        let reactionsDisplay = Object.keys(REACTION_MAP).map(title => {
+            let reaction = reactions.find(r => r.title === title);
+            if (reaction) {
+                return <Reaction 
+                        key={title} react={this.props.react(cid, title)} emoji={title} count={reaction.count} total={totalReactions}/>
+            }
+            else { // noone has reacted with this emoji yet
+            return <Reaction 
+                    key={title} react={this.props.react(cid, title)} emoji={title} count={0} total={totalReactions}/>
+            }
+        });
+        reactionsDisplay.sort((r1, r2) => {return r1.props.count < r2.props.count});        
         return (
         <div id="modal-body">
                 <div className="cf">
@@ -79,14 +97,7 @@ export class CourseModalBody extends React.Component {
                     <div className="col-8-16">
                         <div id="reactions-wrapper">
                             <div id="reactions">
-                                <Reaction emoji="FIRE" count={100} total={230}/>
-                                <Reaction emoji="LOVE" count={50} total={230} />
-                                <Reaction emoji="CRAP" count={30} total={230} />
-                                <Reaction emoji="OKAY" count={20} total={230} />
-                                <Reaction emoji="BORING" count={10} total={230} />
-                                <Reaction emoji="HARD" count={10} total={230} />
-                                <Reaction emoji="TEARS" count={5} total={230} />
-                                <Reaction emoji="INTERESTING" count={5} total={230} />
+                                {reactionsDisplay}
                             </div>
                         </div>
                         <div>
