@@ -8,7 +8,8 @@ export const explorationModal = (state = { isVisible: false, advancedSearchResul
 			return Object.assign({}, state, { isFetching: true });
 		case 'RECEIVE_ADVANCED_SEARCH_RESULTS':
 			let { advancedSearchResults } = action;
-			return Object.assign({}, state, { advancedSearchResults, isFetching: false });
+			return Object.assign({}, state, { advancedSearchResults, isFetching: false,
+				active:0 });
 		case 'SET_ACTIVE_RESULT':
 			return Object.assign({}, state, { active: action.active });
 		default:
