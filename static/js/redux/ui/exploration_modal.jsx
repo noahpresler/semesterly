@@ -25,10 +25,16 @@ export class ExplorationModal extends React.Component {
 		this.props.addOrRemoveCourse(id, section);
 		this.hide();
 	}
+	componentWillReceiveProps(nextProps) {
+		if (this.props.isVisible && !nextProps.isVisible) {
+			this.refs.modal.hide()
+		}
+	}
 	componentDidUpdate(nextProps) {
 		if (this.props.isVisible) {
 			this.refs.modal.show();
 		}
+
 	}
 	toggleDepartments() {
 		this.setState({ showDepartments: !this.state.showDepartments });
@@ -44,7 +50,7 @@ export class ExplorationModal extends React.Component {
 	}
 	hide() {
 		this.props.unhoverSection();
-		this.props.hideExplorationModal();
+		this.props.hideModal();
 		this.refs.modal.hide();
 	}
 	fetchAdvancedSearchResults() {
@@ -60,7 +66,6 @@ export class ExplorationModal extends React.Component {
 			width: '100%',
 			backgroundColor: 'transparent'
 		};
-
 		let departmentFilter = (
 			<div className={classNames("filter-pop-out", {'open' : this.state.showDepartments})}>
 				<input placeholder="Department Search"/>
@@ -214,7 +219,7 @@ export class ExplorationModal extends React.Component {
             <Modal ref="modal"
                 className={classNames("exploration-modal", {"trans": this.props.hasHoveredResult})}
                 modalStyle={modalStyle}
-                onHide={this.props.hideExplorationModal}
+                onHide={this.props.hideModal}
                 >
                 {content}
             </Modal>
