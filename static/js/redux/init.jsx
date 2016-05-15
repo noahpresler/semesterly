@@ -12,7 +12,7 @@ import { getLocalTimetable } from './util.jsx';
 export const store = createStore(rootReducer, applyMiddleware(thunkMiddleware));
 
 export const getSchool = () => {
-  return store.getState().school;
+  return store.getState().school.school;
 }
 export const getSemester = () => {
   return store.getState().semester;
