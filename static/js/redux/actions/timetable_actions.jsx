@@ -11,6 +11,9 @@ export function fetchSchoolInfo() {
 	return (dispatch) => {
 		fetch(getSchoolInfoEndpoint())
 	    .then(response => response.json())
+	    .then(json => {
+	    	
+	    });
 	}
 }
 
@@ -64,7 +67,7 @@ Returns the body of the request used to get new timetables
 */
 function getBaseReqBody(state){
 	return {
-		school: state.school,
+		school: state.school.school,
 		semester: state.semester,
 		courseSections: state.courseSections.objects,
 		preferences: state.preferences,
