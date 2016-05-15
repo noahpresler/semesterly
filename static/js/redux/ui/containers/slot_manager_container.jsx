@@ -21,7 +21,7 @@ const mapStateToProps = (state) => {
 	        // couldn't find a match, so the course isn't locked for this section
 			return false;
 		},
-		primaryDisplayAttribute: getPrimaryDisplay(state.school),
+		primaryDisplayAttribute: getPrimaryDisplay(state.school.school),
 		courseToColourIndex: state.ui.courseToColourIndex,
 		custom: state.customSlots,
 		classmates: (id,sec) => {
