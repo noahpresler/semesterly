@@ -7,53 +7,29 @@
 	width: 40px;
 	margin: 0 2px;
  	transition: all 0.5s cubic-bezier(.36,-0.64,.34,1.76);
-    -moz-transition: -webkit-transform .3s ease-out;
-	-webkit-transition: -moz-transform .3s ease-out;
-    -o-transition: -o-transform .3s ease-out;
 	transition: transform .3s ease-out;
 	cursor:pointer;
 }
 .swing {
 	opacity: 0;
 	perspective: 100px;
-	moz-transform: scale(1.2);
-	-webkit-transform: scale(1.2);
-	o-transform: scale(1.2);
 	transform: scale(1.2);
-	   -moz-transition: -webkit-transform .3s ease-out;
-	-webkit-transition: -moz-transform .3s ease-out;
-   -o-transition: -o-transform .3s ease-out;
 	transition: transform .3s ease-out;
 }
 
 .swing.reaction.no-animate {
 	opacity: 1;
-	-moz-transition: -webkit-transform .3s ease-out;
-	-webkit-transition: -moz-transform .3s ease-out;
-	-o-transition: -o-transform .3s ease-out;
 	transition: transform .3s ease-out;
 	transform: none;
 }
 
 #reactions .reaction:hover.animate {
-	moz-transform: scale(1.2);
-	-webkit-transform: scale(1.2);
-	o-transform: scale(1.2);
 	transform: scale(1.2);
-	-moz-transition: -webkit-transform .3s ease-out;
-	-webkit-transition: -moz-transform .3s ease-out;
-	-o-transition: -o-transform .3s ease-out;
 	transition: transform .3s ease-out;
 }
 
 #reactions .reaction:hover.no-animate {
-	moz-transform: scale(1.1);
-	-webkit-transform: scale(1.1);
-	o-transform: scale(1.1);
 	transform: scale(1.1);
-	-moz-transition: -webkit-transform .3s ease-out;
-	-webkit-transition: -moz-transform .3s ease-out;
-	o-transition: -o-transform .3s ease-out;
 	transition: transform .3s ease-out;
 }
 
