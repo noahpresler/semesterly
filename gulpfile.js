@@ -18,6 +18,10 @@ var lrload = require('livereactload');
 var postcss = require('gulp-postcss');
 var autoprefixer = require('gulp-autoprefixer');
 
+var autoprefixerOptions = {
+  browsers: ['last 2 versions', '> 5%', 'Firefox ESR']
+};
+
 const STATIC_DIR = 'static/';
 const APP_LOCATION = STATIC_DIR + 'js/redux/init.jsx';
 const COMPILED_NAME = 'application.js';
