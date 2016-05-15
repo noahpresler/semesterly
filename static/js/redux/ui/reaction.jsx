@@ -6,7 +6,7 @@ import classNames from 'classnames';
 class Reaction extends React.Component {
 	constructor(props) {
 		super(props);
-		this.state = {didSelect: this.props.selected === true, animating: true};
+		this.state = { didSelect: this.props.selected === true, animating: true };
 		this.toggleSelected = this.toggleSelected.bind(this);
 		this.animate = this.animate.bind(this);
 	}
@@ -23,13 +23,16 @@ class Reaction extends React.Component {
 	}
 	animate() {
 		setTimeout(() => {
-			this.setState({animating: false});
+			this.setState({ animating: false });
 		}, 300);
+	}
+	componentWillReceiveProps(nextProps) {
+		this.setState({ didSelect: nextProps.selected === true });
 	}
 	render() {
 		let size = 20 + this.props.count/this.props.total * 45;
 		let actionSize = 15 + 45*(this.props.count/this.props.total);
-		let emojiStyle = {height: size, width: size};
+		let emojiStyle = { height: size, width: size };
 		return (
 			<div className={classNames({"swing": true, "reaction": true, "no-animate": !this.state.animating})} onClick={this.toggleSelected}>
 				<div className="emoji" style={emojiStyle}
