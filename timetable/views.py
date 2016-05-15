@@ -761,7 +761,7 @@ def school_info(request, school):
     return HttpResponse("School not found")
   SchoolCourse, SchoolCourseOffering = school_to_models[school]
   json_data = { # TODO(rohan): Get areas once models are updated
-    'areas': []
+    'areas': list(SchoolCourse.objects.exclude(areas__exact='').values_list('areas', flat=True).distinct())
   }
   return HttpResponse(json.dumps(json_data), content_type="application/json")
 

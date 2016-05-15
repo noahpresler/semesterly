@@ -7,10 +7,11 @@
 	width: 40px;
 	margin: 0 2px;
  	transition: all 0.5s cubic-bezier(.36,-0.64,.34,1.76);
-   -moz-transition: -webkit-transform .3s ease-out;
+    -moz-transition: -webkit-transform .3s ease-out;
 	-webkit-transition: -moz-transform .3s ease-out;
-   -o-transition: -o-transform .3s ease-out;
+    -o-transition: -o-transform .3s ease-out;
 	transition: transform .3s ease-out;
+	cursor:pointer;
 }
 .swing {
 	opacity: 0;
@@ -162,17 +163,19 @@
 	visibility: hidden;
 	color: white;
 	transition: visibility 0s linear 300ms, opacity 300ms;
+	padding-top:1px;
+	padding-bottom:1px;
 }
 
 #reaction-dropdown .tip-border {
-	top: -5px;
+	top: -7px;
 	left: 20px;
 	border-color: transparent transparent #a1a1a1;
 	border-bottom-color: rgba(0,0,0,.2);
 }
 
 #reaction-dropdown .tip {
-   top: -5px;
+    top: -7px;
 	left: 20px;
 	border-color: transparent transparent #a1a1a1;
 }
