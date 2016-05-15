@@ -1,6 +1,12 @@
 import update from 'react/lib/update';
 
-export const explorationModal = (state = { isVisible: false, advancedSearchResults: [], isFetching: false, active: 0, schoolInfoLoaded: false }, action) => {
+export const explorationModal = (state = { 
+	isVisible: false, 
+	advancedSearchResults: [], 
+	isFetching: false, 
+	active: 0, 
+	schoolInfoLoaded: false 
+}, action) => {
 	switch (action.type) {
 		case 'SHOW_EXPLORATION_MODAL':
 			return Object.assign({}, state, { isVisible: true });
@@ -21,6 +27,10 @@ export const explorationModal = (state = { isVisible: false, advancedSearchResul
 				return Object.assign({}, state, { advancedSearchResults });
 			}
 			return state;
+		case 'REQUEST_SCHOOL_INFO':
+			return Object.assign({}, state, { schoolInfoLoaded: true });
+		case 'RECEIVE_SCHOOL_INFO':
+			return Object.assign({}, state, { schoolInfoLoaded: false });
 		default:
 			return state;
 	}
