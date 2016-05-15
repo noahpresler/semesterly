@@ -1,15 +1,49 @@
 {% load staticfiles %}
 
-<!DOCTYPE html>
-  <head>
-  	<link rel="stylesheet" href="{% static 'css/splash.css'%}">
-  </head>
-  <body>
-  Welcome to semesterly!
-  <a href="http://jhu.sem.ly:8000">JHU</a>
-  <a href="http://uoft.sem.ly:8000">UofT</a>
-  <a href="http://umd.sem.ly:8000">UMD</a>
-  <a href="http://rutgers.sem.ly:8000">Rutgers</a>
-  <script type="text/javascript" src="{% static 'js/splash.js'%}"></script>
-  </body>
-  
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+		<meta name="description" content="Now with a new and improved UI: view a section, and find your textbooks to rent/buy through Amazon. Alternatively, explore new options with our recommendation engine – helping you find new and exciting courses on the fly. Not sure if the class is worthwhile? Instantly see what your peers think, alongside detailed comments from past course evaluations. Currently supporting course finding software for the Johns Hopkins University (JHU) and the University of Toronto (UofT).">
+		<meta name="author" content="Noah Presler, Rohan Das, Felix Zhu, Max Yeo">
+
+		<!-- Facebook thumbnail info -->
+		<meta property="og:title" content="Semester.ly - Countdown to Registration" />
+		<meta property="og:type" content="website" />
+		<meta property="og:site_name" content="Semesterly" />
+		<meta property="og:url" content="http://semester.ly" />
+		<meta property="og:image" content="http://i.imgur.com/8Oncgfx.png" />
+		<meta property="og:description" content="Now with a new and improved UI: view a section, and find your textbooks to rent/buy through Amazon. Alternatively, explore new options with our recommendation engine – helping you find new and exciting courses on the fly. Not sure if the class is worthwhile? Instantly see what your peers think, alongside detailed comments from past course evaluations." />
+		<meta property="fb:admins" content="535129063" />
+
+		<title>Semester.ly: Textbooks, Course Finding & More | JHU Registration Countdown</title>
+		<link rel="shortcut icon" type="image/x-icon" href="{% static 'img/favicon.ico' %}" />
+
+		<link rel="stylesheet" href="{% static 'css/splash.css'%}">
+	</head>
+	<body>
+		<header>
+			<div class="grid cf">
+				<a href="/">
+					<span id="logo"></span>
+					<h1>Semester.ly</h1>
+				</a>
+			</div>
+		</header>
+
+		<div id="page">
+			Welcome to semesterly!
+			<a href="http://jhu.sem.ly:8000">JHU</a>
+			<a href="http://uoft.sem.ly:8000">UofT</a>
+			<a href="http://umd.sem.ly:8000">UMD</a>
+			<a href="http://rutgers.sem.ly:8000">Rutgers</a>
+		</div>
+
+		<footer>
+
+		</footer>
+
+		<script type="text/javascript" src="{% static 'js/splash.js'%}"></script>
+	</body>
+</html>
