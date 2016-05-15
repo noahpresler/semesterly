@@ -32,7 +32,9 @@ const mapStateToProps = (state) => {
 		},
 		isSectionOnActiveTimetable: (courseId, section) => {
 			return activeTimetable.courses.some(course => course.id === courseId && course.enrolled_sections.some(sec => sec == section));
-		}
+		},
+		areas: state.school.areas,
+		departments: ["CSC", "MAT", "GGR", "ESS", "ANT", "PHY", "PSY", "GEO", "INI", "VIC", "STA", "ENG", "GER"],
 	}
 }
 

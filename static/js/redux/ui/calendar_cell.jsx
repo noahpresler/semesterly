@@ -45,7 +45,6 @@ function collectDragDrop(connect, monitor) { // inject props as drop target
 // ----------------- create source:
 const createSource = {
   beginDrag(props) {
-    console.log('oh me oh my')
     let newSlotId = new Date().getTime()
     props.addCustomSlot(
       props.time, 
