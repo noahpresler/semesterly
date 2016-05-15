@@ -11,7 +11,6 @@ class Reaction extends React.Component {
 		this.animate = this.animate.bind(this);
 	}
 	toggleSelected() {
-		console.log("toggle")
 		this.setState({animating: true});
 		this.animate()
 		this.props.react();
@@ -20,11 +19,9 @@ class Reaction extends React.Component {
 		});
 	}
 	componentDidMount() {
-		console.log("CDM")
 		this.animate()
 	}
 	animate() {
-		console.log("ANIMATE");
 		setTimeout(() => {
 			this.setState({animating: false});
 		}, 300);
