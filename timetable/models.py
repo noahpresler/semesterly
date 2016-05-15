@@ -398,8 +398,8 @@ class QueensCourse(BaseCourse):
     return self.base_get_eval_info(QueensCourseEvaluation)
 
 
-# class QueensCourseEvaluation(BaseCourseEvaluation):
-#   course = models.ForeignKey(QueensCourse)
+class QueensCourseEvaluation(BaseCourseEvaluation):
+  course = models.ForeignKey(QueensCourse)
 
 
 class QueensCourseOffering(BaseCourseOffering):
