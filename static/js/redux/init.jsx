@@ -42,4 +42,3 @@ render(
   <Provider store={store}>
     <SemesterlyContainer />
   </Provider>, document.getElementById("page"));
-    //<Calendar timetables={state.timetables.items} />

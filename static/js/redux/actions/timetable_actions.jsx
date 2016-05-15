@@ -9,10 +9,14 @@ export const SID = randomString(30);
 
 export function fetchSchoolInfo() {
 	return (dispatch) => {
+		dispatch({ type: "REQUEST_SCHOOL_INFO" });
 		fetch(getSchoolInfoEndpoint())
 	    .then(response => response.json())
 	    .then(json => {
-	    	
+	    	dispatch({
+	    		type: "RECEIVE_SCHOOL_INFO", 
+	    		schoolInfo: json
+	    	});
 	    });
 	}
 }
@@ -40,7 +44,7 @@ export function loadTimetable(timetable, created=false) {
 	let dispatch = store.dispatch;
 	let state = store.getState();
 	if (!state.userInfo.data.isLoggedIn) {
-		return dispatch({type: 'TOGGLE_SIGNUP_MODAL'})
+		return dispatch({type: 'TOGGLE_SIGNUP_MODAL'});
 	}
 	dispatch({
 		type: "CHANGE_ACTIVE_SAVED_TIMETABLE",
