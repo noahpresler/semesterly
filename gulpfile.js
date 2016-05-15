@@ -1,3 +1,4 @@
+require('es6-promise').polyfill();
 var gulp = require('gulp');
 var gulpif = require('gulp-if');
 var gutil = require('gulp-util');
@@ -14,6 +15,12 @@ var babel = require('babelify');
 var minifyCSS = require('gulp-minify-css');
 var concat = require('gulp-concat');
 var lrload = require('livereactload');
+var postcss = require('gulp-postcss');
+var autoprefixer = require('gulp-autoprefixer');
+
+var autoprefixerOptions = {
+  browsers: ['last 2 versions', '> 5%', 'Firefox ESR']
+};
 
 const STATIC_DIR = 'static/';
 const APP_LOCATION = STATIC_DIR + 'js/redux/init.jsx';
@@ -65,14 +72,15 @@ function watch() {
   return compile(true);
 };
 
-gulp.task('jswatch', function() { 
-  return watch(); 
+gulp.task('jswatch', function() {
+  return watch();
 });
 
 gulp.task('css', function(){
     return gulp.src(CSS_FILES)
         .pipe(minifyCSS())
         .pipe(concat('style.min.css'))
+        .pipe(autoprefixer())
         .pipe(gulp.dest('static/css/gulp'))
         .pipe(livereload());
 });
