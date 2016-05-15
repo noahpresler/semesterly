@@ -2,6 +2,7 @@ import React from 'react';
 import Modal from 'boron/DropModal';
 import classNames from 'classnames';
 import { CourseModalBody } from './course_modal_body.jsx';
+import ClickOutHandler from 'react-onclickout';
 
 export class ExplorationModal extends React.Component {
 	constructor(props){
@@ -10,7 +11,11 @@ export class ExplorationModal extends React.Component {
 			showDepartments: false,
 			showAreas: false,
 			showTimes: false,
-			showLevels: false
+			showLevels: false,
+			areas: [],
+			departments: [],
+			times: [],
+			levels: []
 		};
 		this.toggleDepartments = this.toggleDepartments.bind(this);
 		this.toggleAreas = this.toggleAreas.bind(this);
@@ -20,6 +25,8 @@ export class ExplorationModal extends React.Component {
 		this.addOrRemoveCourse = this.addOrRemoveCourse.bind(this);
 		this.changeTimer = false;
 		this.hide = this.hide.bind(this);
+		this.add = this.add.bind(this);
+		this.hideAll = this.hideAll.bind(this);
 	}
 	addOrRemoveCourse(id, section='') {
 		this.props.addOrRemoveCourse(id, section);
@@ -34,7 +41,6 @@ export class ExplorationModal extends React.Component {
 		if (this.props.isVisible) {
 			this.refs.modal.show();
 		}
-
 	}
 	toggleDepartments() {
 		this.setState({ showDepartments: !this.state.showDepartments });
@@ -61,36 +67,29 @@ export class ExplorationModal extends React.Component {
 			this.changeTimer = false;
 		}, 200);
 	}
+	add(filterType, filter) {
+		if (this.state[filterType].indexOf(filter) > -1) {
+			return;
+		}
+		let updatedFilter = [...this.state[filterType], filter];
+		this.setState({[filterType]: updatedFilter});
+	}
+	hideAll(){
+		this.setState({
+			showDepartments: false,
+			showAreas: false,
+			showTimes: false,
+			showLevels: false
+		})
+	}
 	render() {
 		let modalStyle = {
 			width: '100%',
 			backgroundColor: 'transparent'
 		};
-		let departmentFilter = (
-			<div className={classNames("filter-pop-out", {'open' : this.state.showDepartments})}>
-				<input placeholder="Department Search"/>
-				<div className="fpo-list">
-					<ul>
-						<li>
-							<i className="fa fa-check"></i>
-							<h6>Applied Mathematics and Statistics</h6>
-						</li>
-						<li>
-							<i className="fa fa-check"></i>
-							<h6>Computer Science</h6>
-						</li>
-						<li>
-							<i className="fa fa-check"></i>
-							<h6>Computer Science</h6>
-						</li>
-						<li>
-							<i className="fa fa-check"></i>
-							<h6>Computer Science</h6>
-						</li>
-					</ul>
-				</div>
-			</div>
-		);
+
+	
+
 		let { advancedSearchResults, course } = this.props;
 		let numSearchResults = advancedSearchResults.length > 0 ? 
 		<p>returned { advancedSearchResults.length } Search Results</p> : null;
@@ -133,6 +132,28 @@ export class ExplorationModal extends React.Component {
 				/>
 			</div>
 		}
+		let areaFilter = this.state.showAreas ? (
+            <Filter results={this.props.areas} 
+            		onClickOut={this.hideAll}
+            		filterType={"areas"} 
+            		add={this.add}/>
+
+		) : null;
+		let selectedAreas = this.state.areas.map((a, i) => (
+			<SelectedFilter name={a} key={i} />
+		));	
+		let selectedAreasSection = <SelectedFilterSection name={"Areas"} toggle={this.toggleAreas} children={selectedAreas} />;
+
+		let departmentFilter = this.state.showDepartments ? (
+			<Filter results={this.props.departments}
+					onClickOut={this.hideAll}
+					filterType={"departments"}
+					add={this.add}/>
+		) : null;
+		let selectedDepartments = this.state.departments.map((a, i) => (
+			<SelectedFilter name={a} key={i} />
+		));
+		let selectedDepartmentsSection = <SelectedFilterSection name={"Departments"} toggle={this.toggleDepartments} children={selectedDepartments} />;
 
 		let content = (
 			<div id="exploration-content">
@@ -153,52 +174,29 @@ export class ExplorationModal extends React.Component {
 	            </div>
 	            <div id="exploration-body">
                     <div id="exp-filters" className="col-4-16">
-                        <div className={classNames("exp-filter-section", {'open' : this.state.showDepartments})}>
-							<h3 className="exp-header">
-								<span>Departments Filter</span>
-								<i className="fa fa-plus"
-									onMouseDown={this.toggleDepartments.bind(this)}></i>
-							</h3>
-							<h6>
-								<i className="fa fa-times"></i>
-								<span>Computer Science</span>
-							</h6>
-                        </div>
-                        <div className={classNames("exp-filter-section", {'open' : this.state.showAreas})}>
+                        { selectedDepartmentsSection }
+                        { selectedAreasSection }
+                        
+                        <div className={classNames("exp-filter-section", {'open' : this.state.showLevels})}>
                             <h3 className="exp-header">
-								<span>Areas Filter</span>
+								<span>Course Level Filter</span>
 								<i className="fa fa-plus"
-									onMouseDown={this.toggleAreas.bind(this)}></i>
+									onClick={this.toggleLevels}></i>
 							</h3>
 							<h6>
 								<i className="fa fa-times"></i>
-								<span>Humanities</span>
-							</h6>
-							<h6>
-								<i className="fa fa-times"></i>
-								<span>Writing Intensive</span>
+								<span>200</span>
 							</h6>
                         </div>
                         <div className={classNames("exp-filter-section", {'open' : this.state.showTimes})}>
                             <h3 className="exp-header">
 								<span>Times Filter</span>
 								<i className="fa fa-plus"
-									onMouseDown={this.toggleTimes.bind(this)}></i>
+									onClick={this.toggleTimes}></i>
 							</h3>
 							<h6>
 								<i className="fa fa-times"></i>
 								<span>M 9am-5pm</span>
-							</h6>
-                        </div>
-                        <div className={classNames("exp-filter-section", {'open' : this.state.showLevels})}>
-                            <h3 className="exp-header">
-								<span>Course Level Filter</span>
-								<i className="fa fa-plus"
-									onMouseDown={this.toggleLevels.bind(this)}></i>
-							</h3>
-							<h6>
-								<i className="fa fa-times"></i>
-								<span>200</span>
 							</h6>
                         </div>
                     </div>
@@ -209,6 +207,7 @@ export class ExplorationModal extends React.Component {
                         </div>
                     </div>
                     { departmentFilter }
+                    { areaFilter }
                     <div id="exp-modal" className="col-7-16">
                         { courseModal }
                     </div>
@@ -231,5 +230,66 @@ const ExplorationSearchResult = ({name, code, onClick}) => (
 	<div className="exp-s-result" onClick={onClick}>
 		<h4>{ name }</h4>
 		<h5>{ code }</h5>
+	</div>
+);
+
+class Filter extends React.Component {
+	constructor(props) {
+		super(props);
+		this.state = {results: this.props.results};
+		this.filterResults = this.filterResults.bind(this);
+	}
+	filterResults(event) {
+		let query = event.target.value.toLowerCase();
+		if (query === "") {
+			this.setState({ results: this.props.results });
+		}
+		else {
+			let results = this.props.results;
+			this.setState({
+				results: results.filter(r => r.toLowerCase().includes(query))
+			});
+		}
+	}
+	render() {
+		let results = this.state.results.map((r, i) => {
+			return <li key={i} onClick={() => this.props.add(this.props.filterType, r)} >
+					<i className="fa fa-check"></i>
+					<h6> { r } </h6>
+				</li>
+		});
+		return (
+			<ClickOutHandler onClickOut={this.props.onClickOut}>
+				<div className="filter-pop-out open">
+					<input placeholder={this.props.filterType} onInput={this.filterResults}/>
+					<div className="fpo-list">
+						<ul>
+							{ results }
+						</ul>
+					</div>
+				</div>
+			</ClickOutHandler>
+
+		);
+	}
+
+}
+
+
+const SelectedFilter = ({ name }) => (
+	<h6>
+		<i className="fa fa-times"></i>
+		<span>{ name }</span>
+	</h6>
+);
+
+const SelectedFilterSection = ({ name, toggle, children }) => (
+	<div className="exp-filter-section open">
+	    <h3 className="exp-header">
+			<span>{ name } Filter</span>
+			<i className="fa fa-plus"
+				onClick={toggle}></i>
+		</h3>
+		{children}
 	</div>
 );

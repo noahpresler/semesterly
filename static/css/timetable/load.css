@@ -8,7 +8,7 @@
   width: 0.1px;
   height: 0.1px;
   border: 40px solid transparent;
-  border-radius: 5px;
+  border-radius: 5px;/**/
   animation: loader 3s ease-in infinite, spin 1s linear infinite;
 }
 .modal-loader::before {
