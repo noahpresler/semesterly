@@ -23,6 +23,7 @@ export class ExplorationModal extends React.Component {
 		this.changeTimer = false;
 		this.hide = this.hide.bind(this);
 		this.addFilter = this.addFilter.bind(this);
+		this.removeFilter = this.removeFilter.bind(this);
 		this.hideAll = this.hideAll.bind(this);
 	}
 	addOrRemoveCourse(id, section='') {
@@ -63,7 +64,11 @@ export class ExplorationModal extends React.Component {
 			return;
 		}
 		let updatedFilter = [...this.state[filterType], filter];
-		this.setState({[filterType]: updatedFilter});
+		this.setState({ [filterType]: updatedFilter });
+	}
+	removeFilter(filterType, filter) {
+		let updatedFilter = this.state[filterType].filter(f => f != filter);
+		this.setState({ [filterType]: updatedFilter });
 	}
 	hideAll(){
 		this.setState({
@@ -128,14 +133,14 @@ export class ExplorationModal extends React.Component {
 				   	add={this.addFilter} show={this.state["show_" + filterType]}
 				   	onClickOut={this.hideAll} />
 		));
-		let selectedSections = filterTypes.map(filterType => {
+		let selectedFilterSections = filterTypes.map(filterType => {
 			let availableFilters = this.props[filterType];
 			// sort selected filters according to the order in which they were received from props
 			let sortedFilters = this.state[filterType].concat().sort((a, b) => (
 				availableFilters.indexOf(a) - availableFilters.indexOf(b)
 			));
-			let selectedItems = sortedFilters.map((a, i) => (
-				<SelectedFilter name={a} key={i} />
+			let selectedItems = sortedFilters.map((name, i) => (
+				<SelectedFilter key={i} name={name} remove={() => this.removeFilter(filterType, name)}/>
 			));
 			let name = filterType[0].toUpperCase() + filterType.slice(1);
 
@@ -163,19 +168,7 @@ export class ExplorationModal extends React.Component {
 	            </div>
 	            <div id="exploration-body">
                     <div id="exp-filters" className="col-4-16">
-                        { selectedSections }
-
-                        <div className={classNames("exp-filter-section", {'open' : this.state.show_levels})}>
-                            <h3 className="exp-header">
-								<span>Course Level Filter</span>
-								<i className="fa fa-plus"
-									onClick={this.toggleLevels}></i>
-							</h3>
-							<h6>
-								<i className="fa fa-times"></i>
-								<span>200</span>
-							</h6>
-                        </div>
+                        { selectedFilterSections }
                         <div className={classNames("exp-filter-section", {'open' : this.state.show_times})}>
                             <h3 className="exp-header">
 								<span>Times Filter</span>
@@ -267,9 +260,9 @@ class Filter extends React.Component {
 
 }
 
-const SelectedFilter = ({ name }) => (
+const SelectedFilter = ({ name, remove }) => (
 	<h6>
-		<i className="fa fa-times"></i>
+		<i className="fa fa-times" onClick={() => remove()}></i>
 		<span>{ name }</span>
 	</h6>
 );
