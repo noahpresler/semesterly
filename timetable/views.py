@@ -716,8 +716,13 @@ def advanced_course_search(request):
   # filtering now by departments, areas, or levels if provided
   if filters['areas']:
     course_match_objs = course_match_objs.filter(areas__in=filters['areas'])
-  # if filters['areas']:
-  #   course_match_objs = course_match_objs.filter(areas__in=filters['areas'])
+    #TODO(rohan)
+    '''
+      Use:
+      course_match_objs.objects.filter(reduce(operator.or_, (Q(areas__contains=x) for x in filters['areas'])))
+    '''
+  # if filters['departments']:
+  #   course_match_objs = course_match_objs.filter(areas__in=filters['departments'])
   # if filters['levels']:
   #   course_match_objs = course_match_objs.filter(areas__in=filters['levels'])
 
@@ -733,7 +738,6 @@ def advanced_course_search(request):
     course_match_objs = course_match_objs.filter((Q(umdcourseoffering__semester__in=[sem, 'Y'])))
   elif school == "queens":
     course_match_objs = course_match_objs.filter((Q(queenscourseoffering__semester__in=[sem, 'Y'])))
-
 
   course_match_objs = course_match_objs.distinct('code')[:50]
   s = None
@@ -775,7 +779,8 @@ def school_info(request, school):
   SchoolCourse, SchoolCourseOffering = school_to_models[school]
   json_data = { # TODO(rohan): Get all relevant fields (areas, departments, levels) properly
     'areas': list(SchoolCourse.objects.exclude(areas__exact='').values_list('areas', flat=True).distinct()),
-    'departments': school_to_departments[school]
+    'departments': school_to_departments[school],
+    'levels': []
   }
   return HttpResponse(json.dumps(json_data), content_type="application/json")
 
