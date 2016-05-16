@@ -13,12 +13,7 @@ const mapStateToProps = (state) => {
 		inRoster = courseSections[course.id] !== undefined
 	}
 	let activeTimetable = state.timetables.items[state.timetables.active];
-	let { areas, departments } = state.school;
-	if (areas.length === 0) {areas = ["1. Creative and Cultural Representations",
-		"2. Thought, Belief, and Behaviour",
-		"3. Society and Its Institutions",
-		"4. Living Things and Their Environment",
-		"5. The Physical and Mathematical Universes"]}
+	let { areas, departments, levels } = state.school;
 	return {
 		isVisible,
     	isFetching,
@@ -28,6 +23,7 @@ const mapStateToProps = (state) => {
 		inRoster,
 		areas,
 		departments,
+		levels,
 		hasHoveredResult: activeTimetable.courses.some(course => course.fake),
 		isSectionLocked: (courseId, section) => {
 			if (courseSections[courseId] === undefined) {
@@ -40,8 +36,6 @@ const mapStateToProps = (state) => {
 		isSectionOnActiveTimetable: (courseId, section) => {
 			return activeTimetable.courses.some(course => course.id === courseId && course.enrolled_sections.some(sec => sec == section));
 		},
-
-		levels: ["100", "200", "300", "400"],
 	}
 }
 
