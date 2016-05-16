@@ -1,6 +1,6 @@
 import { VALID_SCHOOLS, SET_SCHOOL } from '../constants.jsx';
 
-export const school = (state = {school: "", areas: []}, action) => {
+export const school = (state = {school: "", areas: [], departments: [], levels: []}, action) => {
 	switch (action.type) {
 		case SET_SCHOOL:
 			if (VALID_SCHOOLS.indexOf(action.school) >= 0) {
@@ -8,8 +8,8 @@ export const school = (state = {school: "", areas: []}, action) => {
 			}
 			return state;
 		case "RECEIVE_SCHOOL_INFO":
-			let { areas, departments } = action.schoolInfo;
-			return Object.assign({}, state, { areas, departments });
+			let { areas, departments, levels } = action.schoolInfo;
+			return Object.assign({}, state, { areas, departments, levels });
 		default:
 			return state;
 	}
