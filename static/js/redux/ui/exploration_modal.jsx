@@ -19,6 +19,7 @@ export class ExplorationModal extends React.Component {
 		};
 		this.toggle = this.toggle.bind(this);
 		this.fetchAdvancedSearchResults = this.fetchAdvancedSearchResults.bind(this);
+		this.fetchAdvancedSearchResultsWrapper = this.fetchAdvancedSearchResultsWrapper.bind(this);
 		this.addOrRemoveCourse = this.addOrRemoveCourse.bind(this);
 		this.changeTimer = false;
 		this.hide = this.hide.bind(this);
@@ -51,11 +52,24 @@ export class ExplorationModal extends React.Component {
 		this.props.hideModal();
 		this.refs.modal.hide();
 	}
-	fetchAdvancedSearchResults() {
-		if (this.changeTimer) clearTimeout(this.changeTimer);
+	fetchAdvancedSearchResults(filters) {
 		let query = this.refs.input.value;
+		let { areas, departments, times, levels} = filters;
+		this.props.fetchAdvancedSearchResults(query, {
+			areas,
+			departments,
+			times,
+			levels
+		});
+	}
+	fetchAdvancedSearchResultsWrapper() {
+		if (this.changeTimer) clearTimeout(this.changeTimer);
 		this.changeTimer = setTimeout( () => {
-			this.props.fetchAdvancedSearchResults(query);
+			// fetchAdvancedSearchResults requires that its argument contain
+			// at least the filters. since this.state has them, we simply pass this.state
+			// as its argument. there are other aspects of state that are irrelevant for the call,
+			// but we include them for the brevity of just passing this.state
+			this.fetchAdvancedSearchResults(this.state);
 			this.changeTimer = false;
 		}, 200);
 	}
@@ -64,10 +78,13 @@ export class ExplorationModal extends React.Component {
 			return;
 		}
 		let updatedFilter = [...this.state[filterType], filter];
+		this.fetchAdvancedSearchResults(Object.assign({}, this.state, { [filterType]: updatedFilter }));
+
 		this.setState({ [filterType]: updatedFilter });
 	}
 	removeFilter(filterType, filter) {
 		let updatedFilter = this.state[filterType].filter(f => f != filter);
+		this.fetchAdvancedSearchResults(Object.assign({}, this.state, { [filterType]: updatedFilter }));
 		this.setState({ [filterType]: updatedFilter });
 	}
 	hideAll(){
@@ -159,7 +176,7 @@ export class ExplorationModal extends React.Component {
 						<h1>Course Discovery</h1>
 					</div>
 					<div className="col-5-16">
-						<input ref="input" onInput={this.fetchAdvancedSearchResults} />
+						<input ref="input" onInput={this.fetchAdvancedSearchResultsWrapper} />
 					</div>
 	                <div id="exploration-close"
 	                	onMouseDown={() => this.refs.modal.hide()}>

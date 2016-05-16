@@ -16,7 +16,7 @@ export const getCourseSearchEndpoint = (query) => {
 	return "search/" + getSchool() + "/" + getSemester() + "/" + query;
 };
 export const getAdvancedSearchEndpoint = (query) => {
-	return "advanced_search/" + getSchool() + "/" + getSemester() + "/" + query;
+	return "advanced_search/";
 };
 export const getTimetablesEndpoint = () => {
 	return "get_timetables/";
