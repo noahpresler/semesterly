@@ -224,7 +224,7 @@ export function fetchClassmates(courses) {
 		fetch(getClassmatesEndpoint(), {
 			credentials: 'include',
 			method: 'POST',
-			body: JSON.stringify({course_ids: courses})
+			body: JSON.stringify({ course_ids: courses })
 		})
 	    .then(response => response.json())
 	    .then(json => {

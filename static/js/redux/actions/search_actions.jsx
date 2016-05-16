@@ -1,5 +1,6 @@
 import fetch from 'isomorphic-fetch';
 import { getCourseSearchEndpoint, getAdvancedSearchEndpoint } from '../constants.jsx';
+import { store } from '../init.jsx';
 
 export function requestCourses() {
   return {
@@ -32,7 +33,7 @@ export function fetchSearchResults(query) {
 	}
 }
 
-export function fetchAdvancedSearchResults(query) {
+export function fetchAdvancedSearchResults(query, filters) {
 	return (dispatch) => {
 		if (query.length <= 1) {
 			dispatch({  
@@ -46,8 +47,14 @@ export function fetchAdvancedSearchResults(query) {
 			type: "REQUEST_ADVANCED_SEARCH_RESULTS",
 		});
 		// send a request (via fetch) to the appropriate endpoint to get courses
-		fetch(getAdvancedSearchEndpoint(query), {
-			'credentials': 'include',
+		fetch(getAdvancedSearchEndpoint(), {
+			credentials: 'include',
+			method: 'POST',
+			body: JSON.stringify({
+				query,
+				filters,
+				semester: store.getState().semester
+			})
 		})
 		.then(response => response.json()) // TODO(rohan): error-check the response
 		.then(json => {
