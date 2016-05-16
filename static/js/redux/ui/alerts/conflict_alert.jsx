@@ -18,7 +18,7 @@ class ConflictAlert extends React.Component {
 			<button 
 				onClick={() => this.handleClick()}
 				className="conflict-alert-btn">
-				Turn Conflicts On!
+				Allow Conflicts!
 			</button>
 	 	</div>);
  	}
