@@ -16,7 +16,15 @@ school_to_models = {
     'uo': (OttawaCourse, OttawaCourseOffering),
     'queens': (QueensCourse, QueensCourseOffering)
 }
-VALID_SCHOOLS = school_to_models.keys()
+
+school_to_departments = {
+  'jhu': [],
+  'uoft': sorted(list(set(map(lambda x: x[:3], list(Course.objects.all().values_list('code', flat=True).distinct()))))),
+  'umd': [],
+  'rutgers': [],
+  'uo': [],
+  'queens': []
+}
 
 VALID_SCHOOLS = school_to_models.keys()
 # the smallest block size (in minutes) needed to describe start/end times
@@ -68,3 +76,4 @@ textbook_parsers = {
   'uo': lambda: None,
   'queens': parse_queens_textbooks
 }
+
