@@ -16,7 +16,7 @@ from pytz import timezone
 
 from analytics.views import *
 from timetable.models import *
-from timetable.school_mappers import school_to_models, school_to_granularity, school_to_departments, VALID_SCHOOLS
+from timetable.school_mappers import school_to_models, school_to_granularity, VALID_SCHOOLS
 from student.models import Student
 
 MAX_RETURN = 60 # Max number of timetables we want to consider
@@ -721,12 +721,10 @@ def advanced_course_search(request):
       Use:
       course_match_objs.objects.filter(reduce(operator.or_, (Q(areas__contains=x) for x in filters['areas'])))
     '''
-  # if filters['departments']:
-  #   course_match_objs = course_match_objs.filter(department__in=filters['departments'])
+  if filters['departments']:
+    course_match_objs = course_match_objs.filter(department__in=filters['departments'])
   if filters['levels']:
-    print course_match_objs
     course_match_objs = course_match_objs.filter(level__in=filters['levels'])
-    print course_match_objs
 
   # We want to filter based on whether the course has an offering in this semester or not.
   # This part needs to be executed case-by-case because of Django's ORM.
@@ -780,8 +778,8 @@ def school_info(request, school):
     return HttpResponse("School not found")
   SchoolCourse, SchoolCourseOffering = school_to_models[school]
   json_data = { # TODO(rohan): Get all relevant fields (areas, departments, levels) properly
-    'areas': list(SchoolCourse.objects.exclude(areas__exact='').values_list('areas', flat=True).distinct()),
-    'departments': school_to_departments[school],
+    'areas': sorted(list(SchoolCourse.objects.exclude(areas__exact='').values_list('areas', flat=True).distinct())),
+    'departments': sorted(list(SchoolCourse.objects.exclude(department__exact='').values_list('department', flat=True).distinct())),
     'levels': sorted(list(SchoolCourse.objects.exclude(level__exact='').values_list('level', flat=True).distinct()))
   }
   return HttpResponse(json.dumps(json_data), content_type="application/json")
