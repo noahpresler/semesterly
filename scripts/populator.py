@@ -5,7 +5,6 @@ from timetable.models import *
 from django.forms.models import model_to_dict
 from django.db.models import Q
 
-from timetable.school_mappers import school_to_models
 
 def start_JSON_populator(school, sem): 
     module_dir = os.path.dirname(__file__)  # get current directory
