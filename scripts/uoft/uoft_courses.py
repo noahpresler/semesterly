@@ -125,7 +125,7 @@ class UofTParser:
                 print "Course:", C, "New?:", created
                 if created:
                     self.new += 1
-                C.courseoffering_set.all().delete()
+                # C.courseoffering_set.all().delete()
                 section_data = []
                 section_data_table = course_div.find('table')
                 tbody = section_data_table.find('tbody')
@@ -159,18 +159,19 @@ class UofTParser:
                         if day not in self.day_map:
                             print "==============ERROR: Day", day, " is not valid!=============="
                             continue
-                        CO = CourseOffering(course=C, 
+                        CO, co_created = CourseOffering.objects.update_or_create(course=C, 
                             semester=semester,
                             meeting_section=section,
-                            instructors=instructors,
                             day=self.day_map[day],
                             time_start=start,
                             time_end=end,
-                            location=loc,
-                            size=size,
-                            enrolment=enrolment,
-                            alternates=False,
-                            section_type=section_type)
+                            section_type=section_type, defaults={
+                            'instructors': instructors,
+                            'location': loc,
+                            'size': size,
+                            'enrolment': enrolment,
+                            'alternates': False,
+                        })
                         CO.save()
                         print "\t\t\t", day, start, end, loc
         self.start_coursefinder()
@@ -206,7 +207,7 @@ class UofTParser:
                         self.new += 1
                     meetings = course_data['meetings']
                     semester = course_data['section']
-                    C.courseoffering_set.all().delete()
+                    # C.courseoffering_set.all().delete()
                     for section_key in meetings:
                         section = section_key.split("-")[0][0] + section_key.split("-")[-1]
                         section_data = meetings[section_key]
@@ -221,18 +222,20 @@ class UofTParser:
                         for offering in schedule:
                             offering_data = schedule[offering]
                             try:
-                                CO = CourseOffering(course=C, 
+                                CO, co_created = CourseOffering.objects.update_or_create(course=C,
                                     semester=semester,
                                     meeting_section=section,
-                                    instructors=instructors,
                                     day=self.day_map[offering_data['meetingDay']],
                                     time_start=offering_data['meetingStartTime'],
                                     time_end=offering_data['meetingEndTime'],
-                                    location='',
-                                    size=section_data['enrollmentCapacity'],
-                                    enrolment=0,
-                                    alternates=False,
-                                    section_type=section[0])
+                                    section_type=section[0], defaults={
+                                    'instructors': instructors,
+                                    'location': '',
+                                    'size': section_data['enrollmentCapacity'],
+                                    'enrolment': 0,
+                                    'alternates': False,
+                                })
+                                           
                                 CO.save()
                             except Exception as e:
                                 print e
@@ -432,20 +435,6 @@ class UofTParser:
             ("meeting_sections", sections)
         ])
 
-        # basic_course = OrderedDict([
-        #     ("code", course_code),
-        #     ("name", course_name),
-        #     ("description", description),
-        #     ("division", division),
-        #     ("department", department),
-        #     ("prerequisites", prereq),
-        #     ("exclusions", exclusions),
-        #     ("level", course_level),
-        #     ("campus", campus),
-        #     ("breadths", breadths)
-        # ])
-
-        # return [course, basic_course]
         return course
     def start_coursefinder(self):
         print "Now starting coursefinder."
