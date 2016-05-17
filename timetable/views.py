@@ -722,9 +722,11 @@ def advanced_course_search(request):
       course_match_objs.objects.filter(reduce(operator.or_, (Q(areas__contains=x) for x in filters['areas'])))
     '''
   # if filters['departments']:
-  #   course_match_objs = course_match_objs.filter(areas__in=filters['departments'])
-  # if filters['levels']:
-  #   course_match_objs = course_match_objs.filter(areas__in=filters['levels'])
+  #   course_match_objs = course_match_objs.filter(department__in=filters['departments'])
+  if filters['levels']:
+    print course_match_objs
+    course_match_objs = course_match_objs.filter(level__in=filters['levels'])
+    print course_match_objs
 
   # We want to filter based on whether the course has an offering in this semester or not.
   # This part needs to be executed case-by-case because of Django's ORM.
@@ -780,7 +782,7 @@ def school_info(request, school):
   json_data = { # TODO(rohan): Get all relevant fields (areas, departments, levels) properly
     'areas': list(SchoolCourse.objects.exclude(areas__exact='').values_list('areas', flat=True).distinct()),
     'departments': school_to_departments[school],
-    'levels': []
+    'levels': sorted(list(SchoolCourse.objects.exclude(level__exact='').values_list('level', flat=True).distinct()))
   }
   return HttpResponse(json.dumps(json_data), content_type="application/json")
 

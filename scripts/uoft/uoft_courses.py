@@ -23,7 +23,8 @@ class UofTParser:
         self.cookies = cookielib.CookieJar()
         self.s = requests.Session()
         self.years_of_study = ["1", "2", "3", "4"]
-        self.DAY_MAP = {'MO': 'M', 'TU': 'T', 'WE': 'W', 'TH': 'R', 'FR': 'F', None: ''}
+        self.level_map = {"1": "100", "2": "200", "3": "300", "4": "400"}
+        self.day_map = {'MO': 'M', 'TU': 'T', 'WE': 'W', 'TH': 'R', 'FR': 'F', None: ''}
         self.errors = 0
 
     def get_school_name(self):
@@ -42,7 +43,6 @@ class UofTParser:
     def start_utm(self):
 
         print "Parsing UTM"
-        level_map = {"1": "100", "2": "200", "3": "300", "4": "400"}
         found_map = {"1": 0, "2": 0, "3": 0, "4": 0}
         for year_of_study in self.years_of_study:
             payload = {
@@ -57,7 +57,7 @@ class UofTParser:
             f.write(response)
             f.close()
             soup = BeautifulSoup(response)
-            level = level_map[year_of_study]
+            level = self.level_map[year_of_study]
             course_divs = soup.find_all("div", class_="course")
             for course_div in course_divs:
                 course_span = course_div.find('span')
@@ -148,14 +148,14 @@ class UofTParser:
                     print "\t\tSection:", section
                     for o in xrange(len(days)):
                         day, start, end, loc = days[o], start_times[o], end_times[o], locations[o]
-                        if day not in self.DAY_MAP:
+                        if day not in self.day_map:
                             print "==============ERROR: Day", day, " is not valid!=============="
                             continue
                         CO = CourseOffering(course=C, 
                             semester=semester,
                             meeting_section=section,
                             instructors=instructors,
-                            day=self.DAY_MAP[day],
+                            day=self.day_map[day],
                             time_start=start,
                             time_end=end,
                             location=loc,
@@ -169,6 +169,7 @@ class UofTParser:
     def start(self):
         print "Starting St. George."
         for year_of_study in self.years_of_study:
+            level = self.level_map[year_of_study]
             print "Parsing year: {}".format(year_of_study)
             request_url = "https://timetable.iit.artsci.utoronto.ca/api/courses?org=&code=&section=&studyyear={}&daytime=&weekday=&prof=&breadth=".format(year_of_study)
             data = json.loads(self.s.get(url=request_url, cookies=self.cookies).text)
@@ -186,7 +187,8 @@ class UofTParser:
                             'areas': course_data['breadthCategories'][-3:],
                             'prerequisites': course_data['prerequisite'],
                             'exclusions': course_data['exclusion'],
-                            'num_credits': num_credits
+                            'num_credits': num_credits,
+                            'level': level
                         })
                     print "Course:", C, "New?:", created
                     meetings = course_data['meetings']
@@ -210,7 +212,7 @@ class UofTParser:
                                     semester=semester,
                                     meeting_section=section,
                                     instructors=instructors,
-                                    day=self.DAY_MAP[offering_data['meetingDay']],
+                                    day=self.day_map[offering_data['meetingDay']],
                                     time_start=offering_data['meetingStartTime'],
                                     time_end=offering_data['meetingEndTime'],
                                     location='',
