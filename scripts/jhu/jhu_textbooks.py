@@ -118,7 +118,11 @@ class JHUTextbookParser:
         soup = BeautifulSoup(response.text,"html.parser")
         semester_list = soup.find(class_="bncbSelectBox termHeader")
         if semester_list == None and is_retry:
-            return
+            if is_retry:
+                return
+            else:
+                print("error parsing semesters, response:" + response.text)
+                exit()
         semesters = []
         for li in semester_list.findAll("li"):
             sem_name = li.contents[0]
