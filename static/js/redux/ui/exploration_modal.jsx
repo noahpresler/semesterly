@@ -8,24 +8,23 @@ export class ExplorationModal extends React.Component {
 	constructor(props){
 		super(props);
 		this.state = {
-			showDepartments: false,
-			showAreas: false,
-			showTimes: false,
-			showLevels: false,
+			show_departments: false,
+			show_areas: false,
+			show_times: false,
+			show_levels: false,
 			areas: [],
 			departments: [],
 			times: [],
 			levels: []
 		};
-		this.toggleDepartments = this.toggleDepartments.bind(this);
-		this.toggleAreas = this.toggleAreas.bind(this);
-		this.toggleTimes = this.toggleTimes.bind(this);
-		this.toggleLevels = this.toggleLevels.bind(this);
+		this.toggle = this.toggle.bind(this);
 		this.fetchAdvancedSearchResults = this.fetchAdvancedSearchResults.bind(this);
+		this.fetchAdvancedSearchResultsWrapper = this.fetchAdvancedSearchResultsWrapper.bind(this);
 		this.addOrRemoveCourse = this.addOrRemoveCourse.bind(this);
 		this.changeTimer = false;
 		this.hide = this.hide.bind(this);
-		this.add = this.add.bind(this);
+		this.addFilter = this.addFilter.bind(this);
+		this.removeFilter = this.removeFilter.bind(this);
 		this.hideAll = this.hideAll.bind(this);
 	}
 	addOrRemoveCourse(id, section='') {
@@ -42,44 +41,58 @@ export class ExplorationModal extends React.Component {
 			this.refs.modal.show();
 		}
 	}
-	toggleDepartments() {
-		this.setState({ showDepartments: !this.state.showDepartments });
-	}
-	toggleAreas() {
-		this.setState({ showAreas: !this.state.showAreas });
-	}
-	toggleTimes() {
-		this.setState({ showTimes: !this.state.showTimes });
-	}
-	toggleLevels() {
-		this.setState({ showLevels: !this.state.showLevels });
+	toggle(filterType) {
+		return () => {
+			let stateName = "show_" + filterType;
+			this.setState({ [stateName]: !this.state[stateName] });
+		}
 	}
 	hide() {
 		this.props.unhoverSection();
 		this.props.hideModal();
 		this.refs.modal.hide();
 	}
-	fetchAdvancedSearchResults() {
-		if (this.changeTimer) clearTimeout(this.changeTimer);
+	fetchAdvancedSearchResults(filters) {
 		let query = this.refs.input.value;
+		let { areas, departments, times, levels} = filters;
+		this.props.fetchAdvancedSearchResults(query, {
+			areas,
+			departments,
+			times,
+			levels
+		});
+	}
+	fetchAdvancedSearchResultsWrapper() {
+		if (this.changeTimer) clearTimeout(this.changeTimer);
 		this.changeTimer = setTimeout( () => {
-			this.props.fetchAdvancedSearchResults(query);
+			// fetchAdvancedSearchResults requires that its argument contain
+			// at least the filters. since this.state has them, we simply pass this.state
+			// as its argument. there are other aspects of state that are irrelevant for the call,
+			// but we include them for the brevity of just passing this.state
+			this.fetchAdvancedSearchResults(this.state);
 			this.changeTimer = false;
 		}, 200);
 	}
-	add(filterType, filter) {
+	addFilter(filterType, filter) {
 		if (this.state[filterType].indexOf(filter) > -1) {
 			return;
 		}
 		let updatedFilter = [...this.state[filterType], filter];
-		this.setState({[filterType]: updatedFilter});
+		this.fetchAdvancedSearchResults(Object.assign({}, this.state, { [filterType]: updatedFilter }));
+
+		this.setState({ [filterType]: updatedFilter });
+	}
+	removeFilter(filterType, filter) {
+		let updatedFilter = this.state[filterType].filter(f => f != filter);
+		this.fetchAdvancedSearchResults(Object.assign({}, this.state, { [filterType]: updatedFilter }));
+		this.setState({ [filterType]: updatedFilter });
 	}
 	hideAll(){
 		this.setState({
-			showDepartments: false,
-			showAreas: false,
-			showTimes: false,
-			showLevels: false
+			show_departments: false,
+			show_areas: false,
+			show_times: false,
+			show_levels: false
 		})
 	}
 	render() {
@@ -88,14 +101,12 @@ export class ExplorationModal extends React.Component {
 			backgroundColor: 'transparent'
 		};
 
-	
-
 		let { advancedSearchResults, course } = this.props;
-		let numSearchResults = advancedSearchResults.length > 0 ? 
+		let numSearchResults = advancedSearchResults.length > 0 ?
 		<p>returned { advancedSearchResults.length } Search Results</p> : null;
 		let searchResults = advancedSearchResults.map( (c, i) => {
-			return <ExplorationSearchResult 
-					key={i} code={c.code} name={c.name} 
+			return <ExplorationSearchResult
+					key={i} code={c.code} name={c.name}
 					onClick={() => this.props.setAdvancedSearchResultIndex(i)}/>
 		});
 		let courseModal = null;
@@ -122,7 +133,7 @@ export class ExplorationModal extends React.Component {
 						<i className="fa fa-plus"></i>
 					</div>
 				</div>
-				<CourseModalBody {...course} 
+				<CourseModalBody {...course}
 					{...this.props}
 					lectureSections={lectureSections}
 					tutorialSections={tutorialSections}
@@ -132,29 +143,29 @@ export class ExplorationModal extends React.Component {
 				/>
 			</div>
 		}
-		let areaFilter = this.state.showAreas ? (
-            <Filter results={this.props.areas} 
-            		onClickOut={this.hideAll}
-            		filterType={"areas"} 
-            		add={this.add}/>
-
-		) : null;
-		let selectedAreas = this.state.areas.map((a, i) => (
-			<SelectedFilter name={a} key={i} />
-		));	
-		let selectedAreasSection = <SelectedFilterSection name={"Areas"} toggle={this.toggleAreas} children={selectedAreas} />;
-
-		let departmentFilter = this.state.showDepartments ? (
-			<Filter results={this.props.departments}
-					onClickOut={this.hideAll}
-					filterType={"departments"}
-					add={this.add}/>
-		) : null;
-		let selectedDepartments = this.state.departments.map((a, i) => (
-			<SelectedFilter name={a} key={i} />
+		let filterTypes = ["departments", "areas", "levels"];
+		let filters = filterTypes.map(filterType => (
+			<Filter results={this.props[filterType]}
+					key={filterType} filterType={filterType}
+				   	add={this.addFilter} show={this.state["show_" + filterType]}
+				   	onClickOut={this.hideAll} />
 		));
-		let selectedDepartmentsSection = <SelectedFilterSection name={"Departments"} toggle={this.toggleDepartments} children={selectedDepartments} />;
+		let selectedFilterSections = filterTypes.map(filterType => {
+			let availableFilters = this.props[filterType];
+			// sort selected filters according to the order in which they were received from props
+			let sortedFilters = this.state[filterType].concat().sort((a, b) => (
+				availableFilters.indexOf(a) - availableFilters.indexOf(b)
+			));
+			let selectedItems = sortedFilters.map((name, i) => (
+				<SelectedFilter key={i} name={name} remove={() => this.removeFilter(filterType, name)}/>
+			));
+			let name = filterType[0].toUpperCase() + filterType.slice(1);
 
+			return <SelectedFilterSection key={filterType} name={name}
+										  toggle={this.toggle(filterType)}
+										  children={selectedItems} />
+		});
+		
 		let content = (
 			<div id="exploration-content">
 				<div id="exploration-header"
@@ -165,7 +176,7 @@ export class ExplorationModal extends React.Component {
 						<h1>Course Discovery</h1>
 					</div>
 					<div className="col-5-16">
-						<input ref="input" onInput={this.fetchAdvancedSearchResults} />
+						<input ref="input" onInput={this.fetchAdvancedSearchResultsWrapper} />
 					</div>
 	                <div id="exploration-close"
 	                	onMouseDown={() => this.refs.modal.hide()}>
@@ -174,21 +185,8 @@ export class ExplorationModal extends React.Component {
 	            </div>
 	            <div id="exploration-body">
                     <div id="exp-filters" className="col-4-16">
-                        { selectedDepartmentsSection }
-                        { selectedAreasSection }
-                        
-                        <div className={classNames("exp-filter-section", {'open' : this.state.showLevels})}>
-                            <h3 className="exp-header">
-								<span>Course Level Filter</span>
-								<i className="fa fa-plus"
-									onClick={this.toggleLevels}></i>
-							</h3>
-							<h6>
-								<i className="fa fa-times"></i>
-								<span>200</span>
-							</h6>
-                        </div>
-                        <div className={classNames("exp-filter-section", {'open' : this.state.showTimes})}>
+                        { selectedFilterSections }
+                        <div className={classNames("exp-filter-section", {'open' : this.state.show_times})}>
                             <h3 className="exp-header">
 								<span>Times Filter</span>
 								<i className="fa fa-plus"
@@ -206,8 +204,7 @@ export class ExplorationModal extends React.Component {
 							{ searchResults }
                         </div>
                     </div>
-                    { departmentFilter }
-                    { areaFilter }
+                    { filters }
                     <div id="exp-modal" className="col-7-16">
                         { courseModal }
                     </div>
@@ -252,16 +249,21 @@ class Filter extends React.Component {
 		}
 	}
 	render() {
+		if (!this.props.show) {
+			return null;
+		}
+		let { filterType } = this.props;
+		let placeholder = filterType[0].toUpperCase() + filterType.slice(1);
 		let results = this.state.results.map((r, i) => {
-			return <li key={i} onClick={() => this.props.add(this.props.filterType, r)} >
+			return <li key={i} onClick={() => this.props.add(filterType, r)} >
 					<i className="fa fa-check"></i>
-					<h6> { r } </h6>
+					<h6>{r}</h6>
 				</li>
 		});
 		return (
 			<ClickOutHandler onClickOut={this.props.onClickOut}>
 				<div className="filter-pop-out open">
-					<input placeholder={this.props.filterType} onInput={this.filterResults}/>
+					<input placeholder={placeholder} onInput={this.filterResults}/>
 					<div className="fpo-list">
 						<ul>
 							{ results }
@@ -275,10 +277,9 @@ class Filter extends React.Component {
 
 }
 
-
-const SelectedFilter = ({ name }) => (
+const SelectedFilter = ({ name, remove }) => (
 	<h6>
-		<i className="fa fa-times"></i>
+		<i className="fa fa-times" onClick={() => remove()}></i>
 		<span>{ name }</span>
 	</h6>
 );

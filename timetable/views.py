@@ -697,30 +697,47 @@ def course_search(request, school, sem, query):
 
 # ADVANCED SEARCH
 @csrf_exempt
-def advanced_course_search(request, school, sem, query):
+def advanced_course_search(request):
+  school = request.subdomain
   if school not in VALID_SCHOOLS:
     return HttpResponse("School not found")
+  params = json.loads(request.body)
+  sem = params['semester']
+  query = params['query']
+  filters = params['filters']
+  times = filters['times']
 
   SchoolCourse, SchoolCourseOffering = school_to_models[school]
+    
+  # filtering first by user's search query
+  course_match_objs = SchoolCourse.objects.filter(
+    (Q(code__icontains=query) | Q(description__icontains=query) | Q(name__icontains=query)))
 
-  course_match_objs = SchoolCourse.objects.filter((Q(code__icontains=query) | Q(description__icontains=query) | Q(name__icontains=query)))
+  # filtering now by departments, areas, or levels if provided
+  if filters['areas']:
+    course_match_objs = course_match_objs.filter(areas__in=filters['areas'])
+    #TODO(rohan)
+    '''
+      Use:
+      course_match_objs.objects.filter(reduce(operator.or_, (Q(areas__contains=x) for x in filters['areas'])))
+    '''
+  if filters['departments']:
+    course_match_objs = course_match_objs.filter(department__in=filters['departments'])
+  if filters['levels']:
+    course_match_objs = course_match_objs.filter(level__in=filters['levels'])
 
   # We want to filter based on whether the course has an offering in this semester or not.
   # This part needs to be executed case-by-case because of Django's ORM.
   # Notice that each call to filter uses the appropriate "courseoffering"
   # class name in the filter.
   if school == "uoft":
-    course_match_objs = course_match_objs.filter(
-      (Q(courseoffering__semester__icontains=sem) | Q(courseoffering__semester__icontains='Y')))
+    course_match_objs = course_match_objs.filter((Q(courseoffering__semester__in=[sem, 'Y'])))
   elif school == "jhu":
-    course_match_objs = course_match_objs.filter(
-      (Q(hopkinscourseoffering__semester__icontains=sem) | Q(hopkinscourseoffering__semester__icontains='Y')))
+    course_match_objs = course_match_objs.filter((Q(hopkinscourseoffering__semester__in=[sem, 'Y'])))
   elif school == "umd":
-    course_match_objs = course_match_objs.filter(
-      (Q(umdcourseoffering__semester__icontains=sem) | Q(umdcourseoffering__semester__icontains='Y')))
+    course_match_objs = course_match_objs.filter((Q(umdcourseoffering__semester__in=[sem, 'Y'])))
   elif school == "queens":
-    course_match_objs = course_match_objs.filter(
-      (Q(queenscourseoffering__semester__icontains=sem) | Q(queenscourseoffering__semester__icontains='Y')))
+    course_match_objs = course_match_objs.filter((Q(queenscourseoffering__semester__in=[sem, 'Y'])))
 
   course_match_objs = course_match_objs.distinct('code')[:50]
   s = None
@@ -760,8 +777,10 @@ def school_info(request, school):
   if school not in VALID_SCHOOLS:
     return HttpResponse("School not found")
   SchoolCourse, SchoolCourseOffering = school_to_models[school]
-  json_data = { # TODO(rohan): Get areas once models are updated
-    'areas': list(SchoolCourse.objects.exclude(areas__exact='').values_list('areas', flat=True).distinct())
+  json_data = { # TODO(rohan): Get all relevant fields (areas, departments, levels) properly
+    'areas': sorted(list(SchoolCourse.objects.exclude(areas__exact='').values_list('areas', flat=True).distinct())),
+    'departments': sorted(list(SchoolCourse.objects.exclude(department__exact='').values_list('department', flat=True).distinct())),
+    'levels': sorted(list(SchoolCourse.objects.exclude(level__exact='').values_list('level', flat=True).distinct()))
   }
   return HttpResponse(json.dumps(json_data), content_type="application/json")
 
