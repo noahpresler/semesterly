@@ -24,6 +24,7 @@ const mapStateToProps = (state) => {
 		areas,
 		departments,
 		levels,
+		isLoggedIn: state.userInfo.data.isLoggedIn,
 		hasHoveredResult: activeTimetable.courses.some(course => course.fake),
 		isSectionLocked: (courseId, section) => {
 			if (courseSections[courseId] === undefined) {
