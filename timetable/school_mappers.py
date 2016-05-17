@@ -17,15 +17,6 @@ school_to_models = {
     'queens': (QueensCourse, QueensCourseOffering)
 }
 
-school_to_departments = {
-  'jhu': [],
-  'uoft': sorted(list(set(map(lambda x: x[:3], list(Course.objects.all().values_list('code', flat=True).distinct()))))),
-  'umd': [],
-  'rutgers': [],
-  'uo': [],
-  'queens': []
-}
-
 VALID_SCHOOLS = school_to_models.keys()
 # the smallest block size (in minutes) needed to describe start/end times
 # e.g. uoft classes only start on the hour or half hour, so granularity is 30min
