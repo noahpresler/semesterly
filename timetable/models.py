@@ -42,6 +42,7 @@ class BaseCourse(models.Model):
   num_credits = models.FloatField(default=-1)
   areas = models.CharField(max_length=300, default='', null=True)
   department = models.CharField(max_length=250, default='', null=True)
+  level = models.CharField(max_length=30, default='', null=True)
   related_courses = models.ManyToManyField("self", blank=True)
 
   
@@ -148,8 +149,6 @@ class Reaction(models.Model):
 #-----------------------  University of Toronto ------------------------------
 class Course(BaseCourse):
   """Uoft Course object"""
-  # a course may have multiple breadths - each character represents one
-  breadths = models.CharField(max_length=5, default='')
 
   def get_dept(self):
     return self.code[:3]
