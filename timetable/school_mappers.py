@@ -16,7 +16,6 @@ school_to_models = {
     'uo': (OttawaCourse, OttawaCourseOffering),
     'queens': (QueensCourse, QueensCourseOffering)
 }
-VALID_SCHOOLS = school_to_models.keys()
 
 VALID_SCHOOLS = school_to_models.keys()
 # the smallest block size (in minutes) needed to describe start/end times
@@ -68,3 +67,4 @@ textbook_parsers = {
   'uo': lambda: None,
   'queens': parse_queens_textbooks
 }
+
