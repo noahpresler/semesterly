@@ -3,13 +3,11 @@ import os
 import django
 from timetable.models import Updates
 from timetable.school_mappers import course_parsers
-from scripts.populator import *
 import datetime, logging, os, sys
 
 
 class Command(BaseCommand):
-  help = "Initiates specified parsers for specified schools. If no school \
-  is provided, starts parsers for all schools."
+  help = "Initiates specified parsers for specified schools. If no school is provided, starts parsers for all schools."
   def add_arguments(self, parser):
   	 	# optional argument to specify parser for specific school
   	 	parser.add_argument('school', nargs='?', default='')
@@ -43,9 +41,6 @@ class Command(BaseCommand):
 				logging.exception(message)
 
 				do_parse()
-				# populate the JSON files in timetables/courses_json
-				start_JSON_populator(school, "F")
-				start_JSON_populator(school, "S")
 
 				# set the last_updated information for the school's courses
 				update_object, created = Updates.objects.update_or_create(
