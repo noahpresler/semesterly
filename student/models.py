@@ -32,20 +32,7 @@ class PersonalTimetable(models.Model):
     student = models.ForeignKey(Student)
     school = models.CharField(max_length=50)
     last_updated = models.DateTimeField(auto_now=True)
-
-class UofTPersonalTimetable(PersonalTimetable):
-    course_offerings = models.ManyToManyField(CourseOffering)
+    sections = models.ManyToManyField(Section)
     courses = models.ManyToManyField(Course)
 
-class HopkinsPersonalTimetable(PersonalTimetable):
-    course_offerings = models.ManyToManyField(HopkinsCourseOffering)
-    courses = models.ManyToManyField(HopkinsCourse)
-
-class UmdPersonalTimetable(PersonalTimetable):
-    course_offerings = models.ManyToManyField(UmdCourseOffering)
-    courses = models.ManyToManyField(UmdCourse)
-
-class RutgersPersonalTimetable(PersonalTimetable):
-    course_offerings = models.ManyToManyField(RutgersCourseOffering)
-    courses = models.ManyToManyField(RutgersCourse)
     

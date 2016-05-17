@@ -22,16 +22,9 @@ class Updates(models.Model):
   last_updated = models.DateTimeField(auto_now=True)
   reason = models.CharField(max_length=200, default='Scheduled Update')
 
-#----------- Abstract Models  ----------------
-class TextbookLink(models.Model):
-  textbook = models.ForeignKey(Textbook)
-  is_required = models.BooleanField(default=False)
 
-  class Meta:
-    abstract = True
-
-
-class BaseCourse(models.Model):
+class Course(models.Model):
+  school = models.CharField(max_length=100)
   code = models.CharField(max_length=20)
   name = models.CharField(max_length=250)
   description = models.TextField(max_length=1500, default='')
@@ -43,9 +36,10 @@ class BaseCourse(models.Model):
   areas = models.CharField(max_length=300, default='', null=True)
   department = models.CharField(max_length=250, default='', null=True)
   level = models.CharField(max_length=30, default='', null=True)
+  cores = models.CharField(max_length=50, null=True, blank=True)
+  geneds = models.CharField(max_length=50, null=True, blank=True)
   related_courses = models.ManyToManyField("self", blank=True)
 
-  
   def __unicode__(self):
     return self.code + ": " + self.name
 
@@ -90,20 +84,23 @@ class BaseCourse(models.Model):
         final.append(i)
     return sorted(final, key=lambda k: k['year']) 
 
-
-class BaseCourseOffering(models.Model):
-  semester = models.CharField(max_length=2)
-  meeting_section = models.CharField(max_length=50)
-  instructors = models.CharField(max_length=500, default='TBA')
-  day = models.CharField(max_length=1)
-  time_start = models.CharField(max_length=15)
-  time_end = models.CharField(max_length=15)
-  location = models.CharField(max_length=200, default='TBA')
+class Section(models.Model):
+  course = models.ForeignKey(Course)
+  name = models.CharField(max_length=50)
   size = models.IntegerField(default=-1)
   enrolment = models.IntegerField(default=-1)
   waitlist = models.IntegerField(default=0)
-  # if no section_type is specified, we assume it's a lecture
   section_type = models.CharField(max_length=50, default='L')
+  instructors = models.CharField(max_length=500, default='TBA')
+  semester = models.CharField(max_length=2)
+
+class Offering(models.Model):
+  section = models.ForeignKey(Section)
+  day = models.CharField(max_length=1)
+  start_time = models.CharField(max_length=15)
+  end_time = models.CharField(max_length=15)
+  location = models.CharField(max_length=200, default='TBA')
+
 
   def get_textbooks(self):
     textbooks = []
@@ -115,21 +112,16 @@ class BaseCourseOffering(models.Model):
 
   def __unicode__(self):
     # return "Semester: %s, Section: %s, Time: %s" % (self.semester, self.meeting_section, self.time)
-    return "Day: %s, Time: %s - %s" % (self.day, self.time_start, self.time_end)
-
-  def get_evaluations(self):
-    return self.course.get_eval_info()
+    return "Day: %s, Time: %s - %s" % (self.day, self.start_time, self.end_time)
 
 
-class BaseCourseEvaluation(models.Model):
+class Evaluation(models.Model):
+  course = models.ForeignKey(Course)
   score = models.FloatField(default=5.0)
   summary = models.TextField(max_length=1500)
   professor = models.CharField(max_length=250)
   course_code = models.CharField(max_length=20)
   year = models.CharField(max_length=200)
-
-  class Meta:
-    abstract = True
 
 class Reaction(models.Model):
   REACTION_CHOICES = (
@@ -143,288 +135,12 @@ class Reaction(models.Model):
     ('INTERESTING', 'INTERESTING'),
   )
   student = models.ForeignKey('student.Student')
-  course = models.ManyToManyField(BaseCourse)
+  course = models.ManyToManyField(Course)
   title = models.CharField(max_length=50, choices=REACTION_CHOICES)
 
-#-----------------------  University of Toronto ------------------------------
-class Course(BaseCourse):
-  """Uoft Course object"""
 
-  def get_dept(self):
-    return self.code[:3]
-
-  def get_dept_matches(self):
-    department = self.get_dept()
-    return Course.objects.filter(code__contains=department)
-
-  def get_all_textbook_info(self):
-    return self.base_get_all_textbook_info(CourseOffering)
-
-  def get_eval_info(self):
-    return [] # TODO
-
-  def get_breadths(self):
-    return map(int, sorted(self.breadths))
-
-
-class CourseOffering(BaseCourseOffering):
-  """Uoft CourseOffering"""
-  course = models.ForeignKey(Course)
-  alternates = models.BooleanField(default=False)
-  textbooks = models.ManyToManyField(Textbook, through='Link')
-
-class Link(TextbookLink):
-  courseoffering = models.ForeignKey(CourseOffering)
-
-
-#---------------------- John Hopkins University ----------------------------
-class HopkinsCourse(BaseCourse):
-
-  def get_dept(self):
-    pass
-
-  def get_dept_matches(self):
-    code_pattern = re.compile(r"(.*\..*)\.(.*)")
-    department = re.search(code_pattern, self.code).group(1)
-    return HopkinsCourse.objects.filter(code__contains=department)
-
-  def get_all_textbook_info(self):
-    return self.base_get_all_textbook_info(HopkinsCourseOffering)
-
-  def get_eval_info(self):
-    return self.base_get_eval_info(HopkinsCourseEvaluation)
-
-
-class HopkinsCourseEvaluation(BaseCourseEvaluation):
-  course = models.ForeignKey(HopkinsCourse)
-
-
-class HopkinsCourseOffering(BaseCourseOffering):
-  course = models.ForeignKey(HopkinsCourse)
-  textbooks = models.ManyToManyField(Textbook, through='HopkinsLink')
-
-  def get_course_code(self):
-    return self.course.code +  ' ' + self.meeting_section
-
-  def get_course_tag(self):
-    return '<course dept="' + self.get_dept().strip() + '" num="' + self.get_course().strip() + '" sect="' + self.get_section().strip() + '" term="W16"/>'
-
-  def get_dept(self):
-    code_pattern = pattern = re.compile(r".*\.(.*)\.(.*)\s\((.*)\)")
-    matches = re.search(code_pattern,self.get_course_code())
-    return str(matches.group(1))
-
-  def get_course(self):
-    code_pattern = pattern = re.compile(r".*\.(.*)\.(.*)\s\((.*)\)")
-    matches = re.search(code_pattern,self.get_course_code())
-    return str(matches.group(2))
-
-  def get_section(self):
-    code_pattern = pattern = re.compile(r".*\.(.*)\.(.*)\s\((.*)\)")
-    matches = re.search(code_pattern,self.get_course_code())
-    return str(matches.group(3))
-
-  def __unicode__(self):
-    # return "Semester: %s, Section: %s, Time: %s" % (self.semester, self.meeting_section, self.time)
-    return "Day: %s, Time: %s - %s" % (self.day, self.time_start, self.time_end)
-
-class HopkinsLink(TextbookLink):
-  courseoffering = models.ForeignKey(HopkinsCourseOffering)
-
-
-#---------------------- University of Maryland ----------------------------
-class UmdCourse(BaseCourse):
-  cores = models.CharField(max_length=50, default='')
-  geneds = models.CharField(max_length=50, default='')
-
-  def get_dept(self):
-    pass
-
-  def get_dept_matches(self):
-    pass
-
-  def get_all_textbook_info(self):
-    return self.base_get_all_textbook_info(UmdCourseOffering)
-
-  def get_eval_info(self):
-    return self.base_get_eval_info(UmdCourseEvaluation)
-
-  def get_cores(self):
-    return self.cores.split(',')
-
-  def get_geneds(self):
-    return self.geneds.split(',')
-
-
-class UmdCourseEvaluation(BaseCourseEvaluation):
-  course = models.ForeignKey(UmdCourse)
-
-
-class UmdCourseOffering(BaseCourseOffering):
-  course = models.ForeignKey(UmdCourse)
-  textbooks = models.ManyToManyField(Textbook, through='UmdLink')
-
-  def get_course_code(self):
-    pass
-
-  def get_course_tag(self):
-    pass
-
-  def get_dept(self):
-    pass
-
-  def get_course(self):
-    pass
-
-  def get_section(self):
-    pass
-
-  def __unicode__(self):
-    # return "Semester: %s, Section: %s, Time: %s" % (self.semester, self.meeting_section, self.time)
-    return "Day: %s, Time: %s - %s" % (self.day, self.time_start, self.time_end)
-
-class UmdLink(TextbookLink):
-  courseoffering = models.ForeignKey(UmdCourseOffering)
-
-
-#---------------------- University of Ottawa ----------------------------
-class OttawaCourse(BaseCourse):
-
-  def get_dept(self):
-    pass
-
-  def get_dept_matches(self):
-    pass
-
-  def get_all_textbook_info(self):
-    return self.base_get_all_textbook_info(OttawaCourseOffering)
-
-  def get_eval_info(self):
-    return self.base_get_eval_info(OttawaCourseEvaluation)
-
-
-class OttawaCourseEvaluation(BaseCourseEvaluation):
-  course = models.ForeignKey(OttawaCourse)
-
-
-class OttawaCourseOffering(BaseCourseOffering):
-  course = models.ForeignKey(OttawaCourse)
-  textbooks = models.ManyToManyField(Textbook, through='OttawaLink')
-
-  def get_course_code(self):
-    pass
-
-  def get_course_tag(self):
-    pass
-
-  def get_dept(self):
-    pass
-
-  def get_course(self):
-    pass
-
-  def get_section(self):
-    pass
-
-  def __unicode__(self):
-    # return "Semester: %s, Section: %s, Time: %s" % (self.semester, self.meeting_section, self.time)
-    return "Day: %s, Time: %s - %s" % (self.day, self.time_start, self.time_end)
-
-class OttawaLink(TextbookLink):
-  courseoffering = models.ForeignKey(OttawaCourseOffering)
-
-#---------------------- Rutgers University ----------------------------
-class RutgersCourse(BaseCourse):
-  cores = models.CharField(max_length=200, default='')
-
-  def get_dept(self):
-    pass
-
-  def get_dept_matches(self):
-    pass
-
-  def get_all_textbook_info(self):
-    return self.base_get_all_textbook_info(RutgersCourseOffering)
-
-  def get_eval_info(self):
-    return self.base_get_eval_info(RutgersCourseEvaluation)
-
-
-class RutgersCourseEvaluation(BaseCourseEvaluation):
-  course = models.ForeignKey(RutgersCourse)
-
-
-class RutgersCourseOffering(BaseCourseOffering):
-  exam_code = models.CharField(max_length=10, default='')
-  course = models.ForeignKey(RutgersCourse)
-  textbooks = models.ManyToManyField(Textbook, through='RutgersLink')
-
-  def get_course_code(self):
-    pass
-
-  def get_course_tag(self):
-    pass
-
-  def get_dept(self):
-    pass
-
-  def get_course(self):
-    pass
-
-  def get_section(self):
-    pass
-
-  def __unicode__(self):
-    # return "Semester: %s, Section: %s, Time: %s" % (self.semester, self.meeting_section, self.time)
-    return "Day: %s, Time: %s - %s" % (self.day, self.time_start, self.time_end)
-
-class RutgersLink(TextbookLink):
-  courseoffering = models.ForeignKey(RutgersCourseOffering)
-
-#---------------------- Queens University ----------------------------
-class QueensCourse(BaseCourse):
-
-  def get_dept(self):
-    return self.course_code[:4]
-
-  def get_dept_matches(self):
-    pass
-
-  def get_all_textbook_info(self):
-    return self.base_get_all_textbook_info(QueensCourseOffering)
-
-  def get_eval_info(self):
-    return self.base_get_eval_info(QueensCourseEvaluation)
-
-
-class QueensCourseEvaluation(BaseCourseEvaluation):
-  course = models.ForeignKey(QueensCourse)
-
-
-class QueensCourseOffering(BaseCourseOffering):
-  course = models.ForeignKey(QueensCourse)
-  textbooks = models.ManyToManyField(Textbook, through='QueensLink')
-  waitlist_size = models.IntegerField(default=-1)
-
-  def get_course_code(self):
-    pass
-
-  def get_course_tag(self):
-    pass
-
-  def get_dept(self):
-    pass
-
-  def get_course(self):
-    pass
-
-  def get_section(self):
-    pass
-
-  def __unicode__(self):
-    # return "Semester: %s, Section: %s, Time: %s" % (self.semester, self.meeting_section, self.time)
-    return "Day: %s, Time: %s - %s" % (self.day, self.time_start, self.time_end)
-
-class QueensLink(TextbookLink):
-  courseoffering = models.ForeignKey(QueensCourseOffering)
+class TextbookLink(models.Model):
+  textbook = models.ForeignKey(Textbook)
+  is_required = models.BooleanField(default=False)
+  section = models.ForeignKey(Section)
   
