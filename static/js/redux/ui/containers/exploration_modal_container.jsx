@@ -13,6 +13,7 @@ const mapStateToProps = (state) => {
 		inRoster = courseSections[course.id] !== undefined
 	}
 	let activeTimetable = state.timetables.items[state.timetables.active];
+	let { areas, departments, levels } = state.school;
 	return {
 		isVisible,
     	isFetching,
@@ -20,6 +21,9 @@ const mapStateToProps = (state) => {
 		active,
 		course,
 		inRoster,
+		areas,
+		departments,
+		levels,
 		isLoggedIn: state.userInfo.data.isLoggedIn,
 		hasHoveredResult: activeTimetable.courses.some(course => course.fake),
 		isSectionLocked: (courseId, section) => {
@@ -33,8 +37,6 @@ const mapStateToProps = (state) => {
 		isSectionOnActiveTimetable: (courseId, section) => {
 			return activeTimetable.courses.some(course => course.id === courseId && course.enrolled_sections.some(sec => sec == section));
 		},
-		areas: state.school.areas,
-		departments: ["CSC", "MAT", "GGR", "ESS", "ANT", "PHY", "PSY", "GEO", "INI", "VIC", "STA", "ENG", "GER"],
 	}
 }
 
@@ -42,7 +44,7 @@ const mapDispatchToProps = (dispatch) => {
 	return {
 		hideModal: () => dispatch({ type: "HIDE_EXPLORATION_MODAL" }),
 		openSignupModal: () => dispatch({ type: "TOGGLE_SIGNUP_MODAL" }),
-	  	fetchAdvancedSearchResults: (query) => dispatch(fetchAdvancedSearchResults(query)),
+	  	fetchAdvancedSearchResults: (query, filters) => dispatch(fetchAdvancedSearchResults(query, filters)),
 	  	setAdvancedSearchResultIndex: (i) => dispatch({ type: "SET_ACTIVE_RESULT", active: i }),
 		hoverSection: hoverSection(dispatch),
 		unhoverSection: unhoverSection(dispatch),
