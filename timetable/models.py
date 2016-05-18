@@ -24,7 +24,7 @@ class Updates(models.Model):
 
 
 class Course(models.Model):
-  school = models.CharField(max_length=100)
+  school = models.CharField(db_index=True, max_length=100)
   code = models.CharField(max_length=20)
   name = models.CharField(max_length=250)
   description = models.TextField(max_length=1500, default='')
