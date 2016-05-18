@@ -257,6 +257,10 @@
 #search-bar-side-sections {
 	font-size: 0;
 }
+#search-bar-side-sections h3 {
+	font-size: 16px;
+	margin: 0px 5px 10px 5px;
+}
 #search-bar-side-sections h4 {
 	font-size: 14px;
 	margin: 5px 0;
