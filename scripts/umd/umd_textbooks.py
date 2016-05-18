@@ -59,7 +59,7 @@ class Semester:
             "Semester id: " + self.id + ", name: " + self.name + "\n"
         )
 
-class JHUTextbookParser:
+class TextbookParser:
     def __init__(self):
         self.ua = UserAgent()
         self.session = requests.Session()
@@ -374,5 +374,5 @@ class JHUTextbookParser:
         return list(set(l))
 
 if __name__ == '__main__':
-    parser = JHUTextbookParser()
+    parser = TextbookParser()
     parser.parse()
