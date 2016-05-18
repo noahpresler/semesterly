@@ -58,9 +58,6 @@ class UofTParser:
                 'instr_sname': ''
             }
             response = requests.post("https://student.utm.utoronto.ca/timetable/formatCourses2.php", data=payload).text
-            f = open('example.html', 'w')
-            f.write(response)
-            f.close()
             soup = BeautifulSoup(response)
             level = self.level_map[year_of_study]
             course_divs = soup.find_all("div", class_="course")
