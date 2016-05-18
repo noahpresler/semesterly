@@ -268,7 +268,7 @@ class Filter extends React.Component {
 		return (
 			<ClickOutHandler onClickOut={this.props.onClickOut}>
 				<div className="filter-pop-out open">
-					<input placeholder={placeholder} onInput={this.filterResults}/>
+					<input ref={(ref) => this.filterInput = ref} placeholder={placeholder} onInput={this.filterResults}/>
 					<div className="fpo-list">
 						<ul>
 							{ results }
@@ -278,6 +278,11 @@ class Filter extends React.Component {
 			</ClickOutHandler>
 
 		);
+	}
+	componentDidUpdate(prevProps, prevState) {
+		if (!prevProps.show && this.props.show) {
+			this.filterInput.focus();
+		}
 	}
 
 }
@@ -296,6 +301,6 @@ const SelectedFilterSection = ({ name, toggle, children }) => (
 			<i className="fa fa-plus"
 				onClick={toggle}></i>
 		</h3>
-		{children}
+		{ children.length > 0 ? children : <h6>None Selected</h6> }
 	</div>
 );
