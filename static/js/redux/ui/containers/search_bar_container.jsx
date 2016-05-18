@@ -13,7 +13,8 @@ const mapStateToProps = (state) => {
     	isFetching: state.searchResults.isFetching,
     	isCourseInRoster: (course_id) => courseSections[course_id] !== undefined,
     	isCourseOptional: (course_id) => state.optionalCourses.courses.some(c => c.id === course_id),
-		hasHoveredResult: state.timetables.items[state.timetables.active].courses.some(course => course.fake)
+		hasHoveredResult: state.timetables.items[state.timetables.active].courses.some(course => course.fake),
+		isHovered: (position) => {return state.ui.searchHover === position;}
 	}
 }
 
