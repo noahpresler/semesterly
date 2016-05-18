@@ -23,9 +23,6 @@ function loadCachedTimetable() {
 	// no coursesections stored locally; user is new (or hasn't added timetables yet)
 	if (!localCourseSections) { return; }
 	// no preferences stored locally; save the defaults
-	if (!localStorage.getItem('preferences')) {
-		localStorage.setItem('preferences', JSON.stringify(store.getState().preferences));
-	}
 	let localPreferences = JSON.parse(localStorage.getItem('preferences'));
 	let localSemester = localStorage.getItem('semester');
 	let localActive = parseInt(localStorage.getItem('active'));
