@@ -145,12 +145,17 @@ export class ExplorationModal extends React.Component {
 		}
 		let filterTypes = ["departments", "areas", "levels"];
 		let filters = filterTypes.map(filterType => (
+			this.props[filterType].length === 0 ? null :
 			<Filter results={this.props[filterType]}
 					key={filterType} filterType={filterType}
 				   	add={this.addFilter} show={this.state["show_" + filterType]}
-				   	onClickOut={this.hideAll} />
+				   	onClickOut={this.hideAll} 
+				   	schoolSpecificInfo={this.props.schoolSpecificInfo}/>
 		));
 		let selectedFilterSections = filterTypes.map(filterType => {
+			if (this.props[filterType].length === 0) {
+				return null;
+			}
 			let availableFilters = this.props[filterType];
 			// sort selected filters according to the order in which they were received from props
 			let sortedFilters = this.state[filterType].concat().sort((a, b) => (
@@ -159,7 +164,7 @@ export class ExplorationModal extends React.Component {
 			let selectedItems = sortedFilters.map((name, i) => (
 				<SelectedFilter key={i} name={name} remove={() => this.removeFilter(filterType, name)}/>
 			));
-			let name = filterType[0].toUpperCase() + filterType.slice(1);
+			let name = this.props.schoolSpecificInfo[filterType + "Name"];
 
 			return <SelectedFilterSection key={filterType} name={name}
 										  toggle={this.toggle(filterType)}
@@ -252,8 +257,8 @@ class Filter extends React.Component {
 		if (!this.props.show) {
 			return null;
 		}
-		let { filterType } = this.props;
-		let placeholder = filterType[0].toUpperCase() + filterType.slice(1);
+		let { filterType, schoolSpecificInfo } = this.props;
+		let placeholder = schoolSpecificInfo[filterType + "Name"];
 		let results = this.state.results.map((r, i) => {
 			return <li key={i} onClick={() => this.props.add(filterType, r)} >
 					<i className="fa fa-check"></i>
