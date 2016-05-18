@@ -1,3 +1,5 @@
+import { saveLocalPreferences } from '../util.jsx';
+
 export const preferences = (state = {
     'no_classes_before': false,
     'no_classes_after': false,
@@ -7,8 +9,12 @@ export const preferences = (state = {
     'try_with_conflicts': false
   }, action) => {
 	switch (action.type) {
+        case 'SET_ALL_PREFERENCES':
+            return action.preferences;
         case 'SET_PREFERENCE':
-            return Object.assign({}, state, {[action.key]: action.value});
+            let newPreferences = Object.assign({}, state, {[action.key]: action.value});
+            saveLocalPreferences(newPreferences);
+            return newPreferences;
 		default:
 			return state;
 	}
