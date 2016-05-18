@@ -158,6 +158,7 @@ class HopkinsParser:
 		course.description=description
 		course.department=courseJson["Department"]
 		course.prerequisites=prereqs
+		course.level=int(re.search(re.compile(r".*\..*\.(.*)"),course.code).group(1)[0])*100
 		course.code=courseJson['OfferingName'].strip()
 		areas = courseJson['Areas'].replace('^',',')
 		if courseJson['IsWritingIntensive'] == "Yes":
