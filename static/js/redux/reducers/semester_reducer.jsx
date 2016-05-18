@@ -1,12 +1,11 @@
+import { saveLocalSemester } from '../util.jsx';
 import { VALID_SEMESTERS, SET_SEMESTER } from '../constants.jsx';
 
 export const semester = (state = "", action) => {
 	switch (action.type) {
 		case SET_SEMESTER:
-			if (VALID_SEMESTERS.indexOf(action.semester) >= 0) {
-				return action.semester;
-			}
-			return state;
+			saveLocalSemester(action.semester);
+			return action.semester;
 		default:
 			return state;
 	}

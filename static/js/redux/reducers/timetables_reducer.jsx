@@ -1,4 +1,6 @@
 import update from 'react/lib/update';
+import { saveLocalActiveIndex } from '../util.jsx';
+
 let initialState = { isFetching: false, items: [{courses: []}], active: 0 };
 
 export const timetables = (state = initialState, action) => {
@@ -58,6 +60,7 @@ export const timetables = (state = initialState, action) => {
 			});
 
 		case 'CHANGE_ACTIVE_TIMETABLE':
+			saveLocalActiveIndex(action.newActive);
 			return Object.assign({}, state, { active: action.newActive });
 
 		case 'ALERT_CONFLICT':
