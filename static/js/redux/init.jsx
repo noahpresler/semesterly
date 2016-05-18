@@ -8,7 +8,7 @@ import { rootReducer } from './reducers/root_reducer.jsx';
 import SemesterlyContainer from './ui/containers/semesterly_container.jsx';
 import { fetchUserInfo } from './actions/user_actions.jsx';
 import { fetchSchoolInfo } from './actions/timetable_actions.jsx'
-import { getLocalTimetable } from './util.jsx';
+import { getLocalTimetable, saveLocalPreferences } from './util.jsx';
 export const store = createStore(rootReducer, applyMiddleware(thunkMiddleware));
 
 export const getSchool = () => {

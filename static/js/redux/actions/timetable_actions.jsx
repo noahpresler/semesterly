@@ -95,6 +95,10 @@ export function unhoverSection (dispatch) {
 		});
 	}
 }
+export function fetchCachedTimetables(state, activeIndex) {
+	let requestBody = getBaseReqBody(state);
+	store.dispatch(fetchTimetables(requestBody, false, activeIndex));
+}
 /*
 Attempts to add the course represented by newCourseId
 to the user's roster. If a section is provided, that section is 
@@ -137,7 +141,7 @@ export function addOrRemoveCourse(newCourseId, lockingSection = '') {
 	store.dispatch(fetchTimetables(reqBody, removing));
 }
 
-function fetchTimetables(requestBody, removing) {
+function fetchTimetables(requestBody, removing, newActive=0) {
 	return (dispatch) => {
 		// mark that we are now asynchronously requesting timetables
 		dispatch(requestTimetables());
@@ -156,6 +160,12 @@ function fetchTimetables(requestBody, removing) {
    					type: "RECEIVE_COURSE_SECTIONS",
     				courseSections: json.new_c_to_s,
   				});
+  				if (newActive > 0){
+	  				dispatch({
+	  					type: "CHANGE_ACTIVE_TIMETABLE",
+	  					newActive,
+	  				})
+  				}
 			}
 			else {
 				// course added by the user resulted in a conflict, so no timetables
