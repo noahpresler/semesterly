@@ -1,6 +1,6 @@
 import fetch from 'isomorphic-fetch';
 import { getTimetablesEndpoint } from '../constants.jsx';
-import { randomString } from '../util.jsx';
+import { randomString, browserSupportsLocalStorage } from '../util.jsx';
 import { store } from '../init.jsx';
 import { getClassmatesEndpoint, getSchoolInfoEndpoint } from '../constants.jsx'
 import { lockActiveSections } from './user_actions.jsx';
@@ -151,7 +151,16 @@ function fetchTimetables(requestBody, removing, newActive=0) {
       		method: 'POST',
       		body: JSON.stringify(requestBody)
     	})
-		.then(response => response.json()) // TODO(rohan): error-check the response
+		.then(response => { 
+			if (response.status === 200) {
+				return response.json();
+			}
+			else {
+				if (browserSupportsLocalStorage()) {
+					localStorage.clear();
+				}
+			}
+		}) // TODO(rohan): maybe log somewhere if errors?
 		.then(json => {
 			if (removing || json.timetables.length > 0) {
 				// mark that timetables and a new courseSections have been received
@@ -181,7 +190,9 @@ function fetchTimetables(requestBody, removing, newActive=0) {
 		});
 		// save preferences when timetables are loaded, so that we know cached preferences 
 		// are always "up-to-date" (correspond to last loaded timetable)
-		localStorage.setItem('preferences', JSON.stringify(requestBody.preferences));
+		if (browserSupportsLocalStorage()) {
+			localStorage.setItem('preferences', JSON.stringify(requestBody.preferences));
+		}
 	}
 }
 
