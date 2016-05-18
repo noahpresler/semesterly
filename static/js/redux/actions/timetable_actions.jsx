@@ -179,6 +179,9 @@ function fetchTimetables(requestBody, removing, newActive=0) {
 				dispatch(fetchClassmates(json.timetables[0].courses.map( c => c['id'])))
 			}
 		});
+		// save preferences when timetables are loaded, so that we know cached preferences 
+		// are always "up-to-date" (correspond to last loaded timetable)
+		localStorage.setItem('preferences', JSON.stringify(requestBody.preferences));
 	}
 }
 
