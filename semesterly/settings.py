@@ -200,9 +200,9 @@ LOGGING = {
 }
 
 ADMINS = [
-    ('Rohan Das', 'das.rohan1993@gmail.com'), 
-    ('Felix Zhu', 'felix.czhu@gmail.com'),
-    ('Noah Presler', 'noah@presler.me')
+    ('Rohan Das', 'rohan@semester.ly'), 
+    ('Felix Zhu', 'felix@semester.ly'),
+    ('Noah Presler', 'noah@semester.ly'),
 ]
 
 EMAIL_USE_TLS = True
