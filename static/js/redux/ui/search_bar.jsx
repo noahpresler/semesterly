@@ -117,7 +117,7 @@ export class SearchResult extends React.Component {
             </span>
         return (
         <li key={course.id}
-            className='search-course'
+            className={classNames('search-course', {'hovered': this.props.isHovered(this.props.position)})}
             onMouseDown={(event) => this.props.fetchCourseInfo(course.id)}
             onMouseOver={() => this.props.hoverSearchResult(this.props.position)}
             >
