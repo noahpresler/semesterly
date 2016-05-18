@@ -1,6 +1,6 @@
 import fetch from 'isomorphic-fetch';
 import { getTimetablesEndpoint } from '../constants.jsx';
-import { randomString } from '../util.jsx';
+import { randomString, browserSupportsLocalStorage } from '../util.jsx';
 import { store } from '../init.jsx';
 import { getClassmatesEndpoint, getSchoolInfoEndpoint } from '../constants.jsx'
 import { lockActiveSections } from './user_actions.jsx';
@@ -95,6 +95,10 @@ export function unhoverSection (dispatch) {
 		});
 	}
 }
+export function fetchCachedTimetables(state, activeIndex) {
+	let requestBody = getBaseReqBody(state);
+	store.dispatch(fetchTimetables(requestBody, false, activeIndex));
+}
 /*
 Attempts to add the course represented by newCourseId
 to the user's roster. If a section is provided, that section is 
@@ -137,7 +141,7 @@ export function addOrRemoveCourse(newCourseId, lockingSection = '') {
 	store.dispatch(fetchTimetables(reqBody, removing));
 }
 
-function fetchTimetables(requestBody, removing) {
+function fetchTimetables(requestBody, removing, newActive=0) {
 	return (dispatch) => {
 		// mark that we are now asynchronously requesting timetables
 		dispatch(requestTimetables());
@@ -147,7 +151,16 @@ function fetchTimetables(requestBody, removing) {
       		method: 'POST',
       		body: JSON.stringify(requestBody)
     	})
-		.then(response => response.json()) // TODO(rohan): error-check the response
+		.then(response => { 
+			if (response.status === 200) {
+				return response.json();
+			}
+			else {
+				if (browserSupportsLocalStorage()) {
+					localStorage.clear();
+				}
+			}
+		}) // TODO(rohan): maybe log somewhere if errors?
 		.then(json => {
 			if (removing || json.timetables.length > 0) {
 				// mark that timetables and a new courseSections have been received
@@ -156,6 +169,12 @@ function fetchTimetables(requestBody, removing) {
    					type: "RECEIVE_COURSE_SECTIONS",
     				courseSections: json.new_c_to_s,
   				});
+  				if (newActive > 0){
+	  				dispatch({
+	  					type: "CHANGE_ACTIVE_TIMETABLE",
+	  					newActive,
+	  				})
+  				}
 			}
 			else {
 				// course added by the user resulted in a conflict, so no timetables
@@ -169,6 +188,11 @@ function fetchTimetables(requestBody, removing) {
 				dispatch(fetchClassmates(json.timetables[0].courses.map( c => c['id'])))
 			}
 		});
+		// save preferences when timetables are loaded, so that we know cached preferences 
+		// are always "up-to-date" (correspond to last loaded timetable)
+		if (browserSupportsLocalStorage()) {
+			localStorage.setItem('preferences', JSON.stringify(requestBody.preferences));
+		}
 	}
 }
 
