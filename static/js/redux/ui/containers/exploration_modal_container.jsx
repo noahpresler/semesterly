@@ -2,6 +2,7 @@ import { connect } from 'react-redux';
 import { ExplorationModal } from '../exploration_modal.jsx';
 import { fetchAdvancedSearchResults } from '../../actions/search_actions.jsx';
 import { hoverSection, unhoverSection, addOrRemoveCourse } from '../../actions/timetable_actions.jsx';
+import { getSchoolSpecificInfo } from '../../constants.jsx';
 import { react } from '../../actions/modal_actions.jsx';
 
 const mapStateToProps = (state) => {
@@ -24,6 +25,7 @@ const mapStateToProps = (state) => {
 		areas,
 		departments,
 		levels,
+		schoolSpecificInfo: getSchoolSpecificInfo(state.school.school),
 		isLoggedIn: state.userInfo.data.isLoggedIn,
 		hasHoveredResult: activeTimetable.courses.some(course => course.fake),
 		isSectionLocked: (courseId, section) => {
