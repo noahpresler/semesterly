@@ -1,7 +1,7 @@
 import { connect } from 'react-redux';
 import { fetchCourseInfo } from '../../actions/modal_actions.jsx'
 import { addOrRemoveCourse } from '../../actions/timetable_actions.jsx'
-import { getPrimaryDisplay } from '../../constants.jsx';
+import { getSchoolSpecificInfo } from '../../constants.jsx';
 import { removeCustomSlot, updateCustomSlot, addCustomSlot } from '../../actions/timetable_actions.jsx';
 import SlotManager from '../slot_manager.jsx';
 
@@ -21,7 +21,7 @@ const mapStateToProps = (state) => {
 	        // couldn't find a match, so the course isn't locked for this section
 			return false;
 		},
-		primaryDisplayAttribute: getPrimaryDisplay(state.school.school),
+		primaryDisplayAttribute: getSchoolSpecificInfo(state.school.school).primaryDisplay,
 		courseToColourIndex: state.ui.courseToColourIndex,
 		custom: state.customSlots,
 		classmates: (id,sec) => {

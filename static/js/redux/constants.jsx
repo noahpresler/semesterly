@@ -40,16 +40,36 @@ export const getReactToCourseEndpoint = () => {
   return "react/";
 }
 
-export const getPrimaryDisplay = (school) => {
+export const getSchoolSpecificInfo = (school) => {
 	switch(school) {
 		case "uoft":
-			return "code";
+			return {
+        primaryDisplay: "code",
+        areasName: "Breadths",
+        departmentsName: "Departments",
+        levelsName: "Levels"
+      }
 		case "jhu":
-			return "name";
+			return {
+        primaryDisplay: "name",
+        areasName: "Areas",
+        departmentsName: "Departments",
+        levelsName: "Levels"
+      }
 		case "umd":
-			return "name"
+			return {
+        primaryDisplay: "name",
+        areasName: "Areas",
+        departmentsName: "Departments",
+        levelsName: "Levels"
+      }
 		default:
-			return "code"
+			return {
+        primaryDisplay: "code",
+        areasName: "Areas",
+        departmentsName: "Departments",
+        levelsName: "Levels"
+      }
 	}
 }
 
