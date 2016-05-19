@@ -79,6 +79,7 @@ class Section(models.Model):
   section_type = models.CharField(max_length=50, default='L')
   instructors = models.CharField(max_length=500, default='TBA')
   semester = models.CharField(max_length=2)
+  textbooks = models.ManyToManyField(Textbook, through='TextbookLink')
 
   def get_textbooks(self):
     return [tb.get_info() for tb in self.textbooks.all()]
@@ -102,7 +103,6 @@ class Evaluation(models.Model):
   professor = models.CharField(max_length=250)
   course_code = models.CharField(max_length=20)
   year = models.CharField(max_length=200)
-
 
 
 class TextbookLink(models.Model):
