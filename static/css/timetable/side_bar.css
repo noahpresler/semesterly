@@ -176,6 +176,7 @@ h4.sb-header:after {
 .master-slot-content h3 {
     margin: 0;
     font-size: 14px;
+    height: 14px;
     white-space: nowrap;
     text-overflow: ellipsis;
     width: 100%;
