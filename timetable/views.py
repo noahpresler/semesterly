@@ -583,7 +583,7 @@ def my_model_to_dict(course, sem, include_reactions=False, student=None):
   d = model_to_dict(course, fields)
   d['sections'] = {}
 
-  course_section_list = course.section_set.filter(semester=sem)
+  course_section_list = course.section_set.filter(semester__in=[sem, "Y"])
 
   for section in course_section_list:
     st = section.section_type
@@ -599,14 +599,15 @@ def my_model_to_dict(course, sem, include_reactions=False, student=None):
     d['reactions'] = course.get_reactions(student)
   return d
 
+
+def get_course_matches(school, query, semester):
+  return Course.objects.filter(school=school).filter(Q(code__icontains=query) | Q(description__icontains=query) | Q(name__icontains=query)).filter((Q(section__semester__in=[semester, 'Y'])))
+
 @csrf_exempt
+@validate_subdomain
 def course_search(request, school, sem, query):
 
-  if school not in VALID_SCHOOLS:
-    return HttpResponse("School not found")
-
-  course_match_objs = Course.objects.filter(school=school).filter(Q(code__icontains=query) | Q(description__icontains=query) | Q(name__icontains=query)).filter((Q(section__semester__icontains=sem) | Q(section__semester__icontains='Y')))
-
+  course_match_objs = get_course_matches(school, query, sem)
   course_match_objs = course_match_objs.distinct('code')[:4]
   course_matches = [my_model_to_dict(course, sem) for course in course_match_objs]
   json_data = {'results': course_matches}
@@ -614,21 +615,17 @@ def course_search(request, school, sem, query):
 
 # ADVANCED SEARCH
 @csrf_exempt
+@validate_subdomain
 def advanced_course_search(request):
   school = request.subdomain
-  if school not in VALID_SCHOOLS:
-    return HttpResponse("School not found")
   params = json.loads(request.body)
   sem = params['semester']
   query = params['query']
   filters = params['filters']
   times = filters['times']
-
-  Course, Offering = school_to_models[school]
     
   # filtering first by user's search query
-  course_match_objs = Course.objects.filter(
-    (Q(code__icontains=query) | Q(description__icontains=query) | Q(name__icontains=query)))
+  course_match_objs = get_course_matches(school, query, sem)
 
   # filtering now by departments, areas, or levels if provided
   if filters['areas']:
@@ -643,25 +640,12 @@ def advanced_course_search(request):
   if filters['levels']:
     course_match_objs = course_match_objs.filter(level__in=filters['levels'])
 
-  # We want to filter based on whether the course has an offering in this semester or not.
-  # This part needs to be executed case-by-case because of Django's ORM.
-  # Notice that each call to filter uses the appropriate "courseoffering"
-  # class name in the filter.
-  if school == "uoft":
-    course_match_objs = course_match_objs.filter((Q(courseoffering__semester__in=[sem, 'Y'])))
-  elif school == "jhu":
-    course_match_objs = course_match_objs.filter((Q(hopkinscourseoffering__semester__in=[sem, 'Y'])))
-  elif school == "umd":
-    course_match_objs = course_match_objs.filter((Q(umdcourseoffering__semester__in=[sem, 'Y'])))
-  elif school == "queens":
-    course_match_objs = course_match_objs.filter((Q(queenscourseoffering__semester__in=[sem, 'Y'])))
-
   course_match_objs = course_match_objs.distinct('code')[:50]
   s = None
   logged = request.user.is_authenticated()
   if logged and Student.objects.filter(user=request.user).exists():
       s = Student.objects.get(user=request.user)
-  json_data = [my_model_to_dict(course, Offering, sem, True, s) for course in course_match_objs]
+  json_data = [my_model_to_dict(course, sem, True, s) for course in course_match_objs]
 
   return HttpResponse(json.dumps(json_data), content_type="application/json")
 
@@ -689,10 +673,9 @@ def course_page(request, code):
   except Exception as e:
     return HttpResponse(str(e))
 
-
+@validate_subdomain
 def school_info(request, school):
-  if school not in VALID_SCHOOLS:
-    return HttpResponse("School not found")
+  school = request.subdomain
   json_data = { # TODO(rohan): Get all relevant fields (areas, departments, levels) properly
     'areas': sorted(list(Course.objects.filter(school=school).exclude(areas__exact='').values_list('areas', flat=True).distinct())),
     'departments': sorted(list(Course.objects.filter(school=school).exclude(department__exact='').values_list('department', flat=True).distinct())),
