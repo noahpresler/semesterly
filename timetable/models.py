@@ -59,23 +59,9 @@ class Course(models.Model):
       info.append(model_to_dict(c))
     return info
 
-  def base_get_all_textbook_info(self, co_model):
-    textbook_info = []
-    for co in co_model.objects.filter(course=self):
-      tb = {
-        "section" : co.meeting_section,
-        "textbooks" : co.get_textbooks()
-      }
-      textbook_info.append(tb)
-    final = []
-    for i in textbook_info:
-      if not any(d['section'] == i['section'] for d in final):
-        final.append(i)
-    return final
-
-  def base_get_eval_info(self, eval_model):
+  def get_eval_info(self):
     eval_info = []
-    evals = eval_model.objects.filter(course=self)
+    evals = Evaluation.objects.filter(course=self)
     for e in evals:
       eval_info.append(model_to_dict(e))
     final = []
@@ -94,21 +80,15 @@ class Section(models.Model):
   instructors = models.CharField(max_length=500, default='TBA')
   semester = models.CharField(max_length=2)
 
+  def get_textbooks(self):
+    return [tb.get_info() for tb in self.textbooks.all()]
+
 class Offering(models.Model):
   section = models.ForeignKey(Section)
   day = models.CharField(max_length=1)
   start_time = models.CharField(max_length=15)
   end_time = models.CharField(max_length=15)
   location = models.CharField(max_length=200, default='TBA')
-
-
-  def get_textbooks(self):
-    textbooks = []
-    temp = []
-    tbs = self.textbooks.all()
-    for tb in tbs:
-      textbooks.append(tb.get_info())
-    return textbooks
 
   def __unicode__(self):
     # return "Semester: %s, Section: %s, Time: %s" % (self.semester, self.meeting_section, self.time)
