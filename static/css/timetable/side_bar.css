@@ -244,6 +244,7 @@ h3.master-slot-credits {
 #side-bar .empty-state {
     width: 280px;
     text-align: center;
+    margin: 0 auto;
 }
 
 #side-bar .empty-state img {
