@@ -21,9 +21,10 @@ export const getSemester = () => {
 store.dispatch(
   {
     type: "SET_SCHOOL",
-    school: window.location.hostname.split(".")[0]
+    school // comes from timetable.html
   }
 );
+console.log("school is now:", school);
 store.dispatch(
   {
     type: "SET_SEMESTER",
