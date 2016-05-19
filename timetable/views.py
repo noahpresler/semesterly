@@ -41,18 +41,29 @@ def save_analytics_data(key, args):
 
 def validate_subdomain(view_func):
   def wrapper(request, *args, **kwargs):
-    if request.subdomain is None:
+    if request.subdomain not in VALID_SCHOOLS:
       return render(request, 'index.html')
     else:
       return view_func(request, *args, **kwargs)
   return wrapper
+
+def get_student(request):
+  logged = request.user.is_authenticated()
+  if logged and Student.objects.filter(user=request.user).exists():
+    return Student.objects.get(user=request.user)
+  else:
+    return None
 # ******************************************************************************
 # ******************************** GENERATE TTs ********************************
 # ******************************************************************************
 
 @validate_subdomain
 def view_timetable(request):
-  return render(request, 'timetable.html')
+  return render_to_response("timetable.html", {
+    'school': request.subdomain,
+    'student': get_student(request)
+  },
+  context_instance=RequestContext(request))
 
 @csrf_exempt
 def get_timetables(request):
