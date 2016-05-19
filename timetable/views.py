@@ -75,8 +75,7 @@ def get_timetables(request):
       courses.append(Course.objects.get(id=int(cid)))
 
     for locked_section in filter(bool, updated_course['section_codes']):
-      update_locked_sections(locked_sections, cid,
-                  locked_section, Offering)
+      update_locked_sections(locked_sections, cid, locked_section)
 
   # temp optional course implementation
   opt_course_ids = params.get('optionCourses', [])
@@ -99,18 +98,12 @@ def get_timetables(request):
   response = {'timetables': result, 'new_c_to_s': locked_sections}
   return HttpResponse(json.dumps(response), content_type='application/json')
 
-def get_section_type(cid, section_code, offering_table):
-  """Query offering table to get section type of provided section."""
-  co = offering_table.objects.filter(course=int(cid),
-                    meeting_section=section_code)[0]
-  return co.section_type
-
-def update_locked_sections(locked_sections, cid, locked_section, offering_table):
+def update_locked_sections(locked_sections, cid, locked_section):
   """
   Take cid of new course, and locked section for that course
   and toggle its locked status (ie if was locked, unlock and vice versa.
   """
-  section_type = get_section_type(cid, locked_section, offering_table)
+  section_type = Section.objects.filter(course=cid, name=locked_section)[0].section_type
   if locked_sections[cid].get(section_type, '') == locked_section: # already locked
     locked_sections[cid][section_type] = '' # unlock that section_type
   else: # add as locked section for that section_type
@@ -150,24 +143,11 @@ class TimetableGenerator:
 
   def get_course_obj(self, course_dict, sections):
     sections = list(sections)
-    slot_objects = [model_to_dict(co) for _, _, course_offerings in sections
+    slot_objects = [merge_dicts(model_to_dict(section), model_to_dict(co))\
+                           for _, section, course_offerings in sections
                            for co in course_offerings]
-    course_dict['enrolled_sections'] = [section_code for _, section_code, _ in sections]
-    try:
-      section = course_dict['enrolled_sections'][0]
-      if (self.school == "uoft"):
-        sections = filter(lambda x: x[0] == "L", course_dict['enrolled_sections'])
-        if len(sections) != 0:
-          section = sections[0]
-
-      c = Course.objects.get(id=course_dict['id'])
-      co = Offering.objects.filter(meeting_section=section, course=c)[0]
-      course_dict['textbooks'] = co.get_textbooks()
-      course_dict['evaluations'] = co.get_evaluations()
-    except:
-      import traceback
-      traceback.print_exc()
-    course_dict['slots'] = slot_objects
+    course_dict['enrolled_sections'] = [section.name for _, section, _ in sections]
+    course_dict['textbooks'] = {section.name: section.get_textbooks() for _, section, _ in sections}
     return course_dict
 
   def get_best_timetables(self, courses):
