@@ -1,7 +1,6 @@
 """Helper functions for accessing Amazon API for textbooks"""
 from django.db.models import Q
 from amazonproduct.errors import InvalidParameterValue
-from timetable.models import CourseOffering
 
 def get_amazon_fields(isbn, api):
     try:
