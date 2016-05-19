@@ -9,7 +9,6 @@ from sys import argv
 import django
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "semesterly.settings")
 django.setup()
-from timetable.models import UmdCourse, UmdCourseOffering
 
 # suppress warnings for not verifying SSL certificate 
 import warnings

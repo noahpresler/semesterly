@@ -13,7 +13,6 @@ import progressbar
 from pprint import pprint
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "semesterly.settings")
 django.setup()
-from timetable.models import OttawaCourse, OttawaCourseOffering
 
 '''#==========================================FOR PRODUCTION USE======================================
 chrome_options = Options()
