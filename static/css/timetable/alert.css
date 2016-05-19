@@ -136,3 +136,9 @@
 .conflict-alert-btn:hover {
   background-color:#16ad8f;
 }
+.change-semester-btn {
+  padding-left:10px;
+  padding-right:5px;
+  width:90%;
+}
+

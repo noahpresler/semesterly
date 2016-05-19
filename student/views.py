@@ -103,7 +103,7 @@ def save_timetable(request):
 		enrolled_sections = course['enrolled_sections']
 		for section in enrolled_sections:
 			personal_timetable.sections.add(course_obj.section_set.get(meeting_section=section,
-																	semester=semester))
+																	semester__in=[semester, "Y"]))
 	personal_timetable.save()
 	timetables = get_student_tts(student, school, semester)
 	saved_timetable = (x for x in timetables if x['id'] == personal_timetable.id).next()
