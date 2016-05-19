@@ -137,6 +137,7 @@ const TextbookList = ({courses}) => {
                 <h3>Textbooks for your classes will appear here. Click to find the lowest prices, plus FREE two day shipping with Amazon Student</h3>
             </div>);
     }
+    console.log(tbs);
     return (
         <div>
             {_.uniq(tbs, 'isbn').map(tb => {
@@ -147,14 +148,13 @@ const TextbookList = ({courses}) => {
 }
 
 const Textbook = ({tb}) => {
-    console.log(tb)
     return (
     <a href={tb.detail_url}>
         <div className="textbook">
             <img src={tb.image_url} />
             <div className="required">Required</div>
             <h4>{tb.title}</h4>
-            <a href={tb.detail_url}><div className="amazon-buy"><i className="fa fa-amazon" aria-hidden="true"></i> Buy or Rent</div></a>
+            <div className="amazon-buy"><i className="fa fa-amazon" aria-hidden="true"></i> Buy or Rent</div>
         </div>
     </a>
     );
