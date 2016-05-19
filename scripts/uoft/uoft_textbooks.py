@@ -48,8 +48,7 @@ def parse_results(source):
         sibling = section_header.find_next_sibling()
         if "not been informed" in sibling.text.lower(): # filter out the textbook-less sections
             continue
-
-        matches = re.search("- (.+)[YS], section (.+?) ", section_header.text)
+        matches = re.search("- (.+)[YFS], section (.+?) ", section_header.text)
         all_textbooks_info = sibling.find_all('td', class_="book-desc")
         print "\t\t\tFor %s section %s, found %d textbook(s). These are:" % (
             matches.group(1), matches.group(2), len(all_textbooks_info))
@@ -156,19 +155,19 @@ def parse_uoft_textbooks():
             'name': 'St. George',
             'ending': '1',
             'campus_id': '43',
-            'term': '546'
+            'term': '557'
         },
         'Scarborough': {
             'name': 'Scarborough',
             'ending': '3',
             'campus_id': '40',
-            'term': '547'
+            'term': '559'
         },
         'Mississauga': {
             'name': 'Mississauga',
             'ending': '5',
             'campus_id': '39',
-            'term': '543'
+            'term': '571'
         }
     }
 
