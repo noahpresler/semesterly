@@ -130,6 +130,7 @@ class TextbookParser:
         if response == None:
             sleep(randint(300, 500))
             self.retry_request(headers)
+            return
 
         soup = BeautifulSoup(response.text,"html.parser")
         semester_list = soup.find(class_="bncbSelectBox termHeader")
