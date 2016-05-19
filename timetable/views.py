@@ -688,39 +688,3 @@ def school_info(request, school):
     'levels': sorted(list(Course.objects.filter(school=school).exclude(level__exact='').values_list('level', flat=True).distinct()))
   }
   return HttpResponse(json.dumps(json_data), content_type="application/json")
-
-@csrf_exempt
-def react_to_course(request):
-  json_data = {}
-  school = request.subdomain
-  if school not in VALID_SCHOOLS:
-    return HttpResponse("School not found")
-  try:
-    logged = request.user.is_authenticated()
-    params = json.loads(request.body)
-    cid = params['cid']
-    title = params['title']
-    if logged and Student.objects.filter(user=request.user).exists():
-      s = Student.objects.get(user=request.user)
-      Course, Offering = school_to_models[school]
-      c = Course.objects.get(id=cid)
-      if c.reaction_set.filter(title=title, student=s).exists():
-        r = c.reaction_set.get(title=title, student=s)
-        c.reaction_set.remove(r)
-      else:
-        r = Reaction(student=s, title=title)
-        r.save()
-        c.reaction_set.add(r)
-      c.save()
-      json_data['reactions'] = c.get_reactions(student=s)
-
-    else:
-      json_data['error'] = 'Must be logged in to rate'
-
-  except Exception as e:
-      json_data['error'] = 'Unknown error'
-
-  
-  return HttpResponse(json.dumps(json_data), content_type="application/json")
-
-

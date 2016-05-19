@@ -53,7 +53,7 @@ def get_student_tts(student, school, semester):
 				index = course_ids.index(c.id)
 				co_dict = model_to_dict(tt)
 				courses[index]['slots'].extend([merge_dicts(model_to_dict(section_obj), model_to_dict(co)) for co in section_obj.offering_set.all()])
-				courses[index]['enrolled_sections'] = section_obj.meeting_section
+				courses[index]['enrolled_sections'].append(section_obj.meeting_section)
 
 			tt_dict['courses'] = courses
 			tts_dict.append(tt_dict)
@@ -137,7 +137,6 @@ def get_classmates(request):
 	else:
 		return HttpResponse("Must have social_courses enabled")
 
-
 def get_classmates_from_course_id(school, student, course_id):
 	#All friends with social courses/sharing enabled
 	friends = student.friends.filter(social_courses=True)
@@ -153,3 +152,38 @@ def get_classmates_from_course_id(school, student, course_id):
 		if len(ptts) > 0:
 			course['classmates'].append(classmate)
 	return course
+
+
+@csrf_exempt
+@validate_subdomain
+def react_to_course(request):
+  json_data = {}
+  school = request.subdomain
+
+  try:
+    logged = request.user.is_authenticated()
+    params = json.loads(request.body)
+    cid = params['cid']
+    title = params['title']
+    if logged and Student.objects.filter(user=request.user).exists():
+      s = Student.objects.get(user=request.user)
+      c = Course.objects.get(id=cid)
+      if c.reaction_set.filter(title=title, student=s).exists():
+        r = c.reaction_set.get(title=title, student=s)
+        c.reaction_set.remove(r)
+      else:
+        r = Reaction(student=s, title=title)
+        r.save()
+        c.reaction_set.add(r)
+      c.save()
+      json_data['reactions'] = c.get_reactions(student=s)
+
+    else:
+      json_data['error'] = 'Must be logged in to rate'
+
+  except Exception as e:
+  	print e
+  	json_data['error'] = 'Unknowssn error'
+
+  
+  return HttpResponse(json.dumps(json_data), content_type="application/json")
