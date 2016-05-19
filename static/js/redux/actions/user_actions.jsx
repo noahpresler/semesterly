@@ -62,10 +62,12 @@ export function fetchUserInfo() {
 function getSaveTimetablesRequestBody() {
 	let state = store.getState();
 	let timetableState = state.timetables;
+	let semester = state.semester
 	let name = state.savingTimetable.activeTimetable.name;
 	let id = state.savingTimetable.activeTimetable.id || 0;
 	return {
 		timetable: timetableState.items[timetableState.active],
+		semester,
 		name,
 		id,
 	}
