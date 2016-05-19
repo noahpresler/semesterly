@@ -72,7 +72,7 @@ class Course(models.Model):
 
 class Section(models.Model):
   course = models.ForeignKey(Course)
-  name = models.CharField(max_length=50)
+  meeting_section = models.CharField(max_length=50)
   size = models.IntegerField(default=-1)
   enrolment = models.IntegerField(default=-1)
   waitlist = models.IntegerField(default=0)
