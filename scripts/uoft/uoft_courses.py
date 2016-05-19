@@ -60,6 +60,7 @@ class UofTParser:
                     num_credits = 1 if course_code[6].upper() == 'Y' else 0.5
 
                     C, created = Course.objects.update_or_create(code=course_code, defaults={
+                            'school': "uoft",
                             'name': course_data['courseTitle'],
                             'description': BeautifulSoup(course_data['courseDescription']).p.get_text(),
                             'campus': course_code[-1],

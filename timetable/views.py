@@ -103,7 +103,7 @@ def update_locked_sections(locked_sections, cid, locked_section):
   Take cid of new course, and locked section for that course
   and toggle its locked status (ie if was locked, unlock and vice versa.
   """
-  section_type = Section.objects.filter(course=cid, name=locked_section)[0].section_type
+  section_type = Section.objects.filter(course=cid, meeting_section=locked_section)[0].section_type
   if locked_sections[cid].get(section_type, '') == locked_section: # already locked
     locked_sections[cid][section_type] = '' # unlock that section_type
   else: # add as locked section for that section_type
@@ -146,8 +146,8 @@ class TimetableGenerator:
     slot_objects = [merge_dicts(model_to_dict(section), model_to_dict(co))\
                            for _, section, course_offerings in sections
                            for co in course_offerings]
-    course_dict['enrolled_sections'] = [section.name for _, section, _ in sections]
-    course_dict['textbooks'] = {section.name: section.get_textbooks() for _, section, _ in sections}
+    course_dict['enrolled_sections'] = [section.meeting_section for _, section, _ in sections]
+    course_dict['textbooks'] = {section.meeting_section: section.get_textbooks() for _, section, _ in sections}
     course_dict['slots'] = slot_objects
     return course_dict
 
@@ -251,7 +251,7 @@ class TimetableGenerator:
       for section_type, sections in grouped:
         if str(c.id) in self.locked_sections and self.locked_sections[str(c.id)].get(section_type, False):
           locked_section_code = self.locked_sections[str(c.id)][section_type]
-          locked_section = next(s for s in sections if s.name == locked_section_code)
+          locked_section = next(s for s in sections if s.meeting_section == locked_section_code)
           pinned = [c.id, locked_section, locked_section.offering_set.all()]
           all_sections.append([pinned])
         else:
@@ -541,10 +541,9 @@ def get_course(request, school, sem, id):
   SCHOOL = school.lower()
 
   try:
-    C, Co = school_to_models[school]
-    course = C.objects.get(id=id)
-    json_data = my_model_to_dict(course, Co, sem)
-    json_data['textbook_info'] = course.get_all_textbook_info()
+    course = Course.objects.get(id=id)
+    json_data = my_model_to_dict(course, sem)
+    # json_data['textbook_info'] = course.get_all_textbook_info()
     json_data['eval_info'] = course.get_eval_info()
     json_data['related_courses'] = course.get_related_course_info()
     student = None
@@ -649,13 +648,13 @@ def my_model_to_dict(course, sem, include_reactions=False, student=None):
 
   for section in course_section_list:
     st = section.section_type
-    name = section.name
+    name = section.meeting_section
     if st not in d['sections']:
       d['sections'][st] = {}
     for offering in section.offering_set.all():
       if name not in d['sections'][st]:
         d['sections'][st][name] = []
-      d['sections'][st][name].append(model_to_dict(offering))
+      d['sections'][st][name].append(merge_dicts(model_to_dict(section), model_to_dict(offering)))
 
   if include_reactions:
     d['reactions'] = course.get_reactions(student)
@@ -667,12 +666,10 @@ def course_search(request, school, sem, query):
   if school not in VALID_SCHOOLS:
     return HttpResponse("School not found")
 
-  course_match_objs = Course.objects.filter(Q(code__icontains=query) | Q(description__icontains=query) | Q(name__icontains=query)).filter((Q(section__semester__icontains=sem) | Q(section__semester__icontains='Y')))
+  course_match_objs = Course.objects.filter(school=school).filter(Q(code__icontains=query) | Q(description__icontains=query) | Q(name__icontains=query)).filter((Q(section__semester__icontains=sem) | Q(section__semester__icontains='Y')))
 
   course_match_objs = course_match_objs.distinct('code')[:4]
-  print course_match_objs
   course_matches = [my_model_to_dict(course, sem) for course in course_match_objs]
-  print course_matches
   json_data = {'results': course_matches}
   return HttpResponse(json.dumps(json_data), content_type="application/json")
 
