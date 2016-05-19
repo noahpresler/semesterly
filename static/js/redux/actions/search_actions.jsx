@@ -15,6 +15,56 @@ export function receiveCourses(json) {
   }
 }
 
+export function setSemester(semester) {
+	let state = store.getState();
+	let dispatch = store.dispatch;
+
+	dispatch({
+		type: "RECEIVE_TIMETABLES",
+		timetables: [{courses: []}],
+	});
+	dispatch({
+		type: "RECEIVE_COURSE_SECTIONS",
+		courseSections: {}
+	});
+	dispatch({
+		type: "SET_SEMESTER",
+		semester
+	});
+}
+
+export function setSemesterWrapper(semester) {
+	let state = store.getState();
+	let dispatch = store.dispatch;
+	if (semester === store.semester) { return; }
+	if (state.timetables.items[state.timetables.active].courses.length > 0) {
+		if (!state.userInfo.data.isLoggedIn || !state.savingTimetable.upToDate) {
+			dispatch({
+				type: "ALERT_CHANGE_SEMESTER",
+				semester,
+			});
+		}
+		else {
+			setSemester(semester);
+		}
+
+	}
+	else {
+		setSemester(semester);
+	}
+			
+}
+
+export function handleChangeSemester() {
+	let state = store.getState();
+	let dispatch = store.dispatch;
+	let changingToSemester = state.semester === "F" ? "S" : "F";
+	// TODO(Rohan): Load user's saved timetables for the new semester?
+	let userInfo = state.userInfo.data;
+	setSemester(changingToSemester);
+	
+}
+
 export function fetchSearchResults(query) {
 	return (dispatch) => {
 		if (query.length <= 1) {
