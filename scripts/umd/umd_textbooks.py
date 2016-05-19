@@ -59,7 +59,7 @@ class Semester:
             "Semester id: " + self.id + ", name: " + self.name + "\n"
         )
 
-class UMDTextbookParser:
+class TextbookParser:
     def __init__(self):
         self.ua = UserAgent()
         self.session = requests.Session()
@@ -70,7 +70,14 @@ class UMDTextbookParser:
         self.identified_count = 0
         self.isbn_pattern = pattern = re.compile(r"(?:\b\d{13}\b)", re.MULTILINE)
         self.code_pattern = pattern = re.compile(r".*\.(.*)\.(.*)\s\((.*)\)")
+
+        # TODO: This is unique to each university.
         self.store_id = "15551"
+        self.store_link = "umcp.bncollege.com"
+        self.course = UmdCourse
+        self.course_offerings = UmdCourseOffering
+        self.course_link = UmdLink
+
         self.textbook_payload = "-----011000010111000001101001\r\nContent-Disposition: form-data; name=\"storeId\"\r\n\r\n" + self.store_id + "\r\n-----011000010111000001101001\r\nContent-Disposition: form-data; name=\"catalogId\"\r\n\r\n10001\r\n-----011000010111000001101001\r\nContent-Disposition: form-data; name=\"langId\"\r\n\r\n-1\r\n-----011000010111000001101001\r\nContent-Disposition: form-data; name=\"clearAll\"\r\n\r\n\r\n-----011000010111000001101001\r\nContent-Disposition: form-data; name=\"viewName\"\r\n\r\nTBWizardView\r\n-----011000010111000001101001\r\nContent-Disposition: form-data; name=\"secCatList\"\r\n\r\n\r\n-----011000010111000001101001\r\nContent-Disposition: form-data; name=\"removeSectionId\"\r\n\r\n\r\n-----011000010111000001101001\r\nContent-Disposition: form-data; name=\"mcEnabled\"\r\n\r\nN\r\n-----011000010111000001101001\r\nContent-Disposition: form-data; name=\"showCampus\"\r\n\r\nfalse\r\n-----011000010111000001101001\r\nContent-Disposition: form-data; name=\"selectTerm\"\r\n\r\nSelect+Term\r\n-----011000010111000001101001\r\nContent-Disposition: form-data; name=\"selectDepartment\"\r\n\r\nSelect+Department\r\n-----011000010111000001101001\r\nContent-Disposition: form-data; name=\"selectSection\"\r\n\r\nSelect+Section\r\n-----011000010111000001101001\r\nContent-Disposition: form-data; name=\"selectCourse\"\r\n\r\nSelect+Course\r\n-----011000010111000001101001\r\nContent-Disposition: form-data; name=\"campus1\"\r\n\r\n14704480\r\n-----011000010111000001101001\r\nContent-Disposition: form-data; name=\"firstTermName_14704480\"\r\n\r\nFall+2016\r\n-----011000010111000001101001\r\nContent-Disposition: form-data; name=\"firstTermId_14704480\"\r\n\r\n73256452\r\n-----011000010111000001101001"
 
     def eval_response(self, request_type, url, params, headers, payload):
@@ -109,7 +116,7 @@ class UMDTextbookParser:
         self.get_textbooks()
 
     def parse_semesters(self, is_retry):
-        url = "http://umcp.bncollege.com/webapp/wcs/stores/servlet/TBWizardView"
+        url = "http://" + self.store_link + "/webapp/wcs/stores/servlet/TBWizardView"
         params = {"catalogId":"10001","langId":"-1","storeId":self.store_id}
 
         payload = "-----011000010111000001101001\r\nContent-Disposition: form-data; name=\"id\"\r\n\r\n0\r\n-----011000010111000001101001--"
@@ -143,19 +150,19 @@ class UMDTextbookParser:
 
     def parse_departments(self):
         for semester in self.semesters:
-            url = "http://umcp.bncollege.com/webapp/wcs/stores/servlet/TextBookProcessDropdownsCmd"
+            url = "http://" + self.store_link + "/webapp/wcs/stores/servlet/TextBookProcessDropdownsCmd"
 
             params = {"campusId":"14704480","termId":semester.id,"deptId":"","courseId":"","sectionId":"","storeId": self.store_id,"catalogId":"10001","langId":"-1","dropdown":"term"}
 
             payload = ""
             headers = {
-                'host': "umcp.bncollege.com",
+                'host': self.store_link,
                 'connection': "keep-alive",
                 'accept': "application/json, text/javascript, */*; q=0.01",
-                'origin': "http://umcp.bncollege.com",
+                'origin': "http://" + self.store_link,
                 'x-requested-with': "XMLHttpRequest",
                 'user-agent': self.ua.random,
-                'referer': "http://umcp.bncollege.com/webapp/wcs/stores/servlet/TBWizardView?catalogId=10001&langId=-1&storeId=" + self.store_id,
+                'referer': "http://" + self.store_link + "/webapp/wcs/stores/servlet/TBWizardView?catalogId=10001&langId=-1&storeId=" + self.store_id,
                 }
 
             departments = self.eval_response("POST", url, params, headers, payload)
@@ -168,19 +175,19 @@ class UMDTextbookParser:
                 self.parse_courses(semester, department)
 
     def parse_courses(self, semester, department):
-        url = "http://umcp.bncollege.com/webapp/wcs/stores/servlet/TextBookProcessDropdownsCmd"
+        url = "http://" + self.store_link + "/webapp/wcs/stores/servlet/TextBookProcessDropdownsCmd"
 
         params = {"campusId":"14704480","termId":semester.id,"deptId":department.id,"courseId":"","sectionId":"","storeId":self.store_id,"catalogId":"10001","langId":"-1","dropdown":"dept"}
 
         payload = ""
         headers = {
-            'host': "umcp.bncollege.com",
+            'host': self.store_link,
             'connection': "keep-alive",
             'accept': "application/json, text/javascript, */*; q=0.01",
-            'origin': "http://umcp.bncollege.com",
+            'origin': "http://" + self.store_link,
             'x-requested-with': "XMLHttpRequest",
             'user-agent': self.ua.random,
-            'referer': "http://umcp.bncollege.com/webapp/wcs/stores/servlet/TBWizardView?catalogId=10001&langId=-1&storeId=" + self.store_id,
+            'referer': "http://" + self.store_link + "/webapp/wcs/stores/servlet/TBWizardView?catalogId=10001&langId=-1&storeId=" + self.store_id,
             }
 
         courses = self.eval_response("POST", url, params, headers, payload)
@@ -193,7 +200,7 @@ class UMDTextbookParser:
             self.parse_sections(semester, department, course)
 
     def parse_sections(self, semester, department, course):
-        url = "http://umcp.bncollege.com/webapp/wcs/stores/servlet/TextBookProcessDropdownsCmd"
+        url = "http://" + self.store_link + "/webapp/wcs/stores/servlet/TextBookProcessDropdownsCmd"
 
         params = {"campusId":"14704480","termId":semester.id,"deptId":department.id,"courseId":course.id,"sectionId":"","storeId":self.store_id,"catalogId":"10001","langId":"-1","dropdown":"course"}
 
@@ -212,16 +219,16 @@ class UMDTextbookParser:
 
     def get_textbooks(self):
         self.num_textbooks = 0
-        textbook_url = "http://umcp.bncollege.com/webapp/wcs/stores/servlet/BNCBTBListView"
+        textbook_url = "http://" + self.store_link + "/webapp/wcs/stores/servlet/BNCBTBListView"
         textbook_headers = {
             'content-type': "multipart/form-data; boundary=---011000010111000001101001",
-            'host': "umcp.bncollege.com",
+            'host': self.store_link,
             'connection': "keep-alive",
             'accept': "application/json, text/javascript, */*; q=0.01",
-            'origin': "http://umcp.bncollege.com",
+            'origin': "http://" + self.store_link,
             'x-requested-with': "XMLHttpRequest",
             'user-agent': self.ua.random,
-            'referer': "http://umcp.bncollege.com/webapp/wcs/stores/servlet/TBWizardView?catalogId=10001&langId=-1&storeId=" + self.store_id,
+            'referer': "http://" + self.store_link + "/webapp/wcs/stores/servlet/TBWizardView?catalogId=10001&langId=-1&storeId=" + self.store_id,
             }
         textbook_payload = self.textbook_payload
         for semester in self.semesters:
@@ -273,12 +280,11 @@ class UMDTextbookParser:
 
     def make_textbook(self, is_required, isbn_number, course_code, section):
         try:
-            course_code = course_code.replace(".", "")
-            course = UmdCourse.objects.filter(code__contains=course_code)[0]
+            course = self.course.objects.filter(code__contains=course_code)[0]
         except IndexError:
             print("index error: " + course_code)
             return
-        course_offerings = UmdCourseOffering.objects.filter(course=course,meeting_section = section)
+        course_offerings = self.course_offerings.objects.filter(course=course,meeting_section = section)
         info = self.get_amazon_fields(isbn_number)
 
         # update/create textbook
@@ -296,7 +302,7 @@ class UMDTextbookParser:
         for co in course_offerings:
             if co.textbooks.filter(isbn=isbn_number).exists():
                 continue
-            new_link = UmdLink(courseoffering=co, textbook=textbook,
+            new_link = self.course_link(courseoffering=co, textbook=textbook,
                             is_required=is_required)
             new_link.save()
 
@@ -368,5 +374,5 @@ class UMDTextbookParser:
         return list(set(l))
 
 if __name__ == '__main__':
-    parser = UMDTextbookParser()
+    parser = TextbookParser()
     parser.parse()
