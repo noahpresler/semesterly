@@ -103,11 +103,40 @@ class SideBar extends React.Component {
                 </div>
                 <h4 className="sb-header">Textbooks</h4>
                 <div className="side-bar-section">
-                    content
+                    <TextbookList courses={this.props.liveTimetableCourses} />
                 </div>
             </div>
         );
     }
 }
+
+const TextbookList = ({courses}) => {
+    let tbs = [];
+    for (let i = 0; i < courses.length; i++)
+        tbs = tbs.concat(courses[i].textbooks);
+    return (
+        <div>
+            {_.uniq(tbs, 'isbn').map(tb => {
+                return <Textbook tb={tb} key={tb.isbn} />
+            })}
+        </div>
+    )
+}
+
+const Textbook = ({tb}) => {
+    console.log(tb)
+    return (
+    <a href={tb.detail_url}>
+        <div className="textbook">
+            <img src={tb.image_url} />
+            <div className="required">Required</div>
+            <h4>{tb.title}</h4>
+            <a href={tb.detail_url}><div className="amazon-buy"><i className="fa fa-amazon" aria-hidden="true"></i> Buy or Rent</div></a>
+        </div>
+    </a>
+    );
+}
+
+
 
 export default SideBar;

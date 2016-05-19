@@ -59,7 +59,7 @@ class Semester:
             "Semester id: " + self.id + ", name: " + self.name + "\n"
         )
 
-class JHUTextbookParser:
+class TextbookParser:
     def __init__(self):
         self.ua = UserAgent()
         self.session = requests.Session()
@@ -70,7 +70,15 @@ class JHUTextbookParser:
         self.identified_count = 0
         self.isbn_pattern = pattern = re.compile(r"(?:\b\d{13}\b)", re.MULTILINE)
         self.code_pattern = pattern = re.compile(r".*\.(.*)\.(.*)\s\((.*)\)")
-        self.textbook_payload = "-----011000010111000001101001\r\nContent-Disposition: form-data; name=\"storeId\"\r\n\r\n18053\r\n-----011000010111000001101001\r\nContent-Disposition: form-data; name=\"catalogId\"\r\n\r\n10001\r\n-----011000010111000001101001\r\nContent-Disposition: form-data; name=\"langId\"\r\n\r\n-1\r\n-----011000010111000001101001\r\nContent-Disposition: form-data; name=\"clearAll\"\r\n\r\n\r\n-----011000010111000001101001\r\nContent-Disposition: form-data; name=\"viewName\"\r\n\r\nTBWizardView\r\n-----011000010111000001101001\r\nContent-Disposition: form-data; name=\"secCatList\"\r\n\r\n\r\n-----011000010111000001101001\r\nContent-Disposition: form-data; name=\"removeSectionId\"\r\n\r\n\r\n-----011000010111000001101001\r\nContent-Disposition: form-data; name=\"mcEnabled\"\r\n\r\nN\r\n-----011000010111000001101001\r\nContent-Disposition: form-data; name=\"showCampus\"\r\n\r\nfalse\r\n-----011000010111000001101001\r\nContent-Disposition: form-data; name=\"selectTerm\"\r\n\r\nSelect+Term\r\n-----011000010111000001101001\r\nContent-Disposition: form-data; name=\"selectDepartment\"\r\n\r\nSelect+Department\r\n-----011000010111000001101001\r\nContent-Disposition: form-data; name=\"selectSection\"\r\n\r\nSelect+Section\r\n-----011000010111000001101001\r\nContent-Disposition: form-data; name=\"selectCourse\"\r\n\r\nSelect+Course\r\n-----011000010111000001101001\r\nContent-Disposition: form-data; name=\"campus1\"\r\n\r\n14704480\r\n-----011000010111000001101001\r\nContent-Disposition: form-data; name=\"firstTermName_14704480\"\r\n\r\nFall+2016\r\n-----011000010111000001101001\r\nContent-Disposition: form-data; name=\"firstTermId_14704480\"\r\n\r\n73256452\r\n-----011000010111000001101001"
+
+        # TODO: This is unique to each university.
+        self.store_id = "18053"
+        self.store_link = "johns-hopkins.bncollege.com"
+        self.course = HopkinsCourse
+        self.course_offerings = HopkinsCourseOffering
+        self.course_link = HopkinsLink
+
+        self.textbook_payload = "-----011000010111000001101001\r\nContent-Disposition: form-data; name=\"storeId\"\r\n\r\n" + self.store_id + "\r\n-----011000010111000001101001\r\nContent-Disposition: form-data; name=\"catalogId\"\r\n\r\n10001\r\n-----011000010111000001101001\r\nContent-Disposition: form-data; name=\"langId\"\r\n\r\n-1\r\n-----011000010111000001101001\r\nContent-Disposition: form-data; name=\"clearAll\"\r\n\r\n\r\n-----011000010111000001101001\r\nContent-Disposition: form-data; name=\"viewName\"\r\n\r\nTBWizardView\r\n-----011000010111000001101001\r\nContent-Disposition: form-data; name=\"secCatList\"\r\n\r\n\r\n-----011000010111000001101001\r\nContent-Disposition: form-data; name=\"removeSectionId\"\r\n\r\n\r\n-----011000010111000001101001\r\nContent-Disposition: form-data; name=\"mcEnabled\"\r\n\r\nN\r\n-----011000010111000001101001\r\nContent-Disposition: form-data; name=\"showCampus\"\r\n\r\nfalse\r\n-----011000010111000001101001\r\nContent-Disposition: form-data; name=\"selectTerm\"\r\n\r\nSelect+Term\r\n-----011000010111000001101001\r\nContent-Disposition: form-data; name=\"selectDepartment\"\r\n\r\nSelect+Department\r\n-----011000010111000001101001\r\nContent-Disposition: form-data; name=\"selectSection\"\r\n\r\nSelect+Section\r\n-----011000010111000001101001\r\nContent-Disposition: form-data; name=\"selectCourse\"\r\n\r\nSelect+Course\r\n-----011000010111000001101001\r\nContent-Disposition: form-data; name=\"campus1\"\r\n\r\n14704480\r\n-----011000010111000001101001\r\nContent-Disposition: form-data; name=\"firstTermName_14704480\"\r\n\r\nFall+2016\r\n-----011000010111000001101001\r\nContent-Disposition: form-data; name=\"firstTermId_14704480\"\r\n\r\n73256452\r\n-----011000010111000001101001"
 
     def eval_response(self, request_type, url, params, headers, payload):
         while True:
@@ -89,7 +97,11 @@ class JHUTextbookParser:
 
 
         headers["user-agent"] = self.ua.random
-        return self.session.request(request_type, url, params=params,  headers=headers, data=payload)
+        try:
+            return self.session.request(request_type, url, params=params,  headers=headers, data=payload)
+        except:
+            sleep(randint(300, 500))
+            self.retry_request(headers)
 
     def retry_request(self, headers):
         # print("error, ua: " + headers["user-agent"])
@@ -104,8 +116,8 @@ class JHUTextbookParser:
         self.get_textbooks()
 
     def parse_semesters(self, is_retry):
-        url = "http://johns-hopkins.bncollege.com/webapp/wcs/stores/servlet/TBWizardView"
-        params = {"catalogId":"10001","langId":"-1","storeId":"18053"}
+        url = "http://" + self.store_link + "/webapp/wcs/stores/servlet/TBWizardView"
+        params = {"catalogId":"10001","langId":"-1","storeId":self.store_id}
 
         payload = "-----011000010111000001101001\r\nContent-Disposition: form-data; name=\"id\"\r\n\r\n0\r\n-----011000010111000001101001--"
         headers = {
@@ -115,9 +127,13 @@ class JHUTextbookParser:
 
         response = self.make_request("POST", url, params, headers, payload)
 
+        if response == None:
+            sleep(randint(300, 500))
+            self.retry_request(headers)
+
         soup = BeautifulSoup(response.text,"html.parser")
         semester_list = soup.find(class_="bncbSelectBox termHeader")
-        if semester_list == None and is_retry:
+        if semester_list == None:
             if is_retry:
                 return
             else:
@@ -134,19 +150,19 @@ class JHUTextbookParser:
 
     def parse_departments(self):
         for semester in self.semesters:
-            url = "http://johns-hopkins.bncollege.com/webapp/wcs/stores/servlet/TextBookProcessDropdownsCmd"
+            url = "http://" + self.store_link + "/webapp/wcs/stores/servlet/TextBookProcessDropdownsCmd"
 
-            params = {"campusId":"14704480","termId":semester.id,"deptId":"","courseId":"","sectionId":"","storeId":"18053","catalogId":"10001","langId":"-1","dropdown":"term"}
+            params = {"campusId":"14704480","termId":semester.id,"deptId":"","courseId":"","sectionId":"","storeId": self.store_id,"catalogId":"10001","langId":"-1","dropdown":"term"}
 
             payload = ""
             headers = {
-                'host': "johns-hopkins.bncollege.com",
+                'host': self.store_link,
                 'connection': "keep-alive",
                 'accept': "application/json, text/javascript, */*; q=0.01",
-                'origin': "http://johns-hopkins.bncollege.com",
+                'origin': "http://" + self.store_link,
                 'x-requested-with': "XMLHttpRequest",
                 'user-agent': self.ua.random,
-                'referer': "http://johns-hopkins.bncollege.com/webapp/wcs/stores/servlet/TBWizardView?catalogId=10001&langId=-1&storeId=18053",
+                'referer': "http://" + self.store_link + "/webapp/wcs/stores/servlet/TBWizardView?catalogId=10001&langId=-1&storeId=" + self.store_id,
                 }
 
             departments = self.eval_response("POST", url, params, headers, payload)
@@ -159,19 +175,19 @@ class JHUTextbookParser:
                 self.parse_courses(semester, department)
 
     def parse_courses(self, semester, department):
-        url = "http://johns-hopkins.bncollege.com/webapp/wcs/stores/servlet/TextBookProcessDropdownsCmd"
+        url = "http://" + self.store_link + "/webapp/wcs/stores/servlet/TextBookProcessDropdownsCmd"
 
-        params = {"campusId":"14704480","termId":semester.id,"deptId":department.id,"courseId":"","sectionId":"","storeId":"18053","catalogId":"10001","langId":"-1","dropdown":"dept"}
+        params = {"campusId":"14704480","termId":semester.id,"deptId":department.id,"courseId":"","sectionId":"","storeId":self.store_id,"catalogId":"10001","langId":"-1","dropdown":"dept"}
 
         payload = ""
         headers = {
-            'host': "johns-hopkins.bncollege.com",
+            'host': self.store_link,
             'connection': "keep-alive",
             'accept': "application/json, text/javascript, */*; q=0.01",
-            'origin': "http://johns-hopkins.bncollege.com",
+            'origin': "http://" + self.store_link,
             'x-requested-with': "XMLHttpRequest",
             'user-agent': self.ua.random,
-            'referer': "http://johns-hopkins.bncollege.com/webapp/wcs/stores/servlet/TBWizardView?catalogId=10001&langId=-1&storeId=18053",
+            'referer': "http://" + self.store_link + "/webapp/wcs/stores/servlet/TBWizardView?catalogId=10001&langId=-1&storeId=" + self.store_id,
             }
 
         courses = self.eval_response("POST", url, params, headers, payload)
@@ -184,9 +200,9 @@ class JHUTextbookParser:
             self.parse_sections(semester, department, course)
 
     def parse_sections(self, semester, department, course):
-        url = "http://johns-hopkins.bncollege.com/webapp/wcs/stores/servlet/TextBookProcessDropdownsCmd"
+        url = "http://" + self.store_link + "/webapp/wcs/stores/servlet/TextBookProcessDropdownsCmd"
 
-        params = {"campusId":"14704480","termId":semester.id,"deptId":department.id,"courseId":course.id,"sectionId":"","storeId":"18053","catalogId":"10001","langId":"-1","dropdown":"course"}
+        params = {"campusId":"14704480","termId":semester.id,"deptId":department.id,"courseId":course.id,"sectionId":"","storeId":self.store_id,"catalogId":"10001","langId":"-1","dropdown":"course"}
 
         payload = ""
         headers = {
@@ -203,16 +219,16 @@ class JHUTextbookParser:
 
     def get_textbooks(self):
         self.num_textbooks = 0
-        textbook_url = "http://johns-hopkins.bncollege.com/webapp/wcs/stores/servlet/BNCBTBListView"
+        textbook_url = "http://" + self.store_link + "/webapp/wcs/stores/servlet/BNCBTBListView"
         textbook_headers = {
             'content-type': "multipart/form-data; boundary=---011000010111000001101001",
-            'host': "johns-hopkins.bncollege.com",
+            'host': self.store_link,
             'connection': "keep-alive",
             'accept': "application/json, text/javascript, */*; q=0.01",
-            'origin': "http://johns-hopkins.bncollege.com",
+            'origin': "http://" + self.store_link,
             'x-requested-with': "XMLHttpRequest",
             'user-agent': self.ua.random,
-            'referer': "http://johns-hopkins.bncollege.com/webapp/wcs/stores/servlet/TBWizardView?catalogId=10001&langId=-1&storeId=18053",
+            'referer': "http://" + self.store_link + "/webapp/wcs/stores/servlet/TBWizardView?catalogId=10001&langId=-1&storeId=" + self.store_id,
             }
         textbook_payload = self.textbook_payload
         for semester in self.semesters:
@@ -251,7 +267,6 @@ class JHUTextbookParser:
                 # print(tb.get_text().encode("utf-8"))
                 # match = re.findall(self.isbn_pattern,"".join(tb.get_text()))
                 match = re.findall(self.isbn_pattern,"".join(tb.get_text()))
-                # print(match)
                 # if len(match) == 0:
                 #     print(tb.get_text())
                 if len(match) > 0:
@@ -265,10 +280,11 @@ class JHUTextbookParser:
 
     def make_textbook(self, is_required, isbn_number, course_code, section):
         try:
-            course = HopkinsCourse.objects.filter(code__contains=course_code)[0]
+            course = self.course.objects.filter(code__contains=course_code)[0]
         except IndexError:
+            print("index error: " + course_code)
             return
-        course_offerings = HopkinsCourseOffering.objects.filter(course=course,meeting_section = section)
+        course_offerings = self.course_offerings.objects.filter(course=course,meeting_section = section)
         info = self.get_amazon_fields(isbn_number)
 
         # update/create textbook
@@ -286,7 +302,7 @@ class JHUTextbookParser:
         for co in course_offerings:
             if co.textbooks.filter(isbn=isbn_number).exists():
                 continue
-            new_link = HopkinsLink(courseoffering=co, textbook=textbook,
+            new_link = self.course_link(courseoffering=co, textbook=textbook,
                             is_required=is_required)
             new_link.save()
 
@@ -358,5 +374,5 @@ class JHUTextbookParser:
         return list(set(l))
 
 if __name__ == '__main__':
-    parser = JHUTextbookParser()
+    parser = TextbookParser()
     parser.parse()
