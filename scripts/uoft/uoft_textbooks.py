@@ -9,7 +9,7 @@ api = API(locale='us')
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "semesterly.settings")
 django.setup()
 
-from timetable.models import Course, CourseOffering, Textbook, Link
+from timetable.models import Course, Offering, Textbook
 from scripts.amazon_helpers import *
 
 SESSION = requests.Session()
@@ -53,7 +53,7 @@ def parse_results(source):
         print "\t\t\tFor %s section %s, found %d textbook(s). These are:" % (
             matches.group(1), matches.group(2), len(all_textbooks_info))
         course = Course.objects.get(code=matches.group(1))
-        course_offerings = CourseOffering.objects.filter(course=course,
+        course_offerings = Offering.objects.filter(course=course,
                                                          meeting_section=matches.group(2))
         for textbook_info in all_textbooks_info:
             try:
@@ -79,7 +79,7 @@ def parse_results(source):
             for offering in course_offerings:
                 if offering.textbooks.filter(isbn=isbn).exists():
                     continue
-                new_link = Link(courseoffering=offering, textbook=textbook,
+                new_link = Link(Offering=offering, textbook=textbook,
                                 is_required=(req.strip().lower() == "required"))
                 new_link.save()
 

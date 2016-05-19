@@ -25,27 +25,30 @@ class Student(models.Model):
     social_courses = models.NullBooleanField(null=True)
     social_offerings = models.NullBooleanField(null=True)
 
+class Reaction(models.Model):
+  REACTION_CHOICES = (
+    ('FIRE', 'FIRE'),
+    ('LOVE', 'LOVE'),
+    ('CRAP', 'CRAP'),
+    ('OKAY', 'OKAY'),
+    ('BORING', 'BORING'),
+    ('HARD', 'HARD'),
+    ('TEARS', 'TEARS'),
+    ('INTERESTING', 'INTERESTING'),
+  )
+  student = models.ForeignKey('student.Student')
+  course = models.ManyToManyField(Course)
+  title = models.CharField(max_length=50, choices=REACTION_CHOICES)
+  
 class PersonalTimetable(models.Model):
+    courses = models.ManyToManyField(Course)
+    school = models.CharField(max_length=50)
     name = models.CharField(max_length=100)
     semester = models.CharField(max_length=2)
     time_updated = models.DateTimeField(auto_now_add=True)
     student = models.ForeignKey(Student)
-    school = models.CharField(max_length=50)
     last_updated = models.DateTimeField(auto_now=True)
+    sections = models.ManyToManyField(Section)
 
-class UofTPersonalTimetable(PersonalTimetable):
-    course_offerings = models.ManyToManyField(CourseOffering)
-    courses = models.ManyToManyField(Course)
 
-class HopkinsPersonalTimetable(PersonalTimetable):
-    course_offerings = models.ManyToManyField(HopkinsCourseOffering)
-    courses = models.ManyToManyField(HopkinsCourse)
-
-class UmdPersonalTimetable(PersonalTimetable):
-    course_offerings = models.ManyToManyField(UmdCourseOffering)
-    courses = models.ManyToManyField(UmdCourse)
-
-class RutgersPersonalTimetable(PersonalTimetable):
-    course_offerings = models.ManyToManyField(RutgersCourseOffering)
-    courses = models.ManyToManyField(RutgersCourse)
     
