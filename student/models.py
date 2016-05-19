@@ -49,6 +49,7 @@ class PersonalTimetable(models.Model):
     student = models.ForeignKey(Student)
     last_updated = models.DateTimeField(auto_now=True)
     sections = models.ManyToManyField(Section)
+    has_conflict = models.BooleanField(blank=True, default=False)
 
 
     
