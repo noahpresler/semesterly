@@ -237,3 +237,29 @@ h3.master-slot-credits {
 .ms-friend:first-child:hover {
     background-color: rgba(0,0,0,.5);
 }
+
+
+/* EMPTY STATES */
+
+#side-bar .empty-state {
+    width: 280px;
+    text-align: center;
+}
+
+#side-bar .empty-state img {
+    width: 280px;
+}
+
+#side-bar .empty-state h4 {
+    margin-top: 5px;
+    font-size: 14px;
+    color: #AFAFAF;
+    margin-bottom: 0px;
+}
+
+#side-bar .empty-state h3 {
+    font-size: 12px;
+    font-weight: 400;
+    color: #ADADAD;
+    margin-top: 8px;
+}
