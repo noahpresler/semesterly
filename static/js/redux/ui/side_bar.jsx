@@ -128,8 +128,11 @@ class SideBar extends React.Component {
 
 const TextbookList = ({courses}) => {
     let tbs = [];
-    for (let i = 0; i < courses.length; i++)
-        tbs = tbs.concat(courses[i].textbooks);
+    for (let i = 0; i < courses.length; i++){
+        if(courses[i].textbooks !== undefined) {
+            tbs = tbs.concat(courses[i].textbooks);
+        }
+    }
     if (tbs.length === 0) {
         return (<div className="empty-state">
                 <img src="/static/img/emptystates/textbooks.png" />
