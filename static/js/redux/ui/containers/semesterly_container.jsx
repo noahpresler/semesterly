@@ -7,6 +7,7 @@ const mapStateToProps = (state) => {
 	return {
     	alertConflict: state.alerts.alertConflict,
     	alertTimetableExists: state.alerts.alertTimetableExists,
+    	alertChangeSemester: state.alerts.alertChangeSemester,
     	explorationModalIsVisible: state.explorationModal.isVisible
 	}
 }

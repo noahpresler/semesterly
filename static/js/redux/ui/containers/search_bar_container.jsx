@@ -1,5 +1,5 @@
 import { connect } from 'react-redux';
-import { fetchSearchResults } from '../../actions/search_actions.jsx';
+import { fetchSearchResults, setSemesterWrapper } from '../../actions/search_actions.jsx';
 import { addOrRemoveCourse, addOrRemoveOptionalCourse } from '../../actions/timetable_actions.jsx';
 import { SearchBar } from '../search_bar.jsx';
 import { fetchCourseInfo } from '../../actions/modal_actions.jsx'
@@ -14,7 +14,7 @@ const mapStateToProps = (state) => {
     	isCourseInRoster: (course_id) => courseSections[course_id] !== undefined,
     	isCourseOptional: (course_id) => state.optionalCourses.courses.some(c => c.id === course_id),
 		hasHoveredResult: state.timetables.items[state.timetables.active].courses.some(course => course.fake),
-		isHovered: (position) => {return state.ui.searchHover === position;}
+		isHovered: (position) => state.ui.searchHover === position
 	}
 }
 
@@ -31,12 +31,7 @@ const mapDispatchToProps = (dispatch) => {
 				position
 			});
 		},
-		setSemester: (semester) => {
-			dispatch({
-				type: "SET_SEMESTER",
-				semester
-			})
-		}
+		setSemester: setSemesterWrapper
 	}
 }
 
