@@ -36,7 +36,6 @@ class MasterSlot extends React.Component {
             friendCircles = [<div className="ms-friend" key={4}>{plusMore}</div>].concat(friendCircles.slice(0,3))
         }
         let masterSlotClass = 'master-slot slot-' + this.props.course.id;
-        console.log(this.props.professors)
         let prof = !this.props.professors || this.props.professors[0] === "" ? "Professor Unlisted" : this.props.professors;
         masterSlotClass = this.props.onTimetable ? masterSlotClass : masterSlotClass + ' optional';
 		return <div className={masterSlotClass}

@@ -46,6 +46,12 @@ export class SearchBar extends React.Component {
         let result_container = !this.state.focused || results.length == 0 ? null : (
             <ul className={resClass} >
                 {results}
+                <div id="see-more" style={{height: 240-60*results.length}}>
+                    <div id="see-more-inner">
+                        <h4>Don't see what you're looking for?</h4>
+                        <p>Click <i className="fa fa-compass" /> above to filter by areas, departments, times and more!</p>
+                    </div>
+                </div>
                 <SearchSideBarContainer />
             </ul>
         );
