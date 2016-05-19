@@ -512,29 +512,6 @@ def get_minute_from_string_time(time_string):
 # --------------------TODO: move to separate file------------------------------
 # -----------------------------------------------------------------------------
 
-@csrf_exempt
-def get_courses(request, school, sem):
-  school = school.lower()
-  sem = sem.upper()
-  if (school not in school_to_models) or (sem not in ["F", "S"]):
-    json_data = []
-  else:
-    module_dir = os.path.dirname(__file__)  # get current directory
-    file_path = os.path.join(module_dir,
-      "courses_json/" + school + "-" + sem + ".json")
-    data = open(file_path).read()
-    json_data = json.loads(data)
-    try:
-      update_obj = Updates.objects.get(school=school,update_field="Course").last_updated.astimezone(timezone('US/Eastern'))
-      last_updated = update_obj.strftime('%Y-%m-%d %H:%M') + " " + update_obj.tzname()
-    except:
-      last_updated = None
-
-  return HttpResponse(json.dumps({
-              'last_updated': last_updated,
-              'courses':json_data
-        }),
-      content_type="application/json")
 
 def get_course(request, school, sem, id):
   global SCHOOL
@@ -563,9 +540,7 @@ def get_course(request, school, sem, id):
 def get_course_id(request, school, sem, code):
   school = school.lower()
   try:
-    models = school_to_models[school]
-    C, Co = models[0], models[1]
-    course = C.objects.filter(Q(code__icontains=code))[0]
+    course = Course.objects.filter(school=school, code__icontains=code)[0]
     json_data = {"id": course.id}
   except:
     import traceback
@@ -573,42 +548,6 @@ def get_course_id(request, school, sem, code):
     json_data = {}
 
   return HttpResponse(json.dumps(json_data), content_type="application/json")
-
-def convert_courses_to_json(courses, sem, limit=50):
-  cs = []
-  result_count = 0    # limiting the number of results one search query can provide to 50
-  for course in courses:
-    if result_count == limit: break
-    if has_offering(course, sem):
-      cs.append(course)
-      result_count += 1
-  return [get_course_serializable(course, sem) for course in cs]
-
-def get_course_serializable(course, sem):
-  d = model_to_dict(course)
-  d['sections'] = get_meeting_sections(course, sem)
-  return d
-
-def get_meeting_sections(course, semester):
-  Course, Offering = school_to_models[SCHOOL]
-  offering_objs = Offering.objects.filter((Q(semester=semester) | Q(semester='Y')),
-                          course=course)
-  sections = []
-  for o in offering_objs:
-    if o.meeting_section not in sections:
-      sections.append(o.meeting_section)
-  sections.sort()
-  return sections
-
-def get_meeting_sections_objects(course, semester):
-  Course, Offering = school_to_models[SCHOOL]
-  offering_objs = Offering.objects.filter((Q(semester=semester) | Q(semester='Y')), course=course)
-  sections = []
-  for o in offering_objs:
-    if o.meeting_section not in sections:
-      sections.append(model_to_dict(o))
-  sections.sort()
-  return sections
 
 def has_offering(course, sem):
   Course, Offering = school_to_models[SCHOOL]
@@ -626,17 +565,6 @@ def has_offering(course, sem):
 
 
 ### COURSE SEARCH ###
-# def my_model_to_dict(course, Offering, sem):
-#   fields=['code','name', 'id', 'description']
-#   d = model_to_dict(course, fields)
-#   d['slots'] = {}
-#   res = Offering.objects.filter(~Q(time_start__iexact='TBA'),
-#                       (Q(semester=sem) | Q(semester='Y')),
-#                       course_id=course.id)
-#   section_list = res.values_list('meeting_section').distinct()
-#   for section, in section_list:
-#     d['slots'][section] = [model_to_dict(offering) for offering in res.filter(meeting_section=section)]
-#   return d
 
 ## Organizing result sections by section type ###
 def my_model_to_dict(course, sem, include_reactions=False, student=None):
@@ -730,12 +658,12 @@ def advanced_course_search(request):
 def jhu_timer(request):
   return render(request, "jhu_timer.html")
 
+@validate_subdomain
 def course_page(request, code):
   school = request.subdomain
-  Course, Offering = school_to_models[school]
   try:
     course_obj = Course.objects.filter(code__iexact=code)[0]
-    course_dict = my_model_to_dict(course_obj, Offering, "F")
+    course_dict = my_model_to_dict(course_obj, "F")
     l = course_dict.get('sections').get('L').values() if course_dict.get('sections').get('L') else None
     t = course_dict.get('sections').get('T').values() if course_dict.get('sections').get('T') else None
     p = course_dict.get('sections').get('P').values() if course_dict.get('sections').get('P') else None
@@ -754,11 +682,10 @@ def course_page(request, code):
 def school_info(request, school):
   if school not in VALID_SCHOOLS:
     return HttpResponse("School not found")
-  Course, Offering = school_to_models[school]
   json_data = { # TODO(rohan): Get all relevant fields (areas, departments, levels) properly
-    'areas': sorted(list(Course.objects.exclude(areas__exact='').values_list('areas', flat=True).distinct())),
-    'departments': sorted(list(Course.objects.exclude(department__exact='').values_list('department', flat=True).distinct())),
-    'levels': sorted(list(Course.objects.exclude(level__exact='').values_list('level', flat=True).distinct()))
+    'areas': sorted(list(Course.objects.filter(school=school).exclude(areas__exact='').values_list('areas', flat=True).distinct())),
+    'departments': sorted(list(Course.objects.filter(school=school).exclude(department__exact='').values_list('department', flat=True).distinct())),
+    'levels': sorted(list(Course.objects.filter(school=school).exclude(level__exact='').values_list('level', flat=True).distinct()))
   }
   return HttpResponse(json.dumps(json_data), content_type="application/json")
 
