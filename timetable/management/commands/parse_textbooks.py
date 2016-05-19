@@ -43,7 +43,6 @@ class Command(BaseCommand):
 				message = "parser for %s.\n" % (school)
 				self.success_print("Starting " + message)
 				logging.exception(message)
-
 				do_parse()
 				
 				# set the last_updated information for the school's textbooks
