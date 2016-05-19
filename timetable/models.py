@@ -84,6 +84,10 @@ class Section(models.Model):
   def get_textbooks(self):
     return [tb.get_info() for tb in self.textbooks.all()]
 
+  def __unicode__(self):
+    return "Course: %s; Section: %s; Semester: %s" % (str(self.course), self.meeting_section, self.semester)
+
+
 class Offering(models.Model):
   section = models.ForeignKey(Section)
   day = models.CharField(max_length=1)
