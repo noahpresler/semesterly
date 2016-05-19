@@ -52,6 +52,7 @@ def get_student_tts(student, school, semester):
 					course_ids.append(c.id)
 					courses[-1]['slots'] = []
 					courses[-1]['enrolled_sections'] = []
+					courses[-1]['textbooks'] = []
 
 				index = course_ids.index(c.id)
 				courses[index]['slots'].extend([merge_dicts(model_to_dict(section_obj), model_to_dict(co)) for co in section_obj.offering_set.all()])
