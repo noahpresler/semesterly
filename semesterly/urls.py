@@ -51,5 +51,5 @@ urlpatterns = patterns('',
 	url(r'^advanced_search/', 'timetable.views.advanced_course_search'),
 	url(r'^school_info/(?P<school>.+?)/', 'timetable.views.school_info'),
 	url(r'c/(?P<code>.+?)$', 'timetable.views.course_page'),
-	url(r'react/', 'timetable.views.react_to_course'),
+	url(r'react/', 'student.views.react_to_course'),
 )
