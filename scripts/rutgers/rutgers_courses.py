@@ -18,7 +18,6 @@ from scripts.base_parser import BaseParser
 import django
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "semesterly.settings")
 django.setup()
-from timetable.models import RutgersCourse, RutgersCourseOffering
 
 time_pattern = r'[0-9]+:[0-9]+ [AP]M - [0-9]+:[0-9]+ [AP]M'
 code_pattern = r'\d{2}:\d{3}:\d{3}'

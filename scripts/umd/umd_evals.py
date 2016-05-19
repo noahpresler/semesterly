@@ -7,7 +7,6 @@ import django
 import os
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "semesterly.settings")
 django.setup()
-from timetable.models import UmdCourse, UmdCourseOffering,UmdCourseEvaluation
 
 django.setup()
 
