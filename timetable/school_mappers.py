@@ -19,7 +19,7 @@ school_to_granularity = {
     'uo': 5,
     'queens': 30
 }
-VALID_SCHOOLS = ["uoft"]
+VALID_SCHOOLS = ["uoft", "jhu", "umd", "uo", "rutgers", "queens"]
 
 # do the imports: assumes all parser follow the same naming conventions: 
 # schoolname_parsertype where parsertype can be courses, evals, or textbooks
