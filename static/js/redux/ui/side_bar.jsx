@@ -131,7 +131,7 @@ const Textbook = ({tb}) => {
             <img src={tb.image_url} />
             <div className="required">Required</div>
             <h4>{tb.title}</h4>
-            <a href="#"><div className="amazon-buy"><i className="fa fa-amazon" aria-hidden="true"></i> Buy or Rent</div></a>
+            <a href={tb.detail_url}><div className="amazon-buy"><i className="fa fa-amazon" aria-hidden="true"></i> Buy or Rent</div></a>
         </div>
     </a>
     );
