@@ -64,25 +64,24 @@ def get_timetables(request):
   mark_request(request, sid)
 
   SCHOOL = request.subdomain
-  SchoolCourse, SchoolCourseOffering = school_to_models[SCHOOL]
 
   course_ids = params['courseSections'].keys()
-  courses = [SchoolCourse.objects.get(id=cid) for cid in course_ids]
+  courses = [Course.objects.get(id=cid) for cid in course_ids]
   locked_sections = params['courseSections']
   for updated_course in params.get('updated_courses', []):
     cid = str(updated_course['course_id'])
     locked_sections[cid] = locked_sections.get(cid, {})
     if cid not in course_ids:
-      courses.append(SchoolCourse.objects.get(id=int(cid)))
+      courses.append(Course.objects.get(id=int(cid)))
 
     for locked_section in filter(bool, updated_course['section_codes']):
       update_locked_sections(locked_sections, cid,
-                  locked_section, SchoolCourseOffering)
+                  locked_section, Offering)
 
   # temp optional course implementation
   opt_course_ids = params.get('optionCourses', [])
   max_optional = params.get('numOptionCourses', 0)
-  optional_courses = [SchoolCourse.objects.get(id=cid) for cid in opt_course_ids]
+  optional_courses = [Course.objects.get(id=cid) for cid in opt_course_ids]
   optional_course_subsets = [subset for k in range(max_optional, -1, -1)\
                                     for subset in itertools.combinations(optional_courses, k)]
 
@@ -121,8 +120,6 @@ class TimetableGenerator:
   def __init__(self, semester, school, locked_sections, custom_events, preferences):
     self.school = school
     self.slots_per_hour = 60 / school_to_granularity[school]
-    self.course_model = school_to_models[school][0]
-    self.offering_model = school_to_models[school][1]
     self.semester = semester
     self.no_classes_before = 0 if not preferences['no_classes_before'] else self.slots_per_hour * 2 - 1
     self.no_classes_after = self.slots_per_hour * 14 if not preferences['no_classes_after'] else self.slots_per_hour * 10 + 1
@@ -148,7 +145,7 @@ class TimetableGenerator:
     return tt_obj
 
   def get_course_dict(self, section):
-    model = self.course_model.objects.get(id=section[0])
+    model = Course.objects.get(id=section[0])
     return model_to_dict(model, fields=['code', 'name', 'id', 'num_credits', 'department'])
 
   def get_course_obj(self, course_dict, sections):
@@ -163,8 +160,8 @@ class TimetableGenerator:
         if len(sections) != 0:
           section = sections[0]
 
-      c = self.course_model.objects.get(id=course_dict['id'])
-      co = self.offering_model.objects.filter(meeting_section=section, course=c)[0]
+      c = Course.objects.get(id=course_dict['id'])
+      co = Offering.objects.filter(meeting_section=section, course=c)[0]
       course_dict['textbooks'] = co.get_textbooks()
       course_dict['evaluations'] = co.get_evaluations()
     except:
@@ -266,25 +263,38 @@ class TimetableGenerator:
     elements are courseoffering objects and the second elements are lists used to keep
     track of conflict information for that specific courseoffering.
     """
-    sections = []
     for c in courses:
-      offerings = self.offering_model.objects.filter(~Q(time_start__iexact='TBA'), \
-                          (Q(semester=self.semester) | Q(semester='Y')), \
-                          course=c)
-      section_to_offerings = get_section_to_offering_map(offerings)
-      section_type_to_sections = get_section_type_to_sections_map(section_to_offerings, \
-                                    plist, \
-                                    c.id)
-      for section_type in section_type_to_sections:
-        # if there are any locked sections for given type, course
+      sections = sorted(c.section_set.all(), key=get_section_type)
+      grouped = itertools.groupby(sections, get_section_type)
+      for section_type, sections in grouped:
         if str(c.id) in self.locked_sections and self.locked_sections[str(c.id)].get(section_type, False):
-          locked_section = self.locked_sections[str(c.id)][section_type]
-          pinned = [c.id, locked_section, section_to_offerings[locked_section]]
+          locked_section_code = self.locked_sections[str(c.id)][section_type]
+          locked_section = next(s for s in sections if s.name == locked_section_code)
+          pinned = [c.id, locked_section_code, locked_section.offering_set.all()]
           sections.append([pinned])
         else:
-          sections.append(section_type_to_sections[section_type])
-    # sections.sort(key = lambda l: len(l), reverse=False)
+          sections.append([[c.id, section.name, section.offering_set.all()] for section in sections])
     return sections
+
+    # sections = []
+    # for c in courses:
+    #   offerings = Offering.objects.filter(~Q(time_start__iexact='TBA'), \
+    #                       (Q(semester=self.semester) | Q(semester='Y')), \
+    #                       course=c)
+    #   section_to_offerings = get_section_to_offering_map(offerings)
+    #   section_type_to_sections = get_section_type_to_sections_map(section_to_offerings, \
+    #                                 plist, \
+    #                                 c.id)
+    #   for section_type in section_type_to_sections:
+    #     # if there are any locked sections for given type, course
+    #     if str(c.id) in self.locked_sections and self.locked_sections[str(c.id)].get(section_type, False):
+    #       locked_section = self.locked_sections[str(c.id)][section_type]
+    #       pinned = [c.id, locked_section, section_to_offerings[locked_section]]
+    #       sections.append([pinned])
+    #     else:
+    #       sections.append(section_type_to_sections[section_type])
+    # # sections.sort(key = lambda l: len(l), reverse=False)
+    # return sections
 
   def construct_preference_tt(self):
     """
@@ -591,8 +601,8 @@ def get_course_serializable(course, sem):
   return d
 
 def get_meeting_sections(course, semester):
-  SchoolCourse, SchoolCourseOffering = school_to_models[SCHOOL]
-  offering_objs = SchoolCourseOffering.objects.filter((Q(semester=semester) | Q(semester='Y')),
+  Course, Offering = school_to_models[SCHOOL]
+  offering_objs = Offering.objects.filter((Q(semester=semester) | Q(semester='Y')),
                           course=course)
   sections = []
   for o in offering_objs:
@@ -602,8 +612,8 @@ def get_meeting_sections(course, semester):
   return sections
 
 def get_meeting_sections_objects(course, semester):
-  SchoolCourse, SchoolCourseOffering = school_to_models[SCHOOL]
-  offering_objs = SchoolCourseOffering.objects.filter((Q(semester=semester) | Q(semester='Y')), course=course)
+  Course, Offering = school_to_models[SCHOOL]
+  offering_objs = Offering.objects.filter((Q(semester=semester) | Q(semester='Y')), course=course)
   sections = []
   for o in offering_objs:
     if o.meeting_section not in sections:
@@ -612,9 +622,9 @@ def get_meeting_sections_objects(course, semester):
   return sections
 
 def has_offering(course, sem):
-  SchoolCourse, SchoolCourseOffering = school_to_models[SCHOOL]
+  Course, Offering = school_to_models[SCHOOL]
   try:
-    res = SchoolCourseOffering.objects.filter(~Q(time_start__iexact='TBA'),
+    res = Offering.objects.filter(~Q(time_start__iexact='TBA'),
                       (Q(semester=sem) | Q(semester='Y')),
                       course_id=course.id)
     for offering in res:
@@ -627,11 +637,11 @@ def has_offering(course, sem):
 
 
 ### COURSE SEARCH ###
-# def my_model_to_dict(course, SchoolCourseOffering, sem):
+# def my_model_to_dict(course, Offering, sem):
 #   fields=['code','name', 'id', 'description']
 #   d = model_to_dict(course, fields)
 #   d['slots'] = {}
-#   res = SchoolCourseOffering.objects.filter(~Q(time_start__iexact='TBA'),
+#   res = Offering.objects.filter(~Q(time_start__iexact='TBA'),
 #                       (Q(semester=sem) | Q(semester='Y')),
 #                       course_id=course.id)
 #   section_list = res.values_list('meeting_section').distinct()
@@ -640,12 +650,12 @@ def has_offering(course, sem):
 #   return d
 
 ## Organizing result sections by section type ###
-def my_model_to_dict(course, SchoolCourseOffering, sem, include_reactions=False, student=None):
+def my_model_to_dict(course, Offering, sem, include_reactions=False, student=None):
   fields=['code','name', 'id', 'description', 'department', 'num_credits']
   d = model_to_dict(course, fields)
   d['sections'] = {}
 
-  res = SchoolCourseOffering.objects.filter(~Q(time_start__iexact='TBA'),
+  res = Offering.objects.filter(~Q(time_start__iexact='TBA'),
                       (Q(semester=sem) | Q(semester='Y')),
                       course_id=course.id)
   section_list = res.values_list('meeting_section')
@@ -667,9 +677,9 @@ def course_search(request, school, sem, query):
   if school not in VALID_SCHOOLS:
     return HttpResponse("School not found")
 
-  SchoolCourse, SchoolCourseOffering = school_to_models[school]
+  Course, Offering = school_to_models[school]
 
-  course_match_objs = SchoolCourse.objects.filter((Q(code__icontains=query) | Q(description__icontains=query) | Q(name__icontains=query)))
+  course_match_objs = Course.objects.filter((Q(code__icontains=query) | Q(description__icontains=query) | Q(name__icontains=query)))
 
   # We want to filter based on whether the course has an offering in this semester or not.
   # This part needs to be executed case-by-case because of Django's ORM.
@@ -690,7 +700,7 @@ def course_search(request, school, sem, query):
 
   course_match_objs = course_match_objs.distinct('code')[:4]
 
-  course_matches = [my_model_to_dict(course, SchoolCourseOffering, sem) for course in course_match_objs]
+  course_matches = [my_model_to_dict(course, Offering, sem) for course in course_match_objs]
   json_data = {'results': course_matches}
   return HttpResponse(json.dumps(json_data), content_type="application/json")
 
@@ -707,10 +717,10 @@ def advanced_course_search(request):
   filters = params['filters']
   times = filters['times']
 
-  SchoolCourse, SchoolCourseOffering = school_to_models[school]
+  Course, Offering = school_to_models[school]
     
   # filtering first by user's search query
-  course_match_objs = SchoolCourse.objects.filter(
+  course_match_objs = Course.objects.filter(
     (Q(code__icontains=query) | Q(description__icontains=query) | Q(name__icontains=query)))
 
   # filtering now by departments, areas, or levels if provided
@@ -744,7 +754,7 @@ def advanced_course_search(request):
   logged = request.user.is_authenticated()
   if logged and Student.objects.filter(user=request.user).exists():
       s = Student.objects.get(user=request.user)
-  json_data = [my_model_to_dict(course, SchoolCourseOffering, sem, True, s) for course in course_match_objs]
+  json_data = [my_model_to_dict(course, Offering, sem, True, s) for course in course_match_objs]
 
   return HttpResponse(json.dumps(json_data), content_type="application/json")
 
@@ -754,10 +764,10 @@ def jhu_timer(request):
 
 def course_page(request, code):
   school = request.subdomain
-  SchoolCourse, SchoolCourseOffering = school_to_models[school]
+  Course, Offering = school_to_models[school]
   try:
-    course_obj = SchoolCourse.objects.filter(code__iexact=code)[0]
-    course_dict = my_model_to_dict(course_obj, SchoolCourseOffering, "F")
+    course_obj = Course.objects.filter(code__iexact=code)[0]
+    course_dict = my_model_to_dict(course_obj, Offering, "F")
     l = course_dict.get('sections').get('L').values() if course_dict.get('sections').get('L') else None
     t = course_dict.get('sections').get('T').values() if course_dict.get('sections').get('T') else None
     p = course_dict.get('sections').get('P').values() if course_dict.get('sections').get('P') else None
@@ -776,11 +786,11 @@ def course_page(request, code):
 def school_info(request, school):
   if school not in VALID_SCHOOLS:
     return HttpResponse("School not found")
-  SchoolCourse, SchoolCourseOffering = school_to_models[school]
+  Course, Offering = school_to_models[school]
   json_data = { # TODO(rohan): Get all relevant fields (areas, departments, levels) properly
-    'areas': sorted(list(SchoolCourse.objects.exclude(areas__exact='').values_list('areas', flat=True).distinct())),
-    'departments': sorted(list(SchoolCourse.objects.exclude(department__exact='').values_list('department', flat=True).distinct())),
-    'levels': sorted(list(SchoolCourse.objects.exclude(level__exact='').values_list('level', flat=True).distinct()))
+    'areas': sorted(list(Course.objects.exclude(areas__exact='').values_list('areas', flat=True).distinct())),
+    'departments': sorted(list(Course.objects.exclude(department__exact='').values_list('department', flat=True).distinct())),
+    'levels': sorted(list(Course.objects.exclude(level__exact='').values_list('level', flat=True).distinct()))
   }
   return HttpResponse(json.dumps(json_data), content_type="application/json")
 
@@ -797,8 +807,8 @@ def react_to_course(request):
     title = params['title']
     if logged and Student.objects.filter(user=request.user).exists():
       s = Student.objects.get(user=request.user)
-      SchoolCourse, SchoolCourseOffering = school_to_models[school]
-      c = SchoolCourse.objects.get(id=cid)
+      Course, Offering = school_to_models[school]
+      c = Course.objects.get(id=cid)
       if c.reaction_set.filter(title=title, student=s).exists():
         r = c.reaction_set.get(title=title, student=s)
         c.reaction_set.remove(r)
