@@ -148,6 +148,7 @@ class TimetableGenerator:
                            for co in course_offerings]
     course_dict['enrolled_sections'] = [section.name for _, section, _ in sections]
     course_dict['textbooks'] = {section.name: section.get_textbooks() for _, section, _ in sections}
+    course_dict['slots'] = slot_objects
     return course_dict
 
   def get_best_timetables(self, courses):
@@ -243,6 +244,7 @@ class TimetableGenerator:
     elements are courseoffering objects and the second elements are lists used to keep
     track of conflict information for that specific courseoffering.
     """
+    all_sections = []
     for c in courses:
       sections = sorted(c.section_set.all(), key=get_section_type)
       grouped = itertools.groupby(sections, get_section_type)
@@ -250,11 +252,11 @@ class TimetableGenerator:
         if str(c.id) in self.locked_sections and self.locked_sections[str(c.id)].get(section_type, False):
           locked_section_code = self.locked_sections[str(c.id)][section_type]
           locked_section = next(s for s in sections if s.name == locked_section_code)
-          pinned = [c.id, locked_section_code, locked_section.offering_set.all()]
-          sections.append([pinned])
+          pinned = [c.id, locked_section, locked_section.offering_set.all()]
+          all_sections.append([pinned])
         else:
-          sections.append([[c.id, section.name, section.offering_set.all()] for section in sections])
-    return sections
+          all_sections.append([[c.id, section, section.offering_set.all()] for section in sections])
+    return all_sections
 
     # sections = []
     # for c in courses:
@@ -321,6 +323,14 @@ class TimetableGenerator:
       tt.append(break_possibilities)
 
     return tt
+
+def get_section_type(s):
+  return s.section_type
+
+def merge_dicts(d1, d2):
+  d = d1.copy()
+  d.update(d2)
+  return d
 
 def rank_by_spread(timetables):
   return sorted(timetables,
