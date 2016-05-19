@@ -1,0 +1,68 @@
+.textbook {
+	padding: 5px;
+	width: 95px;
+	float: left;
+	text-align: center;
+}
+
+.textbook h4 {
+    font-size: 11px;
+    margin: 0 0 2px;
+    font-weight: 500;
+    height: 25px;
+    display: -webkit-box;
+    overflow: hidden;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+}
+
+.textbook h2 {
+    font-size: 12px;
+    margin: 0 0 2px;
+    font-weight: 500;
+    max-height: 84px;
+	overflow: hidden;
+	text-overflow: ellipsis;
+}
+
+.textbook img {
+	width: 90px;
+	padding: 4px 4px;
+}
+
+.textbook .required {
+    width: 60px;
+    position: relative;
+    z-index: 10;
+    color: #fff;
+    top: -12px;
+    font-size: 12px;
+    background-color: #1abc9c;
+}
+
+.textbook .required:after {
+    content: ' ';
+    position: absolute;
+    border-color: #1abc9c transparent transparent #1abc9c;
+    border-width: 9px 4px;
+    border-style: solid;
+    margin-left: 4px;
+}
+
+.textbook .amazon-buy {
+	color: #34495E;
+    /*background-color: #1abc9c;*/
+	font-size: 11px;
+    font-weight: 600;
+    font-style: italic;
+}
+
+a .textbook h4 {
+    color: #555;
+    transition: color 0.5s ease;
+}
+
+a .textbook h4:hover {
+    transition: color 0.5s ease;
+    color: #1abc9c;
+}
