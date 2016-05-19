@@ -5,7 +5,6 @@ import django
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "semesterly.settings")
 django.setup()
 
-from timetable.models import QueensCourse, QueensCourseOffering, Textbook, QueensLink
 from qcumber_scraper.textbooks import main
 from scripts.amazon_helpers import *
 
