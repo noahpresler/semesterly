@@ -31,12 +31,12 @@ store.dispatch(
   }
 );
 
-store.dispatch(
-  fetchUserInfo()
-)
-store.dispatch(
-  fetchSchoolInfo()
-)
+// store.dispatch(
+//   fetchUserInfo()
+// )
+// store.dispatch(
+//   fetchSchoolInfo()
+// )
 
 render(
   <Provider store={store}>

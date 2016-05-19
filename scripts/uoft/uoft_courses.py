@@ -103,8 +103,8 @@ class UofTParser:
                             try:
                                 CO, co_created = Offering.objects.update_or_create(section=S,
                                     day=self.day_map[offering_data['meetingDay']],
-                                    start_time=offering_data['meetingStartTime'],
-                                    end_time=offering_data['meetingEndTime'],
+                                    time_start=offering_data['meetingStartTime'],
+                                    time_end=offering_data['meetingEndTime'],
                                     location='')
                                            
                                 CO.save()
