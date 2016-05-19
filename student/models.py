@@ -25,6 +25,21 @@ class Student(models.Model):
     social_courses = models.NullBooleanField(null=True)
     social_offerings = models.NullBooleanField(null=True)
 
+class Reaction(models.Model):
+  REACTION_CHOICES = (
+    ('FIRE', 'FIRE'),
+    ('LOVE', 'LOVE'),
+    ('CRAP', 'CRAP'),
+    ('OKAY', 'OKAY'),
+    ('BORING', 'BORING'),
+    ('HARD', 'HARD'),
+    ('TEARS', 'TEARS'),
+    ('INTERESTING', 'INTERESTING'),
+  )
+  student = models.ForeignKey('student.Student')
+  course = models.ManyToManyField(Course)
+  title = models.CharField(max_length=50, choices=REACTION_CHOICES)
+  
 class PersonalTimetable(models.Model):
     name = models.CharField(max_length=100)
     semester = models.CharField(max_length=2)
@@ -34,5 +49,6 @@ class PersonalTimetable(models.Model):
     last_updated = models.DateTimeField(auto_now=True)
     sections = models.ManyToManyField(Section)
     courses = models.ManyToManyField(Course)
+
 
     
