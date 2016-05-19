@@ -24,7 +24,6 @@ store.dispatch(
     school // comes from timetable.html
   }
 );
-console.log("school is now:", school);
 store.dispatch(
   {
     type: "SET_SEMESTER",
