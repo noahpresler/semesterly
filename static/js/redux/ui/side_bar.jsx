@@ -137,7 +137,6 @@ const TextbookList = ({courses}) => {
                 <h3>Textbooks for your classes will appear here. Click to find the lowest prices, plus FREE two day shipping with Amazon Student</h3>
             </div>);
     }
-    console.log(tbs);
     return (
         <div>
             {_.uniq(tbs, 'isbn').map(tb => {
