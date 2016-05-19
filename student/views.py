@@ -42,17 +42,19 @@ def get_student_tts(student,school):
 			#for each co in the personal timetable
 			for co in tt.course_offerings.all():
 				c = co.course # get the co's course
-				c_dict = model_to_dict(c)
 
 				if c.id not in course_ids: #if not in courses, add to course dictionary with co
+					c_dict = model_to_dict(c)
 					courses.append(c_dict)
 					course_ids.append(c.id)
 					courses[-1]['slots'] = [model_to_dict(co, exclude=['basecourseoffering_ptr'])]
 					courses[-1]['enrolled_sections'] = [co.meeting_section]
+					courses[-1]['textbooks'] = co.get_textbooks()
 				else: # already in the dictionary, add the co to it
 					index = course_ids.index(c.id)
 					co_dict = model_to_dict(tt,exclude=['personaltimetable_ptr'])
 					courses[index]['slots'].append(model_to_dict(co, exclude=['basecourseoffering_ptr']))
+					courses[index]['textbooks'].extend(co.get_textbooks())
 					if co.meeting_section not in courses[index]['enrolled_sections']:
 						courses[index]['enrolled_sections'].append(co.meeting_section)
 
