@@ -1,3 +1,19 @@
+html {
+	height: 100%;
+}
+
+#dad-bod {
+	height: 100%;
+}
+
+#page {
+	height: 100%;
+}
+
+#page-wrapper {
+	height: 100%;
+}
+
 #side-bar {
 	position: absolute;
 	z-index: 99;
@@ -29,6 +45,7 @@
 }
 
 #all-cols {
+	height: 100%;
 	position: relative;
 	overflow-x: hidden;
 }

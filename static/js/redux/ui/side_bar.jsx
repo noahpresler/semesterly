@@ -68,6 +68,22 @@ class SideBar extends React.Component {
                 onMouseDown={this.toggleDropdown.bind(this)}>
                 <span className={classNames("tip-down", {'down' : this.state.showDropdown})}></span>
             </div> : null;
+        if (masterSlots.length === 0) {
+            masterSlots = (
+                <div className="empty-state">
+                    <img src="/static/img/emptystates/masterslots.png" />
+                    <h4>Looks like you don't have any courses yet!</h4>
+                    <h3>Your selections will appear here along with credits, professors and friends in the class</h3>
+                </div>);
+        }
+        if (optionalSlots.length === 0) {
+            optionalSlots = (
+                <div className="empty-state">
+                    <img src="/static/img/emptystates/optionalslots.png" />
+                    <h4>Give Optional Courses a Spin!</h4>
+                    <h3>Load this list with some courses you aren't 100% on - we'll fit as many as we can, automatically</h3>
+                </div>);
+        }
         return (
             <div id="side-bar">
                 <div id="sb-name">
@@ -114,6 +130,13 @@ const TextbookList = ({courses}) => {
     let tbs = [];
     for (let i = 0; i < courses.length; i++)
         tbs = tbs.concat(courses[i].textbooks);
+    if (tbs.length === 0) {
+        return (<div className="empty-state">
+                <img src="/static/img/emptystates/textbooks.png" />
+                <h4>Buy & Rent Textbooks: New, Used or eBook!</h4>
+                <h3>Textbooks for your classes will appear here. Click to find the lowest prices, plus FREE two day shipping with Amazon Student</h3>
+            </div>);
+    }
     return (
         <div>
             {_.uniq(tbs, 'isbn').map(tb => {
