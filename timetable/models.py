@@ -86,8 +86,8 @@ class Section(models.Model):
 class Offering(models.Model):
   section = models.ForeignKey(Section)
   day = models.CharField(max_length=1)
-  start_time = models.CharField(max_length=15)
-  end_time = models.CharField(max_length=15)
+  time_start = models.CharField(max_length=15)
+  time_end = models.CharField(max_length=15)
   location = models.CharField(max_length=200, default='TBA')
 
   def __unicode__(self):
@@ -103,20 +103,6 @@ class Evaluation(models.Model):
   course_code = models.CharField(max_length=20)
   year = models.CharField(max_length=200)
 
-class Reaction(models.Model):
-  REACTION_CHOICES = (
-    ('FIRE', 'FIRE'),
-    ('LOVE', 'LOVE'),
-    ('CRAP', 'CRAP'),
-    ('OKAY', 'OKAY'),
-    ('BORING', 'BORING'),
-    ('HARD', 'HARD'),
-    ('TEARS', 'TEARS'),
-    ('INTERESTING', 'INTERESTING'),
-  )
-  student = models.ForeignKey('student.Student')
-  course = models.ManyToManyField(Course)
-  title = models.CharField(max_length=50, choices=REACTION_CHOICES)
 
 
 class TextbookLink(models.Model):

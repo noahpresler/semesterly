@@ -16,7 +16,7 @@ from pytz import timezone
 
 from analytics.views import *
 from timetable.models import *
-from timetable.school_mappers import school_to_models, school_to_granularity, VALID_SCHOOLS
+from timetable.school_mappers import school_to_granularity, VALID_SCHOOLS
 from student.models import Student
 
 MAX_RETURN = 60 # Max number of timetables we want to consider
@@ -630,23 +630,23 @@ def has_offering(course, sem):
 #   return d
 
 ## Organizing result sections by section type ###
-def my_model_to_dict(course, Offering, sem, include_reactions=False, student=None):
+def my_model_to_dict(course, sem, include_reactions=False, student=None):
   fields=['code','name', 'id', 'description', 'department', 'num_credits']
   d = model_to_dict(course, fields)
   d['sections'] = {}
 
-  res = Offering.objects.filter(~Q(time_start__iexact='TBA'),
-                      (Q(semester=sem) | Q(semester='Y')),
-                      course_id=course.id)
-  section_list = res.values_list('meeting_section')
-  section_type_list = res.values_list('section_type').distinct()
-  for section_type, in section_type_list:
-    d['sections'][section_type] = {}
-  for co in res:
-    section_code = co.meeting_section
-    if section_code not in d['sections'][co.section_type]:
-      d['sections'][co.section_type][section_code] = []
-    d['sections'][co.section_type][section_code].append(model_to_dict(co))
+  course_section_list = course.section_set.filter(semester=sem)
+
+  for section in course_section_list:
+    st = section.section_type
+    name = section.name
+    if st not in d['sections']:
+      d['sections'][st] = {}
+    for offering in section.offering_set.all():
+      if name not in d['sections'][st]:
+        d['sections'][st][name] = []
+      d['sections'][st][name].append(model_to_dict(offering))
+
   if include_reactions:
     d['reactions'] = course.get_reactions(student)
   return d
@@ -657,33 +657,14 @@ def course_search(request, school, sem, query):
   if school not in VALID_SCHOOLS:
     return HttpResponse("School not found")
 
-  Course, Offering = school_to_models[school]
-
-  course_match_objs = Course.objects.filter((Q(code__icontains=query) | Q(description__icontains=query) | Q(name__icontains=query)))
-
-  # We want to filter based on whether the course has an offering in this semester or not.
-  # This part needs to be executed case-by-case because of Django's ORM.
-  # Notice that each call to filter uses the appropriate "courseoffering"
-  # class name in the filter.
-  if school == "uoft":
-    course_match_objs = course_match_objs.filter(
-      (Q(courseoffering__semester__icontains=sem) | Q(courseoffering__semester__icontains='Y')))
-  elif school == "jhu":
-    course_match_objs = course_match_objs.filter(
-      (Q(hopkinscourseoffering__semester__icontains=sem) | Q(hopkinscourseoffering__semester__icontains='Y')))
-  elif school == "umd":
-    course_match_objs = course_match_objs.filter(
-      (Q(umdcourseoffering__semester__icontains=sem) | Q(umdcourseoffering__semester__icontains='Y')))
-  elif school == "queens":
-    course_match_objs = course_match_objs.filter(
-      (Q(queenscourseoffering__semester__icontains=sem) | Q(queenscourseoffering__semester__icontains='Y')))
+  course_match_objs = Course.objects.filter(Q(code__icontains=query) | Q(description__icontains=query) | Q(name__icontains=query)).filter((Q(section__semester__icontains=sem) | Q(section__semester__icontains='Y')))
 
   course_match_objs = course_match_objs.distinct('code')[:4]
-
-  course_matches = [my_model_to_dict(course, Offering, sem) for course in course_match_objs]
+  print course_match_objs
+  course_matches = [my_model_to_dict(course, sem) for course in course_match_objs]
+  print course_matches
   json_data = {'results': course_matches}
   return HttpResponse(json.dumps(json_data), content_type="application/json")
-
 
 # ADVANCED SEARCH
 @csrf_exempt
