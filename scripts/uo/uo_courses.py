@@ -1,18 +1,21 @@
 import sys
-import requests, cookielib
-from string import capwords
-from bs4 import BeautifulSoup
+import requests
+import cookielib
 import re
-from selenium import webdriver
-from selenium.webdriver.support.ui import Select
-from collections import OrderedDict
-import django
 import os
 import time
-import progressbar
 from pprint import pprint
+from string import capwords
+
+import django
+import progressbar
+from bs4 import BeautifulSoup
+from selenium import webdriver
+from selenium.webdriver.support.ui import Select
+
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "semesterly.settings")
 django.setup()
+from timetable.models import Course, Section, Offering
 
 '''#==========================================FOR PRODUCTION USE======================================
 chrome_options = Options()
@@ -31,7 +34,7 @@ WEBDRIVER_CHROME = '/root/chromedriver_executable/chromedriver' # e.g. '/home/li
 WEBDRIVER_CHROME = None
 #=====================================================================================================
 
-class ottawa_parser:
+class OttawaParser:
 
   def safe_print(self,to_print):
     try:
@@ -58,7 +61,7 @@ class ottawa_parser:
 
     # TODO: programmatically get year for semester
     if semester == 'F':
-      self.sem_value = "20159"
+      self.sem_value = "20169"
     else:
       self.sem_value = "20161"
 
@@ -151,7 +154,7 @@ class ottawa_parser:
       'name': self.process_title(title),
       'description': description
     }
-    course_obj, created = OttawaCourse.objects.update_or_create(code=code,
+    course_obj, created = Course.objects.update_or_create(code=code,
                                                           defaults=course_data)
     sections_tables = soup.findAll('table',class_="display")
     for section_table in sections_tables:
@@ -172,18 +175,22 @@ class ottawa_parser:
         section_type = self.process_type(meet_type)
         section_code = section_id.split()[1] + ' ' + meet_type
 
+        s_data = {
+          'section_type': section_type,
+          'instructors': prof
+        }
+
+        s_obj, _ = Section.objects.update_or_create(course=course_obj,
+                                                  meeting_section=section_code,
+                                                  semester=self.semester,
+                                                  defaults=s_data)
         o_data = {
           'day': day,
           'time_start': start,
           'time_end': end,
-          'instructors': prof,
           'location': place,
-          'section_type': section_type
         }
-        obj, _ = OttawaCourseOffering.objects.update_or_create(course=course_obj,
-                                                  semester=self.semester,
-                                                  meeting_section=section_code,
-                                                  defaults=o_data)
+        Offering.objects.update_or_create(section=s_obj, defaults=o_data)
 
   def get_detail_link(self,row):
     return self.detail_base_url+row.find('a')['href']
@@ -260,8 +267,8 @@ class ottawa_parser:
     return capwords(' '.join(title.split()[2:]))
 
 def parse_ottawa():
-  ottawa_parser('F').parse_courses()
-  ottawa_parser('S').parse_courses()
+  OttawaParser('F').parse_courses()
+  OttawaParser('S').parse_courses()
 
 if __name__ == '__main__':
   if len(sys.argv) < 2:
@@ -270,5 +277,5 @@ if __name__ == '__main__':
     if sys.argv[1] not in ['F', 'S']:
       print "Please specify either F or S for semester"
     else:
-      ott = ottawa_parser(sys.argv[1])
+      ott = OttawaParser(sys.argv[1])
       ott.parse_courses()
