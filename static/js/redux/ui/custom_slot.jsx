@@ -133,7 +133,7 @@ class CustomSlot extends React.Component {
                 <div className={"fc-time-grid-event fc-event slot"}
                      style={ this.getSlotStyles() }
                      id={ this.props.id }>
-                    <div className="slot-bar" />
+                    <div className="slot-bar" style={{backgroundColor: '#aaa'}} />
                         <i className="fa fa-times" onClick={ (e) => this.stopPropagation(this.props.removeCustomSlot, e) }></i>
                     <div className="fc-content">
                         <div className="fc-time">
@@ -142,7 +142,13 @@ class CustomSlot extends React.Component {
                         <div className="fc-time">
                             <input type="text" 
                                     name="eventName" 
-                                    style={ {backgroundColor: "#C8F7C5"} } 
+                                    style={ {
+                                        backgroundColor: "#F8F6F7",
+                                        borderStyle: 'none',
+                                        outlineColor: '#aaa',
+                                        outlineWidth: '2px',
+                                        width: '95%'
+                                    } } 
                                     value={ this.props.name } 
                                     onChange={ (event) => this.updateName(event) }/>
                         </div>
@@ -164,7 +170,7 @@ class CustomSlot extends React.Component {
         if (this.props.preview) { // don't take into account conflicts, reduce opacity, increase z-index
             return {
                 top: top, bottom: -bottom, zIndex: 10, left: '0%', right: '0%', 
-                backgroundColor: "#C8F7C5",
+                backgroundColor: "#F8F6F7",
                 color: "#222",
                 width: '100%',
                 left: 0,
@@ -182,7 +188,7 @@ class CustomSlot extends React.Component {
             }
             return {
                 top: top, bottom: -bottom, zIndex: 1, left: '0%', right: '0%', 
-                backgroundColor: "#C8F7C5",
+                backgroundColor: "#F8F6F7",
                 width: slot_width_percentage + "%",
                 left: push_left + "%",
                 zIndex: 10 * this.props.depth_level,
