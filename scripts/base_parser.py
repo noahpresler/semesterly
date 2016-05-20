@@ -43,7 +43,8 @@ class BaseParser:
     """
     section_code, section_data = self.parse_section_element(section_element)
     if section_code:
-      section_obj, _ = Section.objects.update_or_create(meeting_section=section_code,
+      section_obj, _ = Section.objects.update_or_create(course=course_obj,
+                                                          meeting_section=section_code,
                                                           semester=self.semester,
                                                           defaults=section_data)
       for meeting_element in self.get_meeting_elements(section_element):
