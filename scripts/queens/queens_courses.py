@@ -1,9 +1,3 @@
-import os
-
-import django
-os.environ.setdefault("DJANGO_SETTINGS_MODULE", "semesterly.settings")
-django.setup()
-
 from qcumber_scraper.main import JobManager
 from scripts.base_parser import BaseParser
 
