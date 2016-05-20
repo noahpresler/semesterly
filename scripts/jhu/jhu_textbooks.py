@@ -15,7 +15,7 @@ from timetable.models import *
 from amazonproduct import API
 api = API(locale='us')  
 
-class Section:
+class TextbookSection:
     def __init__(self, section_id, name):
         self.id = section_id
         self.name = name
@@ -26,7 +26,7 @@ class Section:
             "Section id: " + self.id + ", name: " + self.name + "\n"
         )
 
-class Course:
+class TextbookCourse:
     def __init__(self, course_id, name):
         self.id = course_id
         self.name = name
@@ -37,7 +37,7 @@ class Course:
             "Course id: " + self.id + ", name: " + self.name + "\n"
         )
 
-class Department:
+class TextbookDepartment:
     def __init__(self, department_id, name):
         self.id = department_id
         self.name = name
@@ -48,7 +48,7 @@ class Department:
             "Department id: " + self.id + ", name: " + self.name + "\n"
         )
 
-class Semester:
+class TextbookSemester:
     def __init__(self, semester_id, name):
         self.id = semester_id
         self.name = name
@@ -74,9 +74,9 @@ class TextbookParser:
         # TODO: This is unique to each university.
         self.store_id = "18053"
         self.store_link = "johns-hopkins.bncollege.com"
-        self.course = HopkinsCourse
-        self.course_offerings = HopkinsCourseOffering
-        self.course_link = HopkinsLink
+        self.course = Course
+        self.sections = Section
+        self.textbook_link = TextbookLink
 
         self.textbook_payload = "-----011000010111000001101001\r\nContent-Disposition: form-data; name=\"storeId\"\r\n\r\n" + self.store_id + "\r\n-----011000010111000001101001\r\nContent-Disposition: form-data; name=\"catalogId\"\r\n\r\n10001\r\n-----011000010111000001101001\r\nContent-Disposition: form-data; name=\"langId\"\r\n\r\n-1\r\n-----011000010111000001101001\r\nContent-Disposition: form-data; name=\"clearAll\"\r\n\r\n\r\n-----011000010111000001101001\r\nContent-Disposition: form-data; name=\"viewName\"\r\n\r\nTBWizardView\r\n-----011000010111000001101001\r\nContent-Disposition: form-data; name=\"secCatList\"\r\n\r\n\r\n-----011000010111000001101001\r\nContent-Disposition: form-data; name=\"removeSectionId\"\r\n\r\n\r\n-----011000010111000001101001\r\nContent-Disposition: form-data; name=\"mcEnabled\"\r\n\r\nN\r\n-----011000010111000001101001\r\nContent-Disposition: form-data; name=\"showCampus\"\r\n\r\nfalse\r\n-----011000010111000001101001\r\nContent-Disposition: form-data; name=\"selectTerm\"\r\n\r\nSelect+Term\r\n-----011000010111000001101001\r\nContent-Disposition: form-data; name=\"selectDepartment\"\r\n\r\nSelect+Department\r\n-----011000010111000001101001\r\nContent-Disposition: form-data; name=\"selectSection\"\r\n\r\nSelect+Section\r\n-----011000010111000001101001\r\nContent-Disposition: form-data; name=\"selectCourse\"\r\n\r\nSelect+Course\r\n-----011000010111000001101001\r\nContent-Disposition: form-data; name=\"campus1\"\r\n\r\n14704480\r\n-----011000010111000001101001\r\nContent-Disposition: form-data; name=\"firstTermName_14704480\"\r\n\r\nFall+2016\r\n-----011000010111000001101001\r\nContent-Disposition: form-data; name=\"firstTermId_14704480\"\r\n\r\n73256452\r\n-----011000010111000001101001"
 
@@ -90,12 +90,6 @@ class TextbookParser:
                 self.retry_request(headers)
 
     def make_request(self, request_type, url, params, headers, payload):
-        # print(url)
-        # print(params)
-        # print(headers)
-        # print(payload)
-
-
         headers["user-agent"] = self.ua.random
         try:
             return self.session.request(request_type, url, params=params,  headers=headers, data=payload)
@@ -104,8 +98,6 @@ class TextbookParser:
             self.retry_request(headers)
 
     def retry_request(self, headers):
-        # print("error, ua: " + headers["user-agent"])
-        # print(headers)
         headers["user-agent"] = self.ua.random
         self.session = requests.Session()
         self.parse_semesters(True)
@@ -130,6 +122,7 @@ class TextbookParser:
         if response == None:
             sleep(randint(300, 500))
             self.retry_request(headers)
+            return
 
         soup = BeautifulSoup(response.text,"html.parser")
         semester_list = soup.find(class_="bncbSelectBox termHeader")
@@ -143,7 +136,7 @@ class TextbookParser:
         for li in semester_list.findAll("li"):
             sem_name = li.contents[0]
             sem_id = li["data-optionvalue"]
-            semester = Semester(sem_id, sem_name)
+            semester = TextbookSemester(sem_id, sem_name)
 
             semesters.append(semester)
         return semesters
@@ -170,7 +163,7 @@ class TextbookParser:
             for dep in departments:
                 dep_id = dep["categoryId"]
                 dep_name = dep["categoryName"]
-                department = Department(dep_id, dep_name)
+                department = TextbookDepartment(dep_id, dep_name)
                 semester.departments.append(department)
                 self.parse_courses(semester, department)
 
@@ -195,7 +188,7 @@ class TextbookParser:
         for c in courses:
             c_id = c["categoryId"]
             c_name = c["categoryName"]
-            course = Course(c_id, c_name)
+            course = TextbookCourse(c_id, c_name)
             department.courses.append(course)
             self.parse_sections(semester, department, course)
 
@@ -214,7 +207,7 @@ class TextbookParser:
         for s in sections:
             s_id = s["categoryId"]
             s_name = s["categoryName"]
-            section = Section(s_id, s_name)
+            section = TextbookSection(s_id, s_name)
             course.sections.append(section)
 
     def get_textbooks(self):
@@ -264,11 +257,7 @@ class TextbookParser:
             course_code = stripped_code[:3] + "." + stripped_code[3:6]
             section = "(" + stripped_code[6:8] + ")"
             for tb in tbsec.findAll('div',class_="book_details"):
-                # print(tb.get_text().encode("utf-8"))
-                # match = re.findall(self.isbn_pattern,"".join(tb.get_text()))
                 match = re.findall(self.isbn_pattern,"".join(tb.get_text()))
-                # if len(match) == 0:
-                #     print(tb.get_text())
                 if len(match) > 0:
                     isbn_number = match[0]
                     is_required = self.check_required(tb.find('span', class_="recommendBookType").get_text())
@@ -280,11 +269,11 @@ class TextbookParser:
 
     def make_textbook(self, is_required, isbn_number, course_code, section):
         try:
-            course = self.course.objects.filter(code__contains=course_code)[0]
+            course = self.course.objects.filter(code__contains = course_code, school = "jhu")[0]
         except IndexError:
             print("index error: " + course_code)
             return
-        course_offerings = self.course_offerings.objects.filter(course=course,meeting_section = section)
+        sections = self.sections.objects.filter(course = course, meeting_section = section)
         info = self.get_amazon_fields(isbn_number)
 
         # update/create textbook
@@ -299,12 +288,18 @@ class TextbookParser:
         self.create_count += int(created)
 
         # link to all course offerings
-        for co in course_offerings:
-            if co.textbooks.filter(isbn=isbn_number).exists():
-                continue
-            new_link = self.course_link(courseoffering=co, textbook=textbook,
-                            is_required=is_required)
-            new_link.save()
+        for section in sections:
+            # if section.textbooks.filter(isbn=isbn_number).exists():
+            #     continue
+            # new_link = self.textbook_link(courseoffering=co, textbook=textbook,
+            #                 is_required=is_required)
+            # new_link.save()
+
+            section, created = self.textbook_link.objects.update_or_create(
+                is_required = is_required,
+                section = section,
+                textbook = textbook
+            )
 
         # print results
         if created:
