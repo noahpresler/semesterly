@@ -119,7 +119,7 @@ class SideBar extends React.Component {
                 </div>
                 <h4 className="sb-header">Textbooks</h4>
                 <div className="side-bar-section">
-                    <TextbookList courses={this.props.liveTimetableCourses} />
+                    <TextbookList courses={this.props.liveTimetableCourses}/>
                 </div>
             </div>
         );
@@ -130,7 +130,9 @@ const TextbookList = ({courses}) => {
     let tbs = [];
     for (let i = 0; i < courses.length; i++){
         if(courses[i].textbooks !== undefined) {
-            tbs = tbs.concat(courses[i].textbooks);
+            for (let j=0; j<courses[i].enrolled_sections.length; j++) {
+                tbs = tbs.concat(courses[i].textbooks[courses[i].enrolled_sections[j]]);
+            }
         }
     }
     if (tbs.length === 0) {
