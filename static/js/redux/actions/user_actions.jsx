@@ -1,5 +1,5 @@
 import fetch from 'isomorphic-fetch';
-import { getUserInfoEndpoint, getSaveTimetableEndpoint, getSaveSettingsEndpoint } from '../constants.jsx';
+import { getUserInfoEndpoint, getSaveTimetableEndpoint, getSaveSettingsEndpoint, getLoadSavedTimetablesEndpoint } from '../constants.jsx';
 import { store } from '../init.jsx';
 import { loadTimetable, fetchClassmates, fetchCachedTimetables } from './timetable_actions.jsx';
 import { browserSupportsLocalStorage } from '../util.jsx';
@@ -177,3 +177,26 @@ export function saveSettings() {
 		}));
 	}
 }	
+
+export function getUserSavedTimetables(semester) {
+	return (dispatch) => {
+		dispatch({
+			type: "REQUEST_SAVE_USER_INFO"
+		});
+		fetch(getLoadSavedTimetablesEndpoint(semester), {
+			credentials: 'include',
+		})
+		.then(response => response.json())
+		.then(timetables => {
+				dispatch({
+				type: "RECEIVE_SAVED_TIMETABLES",
+				timetables,
+			});
+			if (timetables[0]) {
+				loadTimetable(timetables[0]);
+			}
+		})
+
+	}
+}
+
