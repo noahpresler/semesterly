@@ -3,6 +3,8 @@ import ReactDOM from 'react-dom';
 import classnames from 'classnames';
 import Reaction from './reaction.jsx'
 import { REACTION_MAP } from '../constants.jsx';
+import MasterSlot from './master_slot.jsx';
+
 export class CourseModalBody extends React.Component {
     constructor(props) {
         super(props);
@@ -85,6 +87,40 @@ export class CourseModalBody extends React.Component {
             }
         });
         reactionsDisplay.sort((r1, r2) => {return r1.props.count < r2.props.count});
+
+        let evalInfo = this.props.data.eval_info;
+        let relatedCourses = this.props.data.related_courses;
+        let { prerequisites, textbooks } = this.props.data;
+
+        let evals = evalInfo.length === 0 ? null :
+        <div>
+            <h3 className="modal-module-header">Course Evaluations</h3>
+            {evalInfo.map((e, i) => <div key={i}>{ e }</div>)}
+        </div>;
+        let similarCourses = relatedCourses.length === 0 ? null : 
+        <div>
+            <h3 className="modal-module-header">Similar Courses</h3>
+            {relatedCourses.map((rc, i) => <MasterSlot 
+                key={i} course={rc} 
+                professors={[]}
+                colourIndex={i}
+                onTimetable={false}
+                />
+
+            )}
+        </div>
+        let prerequisitesDisplay = 
+        <div>
+            <h3 className="modal-module-header">Prerequisites</h3>
+            <p>{ prerequisites || "None" }</p>
+        </div>
+        let textbooksDisplay = !textbooks || textbooks.length === 0 ? null :
+        <div>
+            <h3 className="modal-module-header">Textbooks</h3>
+            {
+                textbooks.map((t, i) => <div>{t}</div>)
+            }
+        </div>
         return (
         <div id="modal-body">
                 <div className="cf">
@@ -101,14 +137,8 @@ export class CourseModalBody extends React.Component {
                                 </div>
                             </div>
                         </div>
-                        <div>
-                            <h3 className="modal-module-header">Prerequisites</h3>
-                            <p>{this.props.prerequisites}</p>
-                        </div>
-                        <div>
-                            <h3 className="modal-module-header">Similar Courses</h3>
-
-                        </div>
+                        { prerequisitesDisplay}
+                        
                     </div>
                     <div className="col-8-16">
                         <div id="reactions-wrapper">
@@ -118,14 +148,11 @@ export class CourseModalBody extends React.Component {
                         </div>
                         <div>
                             <h3 className="modal-module-header">Course Description</h3>
-                            <p>{this.props.description}</p>
+                            <p>{this.props.data.description}</p>
                         </div>
-                        <div>
-                            <h3 className="modal-module-header">Course Evaluations</h3>
-                        </div>
-                        <div>
-                            <h3 className="modal-module-header">Textbook</h3>
-                        </div>
+
+                        {textbooksDisplay}
+                        
                     </div>
                     <div id="modal-section-lists"
                         className="col-5-16 cf">
