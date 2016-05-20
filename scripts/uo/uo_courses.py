@@ -155,6 +155,7 @@ class OttawaParser:
       'description': description
     }
     course_obj, created = Course.objects.update_or_create(code=code,
+                                                          school='uo',
                                                           defaults=course_data)
     sections_tables = soup.findAll('table',class_="display")
     for section_table in sections_tables:
