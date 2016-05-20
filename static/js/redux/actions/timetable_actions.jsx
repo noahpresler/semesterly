@@ -4,7 +4,7 @@ import { randomString, browserSupportsLocalStorage } from '../util.jsx';
 import { store } from '../init.jsx';
 import { getClassmatesEndpoint, getSchoolInfoEndpoint } from '../constants.jsx'
 import { lockActiveSections } from './user_actions.jsx';
-
+import { saveLocalSemester, saveLocalPreferences, saveLocalCourseSections, saveLocalActiveIndex } from '../util.jsx';
 export const SID = randomString(30);
 
 export function fetchSchoolInfo() {
@@ -158,6 +158,7 @@ export function addOrRemoveCourse(newCourseId, lockingSection = '') {
 
 function fetchTimetables(requestBody, removing, newActive=0) {
 	return (dispatch) => {
+		let state = store.getState();
 		// mark that we are now asynchronously requesting timetables
 		dispatch(requestTimetables());
 		// send a request (via fetch) to the appropriate endpoint with
@@ -177,6 +178,8 @@ function fetchTimetables(requestBody, removing, newActive=0) {
 			}
 		}) // TODO(rohan): maybe log somewhere if errors?
 		.then(json => {
+			// save new courseSections and timetable active index to cache
+
 			if (removing || json.timetables.length > 0) {
 				// mark that timetables and a new courseSections have been received
 				dispatch(receiveTimetables(json.timetables));
@@ -196,18 +199,24 @@ function fetchTimetables(requestBody, removing, newActive=0) {
 				// were received
 				dispatch(alertConflict());
 			}
+			saveLocalCourseSections(json.new_c_to_s);
+			saveLocalActiveIndex(newActive);
 			return json;
 		})
 		.then(json => {
-			if (store.getState().userInfo.data.isLoggedIn && json.timetables[0]) {
+			if (state.userInfo.data.isLoggedIn && json.timetables[0]) {
 				dispatch(fetchClassmates(json.timetables[0].courses.map( c => c['id'])))
 			}
 		});
+
 		// save preferences when timetables are loaded, so that we know cached preferences 
-		// are always "up-to-date" (correspond to last loaded timetable)
-		if (browserSupportsLocalStorage()) {
-			localStorage.setItem('preferences', JSON.stringify(requestBody.preferences));
+		// are always "up-to-date" (correspond to last loaded timetable).
+		// same for the semester
+		saveLocalPreferences(requestBody.preferences);
+		if (localStorage.semester !== state.semester) {
+			saveLocalSemester(state.semester);
 		}
+		
 	}
 }
 

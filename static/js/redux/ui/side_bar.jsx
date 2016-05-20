@@ -119,12 +119,13 @@ class SideBar extends React.Component {
                 </div>
                 <h4 className="sb-header">Textbooks</h4>
                 <div className="side-bar-section">
-                    <TextbookList courses={this.props.liveTimetableCourses}/>
                 </div>
             </div>
         );
     }
 }
+// This isn't working. Does it handle the case when there are no textbooks?
+//<TextbookList courses={this.props.liveTimetableCourses}/>
 
 const TextbookList = ({courses}) => {
     let tbs = [];
