@@ -89,7 +89,7 @@ class UofTParser:
                             instructors = instructors[:-1]
                         S, s_created = Section.objects.update_or_create(
                             course=C,
-                            meeting_name=section, 
+                            meeting_section=section, 
                             section_type=section[0],
                             semester=semester,
                             defaults={
