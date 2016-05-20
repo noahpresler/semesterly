@@ -132,9 +132,22 @@ class SchoolParser(BaseParser):
   def parse_course_element(self, course_element):
     coures_code = None
     course_data = {
+      # mandatory
       'name': None, 
+      'school': None,
+
+      # optional
       'description': None,
-      'num_credits': None
+      'num_credits': None,
+      'campus': None,
+      'prerequisites': None,
+      'exclusions': None,
+      'num_credits': None,
+      'areas': None,
+      'department': None,
+      'level': None,
+
+      # any other school specific fields
     }
     return course_code, course_data
 
@@ -142,21 +155,33 @@ class SchoolParser(BaseParser):
     pass
 
   def parse_section_element(self, section_element):
-    section_code = None
+    meeting_section = None # section code
     section_data = {
+      # mandatory
+      'semester': None,
+
+      # optional
       'section_type': None,
-      'instructors': None
+      'instructors': None,
+      'size': None,
+      'enrolment': None,
+      'size': None,
+      'waitlist': None,
+      'waitlist_size': None,
     }
-    return section_code, section_data
+    return meeting_section, section_data
 
   def get_meeting_elements(self, section_element):
     pass
 
   def parse_meeting_element(self, meeting_element):
     meeting_data = {
+      # mandatory
       'day': None,
       'time_start': None,
       'time_end': None,
+
+      # optional
       'location': None
     }
     return meeting_data
