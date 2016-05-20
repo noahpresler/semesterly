@@ -24,6 +24,7 @@ class QueensParser(BaseParser):
     course_code = ce['basic']['subject'] + ' ' + ce['basic']['number']
     course_data = {
       'name': ce['basic']['title'],
+      'school': 'queens',
       'description': ce['basic']['description'],
       'num_credits': int(float(ce['extra']['units'])),
       'prerequisites': ce['extra'].get('enrollment_requirement', '')
