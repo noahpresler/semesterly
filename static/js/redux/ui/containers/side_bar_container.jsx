@@ -9,6 +9,7 @@ const mapStateToProps = (state) => {
 	// don't pass fake courses as part of roster
 	let activeTimetable = state.timetables.items[state.timetables.active];
 	return {
+		semester: state.semester,
 		liveTimetableCourses: activeTimetable.courses.filter(c => !c.fake),
 		savedTimetables: state.userInfo.data.timetables,
 		courseToColourIndex: state.ui.courseToColourIndex,
