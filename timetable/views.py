@@ -257,7 +257,7 @@ class TimetableGenerator:
     """
     all_sections = []
     for c in courses:
-      sections = sorted(c.section_set.all(), key=get_section_type)
+      sections = sorted(c.section_set.filter(semester=self.semester), key=get_section_type)
       grouped = itertools.groupby(sections, get_section_type)
       for section_type, sections in grouped:
         if str(c.id) in self.locked_sections and self.locked_sections[str(c.id)].get(section_type, False):

@@ -5,6 +5,9 @@ import { addOrRemoveCourse, hoverSection, unhoverSection } from '../../actions/t
 const mapStateToProps = (state) => {
 	let courseSections = state.courseSections.objects;
 	let hovered = state.searchResults.items[state.ui.searchHover];
+	if (!hovered) {
+		hovered = state.searchResults.items[0];
+	}
 	let sectionTypeToSections = hovered.sections;
 	let lectureSections = sectionTypeToSections['L'];
 	let tutorialSections = sectionTypeToSections['T'];
