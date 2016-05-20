@@ -1,15 +1,20 @@
 import abc
 import time
 import progressbar
+import os
+
+import django
+os.environ.setdefault("DJANGO_SETTINGS_MODULE", "semesterly.settings")
+django.setup()
+from timetable.models import Course, Section, Offering
+
 
 class BaseParser:
   __metaclass__ = abc.ABCMeta
 
-  def __init__(self, course_model, offering_model, semester=None):
-    self.update_or_create_course = course_model.objects.update_or_create
-    self.update_or_create_offering = offering_model.objects.update_or_create
+  def __init__(self, semester, num_courses=None):
     self.semester = semester
-    self.num_courses = None
+    self.num_courses = num_courses
 
   def parse_courses(self):
     """Update database with courses and offerings for given semester."""
@@ -26,7 +31,7 @@ class BaseParser:
     """
     course_code, course_data = self.parse_course_element(course_element)
     if course_code:
-      course_obj, created = self.update_or_create_course(code=course_code,
+      course_obj, _ = Course.objects.update_or_create(code=course_code,
                                                         defaults=course_data)
       for section_element in self.get_section_elements(course_element):
         self.parse_and_save_section(section_element, course_obj)
@@ -38,26 +43,20 @@ class BaseParser:
     """
     section_code, section_data = self.parse_section_element(section_element)
     if section_code:
-      semester = section_data.get('semester', None)
-      if semester in section_data:
-        del section_data[semester]
+      section_obj, _ = Section.object.update_or_create(meeting_section=section_code,
+                                                          semester=self.semester,
+                                                          defaults=section_data)
       for meeting_element in self.get_meeting_elements(section_element):
-        self.parse_and_save_meeting(meeting_element, section_data, section_code, 
-                                    course_obj, semester)
+        self.parse_and_save_meeting(meeting_element, section_obj)
 
-  def parse_and_save_meeting(self, meeting_element, section_data, section_code, 
-                                    course_obj, semester):
+  def parse_and_save_meeting(self, meeting_element, section_obj):
     """
     Update database with new offering corresponding to the given bs4 element 
     and other data.
     """
     meeting_data = self.parse_meeting_element(meeting_element)
     if meeting_data:
-      meeting_data.update(section_data)
-      self.update_or_create_offering(course=course_obj,
-                                      semester=self.semester or semester,
-                                      meeting_section=section_code,
-                                      defaults=meeting_data)
+      Offering.objects.update_or_create(section=section_obj, defaults=meeting_data)
 
   @abc.abstractmethod
   def get_course_elements(self):
@@ -155,11 +154,8 @@ class SchoolParser(BaseParser):
     pass
 
   def parse_section_element(self, section_element):
-    meeting_section = None # section code
+    section_code = None
     section_data = {
-      # mandatory
-      'semester': None,
-
       # optional
       'section_type': None,
       'instructors': None,
@@ -169,7 +165,7 @@ class SchoolParser(BaseParser):
       'waitlist': None,
       'waitlist_size': None,
     }
-    return meeting_section, section_data
+    return section_code, section_data
 
   def get_meeting_elements(self, section_element):
     pass
