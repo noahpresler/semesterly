@@ -55,12 +55,12 @@ class HopkinsEvalParser:
 		return match.group(1)
 
 	def make_review_item(self,code,prof,score,summary,year):
-	 	courses = HopkinsCourse.objects.filter(code__contains=self.get_code_partial(code))
+	 	courses = Course.objects.filter(code__contains = self.get_code_partial(code), school = "jhu")
 	 	if len(courses) == 0:
 	 		return
 	 	else:
 	 		course = courses[0]
-	 		obj, created = HopkinsCourseEvaluation.objects.get_or_create(
+	 		obj, created = Evaluation.objects.get_or_create(
 	 			course=course,
 	 			score=score,
 	 			summary=summary,
