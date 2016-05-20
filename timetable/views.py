@@ -4,8 +4,7 @@ import itertools
 import json
 import logging
 import os
-from collections import OrderedDict
-
+from pprint import pprint
 from django.shortcuts import render_to_response, render
 from django.http import HttpResponse, HttpResponseRedirect, Http404
 from django.views.decorators.csrf import csrf_exempt
@@ -257,7 +256,7 @@ class TimetableGenerator:
     """
     all_sections = []
     for c in courses:
-      sections = sorted(c.section_set.filter(semester=self.semester), key=get_section_type)
+      sections = sorted(c.section_set.filter(Q(semester=self.semester) | Q(semester='Y')), key=get_section_type)
       grouped = itertools.groupby(sections, get_section_type)
       for section_type, sections in grouped:
         if str(c.id) in self.locked_sections and self.locked_sections[str(c.id)].get(section_type, False):
@@ -268,26 +267,6 @@ class TimetableGenerator:
         else:
           all_sections.append([[c.id, section, section.offering_set.all()] for section in sections])
     return all_sections
-
-    # sections = []
-    # for c in courses:
-    #   offerings = Offering.objects.filter(~Q(time_start__iexact='TBA'), \
-    #                       (Q(semester=self.semester) | Q(semester='Y')), \
-    #                       course=c)
-    #   section_to_offerings = get_section_to_offering_map(offerings)
-    #   section_type_to_sections = get_section_type_to_sections_map(section_to_offerings, \
-    #                                 plist, \
-    #                                 c.id)
-    #   for section_type in section_type_to_sections:
-    #     # if there are any locked sections for given type, course
-    #     if str(c.id) in self.locked_sections and self.locked_sections[str(c.id)].get(section_type, False):
-    #       locked_section = self.locked_sections[str(c.id)][section_type]
-    #       pinned = [c.id, locked_section, section_to_offerings[locked_section]]
-    #       sections.append([pinned])
-    #     else:
-    #       sections.append(section_type_to_sections[section_type])
-    # # sections.sort(key = lambda l: len(l), reverse=False)
-    # return sections
 
   def construct_preference_tt(self):
     """
@@ -452,34 +431,8 @@ def get_hour(str_time):
   si = str_time.index(':') if ':' in str_time else len(str_time)
   return int(str_time[:si])
 
-def get_section_type_to_sections_map(section_to_offerings, plist, cid):
-  """Return map: section_type -> [cid, section, [offerings]] """
-  section_type_to_sections = {offerings[0].section_type: [] for section, offerings in section_to_offerings.iteritems()}
-  i = 0
-  for section, offerings in section_to_offerings.iteritems():
-    if not violates_any_preferences(offerings, plist):
-      # section_type for all offerings for a given section should be the same,
-      # so we just take the first one
-      section_type = offerings[0].section_type
-      section_type_to_sections[section_type].append([cid, \
-                            section, \
-                            section_to_offerings[section]])
-    i += 1
-  return section_type_to_sections
-
 def violates_any_preferences(offerings, plist):
   return any([check_co_against_preferences(plist, co) for co in offerings])
-
-def get_section_to_offering_map(offerings):
-  """ Return map: section_code -> [offerings] """
-  section_to_offerings = OrderedDict()
-  for offering in offerings:
-    section_code = offering.meeting_section
-    if section_code in section_to_offerings:
-      section_to_offerings[section_code].append(offering)
-    else: # new section
-      section_to_offerings[section_code] = [offering]
-  return section_to_offerings
 
 def check_co_against_preferences(preference_list, co):
   """
