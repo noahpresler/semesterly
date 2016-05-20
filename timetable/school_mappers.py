@@ -33,7 +33,7 @@ course_parsers = {
   'uoft': lambda: UofTParser().start(),
   # 'umd': parse_umd,
   # 'rutgers': parse_rutgers,
-  # 'uo': parse_ottawa,
+  'uo': parse_ottawa,
   'queens': lambda: QueensParser().parse_courses()
 }
 
@@ -51,6 +51,6 @@ textbook_parsers = {
   'umd': lambda: None,
   'rutgers': lambda: None,
   'uo': lambda: None,
-  # 'queens': parse_queens_textbooks
+  'queens': parse_queens_textbooks
 }
 
