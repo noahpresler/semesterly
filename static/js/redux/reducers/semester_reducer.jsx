@@ -4,7 +4,9 @@ import { VALID_SEMESTERS, SET_SEMESTER } from '../constants.jsx';
 export const semester = (state = "", action) => {
 	switch (action.type) {
 		case SET_SEMESTER:
-			saveLocalSemester(action.semester);
+			if (!action.initialPageLoad) {
+				saveLocalSemester(action.semester);
+			}
 			return action.semester;
 		default:
 			return state;
