@@ -91,7 +91,7 @@ def save_timetable(request):
 	# 2. the user is editing the name of an existing timetable, in which
 	# case tempId is the ID of that timetable, as passed from the frontend.
 	# we check if a timetable with a different id has that name
-	if PersonalTimetable.objects.filter(~Q(id=tempId), student=student, name=params['name'], semester=semester).exists():
+	if PersonalTimetable.objects.filter(~Q(id=tempId), student=student, name=params['name'], semester=semester, school=school).exists():
 		return HttpResponse(json.dumps(error), content_type='application/json')
 
 	if params['id']:
