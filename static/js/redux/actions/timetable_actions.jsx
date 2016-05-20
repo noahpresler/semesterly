@@ -219,7 +219,7 @@ export function addCustomSlot(timeStart, timeEnd, day, preview, id) {
 			time_start: timeStart, // match backend slot attribute names
 			time_end: timeEnd,
 			day: day,
-			name: "New Custom Event",
+			name: "New Event", // default name for custom slot
 			id: id,
 			preview: preview
 		}
