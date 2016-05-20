@@ -2,6 +2,7 @@ import fetch from 'isomorphic-fetch';
 import { getCourseSearchEndpoint, getAdvancedSearchEndpoint } from '../constants.jsx';
 import { store } from '../init.jsx';
 import { getUserSavedTimetables } from './user_actions.jsx';
+import { nullifyTimetable } from './timetable_actions.jsx';
 
 export function requestCourses() {
   return {
@@ -22,18 +23,11 @@ export function setSemester(semester) {
 	if (state.userInfo.data.isLoggedIn) {
 		dispatch(getUserSavedTimetables(semester));
 	}
-	dispatch({
-		type: "CHANGE_ACTIVE_SAVED_TIMETABLE",
-		timetable: {name: "Untitled Schedule", courses: []}
-	})
-	dispatch({
-		type: "RECEIVE_TIMETABLES",
-		timetables: [{courses: []}],
-	});
-	dispatch({
-		type: "RECEIVE_COURSE_SECTIONS",
-		courseSections: {}
-	});
+	else {
+		nullifyTimetable(dispatch);
+	}
+
+	
 	dispatch({
 		type: "SET_SEMESTER",
 		semester
