@@ -40,6 +40,21 @@ export function alertConflict(){
 	}
 }
 
+export function nullifyTimetable(dispatch) {
+	dispatch({
+		type: "RECEIVE_TIMETABLES",
+		timetables: [{courses: []}],
+	});
+	dispatch({
+		type: "RECEIVE_COURSE_SECTIONS",
+		courseSections: {}
+	});
+	dispatch({
+		type: "CHANGE_ACTIVE_SAVED_TIMETABLE",
+		timetable: {name: "Untitled Schedule", courses: []}
+	})
+}
+
 export function loadTimetable(timetable, created=false) {
 	let dispatch = store.dispatch;
 	let state = store.getState();
@@ -147,6 +162,7 @@ function fetchTimetables(requestBody, removing, newActive=0) {
 		dispatch(requestTimetables());
 		// send a request (via fetch) to the appropriate endpoint with
 		// relevant data as contained in @state (including courses, preferences, etc)
+		console.log(requestBody);
 		fetch(getTimetablesEndpoint(), {
       		method: 'POST',
       		body: JSON.stringify(requestBody)
@@ -162,6 +178,7 @@ function fetchTimetables(requestBody, removing, newActive=0) {
 			}
 		}) // TODO(rohan): maybe log somewhere if errors?
 		.then(json => {
+			console.log(json)
 			if (removing || json.timetables.length > 0) {
 				// mark that timetables and a new courseSections have been received
 				dispatch(receiveTimetables(json.timetables));
