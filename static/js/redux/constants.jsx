@@ -50,28 +50,44 @@ export const getSchoolSpecificInfo = (school) => {
         primaryDisplay: "code",
         areasName: "Breadths",
         departmentsName: "Departments",
-        levelsName: "Levels"
+        levelsName: "Levels",
+        semesters: {
+          F: "Fall 2016",
+          S: "Winter 2017"
+        }
       }
 		case "jhu":
 			return {
         primaryDisplay: "name",
         areasName: "Areas",
         departmentsName: "Departments",
-        levelsName: "Levels"
+        levelsName: "Levels",
+        semesters: {
+          F: "Fall 2016",
+          S: "Spring 2017"
+        }
       }
 		case "umd":
 			return {
         primaryDisplay: "name",
         areasName: "Areas",
         departmentsName: "Departments",
-        levelsName: "Levels"
+        levelsName: "Levels",
+        semesters: {
+          F: "Fall 2016",
+          S: "Spring 2017"
+        }
       }
 		default:
 			return {
         primaryDisplay: "code",
         areasName: "Areas",
         departmentsName: "Departments",
-        levelsName: "Levels"
+        levelsName: "Levels",
+        semesters: {
+          F: "Fall 2016",
+          S: "Spring 2017"
+        }
       }
 	}
 }
