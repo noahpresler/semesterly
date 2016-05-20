@@ -89,7 +89,7 @@ def get_timetables(request):
 
   # temp optional course implementation
   opt_course_ids = params.get('optionCourses', [])
-  max_optional = params.get('numOptionCourses', 0)
+  max_optional = params.get('numOptionCourses', len(opt_course_ids))
   optional_courses = [Course.objects.get(id=cid) for cid in opt_course_ids]
   optional_course_subsets = [subset for k in range(max_optional, -1, -1)\
                                     for subset in itertools.combinations(optional_courses, k)]
