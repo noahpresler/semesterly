@@ -111,30 +111,41 @@ function collectCreateDrop(connect, monitor) { // inject props as drop target
   };
 }
 
-// TODO: set connectDragPreview
+// TODO: set connectDragPreview or update state as preview
 class CustomSlot extends React.Component {
     constructor(props) {
         super(props);
+        this.state = { hovered: false };
+        this.onSlotHover = this.onSlotHover.bind(this);
+        this.onSlotUnhover = this.onSlotUnhover.bind(this);
     }
     stopPropagation(callback, event) {
         event.stopPropagation();
         callback();
     }
-    stopPropagation(callback, event) {
-        event.stopPropagation();
-        callback();
+    onSlotHover() {
+        this.setState({ hovered : true});
+    }
+    onSlotUnhover() {
+        this.setState({ hovered : false});
     }
     updateName(event) {
         this.props.updateCustomSlot({ name: event.target.value }, this.props.id)
     }
     render() {
+        let removeButton = this.state.hovered ? 
+            <i className="fa fa-times" 
+               onClick={ (event) => this.stopPropagation(this.props.removeCustomSlot, event) }></i> : null;
+
         return this.props.connectCreateTarget(this.props.connectDragTarget(this.props.connectDragSource(
             <div className="fc-event-container">
                 <div className={"fc-time-grid-event fc-event slot"}
                      style={ this.getSlotStyles() }
+                     onMouseEnter={ this.onSlotHover }
+                     onMouseLeave={ this.onSlotUnhover }
                      id={ this.props.id }>
                     <div className="slot-bar" style={{backgroundColor: '#aaa'}} />
-                        <i className="fa fa-times" onClick={ (e) => this.stopPropagation(this.props.removeCustomSlot, e) }></i>
+                        {removeButton}
                     <div className="fc-content">
                         <div className="fc-time">
                             <span>{ this.props.time_start } – { this.props.time_end }</span>
