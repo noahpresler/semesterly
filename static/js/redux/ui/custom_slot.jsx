@@ -15,7 +15,6 @@ function convertToStr(halfHours) {
 
 const dragSlotSource = {
     beginDrag(props) {
-        console.log('oowee look at me')
         return {
             timeStart: props.time_start,
             timeEnd: props.time_end,
@@ -23,7 +22,6 @@ const dragSlotSource = {
         }
     },
     endDrag(props, monitor) {
-        console.log('end');
     }
 }
 

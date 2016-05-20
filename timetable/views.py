@@ -475,6 +475,33 @@ def get_minute_from_string_time(time_string):
 # -----------------------------------------------------------------------------
 # --------------------TODO: move to separate file------------------------------
 # -----------------------------------------------------------------------------
+def get_detailed_course_json(course, sem, student=None):
+  json_data = get_basic_course_json(course, sem, ['prerequisites', 'exclusions'])
+  # json_data['textbook_info'] = course.get_all_textbook_info()
+  json_data['eval_info'] = course.get_eval_info()
+  json_data['related_courses'] = course.get_related_course_info()
+  json_data['reactions'] = course.get_reactions(student)
+
+  return json_data
+
+def get_basic_course_json(course, sem, extra_model_fields=[]):
+  fields = ['code','name', 'id', 'description', 'department', 'num_credits'] + extra_model_fields
+  d = model_to_dict(course, fields)
+  d['sections'] = {}
+
+  course_section_list = course.section_set.filter(semester__in=[sem, "Y"])
+
+  for section in course_section_list:
+    st = section.section_type
+    name = section.meeting_section
+    if st not in d['sections']:
+      d['sections'][st] = {}
+    for offering in section.offering_set.all():
+      if name not in d['sections'][st]:
+        d['sections'][st][name] = []
+      d['sections'][st][name].append(merge_dicts(model_to_dict(section), model_to_dict(offering)))
+
+  return d
 
 
 def get_course(request, school, sem, id):
@@ -483,15 +510,11 @@ def get_course(request, school, sem, id):
 
   try:
     course = Course.objects.get(id=id)
-    json_data = my_model_to_dict(course, sem)
-    # json_data['textbook_info'] = course.get_all_textbook_info()
-    json_data['eval_info'] = course.get_eval_info()
-    json_data['related_courses'] = course.get_related_course_info()
     student = None
     logged = request.user.is_authenticated()
     if logged and Student.objects.filter(user=request.user).exists():
       student = Student.objects.get(user=request.user)
-    json_data['reactions'] = course.get_reactions(student)
+    json_data = get_detailed_course_json(course, sem, student)
 
   except:
     import traceback
@@ -513,48 +536,10 @@ def get_course_id(request, school, sem, code):
 
   return HttpResponse(json.dumps(json_data), content_type="application/json")
 
-def has_offering(course, sem):
-  Course, Offering = school_to_models[SCHOOL]
-  try:
-    res = Offering.objects.filter(~Q(time_start__iexact='TBA'),
-                      (Q(semester=sem) | Q(semester='Y')),
-                      course_id=course.id)
-    for offering in res:
-      day = offering.day
-      if day == 'S' or day == 'U':
-        return False
-    return True if len(res) > 0 else False
-  except:
-    return False
-
-
 ### COURSE SEARCH ###
 
-## Organizing result sections by section type ###
-def my_model_to_dict(course, sem, include_reactions=False, student=None):
-  fields=['code','name', 'id', 'description', 'department', 'num_credits']
-  d = model_to_dict(course, fields)
-  d['sections'] = {}
-
-  course_section_list = course.section_set.filter(semester__in=[sem, "Y"])
-
-  for section in course_section_list:
-    st = section.section_type
-    name = section.meeting_section
-    if st not in d['sections']:
-      d['sections'][st] = {}
-    for offering in section.offering_set.all():
-      if name not in d['sections'][st]:
-        d['sections'][st][name] = []
-      d['sections'][st][name].append(merge_dicts(model_to_dict(section), model_to_dict(offering)))
-
-  if include_reactions:
-    d['reactions'] = course.get_reactions(student)
-  return d
-
-
 def get_course_matches(school, query, semester):
-  return Course.objects.filter(school=school).filter(Q(code__icontains=query) | Q(description__icontains=query) | Q(name__icontains=query)).filter((Q(section__semester__in=[semester, 'Y'])))
+  return Course.objects.filter(school=school).filter(Q(code__icontains=query) | Q(name__icontains=query)).filter((Q(section__semester__in=[semester, 'Y'])))
 
 @csrf_exempt
 @validate_subdomain
@@ -562,7 +547,7 @@ def course_search(request, school, sem, query):
 
   course_match_objs = get_course_matches(school, query, sem)
   course_match_objs = course_match_objs.distinct('code')[:4]
-  course_matches = [my_model_to_dict(course, sem) for course in course_match_objs]
+  course_matches = [get_basic_course_json(course, sem) for course in course_match_objs]
   json_data = {'results': course_matches}
   return HttpResponse(json.dumps(json_data), content_type="application/json")
 
@@ -594,11 +579,11 @@ def advanced_course_search(request):
     course_match_objs = course_match_objs.filter(level__in=filters['levels'])
 
   course_match_objs = course_match_objs.distinct('code')[:50]
-  s = None
+  student = None
   logged = request.user.is_authenticated()
   if logged and Student.objects.filter(user=request.user).exists():
-      s = Student.objects.get(user=request.user)
-  json_data = [my_model_to_dict(course, sem, True, s) for course in course_match_objs]
+      student = Student.objects.get(user=request.user)
+  json_data = [get_detailed_course_json(course, sem, student) for course in course_match_objs]
 
   return HttpResponse(json.dumps(json_data), content_type="application/json")
 
@@ -611,7 +596,7 @@ def course_page(request, code):
   school = request.subdomain
   try:
     course_obj = Course.objects.filter(code__iexact=code)[0]
-    course_dict = my_model_to_dict(course_obj, "F")
+    course_dict = get_basic_course_json(course_obj, "F")
     l = course_dict.get('sections').get('L').values() if course_dict.get('sections').get('L') else None
     t = course_dict.get('sections').get('T').values() if course_dict.get('sections').get('T') else None
     p = course_dict.get('sections').get('P').values() if course_dict.get('sections').get('P') else None

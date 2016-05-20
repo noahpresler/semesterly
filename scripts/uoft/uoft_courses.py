@@ -97,6 +97,8 @@ class UofTParser:
                                 'size': section_data['enrollmentCapacity'],
                                 'enrolment': 0,
                         })
+                        S.save()
+                        S.offering_set.all().delete()
                         schedule = section_data['schedule']
                         
                         for offering in schedule:
@@ -110,9 +112,10 @@ class UofTParser:
                                            
                                 CO.save()
                             except Exception as e:
+                                S.delete()
                                 print e
                                 self.errors += 1
-                                continue
+                                break
                 except Exception as f:
                     import traceback
                     traceback.print_exc()

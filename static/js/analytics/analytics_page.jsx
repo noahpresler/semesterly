@@ -30,7 +30,6 @@ AnalyticsPage = React.createClass({
 
 	getInfo: function() {
 		$.get("/analytics/get_num_generated", {}, (function(response) {
-			console.log(response);
 			this.setState({
 				uoft_generated: response.uoft_generated, 
 				jhu_generated: response.jhu_generated
