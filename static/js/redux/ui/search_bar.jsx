@@ -56,13 +56,13 @@ export class SearchBar extends React.Component {
             </ul>
         );
         let availableSemesters = this.props.availableSemesters.map(s => 
-            <div key={s} className="semester-option" onMouseDown={ () => this.setSemester(s) }> { getSemesterName(s) } </div>
+            <div key={s} className="semester-option" onMouseDown={ () => this.setSemester(s) }> { this.props.getSemesterName[s] } </div>
         );
     	return (
         	<div id="search-bar">
                 <div id="search-bar-wrapper">
                     <ClickOutHandler onClickOut={this.onClickOut.bind(this)}>
-                        <div id="search-bar-semester" onMouseDown={this.toggleDropdown.bind(this)}>{ getSemesterName(this.props.semester) }</div>
+                        <div id="search-bar-semester" onMouseDown={this.toggleDropdown.bind(this)}>{this.props.semesterName}</div>
                         <div id="semester-picker"
                              className={classNames({'down' : this.state.showDropdown})}
                         >

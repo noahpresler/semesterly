@@ -7,7 +7,6 @@ import { COLOUR_DATA } from '../constants.jsx';
 import ClickOutHandler from 'react-onclickout';
 import TimetableNameInputContainer from './containers/timetable_name_input_container.jsx';
 import CreditTickerContainer from './containers/credit_ticker_container.jsx';
-import { getSemesterName } from '../constants.jsx'
 
 class SideBar extends React.Component {
     constructor(props) {
@@ -95,7 +94,7 @@ class SideBar extends React.Component {
                             >
                             <div className="tip-border"></div>
                             <div className="tip"></div>
-                            <h4>{getSemesterName(this.props.semester)}</h4>
+                            <h4>{ this.props.semesterName }</h4>
                             { savedTimetables }
                         </div>
                     </ClickOutHandler>
