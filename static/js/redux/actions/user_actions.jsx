@@ -1,7 +1,7 @@
 import fetch from 'isomorphic-fetch';
 import { getUserInfoEndpoint, getSaveTimetableEndpoint, getSaveSettingsEndpoint, getLoadSavedTimetablesEndpoint } from '../constants.jsx';
 import { store } from '../init.jsx';
-import { loadTimetable, fetchClassmates, fetchCachedTimetables } from './timetable_actions.jsx';
+import { loadTimetable, fetchClassmates, fetchCachedTimetables, nullifyTimetable } from './timetable_actions.jsx';
 import { browserSupportsLocalStorage } from '../util.jsx';
 
 export function getUserInfo(json) {
@@ -194,6 +194,9 @@ export function getUserSavedTimetables(semester) {
 			});
 			if (timetables[0]) {
 				loadTimetable(timetables[0]);
+			}
+			else {
+				nullifyTimetable(dispatch);
 			}
 		})
 
