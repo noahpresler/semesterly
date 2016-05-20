@@ -11,8 +11,7 @@ days = ['_', 'M', 'T', 'W', 'R', 'F']
 
 class QueensParser(BaseParser):
   def __init__(self):
-    BaseParser.__init__(self, QueensCourse,
-                              QueensCourseOffering)
+    BaseParser.__init__(self, 'S')
 
   def get_course_elements(self):
     try:
@@ -52,7 +51,6 @@ class QueensParser(BaseParser):
 
     section_code = se['_unique']
     section_data = {
-      'semester': 'F' if se['basic']['season'] == 'Fall' else 'S',
       'section_type': se['basic']['type'],
       'instructors': '; '.join(instructors) if instructors else 'TBD',
     }
