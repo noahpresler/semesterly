@@ -83,6 +83,8 @@
 	z-index: 100;
 	overflow: hidden;
 	border: 1px solid #E8E8E8;
+    border-top-color: #d9d9d9;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.2);
 }
 
 #see-more h4 {
@@ -248,6 +250,8 @@
 	/*This makes is fully transparent*/
 	background-color: rgba(255, 255, 255, 0);
 	border: 1px solid rgba(255,255,255,0);
+	border-top-color: transparent;
+    box-shadow: none;
 }
 .trans50 li,
 .trans50 .search-section,
@@ -333,6 +337,9 @@
 		width: 100%;
 	}
 	#search-bar-side {
+		display: none;
+	}
+	#see-more {
 		display: none;
 	}
 }
