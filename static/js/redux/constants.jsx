@@ -39,6 +39,9 @@ export const getSchoolInfoEndpoint = () => {
 export const getReactToCourseEndpoint = () => {
   return "react/";
 }
+export const getLoadSavedTimetablesEndpoint = (semester) => {
+  return "user/get_saved_timetables/" + getSchool() + "/" + semester;
+}
 
 export const getSchoolSpecificInfo = (school) => {
 	switch(school) {

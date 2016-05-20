@@ -31,36 +31,44 @@ def get_user(request):
 		}
 	return HttpResponse(json.dumps(response), content_type='application/json')
 
+@login_required
+@validate_subdomain
+@csrf_exempt
+def get_student_tts_wrapper(request, school, sem):
+	student = Student.objects.get(user=request.user)
+	response = get_student_tts(student, school, sem)
+	return HttpResponse(json.dumps(response), content_type='application/json')
+
 def get_student_tts(student, school, semester):
-		tts = student.personaltimetable_set.filter(school=school, semester=semester).order_by('-last_updated')
-		tts_dict = [] #aka titty dick
-		#for each personal timetable
-		for tt in tts:
-			courses = []
-			course_ids = []
-			tt_dict = model_to_dict(tt)
-			tt_dict['last_updated'] = str(tt.last_updated)
-			#for each co in the personal timetable
+	tts = student.personaltimetable_set.filter(school=school, semester=semester).order_by('-last_updated')
+	tts_dict = [] #aka titty dick
+	#for each personal timetable
+	for tt in tts:
+		courses = []
+		course_ids = []
+		tt_dict = model_to_dict(tt)
+		tt_dict['last_updated'] = str(tt.last_updated)
+		#for each co in the personal timetable
 
-			for section_obj in tt.sections.all():
-				c = section_obj.course # get the section's course
+		for section_obj in tt.sections.all():
+			c = section_obj.course # get the section's course
+			c_dict = model_to_dict(c)
+
+			if c.id not in course_ids: #if not in courses, add to course dictionary with co
 				c_dict = model_to_dict(c)
+				courses.append(c_dict)
+				course_ids.append(c.id)
+				courses[-1]['slots'] = []
+				courses[-1]['enrolled_sections'] = []
+				courses[-1]['textbooks'] = []
 
-				if c.id not in course_ids: #if not in courses, add to course dictionary with co
-					c_dict = model_to_dict(c)
-					courses.append(c_dict)
-					course_ids.append(c.id)
-					courses[-1]['slots'] = []
-					courses[-1]['enrolled_sections'] = []
-					courses[-1]['textbooks'] = []
+			index = course_ids.index(c.id)
+			courses[index]['slots'].extend([merge_dicts(model_to_dict(section_obj), model_to_dict(co)) for co in section_obj.offering_set.all()])
+			courses[index]['enrolled_sections'].append(section_obj.meeting_section)
 
-				index = course_ids.index(c.id)
-				courses[index]['slots'].extend([merge_dicts(model_to_dict(section_obj), model_to_dict(co)) for co in section_obj.offering_set.all()])
-				courses[index]['enrolled_sections'].append(section_obj.meeting_section)
-
-			tt_dict['courses'] = courses
-			tts_dict.append(tt_dict)
-		return tts_dict
+		tt_dict['courses'] = courses
+		tts_dict.append(tt_dict)
+	return tts_dict
 
 @csrf_exempt
 @login_required
@@ -83,7 +91,7 @@ def save_timetable(request):
 	# 2. the user is editing the name of an existing timetable, in which
 	# case tempId is the ID of that timetable, as passed from the frontend.
 	# we check if a timetable with a different id has that name
-	if PersonalTimetable.objects.filter(~Q(id=tempId), student=student, name=params['name']).exists():
+	if PersonalTimetable.objects.filter(~Q(id=tempId), student=student, name=params['name'], semester=semester).exists():
 		return HttpResponse(json.dumps(error), content_type='application/json')
 
 	if params['id']:
