@@ -63,7 +63,7 @@ class OttawaParser:
     if semester == 'F':
       self.sem_value = "20169"
     else:
-      self.sem_value = "20161"
+      self.sem_value = "20171"
 
   def row_cond(self,x):
     if x:
@@ -189,7 +189,7 @@ class OttawaParser:
           'day': day,
           'time_start': start,
           'time_end': end,
-          'location': place,
+          'location': '' if place == 'Not available at this time.' else place
         }
         Offering.objects.update_or_create(section=s_obj, defaults=o_data)
 
