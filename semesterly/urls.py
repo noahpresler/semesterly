@@ -39,7 +39,7 @@ urlpatterns = patterns('',
 	url(r'^user/save_timetable/$', 'student.views.save_timetable'),
 	url(r'^user/save_settings/$', 'student.views.save_settings'),
 	url(r'^user/get_classmates/$', 'student.views.get_classmates'),
-
+	url(r'^user/get_saved_timetables/(?P<school>.+)/(?P<sem>[fFsS]{1})', 'student.views.get_student_tts_wrapper'),
 	url(r'^live_user_data/*$', 'analytics.views.get_live_user_data'),
 	url(r'^courses/(?P<school>.+?)/(?P<sem>[fFsS]{1}?)/code/(?P<course_id>.+)/*$', 'timetable.views.get_course_id'),
 	url(r'^reason/*$', 'analytics.views.verify_password'),
