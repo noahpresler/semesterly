@@ -27,7 +27,6 @@ store.dispatch(
   {
     type: "SET_SEMESTER",
     semester: "F",
-    initialPageLoad: true
   }
 );
 
