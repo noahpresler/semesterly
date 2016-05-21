@@ -169,7 +169,7 @@ def parse_uoft_textbooks():
         'Mississauga': {
             'name': 'Mississauga',
             'ending': '5',
-            'campus_id': '39',
+            'campus_id': '47',
             'term': '571'
         }
     }
