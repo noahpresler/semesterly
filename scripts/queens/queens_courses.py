@@ -1,9 +1,3 @@
-import os
-
-import django
-os.environ.setdefault("DJANGO_SETTINGS_MODULE", "semesterly.settings")
-django.setup()
-
 from qcumber_scraper.main import JobManager
 from scripts.base_parser import BaseParser
 
@@ -11,8 +5,7 @@ days = ['_', 'M', 'T', 'W', 'R', 'F']
 
 class QueensParser(BaseParser):
   def __init__(self):
-    BaseParser.__init__(self, QueensCourse,
-                              QueensCourseOffering)
+    BaseParser.__init__(self, 'S')
 
   def get_course_elements(self):
     try:
@@ -31,8 +24,10 @@ class QueensParser(BaseParser):
     course_code = ce['basic']['subject'] + ' ' + ce['basic']['number']
     course_data = {
       'name': ce['basic']['title'],
+      'school': 'queens',
       'description': ce['basic']['description'],
-      'num_credits': int(float(ce['extra']['units']))
+      'num_credits': int(float(ce['extra']['units'])),
+      'prerequisites': ce['extra'].get('enrollment_requirement', '')
     }
     return course_code, course_data
 
@@ -52,7 +47,6 @@ class QueensParser(BaseParser):
 
     section_code = se['_unique']
     section_data = {
-      'semester': 'F' if se['basic']['season'] == 'Fall' else 'S',
       'section_type': se['basic']['type'],
       'instructors': '; '.join(instructors) if instructors else 'TBD',
     }
