@@ -24,11 +24,10 @@
 .course-modal.trans #modal-header,
 .course-modal.trans #modal-header h1,
 .course-modal.trans #modal-header h2,
-.course-modal.trans h3.modal-module-header,
-.course-modal.trans h3.modal-module-header:after,
 .course-modal.trans #modal-body p,
 .course-modal.trans #modal-body .credits h4,
-.course-modal.trans #modal-body .rating-module h4 {
+.course-modal.trans #modal-body .rating-module h4,
+.course-modal.trans #modal-body .modal-module * {
 	background-color: transparent;
 	color: transparent;
 	border-color: transparent;
@@ -42,7 +41,10 @@
 	opacity: 0;
 	visibility: hidden;
 }
-
+.course-modal .master-slot .slot-bar {
+    border-top-left-radius: 3px;
+    border-bottom-left-radius: 3px;
+}
 /* Course Modal Content Styles */
 #modal-content {
 	width: 100%;

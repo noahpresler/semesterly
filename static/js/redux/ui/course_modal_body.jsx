@@ -5,6 +5,7 @@ import Reaction from './reaction.jsx'
 import { REACTION_MAP } from '../constants.jsx';
 import MasterSlot from './master_slot.jsx';
 import Textbook from './textbook.jsx';
+import { COLOUR_DATA } from '../constants.jsx';
 
 export class CourseModalBody extends React.Component {
     constructor(props) {
@@ -92,34 +93,38 @@ export class CourseModalBody extends React.Component {
         let evalInfo = this.props.data.eval_info;
         let relatedCourses = this.props.data.related_courses;
         let { prerequisites, textbooks } = this.props.data;
-
         let evals = evalInfo.length === 0 ? null :
-        <div>
+        <div className="modal-module">
             <h3 className="modal-module-header">Course Evaluations</h3>
             {evalInfo.map((e, i) => <div key={i}>{ e }</div>)}
         </div>;
+        let maxColourIndex = COLOUR_DATA.length - 1;
         let similarCourses = relatedCourses.length === 0 ? null : 
-        <div>
+        <div className="modal-module">
             <h3 className="modal-module-header">Similar Courses</h3>
             {relatedCourses.map((rc, i) => <MasterSlot 
                 key={i} course={rc} 
                 professors={[]}
-                colourIndex={i}
-                onTimetable={false}
+                colourIndex={Math.min(i, maxColourIndex)}
+                onTimetable={true}
+                hideCloseButton={true}
+                inModal={true}
+                fetchCourseInfo={() => this.props.fetchCourseInfo(rc.id)}
                 />
 
             )}
         </div>
+
         let prerequisitesDisplay = 
-        <div className="prerequisites">
+        <div className="modal-module prerequisites">
             <h3 className="modal-module-header">Prerequisites</h3>
             <p>{ prerequisites || "None" }</p>
         </div>
         let textbooksDisplay = !textbooks || textbooks.length === 0 ? null :
-        <div>
+        <div className="modal-module">
             <h3 className="modal-module-header">Textbooks</h3>
             {
-            textbooks.map((t, i) => <Textbook key={i} tb={t}/>)
+                textbooks.map((t, i) => <Textbook key={i} tb={t}/>)
             }
         </div>
         return (
@@ -153,6 +158,7 @@ export class CourseModalBody extends React.Component {
                         </div>
 
                         {textbooksDisplay}
+                        {similarCourses}
                         
                     </div>
                     <div id="modal-section-lists"
