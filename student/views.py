@@ -60,10 +60,13 @@ def get_student_tts(student, school, semester):
 				course_ids.append(c.id)
 				courses[-1]['slots'] = []
 				courses[-1]['enrolled_sections'] = []
-				courses[-1]['textbooks'] = []
+				courses[-1]['textbooks'] = {}
+
 
 			index = course_ids.index(c.id)
 			courses[index]['slots'].extend([merge_dicts(model_to_dict(section_obj), model_to_dict(co)) for co in section_obj.offering_set.all()])
+			courses[index]['textbooks'][section_obj.meeting_section] = section_obj.get_textbooks()
+
 			courses[index]['enrolled_sections'].append(section_obj.meeting_section)
 
 		tt_dict['courses'] = courses

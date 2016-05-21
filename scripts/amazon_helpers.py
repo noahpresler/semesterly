@@ -1,5 +1,7 @@
 """Helper functions for accessing Amazon API for textbooks"""
 from django.db.models import Q
+from django.utils.encoding import smart_str
+
 from amazonproduct.errors import InvalidParameterValue
 from timetable.models import Section
 
