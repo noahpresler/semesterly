@@ -137,7 +137,7 @@ export class CourseModalBody extends React.Component {
                                 </div>
                             </div>
                         </div>
-                        { prerequisitesDisplay}
+                        { prerequisitesDisplay }
                         
                     </div>
                     <div className="col-8-16">
