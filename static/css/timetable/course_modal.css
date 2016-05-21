@@ -27,7 +27,7 @@
 .course-modal.trans #modal-body p,
 .course-modal.trans #modal-body .credits h4,
 .course-modal.trans #modal-body .rating-module h4,
-.course-modal.trans #modal-body .modal-module * {
+.course-modal.trans #modal-body .modal-module {
 	background-color: transparent;
 	color: transparent;
 	border-color: transparent;
@@ -37,6 +37,7 @@
 .course-modal.trans #modal-save,
 .course-modal.trans #modal-add,
 .course-modal.trans #modal-body .rating-module,
+.course-modal.trans #modal-body .modal-module,
 .trans #reactions-wrapper {
 	opacity: 0;
 	visibility: hidden;
@@ -189,6 +190,7 @@ h3.modal-module-header:after {
 	padding: 0 5px;
 	margin: 7px 0;
 	transition: color .2s;
+	word-wrap:break-word;
 }
 #modal-body .prerequisites p {
 	margin-top:2px;
