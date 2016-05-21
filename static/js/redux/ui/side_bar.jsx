@@ -7,6 +7,7 @@ import { COLOUR_DATA } from '../constants.jsx';
 import ClickOutHandler from 'react-onclickout';
 import TimetableNameInputContainer from './containers/timetable_name_input_container.jsx';
 import CreditTickerContainer from './containers/credit_ticker_container.jsx';
+import Textbook from './textbook.jsx';
 
 class SideBar extends React.Component {
     constructor(props) {
@@ -124,9 +125,10 @@ class SideBar extends React.Component {
         );
     }
 }
-// This isn't working. Does it handle the case when there are no textbooks?
 
-const TextbookList = ({courses}) => {
+export default SideBar;
+
+export const TextbookList = ({courses}) => {
     let tbs = [];
     for (let i = 0; i < courses.length; i++){
         if(courses[i].textbooks !== undefined && Object.keys(courses[i].textbooks).length > 0) {
@@ -145,25 +147,9 @@ const TextbookList = ({courses}) => {
     return (
         <div>
             {_.uniq(tbs, 'isbn').map(tb => {
-                return <Textbook tb={tb} key={tb} />
+                return <Textbook tb={tb} key={tb.isbn} />
             })}
         </div>
     )
 }
 
-const Textbook = ({tb}) => {
-    return (
-    <a href={tb.detail_url}>
-        <div className="textbook">
-            <img src={tb.image_url} />
-            <div className="required">Required</div>
-            <h4>{tb.title}</h4>
-            <div className="amazon-buy"><i className="fa fa-amazon" aria-hidden="true"></i> Buy or Rent</div>
-        </div>
-    </a>
-    );
-}
-
-
-
-export default SideBar;

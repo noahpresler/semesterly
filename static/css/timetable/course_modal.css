@@ -179,6 +179,7 @@ h3.modal-module-header:after {
 	background-color: #ddd;
 	transition: background-color .2s;
 }
+
 #modal-body p {
 	font-size: 16px;
 	line-height: 22px;
@@ -186,6 +187,10 @@ h3.modal-module-header:after {
 	padding: 0 5px;
 	margin: 7px 0;
 	transition: color .2s;
+}
+#modal-body .prerequisites p {
+	margin-top:2px;
+	font-size:14px;
 }
 #modal-body .credits h3 {
 	text-align: center;
