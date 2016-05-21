@@ -70,6 +70,18 @@ class Course(models.Model):
         final.append(i)
     return sorted(final, key=lambda k: k['year']) 
 
+  def get_textbooks(self, semester):
+    textbooks = []
+    isbns = set()
+    for section in self.section_set.filter(semester__in=[semester, 'Y']):
+      for textbook in section.textbooks.all():
+        if textbook.isbn not in isbns:
+          textbooks.append(textbook.get_info())
+          isbns.add(textbook.isbn)
+
+    return textbooks
+
+
 class Section(models.Model):
   course = models.ForeignKey(Course)
   meeting_section = models.CharField(max_length=50)
