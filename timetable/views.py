@@ -89,7 +89,7 @@ def get_timetables(request):
 
   # temp optional course implementation
   opt_course_ids = params.get('optionCourses', [])
-  max_optional = params.get('numOptionCourses', 0)
+  max_optional = params.get('numOptionCourses', len(opt_course_ids))
   optional_courses = [Course.objects.get(id=cid) for cid in opt_course_ids]
   optional_course_subsets = [subset for k in range(max_optional, -1, -1)\
                                     for subset in itertools.combinations(optional_courses, k)]
@@ -126,10 +126,7 @@ class TimetableGenerator:
     self.semester = semester
     self.no_classes_before = 0 if not preferences['no_classes_before'] else self.slots_per_hour * 2 - 1
     self.no_classes_after = self.slots_per_hour * 14 if not preferences['no_classes_after'] else self.slots_per_hour * 10 + 1
-    self.long_weekend = preferences['long_weekend']
     self.least_days = preferences.get('least_days', False)
-    self.break_times = preferences.get('break_times', False)
-    self.break_lengths = preferences.get('break_lengths', [])
     self.spread = not preferences['grouped']
     self.sort_by_spread = preferences['do_ranking']
     self.with_conflicts = preferences['try_with_conflicts']
@@ -292,25 +289,12 @@ class TimetableGenerator:
       tt.append([lambda co: not (get_time_index_from_string(co[0].time_start) > self.no_classes_before \
                 and get_time_index_from_string(co[0].time_end) < self.no_classes_after)])
 
-    # long weekend preference
     if self.least_days:
       tt.append([(lambda co: co[0].day == 'T'), \
             (lambda co: co[0].day == 'W'), \
             (lambda co: co[0].day == 'R'), \
             (lambda co: co[0].day == 'M'), \
             (lambda co: co[0].day == 'F')])
-
-    elif self.long_weekend:
-      tt.append([(lambda co: co[0].day == 'M'), \
-            (lambda co: co[0].day == 'F')])
-
-    # break time preference
-    if self.break_times:
-      break_periods = [self.break_times[i:i+self.break_length] for i in range(len(self.break_times) - self.break_length + 1)]
-      break_possibilities = [(lambda co: not (get_time_index_from_string(co[0].time_start) > periods[-1] \
-                        and get_time_index_from_string(co[0].time_end) < periods[0])) \
-                  for periods in break_periods]
-      tt.append(break_possibilities)
 
     return tt
 
@@ -357,21 +341,12 @@ def calculate_spread_by_day(day_bitarray):
 
 def get_preference_score(day_to_usage):
   """Calculate cost for long weekend, early/late class, and break preferences."""
-  day_cost = get_day_cost(day_to_usage)
+  day_cost = day_use(day_to_usage)
   time_cost = 0
   for day in day_to_usage.keys():
     time_cost += get_time_cost(day_to_usage[day])
   break_cost = get_break_cost(day_to_usage)
   return sum([day_cost, time_cost, break_cost])
-
-def get_day_cost(day_to_usage):
-  """Cost of having/not having a long weekend, based on user's preferences."""
-  if not LONG_WEEKEND and not LEAST_DAYS:
-    return 0
-  elif LONG_WEEKEND:
-    return day_use(day_to_usage, 'M', 'F')
-  else:
-    return day_use(day_to_usage, 'M' ,'T', 'W', 'R', 'F')
 
 def get_time_cost(day_bitarray):
   """Cost of having early/late classes, based on the user's preferences."""
