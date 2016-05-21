@@ -4,6 +4,7 @@ import classnames from 'classnames';
 import Reaction from './reaction.jsx'
 import { REACTION_MAP } from '../constants.jsx';
 import MasterSlot from './master_slot.jsx';
+import Textbook from './textbook.jsx';
 
 export class CourseModalBody extends React.Component {
     constructor(props) {
@@ -110,7 +111,7 @@ export class CourseModalBody extends React.Component {
             )}
         </div>
         let prerequisitesDisplay = 
-        <div>
+        <div className="prerequisites">
             <h3 className="modal-module-header">Prerequisites</h3>
             <p>{ prerequisites || "None" }</p>
         </div>
@@ -118,7 +119,7 @@ export class CourseModalBody extends React.Component {
         <div>
             <h3 className="modal-module-header">Textbooks</h3>
             {
-                textbooks.map((t, i) => <div>{t}</div>)
+            textbooks.map((t, i) => <Textbook key={i} tb={t}/>)
             }
         </div>
         return (
