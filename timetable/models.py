@@ -52,11 +52,16 @@ class Course(models.Model):
       result[i]['reacted'] = self.reaction_set.filter(student=student,title=r['title']).exists()
     return result
 
-  def get_related_course_info(self):
+  def get_related_course_info(self, semester=None, limit=None):
     info = []
     related = self.related_courses.all()
+    if semester:
+      related = related.filter(section__semester__in=[semester, 'Y']).distinct()
+    if limit and limit > 0:
+      related = related[:limit]
     for c in related:
-      info.append(model_to_dict(c))
+      info.append(model_to_dict(c, exclude=['related_courses', 'unstopped_description']))
+
     return info
 
   def get_eval_info(self):
