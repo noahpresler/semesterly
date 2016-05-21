@@ -118,18 +118,18 @@ class SideBar extends React.Component {
                 </div>
                 <h4 className="sb-header">Textbooks</h4>
                 <div className="side-bar-section">
+                    <TextbookList courses={this.props.liveTimetableCourses}/>
                 </div>
             </div>
         );
     }
 }
 // This isn't working. Does it handle the case when there are no textbooks?
-//<TextbookList courses={this.props.liveTimetableCourses}/>
 
 const TextbookList = ({courses}) => {
     let tbs = [];
     for (let i = 0; i < courses.length; i++){
-        if(courses[i].textbooks !== undefined) {
+        if(courses[i].textbooks !== undefined && Object.keys(courses[i].textbooks).length > 0) {
             for (let j=0; j<courses[i].enrolled_sections.length; j++) {
                 tbs = tbs.concat(courses[i].textbooks[courses[i].enrolled_sections[j]]);
             }
@@ -145,7 +145,7 @@ const TextbookList = ({courses}) => {
     return (
         <div>
             {_.uniq(tbs, 'isbn').map(tb => {
-                return <Textbook tb={tb} key={tb.isbn} />
+                return <Textbook tb={tb} key={tb} />
             })}
         </div>
     )
