@@ -8,6 +8,7 @@ class MasterSlot extends React.Component {
         this.stopPropagation = this.stopPropagation.bind(this);
         this.onMasterSlotHover = this.onMasterSlotHover.bind(this);
         this.onMasterSlotUnhover = this.onMasterSlotUnhover.bind(this);
+        this.updateColours = this.updateColours.bind(this);
     }
     stopPropagation(callback, event) {
         event.stopPropagation();
@@ -22,6 +23,8 @@ class MasterSlot extends React.Component {
         this.updateColours(COLOUR_DATA[this.props.colourIndex].background);
     }
     updateColours(colour) {
+        // no updating when hovering over a masterslot in the course modal (i.e. related course)
+        if (this.props.inModal) {return;}
         // update sibling slot colours (i.e. the slots for the same course)
         $(".slot-" + this.props.course.id)
           .css('background-color', colour)
@@ -36,7 +39,7 @@ class MasterSlot extends React.Component {
             friendCircles = [<div className="ms-friend" key={4}>{plusMore}</div>].concat(friendCircles.slice(0,3))
         }
         let masterSlotClass = 'master-slot slot-' + this.props.course.id;
-        let prof = !this.props.professors || this.props.professors[0] === "" ? "Professor Unlisted" : this.props.professors.join(', ');
+        let prof = !this.props.professors || this.props.professors.length === 0 || this.props.professors[0] === "" ? "Professor Unlisted" : this.props.professors.join(', ');
         masterSlotClass = this.props.onTimetable ? masterSlotClass : masterSlotClass + ' optional';
 		return <div className={masterSlotClass}
 					onMouseEnter={ this.onMasterSlotHover }
@@ -56,8 +59,11 @@ class MasterSlot extends React.Component {
 		        </div>
 		        <div className="master-slot-actions">
 		            <i className="fa fa-share-alt"></i>
+                    {
+                        !this.props.hideCloseButton ? 
 		            <i className="fa fa-times" 
-                        onClick={(event) => this.stopPropagation(this.props.removeCourse, event)}></i>
+                        onClick={(event) => this.stopPropagation(this.props.removeCourse, event)}></i> : null
+                    }
 		        </div>
 		        <div className="master-slot-friends">
                     {friendCircles}
