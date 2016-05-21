@@ -456,6 +456,7 @@ def get_detailed_course_json(course, sem, student=None):
   json_data['eval_info'] = course.get_eval_info()
   json_data['related_courses'] = course.get_related_course_info()
   json_data['reactions'] = course.get_reactions(student)
+  json_data['textbooks'] = course.get_textbooks(sem)
 
   return json_data
 
