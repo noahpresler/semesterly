@@ -1,7 +1,7 @@
 import { connect } from 'react-redux';
 import { CourseModal } from '../course_modal.jsx';
 import { hoverSection, unhoverSection, addOrRemoveCourse } from '../../actions/timetable_actions.jsx';
-import { setCourseId, react } from '../../actions/modal_actions.jsx';
+import { setCourseId, react, fetchCourseInfo } from '../../actions/modal_actions.jsx';
 
 const mapStateToProps = (state) => {
 	let lectureSections = [];
@@ -36,7 +36,7 @@ const mapStateToProps = (state) => {
 		},
 		isSectionOnActiveTimetable: (courseId, section) => {
 			return activeTimetable.courses.some(course => course.id === courseId && course.enrolled_sections.some(sec => sec == section));
-		}
+		},
 	}
 }
 
@@ -44,6 +44,7 @@ const mapDispatchToProps = (dispatch) => {
 	return {
 		hideModal: () => dispatch(setCourseId(null)),
 		openSignupModal: () => dispatch({type: 'TOGGLE_SIGNUP_MODAL'}),
+		fetchCourseInfo: (courseId) => dispatch(fetchCourseInfo(courseId)),
 		hoverSection: hoverSection(dispatch),
 		unhoverSection: unhoverSection(dispatch),
 		addOrRemoveCourse,
