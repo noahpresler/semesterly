@@ -11,6 +11,7 @@ export class CourseModalBody extends React.Component {
     constructor(props) {
         super(props);
         this.sendReact = this.sendReact.bind(this);
+        this.fetchCourseInfo = this.fetchCourseInfo.bind(this)
     }
 
     sendReact(cid, title) {
@@ -53,6 +54,11 @@ export class CourseModalBody extends React.Component {
                     inRoster={this.props.inRoster}
                 />
         });
+    }
+    fetchCourseInfo(courseId) {
+        if (this.props.fetchCourseInfo) {
+            this.props.fetchCourseInfo(courseId);
+        }
     }
 
     render() {
@@ -99,6 +105,7 @@ export class CourseModalBody extends React.Component {
             {evalInfo.map((e, i) => <div key={i}>{ e }</div>)}
         </div>;
         let maxColourIndex = COLOUR_DATA.length - 1;
+
         let similarCourses = relatedCourses.length === 0 ? null : 
         <div className="modal-module">
             <h3 className="modal-module-header">Similar Courses</h3>
@@ -109,7 +116,7 @@ export class CourseModalBody extends React.Component {
                 onTimetable={true}
                 hideCloseButton={true}
                 inModal={true}
-                fetchCourseInfo={() => this.props.fetchCourseInfo(rc.id)}
+                fetchCourseInfo={() => this.fetchCourseInfo(rc.id)}
                 />
 
             )}
