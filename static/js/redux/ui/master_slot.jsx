@@ -1,6 +1,7 @@
 import React from 'react';
 import { COLOUR_DATA } from '../constants.jsx';
 import classNames from 'classnames';
+import { getShareLink } from '../helpers/timetable_helpers.jsx';
 
 class MasterSlot extends React.Component {
 	constructor(props) {
@@ -58,7 +59,7 @@ class MasterSlot extends React.Component {
 		            <h3>4 credits</h3>
 		        </div>
 		        <div className="master-slot-actions">
-		            <i className="fa fa-share-alt"></i>
+		            <i className="fa fa-share-alt" onClick={getShareLink}></i>
                     {
                         !this.props.hideCloseButton ? 
 		            <i className="fa fa-times" 
