@@ -10,8 +10,7 @@ from django.utils.encoding import smart_str
 import datetime, logging, os, sys, cookielib, requests, time, re
 
 class Command(BaseCommand):
-  help = "Initiates textbook parsers for specified schools. If no school \
-  is provided, starts textbook parsers for all schools."
+  help = "Initiates textbook parsers for specified schools. If no school is provided, starts textbook parsers for all schools."
   def add_arguments(self, parser):
   	 	# optional argument to specify parser for specific school
   	 	parser.add_argument('school', nargs='?', default='')
@@ -25,14 +24,14 @@ class Command(BaseCommand):
   def handle(self, *args, **options):
   	logging.basicConfig(level=logging.ERROR, filename='parse_errors.log')
 
-  	VALID_SCHOOLS=textbook_parsers.keys()
+  	schools_with_tb_parsers=textbook_parsers.keys()
 
-  	schools = VALID_SCHOOLS
+  	schools = schools_with_tb_parsers
   	if options['school']:
-  		if options['school'] in VALID_SCHOOLS:
+  		if options['school'] in schools_with_tb_parsers:
   			schools = [options['school']]
   		else:
-			self.stderr.write(self.style.ERROR("Invalid school provided. Valid options are: " + str(VALID_SCHOOLS)))
+			self.stderr.write(self.style.ERROR("Invalid school provided. Valid options are: " + str(schools_with_tb_parsers)))
 			exit(1)
 
 

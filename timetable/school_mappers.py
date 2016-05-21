@@ -47,7 +47,7 @@ eval_parsers = {
 }
 textbook_parsers = {
   'jhu': lambda: HopkinsTextbookFinder().parse_classes(),
-  # 'uoft': parse_uoft_textbooks,
+  'uoft': parse_uoft_textbooks,
   'umd': lambda: None,
   'rutgers': lambda: None,
   'uo': lambda: None,

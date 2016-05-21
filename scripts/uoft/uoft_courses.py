@@ -258,4 +258,4 @@ class UofTParser:
 
 if __name__ == "__main__":
     parser = UofTParser()
-    parser.start_utm()
+    parser.start()
