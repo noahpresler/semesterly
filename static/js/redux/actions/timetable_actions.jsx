@@ -55,6 +55,25 @@ export function nullifyTimetable(dispatch) {
 	})
 }
 
+// loads timetable from localStorage
+function loadCachedTimetable() {
+	if (!browserSupportsLocalStorage()) { return; }
+	let localCourseSections = JSON.parse(localStorage.getItem('courseSections'));
+	// no coursesections stored locally; user is new (or hasn't added timetables yet)
+	if (!localCourseSections) { return; }
+	// no preferences stored locally; save the defaults
+	let localPreferences = JSON.parse(localStorage.getItem('preferences'));
+	let localSemester = localStorage.getItem('semester');
+	let localActive = parseInt(localStorage.getItem('active'));
+	if (Object.keys(localCourseSections).length === 0 || Object.keys(localPreferences).length === 0) { return; }
+	store.dispatch({ type: 'SET_ALL_PREFERENCES', preferences: localPreferences });
+	store.dispatch({ type: 'SET_SEMESTER', semester: localSemester });
+	store.dispatch({ type: 'RECEIVE_COURSE_SECTIONS', courseSections: localCourseSections });
+	fetchCachedTimetables(store.getState(), localActive);
+}
+
+// loads @timetable into the state.
+// @created is true if the user is creating a new timetable
 export function loadTimetable(timetable, created=false) {
 	let dispatch = store.dispatch;
 	let state = store.getState();
