@@ -7,15 +7,7 @@ class Student(models.Model):
     SOPHOMORE = 'SO'
     JUNIOR = 'JR'
     SENIOR = 'SR'
-    YEAR_IN_SCHOOL_CHOICES = (
-        (FRESHMAN, 'Freshman'),
-        (SOPHOMORE, 'Sophomore'),
-        (JUNIOR, 'Junior'),
-        (SENIOR, 'Senior'),
-    )
-    class_year = models.CharField(max_length=2,
-                                    choices=YEAR_IN_SCHOOL_CHOICES,
-                                    blank=True)
+    class_year = models.IntegerField(blank=True, null=True)
     user = models.OneToOneField(User)
     img_url = models.CharField(max_length=300, default=-1)
     friends = models.ManyToManyField("self", blank=True)
