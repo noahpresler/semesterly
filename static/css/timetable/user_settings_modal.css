@@ -1,0 +1,70 @@
+.welcome-modal {
+	max-width: 500px;
+	height: 575px;
+	outline: none;;
+}
+
+.welcome-modal #modal-header {
+	background-color: #eee;
+	padding: 25px 25px;
+	position: relative;
+	border-bottom: 1px solid #ddd;
+	margin-bottom: 30px;
+}
+
+.welcome-modal .pro-pic {
+	border: 2px solid #ddd;
+}
+
+.welcome-modal #modal-content {
+	padding: 12px;
+	text-align: center;
+	height: 400px;
+}
+
+.welcome-modal #modal-content p {
+	color: #aaa;
+	margin-bottom: 5px;
+}
+
+.welcome-modal #modal-content form {
+	text-align: left;
+}
+
+.welcome-modal .signup-button {
+    bottom: -30px;
+    position: fixed;
+    margin: 0 auto;
+    left: 200px;
+}
+
+.welcome-modal h3 {
+	text-align: left;
+	font-size: 15px;
+	margin-bottom: 5px;
+	margin-top: 5px;
+}
+
+.welcome-modal .Select {
+	margin-bottom: 20px;
+	margin-top: 10px;
+}
+
+.welcome-modal .disclaimer {
+	font-size: 11px;
+	margin-top: 0px;
+	text-align: left;
+}
+
+.welcome-modal .switch-slide .switch-label:after {
+    background: rgb(90, 200, 251);
+}
+
+.preference-wrapper {
+	width: 75%;
+	float: left;
+}
+
+.welcome-modal .switch-slide {
+	float: left;
+}
