@@ -43,8 +43,8 @@
 	visibility: hidden;
 }
 .course-modal .master-slot .slot-bar {
-    border-top-left-radius: 3px;
-    border-bottom-left-radius: 3px;
+    border-top-left-radius: 5px;
+    border-bottom-left-radius: 5px;
 }
 /* Course Modal Content Styles */
 #modal-content {
@@ -110,7 +110,7 @@
     right:5px;
     height:33px;
     padding:0px 5px;
-    background-color:#777;
+    background-color:#D6D6D6;
     border-radius:2px;
 }
 #modal-header #share-course-link {
