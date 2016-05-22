@@ -18,7 +18,7 @@ from timetable.models import *
 from timetable.school_mappers import school_to_granularity, VALID_SCHOOLS
 from timetable.utils import *
 from student.models import Student
-from student.views import get_user_dict
+from student.views import get_student, get_user_dict
 
 MAX_RETURN = 60 # Max number of timetables we want to consider
 
@@ -47,10 +47,23 @@ def save_analytics_data(key, args):
 # ******************************************************************************
 
 @validate_subdomain
-def view_timetable(request):
+def view_timetable(request, code=None, sem=None):
+  school = request.subdomain
+  student = get_student(request)
+  course_json = {}
+  if code: # user is loading a share course link, since code was included
+    sem = sem.upper()
+    code = code.upper()
+    try:
+      course = Course.objects.get(school=school, code=code)
+      course_json = get_detailed_course_json(course, sem, student)
+    except:
+      raise Http404
+
   return render_to_response("timetable.html", {
-    'school': request.subdomain,
-    'student': json.dumps(get_user_dict(request))
+    'school': school,
+    'student': json.dumps(get_user_dict(school, student)),
+    'course': json.dumps(course_json)
   },
   context_instance=RequestContext(request))
 

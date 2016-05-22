@@ -6,3 +6,8 @@ export function getShareLink() {
 	let courseSections = state.courseSections.objects;	
 	let url = window.location.hostname + "/share/" + $.param(courseSections);
 }
+
+export function getCourseShareLink(code) {
+	let semester = store.getState().semester;
+	return window.location.hostname + "/course/" + code + "/" + semester;
+}
