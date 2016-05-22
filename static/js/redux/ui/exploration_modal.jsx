@@ -178,7 +178,7 @@ export class ExplorationModal extends React.Component {
 					<div id="exp-title"
 						className="col-4-16">
 						<i className="fa fa-compass"></i>
-						<h1>Course Discovery</h1>
+						<h1>Advanced Search</h1>
 					</div>
 					<div className="col-5-16">
 						<input ref="input" onInput={this.fetchAdvancedSearchResultsWrapper} />

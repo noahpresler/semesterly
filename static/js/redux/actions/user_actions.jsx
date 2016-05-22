@@ -17,48 +17,6 @@ export function requestUserInfo(id) {
   }
 }
 
-function loadCachedTimetable() {
-	if (!browserSupportsLocalStorage()) { return; }
-	let localCourseSections = JSON.parse(localStorage.getItem('courseSections'));
-	// no coursesections stored locally; user is new (or hasn't added timetables yet)
-	if (!localCourseSections) { return; }
-	// no preferences stored locally; save the defaults
-	let localPreferences = JSON.parse(localStorage.getItem('preferences'));
-	let localSemester = localStorage.getItem('semester');
-	let localActive = parseInt(localStorage.getItem('active'));
-	if (Object.keys(localCourseSections).length === 0 || Object.keys(localPreferences).length === 0) { return; }
-	store.dispatch({ type: 'SET_ALL_PREFERENCES', preferences: localPreferences });
-	store.dispatch({ type: 'SET_SEMESTER', semester: localSemester });
-	store.dispatch({ type: 'RECEIVE_COURSE_SECTIONS', courseSections: localCourseSections });
-	fetchCachedTimetables(store.getState(), localActive);
-}
-
-export function fetchUserInfo() {
-	return (dispatch) => {
-		dispatch(requestUserInfo());
-
-		fetch(getUserInfoEndpoint(), { credentials: 'include' })
-			.then(response => response.json()) // TODO(rohan): error-check the response
-			.then(user => {
-				dispatch(getUserInfo(user));
-				if (user.timetables && user.timetables.length > 0) { // user had saved timetables
-					// loading one of the user's timetables (after initial page load)
-					loadTimetable(user.timetables[0]);
-					dispatch({type: "RECEIVE_TIMETABLE_SAVED"});
-				}
-				else { // load last browser-cached timetable
-					loadCachedTimetable();
-				}
-				return user;
-			})
-			.then(user => {
-				if (user.isLoggedIn && user.timetables[0]) {
-					dispatch(fetchClassmates(user.timetables[0].courses.map( c => c['id'])))
-				}
-			});
-	}
-}
-
 function getSaveTimetablesRequestBody() {
 	let state = store.getState();
 	let timetableState = state.timetables;
