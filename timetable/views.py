@@ -16,7 +16,9 @@ from pytz import timezone
 from analytics.views import *
 from timetable.models import *
 from timetable.school_mappers import school_to_granularity, VALID_SCHOOLS
+from timetable.utils import *
 from student.models import Student
+from student.views import get_user_dict
 
 MAX_RETURN = 60 # Max number of timetables we want to consider
 
@@ -38,20 +40,8 @@ def save_analytics_data(key, args):
   except:
     pass
 
-def validate_subdomain(view_func):
-  def wrapper(request, *args, **kwargs):
-    if request.subdomain not in VALID_SCHOOLS:
-      return render(request, 'index.html')
-    else:
-      return view_func(request, *args, **kwargs)
-  return wrapper
 
-def get_student(request):
-  logged = request.user.is_authenticated()
-  if logged and Student.objects.filter(user=request.user).exists():
-    return Student.objects.get(user=request.user)
-  else:
-    return None
+
 # ******************************************************************************
 # ******************************** GENERATE TTs ********************************
 # ******************************************************************************
@@ -60,7 +50,7 @@ def get_student(request):
 def view_timetable(request):
   return render_to_response("timetable.html", {
     'school': request.subdomain,
-    'student': get_student(request)
+    'student': json.dumps(get_user_dict(request))
   },
   context_instance=RequestContext(request))
 
@@ -300,11 +290,6 @@ class TimetableGenerator:
 
 def get_section_type(s):
   return s.section_type
-
-def merge_dicts(d1, d2):
-  d = d1.copy()
-  d.update(d2)
-  return d
 
 def rank_by_spread(timetables):
   return sorted(timetables,
