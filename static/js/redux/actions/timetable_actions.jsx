@@ -2,24 +2,10 @@ import fetch from 'isomorphic-fetch';
 import { getTimetablesEndpoint } from '../constants.jsx';
 import { randomString, browserSupportsLocalStorage } from '../util.jsx';
 import { store } from '../init.jsx';
-import { getClassmatesEndpoint, getSchoolInfoEndpoint } from '../constants.jsx'
+import { getClassmatesEndpoint } from '../constants.jsx'
 import { lockActiveSections } from './user_actions.jsx';
 import { saveLocalSemester, saveLocalPreferences, saveLocalCourseSections, saveLocalActiveIndex } from '../util.jsx';
 export const SID = randomString(30);
-
-export function fetchSchoolInfo() {
-	return (dispatch) => {
-		dispatch({ type: "REQUEST_SCHOOL_INFO" });
-		fetch(getSchoolInfoEndpoint())
-	    .then(response => response.json())
-	    .then(json => {
-	    	dispatch({
-	    		type: "RECEIVE_SCHOOL_INFO", 
-	    		schoolInfo: json
-	    	});
-	    });
-	}
-}
 
 export function requestTimetables() {
   return {
@@ -56,7 +42,7 @@ export function nullifyTimetable(dispatch) {
 }
 
 // loads timetable from localStorage
-function loadCachedTimetable() {
+export function loadCachedTimetable() {
 	if (!browserSupportsLocalStorage()) { return; }
 	let localCourseSections = JSON.parse(localStorage.getItem('courseSections'));
 	// no coursesections stored locally; user is new (or hasn't added timetables yet)
@@ -284,6 +270,23 @@ export function requestClassmates(id) {
   }
 }
 
+export function addOrRemoveOptionalCourse(course) {
+	return (dispatch) => {
+		dispatch({
+	  		type: "ADD_REMOVE_OPTIONAL_COURSE",
+	  		newCourse: course
+	  	});
+	  	let state = store.getState();
+	  	let reqBody = getBaseReqBody(state);
+		Object.assign(reqBody, {
+        	'optionCourses': state.optionalCourses.courses.map(c => c.id),
+        	'numOptionCourses': state.optionalCourses.numRequired
+        });
+		store.dispatch(fetchTimetables(reqBody, false));
+	}
+}
+
+
 export function fetchClassmates(courses) {
 	return (dispatch) => {
 
@@ -300,18 +303,3 @@ export function fetchClassmates(courses) {
 	}
 }
 
-export function addOrRemoveOptionalCourse(course) {
-	return (dispatch) => {
-		dispatch({
-	  		type: "ADD_REMOVE_OPTIONAL_COURSE",
-	  		newCourse: course
-	  	});
-	  	let state = store.getState();
-	  	let reqBody = getBaseReqBody(state);
-		Object.assign(reqBody, {
-        	'optionCourses': state.optionalCourses.courses.map(c => c.id),
-        	'numOptionCourses': state.optionalCourses.numRequired
-        });
-		store.dispatch(fetchTimetables(reqBody, false));
-	}
-}
