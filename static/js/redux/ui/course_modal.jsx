@@ -53,19 +53,25 @@ export class CourseModal extends React.Component {
             width: '100%',
             backgroundColor: 'transparent'
         };
-        let inRoster = this.props.inRoster;
-        let courseAndDept = this.props.data.code;
-        courseAndDept = this.props.data.department && this.props.data.department != "" ?
-        courseAndDept + ", " + this.props.data.department : courseAndDept;
+        let { data, inRoster } = this.props;
+        let courseAndDept = data.code;
+        courseAndDept = data.department && data.department != "" ?
+        courseAndDept + ", " + data.department : courseAndDept;
         let shareLink = this.state.shareLinkShown ? 
         <ShareCourseLink 
-            link={getCourseShareLink(this.props.data.code)}
+            link={getCourseShareLink(data.code)}
             onClickOut={this.hideShareLink} /> : 
         null;
-        let content = this.props.isFetching ? <div className="modal-loader"></div> :
+
+        let add = data.sections !== undefined && Object.keys(data.sections).length > 0 ? <div id="modal-add"
+                    className={classNames('search-course-add', {'in-roster': inRoster})}
+                    onClick={() => this.addOrRemoveCourse(this.props.id)}>
+                    <i className={classNames('fa', {'fa-plus' : !inRoster, 'fa-check' : inRoster})}></i>
+                </div> : null;
+        let content = 
         (<div id="modal-content">
             <div id="modal-header">
-                <h1>{this.props.data.name}</h1>
+                <h1>{data.name}</h1>
                 <h2>{courseAndDept}</h2>
                 <div id="modal-close" onClick={() => this.refs.modal.hide()}>
                     <i className="fa fa-times"></i>
@@ -78,11 +84,8 @@ export class CourseModal extends React.Component {
                 <div id="modal-save">
                     <i className="fa fa-bookmark"></i>
                 </div>
-                <div id="modal-add"
-                    className={classNames('search-course-add', {'in-roster': inRoster})}
-                    onClick={() => this.addOrRemoveCourse(this.props.id)}>
-                    <i className={classNames('fa', {'fa-plus' : !inRoster, 'fa-check' : inRoster})}></i>
-                </div>
+                { add }
+                
             </div>
             <CourseModalBody {...this.props} hideModal={this.hide} addOrRemoveCourse={this.addOrRemoveCourse}/>
         </div>);

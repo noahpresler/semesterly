@@ -41,9 +41,8 @@ export function nullifyTimetable(dispatch) {
 	})
 }
 
-// loads timetable from localStorage
+// loads timetable from localStorage. assumes the browser supports localStorage
 export function loadCachedTimetable() {
-	if (!browserSupportsLocalStorage()) { return; }
 	let localCourseSections = JSON.parse(localStorage.getItem('courseSections'));
 	// no coursesections stored locally; user is new (or hasn't added timetables yet)
 	if (!localCourseSections) { return; }
