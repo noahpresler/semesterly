@@ -10,6 +10,7 @@ import { getUserInfo } from './actions/user_actions.jsx';
 import { loadTimetable, loadCachedTimetable } from './actions/timetable_actions.jsx'
 import { fetchSchoolInfo } from './actions/school_actions.jsx';
 import { setCourseInfo } from './actions/modal_actions.jsx';
+import { browserSupportsLocalStorage } from './util.jsx';
 
 export const store = createStore(rootReducer, applyMiddleware(thunkMiddleware));
 
@@ -26,15 +27,16 @@ store.dispatch(
     school // comes from timetable.html
   }
 );
-store.dispatch(
-  {
-    type: "SET_SEMESTER",
-    semester: "F",
-  }
-);
+
 // setup the state. loads the user's timetables if logged in; cached timetable if not.
 // also handles sharing courses and sharing timetables
 function setup(dispatch) {
+  dispatch(
+    {
+      type: "SET_SEMESTER",
+      semester: currentSemester, // currentSemester comes from timetable.html (rendered by the server). if the user is loading a share course link, we need to set the appropriate semester
+    }
+  );
   /* first setup the user's state */
   let user = currentUser; // comes from timetable.html
   dispatch(getUserInfo(user));
@@ -44,7 +46,9 @@ function setup(dispatch) {
     dispatch({ type: "RECEIVE_TIMETABLE_SAVED" });
   }
   else { // user isn't logged in (or has no saved timetables); load last browser-cached timetable
-    loadCachedTimetable();
+    if (browserSupportsLocalStorage() && localStorage.semester === currentSemester) {
+      loadCachedTimetable();
+    }
   }
   /* Now setup sharing state */
   if (sharedCourse) {

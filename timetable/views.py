@@ -51,6 +51,8 @@ def view_timetable(request, code=None, sem=None):
   school = request.subdomain
   student = get_student(request)
   course_json = {}
+  if not sem: # not loading a share course link
+    sem = 'F' 
   if code: # user is loading a share course link, since code was included
     sem = sem.upper()
     code = code.upper()
@@ -62,8 +64,9 @@ def view_timetable(request, code=None, sem=None):
 
   return render_to_response("timetable.html", {
     'school': school,
-    'student': json.dumps(get_user_dict(school, student)),
-    'course': json.dumps(course_json)
+    'student': json.dumps(get_user_dict(school, student, sem)),
+    'course': json.dumps(course_json),
+    'semester': sem
   },
   context_instance=RequestContext(request))
 
