@@ -42,6 +42,9 @@ class MasterSlot extends React.Component {
         let masterSlotClass = 'master-slot slot-' + this.props.course.id;
         let prof = !this.props.professors || this.props.professors.length === 0 || this.props.professors[0] === "" ? "Professor Unlisted" : this.props.professors.join(', ');
         masterSlotClass = this.props.onTimetable ? masterSlotClass : masterSlotClass + ' optional';
+        let numCredits = this.props.course.num_credits;
+        let creditsDisplay = numCredits === 1 ? " credit" : " credits";
+        creditsDisplay = numCredits + creditsDisplay;
 		return <div className={masterSlotClass}
 					onMouseEnter={ this.onMasterSlotHover }
                     onMouseLeave={ this.onMasterSlotUnhover }
@@ -56,7 +59,7 @@ class MasterSlot extends React.Component {
 		            <h3>{ this.props.course.code }</h3>
 		            <h3>{ this.props.course.name }</h3>
 		            <h3>{ prof }</h3>
-		            <h3>4 credits</h3>
+		            <h3>{ creditsDisplay }</h3>
 		        </div>
 		        <div className="master-slot-actions">
 		            <i className="fa fa-share-alt" onClick={getShareLink}></i>
