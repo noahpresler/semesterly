@@ -19,7 +19,10 @@ urlpatterns = patterns('',
 	url('', include('social.apps.django_app.urls', namespace='social')),
 	url('', include('django.contrib.auth.urls', namespace='auth')),
 	url(r'^complete/facebook/.*$', 'timetable.views.view_timetable'),
+	# home
 	url(r'^$', 'timetable.views.view_timetable'),
+	# sharing course
+	url(r'course/(?P<code>.+?)/(?P<sem>[fFsS]{1}?)/*$', 'timetable.views.view_timetable'),
 
 	# index
 	url(r'^timetable/*$', 'timetable.views.redirect_to_home'),
@@ -45,7 +48,6 @@ urlpatterns = patterns('',
 	url(r'^reason/*$', 'analytics.views.verify_password'),
 	url(r'^jhu/countdown/*$', 'timetable.views.jhu_timer'),
 	url(r'^courses/(?P<school>.+?)/(?P<sem>[fFsS]{1}?)/id/(?P<id>[0-9]+)/*$', 'timetable.views.get_course'),
-	url(r'^$', 'timetable.views.view_timetable'),
 	url(r'^get_timetables/$', 'timetable.views.get_timetables'),
 	url(r'^search/(?P<school>.+?)/(?P<sem>.+?)/(?P<query>.+?)/', 'timetable.views.course_search'),
 	url(r'^advanced_search/', 'timetable.views.advanced_course_search'),

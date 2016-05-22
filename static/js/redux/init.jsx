@@ -7,7 +7,10 @@ import { Provider } from 'react-redux';
 import { rootReducer } from './reducers/root_reducer.jsx';
 import SemesterlyContainer from './ui/containers/semesterly_container.jsx';
 import { getUserInfo } from './actions/user_actions.jsx';
-import { fetchSchoolInfo, loadTimetable, loadCachedTimetable } from './actions/timetable_actions.jsx'
+import { loadTimetable, loadCachedTimetable } from './actions/timetable_actions.jsx'
+import { fetchSchoolInfo } from './actions/school_actions.jsx';
+import { setCourseInfo } from './actions/modal_actions.jsx';
+
 export const store = createStore(rootReducer, applyMiddleware(thunkMiddleware));
 
 export const getSchool = () => {
@@ -32,20 +35,24 @@ store.dispatch(
 // setup the state. loads the user's timetables if logged in; cached timetables if not.
 // also handles sharing courses and sharing timetables
 function setup(dispatch) {
+  /* first setup the user's state */
   let user = currentUser; // comes from timetable.html
   dispatch(getUserInfo(user));
-  if (user.timetables && user.timetables.length > 0) { // user had saved timetables
-    // loading one of the user's timetables (after initial page load)
-    loadTimetable(user.timetables[0]);
-    dispatch({type: "RECEIVE_TIMETABLE_SAVED"});
+  if (user.isLoggedIn && user.timetables.length > 0) { // user had saved timetables
+    // loading one of the user's timetables (after initial page load). also fetches classmates 
+    loadTimetable(user.timetables[0]); 
+    dispatch({ type: "RECEIVE_TIMETABLE_SAVED" });
   }
-  else { // load last browser-cached timetable
+  else { // user isn't logged in (or has no saved timetables); load last browser-cached timetable
     loadCachedTimetable();
   }
-  return user;
+  /* Now setup sharing state */
+  if (sharedCourse) {
+    dispatch(setCourseInfo(sharedCourse));
+  }
 }
 
-setup(store.dispatch)
+setup(store.dispatch);
 
 // asynchronously get the school's specific info, including departments,
 // areas, etc
