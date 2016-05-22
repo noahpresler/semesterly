@@ -8,10 +8,12 @@ import majors from '../majors.jsx';
 
 export class UserSettingsModal extends React.Component {
     constructor(props) {
-        super(props)
+        super(props);
         this.changeForm = this.changeForm.bind(this);
         this.changeMajor = this.changeMajor.bind(this);
         this.changeClassYear = this.changeClassYear.bind(this);
+        this.changeClassYearshouldShow = this.shouldShow.bind(this);
+        this.isIncomplete = this.isIncomplete.bind(this);
     }
     changeForm() {
         let newUserSettings = {
@@ -19,23 +21,31 @@ export class UserSettingsModal extends React.Component {
             social_offerings: this.refs.share_sections.checked
         }
         let userSettings = Object.assign({}, this.props.userInfo, newUserSettings);
-        this.props.changeUserInfo(userSettings)
+        this.props.changeUserInfo(userSettings);
+        this.props.saveSettings();
     }
-    componentWillReceiveProps(nextProps) {
-        console.log(nextProps);
-        if (nextProps.userInfo.isLoggedIn && (nextProps.userInfo.social_offerings == null || nextProps.userInfo.social_courses == null || nextProps.userInfo.major == null)) {
+    componentWillReceiveProps(props) {
+        if (this.shouldShow(props))
             this.refs.modal.show();
-        }
     }
     changeMajor(val) {
         let userSettings = Object.assign({}, this.props.userInfo, {major: val.value});
         this.props.changeUserInfo(userSettings);
+        this.props.saveSettings();
     }
     changeClassYear(val) {
         let userSettings = Object.assign({}, this.props.userInfo, {class_year: val.value});
         this.props.changeUserInfo(userSettings);
+        this.props.saveSettings();
+    }
+    shouldShow(props) {
+        return props.userInfo.isLoggedIn && (this.isIncomplete(props.userInfo.social_offerings) || this.isIncomplete(props.userInfo.social_courses) || this.isIncomplete(props.userInfo.major));
+    }
+    isIncomplete(prop) {
+        return !prop || prop == null || prop === "";
     }
     render() {
+        console.log(this.props.userInfo);
         return (
             <Modal ref="modal" className="welcome-modal" closeOnClick={false} keyboard={false}>
                 <div id="modal-header">
@@ -95,7 +105,7 @@ export class UserSettingsModal extends React.Component {
                     </div>
                     <button className="signup-button" onClick={() => {
                         this.props.saveSettings();
-                        if (this.props.userInfo.isLoggedIn && !(this.props.userInfo.social_offerings == null || this.props.userInfo.social_courses == null || this.props.userInfo.major == null))
+                        if (!this.shouldShow(this.props))
                                 this.refs.modal.hide();
                     }}>Save</button>
                 </div>
