@@ -32,7 +32,7 @@ store.dispatch(
     semester: "F",
   }
 );
-// setup the state. loads the user's timetables if logged in; cached timetables if not.
+// setup the state. loads the user's timetables if logged in; cached timetable if not.
 // also handles sharing courses and sharing timetables
 function setup(dispatch) {
   /* first setup the user's state */
