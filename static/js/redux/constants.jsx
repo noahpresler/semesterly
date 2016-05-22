@@ -10,37 +10,37 @@ export const MAX_TIMETABLE_NAME_LENGTH = 30; // Length of "This is my fucking ti
 
 /* server endpoints */
 export const getCourseInfoEndpoint = (course_id) => {
-	return "courses/" + getSchool() + "/" + getSemester() + "/id/" + course_id;
+	return "/courses/" + getSchool() + "/" + getSemester() + "/id/" + course_id;
 };
 export const getCourseSearchEndpoint = (query) => {
-	return "search/" + getSchool() + "/" + getSemester() + "/" + query;
+	return "/search/" + getSchool() + "/" + getSemester() + "/" + query;
 };
 export const getAdvancedSearchEndpoint = (query) => {
-	return "advanced_search/";
+	return "/advanced_search/";
 };
 export const getTimetablesEndpoint = () => {
-	return "get_timetables/";
+	return "/get_timetables/";
 };
 export const getUserInfoEndpoint = () => {
-	return "user/info";
+	return "/user/info";
 };
 export const getSaveTimetableEndpoint = () => {
-	return "user/save_timetable/";
+	return "/user/save_timetable/";
 };
 export const getSaveSettingsEndpoint = () => {
-	return "user/save_settings/"
+	return "/user/save_settings/"
 }
 export const getClassmatesEndpoint = () => {
-	return "user/get_classmates/"
+	return "/user/get_classmates/"
 }
 export const getSchoolInfoEndpoint = () => {
-	return "school_info/" + getSchool()
+	return "/school_info/" + getSchool()
 }
 export const getReactToCourseEndpoint = () => {
-  return "react/";
+  return "/react/";
 }
 export const getLoadSavedTimetablesEndpoint = (semester) => {
-  return "user/get_saved_timetables/" + getSchool() + "/" + semester;
+  return "/user/get_saved_timetables/" + getSchool() + "/" + semester;
 }
 
 export const getSchoolSpecificInfo = (school) => {
@@ -95,9 +95,9 @@ export const getSchoolSpecificInfo = (school) => {
 export const getSemesterName = (semester) => {
 	switch(semester) {
 		case "F":
-			return "Fall 2016";
+			return "/Fall 2016";
 		case "S":
-			return "Spring 2017"
+			return "/Spring 2017"
 	}
 }
 export const COLOUR_DATA = [

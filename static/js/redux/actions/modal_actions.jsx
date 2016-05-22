@@ -24,7 +24,6 @@ export function setCourseId(id) {
 
 export function fetchCourseInfo(courseId) {
 	return (dispatch) => {
-
 		dispatch(requestCourseInfo(courseId));
 		fetch(getCourseInfoEndpoint(courseId), {
 				'credentials': 'include'
