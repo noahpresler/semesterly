@@ -104,6 +104,29 @@
 #modal-share {
 	right: 30px;
 }
+#modal-header #share-course-link-wrapper {
+    position:absolute;
+    top:35px;
+    right:5px;
+    height:33px;
+    padding:0px 5px;
+    background-color:#777;
+    border-radius:2px;
+}
+#modal-header #share-course-link {
+	font-size:14px;
+    height:25px;
+    margin-top:4px;
+}
+#modal-header #share-course-link-wrapper .tip {
+    top:-7px;
+    right:28px;
+    border:1px solid #ccc;
+}
+#modal-header #share-course-link-wrapper .tip-border {
+    top:-7px;
+    right:28px;
+}
 #modal-save {
 	right: 55px;
 }
