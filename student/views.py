@@ -22,23 +22,17 @@ def get_student(request):
   else:
     return None
 
-def get_user_dict(school, student):
+def get_user_dict(school, student, semester):
 	user_dict = {}
 	if student:
 		user_dict = model_to_dict(student, exclude=["user","id","fbook_uid", "friends"])
-		user_dict["timetables"] = get_student_tts(student, school, "F")
+		user_dict["timetables"] = get_student_tts(student, school, semester)
 		user_dict["userFirstName"] = student.user.first_name
 		user_dict["userLastName"] = student.user.last_name
 	
 	user_dict["isLoggedIn"] = student is not None
 
 	return user_dict
-
-@validate_subdomain
-def get_user(request):
-	school = request.subdomain
-	student = get_student(request)
-	return HttpResponse(json.dumps(get_user_dict(school, student)), content_type='application/json')
 
 @login_required
 @validate_subdomain
