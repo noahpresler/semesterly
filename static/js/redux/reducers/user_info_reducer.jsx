@@ -3,7 +3,9 @@ export const userInfo = (state = {data: {isLoggedIn: false}, saving: false, isFe
 		case 'REQUEST_SAVE_USER_INFO':
 			return Object.assign( {}, state, { saving: true });
 		case 'CHANGE_USER_INFO':
-			return Object.assign( {}, state, { data: action.data });
+			let changeData = action.data;
+			changeData.social_courses = changeData.social_offerings ? true : changeData.social_courses;
+			return Object.assign( {}, state, { data: changeData });
 		case 'RECEIVE_USER_INFO_SAVED':
 			return Object.assign( {}, state, { saving: false });
 		case "USER_INFO_RECEIVED":
