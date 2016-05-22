@@ -43,7 +43,6 @@
     <script src="//twemoji.maxcdn.com/2/twemoji.min.js"></script>
   </head>
   <body id="dad-bod">
-
       <div id="page">
       </div>
       <div id="semesterly-modal">
@@ -51,13 +50,12 @@
       <script type="text/javascript">
         var school = "{{school}}";
         var currentUser = JSON.parse("{{student|escapejs}}");
+        var sharedCourse = JSON.parse("{{course|escapejs}}");
       </script>
       <!-- Libraries -->
       <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.8.3/underscore-min.js"></script>
       <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
       <!-- ReactJS compiled file -->
       <script type="text/javascript" src="{% static 'js/gulp/application.js'%}"></script>
-
-
     </body>
 </html>

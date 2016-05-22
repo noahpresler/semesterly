@@ -1,7 +1,8 @@
 import React from 'react';
 import { COLOUR_DATA } from '../constants.jsx';
 import classNames from 'classnames';
-import { getShareLink } from '../helpers/timetable_helpers.jsx';
+import { getCourseShareLink } from '../helpers/timetable_helpers.jsx';
+import ClickOutHandler from 'react-onclickout';
 
 class MasterSlot extends React.Component {
 	constructor(props) {
@@ -10,6 +11,9 @@ class MasterSlot extends React.Component {
         this.onMasterSlotHover = this.onMasterSlotHover.bind(this);
         this.onMasterSlotUnhover = this.onMasterSlotUnhover.bind(this);
         this.updateColours = this.updateColours.bind(this);
+        this.showShareLink = this.showShareLink.bind(this);
+        this.hideShareLink = this.hideShareLink.bind(this);
+        this.state = {shareLinkShown: false};
     }
     stopPropagation(callback, event) {
         event.stopPropagation();
@@ -30,6 +34,12 @@ class MasterSlot extends React.Component {
         $(".slot-" + this.props.course.id)
           .css('background-color', colour)
     }
+    showShareLink() {
+        this.setState({shareLinkShown: true});
+    }
+    hideShareLink() {
+        this.setState({shareLinkShown: false});
+    }
 
 	render() {
         let friendCircles = this.props.classmates && this.props.classmates.classmates ? this.props.classmates.classmates.map(c => {
@@ -45,6 +55,12 @@ class MasterSlot extends React.Component {
         let numCredits = this.props.course.num_credits;
         let creditsDisplay = numCredits === 1 ? " credit" : " credits";
         creditsDisplay = numCredits + creditsDisplay;
+        let shareLink = this.state.shareLinkShown ? 
+        <ShareCourseLink 
+            link={getCourseShareLink(this.props.course.code)}
+            onClickOut={this.hideShareLink} /> : 
+        null;
+
 		return <div className={masterSlotClass}
 					onMouseEnter={ this.onMasterSlotHover }
                     onMouseLeave={ this.onMasterSlotUnhover }
@@ -62,7 +78,9 @@ class MasterSlot extends React.Component {
 		            <h3>{ creditsDisplay }</h3>
 		        </div>
 		        <div className="master-slot-actions">
-		            <i className="fa fa-share-alt" onClick={getShareLink}></i>
+
+		            <i className="fa fa-share-alt" onClick={(event) => this.stopPropagation(this.showShareLink, event)}></i>
+                    {shareLink}
                     {
                         !this.props.hideCloseButton ? 
 		            <i className="fa fa-times" 
@@ -75,5 +93,15 @@ class MasterSlot extends React.Component {
     	</div>
     }
 }
+
+export const ShareCourseLink = ({link, onClickOut}) => (
+    <ClickOutHandler onClickOut={onClickOut}>
+        <div id="share-course-link-wrapper">
+            <div className="tip-border"></div>
+            <div className="tip"></div>
+            <input id="share-course-link" size={link.length} value={link} onClick={(e) => e.stopPropagation()} readOnly />
+        </div>
+    </ClickOutHandler>
+)
 
 export default MasterSlot;

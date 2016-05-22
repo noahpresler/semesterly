@@ -173,6 +173,44 @@ h4.sb-header:after {
     left: 0;
     top: 0;
 }
+.master-slot #share-course-link-wrapper {
+    position:absolute;
+    top:20px;
+    right:5px;
+    height:38px;
+    padding:0px 5px;
+    background-color:#F8F6F7;
+    border-radius:2px;
+}
+.master-slot #share-course-link-wrapper .tip {
+    top:-7px;
+    right:12px;
+}
+.master-slot #share-course-link-wrapper .tip-border {
+    top:-7px;
+    right:12px;
+}
+.modal-module .master-slot-actions .fa-share-alt {
+    margin-right:4px;
+}
+.modal-module .master-slot #share-course-link-wrapper .tip {
+    top:-7px;
+    right:0px;
+}
+.modal-module .master-slot #share-course-link-wrapper .tip-border {
+    top:-7px;
+    right:0px;
+}
+.master-slot #share-course-link-wrapper #share-course-link {
+    color: #222;
+    font-size:14px;
+    font-weight:400;
+    margin-top:7px;
+    width:auto;
+    height:25px;
+    cursor:pointer;
+}
+
 .master-slot-content h3 {
     margin: 0;
     font-size: 14px;
