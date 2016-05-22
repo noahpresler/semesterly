@@ -5,12 +5,17 @@ import fetch from 'isomorphic-fetch';
 import { getSchool } from '../init.jsx';
 import Modal from 'boron/DropModal';
 import { CourseModalBody } from './course_modal_body.jsx'
+import { getCourseShareLink } from '../helpers/timetable_helpers.jsx';
+import { ShareCourseLink } from './master_slot.jsx';
 
 export class CourseModal extends React.Component {
     constructor(props) {
         super(props);
         this.addOrRemoveCourse = this.addOrRemoveCourse.bind(this);
         this.hide = this.hide.bind(this);
+        this.state = { shareLinkShown: false }
+        this.showShareLink = this.showShareLink.bind(this);
+        this.hideShareLink = this.hideShareLink.bind(this);
     }
     componentWillReceiveProps(nextProps) {
         if (nextProps.id != null) {
@@ -20,6 +25,12 @@ export class CourseModal extends React.Component {
     addOrRemoveCourse(id, section='') {
         this.props.addOrRemoveCourse(id, section);
         this.hide();
+    }
+    showShareLink() {
+        this.setState({shareLinkShown: true});
+    }
+    hideShareLink() {
+        this.setState({shareLinkShown: false});
     }
     // sizeItUp() {
     //     let h = $("#modal-header").outerHeight();
@@ -46,6 +57,11 @@ export class CourseModal extends React.Component {
         let courseAndDept = this.props.data.code;
         courseAndDept = this.props.data.department && this.props.data.department != "" ?
         courseAndDept + ", " + this.props.data.department : courseAndDept;
+        let shareLink = this.state.shareLinkShown ? 
+        <ShareCourseLink 
+            link={getCourseShareLink(this.props.data.code)}
+            onClickOut={this.hideShareLink} /> : 
+        null;
         let content = this.props.isFetching ? <div className="modal-loader"></div> :
         (<div id="modal-content">
             <div id="modal-header">
@@ -55,8 +71,10 @@ export class CourseModal extends React.Component {
                     <i className="fa fa-times"></i>
                 </div>
                 <div id="modal-share">
-                    <i className="fa fa-share-alt"></i>
+                    <i className="fa fa-share-alt" onClick={this.showShareLink}></i>
                 </div>
+                { shareLink }
+
                 <div id="modal-save">
                     <i className="fa fa-bookmark"></i>
                 </div>

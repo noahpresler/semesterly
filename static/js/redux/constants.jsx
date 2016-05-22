@@ -92,14 +92,6 @@ export const getSchoolSpecificInfo = (school) => {
 	}
 }
 
-export const getSemesterName = (semester) => {
-	switch(semester) {
-		case "F":
-			return "/Fall 2016";
-		case "S":
-			return "/Spring 2017"
-	}
-}
 export const COLOUR_DATA = [
     { background: "#FD7473", highlight: "#E26A6A", border: "#963838", font: "#222" },
     { background: "#5AC8FB", highlight: "#28A4EA", border: "#1B6B90", font: "#222" },
