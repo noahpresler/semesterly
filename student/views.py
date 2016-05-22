@@ -13,23 +13,33 @@ from student.models import *
 from django.forms.models import model_to_dict
 from django.contrib.auth.decorators import login_required
 
-from timetable.views import validate_subdomain, merge_dicts
+from timetable.utils import *
 
-def get_user(request):
-	logged = request.user.is_authenticated()
-	if logged and Student.objects.filter(user=request.user).exists():
+def get_student(request):
+  logged = request.user.is_authenticated()
+  if logged and Student.objects.filter(user=request.user).exists():
+    return Student.objects.get(user=request.user)
+  else:
+    return None
+
+def get_user_dict(request):
+	student = get_student(request)
+	response = {}
+	if student:
 		school = request.subdomain
 		student = Student.objects.get(user=request.user)
-		response = model_to_dict(student, exclude=['user','id','fbook_uid', 'friends'])
-		response['timetables'] = get_student_tts(student, school, "F")
-		response['userFirstName'] = request.user.first_name
-		response['userLastName'] = request.user.last_name
-		response['isLoggedIn'] = logged
-	else:
-		response = {
-			'isLoggedIn': False
-		}
-	return HttpResponse(json.dumps(response), content_type='application/json')
+		response = model_to_dict(student, exclude=["user","id","fbook_uid", "friends"])
+		response["timetables"] = get_student_tts(student, school, "F")
+		response["userFirstName"] = request.user.first_name
+		response["userLastName"] = request.user.last_name
+	
+	response["isLoggedIn"] = student != None
+
+	return response
+
+def get_user(request):
+	print json.dumps(get_user_dict(request))
+	return HttpResponse(json.dumps(get_user_dict(request)), content_type='application/json')
 
 @login_required
 @validate_subdomain
