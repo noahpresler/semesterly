@@ -12,7 +12,7 @@ export class UserSettingsModal extends React.Component {
         this.changeForm = this.changeForm.bind(this);
         this.changeMajor = this.changeMajor.bind(this);
         this.changeClassYear = this.changeClassYear.bind(this);
-        this.changeClassYearshouldShow = this.shouldShow.bind(this);
+        this.shouldShow = this.shouldShow.bind(this);
         this.isIncomplete = this.isIncomplete.bind(this);
     }
     changeForm() {
@@ -23,6 +23,15 @@ export class UserSettingsModal extends React.Component {
         let userSettings = Object.assign({}, this.props.userInfo, newUserSettings);
         this.props.changeUserInfo(userSettings);
         this.props.saveSettings();
+    }
+    componentDidMount() {
+        if (this.shouldShow(this.props))
+            this.refs.modal.show();
+        if(this.isIncomplete(this.props.userInfo.social_courses)) {
+            let newUserSettings = { social_courses: true, social_offerings: false };
+            let userSettings = Object.assign({}, this.props.userInfo, newUserSettings);
+            this.props.changeUserInfo(userSettings);
+        }
     }
     componentWillReceiveProps(props) {
         if (this.shouldShow(props))
@@ -39,13 +48,12 @@ export class UserSettingsModal extends React.Component {
         this.props.saveSettings();
     }
     shouldShow(props) {
-        return props.userInfo.isLoggedIn && (this.isIncomplete(props.userInfo.social_offerings) || this.isIncomplete(props.userInfo.social_courses) || this.isIncomplete(props.userInfo.major));
+        return props.userInfo.isLoggedIn && (this.isIncomplete(props.userInfo.social_offerings) || this.isIncomplete(props.userInfo.social_courses) || this.isIncomplete(props.userInfo.major) || this.isIncomplete(props.userInfo.class_year));
     }
     isIncomplete(prop) {
-        return !prop || prop == null || prop === "";
+        return prop === undefined || prop === null || prop === "";
     }
     render() {
-        console.log(this.props.userInfo);
         return (
             <Modal ref="modal" className="welcome-modal" closeOnClick={false} keyboard={false}>
                 <div id="modal-header">
