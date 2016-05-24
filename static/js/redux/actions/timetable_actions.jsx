@@ -3,8 +3,9 @@ import { getTimetablesEndpoint } from '../constants.jsx';
 import { randomString, browserSupportsLocalStorage } from '../util.jsx';
 import { store } from '../init.jsx';
 import { getClassmatesEndpoint } from '../constants.jsx'
-import { lockActiveSections } from './user_actions.jsx';
+import { lockActiveSections, fetchClassmates } from './user_actions.jsx';
 import { saveLocalSemester, saveLocalPreferences, saveLocalCourseSections, saveLocalActiveIndex } from '../util.jsx';
+
 export const SID = randomString(30);
 
 export function requestTimetables() {
@@ -41,7 +42,7 @@ export function nullifyTimetable(dispatch) {
 	})
 }
 
-// loads timetable from localStorage. assumes the browser supports localStorage
+// loads timetable from localStorage. assumes that the browser supports localStorage
 export function loadCachedTimetable() {
 	let localCourseSections = JSON.parse(localStorage.getItem('courseSections'));
 	// no coursesections stored locally; user is new (or hasn't added timetables yet)
@@ -54,7 +55,7 @@ export function loadCachedTimetable() {
 	store.dispatch({ type: 'SET_ALL_PREFERENCES', preferences: localPreferences });
 	store.dispatch({ type: 'SET_SEMESTER', semester: localSemester });
 	store.dispatch({ type: 'RECEIVE_COURSE_SECTIONS', courseSections: localCourseSections });
-	fetchCachedTimetables(store.getState(), localActive);
+	fetchStateTimetables(store.getState(), localActive);
 }
 
 // loads @timetable into the state.
@@ -62,14 +63,21 @@ export function loadCachedTimetable() {
 export function loadTimetable(timetable, created=false) {
 	let dispatch = store.dispatch;
 	let state = store.getState();
-	if (!state.userInfo.data.isLoggedIn) {
+	let isLoggedIn = state.userInfo.data.isLoggedIn;
+	if (!isLoggedIn) {
 		return dispatch({type: 'TOGGLE_SIGNUP_MODAL'});
 	}
+	// store the 'saved timetable' (handled by the saving_timetable reducer)
 	dispatch({
 		type: "CHANGE_ACTIVE_SAVED_TIMETABLE",
 		timetable,
 		created
 	});
+	// lock sections for this timetable; and mark it as the only available one
+	lockTimetable(dispatch, timetable, created, isLoggedIn);
+}
+
+export function lockTimetable(dispatch, timetable, created, isLoggedIn) {
 	dispatch({
 		type: "RECEIVE_COURSE_SECTIONS",
 		courseSections: lockActiveSections(timetable)
@@ -79,8 +87,7 @@ export function loadTimetable(timetable, created=false) {
 		timetables: [timetable],
 		preset: created === false
 	});
-	let userInfo = state.userInfo.data;
-	if (userInfo.isLoggedIn) {
+	if (isLoggedIn) { // fetch classmates for this timetable only if the user is logged in
 		dispatch(fetchClassmates(timetable.courses.map( c => c['id'])))
 	}
 }
@@ -114,7 +121,7 @@ export function unhoverSection (dispatch) {
 		});
 	}
 }
-export function fetchCachedTimetables(state, activeIndex) {
+export function fetchStateTimetables(state, activeIndex) {
 	let requestBody = getBaseReqBody(state);
 	store.dispatch(fetchTimetables(requestBody, false, activeIndex));
 }
@@ -231,10 +238,10 @@ export function addCustomSlot(timeStart, timeEnd, day, preview, id) {
 		newCustomSlot: {
 			time_start: timeStart, // match backend slot attribute names
 			time_end: timeEnd,
-			day: day,
-			name: "New Event", // default name for custom slot
-			id: id,
-			preview: preview
+			name: "New Custom Event", // default name for custom slot
+			day,
+			id,
+			preview,
 		}
 	})
 }
@@ -243,8 +250,8 @@ export function updateCustomSlot(newValues, id) {
 	let dispatch = store.dispatch;
 	dispatch({
 		type: "UPDATE_CUSTOM_SLOT",
-		newValues: newValues,
-		id: id
+		newValues,
+		id,
 	})
 }
 
@@ -252,22 +259,10 @@ export function removeCustomSlot(id) {
 	let dispatch = store.dispatch;
 	dispatch({
 		type: "REMOVE_CUSTOM_SLOT",
-		id: id
+		id,
 	})
 }
 
-export function getClassmates(json) {
-	return {
-		type: "CLASSMATES_RECEIVED",
-		courses: json
-	};
-}
-
-export function requestClassmates(id) {
-  return {
-    type: "REQUEST_CLASSMATES",
-  }
-}
 
 export function addOrRemoveOptionalCourse(course) {
 	return (dispatch) => {
@@ -278,27 +273,10 @@ export function addOrRemoveOptionalCourse(course) {
 	  	let state = store.getState();
 	  	let reqBody = getBaseReqBody(state);
 		Object.assign(reqBody, {
-        	'optionCourses': state.optionalCourses.courses.map(c => c.id),
-        	'numOptionCourses': state.optionalCourses.numRequired
+        	optionCourses: state.optionalCourses.courses.map(c => c.id),
+        	numOptionCourses: state.optionalCourses.numRequired
         });
 		store.dispatch(fetchTimetables(reqBody, false));
-	}
-}
-
-
-export function fetchClassmates(courses) {
-	return (dispatch) => {
-
-		dispatch(requestClassmates());
-		fetch(getClassmatesEndpoint(), {
-			credentials: 'include',
-			method: 'POST',
-			body: JSON.stringify({ course_ids: courses })
-		})
-	    .then(response => response.json())
-	    .then(json => {
-	    	dispatch(getClassmates(json))
-	    });
 	}
 }
 
