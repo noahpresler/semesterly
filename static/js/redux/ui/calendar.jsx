@@ -28,13 +28,15 @@ class Calendar extends React.Component {
 	constructor(props) {
 		super(props);
 		this.state = {shareLinkShown: false};
+		this.fetchShareTimetableLink = this.fetchShareTimetableLink.bind(this);
 		this.hideShareLink = this.hideShareLink.bind(this);
 	}
 	componentWillReceiveProps(nextProps) {
-		if (this.props.shareLink !== nextProps.shareLink) {
+		if (this.props.isFetchingShareLink && !nextProps.isFetchingShareLink) {
 			this.setState({shareLinkShown: true});
 		}
 	}
+
 	getCalendarRows() {
 	    let rows = [];
 	    for (let i = 8; i <= this.props.endHour; i++) { // one row for each hour, starting from 8am
@@ -43,6 +45,14 @@ class Calendar extends React.Component {
 	    }
 
 	  	return rows;
+	}
+	fetchShareTimetableLink() {
+		if (this.props.shareLinkValid) {
+			this.setState({shareLinkShown: true});
+		}
+		if (!this.props.isFetchingShareLink) {
+			this.props.fetchShareTimetableLink();
+		}
 	}
 
 	hideShareLink() {
@@ -59,7 +69,7 @@ class Calendar extends React.Component {
 		);
 		let addButton = <button
 			onClick={this.props.createTimetable} className="save-timetable add-button"><i className="fa fa-plus" /></button>
-		let shareButton = <button onClick={this.props.fetchShareTimetableLink}
+		let shareButton = <button onClick={this.fetchShareTimetableLink}
 			className="save-timetable add-button">
 				<i className={classnames("fa",  
 					{"fa-share-alt": !this.props.isFetchingShareLink}, 

@@ -1,7 +1,8 @@
 import { connect } from 'react-redux';
 import Calendar from '../calendar.jsx';
-import { saveTimetable, fetchShareTimetableLink } from '../../actions/user_actions.jsx';
+import { saveTimetable } from '../../actions/user_actions.jsx';
 import { loadTimetable } from '../../actions/timetable_actions.jsx';
+import { fetchShareTimetableLink } from '../../actions/calendar_actions.jsx';
 /*
 gets the end hour of the current timetable, based on the class that ends latest
 */
@@ -27,12 +28,13 @@ const mapStateToProps = (state) => {
 	let timetables = state.timetables.items;
 	let active = state.timetables.active;
 	let hasTimetables = timetables[active].courses.length > 0;
-  let { isFetchingShareLink, shareLink } = state.calendar;
+  let { isFetchingShareLink, shareLink, shareLinkValid } = state.calendar;
 	return {
     	endHour: getMaxEndHour(timetables[active], hasTimetables),
       saving: state.savingTimetable.saving,
       isFetchingShareLink,
       shareLink,
+      shareLinkValid,
 	}
 }
 const mapDispatchToProps = (dispatch) => {

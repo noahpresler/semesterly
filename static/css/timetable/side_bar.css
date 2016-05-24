@@ -14,11 +14,18 @@
     line-height: 25px;
     width: 100%;
 }
+#share-course-link-wrapper input {
+    border: 1px solid #fff;
+    transition: border .3s;
+}
 #side-bar input:focus,
-#side-bar input:focus:hover {
+#side-bar input:focus:hover,
+#share-course-link-wrapper input:focus,
+#share-course-link-wrapper input:focus:hover {
 	border: 1px solid #0095FF;
 }
-#side-bar input:hover {
+#side-bar input:hover,
+#share-course-link-wrapper input:hover {
 	border: 1px solid #ddd;
 }
 #side-bar .unsaved { 
