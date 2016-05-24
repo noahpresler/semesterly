@@ -42,7 +42,6 @@ class MasterSlot extends React.Component {
     }
 
 	render() {
-        console.log(this.props.course.code, this.props.onTimetable);
         let friendCircles = this.props.classmates && this.props.classmates.classmates ? this.props.classmates.classmates.map(c => {
             return <div className="ms-friend" key={c.img_url} style={{backgroundImage: 'url(' + c.img_url + ')'}}></div>;
         }) : null;
