@@ -42,6 +42,9 @@ export const getReactToCourseEndpoint = () => {
 export const getLoadSavedTimetablesEndpoint = (semester) => {
   return "/user/get_saved_timetables/" + getSchool() + "/" + semester;
 }
+export const getRequestShareTimetableLinkEndpoint = () => {
+  return "/share/link/";
+}
 
 export const getSchoolSpecificInfo = (school) => {
 	switch(school) {
@@ -97,6 +100,7 @@ export const COLOUR_DATA = [
     { background: "#5AC8FB", highlight: "#28A4EA", border: "#1B6B90", font: "#222" },
     { background: "#4CD4B0", highlight: "#3DBB9A", border: "#1E755E", font: "#222" },
     { background: "#8870FF", highlight: "#7059E6", border: "#382694", font: "#222" },
+    { background: "#E7F76D", highlight: "#C9E20A", border: "#C2D629", font: "#222" },
     { background: "#FFBF8D", highlight: "#F7954A", border: "#AF5E20", font: "#222" },
     { background: "#D4DBC8", highlight: "#B5BFA3", border: "#6C7A89", font: "#222" },
     { background: "#F182B4", highlight: "#DE699D", border: "#6C7A89", font: "#222" },

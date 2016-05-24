@@ -23,7 +23,10 @@ urlpatterns = patterns('',
 	url(r'^$', 'timetable.views.view_timetable'),
 	# sharing course
 	url(r'course/(?P<code>.+?)/(?P<sem>[fFsS]{1}?)/*$', 'timetable.views.view_timetable'),
-
+	# request sharing timetable link
+	url(r'share/link/*$', 'timetable.views.create_share_link'),
+	# view shared timetable 
+	url(r'share/(?P<ref>[\d]+)/*$', 'timetable.views.share_timetable'),
 	# index
 	url(r'^timetable/*$', 'timetable.views.redirect_to_home'),
 	url(r'^timetable/.+$', 'timetable.views.redirect_to_home'),
