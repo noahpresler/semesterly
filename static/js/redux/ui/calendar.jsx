@@ -1,9 +1,11 @@
 import React from 'react';
+import classnames from 'classnames';
 import PaginationContainer  from './containers/pagination_container.jsx';
 import SlotManagerContainer from './containers/slot_manager_container.jsx';
 import CellContainer from './containers/cell_container.jsx'
 import { DAYS, DRAGTYPES } from '../constants.jsx';
 import { DropTarget } from 'react-dnd';
+import { ShareLink } from './master_slot.jsx';
 
 const Row = (props) => {
 	let timeText = props.show ? <span>{props.time}</span> : null;
@@ -23,14 +25,28 @@ const Row = (props) => {
 }
 
 class Calendar extends React.Component {
+	constructor(props) {
+		super(props);
+		this.state = {shareLinkShown: false};
+		this.hideShareLink = this.hideShareLink.bind(this);
+	}
+	componentWillReceiveProps(nextProps) {
+		if (this.props.shareLink !== nextProps.shareLink) {
+			this.setState({shareLinkShown: true});
+		}
+	}
 	getCalendarRows() {
-    let rows = [];
-    for (let i = 8; i <= this.props.endHour; i++) { // one row for each hour, starting from 8am
-      rows.push(<Row time={i + ':00'} show={true} key={i}/>);
-      rows.push(<Row time={i + ':30'} show={false} key={i + 0.5}/>);
-    }
+	    let rows = [];
+	    for (let i = 8; i <= this.props.endHour; i++) { // one row for each hour, starting from 8am
+	      rows.push(<Row time={i + ':00'} show={true} key={i}/>);
+	      rows.push(<Row time={i + ':30'} show={false} key={i + 0.5}/>);
+	    }
 
-  	return rows;
+	  	return rows;
+	}
+
+	hideShareLink() {
+		this.setState({shareLinkShown: false});
 	}
 
 	render() {
@@ -43,11 +59,20 @@ class Calendar extends React.Component {
 		);
 		let addButton = <button
 			onClick={this.props.createTimetable} className="save-timetable add-button"><i className="fa fa-plus" /></button>
-		let shareButton = <button
-			className="save-timetable add-button"><i className="fa fa-share-alt" /></button>
+		let shareButton = <button onClick={this.props.fetchShareTimetableLink}
+			className="save-timetable add-button">
+				<i className={classnames("fa",  
+					{"fa-share-alt": !this.props.isFetchingShareLink}, 
+					{"fa-spin fa-circle-o-notch": this.props.isFetchingShareLink})} />
+			</button>
+		
 		// let downloadButton = <button
 		// 	className="save-timetable add-button"><i className="fa fa-download" /></button>
-    let downloadButton = null
+		let shareLink = this.state.shareLinkShown ? 
+        <ShareLink 
+            link={this.props.shareLink}
+            onClickOut={this.hideShareLink} /> : 
+        null;
 		return (
 
 	      <div id="calendar" className="fc fc-ltr fc-unthemed">
@@ -56,8 +81,8 @@ class Calendar extends React.Component {
 	      		<PaginationContainer />
 	      	  </div>
 	          <div className="fc-right">
-	          	{ downloadButton }
 	          	{ shareButton }
+	          	{ shareLink }
 	          	{ addButton }
 	          	{ saveButton }
 	          </div>

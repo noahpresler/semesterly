@@ -1,4 +1,5 @@
 from school_mappers import VALID_SCHOOLS
+from django.shortcuts import render
 
 def validate_subdomain(view_func):
   def wrapper(request, *args, **kwargs):

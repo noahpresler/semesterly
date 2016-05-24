@@ -13,12 +13,13 @@ from django.db.models import Q
 from hashids import Hashids
 from pytz import timezone
 
+from analytics.models import *
 from analytics.views import *
 from timetable.models import *
 from timetable.school_mappers import school_to_granularity, VALID_SCHOOLS
 from timetable.utils import *
 from student.models import Student
-from student.views import get_student, get_user_dict
+from student.views import get_student, get_user_dict, convert_tt_to_dict
 
 MAX_RETURN = 60 # Max number of timetables we want to consider
 
@@ -47,10 +48,10 @@ def save_analytics_data(key, args):
 # ******************************************************************************
 
 @validate_subdomain
-def view_timetable(request, code=None, sem=None):
+def view_timetable(request, code=None, sem=None, shared_timetable=None):
   school = request.subdomain
   student = get_student(request)
-  course_json = {}
+  course_json = None
   if not sem: # not loading a share course link
     sem = 'F' 
   if code: # user is loading a share course link, since code was included
@@ -66,9 +67,42 @@ def view_timetable(request, code=None, sem=None):
     'school': school,
     'student': json.dumps(get_user_dict(school, student, sem)),
     'course': json.dumps(course_json),
-    'semester': sem
+    'semester': sem,
+    'shared_timetable': json.dumps(shared_timetable),
   },
   context_instance=RequestContext(request))
+
+@validate_subdomain
+def share_timetable(request, ref):
+  try:
+    shared_timetable = convert_tt_to_dict(SharedTimetable.objects.get(id=ref), False)
+    semester = shared_timetable['semester']
+    return view_timetable(request, sem=semester, shared_timetable=shared_timetable)
+  except Exception as e:
+    raise Http404
+
+@csrf_exempt
+@validate_subdomain
+def create_share_link(request):
+  school = request.subdomain
+  params = json.loads(request.body)
+  courses = params['timetable']['courses']
+  semester = params['semester']
+  student = get_student(request)
+  shared_timetable = SharedTimetable.objects.create(
+    student=student, school=school, semester=semester)
+  shared_timetable.save()
+
+  for course in courses:
+    course_obj = Course.objects.get(id=course['id'])
+    shared_timetable.courses.add(course_obj)
+    enrolled_sections = course['enrolled_sections']
+    for section in enrolled_sections:
+      shared_timetable.sections.add(course_obj.section_set.get(meeting_section=section, semester__in=[semester, "Y"]))
+  shared_timetable.save()
+
+  response = {'link': shared_timetable.id}
+  return HttpResponse(json.dumps(response), content_type='application/json')
 
 @csrf_exempt
 def get_timetables(request):
