@@ -22,7 +22,6 @@ class Updates(models.Model):
   last_updated = models.DateTimeField(auto_now=True)
   reason = models.CharField(max_length=200, default='Scheduled Update')
 
-
 class Course(models.Model):
   school = models.CharField(db_index=True, max_length=100)
   code = models.CharField(max_length=20)
@@ -115,7 +114,7 @@ class Offering(models.Model):
 
   def __unicode__(self):
     # return "Semester: %s, Section: %s, Time: %s" % (self.semester, self.meeting_section, self.time)
-    return "Day: %s, Time: %s - %s" % (self.day, self.start_time, self.end_time)
+    return "Day: %s, Time: %s - %s" % (self.day, self.time_start, self.time_end)
 
 
 class Evaluation(models.Model):

@@ -6,7 +6,7 @@ import { getSchool } from '../init.jsx';
 import Modal from 'boron/DropModal';
 import { CourseModalBody } from './course_modal_body.jsx'
 import { getCourseShareLink } from '../helpers/timetable_helpers.jsx';
-import { ShareCourseLink } from './master_slot.jsx';
+import { ShareLink } from './master_slot.jsx';
 
 export class CourseModal extends React.Component {
     constructor(props) {
@@ -58,7 +58,7 @@ export class CourseModal extends React.Component {
         courseAndDept = data.department && data.department != "" ?
         courseAndDept + ", " + data.department : courseAndDept;
         let shareLink = this.state.shareLinkShown ? 
-        <ShareCourseLink 
+        <ShareLink 
             link={getCourseShareLink(data.code)}
             onClickOut={this.hideShareLink} /> : 
         null;

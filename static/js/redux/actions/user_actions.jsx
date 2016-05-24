@@ -1,7 +1,7 @@
 import fetch from 'isomorphic-fetch';
-import { getUserInfoEndpoint, getSaveTimetableEndpoint, getSaveSettingsEndpoint, getLoadSavedTimetablesEndpoint } from '../constants.jsx';
+import { getUserInfoEndpoint, getSaveTimetableEndpoint, getSaveSettingsEndpoint, getClassmatesEndpoint, getLoadSavedTimetablesEndpoint, getRequestShareTimetableLinkEndpoint } from '../constants.jsx';
 import { store } from '../init.jsx';
-import { loadTimetable, fetchClassmates, fetchCachedTimetables, nullifyTimetable } from './timetable_actions.jsx';
+import { loadTimetable, nullifyTimetable } from './timetable_actions.jsx';
 import { browserSupportsLocalStorage } from '../util.jsx';
 
 export function getUserInfo(json) {
@@ -17,14 +17,55 @@ export function requestUserInfo(id) {
   }
 }
 
+export function getClassmates(json) {
+	return {
+		type: "CLASSMATES_RECEIVED",
+		courses: json
+	};
+}
+
+export function requestClassmates() {
+  return {
+    type: "REQUEST_CLASSMATES",
+  }
+}
+
+
+export function fetchShareTimetableLink() {
+	return (dispatch) => {
+		let state = store.getState();
+		let semester = state.semester;
+		let timetableState = state.timetables;
+		dispatch({
+			type: "REQUEST_SHARE_TIMETABLE_LINK"
+		});
+		fetch(getRequestShareTimetableLinkEndpoint(), {
+			method: 'POST',
+			body: JSON.stringify({
+				timetable: getActiveTimetable(timetableState),
+				semester,
+			}),
+			credentials: 'include',
+		})
+		.then(response => response.json())
+		.then(ref => {
+			dispatch({
+				type: "RECEIVE_SHARE_TIMETABLE_LINK",
+				shareLink: window.location.hostname + "/share/" + ref.link
+			});
+		})
+
+	}
+}
+
 function getSaveTimetablesRequestBody() {
 	let state = store.getState();
 	let timetableState = state.timetables;
-	let semester = state.semester
+	let semester = state.semester;
 	let name = state.savingTimetable.activeTimetable.name;
 	let id = state.savingTimetable.activeTimetable.id || 0;
 	return {
-		timetable: timetableState.items[timetableState.active],
+		timetable: getActiveTimetable(timetableState),
 		semester,
 		name,
 		id,
@@ -35,7 +76,7 @@ function getSaveTimetablesRequestBody() {
 function getActiveTimetable(timetableState) {
 	return timetableState.items[timetableState.active];
 }
-/* Returns the currently active timetable */
+/* Returns the updated courseSections, after locking all sections */
 export function lockActiveSections(activeTimetable) {
 	let courseSections = {};
 	let courses = activeTimetable.courses;
@@ -57,7 +98,7 @@ export function saveTimetable() {
 			return dispatch({type: 'TOGGLE_SIGNUP_MODAL'})
 		}
 		let activeTimetable = getActiveTimetable(state.timetables);
-		// current timetable is empty or we're already in saved state, don't save this timetable
+		// if current timetable is empty or we're already in saved state, don't save this timetable
 		if (activeTimetable.courses.length === 0 || state.savingTimetable.upToDate) {
 			return;
 		}
@@ -65,7 +106,7 @@ export function saveTimetable() {
 		dispatch({
 			type: "REQUEST_SAVE_TIMETABLE"
 		});
-		// mark that the current timetable is now the only available one
+		// mark that the current timetable is now the only available one (since all sections are locked)
 		dispatch({
 			type: "RECEIVE_TIMETABLES",
 			timetables: [activeTimetable],
@@ -158,6 +199,22 @@ export function getUserSavedTimetables(semester) {
 			}
 		})
 
+	}
+}
+
+export function fetchClassmates(courses) {
+	return (dispatch) => {
+
+		dispatch(requestClassmates());
+		fetch(getClassmatesEndpoint(), {
+			credentials: 'include',
+			method: 'POST',
+			body: JSON.stringify({ course_ids: courses })
+		})
+	    .then(response => response.json())
+	    .then(json => {
+	    	dispatch(getClassmates(json))
+	    });
 	}
 }
 

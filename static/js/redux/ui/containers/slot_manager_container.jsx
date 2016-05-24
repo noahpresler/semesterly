@@ -21,6 +21,7 @@ const mapStateToProps = (state) => {
 	        // couldn't find a match, so the course isn't locked for this section
 			return false;
 		},
+		isLoggedIn: state.userInfo.data.isLoggedIn,
 		primaryDisplayAttribute: getSchoolSpecificInfo(state.school.school).primaryDisplay,
 		courseToColourIndex: state.ui.courseToColourIndex,
 		custom: state.customSlots,
