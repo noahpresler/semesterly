@@ -7,7 +7,6 @@ import { getSchoolSpecificInfo } from '../../constants.jsx'
 const mapStateToProps = (state) => {
 	let courseSections = state.courseSections.objects;
 	let savingTimetable = state.savingTimetable;
-	console.log(state);
 	// don't pass fake courses as part of roster
 	let activeTimetable = state.timetables.items[state.timetables.active];
 	return {
