@@ -24,8 +24,8 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch) => {
 	return {
 		fetchCourseInfo: (courseId) => dispatch(fetchCourseInfo(courseId)),
-		loadTimetable,
         removeCourse: (courseId) => addOrRemoveCourse(courseId),
+		loadTimetable,
 	}
 }
 

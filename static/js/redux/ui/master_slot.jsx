@@ -56,7 +56,7 @@ class MasterSlot extends React.Component {
         let creditsDisplay = numCredits === 1 ? " credit" : " credits";
         creditsDisplay = numCredits + creditsDisplay;
         let shareLink = this.state.shareLinkShown ? 
-        <ShareCourseLink 
+        <ShareLink 
             link={getCourseShareLink(this.props.course.code)}
             onClickOut={this.hideShareLink} /> : 
         null;
@@ -94,7 +94,7 @@ class MasterSlot extends React.Component {
     }
 }
 
-export const ShareCourseLink = ({link, onClickOut}) => (
+export const ShareLink = ({link, onClickOut}) => (
     <ClickOutHandler onClickOut={onClickOut}>
         <div id="share-course-link-wrapper">
             <div className="tip-border"></div>
