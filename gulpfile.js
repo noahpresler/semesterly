@@ -14,7 +14,7 @@ var uglify = require('gulp-uglify');
 var babel = require('babelify');
 var minifyCSS = require('gulp-minify-css');
 var concat = require('gulp-concat');
-var lrload = require('livereactload');
+// var lrload = require('livereactload');
 var postcss = require('gulp-postcss');
 var autoprefixer = require('gulp-autoprefixer');
 
@@ -39,7 +39,7 @@ function compile(watch) {
             debug: true,
             // Allow importing from the following extensions
             extensions: ['js', 'jsx'],
-            plugin: isProd ? [] : [ lrload ],
+            plugin: isProd ? [] : [],
             transform: [
               [babel, {presets: ["es2015", "react"]} ],
               [envify, {global: true, NODE_ENV: process.env.NODE_ENV}]
