@@ -61,7 +61,8 @@ class SideBar extends React.Component {
                     onTimetable={this.props.isCourseInRoster(c.id)}
                     colourIndex={colourIndex}
                     course={c}
-                    fetchCourseInfo={() => this.props.fetchCourseInfo(c.id)}/>
+                    fetchCourseInfo={() => this.props.fetchCourseInfo(c.id)}
+                    removeCourse={() => this.props.removeOptionalCourse(c)}/>
         }) : null;
         let dropItDown = savedTimetables && savedTimetables.length !== 0 ?
              <div id="timetable-drop-it-down"
