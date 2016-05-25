@@ -3,7 +3,7 @@ import update from 'react/lib/update';
 export const optionalCourses = (state = { courses: [], numRequired: 0}, action) => {
 	switch(action.type) {
 		case 'ADD_REMOVE_OPTIONAL_COURSE':
-			let idx = state.courses.indexOf(action.newCourse)
+			let idx = state.courses.findIndex(c => c.id === action.newCourse.id)
 			if ( idx != -1) {
 				let newCourses = [
 					...state.courses.slice(0,idx),
