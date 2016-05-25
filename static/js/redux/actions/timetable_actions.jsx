@@ -263,7 +263,6 @@ export function removeCustomSlot(id) {
 	})
 }
 
-
 export function addOrRemoveOptionalCourse(course) {
 	return (dispatch) => {
 		dispatch({
@@ -272,8 +271,12 @@ export function addOrRemoveOptionalCourse(course) {
 	  	});
 	  	let state = store.getState();
 	  	let reqBody = getBaseReqBody(state);
+	  	let { optionalCourses } = state;
+
+	  	let optionCourses = optionalCourses.courses.map(c => c.id);
+
 		Object.assign(reqBody, {
-        	optionCourses: state.optionalCourses.courses.map(c => c.id),
+        	optionCourses,
         	numOptionCourses: state.optionalCourses.numRequired
         });
 		store.dispatch(fetchTimetables(reqBody, false));
