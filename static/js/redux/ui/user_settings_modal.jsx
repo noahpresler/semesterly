@@ -90,8 +90,8 @@ export class UserSettingsModal extends React.Component {
                             <h3>Would you like to find classes with friends?</h3>
                             <p className="disclaimer">Find classes with your friends, and allow your friends to find classes with you.</p>
                         </div>
-                        <label className="switch switch-slide" onClick={this.changeForm}>
-                            <input ref="share_courses" className="switch-input" type="checkbox" checked={this.props.userInfo.social_courses === true}/>
+                        <label className="switch switch-slide">
+                            <input ref="share_courses" className="switch-input" type="checkbox" checked={this.props.userInfo.social_courses} onChange={this.changeForm}/>
                             <span className="switch-label" data-on="Yes" data-off="No"></span>
                             <span className="switch-handle"></span>
                         </label>
@@ -101,8 +101,8 @@ export class UserSettingsModal extends React.Component {
                             <h3>Would you like to find sections with friends?</h3>
                             <p className="disclaimer">Find specific sections with your friends, and allow your friends to find sections with you.</p>
                         </div>
-                        <label className="switch switch-slide" onClick={this.changeForm}>
-                            <input ref="share_sections" className="switch-input" type="checkbox" checked={this.props.userInfo.social_offerings === true}/>
+                        <label className="switch switch-slide">
+                            <input ref="share_sections" className="switch-input" type="checkbox" checked={this.props.userInfo.social_offerings === true} onChange={this.changeForm}/>
                             <span className="switch-label" data-on="Yes" data-off="No"></span>
                             <span className="switch-handle"></span>
                         </label>
