@@ -1,4 +1,4 @@
-import 'babel-polyfill'; // please fuck off ye?
+import 'babel-polyfill';
 import React from 'react';
 import { render } from 'react-dom';
 import { createStore, applyMiddleware } from 'redux';
@@ -20,7 +20,6 @@ export const getSchool = () => {
 export const getSemester = () => {
   return store.getState().semester;
 }
-
 // setup the state. loads the user's timetables if logged in; cached timetable if not.
 // also handles sharing courses and sharing timetables
 function setup(dispatch) {
