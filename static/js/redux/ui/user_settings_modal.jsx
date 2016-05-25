@@ -48,7 +48,7 @@ export class UserSettingsModal extends React.Component {
         this.props.saveSettings();
     }
     shouldShow(props) {
-        return props.userInfo.isLoggedIn && (this.isIncomplete(props.userInfo.social_offerings) || this.isIncomplete(props.userInfo.social_courses) || this.isIncomplete(props.userInfo.major) || this.isIncomplete(props.userInfo.class_year));
+        return props.userInfo.isLoggedIn && (props.showOverrided || this.isIncomplete(props.userInfo.social_offerings) || this.isIncomplete(props.userInfo.social_courses) || this.isIncomplete(props.userInfo.major) || this.isIncomplete(props.userInfo.class_year));
     }
     isIncomplete(prop) {
         return prop === undefined || prop === null || prop === "";
@@ -109,7 +109,8 @@ export class UserSettingsModal extends React.Component {
                     </div>
                     <button className="signup-button" onClick={() => {
                         this.props.saveSettings();
-                        if (!this.shouldShow(this.props))
+                        this.props.closeUserSettings();
+                        if (!this.shouldShow(Object.assign({}, this.props, { showOverrided: false })))
                                 this.refs.modal.hide();
                     }}>Save</button>
                 </div>
