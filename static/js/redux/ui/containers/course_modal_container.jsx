@@ -47,7 +47,7 @@ const mapDispatchToProps = (dispatch) => {
 		fetchCourseInfo: (courseId) => dispatch(fetchCourseInfo(courseId)),
 		hoverSection: hoverSection(dispatch),
 		unhoverSection: unhoverSection(dispatch),
-		addRemoveOptionalCourse: (course) => dispatch(addOrRemoveOptionalCourse(course)),
+		addOrRemoveOptionalCourse: (course) => dispatch(addOrRemoveOptionalCourse(course)),
 		addOrRemoveCourse,
 		react,
 	}
