@@ -521,7 +521,7 @@ def get_course(request, school, sem, id):
   SCHOOL = school.lower()
 
   try:
-    course = Course.objects.get(id=id)
+    course = Course.objects.get(school=school, id=id)
     student = None
     logged = request.user.is_authenticated()
     if logged and Student.objects.filter(user=request.user).exists():

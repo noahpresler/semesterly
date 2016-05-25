@@ -12,6 +12,7 @@ export class CourseModal extends React.Component {
     constructor(props) {
         super(props);
         this.addOrRemoveCourse = this.addOrRemoveCourse.bind(this);
+        this.addOrRemoveOptionalCourse = this.addOrRemoveOptionalCourse.bind(this);
         this.hide = this.hide.bind(this);
         this.state = { shareLinkShown: false }
         this.showShareLink = this.showShareLink.bind(this);
@@ -24,6 +25,10 @@ export class CourseModal extends React.Component {
     }
     addOrRemoveCourse(id, section='') {
         this.props.addOrRemoveCourse(id, section);
+        this.hide();
+    }
+    addOrRemoveOptionalCourse(course) {
+        this.props.addOrRemoveOptionalCourse(course);
         this.hide();
     }
     showShareLink() {
@@ -62,6 +67,10 @@ export class CourseModal extends React.Component {
             link={getCourseShareLink(data.code)}
             onClickOut={this.hideShareLink} /> : 
         null;
+        let addOptional = this.props.inRoster ? null :
+         <div id="modal-save" onClick={() => this.addOrRemoveOptionalCourse(data)}>
+                    <i className="fa fa-bookmark"></i>
+         </div>;
 
         let add = data.sections !== undefined && Object.keys(data.sections).length > 0 ? <div id="modal-add"
                     className={classNames('search-course-add', {'in-roster': inRoster})}
@@ -80,9 +89,7 @@ export class CourseModal extends React.Component {
                     <i className="fa fa-share-alt" onClick={this.showShareLink}></i>
                 </div>
                 { shareLink }
-                <div id="modal-save">
-                    <i className="fa fa-bookmark"></i>
-                </div>
+                { addOptional }
                 { add }
             </div>
             <CourseModalBody {...this.props} hideModal={this.hide} addOrRemoveCourse={this.addOrRemoveCourse}/>
