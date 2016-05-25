@@ -75,7 +75,8 @@ def view_timetable(request, code=None, sem=None, shared_timetable=None):
 @validate_subdomain
 def share_timetable(request, ref):
   try:
-    shared_timetable = convert_tt_to_dict(SharedTimetable.objects.get(id=ref), include_last_updated=False)
+    shared_timetable = convert_tt_to_dict(SharedTimetable.objects.get(school=request.subdomain, id=ref), 
+                                          include_last_updated=False)
     semester = shared_timetable['semester']
     return view_timetable(request, sem=semester, shared_timetable=shared_timetable)
   except Exception as e:
