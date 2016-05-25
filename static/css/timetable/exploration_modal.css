@@ -123,7 +123,17 @@
 	line-height: 20px;
 	font-size: 20px;
 }
-
+/* Share Button */
+#exp-modal #share-course-link-wrapper {
+	margin-top:118px;
+	margin-right:158px;
+}
+#exp-modal #share-course-link-wrapper .tip {
+	display:none;
+}
+#exp-modal #share-course-link-wrapper .tip-border {
+	right:180px;
+}
 /* Exploration Body */
 #exploration-body {
 	position: absolute;
