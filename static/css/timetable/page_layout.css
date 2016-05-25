@@ -37,7 +37,6 @@ html {
 #main-bar {
 	width: calc(100% - 300px);
 	float:left;
-	height:100%;
 	opacity: 1;
 	visibility: visible;
 	transition: width .3s, opacity .3s, visibility .3s;
@@ -45,8 +44,9 @@ html {
 }
 
 #all-cols {
-	height: 100%;
-	position: relative;
+	top: 50px;
+	bottom: 0;
+	position: absolute;
 	overflow-x: hidden;
 }
 
