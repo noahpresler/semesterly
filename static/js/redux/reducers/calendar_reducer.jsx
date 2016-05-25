@@ -7,7 +7,6 @@ export const calendar = (state = {shareLink: null, isFetchingShareLink: false, s
 		case "RECEIVE_TIMETABLES":
 		case "CHANGE_ACTIVE_TIMETABLE":
 			return Object.assign({}, state, { shareLinkValid: false });
-
 		default:
 			return state;
 	}

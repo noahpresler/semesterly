@@ -80,12 +80,10 @@ export class CourseModal extends React.Component {
                     <i className="fa fa-share-alt" onClick={this.showShareLink}></i>
                 </div>
                 { shareLink }
-
                 <div id="modal-save">
                     <i className="fa fa-bookmark"></i>
                 </div>
                 { add }
-                
             </div>
             <CourseModalBody {...this.props} hideModal={this.hide} addOrRemoveCourse={this.addOrRemoveCourse}/>
         </div>);
