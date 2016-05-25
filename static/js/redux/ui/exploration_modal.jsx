@@ -50,6 +50,8 @@ export class ExplorationModal extends React.Component {
     }
 	toggle(filterType) {
 		return () => {
+			if (this.props.isFetching) { return; }
+
 			let stateName = "show_" + filterType;
 			this.setState({ [stateName]: !this.state[stateName] });
 		}
@@ -60,6 +62,7 @@ export class ExplorationModal extends React.Component {
 		this.refs.modal.hide();
 	}
 	fetchAdvancedSearchResults(filters) {
+		if (this.props.isFetching) { return; }
 		let query = this.refs.input.value;
 		let { areas, departments, times, levels} = filters;
 		this.props.fetchAdvancedSearchResults(query, {
@@ -81,7 +84,7 @@ export class ExplorationModal extends React.Component {
 		}, 200);
 	}
 	addFilter(filterType, filter) {
-		if (this.state[filterType].indexOf(filter) > -1) {
+		if (this.props.isFetching || this.state[filterType].indexOf(filter) > -1) {
 			return;
 		}
 		let updatedFilter = [...this.state[filterType], filter];
@@ -90,6 +93,7 @@ export class ExplorationModal extends React.Component {
 		this.setState({ [filterType]: updatedFilter });
 	}
 	removeFilter(filterType, filter) {
+		if (this.props.isFetching) { return; }
 		let updatedFilter = this.state[filterType].filter(f => f != filter);
 		this.fetchAdvancedSearchResults(Object.assign({}, this.state, { [filterType]: updatedFilter }));
 		this.setState({ [filterType]: updatedFilter });
