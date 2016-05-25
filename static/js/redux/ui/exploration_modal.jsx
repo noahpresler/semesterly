@@ -3,6 +3,8 @@ import Modal from 'boron/DropModal';
 import classNames from 'classnames';
 import { CourseModalBody } from './course_modal_body.jsx';
 import ClickOutHandler from 'react-onclickout';
+import { getCourseShareLink } from '../helpers/timetable_helpers.jsx';
+import { ShareLink } from './master_slot.jsx';
 
 export class ExplorationModal extends React.Component {
 	constructor(props){
@@ -15,7 +17,8 @@ export class ExplorationModal extends React.Component {
 			areas: [],
 			departments: [],
 			times: [],
-			levels: []
+			levels: [],
+			shareLinkShown: false,
 		};
 		this.toggle = this.toggle.bind(this);
 		this.fetchAdvancedSearchResults = this.fetchAdvancedSearchResults.bind(this);
@@ -26,10 +29,8 @@ export class ExplorationModal extends React.Component {
 		this.addFilter = this.addFilter.bind(this);
 		this.removeFilter = this.removeFilter.bind(this);
 		this.hideAll = this.hideAll.bind(this);
-	}
-	addOrRemoveCourse(id, section='') {
-		this.props.addOrRemoveCourse(id, section);
-		this.hide();
+        this.showShareLink = this.showShareLink.bind(this);
+        this.hideShareLink = this.hideShareLink.bind(this);
 	}
 	componentWillReceiveProps(nextProps) {
 		if (this.props.isVisible && !nextProps.isVisible) {
@@ -41,6 +42,12 @@ export class ExplorationModal extends React.Component {
 			this.refs.modal.show();
 		}
 	}
+    showShareLink() {
+        this.setState({shareLinkShown: true});
+    }
+    hideShareLink() {
+        this.setState({shareLinkShown: false});
+    }
 	toggle(filterType) {
 		return () => {
 			let stateName = "show_" + filterType;
@@ -95,13 +102,21 @@ export class ExplorationModal extends React.Component {
 			show_levels: false
 		})
 	}
+	addOrRemoveCourse(id, section='') {
+		this.props.addOrRemoveCourse(id, section);
+		this.hide();
+	}
+    addOrRemoveOptionalCourse(course) {
+        this.props.addOrRemoveOptionalCourse(course);
+        this.hide();
+    }
 	render() {
 		let modalStyle = {
 			width: '100%',
 			backgroundColor: 'transparent'
 		};
+		let { advancedSearchResults, course, inRoster } = this.props;
 
-		let { advancedSearchResults, course } = this.props;
 		let numSearchResults = advancedSearchResults.length > 0 ?
 		<p>returned { advancedSearchResults.length } Search Results</p> : null;
 		let searchResults = advancedSearchResults.map( (c, i) => {
@@ -119,18 +134,27 @@ export class ExplorationModal extends React.Component {
 				tutorialSections = course.sections['T'];
 				practicalSections = course.sections['P'];
 			}
+			let shareLink = this.state.shareLinkShown ? 
+	        <ShareLink 
+	            link={getCourseShareLink(course.code)}
+	            onClickOut={this.hideShareLink} /> : 
+	        null;
 			courseModal = <div id="modal-content">
 				<div id="modal-header">
 					<h1>{ course.name }</h1>
 					<h2>{ course.code }</h2>
-					<div id="modal-share">
+					<div id="modal-share" onClick={this.showShareLink}>
 						<i className="fa fa-share-alt"></i>
 					</div>
-					<div id="modal-save">
-						<i className="fa fa-save"></i>
+					{ shareLink }
+					{
+						inRoster ? null :
+					<div id="modal-save" onClick={() => this.addOrRemoveOptionalCourse(course)}>
+						<i className="fa fa-bookmark"></i>
 					</div>
-					<div id="modal-add">
-						<i className="fa fa-plus"></i>
+					}
+					<div id="modal-add" onClick={() => this.addOrRemoveCourse(course.id)}>
+						<i className={classNames('fa', {'fa-plus' : !inRoster, 'fa-check' : inRoster})}></i>
 					</div>
 				</div>
 				<CourseModalBody {...course}
@@ -170,7 +194,8 @@ export class ExplorationModal extends React.Component {
 										  toggle={this.toggle(filterType)}
 										  children={selectedItems} />
 		});
-		
+
+
 		let content = (
 			<div id="exploration-content">
 				<div id="exploration-header"

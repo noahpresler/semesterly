@@ -72,6 +72,9 @@
     margin: 0;
     color: #222;
 }
+#social-dropdown a:hover {
+    background-color: #ececec;
+}
 #social-dropdown a i,
 #social-dropdown a span {
     display: inline-block;
