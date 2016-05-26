@@ -133,6 +133,10 @@ class HopkinsParser:
                         start_hour += 12
                     if time_pieces.group(6).upper() == "P" and time_pieces.group(4) != "12":
                         end_hour += 12
+                    if start_hour < 10:
+                        start_hour = "0" + str(start_hour)
+                    if end_hour < 10:
+                        end_hour = "0" + str(end_hour)
                     start = str(start_hour) + ":" + time_pieces.group(2)
                     end = str(end_hour) + ":" + time_pieces.group(5)
                     days = Meeting['DOW']

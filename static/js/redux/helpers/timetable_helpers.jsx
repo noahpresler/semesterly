@@ -1,5 +1,4 @@
 import { store } from '../init.jsx';
-import deparam from '../../deparam.js';
 
 export function getTimetableShareLink() {
 	let state = store.getState();
