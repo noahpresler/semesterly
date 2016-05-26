@@ -580,8 +580,9 @@ def advanced_course_search(request):
   # filtering now by departments, areas, or levels if provided
   if filters['areas']:
     course_match_objs = course_match_objs.filter(areas__in=filters['areas'])
-    #TODO(rohan)
     '''
+      TODO(rohan)
+
       Use:
       course_match_objs.objects.filter(reduce(operator.or_, (Q(areas__contains=x) for x in filters['areas'])))
     '''
@@ -589,7 +590,8 @@ def advanced_course_search(request):
     course_match_objs = course_match_objs.filter(department__in=filters['departments'])
   if filters['levels']:
     course_match_objs = course_match_objs.filter(level__in=filters['levels'])
-
+  # if filters['times']:
+  # course_match_objs = course_match_objs.filter(section__semester__in=[sem, 'Y'], section__offering__time_start__icontains="15", section__offering__time_end__lte="16:00")
   course_match_objs = course_match_objs.distinct('code')[:50]
   student = None
   logged = request.user.is_authenticated()
