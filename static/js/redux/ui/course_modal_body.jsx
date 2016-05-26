@@ -84,7 +84,7 @@ export class CourseModalBody extends React.Component {
         if (pracs.length > 0) {
             practicalSections = <div><h3 className="modal-module-header">Practical Sections</h3>{pracs}</div>
         }
-        let { reactions } = this.props.data;
+        let { reactions, num_credits:numCredits } = this.props.data;
         // reactions.sort((r1, r2) => {return r1.count < r2.count});
 
         let cid = this.props.data.id;
@@ -142,13 +142,14 @@ export class CourseModalBody extends React.Component {
             }
         </div>
 
+        let creditsSuffix = numCredits === 1 ? " credit" : " credits";
         return (
         <div id="modal-body">
                 <div className="cf">
                     <div className="col-3-16">
                         <div className="credits">
-                            <h3>{this.props.data.num_credits}</h3>
-                            <h4>credits</h4>
+                            <h3>{ numCredits }</h3>
+                            <h4>{ creditsSuffix }</h4>
                         </div>
                         <div className="rating-module">
                             <h4>Average Course Rating</h4>
