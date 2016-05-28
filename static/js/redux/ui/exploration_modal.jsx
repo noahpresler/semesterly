@@ -118,6 +118,7 @@ export class ExplorationModal extends React.Component {
         this.hide();
     }
     handleTimesChange(component, values) {
+    	if (this.props.isFetching) { return; }
     	let times = [...this.state.times];
     	let i = times.findIndex(t => t.day === component.props.day);
     	times[i] = Object.assign({}, times[i], values);
@@ -125,7 +126,6 @@ export class ExplorationModal extends React.Component {
 	      times
 	    };
 	    this.setState(stateUpdate);
-	    this.fetchAdvancedSearchResults(Object.assign({}, this.state, stateUpdate));
   	}
   	addDayForTimesFilter(filterType, day) {
   		if (this.state.addedDays.indexOf(day) > -1) {
@@ -257,10 +257,11 @@ export class ExplorationModal extends React.Component {
 			let timeState = this.state.times.find(t => t.day === d);
 			let value = { min: timeState.min, max: timeState.max };
 		return	<TimeSelector
-				key={i}
+				key={timeState.day}
 				day={timeState.day}
         		value={value}
         		onChange={this.handleTimesChange.bind(this)}
+        		onChangeComplete={() => this.fetchAdvancedSearchResults(this.state)}
         		remove={this.removeTimeFilter.bind(this)}
       		/>
 		})
@@ -319,7 +320,7 @@ export class ExplorationModal extends React.Component {
         );
     }
 }
-
+//lol
 const ExplorationSearchResult = ({name, code, onClick}) => (
 	<div className="exp-s-result" onClick={onClick}>
 		<h4>{ name }</h4>
@@ -397,16 +398,25 @@ const SelectedFilterSection = ({ name, toggle, children }) => (
 	</div>
 );
 
-const TimeSelector = ({ day, value, onChange, remove }) => (
-	<div className="time-selector">
-		<span className="time-selector-day"> <i className="fa fa-times" onClick={() => remove(day)}/>{ day.slice(0, 3) } </span>
-		<InputRange
-			day={day}
-    		maxValue={24}
-   			minValue={8}
-    		value={value}
-    		onChange={onChange}
-  		/>
-	</div>
+class TimeSelector extends React.Component {
 
-);
+	render() {
+		let { day, value, onChange, onChangeComplete, remove } = this.props;
+		return <div className="time-selector">
+			<span className="time-selector-day"> <i className="fa fa-times" onClick={() => remove(day)}/>{ day.slice(0, 3) } </span>
+			<InputRange
+				day={day}
+	    		maxValue={24}
+	   			minValue={8}
+	    		value={value}
+	    		onChange={onChange}
+	    		onChangeComplete={onChangeComplete}
+	  		/>
+		</div>
+	}
+	componentDidMount() {
+		$(".InputRange-labelContainer").filter((i, c) => i % 2 === 0)
+		.addClass('InputRange-labelMaxTime');
+	}
+
+}
