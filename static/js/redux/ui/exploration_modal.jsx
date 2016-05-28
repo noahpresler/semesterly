@@ -275,7 +275,7 @@ export class ExplorationModal extends React.Component {
 						<h1>Advanced Search</h1>
 					</div>
 					<div className="col-5-16">
-						<input ref="input" onInput={this.fetchAdvancedSearchResultsWrapper} value="ASDF"/>
+						<input ref="input" onInput={this.fetchAdvancedSearchResultsWrapper}/>
 					</div>
 	                <div id="exploration-close"
 	                	onMouseDown={() => this.refs.modal.hide()}>
