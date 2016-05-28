@@ -271,7 +271,7 @@ class TextbookParser:
         try:
             course = self.course.objects.filter(code__contains = course_code, school = "jhu")[0]
         except IndexError:
-            print("index error: " + course_code)
+            print("index error (course does not exist): " + course_code)
             return
         sections = self.sections.objects.filter(course = course, meeting_section = section)
         info = self.get_amazon_fields(isbn_number)

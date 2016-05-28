@@ -160,21 +160,20 @@ def get_classmates(request):
 		return HttpResponse("Must have social_courses enabled")
 
 def get_classmates_from_course_id(school, student, course_id):
-	#All friends with social courses/sharing enabled
+	# All friends with social courses/sharing enabled
 	friends = student.friends.filter(social_courses=True)
 	course = { 'course_id': course_id, 'classmates': [] }
 	for friend in friends:
 		classmate = model_to_dict(friend, exclude=['user','id','fbook_uid', 'friends'])
-		ptts = PersonalTimetable.objects.filter(student=friend,courses__id__exact=course_id)
+		ptts = PersonalTimetable.objects.filter(student=friend, courses__id__exact=course_id)
 		for tt in ptts:
 			if student.social_offerings and friend.social_offerings:
-				friend_cos = tt.course_offerings.all().filter(course__id__exact=course_id)
-				sections = friend_cos.values('meeting_section').distinct()
-				classmate['sections'] = list(map(lambda d: d['meeting_section'], sections))
+				friend_sections = tt.sections.all().filter(course__id=course_id)
+				sections = list(friend_sections.values_list('meeting_section', flat=True).distinct())
+				classmate['sections'] = sections
 		if len(ptts) > 0:
 			course['classmates'].append(classmate)
 	return course
-
 
 @csrf_exempt
 @validate_subdomain
