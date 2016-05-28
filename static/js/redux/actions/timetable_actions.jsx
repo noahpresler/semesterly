@@ -78,6 +78,13 @@ export function loadTimetable(timetable, created=false) {
 }
 
 export function lockTimetable(dispatch, timetable, created, isLoggedIn) {
+	if (timetable.has_conflict) { // turn conflicts on if necessary
+		dispatch({
+			type: "SET_PREFERENCE",
+			key: "try_with_conflicts",
+			value: true
+		});
+	}
 	dispatch({
 		type: "RECEIVE_COURSE_SECTIONS",
 		courseSections: lockActiveSections(timetable)
@@ -189,8 +196,6 @@ function fetchTimetables(requestBody, removing, newActive=0) {
 			}
 		}) // TODO(rohan): maybe log somewhere if errors?
 		.then(json => {
-			// save new courseSections and timetable active index to cache
-
 			if (removing || json.timetables.length > 0) {
 				// mark that timetables and a new courseSections have been received
 				dispatch(receiveTimetables(json.timetables));
@@ -204,6 +209,7 @@ function fetchTimetables(requestBody, removing, newActive=0) {
 	  					newActive,
 	  				})
   				}
+				// save new courseSections and timetable active index to cache
 				saveLocalCourseSections(json.new_c_to_s);
 				saveLocalActiveIndex(newActive);
 			}
