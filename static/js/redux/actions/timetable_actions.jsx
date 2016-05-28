@@ -204,14 +204,14 @@ function fetchTimetables(requestBody, removing, newActive=0) {
 	  					newActive,
 	  				})
   				}
+				saveLocalCourseSections(json.new_c_to_s);
+				saveLocalActiveIndex(newActive);
 			}
-			else {
+			else { // user wasn't removing (i.e. was adding a course/section), but we got no timetables back
 				// course added by the user resulted in a conflict, so no timetables
 				// were received
 				dispatch(alertConflict());
 			}
-			saveLocalCourseSections(json.new_c_to_s);
-			saveLocalActiveIndex(newActive);
 			return json;
 		})
 		.then(json => {
