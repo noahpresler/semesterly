@@ -45,14 +45,15 @@ class SideBar extends React.Component {
                             />
                 }
         }) : null;
+        let usedColourIndices = Object.values(this.props.courseToColourIndex);
         let optionalSlots = this.props.liveTimetableCourses ? this.props.optionalCourses.map(c => {
             let colourIndex;
             let classmates = this.props.classmates ? this.props.classmates.find(course => course.course_id === c.id) : [];
             if (this.props.liveTimetableCourses.find(course => course.id === c.id) === undefined) {
-                let usedColourIndices = Object.values(this.props.courseToColourIndex);
                 colourIndex = _.range(COLOUR_DATA.length).find((i) =>
                         !usedColourIndices.some((x) => x === i)
                 );
+                usedColourIndices[c.id] = colourIndex;
             } else {
                  colourIndex = this.props.courseToColourIndex[c.id]
              }
