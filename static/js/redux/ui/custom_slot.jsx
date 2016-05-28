@@ -15,7 +15,6 @@ function convertToStr(halfHours) {
 
 const dragSlotSource = {
     beginDrag(props) {
-        console.log('oowee look at me')
         return {
             timeStart: props.time_start,
             timeEnd: props.time_end,
@@ -23,7 +22,6 @@ const dragSlotSource = {
         }
     },
     endDrag(props, monitor) {
-        console.log('end');
     }
 }
 
@@ -111,30 +109,41 @@ function collectCreateDrop(connect, monitor) { // inject props as drop target
   };
 }
 
-// TODO: set connectDragPreview
+// TODO: set connectDragPreview or update state as preview
 class CustomSlot extends React.Component {
     constructor(props) {
         super(props);
+        this.state = { hovered: false };
+        this.onSlotHover = this.onSlotHover.bind(this);
+        this.onSlotUnhover = this.onSlotUnhover.bind(this);
     }
     stopPropagation(callback, event) {
         event.stopPropagation();
         callback();
     }
-    stopPropagation(callback, event) {
-        event.stopPropagation();
-        callback();
+    onSlotHover() {
+        this.setState({ hovered : true});
+    }
+    onSlotUnhover() {
+        this.setState({ hovered : false});
     }
     updateName(event) {
         this.props.updateCustomSlot({ name: event.target.value }, this.props.id)
     }
     render() {
+        let removeButton = this.state.hovered ? 
+            <i className="fa fa-times" 
+               onClick={ (event) => this.stopPropagation(this.props.removeCustomSlot, event) }></i> : null;
+
         return this.props.connectCreateTarget(this.props.connectDragTarget(this.props.connectDragSource(
             <div className="fc-event-container">
                 <div className={"fc-time-grid-event fc-event slot"}
                      style={ this.getSlotStyles() }
+                     onMouseEnter={ this.onSlotHover }
+                     onMouseLeave={ this.onSlotUnhover }
                      id={ this.props.id }>
-                    <div className="slot-bar" />
-                        <i className="fa fa-times" onClick={ (e) => this.stopPropagation(this.props.removeCustomSlot, e) }></i>
+                    <div className="slot-bar" style={{backgroundColor: '#aaa'}} />
+                        {removeButton}
                     <div className="fc-content">
                         <div className="fc-time">
                             <span>{ this.props.time_start } – { this.props.time_end }</span>
@@ -142,7 +151,13 @@ class CustomSlot extends React.Component {
                         <div className="fc-time">
                             <input type="text" 
                                     name="eventName" 
-                                    style={ {backgroundColor: "#C8F7C5"} } 
+                                    style={ {
+                                        backgroundColor: "#F8F6F7",
+                                        borderStyle: 'none',
+                                        outlineColor: '#aaa',
+                                        outlineWidth: '2px',
+                                        width: '95%'
+                                    } } 
                                     value={ this.props.name } 
                                     onChange={ (event) => this.updateName(event) }/>
                         </div>
@@ -164,7 +179,7 @@ class CustomSlot extends React.Component {
         if (this.props.preview) { // don't take into account conflicts, reduce opacity, increase z-index
             return {
                 top: top, bottom: -bottom, zIndex: 10, left: '0%', right: '0%', 
-                backgroundColor: "#C8F7C5",
+                backgroundColor: "#F8F6F7",
                 color: "#222",
                 width: '100%',
                 left: 0,
@@ -182,7 +197,7 @@ class CustomSlot extends React.Component {
             }
             return {
                 top: top, bottom: -bottom, zIndex: 1, left: '0%', right: '0%', 
-                backgroundColor: "#C8F7C5",
+                backgroundColor: "#F8F6F7",
                 width: slot_width_percentage + "%",
                 left: push_left + "%",
                 zIndex: 10 * this.props.depth_level,

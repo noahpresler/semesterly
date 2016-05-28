@@ -1,6 +1,9 @@
 """Helper functions for accessing Amazon API for textbooks"""
 from django.db.models import Q
+from django.utils.encoding import smart_str
+
 from amazonproduct.errors import InvalidParameterValue
+from timetable.models import Section
 
 def get_amazon_fields(isbn, api):
     try:
@@ -50,10 +53,7 @@ def get_title(result):
         return "Cannot Be Found"
 
 def get_all_sections(crs, semester):
-    offerings = CourseOffering.objects.filter((Q(semester=semester) | Q(semester='Y')), \
-                                            course=crs)
-    sections = []
-    for off in offerings:
-        if off.meeting_section not in sections:
-            sections.append(off.meeting_section)
+    return list(Section.objects.filter((Q(semester__in=[semester, 'Y'])),                                            course=crs).values_list('meeting_section', flat=True).distinct())
+
     return sections
+    

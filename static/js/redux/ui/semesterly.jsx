@@ -21,7 +21,7 @@ class Semesterly extends React.Component {
 				this.showAlert(<TimetableExistsAlertContainer />, 'info', 10000);
 			}
 			else if (nextProps.alertChangeSemester) {
-				this.showAlert(<ChangeSemesterAlertContainer />, 'info', 10000);
+				this.showAlert(<ChangeSemesterAlertContainer />, 'info', 15000);
 			}
 			else {
 				this.msg.removeAll();

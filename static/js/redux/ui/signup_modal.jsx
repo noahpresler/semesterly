@@ -44,7 +44,7 @@ export class SignupModal extends React.Component {
                             <div className="col-1-2">
                                 <div className="emoji"><i className="fa fa-check"/></div>
                                 Create custom events
-                                <img className="sample-slot" src="/static/img/sample_custom_slot.png"/>
+                                <img className="sample-slot" src="/static/img/sample_custom_slot_grey.png"/>
                             </div>
                             <div className="col-1-2">
                                 <div className="emoji" dangerouslySetInnerHTML={{__html: twemoji.parse('\uD83D\uDD25')}}/>

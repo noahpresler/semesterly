@@ -2,12 +2,16 @@ import { connect } from 'react-redux';
 import { fetchSearchResults, setSemesterWrapper } from '../../actions/search_actions.jsx';
 import { addOrRemoveCourse, addOrRemoveOptionalCourse } from '../../actions/timetable_actions.jsx';
 import { SearchBar } from '../search_bar.jsx';
-import { fetchCourseInfo } from '../../actions/modal_actions.jsx'
+import { fetchCourseInfo } from '../../actions/modal_actions.jsx';
+import { getSchoolSpecificInfo } from '../../constants.jsx';
 
 const mapStateToProps = (state) => {
 	let courseSections = state.courseSections.objects;
+	let schoolSpecificSemesters = getSchoolSpecificInfo(state.school.school).semesters;
 	return {
 		semester: state.semester,
+		semesterName: schoolSpecificSemesters[state.semester],
+		getSemesterName: schoolSpecificSemesters,
 		availableSemesters: ["F", "S"],
     	searchResults: state.searchResults.items,
     	isFetching: state.searchResults.isFetching,
