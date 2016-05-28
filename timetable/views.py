@@ -19,6 +19,7 @@ from analytics.views import *
 from timetable.models import *
 from timetable.school_mappers import school_to_granularity, VALID_SCHOOLS
 from timetable.utils import *
+from timetable.scoring import get_tt_cost
 from student.models import Student
 from student.views import get_student, get_user_dict, convert_tt_to_dict
 
@@ -164,6 +165,7 @@ class TimetableGenerator:
   def courses_to_timetables(self, courses):
     all_offerings = self.courses_to_offerings(courses)
     timetables = self.create_timetable_from_offerings(all_offerings)
+    timetables.sort(key=lambda tt: get_tt_cost(tt[0], self.sort_order))
     return map(self.convert_tt_to_dict, timetables)
 
   def convert_tt_to_dict(self, timetable):
