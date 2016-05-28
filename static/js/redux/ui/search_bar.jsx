@@ -55,7 +55,7 @@ export class SearchBar extends React.Component {
                 <SearchSideBarContainer />
             </ul>
         );
-        let availableSemesters = this.props.availableSemesters.map(s => 
+        let availableSemesters = this.props.availableSemesters.map(s =>
             <div key={s} className="semester-option" onMouseDown={ () => this.setSemester(s) }> { this.props.getSemesterName[s] } </div>
         );
     	return (
@@ -72,11 +72,12 @@ export class SearchBar extends React.Component {
                         </div>
                     </ClickOutHandler>
                     <div id="search-bar-input-wrapper">
-                        <input ref="input" 
-                               className={this.props.isFetching ? 'results-loading-gif' : ''} 
-                               onInput={this.fetchSearchResults} 
+                        <input ref="input"
+                               className={this.props.isFetching ? 'results-loading-gif' : ''}
+                               onInput={this.fetchSearchResults}
                                onFocus={() => this.setState({ focused: true, showDropdown: false })}
                                onBlur={() => this.setState({ focused: false })}
+                               onKeyDown={(e) => {if (e.key === 'Enter') { this.props.addCourse(this.props.searchResults[0].id) }}}
                         />
                     </div>
                     <div id="show-exploration"
@@ -111,12 +112,12 @@ export class SearchResult extends React.Component {
         let inRoster = this.props.inRoster;
         let inOptionRoster = this.props.inOptionRoster;
         let addRemoveButton =
-            <span className={classNames('search-course-add', {'in-roster': inRoster})} 
+            <span className={classNames('search-course-add', {'in-roster': inRoster})}
               onMouseDown={(event) => this.addCourseWrapper(course, '', event)}>
                 <i className={classNames('fa', {'fa-plus' : !inRoster, 'fa-check' : inRoster})}></i>
             </span>;
         let addOptionalCourseButton = this.props.inRoster ? null :
-            <span className={classNames('search-course-save', {'in-roster': inOptionRoster})} 
+            <span className={classNames('search-course-save', {'in-roster': inOptionRoster})}
                 onMouseDown={(event) => this.addOptionalCourseWrapper(course, event)}
                 >
                 <i className={classNames('fa', {'fa-bookmark' : !inOptionRoster, 'fa-check' : inOptionRoster})}></i>
