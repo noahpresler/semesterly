@@ -33,7 +33,7 @@ course_parsers = {
   'uoft': lambda: UofTParser().start(),
   # 'umd': parse_umd,
   # 'rutgers': parse_rutgers,
-  # 'uo': parse_ottawa,
+  'uo': parse_ottawa,
   'queens': lambda: QueensParser().parse_courses()
 }
 
@@ -47,10 +47,10 @@ eval_parsers = {
 }
 textbook_parsers = {
   'jhu': lambda: HopkinsTextbookFinder().parse_classes(),
-  # 'uoft': parse_uoft_textbooks,
+  'uoft': parse_uoft_textbooks,
   'umd': lambda: None,
   'rutgers': lambda: None,
   'uo': lambda: None,
-  # 'queens': parse_queens_textbooks
+  'queens': parse_queens_textbooks
 }
 

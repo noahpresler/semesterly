@@ -115,7 +115,6 @@
 	padding: 4px;
 	width: 75%;
 	margin: 0 auto;
-
 }
 
 /* Each Course that is listed in the Search Results */
@@ -271,6 +270,13 @@
 .trans50 #search-bar-side {
 	background-color: transparent;
 }
+.trans50 #see-more-inner {
+	border: 1px solid rgba(255,255,255,0);
+	color: transparent;
+}
+.trans50 #search-bar-side-sections {
+	background-color: rgba(255, 255, 255,.9);
+}
 
 .results-loading-gif {
  	background: url('/static/img/search-results-loader.gif') no-repeat;
@@ -294,7 +300,7 @@
 }
 #search-bar-side-sections h3 {
 	font-size: 16px;
-	margin: 0px 5px 10px 5px;
+	margin: 0px 5px 10px 0px;
 }
 #search-bar-side-sections h4 {
 	font-size: 14px;

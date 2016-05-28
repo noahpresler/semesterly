@@ -3,10 +3,15 @@ import ReactDOM from 'react-dom';
 import classnames from 'classnames';
 import Reaction from './reaction.jsx'
 import { REACTION_MAP } from '../constants.jsx';
+import MasterSlot from './master_slot.jsx';
+import Textbook from './textbook.jsx';
+import { COLOUR_DATA } from '../constants.jsx';
+
 export class CourseModalBody extends React.Component {
     constructor(props) {
         super(props);
         this.sendReact = this.sendReact.bind(this);
+        this.fetchCourseInfo = this.fetchCourseInfo.bind(this)
     }
 
     sendReact(cid, title) {
@@ -50,8 +55,20 @@ export class CourseModalBody extends React.Component {
                 />
         });
     }
+    fetchCourseInfo(courseId) {
+        if (this.props.fetchCourseInfo) {
+            this.props.fetchCourseInfo(courseId);
+        }
+    }
 
     render() {
+        if (this.props.isFetching) {
+            return <div id="modal-body">
+                <div className="cf">
+                     <div className="modal-loader"></div>
+                </div>
+            </div>
+        }
         let lecs = this.mapSectionsToSlots(this.props.lectureSections);
         let tuts = this.mapSectionsToSlots(this.props.tutorialSections);
         let pracs = this.mapSectionsToSlots(this.props.practicalSections);
@@ -67,7 +84,7 @@ export class CourseModalBody extends React.Component {
         if (pracs.length > 0) {
             practicalSections = <div><h3 className="modal-module-header">Practical Sections</h3>{pracs}</div>
         }
-        let { reactions } = this.props.data;
+        let { reactions, num_credits:numCredits } = this.props.data;
         // reactions.sort((r1, r2) => {return r1.count < r2.count});
 
         let cid = this.props.data.id;
@@ -85,13 +102,54 @@ export class CourseModalBody extends React.Component {
             }
         });
         reactionsDisplay.sort((r1, r2) => {return r1.props.count < r2.props.count});
+
+        let evalInfo = this.props.data.eval_info;
+        let relatedCourses = this.props.data.related_courses;
+        let { prerequisites, textbooks } = this.props.data;
+        let evals = evalInfo.length === 0 ? null :
+        <div className="modal-module">
+            <h3 className="modal-module-header">Course Evaluations</h3>
+            {evalInfo.map((e, i) => <div key={i}>{ e }</div>)}
+        </div>;
+        let maxColourIndex = COLOUR_DATA.length - 1;
+
+        let similarCourses = relatedCourses.length === 0 ? null : 
+        <div className="modal-module">
+            <h3 className="modal-module-header">Similar Courses</h3>
+            {relatedCourses.map((rc, i) => <MasterSlot 
+                key={i} course={rc} 
+                professors={[]}
+                colourIndex={Math.min(i, maxColourIndex)}
+                onTimetable={true}
+                hideCloseButton={true}
+                inModal={true}
+                fetchCourseInfo={() => this.fetchCourseInfo(rc.id)}
+                />
+
+            )}
+        </div>
+
+        let prerequisitesDisplay = 
+        <div className="modal-module prerequisites">
+            <h3 className="modal-module-header">Prerequisites</h3>
+            <p>{ prerequisites || "None" }</p>
+        </div>
+        let textbooksDisplay = !textbooks || textbooks.length === 0 ? null :
+        <div className="modal-module">
+            <h3 className="modal-module-header">Textbooks</h3>
+            {
+                textbooks.map((t, i) => <Textbook key={i} tb={t}/>)
+            }
+        </div>
+
+        let creditsSuffix = numCredits === 1 ? " credit" : " credits";
         return (
         <div id="modal-body">
                 <div className="cf">
                     <div className="col-3-16">
                         <div className="credits">
-                            <h3>{this.props.data.num_credits}</h3>
-                            <h4>credits</h4>
+                            <h3>{ numCredits }</h3>
+                            <h4>{ creditsSuffix }</h4>
                         </div>
                         <div className="rating-module">
                             <h4>Average Course Rating</h4>
@@ -101,14 +159,8 @@ export class CourseModalBody extends React.Component {
                                 </div>
                             </div>
                         </div>
-                        <div>
-                            <h3 className="modal-module-header">Prerequisites</h3>
-                            <p>{this.props.prerequisites}</p>
-                        </div>
-                        <div>
-                            <h3 className="modal-module-header">Similar Courses</h3>
-
-                        </div>
+                        { prerequisitesDisplay }
+                        
                     </div>
                     <div className="col-8-16">
                         <div id="reactions-wrapper">
@@ -118,14 +170,12 @@ export class CourseModalBody extends React.Component {
                         </div>
                         <div>
                             <h3 className="modal-module-header">Course Description</h3>
-                            <p>{this.props.description}</p>
+                            <p>{this.props.data.description}</p>
                         </div>
-                        <div>
-                            <h3 className="modal-module-header">Course Evaluations</h3>
-                        </div>
-                        <div>
-                            <h3 className="modal-module-header">Textbook</h3>
-                        </div>
+
+                        {textbooksDisplay}
+                        {similarCourses}
+                        
                     </div>
                     <div id="modal-section-lists"
                         className="col-5-16 cf">

@@ -24,11 +24,10 @@
 .course-modal.trans #modal-header,
 .course-modal.trans #modal-header h1,
 .course-modal.trans #modal-header h2,
-.course-modal.trans h3.modal-module-header,
-.course-modal.trans h3.modal-module-header:after,
 .course-modal.trans #modal-body p,
 .course-modal.trans #modal-body .credits h4,
-.course-modal.trans #modal-body .rating-module h4 {
+.course-modal.trans #modal-body .rating-module h4,
+.course-modal.trans #modal-body .modal-module {
 	background-color: transparent;
 	color: transparent;
 	border-color: transparent;
@@ -38,11 +37,15 @@
 .course-modal.trans #modal-save,
 .course-modal.trans #modal-add,
 .course-modal.trans #modal-body .rating-module,
+.course-modal.trans #modal-body .modal-module,
 .trans #reactions-wrapper {
 	opacity: 0;
 	visibility: hidden;
 }
-
+.course-modal .master-slot .slot-bar {
+    border-top-left-radius: 5px;
+    border-bottom-left-radius: 5px;
+}
 /* Course Modal Content Styles */
 #modal-content {
 	width: 100%;
@@ -100,6 +103,29 @@
 }
 #modal-share {
 	right: 30px;
+}
+#modal-header #share-course-link-wrapper {
+    position:absolute;
+    top:35px;
+    right:5px;
+    height:33px;
+    padding:0px 5px;
+    background-color:#D6D6D6;
+    border-radius:2px;
+}
+#modal-header #share-course-link {
+	font-size:14px;
+    height:25px;
+    margin-top:4px;
+}
+#modal-header #share-course-link-wrapper .tip {
+    top:-7px;
+    right:28px;
+    border:1px solid #ccc;
+}
+#modal-header #share-course-link-wrapper .tip-border {
+    top:-7px;
+    right:28px;
 }
 #modal-save {
 	right: 55px;
@@ -179,6 +205,7 @@ h3.modal-module-header:after {
 	background-color: #ddd;
 	transition: background-color .2s;
 }
+
 #modal-body p {
 	font-size: 16px;
 	line-height: 22px;
@@ -186,6 +213,11 @@ h3.modal-module-header:after {
 	padding: 0 5px;
 	margin: 7px 0;
 	transition: color .2s;
+	word-wrap:break-word;
+}
+#modal-body .prerequisites p {
+	margin-top:2px;
+	font-size:14px;
 }
 #modal-body .credits h3 {
 	text-align: center;

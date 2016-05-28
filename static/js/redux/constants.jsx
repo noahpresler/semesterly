@@ -10,37 +10,40 @@ export const MAX_TIMETABLE_NAME_LENGTH = 30; // Length of "This is my fucking ti
 
 /* server endpoints */
 export const getCourseInfoEndpoint = (course_id) => {
-	return "courses/" + getSchool() + "/" + getSemester() + "/id/" + course_id;
+	return "/courses/" + getSchool() + "/" + getSemester() + "/id/" + course_id;
 };
 export const getCourseSearchEndpoint = (query) => {
-	return "search/" + getSchool() + "/" + getSemester() + "/" + query;
+	return "/search/" + getSchool() + "/" + getSemester() + "/" + query;
 };
 export const getAdvancedSearchEndpoint = (query) => {
-	return "advanced_search/";
+	return "/advanced_search/";
 };
 export const getTimetablesEndpoint = () => {
-	return "get_timetables/";
+	return "/get_timetables/";
 };
 export const getUserInfoEndpoint = () => {
-	return "user/info";
+	return "/user/info";
 };
 export const getSaveTimetableEndpoint = () => {
-	return "user/save_timetable/";
+	return "/user/save_timetable/";
 };
 export const getSaveSettingsEndpoint = () => {
-	return "user/save_settings/"
+	return "/user/save_settings/"
 }
 export const getClassmatesEndpoint = () => {
-	return "user/get_classmates/"
+	return "/user/get_classmates/"
 }
 export const getSchoolInfoEndpoint = () => {
-	return "school_info/" + getSchool()
+	return "/school_info/" + getSchool()
 }
 export const getReactToCourseEndpoint = () => {
-  return "react/";
+  return "/react/";
 }
 export const getLoadSavedTimetablesEndpoint = (semester) => {
-  return "user/get_saved_timetables/" + getSchool() + "/" + semester;
+  return "/user/get_saved_timetables/" + getSchool() + "/" + semester;
+}
+export const getRequestShareTimetableLinkEndpoint = () => {
+  return "/share/link/";
 }
 
 export const getSchoolSpecificInfo = (school) => {
@@ -50,45 +53,58 @@ export const getSchoolSpecificInfo = (school) => {
         primaryDisplay: "code",
         areasName: "Breadths",
         departmentsName: "Departments",
-        levelsName: "Levels"
+        levelsName: "Levels",
+        timesName: "Times",
+        semesters: {
+          F: "Fall 2016",
+          S: "Winter 2017"
+        }
       }
 		case "jhu":
 			return {
         primaryDisplay: "name",
         areasName: "Areas",
         departmentsName: "Departments",
-        levelsName: "Levels"
+        levelsName: "Levels",
+        timesName: "Times",
+        semesters: {
+          F: "Fall 2016",
+          S: "Spring 2017"
+        }
       }
 		case "umd":
 			return {
         primaryDisplay: "name",
         areasName: "Areas",
         departmentsName: "Departments",
-        levelsName: "Levels"
+        levelsName: "Levels",
+        timesName: "Times",
+        semesters: {
+          F: "Fall 2016",
+          S: "Spring 2017"
+        }
       }
 		default:
 			return {
         primaryDisplay: "code",
         areasName: "Areas",
         departmentsName: "Departments",
-        levelsName: "Levels"
+        levelsName: "Levels",
+        timesName: "Times",
+        semesters: {
+          F: "Fall 2016",
+          S: "Spring 2017"
+        }
       }
 	}
 }
 
-export const getSemesterName = (semester) => {
-	switch(semester) {
-		case "F":
-			return "Fall 2016";
-		case "S":
-			return "Spring 2017"
-	}
-}
 export const COLOUR_DATA = [
     { background: "#FD7473", highlight: "#E26A6A", border: "#963838", font: "#222" },
     { background: "#5AC8FB", highlight: "#28A4EA", border: "#1B6B90", font: "#222" },
     { background: "#4CD4B0", highlight: "#3DBB9A", border: "#1E755E", font: "#222" },
     { background: "#8870FF", highlight: "#7059E6", border: "#382694", font: "#222" },
+    { background: "#E7F76D", highlight: "#C9E20A", border: "#C2D629", font: "#222" },
     { background: "#FFBF8D", highlight: "#F7954A", border: "#AF5E20", font: "#222" },
     { background: "#D4DBC8", highlight: "#B5BFA3", border: "#6C7A89", font: "#222" },
     { background: "#F182B4", highlight: "#DE699D", border: "#6C7A89", font: "#222" },
