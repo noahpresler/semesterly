@@ -130,9 +130,6 @@
 .search-course.hovered {
 	background-color: #f3f3f3;
 }
-.search-course:hover {
-	background-color: #f3f3f3;
-}
 .search-course h3 {
 	font-size: 14px;
 	margin: 0;
