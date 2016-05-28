@@ -100,6 +100,9 @@ a#social-login:visited {
     font-size: 15px;
     font-weight: 500;
 }
+#social-login h2 .mobile {
+    display: none;
+}
 #social-login i {
     font-size: 17px;
     margin-left: 3px;
@@ -156,7 +159,21 @@ a#social-login:hover:before {
     #social-pro-pic {
         margin-right: 5px;
     }
-    #social h2 {
+    #social-login h2 span {
         display: none;
+    }
+    #social-login h2 .mobile {
+        display: inline-block;
+        width: 36px;
+        font-size: 10px;
+        line-height: 12px;
+        vertical-align: middle;
+        text-align: center;
+    }
+    #social.logged-in h2 {
+        display: none;
+    }
+    a#social-login:hover:before {
+        width: 0%;
     }
 }

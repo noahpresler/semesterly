@@ -182,8 +182,10 @@ class TimetableGenerator:
 
   def convert_tt_to_dict(self, timetable):
     tt_obj = {}
-    grouped = itertools.groupby(timetable, self.get_course_dict)
+    tt, has_conflict = timetable
+    grouped = itertools.groupby(tt, self.get_course_dict)
     tt_obj['courses'] = list(itertools.starmap(self.get_course_obj, grouped))
+    tt_obj['has_conflict'] = has_conflict
     return tt_obj
 
   def get_course_dict(self, section):
@@ -227,7 +229,7 @@ class TimetableGenerator:
     """
     all_offerings = self.courses_to_offerings(courses)
     timetables = self.create_timetable_from_offerings(all_offerings)
-    s = sorted(timetables, key=functools.partial(get_rank_score, metric=get_preference_score))
+    s = sorted([tt[0] for tt in timetables], key=functools.partial(get_rank_score, metric=get_preference_score))
     return s
 
   def create_timetable_from_offerings(self, offerings):
@@ -255,16 +257,19 @@ class TimetableGenerator:
     for p in xrange(total_num_permutations): # for each possible tt
       current_tt = []
       day_to_usage = self.get_day_to_usage()
-      no_conflicts = True
+      tt_has_conflict = False
+      add_tt = True
       for i in xrange(len(sections)): # add an offering for the next section
         j = (p/num_permutations_remaining[i]) % num_offerings[i]
-        conflict = add_meeting_and_check_conflict(day_to_usage, sections[i][j])
-        if conflict and not self.with_conflicts: # there's a conflict and we don't want to consider it
-          no_conflicts = False
+        new_meeting_creates_conflict = add_meeting_and_check_conflict(day_to_usage, 
+                                                                sections[i][j])
+        tt_has_conflict = tt_has_conflict or new_meeting_creates_conflict
+        if tt_has_conflict and not self.with_conflicts:
+          add_tt = False
           break
         current_tt.append(sections[i][j])
-      if no_conflicts and len(current_tt) != 0:
-        yield tuple(current_tt)
+      if add_tt and len(current_tt) != 0:
+        yield (tuple(current_tt), tt_has_conflict)
 
   def get_day_to_usage(self):
     """Initialize day_to_usage dictionary, which has custom events blocked out."""
