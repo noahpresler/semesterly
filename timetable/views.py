@@ -156,29 +156,31 @@ class TimetableGenerator:
     self.school = school
     self.slots_per_hour = 60 / school_to_granularity[school]
     self.semester = semester
-    self.least_days = preferences.get('least_days', False)
-    self.with_conflicts = preferences['try_with_conflicts']
+    self.with_conflicts = preferences.get('try_with_conflicts', False)
+    self.sort_order = preferences.get('sort_by', [])
     self.locked_sections = locked_sections
     self.custom_events = custom_events
 
   def courses_to_timetables(self, courses):
-    timetables = self.get_timetables(courses)
-    result = [self.convert_tt_to_dict(tt) for tt in timetables]
-    return result
+    all_offerings = self.courses_to_offerings(courses)
+    timetables = self.create_timetable_from_offerings(all_offerings)
+    return map(self.convert_tt_to_dict, timetables)
 
   def convert_tt_to_dict(self, timetable):
     tt_obj = {}
     tt, has_conflict = timetable
-    grouped = itertools.groupby(tt, self.get_course_dict)
-    tt_obj['courses'] = list(itertools.starmap(self.get_course_obj, grouped))
+    # get a course dict -> sections dictionary
+    grouped = itertools.groupby(tt, self.get_basic_course_dict)
+    # augment each course dict with its section/other info
+    tt_obj['courses'] = list(itertools.starmap(self.augment_course_dict, grouped))
     tt_obj['has_conflict'] = has_conflict
     return tt_obj
 
-  def get_course_dict(self, section):
+  def get_basic_course_dict(self, section):
     model = Course.objects.get(id=section[0])
     return model_to_dict(model, fields=['code', 'name', 'id', 'num_credits', 'department'])
 
-  def get_course_obj(self, course_dict, sections):
+  def augment_course_dict(self, course_dict, sections):
     sections = list(sections)
     slot_objects = [merge_dicts(model_to_dict(section), model_to_dict(co))\
                            for _, section, course_offerings in sections
@@ -187,14 +189,6 @@ class TimetableGenerator:
     course_dict['textbooks'] = {section.meeting_section: section.get_textbooks() for _, section, _ in sections}
     course_dict['slots'] = slot_objects
     return course_dict
-
-  def get_timetables(self, courses):
-    """
-    Generate timetables from all offerings (no pre-filtering of course offerings),
-    and return timetables ranked by # of preferences satisfied.
-    """
-    all_offerings = self.courses_to_offerings(courses)
-    return self.create_timetable_from_offerings(all_offerings)
 
   def create_timetable_from_offerings(self, offerings):
     timetables = []
@@ -242,25 +236,19 @@ class TimetableGenerator:
             'W': [[] for i in range(14 * 60 / school_to_granularity[SCHOOL])],
             'R': [[] for i in range(14 * 60 / school_to_granularity[SCHOOL])],
             'F': [[] for i in range(14 * 60 / school_to_granularity[SCHOOL])]}
+
     for event in self.custom_events:
       for slot in find_slots_to_fill(event['time_start'], event['time_end']):
         day_to_usage[event['day']][slot].append('custom_slot')
+
     return day_to_usage
 
   def courses_to_offerings(self, courses, plist=[]):
     """
-    Takes a list of courses as input, and returns a list r such as:
-    > [
-      [[2, u'L5101', [[<CourseOffering> []], [<CourseOffering> []]]],
-      [[2, u'P5101', [[<CourseOffering> []], [<CourseOffering> []]]],
-      [[2, u'T0101', [[<CourseOffering> []]]], [2, u'T0201', [[<CourseOffering> []]]]],
-      [[37, u'L1001', [[<CourseOffering> []], [<CourseOffering> []]]], [37, u'L2001', [[<CourseOffering> []]]]],
-      etc...
-      ]
-    where r is a list of lists representing the meeting sections across all courses.
-    Each list contains the course id, meeting section, and pairs where the first
-    elements are courseoffering objects and the second elements are lists used to keep
-    track of conflict information for that specific courseoffering.
+    Take a list of courses and group all of the courses' offerings by section 
+    type. Returns a list of lists (for each group), where e
+    each offering is represented as a [course_id, section_code, [CourseOffering]] 
+    triple.
     """
     all_sections = []
     for c in courses:
@@ -318,25 +306,6 @@ def find_slots_to_fill(start, end):
   end_hour, end_minute = get_hours_minutes(end)
 
   return [i for i in range(get_time_index(start_hour, start_minute), get_time_index(end_hour, end_minute))]
-
-def get_hour(str_time):
-  si = str_time.index(':') if ':' in str_time else len(str_time)
-  return int(str_time[:si])
-
-def violates_any_preferences(offerings, plist):
-  return any([check_co_against_preferences(plist, co) for co in offerings])
-
-def check_co_against_preferences(preference_list, co):
-  """
-  Take a list of preferences - each preference is a function which takes a courseoffering and
-  returns True if the courseoffering goes against the preference and False otherwise, and a courseoffering,
-  and returns True if any of the preferences are violated and False otherwise.
-  """
-  return any(map(lambda f: f(co), preference_list))
-
-def get_time_index_from_string(s):
-  """Find the time index based on course offering string (e.g. 8:30 -> 2)"""
-  return get_time_index(*get_hours_minutes(s))
 
 def get_time_index(hours, minutes):
   """Take number of hours and minutes, and return the corresponding time slot index"""
