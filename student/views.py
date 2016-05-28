@@ -88,6 +88,7 @@ def save_timetable(request):
 	school = request.subdomain
 	params = json.loads(request.body)
 	courses = params['timetable']['courses']
+	has_conflict = params['timetable']['has_conflict']
 	name = params['name']
 	semester = params['semester']
 	student = Student.objects.get(user=request.user)
@@ -123,6 +124,7 @@ def save_timetable(request):
 		for section in enrolled_sections:
 			personal_timetable.sections.add(course_obj.section_set.get(meeting_section=section,
 																	semester__in=[semester, "Y"]))
+	personal_timetable.has_conflict = has_conflict
 	personal_timetable.save()
 	timetables = get_student_tts(student, school, semester)
 	saved_timetable = (x for x in timetables if x['id'] == personal_timetable.id).next()

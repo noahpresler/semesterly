@@ -122,10 +122,9 @@ export class ExplorationModal extends React.Component {
     	let times = [...this.state.times];
     	let i = times.findIndex(t => t.day === component.props.day);
     	times[i] = Object.assign({}, times[i], values);
-    	let stateUpdate = {
+	    this.setState({
 	      times
-	    };
-	    this.setState(stateUpdate);
+	    });
   	}
   	addDayForTimesFilter(filterType, day) {
   		if (this.state.addedDays.indexOf(day) > -1) {
