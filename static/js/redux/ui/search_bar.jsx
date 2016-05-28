@@ -14,14 +14,15 @@ export class SearchBar extends React.Component {
         this.fetchSearchResults = this.fetchSearchResults.bind(this);
         this.changeTimer = false;
     }
-    componentWillMount() {
-        $(document.body).on('keydown', (e) => {
-            if ((e.keyCode >= 48 && e.keyCode <= 57) || (e.keyCode >= 65 && e.keyCode <= 90)) {
-                $('#search-bar input').focus();
-                this.setState({ focused: true });
-            }
-        });
-    }
+    //autofocus search
+    // componentWillMount() {
+    //     $(document.body).on('keydown', (e) => {
+    //         if ((e.keyCode >= 48 && e.keyCode <= 57) || (e.keyCode >= 65 && e.keyCode <= 90)) {
+    //             $('#search-bar input').focus();
+    //             this.setState({ focused: true });
+    //         }
+    //     });
+    // }
     toggleDropdown() {
         this.setState({ showDropdown: !this.state.showDropdown });
     }
