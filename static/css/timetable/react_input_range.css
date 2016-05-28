@@ -54,8 +54,11 @@
 }
 .InputRange-label--value {
   position: absolute;
-  top: -2.2rem;
-  font-size:10px;
+  top: -2.3rem;
+  font-size:11px;
+}
+.InputRange-labelMaxTime {
+  top: 2.7em;
 }
 .InputRange-labelContainer {
   left: -50%;
