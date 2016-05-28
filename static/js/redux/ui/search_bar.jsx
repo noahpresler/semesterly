@@ -14,6 +14,14 @@ export class SearchBar extends React.Component {
         this.fetchSearchResults = this.fetchSearchResults.bind(this);
         this.changeTimer = false;
     }
+    componentWillMount() {
+        $(document.body).on('keydown', (e) => {
+            if ((e.keyCode >= 48 && e.keyCode <= 57) || (e.keyCode >= 65 && e.keyCode <= 90)) {
+                $('#search-bar input').focus();
+                this.setState({ focused: true });
+            }
+        });
+    }
     toggleDropdown() {
         this.setState({ showDropdown: !this.state.showDropdown });
     }
@@ -81,6 +89,7 @@ export class SearchBar extends React.Component {
                                     if (e.key === 'Enter' && this.props.searchResults.length > 0) { this.props.addCourse(this.props.searchResults[this.props.hoveredPosition].id)}
                                     else if (e.key === 'ArrowDown' && parseInt(this.props.hoveredPosition) < 3) {this.props.hoverSearchResult(this.props.hoveredPosition + 1)}
                                     else if (e.key === 'ArrowUp' && parseInt(this.props.hoveredPosition) > 0) {this.props.hoverSearchResult(this.props.hoveredPosition - 1)}
+                                    else if (e.key === 'Escape') {this.setState({ focused: false }); $('#search-bar input').blur();}
                                 }}
                         />
                     </div>
