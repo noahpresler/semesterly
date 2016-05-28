@@ -77,7 +77,11 @@ export class SearchBar extends React.Component {
                                onInput={this.fetchSearchResults}
                                onFocus={() => this.setState({ focused: true, showDropdown: false })}
                                onBlur={() => this.setState({ focused: false })}
-                               onKeyDown={(e) => {if (e.key === 'Enter') { this.props.addCourse(this.props.searchResults[0].id) }}}
+                               onKeyDown={(e) => {
+                                    if (e.key === 'Enter' && this.props.searchResults.length > 0) { this.props.addCourse(this.props.searchResults[this.props.hoveredPosition].id)}
+                                    else if (e.key === 'ArrowDown' && parseInt(this.props.hoveredPosition) < 3) {this.props.hoverSearchResult(this.props.hoveredPosition + 1)}
+                                    else if (e.key === 'ArrowUp' && parseInt(this.props.hoveredPosition) > 0) {this.props.hoverSearchResult(this.props.hoveredPosition - 1)}
+                                }}
                         />
                     </div>
                     <div id="show-exploration"

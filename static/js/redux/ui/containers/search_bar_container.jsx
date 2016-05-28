@@ -18,7 +18,8 @@ const mapStateToProps = (state) => {
     	isCourseInRoster: (course_id) => courseSections[course_id] !== undefined,
     	isCourseOptional: (course_id) => state.optionalCourses.courses.some(c => c.id === course_id),
 		hasHoveredResult: state.timetables.items[state.timetables.active].courses.some(course => course.fake),
-		isHovered: (position) => state.ui.searchHover === position
+		isHovered: (position) => state.ui.searchHover === position,
+		hoveredPosition: state.ui.searchHover
 	}
 }
 
