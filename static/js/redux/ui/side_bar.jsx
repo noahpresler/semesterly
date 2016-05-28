@@ -7,7 +7,7 @@ import { COLOUR_DATA } from '../constants.jsx';
 import ClickOutHandler from 'react-onclickout';
 import TimetableNameInputContainer from './containers/timetable_name_input_container.jsx';
 import CreditTickerContainer from './containers/credit_ticker_container.jsx';
-import { getSemesterName } from '../constants.jsx'
+import Textbook from './textbook.jsx';
 
 class SideBar extends React.Component {
     constructor(props) {
@@ -24,7 +24,7 @@ class SideBar extends React.Component {
     }
     render() {
         let savedTimetables = this.props.savedTimetables ? this.props.savedTimetables.map(t => {
-            return <div className="tt-name" key={t.id} onClick={() => this.props.loadTimetable(t)}>{t.name}</div>
+            return <div className="tt-name" key={t.id} onMouseDown={() => this.props.loadTimetable(t)}>{t.name}</div>
         }) : null;
         let masterSlots = this.props.liveTimetableCourses ?
             this.props.liveTimetableCourses.map(c => {
@@ -45,14 +45,15 @@ class SideBar extends React.Component {
                             />
                 }
         }) : null;
+        let usedColourIndices = Object.values(this.props.courseToColourIndex);
         let optionalSlots = this.props.liveTimetableCourses ? this.props.optionalCourses.map(c => {
             let colourIndex;
             let classmates = this.props.classmates ? this.props.classmates.find(course => course.course_id === c.id) : [];
             if (this.props.liveTimetableCourses.find(course => course.id === c.id) === undefined) {
-                let usedColourIndices = Object.values(this.props.courseToColourIndex);
                 colourIndex = _.range(COLOUR_DATA.length).find((i) =>
                         !usedColourIndices.some((x) => x === i)
                 );
+                usedColourIndices[c.id] = colourIndex;
             } else {
                  colourIndex = this.props.courseToColourIndex[c.id]
              }
@@ -61,7 +62,8 @@ class SideBar extends React.Component {
                     onTimetable={this.props.isCourseInRoster(c.id)}
                     colourIndex={colourIndex}
                     course={c}
-                    fetchCourseInfo={() => this.props.fetchCourseInfo(c.id)}/>
+                    fetchCourseInfo={() => this.props.fetchCourseInfo(c.id)}
+                    removeCourse={() => this.props.removeOptionalCourse(c)}/>
         }) : null;
         let dropItDown = savedTimetables && savedTimetables.length !== 0 ?
              <div id="timetable-drop-it-down"
@@ -95,7 +97,7 @@ class SideBar extends React.Component {
                             >
                             <div className="tip-border"></div>
                             <div className="tip"></div>
-                            <h4>{getSemesterName(this.props.semester)}</h4>
+                            <h4>{ this.props.semesterName }</h4>
                             { savedTimetables }
                         </div>
                     </ClickOutHandler>
@@ -126,10 +128,12 @@ class SideBar extends React.Component {
     }
 }
 
-const TextbookList = ({courses}) => {
+export default SideBar;
+
+export const TextbookList = ({courses}) => {
     let tbs = [];
     for (let i = 0; i < courses.length; i++){
-        if(courses[i].textbooks !== undefined) {
+        if(courses[i].textbooks !== undefined && Object.keys(courses[i].textbooks).length > 0) {
             for (let j=0; j<courses[i].enrolled_sections.length; j++) {
                 tbs = tbs.concat(courses[i].textbooks[courses[i].enrolled_sections[j]]);
             }
@@ -151,19 +155,3 @@ const TextbookList = ({courses}) => {
     )
 }
 
-const Textbook = ({tb}) => {
-    return (
-    <a href={tb.detail_url}>
-        <div className="textbook">
-            <img src={tb.image_url} />
-            <div className="required">Required</div>
-            <h4>{tb.title}</h4>
-            <div className="amazon-buy"><i className="fa fa-amazon" aria-hidden="true"></i> Buy or Rent</div>
-        </div>
-    </a>
-    );
-}
-
-
-
-export default SideBar;

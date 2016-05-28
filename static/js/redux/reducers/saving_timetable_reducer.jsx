@@ -10,11 +10,6 @@ export const savingTimetable = (state = { activeTimetable: { name: String("Untit
 		case 'RECEIVE_TIMETABLES':
 			return Object.assign( {}, state, { upToDate: action.preset === true });
 
-		case 'USER_INFO_RECEIVED':
-			let activeTimetable = action.data.timetables && action.data.timetables[0] ? 
-			action.data.timetables[0] : state.activeTimetable;			
-			return Object.assign({}, state, { activeTimetable });
-
 		case 'CHANGE_ACTIVE_SAVED_TIMETABLE':
 			return Object.assign( {}, state, { activeTimetable: action.timetable });
 

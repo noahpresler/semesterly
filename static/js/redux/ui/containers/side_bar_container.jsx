@@ -1,7 +1,8 @@
 import { connect } from 'react-redux';
 import SideBar from '../side_bar.jsx';
 import { fetchCourseInfo } from '../../actions/modal_actions.jsx'
-import { addOrRemoveCourse, loadTimetable } from '../../actions/timetable_actions.jsx';
+import { addOrRemoveCourse, loadTimetable, addOrRemoveOptionalCourse } from '../../actions/timetable_actions.jsx';
+import { getSchoolSpecificInfo } from '../../constants.jsx'
 
 const mapStateToProps = (state) => {
 	let courseSections = state.courseSections.objects;
@@ -10,20 +11,22 @@ const mapStateToProps = (state) => {
 	let activeTimetable = state.timetables.items[state.timetables.active];
 	return {
 		semester: state.semester,
+		semesterName: getSchoolSpecificInfo(state.school.school).semesters[state.semester],
 		liveTimetableCourses: activeTimetable.courses.filter(c => !c.fake),
 		savedTimetables: state.userInfo.data.timetables,
 		courseToColourIndex: state.ui.courseToColourIndex,
 		optionalCourses: state.optionalCourses.courses,
 		classmates: state.classmates.courseToClassmates,
-		isCourseInRoster: (course_id) => courseSections[course_id] !== undefined
+		isCourseInRoster: (course_id) => activeTimetable.courses.some(c => c.id === course_id)
 	}
 }
 
 const mapDispatchToProps = (dispatch) => {
 	return {
 		fetchCourseInfo: (courseId) => dispatch(fetchCourseInfo(courseId)),
-		loadTimetable,
         removeCourse: (courseId) => addOrRemoveCourse(courseId),
+        removeOptionalCourse: (course) => dispatch(addOrRemoveOptionalCourse(course)),
+		loadTimetable,
 	}
 }
 

@@ -3,9 +3,11 @@ import { handleChangeSemester } from '../../actions/search_actions.jsx'
 import ChangeSemesterAlert from './change_semester_alert.jsx';
 
 const mapStateToProps = (state) => {
-	let msg = state.userInfo.data.isLoggedIn ? "You haven't saved your current timetable!" : "Switching semesters will clear your current timetable!";
+	let { isLoggedIn } = state.userInfo.data;
+	let msg = isLoggedIn ? "You haven't saved your current timetable!" : "Switching semesters will clear your current timetable!";
 	return {
 		msg,
+		isLoggedIn
 	}
 }
 const mapDispatchToProps = (dispatch) => {

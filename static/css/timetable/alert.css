@@ -141,4 +141,8 @@
   padding-right:5px;
   width:90%;
 }
-
+.react-alerts .alert-extra {
+  position:relative;
+  top:12px;
+  text-transform: none;
+}
