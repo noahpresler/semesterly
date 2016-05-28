@@ -100,7 +100,7 @@
 .time-selector > .time-selector-day {
 	display:inline-block;
 	width:30px;
-	font-size:12px;
+	font-size:14px;
 }
 .time-selector:first-of-type {
 	margin-top:-10px !important;

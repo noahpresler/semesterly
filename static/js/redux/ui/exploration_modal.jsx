@@ -18,16 +18,12 @@ export class ExplorationModal extends React.Component {
 			areas: [],
 			departments: [],
 			levels: [],
-			times: [{min: 8, max: 24},
-					 {min: 8, max: 24},
-					 {min: 8, max: 24},
-					 {min: 8, max: 24},
-					 {min: 8, max: 24},
-					], // min and max times for each day of the week
+			times: [], // will contain 5 objects, containing keys "min" and "max" (times), for each day of the week
+			addedDays: [],
 			shareLinkShown: false,
 			
 		};
-		this.dayMap = ["Mon", "Tue", "Wed", "Thu", "Fri"],
+		this.dayMap = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"],
 		this.toggle = this.toggle.bind(this);
 		this.fetchAdvancedSearchResults = this.fetchAdvancedSearchResults.bind(this);
 		this.fetchAdvancedSearchResultsWrapper = this.fetchAdvancedSearchResultsWrapper.bind(this);
@@ -59,7 +55,6 @@ export class ExplorationModal extends React.Component {
 	toggle(filterType) {
 		return () => {
 			if (this.props.isFetching) { return; }
-
 			let stateName = "show_" + filterType;
 			this.setState({ [stateName]: !this.state[stateName] });
 		}
@@ -123,13 +118,54 @@ export class ExplorationModal extends React.Component {
         this.hide();
     }
     handleTimesChange(component, values) {
-    	let newTimes = [...this.state.times];
-    	let i = component.props.dayIndex;
-    	newTimes[i] = values;
+    	let times = [...this.state.times];
+    	let i = times.findIndex(t => t.day === component.props.day);
+    	times[i] = Object.assign({}, times[i], values);
     	let stateUpdate = {
-	      times: newTimes,
+	      times
 	    };
 	    this.setState(stateUpdate);
+	    this.fetchAdvancedSearchResults(Object.assign({}, this.state, stateUpdate));
+  	}
+  	addDayForTimesFilter(filterType, day) {
+  		if (this.state.addedDays.indexOf(day) > -1) {
+  			return;
+  		} 
+  		let availableDays = this.dayMap;
+  		let addedDays = [...this.state.addedDays, day];
+  		addedDays.sort((a, b) => (
+			availableDays.indexOf(a) - availableDays.indexOf(b)
+		));
+		let times = [...this.state.times, {
+			min: 8,
+			max: 24,
+			day, 
+		}];
+		let stateUpdate = {
+  			addedDays,
+  			times,
+  		};
+  		this.setState(stateUpdate);
+	    this.fetchAdvancedSearchResults(Object.assign({}, this.state, stateUpdate));
+  	}
+  	removeTimeFilter(day) {
+  		let { times, addedDays } = this.state;
+  		let addedDayIndex = addedDays.indexOf(day);
+  		let timesIndex = times.findIndex(t => t.day === day);
+  		if (addedDayIndex === -1) {
+  			return;
+  		}
+  		let stateUpdate = {
+  			addedDays: [
+					...addedDays.slice(0, addedDayIndex),
+					...addedDays.slice(addedDayIndex + 1)
+				],
+			times: [
+				...times.slice(0, timesIndex),
+				...times.slice(timesIndex + 1)
+			],
+  		};
+  		this.setState(stateUpdate);
 	    this.fetchAdvancedSearchResults(Object.assign({}, this.state, stateUpdate));
   	}
 	render() {
@@ -217,7 +253,17 @@ export class ExplorationModal extends React.Component {
 										  children={selectedItems} />
 		});
 
-
+		let timeFilters = this.state.addedDays.map((d, i) => {
+			let timeState = this.state.times.find(t => t.day === d);
+			let value = { min: timeState.min, max: timeState.max };
+		return	<TimeSelector
+				key={i}
+				day={timeState.day}
+        		value={value}
+        		onChange={this.handleTimesChange.bind(this)}
+        		remove={this.removeTimeFilter.bind(this)}
+      		/>
+		})
 		let content = (
 			<div id="exploration-content">
 				<div id="exploration-header"
@@ -238,28 +284,9 @@ export class ExplorationModal extends React.Component {
 	            <div id="exploration-body">
                     <div id="exp-filters" className="col-4-16">
                         { selectedFilterSections }
-
-                        <div className={classNames("exp-filter-section", {'open' : this.state.show_times})}>
-                            <h3 className="exp-header">
-								<span>Times Filter</span>
-								
-							</h3>
-							<div className="time-filters">
-							{
-								this.state.times.map((t, i) => (
-									<TimeSelector
-										key={i}
-										day={this.dayMap[i]}
-										dayIndex={i}
-						        		value={this.state.times[i]}
-						        		onChange={this.handleTimesChange.bind(this)}
-						      		/>
-								))
-							}
-							</div>
-
-
-                        </div>
+                        <SelectedFilterSection key={"times"} name={"Times"}
+										  toggle={this.toggle("times")}
+										  children={timeFilters} />
                     </div>
                     <div id="exp-search-results" className="col-5-16">
                         <div id="exp-search-list">
@@ -268,6 +295,12 @@ export class ExplorationModal extends React.Component {
                         </div>
                     </div>
                     { filters }
+                    <Filter results={["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"]}
+					filterType={"times"}
+				   	add={this.addDayForTimesFilter.bind(this)} show={this.state["show_times"]}
+				   	onClickOut={this.hideAll} 
+				   	schoolSpecificInfo={this.props.schoolSpecificInfo}
+				   	/>
 
                     <div id="exp-modal" className="col-7-16">
                         { courseModal }
@@ -364,11 +397,11 @@ const SelectedFilterSection = ({ name, toggle, children }) => (
 	</div>
 );
 
-const TimeSelector = ({ day, dayIndex, value, onChange }) => (
+const TimeSelector = ({ day, value, onChange, remove }) => (
 	<div className="time-selector">
-		<span className="time-selector-day"> { day } </span>
+		<span className="time-selector-day"> <i className="fa fa-times" onClick={() => remove(day)}/>{ day.slice(0, 3) } </span>
 		<InputRange
-			dayIndex={dayIndex}
+			day={day}
     		maxValue={24}
    			minValue={8}
     		value={value}
