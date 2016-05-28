@@ -14,7 +14,7 @@ var uglify = require('gulp-uglify');
 var babel = require('babelify');
 var minifyCSS = require('gulp-minify-css');
 var concat = require('gulp-concat');
-var lrload = require('livereactload');
+// var lrload = require('livereactload');
 var postcss = require('gulp-postcss');
 var autoprefixer = require('gulp-autoprefixer');
 
@@ -39,7 +39,7 @@ function compile(watch) {
             debug: true,
             // Allow importing from the following extensions
             extensions: ['js', 'jsx'],
-            plugin: isProd ? [] : [ lrload ],
+            plugin: isProd ? [] : [],
             transform: [
               [babel, {presets: ["es2015", "react"]} ],
               [envify, {global: true, NODE_ENV: process.env.NODE_ENV}]
@@ -76,6 +76,30 @@ gulp.task('jswatch', function() {
   return watch();
 });
 
+gulp.task('js', function() {
+  gutil.log(gutil.colors.magenta('Recompiling Javascript...'));
+  var bundler = browserify({
+      entries: [APP_LOCATION],
+      debug: true,
+      // Allow importing from the following extensions
+      extensions: ['js', 'jsx'],
+      plugin: isProd ? [] : [],
+      transform: [
+        [babel, {presets: ["es2015", "react"]} ],
+        [envify, {global: true, NODE_ENV: process.env.NODE_ENV}]
+      ]
+  });
+  bundler.bundle()
+      .on('error', function(err) { console.error(err); this.emit('end'); })
+      .pipe(source(COMPILED_NAME))
+      .pipe(buffer())
+      .pipe(gulpif(isDev, sourcemaps.init({ loadMaps: true })))
+      .pipe(gulpif(isProd, streamify(uglify())))
+      .pipe(gulpif(isDev, sourcemaps.write('./')))
+      .pipe(gulp.dest(COMPILED_LOCATION));
+  gutil.log(gutil.colors.green('Compilation complete!'));
+  return;
+});
 gulp.task('css', function(){
     return gulp.src(CSS_FILES)
         .pipe(minifyCSS())
@@ -110,3 +134,4 @@ return gulp.src('./static/js/misc/jhu_timer.jsx')
 
 gulp.task('build', function() { return compile(); });
 gulp.task('default', ['jswatch', 'csswatch']);
+

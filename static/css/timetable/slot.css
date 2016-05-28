@@ -1,6 +1,6 @@
 #wrapper {
 	padding: 50px;
-}
+} 
 /*.slot,
 .master-slot {
 	float: left;
@@ -46,6 +46,7 @@
 	margin-left: 2px;
 	line-height: 15px;
 }
+
 .slot i.fa-times {
 	position: absolute;
 	top: 1px;

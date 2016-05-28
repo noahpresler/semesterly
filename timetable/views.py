@@ -3,9 +3,9 @@ import functools
 import itertools
 import json
 import logging
+import operator
 import os
-from collections import OrderedDict
-
+from pprint import pprint
 from django.shortcuts import render_to_response, render
 from django.http import HttpResponse, HttpResponseRedirect, Http404
 from django.views.decorators.csrf import csrf_exempt
@@ -14,10 +14,13 @@ from django.db.models import Q
 from hashids import Hashids
 from pytz import timezone
 
+from analytics.models import *
 from analytics.views import *
 from timetable.models import *
 from timetable.school_mappers import school_to_granularity, VALID_SCHOOLS
+from timetable.utils import *
 from student.models import Student
+from student.views import get_student, get_user_dict, convert_tt_to_dict
 
 MAX_RETURN = 60 # Max number of timetables we want to consider
 
@@ -39,31 +42,69 @@ def save_analytics_data(key, args):
   except:
     pass
 
-def validate_subdomain(view_func):
-  def wrapper(request, *args, **kwargs):
-    if request.subdomain not in VALID_SCHOOLS:
-      return render(request, 'index.html')
-    else:
-      return view_func(request, *args, **kwargs)
-  return wrapper
 
-def get_student(request):
-  logged = request.user.is_authenticated()
-  if logged and Student.objects.filter(user=request.user).exists():
-    return Student.objects.get(user=request.user)
-  else:
-    return None
+
 # ******************************************************************************
 # ******************************** GENERATE TTs ********************************
 # ******************************************************************************
 
 @validate_subdomain
-def view_timetable(request):
+def view_timetable(request, code=None, sem=None, shared_timetable=None):
+  school = request.subdomain
+  student = get_student(request)
+  course_json = None
+  if not sem: # not loading a share course link
+    sem = 'F'
+  if code: # user is loading a share course link, since code was included
+    sem = sem.upper()
+    code = code.upper()
+    try:
+      course = Course.objects.get(school=school, code=code)
+      course_json = get_detailed_course_json(course, sem, student)
+    except:
+      raise Http404
+
   return render_to_response("timetable.html", {
-    'school': request.subdomain,
-    'student': get_student(request)
+    'school': school,
+    'student': json.dumps(get_user_dict(school, student, sem)),
+    'course': json.dumps(course_json),
+    'semester': sem,
+    'shared_timetable': json.dumps(shared_timetable),
   },
   context_instance=RequestContext(request))
+
+@validate_subdomain
+def share_timetable(request, ref):
+  try:
+    shared_timetable = convert_tt_to_dict(SharedTimetable.objects.get(school=request.subdomain, id=ref),
+                                          include_last_updated=False)
+    semester = shared_timetable['semester']
+    return view_timetable(request, sem=semester, shared_timetable=shared_timetable)
+  except Exception as e:
+    raise Http404
+
+@csrf_exempt
+@validate_subdomain
+def create_share_link(request):
+  school = request.subdomain
+  params = json.loads(request.body)
+  courses = params['timetable']['courses']
+  semester = params['semester']
+  student = get_student(request)
+  shared_timetable = SharedTimetable.objects.create(
+    student=student, school=school, semester=semester)
+  shared_timetable.save()
+
+  for course in courses:
+    course_obj = Course.objects.get(id=course['id'])
+    shared_timetable.courses.add(course_obj)
+    enrolled_sections = course['enrolled_sections']
+    for section in enrolled_sections:
+      shared_timetable.sections.add(course_obj.section_set.get(meeting_section=section, semester__in=[semester, "Y"]))
+  shared_timetable.save()
+
+  response = {'link': shared_timetable.id}
+  return HttpResponse(json.dumps(response), content_type='application/json')
 
 @csrf_exempt
 def get_timetables(request):
@@ -90,13 +131,13 @@ def get_timetables(request):
 
   # temp optional course implementation
   opt_course_ids = params.get('optionCourses', [])
-  max_optional = params.get('numOptionCourses', 0)
+  max_optional = params.get('numOptionCourses', len(opt_course_ids))
   optional_courses = [Course.objects.get(id=cid) for cid in opt_course_ids]
   optional_course_subsets = [subset for k in range(max_optional, -1, -1)\
                                     for subset in itertools.combinations(optional_courses, k)]
 
   custom_events = params.get('customSlots', [])
-  generator = TimetableGenerator(params['semester'], 
+  generator = TimetableGenerator(params['semester'],
                   params['school'],
                   locked_sections,
                   custom_events,
@@ -127,10 +168,7 @@ class TimetableGenerator:
     self.semester = semester
     self.no_classes_before = 0 if not preferences['no_classes_before'] else self.slots_per_hour * 2 - 1
     self.no_classes_after = self.slots_per_hour * 14 if not preferences['no_classes_after'] else self.slots_per_hour * 10 + 1
-    self.long_weekend = preferences['long_weekend']
     self.least_days = preferences.get('least_days', False)
-    self.break_times = preferences.get('break_times', False)
-    self.break_lengths = preferences.get('break_lengths', [])
     self.spread = not preferences['grouped']
     self.sort_by_spread = preferences['do_ranking']
     self.with_conflicts = preferences['try_with_conflicts']
@@ -257,7 +295,7 @@ class TimetableGenerator:
     """
     all_sections = []
     for c in courses:
-      sections = sorted(c.section_set.filter(semester=self.semester), key=get_section_type)
+      sections = sorted(c.section_set.filter(Q(semester__in=[self.semester, 'Y'])), key=get_section_type)
       grouped = itertools.groupby(sections, get_section_type)
       for section_type, sections in grouped:
         if str(c.id) in self.locked_sections and self.locked_sections[str(c.id)].get(section_type, False):
@@ -268,26 +306,6 @@ class TimetableGenerator:
         else:
           all_sections.append([[c.id, section, section.offering_set.all()] for section in sections])
     return all_sections
-
-    # sections = []
-    # for c in courses:
-    #   offerings = Offering.objects.filter(~Q(time_start__iexact='TBA'), \
-    #                       (Q(semester=self.semester) | Q(semester='Y')), \
-    #                       course=c)
-    #   section_to_offerings = get_section_to_offering_map(offerings)
-    #   section_type_to_sections = get_section_type_to_sections_map(section_to_offerings, \
-    #                                 plist, \
-    #                                 c.id)
-    #   for section_type in section_type_to_sections:
-    #     # if there are any locked sections for given type, course
-    #     if str(c.id) in self.locked_sections and self.locked_sections[str(c.id)].get(section_type, False):
-    #       locked_section = self.locked_sections[str(c.id)][section_type]
-    #       pinned = [c.id, locked_section, section_to_offerings[locked_section]]
-    #       sections.append([pinned])
-    #     else:
-    #       sections.append(section_type_to_sections[section_type])
-    # # sections.sort(key = lambda l: len(l), reverse=False)
-    # return sections
 
   def construct_preference_tt(self):
     """
@@ -313,7 +331,6 @@ class TimetableGenerator:
       tt.append([lambda co: not (get_time_index_from_string(co[0].time_start) > self.no_classes_before \
                 and get_time_index_from_string(co[0].time_end) < self.no_classes_after)])
 
-    # long weekend preference
     if self.least_days:
       tt.append([(lambda co: co[0].day == 'T'), \
             (lambda co: co[0].day == 'W'), \
@@ -321,27 +338,10 @@ class TimetableGenerator:
             (lambda co: co[0].day == 'M'), \
             (lambda co: co[0].day == 'F')])
 
-    elif self.long_weekend:
-      tt.append([(lambda co: co[0].day == 'M'), \
-            (lambda co: co[0].day == 'F')])
-
-    # break time preference
-    if self.break_times:
-      break_periods = [self.break_times[i:i+self.break_length] for i in range(len(self.break_times) - self.break_length + 1)]
-      break_possibilities = [(lambda co: not (get_time_index_from_string(co[0].time_start) > periods[-1] \
-                        and get_time_index_from_string(co[0].time_end) < periods[0])) \
-                  for periods in break_periods]
-      tt.append(break_possibilities)
-
     return tt
 
 def get_section_type(s):
   return s.section_type
-
-def merge_dicts(d1, d2):
-  d = d1.copy()
-  d.update(d2)
-  return d
 
 def rank_by_spread(timetables):
   return sorted(timetables,
@@ -378,21 +378,12 @@ def calculate_spread_by_day(day_bitarray):
 
 def get_preference_score(day_to_usage):
   """Calculate cost for long weekend, early/late class, and break preferences."""
-  day_cost = get_day_cost(day_to_usage)
+  day_cost = day_use(day_to_usage)
   time_cost = 0
   for day in day_to_usage.keys():
     time_cost += get_time_cost(day_to_usage[day])
   break_cost = get_break_cost(day_to_usage)
   return sum([day_cost, time_cost, break_cost])
-
-def get_day_cost(day_to_usage):
-  """Cost of having/not having a long weekend, based on user's preferences."""
-  if not LONG_WEEKEND and not LEAST_DAYS:
-    return 0
-  elif LONG_WEEKEND:
-    return day_use(day_to_usage, 'M', 'F')
-  else:
-    return day_use(day_to_usage, 'M' ,'T', 'W', 'R', 'F')
 
 def get_time_cost(day_bitarray):
   """Cost of having early/late classes, based on the user's preferences."""
@@ -452,34 +443,8 @@ def get_hour(str_time):
   si = str_time.index(':') if ':' in str_time else len(str_time)
   return int(str_time[:si])
 
-def get_section_type_to_sections_map(section_to_offerings, plist, cid):
-  """Return map: section_type -> [cid, section, [offerings]] """
-  section_type_to_sections = {offerings[0].section_type: [] for section, offerings in section_to_offerings.iteritems()}
-  i = 0
-  for section, offerings in section_to_offerings.iteritems():
-    if not violates_any_preferences(offerings, plist):
-      # section_type for all offerings for a given section should be the same,
-      # so we just take the first one
-      section_type = offerings[0].section_type
-      section_type_to_sections[section_type].append([cid, \
-                            section, \
-                            section_to_offerings[section]])
-    i += 1
-  return section_type_to_sections
-
 def violates_any_preferences(offerings, plist):
   return any([check_co_against_preferences(plist, co) for co in offerings])
-
-def get_section_to_offering_map(offerings):
-  """ Return map: section_code -> [offerings] """
-  section_to_offerings = OrderedDict()
-  for offering in offerings:
-    section_code = offering.meeting_section
-    if section_code in section_to_offerings:
-      section_to_offerings[section_code].append(offering)
-    else: # new section
-      section_to_offerings[section_code] = [offering]
-  return section_to_offerings
 
 def check_co_against_preferences(preference_list, co):
   """
@@ -522,6 +487,34 @@ def get_minute_from_string_time(time_string):
 # -----------------------------------------------------------------------------
 # --------------------TODO: move to separate file------------------------------
 # -----------------------------------------------------------------------------
+def get_detailed_course_json(course, sem, student=None):
+  json_data = get_basic_course_json(course, sem, ['prerequisites', 'exclusions'])
+  # json_data['textbook_info'] = course.get_all_textbook_info()
+  json_data['eval_info'] = course.get_eval_info()
+  json_data['related_courses'] = course.get_related_course_info(sem, limit=5)
+  json_data['reactions'] = course.get_reactions(student)
+  json_data['textbooks'] = course.get_textbooks(sem)
+
+  return json_data
+
+def get_basic_course_json(course, sem, extra_model_fields=[]):
+  fields = ['code','name', 'id', 'description', 'department', 'num_credits'] + extra_model_fields
+  d = model_to_dict(course, fields)
+  d['sections'] = {}
+
+  course_section_list = course.section_set.filter(semester__in=[sem, "Y"])
+
+  for section in course_section_list:
+    st = section.section_type
+    name = section.meeting_section
+    if st not in d['sections']:
+      d['sections'][st] = {}
+    for offering in section.offering_set.all():
+      if name not in d['sections'][st]:
+        d['sections'][st][name] = []
+      d['sections'][st][name].append(merge_dicts(model_to_dict(section), model_to_dict(offering)))
+
+  return d
 
 
 def get_course(request, school, sem, id):
@@ -529,16 +522,12 @@ def get_course(request, school, sem, id):
   SCHOOL = school.lower()
 
   try:
-    course = Course.objects.get(id=id)
-    json_data = my_model_to_dict(course, sem)
-    # json_data['textbook_info'] = course.get_all_textbook_info()
-    json_data['eval_info'] = course.get_eval_info()
-    json_data['related_courses'] = course.get_related_course_info()
+    course = Course.objects.get(school=school, id=id)
     student = None
     logged = request.user.is_authenticated()
     if logged and Student.objects.filter(user=request.user).exists():
       student = Student.objects.get(user=request.user)
-    json_data['reactions'] = course.get_reactions(student)
+    json_data = get_detailed_course_json(course, sem, student)
 
   except:
     import traceback
@@ -560,48 +549,10 @@ def get_course_id(request, school, sem, code):
 
   return HttpResponse(json.dumps(json_data), content_type="application/json")
 
-def has_offering(course, sem):
-  Course, Offering = school_to_models[SCHOOL]
-  try:
-    res = Offering.objects.filter(~Q(time_start__iexact='TBA'),
-                      (Q(semester=sem) | Q(semester='Y')),
-                      course_id=course.id)
-    for offering in res:
-      day = offering.day
-      if day == 'S' or day == 'U':
-        return False
-    return True if len(res) > 0 else False
-  except:
-    return False
-
-
 ### COURSE SEARCH ###
 
-## Organizing result sections by section type ###
-def my_model_to_dict(course, sem, include_reactions=False, student=None):
-  fields=['code','name', 'id', 'description', 'department', 'num_credits']
-  d = model_to_dict(course, fields)
-  d['sections'] = {}
-
-  course_section_list = course.section_set.filter(semester__in=[sem, "Y"])
-
-  for section in course_section_list:
-    st = section.section_type
-    name = section.meeting_section
-    if st not in d['sections']:
-      d['sections'][st] = {}
-    for offering in section.offering_set.all():
-      if name not in d['sections'][st]:
-        d['sections'][st][name] = []
-      d['sections'][st][name].append(merge_dicts(model_to_dict(section), model_to_dict(offering)))
-
-  if include_reactions:
-    d['reactions'] = course.get_reactions(student)
-  return d
-
-
 def get_course_matches(school, query, semester):
-  return Course.objects.filter(school=school).filter(Q(code__icontains=query) | Q(description__icontains=query) | Q(name__icontains=query)).filter((Q(section__semester__in=[semester, 'Y'])))
+  return Course.objects.filter(school=school).filter(Q(code__icontains=query) | Q(name__icontains=query)).filter((Q(section__semester__in=[semester, 'Y'])))
 
 @csrf_exempt
 @validate_subdomain
@@ -609,7 +560,7 @@ def course_search(request, school, sem, query):
 
   course_match_objs = get_course_matches(school, query, sem)
   course_match_objs = course_match_objs.distinct('code')[:4]
-  course_matches = [my_model_to_dict(course, sem) for course in course_match_objs]
+  course_matches = [get_basic_course_json(course, sem) for course in course_match_objs]
   json_data = {'results': course_matches}
   return HttpResponse(json.dumps(json_data), content_type="application/json")
 
@@ -623,15 +574,16 @@ def advanced_course_search(request):
   query = params['query']
   filters = params['filters']
   times = filters['times']
-    
+
   # filtering first by user's search query
   course_match_objs = get_course_matches(school, query, sem)
 
   # filtering now by departments, areas, or levels if provided
   if filters['areas']:
     course_match_objs = course_match_objs.filter(areas__in=filters['areas'])
-    #TODO(rohan)
     '''
+      TODO(rohan)
+
       Use:
       course_match_objs.objects.filter(reduce(operator.or_, (Q(areas__contains=x) for x in filters['areas'])))
     '''
@@ -639,13 +591,23 @@ def advanced_course_search(request):
     course_match_objs = course_match_objs.filter(department__in=filters['departments'])
   if filters['levels']:
     course_match_objs = course_match_objs.filter(level__in=filters['levels'])
+  if filters['times']:
+    day_map = {"Monday": "M", "Tuesday": "T", "Wednesday": "W", "Thursday": "R", "Friday": "F"}
+    course_match_objs = course_match_objs.filter(reduce(operator.or_,
+      (Q(section__offering__time_start__gte="{0:0=2d}:00".format(min_max['min']),
+        section__offering__time_end__lte="{0:0=2d}:00".format(min_max['max']),
+        section__offering__day=day_map[min_max['day']],
+        section__semester=sem,
+        section__section_type="L", # we only want to show classes that have LECTURE sections within the given boundaries
+        )
+      for day_index, min_max in enumerate(filters['times']))))
 
-  course_match_objs = course_match_objs.distinct('code')[:50]
-  s = None
+  course_match_objs = course_match_objs.distinct('code')[:50] # limit to 50 search results
+  student = None
   logged = request.user.is_authenticated()
   if logged and Student.objects.filter(user=request.user).exists():
-      s = Student.objects.get(user=request.user)
-  json_data = [my_model_to_dict(course, sem, True, s) for course in course_match_objs]
+      student = Student.objects.get(user=request.user)
+  json_data = [get_detailed_course_json(course, sem, student) for course in course_match_objs]
 
   return HttpResponse(json.dumps(json_data), content_type="application/json")
 
@@ -658,17 +620,17 @@ def course_page(request, code):
   school = request.subdomain
   try:
     course_obj = Course.objects.filter(code__iexact=code)[0]
-    course_dict = my_model_to_dict(course_obj, "F")
+    course_dict = get_basic_course_json(course_obj, "F")
     l = course_dict.get('sections').get('L').values() if course_dict.get('sections').get('L') else None
     t = course_dict.get('sections').get('T').values() if course_dict.get('sections').get('T') else None
     p = course_dict.get('sections').get('P').values() if course_dict.get('sections').get('P') else None
-    return render_to_response("course_page.html", 
-      {'school': school, 
+    return render_to_response("course_page.html",
+      {'school': school,
        'course': course_dict,
        'lectures': l,
        'tutorials': t,
        'practicals': p,
-       }, 
+       },
     context_instance=RequestContext(request))
   except Exception as e:
     return HttpResponse(str(e))

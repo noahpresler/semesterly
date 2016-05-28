@@ -7,8 +7,18 @@ const mapStateToProps = (state) => {
 	}
 }
 
+const mapDispatchToProps = (dispatch) => {
+	return {
+		showUserSettings: () => dispatch({
+			type: "OVERRIDE_SETTINGS_SHOW",
+			data: true,
+		}),
+	}
+}
+
 const SocialProfileContainer = connect(
-	mapStateToProps
+	mapStateToProps,
+	mapDispatchToProps
 )(SocialProfile);
 
 export default SocialProfileContainer;

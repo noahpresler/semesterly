@@ -2,24 +2,11 @@ import fetch from 'isomorphic-fetch';
 import { getTimetablesEndpoint } from '../constants.jsx';
 import { randomString, browserSupportsLocalStorage } from '../util.jsx';
 import { store } from '../init.jsx';
-import { getClassmatesEndpoint, getSchoolInfoEndpoint } from '../constants.jsx'
-import { lockActiveSections } from './user_actions.jsx';
+import { getClassmatesEndpoint } from '../constants.jsx'
+import { lockActiveSections, fetchClassmates } from './user_actions.jsx';
+import { saveLocalSemester, saveLocalPreferences, saveLocalCourseSections, saveLocalActiveIndex } from '../util.jsx';
 
 export const SID = randomString(30);
-
-export function fetchSchoolInfo() {
-	return (dispatch) => {
-		dispatch({ type: "REQUEST_SCHOOL_INFO" });
-		fetch(getSchoolInfoEndpoint())
-	    .then(response => response.json())
-	    .then(json => {
-	    	dispatch({
-	    		type: "RECEIVE_SCHOOL_INFO", 
-	    		schoolInfo: json
-	    	});
-	    });
-	}
-}
 
 export function requestTimetables() {
   return {
@@ -55,17 +42,42 @@ export function nullifyTimetable(dispatch) {
 	})
 }
 
+// loads timetable from localStorage. assumes that the browser supports localStorage
+export function loadCachedTimetable() {
+	let localCourseSections = JSON.parse(localStorage.getItem('courseSections'));
+	// no coursesections stored locally; user is new (or hasn't added timetables yet)
+	if (!localCourseSections) { return; }
+	// no preferences stored locally; save the defaults
+	let localPreferences = JSON.parse(localStorage.getItem('preferences'));
+	let localSemester = localStorage.getItem('semester');
+	let localActive = parseInt(localStorage.getItem('active'));
+	if (Object.keys(localCourseSections).length === 0 || Object.keys(localPreferences).length === 0) { return; }
+	store.dispatch({ type: 'SET_ALL_PREFERENCES', preferences: localPreferences });
+	store.dispatch({ type: 'SET_SEMESTER', semester: localSemester });
+	store.dispatch({ type: 'RECEIVE_COURSE_SECTIONS', courseSections: localCourseSections });
+	fetchStateTimetables(store.getState(), localActive);
+}
+
+// loads @timetable into the state.
+// @created is true if the user is creating a new timetable
 export function loadTimetable(timetable, created=false) {
 	let dispatch = store.dispatch;
 	let state = store.getState();
-	if (!state.userInfo.data.isLoggedIn) {
+	let isLoggedIn = state.userInfo.data.isLoggedIn;
+	if (!isLoggedIn) {
 		return dispatch({type: 'TOGGLE_SIGNUP_MODAL'});
 	}
+	// store the 'saved timetable' (handled by the saving_timetable reducer)
 	dispatch({
 		type: "CHANGE_ACTIVE_SAVED_TIMETABLE",
 		timetable,
 		created
 	});
+	// lock sections for this timetable; and mark it as the only available one
+	lockTimetable(dispatch, timetable, created, isLoggedIn);
+}
+
+export function lockTimetable(dispatch, timetable, created, isLoggedIn) {
 	dispatch({
 		type: "RECEIVE_COURSE_SECTIONS",
 		courseSections: lockActiveSections(timetable)
@@ -75,8 +87,7 @@ export function loadTimetable(timetable, created=false) {
 		timetables: [timetable],
 		preset: created === false
 	});
-	let userInfo = state.userInfo.data;
-	if (userInfo.isLoggedIn) {
+	if (isLoggedIn) { // fetch classmates for this timetable only if the user is logged in
 		dispatch(fetchClassmates(timetable.courses.map( c => c['id'])))
 	}
 }
@@ -110,7 +121,7 @@ export function unhoverSection (dispatch) {
 		});
 	}
 }
-export function fetchCachedTimetables(state, activeIndex) {
+export function fetchStateTimetables(state, activeIndex) {
 	let requestBody = getBaseReqBody(state);
 	store.dispatch(fetchTimetables(requestBody, false, activeIndex));
 }
@@ -158,6 +169,7 @@ export function addOrRemoveCourse(newCourseId, lockingSection = '') {
 
 function fetchTimetables(requestBody, removing, newActive=0) {
 	return (dispatch) => {
+		let state = store.getState();
 		// mark that we are now asynchronously requesting timetables
 		dispatch(requestTimetables());
 		// send a request (via fetch) to the appropriate endpoint with
@@ -177,6 +189,8 @@ function fetchTimetables(requestBody, removing, newActive=0) {
 			}
 		}) // TODO(rohan): maybe log somewhere if errors?
 		.then(json => {
+			// save new courseSections and timetable active index to cache
+
 			if (removing || json.timetables.length > 0) {
 				// mark that timetables and a new courseSections have been received
 				dispatch(receiveTimetables(json.timetables));
@@ -190,8 +204,10 @@ function fetchTimetables(requestBody, removing, newActive=0) {
 	  					newActive,
 	  				})
   				}
+				saveLocalCourseSections(json.new_c_to_s);
+				saveLocalActiveIndex(newActive);
 			}
-			else {
+			else { // user wasn't removing (i.e. was adding a course/section), but we got no timetables back
 				// course added by the user resulted in a conflict, so no timetables
 				// were received
 				dispatch(alertConflict());
@@ -199,15 +215,19 @@ function fetchTimetables(requestBody, removing, newActive=0) {
 			return json;
 		})
 		.then(json => {
-			if (store.getState().userInfo.data.isLoggedIn && json.timetables[0]) {
+			if (state.userInfo.data.isLoggedIn && json.timetables[0]) {
 				dispatch(fetchClassmates(json.timetables[0].courses.map( c => c['id'])))
 			}
 		});
+
 		// save preferences when timetables are loaded, so that we know cached preferences 
-		// are always "up-to-date" (correspond to last loaded timetable)
-		if (browserSupportsLocalStorage()) {
-			localStorage.setItem('preferences', JSON.stringify(requestBody.preferences));
+		// are always "up-to-date" (correspond to last loaded timetable).
+		// same for the semester
+		saveLocalPreferences(requestBody.preferences);
+		if (localStorage.semester !== state.semester) {
+			saveLocalSemester(state.semester);
 		}
+		
 	}
 }
 
@@ -218,10 +238,10 @@ export function addCustomSlot(timeStart, timeEnd, day, preview, id) {
 		newCustomSlot: {
 			time_start: timeStart, // match backend slot attribute names
 			time_end: timeEnd,
-			day: day,
-			name: "New Custom Event",
-			id: id,
-			preview: preview
+			name: "New Custom Event", // default name for custom slot
+			day,
+			id,
+			preview,
 		}
 	})
 }
@@ -230,8 +250,8 @@ export function updateCustomSlot(newValues, id) {
 	let dispatch = store.dispatch;
 	dispatch({
 		type: "UPDATE_CUSTOM_SLOT",
-		newValues: newValues,
-		id: id
+		newValues,
+		id,
 	})
 }
 
@@ -239,37 +259,8 @@ export function removeCustomSlot(id) {
 	let dispatch = store.dispatch;
 	dispatch({
 		type: "REMOVE_CUSTOM_SLOT",
-		id: id
+		id,
 	})
-}
-
-export function getClassmates(json) {
-	return {
-		type: "CLASSMATES_RECEIVED",
-		courses: json
-	};
-}
-
-export function requestClassmates(id) {
-  return {
-    type: "REQUEST_CLASSMATES",
-  }
-}
-
-export function fetchClassmates(courses) {
-	return (dispatch) => {
-
-		dispatch(requestClassmates());
-		fetch(getClassmatesEndpoint(), {
-			credentials: 'include',
-			method: 'POST',
-			body: JSON.stringify({ course_ids: courses })
-		})
-	    .then(response => response.json())
-	    .then(json => {
-	    	dispatch(getClassmates(json))
-	    });
-	}
 }
 
 export function addOrRemoveOptionalCourse(course) {
@@ -280,10 +271,15 @@ export function addOrRemoveOptionalCourse(course) {
 	  	});
 	  	let state = store.getState();
 	  	let reqBody = getBaseReqBody(state);
+	  	let { optionalCourses } = state;
+
+	  	let optionCourses = optionalCourses.courses.map(c => c.id);
+
 		Object.assign(reqBody, {
-        	'optionCourses': state.optionalCourses.courses.map(c => c.id),
-        	'numOptionCourses': state.optionalCourses.numRequired
+        	optionCourses,
+        	numOptionCourses: state.optionalCourses.numRequired
         });
 		store.dispatch(fetchTimetables(reqBody, false));
 	}
 }
+

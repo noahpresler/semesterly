@@ -61,7 +61,7 @@
 	position: absolute;
 	bottom: 10px;
 	right: 0px;
-	height: 15px;
+	height: 16px;
 	padding: 0px 2px 0px 2px;
 	border-radius: 30%;
 	font-size: 14px;
@@ -80,7 +80,7 @@
 	height: 15px;
 	width: 15px;
 	border-radius: 50%;
-	font-size: 14px;
+	font-size: 12px;
 	color: white;
 	background-color: #1abc9c;
 	visibility: hidden;
