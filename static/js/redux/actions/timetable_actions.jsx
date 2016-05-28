@@ -204,14 +204,14 @@ function fetchTimetables(requestBody, removing, newActive=0) {
 	  					newActive,
 	  				})
   				}
+				saveLocalCourseSections(json.new_c_to_s);
+				saveLocalActiveIndex(newActive);
 			}
-			else {
+			else { // user wasn't removing (i.e. was adding a course/section), but we got no timetables back
 				// course added by the user resulted in a conflict, so no timetables
 				// were received
 				dispatch(alertConflict());
 			}
-			saveLocalCourseSections(json.new_c_to_s);
-			saveLocalActiveIndex(newActive);
 			return json;
 		})
 		.then(json => {
@@ -265,11 +265,12 @@ export function removeCustomSlot(id) {
 
 export function addOrRemoveOptionalCourse(course) {
 	return (dispatch) => {
+		let removing = store.getState().optionalCourses.courses.some(c => c.id === course.id);
 		dispatch({
 	  		type: "ADD_REMOVE_OPTIONAL_COURSE",
 	  		newCourse: course
 	  	});
-	  	let state = store.getState();
+	  	let state = store.getState(); // the above dispatched action changes the state
 	  	let reqBody = getBaseReqBody(state);
 	  	let { optionalCourses } = state;
 
@@ -279,7 +280,7 @@ export function addOrRemoveOptionalCourse(course) {
         	optionCourses,
         	numOptionCourses: state.optionalCourses.numRequired
         });
-		store.dispatch(fetchTimetables(reqBody, false));
+		store.dispatch(fetchTimetables(reqBody, removing));
 	}
 }
 
