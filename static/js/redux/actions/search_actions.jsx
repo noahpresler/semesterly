@@ -90,7 +90,12 @@ export function fetchSearchResults(query) {
 
 export function fetchAdvancedSearchResults(query, filters) {
 	return (dispatch) => {
-		if (query.length <= 1) {
+
+		// if too small a query AND no filters; don't make request.
+		// we'll allow small query strings if some filters (departments, or breadths, or levels) are chosen.
+
+
+		if (query.length <= 1 && [].concat(...Object.values(filters)).length === 0) {
 			dispatch({  
 				type: "RECEIVE_ADVANCED_SEARCH_RESULTS",
 				advancedSearchResults: []

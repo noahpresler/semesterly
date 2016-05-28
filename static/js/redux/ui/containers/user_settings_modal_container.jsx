@@ -4,7 +4,8 @@ import { saveSettings } from '../../actions/user_actions.jsx'
 
 const mapStateToProps = (state) => {
 	return {
-		userInfo: state.userInfo.data
+		userInfo: state.userInfo.data,
+		showOverrided: state.userInfo.overrideShow
 	}
 }
 
@@ -15,6 +16,10 @@ const mapDispatchToProps = (dispatch) => {
 			type: "CHANGE_USER_INFO",
 			data: info,
 		}),
+		closeUserSettings: () => dispatch({
+			type: "OVERRIDE_SETTINGS_SHOW",
+			data: false,
+		})
 	}
 }
 

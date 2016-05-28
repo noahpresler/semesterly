@@ -22,16 +22,15 @@ class Updates(models.Model):
   last_updated = models.DateTimeField(auto_now=True)
   reason = models.CharField(max_length=200, default='Scheduled Update')
 
-
 class Course(models.Model):
   school = models.CharField(db_index=True, max_length=100)
   code = models.CharField(max_length=20)
   name = models.CharField(max_length=250)
-  description = models.TextField(max_length=1500, default='')
-  unstopped_description = models.TextField(max_length=1500, default='')
-  campus = models.TextField(max_length=300, default='')
-  prerequisites = models.TextField(max_length=1000, default='')
-  exclusions = models.TextField(max_length=1000, default='')
+  description = models.TextField(default='')
+  unstopped_description = models.TextField(default='')
+  campus = models.CharField(max_length=300, default='')
+  prerequisites = models.TextField(default='')
+  exclusions = models.TextField(default='')
   num_credits = models.FloatField(default=-1)
   areas = models.CharField(max_length=300, default='', null=True)
   department = models.CharField(max_length=250, default='', null=True)
@@ -52,11 +51,16 @@ class Course(models.Model):
       result[i]['reacted'] = self.reaction_set.filter(student=student,title=r['title']).exists()
     return result
 
-  def get_related_course_info(self):
+  def get_related_course_info(self, semester=None, limit=None):
     info = []
     related = self.related_courses.all()
+    if semester:
+      related = related.filter(section__semester__in=[semester, 'Y']).distinct()
+    if limit and limit > 0:
+      related = related[:limit]
     for c in related:
-      info.append(model_to_dict(c))
+      info.append(model_to_dict(c, exclude=['related_courses', 'unstopped_description']))
+
     return info
 
   def get_eval_info(self):
@@ -70,12 +74,25 @@ class Course(models.Model):
         final.append(i)
     return sorted(final, key=lambda k: k['year']) 
 
+  def get_textbooks(self, semester):
+    textbooks = []
+    isbns = set()
+    for section in self.section_set.filter(semester__in=[semester, 'Y']):
+      for textbook in section.textbooks.all():
+        if textbook.isbn not in isbns:
+          textbooks.append(textbook.get_info())
+          isbns.add(textbook.isbn)
+
+    return textbooks
+
+
 class Section(models.Model):
   course = models.ForeignKey(Course)
   meeting_section = models.CharField(max_length=50)
   size = models.IntegerField(default=-1)
   enrolment = models.IntegerField(default=-1)
-  waitlist = models.IntegerField(default=0)
+  waitlist = models.IntegerField(default=-1)
+  waitlist_size = models.IntegerField(default=-1)
   section_type = models.CharField(max_length=50, default='L')
   instructors = models.CharField(max_length=500, default='TBA')
   semester = models.CharField(max_length=2)
@@ -97,13 +114,13 @@ class Offering(models.Model):
 
   def __unicode__(self):
     # return "Semester: %s, Section: %s, Time: %s" % (self.semester, self.meeting_section, self.time)
-    return "Day: %s, Time: %s - %s" % (self.day, self.start_time, self.end_time)
+    return "Day: %s, Time: %s - %s" % (self.day, self.time_start, self.time_end)
 
 
 class Evaluation(models.Model):
   course = models.ForeignKey(Course)
   score = models.FloatField(default=5.0)
-  summary = models.TextField(max_length=1500)
+  summary = models.TextField()
   professor = models.CharField(max_length=250)
   course_code = models.CharField(max_length=20)
   year = models.CharField(max_length=200)

@@ -9,7 +9,7 @@ api = API(locale='us')
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "semesterly.settings")
 django.setup()
 
-from timetable.models import Course, Offering, Textbook
+from timetable.models import *
 from scripts.amazon_helpers import *
 
 SESSION = requests.Session()
@@ -52,9 +52,8 @@ def parse_results(source):
         all_textbooks_info = sibling.find_all('td', class_="book-desc")
         print "\t\t\tFor %s section %s, found %d textbook(s). These are:" % (
             matches.group(1), matches.group(2), len(all_textbooks_info))
-        course = Course.objects.get(code=matches.group(1))
-        course_offerings = Offering.objects.filter(course=course,
-                                                         meeting_section=matches.group(2))
+        course = Course.objects.get(school="uoft", code=matches.group(1))
+        course_sections = Section.objects.filter(course=course, meeting_section=matches.group(2))
         for textbook_info in all_textbooks_info:
             try:
                 title = textbook_info.find('span', class_="book-title").text
@@ -76,10 +75,10 @@ def parse_results(source):
             textbook, created = Textbook.objects.update_or_create(isbn=isbn,
                                                         defaults=textbook_data)
             textbooks_found_count += int(created)
-            for offering in course_offerings:
-                if offering.textbooks.filter(isbn=isbn).exists():
+            for section in course_sections:
+                if section.textbooks.filter(isbn=isbn).exists():
                     continue
-                new_link = Link(Offering=offering, textbook=textbook,
+                new_link = TextbookLink(section=section, textbook=textbook,
                                 is_required=(req.strip().lower() == "required"))
                 new_link.save()
 
@@ -89,7 +88,7 @@ def parse_results(source):
     return textbooks_found_count
 
 
-def process_campus(campus_info):
+def process_campus(campus_info, semester="F"):
     print "Now processing textbooks for %s." % (campus_info['name'])
 
     rest = "control=campus&campus=%s&term=%s" % (campus_info['campus_id'], campus_info['term'])
@@ -100,18 +99,18 @@ def process_campus(campus_info):
     for dept in depts:
         department_to_dept_id[dept['abrev']] = dept['id']
 
-    campus_courses = Course.objects.filter(code__endswith=campus_info['ending']).order_by('code')
+    campus_courses = Course.objects.filter(school="uoft", code__endswith=campus_info['ending']).order_by('code')
     current_dept = ""
     for i, course in enumerate(campus_courses):
-        available_sections = get_all_sections(course, "S")
+        available_sections = get_all_sections(course, semester)
         if available_sections == []:
             continue
         print "%d. On Course: %s" % (i + 1, course.code)
         # new dept, get course info for this dept and store it in course_to_course_id
-        if course.get_dept() != current_dept:
-            if course.get_dept() not in department_to_dept_id:
+        if course.department != current_dept:
+            if course.department not in department_to_dept_id:
                 continue
-            current_dept = course.get_dept()
+            current_dept = course.department
 
             rest = "control=department&dept=%s&term=%s" % (department_to_dept_id[current_dept],
                                                            campus_info['term'])
@@ -120,7 +119,11 @@ def process_campus(campus_info):
             soup_courses = course_soup.findAll('course')
             course_to_course_id = {}
             for soup_course in soup_courses:
-                course_to_course_id[soup_course['name'][:-1]] = soup_course['id']
+                code = soup_course['name']
+                if code[-1].upper() not in [semester, 'Y']:
+                    print "Skipping", code, "because this entry was for different semester"
+                    continue
+                course_to_course_id[code[:-1]] = soup_course['id']
 
         if course.code not in course_to_course_id:
             continue
@@ -166,7 +169,7 @@ def parse_uoft_textbooks():
         'Mississauga': {
             'name': 'Mississauga',
             'ending': '5',
-            'campus_id': '39',
+            'campus_id': '47',
             'term': '571'
         }
     }

@@ -59,6 +59,7 @@
 .trans #exp-modal #modal-add i,
 .trans #exp-modal #modal-save,
 .trans #exp-modal #modal-save i,
+.trans .modal-module,
 .trans h3.modal-module-header,
 .trans h3.modal-module-header:after {
 	color: transparent;
@@ -67,6 +68,8 @@
 }
 
 .trans #exp-search-results,
+.trans .modal-module,
+.trans .time-selector,
 .trans #modal-body .rating-module {
 	opacity: 0;
 	visibility: hidden;
@@ -123,7 +126,17 @@
 	line-height: 20px;
 	font-size: 20px;
 }
-
+/* Share Button */
+#exp-modal #share-course-link-wrapper {
+	margin-top:118px;
+	margin-right:158px;
+}
+#exp-modal #share-course-link-wrapper .tip {
+	display:none;
+}
+#exp-modal #share-course-link-wrapper .tip-border {
+	right:180px;
+}
 /* Exploration Body */
 #exploration-body {
 	position: absolute;
@@ -179,19 +192,28 @@ h3.exp-header i:hover {
 #exp-filters h6 {
 	font-size: 16px;
 	padding: 5px;
-	margin: 0 5px 3px;
+	margin: 0 0px 3px;
 	border-radius: 3px;
 	font-weight: 400;
 	/*background-color: #eee;*/
 }
-#exp-filters h6 i {
-	margin-right: 5px;
+#exp-filters h6 i,
+#exp-filters .time-selector i {
+	font-size:14px;
+	margin-right: 3px;
 	cursor: pointer;
 	transition: transform .3s, color .3s;
 }
-#exp-filters h6 i:hover {
+#exp-filters h6 i:hover,
+#exp-filters .time-selector i:hover {
 	color: #ff4523;
 	transform: scale(1.1);
+}
+#exp-filters h6 i {
+	margin-left:-5px;
+}
+#exp-filters .time-selector i {
+	margin-right:10px;
 }
 
 /* Filter Out Pop */
@@ -364,3 +386,8 @@ h3.exp-header i:hover {
 #exp-modal #modal-add.on-active-timetable:hover{
 	background-color: #56ECCF;
 }
+#exp-filters .none-selected {
+	font-size: 14px;
+	margin-left: 0px;
+}
+
