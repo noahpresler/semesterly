@@ -12,6 +12,14 @@ import ExplorationModalContainer from './containers/exploration_modal_container.
 import SignupModalContainer from './containers/signup_modal_container.jsx';
 
 class Semesterly extends React.Component {
+
+	componentWillMount() {
+		$(document.body).on('keydown', (e) => {
+			if(parseInt(e.keyCode) === 39) {if (this.props.PgActive + 1 < this.props.PgCount) {this.props.setPgActive(this.props.PgActive + 1);}}
+			else if(parseInt(e.keyCode) === 37) {if (this.props.PgActive > 0) {this.props.setPgActive(this.props.PgActive - 1);}}
+		});
+	}
+
 	componentWillReceiveProps(nextProps) {
 		if (nextProps != this.props) {
 			if (nextProps.alertConflict) {
