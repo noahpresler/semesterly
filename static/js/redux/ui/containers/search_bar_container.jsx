@@ -6,6 +6,7 @@ import { fetchCourseInfo } from '../../actions/modal_actions.jsx';
 import { getSchoolSpecificInfo } from '../../constants.jsx';
 
 const mapStateToProps = (state) => {
+	let { isVisible } = state.explorationModal;
 	let courseSections = state.courseSections.objects;
 	let schoolSpecificSemesters = getSchoolSpecificInfo(state.school.school).semesters;
 	return {
@@ -19,7 +20,8 @@ const mapStateToProps = (state) => {
     	isCourseOptional: (course_id) => state.optionalCourses.courses.some(c => c.id === course_id),
 		hasHoveredResult: state.timetables.items[state.timetables.active].courses.some(course => course.fake),
 		isHovered: (position) => state.ui.searchHover === position,
-		hoveredPosition: state.ui.searchHover
+		hoveredPosition: state.ui.searchHover,
+		explorationModalIsVisible: isVisible
 	}
 }
 
