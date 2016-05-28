@@ -3,6 +3,7 @@ import functools
 import itertools
 import json
 import logging
+import operator
 import os
 from pprint import pprint
 from django.shortcuts import render_to_response, render
@@ -53,7 +54,7 @@ def view_timetable(request, code=None, sem=None, shared_timetable=None):
   student = get_student(request)
   course_json = None
   if not sem: # not loading a share course link
-    sem = 'F' 
+    sem = 'F'
   if code: # user is loading a share course link, since code was included
     sem = sem.upper()
     code = code.upper()
@@ -75,7 +76,7 @@ def view_timetable(request, code=None, sem=None, shared_timetable=None):
 @validate_subdomain
 def share_timetable(request, ref):
   try:
-    shared_timetable = convert_tt_to_dict(SharedTimetable.objects.get(school=request.subdomain, id=ref), 
+    shared_timetable = convert_tt_to_dict(SharedTimetable.objects.get(school=request.subdomain, id=ref),
                                           include_last_updated=False)
     semester = shared_timetable['semester']
     return view_timetable(request, sem=semester, shared_timetable=shared_timetable)
@@ -136,7 +137,7 @@ def get_timetables(request):
                                     for subset in itertools.combinations(optional_courses, k)]
 
   custom_events = params.get('customSlots', [])
-  generator = TimetableGenerator(params['semester'], 
+  generator = TimetableGenerator(params['semester'],
                   params['school'],
                   locked_sections,
                   custom_events,
@@ -573,7 +574,7 @@ def advanced_course_search(request):
   query = params['query']
   filters = params['filters']
   times = filters['times']
-    
+
   # filtering first by user's search query
   course_match_objs = get_course_matches(school, query, sem)
 
@@ -590,8 +591,19 @@ def advanced_course_search(request):
     course_match_objs = course_match_objs.filter(department__in=filters['departments'])
   if filters['levels']:
     course_match_objs = course_match_objs.filter(level__in=filters['levels'])
-  # if filters['times']:
-  # course_match_objs = course_match_objs.filter(section__semester__in=[sem, 'Y'], section__offering__time_start__icontains="15", section__offering__time_end__lte="16:00")
+  if filters['times']:
+    print "LMFAO"
+    day_map = ["M", "T", "W", "R", "F"]
+    course_match_objs = course_match_objs.filter(reduce(operator.or_,
+      (Q(section__offering__time_start__gte="{0:0=2d}:00".format(min_max['min']),
+        section__offering__time_end__lte="{0:0=2d}:00".format(min_max['max']),
+        section__offering__day=day_map[day_index],
+        section__semester=sem,
+        section__section_type="L", # we only want to show classes that have LECTURE sections within the given boundaries
+        )
+      for day_index, min_max in enumerate(filters['times']))))
+
+  print course_match_objs.query
   course_match_objs = course_match_objs.distinct('code')[:50]
   student = None
   logged = request.user.is_authenticated()
@@ -614,13 +626,13 @@ def course_page(request, code):
     l = course_dict.get('sections').get('L').values() if course_dict.get('sections').get('L') else None
     t = course_dict.get('sections').get('T').values() if course_dict.get('sections').get('T') else None
     p = course_dict.get('sections').get('P').values() if course_dict.get('sections').get('P') else None
-    return render_to_response("course_page.html", 
-      {'school': school, 
+    return render_to_response("course_page.html",
+      {'school': school,
        'course': course_dict,
        'lectures': l,
        'tutorials': t,
        'practicals': p,
-       }, 
+       },
     context_instance=RequestContext(request))
   except Exception as e:
     return HttpResponse(str(e))

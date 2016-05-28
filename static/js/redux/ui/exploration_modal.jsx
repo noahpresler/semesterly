@@ -5,21 +5,29 @@ import { CourseModalBody } from './course_modal_body.jsx';
 import ClickOutHandler from 'react-onclickout';
 import { getCourseShareLink } from '../helpers/timetable_helpers.jsx';
 import { ShareLink } from './master_slot.jsx';
+import InputRange from './react_input_range.jsx';
 
 export class ExplorationModal extends React.Component {
 	constructor(props){
 		super(props);
 		this.state = {
-			show_departments: false,
 			show_areas: false,
-			show_times: false,
+			show_departments: false,
 			show_levels: false,
+			show_times: false,
 			areas: [],
 			departments: [],
-			times: [],
 			levels: [],
+			times: [{min: 8, max: 24},
+					 {min: 8, max: 24},
+					 {min: 8, max: 24},
+					 {min: 8, max: 24},
+					 {min: 8, max: 24},
+					], // min and max times for each day of the week
 			shareLinkShown: false,
+			
 		};
+		this.dayMap = ["Mon", "Tue", "Wed", "Thu", "Fri"],
 		this.toggle = this.toggle.bind(this);
 		this.fetchAdvancedSearchResults = this.fetchAdvancedSearchResults.bind(this);
 		this.fetchAdvancedSearchResultsWrapper = this.fetchAdvancedSearchResultsWrapper.bind(this);
@@ -114,6 +122,16 @@ export class ExplorationModal extends React.Component {
         this.props.addOrRemoveOptionalCourse(course);
         this.hide();
     }
+    handleTimesChange(component, values) {
+    	let newTimes = [...this.state.times];
+    	let i = component.props.dayIndex;
+    	newTimes[i] = values;
+    	let stateUpdate = {
+	      times: newTimes,
+	    };
+	    this.setState(stateUpdate);
+	    this.fetchAdvancedSearchResults(Object.assign({}, this.state, stateUpdate));
+  	}
 	render() {
 		let modalStyle = {
 			width: '100%',
@@ -220,16 +238,27 @@ export class ExplorationModal extends React.Component {
 	            <div id="exploration-body">
                     <div id="exp-filters" className="col-4-16">
                         { selectedFilterSections }
+
                         <div className={classNames("exp-filter-section", {'open' : this.state.show_times})}>
                             <h3 className="exp-header">
 								<span>Times Filter</span>
-								<i className="fa fa-plus"
-									onClick={this.toggleTimes}></i>
+								
 							</h3>
-							<h6>
-								<i className="fa fa-times"></i>
-								<span>M 9am-5pm</span>
-							</h6>
+							<div className="time-filters">
+							{
+								this.state.times.map((t, i) => (
+									<TimeSelector
+										key={i}
+										day={this.dayMap[i]}
+										dayIndex={i}
+						        		value={this.state.times[i]}
+						        		onChange={this.handleTimesChange.bind(this)}
+						      		/>
+								))
+							}
+							</div>
+
+
                         </div>
                     </div>
                     <div id="exp-search-results" className="col-5-16">
@@ -239,6 +268,7 @@ export class ExplorationModal extends React.Component {
                         </div>
                     </div>
                     { filters }
+
                     <div id="exp-modal" className="col-7-16">
                         { courseModal }
                     </div>
@@ -330,6 +360,20 @@ const SelectedFilterSection = ({ name, toggle, children }) => (
 			<i className="fa fa-plus"
 				onClick={toggle}></i>
 		</h3>
-		{ children.length > 0 ? children : <h6>None Selected</h6> }
+		{ children.length > 0 ? children : <h6 className="none-selected">None Selected</h6> }
 	</div>
+);
+
+const TimeSelector = ({ day, dayIndex, value, onChange }) => (
+	<div className="time-selector">
+		<span className="time-selector-day"> { day } </span>
+		<InputRange
+			dayIndex={dayIndex}
+    		maxValue={24}
+   			minValue={8}
+    		value={value}
+    		onChange={onChange}
+  		/>
+	</div>
+
 );
