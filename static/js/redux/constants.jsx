@@ -54,6 +54,7 @@ export const getSchoolSpecificInfo = (school) => {
         areasName: "Breadths",
         departmentsName: "Departments",
         levelsName: "Levels",
+        timesName: "Times",
         semesters: {
           F: "Fall 2016",
           S: "Winter 2017"
@@ -65,6 +66,7 @@ export const getSchoolSpecificInfo = (school) => {
         areasName: "Areas",
         departmentsName: "Departments",
         levelsName: "Levels",
+        timesName: "Times",
         semesters: {
           F: "Fall 2016",
           S: "Spring 2017"
@@ -76,6 +78,7 @@ export const getSchoolSpecificInfo = (school) => {
         areasName: "Areas",
         departmentsName: "Departments",
         levelsName: "Levels",
+        timesName: "Times",
         semesters: {
           F: "Fall 2016",
           S: "Spring 2017"
@@ -87,6 +90,7 @@ export const getSchoolSpecificInfo = (school) => {
         areasName: "Areas",
         departmentsName: "Departments",
         levelsName: "Levels",
+        timesName: "Times",
         semesters: {
           F: "Fall 2016",
           S: "Spring 2017"

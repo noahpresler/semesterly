@@ -101,6 +101,12 @@ class HopkinsParser:
 
     def create_course_offerings(self, course, CourseModel, SectionDetails, Meetings, SectionCode):
         wrapped_code = "(" + str(SectionCode) + ")"
+        section, section_created = Section.objects.update_or_create(
+                course = CourseModel,
+                semester = self.semester[0].upper(),
+                meeting_section = wrapped_code,
+            )
+        Offering.objects.filter(section = section).all().delete()
         for Meeting in Meetings:
             try:
                 section_size = int(course['MaxSeats'])
@@ -150,7 +156,9 @@ class HopkinsParser:
                                 day = day,
                                 time_start = start,
                                 time_end = end,
-                                location = location
+                                defaults = {
+                                    'location':location
+                                }
                             )
 
     def get_create_course(self,courseJson,description,prereqs):
@@ -161,7 +169,7 @@ class HopkinsParser:
             num_credits=int(float(courseJson['Credits']))
         except:
             num_credits=0
-        level = re.search(re.compile(r"(?<=\.)[^.]*$"),courseJson['OfferingName']).group(0)
+        level = re.search(re.compile(r"(?<=\.)[^.]"),courseJson['OfferingName']).group(0) + "00"
 
         course, CourseCreated = Course.objects.update_or_create(
             code = courseJson['OfferingName'].strip(),
