@@ -1,9 +1,10 @@
 .welcome-modal {
 	max-width: 500px;
 	height: 575px;
-	outline: none;;
 }
-
+.welcome-modal > div {
+	outline:none;
+}
 .welcome-modal #modal-header {
 	background-color: #eee;
 	padding: 25px 25px;
