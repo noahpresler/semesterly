@@ -552,7 +552,8 @@ def get_course_id(request, school, sem, code):
 ### COURSE SEARCH ###
 
 def get_course_matches(school, query, semester):
-  return Course.objects.filter(school=school).filter(Q(code__icontains=query) | Q(name__icontains=query)).filter((Q(section__semester__in=[semester, 'Y'])))
+  param_values = query.split()
+  return Course.objects.filter(school=school).filter(reduce(operator.and_, (Q(code__icontains=param) | Q(name__icontains=param.replace("&", "and")) | Q(name__icontains=param.replace("and", "&")) for param in param_values))).filter((Q(section__semester__in=[semester, 'Y'])))
 
 @csrf_exempt
 @validate_subdomain
