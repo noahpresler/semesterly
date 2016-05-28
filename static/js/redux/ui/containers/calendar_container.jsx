@@ -43,7 +43,7 @@ const mapDispatchToProps = (dispatch) => {
     saveTimetable: () => dispatch(saveTimetable()),
     fetchShareTimetableLink: () => dispatch(fetchShareTimetableLink()),
     createTimetable: () => {
-      loadTimetable({ name: "Untitled Schedule", courses: [] }, true);
+      loadTimetable({ name: "Untitled Schedule", courses: [], has_conflict: false }, true);
     }
   }
 }
