@@ -137,6 +137,10 @@
 	font-size: 14px;
 	margin: 0;
 	padding-left: 5px;
+	height: 14px;
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
 }
 .search-course h4 {
 	font-size: 12px;
