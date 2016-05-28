@@ -156,17 +156,13 @@ class TimetableGenerator:
     self.school = school
     self.slots_per_hour = 60 / school_to_granularity[school]
     self.semester = semester
-    self.no_classes_before = 0 if not preferences['no_classes_before'] else self.slots_per_hour * 2 - 1
-    self.no_classes_after = self.slots_per_hour * 14 if not preferences['no_classes_after'] else self.slots_per_hour * 10 + 1
     self.least_days = preferences.get('least_days', False)
-    self.spread = not preferences['grouped']
-    self.sort_by_spread = preferences['do_ranking']
     self.with_conflicts = preferences['try_with_conflicts']
     self.locked_sections = locked_sections
     self.custom_events = custom_events
 
   def courses_to_timetables(self, courses):
-    timetables = self.get_best_timetables(courses)
+    timetables = self.get_timetables(courses)
     result = [self.convert_tt_to_dict(tt) for tt in timetables]
     return result
 
@@ -192,35 +188,13 @@ class TimetableGenerator:
     course_dict['slots'] = slot_objects
     return course_dict
 
-  def get_best_timetables(self, courses):
-    with_preferences = self.get_timetables_with_all_preferences(courses)
-    return with_preferences if with_preferences[0] != () \
-                else self.get_timetables_with_some_preferences(courses)
-
-  def get_timetables_with_all_preferences(self, courses):
-    preference_timetable = [p for p in self.construct_preference_tt() if p]
-    valid_timetables = []
-
-    for pref_combination in itertools.product(*preference_timetable):
-      possible_offerings = self.courses_to_offerings(courses, pref_combination)
-      new_timetables = self.create_timetable_from_offerings(possible_offerings)
-      if new_timetables:
-        valid_timetables += new_timetables
-      if len(valid_timetables) >= MAX_RETURN:
-        break
-
-    if not valid_timetables: valid_timetables = [()]
-    return rank_by_spread(valid_timetables) if self.sort_by_spread else valid_timetables
-
-  def get_timetables_with_some_preferences(self, courses):
+  def get_timetables(self, courses):
     """
     Generate timetables from all offerings (no pre-filtering of course offerings),
     and return timetables ranked by # of preferences satisfied.
     """
     all_offerings = self.courses_to_offerings(courses)
-    timetables = self.create_timetable_from_offerings(all_offerings)
-    s = sorted([tt[0] for tt in timetables], key=functools.partial(get_rank_score, metric=get_preference_score))
-    return s
+    return self.create_timetable_from_offerings(all_offerings)
 
   def create_timetable_from_offerings(self, offerings):
     timetables = []
@@ -290,8 +264,9 @@ class TimetableGenerator:
     """
     all_sections = []
     for c in courses:
-      sections = sorted(c.section_set.filter(Q(semester__in=[self.semester, 'Y'])), key=get_section_type)
-      grouped = itertools.groupby(sections, get_section_type)
+      sections = sorted(c.section_set.filter(Q(semester__in=[self.semester, 'Y'])), 
+                        key=lambda s: s.section_type)
+      grouped = itertools.groupby(sections, lambda s: s.section_type)
       for section_type, sections in grouped:
         if str(c.id) in self.locked_sections and self.locked_sections[str(c.id)].get(section_type, False):
           locked_section_code = self.locked_sections[str(c.id)][section_type]
@@ -301,96 +276,6 @@ class TimetableGenerator:
         else:
           all_sections.append([[c.id, section, section.offering_set.all()] for section in sections])
     return all_sections
-
-  def construct_preference_tt(self):
-    """
-    Constructs a preference "timetable" based on the input preferences.
-    Assumes that the inputs are always defined. A preference "timetable"
-    is a list of lists consisting of predicates. Each sublist represents
-    a specific preference which is satisfied if any one of the predicates in
-    the sublist returns false. For example, in the following "tt":
-    [
-      [lambda co: co.time_start > 3 or co.time_end < 21],
-      [lambda co: co.day == 'M', lambda co: co.day == 'F']
-    ]
-    The first sublist represents the preference of starting and ending between
-    10am and 6pm, and the second represents the preference of having a long
-    weekend (i.e. either no classes monday or no classes friday).
-    The reason this is similar to a timetable is because the set of all preferences are satisfied
-    if there is some combination of preferences (one from each sublist) that
-    returns is False.
-    """
-    tt = []
-    # early/late class preference
-    if (self.no_classes_before > 0 or self.no_classes_after < 14 * 60/school_to_granularity[self.school]):
-      tt.append([lambda co: not (get_time_index_from_string(co[0].time_start) > self.no_classes_before \
-                and get_time_index_from_string(co[0].time_end) < self.no_classes_after)])
-
-    if self.least_days:
-      tt.append([(lambda co: co[0].day == 'T'), \
-            (lambda co: co[0].day == 'W'), \
-            (lambda co: co[0].day == 'R'), \
-            (lambda co: co[0].day == 'M'), \
-            (lambda co: co[0].day == 'F')])
-
-    return tt
-
-def get_section_type(s):
-  return s.section_type
-
-def rank_by_spread(timetables):
-  return sorted(timetables,
-        key=functools.partial(get_rank_score, metric=get_spread_score),
-        reverse=SPREAD)
-
-def get_rank_score(timetable, metric):
-  """Get score for a timetable. The higher the score, the more grouped it is."""
-  day_to_usage = {'M': [False for i in range(14 * 60 / school_to_granularity[SCHOOL])],
-          'T': [False for i in range(14 * 60 / school_to_granularity[SCHOOL])],
-          'W': [False for i in range(14 * 60 / school_to_granularity[SCHOOL])],
-          'R': [False for i in range(14 * 60 / school_to_granularity[SCHOOL])],
-          'F': [False for i in range(14 * 60 / school_to_granularity[SCHOOL])]}
-  conflict_cost = 0
-  for meeting in timetable:
-    for co, conflict in meeting[2]:
-      for index in find_slots_to_fill(co.time_start, co.time_end):
-        if day_to_usage[co.day][index] == True:
-          conflict_cost += 500
-        else:
-          day_to_usage[co.day][index] = True
-  return metric(day_to_usage) + conflict_cost
-
-def get_spread_score(day_to_usage):
-  """Get score which is higher the more spread out the timetable is."""
-  return sum([calculate_spread_by_day(day_to_usage[day]) for day in day_to_usage.keys()])
-
-def calculate_spread_by_day(day_bitarray):
-  """Calculate the score for a bit array representing a day's schedule."""
-  day_string = ''.join(map(lambda s: 'T' if s else ' ', day_bitarray)).strip()
-  break_lengths = day_string.split('T')
-  return sum(map(lambda s: len(s)**2, break_lengths)) if len(break_lengths) > 2 \
-                            else 0
-
-def get_preference_score(day_to_usage):
-  """Calculate cost for long weekend, early/late class, and break preferences."""
-  day_cost = day_use(day_to_usage)
-  time_cost = 0
-  for day in day_to_usage.keys():
-    time_cost += get_time_cost(day_to_usage[day])
-  break_cost = get_break_cost(day_to_usage)
-  return sum([day_cost, time_cost, break_cost])
-
-def get_time_cost(day_bitarray):
-  """Cost of having early/late classes, based on the user's preferences."""
-  return sum([1 for slot in (day_bitarray[:NO_CLASSES_BEFORE] +
-                 day_bitarray[NO_CLASSES_AFTER:])
-          if slot])
-
-def get_break_cost(day_to_usage):
-  return 0
-
-def day_use(day_to_usage, *days):
-  return sum([1 for day in days if any(day_to_usage[day])])
 
 def get_xproduct_indicies(lists):
   """
