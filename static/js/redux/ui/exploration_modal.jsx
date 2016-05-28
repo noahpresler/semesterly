@@ -275,7 +275,7 @@ export class ExplorationModal extends React.Component {
 						<h1>Advanced Search</h1>
 					</div>
 					<div className="col-5-16">
-						<input ref="input" onInput={this.fetchAdvancedSearchResultsWrapper} />
+						<input ref="input" onInput={this.fetchAdvancedSearchResultsWrapper} value="ASDF"/>
 					</div>
 	                <div id="exploration-close"
 	                	onMouseDown={() => this.refs.modal.hide()}>
@@ -416,7 +416,7 @@ class TimeSelector extends React.Component {
 	}
 	componentDidMount() {
 		$(".InputRange-labelContainer").filter((i, c) => i % 2 === 0)
-		.addClass('InputRange-labelMaxTime');
+		.addClass('InputRange-labelMaxTime');		
 	}
 
 }
