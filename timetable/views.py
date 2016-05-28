@@ -477,15 +477,15 @@ def course_page(request, code):
   try:
     course_obj = Course.objects.filter(code__iexact=code)[0]
     course_dict = get_basic_course_json(course_obj, "F")
-    l = course_dict.get('sections').get('L').values() if course_dict.get('sections').get('L') else None
-    t = course_dict.get('sections').get('T').values() if course_dict.get('sections').get('T') else None
-    p = course_dict.get('sections').get('P').values() if course_dict.get('sections').get('P') else None
+    l = course_dict['sections'].get('L', {}).values()
+    t = course_dict['sections'].get('T', {}).values()
+    p = course_dict['sections'].get('P', {}).values()
     return render_to_response("course_page.html",
       {'school': school,
        'course': course_dict,
-       'lectures': l,
-       'tutorials': t,
-       'practicals': p,
+       'lectures': l if l else None,
+       'tutorials': t if t else None,
+       'practicals': p if p else None,
        },
     context_instance=RequestContext(request))
   except Exception as e:
