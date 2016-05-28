@@ -22,12 +22,13 @@ const mapStateToProps = (state) => {
 			return false;
 		},
 		isLoggedIn: state.userInfo.data.isLoggedIn,
+		socialSections: state.userInfo.data.social_offerings,
 		primaryDisplayAttribute: getSchoolSpecificInfo(state.school.school).primaryDisplay,
 		courseToColourIndex: state.ui.courseToColourIndex,
 		custom: state.customSlots,
 		classmates: (id,sec) => {
 			let cm = state.classmates.courseToClassmates ? state.classmates.courseToClassmates.find(course => course.course_id === id) : [];
-			return cm ? cm.classmates.filter(friend => friend.sections.find(s => s === sec) !== undefined) : [];
+			return cm ? cm.classmates.filter(friend => friend.sections && friend.sections.find(s => s === sec) !== undefined) : [];
 		}
 
 	}
