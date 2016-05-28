@@ -592,19 +592,17 @@ def advanced_course_search(request):
   if filters['levels']:
     course_match_objs = course_match_objs.filter(level__in=filters['levels'])
   if filters['times']:
-    print "LMFAO"
-    day_map = ["M", "T", "W", "R", "F"]
+    day_map = {"Monday": "M", "Tuesday": "T", "Wednesday": "W", "Thursday": "R", "Friday": "F"}
     course_match_objs = course_match_objs.filter(reduce(operator.or_,
       (Q(section__offering__time_start__gte="{0:0=2d}:00".format(min_max['min']),
         section__offering__time_end__lte="{0:0=2d}:00".format(min_max['max']),
-        section__offering__day=day_map[day_index],
+        section__offering__day=day_map[min_max['day']],
         section__semester=sem,
         section__section_type="L", # we only want to show classes that have LECTURE sections within the given boundaries
         )
       for day_index, min_max in enumerate(filters['times']))))
 
-  print course_match_objs.query
-  course_match_objs = course_match_objs.distinct('code')[:50]
+  course_match_objs = course_match_objs.distinct('code')[:50] # limit to 50 search results
   student = None
   logged = request.user.is_authenticated()
   if logged and Student.objects.filter(user=request.user).exists():
