@@ -20,6 +20,7 @@
 		<title>Semester.ly: Textbooks, Course Finding & More | JHU Registration Countdown</title>
 		<link rel="shortcut icon" type="image/x-icon" href="{% static 'img/favicon.ico' %}" />
 
+		<link rel="stylesheet" href="{% static 'css/timetable/global.css'%}">
 		<link rel="stylesheet" href="{% static 'css/splash.css'%}">
 	</head>
 	<body>
@@ -33,7 +34,19 @@
 		</header>
 
 		<div id="page">
-			Welcome to semesterly!
+
+			<div id="top" style="background-image: url({% static 'img/splash/students-in-gilman.jpg'%});">
+				<div class="grid">
+					<div class="col-12-16">
+						<div id="banner-logo" style="background-image: url({% static 'img/logo2.0.png'%})"></div>
+						<h1>Semester.ly</h1>
+						<h2>Your Semester, Made Simple</h2>
+					</div>
+				</div>
+			</div>
+			<div id="">
+
+			</div>
 			<a href="http://jhu.sem.ly:8000">JHU</a>
 			<a href="http://uoft.sem.ly:8000">UofT</a>
 			<a href="http://umd.sem.ly:8000">UMD</a>
