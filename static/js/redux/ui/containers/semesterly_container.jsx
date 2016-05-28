@@ -8,12 +8,21 @@ const mapStateToProps = (state) => {
     	alertConflict: state.alerts.alertConflict,
     	alertTimetableExists: state.alerts.alertTimetableExists,
     	alertChangeSemester: state.alerts.alertChangeSemester,
-    	explorationModalIsVisible: state.explorationModal.isVisible
+    	explorationModalIsVisible: state.explorationModal.isVisible,
+		PgCount: state.timetables.items.length,
+    	PgActive: state.timetables.active,
+	}
+}
+
+const mapDispatchToProps = (dispatch) => {
+	return {
+		setPgActive: (newActive) => dispatch( {type: "CHANGE_ACTIVE_TIMETABLE", newActive} ),
 	}
 }
 
 const SemesterlyContainer = connect(
-	mapStateToProps
+	mapStateToProps,
+	mapDispatchToProps
 )(Semesterly);
 
 export default DragDropContext(HTML5Backend)(SemesterlyContainer);
