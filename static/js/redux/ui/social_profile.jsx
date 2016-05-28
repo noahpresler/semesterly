@@ -51,12 +51,17 @@ export class SocialProfile extends React.Component {
 		);
 		let loggedOut = (
 			<a id="social-login" href="/login/facebook">
-				<h2>Signup/Login <i className="fa yfa-facebook-square"></i></h2>
+				<h2>
+					<span>Signup/Login</span>
+					<span className="mobile">Signup Login</span>
+					<i className="fa fa-facebook-square"></i>
+				</h2>
 			</a>
 		);
 		let social = this.props.userInfo.isLoggedIn ? loggedIn : loggedOut;
     	return(
-			<div id="social">
+			<div id="social"
+				className={classNames({'logged-in' : this.props.userInfo.isLoggedIn})}>
 				{social}
 			</div>
 		);
