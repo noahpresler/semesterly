@@ -163,6 +163,7 @@ export class CourseModalBody extends React.Component {
                         
                     </div>
                     <div className="col-8-16">
+                        <h3 className="modal-module-header">Reactions</h3>
                         <div id="reactions-wrapper">
                             <div id="reactions">
                                 {reactionsDisplay}
