@@ -2,13 +2,13 @@
 $(document).ready(function() {  
     sizeitup();
 
-    $('#light-content').click(function(e){
-      e.stopPropagation();
-    });
+    // $('#light-content').click(function(e){
+    //   e.stopPropagation();
+    // });
 
-    $('#light, #light-exit').click(function(){
-      $('#light').addClass('out');
-    });
+    // $('#light, #light-exit').click(function(){
+    //   $('#light').addClass('out');
+    // });
 
 });
 
@@ -24,13 +24,14 @@ $(window).scroll(function() {
     var bodyh = $(window).height();
     var pos = $(window).scrollTop();
     if (pos > 0) {
-        $('header').addClass('up');
+        $('header').removeClass('down');
     } else {
-        $('header').removeClass('up');
+        $('header').addClass('down');
     }
 });
 
 //SMOOTH SCROLLING
+/*
 $(function() {
     $('a[href*=#]:not([href=#])').click(function() {
         if (location.pathname.replace(/^\//,'') == this.pathname.replace(/^\//,'') && location.hostname == this.hostname) {
@@ -45,3 +46,4 @@ $(function() {
         }
     });
 });
+*/

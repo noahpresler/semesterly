@@ -54,8 +54,16 @@ export class UserSettingsModal extends React.Component {
         return prop === undefined || prop === null || prop === "";
     }
     render() {
+        let modalStyle = {
+            width: '100%',
+        };
         return (
-            <Modal ref="modal" className="welcome-modal" closeOnClick={false} keyboard={false}>
+            <Modal ref="modal"
+                className="welcome-modal"
+                closeOnClick={false}
+                keyboard={false}
+                modalStyle={modalStyle}
+                >
                 <div id="modal-header">
                     <div className="pro-pic" style={{backgroundImage: 'url(' + this.props.userInfo.img_url + ')'}}></div>
                     <h1>Welcome!</h1>
@@ -85,34 +93,36 @@ export class UserSettingsModal extends React.Component {
                         ]}
                         onChange={this.changeClassYear}
                     />
-                    <div className="preference">
-                        <div className="preference-wrapper">
-                            <h3>Would you like to find classes with friends?</h3>
-                            <p className="disclaimer">Find classes with your friends, and allow your friends to find classes with you.</p>
-                        </div>
+                    <div className="preference cf">
                         <label className="switch switch-slide">
                             <input ref="share_courses" className="switch-input" type="checkbox" checked={this.props.userInfo.social_courses} onChange={this.changeForm}/>
                             <span className="switch-label" data-on="Yes" data-off="No"></span>
                             <span className="switch-handle"></span>
                         </label>
-                    </div>
-                    <div className="preference">
                         <div className="preference-wrapper">
-                            <h3>Would you like to find sections with friends?</h3>
-                            <p className="disclaimer">Find specific sections with your friends, and allow your friends to find sections with you.</p>
+                            <h3>Would you like to find classes with friends?</h3>
+                            <p className="disclaimer">Find classes with your friends, and allow your friends to find classes with you.</p>
                         </div>
+                    </div>
+                    <div className="preference cf">
                         <label className="switch switch-slide">
                             <input ref="share_sections" className="switch-input" type="checkbox" checked={this.props.userInfo.social_offerings === true} onChange={this.changeForm}/>
                             <span className="switch-label" data-on="Yes" data-off="No"></span>
                             <span className="switch-handle"></span>
                         </label>
+                        <div className="preference-wrapper">
+                            <h3>Would you like to find sections with friends?</h3>
+                            <p className="disclaimer">Find specific sections with your friends, and allow your friends to find sections with you.</p>
+                        </div>
                     </div>
-                    <button className="signup-button" onClick={() => {
-                        this.props.saveSettings();
-                        this.props.closeUserSettings();
-                        if (!this.shouldShow(Object.assign({}, this.props, { showOverrided: false })))
-                                this.refs.modal.hide();
-                    }}>Save</button>
+                    <div className="button-wrapper">
+                        <button className="signup-button" onClick={() => {
+                            this.props.saveSettings();
+                            this.props.closeUserSettings();
+                            if (!this.shouldShow(Object.assign({}, this.props, { showOverrided: false })))
+                                    this.refs.modal.hide();
+                        }}>Save</button>
+                    </div>
                 </div>
             </Modal>
         );
