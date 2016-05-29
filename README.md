@@ -1,5 +1,5 @@
 # [Semesterly](http://semester.ly)
-A dynamic timetable generator for students.
+A dynamic timetable generator for students.A
 Find the perfect schedule based on your preferences and
 the courses you choose.
 
@@ -30,4 +30,4 @@ Gulp will wait for changes in the JSX files, and update `application.js` accordi
 it has stopped transforming, restart the process.
 
 ### Further Instructions
-Coming soon.
+Coming soon!
