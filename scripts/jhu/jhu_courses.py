@@ -7,6 +7,7 @@ from toolz import itertoolz
 from collections import OrderedDict
 import re
 import django
+import datetime
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "semesterly.settings")
 django.setup()
 from timetable.models import *

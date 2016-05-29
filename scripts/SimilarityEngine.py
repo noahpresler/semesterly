@@ -21,15 +21,15 @@ class SimilarityFinder:
 	def parse_classes(self):
 		for course in self.courses:
 			if course.description not in ["Infomration not required for this course type","Not Available","None provided"]:
-				department_matches = Course.objects.filter(school=self.school, department=course.department).values_list('description', flat=True)
-				matches = process.extract(course.description,department_matches, limit=4)
+				department_matches = Course.objects.filter(school=self.school, department=course.department).exclude(code=course.code).values_list('description', flat=True)
+				matches = process.extract(course.description, department_matches, limit=4)
 				try:
 					itermatches = iter(matches)
 					next(itermatches)
 				except:
 					continue
 				for match in itermatches:
-					course_match = Course.objects.filter(school=self.school, description=match[0])[0]
+					course_match = Course.objects.filter(school=self.school, description=match[0]).exclude(code=course.code)[0]
 					try:
 						course.related_courses.get(code=course_match.code)
 						print "PREVIOUSLY related", course_match, " to ", course
