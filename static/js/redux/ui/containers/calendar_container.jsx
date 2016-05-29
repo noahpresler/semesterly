@@ -45,7 +45,8 @@ const mapDispatchToProps = (dispatch) => {
     fetchShareTimetableLink: () => dispatch(fetchShareTimetableLink()),
     createTimetable: () => {
       loadTimetable({ name: "Untitled Schedule", courses: [], has_conflict: false }, true);
-    }
+    },
+    togglePreferenceModal: () => dispatch({ type: 'TOGGLE_PREFERENCE_MODAL' })
   }
 }
 
