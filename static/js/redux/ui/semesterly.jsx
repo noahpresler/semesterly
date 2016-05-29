@@ -18,6 +18,16 @@ class Semesterly extends React.Component {
 			if(parseInt(e.keyCode) === 39) {if (this.props.PgActive + 1 < this.props.PgCount) {this.props.setPgActive(this.props.PgActive + 1);}}
 			else if(parseInt(e.keyCode) === 37) {if (this.props.PgActive > 0) {this.props.setPgActive(this.props.PgActive - 1);}}
 		});
+		$(document.body).bind('keydown', (e) => {
+			if (event.ctrlKey || event.metaKey) {
+				switch (String.fromCharCode(event.which).toLowerCase()) {
+				case 's':
+					event.preventDefault();
+					this.props.saveTimetable();
+					break;
+				}
+			}
+		});
 	}
 
 	componentWillReceiveProps(nextProps) {
@@ -37,11 +47,11 @@ class Semesterly extends React.Component {
 		}
 	}
 	showAlert(alert, type, delay=5000){
-	    this.msg.show(alert, {
-	      type: type,
-	      time: delay,
-	    });
-    }
+		this.msg.show(alert, {
+		  type: type,
+		  time: delay,
+		});
+	}
 
 	render() {
 		return (
