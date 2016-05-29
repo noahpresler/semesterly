@@ -1,0 +1,16 @@
+.conflict-row {
+  display: flex;
+}
+
+.sort-menu {
+  display: flex;
+}
+
+.preference-footer {
+  display: flex;
+}
+
+.sort-row {
+  width: 100%;
+  height: 50px;
+}
