@@ -561,7 +561,7 @@ def get_course_id(request, school, sem, code):
 def get_course_matches(school, query, semester):
   param_values = query.split()
   if query == "":
-    return Course.objects.none()
+    return Course.objects.all()
   return Course.objects.filter(school=school).filter(reduce(operator.and_, (Q(code__icontains=param) | Q(name__icontains=param.replace("&", "and")) | Q(name__icontains=param.replace("and", "&")) for param in param_values))).filter((Q(section__semester__in=[semester, 'Y'])))
 
 @csrf_exempt
