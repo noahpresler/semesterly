@@ -8,6 +8,7 @@ import json
 import os
 import sys
 import django
+import datetime
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "semesterly.settings")
 django.setup()
 from timetable.models import *
@@ -254,7 +255,15 @@ class UofTParser:
                         CO.save()
                         
                         print "\t\t\t", day, start, end, loc
-        print "Done UTM! Total courses found:", self.new
+        print "Done UTM! Total new courses found:", self.new
+        self.wrap_up()
+    def wrap_up(self):
+        update_object, created = Updates.objects.update_or_create(
+            school=self.school,
+            update_field="Course",
+            defaults={'last_updated': datetime.datetime.now()}
+        )
+        update_object.save()
 
 if __name__ == "__main__":
     parser = UofTParser()

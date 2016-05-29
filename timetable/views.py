@@ -53,6 +53,7 @@ def view_timetable(request, code=None, sem=None, shared_timetable=None):
   school = request.subdomain
   student = get_student(request)
   course_json = None
+
   if not sem: # not loading a share course link
     sem = 'F'
   if code: # user is loading a share course link, since code was included
@@ -560,8 +561,10 @@ def get_course_id(request, school, sem, code):
 
 def get_course_matches(school, query, semester):
   param_values = query.split()
+
   if query == "":
-    return Course.objects.all()
+    return Course.objects.filter(school=school)
+
   return Course.objects.filter(school=school).filter(reduce(operator.and_, (Q(code__icontains=param) | Q(name__icontains=param.replace("&", "and")) | Q(name__icontains=param.replace("and", "&")) for param in param_values))).filter((Q(section__semester__in=[semester, 'Y'])))
 
 @csrf_exempt
@@ -648,9 +651,14 @@ def course_page(request, code):
 @validate_subdomain
 def school_info(request, school):
   school = request.subdomain
+  last_updated = None
+  if Updates.objects.filter(school=school, update_field="Course").exists():
+    update_time_obj = Updates.objects.get(school=school, update_field="Course").last_updated.astimezone(timezone('US/Eastern'))
+    last_updated = update_time_obj.strftime('%Y-%m-%d %H:%M') + " " + update_time_obj.tzname()
   json_data = { # TODO(rohan): Get all relevant fields (areas, departments, levels) properly
     'areas': sorted(list(Course.objects.filter(school=school).exclude(areas__exact='').values_list('areas', flat=True).distinct())),
     'departments': sorted(list(Course.objects.filter(school=school).exclude(department__exact='').values_list('department', flat=True).distinct())),
-    'levels': sorted(list(Course.objects.filter(school=school).exclude(level__exact='').values_list('level', flat=True).distinct()))
+    'levels': sorted(list(Course.objects.filter(school=school).exclude(level__exact='').values_list('level', flat=True).distinct())),
+    'last_updated': last_updated
   }
   return HttpResponse(json.dumps(json_data), content_type="application/json")
