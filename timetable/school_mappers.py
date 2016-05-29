@@ -7,8 +7,6 @@ from timetable.models import *
 from student.models import *
 import sys
 
-
-
 # the smallest block size (in minutes) needed to describe start/end times
 # e.g. uoft classes only start on the hour or half hour, so granularity is 30min
 school_to_granularity = {
@@ -53,4 +51,3 @@ textbook_parsers = {
   'uo': lambda: None,
   'queens': parse_queens_textbooks
 }
-

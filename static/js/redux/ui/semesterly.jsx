@@ -32,13 +32,13 @@ class Semesterly extends React.Component {
 
 	componentWillReceiveProps(nextProps) {
 		if (nextProps != this.props) {
-			if (nextProps.alertConflict) {
+			if (nextProps.alertConflict && !this.props.alertConflict) {
 				this.showAlert(<ConflictAlertContainer />, 'info', 10000);
 			}
-			else if (nextProps.alertTimetableExists) {
+			else if (nextProps.alertTimetableExists && !this.props.alertTimetableExists) {
 				this.showAlert(<TimetableExistsAlertContainer />, 'info', 10000);
 			}
-			else if (nextProps.alertChangeSemester) {
+			else if (nextProps.alertChangeSemester && !this.props.alertChangeSemester) {
 				this.showAlert(<ChangeSemesterAlertContainer />, 'info', 15000);
 			}
 			else {

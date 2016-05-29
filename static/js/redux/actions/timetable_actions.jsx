@@ -272,6 +272,9 @@ export function removeCustomSlot(id) {
 export function addOrRemoveOptionalCourse(course) {
 	return (dispatch) => {
 		let removing = store.getState().optionalCourses.courses.some(c => c.id === course.id);
+		if (store.getState().timetables.isFetching) {
+			return;
+		}
 		dispatch({
 	  		type: "ADD_REMOVE_OPTIONAL_COURSE",
 	  		newCourse: course
