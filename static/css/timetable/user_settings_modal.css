@@ -23,20 +23,14 @@
 	height: 400px;
 }
 
-.welcome-modal #modal-content p {
+.welcome-modal p {
 	color: #aaa;
 	margin-bottom: 5px;
+	font-size: 18px;
 }
 
 .welcome-modal #modal-content form {
 	text-align: left;
-}
-
-.welcome-modal .signup-button {
-    bottom: -30px;
-    position: fixed;
-    margin: 0 auto;
-    left: 200px;
 }
 
 .welcome-modal h3 {
@@ -61,11 +55,17 @@
     background: rgb(90, 200, 251);
 }
 
-.preference-wrapper {
-	width: 75%;
-	float: left;
+.welcome-modal .preference {
+	padding: 0 0 15px;
 }
 
 .welcome-modal .switch-slide {
-	float: left;
+	float: right;
+	margin-left: 15px;
+}
+
+@media (max-width: 766px) {
+	.welcome-modal p {
+		font-size: 14px;
+	}
 }
