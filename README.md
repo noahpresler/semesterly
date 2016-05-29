@@ -30,4 +30,4 @@ Gulp will wait for changes in the JSX files, and update `application.js` accordi
 it has stopped transforming, restart the process.
 
 ### Further Instructions
-Coming soon!
+Coming soon!!
