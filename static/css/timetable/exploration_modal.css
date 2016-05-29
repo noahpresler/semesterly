@@ -15,9 +15,6 @@
 	position: relative;
 	background: #fff;
 }
-.exploration-modal #reactions-wrapper {
-	margin-top:-53px;
-}
 
 .exploration-modal + div {
 	/* using important to override boron default style */

@@ -23,6 +23,7 @@ class SideBar extends React.Component {
     	this.setState({ showDropdown: !this.state.showDropdown });
     }
     render() {
+        console.log(this.props.liveTimetableCourses);
         let savedTimetables = this.props.savedTimetables ? this.props.savedTimetables.map(t => {
             return <div className="tt-name" key={t.id} onMouseDown={() => this.props.loadTimetable(t)}>{t.name}</div>
         }) : null;
