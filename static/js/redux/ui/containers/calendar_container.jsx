@@ -32,6 +32,7 @@ const mapStateToProps = (state) => {
 	return {
     	endHour: getMaxEndHour(timetables[active], hasTimetables),
       saving: state.savingTimetable.saving,
+      dataLastUpdated: state.school.dataLastUpdated,
       hasTimetables,
       isFetchingShareLink,
       shareLink,
