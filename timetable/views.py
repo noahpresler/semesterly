@@ -413,7 +413,6 @@ def get_course_matches(school, query, semester):
 @csrf_exempt
 @validate_subdomain
 def course_search(request, school, sem, query):
-
   course_match_objs = get_course_matches(school, query, sem)
   course_match_objs = course_match_objs.distinct('code')[:4]
   course_matches = [get_basic_course_json(course, sem) for course in course_match_objs]
@@ -477,6 +476,7 @@ def course_page(request, code):
   try:
     course_obj = Course.objects.filter(code__iexact=code)[0]
     course_dict = get_basic_course_json(course_obj, "F")
+    # TODO: section types should never be hardcoded
     l = course_dict['sections'].get('L', {}).values()
     t = course_dict['sections'].get('T', {}).values()
     p = course_dict['sections'].get('P', {}).values()
