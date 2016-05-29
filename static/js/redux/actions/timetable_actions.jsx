@@ -289,4 +289,3 @@ export function addOrRemoveOptionalCourse(course) {
 		store.dispatch(fetchTimetables(reqBody, removing));
 	}
 }
-

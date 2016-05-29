@@ -49,6 +49,7 @@ class HopkinsParser:
     def start(self):
         self.get_schools()
         self.parse_schools()
+        self.wrap_up()
 
     def get_schools(self):
         url = API_URL + '/codes/schools?key=' + KEY
@@ -57,6 +58,14 @@ class HopkinsParser:
     def parse_schools(self):
         for school in self.schools:
             self.parse_school(school)
+
+    def wrap_up(self):
+        update_object, created = Updates.objects.update_or_create(
+            school=self.school,
+            update_field="Course",
+            defaults={'last_updated': datetime.datetime.now()}
+        )
+        update_object.save()
 
     def parse_school(self,school):
         courses = self.get_courses(school)
