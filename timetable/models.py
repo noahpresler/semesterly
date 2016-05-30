@@ -67,6 +67,10 @@ class Course(models.Model):
     eval_info = map(model_to_dict, Evaluation.objects.filter(course=self))
     return sorted(eval_info, key=lambda eval: eval['year']) 
 
+  def get_avg_rating(self):
+    ratings = Evaluation.objects.only('course', 'score').filter(course=self)
+    return sum([rating.score for rating in ratings])/len(ratings) if ratings else 0
+
   def get_textbooks(self, semester):
     textbooks = []
     isbns = set()
