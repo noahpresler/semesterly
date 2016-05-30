@@ -178,7 +178,7 @@ class HopkinsParser:
             num_credits=int(float(courseJson['Credits']))
         except:
             num_credits=0
-        level = re.search(re.compile(r"(?<=\.)[^.]"),courseJson['OfferingName']).group(0) + "00"
+        level = re.findall(re.compile(r".+?\..+?\.(.{1}).+"),courseJson['OfferingName'])[0] + "00"
 
         course, CourseCreated = Course.objects.update_or_create(
             code = courseJson['OfferingName'].strip(),
