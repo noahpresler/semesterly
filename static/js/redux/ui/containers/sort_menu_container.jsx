@@ -14,7 +14,8 @@ const mapDispatchToProps = (dispatch) => {
     changeMetric: (add, del) => {
       dispatch({type: "ADD_METRIC", metric: add})
       dispatch({type: "REMOVE_METRIC", metric: del})
-    }
+    },
+    toggleMetricOrder: (metric) => dispatch({type: "TOGGLE_METRIC_ORDER", metric: metric})
   }
 }
 
