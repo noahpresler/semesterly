@@ -176,7 +176,7 @@ export class CourseModalBody extends React.Component {
                             <h3 className="modal-module-header">Course Description</h3>
                             <p>{this.props.data.description}</p>
                         </div>
-                        <div>
+                        <div className="modal-module">
                             <h3 className="modal-module-header">Course Evaluations</h3>
                             <EvaluationList evalInfo={evalInfo} />
                         </div>
