@@ -61,16 +61,26 @@
   text-align: left;
   margin: 10px;
   float:left;
+  font-size: 15px;
 }
 
 .eval-item.mini {
-  height:50px;
+  height:45px;
   background-color: #fff;
-  font-size:13.5px;
+  font-size:12px;
   padding-top:2px;
-  width: 32.2%;
+  width: 31.9%;
   cursor:pointer;
 }
+
+.selected #prof {
+  font-size: 15px;
+}
+
+.selected .numeric-rating {
+  font-size: 15px;
+}
+
 .numeric-rating {
   float: left;
   text-decoration:none;
@@ -79,9 +89,18 @@
   top: 1px;
 }
 
+.eval-item.mini .numeric-rating {
+  font-weight: 500;
+  color: #a1a1a1;
+}
 .rating-wrapper {
   display: inline-block;
   text-align: center;
+}
+
+.scroll-nav {
+    margin: 0 auto;
+    text-align: center;
 }
 
 .star-ratings-sprite {
@@ -95,6 +114,12 @@
     margin: 0 auto;
     float:left;
 }
+
+.col-3-16 .star-ratings-sprite {
+    margin-left: 50%;
+    transform: translateX(-50%);
+}
+
 .rating {
     background: url(../../img/rating.png) 0 100% repeat-x;
     float: left;
@@ -104,4 +129,10 @@
 
 .trans #course-evaluations {
   display: none;
+}
+
+@media (max-width: 910px) {
+  .eval-item.mini {
+      width: 48.2%;
+    }
 }

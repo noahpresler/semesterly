@@ -105,10 +105,13 @@ class SideBar extends React.Component {
                 <CreditTickerContainer />
                 <div id="sb-rating" className="col-2-3">
                     <h3>Average Course Rating</h3>
-                    <div className="sub-rating-wrapper">
-                        <div className="star-ratings-sprite">
-                            <span className="rating"></span>
+                    <div className="sb-rating-wrapper">
+                        <div className="sub-rating-wrapper">
+                            <div className="star-ratings-sprite">
+                                <span className="rating"></span>
+                            </div>
                         </div>
+                        <div className="numeric-rating">3.4</div>
                     </div>
                 </div>
                 <h4 className="sb-header">Current Courses</h4>
