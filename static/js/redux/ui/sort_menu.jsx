@@ -39,7 +39,6 @@ const FooterRow = ({ addNextMetric }) => (
 export class SortMenu extends React.Component {
   render() {
     let selectedMetrics = this.props.metrics.filter( m => m.selected )
-    console.log(selectedMetrics)
     let availMetrics = this.props.metrics.filter( m => !m.selected )
     let headerRow = selectedMetrics.length > 0 ?
       <SortRow {...this.props}
