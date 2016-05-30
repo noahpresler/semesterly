@@ -32,17 +32,6 @@ logger = logging.getLogger(__name__)
 def redirect_to_home(request):
   return HttpResponseRedirect("/")
 
-def mark_request(request, sid):
-  create_session_for_request(request, sid)
-
-def save_analytics_data(key, args):
-  try:
-    if key == "timetables":
-      save_timetable_data(args['sid'], args['school'], args['courses'], args['count'])
-  except:
-    pass
-
-
 
 # ******************************************************************************
 # ******************************** GENERATE TTs ********************************
@@ -116,7 +105,6 @@ def get_timetables(request):
 
   params = json.loads(request.body)
   sid = params['sid']
-  mark_request(request, sid)
 
   SCHOOL = request.subdomain
 
@@ -147,8 +135,7 @@ def get_timetables(request):
                   params['preferences'])
   result = [timetable for opt_courses in optional_course_subsets \
       for timetable in generator.courses_to_timetables(courses + list(opt_courses))]
-  save_analytics_data('timetables', {'sid': sid, 'school': SCHOOL,
-                  'courses': courses, 'count': len(result)})
+
   # updated roster object
   response = {'timetables': result, 'new_c_to_s': locked_sections}
   return HttpResponse(json.dumps(response), content_type='application/json')
