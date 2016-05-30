@@ -86,6 +86,7 @@ class SideBar extends React.Component {
                     <h3>Load this list with courses you aren't 100% sure you want to take - we'll fit as many as we can, automatically</h3>
                 </div>);
         }
+        // let avgRating = evalInfo.reduce(function(sum, e) { console.log(sum,e.score); return sum + parseFloat(e.score); },0) / evalInfo.length;
         return (
             <div id="side-bar">
                 <div id="sb-name">
@@ -105,13 +106,10 @@ class SideBar extends React.Component {
                 <CreditTickerContainer />
                 <div id="sb-rating" className="col-2-3">
                     <h3>Average Course Rating</h3>
-                    <div className="sb-rating-wrapper">
-                        <div className="sub-rating-wrapper">
-                            <div className="star-ratings-sprite">
-                                <span className="rating"></span>
-                            </div>
+                    <div className="sub-rating-wrapper">
+                        <div className="star-ratings-sprite">
+                            <span className="rating"></span>
                         </div>
-                        <div className="numeric-rating">3.4</div>
                     </div>
                 </div>
                 <h4 className="sb-header">Current Courses</h4>
