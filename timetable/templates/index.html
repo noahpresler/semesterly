@@ -19,41 +19,53 @@
 
 		<title>Semester.ly: Textbooks, Course Finding & More | JHU Registration Countdown</title>
 		<link rel="shortcut icon" type="image/x-icon" href="{% static 'img/favicon.ico' %}" />
-
+		<link href='http://fonts.googleapis.com/css?family=Lato&subset=latin,latin-ext' rel='stylesheet' type='text/css'>
 		<link rel="stylesheet" href="{% static 'css/timetable/global.css'%}">
 		<link rel="stylesheet" href="{% static 'css/splash.css'%}">
+		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css">
 	</head>
 	<body>
-		<header>
-			<div class="grid cf">
-				<a href="/">
-					<span id="logo"></span>
-					<h1>Semester.ly</h1>
-				</a>
-			</div>
-		</header>
-
 		<div id="page">
-
-			<div id="top" style="background-image: url({% static 'img/splash/students-in-gilman.jpg'%});">
-				<div class="grid">
-					<div class="col-12-16">
-						<div id="banner-logo" style="background-image: url({% static 'img/logo2.0.png'%})"></div>
-						<h1>Semester.ly</h1>
-						<h2>Your Semester, Made Simple</h2>
+			<div id="top">
+				<div id="top-content">
+					<img id="semesterly-logo" src="/static/img/logo2.0-32x32.png">
+					<h1>Semester.ly</h1>
+					<div id="schools">
+						<a href="http://jhu.semester.ly">Hopkins</a>
+						<a href="http://uoft.semester.ly">UofT</a>
+						<a href="http://umd.semester.ly">UMD</a>
 					</div>
 				</div>
 			</div>
-			<div id="">
-
+			<div id="second">
+				<div id="second-wrapper">
+					<h3>Your Semester, Made Simple</h3>
+		            <img class="mac-demo" src="http://the8guild.com/themes/html/ultima/v2.3.1/img/demo/rightMac.png" width="553" alt="Ultima Version 2">
+		    	</div>
 			</div>
-			<a href="http://jhu.sem.ly:8000">JHU</a>
-			<a href="http://uoft.sem.ly:8000">UofT</a>
-			<a href="http://umd.sem.ly:8000">UMD</a>
-			<a href="http://rutgers.sem.ly:8000">Rutgers</a>
-      		<a href="http://queens.sem.ly:8000">Queens</a>
+			<div id="bottom">
+				<div id="schools-wrapper">
+					<div class="school" onClick="location.href='http://jhu.semester.ly'">
+						<div class="circle" style="background-color:#3498db;">
+							<i class="fa fa-university" aria-hidden="true"></i>
+						</div>
+						<h1>Johns Hopkins</h1>
+					</div>
+					<div class="school" onClick="location.href='http://umd.semester.ly'">
+						<div class="circle">
+							<i class="fa fa-university" aria-hidden="true"></i>
+						</div>
+						<h1>University of Maryland</h1>
+					</div>
+					<div class="school last" onClick="location.href='http://uoft.semester.ly'">
+						<div class="circle" style="background-color:#8e44ad;">
+							<i class="fa fa-university" aria-hidden="true"></i>
+						</div>
+						<h1>University of Toronto</h1>
+					</div>
+				</div>
+			</div>
 		</div>
-
 		<footer>
 
 		</footer>
