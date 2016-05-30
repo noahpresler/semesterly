@@ -198,7 +198,7 @@ export class ExplorationModal extends React.Component {
 	        null;
 			courseModal = <div id="modal-content">
 				<div id="modal-header">
-					<h1>{ course.name }</h1>
+				<h1>{ course.name }</h1>
 					<h2>{ course.code }</h2>
 					<div id="modal-share" onClick={this.showShareLink}>
 						<i className="fa fa-share-alt"></i>
@@ -263,7 +263,8 @@ export class ExplorationModal extends React.Component {
         		onChangeComplete={() => this.fetchAdvancedSearchResults(this.state)}
         		remove={this.removeTimeFilter.bind(this)}
       		/>
-		})
+		});
+		let explorationLoader = this.props.isFetching ? <i className="fa fa-spin fa-refresh" /> : null;
 		let content = (
 			<div id="exploration-content">
 				<div id="exploration-header"
@@ -275,6 +276,7 @@ export class ExplorationModal extends React.Component {
 					</div>
 					<div className="col-5-16">
 						<input ref="input" onInput={this.fetchAdvancedSearchResultsWrapper}/>
+						{explorationLoader}
 					</div>
 	                <div id="exploration-close"
 	                	onMouseDown={() => this.refs.modal.hide()}>
@@ -301,10 +303,12 @@ export class ExplorationModal extends React.Component {
 				   	onClickOut={this.hideAll} 
 				   	schoolSpecificInfo={this.props.schoolSpecificInfo}
 				   	/>
-
-                    <div id="exp-modal" className="col-7-16">
-                        { courseModal }
-                    </div>
+				   	{
+				   		this.props.isFetching ? null : 
+	                    <div id="exp-modal" className="col-7-16">
+	                        { courseModal }
+	                    </div>
+                    }
 	            </div>
 	        </div>
         );
