@@ -3,8 +3,8 @@ import ReactDOM from 'react-dom';
 import fetch from 'isomorphic-fetch';
 import { getSchool } from '../init.jsx';
 import Modal from 'boron/DropModal';
-import Select from 'react-select';
 import majors from '../majors.jsx';
+import Select from 'react-select';
 
 export class UserSettingsModal extends React.Component {
     constructor(props) {
@@ -40,18 +40,16 @@ export class UserSettingsModal extends React.Component {
     changeMajor(val) {
         let userSettings = Object.assign({}, this.props.userInfo, {major: val.value});
         this.props.changeUserInfo(userSettings);
-        this.props.saveSettings();
     }
     changeClassYear(val) {
         let userSettings = Object.assign({}, this.props.userInfo, {class_year: val.value});
         this.props.changeUserInfo(userSettings);
-        this.props.saveSettings();
     }
     shouldShow(props) {
         return props.userInfo.isLoggedIn && (props.showOverrided || this.isIncomplete(props.userInfo.social_offerings) || this.isIncomplete(props.userInfo.social_courses) || this.isIncomplete(props.userInfo.major) || this.isIncomplete(props.userInfo.class_year));
     }
     isIncomplete(prop) {
-        return prop === undefined || prop === null || prop === "";
+        return !prop || prop === "";
     }
     render() {
         let modalStyle = {
@@ -76,6 +74,7 @@ export class UserSettingsModal extends React.Component {
                         value={this.props.userInfo.major}
                         ref="major"
                         options={majors}
+                        searchable={false}
                         onChange={this.changeMajor}
                     />
                     <h3>What's your graduating class year?</h3>
@@ -89,8 +88,9 @@ export class UserSettingsModal extends React.Component {
                             {value: 2019, label: 2019},
                             {value: 2021, label: 2021},
                             {value: 2022, label: 2022},
-                            {value: 2023, label: 2023}
+                            {value: 2023, label: 2023},
                         ]}
+                        searchable={false}
                         onChange={this.changeClassYear}
                     />
                     <div className="preference cf">
