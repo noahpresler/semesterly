@@ -302,3 +302,8 @@ h3.master-slot-credits {
     color: #ADADAD;
     margin-top: 8px;
 }
+
+#sb-rating .sub-rating-wrapper {
+    margin-left: 50%;
+    transform: translateX(-50%);
+}

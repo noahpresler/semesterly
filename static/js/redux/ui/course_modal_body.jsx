@@ -145,7 +145,7 @@ export class CourseModalBody extends React.Component {
         </div>
 
         let creditsSuffix = numCredits === 1 ? " credit" : " credits";
-        let avgRating = evalInfo.reduce(function(sum, e) { console.log(sum,e.score); return sum + parseFloat(e.score); },0) / evalInfo.length;
+        let avgRating = evalInfo.reduce(function(sum, e) { return sum + parseFloat(e.score); },0) / evalInfo.length;
         return (
         <div id="modal-body">
                 <div className="cf">
