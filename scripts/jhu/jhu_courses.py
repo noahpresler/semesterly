@@ -12,7 +12,6 @@ os.environ.setdefault("DJANGO_SETTINGS_MODULE", "semesterly.settings")
 django.setup()
 from timetable.models import *
 import urllib2
-import json
 from fake_useragent import UserAgent
 from pprint import pprint
 
