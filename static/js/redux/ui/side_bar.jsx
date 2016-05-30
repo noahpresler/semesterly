@@ -86,7 +86,6 @@ class SideBar extends React.Component {
                     <h3>Load this list with courses you aren't 100% sure you want to take - we'll fit as many as we can, automatically</h3>
                 </div>);
         }
-        // let avgRating = evalInfo.reduce(function(sum, e) { console.log(sum,e.score); return sum + parseFloat(e.score); },0) / evalInfo.length;
         return (
             <div id="side-bar">
                 <div id="sb-name">
@@ -108,7 +107,9 @@ class SideBar extends React.Component {
                     <h3>Average Course Rating</h3>
                     <div className="sub-rating-wrapper">
                         <div className="star-ratings-sprite">
-                            <span className="rating"></span>
+                            <span style={{width: 100*this.props.avgRating/5 + "%"}} 
+                                    className="rating">
+                            </span>
                         </div>
                     </div>
                 </div>
