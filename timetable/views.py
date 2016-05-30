@@ -158,14 +158,16 @@ class TimetableGenerator:
     self.slots_per_hour = 60 / school_to_granularity[school]
     self.semester = semester
     self.with_conflicts = preferences.get('try_with_conflicts', False)
-    self.sort_order = preferences.get('sort_by', [])
+    self.sort_metrics = [(m.metric, m.order) \
+                            for m in preferences.get('sort_metrics', []) \
+                              if m.selected]
     self.locked_sections = locked_sections
     self.custom_events = custom_events
 
   def courses_to_timetables(self, courses):
     all_offerings = self.courses_to_offerings(courses)
     timetables = self.create_timetable_from_offerings(all_offerings)
-    timetables.sort(key=lambda tt: get_tt_cost(tt[0], self.sort_order))
+    timetables.sort(key=lambda tt: get_tt_cost(tt[0], self.sort_metrics))
     return map(self.convert_tt_to_dict, timetables)
 
   def convert_tt_to_dict(self, timetable):
