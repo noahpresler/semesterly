@@ -1,6 +1,6 @@
 .conflict-row {
   display: flex;
-  padding-top: 3%;
+  padding: 2% 0;
 }
 
 .sort-menu {
@@ -11,6 +11,12 @@
   display: flex;
 }
 
+/* overwrite flat UI select stuff */
+.select {
+  min-width: 0 !important; 
+  width: 100% !important;
+}
+
 .sort-row {
   width: 80%;
   height: 50px;
@@ -19,27 +25,26 @@
   border-radius: 10px;
   margin: auto;
   margin-bottom: 10px;
-  padding: auto;
 }
 
 .sort-text {
+  padding: 2% 0;
   width: 20%;
-  margin: auto;
 }
 
 .sort-order-dropdown {
+  padding: 3%;
   width: 20%;
-  margin: auto;
 }
 
 .sort-metric-dropdown {
+  padding: 3%;
   width: 50%;
-  margin: auto;
 }
 
 .sort-close {
-  width: 5%;
-  margin: auto;
+  padding: 2% 0;
+  width: 10%;
 }
 
 .metric-row {
