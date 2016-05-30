@@ -18,17 +18,27 @@ export class PreferenceModal extends React.Component {
                     modalStyle={modalStyle}
                     onHide={this.props.togglePreferenceModal}>
                 <div className="conflict-row">
-                    <p> Conflicts: </p>
-                    <input type="checkbox" 
-                            dataToggle="switch"
-                            defaultChecked={false}
-                            onChange={this.props.toggleConflicts} />
+                    <div style={{ marginRight: 'auto', marginLeft: '10%' }}>
+                        <p>Conflicts: </p>
+                    </div>
+                    <div style={{ marginLeft: 'auto', marginRight: '10%'}}>
+                        <input type="checkbox" 
+                                dataToggle="switch"
+                                defaultChecked={false}
+                                onChange={this.props.toggleConflicts} />
+                    </div>
                 </div>
                 <hr/>
                 <SortMenuContainer />
                 <div className="preference-footer">
-                  <div className="signup-button">Cancel</div>
-                  <div className="signup-button">Apply</div>
+                    <div className="signup-button"
+                        style={{ marginLeft: 'auto' }}>
+                        Cancel
+                    </div>
+                    <div className="signup-button"
+                        style={{ marginLeft: '5px', marginRight: '10%' }}>
+                        Apply
+                    </div>
                 </div>
             </Modal>
         );
