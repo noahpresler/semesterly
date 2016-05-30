@@ -237,11 +237,13 @@ class TimetableGenerator:
 
   def get_day_to_usage(self):
     """Initialize day_to_usage dictionary, which has custom events blocked out."""
-    day_to_usage = {'M': [[] for i in range(14 * 60 / school_to_granularity[SCHOOL])],
-            'T': [[] for i in range(14 * 60 / school_to_granularity[SCHOOL])],
-            'W': [[] for i in range(14 * 60 / school_to_granularity[SCHOOL])],
-            'R': [[] for i in range(14 * 60 / school_to_granularity[SCHOOL])],
-            'F': [[] for i in range(14 * 60 / school_to_granularity[SCHOOL])]}
+    day_to_usage = {
+      'M': [set() for i in range(14 * 60 / school_to_granularity[SCHOOL])],
+      'T': [set() for i in range(14 * 60 / school_to_granularity[SCHOOL])],
+      'W': [set() for i in range(14 * 60 / school_to_granularity[SCHOOL])],
+      'R': [set() for i in range(14 * 60 / school_to_granularity[SCHOOL])],
+      'F': [set() for i in range(14 * 60 / school_to_granularity[SCHOOL])]
+    }
 
     for event in self.custom_events:
       for slot in find_slots_to_fill(event['time_start'], event['time_end']):
@@ -294,14 +296,14 @@ def add_meeting_and_check_conflict(day_to_usage, new_meeting):
   which is True if conflict, False otherwise.
   """
   course_offerings = new_meeting[2]
-  exists_conflict = False
-  for offering in course_offerings: # use index to avoid referencing copies
+  new_conflicts = 0
+  for offering in course_offerings:
     day = offering.day
     for slot in find_slots_to_fill(offering.time_start, offering.time_end):
-      if day_to_usage[day][slot]:
-        exists_conflict = True
-      day_to_usage[day][slot] = True
-  return exists_conflict
+      previous_len = max(1, len(day_to_usage[day][slot]))
+      day_to_usage[day][slot].add(offering)
+      new_conflicts += len(day_to_usage[day][slot]) - previous_len
+  return new_conflicts
 
 def find_slots_to_fill(start, end):
   """
