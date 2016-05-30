@@ -1,11 +1,12 @@
-import django
-from django.db import models
-from timetable.models import *
+import os
+import sys
 import re
-import urllib
+import django
 from bs4 import BeautifulSoup
-
+import urllib
+os.environ.setdefault("DJANGO_SETTINGS_MODULE", "semesterly.settings")
 django.setup()
+from timetable.models import *
 
 class HopkinsEvalParser:
 	def __init__(self):
