@@ -106,7 +106,6 @@ export class CourseModalBody extends React.Component {
         reactionsDisplay.sort((r1, r2) => {return r1.props.count < r2.props.count});
 
         let evalInfo = this.props.data.eval_info;
-        console.log(evalInfo);
         let relatedCourses = this.props.data.related_courses;
         let { prerequisites, textbooks } = this.props.data;
         let evals = evalInfo.length === 0 ? null :
@@ -146,6 +145,7 @@ export class CourseModalBody extends React.Component {
         </div>
 
         let creditsSuffix = numCredits === 1 ? " credit" : " credits";
+        let avgRating = evalInfo.reduce(function(sum, e) { console.log(sum,e.score); return sum + parseFloat(e.score); },0) / evalInfo.length;
         return (
         <div id="modal-body">
                 <div className="cf">
@@ -158,7 +158,7 @@ export class CourseModalBody extends React.Component {
                             <h4>Average Course Rating</h4>
                             <div className="sub-rating-wrapper">
                                 <div className="star-ratings-sprite">
-                                    <span></span>
+                                    <span style={{width: 100*avgRating/5 + "%"}} className="rating"></span>
                                 </div>
                             </div>
                         </div>

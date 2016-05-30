@@ -122,7 +122,7 @@ h4.sb-header:after {
 /* Rating */
 #sb-rating h3 {
 	font-weight: 200;
-	margin: px;
+	margin: 0px;
 	font-size: 12px;
 	color: #777;
     text-align: center;
