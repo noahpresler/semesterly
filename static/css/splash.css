@@ -4,29 +4,11 @@
 
 html, body{
 	margin: 0;
+	height: 100%;
 	background-color: #fff;
 	font-family: Lato,Helvetica,Arial,sans-serif;
 }
 
-header {
-	position: fixed;
-	top: 0;
-	left: 0;
-	width: 100%;
-	transform: translateY(-100%);
-	transition: transform .3s;
-}
-header.down {
-	transform: translateY(0%);
-}
-
-#top {
-	padding: 200px 0 0;
-	height: 600px;
-	background-size: cover;
-	background-position: center;
-	background-repeat: no-repeat;
-}
 #banner-logo {
 	float: left;
 	margin-right: 20px;
@@ -36,15 +18,184 @@ header.down {
 	background-position: center;
 	background-repeat: no-repeat;
 }
-#top h1 {
-	color: #23313E;
-	margin: 0;
-	line-height: 110px;
-	font-size: 100px;
+
+#page {
+	width: 100%;
+	height: 100%;
+	background-color: rgb(37, 51, 64);
 }
-#top h2 {
-	color: #fff;
-	margin: 0;
-	line-height: 60px;
-	font-size: 40px;
+
+#top h1 {
+	font-weight: 400;
+	font-size: 32px;
+	line-height: 32px;
+	height: 32px;
+	margin:0px;
+	margin-left: 10px;
+	float: left;
+	font-family: lato;
+}
+
+#top {
+	padding: 30px;
+	height: 30px;
+	color:#253340;
+	background-color: white;
+}
+
+#semesterly-logo {
+	height: 32px;
+	float: left;
+}
+
+#second {
+	height: 500px;
+	width: 100%;
+	background-color: rgb(253, 116, 115);
+	box-shadow: 0 6px 0px 8px #fd5b5a;
+}
+
+#top-content {
+	height: 32px;
+	transform: translateY(-50%);
+}
+
+.mac-demo {
+	position: relative;
+	float: right;
+	margin-right: 3%;
+}
+
+#second h3 {
+	color: white;
+	position: absolute;
+	width: 51%;
+	font-size: 86px;
+	margin: 0px;
+	margin-left: 25PX;
+	/* transform: translateY(-50%); */
+	/* top: -50%; */
+	margin-top: 145px;
+	max-width: 625px;
+}
+
+#second-wrapper {
+	max-width: 1208px;
+	height: 500px;
+	margin: auto;
+}
+
+#schools {
+	font-weight: 600;
+	font-size: 16px;
+	line-height: 32px;
+	height: 32px;
+	position: absolute;
+	right: 0px;
+	font-family: lato;
+}
+
+#schools a {
+	margin-right: 10px;
+	color: rgb(37, 51, 64);
+}
+
+#schools a:hover {
+	margin-right: 10px;
+	color: #3498DB;
+	transition: all .1s linear;
+}
+
+
+#bottom {
+    width: 100%;
+    padding: 100px;
+    margin-top: 14px;
+    background-color: #253340;
+}
+
+.circle {
+	height: 100px;
+	background-color: #1abc9c;
+	text-align: center;
+	width: 100px;
+	border-radius: 100px;
+	color: rgb(37, 51, 64);
+	font-size: 50px;
+	margin: 0 auto;
+	display: ;
+	margin-bottom: 16px;
+}
+
+.circle i {
+	margin: 23px;
+}
+
+#bottom h1 {
+	color: #FFFFFF;
+	width: 100%;
+	text-align: center;
+	font-size: 30px;
+}
+
+.school {
+	width: 30%;
+	margin-right: 5%;
+	float: left;
+	padding: 3px;
+	border-radius: 10px;
+	transition: all .1s linear;
+}
+
+.school:hover {
+	box-shadow: 3px 6px 6px 4px #1c2630;
+	transition: all .1s linear;
+}
+
+.last {
+	margin-right: 0px;
+}
+
+#schools-wrapper {
+	max-width: 1040px;
+	text-align: center;
+	/* min-height: 20px; */
+	margin: auto;
+	margin-top: 50px;
+}
+
+@media(max-width:1170px) {
+	#second h3 {
+		/* width: 100%; */
+		min-width: 320px;
+		text-align: center;
+		margin: 0 auto;
+		top: 0px;
+		/* margin: 0px; */
+		font-size: 66px;
+		position: relative;
+		max-width: none;
+	}
+	.mac-demo {
+		clear: both;
+		margin-right: 50%;
+		width: 40%;
+		min-width: 320px;
+		transform: translateX(50%);
+	}
+}
+
+@media(max-width: 725px) {
+	.school {
+		float: none;
+		margin: 0px;
+		width: 100%;
+		margin-bottom: 30px;
+	}
+}
+
+@media(max-width: 445px) {
+	#top h1 {
+		display: none;
+	}
 }
