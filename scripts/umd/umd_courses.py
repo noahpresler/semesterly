@@ -5,10 +5,10 @@ import requests, cookielib
 import datetime
 from bs4 import BeautifulSoup
 from sys import argv
-
 import django
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "semesterly.settings")
 django.setup()
+from timetable.models import *
 
 # suppress warnings for not verifying SSL certificate 
 import warnings
@@ -34,7 +34,6 @@ def shorten_name(prof):
   return prof[12:] if prof.startswith('Instructor: ')\
                           else prof
 
-
 class umdSection:
   def __init__(self, sid, profs, day, start_time, end_time, building, room, total_seats, open_seats, waitlist):
     self.id = sid
@@ -55,14 +54,13 @@ class umdSection:
       + ", open_seats: " + self.open_seats + ", waitlist: " + self.waitlist
     )
 
-
 class umdCourse:
-  def __init__(self, cid, title, credits, description, sections, cores, geneds):
+  def __init__(self, cid, title, credits, department, description, cores, geneds):
     self.id = cid
     self.title = title
     self.credits = credits
+    self.department = department
     self.description = description
-    self.sections = sections
     self.cores = cores
     self.geneds = geneds
 
@@ -80,10 +78,9 @@ class umdCourse:
 
   def __str__(self):
     return (
-      "ID: " + self.id + ", title: " + self.title + ", credits: " + self.credits + "\nDescription: " + self.description 
+      "ID: " + self.id + ", title: " + self.title + ", credits: " + self.credits + ", department: " + self.department + "\nDescription: " + self.description 
       + "\nSection: " + str(self.sections[0]) + " , " + self.desig_string()
     )
-
 
 class umd:
 
@@ -142,19 +139,6 @@ class umd:
         continue
     return html.encode('utf-8')
 
-  def get_current_departments(self):
-    """Get department in current semester."""
-    html = self.get_html(self.base_url)
-    soup = BeautifulSoup(html,"html.parser")
-    prefix_rows = soup.findAll(class_='course-prefix row')
-    prefix_a_tags = []
-    department_urls = []
-    for row in prefix_rows:
-      prefix_a_tags.append(row.find('a'))
-    for link in prefix_a_tags:
-      department_urls.append(self.base_url + link['href'])
-    return department_urls
-
   def get_departments(self, semester, year):
     """Get department in the specified semester in specified year."""
     semester_map = {"fall":"08", "spring":"01"}
@@ -164,20 +148,20 @@ class umd:
     soup = BeautifulSoup(html,"html.parser")
     prefix_rows = soup.findAll(class_='course-prefix row')
     prefix_a_tags = []
-    department_urls = []
+    departments = {}
     for row in prefix_rows:
       prefix_a_tags.append(row.find('a'))
     for link in prefix_a_tags:
-      department = link.find('span').string
-      partial_url = str(year) + semester_month + "/" + department
-      # print(partial_url)
-      department_urls.append(self.base_url + partial_url)
-    return department_urls
+      spans = link.findAll('span')
+      department_url = spans[0].string
+      department_name = spans[1].string
+      partial_url = str(year) + semester_month + "/" + department_url
+      departments[self.base_url + partial_url] = department_name
+    return departments
 
-  def get_sections(self, section_url):
+  def get_sections(self, section_url, course_model, semester):
     html = self.get_html(section_url)
     soup = BeautifulSoup(html, "html.parser")
-    sections = []
     container = soup.find(class_="sections-container")
     section_divs = container.findAll(class_="section")
     for div in section_divs:
@@ -201,27 +185,47 @@ class umd:
       open_seats = self.find_content("open-seats-count", div)
       waitlist = self.find_content("waitlist-count", div)
       
-      sections.append(umdSection(sid, instructors, day, start_time, end_time, building, room, total_seats, open_seats, waitlist))
+      section = umdSection(sid, instructors, day, start_time, end_time, building, room, total_seats, open_seats, waitlist)
 
-    return sections
+      section_model, section_created = Section.objects.update_or_create(
+                course = course_model,
+                semester = semester,
+                meeting_section = section.id,
+                defaults = {
+                    'instructors': get_profs(section.profs),
+                    'size': section.total_seats,
+                    'enrolment': int(section.total_seats) - int(section.open_seats)
+                }
+            )
 
+      days = section.day.replace('Tu', 'T').replace('Th', 'R')
+      for day in days:
+        try:
+          offering_model, OfferingCreated = Offering.objects.update_or_create(
+              section = section_model,
+              day = day,
+              time_start = get_valid_time(section.start_time),
+              time_end = get_valid_time(section.end_time),
+              defaults = {
+                  'location':section.building + section.room
+              }
+          )
+        except:
+          print meeting_section, day, time_start, section_data
 
-  def get_courses(self, department_urls, semester='S'):
+  def get_courses(self, departments, semester='S'):
     semester = 'F' if semester == 'fall' else 'S'
     num_created, num_updated = 0, 0
-    for department_url in department_urls:
+    for department_url, department_name in departments.items():
       html = self.get_html(department_url)
       soup = BeautifulSoup(html, "html.parser")
       course_div = soup.findAll(class_="course")
-      courses = []
       for c in course_div:
         cid = self.find_content("course-id", c)
-        # print(cid)
         partial_url = self.find_url("toggle-sections-link", c)
         if (partial_url == ''):
           continue
-        section_url = "http://ntst.umd.edu" + partial_url
-        sections = self.get_sections(section_url)
+
         title = self.find_content("course-title", c)
         credits = self.find_content("course-min-credits", c)
         description = self.find_content("approved-course-text", c)
@@ -232,60 +236,36 @@ class umd:
         geneds = []
         geneds = self.find_gens("course-subcategory", c)
 
-        courses.append(umdCourse(cid, title, credits, description, sections, cores, geneds))
-        course_data = {
-          'name': title,
-          'description': description,
-          'cores': ', '.join(cores),
-          'geneds': ', '.join(geneds),
-          'num_credits': int(credits)
-        }
-        try:
-          course, created = UmdCourse.objects.update_or_create(code=cid, defaults=course_data)
-        except: # new course's attributes don't fit model specs
-          print cid, course_data
+        course = umdCourse(cid, title, credits, department_name, description, cores, geneds)
+
+        level = re.findall(re.compile(r"^\D*(\d)"), course.id)[0] + "00"
+
+        course_model, created = Course.objects.update_or_create(
+            code = course.id,
+            school = 'umd',
+            campus = 1,
+            defaults={
+                'name': course.title,
+                'description': course.description,
+                'cores': ', '.join(course.cores),
+                'geneds': ', '.join(course.geneds),
+                'num_credits': int(course.credits),
+                'level': level,
+                'department': course.department
+            }
+        )
 
         action = "CREATED" if created else "UPDATED"
         print "{0} {1} ==> {2}".format(action, cid, title)
         num_created += created
         num_updated += 1 - created
 
-        for section in sections:
-          enrolment = int(section.total_seats) - int(section.open_seats) if \
-                      section.total_seats else -1
-          section_data = {
-            'instructors': get_profs(section.profs),
-            'time_end': get_valid_time(section.end_time),
-            'location': section.building + section.room,
-            'size': section.total_seats,
-            'enrolment': int(section.total_seats) - int(section.open_seats),
-            'section_type': 'R',
-          }
-          days = section.day.replace('Tu', 'T').replace('Th', 'R')
-          for day in days:
-            try:
-              co = UmdCourseOffering.objects.update_or_create(course=course,
-                 semester=semester,
-                 meeting_section=section.id,
-                 day=day,
-                 time_start=get_valid_time(section.start_time),
-                 defaults=section_data)
-            except:
-              print meeting_section, day, time_start, section_data
-
-    print "Created/updated: [{0!s}/{1!s}]".format(num_created, num_updated)
-    return courses
-
+        section_url = "http://ntst.umd.edu" + partial_url
+        sections = self.get_sections(section_url, course_model, semester)
 
   def parse_courses(self, semester=None, year=None):
-
-    if semester == None or year == None:
-      department_urls = self.get_current_departments()
-    else:
-      department_urls = self.get_departments(semester, year)
-
-    courses = self.get_courses(department_urls, semester)
-    return courses
+    departments = self.get_departments(semester, year)
+    self.get_courses(departments, semester)
 
 def parse_umd():
   """Parse courses for both semester of the current year."""
@@ -296,8 +276,6 @@ def parse_umd():
 
 if __name__ == '__main__':
   u = umd()
-  # Get all current courses
-  # u.parse_courses()
 
   # Get all courses from the specified year and semester
   if len(argv) < 2 or sys.argv[1] not in ['fall', 'spring']:
