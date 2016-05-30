@@ -122,27 +122,12 @@ h4.sb-header:after {
 /* Rating */
 #sb-rating h3 {
 	font-weight: 200;
-	margin: 5px;
+	margin: px;
 	font-size: 12px;
 	color: #777;
     text-align: center;
 }
-.star-ratings-sprite {
-    background: url(../../img/star.png) repeat-x;
-    font-size: 0;
-    height: 24px;
-    line-height: 0;
-    overflow: hidden;
-    text-indent: -999em;
-    width: 120px;
-    margin: 0 auto;
-}
-.rating {
-    background: url(../../img/rating.png) 0 100% repeat-x;
-    float: left;
-    height: 24px;
-    display: block;
-}
+
 
 /* credits */
 #sb-credits {

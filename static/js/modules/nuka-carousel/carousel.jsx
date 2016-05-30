@@ -1,11 +1,13 @@
 'use strict';
+import React from 'react';
+import ReactDOM from 'react-dom';
 
 var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
 
-var tweenState = require('./react-tween-state');
-var decorators = require('./decorators');
-var assign = require('./object-assign');
-var ExecutionEnvironment = require('./exenv');
+import tweenState from './react-tween-state.jsx';
+import decorators from './decorators.jsx';
+import assign from './object-assign.jsx';
+import ExecutionEnvironment from './exenv.jsx';
 
 var addEvent = function addEvent(elem, type, eventHandle) {
   if (elem === null || typeof elem === 'undefined') {
@@ -80,7 +82,7 @@ var Carousel = React.createClass({
       slidesToShow: 1,
       slidesToScroll: 1,
       slideWidth: 1,
-      speed: 500,
+      speed: 300,
       vertical: false,
       width: '100%'
     };
