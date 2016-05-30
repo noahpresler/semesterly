@@ -79,11 +79,7 @@ export function loadTimetable(timetable, created=false) {
 
 export function lockTimetable(dispatch, timetable, created, isLoggedIn) {
 	if (timetable.has_conflict) { // turn conflicts on if necessary
-		dispatch({
-			type: "SET_PREFERENCE",
-			key: "try_with_conflicts",
-			value: true
-		});
+		dispatch({ type: "TURN_CONFLICTS_ON" });
 	}
 	dispatch({
 		type: "RECEIVE_COURSE_SECTIONS",
@@ -233,8 +229,7 @@ function fetchTimetables(requestBody, removing, newActive=0) {
 		saveLocalPreferences(requestBody.preferences);
 		if (localStorage.semester !== state.semester) {
 			saveLocalSemester(state.semester);
-		}
-		
+		}		
 	}
 }
 

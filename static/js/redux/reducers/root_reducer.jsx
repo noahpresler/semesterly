@@ -17,8 +17,8 @@ import { explorationModal } from './exploration_modal_reducer.jsx';
 import { customSlots } from './custom_slots_reducer.jsx'
 import { signupModal } from './signup_modal_reducer.jsx';
 import { preferenceModal } from './preference_modal_reducer.jsx'
-import { sortMetrics } from './sort_reducer.jsx'
 
+console.log(preferences)
 export const rootReducer = combineReducers({
   school,
   semester,
@@ -38,5 +38,4 @@ export const rootReducer = combineReducers({
   customSlots,
   signupModal,
   preferenceModal,
-  sortMetrics
 });
