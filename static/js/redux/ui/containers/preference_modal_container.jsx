@@ -10,7 +10,7 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch) => {
   return {
     togglePreferenceModal: () => dispatch({type: "TOGGLE_PREFERENCE_MODAL"}),
-    toggleConflicts: () => console.log('lolol')
+    toggleConflicts: () => dispatch({type: "TOGGLE_CONFLICTS"})
   }
 }
 
