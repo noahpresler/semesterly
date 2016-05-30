@@ -352,23 +352,19 @@ def get_detailed_course_json(course, sem, student=None):
   return json_data
 
 def get_basic_course_json(course, sem, extra_model_fields=[]):
-  fields = ['code','name', 'id', 'description', 'department', 'num_credits'] + extra_model_fields
-  d = model_to_dict(course, fields)
-  d['sections'] = {}
+  basic_fields = ['code','name', 'id', 'description', 'department', 'num_credits']
+  course_json = model_to_dict(course, basic_fields + extra_model_fields)
+  course_json['evals'] = course.get_eval_info()
+  course_json['sections'] = {}
 
-  course_section_list = course.section_set.filter(semester__in=[sem, "Y"])
+  course_section_list = sorted(course.section_set.filter(semester__in=[sem, "Y"]),
+                              key=lambda section: section.section_type)
 
-  for section in course_section_list:
-    st = section.section_type
-    name = section.meeting_section
-    if st not in d['sections']:
-      d['sections'][st] = {}
-    for offering in section.offering_set.all():
-      if name not in d['sections'][st]:
-        d['sections'][st][name] = []
-      d['sections'][st][name].append(merge_dicts(model_to_dict(section), model_to_dict(offering)))
+  for section_type, sections in course_section_list.groupby(lambda s: s.section_type):
+    course_json['sections'][section_type] = [co for section in sections\
+                                                for co in section.offering_set.all()]
 
-  return d
+  return course_json
 
 
 def get_course(request, school, sem, id):
