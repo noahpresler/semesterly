@@ -70,7 +70,6 @@ export class CourseModalBody extends React.Component {
                 </div>
             </div>
         }
-
         let lecs = this.mapSectionsToSlots(this.props.lectureSections);
         let tuts = this.mapSectionsToSlots(this.props.tutorialSections);
         let pracs = this.mapSectionsToSlots(this.props.practicalSections);
