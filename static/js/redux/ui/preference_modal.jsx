@@ -31,14 +31,14 @@ export class PreferenceModal extends React.Component {
                 <hr/>
                 <SortMenuContainer />
                 <div className="preference-footer">
-                    <div className="signup-button"
+                    <button className="btn btn-default"
                         style={{ marginLeft: 'auto' }}>
                         Cancel
-                    </div>
-                    <div className="signup-button"
+                    </button>
+                    <button className="btn btn-default"
                         style={{ marginLeft: '5px', marginRight: '10%' }}>
                         Apply
-                    </div>
+                    </button>
                 </div>
             </Modal>
         );

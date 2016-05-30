@@ -38,25 +38,23 @@ const FooterRow = ({ addNextMetric }) => (
 
 export class SortMenu extends React.Component {
   render() {
-    let selectedMetrics = this.props.metrics.filter( m => m.selected )
-    let availMetrics = this.props.metrics.filter( m => !m.selected )
-    let headerRow = selectedMetrics.length > 0 ?
+    let headerRow = this.props.sortMetrics.length > 0 ?
       <SortRow {...this.props}
                actionText="Sort by"
-               chosenMetric={selectedMetrics[0]}
-               availMetrics={availMetrics} 
+               chosenMetric={this.props.sortMetrics[0]}
+               availMetrics={this.props.availMetrics} 
                /> 
       : null
-    let middleRows = selectedMetrics.slice(1).map( (m, i) => (
+    let middleRows = this.props.sortMetrics.slice(1).map( (m, i) => (
       <SortRow {...this.props}
                actionText="then by"
                chosenMetric={m}
-               availMetrics={availMetrics} 
+               availMetrics={this.props.availMetrics} 
                key={i}
                /> 
     ))
-    let footer = availMetrics.length > 0 ? 
-      <FooterRow addNextMetric={() => this.props.addMetric(availMetrics[0].metric)} /> 
+    let footer = this.props.availMetrics.length > 0 ? 
+      <FooterRow addNextMetric={() => this.props.addMetric(this.props.availMetrics[0].metric)} /> 
       : null
 
     return (
