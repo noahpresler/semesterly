@@ -19,9 +19,13 @@ def view_analytics_dashboard(request):
         context_instance=RequestContext(request))
 
 def save_analytics_timetable(courses, semester, school, student=None):
-  analytics_timetable = AnalyticsTimetable.objects.create(semester=semester,
+    analytics_timetable = AnalyticsTimetable.objects.create(semester=semester,
                                                           school=school,
                                                           time_created=datetime.datetime.now(),
                                                           student=student)
-  analytics_timetable.courses.add(*courses)
-  analytics_timetable.save()
+    analytics_timetable.courses.add(*courses)
+    analytics_timetable.save()
+
+def number_analytics_timetables(school=None, semester=None, student=None):
+    timetables = AnalyticsTimetable.objects.filter(student=student, school='jhu')
+    return len(timetables)

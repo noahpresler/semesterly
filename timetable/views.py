@@ -109,7 +109,7 @@ def get_timetables(request):
 
   course_ids = params['courseSections'].keys()
   courses = [Course.objects.get(id=cid) for cid in course_ids]
-  save_analytics_timetable(courses, params['semester'], SCHOOL, None)
+  save_analytics_timetable(courses, params['semester'], SCHOOL, get_student(request))
   locked_sections = params['courseSections']
   for updated_course in params.get('updated_courses', []):
     cid = str(updated_course['course_id'])
