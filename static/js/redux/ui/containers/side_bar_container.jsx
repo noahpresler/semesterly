@@ -17,6 +17,7 @@ const mapStateToProps = (state) => {
 		courseToColourIndex: state.ui.courseToColourIndex,
 		optionalCourses: state.optionalCourses.courses,
 		classmates: state.classmates.courseToClassmates,
+		avgRating: activeTimetable.avg_rating,
 		isCourseInRoster: (course_id) => activeTimetable.courses.some(c => c.id === course_id)
 	}
 }
