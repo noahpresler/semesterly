@@ -1,6 +1,6 @@
 import React from 'react'
 
-// friends, conflicts, days off, time on/off campus, rating
+// tip: metrics are friends, conflicts, days off, time on/off campus, rating
 const SortRow = (props) => (
   <div className="sort-row metric-row">
     <div className="sort-text"><span> {props.actionText} </span></div>

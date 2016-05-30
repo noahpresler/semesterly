@@ -3,7 +3,7 @@ import { SortMenu } from '../sort_menu.jsx';
 
 const mapStateToProps = (state) => {
   return {
-    metrics: state.sortMetrics,
+    metrics: state.preferences.sort_metrics,
   }
 }
 
