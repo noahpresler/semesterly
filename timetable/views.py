@@ -172,13 +172,12 @@ class TimetableGenerator:
 
   def convert_tt_to_dict(self, timetable):
     tt_obj = {}
-    tt, has_conflict = timetable
+    tt, tt_stats = timetable
     # get a course dict -> sections dictionary
     grouped = itertools.groupby(tt, self.get_basic_course_dict)
     # augment each course dict with its section/other info
     tt_obj['courses'] = list(itertools.starmap(self.augment_course_dict, grouped))
-    tt_obj['has_conflict'] = has_conflict
-    return tt_obj
+    return merge_dicts(tt_obj, tt_stats)
 
   def get_basic_course_dict(self, section):
     model = Course.objects.get(id=section[0])
@@ -219,19 +218,22 @@ class TimetableGenerator:
     for p in xrange(total_num_permutations): # for each possible tt
       current_tt = []
       day_to_usage = self.get_day_to_usage()
-      tt_has_conflict = False
+      num_conflicts = 0
       add_tt = True
       for i in xrange(len(sections)): # add an offering for the next section
         j = (p/num_permutations_remaining[i]) % num_offerings[i]
-        new_meeting_creates_conflict = add_meeting_and_check_conflict(day_to_usage, 
-                                                                sections[i][j])
-        tt_has_conflict = tt_has_conflict or new_meeting_creates_conflict
-        if tt_has_conflict and not self.with_conflicts:
+        num_added_conflicts = add_meeting_and_check_conflict(day_to_usage, 
+                                                              sections[i][j])
+        num_conflicts += num_added_conflicts
+        if num_conflicts and not self.with_conflicts:
           add_tt = False
           break
         current_tt.append(sections[i][j])
       if add_tt and len(current_tt) != 0:
-        yield (tuple(current_tt), tt_has_conflict)
+        tt_stats = self.get_tt_stats(current_tt)
+        tt_stats['num_conflicts'] = num_conflicts
+        tt_stats['has_conflict'] = bool(num_conflicts)
+        yield (tuple(current_tt), tt_stats)
 
   def get_day_to_usage(self):
     """Initialize day_to_usage dictionary, which has custom events blocked out."""
@@ -268,6 +270,9 @@ class TimetableGenerator:
         else:
           all_sections.append([[c.id, section, section.offering_set.all()] for section in sections])
     return all_sections
+
+  def get_tt_stats(self, timetable):
+    return {}
 
 def get_xproduct_indicies(lists):
   """
