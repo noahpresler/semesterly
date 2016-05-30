@@ -6,6 +6,7 @@ import { REACTION_MAP } from '../constants.jsx';
 import MasterSlot from './master_slot.jsx';
 import Textbook from './textbook.jsx';
 import { COLOUR_DATA } from '../constants.jsx';
+import EvaluationList from './evaluation_list.jsx';
 
 export class CourseModalBody extends React.Component {
     constructor(props) {
@@ -105,6 +106,7 @@ export class CourseModalBody extends React.Component {
         reactionsDisplay.sort((r1, r2) => {return r1.props.count < r2.props.count});
 
         let evalInfo = this.props.data.eval_info;
+        console.log(evalInfo);
         let relatedCourses = this.props.data.related_courses;
         let { prerequisites, textbooks } = this.props.data;
         let evals = evalInfo.length === 0 ? null :
@@ -174,7 +176,10 @@ export class CourseModalBody extends React.Component {
                             <h3 className="modal-module-header">Course Description</h3>
                             <p>{this.props.data.description}</p>
                         </div>
-
+                        <div>
+                            <h3 className="modal-module-header">Course Evaluations</h3>
+                            <EvaluationList evalInfo={evalInfo} />
+                        </div>
                         {textbooksDisplay}
                         {similarCourses}
                         
