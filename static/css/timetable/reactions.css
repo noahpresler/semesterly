@@ -161,3 +161,14 @@
 	visibility: visible;
 	transition: visibility 0s linear 0ms, opacity 300ms;
 }
+
+@media (max-width: 810px) {
+	#reactions .reaction {
+		width: 34px;
+	}
+}
+@media (max-width: 355px) {
+	#reactions .reaction {
+		width: 29px;
+	}
+}
