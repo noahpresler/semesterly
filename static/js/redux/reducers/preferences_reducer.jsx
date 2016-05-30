@@ -18,15 +18,14 @@ export const preferences = (state=initPreferences, action) => {
         case 'SET_ALL_PREFERENCES':
             return action.preferences;
         case 'ADD_METRIC':
-        	console.log(state)
             let addIndex = state.sort_metrics.findIndex(m => m.metric == action.metric)
             if (addIndex == -1) 
                 return state
             let added = Object.assign({}, state.sort_metrics[addIndex], {selected: true})
             let addedMetrics = [
             	...state.sort_metrics.slice(0, addIndex), 
-            	added, 
-            	...state.sort_metrics.slice(addIndex + 1)
+            	...state.sort_metrics.slice(addIndex + 1),
+                added
             ]
             return Object.assign({}, state, {sort_metrics: addedMetrics})
         case 'TOGGLE_METRIC_ORDER':
