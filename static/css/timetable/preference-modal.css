@@ -1,0 +1,51 @@
+.conflict-row {
+  display: flex;
+  padding-top: 3%;
+}
+
+.sort-menu {
+  display: block;
+}
+
+.preference-footer {
+  display: flex;
+}
+
+.sort-row {
+  width: 80%;
+  height: 50px;
+  display: flex;
+  border-width: 2px;
+  border-radius: 10px;
+  margin: auto;
+  margin-bottom: 10px;
+  padding: auto;
+}
+
+.sort-text {
+  width: 20%;
+  margin: auto;
+}
+
+.sort-order-dropdown {
+  width: 20%;
+  margin: auto;
+}
+
+.sort-metric-dropdown {
+  width: 50%;
+  margin: auto;
+}
+
+.sort-close {
+  width: 5%;
+  margin: auto;
+}
+
+.metric-row {
+  border-style: solid;
+}
+
+.footer-row {
+  border-style: dashed;
+}
