@@ -64,15 +64,8 @@ class Course(models.Model):
     return info
 
   def get_eval_info(self):
-    eval_info = []
-    evals = Evaluation.objects.filter(course=self)
-    for e in evals:
-      eval_info.append(model_to_dict(e))
-    final = []
-    for i in eval_info:
-      if not any(d['year'] == i['year'] for d in final):
-        final.append(i)
-    return sorted(final, key=lambda k: k['year']) 
+    eval_info = map(model_to_dict, Evaluation.objects.filter(course=self))
+    return sorted(eval_info, key=lambda eval: eval['year']) 
 
   def get_textbooks(self, semester):
     textbooks = []

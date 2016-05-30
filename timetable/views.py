@@ -360,8 +360,9 @@ def get_basic_course_json(course, sem, extra_model_fields=[]):
   course_section_list = sorted(course.section_set.filter(semester__in=[sem, "Y"]),
                               key=lambda section: section.section_type)
 
-  for section_type, sections in course_section_list.groupby(lambda s: s.section_type):
-    course_json['sections'][section_type] = [co for section in sections\
+  for section_type, sections in itertools.groupby(course_section_list, lambda s: s.section_type):
+    course_json['sections'][section_type] = [merge_dicts(model_to_dict(co), model_to_dict(section)) \
+                                                for section in sections\
                                                 for co in section.offering_set.all()]
 
   return course_json
