@@ -1,5 +1,6 @@
 .conflict-row {
   display: flex;
+  padding-top: 3%;
 }
 
 .sort-menu {
@@ -9,7 +10,7 @@
 .preference-footer {
   display: flex;
 }
-
+/*wtf*/
 .sort-row {
   width: 80%;
   height: 50px;
@@ -22,12 +23,12 @@
 }
 
 .sort-text {
-  width: 15%;
+  width: 20%;
   margin: auto;
 }
 
 .sort-order-dropdown {
-  width: 25%;
+  width: 20%;
   margin: auto;
 }
 
