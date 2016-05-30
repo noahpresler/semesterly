@@ -1,6 +1,7 @@
 import React from 'react';
 import Evaluation from './evaluation.jsx';
 import SideScroller from './side_scroller.jsx';
+
 class EvaluationList extends React.Component {
 	render() {
 		let { evalInfo } = this.props;
