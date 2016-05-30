@@ -6,6 +6,7 @@ import { REACTION_MAP } from '../constants.jsx';
 import MasterSlot from './master_slot.jsx';
 import Textbook from './textbook.jsx';
 import { COLOUR_DATA } from '../constants.jsx';
+import EvaluationList from './evaluation_list.jsx';
 
 export class CourseModalBody extends React.Component {
     constructor(props) {
@@ -144,6 +145,7 @@ export class CourseModalBody extends React.Component {
         </div>
 
         let creditsSuffix = numCredits === 1 ? " credit" : " credits";
+        let avgRating = evalInfo.reduce(function(sum, e) { return sum + parseFloat(e.score); },0) / evalInfo.length;
         return (
         <div id="modal-body">
                 <div className="cf">
@@ -156,7 +158,7 @@ export class CourseModalBody extends React.Component {
                             <h4>Average Course Rating</h4>
                             <div className="sub-rating-wrapper">
                                 <div className="star-ratings-sprite">
-                                    <span></span>
+                                    <span style={{width: 100*avgRating/5 + "%"}} className="rating"></span>
                                 </div>
                             </div>
                         </div>
@@ -174,7 +176,10 @@ export class CourseModalBody extends React.Component {
                             <h3 className="modal-module-header">Course Description</h3>
                             <p>{this.props.data.description}</p>
                         </div>
-
+                        <div>
+                            <h3 className="modal-module-header">Course Evaluations</h3>
+                            <EvaluationList evalInfo={evalInfo} />
+                        </div>
                         {textbooksDisplay}
                         {similarCourses}
                         
