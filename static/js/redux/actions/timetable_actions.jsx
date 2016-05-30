@@ -142,35 +142,36 @@ export function addOrRemoveCourse(newCourseId, lockingSection = '') {
 	if (state.timetables.isFetching) {
 		return;
 	}
-	if (!removing && state.optionalCourses.courses.some(c => c.id === newCourseId)) {
+	let removing = state.courseSections.objects[newCourseId] !== undefined && lockingSection === '';
+	let reqBody = getBaseReqBody(state);
+	if (state.optionalCourses.courses.some(c => c.id === newCourseId)) {
 		let dispatch = store.dispatch;
 		dispatch({
 	  		type: "REMOVE_OPTIONAL_COURSE_BY_ID",
 	  		courseId: newCourseId
 	  	});
-	  	state = store.getState();
+	  	reqBody = getBaseReqBody(store.getState());
+	} else {
+		if (removing) {
+			let updatedCourseSections = Object.assign({}, state.courseSections.objects);
+			delete updatedCourseSections[newCourseId]; // remove it from courseSections.objects
+			reqBody.courseSections = updatedCourseSections;
+		}
+		else { // adding a course
+			Object.assign(reqBody, {
+				updated_courses: [{
+					'course_id': newCourseId,
+	        		'section_codes': [lockingSection]
+	        	}],
+	        	'optionCourses': state.optionalCourses.courses.map(c => c.id),
+	        	'numOptionCourses': state.optionalCourses.numRequired,
+	        	'customSlots': state.customSlots
+	        });
+		}
 	}
-	let reqBody = getBaseReqBody(state);
 	// user must be removing this course if it's already in roster,
 	// and they're not trying to lock a new section).
 	// otherwise, they're adding it
-	let removing = state.courseSections.objects[newCourseId] !== undefined && lockingSection === '';
-	if (removing) {
-		let updatedCourseSections = Object.assign({}, state.courseSections.objects);
-		delete updatedCourseSections[newCourseId]; // remove it from courseSections.objects
-		reqBody.courseSections = updatedCourseSections;
-	}
-	else { // adding a course
-		Object.assign(reqBody, {
-			updated_courses: [{
-				'course_id': newCourseId,
-        		'section_codes': [lockingSection]
-        	}],
-        	'optionCourses': state.optionalCourses.courses.map(c => c.id),
-        	'numOptionCourses': state.optionalCourses.numRequired,
-        	'customSlots': state.customSlots
-        });
-	}
 	store.dispatch(fetchTimetables(reqBody, removing));
 }
 
