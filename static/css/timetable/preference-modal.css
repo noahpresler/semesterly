@@ -3,7 +3,7 @@
 }
 
 .sort-menu {
-  display: flex;
+  display: block;
 }
 
 .preference-footer {
@@ -11,6 +11,40 @@
 }
 
 .sort-row {
-  width: 100%;
+  width: 80%;
   height: 50px;
+  display: flex;
+  border-width: 2px;
+  border-radius: 10px;
+  margin: auto;
+  margin-bottom: 10px;
+  padding: auto;
+}
+
+.sort-text {
+  width: 15%;
+  margin: auto;
+}
+
+.sort-order-dropdown {
+  width: 25%;
+  margin: auto;
+}
+
+.sort-metric-dropdown {
+  width: 50%;
+  margin: auto;
+}
+
+.sort-close {
+  width: 5%;
+  margin: auto;
+}
+
+.metric-row {
+  border-style: solid;
+}
+
+.footer-row {
+  border-style: dashed;
 }

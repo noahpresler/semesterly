@@ -10,7 +10,8 @@ export class PreferenceModal extends React.Component {
   }
     render() {
         let modalStyle = {
-            width: '60%'
+            width: '60%',
+            height: '85%'
         };
         return (
             <Modal ref="modal"
