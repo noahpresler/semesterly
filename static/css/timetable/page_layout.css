@@ -32,6 +32,7 @@ html {
 	-moz-transition: transform .3s;
 	background-color: white;
 	padding: 20px 10px 10px 0;
+	bottom: auto;
 }
 
 #main-bar {
@@ -261,17 +262,50 @@ html {
 }
 /* End Navicon */
 
-.footer {
+/*.footer {
 	background-color: #F8F6F7;
-	min-height: 50px;
-	border-top: 1px solid #E8E8E8;
-	margin: 10px 0px 0px 0px;
+	height: 30px;
+	min-height: 30px;
+	margin: -30px 0px 0px 0px;
+	position: absolute;
+	width: 100%;
+	z-index: 100;
 }
 
-.nav-pills>li>a {
+.nav-pills > li > a {
+	font-weight: 300;
+	font-size: 12px;
+	line-height: 30px;
 	color: #34495E;
+	padding: 0 15px;
+}
+.nav-pills > li > a:hover {
+	background: transparent;
 }
 
 ul.nav.nav-pills {
 	float: right;
+}*/
+
+footer {
+	margin-top: -10px;
+	background-color: transparent;
+}
+footer ul {
+	float: right;
+	list-style-type: none;
+	padding: 0;
+}
+footer li {
+	display: inline-block;
+	margin: 0 5px;
+}
+footer li a {
+	font-weight: 400;
+	font-size: 12px;
+	color: #aaa;
+}
+footer li a:hover {
+	color: #aaa;
+	text-decoration: underline;
 }
