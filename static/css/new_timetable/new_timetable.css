@@ -936,6 +936,7 @@ input.cmn-toggle-round:checked + label:after {
   margin: 0 auto;
   float:left;
 }
+
 .eval-stars {
     margin-right:5px;
 }
