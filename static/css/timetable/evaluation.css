@@ -68,7 +68,7 @@
   background-color: #fff;
   font-size:13.5px;
   padding-top:2px;
-  width: 30%;
+  width: 32.2%;
   cursor:pointer;
 }
 .numeric-rating {
@@ -100,4 +100,8 @@
     float: left;
     height: 18px;
     display: block;
+}
+
+.trans #course-evaluations {
+  display: none;
 }
