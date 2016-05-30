@@ -1,3 +1,15 @@
+.pref-modal {
+  max-width: 600px;
+  height: 550px;
+}
+
+.pref-modal #modal-header {
+  background-color: #eee;
+  padding: 25px 25px;
+  position: relative;
+  border-bottom: 1px solid #ddd;
+}
+
 .conflict-row {
   display: flex;
   padding: 2% 0;
@@ -15,6 +27,7 @@
 .select {
   min-width: 0 !important; 
   width: 100% !important;
+  font-size: 18px !important;
 }
 
 .sort-row {
@@ -34,12 +47,12 @@
 
 .sort-order-dropdown {
   padding: 3%;
-  width: 20%;
+  width: 25%;
 }
 
 .sort-metric-dropdown {
   padding: 3%;
-  width: 50%;
+  width: 45%;
 }
 
 .sort-close {
@@ -53,4 +66,13 @@
 
 .footer-row {
   border-style: dashed;
+}
+
+@media (max-width: 460px) {
+  .sort-menu {
+    font-size: 12px;
+  }
+  .select {
+    font-size: 12px !important; /* overwrite flat-ui on mobile */
+  }
 }
