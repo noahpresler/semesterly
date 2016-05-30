@@ -18,24 +18,29 @@ export class PreferenceModal extends React.Component {
                     modalStyle={modalStyle}
                     onHide={this.props.togglePreferenceModal}>
                 <div className="conflict-row">
-                    <div style={{ marginRight: 'auto', marginLeft: '10%' }}>
-                        <p>Conflicts: </p>
+                    <div style={{ marginRight: 'auto', marginLeft: '15%' }}>
+                        <p style={{ margin: 0 }}>Conflicts: </p>
                     </div>
-                    <div style={{ marginLeft: 'auto', marginRight: '10%'}}>
-                        <input type="checkbox" 
-                                dataToggle="switch"
-                                defaultChecked={false}
-                                onChange={this.props.toggleConflicts} />
+                    <div style={{ marginLeft: 'auto', marginRight: '15%'}}>
+                        <div className="bootstrap-switch-square">
+                            <input type="checkbox" 
+                                    name="square-switch"
+                                    dataToggle="switch"
+                                    dataOnColor="primary"
+                                    dataOffColor="default"
+                                    defaultChecked={false}
+                                    onChange={this.props.toggleConflicts} />
+                        </div>
                     </div>
                 </div>
-                <hr/>
+                <hr style={{ marginTop: 0, width: '80%' }}/>
                 <SortMenuContainer />
                 <div className="preference-footer">
-                    <button className="btn btn-default"
+                    <button className="btn btn-primary"
                         style={{ marginLeft: 'auto' }}>
                         Cancel
                     </button>
-                    <button className="btn btn-default"
+                    <button className="btn btn-primary"
                         style={{ marginLeft: '5px', marginRight: '10%' }}>
                         Apply
                     </button>
