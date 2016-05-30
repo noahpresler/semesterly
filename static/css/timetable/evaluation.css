@@ -1,0 +1,103 @@
+.modal-entry .eval-item {
+  background-color: #FFF;
+  border: 1px solid #D4D4D4;
+  display: inline-block;
+  margin-bottom: 10px;
+  text-align: center;
+  margin: 3px;
+  -webkit-transition: width .5s;
+  transition: all 0.3s;
+
+}
+.nav-item-active .eval-item {
+  border: 1px solid #34495E;
+}
+
+.spacious-entry {
+  padding-bottom:20px;
+}
+
+.last-updated {
+  font-size:12px;
+  margin-left:40px;
+}
+
+.selected .rating-wrapper {
+  margin :10px;
+  text-align: right;
+  display: inline-block;
+  float:right;
+}
+.empty-intro {
+  padding-top:15px;
+}
+.eval-item #details {
+  font-size:15px;
+  margin: 5px;
+}
+.eval-stars {
+    margin-right:5px;
+}
+.eval-wrapper {
+  margin-bottom: 10px;
+}
+
+.eval-wrapper #prof {
+  display: inline-block;
+  margin: 0 auto;
+  margin-top: 10px;
+  text-align: center;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  width:40%;
+}
+
+.selected {
+  width: 99%;
+}
+
+.selected .year {
+  text-align: left;
+  margin: 10px;
+  float:left;
+}
+
+.eval-item.mini {
+  height:50px;
+  background-color: #fff;
+  font-size:13.5px;
+  padding-top:2px;
+  width: 30%;
+  cursor:pointer;
+}
+.numeric-rating {
+  float: left;
+  text-decoration:none;
+  position: relative;
+  margin-left:8px;
+  top: 1px;
+}
+
+.rating-wrapper {
+  display: inline-block;
+  text-align: center;
+}
+
+.star-ratings-sprite {
+    background: url(../../img/star.png) repeat-x;
+    font-size: 0;
+    height: 18px;
+    line-height: 0;
+    overflow: hidden;
+    text-indent: -999em;
+    width: 90px;
+    margin: 0 auto;
+    float:left;
+}
+.rating {
+    background: url(../../img/rating.png) 0 100% repeat-x;
+    float: left;
+    height: 18px;
+    display: block;
+}

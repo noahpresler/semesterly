@@ -100,13 +100,18 @@ export const getSchoolSpecificInfo = (school) => {
 }
 
 export const COLOUR_DATA = [
+    // red
     { background: "#FD7473", highlight: "#E26A6A", border: "#963838", font: "#222" },
+    // blue
     { background: "#5AC8FB", highlight: "#28A4EA", border: "#1B6B90", font: "#222" },
-    { background: "#4CD4B0", highlight: "#3DBB9A", border: "#1E755E", font: "#222" },
-    { background: "#E7F76D", highlight: "#C9E20A", border: "#AFC11F", font: "#222" },
-    { background: "#B68FF1", highlight: "#9470CC", border: "#4C2B7D", font: "#222" },
-    { background: "#FFBF8D", highlight: "#F7954A", border: "#AF5E20", font: "#222" },
+    // turquoise 
+    { background: "#36DEBB", highlight: "#3DBB9A", border: "#1E755E", font: "#222" },
+    // purple
+    { background: "#C585DE", highlight: "#9470CC", border: "#4C2B7D", font: "#222" },
+    // 'yellow'
+    { background: "#FFD462", highlight: "#F7954A", border: "#AF5E20", font: "#222" },
     { background: "#D4DBC8", highlight: "#B5BFA3", border: "#97A086", font: "#222" },
+    { background: "#E7F76D", highlight: "#C9E20A", border: "#AFC11F", font: "#222" },
     { background: "#A3F5F2", highlight: "#7CD2CF", border: "#53ABA8", font: "#222" },
     { background: "#7499A2", highlight: "#668B94", border: "#6C7A89", font: "#222" },
     { background: "#E7F76D", highlight: "#C4D44D", border: "#6C7A89", font: "#222" },
