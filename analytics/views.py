@@ -15,5 +15,13 @@ to_zone = tz.gettz('America/New_York')
 
 
 def view_analytics_dashboard(request):
-	return render_to_response('analytics_dashboard.html', {}, 
-		context_instance=RequestContext(request))
+    return render_to_response('analytics_dashboard.html', {}, 
+        context_instance=RequestContext(request))
+
+def save_analytics_timetable(courses, semester, school, student=None):
+  analytics_timetable = AnalyticsTimetable.objects.create(semester=semester,
+                                                          school=school,
+                                                          time_created=datetime.datetime.now(),
+                                                          student=student)
+  analytics_timetable.courses.add(*courses)
+  analytics_timetable.save()
