@@ -3,6 +3,7 @@ from student.models import *
 import urllib2, json, pprint
 from django.conf import settings
 from django.db import models
+import json
 
 
 def create_student(strategy, details, response, user, *args, **kwargs):
@@ -14,7 +15,11 @@ def create_student(strategy, details, response, user, *args, **kwargs):
     social_user = user.social_auth.filter(
         provider='facebook',
     ).first()
-    access_token = social_user.extra_data["access_token"]
+
+    try:
+      access_token = social_user.extra_data["access_token"]
+    except TypeError:
+      access_token = json.loads(social_user.extra_data)["access_token"]
     if social_user:
         url = u'https://graph.facebook.com/{0}/' \
               u'?fields=picture&type=large' \
