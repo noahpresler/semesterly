@@ -62,29 +62,39 @@ class Calendar extends React.Component {
 	render() {
 		let saveIcon = this.props.saving ? <i className = "fa fa-spin fa-circle-o-notch" /> :
 			<i className="fa fa-floppy-o"></i>
-		let saveButton = (
-	        <button className="save-timetable" onMouseDown={ this.props.saveTimetable }>
-	        	{saveIcon}
-	        </button>
-		);
-		let addButton = <button
-			onClick={this.props.createTimetable} className="save-timetable add-button"><i className="fa fa-plus" /></button>
-		let shareButton = <button onClick={this.fetchShareTimetableLink}
-			className="save-timetable add-button">
+
+		let shareButton = (
+			<button onClick={this.fetchShareTimetableLink}
+							className="save-timetable add-button">
 				<i className={classnames("fa",  
 					{"fa-share-alt": !this.props.isFetchingShareLink}, 
 					{"fa-spin fa-circle-o-notch": this.props.isFetchingShareLink})} />
 			</button>
-		
-		// let downloadButton = <button
-		// 	className="save-timetable add-button"><i className="fa fa-download" /></button>
+		)
 		let shareLink = this.state.shareLinkShown ? 
         <ShareLink 
             link={this.props.shareLink}
             onClickOut={this.hideShareLink} /> : 
         null;
-		return (
+  	let addButton = (
+			<button onClick={this.props.createTimetable} 
+							className="save-timetable add-button">
+				<i className="fa fa-plus" />
+			</button>
+		)
+		let saveButton = (
+      <button className="save-timetable add-button" onMouseDown={ this.props.saveTimetable }>
+      	{saveIcon}
+      </button>
+		);
+    let preferenceButton = (
+    	<button onClick={this.props.togglePreferenceModal}
+    					className="save-timetable">
+    		<i className="fa fa-cog" />
+    	</button>
+    )
 
+		return (
 	      <div id="calendar" className="fc fc-ltr fc-unthemed">
 	        <div className="fc-toolbar">
 	          <div className="fc-left">
@@ -95,6 +105,7 @@ class Calendar extends React.Component {
 	          	{ shareLink }
 	          	{ addButton }
 	          	{ saveButton }
+	          	{ preferenceButton }
 	          </div>
 	          <div className="fc-center" />
 	          <div className="fc-clear" />
@@ -161,7 +172,7 @@ class Calendar extends React.Component {
 	              </tbody>
 	            </table>
 	          </div>
-	          <p className="data-last-updated">{ this.props.dataLastUpdated.length && this.props.dataLastUpdated !== "null" ? "Data last updated: " + this.props.dataLastUpdated : null }</p>
+	          <p className="data-last-updated">{ this.props.dataLastUpdated && this.props.dataLastUpdated.length && this.props.dataLastUpdated !== "null" ? "Data last updated: " + this.props.dataLastUpdated : null }</p>
 	        </div>
 	      </div>
     	);

@@ -106,5 +106,6 @@ button.save-timetable.add-button {
     right:0px;
 }
 .data-last-updated {
+    margin: 5px 0 0;
     font-size:12px;
 }
