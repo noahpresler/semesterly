@@ -54,7 +54,7 @@ export const preferences = (state=initPreferences, action) => {
             let orderIndex = state.sort_metrics.findIndex(m => m.metric == action.metric)
             if (orderIndex == -1)
                 return state
-            let next_order = state.sort_metrics[orderIndex] == 'least' ? 'most' : 'least'
+            let next_order = state.sort_metrics[orderIndex].order == 'least' ? 'most' : 'least'
             let reversed = Object.assign({}, state.sort_metrics[orderIndex], {order: next_order})
             let toggledMetrics = [
                 ...state.sort_metrics.slice(0, orderIndex), 
