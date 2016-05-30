@@ -1,8 +1,11 @@
 # tip: timetables with lowest cost get shown first -> metrics should return
 # lower numbers for "better" timetables
+from pprint import pprint
 
 def get_tt_cost(timetable, sort_params):
-  return tuple([metric(timetable) for metric in map(str_to_func.get, sort_params)])
+  pprint(timetable)
+  return 0
+  # return tuple([metric(timetable) for metric in map(str_to_func.get, sort_params)])
 
 def reverse_metric(metric):
   def _reversed(timetable):
@@ -25,12 +28,14 @@ def get_day_length(timetable):
   pass
 
 str_to_func = {
-  'by_most_friends': reverse_metric(get_num_friends),
-  'by_least_friends': get_num_friends,
-  'by_least_conflicts': reverse_metric(get_num_conflicts),
-  'by_most_days_off': get_num_days,
-  'by_least_days_off': reverse_metric(get_num_days),
-  'by_rating': reverse_metric(get_average_rating),
-  'by_time_on_campus': reverse_metric(get_day_length),
-  'by_time_off_campus': get_day_length,
+  ('sections with friends', 'most'): reverse_metric(get_num_friends),
+  ('sections with friends', 'least'): get_num_friends,
+  ('number of conflicts', 'least'): reverse_metric(get_num_conflicts),
+  ('number of conflicts', 'most'): get_num_conflicts,
+  ('days with class', 'least'): get_num_days,
+  ('days with class', 'most'): reverse_metric(get_num_days),
+  ('course rating stars', 'most'): reverse_metric(get_average_rating),
+  ('course rating stars', 'least'): get_average_rating,
+  ('time on campus', 'most'): reverse_metric(get_day_length),
+  ('time on campus', 'least'): get_day_length,
 }
