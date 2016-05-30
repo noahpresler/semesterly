@@ -3,9 +3,12 @@ import React from 'react'
 // tip: metrics are friends, conflicts, days off, time on/off campus, rating
 const SortRow = (props) => (
   <div className="sort-row metric-row">
-    <div className="sort-text"><span> {props.actionText} </span></div>
+    <div className="sort-text">
+      <span style={{ float: 'right' }}> {props.actionText} </span>
+    </div>
     <div className="sort-order-dropdown">
       <select name="order"
+              className="form-control select select-primary select-block"
               value={props.chosenMetric.order}
               onChange={(e) => props.toggleMetricOrder(props.chosenMetric.metric)}> 
         <option value="most">most</option>
@@ -14,6 +17,7 @@ const SortRow = (props) => (
     </div>
     <div className="sort-metric-dropdown">
       <select name="metric" 
+              className="form-control select select-primary select-block"
               value={props.chosenMetric.metric}
               onChange={(e) => props.changeMetric(e.target.value, props.chosenMetric.metric)}>
         <option value={props.chosenMetric.metric} >{props.chosenMetric.metric}</option>
