@@ -107,7 +107,9 @@ class SideBar extends React.Component {
                     <h3>Average Course Rating</h3>
                     <div className="sub-rating-wrapper">
                         <div className="star-ratings-sprite">
-                            <span className="rating"></span>
+                            <span style={{width: 100*this.props.avgRating/5 + "%"}} 
+                                    className="rating">
+                            </span>
                         </div>
                     </div>
                 </div>

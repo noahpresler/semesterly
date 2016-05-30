@@ -1,0 +1,138 @@
+.modal-entry .eval-item {
+  background-color: #FFF;
+  border: 1px solid #D4D4D4;
+  display: inline-block;
+  margin-bottom: 10px;
+  text-align: center;
+  margin: 3px;
+  -webkit-transition: width .5s;
+  transition: all 0.3s;
+
+}
+.nav-item-active .eval-item {
+  border: 1px solid #34495E;
+}
+
+.spacious-entry {
+  padding-bottom:20px;
+}
+
+.last-updated {
+  font-size:12px;
+  margin-left:40px;
+}
+
+.selected .rating-wrapper {
+  margin :10px;
+  text-align: right;
+  display: inline-block;
+  float:right;
+}
+.empty-intro {
+  padding-top:15px;
+}
+.eval-item #details {
+  font-size:15px;
+  margin: 5px;
+}
+.eval-stars {
+    margin-right:5px;
+}
+.eval-wrapper {
+  margin-bottom: 10px;
+}
+
+.eval-wrapper #prof {
+  display: inline-block;
+  margin: 0 auto;
+  margin-top: 10px;
+  text-align: center;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  width:40%;
+}
+
+.selected {
+  width: 99%;
+}
+
+.selected .year {
+  text-align: left;
+  margin: 10px;
+  float:left;
+  font-size: 15px;
+}
+
+.eval-item.mini {
+  height:45px;
+  background-color: #fff;
+  font-size:12px;
+  padding-top:2px;
+  width: 31.9%;
+  cursor:pointer;
+}
+
+.selected #prof {
+  font-size: 15px;
+}
+
+.selected .numeric-rating {
+  font-size: 15px;
+}
+
+.numeric-rating {
+  float: left;
+  text-decoration:none;
+  position: relative;
+  margin-left:8px;
+  top: 1px;
+}
+
+.eval-item.mini .numeric-rating {
+  font-weight: 500;
+  color: #a1a1a1;
+}
+.rating-wrapper {
+  display: inline-block;
+  text-align: center;
+}
+
+.scroll-nav {
+    margin: 0 auto;
+    text-align: center;
+}
+
+.star-ratings-sprite {
+    background: url(../../img/star.png) repeat-x;
+    font-size: 0;
+    height: 18px;
+    line-height: 0;
+    overflow: hidden;
+    text-indent: -999em;
+    width: 90px;
+    margin: 0 auto;
+    float:left;
+}
+
+.col-3-16 .star-ratings-sprite {
+    margin-left: 50%;
+    transform: translateX(-50%);
+}
+
+.rating {
+    background: url(../../img/rating.png) 0 100% repeat-x;
+    float: left;
+    height: 18px;
+    display: block;
+}
+
+.trans #course-evaluations {
+  display: none;
+}
+
+@media (max-width: 910px) {
+  .eval-item.mini {
+      width: 48.2%;
+    }
+}
