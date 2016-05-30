@@ -40,10 +40,12 @@ export class UserSettingsModal extends React.Component {
     changeMajor(val) {
         let userSettings = Object.assign({}, this.props.userInfo, {major: val.value});
         this.props.changeUserInfo(userSettings);
+        this.props.saveSettings();
     }
     changeClassYear(val) {
         let userSettings = Object.assign({}, this.props.userInfo, {class_year: val.value});
         this.props.changeUserInfo(userSettings);
+        this.props.saveSettings();
     }
     shouldShow(props) {
         return props.userInfo.isLoggedIn && (props.showOverrided || this.isIncomplete(props.userInfo.social_offerings) || this.isIncomplete(props.userInfo.social_courses) || this.isIncomplete(props.userInfo.major) || this.isIncomplete(props.userInfo.class_year));
