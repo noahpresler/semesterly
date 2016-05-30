@@ -19,7 +19,7 @@ from analytics.views import *
 from timetable.models import *
 from timetable.school_mappers import school_to_granularity, VALID_SCHOOLS
 from timetable.utils import *
-from timetable.scoring import get_tt_cost
+from timetable.scoring import *
 from student.models import Student
 from student.views import get_student, get_user_dict, convert_tt_to_dict
 
@@ -167,7 +167,7 @@ class TimetableGenerator:
   def courses_to_timetables(self, courses):
     all_offerings = self.courses_to_offerings(courses)
     timetables = self.create_timetable_from_offerings(all_offerings)
-    timetables.sort(key=lambda tt: get_tt_cost(tt[0], self.sort_metrics))
+    timetables.sort(key=lambda tt: get_tt_cost(tt[1], self.sort_metrics))
     return map(self.convert_tt_to_dict, timetables)
 
   def convert_tt_to_dict(self, timetable):
@@ -230,7 +230,7 @@ class TimetableGenerator:
           break
         current_tt.append(sections[i][j])
       if add_tt and len(current_tt) != 0:
-        tt_stats = self.get_tt_stats(current_tt)
+        tt_stats = self.get_tt_stats(current_tt, day_to_usage)
         tt_stats['num_conflicts'] = num_conflicts
         tt_stats['has_conflict'] = bool(num_conflicts)
         yield (tuple(current_tt), tt_stats)
@@ -273,8 +273,13 @@ class TimetableGenerator:
           all_sections.append([[c.id, section, section.offering_set.all()] for section in sections])
     return all_sections
 
-  def get_tt_stats(self, timetable):
-    return {}
+  def get_tt_stats(self, timetable, day_to_usage):
+    return {
+      'days_with_class': get_num_days(day_to_usage),
+      'time_on_campus': get_avg_day_length(day_to_usage),
+      'num_friends': get_num_friends(timetable),
+      'avg_rating': get_avg_rating(timetable)
+    }
 
 def get_xproduct_indicies(lists):
   """
