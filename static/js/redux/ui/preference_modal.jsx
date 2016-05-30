@@ -9,14 +9,21 @@ export class PreferenceModal extends React.Component {
     }
   }
     render() {
+        let modalHeader =
+            <div id="modal-content">
+                <div id="modal-header">
+                    <h1>Timetable Preferences</h1>
+                </div>
+            </div>
         let modalStyle = {
-            width: '60%',
-            height: '85%'
+            width: '100%',
         };
         return (
             <Modal ref="modal"
-                    modalStyle={modalStyle}
-                    onHide={this.props.togglePreferenceModal}>
+                   className="pref-modal"
+                   modalStyle={modalStyle}
+                   onHide={this.props.togglePreferenceModal}>
+                {modalHeader}
                 <div className="conflict-row">
                     <div style={{ marginRight: 'auto', marginLeft: '15%' }}>
                         <p style={{ margin: 0 }}>Conflicts: </p>
