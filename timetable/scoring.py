@@ -1,5 +1,5 @@
 # tip: timetables with lowest cost get shown first -> metrics should return
-# lower numbers for "better" timetables
+# lower numbers for "better" timetables. timetable: [cid, sid, [offerings]]
 from pprint import pprint
 
 def get_tt_cost(timetable, sort_params):
