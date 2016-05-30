@@ -43,5 +43,4 @@ class PersonalTimetable(models.Model):
     sections = models.ManyToManyField(Section)
     has_conflict = models.BooleanField(blank=True, default=False)
 
-
     
