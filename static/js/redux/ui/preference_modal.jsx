@@ -30,8 +30,12 @@ export class PreferenceModal extends React.Component {
                     </div>
                     <div style={{ marginLeft: 'auto', marginRight: '10%'}}>
                         <label className="switch switch-slide">
-                           <input ref="share_sections" className="switch-input" type="checkbox" defaultChecked={false} onChange={this.props.toggleConflicts} />
-                           <span className="switch-label" data-on="Yes" data-off="No"></span>
+                           <input ref="share_sections" 
+                                className="switch-input" 
+                                type="checkbox" 
+                                checked={this.props.withConflicts} 
+                                onChange={this.props.toggleConflicts} />
+                           <span className="switch-label" data-on="Enabled" data-off="Disabled"></span>
                            <span className="switch-handle"></span>
                        </label>
                     </div>
