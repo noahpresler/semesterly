@@ -60,7 +60,7 @@ const createSource = {
     }
   },
   canDrag(props) {
-    return props.isLoggedIn
+    return props.loggedIn
   }
 }
 
