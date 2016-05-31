@@ -112,6 +112,7 @@ html, body{
     padding: 100px;
     margin-top: 14px;
     background-color: #253340;
+    display: inline-block;
 }
 
 .circle {
