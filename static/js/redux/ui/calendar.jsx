@@ -41,13 +41,13 @@ class Calendar extends React.Component {
 	}
 
 	getCalendarRows() {
-	    let rows = [];
-	    for (let i = 8; i <= this.props.endHour; i++) { // one row for each hour, starting from 8am
-	      rows.push(<Row time={i + ':00'} show={true} isLoggedIn={this.props.isLoggedIn} key={i}/>);
-	      rows.push(<Row time={i + ':30'} show={false} isLoggedIn={this.props.isLoggedIn} key={i + 0.5}/>);
-	    }
+    let rows = [];
+    for (let i = 8; i <= this.props.endHour; i++) { // one row for each hour, starting from 8am
+      rows.push(<Row time={i + ':00'} show={true} isLoggedIn={this.props.isLoggedIn} key={i}/>);
+      rows.push(<Row time={i + ':30'} show={false} isLoggedIn={this.props.isLoggedIn} key={i + 0.5}/>);
+    }
 
-	  	return rows;
+  	return rows;
 	}
 	fetchShareTimetableLink() {
 		if (this.props.shareLinkValid) {
