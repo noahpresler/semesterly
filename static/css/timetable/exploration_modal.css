@@ -67,7 +67,8 @@
 .trans #exp-search-results,
 .trans .modal-module,
 .trans .time-selector,
-.trans #modal-body .rating-module {
+.trans #modal-body .rating-module,
+.trans #modal-body .modal-module-header {
 	opacity: 0;
 	visibility: hidden;
 }
