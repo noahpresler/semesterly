@@ -23,36 +23,38 @@ export class PreferenceModal extends React.Component {
                    className="pref-modal"
                    modalStyle={modalStyle}
                    onHide={this.props.togglePreferenceModal}>
-                {modalHeader}
-                <div className="conflict-row">
-                    <div style={{ marginRight: 'auto', marginLeft: '15%' }}>
-                        <p style={{ margin: 0 }}>Conflicts: </p>
+                <div id="perf-modal-wrapper">
+                    {modalHeader}
+                    <div className="conflict-row">
+                        <div style={{ marginRight: 'auto', marginLeft: '15%' }}>
+                            <p style={{ margin: 0 }}>Conflicts: </p>
+                        </div>
+                        <div style={{ marginLeft: 'auto', marginRight: '10%'}}>
+                            <label className="switch switch-slide">
+                               <input ref="share_sections" 
+                                    className="switch-input" 
+                                    type="checkbox" 
+                                    checked={this.props.withConflicts} 
+                                    onChange={this.props.toggleConflicts} />
+                               <span className="switch-label" data-on="Enabled" data-off="Disabled"></span>
+                               <span className="switch-handle"></span>
+                           </label>
+                        </div>
                     </div>
-                    <div style={{ marginLeft: 'auto', marginRight: '10%'}}>
-                        <label className="switch switch-slide">
-                           <input ref="share_sections" 
-                                className="switch-input" 
-                                type="checkbox" 
-                                checked={this.props.withConflicts} 
-                                onChange={this.props.toggleConflicts} />
-                           <span className="switch-label" data-on="Enabled" data-off="Disabled"></span>
-                           <span className="switch-handle"></span>
-                       </label>
+                    <hr style={{ marginTop: 0, width: '80%' }}/>
+                    <SortMenuContainer />
+                    <div className="preference-footer">
+                        <button className="btn btn-primary"
+                                style={{ marginLeft: 'auto' }}
+                                onClick={this.props.togglePreferenceModal}>
+                            Cancel
+                        </button>
+                        <button className="btn btn-primary"
+                                style={{ marginLeft: '5px', marginRight: '10%' }}
+                                onClick={this.props.applyPreferences}>
+                            Apply
+                        </button>
                     </div>
-                </div>
-                <hr style={{ marginTop: 0, width: '80%' }}/>
-                <SortMenuContainer />
-                <div className="preference-footer">
-                    <button className="btn btn-primary"
-                            style={{ marginLeft: 'auto' }}
-                            onClick={this.props.togglePreferenceModal}>
-                        Cancel
-                    </button>
-                    <button className="btn btn-primary"
-                            style={{ marginLeft: '5px', marginRight: '10%' }}
-                            onClick={this.props.applyPreferences}>
-                        Apply
-                    </button>
                 </div>
             </Modal>
         );
