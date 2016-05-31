@@ -22,6 +22,11 @@ def get_student(request):
   else:
     return None
 
+def get_avg_rating(course_ids):
+  avgs = [Course.objects.get(id=cid).get_avg_rating() \
+          for cid in set([cid for cid in course_ids])]
+  return sum(avgs)/len(avgs) if avgs else 0
+
 def get_user_dict(school, student, semester):
 	user_dict = {}
 	if student:
@@ -79,6 +84,7 @@ def convert_tt_to_dict(timetable, include_last_updated=True):
 		courses[index]['enrolled_sections'].append(section_obj.meeting_section)
 
 	tt_dict['courses'] = courses
+	tt_dict['avg_rating'] = get_avg_rating(course_ids)
 	return tt_dict
 
 @csrf_exempt
