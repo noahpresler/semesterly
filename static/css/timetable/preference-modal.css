@@ -11,9 +11,9 @@
 }
 
 .pref-modal .switch-slide .switch-label {
-   font-family: lato;
-   font-size: 16px;
-   text-transform: none;
+    font-family: lato;
+    font-size: 12px;
+    text-transform: none;
 }
 
 .pref-modal .switch-slide .switch-handle, .switch-yes-no .switch-handle {
