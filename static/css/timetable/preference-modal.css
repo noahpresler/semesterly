@@ -5,8 +5,15 @@
 
 .pref-modal .switch-slide .switch-label:after {
    background: #1abc9c;
-   margin: 0px;
-   border-radius: 5px;
+}
+
+.pref-modal .switch-slide .switch-handle, .switch-yes-no .switch-handle {
+    margin: 0px;
+  }
+
+  .pref-modal .switch-slide, .switch-yes-no {
+    margin: 0px;
+    border-radius: 4px;
 }
 
 .pref-modal #modal-header {
