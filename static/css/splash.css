@@ -116,19 +116,19 @@ header nav a:hover {
 	margin-bottom: 0;
 }
 .circle {
-	height: 100px;
+	height: 120px;
 	background-color: #1abc9c;
 	text-align: center;
-	width: 100px;
+	width: 120px;
 	border-radius: 100px;
 	color: rgb(37, 51, 64);
 	font-size: 50px;
 	margin: 0 auto;
-	display: ;
 	margin-bottom: 16px;
 }
 .circle i {
-	margin: 23px;
+	width: 100%;
+	line-height: 120px;
 }
 
 
@@ -155,17 +155,14 @@ header nav a:hover {
 	}
 }
 
-@media(max-width:766px) {
-	#hero img {
-		width: 60%;
-	}	
-}
-
 @media(max-width: 445px) {
 	header h1 {
 		display: none;
 	}
 	#hero h2 {
 		font-size: 55px;
+	}
+	#hero img {
+		width: 60%;
 	}
 }
