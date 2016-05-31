@@ -55,7 +55,7 @@ export function loadCachedTimetable() {
 	store.dispatch({ type: 'SET_ALL_PREFERENCES', preferences: localPreferences });
 	store.dispatch({ type: 'SET_SEMESTER', semester: localSemester });
 	store.dispatch({ type: 'RECEIVE_COURSE_SECTIONS', courseSections: localCourseSections });
-	fetchStateTimetables(store.getState(), localActive);
+	fetchStateTimetables(localActive);
 }
 
 // loads @timetable into the state.
@@ -124,8 +124,8 @@ export function unhoverSection (dispatch) {
 		});
 	}
 }
-export function fetchStateTimetables(state, activeIndex) {
-	let requestBody = getBaseReqBody(state);
+export function fetchStateTimetables(activeIndex=0) {
+	let requestBody = getBaseReqBody(store.getState());
 	store.dispatch(fetchTimetables(requestBody, false, activeIndex));
 }
 /*
