@@ -46,7 +46,7 @@ export class PreferenceModal extends React.Component {
                     <div className="preference-footer">
                         <button className="btn btn-primary"
                                 style={{ marginLeft: 'auto' }}
-                                onClick={this.props.togglePreferenceModal}>
+                                onClick={() => this.refs.modal.hide()}>
                             Cancel
                         </button>
                         <button className="btn btn-primary"
