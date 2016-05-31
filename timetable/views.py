@@ -354,7 +354,7 @@ def get_minute_from_string_time(time_string):
 # --------------------TODO: move to separate file------------------------------
 # -----------------------------------------------------------------------------
 def get_detailed_course_json(course, sem, student=None):
-  json_data = get_basic_course_json(course, sem, ['prerequisites', 'exclusions'])
+  json_data = get_basic_course_json(course, sem, ['prerequisites', 'exclusions', 'areas'])
   # json_data['textbook_info'] = course.get_all_textbook_info()
   json_data['eval_info'] = course.get_eval_info()
   json_data['related_courses'] = course.get_related_course_info(sem, limit=5)
