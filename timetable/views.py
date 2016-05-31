@@ -157,8 +157,7 @@ class TimetableGenerator:
     self.school = school
     self.slots_per_hour = 60 / school_to_granularity[school]
     self.semester = semester
-    # self.with_conflicts = preferences.get('try_with_conflicts', False)
-    self.with_conflicts = False
+    self.with_conflicts = preferences.get('try_with_conflicts', False)
     self.sort_metrics = [(m['metric'], m['order']) \
                             for m in preferences.get('sort_metrics', []) \
                               if m['selected']]
