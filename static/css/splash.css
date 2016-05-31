@@ -150,6 +150,7 @@ html, body{
 .school:hover {
 	box-shadow: 3px 6px 6px 4px #1c2630;
 	transition: all .1s linear;
+	cursor: pointer;
 }
 
 .last {
