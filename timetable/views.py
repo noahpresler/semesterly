@@ -364,7 +364,7 @@ def get_detailed_course_json(course, sem, student=None):
   return json_data
 
 def get_basic_course_json(course, sem, extra_model_fields=[]):
-  basic_fields = ['code','name', 'id', 'description', 'department', 'num_credits']
+  basic_fields = ['code','name', 'id', 'description', 'department', 'num_credits', 'areas']
   course_json = model_to_dict(course, basic_fields + extra_model_fields)
   course_json['evals'] = course.get_eval_info()
   course_json['sections'] = {}
