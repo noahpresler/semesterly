@@ -45,14 +45,9 @@ export class PreferenceModal extends React.Component {
                     <SortMenuContainer />
                     <div className="preference-footer">
                         <button className="btn btn-primary"
-                                style={{ marginLeft: 'auto' }}
+                                style={{ marginLeft: 'auto', marginRight: '10%' }}
                                 onClick={() => this.refs.modal.hide()}>
-                            Cancel
-                        </button>
-                        <button className="btn btn-primary"
-                                style={{ marginLeft: '5px', marginRight: '10%' }}
-                                onClick={this.props.applyPreferences}>
-                            Apply
+                            Save and Close
                         </button>
                     </div>
                 </div>
