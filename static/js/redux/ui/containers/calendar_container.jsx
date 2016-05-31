@@ -3,25 +3,38 @@ import Calendar from '../calendar.jsx';
 import { saveTimetable } from '../../actions/user_actions.jsx';
 import { loadTimetable } from '../../actions/timetable_actions.jsx';
 import { fetchShareTimetableLink } from '../../actions/calendar_actions.jsx';
+
+const getMaxHourBasedOnWindowHeight = () => {
+  let calRow = $(".cal-row");
+  let lastRowY = calRow.last().position();
+  if (!lastRowY) {
+    return 0;
+  }
+  console.log("Document height:", $(document).height());
+  let lastHour = 7 + calRow.length/2;
+  let hourHeight = calRow.height()*2;
+  let maxHour = lastHour + ($(document).height() - 200 - lastRowY.top)/hourHeight;
+  return Math.min(24, parseInt(maxHour));
+}
 /*
 gets the end hour of the current timetable, based on the class that ends latest
 */
 const getMaxEndHour = (timetable, hasCourses) => {
-    let max_end_hour = 17;
+    let maxEndHour = 17;
     if (!hasCourses) {
-      return max_end_hour;
+      return maxEndHour;
     }
-
+    getMaxHourBasedOnWindowHeight();
     let courses = timetable.courses;
     for (let course_index in courses) {
       let course = courses[course_index];
       for (let slot_index in course.slots) {
         let slot = course.slots[slot_index];
         let end_hour = parseInt(slot.time_end.split(":")[0]);
-        max_end_hour = Math.max(max_end_hour, end_hour);
+        maxEndHour = Math.max(maxEndHour, end_hour);
       }
     }
-    return max_end_hour;
+    return Math.max(maxEndHour, getMaxHourBasedOnWindowHeight());
 
 }
 const mapStateToProps = (state) => {
