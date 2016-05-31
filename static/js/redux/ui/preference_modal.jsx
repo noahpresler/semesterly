@@ -35,7 +35,7 @@ export class PreferenceModal extends React.Component {
                                     dataToggle="switch"
                                     dataOnColor="primary"
                                     dataOffColor="default"
-                                    defaultChecked={false}
+                                    checked={this.props.withConflicts}
                                     onChange={this.props.toggleConflicts} />
                         </div>
                     </div>
@@ -44,11 +44,13 @@ export class PreferenceModal extends React.Component {
                 <SortMenuContainer />
                 <div className="preference-footer">
                     <button className="btn btn-primary"
-                        style={{ marginLeft: 'auto' }}>
+                            style={{ marginLeft: 'auto' }}
+                            onClick={this.props.togglePreferenceModal}>
                         Cancel
                     </button>
                     <button className="btn btn-primary"
-                        style={{ marginLeft: '5px', marginRight: '10%' }}>
+                            style={{ marginLeft: '5px', marginRight: '10%' }}
+                            onClick={this.props.applyPreferences}>
                         Apply
                     </button>
                 </div>
