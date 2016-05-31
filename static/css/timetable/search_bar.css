@@ -327,9 +327,6 @@
 		left: 82px;
 		width: 55%;
 	}
-	.sb-side-sections {
-		width: 25%;
-	}
 }
 @media (max-width: 766px) {
 	#search-bar {
