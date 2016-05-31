@@ -97,13 +97,10 @@ button.save-timetable.add-button {
     height:25px;
 }
 .fc-right #share-course-link-wrapper .tip {
-    top:-7px;
-    right:0px;
-    border-color:transparent transparent #eee;
+    display:none;
 }
 .fc-right #share-course-link-wrapper .tip-border {
-    top:-7px;
-    right:0px;
+    display:none;
 }
 .data-last-updated {
     margin: 5px 0 0;
