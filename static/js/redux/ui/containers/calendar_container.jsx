@@ -12,7 +12,7 @@ const getMaxHourBasedOnWindowHeight = () => {
   }
   let lastHour = 7 + calRow.length/2;
   let hourHeight = calRow.height()*2;
-  let maxHour = parseInt(lastHour + ($(document).height() - 200 - lastRowY.top)/hourHeight);
+  let maxHour = parseInt(lastHour + ($(document).height() - 250 - lastRowY.top)/hourHeight);
   if (maxHour < lastHour) {
     return lastHour;
   }

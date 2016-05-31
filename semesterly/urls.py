@@ -26,7 +26,7 @@ urlpatterns = patterns('',
 	# request sharing timetable link
 	url(r'share/link/*$', 'timetable.views.create_share_link'),
 	# view shared timetable 
-	url(r'share/(?P<ref>[\d]+)/*$', 'timetable.views.share_timetable'),
+	url(r'share/(?P<ref>.+)/*$', 'timetable.views.share_timetable'),
 	# index
 	url(r'^timetable/*$', 'timetable.views.redirect_to_home'),
 	url(r'^timetable/.+$', 'timetable.views.redirect_to_home'),
