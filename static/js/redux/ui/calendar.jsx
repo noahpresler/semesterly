@@ -175,7 +175,7 @@ class Calendar extends React.Component {
 	              </tbody>
 	            </table>
 	          </div>
-	          <p className="data-last-updated">{ this.props.dataLastUpdated && this.props.dataLastUpdated.length && this.props.dataLastUpdated !== "null" ? "Data last updated: " + this.props.dataLastUpdated : null }</p>
+	          <p className="data-last-updated">Data last updated: { this.props.dataLastUpdated && this.props.dataLastUpdated.length && this.props.dataLastUpdated !== "null" ? this.props.dataLastUpdated : null }</p>
 	        </div>
 	      </div>
     	);
