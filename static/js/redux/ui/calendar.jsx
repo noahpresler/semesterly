@@ -9,7 +9,10 @@ import { ShareLink } from './master_slot.jsx';
 
 const Row = (props) => {
 	let timeText = props.show ? <span>{props.time}</span> : null;
-	let dayCells = DAYS.map(day => <CellContainer day={day} time={props.time} key={day+props.time} />)
+	let dayCells = DAYS.map(day => <CellContainer day={day} 
+																								time={props.time} 
+																								key={day+props.time}
+																								loggedIn={props.isLoggedIn} />)
 	return (
 		<tr key={props.time}>
         <td className="fc-axis fc-time fc-widget-content cal-row">
@@ -40,8 +43,8 @@ class Calendar extends React.Component {
 	getCalendarRows() {
 	    let rows = [];
 	    for (let i = 8; i <= this.props.endHour; i++) { // one row for each hour, starting from 8am
-	      rows.push(<Row time={i + ':00'} show={true} key={i}/>);
-	      rows.push(<Row time={i + ':30'} show={false} key={i + 0.5}/>);
+	      rows.push(<Row time={i + ':00'} show={true} isLoggedIn={this.props.isLoggedIn} key={i}/>);
+	      rows.push(<Row time={i + ':30'} show={false} isLoggedIn={this.props.isLoggedIn} key={i + 0.5}/>);
 	    }
 
 	  	return rows;
