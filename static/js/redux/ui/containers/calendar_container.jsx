@@ -8,7 +8,6 @@ const getMaxHourBasedOnWindowHeight = () => {
   let calRow = $(".cal-row");
   let lastRowY = calRow.last().position();
   if (!lastRowY) {
-    console.log("yoyo");
     return 0;
   }
   let lastHour = 7 + calRow.length/2;
@@ -17,7 +16,6 @@ const getMaxHourBasedOnWindowHeight = () => {
   if (maxHour < lastHour) {
     return lastHour;
   }
-  console.log("heyhey", lastHour, hourHeight, lastRowY, maxHour);
   return Math.min(24, parseInt(maxHour));
 }
 /*
