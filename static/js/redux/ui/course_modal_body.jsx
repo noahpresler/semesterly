@@ -137,7 +137,7 @@ export class CourseModalBody extends React.Component {
         </div>
         let areasDisplay =
             <div className="modal-module areas">
-                <h3 className="modal-module-header">Areas</h3>
+                <h3 className="modal-module-header">{this.props.schoolSpecificInfo.areasName}</h3>
                 <p>{ this.props.data.areas || "None" }</p>
             </div>
         let textbooksDisplay = !textbooks || textbooks.length === 0 ? null :
