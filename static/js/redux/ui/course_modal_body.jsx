@@ -63,7 +63,6 @@ export class CourseModalBody extends React.Component {
     }
 
     render() {
-        console.log(this.props);
         if (this.props.isFetching) {
             return <div id="modal-body">
                 <div className="cf">
@@ -136,6 +135,11 @@ export class CourseModalBody extends React.Component {
             <h3 className="modal-module-header">Prerequisites</h3>
             <p>{ prerequisites || "None" }</p>
         </div>
+        let areasDisplay =
+            <div className="modal-module areas">
+                <h3 className="modal-module-header">Areas</h3>
+                <p>{ this.props.data.areas || "None" }</p>
+            </div>
         let textbooksDisplay = !textbooks || textbooks.length === 0 ? null :
         <div className="modal-module">
             <h3 className="modal-module-header">Textbooks</h3>
@@ -163,6 +167,7 @@ export class CourseModalBody extends React.Component {
                             </div>
                         </div>
                         { prerequisitesDisplay }
+                        { areasDisplay }
                         
                     </div>
                     <div className="col-8-16">
