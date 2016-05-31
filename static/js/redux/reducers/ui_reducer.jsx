@@ -25,7 +25,6 @@ export const ui = (state = { searchHover: 0, courseToColourIndex: {} }, action) 
 				}
 
 			}
-			console.log(Object.assign({}, state, { courseToColourIndex }))
 			return Object.assign({}, state, { courseToColourIndex });
 		default:
 			return state;
