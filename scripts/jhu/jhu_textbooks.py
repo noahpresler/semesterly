@@ -74,8 +74,7 @@ class TextbookParser:
         # TODO: This is unique to each university.
         self.store_id = "18053"
         self.store_link = "johns-hopkins.bncollege.com"
-        self.course = Course
-        self.sections = Section
+        self.school = "jhu"
         self.textbook_link = TextbookLink
 
         self.textbook_payload = "-----011000010111000001101001\r\nContent-Disposition: form-data; name=\"storeId\"\r\n\r\n" + self.store_id + "\r\n-----011000010111000001101001\r\nContent-Disposition: form-data; name=\"catalogId\"\r\n\r\n10001\r\n-----011000010111000001101001\r\nContent-Disposition: form-data; name=\"langId\"\r\n\r\n-1\r\n-----011000010111000001101001\r\nContent-Disposition: form-data; name=\"clearAll\"\r\n\r\n\r\n-----011000010111000001101001\r\nContent-Disposition: form-data; name=\"viewName\"\r\n\r\nTBWizardView\r\n-----011000010111000001101001\r\nContent-Disposition: form-data; name=\"secCatList\"\r\n\r\n\r\n-----011000010111000001101001\r\nContent-Disposition: form-data; name=\"removeSectionId\"\r\n\r\n\r\n-----011000010111000001101001\r\nContent-Disposition: form-data; name=\"mcEnabled\"\r\n\r\nN\r\n-----011000010111000001101001\r\nContent-Disposition: form-data; name=\"showCampus\"\r\n\r\nfalse\r\n-----011000010111000001101001\r\nContent-Disposition: form-data; name=\"selectTerm\"\r\n\r\nSelect+Term\r\n-----011000010111000001101001\r\nContent-Disposition: form-data; name=\"selectDepartment\"\r\n\r\nSelect+Department\r\n-----011000010111000001101001\r\nContent-Disposition: form-data; name=\"selectSection\"\r\n\r\nSelect+Section\r\n-----011000010111000001101001\r\nContent-Disposition: form-data; name=\"selectCourse\"\r\n\r\nSelect+Course\r\n-----011000010111000001101001\r\nContent-Disposition: form-data; name=\"campus1\"\r\n\r\n14704480\r\n-----011000010111000001101001\r\nContent-Disposition: form-data; name=\"firstTermName_14704480\"\r\n\r\nFall+2016\r\n-----011000010111000001101001\r\nContent-Disposition: form-data; name=\"firstTermId_14704480\"\r\n\r\n73256452\r\n-----011000010111000001101001"
@@ -235,13 +234,11 @@ class TextbookParser:
 
     def add_textbook(self, section_id, textbook_url, textbook_headers, textbook_payload, force_request):
         if self.num_textbooks == self.max_textbooks or force_request:
-            # textbook_payload += "\r\nContent-Disposition: form-data; name=\"numberOfCourseAlready\"\r\n\r\n" + str(num_textbooks) + "\r\n-----011000010111000001101001--"
             textbook_payload += "--"
             response = self.make_request("POST", textbook_url, "", textbook_headers, textbook_payload)
             self.parse_textbooks(response.text)
             self.num_textbooks = 0
             return self.textbook_payload
-            # exit()
         return textbook_payload + "\r\nContent-Disposition: form-data; name=\"section_" + str(self.num_textbooks) + "\"\r\n\r\n" + str(section_id) + "\r\n-----011000010111000001101001"
 
     def parse_textbooks(self,html):
@@ -269,11 +266,11 @@ class TextbookParser:
 
     def make_textbook(self, is_required, isbn_number, course_code, section):
         try:
-            course = self.course.objects.filter(code__contains = course_code, school = "jhu")[0]
+            course = Course.objects.filter(code__contains = course_code, school = self.school)[0]
         except IndexError:
             print("index error (course does not exist): " + course_code)
             return
-        sections = self.sections.objects.filter(course = course, meeting_section = section)
+        sections = Section.objects.filter(course = course, meeting_section = section)
         info = self.get_amazon_fields(isbn_number)
 
         # update/create textbook
@@ -289,12 +286,6 @@ class TextbookParser:
 
         # link to all course offerings
         for section in sections:
-            # if section.textbooks.filter(isbn=isbn_number).exists():
-            #     continue
-            # new_link = self.textbook_link(courseoffering=co, textbook=textbook,
-            #                 is_required=is_required)
-            # new_link.save()
-
             section, created = self.textbook_link.objects.update_or_create(
                 is_required = is_required,
                 section = section,
