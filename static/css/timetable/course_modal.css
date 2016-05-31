@@ -38,6 +38,7 @@
 .course-modal.trans #modal-add,
 .course-modal.trans #modal-body .rating-module,
 .course-modal.trans #modal-body .modal-module,
+.course-modal.trans #modal-body .modal-module-header,
 .trans #reactions-wrapper {
 	opacity: 0;
 	visibility: hidden;
@@ -204,6 +205,10 @@ h3.modal-module-header:after {
 	height: 1px;
 	background-color: #ddd;
 	transition: background-color .2s;
+}
+h3.modal-module-header small {
+	font-size:11px;
+	color:#777;
 }
 
 #modal-body p {
