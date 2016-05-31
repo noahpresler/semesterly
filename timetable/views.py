@@ -157,7 +157,8 @@ class TimetableGenerator:
     self.school = school
     self.slots_per_hour = 60 / school_to_granularity[school]
     self.semester = semester
-    self.with_conflicts = preferences.get('try_with_conflicts', False)
+    # self.with_conflicts = preferences.get('try_with_conflicts', False)
+    self.with_conflicts = False
     self.sort_metrics = [(m['metric'], m['order']) \
                             for m in preferences.get('sort_metrics', []) \
                               if m['selected']]
@@ -372,13 +373,11 @@ def get_basic_course_json(course, sem, extra_model_fields=[]):
                               key=lambda section: section.section_type)
 
   for section_type, sections in itertools.groupby(course_section_list, lambda s: s.section_type):
-    sections = list(sections)
-    course_json['sections'][section_type] = {section.meeting_section: [merge_dicts(model_to_dict(co), model_to_dict(section))] \
-                                                for section in sections\
-                                                for co in section.offering_set.all()}
+    course_json['sections'][section_type] = {section.meeting_section: [merge_dicts(model_to_dict(co), model_to_dict(section)) \
+                                                                        for co in section.offering_set.all()]\
+                                              for section in sections}
 
   return course_json
-
 
 def get_course(request, school, sem, id):
   global SCHOOL
