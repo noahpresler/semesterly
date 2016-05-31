@@ -3,6 +3,12 @@
   height: 550px;
 }
 
+.pref-modal .switch-slide .switch-label:after {
+   background: #1abc9c;
+   margin: 0px;
+   border-radius: 5px;
+}
+
 .pref-modal #modal-header {
   background-color: #eee;
   padding: 25px 25px;
