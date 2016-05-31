@@ -27,8 +27,7 @@ export const timetables = (state = initialState, action) => {
 			// if there's already a hovered course on the timetable, or
 			// if the user is hovering over a section that they've already added 
 			// to their timetable, we don't want to show any new slots on the timetable
-			if (currentCourses.some(course => course.fake || 
-			(course.code == newCourse.code && course.enrolled_sections.indexOf(newCourse.section) > -1))) { // only one "fake" (hovered course) at a time
+			if (currentCourses.some(course => course.fake)) { // only one "fake" (hovered course) at a time
 				return state;
 			}
 			// here, we are using React's update function, which allows syntactic sugar to update
