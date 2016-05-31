@@ -142,7 +142,6 @@ class umd:
   def get_departments(self, semester, year):
     """Get department in the specified semester in specified year."""
     semester_map = {"fall":"08", "spring":"01"}
-    semester_month = semester_map[semester]
 
     html = self.get_html(self.base_url)
     soup = BeautifulSoup(html,"html.parser")
@@ -155,7 +154,11 @@ class umd:
       spans = link.findAll('span')
       department_url = spans[0].string
       department_name = spans[1].string
-      partial_url = str(year) + semester_month + "/" + department_url
+      if semester == None or year == None:
+        partial_url = department_url
+      else:
+        semester_month = semester_map[semester]
+        partial_url = str(year) + semester_month + "/" + department_url
       departments[self.base_url + partial_url] = department_name
     return departments
 
