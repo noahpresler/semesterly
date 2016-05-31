@@ -2,6 +2,9 @@
   max-width: 600px;
   height: 550px;
 }
+.pref-modal > div {
+  outline:none;
+}
 
 .pref-modal .switch-slide .switch-label:after {
    background: #1abc9c;
@@ -51,6 +54,17 @@
   border-radius: 10px;
   margin: auto;
   margin-bottom: 10px;
+}
+.sort-row select {
+  cursor:pointer;
+}
+.sort-close .fa-times {
+  cursor:pointer;
+  transition: all .3s;
+}
+.sort-close .fa-times:hover {
+  color:#ff4523;
+  transform: scale(1.2);
 }
 
 .sort-text {
