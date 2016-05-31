@@ -63,6 +63,7 @@ export class CourseModalBody extends React.Component {
     }
 
     render() {
+        console.log(this.props);
         if (this.props.isFetching) {
             return <div id="modal-body">
                 <div className="cf">
@@ -166,6 +167,7 @@ export class CourseModalBody extends React.Component {
                     </div>
                     <div className="col-8-16">
                         <h3 className="modal-module-header">Reactions</h3>
+                        <p>Checkout your classmate's reactions, click an emoji to add your opinion!</p>
                         <div id="reactions-wrapper">
                             <div id="reactions">
                                 {reactionsDisplay}
