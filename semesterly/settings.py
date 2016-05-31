@@ -24,7 +24,7 @@ DEBUG = False
 
 TEMPLATE_DEBUG = DEBUG
 
-ALLOWED_HOSTS = ['*']
+ALLOWED_HOSTS = ['localhost', 'sem.ly', '*']
 
 SOCIAL_AUTH_FACEBOOK_KEY = '580022102164877'
 SOCIAL_AUTH_FACEBOOK_SECRET = '***REMOVED***'
@@ -187,7 +187,12 @@ LOGGING = {
             'propagate': True,
         },
         'timetable.views': {
-            'handlers': ['mail_admins'],
+            'handlers': ['mail_admins', 'file'],
+            'level': 'ERROR',
+            'propagate': True,
+        },
+        'student.views': {
+            'handlers': ['mail_admins', 'file'],
             'level': 'ERROR',
             'propagate': True,
         },

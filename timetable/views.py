@@ -503,6 +503,7 @@ def course_page(request, code):
 
 @validate_subdomain
 def school_info(request, school):
+  logger.error('test')
   school = request.subdomain
   last_updated = None
   if Updates.objects.filter(school=school, update_field="Course").exists():
