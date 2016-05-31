@@ -58,6 +58,9 @@ const createSource = {
       day: props.day,
       id: newSlotId
     }
+  },
+  canDrag(props) {
+    return props.isLoggedIn
   }
 }
 
