@@ -1,9 +1,9 @@
 const initPreferences = {
     try_with_conflicts: false,
     sort_metrics: [
-        {metric: 'sections with friends', selected: false, order: 'most'},
-        {metric: 'number of conflicts', selected: false, order: 'least'},
+        // {metric: 'sections with friends', selected: false, order: 'most'},
         {metric: 'days with class', selected: false, order: 'least'},
+        {metric: 'number of conflicts', selected: false, order: 'least'},
         {metric: 'time on campus', selected: false, order: 'least'},
         {metric: 'course rating stars', selected: false, order: 'most'}
     ]
