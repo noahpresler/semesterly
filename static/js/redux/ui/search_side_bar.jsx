@@ -56,10 +56,10 @@ export class SearchSideBar extends React.Component {
 const SearchResultSection = ({ section, locked, hoverSection, unhoverSection, onMouseDown, isOnActiveTimetable }) => {
     let rosterIndicator = null;
     if (isOnActiveTimetable) {
-        rosterIndicator = <i className="fa fa-calendar-check-o" />
+        rosterIndicator = <i title="Lock this section" className="fa fa-calendar-check-o" />
     }
     if (locked) {
-        rosterIndicator = <i className="fa fa-lock" />
+        rosterIndicator = <i title="Unlock this section" className="fa fa-lock" />
     }
 
     return (
@@ -69,6 +69,7 @@ const SearchResultSection = ({ section, locked, hoverSection, unhoverSection, on
         onMouseDown={onMouseDown}
         onMouseEnter={hoverSection}
         onMouseLeave={unhoverSection}
+        title={locked ? "Unlock this section" : "Lock this section"}
     >
         {section + " "}
         {rosterIndicator}
