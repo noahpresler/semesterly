@@ -82,7 +82,10 @@ def create_share_link(request):
   school = request.subdomain
   params = json.loads(request.body)
   courses = params['timetable']['courses']
-  has_conflict = params['timetable']['has_conflict']
+  try:
+    has_conflict = params['timetable']['has_conflict']
+  except:
+    has_conflict = False
   semester = params['semester']
   student = get_student(request)
   shared_timetable = SharedTimetable.objects.create(

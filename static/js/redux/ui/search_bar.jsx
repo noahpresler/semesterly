@@ -128,12 +128,12 @@ export class SearchResult extends React.Component {
         let inRoster = this.props.inRoster;
         let inOptionRoster = this.props.inOptionRoster;
         let addRemoveButton =
-            <span className={classNames('search-course-add', {'in-roster': inRoster})}
+            <span title="Add this course" className={classNames('search-course-add', {'in-roster': inRoster})}
               onMouseDown={(event) => this.addCourseWrapper(course, '', event)}>
                 <i className={classNames('fa', {'fa-plus' : !inRoster, 'fa-check' : inRoster})}></i>
             </span>;
         let addOptionalCourseButton = this.props.inRoster ? null :
-            <span className={classNames('search-course-save', {'in-roster': inOptionRoster})}
+            <span title="Add this course as optional" className={classNames('search-course-save', {'in-roster': inOptionRoster})}
                 onMouseDown={(event) => this.addOptionalCourseWrapper(course, event)}
                 >
                 <i className={classNames('fa', {'fa-bookmark' : !inOptionRoster, 'fa-check' : inOptionRoster})}></i>

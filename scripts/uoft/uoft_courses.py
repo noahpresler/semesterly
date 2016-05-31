@@ -9,9 +9,24 @@ import os
 import sys
 import django
 import datetime
+from HTMLParser import HTMLParser
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "semesterly.settings")
 django.setup()
 from timetable.models import *
+
+class MLStripper(HTMLParser):
+    def __init__(self):
+        self.reset()
+        self.fed = []
+    def handle_data(self, d):
+        self.fed.append(d)
+    def get_data(self):
+        return ''.join(self.fed)
+
+def remove_html_tags(text):
+    s = MLStripper()
+    s.feed(text)
+    return s.get_data()
 
 
 class UofTParser:
@@ -191,7 +206,7 @@ class UofTParser:
 
                 C, created = Course.objects.update_or_create(school="uoft", code=code, defaults={
                     'name': name,
-                    'description': description,
+                    'description': remove_html_tags(description),
                     'campus': code[-1],
                     'prerequisites': prerequisites,
                     'exclusions': exclusions,
