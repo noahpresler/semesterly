@@ -24,7 +24,7 @@ DEBUG = False
 
 TEMPLATE_DEBUG = DEBUG
 
-ALLOWED_HOSTS = ['localhost', 'sem.ly', '*']
+ALLOWED_HOSTS = ['*']
 
 SOCIAL_AUTH_FACEBOOK_KEY = '580022102164877'
 SOCIAL_AUTH_FACEBOOK_SECRET = '0eac3d0db71f27b07f03d7fd6a760a33'
@@ -178,6 +178,7 @@ LOGGING = {
         'mail_admins': {
             'level': 'ERROR',
             'class': 'django.utils.log.AdminEmailHandler',
+            'include_html': True,
         }
     },
     'loggers': {
@@ -196,11 +197,6 @@ LOGGING = {
             'level': 'ERROR',
             'propagate': True,
         },
-        'django.request': { 
-            'handlers': ['mail_admins'], 
-            'level': 'ERROR', 
-            'propagate': False, 
-        }
     },
 }
 
@@ -215,6 +211,7 @@ EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_PORT = 587
 
 DEFAULT_FROM_EMAIL = 'semesterly.contact@gmail.com'
+SERVER_EMAIL = DEFAULT_FROM_EMAIL
 
 # Internationalization
 # https://docs.djangoproject.com/en/1.6/topics/i18n/

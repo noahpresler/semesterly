@@ -33,6 +33,8 @@ logger = logging.getLogger(__name__)
 def redirect_to_home(request):
   return HttpResponseRedirect("/")
 
+def custom_404(request):
+  return HttpResponse("404")
 # ******************************************************************************
 # ******************************** GENERATE TTs ********************************
 # ******************************************************************************
@@ -503,7 +505,6 @@ def course_page(request, code):
 
 @validate_subdomain
 def school_info(request, school):
-  logger.error('test')
   school = request.subdomain
   last_updated = None
   if Updates.objects.filter(school=school, update_field="Course").exists():
