@@ -77,7 +77,7 @@ export class CourseModalBody extends React.Component {
         let tutorialSections = null;
         let practicalSections = null;
         if (lecs.length > 0) {
-            lectureSections = <div><h3 className="modal-module-header">Lecture Sections</h3>{lecs}</div>
+            lectureSections = <div><h3 className="modal-module-header">Lecture Sections <small>(Hover to see the section on your timetable)</small></h3>{lecs}</div>
         }
         if (tuts.length > 0) {
             tutorialSections = <div><h3 className="modal-module-header">Tutorial Sections</h3>{tuts}</div>
