@@ -70,7 +70,6 @@ class Semesterly extends React.Component {
 							<div class="fb-like" data-href="https://www.facebook.com/semesterly/" data-layout="button_count" data-action="like" data-show-faces="true" data-share="false"></div>
 							<ul class="nav nav-pills">
 								<li role="presentation"><a TARGET="_blank" href="mailto:contact@semester.ly?Subject=Semesterly">Contact us</a></li>
-								<li role="presentation"><a TARGET="_blank" href="https://www.facebook.com/semesterly/">Press</a></li>
 								<li role="presentation"><a TARGET="_blank" href="https://www.facebook.com/semesterly/">Facebook</a></li>
 							</ul>
 						</footer>
