@@ -9,7 +9,7 @@ export const ui = (state = { searchHover: 0, courseToColourIndex: {} }, action) 
 			let timetables = action.timetables.length > 0 ? action.timetables : [{courses: []}];
 			let existingCourseToColour = !action.saving && action.preset ? {} : state.courseToColourIndex;
 			let courseToColourIndex = {};
-            let usedColourIndices = Object.values(existingCourseToColour);
+      let usedColourIndices = Object.values(existingCourseToColour);
 			for (let i in timetables[0].courses) {
 				let cid = timetables[0].courses[i].id;
 				if (cid in existingCourseToColour) { // course already has a colour
@@ -25,6 +25,7 @@ export const ui = (state = { searchHover: 0, courseToColourIndex: {} }, action) 
 				}
 
 			}
+			console.log(Object.assign({}, state, { courseToColourIndex }))
 			return Object.assign({}, state, { courseToColourIndex });
 		default:
 			return state;
