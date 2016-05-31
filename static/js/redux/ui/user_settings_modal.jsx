@@ -51,7 +51,7 @@ export class UserSettingsModal extends React.Component {
         return props.userInfo.isLoggedIn && (props.showOverrided || this.isIncomplete(props.userInfo.social_offerings) || this.isIncomplete(props.userInfo.social_courses) || this.isIncomplete(props.userInfo.major) || this.isIncomplete(props.userInfo.class_year));
     }
     isIncomplete(prop) {
-        return !prop || prop === "";
+        return prop === undefined || prop === "";
     }
     render() {
         let modalStyle = {
@@ -103,7 +103,7 @@ export class UserSettingsModal extends React.Component {
                         </label>
                         <div className="preference-wrapper">
                             <h3>Would you like to find classes with friends?</h3>
-                            <p className="disclaimer">Find classes with your friends, and allow your friends to find classes with you.</p>
+                            <p className="disclaimer">See which Facebook friends will be your classmates! Only friends in your course will see your name.</p>
                         </div>
                     </div>
                     <div className="preference cf">
@@ -114,7 +114,7 @@ export class UserSettingsModal extends React.Component {
                         </label>
                         <div className="preference-wrapper">
                             <h3>Would you like to find sections with friends?</h3>
-                            <p className="disclaimer">Find specific sections with your friends, and allow your friends to find sections with you.</p>
+                            <p className="disclaimer">See which Facebook friends will be in your section! Only friends in your section will see your name.</p>
                         </div>
                     </div>
                     <div className="button-wrapper">
