@@ -10,7 +10,6 @@ const getMaxHourBasedOnWindowHeight = () => {
   if (!lastRowY) {
     return 0;
   }
-  console.log("Document height:", $(document).height());
   let lastHour = 7 + calRow.length/2;
   let hourHeight = calRow.height()*2;
   let maxHour = lastHour + ($(document).height() - 200 - lastRowY.top)/hourHeight;
