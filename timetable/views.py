@@ -27,7 +27,7 @@ MAX_RETURN = 60 # Max number of timetables we want to consider
 
 SCHOOL = ""
 
-# hashid = Hashids("***REMOVED***")
+hashids = Hashids(salt="***REMOVED***")
 logger = logging.getLogger(__name__)
 
 def redirect_to_home(request):
@@ -68,7 +68,8 @@ def view_timetable(request, code=None, sem=None, shared_timetable=None):
 @validate_subdomain
 def share_timetable(request, ref):
   try:
-    shared_timetable = convert_tt_to_dict(SharedTimetable.objects.get(school=request.subdomain, id=ref),
+    timetable_id = hashids.decrypt(ref)[0]
+    shared_timetable = convert_tt_to_dict(SharedTimetable.objects.get(school=request.subdomain, id=timetable_id),
                                           include_last_updated=False)
     semester = shared_timetable['semester']
     return view_timetable(request, sem=semester, shared_timetable=shared_timetable)
@@ -97,7 +98,7 @@ def create_share_link(request):
       shared_timetable.sections.add(course_obj.section_set.get(meeting_section=section, semester__in=[semester, "Y"]))
   shared_timetable.save()
 
-  response = {'link': shared_timetable.id}
+  response = {'link': hashids.encrypt(shared_timetable.id)}
   return HttpResponse(json.dumps(response), content_type='application/json')
 
 @csrf_exempt
