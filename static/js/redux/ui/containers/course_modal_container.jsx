@@ -2,6 +2,7 @@ import { connect } from 'react-redux';
 import { CourseModal } from '../course_modal.jsx';
 import { hoverSection, unhoverSection, addOrRemoveCourse, addOrRemoveOptionalCourse } from '../../actions/timetable_actions.jsx';
 import { setCourseId, react, fetchCourseInfo } from '../../actions/modal_actions.jsx';
+import { getSchoolSpecificInfo } from '../../constants.jsx';
 
 const mapStateToProps = (state) => {
 	let lectureSections = [];
@@ -26,6 +27,7 @@ const mapStateToProps = (state) => {
 		description: state.courseInfo.data.description,
 		inRoster: courseSections[state.courseInfo.id] !== undefined,
 		isLoggedIn: state.userInfo.data.isLoggedIn,
+		schoolSpecificInfo: getSchoolSpecificInfo(state.school.school),
 		isSectionLocked: (courseId, section) => {
 			if (courseSections[courseId] === undefined) {
 				return false;
