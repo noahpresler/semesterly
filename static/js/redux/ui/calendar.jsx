@@ -80,7 +80,7 @@ class Calendar extends React.Component {
             onClickOut={this.hideShareLink} /> : 
         null;
   	let addButton = (
-			<button onClick={this.props.createTimetable} 
+			<button onClick={this.props.handleCreateNewTimetable} 
 							className="save-timetable add-button">
 				<i className="fa fa-plus" />
 			</button>
