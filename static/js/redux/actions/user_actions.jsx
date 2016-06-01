@@ -85,13 +85,7 @@ export function saveTimetable() {
 			preset: true,
 			saving: true
 		});
-		// edit the state's courseSections, so that future requests to add/remove/unlock
-		// courses are handled correctly. in the new courseSections, every currently active
-		// section will be locked
-		dispatch({
-			type: "RECEIVE_COURSE_SECTIONS",
-			courseSections: lockActiveSections(activeTimetable)
-		});
+
 		fetch(getSaveTimetableEndpoint(), {
 			method: 'POST',
 			body: JSON.stringify(getSaveTimetablesRequestBody()),
@@ -105,6 +99,13 @@ export function saveTimetable() {
 				});
 			}
 			else {
+				// edit the state's courseSections, so that future requests to add/remove/unlock
+				// courses are handled correctly. in the new courseSections, every currently active
+				// section will be locked
+				dispatch({
+					type: "RECEIVE_COURSE_SECTIONS",
+					courseSections: lockActiveSections(activeTimetable)
+				});
 				dispatch({
 					type: "CHANGE_ACTIVE_SAVED_TIMETABLE",
 					timetable: json.saved_timetable
@@ -115,8 +116,10 @@ export function saveTimetable() {
 				});
 			}
 			dispatch({
-				type: "RECEIVE_TIMETABLE_SAVED"
+				type: "RECEIVE_TIMETABLE_SAVED",
+				upToDate: !json.error
 			});
+
 			return json;
 		})
 		.then(json => {
