@@ -1,7 +1,7 @@
 import { connect } from 'react-redux';
 import Calendar from '../calendar.jsx';
 import { saveTimetable } from '../../actions/user_actions.jsx';
-import { loadTimetable } from '../../actions/timetable_actions.jsx';
+import { handleCreateNewTimetable } from '../../actions/timetable_actions.jsx';
 import { fetchShareTimetableLink } from '../../actions/calendar_actions.jsx';
 
 const getMaxHourBasedOnWindowHeight = () => {
@@ -59,10 +59,8 @@ const mapDispatchToProps = (dispatch) => {
   return {
     saveTimetable: () => dispatch(saveTimetable()),
     fetchShareTimetableLink: () => dispatch(fetchShareTimetableLink()),
-    createTimetable: () => {
-      loadTimetable({ name: "Untitled Schedule", courses: [], has_conflict: false }, true);
-    },
-    togglePreferenceModal: () => dispatch({ type: 'TOGGLE_PREFERENCE_MODAL' })
+    togglePreferenceModal: () => dispatch({ type: 'TOGGLE_PREFERENCE_MODAL' }),
+    handleCreateNewTimetable,    
   }
 }
 
