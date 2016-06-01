@@ -55,8 +55,4 @@ def number_timetables_per_hour(timetable = AnalyticsTimetable):
     while time_start <= time_end:
         num_timetables.append(number_timetables(timetable = timetable, time_start = time_start, time_end = time_start + time_delta))
         time_start += time_delta
-<<<<<<< HEAD
     return num_timetables
-=======
-    return num_timetables
->>>>>>> Redux_Frontend
