@@ -111,7 +111,10 @@ export class SearchBar extends React.Component {
 export class SearchResult extends React.Component {
     constructor(props) {
         super(props);
+        this.state = { hoverAdd: false, hoverSave: false};
         this.addCourseWrapper = this.addCourseWrapper.bind(this);
+        this.actionOver = this.actionOver.bind(this);
+        this.actionOut = this.actionOut.bind(this);
     }
     addCourseWrapper(course, sec, event) {
         event.stopPropagation(); // stops modal from popping up
@@ -123,21 +126,55 @@ export class SearchResult extends React.Component {
         event.preventDefault(); // stops search bar from blurring (losing focus)
         this.props.addRemoveOptionalCourse(course);
     }
+    actionOver(action) {
+        switch (action) {
+            case "ADD":
+                this.setState({hoverAdd: true});
+                break;
+            case "SAVE":
+                this.setState({hoverSave: true});
+                break;
+        }
+    }
+    actionOut(action) {
+        switch (action) {
+            case "ADD":
+                this.setState({hoverAdd: false});
+                break;
+            case "SAVE":
+                this.setState({hoverSave: false});
+                break;
+        }
+    }
     render() {
         let course = this.props.course;
         let inRoster = this.props.inRoster;
         let inOptionRoster = this.props.inOptionRoster;
         let addRemoveButton =
             <span title="Add this course" className={classNames('search-course-add', {'in-roster': inRoster})}
-              onMouseDown={(event) => this.addCourseWrapper(course, '', event)}>
+              onMouseDown={(event) => this.addCourseWrapper(course, '', event)}
+              onMouseOver={() => this.actionOver("ADD")}
+              onMouseOut={() => this.actionOut("ADD")}>
                 <i className={classNames('fa', {'fa-plus' : !inRoster, 'fa-check' : inRoster})}></i>
             </span>;
         let addOptionalCourseButton = this.props.inRoster ? null :
             <span title="Add this course as optional" className={classNames('search-course-save', {'in-roster': inOptionRoster})}
                 onMouseDown={(event) => this.addOptionalCourseWrapper(course, event)}
-                >
+                onMouseOver={() => this.actionOver("SAVE")}
+                onMouseOut={() => this.actionOut("SAVE")}>
                 <i className={classNames('fa', {'fa-bookmark' : !inOptionRoster, 'fa-check' : inOptionRoster})}></i>
             </span>
+        let info = course.code;
+        if (this.state.hoverSave) {
+            info = "Add this as an optional course";
+        } else if (this.state.hoverAdd) {
+            info = "Add this course to your timetable";
+        }
+        let style = {};
+        if(this.state.hoverAdd)
+            style = {color: "#52B7D9"};
+        if(this.state.hoverSave)
+            style = {color: "#27ae60"};
         return (
         <li key={course.id}
             className={classNames('search-course', {'hovered': this.props.isHovered(this.props.position)})}
@@ -147,7 +184,7 @@ export class SearchResult extends React.Component {
             <h3>{course.name} </h3>
             { addOptionalCourseButton}
             { addRemoveButton }
-            <h4>{course.code}</h4>
+            <h4 style={style}>{info}</h4>
         </li>);
     }
 }
