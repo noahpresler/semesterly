@@ -146,6 +146,7 @@
 	padding-left: 5px;
 	margin: 5px 0;
 	min-height: 12px;
+	transition: all .1s linear;
 }
 .search-course .search-course-add,
 .search-course .search-course-save {
