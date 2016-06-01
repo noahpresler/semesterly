@@ -9,6 +9,7 @@ const mapStateToProps = (state) => {
     	alertConflict: state.alerts.alertConflict,
     	alertTimetableExists: state.alerts.alertTimetableExists,
     	alertChangeSemester: state.alerts.alertChangeSemester,
+    	alertNewTimetable: state.alerts.alertNewTimetable,
     	explorationModalIsVisible: state.explorationModal.isVisible,
 		PgCount: state.timetables.items.length,
     	PgActive: state.timetables.active,
