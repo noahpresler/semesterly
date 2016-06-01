@@ -45,6 +45,7 @@ export class SearchSideBar extends React.Component {
             <div id="search-bar-side">
                 <div id="search-bar-side-sections">
                 <h3>{this.props.hovered.name}</h3>
+                    <p>Hover over a section below for a preview on your timetable! </p>
                     {lectureSections}
                     {tutorialSections}
                     {practicalSections}

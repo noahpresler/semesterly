@@ -29,7 +29,7 @@ for school in VALID_SCHOOLS:
 course_parsers = {
   'jhu': lambda: HopkinsParser().start(), # avoid calling constructor lazily
   'uoft': lambda: UofTParser().start(),
-  # 'umd': parse_umd,
+  'umd': parse_umd,
   # 'rutgers': parse_rutgers,
   'uo': parse_ottawa,
   'queens': lambda: QueensParser().parse_courses()
