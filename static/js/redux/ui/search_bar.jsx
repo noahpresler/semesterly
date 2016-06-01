@@ -147,9 +147,8 @@ export class SearchResult extends React.Component {
         }
     }
     render() {
-        let course = this.props.course;
-        let inRoster = this.props.inRoster;
-        let inOptionRoster = this.props.inOptionRoster;
+        let { course, inRoster, inOptionRoster } = this.props;
+
         let addRemoveButton =
             <span title="Add this course" className={classNames('search-course-add', {'in-roster': inRoster})}
               onMouseDown={(event) => this.addCourseWrapper(course, '', event)}
@@ -166,9 +165,9 @@ export class SearchResult extends React.Component {
             </span>
         let info = course.code;
         if (this.state.hoverSave) {
-            info = "Add this as an optional course";
+            info = !inOptionRoster ? "Add this as an optional course" : "Remove this optional course";
         } else if (this.state.hoverAdd) {
-            info = "Add this course to your timetable";
+            info = !inRoster ? "Add this course to your timetable" : "Remove this course from your timetable";
         }
         let style = {};
         if(this.state.hoverAdd)
