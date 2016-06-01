@@ -307,6 +307,13 @@
 	font-size: 14px;
 	margin: 5px 0;
 }
+#search-bar-side-sections p {
+	font-size: 11px;
+	margin: 5px 0;
+	color: #777777;
+	margin-top: 0px;
+	line-height: 11px;
+}
 .sb-side-sections {
 	width: auto;
 	text-align: center;
@@ -315,6 +322,10 @@
 	margin: 0;
 	padding: 5px;
 	font-weight: 400;
+	border: 1px solid #777777;
+	border-radius: 3px;
+	margin-right: 5px;
+	margin-top: 1px;
 	color: #777;
 	cursor: pointer;
 	transition: background-color .1s;
