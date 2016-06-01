@@ -58,6 +58,7 @@ export function loadCachedTimetable() {
 	fetchStateTimetables(localActive);
 }
 
+
 // loads @timetable into the state.
 // @created is true if the user is creating a new timetable
 export function loadTimetable(timetable, created=false) {
@@ -93,6 +94,28 @@ export function lockTimetable(dispatch, timetable, created, isLoggedIn) {
 	if (isLoggedIn) { // fetch classmates for this timetable only if the user is logged in
 		dispatch(fetchClassmates(timetable.courses.map( c => c['id'])))
 	}
+}
+
+export function handleCreateNewTimetable() {
+	let dispatch = store.dispatch;
+	let state = store.getState();
+	let isLoggedIn = state.userInfo.data.isLoggedIn;
+	if (!isLoggedIn) {
+		return dispatch({type: 'TOGGLE_SIGNUP_MODAL'});
+	}
+	let { timetables:timetablesState } = state;
+	if (timetablesState.items[timetablesState.active].courses.length > 0 && !state.savingTimetable.upToDate) {
+		return dispatch({
+			type: "ALERT_NEW_TIMETABLE",
+		});
+	}
+	else {
+		createNewTimetable();
+	}
+}
+
+export function createNewTimetable() {
+	loadTimetable({ name: "Untitled Schedule", courses: [], has_conflict: false }, true);
 }
 
 /* 

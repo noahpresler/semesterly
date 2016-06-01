@@ -114,7 +114,7 @@ class SideBar extends React.Component {
                     </div>
                 </div>
                 <h4 className="sb-header">Current Courses</h4>
-                <h4 className="sb-tip"><b>Pro Tip:</b> use <i className="fa fa-lock"/> to lock a course in place.</h4>
+                <h4 className="sb-tip"><b>ProTip:</b> use <i className="fa fa-lock"/> to lock a section in place.</h4>
                 <div id="sb-master-slots">
                     { masterSlots }
                 </div>
