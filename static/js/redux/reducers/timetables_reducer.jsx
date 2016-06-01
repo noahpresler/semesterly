@@ -30,6 +30,31 @@ export const timetables = (state = initialState, action) => {
 			if (currentCourses.some(course => course.fake)) { // only one "fake" (hovered course) at a time
 				return state;
 			}
+			let oldCourseIndex = currentCourses.findIndex(course => course.id === newCourse.id);
+			if (oldCourseIndex > -1) {
+				let newSectionType = newCourse.slots[0].section_type;
+
+				let oldCourse = Object.assign({}, currentCourses[oldCourseIndex]);
+				let oldSlots = oldCourse.slots.filter(slot => slot.section_type == newSectionType);
+				oldCourse.oldSlots = oldSlots;
+
+				let filteredSlots = oldCourse.slots.filter(slot => slot.section_type != newSectionType);
+				oldCourse.slots = filteredSlots;
+				let newCourses = [...currentCourses, newCourse]
+				
+				newCourses[oldCourseIndex] = oldCourse;
+
+				return update(state, {
+					items: {
+						[state.active]: {
+							courses: {
+								$set: newCourses
+							}
+						}
+					}
+				});
+
+			}
 			// here, we are using React's update function, which allows syntactic sugar to update
 			// nested components. we are updating state.items[state.active].courses, by concatenating it with [newCourse] (i.e. adding newCourse to it)
 			// see https://facebook.github.io/react/docs/update.html
@@ -46,17 +71,37 @@ export const timetables = (state = initialState, action) => {
 		case 'UNHOVER_COURSE':
 
 			// find fake course index; delete it
-			let fakeCourseIndex = state.items[state.active].courses.findIndex(c => c.fake);
+			let curCourses = state.items[state.active].courses;
+			let fakeCourseIndex = curCourses.findIndex(c => c.fake);
 			if (fakeCourseIndex < 0) { return state; }
-			return update(state, {
-				items:	{
-					[state.active]: {
-						courses: {
-							$splice: [[fakeCourseIndex]]
+			let prevCourseIndex = curCourses.findIndex(c => c.id === curCourses[fakeCourseIndex].id && !c.fake)
+			if (prevCourseIndex === -1) { // removing a course that isn't already in roster
+				return update(state, {
+					items:	{
+						[state.active]: {
+							courses: {
+								$splice: [[fakeCourseIndex]]
+							}
 						}
 					}
-				}
-			});
+				});
+			}
+			else { // course is already in roster; remove the entry from curCourses that represents the "fake"
+			// slots, and replace the actual entry's slotss with its original slots
+				let prevCourse = Object.assign({}, curCourses[prevCourseIndex]);
+				prevCourse.slots = prevCourse.slots.concat(prevCourse.oldSlots);
+				let newCourses = curCourses.slice(0, fakeCourseIndex);
+				newCourses[prevCourseIndex] = prevCourse;
+				return update(state, {
+					items:	{
+						[state.active]: {
+							courses: {
+								$set: newCourses
+							}
+						}
+					}
+				});
+			}
 
 		case 'CHANGE_ACTIVE_TIMETABLE':
 			saveLocalActiveIndex(action.newActive);
