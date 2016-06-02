@@ -203,7 +203,8 @@ function fetchTimetables(requestBody, removing, newActive=0) {
 		// relevant data as contained in @state (including courses, preferences, etc)
 		fetch(getTimetablesEndpoint(), {
       		method: 'POST',
-      		body: JSON.stringify(requestBody)
+      		body: JSON.stringify(requestBody),
+      		credentials: 'include'
     	})
 		.then(response => { 
 			if (response.status === 200) {
