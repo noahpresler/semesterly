@@ -21,7 +21,7 @@ from timetable.school_mappers import school_to_granularity, VALID_SCHOOLS
 from timetable.utils import *
 from timetable.scoring import *
 from student.models import Student
-from student.views import get_student, get_user_dict, convert_tt_to_dict
+from student.views import get_student, get_user_dict, convert_tt_to_dict, get_classmates_from_course_id
 
 MAX_RETURN = 60 # Max number of timetables we want to consider
 
@@ -52,7 +52,7 @@ def view_timetable(request, code=None, sem=None, shared_timetable=None):
     code = code.upper()
     try:
       course = Course.objects.get(school=school, code=code)
-      course_json = get_detailed_course_json(course, sem, student)
+      course_json = get_detailed_course_json(school, course, sem, student)
     except:
       raise Http404
 
@@ -358,14 +358,15 @@ def get_minute_from_string_time(time_string):
 # -----------------------------------------------------------------------------
 # --------------------TODO: move to separate file------------------------------
 # -----------------------------------------------------------------------------
-def get_detailed_course_json(course, sem, student=None):
+def get_detailed_course_json(school, course, sem, student=None):
   json_data = get_basic_course_json(course, sem, ['prerequisites', 'exclusions', 'areas'])
   # json_data['textbook_info'] = course.get_all_textbook_info()
   json_data['eval_info'] = course.get_eval_info()
   json_data['related_courses'] = course.get_related_course_info(sem, limit=5)
   json_data['reactions'] = course.get_reactions(student)
   json_data['textbooks'] = course.get_textbooks(sem)
-
+  if student and student.user.is_authenticated() and student.social_courses:
+    json_data['classmates'] = get_classmates_from_course_id(school, student, course.id)
   return json_data
 
 def get_basic_course_json(course, sem, extra_model_fields=[]):
@@ -394,7 +395,7 @@ def get_course(request, school, sem, id):
     logged = request.user.is_authenticated()
     if logged and Student.objects.filter(user=request.user).exists():
       student = Student.objects.get(user=request.user)
-    json_data = get_detailed_course_json(course, sem, student)
+    json_data = get_detailed_course_json(school, course, sem, student)
 
   except:
     import traceback
@@ -478,7 +479,7 @@ def advanced_course_search(request):
   logged = request.user.is_authenticated()
   if logged and Student.objects.filter(user=request.user).exists():
       student = Student.objects.get(user=request.user)
-  json_data = [get_detailed_course_json(course, sem, student) for course in course_match_objs]
+  json_data = [get_detailed_course_json(request.school, course, sem, student) for course in course_match_objs]
 
   return HttpResponse(json.dumps(json_data), content_type="application/json")
 
