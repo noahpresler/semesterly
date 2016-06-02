@@ -247,7 +247,7 @@ class TimetableGenerator:
 
     for event in self.custom_events:
       for slot in find_slots_to_fill(event['time_start'], event['time_end']):
-        day_to_usage[event['day']][slot].append('custom_slot')
+        day_to_usage[event['day']][slot].add('custom_slot')
 
     return day_to_usage
 
