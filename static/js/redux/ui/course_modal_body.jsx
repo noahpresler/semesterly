@@ -130,7 +130,7 @@ export class CourseModalBody extends React.Component {
             )}
         </div>
 
-        let prerequisitesDisplay = 
+        let prerequisitesDisplay =
         <div className="modal-module prerequisites">
             <h3 className="modal-module-header">Prerequisites</h3>
             <p>{ prerequisites || "None" }</p>
@@ -140,6 +140,20 @@ export class CourseModalBody extends React.Component {
                 <h3 className="modal-module-header">{this.props.schoolSpecificInfo.areasName}</h3>
                 <p>{ this.props.data.areas || "None" }</p>
             </div>
+        let friendCircles = this.props.data.classmates && this.props.data.classmates.classmates.length > 0 ? this.props.data.classmates.classmates.map( c =>
+                <div className="friend">
+                    <div className="ms-friend" key={c.img_url} style={{backgroundImage: 'url(' + c.img_url + ')'}}/>
+                    <p>{ c.first_name + " " + c.last_name }</p>
+                </div>) : null;
+        let friendDisplay = this.props.data.classmates && this.props.data.classmates.classmates.length > 0 ?
+            <div className="modal-module friends">
+                <h3 className="modal-module-header">Friends</h3>
+                <div id="friends-wrapper">
+                    <div id="friends-inner">
+                        { friendCircles }
+                    </div>
+                </div>
+            </div> : null;
         let textbooksDisplay = !textbooks || textbooks.length === 0 ? null :
         <div className="modal-module">
             <h3 className="modal-module-header">Textbooks</h3>
@@ -168,6 +182,7 @@ export class CourseModalBody extends React.Component {
                         </div>
                         { prerequisitesDisplay }
                         { areasDisplay }
+                        { friendDisplay }
                         
                     </div>
                     <div className="col-8-16">
