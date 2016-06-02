@@ -173,6 +173,8 @@ def get_classmates_from_course_id(school, student, course_id):
 	course = { 'course_id': course_id, 'classmates': [] }
 	for friend in friends:
 		classmate = model_to_dict(friend, exclude=['user','id','fbook_uid', 'friends'])
+		classmate['first_name'] = friend.user.first_name
+		classmate['last_name'] = friend.user.last_name
 		ptts = PersonalTimetable.objects.filter(student=friend, courses__id__exact=course_id)
 		for tt in ptts:
 			if student.social_offerings and friend.social_offerings:
