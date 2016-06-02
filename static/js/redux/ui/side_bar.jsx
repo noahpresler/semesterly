@@ -79,9 +79,10 @@ class SideBar extends React.Component {
                 </div>);
         }
         if (optionalSlots.length === 0) {
+            let img = (parseInt(masterSlots) != NaN && (masterSlots.length >= 4)) ? null : <img src="/static/img/emptystates/optionalslots.png" />;
             optionalSlots = (
                 <div className="empty-state">
-                    <img src="/static/img/emptystates/optionalslots.png" />
+                    { img }
                     <h4>Give Optional Courses a Spin!</h4>
                     <h3>Load this list with courses you aren't 100% sure you want to take - we'll fit as many as we can, automatically</h3>
                 </div>);
@@ -142,9 +143,10 @@ export const TextbookList = ({courses}) => {
             }
         }
     }
+    let img = (parseInt(courses) != NaN && (courses.length >= 5)) ? null : <img src="/static/img/emptystates/textbooks.png" />;
     if (tbs.length === 0) {
         return (<div className="empty-state">
-                <img src="/static/img/emptystates/textbooks.png" />
+                { img }
                 <h4>Buy & Rent Textbooks: New, Used or eBook!</h4>
                 <h3>Textbooks for your classes will appear here. Click to find the lowest prices, plus FREE two day shipping with Amazon Student</h3>
             </div>);
