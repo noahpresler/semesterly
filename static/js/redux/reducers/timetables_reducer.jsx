@@ -31,7 +31,10 @@ export const timetables = (state = initialState, action) => {
 				return state;
 			}
 			let oldCourseIndex = currentCourses.findIndex(course => course.id === newCourse.id);
-			if (oldCourseIndex > -1) {
+			if (oldCourseIndex > -1) { // we want to remove old 'section_type' slots and add the new 'section_type' slots for this course
+				// store a new property 'oldSlots' for the course, representing the slots that we're about to remove
+				// (i.e. slots of the same section_type, since we want to show the new slots of that section_type as specified by the hovered course)
+				// remove those old slots from the 'slots' property; then push the hovered course (which only contains the new section_type slots) to the courses array, which gives, collectively for the course, all the required slots (old tutorials gone, new tutorials added, as an example, in the case of UofT)
 				let newSectionType = newCourse.slots[0].section_type;
 
 				let oldCourse = Object.assign({}, currentCourses[oldCourseIndex]);
