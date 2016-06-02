@@ -147,7 +147,7 @@ export class CourseModalBody extends React.Component {
                 </div>) : null;
         let friendDisplay = this.props.data.classmates && this.props.data.classmates.classmates.length > 0 ?
             <div className="modal-module friends">
-                <h3 className="modal-module-header">Friends</h3>
+                <h3 className="modal-module-header">Friends In This Course</h3>
                 <div id="friends-wrapper">
                     <div id="friends-inner">
                         { friendCircles }
