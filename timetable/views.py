@@ -479,7 +479,7 @@ def advanced_course_search(request):
   logged = request.user.is_authenticated()
   if logged and Student.objects.filter(user=request.user).exists():
       student = Student.objects.get(user=request.user)
-  json_data = [get_detailed_course_json(request.school, course, sem, student) for course in course_match_objs]
+  json_data = [get_detailed_course_json(request.subdomain, course, sem, student) for course in course_match_objs]
 
   return HttpResponse(json.dumps(json_data), content_type="application/json")
 
