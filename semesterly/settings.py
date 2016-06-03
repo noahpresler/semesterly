@@ -36,6 +36,7 @@ SOCIAL_AUTH_FACEBOOK_PROFILE_EXTRA_PARAMS = {
     'fields': 'id,name,email,gender'
 }
 SOCIAL_AUTH_LOGIN_REDIRECT_URL = '/'
+SOCIAL_AUTH_LOGIN_ERROR_URL = '/'
 
 SOCIAL_AUTH_AUTHENTICATION_BACKENDS = (
     'social.backends.facebook.FacebookOAuth2',
@@ -113,6 +114,7 @@ MIDDLEWARE_CLASSES = (
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'semesterly.middleware.subdomain_middleware.SubdomainMiddleware',
+     'social.apps.django_app.middleware.SocialAuthExceptionMiddleware',
 )
 
 TEMPLATE_CONTEXT_PROCESSORS = (
