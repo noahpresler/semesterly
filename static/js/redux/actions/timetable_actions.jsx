@@ -175,6 +175,11 @@ export function addOrRemoveCourse(newCourseId, lockingSection = '') {
 			let updatedCourseSections = Object.assign({}, state.courseSections.objects);
 			delete updatedCourseSections[newCourseId]; // remove it from courseSections.objects
 			reqBody.courseSections = updatedCourseSections;
+			Object.assign(reqBody, {
+      	'optionCourses': state.optionalCourses.courses.map(c => c.id),
+      	'numOptionCourses': state.optionalCourses.numRequired,
+      	'customSlots': state.customSlots
+			})
 		}
 		else { // adding a course
 			Object.assign(reqBody, {
@@ -182,10 +187,10 @@ export function addOrRemoveCourse(newCourseId, lockingSection = '') {
 					'course_id': newCourseId,
 	        		'section_codes': [lockingSection]
 	        	}],
-	        	'optionCourses': state.optionalCourses.courses.map(c => c.id),
-	        	'numOptionCourses': state.optionalCourses.numRequired,
-	        	'customSlots': state.customSlots
-	        });
+      	'optionCourses': state.optionalCourses.courses.map(c => c.id),
+      	'numOptionCourses': state.optionalCourses.numRequired,
+      	'customSlots': state.customSlots
+	    });
 		}
 	}
 	// user must be removing this course if it's already in roster,
