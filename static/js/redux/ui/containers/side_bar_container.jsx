@@ -9,7 +9,7 @@ const mapStateToProps = (state) => {
 	let savingTimetable = state.savingTimetable;
 
 	let activeTimetable = state.timetables.items[state.timetables.active];
-	let mandatoryCourses = activeTimetable.courses.filter(c => !c.is_optional);
+	let mandatoryCourses = activeTimetable.courses.filter(c => !c.is_optional && !c.fake);
 	let optionalCourses = state.optionalCourses.courses;
 
 
