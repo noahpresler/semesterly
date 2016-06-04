@@ -73,9 +73,9 @@ class Semesterly extends React.Component {
 						<footer class="footer navbar">
 							<ul class="nav nav-pills">
 								
-								<li role="presentation"><a TARGET="_blank" href="mailto:contact@semester.ly?Subject=Semesterly">Contact us</a></li>
-								<li role="presentation"><a TARGET="_blank" href="http://goo.gl/forms/YSltU2YI54PC9sXw1">Feedback</a></li>
-								<li role="presentation"><a TARGET="_blank" href="https://www.facebook.com/semesterly/">Facebook</a></li>
+								<li role="presentation"><a href="mailto:contact@semester.ly?Subject=Semesterly">Contact us</a></li>
+								<li role="presentation"><a target="_blank" href="http://goo.gl/forms/YSltU2YI54PC9sXw1">Feedback</a></li>
+								<li role="presentation"><a target="_blank" href="https://www.facebook.com/semesterly/">Facebook</a></li>
 							</ul>
 						</footer>
 					</div>
