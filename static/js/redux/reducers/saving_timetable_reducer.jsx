@@ -5,7 +5,7 @@ export const savingTimetable = (state = { activeTimetable: { name: String("Untit
 			return Object.assign( {}, state, { saving });
 
 		case 'RECEIVE_TIMETABLE_SAVED':
-			// action.upToDate will be false if the user tried saving 
+			// action.upToDate will be false if the user tried saving
 			// a timetable with a name that already exists
 			let { upToDate } = action;
 			return Object.assign( {}, state, { saving: false, upToDate });
@@ -17,8 +17,12 @@ export const savingTimetable = (state = { activeTimetable: { name: String("Untit
 			return Object.assign( {}, state, { activeTimetable: action.timetable });
 
 		case 'CHANGE_ACTIVE_SAVED_TIMETABLE_NAME':
-			return Object.assign( {}, state, { 
+			return Object.assign( {}, state, {
 				activeTimetable: Object.assign({}, state.activeTimetable, { name: action.name }),
+				upToDate: false
+			});
+		case 'CHANGE_ACTIVE_TIMETABLE':
+			return Object.assign( {}, state, {
 				upToDate: false
 			});
 		default:
