@@ -108,6 +108,21 @@ h4.sb-header {
     clear: both;
     position: relative;
 }
+h4.sb-tip {
+    font-size: 14px;
+    padding: 10px 5px;
+    margin: 0;
+    color: #777;
+    font-weight: 200;
+    clear: both;
+    position: relative;
+    text-align: center;
+}
+.sb-tip i {
+    margin-left: 2px;
+    color: #777;
+    margin-right: 2px;
+}
 h4.sb-header:after {
     content: "";
     display: block;

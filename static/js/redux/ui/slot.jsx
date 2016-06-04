@@ -119,12 +119,12 @@ class Slot extends React.Component {
 
         let lockButton = null;
         if (this.props.locked) {
-            lockButton = <i className="fa fa-lock" 
+            lockButton = <i title="Unlock this section" className="fa fa-lock" 
                             onClick={ (event) => this.stopPropagation(this.props.lockOrUnlockSection, event) }></i>;
         }
         else { // not a locked section
             if (this.state.hovered) { // show unlock icon on hover
-                lockButton = <i className="fa fa-unlock" 
+                lockButton = <i title="Lock this section" className="fa fa-unlock" 
                                 onClick={ (event) => this.stopPropagation(this.props.lockOrUnlockSection, event) }></i>;
             }
         }
