@@ -6,7 +6,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
     <meta name="description" content="Now with a new and improved UI: find courses with friends, view course reactions, and use Advanced Search to find the course that fits all your needs. Alternatively, explore new options with our recommendation engine – helping you find new and exciting courses on the fly. Not sure if the class is worthwhile? Instantly see what your peers think, alongside detailed comments from past course evaluations. Currently supporting course finding software for the Johns Hopkins University (JHU), the University of Toronto (UofT) and the University of Maryland (UMD).">
-    <meta name="author" content="Noah Presler, Rohan Das, Felix Zhu, Max Yeo, Eric Calder">
+    <meta name="author" content="Noah Presler, Rohan Das, Felix Zhu, Max Yeo, Eric Calder, Neha Onteeru, Sho Conte, Aneek Patel, Tsukasa Kikuchi">
 
     <!-- Facebook thumbnail info -->
     <meta property="og:title" content="Semester.ly - Course Scheduling Made Easy" />
@@ -20,14 +20,14 @@
     <title>Semester.ly: Course Scheduling, Textbooks, Social & More</title>
     <link rel="shortcut icon" type="image/x-icon" href="{% static 'img/favicon.ico' %}" />
 
-    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet" integrity="sha256-7s5uDGW3AHqw6xtJmNNtr+OBRJUlgkNJEo78P4b0yRw= sha512-nNo+yCHEyn0smMxSswnf/OnX6/KwJuZTlNZBjauKhTK0c+zT+q5JOCx0UFhXQ6rJR9jg6Es8gPuD2uZcYDLqSw==" crossorigin="anonymous">
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css">
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" type="text/css" rel="stylesheet" integrity="sha256-7s5uDGW3AHqw6xtJmNNtr+OBRJUlgkNJEo78P4b0yRw= sha512-nNo+yCHEyn0smMxSswnf/OnX6/KwJuZTlNZBjauKhTK0c+zT+q5JOCx0UFhXQ6rJR9jg6Es8gPuD2uZcYDLqSw==" crossorigin="anonymous">
+    <link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css">
 
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/flat-ui/2.3.0/css/flat-ui.min.css">
-    <link rel="stylesheet" href="{% static 'css/full-calendar.min.css'%}">
-    <link rel="stylesheet" href="{% static 'css/ball-clip-rotate-multiple.css'%}">
+    <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/flat-ui/2.3.0/css/flat-ui.min.css">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/full-calendar.min.css'%}">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/ball-clip-rotate-multiple.css'%}">
 
-    <link rel="stylesheet" href="{% static 'css/gulp/style.min.css'%}">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/gulp/style.min.css'%}">
 
     <!-- Google Analytics script -->
     <script>
@@ -54,6 +54,15 @@
             <li role="presentation"><a TARGET="_blank" href="https://www.facebook.com/semesterly/">Facebook</a></li>
           </ul>
       </footer> -->
+      <div id="fb-root"></div>
+      <script>(function(d, s, id) {
+        var js, fjs = d.getElementsByTagName(s)[0];
+        if (d.getElementById(id)) return;
+        js = d.createElement(s); js.id = id;
+        js.src = "//connect.facebook.net/en_US/sdk.js#xfbml=1&version=v2.6&appId=580022102164877";
+        fjs.parentNode.insertBefore(js, fjs);
+      }(document, 'script', 'facebook-jssdk'));</script>  
+      
       <div id="semesterly-modal">
       </div>
       <script type="text/javascript">
