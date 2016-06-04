@@ -40,7 +40,7 @@ export class SocialProfile extends React.Component {
 							<i className="fa fa-cog"></i>
 							<span>Account</span>
 						</a>
-						<a href="/user/logout">
+						<a href="/user/logout/">
 							<i className="fa fa-sign-out"></i>
 							<span>Sign out</span>
 						</a>
@@ -50,7 +50,7 @@ export class SocialProfile extends React.Component {
 
 		);
 		let loggedOut = (
-			<a id="social-login" href="/login/facebook">
+			<a id="social-login" href="/login/facebook/">
 				<h2>
 					<span>Signup/Login</span>
 					<span className="mobile">Signup Login</span>
