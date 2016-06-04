@@ -20,7 +20,7 @@ def get_num_days(day_to_usage):
 def get_avg_rating(timetable):
   avgs = [Course.objects.get(id=cid).get_avg_rating() \
           for cid in set([cid for cid, sid, cos in timetable])]
-  return sum(avgs)/len(avgs) if avgs else 0
+  return min(5, sum(avgs)/len(avgs) if avgs else 0)
 
 def get_avg_day_length(day_to_usage):
   lengths = [get_day_length(usage) for usage in day_to_usage.values()]
