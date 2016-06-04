@@ -4,6 +4,8 @@ import { store } from '../init.jsx';
 import { loadTimetable, nullifyTimetable } from './timetable_actions.jsx';
 import { browserSupportsLocalStorage } from '../util.jsx';
 
+let autoSaveTimer;
+
 export function getUserInfo(json) {
 	return {
 		type: "USER_INFO_RECEIVED",
@@ -196,7 +198,8 @@ export function fetchClassmates(courses) {
 
 export function autoSave(delay=4000) {
 	let state = store.getState();
-	setTimeout(() => {
+	clearTimeout(autoSaveTimer)
+	autoSaveTimer = setTimeout(() => {
 		if (state.userInfo.data.isLoggedIn && state.timetables.items[state.timetables.active].courses.length > 0)
 			store.dispatch(saveTimetable(true))
 	}, delay);
