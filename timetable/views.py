@@ -139,7 +139,8 @@ def get_timetables(request):
                   params['school'],
                   locked_sections,
                   custom_events,
-                  params['preferences'])
+                  params['preferences'],
+                  opt_course_ids)
   result = [timetable for opt_courses in optional_course_subsets \
       for timetable in generator.courses_to_timetables(courses + list(opt_courses))]
 
@@ -159,7 +160,13 @@ def update_locked_sections(locked_sections, cid, locked_section):
     locked_sections[cid][section_type] = locked_section
 
 class TimetableGenerator:
-  def __init__(self, semester, school, locked_sections, custom_events, preferences):
+  def __init__(self,
+                semester,
+                school,
+                locked_sections,
+                custom_events,
+                preferences,
+                optional_course_ids=[]):
     self.school = school
     self.slots_per_hour = 60 / school_to_granularity[school]
     self.semester = semester
@@ -169,6 +176,7 @@ class TimetableGenerator:
                               if m['selected']]
     self.locked_sections = locked_sections
     self.custom_events = custom_events
+    self.optional_course_ids = optional_course_ids
 
   def courses_to_timetables(self, courses):
     all_offerings = self.courses_to_offerings(courses)
@@ -187,7 +195,10 @@ class TimetableGenerator:
 
   def get_basic_course_dict(self, section):
     model = Course.objects.get(id=section[0])
-    return model_to_dict(model, fields=['code', 'name', 'id', 'num_credits', 'department'])
+    course_dict = model_to_dict(model, fields=['code', 'name', 'id', 'num_credits', 'department'])
+    if section[0] in self.optional_course_ids: # mark optional courses
+      course_dict['is_optional'] = True
+    return course_dict
 
   def augment_course_dict(self, course_dict, sections):
     sections = list(sections)
@@ -228,7 +239,7 @@ class TimetableGenerator:
       add_tt = True
       for i in xrange(len(sections)): # add an offering for the next section
         j = (p/num_permutations_remaining[i]) % num_offerings[i]
-        num_added_conflicts = add_meeting_and_check_conflict(day_to_usage, 
+        num_added_conflicts = add_meeting_and_check_conflict(day_to_usage,
                                                               sections[i][j])
         num_conflicts += num_added_conflicts
         if num_conflicts and not self.with_conflicts:
@@ -259,14 +270,14 @@ class TimetableGenerator:
 
   def courses_to_offerings(self, courses, plist=[]):
     """
-    Take a list of courses and group all of the courses' offerings by section 
+    Take a list of courses and group all of the courses' offerings by section
     type. Returns a list of lists (for each group), where e
-    each offering is represented as a [course_id, section_code, [CourseOffering]] 
+    each offering is represented as a [course_id, section_code, [CourseOffering]]
     triple.
     """
     all_sections = []
     for c in courses:
-      sections = sorted(c.section_set.filter(Q(semester__in=[self.semester, 'Y'])), 
+      sections = sorted(c.section_set.filter(Q(semester__in=[self.semester, 'Y'])),
                         key=lambda s: s.section_type)
       grouped = itertools.groupby(sections, lambda s: s.section_type)
       for section_type, sections in grouped:
