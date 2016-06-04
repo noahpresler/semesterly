@@ -114,7 +114,6 @@ def get_timetables(request):
 
   SCHOOL = request.subdomain
 
-  pprint(params)
   course_ids = params['courseSections'].keys()
   courses = [Course.objects.get(id=cid) for cid in course_ids]
   save_analytics_timetable(courses, params['semester'], SCHOOL, get_student(request))
