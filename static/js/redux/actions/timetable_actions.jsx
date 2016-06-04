@@ -3,7 +3,7 @@ import { getTimetablesEndpoint } from '../constants.jsx';
 import { randomString, browserSupportsLocalStorage } from '../util.jsx';
 import { store } from '../init.jsx';
 import { getClassmatesEndpoint } from '../constants.jsx'
-import { lockActiveSections, fetchClassmates } from './user_actions.jsx';
+import { lockActiveSections, fetchClassmates, autoSave } from './user_actions.jsx';
 import { saveLocalSemester, saveLocalPreferences, saveLocalCourseSections, saveLocalActiveIndex } from '../util.jsx';
 
 export const SID = randomString(30);
@@ -110,12 +110,14 @@ export function handleCreateNewTimetable() {
 		});
 	}
 	else {
-		createNewTimetable();
+		let suffix = state.userInfo.data.timetables.filter(t => t.name.indexOf("Untitled") > -1).length;
+		suffix = suffix === 0 ? "" : " " + suffix;
+		createNewTimetable("Untitled Schedule" + String(suffix));
 	}
 }
 
-export function createNewTimetable() {
-	loadTimetable({ name: "Untitled Schedule", courses: [], has_conflict: false }, true);
+export function createNewTimetable(ttName="Untitled Schedule") {
+	loadTimetable({ name: ttName, courses: [], has_conflict: false }, true);
 }
 
 /* 
@@ -197,6 +199,7 @@ export function addOrRemoveCourse(newCourseId, lockingSection = '') {
 	// and they're not trying to lock a new section).
 	// otherwise, they're adding it
 	store.dispatch(fetchTimetables(reqBody, removing));
+	autoSave();
 }
 
 function fetchTimetables(requestBody, removing, newActive=0) {
