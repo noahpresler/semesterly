@@ -197,7 +197,7 @@ export function fetchClassmates(courses) {
 export function autoSave(delay=4000) {
 	let state = store.getState();
 	setTimeout(() => {
-		if (state.userInfo.data.isLoggedIn)
+		if (state.userInfo.data.isLoggedIn && state.timetables.items[state.timetables.active].courses.length > 0)
 			store.dispatch(saveTimetable(true))
 	}, delay);
 }
