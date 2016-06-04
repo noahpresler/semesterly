@@ -22,7 +22,7 @@ class SlotManager extends React.Component {
                 :
                 <Slot {...slot}
                     fetchCourseInfo={ () => this.props.fetchCourseInfo(courseId) }
-                    key={ i.toString() + j.toString() }
+                    key={ slot.fake ? -slot.id : slot.id + i.toString() + j.toString()}
                     locked={ locked }
                     classmates={this.props.socialSections ? this.props.classmates(courseId, slot.meeting_section) : []}
                     lockOrUnlockSection={ () => this.props.addOrRemoveCourse(courseId, slot.meeting_section) }
