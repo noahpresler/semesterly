@@ -7,18 +7,23 @@ import { getSchoolSpecificInfo } from '../../constants.jsx'
 const mapStateToProps = (state) => {
 	let courseSections = state.courseSections.objects;
 	let savingTimetable = state.savingTimetable;
-	// don't pass fake courses as part of roster
+
 	let activeTimetable = state.timetables.items[state.timetables.active];
+	let mandatoryCourses = activeTimetable.courses.filter(c => !c.is_optional);
+	let optionalCourses = state.optionalCourses.courses;
+
+
 	return {
 		semester: state.semester,
 		semesterName: getSchoolSpecificInfo(state.school.school).semesters[state.semester],
-		liveTimetableCourses: activeTimetable.courses.filter(c => !c.fake),
+		liveTimetableCourses: activeTimetable.courses.filter(c => !c.fake), // don't want to consider courses that are shown on timetable only because of a 'HOVER_COURSE' action (i.e. fake courses)
 		savedTimetables: state.userInfo.data.timetables,
 		courseToColourIndex: state.ui.courseToColourIndex,
-		optionalCourses: state.optionalCourses.courses,
 		classmates: state.classmates.courseToClassmates,
 		avgRating: activeTimetable.avg_rating,
-		isCourseInRoster: (course_id) => activeTimetable.courses.some(c => c.id === course_id)
+		isCourseInRoster: (course_id) => activeTimetable.courses.some(c => c.id === course_id),
+		mandatoryCourses,
+		optionalCourses,
 	}
 }
 
