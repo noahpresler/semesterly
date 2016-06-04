@@ -21,18 +21,20 @@ from timetable.school_mappers import school_to_granularity, VALID_SCHOOLS
 from timetable.utils import *
 from timetable.scoring import *
 from student.models import Student
-from student.views import get_student, get_user_dict, convert_tt_to_dict
+from student.views import get_student, get_user_dict, convert_tt_to_dict, get_classmates_from_course_id
 
 MAX_RETURN = 60 # Max number of timetables we want to consider
 
 SCHOOL = ""
 
-# hashid = Hashids("x98as7dhg&h*askdj^has!kj?xz<!9")
+hashids = Hashids(salt="x98as7dhg&h*askdj^has!kj?xz<!9")
 logger = logging.getLogger(__name__)
 
 def redirect_to_home(request):
   return HttpResponseRedirect("/")
 
+def custom_404(request):
+  return HttpResponse("404", status=404)
 # ******************************************************************************
 # ******************************** GENERATE TTs ********************************
 # ******************************************************************************
@@ -50,7 +52,7 @@ def view_timetable(request, code=None, sem=None, shared_timetable=None):
     code = code.upper()
     try:
       course = Course.objects.get(school=school, code=code)
-      course_json = get_detailed_course_json(course, sem, student)
+      course_json = get_detailed_course_json(school, course, sem, student)
     except:
       raise Http404
 
@@ -66,7 +68,8 @@ def view_timetable(request, code=None, sem=None, shared_timetable=None):
 @validate_subdomain
 def share_timetable(request, ref):
   try:
-    shared_timetable = convert_tt_to_dict(SharedTimetable.objects.get(school=request.subdomain, id=ref),
+    timetable_id = hashids.decrypt(ref)[0]
+    shared_timetable = convert_tt_to_dict(SharedTimetable.objects.get(school=request.subdomain, id=timetable_id),
                                           include_last_updated=False)
     semester = shared_timetable['semester']
     return view_timetable(request, sem=semester, shared_timetable=shared_timetable)
@@ -79,7 +82,10 @@ def create_share_link(request):
   school = request.subdomain
   params = json.loads(request.body)
   courses = params['timetable']['courses']
-  has_conflict = params['timetable']['has_conflict']
+  try:
+    has_conflict = params['timetable']['has_conflict']
+  except:
+    has_conflict = False
   semester = params['semester']
   student = get_student(request)
   shared_timetable = SharedTimetable.objects.create(
@@ -95,7 +101,7 @@ def create_share_link(request):
       shared_timetable.sections.add(course_obj.section_set.get(meeting_section=section, semester__in=[semester, "Y"]))
   shared_timetable.save()
 
-  response = {'link': shared_timetable.id}
+  response = {'link': hashids.encrypt(shared_timetable.id)}
   return HttpResponse(json.dumps(response), content_type='application/json')
 
 @csrf_exempt
@@ -133,7 +139,8 @@ def get_timetables(request):
                   params['school'],
                   locked_sections,
                   custom_events,
-                  params['preferences'])
+                  params['preferences'],
+                  opt_course_ids)
   result = [timetable for opt_courses in optional_course_subsets \
       for timetable in generator.courses_to_timetables(courses + list(opt_courses))]
 
@@ -153,7 +160,13 @@ def update_locked_sections(locked_sections, cid, locked_section):
     locked_sections[cid][section_type] = locked_section
 
 class TimetableGenerator:
-  def __init__(self, semester, school, locked_sections, custom_events, preferences):
+  def __init__(self,
+                semester,
+                school,
+                locked_sections,
+                custom_events,
+                preferences,
+                optional_course_ids=[]):
     self.school = school
     self.slots_per_hour = 60 / school_to_granularity[school]
     self.semester = semester
@@ -163,6 +176,7 @@ class TimetableGenerator:
                               if m['selected']]
     self.locked_sections = locked_sections
     self.custom_events = custom_events
+    self.optional_course_ids = optional_course_ids
 
   def courses_to_timetables(self, courses):
     all_offerings = self.courses_to_offerings(courses)
@@ -181,7 +195,10 @@ class TimetableGenerator:
 
   def get_basic_course_dict(self, section):
     model = Course.objects.get(id=section[0])
-    return model_to_dict(model, fields=['code', 'name', 'id', 'num_credits', 'department'])
+    course_dict = model_to_dict(model, fields=['code', 'name', 'id', 'num_credits', 'department'])
+    if section[0] in self.optional_course_ids: # mark optional courses
+      course_dict['is_optional'] = True
+    return course_dict
 
   def augment_course_dict(self, course_dict, sections):
     sections = list(sections)
@@ -222,7 +239,7 @@ class TimetableGenerator:
       add_tt = True
       for i in xrange(len(sections)): # add an offering for the next section
         j = (p/num_permutations_remaining[i]) % num_offerings[i]
-        num_added_conflicts = add_meeting_and_check_conflict(day_to_usage, 
+        num_added_conflicts = add_meeting_and_check_conflict(day_to_usage,
                                                               sections[i][j])
         num_conflicts += num_added_conflicts
         if num_conflicts and not self.with_conflicts:
@@ -253,14 +270,14 @@ class TimetableGenerator:
 
   def courses_to_offerings(self, courses, plist=[]):
     """
-    Take a list of courses and group all of the courses' offerings by section 
+    Take a list of courses and group all of the courses' offerings by section
     type. Returns a list of lists (for each group), where e
-    each offering is represented as a [course_id, section_code, [CourseOffering]] 
+    each offering is represented as a [course_id, section_code, [CourseOffering]]
     triple.
     """
     all_sections = []
     for c in courses:
-      sections = sorted(c.section_set.filter(Q(semester__in=[self.semester, 'Y'])), 
+      sections = sorted(c.section_set.filter(Q(semester__in=[self.semester, 'Y'])),
                         key=lambda s: s.section_type)
       grouped = itertools.groupby(sections, lambda s: s.section_type)
       for section_type, sections in grouped:
@@ -352,14 +369,15 @@ def get_minute_from_string_time(time_string):
 # -----------------------------------------------------------------------------
 # --------------------TODO: move to separate file------------------------------
 # -----------------------------------------------------------------------------
-def get_detailed_course_json(course, sem, student=None):
+def get_detailed_course_json(school, course, sem, student=None):
   json_data = get_basic_course_json(course, sem, ['prerequisites', 'exclusions', 'areas'])
   # json_data['textbook_info'] = course.get_all_textbook_info()
   json_data['eval_info'] = course.get_eval_info()
   json_data['related_courses'] = course.get_related_course_info(sem, limit=5)
   json_data['reactions'] = course.get_reactions(student)
   json_data['textbooks'] = course.get_textbooks(sem)
-
+  if student and student.user.is_authenticated() and student.social_courses:
+    json_data['classmates'] = get_classmates_from_course_id(school, student, course.id)
   return json_data
 
 def get_basic_course_json(course, sem, extra_model_fields=[]):
@@ -388,7 +406,7 @@ def get_course(request, school, sem, id):
     logged = request.user.is_authenticated()
     if logged and Student.objects.filter(user=request.user).exists():
       student = Student.objects.get(user=request.user)
-    json_data = get_detailed_course_json(course, sem, student)
+    json_data = get_detailed_course_json(school, course, sem, student)
 
   except:
     import traceback
@@ -472,7 +490,7 @@ def advanced_course_search(request):
   logged = request.user.is_authenticated()
   if logged and Student.objects.filter(user=request.user).exists():
       student = Student.objects.get(user=request.user)
-  json_data = [get_detailed_course_json(course, sem, student) for course in course_match_objs]
+  json_data = [get_detailed_course_json(request.subdomain, course, sem, student) for course in course_match_objs]
 
   return HttpResponse(json.dumps(json_data), content_type="application/json")
 

@@ -5,7 +5,10 @@ export const savingTimetable = (state = { activeTimetable: { name: String("Untit
 			return Object.assign( {}, state, { saving });
 
 		case 'RECEIVE_TIMETABLE_SAVED':
-			return Object.assign( {}, state, { saving: false, upToDate: true });
+			// action.upToDate will be false if the user tried saving 
+			// a timetable with a name that already exists
+			let { upToDate } = action;
+			return Object.assign( {}, state, { saving: false, upToDate });
 
 		case 'RECEIVE_TIMETABLES':
 			return Object.assign( {}, state, { upToDate: action.preset === true });
