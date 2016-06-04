@@ -13,7 +13,6 @@ class SlotManager extends React.Component {
             let day_slots = slots_by_day[day].map((slot, j) => {
                 let courseId = slot.course;
                 let locked = this.props.isLocked(courseId, slot.meeting_section);
-                console.log('one')
                 return slot.custom ?
                 <CustomSlot {...slot}
                     key={ i.toString() + j.toString() + " custom" }
