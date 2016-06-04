@@ -169,29 +169,29 @@ export function addOrRemoveCourse(newCourseId, lockingSection = '') {
 	  		type: "REMOVE_OPTIONAL_COURSE_BY_ID",
 	  		courseId: newCourseId
 	  	});
-	  	reqBody = getBaseReqBody(store.getState());
-	} else {
-		if (removing) {
-			let updatedCourseSections = Object.assign({}, state.courseSections.objects);
-			delete updatedCourseSections[newCourseId]; // remove it from courseSections.objects
-			reqBody.courseSections = updatedCourseSections;
-			Object.assign(reqBody, {
-      	'optionCourses': state.optionalCourses.courses.map(c => c.id),
-      	'numOptionCourses': state.optionalCourses.numRequired,
-      	'customSlots': state.customSlots
-			})
-		}
-		else { // adding a course
-			Object.assign(reqBody, {
-				updated_courses: [{
-					'course_id': newCourseId,
-	        		'section_codes': [lockingSection]
-	        	}],
-      	'optionCourses': state.optionalCourses.courses.map(c => c.id),
-      	'numOptionCourses': state.optionalCourses.numRequired,
-      	'customSlots': state.customSlots
-	    });
-		}
+	  reqBody = getBaseReqBody(store.getState());
+	}
+	state = store.getState()
+	if (removing) {
+		let updatedCourseSections = Object.assign({}, state.courseSections.objects);
+		delete updatedCourseSections[newCourseId]; // remove it from courseSections.objects
+		reqBody.courseSections = updatedCourseSections;
+		Object.assign(reqBody, {
+    	'optionCourses': state.optionalCourses.courses.map(c => c.id),
+    	'numOptionCourses': state.optionalCourses.numRequired,
+    	'customSlots': state.customSlots
+		})
+	}
+	else { // adding a course
+		Object.assign(reqBody, {
+			updated_courses: [{
+				'course_id': newCourseId,
+        		'section_codes': [lockingSection]
+        	}],
+    	'optionCourses': state.optionalCourses.courses.map(c => c.id),
+    	'numOptionCourses': state.optionalCourses.numRequired,
+    	'customSlots': state.customSlots
+    });
 	}
 	// user must be removing this course if it's already in roster,
 	// and they're not trying to lock a new section).
