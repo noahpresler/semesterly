@@ -74,7 +74,7 @@ class Semesterly extends React.Component {
 						<CalendarContainer />
 						<footer class="footer navbar">
 							<ul class="nav nav-pills">
-								
+								<li><div className="fb-like" data-href="https://www.facebook.com/semesterly/" data-layout="button_count" data-action="like" data-show-faces="true" data-share="false"></div></li>
 								<li role="presentation"><a href="mailto:contact@semester.ly?Subject=Semesterly">Contact us</a></li>
 								<li role="presentation"><a target="_blank" href="http://goo.gl/forms/YSltU2YI54PC9sXw1">Feedback</a></li>
 								<li role="presentation"><a target="_blank" href="https://www.facebook.com/semesterly/">Facebook</a></li>
