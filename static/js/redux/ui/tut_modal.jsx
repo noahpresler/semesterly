@@ -13,8 +13,11 @@ export class TutModal extends React.Component {
     }
 	componentDidMount(nextProps) {
 		let tutorial = JSON.parse(localStorage.getItem('tutorial'));
-		if(!tutorial || !tutorial.shown)
+		if(!tutorial || !tutorial.modalTutShown)
 			this.refs.modal.show();
+		$(document.body).on('keydown', (e) => {
+			e.stopPropagation();
+		});
 	}
 	next() {
 		this.setState({tutPosition: this.state.tutPosition + 1});
@@ -25,7 +28,7 @@ export class TutModal extends React.Component {
 	hide() {
 		this.refs.modal.hide();
 		if (browserSupportsLocalStorage()) {
-			localStorage.setItem("tutorial",JSON.stringify({shown: true}));
+			localStorage.setItem("tutorial",JSON.stringify({modalTutShown: true}));
 		}
 	}
 	render() {

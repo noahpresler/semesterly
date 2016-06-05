@@ -63,6 +63,10 @@
 	transition: all .1s linear;
 }
 
+.tut-modal > div {
+	outline: none;
+}
+
 @media(max-width: 500px) {
 	.tut-modal {
 		width: 100% !important;
