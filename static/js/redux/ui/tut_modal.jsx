@@ -63,7 +63,7 @@ export class TutModal extends React.Component {
 				closeOnClick={false}
                 keyboard={false}
 				modalStyle={modalStyle}
-				onShow={() => $(".max-modal").parent().css("display", "block")}
+                onShow={() => $(".max-modal").unwrap()}
 				>
 				<div id="tut-wrapper">
 					<div id="tut-nav">
