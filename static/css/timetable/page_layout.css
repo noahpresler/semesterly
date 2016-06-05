@@ -309,3 +309,10 @@ footer li a:hover {
 	color: #aaa;
 	text-decoration: underline;
 }
+
+@media (max-width: 450px) {
+	footer {
+		float: left;
+		margin-top: 5px;
+	}
+}
