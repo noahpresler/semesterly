@@ -82,12 +82,12 @@ def most_popular_reaction():
             num_reactions[title] = 0
     return max(num_reactions.iterkeys(), key=lambda k: num_reactions[k])
 
-def most_popular_course_search(n, school, semester):
-    """Gets the top n most popular courses searched."""
+def most_popular_courses(n, school, semester, table = AnalyticsTimetable):
+    """Gets the top n most popular courses searched (AnalyticsCourseSearch) or in time table(AnalyticsTimetable)."""
     num_courses = {}
-    searches = AnalyticsCourseSearch.objects.filter(school = school, semester = semester)
-    for search in searches:
-        for course in search.courses.all():
+    link_to_courses = table.objects.filter(school = school, semester = semester)
+    for link_to_course in link_to_courses:
+        for course in link_to_course.courses.all():
             if course.name in num_courses:
                 num_courses[course.name] += 1
             else:
