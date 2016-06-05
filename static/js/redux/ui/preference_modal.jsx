@@ -3,11 +3,12 @@ import Modal from 'boron/DropModal';
 import SortMenuContainer from './containers/sort_menu_container.jsx'
 
 export class PreferenceModal extends React.Component {
-  componentDidUpdate(nextProps) {
-    if (this.props.isVisible) {
-        this.refs.modal.show();
+    componentDidUpdate(nextProps) {
+        if (this.props.isVisible) {
+            this.refs.modal.show();
+        }
+        $(".max-modal").parent().css("display", "block");
     }
-  }
     render() {
         let modalHeader =
             <div id="modal-content">
@@ -16,13 +17,15 @@ export class PreferenceModal extends React.Component {
                 </div>
             </div>
         let modalStyle = {
-            width: '100%',
+            width: '100%'
         };
         return (
             <Modal ref="modal"
-                   className="pref-modal"
+                   className="pref-modal max-modal"
                    modalStyle={modalStyle}
-                   onHide={this.props.togglePreferenceModal}>
+                   onHide={this.props.togglePreferenceModal}
+                   onShow={() => $(".max-modal").parent().css("display", "block")}
+                   >
                 <div id="perf-modal-wrapper">
                     {modalHeader}
                     <div className="conflict-row">

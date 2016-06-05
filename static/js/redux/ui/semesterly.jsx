@@ -59,6 +59,10 @@ class Semesterly extends React.Component {
 		});
 	}
 
+	componentDidUpdate() {
+		//$(".max-modal").parent().css("display", "block");
+	}
+
 	render() {
 		return (
 			<div id="page-wrapper">
