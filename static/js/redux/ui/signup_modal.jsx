@@ -7,6 +7,7 @@ export class SignupModal extends React.Component {
 		if (this.props.isVisible) {
 			this.refs.modal.show();
 		}
+        $(".max-modal").parent().css("display", "block");
 	}
 	render() {
         let modalHeader =
@@ -21,9 +22,11 @@ export class SignupModal extends React.Component {
         };
         return (
             <Modal ref="modal"
-                className="signup-modal"
+                className="signup-modal max-modal"
                 modalStyle={modalStyle}
-                onHide={this.props.toggleSignupModal}>
+                onHide={this.props.toggleSignupModal}
+                onShow={() => $(".max-modal").parent().css("display", "block")}
+                >
                 {modalHeader}
                 <div id="features">
                     That feature requires an account.

@@ -19,6 +19,9 @@ export class TutModal extends React.Component {
 			e.stopPropagation();
 		});
 	}
+	componentDidUpdate() {
+        $(".max-modal").parent().css("display", "block");
+    }
 	next() {
 		this.setState({tutPosition: this.state.tutPosition + 1});
 	}
@@ -56,10 +59,12 @@ export class TutModal extends React.Component {
 		}
 		return (
 			<Modal ref="modal"
-				className="tut-modal"
+				className="tut-modal max-modal"
 				closeOnClick={false}
                 keyboard={false}
-				modalStyle={modalStyle}>
+				modalStyle={modalStyle}
+				onShow={() => $(".max-modal").parent().css("display", "block")}
+				>
 				<div id="tut-wrapper">
 					<div id="tut-nav">
 						{ left }
