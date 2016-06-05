@@ -79,7 +79,9 @@ export function fetchSearchResults(query) {
 		// indicate that we are now requesting courses
 		dispatch(requestCourses());
 		// send a request (via fetch) to the appropriate endpoint to get courses
-		fetch(getCourseSearchEndpoint(query))
+		fetch(getCourseSearchEndpoint(query), {
+			credentials: 'include'
+		})
 		.then(response => response.json()) // TODO(rohan): error-check the response
 		.then(json => {
 			// indicate that courses have been received

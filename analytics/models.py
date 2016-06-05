@@ -36,6 +36,8 @@ class AnalyticsCourseSearch(models.Model):
 	A search that is saved everytime a user searches for a course. All courses DISPLAYED 
 	are linked. 
 	"""
-	courses = models.ManyToManyField(Course)
+	query = models.CharField(max_length=200)
+	is_advanced = models.BooleanField(blank=True, default=False)
 	semester = models.CharField(max_length=2)
 	school = models.CharField(max_length=50)
+	student = models.ForeignKey(Student, null=True, default=None)
