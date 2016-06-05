@@ -314,9 +314,10 @@ export class ExplorationModal extends React.Component {
         );
         return (
             <Modal ref="modal"
-                className={classNames("exploration-modal", {"trans": this.props.hasHoveredResult})}
+                className={classNames("exploration-modal max-modal", {"trans": this.props.hasHoveredResult})}
                 modalStyle={modalStyle}
                 onHide={this.props.hideModal}
+                onShow={() => $(".max-modal").parent().css("display", "block")}
                 >
                 {content}
             </Modal>
