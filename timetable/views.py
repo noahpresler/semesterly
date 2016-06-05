@@ -443,7 +443,7 @@ def get_course_matches(school, query, semester):
 def course_search(request, school, sem, query):
   course_match_objs = get_course_matches(school, query, sem)
   course_match_objs = course_match_objs.distinct('code')[:4]
-  save_analytics_course_search(query[:200], sem, school, get_student(request))
+  save_analytics_course_search(query[:200], course_match_objs[:2], sem, school, get_student(request))
   course_matches = [get_basic_course_json(course, sem) for course in course_match_objs]
   json_data = {'results': course_matches}
   return HttpResponse(json.dumps(json_data), content_type="application/json")
@@ -487,7 +487,7 @@ def advanced_course_search(request):
       for day_index, min_max in enumerate(filters['times']))))
 
   course_match_objs = course_match_objs.distinct('code')[:50] # limit to 50 search results
-  save_analytics_course_search(query[:200], sem, school, get_student(request), advanced=True)
+  save_analytics_course_search(query[:200], course_match_objs[:2], sem, school, get_student(request), advanced=True)
   student = None
   logged = request.user.is_authenticated()
   if logged and Student.objects.filter(user=request.user).exists():
