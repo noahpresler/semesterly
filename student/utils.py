@@ -38,7 +38,10 @@ def create_student(strategy, details, response, user, *args, **kwargs):
               )
         request = urllib2.Request(url)
         data = json.loads(urllib2.urlopen(request).read())
-        new_student.gender = data['gender']
+        try:
+          new_student.gender = data['gender']
+        except:
+          pass
         new_student.fbook_uid = social_user.uid
         new_student.save()
         url = u'https://graph.facebook.com/{0}/' \
