@@ -19,6 +19,7 @@ def view_analytics_dashboard(request):
         context_instance=RequestContext(request))
 
 def save_analytics_timetable(courses, semester, school, student=None):
+    """Create an analytics time table entry."""
     analytics_timetable = AnalyticsTimetable.objects.create(semester=semester,
                                                           school=school,
                                                           time_created=datetime.datetime.now(),
@@ -27,11 +28,11 @@ def save_analytics_timetable(courses, semester, school, student=None):
     analytics_timetable.save()
 
 def save_analytics_course_search(courses, semester, school, student=None):
+    """Create an analytics course search entry."""
     course_search = AnalyticsCourseSearch.objects.create(semester=semester,
                                                           school=school)
     course_search.courses.add(*courses)
     course_search.save()
-    most_popular_course_search(3, 'jhu', 'F')
 
 def number_timetables(timetable = AnalyticsTimetable, school = None, semester = None, student = None, time_start = None, time_end = None):
     """Gets the number of time tables by school, semester, student, and/or time. Can be used for analytics or shared time tables."""
