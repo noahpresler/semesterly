@@ -206,6 +206,8 @@ ADMINS = [
     ('Rohan Das', 'rohan@semester.ly'), 
     ('Felix Zhu', 'felix@semester.ly'),
     ('Noah Presler', 'noah@semester.ly'),
+    ('Eric Calder', 'eric@semester.ly'),
+
 ]
 
 EMAIL_USE_TLS = True
