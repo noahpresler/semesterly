@@ -20,7 +20,9 @@ class SharedTimetable(models.Model):
 
 class AnalyticsTimetable(models.Model):
 	"""
-	TODO(Eric): describe this model lol
+	A timetable that is generated everytime a user makes a change to a timetable.
+	Used to record the number of changes all uesrs made to their timetables, even
+	when they are not saved.
 	"""
 	courses = models.ManyToManyField(Course)
 	semester = models.CharField(max_length=2)
@@ -28,3 +30,12 @@ class AnalyticsTimetable(models.Model):
 	has_conflict = models.BooleanField(blank=True, default=False)
 	time_created = models.DateTimeField(auto_now_add=True)
 	student = models.ForeignKey(Student, null=True, default=None)
+
+class AnalyticsCourseSearch(models.Model):
+	"""
+	A search that is saved everytime a user searches for a course. All courses DISPLAYED 
+	are linked. 
+	"""
+	courses = models.ManyToManyField(Course)
+	semester = models.CharField(max_length=2)
+	school = models.CharField(max_length=50)
