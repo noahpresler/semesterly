@@ -12,6 +12,7 @@ import UserSettingsModalContainer from './containers/user_settings_modal_contain
 import ExplorationModalContainer from './containers/exploration_modal_container.jsx';
 import SignupModalContainer from './containers/signup_modal_container.jsx';
 import PreferenceModalContainer from './containers/preference_modal_container.jsx';
+import TutModalContainer from './containers/tut_modal_container.jsx';
 
 class Semesterly extends React.Component {
 
@@ -66,6 +67,7 @@ class Semesterly extends React.Component {
 				<ExplorationModalContainer />
 				<SignupModalContainer />
 				<PreferenceModalContainer />
+				<TutModalContainer />
 				<AlertBox ref={a => this.msg = a} {...this.alertOptions} />
 				<div id="all-cols">
 					<div id="main-bar">
