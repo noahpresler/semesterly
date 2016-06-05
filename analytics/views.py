@@ -27,13 +27,14 @@ def save_analytics_timetable(courses, semester, school, student=None):
     analytics_timetable.courses.add(*courses)
     analytics_timetable.save()
 
-def save_analytics_course_search(query, semester, school, student=None, advanced=False):
+def save_analytics_course_search(query, courses, semester, school, student=None, advanced=False):
     """Create an analytics course search entry."""
     course_search = AnalyticsCourseSearch.objects.create(query=query,
                                                           semester=semester,
                                                           school=school,
                                                           student=student,
                                                           is_advanced=advanced)
+    course_search.courses.add(*courses)
     course_search.save()
 
 def number_timetables(timetable = AnalyticsTimetable, school = None, semester = None, student = None, time_start = None, time_end = None):
