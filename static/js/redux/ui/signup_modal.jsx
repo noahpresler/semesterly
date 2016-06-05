@@ -57,7 +57,7 @@ export class SignupModal extends React.Component {
                         <div className="disclaimer">
                             Semester.ly will NEVER post to your timeline. Your course selections will not be shared with any other user without your permission.
                         </div>
-                        <a href="/login/facebook">
+                        <a href="/login/facebook/">
                             <div  className="signup-button">
                                 Signup!
                             </div>

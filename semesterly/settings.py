@@ -36,6 +36,7 @@ SOCIAL_AUTH_FACEBOOK_PROFILE_EXTRA_PARAMS = {
     'fields': 'id,name,email,gender'
 }
 SOCIAL_AUTH_LOGIN_REDIRECT_URL = '/'
+SOCIAL_AUTH_LOGIN_ERROR_URL = '/'
 
 SOCIAL_AUTH_AUTHENTICATION_BACKENDS = (
     'social.backends.facebook.FacebookOAuth2',
@@ -113,6 +114,7 @@ MIDDLEWARE_CLASSES = (
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'semesterly.middleware.subdomain_middleware.SubdomainMiddleware',
+     'social.apps.django_app.middleware.SocialAuthExceptionMiddleware',
 )
 
 TEMPLATE_CONTEXT_PROCESSORS = (
@@ -178,6 +180,7 @@ LOGGING = {
         'mail_admins': {
             'level': 'ERROR',
             'class': 'django.utils.log.AdminEmailHandler',
+            'include_html': True,
         }
     },
     'loggers': {
@@ -187,15 +190,15 @@ LOGGING = {
             'propagate': True,
         },
         'timetable.views': {
-            'handlers': ['mail_admins'],
+            'handlers': ['mail_admins', 'file'],
             'level': 'ERROR',
             'propagate': True,
         },
-        'django.request': { 
-            'handlers': ['mail_admins'], 
-            'level': 'ERROR', 
-            'propagate': False, 
-        }
+        'student.views': {
+            'handlers': ['mail_admins', 'file'],
+            'level': 'ERROR',
+            'propagate': True,
+        },
     },
 }
 
@@ -203,6 +206,8 @@ ADMINS = [
     ('Rohan Das', 'rohan@semester.ly'), 
     ('Felix Zhu', 'felix@semester.ly'),
     ('Noah Presler', 'noah@semester.ly'),
+    ('Eric Calder', 'eric@semester.ly'),
+
 ]
 
 EMAIL_USE_TLS = True
@@ -210,6 +215,7 @@ EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_PORT = 587
 
 DEFAULT_FROM_EMAIL = 'semesterly.contact@gmail.com'
+SERVER_EMAIL = DEFAULT_FROM_EMAIL
 
 # Internationalization
 # https://docs.djangoproject.com/en/1.6/topics/i18n/
@@ -224,6 +230,7 @@ USE_L10N = True
 
 USE_TZ = True
 
+APPEND_SLASH = True
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.6/howto/static-files/

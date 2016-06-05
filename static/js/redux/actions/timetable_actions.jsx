@@ -3,7 +3,7 @@ import { getTimetablesEndpoint } from '../constants.jsx';
 import { randomString, browserSupportsLocalStorage } from '../util.jsx';
 import { store } from '../init.jsx';
 import { getClassmatesEndpoint } from '../constants.jsx'
-import { lockActiveSections, fetchClassmates } from './user_actions.jsx';
+import { lockActiveSections, fetchClassmates, autoSave } from './user_actions.jsx';
 import { saveLocalSemester, saveLocalPreferences, saveLocalCourseSections, saveLocalActiveIndex } from '../util.jsx';
 
 export const SID = randomString(30);
@@ -58,6 +58,7 @@ export function loadCachedTimetable() {
 	fetchStateTimetables(localActive);
 }
 
+
 // loads @timetable into the state.
 // @created is true if the user is creating a new timetable
 export function loadTimetable(timetable, created=false) {
@@ -93,6 +94,30 @@ export function lockTimetable(dispatch, timetable, created, isLoggedIn) {
 	if (isLoggedIn) { // fetch classmates for this timetable only if the user is logged in
 		dispatch(fetchClassmates(timetable.courses.map( c => c['id'])))
 	}
+}
+
+export function handleCreateNewTimetable() {
+	let dispatch = store.dispatch;
+	let state = store.getState();
+	let isLoggedIn = state.userInfo.data.isLoggedIn;
+	if (!isLoggedIn) {
+		return dispatch({type: 'TOGGLE_SIGNUP_MODAL'});
+	}
+	let { timetables:timetablesState } = state;
+	if (timetablesState.items[timetablesState.active].courses.length > 0 && !state.savingTimetable.upToDate) {
+		return dispatch({
+			type: "ALERT_NEW_TIMETABLE",
+		});
+	}
+	else {
+		let suffix = state.userInfo.data.timetables.filter(t => t.name.indexOf("Untitled") > -1).length;
+		suffix = suffix === 0 ? "" : " " + suffix;
+		createNewTimetable("Untitled Schedule" + String(suffix));
+	}
+}
+
+export function createNewTimetable(ttName="Untitled Schedule") {
+	loadTimetable({ name: ttName, courses: [], has_conflict: false }, true);
 }
 
 /* 
@@ -146,29 +171,35 @@ export function addOrRemoveCourse(newCourseId, lockingSection = '') {
 	  		type: "REMOVE_OPTIONAL_COURSE_BY_ID",
 	  		courseId: newCourseId
 	  	});
-	  	reqBody = getBaseReqBody(store.getState());
-	} else {
-		if (removing) {
-			let updatedCourseSections = Object.assign({}, state.courseSections.objects);
-			delete updatedCourseSections[newCourseId]; // remove it from courseSections.objects
-			reqBody.courseSections = updatedCourseSections;
-		}
-		else { // adding a course
-			Object.assign(reqBody, {
-				updated_courses: [{
-					'course_id': newCourseId,
-	        		'section_codes': [lockingSection]
-	        	}],
-	        	'optionCourses': state.optionalCourses.courses.map(c => c.id),
-	        	'numOptionCourses': state.optionalCourses.numRequired,
-	        	'customSlots': state.customSlots
-	        });
-		}
+	  reqBody = getBaseReqBody(store.getState());
+	}
+	state = store.getState()
+	if (removing) {
+		let updatedCourseSections = Object.assign({}, state.courseSections.objects);
+		delete updatedCourseSections[newCourseId]; // remove it from courseSections.objects
+		reqBody.courseSections = updatedCourseSections;
+		Object.assign(reqBody, {
+    	'optionCourses': state.optionalCourses.courses.map(c => c.id),
+    	'numOptionCourses': state.optionalCourses.numRequired,
+    	'customSlots': state.customSlots
+		})
+	}
+	else { // adding a course
+		Object.assign(reqBody, {
+			updated_courses: [{
+				'course_id': newCourseId,
+        		'section_codes': [lockingSection]
+        	}],
+    	'optionCourses': state.optionalCourses.courses.map(c => c.id),
+    	'numOptionCourses': state.optionalCourses.numRequired,
+    	'customSlots': state.customSlots
+    });
 	}
 	// user must be removing this course if it's already in roster,
 	// and they're not trying to lock a new section).
 	// otherwise, they're adding it
 	store.dispatch(fetchTimetables(reqBody, removing));
+	autoSave();
 }
 
 function fetchTimetables(requestBody, removing, newActive=0) {
@@ -180,7 +211,8 @@ function fetchTimetables(requestBody, removing, newActive=0) {
 		// relevant data as contained in @state (including courses, preferences, etc)
 		fetch(getTimetablesEndpoint(), {
       		method: 'POST',
-      		body: JSON.stringify(requestBody)
+      		body: JSON.stringify(requestBody),
+      		credentials: 'include'
     	})
 		.then(response => { 
 			if (response.status === 200) {

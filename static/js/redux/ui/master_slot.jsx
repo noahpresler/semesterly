@@ -50,7 +50,8 @@ class MasterSlot extends React.Component {
             friendCircles = [<div className="ms-friend" key={4}>{plusMore}</div>].concat(friendCircles.slice(0,3))
         }
         let masterSlotClass = 'master-slot slot-' + this.props.course.id;
-        let prof = !this.props.professors || this.props.professors.length === 0 || this.props.professors[0] === "" ? "Professor Unlisted" : this.props.professors.join(', ');
+        let validProfs = this.props.professors ? this.props.professors.filter((p) => p) : false
+        let prof = !validProfs || validProfs.length === 0 || validProfs[0] === "" ? "Professor Unlisted" : validProfs.join(', ');
         masterSlotClass = this.props.onTimetable ? masterSlotClass : masterSlotClass + ' optional';
         let numCredits = this.props.course.num_credits;
         let creditsDisplay = numCredits === 1 ? " credit" : " credits";
