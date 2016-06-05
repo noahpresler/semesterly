@@ -9,6 +9,7 @@ import datetime, json, urllib2
 from datetime import timedelta
 
 from analytics.models import *
+from student.models import *
 from dateutil import tz
 
 to_zone = tz.gettz('America/New_York')
@@ -25,6 +26,7 @@ def save_analytics_timetable(courses, semester, school, student=None):
                                                           student=student)
     analytics_timetable.courses.add(*courses)
     analytics_timetable.save()
+    number_reactions()
 
 def number_timetables(timetable = AnalyticsTimetable, school = None, semester = None, student = None, time_start = None, time_end = None):
     timetables = []
@@ -65,7 +67,7 @@ def number_reactions():
         reactions = Reaction.objects.filter(title = title)
         if len(reactions) > 0:
             reaction = reactions[0]
-            num_reactions[reaction] = len(reaction.courses.objects.all())
+            num_reactions[title] = len(reaction.course.all())
         else:
-            num_reactions[reaction] = 0
+            num_reactions[title] = 0
     print(num_reactions)
