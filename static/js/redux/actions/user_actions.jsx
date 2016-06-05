@@ -4,6 +4,8 @@ import { store } from '../init.jsx';
 import { loadTimetable, nullifyTimetable } from './timetable_actions.jsx';
 import { browserSupportsLocalStorage } from '../util.jsx';
 
+let autoSaveTimer;
+
 export function getUserInfo(json) {
 	return {
 		type: "USER_INFO_RECEIVED",
@@ -63,7 +65,7 @@ export function lockActiveSections(activeTimetable) {
 	}
 	return courseSections;
 }
-export function saveTimetable() {
+export function saveTimetable(isAutoSave=false) {
 	return (dispatch) => {
 		let state = store.getState();
 		if (!state.userInfo.data.isLoggedIn) {
@@ -78,20 +80,6 @@ export function saveTimetable() {
 		dispatch({
 			type: "REQUEST_SAVE_TIMETABLE"
 		});
-		// mark that the current timetable is now the only available one (since all sections are locked)
-		dispatch({
-			type: "RECEIVE_TIMETABLES",
-			timetables: [activeTimetable],
-			preset: true,
-			saving: true
-		});
-		// edit the state's courseSections, so that future requests to add/remove/unlock
-		// courses are handled correctly. in the new courseSections, every currently active
-		// section will be locked
-		dispatch({
-			type: "RECEIVE_COURSE_SECTIONS",
-			courseSections: lockActiveSections(activeTimetable)
-		});
 		fetch(getSaveTimetableEndpoint(), {
 			method: 'POST',
 			body: JSON.stringify(getSaveTimetablesRequestBody()),
@@ -105,6 +93,22 @@ export function saveTimetable() {
 				});
 			}
 			else {
+				// edit the state's courseSections, so that future requests to add/remove/unlock
+				// courses are handled correctly. in the new courseSections, every currently active
+				// section will be locked
+				if (!isAutoSave) {
+					// mark that the current timetable is now the only available one (since all sections are locked)
+					dispatch({
+						type: "RECEIVE_TIMETABLES",
+						timetables: [activeTimetable],
+						preset: true,
+						saving: true
+					});
+					dispatch({
+						type: "RECEIVE_COURSE_SECTIONS",
+						courseSections: lockActiveSections(activeTimetable)
+					});
+				}
 				dispatch({
 					type: "CHANGE_ACTIVE_SAVED_TIMETABLE",
 					timetable: json.saved_timetable
@@ -115,8 +119,10 @@ export function saveTimetable() {
 				});
 			}
 			dispatch({
-				type: "RECEIVE_TIMETABLE_SAVED"
+				type: "RECEIVE_TIMETABLE_SAVED",
+				upToDate: !json.error
 			});
+
 			return json;
 		})
 		.then(json => {
@@ -190,3 +196,11 @@ export function fetchClassmates(courses) {
 	}
 }
 
+export function autoSave(delay=4000) {
+	let state = store.getState();
+	clearTimeout(autoSaveTimer)
+	autoSaveTimer = setTimeout(() => {
+		if (state.userInfo.data.isLoggedIn && state.timetables.items[state.timetables.active].courses.length > 0)
+			store.dispatch(saveTimetable(true))
+	}, delay);
+}

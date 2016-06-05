@@ -25,7 +25,7 @@ def get_student(request):
 def get_avg_rating(course_ids):
   avgs = [Course.objects.get(id=cid).get_avg_rating() \
           for cid in set([cid for cid in course_ids])]
-  return sum(avgs)/len(avgs) if avgs else 0
+  return min(5, sum(avgs)/len(avgs) if avgs else 0)
 
 def get_user_dict(school, student, semester):
 	user_dict = {}
@@ -173,6 +173,8 @@ def get_classmates_from_course_id(school, student, course_id):
 	course = { 'course_id': course_id, 'classmates': [] }
 	for friend in friends:
 		classmate = model_to_dict(friend, exclude=['user','id','fbook_uid', 'friends'])
+		classmate['first_name'] = friend.user.first_name
+		classmate['last_name'] = friend.user.last_name
 		ptts = PersonalTimetable.objects.filter(student=friend, courses__id__exact=course_id)
 		for tt in ptts:
 			if student.social_offerings and friend.social_offerings:

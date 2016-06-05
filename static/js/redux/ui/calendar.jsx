@@ -80,7 +80,7 @@ class Calendar extends React.Component {
             onClickOut={this.hideShareLink} /> : 
         null;
   	let addButton = (
-			<button onClick={this.props.createTimetable} 
+			<button onClick={this.props.handleCreateNewTimetable} 
 							className="save-timetable add-button">
 				<i className="fa fa-plus" />
 			</button>
@@ -175,7 +175,7 @@ class Calendar extends React.Component {
 	              </tbody>
 	            </table>
 	          </div>
-	          <p className="data-last-updated">{ this.props.dataLastUpdated && this.props.dataLastUpdated.length && this.props.dataLastUpdated !== "null" ? "Data last updated: " + this.props.dataLastUpdated : null }</p>
+	          <p className="data-last-updated">Data last updated: { this.props.dataLastUpdated && this.props.dataLastUpdated.length && this.props.dataLastUpdated !== "null" ? this.props.dataLastUpdated : null }</p>
 	        </div>
 	      </div>
     	);

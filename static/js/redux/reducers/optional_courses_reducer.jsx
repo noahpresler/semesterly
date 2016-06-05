@@ -4,13 +4,13 @@ export const optionalCourses = (state = { courses: [], numRequired: 0}, action) 
 	switch(action.type) {
 		case 'ADD_REMOVE_OPTIONAL_COURSE':
 			let idx = state.courses.findIndex(c => c.id === action.newCourse.id)
-			if ( idx != -1) {
+			if ( idx != -1) { // removing
 				let newCourses = [
 					...state.courses.slice(0,idx),
 					...state.courses.slice(idx + 1)
 				]
 				return Object.assign({}, state, {courses: newCourses, numRequired: newCourses.length});
-			} else {
+			} else { // adding
 				let newState = update(state, {
 					courses: {
 						$push: [action.newCourse]
