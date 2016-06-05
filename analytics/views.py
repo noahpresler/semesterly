@@ -56,3 +56,16 @@ def number_timetables_per_hour(timetable = AnalyticsTimetable):
         num_timetables.append(number_timetables(timetable = timetable, time_start = time_start, time_end = time_start + time_delta))
         time_start += time_delta
     return num_timetables
+
+def number_reactions():
+    num_reactions = {}
+    reaction_list = Reaction.REACTION_CHOICES
+    for title, text in reaction_list:
+        reaction = None
+        reactions = Reaction.objects.filter(title = title)
+        if len(reactions) > 0:
+            reaction = reactions[0]
+            num_reactions[reaction] = len(reaction.courses.objects.all())
+        else:
+            num_reactions[reaction] = 0
+    print(num_reactions)
