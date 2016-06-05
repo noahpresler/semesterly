@@ -70,4 +70,5 @@ def number_reactions():
             num_reactions[title] = len(reaction.course.all())
         else:
             num_reactions[title] = 0
-    print(num_reactions)
+    most_popular = max(num_reactions.iterkeys(), key=lambda k: num_reactions[k])
+    print(most_popular)
