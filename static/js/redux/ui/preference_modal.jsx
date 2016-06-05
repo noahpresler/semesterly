@@ -24,7 +24,7 @@ export class PreferenceModal extends React.Component {
                    className="pref-modal max-modal"
                    modalStyle={modalStyle}
                    onHide={this.props.togglePreferenceModal}
-                   onShow={() => $(".max-modal").parent().css("display", "block")}
+                   onShow={() => $(".max-modal").unwrap()}
                    >
                 <div id="perf-modal-wrapper">
                     {modalHeader}
