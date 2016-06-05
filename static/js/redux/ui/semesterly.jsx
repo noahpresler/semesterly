@@ -58,11 +58,7 @@ class Semesterly extends React.Component {
 		  time: delay,
 		});
 	}
-
-	componentDidUpdate() {
-		//$(".max-modal").parent().css("display", "block");
-	}
-
+	
 	render() {
 		return (
 			<div id="page-wrapper">
