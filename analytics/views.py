@@ -95,6 +95,5 @@ def most_popular_courses(n, school, semester, table = AnalyticsTimetable):
                 num_courses[course.id] += 1
             else:
                 num_courses[course.id] = 1
-
     return heapq.nlargest(n, num_courses, key=lambda k: num_courses[k])
     
