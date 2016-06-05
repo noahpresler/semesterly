@@ -2,16 +2,15 @@ from django.shortcuts import render_to_response, render
 from django.http import HttpResponse, HttpResponseRedirect, Http404
 from django.template import RequestContext
 from django.views.decorators.csrf import csrf_exempt
-
 from django.db.models import Q
 
 import datetime, json, urllib2
+import heapq
 from datetime import timedelta
 
 from analytics.models import *
 from student.models import *
 from dateutil import tz
-
 to_zone = tz.gettz('America/New_York')
 
 
@@ -27,7 +26,15 @@ def save_analytics_timetable(courses, semester, school, student=None):
     analytics_timetable.courses.add(*courses)
     analytics_timetable.save()
 
+def save_analytics_course_search(courses, semester, school, student=None):
+    course_search = AnalyticsCourseSearch.objects.create(semester=semester,
+                                                          school=school)
+    course_search.courses.add(*courses)
+    course_search.save()
+    most_popular_course_search(3, 'jhu', 'F')
+
 def number_timetables(timetable = AnalyticsTimetable, school = None, semester = None, student = None, time_start = None, time_end = None):
+    """Gets the number of time tables by school, semester, student, and/or time. Can be used for analytics or shared time tables."""
     timetables = []
     if time_start and time_end:
         timetables += (
@@ -48,6 +55,7 @@ def number_timetables(timetable = AnalyticsTimetable, school = None, semester = 
     return len(timetables)
 
 def number_timetables_per_hour(timetable = AnalyticsTimetable):
+    """Gets the number of time tables created each hour."""
     # TODO: Change start and end time.
     time_start = datetime.datetime(2016, 5, 30, 0, 0, 0)
     time_end = datetime.datetime(2016, 5, 31, 12, 0, 0)
@@ -58,7 +66,8 @@ def number_timetables_per_hour(timetable = AnalyticsTimetable):
         time_start += time_delta
     return num_timetables
 
-def number_reactions():
+def most_popular_reaction():
+    """Gets the the most popular reaction."""
     # TODO: Could be modified for max AND number of each reaction.
     num_reactions = {}
     reaction_list = Reaction.REACTION_CHOICES
@@ -72,3 +81,15 @@ def number_reactions():
             num_reactions[title] = 0
     return max(num_reactions.iterkeys(), key=lambda k: num_reactions[k])
 
+def most_popular_course_search(n, school, semester):
+    """Gets the top n most popular courses searched."""
+    num_courses = {}
+    searches = AnalyticsCourseSearch.objects.filter(school = school, semester = semester)
+    for search in searches:
+        for course in search.courses.all():
+            if course.name in num_courses:
+                num_courses[course.name] += 1
+            else:
+                num_courses[course.name] = 1
+
+    return heapq.nlargest(n, num_courses, key=lambda k: num_courses[k])
