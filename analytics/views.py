@@ -88,9 +88,9 @@ def most_popular_courses(n, school, semester, table = AnalyticsTimetable):
     link_to_courses = table.objects.filter(school = school, semester = semester)
     for link_to_course in link_to_courses:
         for course in link_to_course.courses.all():
-            if course.name in num_courses:
-                num_courses[course.name] += 1
+            if course in num_courses:
+                num_courses[course] += 1
             else:
-                num_courses[course.name] = 1
+                num_courses[course] = 1
 
     return heapq.nlargest(n, num_courses, key=lambda k: num_courses[k])
