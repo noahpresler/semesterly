@@ -26,7 +26,6 @@ def save_analytics_timetable(courses, semester, school, student=None):
                                                           student=student)
     analytics_timetable.courses.add(*courses)
     analytics_timetable.save()
-    number_reactions()
 
 def number_timetables(timetable = AnalyticsTimetable, school = None, semester = None, student = None, time_start = None, time_end = None):
     timetables = []
