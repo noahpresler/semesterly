@@ -31,7 +31,8 @@ class Reaction(models.Model):
   student = models.ForeignKey('student.Student')
   course = models.ManyToManyField(Course)
   title = models.CharField(max_length=50, choices=REACTION_CHOICES)
-  
+  time_created = models.DateTimeField(auto_now_add=True)
+
 class PersonalTimetable(models.Model):
     courses = models.ManyToManyField(Course)
     school = models.CharField(max_length=50)
