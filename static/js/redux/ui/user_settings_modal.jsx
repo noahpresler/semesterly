@@ -66,6 +66,7 @@ export class UserSettingsModal extends React.Component {
                 closeOnClick={false}
                 keyboard={false}
                 modalStyle={modalStyle}
+                onShow={() => $(".max-modal").unwrap()}
                 >
                 <div id="modal-header">
                     <div className="pro-pic" style={{backgroundImage: 'url(' + this.props.userInfo.img_url + ')'}}></div>

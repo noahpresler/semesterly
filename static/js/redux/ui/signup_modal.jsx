@@ -25,7 +25,7 @@ export class SignupModal extends React.Component {
                 className="signup-modal max-modal"
                 modalStyle={modalStyle}
                 onHide={this.props.toggleSignupModal}
-                onShow={() => $(".max-modal").parent().css("display", "block")}
+                onShow={() => $(".max-modal").unwrap()}
                 >
                 {modalHeader}
                 <div id="features">

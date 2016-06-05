@@ -40,7 +40,7 @@ export class CourseModalBody extends React.Component {
             let instructString = Array.from(instructors).join(', ');
             let enrolled = 0
             if (slots.length > 0) {
-                enrolled = slots[0].enrolled || 0;
+                enrolled = slots[0] ? slots[0].enrolled || 0 : 0;
             }
             return <SearchResultSection
                     key={sec}
