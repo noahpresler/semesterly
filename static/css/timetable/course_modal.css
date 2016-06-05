@@ -38,6 +38,7 @@
 .course-modal.trans #modal-add,
 .course-modal.trans #modal-body .rating-module,
 .course-modal.trans #modal-body .modal-module,
+.course-modal.trans #modal-body .modal-module-header,
 .trans #reactions-wrapper {
 	opacity: 0;
 	visibility: hidden;
@@ -46,6 +47,24 @@
     border-top-left-radius: 5px;
     border-bottom-left-radius: 5px;
 }
+
+.friend {
+    height: 30px;
+    overflow: hidden;
+    margin-bottom: 3px;
+    width: 115px;
+    float: left;
+}
+
+.course-modal .ms-friend {
+    float: left;
+    margin-left: 3px;
+    height: 30px;
+    width: 30px;
+    margin-right: 4.5px;
+}
+
+
 /* Course Modal Content Styles */
 #modal-content {
 	width: 100%;
@@ -205,6 +224,10 @@ h3.modal-module-header:after {
 	background-color: #ddd;
 	transition: background-color .2s;
 }
+h3.modal-module-header small {
+	font-size:11px;
+	color:#777;
+}
 
 #modal-body p {
 	font-size: 16px;
@@ -217,7 +240,6 @@ h3.modal-module-header:after {
 }
 #modal-body .prerequisites p {
 	margin-top:2px;
-	font-size:14px;
 }
 #modal-body .credits h3 {
 	text-align: center;
@@ -328,6 +350,17 @@ h3.modal-module-header:after {
 	opacity: 0;
 	visibility: hidden;
 	transition: opacity .3s, visibility .3s;
+}
+#modal-body .friend p {
+    float: left;
+    font-size: 11px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+#friends-inner {
+	margin: 0 auto;
 }
 
 @media (max-width: 766px) {

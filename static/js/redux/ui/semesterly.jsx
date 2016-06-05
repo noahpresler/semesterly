@@ -4,13 +4,15 @@ import AlertBox from './alert_box.jsx';
 import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
 import ConflictAlertContainer from './alerts/conflict_alert_container.jsx';
 import TimetableExistsAlertContainer from './alerts/timetable_exists_alert_container.jsx';
-import ChangeSemesterAlertContainer from './alerts/change_semester_alert_container.jsx'
+import ChangeSemesterAlertContainer from './alerts/change_semester_alert_container.jsx';
+import NewTimetableAlertContainer from './alerts/new_timetable_alert_container.jsx'
 import TopBar from './top_bar.jsx';
 import SideBarContainer from './containers/side_bar_container.jsx';
 import UserSettingsModalContainer from './containers/user_settings_modal_container.jsx';
 import ExplorationModalContainer from './containers/exploration_modal_container.jsx';
 import SignupModalContainer from './containers/signup_modal_container.jsx';
 import PreferenceModalContainer from './containers/preference_modal_container.jsx';
+import TutModalContainer from './containers/tut_modal_container.jsx';
 
 class Semesterly extends React.Component {
 
@@ -42,6 +44,9 @@ class Semesterly extends React.Component {
 			else if (nextProps.alertChangeSemester && !this.props.alertChangeSemester) {
 				this.showAlert(<ChangeSemesterAlertContainer />, 'info', 15000);
 			}
+			else if (nextProps.alertNewTimetable && !this.props.alertNewTimetable) {
+				this.showAlert(<NewTimetableAlertContainer />, 'info', 12000);
+			}
 			else {
 				this.msg.removeAll();
 			}
@@ -62,15 +67,17 @@ class Semesterly extends React.Component {
 				<ExplorationModalContainer />
 				<SignupModalContainer />
 				<PreferenceModalContainer />
+				<TutModalContainer />
 				<AlertBox ref={a => this.msg = a} {...this.alertOptions} />
 				<div id="all-cols">
 					<div id="main-bar">
 						<CalendarContainer />
 						<footer class="footer navbar">
-							<div class="fb-like" data-href="https://www.facebook.com/semesterly/" data-layout="button_count" data-action="like" data-show-faces="true" data-share="false"></div>
 							<ul class="nav nav-pills">
-								<li role="presentation"><a TARGET="_blank" href="mailto:contact@semester.ly?Subject=Semesterly">Contact us</a></li>
-								<li role="presentation"><a TARGET="_blank" href="https://www.facebook.com/semesterly/">Facebook</a></li>
+								
+								<li role="presentation"><a href="mailto:contact@semester.ly?Subject=Semesterly">Contact us</a></li>
+								<li role="presentation"><a target="_blank" href="http://goo.gl/forms/YSltU2YI54PC9sXw1">Feedback</a></li>
+								<li role="presentation"><a target="_blank" href="https://www.facebook.com/semesterly/">Facebook</a></li>
 							</ul>
 						</footer>
 					</div>
@@ -81,3 +88,9 @@ class Semesterly extends React.Component {
 }
 
 export default Semesterly;
+
+
+/*
+<li className="fb-like" data-href="https://www.facebook.com/semesterly/" data-layout="standard" data-action="like" data-show-faces="true" >
+								</li>
+*/

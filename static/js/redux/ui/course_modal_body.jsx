@@ -77,7 +77,7 @@ export class CourseModalBody extends React.Component {
         let tutorialSections = null;
         let practicalSections = null;
         if (lecs.length > 0) {
-            lectureSections = <div><h3 className="modal-module-header">Lecture Sections</h3>{lecs}</div>
+            lectureSections = <div><h3 className="modal-module-header">Lecture Sections <small>(Hover to see the section on your timetable)</small></h3>{lecs}</div>
         }
         if (tuts.length > 0) {
             tutorialSections = <div><h3 className="modal-module-header">Tutorial Sections</h3>{tuts}</div>
@@ -130,7 +130,7 @@ export class CourseModalBody extends React.Component {
             )}
         </div>
 
-        let prerequisitesDisplay = 
+        let prerequisitesDisplay =
         <div className="modal-module prerequisites">
             <h3 className="modal-module-header">Prerequisites</h3>
             <p>{ prerequisites || "None" }</p>
@@ -140,6 +140,20 @@ export class CourseModalBody extends React.Component {
                 <h3 className="modal-module-header">{this.props.schoolSpecificInfo.areasName}</h3>
                 <p>{ this.props.data.areas || "None" }</p>
             </div>
+        let friendCircles = this.props.data.classmates && this.props.data.classmates.classmates.length > 0 ? this.props.data.classmates.classmates.map( c =>
+                <div className="friend">
+                    <div className="ms-friend" key={c.img_url} style={{backgroundImage: 'url(' + c.img_url + ')'}}/>
+                    <p>{ c.first_name + " " + c.last_name }</p>
+                </div>) : null;
+        let friendDisplay = this.props.data.classmates && this.props.data.classmates.classmates.length > 0 ?
+            <div className="modal-module friends">
+                <h3 className="modal-module-header">Friends In This Course</h3>
+                <div id="friends-wrapper">
+                    <div id="friends-inner">
+                        { friendCircles }
+                    </div>
+                </div>
+            </div> : null;
         let textbooksDisplay = !textbooks || textbooks.length === 0 ? null :
         <div className="modal-module">
             <h3 className="modal-module-header">Textbooks</h3>
@@ -168,11 +182,12 @@ export class CourseModalBody extends React.Component {
                         </div>
                         { prerequisitesDisplay }
                         { areasDisplay }
+                        { friendDisplay }
                         
                     </div>
                     <div className="col-8-16">
                         <h3 className="modal-module-header">Reactions</h3>
-                        <p>Checkout your classmate's reactions, click an emoji to add your opinion!</p>
+                        <p>Check out your classmate's reactions – click an emoji to add your own opinion!</p>
                         <div id="reactions-wrapper">
                             <div id="reactions">
                                 {reactionsDisplay}
