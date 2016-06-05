@@ -103,6 +103,7 @@ class UofTParser:
                             instructors += instructor_info['firstName'] + " " + instructor_info['lastName']
                         if instructors and instructors[-1] == ",": 
                             instructors = instructors[:-1]
+                        size = section_data['enrollmentCapacity'] if section_data['enrollmentCapacity'] else 0
                         S, s_created = Section.objects.update_or_create(
                             course=C,
                             meeting_section=section, 
@@ -110,7 +111,7 @@ class UofTParser:
                             semester=semester,
                             defaults={
                                 'instructors': instructors,
-                                'size': section_data['enrollmentCapacity'],
+                                'size': size,
                                 'enrolment': 0,
                         })
                         S.save()
