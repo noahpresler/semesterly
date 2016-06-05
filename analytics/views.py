@@ -60,6 +60,7 @@ def number_timetables_per_hour(timetable = AnalyticsTimetable):
     return num_timetables
 
 def number_reactions():
+    # TODO: Could be modified for max AND number of each reaction.
     num_reactions = {}
     reaction_list = Reaction.REACTION_CHOICES
     for title, text in reaction_list:
@@ -70,5 +71,5 @@ def number_reactions():
             num_reactions[title] = len(reaction.course.all())
         else:
             num_reactions[title] = 0
-    most_popular = max(num_reactions.iterkeys(), key=lambda k: num_reactions[k])
-    print(most_popular)
+    return max(num_reactions.iterkeys(), key=lambda k: num_reactions[k])
+
