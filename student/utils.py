@@ -39,7 +39,7 @@ def create_student(strategy, details, response, user, *args, **kwargs):
         request = urllib2.Request(url)
         data = json.loads(urllib2.urlopen(request).read())
         try:
-          new_student.gender = data['gender']
+          new_student.gender = data.get('gender','')
         except:
           pass
         new_student.fbook_uid = social_user.uid
