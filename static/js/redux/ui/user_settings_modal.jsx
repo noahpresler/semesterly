@@ -33,9 +33,7 @@ export class UserSettingsModal extends React.Component {
             this.props.changeUserInfo(userSettings);
         }
     }
-    componentDidUpdate() {
-        $(".max-modal").parent().css("display", "block");
-    }
+
     componentWillReceiveProps(props) {
         if (this.shouldShow(props))
             this.refs.modal.show();
@@ -66,7 +64,6 @@ export class UserSettingsModal extends React.Component {
                 closeOnClick={false}
                 keyboard={false}
                 modalStyle={modalStyle}
-                onShow={() => $(".max-modal").unwrap()}
                 >
                 <div id="modal-header">
                     <div className="pro-pic" style={{backgroundImage: 'url(' + this.props.userInfo.img_url + ')'}}></div>

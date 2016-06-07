@@ -1,5 +1,5 @@
 import React from 'react';
-import Modal from 'boron/DropModal';
+import Modal from 'boron/FadeModal';
 import SortMenuContainer from './containers/sort_menu_container.jsx'
 
 export class PreferenceModal extends React.Component {
@@ -7,7 +7,6 @@ export class PreferenceModal extends React.Component {
         if (this.props.isVisible) {
             this.refs.modal.show();
         }
-        $(".max-modal").parent().css("display", "block");
     }
     render() {
         let modalHeader =
@@ -24,7 +23,6 @@ export class PreferenceModal extends React.Component {
                    className="pref-modal max-modal"
                    modalStyle={modalStyle}
                    onHide={this.props.togglePreferenceModal}
-                   onShow={() => $(".max-modal").unwrap()}
                    >
                 <div id="perf-modal-wrapper">
                     {modalHeader}
