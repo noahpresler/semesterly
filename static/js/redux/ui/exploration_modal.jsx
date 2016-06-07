@@ -317,7 +317,6 @@ export class ExplorationModal extends React.Component {
                 className={classNames("exploration-modal max-modal", {"trans": this.props.hasHoveredResult})}
                 modalStyle={modalStyle}
                 onHide={this.props.hideModal}
-                onShow={() => $(".max-modal").unwrap()}
                 >
                 {content}
             </Modal>
