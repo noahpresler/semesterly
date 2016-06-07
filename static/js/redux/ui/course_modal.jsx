@@ -23,9 +23,6 @@ export class CourseModal extends React.Component {
             this.refs.modal.show();
         }
     }
-    componentDidUpdate() {
-        $(".max-modal").parent().css("display", "block");
-    }
     addOrRemoveCourse(id, section='') {
         this.props.addOrRemoveCourse(id, section);
         this.hide();
@@ -103,7 +100,6 @@ export class CourseModal extends React.Component {
                 className={classNames('course-modal max-modal', {'trans' : this.props.hasHoveredResult})}
                 modalStyle={modalStyle}
                 onHide={this.hide}
-                onShow={() => $(".max-modal").unwrap()}
                 >
                 {content}
             </Modal>

@@ -1,5 +1,5 @@
 import React from 'react';
-import Modal from 'boron/DropModal';
+import Modal from 'boron/WaveModal';
 import classNames from 'classnames';
 import { browserSupportsLocalStorage } from '../util.jsx';
 
@@ -19,9 +19,7 @@ export class TutModal extends React.Component {
 			e.stopPropagation();
 		});
 	}
-	componentDidUpdate() {
-        $(".max-modal").parent().css("display", "block");
-    }
+
 	next() {
 		this.setState({tutPosition: this.state.tutPosition + 1});
 	}
@@ -35,7 +33,7 @@ export class TutModal extends React.Component {
 		}
 	}
 	render() {
-		let modalStyle = {
+		let contentStyle = {
 			maxWidth: '500px',
 			maxHeight: '550px'
 		};
@@ -45,16 +43,16 @@ export class TutModal extends React.Component {
 		let backgroundColor;
 		switch(this.state.tutPosition) {
 			case 1:
-				modalStyle.backgroundColor = "#27AE60";
+				contentStyle.backgroundColor = "#27AE60";
 				break;
 			case 2:
-				modalStyle.backgroundColor = "#2980B9";
+				contentStyle.backgroundColor = "#2980B9";
 				break;
 			case 3:
-				modalStyle.backgroundColor = "#8E44AD";
+				contentStyle.backgroundColor = "#8E44AD";
 				break;
 			case 4:
-				modalStyle.backgroundColor = "#E74C3C";
+				contentStyle.backgroundColor = "#E74C3C";
 				break;
 		}
 		return (
@@ -62,8 +60,7 @@ export class TutModal extends React.Component {
 				className="tut-modal max-modal"
 				closeOnClick={false}
                 keyboard={false}
-				modalStyle={modalStyle}
-                onShow={() => $(".max-modal").unwrap()}
+				contentStyle={contentStyle}
 				>
 				<div id="tut-wrapper">
 					<div id="tut-nav">
