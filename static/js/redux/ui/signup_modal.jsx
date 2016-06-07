@@ -7,7 +7,6 @@ export class SignupModal extends React.Component {
 		if (this.props.isVisible) {
 			this.refs.modal.show();
 		}
-        $(".max-modal").parent().css("display", "block");
 	}
 	render() {
         let modalHeader =
@@ -25,7 +24,6 @@ export class SignupModal extends React.Component {
                 className="signup-modal max-modal"
                 modalStyle={modalStyle}
                 onHide={this.props.toggleSignupModal}
-                onShow={() => $(".max-modal").unwrap()}
                 >
                 {modalHeader}
                 <div id="features">
