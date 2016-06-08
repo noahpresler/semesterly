@@ -150,6 +150,7 @@ var majors = [
 	{value: "Population Health", label: "Population Health"},
 	{value: "Product & Industrial Design", label: "Product & Industrial Design"},
 	{value: "Psychology", label: "Psychology"},
+	{value: "Public Health", label: "Public Health"},
 	{value: "Public Policy", label: "Public Policy"},
 	{value: "Public Relations", label: "Public Relations"},
 	{value: "Radiation Therapy", label: "Radiation Therapy"},
