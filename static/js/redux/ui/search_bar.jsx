@@ -73,7 +73,10 @@ export class SearchBar extends React.Component {
         	<div id="search-bar">
                 <div id="search-bar-wrapper">
                     <ClickOutHandler onClickOut={this.onClickOut.bind(this)}>
-                        <div id="search-bar-semester" onMouseDown={this.toggleDropdown.bind(this)}>{this.props.semesterName}</div>
+                        <div id="search-bar-semester" onMouseDown={this.toggleDropdown.bind(this)}>
+                            <span className={classNames("tip-down", {'down' : this.state.showDropdown})}> 
+                            </span>
+                            {this.props.semesterName}</div>
                         <div id="semester-picker"
                              className={classNames({'down' : this.state.showDropdown})}
                         >
