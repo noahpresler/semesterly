@@ -84,7 +84,7 @@ export class SearchBar extends React.Component {
                     </ClickOutHandler>
                     <div id="search-bar-input-wrapper">
                         <input ref="input"
-                               placeholder={"Searching " + this.props.semesterName + " courses"}
+                               placeholder={"Searching " + this.props.semesterName}
                                className={this.props.isFetching ? 'results-loading-gif' : ''}
                                onInput={this.fetchSearchResults}
                                onFocus={() => this.setState({ focused: true, showDropdown: false })}
