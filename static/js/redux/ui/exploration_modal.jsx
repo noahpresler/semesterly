@@ -275,7 +275,10 @@ export class ExplorationModal extends React.Component {
 						<h1>Advanced Search</h1>
 					</div>
 					<div className="col-5-16">
-						<input ref="input" onInput={this.fetchAdvancedSearchResultsWrapper}/>
+						<input 
+							ref="input" 
+							placeholder={"Searching " + this.props.semesterName}
+							onInput={this.fetchAdvancedSearchResultsWrapper}/>
 						{explorationLoader}
 					</div>
 	                <div id="exploration-close"
