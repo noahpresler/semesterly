@@ -106,6 +106,12 @@
 	outline: 0;
 	margin-right:7px;
 }
+#exploration-header input::-webkit-input-placeholder {
+   font-size:14px;
+}
+#exploration-header input::-moz-placeholder {
+   font-size:14px;
+}
 
 /* Close Exploration Button */
 #exploration-close {
