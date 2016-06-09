@@ -21,9 +21,10 @@ export class SignupModal extends React.Component {
         };
         return (
             <Modal ref="modal"
-                className="signup-modal"
+                className="signup-modal max-modal"
                 modalStyle={modalStyle}
-                onHide={this.props.toggleSignupModal}>
+                onHide={this.props.toggleSignupModal}
+                >
                 {modalHeader}
                 <div id="features">
                     That feature requires an account.

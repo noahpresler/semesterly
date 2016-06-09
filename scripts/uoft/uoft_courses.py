@@ -271,9 +271,188 @@ class UofTParser:
                         CO.save()
                         
                         print "\t\t\t", day, start, end, loc
-        print "Done UTM! Total new courses found:", self.new
+        self.start_utsc()
+
+    def remove_intermediary_spaces(self, text):
+        return ' '.join(text.split())
+    def get_section_info(self, tds):
+        return {
+      'meeting_section': self.remove_intermediary_spaces(tds[0].text),
+      'day': self.remove_intermediary_spaces(tds[1].text),
+      'time_start': self.remove_intermediary_spaces(tds[2].text),
+      'time_end': self.remove_intermediary_spaces(tds[3].text),
+      'location': self.remove_intermediary_spaces(tds[4].text),
+      'instructors': self.remove_intermediary_spaces(tds[5].text),
+      'notes': self.remove_intermediary_spaces(tds[6].text)
+    }
+    def get_excl_prereq_breadth(self, tag):
+       excl_prereq_breadth = {
+          'exclusions': '',
+          'prerequisites': '',
+          'breadth': ''
+       }
+       while tag and tag.name != 'a':
+
+          if 'Exclusion' not in tag and 'Prerequisite' not in tag and 'Breadth' not in tag:
+             tag = tag.nextSibling
+             continue
+          is_excl = 'Exclusion' in tag
+          is_prereq = 'Prerequisite' in tag
+          is_breadth = 'Breadth' in tag
+
+          value = tag[tag.index(":") + 1: ].strip()
+          while tag.nextSibling and tag.nextSibling.name != "a" and ":" not in tag.nextSibling:
+             try:
+                value += tag.nextSibling
+             except:
+                value += tag.nextSibling.get_text()
+             tag = tag.nextSibling
+
+          value = self.remove_intermediary_spaces(value)
+          if is_excl:
+             excl_prereq_breadth['exclusions'] = value
+          elif is_prereq:
+             excl_prereq_breadth['prerequisites'] = value
+          elif is_breadth:
+             excl_prereq_breadth['breadth'] = value
+          tag = tag.nextSibling
+       return excl_prereq_breadth
+
+    def get_course_details(self, code, link):
+       data_unavailable_codes = ["COPD", "CRTB", "CTL", "EDU", "EST", "FLD", "FSG", "FST", "MGAD10", "MGSC40", "VPH", "VPMB88", "WST"]
+
+       if any(x in code for x in data_unavailable_codes): 
+         return {
+          'description': '',
+          'exclusions': '',
+          'prerequisites': '',
+          'breadth': ''
+       }
+       desc, excl, prereq, breadth = '', '', '', ''
+       detail_soup = BeautifulSoup(self.s.get(link).text)
+       [br.extract() for br in detail_soup.find_all('br')]
+       for anc in detail_soup.find_all('a'):
+          if not anc.has_attr('name'):
+             anc.replaceWith(anc.get_text())
+             
+       a = detail_soup.find('a', {'name':code})
+       alternate_desc = False
+       
+       try:
+          if a.next_sibling.next_sibling.strip or a.next_sibling.next_sibling.text.strip():
+            desc = a.next_sibling.next_sibling
+          else:
+            alternate_desc = True
+            desc = a.find_next('span', {'style': 'mso-bidi-font-size: 12.0pt;'})
+
+       except Exception as e:
+          desc = a.find_next('p')
+
+       if "CITD05" in code or "CITD06" in code:
+        desc_text = "Unavailable"
+       else:
+        desc_text = desc.get_text().strip()
+
+       assert len(desc_text) > 2
+
+
+       if not alternate_desc:
+          excl_or_prereq = desc.nextSibling
+       else:
+          excl_or_prereq = desc.parent.nextSibling
+
+       result = self.get_excl_prereq_breadth(excl_or_prereq)
+       result ['description'] = self.remove_intermediary_spaces(desc_text).strip()
+
+       return result
+    
+
+    def is_tr_relevant(self, tr):
+       if tr.has_attr('style') and "rgb(231, 234, 239)" not in tr.get('style'):
+          return False
+       return True
+
+    def is_tr_new_course(self, tr):
+        return tr.find('b') and tr.find('b').find('a')   
+    def start_utsc(self):
+        payload = {
+            'sess': 'year', 
+            'course': 'DISPLAY_ALL',
+            'submit': 'Display+by+Discipline',
+            'course2': '',
+        }
+        response = self.s.post(url="http://www.utsc.utoronto.ca/~registrar/scheduling/timetable", data=payload).text
+
+        soup = BeautifulSoup(response)
+        table = soup.find("table", class_="tb_border_tb")
+        trs = filter(self.is_tr_relevant, table.find_all('tr'))
+        i = 0
+        utsc_level_map = {"A": "100", "B": "200", "C": "300", "D": "400"}
+        while i < len(trs):
+            tr = trs[i]
+            if self.is_tr_new_course(tr):
+              code_and_semester = tr.find('a').text.strip()
+              code = code_and_semester[:-1]
+              semester = code_and_semester[-1]
+              course_link = tr.find('a').get('href')
+              tr.a.extract()
+              name = tr.find('b').text.strip()[2:]
+              level = code[3].upper()
+              assert level in ["A", "B", "C", "D"]
+              print "On Course:", code, ":", name, "\n"
+              course_details = self.get_course_details(code, course_link)
+              C, created = Course.objects.update_or_create(code=code, school="uoft", defaults={
+                    'name': name,
+                    'description': course_details['description'],
+                    'campus': code[-1],
+                    'areas': '',
+                    'prerequisites': course_details['prerequisites'],
+                    'exclusions': course_details['exclusions'],
+                    'num_credits': 1 if code[6].upper() == 'Y' else 0.5,
+                    'level': level,
+                    'department': code[:3]
+              })
+              if created:
+                self.new += 1
+
+
+            else: #sections and offerings
+              tds = tr.find_all('td')
+              assert len(tds) == 7
+              section_info = self.get_section_info(tds)
+              if section_info['meeting_section']:
+                 meeting_section = section_info['meeting_section'][0] + section_info['meeting_section'][3:]
+
+              if section_info['time_start'] == '' or section_info['time_end'] == '':
+                 print "\tInvalid details for course", code, section_info['meeting_section'], ". Perhaps online?\n"
+                 i += 1
+                 continue
+
+              instructors = section_info['instructors']
+              S, s_created = Section.objects.update_or_create(
+                    course=C,
+                    meeting_section=meeting_section, 
+                    section_type=meeting_section[0],
+                    semester=semester,
+                    defaults={
+                        'instructors': instructors,
+                        'enrolment': 0,
+              })
+              CO, co_created = Offering.objects.update_or_create(section=S,
+                                    day=self.day_map[section_info['day']],
+                                    time_start=section_info['time_start'].strip(),
+                                    time_end=section_info['time_end'].strip(),
+                                    location=section_info['location'])
+                                           
+              CO.save()
+              print "\t", meeting_section, "taught by", instructors
+              print "\t\t", section_info['day'] + ":", section_info['time_start'] + "-" + section_info['time_end'], "at", section_info['location']
+
+            i += 1
         self.wrap_up()
     def wrap_up(self):
+        print "Done! Total new courses found:", self.new
+
         update_object, created = Updates.objects.update_or_create(
             school=self.school,
             update_field="Course",
