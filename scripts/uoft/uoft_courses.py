@@ -442,7 +442,9 @@ class UofTParser:
                                     day=self.day_map[section_info['day']],
                                     time_start=section_info['time_start'].strip(),
                                     time_end=section_info['time_end'].strip(),
-                                    location=section_info['location'])
+                                    defaults={
+                                      'location': section_info['location']
+                                    })
                                            
               CO.save()
               print "\t", meeting_section, "taught by", instructors

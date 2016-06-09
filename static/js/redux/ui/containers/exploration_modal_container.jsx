@@ -15,6 +15,8 @@ const mapStateToProps = (state) => {
 	}
 	let activeTimetable = state.timetables.items[state.timetables.active];
 	let { areas, departments, levels } = state.school;
+	let schoolSpecificSemesters = getSchoolSpecificInfo(state.school.school).semesters;
+	let semesterName = schoolSpecificSemesters[state.semester];
 	return {
 		isVisible,
     	isFetching,
@@ -25,6 +27,7 @@ const mapStateToProps = (state) => {
 		areas,
 		departments,
 		levels,
+		semesterName,
 		schoolSpecificInfo: getSchoolSpecificInfo(state.school.school),
 		isLoggedIn: state.userInfo.data.isLoggedIn,
 		hasHoveredResult: activeTimetable.courses.some(course => course.fake),
