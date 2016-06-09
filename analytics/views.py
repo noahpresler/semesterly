@@ -15,7 +15,16 @@ to_zone = tz.gettz('America/New_York')
 
 
 def view_analytics_dashboard(request):
-    return render_to_response('analytics_dashboard.html', {"total_time_tables":number_timetables()},
+    return render_to_response('analytics_dashboard.html', {
+            "total_timetables":number_timetables(),
+            "jhu_timetables":number_timetables(school='jhu'),
+            "uoft_timetables":number_timetables(school='uoft'),
+            "umd_timetables":number_timetables(school='umd'),
+            "most_popular_reaction":most_popular_reaction(),
+            "jhu_most_popular_courses":most_popular_courses(5, 'jhu', 'S'),
+            "uoft_most_popular_courses":most_popular_courses(5, 'uoft', 'S'),
+            "umd_most_popular_courses":most_popular_courses(5, 'umd', 'S')
+        },
         context_instance=RequestContext(request))
 
 def save_analytics_timetable(courses, semester, school, student=None):
@@ -48,13 +57,13 @@ def number_timetables(Timetable = AnalyticsTimetable, school = None, semester = 
         )
 
     if school:
-        timetables += timetables.filter(school = school)
+        timetables = timetables.filter(school = school)
 
     if semester:
-        timetables += timetables.filter(semester = semester)
+        timetables = timetables.filter(semester = semester)
 
     if student:
-        timetables += timetables.filter(student = student)
+        timetables = timetables.filter(student = student)
 
     return timetables.count()
 
@@ -95,5 +104,6 @@ def most_popular_courses(n, school, semester, table = AnalyticsTimetable):
                 num_courses[course.id] += 1
             else:
                 num_courses[course.id] = 1
-    return heapq.nlargest(n, num_courses, key=lambda k: num_courses[k])
+    course_ids = heapq.nlargest(n, num_courses, key=lambda k: num_courses[k])
+    return Course.objects.filter(pk__in = course_ids)
     
