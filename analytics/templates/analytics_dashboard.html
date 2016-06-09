@@ -17,7 +17,36 @@
   <body>
     <div id="analytics-container">
     </div>
-    <h3>Total number of Timetables: {{total_time_tables}}</h3>
+    <h3>Total number of Timetables: {{total_timetables}}</h3>
+
+    <h3>Total number of JHU Timetables: {{jhu_timetables}}</h3>  
+    <h4>Most popular courses in JHU:</h4>  
+    {% for course in jhu_most_popular_courses %}
+    <div>
+        <p>{{ course.name }}</p>
+    </div>
+    {% endfor %}
+
+    <h3>Total number of UOFT Timetables: {{uoft_timetables}}</h3>
+    <h4>Most popular courses in UOFT:</h4>  
+    {% for course in uoft_most_popular_courses %}
+    <div>
+        <p>{{ course.name }}</p>
+    </div>
+    {% endfor %}
+    
+    <h3>Total number of UMD Timetables: {{umd_timetables}}</h3>
+    <h4>Most popular courses in UMD:</h4>  
+    {% for course in umd_most_popular_courses %}
+    <div>
+        <p>{{ course.name }}</p>
+    </div>
+    {% endfor %}
+    
+
+
+    <h3>Most popular reaction: {{most_popular_reaction}}</h3>
+
 
 
       <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
