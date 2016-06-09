@@ -79,6 +79,9 @@ header nav a:hover {
 	font-size: 0;
 	transform: translate(-50%, -50%);
 }
+#hero-content-wrapper {
+	padding: 0 20px;
+}
 #hero h2 {
 	width: 50%;
 	color: white;
@@ -90,6 +93,8 @@ header nav a:hover {
 	width: 50%;
 	height: auto;
 	vertical-align: middle;
+	position: relative;
+	top: 70px;
 }
 
 /* Schools */
@@ -133,15 +138,20 @@ header nav a:hover {
 
 
 
-@media(max-width:1170px) {
+@media(max-width: 1170px) {
 	#hero h2 {
-		min-width: 320px;
 		text-align: center;
 		font-size: 66px;
 	}
 }
 
-@media(max-width:766px) {
+@media(max-width: 920px) {
+	#hero h2 {
+		font-size: 50px;
+	}
+}
+
+@media(max-width: 766px) {
 	#hero-wrapper {
 		position: static;
 		transform: translate(0%, 0%);
@@ -151,7 +161,8 @@ header nav a:hover {
 		display: inline-block;
 	}
 	#hero img {
-		width: 50%;
+		top: auto;
+		width: 60%;
 	}
 }
 
@@ -160,9 +171,9 @@ header nav a:hover {
 		display: none;
 	}
 	#hero h2 {
-		font-size: 55px;
+		font-size: 45px;
 	}
 	#hero img {
-		width: 60%;
+		width: 70%;
 	}
 }
