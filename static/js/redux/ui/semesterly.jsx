@@ -58,7 +58,7 @@ class Semesterly extends React.Component {
 		  time: delay,
 		});
 	}
-
+	
 	render() {
 		return (
 			<div id="page-wrapper">
