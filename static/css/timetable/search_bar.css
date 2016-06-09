@@ -15,11 +15,17 @@
 	font-weight: 400;
 	color: #777;
 	line-height: 18px;
-	padding: 5px 10px;
+	padding: 5px 7px;
 	border: 1px solid #E8E8E8;
 	border-right: none;
 	background-color: #fff;
 	cursor:pointer;
+	padding-left:20px;
+}
+#search-bar-semester > .tip-down {
+	position:absolute;
+	top:12px;
+	left:1px;
 }
 #search-bar-input-wrapper {
 	width: auto;

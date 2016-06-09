@@ -286,7 +286,7 @@ export class ExplorationModal extends React.Component {
 	            <div id="exploration-body">
                     <div id="exp-filters" className="col-4-16">
                         { selectedFilterSections }
-                        <SelectedFilterSection key={"times"} name={"Times"}
+                        <SelectedFilterSection key={"times"} name={"Day/Times"}
 										  toggle={this.toggle("times")}
 										  children={timeFilters} />
                     </div>
@@ -314,7 +314,7 @@ export class ExplorationModal extends React.Component {
         );
         return (
             <Modal ref="modal"
-                className={classNames("exploration-modal", {"trans": this.props.hasHoveredResult})}
+                className={classNames("exploration-modal max-modal", {"trans": this.props.hasHoveredResult})}
                 modalStyle={modalStyle}
                 onHide={this.props.hideModal}
                 >
@@ -393,7 +393,7 @@ const SelectedFilter = ({ name, remove }) => (
 const SelectedFilterSection = ({ name, toggle, children }) => (
 	<div className="exp-filter-section open">
 	    <h3 className="exp-header">
-			<span>{ name } Filter</span>
+			<span>{ name.substring(0, name.length - 1) } Filter</span>
 			<i className="fa fa-plus"
 				onClick={toggle}></i>
 		</h3>
@@ -421,5 +421,4 @@ class TimeSelector extends React.Component {
 		$(".InputRange-labelContainer").filter((i, c) => i % 2 === 0)
 		.addClass('InputRange-labelMaxTime');		
 	}
-
 }

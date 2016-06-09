@@ -535,3 +535,4 @@ def school_info(request, school):
     'last_updated': last_updated
   }
   return HttpResponse(json.dumps(json_data), content_type="application/json")
+  

@@ -33,6 +33,7 @@ export class UserSettingsModal extends React.Component {
             this.props.changeUserInfo(userSettings);
         }
     }
+
     componentWillReceiveProps(props) {
         if (this.shouldShow(props))
             this.refs.modal.show();
@@ -59,7 +60,7 @@ export class UserSettingsModal extends React.Component {
         };
         return (
             <Modal ref="modal"
-                className="welcome-modal"
+                className="welcome-modal max-modal"
                 closeOnClick={false}
                 keyboard={false}
                 modalStyle={modalStyle}
