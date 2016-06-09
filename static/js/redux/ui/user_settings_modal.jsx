@@ -121,7 +121,7 @@ export class UserSettingsModal extends React.Component {
                     </div>
                     <div className="button-wrapper">
                         <button className="signup-button" onClick={() => {
-                            this.props.saveSettings();
+                            this.changeForm();
                             this.props.closeUserSettings();
                             if (!this.shouldShow(Object.assign({}, this.props, { showOverrided: false })))
                                     this.refs.modal.hide();
