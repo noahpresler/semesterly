@@ -1,5 +1,5 @@
 import React from 'react';
-import Modal from 'boron/DropModal';
+import Modal from 'boron/WaveModal';
 import classNames from 'classnames';
 
 export class SignupModal extends React.Component {
