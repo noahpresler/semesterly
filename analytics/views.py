@@ -15,7 +15,7 @@ to_zone = tz.gettz('America/New_York')
 
 
 def view_analytics_dashboard(request):
-    return render_to_response('analytics_dashboard.html', {},
+    return render_to_response('analytics_dashboard.html', {"total_time_tables":number_timetables()},
         context_instance=RequestContext(request))
 
 def save_analytics_timetable(courses, semester, school, student=None):
@@ -37,28 +37,28 @@ def save_analytics_course_search(query, courses, semester, school, student=None,
     course_search.courses.add(*courses)
     course_search.save()
 
-def number_timetables(timetable = AnalyticsTimetable, school = None, semester = None, student = None, time_start = None, time_end = None):
+def number_timetables(Timetable = AnalyticsTimetable, school = None, semester = None, student = None, time_start = None, time_end = None):
     """Gets the number of time tables by school, semester, student, and/or time. Can be used for analytics or shared time tables."""
-    timetables = []
+    timetables = Timetable.objects.all()
     if time_start and time_end:
-        timetables += (
-            timetable.objects.filter(
+        timetables = (
+            timetables.filter(
                 time_created__range=(time_start, time_end)
             )
         )
 
     if school:
-        timetables += timetable.objects.filter(school = school)
+        timetables += timetables.filter(school = school)
 
     if semester:
-        timetables += timetable.objects.filter(semester = semester)
+        timetables += timetables.filter(semester = semester)
 
     if student:
-        timetables += timetable.objects.filter(student = student)
+        timetables += timetables.filter(student = student)
 
-    return len(timetables)
+    return timetables.count()
 
-def number_timetables_per_hour(timetable = AnalyticsTimetable):
+def number_timetables_per_hour(Timetable = AnalyticsTimetable):
     """Gets the number of time tables created each hour."""
     # TODO: Change start and end time.
     time_start = datetime.datetime(2016, 5, 30, 0, 0, 0)
@@ -66,7 +66,7 @@ def number_timetables_per_hour(timetable = AnalyticsTimetable):
     time_delta = timedelta(hours = 1)
     num_timetables = []
     while time_start <= time_end:
-        num_timetables.append(number_timetables(timetable = timetable, time_start = time_start, time_end = time_start + time_delta))
+        num_timetables.append(number_timetables(Timetable = Timetable, time_start = time_start, time_end = time_start + time_delta))
         time_start += time_delta
     return num_timetables
 
