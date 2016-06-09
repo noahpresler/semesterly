@@ -99,7 +99,7 @@ export class UserSettingsModal extends React.Component {
                     />
                     <div className="preference cf">
                         <label className="switch switch-slide">
-                            <input ref="share_courses" className="switch-input" type="checkbox" checked={this.props.userInfo.social_courses} onChange={this.changeForm}/>
+                            <input ref="share_courses" className="switch-input" type="checkbox" checked={this.props.userInfo.social_courses} onChange={this.changeForm} defaultChecked={true}/>
                             <span className="switch-label" data-on="Yes" data-off="No"></span>
                             <span className="switch-handle"></span>
                         </label>
