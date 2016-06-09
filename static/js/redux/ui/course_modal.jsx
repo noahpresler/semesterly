@@ -38,8 +38,9 @@ export class CourseModal extends React.Component {
         this.setState({shareLinkShown: false});
     }
     // sizeItUp() {
-    //     let h = $("#modal-header").outerHeight();
-    //     $("#modal-body").css("top", h);
+    //     // let h = $("#modal-header").outerHeight();
+    //     // $("#modal-body").css("top", h);
+    //     $(".course-modal:parent").css("display", "block");
     // }
     // componentDidMount() {
     //     $(window).resize(this.sizeItUp);
@@ -96,7 +97,7 @@ export class CourseModal extends React.Component {
         </div>);
         return (
             <Modal ref="modal"
-                className={classNames('course-modal', {'trans' : this.props.hasHoveredResult})}
+                className={classNames('course-modal max-modal', {'trans' : this.props.hasHoveredResult})}
                 modalStyle={modalStyle}
                 onHide={this.hide}
                 >
