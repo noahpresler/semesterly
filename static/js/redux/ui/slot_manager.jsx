@@ -13,6 +13,8 @@ class SlotManager extends React.Component {
             let day_slots = slots_by_day[day].map((slot, j) => {
                 let courseId = slot.course;
                 let locked = this.props.isLocked(courseId, slot.meeting_section);
+                let isOptional = this.props.isCourseOptional(courseId);
+                let optionalCourse = isOptional ? this.props.getOptionalCourseById(courseId) : null;
                 return slot.custom ?
                 <CustomSlot {...slot}
                     key={ i.toString() + j.toString() + " custom" }
@@ -26,7 +28,7 @@ class SlotManager extends React.Component {
                     locked={ locked }
                     classmates={this.props.socialSections ? this.props.classmates(courseId, slot.meeting_section) : []}
                     lockOrUnlockSection={ () => this.props.addOrRemoveCourse(courseId, slot.meeting_section) }
-                    removeCourse={ () => this.props.addOrRemoveCourse(courseId) }
+                    removeCourse={ () =>  !isOptional ? (this.props.addOrRemoveCourse(courseId)) : (this.props.addOrRemoveOptionalCourse(optionalCourse)) }
                     primaryDisplayAttribute={this.props.primaryDisplayAttribute}
                     updateCustomSlot={ this.props.updateCustomSlot } 
                     addCustomSlot={ this.props.addCustomSlot } />
