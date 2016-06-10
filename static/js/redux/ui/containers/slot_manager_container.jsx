@@ -1,6 +1,6 @@
 import { connect } from 'react-redux';
 import { fetchCourseInfo } from '../../actions/modal_actions.jsx'
-import { addOrRemoveCourse } from '../../actions/timetable_actions.jsx'
+import { addOrRemoveCourse, addOrRemoveOptionalCourse } from '../../actions/timetable_actions.jsx'
 import { getSchoolSpecificInfo } from '../../constants.jsx';
 import { removeCustomSlot, updateCustomSlot, addCustomSlot } from '../../actions/timetable_actions.jsx';
 import SlotManager from '../slot_manager.jsx';
@@ -26,6 +26,8 @@ const mapStateToProps = (state) => {
 		primaryDisplayAttribute: getSchoolSpecificInfo(state.school.school).primaryDisplay,
 		courseToColourIndex: state.ui.courseToColourIndex,
 		custom: state.customSlots,
+		isCourseOptional: (cid) => state.optionalCourses.courses.findIndex(c => c.id === cid) > -1,
+		getOptionalCourseById: (cid) => state.optionalCourses.courses.find(c => c.id === cid),
 		classmates: (id,sec) => {
 			let cm = state.classmates.courseToClassmates ? state.classmates.courseToClassmates.find(course => course.course_id === id) : [];
 			return cm ? cm.classmates.filter(friend => friend.sections && friend.sections.find(s => s === sec) !== undefined) : [];
@@ -37,10 +39,11 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch) => {
 	return {
 		fetchCourseInfo: (courseId) => dispatch(fetchCourseInfo(courseId)),
+		addOrRemoveOptionalCourse: (course) => dispatch(addOrRemoveOptionalCourse(course)),
 		addOrRemoveCourse: addOrRemoveCourse,
-    removeCustomSlot: removeCustomSlot,
-    updateCustomSlot: updateCustomSlot,
-    addCustomSlot: addCustomSlot
+    	removeCustomSlot: removeCustomSlot,
+    	updateCustomSlot: updateCustomSlot,
+    	addCustomSlot: addCustomSlot
 	}
 }
 
