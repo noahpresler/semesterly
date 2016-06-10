@@ -100,11 +100,11 @@ class Slot extends React.Component {
         callback();
     }
     onSlotHover() {
-        this.setState({ hovered : true});
+        this.setState({ hovered: true});
         this.updateColours(COLOUR_DATA[this.props.colourId].highlight);
     }
     onSlotUnhover() {
-        this.setState({ hovered : false});
+        this.setState({ hovered: false});
         this.updateColours(COLOUR_DATA[this.props.colourId].background);
     }
     updateColours(colour) {
