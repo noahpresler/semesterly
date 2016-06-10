@@ -30,7 +30,7 @@ export function alertConflict(){
 export function nullifyTimetable(dispatch) {
 	dispatch({
 		type: "RECEIVE_TIMETABLES",
-		timetables: [{courses: []}],
+		timetables: [{courses: [], has_conflict: false}],
 	});
 	dispatch({
 		type: "RECEIVE_COURSE_SECTIONS",
@@ -38,7 +38,7 @@ export function nullifyTimetable(dispatch) {
 	});
 	dispatch({
 		type: "CHANGE_ACTIVE_SAVED_TIMETABLE",
-		timetable: {name: "Untitled Schedule", courses: []}
+		timetable: {name: "Untitled Schedule", courses: [], has_conflict: false}
 	})
 }
 
