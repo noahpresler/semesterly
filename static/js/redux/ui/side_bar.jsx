@@ -82,7 +82,7 @@ class SideBar extends React.Component {
                 <div className="empty-state">
                     { img }
                     <h4>Give Optional Courses a Spin!</h4>
-                    <h3>Load this list with courses you aren't 100% sure you want to take - we'll fit as many as we can, automatically</h3>
+                    <h3>Load this list with courses you aren't 100% sure you want to take - we'll fit as many as possible, automatically</h3>
                 </div>);
         }
         return (
