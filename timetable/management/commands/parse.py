@@ -21,14 +21,14 @@ class Command(BaseCommand):
   def handle(self, *args, **options):
   	logging.basicConfig(level=logging.ERROR, filename='parse_errors.log')
 
-  	VALID_SCHOOLS = course_parsers.keys()
+  	schools_to_parse = course_parsers.keys()
 
-  	schools = VALID_SCHOOLS
+  	schools = schools_to_parse
   	if options['school']:
-  		if options['school'] in VALID_SCHOOLS:
+  		if options['school'] in schools_to_parse:
   			schools = [options['school']]
   		else:
-			self.stderr.write(self.style.ERROR("Invalid school provided. Valid options are: " + str(VALID_SCHOOLS)))
+			self.stderr.write(self.style.ERROR("Invalid school provided. Valid options are: " + str(schools_to_parse)))
 			exit(1)
 
 
