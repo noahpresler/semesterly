@@ -1,7 +1,7 @@
 import update from 'react/lib/update';
 import { saveLocalActiveIndex } from '../util.jsx';
 
-let initialState = { isFetching: false, items: [{courses: []}], active: 0 };
+let initialState = { isFetching: false, items: [{courses: [], has_conflict: false}], active: 0 };
 
 export const timetables = (state = initialState, action) => {
 
@@ -11,7 +11,7 @@ export const timetables = (state = initialState, action) => {
 			return Object.assign({}, state, {isFetching: true});
 
 		case 'RECEIVE_TIMETABLES':
-			let timetables = action.timetables.length > 0 ? action.timetables : [{courses: []}];
+			let timetables = action.timetables.length > 0 ? action.timetables : [{courses: [], has_conflict: false}];
 			return {
 				isFetching: false, 
 				items: timetables,
