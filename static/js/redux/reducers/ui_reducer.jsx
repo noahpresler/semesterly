@@ -6,7 +6,7 @@ export const ui = (state = { searchHover: 0, courseToColourIndex: {} }, action) 
 			return Object.assign( {}, state, { searchHover : action.position } );
 		case 'RECEIVE_TIMETABLES':
 		 	// update slot colours based on new timetables
-			let timetables = action.timetables.length > 0 ? action.timetables : [{courses: []}];
+			let timetables = action.timetables.length > 0 ? action.timetables : [{courses: [], has_conflict: false}];
 			let existingCourseToColour = !action.saving && action.preset ? {} : state.courseToColourIndex;
 			let courseToColourIndex = {};
       let usedColourIndices = Object.values(existingCourseToColour);
