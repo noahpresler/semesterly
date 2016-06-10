@@ -138,7 +138,7 @@ class UofTParser:
                     traceback.print_exc()
 
         print "Total errors:", self.errors
-        print "Done St. George. Now starting UTM."
+        print "Done St. George, found %d new courses. Now starting UTM." % (self.new)
         self.start_utm()
         
     def start_utm(self):
@@ -271,6 +271,7 @@ class UofTParser:
                         CO.save()
                         
                         print "\t\t\t", day, start, end, loc
+        print "Done UTM, found %d new courses (collectively) so far. Now starting UTSC." % (self.new)
         self.start_utsc()
 
     def remove_intermediary_spaces(self, text):
@@ -319,52 +320,52 @@ class UofTParser:
        return excl_prereq_breadth
 
     def get_course_details(self, code, link):
-       data_unavailable_codes = ["COPD", "CRTB", "CTL", "EDU", "EST", "FLD", "FSG", "FST", "MGAD10", "MGSC40", "VPH", "VPMB88", "WST"]
+       try:
+         desc, excl, prereq, breadth = '', '', '', ''
+         detail_soup = BeautifulSoup(self.s.get(link).text)
+         [br.extract() for br in detail_soup.find_all('br')]
+         for anc in detail_soup.find_all('a'):
+            if not anc.has_attr('name'):
+               anc.replaceWith(anc.get_text())
+               
+         a = detail_soup.find('a', {'name':code})
+         alternate_desc = False
+         
+         try:
+            if a.next_sibling.next_sibling.strip or a.next_sibling.next_sibling.text.strip():
+              desc = a.next_sibling.next_sibling
+            else:
+              alternate_desc = True
+              desc = a.find_next('span', {'style': 'mso-bidi-font-size: 12.0pt;'})
 
-       if any(x in code for x in data_unavailable_codes): 
-         return {
+         except Exception as e:
+            desc = a.find_next('p')
+
+         if "CITD05" in code or "CITD06" in code:
+          desc_text = "Unavailable"
+         else:
+          desc_text = desc.get_text().strip()
+
+         assert len(desc_text) > 2
+
+
+         if not alternate_desc:
+            excl_or_prereq = desc.nextSibling
+         else:
+            excl_or_prereq = desc.parent.nextSibling
+
+         result = self.get_excl_prereq_breadth(excl_or_prereq)
+         result ['description'] = self.remove_intermediary_spaces(desc_text).strip()
+
+         return result
+       except:
+        print "\tError: Couldn't find desc/excl/prereq/breadth details for", code
+        return {
           'description': '',
           'exclusions': '',
           'prerequisites': '',
           'breadth': ''
        }
-       desc, excl, prereq, breadth = '', '', '', ''
-       detail_soup = BeautifulSoup(self.s.get(link).text)
-       [br.extract() for br in detail_soup.find_all('br')]
-       for anc in detail_soup.find_all('a'):
-          if not anc.has_attr('name'):
-             anc.replaceWith(anc.get_text())
-             
-       a = detail_soup.find('a', {'name':code})
-       alternate_desc = False
-       
-       try:
-          if a.next_sibling.next_sibling.strip or a.next_sibling.next_sibling.text.strip():
-            desc = a.next_sibling.next_sibling
-          else:
-            alternate_desc = True
-            desc = a.find_next('span', {'style': 'mso-bidi-font-size: 12.0pt;'})
-
-       except Exception as e:
-          desc = a.find_next('p')
-
-       if "CITD05" in code or "CITD06" in code:
-        desc_text = "Unavailable"
-       else:
-        desc_text = desc.get_text().strip()
-
-       assert len(desc_text) > 2
-
-
-       if not alternate_desc:
-          excl_or_prereq = desc.nextSibling
-       else:
-          excl_or_prereq = desc.parent.nextSibling
-
-       result = self.get_excl_prereq_breadth(excl_or_prereq)
-       result ['description'] = self.remove_intermediary_spaces(desc_text).strip()
-
-       return result
     
 
     def is_tr_relevant(self, tr):
