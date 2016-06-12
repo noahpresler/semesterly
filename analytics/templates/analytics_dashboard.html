@@ -19,6 +19,17 @@
     </div>
     <h3>Total number of Timetables: {{total_timetables}}</h3>
 
+    <h3>Number Timetables created per hour for the last 24 hours:</h3>  
+    {% for num_timetables in timetables_per_hour %}
+    <div>
+        <p>{{ forloop.counter }}: {{ num_timetables }}</p>
+    </div>
+    {% endfor %}
+
+    <h3>Total number of timetalbes for Fall semester: {{total_timetables_fall}}</h3>
+
+    <h3>Total number of Timetables for Spring semester: {{total_timetables_spring}}</h3>
+
     <h3>Total number of JHU Timetables: {{jhu_timetables}}</h3>  
     <h4>Most popular courses in JHU:</h4>  
     {% for course in jhu_most_popular_courses %}
@@ -43,7 +54,6 @@
     </div>
     {% endfor %}
     
-
 
     <h3>Most popular reaction: {{most_popular_reaction}}</h3>
 

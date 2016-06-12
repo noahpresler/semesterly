@@ -17,6 +17,9 @@ to_zone = tz.gettz('America/New_York')
 def view_analytics_dashboard(request):
     return render_to_response('analytics_dashboard.html', {
             "total_timetables":number_timetables(),
+            "timetables_per_hour":number_timetables_per_hour(),
+            "total_timetables_fall":number_timetables(semester="F"),
+            "total_timetables_sprint":number_timetables(semester="S"),
             "jhu_timetables":number_timetables(school='jhu'),
             "uoft_timetables":number_timetables(school='uoft'),
             "umd_timetables":number_timetables(school='umd'),
@@ -69,12 +72,14 @@ def number_timetables(Timetable = AnalyticsTimetable, school = None, semester = 
 
 def number_timetables_per_hour(Timetable = AnalyticsTimetable):
     """Gets the number of time tables created each hour."""
-    # TODO: Change start and end time.
-    time_start = datetime.datetime(2016, 5, 30, 0, 0, 0)
-    time_end = datetime.datetime(2016, 5, 31, 12, 0, 0)
+    # TODO: Change start and end time. Currently set for past 24 hours.
+    time_end = datetime.datetime.now()
+    length = timedelta(days = 1)
+    time_start = time_end - length
+
     time_delta = timedelta(hours = 1)
     num_timetables = []
-    while time_start <= time_end:
+    while time_start < time_end:
         num_timetables.append(number_timetables(Timetable = Timetable, time_start = time_start, time_end = time_start + time_delta))
         time_start += time_delta
     return num_timetables
