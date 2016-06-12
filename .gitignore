@@ -19,3 +19,4 @@ static/css/gulp/*
 logfile.txt
 semesterly/sensitive.py
 semesterly-venv/
+github-request-body
