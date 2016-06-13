@@ -3,11 +3,11 @@ from django.http import HttpResponse, HttpResponseRedirect, Http404
 from django.template import RequestContext
 from django.views.decorators.csrf import csrf_exempt
 from django.db.models import Q
-
+from django.http import Http404
 import datetime, json, urllib2
 import heapq
 from datetime import timedelta
-
+from student.views import get_student
 from analytics.models import *
 from student.models import *
 from dateutil import tz
@@ -15,20 +15,25 @@ to_zone = tz.gettz('America/New_York')
 
 
 def view_analytics_dashboard(request):
-    return render_to_response('analytics_dashboard.html', {
-            "total_timetables":number_timetables(),
-            "timetables_per_hour":number_timetables_per_hour(),
-            "total_timetables_fall":number_timetables(semester="F"),
-            "total_timetables_sprint":number_timetables(semester="S"),
-            "jhu_timetables":number_timetables(school='jhu'),
-            "uoft_timetables":number_timetables(school='uoft'),
-            "umd_timetables":number_timetables(school='umd'),
-            "most_popular_reaction":most_popular_reaction(),
-            "jhu_most_popular_courses":most_popular_courses(5, 'jhu', 'S'),
-            "uoft_most_popular_courses":most_popular_courses(5, 'uoft', 'S'),
-            "umd_most_popular_courses":most_popular_courses(5, 'umd', 'S')
-        },
-        context_instance=RequestContext(request))
+    student = get_student(request)
+    if student and student.user.is_staff:
+        return render_to_response('analytics_dashboard.html', {
+                "total_timetables":number_timetables(),
+                "timetables_per_hour":number_timetables_per_hour(),
+                "total_timetables_fall":number_timetables(semester="F"),
+                "total_timetables_sprint":number_timetables(semester="S"),
+                "jhu_timetables":number_timetables(school='jhu'),
+                "uoft_timetables":number_timetables(school='uoft'),
+                "umd_timetables":number_timetables(school='umd'),
+                "most_popular_reaction":most_popular_reaction(),
+                "jhu_most_popular_courses":most_popular_courses(5, 'jhu', 'S'),
+                "uoft_most_popular_courses":most_popular_courses(5, 'uoft', 'S'),
+                "umd_most_popular_courses":most_popular_courses(5, 'umd', 'S')
+            },
+            context_instance=RequestContext(request))
+
+    else:
+        raise Http404
 
 def save_analytics_timetable(courses, semester, school, student=None):
     """Create an analytics time table entry."""
