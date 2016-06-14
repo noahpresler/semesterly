@@ -5,7 +5,7 @@
 html, body{
 	margin: 0;
 	height: 100%;
-	background-color: #253340;;
+	background-color: #253340;
 	font-family: Lato,Helvetica,Arial,sans-serif;
 }
 
@@ -17,13 +17,14 @@ header {
 	height: 50px;
 	padding: 10px;
 	color: #253340;
-	background-color: #fff;
+	background-color: #F9F9F9;
+	border-bottom: 1px solid #DDD;
 }
 header h1 {
 	float: left;
 	font-family: lato;
 	font-weight: 400;
-	font-size: 32px;
+	font-size: 26px;
 	line-height: 30px;
 	margin: 0 10px 0;
 }
@@ -46,12 +47,12 @@ header nav a:active,
 header nav a:visited {
 	margin-right: 10px;
 	color: rgb(37, 51, 64);
+	text-decoration: none;
+	transition: color .2s;
 }
 
 header nav a:hover {
-	margin-right: 10px;
 	color: #3498DB;
-	transition: all .1s linear;
 }
 
 /* Page Content */
@@ -104,16 +105,19 @@ header nav a:hover {
     margin-top: 14px;
     background-color: #253340;
     display: inline-block;
+	text-align: center;
+}
+#schools h2 {
+	color: #E1E2E4;
 }
 .school {
-	text-align: center;
 	padding: 30px 15px;
 	border-radius: 10px;
 	cursor: pointer;
-	transition: box-shadow .3s linear;
+	transition: transform .3s;
 }
 .school:hover {
-	box-shadow: 3px 6px 6px 4px #1c2630;
+	transform: scale(1.05);
 }
 .school h3 {
 	color: #FFFFFF;
@@ -136,7 +140,200 @@ header nav a:hover {
 	line-height: 120px;
 }
 
+.reason {
+	position: relative;
+	text-align: center;
+}
+#tutorials {
+	background-color: #F9F9F9;
+}
+.tutorial {
+	padding: 120px 0;
+	font-size: 0;
+	border-bottom: 1px solid #ddd;
+	position: relative;
+}
+.tutorial:last-child {
+	border-bottom: none;
+}
+.tutorial img {
+	width: 100%;
+	max-width: 550px;
+	height: auto;
+	margin: 0 auto;
+}
+.tutorial-half {
+	display: inline-block;
+	width: 50%;
+	vertical-align: middle;
+	text-align: center;
+}
+.tutorial-text {
+	padding: 0 50px 40px;
+}
+.tutorial-bg {
+	position: absolute;
+	bottom: 0;
+	right: 0;
+	width: 60%;
+	height: 70%;
+	background-image: url(/static/img/splash/friends_photo.png);
+	background-size: contain;
+	background-position: bottom;
+	background-repeat: no-repeat;
+	visibility: visible;
+}
+.tutorial h5,
+.reason h5 {
+	font-size: 16px;
+	font-weight: 100;
+	margin: 0;
+	text-transform: uppercase;
+	letter-spacing: 0.2em;
+	color: #555;
+}
+.tutorial h2,
+.reason h2 {
+	font-size: 42px;
+	font-weight: 300;
+	margin: 20px 0 0;
+	color: #666;
+}
+.tutorial h4,
+.reason h4 {
+	font-size: 18px;
+	font-weight: 400;
+	color: #222;
+	margin: 10px 0 0;
+	max-width: 400px;
+	line-height: 24px;
+}
+.reason h4 {
+	margin: 10px auto 0;
+}
+.right {
+	text-align: left;
+}
+.left {
+	text-align: right;
+}
+.center {
+	text-align: center;
+}
+.tutorial .left h4 {
+	margin: 10px 0 0 auto;
+}
+.tutorial .center h4 {
+	margin: 10px auto 0;
+	max-width: 700px;
+}
+#mobile {
+	background-color: #ddd;
+	padding: 80px 0 0;
+}
+#mobile img {
+	width: 100%;
+	max-width: 380px;
+	height: auto;
+	margin: 0 auto;
+	display: block;
+}
+.reason-text {
+	padding: 50px 20px 0;
+}
+.reason-text h3 {
+	margin: 80px 0 15px;
+	color: #777;
+}
+.reason-text ul {
+	padding: 0;
+	margin: 0;
+	font-size: 0;
+	text-align: center;
+}
+.reason-text ul a,
+.reason-text ul a:link,
+.reason-text ul a:visited {
+	display: inline-block;
+	width: 24%;
+	padding: 0;
+	text-decoration: none;
+	text-align: center;
+	transition: transform .3s;
+}
+.reason-text ul a:hover:active {
+	transform: scale(1.05);
+}
+.reason-text ul a:hover {
+	transform: scale(1.1);
+}
+.square-logo {
+	width: 100%;
+	height: 100px;
+	background-size: contain;
+	background-position: center;
+	background-repeat: no-repeat;
+}
+.reason-text ul a span {
+	display: block;
+	color: #777;
+	font-size: 14px;
+}
 
+footer {
+	background-color: #253340;
+	padding: 40px 0 10px;
+}
+footer ul {
+	list-style-type: none;
+	padding: 0 0 40px 0;
+	margin: 0;
+}
+footer ul li {
+	margin: 10px 0;
+}
+footer ul li a, 
+footer ul li a:link, 
+footer ul li a:active, 
+footer ul li a:visited {
+	color: #ddd;
+	font-size: 14px;
+	text-decoration: none;
+}
+footer ul li a:hover {
+	text-decoration: underline;
+}
+footer ul li a i {
+	width: 24px;
+	height: 24px;
+	text-align: center;
+	border-radius: 100%;
+	margin-right: 5px;
+}
+footer ul li a i.fa-facebook {
+	line-height: 24px;
+	background-color: #3b5998;
+}
+footer ul li a i.fa-at {
+	line-height: 24px;
+	background-color: #409036;
+}
+footer h6 {
+	text-align: center;
+	font-size: 10px;
+	color: #777;
+	margin: 0;
+}
+
+.mobile {
+	display: none;
+}
+.desktop {
+	display: block;
+}
+.desktop.tutorial-text {
+	display: inline-block;
+}
 
 @media(max-width: 1170px) {
 	#hero h2 {
@@ -148,6 +345,12 @@ header nav a:hover {
 @media(max-width: 920px) {
 	#hero h2 {
 		font-size: 50px;
+	}
+	.reason h2 {
+		font-size: 36px; 
+	}
+	.reason-text {
+		padding-top: 0;
 	}
 }
 
@@ -163,6 +366,34 @@ header nav a:hover {
 	#hero img {
 		top: auto;
 		width: 60%;
+	}
+	.tutorial-half {
+		width: 100%;
+	}
+	.tutorial-bg {
+		visibility: hidden;
+	}
+	.left {
+		text-align: center;
+	}
+	.tutorial .left h4 {
+		margin: 10px auto 0;
+	}
+	.reason-text h3 {
+		margin-top: 40px;
+	}
+	.reason-text ul {
+		margin-bottom: 40px;
+	}
+	footer li {
+		text-align: center;
+	}
+	.mobile {
+		display: block;
+	}
+	.desktop, 
+	.desktop.tutorial-text {
+		display: none;
 	}
 }
 
