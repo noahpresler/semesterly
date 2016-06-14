@@ -44,6 +44,7 @@ export class SearchBar extends React.Component {
         this.props.setSemester(semester);
     }
     render() {
+        console.log(this.props);
         let resClass = classNames({'search-results' : true, 'trans50' : this.props.hasHoveredResult})
     	let results = this.props.searchResults.map( (c, i) => {
             return (<SearchResult {...this.props}
@@ -187,7 +188,7 @@ export class SearchResult extends React.Component {
             <h3>{course.name} </h3>
             { addOptionalCourseButton}
             { addRemoveButton }
-            <h4 style={style}>{info}</h4>
+            <h4 className="label" style={style}>{info}</h4><h4 className={classNames('label','bubble')}>UTSG</h4>
         </li>);
     }
 }
