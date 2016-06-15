@@ -8,11 +8,14 @@ import { getSchoolSpecificInfo } from '../../constants.jsx';
 const mapStateToProps = (state) => {
 	let { isVisible } = state.explorationModal;
 	let courseSections = state.courseSections.objects;
-	let schoolSpecificSemesters = getSchoolSpecificInfo(state.school.school).semesters;
+	let schoolSpecificInfo = getSchoolSpecificInfo(state.school.school);
+	let schoolSpecificSemesters = schoolSpecificInfo.semesters;
+	let schoolSpecificCampuses = schoolSpecificInfo.campuses;
 	return {
 		semester: state.semester,
 		semesterName: schoolSpecificSemesters[state.semester],
 		getSemesterName: schoolSpecificSemesters,
+		campuses: schoolSpecificCampuses,
 		availableSemesters: ["F", "S"],
     	searchResults: state.searchResults.items,
     	isFetching: state.searchResults.isFetching,

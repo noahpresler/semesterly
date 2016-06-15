@@ -58,6 +58,11 @@ export const getSchoolSpecificInfo = (school) => {
         semesters: {
           F: "Fall 2016",
           S: "Winter 2017"
+        },
+        campuses: {
+          1: "UTSG",
+          2: "UTSC",
+          5: "UTM"
         }
       }
 		case "jhu":
@@ -70,6 +75,9 @@ export const getSchoolSpecificInfo = (school) => {
         semesters: {
           F: "Fall 2016",
           S: "Spring 2017"
+        },
+        campuses: {
+          1: ""
         }
       }
 		case "umd":
@@ -82,6 +90,9 @@ export const getSchoolSpecificInfo = (school) => {
         semesters: {
           F: "Fall 2016",
           S: "Spring 2017"
+        },
+        campuses: {
+          1: ""
         }
       }
 		default:
@@ -94,6 +105,9 @@ export const getSchoolSpecificInfo = (school) => {
         semesters: {
           F: "Fall 2016",
           S: "Spring 2017"
+        },
+        campuses: {
+          1: ""
         }
       }
 	}

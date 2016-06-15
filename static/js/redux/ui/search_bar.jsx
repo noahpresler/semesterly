@@ -153,7 +153,7 @@ export class SearchResult extends React.Component {
     }
     render() {
         let { course, inRoster, inOptionRoster } = this.props;
-
+        console.log(this.props);
         let addRemoveButton =
             <span title="Add this course" className={classNames('search-course-add', {'in-roster': inRoster})}
               onMouseDown={(event) => this.addCourseWrapper(course, '', event)}
@@ -188,7 +188,7 @@ export class SearchResult extends React.Component {
             <h3>{course.name} </h3>
             { addOptionalCourseButton}
             { addRemoveButton }
-            <h4 className="label" style={style}>{info}</h4><h4 className={classNames('label','bubble')}>UTSG</h4>
+            <h4 className="label" style={style}>{info}</h4><h4 className={classNames('label','bubble')}>{this.props.campuses[course.campus]}</h4>
         </li>);
     }
 }
