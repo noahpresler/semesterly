@@ -61,10 +61,12 @@
 
 
 
-    <h3>Number of timetalbes created per hour for the past 24 hours:</h3>
+    <h3>Number of timetables created per hour per school for the past 24 hours:</h3>
 
     <script type="text/javascript">
-      var timetables_per_hour = JSON.parse("{{timetables_per_hour|escapejs}}");
+      var jhu_timetables_per_hour = JSON.parse("{{jhu_timetables_per_hour}}");
+      var uoft_timetables_per_hour = JSON.parse("{{uoft_timetables_per_hour}}");
+      var umd_timetables_per_hour = JSON.parse("{{umd_timetables_per_hour}}");
     </script>
 
     <canvas id="myChart" width="400" height="400"></canvas>
@@ -73,30 +75,72 @@
         labels: ["-23", "-22", "-21", "-20", "-19", "-18", "-17","-16", "-15", "-14", "-13", "-12", "-11", "-10","-9", "-8", "-7", "-6", "-5", "-4", "-3", "-2", "-1", "Now"],
         datasets: [
             {
-                label: "# Timetables created",
+                label: "JHU",
                 fill: false,
                 lineTension: 0.1,
-                backgroundColor: "rgba(75,192,192,0.4)",
-                borderColor: "rgba(75,192,192,1)",
+                backgroundColor: "rgba(61,90,254,0.4)",
+                borderColor: "rgba(61,90,254,1)",
                 borderCapStyle: 'butt',
                 borderDash: [],
                 borderDashOffset: 0.0,
                 borderJoinStyle: 'miter',
-                pointBorderColor: "rgba(75,192,192,1)",
+                pointBorderColor: "rgba(61,90,254,1)",
                 pointBackgroundColor: "#fff",
                 pointBorderWidth: 1,
                 pointHoverRadius: 5,
-                pointHoverBackgroundColor: "rgba(75,192,192,1)",
+                pointHoverBackgroundColor: "rgba(61,90,254,1)",
                 pointHoverBorderColor: "rgba(220,220,220,1)",
                 pointHoverBorderWidth: 2,
                 pointRadius: 1,
                 pointHitRadius: 10,
-                data: timetables_per_hour,
+                data: jhu_timetables_per_hour,
+            },
+            {
+                label: "UOFT",
+                fill: false,
+                lineTension: 0.1,
+                backgroundColor: "rgba(233,30,99,0.4)",
+                borderColor: "rgba(233,30,99,1)",
+                borderCapStyle: 'butt',
+                borderDash: [],
+                borderDashOffset: 0.0,
+                borderJoinStyle: 'miter',
+                pointBorderColor: "rgba(233,30,99,1)",
+                pointBackgroundColor: "#fff",
+                pointBorderWidth: 1,
+                pointHoverRadius: 5,
+                pointHoverBackgroundColor: "rgba(233,30,99,1)",
+                pointHoverBorderColor: "rgba(220,220,220,1)",
+                pointHoverBorderWidth: 2,
+                pointRadius: 1,
+                pointHitRadius: 10,
+                data: uoft_timetables_per_hour,
+            },
+            {
+                label: "UMD",
+                fill: false,
+                lineTension: 0.1,
+                backgroundColor: "rgba(0,200,83,0.4)",
+                borderColor: "rgba(0,200,83,1)",
+                borderCapStyle: 'butt',
+                borderDash: [],
+                borderDashOffset: 0.0,
+                borderJoinStyle: 'miter',
+                pointBorderColor: "rgba(0,200,83,1)",
+                pointBackgroundColor: "#fff",
+                pointBorderWidth: 1,
+                pointHoverRadius: 5,
+                pointHoverBackgroundColor: "rgba(0,200,83,1)",
+                pointHoverBorderColor: "rgba(220,220,220,1)",
+                pointHoverBorderWidth: 2,
+                pointRadius: 1,
+                pointHitRadius: 10,
+                data: umd_timetables_per_hour,
             }
         ]
     };
     var ctx = document.getElementById("myChart");
-    var myLineChart = new Chart(ctx, {
+    var line_chart_24_hours = new Chart(ctx, {
         type: 'line',
         data: timetables_per_hour_data,
     });

@@ -19,7 +19,9 @@ def view_analytics_dashboard(request):
     if student and student.user.is_staff:
         return render_to_response('analytics_dashboard.html', {
                 "total_timetables":number_timetables(),
-                "timetables_per_hour":number_timetables_per_hour(),
+                "jhu_timetables_per_hour":number_timetables_per_hour(school="jhu"),
+                "uoft_timetables_per_hour":number_timetables_per_hour(school="uoft"),
+                "umd_timetables_per_hour":number_timetables_per_hour(school="umd"),
                 "total_timetables_fall":number_timetables(semester="F"),
                 "total_timetables_sprint":number_timetables(semester="S"),
                 "jhu_timetables":number_timetables(school='jhu'),
@@ -75,7 +77,7 @@ def number_timetables(Timetable = AnalyticsTimetable, school = None, semester = 
 
     return timetables.count()
 
-def number_timetables_per_hour(Timetable = AnalyticsTimetable):
+def number_timetables_per_hour(Timetable = AnalyticsTimetable, school = None):
     """Gets the number of time tables created each hour."""
     # TODO: Change start and end time. Currently set for past 24 hours.
     time_end = datetime.datetime.now()
@@ -85,7 +87,7 @@ def number_timetables_per_hour(Timetable = AnalyticsTimetable):
     time_delta = timedelta(hours = 1)
     num_timetables = []
     while time_start < time_end:
-        num_timetables.append(number_timetables(Timetable = Timetable, time_start = time_start, time_end = time_start + time_delta))
+        num_timetables.append(number_timetables(Timetable = Timetable, school = school, time_start = time_start, time_end = time_start + time_delta))
         time_start += time_delta
     return num_timetables
 
