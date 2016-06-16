@@ -97,24 +97,8 @@ class Calendar extends React.Component {
     	</button>
     )
 
-		return (
-	      <div id="calendar" className="fc fc-ltr fc-unthemed">
-	        <div className="fc-toolbar">
-	          <div className="fc-left">
-	      		<PaginationContainer />
-	      	  </div>
-	          <div className="fc-right">
-	          	{ shareButton }
-	          	{ shareLink }
-	          	{ addButton }
-	          	{ saveButton }
-	          	{ preferenceButton }
-	          </div>
-	          <div className="fc-center" />
-	          <div className="fc-clear" />
-
-	        </div>
-	        <div className="fc-view-container" style={{}}>
+    let innerCal =
+    		<div className="fc-view-container split" style={{}}>
 	          <div className="fc-view fc-settimana-view fc-agenda-view">
 	            <table>
 	              <thead className="fc-head">
@@ -177,6 +161,26 @@ class Calendar extends React.Component {
 	          </div>
 	          <p className="data-last-updated">Data last updated: { this.props.dataLastUpdated && this.props.dataLastUpdated.length && this.props.dataLastUpdated !== "null" ? this.props.dataLastUpdated : null }</p>
 	        </div>
+
+		return (
+	      <div id="calendar" className="fc fc-ltr fc-unthemed">
+	        <div className="fc-toolbar">
+	          <div className="fc-left">
+	      		<PaginationContainer />
+	      	  </div>
+	          <div className="fc-right">
+	          	{ shareButton }
+	          	{ shareLink }
+	          	{ addButton }
+	          	{ saveButton }
+	          	{ preferenceButton }
+	          </div>
+	          <div className="fc-center" />
+	          <div className="fc-clear" />
+
+	        </div>
+	        { innerCal }
+	        { innerCal }
 	      </div>
     	);
   	}
