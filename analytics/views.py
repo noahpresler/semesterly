@@ -27,13 +27,12 @@ def view_analytics_dashboard(request):
                 "jhu_timetables":number_timetables(school='jhu'),
                 "uoft_timetables":number_timetables(school='uoft'),
                 "umd_timetables":number_timetables(school='umd'),
-                "most_popular_reaction":most_popular_reaction(),
+                "number_of_reactions":json.dumps(number_of_reactions()),
                 "jhu_most_popular_courses":most_popular_courses(5, 'jhu', 'S'),
                 "uoft_most_popular_courses":most_popular_courses(5, 'uoft', 'S'),
                 "umd_most_popular_courses":most_popular_courses(5, 'umd', 'S')
             },
             context_instance=RequestContext(request))
-
     else:
         raise Http404
 
@@ -91,20 +90,20 @@ def number_timetables_per_hour(Timetable = AnalyticsTimetable, school = None):
         time_start += time_delta
     return num_timetables
 
-def most_popular_reaction():
-    """Gets the the most popular reaction."""
+def number_of_reactions(max_only=False):
+    """Gets the the number of uses for each reaction. If max_only is true, return only the reaction with the most uses."""
     # TODO: Could be modified for max AND number of each reaction.
     num_reactions = {}
     reaction_list = Reaction.REACTION_CHOICES
     for title, text in reaction_list:
         reaction = None
         reactions = Reaction.objects.filter(title = title)
-        if len(reactions) > 0:
-            reaction = reactions[0]
-            num_reactions[title] = len(reaction.course.all())
-        else:
-            num_reactions[title] = 0
-    return max(num_reactions.iterkeys(), key=lambda k: num_reactions[k])
+        num_reactions[title] = len(reactions)
+    print(num_reactions)
+    if max_only:
+        return max(num_reactions.iterkeys(), key=lambda k: num_reactions[k])
+    else:
+        return num_reactions
 
 def most_popular_courses(n, school, semester, table = AnalyticsTimetable):
     """Gets the top n most popular courses searched (AnalyticsCourseSearch) or in time table(AnalyticsTimetable)."""
