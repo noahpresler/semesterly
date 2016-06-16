@@ -290,6 +290,7 @@ ul.nav.nav-pills {
 footer {
 	margin-top: -22px;
 	background-color: transparent;
+	clear: both;
 }
 footer ul {
 	float: right;
@@ -315,4 +316,14 @@ footer li a:hover {
 		float: left;
 		margin-top: 5px;
 	}
+}
+
+
+/*
+SPLIT CALENDAR
+*/
+
+.split {
+  width: 50% !important;
+  float: left;
 }
