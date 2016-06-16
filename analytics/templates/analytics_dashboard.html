@@ -21,13 +21,6 @@
     </div>
     <h3>Total number of Timetables: {{total_timetables}}</h3>
 
-    <h3>:</h3>  
-    {% for num_timetables in timetables_per_hour %}
-    <div>
-        <p>{{ forloop.counter }}: {{ num_timetables }}</p>
-    </div>
-    {% endfor %}
-
     <h3>Total number of timetalbes for Fall semester: {{total_timetables_fall}}</h3>
 
     <h3>Total number of Timetables for Spring semester: {{total_timetables_spring}}</h3>
@@ -55,11 +48,6 @@
         <p>{{ course.name }}</p>
     </div>
     {% endfor %}
-    
-
-    <h3>Most popular reaction: {{most_popular_reaction}}</h3>
-
-
 
     <h3>Number of timetables created per hour per school for the past 24 hours:</h3>
 
@@ -67,9 +55,14 @@
       var jhu_timetables_per_hour = JSON.parse("{{jhu_timetables_per_hour}}");
       var uoft_timetables_per_hour = JSON.parse("{{uoft_timetables_per_hour}}");
       var umd_timetables_per_hour = JSON.parse("{{umd_timetables_per_hour}}");
+      var number_of_reactions = JSON.parse("{{number_of_reactions|escapejs}}");
+      console.log(number_of_reactions);
+      console.log(typeof(number_of_reactions));
     </script>
 
-    <canvas id="myChart" width="400" height="400"></canvas>
+    <canvas id="timetables_per_hours_chart" width="400" height="400"></canvas>
+    <canvas id="reactions_chart" width="400" height="400"></canvas>
+
     <script>
     var timetables_per_hour_data = {
         labels: ["-23", "-22", "-21", "-20", "-19", "-18", "-17","-16", "-15", "-14", "-13", "-12", "-11", "-10","-9", "-8", "-7", "-6", "-5", "-4", "-3", "-2", "-1", "Now"],
@@ -139,10 +132,29 @@
             }
         ]
     };
-    var ctx = document.getElementById("myChart");
+    var reactions_data = {
+        labels: Object.keys(number_of_reactions),
+        datasets: [
+            {
+                label: "# Uses",
+                backgroundColor: "rgba(255,23,68,0.2)",
+                borderColor: "rgba(255,23,68,1)",
+                borderWidth: 1,
+                hoverBackgroundColor: "rgba(255,23,68,0.4)",
+                hoverBorderColor: "rgba(255,23,68,1)",
+                data: Object.keys(number_of_reactions).map(function(key){return number_of_reactions[key]}),
+            }
+        ]
+    };
+    var ctx = document.getElementById("timetables_per_hours_chart");
     var line_chart_24_hours = new Chart(ctx, {
         type: 'line',
         data: timetables_per_hour_data,
+    });
+    var rtx = document.getElementById("reactions_chart");
+    var line_chart_reactions = new Chart(rtx, {
+        type: 'bar',
+        data: reactions_data,
     });
     </script>
 
