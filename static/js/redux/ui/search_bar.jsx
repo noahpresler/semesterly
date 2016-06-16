@@ -44,7 +44,6 @@ export class SearchBar extends React.Component {
         this.props.setSemester(semester);
     }
     render() {
-        console.log(this.props);
         let resClass = classNames({'search-results' : true, 'trans50' : this.props.hasHoveredResult})
     	let results = this.props.searchResults.map( (c, i) => {
             return (<SearchResult {...this.props}
@@ -153,7 +152,6 @@ export class SearchResult extends React.Component {
     }
     render() {
         let { course, inRoster, inOptionRoster } = this.props;
-        console.log(this.props);
         let addRemoveButton =
             <span title="Add this course" className={classNames('search-course-add', {'in-roster': inRoster})}
               onMouseDown={(event) => this.addCourseWrapper(course, '', event)}
