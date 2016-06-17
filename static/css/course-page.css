@@ -180,6 +180,38 @@
 
 /* latin-ext */
 @font-face {
+  font-family: 'Lato';
+  font-style: normal;
+  font-weight: 100;
+  src: local('Lato Hairline'), local('Lato-Hairline'), url(https://fonts.gstatic.com/s/lato/v11/h3_FseZLI76g1To6meQ4zX-_kf6ByYO6CLYdB4HQE-Y.woff2) format('woff2');
+  unicode-range: U+0100-024F, U+1E00-1EFF, U+20A0-20AB, U+20AD-20CF, U+2C60-2C7F, U+A720-A7FF;
+}
+/* latin */
+@font-face {
+  font-family: 'Lato';
+  font-style: normal;
+  font-weight: 100;
+  src: local('Lato Hairline'), local('Lato-Hairline'), url(https://fonts.gstatic.com/s/lato/v11/ifRS04pY1nJBsu8-cUFUS-vvDin1pK8aKteLpeZ5c0A.woff2) format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2212, U+2215, U+E0FF, U+EFFD, U+F000;
+}
+/* latin-ext */
+@font-face {
+  font-family: 'Lato';
+  font-style: normal;
+  font-weight: 300;
+  src: local('Lato Light'), local('Lato-Light'), url(https://fonts.gstatic.com/s/lato/v11/IY9HZVvI1cMoAHxvl0w9LVKPGs1ZzpMvnHX-7fPOuAc.woff2) format('woff2');
+  unicode-range: U+0100-024F, U+1E00-1EFF, U+20A0-20AB, U+20AD-20CF, U+2C60-2C7F, U+A720-A7FF;
+}
+/* latin */
+@font-face {
+  font-family: 'Lato';
+  font-style: normal;
+  font-weight: 300;
+  src: local('Lato Light'), local('Lato-Light'), url(https://fonts.gstatic.com/s/lato/v11/22JRxvfANxSmnAhzbFH8PgLUuEpTyoUstqEm5AMlJo4.woff2) format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2212, U+2215, U+E0FF, U+EFFD, U+F000;
+}
+/* latin-ext */
+@font-face {
 	font-family: 'Lato';
 	font-style: normal;
 	font-weight: 400;
@@ -424,20 +456,25 @@ a#social-login:hover:before {
  * 5.0 Top
  */
 
-#top {
+#top-bg {
 	height: 500px;
 	width: 100%;
 	background: #E26A6A; /*red*/
 	background: #F7954A; /*orange*/
 	background: #3DBB9A; /*green*/
 	background: #28A4EA; /*blue*/
+	position: absolute;
+}
+#page {
+	padding: 0 0 100px;
 }
 #top h1 {
 	margin: 0;
 	color: #fff;
-	padding: 20px 30px;
-	line-height: 100px;
+	padding: 60px 30px 20px;
+	line-height: 26px;
 	font-size: 26px;
+	position: relative;
 }
 
 /**
@@ -448,8 +485,7 @@ a#social-login:hover:before {
 	position: relative;
 }
 #card {
-	position: relative;
-	top: -400px;
+	float: left;
 	background-color: #fff;
 	padding: 60px 80px;
 	width: 80%;
@@ -457,7 +493,30 @@ a#social-login:hover:before {
 	box-shadow: 0 2px 5px 0 rgba(0,0,0,.26);
 }
 #content h1 {
-	margin: 0 0 1em 0;
+	margin: 0 0 20px;
+}
+#content h1:after {
+	display: block;
+	content: '';
+	width: 100%;
+	height: 1px;
+	margin-top: 15px;
+	background-color: #ddd;
+}
+#credits {
+	text-align: center;
+	padding-right: 20px;
+}
+#credits h3 {
+	margin: 0;
+	font-size: 70px;
+	color: #253340;
+	font-weight: 300;
+}
+#credits span {
+	padding-left: 10px;
+	font-size: 30px;
+	color: #aaa;
 }
 #content p {
 	font-size: 14px;
@@ -494,4 +553,9 @@ a#social-login:hover:before {
 }
 .section.red h5.enrollment span {
 	color: #D21616;
+}
+#outcard {
+	float: left;
+	width: 20%;
+	padding: 40px 0 0 30px;
 }
