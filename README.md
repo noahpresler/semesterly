@@ -1,5 +1,5 @@
 # [Semesterly](http://semester.ly)
-A dynamic timetable generator for students.A
+A dynamic timetable generator for students.
 Find the perfect schedule based on your preferences and
 the courses you choose.
 
