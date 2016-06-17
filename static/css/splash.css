@@ -5,7 +5,7 @@
 html, body{
 	margin: 0;
 	height: 100%;
-	background-color: #253340;
+	background-color: #F3F3F3;
 	font-family: Lato,Helvetica,Arial,sans-serif;
 }
 
@@ -17,8 +17,13 @@ header {
 	height: 50px;
 	padding: 10px;
 	color: #253340;
-	background-color: #F9F9F9;
+	background-color: rgba(252, 252, 252, .95);
 	border-bottom: 1px solid #DDD;
+	transition: background-color .3s, border .3s;
+}
+header.down {
+	background-color: transparent;
+	border-bottom: 1px solid transparent;
 }
 header h1 {
 	float: left;
@@ -59,53 +64,90 @@ header nav a:hover {
 #page {
 	width: 100%;
 	padding-top: 50px;
-	background-color: rgb(37, 51, 64);
+	background-color: #F3F3F3;
 }
 
 /* Hero */
 #hero {
-	height: 500px;
 	width: 100%;
-	background-color: rgb(253, 116, 115);
-	box-shadow: 0 6px 0px 8px #fd5b5a;
+	background-color: #F3F3F3;
 	position: relative;
-}
-#hero-wrapper {
-	position: absolute;
-	text-align: center;
-	top: 50%;
-	left: 50%;
-	width: 100%;
-	max-width: 1280px;
-	font-size: 0;
-	transform: translate(-50%, -50%);
-}
-#hero-content-wrapper {
-	padding: 0 20px;
+	padding: 90px 0 0;
 }
 #hero h2 {
-	width: 50%;
 	color: white;
-	font-size: 86px;
+	font-size: 50px;
+	color: #aaa;
+	margin: 0 0 20px;
+	font-weight: 100;
+	padding: 0 40px 0 0;
+}
+	@media(max-width: 1170px) {#hero h2 {font-size: 40px;}}
+	@media(max-width: 980px) {#hero h2 {font-size: 30px;}}
+
+#hero h4 {
+	font-size: 16px;
+	line-height: 24px;
+	color: #777;
+	font-weight: 400;
+	padding: 0 40px 0 0;
+}
+	@media(max-width: 980px) {#hero h4 {font-size: 14px; line-height: 18px;}}
+#hero ul {
+	padding: 0 40px 0 10px;
+}
+#hero ul a,
+#hero ul a:link,
+#hero ul a:visited {
+	display: block;
+	margin: 0;
+	text-decoration: none;
+	color: #555;
+	transition: transform .3s;
+	color: #253340;
+}
+#hero ul a:hover {
+	transform: translateX(10px);
+}
+#hero ul a .square-logo {
+	display: inline-block;
+	width: 30px;
+	height: 30px;
+	vertical-align: middle;
+}
+#hero ul a span {
 	display: inline-block;
 	vertical-align: middle;
+	font-size: 12px;
+	letter-spacing: 0.02em;
+	text-transform: uppercase;
 }
-#hero img {
-	width: 50%;
-	height: auto;
-	vertical-align: middle;
-	position: relative;
-	top: 70px;
+#screenshot {
+	width: 100%;
+	height: 0;
+	padding-bottom: 60%;
+	background-size: cover;
+	background-position: top center;
+	background-repeat: no-repeat;
+	background-image: url(/static/img/splash/ChromeMockup.png);
 }
+
 
 /* Schools */
 #schools {
     width: 100%;
     padding: 100px 0;
-    margin-top: 14px;
-    background-color: #253340;
+    background-color: #fff;
     display: inline-block;
 	text-align: center;
+}
+#schools h5 {
+	font-size: 16px;
+	font-weight: 100;
+	margin: 0;
+	text-transform: uppercase;
+	letter-spacing: 0.2em;
+	color: #555;
 }
 #schools h2 {
 	color: #E1E2E4;
@@ -145,7 +187,7 @@ header nav a:hover {
 	text-align: center;
 }
 #tutorials {
-	background-color: #F9F9F9;
+	background-color: #FCFCFC;
 }
 .tutorial {
 	padding: 120px 0;
@@ -335,17 +377,26 @@ footer h6 {
 	display: inline-block;
 }
 
-@media(max-width: 1170px) {
-	#hero h2 {
-		text-align: center;
-		font-size: 66px;
+@media(max-width: 1110px) {
+	#hero ul {
+		padding: 0 40px 0 0;
+	}
+	#screenshot {
+		padding-bottom: 75%;
+	}
+}
+@media(max-width: 980px) {
+	#hero {
+		padding: 50px 0 0;
+	}
+	#hero h2, 
+	#hero h4,
+	#hero ul {
+		padding: 0 20px 0 0;
 	}
 }
 
 @media(max-width: 920px) {
-	#hero h2 {
-		font-size: 50px;
-	}
 	.reason h2 {
 		font-size: 36px; 
 	}
@@ -355,17 +406,20 @@ footer h6 {
 }
 
 @media(max-width: 766px) {
-	#hero-wrapper {
-		position: static;
-		transform: translate(0%, 0%);
+	#hero {
+		border-bottom: 1px solid #aaa;
+		text-align: center;
+	}
+	#hero h2, 
+	#hero h4,
+	#hero ul {
+		padding: 0 40px;
 	}
 	#hero h2 {
-		width: 100%;
-		display: inline-block;
+		font-size: 40px;
 	}
-	#hero img {
-		top: auto;
-		width: 60%;
+	#screenshot {
+		padding-bottom: 40%;
 	}
 	.tutorial-half {
 		width: 100%;
@@ -398,13 +452,5 @@ footer h6 {
 }
 
 @media(max-width: 445px) {
-	header h1 {
-		display: none;
-	}
-	#hero h2 {
-		font-size: 45px;
-	}
-	#hero img {
-		width: 70%;
-	}
+
 }
