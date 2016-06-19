@@ -9,7 +9,7 @@
 		<meta name="author" content="Noah Presler, Rohan Das, Felix Zhu, Max Yeo">
 
 		<!-- Facebook thumbnail info -->
-		<meta property="og:title" content="Semester.ly - Countdown to Registration" />
+		<meta property="og:title" content="{{ course.code }} {{ course.name }} | Semester.ly" />
 		<meta property="og:type" content="website" />
 		<meta property="og:site_name" content="Semesterly" />
 		<meta property="og:url" content="http://semester.ly" />
@@ -17,7 +17,7 @@
 		<meta property="og:description" content="Now with a new and improved UI: view a section, and find your textbooks to rent/buy through Amazon. Alternatively, explore new options with our recommendation engine – helping you find new and exciting courses on the fly. Not sure if the class is worthwhile? Instantly see what your peers think, alongside detailed comments from past course evaluations." />
 		<meta property="fb:admins" content="535129063" />
 
-		<title>Semester.ly: Textbooks, Course Finding & More | JHU Registration Countdown</title>
+		<title>{{ course.code }} {{ course.name }} | Semester.ly</title>
 		<link rel="shortcut icon" type="image/x-icon" href="{% static 'img/favicon.ico' %}" />
 
 		<link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet" integrity="sha256-7s5uDGW3AHqw6xtJmNNtr+OBRJUlgkNJEo78P4b0yRw= sha512-nNo+yCHEyn0smMxSswnf/OnX6/KwJuZTlNZBjauKhTK0c+zT+q5JOCx0UFhXQ6rJR9jg6Es8gPuD2uZcYDLqSw==" crossorigin="anonymous">
@@ -55,16 +55,29 @@
 			</div>
 		</header>
 		<div id="page">
-			<div id="top">
-				<div class="grid cf">
-					<h1>{{ school }} | {{ course.code }}</h1>
-				</div>
+			<div id="top-bg"></div>
+			<div id="top" class="grid cf">
+				<h1>{{ school }} | {{ course.code }}</h1>
 			</div>
 			<div id="content">
 				<div class="grid cf">
 					<div id="card">
 						<h1>{{ course.name }}</h1>
-						<p>{{ course.description }}</p>
+						<div class="cf">
+							<div class="col-1-4">
+								<div id="credits">
+									<h3>{{ course.num_credits }}</h3>
+									<span>credits</span>
+								</div>
+							</div>
+							<div class="col-3-4">
+								{% if course.description %}
+									<p>{{ course.description }}</p>
+								{% else %}
+									<p>No description found.</p>
+								{% endif %}
+							</div>
+						</div>
 						<div id="sections" class="cf">
 							{% if lectures %}
 								<div class="section-group cf">
@@ -118,6 +131,9 @@
 								</div>
 							{% endif %}
 						</div>
+					</div>
+					<div id="outcard">
+						
 					</div>
 				</div>
 			</div>
