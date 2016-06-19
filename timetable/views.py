@@ -109,7 +109,11 @@ def get_timetables(request):
   """Generate best timetables given the user's selected courses"""
   global SCHOOL
 
-  params = json.loads(request.body)
+  try:
+    params = json.loads(request.body)
+  except ValueError: # someone is trying to manually send requests
+    return HttpResponse(json.dumps({'timetables': [], 'new_c_to_s': {}}), 
+                        content_type='application/json')
   sid = params['sid']
 
   SCHOOL = request.subdomain
