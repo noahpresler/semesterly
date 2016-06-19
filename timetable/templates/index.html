@@ -19,18 +19,18 @@
 
 		<title>Semester.ly: Course Scheduling, Textbooks, Social & More</title>
 		<link rel="shortcut icon" type="image/x-icon" href="{% static 'img/favicon.ico' %}" />
-		<link href='https://fonts.googleapis.com/css?family=Lato&subset=latin,latin-ext' rel='stylesheet' type='text/css'>
+		<link href='https://fonts.googleapis.com/css?family=Lato:400,700,300&subset=latin,latin-ext' rel='stylesheet' type='text/css'>
 		<link rel="stylesheet" href="{% static 'css/timetable/global.css'%}">
 		<link rel="stylesheet" href="{% static 'css/splash.css'%}">
 		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css">
 	</head>
 	<body>
-		<header>
+		<header class="down">
 			<div class="grid cf">
 				<img id="semesterly-logo" src="/static/img/logo2.0-32x32.png">
 				<h1>Semester.ly</h1>
 				<nav>
-					<a href="https://jhu.semester.ly">Hopkins</a>
+					<a href="https://jhu.semester.ly">JHU</a>
 					<a href="https://umd.semester.ly">UMD</a>
 					<a href="https://uoft.semester.ly">UofT</a>
 				</nav>
@@ -38,36 +38,126 @@
 		</header>
 		<div id="page">
 			<div id="hero">
-				<div id="hero-wrapper">
-					<div id="hero-content-wrapper">
+				<div class="grid cf">
+					<div class="col-1-3">
 						<h2>Your Semester, Made Simple</h2>
-						<img src="/static/img/rightMac.png" alt="iMac with Semester.ly open">
+						<h4>Scheduling your classes for the next semester just got easier!  Semester.ly is the one stop shop for finding the classes that fit your schedule, course reviews, ratings, textbooks, and classes that your friends are in!  Select a school to start!</h3>
+						<ul>
+							<a href="https://jhu.semester.ly">
+								<div class="square-logo" style="background-image: url(/static/img/school_logos/jhu-square.png);"></div>
+								<span>Johns Hopkins University</span>
+							</a>
+							<a href="https://umd.semester.ly">
+								<div class="square-logo" style="background-image: url(/static/img/school_logos/umd-square.png);"></div>
+								<span>University of Maryland</span>
+							</a>
+							<a href="https://uoft.semester.ly">
+								<div class="square-logo" style="background-image: url(/static/img/school_logos/uoft-square.png);"></div>
+								<span>University of Toronto</span>
+							</a>
+						</ul>
+					</div>
+					<div class="col-2-3">
+						<div id="screenshot"></div>
 					</div>
 				</div>
 			</div>
-			<div id="schools">
-				<div class="grid cf">
-					<div class="col-1-3 school" onClick="location.href='https://jhu.semester.ly'">
-						<div class="circle" style="background-color:#3498db;">
-							<i class="fa fa-university" aria-hidden="true"></i>
+			<div id="reasons">
+				<div id="tutorials">
+					<div class="tutorial">
+						<div class="tutorial-bg"></div>
+						<div class="grid cf">
+							<div class="col-1-1 tutorial-text center">
+								<h5>Social</h5>
+								<h2>Find Your Friends</h2>
+								<h4>See which Facebook friends will be your classmates! Only friends in your course will see your name.</h4>
+							</div>
+							<div class="tutorial-half">
+								<img src="/static/img/splash/friends_v2.png" alt="a sample ">
+							</div>
+							<div class="tutorial-half">
+
+							</div>
 						</div>
-						<h3>Johns Hopkins</h3>
 					</div>
-					<div class="col-1-3 school" onClick="location.href='https://umd.semester.ly'">
-						<div class="circle">
-							<i class="fa fa-university" aria-hidden="true"></i>
+					<div class="tutorial">
+						<div class="grid cf">
+							<div class="tutorial-half tutorial-text left">
+								<h5>Options</h5>
+								<h2>Pick the Perfect Times</h2>
+								<h4>Use the arrows to flip through all the possible configurations of your schedule.</h4>
+							</div>
+							<div class="tutorial-half">
+								<img src="/static/img/splash/pagination.gif" alt="a sample ">
+							</div>
 						</div>
-						<h3>University of Maryland</h3>
 					</div>
-					<div class="col-1-3 school" onClick="location.href='https://uoft.semester.ly'">
-						<div class="circle" style="background-color:#8e44ad;">
-							<i class="fa fa-university" aria-hidden="true"></i>
+					<div class="tutorial">
+						<div class="grid cf">
+							<div class="tutorial-half tutorial-text center mobile">
+								<h5>Filters</h5>
+								<h2>Advanced Search to Find the Right Class</h2>
+								<h4>Use the arrows to flip through all the possible configurations of your schedule.</h4>
+							</div>
+							<div class="tutorial-half">
+								<img src="/static/img/splash/advancedsearch.png" alt="a sample ">
+							</div>
+							<div class="tutorial-half tutorial-text right desktop">
+								<h5>Filters</h5>
+								<h2>Advanced Search to Find the Right Class</h2>
+								<h4>A myriad of filters and toggles will narrow your search results to the perfect class for you!  Only want 400 level Biology classes on Wednesday Afternoon? You got it!</h4>
+							</div>
 						</div>
-						<h3>University of Toronto</h3>
+					</div>
+				</div>
+				<div id="mobile" class="reason">
+					<div class="grid cf">
+						<div class="col-1-2 reason-text">
+							<h5>Mobile</h5>
+							<h2>Modern, Social, Easy</h2>
+							<h4>A mobile-friendly application means finding your perfect semester on any device!</h4>
+							<h3>select your school to begin</h3>
+							<ul>
+								<a href="https://jhu.semester.ly">
+									<div class="square-logo" style="background-image: url(/static/img/school_logos/jhu-square.png);"></div>
+									<span>JHU</span>
+								</a>
+								<a href="https://umd.semester.ly">
+									<div class="square-logo" style="background-image: url(/static/img/school_logos/umd-square.png);"></div>
+									<span>UMD</span>
+								</a>
+								<a href="https://uoft.semester.ly">
+									<div class="square-logo" style="background-image: url(/static/img/school_logos/uoft-square.png);"></div>
+									<span>UofT</span>
+								</a>
+							</ul>
+						</div>
+						<div class="col-1-2">
+							<img src="/static/img/splash/iPhoneMockupCropped.png" alt="iPhone with Semester.ly open">
+						</div>
 					</div>
 				</div>
 			</div>
 		</div>
+
+		<footer>
+			<div class="grid cf">
+				<div class="col-1-1">
+					<ul>
+						<li><a href="https://www.facebook.com/semesterly/" target="_blank">
+							<i class="fa fa-facebook"></i>
+							<span>Like us on Facebook</span>
+						</a></li>
+						<li><a href="mailto:contact@semester.ly">
+							<i class="fa fa-at"></i>
+							<span>Email us at contact@semester.ly</span>
+						</a></li>
+					</ul>
+				</div>
+				<h6>COPYRIGHT © 2016 SEMESTERLY TECHNOLOGIES, LLC.</h6>
+			</div>
+		</footer>
+
       	<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
 		<script type="text/javascript" src="{% static 'js/splash.js'%}"></script>
 	</body>
