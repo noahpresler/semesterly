@@ -30,6 +30,8 @@ urlpatterns = patterns('',
 	# index
 	url(r'^timetable/*$', 'timetable.views.redirect_to_home'),
 	url(r'^timetable/.+$', 'timetable.views.redirect_to_home'),
+	# analytics
+	url(r'^analytics/*$', 'analytics.views.view_analytics_dashboard'),
 
 	#User,Auth,User Info
 	url(r'^user/logout/$', 'django.contrib.auth.views.logout', {'next_page': '/'}),
