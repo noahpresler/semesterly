@@ -1,5 +1,6 @@
 from django.conf.urls import patterns, include, url
-
+from django.http import HttpResponse
+from django.conf import settings
 from django.contrib import admin
 
 # from haystack.views import SearchView
@@ -32,6 +33,7 @@ urlpatterns = patterns('',
 	url(r'^timetable/.+$', 'timetable.views.redirect_to_home'),
 	# analytics
 	url(r'^analytics/*$', 'analytics.views.view_analytics_dashboard'),
+	url(r'^/robots.txt*$', 'analytics.views.view_analytics_dashboard'),
 
 	#User,Auth,User Info
 	url(r'^user/logout/$', 'django.contrib.auth.views.logout', {'next_page': '/'}),
@@ -50,4 +52,10 @@ urlpatterns = patterns('',
 	url(r'react/', 'student.views.react_to_course'),
 	# Automatic deployment endpoint
 	url(r'deploy_staging/', 'semesterly.views.deploy_staging'),
+	# Robots.txt
 )
+
+if getattr(settings, 'STAGING', False):
+	urlpatterns += patterns('', url(r'^robots.txt$', lambda r: HttpResponse("User-agent: *\nDisallow: /", content_type="text/plain")) )
+else:
+	urlpatterns += patterns('', url(r'^robots.txt$', lambda r: HttpResponse("User-agent: *\nDisallow:", content_type="text/plain")) )
