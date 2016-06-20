@@ -7,6 +7,7 @@ django.setup()
 
 from qcumber_scraper.textbooks import main
 from scripts.amazon_helpers import *
+from timetable.models import Textbook
 
 
 api = API(locale='us')
