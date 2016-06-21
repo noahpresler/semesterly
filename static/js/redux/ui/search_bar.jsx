@@ -44,7 +44,6 @@ export class SearchBar extends React.Component {
         this.props.setSemester(semester);
     }
     render() {
-        console.log(this.props);
         let resClass = classNames({'search-results' : true, 'trans50' : this.props.hasHoveredResult})
     	let results = this.props.searchResults.map( (c, i) => {
             return (<SearchResult {...this.props}
