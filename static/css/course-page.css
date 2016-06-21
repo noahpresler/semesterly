@@ -499,6 +499,7 @@ a#social-login:hover:before {
 	box-shadow: 0 2px 5px 0 rgba(0,0,0,.26);
 }
 #content h1 {
+	font-size: 36px;
 	margin: 0 0 20px;
 }
 #content h1:after {
@@ -511,7 +512,7 @@ a#social-login:hover:before {
 }
 #credits {
 	text-align: center;
-	padding-right: 20px;
+	padding-bottom: 20px;
 }
 #credits h3 {
 	margin: 0;
@@ -524,8 +525,32 @@ a#social-login:hover:before {
 	font-size: 30px;
 	color: #aaa;
 }
+#description {
+	padding-left: 20px;
+}
 #content p {
 	font-size: 14px;
+}
+#call-to-action {
+	padding: 20px 0 0;
+	text-align: center;
+}
+#call-to-action a,
+#call-to-action a:link,
+#call-to-action a:visited {
+	display: inline-block;
+	background-color: #28A4EA;
+	color: #fff;
+	padding: 10px 20px;
+	border-radius: 3px;
+	text-decoration: none;
+	transition: background-color .3s;
+}
+#call-to-action a:active:hover {
+	background-color: #289cde;
+}
+#call-to-action a:hover {
+	background-color: #43b2f1;
 }
 #sections h3 {
 	clear: both;
@@ -564,4 +589,44 @@ a#social-login:hover:before {
 	float: left;
 	width: 20%;
 	padding: 40px 0 0 30px;
+}
+
+@media (max-width: 766px) {
+	.card-width {
+		width: 100%;
+		padding: 40px 30px 20px;
+	}
+	#card {
+		width: 100%;
+	}
+	#description {
+		padding-left: 0px;
+	}
+}
+
+@media (max-width: 599px) {
+	#top h1 {
+		font-size: 20px;
+	}
+	#card {
+		padding: 50px 40px;
+	}
+	#content h1 {
+		font-size: 26px;
+	}
+	.section {
+		width: 50%;
+	}
+}
+
+@media (max-width: 420px) {
+	#top h1 {
+		font-size: 16px;
+	}
+	#card {
+		padding: 30px 20px;
+	}
+	.card-width {
+		padding: 20px;
+	}
 }

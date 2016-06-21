@@ -59,7 +59,6 @@
 			<div id="top" class="grid cf">
 				<div class="card-width">
 					<h1>{{ school }} | {{ course.code }}</h1>
-					<a href="/course/{{ course.code }}/F">See couse in </a>
 				</div>
 			</div>
 			<div id="content">
@@ -74,11 +73,16 @@
 								</div>
 							</div>
 							<div class="col-3-4">
-								{% if course.description %}
-									<p>{{ course.description }}</p>
-								{% else %}
-									<p>No description found.</p>
-								{% endif %}
+								<div id="description">
+									{% if course.description %}
+										<p>{{ course.description }}</p>
+									{% else %}
+										<p>No description found.</p>
+									{% endif %}
+								</div>
+							</div>
+							<div id="call-to-action" class="col-1-1">
+								<a href="/course/{{ course.code }}/F">Course evaluations, professor ratings, textbooks and more!</a>
 							</div>
 						</div>
 						<div id="sections" class="cf">
