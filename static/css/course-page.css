@@ -468,10 +468,16 @@ a#social-login:hover:before {
 #page {
 	padding: 0 0 100px;
 }
+.card-width {
+	float: left;
+	width: 80%;
+	max-width: 850px;
+	padding: 60px 30px 20px;
+}
 #top h1 {
+	float: left;
 	margin: 0;
 	color: #fff;
-	padding: 60px 30px 20px;
 	line-height: 26px;
 	font-size: 26px;
 	position: relative;
