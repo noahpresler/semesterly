@@ -27,7 +27,7 @@ class Reaction(models.Model):
     ('OKAY', 'OKAY'),
     ('BORING', 'BORING'),
     ('HARD', 'HARD'),
-    ('TEARS', 'TEARS'),
+    ('EASY', 'EASY'),
     ('INTERESTING', 'INTERESTING'),
   )
   student = models.ForeignKey('student.Student')
