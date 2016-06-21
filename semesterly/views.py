@@ -4,7 +4,7 @@ from django.core.context_processors import csrf
 from django.views.decorators.csrf import csrf_exempt
 from django.conf import settings
 from django.core.mail import send_mail
-import hashlib, hmac, json, pprint, os, subprocess
+import datetime, hashlib, hmac, json, pprint, os, subprocess
 
 
 def default_send_email(subject, message):
@@ -34,22 +34,34 @@ def deploy_staging(request):
 
         elif event_type == "push":
             body = json.loads(request.body)
-            commit = body['commits'][0]
             ref = body['ref']
             email_info = {
                 'ref': ref,
-                'sender_name': commit['committer']['name'],
-                'commit_hash': commit['id'],
-                'time': commit['timestamp'],
-                'compare_link': body['compare']
+                'link': body['compare']
             }
-
-            if ref.split("/")[-1] != "staging":
-                default_send_email("Non-Staging Branch Updated", 
+            try:
+                commit = body['commits'][0]
+                email_info.update({
+                    'type': 'Commit',
+                    'sender_username': commit['committer']['username'],
+                    'commit_hash': commit['id'],
+                    'commit_link': commit['url'],
+                    'time': commit['timestamp']
+                })
+            except IndexError:
+                email_info.update({
+                    'type': 'Merge [?]',
+                    'sender_username': body['sender']['login'],
+                    'time': str(datetime.datetime.now()),
+                })
+            
+            branch_name = ref.split("/")[-1]
+            if branch != "staging":
+                default_send_email("Semester.ly Branch: " + branch_name + " Updated", 
                     pprint.pformat(email_info, indent=4))
                 return HttpResponse("200")
 
-            default_send_email("Staging Server Being Updated", 
+            default_send_email("Semester.ly Staging Server Being Updated", 
                 pprint.pformat(email_info, indent=4))
             return_code = subprocess.call(getattr(settings, 'DEPLOY_COMMAND', ""), 
                 shell=True)
