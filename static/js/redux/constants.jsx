@@ -159,9 +159,9 @@ export const REACTION_MAP = {
   	unicode: '\uD83D\uDE29',
   	name: 'Hard'
   },
-  TEARS: {
-  	unicode: '\uD83D\uDE2D',
-  	name: 'Tears'
+  EASY: {
+  	unicode: '\uD83D\uDCAF',
+  	name: 'Easy'
   },
   INTERESTING: {
   	unicode: '\uD83E\uDD13',
