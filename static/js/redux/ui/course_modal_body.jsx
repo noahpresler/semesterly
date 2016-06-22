@@ -86,7 +86,7 @@ export class CourseModalBody extends React.Component {
             tutorialSections = <div><h3 className="modal-module-header">Tutorial Sections</h3>{tuts}</div>
         }
         if (pracs.length > 0) {
-            practicalSections = <div><h3 className="modal-module-header">Practical Sections</h3>{pracs}</div>
+            practicalSections = <div><h3 className="modal-module-header">Lab/Practical Sections</h3>{pracs}</div>
         }
         let { reactions, num_credits:numCredits } = this.props.data;
         // reactions.sort((r1, r2) => {return r1.count < r2.count});
