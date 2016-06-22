@@ -52,7 +52,7 @@ class QueensParser(BaseParser):
 
     section_code = se['_unique']
     section_data = {
-      'section_type': se['basic']['type'],
+      'section_type': self.section_type_map.get(se['basic']['type'], 'L'),
       'instructors': '; '.join(instructors) if instructors else 'TBD',
     }
 
