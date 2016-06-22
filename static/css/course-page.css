@@ -546,6 +546,14 @@ a#social-login:hover:before {
 	text-decoration: none;
 	transition: background-color .3s;
 }
+#call-to-action svg {
+	fill: #fff;
+	height: 24px;
+	margin-bottom: 2px;
+	margin-left: 9.5px;
+	vertical-align: middle;
+	width: 24px;
+}
 #call-to-action a:active:hover {
 	background-color: #289cde;
 }
