@@ -11,7 +11,6 @@ class SolusScraper(object):
         self.job = job
         self.save_to_db = save
         self.semesters = semesters
-        print "SAVE TO DB?", save
 
     def start(self):
         """Starts running the scrape outlined in the job"""
@@ -56,8 +55,6 @@ class SolusScraper(object):
 
         # Iterate over all subjects
         for subject in all_subjects:
-            if subject["abbreviation"] == "AGHE":
-                continue
             # logging.info(u"--Subject: {abbreviation} - {title}".format(**subject))
 
             if not self.save_to_db:
@@ -124,7 +121,7 @@ class SolusScraper(object):
             # print "Trying:", term, course['basic']['subject'], course['basic']['number']
             if self.semesters and (term['season'], term['year']) not in self.semesters:
                 continue
-            print "Scraping", term["_unique"], "offerings for", course['basic']['subject'], course['basic']['number']
+            print "\tScraping", term["_unique"], "offerings for", course['basic']['subject'], course['basic']['number']
             # logging.info(u"------Term: {year} - {season}".format(**term))
             self.session.switch_to_term(term["_unique"])
 
