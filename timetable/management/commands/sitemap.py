@@ -19,16 +19,18 @@ class Command(BaseCommand):
 
   def handle(self, *args, **options):
   	print os.path.dirname(os.path.realpath(__file__))
+  	update_time = str(datetime.datetime.today()).split()[0]
   	logging.basicConfig(level=logging.ERROR, filename='parse_errors.log')
-  	xml = '<?xml version="1.0" encoding="UTF-8"?><urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"><url><loc>https://semester.ly</loc><lastmod>2008-01-01</lastmod><changefreq>daily</changefreq><priority>0.8</priority></url>'
+  	xml = '<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n'
+  	xml += '<url><loc>https://semester.ly</loc><lastmod>' + update_time + '</lastmod><changefreq>daily</changefreq><priority>0.1</priority></url>\n'
 	xml_footer = "</urlset>"
 
 	for school in VALID_SCHOOLS:
-		xml += "<url><loc>https://" + school + ".semester.ly</loc></url>\n"
+		xml += "<url><loc>https://" + school + ".semester.ly</loc><lastmod>" + update_time + "</lastmod><changefreq>daily</changefreq><priority>0.1</priority></url>\n"
 		courses = Course.objects.filter(school=school)
 		for course in courses:
 			url = "https://" + school + ".semester.ly/c/" + course.code.replace(" ", "%20")
-			xml += "<url><loc>" + url + "</loc></url>\n"
+			xml += "<url><loc>" + url + "</loc><lastmod>" + update_time + "</lastmod><changefreq>daily</changefreq><priority>0.1</priority></url>\n"
 
 	xml = xml + xml_footer
 	sitemap = open('static/sitemap.txt', 'w')
