@@ -514,12 +514,17 @@ def course_page(request, code):
     l = course_dict['sections'].get('L', {}).values()
     t = course_dict['sections'].get('T', {}).values()
     p = course_dict['sections'].get('P', {}).values()
+    if school == "jhu":
+      course_url = "/course/" + course_dict['code'] + "/F"
+    else:
+      course_url = "/course/" + course_dict['code'] + "/F"
     return render_to_response("course_page.html",
       {'school': school,
        'course': course_dict,
        'lectures': l if l else None,
        'tutorials': t if t else None,
        'practicals': p if p else None,
+       'url': course_url
        },
     context_instance=RequestContext(request))
   except Exception as e:
