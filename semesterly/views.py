@@ -56,7 +56,7 @@ def deploy_staging(request):
                 })
             
             branch_name = ref.split("/")[-1]
-            if branch != "staging":
+            if branch_name != "staging":
                 default_send_email("Semester.ly Branch: " + branch_name + " Updated", 
                     pprint.pformat(email_info, indent=4))
                 return HttpResponse("200")
