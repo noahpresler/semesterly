@@ -1,22 +1,27 @@
 from qcumber_scraper.main import JobManager
 from scripts.base_parser import BaseParser
-
+from pprint import pprint
 days = ['_', 'M', 'T', 'W', 'R', 'F']
 
 class QueensParser(BaseParser):
   def __init__(self):
-    BaseParser.__init__(self, 'S')
+    BaseParser.__init__(self, 'F')
+    self.section_type_map = {
+      'LEC': 'L',
+      'TUT': 'T',
+      'LAB': 'P',
+    }
 
   def get_course_elements(self):
     try:
         from qcumber_scraper.queens_config import USER, PASS
     except ImportError:
-        print "No credientials found. Create a queens_config.py file with" + \
+        print "No credentials found. Create a queens_config.py file with" + \
               " USER and PASS constants"
         return
 
     # valid "seasons": Fall, Winter, Summer
-    for course in JobManager(USER, PASS, True, {'semesters': [('Winter', '2016')]}).parse_courses():
+    for course in JobManager(USER, PASS, True, {'semesters': [('Fall', '2016')]}).parse_courses():
       yield course
 
   def parse_course_element(self, course_element):

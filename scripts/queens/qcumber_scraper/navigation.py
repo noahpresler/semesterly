@@ -139,6 +139,7 @@ class SolusSession(object):
 
     def dropdown_subject(self, subject_unique):
         """Opens the dropdown menu for a subject"""
+        print "On subject:", subject_unique
         logging.debug(u"Dropping down subject with unique '{0}'".format(subject_unique))
 
         action = self.parser.subject_action(subject_unique)
@@ -211,7 +212,7 @@ class SolusSession(object):
         logging.debug(u"Switching to term with unique '{0}'".format(term_unique))
         value = self.parser.term_value(term_unique)
 
-        self._catalog_post(action='DERIVED_SAA_CRS_SSR_PB_GO$98$', extras={'DERIVED_SAA_CRS_TERM_ALT': value})
+        self._catalog_post(action='DERIVED_SAA_CRS_SSR_PB_GO$3$', extras={'DERIVED_SAA_CRS_TERM_ALT': value})
 
         if self.recovery_state < 0:
             self.recovery_stack[3] = term_unique
@@ -292,10 +293,10 @@ class SolusSession(object):
             extras = {}
         extras['ICAction'] = action
         self._post(self.course_catalog_url, data=extras)
-
         #import random
         # TODO: Improve this, could easily give false positives
         if "Data Integrity Error" in self.latest_text:
+            print "lmfoo u med"
             self._recover(action, extras)
 
         # TESTING - Fake a DIE using random number generator
@@ -326,16 +327,21 @@ class SolusSession(object):
 
             # State numbers are OBO due to previous increment
             if self.recovery_state == 1:
+                print "lmfao", self.recovery_state
                 self.select_alphanum(self.recovery_stack[0])
             elif self.recovery_state == 2:
+                print "lmfao", self.recovery_state
                 self.dropdown_subject(self.recovery_stack[1])
             elif self.recovery_state == 3:
+                print "lmfao", self.recovery_state
                 self.open_course(self.recovery_stack[2])
                 self.show_sections()
             elif self.recovery_state == 4:
+                print "lmfao", self.recovery_state
                 self.switch_to_term(self.recovery_stack[3])
                 self.view_all_sections()
             elif self.recovery_state == 5:
+                print "lmfao", self.recovery_state
                 self.visit_section_page(self.recovery_stack[4])
 
         # Finished recovering
