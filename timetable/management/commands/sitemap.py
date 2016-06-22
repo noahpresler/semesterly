@@ -24,7 +24,7 @@ class Command(BaseCommand):
 	xml_footer = "</urlset>"
 
 	for school in VALID_SCHOOLS:
-		xml += "<url><loc>https://" + school + "semester.ly</loc></url>\n"
+		xml += "<url><loc>https://" + school + ".semester.ly</loc></url>\n"
 		courses = Course.objects.filter(school=school)
 		for course in courses:
 			url = "https://" + school + ".semester.ly/c/" + course.code.replace(" ", "%20")
