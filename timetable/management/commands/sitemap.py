@@ -29,7 +29,7 @@ class Command(BaseCommand):
 		xml += "<url><loc>https://" + school + ".semester.ly</loc><lastmod>" + update_time + "</lastmod><changefreq>daily</changefreq><priority>0.1</priority></url>\n"
 		courses = Course.objects.filter(school=school)
 		for course in courses:
-			url = "https://" + school + ".semester.ly/" + course.code.replace(" ", "%20")
+			url = "https://" + school + ".semester.ly/c/" + course.code.replace(" ", "%20")
 			xml += "<url><loc>" + url + "</loc><lastmod>" + update_time + "</lastmod><changefreq>daily</changefreq><priority>0.1</priority></url>\n"
 
 	xml = xml + xml_footer
