@@ -139,6 +139,7 @@ class SolusSession(object):
 
     def dropdown_subject(self, subject_unique):
         """Opens the dropdown menu for a subject"""
+        print "On subject:", subject_unique
         logging.debug(u"Dropping down subject with unique '{0}'".format(subject_unique))
 
         action = self.parser.subject_action(subject_unique)
@@ -211,7 +212,7 @@ class SolusSession(object):
         logging.debug(u"Switching to term with unique '{0}'".format(term_unique))
         value = self.parser.term_value(term_unique)
 
-        self._catalog_post(action='DERIVED_SAA_CRS_SSR_PB_GO$98$', extras={'DERIVED_SAA_CRS_TERM_ALT': value})
+        self._catalog_post(action='DERIVED_SAA_CRS_SSR_PB_GO$3$', extras={'DERIVED_SAA_CRS_TERM_ALT': value})
 
         if self.recovery_state < 0:
             self.recovery_stack[3] = term_unique
@@ -292,7 +293,6 @@ class SolusSession(object):
             extras = {}
         extras['ICAction'] = action
         self._post(self.course_catalog_url, data=extras)
-
         #import random
         # TODO: Improve this, could easily give false positives
         if "Data Integrity Error" in self.latest_text:
