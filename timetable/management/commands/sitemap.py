@@ -37,5 +37,4 @@ class Command(BaseCommand):
 	sitemap.write(xml)
 	sitemap.close()
 
-
 	self.success_print("Finished!")
