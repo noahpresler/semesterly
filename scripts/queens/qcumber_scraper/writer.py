@@ -32,7 +32,6 @@ def out_path(dirname):
 
 
 def write_course(course):
-
     # Merge the basic and extra information into a single dict
     # I should probably just do this at a lower level, but this works too
     merged_course = course['basic'].copy()
