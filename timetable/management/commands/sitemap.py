@@ -20,7 +20,7 @@ class Command(BaseCommand):
   def handle(self, *args, **options):
   	print os.path.dirname(os.path.realpath(__file__))
   	logging.basicConfig(level=logging.ERROR, filename='parse_errors.log')
-  	xml = '<?xml version="1.0" encoding="UTF-8"?><urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"><url><loc>https://semester.ly</loc></url>'
+  	xml = '<?xml version="1.0" encoding="UTF-8"?><urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"><url><loc>https://semester.ly</loc><lastmod>2008-01-01</lastmod><changefreq>daily</changefreq><priority>0.8</priority></url>'
 	xml_footer = "</urlset>"
 
 	for school in VALID_SCHOOLS:
