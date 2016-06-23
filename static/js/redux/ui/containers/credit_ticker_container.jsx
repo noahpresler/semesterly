@@ -10,9 +10,8 @@ const mapStateToProps = (state) => {
   	numCredits = 0.5 * liveTimetableCourses.length;
   }
   else {
-	numCredits = liveTimetableCourses.length > 0 ? liveTimetableCourses.reduce((prev,c) => c.num_credits + prev, 0) : 0;
+	  numCredits = liveTimetableCourses.length > 0 ? liveTimetableCourses.reduce((prev,c) => c.num_credits + prev, 0) : 0;
   }
-  console.log(numCredits);
   return {
     	numCredits,
   }
