@@ -32,7 +32,7 @@ course_parsers = {
   'umd': parse_umd,
   # 'rutgers': parse_rutgers,
   'uo': parse_ottawa,
-  'queens': lambda: QueensParser().parse_courses()
+  'queens': lambda: parse_queens('FS')
 }
 
 eval_parsers = {
