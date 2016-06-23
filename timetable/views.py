@@ -385,7 +385,7 @@ def get_detailed_course_json(school, course, sem, student=None):
   return json_data
 
 def get_basic_course_json(course, sem, extra_model_fields=[]):
-  basic_fields = ['code','name', 'id', 'description', 'department', 'num_credits', 'areas']
+  basic_fields = ['code','name', 'id', 'description', 'department', 'num_credits', 'areas', 'campus']
   course_json = model_to_dict(course, basic_fields + extra_model_fields)
   course_json['evals'] = course.get_eval_info()
   course_json['sections'] = {}
@@ -514,12 +514,17 @@ def course_page(request, code):
     l = course_dict['sections'].get('L', {}).values()
     t = course_dict['sections'].get('T', {}).values()
     p = course_dict['sections'].get('P', {}).values()
+    if school == "jhu":
+      course_url = "/course/" + course_dict['code'] + "/F"
+    else:
+      course_url = "/course/" + course_dict['code'] + "/F"
     return render_to_response("course_page.html",
       {'school': school,
        'course': course_dict,
        'lectures': l if l else None,
        'tutorials': t if t else None,
        'practicals': p if p else None,
+       'url': course_url
        },
     context_instance=RequestContext(request))
   except Exception as e:

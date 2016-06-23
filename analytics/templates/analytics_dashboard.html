@@ -15,14 +15,153 @@
    
   </head>
   <body>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.1.3/Chart.min.js"></script>
+
     <div id="analytics-container">
     </div>
+    <h3>Total number of Timetables: {{total_timetables}}</h3>
 
+    <h3>Total number of timetalbes for Fall semester: {{total_timetables_fall}}</h3>
 
-      <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
-      <script type="text/javascript" src="https://fb.me/react-0.14.3.js"></script>
-      <script type="text/javascript" src="https://fb.me/react-dom-0.14.3.js"></script>
-      <script type="text/javascript" src="{% static 'js/gulp/analytics_application.js' %}"></script>
+    <h3>Total number of Timetables for Spring semester: {{total_timetables_spring}}</h3>
+
+    <h3>Total number of JHU Timetables: {{jhu_timetables}}</h3>  
+    <h4>Most popular courses in JHU:</h4>  
+    {% for course in jhu_most_popular_courses %}
+    <div>
+        <p>{{ course.name }}</p>
+    </div>
+    {% endfor %}
+
+    <h3>Total number of UOFT Timetables: {{uoft_timetables}}</h3>
+    <h4>Most popular courses in UOFT:</h4>  
+    {% for course in uoft_most_popular_courses %}
+    <div>
+        <p>{{ course.name }}</p>
+    </div>
+    {% endfor %}
+    
+    <h3>Total number of UMD Timetables: {{umd_timetables}}</h3>
+    <h4>Most popular courses in UMD:</h4>  
+    {% for course in umd_most_popular_courses %}
+    <div>
+        <p>{{ course.name }}</p>
+    </div>
+    {% endfor %}
+
+    <h3>Number of timetables created per hour per school for the past 24 hours:</h3>
+
+    <script type="text/javascript">
+      var jhu_timetables_per_hour = JSON.parse("{{jhu_timetables_per_hour}}");
+      var uoft_timetables_per_hour = JSON.parse("{{uoft_timetables_per_hour}}");
+      var umd_timetables_per_hour = JSON.parse("{{umd_timetables_per_hour}}");
+      var number_of_reactions = JSON.parse("{{number_of_reactions|escapejs}}");
+      console.log(number_of_reactions);
+      console.log(typeof(number_of_reactions));
+    </script>
+
+    <canvas id="timetables_per_hours_chart" width="400" height="400"></canvas>
+    <canvas id="reactions_chart" width="400" height="400"></canvas>
+
+    <script>
+    var timetables_per_hour_data = {
+        labels: ["-23", "-22", "-21", "-20", "-19", "-18", "-17","-16", "-15", "-14", "-13", "-12", "-11", "-10","-9", "-8", "-7", "-6", "-5", "-4", "-3", "-2", "-1", "Now"],
+        datasets: [
+            {
+                label: "JHU",
+                fill: false,
+                lineTension: 0.1,
+                backgroundColor: "rgba(61,90,254,0.4)",
+                borderColor: "rgba(61,90,254,1)",
+                borderCapStyle: 'butt',
+                borderDash: [],
+                borderDashOffset: 0.0,
+                borderJoinStyle: 'miter',
+                pointBorderColor: "rgba(61,90,254,1)",
+                pointBackgroundColor: "#fff",
+                pointBorderWidth: 1,
+                pointHoverRadius: 5,
+                pointHoverBackgroundColor: "rgba(61,90,254,1)",
+                pointHoverBorderColor: "rgba(220,220,220,1)",
+                pointHoverBorderWidth: 2,
+                pointRadius: 1,
+                pointHitRadius: 10,
+                data: jhu_timetables_per_hour,
+            },
+            {
+                label: "UOFT",
+                fill: false,
+                lineTension: 0.1,
+                backgroundColor: "rgba(233,30,99,0.4)",
+                borderColor: "rgba(233,30,99,1)",
+                borderCapStyle: 'butt',
+                borderDash: [],
+                borderDashOffset: 0.0,
+                borderJoinStyle: 'miter',
+                pointBorderColor: "rgba(233,30,99,1)",
+                pointBackgroundColor: "#fff",
+                pointBorderWidth: 1,
+                pointHoverRadius: 5,
+                pointHoverBackgroundColor: "rgba(233,30,99,1)",
+                pointHoverBorderColor: "rgba(220,220,220,1)",
+                pointHoverBorderWidth: 2,
+                pointRadius: 1,
+                pointHitRadius: 10,
+                data: uoft_timetables_per_hour,
+            },
+            {
+                label: "UMD",
+                fill: false,
+                lineTension: 0.1,
+                backgroundColor: "rgba(0,200,83,0.4)",
+                borderColor: "rgba(0,200,83,1)",
+                borderCapStyle: 'butt',
+                borderDash: [],
+                borderDashOffset: 0.0,
+                borderJoinStyle: 'miter',
+                pointBorderColor: "rgba(0,200,83,1)",
+                pointBackgroundColor: "#fff",
+                pointBorderWidth: 1,
+                pointHoverRadius: 5,
+                pointHoverBackgroundColor: "rgba(0,200,83,1)",
+                pointHoverBorderColor: "rgba(220,220,220,1)",
+                pointHoverBorderWidth: 2,
+                pointRadius: 1,
+                pointHitRadius: 10,
+                data: umd_timetables_per_hour,
+            }
+        ]
+    };
+    var reactions_data = {
+        labels: Object.keys(number_of_reactions),
+        datasets: [
+            {
+                label: "# Uses",
+                backgroundColor: "rgba(255,23,68,0.2)",
+                borderColor: "rgba(255,23,68,1)",
+                borderWidth: 1,
+                hoverBackgroundColor: "rgba(255,23,68,0.4)",
+                hoverBorderColor: "rgba(255,23,68,1)",
+                data: Object.keys(number_of_reactions).map(function(key){return number_of_reactions[key]}),
+            }
+        ]
+    };
+    var ctx = document.getElementById("timetables_per_hours_chart");
+    var line_chart_24_hours = new Chart(ctx, {
+        type: 'line',
+        data: timetables_per_hour_data,
+    });
+    var rtx = document.getElementById("reactions_chart");
+    var line_chart_reactions = new Chart(rtx, {
+        type: 'bar',
+        data: reactions_data,
+    });
+    </script>
+
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+    <script type="text/javascript" src="https://fb.me/react-0.14.3.js"></script>
+    <script type="text/javascript" src="https://fb.me/react-dom-0.14.3.js"></script>
+    <!--<script type="text/javascript" src="{% static 'js/gulp/analytics_application.js' %}"></script>-->
 
   </body>
 </html>
