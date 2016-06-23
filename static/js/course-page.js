@@ -7,7 +7,10 @@ document.addEventListener("DOMContentLoaded", function(event) {
 		var enrolled = s.getAttribute('data-enrolment');
 		var left = size - enrolled;
 		var h = s.getElementsByClassName('enrollment')[0];
-		if (waitlist > 0) {
+		if (size < 0) {
+			s.className += '';
+			var txt = 'No enrollment info';
+		} else if (waitlist > 0) {
 			s.className += ' red';
 			var txt = '<span>' + waitlist + ' waitlist</span> / ' + size + ' seats';
 		} else if (left < size / 10) {
