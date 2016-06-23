@@ -51,3 +51,11 @@ textbook_parsers = {
   'uo': lambda: None,
   'queens': parse_queens_textbooks
 }
+sitemappers = {
+  'jhu': lambda: HopkinsTextbookFinder().parse_classes(),
+  'uoft': parse_uoft_textbooks,
+  'umd': lambda: None,
+  'rutgers': lambda: None,
+  'uo': lambda: None,
+  'queens': parse_queens_textbooks
+}
