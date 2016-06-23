@@ -5,19 +5,19 @@
 	<head>
 		<meta charset="utf-8">
 		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
-		<meta name="description" content="Now with a new and improved UI: view a section, and find your textbooks to rent/buy through Amazon. Alternatively, explore new options with our recommendation engine – helping you find new and exciting courses on the fly. Not sure if the class is worthwhile? Instantly see what your peers think, alongside detailed comments from past course evaluations. Currently supporting course finding software for the Johns Hopkins University (JHU) and the University of Toronto (UofT).">
+		<meta name="description" content="{{ course.description }}">
 		<meta name="author" content="Noah Presler, Rohan Das, Felix Zhu, Max Yeo">
 
 		<!-- Facebook thumbnail info -->
-		<meta property="og:title" content="Semester.ly - Countdown to Registration" />
+		<meta property="og:title" content="{{ course.code }} {{ course.name }} | Semester.ly" />
 		<meta property="og:type" content="website" />
 		<meta property="og:site_name" content="Semesterly" />
 		<meta property="og:url" content="http://semester.ly" />
 		<meta property="og:image" content="http://i.imgur.com/MoxzrNG.png" />
-		<meta property="og:description" content="Now with a new and improved UI: view a section, and find your textbooks to rent/buy through Amazon. Alternatively, explore new options with our recommendation engine – helping you find new and exciting courses on the fly. Not sure if the class is worthwhile? Instantly see what your peers think, alongside detailed comments from past course evaluations." />
+		<meta property="og:description" content="{{ course.description }}" />
 		<meta property="fb:admins" content="535129063" />
 
-		<title>Semester.ly: Textbooks, Course Finding & More | JHU Registration Countdown</title>
+		<title>{{ course.code }} {{ course.name }} | Semester.ly</title>
 		<link rel="shortcut icon" type="image/x-icon" href="{% static 'img/favicon.ico' %}" />
 
 		<link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet" integrity="sha256-7s5uDGW3AHqw6xtJmNNtr+OBRJUlgkNJEo78P4b0yRw= sha512-nNo+yCHEyn0smMxSswnf/OnX6/KwJuZTlNZBjauKhTK0c+zT+q5JOCx0UFhXQ6rJR9jg6Es8gPuD2uZcYDLqSw==" crossorigin="anonymous">
@@ -34,7 +34,7 @@
 					<span id="logo"></span>
 					<h1>Semester.ly</h1>
 				</a>
-				<div id="social">
+				<!-- <div id="social">
 					<div id="social-card">
 						<div id="social-pro-pic" style="background-image: url();"></div>
 						<h2>Max</h2>
@@ -48,16 +48,18 @@
 							<span>Sign out</span>
 						</a>
 					</div>
-					<!-- <a id="social-login" href="/login/facebook">
+					<a id="social-login" href="/login/facebook">
 						<h2>Signup/Login <i className="fa fa-facebook-square"></i></h2>
-					</a> -->
-				</div>
+					</a>
+				</div> -->
 			</div>
 		</header>
 		<div id="page">
 			<div id="top-bg"></div>
 			<div id="top" class="grid cf">
-				<h1>{{ school }} | {{ course.code }}</h1>
+				<div class="card-width">
+					<h1>{{ school }} | {{ course.code }}</h1>
+				</div>
 			</div>
 			<div id="content">
 				<div class="grid cf">
@@ -71,11 +73,21 @@
 								</div>
 							</div>
 							<div class="col-3-4">
-								{% if course.description %}
-									<p>{{ course.description }}</p>
-								{% else %}
-									<p>No description found.</p>
-								{% endif %}
+								<div id="description">
+									{% if course.description %}
+										<p>{{ course.description }}</p>
+									{% else %}
+										<p>No description found.</p>
+									{% endif %}
+								</div>
+							</div>
+							<div id="call-to-action" class="col-1-1">
+								<a href="{{ url }}">
+									<span>Course evaluations, professor ratings, textbooks and more!</span>
+									<svg viewBox="0 0 48 48">
+										<path d="M20.17 31.17L23 34l10-10-10-10-2.83 2.83L25.34 22H6v4h19.34l-5.17 5.17zM38 6H10c-2.21 0-4 1.79-4 4v8h4v-8h28v28H10v-8H6v8c0 2.21 1.79 4 4 4h28c2.21 0 4-1.79 4-4V10c0-2.21-1.79-4-4-4z"></path>
+									</svg>
+								</a>
 							</div>
 						</div>
 						<div id="sections" class="cf">
@@ -115,7 +127,7 @@
 							{% endif %}
 							{% if practicals %}
 								<div class="section-group cf">
-									<h3>Practical Sections</h3>
+									<h3>Lab/Practical Sections</h3>
 									{% for p in practicals %}
 										<div class="section"
 											data-waitlist="{{ p.0.waitlist }}"

@@ -39,7 +39,7 @@ export class SearchSideBar extends React.Component {
             tutorialSections = <div><h4> Tutorial Sections </h4>{tuts}</div>
         }
         if (pracs.length > 0) {
-            practicalSections = <div><h4> Practical Sections </h4>{pracs}</div>
+            practicalSections = <div><h4> Lab/Practical Sections </h4>{pracs}</div>
         }
         return (
             <div id="search-bar-side">
