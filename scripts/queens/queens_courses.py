@@ -4,13 +4,14 @@ from pprint import pprint
 days = ['_', 'M', 'T', 'W', 'R', 'F']
 
 class QueensParser(BaseParser):
-  def __init__(self):
-    BaseParser.__init__(self, 'F')
+  def __init__(self, semester):
+    BaseParser.__init__(self, semester)
     self.section_type_map = {
       'LEC': 'L',
       'TUT': 'T',
       'LAB': 'P',
     }
+    self.semester = 'Fall' if semester == 'F' else 'Winter'
 
   def get_course_elements(self):
     try:
@@ -21,7 +22,7 @@ class QueensParser(BaseParser):
         return
 
     # valid "seasons": Fall, Winter, Summer
-    for course in JobManager(USER, PASS, True, {'semesters': [('Fall', '2016')]}).parse_courses():
+    for course in JobManager(USER, PASS, True, {'semesters': [(self.semester, '2016')]}).parse_courses():
       yield course
 
   def parse_course_element(self, course_element):
@@ -98,5 +99,9 @@ def valid_section(section_element):
 def missing_info(meeting_element):
   return not all([meeting_element[info] for info in ['day_of_week', 'end_time', 'start_time']])
 
+def parse_queens(semesters):
+  for semester in semesters:
+    QueensParser(semester).parse_courses()
+
 if __name__ == '__main__':
-  QueensParser().parse_courses()
+  parse_queens('FS')
