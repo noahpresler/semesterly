@@ -55,7 +55,6 @@ class SolusScraper(object):
 
         # Iterate over all subjects
         for subject in all_subjects:
-
             # logging.info(u"--Subject: {abbreviation} - {title}".format(**subject))
 
             if not self.save_to_db:
@@ -100,8 +99,13 @@ class SolusScraper(object):
                 raise
 
             if self.save_to_db:
-                course_attrs['sections'] = self.scrape_terms(course_attrs)
-                yield course_attrs
+                sections = self.scrape_terms(course_attrs)
+                course_attrs['sections'] = sections
+                if len(sections) > 0:
+                    yield course_attrs
+                else:
+                    pass
+
             else:
                 self.scrape_terms(course_attrs)
             self.session.return_from_course()
@@ -112,25 +116,29 @@ class SolusScraper(object):
 
         # Get all terms on the page and iterate over them
         all_terms = self.session.parser.all_terms()
+        res = []
         for term in all_terms:
+            # print "Trying:", term, course['basic']['subject'], course['basic']['number']
             if self.semesters and (term['season'], term['year']) not in self.semesters:
                 continue
+            print "\tScraping", term["_unique"], "offerings for", course['basic']['subject'], course['basic']['number']
             # logging.info(u"------Term: {year} - {season}".format(**term))
             self.session.switch_to_term(term["_unique"])
 
             self.session.view_all_sections()
             if self.save_to_db:
                 for section in self.scrape_sections(course, term):
-                    yield section
+                    res.append(section)
             else:
                 self.scrape_sections(course, term)
+        return res
 
     def scrape_sections(self, course, term):
         """Scrape sections"""
 
         # Grab all the basic data
         all_sections = self.session.parser.all_section_data()
-
+        res = []
 
         if logging.getLogger().isEnabledFor(logging.INFO):
             for section in all_sections:
@@ -156,9 +164,12 @@ class SolusScraper(object):
             section['basic']['subject'] = course['basic']['subject']
             section['basic']['year'] = term['year']
             section['basic']['season'] = term['season']
+            # print "\t\tAdded:", section
 
             if not self.save_to_db: # If not saving to DB, write to JSON
                 writer.write_section(section)
             else:
-                yield section
+                res.append(section)
+
+        return res
 
