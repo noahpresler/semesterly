@@ -19,31 +19,39 @@
 
     <div id="analytics-container">
     </div>
+
     <h3>Total number of timetables: {{total_timetables}}</h3>
 
     <h3>Total number of shared timetables: {{total_shared_timetables}}</h3>
 
-    <h3>Total number of timetalbes for Fall semester: {{total_timetables_fall}}</h3>
+    <h4>Total number of Timetables: {{total_timetables}}</h4>
 
     <h3>Total number of timetables for Spring semester: {{total_timetables_spring}}</h3>
 
-    <h3>Total number of JHU timetables: {{jhu_timetables}}</h3>  
-    <h4>Most popular courses in JHU:</h4>  
+    <h4>Total number of Timetables for Fall semester: {{total_timetables_fall}}</h4>
+
+    <h4>Total number of Timetables for Spring semester: {{total_timetables_spring}}</h4>
+
+    <h4>Total number of JHU Timetables: {{jhu_timetables}}</h4>  
+
+    <!-- <h4>Most popular courses in JHU:</h4>  
+
     {% for course in jhu_most_popular_courses %}
     <div>
         <p>{{ course.name }}</p>
     </div>
     {% endfor %}
 
+
     <h4>Most searched courses in JHU:</h4>  
     {% for course in jhu_most_searched_courses %}
     <div>
         <p>{{ course.name }}</p>
     </div>
-    {% endfor %}
+    {% endfor %} -->
 
-    <h3>Total number of UOFT timetables: {{uoft_timetables}}</h3>
-    <h4>Most popular courses in UOFT:</h4>  
+    <h4>Total number of UOFT Timetables: {{uoft_timetables}}</h4>
+    <!-- <h4>Most popular courses in UOFT:</h4>  
     {% for course in uoft_most_popular_courses %}
     <div>
         <p>{{ course.name }}</p>
@@ -55,10 +63,10 @@
     <div>
         <p>{{ course.name }}</p>
     </div>
-    {% endfor %}
+    {% endfor %}-->
     
-    <h3>Total number of UMD timetables: {{umd_timetables}}</h3>
-    <h4>Most popular courses in UMD:</h4>  
+    <h4>Total number of UMD Timetables: {{umd_timetables}}</h4>
+    <!-- <h4>Most popular courses in UMD:</h4>  
     {% for course in umd_most_popular_courses %}
     <div>
         <p>{{ course.name }}</p>
@@ -70,21 +78,31 @@
     <div>
         <p>{{ course.name }}</p>
     </div>
-    {% endfor %}
+    {% endfor %} -->
 
+    <h4>Total number of Queens Timetables: {{queens_timetables}}</h4>
+
+
+    <h4>Total signups: {{total_signups}}</h4>
 
     <script type="text/javascript">
       var jhu_timetables_per_hour = JSON.parse("{{jhu_timetables_per_hour}}");
       var uoft_timetables_per_hour = JSON.parse("{{uoft_timetables_per_hour}}");
       var umd_timetables_per_hour = JSON.parse("{{umd_timetables_per_hour}}");
+      var queens_timetables_per_hour = JSON.parse("{{queens_timetables_per_hour}}");
       var jhu_shared_timetables_per_hour = JSON.parse("{{jhu_shared_timetables_per_hour}}");
       var uoft_shared_timetables_per_hour = JSON.parse("{{uoft_shared_timetables_per_hour}}");
       var umd_shared_timetables_per_hour = JSON.parse("{{umd_shared_timetables_per_hour}}");
+      var queens_shared_timetables_per_hour = JSON.parse("{{queens_shared_timetables_per_hour}}");
       var number_of_reactions = JSON.parse("{{number_of_reactions|escapejs}}");
-      console.log(number_of_reactions);
-      console.log(typeof(number_of_reactions));
+      var num_jhu_timetables = JSON.parse("{{jhu_timetables}}");
+      var num_uoft_timetables = JSON.parse("{{uoft_timetables}}");
+      var num_umd_timetables = JSON.parse("{{umd_timetables}}");
+      var num_queens_timetables = JSON.parse("{{queens_timetables}}");
     </script>
 
+    <h3>Number of timetables by school:</h3>
+    <canvas id="timetables_by_schools" width="400" height="400"></canvas>
 
     <h3>Number of timetables created per hour per school for the past 24 hours:</h3>
     <canvas id="timetables_per_hours_chart" width="400" height="400"></canvas>
@@ -94,6 +112,8 @@
 
     <h3>Number of each reaction used:</h3>
     <canvas id="reactions_chart" width="400" height="400"></canvas>
+
+
 
     <script>
     Chart.defaults.global.responsive = true;
@@ -163,6 +183,27 @@
                 pointRadius: 1,
                 pointHitRadius: 10,
                 data: umd_timetables_per_hour,
+            },
+            {
+                label: "Queens",
+                fill: false,
+                lineTension: 0.1,
+                backgroundColor: "rgba(255,87,34 ,0.4)",
+                borderColor: "rgba(255,87,34 ,1)",
+                borderCapStyle: 'butt',
+                borderDash: [],
+                borderDashOffset: 0.0,
+                borderJoinStyle: 'miter',
+                pointBorderColor: "rgba(255,87,34 ,1)",
+                pointBackgroundColor: "#fff",
+                pointBorderWidth: 1,
+                pointHoverRadius: 5,
+                pointHoverBackgroundColor: "rgba(255,87,34 ,1)",
+                pointHoverBorderColor: "rgba(220,220,220,1)",
+                pointHoverBorderWidth: 2,
+                pointRadius: 1,
+                pointHitRadius: 10,
+                data: queens_timetables_per_hour,
             }
         ]
     };
@@ -231,6 +272,27 @@
                 pointRadius: 1,
                 pointHitRadius: 10,
                 data: umd_shared_timetables_per_hour,
+            },
+            {
+                label: "Queens",
+                fill: false,
+                lineTension: 0.1,
+                backgroundColor: "rgba(255,87,34 ,0.4)",
+                borderColor: "rgba(255,87,34 ,1)",
+                borderCapStyle: 'butt',
+                borderDash: [],
+                borderDashOffset: 0.0,
+                borderJoinStyle: 'miter',
+                pointBorderColor: "rgba(255,87,34 ,1)",
+                pointBackgroundColor: "#fff",
+                pointBorderWidth: 1,
+                pointHoverRadius: 5,
+                pointHoverBackgroundColor: "rgba(255,87,34 ,1)",
+                pointHoverBorderColor: "rgba(220,220,220,1)",
+                pointHoverBorderWidth: 2,
+                pointRadius: 1,
+                pointHitRadius: 10,
+                data: umd_shared_timetables_per_hour,
             }
         ]
     };
@@ -248,20 +310,53 @@
             }
         ]
     };
+    var timetables_by_schools_data = {
+        labels: [
+            "JHU",
+            "UOFT",
+            "UMD",
+            "Q,ueens"
+        ],
+        datasets: [
+            {
+                data: [num_jhu_timetables, num_uoft_timetables, num_umd_timetables, num_queens_timetables],
+                backgroundColor: [
+                    "#FF6384",
+                    "#36A2EB",
+                    "#FFCE56",
+                    "#FF5722"
+                ],
+                hoverBackgroundColor: [
+                    "#FF6384",
+                    "#36A2EB",
+                    "#FFCE56",
+                    "#FF5722"
+                ]
+            }]
+    };
+
     var ctx = document.getElementById("timetables_per_hours_chart");
     var line_chart_24_hours = new Chart(ctx, {
         type: 'line',
         data: timetables_per_hour_data,
     });
+
     var stx = document.getElementById("shared_timetables_per_hours_chart");
     var line_chart_shared_24_hours = new Chart(stx, {
         type: 'line',
         data: shared_timetables_per_hour_data,
     });
+
     var rtx = document.getElementById("reactions_chart");
     var line_chart_reactions = new Chart(rtx, {
         type: 'bar',
         data: reactions_data,
+    });
+
+    var ptx = document.getElementById("timetables_by_schools");
+    var myPieChart = new Chart(ptx, {
+        type: 'pie',
+        data: timetables_by_schools_data,
     });
     </script>
 
