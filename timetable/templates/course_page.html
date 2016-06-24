@@ -102,6 +102,11 @@
 											>
 											<h4>{{ l.0.meeting_section }}</h4>
 											<h5>{{ l.0.location }}</h5>
+											{% if l.0.instructors %}
+												<h5>{{ l.0.instructors }}</h5>
+											{% else %}
+												<h5>No instructor info</h5>
+											{% endif %}
 											<h5>{{ l.0.time_start }} - {{ l.0.time_end }}</h5>
 											<h5 class="enrollment"></h5>
 										</div>
