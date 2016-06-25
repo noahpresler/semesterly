@@ -61,7 +61,7 @@ export const getSchoolSpecificInfo = (school) => {
         },
         campuses: {
           1: "UTSG",
-          2: "UTSC",
+          3: "UTSC",
           5: "UTM"
         }
       }
