@@ -22,7 +22,7 @@ class QueensParser(BaseParser):
         return
 
     # valid "seasons": Fall, Winter, Summer
-    for course in JobManager(USER, PASS, True, {'semesters': [(self.semester, '2016')]}).parse_courses():
+    for course in JobManager(USER, PASS, True, {'semesters': [('Fall', '2016'), ('Winter', '2017')]}).parse_courses():
       yield course
 
   def parse_course_element(self, course_element):
@@ -33,7 +33,9 @@ class QueensParser(BaseParser):
       'school': 'queens',
       'description': ce['basic']['description'],
       'num_credits': int(float(ce['extra']['units'])),
-      'prerequisites': ce['extra'].get('enrollment_requirement', '')
+      'prerequisites': ce['extra'].get('enrollment_requirement', ''),
+      'department': ce['basic']['subject']
+      'level': ce['basic']['number']
     }
     return course_code, course_data
 
@@ -55,6 +57,7 @@ class QueensParser(BaseParser):
     section_data = {
       'section_type': self.section_type_map.get(se['basic']['type'], 'L'),
       'instructors': '; '.join(instructors) if instructors else 'TBD',
+      'semester': 'F' if se['basic']['season'] == 'Fall' else 'S'
     }
 
     if 'availability' in section_element:
