@@ -31,8 +31,8 @@ course_parsers = {
   'uoft': lambda: UofTParser().start(),
   'umd': parse_umd,
   # 'rutgers': parse_rutgers,
-  'uo': parse_ottawa,
-  'queens': lambda: parse_queens('FS')
+  'uo': parse_ottawa
+  # 'queens': lambda: QueensParser().parse_courses()
 }
 
 eval_parsers = {
