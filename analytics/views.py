@@ -17,11 +17,16 @@ to_zone = tz.gettz('America/New_York')
 def view_analytics_dashboard(request):
     student = get_student(request)
     if student and student.user.is_staff:
+        print(number_timetables_per_hour(Timetable=SharedTimetable, school="jhu"))
         return render_to_response('analytics_dashboard.html', {
                 "total_timetables":number_timetables(),
+                "total_shared_timetables":number_timetables(Timetable=SharedTimetable),
                 "jhu_timetables_per_hour":number_timetables_per_hour(school="jhu"),
                 "uoft_timetables_per_hour":number_timetables_per_hour(school="uoft"),
                 "umd_timetables_per_hour":number_timetables_per_hour(school="umd"),
+                "jhu_shared_timetables_per_hour":number_timetables_per_hour(Timetable=SharedTimetable, school="jhu"),
+                "uoft_shared_timetables_per_hour":number_timetables_per_hour(Timetable=SharedTimetable, school="uoft"),
+                "umd_shared_timetables_per_hour":number_timetables_per_hour(Timetable=SharedTimetable, school="umd"),
                 "total_timetables_fall":number_timetables(semester="F"),
                 "total_timetables_sprint":number_timetables(semester="S"),
                 "jhu_timetables":number_timetables(school='jhu'),
@@ -30,7 +35,10 @@ def view_analytics_dashboard(request):
                 "number_of_reactions":json.dumps(number_of_reactions()),
                 "jhu_most_popular_courses":most_popular_courses(5, 'jhu', 'S'),
                 "uoft_most_popular_courses":most_popular_courses(5, 'uoft', 'S'),
-                "umd_most_popular_courses":most_popular_courses(5, 'umd', 'S')
+                "umd_most_popular_courses":most_popular_courses(5, 'umd', 'S'),
+                "jhu_most_searched_courses":most_popular_courses(5, 'jhu', 'F', AnalyticsCourseSearch),
+                "uoft_most_searched_courses":most_popular_courses(5, 'uoft', 'F', AnalyticsCourseSearch),
+                "umd_most_searched_courses":most_popular_courses(5, 'umd', 'F', AnalyticsCourseSearch)
             },
             context_instance=RequestContext(request))
     else:
@@ -77,7 +85,7 @@ def number_timetables(Timetable = AnalyticsTimetable, school = None, semester = 
     return timetables.count()
 
 def number_timetables_per_hour(Timetable = AnalyticsTimetable, school = None):
-    """Gets the number of time tables created each hour."""
+    """Gets the number of time tables created each hour. Can be used for analytics or shared time tables."""
     # TODO: Change start and end time. Currently set for past 24 hours.
     time_end = datetime.datetime.now()
     length = timedelta(days = 1)
@@ -99,16 +107,15 @@ def number_of_reactions(max_only=False):
         reaction = None
         reactions = Reaction.objects.filter(title = title)
         num_reactions[title] = len(reactions)
-    print(num_reactions)
     if max_only:
         return max(num_reactions.iterkeys(), key=lambda k: num_reactions[k])
     else:
         return num_reactions
 
-def most_popular_courses(n, school, semester, table = AnalyticsTimetable):
+def most_popular_courses(n, school, semester, Table = AnalyticsTimetable):
     """Gets the top n most popular courses searched (AnalyticsCourseSearch) or in time table(AnalyticsTimetable)."""
     num_courses = {}
-    link_to_courses = table.objects.filter(school = school, semester = semester)
+    link_to_courses = Table.objects.filter(school = school, semester = semester)
     for link_to_course in link_to_courses:
         for course in link_to_course.courses.all():
             if course.id in num_courses:
