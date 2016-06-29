@@ -43,10 +43,14 @@ class BaseParser:
     """
     section_code, section_data = self.parse_section_element(section_element)
     if section_code:
+      semester = self.semester
+      if len(self.semester) > 1:
+        semester = 'F' if self.semester == 'Fall' else 'S'
       section_obj, _ = Section.objects.update_or_create(course=course_obj,
                                                           meeting_section=section_code,
-                                                          semester=self.semester,
+                                                          semester=semester,
                                                           defaults=section_data)
+      section_obj.offering_set.all().delete()
       for meeting_element in self.get_meeting_elements(section_element):
         self.parse_and_save_meeting(meeting_element, section_obj)
 
@@ -57,7 +61,7 @@ class BaseParser:
     """
     meeting_data = self.parse_meeting_element(meeting_element)
     if meeting_data:
-      Offering.objects.update_or_create(section=section_obj, defaults=meeting_data)
+      Offering.objects.create(section=section_obj, **meeting_data)
 
   @abc.abstractmethod
   def get_course_elements(self):

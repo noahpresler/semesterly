@@ -138,6 +138,7 @@
 	list-style-type: none;
 	padding: 10px 110px 10px 5px;
 	transition: background-color .2s, color .2s;
+	height: 60px;
 }
 .search-course.hovered {
 	background-color: #f3f3f3;
@@ -159,6 +160,16 @@
 	margin: 5px 0;
 	min-height: 12px;
 	transition: all .1s linear;
+}
+.search-course .label {
+	float: left;
+    padding-top: 3px;
+    line-height: 11px;
+    padding-bottom: 3px;
+}
+.search-course .label.bubble {
+	background-color: #DEDEDE;
+	font-size: 10px;
 }
 .search-course .search-course-add,
 .search-course .search-course-save {
@@ -268,7 +279,8 @@
 }
 .trans50 li,
 .trans50 .search-section,
-.trans50 .search-course h4 {
+.trans50 .search-course h4,
+.trans50 .search-course .label {
 	/* This makes it semi transparent */
 	/*color: rgba(52, 73, 94, .25);*/
 	/*This makes is fully transparent*/
@@ -281,7 +293,8 @@
 .trans50 .search-course,
 .trans50 .search-course-add,
 .trans50 .search-course-save,
-.trans50 #search-bar-side {
+.trans50 #search-bar-side,
+.trans50 .search-course .label {
 	background-color: transparent;
 }
 .trans50 #see-more-inner {
