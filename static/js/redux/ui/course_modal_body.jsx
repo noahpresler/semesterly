@@ -221,18 +221,19 @@ export class CourseModalBody extends React.Component {
 }
 
 const SearchResultSection = ({ section, secName, instr, enrolled, waitlist, size, hoverSection, unhoverSection, locked, inRoster, lockOrUnlock, isOnActiveTimetable}) => {
-    let seats = size - enrolled;
-    let seatStatus = waitlist > 0 ? (waitlist + " waitlist") : (seats + " open");
-    if (seats === -1) {
+    let seatStatus = waitlist > 0 ? (waitlist + " waitlist") : (enrolled + " open");
+    if (enrolled === -1) {
         seatStatus = "Unknown"
     }
     if (size === -1) {
         size = "Unknown"
     }
     let benchmark = "green";
-    if (waitlist > 0) {
+    if (waitlist >= 0) {
         benchmark = "red";
-    } else if (seats < size/10) {
+    } else if (enrolled === 0) {
+        benchmark = "red";
+    } else if (enrolled < size/10) {
         benchmark = "yellow";
     }
     return (
