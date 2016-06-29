@@ -34,7 +34,7 @@ class QueensParser(BaseParser):
       'description': ce['basic']['description'],
       'num_credits': int(float(ce['extra']['units'])),
       'prerequisites': ce['extra'].get('enrollment_requirement', ''),
-      'department': ce['basic']['subject']
+      'department': ce['basic']['subject'],
       'level': ce['basic']['number']
     }
     return course_code, course_data
