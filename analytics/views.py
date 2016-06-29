@@ -31,7 +31,7 @@ def view_analytics_dashboard(request):
                 "umd_shared_timetables_per_hour":number_timetables_per_hour(Timetable=SharedTimetable, school="umd"),
                 "queens_shared_timetables_per_hour":number_timetables_per_hour(Timetable=SharedTimetable, school="queens"),
                 "total_timetables_fall":number_timetables(semester="F"),
-                "total_timetables_sprint":number_timetables(semester="S"),
+                "total_timetables_spring":number_timetables(semester="S"),
                 "jhu_timetables":number_timetables(school='jhu'),
                 "uoft_timetables":number_timetables(school='uoft'),
                 "umd_timetables":number_timetables(school='umd'),
