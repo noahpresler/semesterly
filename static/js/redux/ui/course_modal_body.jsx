@@ -86,7 +86,7 @@ export class CourseModalBody extends React.Component {
             tutorialSections = <div><h3 className="modal-module-header">Tutorial Sections</h3>{tuts}</div>
         }
         if (pracs.length > 0) {
-            practicalSections = <div><h3 className="modal-module-header">Practical Sections</h3>{pracs}</div>
+            practicalSections = <div><h3 className="modal-module-header">Lab/Practical Sections</h3>{pracs}</div>
         }
         let { reactions, num_credits:numCredits } = this.props.data;
         // reactions.sort((r1, r2) => {return r1.count < r2.count});
@@ -221,18 +221,19 @@ export class CourseModalBody extends React.Component {
 }
 
 const SearchResultSection = ({ section, secName, instr, enrolled, waitlist, size, hoverSection, unhoverSection, locked, inRoster, lockOrUnlock, isOnActiveTimetable}) => {
-    let seats = size - enrolled;
-    let seatStatus = waitlist > 0 ? (waitlist + " waitlist") : (seats + " open");
-    if (seats === -1) {
+    let seatStatus = waitlist > 0 ? (waitlist + " waitlist") : (enrolled + " open");
+    if (enrolled === -1) {
         seatStatus = "Unknown"
     }
     if (size === -1) {
         size = "Unknown"
     }
     let benchmark = "green";
-    if (waitlist > 0) {
+    if (waitlist >= 0) {
         benchmark = "red";
-    } else if (seats < size/10) {
+    } else if (enrolled === 0) {
+        benchmark = "red";
+    } else if (enrolled < size/10) {
         benchmark = "yellow";
     }
     return (

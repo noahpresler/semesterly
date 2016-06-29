@@ -58,6 +58,11 @@ export const getSchoolSpecificInfo = (school) => {
         semesters: {
           F: "Fall 2016",
           S: "Winter 2017"
+        },
+        campuses: {
+          1: "UTSG",
+          2: "UTSC",
+          5: "UTM"
         }
       }
 		case "jhu":
@@ -70,6 +75,9 @@ export const getSchoolSpecificInfo = (school) => {
         semesters: {
           F: "Fall 2016",
           S: "Spring 2017"
+        },
+        campuses: {
+          1: ""
         }
       }
 		case "umd":
@@ -82,6 +90,9 @@ export const getSchoolSpecificInfo = (school) => {
         semesters: {
           F: "Fall 2016",
           S: "Spring 2017"
+        },
+        campuses: {
+          1: ""
         }
       }
 		default:
@@ -94,6 +105,9 @@ export const getSchoolSpecificInfo = (school) => {
         semesters: {
           F: "Fall 2016",
           S: "Spring 2017"
+        },
+        campuses: {
+          1: ""
         }
       }
 	}
@@ -145,9 +159,9 @@ export const REACTION_MAP = {
   	unicode: '\uD83D\uDE29',
   	name: 'Hard'
   },
-  TEARS: {
-  	unicode: '\uD83D\uDE2D',
-  	name: 'Tears'
+  EASY: {
+  	unicode: '\uD83D\uDCAF',
+  	name: 'Easy'
   },
   INTERESTING: {
   	unicode: '\uD83E\uDD13',
