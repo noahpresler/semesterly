@@ -1,9 +1,16 @@
 from selenium import webdriver
 from selenium.webdriver.support.ui import Select
 from time import sleep
-# driver = webdriver.PhantomJS()
-driver = webdriver.Chrome('/home/linoah/chromedriver')
-# f = open('workfile.html', 'w')
+
+#-------------------------------------------------------
+#   FOR HEADLESS, LEGIT USAGE
+driver = webdriver.PhantomJS()
+#-------------------------------------------------------
+
+#-------------------------------------------------------
+#   FOR DEBUGGING USE ONLY
+# driver = webdriver.Chrome('/home/linoah/chromedriver')
+#-------------------------------------------------------
 
 def seleni_run(code):
 	while True:
@@ -66,6 +73,3 @@ for i in range(1,num_subjects):
 	#---------------------------------
 	print "RETURN"
 	return_to_search()
-
-# f.write(driver.page_source.encode("utf-8"))
-# f.close()
