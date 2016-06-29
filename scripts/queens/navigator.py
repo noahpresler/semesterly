@@ -24,12 +24,19 @@ def select_term_by_term_string(term):
 
 def click_search():
 	seleni_run(lambda: driver.find_element_by_id('CLASS_SRCH_WRK2_SSR_PB_CLASS_SRCH').click())
+	sleep(2)
 
 def return_to_search():
-	try: 
-		driver.find_element_by_id('CLASS_SRCH_WRK2_SSR_PB_CLASS_SRCH')
-	except:
-		seleni_run(lambda: driver.find_element_by_id('CLASS_SRCH_WRK2_SSR_PB_MODIFY').click())
+	while True:
+		try: # try to find error
+			driver.find_element_by_id('win0divDERIVED_CLSMSG_ERROR_TEXT')
+			return
+		except: # no error
+			try: # try to find return to search button
+				driver.find_element_by_id('CLASS_SRCH_WRK2_SSR_PB_MODIFY').click()
+				return
+			except:
+				continue # try again
 
 print "LOGGING IN"
 driver.get('https://my.queensu.ca/')
@@ -56,7 +63,6 @@ for i in range(1,num_subjects):
 	click_search()
 	#---------------------------------
 	#INSERT SEARCH SCRAPING LOGIC HERE
-	sleep(1)
 	#---------------------------------
 	print "RETURN"
 	return_to_search()
