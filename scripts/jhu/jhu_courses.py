@@ -122,9 +122,11 @@ class HopkinsParser:
             except:
                 section_size = 0
             try:
-                section_enrolment=int(course['SeatsAvailable'].split("/")[0])
+                section_enrolment = section_size - int(course['SeatsAvailable'].split("/")[0])
+                if section_enrolment < 0:
+                    section_enrolment = 0
             except:
-                section_enrolment=0
+                section_enrolment = 0
 
             section, section_created = Section.objects.update_or_create(
                 course = CourseModel,
