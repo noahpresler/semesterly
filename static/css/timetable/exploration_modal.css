@@ -338,6 +338,7 @@ h3.exp-header i:hover {
 }
 #exp-modal [class^="col-"] {
 	width: 100%;
+	padding: 20px 15px 0;
 }
 #exp-modal #modal-share,
 #exp-modal #modal-add,
@@ -395,5 +396,11 @@ h3.exp-header i:hover {
 #exp-filters .none-selected {
 	font-size: 14px;
 	margin-left: 0px;
+}
+.exploration-modal .ms-friend {
+	float: left;
+	margin: 0;
+	width: 30px;
+	height: 30px;
 }
 
