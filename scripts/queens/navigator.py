@@ -4,12 +4,12 @@ from time import sleep
 
 #-------------------------------------------------------
 #   FOR HEADLESS, LEGIT USAGE
-driver = webdriver.PhantomJS()
+# driver = webdriver.PhantomJS()
 #-------------------------------------------------------
 
 #-------------------------------------------------------
 #   FOR DEBUGGING USE ONLY
-# driver = webdriver.Chrome('/home/linoah/chromedriver')
+driver = webdriver.Chrome('/home/linoah/chromedriver')
 #-------------------------------------------------------
 
 def seleni_run(code):
@@ -45,6 +45,34 @@ def return_to_search():
 			except:
 				continue # try again
 
+def focus_iframe():
+	print "FOCUSING IFRAME"
+	iframe = seleni_run(lambda: driver.find_element_by_xpath("//iframe[@id='ptifrmtgtframe']"))
+	driver.switch_to_frame(iframe)
+
+def get_nth_class_element(n,num_sections):
+	# focus_iframe()
+	print "GETTING CLASS ELEMENTS"
+	while True:
+		sections = seleni_run(lambda: driver.find_elements_by_css_selector("a[id^='MTG_CLASS_NBR']"))
+		if len(sections) == num_sections:
+			return sections[n]
+
+def get_class_elements():
+	# focus_iframe()
+	print "GETTING CLASS ELEMENTS"
+	return seleni_run(lambda: driver.find_elements_by_css_selector("a[id^='MTG_CLASS_NBR']"))
+
+def get_section_html(num_sections):
+	print "GETTING SECTIONS HTML"
+	for n in range(num_sections):
+		print "CLICKING"
+		print str(n) + "/" + str(num_sections)
+		get_nth_class_element(n,num_sections).click()
+		return driver.page_source
+		print "RETURNING"
+		seleni_run(lambda: driver.find_element_by_id('CLASS_SRCH_WRK2_SSR_PB_BACK')).click()
+
 print "LOGGING IN"
 driver.get('https://my.queensu.ca/')
 seleni_run(lambda: driver.find_element_by_id('username').send_keys('1dc4'))
@@ -55,8 +83,7 @@ print "NAVIGATING TO SOLUS"
 seleni_run(lambda: driver.find_element_by_link_text("SOLUS").click())
 
 print "NAVIGATING TO SEARCH PAGE"
-iframe = seleni_run(lambda: driver.find_element_by_xpath("//iframe[@id='ptifrmtgtframe']"))
-driver.switch_to_frame(iframe)
+focus_iframe()
 seleni_run(lambda: driver.find_element_by_link_text("Search").click())
 
 print "SELECTING TERM 2016 Fall"
@@ -64,12 +91,20 @@ select_term_by_term_string("2016 Fall")
 
 num_subjects = len(seleni_run(lambda: driver.find_element_by_id('SSR_CLSRCH_WRK_SUBJECT_SRCH$0')).find_elements_by_tag_name('option'))
 for i in range(1,num_subjects):
-	print "SELECTING " + str(i) + "th SUBJECT"
+	print "SELECTING SUBJECT #" + str(i)
 	select_subject_by_index(i)
 	print "SEARCH"
 	click_search()
+	sections = get_class_elements()
+	html = get_section_html(len(sections))
 	#---------------------------------
 	#INSERT SEARCH SCRAPING LOGIC HERE
+	# @FELIX - HTML IS STORED IN html
+	# writing it to workfile.html for fun
+	f = open('workfile.html','w')
+	f.write(html.encode("utf-8"))
+	f.close()
+	# you can delete that obviously
 	#---------------------------------
 	print "RETURN"
 	return_to_search()
