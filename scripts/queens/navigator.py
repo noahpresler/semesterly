@@ -63,13 +63,28 @@ def get_class_elements():
 	print "GETTING CLASS ELEMENTS"
 	return seleni_run(lambda: driver.find_elements_by_css_selector("a[id^='MTG_CLASS_NBR']"))
 
+def felix_parses_this_shit(html):
+	print "FELIX IS PARSING"
+	# THIS PARSES HTML FOR *ONE* SECTION PAGE
+	#---------------------------------
+	#INSERT SEARCH SCRAPING LOGIC HERE
+	# @FELIX - HTML IS STORED IN html
+	# writing it to workfile.html for fun
+	f = open('workfile.html','w')
+	f.write(html.encode("utf-8"))
+	f.close()
+	# you can delete that obviously
+	#---------------------------------
+
 def get_section_html(num_sections):
 	print "GETTING SECTIONS HTML"
 	for n in range(num_sections):
 		print "CLICKING"
 		print str(n) + "/" + str(num_sections)
 		get_nth_class_element(n,num_sections).click()
-		return driver.page_source
+		print "WAITING FOR PAGE LOAD"
+		seleni_run(lambda: driver.find_element_by_class_name('PALEVEL0SECONDARY'))
+		felix_parses_this_shit(driver.page_source)
 		print "RETURNING"
 		seleni_run(lambda: driver.find_element_by_id('CLASS_SRCH_WRK2_SSR_PB_BACK')).click()
 
@@ -97,14 +112,5 @@ for i in range(1,num_subjects):
 	click_search()
 	sections = get_class_elements()
 	html = get_section_html(len(sections))
-	#---------------------------------
-	#INSERT SEARCH SCRAPING LOGIC HERE
-	# @FELIX - HTML IS STORED IN html
-	# writing it to workfile.html for fun
-	f = open('workfile.html','w')
-	f.write(html.encode("utf-8"))
-	f.close()
-	# you can delete that obviously
-	#---------------------------------
 	print "RETURN"
 	return_to_search()
