@@ -360,6 +360,15 @@ footer ul li a i.fa-at {
 	line-height: 24px;
 	background-color: #409036;
 }
+footer #course-listings {
+	text-align: right;
+}
+footer #course-listings li {
+	margin: 5px 0;
+}
+footer #course-listings li a {
+	color: #788b9c;
+}
 footer h6 {
 	text-align: center;
 	font-size: 10px;
