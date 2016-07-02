@@ -27,6 +27,7 @@ class Command(BaseCommand):
 
 	for school in VALID_SCHOOLS:
 		xml += "<url><loc>https://" + school + ".semester.ly</loc><lastmod>" + update_time + "</lastmod><changefreq>daily</changefreq><priority>0.1</priority></url>\n"
+		xml += "<url><loc>https://" + school + ".semester.ly/courses</loc><lastmod>" + update_time + "</lastmod><changefreq>daily</changefreq><priority>0.1</priority></url>\n"
 		courses = Course.objects.filter(school=school)
 		for course in courses:
 			url = "https://" + school + ".semester.ly/c/" + course.code.replace(" ", "%20")
