@@ -47,7 +47,7 @@ class BaseParser:
       if len(self.semester) > 1:
         semester = 'F' if self.semester == 'Fall' else 'S'
       section_obj, _ = Section.objects.update_or_create(course=course_obj,
-                                                          semester=section_data['semester']
+                                                          semester=section_data['semester'],
                                                           meeting_section=section_code,
                                                           defaults=section_data)
       section_obj.offering_set.all().delete()
