@@ -52,13 +52,15 @@
     height: 30px;
     overflow: hidden;
     margin-bottom: 3px;
-    width: 115px;
     float: left;
+    position: relative;
+    width: 100%;
 }
 
 .course-modal .ms-friend {
     float: left;
-    margin-left: 3px;
+    margin-left: 0px;
+    padding: 0;
     height: 30px;
     width: 30px;
     margin-right: 4.5px;
@@ -352,11 +354,17 @@ h3.modal-module-header small {
 	transition: opacity .3s, visibility .3s;
 }
 #modal-body .friend p {
-    float: left;
     font-size: 11px;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
+    padding: 0;
+    margin: 0;
+    line-height: 30px;
+    position: absolute;
+    top: 0;
+    left: 35px;
+    right: 0px;
 }
 
 #friends-inner {
