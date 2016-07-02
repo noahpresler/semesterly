@@ -508,6 +508,7 @@ def jhu_timer(request):
 def course_page(request, code):
   school = request.subdomain
   try:
+    school_name = school_code_to_name[school]
     course_obj = Course.objects.filter(code__iexact=code)[0]
     course_dict = get_basic_course_json(course_obj, "F")
     # TODO: section types should never be hardcoded
@@ -520,6 +521,7 @@ def course_page(request, code):
       course_url = "/course/" + course_dict['code'] + "/F"
     return render_to_response("course_page.html",
       {'school': school,
+       'school_name': school_name,
        'course': course_dict,
        'lectures': l if l else None,
        'tutorials': t if t else None,
