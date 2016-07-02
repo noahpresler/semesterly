@@ -17,7 +17,7 @@ from pytz import timezone
 from analytics.models import *
 from analytics.views import *
 from timetable.models import *
-from timetable.school_mappers import school_to_granularity, VALID_SCHOOLS
+from timetable.school_mappers import school_to_granularity, VALID_SCHOOLS, school_code_to_name
 from timetable.utils import *
 from timetable.scoring import *
 from student.models import Student
@@ -525,6 +525,24 @@ def course_page(request, code):
        'tutorials': t if t else None,
        'practicals': p if p else None,
        'url': course_url
+       },
+    context_instance=RequestContext(request))
+  except Exception as e:
+    return HttpResponse(str(e))
+
+@validate_subdomain
+def all_courses(request):
+  school = request.subdomain
+  school_name = school_code_to_name[school]
+  try:
+    course_map = {}
+    departments = Course.objects.filter(school=school).values_list('department', flat=True).distinct()
+    for department in departments:
+      course_map[department] = Course.objects.filter(school=school, department=department).all()
+    return render_to_response("all_courses.html",
+      {'course_map': course_map,
+       'school': school,
+       'school_name': school_name
        },
     context_instance=RequestContext(request))
   except Exception as e:
