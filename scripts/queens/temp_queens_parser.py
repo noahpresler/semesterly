@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-import os
+import os,re
 
 from selenium import webdriver
 from selenium.webdriver.support.ui import Select
@@ -25,10 +25,15 @@ subheader_id = 'DERIVED_CLSRCH_SSS_PAGE_KEYDESCR'
 
 # search results stuff
 section_table_id = 'ACE_$ICField48$0'
-section_table_cols = 3  
+section_table_cols = 3
 section_table_class ='PABACKGROUNDINVISIBLE'
 section_td_class = 'PSLEVEL3GRIDROW'
 
+#class availability stuff
+class_size_id = 'SSR_CLS_DTL_WRK_ENRL_CAP'
+class_enrollment_id = 'SSR_CLS_DTL_WRK_ENRL_TOT'
+class_waitlist_size_id = 'SSR_CLS_DTL_WRK_WAIT_CAP'
+class_waitlist_id = 'SSR_CLS_DTL_WRK_WAIT_TOT'
 
 class QueensParser(BaseParser):
   def __init__(self, semester, year, debug=False):
@@ -36,40 +41,29 @@ class QueensParser(BaseParser):
     self.driver = webdriver.Chrome() if debug else webdriver.PhantomJS()
 
   def get_course_elements(self):
-    print "LOGGING IN"
     self.driver.get('https://my.queensu.ca/')
     seleni_run(lambda: self.driver.find_element_by_id('username').send_keys('1dc4'))
     seleni_run(lambda: self.driver.find_element_by_id('password').send_keys('CREOmule1'))
     seleni_run(lambda: self.driver.find_element_by_class_name('Btn1Def').click())
 
-    print "NAVIGATING TO SOLUS"
     seleni_run(lambda: self.driver.find_element_by_link_text("SOLUS").click())
 
-    print "NAVIGATING TO SEARCH PAGE"
     self.focus_iframe()
     seleni_run(lambda: self.driver.find_element_by_link_text("Search").click())
 
-    print "SELECTING TERM 2016 Fall"
     self.select_term_by_term_string("2016 Fall")
 
     num_subjects = len(seleni_run(lambda: self.driver.find_element_by_id('SSR_CLSRCH_WRK_SUBJECT_SRCH$0')).find_elements_by_tag_name('option'))
     for i in range(1,num_subjects):
-      print "SELECTING SUBJECT #" + str(i)
       self.select_subject_by_index(i)
-      print "SEARCH"
       self.click_search()
       sections = self.get_class_elements()
-      print "GETTING SECTIONS HTML"
       for n in range(len(sections)):
-        print "CLICKING"
         print str(n) + "/" + str(len(sections))
         self.get_nth_class_element(n,len(sections)).click()
-        print "WAITING FOR PAGE LOAD"
         seleni_run(lambda: self.driver.find_element_by_class_name('PALEVEL0SECONDARY'))
         yield Soup(self.driver.page_source)
-        print "RETURNING"
         seleni_run(lambda: self.driver.find_element_by_id('CLASS_SRCH_WRK2_SSR_PB_BACK')).click()
-        print "RETURN"
       self.return_to_search()
 
   def select_subject_by_index(self, index):
@@ -98,13 +92,11 @@ class QueensParser(BaseParser):
           continue # try again
 
   def focus_iframe(self):
-    print "FOCUSING IFRAME"
     iframe = seleni_run(lambda: self.driver.find_element_by_xpath("//iframe[@id='ptifrmtgtframe']"))
     self.driver.switch_to_frame(iframe)
 
   def get_nth_class_element(self, n, num_sections):
     # focus_iframe()
-    print "GETTING CLASS ELEMENTS"
     while True:
       sections = seleni_run(lambda: self.driver.find_elements_by_css_selector("a[id^='MTG_CLASS_NBR']"))
       if len(sections) == num_sections:
@@ -112,16 +104,18 @@ class QueensParser(BaseParser):
 
   def get_class_elements(self):
     # focus_iframe()
-    print "GETTING CLASS ELEMENTS"
     return seleni_run(lambda: self.driver.find_elements_by_css_selector("a[id^='MTG_CLASS_NBR']"))
 
   def parse_course_element(self, course_element):
     page_title = get_field_text(course_element, course_title_id)
     course_code = ' '.join(page_title.split()[:2])
-    course_graph_info = get_field_text(course_element, prereq_id).split('\n')
+    try:
+      course_graph_info = get_field_text(course_element, prereq_id).split('\n')
+    except:
+      course_graph_info = []
     course_data = {
       # mandatory
-      'name': ' '.join(page_title.split()[4:]), 
+      'name': ' '.join(page_title.split()[4:]),
       'school': 'queens',
 
       # optional
@@ -145,17 +139,16 @@ class QueensParser(BaseParser):
     meeting_table = section_element.find('table', {'class': 'PSLEVEL1GRIDWBO'})
     meeting_rows = meeting_table.tbody.findChildren(recursive=False)[2:]
     all_instructors = [row.findChildren(recursive=False)[2].div.span.text for row in meeting_rows]
-    avail_table = section_element.findAll('table', class_='PSGROUPBOXWBO')[2].tbody.tbody
-    avail_rows = avail_table.findAll('tr')
+    avail_table = section_element.find('td', text=re.compile(r'Class Availability')).parent.parent
 
     section_data = {
       'semester': self.semester,
       'section_type': get_field_text(section_element, subheader_id).split()[-1].strip(),
       'instructors': get_uniq_profs(all_instructors),
-      'size': int(avail_rows[2].findAll('td')[1].find('span').text),
-      'enrolment': int(avail_rows[4].findAll('td')[1].find('span').text),
-      'waitlist_size': int(avail_rows[2].findAll('td')[3].find('span').text),
-      'waitlist': int(avail_rows[4].findAll('td')[2].find('span').text)
+      'size': get_field_text(avail_table,class_size_id),
+      'enrolment': get_field_text(avail_table,class_enrollment_id),
+      'waitlist_size': get_field_text(avail_table,class_waitlist_size_id),
+      'waitlist': get_field_text(avail_table,class_waitlist_id)
     }
     return section_code, section_data
 
@@ -164,7 +157,7 @@ class QueensParser(BaseParser):
     first_dates = None
     for row in meeting_table.tbody.findChildren(recursive=False)[2:]:
       cols = row.findChildren(recursive=False)
-      # TEMP: check if this meeting corresponds to the first set of meeting dates 
+      # TEMP: check if this meeting corresponds to the first set of meeting dates
       meeting_dates = cols[3].div.span.text
       if (meeting_dates == first_dates) or first_dates is None:
         first_dates = meeting_dates
