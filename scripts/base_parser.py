@@ -19,10 +19,10 @@ class BaseParser:
   def parse_courses(self):
     """Update database with courses and offerings for given semester."""
     max_val = self.num_courses or progressbar.UnknownLength
-    bar = progressbar.ProgressBar(max_value=max_val)
+    # bar = progressbar.ProgressBar(max_value=max_val)
     for i, course_element in enumerate(self.get_course_elements()):
       self.parse_and_save_course(course_element)
-      bar.update(i)
+      # bar.update(i)
 
   def parse_and_save_course(self, course_element):
     """
@@ -43,12 +43,9 @@ class BaseParser:
     """
     section_code, section_data = self.parse_section_element(section_element)
     if section_code:
-      semester = self.semester
-      if len(self.semester) > 1:
-        semester = 'F' if self.semester == 'Fall' else 'S'
       section_obj, _ = Section.objects.update_or_create(course=course_obj,
-                                                          semester=semester,
                                                           meeting_section=section_code,
+                                                          semester=self.semester,
                                                           defaults=section_data)
       section_obj.offering_set.all().delete()
       for meeting_element in self.get_meeting_elements(section_element):
