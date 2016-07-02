@@ -5,7 +5,7 @@
 	<head>
 		<meta charset="utf-8">
 		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
-		<meta name="description" content="{{ course.description }}">
+		<meta name="description" content="{{ course.name }} at {{ school_name }}: {{ course.description }}">
 		<meta name="author" content="Noah Presler, Rohan Das, Felix Zhu, Max Yeo">
 
 		<!-- Facebook thumbnail info -->
@@ -58,7 +58,7 @@
 			<div id="top-bg"></div>
 			<div id="top" class="grid cf">
 				<div class="card-width">
-					<h1>{{ school }} | {{ course.code }}</h1>
+					<h1>{{ school_name }} | {{ course.code }}</h1>
 				</div>
 			</div>
 			<div id="content">
