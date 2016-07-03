@@ -109,10 +109,8 @@ class QueensParser(BaseParser):
   def parse_course_element(self, course_element):
     page_title = get_field_text(course_element, course_title_id)
     course_code = ' '.join(page_title.split()[:2])
-    try:
-      course_graph_info = get_field_text(course_element, prereq_id).split('\n')
-    except:
-      course_graph_info = []
+    course_graph_info = get_field_text(course_element, prereq_id).split('\n')
+
     course_data = {
       # mandatory
       'name': ' '.join(page_title.split()[4:]),
@@ -120,7 +118,7 @@ class QueensParser(BaseParser):
 
       # optional
       'description': get_field_text(course_element, description_id),
-      'num_credits': int(get_field_text(course_element, units_id).split()[0]),
+      'num_credits': float(get_field_text(course_element, units_id).split()[0]),
       'campus': get_field_text(course_element, campus_id),
       'prerequisites': extract_prereqs(course_graph_info),
       'exclusions': extract_exclusions(course_graph_info),
@@ -128,7 +126,7 @@ class QueensParser(BaseParser):
       'level': course_code.split()[1][0],
     }
     print course_code, course_data
-    return course_code, course_data
+    return (course_code, course_data) if course_data['name'] else (None, None)
 
   def get_section_elements(self, course_element):
     return [course_element]
@@ -141,6 +139,11 @@ class QueensParser(BaseParser):
     all_instructors = [row.findChildren(recursive=False)[2].div.span.text for row in meeting_rows]
     avail_table = section_element.find('td', text=re.compile(r'Class Availability')).parent.parent
 
+    meeting_table = section_element.find('table', {'class': meeting_table_id})
+    cols_by_row = [row.findChildren(recursive=False) for row in meeting_table.tbody.findChildren(recursive=False)[2:]]
+    time_is_TBA = any(('TBA' in cols[0].div.span.text or len(cols[0].div.span.text.split()) != 4
+                    for cols in cols_by_row))
+
     section_data = {
       'semester': self.semester,
       'section_type': get_field_text(section_element, subheader_id).split()[-1].strip(),
@@ -150,7 +153,7 @@ class QueensParser(BaseParser):
       'waitlist_size': get_field_text(avail_table,class_waitlist_size_id),
       'waitlist': get_field_text(avail_table,class_waitlist_id)
     }
-    return section_code, section_data
+    return (section_code, section_data) if not time_is_TBA else (None, None)
 
   def get_meeting_elements(self, section_element):
     meeting_table = section_element.find('table', {'class': meeting_table_id})
@@ -181,7 +184,10 @@ class QueensParser(BaseParser):
     return meeting_data
 
 def get_field_text(soup, span_id):
-  return soup.find('span', {'id': span_id}).text
+  try:
+    return soup.find('span', {'id': span_id}).text
+  except AttributeError: # couldn't find the element
+    return ''
 
 def extract_prereqs(relations):
   result = ''
@@ -205,5 +211,5 @@ def get_section_cols(section_element):
   return [col.div.span for col in section_element.findAll('td', {'class': section_td_class})]
 
 if __name__ == '__main__':
-  parser = QueensParser('Fall', 2016, True)
+  parser = QueensParser('Fall', 2016)
   parser.parse_courses()
