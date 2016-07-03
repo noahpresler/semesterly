@@ -58,12 +58,16 @@ class QueensParser(BaseParser):
       self.select_subject_by_index(i)
       self.click_search()
       sections = self.get_class_elements()
+      self.update_progress(0, len(sections))
       for n in range(len(sections)):
-        print str(n) + "/" + str(len(sections))
-        self.get_nth_class_element(n,len(sections)).click()
-        seleni_run(lambda: self.driver.find_element_by_class_name('PALEVEL0SECONDARY'))
-        yield Soup(self.driver.page_source)
-        seleni_run(lambda: self.driver.find_element_by_id('CLASS_SRCH_WRK2_SSR_PB_BACK')).click()
+        self.update_progress(n)
+        # print str(n) + "/" + str(len(sections))
+        nth_section_page = self.get_nth_class_element(n, len(sections))
+        if nth_section_page:
+          nth_section_page.click()
+          seleni_run(lambda: self.driver.find_element_by_class_name('PALEVEL0SECONDARY'))
+          yield Soup(self.driver.page_source)
+          seleni_run(lambda: self.driver.find_element_by_id('CLASS_SRCH_WRK2_SSR_PB_BACK')).click()
       self.return_to_search()
 
   def select_subject_by_index(self, index):
@@ -125,7 +129,7 @@ class QueensParser(BaseParser):
       'department': page_title.split()[0],
       'level': course_code.split()[1][0],
     }
-    print course_code, course_data
+    # print course_code, course_data
     return (course_code, course_data) if course_data['name'] else (None, None)
 
   def get_section_elements(self, course_element):
