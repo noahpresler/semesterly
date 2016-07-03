@@ -15,11 +15,12 @@ class BaseParser:
   def __init__(self, semester, num_courses=None):
     self.semester = semester
     self.num_courses = num_courses
+    self.bar = None
 
   def parse_courses(self):
     """Update database with courses and offerings for given semester."""
     max_val = self.num_courses or progressbar.UnknownLength
-    # bar = progressbar.ProgressBar(max_value=max_val)
+    self.bar = progressbar.ProgressBar(max_value=max_val)
     for i, course_element in enumerate(self.get_course_elements()):
       self.parse_and_save_course(course_element)
       # bar.update(i)
@@ -59,6 +60,11 @@ class BaseParser:
     meeting_data = self.parse_meeting_element(meeting_element)
     if meeting_data:
       Offering.objects.create(section=section_obj, **meeting_data)
+
+  def update_progress(self, num_parsed, num_total=None):
+    if num_total is not None:
+      self.bar = progressbar.ProgressBar(max_value=num_total)
+    self.bar.update(num_parsed)
 
   @abc.abstractmethod
   def get_course_elements(self):
