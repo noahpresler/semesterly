@@ -17,7 +17,7 @@ from pytz import timezone
 from analytics.models import *
 from analytics.views import *
 from timetable.models import *
-from timetable.school_mappers import school_to_granularity, VALID_SCHOOLS
+from timetable.school_mappers import school_to_granularity, VALID_SCHOOLS, school_code_to_name
 from timetable.utils import *
 from timetable.scoring import *
 from student.models import Student
@@ -109,7 +109,11 @@ def get_timetables(request):
   """Generate best timetables given the user's selected courses"""
   global SCHOOL
 
-  params = json.loads(request.body)
+  try:
+    params = json.loads(request.body)
+  except ValueError: # someone is trying to manually send requests
+    return HttpResponse(json.dumps({'timetables': [], 'new_c_to_s': {}}), 
+                        content_type='application/json')
   sid = params['sid']
 
   SCHOOL = request.subdomain
@@ -504,6 +508,7 @@ def jhu_timer(request):
 def course_page(request, code):
   school = request.subdomain
   try:
+    school_name = school_code_to_name[school]
     course_obj = Course.objects.filter(code__iexact=code)[0]
     course_dict = get_basic_course_json(course_obj, "F")
     # TODO: section types should never be hardcoded
@@ -516,11 +521,30 @@ def course_page(request, code):
       course_url = "/course/" + course_dict['code'] + "/F"
     return render_to_response("course_page.html",
       {'school': school,
+       'school_name': school_name,
        'course': course_dict,
        'lectures': l if l else None,
        'tutorials': t if t else None,
        'practicals': p if p else None,
        'url': course_url
+       },
+    context_instance=RequestContext(request))
+  except Exception as e:
+    return HttpResponse(str(e))
+
+@validate_subdomain
+def all_courses(request):
+  school = request.subdomain
+  school_name = school_code_to_name[school]
+  try:
+    course_map = {}
+    departments = Course.objects.filter(school=school).values_list('department', flat=True).distinct()
+    for department in departments:
+      course_map[department] = Course.objects.filter(school=school, department=department).all()
+    return render_to_response("all_courses.html",
+      {'course_map': course_map,
+       'school': school,
+       'school_name': school_name
        },
     context_instance=RequestContext(request))
   except Exception as e:
