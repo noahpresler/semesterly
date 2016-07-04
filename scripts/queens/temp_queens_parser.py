@@ -54,7 +54,8 @@ class QueensParser(BaseParser):
     self.select_term_by_term_string("2016 Fall")
 
     num_subjects = len(seleni_run(lambda: self.driver.find_element_by_id('SSR_CLSRCH_WRK_SUBJECT_SRCH$0')).find_elements_by_tag_name('option'))
-    for i in range(1,num_subjects):
+    for i in range(1, num_subjects):
+      print "parsing subject {0} of {1}".format(i, num_subjects)
       self.select_subject_by_index(i)
       self.click_search()
       sections = self.get_class_elements()
