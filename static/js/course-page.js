@@ -13,6 +13,9 @@ document.addEventListener("DOMContentLoaded", function(event) {
 		} else if (waitlist > 0) {
 			s.className += ' red';
 			var txt = '<span>' + waitlist + ' waitlist</span> / ' + size + ' seats';
+		} else if (left == 0) {
+			s.className += ' red';
+			var txt = '<span>' + left + ' open</span> / ' + size + ' seats';
 		} else if (left < size / 10) {
 			s.className += ' yellow';
 			var txt = '<span>' + left + ' open</span> / ' + size + ' seats';

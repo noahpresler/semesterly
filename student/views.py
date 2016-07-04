@@ -7,7 +7,6 @@ from django.db.models import Q
 from hashids import Hashids
 from pytz import timezone
 import copy, functools, itertools, json, logging, os
-from analytics.views import *
 from timetable.models import *
 from student.models import *
 from django.forms.models import model_to_dict
