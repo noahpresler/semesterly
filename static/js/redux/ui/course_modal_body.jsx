@@ -144,9 +144,9 @@ export class CourseModalBody extends React.Component {
                 <p>{ this.props.data.areas || "None" }</p>
             </div>
         let friendCircles = this.props.data.classmates && this.props.data.classmates.classmates.length > 0 ? this.props.data.classmates.classmates.map( c =>
-                <div className="friend">
-                    <div className="ms-friend" key={c.img_url} style={{backgroundImage: 'url(' + c.img_url + ')'}}/>
-                    <p>{ c.first_name + " " + c.last_name }</p>
+                <div className="friend" key={c.img_url}>
+                    <div className="ms-friend" style={{backgroundImage: 'url(' + c.img_url + ')'}}/>
+                    <p title={ c.first_name + " " + c.last_name }>{ c.first_name + " " + c.last_name }</p>
                 </div>) : null;
         let friendDisplay = this.props.data.classmates && this.props.data.classmates.classmates.length > 0 ?
             <div className="modal-module friends">
@@ -231,6 +231,8 @@ const SearchResultSection = ({ section, secName, instr, enrolled, waitlist, size
     }
     let benchmark = "green";
     if (waitlist > 0) {
+        benchmark = "red";
+    } else if (seats === 0) {
         benchmark = "red";
     } else if (seats < size/10) {
         benchmark = "yellow";

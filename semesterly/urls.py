@@ -49,6 +49,7 @@ urlpatterns = patterns('',
 	url(r'^advanced_search/', 'timetable.views.advanced_course_search'),
 	url(r'^school_info/(?P<school>.+?)/', 'timetable.views.school_info'),
 	url(r'c/(?P<code>.+?)$', 'timetable.views.course_page'),
+	url(r'courses/', 'timetable.views.all_courses'),
 	url(r'react/', 'student.views.react_to_course'),
 	# Automatic deployment endpoint
 	url(r'deploy_staging/', 'semesterly.views.deploy_staging'),

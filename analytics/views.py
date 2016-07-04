@@ -19,18 +19,19 @@ def view_analytics_dashboard(request):
     if student and student.user.is_staff:
         return render_to_response('analytics_dashboard.html', {
                 "total_timetables":number_timetables(),
+                "total_signups":Student.objects.count(),
                 "jhu_timetables_per_hour":number_timetables_per_hour(school="jhu"),
                 "uoft_timetables_per_hour":number_timetables_per_hour(school="uoft"),
                 "umd_timetables_per_hour":number_timetables_per_hour(school="umd"),
                 "total_timetables_fall":number_timetables(semester="F"),
-                "total_timetables_sprint":number_timetables(semester="S"),
+                "total_timetables_spring":number_timetables(semester="S"),
                 "jhu_timetables":number_timetables(school='jhu'),
                 "uoft_timetables":number_timetables(school='uoft'),
                 "umd_timetables":number_timetables(school='umd'),
                 "number_of_reactions":json.dumps(number_of_reactions()),
-                "jhu_most_popular_courses":most_popular_courses(5, 'jhu', 'S'),
-                "uoft_most_popular_courses":most_popular_courses(5, 'uoft', 'S'),
-                "umd_most_popular_courses":most_popular_courses(5, 'umd', 'S')
+                "jhu_most_popular_courses":[], # needs to be refactored; was causing timeout on server because too slow
+                "uoft_most_popular_courses":[], # needs to be refactored; was causing timeout on server because too slow
+                "umd_most_popular_courses":[] # needs to be refactored; was causing timeout on server because too slow
             },
             context_instance=RequestContext(request))
     else:
