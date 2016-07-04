@@ -38,6 +38,11 @@ class_waitlist_id = 'SSR_CLS_DTL_WRK_WAIT_TOT'
 class QueensParser(BaseParser):
   def __init__(self, semester, year, debug=False):
     BaseParser.__init__(self, 'F' if semester == 'Fall' else 'S')
+    self.section_type_map = {
+      'LEC': 'L',
+      'TUT': 'T',
+      'LAB': 'P',
+    }
     self.driver = webdriver.Chrome() if debug else webdriver.PhantomJS()
 
   def get_course_elements(self):
@@ -148,10 +153,10 @@ class QueensParser(BaseParser):
     cols_by_row = [row.findChildren(recursive=False) for row in meeting_table.tbody.findChildren(recursive=False)[2:]]
     time_is_TBA = any(('TBA' in cols[0].div.span.text or len(cols[0].div.span.text.split()) != 4
                     for cols in cols_by_row))
-
+    section_type = self.section_type_map.get(get_field_text(section_element, subheader_id).split()[-1].strip(), 'L')
     section_data = {
       'semester': self.semester,
-      'section_type': get_field_text(section_element, subheader_id).split()[-1].strip(),
+      'section_type': section_type,
       'instructors': get_uniq_profs(all_instructors),
       'size': get_field_text(avail_table,class_size_id),
       'enrolment': get_field_text(avail_table,class_enrollment_id),
