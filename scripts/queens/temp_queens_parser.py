@@ -62,9 +62,8 @@ class QueensParser(BaseParser):
 
   def _get_course_elements(self):
     self.driver.get('https://my.queensu.ca/')
-    if self.start_index == 1: # starting a fresh parse
-      seleni_run(lambda: self.driver.find_element_by_id('username').send_keys('1dc4'))
-      seleni_run(lambda: self.driver.find_element_by_id('password').send_keys('***REMOVED***'))
+    seleni_run(lambda: self.driver.find_element_by_id('username').send_keys('1dc4'))
+    seleni_run(lambda: self.driver.find_element_by_id('password').send_keys('***REMOVED***'))
 
     seleni_run(lambda: self.driver.find_element_by_class_name('Btn1Def').click())
     seleni_run(lambda: self.driver.find_element_by_link_text("SOLUS").click())
