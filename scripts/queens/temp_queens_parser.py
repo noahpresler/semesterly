@@ -45,6 +45,7 @@ class QueensParser(BaseParser):
       'TUT': 'T',
       'LAB': 'P',
     }
+    self.debug = debug
     self.driver = webdriver.Chrome() if debug else webdriver.PhantomJS()
     self.start_index = 1
 
@@ -56,7 +57,7 @@ class QueensParser(BaseParser):
         break
       except TimeoutException, StaleElementReferenceException:
         self.driver.quit()
-        self.driver = webdriver.Chrome() if debug else webdriver.PhantomJS()
+        self.driver = webdriver.Chrome() if self.debug else webdriver.PhantomJS()
         print "Detected timeout or error, restarting parse from last parsed subject"
 
   def _get_course_elements(self):
