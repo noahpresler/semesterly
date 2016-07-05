@@ -5,6 +5,7 @@ import os,re
 
 from selenium import webdriver
 from selenium.webdriver.support.ui import Select
+from selenium.common.exceptions import StaleElementReferenceException
 from time import sleep
 from bs4 import BeautifulSoup as Soup
 
@@ -35,6 +36,7 @@ class_enrollment_id = 'SSR_CLS_DTL_WRK_ENRL_TOT'
 class_waitlist_size_id = 'SSR_CLS_DTL_WRK_WAIT_CAP'
 class_waitlist_id = 'SSR_CLS_DTL_WRK_WAIT_TOT'
 
+
 class QueensParser(BaseParser):
   def __init__(self, semester, year, debug=False):
     BaseParser.__init__(self, 'F' if semester == 'Fall' else 'S')
@@ -44,24 +46,33 @@ class QueensParser(BaseParser):
       'LAB': 'P',
     }
     self.driver = webdriver.Chrome() if debug else webdriver.PhantomJS()
+    self.start_index = 1
 
   def get_course_elements(self):
+    while True:
+      try:
+        for course_element in self._get_course_elements():
+          yield course_element
+        break
+      except TimeoutException, StaleElementReferenceException:
+        print "Detected timeout or error, restarting parse from last parsed subject"
+
+  def _get_course_elements(self):
     self.driver.get('https://my.queensu.ca/')
-    seleni_run(lambda: self.driver.find_element_by_id('username').send_keys('1dc4'))
-    seleni_run(lambda: self.driver.find_element_by_id('password').send_keys('CREOmule1'))
+    if self.start_index == 1: # starting a fresh parse
+      seleni_run(lambda: self.driver.find_element_by_id('username').send_keys('1dc4'))
+      seleni_run(lambda: self.driver.find_element_by_id('password').send_keys('CREOmule1'))
+
     seleni_run(lambda: self.driver.find_element_by_class_name('Btn1Def').click())
-
     seleni_run(lambda: self.driver.find_element_by_link_text("SOLUS").click())
-
     self.focus_iframe()
     seleni_run(lambda: self.driver.find_element_by_link_text("Search").click())
-
     self.select_term_by_term_string("2016 Fall")
 
     num_subjects = len(seleni_run(lambda: self.driver.find_element_by_id('SSR_CLSRCH_WRK_SUBJECT_SRCH$0')).find_elements_by_tag_name('option'))
-    for i in range(1, num_subjects):
+    for i in range(self.start_index, num_subjects):
       print "parsing subject {0} of {1}".format(i, num_subjects)
-      self.select_subject_by_index(i)
+      self.select_subject_by_index(i) 
       self.click_search()
       sections = self.get_class_elements()
       self.update_progress(0, len(sections))
@@ -69,12 +80,12 @@ class QueensParser(BaseParser):
         self.update_progress(n)
         # print str(n) + "/" + str(len(sections))
         nth_section_page = self.get_nth_class_element(n, len(sections))
-        if nth_section_page:
-          nth_section_page.click()
-          seleni_run(lambda: self.driver.find_element_by_class_name('PALEVEL0SECONDARY'))
-          yield Soup(self.driver.page_source)
-          seleni_run(lambda: self.driver.find_element_by_id('CLASS_SRCH_WRK2_SSR_PB_BACK')).click()
+        nth_section_page.click()
+        seleni_run(lambda: self.driver.find_element_by_class_name('PALEVEL0SECONDARY'))
+        yield Soup(self.driver.page_source)
+        seleni_run(lambda: self.driver.find_element_by_id('CLASS_SRCH_WRK2_SSR_PB_BACK')).click()
       self.return_to_search()
+      self.start_index = i
 
   def select_subject_by_index(self, index):
     select = seleni_run(lambda: self.driver.find_element_by_id('SSR_CLSRCH_WRK_SUBJECT_SRCH$0'))
@@ -221,5 +232,5 @@ def get_section_cols(section_element):
   return [col.div.span for col in section_element.findAll('td', {'class': section_td_class})]
 
 if __name__ == '__main__':
-  parser = QueensParser('Fall', 2016)
+  parser = QueensParser('Spring', 2017, True)
   parser.parse_courses()
