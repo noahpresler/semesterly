@@ -55,6 +55,8 @@ class QueensParser(BaseParser):
           yield course_element
         break
       except TimeoutException, StaleElementReferenceException:
+        self.driver.quit()
+        self.driver = webdriver.Chrome() if debug else webdriver.PhantomJS()
         print "Detected timeout or error, restarting parse from last parsed subject"
 
   def _get_course_elements(self):
