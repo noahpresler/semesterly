@@ -10,9 +10,9 @@ def parse_tz_time(time):
 def seleni_run(code):
   start = time.time()
   while True:
-    if time.time() - start > 3:
-      print time.time() - start
     if time.time() - start > 10:
+      print time.time() - start
+    if time.time() - start > 20:
       raise TimeoutException
     try:
       return code()
