@@ -124,8 +124,12 @@ class QueensParser(BaseParser):
         return sections[n]
 
   def get_class_elements(self):
-    # focus_iframe()
-    return seleni_run(lambda: self.driver.find_elements_by_css_selector("a[id^='MTG_CLASS_NBR']"))
+    num_str = seleni_run(lambda: self.driver.find_element_by_xpath("//*[contains(text(), 'class section(s) found')]")).text
+    n_expected = [int(s) for s in num_str.split() if s.isdigit()][0]
+    found = []
+    while n_expected != len(found):
+      found = seleni_run(lambda: self.driver.find_elements_by_css_selector("a[id^='MTG_CLASS_NBR']"))
+    return found
 
   def parse_course_element(self, course_element):
     page_title = get_field_text(course_element, course_title_id)
