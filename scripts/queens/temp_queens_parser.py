@@ -77,7 +77,7 @@ class QueensParser(BaseParser):
       sections = self.get_class_elements()
       self.update_progress(0, len(sections))
       for n in range(len(sections)):
-        self.update_progress(n)
+        self.update_progress(n + 1)
         # print str(n) + "/" + str(len(sections))
         nth_section_page = self.get_nth_class_element(n, len(sections))
         nth_section_page.click()
