@@ -1,3 +1,5 @@
+import time
+
 def parse_tz_time(time):
   """1:30PM -> 13:30, 11:30AM -> 11:30"""
   time_str = time[:-2]
@@ -6,9 +8,17 @@ def parse_tz_time(time):
   return new_hour + ':' + minutes
 
 def seleni_run(code):
+  start = time.time()
   while True:
+    if time.time() - start > 3:
+      print time.time() - start
+    if time.time() - start > 10:
+      raise TimeoutException
     try:
       return code()
-      break
     except:
       continue
+
+class TimeoutException(Exception):
+  pass
+
