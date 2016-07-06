@@ -20,3 +20,13 @@ def seleni_run(code):
 class TimeoutException(Exception):
   pass
 
+def repeat_until_timeout(f):
+  def _f(*args):  
+    start = time.time()
+    while True:
+      if time.time() - start > 30:
+        raise TimeoutException
+      result = f(*args)
+      if result is not None:
+        return result
+  return _f
