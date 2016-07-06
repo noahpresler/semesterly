@@ -21,7 +21,8 @@ class TimeoutException(Exception):
   pass
 
 def repeat_until_timeout(f):
-  def _f(*args):  
+  def _f(*args):
+    """Keep trying to get a none None result from f until success or timeout."""
     start = time.time()
     while True:
       if time.time() - start > 30:
