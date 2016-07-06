@@ -6,6 +6,7 @@ import os,re
 from selenium import webdriver
 from selenium.webdriver.support.ui import Select
 from selenium.common.exceptions import StaleElementReferenceException
+from selenium.webdriver.support import expected_conditions as EC
 from time import sleep
 from bs4 import BeautifulSoup as Soup
 
@@ -56,6 +57,10 @@ class QueensParser(BaseParser):
           yield course_element
         break
       except TimeoutException, StaleElementReferenceException:
+        try:
+          self.driver.switch_to_alert().accept()
+        except:
+          print "No XML alert, continuing"
         self.driver.quit()
         self.driver = webdriver.Chrome() if self.debug else webdriver.PhantomJS()
         print "Detected timeout or error, restarting parse from last parsed subject"
@@ -246,5 +251,5 @@ def get_section_cols(section_element):
   return [col.div.span for col in section_element.findAll('td', {'class': section_td_class})]
 
 if __name__ == '__main__':
-  parser = QueensParser('Spring', 2017, True)
+  parser = QueensParser('Spring', 2017, False)
   parser.parse_courses()
