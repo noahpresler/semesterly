@@ -49,6 +49,8 @@ class QueensParser(BaseParser):
     self.debug = debug
     self.driver = webdriver.Chrome() if debug else webdriver.PhantomJS()
     self.start_index = 1
+    self.year = year
+    self.semester = semester
 
   def get_course_elements(self):
     while True:
@@ -74,7 +76,7 @@ class QueensParser(BaseParser):
     seleni_run(lambda: self.driver.find_element_by_link_text("SOLUS").click())
     self.focus_iframe()
     seleni_run(lambda: self.driver.find_element_by_link_text("Search").click())
-    self.select_term_by_term_string("2016 Fall")
+    self.select_term_by_term_string("{0} {1}".format(self.year, self.semester))
 
     num_subjects = len(seleni_run(lambda: self.driver.find_element_by_id('SSR_CLSRCH_WRK_SUBJECT_SRCH$0')).find_elements_by_tag_name('option'))
     for i in range(self.start_index, num_subjects):
@@ -251,5 +253,5 @@ def get_section_cols(section_element):
   return [col.div.span for col in section_element.findAll('td', {'class': section_td_class})]
 
 if __name__ == '__main__':
-  parser = QueensParser('Spring', 2017, False)
+  parser = QueensParser('Winter', 2017, True)
   parser.parse_courses()
