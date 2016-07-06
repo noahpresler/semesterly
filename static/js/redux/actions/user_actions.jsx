@@ -65,7 +65,7 @@ export function lockActiveSections(activeTimetable) {
 	}
 	return courseSections;
 }
-export function saveTimetable(isAutoSave=false) {
+export function saveTimetable(isAutoSave=false, callback=null) {
 	return (dispatch) => {
 		let state = store.getState();
 		if (!state.userInfo.data.isLoggedIn) {
@@ -126,6 +126,10 @@ export function saveTimetable(isAutoSave=false) {
 			return json;
 		})
 		.then(json => {
+			if (callback) {
+				callback();
+				return;
+			}
 			if (!json.error && state.userInfo.data.isLoggedIn && json.timetables[0]) {
 				dispatch(fetchClassmates(json.timetables[0].courses.map( c => c['id'])))
 			}
