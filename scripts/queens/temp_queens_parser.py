@@ -108,44 +108,43 @@ class QueensParser(BaseParser):
     seleni_run(lambda: self.driver.find_element_by_id('CLASS_SRCH_WRK2_SSR_PB_CLASS_SRCH').click())
     sleep(2)
 
+  @repeat_until_timeout
   def return_to_search(self):
-    while True:
-      try: # try to find error
-        self.driver.find_element_by_id('win0divDERIVED_CLSMSG_ERROR_TEXT')
-        return
-      except: # no error
-        try: # try to find return to search button
-          self.driver.find_element_by_id('CLASS_SRCH_WRK2_SSR_PB_MODIFY').click()
-          return
-        except:
-          continue # try again
+    try: # try to find error
+      self.driver.find_element_by_id('win0divDERIVED_CLSMSG_ERROR_TEXT')
+      return True
+    except: # no error
+      try: # try to find return to search button
+        self.driver.find_element_by_id('CLASS_SRCH_WRK2_SSR_PB_MODIFY').click()
+        return True
+      except:
+        return # return None to try again
 
   def focus_iframe(self):
     iframe = seleni_run(lambda: self.driver.find_element_by_xpath("//iframe[@id='ptifrmtgtframe']"))
     self.driver.switch_to_frame(iframe)
 
+  @repeat_until_timeout
   def get_nth_class_element(self, n, num_sections):
-    # focus_iframe()
-    while True:
-      sections = seleni_run(lambda: self.driver.find_elements_by_css_selector("a[id^='MTG_CLASS_NBR']"))
-      if len(sections) == num_sections:
-        return sections[n]
+    sections = seleni_run(lambda: self.driver.find_elements_by_css_selector("a[id^='MTG_CLASS_NBR']"))
+    if len(sections) == num_sections:
+      return sections[n]
 
+  @repeat_until_timeout
   def get_class_elements(self):
-    while True:
-      try: # try to find error
-        self.driver.find_element_by_id('win0divDERIVED_CLSMSG_ERROR_TEXT')
-        return []
-      except: # no error box
-        try: # try to find sections
-          num_str = self.driver.find_element_by_xpath("//*[contains(text(), 'class section(s) found')]").text
-          n_expected = [int(s) for s in num_str.split() if s.isdigit()][0]
-          found = []
-          while n_expected != len(found):
-            found = seleni_run(lambda: self.driver.find_elements_by_css_selector("a[id^='MTG_CLASS_NBR']"))
-          return found
-        except:
-          continue # try again
+    try: # try to find error
+      self.driver.find_element_by_id('win0divDERIVED_CLSMSG_ERROR_TEXT')
+      return []
+    except: # no error box
+      try: # try to find sections
+        num_str = self.driver.find_element_by_xpath("//*[contains(text(), 'class section(s) found')]").text
+        n_expected = [int(s) for s in num_str.split() if s.isdigit()][0]
+        found = []
+        while n_expected != len(found):
+          found = seleni_run(lambda: self.driver.find_elements_by_css_selector("a[id^='MTG_CLASS_NBR']"))
+        return found
+      except:
+        return # return None to try again
 
   def parse_course_element(self, course_element):
     page_title = get_field_text(course_element, course_title_id)
