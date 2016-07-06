@@ -49,6 +49,7 @@ class QueensParser(BaseParser):
     self.debug = debug
     self.driver = webdriver.Chrome() if debug else webdriver.PhantomJS()
     self.start_index = 1
+    self.section_index = 0
     self.term = "{0} {1}".format(year, semester)
 
   def get_course_elements(self):
@@ -84,14 +85,16 @@ class QueensParser(BaseParser):
       self.click_search()
       sections = self.get_class_elements()
       self.update_progress(0, len(sections))
-      for n in range(len(sections)):
+      for n in range(self.section_index, len(sections)):
         self.update_progress(n + 1)
         # print str(n) + "/" + str(len(sections))
         nth_section_page = self.get_nth_class_element(n, len(sections))
         nth_section_page.click()
         seleni_run(lambda: self.driver.find_element_by_class_name('PALEVEL0SECONDARY'))
         yield Soup(self.driver.page_source)
+        self.section_index = n
         seleni_run(lambda: self.driver.find_element_by_id('CLASS_SRCH_WRK2_SSR_PB_BACK')).click()
+      self.section_index = 0
       self.return_to_search()
       self.start_index = i
 
