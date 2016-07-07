@@ -18,6 +18,7 @@ school_to_granularity = {
     'queens': 5,
     'vandy': 5,
     'chapman': 5
+    'umich': 30
 }
 VALID_SCHOOLS = [
   "uoft", 
