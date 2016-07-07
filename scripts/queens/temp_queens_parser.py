@@ -5,7 +5,7 @@ import os,re
 
 from selenium import webdriver
 from selenium.webdriver.support.ui import Select
-from selenium.common.exceptions import StaleElementReferenceException
+from selenium.common.exceptions import StaleElementReferenceException, TimeoutException
 from selenium.webdriver.support import expected_conditions as EC
 from time import sleep
 from bs4 import BeautifulSoup as Soup
@@ -47,10 +47,16 @@ class QueensParser(BaseParser):
       'LAB': 'P',
     }
     self.debug = debug
-    self.driver = webdriver.Chrome() if debug else webdriver.PhantomJS()
+    self.driver = None
     self.start_index = 1
     self.section_index = 0
     self.term = "{0} {1}".format(year, semester)
+    self.start_new_driver()
+
+  def start_new_driver(self):
+    self.driver = webdriver.Chrome() if self.debug else webdriver.PhantomJS()
+    self.driver.set_page_load_timeout(15)
+    self.driver.implicitly_wait(15)
 
   def get_course_elements(self):
     while True:
@@ -58,13 +64,13 @@ class QueensParser(BaseParser):
         for course_element in self._get_course_elements():
           yield course_element
         break
-      except TimeoutException, StaleElementReferenceException:
+      except:
         try:
           self.driver.switch_to_alert().accept()
         except:
           print "No XML alert, continuing"
         self.driver.quit()
-        self.driver = webdriver.Chrome() if self.debug else webdriver.PhantomJS()
+        self.start_new_driver()
         print "Detected timeout or error, restarting parse from last parsed subject"
 
   def _get_course_elements(self):
@@ -81,13 +87,13 @@ class QueensParser(BaseParser):
     num_subjects = len(seleni_run(lambda: self.driver.find_element_by_id('SSR_CLSRCH_WRK_SUBJECT_SRCH$0')).find_elements_by_tag_name('option'))
     for i in range(self.start_index, num_subjects):
       print "parsing subject {0} of {1}".format(i, num_subjects)
+      self.start_index = i
       self.select_subject_by_index(i)
       self.click_search()
       sections = self.get_class_elements()
       self.update_progress(0, len(sections))
       for n in range(self.section_index, len(sections)):
         self.update_progress(n + 1)
-        self.start_index = i
         # print str(n) + "/" + str(len(sections))
         nth_section_page = self.get_nth_class_element(n, len(sections))
         nth_section_page.click()
@@ -254,5 +260,5 @@ def get_section_cols(section_element):
   return [col.div.span for col in section_element.findAll('td', {'class': section_td_class})]
 
 if __name__ == '__main__':
-  parser = QueensParser('Winter', 2017, True)
+  parser = QueensParser('Fall', 2016)
   parser.parse_courses()
