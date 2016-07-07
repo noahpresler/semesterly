@@ -49,11 +49,7 @@ school_code_to_name = {
   'uo': 'University of Ottawa',
   'queens': 'Queens University',
   'vandy': 'Vanderbilt University',
-<<<<<<< 5dd16e58b1602187a5e24f6c0f4e1f1f0a8ef06c
   'chapman': 'Chapman University',
-=======
-  'chapman': 'Chapman University'
->>>>>>> add umich
   'umich': 'University of Michigan'
 }
 
