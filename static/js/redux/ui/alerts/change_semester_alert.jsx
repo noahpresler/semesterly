@@ -21,13 +21,10 @@ class ChangeSemesterAlert extends React.Component {
 				className="conflict-alert-btn change-semester-btn">
 				Change Semester Anyway
 			</button>
-			{ 
-				!this.props.isLoggedIn ? 
-				<small className="alert-extra">
-					Psst – Signing up allows you to save multiple timetables for all semesters!
-				</small>
-				: null
-			}
+			<small className="alert-extra">
+				Psst – Signing up allows you to save multiple timetables for all semesters!
+			</small>
+
 	 	</div>);
  	}
 };
