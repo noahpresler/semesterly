@@ -15,9 +15,10 @@ school_to_granularity = {
     'umd': 5,
     'rutgers': 5,
     'uo': 5,
-    'queens': 30
+    'queens': 30,
+    'umich': 30
 }
-VALID_SCHOOLS = ["uoft", "jhu", "umd", "uo", "rutgers", "queens"]
+VALID_SCHOOLS = ["uoft", "jhu", "umd", "uo", "rutgers", "queens", "umich"]
 
 school_code_to_name = {
   'jhu': 'Johns Hopkins University',
@@ -25,7 +26,8 @@ school_code_to_name = {
   'umd': 'University of Maryland',
   'rutgers': 'Rutgers University',
   'uo': 'University of Ottawa',
-  'queens': 'Queens University'
+  'queens': 'Queens University',
+  'umich': 'University of Michigan'
 }
 
 # do the imports: assumes all parser follow the same naming conventions: 
@@ -40,8 +42,9 @@ course_parsers = {
   'uoft': lambda: UofTParser().start(),
   'umd': parse_umd,
   # 'rutgers': parse_rutgers,
-  'uo': parse_ottawa
-  # 'queens': lambda: QueensParser().parse_courses()
+  'uo': parse_ottawa,
+  # 'queens': lambda: QueensParser().parse_courses(),
+  # 'umich': lambda: None
 }
 
 eval_parsers = {
@@ -50,7 +53,8 @@ eval_parsers = {
   'umd': lambda: umdReview().parse_reviews,
   'rutgers': lambda: None,
   'uo': lambda: None,
-  'queens': lambda: None
+  'queens': lambda: None,
+  'umich': lambda: None
 }
 textbook_parsers = {
   'jhu': lambda: HopkinsTextbookFinder().parse_classes(),
@@ -58,7 +62,8 @@ textbook_parsers = {
   'umd': lambda: None,
   'rutgers': lambda: None,
   'uo': lambda: None,
-  'queens': parse_queens_textbooks
+  'queens': parse_queens_textbooks,
+  'umich': lambda: None
 }
 sitemappers = {
   'jhu': lambda: HopkinsTextbookFinder().parse_classes(),
@@ -66,5 +71,6 @@ sitemappers = {
   'umd': lambda: None,
   'rutgers': lambda: None,
   'uo': lambda: None,
-  'queens': parse_queens_textbooks
+  'queens': parse_queens_textbooks,
+  'umich': lambda: None
 }

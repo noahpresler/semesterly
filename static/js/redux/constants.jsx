@@ -1,5 +1,5 @@
 import { getSchool, getSemester } from './init.jsx';
-export const VALID_SCHOOLS = ["uoft", "jhu", "umd", "uo", "rutgers", "queens"];
+export const VALID_SCHOOLS = ["uoft", "jhu", "umd", "uo", "rutgers", "queens", "umich"];
 export const VALID_SEMESTERS = ["F", "S"];
 export const SET_SCHOOL = "SET_SCHOOL";
 export const SET_SEMESTER = "SET_SEMESTER";
@@ -69,6 +69,21 @@ export const getSchoolSpecificInfo = (school) => {
 			return {
         primaryDisplay: "name",
         areasName: "Areas",
+        departmentsName: "Departments",
+        levelsName: "Levels",
+        timesName: "Times",
+        semesters: {
+          F: "Fall 2016",
+          S: "Spring 2017"
+        },
+        campuses: {
+          1: ""
+        }
+      }
+    case "umich":
+      return {
+        primaryDisplay: "name",
+        areasName: "Breadths",
         departmentsName: "Departments",
         levelsName: "Levels",
         timesName: "Times",
