@@ -87,6 +87,7 @@ class QueensParser(BaseParser):
       self.update_progress(0, len(sections))
       for n in range(self.section_index, len(sections)):
         self.update_progress(n + 1)
+        self.start_index = i
         # print str(n) + "/" + str(len(sections))
         nth_section_page = self.get_nth_class_element(n, len(sections))
         nth_section_page.click()
@@ -96,7 +97,6 @@ class QueensParser(BaseParser):
         seleni_run(lambda: self.driver.find_element_by_id('CLASS_SRCH_WRK2_SSR_PB_BACK')).click()
       self.section_index = 0
       self.return_to_search()
-      self.start_index = i
 
   def select_subject_by_index(self, index):
     select = seleni_run(lambda: self.driver.find_element_by_id('SSR_CLSRCH_WRK_SUBJECT_SRCH$0'))
