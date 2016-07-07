@@ -15,9 +15,8 @@ school_to_granularity = {
     'umd': 5,
     'rutgers': 5,
     'uo': 5,
-    'queens': 30,
-    'umich': 30,
-    'queens': 5
+    'queens': 5,
+    'umich': 30
 }
 VALID_SCHOOLS = ["uoft", "jhu", "umd", "uo", "rutgers", "queens", "umich"]
 
@@ -45,8 +44,9 @@ course_parsers = {
   'uoft': lambda: UofTParser().start(),
   'umd': parse_umd,
   # 'rutgers': parse_rutgers,
-  'uo': parse_ottawa
-  # 'queens': lambda: QueensParser().parse_courses()
+  'uo': parse_ottawa,
+  # 'queens': lambda: QueensParser().parse_courses(),
+  # 'umich': lambda: None
 }
 
 eval_parsers = {
