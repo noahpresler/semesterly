@@ -27,5 +27,5 @@ for fixture in data:
 	new_json.append(fixture)
 
 with open('everything_redumped.json','w') as data_file:
-	data_file.write(str(new_json))
+	data_file.write(json.dumps(new_json))
 	data_file.close()
