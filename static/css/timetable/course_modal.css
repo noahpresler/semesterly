@@ -18,7 +18,7 @@
 .course-modal.trans + div {
 	/* using important to override boron default style */
 	/* can't declare in javascript either, cuz need hover */
-	background-color: transparent !important;	
+	background-color: transparent !important;
 }
 .course-modal.trans #modal-content,
 .course-modal.trans #modal-header,
@@ -152,7 +152,7 @@
 	right: 55px;
 }
 #modal-close:hover {
-	color: #ff4523;
+	color: #C0392B;
 	transform: scale(1.2);
 }
 #modal-share:hover {
@@ -188,6 +188,9 @@
 }
 #modal-add:hover {
 	background-color: #1858BB;
+}
+#modal-add.in-roster:hover {
+	background-color: #C0392B;
 }
 #modal-add.on-active-timetable{
 	background-color: #2DD6B5;
@@ -380,7 +383,7 @@ h3.modal-module-header small {
 	}
 }
 
-@media (max-width: 500px) { 
+@media (max-width: 500px) {
 	.course-modal {
 		position: static;
 	}
