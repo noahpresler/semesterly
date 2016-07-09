@@ -81,6 +81,40 @@
 									{% endif %}
 								</div>
 							</div>
+							<div class="col-1-1">
+								<div id="no-template-pager" class="cycle-pager external">
+									{% for e in evals %}
+										<div class="review-pager">
+											<h4 class="review-pager-year">{{ e.year }}</h4>
+											<div class="review-pager-stars">
+												{{ e.score }}
+											</div>
+										</div>
+									{% endfor %}
+								</div>
+								<div class="cycle-slideshow" 
+									data-cycle-fx="fade" 
+									data-cycle-timeout="0"
+									data-cycle-slides="> div"
+									data-cycle-pager="#no-template-pager"
+									data-cycle-pager-template=""
+									>
+									{% for e in evals %}
+										<div class="review">
+											<div class="review-header">
+												<h4 class="review-year">{{ e.year }}</h4>
+												<h4 class="review-prof">{{ e.professor }}</h4>
+												<div class="review-stars">
+													{{ e.score }}
+												</div>
+											</div>
+											<div class="review-body">
+												<p>{{ e.summary }}</p>
+											</div>
+										</div>
+									{% endfor %}
+								</div>
+							</div>
 							<div id="call-to-action" class="col-1-1">
 								<a href="{{ url }}">
 									<span>Course evaluations, professor ratings, textbooks and more!</span>
@@ -89,7 +123,6 @@
 									</svg>
 								</a>
 							</div>
-							{{ evals }}
 						</div>
 						<div id="sections" class="cf">
 							{% if lectures %}
@@ -171,6 +204,8 @@
 		ga('create', 'UA-68704308-1', 'auto');
 		ga('send', 'pageview');
 		</script>
+		<script src="http://ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js"></script>
+		<script src="http://malsup.github.com/jquery.cycle2.js"></script>
 		<script type='text/javascript' src='/static/js/course-page.js'></script>
 	</body>
 </html>

@@ -531,6 +531,14 @@ a#social-login:hover:before {
 #content p {
 	font-size: 14px;
 }
+
+/* Course Reviews */
+.review {
+	width: 100%;
+}
+/* End Course Reviews */
+
+
 #call-to-action {
 	padding: 20px 0 0;
 	text-align: center;
