@@ -42,9 +42,10 @@ class QueensParser(BaseParser):
   def __init__(self, semester, year, debug=False):
     BaseParser.__init__(self, 'F' if semester == 'Fall' else 'S')
     self.section_type_map = {
-      'LEC': 'L',
-      'TUT': 'T',
-      'LAB': 'P',
+      'Lec': 'L',
+      'Tut': 'T',
+      'Lab': 'P',
+      'Pra': 'P',
     }
     self.debug = debug
     self.driver = None
@@ -159,7 +160,6 @@ class QueensParser(BaseParser):
     page_title = get_field_text(course_element, course_title_id)
     course_code = ' '.join(page_title.split()[:2])
     course_graph_info = get_field_text(course_element, prereq_id).split('\n')
-
     course_data = {
       # mandatory
       'name': ' '.join(page_title.split()[4:]),
@@ -192,7 +192,8 @@ class QueensParser(BaseParser):
     cols_by_row = [row.findChildren(recursive=False) for row in meeting_table.tbody.findChildren(recursive=False)[2:]]
     time_is_TBA = any(('TBA' in cols[0].div.span.text or len(cols[0].div.span.text.split()) != 4
                     for cols in cols_by_row))
-    section_type = self.section_type_map.get(get_field_text(section_element, subheader_id).split()[-1].strip(), 'L')
+    given_section_type=get_field_text(section_element, subheader_id).split()[-1].strip()[:3] # e.g. "Lecture", "Laboratory", etc
+    section_type = self.section_type_map.get(given_section_type, 'L')
     section_data = {
       'semester': self.semester,
       'section_type': section_type,
