@@ -521,6 +521,8 @@ def course_page(request, code):
       for k, e in v.items():
         if isinstance(evals[i][k], basestring):
           clean_evals[i][k] = evals[i][k].replace(u'\xa0', u' ')
+        if k == "year":
+          clean_evals[i][k] = evals[i][k].replace(":", " ")
     print clean_evals
     if school == "jhu":
       course_url = "/course/" + course_dict['code'] + "/F"
