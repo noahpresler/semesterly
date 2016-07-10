@@ -82,38 +82,59 @@
 								</div>
 							</div>
 							<div class="col-1-1">
-								<div id="no-template-pager" class="cycle-pager external">
-									{% for e in evals %}
-										<div class="review-pager">
-											<h4 class="review-pager-year">{{ e.year }}</h4>
-											<div class="review-pager-stars">
-												{{ e.score }}
-											</div>
-										</div>
-									{% endfor %}
-								</div>
-								<div class="cycle-slideshow" 
-									data-cycle-fx="fade" 
-									data-cycle-timeout="0"
-									data-cycle-slides="> div"
-									data-cycle-pager="#no-template-pager"
-									data-cycle-pager-template=""
-									>
-									{% for e in evals %}
-										<div class="review">
-											<div class="review-header">
-												<h4 class="review-year">{{ e.year }}</h4>
-												<h4 class="review-prof">{{ e.professor }}</h4>
-												<div class="review-stars">
-													{{ e.score }}
+								{% if evals %}
+									<div id="no-template-pager" class="cycle-pager external cf">
+										{% for e in evals %}
+											<div class="review-pager">
+												<div class="review-pager-border">
+													<h4 class="review-pager-year">{{ e.year }}</h4>
+													<div class="rating-wrapper"
+														data-score="{{ e.score }}">
+														<div class="star-ratings-sprite eval-stars">
+															<span class="rating" style="width: 0%;"></span>
+														</div>
+														<div class="numeric-rating">
+															<b>({{ e.score }})</b>
+														</div>
+													</div>
 												</div>
 											</div>
-											<div class="review-body">
-												<p>{{ e.summary }}</p>
+										{% endfor %}
+									</div>
+									<div class="cycle-slideshow" 
+										data-cycle-fx="fade" 
+										data-cycle-timeout="0"
+										data-cycle-slides="> div"
+										data-cycle-pager="#no-template-pager"
+										data-cycle-pager-template=""
+										data-cycle-auto-height=container
+										>
+										{% for e in evals %}
+											<div class="review">
+												<div class="review-border">
+													<div class="review-header">
+														<h4 class="review-year">{{ e.year }}</h4>
+														<h4 class="review-prof">Professor: {{ e.professor }}</h4>
+														<div class="rating-wrapper"
+															data-score="{{ e.score }}">
+															<div class="star-ratings-sprite eval-stars">
+																<span class="rating" style="width: 0%;"></span>
+															</div>
+															<div class="numeric-rating">
+																<b>({{ e.score }})</b>
+															</div>
+														</div>
+													</div>
+													<div class="review-body">
+														<p>{{ e.summary }}</p>
+													</div>
+												</div>
 											</div>
-										</div>
-									{% endfor %}
-								</div>
+										{% endfor %}
+									</div>
+								{% else %}
+									<p>No Course Evaluations found</p>
+								{% endif %}
 							</div>
 							<div id="call-to-action" class="col-1-1">
 								<a href="{{ url }}">
