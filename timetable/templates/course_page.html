@@ -82,7 +82,7 @@
 								</div>
 							</div>
 							<div class="col-1-1">
-								{% if evals %}
+								{% if evals and evals|length > 1 %}
 									<div id="no-template-pager" class="cycle-pager external cf">
 										{% for e in evals %}
 											<div class="review-pager">
@@ -132,6 +132,29 @@
 											</div>
 										{% endfor %}
 									</div>
+								{% elif evals %}
+									{% for e in evals %}
+										<div class="review">
+											<div class="review-border">
+												<div class="review-header">
+													<h4 class="review-year">{{ e.year }}</h4>
+													<h4 class="review-prof">Professor: {{ e.professor }}</h4>
+													<div class="rating-wrapper"
+														data-score="{{ e.score }}">
+														<div class="star-ratings-sprite eval-stars">
+															<span class="rating" style="width: 0%;"></span>
+														</div>
+														<div class="numeric-rating">
+															<b>({{ e.score }})</b>
+														</div>
+													</div>
+												</div>
+												<div class="review-body">
+													<p>{{ e.summary }}</p>
+												</div>
+											</div>
+										</div>
+									{% endfor %}
 								{% else %}
 									<p>No Course Evaluations found</p>
 								{% endif %}
