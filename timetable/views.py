@@ -516,6 +516,12 @@ def course_page(request, code):
     t = course_dict['sections'].get('T', {}).values()
     p = course_dict['sections'].get('P', {}).values()
     evals = course_dict['evals']
+    clean_evals = evals
+    for i, v in enumerate(evals):
+      for k, e in v.items():
+        if isinstance(evals[i][k], basestring):
+          clean_evals[i][k] = evals[i][k].replace(u'\xa0', u' ')
+    print clean_evals
     if school == "jhu":
       course_url = "/course/" + course_dict['code'] + "/F"
     else:
@@ -528,7 +534,7 @@ def course_page(request, code):
        'tutorials': t if t else None,
        'practicals': p if p else None,
        'url': course_url,
-       'evals': evals
+       'evals': clean_evals
        },
     context_instance=RequestContext(request))
   except Exception as e:
