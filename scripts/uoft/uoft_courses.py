@@ -64,9 +64,12 @@ class UofTParser:
     def start_engineering(self):
         engineering_day_map = {"Mon": "M", "Tue": "T", "Wed": "W", "Thu": "T", "Fri": "F"}
         for semester in ["fall", "winter"]:
+            print "Parsing " + semester + " for engineering"
             json = {}
+            print "Making request, will update when response received..."
             request_url = "http://www.apsc.utoronto.ca/timetable/{}.html".format(semester)
-            soup = BeautifulSoup(self.s.get(url=request_url, cookies=self.cookies).text)
+            soup = BeautifulSoup(self.s.get(url=request_url).text)
+            print "Response received. Initiating parse of response HTML."
             tables = soup.find_all('table',attrs={"border": "border"})
             data = []
             for table in tables:
@@ -82,6 +85,7 @@ class UofTParser:
                     course = course.strip()
                     section = section.strip()
                     section = section[0] + section[3:]
+                    print "On", course + ", section " + section + "..."
                     if course not in json:
                         json[course] = {}
                     if section not in json[course]:
@@ -99,7 +103,7 @@ class UofTParser:
                 C, created = Course.objects.update_or_create(school="uoft", code=code,defaults={
                         'campus': code[-1],
                         'num_credits': 1 if code[6].upper() == 'Y' else 0.5,
-                        'level': code[3],
+                        'level': code[3] + "00",
                         'department': code[:3]
                     })
                 C.save()
