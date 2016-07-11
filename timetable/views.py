@@ -515,6 +515,15 @@ def course_page(request, code):
     l = course_dict['sections'].get('L', {}).values()
     t = course_dict['sections'].get('T', {}).values()
     p = course_dict['sections'].get('P', {}).values()
+    avg = round(course_obj.get_avg_rating(), 2)
+    evals = course_dict['evals']
+    clean_evals = evals
+    for i, v in enumerate(evals):
+      for k, e in v.items():
+        if isinstance(evals[i][k], basestring):
+          clean_evals[i][k] = evals[i][k].replace(u'\xa0', u' ')
+        if k == "year":
+          clean_evals[i][k] = evals[i][k].replace(":", " ")
     if school == "jhu":
       course_url = "/course/" + course_dict['code'] + "/F"
     else:
@@ -526,7 +535,9 @@ def course_page(request, code):
        'lectures': l if l else None,
        'tutorials': t if t else None,
        'practicals': p if p else None,
-       'url': course_url
+       'url': course_url,
+       'evals': clean_evals,
+       'avg': avg
        },
     context_instance=RequestContext(request))
   except Exception as e:
