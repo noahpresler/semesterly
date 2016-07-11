@@ -166,7 +166,7 @@ export class SearchResult extends React.Component {
                 onMouseOut={() => this.actionOut("SAVE")}>
                 <i className={classNames('fa', {'fa-bookmark' : !inOptionRoster, 'fa-check' : inOptionRoster})}></i>
             </span>
-        let info = course.code;
+        let info = course.name ? course.code : "";
         if (this.state.hoverSave) {
             info = !inOptionRoster ? "Add this as an optional course" : "Remove this optional course";
         } else if (this.state.hoverAdd) {
@@ -183,7 +183,7 @@ export class SearchResult extends React.Component {
             onMouseDown={(event) => this.props.fetchCourseInfo(course.id)}
             onMouseOver={() => this.props.hoverSearchResult(this.props.position)}
             >
-            <h3>{course.name} </h3>
+            <h3>{course.name || course.code} </h3>
             { addOptionalCourseButton}
             { addRemoveButton }
             <h4 className="label" style={style}>{info}</h4><h4 className={classNames('label','bubble')}>{this.props.campuses[course.campus]}</h4>
