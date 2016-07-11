@@ -54,7 +54,9 @@
 				</div> -->
 			</div>
 		</header>
-		<div id="page">
+		<div id="page" itemscope itemtype="http://schema.org/Rating">
+			<meta itemprop="worstRating" content = "0"/>
+			<meta itemprop="bestRating" content = "5"/>
 			<div id="top-bg"></div>
 			<div id="top" class="grid cf">
 				<div class="card-width">
@@ -64,12 +66,26 @@
 			<div id="content">
 				<div class="grid cf">
 					<div id="card">
-						<h1>{{ course.name }}</h1>
+						<h1 itemprop="name">{{ course.name }}</h1>
 						<div class="cf">
 							<div class="col-1-4">
 								<div id="credits">
 									<h3>{{ course.num_credits }}</h3>
 									<span>credits</span>
+								</div>
+								<div id="avg-rating">
+									{% if avg %}
+										<h3>Average Course Rating</h3>
+										<div class="rating-wrapper"
+											data-score="{{ avg }}">
+											<div class="star-ratings-sprite eval-stars">
+												<span class="rating" style="width: 0%;"></span>
+											</div>
+											<div class="numeric-rating">
+												<b>({{ avg }})</b>
+											</div>
+										</div>
+									{% endif %}
 								</div>
 							</div>
 							<div class="col-3-4">
@@ -80,6 +96,84 @@
 										<p>No description found.</p>
 									{% endif %}
 								</div>
+							</div>
+							<div class="col-1-1">
+								{% if evals and evals|length > 1 %}
+									<div id="no-template-pager" class="cycle-pager external cf">
+										{% for e in evals %}
+											<div class="review-pager">
+												<div class="review-pager-border">
+													<h4 class="review-pager-year">{{ e.year }}</h4>
+													<div class="rating-wrapper"
+														data-score="{{ e.score }}">
+														<div class="star-ratings-sprite eval-stars">
+															<span class="rating" style="width: 0%;"></span>
+														</div>
+														<div class="numeric-rating">
+															<b>({{ e.score }})</b>
+														</div>
+													</div>
+												</div>
+											</div>
+										{% endfor %}
+									</div>
+									<div class="cycle-slideshow" 
+										data-cycle-fx="fade" 
+										data-cycle-timeout="0"
+										data-cycle-slides="> div"
+										data-cycle-pager="#no-template-pager"
+										data-cycle-pager-template=""
+										data-cycle-auto-height=container
+										>
+										{% for e in evals %}
+											<div class="review">
+												<div class="review-border">
+													<div class="review-header">
+														<h4 class="review-year">{{ e.year }}</h4>
+														<h4 class="review-prof">Professor: {{ e.professor }}</h4>
+														<div class="rating-wrapper"
+															data-score="{{ e.score }}">
+															<div class="star-ratings-sprite eval-stars">
+																<span class="rating" style="width: 0%;"></span>
+															</div>
+															<div class="numeric-rating">
+																<b>({{ e.score }})</b>
+															</div>
+														</div>
+													</div>
+													<div class="review-body">
+														<p>{{ e.summary }}</p>
+													</div>
+												</div>
+											</div>
+										{% endfor %}
+									</div>
+								{% elif evals %}
+									{% for e in evals %}
+										<div class="review">
+											<div class="review-border">
+												<div class="review-header">
+													<h4 class="review-year">{{ e.year }}</h4>
+													<h4 class="review-prof">Professor: {{ e.professor }}</h4>
+													<div class="rating-wrapper"
+														data-score="{{ e.score }}">
+														<div class="star-ratings-sprite eval-stars">
+															<span class="rating" style="width: 0%;"></span>
+														</div>
+														<div class="numeric-rating">
+															<b>({{ e.score }})</b>
+														</div>
+													</div>
+												</div>
+												<div class="review-body">
+													<p>{{ e.summary }}</p>
+												</div>
+											</div>
+										</div>
+									{% endfor %}
+								{% else %}
+									<p>No Course Evaluations found</p>
+								{% endif %}
 							</div>
 							<div id="call-to-action" class="col-1-1">
 								<a href="{{ url }}">
@@ -170,6 +264,8 @@
 		ga('create', 'UA-68704308-1', 'auto');
 		ga('send', 'pageview');
 		</script>
+		<script src="http://ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js"></script>
+		<script src="http://malsup.github.com/jquery.cycle2.js"></script>
 		<script type='text/javascript' src='/static/js/course-page.js'></script>
 	</body>
 </html>
