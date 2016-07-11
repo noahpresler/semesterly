@@ -54,7 +54,9 @@
 				</div> -->
 			</div>
 		</header>
-		<div id="page">
+		<div id="page" itemscope itemtype="http://schema.org/Rating">
+			<meta itemprop="worstRating" content = "0"/>
+			<meta itemprop="bestRating" content = "5"/>
 			<div id="top-bg"></div>
 			<div id="top" class="grid cf">
 				<div class="card-width">
@@ -64,7 +66,7 @@
 			<div id="content">
 				<div class="grid cf">
 					<div id="card">
-						<h1>{{ course.name }}</h1>
+						<h1 itemprop="name">{{ course.name }}</h1>
 						<div class="cf">
 							<div class="col-1-4">
 								<div id="credits">
@@ -83,6 +85,9 @@
 							</div>
 							<div class="col-1-1">
 								{% if evals and evals|length > 1 %}
+									<div class="average">
+										<h3>Average Course Rating: <span itemprop="ratingValue">{{ avg }}</span></h3>
+									</div>
 									<div id="no-template-pager" class="cycle-pager external cf">
 										{% for e in evals %}
 											<div class="review-pager">
