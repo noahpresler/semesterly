@@ -1,4 +1,6 @@
 document.addEventListener("DOMContentLoaded", function(event) { 
+
+	// ssection enrolment
 	var sections = document.getElementsByClassName('section');
 	for (var i = 0; i < sections.length; ++i) {
 		var s = sections[i];
@@ -25,4 +27,15 @@ document.addEventListener("DOMContentLoaded", function(event) {
 		}
 		h.innerHTML = txt;
 	}
+
+	// Course ratings
+	var ratings = document.getElementsByClassName('rating-wrapper');
+	for (var i = 0; i < ratings.length; ++i) {
+		var r = ratings[i];
+		var score = r.getAttribute('data-score');
+		var percent = ((score / 5) * 100).toString() + "%";
+		var h = r.getElementsByClassName('rating')[0];
+		h.style.width = percent;
+	}
+
 });
