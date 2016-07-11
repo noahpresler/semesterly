@@ -73,6 +73,20 @@
 									<h3>{{ course.num_credits }}</h3>
 									<span>credits</span>
 								</div>
+								<div id="avg-rating">
+									{% if avg %}
+										<h3>Average Course Rating</h3>
+										<div class="rating-wrapper"
+											data-score="{{ avg }}">
+											<div class="star-ratings-sprite eval-stars">
+												<span class="rating" style="width: 0%;"></span>
+											</div>
+											<div class="numeric-rating">
+												<b>({{ avg }})</b>
+											</div>
+										</div>
+									{% endif %}
+								</div>
 							</div>
 							<div class="col-3-4">
 								<div id="description">
@@ -85,9 +99,6 @@
 							</div>
 							<div class="col-1-1">
 								{% if evals and evals|length > 1 %}
-									<div class="average">
-										<h3>Average Course Rating: <span itemprop="ratingValue">{{ avg }}</span></h3>
-									</div>
 									<div id="no-template-pager" class="cycle-pager external cf">
 										{% for e in evals %}
 											<div class="review-pager">
