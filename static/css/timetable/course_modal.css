@@ -189,8 +189,14 @@
 #modal-add:hover {
 	background-color: #1858BB;
 }
+@keyframes pulsate {
+0% { opacity: 1; transform: scale(1); }
+50% { opacity: 1; transform: scale(1.5); }
+100% { opacity: 1; transform: scale(1); }
+}
 #modal-add.in-roster:hover {
 	background-color: #C0392B;
+	animation: pulsate 0.8s ease-out infinite;
 }
 #modal-add.on-active-timetable{
 	background-color: #2DD6B5;
