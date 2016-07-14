@@ -46,6 +46,7 @@ class QueensParser(BaseParser):
       'Tut': 'T',
       'Lab': 'P',
       'Pra': 'P',
+      'Ble': 'T',
     }
     self.debug = debug
     self.driver = None
