@@ -29,6 +29,7 @@ def view_analytics_dashboard(request):
 
         return render_to_response('analytics_dashboard.html', {
                 "timetables_per_hour":json.dumps(timetables_per_hour),
+                "signups_per_hour":number_timetables_per_hour(Timetable=Student),
                 "shared_timetables_per_hour":json.dumps(shared_timetables_per_hour),
                 "total_timetables_by_school":json.dumps(total_timetables_by_school),
                 "total_timetables":number_timetables(),
