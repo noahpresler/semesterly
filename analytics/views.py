@@ -11,29 +11,45 @@ from student.views import get_student
 from analytics.models import *
 from student.models import *
 from dateutil import tz
+from timetable.school_mappers import VALID_SCHOOLS
 to_zone = tz.gettz('America/New_York')
 
 
 def view_analytics_dashboard(request):
     student = get_student(request)
     if student and student.user.is_staff:
+
+        total_timetables_by_school = {}
+        timetables_per_hour = {}
+        shared_timetables_per_hour = {}
+        for school in VALID_SCHOOLS:
+            total_timetables_by_school[school] = number_timetables(school=school)
+            timetables_per_hour[school] = number_timetables_per_hour(school=school)
+            shared_timetables_per_hour[school] = number_timetables_per_hour(Timetable=SharedTimetable, school=school)
+
         return render_to_response('analytics_dashboard.html', {
+                "timetables_per_hour":json.dumps(timetables_per_hour),
+                "signups_per_hour":number_timetables_per_hour(Timetable=Student,start_delta_days=7, interval_delta_hours=24),
+                "shared_timetables_per_hour":json.dumps(shared_timetables_per_hour),
+                "total_timetables_by_school":json.dumps(total_timetables_by_school),
                 "total_timetables":number_timetables(),
+                "total_shared_timetables":number_timetables(Timetable=SharedTimetable),
+                "total_personal_timetables":number_timetables(Timetable=PersonalTimetable),
                 "total_signups":Student.objects.count(),
-                "jhu_timetables_per_hour":number_timetables_per_hour(school="jhu"),
-                "uoft_timetables_per_hour":number_timetables_per_hour(school="uoft"),
-                "umd_timetables_per_hour":number_timetables_per_hour(school="umd"),
                 "total_timetables_fall":number_timetables(semester="F"),
                 "total_timetables_spring":number_timetables(semester="S"),
-                "jhu_timetables":number_timetables(school='jhu'),
-                "uoft_timetables":number_timetables(school='uoft'),
-                "umd_timetables":number_timetables(school='umd'),
                 "number_of_reactions":json.dumps(number_of_reactions()),
                 "jhu_most_popular_courses":[], # needs to be refactored; was causing timeout on server because too slow
                 "uoft_most_popular_courses":[], # needs to be refactored; was causing timeout on server because too slow
                 "umd_most_popular_courses":[] # needs to be refactored; was causing timeout on server because too slow
             },
             context_instance=RequestContext(request))
+            # "jhu_most_popular_courses":most_popular_courses(5, 'jhu', 'S'),
+            # "uoft_most_popular_courses":most_popular_courses(5, 'uoft', 'S'),
+            # "umd_most_popular_courses":most_popular_courses(5, 'umd', 'S'),
+            # "jhu_most_searched_courses":most_popular_courses(5, 'jhu', 'F', AnalyticsCourseSearch),
+            # "uoft_most_searched_courses":most_popular_courses(5, 'uoft', 'F', AnalyticsCourseSearch),
+            # "umd_most_searched_courses":most_popular_courses(5, 'umd', 'F', AnalyticsCourseSearch)
     else:
         raise Http404
 
@@ -77,14 +93,14 @@ def number_timetables(Timetable = AnalyticsTimetable, school = None, semester = 
 
     return timetables.count()
 
-def number_timetables_per_hour(Timetable = AnalyticsTimetable, school = None):
-    """Gets the number of time tables created each hour."""
+def number_timetables_per_hour(Timetable = AnalyticsTimetable, school = None, start_delta_days = 1, interval_delta_hours = 1):
+    """Gets the number of time tables created each hour. Can be used for analytics or shared time tables."""
     # TODO: Change start and end time. Currently set for past 24 hours.
     time_end = datetime.datetime.now()
-    length = timedelta(days = 1)
+    length = timedelta(days = start_delta_days)
     time_start = time_end - length
 
-    time_delta = timedelta(hours = 1)
+    time_delta = timedelta(hours = interval_delta_hours)
     num_timetables = []
     while time_start < time_end:
         num_timetables.append(number_timetables(Timetable = Timetable, school = school, time_start = time_start, time_end = time_start + time_delta))
@@ -100,16 +116,15 @@ def number_of_reactions(max_only=False):
         reaction = None
         reactions = Reaction.objects.filter(title = title)
         num_reactions[title] = len(reactions)
-    print(num_reactions)
     if max_only:
         return max(num_reactions.iterkeys(), key=lambda k: num_reactions[k])
     else:
         return num_reactions
 
-def most_popular_courses(n, school, semester, table = AnalyticsTimetable):
+def most_popular_courses(n, school, semester, Table = AnalyticsTimetable):
     """Gets the top n most popular courses searched (AnalyticsCourseSearch) or in time table(AnalyticsTimetable)."""
     num_courses = {}
-    link_to_courses = table.objects.filter(school = school, semester = semester)
+    link_to_courses = Table.objects.filter(school = school, semester = semester)
     for link_to_course in link_to_courses:
         for course in link_to_course.courses.all():
             if course.id in num_courses:
