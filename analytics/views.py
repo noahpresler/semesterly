@@ -11,31 +11,31 @@ from student.views import get_student
 from analytics.models import *
 from student.models import *
 from dateutil import tz
+from timetable.school_mappers import VALID_SCHOOLS
 to_zone = tz.gettz('America/New_York')
 
 
 def view_analytics_dashboard(request):
     student = get_student(request)
     if student and student.user.is_staff:
-        print(number_timetables_per_hour(Timetable=SharedTimetable, school="jhu"))
+
+        total_timetables_by_school = {}
+        timetables_per_hour = {}
+        shared_timetables_per_hour = {}
+        for school in VALID_SCHOOLS:
+            total_timetables_by_school[school] = number_timetables(school=school)
+            timetables_per_hour[school] = number_timetables_per_hour(school=school)
+            shared_timetables_per_hour[school] = number_timetables_per_hour(Timetable=SharedTimetable, school=school)
+
         return render_to_response('analytics_dashboard.html', {
+                "timetables_per_hour":json.dumps(timetables_per_hour),
+                "shared_timetables_per_hour":json.dumps(shared_timetables_per_hour),
+                "total_timetables_by_school":json.dumps(total_timetables_by_school),
                 "total_timetables":number_timetables(),
                 "total_shared_timetables":number_timetables(Timetable=SharedTimetable),
                 "total_signups":Student.objects.count(),
-                "jhu_timetables_per_hour":number_timetables_per_hour(school="jhu"),
-                "uoft_timetables_per_hour":number_timetables_per_hour(school="uoft"),
-                "umd_timetables_per_hour":number_timetables_per_hour(school="umd"),
-                "queens_timetables_per_hour":number_timetables_per_hour(school="queens"),
-                "jhu_shared_timetables_per_hour":number_timetables_per_hour(Timetable=SharedTimetable, school="jhu"),
-                "uoft_shared_timetables_per_hour":number_timetables_per_hour(Timetable=SharedTimetable, school="uoft"),
-                "umd_shared_timetables_per_hour":number_timetables_per_hour(Timetable=SharedTimetable, school="umd"),
-                "queens_shared_timetables_per_hour":number_timetables_per_hour(Timetable=SharedTimetable, school="queens"),
                 "total_timetables_fall":number_timetables(semester="F"),
                 "total_timetables_spring":number_timetables(semester="S"),
-                "jhu_timetables":number_timetables(school='jhu'),
-                "uoft_timetables":number_timetables(school='uoft'),
-                "umd_timetables":number_timetables(school='umd'),
-                "queens_timetables":number_timetables(school="queens"),
                 "number_of_reactions":json.dumps(number_of_reactions()),
                 "jhu_most_popular_courses":[], # needs to be refactored; was causing timeout on server because too slow
                 "uoft_most_popular_courses":[], # needs to be refactored; was causing timeout on server because too slow
