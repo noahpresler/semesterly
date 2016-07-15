@@ -12,7 +12,7 @@ from timetable.models import Course, Section, Offering
 class BaseParser:
   __metaclass__ = abc.ABCMeta
 
-  def __init__(self, semester, num_courses=None):
+  def __init__(self, semester=None, num_courses=None):
     self.semester = semester
     self.num_courses = num_courses
     self.bar = None
@@ -23,7 +23,7 @@ class BaseParser:
     self.bar = progressbar.ProgressBar(max_value=max_val)
     for i, course_element in enumerate(self.get_course_elements()):
       self.parse_and_save_course(course_element)
-      # bar.update(i)
+      # self.bar.update(i)
 
   def parse_and_save_course(self, course_element):
     """
@@ -46,7 +46,7 @@ class BaseParser:
     if section_code:
       section_obj, _ = Section.objects.update_or_create(course=course_obj,
                                                           meeting_section=section_code,
-                                                          semester=self.semester,
+                                                          semester=section_data.get('semester', self.semester),
                                                           defaults=section_data)
       section_obj.offering_set.all().delete()
       for meeting_element in self.get_meeting_elements(section_element):
@@ -119,19 +119,12 @@ class BaseParser:
 
 # TEMPLATE FOR BASEPARSER SUBCLASS:
 """
-import os
-
-import django
-os.environ.setdefault("DJANGO_SETTINGS_MODULE", "semesterly.settings")
-django.setup()
-from timetable.models import SchoolCourse, SchoolCourseOffering
 from scripts.base_parser import BaseParser
 
 
 class SchoolParser(BaseParser):
   def __init__(self):
-    BaseParser.__init__(self, SchoolCourse,
-                              SchoolCourseOffering)
+    BaseParser.__init__(self)
 
   def get_course_elements(self):
     pass
@@ -149,7 +142,6 @@ class SchoolParser(BaseParser):
       'campus': None,
       'prerequisites': None,
       'exclusions': None,
-      'num_credits': None,
       'areas': None,
       'department': None,
       'level': None,
@@ -164,12 +156,14 @@ class SchoolParser(BaseParser):
   def parse_section_element(self, section_element):
     section_code = None
     section_data = {
+      # required if not provided to BaseParser:
+      'semester': None,
+
       # optional
       'section_type': None,
       'instructors': None,
       'size': None,
       'enrolment': None,
-      'size': None,
       'waitlist': None,
       'waitlist_size': None,
     }
