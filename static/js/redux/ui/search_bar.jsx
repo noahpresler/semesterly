@@ -14,9 +14,11 @@ export class SearchBar extends React.Component {
         this.fetchSearchResults = this.fetchSearchResults.bind(this);
         this.changeTimer = false;
     }
-    //autofocus search
+    //autofocus search currently disabled so it doesn't bug out nudgespot
     componentWillMount() {
+
         $(document.body).on('keydown', (e) => {
+            if($("textarea").is(":focus")) { return; } // don't "search" if Nudgespot textarea is focused
             if ( $('input:focus').length === 0 && !this.props.explorationModalIsVisible && !e.ctrlKey) {
                 if ((e.keyCode >= 48 && e.keyCode <= 57) || (e.keyCode >= 65 && e.keyCode <= 90)) {
                     $('#search-bar input').focus();
@@ -74,7 +76,7 @@ export class SearchBar extends React.Component {
                 <div id="search-bar-wrapper">
                     <ClickOutHandler onClickOut={this.onClickOut.bind(this)}>
                         <div id="search-bar-semester" onMouseDown={this.toggleDropdown.bind(this)}>
-                            <span className={classNames("tip-down", {'down' : this.state.showDropdown})}> 
+                            <span className={classNames("tip-down", {'down' : this.state.showDropdown})}>
                             </span>
                             {this.props.semesterName}</div>
                         <div id="semester-picker"
