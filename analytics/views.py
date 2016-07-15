@@ -29,11 +29,12 @@ def view_analytics_dashboard(request):
 
         return render_to_response('analytics_dashboard.html', {
                 "timetables_per_hour":json.dumps(timetables_per_hour),
-                "signups_per_hour":number_timetables_per_hour(Timetable=Student),
+                "signups_per_hour":number_timetables_per_hour(Timetable=Student,start_delta_days=7, interval_delta_hours=24),
                 "shared_timetables_per_hour":json.dumps(shared_timetables_per_hour),
                 "total_timetables_by_school":json.dumps(total_timetables_by_school),
                 "total_timetables":number_timetables(),
                 "total_shared_timetables":number_timetables(Timetable=SharedTimetable),
+                "total_personal_timetables":number_timetables(Timetable=PersonalTimetable),
                 "total_signups":Student.objects.count(),
                 "total_timetables_fall":number_timetables(semester="F"),
                 "total_timetables_spring":number_timetables(semester="S"),
@@ -92,14 +93,14 @@ def number_timetables(Timetable = AnalyticsTimetable, school = None, semester = 
 
     return timetables.count()
 
-def number_timetables_per_hour(Timetable = AnalyticsTimetable, school = None):
+def number_timetables_per_hour(Timetable = AnalyticsTimetable, school = None, start_delta_days = 1, interval_delta_hours = 1):
     """Gets the number of time tables created each hour. Can be used for analytics or shared time tables."""
     # TODO: Change start and end time. Currently set for past 24 hours.
     time_end = datetime.datetime.now()
-    length = timedelta(days = 1)
+    length = timedelta(days = start_delta_days)
     time_start = time_end - length
 
-    time_delta = timedelta(hours = 1)
+    time_delta = timedelta(hours = interval_delta_hours)
     num_timetables = []
     while time_start < time_end:
         num_timetables.append(number_timetables(Timetable = Timetable, school = school, time_start = time_start, time_end = time_start + time_delta))

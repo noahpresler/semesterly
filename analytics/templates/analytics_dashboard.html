@@ -19,18 +19,22 @@
 
     <div id="analytics-container">
     </div>
+    <ul>
+      <li><h4>Total number of Timetables: {{total_timetables}}</h4></li>
+      <ul>
+        <li>
+          <h4>Fall semester Timetables: {{total_timetables_fall}}</h4></li>
+          <li>
+            <h4>Spring semester Timetables: {{total_timetables_spring}}</h4>
+         </li>
+      </ul>
+      <li><h4>Total number of Shared timetables: {{total_shared_timetables}}</h4></li>
+      <li><h4>Total number of Personal timetables: {{total_personal_timetables}}</h4></li>
 
-    <h3>Total number of timetables: {{total_timetables}}</h3>
+      <li><h4>Total signups: {{total_signups}}</h4></li>
+    </ul>
 
-    <h3>Total number of shared timetables: {{total_shared_timetables}}</h3>
-
-    <h4>Total number of Timetables: {{total_timetables}}</h4>
-
-    <h3>Total number of timetables for Spring semester: {{total_timetables_spring}}</h3>
-
-    <h4>Total number of Timetables for Fall semester: {{total_timetables_fall}}</h4>
-
-    <h4>Total number of Timetables for Spring semester: {{total_timetables_spring}}</h4>
+    
 
     <!-- <h4>Most popular courses in JHU:</h4>  
 
@@ -76,7 +80,7 @@
     </div>
     {% endfor %} -->
 
-    <h4>Total signups: {{total_signups}}</h4>
+    
 
     <script type="text/javascript">
       var total_timetables_by_school = JSON.parse("{{total_timetables_by_school|escapejs}}");
@@ -86,20 +90,20 @@
       var signups_per_hour = JSON.parse("{{signups_per_hour|escapejs}}");
     </script>
 
-    <h3>Number of timetables by school:</h3>
-    <canvas id="timetables_by_schools" width="400" height="400"></canvas>
+    <h4>Number of timetables by school:</h4>
+    <canvas id="timetables_by_schools"></canvas>
 
-    <h3>Number of timetables created per hour per school for the past 24 hours:</h3>
-    <canvas id="timetables_per_hours_chart" width="400" height="400"></canvas>
+    <h4>Number of timetables created per hour per school for the past 24 hours:</h4>
+    <canvas id="timetables_per_hours_chart"></canvas>
 
-    <h3>Number of shared timetables per hour per school for the past 24 hours:</h3>
-    <canvas id="shared_timetables_per_hours_chart" width="400" height="400"></canvas>
+    <h4>Number of shared timetables per hour per school for the past 24 hours:</h4>
+    <canvas id="shared_timetables_per_hours_chart"></canvas>
 
-    <h3>Number of signups per hour:</h3>
-    <canvas id="signups_chart" width="400" height="400"></canvas>
+    <h4>Number of signups per hour:</h4>
+    <canvas id="signups_chart"></canvas>
 
-    <h3>Number of each reaction used:</h3>
-    <canvas id="reactions_chart" width="400" height="400"></canvas>
+    <h4>Number of each reaction used:</h4>
+    <canvas id="reactions_chart"></canvas>
 
 
 
@@ -167,7 +171,7 @@
       datasets: shared_timetables_per_hour_datasets
     };
     var signups_per_hour_data = {
-      labels: past_24_labels,
+      labels: ["-6", "-5", "-4", "-3", "-2", "-1", "Now"],
       datasets:     [
         {
           label: "# Signups",
