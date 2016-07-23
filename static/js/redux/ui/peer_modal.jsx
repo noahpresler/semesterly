@@ -59,7 +59,11 @@ export class PeerModal extends React.Component {
             </div>
         let upsell =
             <div className="peer-card upsell">
-                <div className="peer-card-wrapper upsell">
+                <div className="peer-card-wrapper upsell cf">
+                    <h4>A Creative Header</h4>
+                    <p className="description">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua laborum.</p>
+                    <p className="disclaimer">Disclaimer about permissions goes here</p>
+                    <button className="lure-accept">Yes, I'm In</button>
                 </div>
             </div>
         let peerCard =
