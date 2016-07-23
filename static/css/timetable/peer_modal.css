@@ -1,0 +1,235 @@
+.peer-modal {
+	max-width: 1200px;
+	height: 85%;
+	max-height: 900px;
+}
+
+.peer-modal > div {
+	outline: none;
+	width: 100%;
+	height: 100%;
+}
+
+#pm-side-bar {
+	position: absolute;
+	width: 200px;
+	height: 100%;
+	border-right: 1px solid #ddd;
+}
+
+#main-modal-wrapper {
+	position: absolute;
+    left: 200px;
+    right: 0px;
+    height: 100%;
+    padding: 20px 10px 20px 20px;
+    background-color: #f7f7f7;
+    overflow: auto;
+}
+
+#split-modal-wrapper {
+	position: relative;
+    height: 100%;
+}
+
+#main-modal-wrapper h4 {
+    text-align: center;
+    margin: 0px;
+    font-weight: 200;
+    margin-bottom: 16px;
+}
+
+.peer-modal #modal-content {
+	position: relative;
+	height:	100%;
+}
+
+.circle-pic {
+    margin-left: 60px;
+    margin-right: 60px;
+    margin-top: 20px;
+    margin-bottom: 20px;
+    height: 80px;
+    width: 80px;
+    background-size: cover;
+    border-radius: 100%;
+    background-position: center;
+    background-repeat: no-repeat;
+    position: relative;
+    border: 1px solid #ddd;
+}
+
+.peer-pic {
+    height: 50px;
+    width: 50px;
+    display: inline-block;
+    vertical-align: middle;
+    background-size: cover;
+    border-radius: 100%;
+    background-position: center;
+    background-repeat: no-repeat;
+    position: relative;
+    border: 1px solid #ddd;
+    float: left;
+}
+
+.peer-card {
+	width: 50%;
+    float: left;
+    padding-right: 10px;
+    padding-bottom: 10px;
+}
+
+.peer-card-wrapper {
+	border: 1px solid #D4D4D4;
+    box-shadow: 0 -1px 0 #e5e5e5,0 0 2px rgba(0,0,0,.1),0 2px 4px rgba(0,0,0,.1);
+    background-color: white;
+}
+
+.peer-card .user-info {
+	height: 50px;
+	display: inline-block;
+	vertical-align: middle;
+	margin-left: 15px;
+}
+
+.peer-card h3 {
+	margin: 0px;
+	font-size: 20px;
+	font-weight: 400;
+	line-height: 30px;
+}
+
+.peer-card .ghost-name {
+	height: 25px;
+	margin-bottom: 5px;
+	width: 220px;
+	background-color: black;
+	opacity: .1;
+}
+
+
+.view-profile-btn {
+	background: #4080ff;
+	border: 1px solid #4080ff;
+	border-radius: 3px;
+	font-size: 11px;
+	height: 20px;
+	padding: 0 0 0 2px;
+	color: white;
+	width: 100px;
+	display: block
+}
+
+.peer-card .card-hat {
+	width: 100%;
+	height: 85px;
+	padding: 20px;
+}
+
+.peer-card .shared-courses {
+	padding: 0px 20px 20px 20px;
+}
+
+.shared-course .course-color-circle {
+	background-color: #FD7473;
+	height: 16px;
+	width: 16px;
+	border-radius: 16px;
+	float: left;
+}
+
+.peer-card .shared-course p {
+	font-weight: 300;
+    font-size: 16px;
+    line-height: 16px;
+    color: #555;
+    padding: 0 5px;
+    margin: 7px 0;
+	margin-left: 20px;
+    -webkit-transition: color .2s;
+    transition: color .2s;
+    word-wrap: break-word;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+}
+
+.ghost-course-title {
+	width: 220px;
+	height: 16px;
+	background-color: #555;
+    line-height: 16px;
+    padding: 0 5px;
+    margin: 7px 0;
+	margin-left: 25px;
+	opacity: 0.07;
+}
+
+.peer-card .class-only-indicator {
+	float: left;
+	margin-top: -1px;
+	margin-left: 2px;
+	font-size: 18px;
+	line-height: 18px;;
+	color: rgb(83, 233, 151);
+}
+
+.ghost button {
+	opacity: .4;
+}
+
+.ghost .course-color-circle {
+	opacity: .5;
+}
+
+.pm-side-bar-slot {
+	margin: 8px;
+	padding: 5px 5px 5px 10px;
+	border-radius: 5px;
+	background-color: #FD7473;
+	overflow: hidden;
+    margin-bottom: 5px;
+    cursor: pointer;
+    position: relative;
+}
+
+.pm-side-bar-slot .slot-bar {
+	left: 0;
+	top: 0;
+}
+
+#pm-side-bar p {
+	font-weight: 200;
+	width: 100%;
+    font-size: 16px;
+    line-height: 16px;
+    color: #555;
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+.peer-card.upsell {
+	width: 100%;
+}
+
+.peer-card-wrapper.upsell {
+	min-height: 150px;
+	width: 100%;
+}
+
+@media (max-width: 850px) {
+	.peer-card {
+		width: 100%;
+	}
+}
+
+@media (max-width: 600px) {
+	.pm-side-bar {
+		display: none;
+	}
+	#main-modal-wrapper {
+		position: absolute;
+	    left: 0px
+	}
+}
