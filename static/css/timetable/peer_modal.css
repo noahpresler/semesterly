@@ -216,6 +216,7 @@
 .peer-card-wrapper.upsell {
 	min-height: 150px;
 	width: 100%;
+	padding: 10px 20px 10px 20px;
 }
 
 @media (max-width: 850px) {
@@ -232,4 +233,38 @@
 		position: absolute;
 	    left: 0px
 	}
+}
+
+#main-modal-wrapper .upsell h4 {
+	font-weight: 400;
+	text-align: left;
+}
+
+#main-modal-wrapper .upsell .disclaimer {
+	float: left;
+}
+
+#main-modal-wrapper .upsell p {
+    font-size: 16px;
+    line-height: 22px;
+    color: #555;
+    padding: 0 5px;
+    margin: 7px 0;
+    -webkit-transition: color .2s;
+    transition: color .2s;
+    word-wrap: break-word;
+}
+
+#main-modal-wrapper .upsell .lure-accept {
+	float: right;
+	background: #4AD187;
+	border: 1px solid #4AD187;
+	border-radius: 3px;
+	font-size: 11px;
+	font-weight: 900;
+	height: 25px;
+	padding: 0 0 0 2px;
+	color: white;
+	width: 100px;
+	display: block
 }
