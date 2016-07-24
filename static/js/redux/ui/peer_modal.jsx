@@ -60,9 +60,8 @@ export class PeerModal extends React.Component {
         let upsell =
             <div className="peer-card upsell">
                 <div className="peer-card-wrapper upsell cf">
-                    <h4>A Creative Header</h4>
-                    <p className="description">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua laborum.</p>
-                    <p className="disclaimer">Disclaimer about permissions goes here</p>
+                    <h4>Study Buddies, Delivered</h4>
+                    <p className="description">Find peers across Semester.ly taking schedules similar to yours, add them on Facebook. Meet new people, make new friends, have a great semester. <i>Accepting this permission will enable all users in your classes to....</i></p>
                     <button className="lure-accept">Yes, I'm In</button>
                 </div>
             </div>
@@ -73,12 +72,12 @@ export class PeerModal extends React.Component {
                         <div className="peer-pic" style={{backgroundImage: 'url(/static/img/blank.jpg)'}}></div>
                         <div className="user-info">
                             <h3>Maxwell Ze Wei Yeo</h3>
-                            <button className="view-profile-btn">View Profile</button>
+                            <button className="view-profile-btn"><i className="fa fa-facebook-square"></i>View Profile</button>
                         </div>
                     </div>
                     <div className="shared-courses">
                         <div className="shared-course">
-                            <div className="course-color-circle"/>
+                            <div className="course-color-circle"><i className="fa fa-check"/></div>
                             <p className="course-title">Calculus II (Biology and Social Sciences)</p>
                         </div>
                         <div className="shared-course">
@@ -86,7 +85,7 @@ export class PeerModal extends React.Component {
                             <p className="course-title">Physics: Electricity & Magnetism</p>
                         </div>
                         <div className="shared-course">
-                            <span className="class-only-indicator">C</span>
+                             <div className="course-color-circle" style={{backgroundColor: 'rgb(83, 233, 151)'}}/>
                             <p className="course-title">Introduction to Business</p>
                         </div>
                     </div>
@@ -98,7 +97,7 @@ export class PeerModal extends React.Component {
                         <div className="card-hat">
                             <div className="peer-pic" style={{backgroundImage: 'url(/static/img/blank.jpg)'}}></div>
                             <div className="user-info">
-                                <div className="ghost-name"/>
+                                <div className="ghost-name">H</div>
                                 <button className="view-profile-btn"/>
                             </div>
                         </div>
@@ -129,13 +128,23 @@ export class PeerModal extends React.Component {
                         {sideBar}
                         <div id="main-modal-wrapper">
                             <h4>Your Classmates</h4>
+                            <div className="key">
+                                <div className="key-entry">
+                                  <div className="course-color-circle" style={{backgroundColor: '#ddd'}}><i className="fa fa-check"/></div>
+                                  <p>peer is in your class & section</p>
+                                </div>
+                                <div className="key-entry">
+                                  <div className="course-color-circle" style={{backgroundColor: '#ddd'}}/>
+                                    <p>peer is in your class only</p>
+                                </div>
+                            </div>
                             {upsell}
                             {peerCard}
                             {peerCard}
                             {peerCard}
                             {peerCard}
                             {peerCard}
-                            {ghostCard}
+                            {peerCard}
                         </div>
                     </div>
                 </div>
