@@ -116,7 +116,16 @@
 	padding: 0 0 0 2px;
 	color: white;
 	width: 100px;
-	display: block
+	display: block;
+	float: left;
+	margin-left: 5px;
+}
+
+.friend-status {
+	margin: 0px;
+	margin-left: 110px;
+	font-size: 13px;
+	padding: 0px;
 }
 
 .peer-card .card-hat {
@@ -285,9 +294,20 @@
 	line-height: 16px;
 }
 
+.friend-status {
+	color: rgb(58, 163, 105);
+}
+
+
 @media (max-width: 850px) {
 	.peer-card {
 		width: 100%;
+	}
+	#main-modal-wrapper h4 {
+		font-size: 22px;
+	}
+	.key {
+		margin-bottom: 15px;
 	}
 }
 
@@ -306,6 +326,11 @@
 	#main-modal-wrapper .upsell p {
 		font-size: 12px;
 		line-height: 16px;
+	}
+
+	#main-modal-wrapper h4 {
+		margin-top: 3px;
+		font-size: 25px;
 	}
 
 	#main-modal-wrapper .upsell h4 {
