@@ -61,7 +61,7 @@ export class PeerModal extends React.Component {
             <div className="peer-card upsell">
                 <div className="peer-card-wrapper upsell cf">
                     <h4>Study Buddies, Delivered</h4>
-                    <p className="description">Find peers across Semester.ly taking schedules similar to yours, add them on Facebook. Meet new people, make new friends, have a great semester. <i>Accepting this permission will enable all users in your classes to....</i></p>
+                    <p className="description">See who your classmates are this semester! Click yes below to find Semester.ly users in your courses, message them, or add them on Facebook! <i>By accepting this permission other Semester.ly students outside of your friends will be able to view your name and public Facebook profile.</i></p>
                     <button className="lure-accept">Yes, I'm In</button>
                 </div>
             </div>
@@ -73,6 +73,7 @@ export class PeerModal extends React.Component {
                         <div className="user-info">
                             <h3>Maxwell Ze Wei Yeo</h3>
                             <button className="view-profile-btn"><i className="fa fa-facebook-square"></i>View Profile</button>
+                            <p className="friend-status"><i className="fa fa-check" />Friends</p>
                         </div>
                     </div>
                     <div className="shared-courses">
@@ -140,11 +141,11 @@ export class PeerModal extends React.Component {
                             </div>
                             {upsell}
                             {peerCard}
-                            {peerCard}
-                            {peerCard}
-                            {peerCard}
-                            {peerCard}
-                            {peerCard}
+                            {ghostCard}
+                            {ghostCard}
+                            {ghostCard}
+                            {ghostCard}
+                            {ghostCard}
                         </div>
                     </div>
                 </div>
