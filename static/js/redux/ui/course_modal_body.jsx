@@ -29,6 +29,13 @@ export class CourseModalBody extends React.Component {
         if (sections === undefined) {
             return [];
         }
+        /* Begin code that seems patchworky, since db i serving up null sections?? */
+        let temp = new Object();
+        for(let [key, value] of Object.entries(sections))
+            if (value.length > 0)
+                temp[key] = value;
+        sections = temp;
+        /* end patchworky code */
         return Object.keys(sections).map(sec =>{
             let slots = sections[sec];
             let instructors = new Set();
