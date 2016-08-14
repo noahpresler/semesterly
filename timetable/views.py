@@ -1,3 +1,4 @@
+import collections
 import copy
 import functools
 import itertools
@@ -548,8 +549,8 @@ def all_courses(request):
   school = request.subdomain
   school_name = school_code_to_name[school]
   try:
-    course_map = {}
-    departments = Course.objects.filter(school=school).values_list('department', flat=True).distinct()
+    course_map = collections.OrderedDict()
+    departments = Course.objects.filter(school=school).order_by('department').values_list('department', flat=True).distinct()
     for department in departments:
       course_map[department] = Course.objects.filter(school=school, department=department).all()
     return render_to_response("all_courses.html",
