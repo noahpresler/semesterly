@@ -6,7 +6,12 @@ html, body{
 	margin: 0;
 	height: 100%;
 	background-color: #F3F3F3;
-	font-family: Lato,Helvetica,Arial,sans-serif;
+	font-family: "Roboto",Arial,sans-serif;
+}
+
+h1, h2, h5 {
+	font-family: "Palanquin",Arial,sans-serif;
+	font-weight: 500;
 }
 
 /* Header */
@@ -27,8 +32,6 @@ header.down {
 }
 header h1 {
 	float: left;
-	font-family: lato;
-	font-weight: 400;
 	font-size: 26px;
 	line-height: 30px;
 	margin: 0 10px 0;
@@ -77,6 +80,7 @@ header nav a:hover {
 #hero h2 {
 	color: white;
 	font-size: 50px;
+	line-height: 55px;
 	color: #aaa;
 	margin: 0 0 20px;
 	font-weight: 100;
@@ -237,6 +241,7 @@ header nav a:hover {
 .tutorial h2,
 .reason h2 {
 	font-size: 42px;
+	line-height: 50px;
 	font-weight: 300;
 	margin: 20px 0 0;
 	color: #666;
