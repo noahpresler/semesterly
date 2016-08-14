@@ -3,7 +3,10 @@ A dynamic timetable generator for students.
 Find the perfect schedule based on your preferences and
 the courses you choose.
 
-##Contribute
+## Contributing:
+For details on how to contribute to semesterly, have a look at our wiki.
+
+## Getting Started
 
 To get started, simply run
 ```sh
