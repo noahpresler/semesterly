@@ -14,7 +14,10 @@ export class CourseModal extends React.Component {
         this.addOrRemoveCourse = this.addOrRemoveCourse.bind(this);
         this.addOrRemoveOptionalCourse = this.addOrRemoveOptionalCourse.bind(this);
         this.hide = this.hide.bind(this);
-        this.state = { shareLinkShown: false }
+        this.state = {
+            shareLinkShown: false,
+            addBtnIsHover: false,
+        }
         this.showShareLink = this.showShareLink.bind(this);
         this.hideShareLink = this.hideShareLink.bind(this);
     }
@@ -63,22 +66,36 @@ export class CourseModal extends React.Component {
         let courseAndDept = data.code;
         courseAndDept = data.department && data.department != "" ?
         courseAndDept + ", " + data.department : courseAndDept;
-        let shareLink = this.state.shareLinkShown ? 
-        <ShareLink 
+        let shareLink = this.state.shareLinkShown ?
+        <ShareLink
             link={getCourseShareLink(data.code)}
-            onClickOut={this.hideShareLink} /> : 
+            onClickOut={this.hideShareLink} /> :
         null;
         let addOptional = this.props.inRoster ? null :
          <div id="modal-save" onClick={() => this.addOrRemoveOptionalCourse(data)}>
                     <i className="fa fa-bookmark"></i>
          </div>;
-
         let add = data.sections !== undefined && Object.keys(data.sections).length > 0 ? <div id="modal-add"
-                    className={classNames('search-course-add', {'in-roster': inRoster})}
-                    onClick={() => this.addOrRemoveCourse(this.props.id)}>
-                    <i className={classNames('fa', {'fa-plus' : !inRoster, 'fa-check' : inRoster})}></i>
+                    className={classNames('search-course-add', {
+                        'in-roster': inRoster,
+                    })}
+                    onClick={() => {
+                        this.setState({addBtnIsHover:false})
+                        this.addOrRemoveCourse(this.props.id)
+                    }}
+                    onMouseEnter={
+                        () => {this.setState({addBtnIsHover:true})}
+                    }
+                    onMouseLeave={
+                        () => {this.setState({addBtnIsHover:false})}
+                    }>
+                    <i className={classNames('fa', {
+                        'fa-plus': !inRoster,
+                        'fa-check': inRoster && !this.state.addBtnIsHover,
+                        'fa-trash-o': inRoster && this.state.addBtnIsHover,
+                    })}></i>
                 </div> : null;
-        let content = 
+        let content =
         (<div id="modal-content">
             <div id="modal-header">
                 <h1>{data.name}</h1>
