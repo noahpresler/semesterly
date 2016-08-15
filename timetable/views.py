@@ -1,3 +1,4 @@
+import collections
 import copy
 import functools
 import itertools
@@ -17,7 +18,7 @@ from pytz import timezone
 from analytics.models import *
 from analytics.views import *
 from timetable.models import *
-from timetable.school_mappers import school_to_granularity, VALID_SCHOOLS
+from timetable.school_mappers import school_to_granularity, VALID_SCHOOLS, school_code_to_name
 from timetable.utils import *
 from timetable.scoring import *
 from student.models import Student
@@ -109,7 +110,11 @@ def get_timetables(request):
   """Generate best timetables given the user's selected courses"""
   global SCHOOL
 
-  params = json.loads(request.body)
+  try:
+    params = json.loads(request.body)
+  except ValueError: # someone is trying to manually send requests
+    return HttpResponse(json.dumps({'timetables': [], 'new_c_to_s': {}}), 
+                        content_type='application/json')
   sid = params['sid']
 
   SCHOOL = request.subdomain
@@ -381,7 +386,7 @@ def get_detailed_course_json(school, course, sem, student=None):
   return json_data
 
 def get_basic_course_json(course, sem, extra_model_fields=[]):
-  basic_fields = ['code','name', 'id', 'description', 'department', 'num_credits', 'areas']
+  basic_fields = ['code','name', 'id', 'description', 'department', 'num_credits', 'areas', 'campus']
   course_json = model_to_dict(course, basic_fields + extra_model_fields)
   course_json['evals'] = course.get_eval_info()
   course_json['sections'] = {}
@@ -504,18 +509,54 @@ def jhu_timer(request):
 def course_page(request, code):
   school = request.subdomain
   try:
+    school_name = school_code_to_name[school]
     course_obj = Course.objects.filter(code__iexact=code)[0]
     course_dict = get_basic_course_json(course_obj, "F")
     # TODO: section types should never be hardcoded
     l = course_dict['sections'].get('L', {}).values()
     t = course_dict['sections'].get('T', {}).values()
     p = course_dict['sections'].get('P', {}).values()
+    avg = round(course_obj.get_avg_rating(), 2)
+    evals = course_dict['evals']
+    clean_evals = evals
+    for i, v in enumerate(evals):
+      for k, e in v.items():
+        if isinstance(evals[i][k], basestring):
+          clean_evals[i][k] = evals[i][k].replace(u'\xa0', u' ')
+        if k == "year":
+          clean_evals[i][k] = evals[i][k].replace(":", " ")
+    if school == "jhu":
+      course_url = "/course/" + course_dict['code'] + "/F"
+    else:
+      course_url = "/course/" + course_dict['code'] + "/F"
     return render_to_response("course_page.html",
       {'school': school,
+       'school_name': school_name,
        'course': course_dict,
        'lectures': l if l else None,
        'tutorials': t if t else None,
        'practicals': p if p else None,
+       'url': course_url,
+       'evals': clean_evals,
+       'avg': avg
+       },
+    context_instance=RequestContext(request))
+  except Exception as e:
+    return HttpResponse(str(e))
+
+@validate_subdomain
+def all_courses(request):
+  school = request.subdomain
+  school_name = school_code_to_name[school]
+  try:
+    course_map = collections.OrderedDict()
+    departments = Course.objects.filter(school=school).order_by('department').values_list('department', flat=True).distinct()
+    for department in departments:
+      course_map[department] = Course.objects.filter(school=school, department=department).all()
+    return render_to_response("all_courses.html",
+      {'course_map': course_map,
+       'school': school,
+       'school_name': school_name
        },
     context_instance=RequestContext(request))
   except Exception as e:
