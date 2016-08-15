@@ -40,7 +40,7 @@ export class CourseModalBody extends React.Component {
             let instructString = Array.from(instructors).join(', ');
             let enrolled = 0
             if (slots.length > 0) {
-                enrolled = slots[0] ? slots[0].enrolled || 0 : 0;
+                enrolled = slots[0] ? slots[0].enrolment || 0 : 0;
             }
             return <SearchResultSection
                     key={sec}
@@ -86,7 +86,7 @@ export class CourseModalBody extends React.Component {
             tutorialSections = <div><h3 className="modal-module-header">Tutorial Sections</h3>{tuts}</div>
         }
         if (pracs.length > 0) {
-            practicalSections = <div><h3 className="modal-module-header">Practical Sections</h3>{pracs}</div>
+            practicalSections = <div><h3 className="modal-module-header">Lab/Practical Sections</h3>{pracs}</div>
         }
         let { reactions, num_credits:numCredits } = this.props.data;
         // reactions.sort((r1, r2) => {return r1.count < r2.count});
@@ -144,9 +144,9 @@ export class CourseModalBody extends React.Component {
                 <p>{ this.props.data.areas || "None" }</p>
             </div>
         let friendCircles = this.props.data.classmates && this.props.data.classmates.classmates.length > 0 ? this.props.data.classmates.classmates.map( c =>
-                <div className="friend">
-                    <div className="ms-friend" key={c.img_url} style={{backgroundImage: 'url(' + c.img_url + ')'}}/>
-                    <p>{ c.first_name + " " + c.last_name }</p>
+                <div className="friend" key={c.img_url}>
+                    <div className="ms-friend" style={{backgroundImage: 'url(' + c.img_url + ')'}}/>
+                    <p title={ c.first_name + " " + c.last_name }>{ c.first_name + " " + c.last_name }</p>
                 </div>) : null;
         let friendDisplay = this.props.data.classmates && this.props.data.classmates.classmates.length > 0 ?
             <div className="modal-module friends">
@@ -223,7 +223,7 @@ export class CourseModalBody extends React.Component {
 const SearchResultSection = ({ section, secName, instr, enrolled, waitlist, size, hoverSection, unhoverSection, locked, inRoster, lockOrUnlock, isOnActiveTimetable}) => {
     let seats = size - enrolled;
     let seatStatus = waitlist > 0 ? (waitlist + " waitlist") : (seats + " open");
-    if (seats === -1) {
+    if (seats === -1 || size === -1) {
         seatStatus = "Unknown"
     }
     if (size === -1) {
@@ -231,6 +231,8 @@ const SearchResultSection = ({ section, secName, instr, enrolled, waitlist, size
     }
     let benchmark = "green";
     if (waitlist > 0) {
+        benchmark = "red";
+    } else if (seats === 0 && size != "Unknown") {
         benchmark = "red";
     } else if (seats < size/10) {
         benchmark = "yellow";
