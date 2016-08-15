@@ -219,7 +219,7 @@ h3.modal-module-header {
 	padding: 10px 5px;
 	margin: 0;
 	color: #777;
-	font-weight: 200;
+	font-weight: 300;
 	clear: both;
 	position: relative;
 	transition: color .2s;
@@ -254,14 +254,14 @@ h3.modal-module-header small {
 }
 #modal-body .credits h3 {
 	text-align: center;
-	font-weight: 200;
+	font-weight: 100;
 	margin: 0;
 	font-size: 60px;
 	line-height: 66px;
 }
 #modal-body .credits h4 {
 	text-align: center;
-	color: #D4D4D4;
+	color: #999;
 	margin: 0 auto 20px;
 	line-height: 30px;
 	font-size: 30px;
