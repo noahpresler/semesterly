@@ -28,6 +28,8 @@ export const optionalCourses = (state = { courses: [], numRequired: 0}, action) 
 				return Object.assign({}, state, {courses: newCourses, numRequired: newCourses.length});
 			}
 			return state;
+		case 'CLEAR_OPTIONAL_COURSES':
+			return { courses: [], numRequired: 0 }
 		default:
 			return state;
 	}

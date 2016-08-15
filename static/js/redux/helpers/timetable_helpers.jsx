@@ -9,5 +9,5 @@ export function getTimetableShareLink() {
 
 export function getCourseShareLink(code) {
 	let semester = store.getState().semester;
-	return window.location.hostname + "/course/" + code + "/" + semester;
+	return window.location.hostname + "/course/" + encodeURIComponent(code) + "/" + semester;
 }
