@@ -1,7 +1,7 @@
 import fetch from 'isomorphic-fetch';
 import { getCourseSearchEndpoint, getAdvancedSearchEndpoint } from '../constants.jsx';
 import { store } from '../init.jsx';
-import { getUserSavedTimetables } from './user_actions.jsx';
+import { getUserSavedTimetables, saveTimetable } from './user_actions.jsx';
 import { nullifyTimetable } from './timetable_actions.jsx';
 
 export function requestCourses() {
@@ -27,7 +27,6 @@ export function setSemester(semester) {
 		nullifyTimetable(dispatch);
 	}
 
-	
 	dispatch({
 		type: "SET_SEMESTER",
 		semester
@@ -43,14 +42,17 @@ export function setSemesterWrapper(semester) {
 	let dispatch = store.dispatch;
 	if (semester === state.semester) { return; }
 	if (state.timetables.items[state.timetables.active].courses.length > 0) {
-		if (!state.userInfo.data.isLoggedIn || !state.savingTimetable.upToDate) {
+		if (state.userInfo.data.isLoggedIn && !state.savingTimetable.upToDate) {
+			dispatch(saveTimetable(false, () => setSemester(semester)));
+		}
+		else if (state.userInfo.data.isLoggedIn) {
+			setSemester(semester);
+		}
+		else {
 			dispatch({
 				type: "ALERT_CHANGE_SEMESTER",
 				semester,
 			});
-		}
-		else {
-			setSemester(semester);
 		}
 
 	}

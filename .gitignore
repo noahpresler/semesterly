@@ -20,3 +20,5 @@ logfile.txt
 semesterly/sensitive.py
 semesterly-venv/
 github-request-body
+static/robots.txt
+static/sitemap.txt

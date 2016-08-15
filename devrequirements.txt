@@ -20,7 +20,7 @@ nltk==3.2.1
 oauth==1.0.1
 oauthlib==1.1.1
 prettytable==0.7.2
-progressbar2==3.6.2
+progressbar==2.3
 psycopg2==2.4.5
 pyserial==2.6
 python-amazon-product-api==0.2.8

@@ -61,6 +61,83 @@ class UofTParser:
             return test2
         return [line]
 
+    def start_engineering(self):
+        engineering_day_map = {"Mon": "M", "Tue": "T", "Wed": "W", "Thu": "T", "Fri": "F"}
+        try:
+            for semester in ["fall", "winter"]:
+                print "Parsing " + semester + " for engineering"
+                json = {}
+                print "Making request, will update when response received..."
+                request_url = "http://www.apsc.utoronto.ca/timetable/{}.html".format(semester)
+                soup = BeautifulSoup(self.s.get(url=request_url, cookies=self.cookies, timeout=15).text)
+                print "Response received. Initiating parse of response HTML."
+                tables = soup.find_all('table',attrs={"border": "border"})
+                data = []
+                for table in tables:
+                    rows = table.find_all('tr')
+                    for row in rows:
+                        cols = row.find_all('td')
+                        cols = [ele.text.strip() for ele in cols]
+                        split_row = [ele for ele in cols if ele] # Get rid of empty values
+                        if not split_row: continue
+                        assert len(split_row) == 9
+                        course, section, _, day, start, end, loc, profs, __ = split_row
+                        if day not in engineering_day_map: continue
+                        course = course.strip()
+                        section = section.strip()
+                        section = section[0] + section[3:]
+                        print "On", course + ", section " + section + "..."
+                        if course not in json:
+                            json[course] = {}
+                        if section not in json[course]:
+                            json[course][section] = {'profs': profs.strip().replace("&nbsp", "").replace(";", ""), 'offerings': []}
+
+                        json[course][section]['offerings'].append({
+                            'day': engineering_day_map[day],
+                            'time_start': start.strip(),
+                            'time_end': end.strip(),
+                            'location': loc.strip(),
+                        })
+
+                for course in json:
+                    code = course[:-1]
+                    C, created = Course.objects.update_or_create(school="uoft", code=code,defaults={
+                            'campus': code[-1],
+                            'num_credits': 1 if code[6].upper() == 'Y' else 0.5,
+                            'level': code[3] + "00",
+                            'department': code[:3]
+                        })
+                    C.save()
+                    if created:
+                        self.new += 1
+                    for section in json[course]:
+                        S, created = Section.objects.update_or_create(
+                            course=C,
+                            meeting_section=section, 
+                            section_type=section[0],
+                            semester=course[-1],
+                            defaults={
+                                'instructors': json[course][section]['profs'],
+                        })
+                        S.save()
+                        S.offering_set.all().delete()
+                        S.save()
+                        for offering_dict in json[course][section]['offerings']:
+                            o, created = Offering.objects.update_or_create(section=S, 
+                                day=offering_dict['day'],
+                                time_start=offering_dict['time_start'],
+                                time_end=offering_dict['time_end'],
+                                defaults={
+                                    'location': offering_dict['location']
+                                })
+                            o.save()
+            
+            print "Done Engineering, found %d new courses (collectively) so far. Now wrapping up..." % (self.new)
+        except requests.ConnectionError:
+            print "Couldn't connect. Found %d new courses (collectively) so far. Now wrapping up..." % (self.new)
+        self.wrap_up()
+
+
     def start(self):
         print "Starting St. George."
         for year_of_study in self.years_of_study:
@@ -92,7 +169,7 @@ class UofTParser:
                         self.new += 1
                     meetings = course_data['meetings']
                     semester = course_data['section']
-                    # C.courseoffering_set.all().delete()
+
                     for section_key in meetings:
                         section = section_key.split("-")[0][0] + section_key.split("-")[-1]
                         section_data = meetings[section_key]
@@ -452,7 +529,9 @@ class UofTParser:
               print "\t\t", section_info['day'] + ":", section_info['time_start'] + "-" + section_info['time_end'], "at", section_info['location']
 
             i += 1
-        self.wrap_up()
+        print "Done UTSC, found %d new courses (collectively) so far. Now starting Engineering." % (self.new)
+        self.start_engineering()
+
     def wrap_up(self):
         print "Done! Total new courses found:", self.new
 
@@ -465,4 +544,4 @@ class UofTParser:
 
 if __name__ == "__main__":
     parser = UofTParser()
-    parser.start()
+    parser.start_engineering()

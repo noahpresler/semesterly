@@ -210,7 +210,7 @@ ADMINS = [
 
 ]
 
-STAGING_NOTIFIED_ADMINS = ['rohan@semester.ly']
+STAGING_NOTIFIED_ADMINS = ['rohan@semester.ly', 'noah@semester.ly']
 
 EMAIL_USE_TLS = True
 EMAIL_HOST = 'smtp.gmail.com'
