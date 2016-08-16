@@ -41,7 +41,7 @@ def custom_404(request):
 # ******************************************************************************
 
 @validate_subdomain
-def view_timetable(request, code=None, sem=None, shared_timetable=None):
+def view_timetable(request, code=None, sem=None, shared_timetable=None, find_friends=False):
   school = request.subdomain
   student = get_student(request)
   course_json = None
@@ -56,15 +56,22 @@ def view_timetable(request, code=None, sem=None, shared_timetable=None):
       course_json = get_detailed_course_json(school, course, sem, student)
     except:
       raise Http404
-
   return render_to_response("timetable.html", {
     'school': school,
     'student': json.dumps(get_user_dict(school, student, sem)),
     'course': json.dumps(course_json),
     'semester': sem,
     'shared_timetable': json.dumps(shared_timetable),
+    'find_friends': find_friends
   },
   context_instance=RequestContext(request))
+
+@validate_subdomain
+def find_friends(request):
+  try:
+    return view_timetable(request, find_friends=True)
+  except Exception as e:
+    raise Http404
 
 @validate_subdomain
 def share_timetable(request, ref):
