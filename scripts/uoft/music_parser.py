@@ -3,14 +3,14 @@ from copy import deepcopy
 from numpy import nan
 import re
 
-from scripts.base_parser import BaseParser
+from scripts.base_writer import BaseWriter
 from scripts.common import *
 
 
-class UofTMusicParser(BaseParser):
+class UofTMusicWriter(BaseWriter):
   def __init__(self, sheet_path='scripts/uoft/timetable2016-17.xls'):
     self.data = get_tt_df(sheet_path) # get data first to pass num rows to base parser
-    BaseParser.__init__(self, None, len(self.data))
+    BaseWriter.__init__(self)
     self.row_iter = self.data.iterrows()
     self.next_course_row = next(self.row_iter)[1] # stores the header row of the next course
 
@@ -138,5 +138,5 @@ def find_first_number(s):
       return i
 
 if __name__ == '__main__':
-  parser = UofTMusicParser()
-  parser.parse_courses()
+  parser = UofTMusicWriter()
+  parser.write_courses('music_courses.json')
