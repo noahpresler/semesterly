@@ -17,6 +17,8 @@ handler404 = 'timetable.views.custom_404'
 
 urlpatterns = patterns('',
 	# url(r'^admin/', include(admin.site.urls)),
+	#finding frandsssss
+	url(r'^find_friends/$', 'timetable.views.find_friends'),
 	url('', include('social.apps.django_app.urls', namespace='social')),
 	url('', include('django.contrib.auth.urls', namespace='auth')),
 	url(r'^complete/facebook/.*$', 'timetable.views.view_timetable'),
@@ -40,6 +42,7 @@ urlpatterns = patterns('',
 	url(r'^user/save_timetable/$', 'student.views.save_timetable'),
 	url(r'^user/save_settings/$', 'student.views.save_settings'),
 	url(r'^user/get_classmates/$', 'student.views.get_classmates'),
+	url(r'^user/find_friends/$', 'student.views.find_friends'),
 	url(r'^user/get_saved_timetables/(?P<school>.+)/(?P<sem>[fFsS]{1})', 'student.views.get_student_tts_wrapper'),
 	url(r'^courses/(?P<school>.+?)/(?P<sem>[fFsS]{1}?)/code/(?P<course_id>.+)/*$', 'timetable.views.get_course_id'),
 	url(r'^jhu/countdown/*$', 'timetable.views.jhu_timer'),
