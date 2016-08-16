@@ -78,15 +78,14 @@ header nav a:hover {
 }
 #hero h2 {
 	color: white;
-	font-size: 50px;
+	font-size: 48px;
 	line-height: 55px;
 	color: #aaa;
 	margin: 0 0 20px;
-	font-weight: 100;
 	padding: 0 40px 0 0;
 }
-	@media(max-width: 1170px) {#hero h2 {font-size: 40px;}}
-	@media(max-width: 980px) {#hero h2 {font-size: 30px;}}
+	@media(max-width: 1170px) {#hero h2 {font-size: 40px; line-height: 45px;}}
+	@media(max-width: 980px) {#hero h2 {font-size: 30px; line-height: 38px;}}
 
 #hero h4 {
 	font-size: 16px;
@@ -456,5 +455,18 @@ footer h6 {
 }
 
 @media(max-width: 445px) {
-
+	header h1 {
+		display: none;
+	}
+	#hero h2, 
+	#hero h4,
+	#hero ul {
+		padding: 0 15px;
+	}
+	.tutorial-text {
+		padding: 0 20px 40px;
+	}
+	.tutorial {
+		padding: 60px 0;
+	}
 }
