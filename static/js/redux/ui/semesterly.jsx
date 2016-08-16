@@ -74,8 +74,8 @@ class Semesterly extends React.Component {
 				<div id="all-cols">
 					<div id="main-bar">
 						<CalendarContainer />
-						<footer class="footer navbar">
-							<ul class="nav nav-pills">
+						<footer className="footer navbar no-print">
+							<ul className="nav nav-pills no-print">
 								<li role="presentation"><a href="mailto:contact@semester.ly?Subject=Semesterly">Contact us</a></li>
 								<li role="presentation"><a target="_blank" href="http://goo.gl/forms/YSltU2YI54PC9sXw1">Feedback</a></li>
 								<li role="presentation"><a target="_blank" href="https://www.facebook.com/semesterly/">Facebook</a></li>

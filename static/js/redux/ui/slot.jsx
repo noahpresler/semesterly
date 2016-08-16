@@ -9,7 +9,7 @@ function convertToHalfHours(str) {
 
 function convertToStr(halfHours) {
     let num_hours = Math.floor(halfHours/2)
-    return halfHours % 2 ? num_hours + ':30' : num_hours + ':00' 
+    return halfHours % 2 ? num_hours + ':30' : num_hours + ':00'
 }
 
 const dragSlotTarget = {
@@ -113,18 +113,18 @@ class Slot extends React.Component {
           .css('background-color', colour)
     }
   render() {
-        let removeButton = this.state.hovered ? 
-            <i className="fa fa-times" 
+        let removeButton = this.state.hovered ?
+            <i className="fa fa-times"
                onClick={ (event) => this.stopPropagation(this.props.removeCourse, event) }></i> : null;
 
         let lockButton = null;
         if (this.props.locked) {
-            lockButton = <i title="Unlock this section" className="fa fa-lock" 
+            lockButton = <i title="Unlock this section" className="fa fa-lock"
                             onClick={ (event) => this.stopPropagation(this.props.lockOrUnlockSection, event) }></i>;
         }
         else { // not a locked section
             if (this.state.hovered) { // show unlock icon on hover
-                lockButton = <i title="Lock this section" className="fa fa-unlock" 
+                lockButton = <i title="Lock this section" className="fa fa-unlock"
                                 onClick={ (event) => this.stopPropagation(this.props.lockOrUnlockSection, event) }></i>;
             }
         }
@@ -138,12 +138,12 @@ class Slot extends React.Component {
     return this.props.connectCreateTarget(this.props.connectDragTarget(
       <div className="fc-event-container" >
                 <div className={"fc-time-grid-event fc-event slot slot-" + this.props.course}
-                     style={ this.getSlotStyles() } 
+                     style={ this.getSlotStyles() }
                      onClick={ this.props.fetchCourseInfo }
                      onMouseEnter={ this.onSlotHover }
                      onMouseLeave={ this.onSlotUnhover }
                      id={ this.props.id }>
-            <div className="slot-bar" 
+            <div className="slot-bar"
                          style={ { backgroundColor: COLOUR_DATA[this.props.colourId].border } }/>
                     { removeButton }
                     { lockButton }
@@ -182,7 +182,7 @@ class Slot extends React.Component {
             push_left += .5;
         }
     return {
-            top: top, bottom: -bottom, right: '0%', 
+            top: top, bottom: -bottom, right: '0%',
             backgroundColor: COLOUR_DATA[this.props.colourId].background,
             color: COLOUR_DATA[this.props.colourId].font,
             width: slot_width_percentage + "%",
