@@ -29,7 +29,7 @@ export class PeerModal extends React.Component {
         }
         let userSettings = Object.assign({}, this.props.userInfo, newUserSettings);
         this.props.changeUserInfo(userSettings);
-        this.props.saveSettings(() => {this.props.fetchFriends(); console.log("callback")});
+        this.props.saveSettings(() => {this.props.fetchFriends();});
     }
     render() {
         let modalStyle = {
@@ -53,7 +53,14 @@ export class PeerModal extends React.Component {
                 <p>Your Courses</p>
                 {sideSlots}
             </div>
-        let upsell =
+        let emptyState =
+            <div className="peer-card upsell">
+                <div className="peer-card-wrapper upsell cf">
+                    <h4>Check back later!</h4>
+                    <p className="description">Seems you are the first one here! Add some more classes to your timetable or check back later to find peers who have added the same classes as you!</p>
+                </div>
+            </div>
+         let upsell =
             <div className="peer-card upsell">
                 <div className="peer-card-wrapper upsell cf">
                     <h4>Study Buddies, Delivered</h4>
@@ -112,7 +119,7 @@ export class PeerModal extends React.Component {
                         </div>
                     </div>
                 </div>
-        let ghostCards = !this.props.userInfo.social_all ? <div>{ghostCard}{ghostCard}{ghostCard}{ghostCard}</div> : null;
+        let ghostCards = !this.props.userInfo.social_all || peerCards.length == 0 ? <div>{ghostCard}{ghostCard}{ghostCard}{ghostCard}</div> : null;
         return (
             <Modal ref="modal"
                 className='peer-modal'
@@ -137,6 +144,7 @@ export class PeerModal extends React.Component {
                                 </div>
                             </div>
                             {!this.props.userInfo.social_all ? upsell : null}
+                            {peerCards.length == 0 && this.props.userInfo.social_all ? emptyState : null}
                             {peerCards}
                             {ghostCards}
                         </div>
