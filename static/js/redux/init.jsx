@@ -35,6 +35,7 @@ function setup(dispatch) {
   });
   sharedTimetable = JSON.parse(sharedTimetable);
   sharedCourse = JSON.parse(sharedCourse);
+  findFriends = findFriends === "True";
   /* first setup the user's state */
   let user = JSON.parse(currentUser); // currentUser comes from timetable.html
   dispatch(getUserInfo(user));
@@ -59,6 +60,8 @@ function setup(dispatch) {
   }
   else if (sharedCourse) {
     dispatch(setCourseInfo(sharedCourse));
+  } else if (findFriends) {
+    dispatch({type: "TOGGLE_PEER_MODAL"});
   }
 
 }
