@@ -345,6 +345,9 @@
 
 @media (max-width: 410px) {
 	#main-modal-wrapper h4 {
-		font-size: 22px;
+		font-size: 18px;
+	}
+	.key-entry p {
+		font-size: 10px;
 	}
 }
