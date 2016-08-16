@@ -4,10 +4,8 @@ from django.shortcuts import render
 def validate_subdomain(view_func):
   def wrapper(request, *args, **kwargs):
     if request.subdomain not in VALID_SCHOOLS:
-      print "IFFFF"
       return render(request, 'index.html')
     else:
-      print "ELSEEE"
       return view_func(request, *args, **kwargs)
   return wrapper
 
