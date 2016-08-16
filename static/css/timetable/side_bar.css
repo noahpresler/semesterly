@@ -100,6 +100,14 @@
 }
 
 /* Side Bar Section Name Headers */
+#find-friends {
+    float: right;
+}
+#find-friends:hover {
+    color: rgb(52,73,94);
+    cursor: pointer;
+    transition: all 0.3s;
+}
 h4.sb-header {
     font-size: 14px;
     padding: 10px 5px;
