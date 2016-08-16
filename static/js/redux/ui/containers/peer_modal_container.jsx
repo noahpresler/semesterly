@@ -8,7 +8,8 @@ const mapStateToProps = (state) => {
 		liveTimetableCourses: activeTimetable.courses.filter(c => !c.fake), // don't want to consider courses that are shown on timetable only because of a 'HOVER_COURSE' action (i.e. fake courses)
 		courseToColourIndex: state.ui.courseToColourIndex,
 		peers: state.friends.peers,
-		userInfo: state.userInfo.data
+		userInfo: state.userInfo.data,
+		isVisible: state.peerModal.isVisible
 	}
 }
 
@@ -19,7 +20,9 @@ const mapDispatchToProps = (dispatch) => {
 		changeUserInfo: (info) => dispatch({
 			type: "CHANGE_USER_INFO",
 			data: info,
-		})
+		}),
+		togglePeerModal: () => dispatch({type:'TOGGLE_PEER_MODAL'}),
+		openSignupModal: () => dispatch({type: 'TOGGLE_SIGNUP_MODAL'})
 	}
 }
 
