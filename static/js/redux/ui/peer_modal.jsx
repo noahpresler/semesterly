@@ -19,6 +19,14 @@ export class PeerModal extends React.Component {
             this.props.togglePeerModal();
         }
     }
+    componentDidMount() {
+        if (this.props.isVisible) {
+            this.refs.modal.show();
+            if (this.props.userInfo.social_all) {
+                this.props.fetchFriends();
+            }
+        }
+    }
     componentWillReceiveProps(nextProps) {
         if (!this.props.isVisible && nextProps.isVisible) {
             this.refs.modal.show();

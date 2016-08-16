@@ -9,7 +9,7 @@ const mapStateToProps = (state) => {
 		courseToColourIndex: state.ui.courseToColourIndex,
 		peers: state.friends.peers,
 		userInfo: state.userInfo.data,
-		isVisible: state.peerModal.isVisible
+		isVisible: state.peerModal.isVisible,
 	}
 }
 
