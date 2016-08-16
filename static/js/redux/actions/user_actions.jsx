@@ -1,5 +1,5 @@
 import fetch from 'isomorphic-fetch';
-import { getUserInfoEndpoint, getSaveTimetableEndpoint, getSaveSettingsEndpoint, getClassmatesEndpoint, getLoadSavedTimetablesEndpoint } from '../constants.jsx';
+import { getUserInfoEndpoint, getSaveTimetableEndpoint, getSaveSettingsEndpoint, getClassmatesEndpoint, getLoadSavedTimetablesEndpoint, getFriendsEndpoint } from '../constants.jsx';
 import { store } from '../init.jsx';
 import { loadTimetable, nullifyTimetable } from './timetable_actions.jsx';
 import { browserSupportsLocalStorage } from '../util.jsx';
@@ -26,9 +26,22 @@ export function getClassmates(json) {
 	};
 }
 
+export function getFriends(json) {
+	return {
+		type: "FRIENDS_RECEIVED",
+		peers: json
+	};
+}
+
 export function requestClassmates() {
   return {
     type: "REQUEST_CLASSMATES",
+  }
+}
+
+export function requestFriends() {
+  return {
+    type: "REQUEST_FRIENDS",
   }
 }
 
@@ -143,7 +156,7 @@ function getSaveSettingsRequestBody() {
 	}
 }
 
-export function saveSettings() {
+export function saveSettings(callback) {
 	return (dispatch) => {
 		dispatch({
 			type: "REQUEST_SAVE_USER_INFO"
@@ -153,9 +166,15 @@ export function saveSettings() {
 			body: JSON.stringify(getSaveSettingsRequestBody()),
 			credentials: 'include',
 		})
-		.then(response => dispatch({
-			type: "RECEIVE_USER_INFO_SAVED"
-		}));
+		.then(response => {
+			dispatch({
+				type: "RECEIVE_USER_INFO_SAVED"
+			})
+			return response;
+		})
+		.then(response => {
+				if(callback){callback()}
+		});
 	}
 }	
 
@@ -196,6 +215,20 @@ export function fetchClassmates(courses) {
 	    .then(response => response.json())
 	    .then(json => {
 	    	dispatch(getClassmates(json))
+	    });
+	}
+}
+
+export function fetchFriends() {
+	return (dispatch) => {
+		dispatch(requestFriends());
+		fetch(getFriendsEndpoint(), {
+			credentials: 'include',
+			method: 'GET'
+		})
+	    .then(response => response.json())
+	    .then(json => {
+	    	dispatch(getFriends(json))
 	    });
 	}
 }

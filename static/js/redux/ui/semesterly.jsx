@@ -13,6 +13,7 @@ import ExplorationModalContainer from './containers/exploration_modal_container.
 import SignupModalContainer from './containers/signup_modal_container.jsx';
 import PreferenceModalContainer from './containers/preference_modal_container.jsx';
 import TutModalContainer from './containers/tut_modal_container.jsx';
+import PeerModalContainer from './containers/peer_modal_container.jsx';
 
 class Semesterly extends React.Component {
 
@@ -22,10 +23,10 @@ class Semesterly extends React.Component {
 			else if(parseInt(e.keyCode) === 37) {if (this.props.PgActive > 0) {this.props.setPgActive(this.props.PgActive - 1);}}
 		});
 		$(document.body).bind('keydown', (e) => {
-			if (event.ctrlKey || event.metaKey) {
-				switch (String.fromCharCode(event.which).toLowerCase()) {
+			if (e.ctrlKey || e.metaKey) {
+				switch (String.fromCharCode(e.which).toLowerCase()) {
 				case 's':
-					event.preventDefault();
+					e.preventDefault();
 					this.props.saveTimetable();
 					break;
 				}
@@ -68,6 +69,7 @@ class Semesterly extends React.Component {
 				<SignupModalContainer />
 				<PreferenceModalContainer />
 				<TutModalContainer />
+				<PeerModalContainer />
 				<AlertBox ref={a => this.msg = a} {...this.alertOptions} />
 				<div id="all-cols">
 					<div id="main-bar">

@@ -32,6 +32,7 @@ const mapDispatchToProps = (dispatch) => {
 		fetchCourseInfo: (courseId) => dispatch(fetchCourseInfo(courseId)),
         removeCourse: (courseId) => addOrRemoveCourse(courseId),
         removeOptionalCourse: (course) => dispatch(addOrRemoveOptionalCourse(course)),
+        launchPeerModal: () => dispatch({type:'TOGGLE_PEER_MODAL'}),
 		loadTimetable,
 	}
 }

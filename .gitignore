@@ -1,6 +1,7 @@
 semesterly/local_settings.py
 *.pyc
 env/
+venv/
 dev_env/
 prod_env/
 dev_requirements.txt
