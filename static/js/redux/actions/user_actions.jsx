@@ -173,7 +173,6 @@ export function saveSettings(callback) {
 			return response;
 		})
 		.then(response => {
-				console.log("HERE",callback);
 				if(callback){callback()}
 		});
 	}
