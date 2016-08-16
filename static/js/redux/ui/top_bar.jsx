@@ -40,7 +40,7 @@ class TopBar extends React.Component {
 	}
 	render() {
 		return (
-		<div id="top-bar">
+		<div id="top-bar" className="no-print">
 			<img id="semesterly-logo" src="/static/img/logo2.0-32x32.png"/>
 			<div id="semesterly-name">Semester.ly</div>
 			<SearchBarContainer />
