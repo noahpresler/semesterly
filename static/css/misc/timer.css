@@ -1,6 +1,6 @@
 body {
 	background-color:#fff;
-	font-family: lato;
+	font-family: "Roboto",Arial,sans-serif;
 }
 .semesterly-timer{
 	width:75%;
@@ -67,7 +67,7 @@ body {
 	font-size:60px;
 	color:#22303E;
 	margin-bottom:70px;
-    font-family: lato;
+	font-family: "Palanquin",Arial,sans-serif;
 	text-align:center;
 }
 	
