@@ -174,12 +174,16 @@ def find_friends(request):
 	student = Student.objects.get(user=request.user)
 	if not student.social_all:
 		return HttpResponse("Must have social_all enabled")
-	student_tt = student.personaltimetable_set.filter(school=school).last()
+	student_tt = student.personaltimetable_set.filter(school=school).order_by('last_updated').last()
 	c = student_tt.courses.all()
 	friends = []
+	
+	students = Student.objects.filter(~Q(personaltimetable=None),personaltimetable__courses__id__in=c).exclude(id=student.id).distinct()
+	peers = filter(lambda s: s.personaltimetable_set.order_by('last_updated').last().courses.all() & c, students)
+
 	peers = Student.objects.filter(personaltimetable__courses__id__in=c).exclude(id=student.id).distinct()
 	for peer in peers:
-		peer_tt = peer.personaltimetable_set.filter(school=school).last()
+		peer_tt = peer.personaltimetable_set.filter(school=school).order_by('last_updated').last()
 		shared_courses = map(
 				lambda x: {
 					'course': model_to_dict(x,exclude=['unstopped_description','description','credits']),
@@ -196,7 +200,6 @@ def find_friends(request):
 			'large_img': 'http://graph.facebook.com/' + peer.fbook_uid + '/picture?type=normal'
 		})
 	friends.sort(key=lambda l: len(l['shared_courses']), reverse=True)
-		#TODO SHIT ON SIGNED OUT PEOPLE
 	return HttpResponse(json.dumps(friends))
 
 def get_classmates_from_course_id(school, student, course_id):
