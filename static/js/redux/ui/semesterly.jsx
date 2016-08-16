@@ -23,10 +23,10 @@ class Semesterly extends React.Component {
 			else if(parseInt(e.keyCode) === 37) {if (this.props.PgActive > 0) {this.props.setPgActive(this.props.PgActive - 1);}}
 		});
 		$(document.body).bind('keydown', (e) => {
-			if (event.ctrlKey || event.metaKey) {
-				switch (String.fromCharCode(event.which).toLowerCase()) {
+			if (e.ctrlKey || e.metaKey) {
+				switch (String.fromCharCode(e.which).toLowerCase()) {
 				case 's':
-					event.preventDefault();
+					e.preventDefault();
 					this.props.saveTimetable();
 					break;
 				}

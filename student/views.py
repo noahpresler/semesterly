@@ -29,7 +29,7 @@ def get_avg_rating(course_ids):
 def get_user_dict(school, student, semester):
 	user_dict = {}
 	if student:
-		user_dict = model_to_dict(student, exclude=["user","id","fbook_uid", "friends"])
+		user_dict = model_to_dict(student, exclude=["user","id","friends"])
 		user_dict["timetables"] = get_student_tts(student, school, semester)
 		user_dict["userFirstName"] = student.user.first_name
 		user_dict["userLastName"] = student.user.last_name
@@ -145,6 +145,7 @@ def save_settings(request):
 	params = json.loads(request.body)['userInfo']
 	student.social_offerings = params['social_offerings']
 	student.social_courses = params['social_courses']
+	student.social_all = params['social_all']
 	student.major = params['major']
 	student.class_year = params['class_year']
 	student.save()
@@ -165,6 +166,38 @@ def get_classmates(request):
 		return HttpResponse(json.dumps(courses), content_type='application/json')
 	else:
 		return HttpResponse("Must have social_courses enabled")
+
+@csrf_exempt
+@login_required
+def find_friends(request):
+	school = request.subdomain
+	student = Student.objects.get(user=request.user)
+	if not student.social_all:
+		return HttpResponse("Must have social_all enabled")
+	student_tt = student.personaltimetable_set.filter(school=school).last()
+	c = student_tt.courses.all()
+	friends = []
+	peers = Student.objects.filter(personaltimetable__courses__id__in=c).exclude(id=student.id).distinct()
+	for peer in peers:
+		peer_tt = peer.personaltimetable_set.filter(school=school).last()
+		shared_courses = map(
+				lambda x: {
+					'course': model_to_dict(x,exclude=['unstopped_description','description','credits']),
+					'in_section': peer_tt.sections.filter(id=student_tt.sections.get(course__id=x.id).id).exists()
+				},
+				c & peer_tt.courses.all(),
+			)
+		friends.append({
+			'peer': model_to_dict(peer,exclude=['user','id','fbook_uid', 'friends']),
+			'is_friend': student.friends.filter(id=peer.id).exists(),
+			'shared_courses': shared_courses,
+			'profile_url': 'http://www.facebook.com/' + peer.fbook_uid,
+			'name': peer.user.first_name + ' ' + peer.user.last_name,
+			'large_img': 'http://graph.facebook.com/' + peer.fbook_uid + '/picture?type=normal'
+		})
+	friends.sort(key=lambda l: len(l['shared_courses']), reverse=True)
+		#TODO SHIT ON SIGNED OUT PEOPLE
+	return HttpResponse(json.dumps(friends))
 
 def get_classmates_from_course_id(school, student, course_id):
 	# All friends with social courses/sharing enabled

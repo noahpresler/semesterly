@@ -17,8 +17,9 @@ export class UserSettingsModal extends React.Component {
     }
     changeForm() {
         let newUserSettings = {
-            social_courses: this.refs.share_courses.checked,
-            social_offerings: this.refs.share_sections.checked
+            social_courses: this.refs.share_all.checked || this.refs.share_courses.checked,
+            social_offerings: this.refs.share_all.checked || this.refs.share_sections.checked,
+            social_all: this.refs.share_all.checked
         }
         let userSettings = Object.assign({}, this.props.userInfo, newUserSettings);
         this.props.changeUserInfo(userSettings);
@@ -28,7 +29,7 @@ export class UserSettingsModal extends React.Component {
         if (this.shouldShow(this.props))
             this.refs.modal.show();
         if(this.isIncomplete(this.props.userInfo.social_courses)) {
-            let newUserSettings = { social_courses: true, social_offerings: false };
+            let newUserSettings = { social_courses: true, social_offerings: false, social_all: false };
             let userSettings = Object.assign({}, this.props.userInfo, newUserSettings);
             this.props.changeUserInfo(userSettings);
         }
@@ -66,7 +67,7 @@ export class UserSettingsModal extends React.Component {
                 modalStyle={modalStyle}
                 >
                 <div id="modal-header">
-                    <div className="pro-pic" style={{backgroundImage: 'url(' + this.props.userInfo.img_url + ')'}}></div>
+                    <div className="pro-pic" style={{backgroundImage: 'url(http://graph.facebook.com/' + JSON.parse(currentUser).fbook_uid + '/picture?type=normal)'}}></div>
                     <h1>Welcome!</h1>
                 </div>
                 <div id="modal-content">
@@ -117,6 +118,17 @@ export class UserSettingsModal extends React.Component {
                         <div className="preference-wrapper">
                             <h3>Would you like to find sections with friends?</h3>
                             <p className="disclaimer">See which Facebook friends will be in your section! Only friends in your section will see your name.</p>
+                        </div>
+                    </div>
+                    <div className="preference cf">
+                        <label className="switch switch-slide">
+                            <input ref="share_all" className="switch-input" type="checkbox" checked={this.props.userInfo.social_all === true} onChange={this.changeForm}/>
+                            <span className="switch-label" data-on="Yes" data-off="No"></span>
+                            <span className="switch-handle"></span>
+                        </label>
+                        <div className="preference-wrapper">
+                            <h3>Find new friends in your classes!</h3>
+                            <p className="disclaimer">Find your peers for this semester. All students in your courses will be able to view your name and public Facebook profile.</p>
                         </div>
                     </div>
                     <div className="button-wrapper">
