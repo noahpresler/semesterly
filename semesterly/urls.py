@@ -17,6 +17,8 @@ handler404 = 'timetable.views.custom_404'
 
 urlpatterns = patterns('',
 	# url(r'^admin/', include(admin.site.urls)),
+	#finding frandsssss
+	url(r'^find_friends/$', 'timetable.views.find_friends'),
 	url('', include('social.apps.django_app.urls', namespace='social')),
 	url('', include('django.contrib.auth.urls', namespace='auth')),
 	url(r'^complete/facebook/.*$', 'timetable.views.view_timetable'),
