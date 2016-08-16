@@ -11,14 +11,20 @@ export class PeerModal extends React.Component {
         super(props);
         this.hide = this.hide.bind(this);
         this.optInAll = this.optInAll.bind(this);
+        this.optInSignUp = this.optInSignUp.bind(this);
     }
     hide() {
         this.refs.modal.hide();
+        if (this.props.isVisible) {
+            this.props.togglePeerModal();
+        }
     }
-    componentDidMount() {
-        this.refs.modal.show();
-        if (this.props.userInfo.social_all) {
-            this.props.fetchFriends();
+    componentWillReceiveProps(nextProps) {
+        if (!this.props.isVisible && nextProps.isVisible) {
+            this.refs.modal.show();
+            if (this.props.userInfo.social_all) {
+                this.props.fetchFriends();
+            }
         }
     }
     optInAll() {
@@ -30,6 +36,10 @@ export class PeerModal extends React.Component {
         let userSettings = Object.assign({}, this.props.userInfo, newUserSettings);
         this.props.changeUserInfo(userSettings);
         this.props.saveSettings(() => {this.props.fetchFriends();});
+    }
+    optInSignUp() {
+        this.hide();
+        this.props.openSignupModal();
     }
     render() {
         let modalStyle = {
@@ -47,9 +57,10 @@ export class PeerModal extends React.Component {
                         <h3>{professors.length == 0 ? "No Professor Listed" : professors}</h3>
                     </div>
                 </div>)});
+        let proPicStyle = !this.props.userInfo.isLoggedIn ? {backgroundImage: 'url("/static/img/blank.jpg")'} : {backgroundImage: 'url(http://graph.facebook.com/' + JSON.parse(currentUser).fbook_uid + '/picture?type=normal)'};
         let sideBar =
             <div id="pm-side-bar">
-                <div className="circle-pic" style={{backgroundImage: 'url(http://graph.facebook.com/' + JSON.parse(currentUser).fbook_uid + '/picture?type=normal)'}}></div>
+                <div className="circle-pic" style={proPicStyle}></div>
                 <p>Your Courses</p>
                 {sideSlots}
             </div>
@@ -60,15 +71,16 @@ export class PeerModal extends React.Component {
                     <p className="description">Seems you are the first one here! Add some more classes to your timetable or check back later to find peers who have added the same classes as you!</p>
                 </div>
             </div>
-         let upsell =
+        let optInClick = this.props.userInfo.isLoggedIn ? this.optInAll : this.optInSignUp;
+        let upsell =
             <div className="peer-card upsell">
                 <div className="peer-card-wrapper upsell cf">
                     <h4>Study Buddies, Delivered</h4>
-                    <p className="description">See who your classmates are this semester! Click yes below to find Semester.ly users in your courses, message them, or add them on Facebook! <i>By accepting this permission other Semester.ly students outside of your friends will be able to view your name and public Facebook profile.</i></p>
-                    <button className="lure-accept" onClick={this.optInAll}>Yes, I'm In</button>
+                    <p className="description">See who your classmates are this semester! Click below to find Semester.ly users in your courses, message them, or add them on Facebook! <i>By accepting this permission other Semester.ly students outside of your friends will be able to view your name and public Facebook profile.</i></p>
+                    <button className="lure-accept" onClick={optInClick}>Yes, I'm In</button>
                 </div>
             </div>
-        let height = this.props.peers[0] && this.props.peers[0].shared_courses ? this.props.peers[0].shared_courses.length * 30 + 85 : 0;
+        let height = this.props.peers[0] && this.props.peers[0].shared_courses ? this.props.peers[0].shared_courses.length * 30 + 95 : 0;
         let peerCards = this.props.peers.map(p => {
             let isFriend = p.is_friend ? <p className="friend-status"><i className="fa fa-check"/> Friends</p> : null;
             let sharedCourses = p.shared_courses.map(sc => {
@@ -145,7 +157,7 @@ export class PeerModal extends React.Component {
                             </div>
                             {!this.props.userInfo.social_all ? upsell : null}
                             {peerCards.length == 0 && this.props.userInfo.social_all ? emptyState : null}
-                            {peerCards}
+                            {this.props.userInfo.social_all ? peerCards : null}
                             {ghostCards}
                         </div>
                     </div>
