@@ -33,6 +33,9 @@ export const getSaveSettingsEndpoint = () => {
 export const getClassmatesEndpoint = () => {
 	return "/user/get_classmates/"
 }
+export const getFriendsEndpoint = () => {
+  return "/user/find_friends/"
+}
 export const getSchoolInfoEndpoint = () => {
 	return "/school_info/" + getSchool() + "/";
 }
