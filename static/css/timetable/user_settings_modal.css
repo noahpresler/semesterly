@@ -1,6 +1,5 @@
 .welcome-modal {
 	max-width: 500px;
-	height: 575px;
 }
 .welcome-modal > div {
 	outline:none;
@@ -18,15 +17,14 @@
 }
 
 .welcome-modal #modal-content {
-	padding: 12px;
+	padding: 12px 20px 20px;
 	text-align: center;
-	height: 400px;
 }
 
 .welcome-modal p {
 	color: #aaa;
-	margin-bottom: 5px;
-	font-size: 18px;
+	margin-bottom: 15px;
+	font-size: 16px;
 }
 
 .welcome-modal #modal-content form {
@@ -48,6 +46,7 @@
 .welcome-modal .disclaimer {
 	font-size: 11px;
 	margin-top: 0px;
+	margin-bottom: 5px;
 	text-align: left;
 }
 
