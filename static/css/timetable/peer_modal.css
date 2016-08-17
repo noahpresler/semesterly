@@ -24,18 +24,19 @@
 }
 
 #main-modal-wrapper {
-	position: absolute;
+    position: absolute;
     left: 200px;
-    right: 0px;
+    right: 0;
     height: 100%;
     padding: 20px 10px 20px 20px;
     background-color: #f7f7f7;
-    overflow: auto;
 }
 
 #split-modal-wrapper {
 	position: relative;
     height: 100%;
+    overflow: auto;
+    background-color: #f7f7f7;
 }
 
 #main-modal-wrapper h4 {
@@ -50,6 +51,7 @@
 .peer-modal #modal-content {
 	position: relative;
 	height: 100%;
+    background-color: #f7f7f7;
 }
 
 .circle-pic {
