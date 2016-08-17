@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom';
 import classNames from 'classnames';
 import fetch from 'isomorphic-fetch';
 import { getSchool } from '../init.jsx';
-import Modal from 'boron/DropModal';
+import Modal from 'boron/WaveModal';
 import { CourseModalBody } from './course_modal_body.jsx'
 import { getCourseShareLink } from '../helpers/timetable_helpers.jsx';
 import { ShareLink } from './master_slot.jsx';
