@@ -7,13 +7,12 @@ class CreditTicker extends React.Component {
         super(props);
         this.state = { 
             actualCredits: parseFloat(this.props.numCredits),
-            displayedCredits: 0
+            displayedCredits: parseFloat(this.props.numCredits)
         };
         this.incCredits = this.incCredits.bind(this);
         this.decCredits = this.decCredits.bind(this);
         this.interval = 0;
     }
-
 	componentWillReceiveProps(nextProps) {
         this.setState({actualCredits: parseFloat(nextProps.numCredits)});
         if (parseFloat(nextProps.numCredits.toFixed(2)) > parseFloat(this.state.displayedCredits.toFixed(2))) {
