@@ -65,7 +65,7 @@ export class SocialProfile extends React.Component {
 		let social = this.props.userInfo.isLoggedIn ? loggedIn : loggedOut;
     	return(
 			<div id="social"
-				className={classNames({'logged-in' : this.props.userInfo.isLoggedIn})}>
+				className={classNames({'logged-in' : this.props.userInfo.isLoggedIn}, "no-print")}>
 				{social}
 			</div>
 		);
