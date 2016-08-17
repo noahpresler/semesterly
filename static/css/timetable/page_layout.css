@@ -6,6 +6,11 @@ html {
 	height: 100%;
 }
 
+.print
+{
+	display: none;
+}
+
 #page {
 	height: 100%;
 }
@@ -319,19 +324,50 @@ footer li a:hover {
 
 @media print
 {
-		@page {size: landscape}
+		html, body
+		{
+		  height: 80% !important;
+		}
+		@page {
+			size: landscape;
+			margin: 1mm 2mm 5mm 1mm;
+			}
 		#calendar {
-			position:absolute;
+			position:fixed;
 			display:block;
-			top: 0;
-			left: 0;
-			max-width: 100% !important;
-			margin:0 auto !important;
+			top: 0.3in;
+			transform: scale(0.7);
+			min-width: 139.5% !important;
+			margin: 0 auto;
+			z-index: 100;
+			-webkit-transform-origin-x: 0;
 		}
     .no-print, .no-print *
     {
-        display: none !important;
+        display: none;
     }
+    .print
+    {
+    	display: inline-block;
+    }
+    #top-bar {
+    	border-bottom: none;
+    	margin-top: 20px;
+    }
+    #semesterly-name {
+    	display: inline-block;
+    	-webkit-print-color-adjust: exact;
+    }
+    #print-content{
+    	display: block;
+    	clear: both;
+    }
+    #print-name, #print-major {
+    	display: block;
+    	color: black;
+    	margin-left: 35px;
+    }
+
     body
     {
       margin: 0 auto;
@@ -341,7 +377,7 @@ footer li a:hover {
     }
     .fc-time-grid-event {
     	-webkit-print-color-adjust: exact;
-      border: 1px solid black;
-      box-shadow: inset 0 0 0 1000px white !important;
+      /*border: 1px solid black;*/
+      /*box-shadow: inset 0 0 0 1000px white !important;*/
     }
 }
