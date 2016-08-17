@@ -72,7 +72,7 @@ export class SearchBar extends React.Component {
             <div key={s} className="semester-option" onMouseDown={ () => this.setSemester(s) }> { this.props.getSemesterName[s] } </div>
         );
     	return (
-        	<div id="search-bar">
+        	<div id="search-bar" className="no-print">
                 <div id="search-bar-wrapper">
                     <ClickOutHandler onClickOut={this.onClickOut.bind(this)}>
                         <div id="search-bar-semester" onMouseDown={this.toggleDropdown.bind(this)}>

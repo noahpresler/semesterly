@@ -6,7 +6,7 @@ import ConflictAlertContainer from './alerts/conflict_alert_container.jsx';
 import TimetableExistsAlertContainer from './alerts/timetable_exists_alert_container.jsx';
 import ChangeSemesterAlertContainer from './alerts/change_semester_alert_container.jsx';
 import NewTimetableAlertContainer from './alerts/new_timetable_alert_container.jsx'
-import TopBar from './top_bar.jsx';
+import TopBarContainer from './containers/top_bar_container.jsx';
 import SideBarContainer from './containers/side_bar_container.jsx';
 import UserSettingsModalContainer from './containers/user_settings_modal_container.jsx';
 import ExplorationModalContainer from './containers/exploration_modal_container.jsx';
@@ -63,7 +63,7 @@ class Semesterly extends React.Component {
 	render() {
 		return (
 			<div id="page-wrapper">
-				<TopBar />
+				<TopBarContainer />
 				<UserSettingsModalContainer />
 				<ExplorationModalContainer />
 				<SignupModalContainer />
