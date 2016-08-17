@@ -1,6 +1,7 @@
 import React from 'react';
 import { DropTarget } from 'react-dnd'
 import { HALF_HOUR_HEIGHT, COLOUR_DATA, DRAGTYPES } from '../constants.jsx';
+import Radium, { StyleRoot } from 'radium';
 
 function convertToHalfHours(str) {
     let start = parseInt(str.split(':')[0])
@@ -136,6 +137,8 @@ class Slot extends React.Component {
             </div>) : null;
 
     return this.props.connectCreateTarget(this.props.connectDragTarget(
+       <div>
+        <StyleRoot>
       <div className="fc-event-container" >
                 <div className={"fc-time-grid-event fc-event slot slot-" + this.props.course}
                      style={ this.getSlotStyles() }
@@ -161,6 +164,8 @@ class Slot extends React.Component {
                     </div>
                 </div>
             </div>
+        </StyleRoot>
+        </div>
     ));
   }
   getSlotStyles() {
@@ -182,6 +187,9 @@ class Slot extends React.Component {
             push_left += .5;
         }
     return {
+            '@media print': {
+                boxShadow: `inset 0 0 0 1000px ${COLOUR_DATA[this.props.colourId].background}`,
+            },
             top: top, bottom: -bottom, right: '0%',
             backgroundColor: COLOUR_DATA[this.props.colourId].background,
             color: COLOUR_DATA[this.props.colourId].font,
@@ -191,6 +199,8 @@ class Slot extends React.Component {
         };
 	}
 }
+
+Slot = Radium(Slot);
 
 export default DropTarget(DRAGTYPES.CREATE, createSlotTarget, collectCreateDrop)(
     DropTarget(DRAGTYPES.DRAG, dragSlotTarget, collectDragDrop)(Slot)
