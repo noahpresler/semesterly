@@ -2,7 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import classNames from 'classnames';
 import fetch from 'isomorphic-fetch';
-import Modal from 'boron/DropModal';
+import Modal from 'boron/WaveModal';
 import { COLOUR_DATA } from '../constants.jsx';
 
 
