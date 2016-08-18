@@ -121,17 +121,6 @@ export class UserSettingsModal extends React.Component {
                                 <p className="disclaimer">See which Facebook friends will be in your section! Only friends in your section will see your name.</p>
                             </div>
                         </div>
-                        <div className="preference cf">
-                            <label className="switch switch-slide">
-                                <input ref="share_all" className="switch-input" type="checkbox" checked={this.props.userInfo.social_all === true} onChange={this.changeForm}/>
-                                <span className="switch-label" data-on="Yes" data-off="No"></span>
-                                <span className="switch-handle"></span>
-                            </label>
-                            <div className="preference-wrapper">
-                                <h3>Find new friends in your classes!</h3>
-                                <p className="disclaimer">Find your peers for this semester. All students in your courses will be able to view your name and public Facebook profile.</p>
-                            </div>
-                        </div>
                         <div className="button-wrapper">
                             <button className="signup-button" onClick={() => {
                                 this.changeForm();
@@ -140,6 +129,28 @@ export class UserSettingsModal extends React.Component {
                                         this.refs.modal.hide();
                             }}>Save</button>
                         </div>
+<<<<<<< HEAD
+                    </div>
+                    <div className="preference cf">
+                        <label className="switch switch-slide">
+                            <input ref="share_all" className="switch-input" type="checkbox" checked={this.props.userInfo.social_all === true} onChange={this.changeForm}/>
+                            <span className="switch-label" data-on="Yes" data-off="No"></span>
+                            <span className="switch-handle"></span>
+                        </label>
+                        <div className="preference-wrapper">
+                            <h3>Find new friends in your classes!</h3>
+                            <p className="disclaimer">Find your peers for this semester. All students in your courses will be able to view your name and public Facebook profile.</p>
+                        </div>
+                    </div>
+                    <div className="button-wrapper">
+                        <button className="signup-button" onClick={() => {
+                            this.changeForm();
+                            this.props.closeUserSettings();
+                            if (!this.shouldShow(Object.assign({}, this.props, { showOverrided: false })))
+                                    this.refs.modal.hide();
+                        }}>Save</button>
+=======
+>>>>>>> logo_rebrand
                     </div>
                 </div>
             </Modal>
