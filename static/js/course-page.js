@@ -7,25 +7,29 @@ document.addEventListener("DOMContentLoaded", function(event) {
 		var waitlist = s.getAttribute('data-waitlist');
 		var size = s.getAttribute('data-size');
 		var enrolled = s.getAttribute('data-enrolment');
-		var left = size - enrolled;
 		var h = s.getElementsByClassName('enrollment')[0];
-		if (size < 0) {
-			s.className += '';
-			var txt = 'No enrollment info';
-		} else if (waitlist > 0) {
-			s.className += ' red';
-			var txt = '<span>' + waitlist + ' waitlist</span> / ' + size + ' seats';
-		} else if (left == 0) {
-			s.className += ' red';
-			var txt = '<span>' + left + ' open</span> / ' + size + ' seats';
-		} else if (left < size / 10) {
-			s.className += ' yellow';
-			var txt = '<span>' + left + ' open</span> / ' + size + ' seats';
+		if (waitlist == "" || size == "" || enrolled == "") {
+			h.innerHTML = "No enrolment info";
 		} else {
-			s.className += ' green';
-			var txt = '<span>' + left + ' open</span> / ' + size + ' seats';
+			var left = size - enrolled;
+			if (size < 0) {
+				s.className += '';
+				var txt = 'No enrollment info';
+			} else if (waitlist > 0) {
+				s.className += ' red';
+				var txt = '<span>' + waitlist + ' waitlist</span> / ' + size + ' seats';
+			} else if (left == 0) {
+				s.className += ' red';
+				var txt = '<span>' + left + ' open</span> / ' + size + ' seats';
+			} else if (left < size / 10) {
+				s.className += ' yellow';
+				var txt = '<span>' + left + ' open</span> / ' + size + ' seats';
+			} else {
+				s.className += ' green';
+				var txt = '<span>' + left + ' open</span> / ' + size + ' seats';
+			}
+			h.innerHTML = txt;
 		}
-		h.innerHTML = txt;
 	}
 
 	// Course ratings
