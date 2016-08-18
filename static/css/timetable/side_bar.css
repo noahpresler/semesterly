@@ -17,6 +17,7 @@
     font-size: 18px;
     line-height: 25px;
     width: 100%;
+    font-family: "Palanquin",Arial,sans-serif;
 }
 #share-course-link-wrapper input {
     border: 1px solid #fff;
@@ -112,7 +113,7 @@ h4.sb-header {
     padding: 10px 5px;
     margin: 0;
     color: #777;
-    font-weight: 200;
+    font-weight: 300;
     clear: both;
     position: relative;
 }
@@ -160,16 +161,16 @@ h4.sb-header:after {
 #sb-credits h3 {
     color: #34495E;
     font-size: 30px;
-    font-weight: 200;
+    font-weight: 300;
     line-height: 36px;
     margin: 0;
 }
 #sb-credits h4 {
     font-size: 14px;
-    color: #D4D4D4;
+    color: #999;
     line-height: 14px;
     margin: 0;
-    font-weight: 200;
+    font-weight: 300;
 }
 
 /* Master Slots */

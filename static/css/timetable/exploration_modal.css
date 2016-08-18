@@ -99,18 +99,29 @@
 }
 #exploration-header input {
 	width: 90%;
-	padding: 5px 10px;
+	padding: 0 10px;
 	font-size: 16px;
-	line-height: 16px;
+	line-height: 30px;
+	height: 30px;
 	border: 1px solid #E8E8E8;
 	outline: 0;
 	margin-right:7px;
 }
 #exploration-header input::-webkit-input-placeholder {
-   font-size:14px;
+	font-size:14px;
+	line-height: 30px;
 }
 #exploration-header input::-moz-placeholder {
-   font-size:14px;
+	font-size:14px;
+	line-height: 30px;
+}
+#exploration-header input:-ms-input-placeholder { /* IE 10+ */
+	font-size:14px;
+	line-height: 30px;
+}
+#exploration-header input:-moz-placeholder { /* Firefox 18- */
+	font-size:14px;
+	line-height: 30px;
 }
 
 /* Close Exploration Button */
