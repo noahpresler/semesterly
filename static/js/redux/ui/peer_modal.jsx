@@ -2,7 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import classNames from 'classnames';
 import fetch from 'isomorphic-fetch';
-import Modal from 'boron/DropModal';
+import Modal from 'boron/WaveModal';
 import { COLOUR_DATA } from '../constants.jsx';
 
 
@@ -84,7 +84,7 @@ export class PeerModal extends React.Component {
             <div className="peer-card upsell">
                 <div className="peer-card-wrapper upsell cf">
                     <h4>Study Buddies, Delivered</h4>
-                    <p className="description">See who your classmates are this semester! Click below to find Semester.ly users in your courses, message them, or add them on Facebook! <i>By accepting this permission other Semester.ly students outside of your friends will be able to view your name and public Facebook profile.</i></p>
+                    <p className="description">See who your classmates are this semester! Click below to find Semester.ly users in your courses, message them, or add them on Facebook! <i>By accepting this permission, any Semester.ly students in your courses will be able to view your name and public Facebook profile.</i></p>
                     <button className="lure-accept" onClick={optInClick}>Yes, I'm In</button>
                 </div>
             </div>

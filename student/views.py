@@ -193,9 +193,9 @@ def find_friends(request):
 			'peer': model_to_dict(peer,exclude=['user','id','fbook_uid', 'friends']),
 			'is_friend': student.friends.filter(id=peer.id).exists(),
 			'shared_courses': shared_courses,
-			'profile_url': 'http://www.facebook.com/' + peer.fbook_uid,
+			'profile_url': 'https://www.facebook.com/' + peer.fbook_uid,
 			'name': peer.user.first_name + ' ' + peer.user.last_name,
-			'large_img': 'http://graph.facebook.com/' + peer.fbook_uid + '/picture?type=normal'
+			'large_img': 'https://graph.facebook.com/' + peer.fbook_uid + '/picture?type=normal'
 		})
 	friends.sort(key=lambda l: len(l['shared_courses']), reverse=True)
 	return HttpResponse(json.dumps(friends))
