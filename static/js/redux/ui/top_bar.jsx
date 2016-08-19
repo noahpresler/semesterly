@@ -41,12 +41,13 @@ class TopBar extends React.Component {
 	}
 	renderUserForPrint() {
 		const { userInfo } = this.props;
+		let semester = currentSemester == 'F' ? 'Fall 2016' : 'Spring 2017';
 		return (
 		<div className="print">
 			<img className="usr-pic print" src={'http://graph.facebook.com/' + JSON.parse(currentUser).fbook_uid + '/picture?type=normal'}/>
 			<div id="print-name-major" className="print">
 				<span id="print-name" className="print">{userInfo.userFirstName + ' ' + userInfo.userLastName}</span>
-				<span id="print-major" className="print">{userInfo.major} | Class of 2020 | Fall 2016</span>
+				<span id="print-major" className="print">{userInfo.major} {userInfo.class_year.length > 0 ? '| Class of ' + userInfo.classYear : null} | {semester}</span>
 			</div>
 		</div>
 		);
