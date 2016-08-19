@@ -18,30 +18,16 @@
 			size: landscape;
 			margin: 1mm 2mm 5mm 1mm;
 			}
-		#calendar {
-			display:flex;
-			transform: scale(0.7);
-			min-width: 143% !important;
-			margin: 0 auto;
-			z-index: 100;
-			-webkit-transform-origin-x: 0;
-		}
-        #all-cols {
-            display: flex;
-            top: 1in;
-            align-items: bottom;
-            align-content: center;
-            justify-content: center;
-        }
-        #main-bar {
-            height: 70%;
-            width: 100%;
-            display: flex;
-            flex-direction: column;
-            align-items: bottom;
-            align-content: center;
-            justify-content: center;
-        }
+                #calendar {
+                    position:fixed;
+                    display:block;
+                    top: 0.3in;
+                    transform: scale(0.7);
+                    min-width: 139.5% !important;
+                    margin: 0 auto;
+                    z-index: 100;
+                    -webkit-transform-origin-x: 0;
+                }
     .no-print, .no-print *
     {
         display: none;
