@@ -80,11 +80,18 @@
     }
     #semesterly-logo-print {
         height: 32px;
+        display: inline-block;
+        margin-top: 9px;
+        margin-left: 35px;
 
     }
     #semesterly-name-print {
         margin-right: 30px;
         color: #5C5C5C !important;
+        font-size: 32px !important;
+        line-height: 50px;
+        height: 50px;
+        margin-left: 10px;
     }
     .usr-pic.print {
         height: 100px;
