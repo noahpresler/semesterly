@@ -178,10 +178,8 @@ def find_friends(request):
 	c = student_tt.courses.all()
 	friends = []
 	
-	students = Student.objects.filter(~Q(personaltimetable=None),personaltimetable__courses__id__in=c).exclude(id=student.id).distinct()
-	peers = filter(lambda s: s.personaltimetable_set.order_by('last_updated').last().courses.all() & c, students)
-
-	peers = Student.objects.filter(personaltimetable__courses__id__in=c).exclude(id=student.id).distinct()
+	students = Student.objects.filter(social_all=True,personaltimetable__courses__id__in=c).exclude(id=student.id).distinct()
+	peers = filter(lambda s: s.personaltimetable_set.filter(school=school).order_by('last_updated').last().courses.all() & c, students)
 	for peer in peers:
 		peer_tt = peer.personaltimetable_set.filter(school=school).order_by('last_updated').last()
 		shared_courses = map(
@@ -195,9 +193,9 @@ def find_friends(request):
 			'peer': model_to_dict(peer,exclude=['user','id','fbook_uid', 'friends']),
 			'is_friend': student.friends.filter(id=peer.id).exists(),
 			'shared_courses': shared_courses,
-			'profile_url': 'http://www.facebook.com/' + peer.fbook_uid,
+			'profile_url': 'https://www.facebook.com/' + peer.fbook_uid,
 			'name': peer.user.first_name + ' ' + peer.user.last_name,
-			'large_img': 'http://graph.facebook.com/' + peer.fbook_uid + '/picture?type=normal'
+			'large_img': 'https://graph.facebook.com/' + peer.fbook_uid + '/picture?type=normal'
 		})
 	friends.sort(key=lambda l: len(l['shared_courses']), reverse=True)
 	return HttpResponse(json.dumps(friends))
