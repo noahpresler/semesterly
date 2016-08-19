@@ -1,7 +1,7 @@
-#semesterly-logo.print {
+#semesterly-logo-print.print {
         display: none;
     }
-#semesterly-name.print {
+#semesterly-name-print.print {
     display: none;
 }
 .pro-pic.print {
@@ -19,15 +19,29 @@
 			margin: 1mm 2mm 5mm 1mm;
 			}
 		#calendar {
-			position:fixed;
-			display:block;
-			top: 0.3in;
+			display:flex;
 			transform: scale(0.7);
-			min-width: 139.5% !important;
+			min-width: 143% !important;
 			margin: 0 auto;
 			z-index: 100;
 			-webkit-transform-origin-x: 0;
 		}
+        #all-cols {
+            display: flex;
+            top: 1in;
+            align-items: bottom;
+            align-content: center;
+            justify-content: center;
+        }
+        #main-bar {
+            height: 70%;
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: bottom;
+            align-content: center;
+            justify-content: center;
+        }
     .no-print, .no-print *
     {
         display: none;
@@ -40,7 +54,7 @@
     	border-bottom: none;
     	margin-top: 20px;
     }
-    #semesterly-name {
+    #semesterly-name-print {
     	display: inline-block;
     	-webkit-print-color-adjust: exact;
     }
@@ -60,11 +74,15 @@
     #semesterly-name {
         display: none;
     }
-    #semesterly-name.print, #semesterly-logo.print {
+    #semesterly-name-print.print, #semesterly-logo-print.print {
         display: block;
         float: right;
     }
-    #semesterly-name {
+    #semesterly-logo-print {
+        height: 32px;
+
+    }
+    #semesterly-name-print {
         margin-right: 30px;
         color: #5C5C5C !important;
     }
