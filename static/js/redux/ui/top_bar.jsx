@@ -55,13 +55,13 @@ class TopBar extends React.Component {
 	render() {
 		return (
 		<div id="top-bar">
-			<img id="semesterly-logo" className="no-print" src="/static/img/logo2.0-32x32.png"/>
-			<div id="semesterly-name" className="no-print">Semester.ly</div>
+			<img id="semesterly-name" className="no-print" src="/static/img/logo2.0-32x32.png"/>
+			<div id="semesterly-logo" className="no-print">Semester.ly</div>
 			<div id="print-content" className="print">
 				{this.props.userInfo.isLoggedIn && this.props.userInfo.userFirstName ? this.renderUserForPrint() : null}
 				<div id="name-logo" className="print">
-					<div id="semesterly-name" className="print">Semester.ly</div>
-					<img id="semesterly-logo" className="print" src="/static/img/logo2.0-32x32.png"/>
+					<div id="semesterly-name-print" className="print">Semester.ly</div>
+					<img id="semesterly-logo-print" className="print" src="/static/img/logo2.0-32x32.png"/>
 				</div>
 			</div>
 			<SearchBarContainer />
