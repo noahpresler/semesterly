@@ -6,7 +6,7 @@ import ConflictAlertContainer from './alerts/conflict_alert_container.jsx';
 import TimetableExistsAlertContainer from './alerts/timetable_exists_alert_container.jsx';
 import ChangeSemesterAlertContainer from './alerts/change_semester_alert_container.jsx';
 import NewTimetableAlertContainer from './alerts/new_timetable_alert_container.jsx'
-import TopBar from './top_bar.jsx';
+import TopBarContainer from './containers/top_bar_container.jsx';
 import SideBarContainer from './containers/side_bar_container.jsx';
 import UserSettingsModalContainer from './containers/user_settings_modal_container.jsx';
 import ExplorationModalContainer from './containers/exploration_modal_container.jsx';
@@ -63,7 +63,7 @@ class Semesterly extends React.Component {
 	render() {
 		return (
 			<div id="page-wrapper">
-				<TopBar />
+				<TopBarContainer />
 				<UserSettingsModalContainer />
 				<ExplorationModalContainer />
 				<SignupModalContainer />
@@ -74,8 +74,8 @@ class Semesterly extends React.Component {
 				<div id="all-cols">
 					<div id="main-bar">
 						<CalendarContainer />
-						<footer class="footer navbar">
-							<ul class="nav nav-pills">
+						<footer className="footer navbar no-print">
+							<ul className="nav nav-pills no-print">
 								<li role="presentation"><a href="mailto:contact@semester.ly?Subject=Semesterly">Contact us</a></li>
 								<li role="presentation"><a target="_blank" href="http://goo.gl/forms/YSltU2YI54PC9sXw1">Feedback</a></li>
 								<li role="presentation"><a target="_blank" href="https://www.facebook.com/semesterly/">Facebook</a></li>
