@@ -13,6 +13,10 @@ body {
     user-select: none;           /* non-prefixed version, currently */
 }
 
+#calendar th {
+    font-family: "Palanquin",Arial,sans-serif;
+}
+
 button.save-timetable {
     border: none;
     outline: none;
