@@ -42,18 +42,27 @@ class TopBar extends React.Component {
 	renderUserForPrint() {
 		const { userInfo } = this.props;
 		return (
-		<div id="print-content" className="print">
-			<span id="print-name" className="print">{userInfo.userFirstName + ' ' + userInfo.userLastName}</span>
-			<span id="print-major" className="print">{userInfo.major}</span>
+		<div className="print">
+			<img className="usr-pic print" src={'http://graph.facebook.com/' + JSON.parse(currentUser).fbook_uid + '/picture?type=normal'}/>
+			<div id="print-name-major" className="print">
+				<span id="print-name" className="print">{userInfo.userFirstName + ' ' + userInfo.userLastName}</span>
+				<span id="print-major" className="print">{userInfo.major} | Class of 2020 | Fall 2016</span>
+			</div>
 		</div>
 		);
 	}
 	render() {
 		return (
 		<div id="top-bar">
-			<img id="semesterly-logo" src="/static/img/logo2.0-32x32.png"/>
-			<div id="semesterly-name">Semester.ly</div>
-			{this.props.userInfo.isLoggedIn && this.props.userInfo.userFirstName ? this.renderUserForPrint() : null}
+			<img id="semesterly-logo" className="no-print" src="/static/img/logo2.0-32x32.png"/>
+			<div id="semesterly-name" className="no-print">Semester.ly</div>
+			<div id="print-content" className="print">
+				{this.props.userInfo.isLoggedIn && this.props.userInfo.userFirstName ? this.renderUserForPrint() : null}
+				<div id="name-logo" className="print">
+					<div id="semesterly-name" className="print">Semester.ly</div>
+					<img id="semesterly-logo" className="print" src="/static/img/logo2.0-32x32.png"/>
+				</div>
+			</div>
 			<SearchBarContainer />
 			<CourseModalContainer />
 			<SocialProfileContainer />
