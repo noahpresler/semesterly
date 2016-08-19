@@ -86,7 +86,7 @@ class SideBar extends React.Component {
                 </div>);
         }
         return (
-            <div id="side-bar">
+            <div id="side-bar" className="no-print">
                 <div id="sb-name">
                     <TimetableNameInputContainer />
                     <ClickOutHandler onClickOut={this.hideDropdown}>
@@ -106,7 +106,7 @@ class SideBar extends React.Component {
                     <h3>Average Course Rating</h3>
                     <div className="sub-rating-wrapper">
                         <div className="star-ratings-sprite">
-                            <span style={{width: 100*this.props.avgRating/5 + "%"}} 
+                            <span style={{width: 100*this.props.avgRating/5 + "%"}}
                                     className="rating">
                             </span>
                         </div>
