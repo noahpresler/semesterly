@@ -13,16 +13,16 @@
 		<meta property="og:type" content="website" />
 		<meta property="og:site_name" content="Semesterly" />
 		<meta property="og:url" content="http://semester.ly" />
-		<meta property="og:image" content="http://i.imgur.com/MoxzrNG.png" />
+		<meta property="og:image" content="http://i.imgur.com/Eem4KTj.png" />
 		<meta property="og:description" content="{{ course.description }}" />
 		<meta property="fb:admins" content="535129063" />
 
 		<title>{{ course.code }} {{ course.name }} | Semester.ly</title>
-		<link rel="shortcut icon" type="image/x-icon" href="{% static 'img/favicon.ico' %}" />
+		<link rel="shortcut icon" type="image/x-icon" href="{% static 'img/logo2.0-310x310.png' %}" />
 
 		<link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet" integrity="sha256-7s5uDGW3AHqw6xtJmNNtr+OBRJUlgkNJEo78P4b0yRw= sha512-nNo+yCHEyn0smMxSswnf/OnX6/KwJuZTlNZBjauKhTK0c+zT+q5JOCx0UFhXQ6rJR9jg6Es8gPuD2uZcYDLqSw==" crossorigin="anonymous">
 		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css">
-		<link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Lato">
+		<link href="https://fonts.googleapis.com/css?family=Palanquin:500|Roboto:100,300,400" rel="stylesheet" type='text/css'>
 		
 		<!-- <img class="timer-logo" height=75 src="{% static 'img/logo2.0.png' %}"/> -->
 		<link rel="stylesheet" href="{% static 'css/course-page.css' %}">
@@ -189,21 +189,35 @@
 								<div class="section-group cf">
 									<h3>Lecture Sections</h3>
 									{% for l in lectures %}
-										<div class="section"
-											data-waitlist="{{ l.0.waitlist }}"
-											data-enrolment="{{ l.0.enrolment }}"
-											data-size="{{ l.0.size }}"
-											>
-											<h4>{{ l.0.meeting_section }}</h4>
-											<h5>{{ l.0.location }}</h5>
-											{% if l.0.instructors %}
-												<h5>{{ l.0.instructors }}</h5>
-											{% else %}
-												<h5>No instructor info</h5>
-											{% endif %}
-											<h5>{{ l.0.time_start }} - {{ l.0.time_end }}</h5>
-											<h5 class="enrollment"></h5>
-										</div>
+										{% if l %}
+											<div class="section"
+												data-waitlist="{{ l.0.waitlist }}"
+												data-enrolment="{{ l.0.enrolment }}"
+												data-size="{{ l.0.size }}"a
+												>
+												{% if l.0.meeting_section %}
+													<h4>{{ l.0.meeting_section }}</h4>
+												{% else %}
+													<h4>No section number</h4>
+												{% endif %}
+												{% if l.0.location %}
+													<h5>{{ l.0.location }}</h5>
+												{% else %}
+													<h5>No location info</h5>
+												{% endif %}
+												{% if l.0.instructors %}
+													<h5>{{ l.0.instructors }}</h5>
+												{% else %}
+													<h5>No instructor info</h5>
+												{% endif %}
+												{% if l.0.time_start %}
+													<h5>{{ l.0.time_start }} - {{ l.0.time_end }}</h5>
+												{% else %}
+													<h5>No class times info</h5>
+												{% endif %}
+												<h5 class="enrollment"></h5>
+											</div>
+										{% endif %}
 									{% endfor %}
 								</div>
 							{% endif %}
@@ -218,7 +232,16 @@
 											>
 											<h4>{{ t.0.meeting_section }}</h4>
 											<h5>{{ t.0.location }}</h5>
-											<h5>{{ t.0.time_start }} - {{ t.0.time_end }}</h5>
+											{% if t.0.instructors %}
+												<h5>{{ t.0.instructors }}</h5>
+											{% else %}
+												<h5>No instructor info</h5>
+											{% endif %}
+											{% if t.0.time_start %}
+												<h5>{{ t.0.time_start }} - {{ t.0.time_end }}</h5>
+											{% else %}
+												<h5>No class times info</h5>
+											{% endif %}
 											<h5 class="enrollment"></h5>
 										</div>
 									{% endfor %}
@@ -235,7 +258,16 @@
 											>
 											<h4>{{ p.0.meeting_section }}</h4>
 											<h5>{{ p.0.location }}</h5>
-											<h5>{{ p.0.time_start }} - {{ p.0.time_end }}</h5>
+											{% if p.0.instructors %}
+												<h5>{{ p.0.instructors }}</h5>
+											{% else %}
+												<h5>No instructor info</h5>
+											{% endif %}
+											{% if p.0.time_start %}
+												<h5>{{ p.0.time_start }} - {{ p.0.time_end }}</h5>
+											{% else %}
+												<h5>No class times info</h5>
+											{% endif %}
 											<h5 class="enrollment"></h5>
 										</div>
 									{% endfor %}
