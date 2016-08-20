@@ -23,21 +23,21 @@ def view_analytics_dashboard(request):
         timetables_per_hour = {}
         shared_timetables_per_hour = {}
         for school in VALID_SCHOOLS:
-            total_timetables_by_school[school] = number_timetables(school=school)
+            total_timetables_by_school[school] = number_timetables({"school":school})
             timetables_per_hour[school] = number_timetables_per_hour(school=school)
             shared_timetables_per_hour[school] = number_timetables_per_hour(Timetable=SharedTimetable, school=school)
 
         return render_to_response('analytics_dashboard.html', {
                 "timetables_per_hour":json.dumps(timetables_per_hour),
-                "signups_per_hour":number_timetables_per_hour(Timetable=Student,start_delta_days=7, interval_delta_hours=24),
+                "signups_per_hour":number_timetables_per_hour(Timetable=Student, start_delta_days=7, interval_delta_hours=24),
                 "shared_timetables_per_hour":json.dumps(shared_timetables_per_hour),
                 "total_timetables_by_school":json.dumps(total_timetables_by_school),
-                "total_timetables":number_timetables(),
-                "total_shared_timetables":number_timetables(Timetable=SharedTimetable),
-                "total_personal_timetables":number_timetables(Timetable=PersonalTimetable),
+                "total_timetables":number_timetables({}),
+                "total_shared_timetables":number_timetables({"Timetable":SharedTimetable}),
+                "total_personal_timetables":number_timetables({"Timetable":SharedTimetable}),
                 "total_signups":Student.objects.count(),
-                "total_timetables_fall":number_timetables(semester="F"),
-                "total_timetables_spring":number_timetables(semester="S"),
+                "total_timetables_fall":number_timetables({"semester":"F"}),
+                "total_timetables_spring":number_timetables({"semester":"S"}),
                 "number_of_reactions":json.dumps(number_of_reactions()),
                 "jhu_most_popular_courses":[], # needs to be refactored; was causing timeout on server because too slow
                 "uoft_most_popular_courses":[], # needs to be refactored; was causing timeout on server because too slow
@@ -72,24 +72,37 @@ def save_analytics_course_search(query, courses, semester, school, student=None,
     course_search.courses.add(*courses)
     course_search.save()
 
-def number_timetables(Timetable = AnalyticsTimetable, school = None, semester = None, student = None, time_start = None, time_end = None):
+def number_timetables(parameters):
     """Gets the number of time tables by school, semester, student, and/or time. Can be used for analytics or shared time tables."""
+    if "Timetable" in parameters:
+        Timetable = parameters["Timetable"]
+        parameters.pop("Timetable")
+    else:
+        Timetable = AnalyticsTimetable
+
     timetables = Timetable.objects.all()
-    if time_start and time_end:
+    if "time_start" in parameters and "time_end" in parameters:
         timetables = (
             timetables.filter(
-                time_created__range=(time_start, time_end)
+                time_created__range=(parameters["time_start"], parameters["time_end"])
             )
         )
+        parameters.pop("time_start")
+        parameters.pop("time_end")
 
-    if school:
-        timetables = timetables.filter(school = school)
+    for parameter in parameters:
+        if parameters[parameter] != None:
+            query_filter = parameter + "__contains"
+            timetables = timetables.filter(**{ query_filter: parameters[parameter] })
 
-    if semester:
-        timetables = timetables.filter(semester = semester)
+    # if parameters["school"]:
+    #     timetables = timetables.filter(school = parameters["school"])
 
-    if student:
-        timetables = timetables.filter(student = student)
+    # if parameters["semester"]:
+    #     timetables = timetables.filter(semester = parameters["semester"])
+
+    # if parameters["student"]:
+    #     timetables = timetables.filter(student = parameters["student"])
 
     return timetables.count()
 
@@ -103,7 +116,7 @@ def number_timetables_per_hour(Timetable = AnalyticsTimetable, school = None, st
     time_delta = timedelta(hours = interval_delta_hours)
     num_timetables = []
     while time_start < time_end:
-        num_timetables.append(number_timetables(Timetable = Timetable, school = school, time_start = time_start, time_end = time_start + time_delta))
+        num_timetables.append(number_timetables({"Timetable": Timetable, "school": school, "time_start": time_start, "time_end": time_start + time_delta}))
         time_start += time_delta
     return num_timetables
 
