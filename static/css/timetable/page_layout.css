@@ -16,6 +16,11 @@ h3, h4, h5, h6, p, a, span, input, textarea {
 	height: 100%;
 }
 
+.print
+{
+	display: none;
+}
+
 #page {
 	height: 100%;
 }
@@ -85,7 +90,7 @@ h3, h4, h5, h6, p, a, span, input, textarea {
     -webkit-user-select: none;
     -khtml-user-select: none;
     -moz-user-select: none;
-    -ms-user-select: none; 
+    -ms-user-select: none;
     user-select: none;
 }
 #show-exploration i {
@@ -185,7 +190,7 @@ h3, h4, h5, h6, p, a, span, input, textarea {
 	font-weight: 500;
 	display: inline-block;
 	float: left;
-	font-size: 32px;
+	font-size: 32px !important;
 	line-height: 50px;
 	height: 50px;
 	margin-left: 10px;
@@ -193,7 +198,7 @@ h3, h4, h5, h6, p, a, span, input, textarea {
     -webkit-user-select: none;
     -khtml-user-select: none;
     -moz-user-select: none;
-    -ms-user-select: none; 
+    -ms-user-select: none;
     user-select: none;
 }
 
@@ -207,11 +212,11 @@ h3, h4, h5, h6, p, a, span, input, textarea {
     -webkit-user-select: none;
     -khtml-user-select: none;
     -moz-user-select: none;
-    -ms-user-select: none; 
+    -ms-user-select: none;
     user-select: none;
 }
 
-@media (max-width: 1000px) { 
+@media (max-width: 1000px) {
 	.fc-ltr .fc-time-grid .fc-event-container {
 		margin-left:0.5%;
 	}
