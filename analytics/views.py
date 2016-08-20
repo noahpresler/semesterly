@@ -34,10 +34,9 @@ def view_analytics_dashboard(request):
 
         permissions = ["social_courses", "social_offerings", "social_all"]
         num_users_by_permission = {}
-        percent_users_by_permission = {}
 
         for permission in permissions:
-            # TODO: hacky way of passing in permission as an identifier for parameter.
+            # TODO: hacky way of passing in permission as an identifier for parameter. Also have to use tuple for template to easily access %.
             args = {"Timetable":Student, permission:True}
             num_users = number_timetables(**args)
             num_users_by_permission[permission] = (num_users, num_users / total_signups * 100)
@@ -52,7 +51,6 @@ def view_analytics_dashboard(request):
                 "total_personal_timetables":number_timetables(Timetable=PersonalTimetable),
                 "total_signups":total_signups,
                 "num_users_by_permission":num_users_by_permission,
-                "percent_users_by_permission":percent_users_by_permission,
                 "total_timetables_fall":number_timetables(semester="F"),
                 "total_timetables_spring":number_timetables(semester="S"),
                 "number_of_reactions":json.dumps(number_of_reactions()),
