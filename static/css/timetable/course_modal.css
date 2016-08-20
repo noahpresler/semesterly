@@ -20,6 +20,17 @@
 	/* can't declare in javascript either, cuz need hover */
 	background-color: transparent !important;
 }
+.course-modal>div {
+	/* using important to override boron default style */
+	/* can't declare in javascript either, cuz need hover */
+	background-color: rgba(0,0,0,.8) !important;
+	transition: background-color .2s;
+}
+.course-modal.trans>div {
+	/* using important to override boron default style */
+	/* can't declare in javascript either, cuz need hover */
+	background-color: transparent !important;
+}
 .course-modal.trans #modal-content,
 .course-modal.trans #modal-header,
 .course-modal.trans #modal-header h1,
