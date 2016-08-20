@@ -19,6 +19,7 @@ def view_analytics_dashboard(request):
     student = get_student(request)
     if student and student.user.is_staff:
 
+        # Number of time tables by school
         total_timetables_by_school = {}
         timetables_per_hour = {}
         shared_timetables_per_hour = {}
@@ -26,6 +27,19 @@ def view_analytics_dashboard(request):
             total_timetables_by_school[school] = number_timetables(school=school)
             timetables_per_hour[school] = number_timetables_per_hour(school=school)
             shared_timetables_per_hour[school] = number_timetables_per_hour(Timetable=SharedTimetable, school=school)
+
+        # Number of users by permission
+        # TODO: Moves this array to somewhere else (like VALID_SCHOOLS)        
+        total_signups = number_timetables(Timetable=Student)
+
+        permissions = ["social_courses", "social_offerings", "social_all"]
+        num_users_by_permission = {}
+
+        for permission in permissions:
+            # TODO: hacky way of passing in permission as an identifier for parameter. Also have to use tuple for template to easily access %.
+            args = {"Timetable":Student, permission:True}
+            num_users = number_timetables(**args)
+            num_users_by_permission[permission] = (num_users, num_users / total_signups * 100)
 
         return render_to_response('analytics_dashboard.html', {
                 "timetables_per_hour":json.dumps(timetables_per_hour),
@@ -35,7 +49,8 @@ def view_analytics_dashboard(request):
                 "total_timetables":number_timetables(),
                 "total_shared_timetables":number_timetables(Timetable=SharedTimetable),
                 "total_personal_timetables":number_timetables(Timetable=PersonalTimetable),
-                "total_signups":Student.objects.count(),
+                "total_signups":total_signups,
+                "num_users_by_permission":num_users_by_permission,
                 "total_timetables_fall":number_timetables(semester="F"),
                 "total_timetables_spring":number_timetables(semester="S"),
                 "number_of_reactions":json.dumps(number_of_reactions()),
@@ -72,24 +87,27 @@ def save_analytics_course_search(query, courses, semester, school, student=None,
     course_search.courses.add(*courses)
     course_search.save()
 
-def number_timetables(Timetable = AnalyticsTimetable, school = None, semester = None, student = None, time_start = None, time_end = None):
-    """Gets the number of time tables by school, semester, student, and/or time. Can be used for analytics or shared time tables."""
+def number_timetables(**parameters):
+    """Gets the number of time tables filtered by any paramters. Use Timetable to specify the table to filter."""
+    if "Timetable" in parameters:
+        Timetable = parameters["Timetable"]
+        parameters.pop("Timetable")
+    else:
+        Timetable = AnalyticsTimetable
+
     timetables = Timetable.objects.all()
-    if time_start and time_end:
+    if "time_start" in parameters and "time_end" in parameters:
         timetables = (
             timetables.filter(
-                time_created__range=(time_start, time_end)
+                time_created__range=(parameters["time_start"], parameters["time_end"])
             )
         )
+        parameters.pop("time_start")
+        parameters.pop("time_end")
 
-    if school:
-        timetables = timetables.filter(school = school)
-
-    if semester:
-        timetables = timetables.filter(semester = semester)
-
-    if student:
-        timetables = timetables.filter(student = student)
+    for parameter in parameters:
+        if parameters[parameter] != None:
+            timetables = timetables.filter(**{ parameter: parameters[parameter] })
 
     return timetables.count()
 
