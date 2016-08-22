@@ -42,7 +42,7 @@
 
     
 
-    <!-- <h4>Most popular courses in JHU:</h4>  
+    <!-- <h4>Most popular courses in JHU:</h4>
 
     {% for course in jhu_most_popular_courses %}
     <div>
@@ -51,50 +51,53 @@
     {% endfor %}
 
 
-    <h4>Most searched courses in JHU:</h4>  
+    <h4>Most searched courses in JHU:</h4>
     {% for course in jhu_most_searched_courses %}
     <div>
         <p>{{ course.name }}</p>
     </div>
     {% endfor %} -->
 
-    <!-- <h4>Most popular courses in UOFT:</h4>  
+    <!-- <h4>Most popular courses in UOFT:</h4>
     {% for course in uoft_most_popular_courses %}
     <div>
         <p>{{ course.name }}</p>
     </div>
     {% endfor %}
 
-    <h4>Most searched courses in UOFT:</h4>  
+    <h4>Most searched courses in UOFT:</h4>
     {% for course in uoft_most_searched_courses %}
     <div>
         <p>{{ course.name }}</p>
     </div>
     {% endfor %}-->
     
-    <!-- <h4>Most popular courses in UMD:</h4>  
+    <!-- <h4>Most popular courses in UMD:</h4>
     {% for course in umd_most_popular_courses %}
     <div>
         <p>{{ course.name }}</p>
     </div>
     {% endfor %}
 
-    <h4>Most searched courses in UMD:</h4>  
+    <h4>Most searched courses in UMD:</h4>
     {% for course in umd_most_searched_courses %}
     <div>
         <p>{{ course.name }}</p>
     </div>
     {% endfor %} -->
 
-    
 
     <script type="text/javascript">
+      var num_users_by_class_year = JSON.parse("{{num_users_by_class_year|escapejs}}");
       var total_timetables_by_school = JSON.parse("{{total_timetables_by_school|escapejs}}");
       var number_of_reactions = JSON.parse("{{number_of_reactions|escapejs}}");
       var timetables_per_hour = JSON.parse("{{timetables_per_hour|escapejs}}");
       var shared_timetables_per_hour = JSON.parse("{{shared_timetables_per_hour|escapejs}}");
       var signups_per_hour = JSON.parse("{{signups_per_hour|escapejs}}");
     </script>
+
+    <h4>Number of users by class year:</h4>
+    <canvas id="num_users_by_class_year"></canvas>
 
     <h4>Number of timetables by school:</h4>
     <canvas id="timetables_by_schools"></canvas>
@@ -115,6 +118,7 @@
 
     <script>
     // Colors for each school.
+    // TODO: user COLOURS_DATA in constants.jsx.
     var background_colors = ["rgba(61,90,254,0.4)", "rgba(233,30,99,0.4)", "rgba(0,200,83,0.4)", "rgba(255,87,34,0.4)", "rgba(40,53,147,0.4)", "rgba(175,180,43,0.4)"];
     var border_colors = ["rgba(61,90,254,1)", "rgba(233,30,99,1)", "rgba(0,200,83,1)", "rgba(255,87,34,1)", "rgba(40,53,147,1)", "rgba(175,180,43,1)"];
 
@@ -123,7 +127,7 @@
     var shared_timetables_per_hour_datasets = new Array(Object.keys(shared_timetables_per_hour).length);
     var index = 0;
     for (key in timetables_per_hour) {
-      timetables_per_hour_datasets[index] =             
+      timetables_per_hour_datasets[index] =
       {
         label: key,
         fill: false,
@@ -143,7 +147,7 @@
         pointHitRadius: 10,
         data: timetables_per_hour[key],
       };
-      shared_timetables_per_hour_datasets[index] =             
+      shared_timetables_per_hour_datasets[index] =
       {
         label: key,
         fill: false,
@@ -214,6 +218,15 @@
         }
       ]
     };
+    var num_users_by_class_year_data = {
+      labels: Object.keys(num_users_by_class_year),
+      datasets: [
+        {
+          data: Object.keys(num_users_by_class_year).map(function(key){return num_users_by_class_year[key]}),
+          backgroundColor: background_colors,
+          hoverBackgroundColor: border_colors
+        }]
+    };
     var timetables_by_schools_data = {
       labels: Object.keys(total_timetables_by_school),
       datasets: [
@@ -246,6 +259,12 @@
     var line_chart_reactions = new Chart(rtx, {
       type: 'bar',
       data: reactions_data,
+    });
+
+    var ptx = document.getElementById("num_users_by_class_year");
+    var myPieChart = new Chart(ptx, {
+      type: 'pie',
+      data: num_users_by_class_year_data,
     });
 
     var ptx = document.getElementById("timetables_by_schools");
