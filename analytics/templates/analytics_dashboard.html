@@ -119,9 +119,10 @@
     <script>
     // Colors for each school.
     // TODO: user COLOURS_DATA in constants.jsx.
-    var background_colors = ["rgba(61,90,254,0.4)", "rgba(233,30,99,0.4)", "rgba(0,200,83,0.4)", "rgba(255,87,34,0.4)", "rgba(40,53,147,0.4)", "rgba(175,180,43,0.4)"];
-    var border_colors = ["rgba(61,90,254,1)", "rgba(233,30,99,1)", "rgba(0,200,83,1)", "rgba(255,87,34,1)", "rgba(40,53,147,1)", "rgba(175,180,43,1)"];
-
+    var primary_colors = ["#FD7473", "#5CCCF2", "#36DEBB", "#FFD462", "#C585DE", "#53e997", "#D4DBC8", "#E7F76D", "#A3F5F2", "#7499A2",
+    "#C8F7C5", "#4c7fd8"];
+    var secondary_colors = ["#e36867", "#52b7d9", "#30c7a8", "#e5be58", "#b177c7", "#4ad187", "#B5BFA3", "#C9E20A", "#7CD2CF", "#668B94",
+    "#C4D44D", "#6598f1"];
     Chart.defaults.global.responsive = true;
     var timetables_per_hour_datasets = new Array(Object.keys(timetables_per_hour).length);
     var shared_timetables_per_hour_datasets = new Array(Object.keys(shared_timetables_per_hour).length);
@@ -132,8 +133,8 @@
         label: key,
         fill: false,
         lineTension: 0.1,
-        backgroundColor: background_colors[index],
-        borderColor: border_colors[index],
+        backgroundColor: primary_colors[index],
+        borderColor: secondary_colors[index],
         borderCapStyle: 'butt',
         borderDash: [],
         borderDashOffset: 0.0,
@@ -152,8 +153,8 @@
         label: key,
         fill: false,
         lineTension: 0.1,
-        backgroundColor: background_colors[index],
-        borderColor: border_colors[index],
+        backgroundColor: primary_colors[index],
+        borderColor: secondary_colors[index],
         borderCapStyle: 'butt',
         borderDash: [],
         borderDashOffset: 0.0,
@@ -187,8 +188,8 @@
           label: "# Signups",
           fill: false,
           lineTension: 0.1,
-          backgroundColor: background_colors[0],
-          borderColor: border_colors[0],
+          backgroundColor: primary_colors[0],
+          borderColor: secondary_colors[0],
           borderCapStyle: 'butt',
           borderDash: [],
           borderDashOffset: 0.0,
@@ -223,8 +224,8 @@
       datasets: [
         {
           data: Object.keys(num_users_by_class_year).map(function(key){return num_users_by_class_year[key]}),
-          backgroundColor: background_colors,
-          hoverBackgroundColor: border_colors
+          backgroundColor: primary_colors,
+          hoverBackgroundColor: secondary_colors
         }]
     };
     var timetables_by_schools_data = {
@@ -232,8 +233,8 @@
       datasets: [
         {
           data: Object.keys(total_timetables_by_school).map(function(key){return total_timetables_by_school[key]}),
-          backgroundColor: background_colors,
-          hoverBackgroundColor: border_colors
+          backgroundColor: primary_colors,
+          hoverBackgroundColor: secondary_colors
         }]
     };
 
