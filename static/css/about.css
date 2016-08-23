@@ -1,3 +1,85 @@
+* {
+	box-sizing: border-box;
+}
+
+/* Header */
 header {
-	background-color: red;
+	position: fixed;
+	z-index: 100;
+	width: 100%;
+	height: 50px;
+	padding: 10px;
+	color: #253340;
+	background-color: rgba(252, 252, 252, .95);
+	border-bottom: 1px solid #DDD;
+	transition: background-color .3s, border .3s;
+}
+header.down {
+	background-color: transparent;
+	border-bottom: 1px solid transparent;
+}
+header h1 {
+	float: left;
+	font-size: 26px;
+	line-height: 30px;
+	margin: 0 10px 0;
+}
+#semesterly-logo {
+	height: 32px;
+	float: left;
+}
+header nav {
+	float: right;
+	font-weight: 600;
+	font-size: 16px;
+	line-height: 30px;
+	height: 30px;
+}
+
+header nav a,
+header nav a:link,
+header nav a:active,
+header nav a:visited {
+	margin-right: 10px;
+	color: rgb(37, 51, 64);
+	text-decoration: none;
+	transition: color .2s;
+}
+
+header nav a:hover {
+	color: #3498DB;
+}
+
+/* Page Content */
+#page {
+	width: 100%;
+	padding-top: 50px;
+	background-color: #F3F3F3;
+}
+
+#semesterly-logo {
+	height: 32px;
+	float: left;
+}
+
+header nav {
+	float: right;
+	font-weight: 600;
+	font-size: 16px;
+	line-height: 30px;
+	height: 30px;
+}
+
+header nav a,
+header nav a:link,
+header nav a:active,
+header nav a:visited {
+	margin-right: 10px;
+	color: rgb(37, 51, 64);
+	text-decoration: none;
+	transition: color .2s;
+}
+
+header nav a:hover {
+	color: #3498DB;
 }
