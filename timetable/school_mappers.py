@@ -19,6 +19,8 @@ school_to_granularity = {
 }
 VALID_SCHOOLS = ["uoft", "jhu", "umd", "uo", "rutgers", "queens"]
 
+AM_PM_SCHOOLS = ["jhu","umd","rutgers"]
+
 school_code_to_name = {
   'jhu': 'Johns Hopkins University',
   'uoft': 'University of Toronto',
