@@ -42,7 +42,7 @@
 
     
 
-    <!-- <h4>Most popular courses in JHU:</h4>  
+    <!-- <h4>Most popular courses in JHU:</h4>
 
     {% for course in jhu_most_popular_courses %}
     <div>
@@ -51,50 +51,53 @@
     {% endfor %}
 
 
-    <h4>Most searched courses in JHU:</h4>  
+    <h4>Most searched courses in JHU:</h4>
     {% for course in jhu_most_searched_courses %}
     <div>
         <p>{{ course.name }}</p>
     </div>
     {% endfor %} -->
 
-    <!-- <h4>Most popular courses in UOFT:</h4>  
+    <!-- <h4>Most popular courses in UOFT:</h4>
     {% for course in uoft_most_popular_courses %}
     <div>
         <p>{{ course.name }}</p>
     </div>
     {% endfor %}
 
-    <h4>Most searched courses in UOFT:</h4>  
+    <h4>Most searched courses in UOFT:</h4>
     {% for course in uoft_most_searched_courses %}
     <div>
         <p>{{ course.name }}</p>
     </div>
     {% endfor %}-->
     
-    <!-- <h4>Most popular courses in UMD:</h4>  
+    <!-- <h4>Most popular courses in UMD:</h4>
     {% for course in umd_most_popular_courses %}
     <div>
         <p>{{ course.name }}</p>
     </div>
     {% endfor %}
 
-    <h4>Most searched courses in UMD:</h4>  
+    <h4>Most searched courses in UMD:</h4>
     {% for course in umd_most_searched_courses %}
     <div>
         <p>{{ course.name }}</p>
     </div>
     {% endfor %} -->
 
-    
 
     <script type="text/javascript">
+      var num_users_by_class_year = JSON.parse("{{num_users_by_class_year|escapejs}}");
       var total_timetables_by_school = JSON.parse("{{total_timetables_by_school|escapejs}}");
       var number_of_reactions = JSON.parse("{{number_of_reactions|escapejs}}");
       var timetables_per_hour = JSON.parse("{{timetables_per_hour|escapejs}}");
       var shared_timetables_per_hour = JSON.parse("{{shared_timetables_per_hour|escapejs}}");
       var signups_per_hour = JSON.parse("{{signups_per_hour|escapejs}}");
     </script>
+
+    <h4>Number of users by class year:</h4>
+    <canvas id="num_users_by_class_year"></canvas>
 
     <h4>Number of timetables by school:</h4>
     <canvas id="timetables_by_schools"></canvas>
@@ -115,21 +118,23 @@
 
     <script>
     // Colors for each school.
-    var background_colors = ["rgba(61,90,254,0.4)", "rgba(233,30,99,0.4)", "rgba(0,200,83,0.4)", "rgba(255,87,34,0.4)", "rgba(40,53,147,0.4)", "rgba(175,180,43,0.4)"];
-    var border_colors = ["rgba(61,90,254,1)", "rgba(233,30,99,1)", "rgba(0,200,83,1)", "rgba(255,87,34,1)", "rgba(40,53,147,1)", "rgba(175,180,43,1)"];
-
+    // TODO: user COLOURS_DATA in constants.jsx.
+    var primary_colors = ["#FD7473", "#5CCCF2", "#36DEBB", "#FFD462", "#C585DE", "#53e997", "#D4DBC8", "#E7F76D", "#A3F5F2", "#7499A2",
+    "#C8F7C5", "#4c7fd8"];
+    var secondary_colors = ["#e36867", "#52b7d9", "#30c7a8", "#e5be58", "#b177c7", "#4ad187", "#B5BFA3", "#C9E20A", "#7CD2CF", "#668B94",
+    "#C4D44D", "#6598f1"];
     Chart.defaults.global.responsive = true;
     var timetables_per_hour_datasets = new Array(Object.keys(timetables_per_hour).length);
     var shared_timetables_per_hour_datasets = new Array(Object.keys(shared_timetables_per_hour).length);
     var index = 0;
     for (key in timetables_per_hour) {
-      timetables_per_hour_datasets[index] =             
+      timetables_per_hour_datasets[index] =
       {
         label: key,
         fill: false,
         lineTension: 0.1,
-        backgroundColor: background_colors[index],
-        borderColor: border_colors[index],
+        backgroundColor: primary_colors[index],
+        borderColor: secondary_colors[index],
         borderCapStyle: 'butt',
         borderDash: [],
         borderDashOffset: 0.0,
@@ -143,13 +148,13 @@
         pointHitRadius: 10,
         data: timetables_per_hour[key],
       };
-      shared_timetables_per_hour_datasets[index] =             
+      shared_timetables_per_hour_datasets[index] =
       {
         label: key,
         fill: false,
         lineTension: 0.1,
-        backgroundColor: background_colors[index],
-        borderColor: border_colors[index],
+        backgroundColor: primary_colors[index],
+        borderColor: secondary_colors[index],
         borderCapStyle: 'butt',
         borderDash: [],
         borderDashOffset: 0.0,
@@ -183,8 +188,8 @@
           label: "# Signups",
           fill: false,
           lineTension: 0.1,
-          backgroundColor: background_colors[0],
-          borderColor: border_colors[0],
+          backgroundColor: primary_colors[0],
+          borderColor: secondary_colors[0],
           borderCapStyle: 'butt',
           borderDash: [],
           borderDashOffset: 0.0,
@@ -214,13 +219,22 @@
         }
       ]
     };
+    var num_users_by_class_year_data = {
+      labels: Object.keys(num_users_by_class_year),
+      datasets: [
+        {
+          data: Object.keys(num_users_by_class_year).map(function(key){return num_users_by_class_year[key]}),
+          backgroundColor: primary_colors,
+          hoverBackgroundColor: secondary_colors
+        }]
+    };
     var timetables_by_schools_data = {
       labels: Object.keys(total_timetables_by_school),
       datasets: [
         {
           data: Object.keys(total_timetables_by_school).map(function(key){return total_timetables_by_school[key]}),
-          backgroundColor: background_colors,
-          hoverBackgroundColor: border_colors
+          backgroundColor: primary_colors,
+          hoverBackgroundColor: secondary_colors
         }]
     };
 
@@ -246,6 +260,12 @@
     var line_chart_reactions = new Chart(rtx, {
       type: 'bar',
       data: reactions_data,
+    });
+
+    var ptx = document.getElementById("num_users_by_class_year");
+    var myPieChart = new Chart(ptx, {
+      type: 'pie',
+      data: num_users_by_class_year_data,
     });
 
     var ptx = document.getElementById("timetables_by_schools");
