@@ -29,12 +29,11 @@ def view_analytics_dashboard(request):
             shared_timetables_per_hour[school] = number_timetables_per_hour(Timetable=SharedTimetable, school=school)
 
         # Number of users by permission
-        # TODO: Moves this array to somewhere else (like VALID_SCHOOLS)        
+        # TODO: Moves this array to somewhere else (like VALID_SCHOOLS)
         total_signups = number_timetables(Timetable=Student)
 
         permissions = ["social_courses", "social_offerings", "social_all"]
         num_users_by_permission = {}
-
         for permission in permissions:
             # TODO: hacky way of passing in permission as an identifier for parameter. Also have to use tuple for template to easily access %.
             args = {"Timetable":Student, permission:True}
@@ -52,6 +51,7 @@ def view_analytics_dashboard(request):
                 "total_personal_timetables":number_timetables(Timetable=PersonalTimetable),
                 "total_signups":total_signups,
                 "num_users_by_permission":num_users_by_permission,
+                "num_users_by_class_year":json.dumps(number_students_by_year()),
                 "total_timetables_fall":number_timetables(semester="F"),
                 "total_timetables_spring":number_timetables(semester="S"),
                 "number_of_reactions":json.dumps(number_of_reactions()),
@@ -152,4 +152,11 @@ def most_popular_courses(n, school, semester, Table = AnalyticsTimetable):
                 num_courses[course.id] = 1
     course_ids = heapq.nlargest(n, num_courses, key=lambda k: num_courses[k])
     return Course.objects.filter(pk__in = course_ids)
-    
+
+def number_students_by_year():
+    """Gets the number of students by class year."""
+    valid_class_years = Student.objects.values("class_year").distinct()
+    count_class_years = {}
+    for class_year in valid_class_years:
+        count_class_years[class_year["class_year"]] = Student.objects.filter(class_year = class_year["class_year"]).count()
+    return count_class_years
