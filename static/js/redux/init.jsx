@@ -36,6 +36,7 @@ function setup(dispatch) {
   sharedTimetable = JSON.parse(sharedTimetable);
   sharedCourse = JSON.parse(sharedCourse);
   findFriends = findFriends === "True";
+  uses12HrTime = uses12HrTime === "True"
   /* first setup the user's state */
   let user = JSON.parse(currentUser); // currentUser comes from timetable.html
   dispatch(getUserInfo(user));
