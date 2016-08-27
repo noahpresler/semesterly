@@ -21,7 +21,7 @@
                 #calendar {
                     position:fixed;
                     display:block;
-                    top: 0.3in;
+                    top: 60px;
                     transform: scale(0.7);
                     min-width: 139.5% !important;
                     margin: 0 auto;
