@@ -31,6 +31,7 @@ var majors = [
 	{value: "Civil Engineering", label: "Civil Engineering"},
 	{value: "Classical Studies", label: "Classical Studies"},
 	{value: "Clothing & Textiles", label: "Clothing & Textiles"},
+	{value: "Cognitive Science", label: "Cognitive Science"},
 	{value: "Commercial Law", label: "Commercial Law"},
 	{value: "Communication & Professional Writing", label: "Communication & Professional Writing"},
 	{value: "Computer Engineering", label: "Computer Engineering"},
