@@ -82,6 +82,42 @@ header nav a:hover {
 	color: white;
 	font-size: 48px;
 	line-height: 55px;
+	background-color: #F3F3F3;
+	position: relative;
+}
+
+#hero h2 {
+	color: white;
+	font-size: 48px;
+	line-height: 55px;
+	margin: 0 0 20px;
+	padding: 0 40px 0 0;
+}
+
+#about-image{
+	width: 100%;
+	height: 0;
+	padding-bottom: 60%;
+	background-size: cover;
+	background-position: top center;
+	background-repeat: no-repeat;
+	background-image: url(/static/img/about-us.jpeg);
+}
+
+#learn {
+	background-color: #FCFCFC;
+}
+
+.mission {
+	padding: 120px 0;
+	font-size: 0;
+	border-bottom: 1px solid #ddd;
+	position: relative;
+}
+
+#semesterly-logo {
+	height: 32px;
+	float: left;
 }
 	@media(max-width: 1170px) {#hero h2 {font-size: 40px; line-height: 45px;}}
 	@media(max-width: 980px) {#hero h2 {font-size: 30px; line-height: 38px;}}
