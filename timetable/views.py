@@ -18,7 +18,7 @@ from pytz import timezone
 from analytics.models import *
 from analytics.views import *
 from timetable.models import *
-from timetable.school_mappers import school_to_granularity, VALID_SCHOOLS, school_code_to_name
+from timetable.school_mappers import school_to_granularity, VALID_SCHOOLS, school_code_to_name, AM_PM_SCHOOLS
 from timetable.utils import *
 from timetable.scoring import *
 from student.models import Student
@@ -62,7 +62,8 @@ def view_timetable(request, code=None, sem=None, shared_timetable=None, find_fri
     'course': json.dumps(course_json),
     'semester': sem,
     'shared_timetable': json.dumps(shared_timetable),
-    'find_friends': find_friends
+    'find_friends': find_friends,
+    'uses_12hr_time': school in AM_PM_SCHOOLS
   },
   context_instance=RequestContext(request))
 
