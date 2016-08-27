@@ -41,8 +41,10 @@
     	margin-top: 20px;
     }
     #semesterly-name-print {
-    	display: inline-block;
-    	-webkit-print-color-adjust: exact;
+        font-family: Palanquin,Arial,sans-serif;
+        color: #34495e;
+        display: inline-block;
+        -webkit-print-color-adjust: exact;
     }
     #print-content{
     	display: block;
