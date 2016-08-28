@@ -33,11 +33,12 @@ for student_id in students:
     if not have_textbooks:
         continue
 
+    print(textbook_json)
+
     msg_html = render_to_string('email_textbooks.html', {
         'user':student,
-        'textbooks': json.dumps(textbook_json)
+        'textbooks_json': textbook_json
     })
-
 
 
 # student = Student.objects.get(user__first_name="Eric")
@@ -46,15 +47,18 @@ for student_id in students:
 # textbooks = map(lambda s: s.textbooks.all(),student.personaltimetable_set.order_by('last_updated').last().sections.filter(~Q(textbooks=None)).all())
 
 
-# Define to/from
-sender = 'textbooks@semester.ly'
-recipient = student.user.email
+    # Define to/from
+    sender = 'textbooks@semester.ly'
+    recipient = student.user.email
 
-# Create message
-msg = MIMEText(msg_html,'html')
-msg['Subject'] = "Your Textbooks from Semester.ly"
-msg['From'] = sender
-msg['To'] = recipient
+    # Create message
+    msg = MIMEText(msg_html,'html')
+    f = open(r"/Users/ericcalder/Desktop/test_email.html", "w")
+    f.write(str(msg))
+    msg['Subject'] = "Your Textbooks from Semester.ly"
+    msg['From'] = sender
+    msg['To'] = recipient
+
 
 # Create server object with SSL option
 # server = smtplib.SMTP_SSL('smtp.zoho.com', 465)
