@@ -17,20 +17,25 @@ students = PersonalTimetable.objects.filter(school=school).values_list("student"
 for student_id in students:
     student = Student.objects.get(id=student_id)
     tt = student.personaltimetable_set.order_by('last_updated').last()
-    textbooks = map(lambda c:
+    textbook_json = map(lambda c:
                     {
                         "textbooks": map(lambda t: model_to_dict(Textbook.objects.get(isbn=t)), tt.sections.filter(~Q(textbooks=None), course=c).values_list("textbooks", flat=True).distinct()),
                         "course_name": c.name,
                         "course_code": c.code
                     }, tt.courses.all())
-    # Makes the HTML
 
-    # Go through dict. If all empty lists, go to next student.
+    # Go through textbooks. If all empty lists (no textbooks), go to next student.
+    have_textbooks = False
+    for dic in textbook_json:
+        if dic["textbooks"]:
+            have_textbooks = True
 
-    print(textbooks)
+    if not have_textbooks:
+        continue
+
     msg_html = render_to_string('email_textbooks.html', {
         'user':student,
-        'textbooks': json.dumps(textbooks)
+        'textbooks': json.dumps(textbook_json)
     })
 
 
