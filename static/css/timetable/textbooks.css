@@ -5,6 +5,10 @@
 	text-align: center;
 }
 
+.textbook-ctn:nth-child(3n+1) {
+    clear: left;
+}
+
 .textbook h4 {
     font-size: 11px;
     margin: 0 0 2px;
@@ -64,4 +68,10 @@ a .textbook h4 {
 
 a .textbook h4:hover {
     color: #1abc9c;
+}
+
+@media (max-width: 999px) {
+    .textbook-ctn:nth-child(3n+1) {
+        clear: none;
+    }
 }
