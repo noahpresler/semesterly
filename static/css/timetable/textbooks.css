@@ -7,6 +7,12 @@
 
 .textbook-ctn:nth-child(3n+1) {
     clear: left;
+    display: block;
+}
+@media (max-width: 999px) {
+    .textbook-ctn:nth-child(3n+1) {
+        clear: none;
+    }
 }
 
 .textbook h4 {
@@ -68,10 +74,4 @@ a .textbook h4 {
 
 a .textbook h4:hover {
     color: #1abc9c;
-}
-
-@media (max-width: 999px) {
-    .textbook-ctn:nth-child(3n+1) {
-        clear: none;
-    }
 }
