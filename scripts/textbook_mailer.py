@@ -1,4 +1,5 @@
 import django, os, json
+import sys
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "semesterly.settings")
 django.setup()
 import smtplib
@@ -10,9 +11,11 @@ from django.db.models import Q
 from django.forms.models import model_to_dict
 
 #TODO: Take school as command line.
-school = "jhu"
+if len(sys.argv) < 2:
+    print("Please specify a school.")
+    exit(0)
+school = sys.argv[1]
 
-#TODO: Only students that have personal time tables with courses with textbooks.
 students = PersonalTimetable.objects.filter(school=school).values_list("student", flat=True).distinct()
 for student_id in students:
     student = Student.objects.get(id=student_id)
@@ -33,19 +36,10 @@ for student_id in students:
     if not have_textbooks:
         continue
 
-    print(textbook_json)
-
     msg_html = render_to_string('email_textbooks.html', {
         'user':student,
         'textbooks_json': textbook_json
     })
-
-
-# student = Student.objects.get(user__first_name="Eric")
-
-# # Gets the textbook for the given student
-# textbooks = map(lambda s: s.textbooks.all(),student.personaltimetable_set.order_by('last_updated').last().sections.filter(~Q(textbooks=None)).all())
-
 
     # Define to/from
     sender = 'textbooks@semester.ly'
@@ -53,8 +47,12 @@ for student_id in students:
 
     # Create message
     msg = MIMEText(msg_html,'html')
+
+    #TODO: Remove testing code
     f = open(r"/Users/ericcalder/Desktop/test_email.html", "w")
     f.write(str(msg))
+    #END testing code
+
     msg['Subject'] = "Your Textbooks from Semester.ly"
     msg['From'] = sender
     msg['To'] = recipient
