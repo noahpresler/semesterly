@@ -95,6 +95,30 @@ header nav a:hover {
 	background-image: url(/static/img/about-us.jpeg);
 }
 
+.img-circle {
+    border-radius: 50%;
+}
+
+.circular {
+	width: 300px;
+	height: 300px;
+	border-radius: 150px;
+	-webkit-border-radius: 150px;
+	-moz-border-radius: 150px;
+	background: url(/static/img/noahStock.png) no-repeat;
+	background-size: cover;
+	position: absolute;
+}
+
+.member {
+	position: relative; 
+	display: inline-block; 
+	width: 100%;
+	max-width: 180px; 
+	margin: 0 auto; 
+	padding: 0px 10px 0px 10px;
+}
+
 .about-text {
 	top: 70%;
 	left: 50%;
@@ -103,7 +127,12 @@ header nav a:hover {
 }
 
 #learn {
-	background-color: #FCFCFC;
+	position: relative;
+	text-align: center;
+}
+
+#about {
+
 }
 
 .mission {
@@ -111,6 +140,15 @@ header nav a:hover {
 	font-size: 0;
 	border-bottom: 1px solid #ddd;
 	position: relative;
+}
+
+.row {
+	position: relative; 
+	width: 100%;
+	max-width: 600px; 
+	margin:; 0 auto; 
+	padding: 20px; 
+	text-align: center;
 }
 
 #semesterly-logo {
