@@ -40,7 +40,6 @@ def view_analytics_dashboard(request):
             num_users = number_timetables(**args)
             percent_users = format(float(num_users) / total_signups * 100, '.2f')
             num_users_by_permission[permission] = (num_users, percent_users)
-
         return render_to_response('analytics_dashboard.html', {
                 "timetables_per_hour":json.dumps(timetables_per_hour),
                 "signups_per_hour":number_timetables_per_hour(Timetable=Student,start_delta_days=7, interval_delta_hours=24),
@@ -52,6 +51,7 @@ def view_analytics_dashboard(request):
                 "total_signups":total_signups,
                 "num_users_by_permission":num_users_by_permission,
                 "num_users_by_class_year":json.dumps(number_students_by_year()),
+                "num_users_by_school":json.dumps(number_students_by_school()),
                 "total_timetables_fall":number_timetables(semester="F"),
                 "total_timetables_spring":number_timetables(semester="S"),
                 "number_of_reactions":json.dumps(number_of_reactions()),
@@ -160,3 +160,21 @@ def number_students_by_year():
     for class_year in valid_class_years:
         count_class_years[class_year["class_year"]] = Student.objects.filter(class_year = class_year["class_year"]).count()
     return count_class_years
+
+def number_students_by_school():
+    result = {}
+    for school in VALID_SCHOOLS:
+        count = PersonalTimetable.objects.filter(school=school).values_list("student", flat=True).distinct().count()
+        result[school] = count
+    return result
+
+
+
+
+
+
+
+
+
+
+
