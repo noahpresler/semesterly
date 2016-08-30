@@ -32,7 +32,6 @@ for student_id in students:
         continue
 
     unsub_link = "https://semester.ly" + create_unsubscribe_link(student)
-    print(unsub_link)
     tt = student.personaltimetable_set.order_by('last_updated').last()
     textbook_json = map(lambda c:
                     {
@@ -57,11 +56,12 @@ for student_id in students:
     })
 
     # Create message
+    recipient = student.user.email
     msg = MIMEText(msg_html,'html')
 
     msg['Subject'] = "Your Textbooks from Semester.ly"
     msg['From'] = sender
-    msg['To'] = student.user.email
+    msg['To'] = recipient
 
     # Perform operations via server
     # TODO: Ping their email address to make sure it's fine
