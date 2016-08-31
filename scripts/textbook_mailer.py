@@ -59,7 +59,11 @@ blacklist = {"defineciks@hotmail.com"
 ,"melissaeustache@yahoo.com"
 ,"tellriya@msn.com"
 ,"azhao@webb.org"
-,"beobgwan@gmail.com"}
+,"beobgwan@gmail.com"
+,"rkl2907@gmail.com"
+,"jr9917@hotmail.com"
+,"outingting0526@gmail.com"
+,"kevin.wu690@yahoo.com"}
 
 # Define to
 sender = 'textbooks@semester.ly'
@@ -112,4 +116,7 @@ for student_id in students:
         e = sys.exc_info()[0]
         print("skipped " + str(student.user.email))
         print(e)
+
+        server = smtplib.SMTP_SSL('smtp.zoho.com', 465)
+        server.login('textbooks@semester.ly', '7roHan11')
 server.quit()
