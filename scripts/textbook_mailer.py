@@ -63,6 +63,7 @@ for student_id in students:
     msg['Subject'] = "Your Textbooks from Semester.ly"
     msg['From'] = sender
     msg['To'] = recipient
+    print "Sending to: " + str(recipient)
 
     # Perform operations via server
     # TODO: Ping their email address to make sure it's fine
