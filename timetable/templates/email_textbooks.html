@@ -68,6 +68,8 @@
 			img[class="artist2"] { width:70% !important; height:auto !important; padding-left:0px !important; margin:0px !important; display:inline-block !important; text-align:center !important;}*/
 			td[class="artist_blurb"] {width:100% !important; font-size:20px !important; padding: 0 30px 60px 30px !important;}
 			th[class="icon"] {padding-left: 18px !important; padding-right: 18px !important;}
+			td[class="horiz-row"] {padding-left: 18px !important; padding-right: 18px !important;}
+			td[class="course-name"] {padding-left: 18px !important; padding-right: 18px !important;}
 			td[class="outer_cell_1"] {padding: 0 !important; }
 			td[class="mbl_text_style_1"] { padding:10px 50px 15px 50px !important; line-height:1.2em !important; font-weight: normal !important; }
 			td[class="mbl_text_style_2"] { font-size:20px !important; line-height:26px !important; font-weight: normal !important; padding:10px 40px 20px 40px !important; }
@@ -119,7 +121,7 @@
 		{% if not dict.textbooks %}
 			<!-- COURSE HAS NO TEXTBOOKS-->
 				<tr>
-					<td style="padding-left:50px; padding-right:50px; padding-top:10px; padding-bottom:10px; text-align:left;">
+					<td class="horiz-row" style="padding-left:50px; padding-right:50px; padding-top:10px; padding-bottom:10px; text-align:left;">
 						<table class="textbook_image" align="left" border="0" cellspacing="0" cellpadding="0" style="width:25%; padding: 0; margin: 0;border-collapse:collapse; mso-table-lspace:0pt; mso-table-rspace:0pt;">
 							<tr><td style="padding-left:20px; padding-top:0px; padding-bottom:0px; font-family:Avenir, 'Helvetica Neue', Helvetica, Arial, sans-serif; text-align:left;">
 								<span style="display:block; color:#6a6a6a; font-size:14px; line-height:18px; font-weight:200; margin-bottom:10px;">No textbooks.</span>
@@ -133,7 +135,7 @@
 
 			{% for textbook in dict.textbooks %}
 				<tr>
-					<td style="padding-left:50px; padding-right:50px; padding-top:10px; padding-bottom:10px; text-align:left;">
+					<td class="horiz-row" style="padding-left:50px; padding-right:50px; padding-top:10px; padding-bottom:10px; text-align:left;">
 						<table class="textbook_image" align="left" border="0" cellspacing="0" cellpadding="0" style="width:25%; padding: 0; margin: 0;border-collapse:collapse; mso-table-lspace:0pt; mso-table-rspace:0pt;">
 							<tr><td style="text-align:center;">
 								<a href={{textbook.detail_url}} target="_blank" style="text-decoration: none; display:inline-block;">
@@ -148,11 +150,11 @@
 									<span style="display:block; color:#6a6a6a; font-size:14px; line-height:18px; font-weight:200; margin-bottom:10px;">{{textbook.isbn}}</span>
 									<a href={{textbook.detail_url}} style="background-color:#ffd819; padding: 2px 10px; border-radius: 5px; margin-right:5px; ">
 										<img src="http://i.imgur.com/vqPqrT1.png" width="18px" height="18px" alt="Amazon" style="display:inline-block; vertical-align:middle;"/>
-										<span style="display:inline-block; vertical-align:middle; color:#263440; font-weight:700; font-size:14px; line-height: 20px;">Buy</span>
+										<span style="display:inline-block; vertical-align:middle; color:#263440; font-weight:700; font-size:14px; line-height: 20px; text-decoration: none;">Buy</span>
 									</a>
 									<a href={{textbook.detail_url}} style="background-color:#eeeeee; padding: 2px 10px; border-radius: 5px;">
 										<img src="http://i.imgur.com/vqPqrT1.png" width="18px" height="18px" alt="Amazon" style="display:inline-block; vertical-align:middle;"/>
-										<span style="display:inline-block; vertical-align:middle; color:#263440; font-weight:700; font-size:14px; line-height: 20px;">Rent</span>
+										<span style="display:inline-block; vertical-align:middle; color:#263440; font-weight:700; font-size:14px; line-height: 20px; text-decoration: none;">Rent</span>
 									</a>
 							</td></tr>
 						</table>
