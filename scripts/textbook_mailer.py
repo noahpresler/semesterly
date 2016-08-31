@@ -45,6 +45,7 @@ for student_id in students:
     for dic in textbook_json:
         if dic["textbooks"]:
             have_textbooks = True
+            break
 
     if not have_textbooks:
         continue
