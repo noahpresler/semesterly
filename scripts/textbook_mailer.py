@@ -28,7 +28,7 @@ sender = 'textbooks@semester.ly'
 for student_id in students:
     student = Student.objects.get(id=student_id)
 
-    if not student.emails_enabled:
+    if not student.emails_enabled or not student.user.email:
         continue
 
     unsub_link = "https://semester.ly" + create_unsubscribe_link(student)
