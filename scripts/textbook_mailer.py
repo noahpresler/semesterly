@@ -1,4 +1,5 @@
 import django, os, json
+import traceback
 import sys
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "semesterly.settings")
 django.setup()
@@ -115,7 +116,7 @@ for student_id in students:
     except:
         e = sys.exc_info()[0]
         print("skipped " + str(student.user.email))
-        print(e)
+	traceback.print_exc()
 
         server = smtplib.SMTP_SSL('smtp.zoho.com', 465)
         server.login('textbooks@semester.ly', '***REMOVED***')
