@@ -161,7 +161,7 @@ for student_id in students:
 
         # Create message
         recipient = student.user.email
-        msg = MIMEText(msg_html,'html')
+        msg = MIMEText(msg_html.encode('utf-8'),'html')
 
         msg['Subject'] = "Your Textbooks from Semester.ly"
         msg['From'] = sender
@@ -170,7 +170,7 @@ for student_id in students:
 
         # Perform operations via server
         # TODO: Ping their email address to make sure it's fine
-        server.sendmail(sender, [recipient], msg.as_string().encode('utf-8'))
+        server.sendmail(sender, [recipient], msg.as_string())
         sleep(1)
     except:
         e = sys.exc_info()[0]
