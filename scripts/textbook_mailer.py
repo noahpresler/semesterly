@@ -20,8 +20,8 @@ school = sys.argv[1]
 students = PersonalTimetable.objects.filter(school=school).values_list("student", flat=True).distinct()
 
 # Create server object with SSL option
-server = smtplib.SMTP_SSL('smtp.zoho.com', 465)
-server.login('textbooks@semester.ly', '***REMOVED***')
+server = smtplib.SMTP_SSL('email-smtp.us-east-1.amazonaws.com')
+server.login('***REMOVED***', '***REMOVED***')
 
 blacklist = {"defineciks@hotmail.com"
 ,"aarowkid1235@gmail.com"
