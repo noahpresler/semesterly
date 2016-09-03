@@ -1,4 +1,5 @@
 var majors = [
+	{value: "Undecided", label: "Undecided"},
 	{value: "Accounting", label: "Accounting"},
 	{value: "Advertising", label: "Advertising"},
 	{value: "Agribusiness", label: "Agribusiness"},
@@ -24,6 +25,7 @@ var majors = [
 	{value: "Biotechnology", label: "Biotechnology"},
 	{value: "Botany", label: "Botany"},
 	{value: "Chemical & Process Engineering", label: "Chemical & Process Engineering"},
+	{value: "Chemical & Biomolecular Engineering", label: "Chemical & Biomolecular Engineering"},
 	{value: "Chemistry", label: "Chemistry"},
 	{value: "Chinese", label: "Chinese"},
 	{value: "Chinese Studies", label: "Chinese Studies"},
@@ -119,6 +121,7 @@ var majors = [
 	{value: "Maritime Engineering", label: "Maritime Engineering"},
 	{value: "Marketing", label: "Marketing"},
 	{value: "Mathematics", label: "Mathematics"},
+	{value: "Materials Science", label: "Materials Science"},
 	{value: "Mechanical Engineering", label: "Mechanical Engineering"},
 	{value: "Mechatronics", label: "Mechatronics"},
 	{value: "Medical Laboratory Science", label: "Medical Laboratory Science"},
@@ -181,7 +184,8 @@ var majors = [
 	{value: "Theology", label: "Theology"},
 	{value: "Tourism", label: "Tourism"},
 	{value: "Valuation & Property Management", label: "Valuation & Property Management"},
-	{value: "Veterinary Science & Technology", label: "Veterinary Science & Technology"}
+	{value: "Veterinary Science & Technology", label: "Veterinary Science & Technology"},
+	{value: "Writing Seminars", label: "Writing Seminars"}
 ];
 
 export default majors;
