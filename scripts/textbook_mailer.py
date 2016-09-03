@@ -177,6 +177,6 @@ for student_id in students:
         print("skipped " + str(student.user.email))
 	traceback.print_exc()
 
-        server = smtplib.SMTP_SSL('smtp.zoho.com', 465)
-        server.login('textbooks@semester.ly', '***REMOVED***')
+        server = smtplib.SMTP_SSL('email-smtp.us-east-1.amazonaws.com')
+        server.login('***REMOVED***', '***REMOVED***')
 server.quit()
