@@ -23,7 +23,10 @@ students = PersonalTimetable.objects.filter(school=school).values_list("student"
 server = smtplib.SMTP_SSL('email-smtp.us-east-1.amazonaws.com')
 server.login('***REMOVED***', '***REMOVED***')
 
-blacklist = {"defineciks@hotmail.com"
+blacklist = { "sinjia2007@hotmail.com"
+,"jerricamarie.li@gmail.com"
+,"snjy9182@gmail.com"
+,"defineciks@hotmail.com"
 ,"aarowkid1235@gmail.com"
 ,"julbull97@gmail.com"
 ,"afang151@gmail.com"
@@ -94,6 +97,9 @@ for student_id in students:
 
         if not have_textbooks:
             continue
+
+        student.user.first_name = student.user.first_name.encode('utf-8')
+        student.user.last_name = student.user.last_name.encode('utf-8')
 
         msg_html = render_to_string('email_textbooks.html', {
             'user': student,
