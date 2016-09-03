@@ -35,7 +35,11 @@ def redirect_to_home(request):
   return HttpResponseRedirect("/")
 
 def custom_404(request):
-  return HttpResponse("404", status=404)
+  # return HttpResponse("404", status=404)
+  response = render(request, "404.html")
+  # TODO, maybe add this next line back in when im done testing
+  #response.status_code = 404
+  return response
 # ******************************************************************************
 # ******************************** GENERATE TTs ********************************
 # ******************************************************************************
