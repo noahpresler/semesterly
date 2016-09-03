@@ -23,7 +23,18 @@ students = PersonalTimetable.objects.filter(school=school).values_list("student"
 server = smtplib.SMTP_SSL('email-smtp.us-east-1.amazonaws.com')
 server.login('***REMOVED***', '***REMOVED***')
 
-blacklist = { "sanjayel@hotmail.com"
+blacklist = {"jmsusas@yahoo.com"
+,"clara.liff@gmail.com"
+,"muffinman1117@gmail.com"
+,"rebekah.kirkwood@gmail.com"
+,"awax1@jhu.edu"
+,"tfitzg12@jhu.edu"
+,"tlranger96@gmail.com"
+,"mcola22@gmail.com"
+,"gaby776@gmail.com"
+,"chaudrey84@gmail.com"
+,"hstwitter@hotmail.com"
+,"sanjayel@hotmail.com"
 ,"dandoherty97@gmail.com"
 ,"toxikjumper@gmail.com"
 ,"serfineokeyo@gmail.com"
@@ -171,7 +182,6 @@ for student_id in students:
         # Perform operations via server
         # TODO: Ping their email address to make sure it's fine
         server.sendmail(sender, [recipient], msg.as_string())
-        sleep(1)
     except:
         e = sys.exc_info()[0]
         print("skipped " + str(student.user.email))
