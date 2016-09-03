@@ -58,6 +58,9 @@ urlpatterns = patterns('',
     url(r'deploy_staging/', 'semesterly.views.deploy_staging'),
     # Robots.txt
     url(r'^unsubscribe/(?P<id>[\w.@+-]+)/(?P<token>[\w.:\-_=]+)/$', 'student.views.unsubscribe'),
+
+    # for testing 404, so i don't have to turn off debug
+	url(r'^404testing/', 'timetable.views.custom_404')
 )
 
 if getattr(settings, 'STAGING', False):
