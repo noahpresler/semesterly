@@ -20,19 +20,9 @@
 	font-size: 14px;
 }
 
-#error-404 {
-	position: absolute;
-	top: 50px;
-	bottom: 50px;
-	left: 50px;
-	right: 50px;
-	background-image: url(/static/img/emptystates/404.jpg);
-	background-size: contain;
-	background-position: center;
-	background-repeat: no-repeat;
-}
 #error-404 h2 {
 	font-size: 56px;
 	line-height: 56px;
-	color: #d11515;
+	color: #34495e;
+	margin: 0;
 }
