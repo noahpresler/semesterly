@@ -137,7 +137,7 @@ class VandyParser:
 			semester = 'F', #self.semester[0].upper(),
 			meeting_section = '(' + self.course.get('section') + ')',
 			defaults = {
-				'instructors': self.course.get('Instructor(s)'),
+				'instructors': self.course.get('Instructor(s)') or '',
 				'size': int(self.course.get('Class Capacity')),
 				'enrolment': int(self.course.get('Total Enrolled'))
 			}
@@ -149,18 +149,19 @@ class VandyParser:
 
 		offeringModels = []
 
-		for day in list(self.course.get('days')):
-			offeringModel, offering_was_created = Offering.objects.update_or_create(
-				section = sectionModel,
-				day = day,
-				time_start = self.course.get('time_start'),
-				time_end = self.course.get('time_end'),
-				defaults = {
-					'location': 'unknown'
-				}
-			)
+		if self.course.get('days'):
+			for day in list(self.course.get('days')):
+				offeringModel, offering_was_created = Offering.objects.update_or_create(
+					section = sectionModel,
+					day = day,
+					time_start = self.course.get('time_start'),
+					time_end = self.course.get('time_end'),
+					defaults = {
+						'location': 'unknown'
+					}
+				)
 
-			offeringModels.append(offeringModel)
+				offeringModels.append(offeringModel)
 
 		return offeringModels
 
@@ -463,7 +464,7 @@ class VandyParser:
 				if label == "Instructor(s)":
 					self.update_current_course(label, ', '.join(self.extractInstructors(value)))
 				elif label == "Time":
-					self.parseTime(value)
+					self.parse_time_range(value)
 				elif label == "Days":
 					self.parseWeekDays(value)
 				else:
@@ -477,20 +478,22 @@ class VandyParser:
 		else:
 			self.update_current_course("days", unformatted_days)
 
-	def parseTime(self, unformatted_time):
+	def parse_time_range(self, unformatted_time_range):
 
-		if unformatted_time == "TBA" or unformatted_time == "":
-			# TODO - deal with this
-			pass
+		if unformatted_time_range == "TBA" or unformatted_time_range == "":
+
+			# Create empty time slots
+			self.update_current_course('time_start', '')
+			self.update_current_course('time_end', '')
+
 		else:
 
-			search = re.match("(.*) \- (.*)", unformatted_time)
+			search = re.match("(.*) \- (.*)", unformatted_time_range)
 			if search is not None:
 				self.update_current_course('time_start', self.time_to_24(search.group(1)))
 				self.update_current_course('time_end', self.time_to_24(search.group(2)))
 			else:
-				pass
-				# TODO - scream
+				sys.stderr.write('ERROR: invalid time format')
 
 	def time_to_24(self, time12):
 
