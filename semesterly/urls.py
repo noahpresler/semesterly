@@ -11,6 +11,8 @@ admin.autodiscover()
 
 # custom 404 page
 handler404 = 'timetable.views.custom_404'
+# custom 500 page
+handler500 = 'timetable.views.custom_500'
 
     # for sorting search results by course code
     # sqs = SearchQuerySet().order_by('code')
@@ -60,7 +62,9 @@ urlpatterns = patterns('',
     url(r'^unsubscribe/(?P<id>[\w.@+-]+)/(?P<token>[\w.:\-_=]+)/$', 'student.views.unsubscribe'),
 
     # for testing 404, so i don't have to turn off debug
-	url(r'^404testing/', 'timetable.views.custom_404')
+	url(r'^404testing/', 'timetable.views.custom_404'),
+    # for testing 500, so i don't have to turn off debug
+    url(r'^500testing/', 'timetable.views.custom_500')
 )
 
 if getattr(settings, 'STAGING', False):
