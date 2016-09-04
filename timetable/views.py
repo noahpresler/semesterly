@@ -40,6 +40,12 @@ def custom_404(request):
   # TODO, maybe add this next line back in when im done testing
   #response.status_code = 404
   return response
+
+def custom_500(request):
+    response = render_to_response('500.html')
+    # TODO, maybe add this next line back in when im done testing
+    # response.status_code = 500
+    return response
 # ******************************************************************************
 # ******************************** GENERATE TTs ********************************
 # ******************************************************************************
