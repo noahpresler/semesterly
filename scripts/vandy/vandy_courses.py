@@ -33,39 +33,44 @@ class VandyParser:
 					params = payload,
 					cookies = self.cookies,
 					headers = self.headers,
-					verify = True)
+					verify = True
+				)
 
 				if r.status_code == 200:
 					html = r.text
 
 			except (requests.exceptions.Timeout,
 				requests.exceptions.ConnectionError):
-				print "Unexpected error: ", sys.exc_info()[0]
+				sys.stderr.write("Unexpected error: " + sys.exc_info()[0])
 				continue
 
 		return html.encode('utf-8')
 
-	def post(self, url, payload=''):
-		pass
+	def post_http(self, url, payload=''):
+		try:
+			self.session.post(
+				url,
+				params = payload,
+				cookies = self.cookies,
+				headers = self.headers,
+				verify = True
+			)
+
+		except (requests.exceptions.Timeout,
+			requests.exceptions.ConnectionError):
+			sys.stderr.write("Unexpected error: " + sys.exc_info()[0])
 
 	def login(self):
 
 		print "Logging in..."
 
 		get_login_url = "https://login.mis.vanderbilt.edu/login?service=https%3A%2F%2Fwebapp.mis.vanderbilt.edu%2Fmore%2Fj_spring_cas_security_check"
-		r = self.session.get(
-					get_login_url,
-					params = '',
-					cookies = self.cookies,
-					headers = self.headers,
-					verify = True)
-		print 'cookies:',requests.utils.dict_from_cookiejar(self.session.cookies)
+		self.get_html(get_login_url)
 
-		print self.cookies
-		for cookie in self.cookies:
-			print cookie.name, cookie.value, cookie.domain #etc etc
+		jsessionid = requests.utils.dict_from_cookiejar(self.session.cookies)['JSESSIONID']
+		print 'jsessionid:', jsessionid
 
-		post_login_url = "https://login.mis.vanderbilt.edu/mis-cas/login;jsessionid=6Hj313_pgckJYt0YDpJREDgEb2KkKvN78IMBlx227eVyA2gVQbg7!-1096849288"
+		post_login_url = "https://login.mis.vanderbilt.edu/mis-cas/login;jsessionid=" + jsessionid
 		post_payload = {
 			'service': 'https%3A%2F%2Fwebapp.mis.vanderbilt.edu%2Fmore%2Fj_spring_cas_security_check',
 			'username': self.username,
@@ -74,6 +79,8 @@ class VandyParser:
 			'_eventId': 'submit',
 			'submit': 'LOGIN'
 		}
+
+		self.post_http(post_login_url, post_payload)
 
 	def parse(self):
 
