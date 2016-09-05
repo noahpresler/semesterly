@@ -21,6 +21,8 @@ class VandyParser:
 		self.semester = sem
 		self.departments = {}
 		self.course = {}
+		self.username = 'khanaf'
+		self.password = 'Gainz%2123'
 
 	def get_html(self, url, payload=''):
 		html = None
@@ -43,7 +45,34 @@ class VandyParser:
 
 		return html.encode('utf-8')
 
+	def post(self, url, payload=''):
+		pass
+
+	def login(self):
+
+		print "Logging in..."
+
+		get_login_url = "https://login.mis.vanderbilt.edu/login?service=https%3A%2F%2Fwebapp.mis.vanderbilt.edu%2Fmore%2Fj_spring_cas_security_check"
+		self.get_html(get_login_url)
+
+		print self.cookies
+		for cookie in self.cookies:
+			print cookie.name, cookie.value, cookie.domain #etc etc
+
+		post_login_url = "https://login.mis.vanderbilt.edu/mis-cas/login;jsessionid=6Hj313_pgckJYt0YDpJREDgEb2KkKvN78IMBlx227eVyA2gVQbg7!-1096849288"
+		post_payload = {
+			'service': 'https%3A%2F%2Fwebapp.mis.vanderbilt.edu%2Fmore%2Fj_spring_cas_security_check',
+			'username': self.username,
+			'password': self.password,
+			'lt': '_c59609F2E-246F-20A6-A258-5599BE8D1C39_kBD984736-70E7-D979-4F8D-87CD64A8B152',
+			'_eventId': 'submit',
+			'submit': 'LOGIN'
+		}
+
 	def parse(self):
+
+		# Login to vandy course search site
+		self.login()
 
 		# Get a list of all the department codes
 		departmentCodes = self.getDepartmentCodes()

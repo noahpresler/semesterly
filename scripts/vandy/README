@@ -15,6 +15,35 @@ TODO
  	--> ex: EMGT-7733, EMGT-7711
 ______________________________________________
 
+LOGIN
+
+	VU-Net ID: khanaf
+	Pass: Gainz!23
+
+	GET 
+
+		https://login.mis.vanderbilt.edu/login?service=https%3A%2F%2Fwebapp.mis.vanderbilt.edu%2Fmore%2Fj_spring_cas_security_check
+
+	That returns a response header:
+
+		Set-Cookie:JSESSIONID=6Hj313_pgckJYt0YDpJREDgEb2KkKvN78IMBlx227eVyA2gVQbg7!-1096849288; path=/mis-cas; HttpOnly
+
+	Now in the cookie jar you should be able to find this cookie!
+
+	Now we have a session ID to use next
+
+	With that we POST to 
+
+		https://login.mis.vanderbilt.edu/mis-cas/login;jsessionid=6Hj313_pgckJYt0YDpJREDgEb2KkKvN78IMBlx227eVyA2gVQbg7!-1096849288?service=https%3A%2F%2Fwebapp.mis.vanderbilt.edu%2Fmore%2Fj_spring_cas_security_check
+
+	That needs a form data header:
+	
+		username=khanaf&password=Gainz%2123&lt=_c59609F2E-246F-20A6-A258-5599BE8D1C39_kBD984736-70E7-D979-4F8D-87CD64A8B152&_eventId=submit&submit=LOGIN
+
+	This should log us in
+
+______________________________________________
+
 LOCATION
 
 must be logged in within browser in order to request location information
