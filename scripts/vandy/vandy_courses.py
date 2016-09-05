@@ -48,13 +48,18 @@ class VandyParser:
 
 	def post_http(self, url, payload=''):
 		try:
-			self.session.post(
+
+			self.session.headers['User-Agent'] = 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_9_2) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/34.0.1847.131 Safari/537.36'
+
+			r = self.session.post(
 				url,
 				params = payload,
 				cookies = self.cookies,
-				headers = self.headers,
+				# headers = self.headers,
 				verify = True
 			)
+
+			print r.url
 
 		except (requests.exceptions.Timeout,
 			requests.exceptions.ConnectionError):
