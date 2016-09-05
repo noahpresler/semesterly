@@ -325,7 +325,7 @@ class VandyParser:
 
 		self.parseCourseDetails(self.get_html(courseDetailsURL, payload))
 
-		self.print_course()
+		# self.print_course()
 
 		# Create models
 		courseModel = self.create_course()
@@ -506,27 +506,6 @@ class VandyParser:
 		# Return as string
 		return str(hours) + ":" + str(minutes)
 
-	# def extractCourseNumberAndTermCode(self, string):
-	# 	codes = re.search("YAHOO.mis.student.Topics.showClassDetailPanel.fire\({classNumber : '([0-9]*)', termCode : '([0-9]*)',", string)
-
-	# 	# Check for regex match
-	# 	if codes is not None:
-	# 		return codes.group(1), codes.group(2)
-	# 	else:
-	# 		sys.stderr.write("ERROR: parsing course # and term code\n" + string)
-	# 		return '', ''
-
-	# def extractCourseNameAndAbbreviation(self, string):
-
-	# 	names = re.search("(.*):.*\n(.*)", string)
-
-	# 	# Check for regex match
-	# 	if names is not None:
-	# 		return names.group(2).strip(), names.group(1).strip()
-	# 	else:
-	# 		sys.stderr.write("ERROR: parsing course name and abbr\n" + string)
-	# 		return '', ''
-
 	def extract_instructors(self, string):
 
 		instructors = string.splitlines()
@@ -545,56 +524,8 @@ class VandyParser:
 		self.update_current_course('Notes', '\n'.join(notes))
 
 	def parse_description(self, soup):
-
-		description = soup.text.strip()
-
-		formerly = ""
-
-		# extract formerly info
-		# search = re.search("\[Formerly (\S* \S*)\]", description)
-		# if search is not None:
-
-		# 	formerly = search.group(1).strip()
-
-		# 	self.update_current_course("Formerly", formerly)
-
-		# 	# trim description
-		# 	description = re.search("\[Formerly \S* \S*\](.*)", description).group(1).strip()
-
-		self.update_current_course('description', description)
+		self.update_current_course('description', soup.text.strip())
 		self.update_current_course('Notes', '')
-
-	# def extractBookURL(self, string):
-
-	# 	bookURL = re.search("new YAHOO.mis.student.PopUpOpener\('(.*)',", string)
-
-	# 	# Check for regex match
-	# 	if bookURL is not None:
-	# 		return bookURL.group(1)
-	# 	else:
-	# 		sys.stderr.write("ERROR: parsing book url\n" + string)
-	# 		return ''
-
-	# def extractText(self, soup):
-	# 	return soup.text.strip()
-
-	# def extractAbbreviationDetails(self, string):
-
-	# 	search = re.match("(.*)-(.*)-(.*)", string)
-
-	# 	# Check if regex matched
-	# 	if search is not None:
-
-	# 		# extract
-	# 		departmentCode = search.group(1)
-	# 		catalogID = search.group(2)
-	# 		sectionNumber = search.group(3)
-			
-	# 		return departmentCode, catalogID, sectionNumber
-
-	# 	else:
-	# 		sys.stderr.write("ERROR: parsing course abbr details\n" + string)
-	# 		return '', '', ''
 
 def main():
 	vp = VandyParser()
