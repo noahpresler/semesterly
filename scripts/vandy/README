@@ -13,6 +13,7 @@ TODO
  	--> add parser for it
  - deal with "Ad Hoc Meeting Times"
  	--> ex: EMGT-7733, EMGT-7711
+ - implement fake User-Agent
 ______________________________________________
 
 LOGIN
