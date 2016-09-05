@@ -49,30 +49,32 @@ class VandyParser:
 	def post_http(self, url, payload=''):
 		try:
 
-			# TESTING FOR REDIRECTS
-			loc = url
-			seen = set()
-			while True:
-				r = self.session.post(loc, params=payload, allow_redirects=False)
-				loc = r.headers['location']
-				if loc in seen:
-					break
-				seen.add(loc)
-				print loc
+			# # TESTING FOR REDIRECTS
+			# loc = url
+			# seen = set()
+			# while True:
+			# 	r = self.session.get(loc, params=payload, allow_redirects=False)
+			# 	loc = r.headers['Location']
+			# 	if loc in seen:
+			# 		break
+			# 	seen.add(loc)
+			# 	print loc
 
-			# END TESTING
+			# # END TESTING
 
-			self.session.headers['User-Agent'] = 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_9_2) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/34.0.1847.131 Safari/537.36'
+			g = self.session.get(url, params=payload, allow_redirects=False)
+			loc = g.headers['location']
+			print loc
+
+			# self.session.headers['User-Agent'] = 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_9_2) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/34.0.1847.131 Safari/537.36'
 
 			r = self.session.post(
-				url,
-				params = payload,
+				loc,
+				# params = payload,
 				cookies = self.cookies,
-				# headers = self.headers,
+				headers = self.headers,
 				verify = True
 			)
-
-			print r.url
 
 		except (requests.exceptions.Timeout,
 			requests.exceptions.ConnectionError):
