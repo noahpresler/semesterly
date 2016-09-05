@@ -62,7 +62,7 @@ class VandyParser:
 
 			# # END TESTING
 
-			g = self.session.get(url, params=payload, allow_redirects=False)
+			g = self.session.post(url, params=payload, allow_redirects=False)
 			loc = g.headers['location']
 			print loc
 
