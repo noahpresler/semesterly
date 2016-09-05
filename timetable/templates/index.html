@@ -13,13 +13,14 @@
 		<meta property="og:type" content="website" />
 		<meta property="og:site_name" content="Semesterly" />
 		<meta property="og:url" content="http://semester.ly" />
-		<meta property="og:image" content="http://i.imgur.com/MoxzrNG.png" />
+		<meta property="og:image" content="http://i.imgur.com/Eem4KTj.png" />
 		<meta property="og:description" content="Now with a new and improved UI: find courses with friends, view course reactions, and use Advanced Search to find the course that fits all your needs. Alternatively, explore new options with our recommendation engine – helping you find new and exciting courses on the fly. Not sure if the class is worthwhile? Instantly see what your peers think, alongside detailed comments from past course evaluations." />
 		<meta property="fb:admins" content="535129063" />
 
 		<title>Semester.ly: Course Scheduling, Textbooks, Social & More</title>
-		<link rel="shortcut icon" type="image/x-icon" href="{% static 'img/favicon.ico' %}" />
-		<link href='https://fonts.googleapis.com/css?family=Lato:400,700,300&subset=latin,latin-ext' rel='stylesheet' type='text/css'>
+		<link rel="shortcut icon" type="image/x-icon" href="{% static 'img/logo2.0-310x310.png' %}" />
+
+		<link href="https://fonts.googleapis.com/css?family=Palanquin:500|Roboto:100,300,400" rel="stylesheet" type='text/css'>
 		<link rel="stylesheet" href="{% static 'css/timetable/global.css'%}">
 		<link rel="stylesheet" href="{% static 'css/splash.css'%}">
 		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css">
@@ -90,7 +91,7 @@
 								<h4>See which Facebook friends will be your classmates! Only friends in your course will see your name.</h4>
 							</div>
 							<div class="tutorial-half">
-								<img src="/static/img/splash/friends_v2.png" alt="a sample ">
+								<img src="/static/img/splash/friends.png" alt="a sample ">
 							</div>
 							<div class="tutorial-half">
 
@@ -180,6 +181,7 @@
 		</footer>
 
       	<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+      	<script type="text/javascript">(function(d,n){var s,a,p;s=document.createElement("script");s.type="text/javascript";s.async=true;s.src=(document.location.protocol==="https:"?"https:":"http:")+"//cdn.nudgespot.com"+"/nudgespot.js";a=document.getElementsByTagName("script");p=a[a.length-1];p.parentNode.insertBefore(s,p.nextSibling);window.nudgespot=n;n.init=function(t){function f(n,m){var a=m.split('.');2==a.length&&(n=n[a[0]],m=a[1]);n[m]=function(){n.push([m].concat(Array.prototype.slice.call(arguments,0)))}}n._version=0.1;n._globals=[t];n.people=n.people||[];n.params=n.params||[];m="track register unregister identify set_config people.delete people.create people.update people.create_property people.tag people.remove_Tag".split(" ");for(var i=0;i<m.length;i++)f(n,m[i])}})(document,window.nudgespot||[]);nudgespot.init("78e9e3015a898741a1284cd2cafcfb07");</script>
 		<script type="text/javascript" src="{% static 'js/splash.js'%}"></script>
 	</body>
 </html>

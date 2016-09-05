@@ -5,7 +5,7 @@ import os,re
 
 from selenium import webdriver
 from selenium.webdriver.support.ui import Select
-from selenium.common.exceptions import StaleElementReferenceException
+from selenium.common.exceptions import StaleElementReferenceException, TimeoutException
 from selenium.webdriver.support import expected_conditions as EC
 from time import sleep
 from bs4 import BeautifulSoup as Soup
@@ -42,15 +42,23 @@ class QueensParser(BaseParser):
   def __init__(self, semester, year, debug=False):
     BaseParser.__init__(self, 'F' if semester == 'Fall' else 'S')
     self.section_type_map = {
-      'LEC': 'L',
-      'TUT': 'T',
-      'LAB': 'P',
+      'Lec': 'L',
+      'Tut': 'T',
+      'Lab': 'P',
+      'Pra': 'P',
+      'Ble': 'B',
     }
     self.debug = debug
-    self.driver = webdriver.Chrome() if debug else webdriver.PhantomJS()
+    self.driver = None
     self.start_index = 1
     self.section_index = 0
     self.term = "{0} {1}".format(year, semester)
+    self.start_new_driver()
+
+  def start_new_driver(self):
+    self.driver = webdriver.Chrome() if self.debug else webdriver.PhantomJS()
+    self.driver.set_page_load_timeout(15)
+    self.driver.implicitly_wait(15)
 
   def get_course_elements(self):
     while True:
@@ -58,13 +66,13 @@ class QueensParser(BaseParser):
         for course_element in self._get_course_elements():
           yield course_element
         break
-      except TimeoutException, StaleElementReferenceException:
+      except:
         try:
           self.driver.switch_to_alert().accept()
         except:
           print "No XML alert, continuing"
         self.driver.quit()
-        self.driver = webdriver.Chrome() if self.debug else webdriver.PhantomJS()
+        self.start_new_driver()
         print "Detected timeout or error, restarting parse from last parsed subject"
 
   def _get_course_elements(self):
@@ -81,6 +89,7 @@ class QueensParser(BaseParser):
     num_subjects = len(seleni_run(lambda: self.driver.find_element_by_id('SSR_CLSRCH_WRK_SUBJECT_SRCH$0')).find_elements_by_tag_name('option'))
     for i in range(self.start_index, num_subjects):
       print "parsing subject {0} of {1}".format(i, num_subjects)
+      self.start_index = i
       self.select_subject_by_index(i)
       self.click_search()
       sections = self.get_class_elements()
@@ -96,7 +105,6 @@ class QueensParser(BaseParser):
         seleni_run(lambda: self.driver.find_element_by_id('CLASS_SRCH_WRK2_SSR_PB_BACK')).click()
       self.section_index = 0
       self.return_to_search()
-      self.start_index = i
 
   def select_subject_by_index(self, index):
     select = seleni_run(lambda: self.driver.find_element_by_id('SSR_CLSRCH_WRK_SUBJECT_SRCH$0'))
@@ -153,7 +161,6 @@ class QueensParser(BaseParser):
     page_title = get_field_text(course_element, course_title_id)
     course_code = ' '.join(page_title.split()[:2])
     course_graph_info = get_field_text(course_element, prereq_id).split('\n')
-
     course_data = {
       # mandatory
       'name': ' '.join(page_title.split()[4:]),
@@ -186,7 +193,8 @@ class QueensParser(BaseParser):
     cols_by_row = [row.findChildren(recursive=False) for row in meeting_table.tbody.findChildren(recursive=False)[2:]]
     time_is_TBA = any(('TBA' in cols[0].div.span.text or len(cols[0].div.span.text.split()) != 4
                     for cols in cols_by_row))
-    section_type = self.section_type_map.get(get_field_text(section_element, subheader_id).split()[-1].strip(), 'L')
+    given_section_type=get_field_text(section_element, subheader_id).split()[-1].strip()[:3] # e.g. "Lecture", "Laboratory", etc
+    section_type = self.section_type_map.get(given_section_type, 'L')
     section_data = {
       'semester': self.semester,
       'section_type': section_type,
@@ -254,5 +262,5 @@ def get_section_cols(section_element):
   return [col.div.span for col in section_element.findAll('td', {'class': section_td_class})]
 
 if __name__ == '__main__':
-  parser = QueensParser('Winter', 2017, True)
+  parser = QueensParser('Fall', 2016)
   parser.parse_courses()

@@ -16,6 +16,8 @@ class Student(models.Model):
     major = models.CharField(max_length=255, default='')
     social_courses = models.NullBooleanField(null=True)
     social_offerings = models.NullBooleanField(null=True)
+    social_all = models.NullBooleanField(null=True)
+    emails_enabled = models.NullBooleanField(null=True, default=True)
     time_created = models.DateTimeField(auto_now_add=True)
 
 

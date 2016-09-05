@@ -1,3 +1,4 @@
+import collections
 import copy
 import functools
 import itertools
@@ -17,7 +18,7 @@ from pytz import timezone
 from analytics.models import *
 from analytics.views import *
 from timetable.models import *
-from timetable.school_mappers import school_to_granularity, VALID_SCHOOLS, school_code_to_name
+from timetable.school_mappers import school_to_granularity, VALID_SCHOOLS, school_code_to_name, AM_PM_SCHOOLS
 from timetable.utils import *
 from timetable.scoring import *
 from student.models import Student
@@ -34,13 +35,23 @@ def redirect_to_home(request):
   return HttpResponseRedirect("/")
 
 def custom_404(request):
-  return HttpResponse("404", status=404)
+  # return HttpResponse("404", status=404)
+  response = render(request, "404.html")
+  # TODO, maybe add this next line back in when im done testing
+  #response.status_code = 404
+  return response
+
+def custom_500(request):
+    response = render_to_response('500.html')
+    # TODO, maybe add this next line back in when im done testing
+    # response.status_code = 500
+    return response
 # ******************************************************************************
 # ******************************** GENERATE TTs ********************************
 # ******************************************************************************
 
 @validate_subdomain
-def view_timetable(request, code=None, sem=None, shared_timetable=None):
+def view_timetable(request, code=None, sem=None, shared_timetable=None, find_friends=False):
   school = request.subdomain
   student = get_student(request)
   course_json = None
@@ -55,15 +66,23 @@ def view_timetable(request, code=None, sem=None, shared_timetable=None):
       course_json = get_detailed_course_json(school, course, sem, student)
     except:
       raise Http404
-
   return render_to_response("timetable.html", {
     'school': school,
     'student': json.dumps(get_user_dict(school, student, sem)),
     'course': json.dumps(course_json),
     'semester': sem,
     'shared_timetable': json.dumps(shared_timetable),
+    'find_friends': find_friends,
+    'uses_12hr_time': school in AM_PM_SCHOOLS
   },
   context_instance=RequestContext(request))
+
+@validate_subdomain
+def find_friends(request):
+  try:
+    return view_timetable(request, find_friends=True)
+  except Exception as e:
+    raise Http404
 
 @validate_subdomain
 def share_timetable(request, ref):
@@ -515,6 +534,15 @@ def course_page(request, code):
     l = course_dict['sections'].get('L', {}).values()
     t = course_dict['sections'].get('T', {}).values()
     p = course_dict['sections'].get('P', {}).values()
+    avg = round(course_obj.get_avg_rating(), 2)
+    evals = course_dict['evals']
+    clean_evals = evals
+    for i, v in enumerate(evals):
+      for k, e in v.items():
+        if isinstance(evals[i][k], basestring):
+          clean_evals[i][k] = evals[i][k].replace(u'\xa0', u' ')
+        if k == "year":
+          clean_evals[i][k] = evals[i][k].replace(":", " ")
     if school == "jhu":
       course_url = "/course/" + course_dict['code'] + "/F"
     else:
@@ -526,7 +554,9 @@ def course_page(request, code):
        'lectures': l if l else None,
        'tutorials': t if t else None,
        'practicals': p if p else None,
-       'url': course_url
+       'url': course_url,
+       'evals': clean_evals,
+       'avg': avg
        },
     context_instance=RequestContext(request))
   except Exception as e:
@@ -537,8 +567,8 @@ def all_courses(request):
   school = request.subdomain
   school_name = school_code_to_name[school]
   try:
-    course_map = {}
-    departments = Course.objects.filter(school=school).values_list('department', flat=True).distinct()
+    course_map = collections.OrderedDict()
+    departments = Course.objects.filter(school=school).order_by('department').values_list('department', flat=True).distinct()
     for department in departments:
       course_map[department] = Course.objects.filter(school=school, department=department).all()
     return render_to_response("all_courses.html",

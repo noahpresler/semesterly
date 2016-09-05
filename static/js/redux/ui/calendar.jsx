@@ -9,8 +9,8 @@ import { ShareLink } from './master_slot.jsx';
 
 const Row = (props) => {
 	let timeText = props.show ? <span>{props.time}</span> : null;
-	let dayCells = DAYS.map(day => <CellContainer day={day} 
-																								time={props.time} 
+	let dayCells = DAYS.map(day => <CellContainer day={day}
+																								time={props.time}
 																								key={day+props.time}
 																								loggedIn={props.isLoggedIn} />)
 	return (
@@ -43,8 +43,9 @@ class Calendar extends React.Component {
 	getCalendarRows() {
     let rows = [];
     for (let i = 8; i <= this.props.endHour; i++) { // one row for each hour, starting from 8am
-      rows.push(<Row time={i + ':00'} show={true} isLoggedIn={this.props.isLoggedIn} key={i}/>);
-      rows.push(<Row time={i + ':30'} show={false} isLoggedIn={this.props.isLoggedIn} key={i + 0.5}/>);
+      let hour = uses12HrTime && i > 12 ? i - 12 : i;
+      rows.push(<Row time={hour + ':00'} show={true} isLoggedIn={this.props.isLoggedIn} key={i}/>);
+      rows.push(<Row time={hour + ':30'} show={false} isLoggedIn={this.props.isLoggedIn} key={i + 0.5}/>);
     }
 
   	return rows;
@@ -69,18 +70,18 @@ class Calendar extends React.Component {
 		let shareButton = (
 			<button onClick={this.fetchShareTimetableLink}
 							className="save-timetable add-button">
-				<i className={classnames("fa",  
-					{"fa-share-alt": !this.props.isFetchingShareLink}, 
+				<i className={classnames("fa",
+					{"fa-share-alt": !this.props.isFetchingShareLink},
 					{"fa-spin fa-circle-o-notch": this.props.isFetchingShareLink})} />
 			</button>
 		)
-		let shareLink = this.state.shareLinkShown ? 
-        <ShareLink 
+		let shareLink = this.state.shareLinkShown ?
+        <ShareLink
             link={this.props.shareLink}
-            onClickOut={this.hideShareLink} /> : 
+            onClickOut={this.hideShareLink} /> :
         null;
   	let addButton = (
-			<button onClick={this.props.handleCreateNewTimetable} 
+			<button onClick={this.props.handleCreateNewTimetable}
 							className="save-timetable add-button">
 				<i className="fa fa-plus" />
 			</button>
@@ -99,7 +100,7 @@ class Calendar extends React.Component {
 
 		return (
 	      <div id="calendar" className="fc fc-ltr fc-unthemed">
-	        <div className="fc-toolbar">
+	        <div className="fc-toolbar no-print">
 	          <div className="fc-left">
 	      		<PaginationContainer />
 	      	  </div>
@@ -175,7 +176,7 @@ class Calendar extends React.Component {
 	              </tbody>
 	            </table>
 	          </div>
-	          <p className="data-last-updated">Data last updated: { this.props.dataLastUpdated && this.props.dataLastUpdated.length && this.props.dataLastUpdated !== "null" ? this.props.dataLastUpdated : null }</p>
+	          <p className="data-last-updated no-print">Data last updated: { this.props.dataLastUpdated && this.props.dataLastUpdated.length && this.props.dataLastUpdated !== "null" ? this.props.dataLastUpdated : null }</p>
 	        </div>
 	      </div>
     	);

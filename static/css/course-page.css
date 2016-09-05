@@ -175,59 +175,6 @@
 }
 
 /**
- * 2.0 Typography
- */
-
-/* latin-ext */
-@font-face {
-  font-family: 'Lato';
-  font-style: normal;
-  font-weight: 100;
-  src: local('Lato Hairline'), local('Lato-Hairline'), url(https://fonts.gstatic.com/s/lato/v11/h3_FseZLI76g1To6meQ4zX-_kf6ByYO6CLYdB4HQE-Y.woff2) format('woff2');
-  unicode-range: U+0100-024F, U+1E00-1EFF, U+20A0-20AB, U+20AD-20CF, U+2C60-2C7F, U+A720-A7FF;
-}
-/* latin */
-@font-face {
-  font-family: 'Lato';
-  font-style: normal;
-  font-weight: 100;
-  src: local('Lato Hairline'), local('Lato-Hairline'), url(https://fonts.gstatic.com/s/lato/v11/ifRS04pY1nJBsu8-cUFUS-vvDin1pK8aKteLpeZ5c0A.woff2) format('woff2');
-  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2212, U+2215, U+E0FF, U+EFFD, U+F000;
-}
-/* latin-ext */
-@font-face {
-  font-family: 'Lato';
-  font-style: normal;
-  font-weight: 300;
-  src: local('Lato Light'), local('Lato-Light'), url(https://fonts.gstatic.com/s/lato/v11/IY9HZVvI1cMoAHxvl0w9LVKPGs1ZzpMvnHX-7fPOuAc.woff2) format('woff2');
-  unicode-range: U+0100-024F, U+1E00-1EFF, U+20A0-20AB, U+20AD-20CF, U+2C60-2C7F, U+A720-A7FF;
-}
-/* latin */
-@font-face {
-  font-family: 'Lato';
-  font-style: normal;
-  font-weight: 300;
-  src: local('Lato Light'), local('Lato-Light'), url(https://fonts.gstatic.com/s/lato/v11/22JRxvfANxSmnAhzbFH8PgLUuEpTyoUstqEm5AMlJo4.woff2) format('woff2');
-  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2212, U+2215, U+E0FF, U+EFFD, U+F000;
-}
-/* latin-ext */
-@font-face {
-	font-family: 'Lato';
-	font-style: normal;
-	font-weight: 400;
-	src: local('Lato Regular'), local('Lato-Regular'), url(http://fonts.gstatic.com/s/lato/v11/8qcEw_nrk_5HEcCpYdJu8BTbgVql8nDJpwnrE27mub0.woff2) format('woff2');
-	unicode-range: U+0100-024F, U+1E00-1EFF, U+20A0-20AB, U+20AD-20CF, U+2C60-2C7F, U+A720-A7FF;
-}
-/* latin */
-@font-face {
-	font-family: 'Lato';
-	font-style: normal;
-	font-weight: 400;
-	src: local('Lato Regular'), local('Lato-Regular'), url(http://fonts.gstatic.com/s/lato/v11/MDadn8DQ_3oT6kvnUq_2r_esZW2xOQ-xsNqO47m55DA.woff2) format('woff2');
-	unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2212, U+2215, U+E0FF, U+EFFD, U+F000;
-}
-
-/**
  * 3.0 Formalities
  */
 
@@ -243,7 +190,7 @@ body, html {
 	width: 100%;
 	height: 100%;
 	background-color: #eee;
-	font-family: "Lato", sans-serif;
+	font-family: "Roboto", sans-serif;
 }
 
 /**
@@ -267,8 +214,8 @@ header a:hover {
 header h1 {
 	margin: 0;
 	color: #34495E;
-	font-family: lato;
-	font-weight: 400;
+	font-family: "Palanquin",Arial,sans-serif;
+	font-weight: 500;
 	display: inline-block;
 	font-size: 32px;
 	line-height: 50px;
@@ -326,7 +273,7 @@ header h1 {
     display: inline-block;
     border-color: transparent;
     border-top-color: #34495e; 
-    border-style: dashed dashed solid;
+    border-style: solid dashed dashed;
     border-width: 6.5px 6.5px 0;
     margin-left: 5px;
     z-index: 1;
@@ -343,7 +290,7 @@ header h1 {
     top: 49px;
     right: 10px;
     width: 100%;
-    min-width: 100px;
+    min-width: 105px;
     background-color: #fff;
     border: 1px solid #E8E8E8;
     box-shadow: 0 2px 10px rgba(0,0,0,.2);
@@ -481,6 +428,7 @@ a#social-login:hover:before {
 	line-height: 26px;
 	font-size: 26px;
 	position: relative;
+	font-family: "Palanquin",Arial,sans-serif;
 }
 
 /**
@@ -512,25 +460,128 @@ a#social-login:hover:before {
 }
 #credits {
 	text-align: center;
-	padding-bottom: 20px;
+	padding-bottom: 10px;
 }
 #credits h3 {
 	margin: 0;
 	font-size: 70px;
-	color: #253340;
-	font-weight: 300;
+	color: #34495e;
+	font-weight: 100;
 }
 #credits span {
 	padding-left: 10px;
 	font-size: 30px;
 	color: #aaa;
+	font-weight: 300;
 }
+
+#avg-rating {
+	text-align: center;
+	padding-bottom: 10px;
+}
+#avg-rating h3 {
+	margin: 0;
+	font-size: 12px;
+	color: #555;
+}
+#avg-rating b {
+	color: #777;
+}
+
 #description {
 	padding-left: 20px;
 }
 #content p {
 	font-size: 14px;
 }
+
+/* Course Reviews */
+.review-pager {
+	float: left;
+	width: 33%;
+	text-align: center;
+	padding: 3px 6px 3px 0;
+	font-size: 12px;
+}
+.review-pager-border {
+	border: 1px solid #D4D4D4;
+	padding: 2px 0 0 0;
+	cursor: pointer;
+}
+.review-pager-year {
+	font-size: 14px;
+	margin: 0;
+}
+
+.rating-wrapper {
+    display: inline-block;
+    text-align: center;
+}
+.star-ratings-sprite {
+	background: url(/static/img/star.png) repeat-x;
+	font-size: 0;
+	height: 18px;
+	line-height: 0;
+	overflow: hidden;
+	text-indent: -999em;
+	width: 90px;
+	margin: 0 auto;
+	float: left;
+}
+.rating {
+	background: url(/static/img/rating.png) 0 100% repeat-x;
+	float: left;
+	height: 18px;
+	display: block;
+}
+.review-pager .numeric-rating {
+	font-weight: 500;
+	color: #a1a1a1;
+}
+.numeric-rating {
+	float: left;
+	text-decoration: none;
+	position: relative;
+	margin-left: 8px;
+	top: 1px;
+}
+
+.review {
+	width: 100%;
+	background-color: #fff;
+	padding: 3px 12px 3px 0;
+}
+.review-header {
+	padding: 5px 0;
+	text-align: center;
+}
+.review-border {
+	border: 1px solid #D4D4D4;
+	padding: 10px;
+}
+.review-year {
+	float: left;
+	margin: 0;
+	font-size: 14px;
+	font-weight: 700;
+	color: #34495e;
+}
+.review-prof {
+	display: inline-block;
+	font-size: 14px;
+	margin: 0 15px;
+	font-weight: 700;
+	color: #34495e;
+}
+.review .rating-wrapper {
+	float: right;
+}
+.review-body {
+	text-align: left;
+}
+/* End Course Reviews */
+
+
 #call-to-action {
 	padding: 20px 0 0;
 	text-align: center;
@@ -599,6 +650,12 @@ a#social-login:hover:before {
 	padding: 40px 0 0 30px;
 }
 
+@media (max-width: 799px) {
+	.review-pager {
+		width: 50%;
+	}
+}
+
 @media (max-width: 766px) {
 	.card-width {
 		width: 100%;
@@ -609,6 +666,9 @@ a#social-login:hover:before {
 	}
 	#description {
 		padding-left: 0px;
+	}
+	.review-pager {
+		width: 33%;
 	}
 }
 
@@ -623,6 +683,12 @@ a#social-login:hover:before {
 		font-size: 26px;
 	}
 	.section {
+		width: 50%;
+	}
+}
+
+@media (max-width: 599px) {
+	.review-pager {
 		width: 50%;
 	}
 }

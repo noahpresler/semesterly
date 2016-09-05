@@ -40,6 +40,9 @@ export function nullifyTimetable(dispatch) {
 		type: "CHANGE_ACTIVE_SAVED_TIMETABLE",
 		timetable: {name: "Untitled Schedule", courses: [], has_conflict: false}
 	})
+	dispatch({
+		type: "CLEAR_OPTIONAL_COURSES"
+	})
 }
 
 // loads timetable from localStorage. assumes that the browser supports localStorage

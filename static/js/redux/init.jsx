@@ -12,11 +12,11 @@ import { fetchSchoolInfo } from './actions/school_actions.jsx';
 import { setCourseInfo } from './actions/modal_actions.jsx';
 import { browserSupportsLocalStorage } from './util.jsx';
 
-export const store = createStore(rootReducer, applyMiddleware(thunkMiddleware));
+export const store = createStore(rootReducer, window.devToolsExtension && window.devToolsExtension(), applyMiddleware(thunkMiddleware));
 
 export const getSchool = () => {
   return store.getState().school.school;
-} 
+}
 export const getSemester = () => {
   return store.getState().semester;
 }
@@ -35,13 +35,15 @@ function setup(dispatch) {
   });
   sharedTimetable = JSON.parse(sharedTimetable);
   sharedCourse = JSON.parse(sharedCourse);
+  findFriends = findFriends === "True";
+  uses12HrTime = uses12HrTime === "True"
   /* first setup the user's state */
   let user = JSON.parse(currentUser); // currentUser comes from timetable.html
   dispatch(getUserInfo(user));
   if (!sharedTimetable) { // we load user's timetable (or cached timetable) only if they're _not_ trying to load a shared timetable
     if (user.isLoggedIn && user.timetables.length > 0) { // user is logged in and has saved timetables
-      // load one of the user's saved timetables (after initial page load). also fetches classmates 
-      loadTimetable(user.timetables[0]); 
+      // load one of the user's saved timetables (after initial page load). also fetches classmates
+      loadTimetable(user.timetables[0]);
       dispatch({ type: "RECEIVE_TIMETABLE_SAVED", upToDate: true });
     }
     else { // user isn't logged in (or has no saved timetables); load last browser-cached timetable, under certain conditions.
@@ -59,6 +61,8 @@ function setup(dispatch) {
   }
   else if (sharedCourse) {
     dispatch(setCourseInfo(sharedCourse));
+  } else if (findFriends) {
+    dispatch({type: "TOGGLE_PEER_MODAL"});
   }
 
 }

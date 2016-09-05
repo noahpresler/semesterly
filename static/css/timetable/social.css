@@ -35,7 +35,7 @@
     display: inline-block;
     border-color: transparent;
     border-top-color: #34495e; 
-    border-style: dashed dashed solid;
+    border-style: solid dashed dashed;
     border-width: 6.5px 6.5px 0;
     margin-left: 5px;
     z-index: 1;
@@ -52,7 +52,7 @@
     top: 49px;
     right: 10px;
     width: 100%;
-    min-width: 100px;
+    min-width: 105px;
     background-color: #fff;
     border: 1px solid #E8E8E8;
     box-shadow: 0 2px 10px rgba(0,0,0,.2);

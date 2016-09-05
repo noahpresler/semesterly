@@ -13,16 +13,16 @@
 		<meta property="og:type" content="website" />
 		<meta property="og:site_name" content="Semesterly" />
 		<meta property="og:url" content="http://semester.ly" />
-		<meta property="og:image" content="http://i.imgur.com/MoxzrNG.png" />
+		<meta property="og:image" content="http://i.imgur.com/Eem4KTj.png" />
 		<meta property="og:description" content="{{ course.description }}" />
 		<meta property="fb:admins" content="535129063" />
 
 		<title>{{ course.code }} {{ course.name }} | Semester.ly</title>
-		<link rel="shortcut icon" type="image/x-icon" href="{% static 'img/favicon.ico' %}" />
+		<link rel="shortcut icon" type="image/x-icon" href="{% static 'img/logo2.0-310x310.png' %}" />
 
 		<link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet" integrity="sha256-7s5uDGW3AHqw6xtJmNNtr+OBRJUlgkNJEo78P4b0yRw= sha512-nNo+yCHEyn0smMxSswnf/OnX6/KwJuZTlNZBjauKhTK0c+zT+q5JOCx0UFhXQ6rJR9jg6Es8gPuD2uZcYDLqSw==" crossorigin="anonymous">
 		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css">
-		<link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Lato">
+		<link href="https://fonts.googleapis.com/css?family=Palanquin:500|Roboto:100,300,400" rel="stylesheet" type='text/css'>
 		
 		<!-- <img class="timer-logo" height=75 src="{% static 'img/logo2.0.png' %}"/> -->
 		<link rel="stylesheet" href="{% static 'css/course-page.css' %}">
@@ -54,7 +54,9 @@
 				</div> -->
 			</div>
 		</header>
-		<div id="page">
+		<div id="page" itemscope itemtype="http://schema.org/Rating">
+			<meta itemprop="worstRating" content = "0"/>
+			<meta itemprop="bestRating" content = "5"/>
 			<div id="top-bg"></div>
 			<div id="top" class="grid cf">
 				<div class="card-width">
@@ -64,12 +66,26 @@
 			<div id="content">
 				<div class="grid cf">
 					<div id="card">
-						<h1>{{ course.name }}</h1>
+						<h1 itemprop="name">{{ course.name }}</h1>
 						<div class="cf">
 							<div class="col-1-4">
 								<div id="credits">
 									<h3>{{ course.num_credits }}</h3>
 									<span>credits</span>
+								</div>
+								<div id="avg-rating">
+									{% if avg %}
+										<h3>Average Course Rating</h3>
+										<div class="rating-wrapper"
+											data-score="{{ avg }}">
+											<div class="star-ratings-sprite eval-stars">
+												<span class="rating" style="width: 0%;"></span>
+											</div>
+											<div class="numeric-rating">
+												<b>({{ avg }})</b>
+											</div>
+										</div>
+									{% endif %}
 								</div>
 							</div>
 							<div class="col-3-4">
@@ -80,6 +96,84 @@
 										<p>No description found.</p>
 									{% endif %}
 								</div>
+							</div>
+							<div class="col-1-1">
+								{% if evals and evals|length > 1 %}
+									<div id="no-template-pager" class="cycle-pager external cf">
+										{% for e in evals %}
+											<div class="review-pager">
+												<div class="review-pager-border">
+													<h4 class="review-pager-year">{{ e.year }}</h4>
+													<div class="rating-wrapper"
+														data-score="{{ e.score }}">
+														<div class="star-ratings-sprite eval-stars">
+															<span class="rating" style="width: 0%;"></span>
+														</div>
+														<div class="numeric-rating">
+															<b>({{ e.score }})</b>
+														</div>
+													</div>
+												</div>
+											</div>
+										{% endfor %}
+									</div>
+									<div class="cycle-slideshow" 
+										data-cycle-fx="fade" 
+										data-cycle-timeout="0"
+										data-cycle-slides="> div"
+										data-cycle-pager="#no-template-pager"
+										data-cycle-pager-template=""
+										data-cycle-auto-height=container
+										>
+										{% for e in evals %}
+											<div class="review">
+												<div class="review-border">
+													<div class="review-header">
+														<h4 class="review-year">{{ e.year }}</h4>
+														<h4 class="review-prof">Professor: {{ e.professor }}</h4>
+														<div class="rating-wrapper"
+															data-score="{{ e.score }}">
+															<div class="star-ratings-sprite eval-stars">
+																<span class="rating" style="width: 0%;"></span>
+															</div>
+															<div class="numeric-rating">
+																<b>({{ e.score }})</b>
+															</div>
+														</div>
+													</div>
+													<div class="review-body">
+														<p>{{ e.summary }}</p>
+													</div>
+												</div>
+											</div>
+										{% endfor %}
+									</div>
+								{% elif evals %}
+									{% for e in evals %}
+										<div class="review">
+											<div class="review-border">
+												<div class="review-header">
+													<h4 class="review-year">{{ e.year }}</h4>
+													<h4 class="review-prof">Professor: {{ e.professor }}</h4>
+													<div class="rating-wrapper"
+														data-score="{{ e.score }}">
+														<div class="star-ratings-sprite eval-stars">
+															<span class="rating" style="width: 0%;"></span>
+														</div>
+														<div class="numeric-rating">
+															<b>({{ e.score }})</b>
+														</div>
+													</div>
+												</div>
+												<div class="review-body">
+													<p>{{ e.summary }}</p>
+												</div>
+											</div>
+										</div>
+									{% endfor %}
+								{% else %}
+									<p>No Course Evaluations found</p>
+								{% endif %}
 							</div>
 							<div id="call-to-action" class="col-1-1">
 								<a href="{{ url }}">
@@ -95,21 +189,35 @@
 								<div class="section-group cf">
 									<h3>Lecture Sections</h3>
 									{% for l in lectures %}
-										<div class="section"
-											data-waitlist="{{ l.0.waitlist }}"
-											data-enrolment="{{ l.0.enrolment }}"
-											data-size="{{ l.0.size }}"
-											>
-											<h4>{{ l.0.meeting_section }}</h4>
-											<h5>{{ l.0.location }}</h5>
-											{% if l.0.instructors %}
-												<h5>{{ l.0.instructors }}</h5>
-											{% else %}
-												<h5>No instructor info</h5>
-											{% endif %}
-											<h5>{{ l.0.time_start }} - {{ l.0.time_end }}</h5>
-											<h5 class="enrollment"></h5>
-										</div>
+										{% if l %}
+											<div class="section"
+												data-waitlist="{{ l.0.waitlist }}"
+												data-enrolment="{{ l.0.enrolment }}"
+												data-size="{{ l.0.size }}"a
+												>
+												{% if l.0.meeting_section %}
+													<h4>{{ l.0.meeting_section }}</h4>
+												{% else %}
+													<h4>No section number</h4>
+												{% endif %}
+												{% if l.0.location %}
+													<h5>{{ l.0.location }}</h5>
+												{% else %}
+													<h5>No location info</h5>
+												{% endif %}
+												{% if l.0.instructors %}
+													<h5>{{ l.0.instructors }}</h5>
+												{% else %}
+													<h5>No instructor info</h5>
+												{% endif %}
+												{% if l.0.time_start %}
+													<h5>{{ l.0.time_start }} - {{ l.0.time_end }}</h5>
+												{% else %}
+													<h5>No class times info</h5>
+												{% endif %}
+												<h5 class="enrollment"></h5>
+											</div>
+										{% endif %}
 									{% endfor %}
 								</div>
 							{% endif %}
@@ -124,7 +232,16 @@
 											>
 											<h4>{{ t.0.meeting_section }}</h4>
 											<h5>{{ t.0.location }}</h5>
-											<h5>{{ t.0.time_start }} - {{ t.0.time_end }}</h5>
+											{% if t.0.instructors %}
+												<h5>{{ t.0.instructors }}</h5>
+											{% else %}
+												<h5>No instructor info</h5>
+											{% endif %}
+											{% if t.0.time_start %}
+												<h5>{{ t.0.time_start }} - {{ t.0.time_end }}</h5>
+											{% else %}
+												<h5>No class times info</h5>
+											{% endif %}
 											<h5 class="enrollment"></h5>
 										</div>
 									{% endfor %}
@@ -141,7 +258,16 @@
 											>
 											<h4>{{ p.0.meeting_section }}</h4>
 											<h5>{{ p.0.location }}</h5>
-											<h5>{{ p.0.time_start }} - {{ p.0.time_end }}</h5>
+											{% if p.0.instructors %}
+												<h5>{{ p.0.instructors }}</h5>
+											{% else %}
+												<h5>No instructor info</h5>
+											{% endif %}
+											{% if p.0.time_start %}
+												<h5>{{ p.0.time_start }} - {{ p.0.time_end }}</h5>
+											{% else %}
+												<h5>No class times info</h5>
+											{% endif %}
 											<h5 class="enrollment"></h5>
 										</div>
 									{% endfor %}
@@ -170,6 +296,8 @@
 		ga('create', 'UA-68704308-1', 'auto');
 		ga('send', 'pageview');
 		</script>
+		<script src="http://ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js"></script>
+		<script src="http://malsup.github.com/jquery.cycle2.js"></script>
 		<script type='text/javascript' src='/static/js/course-page.js'></script>
 	</body>
 </html>

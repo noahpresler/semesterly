@@ -2,8 +2,23 @@ html {
 	height: 100%;
 }
 
+h1, h2 {
+	font-family: "Palanquin",Arial,sans-serif;
+	font-weight: 500;
+}
+
+h3, h4, h5, h6, p, a, span, input, textarea {
+	font-family: "Roboto",Arial,sans-serif;
+	font-weight: 400;
+}
+
 #dad-bod {
 	height: 100%;
+}
+
+.print
+{
+	display: none;
 }
 
 #page {
@@ -53,11 +68,12 @@ html {
 }
 
 #top-bar {
-	background-color: #F8F6F7;
 	min-height: 50px;
-	border-bottom: 1px solid #E8E8E8;
 	position: relative;
+	box-shadow: 0 0px 12px rgba(0,0,0,0.1), 0 0px 1px rgba(0,0,0,0.15);
+	z-index: 1000;
 }
+
 .la-ball-clip-rotate-multiple {
 	float: right;
 	margin-right: 0;
@@ -74,7 +90,7 @@ html {
     -webkit-user-select: none;
     -khtml-user-select: none;
     -moz-user-select: none;
-    -ms-user-select: none; 
+    -ms-user-select: none;
     user-select: none;
 }
 #show-exploration i {
@@ -85,6 +101,7 @@ html {
 }
 #show-exploration span {
 	display: inline-block;
+	font-family: "Roboto",Arial,sans-serif;
 	margin-left: 4px;
 	font-size: 12px;
 	padding: 3px 0;
@@ -169,11 +186,11 @@ html {
 /* Logo & name */
 
 #semesterly-name {
-	font-family: lato;
-	font-weight: 400;
+	font-family: "Palanquin", sans-serif;
+	font-weight: 500;
 	display: inline-block;
 	float: left;
-	font-size: 32px;
+	font-size: 32px !important;
 	line-height: 50px;
 	height: 50px;
 	margin-left: 10px;
@@ -181,7 +198,7 @@ html {
     -webkit-user-select: none;
     -khtml-user-select: none;
     -moz-user-select: none;
-    -ms-user-select: none; 
+    -ms-user-select: none;
     user-select: none;
 }
 
@@ -195,11 +212,11 @@ html {
     -webkit-user-select: none;
     -khtml-user-select: none;
     -moz-user-select: none;
-    -ms-user-select: none; 
+    -ms-user-select: none;
     user-select: none;
 }
 
-@media (max-width: 1000px) { 
+@media (max-width: 1000px) {
 	.fc-ltr .fc-time-grid .fc-event-container {
 		margin-left:0.5%;
 	}

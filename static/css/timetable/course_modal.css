@@ -18,7 +18,18 @@
 .course-modal.trans + div {
 	/* using important to override boron default style */
 	/* can't declare in javascript either, cuz need hover */
-	background-color: transparent !important;	
+	background-color: transparent !important;
+}
+.course-modal>div {
+	/* using important to override boron default style */
+	/* can't declare in javascript either, cuz need hover */
+	background-color: rgba(0,0,0,.8) !important;
+	transition: background-color .2s;
+}
+.course-modal.trans>div {
+	/* using important to override boron default style */
+	/* can't declare in javascript either, cuz need hover */
+	background-color: transparent !important;
 }
 .course-modal.trans #modal-content,
 .course-modal.trans #modal-header,
@@ -97,6 +108,7 @@
 	font-weight: 400;
 	padding-right: 15%;
 	transition: color .2s;
+	font-family: "Roboto",Arial,sans-serif;
 }
 
 /* Course Modal Corner Actions */
@@ -152,7 +164,7 @@
 	right: 55px;
 }
 #modal-close:hover {
-	color: #ff4523;
+	color: #C0392B;
 	transform: scale(1.2);
 }
 #modal-share:hover {
@@ -189,6 +201,15 @@
 #modal-add:hover {
 	background-color: #1858BB;
 }
+@keyframes pulsate {
+0% { opacity: 1; transform: scale(1); }
+50% { opacity: 1; transform: scale(1.5); }
+100% { opacity: 1; transform: scale(1); }
+}
+#modal-add.in-roster:hover {
+	background-color: #C0392B;
+	animation: pulsate 0.8s ease-out infinite;
+}
 #modal-add.on-active-timetable{
 	background-color: #2DD6B5;
 }
@@ -210,7 +231,7 @@ h3.modal-module-header {
 	padding: 10px 5px;
 	margin: 0;
 	color: #777;
-	font-weight: 200;
+	font-weight: 300;
 	clear: both;
 	position: relative;
 	transition: color .2s;
@@ -245,14 +266,14 @@ h3.modal-module-header small {
 }
 #modal-body .credits h3 {
 	text-align: center;
-	font-weight: 200;
+	font-weight: 100;
 	margin: 0;
 	font-size: 60px;
 	line-height: 66px;
 }
 #modal-body .credits h4 {
 	text-align: center;
-	color: #D4D4D4;
+	color: #999;
 	margin: 0 auto 20px;
 	line-height: 30px;
 	font-size: 30px;
@@ -380,7 +401,7 @@ h3.modal-module-header small {
 	}
 }
 
-@media (max-width: 500px) { 
+@media (max-width: 500px) {
 	.course-modal {
 		position: static;
 	}
