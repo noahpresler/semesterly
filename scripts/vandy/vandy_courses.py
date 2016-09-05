@@ -1,8 +1,6 @@
-# FIXME - deal with EMGT-7733, EMGT-7711
-
 # @what	Vanderbilt Course Parser
-# @author	Michael N. Miller
 # @org	Semeseter.ly
+# @author	Michael N. Miller
 # @date	9/3/16
 
 import django, os, datetime
@@ -59,37 +57,13 @@ class VandyParser:
 			'__checkbox_searchCriteria.classStatusCodes':'O',
 			'searchCriteria.classStatusCodes':'W',
 			'__checkbox_searchCriteria.classStatusCodes':'W',
-			'searchCriteria.classStatusCodes':'C', # NOTE: shows closed classes
+			'searchCriteria.classStatusCodes':'C',
 			'__checkbox_searchCriteria.classStatusCodes':'C',
-			# '__checkbox_searchCriteria.newClassesOnly':'false',
-			# 'searchCriteria.title':'',
-			# 'searchCriteria.catalogNumber':'',
-			# 'searchCriteria.instructorName':'',
-			# 'searchCriteria.meetingDaysOperation':'ANY',
-			# 'searchCriteria.meetingDays.onMonday':'true',
-			# '__checkbox_searchCriteria.meetingDays.onMonday':'true',
-			# 'searchCriteria.meetingDays.onTuesday':'true',
-			# '__checkbox_searchCriteria.meetingDays.onTuesday':'true',
-			# 'searchCriteria.meetingDays.onWednesday':'true',
-			# '__checkbox_searchCriteria.meetingDays.onWednesday':'true',
-			# 'searchCriteria.meetingDays.onThursday':'true',
-			# '__checkbox_searchCriteria.meetingDays.onThursday':'true',
-			# 'searchCriteria.meetingDays.onFriday':'true',
-			# '__checkbox_searchCriteria.meetingDays.onFriday':'true',
-			# 'searchCriteria.meetingDays.onSaturday':'true',
-			# '__checkbox_searchCriteria.meetingDays.onSaturday':'true',
-			# 'searchCriteria.meetingDays.onSunday':'true',
-			# '__checkbox_searchCriteria.meetingDays.onSunday':'true',
-			# 'searchCriteria.startsAfter':'',
-			# 'searchCriteria.endsBefore':'',
-			# 'searchCriteria.classNumber':'',
-			# 'searchCriteria.units.min':'',
-			# 'searchCriteria.units.max':''
 		}
 
-		for departmentCode in self.departments:
+		for departmentCode in departmentCodes:
 
-			print 'Parsing courses in ' + self.departments[departmentCode]
+			print 'Parsing courses in \"' + self.departments[departmentCode] + '\"'
 
 			# Construct payload with department code
 			payload.update({'searchCriteria.subjectAreaCodes': departmentCode})
@@ -119,7 +93,7 @@ class VandyParser:
 			campus = 1,
 			defaults = {
 				'name': self.course.get('name'),
-				'description': self.course.get('description'),
+				'description': self.course.get('description') + '\n' + self.course.get('Notes'),
 				'areas': self.course.get('Attributes'),
 				'prerequisites': self.course.get('Requirement(s)'),
 				'num_credits': float(self.course.get('Hours')),
@@ -332,8 +306,13 @@ class VandyParser:
 	def parseCourse(self, soup):
 		
 		# Extract course code and term number to generate access to more info
-		onClickDetails = soup.find('td', {'class', 'classSection'})['onclick']
-		courseNumber, termCode = self.extractCourseNumberAndTermCode(onClickDetails)
+		details = soup.find('td', {'class', 'classSection'})['onclick']
+	
+		# Extract course number and term code
+		search = re.search("showClassDetailPanel.fire\({classNumber : '([0-9]*)', termCode : '([0-9]*)',", details)
+
+		courseNumber, termCode = search.group(1), search.group(2)
+
 
 		# Base URL to retrieve detailed course info
 		courseDetailsURL = 'https://webapp.mis.vanderbilt.edu/more/GetClassSectionDetail.action'
@@ -344,16 +323,19 @@ class VandyParser:
 			'termCode' : termCode
 		}
 
-		self.update_current_course("Term Code", termCode)
-		self.update_current_course("Class#", courseNumber)
-
 		self.parseCourseDetails(self.get_html(courseDetailsURL, payload))
 
 		self.print_course()
+
+		# Create models
 		courseModel = self.create_course()
 		sectionModel = self.create_section(courseModel)
 		self.create_offerings(sectionModel)
+		
+		# Clear course map for next pass
 		self.course.clear()
+
+		# Return course number to track end of course pages
 		return courseNumber
 
 	def parseCourseDetails(self, html):
@@ -362,9 +344,13 @@ class VandyParser:
 		soup = BeautifulSoup(html, 'html.parser')
 		courseNameAndAbbreviation = soup.find(id='classSectionDetailDialog').find('h1').text
 
-		# Extract initial details
-		courseName, abbr = self.extractCourseNameAndAbbreviation(courseNameAndAbbreviation)
-		departmentCode, catalogID, sectionNumber = self.extractAbbreviationDetails(abbr)
+		# Extract course name and abbreviation details
+		search = re.search("(.*):.*\n(.*)", soup.find(id='classSectionDetailDialog').find('h1').text)
+		courseName, abbr = search.group(2), search.group(1)
+
+		# Extract department code, catalog ID, and section number from abbreviation
+		match = re.match("(.*)-(.*)-(.*)", abbr)
+		departmentCode, catalogID, sectionNumber = match.group(1), match.group(2), match.group(3)
 
 		self.update_current_course("name", courseName)
 		self.update_current_course("code", departmentCode + '-' + catalogID)
@@ -386,29 +372,32 @@ class VandyParser:
 
 			# Choose parsing strategy dependent on header
 			if header == "Details" or header == "Availability":
-				self.parseLabeledTables(detailPanels[i])
+				self.parse_labeled_table(detailPanels[i])
 
 			elif header == "Description":
-				self.parseDescription(detailPanels[i])
+				self.parse_description(detailPanels[i])
 
 			elif header == "Notes":
-				self.parseNotes(detailPanels[i])
+				self.parse_notes(detailPanels[i])
 
 			elif header == "Meeting Times":
-				self.parseMeetingTimes(detailPanels[i])
+				self.parse_meeting_times(detailPanels[i])
 
 			elif header == "Cross Listings":
 				pass
 
 			elif header == "Attributes":
-				self.parseAttributes(detailPanels[i])
+				self.parse_attributes(detailPanels[i])
 
-	def parseAttributes(self, soup):
+			elif header == "Ad Hoc Meeting Times":
+				pass
+
+	def parse_attributes(self, soup):
 
 		labels = [l.text.strip() for l in soup.find_all('div', {'class' : 'listItem'})]
 		self.update_current_course("Attributes", ', '.join(labels))
 
-	def parseLabeledTables(self, soup):
+	def parse_labeled_table(self, soup):
 
 		# Gather all labeled table entries
 		labels = soup.find_all('td', {'class' : 'label'})
@@ -420,7 +409,7 @@ class VandyParser:
 			# Check if label value exists
 			if len(siblings) != 0:
 
-				# Extract label
+				# Extract pure label from html
 				key = label.text[:-1].strip()
 
 				# Extract label's value(s) [deals with multiline multi-values]
@@ -428,7 +417,8 @@ class VandyParser:
 
 				# Edge cases
 				if key == "Books":
-					# values = [self.extractBookURL(values[0])]
+					# bookURL = re.search("new YAHOO.mis.student.PopUpOpener\('(.*)',", values[0])
+					# values = [bookURL.group(1)]
 					values = ["<long bn url>"]
 
 				elif key == "Hours":
@@ -436,12 +426,12 @@ class VandyParser:
 					try:
 						float(values[0])
 					except ValueError:
-						# NOTE: temporary hack
+						# FIXME -- temporary hack for range of credits (ex: 1.0-3.0)
 						values[0] = '0.0'
 
 				self.update_current_course(key, ', '.join(values))
 
-	def parseMeetingTimes(self, soup):
+	def parse_meeting_times(self, soup):
 
 		# Gather all labeled table entries
 		labels = soup.find_all('th', {'class' : 'label'})
@@ -450,7 +440,11 @@ class VandyParser:
 		if len(labels) > 0:
 			values = soup.find('tr', {'class' : 'courseHeader'}).fetchNextSiblings()[0].find_all('td')
 		else:
-			self.update_current_course("Meeting Times", "TBA")
+
+			# Create empty times slots
+			self.update_current_course('days', '')
+			self.update_current_course('time_start', '')
+			self.update_current_course('time_end', '')
 
 		# NOTE: number of labels and values should be the same
 		assert(len(labels) == len(values))
@@ -460,18 +454,20 @@ class VandyParser:
 			value = values[i].text.strip()
 			if len(label) > 0 and len(value) > 0:
 
-				# edge case for instructor (NOTE: throws away multiple instructors)
 				if label == "Instructor(s)":
-					self.update_current_course(label, ', '.join(self.extractInstructors(value)))
+					self.update_current_course(label, ', '.join(self.extract_instructors(value)))
+
 				elif label == "Time":
 					self.parse_time_range(value)
+
 				elif label == "Days":
-					self.parseWeekDays(value)
+					self.parse_days(value)
+
 				else:
 					self.update_current_course(label, value)
 
 
-	def parseWeekDays(self, unformatted_days):
+	def parse_days(self, unformatted_days):
 
 		if unformatted_days == "TBA" or unformatted_days == "":
 			self.update_current_course("days", "")
@@ -483,6 +479,7 @@ class VandyParser:
 		if unformatted_time_range == "TBA" or unformatted_time_range == "":
 
 			# Create empty time slots
+			self.update_current_course('days', '')
 			self.update_current_course('time_start', '')
 			self.update_current_course('time_end', '')
 
@@ -497,45 +494,40 @@ class VandyParser:
 
 	def time_to_24(self, time12):
 
-		hours = 0
-		minutes = ""
-
+		# Regex extract
 		match = re.match("(\d*):(\d*)(.)", time12)
 
-		if match is not None:
-			minutes = match.group(2)
-			hours = int(match.group(1))
-			if match.group(3) == 'p':
-				hours = (hours%12)+12
+		# Transform to 24 hours
+		minutes = match.group(2)
+		hours = int(match.group(1))
+		if match.group(3) == 'p':
+			hours = (hours%12)+12
 
-		else:
-			# TODO - scream
-			pass
-
+		# Return as string
 		return str(hours) + ":" + str(minutes)
 
-	def extractCourseNumberAndTermCode(self, string):
-		codes = re.search("YAHOO.mis.student.Topics.showClassDetailPanel.fire\({classNumber : '([0-9]*)', termCode : '([0-9]*)',", string)
-		
-		# Check for regex match
-		if codes is not None:
-			return codes.group(1), codes.group(2)
-		else:
-			sys.stderr.write("ERROR: parsing course # and term code\n" + string)
-			return '', ''
+	# def extractCourseNumberAndTermCode(self, string):
+	# 	codes = re.search("YAHOO.mis.student.Topics.showClassDetailPanel.fire\({classNumber : '([0-9]*)', termCode : '([0-9]*)',", string)
 
-	def extractCourseNameAndAbbreviation(self, string):
+	# 	# Check for regex match
+	# 	if codes is not None:
+	# 		return codes.group(1), codes.group(2)
+	# 	else:
+	# 		sys.stderr.write("ERROR: parsing course # and term code\n" + string)
+	# 		return '', ''
 
-		names = re.search("(.*):.*\n(.*)", string)
+	# def extractCourseNameAndAbbreviation(self, string):
 
-		# Check for regex match
-		if names is not None:
-			return names.group(2).strip(), names.group(1).strip()
-		else:
-			sys.stderr.write("ERROR: parsing course name and abbr\n" + string)
-			return '', ''
+	# 	names = re.search("(.*):.*\n(.*)", string)
 
-	def extractInstructors(self, string):
+	# 	# Check for regex match
+	# 	if names is not None:
+	# 		return names.group(2).strip(), names.group(1).strip()
+	# 	else:
+	# 		sys.stderr.write("ERROR: parsing course name and abbr\n" + string)
+	# 		return '', ''
+
+	def extract_instructors(self, string):
 
 		instructors = string.splitlines()
 
@@ -548,13 +540,13 @@ class VandyParser:
 
 		return instructors
 
-	def parseNotes(self, soup):
-		self.update_current_course('Notes', '\n'.join(self.extractText(soup).splitlines()))
-		# FIXME -- unsafe assumption that description present
+	def parse_notes(self, soup):
+		notes = [l for l in (p.strip() for p in soup.text.splitlines()) if l]
+		self.update_current_course('Notes', '\n'.join(notes))
 
-	def parseDescription(self, soup):
+	def parse_description(self, soup):
 
-		description = self.extractText(soup)
+		description = soup.text.strip()
 
 		formerly = ""
 
@@ -569,39 +561,40 @@ class VandyParser:
 		# 	# trim description
 		# 	description = re.search("\[Formerly \S* \S*\](.*)", description).group(1).strip()
 
-		self.update_current_course("description", description)
+		self.update_current_course('description', description)
+		self.update_current_course('Notes', '')
 
-	def extractBookURL(self, string):
+	# def extractBookURL(self, string):
 
-		bookURL = re.search("new YAHOO.mis.student.PopUpOpener\('(.*)',", string)
+	# 	bookURL = re.search("new YAHOO.mis.student.PopUpOpener\('(.*)',", string)
 
-		# Check for regex match
-		if bookURL is not None:
-			return bookURL.group(1)
-		else:
-			sys.stderr.write("ERROR: parsing book url\n" + string)
-			return ''
+	# 	# Check for regex match
+	# 	if bookURL is not None:
+	# 		return bookURL.group(1)
+	# 	else:
+	# 		sys.stderr.write("ERROR: parsing book url\n" + string)
+	# 		return ''
 
-	def extractText(self, soup):
-		return soup.text.strip()
+	# def extractText(self, soup):
+	# 	return soup.text.strip()
 
-	def extractAbbreviationDetails(self, string):
+	# def extractAbbreviationDetails(self, string):
 
-		search = re.match("(.*)-(.*)-(.*)", string)
+	# 	search = re.match("(.*)-(.*)-(.*)", string)
 
-		# Check if regex matched
-		if search is not None:
+	# 	# Check if regex matched
+	# 	if search is not None:
 
-			# extract
-			departmentCode = search.group(1)
-			catalogID = search.group(2)
-			sectionNumber = search.group(3)
+	# 		# extract
+	# 		departmentCode = search.group(1)
+	# 		catalogID = search.group(2)
+	# 		sectionNumber = search.group(3)
 			
-			return departmentCode, catalogID, sectionNumber
+	# 		return departmentCode, catalogID, sectionNumber
 
-		else:
-			sys.stderr.write("ERROR: parsing course abbr details\n" + string)
-			return '', '', ''
+	# 	else:
+	# 		sys.stderr.write("ERROR: parsing course abbr details\n" + string)
+	# 		return '', '', ''
 
 def main():
 	vp = VandyParser()
