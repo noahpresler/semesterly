@@ -53,7 +53,13 @@ class VandyParser:
 		print "Logging in..."
 
 		get_login_url = "https://login.mis.vanderbilt.edu/login?service=https%3A%2F%2Fwebapp.mis.vanderbilt.edu%2Fmore%2Fj_spring_cas_security_check"
-		self.get_html(get_login_url)
+		r = self.session.get(
+					get_login_url,
+					params = '',
+					cookies = self.cookies,
+					headers = self.headers,
+					verify = True)
+		print 'cookies:',requests.utils.dict_from_cookiejar(self.session.cookies)
 
 		print self.cookies
 		for cookie in self.cookies:
