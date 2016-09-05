@@ -1,0 +1,98 @@
+README
+
+@org	Semesterly
+@what	Vanderbilt Course Parser
+@author	Michael N. Miller
+@date	9/3/16
+______________________________________________
+
+TODO 
+ - select Term to search
+ - fix locations
+ 	--> need to be logged in
+ 	--> add parser for it
+ - deal with "Ad Hoc Meeting Times"
+ 	--> ex: EMGT-7733, EMGT-7711
+______________________________________________
+
+LOCATION
+
+must be logged in within browser in order to request location information
+______________________________________________
+
+COURSE NUMBERING
+
+> catalog number can have letters in it
+	
+	Ex: 1601L
+
+> catalog number and class number are different
+
+	Ex: 1601L & 3753
+______________________________________________
+
+AXLE Credit Category
+
+> I am not sure what this is or if it is important?
+______________________________________________
+
+COURSE DESCRIPTION
+
+> if it is empty then it will print "[0]"
+______________________________________________
+
+REQUIREMENTS
+
+- requirements (pre, co, anti)
+ 	--> This is quite a bit harder than a regex parse
+ 	--> Not really necessary
+______________________________________________
+
+INSTRUCTORS
+
+- primary intructors (what do multiple instructor look like)
+	--> NOTE: primary instructor flag lost (but easy to get back)
+	--> EXAMPLE 25914
+_____________________________________________
+
+COURSE SEARCH 
+
+	URL:
+
+		'https://webapp.mis.vanderbilt.edu/more/SearchClassesExecute!search.action'
+
+	PAYLOAD OPTIONS:
+
+		payload = {
+			'searchCriteria.classStatusCodes':'O',
+			'__checkbox_searchCriteria.classStatusCodes':'O',
+			'searchCriteria.classStatusCodes':'W',
+			'__checkbox_searchCriteria.classStatusCodes':'W',
+			'searchCriteria.classStatusCodes':'C', # NOTE: shows closed classes
+			'__checkbox_searchCriteria.classStatusCodes':'C',
+			'__checkbox_searchCriteria.newClassesOnly':'false',
+			'searchCriteria.title':'',
+			'searchCriteria.catalogNumber':'',
+			'searchCriteria.instructorName':'',
+			'searchCriteria.meetingDaysOperation':'ANY',
+			'searchCriteria.meetingDays.onMonday':'true',
+			'__checkbox_searchCriteria.meetingDays.onMonday':'true',
+			'searchCriteria.meetingDays.onTuesday':'true',
+			'__checkbox_searchCriteria.meetingDays.onTuesday':'true',
+			'searchCriteria.meetingDays.onWednesday':'true',
+			'__checkbox_searchCriteria.meetingDays.onWednesday':'true',
+			'searchCriteria.meetingDays.onThursday':'true',
+			'__checkbox_searchCriteria.meetingDays.onThursday':'true',
+			'searchCriteria.meetingDays.onFriday':'true',
+			'__checkbox_searchCriteria.meetingDays.onFriday':'true',
+			'searchCriteria.meetingDays.onSaturday':'true',
+			'__checkbox_searchCriteria.meetingDays.onSaturday':'true',
+			'searchCriteria.meetingDays.onSunday':'true',
+			'__checkbox_searchCriteria.meetingDays.onSunday':'true',
+			'searchCriteria.startsAfter':'',
+			'searchCriteria.endsBefore':'',
+			'searchCriteria.classNumber':'',
+			'searchCriteria.units.min':'',
+			'searchCriteria.units.max':''
+		}
+______________________________________________
