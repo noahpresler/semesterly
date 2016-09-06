@@ -53,7 +53,7 @@ class VandyParser:
 			# loc = url
 			# seen = set()
 			# while True:
-			# 	r = self.session.get(loc, params=payload, allow_redirects=False)
+			# 	r = self.session.post(loc, params=payload, allow_redirects=False)
 			# 	loc = r.headers['Location']
 			# 	if loc in seen:
 			# 		break
@@ -64,6 +64,7 @@ class VandyParser:
 
 			g = self.session.post(url, params=payload, allow_redirects=False)
 			loc = g.headers['location']
+			# print g.url
 			print loc
 
 			# self.session.headers['User-Agent'] = 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_9_2) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/34.0.1847.131 Safari/537.36'
@@ -105,7 +106,7 @@ class VandyParser:
 	def parse(self):
 
 		# Login to vandy course search site
-		self.login()
+		# self.login()
 
 		# Get a list of all the department codes
 		departmentCodes = self.getDepartmentCodes()
@@ -330,7 +331,7 @@ class VandyParser:
 		departmentCode, catalogID, sectionNumber = match.group(1), match.group(2), match.group(3)
 
 		self.update_current_course("name", courseName)
-		self.update_current_course("code", departmentCode + '-' + catalogID)
+		self.update_current_course("code", departmentCode + catalogID)
 		self.update_current_course("department", departmentCode)
 		self.update_current_course("Catalog ID", catalogID)
 		self.update_current_course("section", sectionNumber)
