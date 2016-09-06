@@ -13,7 +13,7 @@ os.environ.setdefault("DJANGO_SETTINGS_MODULE", "semesterly.settings")
 django.setup()
 from timetable.models import *
 from amazonproduct import API
-api = API(locale='us')  
+api = API(locale='us')
 
 class TextbookSection:
     def __init__(self, section_id, name):
@@ -358,7 +358,3 @@ class TextbookParser:
 
     def remove_duplicates(self,l):
         return list(set(l))
-
-if __name__ == '__main__':
-    parser = TextbookParser()
-    parser.parse()
