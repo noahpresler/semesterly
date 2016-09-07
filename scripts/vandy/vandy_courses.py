@@ -94,6 +94,9 @@ class VandyParser:
 		lt = soup.find('div', {'class': ['btn-row']}).find('input', {'name': 'lt'})['value']
 		jsessionid = requests.utils.dict_from_cookiejar(self.session.cookies)['JSESSIONID']
 
+		for cookie in requests.utils.dict_from_cookiejar(self.session.cookies):
+			print cookie
+
 		post_login_url = "https://login.mis.vanderbilt.edu/mis-cas/login;jsessionid=" + jsessionid
 		post_payload = {
 			'service': 'https%3A%2F%2Fwebapp.mis.vanderbilt.edu%2Fmore%2Fj_spring_cas_security_check',
