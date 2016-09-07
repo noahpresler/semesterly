@@ -60,7 +60,7 @@ class TextbookSemester:
         )
 
 class TextbookParser:
-    def __init__(self, store_id, store_link, school):
+    def __init__(self, store_id, store_link, school, delimeter):
         self.ua = UserAgent()
         self.session = requests.Session()
         self.semesters = []
@@ -70,12 +70,13 @@ class TextbookParser:
         self.identified_count = 0
         self.isbn_pattern = pattern = re.compile(r"(?:\b\d{13}\b)", re.MULTILINE)
         self.code_pattern = pattern = re.compile(r".*\.(.*)\.(.*)\s\((.*)\)")
+        self.textbook_link = TextbookLink
 
         # TODO: This is unique to each university.
-        self.store_id =  store_id
+        self.store_id = store_id
         self.store_link = store_link
         self.school = school
-        self.textbook_link = TextbookLink
+        self.delimeter = delimeter
 
         self.textbook_payload = "-----011000010111000001101001\r\nContent-Disposition: form-data; name=\"storeId\"\r\n\r\n" + self.store_id + "\r\n-----011000010111000001101001\r\nContent-Disposition: form-data; name=\"catalogId\"\r\n\r\n10001\r\n-----011000010111000001101001\r\nContent-Disposition: form-data; name=\"langId\"\r\n\r\n-1\r\n-----011000010111000001101001\r\nContent-Disposition: form-data; name=\"clearAll\"\r\n\r\n\r\n-----011000010111000001101001\r\nContent-Disposition: form-data; name=\"viewName\"\r\n\r\nTBWizardView\r\n-----011000010111000001101001\r\nContent-Disposition: form-data; name=\"secCatList\"\r\n\r\n\r\n-----011000010111000001101001\r\nContent-Disposition: form-data; name=\"removeSectionId\"\r\n\r\n\r\n-----011000010111000001101001\r\nContent-Disposition: form-data; name=\"mcEnabled\"\r\n\r\nN\r\n-----011000010111000001101001\r\nContent-Disposition: form-data; name=\"showCampus\"\r\n\r\nfalse\r\n-----011000010111000001101001\r\nContent-Disposition: form-data; name=\"selectTerm\"\r\n\r\nSelect+Term\r\n-----011000010111000001101001\r\nContent-Disposition: form-data; name=\"selectDepartment\"\r\n\r\nSelect+Department\r\n-----011000010111000001101001\r\nContent-Disposition: form-data; name=\"selectSection\"\r\n\r\nSelect+Section\r\n-----011000010111000001101001\r\nContent-Disposition: form-data; name=\"selectCourse\"\r\n\r\nSelect+Course\r\n-----011000010111000001101001\r\nContent-Disposition: form-data; name=\"campus1\"\r\n\r\n14704480\r\n-----011000010111000001101001\r\nContent-Disposition: form-data; name=\"firstTermName_14704480\"\r\n\r\nFall+2016\r\n-----011000010111000001101001\r\nContent-Disposition: form-data; name=\"firstTermId_14704480\"\r\n\r\n73256452\r\n-----011000010111000001101001"
 
@@ -91,7 +92,7 @@ class TextbookParser:
     def make_request(self, request_type, url, params, headers, payload):
         headers["user-agent"] = self.ua.random
         try:
-            return self.session.request(request_type, url, params=params,  headers=headers, data=payload)
+            return self.session.request(request_type, url, params=params, headers=headers, data=payload)
         except:
             sleep(randint(300, 500))
             self.retry_request(headers)
@@ -250,9 +251,9 @@ class TextbookParser:
         self.last_num_found = len(textbooks)
         for tbsec in textbook_sections:
             raw_code = tbsec.findAll('h1')[0]
-            stripped_code = "".join(raw_code.get_text().split())[:8]
-            course_code = stripped_code[:3] + "." + stripped_code[3:6]
-            section = "(" + stripped_code[6:8] + ")"
+            code_list = raw_code.get_text().split()[:-2]
+            course_code = self.delimeter.join(code_list[:-1])
+            section = "(" + code_list[2] + ")"
             for tb in tbsec.findAll('div',class_="book_details"):
                 match = re.findall(self.isbn_pattern,"".join(tb.get_text()))
                 if len(match) > 0:
@@ -267,6 +268,7 @@ class TextbookParser:
     def make_textbook(self, is_required, isbn_number, course_code, section):
         try:
             course = Course.objects.filter(code__contains = course_code, school = self.school)[0]
+            print(course)
         except IndexError:
             print("index error (course does not exist): " + course_code)
             return
