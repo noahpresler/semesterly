@@ -94,8 +94,10 @@ class VandyParser:
 		lt = soup.find('div', {'class': ['btn-row']}).find('input', {'name': 'lt'})['value']
 		jsessionid = requests.utils.dict_from_cookiejar(self.session.cookies)['JSESSIONID']
 
+		print "<<<<<<<<< COOKIES "
 		for cookie in requests.utils.dict_from_cookiejar(self.session.cookies):
 			print cookie
+		print "<<<<<<<<< END COOKIES"
 
 		post_login_url = "https://login.mis.vanderbilt.edu/mis-cas/login;jsessionid=" + jsessionid
 		post_payload = {
@@ -250,43 +252,43 @@ class VandyParser:
 		if numHits == 300:
 			self.parseByDay(courseSearchURL, payload)
 		else:
-			self.parseSetOfCourses(html)
+			self.parse_set_of_courses(html)
 
-	def parseSetOfCourses(self, html):
+	def parse_set_of_courses(self, html):
 
-		prevCourseNumber = 0
-		pageCount = 1
+		prev_course_number = 0
+		page_count = 1
 
 		while True:
 			
 			# Parse page by page
-			lastClassNumber = self.parsePageOfCourses(html)
+			last_class_number = self.parse_page_of_courses(html)
 	
-			# FIXME -- this will always print out ONE repeat for each set of courses
+			# NOTE: this will always print out ONE repeat for each set of courses, but map will be fine
 
 			# Condition met when reached last page
-			if lastClassNumber != prevCourseNumber:
-				pageCount = pageCount + 1
+			if last_class_number != prev_course_number:
+				page_count = page_count + 1
 				nextPageURL = "https://webapp.mis.vanderbilt.edu/more/SearchClassesExecute!switchPage.action?pageNum=" + str(pageCount)
 				html = self.get_html(nextPageURL)
-				prevCourseNumber = lastClassNumber
+				prev_course_number = last_class_number
 
 			else:
 				break
 
-	def parsePageOfCourses(self, html):
+	def parse_page_of_courses(self, html):
 
 		# initial parse with Beautiful Soup
 		soup = BeautifulSoup(html, 'html.parser')
 		courses = soup.find_all('tr', {'class' : 'classRow'})
 
-		lastClassNumber = 0
+		last_class_number = 0
 		for course in courses:
-			lastClassNumber = self.parseCourse(course)
+			last_class_number = self.parse_course(course)
 
-		return lastClassNumber
+		return last_class_number
 
-	def parseCourse(self, soup):
+	def parse_course(self, soup):
 		
 		# Extract course code and term number to generate access to more info
 		details = soup.find('td', {'class', 'classSection'})['onclick']
@@ -294,19 +296,18 @@ class VandyParser:
 		# Extract course number and term code
 		search = re.search("showClassDetailPanel.fire\({classNumber : '([0-9]*)', termCode : '([0-9]*)',", details)
 
-		courseNumber, termCode = search.group(1), search.group(2)
-
+		course_number, term_code = search.group(1), search.group(2)
 
 		# Base URL to retrieve detailed course info
-		courseDetailsURL = 'https://webapp.mis.vanderbilt.edu/more/GetClassSectionDetail.action'
+		course_details_url = 'https://webapp.mis.vanderbilt.edu/more/GetClassSectionDetail.action'
 
 		# Create payload to request course from server
 		payload = {
-			'classNumber' : courseNumber,
-			'termCode' : termCode
+			'classNumber' : course_number,
+			'termCode' : term_code
 		}
 
-		self.parseCourseDetails(self.get_html(courseDetailsURL, payload))
+		self.parse_course_details(self.get_html(course_details_url, payload))
 
 		self.print_course()
 
@@ -319,9 +320,9 @@ class VandyParser:
 		self.course.clear()
 
 		# Return course number to track end of course pages
-		return courseNumber
+		return course_number
 
-	def parseCourseDetails(self, html):
+	def parse_course_details(self, html):
 
 		# Soupify course details html
 		soup = BeautifulSoup(html, 'html.parser')
@@ -342,35 +343,35 @@ class VandyParser:
 		self.update_current_course("section", sectionNumber)
 
 		# Deal with course details as subgroups seen on details page
-		detailHeaders = soup.find_all('div', {'class' : 'detailHeader'})
-		detailPanels = soup.find_all('div', {'class' : 'detailPanel'})
+		detail_headers = soup.find_all('div', {'class' : 'detailHeader'})
+		detail_panels = soup.find_all('div', {'class' : 'detailPanel'})
 
 		# NOTE: there should be the same number of detail headers and detail panels
-		assert(len(detailHeaders) == len(detailPanels))
+		assert(len(detail_headers) == len(detail_panels))
 
-		for i in range(len(detailHeaders)):
+		for i in range(len(detail_headers)):
 
 			# Extract header name
-			header = detailHeaders[i].text.strip()
+			header = detail_headers[i].text.strip()
 
 			# Choose parsing strategy dependent on header
 			if header == "Details" or header == "Availability":
-				self.parse_labeled_table(detailPanels[i])
+				self.parse_labeled_table(detail_panels[i])
 
 			elif header == "Description":
-				self.parse_description(detailPanels[i])
+				self.parse_description(detail_panels[i])
 
 			elif header == "Notes":
-				self.parse_notes(detailPanels[i])
+				self.parse_notes(detail_panels[i])
 
 			elif header == "Meeting Times":
-				self.parse_meeting_times(detailPanels[i])
+				self.parse_meeting_times(detail_panels[i])
 
 			elif header == "Cross Listings":
 				pass
 
 			elif header == "Attributes":
-				self.parse_attributes(detailPanels[i])
+				self.parse_attributes(detail_panels[i])
 
 			elif header == "Ad Hoc Meeting Times":
 				pass
@@ -387,7 +388,7 @@ class VandyParser:
 
 		for label in labels:
 
-			siblings = label.fetchNextSiblings()
+			siblings = label.find_next_siblings()
 
 			# Check if label value exists
 			if len(siblings) != 0:
@@ -421,7 +422,7 @@ class VandyParser:
 
 		values = []
 		if len(labels) > 0:
-			values = soup.find('tr', {'class' : 'courseHeader'}).fetchNextSiblings()[0].find_all('td')
+			values = soup.find('tr', {'class' : 'courseHeader'}).find_next_siblings()[0].find_all('td')
 		else:
 
 			# Create empty times slots
