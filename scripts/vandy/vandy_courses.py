@@ -36,6 +36,7 @@ class VandyParser:
 					verify = True
 				)
 
+				print r.url
 				if r.status_code == 200:
 					html = r.text
 
@@ -62,20 +63,22 @@ class VandyParser:
 
 			# # END TESTING
 
-			g = self.session.post(url, params=payload, allow_redirects=False)
-			loc = g.headers['location']
-			# print g.url
-			print loc
+			# g = self.session.post(url, params=payload, allow_redirects=False)
+			# loc = g.headers['location']
+			# # print g.url
+			# print loc
 
 			# self.session.headers['User-Agent'] = 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_9_2) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/34.0.1847.131 Safari/537.36'
 
 			r = self.session.post(
-				loc,
-				# params = payload,
+				url,
+				params = payload,
 				cookies = self.cookies,
 				headers = self.headers,
 				verify = True
 			)
+
+			print "POST: " + r.url
 
 		except (requests.exceptions.Timeout,
 			requests.exceptions.ConnectionError):
@@ -86,17 +89,17 @@ class VandyParser:
 		print "Logging in..."
 
 		get_login_url = "https://login.mis.vanderbilt.edu/login?service=https%3A%2F%2Fwebapp.mis.vanderbilt.edu%2Fmore%2Fj_spring_cas_security_check"
-		self.get_html(get_login_url)
-
+		
+		soup = BeautifulSoup(self.get_html(get_login_url))
+		lt = soup.find('div', {'class': ['btn-row']}).find('input', {'name': 'lt'})['value']
 		jsessionid = requests.utils.dict_from_cookiejar(self.session.cookies)['JSESSIONID']
-		print 'jsessionid:', jsessionid
 
 		post_login_url = "https://login.mis.vanderbilt.edu/mis-cas/login;jsessionid=" + jsessionid
 		post_payload = {
 			'service': 'https%3A%2F%2Fwebapp.mis.vanderbilt.edu%2Fmore%2Fj_spring_cas_security_check',
 			'username': self.username,
 			'password': self.password,
-			'lt': '_c59609F2E-246F-20A6-A258-5599BE8D1C39_kBD984736-70E7-D979-4F8D-87CD64A8B152',
+			'lt': lt,
 			'_eventId': 'submit',
 			'submit': 'LOGIN'
 		}
@@ -106,7 +109,7 @@ class VandyParser:
 	def parse(self):
 
 		# Login to vandy course search site
-		# self.login()
+		self.login()
 
 		# Get a list of all the department codes
 		departmentCodes = self.getDepartmentCodes()
@@ -116,12 +119,8 @@ class VandyParser:
 
 		# Create payload to request course list from server
 		payload = {
-			'searchCriteria.classStatusCodes':'O',
-			'__checkbox_searchCriteria.classStatusCodes':'O',
-			'searchCriteria.classStatusCodes':'W',
-			'__checkbox_searchCriteria.classStatusCodes':'W',
-			'searchCriteria.classStatusCodes':'C',
-			'__checkbox_searchCriteria.classStatusCodes':'C',
+			'searchCriteria.classStatusCodes': ['O', 'W', 'C'],
+			'__checkbox_searchCriteria.classStatusCodes':['O','W','C']
 		}
 
 		for departmentCode in departmentCodes:
@@ -210,6 +209,9 @@ class VandyParser:
 					print key + "::" + self.course[key] + '::'
 				except:
 					sys.stderr.write("UNICODE ERROR\n")
+
+				if self.course[key] == "Location":
+					sys.stderr.write("LOGGED IN!")
 
 	def update_current_course(self, label, value):
 		self.course[label.encode('utf-8')] = value.encode('utf-8')
@@ -303,7 +305,7 @@ class VandyParser:
 
 		self.parseCourseDetails(self.get_html(courseDetailsURL, payload))
 
-		# self.print_course()
+		self.print_course()
 
 		# Create models
 		courseModel = self.create_course()
@@ -331,7 +333,7 @@ class VandyParser:
 		departmentCode, catalogID, sectionNumber = match.group(1), match.group(2), match.group(3)
 
 		self.update_current_course("name", courseName)
-		self.update_current_course("code", departmentCode + catalogID)
+		self.update_current_course("code", departmentCode + '-' + catalogID)
 		self.update_current_course("department", departmentCode)
 		self.update_current_course("Catalog ID", catalogID)
 		self.update_current_course("section", sectionNumber)
