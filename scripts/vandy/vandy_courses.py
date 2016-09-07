@@ -116,12 +116,12 @@ class VandyParser:
 
 		# Create payload to request course list from server
 		payload = {
-			'searchCriteria.classStatusCodes':'O',
-			'__checkbox_searchCriteria.classStatusCodes':'O',
-			'searchCriteria.classStatusCodes':'W',
-			'__checkbox_searchCriteria.classStatusCodes':'W',
-			'searchCriteria.classStatusCodes':'C',
-			'__checkbox_searchCriteria.classStatusCodes':'C',
+			'searchCriteria.classStatusCodes':['O','W','C'],
+			'__checkbox_searchCriteria.classStatusCodes':['O','W','C']
+			# 'searchCriteria.classStatusCodes':'W',
+			# '__checkbox_searchCriteria.classStatusCodes':'W',
+			# 'searchCriteria.classStatusCodes':'C',
+			# '__checkbox_searchCriteria.classStatusCodes':'C',
 		}
 
 		for departmentCode in departmentCodes:
@@ -331,7 +331,7 @@ class VandyParser:
 		departmentCode, catalogID, sectionNumber = match.group(1), match.group(2), match.group(3)
 
 		self.update_current_course("name", courseName)
-		self.update_current_course("code", departmentCode + catalogID)
+		self.update_current_course("code", departmentCode + "-" + catalogID)
 		self.update_current_course("department", departmentCode)
 		self.update_current_course("Catalog ID", catalogID)
 		self.update_current_course("section", sectionNumber)
