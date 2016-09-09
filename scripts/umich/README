@@ -20,7 +20,10 @@ parsing does not have evals integrated
 
  - Deal with 9 different section types
  	--> currently overloading the 3 types in the model 
+ - Some courses don't have full course names in the API response - needs to be addressed without
+ having to manually go through all of the courses and changing the names
 
+ - Some descriptions are empty
 ----------
 NOTES
 ----------
@@ -31,6 +34,12 @@ from current students are being used to get around this issue. Tokens listed bel
 "6e15388418fa2483841755f5e2d5eba"
 "5562e94b39dccc2eaaab181e0c4ee"
 "c03cae2d767ab4c525d1ce5b57a965"
+"dfccf802a589fcbdbfa6b4e906e1bb6"
+"b0555cfc4e7f81c1a2a4b3b40b79eda"
 
 More will be added soon. Currently, the parser takes ~3 hours to scrape the entire
 catalog for the Fall 2016 semester due to the token throttling. 
+
+API website: https://api.it.umich.edu/store/apis/info?name=UMScheduleOfClasses&version=v1&provider=itswsapi#/
+
+Use one of the tokens above in the "Access Token" field to use the API console
