@@ -110,23 +110,18 @@ header nav a:hover {
 }
 
 .circular {
-	width: 300px;
-	height: 300px;
+	width: 100%;
+	height: 0;
+	padding-bottom: 100%;
 	border-radius: 150px;
 	-webkit-border-radius: 150px;
 	-moz-border-radius: 150px;
-	background: url(/static/img/noahStock.png) no-repeat;
 	background-size: cover;
-	position: absolute;
 }
 
-.member {
-	position: relative; 
-	display: inline-block; 
+#hero .member {
 	width: 100%;
-	max-width: 180px; 
-	margin: 0 auto; 
-	padding: 0px 10px 0px 10px;
+	height: 180px; 
 }
 
 .about-text {
