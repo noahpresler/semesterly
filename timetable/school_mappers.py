@@ -16,7 +16,7 @@ school_to_granularity = {
     'rutgers': 5,
     'uo': 5,
     'queens': 30,
-    'umich': 30
+    'umich': 30,
     'queens': 5
 }
 VALID_SCHOOLS = ["uoft", "jhu", "umd", "uo", "rutgers", "queens", "umich"]

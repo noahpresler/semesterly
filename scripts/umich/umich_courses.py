@@ -44,7 +44,9 @@ class umichParser:
 		self.term = self.semester_code_map[semester]
 		self.url = "http://api-gw.it.umich.edu/Curriculum/SOC/v1/Terms"
 		# ADD MOAR TOKENS!
-		self.tokens = [	"6e15388418fa2483841755f5e2d5eba", "5562e94b39dccc2eaaab181e0c4ee", "c03cae2d767ab4c525d1ce5b57a965"]
+		self.tokens = [	"6e15388418fa2483841755f5e2d5eba", "5562e94b39dccc2eaaab181e0c4ee", \
+						"c03cae2d767ab4c525d1ce5b57a965", "dfccf802a589fcbdbfa6b4e906e1bb6",\
+						"b0555cfc4e7f81c1a2a4b3b40b79eda"]
 		# cycle through the tokens without running off the end of the list
 		self.tok_cyc = cycle(self.tokens)
 		# Switching tokens due to 60/min limit
@@ -145,7 +147,7 @@ class umichParser:
 				outfile.write(",")
 
 	def wrap_up(self):
-		update_ibject, created = Updates.objects.update_or_create(
+		update_object, created = Updates.objects.update_or_create(
 			school = self.school,
 			update_field = "Course",
 			defaults = {'last_updated': datetime.now()}
@@ -207,7 +209,7 @@ class umichParser:
 		course_url = self.url + "/" + str(term) + "/Classes/" + str(class_num)
 		#sleep(1.01)
 		resp = self.get_url(course_url)
-		if(resp == []):
+		if((resp == []) | (resp == 500) | (resp == 400)):
 			return
 		try:
 			course_info = json.loads(resp)['getSOCSectionListByNbrResponse']['ClassOffered']
@@ -235,8 +237,8 @@ class umichParser:
 		#sleep(1.01)
 		#print("Getting Sections for class " + str(subject) + str(cat_num))
 		sections = self.get_sections(section_url)
-		if(sections == []):
-			print("RETURNED 500, continuing without creating SECTION")
+		if(sections == None):
+			print("Sections not found due to 500 ERROR")
 			return
 		#self.parse_all_sections(course_model = course, sections = sections)
 		#section_writables = [] # list of dicts for all sections/meetings
@@ -244,25 +246,17 @@ class umichParser:
 			section_num = section['SectionNumber']
 			#sleep(1.01)
 			#print("Getting meetings for class " + str(subject) + str(cat_num))
-			meeting  = self.get_course_meeting(term = term, school = school, \
-												subject = subject, cat_num = cat_num, \
-												section = section_num)
-			if(meeting == []):
-				print("RETURNED 500, continuing without creating MEETING")
+			meeting  = self.get_course_meeting(term = term, school = school, subject = subject, cat_num = cat_num, section = section_num)
+			if(meeting == None):
+				print("Meetings not found due to 500 ERROR")
 				continue
 			#sleep(1.01)
 			# writing section info into DB
-			self.create_section(meeting = meeting, course_model = course_model, \
-								input_section = section)
+			self.create_section(meeting = meeting, course_model = course_model, input_section = section)
 			# Getting textbook 
 			if(get_textbook & (section['SectionType'] == 'LEC')):
 				print("Getting textbook information")
-				textbook_info = self.get_textbooks( term = term, \
-													school = school, \
-													subject = subject, \
-													cat_num = cat_num, \
-													section = section_num
-												)
+				textbook_info = self.get_textbooks( term = term, school = school, subject = subject, cat_num = cat_num, section = section_num)
 				if(not textbook_info):
 					print("No info found!")
 					continue
@@ -294,7 +288,7 @@ class umichParser:
 	def get_class_num(self, term, subject, cat_num):
 		class_num_url = self.url + "/" + str(term) + "/Classes/Search/" + str(subject) + "%20" + str(cat_num)
 		resp = self.get_url(class_num_url)
-		if(resp == []):
+		if((resp == []) | (resp == 500) | (resp == 400)):
 			return 0
 		try:
 			resp_list = json.loads(resp)['searchSOCClassesResponse']['SearchResult']
@@ -309,8 +303,8 @@ class umichParser:
 	def get_course_descr(self, course_url):
 		resp = self.get_url(course_url)
 		descr = ''
-		if(resp == []):
-			return "Error Code 500/404"
+		if((resp == []) | (resp == 500) | (resp == 400)):
+			return "Not found"
 		try:
 			descr = json.loads(resp)['getSOCCourseDescrResponse']['CourseDescr']
 			if((descr == 'null') or (descr is None)):
@@ -325,8 +319,8 @@ class umichParser:
 						str(subject) + "/CatalogNbrs/" + str(cat_num) + "/Sections/" + str(section) + \
 						"/Meetings"
 		resp = self.get_url(meeting_url)
-		if(not resp):
-			return []
+		if((resp == []) | (resp == 500) | (resp == 400)):
+			return None
 		try:
 			meeting_info = json.loads(resp)['getSOCMeetingsResponse']['Meeting']
 			return meeting_info
@@ -336,8 +330,8 @@ class umichParser:
 
 	def get_sections(self, sections_url):
 		resp = self.get_url(sections_url)
-		if(resp == []):
-			return []
+		if((resp == []) | (resp == 500) | (resp == 400)):
+			return None
 		try:
 			section_list = json.loads(resp)['getSOCSectionsResponse']['Section']
 			if not isinstance(section_list, list):
@@ -352,8 +346,8 @@ class umichParser:
 						str(subject) + "/CatalogNbrs/" + str(cat_num) + "/Sections/" + str(section) + \
 						"/Textbooks"
 		resp = self.get_url(textbook_url)
-		if(resp == []):
-			return resp		
+		if((resp == []) | (resp == 500) | (resp == 400)):
+			return None		
 		try:
 			textbook_info = json.loads(resp)['getSOCTextbooksResponse']['Textbook']
 			if(type(textbook_info) == list):
@@ -458,12 +452,13 @@ class umichParser:
 
 	def create_or_update_course(self, course_info):
 		cat_num = course_info["CatalogNumber"]
+		title = course_info["CourseDescr"]
 		try:
 			cat_num = int(cat_num)
 		except ValueError:
 			cat_num = int(re.findall(r"[0-9]+", cat_num)[0])
 		credits = 0
-		# CHECK with Noah for multiple credit courses! Just taking minimum
+		# WHat to do for multiple credit courses? Just taking minimum
 		if(type(course_info['CreditHours']) == int):
 			credits = course_info['CreditHours']
 		else:
@@ -473,7 +468,7 @@ class umichParser:
 			code = cat_num,
 			school = self.school,
 			campus = 1,
-			name = course_info['CourseDescr'],
+			name = title,
 			description = course_info['Description'],
 			areas = course_info['Acad_Group'],
 			prerequisites = '',
@@ -560,9 +555,8 @@ class umichParser:
 		if(self.req_count == len(self.tokens)*60):
 			self.req_count = 0
 			self.curr_token = self.tok_cyc.next()
-			sleep(50)
-		header = {	"Authorization" : "Bearer " + str(self.curr_token),  
-					"Accept": 'application/json', "User-Agent": "curl/7.35.0"}	
+			sleep(60)
+		header = {"Authorization" : "Bearer " + str(self.curr_token), "Accept": 'application/json', "User-Agent": "curl/7.35.0"}	
 		while True:
 			try:
 				r = requests.get(url, headers = header, verify = True)
@@ -572,16 +566,24 @@ class umichParser:
 					#print("SUCCESS!")
 					return r.text
 				elif r.status_code == 500:
-					print("Bad status code: " + str(r.status_code))
-					return []
+					# Wait and retry
+					print("Encountered 500, retrying")
+					sleep(0.25)
+					r = requests.get(url, headers = header, verify = True)
+					if(r.status_code == 500):
+						print("Bad status code: " + str(r.status_code))
+						print(r.text)
+						return 500
+					else:
+						return r.text
 				elif r.status_code == 404:
 					print("Bad status code: " + str(r.status_code))
-					return []
+					return 404
 				else:
 					print("FAIL!")
 			except(requests.exceptions.Timeout, 
 					requests.exceptions.ConnectionError):
-				print("Unexpected Errror:  ", sys.exec_info()[0])
+				print("Unexpected Errror") 
 				continue 
 		
 
