@@ -101,11 +101,9 @@ header nav a:hover {
 
 .circular {
 	width: 100%;
-	height: 0;
+	height: auto;
 	padding-bottom: 100%;
-	border-radius: 150px;
-	-webkit-border-radius: 150px;
-	-moz-border-radius: 150px;
+	border-radius: 50%;
 	background-size: cover;
 }
 
