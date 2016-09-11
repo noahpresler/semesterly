@@ -43,16 +43,16 @@ export class TutModal extends React.Component {
 		let backgroundColor;
 		switch(this.state.tutPosition) {
 			case 1:
-				contentStyle.backgroundColor = "#27AE60";
+				contentStyle.backgroundColor = "#FC7372";
 				break;
 			case 2:
-				contentStyle.backgroundColor = "#2980B9";
+				contentStyle.backgroundColor = "#35DDBA";
 				break;
 			case 3:
-				contentStyle.backgroundColor = "#8E44AD";
+				contentStyle.backgroundColor = "#5BCBF1";
 				break;
 			case 4:
-				contentStyle.backgroundColor = "#E74C3C";
+				contentStyle.backgroundColor = "#FED361";
 				break;
 		}
 		return (
