@@ -8,7 +8,7 @@ import { DropTarget } from 'react-dnd';
 import { ShareLink } from './master_slot.jsx';
 
 const Row = (props) => {
-	let timeText = props.show ? <span>{props.time}</span> : null;
+	let timeText = props.displayTime ? <span>{props.displayTime}</span> : null;
 	let dayCells = DAYS.map(day => <CellContainer day={day}
 																								time={props.time}
 																								key={day+props.time}
@@ -44,8 +44,8 @@ class Calendar extends React.Component {
     let rows = [];
     for (let i = 8; i <= this.props.endHour; i++) { // one row for each hour, starting from 8am
       let hour = uses12HrTime && i > 12 ? i - 12 : i;
-      rows.push(<Row time={hour + ':00'} show={true} isLoggedIn={this.props.isLoggedIn} key={i}/>);
-      rows.push(<Row time={hour + ':30'} show={false} isLoggedIn={this.props.isLoggedIn} key={i + 0.5}/>);
+      rows.push(<Row displayTime={hour + ':00'} time={i + ':00'} isLoggedIn={this.props.isLoggedIn} key={i}/>);
+      rows.push(<Row time={i + ':30'} isLoggedIn={this.props.isLoggedIn} key={i + 0.5}/>);
     }
 
   	return rows;
