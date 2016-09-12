@@ -135,6 +135,8 @@ class Slot extends React.Component {
                 <i className="fa fa-user"></i>
                 <span>{this.props.location && this.props.location !== "" ? " , " : null}</span>
             </div>) : null;
+        let converted_start = uses12HrTime && parseInt(this.props.time_start.split(':')[0]) > 12 ? (parseInt(this.props.time_start.split(':')[0]) - 12) + ":" + this.props.time_start.split(':')[1] : this.props.time_start
+        let converted_end = uses12HrTime && parseInt(this.props.time_end.split(':')[0]) > 12 ? (parseInt(this.props.time_end.split(':')[0]) - 12) + ":" + this.props.time_end.split(':')[1] : this.props.time_end
 
     return this.props.connectCreateTarget(this.props.connectDragTarget(
        <div>
@@ -152,7 +154,7 @@ class Slot extends React.Component {
                     { lockButton }
                     <div className="fc-content">
                         <div className="fc-time">
-                            <span>{ this.props.time_start } – { this.props.time_end }</span>
+                            <span>{ converted_start } – { converted_end }</span>
                         </div>
                         <div className="fc-time">
                             { this.props[this.props.primaryDisplayAttribute] + " " + this.props.meeting_section}
