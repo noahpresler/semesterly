@@ -33,6 +33,7 @@
     "radium": "^0.18.1",
     "react": "^15.1.0",
     "react-addons-css-transition-group": "^15.1.0",
+    "react-addons-shallow-compare": "^15.3.1",
     "react-alert": "^1.0.14",
     "react-date-picker": "^4.0.8",
     "react-dnd": "^2.1.4",
