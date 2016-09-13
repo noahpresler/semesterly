@@ -83,6 +83,21 @@ export const getSchoolSpecificInfo = (school) => {
           1: ""
         }
       }
+      case "queens":
+      return {
+        primaryDisplay: "name",
+        areasName: "Areas",
+        departmentsName: "Departments",
+        levelsName: "Levels",
+        timesName: "Times",
+        semesters: {
+          F: "Fall 2016",
+          S: "Winter 2017"
+        },
+        campuses: {
+          1: ""
+        }
+      }
 		case "umd":
 			return {
         primaryDisplay: "name",
