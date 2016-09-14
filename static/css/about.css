@@ -9,7 +9,13 @@ html, body{
 	font-family: "Roboto",Arial,sans-serif;
 }
 
-h1, h2, h5 {
+h1, h2 {
+	font-family: "Palanquin",Arial,sans-serif;
+	font-weight: 500;
+	text-transform: uppercase;
+}
+
+h5 {
 	font-family: "Palanquin",Arial,sans-serif;
 	font-weight: 500;
 }
@@ -80,10 +86,6 @@ header nav a:hover {
 	color: white;
 	font-size: 48px;
 	line-height: 55px;
-}
-
-.center {
-	text-transform: uppercase;
 }
 
 #about-image {
@@ -169,4 +171,49 @@ header nav a:visited {
 
 header nav a:hover {
 	color: #3498DB;
+}
+
+footer {
+	background-color: #253340;
+	padding: 40px 0 10px;
+}
+footer ul {
+	list-style-type: none;
+	padding: 0 0 40px 0;
+	margin: 0;
+}
+footer ul li {
+	margin: 10px 0;
+}
+footer ul li a, 
+footer ul li a:link, 
+footer ul li a:active, 
+footer ul li a:visited {
+	color: #ddd;
+	font-size: 14px;
+	text-decoration: none;
+}
+footer ul li a:hover {
+	text-decoration: underline;
+}
+footer ul li a i {
+	width: 24px;
+	height: 24px;
+	text-align: center;
+	border-radius: 100%;
+	margin-right: 5px;
+}
+footer ul li a i.fa-facebook {
+	line-height: 24px;
+	background-color: #3b5998;
+}
+footer ul li a i.fa-at {
+	line-height: 24px;
+	background-color: #409036;
+}
+footer h6 {
+	text-align: center;
+	font-size: 10px;
+	color: #777;
+	margin: 0;
 }
