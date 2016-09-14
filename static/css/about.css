@@ -9,7 +9,13 @@ html, body{
 	font-family: "Roboto",Arial,sans-serif;
 }
 
-h1, h2, h5 {
+h1, h2 {
+	font-family: "Palanquin",Arial,sans-serif;
+	font-weight: 500;
+	text-transform: uppercase;
+}
+
+h5 {
 	font-family: "Palanquin",Arial,sans-serif;
 	font-weight: 500;
 }
@@ -90,10 +96,6 @@ header nav a:hover {
 	color: white;
 	font-size: 48px;
 	line-height: 55px;
-}
-
-.center {
-	text-transform: uppercase;
 }
 
 #about-image {
