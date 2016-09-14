@@ -141,21 +141,48 @@ class VandyEvalParser:
 			'html.parser'
 		)
 
+		# Fun way to extract Score link
 		for row in soup.find_all('table')[3].find_all('tr'):
 
 			cells = row.find_all('td')
 
-			if len(cells) == 9:
-				link = cells[8].find('a')
-				if link:
-					print link['href']
-			elif len(cells) == 8:
-				link = cells[7].find('a')
-				if link:
-					print link['href']
+			link = cells[len(cells) - 1].find('a')
+			if link:
+				self.parse_eval_score_page(link['href'].replace('&amp;', '&'))
 
-	def parse_eval_score_page(self):
-		pass
+	def parse_eval_score_page(self, url):
+
+		print url
+
+		html = BeautifulSoup(
+			self.get_html(url),
+			'html.parser'
+		)
+
+		# rows = html.find('table').find_all('table')[1].find_all('tr', recursive = False)
+
+		# title = rows[0].text.strip()
+		# more_info = rows[1].find('td').text.splitlines()[0]
+		# print title
+		# print more_info
+
+		rows = html.find('table').find_all('table')[1].find('table')
+
+		print len(rows)
+
+		for row in rows[2:]:
+
+			cells = row.find_all('td')
+
+			question = cells[2].text
+			print question
+
+			details = cells[3].find_all('td', {'rowspan' : '20'})
+			
+			for descriptor, value in zip(details[0::2], details[1::2]):
+				print re.match(r'(.*)\d', descriptor.text).group(1).strip() + ':' + value.text
+
+		exit()
 
 	def parse_list_of_courses(self, school, area):
 
