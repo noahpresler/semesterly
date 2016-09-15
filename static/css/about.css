@@ -9,10 +9,9 @@ html, body{
 	font-family: "Roboto",Arial,sans-serif;
 }
 
-h1, h2 {
+h1, h2, h5 {
 	font-family: "Palanquin",Arial,sans-serif;
 	font-weight: 500;
-	text-transform: uppercase;
 }
 
 h5 {
@@ -94,7 +93,7 @@ header nav a:hover {
 	padding-bottom: 50%;
 	background-size: cover;
 	background-position: top center;
-	background-image: url(/static/img/about-us.jpeg);
+	background-image: url(/static/img/about-us.jpg);
 }
 
 .img-circle {
@@ -119,6 +118,31 @@ header nav a:hover {
 	left: 50%;
 	transform: translate(-50%, -50%);
 	position: absolute;
+}
+.about h2 {
+	font-size: 42px;
+	line-height: 50px;
+	font-weight: 300;
+	margin: 20px 0 0;
+	color: #666;
+}
+.about h5 {
+	font-size: 16px;
+	font-weight: 100;
+	margin: 0;
+	text-transform: uppercase;
+	letter-spacing: 0.2em;
+	color: #555;
+	padding: 40px;
+}
+
+.about .center h4 {
+	font-size: 18px;
+	font-weight: 400;
+	color: #222;
+	margin: 10px auto 0;
+	max-width: 700px;
+	line-height: 24px;
 }
 
 #learn {
