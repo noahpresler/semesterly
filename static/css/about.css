@@ -93,7 +93,7 @@ header nav a:hover {
 	padding-bottom: 50%;
 	background-size: cover;
 	background-position: top center;
-	background-image: url(/static/img/about-us.jpg);
+	background-image: url(/static/img/about.png);
 }
 
 .img-circle {
