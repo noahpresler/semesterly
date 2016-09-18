@@ -24,7 +24,19 @@ class SideBar extends React.Component {
     }
     render() {
         let savedTimetables = this.props.savedTimetables ? this.props.savedTimetables.map(t => {
-            return <div className="tt-name" key={t.id} onMouseDown={() => this.props.loadTimetable(t)}>{t.name}</div>
+            return (
+                <div className="tt-name" key={t.id} onMouseDown={() => this.props.loadTimetable(t)}>
+                    {t.name}
+                    <button onClick=''
+                            className="row-button">
+                        <i className="fa fa-trash-o" />
+                    </button>
+                    <button onClick=''
+                            className="row-button">
+                        <i className="fa fa-clone" />
+                    </button>
+                </div>
+            )
         }) : null;
         let masterSlots = this.props.mandatoryCourses ?
             this.props.mandatoryCourses.map(c => {
