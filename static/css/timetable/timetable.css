@@ -46,6 +46,10 @@ button.save-timetable:active {
 button.save-timetable.add-button {
     margin-right: 2px;
 }
+button.row-button {
+    margin-right: 2px;
+    float: right;
+}
 
 .cal-row {
 	width: 49px;
