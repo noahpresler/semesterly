@@ -143,6 +143,47 @@ def save_timetable(request):
 
 @csrf_exempt
 @login_required
+@validate_subdomain
+def delete_timetable(request):
+    school = request.subdomain
+    params = json.loads(request.body)
+    name = params['name']
+    semester = params['semester']
+    student = Student.objects.get(user=request.user)
+
+    PersonalTimetable.objects.filter(
+        student=student, name=name, school=school, semester=semester).delete()
+
+    response = {'timetables': get_student_tts(student, school, semester)}
+    return HttpResponse(json.dumps(response), content_type='application/json')
+
+@csrf_exempt
+@login_required
+@validate_subdomain
+def duplicate_timetable(request):
+    school = request.subdomain
+    params = json.loads(request.body)
+    name = params['name']
+    semester = params['semester']
+    student = Student.objects.get(user=request.user)
+    new_name = name + ' (copy)'
+
+    original = PersonalTimetable.objects.get(
+        student=student, name=name, school=school, semester=semester)
+    duplicate = PersonalTimetable.objects.create(
+        student=student, name=new_name, school=school, semester=semester,
+        has_conflict=original.has_conflict)
+    for course in original.courses.all():
+        duplicate.courses.add(course)
+    for section in original.sections.all():
+        duplicate.sections.add(section)
+
+    response = {'timetables': get_student_tts(student, school, semester),
+                'saved_timetable': duplicate}
+    return HttpResponse(json.dumps(response), content_type='application/json')
+
+@csrf_exempt
+@login_required
 def save_settings(request):
     student = Student.objects.get(user=request.user)
     params = json.loads(request.body)['userInfo']
