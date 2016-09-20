@@ -1,7 +1,7 @@
 # @what	Vanderbilt Eval Parser
 # @org	Semeseter.ly
 # @author	Michael N. Miller
-# @date	9/13/16
+# @updated	9/19/16
 
 import django, os, datetime
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "semesterly.settings")
@@ -32,12 +32,13 @@ class VandyEvalParser:
 					params = payload,
 					cookies = self.cookies,
 					headers = self.headers,
-					verify = True)
-
-				# print 'GET: ' + r.url
+					verify = True
+				)
 
 				if r.status_code == 200:
 					html = r.text
+
+				# print 'GET: ' + r.url
 
 			except (requests.exceptions.Timeout,
 				requests.exceptions.ConnectionError):
@@ -47,11 +48,10 @@ class VandyEvalParser:
 		return html.encode('utf-8')
 
 	def post_http(self, url, form, payload = ''):
-		
+
 		html = ''
 
 		try:
-
 			r = self.session.post(
 				url,
 				data = form,
@@ -61,10 +61,10 @@ class VandyEvalParser:
 				verify = True
 			)
 
-			# print "POST: " + r.url
-
 			if r.status_code == 200:
 				html = r.text
+
+			# print "POST: " + r.url
 
 		except (requests.exceptions.Timeout,
 			requests.exceptions.ConnectionError):
@@ -73,7 +73,7 @@ class VandyEvalParser:
 		return html
 
 	def login(self):
-		
+
 		# Login Page
 		soup = BeautifulSoup(
 			self.get_html(self.base_url), 
@@ -127,12 +127,12 @@ class VandyEvalParser:
 					self.parse_eval_results(school, area, course)
 
 	def parse_eval_results(self, school, area, course):
-		
+
 		# Search selection criteria
 		select = {
-			'ViewSchool' : school,
-			'ViewArea' : area,
-			'ViewCourse' : course
+			'ViewSchool'	: school,
+			'ViewArea'		: area,
+			'ViewCourse'	: course
 		}
 
 		# Soupify post response
@@ -141,48 +141,86 @@ class VandyEvalParser:
 			'html.parser'
 		)
 
-		# Fun way to extract Score link
-		for row in soup.find_all('table')[3].find_all('tr'):
+		# Course review overview table
+		overview_table = soup.find_all('table')
 
-			cells = row.find_all('td')
+		# Make sure that table exists on page
+		if len(overview_table) > 3:
 
-			link = cells[len(cells) - 1].find('a')
-			if link:
-				self.parse_eval_score_page(link['href'].replace('&amp;', '&'))
+			# Fun way to extract Score link
+			for row in overview_table[3].find_all('tr'):
+
+				cells = row.find_all('td')
+
+				# Parse scores if available
+				link = cells[len(cells) - 1].find('a')
+				
+				if link:
+
+					# Parse single evaluations score page
+					url = link['href'].replace('&amp;', '&')
+					self.parse_eval_score_page(url)
 
 	def parse_eval_score_page(self, url):
 
-		print url
-
+		# Soupify single course eval page
 		html = BeautifulSoup(
 			self.get_html(url),
 			'html.parser'
 		)
 
-		# rows = html.find('table').find_all('table')[1].find_all('tr', recursive = False)
+		body = html.find('table').find('body')
 
-		# title = rows[0].text.strip()
-		# more_info = rows[1].find('td').text.splitlines()[0]
-		# print title
-		# print more_info
+		# Review title
+		title = body.find('title').text
 
-		rows = html.find('table').find_all('table')[1].find('table')
+		print '----------------------'
+		print title.encode('utf-8')
 
-		print len(rows)
+		# List of all questions in review
+		questions = body.find('table').find('table').find_all('td', {'valign' : 'top', 'width' : '200'})
 
-		for row in rows[2:]:
+		# Iterate through questions
+		for question in questions:
 
-			cells = row.find_all('td')
+			# extract table of results for question
+			table = question.find_next('table')
 
-			question = cells[2].text
-			print question
+			search_tags = {
+				'align' : 'right',
+				'nowrap' : '',
+				'rowspan' : '20',
+				'valign' : 'center',
+				'width' : '250'
+			}
 
-			details = cells[3].find_all('td', {'rowspan' : '20'})
-			
-			for descriptor, value in zip(details[0::2], details[1::2]):
-				print re.match(r'(.*)\d', descriptor.text).group(1).strip() + ':' + value.text
+			# Adjectives to describe scores
+			adjs = table.find_all('td', search_tags)
 
-		exit()
+			search_tags.clear()
+
+			search_tags = {
+				'align' : 'right',
+				'rowspan' : '20',
+				'style' : 'font-size:75%',
+				'valign' : 'center',
+				'width' : '24'
+			}
+
+			print 'Q: ' + question.text.strip()
+
+			# Iterate over adjectives
+			for adj in adjs:
+
+				# Label (adjective) to describe numeric score
+				label = adj.contents[0].strip()
+
+				# Numeric score
+				score = adj.find_next('td', search_tags).text.strip()
+
+				print label.encode('utf-8') + ':' + score.encode('utf-8')
+
+			print ""
 
 	def parse_list_of_courses(self, school, area):
 
@@ -236,6 +274,25 @@ class VandyEvalParser:
 
 		# Return list of school codes
 		return [s['value'] for s in schools if s['value']]
+
+	def make_review_item(self, code, prof, score, summary, year):
+	 	courses = Course.objects.filter(code__contains = self.get_code_partial(code), school = "jhu")
+	 	if len(courses) == 0:
+	 		return
+	 	else:
+	 		course = courses[0]
+	 		obj, created = Evaluation.objects.get_or_create(
+	 			course=course,
+	 			score=score,
+	 			summary=summary,
+	 			course_code=code[:20],
+	 			professor=prof,
+	 			year=year)
+	 		if created:
+	 			print "Evaluation Object CREATED for: " + code[:20]
+	 		else:
+	 			print "Evaluation Object FOUND for: " + code[:20]
+		return
 
 def main():
 	vep = VandyEvalParser()
