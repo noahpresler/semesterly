@@ -221,3 +221,17 @@ footer h6 {
 		display: none;
 	}
 }
+@media(max-width: 776px) {
+	#hero h2 {
+		font-size: 40px;
+	}
+	footer li {
+		text-align: center;
+	}
+}
+
+@media(max-width: 445px) {
+	header h1 {
+		display: none;
+	}
+}
