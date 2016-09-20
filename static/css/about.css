@@ -196,3 +196,18 @@ footer h6 {
 	color: #777;
 	margin: 0;
 }
+
+@media(max-width: 776px) {
+	#hero h2 {
+		font-size: 40px;
+	}
+	footer li {
+		text-align: center;
+	}
+}
+
+@media(max-width: 445px) {
+	header h1 {
+		display: none;
+	}
+}
