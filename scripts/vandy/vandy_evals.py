@@ -82,10 +82,10 @@ class VandyEvalParser:
 
 		# FIXME -- security checkpoints might not all be necessary
 		# Security checkpoint
-		vsasm_asv_block = soup.find('input', {'name': 'VSASM_ASVBlock'})['value']
+		sec_block = soup.find('input', {'name': 'VSASM_ASVBlock'})['value']
 
 		form = {
-			'VSASM_ASVBlock': vsasm_asv_block,
+			'VSASM_ASVBlock': sec_block,
 			'VSASM_user': 'khanaf',
 			'VSASM_pw': 'Gainz!23',
 			'VSASM_Login': 'Login'
@@ -159,7 +159,8 @@ class VandyEvalParser:
 
 					# Parse single evaluations score page
 					url = link['href'].replace('&amp;', '&')
-					self.parse_eval_score_page(url)
+					questions = self.parse_eval_score_page(url)
+					# self.make_review_item()
 
 	def parse_eval_score_page(self, url):
 
@@ -175,10 +176,12 @@ class VandyEvalParser:
 		title = body.find('title').text
 
 		print '----------------------'
-		print title.encode('utf-8')
+		course, prof, sem = self.extract_info_from_title( title.encode('utf-8'))
 
 		# List of all questions in review
 		questions = body.find('table').find('table').find_all('td', {'valign' : 'top', 'width' : '200'})
+
+		all_questions = ''
 
 		# Iterate through questions
 		for question in questions:
@@ -207,7 +210,7 @@ class VandyEvalParser:
 				'width' : '24'
 			}
 
-			print 'Q: ' + question.text.strip()
+			all_questions += 'Q: ' + question.text.strip() + '\n'
 
 			# Iterate over adjectives
 			for adj in adjs:
@@ -218,9 +221,13 @@ class VandyEvalParser:
 				# Numeric score
 				score = adj.find_next('td', search_tags).text.strip()
 
-				print label.encode('utf-8') + ':' + score.encode('utf-8')
+				all_questions += label.encode('utf-8') + ':' + score.encode('utf-8') + '\n'
+		
+		self.make_review_item(course,  all_questions + '\n\n'
 
-			print ""
+	def extract_info_from_title(self, title):
+		match = re.match("Course Evaluation for (.*) (.*, .*) (.*)", title);
+		return match.group(1), match.group(2), match.group(3)
 
 	def parse_list_of_courses(self, school, area):
 
@@ -275,7 +282,7 @@ class VandyEvalParser:
 		# Return list of school codes
 		return [s['value'] for s in schools if s['value']]
 
-	def make_review_item(self, code, prof, score, summary, year):
+	def make_review_item(self, code, prof, summary, year):
 	 	courses = Course.objects.filter(code__contains = self.get_code_partial(code), school = "jhu")
 	 	if len(courses) == 0:
 	 		return
@@ -283,9 +290,9 @@ class VandyEvalParser:
 	 		course = courses[0]
 	 		obj, created = Evaluation.objects.get_or_create(
 	 			course=course,
-	 			score=score,
+	 			score='NA',
 	 			summary=summary,
-	 			course_code=code[:20],
+	 			course_code=code,
 	 			professor=prof,
 	 			year=year)
 	 		if created:

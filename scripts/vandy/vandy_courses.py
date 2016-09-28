@@ -36,7 +36,6 @@ class VandyParser:
 					verify = True
 				)
 
-				print r.url
 				if r.status_code == 200:
 					html = r.text
 
@@ -47,69 +46,69 @@ class VandyParser:
 
 		return html.encode('utf-8')
 
-	def post_http(self, url, payload=''):
+	def post_http(self, url, form, payload=''):
+
 		try:
-
-			# # TESTING FOR REDIRECTS
-			# loc = url
-			# seen = set()
-			# while True:
-			# 	r = self.session.post(loc, params=payload, allow_redirects=False)
-			# 	loc = r.headers['Location']
-			# 	if loc in seen:
-			# 		break
-			# 	seen.add(loc)
-			# 	print loc
-
-			# # END TESTING
-
-			# g = self.session.post(url, params=payload, allow_redirects=False)
-			# loc = g.headers['location']
-			# # print g.url
-			# print loc
-
-			# self.session.headers['User-Agent'] = 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_9_2) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/34.0.1847.131 Safari/537.36'
-
-			r = self.session.post(
+			post = self.session.post(
 				url,
+				data = form,
 				params = payload,
 				cookies = self.cookies,
 				headers = self.headers,
-				verify = True
+				verify = True,
+				allow_redirects=False
 			)
 
-			print "POST: " + r.url
+			return post
+			# if r.status_code == 200:
+				# post = r.text
+
+			# print "POST: " + r.url
 
 		except (requests.exceptions.Timeout,
 			requests.exceptions.ConnectionError):
 			sys.stderr.write("Unexpected error: " + sys.exc_info()[0])
 
+		return None
+
 	def login(self):
 
 		print "Logging in..."
 
-		get_login_url = "https://login.mis.vanderbilt.edu/login?service=https%3A%2F%2Fwebapp.mis.vanderbilt.edu%2Fmore%2Fj_spring_cas_security_check"
+		login_url = 'https://login.mis.vanderbilt.edu'
 		
-		soup = BeautifulSoup(self.get_html(get_login_url))
-		lt = soup.find('div', {'class': ['btn-row']}).find('input', {'name': 'lt'})['value']
-		jsessionid = requests.utils.dict_from_cookiejar(self.session.cookies)['JSESSIONID']
+		get_login_url = login_url + '/login'
+		params = {
+			'service' : 'https://webapp.mis.vanderbilt.edu/more/j_spring_cas_security_check'
+		}
 
-		print "<<<<<<<<< COOKIES "
-		for cookie in requests.utils.dict_from_cookiejar(self.session.cookies):
-			print cookie
-		print "<<<<<<<<< END COOKIES"
+		soup = BeautifulSoup(self.get_html(get_login_url, params), 'html.parser')
 
-		post_login_url = "https://login.mis.vanderbilt.edu/mis-cas/login;jsessionid=" + jsessionid
-		post_payload = {
-			'service': 'https%3A%2F%2Fwebapp.mis.vanderbilt.edu%2Fmore%2Fj_spring_cas_security_check',
-			'username': self.username,
-			'password': self.password,
-			'lt': lt,
+		post_suffix_url = soup.find('form', {'name' : 'loginForm'})['action']
+
+		post_login_url = login_url + post_suffix_url
+		print post_login_url
+
+		sec_block = soup.find('input', {'name' : 'lt'})['value']
+		print 'lt:' + sec_block
+
+		login_info = {
+			'username': 'khanaf',
+			'password': 'Gainz!23',
+			'lt': sec_block,
 			'_eventId': 'submit',
 			'submit': 'LOGIN'
 		}
 
-		self.post_http(post_login_url, post_payload)
+		text = self.post_http(post_login_url, login_info, params).text
+		redirect_url = BeautifulSoup(text, 'html.parser').find('a')['href']
+		ticket = re.match(r'', redirect_url)
+		# print text
+		# print BeautifulSoup(text, 'html.parser').prettify()
+		print redirect_url
+
+		soup = BeautifulSoup(self.get_html(redirected_url), 'html.parser')
+		print soup.prettify()
 
 	def parse(self):
 
