@@ -1,5 +1,5 @@
 import React from 'react';
-import CalendarContainer from './containers/calendar_container.jsx';
+import DayCalendarContainer from './containers/day_calendar_container.jsx';
 import AlertBox from './alert_box.jsx';
 import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
 import ConflictAlertContainer from './alerts/conflict_alert_container.jsx';
@@ -73,7 +73,7 @@ class Semesterly extends React.Component {
 				<AlertBox ref={a => this.msg = a} {...this.alertOptions} />
 				<div id="all-cols">
 					<div id="main-bar">
-						<CalendarContainer />
+						<DayCalendarContainer />
 						<footer className="footer navbar no-print">
 							<ul className="nav nav-pills no-print">
 								<li role="presentation"><a href="mailto:contact@semester.ly?Subject=Semesterly">Contact us</a></li>
