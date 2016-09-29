@@ -618,3 +618,4 @@ def manifest_json(request, js):
     template = get_template('manifest.json')
     html = template.render()
     return HttpResponse(html, content_type="application/json")
+
