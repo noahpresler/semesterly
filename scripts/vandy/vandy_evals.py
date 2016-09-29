@@ -176,7 +176,7 @@ class VandyEvalParser:
 		title = body.find('title').text
 
 		print '----------------------'
-		course, prof, sem = self.extract_info_from_title( title.encode('utf-8'))
+		code, prof, sem = self.extract_info_from_title( title.encode('utf-8'))
 
 		# List of all questions in review
 		questions = body.find('table').find('table').find_all('td', {'valign' : 'top', 'width' : '200'})
@@ -223,10 +223,10 @@ class VandyEvalParser:
 
 				all_questions += label.encode('utf-8') + ':' + score.encode('utf-8') + '\n'
 		
-		self.make_review_item(course,  all_questions + '\n\n'
+		self.make_review_item(code, prof, all_questions, sem)
 
 	def extract_info_from_title(self, title):
-		match = re.match("Course Evaluation for (.*) (.*, .*) (.*)", title);
+		match = re.match("Course Evaluation for (.*)-.* (.*, .*) (.*)", title);
 		return match.group(1), match.group(2), match.group(3)
 
 	def parse_list_of_courses(self, school, area):
@@ -283,14 +283,16 @@ class VandyEvalParser:
 		return [s['value'] for s in schools if s['value']]
 
 	def make_review_item(self, code, prof, summary, year):
-	 	courses = Course.objects.filter(code__contains = self.get_code_partial(code), school = "jhu")
+		print prof, code, year
+	 	courses = Course.objects.filter(code__contains = code, school = "vandy")
 	 	if len(courses) == 0:
+	 		print 'not found'
 	 		return
 	 	else:
 	 		course = courses[0]
 	 		obj, created = Evaluation.objects.get_or_create(
 	 			course=course,
-	 			score='NA',
+	 			score=0.0,
 	 			summary=summary,
 	 			course_code=code,
 	 			professor=prof,
