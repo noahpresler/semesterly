@@ -135,7 +135,6 @@ class VandyParser:
 
 		for department_code in department_codes:
 
-			department_code = 'DIV'
 			print 'Parsing courses in \"' + self.departments[department_code] + '\"'
 
 			# Construct payload with department code
