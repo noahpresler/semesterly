@@ -2,7 +2,7 @@ import { connect } from 'react-redux';
 import SideBar from '../side_bar.jsx';
 import { fetchCourseInfo } from '../../actions/modal_actions.jsx'
 import { addOrRemoveCourse, loadTimetable, addOrRemoveOptionalCourse } from '../../actions/timetable_actions.jsx';
-import { duplicateTimetable } from '../../actions/user_actions.jsx'
+import { duplicateTimetable, deleteTimetable } from '../../actions/user_actions.jsx'
 import { getSchoolSpecificInfo } from '../../constants.jsx'
 
 const mapStateToProps = (state) => {
@@ -34,8 +34,9 @@ const mapDispatchToProps = (dispatch) => {
     removeCourse: (courseId) => addOrRemoveCourse(courseId),
     removeOptionalCourse: (course) => dispatch(addOrRemoveOptionalCourse(course)),
     launchPeerModal: () => dispatch({type:'TOGGLE_PEER_MODAL'}),
-		loadTimetable,
-		duplicateTimetable: (tt) => dispatch(duplicateTimetable(tt))
+		duplicateTimetable: (tt) => dispatch(duplicateTimetable(tt)),
+		deleteTimetable: (tt) => dispatch(deleteTimetable(tt)),
+		loadTimetable
 	}
 }
 

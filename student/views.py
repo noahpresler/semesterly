@@ -155,9 +155,8 @@ def delete_timetable(request):
         student=student, name=name, school=school, semester=semester).delete()
 
     timetables = get_student_tts(student, school, semester)
-    response = {
-        'timetables': timetables
-        'saved_timetable': timetables[0] if timetables else False}
+    response = {'timetables': timetables,
+                'saved_timetable': timetables[0] if timetables else False}
     return HttpResponse(json.dumps(response), content_type='application/json')
 
 @csrf_exempt
