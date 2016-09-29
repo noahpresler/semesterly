@@ -101,7 +101,9 @@ class VandyParser:
 		}
 
 		self.post_http(post_login_url, login_info, params).text
-		
+		url = 'https://webapp.mis.vanderbilt.edu/more/Entry.action'
+		self.get_html(url)
+
 		# redirect_url = BeautifulSoup(text, 'html.parser').find('a')['href']
 		# print redirect_url
 
@@ -109,8 +111,8 @@ class VandyParser:
 		# print ticket
 		# print BeautifulSoup(text, 'html.parser').prettify()
 
-		url = 'https://webapp.mis.vanderbilt.edu/more/Entry.action'
-		soup = BeautifulSoup(self.get_html(url), 'html.parser')
+		# url = 'https://webapp.mis.vanderbilt.edu/more/Entry.action'
+		# soup = BeautifulSoup(self.get_html(url), 'html.parser')
 		# print soup.prettify().encode('utf-8')
 
 	def parse(self):
@@ -214,16 +216,13 @@ class VandyParser:
 		# return offering_models
 
 	def print_course(self):
-		# print ""
+
 		for label in self.course:
 			try:
 				pass
 				# print label + "::" + self.course[label] + '::'
 			except:
 				sys.stderr.write("UNICODE ERROR\n")
-
-			# if label == "Location":
-			# 	print 'LOGGED IN!'
 
 	def update_current_course(self, label, value):
 		self.course[label.encode('utf-8')] = value.encode('utf-8')
