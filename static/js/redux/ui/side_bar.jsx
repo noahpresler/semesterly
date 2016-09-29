@@ -27,7 +27,7 @@ class SideBar extends React.Component {
             return (
                 <div className="tt-name" key={t.id} onMouseDown={() => this.props.loadTimetable(t)}>
                     {t.name}
-                    <button onClick={() => console.log("trashed")}
+                    <button onClick={() => this.props.deleteTimetable(t)}
                             className="row-button">
                         <i className="fa fa-trash-o" />
                     </button>

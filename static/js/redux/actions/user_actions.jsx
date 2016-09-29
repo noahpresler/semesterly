@@ -1,5 +1,12 @@
 import fetch from 'isomorphic-fetch';
-import { getUserInfoEndpoint, getSaveTimetableEndpoint, getCloneTimetableEndpoint, getSaveSettingsEndpoint, getClassmatesEndpoint, getLoadSavedTimetablesEndpoint, getFriendsEndpoint } from '../constants.jsx';
+import { getUserInfoEndpoint,
+	getSaveTimetableEndpoint,
+	getCloneTimetableEndpoint,
+	getDeleteTimetableEndpoint,
+	getSaveSettingsEndpoint,
+	getClassmatesEndpoint,
+	getLoadSavedTimetablesEndpoint,
+	getFriendsEndpoint } from '../constants.jsx';
 import { store } from '../init.jsx';
 import { loadTimetable, nullifyTimetable } from './timetable_actions.jsx';
 import { browserSupportsLocalStorage } from '../util.jsx';
@@ -168,50 +175,59 @@ export function duplicateTimetable(timetable) {
 		})
 		.then(response => response.json())
 		.then(json => {
-			if (json.error) {
-				dispatch({
-					type: "ALERT_TIMETABLE_EXISTS"
-				});
-			}
-			else {
-				// edit the state's courseSections, so that future requests to add/remove/unlock
-				// courses are handled correctly. in the new courseSections, every currently active
-				// section will be locked
-				if (!isAutoSave) {
-					// mark that the current timetable is now the only available one (since all sections are locked)
-					dispatch({
-						type: "RECEIVE_TIMETABLES",
-						timetables: [activeTimetable],
-						preset: true,
-						saving: true
-					});
-					dispatch({
-						type: "RECEIVE_COURSE_SECTIONS",
-						courseSections: lockActiveSections(activeTimetable)
-					});
-				}
-				dispatch({
-					type: "CHANGE_ACTIVE_SAVED_TIMETABLE",
-					timetable: json.saved_timetable
-				});
-				dispatch({
-					type: "RECEIVE_SAVED_TIMETABLES",
-					timetables: json.timetables
-				});
-			}
 			dispatch({
-				type: "RECEIVE_TIMETABLE_SAVED",
-				upToDate: !json.error
+				type: "CHANGE_ACTIVE_SAVED_TIMETABLE",
+				timetable: json.saved_timetable
 			});
+			dispatch({
+				type: "RECEIVE_SAVED_TIMETABLES",
+				timetables: json.timetables
+			});
+			// dispatch({
+			// 	type: "RECEIVE_TIMETABLE_SAVED",
+			// 	upToDate: true
+			// });
 
 			return json;
 		})
 		.then(json => {
-			if (callback) {
-				callback();
-				return;
+			if (state.userInfo.data.isLoggedIn && json.timetables[0]) {
+				dispatch(fetchClassmates(json.timetables[0].courses.map( c => c['id'])))
 			}
-			if (!json.error && state.userInfo.data.isLoggedIn && json.timetables[0]) {
+		});
+	}
+}
+
+
+export function deleteTimetable(timetable) {
+	return (dispatch) => {
+		let state = store.getState();
+		if (!state.userInfo.data.isLoggedIn) {
+			return dispatch({type: 'TOGGLE_SIGNUP_MODAL'})
+		}
+		// mark that we're now trying to save this timetable
+		dispatch({
+			type: "REQUEST_SAVE_TIMETABLE"
+		});
+		fetch(getDeleteTimetableEndpoint(), {
+			method: 'POST',
+			body: JSON.stringify(timetable),
+			credentials: 'include',
+		})
+		.then(response => response.json())
+		.then(json => {
+			dispatch({
+				type: "CHANGE_ACTIVE_SAVED_TIMETABLE",
+				timetable: json.saved_timetable
+			});
+			dispatch({
+				type: "RECEIVE_SAVED_TIMETABLES",
+				timetables: json.timetables
+			});
+			return json;
+		})
+		.then(json => {
+			if (state.userInfo.data.isLoggedIn && json.timetables[0]) {
 				dispatch(fetchClassmates(json.timetables[0].courses.map( c => c['id'])))
 			}
 		});
