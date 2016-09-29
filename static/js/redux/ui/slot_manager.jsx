@@ -9,7 +9,7 @@ class SlotManager extends React.Component {
 
 	render() {
         let slots_by_day = this.getSlotsByDay();
-        let all_slots = DAYS.map((day, i) => {
+        let all_slots = ['M'].map((day, i) => {
             let day_slots = slots_by_day[day].map((slot, j) => {
                 let courseId = slot.course;
                 let locked = this.props.isLocked(courseId, slot.meeting_section);
