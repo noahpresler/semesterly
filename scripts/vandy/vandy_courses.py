@@ -56,7 +56,7 @@ class VandyParser:
 				cookies = self.cookies,
 				headers = self.headers,
 				verify = True,
-				allow_redirects=False
+				# allow_redirects=False
 			)
 
 			return post
@@ -100,15 +100,18 @@ class VandyParser:
 			'submit': 'LOGIN'
 		}
 
-		text = self.post_http(post_login_url, login_info, params).text
-		redirect_url = BeautifulSoup(text, 'html.parser').find('a')['href']
-		ticket = re.match(r'', redirect_url)
-		# print text
-		# print BeautifulSoup(text, 'html.parser').prettify()
-		print redirect_url
+		self.post_http(post_login_url, login_info, params).text
+		
+		# redirect_url = BeautifulSoup(text, 'html.parser').find('a')['href']
+		# print redirect_url
 
-		soup = BeautifulSoup(self.get_html(redirected_url), 'html.parser')
-		print soup.prettify()
+		# ticket = re.match(r'.*ticket=(.*)', redirect_url).group(1)
+		# print ticket
+		# print BeautifulSoup(text, 'html.parser').prettify()
+
+		url = 'https://webapp.mis.vanderbilt.edu/more/Entry.action'
+		soup = BeautifulSoup(self.get_html(url), 'html.parser')
+		# print soup.prettify().encode('utf-8')
 
 	def parse(self):
 
@@ -116,10 +119,11 @@ class VandyParser:
 		self.login()
 
 		# Get a list of all the department codes
-		departmentCodes = self.getDepartmentCodes()
+		department_codes = self.get_department_codes()
 
 		# Base URL to query database for classes at Vandy
 		courseSearchURL='https://webapp.mis.vanderbilt.edu/more/SearchClassesExecute!search.action'
+		# courseSearchURL = 'https://webapp.mis.vanderbilt.edu/more/Entry.action'
 
 		# Create payload to request course list from server
 		payload = {
@@ -127,7 +131,7 @@ class VandyParser:
 			'__checkbox_searchCriteria.classStatusCodes':['O','W','C']
 		}
 
-		for departmentCode in departmentCodes:
+		for departmentCode in department_codes:
 
 			print 'Parsing courses in \"' + self.departments[departmentCode] + '\"'
 
@@ -138,7 +142,8 @@ class VandyParser:
 			html = self.get_html(courseSearchURL, payload)
 
 			# Parse courses in department
-			self.parseCoursesInDepartment(html)
+			self.parse_courses_in_department(html)
+
 
 		# Final updates
 		self.wrap_up()
@@ -187,58 +192,61 @@ class VandyParser:
 
 	def create_offerings(self, sectionModel):
 
-		offeringModels = []
+		# offering_models = []
+		# print self.course.get('Location')
 
 		if self.course.get('days'):
 			for day in list(self.course.get('days')):
-				offeringModel, offering_was_created = Offering.objects.update_or_create(
+				offering_model, offering_was_created = Offering.objects.update_or_create(
 					section = sectionModel,
 					day = day,
 					time_start = self.course.get('time_start'),
 					time_end = self.course.get('time_end'),
 					defaults = {
-						'location': 'unknown'
+						'location': self.course.get('Location')
 					}
 				)
 
-				offeringModels.append(offeringModel)
+				yield offering_model
 
-		return offeringModels
+				# offering_models.append(offering_model)
+
+		# return offering_models
 
 	def print_course(self):
-		print ""
-		for key in self.course:
-			if self.course[key]:
-				try:
-					print key + "::" + self.course[key] + '::'
-				except:
-					sys.stderr.write("UNICODE ERROR\n")
+		# print ""
+		for label in self.course:
+			try:
+				pass
+				# print label + "::" + self.course[label] + '::'
+			except:
+				sys.stderr.write("UNICODE ERROR\n")
 
-				if self.course[key] == "Location":
-					sys.stderr.write("LOGGED IN!")
+			# if label == "Location":
+			# 	print 'LOGGED IN!'
 
 	def update_current_course(self, label, value):
 		self.course[label.encode('utf-8')] = value.encode('utf-8')
 
-	def getDepartmentCodes(self):
+	def get_department_codes(self):
 
 		# Query Vandy class search website
 		html = self.get_html('https://webapp.mis.vanderbilt.edu/more/SearchClasses!input.action')
 		soup = BeautifulSoup(html, 'html.parser')
 
 		# Retrieve all deparments from dropdown in advanced search
-		departmentEntries = soup.find_all(id=re.compile("subjAreaMultiSelectOption[0-9]"))
+		department_entries = soup.find_all(id=re.compile("subjAreaMultiSelectOption[0-9]"))
 
 		# Extract department codes from parsed department entries
-		departmentCodes = [de['value'] for de in departmentEntries]
+		department_codes = [de['value'] for de in department_entries]
 
-		for de in departmentEntries:
+		for de in department_entries:
 			self.departments[de['value']] = de['title']
 		# change to list comprehension
 
-		return departmentCodes
+		return department_codes
 
-	def parseCoursesInDepartment(self, html):
+	def parse_courses_in_department(self, html):
 
 		# Check number of results isn't over max
 		numHitsSearch = re.search("totalRecords: ([0-9]*),", html)
@@ -268,7 +276,7 @@ class VandyParser:
 			# Condition met when reached last page
 			if last_class_number != prev_course_number:
 				page_count = page_count + 1
-				nextPageURL = "https://webapp.mis.vanderbilt.edu/more/SearchClassesExecute!switchPage.action?pageNum=" + str(pageCount)
+				nextPageURL = "https://webapp.mis.vanderbilt.edu/more/SearchClassesExecute!switchPage.action?pageNum=" + str(page_count)
 				html = self.get_html(nextPageURL)
 				prev_course_number = last_class_number
 
@@ -307,7 +315,6 @@ class VandyParser:
 		}
 
 		self.parse_course_details(self.get_html(course_details_url, payload))
-
 		self.print_course()
 
 		# Create models
