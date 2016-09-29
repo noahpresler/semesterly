@@ -87,10 +87,8 @@ class VandyParser:
 		post_suffix_url = soup.find('form', {'name' : 'loginForm'})['action']
 
 		post_login_url = login_url + post_suffix_url
-		print post_login_url
 
 		sec_block = soup.find('input', {'name' : 'lt'})['value']
-		print 'lt:' + sec_block
 
 		login_info = {
 			'username': '***REMOVED***',
@@ -100,7 +98,9 @@ class VandyParser:
 			'submit': 'LOGIN'
 		}
 
-		self.post_http(post_login_url, login_info, params).text
+		self.post_http(login_url + post_suffix_url, login_info, params)
+
+		# TODO - not sure if this is necessary but it works
 		url = 'https://webapp.mis.vanderbilt.edu/more/Entry.action'
 		self.get_html(url)
 
@@ -135,6 +135,7 @@ class VandyParser:
 
 		for departmentCode in department_codes:
 
+			departmentCode = 'MGT'
 			print 'Parsing courses in \"' + self.departments[departmentCode] + '\"'
 
 			# Construct payload with department code
@@ -166,7 +167,7 @@ class VandyParser:
 			campus = 1,
 			defaults = {
 				'name': self.course.get('name'),
-				'description': self.course.get('description') + '\n' + self.course.get('Notes'),
+				'description': self.course.get('description') if self.course.get('description') else '',
 				'areas': self.course.get('Attributes'),
 				'prerequisites': self.course.get('Requirement(s)'),
 				'num_credits': float(self.course.get('Hours')),
@@ -510,11 +511,18 @@ class VandyParser:
 
 	def parse_notes(self, soup):
 		notes = [l for l in (p.strip() for p in soup.text.splitlines()) if l]
-		self.update_current_course('Notes', '\n'.join(notes))
+
+		# TODO - redundant, last minute change
+		description = ''
+		if self.course.get('description'):
+			description = self.course.get('description') + '\nNotes:' + '\n'.join(notes)
+		else:
+			description = 'Notes:' + '\n'.join(notes)
+
+		self.update_current_course('description', description)
 
 	def parse_description(self, soup):
 		self.update_current_course('description', soup.text.strip())
-		self.update_current_course('Notes', '')
 
 def main():
 	vp = VandyParser()
