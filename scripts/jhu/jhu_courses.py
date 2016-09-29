@@ -136,7 +136,7 @@ class HopkinsParser:
                     'instructors': course['Instructors'],
                     'size': section_size,
                     'enrolment': section_enrolment
-                } 
+                }
             )
 
             times = Meeting['Times']
