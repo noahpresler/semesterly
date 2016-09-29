@@ -133,12 +133,13 @@ class VandyParser:
 			'__checkbox_searchCriteria.classStatusCodes':['O','W','C']
 		}
 
-		for departmentCode in department_codes:
+		for department_code in department_codes:
 
-			print 'Parsing courses in \"' + self.departments[departmentCode] + '\"'
+			department_code = 'DIV'
+			print 'Parsing courses in \"' + self.departments[department_code] + '\"'
 
 			# Construct payload with department code
-			payload.update({'searchCriteria.subjectAreaCodes': departmentCode})
+			payload.update({'searchCriteria.subjectAreaCodes': department_code})
 
 			# GET html for department course listings
 			html = self.get_html(courseSearchURL, payload)
@@ -224,7 +225,14 @@ class VandyParser:
 				sys.stderr.write("UNICODE ERROR\n")
 
 	def update_current_course(self, label, value):
-		self.course[label.encode('utf-8')] = value.encode('utf-8')
+		# FIXME
+		try:
+			self.course[label.encode('utf-8')] = value.encode('utf-8')
+		except:
+			# FIXME
+			# print label
+			# print value
+			sys.stderr.write("UNICODE ERROR\n")
 
 	def get_department_codes(self):
 
@@ -511,13 +519,14 @@ class VandyParser:
 		notes = [l for l in (p.strip() for p in soup.text.splitlines()) if l]
 
 		# TODO - redundant, last minute change
-		description = ''
-		if self.course.get('description'):
-			description = self.course.get('description') + '\nNotes:' + '\n'.join(notes)
-		else:
-			description = 'Notes:' + '\n'.join(notes)
+		if notes and len(notes) > 0:
+			description = ''
+			if self.course.get('description'):
+				description = self.course.get('description') + '\nNotes:' + '\n'.join(notes).encode('utf-8')
+			else:
+				description = 'Notes:' + '\n'.join(notes).encode('utf-8')
 
-		self.update_current_course('description', description)
+			self.update_current_course('description', description)
 
 	def parse_description(self, soup):
 		self.update_current_course('description', soup.text.strip())
