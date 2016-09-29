@@ -154,7 +154,10 @@ def delete_timetable(request):
     PersonalTimetable.objects.filter(
         student=student, name=name, school=school, semester=semester).delete()
 
-    response = {'timetables': get_student_tts(student, school, semester)}
+    timetables = get_student_tts(student, school, semester)
+    response = {
+        'timetables': timetables
+        'saved_timetable': timetables[0] if timetables else False}
     return HttpResponse(json.dumps(response), content_type='application/json')
 
 @csrf_exempt
@@ -162,9 +165,9 @@ def delete_timetable(request):
 @validate_subdomain
 def duplicate_timetable(request):
     school = request.subdomain
-    params = json.loads(request.body)
-    name = params['name']
-    semester = params['semester']
+    tt = json.loads(request.body)
+    name = tt['name']
+    semester = tt['semester']
     student = Student.objects.get(user=request.user)
     new_name = name + ' (copy)'
 
@@ -178,8 +181,10 @@ def duplicate_timetable(request):
     for section in original.sections.all():
         duplicate.sections.add(section)
 
-    response = {'timetables': get_student_tts(student, school, semester),
-                'saved_timetable': duplicate}
+    timetables = get_student_tts(student, school, semester)
+    saved_timetable = (x for x in timetables if x['id'] == duplicate.id).next()
+    response = {'timetables': timetables,
+                'saved_timetable': saved_timetable}
     return HttpResponse(json.dumps(response), content_type='application/json')
 
 @csrf_exempt

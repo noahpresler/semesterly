@@ -42,6 +42,8 @@ urlpatterns = patterns('',
     #User,Auth,User Info
     url(r'^user/logout/$', 'django.contrib.auth.views.logout', {'next_page': '/'}),
     url(r'^user/save_timetable/$', 'student.views.save_timetable'),
+    url(r'^user/duplicate_timetable/$', 'student.views.duplicate_timetable'),
+    url(r'^user/delete_timetable/$', 'student.views.delete_timetable'),
     url(r'^user/save_settings/$', 'student.views.save_settings'),
     url(r'^user/get_classmates/$', 'student.views.get_classmates'),
     url(r'^user/find_friends/$', 'student.views.find_friends'),
