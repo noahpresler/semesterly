@@ -71,7 +71,6 @@ urlpatterns = patterns('',
 
     # for testing 404, so i don't have to turn off debug
 	url(r'^404testing/', 'timetable.views.custom_404'),
-    # for testing 500, so i don't have to turn off debug
     url(r'^500testing/', 'timetable.views.custom_500')
 )
 
