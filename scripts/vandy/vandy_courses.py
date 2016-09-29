@@ -373,7 +373,9 @@ class VandyParser:
 				self.parse_description(detail_panels[i])
 
 			elif header == "Notes":
-				self.parse_notes(detail_panels[i])
+				pass
+				# FIXME
+				# self.parse_notes(detail_panels[i])
 
 			elif header == "Meeting Times":
 				self.parse_meeting_times(detail_panels[i])
