@@ -99,7 +99,7 @@ class Calendar extends React.Component {
     )
 
 		return (
-	      <div id="calendar" className="fc fc-ltr fc-unthemed">
+	      <div id="calendar" className="fc fc-ltr fc-unthemed week-calendar">
 	        <div className="fc-toolbar no-print">
 	          <div className="fc-left">
 	      		<PaginationContainer />
