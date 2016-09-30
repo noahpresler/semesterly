@@ -1,5 +1,4 @@
-@media(max-width: 767px) {
-
+@media screen and (max-device-width: 767px) and (orientation: portrait) {
     .day-pill {
         width: 20%;
         float: left;
@@ -41,7 +40,7 @@
         margin-top: 0px
     } 
 
-    .button.save-timetable {
+    .fc-right button.save-timetable {
         background-color: transparent;
         border: none;
     }
