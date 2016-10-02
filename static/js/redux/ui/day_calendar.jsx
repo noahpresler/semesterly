@@ -3,9 +3,10 @@ import classnames from 'classnames';
 import PaginationContainer  from './containers/pagination_container.jsx';
 import SlotManagerContainer from './containers/slot_manager_container.jsx';
 import CellContainer from './containers/cell_container.jsx'
-import { DAYS, DRAGTYPES } from '../constants.jsx';
+import { DRAGTYPES } from '../constants.jsx';
 import { DropTarget } from 'react-dnd';
 import { ShareLink } from './master_slot.jsx';
+
 
 const Row = (props) => {
 	let timeText = props.displayTime ? <span>{props.displayTime}</span> : null;
@@ -151,7 +152,7 @@ class DayCalendar extends React.Component {
 	                          </table>
 	                        </div>
 	                        <div className="fc-content-skeleton">
-	                          <SlotManagerContainer />
+	                          <SlotManagerContainer days={['M']} />
 	                        </div>
 	                        <hr className="fc-divider fc-widget-header" style={{display: 'none'}} />
 	                      </div>
