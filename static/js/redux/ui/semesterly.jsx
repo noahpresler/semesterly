@@ -20,7 +20,7 @@ class Semesterly extends React.Component {
 	constructor(props) {
         super(props);
         this.state = { 
-            orientation: window.innerHeight > window.innerWidth ? 'portrait' : 'landscape'
+            orientation: Math.abs(screen.orientation.angle) === 90 ? 'landscape' : 'portrait'
         };
      }
 
@@ -40,10 +40,10 @@ class Semesterly extends React.Component {
 			}
 		});
 		window.addEventListener('orientationchange', (e) => {
-			if ( window.innerHeight > window.innerWidth ) {
-		        this.setState({orientation: 'portrait'});
-			} else {
+			if (Math.abs(screen.orientation.angle) === 90) {
 		        this.setState({orientation: 'landscape'});
+			} else {
+		        this.setState({orientation: 'portrait'});
   			}
 		});
 	}
