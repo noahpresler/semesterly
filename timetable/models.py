@@ -135,7 +135,9 @@ class TextbookLink(models.Model):
 class Integration(models.Model):
   name = models.CharField(max_length=250)
 
+
 class CourseIntegration(models.Model):
   course = models.ForeignKey(Course)
   integration = models.ForeignKey(Integration)
   json = models.TextField()
+
