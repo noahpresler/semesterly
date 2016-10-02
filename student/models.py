@@ -18,6 +18,7 @@ class Student(models.Model):
     social_offerings = models.NullBooleanField(null=True)
     social_all = models.NullBooleanField(null=True)
     emails_enabled = models.NullBooleanField(null=True, default=True)
+    users = models.ManyToManyField(Integration, blank=True)
     time_created = models.DateTimeField(auto_now_add=True)
 
 
