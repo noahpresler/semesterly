@@ -3,7 +3,7 @@ import classnames from 'classnames';
 import PaginationContainer  from './containers/pagination_container.jsx';
 import SlotManagerContainer from './containers/slot_manager_container.jsx';
 import CellContainer from './containers/cell_container.jsx'
-import { DRAGTYPES } from '../constants.jsx';
+import { DRAGTYPES, DAYS } from '../constants.jsx';
 import { DropTarget } from 'react-dnd';
 import { ShareLink } from './master_slot.jsx';
 
@@ -11,9 +11,9 @@ import { ShareLink } from './master_slot.jsx';
 const Row = (props) => {
 	let timeText = props.displayTime ? <span>{props.displayTime}</span> : null;
 	let dayCells = ['M'].map(day => <CellContainer day={day}
-																								time={props.time}
-																								key={day+props.time}
-																								loggedIn={props.isLoggedIn} />)
+									time={props.time}
+									key={day+props.time}
+									loggedIn={props.isLoggedIn} />);
 	return (
 		<tr key={props.time}>
         <td className="fc-axis fc-time fc-widget-content cal-row">
@@ -31,7 +31,12 @@ const Row = (props) => {
 class DayCalendar extends React.Component {
 	constructor(props) {
 		super(props);
-		this.state = {shareLinkShown: false};
+		let d = (new Date()).getDay();
+		if (d === 0 || d === 6) { // Sunday or Saturday, respectively
+			d = 1; // Show Monday
+		}
+		let day = DAYS[d - 1] === 'R' ? 'T' : DAYS[d - 1];
+		this.state = {shareLinkShown: false, day};
 		this.fetchShareTimetableLink = this.fetchShareTimetableLink.bind(this);
 		this.hideShareLink = this.hideShareLink.bind(this);
 	}
@@ -81,23 +86,30 @@ class DayCalendar extends React.Component {
             link={this.props.shareLink}
             onClickOut={this.hideShareLink} /> :
         null;
-  	let addButton = (
-			<button onClick={this.props.handleCreateNewTimetable}
-							className="save-timetable add-button">
-				<i className="fa fa-plus" />
-			</button>
-		)
+	  	let addButton = (
+				<button onClick={this.props.handleCreateNewTimetable}
+								className="save-timetable add-button">
+					<i className="fa fa-plus" />
+				</button>
+			)
 		let saveButton = (
       <button className="save-timetable add-button" onMouseDown={ this.props.saveTimetable }>
       	{saveIcon}
       </button>
 		);
-    let preferenceButton = (
-    	<button onClick={this.props.togglePreferenceModal}
-    					className="save-timetable">
-    		<i className="fa fa-cog" />
-    	</button>
-    )
+	    let preferenceButton = (
+	    	<button onClick={this.props.togglePreferenceModal}
+	    					className="save-timetable">
+	    		<i className="fa fa-cog" />
+	    	</button>
+	    )
+	    let dayPills = DAYS.map(day => {
+    		return <div className="day-pill" onClick={() => this.setState({day})}>
+    			<div className={classnames("day-circle", {"selected": day === this.state.day})}>
+    				{day}
+				</div>
+    		</div>
+    	});
 
 		return (
 	      <div id="calendar" className="fc fc-ltr fc-unthemed day-calendar">
@@ -116,11 +128,7 @@ class DayCalendar extends React.Component {
 	          <div className="fc-clear cf">
 		          	<div id="day-pills-wrapper">
 				        <div id="day-pills">
-				          	<div className="day-pill"><div className="day-circle">M</div></div>
-				          	<div className="day-pill"><div className="day-circle">T</div></div>
-				          	<div className="day-pill"><div className="day-circle selected">W</div></div>
-				          	<div className="day-pill"><div className="day-circle">T</div></div>
-				          	<div className="day-pill"><div className="day-circle">F</div></div>
+				          	{dayPills}
 				        </div>
 				    </div>
 			    </div>
@@ -152,7 +160,7 @@ class DayCalendar extends React.Component {
 	                          </table>
 	                        </div>
 	                        <div className="fc-content-skeleton">
-	                          <SlotManagerContainer days={['M']} />
+	                          <SlotManagerContainer days={[this.state.day]} />
 	                        </div>
 	                        <hr className="fc-divider fc-widget-header" style={{display: 'none'}} />
 	                      </div>
