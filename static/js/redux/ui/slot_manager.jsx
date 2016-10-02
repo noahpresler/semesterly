@@ -3,13 +3,13 @@ import { renderCourseModal } from './course_modal.jsx';
 import Slot from './slot.jsx'
 import CustomSlot from './custom_slot.jsx'
 import { index as IntervalTree, matches01 as getIntersections } from 'static-interval-tree'
-import { HALF_HOUR_HEIGHT, COLOUR_DATA, DAYS } from '../constants.jsx';
+import { HALF_HOUR_HEIGHT, COLOUR_DATA } from '../constants.jsx';
 
 class SlotManager extends React.Component {
 
 	render() {
         let slots_by_day = this.getSlotsByDay();
-        let all_slots = ['M'].map((day, i) => {
+        let all_slots = this.props.days.map((day, i) => {
             let day_slots = slots_by_day[day].map((slot, j) => {
                 let courseId = slot.course;
                 let locked = this.props.isLocked(courseId, slot.meeting_section);
