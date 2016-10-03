@@ -125,6 +125,11 @@ class VandyEvalParser:
 
 				for course in self.parse_list_of_courses(school, area):
 
+					# Don't parse evals for courses not offered
+					code = re.match(r'.*:(.*)', area).group(1) + '-' + course
+					if len(Course.objects.filter(code__contains = code, school = self.school)) == 0:
+						continue
+
 					self.parse_eval_results(school, area, course)
 
 	def parse_eval_results(self, school, area, course):
@@ -288,8 +293,6 @@ class VandyEvalParser:
 		return [s['value'] for s in schools if s['value']]
 
 	def make_review_item(self, code, prof, summary, year):
-		
-		print '\t' + prof, code, year
 
 	 	courses = Course.objects.filter(code__contains = code, school = self.school)
 	 	if len(courses) == 0:
@@ -305,9 +308,9 @@ class VandyEvalParser:
 	 			professor=prof,
 	 			year=year)
 	 		if created:
-	 			print "\tEvaluation Object CREATED for: " + code[:20]
+				print '\tEval Object CREATED for: ' + code, prof, year
 	 		else:
-	 			print "\tEvaluation Object FOUND for: " + code[:20]
+	 			print '\tEval Object FOUND for: ' + code, prof, year
 		return
 
 def main():
