@@ -8,12 +8,13 @@ ______________________________________________
 
 TODO 
  - select Term to search
- - fix locations
- 	--> need to be logged in
- 	--> add parser for it
  - deal with "Ad Hoc Meeting Times"
  	--> ex: EMGT-7733, EMGT-7711
  - implement fake User-Agent
+______________________________________________
+
+Formerly  breaks course evals, how to deal with this?
+
 ______________________________________________
 
 LOGIN
@@ -300,3 +301,119 @@ Does the VSASM_BLOCK remain constant throughout the session?
 567466734A65666F753D246C743F6C69626F62673D2477743F4C667A324C3D246C743F3436343D2477743F544A513D246C743F3733444445363444
 
 VSASM_BLOCK=567466734A65666F753D246C743F6C69626F62673D2477743F4C667A324C3D246C743F3436343D2477743F544A513D246C743F3733444445363444
+
+______________________________________________________________________
+
+
+GET 
+
+https://login.mis.vanderbilt.edu/login?service=https://webapp.mis.vanderbilt.edu/more/j_spring_cas_security_check
+
+Request Headers --
+Host: login.mis.vanderbilt.edu
+User-Agent: Mozilla/5.0 (X11; Ubuntu; Linux i686; rv:49.0) Gecko/20100101 Firefox/49.0
+Accept: text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8
+Accept-Language: en-US,en;q=0.5
+Accept-Encoding: gzip, deflate, br
+Referer: https://webapp.mis.vanderbilt.edu/more/SearchClasses!input.action
+Cookie: _ga=GA1.2.535943187.1475017817; _gat=1
+Connection: keep-alive
+Upgrade-Insecure-Requests: 1
+
+Response Headers -- 
+Cache-Control: no-cache, no-store
+Content-Language: en-US
+Content-Length: 4542
+Content-Type: text/html; charset=UTF-8
+Date: Tue, 27 Sep 2016 23:10:21 GMT
+Expires: Thu, 01 Jan 1970 00:00:00 GMT
+Pragma: no-cache
+Set-Cookie: JSESSIONID=I4Rt6cxTK7ZCvrTzmU6VEUsigCf-hM1txCpUshjq5M2BQJMhfUuA!-1021798762; path=/mis-cas; HttpOnly
+
+Query String --
+service:"https://webapp.mis.vanderbilt.edu/more/j_spring_cas_security_check"
+
+Request Cookies --
+_ga:"GA1.2.535943187.1475017817"
+_gat:"1"
+
+Response Cookies --
+JSESSIONID:"I4Rt6cxTK7ZCvrTzmU6VEUsigCf-hM1txCpUshjq5M2BQJMhfUuA!-1021798762"
+_________________________________________________________
+
+POST (302 moved)
+
+https://login.mis.vanderbilt.edu/mis-cas/login;jsessionid=I4Rt6cxTK7ZCvrTzmU6VEUsigCf-hM1txCpUshjq5M2BQJMhfUuA!-1021798762?service=https://webapp.mis.vanderbilt.edu/more/j_spring_cas_security_check
+
+Request headers --
+Host: login.mis.vanderbilt.edu
+User-Agent: Mozilla/5.0 (X11; Ubuntu; Linux i686; rv:49.0) Gecko/20100101 Firefox/49.0
+Accept: text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8
+Accept-Language: en-US,en;q=0.5
+Accept-Encoding: gzip, deflate, br
+Referer: https://login.mis.vanderbilt.edu/login?service=https%3A%2F%2Fwebapp.mis.vanderbilt.edu%2Fmore%2Fj_spring_cas_security_check
+Cookie: JSESSIONID=I4Rt6cxTK7ZCvrTzmU6VEUsigCf-hM1txCpUshjq5M2BQJMhfUuA!-1021798762; _ga=GA1.2.535943187.1475017817; _gat=1; BIGipServer~business_apps~webapp_miscas_9003=!QEwwhVApyQ31Eny9L5xJuNctmkkmqKEqCGemqUbWR+PBMklcM9p17ADHSNkngT1PqCEl7SQ13fIe8w==
+Connection: keep-alive
+Upgrade-Insecure-Requests: 1
+
+Response headers --
+Cache-Control: no-cache, no-store
+Connection: close
+Content-Language: en-US
+Date: Tue, 27 Sep 2016 23:15:19 GMT
+Expires: Thu, 01 Jan 1970 00:00:00 GMT
+Location: https://webapp.mis.vanderbilt.edu/more/j_spring_cas_security_check?ticket=ST-415696-rSQqFIcZbhDVJfbDScb4-cas
+Pragma: no-cache
+Set-Cookie: CASPRIVACY=; expires=Thu, 01-Jan-1970 01:00:00 GMT; path=/
+CASTGC=TGT-298000-bEwoF5hDwenUpQBxGf5WcafytvZOsxkYMyI0hebJGzBzAn2fGc-cas; path=/; secure
+Transfer-Encoding: chunked
+
+Request Cookies --
+BIGipServer~business_apps~webapp_miscas_9003:"!QEwwhVApyQ31Eny9L5xJuNctmkkmqKEqCGemqUbWR+PBMklcM9p17ADHSNkngT1PqCEl7SQ13fIe8w=="
+JSESSIONID:"I4Rt6cxTK7ZCvrTzmU6VEUsigCf-hM1txCpUshjq5M2BQJMhfUuA!-1021798762"
+_ga:"GA1.2.535943187.1475017817"
+_gat:"1"
+
+Response Cookies --
+CASPRIVACY:""
+CASTGC:"TGT-298000-bEwoF5hDwenUpQBxGf5WcafytvZOsxkYMyI0hebJGzBzAn2fGc-cas"
+
+Query String --
+service:"https://webapp.mis.vanderbilt.edu/more/j_spring_cas_security_check"
+
+Form data --
+username:"khanaf"
+password:"Gainz!23"
+lt:"_cFFC811B2-3BDD-7946-598C-490D5D1A9112_k9B830361-0A07-8EA0-F8E3-9415894D0DEF"
+_eventId:"submit"
+submit:"LOGIN"
+_________________________________________________________
+
+GET
+
+https://webapp.mis.vanderbilt.edu/more/j_spring_cas_security_check?ticket=ST-415696-rSQqFIcZbhDVJfbDScb4-cas
+
+Request Headers --
+Host: webapp.mis.vanderbilt.edu
+User-Agent: Mozilla/5.0 (X11; Ubuntu; Linux i686; rv:49.0) Gecko/20100101 Firefox/49.0
+Accept: text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8
+Accept-Language: en-US,en;q=0.5
+Accept-Encoding: gzip, deflate, br
+Referer: https://login.mis.vanderbilt.edu/login?service=https%3A%2F%2Fwebapp.mis.vanderbilt.edu%2Fmore%2Fj_spring_cas_security_check
+Cookie: JSESSIONID=WVBt6aq34byVM3v3_-a8cjhemPkSbt6nzeVAygY89sD8oDr7Tnlb!-649451537; GLOGOUT=https://webapp.mis.vanderbilt.edu:443/more/logout^jsessionid=WVBt6aq34byVM3v3_-a8cjhemPkSbt6nzeVAygY89sD8oDr7Tnlb!-649451537|; BIGipServer~business_apps~webapp_registration_9003=!cOuOsAZoKjyjgyy9L5xJuNctmkkmqHLOc1T+1geIoeTfwx4HvuVK/YYWqqcJbCq8Ug5qyyQl0vZHXyM=; _ga=GA1.2.535943187.1475017817; _gat=1
+Connection: keep-alive
+Upgrade-Insecure-Requests: 1
+
+Response Headers --
+Cache-Control: no-cache, no-store, max-age=0, must-revalidate
+Connection: close
+Date: Tue, 27 Sep 2016 23:15:20 GMT
+Expires: 0
+Location: https://webapp.mis.vanderbilt.edu/more/Entry.action
+Pragma: no-cache
+Strict-Transport-Security: max-age=31536000 ; includeSubDomains
+Transfer-Encoding: chunked
+X-XSS-Protection: 1; mode=block
+
+Params --
+ticket:"ST-415696-rSQqFIcZbhDVJfbDScb4-cas"
