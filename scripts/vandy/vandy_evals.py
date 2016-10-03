@@ -68,7 +68,7 @@ class VandyEvalParser:
 
 		except (requests.exceptions.Timeout,
 			requests.exceptions.ConnectionError):
-			sys.stderr.write("Unexpected error: " + sys.exc_info()[0])
+			sys.stderr.write("Unexpected error: " + str(sys.exc_info()[0]))
 
 		return html
 
@@ -114,16 +114,17 @@ class VandyEvalParser:
 
 	def parse(self):
 
+		print "Logging in..."
 		self.login()
 
 		for school in self.parse_list_of_schools():
 
 			for area in self.parse_list_of_areas(school):
 
+				print "Parsing evals for school:area " + area
+
 				for course in self.parse_list_of_courses(school, area):
 
-					print '--------------------------------------'
-					print area, course
 					self.parse_eval_results(school, area, course)
 
 	def parse_eval_results(self, school, area, course):
@@ -175,8 +176,10 @@ class VandyEvalParser:
 		# Review title
 		title = body.find('title').text
 
-		print '----------------------'
 		code, prof, sem = self.extract_info_from_title( title.encode('utf-8'))
+
+		rcode = re.match(r'([a-zA-Z]*)(\d*)', code)
+		code = rcode.group(1) + '-' + rcode.group(2)
 
 		# List of all questions in review
 		questions = body.find('table').find('table').find_all('td', {'valign' : 'top', 'width' : '200'})
@@ -222,7 +225,9 @@ class VandyEvalParser:
 				score = adj.find_next('td', search_tags).text.strip()
 
 				all_questions += label.encode('utf-8') + ':' + score.encode('utf-8') + '\n'
-		
+
+			all_questions += '\n'
+
 		self.make_review_item(code, prof, all_questions, sem)
 
 	def extract_info_from_title(self, title):
@@ -283,10 +288,12 @@ class VandyEvalParser:
 		return [s['value'] for s in schools if s['value']]
 
 	def make_review_item(self, code, prof, summary, year):
-		print prof, code, year
-	 	courses = Course.objects.filter(code__contains = code, school = "vandy")
+		
+		print '\t' + prof, code, year
+
+	 	courses = Course.objects.filter(code__contains = code, school = self.school)
 	 	if len(courses) == 0:
-	 		print 'not found'
+	 		print '\t' + code + ' not found'
 	 		return
 	 	else:
 	 		course = courses[0]
@@ -298,9 +305,9 @@ class VandyEvalParser:
 	 			professor=prof,
 	 			year=year)
 	 		if created:
-	 			print "Evaluation Object CREATED for: " + code[:20]
+	 			print "\tEvaluation Object CREATED for: " + code[:20]
 	 		else:
-	 			print "Evaluation Object FOUND for: " + code[:20]
+	 			print "\tEvaluation Object FOUND for: " + code[:20]
 		return
 
 def main():
