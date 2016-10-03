@@ -20,7 +20,7 @@ class VandyParser:
 		self.school = 'vandy'
 		self.semester = sem
 		self.departments = {}
-		self.course = {}
+		self.course = {'description' : ''}
 		self.username = '***REMOVED***'
 		self.password = '***REMOVED***'
 
@@ -41,7 +41,7 @@ class VandyParser:
 
 			except (requests.exceptions.Timeout,
 				requests.exceptions.ConnectionError):
-				sys.stderr.write("Unexpected error: " + sys.exc_info()[0])
+				sys.stderr.write("Unexpected error: " + str(sys.exc_info()[0]))
 				continue
 
 		return html.encode('utf-8')
@@ -104,17 +104,6 @@ class VandyParser:
 		url = 'https://webapp.mis.vanderbilt.edu/more/Entry.action'
 		self.get_html(url)
 
-		# redirect_url = BeautifulSoup(text, 'html.parser').find('a')['href']
-		# print redirect_url
-
-		# ticket = re.match(r'.*ticket=(.*)', redirect_url).group(1)
-		# print ticket
-		# print BeautifulSoup(text, 'html.parser').prettify()
-
-		# url = 'https://webapp.mis.vanderbilt.edu/more/Entry.action'
-		# soup = BeautifulSoup(self.get_html(url), 'html.parser')
-		# print soup.prettify().encode('utf-8')
-
 	def parse(self):
 
 		# Login to vandy course search site
@@ -159,7 +148,7 @@ class VandyParser:
 
 	def create_course(self):
 
-		courseModel, course_was_created = Course.objects.update_or_create(
+		course_model, course_was_created = Course.objects.update_or_create(
 			code = self.course.get('code'),
 			school = 'vandy',
 			campus = 1,
@@ -174,12 +163,12 @@ class VandyParser:
 			}
 		)
 
-		return courseModel
+		return course_model
 
-	def create_section(self, courseModel):
+	def create_section(self, course_model):
 
 		section, section_was_created = Section.objects.update_or_create(
-			course = courseModel,
+			course = course_model,
 			semester = 'F', #self.semester[0].upper(),
 			meeting_section = '(' + self.course.get('section') + ')',
 			defaults = {
@@ -191,15 +180,12 @@ class VandyParser:
 
 		return section
 
-	def create_offerings(self, sectionModel):
-
-		# offering_models = []
-		# print self.course.get('Location')
+	def create_offerings(self, section_model):
 
 		if self.course.get('days'):
 			for day in list(self.course.get('days')):
 				offering_model, offering_was_created = Offering.objects.update_or_create(
-					section = sectionModel,
+					section = section_model,
 					day = day,
 					time_start = self.course.get('time_start'),
 					time_end = self.course.get('time_end'),
@@ -210,27 +196,21 @@ class VandyParser:
 
 				yield offering_model
 
-				# offering_models.append(offering_model)
-
-		# return offering_models
-
 	def print_course(self):
 
 		for label in self.course:
 			try:
-				pass
-				# print label + "::" + self.course[label] + '::'
+				print label + "::" + self.course[label] + '::'
 			except:
-				sys.stderr.write("UNICODE ERROR\n")
+				sys.stderr.write("error: UNICODE ERROR\n")
+				print sys.exc_info()[0]
 
 	def update_current_course(self, label, value):
-		# FIXME
 		try:
-			self.course[label.encode('utf-8')] = value.encode('utf-8')
+			# self.course[label.encode('utf-8')] = value.encode('utf-8').strip()
+			self.course[label] = value.strip()
 		except:
-			# FIXME
-			# print label
-			# print value
+			print 'label:', label, sys.exc_info()[0]
 			sys.stderr.write("UNICODE ERROR\n")
 
 	def get_department_codes(self):
@@ -247,7 +227,6 @@ class VandyParser:
 
 		for de in department_entries:
 			self.departments[de['value']] = de['title']
-		# change to list comprehension
 
 		return department_codes
 
@@ -272,10 +251,10 @@ class VandyParser:
 		page_count = 1
 
 		while True:
-			
+
 			# Parse page by page
 			last_class_number = self.parse_page_of_courses(html)
-	
+
 			# NOTE: this will always print out ONE repeat for each set of courses, but map will be fine
 
 			# Condition met when reached last page
@@ -301,10 +280,10 @@ class VandyParser:
 		return last_class_number
 
 	def parse_course(self, soup):
-		
+
 		# Extract course code and term number to generate access to more info
 		details = soup.find('td', {'class', 'classSection'})['onclick']
-	
+
 		# Extract course number and term code
 		search = re.search("showClassDetailPanel.fire\({classNumber : '([0-9]*)', termCode : '([0-9]*)',", details)
 
@@ -320,13 +299,13 @@ class VandyParser:
 		}
 
 		self.parse_course_details(self.get_html(course_details_url, payload))
-		self.print_course()
+		# self.print_course()
 
 		# Create models
 		courseModel = self.create_course()
 		sectionModel = self.create_section(courseModel)
 		self.create_offerings(sectionModel)
-		
+
 		# Clear course map for next pass
 		self.course.clear()
 
@@ -353,6 +332,9 @@ class VandyParser:
 		self.update_current_course("Catalog ID", catalogID)
 		self.update_current_course("section", sectionNumber)
 
+		# in case no description for course
+		self.update_current_course('description', '')
+
 		# Deal with course details as subgroups seen on details page
 		detail_headers = soup.find_all('div', {'class' : 'detailHeader'})
 		detail_panels = soup.find_all('div', {'class' : 'detailPanel'})
@@ -373,9 +355,7 @@ class VandyParser:
 				self.parse_description(detail_panels[i])
 
 			elif header == "Notes":
-				pass
-				# FIXME
-				# self.parse_notes(detail_panels[i])
+				self.parse_notes(detail_panels[i])
 
 			elif header == "Meeting Times":
 				self.parse_meeting_times(detail_panels[i])
@@ -484,12 +464,12 @@ class VandyParser:
 
 			search = re.match("(.*) \- (.*)", unformatted_time_range)
 			if search is not None:
-				self.update_current_course('time_start', self.time_to_24(search.group(1)))
-				self.update_current_course('time_end', self.time_to_24(search.group(2)))
+				self.update_current_course('time_start', self.time_12_to_24(search.group(1)))
+				self.update_current_course('time_end', self.time_12_to_24(search.group(2)))
 			else:
 				sys.stderr.write('ERROR: invalid time format')
 
-	def time_to_24(self, time12):
+	def time_12_to_24(self, time12):
 
 		# Regex extract
 		match = re.match("(\d*):(\d*)(.)", time12)
@@ -517,17 +497,8 @@ class VandyParser:
 		return instructors
 
 	def parse_notes(self, soup):
-		notes = [l for l in (p.strip() for p in soup.text.splitlines()) if l]
-
-		# TODO - redundant, last minute change
-		if notes and len(notes) > 0:
-			description = ''
-			if self.course.get('description'):
-				description = self.course.get('description') + '\nNotes:' + '\n'.join(notes).encode('utf-8')
-			else:
-				description = 'Notes:' + '\n'.join(notes).encode('utf-8')
-
-			self.update_current_course('description', description)
+		notes = ' '.join([l for l in (p.strip() for p in soup.text.splitlines()) if l]).strip()
+		self.update_current_course('description', self.course.get('description') + '\nNotes: ' + notes)
 
 	def parse_description(self, soup):
 		self.update_current_course('description', soup.text.strip())
