@@ -12,6 +12,7 @@ export class Pagination extends React.Component {
     this.state = {numBubbles: this.getNumBubbles()};
     this.prev = this.prev.bind(this);
     this.next = this.next.bind(this);
+    this.resetBubbles = this.resetBubbles.bind(this);
   }
   getNumBubbles() {
     let bubbles = $(window).width() > 700 ? 10 : 4;
@@ -55,10 +56,14 @@ export class Pagination extends React.Component {
       </div>
     );
   }
+  resetBubbles(){
+    this.setState({ numBubbles: this.getNumBubbles() });
+  }
+  componentWillUnmount() {
+    window.removeEventListener('resize', this.resetBubbles)
+  }
 
   componentDidMount() {
-    window.addEventListener('resize', () => 
-      this.setState({ numBubbles: this.getNumBubbles() })
-    );
+    window.addEventListener('resize', this.resetBubbles);
   }
 }
