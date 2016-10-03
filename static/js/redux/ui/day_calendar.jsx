@@ -6,11 +6,11 @@ import CellContainer from './containers/cell_container.jsx'
 import { DRAGTYPES, DAYS } from '../constants.jsx';
 import { DropTarget } from 'react-dnd';
 import { ShareLink } from './master_slot.jsx';
-
+import Swipeable from 'react-swipeable'
 
 const Row = (props) => {
 	let timeText = props.displayTime ? <span>{props.displayTime}</span> : null;
-	let dayCells = ['M'].map(day => <CellContainer day={day}
+	let dayCells = props.days.map(day => <CellContainer day={day}
 									time={props.time}
 									key={day+props.time}
 									loggedIn={props.isLoggedIn} />);
@@ -35,10 +35,12 @@ class DayCalendar extends React.Component {
 		if (d === 0 || d === 6) { // Sunday or Saturday, respectively
 			d = 1; // Show Monday
 		}
-		let day = DAYS[d - 1] === 'R' ? 'T' : DAYS[d - 1];
+		let day = d - 1
 		this.state = {shareLinkShown: false, day};
 		this.fetchShareTimetableLink = this.fetchShareTimetableLink.bind(this);
 		this.hideShareLink = this.hideShareLink.bind(this);
+		this.swipedLeft = this.swipedLeft.bind(this);
+		this.swipedRight = this.swipedRight.bind(this);
 	}
 	componentWillReceiveProps(nextProps) {
 		if (this.props.isFetchingShareLink && !nextProps.isFetchingShareLink) {
@@ -46,12 +48,28 @@ class DayCalendar extends React.Component {
 		}
 	}
 
+	swipedLeft() {
+		let d = this.state.day-1
+		if (d === -1 || d === 5) { // Sunday or Saturday, respectively
+			d = 0; // Show Monday
+		}
+		this.setState({day: d})
+	}
+
+	swipedRight() {
+		let d = this.state.day+1
+		if (d === -1 || d === 5) { // Sunday or Saturday, respectively
+			d = 0; // Show Monday
+		}
+		this.setState({day: d})
+	}
+
 	getCalendarRows() {
     let rows = [];
     for (let i = 8; i <= this.props.endHour; i++) { // one row for each hour, starting from 8am
       let hour = uses12HrTime && i > 12 ? i - 12 : i;
-      rows.push(<Row displayTime={hour + ':00'} time={i + ':00'} isLoggedIn={this.props.isLoggedIn} key={i}/>);
-      rows.push(<Row time={i + ':30'} isLoggedIn={this.props.isLoggedIn} key={i + 0.5}/>);
+      rows.push(<Row displayTime={hour + ':00'} time={i + ':00'} isLoggedIn={this.props.isLoggedIn} key={i} days={[DAYS[this.state.day]]}/>);
+      rows.push(<Row time={i + ':30'} isLoggedIn={this.props.isLoggedIn} key={i + 0.5} days={[DAYS[this.state.day]]}/>);
     }
 
   	return rows;
@@ -103,10 +121,10 @@ class DayCalendar extends React.Component {
 	    		<i className="fa fa-cog" />
 	    	</button>
 	    )
-	    let dayPills = DAYS.map(day => {
-    		return <div className="day-pill" onClick={() => this.setState({day})}>
-    			<div className={classnames("day-circle", {"selected": day === this.state.day})}>
-    				{day}
+	    let dayPills = DAYS.map((day,i) => {
+    		return <div key={i}  className="day-pill" onClick={() => this.setState({day: i})}>
+    			<div className={classnames("day-circle", {"selected": i === this.state.day})}>
+    				{day === 'R' ? 'T' : day}
 				</div>
     		</div>
     	});
@@ -133,45 +151,49 @@ class DayCalendar extends React.Component {
 				    </div>
 			    </div>
 	        </div>
-	        <div className="fc-view-container" style={{}}>
-	          <div className="fc-view fc-settimana-view fc-agenda-view">
-	            <table>
-	              <tbody className="fc-body">
-	                <tr>
-	                  <td className="fc-widget-content">
-	                    <hr className="fc-divider fc-widget-header" />
-	                    <div className="fc-time-grid-container">
-	                      <div className="fc-time-grid">
-	                        <div className="fc-bg">
-	                          <table>
-	                            <tbody>
-	                              <tr>
-	                                <td className="fc-axis fc-widget-content" style={{width: 49}} />
-	                                <td className="fc-day fc-widget-content fc-mon" />
-	                              </tr>
-	                            </tbody>
-	                          </table>
-	                        </div>
-	                        <div className="fc-slats">
-	                          <table>
-	                            <tbody>
-	                              {this.getCalendarRows()}
-	                            </tbody>
-	                          </table>
-	                        </div>
-	                        <div className="fc-content-skeleton">
-	                          <SlotManagerContainer days={[this.state.day]} />
-	                        </div>
-	                        <hr className="fc-divider fc-widget-header" style={{display: 'none'}} />
-	                      </div>
-	                    </div>
-	                  </td>
-	                </tr>
-	              </tbody>
-	            </table>
-	          </div>
-	          <p className="data-last-updated no-print">Data last updated: { this.props.dataLastUpdated && this.props.dataLastUpdated.length && this.props.dataLastUpdated !== "null" ? this.props.dataLastUpdated : null }</p>
-	        </div>
+    		<Swipeable
+		        onSwipedRight={this.swipedRight}
+		        onSwipedLeft={this.swipedLeft}>
+		        <div className="fc-view-container" style={{}}>
+		          <div className="fc-view fc-settimana-view fc-agenda-view">
+		            <table>
+		              <tbody className="fc-body">
+		                <tr>
+		                  <td className="fc-widget-content">
+		                    <hr className="fc-divider fc-widget-header" />
+		                    <div className="fc-time-grid-container">
+		                      <div className="fc-time-grid">
+		                        <div className="fc-bg">
+		                          <table>
+		                            <tbody>
+		                              <tr>
+		                                <td className="fc-axis fc-widget-content" style={{width: 49}} />
+		                                <td className="fc-day fc-widget-content fc-mon" />
+		                              </tr>
+		                            </tbody>
+		                          </table>
+		                        </div>
+		                        <div className="fc-slats">
+		                          <table>
+		                            <tbody>
+		                              {this.getCalendarRows()}
+		                            </tbody>
+		                          </table>
+		                        </div>
+		                        <div className="fc-content-skeleton">
+		                          <SlotManagerContainer days={[DAYS[this.state.day]]} />
+		                        </div>
+		                        <hr className="fc-divider fc-widget-header" style={{display: 'none'}} />
+		                      </div>
+		                    </div>
+		                  </td>
+		                </tr>
+		              </tbody>
+		            </table>
+		          </div>
+		          <p className="data-last-updated no-print">Data last updated: { this.props.dataLastUpdated && this.props.dataLastUpdated.length && this.props.dataLastUpdated !== "null" ? this.props.dataLastUpdated : null }</p>
+		        </div>
+	        </Swipeable>
 	      </div>
     	);
   	}
