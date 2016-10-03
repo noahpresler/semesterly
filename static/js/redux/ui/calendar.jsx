@@ -99,7 +99,7 @@ class Calendar extends React.Component {
     )
 
 		return (
-	      <div id="calendar" className="fc fc-ltr fc-unthemed">
+	      <div id="calendar" className="fc fc-ltr fc-unthemed week-calendar">
 	        <div className="fc-toolbar no-print">
 	          <div className="fc-left">
 	      		<PaginationContainer />
@@ -166,7 +166,7 @@ class Calendar extends React.Component {
 	                          </table>
 	                        </div>
 	                        <div className="fc-content-skeleton">
-	                          <SlotManagerContainer />
+	                          <SlotManagerContainer days={DAYS} />
 	                        </div>
 	                        <hr className="fc-divider fc-widget-header" style={{display: 'none'}} />
 	                      </div>
