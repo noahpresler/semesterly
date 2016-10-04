@@ -42,7 +42,7 @@ class Semesterly extends React.Component {
 		});
 		window.addEventListener('orientationchange', (e) => {
 			let mql = window.matchMedia("(orientation: portrait)");
-			if (!mql.matches && !$('#search-bar-input-wrapper input').is(":focus")) {
+			if (!mql.matches) {
 		        this.setState({orientation: 'landscape'});
 			} else {
 		        this.setState({orientation: 'portrait'});
