@@ -187,4 +187,12 @@ a#social-login:hover:before {
     #social-pro-pic {
         margin-right: 0px;
     }
+
+    .fa-facebook-square {
+        display: none;
+    }
+
+    #social {
+        margin-right: 25px;
+    }
 }
