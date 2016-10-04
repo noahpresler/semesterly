@@ -7,7 +7,7 @@
     } 
 }
 
-@media screen and (max-device-width: 767px) and (max-aspect-ratio: 13/9) {
+@media screen and (max-device-width: 767px) and (max-aspect-ratio: 14/9) {
     .day-pill {
         width: 20%;
         float: left;
