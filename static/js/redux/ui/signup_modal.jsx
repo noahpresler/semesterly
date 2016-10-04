@@ -13,7 +13,7 @@ export class SignupModal extends React.Component {
             <div id="modal-content">
                 <div id="modal-header">
                     <div className="pro-pic" style={{backgroundImage: 'url(/static/img/blank.jpg)'}}></div>
-                    <h1>Signup now...</h1>
+                    <h1>That feature requires an account...</h1>
                 </div>
             </div>
         let modalStyle = {
@@ -27,7 +27,6 @@ export class SignupModal extends React.Component {
                 >
                 {modalHeader}
                 <div id="features">
-                    That feature requires an account.
                     <div id="feature-highlight">
                         <div className="row">
                             <div className="col-1-2">
