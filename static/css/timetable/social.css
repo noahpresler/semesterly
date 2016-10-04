@@ -176,4 +176,23 @@ a#social-login:hover:before {
     a#social-login:hover:before {
         width: 0%;
     }
+    #social .tip-down {
+        display: none;
+    }
+
+    #search-bar input {
+        padding: 0 0px 0 10px;
+    }
+
+    #social-pro-pic {
+        margin-right: 0px;
+    }
+
+    .fa-facebook-square {
+        display: none;
+    }
+
+    #social {
+        margin-right: 25px;
+    }
 }
