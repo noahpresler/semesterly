@@ -19,8 +19,9 @@ import PeerModalContainer from './containers/peer_modal_container.jsx';
 class Semesterly extends React.Component {
 	constructor(props) {
         super(props);
+        let mql = window.matchMedia("(orientation: portrait)");
         this.state = { 
-            orientation: Math.abs(screen.orientation.angle) === 90 ? 'landscape' : 'portrait'
+            orientation: !mql.matches ? 'landscape' : 'portrait'
         };
      }
 
@@ -40,7 +41,8 @@ class Semesterly extends React.Component {
 			}
 		});
 		window.addEventListener('orientationchange', (e) => {
-			if (Math.abs(screen.orientation.angle) === 90) {
+			let mql = window.matchMedia("(orientation: portrait)");
+			if (!mql.matches) {
 		        this.setState({orientation: 'landscape'});
 			} else {
 		        this.setState({orientation: 'portrait'});
