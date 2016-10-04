@@ -23,6 +23,7 @@ class Semesterly extends React.Component {
         this.state = { 
             orientation: !mql.matches ? 'landscape' : 'portrait'
         };
+        this.updateOrientation = this.updateOrientation.bind(this);
      }
 
 	componentWillMount() {
@@ -41,12 +42,23 @@ class Semesterly extends React.Component {
 			}
 		});
 		window.addEventListener('orientationchange', (e) => {
-			if (window.matchMedia("(orientation: portrait)").matches) {
-		        this.setState({orientation: 'portrait'});
-			} if (window.matchMedia("(orientation: landscape)").matches) {
-		        this.setState({orientation: 'landscape'});
-  			}
+			this.updateOrientation();
 		});
+		window.addEventListener('resize', (e) => {
+			this.updateOrientation();
+		});
+	}
+
+	updateOrientation() {
+		let orientation = 'portrait'
+		if (window.matchMedia("(orientation: portrait)").matches) {
+	        orientation = 'portrait';
+		} if (window.matchMedia("(orientation: landscape)").matches) {
+	        orientation = 'landscape';
+		}
+		if (orientation != this.state.orientation) {
+			this.setState({orientation: orientation});
+		}
 	}
 
 	componentWillReceiveProps(nextProps) {
