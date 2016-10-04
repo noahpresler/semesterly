@@ -409,9 +409,19 @@
 	.search-results {
 		top: 39px;
 	}
+
+	#search-bar-wrapper {
+		right: 85px;
+		left: 50px;
+	}
 }
 @media (min-width: 767px) {
 	.search-results {
 		height: 240px;
+	}
+
+	#search-bar-wrapper {
+		right: 85px;
+		left: 50px;
 	}
 }
