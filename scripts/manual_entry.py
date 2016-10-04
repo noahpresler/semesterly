@@ -70,6 +70,7 @@ while True:
 			        course = course,
 			        semester = semester.upper()[:1],
 			        meeting_section = section_code,
+			        section_type = section_type,
 			        defaults = {
 			            'instructors': instructors,
 			            'size': size,
