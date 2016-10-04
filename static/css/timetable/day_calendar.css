@@ -7,7 +7,7 @@
     } 
 }
 
-@media screen and (max-device-width: 767px) and (orientation: portrait) {
+@media screen and (max-device-width: 767px) {
     .day-pill {
         width: 20%;
         float: left;
