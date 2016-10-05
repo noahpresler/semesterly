@@ -333,3 +333,15 @@ def unsubscribe(request, id, token):
 
   # Link is invalid. Redirect to homepage.
   return HttpResponseRedirect("/")
+
+@csrf_exempt
+def set_registration_token(request):
+    token = json.loads(request.body)['token']
+    student = get_student(request)
+    if student != None and student.objects.filter(token=token).exists():
+
+    json_data = {
+        'token': 'yes'
+    }
+    print 'yo setting a registration token'
+    return HttpResponse(json.dumps(json_data), content_type="application/json")
