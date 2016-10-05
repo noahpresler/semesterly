@@ -257,42 +257,6 @@ export function setARegistrationToken() {
 	}
 }
 
-export function sendRegistrationToken(token) {
-	return fetch(getSetRegistrationTokenEndpoint(), {
-		method: 'POST',
-		body: JSON.stringify({
-			token
-		}),
-		credentials: 'include',
-	})
-    .then(response => response.json()) // TODO(rohan): error-check the response
-    .then(json => {
-    	if (!json.error) {
-    		console.log("token registered: " + token);
-	      	store.dispatch({
-	        	type: "TOKEN_REGISTERED"
-        	});
-    	} else {
-    		console.log("token not registered: " + token);
-    	}
-	});
-}
-
-export function unregisterAToken() {
-    if ('serviceWorker' in navigator) {
-	    navigator.serviceWorker.register('/sw.js').then(function(reg) {
-	        reg.pushManager.subscribe({
-	            userVisibleOnly: true
-	        }).then(function(sub) {
-	        	// TODO: unregister token on client side
-	            sendRegistrationTokenForDeletion(sub.endpoint.substring(40))
-	        });
-	    }).catch(function(error) {
-	        console.log(':^(', error);
-	    });
-	}
-}
-
 export function sendRegistrationTokenForDeletion(token) {
     return fetch(deleteRegistrationTokenEndpoint(), {
         method: 'POST',
@@ -313,3 +277,19 @@ export function sendRegistrationTokenForDeletion(token) {
         }
     });
 }
+
+export function unregisterAToken() {
+    if ('serviceWorker' in navigator) {
+	    navigator.serviceWorker.register('/sw.js').then(function(reg) {
+	        reg.pushManager.subscribe({
+	            userVisibleOnly: true
+	        }).then(function(sub) {
+	        	// TODO: unregister token on client side
+	            sendRegistrationTokenForDeletion(sub.endpoint.substring(40))
+	        });
+	    }).catch(function(error) {
+	        console.log(':^(', error);
+	    });
+	}
+}
+
