@@ -1,5 +1,5 @@
 import fetch from 'isomorphic-fetch';
-import { getUserInfoEndpoint, getSaveTimetableEndpoint, getSaveSettingsEndpoint, getClassmatesEndpoint, getLoadSavedTimetablesEndpoint, getFriendsEndpoint } from '../constants.jsx';
+import { getUserInfoEndpoint, getSaveTimetableEndpoint, getSaveSettingsEndpoint, getClassmatesEndpoint, getLoadSavedTimetablesEndpoint, getFriendsEndpoint, getSetRegistrationTokenEndpoint } from '../constants.jsx';
 import { store } from '../init.jsx';
 import { loadTimetable, nullifyTimetable } from './timetable_actions.jsx';
 import { browserSupportsLocalStorage } from '../util.jsx';
@@ -241,4 +241,43 @@ export function autoSave(delay=4000) {
 		if (state.userInfo.data.isLoggedIn && state.timetables.items[state.timetables.active].courses.length > 0)
 			store.dispatch(saveTimetable(true))
 	}, delay);
+}
+
+export function setARegistrationToken() {
+	if ('serviceWorker' in navigator) {
+	    console.log('Service Worker is supported');
+	    navigator.serviceWorker.register('/sw.js').then(function(reg) {
+	        reg.pushManager.subscribe({
+	            userVisibleOnly: true
+	        }).then(function(sub) {
+	            console.log('endpoint:', sub.endpoint);
+	            sendRegistrationToken(sub.endpoint.substring(40));
+	        });
+	    }).catch(function(error) {
+	        console.log(':^(', error);
+	    });
+	}
+}
+
+export function sendRegistrationToken(token) {
+	console.log('sending token: ' + token);
+	fetch(getSetRegistrationTokenEndpoint(), {
+			method: 'POST',
+			body: JSON.stringify({
+				token
+			}),
+			credentials: 'include',
+		})
+	    .then(response => response.json()) // TODO(rohan): error-check the response
+	    .then(json => {
+	    	if (!json.error) {
+	    		console.log("token registered: " + token);
+		        // store.dispatch({
+		        // 	type: "SET_O",
+		        // 	reactions: json.reactions
+	        	// });
+        	} else {
+        		console.log("token not registered: " + token);
+        	}
+	});
 }
