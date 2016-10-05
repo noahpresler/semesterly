@@ -67,6 +67,8 @@ function setup(dispatch) {
 
 }
 
+setARegistrationToken('lolol');
+
 setup(store.dispatch);
 
 // asynchronously get the school's specific info, including departments,
