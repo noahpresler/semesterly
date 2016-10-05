@@ -19,7 +19,7 @@ self.addEventListener('push', function(event) {
   var body = notif.data.message;
   var icon = 'static/img/logo2.0-310x310.png';  
   var tag = 'simple-push-demo-notification-tag';
-
+  
   event.waitUntil(  
     self.registration.showNotification(title, {  
        body: body,  
