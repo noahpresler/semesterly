@@ -47,8 +47,8 @@ class PersonalTimetable(models.Model):
     sections = models.ManyToManyField(Section)
     has_conflict = models.BooleanField(blank=True, default=False)
 
-class RedistrationToken(models.Model):
+class RegistrationToken(models.Model):
     token = models.TextField(default='')
-    user = models.ForeignKey(Student, null=True, default=None)
+    student = models.ForeignKey(Student, null=True, default=None)
 
     
