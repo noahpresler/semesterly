@@ -429,23 +429,4 @@ export function unregisterAToken() {
 	}
 }
 
-export function sendRegistrationTokenForDeletion(token) {
-    return fetch(deleteRegistrationTokenEndpoint(), {
-        method: 'POST',
-        body: JSON.stringify({
-            token
-        }),
-        credentials: 'include',
-    })
-    .then(response => response.json()) // TODO(rohan): error-check the response
-    .then(json => {
-        if (!json.error) {
-            // console.log("token deleted: " + token);
-            store.dispatch({
-                type: "UNREGISTER_TOKEN"
-            });
-        } else {
-            // console.log("token not deleted: " + token);
-        }
-    });
-}
+
