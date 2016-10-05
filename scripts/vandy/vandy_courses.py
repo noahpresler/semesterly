@@ -23,6 +23,7 @@ class VandyParser:
 		self.course = {'description' : ''}
 		self.username = 'khanaf'
 		self.password = 'Gainz%2123'
+		self.cancelled = False
 
 	def get_html(self, url, payload=''):
 		html = None
@@ -119,7 +120,7 @@ class VandyParser:
 		# Create payload to request course list from server
 		payload = {
 			'searchCriteria.classStatusCodes': ['O', 'W', 'C'],
-			'__checkbox_searchCriteria.classStatusCodes':['O','W','C']
+			'__checkbox_searchCriteria.classStatusCodes':['O','W', 'C']
 		}
 
 		for department_code in department_codes:
@@ -167,18 +168,30 @@ class VandyParser:
 
 	def create_section(self, course_model):
 
-		section, section_was_created = Section.objects.update_or_create(
-			course = course_model,
-			semester = 'F', #self.semester[0].upper(),
-			meeting_section = '(' + self.course.get('section') + ')',
-			defaults = {
-				'instructors': self.course.get('Instructor(s)') or '',
-				'size': int(self.course.get('Class Capacity')),
-				'enrolment': int(self.course.get('Total Enrolled'))
-			}
-		)
+		if self.cancelled:
 
-		return section
+			if Section.objects.filter(course = course_model, meeting_section = self.course.get('section')).exists():
+				s = Section.objects.get(course = course_model, meeting_section = self.course.get('section'))
+				Offering.objects.filter(section = s).delete()
+				s.delete()
+
+			self.cancelled = False
+
+			return None
+
+		else:
+			section, section_was_created = Section.objects.update_or_create(
+				course = course_model,
+				semester = 'F', #self.semester[0].upper(),
+				meeting_section = self.course.get('section'),
+				defaults = {
+					'instructors': self.course.get('Instructor(s)') or '',
+					'size': int(self.course.get('Class Capacity')),
+					'enrolment': int(self.course.get('Total Enrolled'))
+				}
+			)
+
+			return section
 
 	def create_offerings(self, section_model):
 
@@ -194,7 +207,7 @@ class VandyParser:
 					}
 				)
 
-				yield offering_model
+				# yield offering_model
 
 	def print_course(self):
 
@@ -275,6 +288,11 @@ class VandyParser:
 
 		last_class_number = 0
 		for course in courses:
+
+			# remove cancelled classes
+			if course.find('a', {'class' : 'cancelledStatus'}):
+				self.cancelled = True
+
 			last_class_number = self.parse_course(course)
 
 		return last_class_number
@@ -302,9 +320,9 @@ class VandyParser:
 		# self.print_course()
 
 		# Create models
-		courseModel = self.create_course()
-		sectionModel = self.create_section(courseModel)
-		self.create_offerings(sectionModel)
+		section_model = self.create_section(self.create_course())
+		if section_model:
+			self.create_offerings(section_model)
 
 		# Clear course map for next pass
 		self.course.clear()
@@ -330,7 +348,7 @@ class VandyParser:
 		self.update_current_course("code", departmentCode + '-' + catalogID)
 		self.update_current_course("department", departmentCode)
 		self.update_current_course("Catalog ID", catalogID)
-		self.update_current_course("section", sectionNumber)
+		self.update_current_course("section", '(' + sectionNumber.strip() + ')')
 
 		# in case no description for course
 		self.update_current_course('description', '')
