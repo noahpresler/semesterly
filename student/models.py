@@ -20,7 +20,6 @@ class Student(models.Model):
     emails_enabled = models.NullBooleanField(null=True, default=True)
     time_created = models.DateTimeField(auto_now_add=True)
 
-
 class Reaction(models.Model):
   REACTION_CHOICES = (
     ('FIRE', 'FIRE'),
@@ -47,5 +46,9 @@ class PersonalTimetable(models.Model):
     last_updated = models.DateTimeField(auto_now=True)
     sections = models.ManyToManyField(Section)
     has_conflict = models.BooleanField(blank=True, default=False)
+
+class RedistrationToken(models.Model):
+    token = models.TextField(default='')
+    user = models.ForeignKey(Student, null=True, default=None)
 
     
