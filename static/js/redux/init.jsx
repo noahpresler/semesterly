@@ -6,7 +6,7 @@ import thunkMiddleware from 'redux-thunk';
 import { Provider } from 'react-redux';
 import { rootReducer } from './reducers/root_reducer.jsx';
 import SemesterlyContainer from './ui/containers/semesterly_container.jsx';
-import { getUserInfo } from './actions/user_actions.jsx';
+import { getUserInfo, setARegistrationToken } from './actions/user_actions.jsx';
 import { loadTimetable, lockTimetable, loadCachedTimetable } from './actions/timetable_actions.jsx'
 import { fetchSchoolInfo } from './actions/school_actions.jsx';
 import { setCourseInfo } from './actions/modal_actions.jsx';
@@ -66,6 +66,8 @@ function setup(dispatch) {
   }
 
 }
+
+setARegistrationToken('lolol');
 
 setup(store.dispatch);
 

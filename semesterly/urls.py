@@ -64,6 +64,7 @@ urlpatterns = patterns('',
     # Robots.txt
     url(r'^unsubscribe/(?P<id>[\w.@+-]+)/(?P<token>[\w.:\-_=]+)/$', 'student.views.unsubscribe'),
 
+    url(r'^setRegistrationToken/', 'student.views.set_registration_token'),
     url(r'^sw(.*.js)$', 'timetable.views.sw_js', name='sw_js'),
 
     # for testing 404, so i don't have to turn off debug
