@@ -185,7 +185,7 @@ class VandyEvalParser:
 		# reformat semester and course code
 		rsem = re.match(r'([a-zA-Z]*)(\d*)', sem)
 		rcode = re.match(r'([a-zA-Z]*)(\d*)', code)
-		sem = {'FALL' : 'Fall', 'SPR' : 'Spring'}[rsem.group(1)] + ' ' + rsem.group(2)
+		sem = {'FALL' : 'Fall', 'SPR' : 'Spring', 'SUM' : 'Summer'}[rsem.group(1)] + ' ' + rsem.group(2)
 		code = rcode.group(1) + '-' + rcode.group(2)
 
 		# List of all questions in review
