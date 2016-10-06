@@ -166,7 +166,6 @@ class VandyEvalParser:
 					# Parse single evaluations score page
 					url = link['href'].replace('&amp;', '&')
 					questions = self.parse_eval_score_page(url)
-					# self.make_review_item()
 
 	def parse_eval_score_page(self, url):
 
@@ -181,9 +180,12 @@ class VandyEvalParser:
 		# Review title
 		title = body.find('title').text
 
-		code, prof, sem = self.extract_info_from_title( title.encode('utf-8'))
+		code, prof, sem = self.extract_info_from_title(title)
 
+		# reformat semester and course code
+		rsem = re.match(r'([a-zA-Z]*)(\d*)', sem)
 		rcode = re.match(r'([a-zA-Z]*)(\d*)', code)
+		sem = {'FALL' : 'Fall', 'SPR' : 'Spring'}[rsem.group(1)] + ' ' + rsem.group(2)
 		code = rcode.group(1) + '-' + rcode.group(2)
 
 		# List of all questions in review
@@ -194,7 +196,7 @@ class VandyEvalParser:
 		# track number of responses
 		total_votes = 0
 		total_score = 0
-		
+
 		# Iterate through questions
 		for question in questions:
 
@@ -242,7 +244,7 @@ class VandyEvalParser:
 
 			all_questions += '\n'
 
-		self.make_review_item(code, prof, float(total_score) / total_votes, all_questions, sem)
+		self.create_review_item(code, prof, float(total_score) / total_votes, all_questions, sem)
 
 	def extract_info_from_title(self, title):
 		match = re.match("Course Evaluation for (.*)-.* (.*, .*) (.*)", title);
@@ -301,7 +303,7 @@ class VandyEvalParser:
 		# Return list of school codes
 		return [s['value'] for s in schools if s['value']]
 
-	def make_review_item(self, code, prof, score, summary, year):
+	def create_review_item(self, code, prof, score, summary, year):
 
 	 	courses = Course.objects.filter(code__contains = code, school = self.school)
 	 	if len(courses) == 0:
@@ -311,7 +313,7 @@ class VandyEvalParser:
 	 		course = courses[0]
 	 		obj, created = Evaluation.objects.get_or_create(
 	 			course=course,
-	 			score=score,
+	 			score=round(score,2),
 	 			summary=summary,
 	 			course_code=code,
 	 			professor=prof,

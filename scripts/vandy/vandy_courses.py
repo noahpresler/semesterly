@@ -20,10 +20,13 @@ class VandyParser:
 		self.school = 'vandy'
 		self.semester = sem
 		self.departments = {}
-		self.course = {'description' : ''}
 		self.username = '***REMOVED***'
 		self.password = '***REMOVED***'
-		self.cancelled = False
+		self.url = 'https://webapp.mis.vanderbilt.edu/more'
+		self.course = {
+			'description' : '',
+			'cancelled' : False
+		}
 
 	def get_html(self, url, payload=''):
 		html = None
@@ -80,7 +83,7 @@ class VandyParser:
 		
 		get_login_url = login_url + '/login'
 		params = {
-			'service' : 'https://webapp.mis.vanderbilt.edu/more/j_spring_cas_security_check'
+			'service' : self.url + '/j_spring_cas_security_check'
 		}
 
 		soup = BeautifulSoup(self.get_html(get_login_url, params), 'html.parser')
@@ -102,7 +105,7 @@ class VandyParser:
 		self.post_http(login_url + post_suffix_url, login_info, params)
 
 		# TODO - not sure if this is necessary but it works
-		url = 'https://webapp.mis.vanderbilt.edu/more/Entry.action'
+		url = self.url + '/Entry.action'
 		self.get_html(url)
 
 	def parse(self):
@@ -114,8 +117,7 @@ class VandyParser:
 		department_codes = self.get_department_codes()
 
 		# Base URL to query database for classes at Vandy
-		courseSearchURL='https://webapp.mis.vanderbilt.edu/more/SearchClassesExecute!search.action'
-		# courseSearchURL = 'https://webapp.mis.vanderbilt.edu/more/Entry.action'
+		courseSearchURL= self.url + '/SearchClassesExecute!search.action'
 
 		# Create payload to request course list from server
 		payload = {
@@ -168,14 +170,14 @@ class VandyParser:
 
 	def create_section(self, course_model):
 
-		if self.cancelled:
+		if self.course.get('cancelled'):
 
 			if Section.objects.filter(course = course_model, meeting_section = self.course.get('section')).exists():
 				s = Section.objects.get(course = course_model, meeting_section = self.course.get('section'))
 				Offering.objects.filter(section = s).delete()
 				s.delete()
 
-			self.cancelled = False
+			self.course['cancelled'] = False
 
 			return None
 
@@ -229,7 +231,7 @@ class VandyParser:
 	def get_department_codes(self):
 
 		# Query Vandy class search website
-		html = self.get_html('https://webapp.mis.vanderbilt.edu/more/SearchClasses!input.action')
+		html = self.get_html(self.url + '/SearchClasses!input.action')
 		soup = BeautifulSoup(html, 'html.parser')
 
 		# Retrieve all deparments from dropdown in advanced search
@@ -273,7 +275,7 @@ class VandyParser:
 			# Condition met when reached last page
 			if last_class_number != prev_course_number:
 				page_count = page_count + 1
-				nextPageURL = "https://webapp.mis.vanderbilt.edu/more/SearchClassesExecute!switchPage.action?pageNum=" + str(page_count)
+				nextPageURL = self.url + '/SearchClassesExecute!switchPage.action?pageNum=' + str(page_count)
 				html = self.get_html(nextPageURL)
 				prev_course_number = last_class_number
 
@@ -291,7 +293,7 @@ class VandyParser:
 
 			# remove cancelled classes
 			if course.find('a', {'class' : 'cancelledStatus'}):
-				self.cancelled = True
+				self.course['cancelled'] = True
 
 			last_class_number = self.parse_course(course)
 
@@ -308,7 +310,7 @@ class VandyParser:
 		course_number, term_code = search.group(1), search.group(2)
 
 		# Base URL to retrieve detailed course info
-		course_details_url = 'https://webapp.mis.vanderbilt.edu/more/GetClassSectionDetail.action'
+		course_details_url = self.url + '/GetClassSectionDetail.action'
 
 		# Create payload to request course from server
 		payload = {
