@@ -191,6 +191,10 @@ class VandyEvalParser:
 
 		all_questions = ''
 
+		# track number of responses
+		total_votes = 0
+		total_score = 0
+		
 		# Iterate through questions
 		for question in questions:
 
@@ -221,19 +225,24 @@ class VandyEvalParser:
 			all_questions += 'Q: ' + question.text.strip() + '\n'
 
 			# Iterate over adjectives
-			for adj in adjs:
+			for adj, i in zip(adjs, range(len(adjs))):
 
 				# Label (adjective) to describe numeric score
 				label = adj.contents[0].strip()
 
-				# Numeric score
-				score = adj.find_next('td', search_tags).text.strip()
+				# Number of votes for label
+				votes = adj.find_next('td', search_tags).text.strip()
 
-				all_questions += label.encode('utf-8') + ':' + score.encode('utf-8') + '\n'
+				# if question.text.strip() == 'Give an overall rating of the course': print question.text.strip() 
+				if label != 'No response' and question.text.strip() == 'Give an overall rating of the course':
+					total_votes += int(votes)
+					total_score += int(votes) * (i+1)
+
+				all_questions += label + ':' + votes + '\n'
 
 			all_questions += '\n'
 
-		self.make_review_item(code, prof, all_questions, sem)
+		self.make_review_item(code, prof, float(total_score) / total_votes, all_questions, sem)
 
 	def extract_info_from_title(self, title):
 		match = re.match("Course Evaluation for (.*)-.* (.*, .*) (.*)", title);
@@ -292,7 +301,7 @@ class VandyEvalParser:
 		# Return list of school codes
 		return [s['value'] for s in schools if s['value']]
 
-	def make_review_item(self, code, prof, summary, year):
+	def make_review_item(self, code, prof, score, summary, year):
 
 	 	courses = Course.objects.filter(code__contains = code, school = self.school)
 	 	if len(courses) == 0:
@@ -302,7 +311,7 @@ class VandyEvalParser:
 	 		course = courses[0]
 	 		obj, created = Evaluation.objects.get_or_create(
 	 			course=course,
-	 			score=0.0,
+	 			score=score,
 	 			summary=summary,
 	 			course_code=code,
 	 			professor=prof,
