@@ -1,47 +1,24 @@
-ICAJAX:
-1
-ICNAVTYPEDROPDOWN:
-0
-ICType:
-Panel
-ICElementNum:
-1
-ICStateNum:
-1
-ICAction:
-CLASS_SRCH_WRK2_SSR_PB_CLASS_SRCH
-ICXPos:
-0
-ICYPos:
-0
-ResponsetoDiffFrame:
--1
-TargetFrameName:
-None
-FacetPath:
-None
-ICFocus:
- 
-ICSaveWarningFilter:
-0
-ICChanged:
--1
-ICResubmit:
-0
-ICSID:
-Hqi51N4T3kp8zt91dvHl/c4Rdyxy4A7jq8EZ/EfEm4k=
-ICActionPrompt:
-false
-ICTypeAheadID:
-
-ICFind:
- 
-ICAddCount:
-
-ICAPPCLSDATA:
- 
-SSR_CLSRCH_WRK_SESSION_CODE$0:
- 
-SSR_CLSRCH_WRK_SUBJECT_SRCH$1:
-ANTH
+'ICAJAX' : '1',
+'ICNAVTYPEDROPDOWN' : '0',
+'ICType' : 'Panel',
+'ICElementNum' : '1',
+'ICStateNum' : '1',
+'ICAction' : 'CLASS_SRCH_WRK2_SSR_PB_CLASS_SRCH',
+'ICXPos' : '0',
+'ICYPos' : '0',
+'ResponsetoDiffFrame' : '-1',
+'TargetFrameName' : 'None',
+'FacetPath' : 'None',
+'ICFocus' : ' ',
+'ICSaveWarningFilter' : '0',
+'ICChanged' : '-1',
+'ICResubmit' : '0',
+'ICSID' : 'Hqi51N4T3kp8zt91dvHl/c4Rdyxy4A7jq8EZ/EfEm4k=',
+'ICActionPrompt' : 'false',
+'ICTypeAheadID' : ' ',
+'ICFind' : ' ',
+'ICAddCount' : ' ',
+'ICAPPCLSDATA' : ' ',
+'SSR_CLSRCH_WRK_SESSION_CODE$0' : ' ',
+'SSR_CLSRCH_WRK_SUBJECT_SRCH$1' : 'ANTH',
 

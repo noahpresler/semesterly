@@ -10,10 +10,12 @@ from timetable.models import *
 from fake_useragent import UserAgent
 from bs4 import BeautifulSoup
 import requests, cookielib, re, sys
+import dryscrape, urllib
 
 class ChapmanParser:
 
 	def __init__(self, sem='Fall 2016'):
+		self.dry = dryscrape.Session()
 		self.session = requests.Session()
 		self.headers = {'User-Agent' : 'My User Agent 1.0'}
 		self.cookies = cookielib.CookieJar()
@@ -71,7 +73,6 @@ class ChapmanParser:
 		return None
 
 
-
 	def parse(self):
 
 		url = 'https://cs90prod.chapman.edu/psc/CS90PROD_1/EMPLOYEE/SA/c/COMMUNITY_ACCESS.CLASS_SEARCH.GBL'
@@ -87,35 +88,39 @@ class ChapmanParser:
 			'IsFolder' : 'false'
 		}
 
-		BeautifulSoup(self.get_html(url, payload), 'html.parser')
+		self.dry.visit(url + '?' + urllib.urlencode(payload))
+		print self.dry.body()
 
-		payload2 = {
-			'ICAJAX' : '1',
-			'ICNAVTYPEDROPDOWN' : '0',
-			'ICType' : 'Panel',
-			'ICElementNum' : '1',
-			'ICStateNum' : '1',
-			'ICAction' : 'CLASS_SRCH_WRK2_SSR_PB_CLASS_SRCH',
-			'ICXPos' : '0',
-			'ICYPos' : '0',
-			'ResponsetoDiffFrame' : '-1',
-			'TargetFrameName' : 'None',
-			'FacetPath' : 'None',
-			'ICFocus' : ' ',
-			'ICSaveWarningFilter' : '0',
-			'ICChanged' : '-1',
-			'ICResubmit' : '0',
-			'ICSID' : 'Hqi51N4T3kp8zt91dvHl/c4Rdyxy4A7jq8EZ/EfEm4k=',
-			'ICActionPrompt' : 'false',
-			'ICTypeAheadID' : ' ',
-			'ICFind' : ' ',
-			'ICAddCount' : ' ',
-			'ICAPPCLSDATA' : ' ',
-			'SSR_CLSRCH_WRK_SESSION_CODE$0' : ' ',
-			'SSR_CLSRCH_WRK_SUBJECT_SRCH$1' : 'ANTH',
-		}
+		soup = BeautifulSoup(self.get_html(url, payload), 'html.parser')
+		terms = soup.find('select', {'id' : 'CLASS_SRCH_WRK2_STRM$35$'}).find_all('option')
+		for term in terms:
+			print term['value']
+			subjects = soup.find('select', {'id' : 'SSR_CLSRCH_WRK_SUBJECT_SRCH$1'}).find_all('option')
+			for subject in subjects:
+				print subject['value']
 
-		print BeautifulSoup(self.get_html(url, payload2)).prettify()
+				payload2 = {
+					'ICAJAX' : '1',
+					'ICNAVTYPEDROPDOWN' : '0',
+					'ICType' : 'Panel',
+					'ICElementNum' : '1',
+					'ICStateNum' : '1',
+					'ICAction' : 'CLASS_SRCH_WRK2_SSR_PB_CLASS_SRCH',
+					'ICXPos' : '0',
+					'ICYPos' : '0',
+					'ResponsetoDiffFrame' : '-1',
+					'TargetFrameName' : 'None',
+					'FacetPath' : 'None',
+					'ICSaveWarningFilter' : '0',
+					'ICChanged' : '-1',
+					'ICResubmit' : '0',
+					'ICSID' : 'Hqi51N4T3kp8zt91dvHl/c4Rdyxy4A7jq8EZ/EfEm4k=',
+					'ICActionPrompt' : 'false',
+					'CLASS_SRCH_WRK2_STRM$35$' : term['value'],
+					'SSR_CLSRCH_WRK_SUBJECT_SRCH$1' : subject['value'],
+				}
+
+				soup = BeautifulSoup(self.get_html(url, payload2))
 
 
 
