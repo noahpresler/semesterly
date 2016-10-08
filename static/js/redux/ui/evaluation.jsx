@@ -9,9 +9,8 @@ class Evaluation extends React.Component {
 
 		if (!this.props.mini) { // only show extra information if this eval isn't mini
 			// (i.e. full evaluation, not nav item for full evaluations)
-			let s = '<p>' + evalData.summary.replace(/\u00a0/g, " ").replace(/\n/g,'<br />') + '</p>'
 			details = (
-				<div id="details" dangerouslySetInnerHTML={{__html: s}}></div>
+				<div id="details"><p>{evalData.summary.replace(/\u00a0/g, " ")}</p></div>
 			);
 			prof = (
 				<div id="prof"><b>Professor: {evalData.professor}</b></div>
