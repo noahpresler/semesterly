@@ -15,11 +15,12 @@ school_to_granularity = {
     'umd': 5,
     'rutgers': 5,
     'uo': 5,
-    'queens': 5
+    'queens': 5,
+    'vandy': 5
 }
-VALID_SCHOOLS = ["uoft", "jhu", "umd", "uo", "rutgers", "queens"]
+VALID_SCHOOLS = ["uoft", "jhu", "umd", "uo", "rutgers", "queens", "vandy"]
 
-AM_PM_SCHOOLS = ["jhu","umd","rutgers"]
+AM_PM_SCHOOLS = ["jhu","umd","rutgers","vandy"]
 
 school_code_to_name = {
   'jhu': 'Johns Hopkins University',
@@ -27,7 +28,8 @@ school_code_to_name = {
   'umd': 'University of Maryland',
   'rutgers': 'Rutgers University',
   'uo': 'University of Ottawa',
-  'queens': 'Queens University'
+  'queens': 'Queens University',
+  'vandy': 'Vanderbilt University'
 }
 
 # do the imports: assumes all parser follow the same naming conventions: 
@@ -38,7 +40,7 @@ for school in VALID_SCHOOLS:
     exec "from scripts.{0}.{0}_{1} import *".format(school, p_type)
 
 course_parsers = {
-  'jhu': lambda: HopkinsParser().start(), # avoid calling constructor lazily
+  'jhu': lambda: HopkinsParser("Spring 2017").start(), # avoid calling constructor lazily
   'uoft': lambda: UofTParser().start(),
   'umd': parse_umd,
   # 'rutgers': parse_rutgers,
