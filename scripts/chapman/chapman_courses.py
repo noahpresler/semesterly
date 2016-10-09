@@ -10,19 +10,17 @@ from timetable.models import *
 from fake_useragent import UserAgent
 from bs4 import BeautifulSoup
 import requests, cookielib, re, sys
-import dryscrape, urllib
 
 class ChapmanParser:
 
 	def __init__(self, sem='Fall 2016'):
-		self.dry = dryscrape.Session()
 		self.session = requests.Session()
 		self.headers = {'User-Agent' : 'My User Agent 1.0'}
 		self.cookies = cookielib.CookieJar()
-		self.school = 'vandy'
+		self.school = 'chapman'
 		self.semester = sem
 		self.departments = {}
-		self.url = 'https://webapp.mis.vanderbilt.edu/more'
+		self.url = 'https://cs90prod.chapman.edu/psc/CS90PROD_1/EMPLOYEE/SA/c/COMMUNITY_ACCESS.CLASS_SEARCH.GBL'
 		self.course = {}
 
 	def get_html(self, url, payload=''):
@@ -57,73 +55,140 @@ class ChapmanParser:
 				cookies = self.cookies,
 				headers = self.headers,
 				verify = True,
-				# allow_redirects=False
 			)
 
-			return post
 			# if r.status_code == 200:
 				# post = r.text
 
 			# print "POST: " + r.url
 
+			return post
+
 		except (requests.exceptions.Timeout,
 			requests.exceptions.ConnectionError):
-			sys.stderr.write("Unexpected error: " + sys.exc_info()[0])
+			sys.stderr.write("Unexpected error: " + str(sys.exc_info()[0]))
 
 		return None
 
 
 	def parse(self):
 
-		url = 'https://cs90prod.chapman.edu/psc/CS90PROD_1/EMPLOYEE/SA/c/COMMUNITY_ACCESS.CLASS_SEARCH.GBL'
+		soup = BeautifulSoup(self.get_html(self.url))
 
-		payload = {
-			'PORTALPARAM_PTCNAV' : 'XC_GUEST_CLASS_SCHEDULE',
-			'EOPP.SCNode' : 'EMPL',
-			'EOPP.SCPortal' : 'EMPLOYEE',
-			'EOPP.SCName' : 'ADMN_SEARCH_FOR_CLASSES__GUES',
-			'EOPP.SCLabel' : '',
-			'EOPP.SCPTcname' : 'PT_PTPP_SCFNAV_BASEPAGE_SCR',
-			'FolderPath' : 'PORTAL_ROOT_OBJECT.PORTAL_BASE_DATA.CO_NAVIGATION_COLLECTIONS.ADMN_SEARCH_FOR_CLASSES__GUES.ADMN_S201505070932101643447597',
-			'IsFolder' : 'false'
-		}
+		# create search payload with hidden form data
+		search_payload = {}
+		for hidden in soup.find('div', {'id' : 'win1divPSHIDDENFIELDS'}).find_all('input'):
+			search_payload[hidden['name']] = hidden['value']
+		search_payload['ICAction'] = 'CLASS_SRCH_WRK2_SSR_PB_CLASS_SRCH'
+		search_payload['SSR_CLSRCH_WRK_SSR_OPEN_ONLY$chk$4'] = 'N'
+		for day in ['MON', 'TUES', 'WED', 'THURS', 'FRI', 'SAT', 'SUN']:
+			search_payload['SSR_CLSRCH_WRK_' + day + '$5'] = 'Y'
+			search_payload['SSR_CLSRCH_WRK_' + day + '$chk$5'] = 'Y'
+		search_payload['SSR_CLSRCH_WRK_INCLUDE_CLASS_DAYS$5'] = 'J'
 
-		self.dry.visit(url + '?' + urllib.urlencode(payload))
-		print self.dry.body()
-
-		soup = BeautifulSoup(self.get_html(url, payload), 'html.parser')
 		terms = soup.find('select', {'id' : 'CLASS_SRCH_WRK2_STRM$35$'}).find_all('option')
+		departments = soup.find('select', {'id' : 'SSR_CLSRCH_WRK_SUBJECT_SRCH$1'}).find_all('option')
+
 		for term in terms:
+
+			# first element in dropdown is empty
+			if len(term['value']) <= 0:
+				continue
+
 			print term['value']
-			subjects = soup.find('select', {'id' : 'SSR_CLSRCH_WRK_SUBJECT_SRCH$1'}).find_all('option')
-			for subject in subjects:
-				print subject['value']
 
-				payload2 = {
-					'ICAJAX' : '1',
-					'ICNAVTYPEDROPDOWN' : '0',
-					'ICType' : 'Panel',
-					'ICElementNum' : '1',
-					'ICStateNum' : '1',
-					'ICAction' : 'CLASS_SRCH_WRK2_SSR_PB_CLASS_SRCH',
-					'ICXPos' : '0',
-					'ICYPos' : '0',
-					'ResponsetoDiffFrame' : '-1',
-					'TargetFrameName' : 'None',
-					'FacetPath' : 'None',
-					'ICSaveWarningFilter' : '0',
-					'ICChanged' : '-1',
-					'ICResubmit' : '0',
-					'ICSID' : 'Hqi51N4T3kp8zt91dvHl/c4Rdyxy4A7jq8EZ/EfEm4k=',
-					'ICActionPrompt' : 'false',
-					'CLASS_SRCH_WRK2_STRM$35$' : term['value'],
-					'SSR_CLSRCH_WRK_SUBJECT_SRCH$1' : subject['value'],
-				}
+			search_payload['CLASS_SRCH_WRK2_STRM$35$'] = term['value']
 
-				soup = BeautifulSoup(self.get_html(url, payload2))
+			for department in departments:
+
+				if len(department['value']) <= 0:
+					continue
+
+				print department['value']
+
+				# Update search payload with department code
+				search_payload['SSR_CLSRCH_WRK_SUBJECT_SRCH$1'] = department['value']
+
+				# # Print search payload
+				# for item in search_payload:
+				# 	print item, search_payload[item]
+
+				# Get course listing page for department
+				soup = BeautifulSoup(self.get_html(self.url, search_payload))
 
 
+				# check for valid search/page
+				if soup.find('td', {'id' : 'PTBADPAGE_' }) or soup.find('div', {'id' : 'win1divDERIVED_CLSMSG_ERROR_TEXT'}):
+					print 'ERROR on search'
+					if soup.find('div', {'id' : 'win1divDERIVED_CLSMSG_ERROR_TEXT'}):
+						print soup.find('div', {'id' : 'win1divDERIVED_CLSMSG_ERROR_TEXT'}).text
+					continue
 
+				# fill payload for course description page request
+				payload3 = {}
+				for hidden in soup.find('div', {'id' : 'win1divPSHIDDENFIELDS'}).find_all('input'):
+					# print hidden['name'], hidden['value']
+					payload3[hidden['name']] = hidden['value']
+
+				courses = soup.find_all('table', {'class' : 'PSLEVEL1GRIDNBONBO'})
+
+				print len(courses)
+
+				# for all the courses on the page
+				for i in range(len(courses)):
+					payload3['ICAction'] = 'MTG_CLASS_NBR$' + str(i)
+
+					# Get course description page
+					soup = BeautifulSoup(self.get_html(self.url, payload3))
+
+					title = soup.find('span', {'id' : 'DERIVED_CLSRCH_DESCR200'}).text
+					units = soup.find('span', {'id' : 'SSR_CLS_DTL_WRK_UNITS_RANGE'}).text
+					capacity = soup.find('span', {'id' : 'SSR_CLS_DTL_WRK_ENRL_CAP'}).text
+					enrollment = soup.find('span', {'id' : 'SSR_CLS_DTL_WRK_ENRL_TOT'}).text
+					waitlist = soup.find('span', {'id' : 'SSR_CLS_DTL_WRK_WAIT_TOT'}).text
+					description = soup.find('span', {'id' : 'DERIVED_CLSRCH_DESCRLONG'})
+					notes = soup.find('span', {'id' : 'DERIVED_CLSRCH_SSR_CLASSNOTE_LONG'})
+					info = soup.find('span', {'id' : 'SSR_CLS_DTL_WRK_SSR_REQUISITE_LONG'})
+
+					scheds 	= soup.find_all('span', id=re.compile(r'MTG_SCHED\$\d*'))
+					locs 	= soup.find_all('span', id=re.compile(r'MTG_LOC\$\d*'))
+					instrs 	= soup.find_all('span', id=re.compile(r'MTG_INSTR\$\d*'))
+					dates 	= soup.find_all('span', id=re.compile(r'MTG_DATE\$\d*'))
+					isbns 	= soup.find_all('span', id=re.compile(r'DERIVED_SSR_TXB_SSR_TXBDTL_ISBN\$\d*'))
+
+					# Extract info from title
+					rtitle = re.match(r'(.*) - (\d*)(.*)', title)
+					code, section, name = rtitle.group(1), rtitle.group(2), rtitle.group(3).strip()
+
+					# concatenate description, notes, and enrollment info
+					description = description.text if description else ''
+					description = description + ('\nEnrollment Info: ' + info.text) if info else ''
+					description = description + ('\nNotes: ' + notes.text) if notes else ''
+
+					units = re.match(r'(\d*).*', units).group(1)
+
+					for sched, loc, instr, date in zip(scheds, locs, instrs, dates):
+						print sched.text, loc.text, instr.text, date.text
+
+						rsched = re.match(r'([a-zA-Z]*) (.*)', sched.text)
+						time = rsched.group(2)
+						days = re.findall('[A-Z][^A-Z]*', rsched.group(1))
+
+						{
+							'' : 'M',
+							'Tu' : 'T',
+							'We' : 'W',
+							'Th' : 'R',
+							'Fr' : 'F',
+							
+						}
+
+					print name, code, section
+					print units, capacity, enrollment, waitlist
+
+					print description
+
+				print '----------------------------------'
 
 def main():
 	vp = ChapmanParser()
