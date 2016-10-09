@@ -244,7 +244,8 @@ class VandyEvalParser:
 
 			all_questions += '\n'
 
-		self.create_review_item(code, prof, float(total_score) / total_votes, all_questions, sem)
+		stars = (float(total_score) / total_votes) if total_votes > 0 else 0
+		self.create_review_item(code, prof, stars, all_questions, sem)
 
 	def extract_info_from_title(self, title):
 		match = re.match("Course Evaluation for (.*)-.* (.*, .*) (.*)", title);
