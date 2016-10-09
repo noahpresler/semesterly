@@ -109,10 +109,6 @@ class ChapmanParser:
 				# Update search payload with department code
 				search_payload['SSR_CLSRCH_WRK_SUBJECT_SRCH$1'] = department['value']
 
-				# # Print search payload
-				# for item in search_payload:
-				# 	print item, search_payload[item]
-
 				# Get course listing page for department
 				soup = BeautifulSoup(self.get_html(self.url, search_payload))
 
@@ -174,13 +170,14 @@ class ChapmanParser:
 						time = rsched.group(2)
 						days = re.findall('[A-Z][^A-Z]*', rsched.group(1))
 
-						{
-							'' : 'M',
+						day_map = {
+							'Mo' : 'M',
 							'Tu' : 'T',
 							'We' : 'W',
 							'Th' : 'R',
 							'Fr' : 'F',
-							
+							'Sa' : 'S',
+							'Su' : 'U'
 						}
 
 					print name, code, section
@@ -189,6 +186,23 @@ class ChapmanParser:
 					print description
 
 				print '----------------------------------'
+
+	def create_course():
+        course, CourseCreated = Course.objects.update_or_create(
+            code = courseJson['OfferingName'].strip(),
+            school = 'jhu',
+            campus = 1,
+            defaults={
+                'name': courseJson['Title'],
+                'description': description,
+                'areas': areas,
+                'prerequisites': prereqs,
+                'num_credits': num_credits,
+                'level': level,
+                'department': courseJson['Department']
+            }
+        )
+        return course
 
 def main():
 	vp = ChapmanParser()
