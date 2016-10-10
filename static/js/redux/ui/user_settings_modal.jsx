@@ -5,10 +5,15 @@ import { getSchool } from '../init.jsx';
 import Modal from 'boron/WaveModal';
 import majors from '../majors.jsx';
 import Select from 'react-select';
+import { setARegistrationToken, unregisterAToken } from '../actions/user_actions.jsx';
 
 export class UserSettingsModal extends React.Component {
     constructor(props) {
         super(props);
+        this.state = {
+            notifications_subscribed: Notification.permission == "granted",
+            sw_capable: 'serviceWorker' in navigator
+        }
         this.changeForm = this.changeForm.bind(this);
         this.changeMajor = this.changeMajor.bind(this);
         this.changeClassYear = this.changeClassYear.bind(this);
@@ -55,10 +60,25 @@ export class UserSettingsModal extends React.Component {
     isIncomplete(prop) {
         return prop === undefined || prop === "";
     }
+    subscribeToNotifications() {
+        setARegistrationToken();
+    }
+    unsubscribeToNotifications() {
+        unregisterAToken();
+    }
     render() {
         let modalStyle = {
             width: '100%',
         };
+        let notifications_button = this.state.notifications_subscribed
+            ? (<a onClick={this.unsubscribeToNotifications}><h3>Turn Off Notifications</h3></a>)
+            : (<a onClick={this.subscribeToNotifications}><h3>Turn On Notifications</h3></a>)
+        let notifications = this.state.sw_capable ? (
+            <div className="preference notifications cf">
+                <h4>Notifications</h4>
+                {notifications_button}
+            </div>
+        ) : null;
         return (
             <Modal ref="modal"
                 className="welcome-modal max-modal"
@@ -73,32 +93,36 @@ export class UserSettingsModal extends React.Component {
                     </div>
                     <div id="modal-body">
                         <p>Welcome to Semester.ly, we just have a few quick questions!</p>
-                        <h3>What's your major?</h3>
-                        <Select
-                            name="form-field-name"
-                            value={this.props.userInfo.major}
-                            ref="major"
-                            options={majors}
-                            searchable={false}
-                            onChange={this.changeMajor}
-                        />
-                        <h3>What's your graduating class year?</h3>
-                        <Select
-                            name="form-field-name"
-                            value={this.props.userInfo.class_year}
-                            ref="class_year"
-                            options={[
-                                {value: 2017, label: 2017},
-                                {value: 2018, label: 2018},
-                                {value: 2019, label: 2019},
-                                {value: 2020, label: 2020},
-                                {value: 2021, label: 2021},
-                                {value: 2022, label: 2022},
-                                {value: 2023, label: 2023},
-                            ]}
-                            searchable={false}
-                            onChange={this.changeClassYear}
-                        />
+                        <div className="preference cf">
+                            <h3>What's your major?</h3>
+                            <Select
+                                name="form-field-name"
+                                value={this.props.userInfo.major}
+                                ref="major"
+                                options={majors}
+                                searchable={false}
+                                onChange={this.changeMajor}
+                            />
+                        </div>
+                        <div className="preference cf">
+                            <h3>What's your graduating class year?</h3>
+                            <Select
+                                name="form-field-name"
+                                value={this.props.userInfo.class_year}
+                                ref="class_year"
+                                options={[
+                                    {value: 2017, label: 2017},
+                                    {value: 2018, label: 2018},
+                                    {value: 2019, label: 2019},
+                                    {value: 2020, label: 2020},
+                                    {value: 2021, label: 2021},
+                                    {value: 2022, label: 2022},
+                                    {value: 2023, label: 2023},
+                                ]}
+                                searchable={false}
+                                onChange={this.changeClassYear}
+                            />
+                        </div>
                         <div className="preference cf">
                             <label className="switch switch-slide">
                                 <input ref="share_courses" className="switch-input" type="checkbox" checked={this.props.userInfo.social_courses} onChange={this.changeForm} defaultChecked={true}/>
@@ -132,6 +156,7 @@ export class UserSettingsModal extends React.Component {
                                 <p className="disclaimer">Find your peers for this semester. All students in your courses will be able to view your name and public Facebook profile.</p>
                             </div>
                         </div>
+                        { notifications }
                         <div className="button-wrapper">
                             <button className="signup-button" onClick={() => {
                                 this.changeForm();
