@@ -8,7 +8,7 @@ import { getUserInfoEndpoint,
 	getLoadSavedTimetablesEndpoint,
 	getFriendsEndpoint } from '../constants.jsx';
 import { store } from '../init.jsx';
-import { loadTimetable, nullifyTimetable } from './timetable_actions.jsx';
+import { loadTimetable, nullifyTimetable, getNumberedName } from './timetable_actions.jsx';
 import { browserSupportsLocalStorage } from '../util.jsx';
 
 let autoSaveTimer;
@@ -167,10 +167,12 @@ export function duplicateTimetable(timetable) {
 		dispatch({
 			type: "REQUEST_SAVE_TIMETABLE"
 		});
-		console.log(timetable);
 		fetch(getCloneTimetableEndpoint(), {
 			method: 'POST',
-			body: JSON.stringify(timetable),
+			body: JSON.stringify({
+				timetable: timetable,
+				name: getNumberedName(timetable.name)
+			}),
 			credentials: 'include',
 		})
 		.then(response => response.json())
