@@ -22,16 +22,20 @@ class SideBar extends React.Component {
     toggleDropdown() {
     	this.setState({ showDropdown: !this.state.showDropdown });
     }
+    stopPropagation(callback, event) {
+        event.stopPropagation();
+        callback();
+    }
     render() {
         let savedTimetables = this.props.savedTimetables ? this.props.savedTimetables.map(t => {
             return (
                 <div className="tt-name" key={t.id} onMouseDown={() => this.props.loadTimetable(t)}>
                     {t.name}
-                    <button onClick={() => this.props.deleteTimetable(t)}
+                    <button onClick={(event) => this.stopPropagation(() => this.props.deleteTimetable(t), event)}
                             className="row-button">
                         <i className="fa fa-trash-o" />
                     </button>
-                    <button onClick={() => this.props.duplicateTimetable(t)}
+                    <button onClick={(event) => this.stopPropagation(() => this.props.duplicateTimetable(t), event)}
                             className="row-button">
                         <i className="fa fa-clone" />
                     </button>
