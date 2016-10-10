@@ -1,5 +1,5 @@
 import fetch from 'isomorphic-fetch';
-import { getUserInfoEndpoint, getSaveTimetableEndpoint, getSaveSettingsEndpoint, getClassmatesEndpoint, getLoadSavedTimetablesEndpoint, getFriendsEndpoint, getSetRegistrationTokenEndpoint } from '../constants.jsx';
+import { getUserInfoEndpoint, getSaveTimetableEndpoint, getSaveSettingsEndpoint, getClassmatesEndpoint, getLoadSavedTimetablesEndpoint, getFriendsEndpoint, getSetRegistrationTokenEndpoint, deleteRegistrationTokenEndpoint } from '../constants.jsx';
 import { store } from '../init.jsx';
 import { loadTimetable, nullifyTimetable } from './timetable_actions.jsx';
 import { browserSupportsLocalStorage } from '../util.jsx';
@@ -245,13 +245,11 @@ export function autoSave(delay=4000) {
 
 export function setARegistrationToken() {
 	if ('serviceWorker' in navigator) {
-	    // console.log('Service Worker is supported');
 	    navigator.serviceWorker.register('/sw.js').then(function(reg) {
 	        reg.pushManager.subscribe({
 	            userVisibleOnly: true
 	        }).then(function(sub) {
-	            // console.log('endpoint:', sub.endpoint);
-	            sendRegistrationToken(sub.endpoint.substring(40));
+	            sendRegistrationToken(sub.endpoint.substring(40))
 	        });
 	    }).catch(function(error) {
 	        console.log(':^(', error);
@@ -260,39 +258,58 @@ export function setARegistrationToken() {
 }
 
 export function sendRegistrationToken(token) {
-	fetch(getSetRegistrationTokenEndpoint(), {
-			method: 'POST',
-			body: JSON.stringify({
-				token
-			}),
-			credentials: 'include',
-		})
-	    .then(response => response.json()) // TODO(rohan): error-check the response
-	    .then(json => {
-	    	if (!json.error) {
-	    		console.log("token registered: " + token);
-		        // store.dispatch({
-		        // 	type: "SET_O",
-		        // 	reactions: json.reactions
-	        	// });
-        	} else {
-        		console.log("token not registered: " + token);
-        	}
+	return fetch(getSetRegistrationTokenEndpoint(), {
+		method: 'POST',
+		body: JSON.stringify({
+			token
+		}),
+		credentials: 'include',
+	})
+    .then(response => response.json()) // TODO(rohan): error-check the response
+    .then(json => {
+    	if (!json.error) {
+    		console.log("token registered: " + token);
+	      	store.dispatch({
+	        	type: "TOKEN_REGISTERED"
+        	});
+    	} else {
+    		console.log("token not registered: " + token);
+    	}
 	});
 }
 
-function unregisterCallback() {
-  if (chrome.runtime.lastError) {
-    // When the unregistration fails, handle the error and retry
-    // the unregistration later.
-    return;
-  }
-}
-
-function unregisterToken() {
-	Gcm.unregister(unregisterCallback);
-}
-
 export function unregisterAToken() {
-	unregisterToken();
+    if ('serviceWorker' in navigator) {
+	    navigator.serviceWorker.register('/sw.js').then(function(reg) {
+	        reg.pushManager.subscribe({
+	            userVisibleOnly: true
+	        }).then(function(sub) {
+	        	// TODO: unregister token on client side
+	            sendRegistrationTokenForDeletion(sub.endpoint.substring(40))
+	        });
+	    }).catch(function(error) {
+	        console.log(':^(', error);
+	    });
+	}
+}
+
+export function sendRegistrationTokenForDeletion(token) {
+    return fetch(deleteRegistrationTokenEndpoint(), {
+        method: 'POST',
+        body: JSON.stringify({
+            token
+        }),
+        credentials: 'include',
+    })
+    .then(response => response.json()) // TODO(rohan): error-check the response
+    .then(json => {
+        if (!json.error) {
+            console.log("token deleted: " + token);
+            store.dispatch({
+                type: "UNREGISTER_TOKEN"
+            });
+        } else {
+            console.log("token not deleted: " + token);
+        }
+    });
 }
