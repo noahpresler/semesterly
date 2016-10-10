@@ -12,18 +12,20 @@ umich_evals.py
 ----------
 TO-DOs
 ----------
- - umich_evals is WIP. Looking into how to get course evaluations. AFAIK umich does not 
-maintain a central public repository with the evals and the API being used for course
-parsing does not have evals integrated
-
- - Obtaining more API access tokens from students to get around the API throttling (see NOTES below)
+ - EVALS do not exist. No public or private centralized repository for course evaluations exist. Course evaluations
+   are recorded every semester individually by each department and are viewable for a few months only to the staff teaching the 
+   course at the end of the semester before being purged.
 
  - Deal with 9 different section types
  	--> currently overloading the 3 types in the model 
+
  - Some courses don't have full course names in the API response - needs to be addressed without
  having to manually go through all of the courses and changing the names
+    -- UPDATE: IT confirms that the data they receive from departments comes in this form and they are not able to fix it
 
  - Some descriptions are empty
+    -- UPDATE: IT confirms again that the aren't able to fix as this data is pulled directly from the departments]
+
 ----------
 NOTES
 ----------
@@ -36,6 +38,8 @@ from current students are being used to get around this issue. Tokens listed bel
 "c03cae2d767ab4c525d1ce5b57a965"
 "dfccf802a589fcbdbfa6b4e906e1bb6"
 "b0555cfc4e7f81c1a2a4b3b40b79eda"
+"aa8b15285aaf42e0aabf7fcba894e584"
+"dd233b5f3d1d3b0289618cc714078f"
 
 More will be added soon. Currently, the parser takes ~3 hours to scrape the entire
 catalog for the Fall 2016 semester due to the token throttling. 
