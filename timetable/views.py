@@ -610,7 +610,11 @@ from django.views.decorators.cache import never_cache
 from django.template.loader import get_template
 @never_cache
 def sw_js(request, js):
-    print 'lol'
     template = get_template('sw.js')
     html = template.render()
     return HttpResponse(html, content_type="application/x-javascript")
+
+def manifest_json(request, js):
+    template = get_template('manifest.json')
+    html = template.render()
+    return HttpResponse(html, content_type="application/json")
