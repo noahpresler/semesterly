@@ -11,7 +11,6 @@ export class UserSettingsModal extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            notifications_subscribed: Notification.permission == "granted",
             sw_capable: 'serviceWorker' in navigator
         }
         this.changeForm = this.changeForm.bind(this);
@@ -70,7 +69,7 @@ export class UserSettingsModal extends React.Component {
         let modalStyle = {
             width: '100%',
         };
-        let notifications_button = this.state.notifications_subscribed
+        let notifications_button = this.props.tokenRegistered
             ? (<a onClick={this.unsubscribeToNotifications}><h3>Turn Off Notifications</h3></a>)
             : (<a onClick={this.subscribeToNotifications}><h3>Turn On Notifications</h3></a>)
         let notifications = this.state.sw_capable ? (

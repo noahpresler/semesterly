@@ -77,7 +77,9 @@ urlpatterns = patterns('',
     url(r'^unsubscribe/(?P<id>[\w.@+-]+)/(?P<token>[\w.:\-_=]+)/$', 'student.views.unsubscribe'),
 
     url(r'^setRegistrationToken/', 'student.views.set_registration_token'),
+    url(r'^deleteRegistrationToken/', 'student.views.delete_registration_token'),
     url(r'^sw(.*.js)$', 'timetable.views.sw_js', name='sw_js'),
+    url(r'^manifest(.*.json)$', 'timetable.views.manifest_json', name='manifest_json'),
 
     # for testing error pages, so i don't have to turn off debug
 	url(r'^404testing/', 'timetable.views.custom_404'),
