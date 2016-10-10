@@ -304,6 +304,22 @@ ul.nav.nav-pills {
 	float: right;
 }*/
 
+.footer-button {
+	line-height: 22px;
+}
+
+.footer-button:nth-child(4) {
+	margin-right: 0;
+}
+
+.footer-button a {
+	padding: 0 15px !important;
+}
+
+.footer-button div {
+	line-height:  20px;
+}
+
 footer {
 	margin-top: -22px;
 	background-color: transparent;
