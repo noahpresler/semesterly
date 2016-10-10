@@ -30,6 +30,10 @@ self.addEventListener('install', function(event) {
 self.addEventListener('activate', function(event) {
   console.log('Activated', event);
 });
+self.addEventListener('message', function(event){
+    console.log("SW Received Message: " + event.data);
+    event.ports[0].postMessage("SW Says 'Hello back!'");
+});
 self.addEventListener('push', function(event) {
   console.log('Push message received', event);
   // TODO
@@ -37,7 +41,7 @@ self.addEventListener('push', function(event) {
   var body = 'There is newly updated content available on the site. Click to see more.';  
   var icon = 'static/img/logo2.0-310x310.png';  
   var tag = 'simple-push-demo-notification-tag';
-  
+
   event.waitUntil(  
     self.registration.showNotification(title, {  
        body: body,  
