@@ -216,7 +216,7 @@ EMAIL_USE_TLS = True
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_PORT = 587
 
-DEFAULT_FROM_EMAIL = 'semesterly.contact@gmail.com'
+DEFAULT_FROM_EMAIL = 'semesterly.logging@gmail.com'
 SERVER_EMAIL = DEFAULT_FROM_EMAIL
 
 # Internationalization

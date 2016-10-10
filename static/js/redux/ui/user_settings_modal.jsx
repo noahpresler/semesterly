@@ -68,7 +68,7 @@ export class UserSettingsModal extends React.Component {
                 >
                 <div id="modal-content">
                     <div id="modal-header">
-                        <div className="pro-pic" style={{backgroundImage: 'url(http://graph.facebook.com/' + JSON.parse(currentUser).fbook_uid + '/picture?type=normal)'}}></div>
+                        <div className="pro-pic" style={{backgroundImage: 'url(https://graph.facebook.com/' + JSON.parse(currentUser).fbook_uid + '/picture?type=normal)'}}></div>
                         <h1>Welcome!</h1>
                     </div>
                     <div id="modal-body">

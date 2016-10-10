@@ -273,7 +273,7 @@ header h1 {
     display: inline-block;
     border-color: transparent;
     border-top-color: #34495e; 
-    border-style: dashed dashed solid;
+    border-style: solid dashed dashed;
     border-width: 6.5px 6.5px 0;
     margin-left: 5px;
     z-index: 1;
