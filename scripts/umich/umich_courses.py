@@ -32,6 +32,11 @@ SECTION_MAP = {	"LEC": "L",
 				"IND": "L",
 				"FLD": "P"
 			}
+_DEBUG_FLAG_ = False
+# Printing debug messages
+def log(msg):
+	if _DEBUG_FLAG_:
+		log(msg)
 
 class umichParser:
 	def __init__(self, semester = "f16"):
@@ -46,7 +51,8 @@ class umichParser:
 		# ADD MOAR TOKENS!
 		self.tokens = [	"6e15388418fa2483841755f5e2d5eba", "5562e94b39dccc2eaaab181e0c4ee", \
 						"c03cae2d767ab4c525d1ce5b57a965", "dfccf802a589fcbdbfa6b4e906e1bb6",\
-						"b0555cfc4e7f81c1a2a4b3b40b79eda"]
+						"b0555cfc4e7f81c1a2a4b3b40b79eda", "dd233b5f3d1d3b0289618cc714078f", \
+						"aa8b15285aaf42e0aabf7fcba894e584"]
 		# cycle through the tokens without running off the end of the list
 		self.tok_cyc = cycle(self.tokens)
 		# Switching tokens due to 60/min limit
@@ -75,10 +81,10 @@ class umichParser:
 		#for term in self.terms:
 		#school = "ENG"
 		#subject = "EECS"
-		#print("Getting Catalog Numbers")
+		#log("Getting Catalog Numbers")
 		#cat_nums = self.get_catalog_nums(school = school, term = term, subject = subject)
 		#catalog_nu = "370"
-		#print("Getting couse info")
+		#log("Getting couse info")
 
 		#self.parse_catalog_nums(school=school, term=term, subject=subject, outfile=outfile, get_textbook=False)
 		#The code below is to parse through all of the terms, schools, 
@@ -87,19 +93,19 @@ class umichParser:
 		
 		#schools = [{"SchoolCode": "ENG"}]
 		for school in schools:
-			#print("Getting subjects for school " + str(school['SchoolCode']))
+			log("Getting subjects for school " + str(school['SchoolCode']))
 			subjects = self.get_subjects(school['SchoolCode'], self.term)
 			#subjects = {"SubjectCode":"EECS"}
 			if(not subjects):
 				continue
 			# If there is a single subject, a dict will be returned
 			if(type(subjects) == dict):
-				#print("Getting Catalog Numbers for subject" + subjects['SubjectCode'])
+				log("Getting Catalog Numbers for subject" + subjects['SubjectCode'])
 				self.parse_catalog_nums(school = school['SchoolCode'], term = self.term, \
 										subject = subjects['SubjectCode'], outfile=outfile, get_textbook=get_textbooks)
 			else: # a list of subjects was returned
 				for subject in subjects:
-					#print("Getting Catalog Numbers for subject " + str(subject['SubjectCode']))
+					log("Getting Catalog Numbers for subject " + str(subject['SubjectCode']))
 					self.parse_catalog_nums(school = school['SchoolCode'], term = self.term, \
 											subject = subject['SubjectCode'], outfile=outfile, get_textbook=get_textbooks)
 		# Removing the last comma
@@ -120,7 +126,7 @@ class umichParser:
 		if(not cat_nums):
 			return
 		elif(type(cat_nums) == dict):
-			#print("Getting Course Information for catalog number " + str(num))
+			log("Getting Course Information for catalog number " + str(num))
 			course_writable = self.get_course_info(	term = term, 
 													school = school['SchoolCode'], 
 													subject = subject['SubjectCode'], 
@@ -134,14 +140,14 @@ class umichParser:
 			# This course's information is all "Null"
 			if(num == '521B'):
 				continue
-			#print("Getting Course Information for catalog number " + str(num))
+			log("Getting Course Information for catalog number " + str(num))
 			course_writable = self.get_course_info(	term = term, 
 													school = school, 
 													subject = subject, 
 													cat_num = num, 
 													get_textbook = get_textbook
 												)
-			print(outfile)
+			log(outfile)
 			if(outfile):
 				outfile.write(course_writable)
 				outfile.write(",")
@@ -177,7 +183,7 @@ class umichParser:
 		try:
 			subjects_list = json.loads(resp)['getSOCSubjectsResponse']['Subject']
 		except KeyError:
-			print("Subjects list empty!")
+			log("Subjects list empty!")
 		#if type(subjects_list) is not list:
 		#	return subjects_list
 		#for item in subjects_list:
@@ -191,7 +197,7 @@ class umichParser:
 		try:
 			resp_list = json.loads(resp)['getSOCCtlgNbrsResponse']['ClassOffered']
 		except KeyError:
-			print("No catalog numbers found!")
+			log("No catalog numbers found!")
 			return []
 		try:
 			cat_num_list = [item["CatalogNumber"] for item in resp_list]
@@ -201,7 +207,7 @@ class umichParser:
 
 	def get_course_info(self, term, school, subject, cat_num, get_textbook=False):
 		# first, get class number
-		#print("Getting class number for class " + str(subject) + str(cat_num))
+		log("Getting class number for class " + str(subject) + str(cat_num))
 		class_num = self.get_class_num(term, subject, cat_num)
 		if(class_num == 0):
 			return
@@ -214,10 +220,10 @@ class umichParser:
 		try:
 			course_info = json.loads(resp)['getSOCSectionListByNbrResponse']['ClassOffered']
 		except KeyError:
-			print("Course info not found! Course was not created")
+			log("Course info not found! Course was not created")
 			return 
 		# get course description
-		#print("Getting description for class " + str(subject) + str(cat_num))
+		log("Getting description for class " + str(subject) + str(cat_num))
 		descr_url = self.url + "/" + str(term) + "/Schools/" + str(school) + \
 					"/Subjects/" + str(subject) + "/CatalogNbrs/" + str(cat_num)
 		#sleep(1.01)
@@ -225,43 +231,43 @@ class umichParser:
 		course_info["Description"] =  course_descr
 		# create course module
 		#sleep(1.01)
-		print("Updating course model for class " + str(subject) + str(cat_num))
+		log("Updating course model for class " + str(subject) + str(cat_num))
 		# Adding course to DB
 		course_model = self.create_or_update_course(course_info)
 
 		#DEBUG
-		print("DONE")
+		log("DONE")
 
 		# get sections for this course
 		section_url = descr_url + "/Sections/"
 		#sleep(1.01)
-		#print("Getting Sections for class " + str(subject) + str(cat_num))
+		log("Getting Sections for class " + str(subject) + str(cat_num))
 		sections = self.get_sections(section_url)
 		if(sections == None):
-			print("Sections not found due to 500 ERROR")
+			log("Sections not found due to 500 ERROR")
 			return
 		#self.parse_all_sections(course_model = course, sections = sections)
 		#section_writables = [] # list of dicts for all sections/meetings
 		for section in sections:
 			section_num = section['SectionNumber']
 			#sleep(1.01)
-			#print("Getting meetings for class " + str(subject) + str(cat_num))
+			#log("Getting meetings for class " + str(subject) + str(cat_num))
 			meeting  = self.get_course_meeting(term = term, school = school, subject = subject, cat_num = cat_num, section = section_num)
 			if(meeting == None):
-				print("Meetings not found due to 500 ERROR")
+				log("Meetings not found due to 500 ERROR")
 				continue
 			#sleep(1.01)
 			# writing section info into DB
 			self.create_section(meeting = meeting, course_model = course_model, input_section = section)
 			# Getting textbook 
 			if(get_textbook & (section['SectionType'] == 'LEC')):
-				print("Getting textbook information")
+				log("Getting textbook information")
 				textbook_info = self.get_textbooks( term = term, school = school, subject = subject, cat_num = cat_num, section = section_num)
 				if(not textbook_info):
-					print("No info found!")
+					log("No info found!")
 					continue
 				elif(textbook_info == 'ZyBooks'):
-					print("Using ZyBooks")
+					log("Using ZyBooks")
 					continue
 				isbn = str(textbook_info['ISBN'])
 				self.make_textbook(required = True,  isbn_number = isbn , cat_num = cat_num, section = section)
@@ -283,7 +289,7 @@ class umichParser:
 		#}
 
 		#return json.dumps(course_writable)
-		#print(sections[0]['Meeting']['Days'])
+		#log(sections[0]['Meeting']['Days'])
 
 	def get_class_num(self, term, subject, cat_num):
 		class_num_url = self.url + "/" + str(term) + "/Classes/Search/" + str(subject) + "%20" + str(cat_num)
@@ -297,7 +303,7 @@ class umichParser:
 			except TypeError:
 				return resp_list[0]["ClassNumber"]
 		except KeyError:
-			print("Class number not found!")
+			log("Class number not found!")
 			return []
 
 	def get_course_descr(self, course_url):
@@ -310,7 +316,7 @@ class umichParser:
 			if((descr == 'null') or (descr is None)):
 				return ''
 		except KeyError:
-			print("Course description not found!")
+			log("Course description not found!")
 			descr = 'No description found!'
 		return descr
 
@@ -325,7 +331,7 @@ class umichParser:
 			meeting_info = json.loads(resp)['getSOCMeetingsResponse']['Meeting']
 			return meeting_info
 		except KeyError:
-			print("Meeting time error!")
+			log("Meeting time error!")
 			return []
 
 	def get_sections(self, sections_url):
@@ -338,7 +344,7 @@ class umichParser:
 				section_list = [section_list]
 			return section_list
 		except KeyError:
-			print("Caught sections error!")
+			log("Caught sections error!")
 			return []
 		
 	def get_textbooks(self, term, school, subject, cat_num, section):
@@ -410,7 +416,7 @@ class umichParser:
 		try:
 			course = Course.objects.filter(code__contains = cat_num, school = 'umich')[0]
 		except IndexError:
-			print("index error (course does not exist): " + cat_num)
+			log("index error (course does not exist): " + cat_num)
 			return
 		sections = Section.objects.filter(course = course, meeting_section = section)
 		info = self.get_amazon_fields(isbn_number)
@@ -437,16 +443,16 @@ class umichParser:
 				textbook = textbook
 			)
 
-		# print results
+		# log results
 		if created:
 			try:
-				print "Textbook created: " + str(textbook.title)
+				log("Textbook created: " + str(textbook.title))
 			except UnicodeEncodeError:
 				pass
 		else:
 			self.identified_count += 1
 			try:
-				print "Textbook found, not created: " + str(textbook.title)
+				log("Textbook found, not created: " + str(textbook.title))
 			except UnicodeEncodeError:
 				pass
 
@@ -458,12 +464,16 @@ class umichParser:
 		except ValueError:
 			cat_num = int(re.findall(r"[0-9]+", cat_num)[0])
 		credits = 0
-		# WHat to do for multiple credit courses? Just taking minimum
+		# What to do for multiple credit courses? Just taking minimum
 		if(type(course_info['CreditHours']) == int):
 			credits = course_info['CreditHours']
 		else:
-			print(type(course_info['CreditHours']))
-			credits = float(course_info['CreditHours'].split(" - ")[0])
+			log(type(course_info['CreditHours']))
+			# Checking if credits field is empty
+			try:
+				credits = float(course_info['CreditHours'].split(" - ")[0])
+			except AttributeError:
+				credits = float(0) # use 0 if empty
 		course, CourseCreated = Course.objects.update_or_create(
 			code = cat_num,
 			school = self.school,
@@ -551,10 +561,11 @@ class umichParser:
 		if(self.tok_count == 60):
 			self.tok_count = 0
 			self.curr_token = self.tok_cyc.next()
+			print("Current token: {}".format(self.curr_token))
 		# Wait after cycling through every token
 		if(self.req_count == len(self.tokens)*60):
 			self.req_count = 0
-			self.curr_token = self.tok_cyc.next()
+			#self.curr_token = self.tok_cyc.next()
 			sleep(60)
 		header = {"Authorization" : "Bearer " + str(self.curr_token), "Accept": 'application/json', "User-Agent": "curl/7.35.0"}	
 		while True:
@@ -563,37 +574,37 @@ class umichParser:
 				self.tok_count += 1
 				self.req_count +=1
 				if r.status_code == 200:
-					#print("SUCCESS!")
+					#log("SUCCESS!")
 					return r.text
 				elif r.status_code == 500:
 					# Wait and retry
-					print("Encountered 500, retrying")
+					log("Encountered 500, retrying")
 					sleep(0.25)
 					r = requests.get(url, headers = header, verify = True)
 					if(r.status_code == 500):
-						print("Bad status code: " + str(r.status_code))
-						print(r.text)
+						log("Bad status code: " + str(r.status_code))
+						log(r.text)
 						return 500
 					else:
 						return r.text
 				elif r.status_code == 404:
-					print("Bad status code: " + str(r.status_code))
+					log("Bad status code: " + str(r.status_code))
 					return 404
 				else:
 					print("FAIL!")
 			except(requests.exceptions.Timeout, 
 					requests.exceptions.ConnectionError):
-				print("Unexpected Errror") 
+				log("Unexpected Errror") 
 				continue 
 		
 
 def main():
 	parser = umichParser()
 	start = tm.time()
-	print("Starting Parser")
+	log("Starting Parser")
 	parser.start(get_textbooks=False)
 	end = tm.time()
-	print("TIME: " + str(end - start))
+	log("TIME: " + str(end - start))
 
 if __name__ == "__main__":
 	main()
