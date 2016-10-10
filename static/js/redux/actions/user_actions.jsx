@@ -244,12 +244,12 @@ export function autoSave(delay=4000) {
 
 export function setARegistrationToken() {
 	if ('serviceWorker' in navigator) {
-	    console.log('Service Worker is supported');
+	    // console.log('Service Worker is supported');
 	    navigator.serviceWorker.register('/sw.js').then(function(reg) {
 	        reg.pushManager.subscribe({
 	            userVisibleOnly: true
 	        }).then(function(sub) {
-	            console.log('endpoint:', sub.endpoint);
+	            // console.log('endpoint:', sub.endpoint);
 	            sendRegistrationToken(sub.endpoint.substring(40));
 	        });
 	    }).catch(function(error) {
@@ -259,7 +259,6 @@ export function setARegistrationToken() {
 }
 
 export function sendRegistrationToken(token) {
-	console.log('sending token: ' + token);
 	fetch(getSetRegistrationTokenEndpoint(), {
 			method: 'POST',
 			body: JSON.stringify({
@@ -279,4 +278,20 @@ export function sendRegistrationToken(token) {
         		console.log("token not registered: " + token);
         	}
 	});
+}
+
+function unregisterCallback() {
+  if (chrome.runtime.lastError) {
+    // When the unregistration fails, handle the error and retry
+    // the unregistration later.
+    return;
+  }
+}
+
+function unregisterToken() {
+	Gcm.unregister(unregisterCallback);
+}
+
+export function unregisterAToken() {
+	unregisterToken();
 }
