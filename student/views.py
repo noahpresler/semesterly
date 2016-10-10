@@ -301,3 +301,12 @@ def set_registration_token(request):
         'token': 'yes'
     }
     return HttpResponse(json.dumps(json_data), content_type="application/json")
+
+@csrf_exempt
+def delete_registration_token(request):
+    token = json.loads(request.body)['token']
+    RegistrationToken.objects.filter(token = token).delete()
+    json_data = {
+        'token': 'deleted'
+    }
+    return HttpResponse(json.dumps(json_data), content_type="application/json")
