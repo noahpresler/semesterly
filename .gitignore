@@ -24,3 +24,6 @@ github-request-body
 static/robots.txt
 static/sitemap.txt
 sections
+openssl.cnf
+ssl.crt
+ssl.key
