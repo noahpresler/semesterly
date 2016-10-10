@@ -580,6 +580,14 @@ def all_courses(request):
   except Exception as e:
     return HttpResponse(str(e))
 
+def about(request):
+  try:
+    return render_to_response("about.html",
+      {},
+    context_instance=RequestContext(request))
+  except Exception as e:
+    return HttpResponse(str(e))
+
 @validate_subdomain
 def school_info(request, school):
   school = request.subdomain
