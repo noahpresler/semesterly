@@ -82,8 +82,6 @@ header nav a:hover {
 	color: white;
 	font-size: 48px;
 	line-height: 55px;
-	background-color: #F3F3F3;
-	position: relative;
 }
 #hero h2 {
 	color: white;
@@ -93,19 +91,12 @@ header nav a:hover {
 	@media(max-width: 1170px) {#hero h2 {font-size: 40px; line-height: 45px;}}
 	@media(max-width: 980px) {#hero h2 {font-size: 30px; line-height: 38px;}}
 
-#about-image {
-	width: 100%;
-	height: 0;
-	padding-bottom: 50%;
-	background-size: cover;
-	background-position: top center;
-	background-image: url(/static/img/about.png);
-}
 .about-text {
 	top: 70%;
 	left: 50%;
 	transform: translate(-50%, -50%);
 	position: absolute;
+	text-align: center;
 }
 .about h2 {
 	font-size: 42px;
