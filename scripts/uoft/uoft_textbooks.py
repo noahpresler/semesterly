@@ -157,20 +157,20 @@ def parse_uoft_textbooks():
         'St. George': {
             'name': 'St. George',
             'ending': '1',
-            'campus_id': '43',
-            'term': '557'
+            'campus_id': '55',
+            'term': '610'
         },
         'Scarborough': {
             'name': 'Scarborough',
             'ending': '3',
-            'campus_id': '40',
-            'term': '559'
+            'campus_id': '53',
+            'term': '600'
         },
         'Mississauga': {
             'name': 'Mississauga',
             'ending': '5',
-            'campus_id': '47',
-            'term': '571'
+            'campus_id': '54',
+            'term': '608'
         }
     }
 
