@@ -164,11 +164,12 @@ def delete_timetable(request):
 @validate_subdomain
 def duplicate_timetable(request):
     school = request.subdomain
-    tt = json.loads(request.body)
+    params = json.loads(request.body)
+    tt = params['timetable']
     name = tt['name']
     semester = tt['semester']
     student = Student.objects.get(user=request.user)
-    new_name = name + ' (copy)'
+    new_name = params['name']
 
     original = PersonalTimetable.objects.get(
         student=student, name=name, school=school, semester=semester)
