@@ -57,6 +57,9 @@ export const getRequestShareTimetableLinkEndpoint = () => {
 export const getSetRegistrationTokenEndpoint = () => {
   return "/setRegistrationToken/";
 }
+export const deleteRegistrationTokenEndpoint = () => {
+  return "/deleteRegistrationToken/";
+}
 
 export const getSchoolSpecificInfo = (school) => {
 	switch(school) {
