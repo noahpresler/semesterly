@@ -5,7 +5,8 @@ import { saveSettings } from '../../actions/user_actions.jsx'
 const mapStateToProps = (state) => {
 	return {
 		userInfo: state.userInfo.data,
-		showOverrided: state.userInfo.overrideShow
+		showOverrided: state.userInfo.overrideShow,
+		tokenRegistered: state.notificationToken.hasToken
 	}
 }
 
