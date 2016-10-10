@@ -1,4 +1,5 @@
 import React from 'react';
+import DayCalendarContainer from './containers/day_calendar_container.jsx';
 import CalendarContainer from './containers/calendar_container.jsx';
 import AlertBox from './alert_box.jsx';
 import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
@@ -16,6 +17,13 @@ import TutModalContainer from './containers/tut_modal_container.jsx';
 import PeerModalContainer from './containers/peer_modal_container.jsx';
 
 class Semesterly extends React.Component {
+	constructor(props) {
+        super(props);
+        let mql = window.matchMedia("(orientation: portrait)");
+        this.state = { 
+            orientation: !mql.matches ? 'landscape' : 'portrait'
+        };
+     }
 
 	componentWillMount() {
 		$(document.body).on('keydown', (e) => {
@@ -31,6 +39,14 @@ class Semesterly extends React.Component {
 					break;
 				}
 			}
+		});
+		window.addEventListener('orientationchange', (e) => {
+			let mql = window.matchMedia("(orientation: portrait)");
+			if (!mql.matches) {
+		        this.setState({orientation: 'landscape'});
+			} else {
+		        this.setState({orientation: 'portrait'});
+  			}
 		});
 	}
 
@@ -61,6 +77,7 @@ class Semesterly extends React.Component {
 	}
 
 	render() {
+		let cal = $(window).width() < 767 && this.state.orientation == 'portrait' ? <DayCalendarContainer /> : <CalendarContainer />;
 		return (
 			<div id="page-wrapper">
 				<TopBarContainer />
@@ -73,13 +90,13 @@ class Semesterly extends React.Component {
 				<AlertBox ref={a => this.msg = a} {...this.alertOptions} />
 				<div id="all-cols">
 					<div id="main-bar">
-						<CalendarContainer />
+						{cal}
 						<footer className="footer navbar no-print">
 							<ul className="nav nav-pills no-print">
-								<li role="presentation"><a href="mailto:contact@semester.ly?Subject=Semesterly">Contact us</a></li>
-								<li role="presentation"><a target="_blank" href="http://goo.gl/forms/YSltU2YI54PC9sXw1">Feedback</a></li>
-								<li role="presentation"><a target="_blank" href="https://www.facebook.com/semesterly/">Facebook</a></li>
-								<li><div className="fb-like" data-href="https://www.facebook.com/semesterly/" data-layout="button_count" data-action="like" data-show-faces="true" data-share="false"></div></li>
+								<li className="footer-button" role="presentation"><a href="mailto:contact@semester.ly?Subject=Semesterly">Contact us</a></li>
+								<li className="footer-button" role="presentation"><a target="_blank" href="http://goo.gl/forms/YSltU2YI54PC9sXw1">Feedback</a></li>
+								<li className="footer-button" role="presentation"><a target="_blank" href="https://www.facebook.com/semesterly/">Facebook</a></li>
+								<li className="footer-button"><div className="fb-like" data-href="https://www.facebook.com/semesterly/" data-layout="button_count" data-action="like" data-show-faces="true" data-share="false"></div></li>
 							</ul>
 						</footer>
 					</div>

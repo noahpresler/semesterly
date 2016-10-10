@@ -5,6 +5,16 @@
 	text-align: center;
 }
 
+.textbook-ctn:nth-child(3n+1) {
+    clear: left;
+    display: block;
+}
+@media (max-width: 999px) {
+    .textbook-ctn:nth-child(3n+1) {
+        clear: none;
+    }
+}
+
 .textbook h4 {
     font-size: 11px;
     margin: 0 0 2px;

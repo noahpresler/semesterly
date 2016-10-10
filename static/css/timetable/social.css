@@ -35,7 +35,7 @@
     display: inline-block;
     border-color: transparent;
     border-top-color: #34495e; 
-    border-style: dashed dashed solid;
+    border-style: solid dashed dashed;
     border-width: 6.5px 6.5px 0;
     margin-left: 5px;
     z-index: 1;
@@ -175,5 +175,24 @@ a#social-login:hover:before {
     }
     a#social-login:hover:before {
         width: 0%;
+    }
+    #social .tip-down {
+        display: none;
+    }
+
+    #search-bar input {
+        padding: 0 0px 0 10px;
+    }
+
+    #social-pro-pic {
+        margin-right: 0px;
+    }
+
+    .fa-facebook-square {
+        display: none;
+    }
+
+    #social {
+        margin-right: 25px;
     }
 }
