@@ -24,6 +24,7 @@ class SideBar extends React.Component {
     }
     stopPropagation(callback, event) {
         event.stopPropagation();
+        this.hideDropdown();
         callback();
     }
     render() {
