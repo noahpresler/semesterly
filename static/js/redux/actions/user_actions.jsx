@@ -219,13 +219,17 @@ export function deleteTimetable(timetable) {
 		.then(response => response.json())
 		.then(json => {
 			dispatch({
-				type: "CHANGE_ACTIVE_SAVED_TIMETABLE",
-				timetable: json.saved_timetable
-			});
-			dispatch({
 				type: "RECEIVE_SAVED_TIMETABLES",
 				timetables: json.timetables
 			});
+			if (json.timetables.length > 0) {
+				dispatch({
+					type: "CHANGE_ACTIVE_SAVED_TIMETABLE",
+					timetable: json.timetables[0]
+				});
+			} else { 
+				nullifyTimetable(dispatch);
+			}
 			return json;
 		})
 		.then(json => {
