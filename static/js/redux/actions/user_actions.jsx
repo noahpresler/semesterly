@@ -178,6 +178,16 @@ export function duplicateTimetable(timetable) {
 		.then(response => response.json())
 		.then(json => {
 			dispatch({
+				type: "RECEIVE_TIMETABLES",
+				timetables: [json.saved_timetable],
+				preset: true,
+				saving: true
+			});
+			dispatch({
+				type: "RECEIVE_COURSE_SECTIONS",
+				courseSections: lockActiveSections(json.saved_timetable)
+			});
+			dispatch({
 				type: "CHANGE_ACTIVE_SAVED_TIMETABLE",
 				timetable: json.saved_timetable
 			});
@@ -185,10 +195,10 @@ export function duplicateTimetable(timetable) {
 				type: "RECEIVE_SAVED_TIMETABLES",
 				timetables: json.timetables
 			});
-			// dispatch({
-			// 	type: "RECEIVE_TIMETABLE_SAVED",
-			// 	upToDate: true
-			// });
+			dispatch({
+				type: "RECEIVE_TIMETABLE_SAVED",
+				upToDate: true
+			});
 
 			return json;
 		})
@@ -224,8 +234,26 @@ export function deleteTimetable(timetable) {
 			});
 			if (json.timetables.length > 0) {
 				dispatch({
+					type: "RECEIVE_TIMETABLES",
+					timetables: [json.timetables[0]],
+					preset: true,
+					saving: true
+				});
+				dispatch({
+					type: "RECEIVE_COURSE_SECTIONS",
+					courseSections: lockActiveSections(json.timetables[0])
+				});
+				dispatch({
 					type: "CHANGE_ACTIVE_SAVED_TIMETABLE",
 					timetable: json.timetables[0]
+				});
+				dispatch({
+					type: "RECEIVE_SAVED_TIMETABLES",
+					timetables: json.timetables
+				});
+				dispatch({
+					type: "RECEIVE_TIMETABLE_SAVED",
+					upToDate: true
 				});
 			} else { 
 				nullifyTimetable(dispatch);
