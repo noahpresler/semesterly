@@ -83,9 +83,25 @@ header nav a:hover {
 	font-size: 48px;
 	line-height: 55px;
 }
-	@media(max-width: 1170px) {#hero h2 {font-size: 40px; line-height: 45px;}}
-	@media(max-width: 980px) {#hero h2 {font-size: 30px; line-height: 38px;}}
+	@media(max-width: 1170px) {#hero h1 {font-size: 40px; line-height: 45px;}}
+	@media(max-width: 980px) {#hero h1 {font-size: 30px; line-height: 38px;}}
 
+#hero h2 {
+	color: white;
+	font-size: 30px;
+	line-height: 40px;
+	padding-left: 50px;
+	padding-right: 50px;
+}
+	@media(max-width: 1170px) {#hero h2 {font-size: 22px; line-height: 30px;}}
+	@media(max-width: 980px) {#hero h2 {font-size: 25px; line-height: 23px;}}
+	@media(max-width: 776px) {#hero h2 {font-size: 15px; line-height: 20px; 
+		padding-left: 30px; padding-right: 30px;}}
+
+
+.about {
+	padding-top: 10px;
+}
 .about-text {
 	top: 70%;
 	left: 50%;
@@ -192,9 +208,6 @@ footer h6 {
 }
 
 @media(max-width: 776px) {
-	#hero h2 {
-		font-size: 40px;
-	}
 	footer li {
 		text-align: center;
 	}
