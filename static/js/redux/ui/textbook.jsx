@@ -2,7 +2,7 @@ import React from 'react';
 
 const Textbook = ({tb}) => {
     return (
-    <a href={tb.detail_url} target="_blank">
+    <a href={tb.detail_url} target="_blank" className="textbook-ctn">
         <div className="textbook">
             <img src={tb.image_url} />
             <div className="required">Required</div>
