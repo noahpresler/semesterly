@@ -18,7 +18,7 @@ from pytz import timezone
 from analytics.models import *
 from analytics.views import *
 from timetable.models import *
-from timetable.school_mappers import school_to_granularity, VALID_SCHOOLS, school_code_to_name
+from timetable.school_mappers import school_to_granularity, VALID_SCHOOLS, school_code_to_name, AM_PM_SCHOOLS
 from timetable.utils import *
 from timetable.scoring import *
 from student.models import Student
@@ -35,7 +35,17 @@ def redirect_to_home(request):
   return HttpResponseRedirect("/")
 
 def custom_404(request):
-  return HttpResponse("404", status=404)
+  # return HttpResponse("404", status=404)
+  response = render(request, "404.html")
+  # TODO, maybe add this next line back in when im done testing
+  #response.status_code = 404
+  return response
+
+def custom_500(request):
+    response = render_to_response('500.html')
+    # TODO, maybe add this next line back in when im done testing
+    # response.status_code = 500
+    return response
 # ******************************************************************************
 # ******************************** GENERATE TTs ********************************
 # ******************************************************************************
@@ -62,7 +72,8 @@ def view_timetable(request, code=None, sem=None, shared_timetable=None, find_fri
     'course': json.dumps(course_json),
     'semester': sem,
     'shared_timetable': json.dumps(shared_timetable),
-    'find_friends': find_friends
+    'find_friends': find_friends,
+    'uses_12hr_time': school in AM_PM_SCHOOLS
   },
   context_instance=RequestContext(request))
 

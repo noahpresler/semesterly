@@ -20,14 +20,13 @@ body {
 button.save-timetable {
     border: none;
     outline: none;
-    background-color: #eee;
+    background-color: transparent;
     height: 30px;
     width: 30px;
     line-height: 30px;
     color: #777;
     position: relative;
     transition: background-color .3s;
-    border: 1px solid #ddd;
 }
 button.save-timetable i {
     position: absolute;
@@ -38,10 +37,10 @@ button.save-timetable i {
     font-size: 18px;
 }
 button.save-timetable:hover {
-    background-color: #ddd;
+    color: #143B63;
 }
 button.save-timetable:active {
-    background-color: #ccc;
+    color: #143B63;
 }
 button.save-timetable.add-button {
     margin-right: 2px;
@@ -67,7 +66,6 @@ button.save-timetable.add-button {
 }
 
 .fc-toolbar {
-    border: 1px solid #ccc;
     border-bottom: 0px;
     padding: 5px;
     margin-top: 20px;
@@ -109,6 +107,7 @@ button.save-timetable.add-button {
 .data-last-updated {
     margin: 5px 0 0;
     font-size:12px;
+    line-height: 22px;
 }
 
 @media(max-width: 514px) {
