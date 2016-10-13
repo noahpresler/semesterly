@@ -159,7 +159,14 @@ header nav a:hover {
 	background-size: cover;
 }
 .name {
-	line-height: 250%;
+	font-weight: normal;
+	margin-top: 5%;
+}
+@media(max-width: 980px) {
+	.long-name {
+		white-space: nowrap;
+		margin-left: -15%;
+	}
 }
 
 footer {
