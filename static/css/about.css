@@ -209,12 +209,6 @@ header nav a:hover {
 		margin-left: 0%;
 	}
 }
-@media(max-width: 776px) {
-	.long-name {
-		white-space: nowrap;
-		margin-left: 5%;
-	}
-}
 
 footer {
 	background-color: #253340;
