@@ -123,10 +123,7 @@ class VandyParser:
 			self.get_html(self.url + '/SelectTerm!updateSessions.action')
 
 			# Get a list of all the department codes
-			department_codes = self.get_department_codes()
-
-			# Base URL to query database for classes at Vandy
-			courseSearchURL= self.url + '/SearchClassesExecute!search.action'
+			department_codes = self.extract_department_codes()
 
 			# Create payload to request course list from server
 			payload = {
@@ -142,7 +139,7 @@ class VandyParser:
 				payload.update({'searchCriteria.subjectAreaCodes': department_code})
 
 				# GET html for department course listings
-				html = self.get_html(courseSearchURL, payload)
+				html = self.get_html(self.url + '/SearchClassesExecute!search.action', payload)
 
 				# Parse courses in department
 				self.parse_courses_in_department(html)
@@ -240,11 +237,13 @@ class VandyParser:
 			print 'label:', label, sys.exc_info()[0]
 			sys.stderr.write("UNICODE ERROR\n")
 
-	def get_department_codes(self):
+	def extract_department_codes(self):
 
 		# Query Vandy class search website
 		html = self.get_html(self.url + '/SearchClasses!input.action')
 		soup = BeautifulSoup(html, 'html.parser')
+		# print soup.prettify().encode('utf-8')
+		# exit(1)
 
 		# Retrieve all deparments from dropdown in advanced search
 		department_entries = soup.find_all(id=re.compile("subjAreaMultiSelectOption[0-9]"))
@@ -268,7 +267,7 @@ class VandyParser:
 
 		# perform more targeted searches if needed
 		if numHits == 300:
-			self.parseByDay(courseSearchURL, payload)
+			self.parseByDay(self.url + '/SearchClassesExecute!search.action', payload)
 		else:
 			self.parse_set_of_courses(html)
 
