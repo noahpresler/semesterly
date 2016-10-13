@@ -162,16 +162,27 @@ header nav a:hover {
 	font-weight: normal;
 	margin-top: 5%;
 }
+@media(max-width: 1134px) {
+	.long-name {
+		white-space: nowrap;
+		margin-left: 0%;
+	}
+}
 @media(max-width: 980px) {
 	.long-name {
 		white-space: nowrap;
-		margin-left: -15%;
+		margin-left: -10%;
 	}
 }
-@media(max-width: 776px) {
+@media(max-width: 800px) {
 	.long-name {
 		white-space: nowrap;
-		margin-left: 5%;
+		margin-left: -20%;
+	}
+@media(max-width: 766px) {
+	.long-name {
+		white-space: nowrap;
+		margin-left: 0%;
 	}
 }
 
