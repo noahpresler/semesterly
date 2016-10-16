@@ -118,6 +118,8 @@ class VandyParser:
 		for semester in semester_codes:
 
 			print 'Parsing semester ' + semester
+
+			# Load environment for targeted semester
 			self.semester = semester
 			self.get_html(self.url + '/SelectTerm!selectTerm.action', {'selectedTermCode' : semester_codes[semester]})
 			self.get_html(self.url + '/SelectTerm!updateSessions.action')
