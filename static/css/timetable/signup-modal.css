@@ -1,6 +1,7 @@
 .signup-modal {
 	max-width: 500px;
 	height: 550px;
+	overflow: auto;
 }
 .signup-modal > div {
 	outline:none;
