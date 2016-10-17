@@ -40,7 +40,7 @@ for school in VALID_SCHOOLS:
     exec "from scripts.{0}.{0}_{1} import *".format(school, p_type)
 
 course_parsers = {
-  'jhu': lambda: HopkinsParser().start(), # avoid calling constructor lazily
+  'jhu': lambda: HopkinsParser("Spring 2017").start(), # avoid calling constructor lazily
   'uoft': lambda: UofTParser().start(),
   'umd': parse_umd,
   # 'rutgers': parse_rutgers,
