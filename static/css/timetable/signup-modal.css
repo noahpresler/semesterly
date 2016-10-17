@@ -103,3 +103,29 @@
 	-webkit-box-shadow: inset 0 -2px #0e8870;
     box-shadow: inset 0 -2px #0e8870;
 }
+
+@media(max-width: 776px) {
+	
+	.signup-modal {
+       max-width: 500px;
+       height: 550px;
+	   max-width: 1200px;
+	   height: 85%;
+	   max-height: 900px;
+	}
+
+	.pro-pic {
+       display: none;
+	}
+
+ 	.signup-modal #features{
+       padding: 0px 10px 10px 10px;
+       width: 100%;
+       font-size: 17px;
+	}
+
+	#feature-highlight h1 {
+		font-size: 21px;
+	}
+
+}
