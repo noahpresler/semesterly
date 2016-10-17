@@ -59,7 +59,7 @@ class DayCalendar extends React.Component {
 	swipedRight() {
 		let d = this.state.day-1
 		if (d === -1 || d === 5) { // Sunday or Saturday, respectively
-			d = 0; // Show Monday
+			d = 4; // Show Friday
 		}
 		this.setState({day: d})
 	}
