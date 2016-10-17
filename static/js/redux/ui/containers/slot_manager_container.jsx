@@ -5,7 +5,7 @@ import { getSchoolSpecificInfo } from '../../constants.jsx';
 import { removeCustomSlot, updateCustomSlot, addCustomSlot } from '../../actions/timetable_actions.jsx';
 import SlotManager from '../slot_manager.jsx';
 
-const mapStateToProps = (state) => {
+const mapStateToProps = (state,ownProps) => {
 	let activeTimetable = state.timetables.items[state.timetables.active];
 	return {
 		timetable: activeTimetable || [],
@@ -31,7 +31,8 @@ const mapStateToProps = (state) => {
 		classmates: (id,sec) => {
 			let cm = state.classmates.courseToClassmates ? state.classmates.courseToClassmates.find(course => course.course_id === id) : [];
 			return cm ? cm.classmates.filter(friend => friend.sections && friend.sections.find(s => s === sec) !== undefined) : [];
-		}
+		},
+		days: ownProps.days
 
 	}
 }

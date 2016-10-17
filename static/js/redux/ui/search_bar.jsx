@@ -68,9 +68,23 @@ export class SearchBar extends React.Component {
                 <SearchSideBarContainer />
             </ul>
         );
-        let availableSemesters = this.props.availableSemesters.map(s =>
-            <div key={s} className="semester-option" onMouseDown={ () => this.setSemester(s) }> { this.props.getSemesterName[s] } </div>
-        );
+        let availableSemesters = this.props.availableSemesters.map(s => {
+            let name = this.props.getSemesterName[s];
+            if ( $(window).width() < 767) {
+                name = name.replace('Fall', 'F');
+                name = name.replace('Spring', 'S');
+                name = name.replace('Winter', 'W');
+                name = name.replace('20', "'");
+            }
+            return <div key={s} className="semester-option" onMouseDown={ () => this.setSemester(s) }> { name } </div>
+        });
+        let currSem = this.props.semesterName;
+        if ( $(window).width() < 767) {
+            currSem = currSem.replace('Fall', 'F');
+            currSem = currSem.replace('Spring', 'S');
+            currSem = currSem.replace('Winter', 'W');
+            currSem = currSem.replace('20', "'");
+        }
     	return (
         	<div id="search-bar" className="no-print">
                 <div id="search-bar-wrapper">
@@ -78,7 +92,7 @@ export class SearchBar extends React.Component {
                         <div id="search-bar-semester" onMouseDown={this.toggleDropdown.bind(this)}>
                             <span className={classNames("tip-down", {'down' : this.state.showDropdown})}>
                             </span>
-                            {this.props.semesterName}</div>
+                            {currSem}</div>
                         <div id="semester-picker"
                              className={classNames({'down' : this.state.showDropdown})}
                         >
@@ -89,7 +103,7 @@ export class SearchBar extends React.Component {
                     </ClickOutHandler>
                     <div id="search-bar-input-wrapper">
                         <input ref="input"
-                               placeholder={"Searching " + this.props.semesterName}
+                               placeholder={"Searching " + currSem}
                                className={this.props.isFetching ? 'results-loading-gif' : ''}
                                onInput={this.fetchSearchResults}
                                onFocus={() => this.setState({ focused: true, showDropdown: false })}
