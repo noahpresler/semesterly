@@ -13,12 +13,12 @@ import requests, cookielib, re, sys
 
 class VandyParser:
 
-	def __init__(self, sem="Fall 2016"):
+	def __init__(self):
 		self.session = requests.Session()
 		self.headers = {'User-Agent' : 'My User Agent 1.0'}
 		self.cookies = cookielib.CookieJar()
 		self.school = 'vandy'
-		self.semester = sem
+		self.semester = ''
 		self.departments = {}
 		self.username = '***REMOVED***'
 		self.password = '***REMOVED***'
@@ -105,38 +105,49 @@ class VandyParser:
 		self.post_http(login_url + post_suffix_url, login_info, params)
 
 		# TODO - not sure if this is necessary but it works
-		url = self.url + '/Entry.action'
-		self.get_html(url)
+		self.get_html(self.url + '/Entry.action')
 
 	def parse(self):
 
 		# Login to vandy course search site
 		self.login()
 
-		# Get a list of all the department codes
-		department_codes = self.get_department_codes()
+		# FIXME - hack to deal with Fall 2016 & Spring 2017
+		semester_codes = {'F' : '0875', 'S' : '0880'}
 
-		# Base URL to query database for classes at Vandy
-		courseSearchURL= self.url + '/SearchClassesExecute!search.action'
+		for semester in semester_codes:
 
-		# Create payload to request course list from server
-		payload = {
-			'searchCriteria.classStatusCodes': ['O', 'W', 'C'],
-			'__checkbox_searchCriteria.classStatusCodes':['O','W', 'C']
-		}
+			print 'Parsing semester ' + semester
 
-		for department_code in department_codes:
+			# Load environment for targeted semester
+			self.semester = semester
+			self.get_html(self.url + '/SelectTerm!selectTerm.action', {'selectedTermCode' : semester_codes[semester]})
+			self.get_html(self.url + '/SelectTerm!updateSessions.action')
 
-			print 'Parsing courses in \"' + self.departments[department_code] + '\"'
+			# Get a list of all the department codes
+			department_codes = self.extract_department_codes()
 
-			# Construct payload with department code
-			payload.update({'searchCriteria.subjectAreaCodes': department_code})
+			# Create payload to request course list from server
+			payload = {
+				'searchCriteria.classStatusCodes': ['O', 'W', 'C'],
+				'__checkbox_searchCriteria.classStatusCodes':['O','W', 'C']
+			}
 
-			# GET html for department course listings
-			html = self.get_html(courseSearchURL, payload)
+			for department_code in department_codes:
 
-			# Parse courses in department
-			self.parse_courses_in_department(html)
+				print 'Parsing courses in \"' + self.departments[department_code] + '\"'
+
+				# Construct payload with department code
+				payload.update({'searchCriteria.subjectAreaCodes': department_code})
+
+				# GET html for department course listings
+				html = self.get_html(self.url + '/SearchClassesExecute!search.action', payload)
+
+				# Parse courses in department
+				self.parse_courses_in_department(html)
+
+			# return to search page for next iteration
+			self.get_html(url + '/Entry.action')
 
 		# Final updates
 		self.wrap_up()
@@ -184,7 +195,7 @@ class VandyParser:
 		else:
 			section, section_was_created = Section.objects.update_or_create(
 				course = course_model,
-				semester = 'F', #self.semester[0].upper(),
+				semester = self.semester,
 				meeting_section = self.course.get('section'),
 				defaults = {
 					'instructors': self.course.get('Instructor(s)') or '',
@@ -228,11 +239,13 @@ class VandyParser:
 			print 'label:', label, sys.exc_info()[0]
 			sys.stderr.write("UNICODE ERROR\n")
 
-	def get_department_codes(self):
+	def extract_department_codes(self):
 
 		# Query Vandy class search website
 		html = self.get_html(self.url + '/SearchClasses!input.action')
 		soup = BeautifulSoup(html, 'html.parser')
+		# print soup.prettify().encode('utf-8')
+		# exit(1)
 
 		# Retrieve all deparments from dropdown in advanced search
 		department_entries = soup.find_all(id=re.compile("subjAreaMultiSelectOption[0-9]"))
@@ -256,7 +269,7 @@ class VandyParser:
 
 		# perform more targeted searches if needed
 		if numHits == 300:
-			self.parseByDay(courseSearchURL, payload)
+			self.parseByDay(self.url + '/SearchClassesExecute!search.action', payload)
 		else:
 			self.parse_set_of_courses(html)
 
