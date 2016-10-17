@@ -45,7 +45,17 @@ button.save-timetable:active {
 button.save-timetable.add-button {
     margin-right: 2px;
 }
-
+button.row-button {
+    margin-right: 2px;
+    float: right;
+    background-color: transparent;
+    border: none;
+    border-radius: 4px;
+    transition: all .3s;
+}
+button.row-button:hover {
+    background-color: #ddd;
+}
 .cal-row {
 	width: 49px;
 	font-size: 14px;

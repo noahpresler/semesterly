@@ -1,4 +1,10 @@
-export const savingTimetable = (state = { activeTimetable: { name: String("Untitled Schedule") }, saving: false, upToDate: false }, action) => {
+let init_state = {
+	activeTimetable: { name: String("Untitled Schedule") }, 
+	saving: false,
+	upToDate: false
+}
+
+export const savingTimetable = (state = init_state, action) => {
 	switch (action.type) {
 		case 'REQUEST_SAVE_TIMETABLE':
 			let saving = !state.upToDate;
