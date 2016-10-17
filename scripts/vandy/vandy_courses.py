@@ -147,7 +147,7 @@ class VandyParser:
 				self.parse_courses_in_department(html)
 
 			# return to search page for next iteration
-			self.get_html(url + '/Entry.action')
+			self.get_html(self.url + '/Entry.action')
 
 		# Final updates
 		self.wrap_up()
