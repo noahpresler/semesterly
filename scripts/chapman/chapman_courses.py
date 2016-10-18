@@ -159,14 +159,12 @@ class ChapmanParser:
 					# Place course info into course model
 					self.course['code'] = rtitle.group(1)
 					self.course['name'] = rtitle.group(3).strip()
-					self.course['credits'] = int(re.match(r'(\d*).*', units).group(1))
+					self.course['credits'] = float(re.match(r'(\d*).*', units).group(1))
 					self.course['descr'] = '\n-'.join(map(lambda a: a.text if a else '', [description, info, notes]))
 					self.course['units'] = re.match(r'(\d*).*', units).group(1)
 					self.course['section'] = rtitle.group(2)
 					self.course['size'] = int(capacity)
 					self.course['enrolment'] = int(enrollment)
-					print units, self.course['credits']
-
 					course = self.create_course()
 
 					for sched, loc, instr, date in izip(scheds, locs, instrs, dates):
@@ -238,7 +236,6 @@ class ChapmanParser:
 		return section
 
 	def create_offerings(self, section_model):
-
 		for day in list(self.course.get('days')):
 			offering_model, offering_was_created = Offering.objects.update_or_create(
 				section = section_model,
