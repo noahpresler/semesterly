@@ -7,6 +7,7 @@ import { autoSave, saveTimetable } from '../../actions/user_actions.jsx';
 const mapStateToProps = (state) => {
 	return {
     	alertConflict: state.alerts.alertConflict,
+    	alertEnableNotifications: state.alerts.alertEnableNotifications,
     	alertTimetableExists: state.alerts.alertTimetableExists,
     	alertChangeSemester: state.alerts.alertChangeSemester,
     	alertNewTimetable: state.alerts.alertNewTimetable,
