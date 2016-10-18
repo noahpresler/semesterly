@@ -176,6 +176,10 @@ class HopkinsParser:
         areas = courseJson['Areas'].replace('^',',')
         if courseJson['IsWritingIntensive'] == "Yes":
             areas = areas + ', Writing Intensive'
+        if courseJson['Department'] == 'EN Computer Science':
+            cs_areas_regex = r'\bApplications|\bAnalysis|\bSystems|\bGeneral'
+            for match in re.findall(cs_areas_regex,description):
+                areas += ', ' + match
         try:
             num_credits=int(float(courseJson['Credits']))
         except:
