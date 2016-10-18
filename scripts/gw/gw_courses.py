@@ -37,7 +37,7 @@ class GWParser:
 					verify = True
 				)
 
-				print r.url
+				print 'GET', r.url
 
 				if r.status_code == 200:
 					html = r.text
@@ -58,10 +58,10 @@ class GWParser:
 				params = payload,
 				cookies = self.cookies,
 				headers = self.headers,
-				verify = True,
+				verify = False,
 			)
 
-			# print "POST: " + r.url
+			print 'POST', post.url
 			return post
 		except (requests.exceptions.Timeout,
 			requests.exceptions.ConnectionError):
@@ -72,24 +72,29 @@ class GWParser:
 	def login(self):
 		print "Logging in..."
 
-		self.get_html(self.url + '/PRODCartridge/twbkwbis.P_WWWLogin') 
+		self.get_html(self.url + '/PRODCartridge/twbkwbis.P_WWWLogin')
+
+		for cookie in self.cookies:
+			print cookie.name, cookie.value
+
 		credentials = {
 			'sid' : self.username,
-			'PIN' : self.password,
-			# 'submit' : 'Login',
-			# 'loginform' : ''
+			'PIN' : self.password
 		}
+		# self.post_http(self.url + '/PRODCartridge/twbkwbis.P_ValLogin', {}, credentials).text
+		print self.post_http(self.url + '/PRODCartridge/twbkwbis.P_ValLogin', credentials).text
+
 		query = {
 			'name' : 'bmenu.P_MainMnu',
-			'msg' : "WELCOME+<I><b>Welcome,+Rachel+Presler,+to+the+WWW+Information+System!</b></I>10/14/1611:15+pm"
+			# 'msg' : 'WELCOME <I><b>Welcome, Rachel Presler, to the WWW Information System!</b></I>10/17/1604:54 pm',
+			# 'msg' : 'WELCOME+\%3CI\%3E\%3Cb\%3EWelcome,+Rachel+Presler,+to+the+WWW+Information+System!\%3C\%2Fb\%3E\%3C\%2FI\%3E10\%2F17\%2F1604\%3A54+pm'
 		}
-		self.get_html(self.url + '/PRODCartridge/twbkwbis.P_GenMenu', query)
-		print self.post_http(self.url + '/PRODCartridge/twbkwbis.P_ValLogin', credentials).text
-		# print BeautifulSoup(self.url + '/PRODCartridge/twbkwbis.P_GenMenu?name=bmenu.P_MainMnu', 'html.parser').prettify()
+		logged_in = self.get_html(self.url + '/PRODCartridge/twbkwbis.P_GenMenu', query)
+
+		# print BeautifulSoup(logged_in, 'html.parser').prettify().encode('utf-8')
 
 	def parse(self):
-		self.login()
-		pass
+		# self.login()
 
 def main():
 	gp = GWParser()
