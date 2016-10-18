@@ -61,14 +61,14 @@ function setup(dispatch) {
       setFirstVisit(time.getTime());
     } else {
       if (localStorage.getItem("declinedNotifications") === null) { // if second visit
-        if (timeLapsedGreaterThan(localStorage.getItem("firstVisit"), .0001157) === true) { // if second visit is one day after first visit
+        if (timeLapsedGreaterThan(localStorage.getItem("firstVisit"), 1) === true) { // if second visit is one day after first visit
           // deploy upsell pop for chrome notifications
           dispatch({type: "ALERT_ENABLE_NOTIFICATIONS"});
         }
       } else { // if after second visit
         if (localStorage.getItem("declinedNotifications") === true || localStorage.getItem("declinedNotifications") === false) {
           // do nothing : either accpeted or declined notigications
-        } else if (timeLapsedGreaterThan(localStorage.getItem("declinedNotifications"), .0001157) === true) {
+        } else if (timeLapsedGreaterThan(localStorage.getItem("declinedNotifications"), 3) === true) {
           // deploy upsell pop for chrome notifications
           dispatch({type: "ALERT_ENABLE_NOTIFICATIONS"});
         } else {
