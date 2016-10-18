@@ -24,7 +24,7 @@ export const saveLocalPreferences = (preferences) => {
 	if (!browserSupportsLocalStorage()) { return; }
 	localStorage.setItem("preferences", JSON.stringify(preferences));
 }
-export const saveLocalSemester = (semester) => {
+export const saveLocalSemester = (semester) => {	
 	if (!browserSupportsLocalStorage()) { return; }
 	localStorage.setItem("semester", semester);
 }
