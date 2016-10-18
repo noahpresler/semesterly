@@ -1,7 +1,7 @@
-# @what	Vanderbilt Course Parser
-# @org	Semeseter.ly
-# @author	Michael N. Miller
-# @date	9/3/16
+# @what Vanderbilt Course Parser
+# @org  Semeseter.ly
+# @author   Michael N. Miller
+# @date 9/3/16
 
 import django, os, datetime
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "semesterly.settings")
@@ -14,8 +14,9 @@ import requests, cookielib, re, sys
 class GWParser:
 
 	def __init__(self):
+		print UserAgent().chrome
 		self.session = requests.Session()
-		self.headers = {'User-Agent' : 'My User Agent 1.0'}
+		self.headers = {'User-Agent' : UserAgent().chrome}
 		self.cookies = cookielib.CookieJar()
 		self.school = 'gw'
 		self.semester = ''
@@ -94,11 +95,11 @@ class GWParser:
 		# print BeautifulSoup(logged_in, 'html.parser').prettify().encode('utf-8')
 
 	def parse(self):
-		# self.login()
+		self.login()
 
 def main():
 	gp = GWParser()
 	gp.parse()
 
 if __name__ == "__main__":
-	main() 
+	main()
