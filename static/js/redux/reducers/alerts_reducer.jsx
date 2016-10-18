@@ -1,7 +1,8 @@
 export const alerts = (state = {alertConflict: false, 
 								alertTimetableExists: false, 
 								alertChangeSemester: false,
-								alertNewTimetable: false}, action) => {
+								alertNewTimetable: false,
+								alertEnableNotifications: false}, action) => {
 	switch (action.type) {
 		// dispatched when there's a conflict
 		case "ALERT_CONFLICT":
@@ -25,6 +26,11 @@ export const alerts = (state = {alertConflict: false,
 			return Object.assign({}, state, {alertNewTimetable: true});
 		case "DISMISS_ALERT_NEW_TIMETABLE":
 			return Object.assign({}, state, {alertNewTimetable: false});
+		// bring up pop up to ask to enable notifications
+		case "ALERT_ENABLE_NOTIFICATIONS":
+			return Object.assign({}, state, {alertEnableNotifications: true});
+		case "DISMISS_ENABLE_NOTIFICATIONS":
+			return Object.assign({}, state, {alertEnableNotifications: false});
 		default:
 			return state;
 	}
