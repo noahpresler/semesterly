@@ -74,9 +74,17 @@ header nav a:hover {
 	width: 100%;
 	padding: 25%;
 	background-color: #F3F3F3;
-	background-image: url(/static/img/about.png);
+	background-image: url(/static/img/splash/about_bg.jpg);
 	background-size: cover;
 	position: relative;
+}
+#hero-bg {
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	background-color: rgba(42, 69, 138, 0.0);
 }
 #hero h1 {
 	color: white;
