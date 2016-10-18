@@ -7,6 +7,7 @@ import ConflictAlertContainer from './alerts/conflict_alert_container.jsx';
 import TimetableExistsAlertContainer from './alerts/timetable_exists_alert_container.jsx';
 import ChangeSemesterAlertContainer from './alerts/change_semester_alert_container.jsx';
 import NewTimetableAlertContainer from './alerts/new_timetable_alert_container.jsx'
+import EnableNotificationsAlertContainer from './alerts/enable_notifications_alert_container.jsx'
 import TopBarContainer from './containers/top_bar_container.jsx';
 import SideBarContainer from './containers/side_bar_container.jsx';
 import UserSettingsModalContainer from './containers/user_settings_modal_container.jsx';
@@ -50,6 +51,16 @@ class Semesterly extends React.Component {
 		});
 	}
 
+	componentDidMount() {
+		if (this.props.alertEnableNotifications) {
+			this.msg.show(<EnableNotificationsAlertContainer />, {
+			  type: 'info',
+			  time: 12000,
+			  icon: <div className="enable-notifications-alert-icon"></div>,
+			});
+		}
+	}
+
 	componentWillReceiveProps(nextProps) {
 		if (nextProps != this.props) {
 			if (nextProps.alertConflict && !this.props.alertConflict) {
@@ -63,6 +74,9 @@ class Semesterly extends React.Component {
 			}
 			else if (nextProps.alertNewTimetable && !this.props.alertNewTimetable) {
 				this.showAlert(<NewTimetableAlertContainer />, 'info', 12000);
+			}
+			else if (nextProps.alertEnableNotifications && !this.props.alertEnableNotifications) {
+				this.showAlert(<EnableNotificationsAlertContainer />, 'info', 12000);
 			}
 			else {
 				this.msg.removeAll();
