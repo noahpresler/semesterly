@@ -10,7 +10,7 @@ import { getUserInfo, setARegistrationToken } from './actions/user_actions.jsx';
 import { loadTimetable, lockTimetable, loadCachedTimetable } from './actions/timetable_actions.jsx'
 import { fetchSchoolInfo } from './actions/school_actions.jsx';
 import { setCourseInfo } from './actions/modal_actions.jsx';
-import { browserSupportsLocalStorage } from './util.jsx';
+import { browserSupportsLocalStorage, setFirstVisit, timeLapsedGreaterThan } from './util.jsx';
 
 export const store = createStore(rootReducer, window.devToolsExtension && window.devToolsExtension(), applyMiddleware(thunkMiddleware));
 
@@ -50,6 +50,30 @@ function setup(dispatch) {
     // we only load the browser-cached timetable if the shared course's semester is the same as the browser-cached timetable's semester OR the user is not trying to load a shared course at all. This results in problematic edge cases, such as showing the course modal of an S course in the F semester, being completely avoided.
       if (browserSupportsLocalStorage() && (localStorage.semester === currentSemester || !sharedCourse)) {
         loadCachedTimetable();
+      }
+    }
+  }
+
+  // check if first visit
+  if (browserSupportsLocalStorage()) {
+    if (localStorage.getItem("firstVisit") === null) {
+      let time = new Date();
+      setFirstVisit(time.getTime());
+    } else {
+      if (localStorage.getItem("declinedNotifications") === null) { // if second visit
+        if (timeLapsedGreaterThan(localStorage.getItem("firstVisit"), .0001157) === true) { // if second visit is one day after first visit
+          // deploy upsell pop for chrome notifications
+          dispatch({type: "ALERT_ENABLE_NOTIFICATIONS"});
+        }
+      } else { // if after second visit
+        if (localStorage.getItem("declinedNotifications") === true || localStorage.getItem("declinedNotifications") === false) {
+          // do nothing : either accpeted or declined notigications
+        } else if (timeLapsedGreaterThan(localStorage.getItem("declinedNotifications"), .0001157) === true) {
+          // deploy upsell pop for chrome notifications
+          dispatch({type: "ALERT_ENABLE_NOTIFICATIONS"});
+        } else {
+          console.log(localStorage.getItem("declinedNotifications"), timeLapsedGreaterThan(localStorage.getItem("declinedNotifications"), .0001157));
+        }
       }
     }
   }
