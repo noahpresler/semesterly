@@ -19,6 +19,7 @@ import { signupModal } from './signup_modal_reducer.jsx';
 import { peerModal } from './peer_modal_reducer.jsx';
 import { preferenceModal } from './preference_modal_reducer.jsx'
 import { friends } from './friends_reducer.jsx';
+import { integrationModal } from './integration_modal_reducer.jsx'
 
 export const rootReducer = combineReducers({
   school,
@@ -40,5 +41,6 @@ export const rootReducer = combineReducers({
   signupModal,
   preferenceModal,
   friends,
-  peerModal
+  peerModal,
+  integrationModal
 });
