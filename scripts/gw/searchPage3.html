@@ -1,0 +1,1304 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/transitional.dtd">
+<HTML lang="en">
+<HEAD>
+<META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<LINK REL="stylesheet" HREF="/css/web_defaultapp.css" TYPE="text/css">
+<LINK REL="stylesheet" HREF="/css/web_defaultprint.css" TYPE="text/css" media="print">
+<TITLE>Banner Secured Area</TITLE>
+<META HTTP-EQUIV="Content-Script-Type" NAME="Default_Script_Language" CONTENT="text/javascript">
+<SCRIPT LANGUAGE="JavaScript" TYPE="text/javascript">
+<!-- Hide JavaScript from older browsers 
+window.onunload = function() {submitcount=0;}
+var submitcount=0;
+function checkSubmit() {
+if (submitcount == 0)
+   {
+   submitcount++;
+   return true;
+   }
+else
+   {
+alert("Your changes have already been submitted.");
+   return false;
+   }
+}
+//  End script hiding -->
+</SCRIPT>
+<SCRIPT LANGUAGE="JavaScript" TYPE="text/javascript">
+<!-- Hide JavaScript from older browsers 
+//  Function to open a window
+function windowOpen(window_url) {
+   helpWin = window.open(window_url,'','toolbar=yes,status=no,scrollbars=yes,menubar=yes,resizable=yes,directories=no,location=no,width=350,height=400');
+   if (document.images) { 
+       if (helpWin) helpWin.focus()
+   }
+}
+//  End script hiding -->
+</SCRIPT>
+</HEAD>
+<BODY>
+<div id="headerImage">
+<IMG SRC="/imag_images/gweb_is_2.gif" CLASS="headerImg" TITLE=""  NAME="IMAG - GWeb Information System" HSPACE=0 VSPACE=0 BORDER=0>
+</div>
+<DIV class="headerwrapperdiv">
+<DIV class="pageheaderdiv1">
+<A HREF="#main_content" onMouseover="window.status='Go to Main Content'; return true" onMouseout="window.status=''; return true" OnFocus="window.status='Go to Main Content'; return true" onBlur="window.status=''; return true" class="skiplinks">Go to Main Content</A>
+<H1>   </H1></DIV><DIV class="headerlinksdiv">
+<SPAN class="pageheaderlinks2">
+<MAP NAME="Module_Navigation_Links_H" title="Module Navigation Links">
+<p>
+<A HREF="#skip_Module_Navigation_Links_H" onMouseover="window.status='Skip Module Navigation Links'; return true" onMouseout="window.status=''; return true" onFocus="window.status='Skip Module Navigation Links'; return true" onBlur="window.status=''; return true"  class="skiplinks">Skip Module Navigation Links</A>
+<TABLE  CLASS="plaintable" SUMMARY="This is main table for displaying Tab Items."
+                          WIDTH="100%" cellSpacing=0 cellPadding=0 border=0>
+<TR>
+<TD CLASS="pldefault">
+<TABLE  CLASS="plaintable" SUMMARY="This table displays Tab Items."
+                 cellSpacing=0 cellPadding=0 border=0>
+<TR>
+<td class="tabon"  height=22>
+<A HREF="/PRODCartridge/twbkwbis.P_GenMenu?name=bmenu.P_StuMainMnu" onMouseover="window.status='Student Services & Financial Aid'; return true" onMouseout="window.status=''; return true" onFocus="window.status='Student Services & Financial Aid'; return true" onBlur="window.status=''; return true" >Student Records & Registration Menu</A>
+</TD>
+<TD class="bgtabon"  height=22 vAlign="top" align="right">
+<IMG SRC="/wtlgifs/web_tab_corner_right.gif" ALT="Tab Corner Right" CLASS="headerImg" TITLE="Tab Corner Right"  NAME="web_tab_corner_right" HSPACE=0 VSPACE=0 BORDER=0 HEIGHT=20 WIDTH=8>
+</TD>
+<td class="taboff" height=22>
+<A HREF="/PRODCartridge/twbkwbis.P_GenMenu?name=bmenu.P_FinAidMainMnu" onMouseover="window.status='Financial Aid'; return true" onMouseout="window.status=''; return true" onFocus="window.status='Financial Aid'; return true" onBlur="window.status=''; return true" >Financial Aid</A>
+</TD>
+<TD class="bgtaboff" height=22 vAlign="top" align="right">
+<IMG SRC="/wtlgifs/web_tab_corner_right.gif" ALT="Tab Corner Right" CLASS="headerImg" TITLE="Tab Corner Right"  NAME="web_tab_corner_right" HSPACE=0 VSPACE=0 BORDER=0 HEIGHT=20 WIDTH=8>
+</TD>
+<td class="taboff" height=22>
+<A HREF="/PRODCartridge/twbkwbis.P_GenMenu?name=bmenu.P_GenMnu" onMouseover="window.status='Personal Information'; return true" onMouseout="window.status=''; return true" onFocus="window.status='Personal Information'; return true" onBlur="window.status=''; return true" >Personal Information Menu</A>
+</TD>
+<TD class="bgtaboff" height=22 vAlign="top" align="right">
+<IMG SRC="/wtlgifs/web_tab_corner_right.gif" ALT="Tab Corner Right" CLASS="headerImg" TITLE="Tab Corner Right"  NAME="web_tab_corner_right" HSPACE=0 VSPACE=0 BORDER=0 HEIGHT=20 WIDTH=8>
+</TD>
+<td class="taboff" height=22>
+<A HREF="/PRODCartridge/twbkwbis.P_GenMenu?name=bmenu.P_EmergencyMenu" onMouseover="window.status='GW Alert Emergency Notification'; return true" onMouseout="window.status=''; return true" onFocus="window.status='GW Alert Emergency Notification'; return true" onBlur="window.status=''; return true" >GW Alert Login Portal</A>
+</TD>
+<TD class="bgtaboff" height=22 vAlign="top" align="right">
+<IMG SRC="/wtlgifs/web_tab_corner_right.gif" ALT="Tab Corner Right" CLASS="headerImg" TITLE="Tab Corner Right"  NAME="web_tab_corner_right" HSPACE=0 VSPACE=0 BORDER=0 HEIGHT=20 WIDTH=8>
+</TD>
+</TR>
+</TABLE>
+</TD>
+</TR>
+<TR>
+<TD class="bgtabon" width="100%" colSpan=2><IMG SRC="/wtlgifs/web_transparent.gif" ALT="Transparent Image" CLASS="headerImg" TITLE="Transparent Image"  NAME="web_transparent" HSPACE=0 VSPACE=0 BORDER=0 HEIGHT=3 WIDTH=10></TD></TR></TABLE>
+</MAP>
+</SPAN>
+<a name="skip_Module_Navigation_Links_H"></a>
+</DIV>
+<TABLE  CLASS="plaintable" SUMMARY="This table displays Menu Items and Banner Search textbox."
+         WIDTH="100%">
+<TR>
+<TD CLASS="pldefault">
+<DIV class="headerlinksdiv2">
+<FORM ACTION="/PRODCartridge/twbksrch.P_ShowResults" METHOD="POST">
+Search
+<SPAN class="fieldlabeltextinvisible"><LABEL for=keyword_in_id><SPAN class="fieldlabeltext">Search</SPAN></LABEL></SPAN>
+<INPUT TYPE="text" NAME="KEYWRD_IN" SIZE="20" MAXLENGTH="65" ID="keyword_in_id">
+<INPUT TYPE="submit" VALUE="Go">
+</FORM>
+</div>
+</TD>
+<TD CLASS="pldefault"><p class="rightaligntext"></p>
+<SPAN class="pageheaderlinks">
+<A HREF="/PRODCartridge/twbkwbis.P_GenMenu?name=bmenu.P_RegMnu"  class="submenulinktext2" id="ssbbackurl">RETURN TO MENU</A>
+|
+<A HREF="/PRODCartridge/twbksite.P_DispSiteMap?menu_name_in=bmenu.P_MainMnu&amp;depth_in=2&amp;columns_in=3" accesskey="2" class="submenulinktext2">SITE MAP</A>
+|
+<A HREF="/stuhelp/hwsrfget.htm                       " accesskey="H" onClick="popup = window.open('/stuhelp/hwsrfget.htm                       ', 'PopupPage','height=500,width=450,scrollbars=yes,resizable=yes'); return false" target="_blank" onMouseOver="window.status='';  return true" onMouseOut="window.status=''; return true"onFocus="window.status='';  return true" onBlur="window.status=''; return true"  class="submenulinktext2">HELP</A>
+|
+<A HREF="twbkwbis.P_Logout" accesskey="3" class="submenulinktext2">EXIT</A>
+</span>
+</TD>
+</TR>
+</TABLE>
+</DIV>
+<DIV class="pagetitlediv">
+<TABLE  CLASS="plaintable" SUMMARY="This table displays title and static header displays."
+   WIDTH="100%">
+<TR>
+<TD CLASS="pldefault">
+<H2><B CLASS=imag_header>Look-Up Classes to Add:</B></H2>
+</TD>
+<TD CLASS="pldefault">
+&nbsp;
+</TD>
+<TD CLASS="pldefault"><p class="rightaligntext"></p>
+<DIV class="staticheaders">
+Fall 2016<br>
+10/18/16 07:19 pm<br>
+</div>
+</TD>
+</TR>
+<TR>
+<TD class="bg3" width="100%" colSpan=3><IMG SRC="/wtlgifs/web_transparent.gif" ALT="Transparent Image" CLASS="headerImg" TITLE="Transparent Image"  NAME="web_transparent" HSPACE=0 VSPACE=0 BORDER=0 HEIGHT=3 WIDTH=10></TD>
+</TR>
+</TABLE>
+<a name="main_content"></a>
+</DIV>
+<DIV class="pagebodydiv">
+<!--  ** END OF twbkwbis.P_OpenDoc **  -->
+<FORM ACTION="/PRODCartridge/bwskfreg.P_AltPin1" METHOD="POST" onSubmit="return checkSubmit()">
+<INPUT TYPE="hidden" NAME="crn" VALUE="dummy">
+<INPUT TYPE="hidden" NAME="rsts" VALUE="dummy">
+</FORM>
+</FORM>
+<TABLE  CLASS="datadisplaytable" SUMMARY="This layout table is used to present the course found" width="80%" border="0">
+</TABLE>
+<TABLE  CLASS="datadisplaytable" SUMMARY="This layout table is used to present the course found" width="80%" border="0">
+<TR>
+<TH COLSPAN="7" CLASS="ddlabel" scope="row" ><SPAN class="fieldOrangetextbold">Fall 2016</SPAN></TH>
+</TR>
+<TR>
+<TH CLASS="ddheader" scope="col" colspan="4" style="font-size:16px;">Sociology</TH>
+</TR>
+<TD CLASS="dddefault"width="10%">1001</TD>
+<TD CLASS="dddefault"width="35%" text-align="left">Introduction to Sociology</TD>
+<td>
+<FORM ACTION="/PRODCartridge/bwskfcls.P_GetCrse" METHOD="POST" onSubmit="return checkSubmit()">
+<input type="hidden" name="term_in" value="201603" >
+<INPUT TYPE="hidden" NAME="sel_subj" VALUE="dummy">
+<input type="hidden" name="sel_subj" value="SOC" >
+<input type="hidden" name="SEL_CRSE" value="1001" >
+<input type="hidden" name="SEL_TITLE" value="">
+<input type="hidden" name="BEGIN_HH" value="0">
+<input type="hidden" name="BEGIN_MI" value="0">
+<input type="hidden" name="BEGIN_AP" value="a">
+<input type="hidden" name="SEL_DAY" value="dummy">
+<input type="hidden" name="SEL_PTRM" value="dummy">
+<input type="hidden" name="END_HH" value="0">
+<input type="hidden" name="END_MI" value="0">
+<input type="hidden" name="END_AP" value="a">
+<input type="hidden" name="SEL_CAMP" value="dummy">
+<input type="hidden" name="SEL_SCHD" value="dummy">
+<input type="hidden" name="SEL_SESS" value="dummy">
+<input type="hidden" name="SEL_INSTR" value="dummy">
+<input type="hidden" name="SEL_INSTR" value="%">
+<input type="hidden" name="SEL_ATTR" value="dummy">
+<input type="hidden" name="SEL_ATTR" value="%">
+<input type="hidden" name="SEL_LEVL" value="dummy">
+<input type="hidden" name="SEL_LEVL" value="%">
+<input type="hidden" name="SEL_INSM"  value="dummy">
+<input type="hidden" name="sel_dunt_code"  value="">
+<input type="hidden" name="sel_dunt_unit"  value="">
+<input type="hidden" name="call_value_in"  value="">
+<INPUT TYPE="hidden" NAME="rsts" VALUE="dummy">
+<INPUT TYPE="hidden" NAME="crn" VALUE="dummy">
+<input type="hidden" name="path" value="1" >
+<INPUT TYPE="submit" NAME="SUB_BTN" VALUE="View Sections" >
+</FORM>
+<BR>
+</td>
+</TR>
+<TD CLASS="dddefault"width="10%">1002</TD>
+<TD CLASS="dddefault"width="35%" text-align="left">The Sociological Imagination</TD>
+<td>
+<FORM ACTION="/PRODCartridge/bwskfcls.P_GetCrse" METHOD="POST" onSubmit="return checkSubmit()">
+<input type="hidden" name="term_in" value="201603" >
+<INPUT TYPE="hidden" NAME="sel_subj" VALUE="dummy">
+<input type="hidden" name="sel_subj" value="SOC" >
+<input type="hidden" name="SEL_CRSE" value="1002" >
+<input type="hidden" name="SEL_TITLE" value="">
+<input type="hidden" name="BEGIN_HH" value="0">
+<input type="hidden" name="BEGIN_MI" value="0">
+<input type="hidden" name="BEGIN_AP" value="a">
+<input type="hidden" name="SEL_DAY" value="dummy">
+<input type="hidden" name="SEL_PTRM" value="dummy">
+<input type="hidden" name="END_HH" value="0">
+<input type="hidden" name="END_MI" value="0">
+<input type="hidden" name="END_AP" value="a">
+<input type="hidden" name="SEL_CAMP" value="dummy">
+<input type="hidden" name="SEL_SCHD" value="dummy">
+<input type="hidden" name="SEL_SESS" value="dummy">
+<input type="hidden" name="SEL_INSTR" value="dummy">
+<input type="hidden" name="SEL_INSTR" value="%">
+<input type="hidden" name="SEL_ATTR" value="dummy">
+<input type="hidden" name="SEL_ATTR" value="%">
+<input type="hidden" name="SEL_LEVL" value="dummy">
+<input type="hidden" name="SEL_LEVL" value="%">
+<input type="hidden" name="SEL_INSM"  value="dummy">
+<input type="hidden" name="sel_dunt_code"  value="">
+<input type="hidden" name="sel_dunt_unit"  value="">
+<input type="hidden" name="call_value_in"  value="">
+<INPUT TYPE="hidden" NAME="rsts" VALUE="dummy">
+<INPUT TYPE="hidden" NAME="crn" VALUE="dummy">
+<input type="hidden" name="path" value="1" >
+<INPUT TYPE="submit" NAME="SUB_BTN" VALUE="View Sections" >
+</FORM>
+<BR>
+</td>
+</TR>
+<TD CLASS="dddefault"width="10%">1003</TD>
+<TD CLASS="dddefault"width="35%" text-align="left">Intro to Criminal Justice</TD>
+<td>
+<FORM ACTION="/PRODCartridge/bwskfcls.P_GetCrse" METHOD="POST" onSubmit="return checkSubmit()">
+<input type="hidden" name="term_in" value="201603" >
+<INPUT TYPE="hidden" NAME="sel_subj" VALUE="dummy">
+<input type="hidden" name="sel_subj" value="SOC" >
+<input type="hidden" name="SEL_CRSE" value="1003" >
+<input type="hidden" name="SEL_TITLE" value="">
+<input type="hidden" name="BEGIN_HH" value="0">
+<input type="hidden" name="BEGIN_MI" value="0">
+<input type="hidden" name="BEGIN_AP" value="a">
+<input type="hidden" name="SEL_DAY" value="dummy">
+<input type="hidden" name="SEL_PTRM" value="dummy">
+<input type="hidden" name="END_HH" value="0">
+<input type="hidden" name="END_MI" value="0">
+<input type="hidden" name="END_AP" value="a">
+<input type="hidden" name="SEL_CAMP" value="dummy">
+<input type="hidden" name="SEL_SCHD" value="dummy">
+<input type="hidden" name="SEL_SESS" value="dummy">
+<input type="hidden" name="SEL_INSTR" value="dummy">
+<input type="hidden" name="SEL_INSTR" value="%">
+<input type="hidden" name="SEL_ATTR" value="dummy">
+<input type="hidden" name="SEL_ATTR" value="%">
+<input type="hidden" name="SEL_LEVL" value="dummy">
+<input type="hidden" name="SEL_LEVL" value="%">
+<input type="hidden" name="SEL_INSM"  value="dummy">
+<input type="hidden" name="sel_dunt_code"  value="">
+<input type="hidden" name="sel_dunt_unit"  value="">
+<input type="hidden" name="call_value_in"  value="">
+<INPUT TYPE="hidden" NAME="rsts" VALUE="dummy">
+<INPUT TYPE="hidden" NAME="crn" VALUE="dummy">
+<input type="hidden" name="path" value="1" >
+<INPUT TYPE="submit" NAME="SUB_BTN" VALUE="View Sections" >
+</FORM>
+<BR>
+</td>
+</TR>
+<TD CLASS="dddefault"width="10%">2101</TD>
+<TD CLASS="dddefault"width="35%" text-align="left">Social Research Methods</TD>
+<td>
+<FORM ACTION="/PRODCartridge/bwskfcls.P_GetCrse" METHOD="POST" onSubmit="return checkSubmit()">
+<input type="hidden" name="term_in" value="201603" >
+<INPUT TYPE="hidden" NAME="sel_subj" VALUE="dummy">
+<input type="hidden" name="sel_subj" value="SOC" >
+<input type="hidden" name="SEL_CRSE" value="2101" >
+<input type="hidden" name="SEL_TITLE" value="">
+<input type="hidden" name="BEGIN_HH" value="0">
+<input type="hidden" name="BEGIN_MI" value="0">
+<input type="hidden" name="BEGIN_AP" value="a">
+<input type="hidden" name="SEL_DAY" value="dummy">
+<input type="hidden" name="SEL_PTRM" value="dummy">
+<input type="hidden" name="END_HH" value="0">
+<input type="hidden" name="END_MI" value="0">
+<input type="hidden" name="END_AP" value="a">
+<input type="hidden" name="SEL_CAMP" value="dummy">
+<input type="hidden" name="SEL_SCHD" value="dummy">
+<input type="hidden" name="SEL_SESS" value="dummy">
+<input type="hidden" name="SEL_INSTR" value="dummy">
+<input type="hidden" name="SEL_INSTR" value="%">
+<input type="hidden" name="SEL_ATTR" value="dummy">
+<input type="hidden" name="SEL_ATTR" value="%">
+<input type="hidden" name="SEL_LEVL" value="dummy">
+<input type="hidden" name="SEL_LEVL" value="%">
+<input type="hidden" name="SEL_INSM"  value="dummy">
+<input type="hidden" name="sel_dunt_code"  value="">
+<input type="hidden" name="sel_dunt_unit"  value="">
+<input type="hidden" name="call_value_in"  value="">
+<INPUT TYPE="hidden" NAME="rsts" VALUE="dummy">
+<INPUT TYPE="hidden" NAME="crn" VALUE="dummy">
+<input type="hidden" name="path" value="1" >
+<INPUT TYPE="submit" NAME="SUB_BTN" VALUE="View Sections" >
+</FORM>
+<BR>
+</td>
+</TR>
+<TD CLASS="dddefault"width="10%">2102</TD>
+<TD CLASS="dddefault"width="35%" text-align="left">Techniques of Data Analysis</TD>
+<td>
+<FORM ACTION="/PRODCartridge/bwskfcls.P_GetCrse" METHOD="POST" onSubmit="return checkSubmit()">
+<input type="hidden" name="term_in" value="201603" >
+<INPUT TYPE="hidden" NAME="sel_subj" VALUE="dummy">
+<input type="hidden" name="sel_subj" value="SOC" >
+<input type="hidden" name="SEL_CRSE" value="2102" >
+<input type="hidden" name="SEL_TITLE" value="">
+<input type="hidden" name="BEGIN_HH" value="0">
+<input type="hidden" name="BEGIN_MI" value="0">
+<input type="hidden" name="BEGIN_AP" value="a">
+<input type="hidden" name="SEL_DAY" value="dummy">
+<input type="hidden" name="SEL_PTRM" value="dummy">
+<input type="hidden" name="END_HH" value="0">
+<input type="hidden" name="END_MI" value="0">
+<input type="hidden" name="END_AP" value="a">
+<input type="hidden" name="SEL_CAMP" value="dummy">
+<input type="hidden" name="SEL_SCHD" value="dummy">
+<input type="hidden" name="SEL_SESS" value="dummy">
+<input type="hidden" name="SEL_INSTR" value="dummy">
+<input type="hidden" name="SEL_INSTR" value="%">
+<input type="hidden" name="SEL_ATTR" value="dummy">
+<input type="hidden" name="SEL_ATTR" value="%">
+<input type="hidden" name="SEL_LEVL" value="dummy">
+<input type="hidden" name="SEL_LEVL" value="%">
+<input type="hidden" name="SEL_INSM"  value="dummy">
+<input type="hidden" name="sel_dunt_code"  value="">
+<input type="hidden" name="sel_dunt_unit"  value="">
+<input type="hidden" name="call_value_in"  value="">
+<INPUT TYPE="hidden" NAME="rsts" VALUE="dummy">
+<INPUT TYPE="hidden" NAME="crn" VALUE="dummy">
+<input type="hidden" name="path" value="1" >
+<INPUT TYPE="submit" NAME="SUB_BTN" VALUE="View Sections" >
+</FORM>
+<BR>
+</td>
+</TR>
+<TD CLASS="dddefault"width="10%">2103</TD>
+<TD CLASS="dddefault"width="35%" text-align="left">Classical Sociological Theory</TD>
+<td>
+<FORM ACTION="/PRODCartridge/bwskfcls.P_GetCrse" METHOD="POST" onSubmit="return checkSubmit()">
+<input type="hidden" name="term_in" value="201603" >
+<INPUT TYPE="hidden" NAME="sel_subj" VALUE="dummy">
+<input type="hidden" name="sel_subj" value="SOC" >
+<input type="hidden" name="SEL_CRSE" value="2103" >
+<input type="hidden" name="SEL_TITLE" value="">
+<input type="hidden" name="BEGIN_HH" value="0">
+<input type="hidden" name="BEGIN_MI" value="0">
+<input type="hidden" name="BEGIN_AP" value="a">
+<input type="hidden" name="SEL_DAY" value="dummy">
+<input type="hidden" name="SEL_PTRM" value="dummy">
+<input type="hidden" name="END_HH" value="0">
+<input type="hidden" name="END_MI" value="0">
+<input type="hidden" name="END_AP" value="a">
+<input type="hidden" name="SEL_CAMP" value="dummy">
+<input type="hidden" name="SEL_SCHD" value="dummy">
+<input type="hidden" name="SEL_SESS" value="dummy">
+<input type="hidden" name="SEL_INSTR" value="dummy">
+<input type="hidden" name="SEL_INSTR" value="%">
+<input type="hidden" name="SEL_ATTR" value="dummy">
+<input type="hidden" name="SEL_ATTR" value="%">
+<input type="hidden" name="SEL_LEVL" value="dummy">
+<input type="hidden" name="SEL_LEVL" value="%">
+<input type="hidden" name="SEL_INSM"  value="dummy">
+<input type="hidden" name="sel_dunt_code"  value="">
+<input type="hidden" name="sel_dunt_unit"  value="">
+<input type="hidden" name="call_value_in"  value="">
+<INPUT TYPE="hidden" NAME="rsts" VALUE="dummy">
+<INPUT TYPE="hidden" NAME="crn" VALUE="dummy">
+<input type="hidden" name="path" value="1" >
+<INPUT TYPE="submit" NAME="SUB_BTN" VALUE="View Sections" >
+</FORM>
+<BR>
+</td>
+</TR>
+<TD CLASS="dddefault"width="10%">2104W</TD>
+<TD CLASS="dddefault"width="35%" text-align="left">Contemp. Sociological Theory</TD>
+<td>
+<FORM ACTION="/PRODCartridge/bwskfcls.P_GetCrse" METHOD="POST" onSubmit="return checkSubmit()">
+<input type="hidden" name="term_in" value="201603" >
+<INPUT TYPE="hidden" NAME="sel_subj" VALUE="dummy">
+<input type="hidden" name="sel_subj" value="SOC" >
+<input type="hidden" name="SEL_CRSE" value="2104W" >
+<input type="hidden" name="SEL_TITLE" value="">
+<input type="hidden" name="BEGIN_HH" value="0">
+<input type="hidden" name="BEGIN_MI" value="0">
+<input type="hidden" name="BEGIN_AP" value="a">
+<input type="hidden" name="SEL_DAY" value="dummy">
+<input type="hidden" name="SEL_PTRM" value="dummy">
+<input type="hidden" name="END_HH" value="0">
+<input type="hidden" name="END_MI" value="0">
+<input type="hidden" name="END_AP" value="a">
+<input type="hidden" name="SEL_CAMP" value="dummy">
+<input type="hidden" name="SEL_SCHD" value="dummy">
+<input type="hidden" name="SEL_SESS" value="dummy">
+<input type="hidden" name="SEL_INSTR" value="dummy">
+<input type="hidden" name="SEL_INSTR" value="%">
+<input type="hidden" name="SEL_ATTR" value="dummy">
+<input type="hidden" name="SEL_ATTR" value="%">
+<input type="hidden" name="SEL_LEVL" value="dummy">
+<input type="hidden" name="SEL_LEVL" value="%">
+<input type="hidden" name="SEL_INSM"  value="dummy">
+<input type="hidden" name="sel_dunt_code"  value="">
+<input type="hidden" name="sel_dunt_unit"  value="">
+<input type="hidden" name="call_value_in"  value="">
+<INPUT TYPE="hidden" NAME="rsts" VALUE="dummy">
+<INPUT TYPE="hidden" NAME="crn" VALUE="dummy">
+<input type="hidden" name="path" value="1" >
+<INPUT TYPE="submit" NAME="SUB_BTN" VALUE="View Sections" >
+</FORM>
+<BR>
+</td>
+</TR>
+<TD CLASS="dddefault"width="10%">2135</TD>
+<TD CLASS="dddefault"width="35%" text-align="left">Youth and Delinquency</TD>
+<td>
+<FORM ACTION="/PRODCartridge/bwskfcls.P_GetCrse" METHOD="POST" onSubmit="return checkSubmit()">
+<input type="hidden" name="term_in" value="201603" >
+<INPUT TYPE="hidden" NAME="sel_subj" VALUE="dummy">
+<input type="hidden" name="sel_subj" value="SOC" >
+<input type="hidden" name="SEL_CRSE" value="2135" >
+<input type="hidden" name="SEL_TITLE" value="">
+<input type="hidden" name="BEGIN_HH" value="0">
+<input type="hidden" name="BEGIN_MI" value="0">
+<input type="hidden" name="BEGIN_AP" value="a">
+<input type="hidden" name="SEL_DAY" value="dummy">
+<input type="hidden" name="SEL_PTRM" value="dummy">
+<input type="hidden" name="END_HH" value="0">
+<input type="hidden" name="END_MI" value="0">
+<input type="hidden" name="END_AP" value="a">
+<input type="hidden" name="SEL_CAMP" value="dummy">
+<input type="hidden" name="SEL_SCHD" value="dummy">
+<input type="hidden" name="SEL_SESS" value="dummy">
+<input type="hidden" name="SEL_INSTR" value="dummy">
+<input type="hidden" name="SEL_INSTR" value="%">
+<input type="hidden" name="SEL_ATTR" value="dummy">
+<input type="hidden" name="SEL_ATTR" value="%">
+<input type="hidden" name="SEL_LEVL" value="dummy">
+<input type="hidden" name="SEL_LEVL" value="%">
+<input type="hidden" name="SEL_INSM"  value="dummy">
+<input type="hidden" name="sel_dunt_code"  value="">
+<input type="hidden" name="sel_dunt_unit"  value="">
+<input type="hidden" name="call_value_in"  value="">
+<INPUT TYPE="hidden" NAME="rsts" VALUE="dummy">
+<INPUT TYPE="hidden" NAME="crn" VALUE="dummy">
+<input type="hidden" name="path" value="1" >
+<INPUT TYPE="submit" NAME="SUB_BTN" VALUE="View Sections" >
+</FORM>
+<BR>
+</td>
+</TR>
+<TD CLASS="dddefault"width="10%">2136</TD>
+<TD CLASS="dddefault"width="35%" text-align="left">Criminology</TD>
+<td>
+<FORM ACTION="/PRODCartridge/bwskfcls.P_GetCrse" METHOD="POST" onSubmit="return checkSubmit()">
+<input type="hidden" name="term_in" value="201603" >
+<INPUT TYPE="hidden" NAME="sel_subj" VALUE="dummy">
+<input type="hidden" name="sel_subj" value="SOC" >
+<input type="hidden" name="SEL_CRSE" value="2136" >
+<input type="hidden" name="SEL_TITLE" value="">
+<input type="hidden" name="BEGIN_HH" value="0">
+<input type="hidden" name="BEGIN_MI" value="0">
+<input type="hidden" name="BEGIN_AP" value="a">
+<input type="hidden" name="SEL_DAY" value="dummy">
+<input type="hidden" name="SEL_PTRM" value="dummy">
+<input type="hidden" name="END_HH" value="0">
+<input type="hidden" name="END_MI" value="0">
+<input type="hidden" name="END_AP" value="a">
+<input type="hidden" name="SEL_CAMP" value="dummy">
+<input type="hidden" name="SEL_SCHD" value="dummy">
+<input type="hidden" name="SEL_SESS" value="dummy">
+<input type="hidden" name="SEL_INSTR" value="dummy">
+<input type="hidden" name="SEL_INSTR" value="%">
+<input type="hidden" name="SEL_ATTR" value="dummy">
+<input type="hidden" name="SEL_ATTR" value="%">
+<input type="hidden" name="SEL_LEVL" value="dummy">
+<input type="hidden" name="SEL_LEVL" value="%">
+<input type="hidden" name="SEL_INSM"  value="dummy">
+<input type="hidden" name="sel_dunt_code"  value="">
+<input type="hidden" name="sel_dunt_unit"  value="">
+<input type="hidden" name="call_value_in"  value="">
+<INPUT TYPE="hidden" NAME="rsts" VALUE="dummy">
+<INPUT TYPE="hidden" NAME="crn" VALUE="dummy">
+<input type="hidden" name="path" value="1" >
+<INPUT TYPE="submit" NAME="SUB_BTN" VALUE="View Sections" >
+</FORM>
+<BR>
+</td>
+</TR>
+<TD CLASS="dddefault"width="10%">2137</TD>
+<TD CLASS="dddefault"width="35%" text-align="left">Transnational Crime</TD>
+<td>
+<FORM ACTION="/PRODCartridge/bwskfcls.P_GetCrse" METHOD="POST" onSubmit="return checkSubmit()">
+<input type="hidden" name="term_in" value="201603" >
+<INPUT TYPE="hidden" NAME="sel_subj" VALUE="dummy">
+<input type="hidden" name="sel_subj" value="SOC" >
+<input type="hidden" name="SEL_CRSE" value="2137" >
+<input type="hidden" name="SEL_TITLE" value="">
+<input type="hidden" name="BEGIN_HH" value="0">
+<input type="hidden" name="BEGIN_MI" value="0">
+<input type="hidden" name="BEGIN_AP" value="a">
+<input type="hidden" name="SEL_DAY" value="dummy">
+<input type="hidden" name="SEL_PTRM" value="dummy">
+<input type="hidden" name="END_HH" value="0">
+<input type="hidden" name="END_MI" value="0">
+<input type="hidden" name="END_AP" value="a">
+<input type="hidden" name="SEL_CAMP" value="dummy">
+<input type="hidden" name="SEL_SCHD" value="dummy">
+<input type="hidden" name="SEL_SESS" value="dummy">
+<input type="hidden" name="SEL_INSTR" value="dummy">
+<input type="hidden" name="SEL_INSTR" value="%">
+<input type="hidden" name="SEL_ATTR" value="dummy">
+<input type="hidden" name="SEL_ATTR" value="%">
+<input type="hidden" name="SEL_LEVL" value="dummy">
+<input type="hidden" name="SEL_LEVL" value="%">
+<input type="hidden" name="SEL_INSM"  value="dummy">
+<input type="hidden" name="sel_dunt_code"  value="">
+<input type="hidden" name="sel_dunt_unit"  value="">
+<input type="hidden" name="call_value_in"  value="">
+<INPUT TYPE="hidden" NAME="rsts" VALUE="dummy">
+<INPUT TYPE="hidden" NAME="crn" VALUE="dummy">
+<input type="hidden" name="path" value="1" >
+<INPUT TYPE="submit" NAME="SUB_BTN" VALUE="View Sections" >
+</FORM>
+<BR>
+</td>
+</TR>
+<TD CLASS="dddefault"width="10%">2145</TD>
+<TD CLASS="dddefault"width="35%" text-align="left">Criminal Law</TD>
+<td>
+<FORM ACTION="/PRODCartridge/bwskfcls.P_GetCrse" METHOD="POST" onSubmit="return checkSubmit()">
+<input type="hidden" name="term_in" value="201603" >
+<INPUT TYPE="hidden" NAME="sel_subj" VALUE="dummy">
+<input type="hidden" name="sel_subj" value="SOC" >
+<input type="hidden" name="SEL_CRSE" value="2145" >
+<input type="hidden" name="SEL_TITLE" value="">
+<input type="hidden" name="BEGIN_HH" value="0">
+<input type="hidden" name="BEGIN_MI" value="0">
+<input type="hidden" name="BEGIN_AP" value="a">
+<input type="hidden" name="SEL_DAY" value="dummy">
+<input type="hidden" name="SEL_PTRM" value="dummy">
+<input type="hidden" name="END_HH" value="0">
+<input type="hidden" name="END_MI" value="0">
+<input type="hidden" name="END_AP" value="a">
+<input type="hidden" name="SEL_CAMP" value="dummy">
+<input type="hidden" name="SEL_SCHD" value="dummy">
+<input type="hidden" name="SEL_SESS" value="dummy">
+<input type="hidden" name="SEL_INSTR" value="dummy">
+<input type="hidden" name="SEL_INSTR" value="%">
+<input type="hidden" name="SEL_ATTR" value="dummy">
+<input type="hidden" name="SEL_ATTR" value="%">
+<input type="hidden" name="SEL_LEVL" value="dummy">
+<input type="hidden" name="SEL_LEVL" value="%">
+<input type="hidden" name="SEL_INSM"  value="dummy">
+<input type="hidden" name="sel_dunt_code"  value="">
+<input type="hidden" name="sel_dunt_unit"  value="">
+<input type="hidden" name="call_value_in"  value="">
+<INPUT TYPE="hidden" NAME="rsts" VALUE="dummy">
+<INPUT TYPE="hidden" NAME="crn" VALUE="dummy">
+<input type="hidden" name="path" value="1" >
+<INPUT TYPE="submit" NAME="SUB_BTN" VALUE="View Sections" >
+</FORM>
+<BR>
+</td>
+</TR>
+<TD CLASS="dddefault"width="10%">2146</TD>
+<TD CLASS="dddefault"width="35%" text-align="left">Bill of Rights & Crim. Justice</TD>
+<td>
+<FORM ACTION="/PRODCartridge/bwskfcls.P_GetCrse" METHOD="POST" onSubmit="return checkSubmit()">
+<input type="hidden" name="term_in" value="201603" >
+<INPUT TYPE="hidden" NAME="sel_subj" VALUE="dummy">
+<input type="hidden" name="sel_subj" value="SOC" >
+<input type="hidden" name="SEL_CRSE" value="2146" >
+<input type="hidden" name="SEL_TITLE" value="">
+<input type="hidden" name="BEGIN_HH" value="0">
+<input type="hidden" name="BEGIN_MI" value="0">
+<input type="hidden" name="BEGIN_AP" value="a">
+<input type="hidden" name="SEL_DAY" value="dummy">
+<input type="hidden" name="SEL_PTRM" value="dummy">
+<input type="hidden" name="END_HH" value="0">
+<input type="hidden" name="END_MI" value="0">
+<input type="hidden" name="END_AP" value="a">
+<input type="hidden" name="SEL_CAMP" value="dummy">
+<input type="hidden" name="SEL_SCHD" value="dummy">
+<input type="hidden" name="SEL_SESS" value="dummy">
+<input type="hidden" name="SEL_INSTR" value="dummy">
+<input type="hidden" name="SEL_INSTR" value="%">
+<input type="hidden" name="SEL_ATTR" value="dummy">
+<input type="hidden" name="SEL_ATTR" value="%">
+<input type="hidden" name="SEL_LEVL" value="dummy">
+<input type="hidden" name="SEL_LEVL" value="%">
+<input type="hidden" name="SEL_INSM"  value="dummy">
+<input type="hidden" name="sel_dunt_code"  value="">
+<input type="hidden" name="sel_dunt_unit"  value="">
+<input type="hidden" name="call_value_in"  value="">
+<INPUT TYPE="hidden" NAME="rsts" VALUE="dummy">
+<INPUT TYPE="hidden" NAME="crn" VALUE="dummy">
+<input type="hidden" name="path" value="1" >
+<INPUT TYPE="submit" NAME="SUB_BTN" VALUE="View Sections" >
+</FORM>
+<BR>
+</td>
+</TR>
+<TD CLASS="dddefault"width="10%">2151</TD>
+<TD CLASS="dddefault"width="35%" text-align="left">Jackie Robinson: Race, Sports</TD>
+<td>
+<FORM ACTION="/PRODCartridge/bwskfcls.P_GetCrse" METHOD="POST" onSubmit="return checkSubmit()">
+<input type="hidden" name="term_in" value="201603" >
+<INPUT TYPE="hidden" NAME="sel_subj" VALUE="dummy">
+<input type="hidden" name="sel_subj" value="SOC" >
+<input type="hidden" name="SEL_CRSE" value="2151" >
+<input type="hidden" name="SEL_TITLE" value="">
+<input type="hidden" name="BEGIN_HH" value="0">
+<input type="hidden" name="BEGIN_MI" value="0">
+<input type="hidden" name="BEGIN_AP" value="a">
+<input type="hidden" name="SEL_DAY" value="dummy">
+<input type="hidden" name="SEL_PTRM" value="dummy">
+<input type="hidden" name="END_HH" value="0">
+<input type="hidden" name="END_MI" value="0">
+<input type="hidden" name="END_AP" value="a">
+<input type="hidden" name="SEL_CAMP" value="dummy">
+<input type="hidden" name="SEL_SCHD" value="dummy">
+<input type="hidden" name="SEL_SESS" value="dummy">
+<input type="hidden" name="SEL_INSTR" value="dummy">
+<input type="hidden" name="SEL_INSTR" value="%">
+<input type="hidden" name="SEL_ATTR" value="dummy">
+<input type="hidden" name="SEL_ATTR" value="%">
+<input type="hidden" name="SEL_LEVL" value="dummy">
+<input type="hidden" name="SEL_LEVL" value="%">
+<input type="hidden" name="SEL_INSM"  value="dummy">
+<input type="hidden" name="sel_dunt_code"  value="">
+<input type="hidden" name="sel_dunt_unit"  value="">
+<input type="hidden" name="call_value_in"  value="">
+<INPUT TYPE="hidden" NAME="rsts" VALUE="dummy">
+<INPUT TYPE="hidden" NAME="crn" VALUE="dummy">
+<input type="hidden" name="path" value="1" >
+<INPUT TYPE="submit" NAME="SUB_BTN" VALUE="View Sections" >
+</FORM>
+<BR>
+</td>
+</TR>
+<TD CLASS="dddefault"width="10%">2179</TD>
+<TD CLASS="dddefault"width="35%" text-align="left">Race and Minority Relations</TD>
+<td>
+<FORM ACTION="/PRODCartridge/bwskfcls.P_GetCrse" METHOD="POST" onSubmit="return checkSubmit()">
+<input type="hidden" name="term_in" value="201603" >
+<INPUT TYPE="hidden" NAME="sel_subj" VALUE="dummy">
+<input type="hidden" name="sel_subj" value="SOC" >
+<input type="hidden" name="SEL_CRSE" value="2179" >
+<input type="hidden" name="SEL_TITLE" value="">
+<input type="hidden" name="BEGIN_HH" value="0">
+<input type="hidden" name="BEGIN_MI" value="0">
+<input type="hidden" name="BEGIN_AP" value="a">
+<input type="hidden" name="SEL_DAY" value="dummy">
+<input type="hidden" name="SEL_PTRM" value="dummy">
+<input type="hidden" name="END_HH" value="0">
+<input type="hidden" name="END_MI" value="0">
+<input type="hidden" name="END_AP" value="a">
+<input type="hidden" name="SEL_CAMP" value="dummy">
+<input type="hidden" name="SEL_SCHD" value="dummy">
+<input type="hidden" name="SEL_SESS" value="dummy">
+<input type="hidden" name="SEL_INSTR" value="dummy">
+<input type="hidden" name="SEL_INSTR" value="%">
+<input type="hidden" name="SEL_ATTR" value="dummy">
+<input type="hidden" name="SEL_ATTR" value="%">
+<input type="hidden" name="SEL_LEVL" value="dummy">
+<input type="hidden" name="SEL_LEVL" value="%">
+<input type="hidden" name="SEL_INSM"  value="dummy">
+<input type="hidden" name="sel_dunt_code"  value="">
+<input type="hidden" name="sel_dunt_unit"  value="">
+<input type="hidden" name="call_value_in"  value="">
+<INPUT TYPE="hidden" NAME="rsts" VALUE="dummy">
+<INPUT TYPE="hidden" NAME="crn" VALUE="dummy">
+<input type="hidden" name="path" value="1" >
+<INPUT TYPE="submit" NAME="SUB_BTN" VALUE="View Sections" >
+</FORM>
+<BR>
+</td>
+</TR>
+<TD CLASS="dddefault"width="10%">2181</TD>
+<TD CLASS="dddefault"width="35%" text-align="left">Special Topics in Sociology</TD>
+<td>
+<FORM ACTION="/PRODCartridge/bwskfcls.P_GetCrse" METHOD="POST" onSubmit="return checkSubmit()">
+<input type="hidden" name="term_in" value="201603" >
+<INPUT TYPE="hidden" NAME="sel_subj" VALUE="dummy">
+<input type="hidden" name="sel_subj" value="SOC" >
+<input type="hidden" name="SEL_CRSE" value="2181" >
+<input type="hidden" name="SEL_TITLE" value="">
+<input type="hidden" name="BEGIN_HH" value="0">
+<input type="hidden" name="BEGIN_MI" value="0">
+<input type="hidden" name="BEGIN_AP" value="a">
+<input type="hidden" name="SEL_DAY" value="dummy">
+<input type="hidden" name="SEL_PTRM" value="dummy">
+<input type="hidden" name="END_HH" value="0">
+<input type="hidden" name="END_MI" value="0">
+<input type="hidden" name="END_AP" value="a">
+<input type="hidden" name="SEL_CAMP" value="dummy">
+<input type="hidden" name="SEL_SCHD" value="dummy">
+<input type="hidden" name="SEL_SESS" value="dummy">
+<input type="hidden" name="SEL_INSTR" value="dummy">
+<input type="hidden" name="SEL_INSTR" value="%">
+<input type="hidden" name="SEL_ATTR" value="dummy">
+<input type="hidden" name="SEL_ATTR" value="%">
+<input type="hidden" name="SEL_LEVL" value="dummy">
+<input type="hidden" name="SEL_LEVL" value="%">
+<input type="hidden" name="SEL_INSM"  value="dummy">
+<input type="hidden" name="sel_dunt_code"  value="">
+<input type="hidden" name="sel_dunt_unit"  value="">
+<input type="hidden" name="call_value_in"  value="">
+<INPUT TYPE="hidden" NAME="rsts" VALUE="dummy">
+<INPUT TYPE="hidden" NAME="crn" VALUE="dummy">
+<input type="hidden" name="path" value="1" >
+<INPUT TYPE="submit" NAME="SUB_BTN" VALUE="View Sections" >
+</FORM>
+<BR>
+</td>
+</TR>
+<TD CLASS="dddefault"width="10%">2988</TD>
+<TD CLASS="dddefault"width="35%" text-align="left">Internship in Law and Society</TD>
+<td>
+<FORM ACTION="/PRODCartridge/bwskfcls.P_GetCrse" METHOD="POST" onSubmit="return checkSubmit()">
+<input type="hidden" name="term_in" value="201603" >
+<INPUT TYPE="hidden" NAME="sel_subj" VALUE="dummy">
+<input type="hidden" name="sel_subj" value="SOC" >
+<input type="hidden" name="SEL_CRSE" value="2988" >
+<input type="hidden" name="SEL_TITLE" value="">
+<input type="hidden" name="BEGIN_HH" value="0">
+<input type="hidden" name="BEGIN_MI" value="0">
+<input type="hidden" name="BEGIN_AP" value="a">
+<input type="hidden" name="SEL_DAY" value="dummy">
+<input type="hidden" name="SEL_PTRM" value="dummy">
+<input type="hidden" name="END_HH" value="0">
+<input type="hidden" name="END_MI" value="0">
+<input type="hidden" name="END_AP" value="a">
+<input type="hidden" name="SEL_CAMP" value="dummy">
+<input type="hidden" name="SEL_SCHD" value="dummy">
+<input type="hidden" name="SEL_SESS" value="dummy">
+<input type="hidden" name="SEL_INSTR" value="dummy">
+<input type="hidden" name="SEL_INSTR" value="%">
+<input type="hidden" name="SEL_ATTR" value="dummy">
+<input type="hidden" name="SEL_ATTR" value="%">
+<input type="hidden" name="SEL_LEVL" value="dummy">
+<input type="hidden" name="SEL_LEVL" value="%">
+<input type="hidden" name="SEL_INSM"  value="dummy">
+<input type="hidden" name="sel_dunt_code"  value="">
+<input type="hidden" name="sel_dunt_unit"  value="">
+<input type="hidden" name="call_value_in"  value="">
+<INPUT TYPE="hidden" NAME="rsts" VALUE="dummy">
+<INPUT TYPE="hidden" NAME="crn" VALUE="dummy">
+<input type="hidden" name="path" value="1" >
+<INPUT TYPE="submit" NAME="SUB_BTN" VALUE="View Sections" >
+</FORM>
+<BR>
+</td>
+</TR>
+<TD CLASS="dddefault"width="10%">3195</TD>
+<TD CLASS="dddefault"width="35%" text-align="left">Research</TD>
+<td>
+<FORM ACTION="/PRODCartridge/bwskfcls.P_GetCrse" METHOD="POST" onSubmit="return checkSubmit()">
+<input type="hidden" name="term_in" value="201603" >
+<INPUT TYPE="hidden" NAME="sel_subj" VALUE="dummy">
+<input type="hidden" name="sel_subj" value="SOC" >
+<input type="hidden" name="SEL_CRSE" value="3195" >
+<input type="hidden" name="SEL_TITLE" value="">
+<input type="hidden" name="BEGIN_HH" value="0">
+<input type="hidden" name="BEGIN_MI" value="0">
+<input type="hidden" name="BEGIN_AP" value="a">
+<input type="hidden" name="SEL_DAY" value="dummy">
+<input type="hidden" name="SEL_PTRM" value="dummy">
+<input type="hidden" name="END_HH" value="0">
+<input type="hidden" name="END_MI" value="0">
+<input type="hidden" name="END_AP" value="a">
+<input type="hidden" name="SEL_CAMP" value="dummy">
+<input type="hidden" name="SEL_SCHD" value="dummy">
+<input type="hidden" name="SEL_SESS" value="dummy">
+<input type="hidden" name="SEL_INSTR" value="dummy">
+<input type="hidden" name="SEL_INSTR" value="%">
+<input type="hidden" name="SEL_ATTR" value="dummy">
+<input type="hidden" name="SEL_ATTR" value="%">
+<input type="hidden" name="SEL_LEVL" value="dummy">
+<input type="hidden" name="SEL_LEVL" value="%">
+<input type="hidden" name="SEL_INSM"  value="dummy">
+<input type="hidden" name="sel_dunt_code"  value="">
+<input type="hidden" name="sel_dunt_unit"  value="">
+<input type="hidden" name="call_value_in"  value="">
+<INPUT TYPE="hidden" NAME="rsts" VALUE="dummy">
+<INPUT TYPE="hidden" NAME="crn" VALUE="dummy">
+<input type="hidden" name="path" value="1" >
+<INPUT TYPE="submit" NAME="SUB_BTN" VALUE="View Sections" >
+</FORM>
+<BR>
+</td>
+</TR>
+<TD CLASS="dddefault"width="10%">4192</TD>
+<TD CLASS="dddefault"width="35%" text-align="left">Seminar in Criminal Justice</TD>
+<td>
+<FORM ACTION="/PRODCartridge/bwskfcls.P_GetCrse" METHOD="POST" onSubmit="return checkSubmit()">
+<input type="hidden" name="term_in" value="201603" >
+<INPUT TYPE="hidden" NAME="sel_subj" VALUE="dummy">
+<input type="hidden" name="sel_subj" value="SOC" >
+<input type="hidden" name="SEL_CRSE" value="4192" >
+<input type="hidden" name="SEL_TITLE" value="">
+<input type="hidden" name="BEGIN_HH" value="0">
+<input type="hidden" name="BEGIN_MI" value="0">
+<input type="hidden" name="BEGIN_AP" value="a">
+<input type="hidden" name="SEL_DAY" value="dummy">
+<input type="hidden" name="SEL_PTRM" value="dummy">
+<input type="hidden" name="END_HH" value="0">
+<input type="hidden" name="END_MI" value="0">
+<input type="hidden" name="END_AP" value="a">
+<input type="hidden" name="SEL_CAMP" value="dummy">
+<input type="hidden" name="SEL_SCHD" value="dummy">
+<input type="hidden" name="SEL_SESS" value="dummy">
+<input type="hidden" name="SEL_INSTR" value="dummy">
+<input type="hidden" name="SEL_INSTR" value="%">
+<input type="hidden" name="SEL_ATTR" value="dummy">
+<input type="hidden" name="SEL_ATTR" value="%">
+<input type="hidden" name="SEL_LEVL" value="dummy">
+<input type="hidden" name="SEL_LEVL" value="%">
+<input type="hidden" name="SEL_INSM"  value="dummy">
+<input type="hidden" name="sel_dunt_code"  value="">
+<input type="hidden" name="sel_dunt_unit"  value="">
+<input type="hidden" name="call_value_in"  value="">
+<INPUT TYPE="hidden" NAME="rsts" VALUE="dummy">
+<INPUT TYPE="hidden" NAME="crn" VALUE="dummy">
+<input type="hidden" name="path" value="1" >
+<INPUT TYPE="submit" NAME="SUB_BTN" VALUE="View Sections" >
+</FORM>
+<BR>
+</td>
+</TR>
+<TD CLASS="dddefault"width="10%">6230</TD>
+<TD CLASS="dddefault"width="35%" text-align="left">Sociological Research Methods</TD>
+<td>
+<FORM ACTION="/PRODCartridge/bwskfcls.P_GetCrse" METHOD="POST" onSubmit="return checkSubmit()">
+<input type="hidden" name="term_in" value="201603" >
+<INPUT TYPE="hidden" NAME="sel_subj" VALUE="dummy">
+<input type="hidden" name="sel_subj" value="SOC" >
+<input type="hidden" name="SEL_CRSE" value="6230" >
+<input type="hidden" name="SEL_TITLE" value="">
+<input type="hidden" name="BEGIN_HH" value="0">
+<input type="hidden" name="BEGIN_MI" value="0">
+<input type="hidden" name="BEGIN_AP" value="a">
+<input type="hidden" name="SEL_DAY" value="dummy">
+<input type="hidden" name="SEL_PTRM" value="dummy">
+<input type="hidden" name="END_HH" value="0">
+<input type="hidden" name="END_MI" value="0">
+<input type="hidden" name="END_AP" value="a">
+<input type="hidden" name="SEL_CAMP" value="dummy">
+<input type="hidden" name="SEL_SCHD" value="dummy">
+<input type="hidden" name="SEL_SESS" value="dummy">
+<input type="hidden" name="SEL_INSTR" value="dummy">
+<input type="hidden" name="SEL_INSTR" value="%">
+<input type="hidden" name="SEL_ATTR" value="dummy">
+<input type="hidden" name="SEL_ATTR" value="%">
+<input type="hidden" name="SEL_LEVL" value="dummy">
+<input type="hidden" name="SEL_LEVL" value="%">
+<input type="hidden" name="SEL_INSM"  value="dummy">
+<input type="hidden" name="sel_dunt_code"  value="">
+<input type="hidden" name="sel_dunt_unit"  value="">
+<input type="hidden" name="call_value_in"  value="">
+<INPUT TYPE="hidden" NAME="rsts" VALUE="dummy">
+<INPUT TYPE="hidden" NAME="crn" VALUE="dummy">
+<input type="hidden" name="path" value="1" >
+<INPUT TYPE="submit" NAME="SUB_BTN" VALUE="View Sections" >
+</FORM>
+<BR>
+</td>
+</TR>
+<TD CLASS="dddefault"width="10%">6238</TD>
+<TD CLASS="dddefault"width="35%" text-align="left">Developmnt-Sociological Theory</TD>
+<td>
+<FORM ACTION="/PRODCartridge/bwskfcls.P_GetCrse" METHOD="POST" onSubmit="return checkSubmit()">
+<input type="hidden" name="term_in" value="201603" >
+<INPUT TYPE="hidden" NAME="sel_subj" VALUE="dummy">
+<input type="hidden" name="sel_subj" value="SOC" >
+<input type="hidden" name="SEL_CRSE" value="6238" >
+<input type="hidden" name="SEL_TITLE" value="">
+<input type="hidden" name="BEGIN_HH" value="0">
+<input type="hidden" name="BEGIN_MI" value="0">
+<input type="hidden" name="BEGIN_AP" value="a">
+<input type="hidden" name="SEL_DAY" value="dummy">
+<input type="hidden" name="SEL_PTRM" value="dummy">
+<input type="hidden" name="END_HH" value="0">
+<input type="hidden" name="END_MI" value="0">
+<input type="hidden" name="END_AP" value="a">
+<input type="hidden" name="SEL_CAMP" value="dummy">
+<input type="hidden" name="SEL_SCHD" value="dummy">
+<input type="hidden" name="SEL_SESS" value="dummy">
+<input type="hidden" name="SEL_INSTR" value="dummy">
+<input type="hidden" name="SEL_INSTR" value="%">
+<input type="hidden" name="SEL_ATTR" value="dummy">
+<input type="hidden" name="SEL_ATTR" value="%">
+<input type="hidden" name="SEL_LEVL" value="dummy">
+<input type="hidden" name="SEL_LEVL" value="%">
+<input type="hidden" name="SEL_INSM"  value="dummy">
+<input type="hidden" name="sel_dunt_code"  value="">
+<input type="hidden" name="sel_dunt_unit"  value="">
+<input type="hidden" name="call_value_in"  value="">
+<INPUT TYPE="hidden" NAME="rsts" VALUE="dummy">
+<INPUT TYPE="hidden" NAME="crn" VALUE="dummy">
+<input type="hidden" name="path" value="1" >
+<INPUT TYPE="submit" NAME="SUB_BTN" VALUE="View Sections" >
+</FORM>
+<BR>
+</td>
+</TR>
+<TD CLASS="dddefault"width="10%">6245</TD>
+<TD CLASS="dddefault"width="35%" text-align="left">Race Relations</TD>
+<td>
+<FORM ACTION="/PRODCartridge/bwskfcls.P_GetCrse" METHOD="POST" onSubmit="return checkSubmit()">
+<input type="hidden" name="term_in" value="201603" >
+<INPUT TYPE="hidden" NAME="sel_subj" VALUE="dummy">
+<input type="hidden" name="sel_subj" value="SOC" >
+<input type="hidden" name="SEL_CRSE" value="6245" >
+<input type="hidden" name="SEL_TITLE" value="">
+<input type="hidden" name="BEGIN_HH" value="0">
+<input type="hidden" name="BEGIN_MI" value="0">
+<input type="hidden" name="BEGIN_AP" value="a">
+<input type="hidden" name="SEL_DAY" value="dummy">
+<input type="hidden" name="SEL_PTRM" value="dummy">
+<input type="hidden" name="END_HH" value="0">
+<input type="hidden" name="END_MI" value="0">
+<input type="hidden" name="END_AP" value="a">
+<input type="hidden" name="SEL_CAMP" value="dummy">
+<input type="hidden" name="SEL_SCHD" value="dummy">
+<input type="hidden" name="SEL_SESS" value="dummy">
+<input type="hidden" name="SEL_INSTR" value="dummy">
+<input type="hidden" name="SEL_INSTR" value="%">
+<input type="hidden" name="SEL_ATTR" value="dummy">
+<input type="hidden" name="SEL_ATTR" value="%">
+<input type="hidden" name="SEL_LEVL" value="dummy">
+<input type="hidden" name="SEL_LEVL" value="%">
+<input type="hidden" name="SEL_INSM"  value="dummy">
+<input type="hidden" name="sel_dunt_code"  value="">
+<input type="hidden" name="sel_dunt_unit"  value="">
+<input type="hidden" name="call_value_in"  value="">
+<INPUT TYPE="hidden" NAME="rsts" VALUE="dummy">
+<INPUT TYPE="hidden" NAME="crn" VALUE="dummy">
+<input type="hidden" name="path" value="1" >
+<INPUT TYPE="submit" NAME="SUB_BTN" VALUE="View Sections" >
+</FORM>
+<BR>
+</td>
+</TR>
+<TD CLASS="dddefault"width="10%">6250</TD>
+<TD CLASS="dddefault"width="35%" text-align="left">Urban Sociology</TD>
+<td>
+<FORM ACTION="/PRODCartridge/bwskfcls.P_GetCrse" METHOD="POST" onSubmit="return checkSubmit()">
+<input type="hidden" name="term_in" value="201603" >
+<INPUT TYPE="hidden" NAME="sel_subj" VALUE="dummy">
+<input type="hidden" name="sel_subj" value="SOC" >
+<input type="hidden" name="SEL_CRSE" value="6250" >
+<input type="hidden" name="SEL_TITLE" value="">
+<input type="hidden" name="BEGIN_HH" value="0">
+<input type="hidden" name="BEGIN_MI" value="0">
+<input type="hidden" name="BEGIN_AP" value="a">
+<input type="hidden" name="SEL_DAY" value="dummy">
+<input type="hidden" name="SEL_PTRM" value="dummy">
+<input type="hidden" name="END_HH" value="0">
+<input type="hidden" name="END_MI" value="0">
+<input type="hidden" name="END_AP" value="a">
+<input type="hidden" name="SEL_CAMP" value="dummy">
+<input type="hidden" name="SEL_SCHD" value="dummy">
+<input type="hidden" name="SEL_SESS" value="dummy">
+<input type="hidden" name="SEL_INSTR" value="dummy">
+<input type="hidden" name="SEL_INSTR" value="%">
+<input type="hidden" name="SEL_ATTR" value="dummy">
+<input type="hidden" name="SEL_ATTR" value="%">
+<input type="hidden" name="SEL_LEVL" value="dummy">
+<input type="hidden" name="SEL_LEVL" value="%">
+<input type="hidden" name="SEL_INSM"  value="dummy">
+<input type="hidden" name="sel_dunt_code"  value="">
+<input type="hidden" name="sel_dunt_unit"  value="">
+<input type="hidden" name="call_value_in"  value="">
+<INPUT TYPE="hidden" NAME="rsts" VALUE="dummy">
+<INPUT TYPE="hidden" NAME="crn" VALUE="dummy">
+<input type="hidden" name="path" value="1" >
+<INPUT TYPE="submit" NAME="SUB_BTN" VALUE="View Sections" >
+</FORM>
+<BR>
+</td>
+</TR>
+<TD CLASS="dddefault"width="10%">6255</TD>
+<TD CLASS="dddefault"width="35%" text-align="left">Practicum in Applied Sociology</TD>
+<td>
+<FORM ACTION="/PRODCartridge/bwskfcls.P_GetCrse" METHOD="POST" onSubmit="return checkSubmit()">
+<input type="hidden" name="term_in" value="201603" >
+<INPUT TYPE="hidden" NAME="sel_subj" VALUE="dummy">
+<input type="hidden" name="sel_subj" value="SOC" >
+<input type="hidden" name="SEL_CRSE" value="6255" >
+<input type="hidden" name="SEL_TITLE" value="">
+<input type="hidden" name="BEGIN_HH" value="0">
+<input type="hidden" name="BEGIN_MI" value="0">
+<input type="hidden" name="BEGIN_AP" value="a">
+<input type="hidden" name="SEL_DAY" value="dummy">
+<input type="hidden" name="SEL_PTRM" value="dummy">
+<input type="hidden" name="END_HH" value="0">
+<input type="hidden" name="END_MI" value="0">
+<input type="hidden" name="END_AP" value="a">
+<input type="hidden" name="SEL_CAMP" value="dummy">
+<input type="hidden" name="SEL_SCHD" value="dummy">
+<input type="hidden" name="SEL_SESS" value="dummy">
+<input type="hidden" name="SEL_INSTR" value="dummy">
+<input type="hidden" name="SEL_INSTR" value="%">
+<input type="hidden" name="SEL_ATTR" value="dummy">
+<input type="hidden" name="SEL_ATTR" value="%">
+<input type="hidden" name="SEL_LEVL" value="dummy">
+<input type="hidden" name="SEL_LEVL" value="%">
+<input type="hidden" name="SEL_INSM"  value="dummy">
+<input type="hidden" name="sel_dunt_code"  value="">
+<input type="hidden" name="sel_dunt_unit"  value="">
+<input type="hidden" name="call_value_in"  value="">
+<INPUT TYPE="hidden" NAME="rsts" VALUE="dummy">
+<INPUT TYPE="hidden" NAME="crn" VALUE="dummy">
+<input type="hidden" name="path" value="1" >
+<INPUT TYPE="submit" NAME="SUB_BTN" VALUE="View Sections" >
+</FORM>
+<BR>
+</td>
+</TR>
+<TD CLASS="dddefault"width="10%">6257</TD>
+<TD CLASS="dddefault"width="35%" text-align="left">Criminal Law</TD>
+<td>
+<FORM ACTION="/PRODCartridge/bwskfcls.P_GetCrse" METHOD="POST" onSubmit="return checkSubmit()">
+<input type="hidden" name="term_in" value="201603" >
+<INPUT TYPE="hidden" NAME="sel_subj" VALUE="dummy">
+<input type="hidden" name="sel_subj" value="SOC" >
+<input type="hidden" name="SEL_CRSE" value="6257" >
+<input type="hidden" name="SEL_TITLE" value="">
+<input type="hidden" name="BEGIN_HH" value="0">
+<input type="hidden" name="BEGIN_MI" value="0">
+<input type="hidden" name="BEGIN_AP" value="a">
+<input type="hidden" name="SEL_DAY" value="dummy">
+<input type="hidden" name="SEL_PTRM" value="dummy">
+<input type="hidden" name="END_HH" value="0">
+<input type="hidden" name="END_MI" value="0">
+<input type="hidden" name="END_AP" value="a">
+<input type="hidden" name="SEL_CAMP" value="dummy">
+<input type="hidden" name="SEL_SCHD" value="dummy">
+<input type="hidden" name="SEL_SESS" value="dummy">
+<input type="hidden" name="SEL_INSTR" value="dummy">
+<input type="hidden" name="SEL_INSTR" value="%">
+<input type="hidden" name="SEL_ATTR" value="dummy">
+<input type="hidden" name="SEL_ATTR" value="%">
+<input type="hidden" name="SEL_LEVL" value="dummy">
+<input type="hidden" name="SEL_LEVL" value="%">
+<input type="hidden" name="SEL_INSM"  value="dummy">
+<input type="hidden" name="sel_dunt_code"  value="">
+<input type="hidden" name="sel_dunt_unit"  value="">
+<input type="hidden" name="call_value_in"  value="">
+<INPUT TYPE="hidden" NAME="rsts" VALUE="dummy">
+<INPUT TYPE="hidden" NAME="crn" VALUE="dummy">
+<input type="hidden" name="path" value="1" >
+<INPUT TYPE="submit" NAME="SUB_BTN" VALUE="View Sections" >
+</FORM>
+<BR>
+</td>
+</TR>
+<TD CLASS="dddefault"width="10%">6258</TD>
+<TD CLASS="dddefault"width="35%" text-align="left">Deviance and Control</TD>
+<td>
+<FORM ACTION="/PRODCartridge/bwskfcls.P_GetCrse" METHOD="POST" onSubmit="return checkSubmit()">
+<input type="hidden" name="term_in" value="201603" >
+<INPUT TYPE="hidden" NAME="sel_subj" VALUE="dummy">
+<input type="hidden" name="sel_subj" value="SOC" >
+<input type="hidden" name="SEL_CRSE" value="6258" >
+<input type="hidden" name="SEL_TITLE" value="">
+<input type="hidden" name="BEGIN_HH" value="0">
+<input type="hidden" name="BEGIN_MI" value="0">
+<input type="hidden" name="BEGIN_AP" value="a">
+<input type="hidden" name="SEL_DAY" value="dummy">
+<input type="hidden" name="SEL_PTRM" value="dummy">
+<input type="hidden" name="END_HH" value="0">
+<input type="hidden" name="END_MI" value="0">
+<input type="hidden" name="END_AP" value="a">
+<input type="hidden" name="SEL_CAMP" value="dummy">
+<input type="hidden" name="SEL_SCHD" value="dummy">
+<input type="hidden" name="SEL_SESS" value="dummy">
+<input type="hidden" name="SEL_INSTR" value="dummy">
+<input type="hidden" name="SEL_INSTR" value="%">
+<input type="hidden" name="SEL_ATTR" value="dummy">
+<input type="hidden" name="SEL_ATTR" value="%">
+<input type="hidden" name="SEL_LEVL" value="dummy">
+<input type="hidden" name="SEL_LEVL" value="%">
+<input type="hidden" name="SEL_INSM"  value="dummy">
+<input type="hidden" name="sel_dunt_code"  value="">
+<input type="hidden" name="sel_dunt_unit"  value="">
+<input type="hidden" name="call_value_in"  value="">
+<INPUT TYPE="hidden" NAME="rsts" VALUE="dummy">
+<INPUT TYPE="hidden" NAME="crn" VALUE="dummy">
+<input type="hidden" name="path" value="1" >
+<INPUT TYPE="submit" NAME="SUB_BTN" VALUE="View Sections" >
+</FORM>
+<BR>
+</td>
+</TR>
+<TD CLASS="dddefault"width="10%">6262</TD>
+<TD CLASS="dddefault"width="35%" text-align="left">Corrections</TD>
+<td>
+<FORM ACTION="/PRODCartridge/bwskfcls.P_GetCrse" METHOD="POST" onSubmit="return checkSubmit()">
+<input type="hidden" name="term_in" value="201603" >
+<INPUT TYPE="hidden" NAME="sel_subj" VALUE="dummy">
+<input type="hidden" name="sel_subj" value="SOC" >
+<input type="hidden" name="SEL_CRSE" value="6262" >
+<input type="hidden" name="SEL_TITLE" value="">
+<input type="hidden" name="BEGIN_HH" value="0">
+<input type="hidden" name="BEGIN_MI" value="0">
+<input type="hidden" name="BEGIN_AP" value="a">
+<input type="hidden" name="SEL_DAY" value="dummy">
+<input type="hidden" name="SEL_PTRM" value="dummy">
+<input type="hidden" name="END_HH" value="0">
+<input type="hidden" name="END_MI" value="0">
+<input type="hidden" name="END_AP" value="a">
+<input type="hidden" name="SEL_CAMP" value="dummy">
+<input type="hidden" name="SEL_SCHD" value="dummy">
+<input type="hidden" name="SEL_SESS" value="dummy">
+<input type="hidden" name="SEL_INSTR" value="dummy">
+<input type="hidden" name="SEL_INSTR" value="%">
+<input type="hidden" name="SEL_ATTR" value="dummy">
+<input type="hidden" name="SEL_ATTR" value="%">
+<input type="hidden" name="SEL_LEVL" value="dummy">
+<input type="hidden" name="SEL_LEVL" value="%">
+<input type="hidden" name="SEL_INSM"  value="dummy">
+<input type="hidden" name="sel_dunt_code"  value="">
+<input type="hidden" name="sel_dunt_unit"  value="">
+<input type="hidden" name="call_value_in"  value="">
+<INPUT TYPE="hidden" NAME="rsts" VALUE="dummy">
+<INPUT TYPE="hidden" NAME="crn" VALUE="dummy">
+<input type="hidden" name="path" value="1" >
+<INPUT TYPE="submit" NAME="SUB_BTN" VALUE="View Sections" >
+</FORM>
+<BR>
+</td>
+</TR>
+<TD CLASS="dddefault"width="10%">6295</TD>
+<TD CLASS="dddefault"width="35%" text-align="left">Research</TD>
+<td>
+<FORM ACTION="/PRODCartridge/bwskfcls.P_GetCrse" METHOD="POST" onSubmit="return checkSubmit()">
+<input type="hidden" name="term_in" value="201603" >
+<INPUT TYPE="hidden" NAME="sel_subj" VALUE="dummy">
+<input type="hidden" name="sel_subj" value="SOC" >
+<input type="hidden" name="SEL_CRSE" value="6295" >
+<input type="hidden" name="SEL_TITLE" value="">
+<input type="hidden" name="BEGIN_HH" value="0">
+<input type="hidden" name="BEGIN_MI" value="0">
+<input type="hidden" name="BEGIN_AP" value="a">
+<input type="hidden" name="SEL_DAY" value="dummy">
+<input type="hidden" name="SEL_PTRM" value="dummy">
+<input type="hidden" name="END_HH" value="0">
+<input type="hidden" name="END_MI" value="0">
+<input type="hidden" name="END_AP" value="a">
+<input type="hidden" name="SEL_CAMP" value="dummy">
+<input type="hidden" name="SEL_SCHD" value="dummy">
+<input type="hidden" name="SEL_SESS" value="dummy">
+<input type="hidden" name="SEL_INSTR" value="dummy">
+<input type="hidden" name="SEL_INSTR" value="%">
+<input type="hidden" name="SEL_ATTR" value="dummy">
+<input type="hidden" name="SEL_ATTR" value="%">
+<input type="hidden" name="SEL_LEVL" value="dummy">
+<input type="hidden" name="SEL_LEVL" value="%">
+<input type="hidden" name="SEL_INSM"  value="dummy">
+<input type="hidden" name="sel_dunt_code"  value="">
+<input type="hidden" name="sel_dunt_unit"  value="">
+<input type="hidden" name="call_value_in"  value="">
+<INPUT TYPE="hidden" NAME="rsts" VALUE="dummy">
+<INPUT TYPE="hidden" NAME="crn" VALUE="dummy">
+<input type="hidden" name="path" value="1" >
+<INPUT TYPE="submit" NAME="SUB_BTN" VALUE="View Sections" >
+</FORM>
+<BR>
+</td>
+</TR>
+<TD CLASS="dddefault"width="10%">6998</TD>
+<TD CLASS="dddefault"width="35%" text-align="left">Thesis Research</TD>
+<td>
+<FORM ACTION="/PRODCartridge/bwskfcls.P_GetCrse" METHOD="POST" onSubmit="return checkSubmit()">
+<input type="hidden" name="term_in" value="201603" >
+<INPUT TYPE="hidden" NAME="sel_subj" VALUE="dummy">
+<input type="hidden" name="sel_subj" value="SOC" >
+<input type="hidden" name="SEL_CRSE" value="6998" >
+<input type="hidden" name="SEL_TITLE" value="">
+<input type="hidden" name="BEGIN_HH" value="0">
+<input type="hidden" name="BEGIN_MI" value="0">
+<input type="hidden" name="BEGIN_AP" value="a">
+<input type="hidden" name="SEL_DAY" value="dummy">
+<input type="hidden" name="SEL_PTRM" value="dummy">
+<input type="hidden" name="END_HH" value="0">
+<input type="hidden" name="END_MI" value="0">
+<input type="hidden" name="END_AP" value="a">
+<input type="hidden" name="SEL_CAMP" value="dummy">
+<input type="hidden" name="SEL_SCHD" value="dummy">
+<input type="hidden" name="SEL_SESS" value="dummy">
+<input type="hidden" name="SEL_INSTR" value="dummy">
+<input type="hidden" name="SEL_INSTR" value="%">
+<input type="hidden" name="SEL_ATTR" value="dummy">
+<input type="hidden" name="SEL_ATTR" value="%">
+<input type="hidden" name="SEL_LEVL" value="dummy">
+<input type="hidden" name="SEL_LEVL" value="%">
+<input type="hidden" name="SEL_INSM"  value="dummy">
+<input type="hidden" name="sel_dunt_code"  value="">
+<input type="hidden" name="sel_dunt_unit"  value="">
+<input type="hidden" name="call_value_in"  value="">
+<INPUT TYPE="hidden" NAME="rsts" VALUE="dummy">
+<INPUT TYPE="hidden" NAME="crn" VALUE="dummy">
+<input type="hidden" name="path" value="1" >
+<INPUT TYPE="submit" NAME="SUB_BTN" VALUE="View Sections" >
+</FORM>
+<BR>
+</td>
+</TR>
+<TD CLASS="dddefault"width="10%">6999</TD>
+<TD CLASS="dddefault"width="35%" text-align="left">Thesis Research</TD>
+<td>
+<FORM ACTION="/PRODCartridge/bwskfcls.P_GetCrse" METHOD="POST" onSubmit="return checkSubmit()">
+<input type="hidden" name="term_in" value="201603" >
+<INPUT TYPE="hidden" NAME="sel_subj" VALUE="dummy">
+<input type="hidden" name="sel_subj" value="SOC" >
+<input type="hidden" name="SEL_CRSE" value="6999" >
+<input type="hidden" name="SEL_TITLE" value="">
+<input type="hidden" name="BEGIN_HH" value="0">
+<input type="hidden" name="BEGIN_MI" value="0">
+<input type="hidden" name="BEGIN_AP" value="a">
+<input type="hidden" name="SEL_DAY" value="dummy">
+<input type="hidden" name="SEL_PTRM" value="dummy">
+<input type="hidden" name="END_HH" value="0">
+<input type="hidden" name="END_MI" value="0">
+<input type="hidden" name="END_AP" value="a">
+<input type="hidden" name="SEL_CAMP" value="dummy">
+<input type="hidden" name="SEL_SCHD" value="dummy">
+<input type="hidden" name="SEL_SESS" value="dummy">
+<input type="hidden" name="SEL_INSTR" value="dummy">
+<input type="hidden" name="SEL_INSTR" value="%">
+<input type="hidden" name="SEL_ATTR" value="dummy">
+<input type="hidden" name="SEL_ATTR" value="%">
+<input type="hidden" name="SEL_LEVL" value="dummy">
+<input type="hidden" name="SEL_LEVL" value="%">
+<input type="hidden" name="SEL_INSM"  value="dummy">
+<input type="hidden" name="sel_dunt_code"  value="">
+<input type="hidden" name="sel_dunt_unit"  value="">
+<input type="hidden" name="call_value_in"  value="">
+<INPUT TYPE="hidden" NAME="rsts" VALUE="dummy">
+<INPUT TYPE="hidden" NAME="crn" VALUE="dummy">
+<input type="hidden" name="path" value="1" >
+<INPUT TYPE="submit" NAME="SUB_BTN" VALUE="View Sections" >
+</FORM>
+<BR>
+</td>
+</TR>
+</TABLE>
+
+<!--  ** START OF twbkwbis.P_CloseDoc **  -->
+<TABLE  CLASS="plaintable" SUMMARY="This is table displays line separator at end of the page."
+                                             WIDTH="100%" cellSpacing=0 cellPadding=0 border=0><TR><TD class="bgtabon" width="100%" colSpan=2><IMG SRC="/wtlgifs/web_transparent.gif" ALT="Transparent Image" CLASS="headerImg" TITLE="Transparent Image"  NAME="web_transparent" HSPACE=0 VSPACE=0 BORDER=0 HEIGHT=3 WIDTH=10></TD></TR></TABLE>
+<A HREF="#top" onMouseover="window.status='Skip to top of page'; return true" onMouseout="window.status=''; return true" OnFocus="window.status='Skip to top of page'; return true" onBlur="window.status=''; return true" class="skiplinks">Skip to top of page</A>
+</DIV>
+<DIV class="footerbeforediv">
+
+</DIV>
+<DIV class="footerlinksdiv">
+<SPAN class="pagefooterlinks">
+<MAP NAME="Banner_Secured_Area_Links_F" title="Banner Secured Area Links">
+<p>
+<A HREF="#skip_Banner_Secured_Area_Links_F" onMouseover="window.status='Skip Banner Secured Area Links'; return true" onMouseout="window.status=''; return true" onFocus="window.status='Skip Banner Secured Area Links'; return true" onBlur="window.status=''; return true"  class="skiplinks">Skip Banner Secured Area Links</A>
+<P>[ <A HREF="/PRODCartridge/bwskfshd.P_CrseSchd">Student Schedule by Day & Time</A>
+ | <A HREF="/PRODCartridge/bwskfshd.P_CrseSchdDetl">Student Detail Schedule</A>
+ ]
+</MAP>
+</SPAN>
+<a name="skip_Banner_Secured_Area_Links_F"></a>
+</DIV>
+<DIV class="footerafterdiv">
+
+</DIV>
+<DIV class="globalafterdiv">
+
+</DIV>
+<DIV class="globalfooterdiv">
+
+</DIV>
+<DIV class="pagefooterdiv">
+<SPAN class="releasetext">Release: 8.5.2.1</SPAN>
+</DIV>
+<DIV class="poweredbydiv">
+</DIV>
+<DIV class="div1"></DIV>
+<DIV class="div2"></DIV>
+<DIV class="div3"></DIV>
+<DIV class="div4"></DIV>
+<DIV class="div5"></DIV>
+<DIV class="div6"></DIV>
+<div class="banner_copyright"></div>
+</BODY>
+</HTML>

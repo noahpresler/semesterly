@@ -50,7 +50,7 @@ class GWParser:
 
 		return html.encode('utf-8')
 
-	def post_http(self, url, form, payload=''):
+	def post_http(self, url, form, headers, payload=''):
 
 		try:
 			post = self.session.post(
@@ -58,11 +58,12 @@ class GWParser:
 				data = form,
 				params = payload,
 				cookies = self.cookies,
-				headers = self.headers,
+				headers = headers,
 				verify = False,
 			)
 
 			print 'POST', post.url
+			print post
 			return post
 		except (requests.exceptions.Timeout,
 			requests.exceptions.ConnectionError):
@@ -82,8 +83,23 @@ class GWParser:
 			'sid' : self.username,
 			'PIN' : self.password
 		}
+
+		headers = {
+			# 'Connection':'keep-alive',
+			# 'Content-Length':'24',
+			# 'Cache-Control':'max-age=0',
+			'Origin': 'https://banweb.gwu.edu',
+			'Upgrade-Insecure-Requests':'1',
+			'User-Agent': UserAgent().chrome,
+			'Content-Type':'application/x-www-form-urlencoded',
+			# 'Accept':'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8',
+			'Referer': 'https://banweb.gwu.edu/PRODCartridge/twbkwbis.P_WWWLogin'
+			# 'Accept-Encoding':'gzip, deflate, br',
+			# 'Accept-Language':'en-US,en;q=0.8'
+		}
+
 		# self.post_http(self.url + '/PRODCartridge/twbkwbis.P_ValLogin', {}, credentials).text
-		print self.post_http(self.url + '/PRODCartridge/twbkwbis.P_ValLogin', credentials).text
+		print self.post_http(self.url + '/PRODCartridge/twbkwbis.P_ValLogin', credentials, headers).text
 
 		query = {
 			'name' : 'bmenu.P_MainMnu',
