@@ -35,6 +35,11 @@ const mapDispatchToProps = (dispatch) => {
 	  	addRemoveOptionalCourse: (course) => dispatch(addOrRemoveOptionalCourse(course)),
 		fetchCourseInfo: (id) => dispatch(fetchCourseInfo(id)), 
 		showExplorationModal: () => dispatch({type: 'SHOW_EXPLORATION_MODAL'}),
+		// {
+		//     type: "REQUEST_COURSE_INFO",
+		//     course_id: course_id,
+		//   }
+		showIntegrationModal: (id) => dispatch({type: 'TOGGLE_INTEGRATION_MODAL', id: id}),
 		hoverSearchResult: (position) => {
 			dispatch({
 				type: "HOVER_SEARCH_RESULT",

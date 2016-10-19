@@ -20,6 +20,7 @@ import { peerModal } from './peer_modal_reducer.jsx';
 import { preferenceModal } from './preference_modal_reducer.jsx'
 import { friends } from './friends_reducer.jsx';
 import { notificationToken } from './notification_token_reducer.jsx';
+import { integrationModal } from './integration_modal_reducer.jsx'
 
 export const rootReducer = combineReducers({
   school,
@@ -43,4 +44,5 @@ export const rootReducer = combineReducers({
   friends,
   peerModal,
   notificationToken
+  integrationModal
 });
