@@ -16,7 +16,7 @@ import SignupModalContainer from './containers/signup_modal_container.jsx';
 import PreferenceModalContainer from './containers/preference_modal_container.jsx';
 import TutModalContainer from './containers/tut_modal_container.jsx';
 import PeerModalContainer from './containers/peer_modal_container.jsx';
-import IntegrationModalContainer from './containers/integration_modal_container.jsx'
+import IntegrationModalContainer from './containers/integration_modal_container.jsx';
 
 class Semesterly extends React.Component {
 	constructor(props) {
