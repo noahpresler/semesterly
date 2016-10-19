@@ -9,10 +9,6 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    addMetric: (metric) => dispatch({type: "ADD_METRIC", metric: metric}),
-    removeMetric: (metric) => dispatch({type: "REMOVE_METRIC", metric: metric}),
-    changeMetric: (add, del) => dispatch({type: "SWITCH_METRIC", add: add, del: del}),
-    toggleMetricOrder: (metric) => dispatch({type: "TOGGLE_METRIC_ORDER", metric: metric})
   }
 }
 
