@@ -43,36 +43,39 @@ export class IntegrationModal extends React.Component {
     // }
     render() {
         let modalStyle = {
-            width: '100%'
+            width: '100%',
+            top: '40%'
+        };
+        let integrationLogo = {
+            backgroundImage: 'url(/static/img/integrations/pilotLogo.png)'
         };
         return (
             <Modal ref="modal"
-                className="signup-modal max-modal"
+                className="integration-modal narrow-modal"
                 modalStyle={modalStyle}
                 onHide={this.props.toggleIntegrationModal}
                 >
-                <div id="sessions">
-                    <div className="enable pilot">
-                        <div className="preference-wrapper">
-                            <h3>Would you like to enable Pilot for this course?</h3>
-                        </div>
+                <div id="integration-modal">
+                    <div id="integration-logo" style={integrationLogo}></div>
+                    <div className="preference cf">
                         <label className="switch switch-slide">
                             <input ref="enable_pilot" className="switch-input" type="checkbox" checked={this.state.enabled} onChange={this.changeForm}/>
                             <span className="switch-label" data-on="Yes" data-off="No"></span>
                             <span className="switch-handle"></span>
                         </label>
-                    </div>
-                    <div id="call-to-action">
-                        <div className="add-integration-button">
-                            <button className="save-button" onClick={() => {
-                                if (!this.state.enabled) {
-                                    delIntegration(1, this.props.course_id);
-                                } else {
-                                    addIntegration(1, this.props.course_id, "");
-                                }
-                                this.refs.modal.hide();
-                            }}>Save</button>
+                        <div className="preference-wrapper">
+                            <h3>Would you like to enable Pilot for this course?</h3>
                         </div>
+                    </div>
+                    <div className="button-wrapper">
+                        <button className="signup-button" onClick={() => {
+                            if (!this.state.enabled) {
+                                delIntegration(1, this.props.course_id);
+                            } else {
+                                addIntegration(1, this.props.course_id, "");
+                            }
+                            this.refs.modal.hide();
+                        }}>Save</button>
                     </div>
                 </div>
             </Modal>
