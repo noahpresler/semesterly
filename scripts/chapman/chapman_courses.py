@@ -160,7 +160,7 @@ class ChapmanParser:
 					self.course['code'] = rtitle.group(1)
 					self.course['name'] = rtitle.group(3).strip()
 					self.course['credits'] = float(re.match(r'(\d*).*', units).group(1))
-					self.course['descr'] = '\n-'.join(map(lambda a: a.text if a else '', [description, info, notes]))
+					self.course['descr'] = '\n-'.join(map(lambda a: a.text, filter(lambda a: True if a else False, [description, info, notes])))
 					self.course['units'] = re.match(r'(\d*).*', units).group(1)
 					self.course['section'] = rtitle.group(2)
 					self.course['size'] = int(capacity)
@@ -205,6 +205,10 @@ class ChapmanParser:
 			update_object.save()
 
 	def create_course(self):
+		print self.course.get('code')
+		print self.course.get('credits')
+		print self.course.get('descr')
+		print self.course.get('department')
 		print self.course.get('credits')
 		course, CourseCreated = Course.objects.update_or_create(
 			code = self.course['code'],
