@@ -1,0 +1,492 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/transitional.dtd">
+<HTML lang="en">
+<HEAD>
+<META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<LINK REL="stylesheet" HREF="/css/web_defaultapp.css" TYPE="text/css">
+<LINK REL="stylesheet" HREF="/css/web_defaultprint.css" TYPE="text/css" media="print">
+<TITLE>Banner Secured Area</TITLE>
+<META HTTP-EQUIV="Content-Script-Type" NAME="Default_Script_Language" CONTENT="text/javascript">
+<SCRIPT LANGUAGE="JavaScript" TYPE="text/javascript">
+<!-- Hide JavaScript from older browsers 
+window.onunload = function() {submitcount=0;}
+var submitcount=0;
+function checkSubmit() {
+if (submitcount == 0)
+   {
+   submitcount++;
+   return true;
+   }
+else
+   {
+alert("Your changes have already been submitted.");
+   return false;
+   }
+}
+//  End script hiding -->
+</SCRIPT>
+<SCRIPT LANGUAGE="JavaScript" TYPE="text/javascript">
+<!-- Hide JavaScript from older browsers 
+//  Function to open a window
+function windowOpen(window_url) {
+   helpWin = window.open(window_url,'','toolbar=yes,status=no,scrollbars=yes,menubar=yes,resizable=yes,directories=no,location=no,width=350,height=400');
+   if (document.images) { 
+       if (helpWin) helpWin.focus()
+   }
+}
+//  End script hiding -->
+</SCRIPT>
+</HEAD>
+<BODY>
+<div id="headerImage">
+<IMG SRC="/imag_images/gweb_is_2.gif" CLASS="headerImg" TITLE=""  NAME="IMAG - GWeb Information System" HSPACE=0 VSPACE=0 BORDER=0>
+</div>
+<DIV class="headerwrapperdiv">
+<DIV class="pageheaderdiv1">
+<A HREF="#main_content" onMouseover="window.status='Go to Main Content'; return true" onMouseout="window.status=''; return true" OnFocus="window.status='Go to Main Content'; return true" onBlur="window.status=''; return true" class="skiplinks">Go to Main Content</A>
+<H1>   </H1></DIV><DIV class="headerlinksdiv">
+<SPAN class="pageheaderlinks2">
+<MAP NAME="Module_Navigation_Links_H" title="Module Navigation Links">
+<p>
+<A HREF="#skip_Module_Navigation_Links_H" onMouseover="window.status='Skip Module Navigation Links'; return true" onMouseout="window.status=''; return true" onFocus="window.status='Skip Module Navigation Links'; return true" onBlur="window.status=''; return true"  class="skiplinks">Skip Module Navigation Links</A>
+<TABLE  CLASS="plaintable" SUMMARY="This is main table for displaying Tab Items."
+                          WIDTH="100%" cellSpacing=0 cellPadding=0 border=0>
+<TR>
+<TD CLASS="pldefault">
+<TABLE  CLASS="plaintable" SUMMARY="This table displays Tab Items."
+                 cellSpacing=0 cellPadding=0 border=0>
+<TR>
+<td class="tabon"  height=22>
+<A HREF="/PRODCartridge/twbkwbis.P_GenMenu?name=bmenu.P_StuMainMnu" onMouseover="window.status='Student Services & Financial Aid'; return true" onMouseout="window.status=''; return true" onFocus="window.status='Student Services & Financial Aid'; return true" onBlur="window.status=''; return true" >Student Records & Registration Menu</A>
+</TD>
+<TD class="bgtabon"  height=22 vAlign="top" align="right">
+<IMG SRC="/wtlgifs/web_tab_corner_right.gif" ALT="Tab Corner Right" CLASS="headerImg" TITLE="Tab Corner Right"  NAME="web_tab_corner_right" HSPACE=0 VSPACE=0 BORDER=0 HEIGHT=20 WIDTH=8>
+</TD>
+<td class="taboff" height=22>
+<A HREF="/PRODCartridge/twbkwbis.P_GenMenu?name=bmenu.P_FinAidMainMnu" onMouseover="window.status='Financial Aid'; return true" onMouseout="window.status=''; return true" onFocus="window.status='Financial Aid'; return true" onBlur="window.status=''; return true" >Financial Aid</A>
+</TD>
+<TD class="bgtaboff" height=22 vAlign="top" align="right">
+<IMG SRC="/wtlgifs/web_tab_corner_right.gif" ALT="Tab Corner Right" CLASS="headerImg" TITLE="Tab Corner Right"  NAME="web_tab_corner_right" HSPACE=0 VSPACE=0 BORDER=0 HEIGHT=20 WIDTH=8>
+</TD>
+<td class="taboff" height=22>
+<A HREF="/PRODCartridge/twbkwbis.P_GenMenu?name=bmenu.P_GenMnu" onMouseover="window.status='Personal Information'; return true" onMouseout="window.status=''; return true" onFocus="window.status='Personal Information'; return true" onBlur="window.status=''; return true" >Personal Information Menu</A>
+</TD>
+<TD class="bgtaboff" height=22 vAlign="top" align="right">
+<IMG SRC="/wtlgifs/web_tab_corner_right.gif" ALT="Tab Corner Right" CLASS="headerImg" TITLE="Tab Corner Right"  NAME="web_tab_corner_right" HSPACE=0 VSPACE=0 BORDER=0 HEIGHT=20 WIDTH=8>
+</TD>
+<td class="taboff" height=22>
+<A HREF="/PRODCartridge/twbkwbis.P_GenMenu?name=bmenu.P_EmergencyMenu" onMouseover="window.status='GW Alert Emergency Notification'; return true" onMouseout="window.status=''; return true" onFocus="window.status='GW Alert Emergency Notification'; return true" onBlur="window.status=''; return true" >GW Alert Login Portal</A>
+</TD>
+<TD class="bgtaboff" height=22 vAlign="top" align="right">
+<IMG SRC="/wtlgifs/web_tab_corner_right.gif" ALT="Tab Corner Right" CLASS="headerImg" TITLE="Tab Corner Right"  NAME="web_tab_corner_right" HSPACE=0 VSPACE=0 BORDER=0 HEIGHT=20 WIDTH=8>
+</TD>
+</TR>
+</TABLE>
+</TD>
+</TR>
+<TR>
+<TD class="bgtabon" width="100%" colSpan=2><IMG SRC="/wtlgifs/web_transparent.gif" ALT="Transparent Image" CLASS="headerImg" TITLE="Transparent Image"  NAME="web_transparent" HSPACE=0 VSPACE=0 BORDER=0 HEIGHT=3 WIDTH=10></TD></TR></TABLE>
+</MAP>
+</SPAN>
+<a name="skip_Module_Navigation_Links_H"></a>
+</DIV>
+<TABLE  CLASS="plaintable" SUMMARY="This table displays Menu Items and Banner Search textbox."
+         WIDTH="100%">
+<TR>
+<TD CLASS="pldefault">
+<DIV class="headerlinksdiv2">
+<FORM ACTION="/PRODCartridge/twbksrch.P_ShowResults" METHOD="POST">
+Search
+<SPAN class="fieldlabeltextinvisible"><LABEL for=keyword_in_id><SPAN class="fieldlabeltext">Search</SPAN></LABEL></SPAN>
+<INPUT TYPE="text" NAME="KEYWRD_IN" SIZE="20" MAXLENGTH="65" ID="keyword_in_id">
+<INPUT TYPE="submit" VALUE="Go">
+</FORM>
+</div>
+</TD>
+<TD CLASS="pldefault"><p class="rightaligntext"></p>
+<SPAN class="pageheaderlinks">
+<A HREF="/PRODCartridge/twbkwbis.P_GenMenu?name=bmenu.P_RegMnu"  class="submenulinktext2" id="ssbbackurl">RETURN TO MENU</A>
+|
+<A HREF="/PRODCartridge/twbksite.P_DispSiteMap?menu_name_in=bmenu.P_MainMnu&amp;depth_in=2&amp;columns_in=3" accesskey="2" class="submenulinktext2">SITE MAP</A>
+|
+<A HREF="/stuhelp/hwshfsea.htm                       " accesskey="H" onClick="popup = window.open('/stuhelp/hwshfsea.htm                       ', 'PopupPage','height=500,width=450,scrollbars=yes,resizable=yes'); return false" target="_blank" onMouseOver="window.status='';  return true" onMouseOut="window.status=''; return true"onFocus="window.status='';  return true" onBlur="window.status=''; return true"  class="submenulinktext2">HELP</A>
+|
+<A HREF="twbkwbis.P_Logout" accesskey="3" class="submenulinktext2">EXIT</A>
+</span>
+</TD>
+</TR>
+</TABLE>
+</DIV>
+<DIV class="pagetitlediv">
+<TABLE  CLASS="plaintable" SUMMARY="This table displays title and static header displays."
+   WIDTH="100%">
+<TR>
+<TD CLASS="pldefault">
+<H2><B CLASS=imag_header>Look-Up Class to Add:</B></H2>
+</TD>
+<TD CLASS="pldefault">
+&nbsp;
+</TD>
+<TD CLASS="pldefault"><p class="rightaligntext"></p>
+<DIV class="staticheaders">
+Fall 2016<br>
+10/18/16 07:10 pm<br>
+</div>
+</TD>
+</TR>
+<TR>
+<TD class="bg3" width="100%" colSpan=3><IMG SRC="/wtlgifs/web_transparent.gif" ALT="Transparent Image" CLASS="headerImg" TITLE="Transparent Image"  NAME="web_transparent" HSPACE=0 VSPACE=0 BORDER=0 HEIGHT=3 WIDTH=10></TD>
+</TR>
+</TABLE>
+<a name="main_content"></a>
+</DIV>
+<DIV class="pagebodydiv">
+<!--  ** END OF twbkwbis.P_OpenDoc **  -->
+<DIV class="infotextdiv"><TABLE  CLASS="infotexttable" SUMMARY="This layout table contains information that may be helpful in understanding the content and functionality of this page.  It could be a brief set of instructions, a description of error messages, or other special information."><TR><TD CLASS="indefault"><IMG SRC="/wtlgifs/twgginfo.gif" CLASS="headerImg" TITLE=""  NAME="Info" HSPACE=0 VSPACE=0 BORDER=0 HEIGHT=24 WIDTH=27></TD><TD CLASS="indefault"><SPAN class="infotext"> <P><i>You may use the options below to search the class schedule. You may choose any combination of fields to narrow your search.</i></P><P><i>Once you have entered the parameters for your search, press the Class Search button to view your results.</i></P><!--Use the selection options below to search the class schedule for the term displayed above.  You may choose any combination of fields to narrow your search, but you must select at least one Subject. When your selection is complete, click Get Classes to perform the search.--></SPAN></TD></TR></TABLE><P></DIV>
+<FORM ACTION="/PRODCartridge/bwskfcls.P_GetCrse" METHOD="POST" onSubmit="return checkSubmit()">
+<INPUT TYPE="hidden" NAME="rsts" VALUE="dummy">
+<INPUT TYPE="hidden" NAME="crn" VALUE="dummy">
+<BR>
+<INPUT TYPE="hidden" NAME="term_in" VALUE="201603">
+<INPUT TYPE="hidden" NAME="sel_subj" VALUE="dummy">
+<INPUT TYPE="hidden" NAME="sel_day" VALUE="dummy">
+<INPUT TYPE="hidden" NAME="sel_schd" VALUE="dummy">
+<INPUT TYPE="hidden" NAME="sel_insm" VALUE="dummy">
+<INPUT TYPE="hidden" NAME="sel_camp" VALUE="dummy">
+<INPUT TYPE="hidden" NAME="sel_levl" VALUE="dummy">
+<INPUT TYPE="hidden" NAME="sel_sess" VALUE="dummy">
+<INPUT TYPE="hidden" NAME="sel_instr" VALUE="dummy">
+<INPUT TYPE="hidden" NAME="sel_ptrm" VALUE="dummy">
+<INPUT TYPE="hidden" NAME="sel_attr" VALUE="dummy">
+<TABLE  CLASS="dataentrytable" SUMMARY="Table is used to present the course search criteria">
+<TR>
+<TD CLASS="delabel" scope="row" ><LABEL for=subj_id><SPAN class="fieldlabeltext">Subject: </SPAN></LABEL></TD>
+<TD COLSPAN="37" CLASS="dedefault">
+<SELECT NAME="sel_subj" SIZE="10" MULTIPLE ID="subj_id">
+<OPTION VALUE="ACA">Academy for Classical Acting
+<OPTION VALUE="ACCY">Accountancy
+<OPTION VALUE="AMST">American Studies
+<OPTION VALUE="ANAT">Anatomy & Regenerative Biology
+<OPTION VALUE="ANES">Anesthesiology
+<OPTION VALUE="ANTH">Anthropology
+<OPTION VALUE="APSC">Applied Science
+<OPTION VALUE="ARAB">Arabic
+<OPTION VALUE="ARTH">Art Therapy
+<OPTION VALUE="AH">Art/Art History
+<OPTION VALUE="FA">Art/Fine Arts
+<OPTION VALUE="ASTR">Astronomy
+<OPTION VALUE="BIOC">Biochemistry
+<OPTION VALUE="BISC">Biological Sciences
+<OPTION VALUE="BME">Biomedical Engineering
+<OPTION VALUE="BMSC">Biomedical Sciences
+<OPTION VALUE="BIOS">Biostatistics
+<OPTION VALUE="BADM">Business Administration
+<OPTION VALUE="CHEM">Chemistry
+<OPTION VALUE="CHIN">Chinese
+<OPTION VALUE="CE">Civil Engineering
+<OPTION VALUE="CLAS">Classical Studies
+<OPTION VALUE="CML">Clinical Mgt & Leadership
+<OPTION VALUE="CRA">Clinical Research Admin
+<OPTION VALUE="CPS">College/Professional Studies
+<OPTION VALUE="CCAS">Columbian College
+<OPTION VALUE="COMM">Communication
+<OPTION VALUE="CSCI">Computer Science
+<OPTION VALUE="CED">Corcoran Art Education
+<OPTION VALUE="CAH">Corcoran Art History
+<OPTION VALUE="CBK">Corcoran Art and the Book
+<OPTION VALUE="CAS">Corcoran Arts & Humanities
+<OPTION VALUE="CCR">Corcoran Ceramics
+<OPTION VALUE="CCE">Corcoran Continuing Education
+<OPTION VALUE="CDE">Corcoran Design
+<OPTION VALUE="CDM">Corcoran Digital Media Design
+<OPTION VALUE="CEX">Corcoran Exhibition Design
+<OPTION VALUE="CFA">Corcoran Fine Art
+<OPTION VALUE="CFN">Corcoran First Year Foundation
+<OPTION VALUE="CGD">Corcoran Graphic Design
+<OPTION VALUE="CID">Corcoran Interior Design
+<OPTION VALUE="CPH">Corcoran Photography
+<OPTION VALUE="CPJ">Corcoran Photojournalism
+<OPTION VALUE="CPR">Corcoran Printmaking
+<OPTION VALUE="CSL">Corcoran Sculpture
+<OPTION VALUE="CNSL">Counseling
+<OPTION VALUE="CPED">Curriculum and Pedagogy
+<OPTION VALUE="DATS">Data Science
+<OPTION VALUE="DNSC">Decision Sciences
+<OPTION VALUE="DERM">Dermatology
+<OPTION VALUE="EALL">East Asian Lang & Lit
+<OPTION VALUE="ECON">Economics
+<OPTION VALUE="EDUC">Educational Leadership
+<OPTION VALUE="ECE">Electrical & Computer Engring
+<OPTION VALUE="EHS">Emergency Health Services
+<OPTION VALUE="EMED">Emergency Medicine
+<OPTION VALUE="ENGL">English
+<OPTION VALUE="EAP">English for Academic Purposes
+<OPTION VALUE="EMSE">Engr Mgt & Systems Engineering
+<OPTION VALUE="ENRP">Environmental Resource Policy
+<OPTION VALUE="EPID">Epidemiology
+<OPTION VALUE="EXNS">Exercise & Nutrition Sciences
+<OPTION VALUE="FILM">Film Studies
+<OPTION VALUE="FINA">Finance
+<OPTION VALUE="FORP">Forensic Psychology
+<OPTION VALUE="FORS">Forensic Sciences
+<OPTION VALUE="FREN">French
+<OPTION VALUE="GTCH">GWTeach
+<OPTION VALUE="GEOG">Geography
+<OPTION VALUE="GEOL">Geology
+<OPTION VALUE="GER">Germanic Language & Literature
+<OPTION VALUE="GCON">Government Contracts
+<OPTION VALUE="GREK">Greek
+<OPTION VALUE="HCQ">Health Care Quality
+<OPTION VALUE="HCS">Health Care Science
+<OPTION VALUE="HSCI">Health Sciences Programs
+<OPTION VALUE="HLWL">Health and Wellness
+<OPTION VALUE="HSML">HealthServicesMgt&Leadership
+<OPTION VALUE="HEBR">Hebrew
+<OPTION VALUE="HIST">History
+<OPTION VALUE="HOMP">Hominid Paleobiology
+<OPTION VALUE="HONR">Honors
+<OPTION VALUE="HDEV">Human Development
+<OPTION VALUE="HOL">Human Organizational Learning
+<OPTION VALUE="HSSJ">Human Services&Social Justice
+<OPTION VALUE="ISTM">InfSystemsTechnologyManagement
+<OPTION VALUE="PSIS">Integrated Inf, Sci, and Tech
+<OPTION VALUE="INTM">Integrative Medicine
+<OPTION VALUE="IDIS">Interdisciplinary Courses
+<OPTION VALUE="IAD">Interior Architecture & Design
+<OPTION VALUE="INTD">Interior Design
+<OPTION VALUE="IAFF">International Affairs
+<OPTION VALUE="IBUS">International Business
+<OPTION VALUE="ITAL">Italian
+<OPTION VALUE="JAPN">Japanese
+<OPTION VALUE="JSTD">Judaic Studies
+<OPTION VALUE="KOR">Korean
+<OPTION VALUE="LATN">Latin
+<OPTION VALUE="LAW">Law
+<OPTION VALUE="LGAF">Legislative Affairs
+<OPTION VALUE="LSPA">Lifestyle,Sport& Phys Activity
+<OPTION VALUE="LING">Linguistics
+<OPTION VALUE="MGT">Management
+<OPTION VALUE="MKTG">Marketing
+<OPTION VALUE="MBAD">Master of Business Administrtn
+<OPTION VALUE="MATH">Mathematics
+<OPTION VALUE="MAE">Mechanical & Aerospace Engring
+<OPTION VALUE="MLS">Medical Laboratory Science
+<OPTION VALUE="MED">Medicine
+<OPTION VALUE="MICR">Microbio, Immun & Tropical Med
+<OPTION VALUE="MMED">Molecular Medicine
+<OPTION VALUE="MSTD">Museum Studies
+<OPTION VALUE="MUS">Music
+<OPTION VALUE="NSC">Naval Science
+<OPTION VALUE="NURS">Nursing
+<OPTION VALUE="OB&G">Obstetrics & Gynecology
+<OPTION VALUE="OT">Occupational Therapy
+<OPTION VALUE="ORSC">Organizational Sciences
+<OPTION VALUE="PATH">Pathology
+<OPTION VALUE="PSTD">Peace Studies
+<OPTION VALUE="PED">Pediatrics
+<OPTION VALUE="PERS">Persian
+<OPTION VALUE="PHRG">Pharmacogenomics
+<OPTION VALUE="PHAR">Pharmacology
+<OPTION VALUE="PHIL">Philosophy
+<OPTION VALUE="PT">Physical Therapy
+<OPTION VALUE="PA">Physician Assistant
+<OPTION VALUE="PHYS">Physics
+<OPTION VALUE="PMGT">Political Management
+<OPTION VALUE="PPSY">Political Psychology
+<OPTION VALUE="PSC">Political Science
+<OPTION VALUE="PORT">Portuguese
+<OPTION VALUE="PSCS">Prof Studies - Cybersecurity
+<OPTION VALUE="PSLD">Prof Studies Landscape Design
+<OPTION VALUE="PSLM">Prof Studies Law Firm Mgmt
+<OPTION VALUE="PSPL">Prof Studies in PublicLeadrshp
+<OPTION VALUE="PSPR">Prof Studies-Public Relations
+<OPTION VALUE="PSPB">Prof Studies-Publishing
+<OPTION VALUE="PSAD">ProfStd-AdvocacyGlobalEnvr
+<OPTION VALUE="PSHC">ProfStudies HlthCareCorpCompli
+<OPTION VALUE="PSUS">ProfStudiesUrbanSustainability
+<OPTION VALUE="PSYD">Professional Psychology
+<OPTION VALUE="PCHI">Psychiatry & Behavioral Sci
+<OPTION VALUE="PSYC">Psychology
+<OPTION VALUE="PUBH">Public Health
+<OPTION VALUE="PPPA">Public Policy and Public Admin
+<OPTION VALUE="RAD">Radiology
+<OPTION VALUE="RAFF">Regulatory Affairs
+<OPTION VALUE="REL">Religion
+<OPTION VALUE="SEAS">School of Eng & Applied Sci
+<OPTION VALUE="SMPA">School of Media&Public Affairs
+<OPTION VALUE="PSSL">Security & Safety Leadership
+<OPTION VALUE="SLAV">Slavic Languages & Lit
+<OPTION VALUE="SOC">Sociology
+<OPTION VALUE="SPAN">Spanish
+<OPTION VALUE="SPED">Special Education
+<OPTION VALUE="SPHR">Speech and Hearing Science
+<OPTION VALUE="STAT">Statistics
+<OPTION VALUE="SMPP">Strategic Mgt & Public Policy
+<OPTION VALUE="SURG">Surgery
+<OPTION VALUE="SUST">Sustainability
+<OPTION VALUE="TRDA">Theatre and Dance
+<OPTION VALUE="TSTD">Tourism Studies
+<OPTION VALUE="THS">Translational Health Sciences
+<OPTION VALUE="TURK">Turkish
+<OPTION VALUE="UNIV">University
+<OPTION VALUE="UW">University Writing
+<OPTION VALUE="WLP">Women and Leadership Program
+<OPTION VALUE="WSTU">Women's Studies
+</SELECT>
+</TD>
+</TR>
+</TABLE>
+<TABLE  CLASS="plaintable" style="margin-top:20px;">
+<tr style="display:none">
+<TD CLASS="pllabel"><LABEL for=crse_id><SPAN class="fieldlabeltext">Course Number: </SPAN></LABEL></TD>
+<TD COLSPAN="7" CLASS="pldefault"><INPUT TYPE="text" NAME="sel_crse" SIZE="6" MAXLENGTH="5" ID="crse_id"></TD>
+</TR>
+<tr style="display:none">
+<TD CLASS="pllabel"><LABEL for=title_id><SPAN class="fieldlabeltext">Title: </SPAN></LABEL></TD>
+<TD COLSPAN="7" CLASS="pldefault"><INPUT TYPE="text" NAME="sel_title" SIZE="33" MAXLENGTH="30" ID="title_id"></TD>
+</TR>
+<tr style="display:none">
+<TD CLASS="pllabel"><LABEL for=credit_id_from><SPAN class="fieldlabeltext">Credit Range: </SPAN></LABEL></TD>
+<TD COLSPAN="7" CLASS="pldefault">
+<INPUT TYPE="text" NAME="sel_from_cred" SIZE="11" MAXLENGTH="10" ID="credit_id_from">
+ hours to  
+<LABEL for=credit_id_to><SPAN class="fieldlabeltextinvisible">Credit Range To:</SPAN></LABEL>
+<INPUT TYPE="text" NAME="sel_to_cred" SIZE="11" MAXLENGTH="10" ID="credit_id_to">
+ hours
+</TD>
+</TR>
+<tr style="display:none">
+<TD CLASS="pllabel"><LABEL for=ptrm_id><SPAN class="fieldlabeltext">Part of Term: </SPAN></LABEL><BR>     <SPAN class="fieldsmalltext">Non-date based courses only</SPAN></TD>
+<TD COLSPAN="7" CLASS="pldefault">
+<SELECT NAME="sel_ptrm" SIZE="3" MULTIPLE ID="ptrm_id">
+<OPTION VALUE="%" SELECTED>All
+</SELECT>
+</TD>
+</TR>
+<tr style="display:none">
+<TD CLASS="pllabel">Start Time: </TD>
+<TD COLSPAN="2" CLASS="pldefault">
+<LABEL for=begin_hh_id><SPAN class="fieldlabeltextinvisible">Hour</SPAN></LABEL>
+Hour <SELECT NAME="begin_hh" SIZE="1" ID="begin_hh_id">
+<OPTION VALUE="0"> 00
+<OPTION VALUE="1"> 01
+<OPTION VALUE="2"> 02
+<OPTION VALUE="3"> 03
+<OPTION VALUE="4"> 04
+<OPTION VALUE="5"> 05
+<OPTION VALUE="6"> 06
+<OPTION VALUE="7"> 07
+<OPTION VALUE="8"> 08
+<OPTION VALUE="9"> 09
+<OPTION VALUE="10"> 10
+<OPTION VALUE="11"> 11
+<OPTION VALUE="12"> 12
+</SELECT>
+</TD>
+<TD COLSPAN="2" CLASS="pldefault">
+<LABEL for=begin_mi_id><SPAN class="fieldlabeltextinvisible">Minute</SPAN></LABEL>
+Minute <SELECT NAME="begin_mi" SIZE="1" ID="begin_mi_id">
+<OPTION VALUE="0"> 00
+<OPTION VALUE="5"> 05
+<OPTION VALUE="10"> 10
+<OPTION VALUE="15"> 15
+<OPTION VALUE="20"> 20
+<OPTION VALUE="25"> 25
+<OPTION VALUE="30"> 30
+<OPTION VALUE="35"> 35
+<OPTION VALUE="40"> 40
+<OPTION VALUE="45"> 45
+<OPTION VALUE="50"> 50
+<OPTION VALUE="55"> 55
+</SELECT>
+</TD>
+</TR>
+<tr style="display:none">
+<TD CLASS="pllabel">End Time: </TD>
+<TD COLSPAN="2" CLASS="pldefault">
+<LABEL for=end_hh_id><SPAN class="fieldlabeltextinvisible">Hour</SPAN></LABEL>
+Hour <SELECT NAME="end_hh" SIZE="1" ID="end_hh_id">
+<OPTION VALUE="0"> 00
+<OPTION VALUE="1"> 01
+<OPTION VALUE="2"> 02
+<OPTION VALUE="3"> 03
+<OPTION VALUE="4"> 04
+<OPTION VALUE="5"> 05
+<OPTION VALUE="6"> 06
+<OPTION VALUE="7"> 07
+<OPTION VALUE="8"> 08
+<OPTION VALUE="9"> 09
+<OPTION VALUE="10"> 10
+<OPTION VALUE="11"> 11
+<OPTION VALUE="12"> 12
+</SELECT>
+</TD>
+<TD COLSPAN="2" CLASS="pldefault">
+<LABEL for=end_mi_id><SPAN class="fieldlabeltextinvisible">Minute</SPAN></LABEL>
+Minute <SELECT NAME="end_mi" SIZE="1" ID="end_mi_id">
+<OPTION VALUE="0"> 00
+<OPTION VALUE="5"> 05
+<OPTION VALUE="10"> 10
+<OPTION VALUE="15"> 15
+<OPTION VALUE="20"> 20
+<OPTION VALUE="25"> 25
+<OPTION VALUE="30"> 30
+<OPTION VALUE="35"> 35
+<OPTION VALUE="40"> 40
+<OPTION VALUE="45"> 45
+<OPTION VALUE="50"> 50
+<OPTION VALUE="55"> 55
+</SELECT>
+</TD>
+</TABLE>
+<INPUT TYPE="hidden" NAME="begin_ap" VALUE="x">
+<INPUT TYPE="hidden" NAME="end_ap" VALUE="y">
+<span id="courseBtnDiv" style="display:block;margin-left:60px;margin-bottom:50px;"></span>
+<INPUT TYPE="hidden" NAME="path" VALUE="1">
+<INPUT TYPE="submit" NAME="SUB_BTN" VALUE="Course Search">
+<INPUT TYPE="submit" NAME="SUB_BTN" VALUE="Advanced Search">
+</FORM>
+
+<!--  ** START OF twbkwbis.P_CloseDoc **  -->
+<TABLE  CLASS="plaintable" SUMMARY="This is table displays line separator at end of the page."
+                                             WIDTH="100%" cellSpacing=0 cellPadding=0 border=0><TR><TD class="bgtabon" width="100%" colSpan=2><IMG SRC="/wtlgifs/web_transparent.gif" ALT="Transparent Image" CLASS="headerImg" TITLE="Transparent Image"  NAME="web_transparent" HSPACE=0 VSPACE=0 BORDER=0 HEIGHT=3 WIDTH=10></TD></TR></TABLE>
+<A HREF="#top" onMouseover="window.status='Skip to top of page'; return true" onMouseout="window.status=''; return true" OnFocus="window.status='Skip to top of page'; return true" onBlur="window.status=''; return true" class="skiplinks">Skip to top of page</A>
+</DIV>
+<DIV class="footerbeforediv">
+
+</DIV>
+<DIV class="footerlinksdiv">
+<SPAN class="pagefooterlinks">
+<MAP NAME="Banner_Secured_Area_Links_F" title="Banner Secured Area Links">
+<p>
+<A HREF="#skip_Banner_Secured_Area_Links_F" onMouseover="window.status='Skip Banner Secured Area Links'; return true" onMouseout="window.status=''; return true" onFocus="window.status='Skip Banner Secured Area Links'; return true" onBlur="window.status=''; return true"  class="skiplinks">Skip Banner Secured Area Links</A>
+<P>[ <A HREF="/PRODCartridge/bwskfshd.P_CrseSchd">Student Schedule by Day & Time</A>
+ | <A HREF="/PRODCartridge/bwskfshd.P_CrseSchdDetl">Student Detail Schedule</A>
+ | <A HREF="/PRODCartridge/bwskoacc.P_ViewHold">View Holds</A>
+ ]
+</MAP>
+</SPAN>
+<a name="skip_Banner_Secured_Area_Links_F"></a>
+</DIV>
+<DIV class="footerafterdiv">
+
+</DIV>
+<DIV class="globalafterdiv">
+
+</DIV>
+<DIV class="globalfooterdiv">
+
+</DIV>
+<DIV class="pagefooterdiv">
+<SPAN class="releasetext">Release: 8.5.2.1</SPAN>
+</DIV>
+<DIV class="poweredbydiv">
+</DIV>
+<DIV class="div1"></DIV>
+<DIV class="div2"></DIV>
+<DIV class="div3"></DIV>
+<DIV class="div4"></DIV>
+<DIV class="div5"></DIV>
+<DIV class="div6"></DIV>
+<div class="banner_copyright"></div>
+</BODY>
+</HTML>
