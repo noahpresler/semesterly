@@ -14,16 +14,13 @@ import requests, cookielib, re, sys
 class GWParser:
 
 	def __init__(self):
-		print UserAgent().chrome
 		self.session = requests.Session()
 		self.headers = {'User-Agent' : UserAgent().chrome}
 		self.cookies = cookielib.CookieJar()
 		self.school = 'gw'
-		self.semester = ''
-		self.departments = {}
 		self.username = 'G45956511'
 		self.password = '052698'
-		self.url = 'https://banweb.gwu.edu'
+		self.url = 'https://banweb.gwu.edu/PRODCartridge'
 		self.course = {}
 
 	def get_html(self, url, payload=''):
@@ -50,7 +47,7 @@ class GWParser:
 
 		return html.encode('utf-8')
 
-	def post_http(self, url, form, headers, payload=''):
+	def post_http(self, url, form, payload=''):
 
 		try:
 			post = self.session.post(
@@ -58,12 +55,12 @@ class GWParser:
 				data = form,
 				params = payload,
 				cookies = self.cookies,
-				headers = headers,
+				headers = self.headers,
 				verify = False,
 			)
 
 			print 'POST', post.url
-			print post
+
 			return post
 		except (requests.exceptions.Timeout,
 			requests.exceptions.ConnectionError):
@@ -74,44 +71,90 @@ class GWParser:
 	def login(self):
 		print "Logging in..."
 
-		self.get_html(self.url + '/PRODCartridge/twbkwbis.P_WWWLogin')
-
-		for cookie in self.cookies:
-			print cookie.name, cookie.value
+		# Collect necessary cookies
+		self.get_html(self.url + '/twbkwbis.P_WWWLogin')
 
 		credentials = {
 			'sid' : self.username,
 			'PIN' : self.password
 		}
 
-		headers = {
-			# 'Connection':'keep-alive',
-			# 'Content-Length':'24',
-			# 'Cache-Control':'max-age=0',
-			'Origin': 'https://banweb.gwu.edu',
-			'Upgrade-Insecure-Requests':'1',
-			'User-Agent': UserAgent().chrome,
-			'Content-Type':'application/x-www-form-urlencoded',
-			# 'Accept':'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8',
-			'Referer': 'https://banweb.gwu.edu/PRODCartridge/twbkwbis.P_WWWLogin'
-			# 'Accept-Encoding':'gzip, deflate, br',
-			# 'Accept-Language':'en-US,en;q=0.8'
-		}
+		self.headers['Referer'] = 'https://banweb.gwu.edu/PRODCartridge/twbkwbis.P_WWWLogin'
 
-		# self.post_http(self.url + '/PRODCartridge/twbkwbis.P_ValLogin', {}, credentials).text
-		print self.post_http(self.url + '/PRODCartridge/twbkwbis.P_ValLogin', credentials, headers).text
+		if self.post_http(self.url + '/twbkwbis.P_ValLogin', credentials).status_code != 200:
+			sys.stderr.write('Unexpected error: login unsuccessful - ' + str(sys.exc_info()[0]) + '\n')
+			exit(1)
 
-		query = {
-			'name' : 'bmenu.P_MainMnu',
-			# 'msg' : 'WELCOME <I><b>Welcome, Rachel Presler, to the WWW Information System!</b></I>10/17/1604:54 pm',
-			# 'msg' : 'WELCOME+\%3CI\%3E\%3Cb\%3EWelcome,+Rachel+Presler,+to+the+WWW+Information+System!\%3C\%2Fb\%3E\%3C\%2FI\%3E10\%2F17\%2F1604\%3A54+pm'
-		}
-		logged_in = self.get_html(self.url + '/PRODCartridge/twbkwbis.P_GenMenu', query)
+	def direct_to_search_page(self):
+		query = {}
+		# query['name'] = 'bmenu.P_MainMnu'
+		# self.get_html(self.url + '/twbkwbis.P_GenMenu', query)
+		# query['name'] = 'bmenu.P_StuMainMnu'
+		# self.get_html(self.url + '/twbkwbis.P_GenMenu', query)
+		# query['name'] = 'bmenu.P_RegMnu'
+		# self.get_html(self.url + '/twbkwbis.P_GenMenu', query)
+		# query.clear()
+		query['term_in'] = ''
+		return self.get_html(self.url + '/bwskfcls.P_CrseSearch', query)
 
-		# print BeautifulSoup(logged_in, 'html.parser').prettify().encode('utf-8')
 
 	def parse(self):
 		self.login()
+		# self.direct_to_search_page()
+
+		# NOTE: hardcoded semesters to parse
+		semesters = {'F':'201603', 'S':'201701'}
+		for semester in semesters:
+
+			search_query = {
+				'p_calling_proc' : 'P_CrseSearch',
+				'p_term' : semesters[semester]
+			}
+			# get list of departments
+			depts = (dept['value'] for dept in BeautifulSoup(self.post_http(self.url + '/bwckgens.p_proc_term_date', search_query).text, 'html.parser').find('select', {'id' : 'subj_id'}).find_all('option'))
+	
+			for dept in depts:
+
+				print self.post_http(self.url + '/bwskfcls.P_GetCrse', GWParser.search_params(term_in=semesters[semester], sel_subj=dept)).text
+
+				break
+				
+			break
+		# print BeautifulSoup(self.get_html(self.url + '/bwskfcls.P_CrseSearch'), 'html.parser').prettify()
+
+	@staticmethod
+	def search_params(**kwargs):
+		params = {
+			'rsts':'dummy',
+			'crn':'dummy',
+			'term_in':'201603',
+			'sel_subj':'dummy',
+			'sel_day':'dummy',
+			'sel_schd':'dummy',
+			'sel_insm':'dummy',
+			'sel_camp':'dummy',
+			'sel_levl':'dummy',
+			'sel_sess':'dummy',
+			'sel_instr':'dummy',
+			'sel_ptrm':'dummy',
+			'sel_attr':'dummy',
+			'sel_subj':'dummy',
+			'sel_crse':'',
+			'sel_title':'',
+			'sel_from_cred':'',
+			'sel_to_cred':'',
+			'sel_ptrm':'%25',
+			'begin_hh':'0',
+			'begin_mi':'0',
+			'end_hh':'0',
+			'end_mi':'0',
+			'begin_ap':'x',
+			'end_ap':'y',
+			'path':'1',
+			'SUB_BTN':'Course+Search'
+		}
+		params.update(kwargs)
+		return params
 
 def main():
 	gp = GWParser()
