@@ -202,6 +202,10 @@ export class SearchResult extends React.Component {
             <h3>{course.name || course.code} </h3>
             { addOptionalCourseButton}
             { addRemoveButton }
+            <a onMouseDown={(event) => {
+                event.stopPropagation();
+                this.props.showIntegrationModal(course.id)
+            }}>Add as Pilot</a>
             <h4 className="label" style={style}>{info}</h4><h4 className={classNames('label','bubble')}>{this.props.campuses[course.campus]}</h4>
         </li>);
     }
