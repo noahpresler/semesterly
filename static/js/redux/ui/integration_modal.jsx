@@ -7,7 +7,9 @@ export class IntegrationModal extends React.Component {
     constructor(props) {
         super(props);
         this.changeForm = this.changeForm.bind(this);
-        this.enabled = false
+        this.state = { 
+            enabled: false
+        };
         // this.appendSession = this.appendSession.bind(this);
         // this.removeSession = this.removeSession.bind(this);
         // this.handleChange = this.handleChange.bind(this);
@@ -20,8 +22,7 @@ export class IntegrationModal extends React.Component {
         }
     }
     changeForm() {
-        this.enabled = !this.enabled;
-        console.log(this.enabled);
+        this.setState({enabled: !this.state.enabled});
     }
     // appendSession() {
     //     this.setState({sessions: this.state.sessions.push(this.json)});
@@ -48,7 +49,7 @@ export class IntegrationModal extends React.Component {
                             <h3>Would you like to enable Pilot for this course?</h3>
                         </div>
                         <label className="switch switch-slide">
-                            <input ref="enable_pilot" className="switch-input" type="checkbox" checked={this.enabled} onChange={this.changeForm} defaultChecked={true}/>
+                            <input ref="enable_pilot" className="switch-input" type="checkbox" checked={this.state.enabled} onChange={this.changeForm} defaultChecked={true}/>
                             <span className="switch-label" data-on="Yes" data-off="No"></span>
                             <span className="switch-handle"></span>
                         </label>
