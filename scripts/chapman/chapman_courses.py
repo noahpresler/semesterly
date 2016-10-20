@@ -12,6 +12,9 @@ from itertools import izip
 from bs4 import BeautifulSoup
 import requests, cookielib, re, sys
 
+from amazonproduct import API
+api = API(locale='us')
+
 class ChapmanParser:
 
 	SCHOOL = 'chapman'
@@ -144,7 +147,7 @@ class ChapmanParser:
 					capacity 	= soup.find('span', {'id' : 'SSR_CLS_DTL_WRK_ENRL_CAP'}).text
 					enrollment 	= soup.find('span', {'id' : 'SSR_CLS_DTL_WRK_ENRL_TOT'}).text
 					waitlist 	= soup.find('span', {'id' : 'SSR_CLS_DTL_WRK_WAIT_TOT'}).text
-					descr = soup.find('span', {'id' : 'DERIVED_CLSRCH_DESCRLONG'})
+					descr 		= soup.find('span', {'id' : 'DERIVED_CLSRCH_DESCRLONG'})
 					notes 		= soup.find('span', {'id' : 'DERIVED_CLSRCH_SSR_CLASSNOTE_LONG'})
 					info 		= soup.find('span', {'id' : 'SSR_CLS_DTL_WRK_SSR_REQUISITE_LONG'})
 
@@ -153,15 +156,19 @@ class ChapmanParser:
 					locs 	= soup.find_all('span', id=re.compile(r'MTG_LOC\$\d*'))
 					instrs 	= soup.find_all('span', id=re.compile(r'MTG_INSTR\$\d*'))
 					dates 	= soup.find_all('span', id=re.compile(r'MTG_DATE\$\d*'))
-					isbns 	= soup.find_all('span', id=re.compile(r'DERIVED_SSR_TXB_SSR_TXBDTL_ISBN\$\d*'))
+
+					# parse textbooks
+					isbns 	= zip(soup.find_all('span', id=re.compile(r'DERIVED_SSR_TXB_SSR_TXBDTL_ISBN\$\d*')), soup.find_all('span', id=re.compile(r'DERIVED_SSR_TXB_SSR_TXB_STATDESCR\$\d*')))
+					for i in range(len(isbns)):
+						isbns[i] = (filter(lambda x: x.isdigit(), isbns[i][0].text), isbns[i][1].text[0].upper() == 'R')
+
+					# combine instrs into a set
+					instrs = ', '.join({instr.text for instr in instrs})
+					self.course['instrs'] = instrs
 
 					# Extract info from title
 					print '\t' + title
 					rtitle = re.match(r'(\w+\s*\w+) - (\w+)\s*(\S.+)', title.encode('ascii', 'ignore'))
-
-					# NOTE: Chapman specific
-					# handle prereqs
-					self.course['prereqs'] = ''
 
 					# Place course info into course model
 					self.course['code'] 	= rtitle.group(1)
@@ -176,8 +183,11 @@ class ChapmanParser:
 					self.course['enrolment'] = int(enrollment)
 
 					course = self.create_course()
+					section = self.create_section(course)
+					for isbn in isbns:
+						self.make_textbook(isbn[1], isbn[0], section)
 
-					for sched, loc, instr, date in izip(scheds, locs, instrs, dates):
+					for sched, loc, date in izip(scheds, locs, dates):
 
 						rsched = re.match(r'([a-zA-Z]*) (.*) - (.*)', sched.text)
 
@@ -188,13 +198,12 @@ class ChapmanParser:
 							days = None
 							time = (None, None)
 
-						self.course['instrs'] = instr.text # NOTE: instr applied to each offering
 						self.course['time_start'] = time[0]
 						self.course['time_end'] = time[1]
 						self.course['location'] = loc.text
 						self.course['days'] = days
 
-						self.create_offerings(self.create_section(course))
+						self.create_offerings(section)
 
 	# NOTE: chapman specific
 	def extract_prereqs(self, text):
@@ -209,6 +218,8 @@ class ChapmanParser:
 			extracted = rex.search(text)
 			if extracted:
 				self.course[ex] = extracted.group(1)
+			else:
+				self.course[ex] = ''
 			text = rex.sub('', text).strip()
 
 		return text
@@ -280,6 +291,55 @@ class ChapmanParser:
 						'location': self.course.get('location')
 					}
 				)
+
+	# NOTE: (mostly) copied from base bn parser, need to do full integration
+	def make_textbook(self, is_required, isbn_number, section):
+
+		info = self.get_amazon_fields(isbn_number)
+
+		# update/create textbook
+		textbook_data = {
+			'detail_url': info['DetailPageURL'],
+			'image_url': info["ImageURL"],
+			'author': info["Author"],
+			'title': info["Title"]
+		}
+		textbook, created = Textbook.objects.update_or_create(isbn=isbn_number,
+														defaults=textbook_data)
+
+		# link to course section
+		section, created = TextbookLink.objects.update_or_create(
+			is_required = is_required,
+			section = section,
+			textbook = textbook
+		)
+
+		# print results
+		if created:
+			print "Textbook created: " + textbook.title
+		else:
+			print "Textbook found, not created: " + textbook.title
+
+	# NOTE: (mostly) copied from base bn parser, need to do full integration
+	def get_amazon_fields(self,isbn):
+		try:
+			result = api.item_lookup(isbn.strip(), IdType='ISBN', SearchIndex='Books', ResponseGroup='Large')
+			info = {
+				"DetailPageURL" : self.get_detail_page(result),
+				"ImageURL" : self.get_image_url(result),
+				"Author" : self.get_author(result),
+				"Title" : self.get_title(result)
+			}
+		except:
+			import traceback
+			traceback.print_exc()
+			info = {
+				"DetailPageURL" : "Cannot be found",
+				"ImageURL" : "Cannot be found",
+				"Author" : "Cannot be found",
+				"Title" : "Cannot be found"
+			}
+		return info
 
 def main():
 	vp = ChapmanParser()
