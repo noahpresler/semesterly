@@ -92,24 +92,27 @@ class ChapmanParser:
 		search_query['SSR_CLSRCH_WRK_INCLUDE_CLASS_DAYS$5'] = 'J'
 
 		# extract search query info
-		terms = soup.find('select', {'id' : 'CLASS_SRCH_WRK2_STRM$35$'}).find_all('option')
-		departments = soup.find('select', {'id' : 'SSR_CLSRCH_WRK_SUBJECT_SRCH$1'}).find_all('option')
+		# terms = soup.find('select', {'id' : 'CLASS_SRCH_WRK2_STRM$35$'}).find_all('option')
+		departments = soup.find('select', {'id' : 'SSR_CLSRCH_WRK_SUBJECT_SRCH$1'}).find_all('option')[1:]
 		# NOTE: first element of dropdown lists in search area is empty
 
-		for term in terms[1:]:
+		# NOTE: hardcoded semesters Fall, Interim, Spring 2016-2017
+		terms = {'F':'2168', 'I':'2172', 'S':'2174'}
 
-			print 'Parsing courses for', term.text
+		for term in terms:
 
-			self.course['semester'] = term.text[0].upper()
+			print 'Parsing courses for', term
+
+			self.course['semester'] = term
 
 			# update search payload with term as parameter
-			search_query['CLASS_SRCH_WRK2_STRM$35$'] = term['value']
+			search_query['CLASS_SRCH_WRK2_STRM$35$'] = terms[term]
 
-			for department in departments[1:]:
+			for department in departments:
 
 				print '> Parsing courses in department', department.text
 
-				self.course['department'] = department['value']
+				self.course['department'] = department.text
 
 				# Update search payload with department code
 				search_query['SSR_CLSRCH_WRK_SUBJECT_SRCH$1'] = department['value']
@@ -119,9 +122,8 @@ class ChapmanParser:
 
 				# check for valid search/page
 				if soup.find('td', {'id' : 'PTBADPAGE_' }) or soup.find('div', {'id' : 'win1divDERIVED_CLSMSG_ERROR_TEXT'}):
-					print 'ERROR on search'
 					if soup.find('div', {'id' : 'win1divDERIVED_CLSMSG_ERROR_TEXT'}):
-						print soup.find('div', {'id' : 'win1divDERIVED_CLSMSG_ERROR_TEXT'}).text
+						print 'Error on search: ' + soup.find('div', {'id' : 'win1divDERIVED_CLSMSG_ERROR_TEXT'}).text
 					continue
 
 				# fill payload for course description page request
@@ -142,7 +144,7 @@ class ChapmanParser:
 					capacity 	= soup.find('span', {'id' : 'SSR_CLS_DTL_WRK_ENRL_CAP'}).text
 					enrollment 	= soup.find('span', {'id' : 'SSR_CLS_DTL_WRK_ENRL_TOT'}).text
 					waitlist 	= soup.find('span', {'id' : 'SSR_CLS_DTL_WRK_WAIT_TOT'}).text
-					description = soup.find('span', {'id' : 'DERIVED_CLSRCH_DESCRLONG'})
+					descr = soup.find('span', {'id' : 'DERIVED_CLSRCH_DESCRLONG'})
 					notes 		= soup.find('span', {'id' : 'DERIVED_CLSRCH_SSR_CLASSNOTE_LONG'})
 					info 		= soup.find('span', {'id' : 'SSR_CLS_DTL_WRK_SSR_REQUISITE_LONG'})
 
@@ -154,24 +156,37 @@ class ChapmanParser:
 					isbns 	= soup.find_all('span', id=re.compile(r'DERIVED_SSR_TXB_SSR_TXBDTL_ISBN\$\d*'))
 
 					# Extract info from title
-					rtitle = re.match(r'(.*) - (\d*)(.*)', title)
+					print '\t' + title
+					rtitle = re.match(r'(\w+\s*\w+) - (\w+)\s*(\S.+)', title.encode('ascii', 'ignore'))
+
+					# NOTE: Chapman specific
+					# handle prereqs
+					self.course['prereqs'] = ''
 
 					# Place course info into course model
-					self.course['code'] = rtitle.group(1)
-					self.course['name'] = rtitle.group(3).strip()
-					self.course['credits'] = float(re.match(r'(\d*).*', units).group(1))
-					self.course['descr'] = '\n-'.join(map(lambda a: a.text, filter(lambda a: True if a else False, [description, info, notes])))
-					self.course['units'] = re.match(r'(\d*).*', units).group(1)
-					self.course['section'] = rtitle.group(2)
-					self.course['size'] = int(capacity)
+					self.course['code'] 	= rtitle.group(1)
+					self.course['section'] 	= rtitle.group(2)
+					self.course['name'] 	= rtitle.group(3)
+					self.course['credits']	= float(re.match(r'(\d*).*', units).group(1))
+					self.course['descr'] 	= self.extract_prereqs(descr.text) if descr else ''
+					self.course['notes'] 	= self.extract_prereqs(notes.text) if notes else ''
+					self.course['info'] 	= self.extract_prereqs(info.text) if info else ''
+					self.course['units'] 	= re.match(r'(\d*).*', units).group(1)
+					self.course['size'] 	= int(capacity)
 					self.course['enrolment'] = int(enrollment)
+
 					course = self.create_course()
 
 					for sched, loc, instr, date in izip(scheds, locs, instrs, dates):
 
 						rsched = re.match(r'([a-zA-Z]*) (.*) - (.*)', sched.text)
-						days = map(lambda d: ChapmanParser.DAY_MAP[d], re.findall('[A-Z][^A-Z]*', rsched.group(1)))
-						time = (ChapmanParser.time_12to24(rsched.group(2)), ChapmanParser.time_12to24(rsched.group(3)))
+
+						if rsched:
+							days = map(lambda d: ChapmanParser.DAY_MAP[d], re.findall('[A-Z][^A-Z]*', rsched.group(1)))
+							time = (ChapmanParser.time_12to24(rsched.group(2)), ChapmanParser.time_12to24(rsched.group(3)))
+						else: # handle TBA classes
+							days = None
+							time = (None, None)
 
 						self.course['instrs'] = instr.text # NOTE: instr applied to each offering
 						self.course['time_start'] = time[0]
@@ -180,6 +195,23 @@ class ChapmanParser:
 						self.course['days'] = days
 
 						self.create_offerings(self.create_section(course))
+
+	# NOTE: chapman specific
+	def extract_prereqs(self, text):
+
+		extractions = {
+			'prereqs' : r'Prerequisite(?:s?)[:,]\s(.*?)\.',
+			'coreqs'  : r'Corequisite(?:s?)[:,]\s(.*?)\.'
+		}
+
+		for ex in extractions:
+			rex = re.compile(extractions[ex])
+			extracted = rex.search(text)
+			if extracted:
+				self.course[ex] = extracted.group(1)
+			text = rex.sub('', text).strip()
+
+		return text
 
 	@staticmethod
 	def time_12to24(time12):
@@ -205,11 +237,6 @@ class ChapmanParser:
 			update_object.save()
 
 	def create_course(self):
-		print self.course.get('code')
-		print self.course.get('credits')
-		print self.course.get('descr')
-		print self.course.get('department')
-		print self.course.get('credits')
 		course, CourseCreated = Course.objects.update_or_create(
 			code = self.course['code'],
 			school = ChapmanParser.SCHOOL,
@@ -218,9 +245,11 @@ class ChapmanParser:
 				'description': self.course.get('descr'),
 				'department': self.course.get('department'),
 				'num_credits': self.course.get('credits'),
+				'prerequisites': self.course.get('prereqs'),
+				'corequisites': self.course.get('coreqs'),
+				'notes': self.course.get('notes'),
+				'info' : self.course.get('info')
 				# 'areas': self.course.get('areas'),
-				# 'prerequisites': self.course.get('prereqs'),
-				# 'level': self.course.get('level') # NOTE: this should not be required as input
 			}
 		)
 		return course
@@ -240,16 +269,17 @@ class ChapmanParser:
 		return section
 
 	def create_offerings(self, section_model):
-		for day in list(self.course.get('days')):
-			offering_model, offering_was_created = Offering.objects.update_or_create(
-				section = section_model,
-				day = day,
-				time_start = self.course.get('time_start'),
-				time_end = self.course.get('time_end'),
-				defaults = {
-					'location': self.course.get('location')
-				}
-			)
+		if self.course.get('days'):
+			for day in self.course.get('days'):
+				offering_model, offering_was_created = Offering.objects.update_or_create(
+					section = section_model,
+					day = day,
+					time_start = self.course.get('time_start'),
+					time_end = self.course.get('time_end'),
+					defaults = {
+						'location': self.course.get('location')
+					}
+				)
 
 def main():
 	vp = ChapmanParser()
