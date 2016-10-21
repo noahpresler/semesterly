@@ -1,7 +1,7 @@
-# @what	Chapman Course Parser
+# @what	Queens (2) Course Parser
 # @org	Semeseter.ly
 # @author	Michael N. Miller
-# @date	9/3/16
+# @date	10/21/16
 
 import django, os, datetime
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "semesterly.settings")
@@ -15,10 +15,10 @@ import requests, cookielib, re, sys
 from amazonproduct import API
 api = API(locale='us')
 
-class PennStateParser:
+class QueensParser:
 
-	SCHOOL = 'pennstate'
-	BASE_URL = 'https://public.lionpath.psu.edu/psc/CSPRD/EMPLOYEE/HRMS/c/COMMUNITY_ACCESS.CLASS_SEARCH.GBL'
+	SCHOOL = 'queens2'
+	BASE_URL = 'https://saself.ps.queensu.ca/psp/saself/EMPLOYEE/HRMS/c/SA_LEARNER_SERVICES.SSS_STUDENT_CENTER.GBL'
 	HEADERS = {'User-Agent' : 'My User Agent 1.0'}
 	DAY_MAP = {
 		'Mo' : 'M',
@@ -29,6 +29,8 @@ class PennStateParser:
 		'Sa' : 'S',
 		'Su' : 'U'
 	}
+	USER = '1dc4'
+	PASS = 'CREOmule1'
 
 	def __init__(self):
 		self.course = {}
@@ -43,7 +45,7 @@ class PennStateParser:
 					url,
 					params = payload,
 					cookies = self.cookies,
-					headers = PennStateParser.HEADERS,
+					headers = QueensParser.HEADERS,
 					verify = True
 				)
 
@@ -67,7 +69,7 @@ class PennStateParser:
 				data = form,
 				params = payload,
 				cookies = self.cookies,
-				headers = PennStateParser.HEADERS,
+				headers = QueensParser.HEADERS,
 				verify = True,
 			)
 
@@ -81,9 +83,30 @@ class PennStateParser:
 
 		return None
 
+	def login(self):
+		login_url = 'https://login.queensu.ca/idp/Authn/UserPassword'
+
+		# collect some cookies (yummy!)
+		self.get_html(QueensParser.BASE_URL)
+		html = self.get_html('https://my.queensu.ca/')
+
+		credentials = {
+			'j_username':'1dc4',
+			'j_password':'CREOmule1',
+			'Login':' Log In '
+		}
+
+		post = self.post_http(login_url, credentials)
+		print post
+		print post.text
+
+		exit(0)
+
 	def parse(self):
 
-		soup = BeautifulSoup(self.get_html(PennStateParser.BASE_URL + '?PORTALPARAM_PTCNAV=HC_CLASS_SEARCH_GBL&EOPP.SCNode=HRMS&EOPP.SCPortal=EMPLOYEE&EOPP.SCName=CO_EMPLOYEE_SELF_SERVICE&EOPP.SCLabel=Self%20Service&EOPP.SCPTfname=CO_EMPLOYEE_SELF_SERVICE&FolderPath=PORTAL_ROOT_OBJECT.CO_EMPLOYEE_SELF_SERVICE.HC_CLASS_SEARCH_GBL&IsFolder=false&PortalActualURL=https%3a%2f%2fpublic.lionpath.psu.edu%2fpsc%2fCSPRD%2fEMPLOYEE%2fHRMS%2fc%2fCOMMUNITY_ACCESS.CLASS_SEARCH.GBL&PortalContentURL=https%3a%2f%2fpublic.lionpath.psu.edu%2fpsc%2fCSPRD%2fEMPLOYEE%2fHRMS%2fc%2fCOMMUNITY_ACCESS.CLASS_SEARCH.GBL&PortalContentProvider=HRMS&PortalCRefLabel=Class%20Search&PortalRegistryName=EMPLOYEE&PortalServletURI=https%3a%2f%2fpublic.lionpath.psu.edu%2fpsp%2fCSPRD%2f&PortalURI=https%3a%2f%2fpublic.lionpath.psu.edu%2fpsc%2fCSPRD%2f&PortalHostNode=HRMS&NoCrumbs=yes&PortalKeyStruct=yes'))
+		self.login()
+
+		soup = BeautifulSoup(self.get_html(QueensParser.BASE_URL))
 
 		# create search payload with hidden form data
 		search_query = {a['name']: a['value'] for a  in soup.find('div', {'id' : 'win0divPSHIDDENFIELDS'}).find_all('input')}
@@ -122,7 +145,7 @@ class PennStateParser:
 				search_query['SSR_CLSRCH_WRK_SUBJECT_SRCH$2'] = department['value']
 
 				# Get course listing page for department
-				soup = BeautifulSoup(self.post_http(PennStateParser.BASE_URL, search_query).text, 'html.parser')
+				soup = BeautifulSoup(self.post_http(QueensParser.BASE_URL, search_query).text, 'html.parser')
 
 				# check for valid search/page
 				if soup.find('td', {'id' : 'PTBADPAGE_' }) or soup.find('div', {'id' : 'win1divDERIVED_CLSMSG_ERROR_TEXT'}):
@@ -140,7 +163,7 @@ class PennStateParser:
 					descr_payload['ICAction'] = 'MTG_CLASS_NBR$' + str(i)
 
 					# Get course description page
-					soup = BeautifulSoup(self.get_html(PennStateParser.BASE_URL, descr_payload))
+					soup = BeautifulSoup(self.get_html(QueensParser.BASE_URL, descr_payload))
 
 					# scrape info from page
 					title 		= soup.find('span', {'id' : 'DERIVED_CLSRCH_DESCR200'}).text
@@ -190,8 +213,8 @@ class PennStateParser:
 						rsched = re.match(r'([a-zA-Z]*) (.*) - (.*)', sched.text)
 
 						if rsched:
-							days = map(lambda d: PennStateParser.DAY_MAP[d], re.findall('[A-Z][^A-Z]*', rsched.group(1)))
-							time = (PennStateParser.time_12to24(rsched.group(2)), PennStateParser.time_12to24(rsched.group(3)))
+							days = map(lambda d: QueensParser.DAY_MAP[d], re.findall('[A-Z][^A-Z]*', rsched.group(1)))
+							time = (QueensParser.time_12to24(rsched.group(2)), QueensParser.time_12to24(rsched.group(3)))
 						else: # handle TBA classes
 							days = None
 							time = (None, None)
@@ -203,7 +226,7 @@ class PennStateParser:
 
 						self.create_offerings(section)
 
-			PennStateParser.wrap_up()
+			QueensParser.wrap_up()
 			print '>>>>>> WRAP UP <<<<<<'
 
 	def parse_textbooks(self, soup):
@@ -249,7 +272,7 @@ class PennStateParser:
 	@staticmethod
 	def wrap_up():
 			update_object, created = Updates.objects.update_or_create(
-					school=PennStateParser.SCHOOL,
+					school=QueensParser.SCHOOL,
 					update_field="Course",
 					defaults={'last_updated': datetime.datetime.now()}
 			)
@@ -258,7 +281,7 @@ class PennStateParser:
 	def create_course(self):
 		course, CourseCreated = Course.objects.update_or_create(
 			code = self.course['code'],
-			school = PennStateParser.SCHOOL,
+			school = QueensParser.SCHOOL,
 			defaults={
 				'name': self.course.get('name'),
 				'description': self.course.get('descr'),
@@ -350,7 +373,7 @@ class PennStateParser:
 		return info
 
 def main():
-	p = PennStateParser()
+	p = QueensParser()
 	p.parse()
 
 if __name__ == "__main__":
