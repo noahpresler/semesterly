@@ -163,7 +163,7 @@ class ChapmanParser:
 
 					# Extract info from title
 					print '\t' + title
-					rtitle = re.match(r'(\w+\s*\w+) - (\w+)\s*(\S.+)', title.encode('ascii', 'ignore'))
+					rtitle = re.match(r'(.+\s*\w+) - (\w+)\s*(\S.+)', title.encode('ascii', 'ignore'))
 
 					# Place course info into course model
 					self.course['code'] 	= rtitle.group(1)

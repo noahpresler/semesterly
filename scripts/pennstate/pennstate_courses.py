@@ -11,7 +11,6 @@ from fake_useragent import UserAgent
 from itertools import izip
 from bs4 import BeautifulSoup
 import requests, cookielib, re, sys
-import dryscrape
 
 from amazonproduct import API
 api = API(locale='us')
@@ -20,7 +19,6 @@ class PennStateParser:
 
 	SCHOOL = 'pennstate'
 	BASE_URL = 'https://public.lionpath.psu.edu/psc/CSPRD/EMPLOYEE/HRMS/c/COMMUNITY_ACCESS.CLASS_SEARCH.GBL'
-	# BASE_URL = 'https://public.lionpath.psu.edu/psp/CSPRD/EMPLOYEE/HRMS/c/COMMUNITY_ACCESS.CLASS_SEARCH.GBL'
 	HEADERS = {'User-Agent' : 'My User Agent 1.0'}
 	DAY_MAP = {
 		'Mo' : 'M',
@@ -165,7 +163,7 @@ class PennStateParser:
 
 					# Extract info from title
 					print '\t' + title
-					rtitle = re.match(r'(\w+\s*\w+) - (\w+)\s*(\S.+)', title.encode('ascii', 'ignore'))
+					rtitle = re.match(r'(.+\s*\w+) - (\w+)\s*(\S.+)', title.encode('ascii', 'ignore'))
 
 					# Place course info into course model
 					self.course['code'] 	= rtitle.group(1)
