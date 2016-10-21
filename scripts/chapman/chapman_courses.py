@@ -158,13 +158,7 @@ class ChapmanParser:
 					dates 	= soup.find_all('span', id=re.compile(r'MTG_DATE\$\d*'))
 
 					# parse textbooks
-					isbns 	= zip(soup.find_all('span', id=re.compile(r'DERIVED_SSR_TXB_SSR_TXBDTL_ISBN\$\d*')), soup.find_all('span', id=re.compile(r'DERIVED_SSR_TXB_SSR_TXB_STATDESCR\$\d*')))
-					for i in range(len(isbns)):
-						isbns[i] = (filter(lambda x: x.isdigit(), isbns[i][0].text), isbns[i][1].text[0].upper() == 'R')
-
-					# combine instrs into a set
-					instrs = ', '.join({instr.text for instr in instrs})
-					self.course['instrs'] = instrs
+					isbns 	= self.parse_textbooks(soup)
 
 					# Extract info from title
 					print '\t' + title
@@ -181,12 +175,15 @@ class ChapmanParser:
 					self.course['units'] 	= re.match(r'(\d*).*', units).group(1)
 					self.course['size'] 	= int(capacity)
 					self.course['enrolment'] = int(enrollment)
+					self.course['instrs'] = ', '.join({instr.text for instr in instrs})
 
 					course = self.create_course()
 					section = self.create_section(course)
-					for isbn in isbns:
-						self.make_textbook(isbn[1], isbn[0], section)
 
+					# create textbooks
+					# map(lambda isbn: self.make_textbook(isbn[1], isbn[0], section), isbns)
+
+					# offering details
 					for sched, loc, date in izip(scheds, locs, dates):
 
 						rsched = re.match(r'([a-zA-Z]*) (.*) - (.*)', sched.text)
@@ -204,6 +201,13 @@ class ChapmanParser:
 						self.course['days'] = days
 
 						self.create_offerings(section)
+
+	def parse_textbooks(self, soup):
+		isbns = zip(soup.find_all('span', id=re.compile(r'DERIVED_SSR_TXB_SSR_TXBDTL_ISBN\$\d*')), soup.find_all('span', id=re.compile(r'DERIVED_SSR_TXB_SSR_TXB_STATDESCR\$\d*')))
+		for i in range(len(isbns)):
+			isbns[i] = (filter(lambda x: x.isdigit(), isbns[i][0].text), isbns[i][1].text[0].upper() == 'R')
+		return isbns
+		# return map(lambda i: (filter(lambda x: x.isdigit(), isbns[i][0].text), isbns[i][1].text[0].upper() == 'R'), range(len(isbns)))
 
 	# NOTE: chapman specific
 	def extract_prereqs(self, text):
@@ -323,7 +327,7 @@ class ChapmanParser:
 	# NOTE: (mostly) copied from base bn parser, need to do full integration
 	def get_amazon_fields(self,isbn):
 		try:
-			result = api.item_lookup(isbn.strip(), IdType='ISBN', SearchIndex='Books', ResponseGroup='Large')
+			result = api.item_lookup(isbn, IdType='ISBN', SearchIndex='Books', ResponseGroup='Large')
 			info = {
 				"DetailPageURL" : self.get_detail_page(result),
 				"ImageURL" : self.get_image_url(result),

@@ -17,9 +17,22 @@ school_to_granularity = {
     'uo': 5,
     'queens': 5
 }
-VALID_SCHOOLS = ["uoft", "jhu", "umd", "uo", "rutgers", "queens"]
+VALID_SCHOOLS = [
+  "uoft", 
+  "jhu", 
+  "umd", 
+  "uo", 
+  "rutgers", 
+  "queens", 
+  "chapman"
+]
 
-AM_PM_SCHOOLS = ["jhu","umd","rutgers"]
+AM_PM_SCHOOLS = [
+  "jhu",
+  "umd",
+  "rutgers",
+  "chapman"
+]
 
 school_code_to_name = {
   'jhu': 'Johns Hopkins University',
@@ -27,7 +40,8 @@ school_code_to_name = {
   'umd': 'University of Maryland',
   'rutgers': 'Rutgers University',
   'uo': 'University of Ottawa',
-  'queens': 'Queens University'
+  'queens': 'Queens University',
+  'chapman': 'Chapman University'
 }
 
 # do the imports: assumes all parser follow the same naming conventions: 
