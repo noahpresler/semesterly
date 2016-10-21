@@ -45,7 +45,7 @@ school_code_to_name = {
   'rutgers': 'Rutgers University',
   'uo': 'University of Ottawa',
   'queens': 'Queens University',
-  'chapman': 'Chapman University'
+  'chapman': 'Chapman University',
   'pennstate': 'Pennsylvania State University'
 }
 
