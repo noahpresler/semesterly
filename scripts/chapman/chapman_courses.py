@@ -100,7 +100,8 @@ class ChapmanParser:
 		# NOTE: first element of dropdown lists in search area is empty
 
 		# NOTE: hardcoded semesters Fall, Interim, Spring 2016-2017
-		terms = {'F':'2168', 'I':'2172', 'S':'2174'}
+		# terms = {'F':'2168', 'I':'2172', 'S':'2174'}
+		terms = {'F':'2168', 'S':'2174'}
 
 		for term in terms:
 
@@ -202,6 +203,9 @@ class ChapmanParser:
 
 						self.create_offerings(section)
 
+			ChapmanParser.wrap_up()
+			print '>>>>>> WRAP UP <<<<<<'
+
 	def parse_textbooks(self, soup):
 		isbns = zip(soup.find_all('span', id=re.compile(r'DERIVED_SSR_TXB_SSR_TXBDTL_ISBN\$\d*')), soup.find_all('span', id=re.compile(r'DERIVED_SSR_TXB_SSR_TXB_STATDESCR\$\d*')))
 		for i in range(len(isbns)):
@@ -243,7 +247,7 @@ class ChapmanParser:
 		return str(hours) + ":" + match.group(2)
 
 	@staticmethod
-	def wrap_up(self):
+	def wrap_up():
 			update_object, created = Updates.objects.update_or_create(
 					school=ChapmanParser.SCHOOL,
 					update_field="Course",
