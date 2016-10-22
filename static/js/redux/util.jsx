@@ -24,23 +24,24 @@ export const saveLocalPreferences = (preferences) => {
 	if (!browserSupportsLocalStorage()) { return; }
 	localStorage.setItem("preferences", JSON.stringify(preferences));
 }
-export const saveLocalSemester = (semester) => {	
+export const saveLocalSemester = (semester) => {
 	if (!browserSupportsLocalStorage()) { return; }
 	localStorage.setItem("semester", semester);
 }
-export const setFirstVisit = (time) => {	
+export const setFirstVisit = (time) => {
 	if (!browserSupportsLocalStorage()) { return; }
 	localStorage.setItem("firstVisit", time);
 }
-export const setDeclinedNotifications = (declined) => {	
+export const setDeclinedNotifications = (declined) => {
 	if (!browserSupportsLocalStorage()) { return; }
+	console.log("settings decline", declined);
 	localStorage.setItem("declinedNotifications", declined);
 }
 export const getDeclinedNotifications = () => {
 	if (!browserSupportsLocalStorage()) { return; }
 	localStorage.getItem("declinedNotifications");
 }
-export const timeLapsedGreaterThan = (time, days) => {	
+export const timeLapsedGreaterThan = (time, days) => {
 	if (!browserSupportsLocalStorage()) { return; }
 	let timeNow = new Date();
 	let windowInMilli = 1000 * 60 * 60 * 24 * days;
@@ -52,7 +53,7 @@ export const getLocalTimetable = () => {
 	try {
 		return {
 			courseSections: JSON.parse(localStorage.getItem("courseSections")),
-			active:  localStorage.getItem("active")
+			active: localStorage.getItem("active")
 		};
 	} catch (exception) {
 		return {};
