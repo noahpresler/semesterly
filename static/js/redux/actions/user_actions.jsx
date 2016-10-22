@@ -11,7 +11,7 @@ import { getUserInfoEndpoint,
 	getFriendsEndpoint } from '../constants.jsx';
 import { store } from '../init.jsx';
 import { loadTimetable, nullifyTimetable, getNumberedName } from './timetable_actions.jsx';
-import { browserSupportsLocalStorage } from '../util.jsx';
+import { browserSupportsLocalStorage, setDeclinedNotifications } from '../util.jsx';
 
 let autoSaveTimer;
 
@@ -369,8 +369,27 @@ export function setARegistrationToken() {
 	        reg.pushManager.subscribe({
 	            userVisibleOnly: true
 	        }).then(function(sub) {
-	            sendRegistrationToken(sub.endpoint.substring(40))
+	            sendRegistrationToken(sub.endpoint.substring(40));
 	        });
+	    }).catch(function(error) {
+	        console.log(':^(', error);
+	    });
+	}
+}
+
+export function isRegistered() {
+	if ('serviceWorker' in navigator) {
+	    navigator.serviceWorker.register('/sw.js').then(function(reg) {
+			return reg.pushManager.getSubscription().then(function(sub) {
+				if (!sub) {
+					return;
+				} else {
+					store.dispatch({
+			        	type: "TOKEN_REGISTERED"
+		        	});
+					return true;
+				}
+			})
 	    }).catch(function(error) {
 	        console.log(':^(', error);
 	    });
