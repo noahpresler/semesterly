@@ -3,7 +3,7 @@ import { setDeclinedNotifications, getDeclinedNotifications } from '../../util.j
 import EnableNotificationsAlert from './enable_notifications_alert.jsx';
 
 const mapStateToProps = (state) => {
-	let msg = "Enable Notifications!";
+	let msg = "Get Alerts!";
 	return {
 		msg,
 	}
@@ -11,9 +11,6 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch) => {
 	return {
     	dismissSelf: () => {
-    		if (getDeclinedNotifications() !== true && getDeclinedNotifications() !== false) {
-				setDeclinedNotifications((new Date).getTime());
-    		}
     		dispatch({type: "DISMISS_ENABLE_NOTIFICATIONS"});
     	},
     	declineNotifications: () => setDeclinedNotifications(true),

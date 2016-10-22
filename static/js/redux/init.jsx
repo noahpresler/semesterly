@@ -6,7 +6,7 @@ import thunkMiddleware from 'redux-thunk';
 import { Provider } from 'react-redux';
 import { rootReducer } from './reducers/root_reducer.jsx';
 import SemesterlyContainer from './ui/containers/semesterly_container.jsx';
-import { getUserInfo, setARegistrationToken } from './actions/user_actions.jsx';
+import { getUserInfo, setARegistrationToken, isRegistered } from './actions/user_actions.jsx';
 import { loadTimetable, lockTimetable, loadCachedTimetable } from './actions/timetable_actions.jsx'
 import { fetchSchoolInfo } from './actions/school_actions.jsx';
 import { setCourseInfo } from './actions/modal_actions.jsx';
@@ -53,7 +53,8 @@ function setup(dispatch) {
       }
     }
   }
-
+  // check if registered for chrome notifications
+  isRegistered();
   // check if first visit
   if (browserSupportsLocalStorage()) {
     if (localStorage.getItem("firstVisit") === null) {
@@ -61,18 +62,18 @@ function setup(dispatch) {
       setFirstVisit(time.getTime());
     } else {
       if (localStorage.getItem("declinedNotifications") === null) { // if second visit
-        if (timeLapsedGreaterThan(localStorage.getItem("firstVisit"), 1) === true) { // if second visit is one day after first visit
+        if (timeLapsedGreaterThan(localStorage.getItem("firstVisit"), 0.00001) === true) { // if second visit is one day after first visit
           // deploy upsell pop for chrome notifications
           dispatch({type: "ALERT_ENABLE_NOTIFICATIONS"});
         }
       } else { // if after second visit
         if (localStorage.getItem("declinedNotifications") === true || localStorage.getItem("declinedNotifications") === false) {
           // do nothing : either accpeted or declined notigications
-        } else if (timeLapsedGreaterThan(localStorage.getItem("declinedNotifications"), 3) === true) {
+        } else if (timeLapsedGreaterThan(localStorage.getItem("declinedNotifications"), 0.00001) === true) {
           // deploy upsell pop for chrome notifications
           dispatch({type: "ALERT_ENABLE_NOTIFICATIONS"});
         } else {
-          console.log(localStorage.getItem("declinedNotifications"), timeLapsedGreaterThan(localStorage.getItem("declinedNotifications"), .0001157));
+          // console.log(localStorage.getItem("declinedNotifications"), timeLapsedGreaterThan(localStorage.getItem("declinedNotifications"), .0001157));
         }
       }
     }
