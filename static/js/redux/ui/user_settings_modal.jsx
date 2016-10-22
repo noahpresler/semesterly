@@ -5,6 +5,7 @@ import { getSchool } from '../init.jsx';
 import Modal from 'boron/WaveModal';
 import majors from '../majors.jsx';
 import Select from 'react-select';
+import classnames from 'classnames';
 import { setARegistrationToken, unregisterAToken } from '../actions/user_actions.jsx';
 
 export class UserSettingsModal extends React.Component {
@@ -73,12 +74,12 @@ export class UserSettingsModal extends React.Component {
             ? (<a onClick={this.unsubscribeToNotifications}><h3>Turn Off Notifications</h3></a>)
             : (<a onClick={this.subscribeToNotifications}><h3>Turn On Notifications</h3></a>)
         let notifications = this.state.sw_capable ? (
-            <div className="preference notifications cf">
+            <div className={classnames('preference notifications cf', {'preference-attn' : enableNotifs})}>
                 <h4>Notifications</h4>
                 {notifications_button}
             </div>
         ) :
-            <div className="preference notifications cf">
+            <div className={classnames('preference notifications cf', {'preference-attn-yellow' : enableNotifs})}>
                 <h3>Use Another Browser To Enable Device Notifications</h3>
             </div>
         ;
