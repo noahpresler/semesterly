@@ -11,7 +11,10 @@ from fake_useragent import UserAgent
 from itertools import izip
 from bs4 import BeautifulSoup
 import requests, cookielib, re, sys
+from django.utils.encoding import smart_str, smart_unicode
+from lxml import objectify
 
+import bottlenose
 from amazonproduct import API
 api = API(locale='us')
 
@@ -163,7 +166,7 @@ class ChapmanParser:
 
 					# Extract info from title
 					print '\t' + title
-					rtitle = re.match(r'(\.+?\s*\w+) - (\w+)\s*(\S.+)', title.encode('ascii', 'ignore'))
+					rtitle = re.match(r'(.+?\s*\w+) - (\w+)\s*(\S.+)', title.encode('ascii', 'ignore'))
 
 					# Place course info into course model
 					self.course['code'] 	= rtitle.group(1)
@@ -182,7 +185,7 @@ class ChapmanParser:
 					section = self.create_section(course)
 
 					# create textbooks
-					# map(lambda isbn: self.make_textbook(isbn[1], isbn[0], section), isbns)
+					map(lambda isbn: ChapmanParser.make_textbook(isbn[1], isbn[0], section), isbns)
 
 					# offering details
 					for sched, loc, date in izip(scheds, locs, dates):
@@ -204,7 +207,6 @@ class ChapmanParser:
 						self.create_offerings(section)
 
 			ChapmanParser.wrap_up()
-			print '>>>>>> WRAP UP <<<<<<'
 
 	def parse_textbooks(self, soup):
 		isbns = zip(soup.find_all('span', id=re.compile(r'DERIVED_SSR_TXB_SSR_TXBDTL_ISBN\$\d*')), soup.find_all('span', id=re.compile(r'DERIVED_SSR_TXB_SSR_TXB_STATDESCR\$\d*')))
@@ -301,9 +303,12 @@ class ChapmanParser:
 				)
 
 	# NOTE: (mostly) copied from base bn parser, need to do full integration
-	def make_textbook(self, is_required, isbn_number, section):
+	@staticmethod
+	def make_textbook(is_required, isbn_number, section):
 
-		info = self.get_amazon_fields(isbn_number)
+		isbn_numbers = isbn_number
+
+		info = ChapmanParser.get_amazon_fields(isbn_number)
 
 		# update/create textbook
 		textbook_data = {
@@ -312,8 +317,9 @@ class ChapmanParser:
 			'author': info["Author"],
 			'title': info["Title"]
 		}
-		textbook, created = Textbook.objects.update_or_create(isbn=isbn_number,
-														defaults=textbook_data)
+
+		# FIXME -- why are we filling up the database with crap books?
+		textbook, created = Textbook.objects.update_or_create(isbn=isbn_number, defaults=textbook_data)
 
 		# link to course section
 		section, created = TextbookLink.objects.update_or_create(
@@ -324,30 +330,84 @@ class ChapmanParser:
 
 		# print results
 		if created:
-			print "Textbook created: " + textbook.title
+			print "\t\tTextbook created: " + textbook.title
 		else:
-			print "Textbook found, not created: " + textbook.title
+			print "\t\tTextbook found, not created: " + textbook.title
 
 	# NOTE: (mostly) copied from base bn parser, need to do full integration
-	def get_amazon_fields(self,isbn):
+	@staticmethod
+	def get_amazon_fields(isbn):
 		try:
-			result = api.item_lookup(isbn, IdType='ISBN', SearchIndex='Books', ResponseGroup='Large')
+			# isbn = isbn[:3] + '-' + isbn[3:]
+			# AWS_ACCESS_KEY_ID = 'AKIAJGUOXN3COOYBPTHQ'
+			# AWS_SECRET_ACCESS_KEY = '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'
+			# AWS_ASSOCIATE_TAG = 'semesterly-20'
+			# amazon = bottlenose.Amazon(AWS_ACCESS_KEY_ID, AWS_SECRET_ACCESS_KEY, AWS_ASSOCIATE_TAG)
+			# response = amazon.ItemLookup(ItemId="0596520999", ResponseGroup="Images",
+			# 	SearchIndex="Books", IdType="ISBN")
+			# response = objectify(response)
+			# result = None
+
+			response = None
+			if len(isbn) == 9:
+				response = api.item_lookup('0840049420', IdType='ISBN', SearchIndex='Book', ResponseGroup='Large')
+			elif len(isbn) == 13:
+				response = api.item_lookup(isbn, IdType='EAN', SearchIndex='All', ResponseGroup='Large')
+
 			info = {
-				"DetailPageURL" : self.get_detail_page(result),
-				"ImageURL" : self.get_image_url(result),
-				"Author" : self.get_author(result),
-				"Title" : self.get_title(result)
+				"DetailPageURL" : ChapmanParser.get_detail_page(response),
+				"ImageURL" : ChapmanParser.get_image_url(response),
+				"Author" : ChapmanParser.get_author(response),
+				"Title" : ChapmanParser.get_title(response)
 			}
 		except:
-			import traceback
-			traceback.print_exc()
+			print '\t\tTextbook NOT FOUND for', isbn
+			# import traceback
+			# traceback.print_exc()
 			info = {
 				"DetailPageURL" : "Cannot be found",
 				"ImageURL" : "Cannot be found",
 				"Author" : "Cannot be found",
 				"Title" : "Cannot be found"
 			}
+
 		return info
+
+	@staticmethod
+	def get_detail_page(result):
+		# try:
+		return smart_str(result.Items.Item.DetailPageURL)
+		# except:
+			# import traceback
+			# traceback.print_exc()
+			# return "Cannot Be Found"
+
+	@staticmethod
+	def get_image_url(result):
+		# try:
+		return smart_str(result.Items.Item.MediumImage.URL)
+		# except:
+			# import traceback
+			# traceback.print_exc()
+			# return "Cannot Be Found"
+
+	@staticmethod
+	def get_author(result):
+		return smart_str(result.Items.Item.ItemAttributes.Author)
+		# try:
+		# except:
+			# import traceback
+			# traceback.print_exc()
+			# return "Cannot Be Found"
+
+	@staticmethod
+	def get_title(result):
+		return smart_str(result.Items.Item.ItemAttributes.Title)
+		# try:
+		# except:
+			# import traceback
+			# traceback.print_exc()
+			# return "Cannot Be Found"
 
 def main():
 	vp = ChapmanParser()
