@@ -56,6 +56,7 @@ class Semesterly extends React.Component {
 			this.msg.show(<EnableNotificationsAlertContainer />, {
 			  type: 'info',
 			  time: 12000000,
+			  additionalClass: 'notification-alert',
 			  icon: <div className="enable-notifications-alert-icon"></div>,
 			});
 		}
