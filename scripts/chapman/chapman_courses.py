@@ -343,23 +343,13 @@ class ChapmanParser:
 	@staticmethod
 	def get_amazon_fields(isbn):
 		try:
-			# isbn = isbn[:3] + '-' + isbn[3:]
-			# AWS_ACCESS_KEY_ID = 'AKIAJGUOXN3COOYBPTHQ'
-			# AWS_SECRET_ACCESS_KEY = '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'
-			# AWS_ASSOCIATE_TAG = 'semesterly-20'
-			# amazon = bottlenose.Amazon(AWS_ACCESS_KEY_ID, AWS_SECRET_ACCESS_KEY, AWS_ASSOCIATE_TAG)
-			# response = amazon.ItemLookup(ItemId="0596520999", ResponseGroup="Images",
-			# 	SearchIndex="Books", IdType="ISBN")
-			# response = objectify(response)
-			# result = None
-
 			response = None
 			if len(isbn) == 9:
 				response = api.item_lookup('0840049420', IdType='ISBN', SearchIndex='Book', ResponseGroup='Large')
 			elif len(isbn) == 13:
 				response = api.item_lookup(isbn, IdType='EAN', SearchIndex='All', ResponseGroup='Large')
 			else:
-				return None
+				return None # invalid isbn
 
 			info = {
 				"DetailPageURL" : ChapmanParser.get_detail_page(response),
