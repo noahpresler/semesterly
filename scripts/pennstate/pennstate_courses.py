@@ -96,7 +96,7 @@ class PennStateParser:
 		# NOTE: first element of dropdown lists in search area is empty
 
 		# NOTE: hardcoded semesters Fall, Interim, Spring 2016-2017
-		terms = {'F':'2168'}#, 'I':'2172', 'S':'2174'}
+		terms = {'F':'2168', 'I':'2172', 'S':'2174'}
 
 		for term in terms:
 
