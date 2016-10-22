@@ -1,22 +1,16 @@
 # @what	Chapman Course Parser
 # @org	Semeseter.ly
 # @author	Michael N. Miller
-# @date	9/3/16
+# @date	10/19/16
 
-import django, os, datetime
+import requests, cookielib, re, sys, django, os, datetime
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "semesterly.settings")
 django.setup()
 from timetable.models import *
 from fake_useragent import UserAgent
 from itertools import izip
 from bs4 import BeautifulSoup
-import requests, cookielib, re, sys
-from django.utils.encoding import smart_str, smart_unicode
-from lxml import objectify
-
-import bottlenose
-from amazonproduct import API
-api = API(locale='us')
+from scripts.textbooks.amazon import make_textbook
 
 class ChapmanParser:
 
@@ -185,7 +179,7 @@ class ChapmanParser:
 					section = self.create_section(course)
 
 					# create textbooks
-					map(lambda isbn: ChapmanParser.make_textbook(isbn[1], isbn[0], section), isbns)
+					map(lambda isbn: make_textbook(isbn[1], isbn[0], section), isbns)
 
 					# offering details
 					for sched, loc, date in izip(scheds, locs, dates):
@@ -301,110 +295,6 @@ class ChapmanParser:
 						'location': self.course.get('location')
 					}
 				)
-
-	# NOTE: (mostly) copied from base bn parser, need to do full integration
-	@staticmethod
-	def make_textbook(is_required, isbn_number, section):
-
-		print 'ISBN', isbn_number
-
-		isbn_numbers = isbn_number
-
-		info = ChapmanParser.get_amazon_fields(isbn_number)
-
-		# invalid isbn
-		if not info:
-			return
-
-		# update/create textbook
-		textbook_data = {
-			'detail_url': info['DetailPageURL'],
-			'image_url': info["ImageURL"],
-			'author': info["Author"],
-			'title': info["Title"]
-		}
-
-		textbook, created = Textbook.objects.update_or_create(isbn=isbn_number, defaults=textbook_data)
-
-		# link to course section
-		section, created = TextbookLink.objects.update_or_create(
-			is_required = is_required,
-			section = section,
-			textbook = textbook
-		)
-
-		# print results
-		if created:
-			print "\t\tTextbook created: " + textbook.title
-		else:
-			print "\t\tTextbook found, not created: " + textbook.title
-
-	# NOTE: (mostly) copied from base bn parser, need to do full integration
-	@staticmethod
-	def get_amazon_fields(isbn):
-		try:
-			response = None
-			if len(isbn) == 9:
-				response = api.item_lookup('0840049420', IdType='ISBN', SearchIndex='Book', ResponseGroup='Large')
-			elif len(isbn) == 13:
-				response = api.item_lookup(isbn, IdType='EAN', SearchIndex='All', ResponseGroup='Large')
-			else:
-				return None # invalid isbn
-
-			info = {
-				"DetailPageURL" : ChapmanParser.get_detail_page(response),
-				"ImageURL" : ChapmanParser.get_image_url(response),
-				"Author" : ChapmanParser.get_author(response),
-				"Title" : ChapmanParser.get_title(response)
-			}
-		except:
-			print '\t\tTextbook NOT FOUND for', isbn
-			# import traceback
-			# traceback.print_exc()
-			info = {
-				"DetailPageURL" : "Cannot be found",
-				"ImageURL" : "Cannot be found",
-				"Author" : "Cannot be found",
-				"Title" : "Cannot be found"
-			}
-
-		return info
-
-	@staticmethod
-	def get_detail_page(result):
-		# try:
-		return smart_str(result.Items.Item.DetailPageURL)
-		# except:
-			# import traceback
-			# traceback.print_exc()
-			# return "Cannot Be Found"
-
-	@staticmethod
-	def get_image_url(result):
-		# try:
-		return smart_str(result.Items.Item.MediumImage.URL)
-		# except:
-			# import traceback
-			# traceback.print_exc()
-			# return "Cannot Be Found"
-
-	@staticmethod
-	def get_author(result):
-		return smart_str(result.Items.Item.ItemAttributes.Author)
-		# try:
-		# except:
-			# import traceback
-			# traceback.print_exc()
-			# return "Cannot Be Found"
-
-	@staticmethod
-	def get_title(result):
-		return smart_str(result.Items.Item.ItemAttributes.Title)
-		# try:
-		# except:
-			# import traceback
-			# traceback.print_exc()
-			# return "Cannot Be Found"
 
 def main():
 	vp = ChapmanParser()
