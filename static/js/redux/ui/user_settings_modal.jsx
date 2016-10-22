@@ -77,7 +77,7 @@ export class UserSettingsModal extends React.Component {
                 <h4>Notifications</h4>
                 {notifications_button}
             </div>
-        ) : null;
+        ) : <h3>Use Another Browser To Enable Device Notifications</h3>
         return (
             <Modal ref="modal"
                 className="welcome-modal max-modal"
@@ -91,7 +91,6 @@ export class UserSettingsModal extends React.Component {
                         <h1>Welcome!</h1>
                     </div>
                     <div id="modal-body">
-                        <p>Welcome to Semester.ly, we just have a few quick questions!</p>
                         <div className="preference cf">
                             <h3>What's your major?</h3>
                             <Select
