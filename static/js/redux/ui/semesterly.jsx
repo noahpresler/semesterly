@@ -55,7 +55,7 @@ class Semesterly extends React.Component {
 		if (this.props.alertEnableNotifications) {
 			this.msg.show(<EnableNotificationsAlertContainer />, {
 			  type: 'info',
-			  time: 12000,
+			  time: 12000000,
 			  icon: <div className="enable-notifications-alert-icon"></div>,
 			});
 		}
