@@ -1,5 +1,6 @@
 .react-alerts {
   position: fixed;
+  top: 14px;
   right: 0;
   bottom: 0;
   margin: 14px;
@@ -8,14 +9,14 @@
 .react-alerts .alert {
   width: 300px;
   min-height: 50px;
-  margin: 10px 0 0 0;
+  margin: 0;
   display: flex;
   align-items: center;
   justify-content: space-between;
   border-radius: 2px;
   background-color: #333;
   font-size: 11px;
-  box-shadow: 0 8px 12px 0 rgba(0,0,0,0.3);
+  box-shadow: 0 3px 12px 0 rgba(0,0,0,0.3);
   color: #fff;
 }
 .react-alerts .alert .content {
