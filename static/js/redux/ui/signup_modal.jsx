@@ -3,6 +3,10 @@ import Modal from 'boron/WaveModal';
 import classNames from 'classnames';
 
 export class SignupModal extends React.Component {
+    componentDidMount() {
+        if (this.props.isVisible)
+            this.refs.modal.show();
+    }
 	componentDidUpdate(nextProps) {
 		if (this.props.isVisible) {
 			this.refs.modal.show();
