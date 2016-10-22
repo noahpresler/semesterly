@@ -36,6 +36,34 @@
 	      ga('send', 'pageview');
 
 	    </script>
+	    <script>
+	    	function loadScript( url, callback ) {
+			  var script = document.createElement( "script" )
+			  script.type = "text/javascript";
+			  if(script.readyState) {  //IE
+			    script.onreadystatechange = function() {
+			      if ( script.readyState === "loaded" || script.readyState === "complete" ) {
+			        script.onreadystatechange = null;
+			        callback();
+			      }
+			    };
+			  } else {  //Others
+			    script.onload = function() {
+			      callback();
+			    };
+			  }
+
+			  script.src = url;
+			  document.getElementsByTagName( "head" )[0].appendChild( script );
+			}
+			// call the function...
+			loadScript("https://cdnjs.cloudflare.com/ajax/libs/js-cookie/2.1.3/js.cookie.js", function() {
+				if(Cookies.get('school') !== undefined) {
+					var proto = location.protocol != 'https' ? 'http://' : 'https://';
+					window.location.replace((window.location.href.replace(/((?:http|https):\/\/)/, proto + Cookies.get('school') + '.')));
+				}
+			});
+	    </script>
 	</head>
 	<body>
 		<header class="down">
