@@ -2,7 +2,7 @@ import fetch from 'isomorphic-fetch';
 import { getUserInfoEndpoint, getSaveTimetableEndpoint, getSaveSettingsEndpoint, getClassmatesEndpoint, getLoadSavedTimetablesEndpoint, getFriendsEndpoint, getSetRegistrationTokenEndpoint, deleteRegistrationTokenEndpoint } from '../constants.jsx';
 import { store } from '../init.jsx';
 import { loadTimetable, nullifyTimetable } from './timetable_actions.jsx';
-import { browserSupportsLocalStorage } from '../util.jsx';
+import { browserSupportsLocalStorage, setDeclinedNotifications } from '../util.jsx';
 
 let autoSaveTimer;
 
@@ -249,7 +249,7 @@ export function setARegistrationToken() {
 	        reg.pushManager.subscribe({
 	            userVisibleOnly: true
 	        }).then(function(sub) {
-	            sendRegistrationToken(sub.endpoint.substring(40))
+	            sendRegistrationToken(sub.endpoint.substring(40));
 	        });
 	    }).catch(function(error) {
 	        console.log(':^(', error);
@@ -257,25 +257,41 @@ export function setARegistrationToken() {
 	}
 }
 
-export function sendRegistrationTokenForDeletion(token) {
-    return fetch(deleteRegistrationTokenEndpoint(), {
-        method: 'POST',
-        body: JSON.stringify({
-            token
-        }),
-        credentials: 'include',
-    })
+export function isRegistered() {
+	if ('serviceWorker' in navigator) {
+	    navigator.serviceWorker.register('/sw.js').then(function(reg) {
+			return reg.pushManager.getSubscription().then(function(sub) {
+				if (!sub) {
+					return;
+				} else {
+					store.dispatch({
+			        	type: "TOKEN_REGISTERED"
+		        	});
+					return true;
+				}
+			})
+	    }).catch(function(error) {
+	        console.log(':^(', error);
+	    });
+	}
+}
+
+export function sendRegistrationToken(token) {
+	return fetch(getSetRegistrationTokenEndpoint(), {
+		method: 'POST',
+		body: JSON.stringify({
+			token
+		}),
+		credentials: 'include',
+	})
     .then(response => response.json()) // TODO(rohan): error-check the response
     .then(json => {
-        if (!json.error) {
-            console.log("token deleted: " + token);
-            store.dispatch({
-                type: "UNREGISTER_TOKEN"
-            });
-        } else {
-            console.log("token not deleted: " + token);
-        }
-    });
+    	if (!json.error) {
+	      	store.dispatch({
+	        	type: "TOKEN_REGISTERED"
+        	});
+    	}
+	});
 }
 
 export function unregisterAToken() {
