@@ -64,6 +64,20 @@
 .welcome-modal #modal-body .preference {
 	padding: 0 20px 15px;
 }
+.welcome-modal #modal-body .preference-attn {
+	border-top: 1px solid #dee2ff;
+    border-bottom: 1px solid #dee2ff;
+	background-color: rgba(90, 200, 251, 0.14);
+}
+.welcome-modal #modal-body .notifications.preference-attn-yellow {
+	background-color: rgba(251, 247, 43, 0.26);
+	color: rgb(101, 71, 42);
+	border-top: 1px solid rgba(101, 71, 42, 0.17);
+    border-bottom: 1px solid rgba(101, 71, 42, 0.17);
+}
+.welcome-modal #modal-body .notifications.preference-attn h4 {
+	color: #34495e;
+}
 
 .welcome-modal #modal-body .switch-slide {
 	float: right;
@@ -103,6 +117,9 @@
 }
 
 @media (max-width: 766px) {
+	.welcome-modal #modal-body {
+		padding: 22px 0 20px;
+	}
 	.welcome-modal #modal-body p {
 		font-size: 14px;
 	}
