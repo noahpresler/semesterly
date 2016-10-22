@@ -47,32 +47,35 @@ class PeopleSoftParser:
 
 			except (requests.exceptions.Timeout,
 				requests.exceptions.ConnectionError):
-				sys.stderr.write("Unexpected error: " + str(sys.exc_info()[0]))
-				continue
+				sys.stderr.write("Unexpected error: " + str(sys.exc_info()[0]) + '\n')
+				raw_input("Press Enter to continue...")
+				html = None
 
-		return html.encode('utf-8')
+		return html
 
 	def post_http(self, url, form, payload=''):
 
-		try:
-			post = self.session.post(
-				url,
-				data = form,
-				params = payload,
-				cookies = self.cookies,
-				headers = self.headers,
-				verify = True,
-			)
+		post = None
+		while post is None:
+			try:
+				post = self.session.post(
+					url,
+					data = form,
+					params = payload,
+					cookies = self.cookies,
+					headers = self.headers,
+					verify = True,
+				)
 
-			# print POST, r.url
+				# print POST, r.url
 
-			return post
+			except (requests.exceptions.Timeout,
+				requests.exceptions.ConnectionError):
+				sys.stderr.write("Unexpected error: " + str(sys.exc_info()[0]) + '\n')
+				raw_input("Press Enter to continue...")
+				post = None
 
-		except (requests.exceptions.Timeout,
-			requests.exceptions.ConnectionError):
-			sys.stderr.write("Unexpected error: " + str(sys.exc_info()[0]))
-
-		return None
+		return post
 
 	def parse(self, terms, **kwargs):
 
@@ -93,6 +96,9 @@ class PeopleSoftParser:
 		departments = options.find_all('option')[1:]
 		# NOTE: first element of dropdown lists in search area is empty
 
+		# TODO - necessary clutter
+		self.course_cleanup()
+
 		for term in terms:
 
 			print 'Parsing courses for', term
@@ -106,7 +112,10 @@ class PeopleSoftParser:
 
 				print '> Parsing courses in department', department.text
 
-				self.course['department'] = department.text
+				if kwargs.get('department_regex'):
+					self.course['department'] = kwargs['department_regex'].match(department.text).group(1)
+				else:
+					self.course['department'] = department.text
 
 				# Update search payload with department code
 				search_query[search_id] = department['value']
@@ -133,7 +142,7 @@ class PeopleSoftParser:
 					soup = BeautifulSoup(self.get_html(self.base_url, descr_payload))
 
 					# scrape info from page
-					title 		= soup.find('span', {'id' : 'DERIVED_CLSRCH_DESCR200'}).text
+					title 		= soup.find('span', {'id' : 'DERIVED_CLSRCH_DESCR200'}).text.encode('ascii', 'ignore')
 					units 		= soup.find('span', {'id' : 'SSR_CLS_DTL_WRK_UNITS_RANGE'}).text
 					capacity 	= soup.find('span', {'id' : 'SSR_CLS_DTL_WRK_ENRL_CAP'}).text
 					enrollment 	= soup.find('span', {'id' : 'SSR_CLS_DTL_WRK_ENRL_TOT'}).text
@@ -141,6 +150,7 @@ class PeopleSoftParser:
 					descr 		= soup.find('span', {'id' : 'DERIVED_CLSRCH_DESCRLONG'})
 					notes 		= soup.find('span', {'id' : 'DERIVED_CLSRCH_SSR_CLASSNOTE_LONG'})
 					info 		= soup.find('span', {'id' : 'SSR_CLS_DTL_WRK_SSR_REQUISITE_LONG'})
+					areas		= soup.find('span', {'id' : 'SSR_CLS_DTL_WRK_SSR_CRSE_ATTR_LONG'})
 
 					# parse table of times
 					scheds 	= soup.find_all('span', id=re.compile(r'MTG_SCHED\$\d*'))
@@ -153,20 +163,21 @@ class PeopleSoftParser:
 
 					# Extract info from title
 					print '\t' + title
-					rtitle = re.match(r'(.+?\s*\w+) - (\w+)\s*(\S.+)', title.encode('ascii', 'ignore'))
+					rtitle = re.match(r'(.+?\s*\w+) - (\w+)\s*(\S.+)', title)
 
 					# Place course info into course model
 					self.course['code'] 	= rtitle.group(1)
 					self.course['section'] 	= rtitle.group(2)
 					self.course['name'] 	= rtitle.group(3)
 					self.course['credits']	= float(re.match(r'(\d*).*', units).group(1))
-					self.course['descr'] 	= self.extract_prereqs(descr.text) if descr else ''
-					self.course['notes'] 	= self.extract_prereqs(notes.text) if notes else ''
-					self.course['info'] 	= self.extract_prereqs(info.text) if info else ''
+					self.course['descr'] 	= self.extract_info(descr.text) if descr else ''
+					self.course['notes'] 	= self.extract_info(notes.text) if notes else ''
+					self.course['info'] 	= self.extract_info(info.text) if info else ''
 					self.course['units'] 	= re.match(r'(\d*).*', units).group(1)
 					self.course['size'] 	= int(capacity)
 					self.course['enrolment'] = int(enrollment)
 					self.course['instrs'] 	= ', '.join({instr.text for instr in instrs})
+					self.course['areas'] = ', '.join((self.extract_info(l) for l in re.sub(r'(<.*?>)', '\n', str(areas)).splitlines() if l.strip())) if areas else '' # FIXME -- small bug
 
 					course = self.create_course()
 					section = self.create_section(course)
@@ -193,7 +204,9 @@ class PeopleSoftParser:
 
 						self.create_offerings(section)
 
-			PeopleSoftParser.wrap_up()
+					self.course_cleanup()
+
+			self.wrap_up()
 
 	def parse_textbooks(self, soup):
 		isbns = zip(soup.find_all('span', id=re.compile(r'DERIVED_SSR_TXB_SSR_TXBDTL_ISBN\$\d*')), soup.find_all('span', id=re.compile(r'DERIVED_SSR_TXB_SSR_TXB_STATDESCR\$\d*')))
@@ -202,25 +215,32 @@ class PeopleSoftParser:
 		return isbns
 		# return map(lambda i: (filter(lambda x: x.isdigit(), isbns[i][0].text), isbns[i][1].text[0].upper() == 'R'), range(len(isbns)))
 
+	def course_cleanup(self):
+		self.course['prereqs'] = ''
+		self.course['coreqs'] = ''
+		self.course['geneds'] = ''
+
 	# NOTE: chapman specific
-	def extract_prereqs(self, text):
+	def extract_info(self, text):
+
+		text = text.encode('ascii', 'ignore')
 
 		extractions = {
-			'prereqs' : r'Pre[rR]equisite(?:s?)[:,]\s(.*?)\.',
-			'coreqs'  : r'Co[rR]equisite(?:s?)[:,]\s(.*?)\.'
+			'prereqs' : r'[Pp]r(?:-?)e[rR]eq(?:uisite)?(?:s?)[:,\s]\s*(.*?)(?:\.|$)\s*',
+			'coreqs'  : r'[Cc]o(?:-?)[rR]eq(?:uisite)?(?:s?)[:,\s]\s*(.*?)(?:\.|$)\s*',
+			'geneds' : r'GE (.*)'
 		}
 
 		for ex in extractions:
 			rex = re.compile(extractions[ex])
 			extracted = rex.search(text)
 			if extracted:
-				self.course[ex] = extracted.group(1)
-			else:
-				self.course[ex] = ''
+				if len(self.course[ex]) > 0:
+					self.course[ex] += ', '
+				self.course[ex] += extracted.group(1) # okay b/c of course_cleanup
 			text = rex.sub('', text).strip()
 
 		return text
-
 
 	@staticmethod
 	def time_12to24(time12):
@@ -236,8 +256,7 @@ class PeopleSoftParser:
 		# Return as 24hr-time string
 		return str(hours) + ":" + match.group(2)
 
-	@staticmethod
-	def wrap_up():
+	def wrap_up(self):
 			update_object, created = Updates.objects.update_or_create(
 					school=self.school,
 					update_field="Course",
@@ -257,8 +276,9 @@ class PeopleSoftParser:
 				'prerequisites': self.course.get('prereqs'),
 				'corequisites': self.course.get('coreqs'),
 				'notes': self.course.get('notes'),
-				'info' : self.course.get('info')
-				# 'areas': self.course.get('areas'),
+				'info' : self.course.get('info'),
+				'areas': self.course.get('areas'),
+				'geneds': self.course.get('geneds')
 			}
 		)
 		return course

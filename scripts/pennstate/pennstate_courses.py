@@ -3,7 +3,7 @@
 # @author	Michael N. Miller
 # @date	10/21/16
 
-import django, os
+import django, os, re
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "semesterly.settings")
 django.setup()
 
@@ -42,7 +42,10 @@ class PennStateParser(PeopleSoftParser):
 			'PortalKeyStruct':'yes'
 		}
 
-		PeopleSoftParser.parse(self, terms, url_params=search_page_params)
+		PeopleSoftParser.parse(self, terms, 
+			url_params=search_page_params,
+			department_regex=re.compile(r'\S+\s+?-\s+?(.*)')
+		)
 
 def main():
 	p = PennStateParser()
