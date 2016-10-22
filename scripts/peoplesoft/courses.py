@@ -223,7 +223,7 @@ class PeopleSoftParser:
 	# NOTE: chapman specific
 	def extract_info(self, text):
 
-		text = text.encode('ascii', 'ignore')
+		text = text.encode('utf-8', 'ignore')
 
 		extractions = {
 			'prereqs' : r'[Pp]r(?:-?)e[rR]eq(?:uisite)?(?:s?)[:,\s]\s*(.*?)(?:\.|$)\s*',
