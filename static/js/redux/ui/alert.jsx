@@ -58,7 +58,7 @@ class Alert extends React.Component {
 
   render(){
     return(
-      <div style={this.props.style.alert} className={classnames('alert', this.props.type)}>
+      <div style={this.props.style.alert} className={classnames('alert', this.props.type, this.props.additionalClass)}>
         <div className="content icon">
           {this._showIcon.bind(this)()}
         </div>
@@ -74,6 +74,7 @@ class Alert extends React.Component {
 } 
 
 Alert.defaultProps = {
+  additionalClass: '',
   icon: '',
   message: '',
   type: 'info'
