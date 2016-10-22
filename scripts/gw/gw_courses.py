@@ -113,37 +113,61 @@ class GWParser:
 			soup = BeautifulSoup(self.post_http(self.url + '/bwckgens.p_proc_term_date', search_query).text, 'html.parser')
 
 			# create search param list
+			self.headers['Referer'] = self.url + '/bwckgens.p_proc_term_date'
 			search_params = {inp['name'] : inp['value'] if inp.get('value') else '' for inp in soup.find('form', {'action': '/PRODCartridge/bwskfcls.P_GetCrse'}).find_all('input')}
-
+			search_params['begin_hh'] = '0'
+			search_params['begin_mi'] = '0'
+			search_params['end_hh'] = '0'
+			search_params['end_mi'] = '0'
+			search_params['sel_ptrm']  = '%'
+			search_params['SUB_BTN'] = 'Section Search'
+		
 			# get list of departments
 			depts = (dept['value'] for dept in soup.find('select', {'id' : 'subj_id'}).find_all('option'))
 
 			for dept in depts:
 
-				self.headers['Referer'] = self.url + '/bwckgens.p_proc_term_date'
-
 				search_params['sel_subj'] = ['dummy', dept]
-				search_params['SUB_BTN'] = 'Course Search'
-				search_params['begin_hh'] = '0'
-				search_params['begin_mi'] = '0'
-				search_params['end_hh'] = '0'
-				search_params['end_mi'] = '0'
-				search_params['sel_ptrm']  = '%'
 
-				# html = requests.post('https://banweb.gwu.edu/PRODCartridge/bwskfcls.P_GetCrse', headers=headers, cookies=self.cookies, data=data).text
-				# print BeautifulSoup(html, 'html.parser').prettify()
-				# exit(0)
+				rows = BeautifulSoup(self.post_http(self.url + '/bwskfcls.P_GetCrse', search_params).text, 'html.parser').find('table', {'class':'datadisplaytable'}).find_all('tr')[2:]
 
-				for param in search_params:
-					print param + ':' + str(search_params[param])
-				html = self.post_http(self.url + '/bwskfcls.P_GetCrse', search_params).text
-				print html
-				# print BeautifulSoup(html, 'html.parser').prettify()
+				courses = {}
 
-				break
+				for row in rows:
+					info = row.find_all('td')
+					ident = info[1].text
+					for i in range(len(info)):
+						print i, info[i].text
+					courses[ident] = {
+						'href':		info[1].find('a')['href'],
+						'dept': 	info[2].text,
+						'code': 	info[3].text,
+						'section': 	info[4].text,
+						'credits': 	float(info[6].text) if GWParser.is_float(info[6].text) else 0.0,
+						'title':	info[7].text,
+						'days':		info[8].text,
+						'capacity':	info[10].text,
+						'enrlment':	info[11].text,
+						'instr':	info[19].text,
+						'loc':		info[20].text,
+						'attr':		info[21].text
+					}
 
-			break
+				for course in courses.items():
 
+					soup = BeautifulSoup(self.get_html(course['href']))
+					title = re.match(r'')
+
+
+			# break
+
+	@staticmethod
+	def is_float(subject):
+		try:
+			float(subject)
+			return True
+		except ValueError:
+			return False
 
 def main():
 	gp = GWParser()
