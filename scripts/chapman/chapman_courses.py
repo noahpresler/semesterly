@@ -1,19 +1,16 @@
 # @what	Chapman Course Parser
 # @org	Semeseter.ly
 # @author	Michael N. Miller
-# @date	9/3/16
+# @date	10/19/16
 
-import django, os, datetime
+import requests, cookielib, re, sys, django, os, datetime
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "semesterly.settings")
 django.setup()
 from timetable.models import *
 from fake_useragent import UserAgent
 from itertools import izip
 from bs4 import BeautifulSoup
-import requests, cookielib, re, sys
-
-from amazonproduct import API
-api = API(locale='us')
+from scripts.textbooks.amazon import make_textbook
 
 class ChapmanParser:
 
@@ -163,7 +160,7 @@ class ChapmanParser:
 
 					# Extract info from title
 					print '\t' + title
-					rtitle = re.match(r'(.+\s*\w+) - (\w+)\s*(\S.+)', title.encode('ascii', 'ignore'))
+					rtitle = re.match(r'(.+?\s*\w+) - (\w+)\s*(\S.+)', title.encode('ascii', 'ignore'))
 
 					# Place course info into course model
 					self.course['code'] 	= rtitle.group(1)
@@ -182,7 +179,7 @@ class ChapmanParser:
 					section = self.create_section(course)
 
 					# create textbooks
-					# map(lambda isbn: self.make_textbook(isbn[1], isbn[0], section), isbns)
+					map(lambda isbn: make_textbook(isbn[1], isbn[0], section), isbns)
 
 					# offering details
 					for sched, loc, date in izip(scheds, locs, dates):
@@ -204,7 +201,6 @@ class ChapmanParser:
 						self.create_offerings(section)
 
 			ChapmanParser.wrap_up()
-			print '>>>>>> WRAP UP <<<<<<'
 
 	def parse_textbooks(self, soup):
 		isbns = zip(soup.find_all('span', id=re.compile(r'DERIVED_SSR_TXB_SSR_TXBDTL_ISBN\$\d*')), soup.find_all('span', id=re.compile(r'DERIVED_SSR_TXB_SSR_TXB_STATDESCR\$\d*')))
@@ -299,55 +295,6 @@ class ChapmanParser:
 						'location': self.course.get('location')
 					}
 				)
-
-	# NOTE: (mostly) copied from base bn parser, need to do full integration
-	def make_textbook(self, is_required, isbn_number, section):
-
-		info = self.get_amazon_fields(isbn_number)
-
-		# update/create textbook
-		textbook_data = {
-			'detail_url': info['DetailPageURL'],
-			'image_url': info["ImageURL"],
-			'author': info["Author"],
-			'title': info["Title"]
-		}
-		textbook, created = Textbook.objects.update_or_create(isbn=isbn_number,
-														defaults=textbook_data)
-
-		# link to course section
-		section, created = TextbookLink.objects.update_or_create(
-			is_required = is_required,
-			section = section,
-			textbook = textbook
-		)
-
-		# print results
-		if created:
-			print "Textbook created: " + textbook.title
-		else:
-			print "Textbook found, not created: " + textbook.title
-
-	# NOTE: (mostly) copied from base bn parser, need to do full integration
-	def get_amazon_fields(self,isbn):
-		try:
-			result = api.item_lookup(isbn, IdType='ISBN', SearchIndex='Books', ResponseGroup='Large')
-			info = {
-				"DetailPageURL" : self.get_detail_page(result),
-				"ImageURL" : self.get_image_url(result),
-				"Author" : self.get_author(result),
-				"Title" : self.get_title(result)
-			}
-		except:
-			import traceback
-			traceback.print_exc()
-			info = {
-				"DetailPageURL" : "Cannot be found",
-				"ImageURL" : "Cannot be found",
-				"Author" : "Cannot be found",
-				"Title" : "Cannot be found"
-			}
-		return info
 
 def main():
 	vp = ChapmanParser()
