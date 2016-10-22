@@ -39,7 +39,7 @@ class Course(models.Model):
   department = models.CharField(max_length=250, default='', null=True)
   level = models.CharField(max_length=30, default='', null=True)
   cores = models.CharField(max_length=50, null=True, blank=True)
-  geneds = models.CharField(max_length=50, null=True, blank=True)
+  geneds = models.CharField(max_length=300, null=True, blank=True)
   related_courses = models.ManyToManyField("self", blank=True)
 
   def __unicode__(self):
