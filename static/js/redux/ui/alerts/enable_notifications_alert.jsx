@@ -1,17 +1,26 @@
 import React from 'react';
+import { setARegistrationToken } from '../../actions/user_actions.jsx';
+import { setDeclinedNotifications, getDeclinedNotifications } from '../../util.jsx';
 
 class EnableNotificationsAlert extends React.Component {
 	constructor(props) {
 		super(props);
 	}
 	componentWillUnmount() {
+		if (!(localStorage.getItem("declinedNotifications") === "true" || localStorage.getItem("declinedNotifications") === "false")) {
+			let date = new Date;
+			setDeclinedNotifications(date.getTime());
+		}
 		this.props.dismissSelf();
 	}
 	clickEnable() {
-		this.props.enableNotifications();	
+		setARegistrationToken();
+		setDeclinedNotifications(false);
+		this.props.enableNotifications();
 		this.props.dismissSelf();
 	}
 	clickDecline() {
+		setDeclinedNotifications(true);
 		this.props.declineNotifications();
 		this.props.dismissSelf();
 	}
@@ -25,7 +34,7 @@ class EnableNotificationsAlert extends React.Component {
 				Enable Notifications
 			</button>
 			<small className="alert-extra">
-				Psst – Enabling notifications allows us to give you a heads up when classes are released and important course changes occur!
+				Enable notifications for a heads up when classes are released and course changes occur!
 			</small>
 			<a className="decline-notifications" onClick={() => this.clickDecline()}>Don't ask me again.</a>
 	 	</div>);
