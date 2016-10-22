@@ -106,6 +106,8 @@ class GWParser:
 		terms = {'F':'201603', 'S':'201701'}
 		for term in terms:
 
+			print term
+
 			search_query = {
 				'p_calling_proc' : 'P_CrseSearch',
 				'p_term' : terms[term]
@@ -134,119 +136,89 @@ class GWParser:
 
 				courses = {}
 
+				# collect offered courses in department
 				for row in rows:
 					info = row.find_all('td')
-					ident = info[1].text
-					code = info[2].text + ' ' + info[3].text
-					courses[code] = {
-						'ident':	info[1].text,
-						'href':		info[1].find('a')['href'],
-						'dept': 	info[2].text,
-						'code': 	info[2].text + ' ' + info[3].text,
-						'section': 	info[4].text,
-						'credits': 	float(info[6].text) if GWParser.is_float(info[6].text) else 0.0,
-						'title':	info[7].text,
-						'days':		info[8].text,
-						'capacity':	info[10].text,
-						'enrlment':	info[11].text,
-						'instr':	info[19].text,
-						'loc':		info[20].text,
-						'attr':		info[21].text
-					}
-					print 'CODE', code
+					if info[1].find('a'):
+						code = info[2].text + ' ' + info[3].text
+						courses[code] = {
+							'code':		code,
+							'href':		info[1].find('a')['href'],
+							'dept': 	info[2].text,
+							'code': 	info[2].text + ' ' + info[3].text,
+							'section': 	info[4].text,
+							'credits': 	float(info[6].text) if GWParser.is_float(info[6].text) else 0.0,
+							'title':	info[7].text,
+							'capacity':	info[10].text,
+							'enrlment':	info[11].text,
+							'attr':		';'.join(info[22].text.split(' and '))
+						}
+						print code
+					# courses[code] = {
+					# 	'ident':	info[1].text,
+					# 	'href':		info[1].find('a')['href'],
+					# 	'dept': 	info[2].text,
+					# 	'code': 	info[2].text + ' ' + info[3].text,
+					# 	'section': 	info[4].text,
+					# 	'credits': 	float(info[6].text) if GWParser.is_float(info[6].text) else 0.0,
+					# 	'title':	info[7].text,
+					# 	# 'days':		info[8].text,
+					# 	'capacity':	info[10].text,
+					# 	'enrlment':	info[11].text,
+					# 	'instr':	re.sub(r'\(P\)', '', ' '.join(info[19].text.split())), # NOTE: not sure if this handles multple instrs
+					# 	'loc':		info[21].text,
+					# 	'attr':		';'.join(info[22].text.split(' and '))
+					# }
 
+				# match course descriptions to offered courses
 				details_query = {
 					'term_in':terms[term],
 					'one_subj':dept,
-					# 'sel_crse_strt':rows[1].find_all('td')[1].text,
-					# 'sel_crse_end':rows[-1].find_all('td')[1].text,
+					'sel_dept':dept,
 					'sel_subj':'',
 					'sel_levl':'',
 					'sel_schd':'',
 					'sel_coll':'',
 					'sel_divs':'',
-					'sel_dept':dept,
 					'sel_attr':''
 				}
 				soup = BeautifulSoup(self.get_html(self.url + '/PRODCartridge/bwckctlg.p_display_courses', details_query))
-				# print soup.prettify().encode('utf-8')
 				rows1 = soup.find('body').find('table', {'class':'datadisplaytable'}).find_all('tr', recursive=False)
-				# print rows1.prettify()
 				for title, descr in izip(rows1[::2], rows1[1:][::2]):
+
 					title = [l for l in title.text.splitlines() if l.strip()][0]
-					code = re.match(r'(.*) - .*', title).group(1).encode('utf-8')
-					print code
+					code = re.match(r'(.*) - .*', title).group(1)
+
+					# extract description (if it exists)
 					if courses.get(code):
-						# print courses[code]
-
 						descr = re.match(r'<td .*?>\n([^<]+)<[^$]*</td>', descr.find('td').prettify())
-						
-						# extract description (if it exists)
-						if descr:
-							descr = descr.group(1).strip()
-							print descr
-						else:
-							print 'NO DESCRIPTION'
+						courses[code]['descr'] = ' '.join(descr.group(1).strip().splitlines()) if descr else ''
 
-						# for l in descr.text.splitlines():
-							# if l.strip():
-								# pass
-								# print l.strip()
+				for code in courses:
 
-					# print descr.find('td', {'class':'ntdefault'}).prettify()
-				# descrs = soup.find_all('td', {'class':'ntdefault'})
-				# for descr in descrs:
-					# print descr.text.encode('utf-8')
-				# print '\n\n'
-
-				continue
-
-				for course in courses.values():
-
-
-					
-					soup = BeautifulSoup(self.get_html(self.url + course['href'])).find('th', {'class':'ddtitle'})
-					title = soup.text
+					soup = BeautifulSoup(self.get_html(self.url + courses[code]['href']))
+					title = soup.find('th', {'class':'ddtitle'}).text
 					print title
 					# extract info from title
 					title = re.match(r'(.*) - (\d*) - (.*) - (\d*)', title)
-					print title.group(1)
-					print title.group(2)
-					print title.group(3)
-					print title.group(4)
 
+					# sanity check
+					if code != title.group(3):
+						exit(1)
 
+					# parse meeting times
+					meeting_times = soup.find('table', {'class':'datadisplaytable'}).find('table', {'class':'datadisplaytable'}).find_all('tr')[1:]
 
-					details_query = {
-						'term_in':terms[term],
-						'one_subj':dept,
-						# 'sel_crse_strt':course['code'],
-						# 'sel_crse_end':course['code'],
-						'sel_subj':dept,
-						'sel_levl':'',
-						'sel_schd':'',
-						'sel_coll':'',
-						'sel_divs':'',
-						'sel_dept':'',
-						'sel_attr':''
-					}
-					soup = BeautifulSoup(self.get_html(self.url + '/PRODCartridge/bwckctlg.p_display_courses', details_query))
-					print soup.prettify()
-					# exit(1)
+					for mt in meeting_times:
+						print mt.find_all('td')
 
-					# details_query = {
-						# 'cat_term_in':  terms[term],
-						# 'subj_code_in': dept,
-						# 'crse_numb_in': course['ident']
-					# }
-					# soup = BeautifulSoup(self.get_html(self.url + soup.find('a')['href']), 'html.parser').find('table', {'class':'datadisplaytable'})
-					# print soup.text
+						# print mt.prettify()
 
-					# soup = BeautifulSoup(self.get_html(self.url + '/PRODCartridge/bwckctlg.p_disp_course_detail', details_query), 'html.parser')#.find('table', {'class':'datadisplaytable'})#.find('td', {'class':'ntdefualt'})
-					# print soup.prettify()
+					# exit(0)
+
+					# soup_wl = BeautifulSoup(self.get_html(self.url + soup.find('a')['href']), 'html.parser').find('table', {'class':'datadisplaytable'})/
+					# print soup_wl.prettify()
 					# print '\n\n'
-
-			# break
 
 	@staticmethod
 	def is_float(subject):
