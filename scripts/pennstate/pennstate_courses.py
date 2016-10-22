@@ -3,17 +3,14 @@
 # @author	Michael N. Miller
 # @date	9/3/16
 
-import django, os, datetime
+import django, os, datetime, requests, cookielib, re, sys
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "semesterly.settings")
 django.setup()
 from timetable.models import *
 from fake_useragent import UserAgent
 from itertools import izip
 from bs4 import BeautifulSoup
-import requests, cookielib, re, sys
-
-from amazonproduct import API
-api = API(locale='us')
+from scripts.textbooks.amazon import make_textbook
 
 class PennStateParser:
 
@@ -95,7 +92,6 @@ class PennStateParser:
 		search_query['SSR_CLSRCH_WRK_INCLUDE_CLASS_DAYS$5'] = 'J'
 
 		# extract search query info
-		# terms = soup.find('select', {'id' : 'CLASS_SRCH_WRK2_STRM$35$'}).find_all('option')
 		departments = soup.find('select', {'id' : 'SSR_CLSRCH_WRK_SUBJECT_SRCH$2'}).find_all('option')[1:]
 		# NOTE: first element of dropdown lists in search area is empty
 
@@ -181,7 +177,7 @@ class PennStateParser:
 					section = self.create_section(course)
 
 					# create textbooks
-					# map(lambda isbn: self.make_textbook(isbn[1], isbn[0], section), isbns)
+					map(lambda isbn: make_textbook(isbn[1], isbn[0], section), isbns)
 
 					# offering details
 					for sched, loc, date in izip(scheds, locs, dates):
@@ -203,7 +199,6 @@ class PennStateParser:
 						self.create_offerings(section)
 
 			PennStateParser.wrap_up()
-			print '>>>>>> WRAP UP <<<<<<'
 
 	def parse_textbooks(self, soup):
 		isbns = zip(soup.find_all('span', id=re.compile(r'DERIVED_SSR_TXB_SSR_TXBDTL_ISBN\$\d*')), soup.find_all('span', id=re.compile(r'DERIVED_SSR_TXB_SSR_TXB_STATDESCR\$\d*')))
