@@ -306,9 +306,15 @@ class ChapmanParser:
 	@staticmethod
 	def make_textbook(is_required, isbn_number, section):
 
+		print 'ISBN', isbn_number
+
 		isbn_numbers = isbn_number
 
 		info = ChapmanParser.get_amazon_fields(isbn_number)
+
+		# invalid isbn
+		if not info:
+			return
 
 		# update/create textbook
 		textbook_data = {
@@ -318,7 +324,6 @@ class ChapmanParser:
 			'title': info["Title"]
 		}
 
-		# FIXME -- why are we filling up the database with crap books?
 		textbook, created = Textbook.objects.update_or_create(isbn=isbn_number, defaults=textbook_data)
 
 		# link to course section
@@ -353,6 +358,8 @@ class ChapmanParser:
 				response = api.item_lookup('0840049420', IdType='ISBN', SearchIndex='Book', ResponseGroup='Large')
 			elif len(isbn) == 13:
 				response = api.item_lookup(isbn, IdType='EAN', SearchIndex='All', ResponseGroup='Large')
+			else:
+				return None
 
 			info = {
 				"DetailPageURL" : ChapmanParser.get_detail_page(response),
