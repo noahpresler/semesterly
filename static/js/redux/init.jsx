@@ -36,7 +36,8 @@ function setup(dispatch) {
   sharedTimetable = JSON.parse(sharedTimetable);
   sharedCourse = JSON.parse(sharedCourse);
   findFriends = findFriends === "True";
-  uses12HrTime = uses12HrTime === "True"
+  enableNotifs = enableNotifs === "True";
+  uses12HrTime = uses12HrTime === "True";
   /* first setup the user's state */
   let user = JSON.parse(currentUser); // currentUser comes from timetable.html
   dispatch(getUserInfo(user));
@@ -56,7 +57,7 @@ function setup(dispatch) {
   // check if registered for chrome notifications
   isRegistered();
   // check if first visit
-  if (browserSupportsLocalStorage()) {
+  if (browserSupportsLocalStorage() && 'serviceWorker' in navigator) {
     if (localStorage.getItem("firstVisit") === null) {
       let time = new Date();
       setFirstVisit(time.getTime());
@@ -80,7 +81,6 @@ function setup(dispatch) {
   }
 
   /* now setup sharing state */
-
   if (sharedTimetable) {
     lockTimetable(dispatch, sharedTimetable, true, user.isLoggedIn);
   }
@@ -89,7 +89,16 @@ function setup(dispatch) {
   } else if (findFriends) {
     dispatch({type: "TOGGLE_PEER_MODAL"});
   }
-
+  if (enableNotifs) {
+    if (!user.isLoggedIn) {
+      dispatch({type: 'TRIGGER_SIGNUP_MODAL'})
+    } else {
+      dispatch({
+        type: "OVERRIDE_SETTINGS_SHOW",
+        data: true,
+      })
+    }
+  }
 }
 
 setup(store.dispatch);
