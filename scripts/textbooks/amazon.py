@@ -1,14 +1,10 @@
+from django.utils.encoding import smart_str, smart_unicode
 from timetable.models import Textbook, TextbookLink
 from amazonproduct import API
 api = API(locale='us')
-from django.utils.encoding import smart_str, smart_unicode
 
 # NOTE: (mostly) copied from base bn parser, need to do full integration
 def make_textbook(is_required, isbn_number, section):
-
-	print 'ISBN', isbn_number
-
-	isbn_numbers = isbn_number
 
 	info = get_amazon_fields(isbn_number)
 

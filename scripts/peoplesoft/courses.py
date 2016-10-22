@@ -6,6 +6,8 @@ from fake_useragent import UserAgent
 from itertools import izip
 from bs4 import BeautifulSoup
 
+from scripts.textbooks.amazon import make_textbook
+
 class PeopleSoftParser:
 
 	DAY_MAP = {
@@ -75,10 +77,9 @@ class PeopleSoftParser:
 	def parse(self, terms, **kwargs):
 
 		soup = BeautifulSoup(self.get_html(self.base_url, kwargs['url_params'] if kwargs.get('url_params') else {}))
-		print soup.prettify()
 
 		# create search payload with hidden form data
-		search_query = {a['name']: a['value'] for a  in soup.find('div', {'id' : 'win0divPSHIDDENFIELDS'}).find_all('input')}
+		search_query = {a['name']: a['value'] for a  in soup.find('div', id=re.compile(r'win\ddivPSHIDDENFIELDS')).find_all('input')}
 		search_query['ICAction'] = 'CLASS_SRCH_WRK2_SSR_PB_CLASS_SRCH'
 		search_query['SSR_CLSRCH_WRK_SSR_OPEN_ONLY$chk$4'] = 'N'
 		for day in ['MON', 'TUES', 'WED', 'THURS', 'FRI', 'SAT', 'SUN']:
@@ -87,11 +88,10 @@ class PeopleSoftParser:
 		search_query['SSR_CLSRCH_WRK_INCLUDE_CLASS_DAYS$5'] = 'J'
 
 		# extract search query info
-		departments = soup.find('select', {'id' : 'SSR_CLSRCH_WRK_SUBJECT_SRCH$2'}).find_all('option')[1:]
+		options = soup.find('select', id=re.compile(r'SSR_CLSRCH_WRK_SUBJECT_SRCH\$\d'))
+		search_id = options['id']
+		departments = options.find_all('option')[1:]
 		# NOTE: first element of dropdown lists in search area is empty
-
-		# NOTE: hardcoded semesters Fall, Interim, Spring 2016-2017
-		terms = {'F':'2168', 'I':'2172', 'S':'2174'}
 
 		for term in terms:
 
@@ -109,10 +109,10 @@ class PeopleSoftParser:
 				self.course['department'] = department.text
 
 				# Update search payload with department code
-				search_query['SSR_CLSRCH_WRK_SUBJECT_SRCH$2'] = department['value']
+				search_query[search_id] = department['value']
 
 				# Get course listing page for department
-				soup = BeautifulSoup(self.post_http(PennStateParser.BASE_URL, search_query).text, 'html.parser')
+				soup = BeautifulSoup(self.post_http(self.base_url, search_query).text, 'html.parser')
 
 				# check for valid search/page
 				if soup.find('td', {'id' : 'PTBADPAGE_' }) or soup.find('div', {'id' : 'win1divDERIVED_CLSMSG_ERROR_TEXT'}):
@@ -121,7 +121,7 @@ class PeopleSoftParser:
 					continue
 
 				# fill payload for course description page request
-				descr_payload = {a['name']: a['value'] for a in soup.find('div', {'id' : 'win0divPSHIDDENFIELDS'}).find_all('input')}
+				descr_payload = {a['name']: a['value'] for a in soup.find('div', id=re.compile(r'win\ddivPSHIDDENFIELDS')).find_all('input')}
 
 				courses = soup.find_all('table', {'class' : 'PSLEVEL1GRIDNBONBO'})
 
@@ -130,7 +130,7 @@ class PeopleSoftParser:
 					descr_payload['ICAction'] = 'MTG_CLASS_NBR$' + str(i)
 
 					# Get course description page
-					soup = BeautifulSoup(self.get_html(PennStateParser.BASE_URL, descr_payload))
+					soup = BeautifulSoup(self.get_html(self.base_url, descr_payload))
 
 					# scrape info from page
 					title 		= soup.find('span', {'id' : 'DERIVED_CLSRCH_DESCR200'}).text
@@ -166,7 +166,7 @@ class PeopleSoftParser:
 					self.course['units'] 	= re.match(r'(\d*).*', units).group(1)
 					self.course['size'] 	= int(capacity)
 					self.course['enrolment'] = int(enrollment)
-					self.course['instrs'] = ', '.join({instr.text for instr in instrs})
+					self.course['instrs'] 	= ', '.join({instr.text for instr in instrs})
 
 					course = self.create_course()
 					section = self.create_section(course)
@@ -180,8 +180,8 @@ class PeopleSoftParser:
 						rsched = re.match(r'([a-zA-Z]*) (.*) - (.*)', sched.text)
 
 						if rsched:
-							days = map(lambda d: PeopleSoftParser.DAY_MAP[d], re.findall('[A-Z][^A-Z]*', rsched.group(1)))
-							time = (PennStateParser.time_12to24(rsched.group(2)), PennStateParser.time_12to24(rsched.group(3)))
+							days = map(lambda d: PeopleSoftParser.DAY_MAP[d], re.findall(r'[A-Z][^A-Z]*', rsched.group(1)))
+							time = (PeopleSoftParser.time_12to24(rsched.group(2)), PeopleSoftParser.time_12to24(rsched.group(3)))
 						else: # handle TBA classes
 							days = None
 							time = (None, None)
@@ -194,6 +194,33 @@ class PeopleSoftParser:
 						self.create_offerings(section)
 
 			PeopleSoftParser.wrap_up()
+
+	def parse_textbooks(self, soup):
+		isbns = zip(soup.find_all('span', id=re.compile(r'DERIVED_SSR_TXB_SSR_TXBDTL_ISBN\$\d*')), soup.find_all('span', id=re.compile(r'DERIVED_SSR_TXB_SSR_TXB_STATDESCR\$\d*')))
+		for i in range(len(isbns)):
+			isbns[i] = (filter(lambda x: x.isdigit(), isbns[i][0].text), isbns[i][1].text[0].upper() == 'R')
+		return isbns
+		# return map(lambda i: (filter(lambda x: x.isdigit(), isbns[i][0].text), isbns[i][1].text[0].upper() == 'R'), range(len(isbns)))
+
+	# NOTE: chapman specific
+	def extract_prereqs(self, text):
+
+		extractions = {
+			'prereqs' : r'Pre[rR]equisite(?:s?)[:,]\s(.*?)\.',
+			'coreqs'  : r'Co[rR]equisite(?:s?)[:,]\s(.*?)\.'
+		}
+
+		for ex in extractions:
+			rex = re.compile(extractions[ex])
+			extracted = rex.search(text)
+			if extracted:
+				self.course[ex] = extracted.group(1)
+			else:
+				self.course[ex] = ''
+			text = rex.sub('', text).strip()
+
+		return text
+
 
 	@staticmethod
 	def time_12to24(time12):
