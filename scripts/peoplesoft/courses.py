@@ -51,7 +51,7 @@ class PeopleSoftParser:
 				raw_input("Press Enter to continue...")
 				html = None
 
-		return html
+		return html.encode('utf-8')
 
 	def post_http(self, url, form, payload=''):
 
@@ -81,14 +81,22 @@ class PeopleSoftParser:
 
 		soup = BeautifulSoup(self.get_html(self.base_url, kwargs['url_params'] if kwargs.get('url_params') else {}))
 
+
 		# create search payload with hidden form data
 		search_query = {a['name']: a['value'] for a  in soup.find('div', id=re.compile(r'win\ddivPSHIDDENFIELDS')).find_all('input')}
+
+		# advanced search
+		search_query['ICAction'] = 'DERIVED_CLSRCH_SSR_EXPAND_COLLAPS$149$$1'
+		soup = BeautifulSoup(self.post_http(self.base_url, search_query).text, 'html.parser')
+
+		# search_query = {a['name']: a['value'] for a  in soup.find('div', id=re.compile(r'win\ddivPSHIDDENFIELDS')).find_all('input')}
 		search_query['ICAction'] = 'CLASS_SRCH_WRK2_SSR_PB_CLASS_SRCH'
 		search_query['SSR_CLSRCH_WRK_SSR_OPEN_ONLY$chk$4'] = 'N'
 		for day in ['MON', 'TUES', 'WED', 'THURS', 'FRI', 'SAT', 'SUN']:
 			search_query['SSR_CLSRCH_WRK_' + day + '$5'] = 'Y'
 			search_query['SSR_CLSRCH_WRK_' + day + '$chk$5'] = 'Y'
 		search_query['SSR_CLSRCH_WRK_INCLUDE_CLASS_DAYS$5'] = 'J'
+		search_query[soup.find('select', id=re.compile(r'SSR_CLSRCH_WRK_INSTRUCTION_MODE\$\d'))['id']] = 'P'
 
 		# extract search query info
 		options = soup.find('select', id=re.compile(r'SSR_CLSRCH_WRK_SUBJECT_SRCH\$\d'))
