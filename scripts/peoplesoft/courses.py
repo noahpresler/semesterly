@@ -236,7 +236,7 @@ class PeopleSoftParser:
 		extractions = {
 			'prereqs' : r'[Pp]r(?:-?)e[rR]eq(?:uisite)?(?:s?)[:,\s]\s*(.*?)(?:\.|$)\s*',
 			'coreqs'  : r'[Cc]o(?:-?)[rR]eq(?:uisite)?(?:s?)[:,\s]\s*(.*?)(?:\.|$)\s*',
-			'geneds' : r'GE (.*)'
+			'areas' : r'(GE .*)'
 		}
 
 		for ex in extractions:
