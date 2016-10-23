@@ -369,7 +369,8 @@ export function setARegistrationToken() {
 	        reg.pushManager.subscribe({
 	            userVisibleOnly: true
 	        }).then(function(sub) {
-	            sendRegistrationToken(sub.endpoint.substring(40));
+	        	console.log(sub);
+	            sendRegistrationToken(sub.toJSON());
 	        });
 	    }).catch(function(error) {
 	        // console.log(':^(', error);
