@@ -124,7 +124,7 @@ class GWParser:
 			search_params['end_mi'] = '0'
 			search_params['sel_ptrm']  = '%'
 			search_params['SUB_BTN'] = 'Section Search'
-		
+
 			# get list of departments
 			depts = (dept['value'] for dept in soup.find('select', {'id' : 'subj_id'}).find_all('option'))
 
@@ -151,24 +151,9 @@ class GWParser:
 							'title':	info[7].text,
 							'capacity':	info[10].text,
 							'enrlment':	info[11].text,
-							'attr':		';'.join(info[22].text.split(' and '))
+							# 'attr':		';'.join(info[22].text.split(' and '))
 						}
 						print code
-					# courses[code] = {
-					# 	'ident':	info[1].text,
-					# 	'href':		info[1].find('a')['href'],
-					# 	'dept': 	info[2].text,
-					# 	'code': 	info[2].text + ' ' + info[3].text,
-					# 	'section': 	info[4].text,
-					# 	'credits': 	float(info[6].text) if GWParser.is_float(info[6].text) else 0.0,
-					# 	'title':	info[7].text,
-					# 	# 'days':		info[8].text,
-					# 	'capacity':	info[10].text,
-					# 	'enrlment':	info[11].text,
-					# 	'instr':	re.sub(r'\(P\)', '', ' '.join(info[19].text.split())), # NOTE: not sure if this handles multple instrs
-					# 	'loc':		info[21].text,
-					# 	'attr':		';'.join(info[22].text.split(' and '))
-					# }
 
 				# match course descriptions to offered courses
 				details_query = {
@@ -207,18 +192,40 @@ class GWParser:
 						exit(1)
 
 					# parse meeting times
-					meeting_times = soup.find('table', {'class':'datadisplaytable'}).find('table', {'class':'datadisplaytable'}).find_all('tr')[1:]
+					meeting_times = GWParser.extract_meeting_times(soup)
 
 					for mt in meeting_times:
-						print mt.find_all('td')
+						info = mt.find_all('td')
+						time_range = re.match(r'(.*) - (.*)', info[1].text)
+						if time_range:
+							time_start = time_12to24(time_range.group(1))
+							time_end = time_12to24(time_range.group(2))
+						else:
+							continue
 
-						# print mt.prettify()
 
 					# exit(0)
 
 					# soup_wl = BeautifulSoup(self.get_html(self.url + soup.find('a')['href']), 'html.parser').find('table', {'class':'datadisplaytable'})/
 					# print soup_wl.prettify()
 					# print '\n\n'
+
+
+
+
+	@staticmethod
+	def extract_meeting_times(soup):
+		meeting_times = soup.find('table', {'class':'datadisplaytable'})
+		if meeting_times:
+			meeting_times = meeting_times.find('table', {'class':'datadisplaytable'})
+			if meeting_times:
+				meeting_times = meeting_times.find_all('tr')[1:]
+			else:
+				meeting_times = []
+		else:
+			meeting_times = []
+
+		return meeting_times
 
 	@staticmethod
 	def is_float(subject):
