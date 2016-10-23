@@ -14,6 +14,7 @@ parser = argparse.ArgumentParser(description='Process some integers.')
 parser.add_argument('--school', dest='school', default=None, help='the school to send the message to')
 parser.add_argument('--message', dest='message', help='the school to send the message to')
 parser.add_argument('--title', dest='title', help='the school to send the message to', default="Semester.ly")
+
 args = parser.parse_args()
 
 if not args.message: 
