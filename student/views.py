@@ -284,13 +284,17 @@ def unsubscribe(request, id, token):
   return HttpResponseRedirect("/")
 
 @csrf_exempt
+@validate_subdomain
 def set_registration_token(request):
     token = json.loads(request.body)['token']
+    school = request.subdomain
     student = get_student(request)
     rt, rt_was_created = RegistrationToken.objects.update_or_create(token = token)
     if student:
         rt.student = student
         rt.save()
+        student.school = school
+        student.save()
     json_data = {
         'token': 'yes'
     }
