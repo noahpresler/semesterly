@@ -23,7 +23,70 @@ students = PersonalTimetable.objects.filter(school=school).values_list("student"
 server = smtplib.SMTP_SSL('email-smtp.us-east-1.amazonaws.com')
 server.login('AKIAJWXCNDO3CMYAIC6A', 'AonOaLbp9FjBkyhP9ihHBge92CEqgMPMbgrUweYxT9Ar')
 
-blacklist = { "sinjia2007@hotmail.com"
+blacklist = {"jmsusas@yahoo.com"
+,"clara.liff@gmail.com"
+,"muffinman1117@gmail.com"
+,"rebekah.kirkwood@gmail.com"
+,"awax1@jhu.edu"
+,"tfitzg12@jhu.edu"
+,"tlranger96@gmail.com"
+,"mcola22@gmail.com"
+,"gaby776@gmail.com"
+,"chaudrey84@gmail.com"
+,"hstwitter@hotmail.com"
+,"sanjayel@hotmail.com"
+,"dandoherty97@gmail.com"
+,"toxikjumper@gmail.com"
+,"serfineokeyo@gmail.com"
+,"ixoxhershey@yahoo.com"
+,"jswokay@gmail.com"
+,"krazykat1001@hotmail.com"
+,"ogunnaike1998@gmail.com"
+,"chensamuel76@yahoo.com"
+,"aphal1@jhu.edu"
+,"98devin@gmail.com"
+,"roadrunnersurvivalla@gmail.com"
+,"namratach98@gmail.com"
+,"pinkperson247@gmail.com"
+,"samc526@gmail.com"
+,"jcjoshuachoi@gmail.com"
+,"emyw123@gmail.com"
+,"sps401@gmail.com"
+,"richardshy1995@aim.com"
+,"g1997p@gmail.com"
+,"hawkinsredfoxresearch@gmail.com"
+,"nehaabby@gmail.com"
+,"miketush@gmail.com"
+,"regan1017@gmail.com"
+,"dtigersfries7@gmail.com"
+,"calvinprofessional@hotmail.com"
+,"maddymaddie411@yahoo.com"
+,"leevincent1427@gmail.com"
+,"hriggott@aol.com"
+,"aurinx@yahoo.com"
+,"slugger1997@hotmail.com"
+,"zz.khan@hotmail.com"
+,"crosset2@jhu.edu"
+,"2013d4@gmail.com"
+,"reecegriffith98@gmail.com"
+,"wackoscackos@optonline.net"
+,"faceswilliam@gmail.com"
+,"yovell98@gmail.com"
+,"crazy4candy24@gmail.com"
+,"briankidd62@gmail.com"
+,"cassidy.quiros@yahoo.com"
+,"colin.thrasher97@gmail.com"
+,"tosin_foreverslife@yahoo.com"
+,"swimmergirl1708@yahoo.com"
+,"sdesilva@farragut2.org"
+,"kevinreyes.cal@gmail.com"
+,"lina.kim@apis.seoul.kr"
+,"crazy4soccerandtennis@gmail.com"
+,"kasim102691@yahoo.com"
+,"madeleine.guell@yahoo.com"
+,"sammyb404@gmail.com"
+,"lucbrenaux@gmail.com"
+,"sinjia2007@hotmail.com"
 ,"jerricamarie.li@gmail.com"
 ,"snjy9182@gmail.com"
 ,"defineciks@hotmail.com"
@@ -109,7 +172,7 @@ for student_id in students:
 
         # Create message
         recipient = student.user.email
-        msg = MIMEText(msg_html,'html')
+        msg = MIMEText(msg_html.encode('utf-8'),'html')
 
         msg['Subject'] = "Your Textbooks from Semester.ly"
         msg['From'] = sender
@@ -124,6 +187,6 @@ for student_id in students:
         print("skipped " + str(student.user.email))
 	traceback.print_exc()
 
-        server = smtplib.SMTP_SSL('smtp.zoho.com', 465)
-        server.login('textbooks@semester.ly', '7roHan11')
+        server = smtplib.SMTP_SSL('email-smtp.us-east-1.amazonaws.com')
+        server.login('AKIAJWXCNDO3CMYAIC6A', 'AonOaLbp9FjBkyhP9ihHBge92CEqgMPMbgrUweYxT9Ar')
 server.quit()
