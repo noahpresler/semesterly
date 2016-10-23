@@ -36,7 +36,7 @@ class GWParser:
 					verify = True
 				)
 
-				print 'GET', r.url
+				# print 'GET', r.url
 
 				if r.status_code == 200:
 					html = r.text
@@ -67,7 +67,7 @@ class GWParser:
 				if post.status_code == 200:
 					p = post
 
-				print 'POST', post.url
+				# print 'POST', post.url
 
 				return post
 
@@ -115,7 +115,7 @@ class GWParser:
 		terms = {'F':'201603', 'S':'201701'}
 		for term in terms:
 
-			print term
+			print 'Parsing courses for', term
 
 			search_query = {
 				'p_calling_proc' : 'P_CrseSearch',
@@ -123,25 +123,29 @@ class GWParser:
 			}
 
 			soup = BeautifulSoup(self.post_http(self.url + '/PRODCartridge/bwckgens.p_proc_term_date', search_query).text, 'html.parser')
+			self.headers['Referer'] = self.url + '/bwckgens.p_proc_term_date'
 
 			# create search param list
-			self.headers['Referer'] = self.url + '/bwckgens.p_proc_term_date'
 			search_params = {inp['name'] : inp['value'] if inp.get('value') else '' for inp in soup.find('form', {'action': '/PRODCartridge/bwskfcls.P_GetCrse'}).find_all('input')}
-			search_params['begin_hh'] = '0'
-			search_params['begin_mi'] = '0'
-			search_params['end_hh'] = '0'
-			search_params['end_mi'] = '0'
-			search_params['sel_ptrm']  = '%'
-			search_params['SUB_BTN'] = 'Section Search'
+			search_params.update({
+				'begin_hh' : '0',
+				'begin_mi' : '0',
+				'end_hh'   : '0',
+				'end_mi'   : '0',
+				'sel_ptrm' : '%',
+				'SUB_BTN'  : 'Section Search'
+			})
 
 			# get list of departments
-			depts = (dept['value'] for dept in soup.find('select', {'id' : 'subj_id'}).find_all('option'))
+			depts = [dept['value'] for dept in soup.find('select', {'id' : 'subj_id'}).find_all('option')]
 
-			for dept in depts:
+			for dept in depts[70:]:
 
 				search_params['sel_subj'] = ['dummy', dept]
 
-				rows = BeautifulSoup(self.post_http(self.url + '/PRODCartridge/bwskfcls.P_GetCrse', search_params).text, 'html.parser').find('table', {'class':'datadisplaytable'}).find_all('tr')[2:]
+				post = self.post_http(self.url + '/PRODCartridge/bwskfcls.P_GetCrse', search_params)
+				url = post.url
+				rows = BeautifulSoup(post.text, 'html.parser').find('table', {'class':'datadisplaytable'}).find_all('tr')[2:]
 
 				courses = {}
 
@@ -149,82 +153,73 @@ class GWParser:
 				for row in rows:
 					info = row.find_all('td')
 					if info[1].find('a'):
-						code = info[2].text + ' ' + info[3].text
-						courses[code] = {
-							'code':		code,
+
+						# general info
+						self.course = {
+							'ident':	info[1].text,
+							'code':		info[2].text + ' ' + info[3].text,
 							'href':		info[1].find('a')['href'],
 							'dept': 	info[2].text,
-							'code': 	info[2].text + ' ' + info[3].text,
+							'selec': 	info[3].text,
 							'section': 	info[4].text,
 							'credits': 	float(info[6].text) if GWParser.is_float(info[6].text) else 0.0,
 							'title':	info[7].text,
 							'capacity':	info[10].text,
 							'enrlment':	info[11].text,
-							# 'attr':		';'.join(info[22].text.split(' and '))
+							'attr':		'; '.join(info[22].text.split(' and ')) if len(info) == 23 else ''
 						}
-						print code
 
-				# match course descriptions to offered courses
-				details_query = {
-					'term_in':terms[term],
-					'one_subj':dept,
-					'sel_dept':dept,
-					'sel_subj':'',
-					'sel_levl':'',
-					'sel_schd':'',
-					'sel_coll':'',
-					'sel_divs':'',
-					'sel_attr':''
-				}
-				print details_query
-				soup = BeautifulSoup(self.get_html(self.url + '/PRODCartridge/bwckctlg.p_display_courses', details_query), 'html.parser')
-				rows1 = soup.find('body').find('table', {'class':'datadisplaytable'}).find_all('tr', recursive=False)
-				for title, descr in izip(rows1[::2], rows1[1:][::2]):
+						# query course catalog to obtain description
+						catalog_query = {
+							'term_in':terms[term],
+							'one_subj':self.course['dept'],
+							'sel_crse_strt':self.course['selec'],
+							'sel_crse_end':self.course['selec'],
+							'sel_subj':'',
+							'sel_levl':'',
+							'sel_schd':'',
+							'sel_coll':'',
+							'sel_divs':'',
+							'sel_dept':'',
+							'sel_attr':''
+						}
 
-					title = [l for l in title.text.splitlines() if l.strip()][0]
-					code = re.match(r'(.*) - .*', title).group(1)
+						catalog = self.get_html(self.url + '/PRODCartridge/bwckctlg.p_display_courses', catalog_query)
+						if catalog:
+							soup = BeautifulSoup(catalog, 'html.parser')
+							self.course['descr'] = GWParser.extract_description(soup)
 
-					print 'CODE', code
-					# extract description (if it exists)
-					if courses.get(code) is not None:
-						print descr.text
-						print descr.find('td')
-						descr = re.match(r'<td .*?>\n([^<]+)<[^$]*</td>', descr.find('td').prettify())
-						courses[code]['descr'] = ' '.join(descr.group(1).strip().splitlines()) if descr else ''
+						course = self.create_course()
 
-				for code in courses:
+						# parse scheduling info
+						meeting_times = GWParser.extract_meeting_times(soup)
+						for mt in meeting_times:
+							colmn = mt.find_all('td')
+							self.course['instrs'] = colmn[6].text
+							time_range = re.match(r'(.*) - (.*)', colmn[1].text)
+							if time_range:
+								self.course['time_start'] = GWParser.time_12to24(time_range.group(1))
+								self.course['time_end'] = GWParser.time_12to24(time_range.group(2))
+								self.course['days'] = list(colmn[2].text)
+								self.course['loc'] = colmn[3].text
+							else:
+								continue
+							meeting_type = colmn[5].text[0].upper()
 
-					soup = BeautifulSoup(self.get_html(self.url + courses[code]['href']))
-					title = soup.find('th', {'class':'ddtitle'}).text
-					print title
-					# extract info from title
-					title = re.match(r'(.*) - (\d*) - (.*) - (\d*)', title)
+						self.print_course()
+					
 
-					# sanity check
-					if code != title.group(3):
-						exit(1)
+		self.wrap_up()
 
-					# parse meeting times
-					meeting_times = GWParser.extract_meeting_times(soup)
+	def print_course(self):
+		for key in self.course:
+			print key, ':', self.course[key]
 
-					for mt in meeting_times:
-						info = mt.find_all('td')
-						time_range = re.match(r'(.*) - (.*)', info[1].text)
-						if time_range:
-							time_start = GWParser.time_12to24(time_range.group(1))
-							time_end = GWParser.time_12to24(time_range.group(2))
-						else:
-							continue
-						days = list(info[2].text)
-						loc = info[3].text
-						mtype = info[5].text[0].upper()
-						instrs = info[6].text
-
-					# exit(0)
-
-					# soup_wl = BeautifulSoup(self.get_html(self.url + soup.find('a')['href']), 'html.parser').find('table', {'class':'datadisplaytable'})/
-					# print soup_wl.prettify()
-					# print '\n\n'
+	@staticmethod
+	def extract_description(soup):
+		soup = soup.find('body').find('table', {'class':'datadisplaytable'}).find_all('tr', recursive=False)[1].find('td')
+		descr = re.match(r'<td .*?>\n([^<]+)<[^$]*</td>', soup.prettify())
+		return ' '.join(descr.group(1).strip().splitlines()) if descr else ''
 
 	def wrap_up(self):
 			update_object, created = Updates.objects.update_or_create(
