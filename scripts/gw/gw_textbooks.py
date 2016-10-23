@@ -72,7 +72,7 @@ class GWTextbooks:
 								'purpose':'browse'
 							}
 
-							print self.get_http(self.url + '/CourseMaterialsResultsView', query2).text
+							print self.get_http(self.url + '/CourseMaterialsResultsView', query2).text.encode('utf-8')
 
 	def get_jsessionid(self):
 

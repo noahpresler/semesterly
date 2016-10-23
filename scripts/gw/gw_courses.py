@@ -63,7 +63,6 @@ class GWParser:
 					verify = False,
 				)
 
-
 				if post.status_code == 200:
 					p = post
 
@@ -193,22 +192,26 @@ class GWParser:
 
 						# parse scheduling info
 						meeting_times = GWParser.extract_meeting_times(soup)
+
+						# collect instr info
+						self.course['instrs'] = ', '.join((mt.find_all('td')[6].text for mt in meeting_times))
+						section = self.create_section(course)
+
 						for mt in meeting_times:
-							colmn = mt.find_all('td')
-							self.course['instrs'] = colmn[6].text
-							time_range = re.match(r'(.*) - (.*)', colmn[1].text)
+							col = mt.find_all('td')
+							time_range = re.match(r'(.*) - (.*)', col[1].text)
 							if time_range:
 								self.course['time_start'] = GWParser.time_12to24(time_range.group(1))
 								self.course['time_end'] = GWParser.time_12to24(time_range.group(2))
-								self.course['days'] = list(colmn[2].text)
-								self.course['loc'] = colmn[3].text
+								self.course['days'] = list(col[2].text)
+								self.course['loc'] = col[3].text
 							else:
 								continue
-							meeting_type = colmn[5].text[0].upper()
+							meeting_type = col[5].text[0].upper()
+							self.create_offering(section)
 
 						self.print_course()
 					
-
 		self.wrap_up()
 
 	def print_course(self):
@@ -229,60 +232,49 @@ class GWParser:
 			)
 			update_object.save()
 
-	def create_course(self, course):
+	def create_course(self):
 		course_model, course_was_created = Course.objects.update_or_create(
 			code = course['code'],
 			school = self.school,
 			campus = 1,
 			defaults = {
-				'name': course['name'],
-				'description': course['descr'] if course.get('descr') else '',
-				'areas': 'TODO NOPE',
-				'prerequisites': 'TODO NOT YET',
-				'num_credits': float(course.get('credits')),
+				'name': self.course['title'],
+				'description': self.course['descr'] if self.course.get('descr') else '',
+				'areas': self.course['attr'],
+				'prerequisites': 'TODO NOT YET', # TODO
+				'num_credits': float(self.course.get('credits')),
 				'level': '0',
-				'department': course.get('dept')
+				'department': self.course.get('dept')
 			}
 		)
 
 		return course_model
 
 	def create_section(self, course_model):
-		if self.course.get('cancelled'):
+		# TODO - deal with cancelled course
+		section, section_was_created = Section.objects.update_or_create(
+			course = course_model,
+			semester = self.semester,
+			meeting_section = self.course.get('section'),
+			defaults = {
+				'instructors': self.course.get('intrs') or '',
+				'size': int(self.course.get('capacity')),
+				'enrolment': int(self.course.get('enrlment'))
+			}
+		)
 
-			if Section.objects.filter(course = course_model, meeting_section = self.course.get('section')).exists():
-				s = Section.objects.get(course = course_model, meeting_section = self.course.get('section'))
-				Offering.objects.filter(section = s).delete()
-				s.delete()
-
-			self.course['cancelled'] = False
-
-			return None
-
-		else:
-			section, section_was_created = Section.objects.update_or_create(
-				course = course_model,
-				semester = self.semester,
-				meeting_section = self.course.get('section'),
-				defaults = {
-					'instructors': self.course.get('Instructor(s)') or '',
-					'size': int(self.course.get('Class Capacity')),
-					'enrolment': int(self.course.get('Total Enrolled'))
-				}
-			)
-
-			return section
+		return section
 
 	def create_offerings(self, section_model):
 		if self.course.get('days'):
-			for day in list(self.course.get('days')):
+			for day in self.course.get('days'):
 				offering_model, offering_was_created = Offering.objects.update_or_create(
 					section = section_model,
 					day = day,
 					time_start = self.course.get('time_start'),
 					time_end = self.course.get('time_end'),
 					defaults = {
-						'location': self.course.get('Location')
+						'location': self.course.get('loc')
 					}
 				)
 
