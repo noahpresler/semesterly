@@ -1,5 +1,8 @@
 import { getSchool, getSemester } from './init.jsx';
+<<<<<<< HEAD
+=======
 export const VALID_SCHOOLS = ["uoft", "jhu", "umd", "uo", "rutgers", "queens", "vandy"];
+>>>>>>> staging
 export const VALID_SEMESTERS = ["F", "S"];
 export const SET_SCHOOL = "SET_SCHOOL";
 export const SET_SEMESTER = "SET_SEMESTER";
@@ -7,6 +10,16 @@ export const REQUEST_TIMETABLES = "REQUEST_TIMETABLES";
 export const RECEIVE_TIMETABLES = "RECEIVE_TIMETABLES";
 export const HALF_HOUR_HEIGHT = 25;
 export const MAX_TIMETABLE_NAME_LENGTH = 30; // Length of "This is my fucking timetable!!"
+export const VALID_SCHOOLS = [
+  "uoft", 
+  "jhu", 
+  "umd", 
+  "uo", 
+  "rutgers", 
+  "queens", 
+  "chapman",
+  "pennstate"
+];
 
 /* server endpoints */
 export const getCourseInfoEndpoint = (course_id) => {
@@ -100,6 +113,36 @@ export const getSchoolSpecificInfo = (school) => {
       }
 		case "umd":
 			return {
+        primaryDisplay: "name",
+        areasName: "Areas",
+        departmentsName: "Departments",
+        levelsName: "Levels",
+        timesName: "Times",
+        semesters: {
+          F: "Fall 2016",
+          S: "Spring 2017"
+        },
+        campuses: {
+          1: ""
+        }
+      }
+    case "chapman":
+      return {
+        primaryDisplay: "name",
+        areasName: "Areas",
+        departmentsName: "Departments",
+        levelsName: "Levels",
+        timesName: "Times",
+        semesters: {
+          F: "Fall 2016",
+          S: "Spring 2017"
+        },
+        campuses: {
+          1: ""
+        }
+      }
+    case "pennstate":
+      return {
         primaryDisplay: "name",
         areasName: "Areas",
         departmentsName: "Departments",
