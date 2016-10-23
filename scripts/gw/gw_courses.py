@@ -16,7 +16,7 @@ class GWParser:
 
 	def __init__(self):
 		self.session = requests.Session()
-		self.headers = {'User-Agent' : UserAgent().chrome}
+		self.headers = {'User-Agent' : UserAgent().random}
 		self.cookies = cookielib.CookieJar()
 		self.school = 'gw'
 		self.username = 'G45956511'
@@ -36,7 +36,7 @@ class GWParser:
 					verify = True
 				)
 
-				# print 'GET', r.url
+				print 'GET', r.url
 
 				if r.status_code == 200:
 					html = r.text
@@ -63,10 +63,13 @@ class GWParser:
 					verify = False,
 				)
 
+
 				if post.status_code == 200:
 					p = post
 
-				# print 'POST', post.url
+				print 'POST', post.url
+
+				return post
 
 			except (requests.exceptions.Timeout,
 				requests.exceptions.ConnectionError):
@@ -165,7 +168,7 @@ class GWParser:
 				details_query = {
 					'term_in':terms[term],
 					'one_subj':dept,
-					'sel_dept':'',
+					'sel_dept':dept,
 					'sel_subj':'',
 					'sel_levl':'',
 					'sel_schd':'',
@@ -174,15 +177,18 @@ class GWParser:
 					'sel_attr':''
 				}
 				print details_query
-				soup = BeautifulSoup(self.get_html(self.url + '/PRODCartridge/bwckctlg.p_display_courses', details_query))
+				soup = BeautifulSoup(self.get_html(self.url + '/PRODCartridge/bwckctlg.p_display_courses', details_query), 'html.parser')
 				rows1 = soup.find('body').find('table', {'class':'datadisplaytable'}).find_all('tr', recursive=False)
 				for title, descr in izip(rows1[::2], rows1[1:][::2]):
 
 					title = [l for l in title.text.splitlines() if l.strip()][0]
 					code = re.match(r'(.*) - .*', title).group(1)
 
+					print 'CODE', code
 					# extract description (if it exists)
-					if courses.get(code):
+					if courses.get(code) is not None:
+						print descr.text
+						print descr.find('td')
 						descr = re.match(r'<td .*?>\n([^<]+)<[^$]*</td>', descr.find('td').prettify())
 						courses[code]['descr'] = ' '.join(descr.group(1).strip().splitlines()) if descr else ''
 
