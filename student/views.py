@@ -5,6 +5,7 @@ from django.views.decorators.csrf import csrf_exempt
 from django.forms.models import model_to_dict
 from django.db.models import Q
 from django.core.urlresolvers import reverse
+from django.template import RequestContext
 from hashids import Hashids
 from pytz import timezone
 import copy, functools, itertools, json, logging, os
@@ -282,3 +283,19 @@ def unsubscribe(request, id, token):
 
   # Link is invalid. Redirect to homepage.
   return HttpResponseRedirect("/")
+
+def profile(request):
+  logged = request.user.is_authenticated()
+  if logged and Student.objects.filter(user=request.user).exists():
+    student = Student.objects.get(user=request.user)
+    print student.user
+    return render_to_response("profile.html", {
+      'name': student.user,
+      'major': student.major,
+      'class': student.class_year,
+      'student': student
+    },
+    context_instance=RequestContext(request))
+  else:
+    print "Fuark"
+    raise Http404
