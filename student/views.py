@@ -289,7 +289,7 @@ def set_registration_token(request):
     token = json.loads(request.body)['token']
     school = request.subdomain
     student = get_student(request)
-    rt, rt_was_created = RegistrationToken.objects.update_or_create(token = token)
+    rt, rt_was_created = RegistrationToken.objects.update_or_create(auth=token['keys']['auth'], p256dh=token['keys']['p256dh'], endpoint=token['endpoint'])
     if student:
         rt.student = student
         rt.save()
@@ -303,7 +303,7 @@ def set_registration_token(request):
 @csrf_exempt
 def delete_registration_token(request):
     token = json.loads(request.body)['token']
-    RegistrationToken.objects.filter(token = token).delete()
+    RegistrationToken.objects.filter(endpoint=token['endpoint']).delete()
     json_data = {
         'token': 'deleted'
     }
