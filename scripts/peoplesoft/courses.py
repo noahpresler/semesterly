@@ -236,7 +236,7 @@ class PeopleSoftParser:
 		extractions = {
 			'prereqs' : r'[Pp]r(?:-?)e[rR]eq(?:uisite)?(?:s?)[:,\s]\s*(.*?)(?:\.|$)\s*',
 			'coreqs'  : r'[Cc]o(?:-?)[rR]eq(?:uisite)?(?:s?)[:,\s]\s*(.*?)(?:\.|$)\s*',
-			'geneds' : r'GE (.*)'
+			'geneds' : r'(GE .*)'
 		}
 
 		for ex in extractions:
@@ -285,7 +285,7 @@ class PeopleSoftParser:
 				'corequisites': self.course.get('coreqs'),
 				'notes': self.course.get('notes'),
 				'info' : self.course.get('info'),
-				'areas': self.course.get('areas'),
+				'areas': self.course.get('areas') + self.course.get('geneds'),
 				'geneds': self.course.get('geneds')
 			}
 		)

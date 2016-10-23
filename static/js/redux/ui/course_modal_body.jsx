@@ -168,7 +168,7 @@ export class CourseModalBody extends React.Component {
         <div className="modal-module">
             <h3 className="modal-module-header">Textbooks</h3>
             {
-                textbooks.map((t, i) => <Textbook key={i} tb={t}/>)
+                textbooks.filter((tb)=>tb["image_url"] !== "Cannot be found").map((t, i) => <Textbook key={i} tb={t}/>)
             }
         </div>
 

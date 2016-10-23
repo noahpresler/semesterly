@@ -151,10 +151,9 @@ export const TextbookList = ({courses}) => {
     }
     return (
         <div>
-            {_.uniq(tbs, 'isbn').map(tb => {
+            {_.uniq(tbs, 'isbn').filter(tb => tb['image_url'] !== "Cannot be found").map(tb => {
                 return <Textbook tb={tb} key={tb.isbn} />
             })}
         </div>
     )
 }
-
