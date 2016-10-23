@@ -31,21 +31,19 @@ else:
 	print "Sending to <" + args.school + "> student(s)"
 tokens = RegistrationToken.objects.filter(student__in=students)
 print "This will send to ", tokens.count(), "device(s)"
-tokens_str = map(lambda t: t.endpoint[40:], tokens)
-tokens_str = [','.join('{0}'.format(w) for w in tokens_str)]
-print tokens_str
 
 confirmation = raw_input("Would you like to send?  (Y/n)")
 if confirmation.lower() != "y":
 	print "Quitting...\n"
 	exit()
 
-subscription_info = {"endpoint":"https://android.googleapis.com/gcm/send/fuKkKlzSEEE:APA91bFKiuJ3LEx7Ke3xOEJ…Lx-t8INikH97ewASUn6OSzRAGeGf8Eu1B5Q7Lju_7QBj5VeGjwCePUufhiSzFXqEogaJ4esAqA","keys":{"p256dh":"BPpHXY59RYhofutOpOrN5C2416kBVuaiK7Rj5a3vEc8u5NLNdDddcOy0YcJRtYCeAs2IJRhmOIzt3pOVAQJ6LUg=","auth":"9CwRLGpioO4VCtXW1xJigA=="}}
-data = '{"data": {"message":"'  + args.message + '","title":"' + args.title + '"}}'
-encoded = WebPusher(subscription_info).encode(data)
-crypto_key = "dh=" + encoded["crypto_key"]
-salt = "salt=" + encoded['salt']
-headers = {'Authorization': 'key=' + FCM_KEY, 'Content-Type': 'application/json', }
-headers.update({'crypto-key': crypto_key, 'content-encoding': 'aesgcm', 'encryption': salt})    
-fcm_data = {"raw_data": base64.b64encode(encoded.get('body')), "registration_ids": tokens_str}
-resp = requests.post(FCM_URL, data=json.dumps(fcm_data), headers=headers)
+for token in tokens:
+	subscription_info = {"endpoint":"https://android.googleapis.com/gcm/send/fuKkKlzSEEE:APA91bFKiuJ3LEx7Ke3xOEJ…Lx-t8INikH97ewASUn6OSzRAGeGf8Eu1B5Q7Lju_7QBj5VeGjwCePUufhiSzFXqEogaJ4esAqA","keys":{"p256dh":token.p256dh,"auth":token.auth}}
+	data = '{"data": {"message":"'  + args.message + '","title":"' + args.title + '"}}'
+	encoded = WebPusher(subscription_info).encode(data)
+	crypto_key = "dh=" + encoded["crypto_key"]
+	salt = "salt=" + encoded['salt']
+	headers = {'Authorization': 'key=' + FCM_KEY, 'Content-Type': 'application/json', }
+	headers.update({'crypto-key': crypto_key, 'content-encoding': 'aesgcm', 'encryption': salt})    
+	fcm_data = {"raw_data": base64.b64encode(encoded.get('body')), "registration_ids": [token.endpoint[40:]]}
+	resp = requests.post(FCM_URL, data=json.dumps(fcm_data), headers=headers)
