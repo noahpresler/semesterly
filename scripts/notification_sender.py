@@ -21,7 +21,7 @@ if not args.message:
 	exit()
 else:
 	print "\nMessage: " + args.message
-	print "\nTitle: " + args.title
+	print "Title: " + args.title
 
 if not args.school:
 	print "Sending to all schools"
