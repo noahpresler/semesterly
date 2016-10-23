@@ -41,33 +41,39 @@ class GWParser:
 				if r.status_code == 200:
 					html = r.text
 
+				return html
+
 			except (requests.exceptions.Timeout,
 				requests.exceptions.ConnectionError):
 				sys.stderr.write("Unexpected error: " + str(sys.exc_info()[0]))
 				continue
 
-		return html.encode('utf-8')
+		return None
 
 	def post_http(self, url, form, payload=''):
+		p = None
+		while p is None:
+			try:
+				post = self.session.post(
+					url,
+					data = form,
+					params = payload,
+					cookies = self.cookies,
+					headers = self.headers,
+					verify = False,
+				)
 
-		try:
-			post = self.session.post(
-				url,
-				data = form,
-				params = payload,
-				cookies = self.cookies,
-				headers = self.headers,
-				verify = False,
-			)
+				if post.status_code == 200:
+					p = post
 
-			print 'POST', post.url
+				# print 'POST', post.url
 
-			return post
-		except (requests.exceptions.Timeout,
-			requests.exceptions.ConnectionError):
-			sys.stderr.write("Unexpected error: " + str(sys.exc_info()[0]))
+			except (requests.exceptions.Timeout,
+				requests.exceptions.ConnectionError):
+				sys.stderr.write("Unexpected error: " + str(sys.exc_info()[0]))
+				continue
 
-		return None
+		return p
 
 	def login(self):
 		print "Logging in..."
@@ -159,7 +165,7 @@ class GWParser:
 				details_query = {
 					'term_in':terms[term],
 					'one_subj':dept,
-					'sel_dept':dept,
+					'sel_dept':'',
 					'sel_subj':'',
 					'sel_levl':'',
 					'sel_schd':'',
@@ -167,6 +173,7 @@ class GWParser:
 					'sel_divs':'',
 					'sel_attr':''
 				}
+				print details_query
 				soup = BeautifulSoup(self.get_html(self.url + '/PRODCartridge/bwckctlg.p_display_courses', details_query))
 				rows1 = soup.find('body').find('table', {'class':'datadisplaytable'}).find_all('tr', recursive=False)
 				for title, descr in izip(rows1[::2], rows1[1:][::2]):
@@ -198,11 +205,14 @@ class GWParser:
 						info = mt.find_all('td')
 						time_range = re.match(r'(.*) - (.*)', info[1].text)
 						if time_range:
-							time_start = time_12to24(time_range.group(1))
-							time_end = time_12to24(time_range.group(2))
+							time_start = GWParser.time_12to24(time_range.group(1))
+							time_end = GWParser.time_12to24(time_range.group(2))
 						else:
 							continue
-
+						days = list(info[2].text)
+						loc = info[3].text
+						mtype = info[5].text[0].upper()
+						instrs = info[6].text
 
 					# exit(0)
 
@@ -210,8 +220,84 @@ class GWParser:
 					# print soup_wl.prettify()
 					# print '\n\n'
 
+	def wrap_up(self):
+			update_object, created = Updates.objects.update_or_create(
+					school=self.school,
+					update_field="Course",
+					defaults={'last_updated': datetime.datetime.now()}
+			)
+			update_object.save()
 
+	def create_course(self, course):
+		course_model, course_was_created = Course.objects.update_or_create(
+			code = course['code'],
+			school = self.school,
+			campus = 1,
+			defaults = {
+				'name': course['name'],
+				'description': course['descr'] if course.get('descr') else '',
+				'areas': 'TODO NOPE',
+				'prerequisites': 'TODO NOT YET',
+				'num_credits': float(course.get('credits')),
+				'level': '0',
+				'department': course.get('dept')
+			}
+		)
 
+		return course_model
+
+	def create_section(self, course_model):
+		if self.course.get('cancelled'):
+
+			if Section.objects.filter(course = course_model, meeting_section = self.course.get('section')).exists():
+				s = Section.objects.get(course = course_model, meeting_section = self.course.get('section'))
+				Offering.objects.filter(section = s).delete()
+				s.delete()
+
+			self.course['cancelled'] = False
+
+			return None
+
+		else:
+			section, section_was_created = Section.objects.update_or_create(
+				course = course_model,
+				semester = self.semester,
+				meeting_section = self.course.get('section'),
+				defaults = {
+					'instructors': self.course.get('Instructor(s)') or '',
+					'size': int(self.course.get('Class Capacity')),
+					'enrolment': int(self.course.get('Total Enrolled'))
+				}
+			)
+
+			return section
+
+	def create_offerings(self, section_model):
+		if self.course.get('days'):
+			for day in list(self.course.get('days')):
+				offering_model, offering_was_created = Offering.objects.update_or_create(
+					section = section_model,
+					day = day,
+					time_start = self.course.get('time_start'),
+					time_end = self.course.get('time_end'),
+					defaults = {
+						'location': self.course.get('Location')
+					}
+				)
+
+	@staticmethod
+	def time_12to24(time12):
+
+		# Regex extract
+		match = re.match("(\d*):(\d*).*(\S)", time12)
+
+		# Transform to 24 hours
+		hours = int(match.group(1))
+		if re.search(r'[pP]', match.group(3)):
+			hours = (hours%12)+12
+
+		# Return as 24hr-time string
+		return str(hours) + ":" + match.group(2)
 
 	@staticmethod
 	def extract_meeting_times(soup):
