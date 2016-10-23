@@ -249,7 +249,8 @@ export function setARegistrationToken() {
 	        reg.pushManager.subscribe({
 	            userVisibleOnly: true
 	        }).then(function(sub) {
-	            sendRegistrationToken(sub.endpoint.substring(40));
+	        	console.log(sub);
+	            sendRegistrationToken(sub.toJSON());
 	        });
 	    }).catch(function(error) {
 	        console.log(':^(', error);
@@ -301,7 +302,7 @@ export function unregisterAToken() {
 	            userVisibleOnly: true
 	        }).then(function(sub) {
 	        	// TODO: unregister token on client side
-	            sendRegistrationTokenForDeletion(sub.endpoint.substring(40))
+	            sendRegistrationTokenForDeletion(sub.toJSON())
 	        });
 	    }).catch(function(error) {
 	        console.log(':^(', error);
