@@ -16,7 +16,7 @@ school_to_granularity = {
     'rutgers': 5,
     'uo': 5,
     'queens': 5,
-    'vandy': 5
+    'vandy': 5,
     'chapman': 5,
     'pennstate': 5
 }
@@ -26,7 +26,8 @@ VALID_SCHOOLS = [
   "umd", 
   "uo", 
   "rutgers", 
-  "queens", 
+  "queens",
+  "vandy",
   "chapman",
   "pennstate"
 ]
@@ -35,6 +36,7 @@ AM_PM_SCHOOLS = [
   "jhu",
   "umd",
   "rutgers",
+  "vandy",
   "chapman",
   "pennstate"
 ]
@@ -47,7 +49,7 @@ school_code_to_name = {
   'uo': 'University of Ottawa',
   'queens': 'Queens University',
   'chapman': 'Chapman University',
-  'pennstate': 'Pennsylvania State University'
+  'pennstate': 'Pennsylvania State University',
   'vandy': 'Vanderbilt University'
 }
 
