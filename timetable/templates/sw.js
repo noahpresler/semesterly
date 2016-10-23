@@ -14,10 +14,9 @@ self.addEventListener('message', function(event){
     event.ports[0].postMessage("SW Says 'Hello back!'");
 });
 self.addEventListener('push', function(event) {
-  console.log('Push message received', event);
-  // TODO
-  var title = 'Courses Are Out!';  
-  var body = 'Click and find your schedule for next semester!';  
+  var notif = event.data.json();
+  var title = notif.data.title;
+  var body = notif.data.message;
   var icon = 'static/img/logo2.0-310x310.png';  
   var tag = 'simple-push-demo-notification-tag';
 
