@@ -115,6 +115,8 @@ class GWParser:
 		for term in terms:
 
 			print 'Parsing courses for', term
+	
+			self.semester = term
 
 			search_query = {
 				'p_calling_proc' : 'P_CrseSearch',
@@ -138,7 +140,9 @@ class GWParser:
 			# get list of departments
 			depts = [dept['value'] for dept in soup.find('select', {'id' : 'subj_id'}).find_all('option')]
 
-			for dept in depts[70:]:
+			for dept in depts:
+
+				print 'Parsing courses in department', dept
 
 				search_params['sel_subj'] = ['dummy', dept]
 
@@ -152,6 +156,8 @@ class GWParser:
 				for row in rows:
 					info = row.find_all('td')
 					if info[1].find('a'):
+
+						print '\t', info[2].text, info[3].text
 
 						# general info
 						self.course = {
@@ -210,7 +216,7 @@ class GWParser:
 							meeting_type = col[5].text[0].upper()
 							self.create_offering(section)
 
-						self.print_course()
+						# self.print_course()
 					
 		self.wrap_up()
 
@@ -234,7 +240,7 @@ class GWParser:
 
 	def create_course(self):
 		course_model, course_was_created = Course.objects.update_or_create(
-			code = course['code'],
+			code = self.course['code'],
 			school = self.school,
 			campus = 1,
 			defaults = {
@@ -242,9 +248,11 @@ class GWParser:
 				'description': self.course['descr'] if self.course.get('descr') else '',
 				'areas': self.course['attr'],
 				'prerequisites': 'TODO NOT YET', # TODO
-				'num_credits': float(self.course.get('credits')),
+				'num_credits': self.course.get('credits'),
 				'level': '0',
 				'department': self.course.get('dept')
+				#'info':'',
+				#'notes':''
 			}
 		)
 
