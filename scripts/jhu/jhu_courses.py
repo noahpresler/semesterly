@@ -34,7 +34,7 @@ class HopkinsParser:
         except UnicodeEncodeError:
             print "Print statement omitted for UnicodeEncodeError."
 
-    def __init__(self, sem="Fall 2016"):
+    def __init__(self, sem="Spring 2017"):
         self.school = "jhu"
         self.s = requests.Session()
         self.cookies = cookielib.CookieJar()
