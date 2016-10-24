@@ -204,13 +204,14 @@ export function getUserSavedTimetables(semester) {
 }
 
 export function fetchClassmates(courses) {
-	return (dispatch) => {
-
+	return (dispatch) => 
+{		let state = store.getState();
+		let semester = state.semester !== undefined ? state.semester : currentSemester;
 		dispatch(requestClassmates());
 		fetch(getClassmatesEndpoint(), {
 			credentials: 'include',
 			method: 'POST',
-			body: JSON.stringify({ course_ids: courses })
+			body: JSON.stringify({ course_ids: courses, semester: semester })
 		})
 	    .then(response => response.json())
 	    .then(json => {
