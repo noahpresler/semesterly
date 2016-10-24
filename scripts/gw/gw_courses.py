@@ -140,7 +140,7 @@ class GWParser:
 			# get list of departments
 			depts = [dept['value'] for dept in soup.find('select', {'id' : 'subj_id'}).find_all('option')]
 
-			for dept in depts:
+			for dept in depts[110:]:
 
 				print 'Parsing courses in department', dept
 
@@ -164,14 +164,14 @@ class GWParser:
 							'ident':	info[1].text,
 							'code':		info[2].text + ' ' + info[3].text,
 							'href':		info[1].find('a')['href'],
-							'dept': 	info[2].text,
+							'dept': 	dept,
 							'selec': 	info[3].text,
 							'section': 	info[4].text,
 							'credits': 	float(info[6].text) if GWParser.is_float(info[6].text) else 0.0,
 							'title':	info[7].text,
 							'capacity':	info[10].text,
 							'enrlment':	info[11].text,
-							'attr':		'; '.join(info[22].text.split(' and ')) if len(info) == 23 else ''
+							'attr':		'; '.join(info[22].text.split(' and ')) if len(info) == 23 else '' #FIXME - hacky fix
 						}
 
 						# query course catalog to obtain description
