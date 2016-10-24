@@ -31,6 +31,7 @@ export class ExplorationModal extends React.Component {
 		this.changeTimer = false;
 		this.hide = this.hide.bind(this);
 		this.addFilter = this.addFilter.bind(this);
+		this.isFiltered = this.isFiltered.bind(this);
 		this.removeFilter = this.removeFilter.bind(this);
 		this.hideAll = this.hideAll.bind(this);
         this.showShareLink = this.showShareLink.bind(this);
@@ -85,6 +86,9 @@ export class ExplorationModal extends React.Component {
 			this.fetchAdvancedSearchResults(this.state);
 			this.changeTimer = false;
 		}, 200);
+	}
+	isFiltered(filterType,filter) {
+		return this.state[filterType].indexOf(filter) > -1
 	}
 	addFilter(filterType, filter) {
 		if (this.props.isFetching || this.state[filterType].indexOf(filter) > -1) {
@@ -230,6 +234,7 @@ export class ExplorationModal extends React.Component {
 			<Filter results={this.props[filterType]}
 					key={filterType} filterType={filterType}
 				   	add={this.addFilter} show={this.state["show_" + filterType]}
+				   	isFiltered={this.isFiltered}
 				   	onClickOut={this.hideAll} 
 				   	schoolSpecificInfo={this.props.schoolSpecificInfo}/>
 		));
@@ -303,6 +308,7 @@ export class ExplorationModal extends React.Component {
                     <Filter results={["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"]}
 					filterType={"times"}
 				   	add={this.addDayForTimesFilter.bind(this)} show={this.state["show_times"]}
+				   	isFiltered={this.isFiltered}
 				   	onClickOut={this.hideAll} 
 				   	schoolSpecificInfo={this.props.schoolSpecificInfo}
 				   	/>
@@ -360,7 +366,7 @@ class Filter extends React.Component {
 		let placeholder = schoolSpecificInfo[filterType + "Name"];
 		let results = this.state.results.map((r, i) => {
 			return <li key={i} onClick={() => this.props.add(filterType, r)} >
-					<i className="fa fa-check"></i>
+					<i className={classNames({"fa": true, "fa-check": this.props.isFiltered(filterType,r)})}></i>
 					<h6>{r}</h6>
 				</li>
 		});
