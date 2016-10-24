@@ -113,10 +113,25 @@ export function handleCreateNewTimetable() {
 		});
 	}
 	else {
-		let suffix = state.userInfo.data.timetables.filter(t => t.name.indexOf("Untitled") > -1).length;
-		suffix = suffix === 0 ? "" : " " + suffix;
-		createNewTimetable("Untitled Schedule" + String(suffix));
+		createNewTimetable(getNumberedName("Untitled Schedule"));
 	}
+}
+
+/*
+ * Numbers the provided string based on the number of other timetables with
+ * that name. e.g. getNumberedName("Untitled") -> "Untitled 2" if there are 2
+ * other timetables with "Untitled" in the title, or "Untitled" if there
+ * no others.
+ */
+export function getNumberedName(name) {
+	let state = store.getState();
+	let tokens = name.split(" ");
+	let nameBase = !isNaN(tokens[tokens.length - 1]) ? 
+		tokens.slice(0, tokens.length - 1).join(" ") : name;
+	let numberSuffix = state.userInfo.data.timetables.filter(
+		t => t.name.indexOf(nameBase) > -1).length;
+	numberSuffix = numberSuffix === 0 ? "" : " " + numberSuffix;
+	return nameBase + numberSuffix;
 }
 
 export function createNewTimetable(ttName="Untitled Schedule") {
