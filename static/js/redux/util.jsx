@@ -34,7 +34,7 @@ export const setFirstVisit = (time) => {
 }
 export const setDeclinedNotifications = (declined) => {
 	if (!browserSupportsLocalStorage()) { return; }
-	console.log("settings decline", declined);
+	// console.log("settings decline", declined);
 	localStorage.setItem("declinedNotifications", declined);
 }
 export const getDeclinedNotifications = () => {
