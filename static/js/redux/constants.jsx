@@ -58,6 +58,12 @@ export const getLoadSavedTimetablesEndpoint = (semester) => {
 export const getRequestShareTimetableLinkEndpoint = () => {
   return "/share/link/";
 }
+export const getSetRegistrationTokenEndpoint = () => {
+  return "/setRegistrationToken/";
+}
+export const deleteRegistrationTokenEndpoint = () => {
+  return "/deleteRegistrationToken/";
+}
 
 export const getSchoolSpecificInfo = (school) => {
 	switch(school) {

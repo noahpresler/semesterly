@@ -19,7 +19,7 @@ class Student(models.Model):
     social_all = models.NullBooleanField(null=True)
     emails_enabled = models.NullBooleanField(null=True, default=True)
     time_created = models.DateTimeField(auto_now_add=True)
-
+    school = models.CharField(max_length=100, null=True)
 
 class Reaction(models.Model):
   REACTION_CHOICES = (
@@ -48,4 +48,8 @@ class PersonalTimetable(models.Model):
     sections = models.ManyToManyField(Section)
     has_conflict = models.BooleanField(blank=True, default=False)
 
-    
+class RegistrationToken(models.Model):
+    auth = models.TextField(default='')
+    p256dh = models.TextField(default='')
+    endpoint = models.TextField(default='')
+    student = models.ForeignKey(Student, null=True, default=None)

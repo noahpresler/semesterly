@@ -51,7 +51,7 @@ def custom_500(request):
 # ******************************************************************************
 
 @validate_subdomain
-def view_timetable(request, code=None, sem=None, shared_timetable=None, find_friends=False):
+def view_timetable(request, code=None, sem=None, shared_timetable=None, find_friends=False, enable_notifs=False):
   school = request.subdomain
   student = get_student(request)
   course_json = None
@@ -73,6 +73,7 @@ def view_timetable(request, code=None, sem=None, shared_timetable=None, find_fri
     'semester': sem,
     'shared_timetable': json.dumps(shared_timetable),
     'find_friends': find_friends,
+    'enable_notifs': enable_notifs,
     'uses_12hr_time': school in AM_PM_SCHOOLS
   },
   context_instance=RequestContext(request))
@@ -81,6 +82,13 @@ def view_timetable(request, code=None, sem=None, shared_timetable=None, find_fri
 def find_friends(request):
   try:
     return view_timetable(request, find_friends=True)
+  except Exception as e:
+    raise Http404
+
+@validate_subdomain
+def enable_notifs(request):
+  try:
+    return view_timetable(request, enable_notifs=True)
   except Exception as e:
     raise Http404
 
@@ -603,3 +611,16 @@ def school_info(request, school):
   }
   return HttpResponse(json.dumps(json_data), content_type="application/json")
   
+
+from django.views.decorators.cache import never_cache
+from django.template.loader import get_template
+@never_cache
+def sw_js(request, js):
+    template = get_template('sw.js')
+    html = template.render()
+    return HttpResponse(html, content_type="application/x-javascript")
+
+def manifest_json(request, js):
+    template = get_template('manifest.json')
+    html = template.render()
+    return HttpResponse(html, content_type="application/json")

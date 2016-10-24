@@ -1,5 +1,6 @@
 .react-alerts {
   position: fixed;
+  top: 14px;
   right: 0;
   bottom: 0;
   margin: 14px;
@@ -8,14 +9,14 @@
 .react-alerts .alert {
   width: 300px;
   min-height: 50px;
-  margin: 10px 0 0 0;
+  margin: 0;
   display: flex;
   align-items: center;
   justify-content: space-between;
   border-radius: 2px;
   background-color: #333;
   font-size: 11px;
-  box-shadow: 0 8px 12px 0 rgba(0,0,0,0.3);
+  box-shadow: 0 3px 12px 0 rgba(0,0,0,0.3);
   color: #fff;
 }
 .react-alerts .alert .content {
@@ -148,4 +149,36 @@
   position:relative;
   top:12px;
   text-transform: none;
+}
+
+.enable-notification-alert h2 {
+  font-size: 16px;
+  margin: 0;
+}
+.enable-notification-alert .alert-extra {
+  font-size: 12px;
+  line-height: 12px;
+}
+.enable-notifications-alert-icon {
+  width: 20px;
+  height: 20px;
+  vertical-align: middle;
+  background-size: contain;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-image: url(/static/img/alert/bell.png);
+}
+.enable-notification-alert a.decline-notifications,
+.enable-notification-alert a.decline-notifications:link,
+.enable-notification-alert a.decline-notifications:active,
+.enable-notification-alert a.decline-notifications:visited {
+  display: block;
+  margin-top: 25px;
+  cursor: pointer;
+  color: #999;
+  opacity: .77;
+  transition: opacity .3s;
+}
+.enable-notification-alert a.decline-notifications:hover {
+  opacity: 1;
 }

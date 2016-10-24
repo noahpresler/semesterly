@@ -53,6 +53,7 @@ urlpatterns = patterns('',
     url(r'^user/save_settings/$', 'student.views.save_settings'),
     url(r'^user/get_classmates/$', 'student.views.get_classmates'),
     url(r'^user/find_friends/$', 'student.views.find_friends'),
+    url(r'^notifyme/$', 'timetable.views.enable_notifs'),
     url(r'^user/get_saved_timetables/(?P<school>.+)/(?P<sem>[fFsS]{1})', 'student.views.get_student_tts_wrapper'),
     
     url(r'^courses/(?P<school>.+?)/(?P<sem>[fFsS]{1}?)/code/(?P<course_id>.+)/*$', 'timetable.views.get_course_id'),
@@ -75,6 +76,11 @@ urlpatterns = patterns('',
     url(r'deploy_staging/', 'semesterly.views.deploy_staging'),
     
     url(r'^unsubscribe/(?P<id>[\w.@+-]+)/(?P<token>[\w.:\-_=]+)/$', 'student.views.unsubscribe'),
+
+    url(r'^setRegistrationToken/', 'student.views.set_registration_token'),
+    url(r'^deleteRegistrationToken/', 'student.views.delete_registration_token'),
+    url(r'^sw(.*.js)$', 'timetable.views.sw_js', name='sw_js'),
+    url(r'^manifest(.*.json)$', 'timetable.views.manifest_json', name='manifest_json'),
 
     # for testing error pages, so i don't have to turn off debug
 	url(r'^404testing/', 'timetable.views.custom_404'),
