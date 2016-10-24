@@ -511,8 +511,8 @@ def advanced_course_search(request):
         section__section_type="L", # we only want to show classes that have LECTURE sections within the given boundaries
         )
       for day_index, min_max in enumerate(filters['times']))))
-
-  course_match_objs = course_match_objs.distinct('code')[:50] # limit to 50 search results
+  valid_section_ids = Section.objects.filter(course__in=course_match_objs, semester=sem).values('course_id')
+  course_match_objs = course_match_objs.filter(id__in=valid_section_ids).distinct('code')[:50] # limit to 50 search results
   save_analytics_course_search(query[:200], course_match_objs[:2], sem, school, get_student(request), advanced=True)
   student = None
   logged = request.user.is_authenticated()
