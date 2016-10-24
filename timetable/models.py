@@ -3,7 +3,7 @@ import re
 os.environ['DJANGO_SETTINGS_MODULE'] = 'semesterly.settings'
 from django.forms.models import model_to_dict
 from django.db import models
-
+from django.db.models import Q
 
 #----------- Global Models  ----------------
 class Textbook(models.Model):
@@ -71,7 +71,7 @@ class Course(models.Model):
     return sorted(eval_info, key=lambda eval: eval['year']) 
 
   def get_avg_rating(self):
-    ratings = Evaluation.objects.only('course', 'score').filter(course=self)
+    ratings = Evaluation.objects.only('course', 'score').filter(~Q(score = 0), course=self)
     return sum([rating.score for rating in ratings])/len(ratings) if ratings else 0
 
   def get_textbooks(self, semester):
