@@ -369,7 +369,7 @@ export function setARegistrationToken() {
 	        reg.pushManager.subscribe({
 	            userVisibleOnly: true
 	        }).then(function(sub) {
-	        	console.log(sub);
+	        	// console.log(sub);
 	            sendRegistrationToken(sub.toJSON());
 	        });
 	    }).catch(function(error) {
@@ -441,12 +441,12 @@ export function sendRegistrationTokenForDeletion(token) {
     .then(response => response.json()) // TODO(rohan): error-check the response
     .then(json => {
         if (!json.error) {
-            console.log("token deleted: " + token);
+            // console.log("token deleted: " + token);
             store.dispatch({
                 type: "UNREGISTER_TOKEN"
             });
         } else {
-            console.log("token not deleted: " + token);
+            // console.log("token not deleted: " + token);
         }
     });
 }
