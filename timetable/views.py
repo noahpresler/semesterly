@@ -403,7 +403,7 @@ def get_detailed_course_json(school, course, sem, student=None):
   json_data['reactions'] = course.get_reactions(student)
   json_data['textbooks'] = course.get_textbooks(sem)
   if student and student.user.is_authenticated() and student.social_courses:
-    json_data['classmates'] = get_classmates_from_course_id(school, student, course.id)
+    json_data['classmates'] = get_classmates_from_course_id(school, student, course.id,sem)
   return json_data
 
 def get_basic_course_json(course, sem, extra_model_fields=[]):
