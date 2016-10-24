@@ -114,7 +114,7 @@ class GWParser:
 		terms = {'F':'201603', 'S':'201701'}
 		for term in terms:
 
-			print 'Parsing courses for', term
+			print 'Parsing courses for term ', term
 	
 			self.semester = term
 
