@@ -161,11 +161,15 @@ def get_classmates(request):
     school = request.subdomain
     student = Student.objects.get(user=request.user)
     course_ids = json.loads(request.body)['course_ids']
+    try:
+        semester = json.loads(request.body)['semester']
+    except:
+        semester = None 
     # user opted in to sharing courses
     if student.social_courses:
         courses = []
         for course_id in course_ids:
-            courses.append(get_classmates_from_course_id(school, student, course_id))
+            courses.append(get_classmates_from_course_id(school, student, course_id, semester))
         return HttpResponse(json.dumps(courses), content_type='application/json')
     else:
         return HttpResponse("Must have social_courses enabled")
@@ -203,7 +207,7 @@ def find_friends(request):
     friends.sort(key=lambda l: len(l['shared_courses']), reverse=True)
     return HttpResponse(json.dumps(friends))
 
-def get_classmates_from_course_id(school, student, course_id):
+def get_classmates_from_course_id(school, student, course_id, semester):
     # All friends with social courses/sharing enabled
     friends = student.friends.filter(social_courses=True)
     course = { 'course_id': course_id, 'classmates': [] }
@@ -212,6 +216,8 @@ def get_classmates_from_course_id(school, student, course_id):
         classmate['first_name'] = friend.user.first_name
         classmate['last_name'] = friend.user.last_name
         ptts = PersonalTimetable.objects.filter(student=friend, courses__id__exact=course_id)
+        if semester:
+            ptts = ptts.filter(semester=semester)
         for tt in ptts:
             if student.social_offerings and friend.social_offerings:
                 friend_sections = tt.sections.all().filter(course__id=course_id)
