@@ -83,11 +83,6 @@ header nav a:hover {
 	font-size: 48px;
 	line-height: 55px;
 }
-#hero h2 {
-	color: white;
-	font-size: 48px;
-	line-height: 55px;
-}
 	@media(max-width: 1170px) {#hero h2 {font-size: 40px; line-height: 45px;}}
 	@media(max-width: 980px) {#hero h2 {font-size: 30px; line-height: 38px;}}
 
@@ -211,6 +206,7 @@ footer h6 {
 	header h1 {
 		display: none;
 	}
+<<<<<<< HEAD
 }
 @media(max-width: 776px) {
 	#hero h2 {
@@ -225,4 +221,6 @@ footer h6 {
 	header h1 {
 		display: none;
 	}
+=======
+>>>>>>> 295d91836b887ad08e379466515d7f6b9e21c380
 }
