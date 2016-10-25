@@ -119,6 +119,10 @@
        display: none;
 	}
 
+	.welcome-modal #modal-body {
+		padding: 22px 0 20px;
+	}
+
  	.signup-modal #features{
        padding: 0px 10px 10px 10px;
        width: 100%;
