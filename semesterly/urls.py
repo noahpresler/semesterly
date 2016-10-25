@@ -75,6 +75,9 @@ urlpatterns = patterns('',
 
     # Automatic deployment endpoint
     url(r'deploy_staging/', 'semesterly.views.deploy_staging'),
+
+    # profile page
+    url(r'me/', 'student.views.profile'),
     
     url(r'^unsubscribe/(?P<id>[\w.@+-]+)/(?P<token>[\w.:\-_=]+)/$', 'student.views.unsubscribe'),
 
