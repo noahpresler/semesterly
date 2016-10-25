@@ -36,31 +36,15 @@ for student_id in students:
 
     try:
         unsub_link = "https://semester.ly" + create_unsubscribe_link(student)
-        tt = student.personaltimetable_set.order_by('last_updated').last()
-        textbook_json = map(lambda c:
-                        {
-                            "textbooks": map(lambda t: model_to_dict(Textbook.objects.get(isbn=t)), tt.sections.filter(~Q(textbooks=None), course=c).values_list("textbooks", flat=True).distinct()),
-                            "course_name": c.name,
-                            "course_code": c.code,
-                        }, tt.courses.all())
-
-        # Go through textbooks. If all empty lists (no textbooks), go to next student.
-        have_textbooks = False
-        for dic in textbook_json:
-            if dic["textbooks"]:
-                have_textbooks = True
-                break
-
-        if not have_textbooks:
-            continue
 
         student.user.first_name = student.user.first_name.encode('utf-8')
         student.user.last_name = student.user.last_name.encode('utf-8')
 
-        msg_html = render_to_string('email_textbooks.html', {
+        msg_html = render_to_string('email_classes_released.html', {
             'user': student,
             'unsub_link': unsub_link,
-            'textbooks_json': textbook_json
+            'freshman': student.class_year == 2020,
+            'senior': student.class_year == 2017
         })
 
         # Create message
