@@ -140,7 +140,7 @@ class GWParser:
 			# get list of departments
 			depts = [dept['value'] for dept in soup.find('select', {'id' : 'subj_id'}).find_all('option')]
 
-			for dept in depts[110:]:
+			for dept in depts:
 
 				print 'Parsing courses in department', dept
 
@@ -148,7 +148,11 @@ class GWParser:
 
 				post = self.post_http(self.url + '/PRODCartridge/bwskfcls.P_GetCrse', search_params)
 				url = post.url
-				rows = BeautifulSoup(post.text, 'html.parser').find('table', {'class':'datadisplaytable'}).find_all('tr')[2:]
+				rows = BeautifulSoup(post.text, 'html.parser').find('table', {'class':'datadisplaytable'})
+				if rows:
+					rows = rows.find_all('tr')[2:]
+				else:
+					continue
 
 				courses = {}
 
@@ -193,6 +197,8 @@ class GWParser:
 						if catalog:
 							soup = BeautifulSoup(catalog, 'html.parser')
 							self.course['descr'] = GWParser.extract_description(soup)
+
+						# self.print_course()
 
 						course = self.create_course()
 
