@@ -48,7 +48,7 @@
 					<h1>{{ name.first_name }} {{ name.last_name }}</h1>
 					<h2>{{ major }}, Class of {{ class }}</h2>
 				</div>
-				<div id="profile-image" style="background-image: url(http://semesterly.info//static/img/max.jpg);"></div>
+				<div id="profile-image" style="background-image: url(https://graph.facebook.com/{{  student.fbook_uid }}/picture?type=large);"></div>
 			</div>
 			<div id="profile-body">
 
@@ -61,7 +61,7 @@
 
 				<!-- Reaction Counter -->
 				<div id="reaction-counter">
-					<h3><span>13</span>Total Reactions</h3>
+					<h3><span>{{ total }}</span>Total Reactions</h3>
 					<div id="reactions">
 						<div class="swing reaction no-animate">
 							<div class="emoji">
@@ -69,7 +69,7 @@
 							</div>
 							<div class="action-container selected">
 								<div class="emoji-count">
-									<span>1</span>
+									<span>{{ FIRE }}</span>
 								</div>
 							</div>
 							<div class="reaction-dropdown">
@@ -84,7 +84,7 @@
 							</div>
 							<div class="action-container selected">
 								<div class="emoji-count">
-									<span>1</span>
+									<span>{{ LOVE }}</span>
 								</div>
 							</div>
 							<div class="reaction-dropdown">
@@ -99,7 +99,7 @@
 							</div>
 							<div class="action-container selected">
 								<div class="emoji-count">
-									<span>1</span>
+									<span>{{ CRAP }}</span>
 								</div>
 							</div>
 							<div class="reaction-dropdown">
@@ -114,7 +114,7 @@
 							</div>
 							<div class="action-container">
 								<div class="emoji-count">
-									<span>0</span>
+									<span>{{ OKAY }}</span>
 								</div>
 							</div>
 							<div class="reaction-dropdown">
@@ -129,7 +129,7 @@
 							</div>
 							<div class="action-container">
 								<div class="emoji-count">
-									<span>0</span>
+									<span>{{ BORING }}</span>
 								</div>
 							</div>
 							<div class="reaction-dropdown">
@@ -144,7 +144,7 @@
 							</div>
 							<div class="action-container">
 								<div class="emoji-count">
-									<span>0</span>
+									<span>{{ HARD }}</span>
 								</div>
 							</div>
 							<div class="reaction-dropdown">
@@ -159,7 +159,7 @@
 							</div>
 							<div class="action-container">
 								<div class="emoji-count">
-									<span>0</span>
+									<span>{{ EASY }}</span>
 								</div>
 							</div>
 							<div class="reaction-dropdown">
@@ -174,7 +174,7 @@
 							</div>
 							<div class="action-container">
 								<div class="emoji-count">
-									<span>0</span>
+									<span>{{ INTERESTING }}</span>
 								</div>
 							</div>
 							<div class="reaction-dropdown">
@@ -210,16 +210,15 @@
 			</div>
 		</footer>
 
-      	<!-- Google Analytics script -->
+		<!-- Google Analytics script -->
 	    <script>
 	      (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
 	      (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
 	      m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
 	      })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
-
 	      ga('create', 'UA-68704308-1', 'auto');
 	      ga('send', 'pageview');
-
 	    </script>
-	</body>
+
+    </body>
 </html>
