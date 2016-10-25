@@ -36,7 +36,7 @@ export class CourseModalBody extends React.Component {
                 temp[key] = value;
         sections = temp;
         /* end patchworky code */
-        return Object.keys(sections).map(sec =>{
+        return Object.keys(sections).sort().map(sec =>{
             let slots = sections[sec];
             let instructors = new Set();
             for (let s of slots) {
