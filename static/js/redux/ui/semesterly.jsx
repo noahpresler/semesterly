@@ -74,6 +74,17 @@ class Semesterly extends React.Component {
 		}
 	}
 
+	componentDidMount() {
+		if (this.props.alertEnableNotifications) {
+			this.msg.show(<EnableNotificationsAlertContainer />, {
+			  type: 'info',
+			  time: 12000000,
+			  additionalClass: 'notification-alert',
+			  icon: <div className="enable-notifications-alert-icon"></div>,
+			});
+		}
+	}
+
 	componentWillReceiveProps(nextProps) {
 		if (nextProps != this.props) {
 			if (nextProps.alertConflict && !this.props.alertConflict) {
