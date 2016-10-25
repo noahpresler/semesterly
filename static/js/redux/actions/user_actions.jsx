@@ -6,10 +6,12 @@ import { getUserInfoEndpoint,
 	getSaveSettingsEndpoint,
 	getClassmatesEndpoint,
 	getLoadSavedTimetablesEndpoint,
+	getSetRegistrationTokenEndpoint,
+	deleteRegistrationTokenEndpoint,
 	getFriendsEndpoint } from '../constants.jsx';
 import { store } from '../init.jsx';
 import { loadTimetable, nullifyTimetable, getNumberedName } from './timetable_actions.jsx';
-import { browserSupportsLocalStorage } from '../util.jsx';
+import { browserSupportsLocalStorage, setDeclinedNotifications } from '../util.jsx';
 
 let autoSaveTimer;
 
@@ -359,4 +361,92 @@ export function autoSave(delay=4000) {
 		if (state.userInfo.data.isLoggedIn && state.timetables.items[state.timetables.active].courses.length > 0)
 			store.dispatch(saveTimetable(true))
 	}, delay);
+}
+
+export function setARegistrationToken() {
+	if ('serviceWorker' in navigator) {
+	    navigator.serviceWorker.register('/sw.js').then(function(reg) {
+	        reg.pushManager.subscribe({
+	            userVisibleOnly: true
+	        }).then(function(sub) {
+	        	// console.log(sub);
+	            sendRegistrationToken(sub.toJSON());
+	        });
+	    }).catch(function(error) {
+	        // console.log(':^(', error);
+	    });
+	}
+}
+
+export function isRegistered() {
+	if ('serviceWorker' in navigator) {
+	    navigator.serviceWorker.register('/sw.js').then(function(reg) {
+			return reg.pushManager.getSubscription().then(function(sub) {
+				if (!sub) {
+					return;
+				} else {
+					store.dispatch({
+			        	type: "TOKEN_REGISTERED"
+		        	});
+					return true;
+				}
+			})
+	    }).catch(function(error) {
+	        // console.log(':^(', error);
+	    });
+	}
+}
+
+export function sendRegistrationToken(token) {
+	return fetch(getSetRegistrationTokenEndpoint(), {
+		method: 'POST',
+		body: JSON.stringify({
+			token
+		}),
+		credentials: 'include',
+	})
+    .then(response => response.json()) // TODO(rohan): error-check the response
+    .then(json => {
+    	if (!json.error) {
+	      	store.dispatch({
+	        	type: "TOKEN_REGISTERED"
+        	});
+    	}
+	});
+}
+
+export function unregisterAToken() {
+    if ('serviceWorker' in navigator) {
+	    navigator.serviceWorker.register('/sw.js').then(function(reg) {
+	        reg.pushManager.subscribe({
+	            userVisibleOnly: true
+	        }).then(function(sub) {
+	        	// TODO: unregister token on client side
+	            sendRegistrationTokenForDeletion(sub.toJSON())
+	        });
+	    }).catch(function(error) {
+	        // console.log(':^(', error);
+	    });
+	}
+}
+
+export function sendRegistrationTokenForDeletion(token) {
+    return fetch(deleteRegistrationTokenEndpoint(), {
+        method: 'POST',
+        body: JSON.stringify({
+            token
+        }),
+        credentials: 'include',
+    })
+    .then(response => response.json()) // TODO(rohan): error-check the response
+    .then(json => {
+        if (!json.error) {
+            // console.log("token deleted: " + token);
+            store.dispatch({
+                type: "UNREGISTER_TOKEN"
+            });
+        } else {
+            // console.log("token not deleted: " + token);
+        }
+    });
 }

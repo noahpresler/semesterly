@@ -30,6 +30,7 @@ python-social-auth==0.2.19
 python-utils==2.0.0
 pytz==2016.4
 PyYAML==3.10
+pywebpush==0.4.0
 requests==2.10.0
 requests-oauthlib==0.6.1
 selenium==2.53.2

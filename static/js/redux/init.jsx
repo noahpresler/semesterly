@@ -6,11 +6,11 @@ import thunkMiddleware from 'redux-thunk';
 import { Provider } from 'react-redux';
 import { rootReducer } from './reducers/root_reducer.jsx';
 import SemesterlyContainer from './ui/containers/semesterly_container.jsx';
-import { getUserInfo } from './actions/user_actions.jsx';
+import { getUserInfo, setARegistrationToken, isRegistered } from './actions/user_actions.jsx';
 import { loadTimetable, lockTimetable, loadCachedTimetable } from './actions/timetable_actions.jsx'
 import { fetchSchoolInfo } from './actions/school_actions.jsx';
 import { setCourseInfo } from './actions/modal_actions.jsx';
-import { browserSupportsLocalStorage } from './util.jsx';
+import { browserSupportsLocalStorage, setFirstVisit, timeLapsedGreaterThan } from './util.jsx';
 
 export const store = createStore(rootReducer, window.devToolsExtension && window.devToolsExtension(), applyMiddleware(thunkMiddleware));
 
@@ -36,7 +36,8 @@ function setup(dispatch) {
   sharedTimetable = JSON.parse(sharedTimetable);
   sharedCourse = JSON.parse(sharedCourse);
   findFriends = findFriends === "True";
-  uses12HrTime = uses12HrTime === "True"
+  enableNotifs = enableNotifs === "True";
+  uses12HrTime = uses12HrTime === "True";
   /* first setup the user's state */
   let user = JSON.parse(currentUser); // currentUser comes from timetable.html
   dispatch(getUserInfo(user));
@@ -53,9 +54,33 @@ function setup(dispatch) {
       }
     }
   }
+  // check if registered for chrome notifications
+  isRegistered();
+  // check if first visit
+  if (browserSupportsLocalStorage() && 'serviceWorker' in navigator) {
+    if (localStorage.getItem("firstVisit") === null) {
+      let time = new Date();
+      setFirstVisit(time.getTime());
+    } else {
+      if (localStorage.getItem("declinedNotifications") === null) { // if second visit
+        if (timeLapsedGreaterThan(localStorage.getItem("firstVisit"), 1) === true) { // if second visit is one day after first visit
+          // deploy upsell pop for chrome notifications
+          dispatch({type: "ALERT_ENABLE_NOTIFICATIONS"});
+        }
+      } else { // if after second visit
+        if (localStorage.getItem("declinedNotifications") === true || localStorage.getItem("declinedNotifications") === false) {
+          // do nothing : either accpeted or declined notigications
+        } else if (timeLapsedGreaterThan(localStorage.getItem("declinedNotifications"), 3) === true) {
+          // deploy upsell pop for chrome notifications
+          dispatch({type: "ALERT_ENABLE_NOTIFICATIONS"});
+        } else {
+          // console.log(localStorage.getItem("declinedNotifications"), timeLapsedGreaterThan(localStorage.getItem("declinedNotifications"), .0001157));
+        }
+      }
+    }
+  }
 
   /* now setup sharing state */
-
   if (sharedTimetable) {
     lockTimetable(dispatch, sharedTimetable, true, user.isLoggedIn);
   }
@@ -64,7 +89,16 @@ function setup(dispatch) {
   } else if (findFriends) {
     dispatch({type: "TOGGLE_PEER_MODAL"});
   }
-
+  if (enableNotifs) {
+    if (!user.isLoggedIn) {
+      dispatch({type: 'TRIGGER_SIGNUP_MODAL'})
+    } else {
+      dispatch({
+        type: "OVERRIDE_SETTINGS_SHOW",
+        data: true,
+      })
+    }
+  }
 }
 
 setup(store.dispatch);

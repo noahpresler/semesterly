@@ -7,6 +7,7 @@ import ConflictAlertContainer from './alerts/conflict_alert_container.jsx';
 import TimetableExistsAlertContainer from './alerts/timetable_exists_alert_container.jsx';
 import ChangeSemesterAlertContainer from './alerts/change_semester_alert_container.jsx';
 import NewTimetableAlertContainer from './alerts/new_timetable_alert_container.jsx'
+import EnableNotificationsAlertContainer from './alerts/enable_notifications_alert_container.jsx'
 import TopBarContainer from './containers/top_bar_container.jsx';
 import SideBarContainer from './containers/side_bar_container.jsx';
 import UserSettingsModalContainer from './containers/user_settings_modal_container.jsx';
@@ -62,6 +63,17 @@ class Semesterly extends React.Component {
 		}
 	}
 
+	componentDidMount() {
+		if (this.props.alertEnableNotifications) {
+			this.msg.show(<EnableNotificationsAlertContainer />, {
+			  type: 'info',
+			  time: 12000,
+			  additionalClass: 'notification-alert',
+			  icon: <div className="enable-notifications-alert-icon"></div>,
+			});
+		}
+	}
+
 	componentWillReceiveProps(nextProps) {
 		if (nextProps != this.props) {
 			if (nextProps.alertConflict && !this.props.alertConflict) {
@@ -75,6 +87,9 @@ class Semesterly extends React.Component {
 			}
 			else if (nextProps.alertNewTimetable && !this.props.alertNewTimetable) {
 				this.showAlert(<NewTimetableAlertContainer />, 'info', 12000);
+			}
+			else if (nextProps.alertEnableNotifications && !this.props.alertEnableNotifications) {
+				this.showAlert(<EnableNotificationsAlertContainer />, 'info', 12000);
 			}
 			else {
 				this.msg.removeAll();
@@ -105,10 +120,10 @@ class Semesterly extends React.Component {
 						{cal}
 						<footer className="footer navbar no-print">
 							<ul className="nav nav-pills no-print">
-								<li role="presentation"><a href="mailto:contact@semester.ly?Subject=Semesterly">Contact us</a></li>
-								<li role="presentation"><a target="_blank" href="http://goo.gl/forms/YSltU2YI54PC9sXw1">Feedback</a></li>
-								<li role="presentation"><a target="_blank" href="https://www.facebook.com/semesterly/">Facebook</a></li>
-								<li><div className="fb-like" data-href="https://www.facebook.com/semesterly/" data-layout="button_count" data-action="like" data-show-faces="true" data-share="false"></div></li>
+								<li className="footer-button" role="presentation"><a href="mailto:contact@semester.ly?Subject=Semesterly">Contact us</a></li>
+								<li className="footer-button" role="presentation"><a target="_blank" href="http://goo.gl/forms/YSltU2YI54PC9sXw1">Feedback</a></li>
+								<li className="footer-button" role="presentation"><a target="_blank" href="https://www.facebook.com/semesterly/">Facebook</a></li>
+								<li className="footer-button"><div className="fb-like" data-href="https://www.facebook.com/semesterly/" data-layout="button_count" data-action="like" data-show-faces="true" data-share="false"></div></li>
 							</ul>
 						</footer>
 					</div>
