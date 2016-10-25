@@ -355,10 +355,11 @@ def add_meeting_and_check_conflict(day_to_usage, new_meeting):
   new_conflicts = 0
   for offering in course_offerings:
     day = offering.day
-    for slot in find_slots_to_fill(offering.time_start, offering.time_end):
-      previous_len = max(1, len(day_to_usage[day][slot]))
-      day_to_usage[day][slot].add(offering)
-      new_conflicts += len(day_to_usage[day][slot]) - previous_len
+    if day != 'U':
+      for slot in find_slots_to_fill(offering.time_start, offering.time_end):
+        previous_len = max(1, len(day_to_usage[day][slot]))
+        day_to_usage[day][slot].add(offering)
+        new_conflicts += len(day_to_usage[day][slot]) - previous_len
   return new_conflicts
 
 def find_slots_to_fill(start, end):
