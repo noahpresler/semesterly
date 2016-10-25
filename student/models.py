@@ -53,4 +53,3 @@ class RegistrationToken(models.Model):
     p256dh = models.TextField(default='')
     endpoint = models.TextField(default='')
     student = models.ForeignKey(Student, null=True, default=None)
-

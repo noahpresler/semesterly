@@ -450,4 +450,3 @@ export function sendRegistrationTokenForDeletion(token) {
         }
     });
 }
-
