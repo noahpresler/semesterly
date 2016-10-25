@@ -7,7 +7,9 @@
   margin: 3px;
   -webkit-transition: width .5s;
   transition: all 0.3s;
-
+}
+.eval-item p {
+  text-align: left;
 }
 .nav-item-active .eval-item {
   border: 1px solid #34495E;
