@@ -330,4 +330,3 @@ export function sendRegistrationTokenForDeletion(token) {
         }
     });
 }
-
