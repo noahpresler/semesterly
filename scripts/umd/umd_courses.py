@@ -275,7 +275,7 @@ def parse_umd():
   year = str(datetime.datetime.now().year)
   u = umd()
   u.parse_courses("fall", year)
-  u.parse_courses("spring", year)
+  u.parse_courses("spring", 2017)
 
 if __name__ == '__main__':
   u = umd()
