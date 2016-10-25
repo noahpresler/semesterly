@@ -14,7 +14,7 @@ from student.models import *
 from django.forms.models import model_to_dict
 from django.contrib.auth.decorators import login_required
 from django.core.signing import TimestampSigner, BadSignature, SignatureExpired
-
+from django.db.models import Count
 
 from timetable.utils import *
 
@@ -339,14 +339,21 @@ def profile(request):
   logged = request.user.is_authenticated()
   if logged and Student.objects.filter(user=request.user).exists():
     student = Student.objects.get(user=request.user)
-    print student.user
-    return render_to_response("profile.html", {
+    reactions =  Reaction.objects.filter(student=student).values('title').annotate(count=Count('title'))
+    context = {
       'name': student.user,
       'major': student.major,
       'class': student.class_year,
-      'student': student
-    },
-    context_instance=RequestContext(request))
+      'student': student,
+      'total': 0
+    }
+    for r in reactions:
+        context[r['title']] = r['count']
+    for r in Reaction.REACTION_CHOICES:
+        if r[0] not in context:
+            context[r[0]] = 0
+        context['total'] += context[r[0]]
+    return render_to_response("profile.html", context, context_instance=RequestContext(request))
   else:
     print "Fuark"
     raise Http404 
