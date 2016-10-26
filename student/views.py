@@ -256,13 +256,15 @@ def find_friends(request):
 def get_classmates_from_course_id(school, student, course_id, semester):
     # All friends with social courses/sharing enabled
     friends = student.friends.filter(social_courses=True)
-    course = { 'course_id': course_id, 'classmates': [] }
+    course = { 'course_id': course_id, 'classmates': [], 'past_classmates': []}
     for friend in friends:
         classmate = model_to_dict(friend, exclude=['user','id','fbook_uid', 'friends'])
         classmate['first_name'] = friend.user.first_name
         classmate['last_name'] = friend.user.last_name
+        past_tts = []
         ptts = PersonalTimetable.objects.filter(student=friend, courses__id__exact=course_id)
         if semester:
+            past_tts = ptts.filter(~Q(semester=semester))
             ptts = ptts.filter(semester=semester)
         for tt in ptts:
             if student.social_offerings and friend.social_offerings:
@@ -271,6 +273,8 @@ def get_classmates_from_course_id(school, student, course_id, semester):
                 classmate['sections'] = sections
         if len(ptts) > 0:
             course['classmates'].append(classmate)
+        if len(past_tts) > 0:
+            course['past_classmates'].append(classmate)
     return course
 
 @csrf_exempt
