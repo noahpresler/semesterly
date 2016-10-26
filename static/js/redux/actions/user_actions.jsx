@@ -1,5 +1,5 @@
 import fetch from 'isomorphic-fetch';
-import { getUserInfoEndpoint, getSaveTimetableEndpoint, getSaveSettingsEndpoint, getClassmatesEndpoint, getLoadSavedTimetablesEndpoint, getFriendsEndpoint } from '../constants.jsx';
+import { getUserInfoEndpoint, getSaveTimetableEndpoint, getSaveSettingsEndpoint, getClassmatesEndpoint, getLoadSavedTimetablesEndpoint, getFriendsEndpoint, getIntegrationGetEndpoint, getIntegrationDelEndpoint, getIntegrationAddEndpoint } from '../constants.jsx';
 import { store } from '../init.jsx';
 import { loadTimetable, nullifyTimetable } from './timetable_actions.jsx';
 import { browserSupportsLocalStorage } from '../util.jsx';
@@ -240,4 +240,38 @@ export function autoSave(delay=4000) {
 		if (state.userInfo.data.isLoggedIn && state.timetables.items[state.timetables.active].courses.length > 0)
 			store.dispatch(saveTimetable(true))
 	}, delay);
+}
+
+export function getIntegration(integrationID, courseID) {
+	return fetch(getIntegrationGetEndpoint(integrationID, courseID), {
+			credentials: 'include',
+			method: 'GET'
+		})
+		.then(response => response.json())
+		.then(json => {
+			console.log(json)
+		});
+}
+
+export function delIntegration(integrationID, courseID) {
+	return fetch(getIntegrationDelEndpoint(integrationID, courseID), {
+			credentials: 'include',
+			method: 'GET'
+		})
+		.then(response => response.json())
+		.then(json => {
+			console.log(json)
+		});
+}
+
+export function addIntegration(integrationID, courseID, json) {
+	return fetch(getIntegrationAddEndpoint(integrationID, courseID), {
+			credentials: 'include',
+			method: 'POST',
+			body: JSON.stringify({ json: json })
+		})
+		.then(response => response.json())
+		.then(json => {
+			console.log(json)
+		});
 }
