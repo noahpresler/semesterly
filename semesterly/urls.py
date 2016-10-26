@@ -60,7 +60,10 @@ urlpatterns = patterns('',
     url(r'deploy_staging/', 'semesterly.views.deploy_staging'),
     # Robots.txt
     url(r'^unsubscribe/(?P<id>[\w.@+-]+)/(?P<token>[\w.:\-_=]+)/$', 'student.views.unsubscribe'),
-
+    # Integration
+    url(r'^integration/get/(?P<integration_id>.+?)/course/(?P<course_id>.+?)/', 'timetable.views.get_integration'),
+    url(r'^integration/del/(?P<integration_id>.+?)/course/(?P<course_id>.+?)/', 'timetable.views.delete_integration'),    
+    url(r'^integration/add/(?P<integration_id>.+?)/course/(?P<course_id>.+?)/', 'timetable.views.add_integration'),
     # for testing 404, so i don't have to turn off debug
 	url(r'^404testing/', 'timetable.views.custom_404'),
     # for testing 500, so i don't have to turn off debug
