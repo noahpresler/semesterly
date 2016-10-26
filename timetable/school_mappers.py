@@ -45,8 +45,8 @@ school_code_to_name = {
   'rutgers': 'Rutgers University',
   'uo': 'University of Ottawa',
   'queens': 'Queens University',
-  'chapman': 'Chapman University',
-  'vandy': 'Vanderbilt University'
+  'vandy': 'Vanderbilt University',
+  'chapman': 'Chapman University'
 }
 
 # do the imports: assumes all parser follow the same naming conventions: 
