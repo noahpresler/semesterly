@@ -384,7 +384,7 @@ header nav a:hover {
 .reason-text ul a:link,
 .reason-text ul a:visited {
 	display: inline-block;
-	width: 19.5%;
+	width: 16%;
 	padding: 0;
 	text-decoration: none;
 	text-align: center;
@@ -537,7 +537,7 @@ footer h6 {
 		display: none;
 	}
 }
-@media(max-width: 550px) {
+@media(max-width: 580px) {
 	header h1 {
 		display: none;
 	}
