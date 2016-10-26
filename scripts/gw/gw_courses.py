@@ -253,7 +253,7 @@ class GWParser:
 				'name': self.course['title'],
 				'description': self.course['descr'] if self.course.get('descr') else '',
 				'areas': self.course['attr'],
-				'prerequisites': 'TODO NOT YET', # TODO
+				'prerequisites': '', # TODO
 				'num_credits': self.course.get('credits'),
 				'level': '0',
 				'department': self.course.get('dept')
