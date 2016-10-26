@@ -164,6 +164,20 @@ export class CourseModalBody extends React.Component {
                     </div>
                 </div>
             </div> : null;
+        let hasTakenCircles = this.props.data.classmates && this.props.data.classmates.past_classmates.length > 0 ? this.props.data.classmates.past_classmates.map( c =>
+                <div className="friend" key={c.img_url}>
+                    <div className="ms-friend" style={{backgroundImage: 'url(' + c.img_url + ')'}}/>
+                    <p title={ c.first_name + " " + c.last_name }>{ c.first_name + " " + c.last_name }</p>
+                </div>) : null;
+        let hasTakenDisplay = this.props.data.classmates && this.props.data.classmates.past_classmates.length > 0 ?
+            <div className="modal-module friends">
+                <h3 className="modal-module-header">Friends Who Have Taken This Course</h3>
+                <div id="friends-wrapper">
+                    <div id="friends-inner">
+                        { hasTakenCircles }
+                    </div>
+                </div>
+            </div> : null;
         let textbooksDisplay = !textbooks || textbooks.length === 0 ? null :
         <div className="modal-module">
             <h3 className="modal-module-header">Textbooks</h3>
@@ -193,7 +207,7 @@ export class CourseModalBody extends React.Component {
                         { prerequisitesDisplay }
                         { areasDisplay }
                         { friendDisplay }
-                        
+                        { hasTakenDisplay }
                     </div>
                     <div className="col-8-16">
                         <h3 className="modal-module-header">Reactions</h3>
