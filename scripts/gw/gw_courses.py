@@ -209,15 +209,18 @@ class GWParser:
 						self.course['instrs'] = ', '.join((mt.find_all('td')[6].text for mt in meeting_times))
 						section = self.create_section(course)
 
+						print 'bf meeting time'
 						for mt in meeting_times:
 							col = mt.find_all('td')
 							time_range = re.match(r'(.*) - (.*)', col[1].text)
 							if time_range:
+								print 'time range'
 								self.course['time_start'] = GWParser.time_12to24(time_range.group(1))
 								self.course['time_end'] = GWParser.time_12to24(time_range.group(2))
 								self.course['days'] = list(col[2].text)
 								self.course['loc'] = col[3].text
 							else:
+								print 'no time range'
 								continue
 							meeting_type = col[5].text[0].upper()
 							self.create_offering(section)
@@ -310,8 +313,10 @@ class GWParser:
 	def extract_meeting_times(soup):
 		meeting_times = soup.find('table', {'class':'datadisplaytable'})
 		if meeting_times:
+			# print meeting_times.prettify()
 			meeting_times = meeting_times.find('table', {'class':'datadisplaytable'})
 			if meeting_times:
+				print 'meeting time found'
 				meeting_times = meeting_times.find_all('tr')[1:]
 			else:
 				meeting_times = []
