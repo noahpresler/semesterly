@@ -36,12 +36,6 @@ export const getUserInfoEndpoint = () => {
 export const getSaveTimetableEndpoint = () => {
 	return "/user/save_timetable/";
 };
-export const getCloneTimetableEndpoint = () => {
-  return "/user/duplicate_timetable/";
-}
-export const getDeleteTimetableEndpoint = () => {
-  return "/user/delete_timetable/";
-}
 export const getSaveSettingsEndpoint = () => {
 	return "/user/save_settings/"
 }
@@ -62,12 +56,6 @@ export const getLoadSavedTimetablesEndpoint = (semester) => {
 }
 export const getRequestShareTimetableLinkEndpoint = () => {
   return "/share/link/";
-}
-export const getSetRegistrationTokenEndpoint = () => {
-  return "/setRegistrationToken/";
-}
-export const deleteRegistrationTokenEndpoint = () => {
-  return "/deleteRegistrationToken/";
 }
 
 export const getSchoolSpecificInfo = (school) => {
