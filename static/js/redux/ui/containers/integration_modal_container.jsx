@@ -4,6 +4,7 @@ import { IntegrationModal } from '../integration_modal.jsx';
 const mapStateToProps = (state) => {
 	return {
 		isVisible: state.integrationModal.isVisible,
+		course_id: state.integrationModal.id
 	}
 }
 
