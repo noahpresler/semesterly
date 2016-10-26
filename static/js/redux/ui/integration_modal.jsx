@@ -11,6 +11,7 @@ export class IntegrationModal extends React.Component {
         this.state = { 
             enabled: this.props.enabled
         };
+        console.log("course_id:" + this.props.course_id);
         // this.appendSession = this.appendSession.bind(this);
         // this.removeSession = this.removeSession.bind(this);
         // this.handleChange = this.handleChange.bind(this);
