@@ -58,6 +58,15 @@ export const getLoadSavedTimetablesEndpoint = (semester) => {
 export const getRequestShareTimetableLinkEndpoint = () => {
   return "/share/link/";
 }
+export const getIntegrationGetEndpoint = (integration_id, course_id) => {
+  return "/integration/get/" + integration_id + "/course/" + course_id + "/";
+}
+export const getIntegrationDelEndpoint = (integration_id, course_id) => {
+  return "/integration/del/" + integration_id + "/course/" + course_id + "/";
+}
+export const getIntegrationAddEndpoint = (integration_id, course_id) => {
+  return "/integration/add/" + integration_id + "/course/" + course_id + "/";
+}
 
 export const getSchoolSpecificInfo = (school) => {
 	switch(school) {

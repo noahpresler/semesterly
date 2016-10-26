@@ -8,6 +8,9 @@ import { getUserInfoEndpoint,
 	getLoadSavedTimetablesEndpoint,
 	getSetRegistrationTokenEndpoint,
 	deleteRegistrationTokenEndpoint,
+	getIntegrationGetEndpoint, 
+	getIntegrationDelEndpoint, 
+	getIntegrationAddEndpoint,
 	getFriendsEndpoint } from '../constants.jsx';
 import { store } from '../init.jsx';
 import { loadTimetable, nullifyTimetable, getNumberedName } from './timetable_actions.jsx';
@@ -449,4 +452,37 @@ export function sendRegistrationTokenForDeletion(token) {
             // console.log("token not deleted: " + token);
         }
     });
+
+export function getIntegration(integrationID, courseID) {
+	return fetch(getIntegrationGetEndpoint(integrationID, courseID), {
+			credentials: 'include',
+			method: 'GET'
+		})
+		.then(response => response.json())
+		.then(json => {
+			console.log(json)
+		});
+}
+
+export function delIntegration(integrationID, courseID) {
+	return fetch(getIntegrationDelEndpoint(integrationID, courseID), {
+			credentials: 'include',
+			method: 'GET'
+		})
+		.then(response => response.json())
+		.then(json => {
+			console.log(json)
+		});
+}
+
+export function addIntegration(integrationID, courseID, json) {
+	return fetch(getIntegrationAddEndpoint(integrationID, courseID), {
+			credentials: 'include',
+			method: 'POST',
+			body: JSON.stringify({ json: json })
+		})
+		.then(response => response.json())
+		.then(json => {
+			console.log(json)
+		});
 }
