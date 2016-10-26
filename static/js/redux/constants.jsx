@@ -14,8 +14,6 @@ export const VALID_SCHOOLS = [
   "rutgers", 
   "queens", 
   "vandy",
-  "chapman",
-  "pennstate",
   "gw"
 ];
 
@@ -123,36 +121,6 @@ export const getSchoolSpecificInfo = (school) => {
       }
 		case "umd":
 			return {
-        primaryDisplay: "name",
-        areasName: "Areas",
-        departmentsName: "Departments",
-        levelsName: "Levels",
-        timesName: "Times",
-        semesters: {
-          F: "Fall 2016",
-          S: "Spring 2017"
-        },
-        campuses: {
-          1: ""
-        }
-      }
-    case "chapman":
-      return {
-        primaryDisplay: "name",
-        areasName: "Areas",
-        departmentsName: "Departments",
-        levelsName: "Levels",
-        timesName: "Times",
-        semesters: {
-          F: "Fall 2016",
-          S: "Spring 2017"
-        },
-        campuses: {
-          1: ""
-        }
-      }
-    case "pennstate":
-      return {
         primaryDisplay: "name",
         areasName: "Areas",
         departmentsName: "Departments",
