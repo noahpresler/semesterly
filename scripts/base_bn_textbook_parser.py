@@ -23,7 +23,7 @@ class TextbookSection:
 
     def __str__(self):
         return (
-            "Section id: " + self.id + ", name: " + self.name + "\n"
+            "Section id: " + self.id + ", name: " + self.name
         )
 
 class TextbookCourse:
@@ -34,7 +34,7 @@ class TextbookCourse:
 
     def __str__(self):
         return (
-            "Course id: " + self.id + ", name: " + self.name + "\n"
+            "Course id: " + self.id + ", name: " + self.name
         )
 
 class TextbookDepartment:
@@ -45,7 +45,7 @@ class TextbookDepartment:
 
     def __str__(self):
         return (
-            "Department id: " + self.id + ", name: " + self.name + "\n"
+            "Department id: " + self.id + ", name: " + self.name
         )
 
 class TextbookSemester:
@@ -56,7 +56,7 @@ class TextbookSemester:
 
     def __str__(self):
         return (
-            "Semester id: " + self.id + ", name: " + self.name + "\n"
+            "Semester id: " + self.id + ", name: " + self.name
         )
 
 class TextbookParser:
@@ -103,8 +103,11 @@ class TextbookParser:
         self.parse_semesters(True)
 
     def parse(self):
+        print("Parsing semester.")
         self.semesters = self.parse_semesters(False)
+        print("Finished parsing semester.\nParsing departments.")
         self.parse_departments()
+        print("Finished parsing departments\nParsing textbooks.")
         self.get_textbooks()
 
     def parse_semesters(self, is_retry):
@@ -165,6 +168,7 @@ class TextbookParser:
                 dep_name = dep["categoryName"]
                 department = TextbookDepartment(dep_id, dep_name)
                 semester.departments.append(department)
+                print("Parsing department " + str(department))
                 self.parse_courses(semester, department)
 
     def parse_courses(self, semester, department):
@@ -253,7 +257,10 @@ class TextbookParser:
             raw_code = tbsec.findAll('h1')[0]
             code_list = raw_code.get_text().split()[:-2]
             course_code = self.delimeter.join(code_list[:-1])
-            section = "(" + code_list[2] + ")"
+            if len(code_list[2]) == 1:
+                section = "(0" + code_list[2] + ")"
+            else:
+                section = "(" + code_list[2] + ")"
             for tb in tbsec.findAll('div',class_="book_details"):
                 match = re.findall(self.isbn_pattern,"".join(tb.get_text()))
                 if len(match) > 0:
