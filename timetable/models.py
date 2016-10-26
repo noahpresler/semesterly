@@ -3,7 +3,7 @@ import re
 os.environ['DJANGO_SETTINGS_MODULE'] = 'semesterly.settings'
 from django.forms.models import model_to_dict
 from django.db import models
-from django.db.models import Q
+
 
 #----------- Global Models  ----------------
 class Textbook(models.Model):
@@ -27,16 +27,19 @@ class Course(models.Model):
   code = models.CharField(max_length=20)
   name = models.CharField(max_length=250)
   description = models.TextField(default='')
+  notes = models.TextField(default='', null=True)
+  info = models.TextField(default='', null=True)
   unstopped_description = models.TextField(default='')
   campus = models.CharField(max_length=300, default='')
-  prerequisites = models.TextField(default='')
+  prerequisites = models.TextField(default='', null=True)
+  corequisites = models.TextField(default='', null=True)
   exclusions = models.TextField(default='')
   num_credits = models.FloatField(default=-1)
   areas = models.CharField(max_length=300, default='', null=True)
   department = models.CharField(max_length=250, default='', null=True)
   level = models.CharField(max_length=30, default='', null=True)
   cores = models.CharField(max_length=50, null=True, blank=True)
-  geneds = models.CharField(max_length=50, null=True, blank=True)
+  geneds = models.CharField(max_length=300, null=True, blank=True)
   related_courses = models.ManyToManyField("self", blank=True)
 
   def __unicode__(self):
@@ -68,7 +71,7 @@ class Course(models.Model):
     return sorted(eval_info, key=lambda eval: eval['year']) 
 
   def get_avg_rating(self):
-    ratings = Evaluation.objects.only('course', 'score').filter(~Q(score = 0), course=self)
+    ratings = Evaluation.objects.only('course', 'score').filter(course=self)
     return sum([rating.score for rating in ratings])/len(ratings) if ratings else 0
 
   def get_textbooks(self, semester):
