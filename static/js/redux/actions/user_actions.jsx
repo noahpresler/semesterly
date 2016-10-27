@@ -464,7 +464,8 @@ export function openIntegrationModal(integrationID, courseID) {
 			store.dispatch({
 				type: 'OPEN_INTEGRATION_MODAL',
 				enabled: json['integration_enabled'],
-				id: courseID
+				id: courseID,
+				integration_id: integrationID
 			})
 		});
 }
