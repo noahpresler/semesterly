@@ -37,26 +37,26 @@ class GWTextbooks:
 				query['termId'] = term
 				query['requestType'] = 'DEPARTMENTS'
 
-				print term
+				# print term
 
 				depts = json.loads(re.search(r'\'(.*)\'', self.get_http(self.url + '/LocateCourseMaterialsServlet', query).text).group(1))['data'][0]
 				for dept in depts:
 					query['departmentName'] = dept
 					query['requestType'] = 'COURSES'
 
-					print dept
+					# print dept
 
 					courses = json.loads(re.search(r'\'(.*)\'', self.get_http(self.url + '/LocateCourseMaterialsServlet', query).text).group(1))['data'][0]
 					for course in courses:
 						query['courseName'] = course
 						query['requestType'] = 'SECTIONS'
 
-						print course
+						# print course
 
 						sections = json.loads(re.search(r'\'(.*)\'', self.get_http(self.url + '/LocateCourseMaterialsServlet', query).text).group(1))['data'][0]
 						for section in sections:
 
-							print section
+							# print section
 							query2 = {
 								'catalogId':'10002',
 								'categoryId':'null',
@@ -71,8 +71,15 @@ class GWTextbooks:
 								'demoKey':'d',
 								'purpose':'browse'
 							}
+							
+							import sys
 
-							print self.get_http(self.url + '/CourseMaterialsResultsView', query2).text.encode('utf-8')
+							orig_stdout = sys.stdout
+							f = file('gw_tbks_js_dump.html', 'w')
+							sys.stdout = f
+
+							print BeautifulSoup(self.get_http(self.url + '/CourseMaterialsResultsView', query2).text, 'html.parser').prettify()
+							exit(0)
 
 	def get_jsessionid(self):
 
