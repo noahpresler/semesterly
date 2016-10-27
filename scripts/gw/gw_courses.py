@@ -198,32 +198,38 @@ class GWParser:
 							soup = BeautifulSoup(catalog, 'html.parser')
 							self.course['descr'] = GWParser.extract_description(soup)
 
-						# self.print_course()
 
-						course = self.create_course()
+						section_query = {
+							'term_in':terms[term],
+							'subj_in':self.course['dept'],
+							'crse_in':self.course['selec'],
+							'crn_in':self.course['ident']
+						}
+
+						section = self.get_html(self.url + '/PRODCartridge/bwckschd.p_disp_listcrse', section_query)
 
 						# parse scheduling info
-						meeting_times = GWParser.extract_meeting_times(soup)
+						meeting_times = GWParser.extract_meeting_times(BeautifulSoup(section, 'html.parser'))
+
+						# self.print_course()
+						course = self.create_course()
 
 						# collect instr info
 						self.course['instrs'] = ', '.join((mt.find_all('td')[6].text for mt in meeting_times))
 						section = self.create_section(course)
 
-						print 'bf meeting time'
 						for mt in meeting_times:
 							col = mt.find_all('td')
 							time_range = re.match(r'(.*) - (.*)', col[1].text)
 							if time_range:
-								print 'time range'
 								self.course['time_start'] = GWParser.time_12to24(time_range.group(1))
 								self.course['time_end'] = GWParser.time_12to24(time_range.group(2))
 								self.course['days'] = list(col[2].text)
 								self.course['loc'] = col[3].text
 							else:
-								print 'no time range'
 								continue
 							meeting_type = col[5].text[0].upper()
-							self.create_offering(section)
+							self.create_offerings(section)
 
 						# self.print_course()
 					
@@ -260,8 +266,6 @@ class GWParser:
 				'num_credits': self.course.get('credits'),
 				'level': '0',
 				'department': self.course.get('dept')
-				#'info':'',
-				#'notes':''
 			}
 		)
 
@@ -311,12 +315,11 @@ class GWParser:
 
 	@staticmethod
 	def extract_meeting_times(soup):
+		# print soup.prettify().encode('utf-8')
 		meeting_times = soup.find('table', {'class':'datadisplaytable'})
 		if meeting_times:
-			# print meeting_times.prettify()
 			meeting_times = meeting_times.find('table', {'class':'datadisplaytable'})
 			if meeting_times:
-				print 'meeting time found'
 				meeting_times = meeting_times.find_all('tr')[1:]
 			else:
 				meeting_times = []
