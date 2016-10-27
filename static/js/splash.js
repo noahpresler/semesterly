@@ -2,13 +2,20 @@
 $(document).ready(function() {  
     sizeitup();
 
-    // $('#light-content').click(function(e){
-    //   e.stopPropagation();
-    // });
+    $('#schools-dropdown').click(function(){
+        console.log('toggling');
+        $('#schools-dropdown').toggleClass('open');
+    });
 
-    // $('#light, #light-exit').click(function(){
-    //   $('#light').addClass('out');
-    // });
+    $('#schools-dropdown').click(function(e){
+        console.log('preventing');
+        e.stopPropagation();
+    });
+
+    $(document).click(function(){
+        console.log('removing');
+        $('#schools-dropdown').removeClass('open');
+    });
 
 });
 
