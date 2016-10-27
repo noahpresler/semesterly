@@ -303,7 +303,7 @@ class GWParser:
 	def time_12to24(time12):
 
 		# Regex extract
-		match = re.match("(\d*):(\d*).*(\S)", time12)
+		match = re.match("(\d*):(\d*).*?(\S)", time12)
 
 		# Transform to 24 hours
 		hours = int(match.group(1))
