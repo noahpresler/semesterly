@@ -150,14 +150,23 @@ export class CourseModalBody extends React.Component {
                 <h3 className="modal-module-header">{this.props.schoolSpecificInfo.areasName}</h3>
                 <p>{ this.props.data.areas || "None" }</p>
             </div>
+        var integrationDivStyle = {
+            backgroundImage: 'url(/static/img/integrations/pilot.png)'
+        };
         let academicSupportDisplay = 
             <div className="modal-module academic-support">
                 <h3 className="modal-module-header">Academic Support</h3>
-                <li>
-                    <span className="integration-image" style="background-image: url(/static/img/integrations/pilot.png);"></span>
+                <li className="cf">
+                    <span className="integration-image" style={integrationDivStyle}></span>
                     <h4>Pilot</h4>
-                    <p>In the PILOT program, students are organized into study teams consisting of 6-10 members who meet weekly to work problems together. A trained student leader acts as captain and facilitates the meetings. </p>
                     <a href="http://academicsupport.jhu.edu/pilot-learning/">Learn More</a>
+                    <p>In the PILOT program, students are organized into study teams consisting of 6-10 members who meet weekly to work problems together.</p>
+                </li>
+                <li className="cf">
+                    <span className="integration-image" style={integrationDivStyle}></span>
+                    <h4>Learning Den</h4>
+                    <a href="http://academicsupport.jhu.edu/pilot-learning/">Learn More</a>
+                    <p>Tutoring Service, There is no fee and there is no limit to the number of sessions a student may attend.</p>
                 </li>
             </div>
         let friendCircles = this.props.data.classmates && this.props.data.classmates.classmates.length > 0 ? this.props.data.classmates.classmates.map( c =>
