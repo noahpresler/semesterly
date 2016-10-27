@@ -193,6 +193,10 @@ export class SearchResult extends React.Component {
             style = {color: "#52B7D9"};
         if(this.state.hoverSave)
             style = {color: "#27ae60"};
+        let pilotIntegration = studentIntegrations['integrations'].indexOf(1) > -1 ? <a onMouseDown={(event) => {
+                event.stopPropagation();
+                this.props.showIntegrationModal(course.id)
+            }}>Add as Pilot</a> : null;
         return (
         <li key={course.id}
             className={classNames('search-course', {'hovered': this.props.isHovered(this.props.position)})}
@@ -202,10 +206,7 @@ export class SearchResult extends React.Component {
             <h3>{course.name || course.code} </h3>
             { addOptionalCourseButton}
             { addRemoveButton }
-            <a onMouseDown={(event) => {
-                event.stopPropagation();
-                this.props.showIntegrationModal(course.id)
-            }}>Add as Pilot</a>
+            { pilotIntegration }
             <h4 className="label" style={style}>{info}</h4><h4 className={classNames('label','bubble')}>{this.props.campuses[course.campus]}</h4>
         </li>);
     }
