@@ -4,13 +4,14 @@ import { IntegrationModal } from '../integration_modal.jsx';
 const mapStateToProps = (state) => {
 	return {
 		isVisible: state.integrationModal.isVisible,
-		course_id: state.integrationModal.id
+		course_id: state.integrationModal.id,
+		enabled: state.integrationModal.enabled
 	}
 }
 
 const mapDispatchToProps = (dispatch) => {
 	return {
-		toggleIntegrationModal: () => {dispatch({type: "TOGGLE_INTEGRATION_MODAL"})}
+		toggleIntegrationModal: () => {dispatch({type: "TOGGLE_INTEGRATION_MODAL"})}	
 	}
 }
 
