@@ -1,7 +1,7 @@
-# @what Vanderbilt Course Parser
+# @what GW Course Parser
 # @org  Semeseter.ly
 # @author   Michael N. Miller
-# @date 9/3/16
+# @date 10/20/16
 
 import django, os, datetime
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "semesterly.settings")

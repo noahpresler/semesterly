@@ -122,6 +122,21 @@ export const getSchoolSpecificInfo = (school) => {
           1: ""
         }
       }
+    case "chapman":
+      return {
+        primaryDisplay: "name",
+        areasName: "Areas",
+        departmentsName: "Departments",
+        levelsName: "Levels",
+        timesName: "Times",
+        semesters: {
+          F: "Fall 2016",
+          S: "Spring 2017"
+        },
+        campuses: {
+          1: ""
+        }
+      }
     case "vandy":
       return {
         primaryDisplay: "name",
@@ -153,7 +168,7 @@ export const getSchoolSpecificInfo = (school) => {
         }
       }
     default:
-			return {
+	  return {
         primaryDisplay: "code",
         areasName: "Areas",
         departmentsName: "Departments",
