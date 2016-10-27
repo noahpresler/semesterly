@@ -66,6 +66,10 @@ def view_timetable(request, code=None, sem=None, shared_timetable=None, find_fri
       course_json = get_detailed_course_json(school, course, sem, student)
     except:
       raise Http404
+  integrations = {'integrations': []}
+  if student and student.user.is_authenticated():
+    for i in student.integrations.all():
+      integrations['integrations'].append(i.id)
   return render_to_response("timetable.html", {
     'school': school,
     'student': json.dumps(get_user_dict(school, student, sem)),
@@ -73,7 +77,8 @@ def view_timetable(request, code=None, sem=None, shared_timetable=None, find_fri
     'semester': sem,
     'shared_timetable': json.dumps(shared_timetable),
     'find_friends': find_friends,
-    'uses_12hr_time': school in AM_PM_SCHOOLS
+    'uses_12hr_time': school in AM_PM_SCHOOLS,
+    'student_integrations': json.dumps(integrations)
   },
   context_instance=RequestContext(request))
 
