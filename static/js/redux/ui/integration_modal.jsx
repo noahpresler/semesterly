@@ -19,7 +19,13 @@ export class IntegrationModal extends React.Component {
     }
     componentDidUpdate(nextProps) {
         if (this.props.isVisible) {
+            if (this.props.enabled != nextProps.enabled) {
+                this.setState({enabled: nextProps.enabled});
+            }
             this.refs.modal.show();
+        }
+        if (this.props.enabled != this.state.enabled && this.props.enabled != nextProps.enabled) {
+            this.setState({enabled: this.props.enabled});
         }
     }
     changeForm() {
@@ -67,7 +73,7 @@ export class IntegrationModal extends React.Component {
                                 } else {
                                     addIntegration(1, this.props.course_id, "");
                                 }
-                                this.props.toggleIntegrationModal();
+                                this.refs.modal.hide();
                             }}>Save</button>
                         </div>
                     </div>
