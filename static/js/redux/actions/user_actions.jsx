@@ -452,6 +452,7 @@ export function sendRegistrationTokenForDeletion(token) {
             // console.log("token not deleted: " + token);
         }
     });
+}
 
 export function openIntegrationModal(integrationID, courseID) {
 	return fetch(getIntegrationGetEndpoint(integrationID, courseID), {
