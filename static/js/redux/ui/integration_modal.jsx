@@ -19,9 +19,15 @@ export class IntegrationModal extends React.Component {
     }
     componentDidUpdate(nextProps) {
         if (this.props.isVisible) {
+            if (this.props.enabled != nextProps.enabled) {
+                this.setState({enabled: nextProps.enabled});
+            }
             this.refs.modal.show();
         } 
         if (this.props.isVisible != nextProps.isVisible && this.state.enabled != this.props.enabled){
+            this.setState({enabled: this.props.enabled});
+        }
+        if (this.props.enabled != this.state.enabled && this.props.enabled != nextProps.enabled) {
             this.setState({enabled: this.props.enabled});
         }
     }
