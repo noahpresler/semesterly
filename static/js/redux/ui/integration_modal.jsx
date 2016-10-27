@@ -18,13 +18,13 @@ export class IntegrationModal extends React.Component {
         // this.index = 0;
     }
     componentDidUpdate(nextProps) {
+        console.log("this5" , this.props);
+        console.log("next" , nextProps);
+        console.log("state" , this.state);
         if (this.props.isVisible) {
-            if (this.props.enabled != nextProps.enabled) {
-                this.setState({enabled: nextProps.enabled});
-            }
             this.refs.modal.show();
-        }
-        if (this.props.enabled != this.state.enabled && this.props.enabled != nextProps.enabled) {
+        } 
+        if (this.props.isVisible != nextProps.isVisible && this.state.enabled != this.props.enabled){
             this.setState({enabled: this.props.enabled});
         }
     }
