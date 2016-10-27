@@ -18,8 +18,7 @@ school_to_granularity = {
     'queens': 5,
     'vandy': 5,
     'gw': 5,
-    'chapman': 5,
-    'pennstate': 5
+    'chapman': 5
 }
 
 VALID_SCHOOLS = [
@@ -31,8 +30,7 @@ VALID_SCHOOLS = [
   "queens",
   "vandy",
   "gw",
-  "chapman",
-  "pennstate"
+  "chapman"
 ]
 
 AM_PM_SCHOOLS = [
@@ -41,8 +39,7 @@ AM_PM_SCHOOLS = [
   "rutgers",
   "vandy",
   "gw"
-  "chapman",
-  "pennstate"
+  "chapman"
 ]
 
 school_code_to_name = {
@@ -55,7 +52,6 @@ school_code_to_name = {
   'vandy': 'Vanderbilt University',
   'gw': 'George Washington University'
   'chapman': 'Chapman University',
-  'pennstate': 'Pennsylvania State University',
   'vandy': 'Vanderbilt University'
 }
 
