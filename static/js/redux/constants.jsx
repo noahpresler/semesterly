@@ -1,8 +1,4 @@
 import { getSchool, getSemester } from './init.jsx';
-<<<<<<< HEAD
-=======
-export const VALID_SCHOOLS = ["uoft", "jhu", "umd", "uo", "rutgers", "queens", "umich"];
->>>>>>> 5f0a36e1ca4e79b8a8741261bf1f80af4adaa6dc
 export const VALID_SEMESTERS = ["F", "S"];
 export const SET_SCHOOL = "SET_SCHOOL";
 export const SET_SEMESTER = "SET_SEMESTER";
@@ -18,7 +14,8 @@ export const VALID_SCHOOLS = [
   "rutgers", 
   "queens", 
   "vandy",
-  "chapman"
+  "chapman",
+  "umich"
 ];
 
 /* server endpoints */
