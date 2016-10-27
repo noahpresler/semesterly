@@ -453,14 +453,18 @@ export function sendRegistrationTokenForDeletion(token) {
         }
     });
 
-export function getIntegration(integrationID, courseID) {
+export function openIntegrationModal(integrationID, courseID) {
 	return fetch(getIntegrationGetEndpoint(integrationID, courseID), {
 			credentials: 'include',
 			method: 'GET'
 		})
 		.then(response => response.json())
 		.then(json => {
-			console.log(json)
+			store.dispatch({
+				type: 'OPEN_INTEGRATION_MODAL',
+				enabled: json['integration_enabled'],
+				id: courseID
+			})
 		});
 }
 
@@ -469,10 +473,7 @@ export function delIntegration(integrationID, courseID) {
 			credentials: 'include',
 			method: 'GET'
 		})
-		.then(response => response.json())
-		.then(json => {
-			console.log(json)
-		});
+		.then(response => response.json());
 }
 
 export function addIntegration(integrationID, courseID, json) {
@@ -481,8 +482,5 @@ export function addIntegration(integrationID, courseID, json) {
 			method: 'POST',
 			body: JSON.stringify({ json: json })
 		})
-		.then(response => response.json())
-		.then(json => {
-			console.log(json)
-		});
+		.then(response => response.json());
 }
