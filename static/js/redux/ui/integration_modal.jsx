@@ -9,9 +9,8 @@ export class IntegrationModal extends React.Component {
         super(props);
         this.changeForm = this.changeForm.bind(this);
         this.state = { 
-            enabled: false
+            enabled: this.props.enabled
         };
-        console.log("course_id:" + this.props.course_id);
         // this.appendSession = this.appendSession.bind(this);
         // this.removeSession = this.removeSession.bind(this);
         // this.handleChange = this.handleChange.bind(this);
@@ -25,7 +24,6 @@ export class IntegrationModal extends React.Component {
     }
     changeForm() {
         this.setState({enabled: !this.state.enabled});
-        console.log("course_id:" + this.props.course_id);
         // getIntegration(1, this.props.course_id)
         // delIntegration(1, this.props.course_id)
         // addIntegration(1, this.props.course_id, "SHEEEIT")
@@ -65,10 +63,11 @@ export class IntegrationModal extends React.Component {
                         <div className="add-integration-button">
                             <button className="save-button" onClick={() => {
                                 if (!this.state.enabled) {
-                                    delIntegration(1, this.props.course_id)
+                                    delIntegration(1, this.props.course_id);
                                 } else {
-                                    addIntegration(1, this.props.course_id, "")
+                                    addIntegration(1, this.props.course_id, "");
                                 }
+                                this.props.toggleIntegrationModal();
                             }}>Save</button>
                         </div>
                     </div>
