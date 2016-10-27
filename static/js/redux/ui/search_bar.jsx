@@ -193,9 +193,9 @@ export class SearchResult extends React.Component {
             style = {color: "#52B7D9"};
         if(this.state.hoverSave)
             style = {color: "#27ae60"};
-        let pilotIntegration = studentIntegrations['integrations'].indexOf(1) > -1 ? <a onMouseDown={(event) => {
+        let pilotIntegration = studentIntegrations['integrations'].indexOf(1) > -1 ? <a style={{fontSize: '10px'}} onMouseDown={(event) => {
                 event.stopPropagation();
-                this.props.showIntegrationModal(course.id)
+                this.props.showIntegrationModal(course.id, 1)
             }}>Add as Pilot</a> : null;
         return (
         <li key={course.id}
