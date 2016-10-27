@@ -171,13 +171,21 @@ class VandyParser:
 				'description': self.course.get('description') if self.course.get('description') else '',
 				'areas': self.course.get('Attributes'),
 				'prerequisites': self.course.get('Requirement(s)'),
-				'num_credits': float(self.course.get('Hours')),
+				'num_credits': float(self.course.get('Hours')) if VandyParser.is_float(self.course.get('Hours')) else 0.0,
 				'level': '0',
 				'department': self.departments.get(self.course.get('department'))
 			}
 		)
 
 		return course_model
+
+	@staticmethod
+	def is_float(f):
+		try:
+			float(f)
+			return True
+		except TypeError:
+			return False
 
 	def create_section(self, course_model):
 
@@ -330,19 +338,24 @@ class VandyParser:
 			'classNumber' : course_number,
 			'termCode' : term_code
 		}
+		
+		try:
+			self.parse_course_details(self.get_html(course_details_url, payload))
+			# self.print_course()
 
-		self.parse_course_details(self.get_html(course_details_url, payload))
-		# self.print_course()
+			# Create models
+			section_model = self.create_section(self.create_course())
+			if section_model:
+				self.create_offerings(section_model)
 
-		# Create models
-		section_model = self.create_section(self.create_course())
-		if section_model:
-			self.create_offerings(section_model)
+			# Clear course map for next pass
+			self.course.clear()
 
-		# Clear course map for next pass
-		self.course.clear()
+			# Return course number to track end of course pages
 
-		# Return course number to track end of course pages
+		except ParseException:
+			print 'invalid course, parse exception'
+
 		return course_number
 
 	def parse_course_details(self, html):
@@ -356,8 +369,13 @@ class VandyParser:
 		courseName, abbr = search.group(2), search.group(1)
 
 		# Extract department code, catalog ID, and section number from abbreviation
-		match = re.match("(.*)-(.*)-(.*)", abbr)
-		departmentCode, catalogID, sectionNumber = match.group(1), match.group(2), match.group(3)
+		title = re.match("(\S*)-(\S*)-(\S*)", abbr)
+
+		if not title:
+			raise ParseException()
+
+		departmentCode, catalogID, sectionNumber = title.group(1), title.group(2), title.group(3)
+		print '\t-', departmentCode, catalogID, sectionNumber.strip(), '-'
 
 		self.update_current_course("name", courseName)
 		self.update_current_course("code", departmentCode + '-' + catalogID)
@@ -535,6 +553,9 @@ class VandyParser:
 
 	def parse_description(self, soup):
 		self.update_current_course('description', soup.text.strip())
+
+class ParseException(Exception):
+	pass
 
 def main():
 	vp = VandyParser()
