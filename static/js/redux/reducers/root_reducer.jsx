@@ -43,6 +43,6 @@ export const rootReducer = combineReducers({
   preferenceModal,
   friends,
   peerModal,
-  notificationToken
+  notificationToken,
   integrationModal
 });
