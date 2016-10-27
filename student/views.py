@@ -28,7 +28,10 @@ def get_student(request):
 def get_avg_rating(course_ids):
   avgs = [Course.objects.get(id=cid).get_avg_rating() \
           for cid in set([cid for cid in course_ids])]
-  return min(5, sum(avgs)/sum([ 0 if a == 0 else 1 for a in avgs]) if avgs else 0)
+  try:
+     return min(5, sum(avgs)/sum([ 0 if a == 0 else 1 for a in avgs]) if avgs else 0)
+  except:
+     return 0
 
 def get_user_dict(school, student, semester):
     user_dict = {}
