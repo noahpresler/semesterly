@@ -1,15 +1,25 @@
-import django, os, datetime, requests, cookielib, re, sys
+# @what	Queens (2) Course Parser
+# @org	Semeseter.ly
+# @author	Michael N. Miller
+# @date	10/21/16
+
+import django, os, datetime
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "semesterly.settings")
 django.setup()
 from timetable.models import *
 from fake_useragent import UserAgent
 from itertools import izip
 from bs4 import BeautifulSoup
+import requests, cookielib, re, sys
 
-from scripts.textbooks.amazon import make_textbook
+from amazonproduct import API
+api = API(locale='us')
 
-class PeopleSoftParser:
+class QueensParser:
 
+	SCHOOL = 'queens2'
+	BASE_URL = 'https://saself.ps.queensu.ca/psp/saself/EMPLOYEE/HRMS/c/SA_LEARNER_SERVICES.SSS_STUDENT_CENTER.GBL'
+	HEADERS = {'User-Agent' : 'My User Agent 1.0'}
 	DAY_MAP = {
 		'Mo' : 'M',
 		'Tu' : 'T',
@@ -19,14 +29,13 @@ class PeopleSoftParser:
 		'Sa' : 'S',
 		'Su' : 'U'
 	}
+	USER = '1dc4'
+	PASS = 'CREOmule1'
 
-	def __init__(self, school, url):
-		self.session = requests.Session()
-		self.headers = {'User-Agent' : UserAgent().chrome}
-		self.cookies = cookielib.CookieJar()
-		self.base_url = url
-		self.school = school
+	def __init__(self):
 		self.course = {}
+		self.session = requests.Session()
+		self.cookies = cookielib.CookieJar()
 
 	def get_html(self, url, payload=''):
 		html = None
@@ -36,7 +45,7 @@ class PeopleSoftParser:
 					url,
 					params = payload,
 					cookies = self.cookies,
-					headers = self.headers,
+					headers = QueensParser.HEADERS,
 					verify = True
 				)
 
@@ -47,65 +56,75 @@ class PeopleSoftParser:
 
 			except (requests.exceptions.Timeout,
 				requests.exceptions.ConnectionError):
-				sys.stderr.write("Unexpected error: " + str(sys.exc_info()[0]) + '\n')
-				raw_input("Press Enter to continue...")
-				html = None
+				sys.stderr.write("Unexpected error: " + str(sys.exc_info()[0]))
+				continue
 
 		return html.encode('utf-8')
 
 	def post_http(self, url, form, payload=''):
 
-		post = None
-		while post is None:
-			try:
-				post = self.session.post(
-					url,
-					data = form,
-					params = payload,
-					cookies = self.cookies,
-					headers = self.headers,
-					verify = True,
-				)
+		try:
+			post = self.session.post(
+				url,
+				data = form,
+				params = payload,
+				cookies = self.cookies,
+				headers = QueensParser.HEADERS,
+				verify = True,
+			)
 
-				# print POST, r.url
+			# print POST, r.url
 
-			except (requests.exceptions.Timeout,
-				requests.exceptions.ConnectionError):
-				sys.stderr.write("Unexpected error: " + str(sys.exc_info()[0]) + '\n')
-				raw_input("Press Enter to continue...")
-				post = None
+			return post
 
-		return post
+		except (requests.exceptions.Timeout,
+			requests.exceptions.ConnectionError):
+			sys.stderr.write("Unexpected error: " + str(sys.exc_info()[0]))
 
-	def parse(self, terms, **kwargs):
+		return None
 
-		soup = BeautifulSoup(self.get_html(self.base_url, kwargs['url_params'] if kwargs.get('url_params') else {}))
+	def login(self):
+		login_url = 'https://login.queensu.ca/idp/Authn/UserPassword'
 
+		# collect some cookies (yummy!)
+		self.get_html(QueensParser.BASE_URL)
+		html = self.get_html('https://my.queensu.ca/')
+
+		credentials = {
+			'j_username':'1dc4',
+			'j_password':'CREOmule1',
+			'Login':' Log In '
+		}
+
+		post = self.post_http(login_url, credentials)
+		print post
+		print post.text
+
+		exit(0)
+
+	def parse(self):
+
+		self.login()
+
+		soup = BeautifulSoup(self.get_html(QueensParser.BASE_URL))
 
 		# create search payload with hidden form data
-		search_query = {a['name']: a['value'] for a  in soup.find('div', id=re.compile(r'win\ddivPSHIDDENFIELDS')).find_all('input')}
-
-		# advanced search
-		search_query['ICAction'] = 'DERIVED_CLSRCH_SSR_EXPAND_COLLAPS$149$$1'
-		soup = BeautifulSoup(self.post_http(self.base_url, search_query).text, 'html.parser')
-
-		# search_query = {a['name']: a['value'] for a  in soup.find('div', id=re.compile(r'win\ddivPSHIDDENFIELDS')).find_all('input')}
+		search_query = {a['name']: a['value'] for a  in soup.find('div', {'id' : 'win0divPSHIDDENFIELDS'}).find_all('input')}
 		search_query['ICAction'] = 'CLASS_SRCH_WRK2_SSR_PB_CLASS_SRCH'
 		search_query['SSR_CLSRCH_WRK_SSR_OPEN_ONLY$chk$4'] = 'N'
 		for day in ['MON', 'TUES', 'WED', 'THURS', 'FRI', 'SAT', 'SUN']:
 			search_query['SSR_CLSRCH_WRK_' + day + '$5'] = 'Y'
 			search_query['SSR_CLSRCH_WRK_' + day + '$chk$5'] = 'Y'
 		search_query['SSR_CLSRCH_WRK_INCLUDE_CLASS_DAYS$5'] = 'J'
-		search_query[soup.find('select', id=re.compile(r'SSR_CLSRCH_WRK_INSTRUCTION_MODE\$\d'))['id']] = 'P'
 
 		# extract search query info
-		options = soup.find('select', id=re.compile(r'SSR_CLSRCH_WRK_SUBJECT_SRCH\$\d'))
-		search_id = options['id']
-		departments = options.find_all('option')[1:]
+		# terms = soup.find('select', {'id' : 'CLASS_SRCH_WRK2_STRM$35$'}).find_all('option')
+		departments = soup.find('select', {'id' : 'SSR_CLSRCH_WRK_SUBJECT_SRCH$2'}).find_all('option')[1:]
 		# NOTE: first element of dropdown lists in search area is empty
 
-		# TODO - necessary clutter
-		self.course_cleanup()
+		# NOTE: hardcoded semesters Fall, Interim, Spring 2016-2017
+		# terms = {'F':'2168', 'I':'2172', 'S':'2174'}
+		terms = {'F':'2168', 'S':'2171'}
 
 		for term in terms:
 
@@ -120,16 +139,13 @@ class PeopleSoftParser:
 
 				print '> Parsing courses in department', department.text
 
-				if kwargs.get('department_regex'):
-					self.course['department'] = kwargs['department_regex'].match(department.text).group(1)
-				else:
-					self.course['department'] = department.text
+				self.course['department'] = department.text
 
 				# Update search payload with department code
-				search_query[search_id] = department['value']
+				search_query['SSR_CLSRCH_WRK_SUBJECT_SRCH$2'] = department['value']
 
 				# Get course listing page for department
-				soup = BeautifulSoup(self.post_http(self.base_url, search_query).text, 'html.parser')
+				soup = BeautifulSoup(self.post_http(QueensParser.BASE_URL, search_query).text, 'html.parser')
 
 				# check for valid search/page
 				if soup.find('td', {'id' : 'PTBADPAGE_' }) or soup.find('div', {'id' : 'win1divDERIVED_CLSMSG_ERROR_TEXT'}):
@@ -138,7 +154,7 @@ class PeopleSoftParser:
 					continue
 
 				# fill payload for course description page request
-				descr_payload = {a['name']: a['value'] for a in soup.find('div', id=re.compile(r'win\ddivPSHIDDENFIELDS')).find_all('input')}
+				descr_payload = {a['name']: a['value'] for a in soup.find('div', {'id' : 'win0divPSHIDDENFIELDS'}).find_all('input')}
 
 				courses = soup.find_all('table', {'class' : 'PSLEVEL1GRIDNBONBO'})
 
@@ -147,10 +163,10 @@ class PeopleSoftParser:
 					descr_payload['ICAction'] = 'MTG_CLASS_NBR$' + str(i)
 
 					# Get course description page
-					soup = BeautifulSoup(self.get_html(self.base_url, descr_payload))
+					soup = BeautifulSoup(self.get_html(QueensParser.BASE_URL, descr_payload))
 
 					# scrape info from page
-					title 		= soup.find('span', {'id' : 'DERIVED_CLSRCH_DESCR200'}).text.encode('ascii', 'ignore')
+					title 		= soup.find('span', {'id' : 'DERIVED_CLSRCH_DESCR200'}).text
 					units 		= soup.find('span', {'id' : 'SSR_CLS_DTL_WRK_UNITS_RANGE'}).text
 					capacity 	= soup.find('span', {'id' : 'SSR_CLS_DTL_WRK_ENRL_CAP'}).text
 					enrollment 	= soup.find('span', {'id' : 'SSR_CLS_DTL_WRK_ENRL_TOT'}).text
@@ -158,7 +174,6 @@ class PeopleSoftParser:
 					descr 		= soup.find('span', {'id' : 'DERIVED_CLSRCH_DESCRLONG'})
 					notes 		= soup.find('span', {'id' : 'DERIVED_CLSRCH_SSR_CLASSNOTE_LONG'})
 					info 		= soup.find('span', {'id' : 'SSR_CLS_DTL_WRK_SSR_REQUISITE_LONG'})
-					areas		= soup.find('span', {'id' : 'SSR_CLS_DTL_WRK_SSR_CRSE_ATTR_LONG'})
 
 					# parse table of times
 					scheds 	= soup.find_all('span', id=re.compile(r'MTG_SCHED\$\d*'))
@@ -171,27 +186,26 @@ class PeopleSoftParser:
 
 					# Extract info from title
 					print '\t' + title
-					rtitle = re.match(r'(.+?\s*\w+) - (\w+)\s*(\S.+)', title)
+					rtitle = re.match(r'(.+?\s*\w+) - (\w+)\s*(\S.+)', title.encode('ascii', 'ignore'))
 
 					# Place course info into course model
 					self.course['code'] 	= rtitle.group(1)
 					self.course['section'] 	= rtitle.group(2)
 					self.course['name'] 	= rtitle.group(3)
 					self.course['credits']	= float(re.match(r'(\d*).*', units).group(1))
-					self.course['descr'] 	= self.extract_info(descr.text) if descr else ''
-					self.course['notes'] 	= self.extract_info(notes.text) if notes else ''
-					self.course['info'] 	= self.extract_info(info.text) if info else ''
+					self.course['descr'] 	= self.extract_prereqs(descr.text) if descr else ''
+					self.course['notes'] 	= self.extract_prereqs(notes.text) if notes else ''
+					self.course['info'] 	= self.extract_prereqs(info.text) if info else ''
 					self.course['units'] 	= re.match(r'(\d*).*', units).group(1)
 					self.course['size'] 	= int(capacity)
 					self.course['enrolment'] = int(enrollment)
-					self.course['instrs'] 	= ', '.join({instr.text for instr in instrs})
-					self.course['areas'] = ', '.join((self.extract_info(l) for l in re.sub(r'(<.*?>)', '\n', str(areas)).splitlines() if l.strip())) if areas else '' # FIXME -- small bug
+					self.course['instrs'] = ', '.join({instr.text for instr in instrs})
 
 					course = self.create_course()
 					section = self.create_section(course)
 
 					# create textbooks
-					map(lambda isbn: make_textbook(isbn[1], isbn[0], section), isbns)
+					# map(lambda isbn: self.make_textbook(isbn[1], isbn[0], section), isbns)
 
 					# offering details
 					for sched, loc, date in izip(scheds, locs, dates):
@@ -199,8 +213,8 @@ class PeopleSoftParser:
 						rsched = re.match(r'([a-zA-Z]*) (.*) - (.*)', sched.text)
 
 						if rsched:
-							days = map(lambda d: PeopleSoftParser.DAY_MAP[d], re.findall(r'[A-Z][^A-Z]*', rsched.group(1)))
-							time = (PeopleSoftParser.time_12to24(rsched.group(2)), PeopleSoftParser.time_12to24(rsched.group(3)))
+							days = map(lambda d: QueensParser.DAY_MAP[d], re.findall('[A-Z][^A-Z]*', rsched.group(1)))
+							time = (QueensParser.time_12to24(rsched.group(2)), QueensParser.time_12to24(rsched.group(3)))
 						else: # handle TBA classes
 							days = None
 							time = (None, None)
@@ -212,9 +226,8 @@ class PeopleSoftParser:
 
 						self.create_offerings(section)
 
-					self.course_cleanup()
-
-			self.wrap_up()
+			QueensParser.wrap_up()
+			print '>>>>>> WRAP UP <<<<<<'
 
 	def parse_textbooks(self, soup):
 		isbns = zip(soup.find_all('span', id=re.compile(r'DERIVED_SSR_TXB_SSR_TXBDTL_ISBN\$\d*')), soup.find_all('span', id=re.compile(r'DERIVED_SSR_TXB_SSR_TXB_STATDESCR\$\d*')))
@@ -223,33 +236,21 @@ class PeopleSoftParser:
 		return isbns
 		# return map(lambda i: (filter(lambda x: x.isdigit(), isbns[i][0].text), isbns[i][1].text[0].upper() == 'R'), range(len(isbns)))
 
-	def course_cleanup(self):
-		self.course['prereqs'] = ''
-		self.course['coreqs'] = ''
-		self.course['geneds'] = ''
-
 	# NOTE: chapman specific
-	def extract_info(self, text):
-
-		text = text.encode('utf-8', 'ignore')
+	def extract_prereqs(self, text):
 
 		extractions = {
-			'prereqs' : r'[Pp]r(?:-?)e[rR]eq(?:uisite)?(?:s?)[:,\s]\s*(.*?)(?:\.|$)\s*',
-			'coreqs'  : r'[Cc]o(?:-?)[rR]eq(?:uisite)?(?:s?)[:,\s]\s*(.*?)(?:\.|$)\s*',
-<<<<<<< HEAD
-			'geneds' : r'(GE .*)'
-=======
-			'geneds' : r'GE (.*)'
->>>>>>> staging
+			'prereqs' : r'Prerequisite(?:s?)[:,]\s(.*?)\.',
+			'coreqs'  : r'Corequisite(?:s?)[:,]\s(.*?)\.'
 		}
 
 		for ex in extractions:
 			rex = re.compile(extractions[ex])
 			extracted = rex.search(text)
 			if extracted:
-				if len(self.course[ex]) > 0:
-					self.course[ex] += ', '
-				self.course[ex] += extracted.group(1) # okay b/c of course_cleanup
+				self.course[ex] = extracted.group(1)
+			else:
+				self.course[ex] = ''
 			text = rex.sub('', text).strip()
 
 		return text
@@ -268,9 +269,10 @@ class PeopleSoftParser:
 		# Return as 24hr-time string
 		return str(hours) + ":" + match.group(2)
 
-	def wrap_up(self):
+	@staticmethod
+	def wrap_up():
 			update_object, created = Updates.objects.update_or_create(
-					school=self.school,
+					school=QueensParser.SCHOOL,
 					update_field="Course",
 					defaults={'last_updated': datetime.datetime.now()}
 			)
@@ -279,7 +281,7 @@ class PeopleSoftParser:
 	def create_course(self):
 		course, CourseCreated = Course.objects.update_or_create(
 			code = self.course['code'],
-			school = self.school,
+			school = QueensParser.SCHOOL,
 			defaults={
 				'name': self.course.get('name'),
 				'description': self.course.get('descr'),
@@ -288,13 +290,8 @@ class PeopleSoftParser:
 				'prerequisites': self.course.get('prereqs'),
 				'corequisites': self.course.get('coreqs'),
 				'notes': self.course.get('notes'),
-				'info' : self.course.get('info'),
-<<<<<<< HEAD
-				'areas': self.course.get('areas') + self.course.get('geneds'),
-=======
-				'areas': self.course.get('areas'),
->>>>>>> staging
-				'geneds': self.course.get('geneds')
+				'info' : self.course.get('info')
+				# 'areas': self.course.get('areas'),
 			}
 		)
 		return course
@@ -325,3 +322,59 @@ class PeopleSoftParser:
 						'location': self.course.get('location')
 					}
 				)
+
+	# NOTE: (mostly) copied from base bn parser, need to do full integration
+	def make_textbook(self, is_required, isbn_number, section):
+
+		info = self.get_amazon_fields(isbn_number)
+
+		# update/create textbook
+		textbook_data = {
+			'detail_url': info['DetailPageURL'],
+			'image_url': info["ImageURL"],
+			'author': info["Author"],
+			'title': info["Title"]
+		}
+		textbook, created = Textbook.objects.update_or_create(isbn=isbn_number,
+														defaults=textbook_data)
+
+		# link to course section
+		section, created = TextbookLink.objects.update_or_create(
+			is_required = is_required,
+			section = section,
+			textbook = textbook
+		)
+
+		# print results
+		if created:
+			print "Textbook created: " + textbook.title
+		else:
+			print "Textbook found, not created: " + textbook.title
+
+	# NOTE: (mostly) copied from base bn parser, need to do full integration
+	def get_amazon_fields(self,isbn):
+		try:
+			result = api.item_lookup(isbn, IdType='ISBN', SearchIndex='Books', ResponseGroup='Large')
+			info = {
+				"DetailPageURL" : self.get_detail_page(result),
+				"ImageURL" : self.get_image_url(result),
+				"Author" : self.get_author(result),
+				"Title" : self.get_title(result)
+			}
+		except:
+			import traceback
+			traceback.print_exc()
+			info = {
+				"DetailPageURL" : "Cannot be found",
+				"ImageURL" : "Cannot be found",
+				"Author" : "Cannot be found",
+				"Title" : "Cannot be found"
+			}
+		return info
+
+def main():
+	p = QueensParser()
+	p.parse()
+
+if __name__ == "__main__":
+	main()
