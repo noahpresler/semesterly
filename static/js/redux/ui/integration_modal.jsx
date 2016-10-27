@@ -18,9 +18,6 @@ export class IntegrationModal extends React.Component {
         // this.index = 0;
     }
     componentDidUpdate(nextProps) {
-        console.log("this5" , this.props);
-        console.log("next" , nextProps);
-        console.log("state" , this.state);
         if (this.props.isVisible) {
             this.refs.modal.show();
         } 
