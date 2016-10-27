@@ -40,7 +40,7 @@ const mapDispatchToProps = (dispatch) => {
 		//     type: "REQUEST_COURSE_INFO",
 		//     course_id: course_id,
 		//   }
-		showIntegrationModal: (id) => openIntegrationModal(1, id),
+		showIntegrationModal: (id, integrationID) => openIntegrationModal(integrationID, id),
 		hoverSearchResult: (position) => {
 			dispatch({
 				type: "HOVER_SEARCH_RESULT",
