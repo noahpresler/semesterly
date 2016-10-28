@@ -4,5 +4,25 @@
     overflow: auto;
 }
 #integration-modal {
+	padding: 20px 20px;
+	text-align: center;
+}
+#integration-logo {
+	width: 300px;
+	height: 150px;
+	margin: 0 auto 20px;
+	background-size: contain;
+	background-position: center;
+	background-repeat: no-repeat;
+}
+#integration-modal .preference {
 	
+}
+#integration-modal .switch-slide {
+	float: right;
+	margin: 0;
+}
+#integration-modal h3 {
+	font-size: 14px;
+	text-align: left;
 }
