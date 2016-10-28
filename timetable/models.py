@@ -85,6 +85,8 @@ class Course(models.Model):
 
     return textbooks
 
+  def get_course_integrations(self):
+    return CourseIntegration.objects.filter(course__id=self.id).values_list("integration", flat=True)
 
 class Section(models.Model):
   course = models.ForeignKey(Course)
