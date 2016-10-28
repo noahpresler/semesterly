@@ -1,6 +1,5 @@
 .narrow-modal {
     max-width: 500px;
-    height: 550px;
     overflow: auto;
 }
 #integration-modal {
