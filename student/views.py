@@ -236,7 +236,7 @@ def find_friends(request):
         c = student_tt.courses.all()
         friends = []
         students = Student.objects.filter(social_all=True,personaltimetable__courses__id__in=c).exclude(id=student.id).distinct()
-        peers = filter(lambda s: s.personaltimetable_set.filter(school=school, semester=semester).order_by('last_updated').last().courses.all() & c, students)
+        peers = filter(lambda s: s.personaltimetable_set.filter(school=school, semester=semester).order_by('last_updated').last() and (s.personaltimetable_set.filter(school=school, semester=semester).order_by('last_updated').last().courses.all() & c), students)
         for peer in peers:
             peer_tt = peer.personaltimetable_set.filter(school=school,semester=semester).order_by('last_updated').last()
             shared_courses = map(
