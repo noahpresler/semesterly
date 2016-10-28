@@ -66,17 +66,15 @@ export class IntegrationModal extends React.Component {
                             <span className="switch-handle"></span>
                         </label>
                     </div>
-                    <div id="call-to-action">
-                        <div className="add-integration-button">
-                            <button className="save-button" onClick={() => {
-                                if (!this.state.enabled) {
-                                    delIntegration(1, this.props.course_id);
-                                } else {
-                                    addIntegration(1, this.props.course_id, "");
-                                }
-                                this.refs.modal.hide();
-                            }}>Save</button>
-                        </div>
+                    <div className="button-wrapper">
+                        <button className="signup-button" onClick={() => {
+                            if (!this.state.enabled) {
+                                delIntegration(1, this.props.course_id);
+                            } else {
+                                addIntegration(1, this.props.course_id, "");
+                            }
+                            this.refs.modal.hide();
+                        }}>Save</button>
                     </div>
                 </div>
             </Modal>
