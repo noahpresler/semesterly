@@ -5,7 +5,6 @@
 }
 #integration-modal {
 	padding: 20px 20px;
-	text-align: center;
 }
 #integration-logo {
 	width: 300px;
@@ -15,14 +14,18 @@
 	background-position: center;
 	background-repeat: no-repeat;
 }
-#integration-modal .preference {
-	
-}
 #integration-modal .switch-slide {
 	float: right;
 	margin: 0;
 }
 #integration-modal h3 {
+	margin: 0;
+	float: left;
+	line-height: 30px;
 	font-size: 14px;
 	text-align: left;
+}
+#integration-modal .button-wrapper {
+	padding-top: 20px;
+	text-align: center;
 }
