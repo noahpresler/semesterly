@@ -58,14 +58,14 @@ export class IntegrationModal extends React.Component {
                 <div id="integration-modal">
                     <div id="integration-logo" style={integrationLogo}></div>
                     <div className="preference cf">
-                        <div className="preference-wrapper">
-                            <h3>Would you like to enable Pilot for this course?</h3>
-                        </div>
                         <label className="switch switch-slide">
                             <input ref="enable_pilot" className="switch-input" type="checkbox" checked={this.state.enabled} onChange={this.changeForm}/>
                             <span className="switch-label" data-on="Yes" data-off="No"></span>
                             <span className="switch-handle"></span>
                         </label>
+                        <div className="preference-wrapper">
+                            <h3>Would you like to enable Pilot for this course?</h3>
+                        </div>
                     </div>
                     <div className="button-wrapper">
                         <button className="signup-button" onClick={() => {
