@@ -114,6 +114,7 @@ export class CourseModalBody extends React.Component {
         });
         reactionsDisplay.sort((r1, r2) => {return r1.props.count < r2.props.count});
 
+        let integrationList = this.props.integrations;
         let evalInfo = this.props.data.eval_info;
         let relatedCourses = this.props.data.related_courses;
         let { prerequisites, textbooks } = this.props.data;
