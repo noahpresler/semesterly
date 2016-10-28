@@ -105,7 +105,6 @@ class Semesterly extends React.Component {
 
 	render() {
 		let mobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
-		console.log(mobile)
 		let cal = mobile && $(window).width() < 767 && this.state.orientation == 'portrait' ? <DayCalendarContainer /> : <CalendarContainer />;
 		return (
 			<div id="page-wrapper">
