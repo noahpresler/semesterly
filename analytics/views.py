@@ -49,6 +49,7 @@ def view_analytics_dashboard(request):
                 "total_shared_timetables":number_timetables(Timetable=SharedTimetable),
                 "total_personal_timetables":number_timetables(Timetable=PersonalTimetable),
                 "total_signups":total_signups,
+                "num_users_chrome_notifs":number_user_chrome_notifs(),
                 "num_users_by_permission":num_users_by_permission,
                 "num_users_by_class_year":json.dumps(number_students_by_year()),
                 "num_users_by_school":json.dumps(number_students_by_school()),
@@ -168,7 +169,8 @@ def number_students_by_school():
         result[school] = count
     return result
 
-
+def number_user_chrome_notifs():
+    return RegistrationToken.objects.values_list("student", flat=True).distinct().count()
 
 
 
