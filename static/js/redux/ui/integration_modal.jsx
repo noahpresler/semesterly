@@ -43,7 +43,8 @@ export class IntegrationModal extends React.Component {
     // }
     render() {
         let modalStyle = {
-            width: '100%'
+            width: '100%',
+            top: '40%'
         };
         let integrationLogo = {
             backgroundImage: 'url(/static/img/integrations/pilotLogo.png)'
