@@ -46,8 +46,8 @@ export class IntegrationModal extends React.Component {
             width: '100%'
         };
         let integrationLogo = {
-            backgroundImage: 'url(/static/img/integrations/pilot-logo.png)'
-        }
+            backgroundImage: 'url(/static/img/integrations/pilotLogo.png)'
+        };
         return (
             <Modal ref="modal"
                 className="integration-modal narrow-modal"
@@ -55,8 +55,8 @@ export class IntegrationModal extends React.Component {
                 onHide={this.props.toggleIntegrationModal}
                 >
                 <div id="integration-modal">
-                    <div id="integration-logo" style="{integrationLogo}"></div>
-                    <div className="enable pilot">
+                    <div id="integration-logo" style={integrationLogo}></div>
+                    <div className="preference cf">
                         <div className="preference-wrapper">
                             <h3>Would you like to enable Pilot for this course?</h3>
                         </div>
