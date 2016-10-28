@@ -341,11 +341,14 @@ export function fetchClassmates(courses) {
 }
 
 export function fetchFriends() {
+	let state = store.getState();
+	let semester = state.semester !== undefined ? state.semester : currentSemester;
 	return (dispatch) => {
 		dispatch(requestFriends());
 		fetch(getFriendsEndpoint(), {
 			credentials: 'include',
-			method: 'GET'
+			method: 'POST',
+			body: JSON.stringify({ semester: semester })
 		})
 	    .then(response => response.json())
 	    .then(json => {
