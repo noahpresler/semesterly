@@ -6,7 +6,8 @@
 	padding: 20px 20px;
 }
 #integration-logo {
-	width: 300px;
+	width: 100%;
+	max-width: 300px;
 	height: 150px;
 	margin: 0 auto 20px;
 	background-size: contain;
