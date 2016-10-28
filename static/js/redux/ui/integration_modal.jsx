@@ -49,6 +49,9 @@ export class IntegrationModal extends React.Component {
         let integrationLogo = {
             backgroundImage: 'url(/static/img/integrations/pilotLogo.png)'
         };
+        let integrationLogo = {
+            backgroundImage: 'url(/static/img/integrations/pilot-logo.png)'
+        }
         return (
             <Modal ref="modal"
                 className="integration-modal narrow-modal"
