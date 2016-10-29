@@ -72,6 +72,7 @@ function getSaveTimetablesRequestBody() {
 export function getActiveTimetable(timetableState) {
 	return timetableState.items[timetableState.active];
 }
+
 /* Returns the updated courseSections, after locking all sections */
 export function lockActiveSections(activeTimetable) {
 	let courseSections = {};
@@ -87,6 +88,7 @@ export function lockActiveSections(activeTimetable) {
 	}
 	return courseSections;
 }
+
 export function saveTimetable(isAutoSave=false, callback=null) {
 	return (dispatch) => {
 		let state = store.getState();
@@ -267,6 +269,38 @@ export function deleteTimetable(timetable) {
 				dispatch(fetchClassmates(json.timetables[0].courses.map( c => c['id'])))
 			}
 		});
+	}
+}
+
+export function saveCustomSlots() {
+	return (dispatch) => {
+		let state = store.getState();
+		if (!state.userInfo.data.isLoggedIn) {
+			return dispatch({type: 'TOGGLE_SIGNUP_MODAL'})
+		}
+		let customSlots = state.customSlots;
+		// if current timetable is empty or we're already in saved state, don't save this timetable
+		// if (activeTimetable.courses.length === 0 || state.savingTimetable.upToDate) {
+		// 	return;
+		// }
+		// mark that we're now trying to save this timetable
+		dispatch({
+			type: "REQUEST_SAVE_TIMETABLE"
+		});
+		fetch(getSaveCustomSlotsEndpoint(), {
+			method: 'POST',
+			body: JSON.stringify(getSaveCustomSlotsRequestBody()),
+			credentials: 'include',
+		})
+		.then(response => response.json())
+		.then(json => {
+			dispatch({
+				type: "RECEIVE_CUSTOM_SLOTS",
+				customSlots: json.customSlots
+			});
+
+			return json;
+		})
 	}
 }
 
