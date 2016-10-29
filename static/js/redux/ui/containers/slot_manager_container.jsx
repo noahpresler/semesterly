@@ -42,9 +42,9 @@ const mapDispatchToProps = (dispatch) => {
 		fetchCourseInfo: (courseId) => dispatch(fetchCourseInfo(courseId)),
 		addOrRemoveOptionalCourse: (course) => dispatch(addOrRemoveOptionalCourse(course)),
 		addOrRemoveCourse: addOrRemoveCourse,
-    	removeCustomSlot: removeCustomSlot,
-    	updateCustomSlot: updateCustomSlot,
-    	addCustomSlot: addCustomSlot
+  	removeCustomSlot: removeCustomSlot,
+  	updateCustomSlot: updateCustomSlot,
+  	addCustomSlot: addCustomSlot
 	}
 }
 
