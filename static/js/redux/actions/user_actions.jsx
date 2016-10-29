@@ -311,7 +311,8 @@ function getSaveCustomSlotsRequestBody() {
 		time_start: slot.time_start,
 		time_end: slot.time_end,
 		day: slot.day,
-		name: slot.name
+		name: slot.name,
+		uuid: slot.id,
 	}));
 	let semester = state.semester;
 	return {

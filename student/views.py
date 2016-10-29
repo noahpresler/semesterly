@@ -197,8 +197,18 @@ def save_custom_slots(request):
     school = request.subdomain
     params = json.loads(request.body)
     student = Student.objects.get(user=request.user)
+    semester = params['semester']
+    custom_slots = params['customSlots']
 
-    
+    num_deleted = CustomSlot.objects.filter(
+        student=student, school=school, semester=semester).delete()
+
+    for custom_slot in custom_slots:
+        new_slot = CustomSlot(school=school, student=student, semester=semester,
+            name=custom_slot['name'], time_start=custom_slot['time_start'],
+            time_end=custom_slot['time_end'])
+        new_slot.save()
+
     return HttpResponse(json.dumps({}), content_type="application/json")
 
 @csrf_exempt
