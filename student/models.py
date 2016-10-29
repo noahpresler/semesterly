@@ -53,3 +53,11 @@ class RegistrationToken(models.Model):
     p256dh = models.TextField(default='')
     endpoint = models.TextField(default='')
     student = models.ForeignKey(Student, null=True, default=None)
+
+class CustomSlot(models.Model):
+    school = models.CharField(max_length=50)
+    name = models.CharField(max_length=100)
+    semester = models.CharField(max_length=2)
+    student = models.ForeignKey(Student)
+    time_start = models.CharField(max_length=15)
+    time_end = models.CharField(max_length=15)

@@ -38,6 +38,9 @@ export const getUserInfoEndpoint = () => {
 export const getSaveTimetableEndpoint = () => {
 	return "/user/save_timetable/";
 };
+export const getSaveCustomSlotsEndpoint = () => {
+  return "/user/save_custom/";
+};
 export const getSaveSettingsEndpoint = () => {
 	return "/user/save_settings/"
 }

@@ -192,6 +192,17 @@ def duplicate_timetable(request):
 
 @csrf_exempt
 @login_required
+@validate_subdomain
+def save_custom_slots(request):
+    school = request.subdomain
+    params = json.loads(request.body)
+    student = Student.objects.get(user=request.user)
+
+    
+    return HttpResponse(json.dumps({}), content_type="application/json")
+
+@csrf_exempt
+@login_required
 def save_settings(request):
     student = Student.objects.get(user=request.user)
     params = json.loads(request.body)['userInfo']

@@ -1,6 +1,7 @@
 import fetch from 'isomorphic-fetch';
 import { getUserInfoEndpoint,
 	getSaveTimetableEndpoint,
+	getSaveCustomSlotsEndpoint,
 	getCloneTimetableEndpoint,
 	getDeleteTimetableEndpoint,
 	getSaveSettingsEndpoint,
@@ -284,29 +285,38 @@ export function saveCustomSlots() {
 		// 	return;
 		// }
 		// mark that we're now trying to save this timetable
-		dispatch({
-			type: "REQUEST_SAVE_TIMETABLE"
-		});
+		// dispatch({
+		// 	type: "REQUEST_SAVE_TIMETABLE"
+		// });
 		fetch(getSaveCustomSlotsEndpoint(), {
 			method: 'POST',
 			body: JSON.stringify(getSaveCustomSlotsRequestBody()),
 			credentials: 'include',
 		})
-		.then(response => response.json())
-		.then(json => {
-			dispatch({
-				type: "RECEIVE_CUSTOM_SLOTS",
-				customSlots: json.customSlots
-			});
+		// .then(response => response.json())
+		// .then(json => {
+		// 	dispatch({
+		// 		type: "RECEIVE_CUSTOM_SLOTS",
+		// 		customSlots: json.customSlots
+		// 	});
 
-			return json;
-		})
+		// 	return json;
+		// })
 	}
 }
 
-function getSaveSettingsRequestBody() {
+function getSaveCustomSlotsRequestBody() {
+	let state = store.getState();
+	let customSlots = state.customSlots.map(slot => ({
+		time_start: slot.time_start,
+		time_end: slot.time_end,
+		day: slot.day,
+		name: slot.name
+	}));
+	let semester = state.semester;
 	return {
-		userInfo: store.getState().userInfo.data
+		customSlots,
+		semester,
 	}
 }
 
@@ -330,7 +340,13 @@ export function saveSettings(callback) {
 				if(callback){callback()}
 		});
 	}
-}	
+}
+
+function getSaveSettingsRequestBody() {
+	return {
+		userInfo: store.getState().userInfo.data
+	}
+}
 
 export function getUserSavedTimetables(semester) {
 	return (dispatch) => {
@@ -389,9 +405,11 @@ export function fetchFriends() {
 }
 
 export function autoSave(delay=4000) {
+	console.log("????")
 	let state = store.getState();
 	clearTimeout(autoSaveTimer)
 	autoSaveTimer = setTimeout(() => {
+		store.dispatch(saveCustomSlots())
 		if (state.userInfo.data.isLoggedIn && state.timetables.items[state.timetables.active].courses.length > 0)
 			store.dispatch(saveTimetable(true))
 	}, delay);
