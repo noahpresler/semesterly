@@ -217,7 +217,7 @@ CustomSlot.propTypes = {
     num_conflicts: PropTypes.number.isRequired,
     shift_index: PropTypes.number.isRequired,
     name: PropTypes.string.isRequired,
-    id: PropTypes.number.isRequired
+    id: PropTypes.string.isRequired
 }
 
 export default DropTarget(DRAGTYPES.DRAG, dragSlotTarget, collectDragDrop)(
