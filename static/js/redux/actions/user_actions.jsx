@@ -9,6 +9,7 @@ import { getUserInfoEndpoint,
 	getLoadSavedTimetablesEndpoint,
 	getSetRegistrationTokenEndpoint,
 	deleteRegistrationTokenEndpoint,
+	getLoadCustomSlotsEndpoint,
 	getFriendsEndpoint } from '../constants.jsx';
 import { store } from '../init.jsx';
 import { loadTimetable, nullifyTimetable, getNumberedName } from './timetable_actions.jsx';
@@ -372,6 +373,19 @@ export function getUserSavedTimetables(semester) {
 		})
 
 	}
+}
+
+export const getSavedCustomSlots = (semester) => (dispatch) => {
+	fetch(getLoadCustomSlotsEndpoint(semester), {
+		credentials: 'include',
+	})
+	.then(response => response.json())
+	.then(customSlots => {
+		dispatch({
+			type: "RECEIVE_CUSTOM_SLOTS",
+			customSlots: customSlots
+		})
+	})
 }
 
 export function fetchClassmates(courses) {

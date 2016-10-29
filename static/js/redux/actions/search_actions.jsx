@@ -1,7 +1,7 @@
 import fetch from 'isomorphic-fetch';
 import { getCourseSearchEndpoint, getAdvancedSearchEndpoint } from '../constants.jsx';
 import { store } from '../init.jsx';
-import { getUserSavedTimetables, saveTimetable } from './user_actions.jsx';
+import { getUserSavedTimetables, saveTimetable, getSavedCustomSlots } from './user_actions.jsx';
 import { nullifyTimetable } from './timetable_actions.jsx';
 
 export function requestCourses() {
@@ -22,6 +22,7 @@ export function setSemester(semester) {
 	let dispatch = store.dispatch;
 	if (state.userInfo.data.isLoggedIn) {
 		dispatch(getUserSavedTimetables(semester));
+		dispatch(getSavedCustomSlots(semester));
 	}
 	else {
 		nullifyTimetable(dispatch);

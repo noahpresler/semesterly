@@ -57,7 +57,9 @@ class RegistrationToken(models.Model):
 class CustomSlot(models.Model):
     school = models.CharField(max_length=50)
     name = models.CharField(max_length=100)
+    day = models.CharField(max_length=1)
     semester = models.CharField(max_length=2)
     student = models.ForeignKey(Student)
     time_start = models.CharField(max_length=15)
     time_end = models.CharField(max_length=15)
+

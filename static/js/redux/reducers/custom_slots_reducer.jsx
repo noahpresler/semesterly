@@ -31,6 +31,9 @@ export const customSlots = (state = [], action) => {
       }
       return [...state.slice(0, dslotIndex), ...state.slice(dslotIndex + 1, state.length)]
 
+    case 'RECEIVE_CUSTOM_SLOTS':
+      return action.customSlots.map(slot => Object.assign(slot, {preview: false, id: slot.id.toString()}))
+    
     default:
       return state;
   }
