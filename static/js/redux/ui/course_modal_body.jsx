@@ -154,7 +154,7 @@ export class CourseModalBody extends React.Component {
         var integrationDivStyle = {
             backgroundImage: 'url(/static/img/integrations/pilot.png)'
         };
-        let academicSupportDisplay = integrationList.indexOf(1) > -1 ?
+        let academicSupportDisplay = integrationList.indexOf('Pilot') > -1 ?
             <div className="modal-module academic-support">
                 <h3 className="modal-module-header">Academic Support</h3>
                 <li className="cf">
@@ -162,12 +162,6 @@ export class CourseModalBody extends React.Component {
                     <h4>Pilot</h4>
                     <a href="http://academicsupport.jhu.edu/pilot-learning/">Learn More</a>
                     <p>In the PILOT program, students are organized into study teams consisting of 6-10 members who meet weekly to work problems together.</p>
-                </li>
-                <li className="cf">
-                    <span className="integration-image" style={integrationDivStyle}></span>
-                    <h4>Learning Den</h4>
-                    <a href="http://academicsupport.jhu.edu/pilot-learning/">Learn More</a>
-                    <p>Tutoring Service, There is no fee and there is no limit to the number of sessions a student may attend.</p>
                 </li>
             </div> : null;
         let friendCircles = this.props.data.classmates && this.props.data.classmates.classmates.length > 0 ? this.props.data.classmates.classmates.map( c =>
