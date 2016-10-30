@@ -69,6 +69,20 @@ header nav a:hover {
 	background-color: #F3F3F3;
 }
 
+/* Before Hero */
+#pre {
+	width: 100%;
+	padding: 25px;
+	background-color: #F3F3F3;
+	position: relative;
+}
+#pre h1 {
+	font-size: 48px;
+}
+@media(max-width: 700px) {#pre h1 {font-size: 30px;} }
+@media(max-width: 470px) {#pre h1 {font-size: 20px; margin-top: 30px;} }
+
+
 /* Hero */
 #hero {
 	width: 100%;
