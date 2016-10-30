@@ -431,7 +431,6 @@ export function autoSave(delay=4000) {
 }
 
 export const autoSaveCustomSlots = throttle(() => {
-	console.log("???")
 	store.dispatch(saveCustomSlots())
 }, 4000)
 
