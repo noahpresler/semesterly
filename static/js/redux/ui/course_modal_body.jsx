@@ -114,7 +114,7 @@ export class CourseModalBody extends React.Component {
         });
         reactionsDisplay.sort((r1, r2) => {return r1.props.count < r2.props.count});
 
-        let integrationList = this.props.integrations;
+        let integrationList = this.props.data.integrations;
         let evalInfo = this.props.data.eval_info;
         let relatedCourses = this.props.data.related_courses;
         let { prerequisites, textbooks } = this.props.data;
@@ -154,7 +154,8 @@ export class CourseModalBody extends React.Component {
         var integrationDivStyle = {
             backgroundImage: 'url(/static/img/integrations/pilot.png)'
         };
-        let academicSupportDisplay = 
+	console.log(integrationList);
+        let academicSupportDisplay = integrationList.indexOf(1) > -1 ?
             <div className="modal-module academic-support">
                 <h3 className="modal-module-header">Academic Support</h3>
                 <li className="cf">
@@ -169,7 +170,7 @@ export class CourseModalBody extends React.Component {
                     <a href="http://academicsupport.jhu.edu/pilot-learning/">Learn More</a>
                     <p>Tutoring Service, There is no fee and there is no limit to the number of sessions a student may attend.</p>
                 </li>
-            </div>
+            </div> : null;
         let friendCircles = this.props.data.classmates && this.props.data.classmates.classmates.length > 0 ? this.props.data.classmates.classmates.map( c =>
                 <div className="friend" key={c.img_url}>
                     <div className="ms-friend" style={{backgroundImage: 'url(' + c.img_url + ')'}}/>
