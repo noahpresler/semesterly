@@ -72,7 +72,7 @@ def view_timetable(request, code=None, sem=None, shared_timetable=None, find_fri
   integrations = {'integrations': []}
   if student and student.user.is_authenticated():
     for i in student.integrations.all():
-      integrations['integrations'].append(i.id)
+      integrations['integrations'].append(i.name)
   return render_to_response("timetable.html", {
     'school': school,
     'student': json.dumps(get_user_dict(school, student, sem)),
