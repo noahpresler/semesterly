@@ -420,15 +420,11 @@ export function fetchFriends() {
 	}
 }
 
-export function autoSave(delay=4000) {
+export const autoSave = throttle(() => {
 	let state = store.getState();
-	clearTimeout(autoSaveTimer)
-	autoSaveTimer = setTimeout(() => {
-		store.dispatch(saveCustomSlots())
-		if (state.userInfo.data.isLoggedIn && state.timetables.items[state.timetables.active].courses.length > 0)
-			store.dispatch(saveTimetable(true))
-	}, delay);
-}
+	if (state.userInfo.data.isLoggedIn && state.timetables.items[state.timetables.active].courses.length > 0)
+		store.dispatch(saveTimetable(true))
+}, 4000)
 
 export const autoSaveCustomSlots = throttle(() => {
 	store.dispatch(saveCustomSlots())
