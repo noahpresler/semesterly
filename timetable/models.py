@@ -86,7 +86,8 @@ class Course(models.Model):
     return textbooks
 
   def get_course_integrations(self):
-    return CourseIntegration.objects.filter(course__id=self.id).values_list("integration", flat=True)
+    ids = CourseIntegration.objects.filter(course__id=self.id).values_list("integration", flat=True)
+    return Integration.objects.filter(id__in = ids).values_list("name", flat=True)
 
 class Section(models.Model):
   course = models.ForeignKey(Course)
@@ -141,4 +142,3 @@ class CourseIntegration(models.Model):
   course = models.ForeignKey(Course)
   integration = models.ForeignKey(Integration)
   json = models.TextField()
-
