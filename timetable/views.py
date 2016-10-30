@@ -419,7 +419,6 @@ def get_detailed_course_json(school, course, sem, student=None):
   json_data['integrations'] = list(course.get_course_integrations())
   if student and student.user.is_authenticated() and student.social_courses:
     json_data['classmates'] = get_classmates_from_course_id(school, student, course.id,sem)
-  print(json_data)
   return json_data
 
 def get_basic_course_json(course, sem, extra_model_fields=[]):
