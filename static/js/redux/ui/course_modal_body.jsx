@@ -154,7 +154,6 @@ export class CourseModalBody extends React.Component {
         var integrationDivStyle = {
             backgroundImage: 'url(/static/img/integrations/pilot.png)'
         };
-	console.log(integrationList);
         let academicSupportDisplay = integrationList.indexOf(1) > -1 ?
             <div className="modal-module academic-support">
                 <h3 className="modal-module-header">Academic Support</h3>
