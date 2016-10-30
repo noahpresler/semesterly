@@ -3,7 +3,7 @@ import { getTimetablesEndpoint } from '../constants.jsx';
 import { randomString, browserSupportsLocalStorage } from '../util.jsx';
 import { store } from '../init.jsx';
 import { getClassmatesEndpoint } from '../constants.jsx'
-import { lockActiveSections, fetchClassmates, autoSave } from './user_actions.jsx';
+import { lockActiveSections, fetchClassmates, autoSave, autoSaveCustomSlots } from './user_actions.jsx';
 import { saveLocalSemester, saveLocalPreferences, saveLocalCourseSections, saveLocalActiveIndex } from '../util.jsx';
 
 export const SID = randomString(30);
@@ -296,6 +296,7 @@ export function addCustomSlot(timeStart, timeEnd, day, preview, id) {
 			preview,
 		}
 	})
+	autoSaveCustomSlots()
 }
 
 export function updateCustomSlot(newValues, id) {
@@ -305,6 +306,7 @@ export function updateCustomSlot(newValues, id) {
 		newValues,
 		id,
 	})
+	autoSaveCustomSlots()
 }
 
 export function removeCustomSlot(id) {
@@ -313,6 +315,7 @@ export function removeCustomSlot(id) {
 		type: "REMOVE_CUSTOM_SLOT",
 		id,
 	})
+	autoSaveCustomSlots()
 }
 
 export function addOrRemoveOptionalCourse(course) {

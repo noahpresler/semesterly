@@ -1,4 +1,5 @@
 import fetch from 'isomorphic-fetch';
+import throttle from 'lodash/throttle';
 import { getUserInfoEndpoint,
 	getSaveTimetableEndpoint,
 	getSaveCustomSlotsEndpoint,
@@ -420,7 +421,6 @@ export function fetchFriends() {
 }
 
 export function autoSave(delay=4000) {
-	console.log("????")
 	let state = store.getState();
 	clearTimeout(autoSaveTimer)
 	autoSaveTimer = setTimeout(() => {
@@ -429,6 +429,11 @@ export function autoSave(delay=4000) {
 			store.dispatch(saveTimetable(true))
 	}, delay);
 }
+
+export const autoSaveCustomSlots = throttle(() => {
+	console.log("???")
+	store.dispatch(saveCustomSlots())
+}, 4000)
 
 export function setARegistrationToken() {
 	if ('serviceWorker' in navigator) {

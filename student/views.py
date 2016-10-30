@@ -208,7 +208,7 @@ def save_custom_slots(request):
             name=custom_slot['name'], time_start=custom_slot['time_start'],
             time_end=custom_slot['time_end'], day=custom_slot['day'])
         new_slot.save()
-
+    print 'save'
     return HttpResponse(json.dumps({}), content_type="application/json")
 
 @login_required
