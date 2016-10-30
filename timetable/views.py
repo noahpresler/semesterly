@@ -425,6 +425,7 @@ def get_basic_course_json(course, sem, extra_model_fields=[]):
   basic_fields = ['code','name', 'id', 'description', 'department', 'num_credits', 'areas', 'campus']
   course_json = model_to_dict(course, basic_fields + extra_model_fields)
   course_json['evals'] = course.get_eval_info()
+  course_json['integrations'] = list(course.get_course_integrations())
   course_json['sections'] = {}
 
   course_section_list = sorted(course.section_set.filter(semester__in=[sem, "Y"]),
