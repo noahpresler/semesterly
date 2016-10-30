@@ -193,7 +193,8 @@ export class SearchResult extends React.Component {
             style = {color: "#52B7D9"};
         if(this.state.hoverSave)
             style = {color: "#27ae60"};
-        let pilotIntegration = studentIntegrations['integrations'].indexOf(1) > -1 ? 
+	console.log(studentIntegrations);
+        let pilotIntegration = studentIntegrations['integrations'].indexOf('Pilot') > -1 ? 
             <a style={{fontSize: '10px'}} onMouseDown={(event) => {
                 event.stopPropagation();
                 this.props.showIntegrationModal(course.id, 1)
