@@ -72,7 +72,7 @@ header nav a:hover {
 /* Before Hero */
 #pre {
 	width: 100%;
-	padding: 25px;
+	padding: 15px;
 	background-color: #F3F3F3;
 	position: relative;
 }
@@ -81,6 +81,26 @@ header nav a:hover {
 }
 @media(max-width: 700px) {#pre h1 {font-size: 30px;} }
 @media(max-width: 470px) {#pre h1 {font-size: 20px; margin-top: 30px;} }
+
+/* After Hero */
+#post {
+	width: 100%;
+	padding: 25px;
+	background-color: #F3F3F3;
+	position: relative;
+}
+#post h2 {
+	font-size: 30px;
+	line-height: 40px;
+	padding-left: 50px;
+	padding-right: 50px;
+	text-align: center;
+}
+	@media(max-width: 1170px) {#post h2 {font-size: 22px; line-height: 30px;}}
+	@media(max-width: 980px) {#post h2 {font-size: 25px; line-height: 23px;}}
+	@media(max-width: 776px) {#post h2 {font-size: 15px; line-height: 20px; 
+		padding-left: 30px; padding-right: 30px;}}
+
 
 
 /* Hero */
@@ -92,44 +112,8 @@ header nav a:hover {
 	background-size: cover;
 	position: relative;
 }
-#hero-bg {
-	position: absolute;
-	top: 0;
-	left: 0;
-	width: 100%;
-	height: 100%;
-	background-color: rgba(42, 69, 138, 0.0);
-}
-#hero h1 {
-	color: white;
-	font-size: 48px;
-	line-height: 55px;
-}
-	@media(max-width: 1170px) {#hero h1 {font-size: 40px; line-height: 45px;}}
-	@media(max-width: 980px) {#hero h1 {font-size: 30px; line-height: 38px;}}
-
-#hero h2 {
-	color: white;
-	font-size: 30px;
-	line-height: 40px;
-	padding-left: 50px;
-	padding-right: 50px;
-}
-	@media(max-width: 1170px) {#hero h2 {font-size: 22px; line-height: 30px;}}
-	@media(max-width: 980px) {#hero h2 {font-size: 25px; line-height: 23px;}}
-	@media(max-width: 776px) {#hero h2 {font-size: 15px; line-height: 20px; 
-		padding-left: 30px; padding-right: 30px;}}
-
-
 .about {
 	padding-top: 10px;
-}
-.about-text {
-	top: 70%;
-	left: 50%;
-	transform: translate(-50%, -50%);
-	position: absolute;
-	text-align: center;
 }
 .about h2 {
 	font-size: 42px;
