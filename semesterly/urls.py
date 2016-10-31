@@ -86,6 +86,11 @@ urlpatterns = patterns('',
     url(r'^sw(.*.js)$', 'timetable.views.sw_js', name='sw_js'),
     url(r'^manifest(.*.json)$', 'timetable.views.manifest_json', name='manifest_json'),
 
+    # Integration
+    url(r'^integration/get/(?P<integration_id>.+?)/course/(?P<course_id>.+?)/', 'timetable.views.get_integration'),
+    url(r'^integration/del/(?P<integration_id>.+?)/course/(?P<course_id>.+?)/', 'timetable.views.delete_integration'),    
+    url(r'^integration/add/(?P<integration_id>.+?)/course/(?P<course_id>.+?)/', 'timetable.views.add_integration'),
+
     # for testing 404, so i don't have to turn off debug
 	url(r'^404testing/', 'timetable.views.custom_404'),
     url(r'^500testing/', 'timetable.views.custom_500')
