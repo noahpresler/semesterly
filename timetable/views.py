@@ -23,6 +23,7 @@ from timetable.utils import *
 from timetable.scoring import *
 from student.models import Student
 from student.views import get_student, get_user_dict, convert_tt_to_dict, get_classmates_from_course_id
+from django.db.models import Count
 
 MAX_RETURN = 60 # Max number of timetables we want to consider
 
@@ -51,7 +52,7 @@ def custom_500(request):
 # ******************************************************************************
 
 @validate_subdomain
-def view_timetable(request, code=None, sem=None, shared_timetable=None, find_friends=False, enable_notifs=False):
+def view_timetable(request, code=None, sem=None, shared_timetable=None, find_friends=False, enable_notifs=False,signup=False):
   school = request.subdomain
   student = get_student(request)
   course_json = None
@@ -82,9 +83,18 @@ def view_timetable(request, code=None, sem=None, shared_timetable=None, find_fri
     'find_friends': find_friends,
     'enable_notifs': enable_notifs,
     'uses_12hr_time': school in AM_PM_SCHOOLS,
-    'student_integrations': json.dumps(integrations)
+    'student_integrations': json.dumps(integrations),
+    'signup': signup
   },
   context_instance=RequestContext(request))
+
+@validate_subdomain
+def signup(request):
+  try:
+    return view_timetable(request, signup=True)
+  except Exception as e:
+    raise Http404
+
 
 @validate_subdomain
 def find_friends(request):
@@ -655,3 +665,25 @@ def manifest_json(request, js):
     template = get_template('manifest.json')
     html = template.render()
     return HttpResponse(html, content_type="application/json")
+
+def profile(request):
+  logged = request.user.is_authenticated()
+  if logged and Student.objects.filter(user=request.user).exists():
+    student = Student.objects.get(user=request.user)
+    reactions =  Reaction.objects.filter(student=student).values('title').annotate(count=Count('title'))
+    context = {
+      'name': student.user,
+      'major': student.major,
+      'class': student.class_year,
+      'student': student,
+      'total': 0
+    }
+    for r in reactions:
+        context[r['title']] = r['count']
+    for r in Reaction.REACTION_CHOICES:
+        if r[0] not in context:
+            context[r[0]] = 0
+        context['total'] += context[r[0]]
+    return render_to_response("profile.html", context, context_instance=RequestContext(request))
+  else:
+    return signup(request)
