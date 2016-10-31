@@ -69,29 +69,68 @@ header nav a:hover {
 	background-color: #F3F3F3;
 }
 
+/* Before Hero */
+#pre {
+	width: 100%;
+	padding: 25px;
+	background-color: #F3F3F3;
+	position: relative;
+	text-align: center;
+}
+#pre h1 {
+	font-size: 48px;
+}
+@media(max-width: 700px) {#pre h1 {font-size: 30px;} }
+@media(max-width: 470px) {#pre h1 {font-size: 20px; margin-top: 30px;} }
+
+/* After Hero */
+#post {
+	width: 100%;
+	padding: 25px;
+	background-color: #F3F3F3;
+	position: relative;
+	text-align: center;
+}
+#post h2 {
+	font-size: 30px;
+}
+@media(max-width: 700px) {#pre h1 {font-size: 25px;} }
+@media(max-width: 470px) {#pre h1 {font-size: 20px; margin-top: 30px;} }
+
+
 /* Hero */
 #hero {
 	width: 100%;
-	height: 550px;
+	padding: 250px;
 	background-color: #F3F3F3;
-	background-image: url(/static/img/about.png);
+	background-image: url(/static/img/splash/about_bg.jpg);
+	background-size: cover;
+	background-position: center;
+	position: relative;
+}
+#hero h2 {
+	color: white;
+	font-size: 30px;
+	line-height: 40px;
+	padding-left: 50px;
+	padding-right: 50px;
+}
+	@media(max-width: 1170px) {#hero h2 {font-size: 22px; line-height: 30px;}}
+	@media(max-width: 980px) {#hero h2 {font-size: 25px; line-height: 23px;}}
+	@media(max-width: 776px) {#hero h2 {font-size: 15px; line-height: 20px; 
+		padding-left: 30px; padding-right: 30px;}}
+
+/* Hero */
+#hero {
+	width: 100%;
+	padding: 250px;
+	background-color: #F3F3F3;
+	background-image: url(/static/img/splash/about_bg.jpg);
 	background-size: cover;
 	position: relative;
 }
-#hero h1 {
-	color: white;
-	font-size: 48px;
-	line-height: 55px;
-}
-	@media(max-width: 1170px) {#hero h2 {font-size: 40px; line-height: 45px;}}
-	@media(max-width: 980px) {#hero h2 {font-size: 30px; line-height: 38px;}}
-
-.about-text {
-	top: 70%;
-	left: 50%;
-	transform: translate(-50%, -50%);
-	position: absolute;
-	text-align: center;
+.about {
+	padding-top: 10px;
 }
 .about h2 {
 	font-size: 42px;
@@ -132,10 +171,8 @@ header nav a:hover {
 	width: 100%;
 	height: 180px; 
 }
-.bubble-wrapper {
-	width: 100%;
-	height: auto;
-	padding: 10%;
+.member {
+	padding: 4%;
 }
 .circular {
 	width: 100%;
@@ -145,7 +182,32 @@ header nav a:hover {
 	background-size: cover;
 }
 .name {
-	line-height: 250%;
+	font-weight: normal;
+	margin-top: 5%;
+}
+@media(max-width: 1134px) {
+	.long-name {
+		white-space: nowrap;
+		margin-left: 0%;
+	}
+}
+@media(max-width: 980px) {
+	.long-name {
+		white-space: nowrap;
+		margin-left: -10%;
+	}
+}
+@media(max-width: 800px) {
+	.long-name {
+		white-space: nowrap;
+		margin-left: -20%;
+	}
+}
+@media(max-width: 766px) {
+	.long-name {
+		white-space: nowrap;
+		margin-left: 0%;
+	}
 }
 
 footer {
@@ -194,9 +256,7 @@ footer h6 {
 }
 
 @media(max-width: 776px) {
-	#hero h2 {
-		font-size: 40px;
-	}
+<<<<<<< HEAD
 	footer li {
 		text-align: center;
 	}
@@ -212,6 +272,8 @@ footer h6 {
 	#hero h2 {
 		font-size: 40px;
 	}
+=======
+>>>>>>> 9da9a06e6842efa6069c9ca824c88f9e557aadec
 	footer li {
 		text-align: center;
 	}
