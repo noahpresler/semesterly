@@ -108,22 +108,6 @@ header nav a:hover {
 	background-position: center;
 	position: relative;
 }
-#hero-bg {
-	position: absolute;
-	top: 0;
-	left: 0;
-	width: 100%;
-	height: 100%;
-	background-color: rgba(42, 69, 138, 0.0);
-}
-#hero h1 {
-	color: white;
-	font-size: 48px;
-	line-height: 55px;
-}
-	@media(max-width: 1170px) {#hero h1 {font-size: 40px; line-height: 45px;}}
-	@media(max-width: 980px) {#hero h1 {font-size: 30px; line-height: 38px;}}
-
 #hero h2 {
 	color: white;
 	font-size: 30px;
@@ -136,16 +120,17 @@ header nav a:hover {
 	@media(max-width: 776px) {#hero h2 {font-size: 15px; line-height: 20px; 
 		padding-left: 30px; padding-right: 30px;}}
 
-
+/* Hero */
+#hero {
+	width: 100%;
+	padding: 250px;
+	background-color: #F3F3F3;
+	background-image: url(/static/img/splash/about_bg.jpg);
+	background-size: cover;
+	position: relative;
+}
 .about {
 	padding-top: 10px;
-}
-.about-text {
-	top: 70%;
-	left: 50%;
-	transform: translate(-50%, -50%);
-	position: absolute;
-	text-align: center;
 }
 .about h2 {
 	font-size: 42px;
@@ -271,6 +256,7 @@ footer h6 {
 }
 
 @media(max-width: 776px) {
+<<<<<<< HEAD
 	footer li {
 		text-align: center;
 	}
@@ -286,6 +272,8 @@ footer h6 {
 	#hero h2 {
 		font-size: 40px;
 	}
+=======
+>>>>>>> 9da9a06e6842efa6069c9ca824c88f9e557aadec
 	footer li {
 		text-align: center;
 	}
