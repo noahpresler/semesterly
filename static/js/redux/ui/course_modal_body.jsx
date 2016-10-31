@@ -114,6 +114,7 @@ export class CourseModalBody extends React.Component {
         });
         reactionsDisplay.sort((r1, r2) => {return r1.props.count < r2.props.count});
 
+        let integrationList = this.props.data.integrations;
         let evalInfo = this.props.data.eval_info;
         let relatedCourses = this.props.data.related_courses;
         let { prerequisites, textbooks } = this.props.data;
@@ -150,6 +151,19 @@ export class CourseModalBody extends React.Component {
                 <h3 className="modal-module-header">{this.props.schoolSpecificInfo.areasName}</h3>
                 <p>{ this.props.data.areas || "None" }</p>
             </div>
+        var integrationDivStyle = {
+            backgroundImage: 'url(/static/img/integrations/pilot.png)'
+        };
+        let academicSupportDisplay = integrationList.indexOf('Pilot') > -1 ?
+            <div className="modal-module academic-support">
+                <h3 className="modal-module-header">Academic Support</h3>
+                <li className="cf">
+                    <span className="integration-image" style={integrationDivStyle}></span>
+                    <h4>Pilot</h4>
+                    <a href="http://academicsupport.jhu.edu/pilot-learning/" target="_blank">Learn More</a>
+                    <p>In the PILOT program, students are organized into study teams consisting of 6-10 members who meet weekly to work problems together.</p>
+                </li>
+            </div> : null;
         let friendCircles = this.props.data.classmates && this.props.data.classmates.classmates.length > 0 ? this.props.data.classmates.classmates.map( c =>
                 <div className="friend" key={c.img_url}>
                     <div className="ms-friend" style={{backgroundImage: 'url(' + c.img_url + ')'}}/>
@@ -206,6 +220,7 @@ export class CourseModalBody extends React.Component {
                         </div>
                         { prerequisitesDisplay }
                         { areasDisplay }
+                        { academicSupportDisplay }
                         { friendDisplay }
                         { hasTakenDisplay }
                     </div>
