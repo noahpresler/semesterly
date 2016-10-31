@@ -72,6 +72,8 @@ def view_timetable(request, code=None, sem=None, shared_timetable=None, find_fri
       raise Http404
   integrations = {'integrations': []}
   if student and student.user.is_authenticated():
+    student.school = school
+    student.save()
     for i in student.integrations.all():
       integrations['integrations'].append(i.name)
   return render_to_response("timetable.html", {
