@@ -69,6 +69,10 @@ def view_timetable(request, code=None, sem=None, shared_timetable=None, find_fri
       course_json = get_detailed_course_json(school, course, sem, student)
     except:
       raise Http404
+  integrations = {'integrations': []}
+  if student and student.user.is_authenticated():
+    for i in student.integrations.all():
+      integrations['integrations'].append(i.name)
   return render_to_response("timetable.html", {
     'school': school,
     'student': json.dumps(get_user_dict(school, student, sem)),
@@ -77,7 +81,8 @@ def view_timetable(request, code=None, sem=None, shared_timetable=None, find_fri
     'shared_timetable': json.dumps(shared_timetable),
     'find_friends': find_friends,
     'enable_notifs': enable_notifs,
-    'uses_12hr_time': school in AM_PM_SCHOOLS
+    'uses_12hr_time': school in AM_PM_SCHOOLS,
+    'student_integrations': json.dumps(integrations)
   },
   context_instance=RequestContext(request))
 
@@ -411,6 +416,7 @@ def get_detailed_course_json(school, course, sem, student=None):
   json_data['related_courses'] = course.get_related_course_info(sem, limit=5)
   json_data['reactions'] = course.get_reactions(student)
   json_data['textbooks'] = course.get_textbooks(sem)
+  json_data['integrations'] = list(course.get_course_integrations())
   if student and student.user.is_authenticated() and student.social_courses:
     json_data['classmates'] = get_classmates_from_course_id(school, student, course.id,sem)
   return json_data
@@ -419,6 +425,7 @@ def get_basic_course_json(course, sem, extra_model_fields=[]):
   basic_fields = ['code','name', 'id', 'description', 'department', 'num_credits', 'areas', 'campus']
   course_json = model_to_dict(course, basic_fields + extra_model_fields)
   course_json['evals'] = course.get_eval_info()
+  course_json['integrations'] = list(course.get_course_integrations())
   course_json['sections'] = {}
 
   course_section_list = sorted(course.section_set.filter(semester__in=[sem, "Y"]),
@@ -614,6 +621,27 @@ def school_info(request, school):
     'last_updated': last_updated
   }
   return HttpResponse(json.dumps(json_data), content_type="application/json")
+
+@csrf_exempt
+@validate_subdomain
+def get_integration(request, integration_id, course_id):
+  has_integration = False
+  if CourseIntegration.objects.filter(course_id=course_id, integration_id = integration_id):
+    has_integration = True
+  return HttpResponse(json.dumps({'integration_enabled': has_integration}), content_type="application/json")
+
+@csrf_exempt
+@validate_subdomain
+def delete_integration(request, integration_id, course_id):
+  CourseIntegration.objects.filter(course_id=course_id, integration_id = integration_id).delete()
+  return HttpResponse(json.dumps({'deleted': True}), content_type="application/json")
+
+@csrf_exempt
+@validate_subdomain
+def add_integration(request, integration_id, course_id):
+  desc = json.loads(request.body)['json']
+  link, created = CourseIntegration.objects.update_or_create(course_id=course_id, integration_id = integration_id, json = desc)
+  return HttpResponse(json.dumps({'created': created}), content_type="application/json")
 
 from django.views.decorators.cache import never_cache
 from django.template.loader import get_template
