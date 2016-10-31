@@ -111,7 +111,8 @@ class GWParser:
 		self.direct_to_search_page()
 
 		# NOTE: hardcoded terms to parse
-		terms = {'F':'201603', 'S':'201701'}
+		# terms = {'F':'201603', 'S':'201701'}
+		terms = {'S':'201701'}
 		for term in terms:
 
 			print 'Parsing courses for term ', term
@@ -162,6 +163,7 @@ class GWParser:
 					if info[1].find('a'):
 
 						print '\t', info[2].text, info[3].text
+						print '\t', info[7].text
 
 						# general info
 						self.course = {
@@ -198,7 +200,6 @@ class GWParser:
 							soup = BeautifulSoup(catalog, 'html.parser')
 							self.course['descr'] = GWParser.extract_description(soup)
 
-
 						section_query = {
 							'term_in':terms[term],
 							'subj_in':self.course['dept'],
@@ -231,8 +232,6 @@ class GWParser:
 							meeting_type = col[5].text[0].upper()
 							self.create_offerings(section)
 
-						# self.print_course()
-					
 		self.wrap_up()
 
 	def print_course(self):
