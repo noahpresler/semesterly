@@ -40,6 +40,9 @@ function setup(dispatch) {
   uses12HrTime = uses12HrTime === "True";
   /* first setup the user's state */
   let user = JSON.parse(currentUser); // currentUser comes from timetable.html
+  if (user.isLoggedIn) {
+    dispatch({ type: "RECEIVE_CUSTOM_SLOTS", customSlots: user.customSlots })
+  }
   dispatch(getUserInfo(user));
   if (!sharedTimetable) { // we load user's timetable (or cached timetable) only if they're _not_ trying to load a shared timetable
     if (user.isLoggedIn && user.timetables.length > 0) { // user is logged in and has saved timetables

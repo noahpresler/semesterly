@@ -275,6 +275,11 @@ export function deleteTimetable(timetable) {
 	}
 }
 
+/* 
+ * Save custom slots just overwrites the backend with the frontend state.
+ * We don't wait for a backend success but use the frontend as source of truth
+ * so that the dragging interface is as responsive as possible.
+ */
 export function saveCustomSlots() {
 	return (dispatch) => {
 		let state = store.getState();
@@ -282,28 +287,12 @@ export function saveCustomSlots() {
 			return dispatch({type: 'TOGGLE_SIGNUP_MODAL'})
 		}
 		let customSlots = state.customSlots;
-		// if current timetable is empty or we're already in saved state, don't save this timetable
-		// if (activeTimetable.courses.length === 0 || state.savingTimetable.upToDate) {
-		// 	return;
-		// }
-		// mark that we're now trying to save this timetable
-		// dispatch({
-		// 	type: "REQUEST_SAVE_TIMETABLE"
-		// });
+
 		fetch(getSaveCustomSlotsEndpoint(), {
 			method: 'POST',
 			body: JSON.stringify(getSaveCustomSlotsRequestBody()),
 			credentials: 'include',
 		})
-		// .then(response => response.json())
-		// .then(json => {
-		// 	dispatch({
-		// 		type: "RECEIVE_CUSTOM_SLOTS",
-		// 		customSlots: json.customSlots
-		// 	});
-
-		// 	return json;
-		// })
 	}
 }
 

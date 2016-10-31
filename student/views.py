@@ -40,6 +40,7 @@ def get_user_dict(school, student, semester):
         user_dict["timetables"] = get_student_tts(student, school, semester)
         user_dict["userFirstName"] = student.user.first_name
         user_dict["userLastName"] = student.user.last_name
+        user_dict["customSlots"] = get_student_custom_slots(school, student, semester)
     
     user_dict["isLoggedIn"] = student is not None
 
@@ -216,10 +217,13 @@ def save_custom_slots(request):
 @csrf_exempt
 def load_custom_slots(request, school, sem):
     student = Student.objects.get(user=request.user)
-    custom_slots = CustomSlot.objects.filter(
-        school=school, student=student, semester=sem)
 
-    return HttpResponse(json.dumps(map(model_to_dict, custom_slots)), content_type='application/json')
+    return HttpResponse(get_student_custom_slots(school, student, sem), 
+                        content_type='application/json')
+
+def get_student_custom_slots(school, student, semester):
+    return map(model_to_dict, CustomSlot.objects.filter(
+        school=school, student=student, semester=semester))
 
 @csrf_exempt
 @login_required
