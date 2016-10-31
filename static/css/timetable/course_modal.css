@@ -392,6 +392,36 @@ h3.modal-module-header small {
 	margin: 0 auto;
 }
 
+.academic-support li {
+	list-style-type: none;
+	padding-top: 5px;
+}
+.academic-support .integration-image {
+	width: 22px;
+	height: 22px;
+	float: left;
+	background-size: contain;
+	background-position: center;
+	background-repeat: no-repeat;
+	margin-right: 5px;
+}
+.academic-support h4 {
+	margin: 0;
+	font-size: 14px;
+	float: left;
+	line-height: 22px;
+}
+#modal-body .academic-support a {
+	float: right;
+	font-size: 12px;
+}
+#modal-body .academic-support p {
+	clear: both;
+	font-size: 12px;
+	line-height: 14px;
+	padding: 5px 0 0;
+}
+
 @media (max-width: 766px) {
 	#modal-header h1 {
 		font-size: 32px;
