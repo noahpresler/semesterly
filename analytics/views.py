@@ -165,7 +165,7 @@ def number_students_by_year():
 def number_students_by_school():
     result = {}
     for school in VALID_SCHOOLS:
-        count = PersonalTimetable.objects.filter(school=school).values_list("student", flat=True).distinct().count()
+        count = Student.objects.filter(school=school).count()
         result[school] = count
     return result
 
