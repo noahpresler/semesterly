@@ -196,10 +196,12 @@ export class SearchResult extends React.Component {
         let integrationLogoImageUrl = {
             backgroundImage : "url(/static/img/integrations/pilotLogo.png)"
         }
-        let integrationLogo = course.integrations.indexOf('Pilot') > -1 ? <span className="has-pilot" style={integrationLogoImageUrl}></span> : null;
+        let integrationLogo = course.integrations.indexOf('Pilot') > -1 ? 
+            <div className="search-result-integration">
+                <span className="has-pilot" style={integrationLogoImageUrl}></span> 
+            </div> : null;
         let pilotIntegration = studentIntegrations['integrations'].indexOf('Pilot') > -1 ? 
             <div className="search-result-integration">
-                { integrationLogo }
                 <a style={{fontSize: '10px'}} onMouseDown={(event) => {
                     event.stopPropagation();
                     this.props.showIntegrationModal(course.id, 1)
@@ -216,6 +218,7 @@ export class SearchResult extends React.Component {
             { addOptionalCourseButton}
             { addRemoveButton }
             <h4 className="label" style={style}>{info}</h4><h4 className={classNames('label','bubble')}>{this.props.campuses[course.campus]}</h4>
+            { integrationLogo }
             { pilotIntegration }
         </li>);
     }
