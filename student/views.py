@@ -344,30 +344,7 @@ def unsubscribe(request, id, token):
     return render(request, 'unsubscribe.html')
 
   # Link is invalid. Redirect to homepage.
-  return HttpResponseRedirect("/")
-
-def profile(request):
-  logged = request.user.is_authenticated()
-  if logged and Student.objects.filter(user=request.user).exists():
-    student = Student.objects.get(user=request.user)
-    reactions =  Reaction.objects.filter(student=student).values('title').annotate(count=Count('title'))
-    context = {
-      'name': student.user,
-      'major': student.major,
-      'class': student.class_year,
-      'student': student,
-      'total': 0
-    }
-    for r in reactions:
-        context[r['title']] = r['count']
-    for r in Reaction.REACTION_CHOICES:
-        if r[0] not in context:
-            context[r[0]] = 0
-        context['total'] += context[r[0]]
-    return render_to_response("profile.html", context, context_instance=RequestContext(request))
-  else:
-    print "Fuark"
-    raise Http404 
+  return HttpResponseRedirect("/") 
 
 @csrf_exempt
 @validate_subdomain
