@@ -38,6 +38,7 @@ function setup(dispatch) {
   findFriends = findFriends === "True";
   enableNotifs = enableNotifs === "True";
   uses12HrTime = uses12HrTime === "True";
+  studentIntegrations = JSON.parse(studentIntegrations);
   /* first setup the user's state */
   let user = JSON.parse(currentUser); // currentUser comes from timetable.html
   dispatch(getUserInfo(user));

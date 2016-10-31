@@ -193,6 +193,21 @@ export class SearchResult extends React.Component {
             style = {color: "#52B7D9"};
         if(this.state.hoverSave)
             style = {color: "#27ae60"};
+        let integrationLogoImageUrl = {
+            backgroundImage : "url(/static/img/integrations/pilotLogo.png)"
+        }
+        let integrationLogo = course.integrations.indexOf('Pilot') > -1 ? 
+            <div className="search-result-integration">
+                <span className="has-pilot" style={integrationLogoImageUrl}></span> 
+            </div> : null;
+        let pilotIntegration = studentIntegrations['integrations'].indexOf('Pilot') > -1 ? 
+            <div className="search-result-integration">
+                <a style={{fontSize: '10px'}} onMouseDown={(event) => {
+                    event.stopPropagation();
+                    this.props.showIntegrationModal(course.id, 1)
+                    }}>Add as Pilot
+                </a> 
+            </div> : null;
         return (
         <li key={course.id}
             className={classNames('search-course', {'hovered': this.props.isHovered(this.props.position)})}
@@ -203,6 +218,8 @@ export class SearchResult extends React.Component {
             { addOptionalCourseButton}
             { addRemoveButton }
             <h4 className="label" style={style}>{info}</h4><h4 className={classNames('label','bubble')}>{this.props.campuses[course.campus]}</h4>
+            { integrationLogo }
+            { pilotIntegration }
         </li>);
     }
 }
