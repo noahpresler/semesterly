@@ -160,7 +160,7 @@ export class CourseModalBody extends React.Component {
                 <li className="cf">
                     <span className="integration-image" style={integrationDivStyle}></span>
                     <h4>Pilot</h4>
-                    <a href="http://academicsupport.jhu.edu/pilot-learning/">Learn More</a>
+                    <a href="http://academicsupport.jhu.edu/pilot-learning/" target="_blank">Learn More</a>
                     <p>In the PILOT program, students are organized into study teams consisting of 6-10 members who meet weekly to work problems together.</p>
                 </li>
             </div> : null;
