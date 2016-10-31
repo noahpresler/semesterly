@@ -52,7 +52,8 @@ const createSource = {
       props.time, 
       props.day, 
       true,
-      newSlotId
+      newSlotId,
+      props.semester
     )
     return {
       timeStart: props.time,

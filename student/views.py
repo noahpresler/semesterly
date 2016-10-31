@@ -217,8 +217,8 @@ def save_custom_slots(request):
 @csrf_exempt
 def load_custom_slots(request, school, sem):
     student = Student.objects.get(user=request.user)
-
-    return HttpResponse(get_student_custom_slots(school, student, sem), 
+    custom_slots = get_student_custom_slots(school, student, sem)
+    return HttpResponse(json.dumps(custom_slots), 
                         content_type='application/json')
 
 def get_student_custom_slots(school, student, semester):

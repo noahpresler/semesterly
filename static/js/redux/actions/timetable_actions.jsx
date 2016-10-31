@@ -283,7 +283,7 @@ function fetchTimetables(requestBody, removing, newActive=0) {
 	}
 }
 
-export function addCustomSlot(timeStart, timeEnd, day, preview, id) {
+export function addCustomSlot(timeStart, timeEnd, day, preview, id, semester) {
 	let dispatch = store.dispatch;
 	dispatch({
 		type: "ADD_CUSTOM_SLOT",
@@ -294,6 +294,7 @@ export function addCustomSlot(timeStart, timeEnd, day, preview, id) {
 			day,
 			id,
 			preview,
+			semester
 		}
 	})
 	autoSaveCustomSlots()

@@ -371,6 +371,7 @@ export const getSavedCustomSlots = (semester) => (dispatch) => {
 	})
 	.then(response => response.json())
 	.then(customSlots => {
+		console.log("???")
 		dispatch({
 			type: "RECEIVE_CUSTOM_SLOTS",
 			customSlots: customSlots

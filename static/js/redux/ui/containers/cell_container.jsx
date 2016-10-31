@@ -30,6 +30,7 @@ const mapStateToProps = (state) => {
   let hasTimetables = timetables[active].courses.length > 0 
   return {
       endHour: getMaxEndHour(timetables[active], hasTimetables),
+      semester: state.semester,
   }
 }
 
