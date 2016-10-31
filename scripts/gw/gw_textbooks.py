@@ -16,70 +16,100 @@ class GWTextbooks:
 		self.cookies = cookielib.CookieJar()
 		self.url = 'http://www.bkstr.com/webapp/wcs/stores/servlet'
 		self.store_id = '10370'
+		self.school = 'gw'
 
 	def direct(self):
+
+		print 'Parsing Textbooks for ' + ''.join(map(lambda x: x.upper(), self.school))
 
 		self.get_jsessionid()
 
 		query = {
 			'storeId':self.store_id,
 			'demoKey':'d',
-			'divisionName':' ',
+			'requestType':'INITIAL',
 			'_': ''
 		}
 
-		programs = {'270'} # NOTE: hardcoded
+		# programs = {'270'} # NOTE: hardcoded
+		programs = json.loads(re.search(r'\'(.*)\'', self.get_http(self.url + '/LocateCourseMaterialsServlet', query).text).group(1))['data'][0]
 		for program in programs:
-			query['programId'] = program
+	
+			print 'in Program: ' + program
 
-			terms = {'100041961', '100044854'} # NOTE: hardcoded
+			query['programId'] = programs[program]
+			query['requestType'] = 'TERMS'
+
+			terms = json.loads(re.search(r'\'(.*)\'', self.get_http(self.url + '/LocateCourseMaterialsServlet', query).text).group(1))['data'][0]
+			terms = {'F16':'100041961'} # TEST
 			for term in terms:
-				query['termId'] = term
+
+				print 'in Term: ' + term
+
+				query['termId'] = terms[term]
 				query['requestType'] = 'DEPARTMENTS'
 
-				# print term
-
 				depts = json.loads(re.search(r'\'(.*)\'', self.get_http(self.url + '/LocateCourseMaterialsServlet', query).text).group(1))['data'][0]
+				depts = {'ANTH':'ANTH'} # TEST
 				for dept in depts:
-					query['departmentName'] = dept
-					query['requestType'] = 'COURSES'
 
-					# print dept
+					print '\tin Dept: ' + dept
+
+					query['departmentName'] = depts[dept]
+					query['requestType'] = 'COURSES'
 
 					courses = json.loads(re.search(r'\'(.*)\'', self.get_http(self.url + '/LocateCourseMaterialsServlet', query).text).group(1))['data'][0]
 					for course in courses:
-						query['courseName'] = course
-						query['requestType'] = 'SECTIONS'
 
-						# print course
+						print '\t\tcourse: ' + course
+
+						query['courseName'] = courses[course]
+						query['requestType'] = 'SECTIONS'
 
 						sections = json.loads(re.search(r'\'(.*)\'', self.get_http(self.url + '/LocateCourseMaterialsServlet', query).text).group(1))['data'][0]
 						for section in sections:
 
+							print '\t\t\tsection: ' + section
+
 							# print section
 							query2 = {
-								'catalogId':'10002',
-								'categoryId':'null',
+								'categoryId':'9604',
 								'storeId':self.store_id,
-								'langId':'null',
-								'programId':program,
-								'termId':term,
+								'langId':'-1',
+								'programId':programs[program],
+								'termId':terms[term],
+								# 'catalogId':'10002',
 								'divisionDisplayName':' ',
-								'departmentDisplayName':dept,
-								'courseDisplayName':course,
-								'sectionDisplayName':'82',
+								'departmentDisplayName':depts[dept],
+								'courseDisplayName':courses[course],
+								'sectionDisplayName':sections[section],
 								'demoKey':'d',
 								'purpose':'browse'
 							}
-							
-							import sys
 
-							orig_stdout = sys.stdout
-							f = file('gw_tbks_js_dump.html', 'w')
-							sys.stdout = f
+							# import sys
 
-							print BeautifulSoup(self.get_http(self.url + '/CourseMaterialsResultsView', query2).text, 'html.parser').prettify()
-							exit(0)
+							# orig_stdout = sys.stdout
+							# f = file('gw_tbks_js_dump.html', 'w')
+							# sys.stdout = f
+
+							soup = BeautifulSoup(self.get_http(self.url + '/CourseMaterialsResultsView', query2).text, 'html.parser')
+
+							if not soup.find('div', id='efCourseErrorSection'):
+								materials = soup.find_all('li', {'class':'material-group'})
+								for material in materials:
+									
+									required = re.match('material-group_(.*)', material['id']).group(1) == 'REQUIRED'
+									# print required
+									
+									books = material.find_all('ul')
+									
+									for book in books:
+										isbn = book.find('span', id='materialISBN')
+										isbn.find('strong').extract()
+										print isbn.text.strip() 
+										
+
 
 	def get_jsessionid(self):
 
@@ -118,7 +148,7 @@ class GWTextbooks:
 					verify = True
 				)
 
-				print 'GET', response.url
+				# print 'GET', response.url
 
 			except (requests.exceptions.Timeout,
 				requests.exceptions.ConnectionError):
@@ -140,7 +170,7 @@ class GWTextbooks:
 					verify = False,
 				)
 
-				print 'POST', post.url
+				# print 'POST', post.url
 
 			except (requests.exceptions.Timeout,
 				requests.exceptions.ConnectionError):
