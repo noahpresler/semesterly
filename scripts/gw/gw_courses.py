@@ -163,7 +163,6 @@ class GWParser:
 					if info[1].find('a'):
 
 						print '\t', info[2].text, info[3].text
-						print '\t', info[7].text
 
 						# general info
 						self.course = {
