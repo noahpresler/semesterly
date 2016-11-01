@@ -262,7 +262,7 @@ class GWParser:
 				'areas': self.course['attr'],
 				'prerequisites': '', # TODO
 				'num_credits': self.course.get('credits'),
-				'level': '0',
+				'level': '0', # TODO
 				'department': self.course.get('dept')
 			}
 		)
