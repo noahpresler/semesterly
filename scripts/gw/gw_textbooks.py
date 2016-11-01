@@ -113,7 +113,7 @@ class GWTextbooks:
 		try:
 			return Course.objects.filter(code__contains = course_code, school = self.school)[0]
 		except IndexError:
-			sys.stderr.write('NOTE: course ' + course_code + 'does not exist in database\n')
+			sys.stderr.write('NOTE: course ' + course_code + ' does not exist in database\n')
 			return None
 
 	def get_jsessionid(self):
