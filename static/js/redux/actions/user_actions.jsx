@@ -418,7 +418,7 @@ export const autoSave = throttle(() => {
 
 export const autoSaveCustomSlots = throttle(() => {
 	store.dispatch(saveCustomSlots())
-}, 4000)
+}, 1000)
 
 export function setARegistrationToken() {
 	if ('serviceWorker' in navigator) {

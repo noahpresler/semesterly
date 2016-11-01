@@ -223,7 +223,7 @@ def load_custom_slots(request, school, sem):
 
 def get_student_custom_slots(school, student, semester):
     return map(model_to_dict, CustomSlot.objects.filter(
-        school=school, student=student, semester=semester))
+        school=school, student=student, semester=semester).all())
 
 @csrf_exempt
 @login_required
