@@ -17,7 +17,11 @@ school_to_granularity = {
     'uo': 5,
     'queens': 5,
     'vandy': 5,
+<<<<<<< 49f4e2d6604cfbda4933f6c6e70a589965d203fd
     'gw': 5,
+=======
+    'umich': 5,
+>>>>>>> copied from original umich branch
     'chapman': 5
 }
 
@@ -29,7 +33,11 @@ VALID_SCHOOLS = [
   "rutgers", 
   "queens",
   "vandy",
+<<<<<<< 49f4e2d6604cfbda4933f6c6e70a589965d203fd
   "gw",
+=======
+  "umich",
+>>>>>>> copied from original umich branch
   "chapman"
 ]
 
@@ -38,7 +46,11 @@ AM_PM_SCHOOLS = [
   "umd",
   "rutgers",
   "vandy",
+<<<<<<< 49f4e2d6604cfbda4933f6c6e70a589965d203fd
   "gw",
+=======
+  "umich",
+>>>>>>> copied from original umich branch
   "chapman"
 ]
 
@@ -50,9 +62,14 @@ school_code_to_name = {
   'uo': 'University of Ottawa',
   'queens': 'Queens University',
   'vandy': 'Vanderbilt University',
+<<<<<<< 49f4e2d6604cfbda4933f6c6e70a589965d203fd
   'gw': 'George Washington University',
   'chapman': 'Chapman University',
   'vandy': 'Vanderbilt University'
+=======
+  'umich': 'University of Michigan',
+  'chapman': 'Chapman University'
+>>>>>>> copied from original umich branch
 }
 
 # do the imports: assumes all parser follow the same naming conventions: 
