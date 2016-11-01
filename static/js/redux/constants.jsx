@@ -14,7 +14,9 @@ export const VALID_SCHOOLS = [
   "rutgers", 
   "queens", 
   "vandy",
-  "chapman"
+  "gw",
+  "chapman",
+  "pennstate"
 ];
 
 /* server endpoints */
@@ -166,7 +168,22 @@ export const getSchoolSpecificInfo = (school) => {
         campuses: {
           1: ""
         }
-      }		
+      }
+    case "gw":
+      return {
+        primaryDisplay: "name",
+        areasName: "Areas",
+        departmentsName: "Departments",
+        levelsName: "Levels",
+        timesName: "Times",
+        semesters: {
+          F: "Fall 2016",
+          S: "Spring 2017"
+        },
+        campuses: {
+          1: ""
+        }
+      }
     default:
 	  return {
         primaryDisplay: "code",
