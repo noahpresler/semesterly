@@ -95,11 +95,10 @@ class GWTextbooks:
 
 							soup = BeautifulSoup(self.get_http(self.url + '/CourseMaterialsResultsView', query2).text, 'html.parser')
 
-							courseModel = 
-							try:
-								course = Course.objects.filter(code__contains = course_code, school = self.school)[0]
-							except IndexError:
-								print("index error (course does not exist): " + course_code)
+							course_model = self.retrieve_course(depts[dept] + ' ' + courses[course])
+							if not course_model :
+								continue
+							section_models = Section.objects.filter(course = course_model, meeting_section = sections[section])
 
 							if not soup.find('div', id='efCourseErrorSection'):
 								materials = soup.find_all('li', {'class':'material-group'})
@@ -113,9 +112,18 @@ class GWTextbooks:
 									for book in books:
 										isbn = book.find('span', id='materialISBN')
 										isbn.find('strong').extract()
-										print isbn.text.strip() 
+										isbn = isbn.text.strip()
+
+										for section_model in section_models:
+											make_textbook(required, isbn, section_model)
 										
 
+	def retrieve_course(self, course_code):
+		try:
+			return Course.objects.filter(code__contains = course_code, school = self.school)[0]
+		except IndexError:
+			sys.stderr.write("ERROR: course does not exist - " + course_code)
+			return None
 
 	def get_jsessionid(self):
 
