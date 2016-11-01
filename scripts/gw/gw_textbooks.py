@@ -7,6 +7,7 @@ from bs4 import BeautifulSoup
 import requests, cookielib, re, sys
 from itertools import izip
 import json
+from scripts.textbooks.amazon import make_textbook
 
 class GWTextbooks:
 
@@ -31,7 +32,6 @@ class GWTextbooks:
 			'_': ''
 		}
 
-		# programs = {'270'} # NOTE: hardcoded
 		programs = json.loads(re.search(r'\'(.*)\'', self.get_http(self.url + '/LocateCourseMaterialsServlet', query).text).group(1))['data'][0]
 		for program in programs:
 	
@@ -94,6 +94,12 @@ class GWTextbooks:
 							# sys.stdout = f
 
 							soup = BeautifulSoup(self.get_http(self.url + '/CourseMaterialsResultsView', query2).text, 'html.parser')
+
+							courseModel = 
+							try:
+								course = Course.objects.filter(code__contains = course_code, school = self.school)[0]
+							except IndexError:
+								print("index error (course does not exist): " + course_code)
 
 							if not soup.find('div', id='efCourseErrorSection'):
 								materials = soup.find_all('li', {'class':'material-group'})
