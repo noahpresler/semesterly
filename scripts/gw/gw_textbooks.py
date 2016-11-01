@@ -32,7 +32,7 @@ class GWTextbooks:
 			'_': ''
 		}
 
-		programs = json.loads(re.search(r'\'(.*)\'', self.get_http(self.url + '/LocateCourseMaterialsServlet', query).text).group(1))['data'][0]
+		programs = self.extract_json(query)
 		for program in programs:
 	
 			print 'in Program: ' + program
@@ -40,8 +40,7 @@ class GWTextbooks:
 			query['programId'] = programs[program]
 			query['requestType'] = 'TERMS'
 
-			terms = json.loads(re.search(r'\'(.*)\'', self.get_http(self.url + '/LocateCourseMaterialsServlet', query).text).group(1))['data'][0]
-			terms = {'F16':'100041961'} # TEST
+			terms = self.extract_json(query)
 			for term in terms:
 
 				print 'in Term: ' + term
@@ -49,8 +48,7 @@ class GWTextbooks:
 				query['termId'] = terms[term]
 				query['requestType'] = 'DEPARTMENTS'
 
-				depts = json.loads(re.search(r'\'(.*)\'', self.get_http(self.url + '/LocateCourseMaterialsServlet', query).text).group(1))['data'][0]
-				depts = {'ANTH':'ANTH'} # TEST
+				depts = self.extract_json(query)
 				for dept in depts:
 
 					print '\tin Dept: ' + dept
@@ -58,7 +56,7 @@ class GWTextbooks:
 					query['departmentName'] = depts[dept]
 					query['requestType'] = 'COURSES'
 
-					courses = json.loads(re.search(r'\'(.*)\'', self.get_http(self.url + '/LocateCourseMaterialsServlet', query).text).group(1))['data'][0]
+					courses = self.extract_json(query)
 					for course in courses:
 
 						print '\t\tcourse: ' + course
@@ -66,19 +64,17 @@ class GWTextbooks:
 						query['courseName'] = courses[course]
 						query['requestType'] = 'SECTIONS'
 
-						sections = json.loads(re.search(r'\'(.*)\'', self.get_http(self.url + '/LocateCourseMaterialsServlet', query).text).group(1))['data'][0]
+						sections = self.extract_json(query)
 						for section in sections:
 
 							print '\t\t\tsection: ' + section
 
-							# print section
 							query2 = {
 								'categoryId':'9604',
 								'storeId':self.store_id,
 								'langId':'-1',
 								'programId':programs[program],
 								'termId':terms[term],
-								# 'catalogId':'10002',
 								'divisionDisplayName':' ',
 								'departmentDisplayName':depts[dept],
 								'courseDisplayName':courses[course],
@@ -86,12 +82,6 @@ class GWTextbooks:
 								'demoKey':'d',
 								'purpose':'browse'
 							}
-
-							# import sys
-
-							# orig_stdout = sys.stdout
-							# f = file('gw_tbks_js_dump.html', 'w')
-							# sys.stdout = f
 
 							soup = BeautifulSoup(self.get_http(self.url + '/CourseMaterialsResultsView', query2).text, 'html.parser')
 
@@ -105,10 +95,9 @@ class GWTextbooks:
 								for material in materials:
 									
 									required = re.match('material-group_(.*)', material['id']).group(1) == 'REQUIRED'
-									# print required
 									
 									books = material.find_all('ul')
-									
+
 									for book in books:
 										isbn = book.find('span', id='materialISBN')
 										isbn.find('strong').extract()
@@ -116,13 +105,15 @@ class GWTextbooks:
 
 										for section_model in section_models:
 											make_textbook(required, isbn, section_model)
-										
+
+	def extract_json(self, query):
+		return json.loads(re.search(r'\'(.*)\'', self.get_http(self.url + '/LocateCourseMaterialsServlet', query).text).group(1))['data'][0]
 
 	def retrieve_course(self, course_code):
 		try:
 			return Course.objects.filter(code__contains = course_code, school = self.school)[0]
 		except IndexError:
-			sys.stderr.write("ERROR: course does not exist - " + course_code)
+			sys.stderr.write('NOTE: course ' + course_code + 'does not exist in database\n')
 			return None
 
 	def get_jsessionid(self):
