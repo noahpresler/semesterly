@@ -17,10 +17,6 @@ school_to_granularity = {
     'uo': 5,
     'queens': 5,
     'vandy': 5,
-<<<<<<< HEAD
-    'gw': 5,
-=======
->>>>>>> c1707f621948ade4af97ae31e8132e7bc4d06de6
     'umich': 5,
     'chapman': 5
 }
@@ -33,10 +29,6 @@ VALID_SCHOOLS = [
   "rutgers", 
   "queens",
   "vandy",
-<<<<<<< HEAD
-  "gw",
-=======
->>>>>>> c1707f621948ade4af97ae31e8132e7bc4d06de6
   "umich",
   "chapman"
 ]
@@ -46,10 +38,6 @@ AM_PM_SCHOOLS = [
   "umd",
   "rutgers",
   "vandy",
-<<<<<<< HEAD
-  "gw",
-=======
->>>>>>> c1707f621948ade4af97ae31e8132e7bc4d06de6
   "umich",
   "chapman"
 ]
@@ -62,11 +50,6 @@ school_code_to_name = {
   'uo': 'University of Ottawa',
   'queens': 'Queens University',
   'vandy': 'Vanderbilt University',
-<<<<<<< HEAD
-  'gw': 'George Washington University',
-  'vandy': 'Vanderbilt University'
-=======
->>>>>>> c1707f621948ade4af97ae31e8132e7bc4d06de6
   'umich': 'University of Michigan',
   'chapman': 'Chapman University'
 }
