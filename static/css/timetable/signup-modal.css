@@ -1,6 +1,6 @@
 .signup-modal {
 	max-width: 500px;
-	height: 550px;
+	height: 588px;
 	overflow: auto;
 }
 .signup-modal > div {
@@ -109,7 +109,6 @@
 	
 	.signup-modal {
        max-width: 500px;
-       height: 550px;
 	   max-width: 1200px;
 	   height: 85%;
 	   max-height: 900px;
