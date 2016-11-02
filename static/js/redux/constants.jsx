@@ -14,10 +14,15 @@ export const VALID_SCHOOLS = [
   "rutgers", 
   "queens", 
   "vandy",
+<<<<<<< HEAD
   "gw",
   "umich",
   "chapman",
   "pennstate"
+=======
+  "umich",
+  "chapman"
+>>>>>>> c1707f621948ade4af97ae31e8132e7bc4d06de6
 ];
 
 /* server endpoints */
