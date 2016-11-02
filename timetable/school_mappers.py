@@ -54,7 +54,6 @@ school_code_to_name = {
   'queens': 'Queens University',
   'vandy': 'Vanderbilt University',
   'gw': 'George Washington University',
-  'chapman': 'Chapman University',
   'vandy': 'Vanderbilt University'
   'umich': 'University of Michigan',
   'chapman': 'Chapman University'
