@@ -15,6 +15,7 @@ export const VALID_SCHOOLS = [
   "queens", 
   "vandy",
   "gw",
+  "umich",
   "chapman",
   "pennstate"
 ];
