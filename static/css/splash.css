@@ -384,11 +384,7 @@ header nav a:hover {
 .reason-text ul a:link,
 .reason-text ul a:visited {
 	display: inline-block;
-<<<<<<< df80a83bdd8d44caef3477b2892871ed4161b263
-	width: 14.2%;
-=======
 	width: 24%;
->>>>>>> added umich to splash page
 	padding: 0;
 	text-decoration: none;
 	text-align: center;
