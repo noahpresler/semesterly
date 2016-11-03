@@ -4,6 +4,7 @@ import { addOrRemoveCourse, addOrRemoveOptionalCourse } from '../../actions/time
 import { SearchBar } from '../search_bar.jsx';
 import { fetchCourseInfo } from '../../actions/modal_actions.jsx';
 import { getSchoolSpecificInfo } from '../../constants.jsx';
+import { openIntegrationModal } from '../../actions/user_actions.jsx';
 
 const mapStateToProps = (state) => {
 	let { isVisible } = state.explorationModal;
@@ -35,6 +36,11 @@ const mapDispatchToProps = (dispatch) => {
 	  	addRemoveOptionalCourse: (course) => dispatch(addOrRemoveOptionalCourse(course)),
 		fetchCourseInfo: (id) => dispatch(fetchCourseInfo(id)), 
 		showExplorationModal: () => dispatch({type: 'SHOW_EXPLORATION_MODAL'}),
+		// {
+		//     type: "REQUEST_COURSE_INFO",
+		//     course_id: course_id,
+		//   }
+		showIntegrationModal: (id, integrationID) => openIntegrationModal(integrationID, id),
 		hoverSearchResult: (position) => {
 			dispatch({
 				type: "HOVER_SEARCH_RESULT",

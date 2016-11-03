@@ -38,6 +38,11 @@ function setup(dispatch) {
   findFriends = findFriends === "True";
   enableNotifs = enableNotifs === "True";
   uses12HrTime = uses12HrTime === "True";
+  studentIntegrations = JSON.parse(studentIntegrations);
+  signup = signup === "True";
+  if (signup) {
+    dispatch({type: 'TRIGGER_SIGNUP_MODAL'});
+  }
   /* first setup the user's state */
   let user = JSON.parse(currentUser); // currentUser comes from timetable.html
   dispatch(getUserInfo(user));
@@ -83,8 +88,7 @@ function setup(dispatch) {
   /* now setup sharing state */
   if (sharedTimetable) {
     lockTimetable(dispatch, sharedTimetable, true, user.isLoggedIn);
-  }
-  else if (sharedCourse) {
+  } else if (sharedCourse) {
     dispatch(setCourseInfo(sharedCourse));
   } else if (findFriends) {
     dispatch({type: "TOGGLE_PEER_MODAL"});
