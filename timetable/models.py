@@ -35,7 +35,7 @@ class Course(models.Model):
   corequisites = models.TextField(default='', null=True)
   exclusions = models.TextField(default='')
   num_credits = models.FloatField(default=-1)
-  areas = models.CharField(max_length=300, default='', null=True)
+  areas = models.CharField(max_length=600, default='', null=True)
   department = models.CharField(max_length=250, default='', null=True)
   level = models.CharField(max_length=30, default='', null=True)
   cores = models.CharField(max_length=50, null=True, blank=True)
@@ -85,6 +85,9 @@ class Course(models.Model):
 
     return textbooks
 
+  def get_course_integrations(self):
+    ids = CourseIntegration.objects.filter(course__id=self.id).values_list("integration", flat=True)
+    return Integration.objects.filter(id__in = ids).values_list("name", flat=True)
 
 class Section(models.Model):
   course = models.ForeignKey(Course)
@@ -130,4 +133,12 @@ class TextbookLink(models.Model):
   textbook = models.ForeignKey(Textbook)
   is_required = models.BooleanField(default=False)
   section = models.ForeignKey(Section)
-  
+
+
+class Integration(models.Model):
+  name = models.CharField(max_length=250)
+
+class CourseIntegration(models.Model):
+  course = models.ForeignKey(Course)
+  integration = models.ForeignKey(Integration)
+  json = models.TextField()

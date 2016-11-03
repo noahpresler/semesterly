@@ -16,6 +16,7 @@ import SignupModalContainer from './containers/signup_modal_container.jsx';
 import PreferenceModalContainer from './containers/preference_modal_container.jsx';
 import TutModalContainer from './containers/tut_modal_container.jsx';
 import PeerModalContainer from './containers/peer_modal_container.jsx';
+import IntegrationModalContainer from './containers/integration_modal_container.jsx';
 
 class Semesterly extends React.Component {
 	constructor(props) {
@@ -104,7 +105,8 @@ class Semesterly extends React.Component {
 	}
 
 	render() {
-		let cal = $(window).width() < 767 && this.state.orientation == 'portrait' ? <DayCalendarContainer /> : <CalendarContainer />;
+		let mobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+		let cal = mobile && $(window).width() < 767 && this.state.orientation == 'portrait' ? <DayCalendarContainer /> : <CalendarContainer />;
 		return (
 			<div id="page-wrapper">
 				<TopBarContainer />
@@ -112,6 +114,7 @@ class Semesterly extends React.Component {
 				<ExplorationModalContainer />
 				<SignupModalContainer />
 				<PreferenceModalContainer />
+				<IntegrationModalContainer />
 				<TutModalContainer />
 				<PeerModalContainer />
 				<AlertBox ref={a => this.msg = a} {...this.alertOptions} />
