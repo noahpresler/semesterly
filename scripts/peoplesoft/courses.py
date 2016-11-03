@@ -97,7 +97,7 @@ class PeopleSoftParser:
 		search_query['SSR_CLSRCH_WRK_INCLUDE_CLASS_DAYS$5'] = 'J'
 		search_query[soup.find('select', id=re.compile(r'SSR_CLSRCH_WRK_INSTRUCTION_MODE\$\d'))['id']] = 'P'
 
-		# TODO - necessary clutter (not really sure why this is here anymore)
+		# TODO - necessary clutter (not really sure why this is here anymore - should be called course_setup but does the same)
 		self.course_cleanup()
 
 		for term in terms:
