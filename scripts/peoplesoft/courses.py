@@ -89,8 +89,7 @@ class PeopleSoftParser:
 		search_query['ICAction'] = 'DERIVED_CLSRCH_SSR_EXPAND_COLLAPS$149$$1'
 		soup = BeautifulSoup(self.post_http(self.base_url, search_query).text, 'html.parser')
 
-		# search_query = {a['name']: a['value'] for a  in soup.find('div', id=re.compile(r'win\ddivPSHIDDENFIELDS')).find_all('input')}
-		search_query['ICAction'] = 'CLASS_SRCH_WRK2_SSR_PB_CLASS_SRCH'
+		# virtually refined search (to get around min search param requirement)
 		search_query['SSR_CLSRCH_WRK_SSR_OPEN_ONLY$chk$4'] = 'N'
 		for day in ['MON', 'TUES', 'WED', 'THURS', 'FRI', 'SAT', 'SUN']:
 			search_query['SSR_CLSRCH_WRK_' + day + '$5'] = 'Y'
@@ -98,13 +97,7 @@ class PeopleSoftParser:
 		search_query['SSR_CLSRCH_WRK_INCLUDE_CLASS_DAYS$5'] = 'J'
 		search_query[soup.find('select', id=re.compile(r'SSR_CLSRCH_WRK_INSTRUCTION_MODE\$\d'))['id']] = 'P'
 
-		# extract search query info
-		options = soup.find('select', id=re.compile(r'SSR_CLSRCH_WRK_SUBJECT_SRCH\$\d'))
-		search_id = options['id']
-		departments = options.find_all('option')[1:]
-		# NOTE: first element of dropdown lists in search area is empty
-
-		# TODO - necessary clutter
+		# TODO - necessary clutter (not really sure why this is here anymore)
 		self.course_cleanup()
 
 		for term in terms:
@@ -115,6 +108,22 @@ class PeopleSoftParser:
 
 			# update search payload with term as parameter
 			search_query['CLASS_SRCH_WRK2_STRM$35$'] = terms[term]
+			search_query['ICAJAX'] = '1'
+			search_query['ICNAVTYPEDROPDOWN'] = '0'
+			search_query['ICAction'] = 'CLASS_SRCH_WRK2_STRM$35$'
+			soup = BeautifulSoup(self.post_http(self.base_url, search_query).text, 'lxml')
+
+			# TODO - this might not be necessary
+			del search_query['ICAJAX']
+			del search_query['ICNAVTYPEDROPDOWN']
+
+			# update search action to get course list
+			search_query['ICAction'] = 'CLASS_SRCH_WRK2_SSR_PB_CLASS_SRCH'
+
+			# extract department query list
+			options = soup.find('select', id=re.compile(r'SSR_CLSRCH_WRK_SUBJECT_SRCH\$\d'))
+			search_id = options['id']
+			departments = options.find_all('option')[1:] # NOTE: first element of dropdown lists in search area is empty
 
 			for department in departments:
 
