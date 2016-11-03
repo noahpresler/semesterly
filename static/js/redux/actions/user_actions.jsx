@@ -8,7 +8,10 @@ import { getUserInfoEndpoint,
 	getLoadSavedTimetablesEndpoint,
 	getSetRegistrationTokenEndpoint,
 	deleteRegistrationTokenEndpoint,
-	getFriendsEndpoint } from '../constants.jsx';
+	getFriendsEndpoint,
+	getIntegrationGetEndpoint,
+	getIntegrationDelEndpoint,
+	getIntegrationAddEndpoint } from '../constants.jsx';
 import { store } from '../init.jsx';
 import { loadTimetable, nullifyTimetable, getNumberedName } from './timetable_actions.jsx';
 import { browserSupportsLocalStorage, setDeclinedNotifications } from '../util.jsx';
@@ -341,11 +344,14 @@ export function fetchClassmates(courses) {
 }
 
 export function fetchFriends() {
+	let state = store.getState();
+	let semester = state.semester !== undefined ? state.semester : currentSemester;
 	return (dispatch) => {
 		dispatch(requestFriends());
 		fetch(getFriendsEndpoint(), {
 			credentials: 'include',
-			method: 'GET'
+			method: 'POST',
+			body: JSON.stringify({ semester: semester })
 		})
 	    .then(response => response.json())
 	    .then(json => {
@@ -449,4 +455,37 @@ export function sendRegistrationTokenForDeletion(token) {
             // console.log("token not deleted: " + token);
         }
     });
+}
+
+export function openIntegrationModal(integrationID, courseID) {
+	return fetch(getIntegrationGetEndpoint(integrationID, courseID), {
+			credentials: 'include',
+			method: 'GET'
+		})
+		.then(response => response.json())
+		.then(json => {
+			store.dispatch({
+				type: 'OPEN_INTEGRATION_MODAL',
+				enabled: json['integration_enabled'],
+				id: courseID,
+				integration_id: integrationID
+			})
+		});
+}
+
+export function delIntegration(integrationID, courseID) {
+	return fetch(getIntegrationDelEndpoint(integrationID, courseID), {
+			credentials: 'include',
+			method: 'GET'
+		})
+		.then(response => response.json());
+}
+
+export function addIntegration(integrationID, courseID, json) {
+	return fetch(getIntegrationAddEndpoint(integrationID, courseID), {
+			credentials: 'include',
+			method: 'POST',
+			body: JSON.stringify({ json: json })
+		})
+		.then(response => response.json());
 }
