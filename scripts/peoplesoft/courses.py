@@ -125,8 +125,12 @@ class PeopleSoftParser:
 				else:
 					self.course['department'] = department.text
 
+				# FORCE PSY DEPT SEARCH HACK
+				self.course['department'] = 'Psychology'
+				search_query[search_id] = 'PSY'
+
 				# Update search payload with department code
-				search_query[search_id] = department['value']
+				# search_query[search_id] = department['value']
 
 				# Get course listing page for department
 				soup = BeautifulSoup(self.post_http(self.base_url, search_query).text, 'html.parser')
@@ -136,6 +140,15 @@ class PeopleSoftParser:
 					if soup.find('div', {'id' : 'win1divDERIVED_CLSMSG_ERROR_TEXT'}):
 						print 'Error on search: ' + soup.find('div', {'id' : 'win1divDERIVED_CLSMSG_ERROR_TEXT'}).text
 					continue
+				elif soup.find('span', {'class','SSSMSGINFOTEXT'}):
+
+					print 'SEARCH MESSAGE: ' + soup.find('span', {'class','SSSMSGINFOTEXT'}).text
+					search_query['ICAction'] = '#ICSave'
+					search_query['ICStateNum'] += 1;
+
+					# Get course listing page for department
+					soup = BeautifulSoup(self.post_http(self.base_url, search_query).text, 'html.parser')
+					print soup.prettify()
 
 				# fill payload for course description page request
 				descr_payload = {a['name']: a['value'] for a in soup.find('div', id=re.compile(r'win\ddivPSHIDDENFIELDS')).find_all('input')}
