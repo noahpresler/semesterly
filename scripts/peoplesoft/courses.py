@@ -22,7 +22,8 @@ class PeopleSoftParser:
 
 	def __init__(self, school, url):
 		self.session = requests.Session()
-		self.headers = {'User-Agent' : UserAgent().chrome}
+		# self.headers = {'User-Agent' : UserAgent().random} # why does this not work anymore?
+		self.headers = {'User-Agent' : 'UserAgent 1.0'}
 		self.cookies = cookielib.CookieJar()
 		self.base_url = url
 		self.school = school
@@ -81,7 +82,6 @@ class PeopleSoftParser:
 
 		soup = BeautifulSoup(self.get_html(self.base_url, kwargs['url_params'] if kwargs.get('url_params') else {}))
 
-
 		# create search payload with hidden form data
 		search_query = {a['name']: a['value'] for a  in soup.find('div', id=re.compile(r'win\ddivPSHIDDENFIELDS')).find_all('input')}
 
@@ -131,14 +131,19 @@ class PeopleSoftParser:
 				# Get course listing page for department
 				soup = BeautifulSoup(self.post_http(self.base_url, search_query).text, 'html.parser')
 
+				special = False # FIXME -- nasty hack, fix it!
+
 				# check for valid search/page
 				if soup.find('td', {'id' : 'PTBADPAGE_' }) or soup.find('div', {'id' : 'win1divDERIVED_CLSMSG_ERROR_TEXT'}):
 					if soup.find('div', {'id' : 'win1divDERIVED_CLSMSG_ERROR_TEXT'}):
 						print 'Error on search: ' + soup.find('div', {'id' : 'win1divDERIVED_CLSMSG_ERROR_TEXT'}).text
 					continue
+				elif soup.find('span', {'class','SSSMSGINFOTEXT'}):
+					soup = self.handle_special_case_on_search(soup)
+					special = True
 
 				# fill payload for course description page request
-				descr_payload = {a['name']: a['value'] for a in soup.find('div', id=re.compile(r'win\ddivPSHIDDENFIELDS')).find_all('input')}
+				descr_payload = {a['name']: a['value'] for a in soup.find('div' if not special else 'field', id=re.compile(r'win\ddivPSHIDDENFIELDS')).find_all('input')}
 
 				courses = soup.find_all('table', {'class' : 'PSLEVEL1GRIDNBONBO'})
 
@@ -215,6 +220,16 @@ class PeopleSoftParser:
 					self.course_cleanup()
 
 			self.wrap_up()
+
+	def handle_special_case_on_search(self, soup):
+		print 'SPECIAL SEARCH MESSAGE: ' + soup.find('span', {'class','SSSMSGINFOTEXT'}).text
+
+		search_query2 = {a['name']: a['value'] for a  in soup.find('div', id=re.compile(r'win\ddivPSHIDDENFIELDS')).find_all('input')}
+		search_query2['ICAction'] = '#ICSave'
+		search_query2['ICAJAX'] = '1'
+		search_query2['ICNAVTYPEDROPDOWN'] = '0'
+
+		return BeautifulSoup(self.post_http(self.base_url, search_query2).text, 'lxml')
 
 	def parse_textbooks(self, soup):
 		isbns = zip(soup.find_all('span', id=re.compile(r'DERIVED_SSR_TXB_SSR_TXBDTL_ISBN\$\d*')), soup.find_all('span', id=re.compile(r'DERIVED_SSR_TXB_SSR_TXB_STATDESCR\$\d*')))
