@@ -200,7 +200,7 @@ class umd:
                     'enrolment': int(section.total_seats) - int(section.open_seats)
                 }
             )
-
+      Offering.objects.filter(section = section_model).all().delete()
       days = section.day.replace('Tu', 'T').replace('Th', 'R')
       for day in days:
         try:

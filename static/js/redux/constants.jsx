@@ -14,7 +14,9 @@ export const VALID_SCHOOLS = [
   "rutgers", 
   "queens", 
   "vandy",
-  "chapman"
+  "gw",
+  "chapman",
+  "pennstate"
 ];
 
 /* server endpoints */
@@ -36,6 +38,12 @@ export const getUserInfoEndpoint = () => {
 export const getSaveTimetableEndpoint = () => {
 	return "/user/save_timetable/";
 };
+export const getCloneTimetableEndpoint = () => {
+  return "/user/duplicate_timetable/";
+}   
+export const getDeleteTimetableEndpoint = () => {
+  return "/user/delete_timetable/";
+}
 export const getSaveSettingsEndpoint = () => {
 	return "/user/save_settings/"
 }
@@ -56,6 +64,15 @@ export const getLoadSavedTimetablesEndpoint = (semester) => {
 }
 export const getRequestShareTimetableLinkEndpoint = () => {
   return "/share/link/";
+}
+export const getIntegrationGetEndpoint = (integration_id, course_id) => {
+  return "/integration/get/" + integration_id + "/course/" + course_id + "/";
+}
+export const getIntegrationDelEndpoint = (integration_id, course_id) => {
+  return "/integration/del/" + integration_id + "/course/" + course_id + "/";
+}
+export const getIntegrationAddEndpoint = (integration_id, course_id) => {
+  return "/integration/add/" + integration_id + "/course/" + course_id + "/";
 }
 
 export const getSchoolSpecificInfo = (school) => {
@@ -151,7 +168,22 @@ export const getSchoolSpecificInfo = (school) => {
         campuses: {
           1: ""
         }
-      }		
+      }
+    case "gw":
+      return {
+        primaryDisplay: "name",
+        areasName: "Areas",
+        departmentsName: "Departments",
+        levelsName: "Levels",
+        timesName: "Times",
+        semesters: {
+          F: "Fall 2016",
+          S: "Spring 2017"
+        },
+        campuses: {
+          1: ""
+        }
+      }
     default:
 	  return {
         primaryDisplay: "code",

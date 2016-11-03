@@ -28,16 +28,47 @@
 
 	</head>
 	<body>
+	<div id="fb-root"></div>
+		<script>(function(d, s, id) {
+		  var js, fjs = d.getElementsByTagName(s)[0];
+		  if (d.getElementById(id)) return;
+		  js = d.createElement(s); js.id = id;
+		  js.src = "//connect.facebook.net/en_US/sdk.js#xfbml=1&version=v2.8&appId=1650567028525136";
+		  fjs.parentNode.insertBefore(js, fjs);
+		}(document, 'script', 'facebook-jssdk'));</script>
 		<header class="down">
 			<div class="grid cf">
 				<img id="semesterly-logo" src="/static/img/logo2.0-32x32.png">
 				<h1>Semester.ly</h1>
 				<nav>
-					<a href="https://jhu.semester.ly">JHU</a>
-					<a href="https://umd.semester.ly">UMD</a>
-					<a href="https://uoft.semester.ly">UofT</a>
-					<a href="https://queens.semester.ly">Queen's</a>
-					<a href="https://vandy.semester.ly">Vandy</a>
+					<div class="desktop-nav">
+						<a href="https://jhu.semester.ly">JHU</a>
+						<a href="https://umd.semester.ly">UMD</a>
+						<a href="https://uoft.semester.ly">UofT</a>
+						<a href="https://queens.semester.ly">Queen's</a>
+						<a href="https://vandy.semester.ly">Vandy</a>
+						<a href="https://chapman.semester.ly">Chapman</a>
+						<a href="https://gw.semester.ly">GW</a>
+					</div>
+					<div id="schools-dropdown" class="mobile-nav">
+						<div class="mobile-nav-label">
+							<span>Schools</span>
+							<span class="tip-down"></span>
+						</div>
+						<div class="nav-dropdown">
+							<div class="tip-border"></div>
+							<div class="tip"></div>
+							<div class="nav-dropdown-list">
+								<a href="https://jhu.semester.ly">JHU</a>
+								<a href="https://umd.semester.ly">UMD</a>
+								<a href="https://uoft.semester.ly">UofT</a>
+								<a href="https://queens.semester.ly">Queen's</a>
+								<a href="https://vandy.semester.ly">Vandy</a>
+								<a href="https://chapman.semester.ly">Chapman</a>
+								<a href="https://gw.semester.ly">GW</a>
+							</div>
+						</div>
+					</div>
 				</nav>
 			</div>
 		</header>
@@ -48,7 +79,7 @@
 					<h1>{{ name.first_name }} {{ name.last_name }}</h1>
 					<h2>{{ major }}, Class of {{ class }}</h2>
 				</div>
-				<div id="profile-image" style="background-image: url(https://graph.facebook.com/{{  student.fbook_uid }}/picture?type=large);"></div>
+				<div id="profile-image" style="background-image: url(https://graph.facebook.com/{{  student.fbook_uid }}/picture?width=700&height=700);"></div>
 			</div>
 			<div id="profile-body">
 
@@ -189,6 +220,7 @@
 				<!-- Date Joined -->
 				<div id="join-date">
 					<p>Joined {{ student.time_created }}</p>
+					<div class="fb-like" data-href="https://www.facebook.com/semesterly/" data-width="40px" data-layout="button" data-action="like" data-size="large" data-show-faces="false" data-share="false"></div>
 				</div>
 			</div>
 		</div>
@@ -219,6 +251,8 @@
 	      ga('create', 'UA-68704308-1', 'auto');
 	      ga('send', 'pageview');
 	    </script>
+	    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+	    <script type="text/javascript" src="{% static 'js/splash.js'%}"></script>
 
     </body>
 </html>
