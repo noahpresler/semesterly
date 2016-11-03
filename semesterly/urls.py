@@ -55,7 +55,7 @@ urlpatterns = patterns('',
     url(r'^user/save_settings/$', 'student.views.save_settings'),
     url(r'^user/get_classmates/$', 'student.views.get_classmates'),
     url(r'^user/find_friends/$', 'student.views.find_friends'),
-    url(r'^notifyme/$', 'timetable.views.enable_notifs'),
+    url(r'^notifyme/*$', 'timetable.views.enable_notifs'),
     url(r'^user/get_saved_timetables/(?P<school>.+)/(?P<sem>[fFsS]{1})', 'student.views.get_student_tts_wrapper'),
     
     url(r'^courses/(?P<school>.+?)/(?P<sem>[fFsS]{1}?)/code/(?P<course_id>.+)/*$', 'timetable.views.get_course_id'),
