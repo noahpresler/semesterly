@@ -89,7 +89,15 @@ class PeopleSoftParser:
 		search_query['ICAction'] = 'DERIVED_CLSRCH_SSR_EXPAND_COLLAPS$149$$1'
 		soup = BeautifulSoup(self.post_http(self.base_url, search_query).text, 'html.parser')
 
-		# TODO - necessary clutter
+		# virtually refined search (to get around min search param requirement)
+		search_query['SSR_CLSRCH_WRK_SSR_OPEN_ONLY$chk$4'] = 'N'
+		for day in ['MON', 'TUES', 'WED', 'THURS', 'FRI', 'SAT', 'SUN']:
+			search_query['SSR_CLSRCH_WRK_' + day + '$5'] = 'Y'
+			search_query['SSR_CLSRCH_WRK_' + day + '$chk$5'] = 'Y'
+		search_query['SSR_CLSRCH_WRK_INCLUDE_CLASS_DAYS$5'] = 'J'
+		search_query[soup.find('select', id=re.compile(r'SSR_CLSRCH_WRK_INSTRUCTION_MODE\$\d'))['id']] = 'P'
+
+		# TODO - necessary clutter (not really sure why this is here anymore)
 		self.course_cleanup()
 
 		for term in terms:
@@ -97,14 +105,6 @@ class PeopleSoftParser:
 			print 'Parsing courses for', term
 
 			self.course['semester'] = term
-
-			# virtually refined search (to get around min param requirement)
-			search_query['SSR_CLSRCH_WRK_SSR_OPEN_ONLY$chk$4'] = 'N'
-			for day in ['MON', 'TUES', 'WED', 'THURS', 'FRI', 'SAT', 'SUN']:
-				search_query['SSR_CLSRCH_WRK_' + day + '$5'] = 'Y'
-				search_query['SSR_CLSRCH_WRK_' + day + '$chk$5'] = 'Y'
-			search_query['SSR_CLSRCH_WRK_INCLUDE_CLASS_DAYS$5'] = 'J'
-			search_query[soup.find('select', id=re.compile(r'SSR_CLSRCH_WRK_INSTRUCTION_MODE\$\d'))['id']] = 'P'
 
 			# update search payload with term as parameter
 			search_query['CLASS_SRCH_WRK2_STRM$35$'] = terms[term]
@@ -116,6 +116,9 @@ class PeopleSoftParser:
 			# TODO - this might not be necessary
 			del search_query['ICAJAX']
 			del search_query['ICNAVTYPEDROPDOWN']
+
+			# update search action to get course list
+			search_query['ICAction'] = 'CLASS_SRCH_WRK2_SSR_PB_CLASS_SRCH'
 
 			# extract department query list
 			options = soup.find('select', id=re.compile(r'SSR_CLSRCH_WRK_SUBJECT_SRCH\$\d'))
@@ -133,9 +136,6 @@ class PeopleSoftParser:
 
 				# Update search payload with department code
 				search_query[search_id] = department['value']
-
-				# update search action to get course list
-				search_query['ICAction'] = 'CLASS_SRCH_WRK2_SSR_PB_CLASS_SRCH'
 
 				# Get course listing page for department
 				soup = BeautifulSoup(self.post_http(self.base_url, search_query).text, 'html.parser')
