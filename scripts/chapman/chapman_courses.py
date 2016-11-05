@@ -1,7 +1,7 @@
 # @what	Chapman Course Parser
 # @org	Semeseter.ly
 # @author	Michael N. Miller
-# @date	10/19/16
+# @date	10/20/16
 
 import django, os
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "semesterly.settings")
