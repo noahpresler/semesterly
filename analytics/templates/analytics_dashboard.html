@@ -92,7 +92,6 @@
     <script type="text/javascript">
       var num_users_by_class_year = JSON.parse("{{num_users_by_class_year|escapejs}}");
       var num_users_by_school = JSON.parse("{{num_users_by_school|escapejs}}");
-      var num_users_by_school_with_timetables = JSON.parse("{{num_users_by_school_with_timetables|escapejs}}");
       var total_timetables_by_school = JSON.parse("{{total_timetables_by_school|escapejs}}");
       var number_of_reactions = JSON.parse("{{number_of_reactions|escapejs}}");
       var timetables_per_hour = JSON.parse("{{timetables_per_hour|escapejs}}");
@@ -100,11 +99,8 @@
       var signups_per_hour = JSON.parse("{{signups_per_hour|escapejs}}");
     </script>
 
-    <h4>Number of users by most recent school:</h4>
+    <h4>Number of users by school:</h4>
     <canvas id="num_users_by_school"></canvas>
-
-    <h4>Number of users with timetables by school:</h4>
-    <canvas id="num_users_by_school_with_timetables"></canvas>
 
     <h4>Number of users by class year:</h4>
     <canvas id="num_users_by_class_year"></canvas>
@@ -238,15 +234,6 @@
           hoverBackgroundColor: secondary_colors
         }]
     };
-    var num_users_by_school_with_timetables_data = {
-      labels: Object.keys(num_users_by_school_with_timetables),
-      datasets: [
-        {
-          data: Object.keys(num_users_by_school_with_timetables).map(function(key){return num_users_by_school_with_timetables[key]}),
-          backgroundColor: primary_colors,
-          hoverBackgroundColor: secondary_colors
-        }]
-    };
     var num_users_by_class_year_data = {
       labels: Object.keys(num_users_by_class_year),
       datasets: [
@@ -294,12 +281,6 @@
     var myPieChart = new Chart(btx, {
       type: 'pie',
       data: num_users_by_school_data,
-    });
-
-    var utt = document.getElementById("num_users_by_school_with_timetables");
-    var myPieChart = new Chart(utt, {
-      type: 'pie',
-      data: num_users_by_school_with_timetables_data,
     });
 
     var ytx = document.getElementById("num_users_by_class_year");
