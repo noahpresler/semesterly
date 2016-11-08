@@ -190,6 +190,8 @@ h3.exp-header:after {
 /* Exploration Filters */
 #exp-filters {
 	padding: 15px;
+	height: 100%;
+	overflow-y: auto;
 }
 .exp-filter-section {
 	padding: 0 0 20px;
