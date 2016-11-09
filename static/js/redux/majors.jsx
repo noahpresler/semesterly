@@ -25,6 +25,7 @@ var majors = [
 	{value: "Biomedical Engineering", label: "Biomedical Engineering"},
 	{value: "Biomedical Sciences (not elsewhere classified)", label: "Biomedical Sciences (not elsewhere classified)"},
 	{value: "Biotechnology", label: "Biotechnology"},
+	{value: "Biophysics", label: "Biophysics"},
 	{value: "Botany", label: "Botany"},
 	{value: "Business Administration", label: "Business Administration"},
 	{value: "Chemical & Process Engineering", label: "Chemical & Process Engineering"},
