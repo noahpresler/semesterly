@@ -165,6 +165,7 @@ class PeopleSoftParser:
 
 					# scrape info from page
 					title 		= soup.find('span', {'id' : 'DERIVED_CLSRCH_DESCR200'}).text.encode('ascii', 'ignore')
+					subtitle	= soup.find('span', {'id' : 'DERIVED_CLSRCH_SSS_PAGE_KEYDESCR'}).text.encode('ascii', 'ignore')
 					units 		= soup.find('span', {'id' : 'SSR_CLS_DTL_WRK_UNITS_RANGE'}).text
 					capacity 	= soup.find('span', {'id' : 'SSR_CLS_DTL_WRK_ENRL_CAP'}).text
 					enrollment 	= soup.find('span', {'id' : 'SSR_CLS_DTL_WRK_ENRL_TOT'}).text
@@ -186,6 +187,7 @@ class PeopleSoftParser:
 					# Extract info from title
 					print '\t' + title
 					rtitle = re.match(r'(.+?\s*\w+) - (\w+)\s*(\S.+)', title)
+					print subtitle.split('|')
 
 					# Place course info into course model
 					self.course['code'] 	= rtitle.group(1)
