@@ -13,7 +13,7 @@ export class TutModal extends React.Component {
     }
 	componentDidMount(nextProps) {
 		let tutorial = JSON.parse(localStorage.getItem('tutorial'));
-		if(!tutorial || !tutorial.modalTutShown)
+		if ((!tutorial || !tutorial.modalTutShown) && !(this.props.signUpModalVisible || this.props.courseModalVisible || this.props.courseModalVisible))
 			this.refs.modal.show();
 		$(document.body).on('keydown', (e) => {
 			e.stopPropagation();
