@@ -195,9 +195,11 @@ export class CourseModalBody extends React.Component {
         let textbooksDisplay = !textbooks || textbooks.length === 0 ? null :
         <div className="modal-module">
             <h3 className="modal-module-header">Textbooks</h3>
-            {
-                textbooks.map((t, i) => <Textbook key={i} tb={t}/>)
-            }
+            <div className="modal-textbook-list">
+                {
+                    textbooks.map((t, i) => <Textbook key={i} tb={t}/>)
+                }
+            </div>
         </div>
 
         let creditsSuffix = numCredits === 1 ? " credit" : " credits";
@@ -241,7 +243,6 @@ export class CourseModalBody extends React.Component {
                             <EvaluationList evalInfo={evalInfo} />
                         </div>
                         {textbooksDisplay}
-                        {similarCourses}
                         
                     </div>
                     <div id="modal-section-lists"
@@ -249,6 +250,7 @@ export class CourseModalBody extends React.Component {
                         {lectureSections}
                         {tutorialSections}
                         {practicalSections}
+                        {similarCourses}
                     </div>
                 </div>
             </div>
