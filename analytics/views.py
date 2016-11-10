@@ -53,7 +53,6 @@ def view_analytics_dashboard(request):
                 "num_users_by_permission":num_users_by_permission,
                 "num_users_by_class_year":json.dumps(number_students_by_year()),
                 "num_users_by_school":json.dumps(number_students_by_school()),
-                "num_users_by_school_with_timetables":json.dumps(number_students_by_school_with_timetables()),
                 "total_timetables_fall":number_timetables(semester="F"),
                 "total_timetables_spring":number_timetables(semester="S"),
                 "number_of_reactions":json.dumps(number_of_reactions()),
@@ -166,15 +165,10 @@ def number_students_by_year():
 def number_students_by_school():
     result = {}
     for school in VALID_SCHOOLS:
-        count = Student.objects.filter(school=school).count()
-        result[school] = count
-    return result
-
-def number_students_by_school_with_timetables():
-    result = {}
-    for school in VALID_SCHOOLS:
-        count = PersonalTimetable.objects.filter(school=school).values_list("student", flat=True).distinct().count()
-        result[school] = count
+        ids = PersonalTimetable.objects.filter(school=school).values_list("student", flat=True).distinct() 
+        students = Student.objects.filter(id__in=ids) | Student.objects.filter(school=school)
+        result[school] = students.count()
+    print(result)
     return result
 
 def number_user_chrome_notifs():
