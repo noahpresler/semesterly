@@ -28,3 +28,4 @@ sections
 openssl.cnf
 ssl.crt
 ssl.key
+semesterly_backup/
