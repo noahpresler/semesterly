@@ -243,6 +243,7 @@ export class CourseModalBody extends React.Component {
                             <EvaluationList evalInfo={evalInfo} />
                         </div>
                         {textbooksDisplay}
+                        {similarCourses}
                         
                     </div>
                     <div id="modal-section-lists"
@@ -250,7 +251,6 @@ export class CourseModalBody extends React.Component {
                         {lectureSections}
                         {tutorialSections}
                         {practicalSections}
-                        {similarCourses}
                     </div>
                 </div>
             </div>
