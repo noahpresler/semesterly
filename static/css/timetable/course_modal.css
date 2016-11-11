@@ -307,6 +307,9 @@ h3.modal-module-header small {
 .modal-section:hover {
 	background-color: #eee;
 }
+.modal-section:nth-child(2n+0) {
+	clear: both;
+}
 .modal-section h4 {
 	font-size: 16px;
 	font-weight: 400;
