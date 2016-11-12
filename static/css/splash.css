@@ -211,7 +211,7 @@ header nav a:hover {
 #screenshot {
 	width: 100%;
 	height: 0;
-	padding-bottom: 60%;
+	padding-bottom: 73%;
 	background-size: cover;
 	background-position: top center;
 	background-repeat: no-repeat;
@@ -371,7 +371,7 @@ header nav a:hover {
 	padding: 50px 20px 0;
 }
 .reason-text h3 {
-	margin: 80px 0 15px;
+	margin: 30px 0 15px;
 	color: #777;
 }
 .reason-text ul {
@@ -384,7 +384,7 @@ header nav a:hover {
 .reason-text ul a:link,
 .reason-text ul a:visited {
 	display: inline-block;
-	width: 14.2%;
+	width: 24%;
 	padding: 0;
 	text-decoration: none;
 	text-align: center;
@@ -469,7 +469,7 @@ footer h6 {
 		padding: 0 40px 0 0;
 	}
 	#screenshot {
-		padding-bottom: 75%;
+		padding-bottom: 77%;
 	}
 }
 @media(max-width: 980px) {
@@ -537,7 +537,7 @@ footer h6 {
 		display: none;
 	}
 }
-@media(max-width: 620px) {
+@media(max-width: 640px) {
 	header h1 {
 		display: none;
 	}

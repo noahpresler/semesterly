@@ -325,7 +325,7 @@ footer h6 {
 	color: #777;
 	margin: 0;
 }
-@media(max-width: 620px) {
+@media(max-width: 640px) {
 	header h1 {
 		display: none;
 	}
