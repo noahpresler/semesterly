@@ -59,7 +59,6 @@ ALTER ROLE ${DATABASE_USER_NAME} SET default_transaction_isolation TO 'read comm
 ALTER ROLE ${DATABASE_USER_NAME} SET timezone TO 'UTC';
 GRANT ALL PRIVILEGES ON DATABASE ${DATABASE_NAME} TO ${DATABASE_USER_NAME};
 EOF
-echo "${PSQL_COMMANDS}"
 
 while read -r cmd; do
 	sudo -u postgres -H -- psql -c "${cmd}"
