@@ -44,8 +44,9 @@ class umichParser:
 		self.terms = []
 		self.schools = []
 		self.subjects = []
-		self.semester_code_map = {'f16': '2110'}
-		self.semester = "Fall 2016"
+		self.semester_code_map = {'f16': '2110', 'w17':'2120'}
+		self.semester_map = {'f16': 'Fall 2016', 'w17': 'Winter 2017'}
+		self.semester = self.semester_map[semester] 
 		self.term = self.semester_code_map[semester]
 		self.url = "http://api-gw.it.umich.edu/Curriculum/SOC/v1/Terms"
 		# ADD MOAR TOKENS!
@@ -526,17 +527,20 @@ class umichParser:
 		days = meeting['Days']
 		time = meeting['Times']
 		if(time == 'TBA'):
-			start_time = 'TBA'
-			end_time = 'TBA'
+			start_time = ''
+			end_time = ''
 		else:
+			time12 = re.match("(.*) \- (.*)", time)
 			try:
-				start_time = str(datetime.strptime(time.split(' - ')[0], '%H:%M%p'))
-				start_time = start_time.split(" ")[1][:-3]
+				#start_time = str(datetime.strptime(time.split(' - ')[0], '%H:%M%p'))
+				#start_time = start_time.split(" ")[1][:-3]
+				start_time = self.convert_time(time12.group(1))
 			except ValueError:
 				start_time = 'TBA'	
 			try:
-				end_time = str(datetime.strptime(time.split(' - ')[1], '%H:%M%p'))
-				end_time = end_time.split(" ")[1][:-3]
+				#end_time = str(datetime.strptime(time.split(' - ')[1], '%H:%M%p'))
+				#end_time = end_time.split(" ")[1][:-3]
+				end_time = self.convert_time(time12.group(2))
 			except ValueError:
 				end_time = 'TBA'
 
@@ -556,6 +560,20 @@ class umichParser:
 				location = str(meeting['Location'])
 			)
 			offering.save()
+
+	def convert_time(self, time):
+		# Regex matching
+		match = re.match("(\d*):(\d*)(.)", time)
+
+		# Transform to 24hr
+		hours = int(match.group(1))
+		minutes = match.group(2)
+		if re.search(r'[pP]', match.group(3)):
+			hours = (hours%12)+12
+
+		# Returning as string
+		return str(hours) + ":" + str(minutes)
+
 	def get_url(self, url):
 		# Switch token every 60 requests due to throttling
 		if(self.tok_count == 60):
@@ -599,7 +617,7 @@ class umichParser:
 		
 
 def main():
-	parser = umichParser()
+	parser = umichParser(semester='w17')
 	start = tm.time()
 	log("Starting Parser")
 	parser.start(get_textbooks=False)
