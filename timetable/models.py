@@ -35,7 +35,7 @@ class Course(models.Model):
   corequisites = models.TextField(default='', null=True)
   exclusions = models.TextField(default='')
   num_credits = models.FloatField(default=-1)
-  areas = models.CharField(max_length=300, default='', null=True)
+  areas = models.CharField(max_length=600, default='', null=True)
   department = models.CharField(max_length=250, default='', null=True)
   level = models.CharField(max_length=30, default='', null=True)
   cores = models.CharField(max_length=50, null=True, blank=True)
