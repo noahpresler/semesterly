@@ -1,3 +1,4 @@
+scripts/gw/gw_tbks_js_dump.html
 semesterly/local_settings.py
 *.pyc
 env/
@@ -27,3 +28,4 @@ sections
 openssl.cnf
 ssl.crt
 ssl.key
+semesterly_backup/
