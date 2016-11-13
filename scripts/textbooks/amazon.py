@@ -54,9 +54,9 @@ def get_amazon_fields(isbn):
 			"Title" : get_title(response)
 		}
 	except:
+
 		print '\t\tTextbook NOT FOUND for', isbn
-		# import traceback
-		# traceback.print_exc()
+
 		info = {
 			"DetailPageURL" : "Cannot be found",
 			"ImageURL" : "Cannot be found",

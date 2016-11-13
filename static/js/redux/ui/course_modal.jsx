@@ -5,7 +5,7 @@ import fetch from 'isomorphic-fetch';
 import { getSchool } from '../init.jsx';
 import Modal from 'boron/WaveModal';
 import { CourseModalBody } from './course_modal_body.jsx'
-import { getCourseShareLink } from '../helpers/timetable_helpers.jsx';
+import { getCourseShareLink, getCourseShareLinkFromModal } from '../helpers/timetable_helpers.jsx';
 import { ShareLink } from './master_slot.jsx';
 
 export class CourseModal extends React.Component {
@@ -23,6 +23,8 @@ export class CourseModal extends React.Component {
     }
     componentWillReceiveProps(nextProps) {
         if (nextProps.id != null) {
+            let { data, inRoster } = nextProps;
+            history.replaceState( {} , 'Semester.ly', getCourseShareLinkFromModal(data.code));
             this.refs.modal.show();
         }
     }
@@ -52,6 +54,7 @@ export class CourseModal extends React.Component {
     //     this.sizeItUp();
     // }
     hide() {
+        history.replaceState( {} , 'Semester.ly', '/');
         this.props.unhoverSection();
         this.props.hideModal();
         this.refs.modal.hide();
