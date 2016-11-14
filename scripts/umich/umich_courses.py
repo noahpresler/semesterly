@@ -30,7 +30,8 @@ SECTION_MAP = {	"LEC": "L",
 				"REC": "T", 
 				"SMA": "T",
 				"IND": "L",
-				"FLD": "P"
+				"FLD": "P",
+				"CAS": "L"
 			}
 _DEBUG_FLAG_ = False
 # Printing debug messages
@@ -44,8 +45,9 @@ class umichParser:
 		self.terms = []
 		self.schools = []
 		self.subjects = []
-		self.semester_code_map = {'f16': '2110'}
-		self.semester = "Fall 2016"
+		self.semester_code_map = {'f16': '2110', 'w17':'2120'}
+		self.semester_map = {'f16': 'F', 'w17': 'W'}
+		self.semester = self.semester_map[semester] 
 		self.term = self.semester_code_map[semester]
 		self.url = "http://api-gw.it.umich.edu/Curriculum/SOC/v1/Terms"
 		# ADD MOAR TOKENS!
@@ -230,7 +232,6 @@ class umichParser:
 		course_descr = self.get_course_descr(descr_url)
 		course_info["Description"] =  course_descr
 		# create course module
-		#sleep(1.01)
 		log("Updating course model for class " + str(subject) + str(cat_num))
 		# Adding course to DB
 		course_model = self.create_or_update_course(course_info)
@@ -240,7 +241,6 @@ class umichParser:
 
 		# get sections for this course
 		section_url = descr_url + "/Sections/"
-		#sleep(1.01)
 		log("Getting Sections for class " + str(subject) + str(cat_num))
 		sections = self.get_sections(section_url)
 		if(sections == None):
@@ -250,13 +250,11 @@ class umichParser:
 		#section_writables = [] # list of dicts for all sections/meetings
 		for section in sections:
 			section_num = section['SectionNumber']
-			#sleep(1.01)
 			#log("Getting meetings for class " + str(subject) + str(cat_num))
 			meeting  = self.get_course_meeting(term = term, school = school, subject = subject, cat_num = cat_num, section = section_num)
 			if(meeting == None):
 				log("Meetings not found due to 500 ERROR")
 				continue
-			#sleep(1.01)
 			# writing section info into DB
 			self.create_section(meeting = meeting, course_model = course_model, input_section = section)
 			# Getting textbook 
@@ -495,6 +493,8 @@ class umichParser:
 			instr_name = input_section['ClassInstructors']['InstrName']
 		except TypeError:
 			instr_list = [name['InstrName'] for name in input_section['ClassInstructors']]
+			# Truncating instructor list since it could exceed character limit
+			instr_list = instr_list[:10]
 			instr_name = ",".join(instr_list)
 		except KeyError:
 			try:
@@ -503,6 +503,12 @@ class umichParser:
 				instr_name = input_section['Meeting'][0]['Instructors']
 			except KeyError:
 				instr_name = 'TBA'
+		#print("course: {}, semester: {}".format(course_model.department+course_model.code, self.semester[0].upper()))
+		#if(type(instr_name) == list):
+		#	print("LIST: len = {}, chars = {}".format(len(instr_name)))
+		#else:
+		#	print("Name: {}, LENGTH: {}, TYPE: {}".format(instr_name, len(instr_name), type(instr_name)))
+		#print(input_section)
 		section, section_created = Section.objects.update_or_create(
 			course = course_model,
 			meeting_section = input_section['SectionNumber'],
@@ -526,17 +532,18 @@ class umichParser:
 		days = meeting['Days']
 		time = meeting['Times']
 		if(time == 'TBA'):
-			start_time = 'TBA'
-			end_time = 'TBA'
+			start_time = ''
+			end_time = ''
+			#print("NOT FOUND: timing information for offering")
+			return
 		else:
+			time12 = re.match("(.*) \- (.*)", time)
 			try:
-				start_time = str(datetime.strptime(time.split(' - ')[0], '%H:%M%p'))
-				start_time = start_time.split(" ")[1][:-3]
+				start_time = self.convert_time(time12.group(1))
 			except ValueError:
 				start_time = 'TBA'	
 			try:
-				end_time = str(datetime.strptime(time.split(' - ')[1], '%H:%M%p'))
-				end_time = end_time.split(" ")[1][:-3]
+				end_time = self.convert_time(time12.group(2))
 			except ValueError:
 				end_time = 'TBA'
 
@@ -556,6 +563,21 @@ class umichParser:
 				location = str(meeting['Location'])
 			)
 			offering.save()
+
+	@staticmethod
+	def convert_time(time):
+		# Regex matching
+		match = re.match("(\d*):(\d*)(.)", time)
+
+		# Transform to 24hr
+		hours = int(match.group(1))
+		minutes = match.group(2)
+		if re.search(r'[pP]', match.group(3)):
+			hours = (hours%12)+12
+
+		# Returning as string
+		return str(hours) + ":" + str(minutes)
+
 	def get_url(self, url):
 		# Switch token every 60 requests due to throttling
 		if(self.tok_count == 60):
@@ -599,7 +621,7 @@ class umichParser:
 		
 
 def main():
-	parser = umichParser()
+	parser = umichParser(semester='w17')
 	start = tm.time()
 	log("Starting Parser")
 	parser.start(get_textbooks=False)
