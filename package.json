@@ -55,6 +55,7 @@
   },
   "devDependencies": {
     "babel-plugin-react-transform": "^2.0.2",
+    "gulp": "^3.9.1",
     "react-proxy": "^1.1.8"
   },
   "scripts": {
