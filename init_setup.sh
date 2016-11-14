@@ -38,7 +38,9 @@ sudo apt install -y \
 # postgresql-devel \ # NOTE: not sure if this is needed...?
 
 # front-end tools
-npm install
+# npm install --global gulp-cli
+# npm install
+# npm install gulp
 
 sudo -H pip install --upgrade pip
 
