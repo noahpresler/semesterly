@@ -192,7 +192,7 @@ export const getSchoolSpecificInfo = (school) => {
         timesName: "Times",
         semesters: {
           F: "Fall 2016",
-          S: "Spring 2017"
+          S: "Winter 2017"
         },
         campuses: {
           1: ""
