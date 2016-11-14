@@ -175,9 +175,7 @@ header nav a:hover {
 
 .article-overlay {
 	background: transparent;
-    -webkit-transition: 0.5s all ease;
-    -transition: 0.5s all ease;
-    transition: 0.5s all ease;
+    transition: background-color 0.5s ease;
     position: absolute;
     top: 0;
     left: 0;
@@ -202,24 +200,22 @@ header nav a:hover {
 }
 
 .article:hover .embed-image {
-    -moz-transform: scale(1.07, 1.07);
-    -ms-transform: scale(1.07, 1.07);
-    -webkit-transform: scale(1.07, 1.07);
     transform: scale(1.07, 1.07);
     /*-webkit-filter: opacity(0.3);*/
    /* -webkit-transition: width 1.8s ease, height 1.8s ease, -webkit-filter 0.5s ease;
     transition: width 1.8s ease, height 1.8s ease, -webkit-filter 0.5s ease;*/
-     -webkit-transition: all 1.8s ease;
-    transition: all 1.8s ease;
+    transition: transform 1.8s ease;
 }
 
 .article .embed-image {
+	height: 0;
+	padding-bottom: 66.67%;
+	background-size: cover;
+	background-position: center;
+	background-repeat: no-repeat;
+	display: block;
     max-width: 100%;
-    -webkit-transition: 0.5s all ease;
-    -transition: 0.5s all ease;
-    transition: 0.5s all ease;
-    -moz-backface-visibility: hidden;
-    -webkit-backface-visibility: hidden;
+    transition: transform 0.5s ease;
     backface-visibility: hidden;
 }
 
@@ -231,14 +227,12 @@ header nav a:hover {
 	font-size: 30px;
 	text-transform: uppercase;
 	font-weight: bold;
-    -webkit-transition: 0.5s all ease;
-    -transition: 0.5s all ease;
-    transition: 0.5s all ease;
-    filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=0);
+    transition: opacity 0.2s ease;
+    /*filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=0);*/
     opacity: 0;
 }
 
-.article-data a {
+.article-data {
 	text-decoration: none;
 	letter-spacing: 2px;
 	color: #111111;
@@ -246,15 +240,18 @@ header nav a:hover {
 
 .article:hover .article-data {
 	opacity: 1;
+	transition: opacity 0.9s ease;
 }
 
 .article-data {
+	padding: 0px 40px;
 	position: absolute;
 	z-index: 2;
     width: 100%;
     height: auto;
-    top: 45%;
+    top: 50%;
     text-align: center;
+    transform: translateY(-50%);
 }
 
 footer {
@@ -302,8 +299,14 @@ footer h6 {
 	margin: 0;
 }
 @media(max-width: 766px) {
-	article {
-		padding: 0px !important;
+	.article-link {
+		border: 10px solid #F3F3F3;
+	}
+	.row {
+		margin: 0px;
+	}
+	.learn-more {
+		margin: 20px 0px;
 	}
 }
 
