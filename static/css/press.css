@@ -74,8 +74,9 @@ header nav a:hover {
 	width: 100%;
 	height: 350px;
 	background-color: #F3F3F3;
-	background-image: url(/static/img/about.png);
+	background-image: url(/static/img/press_hero.png);
 	background-size: cover;
+	background-position: center 70%;
 	position: relative;
 }
 #hero h1 {
@@ -224,7 +225,7 @@ header nav a:hover {
 }*/
 
 .row .article-data {
-	font-size: 30px;
+	font-size: 2.3vw;
 	text-transform: uppercase;
 	font-weight: bold;
     transition: opacity 0.2s ease;
@@ -307,6 +308,9 @@ footer h6 {
 	}
 	.learn-more {
 		margin: 20px 0px;
+	}
+	.article-data {
+		font-size: 5vw;
 	}
 }
 
