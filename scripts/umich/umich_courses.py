@@ -503,12 +503,8 @@ class umichParser:
 				instr_name = input_section['Meeting'][0]['Instructors']
 			except KeyError:
 				instr_name = 'TBA'
-		#print("course: {}, semester: {}".format(course_model.department+course_model.code, self.semester[0].upper()))
-		#if(type(instr_name) == list):
-		#	print("LIST: len = {}, chars = {}".format(len(instr_name)))
-		#else:
-		#	print("Name: {}, LENGTH: {}, TYPE: {}".format(instr_name, len(instr_name), type(instr_name)))
-		#print(input_section)
+		# Section type defaults to "L" if not found in dict
+		sect_type = SECTION_MAP.get(input_section['SectionType'], "L")
 		section, section_created = Section.objects.update_or_create(
 			course = course_model,
 			meeting_section = input_section['SectionNumber'],
@@ -516,7 +512,7 @@ class umichParser:
 			enrolment = input_section['EnrollmentTotal'],
 			waitlist = input_section['WaitTotal'],
 			waitlist_size = input_section['WaitCapacity'],
-			section_type = SECTION_MAP[input_section['SectionType']],
+			section_type = sect_type, #SECTION_MAP[input_section['SectionType']],
 			instructors = instr_name,
 			semester = self.semester[0].upper()
 		)
