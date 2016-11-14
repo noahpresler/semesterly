@@ -80,7 +80,7 @@ header nav a:hover {
 	position: relative;
 }
 #hero h1 {
-	color: white;
+	color: #F3F3F3;
 	font-size: 48px;
 	line-height: 55px;
 }
@@ -152,6 +152,7 @@ header nav a:hover {
 /* Press */
 #press {
 	padding-top: 150px;
+	padding-bottom: 100px;
 }
 
 .row {
