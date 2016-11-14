@@ -37,6 +37,9 @@ sudo apt install -y \
 	npm
 # postgresql-devel \ # NOTE: not sure if this is needed...?
 
+# front-end tools
+npm install
+
 sudo -H pip install --upgrade pip
 
 # Add the following to the bottom of your ~/.bashrc
