@@ -30,7 +30,8 @@ SECTION_MAP = {	"LEC": "L",
 				"REC": "T", 
 				"SMA": "T",
 				"IND": "L",
-				"FLD": "P"
+				"FLD": "P",
+				"CAS": "L"
 			}
 _DEBUG_FLAG_ = False
 # Printing debug messages
@@ -620,7 +621,7 @@ class umichParser:
 		
 
 def main():
-	parser = umichParser(semester='f16')
+	parser = umichParser(semester='w17')
 	start = tm.time()
 	log("Starting Parser")
 	parser.start(get_textbooks=False)
