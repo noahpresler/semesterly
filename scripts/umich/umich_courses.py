@@ -46,7 +46,7 @@ class umichParser:
 		self.schools = []
 		self.subjects = []
 		self.semester_code_map = {'f16': '2110', 'w17':'2120'}
-		self.semester_map = {'f16': 'F', 'w17': 'W'}
+		self.semester_map = {'f16': 'F', 'w17': 'S'}
 		self.semester = self.semester_map[semester] 
 		self.term = self.semester_code_map[semester]
 		self.url = "http://api-gw.it.umich.edu/Curriculum/SOC/v1/Terms"
