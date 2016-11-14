@@ -150,19 +150,51 @@ header nav a:hover {
 
 /* Press */
 #press {
-	padding: 20px 0;
+	padding-top: 150px;
 }
 
 .row {
 	margin-bottom: 40px;
 }
 
-.row article:first-child {
+/*.row article:first-child {
 	padding-right: 20px;
 }
 
 .row article:nth-child(2) {
 	padding-left: 20px;
+}*/
+.learn-more {
+	text-align: center;
+	text-decoration: none;
+	font-weight: bold;
+	text-transform: uppercase;
+	letter-spacing: 1px;
+	color: #111111;
+}
+
+.article-overlay {
+	background: transparent;
+    -webkit-transition: 0.5s all ease;
+    -transition: 0.5s all ease;
+    transition: 0.5s all ease;
+    position: absolute;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    max-height: 100%;
+    max-width: 100%;
+}
+
+.article:hover .article-overlay {
+	background-color: rgba(243, 243, 243, 0.8);
+}
+
+.article-link {
+	overflow: hidden;
+	border-left: 20px solid #F3F3F3;
+	border-right: 20px solid #F3F3F3;
 }
 
 .article {
@@ -174,12 +206,15 @@ header nav a:hover {
     -ms-transform: scale(1.07, 1.07);
     -webkit-transform: scale(1.07, 1.07);
     transform: scale(1.07, 1.07);
-    -webkit-transition: 1.8s all ease;
-    transition: 1.8s all ease;
+    /*-webkit-filter: opacity(0.3);*/
+   /* -webkit-transition: width 1.8s ease, height 1.8s ease, -webkit-filter 0.5s ease;
+    transition: width 1.8s ease, height 1.8s ease, -webkit-filter 0.5s ease;*/
+     -webkit-transition: all 1.8s ease;
+    transition: all 1.8s ease;
 }
 
-.article .embeded-image {
-    width: 100%;
+.article .embed-image {
+    max-width: 100%;
     -webkit-transition: 0.5s all ease;
     -transition: 0.5s all ease;
     transition: 0.5s all ease;
@@ -188,17 +223,25 @@ header nav a:hover {
     backface-visibility: hidden;
 }
 
-.embed-image {
+/*.embed-image {
 	max-width: 100%;
-}
+}*/
 
 .row .article-data {
-	font-size: 18px;
+	font-size: 30px;
+	text-transform: uppercase;
+	font-weight: bold;
     -webkit-transition: 0.5s all ease;
     -transition: 0.5s all ease;
     transition: 0.5s all ease;
     filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=0);
     opacity: 0;
+}
+
+.article-data a {
+	text-decoration: none;
+	letter-spacing: 2px;
+	color: #111111;
 }
 
 .article:hover .article-data {
@@ -210,7 +253,7 @@ header nav a:hover {
 	z-index: 2;
     width: 100%;
     height: auto;
-    top: 50%;
+    top: 45%;
     text-align: center;
 }
 
@@ -257,6 +300,11 @@ footer h6 {
 	font-size: 10px;
 	color: #777;
 	margin: 0;
+}
+@media(max-width: 766px) {
+	article {
+		padding: 0px !important;
+	}
 }
 
 @media(max-width: 776px) {
