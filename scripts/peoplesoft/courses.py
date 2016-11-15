@@ -6,6 +6,8 @@ from fake_useragent import UserAgent
 from itertools import izip
 from bs4 import BeautifulSoup
 
+from sets import Set
+
 from scripts.textbooks.amazon import make_textbook
 
 class PeopleSoftParser:
@@ -18,6 +20,15 @@ class PeopleSoftParser:
 		'Fr' : 'F',
 		'Sa' : 'S',
 		'Su' : 'U'
+	}
+
+	# NOTE: Chapman specific
+	SECTION_TYPE_MAP = {
+		'Lecture': 'L',
+		'Laboratory': 'P',
+		# 'Field Work': 'L',
+		# 'Activity': 'L',
+		# 'Performance Workshop': 'L',
 	}
 
 	def __init__(self, school, url):
@@ -97,8 +108,10 @@ class PeopleSoftParser:
 		search_query['SSR_CLSRCH_WRK_INCLUDE_CLASS_DAYS$5'] = 'J'
 		search_query[soup.find('select', id=re.compile(r'SSR_CLSRCH_WRK_INSTRUCTION_MODE\$\d'))['id']] = 'P'
 
-		# TODO - necessary clutter (not really sure why this is here anymore)
+		# TODO - necessary clutter (not really sure why this is here anymore - should be called course_setup but does the same)
 		self.course_cleanup()
+
+		TYPES = Set()
 
 		for term in terms:
 
@@ -165,6 +178,7 @@ class PeopleSoftParser:
 
 					# scrape info from page
 					title 		= soup.find('span', {'id' : 'DERIVED_CLSRCH_DESCR200'}).text.encode('ascii', 'ignore')
+					subtitle	= soup.find('span', {'id' : 'DERIVED_CLSRCH_SSS_PAGE_KEYDESCR'}).text.encode('ascii', 'ignore')
 					units 		= soup.find('span', {'id' : 'SSR_CLS_DTL_WRK_UNITS_RANGE'}).text
 					capacity 	= soup.find('span', {'id' : 'SSR_CLS_DTL_WRK_ENRL_CAP'}).text
 					enrollment 	= soup.find('span', {'id' : 'SSR_CLS_DTL_WRK_ENRL_TOT'}).text
@@ -186,6 +200,7 @@ class PeopleSoftParser:
 					# Extract info from title
 					print '\t' + title
 					rtitle = re.match(r'(.+?\s*\w+) - (\w+)\s*(\S.+)', title)
+					self.course['section_type'] = PeopleSoftParser.SECTION_TYPE_MAP.get(subtitle.split('|')[2].strip(), 'L')
 
 					# Place course info into course model
 					self.course['code'] 	= rtitle.group(1)
@@ -199,7 +214,8 @@ class PeopleSoftParser:
 					self.course['size'] 	= int(capacity)
 					self.course['enrolment'] = int(enrollment)
 					self.course['instrs'] 	= ', '.join({instr.text for instr in instrs})
-					self.course['areas'] = ', '.join((self.extract_info(l) for l in re.sub(r'(<.*?>)', '\n', str(areas)).splitlines() if l.strip())) if areas else '' # FIXME -- small bug
+					self.course['areas'] 	= ', '.join((self.extract_info(l) for l in re.sub(r'(<.*?>)', '\n', str(areas)).splitlines() if l.strip())) if areas else '' # FIXME -- small bug
+					# self.course['section_type'] = section_type
 
 					course = self.create_course()
 					section = self.create_section(course)
@@ -229,6 +245,8 @@ class PeopleSoftParser:
 					self.course_cleanup()
 
 			self.wrap_up()
+
+			print TYPES
 
 	def handle_special_case_on_search(self, soup):
 		print 'SPECIAL SEARCH MESSAGE: ' + soup.find('span', {'class','SSSMSGINFOTEXT'}).text
@@ -324,7 +342,8 @@ class PeopleSoftParser:
 			defaults = {
 				'instructors': self.course.get('instrs'),
 				'size': self.course.get('size'),
-				'enrolment': self.course.get('enrolment')
+				'enrolment': self.course.get('enrolment'),
+				'section_type': self.course['section_type']
 			}
 		)
 		return section
