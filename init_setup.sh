@@ -34,6 +34,7 @@ sudo apt install -y \
 	libssl-dev \
 	libffi-dev \
 	build-essential \
+	pgadmin3 \
 	npm
 # postgresql-devel \ # NOTE: not sure if this is needed...?
 
