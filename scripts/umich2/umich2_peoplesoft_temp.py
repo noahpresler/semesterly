@@ -1,3 +1,8 @@
+# @what     UMich modified peoplesoft Course Parser
+# @org      Semeseter.ly
+# @author   Michael N. Miller
+# @date     11/15/16
+
 import django, os, datetime, requests, cookielib, re, sys
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "semesterly.settings")
 django.setup()
