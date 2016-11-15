@@ -474,12 +474,20 @@ class umichParser:
 			except AttributeError:
 				credits = float(0) # use 0 if empty
 		try:
-			course = Course.objects.get(school = "umich", code = cat_num, \
+			courses = Course.objects.filter(school = "umich", code = cat_num, \
 										name = title, department=subject)
-			course.update(code = str(subject) + " " + str(cat_num))
-			course.save()
+			courses.update(code = str(subject) + " " + str(cat_num))
 		except Course.DoesNotExist:
 			pass
+		print smart_str(str(subject) + " " + str(cat_num))
+		matches = Course.objects.filter(code = str(subject) + " " + str(cat_num),
+                        school = self.school,
+                        department = subject,
+                        campus = 1)
+		if matches.count() > 1:
+			for c in matches[1:]:
+				c.delete()
+			print smart_str("Deleting stale course")
 		course, CourseCreated = Course.objects.update_or_create(
 			code = str(subject) + " " + str(cat_num),
 			school = self.school,
