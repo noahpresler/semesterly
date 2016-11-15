@@ -1,7 +1,7 @@
-# @what	UMich Course Parser (Numero Duo)
-# @org	Semeseter.ly
-# @author	Michael N. Miller
-# @date	10/19/16
+# @what     UMich Course Parser (Numero Duo)
+# @org      Semeseter.ly
+# @author   Michael N. Miller
+# @date     11/15/16
 
 import django, os
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "semesterly.settings")
