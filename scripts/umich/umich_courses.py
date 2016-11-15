@@ -54,7 +54,7 @@ class umichParser:
 		self.tokens = [	"6e15388418fa2483841755f5e2d5eba", "5562e94b39dccc2eaaab181e0c4ee", \
 						"c03cae2d767ab4c525d1ce5b57a965", "dfccf802a589fcbdbfa6b4e906e1bb6",\
 						"b0555cfc4e7f81c1a2a4b3b40b79eda", "dd233b5f3d1d3b0289618cc714078f", \
-						"aa8b15285aaf42e0aabf7fcba894e584"]
+						"aa8b15285aaf42e0aabf7fcba894e584", "69f54956936d1babd0a34006d63988"]
 		# cycle through the tokens without running off the end of the list
 		self.tok_cyc = cycle(self.tokens)
 		# Switching tokens due to 60/min limit
@@ -457,6 +457,7 @@ class umichParser:
 	def create_or_update_course(self, course_info):
 		cat_num = course_info["CatalogNumber"]
 		title = course_info["CourseDescr"]
+		subject = course_info["SubjectCode"]
 		try:
 			cat_num = int(cat_num)
 		except ValueError:
@@ -472,19 +473,27 @@ class umichParser:
 				credits = float(course_info['CreditHours'].split(" - ")[0])
 			except AttributeError:
 				credits = float(0) # use 0 if empty
+		try:
+			course = Course.objects.get(school = "umich", code = cat_num, \
+										name = title, department=subject)
+			course.update(code = str(subject) + " " + str(cat_num))
+			course.save()
+		except Course.DoesNotExist:
+			pass
 		course, CourseCreated = Course.objects.update_or_create(
-			code = cat_num,
+			code = str(subject) + " " + str(cat_num),
 			school = self.school,
+			department = subject,
 			campus = 1,
-			name = title,
-			description = course_info['Description'],
-			areas = course_info['Acad_Group'],
-			prerequisites = '',
-			num_credits = credits,
-			level = (int(cat_num)/100)*100,
-			department = course_info["SubjectCode"]
+			defaults = {
+				'name' : title,
+				'description' : course_info['Description'],
+				'areas' : course_info['Acad_Group'],
+				'prerequisites' : '',
+				'num_credits' : credits,
+				'level' : (int(cat_num)/100)*100
+			}
 		)
-		course.save()
 		return course
 			#self.create_course_offerings(self, course,)
 	def create_section(self, meeting, course_model, input_section):
