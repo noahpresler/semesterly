@@ -200,10 +200,12 @@ class PeopleSoftParser:
 						# Extract info from title
 						print '\t\t' + title
 						rtitle = re.match(r'(.+?\s*\w+) - (\w+)\s*(\S.+)', title)
+						
+						# Extract info from subtitle
 						self.course['section_type'] = PeopleSoftParser.SECTION_TYPE_MAP.get(subtitle.split('|')[2].strip(), 'L')
 
 						# Place course info into course model
-						self.course['code'] 	= rtitle.group(1)
+						self.course['code'] 	= '-'.join(rtitle.group(1).split())
 						self.course['section'] 	= rtitle.group(2)
 						self.course['name'] 	= rtitle.group(3)
 						self.course['credits']	= float(re.match(r'(\d*).*', units).group(1))
