@@ -55,7 +55,7 @@ class PeopleSoftParser:
 				if r.status_code == 200:
 					html = r.text
 
-				print 'GET', r.url
+				# print 'GET', r.url
 
 			except (requests.exceptions.Timeout,
 				requests.exceptions.ConnectionError):
@@ -142,12 +142,12 @@ class PeopleSoftParser:
 					else:
 						self.course['department'] = department.text
 
-					search_query['ICAction'] = department['id']
+					search_query2['ICAction'] = department['id']
 
 					# Get course listing page for department
 					soup = BeautifulSoup(self.post_http(self.base_url, search_query2).text, 'lxml')
 
-					special = False # FIXME -- nasty hack, fix it!
+					isxml = True # Umich dumps xml!
 
 					# check for valid search/page
 					if soup.find('td', {'id' : 'PTBADPAGE_' }) or soup.find('div', {'id' : 'win1divDERIVED_CLSMSG_ERROR_TEXT'}):
@@ -156,20 +156,12 @@ class PeopleSoftParser:
 						continue
 					elif soup.find('span', {'class','SSSMSGINFOTEXT'}):
 						soup = self.handle_special_case_on_search(soup)
-						special = True
+						isxml = True
 
 					# fill payload for course description page request
-					descr_payload = {a['name']: a['value'] for a in soup.find('field' if not special else 'field', id=re.compile(r'win\ddivPSHIDDENFIELDS')).find_all('input')}
-					for e in descr_payload:
-						print e, descr_payload[e]
-
-					print soup.prettify().encode('utf-8')
-					exit(1)
+					descr_payload = {a['name']: a['value'] for a in soup.find('div' if not isxml else 'field', id=re.compile(r'win\ddivPSHIDDENFIELDS')).find_all('input')}
 
 					courses = soup.find_all('table', {'class' : 'PSLEVEL1GRIDROWNBO'})
-
-					for course in courses:
-						print courses['id']
 
 					# for all the courses on the page
 					for i in range(len(courses)):
@@ -331,7 +323,6 @@ class PeopleSoftParser:
 				'geneds': self.course.get('geneds')
 			}
 		)
-		print 'created course', str(course)
 		return course
 
 	def create_section(self, course_model):
