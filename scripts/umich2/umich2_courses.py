@@ -18,7 +18,7 @@ class Umich2Parser(PeopleSoftParser):
 
 	def parse(self):
 		# NOTE: hardcoded semesters Fall, Interim, Spring 2016-2017
-		terms = {'F':'2110', 'W':'2120'}
+		terms = {'F':'2110', 'S':'2120'}
 		PeopleSoftParser.parse(self, terms)
 
 def main():
