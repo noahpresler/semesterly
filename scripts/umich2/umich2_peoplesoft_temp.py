@@ -137,15 +137,16 @@ class PeopleSoftParser:
 
 				# extract department query list
 				departments = soup.find_all('a', id=re.compile(r'CLASS_SRCH_WRK2_SSR_PB_CLASS_SRCH\$\d'))
+				department_names = soup.find_all('span', id=re.compile(r'M_SR_SS_SUBJECT_DESCR\$\d'))
 
-				for department in departments:
+				for department, department_name in zip(departments, department_names):
 
-					print '\t>> Parsing courses in department', department.text
+					print '\t>> Parsing courses in department', department_name.text
 
 					if kwargs.get('department_regex'):
 						self.course['department'] = kwargs['department_regex'].match(department.text).group(1)
 					else:
-						self.course['department'] = department.text
+						self.course['department'] = department_name.text
 
 					search_query2['ICAction'] = department['id']
 
