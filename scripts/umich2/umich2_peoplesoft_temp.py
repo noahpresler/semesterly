@@ -270,7 +270,7 @@ class PeopleSoftParser:
 		self.course['coreqs'] = ''
 		self.course['geneds'] = ''
 
-	# NOTE: chapman specific
+	# NOTE: chapman specific (... not really, it works for umich too!)
 	def extract_info(self, text):
 
 		text = text.encode('utf-8', 'ignore')

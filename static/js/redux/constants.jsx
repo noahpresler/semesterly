@@ -15,6 +15,7 @@ export const VALID_SCHOOLS = [
   "queens", 
   "vandy",
   "umich",
+  "umich2",
   "chapman"
 ];
 
@@ -193,6 +194,21 @@ export const getSchoolSpecificInfo = (school) => {
         semesters: {
           F: "Fall 2016",
           S: "Winter 2017"
+        },
+        campuses: {
+          1: ""
+        }
+      }
+    case "umich2":
+      return {
+        primaryDisplay: "name",
+        areasName: "Areas",
+        departmentsName: "Departments",
+        levelsName: "Levels",
+        timesName: "Times",
+        semesters: {
+          F: "Fall 2016",
+          W: "Winter 2017"
         },
         campuses: {
           1: ""
