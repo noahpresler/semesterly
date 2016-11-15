@@ -192,7 +192,7 @@ class PeopleSoftParser:
 						isbns 	= self.parse_textbooks(soup)
 
 						# Extract info from title
-						print '\t' + title
+						print '\t\t' + title
 						rtitle = re.match(r'(.+?\s*\w+) - (\w+)\s*(\S.+)', title)
 						self.course['section_type'] = PeopleSoftParser.SECTION_TYPE_MAP.get(subtitle.split('|')[2].strip(), 'L')
 
@@ -207,7 +207,7 @@ class PeopleSoftParser:
 						self.course['units'] 	= re.match(r'(\d*).*', units).group(1)
 						self.course['size'] 	= int(capacity)
 						self.course['enrolment'] = int(enrollment)
-						self.course['instrs'] 	= ', '.join({instr.text for instr in instrs})
+						self.course['instrs'] 	= ', '.join({instr.text for instr in instrs})[:500]
 						self.course['areas'] 	= ', '.join((self.extract_info(l) for l in re.sub(r'(<.*?>)', '\n', str(areas)).splitlines() if l.strip())) if areas else '' # FIXME -- small bug
 						# self.course['section_type'] = section_type
 
