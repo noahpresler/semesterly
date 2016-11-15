@@ -74,9 +74,9 @@ header nav a:hover {
 	width: 100%;
 	height: 350px;
 	background-color: #F3F3F3;
-	background-image: url(/static/img/press_hero.png);
+	background-image: url(/static/img/press_img/press-hero.jpg);
 	background-size: cover;
-	background-position: center 70%;
+	background-position: bottom;
 	position: relative;
 }
 #hero h1 {
@@ -151,7 +151,7 @@ header nav a:hover {
 
 /* Authors */
 #authors > div {
-	padding: 50px 0px 0px 0px;
+	padding: 50px 30px 0px 30px;
 	text-align: center;
 }
 
@@ -160,10 +160,14 @@ header nav a:hover {
 	background-position: center;
     background-size:contain;
     background-repeat: no-repeat;
-    margin: 0px 12px;
+    margin: 1%;
     height: 50px;
-    width: 200px;
+    width: 15.5%;
     filter: grayscale(100%);
+}
+
+#hub {
+	width: 7.8%;
 }
 
 /* Press */
@@ -317,6 +321,13 @@ footer h6 {
 	color: #777;
 	margin: 0;
 }
+@media(max-width: 1060px) {
+	.author {
+	    margin: 2%;
+	    width: 20%;
+	}
+}
+
 @media(max-width: 766px) {
 	.article-link {
 		border: 10px solid #F3F3F3;
@@ -327,8 +338,14 @@ footer h6 {
 	.learn-more {
 		margin: 20px 0px;
 	}
-	.article-data {
+	.row .article-data {
 		font-size: 5vw;
+	}
+	.author {
+	    width: 30%;
+	}
+	#hub {
+		width: 12%
 	}
 }
 
@@ -338,6 +355,25 @@ footer h6 {
 	}
 	footer li {
 		text-align: center;
+	}
+}
+
+@media(max-width: 580px) {
+	#hub {
+		width: 34.5%;
+	}
+	.author {
+		width: 34.5%;
+		margin: 12px;
+	}
+}
+
+@media(max-width: 440px) {
+	#hub {
+		width: 200px;
+	}
+	.author {
+		width: 200px;
 	}
 }
 
