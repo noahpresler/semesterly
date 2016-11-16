@@ -269,10 +269,10 @@ header nav a:hover {
 }
 
 .article-data {
-	padding: 0px 40px;
+	width: 80%;
+    left: 10%;
 	position: absolute;
 	z-index: 2;
-    width: 100%;
     height: auto;
     top: 50%;
     text-align: center;
@@ -393,6 +393,18 @@ footer h6 {
 	}
 	#hero {
 		height: 200px;
+	}
+	.row .article-data {
+		opacity: 1;
+	}
+	.article .article-overlay {
+		background-color: rgba(243, 243, 243, 0.7);
+	}
+	.article:hover .article-overlay {
+		background-color: rgba(243, 243, 243, 0.7);
+	}
+	.article:hover .embed-image {
+	    transform: scale(1.0, 1.0);
 	}
 }
 
