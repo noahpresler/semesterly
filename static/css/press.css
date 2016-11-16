@@ -178,6 +178,7 @@ header nav a:hover {
 
 .row {
 	margin-bottom: 40px;
+	padding: 0px 20px;
 }
 
 /*.row article:first-child {
@@ -214,12 +215,13 @@ header nav a:hover {
 
 .article-link {
 	overflow: hidden;
-	border-left: 20px solid #F3F3F3;
-	border-right: 20px solid #F3F3F3;
+	/*border-left: 20px solid #F3F3F3;
+	border-right: 20px solid #F3F3F3;*/
 }
 
 .article {
 	position: relative;
+	padding: 0px 20px;
 }
 
 .article:hover .embed-image {
@@ -329,8 +331,11 @@ footer h6 {
 }
 
 @media(max-width: 766px) {
-	.article-link {
+/*	.article-link {
 		border: 10px solid #F3F3F3;
+	}*/
+	.article {
+		padding: 20px 0px;
 	}
 	.row {
 		margin: 0px;
