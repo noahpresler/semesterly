@@ -21,7 +21,7 @@ from timetable.models import *
 from amazonproduct import API 
 api = API(locale='us')
 
-DAY_MAP = {"Mo": "M", "Tu": "T", "We": "W", "Th": "T", "Fr": "F"}
+DAY_MAP = {"Mo": "M", "Tu": "T", "We": "W", "Th": "R", "Fr": "F"}
 SECTION_MAP = {	"LEC": "L", 
 				"SEM": "L", 
 				"DIS" : "T", 
