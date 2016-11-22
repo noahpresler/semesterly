@@ -105,3 +105,4 @@ class Requester:
 	def soupify(request, parser):
 		parser = parser if isinstance(parser, basestring) else 'html.parser'
 		return BeautifulSoup(request.text, parser)
+
