@@ -4,11 +4,11 @@ django.setup()
 from timetable.models import *
 from fake_useragent import UserAgent
 from itertools import izip
-from bs4 import BeautifulSoup
 
 from sets import Set
 
 from scripts.textbooks.amazon import make_textbook
+from scripts.parser_library.Requester import Requester
 
 class PeopleSoftParser:
 
@@ -22,83 +22,28 @@ class PeopleSoftParser:
 		'Su' : 'U'
 	}
 
-	# NOTE: Chapman specific
 	SECTION_TYPE_MAP = {
 		'Lecture': 'L',
 		'Laboratory': 'P',
-		# 'Field Work': 'L',
-		# 'Activity': 'L',
-		# 'Performance Workshop': 'L',
+		'Discussion': 'T'
 	}
 
 	def __init__(self, school, url):
-		self.session = requests.Session()
-		# self.headers = {'User-Agent' : UserAgent().random} # why does this not work anymore?
-		self.headers = {'User-Agent' : 'UserAgent 1.0'}
-		self.cookies = cookielib.CookieJar()
 		self.base_url = url
 		self.school = school
+		self.requester = Requester()
 		self.course = {}
-
-	def get_html(self, url, payload=''):
-		html = None
-		while html is None:
-			try:
-				r = self.session.get(
-					url,
-					params = payload,
-					cookies = self.cookies,
-					headers = self.headers,
-					verify = True
-				)
-
-				if r.status_code == 200:
-					html = r.text
-
-				# print GET, r.url
-
-			except (requests.exceptions.Timeout,
-				requests.exceptions.ConnectionError):
-				sys.stderr.write("Unexpected error: " + str(sys.exc_info()[0]) + '\n')
-				raw_input("Press Enter to continue...")
-				html = None
-
-		return html.encode('utf-8')
-
-	def post_http(self, url, form, payload=''):
-
-		post = None
-		while post is None:
-			try:
-				post = self.session.post(
-					url,
-					data = form,
-					params = payload,
-					cookies = self.cookies,
-					headers = self.headers,
-					verify = True,
-				)
-
-				# print POST, r.url
-
-			except (requests.exceptions.Timeout,
-				requests.exceptions.ConnectionError):
-				sys.stderr.write("Unexpected error: " + str(sys.exc_info()[0]) + '\n')
-				raw_input("Press Enter to continue...")
-				post = None
-
-		return post
 
 	def parse(self, terms, **kwargs):
 
-		soup = BeautifulSoup(self.get_html(self.base_url, kwargs['url_params'] if kwargs.get('url_params') else {}))
+		soup = self.requester.get(self.base_url, params=kwargs['url_params'] if kwargs.get('url_params') else {}, parser=True)
 
 		# create search payload with hidden form data
 		search_query = {a['name']: a['value'] for a  in soup.find('div', id=re.compile(r'win\ddivPSHIDDENFIELDS')).find_all('input')}
 
 		# advanced search
 		search_query['ICAction'] = 'DERIVED_CLSRCH_SSR_EXPAND_COLLAPS$149$$1'
-		soup = BeautifulSoup(self.post_http(self.base_url, search_query).text, 'html.parser')
+		soup = self.requester.post(self.base_url, params=search_query, parser=True)
 
 		# virtually refined search (to get around min search param requirement)
 		search_query['SSR_CLSRCH_WRK_SSR_OPEN_ONLY$chk$4'] = 'N'
@@ -124,7 +69,7 @@ class PeopleSoftParser:
 			search_query['ICAJAX'] = '1'
 			search_query['ICNAVTYPEDROPDOWN'] = '0'
 			search_query['ICAction'] = 'CLASS_SRCH_WRK2_STRM$35$'
-			soup = BeautifulSoup(self.post_http(self.base_url, search_query).text, 'lxml')
+			soup = self.requester.post(self.base_url, params=search_query, parser='lxml')
 
 			# TODO - this might not be necessary
 			del search_query['ICAJAX']
@@ -151,7 +96,7 @@ class PeopleSoftParser:
 				search_query[search_id] = department['value']
 
 				# Get course listing page for department
-				soup = BeautifulSoup(self.post_http(self.base_url, search_query).text, 'html.parser')
+				soup = self.requester.post(self.base_url, params=search_query, parser=True)
 
 				special = False # FIXME -- nasty hack, fix it!
 
@@ -174,7 +119,7 @@ class PeopleSoftParser:
 					descr_payload['ICAction'] = 'MTG_CLASS_NBR$' + str(i)
 
 					# Get course description page
-					soup = BeautifulSoup(self.get_html(self.base_url, descr_payload))
+					soup = self.requester.get(self.base_url, params=descr_payload, parser=True)
 
 					# scrape info from page
 					title 		= soup.find('span', {'id' : 'DERIVED_CLSRCH_DESCR200'}).text.encode('ascii', 'ignore')
@@ -256,7 +201,7 @@ class PeopleSoftParser:
 		search_query2['ICAJAX'] = '1'
 		search_query2['ICNAVTYPEDROPDOWN'] = '0'
 
-		return BeautifulSoup(self.post_http(self.base_url, search_query2).text, 'lxml')
+		return self.requester.post(self.base_url, params=search_query2, parser='lxml')
 
 	def parse_textbooks(self, soup):
 		isbns = zip(soup.find_all('span', id=re.compile(r'DERIVED_SSR_TXB_SSR_TXBDTL_ISBN\$\d*')), soup.find_all('span', id=re.compile(r'DERIVED_SSR_TXB_SSR_TXB_STATDESCR\$\d*')))
