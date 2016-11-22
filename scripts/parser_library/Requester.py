@@ -9,7 +9,6 @@ from bs4 import BeautifulSoup
 
 class Requester:
 
-<<<<<<< HEAD
     def __init__(self):
         self.session = requests.Session()
         self.headers = {'User-Agent' : 'UserAgent 1.0'} # UserAgent().random
