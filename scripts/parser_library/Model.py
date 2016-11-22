@@ -33,6 +33,11 @@ class Model:
         return len(self.map)
 
     def create_course(self):
+        ''' Create course in database from info in model map.
+
+        Returns:
+            django course model object
+        '''
         course, CourseCreated = Course.objects.update_or_create(
             code = self.map['code'],
             school = self.school,
@@ -52,6 +57,14 @@ class Model:
         return course
 
     def create_section(self, course_model):
+        ''' Create section in database from info in model map. 
+        
+        Args:
+            course_model: django course model object
+
+        Returns:
+            django section model object
+        '''
         section, section_was_created = Section.objects.update_or_create(
             course = course_model,
             semester = self.map['semester'],
@@ -68,6 +81,11 @@ class Model:
         return section
 
     def create_offerings(self, section_model):
+        ''' Create offering in database from info in model map.
+
+        Args:
+            course_model: django course model object
+        '''
         if self.map.get('days'):
             for day in self.map.get('days'):
                 offering_model, offering_was_created = Offering.objects.update_or_create(
@@ -81,22 +99,14 @@ class Model:
                 )
 
     def remove_section(self, course_model):
-        ''' Remove section specified in model map.
-        
-        Args:
-            course_model: the course model to search for the section in
-        '''
+        ''' Remove section specified in model map from django database. '''
         if Section.objects.filter(course = course_model, meeting_section = self.map.get('section')).exists():
             s = Section.objects.get(course = course_model, meeting_section = self.map.get('section'))
             s.delete()
 
     @staticmethod
     def remove_offerings(section_model):
-        ''' Remove all offerings associated with a section.
-
-        Args:
-            section_model: the section model
-        '''
+        ''' Remove all offerings associated with a section. '''
         Offering.objects.filter(section = section_model).delete()
 
     def wrap_up(self):

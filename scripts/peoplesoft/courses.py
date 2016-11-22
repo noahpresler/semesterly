@@ -1,13 +1,6 @@
-import django, os, datetime, requests, cookielib, re, sys
-os.environ.setdefault("DJANGO_SETTINGS_MODULE", "semesterly.settings")
-django.setup()
-from timetable.models import *
-from fake_useragent import UserAgent
-from itertools import izip
+import re, sys
 
-from sets import Set
-
-# parse library
+# parser library
 from scripts.textbooks.amazon import make_textbook
 from scripts.parser_library.Requester import Requester
 from scripts.parser_library.Extractor import *
@@ -33,9 +26,8 @@ class PeopleSoftParser:
 
 	def __init__(self, school, url, do_tbks=True):
 		self.base_url = url
-		self.school = school
+		self.course = Model(school)
 		self.requester = Requester()
-		self.course = Model(self.school)
 
 	def parse(self, terms, **kwargs):
 
@@ -170,7 +162,7 @@ class PeopleSoftParser:
 					map(lambda isbn: make_textbook(isbn[1], isbn[0], section), isbns)
 
 					# offering details
-					for sched, loc, date in izip(scheds, locs, dates):
+					for sched, loc, date in zip(scheds, locs, dates):
 
 						rsched = re.match(r'([a-zA-Z]*) (.*) - (.*)', sched.text)
 
