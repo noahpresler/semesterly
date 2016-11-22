@@ -1,3 +1,10 @@
+# @what     Parsing library Extractor (info)
+# @org      Semeseter.ly
+# @author   Michael N. Miller
+# @date     11/22/16
+
+import re, sys
+
 def time_12to24(time12):
     ''' Attempts to convert 12hr time to 24hr time
 
