@@ -23,5 +23,7 @@ for ptt_idx in range(len(ptts)):
 	for ft_idx in ptts[ptt_idx].courses.all().values_list('id', flat=True):
 		feat_trix[ptt_idx, ft_idx - min_id + 1] = True
 
+print "SUCCESS", feat_trix.shape
+
 #write to file
 pickle.dump(feat_trix, open("timetable.features", "wb"))
