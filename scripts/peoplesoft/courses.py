@@ -1,3 +1,8 @@
+# @what	PeopleSoft Course Parser
+# @org	Semeseter.ly
+# @author	Michael N. Miller
+# @date	11/22/16
+
 import re, sys
 
 # parser library
@@ -31,14 +36,14 @@ class PeopleSoftParser:
 
 	def parse(self, terms, **kwargs):
 
-		soup = self.requester.get(self.base_url, params=kwargs['url_params'] if kwargs.get('url_params') else {}, parser=True)
+		soup = self.requester.get(self.base_url, params=kwargs['url_params'] if kwargs.get('url_params') else {}, parse=True)
 
 		# create search payload with hidden form data
 		search_query = {a['name']: a['value'] for a  in soup.find('div', id=re.compile(r'win\ddivPSHIDDENFIELDS')).find_all('input')}
 
 		# advanced search
 		search_query['ICAction'] = 'DERIVED_CLSRCH_SSR_EXPAND_COLLAPS$149$$1'
-		soup = self.requester.post(self.base_url, params=search_query, parser=True)
+		soup = self.requester.post(self.base_url, params=search_query, parse=True)
 
 		# virtually refined search (to get around min search param requirement)
 		search_query['SSR_CLSRCH_WRK_SSR_OPEN_ONLY$chk$4'] = 'N'
@@ -62,9 +67,8 @@ class PeopleSoftParser:
 			search_query['ICAJAX'] = '1'
 			search_query['ICNAVTYPEDROPDOWN'] = '0'
 			search_query['ICAction'] = 'CLASS_SRCH_WRK2_STRM$35$'
-			soup = self.requester.post(self.base_url, params=search_query, parser='lxml')
+			soup = self.requester.post(self.base_url, params=search_query, parse=True)
 
-			# TODO - this might not be necessary
 			del search_query['ICAJAX']
 			del search_query['ICNAVTYPEDROPDOWN']
 
@@ -89,7 +93,7 @@ class PeopleSoftParser:
 				search_query[search_id] = department['value']
 
 				# Get course listing page for department
-				soup = self.requester.post(self.base_url, params=search_query, parser=True)
+				soup = self.requester.post(self.base_url, params=search_query, parse=True)
 
 				special = False # FIXME -- nasty hack, fix it!
 
@@ -112,7 +116,7 @@ class PeopleSoftParser:
 					descr_payload['ICAction'] = 'MTG_CLASS_NBR$' + str(i)
 
 					# Get course description page
-					soup = self.requester.get(self.base_url, params=descr_payload, parser=True)
+					soup = self.requester.get(self.base_url, params=descr_payload, parse=True)
 
 					# scrape info from page
 					title 		= soup.find('span', {'id' : 'DERIVED_CLSRCH_DESCR200'}).text.encode('ascii', 'ignore')
@@ -192,7 +196,7 @@ class PeopleSoftParser:
 		search_query2['ICAJAX'] = '1'
 		search_query2['ICNAVTYPEDROPDOWN'] = '0'
 
-		return self.requester.post(self.base_url, params=search_query2, parser='lxml')
+		return self.requester.post(self.base_url, params=search_query2, parse=True)
 
 	def parse_textbooks(self, soup):
 		isbns = zip(soup.find_all('span', id=re.compile(r'DERIVED_SSR_TXB_SSR_TXBDTL_ISBN\$\d*')), soup.find_all('span', id=re.compile(r'DERIVED_SSR_TXB_SSR_TXB_STATDESCR\$\d*')))
@@ -205,3 +209,11 @@ class PeopleSoftParser:
 		self.course['prereqs'] = ''
 		self.course['coreqs'] = ''
 		self.course['geneds'] = ''
+
+	@staticmethod
+	def hidden_params(soup, ajax=False, tag=['div', 'field'], ):	
+
+		if ajax:
+			pass
+
+		return {}
