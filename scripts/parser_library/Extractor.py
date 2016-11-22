@@ -37,7 +37,6 @@ def extract_info(course, text):
         str: the text trimmed of extracted information
     '''
     text = text.encode('utf-8', 'ignore')
-
     extractions = {
         'prereqs' : r'[Pp]r(?:-?)e[rR]eq(?:uisite)?(?:s?)[:,\s]\s*(.*?)(?:\.|$)\s*',
         'coreqs'  : r'[Cc]o(?:-?)[rR]eq(?:uisite)?(?:s?)[:,\s]\s*(.*?)(?:\.|$)\s*',
