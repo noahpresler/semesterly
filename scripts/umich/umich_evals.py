@@ -70,4 +70,4 @@ class UmichEvals:
 		
 		login_url = 'LOGIN_URL'
 
-		soup = BeautifulSoup(login_url, 'html.parser')
+		soup = BeautifulSoup(self.get_html(login_url), 'html.parser')
