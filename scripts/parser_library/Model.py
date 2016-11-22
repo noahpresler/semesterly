@@ -8,8 +8,9 @@ from timetable.models import *
 
 class Model:
 
-    def __init__(self):
+    def __init__(self, school):
         self.map = {}
+        self.school = school
 
     def __setitem__(self, key, value):
         self.map[key] = value
