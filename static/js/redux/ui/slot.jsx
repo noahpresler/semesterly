@@ -1,4 +1,5 @@
 import React from 'react';
+import ReactDOM from 'react-dom'
 import { DropTarget } from 'react-dnd'
 import { HALF_HOUR_HEIGHT, COLOUR_DATA, DRAGTYPES } from '../constants.jsx';
 import Radium, { StyleRoot } from 'radium';
@@ -113,6 +114,18 @@ class Slot extends React.Component {
         $(".slot-" + this.props.course)
           .css('background-color', colour)
     }
+    checkOverflow() {
+    // var name = this.courseName
+        console.log("hey im here");
+        // var div = ReactDOM.findDOMNode(this.refs.courseDiv);
+        // return ((this.refs.courseDiv.getDOMNode().offsetHeight < this.refs.courseDiv.getDOMNode().scrollHeight) || (this.refs.courseDiv.getDOMNode().offsetWidth < this.refs.courseDiv.getDOMNode().scrollWidth));
+        if (!this.refs.courseDiv) {
+            return false;
+        } else {
+            return ((this.refs.courseDiv.offsetHeight < this.refs.courseDiv.scrollHeight) 
+            || (this.refs.courseDiv.offsetWidth < this.refs.courseDiv.scrollWidth));
+        }
+    }
   render() {
         let removeButton = this.state.hovered ?
             <i className="fa fa-times"
@@ -156,8 +169,10 @@ class Slot extends React.Component {
                         <div className="fc-time">
                             <span>{ converted_start } – { converted_end }</span>
                         </div>
-                        <div className="fc-time">
-                            { this.props[this.props.primaryDisplayAttribute] + " " + this.props.meeting_section}
+                        <div ref="courseDiv" className="fc-time">
+                            <span className={"fc-time-name" + (this.checkOverflow() ? "-overflow" : "")}>
+                            { this.props[this.props.primaryDisplayAttribute] + " "}</span>
+                            <span>{this.props.meeting_section}</span>
                         </div>
                         <div className="fc-time">
                             {friends}
