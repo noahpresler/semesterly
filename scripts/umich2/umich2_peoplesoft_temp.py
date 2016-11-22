@@ -27,13 +27,10 @@ class PeopleSoftParser:
 		'Su' : 'U'
 	}
 
-	# NOTE: Chapman specific
 	SECTION_TYPE_MAP = {
 		'Lecture': 'L',
 		'Laboratory': 'P',
-		# 'Field Work': 'L',
-		# 'Activity': 'L',
-		# 'Performance Workshop': 'L',
+		'Discussion': 'T',
 	}
 
 	def __init__(self, school, url):
