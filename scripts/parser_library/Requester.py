@@ -74,7 +74,6 @@ class Requester:
         Examples:
             TODO
         '''
-
         r = None
         while r is None:
             try:
