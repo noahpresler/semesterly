@@ -14,18 +14,18 @@ class Requester:
         self.headers = {'User-Agent' : 'UserAgent 1.0'} # UserAgent().random
         self.cookies = cookielib.CookieJar()
 
-    def get(self, url, params=None, parser=None, quiet=True):
+    def get(self, url, params=None, parse=False, quiet=True):
         ''' HTTP GET.
 
         Args:
             url (str): url to query
             params (dict): payload dictionary of HTTP params (default None)
             quiet (bool): suppress output if True (default True)
-            parser (None, bool, str): specifies if return should be transformed into soup (default None)
-                str option specifies soup parse type
+            parse (bool): specifies if return should be transformed into soup (default False)
+                autodetects parse type as 'html.parser' or 'lxml'
 
         Returns:
-            request object: if parser is set None or False
+            request object: if parse is False
             soup: soupified text of http request
 
         Examples:
@@ -50,13 +50,13 @@ class Requester:
                 sys.stderr.write("Timeout error: (GET) " + str(sys.exc_info()[0]) + '\n')
                 raw_input("Press Enter to try again...")
                 r = None
-        
-        if not parser:
+
+        if not parse:
             return r
         else:
-            return Requester.soupify(r, parser)
+            return Requester.soupify(r.text)
 
-    def post(self, url, form=None, params=None, parser=None, quiet=True):
+    def post(self, url, form=None, params=None, parse=False, quiet=True):
         ''' HTTP POST.
 
         Args:
@@ -64,11 +64,11 @@ class Requester:
             form (dict): HTTP form key-value dictionary (defualt None)
             params (dict): payload dictionary of HTTP params 
             quiet (bool): suppress output if True (default True)
-            parser (None, bool, str): specifies if return should be transformed into soup (default None)
-                str option specifies soup parse type
+            parse (bool): specifies if return should be transformed into soup (default False)
+                autodetects parse type as 'html.parser' or 'lxml'
 
         Returns:
-            request object: if parser is None or False
+            request object: if parse is False
             soup: soupified text of http request
 
         Examples:
@@ -95,13 +95,24 @@ class Requester:
                 raw_input("Press Enter to try again...")
                 r = None
 
-        if not parser:
+        if not parse:
             return r
         else:
-            return Requester.soupify(r, parser)
+            return Requester.soupify(r.text)
 
     @staticmethod
-    def soupify(request, parser):
-        parser = parser if isinstance(parser, basestring) else 'html.parser'
-        return BeautifulSoup(request.text, parser)
+    def soupify(markup):
+        ''' Soupifies markup of given request. Additionally, autodects html or xml format.
 
+        Args:
+            markup: raw markup text
+
+        Returns:
+            soupified markup
+        '''
+        soup = lambda parser: BeautifulSoup(markup, parser)
+        if "</html>"[::-1] in markup[::-1]:
+        # NOTE: ^quite inefficient so do fun things w/reversals :-)
+            return soup('html.parser')
+        else:
+            return soup('lxml')
