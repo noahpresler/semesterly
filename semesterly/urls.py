@@ -73,6 +73,9 @@ urlpatterns = patterns('',
     # about page
     url(r'about/', 'timetable.views.about'),
 
+    # press page
+    url(r'press/', 'timetable.views.press'),
+
     # Automatic deployment endpoint
     url(r'deploy_staging/', 'semesterly.views.deploy_staging'),
 

@@ -520,6 +520,18 @@ class umichParser:
 				instr_name = input_section['Meeting'][0]['Instructors']
 			except KeyError:
 				instr_name = 'TBA'
+		# Getting rid of duplicates
+		matches = Section.objects.filter(course = course_model, meeting_section=input_section['SectionNumber'])
+		if matches.count() > 1:
+			for c in matches[1:]:
+				c.delete()
+			print smart_str("Deleting Stale section for {}".format(course_model.code))
+		# Find all existing offerings for section and delete them
+		if Section.objects.filter(course = course_model, meeting_section = input_section['SectionNumber']).exists():
+			s = Section.objects.get(course = course_model, meeting_section = input_section['SectionNumber'])
+			print smart_str("Deleting stale meeting for {}".format(course_model.code + " " + str(input_section['SectionNumber'])))
+			Offering.objects.filter(section = s).delete()
+
 		# Section type defaults to "L" if not found in dict
 		sect_type = SECTION_MAP.get(input_section['SectionType'], "L")
 		section, section_created = Section.objects.update_or_create(
@@ -533,7 +545,8 @@ class umichParser:
 			instructors = instr_name,
 			semester = self.semester[0].upper()
 		)
-		section.save()
+		#section.save()
+		
 		if(isinstance(meeting, list)):
 			for mtg in meeting:
 				self.create_offering(meeting = mtg, section = section)
@@ -575,7 +588,7 @@ class umichParser:
 				time_end = end_time,
 				location = str(meeting['Location'])
 			)
-			offering.save()
+			#offering.save()
 
 	@staticmethod
 	def convert_time(time):
