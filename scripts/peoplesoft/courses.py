@@ -7,8 +7,11 @@ from itertools import izip
 
 from sets import Set
 
+# parse library
 from scripts.textbooks.amazon import make_textbook
 from scripts.parser_library.Requester import Requester
+from scripts.parser_library.Extractor import *
+from scripts.parser_library.Model import Model
 
 class PeopleSoftParser:
 
@@ -28,11 +31,11 @@ class PeopleSoftParser:
 		'Discussion': 'T'
 	}
 
-	def __init__(self, school, url):
+	def __init__(self, school, url, do_tbks=True):
 		self.base_url = url
 		self.school = school
 		self.requester = Requester()
-		self.course = {}
+		self.course = Model(self.school)
 
 	def parse(self, terms, **kwargs):
 
@@ -55,8 +58,6 @@ class PeopleSoftParser:
 
 		# TODO - necessary clutter (not really sure why this is here anymore - should be called course_setup but does the same)
 		self.course_cleanup()
-
-		TYPES = Set()
 
 		for term in terms:
 
@@ -152,18 +153,18 @@ class PeopleSoftParser:
 					self.course['section'] 	= rtitle.group(2)
 					self.course['name'] 	= rtitle.group(3)
 					self.course['credits']	= float(re.match(r'(\d*).*', units).group(1))
-					self.course['descr'] 	= self.extract_info(descr.text) if descr else ''
-					self.course['notes'] 	= self.extract_info(notes.text) if notes else ''
-					self.course['info'] 	= self.extract_info(info.text) if info else ''
+					self.course['descr'] 	= extract_info(self.course, descr.text) if descr else ''
+					self.course['notes'] 	= extract_info(self.course, notes.text) if notes else ''
+					self.course['info'] 	= extract_info(self.course, info.text) if info else ''
 					self.course['units'] 	= re.match(r'(\d*).*', units).group(1)
 					self.course['size'] 	= int(capacity)
 					self.course['enrolment'] = int(enrollment)
 					self.course['instrs'] 	= ', '.join({instr.text for instr in instrs})
-					self.course['areas'] 	= ', '.join((self.extract_info(l) for l in re.sub(r'(<.*?>)', '\n', str(areas)).splitlines() if l.strip())) if areas else '' # FIXME -- small bug
+					self.course['areas'] 	= ', '.join((extract_info(self.course, l) for l in re.sub(r'(<.*?>)', '\n', str(areas)).splitlines() if l.strip())) if areas else '' # FIXME -- small bug
 					# self.course['section_type'] = section_type
 
-					course = self.create_course()
-					section = self.create_section(course)
+					course = self.course.create_course()
+					section = self.course.create_section(course)
 
 					# create textbooks
 					map(lambda isbn: make_textbook(isbn[1], isbn[0], section), isbns)
@@ -175,7 +176,7 @@ class PeopleSoftParser:
 
 						if rsched:
 							days = map(lambda d: PeopleSoftParser.DAY_MAP[d], re.findall(r'[A-Z][^A-Z]*', rsched.group(1)))
-							time = (PeopleSoftParser.time_12to24(rsched.group(2)), PeopleSoftParser.time_12to24(rsched.group(3)))
+							time = (time_12to24(rsched.group(2)), time_12to24(rsched.group(3)))
 						else: # handle TBA classes
 							days = None
 							time = (None, None)
@@ -185,13 +186,11 @@ class PeopleSoftParser:
 						self.course['location'] = loc.text
 						self.course['days'] = days
 
-						self.create_offerings(section)
+						self.course.create_offerings(section)
 
 					self.course_cleanup()
 
-			self.wrap_up()
-
-			print TYPES
+			self.course.wrap_up()
 
 	def handle_special_case_on_search(self, soup):
 		print 'SPECIAL SEARCH MESSAGE: ' + soup.find('span', {'class','SSSMSGINFOTEXT'}).text
@@ -214,94 +213,3 @@ class PeopleSoftParser:
 		self.course['prereqs'] = ''
 		self.course['coreqs'] = ''
 		self.course['geneds'] = ''
-
-	# NOTE: chapman specific
-	def extract_info(self, text):
-
-		text = text.encode('utf-8', 'ignore')
-
-		extractions = {
-			'prereqs' : r'[Pp]r(?:-?)e[rR]eq(?:uisite)?(?:s?)[:,\s]\s*(.*?)(?:\.|$)\s*',
-			'coreqs'  : r'[Cc]o(?:-?)[rR]eq(?:uisite)?(?:s?)[:,\s]\s*(.*?)(?:\.|$)\s*',
-			'geneds' : r'(GE .*)'
-		}
-
-		for ex in extractions:
-			rex = re.compile(extractions[ex])
-			extracted = rex.search(text)
-			if extracted:
-				if len(self.course[ex]) > 0:
-					self.course[ex] += ', '
-				self.course[ex] += extracted.group(1) # okay b/c of course_cleanup
-			text = rex.sub('', text).strip()
-
-		return text
-
-	@staticmethod
-	def time_12to24(time12):
-
-		# Regex extract
-		match = re.match("(\d*):(\d*)(.)", time12)
-
-		# Transform to 24 hours
-		hours = int(match.group(1))
-		if re.search(r'[pP]', match.group(3)):
-			hours = (hours%12)+12
-
-		# Return as 24hr-time string
-		return str(hours) + ":" + match.group(2)
-
-	def wrap_up(self):
-			update_object, created = Updates.objects.update_or_create(
-					school=self.school,
-					update_field="Course",
-					defaults={'last_updated': datetime.datetime.now()}
-			)
-			update_object.save()
-
-	def create_course(self):
-		course, CourseCreated = Course.objects.update_or_create(
-			code = self.course['code'],
-			school = self.school,
-			defaults={
-				'name': self.course.get('name'),
-				'description': self.course.get('descr'),
-				'department': self.course.get('department'),
-				'num_credits': self.course.get('credits'),
-				'prerequisites': self.course.get('prereqs'),
-				'corequisites': self.course.get('coreqs'),
-				'notes': self.course.get('notes'),
-				'info' : self.course.get('info'),
-				'areas': self.course.get('areas') + self.course.get('geneds'),
-				'geneds': self.course.get('geneds')
-			}
-		)
-		return course
-
-	def create_section(self, course_model):
-		# TODO - deal with cancelled course?
-		section, section_was_created = Section.objects.update_or_create(
-			course = course_model,
-			semester = self.course['semester'],
-			meeting_section = self.course['section'],
-			defaults = {
-				'instructors': self.course.get('instrs'),
-				'size': self.course.get('size'),
-				'enrolment': self.course.get('enrolment'),
-				'section_type': self.course['section_type']
-			}
-		)
-		return section
-
-	def create_offerings(self, section_model):
-		if self.course.get('days'):
-			for day in self.course.get('days'):
-				offering_model, offering_was_created = Offering.objects.update_or_create(
-					section = section_model,
-					day = day,
-					time_start = self.course.get('time_start'),
-					time_end = self.course.get('time_end'),
-					defaults = {
-						'location': self.course.get('location')
-					}
-				)
