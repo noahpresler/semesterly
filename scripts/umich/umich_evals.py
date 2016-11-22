@@ -67,5 +67,7 @@ class UmichEvals:
 		return post
 
 	def parse():
-		pass
 		
+		login_url = 'LOGIN_URL'
+
+		soup = BeautifulSoup(login_url, 'html.parser')
