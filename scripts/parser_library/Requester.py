@@ -9,6 +9,7 @@ from bs4 import BeautifulSoup
 
 class Requester:
 
+<<<<<<< HEAD
     def __init__(self):
         self.session = requests.Session()
         self.headers = {'User-Agent' : 'UserAgent 1.0'} # UserAgent().random
@@ -104,4 +105,3 @@ class Requester:
     def soupify(request, parser):
         parser = parser if isinstance(parser, basestring) else 'html.parser'
         return BeautifulSoup(request.text, parser)
-
