@@ -44,7 +44,7 @@ class Model:
             defaults={
                 'name': self.map.get('name'),
                 'description': self.map.get('descr'),
-                'department': self.map.get('department'),
+                'department': self.map.get('dept'),
                 'num_credits': self.map.get('credits'),
                 'prerequisites': self.map.get('prereqs'),
                 'corequisites': self.map.get('coreqs'),
@@ -67,7 +67,7 @@ class Model:
         '''
         section, section_was_created = Section.objects.update_or_create(
             course = course_model,
-            semester = self.map['semester'],
+            semester = self.map['term'],
             meeting_section = self.map['section'],
             defaults = {
                 'instructors': self.map.get('instrs'),
