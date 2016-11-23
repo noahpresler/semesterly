@@ -92,7 +92,11 @@ function collectCreateDrop(connect, monitor) { // inject props as drop target
 class Slot extends React.Component {
     constructor(props) {
         super(props);
-        this.state = { hovered: false };
+        this.state = { 
+            hovered: false,
+            overflow: false,
+            defaultScrollWidth: 0
+        };
         this.stopPropagation = this.stopPropagation.bind(this);
         this.onSlotHover = this.onSlotHover.bind(this);
         this.onSlotUnhover = this.onSlotUnhover.bind(this);
@@ -116,15 +120,37 @@ class Slot extends React.Component {
     }
     checkOverflow() {
     // var name = this.courseName
-        console.log("hey im here");
+        // console.log("hey im here");
+        // console.log(this.refs.courseDiv.offsetWidth + " and " +  this.state.defaultScrollWidth);
         // var div = ReactDOM.findDOMNode(this.refs.courseDiv);
         // return ((this.refs.courseDiv.getDOMNode().offsetHeight < this.refs.courseDiv.getDOMNode().scrollHeight) || (this.refs.courseDiv.getDOMNode().offsetWidth < this.refs.courseDiv.getDOMNode().scrollWidth));
         if (!this.refs.courseDiv) {
+            // console.log("no div");
             return false;
-        } else {
-            return ((this.refs.courseDiv.offsetHeight < this.refs.courseDiv.scrollHeight) 
-            || (this.refs.courseDiv.offsetWidth < this.refs.courseDiv.scrollWidth));
+        } else if (this.refs.courseDiv.offsetWidth < this.state.defaultScrollWidth) {
+            // console.log("yes overflow");
+            this.setState({overflow: true});
+        } else if (this.refs.courseDiv.offsetWidth >= this.state.defaultScrollWidth) {
+            // console.log("not overflow");
+            this.setState({overflow: false});
         }
+        // console.log("nothing");
+    }
+    componentWillUnmount() {
+        // console.log("unmounted");
+        window.removeEventListener('resize', this.checkOverflow());
+    }
+    componentDidMount() {
+        // console.log("component has mounted");
+        // console.log(this.refs.courseDiv.scrollWidth);
+        // console.log(this.refs.courseSpan.offsetWidth);
+        // var tempWidth = this.refs.courseSpan.offsetWidth + this.refs.courseNum.offsetWidth;
+        // console.log(tempWidth);
+        this.setState({defaultScrollWidth: this.refs.courseSpan.offsetWidth + this.refs.courseNum.offsetWidth}, function() {
+            // console.log("i am here " + this.state.defaultScrollWidth);
+            this.checkOverflow();
+        });
+        window.addEventListener('resize', this.checkOverflow.bind(this));
     }
   render() {
         let removeButton = this.state.hovered ?
@@ -170,9 +196,9 @@ class Slot extends React.Component {
                             <span>{ converted_start } – { converted_end }</span>
                         </div>
                         <div ref="courseDiv" className="fc-time">
-                            <span className={"fc-time-name" + (this.checkOverflow() ? "-overflow" : "")}>
+                            <span ref="courseSpan" className={"fc-time-name" + (this.state.overflow ? "-overflow" : "")}>
                             { this.props[this.props.primaryDisplayAttribute] + " "}</span>
-                            <span>{this.props.meeting_section}</span>
+                            <span ref="courseNum">{this.props.meeting_section}</span>
                         </div>
                         <div className="fc-time">
                             {friends}
