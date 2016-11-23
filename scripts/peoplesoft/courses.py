@@ -35,16 +35,16 @@ class PeopleSoftParser:
 		'ICNAVTYPEDROPDOWN': '0'
 	}
 
-	def __init__(self, school, url, do_tbks=True):
+	def __init__(self, school, url, do_tbks=False):
 		self.base_url = url
 		self.do_tbks = do_tbks
 		self.course = Model(school)
 		self.requester = Requester()
 		self.actions = {
-			'adv_search': 'DERIVED_CLSRCH_SSR_EXPAND_COLLAPS$149$$1',
-			'save': '#ICSave',
-			'term_update' : 'CLASS_SRCH_WRK2_STRM$35$',
-			'class_search' : 'CLASS_SRCH_WRK2_SSR_PB_CLASS_SRCH',
+			'adv_search':	'DERIVED_CLSRCH_SSR_EXPAND_COLLAPS$149$$1',
+			'save':			'#ICSave',
+			'term_update':	'CLASS_SRCH_WRK2_STRM$35$',
+			'class_search':	'CLASS_SRCH_WRK2_SSR_PB_CLASS_SRCH',
 		}
 		self.find_all = {
 			'depts':	lambda soup: soup.find('select', id=re.compile(r'SSR_CLSRCH_WRK_SUBJECT_SRCH\$\d')).find_all('option')[1:],
@@ -57,87 +57,45 @@ class PeopleSoftParser:
 		soup = self.requester.get(self.base_url, params=kwargs.get('url_params', {}))
 
 		# create search payload
-		search_query = PeopleSoftParser.hidden_params(soup)
-		search_query.update(self.action('adv_search'))
-		soup = self.requester.post(self.base_url, params=search_query)
-		search_query.update(PeopleSoftParser.refine_search(soup))
+		params = PeopleSoftParser.hidden_params(soup)
+		params.update(self.action('adv_search'))
+		soup = self.requester.post(self.base_url, params=params)
+		params.update(PeopleSoftParser.refine_search(soup))
 
 		self.course_cleanup() # NOTE: this is neccessary, but bad hack
 
 		for term in terms:
-
-			print 'Parsing courses for', term
-
-			self.course['semester'] = term
+			self.course['term'] = term
+			print 'Parsing courses for term', self.course['term']
 
 			# update search payload with term as parameter
-			search_query[self.actions['term_update']] = terms[term]
-			search_query.update(self.action('term_update'))
-			search_query.update(PeopleSoftParser.ajax_params);
-			soup = self.requester.post(self.base_url, params=search_query)
+			params[self.actions['term_update']] = terms[term]
+			params.update(self.action('term_update'))
+			params.update(PeopleSoftParser.ajax_params);
+			soup = self.requester.post(self.base_url, params=params)
 
-			# update search action to get course list
-			map(lambda k: search_query.__delitem__(k), PeopleSoftParser.ajax_params.keys())
-			search_query.update(self.action('class_search'))
+			# update search params to get course list
+			map(lambda k: params.__delitem__(k), PeopleSoftParser.ajax_params.keys())
+			params.update(self.action('class_search'))
 
-			# extract department query list
-			options = soup.find('select', id=re.compile(r'SSR_CLSRCH_WRK_SUBJECT_SRCH\$\d'))
-			search_id = options['id']
-			print search_id
-			departments = self.find_all['depts'](soup)
+			dept_code = soup.find('select', id=re.compile(r'SSR_CLSRCH_WRK_SUBJECT_SRCH\$\d'))['id']
+			depts = {dept['value']: dept.text for dept in self.find_all['depts'](soup)}
 
-			for department in departments:
-
-				print '> Parsing courses in department', department.text
-
-				if kwargs.get('department_regex'):
-					self.course['department'] = kwargs['department_regex'].match(department.text).group(1)
-				else:
-					self.course['department'] = department.text
+			for dept in depts:
+				self.course['dept'] = depts[dept]
+				print '> Parsing courses in department', self.course['dept']
 
 				# Update search payload with department code
-				search_query[search_id] = department['value']
+				params[dept_code] = dept
 
 				# Get course listing page for department
-				soup = self.requester.post(self.base_url, params=search_query)
-
+				soup = self.requester.post(self.base_url, params=params)
 				if not self.valid_search_page(soup):
 					continue
-
-				# courses = soup.find_all('table', {'class' : 'PSLEVEL1GRIDNBONBO'})
 
 				self.parse_course_list(self.find_all['courses'](soup), soup)
 
 			self.course.wrap_up()
-
-	@staticmethod
-	def parse_textbooks(soup):
-		isbns = zip(soup.find_all('span', id=re.compile(r'DERIVED_SSR_TXB_SSR_TXBDTL_ISBN\$\d*')), soup.find_all('span', id=re.compile(r'DERIVED_SSR_TXB_SSR_TXB_STATDESCR\$\d*')))
-		for i in range(len(isbns)):
-			isbns[i] = (filter(lambda x: x.isdigit(), isbns[i][0].text), isbns[i][1].text[0].upper() == 'R')
-		return isbns
-		# return map(lambda i: (filter(lambda x: x.isdigit(), isbns[i][0].text), isbns[i][1].text[0].upper() == 'R'), range(len(isbns)))
-
-	def course_cleanup(self):
-		self.course['prereqs'] = ''
-		self.course['coreqs'] = ''
-		self.course['geneds'] = ''
-
-	@staticmethod
-	def hidden_params(soup, params=None, ajax=False):
-		if params is None: params = {}
-
-		find = lambda tag: soup.find(tag, id=re.compile(r'win\ddivPSHIDDENFIELDS'))
-
-		hidden = find('div')
-		if not hidden:
-			hidden = find('field')
-
-		params.update({a['name']: a['value'] for a in hidden.find_all('input')})
-
-		if ajax:
-			params.update(PeopleSoftParser.ajax_params)
-		return params
 
 	def parse_course_list(self, courses, soup):
 		# fill payload for course description page request
@@ -218,6 +176,35 @@ class PeopleSoftParser:
 
 		self.course_cleanup()
 
+	@staticmethod
+	def parse_textbooks(soup):
+		isbns = zip(soup.find_all('span', id=re.compile(r'DERIVED_SSR_TXB_SSR_TXBDTL_ISBN\$\d*')), soup.find_all('span', id=re.compile(r'DERIVED_SSR_TXB_SSR_TXB_STATDESCR\$\d*')))
+		for i in range(len(isbns)):
+			isbns[i] = (filter(lambda x: x.isdigit(), isbns[i][0].text), isbns[i][1].text[0].upper() == 'R')
+		return isbns
+		# return map(lambda i: (filter(lambda x: x.isdigit(), isbns[i][0].text), isbns[i][1].text[0].upper() == 'R'), range(len(isbns)))
+
+	def course_cleanup(self):
+		self.course['prereqs'] = ''
+		self.course['coreqs'] = ''
+		self.course['geneds'] = ''
+
+	@staticmethod
+	def hidden_params(soup, params=None, ajax=False):
+		if params is None: params = {}
+
+		find = lambda tag: soup.find(tag, id=re.compile(r'win\ddivPSHIDDENFIELDS'))
+
+		hidden = find('div')
+		if not hidden:
+			hidden = find('field')
+
+		params.update({a['name']: a['value'] for a in hidden.find_all('input')})
+
+		if ajax:
+			params.update(PeopleSoftParser.ajax_params)
+		return params
+
 	def valid_search_page(self, soup):
 		# check for valid search/page
 		errmsg = soup.find('div', {'id' : 'win1divDERIVED_CLSMSG_ERROR_TEXT'})
@@ -254,3 +241,8 @@ class PeopleSoftParser:
 
 		return self.requester.post(self.base_url, params=query)
 
+# FOR PENNSTATE
+# if kwargs.get('department_regex'):
+# 	self.course['department'] = kwargs['department_regex'].match(dept.text).group(1)
+# else:
+# 	self.course['department'] = dept.text
