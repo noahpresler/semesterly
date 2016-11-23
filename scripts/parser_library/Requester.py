@@ -14,7 +14,7 @@ class Requester:
         self.headers = {'User-Agent' : 'UserAgent 1.0'} # UserAgent().random
         self.cookies = cookielib.CookieJar()
 
-    def get(self, url, params=None, parse=False, quiet=True):
+    def get(self, url, params=None, parse=True, quiet=True):
         ''' HTTP GET.
 
         Args:
@@ -56,7 +56,7 @@ class Requester:
         else:
             return Requester.soupify(r.text)
 
-    def post(self, url, form=None, params=None, parse=False, quiet=True):
+    def post(self, url, form=None, params=None, parse=True, quiet=True):
         ''' HTTP POST.
 
         Args:
