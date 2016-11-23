@@ -18,10 +18,10 @@ feature_range = max_id - min_id + 1
 #	create a scipy array of lenghth maxcourseid-mincourseid
 #	set it to one corresponding to each course in timetable
 ptts = PersonalTimetable.objects.filter(school='jhu').all()
-feat_trix = lil_matrix((len(ptts), feature_range), dtype=bool)
+feat_trix = lil_matrix((len(ptts), feature_range), dtype=np.int8)
 for ptt_idx in range(len(ptts)):
 	for ft_idx in ptts[ptt_idx].courses.all().values_list('id', flat=True):
-		feat_trix[ptt_idx, ft_idx - min_id + 1] = True
+		feat_trix[ptt_idx, ft_idx - min_id + 1] = 1
 
 print "SUCCESS", feat_trix.shape
 
