@@ -10,18 +10,16 @@ from analytics.models import *
 from student.models import *
 
 #get the min,max course id for hopkins
-min_id = Course.objects.filter(school='jhu').first().id
 max_id = Course.objects.filter(school='jhu').last().id
-feature_range = max_id - min_id + 1
 
 #for each timetable
 #	create a scipy array of lenghth maxcourseid-mincourseid
 #	set it to one corresponding to each course in timetable
 ptts = PersonalTimetable.objects.filter(school='jhu').all()
-feat_trix = lil_matrix((len(ptts), feature_range), dtype=np.int8)
+feat_trix = lil_matrix((len(ptts), max_id), dtype=np.int8)
 for ptt_idx in range(len(ptts)):
 	for ft_idx in ptts[ptt_idx].courses.all().values_list('id', flat=True):
-		feat_trix[ptt_idx, ft_idx - min_id + 1] = 1
+		feat_trix[ptt_idx, ft_idx] = 1
 
 print "SUCCESS", feat_trix.shape
 
