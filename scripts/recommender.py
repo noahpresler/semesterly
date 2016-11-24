@@ -1,4 +1,4 @@
-import os, sys, django, pickle
+import os, sys, django, pickle, progressbar
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "semesterly.settings")
 django.setup()
 import numpy as np
@@ -27,7 +27,8 @@ similarities = {}
 #           Record that a Timetable has courses C1 and C2
 #   For each Course C2
 #       Compute the similarity between C1 and C2
-for c1 in range(num_fts):
+bar = progressbar.ProgressBar()
+for c1 in bar(range(num_fts)):
     similar = set()
     c1_rows = filter(lambda ptt_idx: feat_trix[ptt_idx, c1] ,range(num_tts))
     for tt in c1_rows:
@@ -39,5 +40,6 @@ for c1 in range(num_fts):
             similarities[c1] = []
         similarities[c1].append((c2,css))
 
-print "TOP 3 AS RELATED TO DISCRETE MATH"
-sorted(similarities[5688], key=lambda x: x[1], reverse=True)[:3]
+# print "TOP 3 AS RELATED TO DISCRETE MATH"
+# sorted(similarities[5688], key=lambda x: x[1], reverse=True)[:3]
+pickle.dump(similarities, open("recommended.model", "wb"))
