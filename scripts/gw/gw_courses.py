@@ -16,7 +16,7 @@ class GWParser:
 
 	def __init__(self):
 		self.session = requests.Session()
-		self.headers = {'User-Agent' : UserAgent().random}
+		self.headers = {'User-Agent' : 'User-Agent 1.0'}
 		self.cookies = cookielib.CookieJar()
 		self.school = 'gw'
 		self.username = 'G45956511'
