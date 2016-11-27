@@ -14,8 +14,7 @@ def time_12to24(time12):
     Returns:
         str: 24 hr time in format hrhr:minmin
     '''
-    # Regex extract
-    match = re.match("(\d*):(\d*)(.)", time12)
+    match = re.match("(\d*):(\d*).*?(\S)", time12)
 
     # Transform to 24 hours
     hours = int(match.group(1))
@@ -50,6 +49,7 @@ def extract_info(course, text):
             if len(course[ex]) > 0:
                 course[ex] += ', '
             course[ex] += extracted.group(1) # okay b/c of course_cleanup
+            # FIXME -- this library does not enforce this, unsafe!
         text = rex.sub('', text).strip()
 
     return text
