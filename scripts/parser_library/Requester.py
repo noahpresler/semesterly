@@ -110,6 +110,8 @@ class Requester:
         Returns:
             soupified markup
         '''
+        if markup is None:
+            return None
         soup = lambda parser: BeautifulSoup(markup, parser)
         if "</html>"[::-1] in markup[::-1]:
         # NOTE: ^quite inefficient so do fun things w/reversals :-)
