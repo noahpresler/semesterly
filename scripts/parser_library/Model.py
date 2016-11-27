@@ -74,6 +74,7 @@ class Model:
                 'geneds': self.map.get('geneds', '')
             }
         )
+        print CourseCreated, course
         return course
 
     def create_section(self, course_model, clean=True):
@@ -102,6 +103,7 @@ class Model:
 
         if clean:
             Model.remove_offerings(section)
+        print section_was_created, section
         return section
 
     def create_offerings(self, section_model):
