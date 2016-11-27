@@ -107,11 +107,11 @@ class GWParser:
 							'dept': 	dept_name,
 							'selec': 	info[3].text,
 							'section': 	info[4].text,
-							'credits': 	tofloat(info[6].text, default=0.0),
+							'credits': 	safe_cast(info[6].text, float, default=0.0),
 							'name':		info[7].text,
 							'size':		info[10].text,
 							'enrolment':	info[11].text,
-							'weightlist':	toint(info[14].text, default=-1),
+							'weightlist':	safe_cast(info[14].text, int, default=-1),
 							'attr':		'; '.join(info[22].text.split(' and ')) if len(info) == 23 else '' #FIXME - hacky fix
 						})
 
