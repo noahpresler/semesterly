@@ -487,7 +487,7 @@ class umichParser:
 		if matches.count() > 1:
 			for c in matches[1:]:
 				c.delete()
-			print smart_str("Deleting stale course")
+			#print smart_str("Deleting stale course")
 		course, CourseCreated = Course.objects.update_or_create(
 			code = str(subject) + " " + str(cat_num),
 			school = self.school,
@@ -525,11 +525,11 @@ class umichParser:
 		if matches.count() > 1:
 			for c in matches[1:]:
 				c.delete()
-			print smart_str("Deleting Stale section for {}".format(course_model.code))
+			#print smart_str("Deleting Stale section for {}".format(course_model.code))
 		# Find all existing offerings for section and delete them
 		if Section.objects.filter(course = course_model, meeting_section = input_section['SectionNumber']).exists():
 			s = Section.objects.get(course = course_model, meeting_section = input_section['SectionNumber'])
-			print smart_str("Deleting stale meeting for {}".format(course_model.code + " " + str(input_section['SectionNumber'])))
+			#print smart_str("Deleting stale meeting for {}".format(course_model.code + " " + str(input_section['SectionNumber'])))
 			Offering.objects.filter(section = s).delete()
 
 		# Section type defaults to "L" if not found in dict
@@ -639,7 +639,7 @@ class umichParser:
 					log("Bad status code: " + str(r.status_code))
 					return 404
 				else:
-					print("FAIL!")
+					print("Token throttled!")
 			except(requests.exceptions.Timeout, 
 					requests.exceptions.ConnectionError):
 				log("Unexpected Errror") 
