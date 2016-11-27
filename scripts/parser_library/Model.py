@@ -71,7 +71,8 @@ class Model:
                 'notes': self.map.get('notes', ''),
                 'info' : self.map.get('info', ''),
                 'areas': self.map.get('areas', '') + self.map.get('geneds', ''),
-                'geneds': self.map.get('geneds', '')
+                'geneds': self.map.get('geneds', ''),
+                'info': self.map.get('info')
             }
         )
         return course
