@@ -1,14 +1,15 @@
-import django, os, datetime, requests, cookielib, re, sys
-os.environ.setdefault("DJANGO_SETTINGS_MODULE", "semesterly.settings")
-django.setup()
-from timetable.models import *
-from fake_useragent import UserAgent
-from itertools import izip
-from bs4 import BeautifulSoup
+# @what	PeopleSoft Course Parser
+# @org	Semeseter.ly
+# @author	Michael N. Miller
+# @date	11/22/16
 
-from sets import Set
+import re, sys
 
+# parser library
 from scripts.textbooks.amazon import make_textbook
+from scripts.parser_library.Requester import Requester
+from scripts.parser_library.Extractor import *
+from scripts.parser_library.Model import Model
 
 class PeopleSoftParser:
 
@@ -22,243 +23,161 @@ class PeopleSoftParser:
 		'Su' : 'U'
 	}
 
-	# NOTE: Chapman specific
-	SECTION_TYPE_MAP = {
+	SECTION_MAP = {
 		'Lecture': 'L',
 		'Laboratory': 'P',
-		# 'Field Work': 'L',
-		# 'Activity': 'L',
-		# 'Performance Workshop': 'L',
+		'Discussion': 'T',
+		'Tutorial': 'T',
 	}
 
-	def __init__(self, school, url):
-		self.session = requests.Session()
-		# self.headers = {'User-Agent' : UserAgent().random} # why does this not work anymore?
-		self.headers = {'User-Agent' : 'UserAgent 1.0'}
-		self.cookies = cookielib.CookieJar()
+	ajax_params = {
+		'ICAJAX': '1',
+		'ICNAVTYPEDROPDOWN': '0'
+	}
+
+	def __init__(self, school, url, do_tbks=False):
 		self.base_url = url
-		self.school = school
-		self.course = {}
-
-	def get_html(self, url, payload=''):
-		html = None
-		while html is None:
-			try:
-				r = self.session.get(
-					url,
-					params = payload,
-					cookies = self.cookies,
-					headers = self.headers,
-					verify = True
-				)
-
-				if r.status_code == 200:
-					html = r.text
-
-				# print GET, r.url
-
-			except (requests.exceptions.Timeout,
-				requests.exceptions.ConnectionError):
-				sys.stderr.write("Unexpected error: " + str(sys.exc_info()[0]) + '\n')
-				raw_input("Press Enter to continue...")
-				html = None
-
-		return html.encode('utf-8')
-
-	def post_http(self, url, form, payload=''):
-
-		post = None
-		while post is None:
-			try:
-				post = self.session.post(
-					url,
-					data = form,
-					params = payload,
-					cookies = self.cookies,
-					headers = self.headers,
-					verify = True,
-				)
-
-				# print POST, r.url
-
-			except (requests.exceptions.Timeout,
-				requests.exceptions.ConnectionError):
-				sys.stderr.write("Unexpected error: " + str(sys.exc_info()[0]) + '\n')
-				raw_input("Press Enter to continue...")
-				post = None
-
-		return post
+		self.do_tbks = do_tbks
+		self.course = Model(school)
+		self.requester = Requester()
+		self.actions = {
+			'adv_search':	'DERIVED_CLSRCH_SSR_EXPAND_COLLAPS$149$$1',
+			'save':			'#ICSave',
+			'term_update':	'CLASS_SRCH_WRK2_STRM$35$',
+			'class_search':	'CLASS_SRCH_WRK2_SSR_PB_CLASS_SRCH',
+		}
+		self.find_all = {
+			'depts':	lambda soup: soup.find('select', id=re.compile(r'SSR_CLSRCH_WRK_SUBJECT_SRCH\$\d')).find_all('option')[1:],
+			'courses':	lambda soup: soup.find_all('table', {'class' : 'PSLEVEL1GRIDNBONBO'}),
+			'isbns':	lambda soup: zip(soup.find_all('span', id=re.compile(r'DERIVED_SSR_TXB_SSR_TXBDTL_ISBN\$\d*')), soup.find_all('span', id=re.compile(r'DERIVED_SSR_TXB_SSR_TXB_STATDESCR\$\d*'))),
+		}
 
 	def parse(self, terms, **kwargs):
 
-		soup = BeautifulSoup(self.get_html(self.base_url, kwargs['url_params'] if kwargs.get('url_params') else {}))
+		soup = self.requester.get(self.base_url, params=kwargs.get('url_params', {}))
 
-		# create search payload with hidden form data
-		search_query = {a['name']: a['value'] for a  in soup.find('div', id=re.compile(r'win\ddivPSHIDDENFIELDS')).find_all('input')}
+		# create search payload
+		params = PeopleSoftParser.hidden_params(soup)
+		params.update(self.action('adv_search'))
+		soup = self.requester.post(self.base_url, params=params)
+		params.update(PeopleSoftParser.refine_search(soup))
 
-		# advanced search
-		search_query['ICAction'] = 'DERIVED_CLSRCH_SSR_EXPAND_COLLAPS$149$$1'
-		soup = BeautifulSoup(self.post_http(self.base_url, search_query).text, 'html.parser')
-
-		# virtually refined search (to get around min search param requirement)
-		search_query['SSR_CLSRCH_WRK_SSR_OPEN_ONLY$chk$4'] = 'N'
-		for day in ['MON', 'TUES', 'WED', 'THURS', 'FRI', 'SAT', 'SUN']:
-			search_query['SSR_CLSRCH_WRK_' + day + '$5'] = 'Y'
-			search_query['SSR_CLSRCH_WRK_' + day + '$chk$5'] = 'Y'
-		search_query['SSR_CLSRCH_WRK_INCLUDE_CLASS_DAYS$5'] = 'J'
-		search_query[soup.find('select', id=re.compile(r'SSR_CLSRCH_WRK_INSTRUCTION_MODE\$\d'))['id']] = 'P'
-
-		# TODO - necessary clutter (not really sure why this is here anymore - should be called course_setup but does the same)
-		self.course_cleanup()
-
-		TYPES = Set()
+		self.course_cleanup() # NOTE: this is neccessary, but bad hack
 
 		for term in terms:
-
-			print 'Parsing courses for', term
-
-			self.course['semester'] = term
+			self.course['term'] = term
+			print 'Parsing courses for term', self.course['term']
 
 			# update search payload with term as parameter
-			search_query['CLASS_SRCH_WRK2_STRM$35$'] = terms[term]
-			search_query['ICAJAX'] = '1'
-			search_query['ICNAVTYPEDROPDOWN'] = '0'
-			search_query['ICAction'] = 'CLASS_SRCH_WRK2_STRM$35$'
-			soup = BeautifulSoup(self.post_http(self.base_url, search_query).text, 'lxml')
+			params[self.actions['term_update']] = terms[term]
+			params.update(self.action('term_update'))
+			params.update(PeopleSoftParser.ajax_params);
+			soup = self.requester.post(self.base_url, params=params)
 
-			# TODO - this might not be necessary
-			del search_query['ICAJAX']
-			del search_query['ICNAVTYPEDROPDOWN']
+			# update search params to get course list
+			map(lambda k: params.__delitem__(k), PeopleSoftParser.ajax_params.keys())
+			params.update(self.action('class_search'))
 
-			# update search action to get course list
-			search_query['ICAction'] = 'CLASS_SRCH_WRK2_SSR_PB_CLASS_SRCH'
+			dept_code = soup.find('select', id=re.compile(r'SSR_CLSRCH_WRK_SUBJECT_SRCH\$\d'))['id']
+			depts = {dept['value']: dept.text for dept in self.find_all['depts'](soup)}
 
-			# extract department query list
-			options = soup.find('select', id=re.compile(r'SSR_CLSRCH_WRK_SUBJECT_SRCH\$\d'))
-			search_id = options['id']
-			departments = options.find_all('option')[1:] # NOTE: first element of dropdown lists in search area is empty
-
-			for department in departments:
-
-				print '> Parsing courses in department', department.text
-
-				if kwargs.get('department_regex'):
-					self.course['department'] = kwargs['department_regex'].match(department.text).group(1)
-				else:
-					self.course['department'] = department.text
+			for dept in depts:
+				self.course['dept'] = depts[dept]
+				print '> Parsing courses in department', self.course['dept']
 
 				# Update search payload with department code
-				search_query[search_id] = department['value']
+				params[dept_code] = dept
 
 				# Get course listing page for department
-				soup = BeautifulSoup(self.post_http(self.base_url, search_query).text, 'html.parser')
-
-				special = False # FIXME -- nasty hack, fix it!
-
-				# check for valid search/page
-				if soup.find('td', {'id' : 'PTBADPAGE_' }) or soup.find('div', {'id' : 'win1divDERIVED_CLSMSG_ERROR_TEXT'}):
-					if soup.find('div', {'id' : 'win1divDERIVED_CLSMSG_ERROR_TEXT'}):
-						print 'Error on search: ' + soup.find('div', {'id' : 'win1divDERIVED_CLSMSG_ERROR_TEXT'}).text
+				soup = self.requester.post(self.base_url, params=params)
+				if not self.valid_search_page(soup):
 					continue
-				elif soup.find('span', {'class','SSSMSGINFOTEXT'}):
-					soup = self.handle_special_case_on_search(soup)
-					special = True
 
-				# fill payload for course description page request
-				descr_payload = {a['name']: a['value'] for a in soup.find('div' if not special else 'field', id=re.compile(r'win\ddivPSHIDDENFIELDS')).find_all('input')}
+				self.parse_course_list(self.find_all['courses'](soup), soup)
 
-				courses = soup.find_all('table', {'class' : 'PSLEVEL1GRIDNBONBO'})
+			self.course.wrap_up()
 
-				# for all the courses on the page
-				for i in range(len(courses)):
-					descr_payload['ICAction'] = 'MTG_CLASS_NBR$' + str(i)
+	def parse_course_list(self, courses, soup):
+		# fill payload for course description page request
+		payload = PeopleSoftParser.hidden_params(soup)
 
-					# Get course description page
-					soup = BeautifulSoup(self.get_html(self.base_url, descr_payload))
+		for i in range(len(courses)):
+			self.actions['details'] = 'MTG_CLASS_NBR$' + str(i)
+			payload.update(self.action('details'))
+			soup = self.requester.get(self.base_url, params=payload)
+			self.parse_course_description(soup)
 
-					# scrape info from page
-					title 		= soup.find('span', {'id' : 'DERIVED_CLSRCH_DESCR200'}).text.encode('ascii', 'ignore')
-					subtitle	= soup.find('span', {'id' : 'DERIVED_CLSRCH_SSS_PAGE_KEYDESCR'}).text.encode('ascii', 'ignore')
-					units 		= soup.find('span', {'id' : 'SSR_CLS_DTL_WRK_UNITS_RANGE'}).text
-					capacity 	= soup.find('span', {'id' : 'SSR_CLS_DTL_WRK_ENRL_CAP'}).text
-					enrollment 	= soup.find('span', {'id' : 'SSR_CLS_DTL_WRK_ENRL_TOT'}).text
-					waitlist 	= soup.find('span', {'id' : 'SSR_CLS_DTL_WRK_WAIT_TOT'}).text
-					descr 		= soup.find('span', {'id' : 'DERIVED_CLSRCH_DESCRLONG'})
-					notes 		= soup.find('span', {'id' : 'DERIVED_CLSRCH_SSR_CLASSNOTE_LONG'})
-					info 		= soup.find('span', {'id' : 'SSR_CLS_DTL_WRK_SSR_REQUISITE_LONG'})
-					areas		= soup.find('span', {'id' : 'SSR_CLS_DTL_WRK_SSR_CRSE_ATTR_LONG'})
+	def parse_course_description(self, soup):
+		# scrape info from page
+		title 		= soup.find('span', {'id' : 'DERIVED_CLSRCH_DESCR200'}).text.encode('ascii', 'ignore')
+		subtitle	= soup.find('span', {'id' : 'DERIVED_CLSRCH_SSS_PAGE_KEYDESCR'}).text.encode('ascii', 'ignore')
+		units 		= soup.find('span', {'id' : 'SSR_CLS_DTL_WRK_UNITS_RANGE'}).text
+		capacity 	= soup.find('span', {'id' : 'SSR_CLS_DTL_WRK_ENRL_CAP'}).text
+		enrollment 	= soup.find('span', {'id' : 'SSR_CLS_DTL_WRK_ENRL_TOT'}).text
+		waitlist 	= soup.find('span', {'id' : 'SSR_CLS_DTL_WRK_WAIT_TOT'}).text
+		descr 		= soup.find('span', {'id' : 'DERIVED_CLSRCH_DESCRLONG'})
+		notes 		= soup.find('span', {'id' : 'DERIVED_CLSRCH_SSR_CLASSNOTE_LONG'})
+		info 		= soup.find('span', {'id' : 'SSR_CLS_DTL_WRK_SSR_REQUISITE_LONG'})
+		areas		= soup.find('span', {'id' : 'SSR_CLS_DTL_WRK_SSR_CRSE_ATTR_LONG'})
 
-					# parse table of times
-					scheds 	= soup.find_all('span', id=re.compile(r'MTG_SCHED\$\d*'))
-					locs 	= soup.find_all('span', id=re.compile(r'MTG_LOC\$\d*'))
-					instrs 	= soup.find_all('span', id=re.compile(r'MTG_INSTR\$\d*'))
-					dates 	= soup.find_all('span', id=re.compile(r'MTG_DATE\$\d*'))
+		# parse table of times
+		scheds 	= soup.find_all('span', id=re.compile(r'MTG_SCHED\$\d*'))
+		locs 	= soup.find_all('span', id=re.compile(r'MTG_LOC\$\d*'))
+		instrs 	= soup.find_all('span', id=re.compile(r'MTG_INSTR\$\d*'))
+		dates 	= soup.find_all('span', id=re.compile(r'MTG_DATE\$\d*'))
 
-					# parse textbooks
-					isbns 	= self.parse_textbooks(soup)
+		# parse textbooks
+		isbns 	= PeopleSoftParser.parse_textbooks(soup)
 
-					# Extract info from title
-					print '\t' + title
-					rtitle = re.match(r'(.+?\s*\w+) - (\w+)\s*(\S.+)', title)
-					self.course['section_type'] = PeopleSoftParser.SECTION_TYPE_MAP.get(subtitle.split('|')[2].strip(), 'L')
+		# Extract info from title
+		print '\t' + title
+		rtitle = re.match(r'(.+?\s*\w+) - (\w+)\s*(\S.+)', title)
+		self.course['section_type'] = PeopleSoftParser.SECTION_MAP.get(subtitle.split('|')[2].strip(), 'L')
 
-					# Place course info into course model
-					self.course['code'] 	= rtitle.group(1)
-					self.course['section'] 	= rtitle.group(2)
-					self.course['name'] 	= rtitle.group(3)
-					self.course['credits']	= float(re.match(r'(\d*).*', units).group(1))
-					self.course['descr'] 	= self.extract_info(descr.text) if descr else ''
-					self.course['notes'] 	= self.extract_info(notes.text) if notes else ''
-					self.course['info'] 	= self.extract_info(info.text) if info else ''
-					self.course['units'] 	= re.match(r'(\d*).*', units).group(1)
-					self.course['size'] 	= int(capacity)
-					self.course['enrolment'] = int(enrollment)
-					self.course['instrs'] 	= ', '.join({instr.text for instr in instrs})
-					self.course['areas'] 	= ', '.join((self.extract_info(l) for l in re.sub(r'(<.*?>)', '\n', str(areas)).splitlines() if l.strip())) if areas else '' # FIXME -- small bug
-					# self.course['section_type'] = section_type
+		# Place course info into course model
+		self.course['code'] 	= rtitle.group(1)
+		self.course['section'] 	= rtitle.group(2)
+		self.course['name'] 	= rtitle.group(3)
+		self.course['credits']	= float(re.match(r'(\d*).*', units).group(1))
+		self.course['descr'] 	= extract_info(self.course, descr.text) if descr else ''
+		self.course['notes'] 	= extract_info(self.course, notes.text) if notes else ''
+		self.course['info'] 	= extract_info(self.course, info.text) if info else ''
+		self.course['units'] 	= re.match(r'(\d*).*', units).group(1)
+		self.course['size'] 	= int(capacity)
+		self.course['enrolment'] = int(enrollment)
+		self.course['instrs'] 	= ', '.join({instr.text for instr in instrs})
+		self.course['areas'] 	= ', '.join((extract_info(self.course, l) for l in re.sub(r'(<.*?>)', '\n', str(areas)).splitlines() if l.strip())) if areas else '' # FIXME -- small bug
 
-					course = self.create_course()
-					section = self.create_section(course)
+		course = self.course.create_course()
+		section = self.course.create_section(course)
 
-					# create textbooks
-					map(lambda isbn: make_textbook(isbn[1], isbn[0], section), isbns)
+		# create textbooks
+		if self.do_tbks:
+			map(lambda isbn: make_textbook(isbn[1], isbn[0], section), isbns)
 
-					# offering details
-					for sched, loc, date in izip(scheds, locs, dates):
+		# offering details
+		for sched, loc, date in zip(scheds, locs, dates):
 
-						rsched = re.match(r'([a-zA-Z]*) (.*) - (.*)', sched.text)
+			rsched = re.match(r'([a-zA-Z]*) (.*) - (.*)', sched.text)
 
-						if rsched:
-							days = map(lambda d: PeopleSoftParser.DAY_MAP[d], re.findall(r'[A-Z][^A-Z]*', rsched.group(1)))
-							time = (PeopleSoftParser.time_12to24(rsched.group(2)), PeopleSoftParser.time_12to24(rsched.group(3)))
-						else: # handle TBA classes
-							days = None
-							time = (None, None)
+			if rsched:
+				days = map(lambda d: PeopleSoftParser.DAY_MAP[d], re.findall(r'[A-Z][^A-Z]*', rsched.group(1)))
+				time = (time_12to24(rsched.group(2)), time_12to24(rsched.group(3)))
+			else: # handle TBA classes
+				days = None
+				time = (None, None)
 
-						self.course['time_start'] = time[0]
-						self.course['time_end'] = time[1]
-						self.course['location'] = loc.text
-						self.course['days'] = days
+			self.course['time_start'] = time[0]
+			self.course['time_end'] = time[1]
+			self.course['location'] = loc.text
+			self.course['days'] = days
 
-						self.create_offerings(section)
+			self.course.create_offerings(section)
 
-					self.course_cleanup()
+		self.course_cleanup()
 
-			self.wrap_up()
-
-			print TYPES
-
-	def handle_special_case_on_search(self, soup):
-		print 'SPECIAL SEARCH MESSAGE: ' + soup.find('span', {'class','SSSMSGINFOTEXT'}).text
-
-		search_query2 = {a['name']: a['value'] for a  in soup.find('div', id=re.compile(r'win\ddivPSHIDDENFIELDS')).find_all('input')}
-		search_query2['ICAction'] = '#ICSave'
-		search_query2['ICAJAX'] = '1'
-		search_query2['ICNAVTYPEDROPDOWN'] = '0'
-
-		return BeautifulSoup(self.post_http(self.base_url, search_query2).text, 'lxml')
-
-	def parse_textbooks(self, soup):
+	@staticmethod
+	def parse_textbooks(soup):
 		isbns = zip(soup.find_all('span', id=re.compile(r'DERIVED_SSR_TXB_SSR_TXBDTL_ISBN\$\d*')), soup.find_all('span', id=re.compile(r'DERIVED_SSR_TXB_SSR_TXB_STATDESCR\$\d*')))
 		for i in range(len(isbns)):
 			isbns[i] = (filter(lambda x: x.isdigit(), isbns[i][0].text), isbns[i][1].text[0].upper() == 'R')
@@ -270,93 +189,60 @@ class PeopleSoftParser:
 		self.course['coreqs'] = ''
 		self.course['geneds'] = ''
 
-	# NOTE: chapman specific
-	def extract_info(self, text):
+	@staticmethod
+	def hidden_params(soup, params=None, ajax=False):
+		if params is None: params = {}
 
-		text = text.encode('utf-8', 'ignore')
+		find = lambda tag: soup.find(tag, id=re.compile(r'win\ddivPSHIDDENFIELDS'))
 
-		extractions = {
-			'prereqs' : r'[Pp]r(?:-?)e[rR]eq(?:uisite)?(?:s?)[:,\s]\s*(.*?)(?:\.|$)\s*',
-			'coreqs'  : r'[Cc]o(?:-?)[rR]eq(?:uisite)?(?:s?)[:,\s]\s*(.*?)(?:\.|$)\s*',
-			'geneds' : r'(GE .*)'
-		}
+		hidden = find('div')
+		if not hidden:
+			hidden = find('field')
 
-		for ex in extractions:
-			rex = re.compile(extractions[ex])
-			extracted = rex.search(text)
-			if extracted:
-				if len(self.course[ex]) > 0:
-					self.course[ex] += ', '
-				self.course[ex] += extracted.group(1) # okay b/c of course_cleanup
-			text = rex.sub('', text).strip()
+		params.update({a['name']: a['value'] for a in hidden.find_all('input')})
 
-		return text
+		if ajax:
+			params.update(PeopleSoftParser.ajax_params)
+		return params
+
+	def valid_search_page(self, soup):
+		# check for valid search/page
+		errmsg = soup.find('div', {'id' : 'win1divDERIVED_CLSMSG_ERROR_TEXT'})
+		if soup.find('td', {'id' : 'PTBADPAGE_' }) or errmsg:
+			if errmsg:
+				print 'Error on search: ' + errmsg.text
+			return False
+		elif soup.find('span', {'class','SSSMSGINFOTEXT'}):
+			# too many search results
+			soup = self.handle_special_case_on_search(soup)
+
+		return True
+
+	def action(self, act):
+		return {'ICAction' : self.actions[act]}
 
 	@staticmethod
-	def time_12to24(time12):
+	def refine_search(soup):
+		''' Virtually refined search (to get around min search param requirement). '''
+		query = {}
+		query['SSR_CLSRCH_WRK_SSR_OPEN_ONLY$chk$4'] = 'N'
+		for day in ['MON', 'TUES', 'WED', 'THURS', 'FRI', 'SAT', 'SUN']:
+			query['SSR_CLSRCH_WRK_' + day + '$5'] = 'Y'
+			query['SSR_CLSRCH_WRK_' + day + '$chk$5'] = 'Y'
+		query['SSR_CLSRCH_WRK_INCLUDE_CLASS_DAYS$5'] = 'J'
+		query[soup.find('select', id=re.compile(r'SSR_CLSRCH_WRK_INSTRUCTION_MODE\$\d'))['id']] = 'P'
+		return query
 
-		# Regex extract
-		match = re.match("(\d*):(\d*)(.)", time12)
+	def handle_special_case_on_search(self, soup):
+		print 'SPECIAL SEARCH MESSAGE: ' + soup.find('span', {'class','SSSMSGINFOTEXT'}).text
 
-		# Transform to 24 hours
-		hours = int(match.group(1))
-		if re.search(r'[pP]', match.group(3)):
-			hours = (hours%12)+12
+		query = PeopleSoftParser.hidden_params(soup, ajax=True)
+		query['ICAction'] = '#ICSave'
 
-		# Return as 24hr-time string
-		return str(hours) + ":" + match.group(2)
+		return self.requester.post(self.base_url, params=query)
 
-	def wrap_up(self):
-			update_object, created = Updates.objects.update_or_create(
-					school=self.school,
-					update_field="Course",
-					defaults={'last_updated': datetime.datetime.now()}
-			)
-			update_object.save()
-
-	def create_course(self):
-		course, CourseCreated = Course.objects.update_or_create(
-			code = self.course['code'],
-			school = self.school,
-			defaults={
-				'name': self.course.get('name'),
-				'description': self.course.get('descr'),
-				'department': self.course.get('department'),
-				'num_credits': self.course.get('credits'),
-				'prerequisites': self.course.get('prereqs'),
-				'corequisites': self.course.get('coreqs'),
-				'notes': self.course.get('notes'),
-				'info' : self.course.get('info'),
-				'areas': self.course.get('areas') + self.course.get('geneds'),
-				'geneds': self.course.get('geneds')
-			}
-		)
-		return course
-
-	def create_section(self, course_model):
-		# TODO - deal with cancelled course?
-		section, section_was_created = Section.objects.update_or_create(
-			course = course_model,
-			semester = self.course['semester'],
-			meeting_section = self.course['section'],
-			defaults = {
-				'instructors': self.course.get('instrs'),
-				'size': self.course.get('size'),
-				'enrolment': self.course.get('enrolment'),
-				'section_type': self.course['section_type']
-			}
-		)
-		return section
-
-	def create_offerings(self, section_model):
-		if self.course.get('days'):
-			for day in self.course.get('days'):
-				offering_model, offering_was_created = Offering.objects.update_or_create(
-					section = section_model,
-					day = day,
-					time_start = self.course.get('time_start'),
-					time_end = self.course.get('time_end'),
-					defaults = {
-						'location': self.course.get('location')
-					}
-				)
+# FOR PENNSTATE
+# if kwargs.get('department_regex'):
+# 	self.course['department'] = kwargs['department_regex'].match(dept.text).group(1)
+# else:
+# 	self.course['department'] = dept.text
