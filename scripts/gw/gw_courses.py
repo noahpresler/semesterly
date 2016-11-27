@@ -82,7 +82,7 @@ class GWParser:
 			# get list of departments
 			depts = {dept.text.strip(): dept['value'] for dept in soup.find('select', {'id' : 'subj_id'}).find_all('option')}
 
-			for dept_name, dept_code in {'Public Health':'PUBH'}.iteritems(): #depts.iteritems():
+			for dept_name, dept_code in depts.iteritems():
 				print '>> Parsing courses in department', dept_name
 
 				search_params['sel_subj'] = ['dummy', dept_code]
@@ -185,10 +185,9 @@ class GWParser:
 		fields = {}
 		try:
 			meat = soup.find('body').find('table', {'class':'datadisplaytable'})
-
 			fields.update(self.extract_description(meat))
-
 			fields.update(self.extract_otherinfo(meat))
+			return fields
 
 		except AttributeError:
 			sys.stderr.write('Unexpected error: at catalog entry parse for course \n' + str(self.course))
