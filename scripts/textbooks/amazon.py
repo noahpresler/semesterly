@@ -1,7 +1,3 @@
-import django, os
-os.environ.setdefault("DJANGO_SETTINGS_MODULE", "semesterly.settings")
-django.setup()
-from timetable.models import *
 from django.utils.encoding import smart_str, smart_unicode
 from timetable.models import Textbook, TextbookLink
 from amazonproduct import API
