@@ -3,9 +3,14 @@
 # @author   Michael N. Miller
 # @date     11/26/16
 
-def isfloat(subject):
+def tofloat(subject, default=None):
 	try:
-		float(subject)
-		return True
+		return float(subject)
 	except ValueError:
-		return False
+		return default
+
+def toint(subject, default=None):
+	try:
+		return int(subject)
+	except ValueError:
+		return default
