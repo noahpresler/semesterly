@@ -23,6 +23,10 @@ class GWParser:
 		self.url = 'https://banweb.gwu.edu'
 		self.course = Model(self.school)
 		self.requester = Requester()
+		self.terms = {
+			'Fall 2016':'201603', 
+			'Spring 2017':'201701'
+		}
 
 	def login(self):
 		print 'Logging in...'
@@ -51,26 +55,23 @@ class GWParser:
 		self.login()
 		self.direct_to_search_page()
 
-		# NOTE: hardcoded terms to parse
-		terms = {'Fall 2016':'201603'}#, 'Spring 2017':'201701'}
-		# terms = {'Spring 2017':'201701'}
-		for term_name, term_code in terms.items():
+		for term_name, term_code in self.terms.items():
 
 			print '> Parsing courses for term', term_name
-	
+
 			self.course['term'] = term_name[0]
 
-			search_query = {
+			query1 = {
 				'p_calling_proc' : 'P_CrseSearch',
 				'p_term' : term_code
 			}
 
-			soup = self.requester.get(self.url + '/PRODCartridge/bwckgens.p_proc_term_date', params=search_query)
+			soup = self.requester.get(self.url + '/PRODCartridge/bwckgens.p_proc_term_date', params=query1)
 			self.requester.headers['Referer'] = self.url + '/bwckgens.p_proc_term_date'
 
 			# create search param list
-			search_params = {inp['name'] : inp['value'] if inp.get('value') else '' for inp in soup.find('form', {'action': '/PRODCartridge/bwskfcls.P_GetCrse'}).find_all('input')}
-			search_params.update({
+			query2 = {a['name'] : a['value'] if a.get('value') else '' for a in soup.find('form', {'action': '/PRODCartridge/bwskfcls.P_GetCrse'}).find_all('input')}
+			query2.update({
 				'begin_hh' : '0',
 				'begin_mi' : '0',
 				'end_hh'   : '0',
@@ -85,9 +86,9 @@ class GWParser:
 			for dept_name, dept_code in depts.iteritems():
 				print '>> Parsing courses in department', dept_name
 
-				search_params['sel_subj'] = ['dummy', dept_code]
+				query2['sel_subj'] = ['dummy', dept_code]
 
-				rows = self.requester.post(self.url + '/PRODCartridge/bwskfcls.P_GetCrse', params=search_params)
+				rows = self.requester.post(self.url + '/PRODCartridge/bwskfcls.P_GetCrse', params=query2)
 
 				if GWParser.iserrorpage(rows):
 					exit(1)
@@ -95,7 +96,7 @@ class GWParser:
 				try:
 					rows = rows.find('table', {'class':'datadisplaytable'}).find_all('tr')[2:]
 				except AttributeError:
-					print '\tMessage: no results for department', dept_name
+					print '\tmessage: no results for department', dept_name
 					continue # no results for department
 
 				# collect offered courses in department
@@ -122,7 +123,7 @@ class GWParser:
 						})
 
 						# query course catalog to obtain description
-						catalog_query = {
+						query3 = {
 							'term_in':term_code,
 							'one_subj':dept_code,
 							'sel_crse_strt':self.course['selec'],
@@ -136,31 +137,26 @@ class GWParser:
 							'sel_attr':''
 						}
 
-						catalog = self.requester.get(self.url + '/PRODCartridge/bwckctlg.p_display_courses', params=catalog_query)
+						catalog = self.requester.get(self.url + '/PRODCartridge/bwckctlg.p_display_courses', params=query3)
 						if catalog:
-							self.course.update(self.parse_catalogentry_page(catalog))
-							# self.course['descr'] = self.extract_description(catalog)
-							# self.scrape_attributes(catalog)
+							self.course.update(self.parse_catalogentrypage(catalog))
 
-						section_query = {
+						query4 = {
 							'term_in':term_code,
 							'subj_in':dept_code,
 							'crse_in':self.course['selec'],
 							'crn_in':self.course['ident']
 						}
 
-						section = self.requester.get(self.url + '/PRODCartridge/bwckschd.p_disp_listcrse', params=section_query)
-
-						# areas = self.scrape_attributes(section)
+						section = self.requester.get(self.url + '/PRODCartridge/bwckschd.p_disp_listcrse', params=query4)
 
 						course = self.course.create_course()
 
 						# parse scheduling info
 						meeting_times = GWParser.extract_meeting_times(section)
 
-
 						# collect instr info
-						self.course['instrs'] = ', '.join((mt.find_all('td')[6].text for mt in meeting_times))
+						self.course['instrs'] = ', '.join((mt.find_all('td')[6].text for mt in meeting_times[:1]))
 						if meeting_times:
 							self.course['section_type'] = meeting_times[0].find_all('td')[5].text[0].upper()
 						section = self.course.create_section(course)
@@ -178,17 +174,7 @@ class GWParser:
 							self.course.create_offerings(section)
 		self.course.wrap_up()
 
-	@staticmethod
-	def iserrorpage(soup):
-		error = soup.find('span',{'class':'errortext'})
-		if error:
-			sys.stderr.write('Error on page request, message: ' + error.text + '\n')
-			sys.stderr.write('^ would assume someone else logged in\n')
-			return True
-		else:
-			return False
-
-	def parse_catalogentry_page(self, soup):
+	def parse_catalogentrypage(self, soup):
 		''' Attempts to scrape information from the (at best) ill-formatted catalog entry page.
 			Includes: description, levels, areas, types, attributes
 
@@ -200,11 +186,9 @@ class GWParser:
 			meat = soup.find('body').find('table', {'class':'datadisplaytable'})
 			fields.update(self.extract_description(meat))
 			fields.update(self.extract_otherinfo(meat))
-			return fields
-
 		except AttributeError:
-			sys.stderr.write('Unexpected error: at catalog entry parse for course \n' + str(self.course))
-			return ''
+			sys.stderr.write('Unexpected error: at catalog entry parse for course\n' + str(self.course))
+		return fields
 
 	def extract_description(self, soup):
 		return {'descr': self.scrape_description(soup)}
@@ -289,6 +273,16 @@ class GWParser:
 			return meeting_times
 		else:
 			return list()
+
+	@staticmethod
+	def iserrorpage(soup):
+		error = soup.find('span',{'class':'errortext'})
+		if error:
+			sys.stderr.write('Error on page request, message: ' + error.text + '\n')
+			sys.stderr.write('^ would assume someone else logged in\n')
+			return True
+		else:
+			return False
 
 def main():
 	gp = GWParser()
