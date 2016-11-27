@@ -111,7 +111,7 @@ class GWParser:
 							'name':		info[7].text,
 							'size':		info[10].text,
 							'enrolment':	info[11].text,
-							'weightlist':	safe_cast(info[14].text, int, default=-1),
+							'waitlist':	safe_cast(info[14].text, int, default=-1),
 							'attr':		'; '.join(info[22].text.split(' and ')) if len(info) == 23 else '' #FIXME - hacky fix
 						})
 
