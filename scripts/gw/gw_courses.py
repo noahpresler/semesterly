@@ -51,8 +51,8 @@ class GWParser:
 		self.direct_to_search_page()
 
 		# NOTE: hardcoded terms to parse
-		# terms = {'Fall 2016':'201603', 'Spring 2017':'201701'}
-		terms = {'Spring 2017':'201701'}
+		terms = {'Fall 2016':'201603', 'Spring 2017':'201701'}
+		# terms = {'Spring 2017':'201701'}
 		for term_name, term_code in terms.items():
 
 			print '> Parsing courses for term', term_name
