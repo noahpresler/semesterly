@@ -131,7 +131,7 @@ class GWParser:
 
 						catalog = self.requester.get(self.url + '/PRODCartridge/bwckctlg.p_display_courses', params=catalog_query)
 						if catalog:
-							self.course['descr'] = GWParser.extract_description(catalog)
+							self.course['descr'] = self.extract_description(catalog)
 
 						section_query = {
 							'term_in':term_code,
@@ -167,8 +167,7 @@ class GWParser:
 							self.course.create_offerings(section)
 		self.course.wrap_up()
 
-	@staticmethod
-	def extract_description(soup):
+	def extract_description(self, soup):
 		try:
 			soup = soup.find('body').find('table', {'class':'datadisplaytable'}).find_all('tr', recursive=False)[1].find('td')
 			descr = re.match(r'<td .*?>\n([^<]+)<[^$]*</td>', soup.prettify())
