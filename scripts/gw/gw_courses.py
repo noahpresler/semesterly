@@ -52,7 +52,7 @@ class GWParser:
 		self.direct_to_search_page()
 
 		# NOTE: hardcoded terms to parse
-		terms = {'Fall 2016':'201603', 'Spring 2017':'201701'}
+		terms = {'Fall 2016':'201603'}#, 'Spring 2017':'201701'}
 		# terms = {'Spring 2017':'201701'}
 		for term_name, term_code in terms.items():
 
@@ -87,13 +87,16 @@ class GWParser:
 
 				search_params['sel_subj'] = ['dummy', dept_code]
 
-				rows = self.requester.post(self.url + '/PRODCartridge/bwskfcls.P_GetCrse', params=search_params).find('table', {'class':'datadisplaytable'})
-				if rows:
-					rows = rows.find_all('tr')[2:]
-				else:
-					continue
+				rows = self.requester.post(self.url + '/PRODCartridge/bwskfcls.P_GetCrse', params=search_params)
 
-				print 'here'
+				if GWParser.iserrorpage(rows):
+					exit(1)
+
+				try:
+					rows = rows.find('table', {'class':'datadisplaytable'}).find_all('tr')[2:]
+				except AttributeError:
+					print '\tMessage: no results for department', dept_name
+					continue # no results for department
 
 				# collect offered courses in department
 				for row in rows:
@@ -175,6 +178,16 @@ class GWParser:
 							self.course.create_offerings(section)
 		self.course.wrap_up()
 
+	@staticmethod
+	def iserrorpage(soup):
+		error = soup.find('span',{'class':'errortext'})
+		if error:
+			sys.stderr.write('Error on page request, message: ' + error.text + '\n')
+			sys.stderr.write('^ would assume someone else logged in\n')
+			return True
+		else:
+			return False
+
 	def parse_catalogentry_page(self, soup):
 		''' Attempts to scrape information from the (at best) ill-formatted catalog entry page.
 			Includes: description, levels, areas, types, attributes
@@ -210,13 +223,13 @@ class GWParser:
 
 	def extract_otherinfo(self, soup):
 		fields = self.scrape_otherinfo(soup)
-		extracted = {}
 		extraction = {
 			'Schedule Types': ('section_type', lambda s: smart_str(s)[0].upper()),
 			'Levels' : ('info', lambda s: 'Levels: ' + smart_str(s).strip()), # NOTE: this needs to be changed in db
 			'Course Attributes': ('areas', lambda x: smart_str(x).strip())
 		}
 
+		extracted = {}
 		for name, data in fields.items():
 			if extraction.get(name):
 				extracted[extraction[name][0]] = extraction[name][1](data)
