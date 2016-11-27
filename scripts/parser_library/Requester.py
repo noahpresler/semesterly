@@ -53,8 +53,12 @@ class Requester:
 
         if not parse:
             return r
+
+        soup = Requester.soupify(r.text)
+        if soup:
+            return soup
         else:
-            return Requester.soupify(r.text)
+            return r
 
     def post(self, url, form=None, params=None, parse=True, quiet=True):
         ''' HTTP POST.
@@ -97,8 +101,12 @@ class Requester:
 
         if not parse:
             return r
+
+        soup = Requester.soupify(r.text)
+        if soup:
+            return soup
         else:
-            return Requester.soupify(r.text)
+            return r
 
     @staticmethod
     def soupify(markup):
