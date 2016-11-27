@@ -3,10 +3,7 @@
 # @author   Michael N. Miller
 # @date     11/22/16
 
-import django, datetime, os
-from django.utils.encoding import smart_str, smart_unicode
-os.environ.setdefault("DJANGO_SETTINGS_MODULE", "semesterly.settings")
-django.setup()
+import django, datetime
 from timetable.models import *
 
 class Model:
@@ -35,23 +32,6 @@ class Model:
     def __len__(self):
         return len(self.map)
 
-    def __str__(self):
-        l = ''
-        for label, value in self.map.items():
-            l += smart_str(label) + ':' + smart_str(value) + '\n'
-        return l
-
-    def update(self, other=None, **kwargs):
-        if other is not None:
-            for k, v in other.items(): 
-                self[k] = v
-        for k, v in kwargs.items():
-            self[k] = v
-
-    def clear(self):
-        self.map.clear()
-        self.school = ''
-
     def create_course(self):
         ''' Create course in database from info in model map.
 
@@ -63,27 +43,24 @@ class Model:
             school = self.school,
             defaults={
                 'name': self.map.get('name'),
-                'description': self.map.get('descr', ''),
+                'description': self.map.get('descr'),
                 'department': self.map.get('dept'),
                 'num_credits': self.map.get('credits'),
                 'prerequisites': self.map.get('prereqs'),
                 'corequisites': self.map.get('coreqs'),
-                'notes': self.map.get('notes', ''),
-                'info' : self.map.get('info', ''),
-                'areas': self.map.get('areas', '') + self.map.get('geneds', ''),
-                'geneds': self.map.get('geneds', '')
+                'notes': self.map.get('notes'),
+                'info' : self.map.get('info'),
+                'areas': self.map.get('areas') + self.map.get('geneds'),
+                'geneds': self.map.get('geneds')
             }
         )
         return course
 
-    def create_section(self, course_model, clean=True):
+    def create_section(self, course_model):
         ''' Create section in database from info in model map. 
         
         Args:
             course_model: django course model object
-
-        Keyword args:
-            clean (boolean): removes course offerings associated with section if set
 
         Returns:
             django section model object
@@ -96,12 +73,11 @@ class Model:
                 'instructors': self.map.get('instrs'),
                 'size': self.map.get('size'),
                 'enrolment': self.map.get('enrolment'),
-                'section_type': self.map.get('section_type', 'X')
+                'section_type': self.map['section_type']
             }
         )
 
-        if clean:
-            Model.remove_offerings(section)
+        Model.remove_offerings(section)
         return section
 
     def create_offerings(self, section_model):
@@ -134,15 +110,15 @@ class Model:
         Offering.objects.filter(section = section_model).delete()
 
     def wrap_up(self):
-        ''' Update time updated for school at end of parse. '''
-        update_object, created = Updates.objects.update_or_create(
-                school=self.school,
-                update_field="Course",
-                defaults={'last_updated': datetime.datetime.now()}
-        )
-        update_object.save()
+            update_object, created = Updates.objects.update_or_create(
+                    school=self.school,
+                    update_field="Course",
+                    defaults={'last_updated': datetime.datetime.now()}
+            )
+            update_object.save()
 
     @staticmethod
     def DEBUG():
         # TODO
         pass
+        
