@@ -96,7 +96,7 @@ class Model:
                 'instructors': self.map.get('instrs'),
                 'size': self.map.get('size'),
                 'enrolment': self.map.get('enrolment'),
-                'waitlist': self.map.get('waitlist', -1)
+                'waitlist': self.map.get('waitlist', -1),
                 'section_type': self.map.get('section_type', 'X')
             }
         )
