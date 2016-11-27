@@ -17,7 +17,7 @@ school_to_granularity = {
     'uo': 5,
     'queens': 5,
     'vandy': 5,
-    'gw':5,
+    'gw': 5,
     'umich': 5,
     'umich2': 5,
     'chapman': 5
@@ -56,7 +56,7 @@ school_code_to_name = {
   'uo': 'University of Ottawa',
   'queens': 'Queens University',
   'vandy': 'Vanderbilt University',
-  'gw':'George Washington University',
+  'gw': 'George Washington University',
   'umich': 'University of Michigan',
   'umich2': 'University of Michigan 2!',
   'chapman': 'Chapman University'
