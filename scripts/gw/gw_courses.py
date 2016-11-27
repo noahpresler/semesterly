@@ -26,7 +26,7 @@ class GWParser:
 		print 'Logging in...'
 
 		# Collect necessary cookies
-		self.requester.get(self.url + '/PRODCartridge/twbkwbis.P_WWWLogin')
+		self.requester.get(self.url + '/PRODCartridge/twbkwbis.P_WWWLogin', parse=False)
 
 		credentials = {
 			'sid' : self.username,
@@ -43,7 +43,7 @@ class GWParser:
 		genurl = self.url + '/PRODCartridge/twbkwbis.P_GenMenu'
 		actions = ['bmenu.P_MainMnu', 'bmenu.P_StuMainMnu', 'bmenu.P_RegMnu']
 		map(lambda n: self.requester.get(genurl, params={'name':n}), actions)
-		return self.requester.get(self.url + '/PRODCartridge/bwskfcls.P_CrseSearch', params={'term_in':''})
+		return self.requester.get(self.url + '/PRODCartridge/bwskfcls.P_CrseSearch', params={'term_in':''}, parse=False)
 
 	def parse(self):
 		self.login()
