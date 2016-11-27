@@ -169,9 +169,13 @@ class GWParser:
 
 	@staticmethod
 	def extract_description(soup):
-		soup = soup.find('body').find('table', {'class':'datadisplaytable'}).find_all('tr', recursive=False)[1].find('td')
-		descr = re.match(r'<td .*?>\n([^<]+)<[^$]*</td>', soup.prettify())
-		return ' '.join(descr.group(1).strip().splitlines()) if descr else ''
+		try:
+			soup = soup.find('body').find('table', {'class':'datadisplaytable'}).find_all('tr', recursive=False)[1].find('td')
+			descr = re.match(r'<td .*?>\n([^<]+)<[^$]*</td>', soup.prettify())
+			return ' '.join(descr.group(1).strip().splitlines()) if descr else ''
+		except AttributeError:
+			sys.stderr.write('Unexpected error: at extract description for course \n' + str(self.course))
+			return ''
 
 	@staticmethod
 	def extract_meeting_times(soup):
