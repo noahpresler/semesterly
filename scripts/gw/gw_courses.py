@@ -7,7 +7,6 @@ import re, sys
 from bs4 import BeautifulSoup
 
 # parser library
-from scripts.textbooks.amazon import make_textbook
 from scripts.parser_library.Requester import Requester
 from scripts.parser_library.Extractor import *
 from scripts.parser_library.Model import Model
@@ -164,6 +163,7 @@ class GWParser:
 								self.course['location'] = col[3].text
 							else:
 								continue
+							# print self.course
 							self.course.create_offerings(section)
 		self.course.wrap_up()
 
