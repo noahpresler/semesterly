@@ -8,8 +8,9 @@ from timetable.models import *
 
 class Model:
 
-    def __init__(self):
+    def __init__(self, school):
         self.map = {}
+        self.school = school
 
     def __setitem__(self, key, value):
         self.map[key] = value
@@ -32,51 +33,81 @@ class Model:
         return len(self.map)
 
     def create_course(self):
+        ''' Create course in database from info in model map.
+
+        Returns:
+            django course model object
+        '''
         course, CourseCreated = Course.objects.update_or_create(
-            code = self.course['code'],
+            code = self.map['code'],
             school = self.school,
             defaults={
-                'name': self.course.get('name'),
-                'description': self.course.get('descr'),
-                'department': self.course.get('department'),
-                'num_credits': self.course.get('credits'),
-                'prerequisites': self.course.get('prereqs'),
-                'corequisites': self.course.get('coreqs'),
-                'notes': self.course.get('notes'),
-                'info' : self.course.get('info'),
-                'areas': self.course.get('areas') + self.course.get('geneds'),
-                'geneds': self.course.get('geneds')
+                'name': self.map.get('name'),
+                'description': self.map.get('descr'),
+                'department': self.map.get('dept'),
+                'num_credits': self.map.get('credits'),
+                'prerequisites': self.map.get('prereqs'),
+                'corequisites': self.map.get('coreqs'),
+                'notes': self.map.get('notes'),
+                'info' : self.map.get('info'),
+                'areas': self.map.get('areas') + self.map.get('geneds'),
+                'geneds': self.map.get('geneds')
             }
         )
         return course
 
     def create_section(self, course_model):
-        # TODO - deal with cancelled course?
+        ''' Create section in database from info in model map. 
+        
+        Args:
+            course_model: django course model object
+
+        Returns:
+            django section model object
+        '''
         section, section_was_created = Section.objects.update_or_create(
             course = course_model,
-            semester = self.course['semester'],
-            meeting_section = self.course['section'],
+            semester = self.map['term'],
+            meeting_section = self.map['section'],
             defaults = {
-                'instructors': self.course.get('instrs'),
-                'size': self.course.get('size'),
-                'enrolment': self.course.get('enrolment'),
-                'section_type': self.course['section_type']
+                'instructors': self.map.get('instrs'),
+                'size': self.map.get('size'),
+                'enrolment': self.map.get('enrolment'),
+                'section_type': self.map['section_type']
             }
         )
+
+        Model.remove_offerings(section)
         return section
 
     def create_offerings(self, section_model):
-        if self.course.get('days'):
-            for day in self.course.get('days'):
+        ''' Create offering in database from info in model map.
+
+        Args:
+            course_model: django course model object
+        '''
+        if self.map.get('days'):
+            for day in self.map.get('days'):
                 offering_model, offering_was_created = Offering.objects.update_or_create(
                     section = section_model,
                     day = day,
-                    time_start = self.course.get('time_start'),
-                    time_end = self.course.get('time_end'),
+                    time_start = self.map.get('time_start'),
+                    time_end = self.map.get('time_end'),
                     defaults = {
-                        'location': self.course.get('location')
+                        'location': self.map.get('location')
                     }
                 )
+
+    def remove_section(self, course_model):
+        ''' Remove section specified in model map from django database. '''
+        if Section.objects.filter(course = course_model, meeting_section = self.map.get('section')).exists():
+            s = Section.objects.get(course = course_model, meeting_section = self.map.get('section'))
+            s.delete()
+
+    @staticmethod
+    def remove_offerings(section_model):
+        ''' Remove all offerings associated with a section. '''
+        Offering.objects.filter(section = section_model).delete()
 
     def wrap_up(self):
             update_object, created = Updates.objects.update_or_create(
@@ -88,4 +119,6 @@ class Model:
 
     @staticmethod
     def DEBUG():
+        # TODO
+        pass
         
