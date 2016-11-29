@@ -128,17 +128,17 @@ export class CourseModalBody extends React.Component {
         let similarCourses = relatedCourses.length === 0 ? null : 
         <div className="modal-module">
             <h3 className="modal-module-header">Students Also Take</h3>
-            {relatedCourses.map((rc, i) => <MasterSlot 
-                key={i} course={rc} 
-                professors={[]}
-                colourIndex={Math.min(i, maxColourIndex)}
-                onTimetable={true}
-                hideCloseButton={true}
-                inModal={true}
-                fetchCourseInfo={() => this.fetchCourseInfo(rc.id)}
-                />
-
-            )}
+            {relatedCourses.map((rc, i) => { 
+                return <MasterSlot 
+                    key={i} course={rc} 
+                    professors={null}
+                    colourIndex={Math.min(i, maxColourIndex)}
+                    onTimetable={true}
+                    hideCloseButton={true}
+                    inModal={true}
+                    fetchCourseInfo={() => this.fetchCourseInfo(rc.id)}
+                    />
+            })}
         </div>
 
         let prerequisitesDisplay =
@@ -243,7 +243,6 @@ export class CourseModalBody extends React.Component {
                             <EvaluationList evalInfo={evalInfo} />
                         </div>
                         {textbooksDisplay}
-                        {similarCourses}
                         
                     </div>
                     <div id="modal-section-lists"
@@ -251,6 +250,7 @@ export class CourseModalBody extends React.Component {
                         {lectureSections}
                         {tutorialSections}
                         {practicalSections}
+                        {similarCourses}
                     </div>
                 </div>
             </div>
