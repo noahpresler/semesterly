@@ -144,10 +144,19 @@ export class CourseModalBody extends React.Component {
         </div>
         let courseRegex = new RegExp(getSchoolSpecificInfo(school).courseRegex, "g");
         let matchedCourses = prerequisites.match(courseRegex);
-        let newPrerequisites = prerequisites == "" ? "None" : prerequisites.split(courseRegex).map(t => {
+        let description = this.props.data.description == "" ? "None" : this.props.data.description.split(courseRegex).map((t, i) => {
+            if (matchedCourses == null)
+                return t
             if (matchedCourses.indexOf(t) == -1)
-                return <span className='textItem' key={t}>{t}</span>;
-            return <a href={getCourseShareLinkFromModal(t)} key={t}>{t}</a>;
+                return <span className='textItem' key={i}>{t}</span>;
+            return <a href={getCourseShareLinkFromModal(t)} key={i}>{t}</a>;
+        });
+        let newPrerequisites = prerequisites == "" ? "None" : prerequisites.split(courseRegex).map((t, i) => {
+            if (matchedCourses == null)
+                return t
+            if (matchedCourses.indexOf(t) == -1)
+                return <span className='textItem' key={i}>{t}</span>;
+            return <a href={getCourseShareLinkFromModal(t)} key={i}>{t}</a>;
         });
         let prerequisitesDisplay =
         <div className="modal-module prerequisites">
@@ -244,7 +253,7 @@ export class CourseModalBody extends React.Component {
                         </div>
                         <div>
                             <h3 className="modal-module-header">Course Description</h3>
-                            <p>{this.props.data.description}</p>
+                            <p>{description}</p>
                         </div>
                         <div className="modal-module">
                             <h3 className="modal-module-header">Course Evaluations</h3>
