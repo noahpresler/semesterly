@@ -7,6 +7,7 @@ import MasterSlot from './master_slot.jsx';
 import Textbook from './textbook.jsx';
 import { COLOUR_DATA, getSchoolSpecificInfo } from '../constants.jsx';
 import EvaluationList from './evaluation_list.jsx';
+import { getCourseShareLinkFromModal } from '../helpers/timetable_helpers.jsx';
 
 export class CourseModalBody extends React.Component {
     constructor(props) {
@@ -71,6 +72,7 @@ export class CourseModalBody extends React.Component {
             this.props.fetchCourseInfo(courseId);
         }
     }
+
 
     render() {
         if (this.props.isFetching) {
@@ -142,10 +144,15 @@ export class CourseModalBody extends React.Component {
         </div>
         let courseRegex = new RegExp(getSchoolSpecificInfo(school).courseRegex, "g");
         let matchedCourses = prerequisites.match(courseRegex);
+        let newPrerequisites = prerequisites == "" ? "None" : prerequisites.split(courseRegex).map(t => {
+            if (matchedCourses.indexOf(t) == -1)
+                return <span className='textItem' key={t}>{t}</span>;
+            return <a href={getCourseShareLinkFromModal(t)} key={t}>{t}</a>;
+        });
         let prerequisitesDisplay =
         <div className="modal-module prerequisites">
             <h3 className="modal-module-header">Prerequisites</h3>
-            <p>{ prerequisites || "None" }</p>
+            <p>{ newPrerequisites }</p>
         </div>
         let areasDisplay =
             <div className="modal-module areas">
