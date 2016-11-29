@@ -5,7 +5,7 @@ import Reaction from './reaction.jsx'
 import { REACTION_MAP } from '../constants.jsx';
 import MasterSlot from './master_slot.jsx';
 import Textbook from './textbook.jsx';
-import { COLOUR_DATA } from '../constants.jsx';
+import { COLOUR_DATA, getSchoolSpecificInfo } from '../constants.jsx';
 import EvaluationList from './evaluation_list.jsx';
 
 export class CourseModalBody extends React.Component {
@@ -140,7 +140,8 @@ export class CourseModalBody extends React.Component {
 
             )}
         </div>
-
+        let courseRegex = new RegExp(getSchoolSpecificInfo(school).courseRegex, "g");
+        let matchedCourses = prerequisites.match(courseRegex);
         let prerequisitesDisplay =
         <div className="modal-module prerequisites">
             <h3 className="modal-module-header">Prerequisites</h3>
