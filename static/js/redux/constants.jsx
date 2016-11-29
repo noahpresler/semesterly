@@ -102,6 +102,7 @@ export const getSchoolSpecificInfo = (school) => {
         departmentsName: "Departments",
         levelsName: "Levels",
         timesName: "Times",
+        courseRegex: "([A-Z]{2}\\.\\d{3}\\.\\d{3})",
         semesters: {
           F: "Fall 2016",
           S: "Spring 2017"
