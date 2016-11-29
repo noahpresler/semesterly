@@ -151,8 +151,8 @@ export class CourseModalBody extends React.Component {
                 return <span className='textItem' key={i}>{t}</span>;
             return <a href={getCourseShareLinkFromModal(t)} key={i}>{t}</a>;
         });
-        let matchedCoursesPrerequisites = prerequisites.match(courseRegex);
-        let newPrerequisites = prerequisites == "" ? "None" : prerequisites.split(courseRegex).map((t, i) => {
+        let matchedCoursesPrerequisites = prerequisites == null ? matchedCoursesPrerequisites = null : prerequisites.match(courseRegex);
+        let newPrerequisites = (prerequisites == "" || prerequisites == null) ? "None" : prerequisites.split(courseRegex).map((t, i) => {
             if (matchedCoursesPrerequisites == null)
                 return t
             if (matchedCoursesPrerequisites.indexOf(t) == -1)
