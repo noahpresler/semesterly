@@ -127,7 +127,7 @@ export class CourseModalBody extends React.Component {
 
         let similarCourses = relatedCourses.length === 0 ? null : 
         <div className="modal-module">
-            <h3 className="modal-module-header">Similar Courses</h3>
+            <h3 className="modal-module-header">Students Also Take</h3>
             {relatedCourses.map((rc, i) => <MasterSlot 
                 key={i} course={rc} 
                 professors={[]}
