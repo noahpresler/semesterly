@@ -1,9 +1,8 @@
 #!/bin/bash
 echo "Dumping data into json."
 python manage.py dumpdata > semesterly_backup/backup.json
-echo "Pushing data onto git."
 cd semesterly_backup
-ssh -T git@github.com
-git add .
-git commit -m "$dt"
-git push
+echo "Compressing to tar.gz."
+tar -czvf backup.tar.gz backup.json
+echo "Sending backup to staging."
+scp backup.tar.gz staging@semesterly.info:/home/staging/prod_backup
