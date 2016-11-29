@@ -143,18 +143,19 @@ export class CourseModalBody extends React.Component {
             )}
         </div>
         let courseRegex = new RegExp(getSchoolSpecificInfo(school).courseRegex, "g");
-        let matchedCourses = prerequisites.match(courseRegex);
+        let matchedCoursesDescription = this.props.data.description.match(courseRegex);
         let description = this.props.data.description == "" ? "None" : this.props.data.description.split(courseRegex).map((t, i) => {
-            if (matchedCourses == null)
+            if (matchedCoursesDescription == null)
                 return t
-            if (matchedCourses.indexOf(t) == -1)
+            if (matchedCoursesDescription.indexOf(t) == -1)
                 return <span className='textItem' key={i}>{t}</span>;
             return <a href={getCourseShareLinkFromModal(t)} key={i}>{t}</a>;
         });
+        let matchedCoursesPrerequisites = prerequisites.match(courseRegex);
         let newPrerequisites = prerequisites == "" ? "None" : prerequisites.split(courseRegex).map((t, i) => {
-            if (matchedCourses == null)
+            if (matchedCoursesPrerequisites == null)
                 return t
-            if (matchedCourses.indexOf(t) == -1)
+            if (matchedCoursesPrerequisites.indexOf(t) == -1)
                 return <span className='textItem' key={i}>{t}</span>;
             return <a href={getCourseShareLinkFromModal(t)} key={i}>{t}</a>;
         });
