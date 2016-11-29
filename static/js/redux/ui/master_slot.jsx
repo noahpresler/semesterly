@@ -56,6 +56,7 @@ class MasterSlot extends React.Component {
         let numCredits = this.props.course.num_credits;
         let creditsDisplay = numCredits === 1 ? " credit" : " credits";
         creditsDisplay = numCredits + creditsDisplay;
+        let prof_disp = this.props.professors == null ? null : <h3>{ prof }</h3>;
         let shareLink = this.state.shareLinkShown ? 
         <ShareLink 
             link={getCourseShareLink(this.props.course.code)}
@@ -75,7 +76,7 @@ class MasterSlot extends React.Component {
 		        <div className="master-slot-content">
 		            <h3>{ this.props.course.code }</h3>
 		            <h3>{ this.props.course.name }</h3>
-		            <h3>{ prof }</h3>
+		            { prof_disp }
 		            <h3>{ creditsDisplay }</h3>
 		        </div>
 		        <div className="master-slot-actions">
