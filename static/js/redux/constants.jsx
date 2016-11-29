@@ -85,6 +85,7 @@ export const getSchoolSpecificInfo = (school) => {
         departmentsName: "Departments",
         levelsName: "Levels",
         timesName: "Times",
+        courseRegex: "([A-Z]{3}[A-Z0-9]\\d{2}[HY]\\d)",
         semesters: {
           F: "Fall 2016",
           S: "Winter 2017"
@@ -126,8 +127,8 @@ export const getSchoolSpecificInfo = (school) => {
           1: ""
         }
       }
-		case "umd":
-			return {
+    case "umd":
+      return {
         primaryDisplay: "name",
         areasName: "Areas",
         departmentsName: "Departments",
@@ -148,6 +149,7 @@ export const getSchoolSpecificInfo = (school) => {
         departmentsName: "Departments",
         levelsName: "Levels",
         timesName: "Times",
+        courseRegex: "([A-Z]{2,4}\\s\\d{3})",
         semesters: {
           F: "Fall 2016",
           S: "Spring 2017"
@@ -163,6 +165,8 @@ export const getSchoolSpecificInfo = (school) => {
         departmentsName: "Departments",
         levelsName: "Levels",
         timesName: "Times",
+        // course codes have dashes, in desciprtions dashes are spaces
+        // courseRegex: "([A-Z-&]{2,7}\\s\\d{4}[W]?)",
         semesters: {
           F: "Fall 2016",
           S: "Spring 2017"
@@ -178,6 +182,8 @@ export const getSchoolSpecificInfo = (school) => {
         departmentsName: "Departments",
         levelsName: "Levels",
         timesName: "Times",
+        // course codes in descriptions have lowercase department names, but I don't want to change the regex to include lowercase
+        courseRegex: "([A-Z]{2,5}\\s\\d{4})[W]?",
         semesters: {
           F: "Fall 2016",
           S: "Spring 2017"
@@ -193,6 +199,8 @@ export const getSchoolSpecificInfo = (school) => {
         departmentsName: "Departments",
         levelsName: "Levels",
         timesName: "Times",
+        // some classes are just numbers, not included in this regex, cuz some descrpitions have years
+        courseRegex: "([A-Z]{2,8}\\s\\d{3})",
         semesters: {
           F: "Fall 2016",
           S: "Winter 2017"
