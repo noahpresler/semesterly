@@ -48,7 +48,12 @@ class SideBar extends React.Component {
                 let colourIndex = this.props.courseToColourIndex[c.id] || 0;
                 let classmates = this.props.classmates ? this.props.classmates.find(course => course.course_id === c.id) : [];
                 classmates = classmates ? classmates : [];
-                let professors = [ ...new Set(c.slots.map(s => s.instructors)) ];
+                let professors = []
+                if (c.slots.length == 0 && c.oldSlots && c.oldSlots.length > 0) {
+                    professors = [ ...new Set(c.oldSlots.map(s => s.instructors)) ];
+                } else {
+                    professors = [ ...new Set(c.slots.map(s => s.instructors)) ];
+                }
                 return <MasterSlot
                         key={c.id}
                         professors={professors}
