@@ -18,7 +18,6 @@ num_fts = feat_trix.shape[1]
 num_tts = feat_trix.shape[0]
 print "Training on {0} features, {1} timetables".format(num_fts,num_tts)
 
-
 #dictionary mapping from course
 #to tuple: (related course, similarity)
 similarities = {}
@@ -49,12 +48,3 @@ for c1 in bar(range(num_fts)):
 # sorted(similarities[5688], key=lambda x: x[1], reverse=True)[:3]
 pickle.dump(similarities, open("recommended.model", "wb"))
 print "FILE WRITTEN"
-
-bar2 = progressbar.ProgressBar()
-for cid in bar2(similarities.keys()):
-    related = filter(lambda x: x[0] != cid,sorted(similarities[cid],key=lambda x: x[1], reverse=True)[:5])
-    course = Course.objects.get(cid)
-    Course.related_courses.through.objects.filter(from_course_id=cid).delete()
-    Course.related_courses.through.objects.filter(to_course_id=cid).delete()
-    for c in related:
-        course.related_courses.add(c)
