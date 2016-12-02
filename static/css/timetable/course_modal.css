@@ -293,6 +293,12 @@ h3.modal-module-header small {
 	margin: 0 auto 5px;
 	transition: color .2s;
 }
+#modal-body a.course-link,
+#modal-body a.course-link:link,
+#modal-body a.course-link:visited {
+	color: #555;
+	text-decoration: underline;
+}
 
 /* Course Modal Sections */
 .modal-section {

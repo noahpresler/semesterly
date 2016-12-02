@@ -149,7 +149,7 @@ export class CourseModalBody extends React.Component {
                 return t
             if (matchedCoursesDescription.indexOf(t) == -1)
                 return <span className='textItem' key={i}>{t}</span>;
-            return <a href={getCourseShareLinkFromModal(t)} key={i}>{t}</a>;
+            return <a href={getCourseShareLinkFromModal(t)} className="course-link" key={i}>{t}</a>;
         });
         let matchedCoursesPrerequisites = prerequisites == null ? matchedCoursesPrerequisites = null : prerequisites.match(courseRegex);
         let newPrerequisites = (prerequisites == "" || prerequisites == null) ? "None" : prerequisites.split(courseRegex).map((t, i) => {
@@ -157,7 +157,7 @@ export class CourseModalBody extends React.Component {
                 return t
             if (matchedCoursesPrerequisites.indexOf(t) == -1)
                 return <span className='textItem' key={i}>{t}</span>;
-            return <a href={getCourseShareLinkFromModal(t)} key={i}>{t}</a>;
+            return <a href={getCourseShareLinkFromModal(t)} className="course-link" key={i}>{t}</a>;
         });
         let prerequisitesDisplay =
         <div className="modal-module prerequisites">
