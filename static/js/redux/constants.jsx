@@ -183,7 +183,7 @@ export const getSchoolSpecificInfo = (school) => {
         levelsName: "Levels",
         timesName: "Times",
         // course codes in descriptions have lowercase department names, but I don't want to change the regex to include lowercase
-        courseRegex: "([A-Z]{2,5}\\s\\d{4})[W]?",
+        courseRegex: "([A-Z]{2,5}\\s\\d{4}[W]?)",
         semesters: {
           F: "Fall 2016",
           S: "Spring 2017"
