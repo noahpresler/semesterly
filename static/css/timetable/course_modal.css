@@ -323,6 +323,7 @@ h3.modal-module-header small {
 	border-radius: 5px;
 	line-height: 20px;
 	z-index: 1;
+	overflow: hidden;
 }
 #modal-body a.course-link .course-link-content {
 	padding: 10px;
