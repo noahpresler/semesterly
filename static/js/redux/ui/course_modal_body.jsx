@@ -142,7 +142,6 @@ export class CourseModalBody extends React.Component {
 
             )}
         </div>
-        console.log(Object.keys(this.props.data.regexed_courses), "lol");
         let courseRegex = new RegExp(getSchoolSpecificInfo(school).courseRegex, "g");
         let matchedCoursesDescription = this.props.data.description.match(courseRegex);
         let description = this.props.data.description == "" ? "None" : this.props.data.description.split(courseRegex).map((t, i) => {
@@ -156,8 +155,17 @@ export class CourseModalBody extends React.Component {
         let newPrerequisites = (prerequisites == "" || prerequisites == null) ? "None" : prerequisites.split(courseRegex).map((t, i) => {
             if (matchedCoursesPrerequisites == null)
                 return t
-            if (matchedCoursesPrerequisites.indexOf(t) != -1 && Object.keys(this.props.data.regexed_courses).indexOf(t) != -1)
-                return <a href={getCourseShareLinkFromModal(t)} className="course-link" key={i}>{t}</a>;
+            if (matchedCoursesPrerequisites.indexOf(t) != -1 && Object.keys(this.props.data.regexed_courses).indexOf(t) != -1) {
+                let name = this.props.data.regexed_courses[t]
+                return <a href={getCourseShareLinkFromModal(t)} className="course-link" key={i}>
+                    <span>{t}</span>
+                    <span className="course-link-tip">
+                        <span className="slot-bar"></span>
+                        <span>{t}</span>
+                        <span>{name}</span>
+                    </span>
+                </a>;
+            }
             return <span className='textItem' key={i}>{t}</span>;
         });
         let prerequisitesDisplay =
