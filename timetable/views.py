@@ -18,7 +18,7 @@ from pytz import timezone
 from analytics.models import *
 from analytics.views import *
 from timetable.models import *
-from timetable.school_mappers import school_to_granularity, VALID_SCHOOLS, school_code_to_name, AM_PM_SCHOOLS
+from timetable.school_mappers import school_to_granularity, VALID_SCHOOLS, school_code_to_name, AM_PM_SCHOOLS, school_to_course_regex
 from timetable.utils import *
 from timetable.scoring import *
 from student.models import Student
@@ -429,6 +429,7 @@ def get_detailed_course_json(school, course, sem, student=None):
   json_data['reactions'] = course.get_reactions(student)
   json_data['textbooks'] = course.get_textbooks(sem)
   json_data['integrations'] = list(course.get_course_integrations())
+  json_data['regexed_courses'] = get_regexed_courses(school, json_data)
   if student and student.user.is_authenticated() and student.social_courses:
     json_data['classmates'] = get_classmates_from_course_id(school, student, course.id,sem)
   return json_data
@@ -481,6 +482,18 @@ def get_course_id(request, school, sem, code):
     json_data = {}
 
   return HttpResponse(json.dumps(json_data), content_type="application/json")
+
+def get_regexed_courses(school, json_data):
+  regexed_courses = {}
+  if school in school_to_course_regex:
+    matched_courses = re.findall(school_to_course_regex[school], json_data['description'] + json_data['prerequisites'])
+    for c in matched_courses:
+      try:
+        regexed_course = Course.objects.filter(school=school, code__icontains=c)[0]
+        regexed_courses[c] = regexed_course.name
+      except:
+        pass
+  return regexed_courses
 
 ### COURSE SEARCH ###
 

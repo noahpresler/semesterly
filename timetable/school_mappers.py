@@ -62,6 +62,15 @@ school_code_to_name = {
   'chapman': 'Chapman University'
 }
 
+school_to_course_regex = {
+  'jhu': '([A-Z]{2}\.\d{3}\.\d{3})',
+  'uoft': '([A-Z]{3}[A-Z0-9]\d{2}[HY]\d)',
+  'vandy': '([A-Z-&]{2,7}\s\d{4}[W]?)',
+  'gw': '([A-Z]{2,5}\s\d{4}[W]?)',
+  'umich': '([A-Z]{2,8}\s\d{3})',
+  'chapman': '([A-Z]{2,4}\s\d{3})'
+}
+
 # do the imports: assumes all parser follow the same naming conventions: 
 # schoolname_parsertype where parsertype can be courses, evals, or textbooks
 types = ['courses', 'evals', 'textbooks']
