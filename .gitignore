@@ -28,3 +28,7 @@ openssl.cnf
 ssl.crt
 ssl.key
 semesterly_backup/
+recommended.model
+timetable.features
+*.recommended.model
+*.timetable.features
