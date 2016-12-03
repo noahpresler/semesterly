@@ -148,26 +148,15 @@ export class CourseModalBody extends React.Component {
             if (matchedCoursesDescription == null)
                 return t
             if (matchedCoursesDescription.indexOf(t) != -1 && Object.keys(this.props.data.regexed_courses).indexOf(t) != -1)
-                return <a href={getCourseShareLinkFromModal(t)} className="course-link" key={i}>{t}</a>;
+                return <FakeSlot key={i} num={i} code={t} name={this.props.data.regexed_courses[t]} />
             return <span className='textItem' key={i}>{t}</span>;
         });
         let matchedCoursesPrerequisites = prerequisites == null ? matchedCoursesPrerequisites = null : prerequisites.match(courseRegex);
         let newPrerequisites = (prerequisites == "" || prerequisites == null) ? "None" : prerequisites.split(courseRegex).map((t, i) => {
             if (matchedCoursesPrerequisites == null)
                 return t
-            if (matchedCoursesPrerequisites.indexOf(t) != -1 && Object.keys(this.props.data.regexed_courses).indexOf(t) != -1) {
-                let name = this.props.data.regexed_courses[t]
-                return <a href={getCourseShareLinkFromModal(t)} className="course-link" key={i}>
-                    <span>{t}</span>
-                    <span className="course-link-tip" style={ { backgroundColor: COLOUR_DATA[Math.min(i-1, maxColourIndex)].background }}>
-                        <span className="slot-bar" style={ { backgroundColor: COLOUR_DATA[Math.min(i-1, maxColourIndex)].border } }></span>
-                        <span className="course-link-content">
-                            <span>{t}</span>
-                            <span>{name}</span>
-                        </span>
-                    </span>
-                </a>;
-            }
+            if (matchedCoursesPrerequisites.indexOf(t) != -1 && Object.keys(this.props.data.regexed_courses).indexOf(t) != -1)
+                return <FakeSlot key={i} num={i} code={t} name={this.props.data.regexed_courses[t]} />
             return <span className='textItem' key={i}>{t}</span>;
         });
         let prerequisitesDisplay =
@@ -286,6 +275,20 @@ export class CourseModalBody extends React.Component {
         );
     }
 }
+
+const FakeSlot = ({num, code, name}) => {
+    let maxColourIndex = COLOUR_DATA.length - 1;
+    return <a href={getCourseShareLinkFromModal(code)} className="course-link" key={num}>
+        <span>{code}</span>
+        <span className="course-link-tip" style={ { backgroundColor: COLOUR_DATA[Math.min(num-1, maxColourIndex)].background }}>
+            <span className="slot-bar" style={ { backgroundColor: COLOUR_DATA[Math.min(num-1, maxColourIndex)].border } }></span>
+            <span className="course-link-content">
+                <span>{code}</span>
+                <span>{name}</span>
+            </span>
+        </span>
+    </a>;
+};
 
 const SearchResultSection = ({ section, secName, instr, enrolled, waitlist, size, hoverSection, unhoverSection, locked, inRoster, lockOrUnlock, isOnActiveTimetable}) => {
     let seats = size - enrolled;
