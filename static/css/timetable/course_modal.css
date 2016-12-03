@@ -293,11 +293,44 @@ h3.modal-module-header small {
 	margin: 0 auto 5px;
 	transition: color .2s;
 }
+#modal-body .textItem {
+	line-height: 20px;
+}
 #modal-body a.course-link,
 #modal-body a.course-link:link,
 #modal-body a.course-link:visited {
 	color: #555;
 	text-decoration: underline;
+	cursor: pointer;
+	position: relative;
+	transition: color .3s;
+}
+#modal-body a.course-link:active,
+#modal-body a.course-link:hover {
+	color: #3473c8;
+}
+#modal-body a.course-link .course-link-tip {
+	opacity: 0;
+	visibility: hidden;
+	transition: opacity .3s, visibility .3s;
+	white-space: nowrap;
+	position: absolute;
+	top: -10px;
+	left: -10px;
+	height: 60px;
+	background-color: #FD7473;
+	color: #222;
+	border-radius: 5px;
+	padding: 10px;
+	line-height: 20px;
+	z-index: 1;
+}
+#modal-body a.course-link .course-link-tip span {
+	display: block;
+}
+#modal-body a.course-link:hover .course-link-tip {
+	opacity: 1;
+	visibility: visible;
 }
 
 /* Course Modal Sections */
