@@ -321,9 +321,11 @@ h3.modal-module-header small {
 	background-color: #FD7473;
 	color: #222;
 	border-radius: 5px;
-	padding: 10px;
 	line-height: 20px;
 	z-index: 1;
+}
+#modal-body a.course-link .course-link-content {
+	padding: 10px;
 }
 #modal-body a.course-link .course-link-tip span {
 	display: block;
