@@ -142,22 +142,23 @@ export class CourseModalBody extends React.Component {
 
             )}
         </div>
+        console.log(Object.keys(this.props.data.regexed_courses), "lol");
         let courseRegex = new RegExp(getSchoolSpecificInfo(school).courseRegex, "g");
         let matchedCoursesDescription = this.props.data.description.match(courseRegex);
         let description = this.props.data.description == "" ? "None" : this.props.data.description.split(courseRegex).map((t, i) => {
             if (matchedCoursesDescription == null)
                 return t
-            if (matchedCoursesDescription.indexOf(t) == -1)
-                return <span className='textItem' key={i}>{t}</span>;
-            return <a href={getCourseShareLinkFromModal(t)} className="course-link" key={i}>{t}</a>;
+            if (matchedCoursesDescription.indexOf(t) != -1 && Object.keys(this.props.data.regexed_courses).indexOf(t) != -1)
+                return <a href={getCourseShareLinkFromModal(t)} className="course-link" key={i}>{t}</a>;
+            return <span className='textItem' key={i}>{t}</span>;
         });
         let matchedCoursesPrerequisites = prerequisites == null ? matchedCoursesPrerequisites = null : prerequisites.match(courseRegex);
         let newPrerequisites = (prerequisites == "" || prerequisites == null) ? "None" : prerequisites.split(courseRegex).map((t, i) => {
             if (matchedCoursesPrerequisites == null)
                 return t
-            if (matchedCoursesPrerequisites.indexOf(t) == -1)
-                return <span className='textItem' key={i}>{t}</span>;
-            return <a href={getCourseShareLinkFromModal(t)} className="course-link" key={i}>{t}</a>;
+            if (matchedCoursesPrerequisites.indexOf(t) != -1 && Object.keys(this.props.data.regexed_courses).indexOf(t) != -1)
+                return <a href={getCourseShareLinkFromModal(t)} className="course-link" key={i}>{t}</a>;
+            return <span className='textItem' key={i}>{t}</span>;
         });
         let prerequisitesDisplay =
         <div className="modal-module prerequisites">
