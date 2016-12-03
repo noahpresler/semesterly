@@ -46,20 +46,45 @@ class Recommender():
         #           Record that a Timetable has courses C1 and C2
         #   For each Course C2
         #       Compute the similarity between C1 and C2
+        print "EXECUTING FIRST PASS"
         bar = progressbar.ProgressBar()
+        low_data_courses = {}
         for c1 in bar(range(num_fts)):
             similar = set()
             c1_rows = filter(lambda ptt_idx: feat_trix[ptt_idx, c1] ,range(num_tts))
             for tt in c1_rows:
                 row = feat_trix[tt].toarray()[0]
                 similar = similar.union(set(np.where(row > 0)[0].flatten()))
+            #use len c1_rows < 5 OR len similar < 3
+            if len(similar) > 0 and (len(c1_rows) < 5 or len(similar) < 3):
+                low_data_courses[c1] = []
             for c2 in similar:
                 css = 1 - 1 * cosine(feat_trix[:,c1].toarray(), feat_trix[:,c2].toarray())
                 if c1 not in similarities:
                     similarities[c1] = []
                 similarities[c1].append((c2,css))
-        # print "TOP 3 AS RELATED TO DISCRETE MATH"
-        # sorted(similarities[5688], key=lambda x: x[1], reverse=True)[:3]
+                if c1 in low_data_courses:
+                    low_data_courses[c1].append((c2,css))
+        #low data pass
+        print "EXECUTING SECOND PASS"
+        bar2 = progressbar.ProgressBar()     
+        for c1, similar_css in bar2(low_data_courses.items()):
+            agg_sims = {}
+            norm_factor = {}
+            for c2, css in similar_css:
+                if c2 not in agg_sims:
+                    agg_sims[c2] = css
+                    norm_factor[c2] = 1
+                for c3, css3 in filter(lambda x: x[0] != c2, similarities[c2]):
+                    if c3 not in agg_sims:
+                        agg_sims[c3] = css
+                        norm_factor[c3] = 1
+                    agg_sims[c3] += css3
+                    norm_factor[c3] += 1
+            similarities[c1] = []
+            for c in agg_sims:
+                similarities[c1].append((c,agg_sims[c]/norm_factor[c]))
+
         pickle.dump(similarities, open(self.school + ".recommended.model", "wb"))
 
 
