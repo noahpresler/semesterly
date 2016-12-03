@@ -5,8 +5,9 @@ import Reaction from './reaction.jsx'
 import { REACTION_MAP } from '../constants.jsx';
 import MasterSlot from './master_slot.jsx';
 import Textbook from './textbook.jsx';
-import { COLOUR_DATA } from '../constants.jsx';
+import { COLOUR_DATA, getSchoolSpecificInfo } from '../constants.jsx';
 import EvaluationList from './evaluation_list.jsx';
+import { getCourseShareLinkFromModal } from '../helpers/timetable_helpers.jsx';
 
 export class CourseModalBody extends React.Component {
     constructor(props) {
@@ -71,6 +72,7 @@ export class CourseModalBody extends React.Component {
             this.props.fetchCourseInfo(courseId);
         }
     }
+
 
     render() {
         if (this.props.isFetching) {
@@ -140,11 +142,27 @@ export class CourseModalBody extends React.Component {
                     />
             })}
         </div>
-
+        let courseRegex = new RegExp(getSchoolSpecificInfo(school).courseRegex, "g");
+        let matchedCoursesDescription = this.props.data.description.match(courseRegex);
+        let description = this.props.data.description == "" ? "No description available" : this.props.data.description.split(courseRegex).map((t, i) => {
+            if (matchedCoursesDescription == null)
+                return t
+            if (matchedCoursesDescription.indexOf(t) != -1 && Object.keys(this.props.data.regexed_courses).indexOf(t) != -1)
+                return <FakeSlot key={i} num={i} code={t} name={this.props.data.regexed_courses[t]} />
+            return <span className='textItem' key={i}>{t}</span>;
+        });
+        let matchedCoursesPrerequisites = prerequisites == null ? matchedCoursesPrerequisites = null : prerequisites.match(courseRegex);
+        let newPrerequisites = (prerequisites == "" || prerequisites == null) ? "None" : prerequisites.split(courseRegex).map((t, i) => {
+            if (matchedCoursesPrerequisites == null)
+                return t
+            if (matchedCoursesPrerequisites.indexOf(t) != -1 && Object.keys(this.props.data.regexed_courses).indexOf(t) != -1)
+                return <FakeSlot key={i} num={i} code={t} name={this.props.data.regexed_courses[t]} />
+            return <span className='textItem' key={i}>{t}</span>;
+        });
         let prerequisitesDisplay =
         <div className="modal-module prerequisites">
             <h3 className="modal-module-header">Prerequisites</h3>
-            <p>{ prerequisites || "None" }</p>
+            <p>{ newPrerequisites }</p>
         </div>
         let areasDisplay =
             <div className="modal-module areas">
@@ -236,7 +254,7 @@ export class CourseModalBody extends React.Component {
                         </div>
                         <div>
                             <h3 className="modal-module-header">Course Description</h3>
-                            <p>{this.props.data.description.length == 0 ? "No description available" : this.props.data.description}</p>
+                            <p>{description}</p>
                         </div>
                         <div className="modal-module">
                             <h3 className="modal-module-header">Course Evaluations</h3>
@@ -257,6 +275,20 @@ export class CourseModalBody extends React.Component {
         );
     }
 }
+
+const FakeSlot = ({num, code, name}) => {
+    let maxColourIndex = COLOUR_DATA.length - 1;
+    return <a href={getCourseShareLinkFromModal(code)} className="course-link" key={num}>
+        <span>{code}</span>
+        <span className="course-link-tip" style={ { backgroundColor: COLOUR_DATA[Math.min(num-1, maxColourIndex)].background }}>
+            <span className="slot-bar" style={ { backgroundColor: COLOUR_DATA[Math.min(num-1, maxColourIndex)].border } }></span>
+            <span className="course-link-content">
+                <span>{code}</span>
+                <span>{name}</span>
+            </span>
+        </span>
+    </a>;
+};
 
 const SearchResultSection = ({ section, secName, instr, enrolled, waitlist, size, hoverSection, unhoverSection, locked, inRoster, lockOrUnlock, isOnActiveTimetable}) => {
     let seats = size - enrolled;
