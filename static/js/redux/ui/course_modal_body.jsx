@@ -159,10 +159,12 @@ export class CourseModalBody extends React.Component {
                 let name = this.props.data.regexed_courses[t]
                 return <a href={getCourseShareLinkFromModal(t)} className="course-link" key={i}>
                     <span>{t}</span>
-                    <span className="course-link-tip">
-                        <span className="slot-bar"></span>
-                        <span>{t}</span>
-                        <span>{name}</span>
+                    <span className="course-link-tip" style={ { backgroundColor: COLOUR_DATA[Math.min(i-1, maxColourIndex)].background }}>
+                        <span className="slot-bar" style={ { backgroundColor: COLOUR_DATA[Math.min(i-1, maxColourIndex)].border } }></span>
+                        <span className="course-link-content">
+                            <span>{t}</span>
+                            <span>{name}</span>
+                        </span>
                     </span>
                 </a>;
             }
