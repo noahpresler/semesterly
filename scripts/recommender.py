@@ -88,11 +88,14 @@ class Recommender():
         pickle.dump(similarities, open(self.school + ".recommended.model", "wb"))
 
 
-    def predict(self, cid, similarities=None):
+    def predict(self, cid, similarities=None, force_print=False):
         if not similarities:
             similarities = pickle.load(open(self.school + ".recommended.model", "rb"))
         # filter the top 5 courses by similarity score, removing the course itself from the list
-        return filter(lambda x: x[0] != cid,sorted(similarities[cid],key=lambda x: x[1], reverse=True)[:5])
+        ret = filter(lambda x: x[0] != cid,sorted(similarities[cid],key=lambda x: x[1], reverse=True)[:5])
+        if force_print:
+            print ret
+        return ret
 
 
     def predict_save_all(self):
@@ -144,7 +147,7 @@ def main():
         if not cids or len(cids) == 0:
             print "MUST PROVIDE COURSE IDS"
             exit()
-        recommender.predict(cids[0])
+        recommender.predict(cids[0],force_print=True)
     elif args.action == "save":
         recommender.predict_save_all()
     elif args.action == "recommend":
