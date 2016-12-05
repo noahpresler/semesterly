@@ -93,9 +93,9 @@ class Recommender():
             similarities = pickle.load(open(self.school + ".recommended.model", "rb"))
         # filter the top 5 courses by similarity score, removing the course itself from the list
         ret = filter(lambda x: x[0] != cid,sorted(similarities[cid],key=lambda x: x[1], reverse=True))
-        spring = filter(lambda x: Course.objects.filter(id=x[0], section__semester__in=['F', 'Y']).exists(), ret)[:5]
-        fall = filter(lambda x: Course.objects.filter(id=x[0], section__semester__in=['S', 'Y']).exists(), ret)[:5]
-        ret = fall + spring
+        fall = filter(lambda x: Course.objects.filter(id=x[0], section__semester__in=['F', 'Y']).exists(), ret)[:5]
+        spring = filter(lambda x: Course.objects.filter(id=x[0], section__semester__in=['S', 'Y']).exists(), ret)[:5]
+        ret = sorted(fall + spring,key=lambda x: x[1], reverse=True)
         if force_print:
             print ret
         return ret
