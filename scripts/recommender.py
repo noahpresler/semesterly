@@ -1,4 +1,4 @@
-import os, sys, django, pickle, progressbar, argparse
+import os, sys, django, pickle, progressbar, argparse, math
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "semesterly.settings")
 django.setup()
 import numpy as np
