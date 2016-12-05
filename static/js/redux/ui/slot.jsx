@@ -119,35 +119,21 @@ class Slot extends React.Component {
           .css('background-color', colour)
     }
     checkOverflow() {
-    // var name = this.courseName
-        // console.log("hey im here");
-        // console.log(this.refs.courseDiv.offsetWidth + " and " +  this.state.defaultScrollWidth);
-        // var div = ReactDOM.findDOMNode(this.refs.courseDiv);
-        // return ((this.refs.courseDiv.getDOMNode().offsetHeight < this.refs.courseDiv.getDOMNode().scrollHeight) || (this.refs.courseDiv.getDOMNode().offsetWidth < this.refs.courseDiv.getDOMNode().scrollWidth));
+        // check if scrollWidth of a slot is larger than its offsetWidth, if course name is longer than the slot's width
         if (!this.refs.courseDiv) {
-            // console.log("no div");
             return false;
         } else if (this.refs.courseDiv.offsetWidth < this.state.defaultScrollWidth) {
-            // console.log("yes overflow");
             this.setState({overflow: true});
         } else if (this.refs.courseDiv.offsetWidth >= this.state.defaultScrollWidth) {
-            // console.log("not overflow");
             this.setState({overflow: false});
         }
-        // console.log("nothing");
     }
     componentWillUnmount() {
-        // console.log("unmounted");
         window.removeEventListener('resize', this.checkOverflow());
     }
     componentDidMount() {
-        // console.log("component has mounted");
-        // console.log(this.refs.courseDiv.scrollWidth);
-        // console.log(this.refs.courseSpan.offsetWidth);
-        // var tempWidth = this.refs.courseSpan.offsetWidth + this.refs.courseNum.offsetWidth;
-        // console.log(tempWidth);
+        // sets scrollWidth of a slot to the width of course name and course section
         this.setState({defaultScrollWidth: this.refs.courseSpan.offsetWidth + this.refs.courseNum.offsetWidth}, function() {
-            // console.log("i am here " + this.state.defaultScrollWidth);
             this.checkOverflow();
         });
         window.addEventListener('resize', this.checkOverflow.bind(this));
