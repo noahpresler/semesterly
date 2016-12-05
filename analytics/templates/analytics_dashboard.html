@@ -94,8 +94,8 @@
       var num_users_by_school = JSON.parse("{{num_users_by_school|escapejs}}");
       var total_timetables_by_school = JSON.parse("{{total_timetables_by_school|escapejs}}");
       var number_of_reactions = JSON.parse("{{number_of_reactions|escapejs}}");
-      var timetables_per_hour = JSON.parse("{{timetables_per_hour|escapejs}}");
-      var shared_timetables_per_hour = JSON.parse("{{shared_timetables_per_hour|escapejs}}");
+      // var timetables_per_hour = JSON.parse("{{timetables_per_hour|escapejs}}");
+      // var shared_timetables_per_hour = JSON.parse("{{shared_timetables_per_hour|escapejs}}");
       var signups_per_hour = JSON.parse("{{signups_per_hour|escapejs}}");
     </script>
 
@@ -108,11 +108,11 @@
     <h4>Number of timetables by school:</h4>
     <canvas id="timetables_by_schools"></canvas>
 
-    <h4>Number of timetables created per hour per school for the past 24 hours:</h4>
+<!--     <h4>Number of timetables created per hour per school for the past 24 hours:</h4>
     <canvas id="timetables_per_hours_chart"></canvas>
 
     <h4>Number of shared timetables per hour per school for the past 24 hours:</h4>
-    <canvas id="shared_timetables_per_hours_chart"></canvas>
+    <canvas id="shared_timetables_per_hours_chart"></canvas> -->
 
     <h4>Number of signups per day for the past week:</h4>
     <canvas id="signups_chart"></canvas>
@@ -130,63 +130,63 @@
     var secondary_colors = ["#e36867", "#52b7d9", "#30c7a8", "#e5be58", "#b177c7", "#4ad187", "#B5BFA3", "#C9E20A", "#7CD2CF", "#668B94",
     "#C4D44D", "#6598f1"];
     Chart.defaults.global.responsive = true;
-    var timetables_per_hour_datasets = new Array(Object.keys(timetables_per_hour).length);
-    var shared_timetables_per_hour_datasets = new Array(Object.keys(shared_timetables_per_hour).length);
-    var index = 0;
-    for (key in timetables_per_hour) {
-      timetables_per_hour_datasets[index] =
-      {
-        label: key,
-        fill: false,
-        lineTension: 0.1,
-        backgroundColor: primary_colors[index],
-        borderColor: secondary_colors[index],
-        borderCapStyle: 'butt',
-        borderDash: [],
-        borderDashOffset: 0.0,
-        borderJoinStyle: 'miter',
-        pointBackgroundColor: "#fff",
-        pointBorderWidth: 1,
-        pointHoverRadius: 5,
-        pointHoverBorderColor: "rgba(220,220,220,1)",
-        pointHoverBorderWidth: 2,
-        pointRadius: 1,
-        pointHitRadius: 10,
-        data: timetables_per_hour[key],
-      };
-      shared_timetables_per_hour_datasets[index] =
-      {
-        label: key,
-        fill: false,
-        lineTension: 0.1,
-        backgroundColor: primary_colors[index],
-        borderColor: secondary_colors[index],
-        borderCapStyle: 'butt',
-        borderDash: [],
-        borderDashOffset: 0.0,
-        borderJoinStyle: 'miter',
-        pointBackgroundColor: "#fff",
-        pointBorderWidth: 1,
-        pointHoverRadius: 5,
-        pointHoverBorderColor: "rgba(220,220,220,1)",
-        pointHoverBorderWidth: 2,
-        pointRadius: 1,
-        pointHitRadius: 10,
-        data: shared_timetables_per_hour[key],
-      };
-      index++;
-    }
+    // var timetables_per_hour_datasets = new Array(Object.keys(timetables_per_hour).length);
+    // var shared_timetables_per_hour_datasets = new Array(Object.keys(shared_timetables_per_hour).length);
+    // var index = 0;
+    // for (key in timetables_per_hour) {
+    //   timetables_per_hour_datasets[index] =
+    //   {
+    //     label: key,
+    //     fill: false,
+    //     lineTension: 0.1,
+    //     backgroundColor: primary_colors[index],
+    //     borderColor: secondary_colors[index],
+    //     borderCapStyle: 'butt',
+    //     borderDash: [],
+    //     borderDashOffset: 0.0,
+    //     borderJoinStyle: 'miter',
+    //     pointBackgroundColor: "#fff",
+    //     pointBorderWidth: 1,
+    //     pointHoverRadius: 5,
+    //     pointHoverBorderColor: "rgba(220,220,220,1)",
+    //     pointHoverBorderWidth: 2,
+    //     pointRadius: 1,
+    //     pointHitRadius: 10,
+    //     data: timetables_per_hour[key],
+    //   };
+    //   shared_timetables_per_hour_datasets[index] =
+    //   {
+    //     label: key,
+    //     fill: false,
+    //     lineTension: 0.1,
+    //     backgroundColor: primary_colors[index],
+    //     borderColor: secondary_colors[index],
+    //     borderCapStyle: 'butt',
+    //     borderDash: [],
+    //     borderDashOffset: 0.0,
+    //     borderJoinStyle: 'miter',
+    //     pointBackgroundColor: "#fff",
+    //     pointBorderWidth: 1,
+    //     pointHoverRadius: 5,
+    //     pointHoverBorderColor: "rgba(220,220,220,1)",
+    //     pointHoverBorderWidth: 2,
+    //     pointRadius: 1,
+    //     pointHitRadius: 10,
+    //     data: shared_timetables_per_hour[key],
+    //   };
+    //   index++;
+    // }
 
     var past_24_labels = ["-23", "-22", "-21", "-20", "-19", "-18", "-17","-16", "-15", "-14", "-13", "-12", "-11", "-10","-9", "-8", "-7", "-6", "-5", "-4", "-3", "-2", "-1", "Now"];
 
-    var timetables_per_hour_data = {
-      labels: past_24_labels,
-      datasets: timetables_per_hour_datasets
-    };
-    var shared_timetables_per_hour_data = {
-      labels: past_24_labels,
-      datasets: shared_timetables_per_hour_datasets
-    };
+    // var timetables_per_hour_data = {
+    //   labels: past_24_labels,
+    //   datasets: timetables_per_hour_datasets
+    // };
+    // var shared_timetables_per_hour_data = {
+    //   labels: past_24_labels,
+    //   datasets: shared_timetables_per_hour_datasets
+    // };
     var signups_per_hour_data = {
       labels: ["-6", "-5", "-4", "-3", "-2", "-1", "Now"],
       datasets:     [
@@ -253,17 +253,17 @@
         }]
     };
 
-    var ctx = document.getElementById("timetables_per_hours_chart");
-    var line_chart_24_hours = new Chart(ctx, {
-      type: 'line',
-      data: timetables_per_hour_data,
-    });
+    // var ctx = document.getElementById("timetables_per_hours_chart");
+    // var line_chart_24_hours = new Chart(ctx, {
+    //   type: 'line',
+    //   data: timetables_per_hour_data,
+    // });
 
-    var stx = document.getElementById("shared_timetables_per_hours_chart");
-    var line_chart_shared_24_hours = new Chart(stx, {
-      type: 'line',
-      data: shared_timetables_per_hour_data,
-    });
+    // var stx = document.getElementById("shared_timetables_per_hours_chart");
+    // var line_chart_shared_24_hours = new Chart(stx, {
+    //   type: 'line',
+    //   data: shared_timetables_per_hour_data,
+    // });
 
     var utx = document.getElementById("signups_chart");
     var myPieChart = new Chart(utx, {
