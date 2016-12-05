@@ -1,4 +1,4 @@
-import os, sys, django, pickle, progressbar, argparse, math
+import os, sys, django, pickle, progressbar, argparse
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "semesterly.settings")
 django.setup()
 import numpy as np
@@ -59,7 +59,7 @@ class Recommender():
             if len(similar) > 0 and (len(c1_rows) < 5 or len(similar) < 3):
                 low_data_courses[c1] = []
             for c2 in similar:
-                css =  1 / ( math.abs(cosine(feat_trix[:,c1].toarray(), feat_trix[:,c2].toarray()))  + 1 )
+                css =  1 / ( abs(cosine(feat_trix[:,c1].toarray(), feat_trix[:,c2].toarray()))  + 1 )
                 if c1 not in similarities:
                     similarities[c1] = []
                 similarities[c1].append((c2,css))
