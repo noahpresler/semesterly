@@ -101,7 +101,7 @@ class Recommender():
     def predict_save_all(self):
         similarities = pickle.load(open(self.school + ".recommended.model", "rb"))
         bar2 = progressbar.ProgressBar()
-        for cid in bar2([similarities.keys()]):
+        for cid in bar2(similarities.keys()):
             related = self.predict(cid, similarities)
             course = Course.objects.get(id=cid)
             #delete old associations via the many-to-many field
