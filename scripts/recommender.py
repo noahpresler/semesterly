@@ -59,7 +59,7 @@ class Recommender():
             if len(similar) > 0 and (len(c1_rows) < 5 or len(similar) < 3):
                 low_data_courses[c1] = []
             for c2 in similar:
-                css =  -1 * (cosine(feat_trix[:,c1].toarray(), feat_trix[:,c2].toarray()) - 1 )
+                css =  1 / ( math.abs(cosine(feat_trix[:,c1].toarray(), feat_trix[:,c2].toarray()))  + 1 )
                 if c1 not in similarities:
                     similarities[c1] = []
                 similarities[c1].append((c2,css))
@@ -92,7 +92,10 @@ class Recommender():
         if not similarities:
             similarities = pickle.load(open(self.school + ".recommended.model", "rb"))
         # filter the top 5 courses by similarity score, removing the course itself from the list
-        ret = filter(lambda x: x[0] != cid,sorted(similarities[cid],key=lambda x: x[1], reverse=True)[:15])
+        ret = filter(lambda x: x[0] != cid,sorted(similarities[cid],key=lambda x: x[1], reverse=True))
+        spring = filter(lambda x: Course.objects.filter(id=x[0], section__semester__in=['F', 'Y']).exists(), ret)[:5]
+        fall = filter(lambda x: Course.objects.filter(id=x[0], section__semester__in=['S', 'Y']).exists(), ret)[:5]
+        ret = fall + spring
         if force_print:
             print ret
         return ret
@@ -108,7 +111,8 @@ class Recommender():
             Course.related_courses.through.objects.filter(from_course_id=cid).delete()
             Course.related_courses.through.objects.filter(to_course_id=cid).delete()
             for c in related:
-                course.related_courses.add(Course.objects.get(id=c[0]))
+                if not course.related_courses.get(c).exists():
+                    course.related_courses.add(Course.objects.get(id=c[0]))
 
 
     def recommend(self, course_ids):
@@ -117,7 +121,7 @@ class Recommender():
         recs = {}
         for cid in bar(course_ids): 
             #for each course, get the related courses by top similarity score
-            related = filter(lambda x: x[0] != cid,sorted(similarities[cid],key=lambda x: x[1], reverse=True)[:25])
+            related = filter(lambda x: x[0] != cid,sorted(similarities[cid],key=lambda x: x[1], reverse=True)[:15])
             for r in related: 
                 if r[0] not in recs:
                     recs[r[0]] = 0
