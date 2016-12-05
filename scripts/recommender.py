@@ -59,7 +59,7 @@ class Recommender():
             if len(similar) > 0 and (len(c1_rows) < 5 or len(similar) < 3):
                 low_data_courses[c1] = []
             for c2 in similar:
-                css = 1 - 1 * cosine(feat_trix[:,c1].toarray(), feat_trix[:,c2].toarray())
+                css =  -1 * (cosine(feat_trix[:,c1].toarray(), feat_trix[:,c2].toarray()) - 1 )
                 if c1 not in similarities:
                     similarities[c1] = []
                 similarities[c1].append((c2,css))
