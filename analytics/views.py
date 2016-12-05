@@ -21,12 +21,12 @@ def view_analytics_dashboard(request):
 
         # Number of time tables by school
         total_timetables_by_school = {}
-        timetables_per_hour = {}
-        shared_timetables_per_hour = {}
+        # timetables_per_hour = {}
+        # shared_timetables_per_hour = {}
         for school in VALID_SCHOOLS:
             total_timetables_by_school[school] = number_timetables(school=school)
-            timetables_per_hour[school] = number_timetables_per_hour(school=school)
-            shared_timetables_per_hour[school] = number_timetables_per_hour(Timetable=SharedTimetable, school=school)
+            # timetables_per_hour[school] = number_timetables_per_hour(school=school)
+            # shared_timetables_per_hour[school] = number_timetables_per_hour(Timetable=SharedTimetable, school=school)
 
         # Number of users by permission
         # TODO: Moves this array to somewhere else (like VALID_SCHOOLS)
@@ -41,9 +41,7 @@ def view_analytics_dashboard(request):
             percent_users = format(float(num_users) / total_signups * 100, '.2f')
             num_users_by_permission[permission] = (num_users, percent_users)
         return render_to_response('analytics_dashboard.html', {
-                "timetables_per_hour":json.dumps(timetables_per_hour),
                 "signups_per_hour":number_timetables_per_hour(Timetable=Student,start_delta_days=7, interval_delta_hours=24),
-                "shared_timetables_per_hour":json.dumps(shared_timetables_per_hour),
                 "total_timetables_by_school":json.dumps(total_timetables_by_school),
                 "total_timetables":number_timetables(),
                 "total_shared_timetables":number_timetables(Timetable=SharedTimetable),
@@ -61,6 +59,8 @@ def view_analytics_dashboard(request):
                 "umd_most_popular_courses":[] # needs to be refactored; was causing timeout on server because too slow
             },
             context_instance=RequestContext(request))
+            # "timetables_per_hour":json.dumps(timetables_per_hour),
+            # "shared_timetables_per_hour":json.dumps(shared_timetables_per_hour),
             # "jhu_most_popular_courses":most_popular_courses(5, 'jhu', 'S'),
             # "uoft_most_popular_courses":most_popular_courses(5, 'uoft', 'S'),
             # "umd_most_popular_courses":most_popular_courses(5, 'umd', 'S'),
