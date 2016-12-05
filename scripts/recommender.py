@@ -92,7 +92,7 @@ class Recommender():
         if not similarities:
             similarities = pickle.load(open(self.school + ".recommended.model", "rb"))
         # filter the top 5 courses by similarity score, removing the course itself from the list
-        ret = filter(lambda x: x[0] != cid,sorted(similarities[cid],key=lambda x: x[1], reverse=True)[:5])
+        ret = filter(lambda x: x[0] != cid,sorted(similarities[cid],key=lambda x: x[1], reverse=True)[:15])
         if force_print:
             print ret
         return ret
@@ -101,7 +101,7 @@ class Recommender():
     def predict_save_all(self):
         similarities = pickle.load(open(self.school + ".recommended.model", "rb"))
         bar2 = progressbar.ProgressBar()
-        for cid in bar2(similarities.keys()):
+        for cid in bar2([similarities.keys()]):
             related = self.predict(cid, similarities)
             course = Course.objects.get(id=cid)
             #delete old associations via the many-to-many field
@@ -117,7 +117,7 @@ class Recommender():
         recs = {}
         for cid in bar(course_ids): 
             #for each course, get the related courses by top similarity score
-            related = filter(lambda x: x[0] != cid,sorted(similarities[cid],key=lambda x: x[1], reverse=True)[:10])
+            related = filter(lambda x: x[0] != cid,sorted(similarities[cid],key=lambda x: x[1], reverse=True)[:25])
             for r in related: 
                 if r[0] not in recs:
                     recs[r[0]] = 0
