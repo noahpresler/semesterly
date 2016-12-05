@@ -1,4 +1,5 @@
 import React from 'react';
+import ReactDOM from 'react-dom'
 import { DropTarget } from 'react-dnd'
 import { HALF_HOUR_HEIGHT, COLOUR_DATA, DRAGTYPES } from '../constants.jsx';
 import Radium, { StyleRoot } from 'radium';
@@ -91,7 +92,11 @@ function collectCreateDrop(connect, monitor) { // inject props as drop target
 class Slot extends React.Component {
     constructor(props) {
         super(props);
-        this.state = { hovered: false };
+        this.state = { 
+            hovered: false,
+            overflow: false,
+            defaultScrollWidth: 0
+        };
         this.stopPropagation = this.stopPropagation.bind(this);
         this.onSlotHover = this.onSlotHover.bind(this);
         this.onSlotUnhover = this.onSlotUnhover.bind(this);
@@ -112,6 +117,26 @@ class Slot extends React.Component {
         // update sibling slot colours (i.e. the slots for the same course)
         $(".slot-" + this.props.course)
           .css('background-color', colour)
+    }
+    checkOverflow() {
+        // check if scrollWidth of a slot is larger than its offsetWidth, if course name is longer than the slot's width
+        if (!this.refs.courseDiv) {
+            return false;
+        } else if (this.refs.courseDiv.offsetWidth < this.state.defaultScrollWidth) {
+            this.setState({overflow: true});
+        } else if (this.refs.courseDiv.offsetWidth >= this.state.defaultScrollWidth) {
+            this.setState({overflow: false});
+        }
+    }
+    componentWillUnmount() {
+        window.removeEventListener('resize', this.checkOverflow());
+    }
+    componentDidMount() {
+        // sets scrollWidth of a slot to the width of course name and course section
+        this.setState({defaultScrollWidth: this.refs.courseSpan.offsetWidth + this.refs.courseNum.offsetWidth}, function() {
+            this.checkOverflow();
+        });
+        window.addEventListener('resize', this.checkOverflow.bind(this));
     }
   render() {
         let removeButton = this.state.hovered ?
@@ -156,8 +181,10 @@ class Slot extends React.Component {
                         <div className="fc-time">
                             <span>{ converted_start } – { converted_end }</span>
                         </div>
-                        <div className="fc-time">
-                            { this.props[this.props.primaryDisplayAttribute] + " " + this.props.meeting_section}
+                        <div ref="courseDiv" className="fc-time">
+                            <span ref="courseSpan" className={"fc-time-name" + (this.state.overflow ? "-overflow" : "")}>
+                            { this.props[this.props.primaryDisplayAttribute] + " "}</span>
+                            <span ref="courseNum">{this.props.meeting_section}</span>
                         </div>
                         <div className="fc-time">
                             {friends}
