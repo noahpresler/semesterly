@@ -1,6 +1,6 @@
 #!/bin/bash
 echo "Dumping data into json."
-python manage.py dumpdata -e contenttypes --natural-foreign > semesterly_backup/backup.json
+python manage.py dumpdata --natural-foreign --exclude auth.permission --exclude contenttypes > semesterly_backup/backup.json
 cd semesterly_backup
 echo "Compressing to tar.gz."
 tar -czvf backup.tar.gz backup.json
