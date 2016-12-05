@@ -82,8 +82,7 @@ button.row-button:hover {
     overflow: hidden;
     white-space: nowrap;
     float: left;
-    /*width: 100px !important;*/
-    width: calc(100% - 20px) !important;
+    width: calc(100% - 20px);
 }
 .fc-toolbar {
     border-bottom: 0px;
