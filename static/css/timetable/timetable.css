@@ -74,7 +74,16 @@ button.row-button:hover {
 	margin-left: 8px;
 	margin-top: 2px;
 }
-
+.fc-time {
+    white-space: nowrap;
+}
+.fc-time-name-overflow {
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+    float: left;
+    width: calc(100% - 20px);
+}
 .fc-toolbar {
     border-bottom: 0px;
     padding: 5px;
