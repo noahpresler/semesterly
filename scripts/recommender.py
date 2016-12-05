@@ -111,7 +111,7 @@ class Recommender():
             Course.related_courses.through.objects.filter(from_course_id=cid).delete()
             Course.related_courses.through.objects.filter(to_course_id=cid).delete()
             for c in related:
-                if not course.related_courses.get(c).exists():
+                if not course.related_courses.filter(id=c[0]).exists():
                     course.related_courses.add(Course.objects.get(id=c[0]))
 
 
