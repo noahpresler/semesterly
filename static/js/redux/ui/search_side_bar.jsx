@@ -15,7 +15,7 @@ export class SearchSideBar extends React.Component {
         if (sections === undefined) {
             return [];
         }
-        return Object.keys(sections).map(sec => 
+        return Object.keys(sections).sort().map(sec => 
             <SearchResultSection key={this.props.hovered.id + sec} course={this.props.hovered} section={sec} 
                 locked={this.props.isSectionLocked(this.props.hovered.id, sec)}
                 isOnActiveTimetable={this.props.isSectionOnActiveTimetable(this.props.hovered.id, sec)}
