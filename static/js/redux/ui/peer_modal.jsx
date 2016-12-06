@@ -65,7 +65,7 @@ export class PeerModal extends React.Component {
                         <h3>{professors.length == 0 ? "No Professor Listed" : professors}</h3>
                     </div>
                 </div>)});
-        let proPicStyle = !this.props.userInfo.isLoggedIn ? {backgroundImage: 'url("/static/img/blank.jpg")'} : {backgroundImage: 'url(http://graph.facebook.com/' + JSON.parse(currentUser).fbook_uid + '/picture?type=normal)'};
+        let proPicStyle = !this.props.userInfo.isLoggedIn ? {backgroundImage: 'url("/static/img/blank.jpg")'} : {backgroundImage: 'url(http://graph.facebook.com/' + JSON.parse(currentUser).fbook_uid + '/picture?width=700&height=700)'};
         let sideBar =
             <div id="pm-side-bar">
                 <div className="circle-pic" style={proPicStyle}></div>
