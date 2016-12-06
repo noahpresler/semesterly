@@ -202,6 +202,7 @@ h4.sb-header:after {
     top:20px;
     right:5px;
     height:38px;
+    max-width: 250px;
     padding:0px 5px;
     background-color:#F8F6F7;
     border-radius:2px;
@@ -232,6 +233,7 @@ h4.sb-header:after {
     margin-top:7px;
     width:auto;
     height:25px;
+    max-width: 240px;
 }
 
 .master-slot-content h3 {
