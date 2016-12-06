@@ -601,9 +601,6 @@ footer h6 {
 }
 
 @media(max-width: 445px) {
-	header h1 {
-		display: none;
-	}
 	#hub {
 		width: 34.5%;
 	}
@@ -613,12 +610,6 @@ footer h6 {
 	#authors > div {
 	    padding: 30px 30px 0px 30px;
 	    text-align: center;
-	}
-	#press {
-		padding-top: 25px;
-	}
-	#hero {
-		height: 200px;
 	}
 	.row .article-data {
 		opacity: 1;
