@@ -252,7 +252,7 @@ def find_friends(request):
                 'shared_courses': shared_courses,
                 'profile_url': 'https://www.facebook.com/' + peer.fbook_uid,
                 'name': peer.user.first_name + ' ' + peer.user.last_name,
-                'large_img': 'https://graph.facebook.com/' + peer.fbook_uid + '/picture?type=normal'
+                'large_img': 'https://graph.facebook.com/' + peer.fbook_uid + '/picture?width=700&height=700'
             })
         friends.sort(key=lambda l: len(l['shared_courses']), reverse=True)
         return HttpResponse(json.dumps(friends))
