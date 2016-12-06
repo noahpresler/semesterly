@@ -464,6 +464,33 @@ footer h6 {
 	display: inline-block;
 }
 
+/* Authors */
+#authors {
+    padding: 70px 10px 50px;
+    border-top: 1px solid #ddd;
+    border-bottom: 1px solid #ddd;
+}
+
+#authors > div {
+	padding: 50px 30px 50px 30px;
+	text-align: center;
+}
+
+.author {
+	display: inline-block;
+	background-position: center;
+    background-size:contain;
+    background-repeat: no-repeat;
+    margin: 1%;
+    height: 50px;
+    width: 15.5%;
+    filter: grayscale(100%);
+}
+
+#hub {
+	width: 7.8%;
+}
+
 @media(max-width: 1110px) {
 	#hero ul {
 		padding: 0 40px 0 0;
@@ -559,5 +586,56 @@ footer h6 {
 	}
 	.tutorial {
 		padding: 60px 0;
+	}
+}
+
+@media(max-width: 580px) {
+	#hub {
+		width: 34.5%;
+	}
+	.author {
+		width: 34.5%;
+		margin: 12px 5%;
+		height: 40px;
+	}
+}
+
+@media(max-width: 445px) {
+	header h1 {
+		display: none;
+	}
+	#hub {
+		width: 34.5%;
+	}
+	.author {
+		width: 34.5%;
+	}
+	#authors > div {
+	    padding: 30px 30px 0px 30px;
+	    text-align: center;
+	}
+	#press {
+		padding-top: 25px;
+	}
+	#hero {
+		height: 200px;
+	}
+	.row .article-data {
+		opacity: 1;
+	}
+	.article .article-overlay {
+		background-color: rgba(243, 243, 243, 0.7);
+	}
+	.article:hover .article-overlay {
+		background-color: rgba(243, 243, 243, 0.7);
+	}
+	.article:hover .embed-image {
+	    transform: scale(1.0, 1.0);
+	}
+}
+
+@media(max-width: 400px) {
+	.author {
+		height: 30px;
 	}
 }
