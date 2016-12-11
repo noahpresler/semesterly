@@ -15,6 +15,8 @@ class Recommender():
         self.school = school
         self.simfcn = simfcn
 
+    #compute similarity with self.simfcn as the method
+    #to add new support, add the method here and in choices for simgcn in __main__
     def compute_similarity(self, arr1, arr2):
         if self.simfcn == "cosine":
             return self.d_to_sim(cosine(arr1, arr2))
@@ -28,6 +30,8 @@ class Recommender():
             print "Similiarity Function Not Yet Supported"
             exit()
 
+    #convert a distance to a similarity measure
+    #adding 1 to denominator to avoid div by 0 issues
     def d_to_sim(self,dist):
         return 1 / ( abs(dist) + 1 )
  
@@ -47,6 +51,8 @@ class Recommender():
         pickle.dump(feat_trix, open(self.school + ".timetable.features", "wb"))
 
 
+    #saves a similarity matrix/model to the corresponding *.model file
+    #uses two passes to do extra post-proccesing for low data instances
     def train(self):
         #write to file
         feat_trix = pickle.load(open(self.school + ".timetable.features", "rb"))
@@ -105,6 +111,9 @@ class Recommender():
         pickle.dump(similarities, open(self.school + ".recommended.model", "wb"))
 
 
+    #predicts the top 5 courses by similarity for a given course id
+    #ensures there is a top 5 for fall and spring
+    #retains ordering 
     def predict(self, cid, similarities=None, force_print=False):
         if not similarities:
             similarities = pickle.load(open(self.school + ".recommended.model", "rb"))
@@ -118,6 +127,8 @@ class Recommender():
         return ret
 
 
+    #predicts for every course saving the resulting relations to the db
+    #deletes old relations for each course on the fly
     def predict_save_all(self):
         similarities = pickle.load(open(self.school + ".recommended.model", "rb"))
         bar2 = progressbar.ProgressBar()
@@ -132,6 +143,8 @@ class Recommender():
                     course.related_courses.add(Course.objects.get(id=c[0]))
 
 
+    #given a timetable (in the form of course_ids), recommends the top courses 
+    # that a user might add to their timetable by aggregating similarities from model
     def recommend(self, course_ids):
         similarities = pickle.load(open(self.school + ".recommended.model", "rb"))
         bar = progressbar.ProgressBar()
@@ -150,6 +163,7 @@ class Recommender():
         return ret
 
 
+#general driver, use --help for more info
 def main():
     parser = argparse.ArgumentParser(description='Recommender system using collaborative filtering')
     parser.add_argument('--action', dest='action', required=True, choices=["train", "featurize", "predict", "save", "recommend"])
