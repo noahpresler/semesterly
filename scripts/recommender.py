@@ -5,15 +5,28 @@ import numpy as np
 
 from analytics.models import *
 from scipy.sparse import lil_matrix
-from scipy.spatial.distance import cosine
+from scipy.spatial.distance import cosine, correlation
 from student.models import *
 from timetable.models import *
 
 class Recommender():
 
-    def __init__(self,school):
+    def __init__(self,school,simfcn):
         self.school = school
+        self.simfcn = simfcn
 
+    def compute_similarity(self, arr1, arr2):
+        if self.simfcn == "cosine":
+            return self.d_to_sim(cosine(arr1, arr2))
+        elif self.simfcn == "pearson":
+            return self.d_to_sim(correlation(arr1, arr2))
+        else:
+            print "Similiarity Function Not Yet Supported"
+            exit()
+
+    def d_to_sim(self,dist):
+        return 1 / ( abs(dist) + 1 )
+ 
     def featurize(self):
         #get the min,max course id for hopkins
         max_id = Course.objects.filter(school=self.school).last().id
@@ -59,7 +72,7 @@ class Recommender():
             if len(similar) > 0 and (len(c1_rows) < 5 or len(similar) < 3):
                 low_data_courses[c1] = []
             for c2 in similar:
-                css =  1 / ( abs(cosine(feat_trix[:,c1].toarray(), feat_trix[:,c2].toarray()))  + 1 )
+                css = self.compute_similarity(feat_trix[:,c1].toarray(),feat_trix[:,c2].toarray())
                 if c1 not in similarities:
                     similarities[c1] = []
                 similarities[c1].append((c2,css))
@@ -138,10 +151,11 @@ def main():
     parser.add_argument('--action', dest='action', required=True, choices=["train", "featurize", "predict", "save", "recommend"])
     parser.add_argument('--cids', dest='cids', default=None, type=str, help="List of course ids, comma seperated for recommending")
     parser.add_argument('--school', dest='school', required=True, help="School is required")
+    parser.add_argument('--simfcn', dest='simfcn', default="cosine", type=str, choices=["pearson","cosine"])
     
     args = parser.parse_args()
     cids = map(lambda x: int(x), args.cids.split(',')) if args.cids else None
-    recommender = Recommender(str(args.school))
+    recommender = Recommender(school=str(args.school), simfcn=args.simfcn)
 
     if args.action == "train":
         recommender.train()
