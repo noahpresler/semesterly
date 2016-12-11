@@ -1,3 +1,10 @@
+#!/usr/bin/env python
+
+"""Collaborative filtering based recommender system for Semester.ly courses"""
+__author__ = "Noah Presler, Eric Calder"
+__copyright__ = "Copyright 2016, Semester.ly Technologies, LLC"
+__credits__ = ["Noah Presler, Eric Calder, Semester.ly Technologies, LLC"]
+
 import os, sys, django, pickle, progressbar, argparse
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "semesterly.settings")
 django.setup()
