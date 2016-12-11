@@ -5,7 +5,7 @@ import numpy as np
 
 from analytics.models import *
 from scipy.sparse import lil_matrix
-from scipy.spatial.distance import cosine, correlation
+from scipy.spatial.distance import cosine, correlation, hamming, jaccard
 from student.models import *
 from timetable.models import *
 
@@ -20,6 +20,10 @@ class Recommender():
             return self.d_to_sim(cosine(arr1, arr2))
         elif self.simfcn == "pearson":
             return self.d_to_sim(correlation(arr1, arr2))
+        elif self.simfcn == "hamming":
+            return 1 - hamming(arr1, arr2)
+        elif self.simfcn == "jaccard":
+            return 1 - jaccard(arr1, arr2)
         else:
             print "Similiarity Function Not Yet Supported"
             exit()
@@ -151,7 +155,7 @@ def main():
     parser.add_argument('--action', dest='action', required=True, choices=["train", "featurize", "predict", "save", "recommend"])
     parser.add_argument('--cids', dest='cids', default=None, type=str, help="List of course ids, comma seperated for recommending")
     parser.add_argument('--school', dest='school', required=True, help="School is required")
-    parser.add_argument('--simfcn', dest='simfcn', default="cosine", type=str, choices=["pearson","cosine"])
+    parser.add_argument('--simfcn', dest='simfcn', default="cosine", type=str, choices=["pearson","cosine","hamming","jaccard"])
     
     args = parser.parse_args()
     cids = map(lambda x: int(x), args.cids.split(',')) if args.cids else None
