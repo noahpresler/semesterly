@@ -155,7 +155,7 @@ def main():
     parser.add_argument('--action', dest='action', required=True, choices=["train", "featurize", "predict", "save", "recommend"])
     parser.add_argument('--cids', dest='cids', default=None, type=str, help="List of course ids, comma seperated for recommending")
     parser.add_argument('--school', dest='school', required=True, help="School is required")
-    parser.add_argument('--simfcn', dest='simfcn', default="cosine", type=str, choices=["pearson","cosine","hamming"])
+    parser.add_argument('--simfcn', dest='simfcn', default="cosine", type=str, choices=["pearson","cosine","hamming","jaccard"])
     
     args = parser.parse_args()
     cids = map(lambda x: int(x), args.cids.split(',')) if args.cids else None
