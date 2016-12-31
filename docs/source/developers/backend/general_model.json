@@ -1,0 +1,117 @@
+[
+    {
+        "course": {
+            "school": "uoft",
+            "code": "FAH487H1",
+            "name": "Introduction to Asian Textiles",
+            "credits": 0.5,
+            "department": {
+                "code": "CS",
+                "name": "Computer Science"
+            },
+            "description": "Description of the course",
+            "notes": "",
+            "info": "",
+            "campus": "Homewood Campus",
+            "requirements": {
+                "prerequisites": ["8 half FAH courses (4.0 FCE)"],
+                "corequisites": [""],
+                "exclusions": [""],
+            },
+            "fulfill" : {
+                "areas": ["Writing Intensive"],
+                "level": "400",
+                "cores": [null],
+                "geneds": [null],
+            },
+            "related": ["CSS110H3", "MAT210H2"],
+
+            "sections": [
+                {
+                    "meeting_section": "L0101",
+                    "size": 25,
+                    "remaining": -1,
+                    "enrolment": 0,
+                    "waitlist": -1,
+                    "waitlist_size": -1,
+                    "section_type": ["Lecture", "Lab"],
+                    "instructors": ["A. Lesk"],
+                    "semester": "F",
+                    "fees": "$50.00",
+
+                    "offerings": [
+                        {
+                            "section": "L0101",
+                            "course": "FAH487H1",
+                            "day": "T",
+                            "time_start": "13:00",
+                            "time_end": "15:00",
+                            "location": "IB 250"
+                        },
+                    ],
+
+                    "textbooks": [
+                        {
+                            "textbook": 9780879500030,
+                            "is_required": true,
+                        },
+                        {
+                            "textbook": 9780879500030,
+                            "is_required": false,
+                        },
+                    ]
+                },
+            ],
+
+            "evaluations": [
+                {
+                    "score": 4.4,
+                    "summary": "text of evaluation",
+                    "professors": ["A. Lesk"],
+                    "term_year": "Spring 2016"
+                },
+            ],
+        },
+
+        "sections": [
+            {
+                "course": "FAH487H1",
+                << same as section above >>
+            },
+        ],
+
+        "offerings": [
+            {
+                "course": "FAH487H1",
+                "section": "L0101",
+                << same as offering in course >>
+            },
+        ],
+
+        "evaluations": [
+            {
+                "course": "FAH487H1",
+                << same as evaluations in model >>
+            },
+        ],
+
+        "textbook_links": [
+            {
+                "section": "L0101",
+                "course": "FAH487H1"
+                << same as textbook in section >>
+            },
+        ],
+
+        "textbooks": [
+            {
+                "isbn": 9780879500030,
+                "detail_url": "http://www.amazon.com/",
+                "image_url": "http://ecx.images-amazon.com/",
+                "author": "Hans Wehr",
+                "title": "Arabic-English Dictionary: The Hans Wehr Dictionary of Modern Written Arabic",
+                "has_image": "True"
+            },
+        ],
+    },
+]
