@@ -27,3 +27,5 @@ Semesterly Developer Documentation.
    :glob:
 
    developers/frontend/*
+
+   copyright

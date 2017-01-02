@@ -1,0 +1,49 @@
+import os, time, progressbar, argparse
+
+from abc import ABCMeta
+from scripts.parser_library.Requester import Requester
+from scripts.parser_library.Model import Model
+
+bar = progressbar.ProgressBar(max_value=progressbar.UnknownLength)
+for i in range(20):
+    time.sleep(0.1)
+    bar.update(i)
+
+bar = progressbar.ProgressBar()
+for i in bar(range(100)):
+    time.sleep(0.02)
+
+bar = progressbar.ProgressBar(redirect_stdout=True)
+for i in range(100):
+    print 'Some text', i
+    time.sleep(0.1)
+    bar.update(i)
+
+bar = progressbar.ProgressBar(widgets=[
+    ' [', progressbar.Timer(), '] ',
+    progressbar.Bar(),
+    ' (', progressbar.ETA(), ') ',
+])
+for i in bar(range(20)):
+    time.sleep(0.1)
+
+class CourseParser:
+	__metaclass__ = ABCMeta
+
+	def __init__(self, school):
+		self.school = school
+		self.requester = Requester()
+		self.model = Model(self.school)
+
+	def getargs():
+		parser = argparse.ArguementParser(description='arg parse')
+		parser.add_argument(('-v', '--verbose'), action='count', required=False, help='show all my private parts.') 
+		parser.add_argument('--department', required=False, help='parse specific department code (may not be supported for specific courses)')
+
+		args = parser.parse_args()
+		# TODO - check args
+		return args
+
+	@abstractmethod
+	def parse(self, terms=None):
+		''' Parse! '''
