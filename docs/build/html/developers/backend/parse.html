@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Parse &mdash; Semesterly 3.0 documentation</title>
+  <title>Parsing &mdash; Semesterly 3.0 documentation</title>
   
 
   
@@ -33,6 +33,7 @@
         <link rel="index" title="Index"
               href="../../genindex.html"/>
         <link rel="search" title="Search" href="../../search.html"/>
+        <link rel="copyright" title="Copyright" href="../../copyright.html"/>
     <link rel="top" title="Semesterly 3.0 documentation" href="../../index.html"/>
         <link rel="next" title="Frontend" href="../frontend/dummy.html"/>
         <link rel="prev" title="Install" href="../getting_started/install.html"/> 
@@ -91,19 +92,43 @@
 </ul>
 <p class="caption"><span class="caption-text">Backend</span></p>
 <ul class="current">
-<li class="toctree-l1 current"><a class="current reference internal" href="#">Parse</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="#output-format">Output Format</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#features">Features</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#installation">Installation</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#contribute">Contribute</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#support">Support</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#license">License</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Parsing</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#school-directory">School Directory</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#directory-structure">Directory Structure</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#config-file">Config File</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#parsers">Parsers</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#output-format">Output Format</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#course">Course</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#section">Section</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#offering">Offering</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#textbook">Textbook</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#evaluation">Evaluation</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#utilities">Utilities</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id1">Utilities</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#framework">Framework</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#requester">Requester</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#scraper">Scraper</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#extractor">Extractor</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#ingestor">Ingestor</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#subscription-handles">(Subscription) Handles</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#trash">TRASH</a></li>
 </ul>
 </li>
 </ul>
 <p class="caption"><span class="caption-text">Frontend</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../frontend/dummy.html">Frontend</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../copyright.html">Contribute</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../copyright.html#support">Support</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../copyright.html#copyright">Copyright</a></li>
 </ul>
 
             
@@ -134,7 +159,7 @@
   <ul class="wy-breadcrumbs">
     <li><a href="../../index.html">Docs</a> &raquo;</li>
       
-    <li>Parse</li>
+    <li>Parsing</li>
       <li class="wy-breadcrumbs-aside">
         
           
@@ -148,57 +173,475 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
             
-  <div class="section" id="parse">
-<h1>Parse<a class="headerlink" href="#parse" title="Permalink to this headline">¶</a></h1>
-<p>$project will solve your problem of where to start with documentation,
-by providing a basic explanation of how to do it easily.</p>
-<p>Look how easy it is to use:</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">project</span>
-<span class="c1"># Get your stuff done</span>
-<span class="n">project</span><span class="o">.</span><span class="n">do_stuff</span><span class="p">()</span>
+  <div class="section" id="parsing">
+<h1>Parsing<a class="headerlink" href="#parsing" title="Permalink to this headline">¶</a></h1>
+<p><strong>Parsing</strong> in this context is the process of gathering and transforming data made available by universities into the Semesterly system.</p>
+<p>This process includes web retrieval and information extraction and formatting. Exploring concepts in Networks, Formal Languages, Databases, and good&#8217;ol hackery.</p>
+<p>The exposed system has been designed to provide both useful utilities and recommended patterns, yet also allows a developer freedom of design.</p>
+<p>Heretofore, all utilities can be assumed, unless explcitly stated, to be implemented in Python 2.7. Note, however, that parsers can be designed in other languages (see ...).</p>
+<div class="section" id="school-directory">
+<h2>School Directory<a class="headerlink" href="#school-directory" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="directory-structure">
+<h3>Directory Structure<a class="headerlink" href="#directory-structure" title="Permalink to this headline">¶</a></h3>
+<p>The school directory structure is where your code and configuration files will live.</p>
+<div class="highlight-none"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre> 1
+ 2
+ 3
+ 4
+ 5
+ 6
+ 7
+ 8
+ 9
+10
+11
+12</pre></div></td><td class="code"><div class="highlight"><pre><span></span>| -- &lt;school (nick)name&gt;
+        * ---- __init__.py
+        * ---- config.json
+        * ---- courses.py
+        * ---- textbooks.py
+        * ---- evals.py
+        | ---- misc
+                | -- utils/
+        | ---- data
+                * -- courses.json
+                * -- textbooks.json
+                * -- evals.json
 </pre></div>
+</td></tr></table></div>
+<p>The highest level directory is simply the nickname of the school. When giving a nickname to a school be sure to keep it short yet descriptive, following the <a class="reference external" href="https://en.wikipedia.org/wiki/Snake_case">snake case</a> naming convention if needed. This name is what will be used in the url seen by a user (i.e. <a class="reference external" href="https://jhu.semester.ly">jhu.semester.ly</a>). It is often prudent to use a colloqualism, for example:</p>
+<div class="highlight-none"><div class="highlight"><pre><span></span>jhu     Johns Hopkins University
+vandy   Vanderbilt University
+umich   University of Michigan in Ann Arbor
+udub    University of Washington in Seattle
+</pre></div>
+</div>
+<p><code class="docutils literal"><span class="pre">__init__.py</span></code> is simply a blank file needed in this directory for <a class="reference external" href="http://stackoverflow.com/questions/448271/what-is-init-py-for">Python to view this directory as containing packages</a>. <code class="docutils literal"><span class="pre">courses.py</span></code>, <code class="docutils literal"><span class="pre">textbooks.py</span></code>, and <code class="docutils literal"><span class="pre">evals.py</span></code> all contain the code needed to parse; they will be discussed in detail later. <code class="docutils literal"><span class="pre">misc/utils/</span></code> is, by design, a bit more undefined and is a place where you, the developer, can place any extraneous code you need for the parse.</p>
+</div>
+<div class="section" id="config-file">
+<h3>Config File<a class="headerlink" href="#config-file" title="Permalink to this headline">¶</a></h3>
+<p>The <code class="docutils literal"><span class="pre">config.json</span></code> is used in order for all components to link up properly on the front and backend.</p>
+<div class="highlight-json"><div class="highlight"><pre><span></span><span class="p">{</span>
+	<span class="nt">&quot;school_code&quot;</span><span class="p">:</span> <span class="s2">&quot;jhu&quot;</span><span class="p">,</span>
+	<span class="nt">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;Johns Hopkins University&quot;</span><span class="p">,</span>
+	<span class="nt">&quot;time_granularity&quot;</span><span class="p">:</span> <span class="mi">5</span><span class="p">,</span>
+	<span class="nt">&quot;textbooks&quot;</span><span class="p">:</span> <span class="kc">true</span><span class="p">,</span>
+	<span class="nt">&quot;evals&quot;</span><span class="p">:</span> <span class="kc">true</span><span class="p">,</span>
+	<span class="nt">&quot;time24&quot;</span><span class="p">:</span> <span class="kc">false</span><span class="p">,</span>
+	<span class="nt">&quot;course_code_regex&quot;</span><span class="p">:</span> <span class="s2">&quot;([A-Z]{2}\\.\\d{3}\\.\\d{3})&quot;</span><span class="p">,</span>
+	<span class="nt">&quot;terms&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;Fall&quot;</span><span class="p">,</span> <span class="s2">&quot;Intersession&quot;</span><span class="p">,</span> <span class="s2">&quot;Spring&quot;</span><span class="p">,</span> <span class="s2">&quot;Summer&quot;</span><span class="p">],</span>
+	<span class="nt">&quot;registration_groupings&quot;</span><span class="p">:</span> <span class="p">[[</span><span class="s2">&quot;Fall&quot;</span><span class="p">],[</span><span class="s2">&quot;Intersession&quot;</span><span class="p">],[</span><span class="s2">&quot;Spring&quot;</span><span class="p">],[</span><span class="s2">&quot;Summer&quot;</span><span class="p">]],</span>
+	<span class="nt">&quot;campuses&quot;</span><span class="p">:</span> <span class="p">[</span>
+		<span class="s2">&quot;Homewood Campus&quot;</span><span class="p">,</span>
+		<span class="s2">&quot;Medical School&quot;</span><span class="p">,</span>
+		<span class="s2">&quot;Carey Business School&quot;</span><span class="p">,</span>
+		<span class="s2">&quot;Peabody Conservatory&quot;</span><span class="p">,</span>
+		<span class="s2">&quot;SAIS&quot;</span><span class="p">,</span>
+		<span class="s2">&quot;APL&quot;</span><span class="p">,</span>
+		<span class="s2">&quot;Online&quot;</span><span class="p">,</span>
+	<span class="p">],</span>
+	<span class="nt">&quot;live_data&quot;</span><span class="p">:</span> <span class="kc">true</span><span class="p">,</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>The fields displayed above are required in the <code class="docutils literal"><span class="pre">config.json</span></code> and must obey various other requirements:</p>
+<blockquote>
+<div><ol class="arabic">
+<li><p class="first">The value for <code class="docutils literal"><span class="pre">&quot;code&quot;</span></code> must match the directory name, discussed above.</p>
+</li>
+<li><p class="first"><code class="docutils literal"><span class="pre">&quot;time_granularity&quot;</span></code> refers to the minimum increment of time (in minutes) needed to encode all start and end times for courses.</p>
+</li>
+<li><p class="first"><code class="docutils literal"><span class="pre">&quot;time24&quot;</span></code> refers to the hour format time display characteristic of a school and can take on one of two values, <code class="docutils literal"><span class="pre">true</span></code> or <code class="docutils literal"><span class="pre">false</span></code>.</p>
+</li>
+<li><p class="first"><code class="docutils literal"><span class="pre">&quot;textbooks&quot;</span></code> and <code class="docutils literal"><span class="pre">&quot;evals&quot;</span></code> can be set accordingly to indicate whether this information is provided by your school/parser.</p>
+</li>
+<li><p class="first">The <code class="docutils literal"><span class="pre">&quot;course_code_regex&quot;</span></code> defines the regular expression that must describe all course codes seen within your school. Please be as specific as you can, while also gauranteeing correctness. The regex defined above was created to define course codes that include:</p>
+<blockquote>
+<div><ul class="simple">
+<li>EN.600.420</li>
+<li>AS.101.120</li>
+</ul>
+</div></blockquote>
+</li>
+<li><p class="first"><code class="docutils literal"><span class="pre">&quot;terms&quot;</span></code> is a list of all term names. Please use sensible names and good judgement but this is designed to be more flexible if needed.</p>
+</li>
+<li><p class="first">In addition to listing the terms, some schools offer their registration per term and others per school year. As such, <code class="docutils literal"><span class="pre">&quot;registration_groupings&quot;</span></code> defines the registration groupings for the school in question. The values found within this list of lists <strong>must</strong> match and encompass the full set of terms defined by <code class="docutils literal"><span class="pre">&quot;terms&quot;</span></code>.</p>
+</li>
+<li><p class="first"><code class="docutils literal"><span class="pre">campuses</span></code> is used to list distinct campuses within a university. These campuses should deleniate distinct course registration seperations. This field is not required.</p>
+</li>
+<li><p class="first"><code class="docutils literal"><span class="pre">&quot;live_enrollment&quot;</span></code> should be set when the data being parsed is <cite>regularly</cite> updated with live information (e.g. enrollment or waitlist information).</p>
+</li>
+</ol>
+</div></blockquote>
+</div>
+<div class="section" id="parsers">
+<h3>Parsers<a class="headerlink" href="#parsers" title="Permalink to this headline">¶</a></h3>
+<p>The parsers can be found in the files:</p>
+<blockquote>
+<div><ul class="simple">
+<li><code class="docutils literal"><span class="pre">courses.py</span></code></li>
+<li><code class="docutils literal"><span class="pre">textbooks.py</span></code></li>
+<li><code class="docutils literal"><span class="pre">evals.py</span></code></li>
+</ul>
+</div></blockquote>
+<p>The seperation of the parsers is provided in order to handle the general case that the respective information is provided across various school resources. Ideally, the implementations for the above are modularized into these three components, however, they can be combined in any configuration as needed, but the filenames must remain the same. In addition, it is not required to provide an implementation for <code class="docutils literal"><span class="pre">textbooks.py</span></code> or <code class="docutils literal"><span class="pre">evals.py</span></code>, just be sure to indicate that in the <code class="docutils literal"><span class="pre">config.json</span></code>.</p>
+<p>The implementation of each parser must inherit the abstract base class <code class="docutils literal"><span class="pre">Parser</span></code>. The simplified representation of Parser class is shown below:</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">abc</span> <span class="kn">import</span> <span class="n">ABCMeta</span>
+
+<span class="k">class</span> <span class="nc">Parser</span><span class="p">:</span>
+        <span class="n">__metaclass__</span> <span class="o">=</span> <span class="n">ABCMeta</span>
+
+        <span class="nd">@abstractmethod</span>
+        <span class="k">def</span> <span class="nf">parse</span><span class="p">():</span> <span class="k">pass</span>
+</pre></div>
+</div>
+<p>Since all parsers get imported into the same namespace, this ensures that the global namespace does not get polluted and that there is some sense of conformity between parsers.</p>
+</div>
 </div>
 <div class="section" id="output-format">
 <h2>Output Format<a class="headerlink" href="#output-format" title="Permalink to this headline">¶</a></h2>
-<div class="highlight-json"><div class="highlight"><pre><span></span><span class="p">{</span>
-<span class="nt">&quot;course&quot;</span><span class="p">:</span> <span class="s2">&quot;name&quot;</span><span class="p">,</span>
-<span class="p">}</span>
-</pre></div>
-</div>
-<div class="highlight-json"><div class="highlight"><pre><span></span><span class="p">{</span>
-	<span class="nt">&quot;course&quot;</span><span class="p">:</span> <span class="s2">&quot;EN.600.200&quot;</span>
-<span class="p">}</span>
-</pre></div>
-</div>
-</div>
-<div class="section" id="features">
-<h2>Features<a class="headerlink" href="#features" title="Permalink to this headline">¶</a></h2>
-<ul class="simple">
-<li>Be awesome</li>
-<li>Make things faster</li>
-</ul>
-</div>
-<div class="section" id="installation">
-<h2>Installation<a class="headerlink" href="#installation" title="Permalink to this headline">¶</a></h2>
-<p>Install $project by running:</p>
+<p>The output of each parser will be a json representation the follows the given structure. There are a few components used in the Semesterly framework. There is the</p>
 <blockquote>
-<div>install project</div></blockquote>
+<div><ol class="arabic simple">
+<li><code class="docutils literal"><span class="pre">course</span></code> which describes a course as seperate from its actual setting and location. <code class="docutils literal"><span class="pre">course</span></code> s are local per school but are <strong>not</strong> local per term.</li>
+<li><code class="docutils literal"><span class="pre">section</span></code> which describes a specific instance of a <code class="docutils literal"><span class="pre">course</span></code>. This is specific per term.</li>
+<li><code class="docutils literal"><span class="pre">offering</span></code> which are the individual times that are offered within a <code class="docutils literal"><span class="pre">section</span></code>.</li>
+<li><code class="docutils literal"><span class="pre">textbook</span></code> which is a link to a textbook needed for a particular <code class="docutils literal"><span class="pre">section</span></code>.</li>
+<li><code class="docutils literal"><span class="pre">evaluation</span></code> which is an evaluation specific per <code class="docutils literal"><span class="pre">section</span></code>.</li>
+</ol>
+</div></blockquote>
+<p>We will go component by component explaining by example the fields and associated restrictions of each. At the end, we will put them all together. Note that <strong>highlighted fields are required</strong>.</p>
+<div class="section" id="course">
+<h3>Course<a class="headerlink" href="#course" title="Permalink to this headline">¶</a></h3>
+<div class="highlight-json"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre> 1
+ 2
+ 3
+ 4
+ 5
+ 6
+ 7
+ 8
+ 9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+38</pre></div></td><td class="code"><div class="highlight"><pre><span></span><span class="p">{</span>
+<span class="hll">  <span class="nt">&quot;school_code&quot;</span><span class="p">:</span> <span class="s2">&quot;jhu&quot;</span><span class="p">,</span>
+</span><span class="hll">  <span class="nt">&quot;course_code&quot;</span><span class="p">:</span> <span class="s2">&quot;EN.600.418&quot;</span><span class="p">,</span>
+</span><span class="hll">  <span class="nt">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;Operating Systems&quot;</span><span class="p">,</span>
+</span><span class="hll">  <span class="nt">&quot;credits&quot;</span><span class="p">:</span> <span class="mi">3</span><span class="p">,</span>
+</span><span class="hll">  <span class="nt">&quot;department&quot;</span><span class="p">:</span> <span class="p">{</span>
+</span><span class="hll">    <span class="nt">&quot;code&quot;</span><span class="p">:</span> <span class="s2">&quot;CS&quot;</span><span class="p">,</span>
+</span><span class="hll">    <span class="nt">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;Computer Science&quot;</span>
+</span><span class="hll">  <span class="p">},</span>
+</span>  <span class="nt">&quot;description&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;This course covers the fundamental topics related to </span>
+<span class="s2">    operating systems theory and practice. Topics include processor</span>
+<span class="s2">    management, storage management, concurrency control, multi-programming and</span>
+<span class="s2">    processing, device drivers, operating system components (e.g., file</span>
+<span class="s2">    system, kernel), modeling and performance measurement, protection and</span>
+<span class="s2">    security, and recent innovations in operating system structure. Course</span>
+<span class="s2">    work includes the implementation of operating systems techniques and</span>
+<span class="s2">    routines, and critical parts of a small but functional operating system.&quot;</span><span class="p">],</span>
+  <span class="nt">&quot;campus&quot;</span><span class="p">:</span> <span class="s2">&quot;Homewood Campus&quot;</span><span class="p">,</span>
+  <span class="nt">&quot;requirements&quot;</span><span class="p">:</span> <span class="p">{</span>
+    <span class="nt">&quot;prerequisites&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;EN.600.120&quot;</span><span class="p">,</span> <span class="s2">&quot;EN.600.233&quot;</span><span class="p">,</span> <span class="s2">&quot;EN.600.226&quot;</span><span class="p">,</span> <span class="s2">&quot;(600.211:</span>
+<span class="s2">      Unix Systems Programming is helpful as well.)&quot;</span><span class="p">,</span> <span class="s2">&quot;Participants must be</span>
+<span class="s2">      familiar with the UNIX environment and must be fluent in the C</span>
+<span class="s2">      programming language. The course includes significant programming</span>
+<span class="s2">      projects; without prior development experience you&#39;ll probably get lost</span>
+<span class="s2">      in a maze of low-level code.&quot;</span><span class="p">],</span>
+    <span class="nt">&quot;corequisites&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;&quot;</span><span class="p">],</span>
+    <span class="nt">&quot;exclusions&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;EN.600.318&quot;</span><span class="p">],</span>
+    <span class="nt">&quot;other&quot;</span><span class="p">:</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
+  <span class="p">},</span>
+  <span class="nt">&quot;fulfill&quot;</span> <span class="p">:</span> <span class="p">{</span>
+    <span class="nt">&quot;areas&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;E&quot;</span><span class="p">,</span> <span class="s2">&quot;CS Systems&quot;</span><span class="p">],</span>
+    <span class="nt">&quot;level&quot;</span><span class="p">:</span> <span class="s2">&quot;400&quot;</span><span class="p">,</span>
+    <span class="nt">&quot;cores&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;&quot;</span><span class="p">],</span>
+    <span class="nt">&quot;geneds&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;&quot;</span><span class="p">],</span>
+  <span class="p">},</span>
+  <span class="nt">&quot;related&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;EN.600.318&quot;</span><span class="p">,</span> <span class="s2">&quot;EN.600.320&quot;</span><span class="p">,</span> <span class="s2">&quot;EN.600.420&quot;</span><span class="p">],</span>
+  <span class="nt">&quot;homepage&quot;</span><span class="p">:</span> <span class="s2">&quot;http://gaming.jhu.edu/~phf/2016/fall/cs318/&quot;</span><span class="p">,</span>
+<span class="p">}</span>
+</pre></div>
+</td></tr></table></div>
+<p>Explanation:</p>
+<blockquote>
+<div><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">school_code:</th><td class="field-body">must match the school_code defined in <code class="docutils literal"><span class="pre">config.json</span></code>.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">course_code:</th><td class="field-body">must satisfy the course_code_regex defined in <code class="docutils literal"><span class="pre">config.json</span></code>.</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">credits:</th><td class="field-body">can be any single integer or float.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">department:</th><td class="field-body">is a dictionary that contains the department code and name. One of these sub-fields (code and name) is required, but both are preferred.</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">description:</th><td class="field-body">can take one of two forms. It can be a list of relevant descriptions of a course. In this form, this field can easily display cases of different parts of the description (e.g. description, info, notes). The field can also just be a single string outside of a list.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">campus:</th><td class="field-body">is the campus that this particular course is offered on.</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">requirements:</th><td class="field-body">consists of pre/corequisites, exclusions, and other. All but the last in that list must be lists, if included.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">fulfill:</th><td class="field-body">seeks to identify more specific information about a course that may be more pertinent to some schools more than others.</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">related:</th><td class="field-body">this will be used in our recommendation engine.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">homepage:</th><td class="field-body">a valid url, if provided, for the course.</td>
+</tr>
+</tbody>
+</table>
+</div></blockquote>
 </div>
-<div class="section" id="contribute">
-<h2>Contribute<a class="headerlink" href="#contribute" title="Permalink to this headline">¶</a></h2>
-<ul class="simple">
-<li>Issue Tracker: github.com/$project/$project/issues</li>
-<li>Source Code: github.com/$project/$project</li>
+<div class="section" id="section">
+<h3>Section<a class="headerlink" href="#section" title="Permalink to this headline">¶</a></h3>
+<div class="highlight-json"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre> 1
+ 2
+ 3
+ 4
+ 5
+ 6
+ 7
+ 8
+ 9
+10
+11
+12
+13
+14</pre></div></td><td class="code"><div class="highlight"><pre><span></span><span class="p">{</span>
+<span class="hll">  <span class="nt">&quot;course_code&quot;</span><span class="p">:</span> <span class="s2">&quot;EN.600.418&quot;</span><span class="p">,</span>
+</span><span class="hll">  <span class="nt">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;01&quot;</span><span class="p">,</span>
+</span><span class="hll">  <span class="nt">&quot;term&quot;</span><span class="p">:</span> <span class="s2">&quot;Fall&quot;</span><span class="p">,</span>
+</span><span class="hll">  <span class="nt">&quot;year&quot;</span><span class="p">:</span> <span class="mi">2016</span><span class="p">,</span>
+</span><span class="hll">  <span class="nt">&quot;capacity&quot;</span><span class="p">:</span> <span class="mi">25</span><span class="p">,</span>
+</span><span class="hll">  <span class="nt">&quot;enrollment&quot;</span><span class="p">:</span> <span class="mi">23</span><span class="p">,</span>
+</span><span class="hll">  <span class="nt">&quot;waitlist&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+</span>  <span class="nt">&quot;waitlist_size&quot;</span><span class="p">:</span> <span class="mi">-1</span><span class="p">,</span>
+  <span class="nt">&quot;remaining_seats&quot;</span><span class="p">:</span> <span class="mi">-1</span><span class="p">,</span>
+<span class="hll">  <span class="nt">&quot;type&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;Lecture&quot;</span><span class="p">],</span>
+</span><span class="hll">  <span class="nt">&quot;instructors&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;Peter Froelich&quot;</span><span class="p">],</span>
+</span>  <span class="nt">&quot;fees&quot;</span><span class="p">:</span> <span class="mf">0.00</span><span class="p">,</span>
+<span class="p">}</span>
+</pre></div>
+</td></tr></table></div>
+<p>Explanation:</p>
+<blockquote>
+<div><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">course_code:</th><td class="field-body">must satisify the course_code_regex defined in <code class="docutils literal"><span class="pre">config.json</span></code> and must have already been defined the in a <code class="docutils literal"><span class="pre">course</span></code> listing.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">section_name:</th><td class="field-body">the identifier of a section.</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">term:</th><td class="field-body">must match a term defined in <code class="docutils literal"><span class="pre">config.json</span></code>.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">capacity:</th><td class="field-body">the max seats available in a section.</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">enrollment:</th><td class="field-body">the current number of students enrolled in a section.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">waitlist:</th><td class="field-body">the number of students on the waitlist.</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">waitlist_size:</th><td class="field-body">the max size of the waitlist.</td>
+</tr>
+<tr class="field-even field"><th class="field-name" colspan="2">remaining_seats:</th></tr>
+<tr class="field-even field"><td>&nbsp;</td><td class="field-body">this will be automatically calculated if given -1 or left out.</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">type:</th><td class="field-body">could be <cite>Lecture</cite>, <cite>Lab</cite>, <cite>Tutorial</cite>, etc.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">instructurs:</th><td class="field-body">a list of course instructors, the first in the list is the primary instructor.</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">fees:</th><td class="field-body">A float or string that will default to 0.00.</td>
+</tr>
+</tbody>
+</table>
+</div></blockquote>
+</div>
+<div class="section" id="offering">
+<h3>Offering<a class="headerlink" href="#offering" title="Permalink to this headline">¶</a></h3>
+<p>An offering</p>
+<div class="highlight-json"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre> 1
+ 2
+ 3
+ 4
+ 5
+ 6
+ 7
+ 8
+ 9
+10
+11
+12</pre></div></td><td class="code"><div class="highlight"><pre><span></span><span class="p">{</span>
+<span class="hll">  <span class="nt">&quot;course_code&quot;</span><span class="p">:</span> <span class="s2">&quot;EN.600.418&quot;</span><span class="p">,</span>
+</span><span class="hll">  <span class="nt">&quot;section_name&quot;</span><span class="p">:</span> <span class="s2">&quot;01&quot;</span><span class="p">,</span>
+</span><span class="hll">  <span class="nt">&quot;days&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;M&quot;</span><span class="p">,</span> <span class="s2">&quot;W&quot;</span><span class="p">,</span> <span class="s2">&quot;F&quot;</span><span class="p">],</span>
+</span><span class="hll">  <span class="nt">&quot;time_start&quot;</span><span class="p">:</span> <span class="s2">&quot;10:00&quot;</span><span class="p">,</span>
+</span><span class="hll">  <span class="nt">&quot;time_end&quot;</span><span class="p">:</span> <span class="s2">&quot;10:50&quot;</span><span class="p">,</span>
+</span><span class="hll">  <span class="nt">&quot;location&quot;</span><span class="p">:</span> <span class="p">{</span>
+</span>    <span class="nt">&quot;campus&quot;</span><span class="p">:</span> <span class="s2">&quot;Homewood Campus&quot;</span><span class="p">,</span>
+    <span class="nt">&quot;building&quot;</span><span class="p">:</span> <span class="s2">&quot;Shaffer&quot;</span><span class="p">,</span>
+    <span class="nt">&quot;room&quot;</span><span class="p">:</span> <span class="s2">&quot;300&quot;</span><span class="p">,</span>
+  <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</td></tr></table></div>
+<p>Explanation:</p>
+<blockquote>
+<div><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">course_code:</th><td class="field-body"><p class="first">must satisify the course_code_regex defined in <code class="docutils literal"><span class="pre">config.json</span></code> and must have already been defined in a <code class="docutils literal"><span class="pre">course</span></code> listing.</p>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">section_name:</th><td class="field-body"><p class="first">must already have defined a valid <code class="docutils literal"><span class="pre">course</span></code> that has a <code class="docutils literal"><span class="pre">section</span></code> defined that matches.</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">days:</th><td class="field-body"><p class="first">this is a list of valid days, <code class="docutils literal"><span class="pre">M,</span> <span class="pre">T,</span> <span class="pre">W,</span> <span class="pre">R,</span> <span class="pre">F,</span> <span class="pre">S,</span> <span class="pre">U</span></code>. These days will be assumed to be repeated every week. In addition a valid date that satisfies the regex <code class="docutils literal"><span class="pre">date</span> <span class="pre">regex</span></code> and agrees with the term year provided in <code class="docutils literal"><span class="pre">section</span></code>. Ex: <code class="docutils literal"><span class="pre">&quot;days&quot;:</span> <span class="pre">[&quot;M&quot;,</span> <span class="pre">&quot;10/02/16&quot;,</span> <span class="pre">&quot;F&quot;]</span></code>.</p>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">time_start:</th><td class="field-body"><p class="first">24-hour time.</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">time_end:</th><td class="field-body"><p class="first">24-hour time. Must be after time_start.</p>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">location:</th><td class="field-body"><p class="first">this can take on one of two types.</p>
+<ol class="last arabic">
+<li><p class="first">The dictionary shown above</p>
+<blockquote>
+<div><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">campus:</th><td class="field-body">the campus must be defined in <code class="docutils literal"><span class="pre">config.json</span></code>.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">building:</th><td class="field-body">the building of the offering.</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">room:</th><td class="field-body">the room of the offering.</td>
+</tr>
+</tbody>
+</table>
+</div></blockquote>
+</li>
+<li><p class="first">A string <code class="docutils literal"><span class="pre">&quot;location&quot;:</span> <span class="pre">&quot;Shaffer</span> <span class="pre">300&quot;</span></code>.</p>
+</li>
+</ol>
+</td>
+</tr>
+</tbody>
+</table>
+</div></blockquote>
+</div>
+<div class="section" id="textbook">
+<h3>Textbook<a class="headerlink" href="#textbook" title="Permalink to this headline">¶</a></h3>
+<div class="highlight-json"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre> 1
+ 2
+ 3
+ 4
+ 5
+ 6
+ 7
+ 8
+ 9
+10</pre></div></td><td class="code"><div class="highlight"><pre><span></span><span class="p">[</span>
+    <span class="p">{</span>
+      <span class="nt">&quot;textbook&quot;</span><span class="p">:</span> <span class="mi">9780879500030</span><span class="p">,</span>
+      <span class="nt">&quot;required&quot;</span><span class="p">:</span> <span class="kc">true</span><span class="p">,</span>
+    <span class="p">},</span>
+    <span class="p">{</span>
+      <span class="nt">&quot;textbook&quot;</span><span class="p">:</span> <span class="mi">9780879500030</span><span class="p">,</span>
+      <span class="nt">&quot;required&quot;</span><span class="p">:</span> <span class="kc">false</span><span class="p">,</span>
+    <span class="p">},</span>
+<span class="p">]</span>
+</pre></div>
+</td></tr></table></div>
+</div>
+<div class="section" id="evaluation">
+<h3>Evaluation<a class="headerlink" href="#evaluation" title="Permalink to this headline">¶</a></h3>
+<div class="highlight-json"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>1
+2
+3
+4
+5
+6</pre></div></td><td class="code"><div class="highlight"><pre><span></span><span class="p">{</span>
+  <span class="nt">&quot;score&quot;</span><span class="p">:</span> <span class="mf">4.7</span><span class="p">,</span>
+  <span class="nt">&quot;summary&quot;</span><span class="p">:</span> <span class="s2">&quot;text of evaluation&quot;</span><span class="p">,</span>
+  <span class="nt">&quot;professors&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;Peter Froelich&quot;</span><span class="p">],</span>
+  <span class="nt">&quot;term_year&quot;</span><span class="p">:</span> <span class="s2">&quot;Spring 2016&quot;</span>
+<span class="p">}</span>
+</pre></div>
+</td></tr></table></div>
+</div>
+</div>
+<div class="section" id="utilities">
+<h2>Utilities<a class="headerlink" href="#utilities" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="id1">
+<h3>Utilities<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h3>
+</div>
+</div>
+<div class="section" id="framework">
+<h2>Framework<a class="headerlink" href="#framework" title="Permalink to this headline">¶</a></h2>
+<p>The design parsing framework is developed</p>
+<div class="section" id="requester">
+<h3>Requester<a class="headerlink" href="#requester" title="Permalink to this headline">¶</a></h3>
+</div>
+<div class="section" id="scraper">
+<h3>Scraper<a class="headerlink" href="#scraper" title="Permalink to this headline">¶</a></h3>
+</div>
+<div class="section" id="extractor">
+<h3>Extractor<a class="headerlink" href="#extractor" title="Permalink to this headline">¶</a></h3>
+</div>
+<div class="section" id="ingestor">
+<h3>Ingestor<a class="headerlink" href="#ingestor" title="Permalink to this headline">¶</a></h3>
+</div>
+<div class="section" id="subscription-handles">
+<h3>(Subscription) Handles<a class="headerlink" href="#subscription-handles" title="Permalink to this headline">¶</a></h3>
+</div>
+</div>
+<div class="section" id="trash">
+<h2>TRASH<a class="headerlink" href="#trash" title="Permalink to this headline">¶</a></h2>
+<p>The design of the parsing infrastructure is developed in such a way as to allow the maximum amount of contribution and extensibility. In this light, the infrastructure does not enforce a language requirement on parsers. All that is required is a valid <a class="reference external" href="https://en.wikipedia.org/wiki/Shebang_(Unix)">shebang</a>. Of course we must have the binaries to run your preferred language as well. We currently support:</p>
+<blockquote>
+<div><ul class="simple">
+<li>Python 2 or 3</li>
+<li>C/C++ (consider <a class="reference external" href="http://stackoverflow.com/questions/21898770/file-scope-and-global-scope-c-c">scoping</a>)</li>
+<li>Java</li>
+<li>Rust</li>
+<li>Ruby</li>
+<li>Perl</li>
+<li>Bash</li>
 </ul>
-</div>
-<div class="section" id="support">
-<h2>Support<a class="headerlink" href="#support" title="Permalink to this headline">¶</a></h2>
-<p>If you are having issues, please let us know.
-We have a mailing list located at: <a class="reference external" href="mailto:project&#37;&#52;&#48;google-groups&#46;com">project<span>&#64;</span>google-groups<span>&#46;</span>com</a></p>
-</div>
-<div class="section" id="license">
-<h2>License<a class="headerlink" href="#license" title="Permalink to this headline">¶</a></h2>
-<p>The project is licensed under the BSD license.</p>
+</div></blockquote>
+<p>and we have also included an optional <a class="reference external" href="https://www.docker.com/">docker</a> integration, talked about later (** TODO or not**).</p>
+<p>Note that, the frameworks and utilities provided are developed for Python 2.7.</p>
 </div>
 </div>
 
@@ -221,7 +664,7 @@ We have a mailing list located at: <a class="reference external" href="mailto:pr
 
   <div role="contentinfo">
     <p>
-        &copy; Copyright 2017, Semesterly Team.
+        &copy; <a href="../../copyright.html">Copyright</a> 2017, Semesterly Team.
 
     </p>
   </div>
