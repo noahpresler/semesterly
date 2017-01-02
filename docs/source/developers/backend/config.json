@@ -1,0 +1,21 @@
+{
+	"school_code": "jhu",
+	"name": "Johns Hopkins University",
+	"time_granularity": 5,
+	"textbooks": true,
+	"evals": true,
+	"time24": false,
+	"course_code_regex": "([A-Z]{2}\\.\\d{3}\\.\\d{3})",
+	"terms": ["Fall", "Intersession", "Spring", "Summer"],
+	"registration_groupings": [["Fall"],["Intersession"],["Spring"],["Summer"]],
+	"campuses": [
+		"Homewood Campus",
+		"Medical School",
+		"Carey Business School",
+		"Peabody Conservatory",
+		"SAIS",
+		"APL",
+		"Online",
+	],
+	"live_data": true,
+}
