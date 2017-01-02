@@ -1,73 +1,75 @@
 [
     {
         "course": {
-            "school": "uoft",
-            "code": "FAH487H1",
-            "name": "Introduction to Asian Textiles",
-            "credits": 0.5,
+            "school": "jhu",
+            "code": "EN.600.418",
+            "name": "Operating Systems",
+            "credits": 3,
             "department": {
                 "code": "CS",
                 "name": "Computer Science"
             },
-            "description": "Description of the course",
-            "notes": "",
-            "info": "",
+            "description": ["This course covers the fundamental topics related to operating systems theory and practice. Topics include processor management, storage management, concurrency control, multi-programming and processing, device drivers, operating system components (e.g., file system, kernel), modeling and performance measurement, protection and security, and recent innovations in operating system structure. Course work includes the implementation of operating systems techniques and routines, and critical parts of a small but functional operating system."],
             "campus": "Homewood Campus",
             "requirements": {
-                "prerequisites": ["8 half FAH courses (4.0 FCE)"],
+                "prerequisites": ["EN.600.120", "EN.600.233", "EN.600.226", "(600.211: Unix Systems Programming is helpful as well.)", "Participants must be familiar with the UNIX environment and must be fluent in the C programming language. The course includes significant programming projects; without prior development experience you'll probably get lost in a maze of low-level code."],
                 "corequisites": [""],
-                "exclusions": [""],
+                "exclusions": ["EN.600.318"],
             },
             "fulfill" : {
-                "areas": ["Writing Intensive"],
+                "areas": ["E", "CS Systems"],
                 "level": "400",
-                "cores": [null],
-                "geneds": [null],
+                "cores": [""],
+                "geneds": [""],
             },
-            "related": ["CSS110H3", "MAT210H2"],
+            "related": ["EN.600.318", "EN.600.320", "EN.600.420"],
+            "homepage": "http://gaming.jhu.edu/~phf/2016/fall/cs318/",
 
             "sections": [
                 {
-                    "meeting_section": "L0101",
-                    "size": 25,
+                    "name": "01",
+                    "term": "Fall",
+                    "year": 2016,
+                    "capacity": 25,
+                    "enrollment": 23,
                     "remaining": -1,
-                    "enrolment": 0,
-                    "waitlist": -1,
+                    "waitlist": 0,
                     "waitlist_size": -1,
-                    "section_type": ["Lecture", "Lab"],
-                    "instructors": ["A. Lesk"],
-                    "semester": "F",
-                    "fees": "$50.00",
+                    "type": ["Lecture"],
+                    "instructors": ["P. Froelich"],
+                    "fees": 0.00,
 
                     "offerings": [
                         {
-                            "section": "L0101",
-                            "course": "FAH487H1",
-                            "day": "T",
-                            "time_start": "13:00",
-                            "time_end": "15:00",
-                            "location": "IB 250"
+                            "days": ["M", "W", "F"], // can also include dates
+                            "time_start": "10:00", // 24 hour time
+                            "time_end": "10:50",
+                            "location": {
+                                "campus": "Homewood Campus",
+                                "building": "Shaffer",
+                                "room": "300",
+                            } // can also just be a string
                         },
                     ],
 
                     "textbooks": [
                         {
                             "textbook": 9780879500030,
-                            "is_required": true,
+                            "required": true,
                         },
                         {
                             "textbook": 9780879500030,
-                            "is_required": false,
+                            "required": false,
                         },
                     ]
                 },
             ],
 
-            "evaluations": [
+            "evals": [
                 {
                     "score": 4.4,
                     "summary": "text of evaluation",
-                    "professors": ["A. Lesk"],
+                    "professors": ["P. Froelich"],
                     "term_year": "Spring 2016"
                 },
             ],
@@ -76,42 +78,51 @@
         "sections": [
             {
                 "course": "FAH487H1",
-                << same as section above >>
+                "NOTE": "<< same as section above >>"
             },
         ],
 
         "offerings": [
             {
-                "course": "FAH487H1",
-                "section": "L0101",
-                << same as offering in course >>
+                "course": "EN.600.418",
+                "section": "01",
+                "NOTE": "<< same as section above >>"
             },
         ],
 
-        "evaluations": [
+        "evals": [
             {
-                "course": "FAH487H1",
-                << same as evaluations in model >>
+                "course": "EN.600.418",
+                "NOTE": "<< same as evals in course >>"
             },
         ],
 
         "textbook_links": [
             {
-                "section": "L0101",
-                "course": "FAH487H1"
-                << same as textbook in section >>
-            },
-        ],
-
-        "textbooks": [
-            {
-                "isbn": 9780879500030,
-                "detail_url": "http://www.amazon.com/",
-                "image_url": "http://ecx.images-amazon.com/",
-                "author": "Hans Wehr",
-                "title": "Arabic-English Dictionary: The Hans Wehr Dictionary of Modern Written Arabic",
-                "has_image": "True"
+                "section": "01",
+                "course": "EN.600.418",
+                "NOTE": "<< same as textbook in section >>"
             },
         ],
     },
 ]
+
+//evals
+[
+    {
+        "course": "FAH487H1",
+        "NOTE": "<< same as evals in model >>"
+    },
+],
+
+// textbooks
+[
+    {
+        "isbn": 9780879500030,
+        "detail_url": "http://www.amazon.com/",
+        "image_url": "http://ecx.images-amazon.com/",
+        "author": "Hans Wehr",
+        "title": "Arabic-English Dictionary: The Hans Wehr Dictionary of Modern Written Arabic",
+        "has_image": "True"
+    },
+],
