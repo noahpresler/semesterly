@@ -105,6 +105,7 @@
 <li class="toctree-l3"><a class="reference internal" href="#offering">Offering</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#textbook">Textbook</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#evaluation">Evaluation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#all">All</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="#utilities">Utilities</a><ul>
@@ -196,17 +197,17 @@
 10
 11
 12</pre></div></td><td class="code"><div class="highlight"><pre><span></span>| -- &lt;school (nick)name&gt;
-        * ---- __init__.py
-        * ---- config.json
-        * ---- courses.py
-        * ---- textbooks.py
-        * ---- evals.py
-        | ---- misc
-                | -- utils/
-        | ---- data
-                * -- courses.json
-                * -- textbooks.json
-                * -- evals.json
+    * ---- __init__.py
+    * ---- config.json
+    * ---- courses.py
+    * ---- textbooks.py
+    * ---- evals.py
+    | ---- misc
+        | -- utils/
+    | ---- data
+        * -- courses.json
+        * -- textbooks.json
+        * -- evals.json
 </pre></div>
 </td></tr></table></div>
 <p>The highest level directory is simply the nickname of the school. When giving a nickname to a school be sure to keep it short yet descriptive, following the <a class="reference external" href="https://en.wikipedia.org/wiki/Snake_case">snake case</a> naming convention if needed. This name is what will be used in the url seen by a user (i.e. <a class="reference external" href="https://jhu.semester.ly">jhu.semester.ly</a>). It is often prudent to use a colloqualism, for example:</p>
@@ -228,6 +229,7 @@ udub    University of Washington in Seattle
 	<span class="nt">&quot;textbooks&quot;</span><span class="p">:</span> <span class="kc">true</span><span class="p">,</span>
 	<span class="nt">&quot;evals&quot;</span><span class="p">:</span> <span class="kc">true</span><span class="p">,</span>
 	<span class="nt">&quot;time24&quot;</span><span class="p">:</span> <span class="kc">false</span><span class="p">,</span>
+	<span class="nt">&quot;live_data&quot;</span><span class="p">:</span> <span class="kc">true</span><span class="p">,</span>
 	<span class="nt">&quot;course_code_regex&quot;</span><span class="p">:</span> <span class="s2">&quot;([A-Z]{2}\\.\\d{3}\\.\\d{3})&quot;</span><span class="p">,</span>
 	<span class="nt">&quot;terms&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;Fall&quot;</span><span class="p">,</span> <span class="s2">&quot;Intersession&quot;</span><span class="p">,</span> <span class="s2">&quot;Spring&quot;</span><span class="p">,</span> <span class="s2">&quot;Summer&quot;</span><span class="p">],</span>
 	<span class="nt">&quot;registration_groupings&quot;</span><span class="p">:</span> <span class="p">[[</span><span class="s2">&quot;Fall&quot;</span><span class="p">],[</span><span class="s2">&quot;Intersession&quot;</span><span class="p">],[</span><span class="s2">&quot;Spring&quot;</span><span class="p">],[</span><span class="s2">&quot;Summer&quot;</span><span class="p">]],</span>
@@ -240,7 +242,6 @@ udub    University of Washington in Seattle
 		<span class="s2">&quot;APL&quot;</span><span class="p">,</span>
 		<span class="s2">&quot;Online&quot;</span><span class="p">,</span>
 	<span class="p">],</span>
-	<span class="nt">&quot;live_data&quot;</span><span class="p">:</span> <span class="kc">true</span><span class="p">,</span>
 <span class="p">}</span>
 </pre></div>
 </div>
@@ -289,10 +290,10 @@ udub    University of Washington in Seattle
 <div class="highlight-python"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">abc</span> <span class="kn">import</span> <span class="n">ABCMeta</span>
 
 <span class="k">class</span> <span class="nc">Parser</span><span class="p">:</span>
-        <span class="n">__metaclass__</span> <span class="o">=</span> <span class="n">ABCMeta</span>
+    <span class="n">__metaclass__</span> <span class="o">=</span> <span class="n">ABCMeta</span>
 
-        <span class="nd">@abstractmethod</span>
-        <span class="k">def</span> <span class="nf">parse</span><span class="p">():</span> <span class="k">pass</span>
+    <span class="nd">@abstractmethod</span>
+    <span class="k">def</span> <span class="nf">parse</span><span class="p">():</span> <span class="k">pass</span>
 </pre></div>
 </div>
 <p>Since all parsers get imported into the same namespace, this ensures that the global namespace does not get polluted and that there is some sense of conformity between parsers.</p>
@@ -303,7 +304,7 @@ udub    University of Washington in Seattle
 <p>The output of each parser will be a json representation the follows the given structure. There are a few components used in the Semesterly framework. There is the</p>
 <blockquote>
 <div><ol class="arabic simple">
-<li><code class="docutils literal"><span class="pre">course</span></code> which describes a course as seperate from its actual setting and location. <code class="docutils literal"><span class="pre">course</span></code> s are local per school but are <strong>not</strong> local per term.</li>
+<li><code class="docutils literal"><span class="pre">course:</span> <span class="pre">which</span> <span class="pre">describes</span> <span class="pre">a</span> <span class="pre">course</span> <span class="pre">as</span> <span class="pre">seperate</span> <span class="pre">from</span> <span class="pre">its</span> <span class="pre">actual</span> <span class="pre">setting</span> <span class="pre">and</span> <span class="pre">location.</span> <span class="pre">``course</span></code> s are local per school but are <strong>not</strong> local per term.</li>
 <li><code class="docutils literal"><span class="pre">section</span></code> which describes a specific instance of a <code class="docutils literal"><span class="pre">course</span></code>. This is specific per term.</li>
 <li><code class="docutils literal"><span class="pre">offering</span></code> which are the individual times that are offered within a <code class="docutils literal"><span class="pre">section</span></code>.</li>
 <li><code class="docutils literal"><span class="pre">textbook</span></code> which is a link to a textbook needed for a particular <code class="docutils literal"><span class="pre">section</span></code>.</li>
@@ -599,6 +600,9 @@ udub    University of Washington in Seattle
 <span class="p">}</span>
 </pre></div>
 </td></tr></table></div>
+</div>
+<div class="section" id="all">
+<h3>All<a class="headerlink" href="#all" title="Permalink to this headline">¶</a></h3>
 </div>
 </div>
 <div class="section" id="utilities">
