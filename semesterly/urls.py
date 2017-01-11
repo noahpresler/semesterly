@@ -54,7 +54,7 @@ urlpatterns = patterns('',
     url(r'^user/delete_timetable/$', 'student.views.delete_timetable'),
     url(r'^user/save_settings/$', 'student.views.save_settings'),
     url(r'^user/get_classmates/$', 'student.views.get_classmates'),
-    url(r'^user/find_friends/$', 'student.views.find_friends'),
+    url(r'^user/find_friends/*$', 'student.views.find_friends'),
     url(r'^notifyme/*$', 'timetable.views.enable_notifs'),
     url(r'^user/get_saved_timetables/(?P<school>.+)/(?P<sem>[fFsS]{1})', 'student.views.get_student_tts_wrapper'),
     
@@ -65,13 +65,13 @@ urlpatterns = patterns('',
     url(r'^search/(?P<school>.+?)/(?P<sem>.+?)/(?P<query>.+?)/', 'timetable.views.course_search'),
     url(r'^advanced_search/', 'timetable.views.advanced_course_search'),
     url(r'^school_info/(?P<school>.+?)/', 'timetable.views.school_info'),
-    url(r'react/', 'student.views.react_to_course'),
+    url(r'react/*', 'student.views.react_to_course'),
     
     # course pages and course listings
     url(r'c/(?P<code>.+?)$', 'timetable.views.course_page'),
-    url(r'courses/', 'timetable.views.all_courses'),
+    url(r'courses/*', 'timetable.views.all_courses'),
     # about page
-    url(r'about/', 'timetable.views.about'),
+    url(r'about/*', 'timetable.views.about'),
 
     # press page
     url(r'press/*', 'timetable.views.press'),
