@@ -103,7 +103,7 @@ export class UserSettingsModal extends React.Component {
                                 value={this.props.userInfo.major}
                                 ref="major"
                                 options={majors}
-                                searchable={false}
+                                searchable={true}
                                 onChange={this.changeMajor}
                             />
                         </div>
@@ -122,7 +122,7 @@ export class UserSettingsModal extends React.Component {
                                     {value: 2022, label: 2022},
                                     {value: 2023, label: 2023},
                                 ]}
-                                searchable={false}
+                                searchable={true}
                                 onChange={this.changeClassYear}
                             />
                         </div>
