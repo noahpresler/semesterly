@@ -14,16 +14,19 @@ export class SearchBar extends React.Component {
         this.fetchSearchResults = this.fetchSearchResults.bind(this);
         this.changeTimer = false;
     }
-    //autofocus search currently disabled so it doesn't bug out nudgespot
     componentWillMount() {
-
         $(document.body).on('keydown', (e) => {
-            if($("textarea").is(":focus")) { return; } // don't "search" if Nudgespot textarea is focused
+            if ($('.nudgespot-message textarea').is(":visible")) { return; } // don't "search" if Nudgespot textarea is focused
             if ( $('input:focus').length === 0 && !this.props.explorationModalIsVisible && !e.ctrlKey) {
                 if ((e.keyCode >= 48 && e.keyCode <= 57) || (e.keyCode >= 65 && e.keyCode <= 90)) {
                     $('#search-bar input').focus();
                     this.setState({ focused: true });
                 }
+            } else if  ( $('input:focus').length !== 0 ) {
+                if (e.key === 'Enter' && this.props.searchResults.length > 0) { this.props.addCourse(this.props.searchResults[this.props.hoveredPosition].id)}
+                else if (e.key === 'ArrowDown' && parseInt(this.props.hoveredPosition) < 3) {this.props.hoverSearchResult(this.props.hoveredPosition + 1)}
+                else if (e.key === 'ArrowUp' && parseInt(this.props.hoveredPosition) > 0) {this.props.hoverSearchResult(this.props.hoveredPosition - 1)}
+                else if (e.key === 'Escape') {this.setState({ focused: false }); $('#search-bar input').blur();}
             }
         });
     }
@@ -107,14 +110,7 @@ export class SearchBar extends React.Component {
                                className={this.props.isFetching ? 'results-loading-gif' : ''}
                                onInput={this.fetchSearchResults}
                                onFocus={() => this.setState({ focused: true, showDropdown: false })}
-                               onBlur={() => this.setState({ focused: false })}
-                               onKeyDown={(e) => {
-                                    if (e.key === 'Enter' && this.props.searchResults.length > 0) { this.props.addCourse(this.props.searchResults[this.props.hoveredPosition].id)}
-                                    else if (e.key === 'ArrowDown' && parseInt(this.props.hoveredPosition) < 3) {this.props.hoverSearchResult(this.props.hoveredPosition + 1)}
-                                    else if (e.key === 'ArrowUp' && parseInt(this.props.hoveredPosition) > 0) {this.props.hoverSearchResult(this.props.hoveredPosition - 1)}
-                                    else if (e.key === 'Escape') {this.setState({ focused: false }); $('#search-bar input').blur();}
-                                }}
-                        />
+                               onBlur={() => this.setState({ focused: false })}                        />
                     </div>
                     <div id="show-exploration"
                         onMouseDown={this.props.showExplorationModal}>
