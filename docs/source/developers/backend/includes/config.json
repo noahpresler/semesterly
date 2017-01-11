@@ -5,6 +5,7 @@
 	"textbooks": true,
 	"evals": true,
 	"time24": false,
+	"live_data": true,
 	"course_code_regex": "([A-Z]{2}\\.\\d{3}\\.\\d{3})",
 	"terms": ["Fall", "Intersession", "Spring", "Summer"],
 	"registration_groupings": [["Fall"],["Intersession"],["Spring"],["Summer"]],
@@ -17,5 +18,4 @@
 		"APL",
 		"Online",
 	],
-	"live_data": true,
 }
