@@ -1,6 +1,6 @@
 {
-  "type": "textbook link",
-  "course": "EN.600.418",
+  "kind": "textbook link",
+  "course_code": "EN.600.418",
   "section": "01",
   "isbn": 9780879500030,
   "required": true,

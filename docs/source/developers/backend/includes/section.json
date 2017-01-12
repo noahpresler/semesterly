@@ -1,5 +1,5 @@
 {
-  "type": "section",
+  "kind": "section",
   "course_code": "EN.600.418",
   "name": "01",
   "term": "Fall",
@@ -9,7 +9,7 @@
   "waitlist": 0,
   "waitlist_size": -1,
   "remaining_seats": -1,
-  "type": ["Lecture"],
+  "type": "Lecture",
   "fees": 0.00,
   "instructors": [
       "P. Froelich",
