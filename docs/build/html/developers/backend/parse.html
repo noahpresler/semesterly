@@ -102,11 +102,12 @@
 <li class="toctree-l2"><a class="reference internal" href="#output-format">Output Format</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#course">Course</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#section">Section</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#offering">Offering</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#textbook-link">Textbook Link</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#offering">Offering</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#evaluation">Evaluation</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#textbook">Textbook</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#all">All</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#nesting-and-omissions">Nesting and Omissions</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#final-thoughts">Final Thoughts</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="#utilities">Utilities</a><ul>
@@ -118,6 +119,7 @@
 <li class="toctree-l3"><a class="reference internal" href="#scraper">Scraper</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#extractor">Extractor</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#ingestor">Ingestor</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#digestor">Digestor</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#subscription-handles">(Subscription) Handles</a></li>
 </ul>
 </li>
@@ -248,32 +250,49 @@ udub    University of Washington in Seattle
 </div>
 <p>The fields displayed above are required in the <code class="docutils literal"><span class="pre">config.json</span></code> and must obey various other requirements:</p>
 <blockquote>
-<div><ol class="arabic">
-<li><p class="first">The value for <code class="docutils literal"><span class="pre">&quot;code&quot;</span></code> must match the directory name, discussed above.</p>
-</li>
-<li><p class="first"><code class="docutils literal"><span class="pre">&quot;time_granularity&quot;</span></code> refers to the minimum increment of time (in minutes) needed to encode all start and end times for courses.</p>
-</li>
-<li><p class="first"><code class="docutils literal"><span class="pre">&quot;time24&quot;</span></code> refers to the hour format time display characteristic of a school and can take on one of two values, <code class="docutils literal"><span class="pre">true</span></code> or <code class="docutils literal"><span class="pre">false</span></code>.</p>
-</li>
-<li><p class="first"><code class="docutils literal"><span class="pre">&quot;textbooks&quot;</span></code> and <code class="docutils literal"><span class="pre">&quot;evals&quot;</span></code> can be set accordingly to indicate whether this information is provided by your school/parser.</p>
-</li>
-<li><p class="first">The <code class="docutils literal"><span class="pre">&quot;course_code_regex&quot;</span></code> defines the regular expression that must describe all course codes seen within your school. Please be as specific as you can, while also gauranteeing correctness. The regex defined above was created to define course codes that include:</p>
-<blockquote>
-<div><ul class="simple">
+<div><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">code:</th><td class="field-body"><p class="first">must match the directory name, discussed above.</p>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name" colspan="2">time_granularity:</th></tr>
+<tr class="field-even field"><td>&nbsp;</td><td class="field-body"><p class="first">refers to the minimum increment of time (in minutes) needed to encode all start and end times for courses.</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">textbooks:</th><td class="field-body"><p class="first">set to indicate whether this information is provided by your school/parser.</p>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">evals:</th><td class="field-body"><p class="first">set to indicate whether this information is provided by your school/parser.</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">time24:</th><td class="field-body"><p class="first">bool that refers to the hour format time display characteristic of a school.</p>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">live_data:</th><td class="field-body"><p class="first">bool to be set when the data being parsed is <cite>regularly</cite> updated with live information (e.g. enrollment or waitlist information).</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name" colspan="2">course_code_regex:</th></tr>
+<tr class="field-odd field"><td>&nbsp;</td><td class="field-body"><p class="first">defines the regular expression that must describe all course codes seen within your school. Please be as specific as you can, while also gauranteeing correctness. The regex defined above was created to define course codes that include:</p>
+<ul class="simple">
 <li>EN.600.420</li>
 <li>AS.101.120</li>
 </ul>
-</div></blockquote>
-</li>
-<li><p class="first"><code class="docutils literal"><span class="pre">&quot;terms&quot;</span></code> is a list of all term names. Please use sensible names and good judgement but this is designed to be more flexible if needed.</p>
-</li>
-<li><p class="first">In addition to listing the terms, some schools offer their registration per term and others per school year. As such, <code class="docutils literal"><span class="pre">&quot;registration_groupings&quot;</span></code> defines the registration groupings for the school in question. The values found within this list of lists <strong>must</strong> match and encompass the full set of terms defined by <code class="docutils literal"><span class="pre">&quot;terms&quot;</span></code>.</p>
-</li>
-<li><p class="first"><code class="docutils literal"><span class="pre">campuses</span></code> is used to list distinct campuses within a university. These campuses should deleniate distinct course registration seperations. This field is not required.</p>
-</li>
-<li><p class="first"><code class="docutils literal"><span class="pre">&quot;live_enrollment&quot;</span></code> should be set when the data being parsed is <cite>regularly</cite> updated with live information (e.g. enrollment or waitlist information).</p>
-</li>
-</ol>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">terms:</th><td class="field-body"><p class="first">is a list of all term names. Please use sensible names and good judgement but this is designed to be more flexible if needed.</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name" colspan="2">registration_groupings:</th></tr>
+<tr class="field-odd field"><td>&nbsp;</td><td class="field-body"><p class="first">defines the registration grouping periods for the school in question. The values found within this list of lists <strong>must</strong> match and encompass the full set of terms defined by <code class="docutils literal"><span class="pre">terms</span></code>.</p>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">campuses:</th><td class="field-body"><p class="first last">is used to list distinct campuses within a university. These campuses should deleniate distinct course registration seperations. This field is not required.</p>
+</td>
+</tr>
+</tbody>
+</table>
 </div></blockquote>
 </div>
 <div class="section" id="parsers">
@@ -595,6 +614,44 @@ udub    University of Washington in Seattle
 </table>
 </div></blockquote>
 </div>
+<div class="section" id="textbook-link">
+<h3>Textbook Link<a class="headerlink" href="#textbook-link" title="Permalink to this headline">¶</a></h3>
+<p>A list of textbooks (links) associated with a given course section.</p>
+<div class="highlight-json"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>1
+2
+3
+4
+5
+6
+7</pre></div></td><td class="code"><div class="highlight"><pre><span></span><span class="p">{</span>
+<span class="hll">  <span class="nt">&quot;kind&quot;</span><span class="p">:</span> <span class="s2">&quot;textbook_link&quot;</span><span class="p">,</span>
+</span><span class="hll">  <span class="nt">&quot;course_code&quot;</span><span class="p">:</span> <span class="s2">&quot;EN.600.418&quot;</span><span class="p">,</span>
+</span><span class="hll">  <span class="nt">&quot;section_name&quot;</span><span class="p">:</span> <span class="s2">&quot;01&quot;</span><span class="p">,</span>
+</span><span class="hll">  <span class="nt">&quot;isbn&quot;</span><span class="p">:</span> <span class="mi">9780879500030</span><span class="p">,</span>
+</span>  <span class="nt">&quot;required&quot;</span><span class="p">:</span> <span class="kc">true</span><span class="p">,</span>
+<span class="p">}</span>
+</pre></div>
+</td></tr></table></div>
+<p>Explanation:</p>
+<blockquote>
+<div><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">kind:</th><td class="field-body">indicates json object of kind <code class="docutils literal"><span class="pre">textbook</span> <span class="pre">link</span></code>.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">course_code:</th><td class="field-body">the course that the textbook link applies to. Must satisify the course_code_regex defined in <code class="docutils literal"><span class="pre">config.json</span></code>, must have already been defined the in a <code class="docutils literal"><span class="pre">course</span></code> listing, or may be omitted if nested within <code class="docutils literal"><span class="pre">course</span></code> listing.</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">section:</th><td class="field-body">the section that the textbook link applies to. Must already have defined a valid <code class="docutils literal"><span class="pre">course</span></code> that has a <code class="docutils literal"><span class="pre">section</span></code> defined that matches. May be omitted if nested within <code class="docutils literal"><span class="pre">section</span></code> listing.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">isbn:</th><td class="field-body">isbn of textbook to link to.</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">required:</th><td class="field-body">a bool indicating whether a textbook is required for a section or not. Defaults to true.</td>
+</tr>
+</tbody>
+</table>
+</div></blockquote>
+</div>
 <div class="section" id="offering">
 <h3>Offering<a class="headerlink" href="#offering" title="Permalink to this headline">¶</a></h3>
 <p>An offering</p>
@@ -645,44 +702,6 @@ udub    University of Washington in Seattle
 </table>
 </div></blockquote>
 </div>
-<div class="section" id="textbook-link">
-<h3>Textbook Link<a class="headerlink" href="#textbook-link" title="Permalink to this headline">¶</a></h3>
-<p>A list of textbooks (links) associated with a given course section.</p>
-<div class="highlight-json"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>1
-2
-3
-4
-5
-6
-7</pre></div></td><td class="code"><div class="highlight"><pre><span></span><span class="p">{</span>
-  <span class="nt">&quot;kind&quot;</span><span class="p">:</span> <span class="s2">&quot;textbook link&quot;</span><span class="p">,</span>
-  <span class="nt">&quot;course_code&quot;</span><span class="p">:</span> <span class="s2">&quot;EN.600.418&quot;</span><span class="p">,</span>
-  <span class="nt">&quot;section&quot;</span><span class="p">:</span> <span class="s2">&quot;01&quot;</span><span class="p">,</span>
-  <span class="nt">&quot;isbn&quot;</span><span class="p">:</span> <span class="mi">9780879500030</span><span class="p">,</span>
-  <span class="nt">&quot;required&quot;</span><span class="p">:</span> <span class="kc">true</span><span class="p">,</span>
-<span class="p">}</span>
-</pre></div>
-</td></tr></table></div>
-<p>Explanation:</p>
-<blockquote>
-<div><table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">kind:</th><td class="field-body">indicates json object of kind <code class="docutils literal"><span class="pre">textbook</span> <span class="pre">link</span></code>.</td>
-</tr>
-<tr class="field-even field"><th class="field-name">course_code:</th><td class="field-body">the course that the textbook link applies to. Must satisify the course_code_regex defined in <code class="docutils literal"><span class="pre">config.json</span></code>, must have already been defined the in a <code class="docutils literal"><span class="pre">course</span></code> listing, or may be omitted if nested within <code class="docutils literal"><span class="pre">course</span></code> listing.</td>
-</tr>
-<tr class="field-odd field"><th class="field-name">section:</th><td class="field-body">the section that the textbook link applies to. Must already have defined a valid <code class="docutils literal"><span class="pre">course</span></code> that has a <code class="docutils literal"><span class="pre">section</span></code> defined that matches. May be omitted if nested within <code class="docutils literal"><span class="pre">section</span></code> listing.</td>
-</tr>
-<tr class="field-even field"><th class="field-name">isbn:</th><td class="field-body">isbn of textbook to link to.</td>
-</tr>
-<tr class="field-odd field"><th class="field-name">required:</th><td class="field-body">a bool indicating whether a textbook is required for a section or not.</td>
-</tr>
-</tbody>
-</table>
-</div></blockquote>
-</div>
 <div class="section" id="evaluation">
 <h3>Evaluation<a class="headerlink" href="#evaluation" title="Permalink to this headline">¶</a></h3>
 <div class="highlight-json"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>1
@@ -693,9 +712,9 @@ udub    University of Washington in Seattle
 6
 7
 8</pre></div></td><td class="code"><div class="highlight"><pre><span></span><span class="p">{</span>
-  <span class="nt">&quot;kind&quot;</span><span class="p">:</span> <span class="s2">&quot;eval&quot;</span><span class="p">,</span>
-  <span class="nt">&quot;course_code&quot;</span><span class="p">:</span> <span class="s2">&quot;EN.600.418&quot;</span><span class="p">,</span>
-  <span class="nt">&quot;score&quot;</span><span class="p">:</span> <span class="mf">4.7</span><span class="p">,</span>
+<span class="hll">  <span class="nt">&quot;kind&quot;</span><span class="p">:</span> <span class="s2">&quot;eval&quot;</span><span class="p">,</span>
+</span><span class="hll">  <span class="nt">&quot;course_code&quot;</span><span class="p">:</span> <span class="s2">&quot;EN.600.418&quot;</span><span class="p">,</span>
+</span>  <span class="nt">&quot;score&quot;</span><span class="p">:</span> <span class="mf">4.7</span><span class="p">,</span>
   <span class="nt">&quot;summary&quot;</span><span class="p">:</span> <span class="s2">&quot;text of evaluation&quot;</span><span class="p">,</span>
   <span class="nt">&quot;instructors&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;Peter Froelich&quot;</span><span class="p">],</span>
   <span class="nt">&quot;term_year&quot;</span><span class="p">:</span> <span class="s2">&quot;Spring 2016&quot;</span><span class="p">,</span>
@@ -712,11 +731,13 @@ udub    University of Washington in Seattle
 </tr>
 <tr class="field-even field"><th class="field-name">course_code:</th><td class="field-body">the course the evaluation refers to. Must satisify the course_code_regex defined in <code class="docutils literal"><span class="pre">config.json</span></code>, must have already been defined the in a <code class="docutils literal"><span class="pre">course</span></code> listing, or may be omitted if nested within <code class="docutils literal"><span class="pre">course</span></code> listing.</td>
 </tr>
-<tr class="field-odd field"><th class="field-name">score:</th><td class="field-body">an integer or float score out of <em>5</em> stars for the course.</td>
+<tr class="field-odd field"><th class="field-name">score:</th><td class="field-body">an integer or float score out of 5 (stars) for the course.</td>
 </tr>
 <tr class="field-even field"><th class="field-name">summary:</th><td class="field-body">the text of the evaluation.</td>
 </tr>
 <tr class="field-odd field"><th class="field-name">instructor:</th><td class="field-body">instructors of the course. May be list dictionary as defined in <code class="docutils literal"><span class="pre">section</span></code>.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">term_year:</th><td class="field-body">the term and year the evaluation pertains to.</td>
 </tr>
 </tbody>
 </table>
@@ -733,9 +754,9 @@ udub    University of Washington in Seattle
 6
 7
 8</pre></div></td><td class="code"><div class="highlight"><pre><span></span><span class="p">{</span>
-  <span class="nt">&quot;kind&quot;</span><span class="p">:</span> <span class="s2">&quot;textbook&quot;</span><span class="p">,</span>
-  <span class="nt">&quot;isbn&quot;</span><span class="p">:</span> <span class="mi">9780879500030</span><span class="p">,</span>
-  <span class="nt">&quot;detail_url&quot;</span><span class="p">:</span> <span class="s2">&quot;http://www.amazon.com/&quot;</span><span class="p">,</span>
+<span class="hll">  <span class="nt">&quot;kind&quot;</span><span class="p">:</span> <span class="s2">&quot;textbook&quot;</span><span class="p">,</span>
+</span><span class="hll">  <span class="nt">&quot;isbn&quot;</span><span class="p">:</span> <span class="mi">9780879500030</span><span class="p">,</span>
+</span>  <span class="nt">&quot;detail_url&quot;</span><span class="p">:</span> <span class="s2">&quot;http://www.amazon.com/&quot;</span><span class="p">,</span>
   <span class="nt">&quot;image_url&quot;</span><span class="p">:</span> <span class="s2">&quot;http://ecx.images-amazon.com/&quot;</span><span class="p">,</span>
   <span class="nt">&quot;author&quot;</span><span class="p">:</span> <span class="s2">&quot;Hans Wehr&quot;</span><span class="p">,</span>
   <span class="nt">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;Arabic-English Dictionary: The Hans Wehr Dictionary of Modern Written Arabic&quot;</span><span class="p">,</span>
@@ -754,8 +775,89 @@ udub    University of Washington in Seattle
 </table>
 </div></blockquote>
 </div>
-<div class="section" id="all">
-<h3>All<a class="headerlink" href="#all" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="nesting-and-omissions">
+<h3>Nesting and Omissions<a class="headerlink" href="#nesting-and-omissions" title="Permalink to this headline">¶</a></h3>
+<p>The json objects defined above can handle reasonable nesting schemes. Furthermore, there often exists cases where nesting may allow (<em>but not enforce</em>) you to omit some fields from the json objects. The fields that can be omitted will usually be <em>obviously</em> redundant. For example, you can nest sections within a <code class="docutils literal"><span class="pre">course</span></code> object and omit the <code class="docutils literal"><span class="pre">course_code</span></code> field in the <code class="docutils literal"><span class="pre">section</span></code> object.</p>
+<div class="highlight-none"><div class="highlight"><pre><span></span>{
+    &quot;kind&quot;: &quot;course&quot;,
+    ...
+    &quot;sections&quot;: [
+        {
+            &quot;kind&quot;: &quot;section&quot;,
+            ...
+        },
+        {
+            &quot;kind&quot;: &quot;section&quot;,
+            ...
+        }
+    ]
+
+}
+</pre></div>
+</div>
+<p>Specific labels associated with the nesting - in the case above <code class="docutils literal"><span class="pre">&quot;sections&quot;</span></code> - are strictly defined below:</p>
+<blockquote>
+<div><table border="1" class="docutils">
+<colgroup>
+<col width="17%" />
+<col width="18%" />
+<col width="7%" />
+<col width="17%" />
+<col width="41%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">kind</th>
+<th class="head">nesting label</th>
+<th class="head">type</th>
+<th class="head">parent</th>
+<th class="head">allowed omissions</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>section</td>
+<td>sections</td>
+<td>[]</td>
+<td>course</td>
+<td>kind, course_code</td>
+</tr>
+<tr class="row-odd"><td>offering</td>
+<td>offerings</td>
+<td>[]</td>
+<td>section</td>
+<td>kind, course_code, section_name</td>
+</tr>
+<tr class="row-even"><td>offering</td>
+<td>offerings</td>
+<td>[]</td>
+<td>course</td>
+<td>kind, course_code</td>
+</tr>
+<tr class="row-odd"><td>textbook_link</td>
+<td>textbook_links</td>
+<td>[]</td>
+<td>course</td>
+<td>kind, course_code, section_name</td>
+</tr>
+<tr class="row-even"><td>eval</td>
+<td>evals</td>
+<td>[]</td>
+<td>course</td>
+<td>kind, course_code</td>
+</tr>
+<tr class="row-odd"><td>textbook</td>
+<td>textbook</td>
+<td>{}</td>
+<td>textbook_link</td>
+<td>kind</td>
+</tr>
+</tbody>
+</table>
+</div></blockquote>
+<p>Note that though a field may be omitted, as per the rules above, <strong>if defined</strong>, the field <strong>must satisfy</strong> all requirements set in its basis definition. Furthermore, if not omitted, a nesting label <strong>must</strong> agree with the <code class="docutils literal"><span class="pre">kind</span></code> defined.</p>
+</div>
+<div class="section" id="final-thoughts">
+<h3>Final Thoughts<a class="headerlink" href="#final-thoughts" title="Permalink to this headline">¶</a></h3>
+<p>The output format was designed in such a way to allow for maximum freedom. Our goal was to create a format that allowed for us to deleniate between information uniformly while not enforcing undo overhead on a developer. For example, it is not best practice to cache data in order to conform to the order of the json object format, therefore, reasonable (optional) nesting is allowed. Furthermore, most fields are optional with defaults being handled in the backend.</p>
 </div>
 </div>
 <div class="section" id="utilities">
@@ -769,15 +871,23 @@ udub    University of Washington in Seattle
 <p>The design parsing framework is developed</p>
 <div class="section" id="requester">
 <h3>Requester<a class="headerlink" href="#requester" title="Permalink to this headline">¶</a></h3>
+<p>HTTP requests and BS4 parsing.</p>
 </div>
 <div class="section" id="scraper">
 <h3>Scraper<a class="headerlink" href="#scraper" title="Permalink to this headline">¶</a></h3>
+<p>Scrape data from website.</p>
 </div>
 <div class="section" id="extractor">
 <h3>Extractor<a class="headerlink" href="#extractor" title="Permalink to this headline">¶</a></h3>
+<p>Extract information from scraped data.</p>
 </div>
 <div class="section" id="ingestor">
 <h3>Ingestor<a class="headerlink" href="#ingestor" title="Permalink to this headline">¶</a></h3>
+<p>Helpers to convert information to json.</p>
+</div>
+<div class="section" id="digestor">
+<h3>Digestor<a class="headerlink" href="#digestor" title="Permalink to this headline">¶</a></h3>
+<p>Validation. Load json into models.</p>
 </div>
 <div class="section" id="subscription-handles">
 <h3>(Subscription) Handles<a class="headerlink" href="#subscription-handles" title="Permalink to this headline">¶</a></h3>

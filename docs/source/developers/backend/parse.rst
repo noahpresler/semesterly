@@ -44,18 +44,20 @@ The ``config.json`` is used in order for all components to link up properly on t
 
 The fields displayed above are required in the ``config.json`` and must obey various other requirements:
     
-    1. The value for ``"code"`` must match the directory name, discussed above.
-    2. ``"time_granularity"`` refers to the minimum increment of time (in minutes) needed to encode all start and end times for courses.
-    3. ``"time24"`` refers to the hour format time display characteristic of a school and can take on one of two values, ``true`` or ``false``.
-    4. ``"textbooks"`` and ``"evals"`` can be set accordingly to indicate whether this information is provided by your school/parser.
-    5. The ``"course_code_regex"`` defines the regular expression that must describe all course codes seen within your school. Please be as specific as you can, while also gauranteeing correctness. The regex defined above was created to define course codes that include:
+    :code: must match the directory name, discussed above.
+    :time_granularity: refers to the minimum increment of time (in minutes) needed to encode all start and end times for courses.
+    :textbooks: set to indicate whether this information is provided by your school/parser.
+    :evals: set to indicate whether this information is provided by your school/parser.
+    :time24: bool that refers to the hour format time display characteristic of a school.
+    :live_data: bool to be set when the data being parsed is `regularly` updated with live information (e.g. enrollment or waitlist information).
+    :course_code_regex: defines the regular expression that must describe all course codes seen within your school. Please be as specific as you can, while also gauranteeing correctness. The regex defined above was created to define course codes that include:
 
         - EN.600.420
         - AS.101.120
-    6. ``"terms"`` is a list of all term names. Please use sensible names and good judgement but this is designed to be more flexible if needed.
-    7. In addition to listing the terms, some schools offer their registration per term and others per school year. As such, ``"registration_groupings"`` defines the registration groupings for the school in question. The values found within this list of lists **must** match and encompass the full set of terms defined by ``"terms"``.
-    8. ``campuses`` is used to list distinct campuses within a university. These campuses should deleniate distinct course registration seperations. This field is not required.
-    9. ``"live_enrollment"`` should be set when the data being parsed is `regularly` updated with live information (e.g. enrollment or waitlist information).
+
+    :terms: is a list of all term names. Please use sensible names and good judgement but this is designed to be more flexible if needed.
+    :registration_groupings: defines the registration grouping periods for the school in question. The values found within this list of lists **must** match and encompass the full set of terms defined by ``terms``.
+    :campuses: is used to list distinct campuses within a university. These campuses should deleniate distinct course registration seperations. This field is not required.
 
 Parsers 
 ~~~~~~~~
@@ -171,6 +173,25 @@ Explanation:
         :location: the building and room of the final exam.
         :notes: any notes pertaining to final exam.
 
+
+Textbook Link
+~~~~~~~~~~~~~~
+A list of textbooks (links) associated with a given course section.
+
+.. literalinclude:: includes/textbook_link.json
+    :language: json
+    :linenos:
+    :emphasize-lines: 2-5
+
+Explanation:
+
+    :kind: indicates json object of kind ``textbook link``.
+    :course_code: the course that the textbook link applies to. Must satisify the course_code_regex defined in ``config.json``, must have already been defined the in a ``course`` listing, or may be omitted if nested within ``course`` listing.
+    :section: the section that the textbook link applies to. Must already have defined a valid ``course`` that has a ``section`` defined that matches. May be omitted if nested within ``section`` listing.
+    :isbn: isbn of textbook to link to.
+    :required: a bool indicating whether a textbook is required for a section or not. Defaults to true.
+
+
 Offering
 ~~~~~~~~~
 
@@ -192,36 +213,22 @@ Explanation:
     :campus: the campus must be defined in ``config.json``.
     :location: the building and room of the offering.
 
-Textbook Link
-~~~~~~~~~~~~~~
-A list of textbooks (links) associated with a given course section.
-
-.. literalinclude:: includes/textbook_link.json
-    :language: json
-    :linenos:
-
-Explanation:
-
-    :kind: indicates json object of kind ``textbook link``.
-    :course_code: the course that the textbook link applies to. Must satisify the course_code_regex defined in ``config.json``, must have already been defined the in a ``course`` listing, or may be omitted if nested within ``course`` listing.
-    :section: the section that the textbook link applies to. Must already have defined a valid ``course`` that has a ``section`` defined that matches. May be omitted if nested within ``section`` listing.
-    :isbn: isbn of textbook to link to.
-    :required: a bool indicating whether a textbook is required for a section or not.
-
 
 Evaluation
 ~~~~~~~~~~~
 .. literalinclude:: includes/eval.json
     :language: json
     :linenos:
+    :emphasize-lines: 2-3
 
 Explanation:
 
     :kind: indicates json object of kind "eval"(uation).
     :course_code: the course the evaluation refers to. Must satisify the course_code_regex defined in ``config.json``, must have already been defined the in a ``course`` listing, or may be omitted if nested within ``course`` listing.
-    :score: an integer or float score out of *5* stars for the course.
+    :score: an integer or float score out of 5 (stars) for the course.
     :summary: the text of the evaluation.
     :instructor: instructors of the course. May be list dictionary as defined in ``section``.
+    :term_year: the term and year the evaluation pertains to.
 
 Textbook
 ~~~~~~~~~
@@ -230,36 +237,80 @@ This should be handled in our amazon textbook library methods. **Leaving out dis
 .. literalinclude:: includes/textbook.json
     :language: json
     :linenos:
+    :emphasize-lines: 2-3
 
 Explanation:
 
     :kind: indicates json object of kind ``textbook``.
 
 
-All
-~~~~
+Nesting and Omissions
+~~~~~~~~~~~~~~~~~~~~~
+The json objects defined above can handle reasonable nesting schemes. Furthermore, there often exists cases where nesting may allow (*but not enforce*) you to omit some fields from the json objects. The fields that can be omitted will usually be *obviously* redundant. For example, you can nest sections within a ``course`` object and omit the ``course_code`` field in the ``section`` object.
+
+.. highlight:: none
+
+::
+
+    {
+        "kind": "course",
+        ...
+        "sections": [
+            {
+                "kind": "section",
+                ...
+            },
+            {
+                "kind": "section",
+                ...
+            }
+        ]
+
+    }
+
+Specific labels associated with the nesting - in the case above ``"sections"`` - are strictly defined below:
+
+    =============   ============== ===== =============   =================
+    kind            nesting label  type  parent          allowed omissions
+    =============   ============== ===== =============   =================
+    section         sections       []    course          kind, course_code
+    offering        offerings      []    section         kind, course_code, section_name
+    offering        offerings      []    course          kind, course_code
+    textbook_link   textbook_links []    course          kind, course_code, section_name
+    eval            evals          []    course          kind, course_code
+    textbook        textbook       {}    textbook_link   kind
+    =============   ============== ===== =============   =================
+
+Note that though a field may be omitted, as per the rules above, **if defined**, the field **must satisfy** all requirements set in its basis definition. Furthermore, if not omitted, a nesting label **must** agree with the ``kind`` defined.
+
+
+Final Thoughts
+~~~~~~~~~~~~~~~
+The output format was designed in such a way to allow for maximum freedom. Our goal was to create a format that allowed for us to deleniate between information uniformly while not enforcing undo overhead on a developer. For example, it is not best practice to cache data in order to conform to the order of the json object format, therefore, reasonable (optional) nesting is allowed. Furthermore, most fields are optional with defaults being handled in the backend.
 
 Utilities
-----------------------
-
-Utilities
-~~~~~~~~~~~~~~~~~~~~
-
-Framework
 ----------------------
 The design parsing framework is developed 
 
 Requester
 ~~~~~~~~~~~~~~~~~~~~
+HTTP requests and BS4 parsing.
 
 Scraper
 ~~~~~~~~~~~~~~~~~~~~
+Scrape data from website.
 
 Extractor
 ~~~~~~~~~~~~~~~~~~~~
+Extract information from scraped data.
 
 Ingestor
 ~~~~~~~~~~~~~~~~~~~~
+Helpers to convert information to json.
+
+Digestor
+~~~~~~~~~~~~~~~~~~~~
+Validation. Load json into models.
 
 (Subscription) Handles
 ~~~~~~~~~~~~~~~~~~~~~~~
