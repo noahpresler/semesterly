@@ -17,25 +17,8 @@ Directory Structure
 
 The school directory structure is where your code and configuration files will live. 
 
-.. highlight:: none
-    :linenothreshold: 5
-
-::
-
-    | -- <school (nick)name>
-        * ---- __init__.py
-        * ---- config.json
-        * ---- courses.py
-        * ---- textbooks.py
-        * ---- evals.py
-        | ---- misc
-            | -- utils/
-        | ---- data
-            * -- courses.json
-            * -- textbooks.json
-            * -- evals.json
-
-.. school nickname:
+.. literalinclude:: includes/dir_structure.txt
+    :linenos:
 
 The highest level directory is simply the nickname of the school. When giving a nickname to a school be sure to keep it short yet descriptive, following the `snake case <https://en.wikipedia.org/wiki/Snake_case>`_ naming convention if needed. This name is what will be used in the url seen by a user (i.e. `jhu.semester.ly <https://jhu.semester.ly>`_). It is often prudent to use a colloqualism, for example:
 
@@ -124,16 +107,21 @@ Course
 
 Explanation:
 
+    :type: indicates json object of type "course"
     :school_code: must match the school_code defined in ``config.json``.
     :course_code: must satisfy the course_code_regex defined in ``config.json``.
-    :credits: can be any single integer or float.
-    :department: is a dictionary that contains the department code and name. One of these sub-fields (code and name) is required, but both are preferred.
-    :description: can take one of two forms. It can be a list of relevant descriptions of a course. In this form, this field can easily display cases of different parts of the description (e.g. description, info, notes). The field can also just be a single string outside of a list.
+    :name: the name of the course
     :campus: is the campus that this particular course is offered on.
-    :requirements: consists of pre/corequisites, exclusions, and other. All but the last in that list must be lists, if included.
+    :credits: can be any single integer or float.
+    :department: is a dictionary that contains the department code and name. One of these sub-fields (code or name) is required, but both are preferred. Note that all entries per school must at least be consistent in the definition of one of these terms in all courses.
+    :description: can take one of two forms. It can be a list of relevant descriptions of a course. In this form, this field can easily display cases of different parts of the description (e.g. description, info, notes). The field can also just be a single string, outside of a list.
+    :prerequisites: list of prerequisites for this course. Entries should preferably match the course code regex, but that is not required.
+    :corequisites: list of corequisites for this course. Entries should preferably match the course code regex, but that is not required
+    :exclusions: list of exclusions for this course. Entries should preferably match the course code regex, but that is not required.
     :fulfill: seeks to identify more specific information about a course that may be more pertinent to some schools more than others.
-    :related: this will be used in our recommendation engine.
-    :homepage: a valid url, if provided, for the course.
+    :related: a list of valid course codes. This will be used in our recommendation engine.
+    :homepage: a valid url for the course.
+    :extra: preferably should be excluded but may contain special cases of information that cannot be expressed within this format.
 
 
 Section
@@ -145,6 +133,7 @@ Section
 
 Explanation:
 
+    :type: indicates json object of type "section"
     :course_code: must satisify the course_code_regex defined in ``config.json`` and must have already been defined the in a ``course`` listing.
     :section_name: the identifier of a section.
     :term: must match a term defined in ``config.json``.
@@ -184,6 +173,21 @@ Explanation:
 
         2) A string ``"location": "Shaffer 300"``.
 
+Textbook Link
+~~~~~~~~~~~~~~
+A list of textbooks (links) associated with a given course section.
+
+.. literalinclude:: includes/textbook_link.json
+    :language: json
+    :linenos:
+
+Explanation:
+
+    :type: indicates json object of type "textbook link".
+    :course: the course that the textbook link applies to.
+    :section: the section that the textbook link applies to.
+    :isbn: isbn of textbook to link to.
+    :required: a bool indicated whether a textbook is required for a section or not.
 
 Textbook
 ~~~~~~~~~
@@ -191,15 +195,24 @@ Textbook
     :language: json
     :linenos:
 
+Explanation:
+
+    :type: indicates json object of type "textbook"
+
+
 Evaluation
 ~~~~~~~~~~~
 .. literalinclude:: includes/eval.json
     :language: json
     :linenos:
 
+Explanation:
+
+    :type: indicates json object of type "eval"(uation)
+
+
 All
 ~~~~
-
 
 Utilities
 ----------------------

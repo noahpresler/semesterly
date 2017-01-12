@@ -1,7 +1,9 @@
 {
+  "type": "course",
   "school_code": "jhu",
   "course_code": "EN.600.418",
   "name": "Operating Systems",
+  "campus": "Homewood Campus",
   "credits": 3,
   "department": {
     "code": "CS",
@@ -15,24 +17,18 @@
     security, and recent innovations in operating system structure. Course
     work includes the implementation of operating systems techniques and
     routines, and critical parts of a small but functional operating system."],
-  "campus": "Homewood Campus",
-  "requirements": {
-    "prerequisites": ["EN.600.120", "EN.600.233", "EN.600.226", "(600.211:
-      Unix Systems Programming is helpful as well.)", "Participants must be
-      familiar with the UNIX environment and must be fluent in the C
-      programming language. The course includes significant programming
-      projects; without prior development experience you'll probably get lost
-      in a maze of low-level code."],
-    "corequisites": [""],
-    "exclusions": ["EN.600.318"],
-    "other": "",
-  },
-  "fulfill" : {
-    "areas": ["E", "CS Systems"],
-    "level": "400",
-    "cores": [""],
-    "geneds": [""],
-  },
+  "prerequisites": ["EN.600.120", "EN.600.233", "EN.600.226", "(600.211:
+    Unix Systems Programming is helpful as well.)", "Participants must be
+    familiar with the UNIX environment and must be fluent in the C
+    programming language. The course includes significant programming
+    projects; without prior development experience you'll probably get lost
+    in a maze of low-level code."],
+  "corequisites": [""],
+  "exclusions": ["EN.600.318"],
+  "areas": ["E", "CS Systems"],
+  "level": "400",
+  "cores": [""],
+  "geneds": [""],
   "related": ["EN.600.318", "EN.600.320", "EN.600.420"],
-  "homepage": "http://gaming.jhu.edu/~phf/2016/fall/cs318/",
+  "homepage": "http://gaming.jhu.edu/~phf/2016/fall/cs318/"
 }
