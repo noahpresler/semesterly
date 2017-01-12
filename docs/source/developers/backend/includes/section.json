@@ -1,4 +1,5 @@
 {
+  "type": "section",
   "course_code": "EN.600.418",
   "name": "01",
   "term": "Fall",
@@ -9,6 +10,19 @@
   "waitlist_size": -1,
   "remaining_seats": -1,
   "type": ["Lecture"],
-  "instructors": ["Peter Froelich"],
   "fees": 0.00,
+  "instructors": [
+      "P. Froelich",
+      {
+          "name": "Miller, Michael",
+          "title": "CA",
+          "email": "mmill178@jhu.edu",
+          "homepage": "http://michaelm.me"
+      },
+  ],
+  "final_exam": {
+    "date": "12/15/16",
+    "campus": "Homewood Campus",
+    "location": "Shaffer 300"
+  }
 }
