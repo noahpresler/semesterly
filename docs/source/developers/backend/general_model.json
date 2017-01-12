@@ -48,7 +48,9 @@
 					"final_exam": {
 						"date": "12/15/16", // must fulfill date regex and check
 						"campus": "Homewood Campus",
-						"location": "Shaffer 300"
+						"location": "Shaffer 300",
+						"time_start": "10:00",
+						"time_end": "10:50"
 					}, // could also be a bool
 
 					"offerings": [
