@@ -290,25 +290,27 @@ The output format was designed in such a way to allow for maximum freedom. Our g
 
 Utilities
 ----------------------
-
-Utilities
-~~~~~~~~~~~~~~~~~~~~
-
-Framework
-----------------------
 The design parsing framework is developed 
 
 Requester
 ~~~~~~~~~~~~~~~~~~~~
+HTTP requests and BS4 parsing.
 
 Scraper
 ~~~~~~~~~~~~~~~~~~~~
+Scrape data from website.
 
 Extractor
 ~~~~~~~~~~~~~~~~~~~~
+Extract information from scraped data.
 
 Ingestor
 ~~~~~~~~~~~~~~~~~~~~
+Helpers to convert information to json.
+
+Digestor
+~~~~~~~~~~~~~~~~~~~~
+Validation. Load json into models.
 
 (Subscription) Handles
 ~~~~~~~~~~~~~~~~~~~~~~~
