@@ -103,6 +103,7 @@
 <li class="toctree-l3"><a class="reference internal" href="#course">Course</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#section">Section</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#offering">Offering</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#textbook-link">Textbook Link</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#textbook">Textbook</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#evaluation">Evaluation</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#all">All</a></li>
@@ -185,7 +186,7 @@
 <div class="section" id="directory-structure">
 <h3>Directory Structure<a class="headerlink" href="#directory-structure" title="Permalink to this headline">¶</a></h3>
 <p>The school directory structure is where your code and configuration files will live.</p>
-<div class="highlight-none"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre> 1
+<div class="highlight-default"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre> 1
  2
  3
  4
@@ -196,18 +197,18 @@
  9
 10
 11
-12</pre></div></td><td class="code"><div class="highlight"><pre><span></span>| -- &lt;school (nick)name&gt;
-    * ---- __init__.py
-    * ---- config.json
-    * ---- courses.py
-    * ---- textbooks.py
-    * ---- evals.py
-    | ---- misc
-        | -- utils/
-    | ---- data
-        * -- courses.json
-        * -- textbooks.json
-        * -- evals.json
+12</pre></div></td><td class="code"><div class="highlight"><pre><span></span><span class="o">|</span> <span class="o">--</span> <span class="o">&lt;</span><span class="n">school</span> <span class="p">(</span><span class="n">nick</span><span class="p">)</span><span class="n">name</span><span class="o">&gt;</span>
+    <span class="o">*</span> <span class="o">----</span> <span class="n">__init__</span><span class="o">.</span><span class="n">py</span>
+    <span class="o">*</span> <span class="o">----</span> <span class="n">config</span><span class="o">.</span><span class="n">json</span>
+    <span class="o">*</span> <span class="o">----</span> <span class="n">courses</span><span class="o">.</span><span class="n">py</span>
+    <span class="o">*</span> <span class="o">----</span> <span class="n">textbooks</span><span class="o">.</span><span class="n">py</span>
+    <span class="o">*</span> <span class="o">----</span> <span class="n">evals</span><span class="o">.</span><span class="n">py</span>
+    <span class="o">|</span> <span class="o">----</span> <span class="n">misc</span>
+        <span class="o">|</span> <span class="o">--</span> <span class="n">utils</span><span class="o">/</span>
+    <span class="o">|</span> <span class="o">----</span> <span class="n">data</span>
+        <span class="o">*</span> <span class="o">--</span> <span class="n">courses</span><span class="o">.</span><span class="n">json</span>
+        <span class="o">*</span> <span class="o">--</span> <span class="n">textbooks</span><span class="o">.</span><span class="n">json</span>
+        <span class="o">*</span> <span class="o">--</span> <span class="n">evals</span><span class="o">.</span><span class="n">json</span>
 </pre></div>
 </td></tr></table></div>
 <p>The highest level directory is simply the nickname of the school. When giving a nickname to a school be sure to keep it short yet descriptive, following the <a class="reference external" href="https://en.wikipedia.org/wiki/Snake_case">snake case</a> naming convention if needed. This name is what will be used in the url seen by a user (i.e. <a class="reference external" href="https://jhu.semester.ly">jhu.semester.ly</a>). It is often prudent to use a colloqualism, for example:</p>
@@ -347,20 +348,18 @@ udub    University of Washington in Seattle
 31
 32
 33
-34
-35
-36
-37
-38</pre></div></td><td class="code"><div class="highlight"><pre><span></span><span class="p">{</span>
-<span class="hll">  <span class="nt">&quot;school_code&quot;</span><span class="p">:</span> <span class="s2">&quot;jhu&quot;</span><span class="p">,</span>
+34</pre></div></td><td class="code"><div class="highlight"><pre><span></span><span class="p">{</span>
+<span class="hll">  <span class="nt">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;course&quot;</span><span class="p">,</span>
+</span><span class="hll">  <span class="nt">&quot;school_code&quot;</span><span class="p">:</span> <span class="s2">&quot;jhu&quot;</span><span class="p">,</span>
 </span><span class="hll">  <span class="nt">&quot;course_code&quot;</span><span class="p">:</span> <span class="s2">&quot;EN.600.418&quot;</span><span class="p">,</span>
 </span><span class="hll">  <span class="nt">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;Operating Systems&quot;</span><span class="p">,</span>
+</span><span class="hll">  <span class="nt">&quot;campus&quot;</span><span class="p">:</span> <span class="s2">&quot;Homewood Campus&quot;</span><span class="p">,</span>
 </span><span class="hll">  <span class="nt">&quot;credits&quot;</span><span class="p">:</span> <span class="mi">3</span><span class="p">,</span>
 </span><span class="hll">  <span class="nt">&quot;department&quot;</span><span class="p">:</span> <span class="p">{</span>
 </span><span class="hll">    <span class="nt">&quot;code&quot;</span><span class="p">:</span> <span class="s2">&quot;CS&quot;</span><span class="p">,</span>
-</span><span class="hll">    <span class="nt">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;Computer Science&quot;</span>
-</span><span class="hll">  <span class="p">},</span>
-</span>  <span class="nt">&quot;description&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;This course covers the fundamental topics related to </span>
+</span>    <span class="nt">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;Computer Science&quot;</span>
+  <span class="p">},</span>
+  <span class="nt">&quot;description&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;This course covers the fundamental topics related to </span>
 <span class="s2">    operating systems theory and practice. Topics include processor</span>
 <span class="s2">    management, storage management, concurrency control, multi-programming and</span>
 <span class="s2">    processing, device drivers, operating system components (e.g., file</span>
@@ -368,26 +367,20 @@ udub    University of Washington in Seattle
 <span class="s2">    security, and recent innovations in operating system structure. Course</span>
 <span class="s2">    work includes the implementation of operating systems techniques and</span>
 <span class="s2">    routines, and critical parts of a small but functional operating system.&quot;</span><span class="p">],</span>
-  <span class="nt">&quot;campus&quot;</span><span class="p">:</span> <span class="s2">&quot;Homewood Campus&quot;</span><span class="p">,</span>
-  <span class="nt">&quot;requirements&quot;</span><span class="p">:</span> <span class="p">{</span>
-    <span class="nt">&quot;prerequisites&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;EN.600.120&quot;</span><span class="p">,</span> <span class="s2">&quot;EN.600.233&quot;</span><span class="p">,</span> <span class="s2">&quot;EN.600.226&quot;</span><span class="p">,</span> <span class="s2">&quot;(600.211:</span>
-<span class="s2">      Unix Systems Programming is helpful as well.)&quot;</span><span class="p">,</span> <span class="s2">&quot;Participants must be</span>
-<span class="s2">      familiar with the UNIX environment and must be fluent in the C</span>
-<span class="s2">      programming language. The course includes significant programming</span>
-<span class="s2">      projects; without prior development experience you&#39;ll probably get lost</span>
-<span class="s2">      in a maze of low-level code.&quot;</span><span class="p">],</span>
-    <span class="nt">&quot;corequisites&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;&quot;</span><span class="p">],</span>
-    <span class="nt">&quot;exclusions&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;EN.600.318&quot;</span><span class="p">],</span>
-    <span class="nt">&quot;other&quot;</span><span class="p">:</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
-  <span class="p">},</span>
-  <span class="nt">&quot;fulfill&quot;</span> <span class="p">:</span> <span class="p">{</span>
-    <span class="nt">&quot;areas&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;E&quot;</span><span class="p">,</span> <span class="s2">&quot;CS Systems&quot;</span><span class="p">],</span>
-    <span class="nt">&quot;level&quot;</span><span class="p">:</span> <span class="s2">&quot;400&quot;</span><span class="p">,</span>
-    <span class="nt">&quot;cores&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;&quot;</span><span class="p">],</span>
-    <span class="nt">&quot;geneds&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;&quot;</span><span class="p">],</span>
-  <span class="p">},</span>
+  <span class="nt">&quot;prerequisites&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;EN.600.120&quot;</span><span class="p">,</span> <span class="s2">&quot;EN.600.233&quot;</span><span class="p">,</span> <span class="s2">&quot;EN.600.226&quot;</span><span class="p">,</span> <span class="s2">&quot;(600.211:</span>
+<span class="s2">    Unix Systems Programming is helpful as well.)&quot;</span><span class="p">,</span> <span class="s2">&quot;Participants must be</span>
+<span class="s2">    familiar with the UNIX environment and must be fluent in the C</span>
+<span class="s2">    programming language. The course includes significant programming</span>
+<span class="s2">    projects; without prior development experience you&#39;ll probably get lost</span>
+<span class="s2">    in a maze of low-level code.&quot;</span><span class="p">],</span>
+  <span class="nt">&quot;corequisites&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;&quot;</span><span class="p">],</span>
+  <span class="nt">&quot;exclusions&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;EN.600.318&quot;</span><span class="p">],</span>
+  <span class="nt">&quot;areas&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;E&quot;</span><span class="p">,</span> <span class="s2">&quot;CS Systems&quot;</span><span class="p">],</span>
+  <span class="nt">&quot;level&quot;</span><span class="p">:</span> <span class="s2">&quot;400&quot;</span><span class="p">,</span>
+  <span class="nt">&quot;cores&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;&quot;</span><span class="p">],</span>
+  <span class="nt">&quot;geneds&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;&quot;</span><span class="p">],</span>
   <span class="nt">&quot;related&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;EN.600.318&quot;</span><span class="p">,</span> <span class="s2">&quot;EN.600.320&quot;</span><span class="p">,</span> <span class="s2">&quot;EN.600.420&quot;</span><span class="p">],</span>
-  <span class="nt">&quot;homepage&quot;</span><span class="p">:</span> <span class="s2">&quot;http://gaming.jhu.edu/~phf/2016/fall/cs318/&quot;</span><span class="p">,</span>
+  <span class="nt">&quot;homepage&quot;</span><span class="p">:</span> <span class="s2">&quot;http://gaming.jhu.edu/~phf/2016/fall/cs318/&quot;</span>
 <span class="p">}</span>
 </pre></div>
 </td></tr></table></div>
@@ -397,25 +390,35 @@ udub    University of Washington in Seattle
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">school_code:</th><td class="field-body">must match the school_code defined in <code class="docutils literal"><span class="pre">config.json</span></code>.</td>
+<tr class="field-odd field"><th class="field-name">type:</th><td class="field-body">indicates json object of type &#8220;course&#8221;</td>
 </tr>
-<tr class="field-even field"><th class="field-name">course_code:</th><td class="field-body">must satisfy the course_code_regex defined in <code class="docutils literal"><span class="pre">config.json</span></code>.</td>
+<tr class="field-even field"><th class="field-name">school_code:</th><td class="field-body">must match the school_code defined in <code class="docutils literal"><span class="pre">config.json</span></code>.</td>
 </tr>
-<tr class="field-odd field"><th class="field-name">credits:</th><td class="field-body">can be any single integer or float.</td>
+<tr class="field-odd field"><th class="field-name">course_code:</th><td class="field-body">must satisfy the course_code_regex defined in <code class="docutils literal"><span class="pre">config.json</span></code>.</td>
 </tr>
-<tr class="field-even field"><th class="field-name">department:</th><td class="field-body">is a dictionary that contains the department code and name. One of these sub-fields (code and name) is required, but both are preferred.</td>
+<tr class="field-even field"><th class="field-name">name:</th><td class="field-body">the name of the course</td>
 </tr>
-<tr class="field-odd field"><th class="field-name">description:</th><td class="field-body">can take one of two forms. It can be a list of relevant descriptions of a course. In this form, this field can easily display cases of different parts of the description (e.g. description, info, notes). The field can also just be a single string outside of a list.</td>
+<tr class="field-odd field"><th class="field-name">campus:</th><td class="field-body">is the campus that this particular course is offered on.</td>
 </tr>
-<tr class="field-even field"><th class="field-name">campus:</th><td class="field-body">is the campus that this particular course is offered on.</td>
+<tr class="field-even field"><th class="field-name">credits:</th><td class="field-body">can be any single integer or float.</td>
 </tr>
-<tr class="field-odd field"><th class="field-name">requirements:</th><td class="field-body">consists of pre/corequisites, exclusions, and other. All but the last in that list must be lists, if included.</td>
+<tr class="field-odd field"><th class="field-name">department:</th><td class="field-body">is a dictionary that contains the department code and name. One of these sub-fields (code or name) is required, but both are preferred. Note that all entries per school must at least be consistent in the definition of one of these terms in all courses.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">description:</th><td class="field-body">can take one of two forms. It can be a list of relevant descriptions of a course. In this form, this field can easily display cases of different parts of the description (e.g. description, info, notes). The field can also just be a single string, outside of a list.</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">prerequisites:</th><td class="field-body">list of prerequisites for this course. Entries should preferably match the course code regex, but that is not required.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">corequisites:</th><td class="field-body">list of corequisites for this course. Entries should preferably match the course code regex, but that is not required</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">exclusions:</th><td class="field-body">list of exclusions for this course. Entries should preferably match the course code regex, but that is not required.</td>
 </tr>
 <tr class="field-even field"><th class="field-name">fulfill:</th><td class="field-body">seeks to identify more specific information about a course that may be more pertinent to some schools more than others.</td>
 </tr>
-<tr class="field-odd field"><th class="field-name">related:</th><td class="field-body">this will be used in our recommendation engine.</td>
+<tr class="field-odd field"><th class="field-name">related:</th><td class="field-body">a list of valid course codes. This will be used in our recommendation engine.</td>
 </tr>
-<tr class="field-even field"><th class="field-name">homepage:</th><td class="field-body">a valid url, if provided, for the course.</td>
+<tr class="field-even field"><th class="field-name">homepage:</th><td class="field-body">a valid url for the course.</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">extra:</th><td class="field-body">preferably should be excluded but may contain special cases of information that cannot be expressed within this format.</td>
 </tr>
 </tbody>
 </table>
@@ -436,19 +439,47 @@ udub    University of Washington in Seattle
 11
 12
 13
-14</pre></div></td><td class="code"><div class="highlight"><pre><span></span><span class="p">{</span>
-<span class="hll">  <span class="nt">&quot;course_code&quot;</span><span class="p">:</span> <span class="s2">&quot;EN.600.418&quot;</span><span class="p">,</span>
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28</pre></div></td><td class="code"><div class="highlight"><pre><span></span><span class="p">{</span>
+<span class="hll">  <span class="nt">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;section&quot;</span><span class="p">,</span>
+</span><span class="hll">  <span class="nt">&quot;course_code&quot;</span><span class="p">:</span> <span class="s2">&quot;EN.600.418&quot;</span><span class="p">,</span>
 </span><span class="hll">  <span class="nt">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;01&quot;</span><span class="p">,</span>
 </span><span class="hll">  <span class="nt">&quot;term&quot;</span><span class="p">:</span> <span class="s2">&quot;Fall&quot;</span><span class="p">,</span>
 </span><span class="hll">  <span class="nt">&quot;year&quot;</span><span class="p">:</span> <span class="mi">2016</span><span class="p">,</span>
 </span><span class="hll">  <span class="nt">&quot;capacity&quot;</span><span class="p">:</span> <span class="mi">25</span><span class="p">,</span>
 </span><span class="hll">  <span class="nt">&quot;enrollment&quot;</span><span class="p">:</span> <span class="mi">23</span><span class="p">,</span>
-</span><span class="hll">  <span class="nt">&quot;waitlist&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
-</span>  <span class="nt">&quot;waitlist_size&quot;</span><span class="p">:</span> <span class="mi">-1</span><span class="p">,</span>
-  <span class="nt">&quot;remaining_seats&quot;</span><span class="p">:</span> <span class="mi">-1</span><span class="p">,</span>
-<span class="hll">  <span class="nt">&quot;type&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;Lecture&quot;</span><span class="p">],</span>
-</span><span class="hll">  <span class="nt">&quot;instructors&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;Peter Froelich&quot;</span><span class="p">],</span>
+</span>  <span class="nt">&quot;waitlist&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+  <span class="nt">&quot;waitlist_size&quot;</span><span class="p">:</span> <span class="mi">-1</span><span class="p">,</span>
+<span class="hll">  <span class="nt">&quot;remaining_seats&quot;</span><span class="p">:</span> <span class="mi">-1</span><span class="p">,</span>
+</span><span class="hll">  <span class="nt">&quot;type&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;Lecture&quot;</span><span class="p">],</span>
 </span>  <span class="nt">&quot;fees&quot;</span><span class="p">:</span> <span class="mf">0.00</span><span class="p">,</span>
+  <span class="nt">&quot;instructors&quot;</span><span class="p">:</span> <span class="p">[</span>
+      <span class="s2">&quot;P. Froelich&quot;</span><span class="p">,</span>
+      <span class="p">{</span>
+          <span class="nt">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;Miller, Michael&quot;</span><span class="p">,</span>
+          <span class="nt">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;CA&quot;</span><span class="p">,</span>
+          <span class="nt">&quot;email&quot;</span><span class="p">:</span> <span class="s2">&quot;mmill178@jhu.edu&quot;</span><span class="p">,</span>
+          <span class="nt">&quot;homepage&quot;</span><span class="p">:</span> <span class="s2">&quot;http://michaelm.me&quot;</span>
+      <span class="p">},</span>
+  <span class="p">],</span>
+  <span class="nt">&quot;final_exam&quot;</span><span class="p">:</span> <span class="p">{</span>
+    <span class="nt">&quot;date&quot;</span><span class="p">:</span> <span class="s2">&quot;12/15/16&quot;</span><span class="p">,</span>
+    <span class="nt">&quot;campus&quot;</span><span class="p">:</span> <span class="s2">&quot;Homewood Campus&quot;</span><span class="p">,</span>
+    <span class="nt">&quot;location&quot;</span><span class="p">:</span> <span class="s2">&quot;Shaffer 300&quot;</span>
+  <span class="p">}</span>
 <span class="p">}</span>
 </pre></div>
 </td></tr></table></div>
@@ -458,28 +489,30 @@ udub    University of Washington in Seattle
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">course_code:</th><td class="field-body">must satisify the course_code_regex defined in <code class="docutils literal"><span class="pre">config.json</span></code> and must have already been defined the in a <code class="docutils literal"><span class="pre">course</span></code> listing.</td>
+<tr class="field-odd field"><th class="field-name">type:</th><td class="field-body">indicates json object of type &#8220;section&#8221;</td>
 </tr>
-<tr class="field-even field"><th class="field-name">section_name:</th><td class="field-body">the identifier of a section.</td>
+<tr class="field-even field"><th class="field-name">course_code:</th><td class="field-body">must satisify the course_code_regex defined in <code class="docutils literal"><span class="pre">config.json</span></code> and must have already been defined the in a <code class="docutils literal"><span class="pre">course</span></code> listing.</td>
 </tr>
-<tr class="field-odd field"><th class="field-name">term:</th><td class="field-body">must match a term defined in <code class="docutils literal"><span class="pre">config.json</span></code>.</td>
+<tr class="field-odd field"><th class="field-name">section_name:</th><td class="field-body">the identifier of a section.</td>
 </tr>
-<tr class="field-even field"><th class="field-name">capacity:</th><td class="field-body">the max seats available in a section.</td>
+<tr class="field-even field"><th class="field-name">term:</th><td class="field-body">must match a term defined in <code class="docutils literal"><span class="pre">config.json</span></code>.</td>
 </tr>
-<tr class="field-odd field"><th class="field-name">enrollment:</th><td class="field-body">the current number of students enrolled in a section.</td>
+<tr class="field-odd field"><th class="field-name">capacity:</th><td class="field-body">the max seats available in a section.</td>
 </tr>
-<tr class="field-even field"><th class="field-name">waitlist:</th><td class="field-body">the number of students on the waitlist.</td>
+<tr class="field-even field"><th class="field-name">enrollment:</th><td class="field-body">the current number of students enrolled in a section.</td>
 </tr>
-<tr class="field-odd field"><th class="field-name">waitlist_size:</th><td class="field-body">the max size of the waitlist.</td>
+<tr class="field-odd field"><th class="field-name">waitlist:</th><td class="field-body">the number of students on the waitlist.</td>
 </tr>
-<tr class="field-even field"><th class="field-name" colspan="2">remaining_seats:</th></tr>
-<tr class="field-even field"><td>&nbsp;</td><td class="field-body">this will be automatically calculated if given -1 or left out.</td>
+<tr class="field-even field"><th class="field-name">waitlist_size:</th><td class="field-body">the max size of the waitlist.</td>
 </tr>
-<tr class="field-odd field"><th class="field-name">type:</th><td class="field-body">could be <cite>Lecture</cite>, <cite>Lab</cite>, <cite>Tutorial</cite>, etc.</td>
+<tr class="field-odd field"><th class="field-name" colspan="2">remaining_seats:</th></tr>
+<tr class="field-odd field"><td>&nbsp;</td><td class="field-body">this will be automatically calculated if given -1 or left out.</td>
 </tr>
-<tr class="field-even field"><th class="field-name">instructurs:</th><td class="field-body">a list of course instructors, the first in the list is the primary instructor.</td>
+<tr class="field-even field"><th class="field-name">type:</th><td class="field-body">could be <cite>Lecture</cite>, <cite>Lab</cite>, <cite>Tutorial</cite>, etc.</td>
 </tr>
-<tr class="field-odd field"><th class="field-name">fees:</th><td class="field-body">A float or string that will default to 0.00.</td>
+<tr class="field-odd field"><th class="field-name">instructurs:</th><td class="field-body">a list of course instructors, the first in the list is the primary instructor.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">fees:</th><td class="field-body">A float or string that will default to 0.00.</td>
 </tr>
 </tbody>
 </table>
@@ -497,19 +530,15 @@ udub    University of Washington in Seattle
  7
  8
  9
-10
-11
-12</pre></div></td><td class="code"><div class="highlight"><pre><span></span><span class="p">{</span>
-<span class="hll">  <span class="nt">&quot;course_code&quot;</span><span class="p">:</span> <span class="s2">&quot;EN.600.418&quot;</span><span class="p">,</span>
+10</pre></div></td><td class="code"><div class="highlight"><pre><span></span><span class="p">{</span>
+<span class="hll">  <span class="nt">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;offering&quot;</span><span class="p">,</span>
+</span><span class="hll">  <span class="nt">&quot;course_code&quot;</span><span class="p">:</span> <span class="s2">&quot;EN.600.418&quot;</span><span class="p">,</span>
 </span><span class="hll">  <span class="nt">&quot;section_name&quot;</span><span class="p">:</span> <span class="s2">&quot;01&quot;</span><span class="p">,</span>
 </span><span class="hll">  <span class="nt">&quot;days&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;M&quot;</span><span class="p">,</span> <span class="s2">&quot;W&quot;</span><span class="p">,</span> <span class="s2">&quot;F&quot;</span><span class="p">],</span>
-</span><span class="hll">  <span class="nt">&quot;time_start&quot;</span><span class="p">:</span> <span class="s2">&quot;10:00&quot;</span><span class="p">,</span>
-</span><span class="hll">  <span class="nt">&quot;time_end&quot;</span><span class="p">:</span> <span class="s2">&quot;10:50&quot;</span><span class="p">,</span>
-</span><span class="hll">  <span class="nt">&quot;location&quot;</span><span class="p">:</span> <span class="p">{</span>
-</span>    <span class="nt">&quot;campus&quot;</span><span class="p">:</span> <span class="s2">&quot;Homewood Campus&quot;</span><span class="p">,</span>
-    <span class="nt">&quot;building&quot;</span><span class="p">:</span> <span class="s2">&quot;Shaffer&quot;</span><span class="p">,</span>
-    <span class="nt">&quot;room&quot;</span><span class="p">:</span> <span class="s2">&quot;300&quot;</span><span class="p">,</span>
-  <span class="p">}</span>
+</span><span class="hll">  <span class="nt">&quot;time_start&quot;</span><span class="p">:</span> <span class="s2">&quot;13:30&quot;</span><span class="p">,</span>
+</span><span class="hll">  <span class="nt">&quot;time_end&quot;</span><span class="p">:</span> <span class="s2">&quot;14:45&quot;</span><span class="p">,</span>
+</span>  <span class="nt">&quot;campus&quot;</span><span class="p">:</span> <span class="s2">&quot;Homewood Campus&quot;</span><span class="p">,</span>
+  <span class="nt">&quot;location&quot;</span><span class="p">:</span> <span class="s2">&quot;Shaffer&quot;</span>
 <span class="p">}</span>
 </pre></div>
 </td></tr></table></div>
@@ -561,29 +590,76 @@ udub    University of Washington in Seattle
 </table>
 </div></blockquote>
 </div>
-<div class="section" id="textbook">
-<h3>Textbook<a class="headerlink" href="#textbook" title="Permalink to this headline">¶</a></h3>
-<div class="highlight-json"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre> 1
- 2
- 3
- 4
- 5
- 6
- 7
- 8
- 9
-10</pre></div></td><td class="code"><div class="highlight"><pre><span></span><span class="p">[</span>
-    <span class="p">{</span>
-      <span class="nt">&quot;textbook&quot;</span><span class="p">:</span> <span class="mi">9780879500030</span><span class="p">,</span>
-      <span class="nt">&quot;required&quot;</span><span class="p">:</span> <span class="kc">true</span><span class="p">,</span>
-    <span class="p">},</span>
-    <span class="p">{</span>
-      <span class="nt">&quot;textbook&quot;</span><span class="p">:</span> <span class="mi">9780879500030</span><span class="p">,</span>
-      <span class="nt">&quot;required&quot;</span><span class="p">:</span> <span class="kc">false</span><span class="p">,</span>
-    <span class="p">},</span>
-<span class="p">]</span>
+<div class="section" id="textbook-link">
+<h3>Textbook Link<a class="headerlink" href="#textbook-link" title="Permalink to this headline">¶</a></h3>
+<p>A list of textbooks (links) associated with a given course section.</p>
+<div class="highlight-json"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>1
+2
+3
+4
+5
+6
+7</pre></div></td><td class="code"><div class="highlight"><pre><span></span><span class="p">{</span>
+  <span class="nt">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;textbook link&quot;</span><span class="p">,</span>
+  <span class="nt">&quot;course&quot;</span><span class="p">:</span> <span class="s2">&quot;EN.600.418&quot;</span><span class="p">,</span>
+  <span class="nt">&quot;section&quot;</span><span class="p">:</span> <span class="s2">&quot;01&quot;</span><span class="p">,</span>
+  <span class="nt">&quot;isbn&quot;</span><span class="p">:</span> <span class="mi">9780879500030</span><span class="p">,</span>
+  <span class="nt">&quot;required&quot;</span><span class="p">:</span> <span class="kc">true</span><span class="p">,</span>
+<span class="p">}</span>
 </pre></div>
 </td></tr></table></div>
+<p>Explanation:</p>
+<blockquote>
+<div><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">type:</th><td class="field-body">indicates json object of type &#8220;textbook link&#8221;.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">course:</th><td class="field-body">the course that the textbook link applies to.</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">section:</th><td class="field-body">the section that the textbook link applies to.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">isbn:</th><td class="field-body">isbn of textbook to link to.</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">required:</th><td class="field-body">a bool indicated whether a textbook is required for a section or not.</td>
+</tr>
+</tbody>
+</table>
+</div></blockquote>
+</div>
+<div class="section" id="textbook">
+<h3>Textbook<a class="headerlink" href="#textbook" title="Permalink to this headline">¶</a></h3>
+<div class="highlight-json"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9</pre></div></td><td class="code"><div class="highlight"><pre><span></span><span class="p">{</span>
+  <span class="nt">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;textbook&quot;</span><span class="p">,</span>
+  <span class="nt">&quot;isbn&quot;</span><span class="p">:</span> <span class="mi">9780879500030</span><span class="p">,</span>
+  <span class="nt">&quot;detail_url&quot;</span><span class="p">:</span> <span class="s2">&quot;http://www.amazon.com/&quot;</span><span class="p">,</span>
+  <span class="nt">&quot;image_url&quot;</span><span class="p">:</span> <span class="s2">&quot;http://ecx.images-amazon.com/&quot;</span><span class="p">,</span>
+  <span class="nt">&quot;author&quot;</span><span class="p">:</span> <span class="s2">&quot;Hans Wehr&quot;</span><span class="p">,</span>
+  <span class="nt">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;Arabic-English Dictionary: The Hans Wehr Dictionary of Modern Written Arabic&quot;</span><span class="p">,</span>
+  <span class="nt">&quot;has_image&quot;</span><span class="p">:</span> <span class="s2">&quot;True&quot;</span><span class="p">,</span>
+<span class="p">}</span>
+</pre></div>
+</td></tr></table></div>
+<p>Explanation:</p>
+<blockquote>
+<div><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">type:</th><td class="field-body">indicates json object of type &#8220;textbook&#8221;</td>
+</tr>
+</tbody>
+</table>
+</div></blockquote>
 </div>
 <div class="section" id="evaluation">
 <h3>Evaluation<a class="headerlink" href="#evaluation" title="Permalink to this headline">¶</a></h3>
@@ -592,7 +668,9 @@ udub    University of Washington in Seattle
 3
 4
 5
-6</pre></div></td><td class="code"><div class="highlight"><pre><span></span><span class="p">{</span>
+6
+7</pre></div></td><td class="code"><div class="highlight"><pre><span></span><span class="p">{</span>
+  <span class="nt">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;eval&quot;</span><span class="p">,</span>
   <span class="nt">&quot;score&quot;</span><span class="p">:</span> <span class="mf">4.7</span><span class="p">,</span>
   <span class="nt">&quot;summary&quot;</span><span class="p">:</span> <span class="s2">&quot;text of evaluation&quot;</span><span class="p">,</span>
   <span class="nt">&quot;professors&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;Peter Froelich&quot;</span><span class="p">],</span>
@@ -600,6 +678,17 @@ udub    University of Washington in Seattle
 <span class="p">}</span>
 </pre></div>
 </td></tr></table></div>
+<p>Explanation:</p>
+<blockquote>
+<div><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">type:</th><td class="field-body">indicates json object of type &#8220;eval&#8221;(uation)</td>
+</tr>
+</tbody>
+</table>
+</div></blockquote>
 </div>
 <div class="section" id="all">
 <h3>All<a class="headerlink" href="#all" title="Permalink to this headline">¶</a></h3>
