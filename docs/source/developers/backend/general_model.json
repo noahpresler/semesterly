@@ -1,0 +1,144 @@
+[
+	{
+		"course": {
+			"type": "course",
+			"school": "jhu",
+			"code": "EN.600.418",
+			"name": "Operating Systems",
+			"credits": 3,
+			"department": {
+				"code": "CS",
+				"name": "Computer Science"
+			},
+			"description": ["This course covers the fundamental topics related to operating systems theory and practice. Topics include processor management, storage management, concurrency control, multi-programming and processing, device drivers, operating system components (e.g., file system, kernel), modeling and performance measurement, protection and security, and recent innovations in operating system structure. Course work includes the implementation of operating systems techniques and routines, and critical parts of a small but functional operating system."],
+			"campus": "Homewood Campus",
+			"prerequisites": ["EN.600.120", "EN.600.233", "EN.600.226", "(600.211: Unix Systems Programming is helpful as well.)", "Participants must be familiar with the UNIX environment and must be fluent in the C programming language. The course includes significant programming projects; without prior development experience you'll probably get lost in a maze of low-level code."],
+			"corequisites": [""],
+			"exclusions": ["EN.600.318"],
+			"areas": ["E", "CS Systems"],
+			"level": "400",
+			"cores": [""],
+			"geneds": [""],
+			"related": ["EN.600.318", "EN.600.320", "EN.600.420"],
+			"homepage": "http://gaming.jhu.edu/~phf/2016/fall/cs318/",
+
+			"sections": [
+				{
+					"type": "section",
+					"name": "01",
+					"term": "Fall",
+					"year": 2016,
+					"capacity": 25,
+					"enrollment": 23,
+					"remaining": -1,
+					"waitlist": 0,
+					"waitlist_size": -1,
+					"type": ["Lecture"],
+					"instructors": [
+						"P. Froelich", // first one is primary 
+						{
+							"title": "CA",
+							"name": "Miller, Michael N.",
+							"email": "mmill178@jhu.edu",
+							"homepage": "http://michaelnmiller.me"
+						},
+					],
+					"fees": 0.00,
+
+					"final_exam": {
+						"date": "12/15/16", // must fulfill date regex and check
+						"campus": "Homewood Campus",
+						"location": "Shaffer 300",
+						"time_start": "10:00",
+						"time_end": "10:50"
+					}, // could also be a bool
+
+					"offerings": [
+						{
+							"type": "offering",
+							"days": ["M", "W", "F"], // can also include dates
+							"time_start": "10:00", // 24 hour time
+							"time_end": "10:50",
+							"campus": "Homewood Campus",
+							"location": "Shaffer 300"
+						},
+					],
+
+					"textbook links": [
+						{
+							"type": "textbook link",
+							"isbn": 9780879500030,
+							"required": true,
+						},
+						{
+							"type": "textbook link",
+							"isbn": 9780879500030,
+							"required": false,
+						},
+					]
+				},
+			],
+
+			"evals": [
+				{
+					"type": "evals",
+					"score": 4.4,
+					"summary": "text of evaluation",
+					"professors": ["P. Froelich"],
+					"term_year": "Spring 2016"
+				},
+			],
+		},
+
+		"sections": [
+			{
+				"course": "FAH487H1",
+				"NOTE": "<< same as section above >>"
+			},
+		],
+
+		"offerings": [
+			{
+				"course": "EN.600.418",
+				"section": "01",
+				"NOTE": "<< same as section above >>"
+			},
+		],
+
+		"evals": [
+			{
+				"course": "EN.600.418",
+				"NOTE": "<< same as evals in course >>"
+			},
+		],
+
+		"textbook_links": [
+			{
+				"section": "01",
+				"course": "EN.600.418",
+				"NOTE": "<< same as textbook in section >>"
+			},
+		],
+	},
+]
+
+//evals
+[
+	{
+		"course": "FAH487H1",
+		"NOTE": "<< same as evals in model >>"
+	},
+],
+
+// textbooks
+[
+	{
+		"type": "textbook",
+		"isbn": 9780879500030,
+		"detail_url": "http://www.amazon.com/",
+		"image_url": "http://ecx.images-amazon.com/",
+		"author": "Hans Wehr",
+		"title": "Arabic-English Dictionary: The Hans Wehr Dictionary of Modern Written Arabic",
+		"has_image": "True"
+	},
+],
