@@ -199,6 +199,7 @@ A list of textbooks (links) associated with a given course section.
 .. literalinclude:: includes/textbook_link.json
     :language: json
     :linenos:
+    :emphasize-lines: 2-5
 
 Explanation:
 
@@ -206,7 +207,7 @@ Explanation:
     :course_code: the course that the textbook link applies to. Must satisify the course_code_regex defined in ``config.json``, must have already been defined the in a ``course`` listing, or may be omitted if nested within ``course`` listing.
     :section: the section that the textbook link applies to. Must already have defined a valid ``course`` that has a ``section`` defined that matches. May be omitted if nested within ``section`` listing.
     :isbn: isbn of textbook to link to.
-    :required: a bool indicating whether a textbook is required for a section or not.
+    :required: a bool indicating whether a textbook is required for a section or not. Defaults to true.
 
 
 Evaluation
@@ -214,14 +215,16 @@ Evaluation
 .. literalinclude:: includes/eval.json
     :language: json
     :linenos:
+    :emphasize-lines: 2-3
 
 Explanation:
 
     :kind: indicates json object of kind "eval"(uation).
     :course_code: the course the evaluation refers to. Must satisify the course_code_regex defined in ``config.json``, must have already been defined the in a ``course`` listing, or may be omitted if nested within ``course`` listing.
-    :score: an integer or float score out of *5* stars for the course.
+    :score: an integer or float score out of 5 (stars) for the course.
     :summary: the text of the evaluation.
     :instructor: instructors of the course. May be list dictionary as defined in ``section``.
+    :term_year: the term and year the evaluation pertains to.
 
 Textbook
 ~~~~~~~~~
@@ -230,14 +233,52 @@ This should be handled in our amazon textbook library methods. **Leaving out dis
 .. literalinclude:: includes/textbook.json
     :language: json
     :linenos:
+    :emphasize-lines: 2-3
 
 Explanation:
 
     :kind: indicates json object of kind ``textbook``.
 
 
-All
-~~~~
+Nesting and Omissions
+~~~~~~~~~~~~~~~~~~~~~
+The json objects defined above can handle reasonable nesting schemes. Furthermore, there often exists cases where nesting may allow (*but not enforce*) you to omit some fields from the json objects. The fields that can be omitted will usually be *obviously* redundant. For example, you can nest sections within a ``course`` object and omit the ``course_code`` field in the ``section`` object.
+
+.. highlight:: none
+
+::
+
+    {
+        "kind": "course",
+        ...
+        "sections": [
+            {
+                "kind": "section",
+                ...
+            },
+            {
+                "kind": "section",
+                ...
+            }
+        ]
+
+    }
+
+Nested objects must always be json lists, ``[]``. Specific labels associated with the nesting - in the case above ``"sections"`` - are strictly defined below:
+
+    =============   ============== ===== =============   =================
+    kind            nesting label  type  parent          allowed omissions
+    =============   ============== ===== =============   =================
+    section         sections       []    course          kind, course_code
+    offering        offerings      []    section         kind, course_code, section_name
+    offering        offerings      []    course          kind, course_code
+    textbook_link   textbook_links []    course          kind, course_code, section_name
+    eval            evals          []    course          kind, course_code
+    textbook        textbook       {}    textbook_link   kind
+    =============   ============== ===== =============   =================
+
+Note that though a field may be omitted, as per the rules above, **if defined**, the field **must satisfy** all requirements set in its basis definition. Furthermore, if not omitted, a nesting label **must** agree with the ``kind`` defined.
+
 
 Utilities
 ----------------------
