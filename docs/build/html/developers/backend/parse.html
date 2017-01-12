@@ -106,7 +106,7 @@
 <li class="toctree-l3"><a class="reference internal" href="#textbook-link">Textbook Link</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#evaluation">Evaluation</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#textbook">Textbook</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#all">All</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#nesting-and-omissions">Nesting and Omissions</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="#utilities">Utilities</a><ul>
@@ -655,11 +655,11 @@ udub    University of Washington in Seattle
 5
 6
 7</pre></div></td><td class="code"><div class="highlight"><pre><span></span><span class="p">{</span>
-  <span class="nt">&quot;kind&quot;</span><span class="p">:</span> <span class="s2">&quot;textbook link&quot;</span><span class="p">,</span>
-  <span class="nt">&quot;course_code&quot;</span><span class="p">:</span> <span class="s2">&quot;EN.600.418&quot;</span><span class="p">,</span>
-  <span class="nt">&quot;section&quot;</span><span class="p">:</span> <span class="s2">&quot;01&quot;</span><span class="p">,</span>
-  <span class="nt">&quot;isbn&quot;</span><span class="p">:</span> <span class="mi">9780879500030</span><span class="p">,</span>
-  <span class="nt">&quot;required&quot;</span><span class="p">:</span> <span class="kc">true</span><span class="p">,</span>
+<span class="hll">  <span class="nt">&quot;kind&quot;</span><span class="p">:</span> <span class="s2">&quot;textbook_link&quot;</span><span class="p">,</span>
+</span><span class="hll">  <span class="nt">&quot;course_code&quot;</span><span class="p">:</span> <span class="s2">&quot;EN.600.418&quot;</span><span class="p">,</span>
+</span><span class="hll">  <span class="nt">&quot;section_name&quot;</span><span class="p">:</span> <span class="s2">&quot;01&quot;</span><span class="p">,</span>
+</span><span class="hll">  <span class="nt">&quot;isbn&quot;</span><span class="p">:</span> <span class="mi">9780879500030</span><span class="p">,</span>
+</span>  <span class="nt">&quot;required&quot;</span><span class="p">:</span> <span class="kc">true</span><span class="p">,</span>
 <span class="p">}</span>
 </pre></div>
 </td></tr></table></div>
@@ -677,7 +677,7 @@ udub    University of Washington in Seattle
 </tr>
 <tr class="field-even field"><th class="field-name">isbn:</th><td class="field-body">isbn of textbook to link to.</td>
 </tr>
-<tr class="field-odd field"><th class="field-name">required:</th><td class="field-body">a bool indicating whether a textbook is required for a section or not.</td>
+<tr class="field-odd field"><th class="field-name">required:</th><td class="field-body">a bool indicating whether a textbook is required for a section or not. Defaults to true.</td>
 </tr>
 </tbody>
 </table>
@@ -693,9 +693,9 @@ udub    University of Washington in Seattle
 6
 7
 8</pre></div></td><td class="code"><div class="highlight"><pre><span></span><span class="p">{</span>
-  <span class="nt">&quot;kind&quot;</span><span class="p">:</span> <span class="s2">&quot;eval&quot;</span><span class="p">,</span>
-  <span class="nt">&quot;course_code&quot;</span><span class="p">:</span> <span class="s2">&quot;EN.600.418&quot;</span><span class="p">,</span>
-  <span class="nt">&quot;score&quot;</span><span class="p">:</span> <span class="mf">4.7</span><span class="p">,</span>
+<span class="hll">  <span class="nt">&quot;kind&quot;</span><span class="p">:</span> <span class="s2">&quot;eval&quot;</span><span class="p">,</span>
+</span><span class="hll">  <span class="nt">&quot;course_code&quot;</span><span class="p">:</span> <span class="s2">&quot;EN.600.418&quot;</span><span class="p">,</span>
+</span>  <span class="nt">&quot;score&quot;</span><span class="p">:</span> <span class="mf">4.7</span><span class="p">,</span>
   <span class="nt">&quot;summary&quot;</span><span class="p">:</span> <span class="s2">&quot;text of evaluation&quot;</span><span class="p">,</span>
   <span class="nt">&quot;instructors&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;Peter Froelich&quot;</span><span class="p">],</span>
   <span class="nt">&quot;term_year&quot;</span><span class="p">:</span> <span class="s2">&quot;Spring 2016&quot;</span><span class="p">,</span>
@@ -712,11 +712,13 @@ udub    University of Washington in Seattle
 </tr>
 <tr class="field-even field"><th class="field-name">course_code:</th><td class="field-body">the course the evaluation refers to. Must satisify the course_code_regex defined in <code class="docutils literal"><span class="pre">config.json</span></code>, must have already been defined the in a <code class="docutils literal"><span class="pre">course</span></code> listing, or may be omitted if nested within <code class="docutils literal"><span class="pre">course</span></code> listing.</td>
 </tr>
-<tr class="field-odd field"><th class="field-name">score:</th><td class="field-body">an integer or float score out of <em>5</em> stars for the course.</td>
+<tr class="field-odd field"><th class="field-name">score:</th><td class="field-body">an integer or float score out of 5 (stars) for the course.</td>
 </tr>
 <tr class="field-even field"><th class="field-name">summary:</th><td class="field-body">the text of the evaluation.</td>
 </tr>
 <tr class="field-odd field"><th class="field-name">instructor:</th><td class="field-body">instructors of the course. May be list dictionary as defined in <code class="docutils literal"><span class="pre">section</span></code>.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">term_year:</th><td class="field-body">the term and year the evaluation pertains to.</td>
 </tr>
 </tbody>
 </table>
@@ -733,9 +735,9 @@ udub    University of Washington in Seattle
 6
 7
 8</pre></div></td><td class="code"><div class="highlight"><pre><span></span><span class="p">{</span>
-  <span class="nt">&quot;kind&quot;</span><span class="p">:</span> <span class="s2">&quot;textbook&quot;</span><span class="p">,</span>
-  <span class="nt">&quot;isbn&quot;</span><span class="p">:</span> <span class="mi">9780879500030</span><span class="p">,</span>
-  <span class="nt">&quot;detail_url&quot;</span><span class="p">:</span> <span class="s2">&quot;http://www.amazon.com/&quot;</span><span class="p">,</span>
+<span class="hll">  <span class="nt">&quot;kind&quot;</span><span class="p">:</span> <span class="s2">&quot;textbook&quot;</span><span class="p">,</span>
+</span><span class="hll">  <span class="nt">&quot;isbn&quot;</span><span class="p">:</span> <span class="mi">9780879500030</span><span class="p">,</span>
+</span>  <span class="nt">&quot;detail_url&quot;</span><span class="p">:</span> <span class="s2">&quot;http://www.amazon.com/&quot;</span><span class="p">,</span>
   <span class="nt">&quot;image_url&quot;</span><span class="p">:</span> <span class="s2">&quot;http://ecx.images-amazon.com/&quot;</span><span class="p">,</span>
   <span class="nt">&quot;author&quot;</span><span class="p">:</span> <span class="s2">&quot;Hans Wehr&quot;</span><span class="p">,</span>
   <span class="nt">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;Arabic-English Dictionary: The Hans Wehr Dictionary of Modern Written Arabic&quot;</span><span class="p">,</span>
@@ -754,8 +756,86 @@ udub    University of Washington in Seattle
 </table>
 </div></blockquote>
 </div>
-<div class="section" id="all">
-<h3>All<a class="headerlink" href="#all" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="nesting-and-omissions">
+<h3>Nesting and Omissions<a class="headerlink" href="#nesting-and-omissions" title="Permalink to this headline">¶</a></h3>
+<p>The json objects defined above can handle reasonable nesting schemes. Furthermore, there often exists cases where nesting may allow (<em>but not enforce</em>) you to omit some fields from the json objects. The fields that can be omitted will usually be <em>obviously</em> redundant. For example, you can nest sections within a <code class="docutils literal"><span class="pre">course</span></code> object and omit the <code class="docutils literal"><span class="pre">course_code</span></code> field in the <code class="docutils literal"><span class="pre">section</span></code> object.</p>
+<div class="highlight-none"><div class="highlight"><pre><span></span>{
+    &quot;kind&quot;: &quot;course&quot;,
+    ...
+    &quot;sections&quot;: [
+        {
+            &quot;kind&quot;: &quot;section&quot;,
+            ...
+        },
+        {
+            &quot;kind&quot;: &quot;section&quot;,
+            ...
+        }
+    ]
+
+}
+</pre></div>
+</div>
+<p>Nested objects must always be json lists, <code class="docutils literal"><span class="pre">[]</span></code>. Specific labels associated with the nesting - in the case above <code class="docutils literal"><span class="pre">&quot;sections&quot;</span></code> - are strictly defined below:</p>
+<blockquote>
+<div><table border="1" class="docutils">
+<colgroup>
+<col width="17%" />
+<col width="18%" />
+<col width="7%" />
+<col width="17%" />
+<col width="41%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">kind</th>
+<th class="head">nesting label</th>
+<th class="head">type</th>
+<th class="head">parent</th>
+<th class="head">allowed omissions</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>section</td>
+<td>sections</td>
+<td>[]</td>
+<td>course</td>
+<td>kind, course_code</td>
+</tr>
+<tr class="row-odd"><td>offering</td>
+<td>offerings</td>
+<td>[]</td>
+<td>section</td>
+<td>kind, course_code, section_name</td>
+</tr>
+<tr class="row-even"><td>offering</td>
+<td>offerings</td>
+<td>[]</td>
+<td>course</td>
+<td>kind, course_code</td>
+</tr>
+<tr class="row-odd"><td>textbook_link</td>
+<td>textbook_links</td>
+<td>[]</td>
+<td>course</td>
+<td>kind, course_code, section_name</td>
+</tr>
+<tr class="row-even"><td>eval</td>
+<td>evals</td>
+<td>[]</td>
+<td>course</td>
+<td>kind, course_code</td>
+</tr>
+<tr class="row-odd"><td>textbook</td>
+<td>textbook</td>
+<td>{}</td>
+<td>textbook_link</td>
+<td>kind</td>
+</tr>
+</tbody>
+</table>
+</div></blockquote>
+<p>Note that though a field may be omitted, as per the rules above, <strong>if defined</strong>, the field <strong>must satisfy</strong> all requirements set in its basis definition. Furthermore, if not omitted, a nesting label <strong>must</strong> agree with the <code class="docutils literal"><span class="pre">kind</span></code> defined.</p>
+<p>Note that <code class="docutils literal"><span class="pre">textbook</span></code> cannot be nested</p>
 </div>
 </div>
 <div class="section" id="utilities">
