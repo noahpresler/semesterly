@@ -1,5 +1,5 @@
 {
-  "type": "course",
+  "kind": "course",
   "school_code": "jhu",
   "course_code": "EN.600.418",
   "name": "Operating Systems",
@@ -29,6 +29,6 @@
   "level": "400",
   "cores": [""],
   "geneds": [""],
-  "related": ["EN.600.318", "EN.600.320", "EN.600.420"],
-  "homepage": "http://gaming.jhu.edu/~phf/2016/fall/cs318/"
+  "homepage": "http://gaming.jhu.edu/~phf/2016/fall/cs318/",
+  "related": ["EN.600.318", "EN.600.320", "EN.600.420"]
 }
