@@ -1,0 +1,12 @@
+[
+    {
+      "type": "textbook link",
+      "textbook": 9780879500030,
+      "required": true,
+    },
+    {
+      "type": "textbook link",
+      "textbook": 9780879500030,
+      "required": false,
+    },
+]
