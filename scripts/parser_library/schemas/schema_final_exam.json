@@ -1,0 +1,41 @@
+{
+	"$schema": "http://json-schema.org/draft-04/schema#",
+	"title": "Final Exam",
+	"description": "Semesterly Final Exam JSON definition",
+	"type": "object",
+	"properties": {
+		"date": {
+			"type": "string",
+			"pattern": "[0-9]{2}/[0-9]{2}/[0-9]{4}"
+		},
+		"time_start": {
+			"type": "string",
+			"pattern": "^([01]\\d|2[0-3]):?([0-5]\\d)$"
+		},
+		"time_end": {
+			"type": "string",
+			"pattern": "^([01]\\d|2[0-3]):?([0-5]\\d)$"
+		},
+		"campus": {
+			"type": "string"
+		},
+		"location": {
+			"type": "string"
+		}
+	},
+	"additionalProperties": false,
+	"anyOf": [
+		{
+			"required": [
+				"date"
+			]
+		},
+		{
+			"required": [
+				"date",
+				"time_start",
+				"time_end"
+			]
+		}
+	]
+}
