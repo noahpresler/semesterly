@@ -7,6 +7,7 @@ import json
 
 class Ingestor:
 
+    # TODO - abstract dictionary methods into ABC
     def __init__(self, school):
         self.map = {}
         self.school = school
@@ -55,6 +56,7 @@ class Ingestor:
             json object model for a course
         '''
         course = {
+            'kind': 'course',
             'school_code': self.school,
             'course_code': self.map['code'],
             'name': self.map['name'],
@@ -67,52 +69,53 @@ class Ingestor:
             'areas': self.map.get('areas'),
             'level': self.map.get('level'),
             'cores': self.map.get('cores'),
-            'geneds': self.map.get('geneds')
+            'geneds': self.map.get('geneds'),
+            'sections': self.map.get('sections')
         }
         course = Ingestor.cleandict(course)
         print json.dumps(course, sort_keys=True, indent=4, separators=(',', ': '))
-        return json.dumps(course)
+        return course
 
-    @staticmethod
-    def cleandict(d):
-        if not isinstance(d, dict):
-            return d
-        return dict((k, Ingestor.cleandict(v)) for k,v in d.iteritems() if v is not None)
+    def create_section(self, course):
+        ''' Create section json object from info in model map. 
 
-    def create_section(self, course_json):
-        ''' Create section in database from info in model map. 
-        
         Args:
-            course_model: django course model object
-
-        Keyword args:
-            clean (boolean): removes course offerings associated with section if set
+            course: course info mapping
 
         Returns:
             json object model for a section
         '''
         section = {
-            course = course_model,
-            semester = self.map['term'],
-            meeting_section = self.map['section'],
-            defaults = {
-                'instructors': self.map.get('instrs'),
-                'size': self.map.get('size'),
-                'enrolment': self.map.get('enrolment'),
-                'waitlist': self.map.get('waitlist', -1),
-                'section_type': self.map.get('section_type', 'X')
-            }
-        )
+            'kind': 'section',
+            'course_code': course['course_code'],
+            'name': self.map['section'],
+            'term': self.map['term'],
+            'year': self.map.get('year', ''), # NOTE: should be required
+            'instructors': self.map.get('instrs'),
+            'capacity': self.map.get('size'),
+            'enrollment': self.map.get('enrolment'), #NOTE: change to enrollment
+            'waitlist': self.map.get('waitlist', -1),
+            'waitlist_size': self.map.get('waitlist_size', -1),
+            'remaining_seats': self.map.get('remaining_seats'),
+            'type': self.map.get('section_type'),
+            'fees': self.map.get('fees'),
+            'final_exam': self.map.get('final_exam'),
+            'offerings': self.map.get('offerings')
+        }
 
-        if clean:
-            Model.remove_offerings(section)
+        section = Ingestor.cleandict(section)
+        print json.dumps(section, sort_keys=True, indent=4, separators=(',', ': '))
         return section
 
     def create_offerings(self, section_model):
         ''' Create offering in database from info in model map.
 
         Args:
-            course_model: django course model object
+            section: section info mapping
+
+        Returns:
+            json object model for a section
+
         '''
         if self.map.get('days'):
             for day in self.map.get('days'):
@@ -145,6 +148,12 @@ class Ingestor:
                 defaults={'last_updated': datetime.datetime.now()}
         )
         update_object.save()
+
+    @staticmethod
+    def cleandict(d):
+        if not isinstance(d, dict):
+            return d
+        return dict((k, Ingestor.cleandict(v)) for k,v in d.iteritems() if v is not None)
 
     @staticmethod
     def DEBUG():
