@@ -49,7 +49,7 @@
         margin-top: 0px
     } 
 
-    .fc-right button.save-timetable {
+    .fc-right button.save-to-ical .fc-right button.save-timetable {
         background-color: transparent;
         border: none;
     }
