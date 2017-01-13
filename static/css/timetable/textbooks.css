@@ -34,11 +34,11 @@
 }
 
 .textbook img {
-    position: absolute;
 	width: 90px;
 	padding: 4px 4px;
+    position: relative;
     top: 50%;
-    transform: translateY(-50%);
+    transform: translateY(-50%)
 }
 
 .textbook .required {
