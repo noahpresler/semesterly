@@ -12,20 +12,31 @@ const Textbook = ({tb}) => {
         image = <img src="/static/img/emptystates/single_textbook.png" style={{opacity: 0.5}}/>;
     }
 
-    return (
-        <a href={tb.detail_url} target="_blank" className="textbook-ctn">
-            <div className="textbook">
-                <div className="tb-image-wrapper">
-                    {image}
-                </div>
-                <div className="required">Required</div>
-                <h4>{title}</h4>
-                {exists(tb.detail_url) && 
-                    <div className="amazon-buy"><i className="fa fa-amazon" aria-hidden="true"></i> Buy or Rent</div>
-                }
+    const textbook = (
+        <div className="textbook">
+            <div className="tb-image-wrapper">
+                {image}
             </div>
-        </a>
+            <div className="required">Required</div>
+            <h4>{title}</h4>
+            {exists(tb.detail_url) && 
+                <div className="amazon-buy"><i className="fa fa-amazon" aria-hidden="true"></i> Buy or Rent</div>
+            }
+        </div>
     );
+
+    let ret = null;
+    if (exists(tb.detail_url)) {
+        ret = (
+            <a href={tb.detail_url} target="_blank" className="textbook-ctn">
+                {textbook}      
+            </a>
+        );
+    } else {
+        ret = textbook;
+    }
+
+    return ret;
 }
 
 export default Textbook;
