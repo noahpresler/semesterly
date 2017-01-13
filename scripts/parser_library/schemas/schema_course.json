@@ -1,0 +1,123 @@
+{
+	"$schema": "http://json-schema.org/draft-04/schema#",
+	"title": "Course",
+	"description": "Semesterly Course JSON definition",
+	"type": "object",
+	"properties": {
+		"kind": {
+			"type": "string"
+		},
+		"school_code": {
+			"type": "string",
+			"pattern": "([a-z0-9]*_*)*"
+		},
+		"course_code": {
+			"type": "string"
+		},
+		"name": {
+			"type": "string"
+		},
+		"campus": {
+			"type": "string"
+		},
+		"credits": {
+			"type": "number"
+		},
+		"department": {
+			"oneOf": [
+				{
+					"type": "string"
+				},
+				{
+					"type": "object",
+					"properties": {
+						"code": {
+							"type": "string"
+						},
+						"name": {
+							"type": "string"
+						}
+					},
+					"additionalProperties": false,
+					"required": [
+						"code",
+						"name"
+					]
+				}
+			]
+		},
+		"description": {
+			"oneOf": [
+				{
+					"type": "string"
+				},
+				{
+					"type": "array",
+					"items": {
+						"type": "string"
+					}
+				}
+			]
+		},
+		"prerequisites": {
+			"type": "array",
+			"items": {
+				"type": "string"
+			}
+		},
+		"corequisites": {
+			"type": "array",
+			"items": {
+				"type": "string"
+			}
+		},
+		"exclusions": {
+			"type": "array",
+			"items": {
+				"type": "string"
+			}
+		},
+		"areas": {
+			"type": "array",
+			"items": {
+				"type": "string"
+			}
+		},
+		"level": {
+			"type": "array",
+			"items": {
+				"type": "string"
+			}
+		},
+		"cores": {
+			"type": "array",
+			"items": {
+				"type": "string"
+			}
+		},
+		"geneds": {
+			"type": "array",
+			"items": {
+				"type": "string"
+			}
+		},
+		"homepage": {
+			"type": "string",
+			"pattern": "(http(s)?:\/\/.)?(www\\.)?[-a-zA-Z0-9@:%._\\+~#=]{2,256}\\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\\+.~#?&//=]*)"
+		},
+		"related": {
+			"type": "array",
+			"items": {
+				"type": "string"
+			}
+		}
+	},
+	"additionalProperties": false,
+	"required": [
+		"school_code",
+		"course_code",
+		"name",
+		"credits",
+		"department"
+	]
+}
