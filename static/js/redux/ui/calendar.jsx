@@ -96,8 +96,13 @@ class Calendar extends React.Component {
     					className="save-timetable">
     		<i className="fa fa-cog" />
     	</button>
-    )
-
+    );
+    let saveToCalendarButton = (
+    	<button onClick={() => this.props.createiCalfromTimetable(this.props.active)}
+    					className="save-timetable">
+    		<i className="fa fa-download" />
+    	</button>
+	);
 		return (
 	      <div id="calendar" className="fc fc-ltr fc-unthemed week-calendar">
 	        <div className="fc-toolbar no-print">
@@ -109,6 +114,7 @@ class Calendar extends React.Component {
 	          	{ shareLink }
 	          	{ addButton }
 	          	{ saveButton }
+	          	{ saveToCalendarButton }
 	          	{ preferenceButton }
 	          </div>
 	          <div className="fc-center" />
