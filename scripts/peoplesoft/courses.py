@@ -35,7 +35,7 @@ class PeopleSoftParser:
 		'ICNAVTYPEDROPDOWN': '0'
 	}
 
-	def __init__(self, school, url, do_tbks=False):
+	def __init__(self, school, url, do_tbks=True):
 		self.base_url = url
 		self.do_tbks = do_tbks
 		self.course = Model(school)
