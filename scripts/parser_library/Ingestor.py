@@ -105,7 +105,6 @@ class Ingestor:
 
         section = Ingestor.cleandict(section)
         print json.dumps(section, sort_keys=True, indent=4, separators=(',', ': '))
-
         return section
 
     def create_offerings(self, section_model):
@@ -119,7 +118,6 @@ class Ingestor:
 
         Returns:
             json object model for a section
-
 
         '''
 
