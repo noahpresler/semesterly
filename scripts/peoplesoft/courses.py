@@ -10,6 +10,7 @@ from scripts.textbooks.amazon import make_textbook
 from scripts.parser_library.Requester import Requester
 from scripts.parser_library.Extractor import *
 from scripts.parser_library.Model import Model
+from scripts.parser_library.Ingestor import Ingestor
 
 class PeopleSoftParser:
 
@@ -38,7 +39,7 @@ class PeopleSoftParser:
 	def __init__(self, school, url, do_tbks=True):
 		self.base_url = url
 		self.do_tbks = do_tbks
-		self.course = Model(school)
+		self.course = Ingestor(school) # Model(School)
 		self.requester = Requester()
 		self.actions = {
 			'adv_search':	'DERIVED_CLSRCH_SSR_EXPAND_COLLAPS$149$$1',
