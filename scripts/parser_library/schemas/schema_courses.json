@@ -7,7 +7,7 @@
 		"title": "Course",
 		"type": "object",
 		"properties": {
-
+			"$ref": "schema_course.json",
 		}
 	}
 }
