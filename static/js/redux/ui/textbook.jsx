@@ -15,7 +15,9 @@ const Textbook = ({tb}) => {
     return (
         <a href={tb.detail_url} target="_blank" className="textbook-ctn">
             <div className="textbook">
-                {image}
+                <div className="tb-image-wrapper">
+                    {image}
+                </div>
                 <div className="required">Required</div>
                 <h4>{title}</h4>
                 {exists(tb.detail_url) && 
