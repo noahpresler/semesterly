@@ -151,6 +151,7 @@ Explanation:
     :course_code: must satisify the course_code_regex defined in ``config.json``, must have already been defined the in a ``course`` listing, or may be left out if nested within ``course`` listing.
     :section_name: the identifier of a section.
     :term: must match a term defined in ``config.json``.
+    :year: the year that the section is offered. Must be in ``YYYY`` format.
     :capacity: the max seats available in a section.
     :enrollment: the current number of students enrolled in a section.
     :waitlist: the number of students on the waitlist.
