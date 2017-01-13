@@ -2,7 +2,7 @@ import { connect } from 'react-redux';
 import Calendar from '../calendar.jsx';
 import { saveTimetable } from '../../actions/user_actions.jsx';
 import { handleCreateNewTimetable } from '../../actions/timetable_actions.jsx';
-import { fetchShareTimetableLink } from '../../actions/calendar_actions.jsx';
+import { fetchShareTimetableLink, createiCalfromTimetable } from '../../actions/calendar_actions.jsx';
 
 const getMaxHourBasedOnWindowHeight = () => {
   let calRow = $(".cal-row");
@@ -53,6 +53,7 @@ const mapStateToProps = (state) => {
       isFetchingShareLink,
       shareLink,
       shareLinkValid,
+      active,
 	}
 }
 const mapDispatchToProps = (dispatch) => {
@@ -60,7 +61,8 @@ const mapDispatchToProps = (dispatch) => {
     saveTimetable: () => dispatch(saveTimetable()),
     fetchShareTimetableLink: () => dispatch(fetchShareTimetableLink()),
     togglePreferenceModal: () => dispatch({ type: 'TOGGLE_PREFERENCE_MODAL' }),
-    handleCreateNewTimetable,    
+    handleCreateNewTimetable,
+    createiCalfromTimetable
   }
 }
 
