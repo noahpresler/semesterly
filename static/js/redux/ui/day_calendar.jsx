@@ -128,6 +128,12 @@ class DayCalendar extends React.Component {
 				</div>
     		</div>
     	});
+    	let saveToCalendarButton = (
+	    	<button onClick={() => console.log('clicked')}
+	    					className="save-to-ical">
+	    		<i className="fa fa-calendar-plus-o" />
+	    	</button>
+		);
 
 		return (
 	      <div id="calendar" className="fc fc-ltr fc-unthemed day-calendar">
@@ -141,6 +147,7 @@ class DayCalendar extends React.Component {
 	          	{ addButton }
 	          	{ saveButton }
 	          	{ preferenceButton }
+	          	{ saveToCalendarButton }
 	          </div>
 	          <div className="fc-center" />
 	          <div className="fc-clear cf">
