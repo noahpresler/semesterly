@@ -489,3 +489,7 @@ export function addIntegration(integrationID, courseID, json) {
 		})
 		.then(response => response.json());
 }
+
+export function createiCal(timetable) {
+	console.log(timetable)
+}
