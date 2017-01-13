@@ -1,0 +1,63 @@
+{
+	"$schema": "http://json-schema.org/draft-04/schema#",
+	"title": "config.json",
+	"description": "Semesterly config.json definition",
+	"type": "object",
+	"properties": {
+		"school_code": {
+			"type": "string",
+			"pattern": "([a-z0-9]*_*)*"
+		},
+		"name": {
+			"type": "string"
+		},
+		"textbooks": {
+			"type": "boolean"
+		},
+		"evals": {
+			"type": "boolean"
+		},
+		"time24": {
+			"type": "boolean"
+		},
+		"live_data": {
+			"type": "boolean"
+		},
+		"course_code_regex": {
+			"type": "string"
+		},
+		"time_granularity": {
+			"type": "integer"
+		},
+		"terms": {
+			"type": "array",
+			"items": {
+				"type": "string"
+			}
+		},
+		"registration_groupings": {
+			"type": "array",
+			"items": {
+				"type": "array",
+				"items": {
+					"type": "string",
+				}
+			}
+		},
+		"campuses": {
+			"type": "array",
+			"items": {
+				"type": "string"
+			}
+		}
+	},
+	"additionalProperties": false,
+	"required": [
+		"school_code",
+		"name",
+		"textbooks",
+		"evals",
+		"course_code_regex",
+		"terms"
+	]
+}

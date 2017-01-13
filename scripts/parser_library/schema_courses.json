@@ -1,0 +1,15 @@
+{
+	"$schema": "http://json-schema.org/draft-04/schema#",
+	"title": "Courses",
+	"description": "Courses full definition",
+	"type": "array",
+	"items": {
+		"title": "Course",
+		"type": "object",
+		"properties": {
+
+		}
+	}
+}
+
+//https://spacetelescope.github.io/understanding-json-schema/structuring.html
