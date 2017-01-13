@@ -1,11 +1,11 @@
 {
 	"$schema": "http://json-schema.org/draft-04/schema#",
-	"title": "Course",
+	"title": "Section",
 	"description": "Semesterly Section JSON definition",
 	"type": "object",
 	"properties": {
 		"kind": {
-			"type": "string"
+			"enum": ["section"]
 		},
 		"course_code": {
 			"type": "string"
@@ -36,17 +36,17 @@
 			"type": "integer"
 		},
 		"type": {
-			"type": "string",
-			"enum": ["Lecture", "Lab", "Tutorial"]
+			"type": "string"
 		},
 		"fees": {
 			"oneOf": [
 				{
 					"type": "string",
-					"pattern": "\\d(.\\d\\d)?"
+					"pattern": "\\d(.\\d{2})?"
 				},
 				{
-					"type": "number"
+					"type": "number",
+					"minimum": 0
 				}
 			]
 		},
@@ -58,12 +58,32 @@
 						"type": "string"
 					},
 					{
-						"type": "object"
+						"type": "object",
+						"properties": {
+							"name": {
+								"type": "string"
+							},
+							"title": {
+								"type": "string"
+							},
+							"email": {
+								"type": "string",
+								"pattern": "(^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\\.[a-zA-Z0-9-.]+$)"
+							},
+							"homepage": {
+								"type": "string",
+								"pattern": "(http(s)?:\/\/.)?(www\\.)?[-a-zA-Z0-9@:%._\\+~#=]{2,256}\\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\\+.~#?&//=]*)"
+							}
+						},
+						"additionalProperties": false,
+						"required": [ "name" ]
 					}
 				]
 			}
+		},
+		"final_exam": {
+			"$ref": "schema_final_exam.json#/"
 		}
-
 	},
 	"additionalProperties": false,
 	"required": [
