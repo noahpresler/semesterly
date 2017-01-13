@@ -90,16 +90,17 @@ export function createiCalfromTimetable(active) {
 			let end = getNextDayOfWeek(sem_start,slot.day);
 			let until = getNextDayOfWeek(sem_end,slot.day);
 
-			let times = slot.time_start.split(':')
-			start.setHours(parseInt(times[0]),parseInt(times[1]))
-			times = slot.time_end.split(':')
-			end.setHours(parseInt(times[0]),parseInt(times[1]))
+			let times = slot.time_start.split(':');
+			start.setHours(parseInt(times[0]),parseInt(times[1]));
+			times = slot.time_end.split(':');
+			end.setHours(parseInt(times[0]),parseInt(times[1]));
+			let description = course.description ?  course.description : '';
 
 			let event = cal.createEvent({
 			    start: start,
 			    end: end,
 			    summary: slot.name + " " + slot.code + slot.meeting_section,
-			    description: slot.code + slot.meeting_section + '\n' + instructors + course.description,
+			    description: slot.code + slot.meeting_section + '\n' + instructors + description,
 			    location: slot.location,
 			    url: getCourseShareLink(slot.code)
 			});
