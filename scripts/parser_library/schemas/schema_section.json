@@ -1,0 +1,75 @@
+{
+	"$schema": "http://json-schema.org/draft-04/schema#",
+	"title": "Course",
+	"description": "Semesterly Section JSON definition",
+	"type": "object",
+	"properties": {
+		"kind": {
+			"type": "string"
+		},
+		"course_code": {
+			"type": "string"
+		},
+		"name": {
+			"type": "string"
+		},
+		"term": {
+			"type": "string"
+		},
+		"year": {
+			"type": "integer",
+			"pattern": "/(201[0-9])/"
+		},
+		"capacity": {
+			"type": "integer"
+		},
+		"enrollment": {
+			"type": "integer"
+		},
+		"waitlist": {
+			"type": "integer"
+		},
+		"waitlist_size": {
+			"type": "integer"
+		},
+		"remaining_seats": {
+			"type": "integer"
+		},
+		"type": {
+			"type": "string",
+			"enum": ["Lecture", "Lab", "Tutorial"]
+		},
+		"fees": {
+			"oneOf": [
+				{
+					"type": "string",
+					"pattern": "\\d(.\\d\\d)?"
+				},
+				{
+					"type": "number"
+				}
+			]
+		},
+		"instructors": {
+			"type": "array",
+			"items": {
+				"oneOf": [
+					{
+						"type": "string"
+					},
+					{
+						"type": "object"
+					}
+				]
+			}
+		}
+
+	},
+	"additionalProperties": false,
+	"required": [
+		"section",
+		"term",
+		"year",
+		"instructors"
+	]
+}
