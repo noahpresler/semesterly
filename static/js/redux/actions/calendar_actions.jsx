@@ -3,7 +3,7 @@ import { getActiveTimetable } from './user_actions.jsx';
 import { store } from '../init.jsx';
 import ical from 'ical-generator';
 import { getCourseShareLink} from '../helpers/timetable_helpers.jsx';
-import fileDownload from 'react-file-download';
+import FileSaver from 'browser-filesaver';
 
 let DAY_MAP = {
 		'M' : 'mo',
@@ -95,7 +95,7 @@ export function createiCalfromTimetable(active) {
 			times = slot.time_end.split(':')
 			end.setHours(parseInt(times[0]),parseInt(times[1]))
 
-			event = cal.createEvent({
+			let event = cal.createEvent({
 			    start: start,
 			    end: end,
 			    summary: slot.name + " " + slot.code + slot.meeting_section,
@@ -112,5 +112,6 @@ export function createiCalfromTimetable(active) {
 
 		}
 	}
-	fileDownload(cal.toString(), 'my_semester.ics')
+	let file = new Blob([cal.toString()], {type: "data:text/calendar;charset=utf8,"});
+	FileSaver.saveAs(file, "my_semester.ics");
 }
