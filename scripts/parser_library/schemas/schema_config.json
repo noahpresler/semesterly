@@ -27,7 +27,9 @@
 			"type": "string"
 		},
 		"time_granularity": {
-			"type": "integer"
+			"type": "integer",
+			"minimum": 0,
+			"exclusiveMinimum": true
 		},
 		"terms": {
 			"type": "array",
