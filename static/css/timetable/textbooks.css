@@ -1,3 +1,10 @@
+.tb-image-wrapper {
+    width: 95px;
+    height: 140px;
+    position: relative;
+    overflow: hidden;
+}
+
 .textbook {
 	padding: 5px;
 	width: 95px;
@@ -27,8 +34,11 @@
 }
 
 .textbook img {
+    position: absolute;
 	width: 90px;
 	padding: 4px 4px;
+    top: 50%;
+    transform: translateY(-50%);
 }
 
 .textbook .required {
