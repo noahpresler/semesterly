@@ -106,7 +106,7 @@ Course
 .. literalinclude:: includes/course.json
     :language: json
     :linenos:
-    :emphasize-lines: 2-8
+    :emphasize-lines: 2-5,7-8
 
 Explanation:
 
@@ -116,7 +116,12 @@ Explanation:
     :name: the name of the course
     :campus: is the campus that this particular course is offered on. Must be defined in ``config.json``.
     :credits: can be any single integer or float. Set to ``-1`` if variable or undefined credits.
-    :department: is a dictionary that contains the department code and name. One of these sub-fields (code or name) is required, but both are preferred. Note that all entries per school must at least be consistent in the definition of one of these terms in all courses. This field may also be a string and in such a case will be treated as a department name.
+    :department: Optional forms:
+
+        1) a dictionary that contains the department code and name. If in this form, both fields are required.
+
+        2) may also be a string.
+
     :description: the description of the course. Optional forms:
 
         1) A list of relevant descriptions of a course. In this form, this field can easily display cases of different parts of the description (e.g. description, info, notes). 
