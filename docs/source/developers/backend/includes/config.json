@@ -1,46 +1,64 @@
 {
-	"school_code": "jhu",
-	"name": "Johns Hopkins University",
-	"time_granularity": 5,
-	"parsers_and_data": [
-		{
-			"name": "courses",
-			"parser": ["courses.py", "--quiet"],
-			"data": "data/courses.json",
-			"live_data": true,
-		},
-		{
-			"name": "textbooks",
-			"parser": ["courses.py", "--quiet", "--with_textbooks"],
-			"data": "data/courses.json"
-		},
-		{
-			"name": "evals",
-			"parser": "evals.py",
-			"data": "data/evals.json"
-		},
-		{
-			"name": "instrs",
-			"data": "data/courses.json",
-			"live_data": true,
-		},
-		{
-			"name": "finals",
-			"parser": "finals.py",
-			"data": "data/finals.json"
-		}
-	],
-	"time24": false,
-	"course_code_regex": "([A-Z]{2}\\.\\d{3}\\.\\d{3})",
-	"terms": ["Fall", "Intersession", "Spring", "Summer"],
-	"registration_groupings": [["Fall"],["Intersession"],["Spring"],["Summer"]],
-	"campuses": [
-		"Homewood Campus",
-		"Medical School",
-		"Carey Business School",
-		"Peabody Conservatory",
-		"SAIS",
-		"APL",
-		"Online",
-	],
+  "school_code": "jhu",
+  "name": "Johns Hopkins University",
+  "time_granularity": 5,
+  "parsers_and_data": [
+    {
+      "name": "courses",
+      "parser": ["courses.py", "--quiet"],
+      "data": "data/courses.json",
+      "live_data": true,
+    },
+    {
+      "name": "textbooks",
+      "parser": ["courses.py", "--quiet", "--with_textbooks"],
+      "data": "data/courses.json"
+    },
+    {
+      "name": "evals",
+      "parser": "evals.py",
+      "data": "data/evals.json"
+    },
+    {
+      "name": "instrs",
+      "data": "data/courses.json",
+    },
+    {
+      "name": "finals",
+      "parser": "finals.py",
+      "data": "data/finals.json"
+    },
+    {
+      "name": "logistics",
+      "parser": "manual",
+      "data": "data/logistics.json"
+    }
+  ],
+  "time24": false,
+  "course_code_regex": "([A-Z]{2}\\.\\d{3}\\.\\d{3})",
+  "terms": ["Fall", "Intersession", "Spring", "Summer"],
+  "registration_groupings": [["Fall"],["Intersession"],["Spring"],["Summer"]],
+  "campuses": [
+    "Homewood Campus",
+    "Medical School",
+    "Carey Business School",
+    "Peabody Conservatory",
+    "SAIS",
+    "APL",
+    "Online",
+  ],
+  "volatile": {
+    "registration_dates": [
+      ""
+    ],
+    "current": {
+      "term": "Spring",
+      "year": "2017"
+    }
+  },
+  "meta": {
+    "author": "Michael N. Miller",
+    "date": "01/13/2017",
+    "link": "semester.ly/about/emem"
+  }
 }
