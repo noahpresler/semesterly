@@ -47,3 +47,12 @@ class AnalyticsCourseSearch(models.Model):
     # areas = models.CharField(max_length=300, default='', null=True)
     # department = models.CharField(max_length=250, default='', null=True)
     # level = models.CharField(max_length=30, default='', null=True)
+
+class DeviceCookie(models.Model):
+    """
+    A cookie which is dropped on each device tracking last login. 
+    Provides analytics on the number of users we have logged in and logged out.
+    """
+    student = models.ForeignKey(Student, null=True, default=None)
+    last_online = models.DateTimeField(auto_now_add=True)
+
