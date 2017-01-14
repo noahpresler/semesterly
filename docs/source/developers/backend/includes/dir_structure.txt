@@ -4,9 +4,13 @@
     * ---- courses.py
     * ---- textbooks.py
     * ---- evals.py
+    * ---- instrs.py
+    * ---- finals.py
     | ---- misc
         | -- utils/
     | ---- data
         * -- courses.json
         * -- textbooks.json
         * -- evals.json
+        * -- instrs.json
+        * -- finals.json
