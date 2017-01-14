@@ -60,7 +60,7 @@ The ``config.json`` is used in order for all components to link up properly on t
 
 The fields displayed above are required in the ``config.json`` and must obey various other requirements:
     
-    :code: must match the directory name, discussed above.
+    :school_code: must match the directory name, discussed above. Must be unique, see :download:`list of used school codes <../school_codes.txt>`.
     :time_granularity: refers to the minimum increment of time (in minutes, multiple of 5) needed to encode all start and end times for courses.
     :textbooks: set to indicate whether this information is provided by your school/parser.
     :evals: set to indicate whether this information is provided by your school/parser.
@@ -123,16 +123,24 @@ Since all parsers get imported into the same namespace, this ensures that the gl
 Output Format
 --------------------
 
-The output of each parser will be a json representation the follows the given structure. There are a few components used in the Semesterly framework. There is the
+The output of each parser will be a JSON representation the follows defined structure. There are a few components used in the Semesterly framework. There is the
 
     1. ``course`` which describes a course as seperate from its actual setting and location. ``course`` s are local per school but are **not** local per term.
     2. ``section`` which describes a specific instance of a ``course``. Sections are local per per term.
     3. ``offering`` which are the individual times that are offered within a ``section``.
-    4. ``textbook link`` which is a link to a textbook needed for a particular ``section``.
+    4. ``textbook link`` which is a link between a textbook and a particular ``section``.
     5. ``evaluation`` which is an evaluation specific per ``section``.
     6. ``textbook`` information needed to render actual textbook. Textbooks are not local per term, nor local per school.
 
-We will go component by component explaining by example the fields and associated restrictions of each. At the end, we will put them all together. Note that **highlighted fields are required**. Setting a field equal to ``null`` is acceptable but it is treated as the equivalent of not defining the field.
+These JSON objects are modularized in such a way as to allow instances to be nested or listed side-by-side. We will go component by component explaining by example the fields and associated restrictions of each. At the end, we will put them all together. Note that **highlighted fields are required**. Setting a field equal to ``null`` is acceptable but it is treated as the equivalent of not defining the field.
+
+.. todo::
+
+    Talk about optimal format for speed.
+
+.. note::
+
+    Not all JSON properties are defined every time they are used, if they have already been described prior.
 
 Course
 ~~~~~~~~
@@ -140,7 +148,7 @@ Course
 .. literalinclude:: includes/course.json
     :language: json
     :linenos:
-    :emphasize-lines: 2-5,7-8
+    :emphasize-lines: 2,4-5,7-8
 
 Explanation:
 
@@ -177,12 +185,10 @@ Section
 .. literalinclude:: includes/section.json
     :language: json
     :linenos:
-    :emphasize-lines: 2-6,14
+    :emphasize-lines: 2,4-6,14
 
 Explanation:
 
-    :kind: indicates json object of kind ``section``
-    :course_code: must satisify the course_code_regex defined in ``config.json``, must have already been defined the in a ``course`` listing, or may be left out if nested within ``course`` listing.
     :section_code: the identifier of a section.
     :term: must match a term defined in ``config.json``.
     :year: the year that the section is offered. Must be in ``YYYY`` format.
@@ -193,7 +199,7 @@ Explanation:
     :remaining_seats: this will be automatically calculated if given -1 or left out.
     :type: could be `Lecture`, `Lab`, `Tutorial`, etc.. Defaults to `Lecture`.
     :fees: A float or string that will default to 0.00.
-    :instructurs:  a list of course instructors; the first in the list is the primary instructor. The entries in the list can take the form of
+    :instructors:  a list of course instructors; the first in the list is the primary instructor. The entries in the list can take the form of
         
         1)  a dictionary
 
@@ -206,7 +212,7 @@ Explanation:
 
     :final_exam: optional field to specify final exam information. If ``final_exam`` is defined, a ``date`` (below) must be defined as well.
 
-        :date: the (valid) date of the final exam.
+        :date: the (valid) date of the final exam. *Format: DD/MM/YYYY*
         :time_start: 24hr time.
         :time_end: 24hr time, must follow ``time_start``.
         :campus: the campus of the final exam. Note, this campus **does not** have to be defined in ``config.json``, but it is prefered.
@@ -244,10 +250,7 @@ An offering
 
 Explanation:
 
-    :kind: indicates json object of kind ``offering``
-    :course_code: must satisify the course_code_regex defined in ``config.json``, must have already been defined the in a ``course`` listing, or may be omitted if nested within ``course`` listing
-    :section_name: must already have defined a valid ``course`` that has a ``section`` defined that matches. May be omitted if nested within ``section`` listing.
-    :days: this is a list of valid days, ``M, T, W, R, F, S, U``. These days will be assumed to be repeated every week. In addition a valid date that satisfies the regex ``date regex`` and agrees with the term year provided in ``section``. Ex: ``"days": ["M", "10/02/16", "F"]``.
+    :days: this is a list of valid days, :regexp:`[M|T|W|R|F|S|U]`. These days will be assumed to be repeated every week. In addition a valid date that satisfies the regex ``date regex`` and agrees with the term year provided in ``section``. Ex: ``"days": ["M", "10/02/16", "F"]``.
     :time_start: 24-hour time.
     :time_end: 24-hour time. Must be after time_start.
     :campus: the campus must be defined in ``config.json``.
@@ -263,11 +266,9 @@ Evaluation
 
 Explanation:
 
-    :kind: indicates json object of kind "eval"(uation).
-    :course_code: the course the evaluation refers to. Must satisify the course_code_regex defined in ``config.json``, must have already been defined the in a ``course`` listing, or may be omitted if nested within ``course`` listing.
     :score: an integer or float score out of 5 (stars) for the course.
     :summary: the text of the evaluation.
-    :instructor: instructors of the course. May be list dictionary as defined in ``section``.
+    :instructor: list of instructors of a course. Elements of the list may be strings or a dictionary as defined in ``section``.
     :term_year: the term and year the evaluation pertains to.
 
 Textbook
