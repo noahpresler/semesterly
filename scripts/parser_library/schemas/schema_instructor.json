@@ -1,0 +1,35 @@
+{
+	"$schema": "http://json-schema.org/draft-04/schema#",
+	"title": "Section",
+	"description": "Semesterly Section JSON definition",
+	"type": "object",
+	"properties": {
+		"school": {
+			"type": "string"
+		},
+		"course_code": {
+			"type": "string"
+		},
+		"section_name": {
+			"type": "string"
+		},
+		"name": {
+			"type": "string"
+		},
+		"title": {
+			"type": "string"
+		},
+		"email": {
+			"type": "string",
+			"pattern": "(^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\\.[a-zA-Z0-9-.]+$)"
+		},
+		"homepage": {
+			"type": "string",
+			"pattern": "(http(s)?:\/\/.)?(www\\.)?[-a-zA-Z0-9@:%._\\+~#=]{2,256}\\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\\+.~#?&//=]*)"
+		}
+	},
+	"additionalProperties": false,
+	"required": [ 
+		"name" 
+	]
+}
