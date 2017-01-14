@@ -7,7 +7,12 @@ This process includes web retrieval and information extraction and formatting. E
 
 The exposed system has been designed to provide both useful utilities and recommended patterns, yet also allows a developer freedom of design.
 
-Heretofore, all utilities can be assumed, unless explcitly stated, to be implemented in Python 2.7. Note, however, that parsers can be designed in other languages (see ...).
+Heretofore, all utilities can be assumed, unless explcitly stated, to be implemented in Python 2.7. 
+
+.. note::
+
+    I have a dream, that one day all will be implemented in Python 3.5. Why not start now?
+
 
 School Directory
 ---------------------
@@ -33,6 +38,13 @@ The highest level directory is simply the *nickname* of the school. When giving 
 
 ``__init__.py`` is simply a blank file needed in this directory for `Python to view this directory as containing packages <http://stackoverflow.com/questions/448271/what-is-init-py-for>`_. The other ``*.py`` files contain the code needed to parse; they will be discussed in detail later. ``misc/utils/`` is, by design, a bit more undefined and is a place where you, the developer, can place any extraneous code you need for the parse.
 
+.. warning::
+
+    ``misc/utils/`` introduces potential security risks.
+
+.. todo::
+
+    Do some analysis and set max size limit for directory and subdirectories
 
 Config File
 ~~~~~~~~~~~~~~~~~~~~~~
@@ -42,10 +54,14 @@ The ``config.json`` is used in order for all components to link up properly on t
 .. literalinclude:: includes/config.json
    :language: json
 
+.. todo::
+
+    write about updated ``config.json`` format once I sleep on it.
+
 The fields displayed above are required in the ``config.json`` and must obey various other requirements:
     
     :code: must match the directory name, discussed above.
-    :time_granularity: refers to the minimum increment of time (in minutes) needed to encode all start and end times for courses.
+    :time_granularity: refers to the minimum increment of time (in minutes, multiple of 5) needed to encode all start and end times for courses.
     :textbooks: set to indicate whether this information is provided by your school/parser.
     :evals: set to indicate whether this information is provided by your school/parser.
     :time24: bool that refers to the hour format time display characteristic of a school.
@@ -59,10 +75,14 @@ The fields displayed above are required in the ``config.json`` and must obey var
     :registration_groupings: defines the registration grouping periods for the school in question. The values found within this list of lists **must** match and encompass the full set of terms defined by ``terms``.
     :campuses: is used to list distinct campuses within a university. These campuses should deleniate distinct course registration seperations. This field is not required.
 
+.. seealso::
+
+    ``config.json`` JSON schema defintion
+
 Parsers 
 ~~~~~~~~
 
-The parsers can be found in the files: 
+The parsers can be found in the directory ``parsers`` in files: 
 
     - ``courses.py``
     - ``textbooks.py``
@@ -95,6 +115,10 @@ The implementation of each parser must inherit the abstract base class ``Parser`
         def parse(): pass
 
 Since all parsers get imported into the same namespace, this ensures that the global namespace does not get polluted and that there is some sense of conformity between parsers.
+
+.. todo::
+
+    expand on these and show an example.
 
 Output Format
 --------------------
@@ -159,7 +183,7 @@ Explanation:
 
     :kind: indicates json object of kind ``section``
     :course_code: must satisify the course_code_regex defined in ``config.json``, must have already been defined the in a ``course`` listing, or may be left out if nested within ``course`` listing.
-    :section_name: the identifier of a section.
+    :section_code: the identifier of a section.
     :term: must match a term defined in ``config.json``.
     :year: the year that the section is offered. Must be in ``YYYY`` format.
     :capacity: the max seats available in a section.
