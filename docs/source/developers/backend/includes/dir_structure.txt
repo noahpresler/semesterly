@@ -1,11 +1,12 @@
 | -- <school (nick)name>
     * ---- __init__.py
     * ---- config.json
-    * ---- courses.py
-    * ---- textbooks.py
-    * ---- evals.py
-    * ---- instrs.py
-    * ---- finals.py
+    | ---- parsers
+        * -- courses.py
+        * -- textbooks.py
+        * -- evals.py
+        * -- instrs.py
+        * -- finals.py
     | ---- misc
         | -- utils/
     | ---- data
