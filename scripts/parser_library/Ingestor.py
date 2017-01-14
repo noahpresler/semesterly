@@ -108,6 +108,9 @@ class Ingestor:
         return section
 
     def create_offerings(self, section_model):
+        self.create_combined_offering(section_model)
+
+    def create_combined_offering(self, section):
         ''' Create offering in database from info in model map.
 
         Args:
@@ -117,29 +120,21 @@ class Ingestor:
             json object model for a section
 
         '''
-        if self.map.get('days'):
-            for day in self.map.get('days'):
-                offering_model, offering_was_created = Offering.objects.update_or_create(
-                    section = section_model,
-                    day = day,
-                    time_start = self.map.get('time_start'),
-                    time_end = self.map.get('time_end'),
-                    defaults = {
-                        'location': self.map.get('location')
-                    }
-                )
 
-    def remove_section(self, course_model):
-        ''' Remove section specified in model map from django database. '''
-        if Section.objects.filter(course = course_model, meeting_section = self.map.get('section')).exists():
-            s = Section.objects.get(course = course_model, meeting_section = self.map.get('section'))
-            s.delete()
+        offering = {
+            'course_code': section['course_code'],
+            'section': section['name'],
+            'days': self.map['days'],
+            'time_start': self.map['time_start'],
+            'time_end': self.map['time_end'],
+            'location': self.map.get('location')
+        }
 
-    @staticmethod
-    def remove_offerings(section_model):
-        ''' Remove all offerings associated with a section. '''
-        Offering.objects.filter(section = section_model).delete()
+        offering = Ingestor.cleandict(offering)
+        print json.dumps(offering, sort_keys=True, indent=4, separators=(',', ': '))
+        return offering
 
+    # TODO - close json list
     def wrap_up(self):
         ''' Update time updated for school at end of parse. '''
         update_object, created = Updates.objects.update_or_create(
