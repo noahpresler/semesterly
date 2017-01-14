@@ -31,7 +31,7 @@ The highest level directory is simply the *nickname* of the school. When giving 
     umich   University of Michigan in Ann Arbor
     udub    University of Washington in Seattle
 
-``__init__.py`` is simply a blank file needed in this directory for `Python to view this directory as containing packages <http://stackoverflow.com/questions/448271/what-is-init-py-for>`_. ``courses.py``, ``textbooks.py``, and ``evals.py`` all contain the code needed to parse; they will be discussed in detail later. ``misc/utils/`` is, by design, a bit more undefined and is a place where you, the developer, can place any extraneous code you need for the parse.
+``__init__.py`` is simply a blank file needed in this directory for `Python to view this directory as containing packages <http://stackoverflow.com/questions/448271/what-is-init-py-for>`_. The other ``*.py`` files contain the code needed to parse; they will be discussed in detail later. ``misc/utils/`` is, by design, a bit more undefined and is a place where you, the developer, can place any extraneous code you need for the parse.
 
 
 Config File
@@ -67,8 +67,18 @@ The parsers can be found in the files:
     - ``courses.py``
     - ``textbooks.py``
     - ``evals.py``
+    - ``instrs.py``
+    - ``finals.py``
 
-The seperation of the parsers is provided in order to handle the general case that the respective information is provided across various school resources. Ideally, the implementations for the above are modularized into these three components, however, they can be combined in any configuration as needed, but the filenames must remain the same. In addition, it is not required to provide an implementation for ``textbooks.py`` or ``evals.py``, just be sure to indicate that in the ``config.json``.
+And json data outputs are written to the files in directory ``data``:
+
+    - ``courses.json``
+    - ``textbooks.json``
+    - ``evals.json``
+    - ``instrs.json``
+    - ``finals.json``
+
+The seperation of the parsers and data into categories is provided in order to handle the general case that the respective information is provided across various school resources. Ideally, the data and implementations for the above are modularized into these components, however, they can be combined in any configuration as needed; note, however, that only these files are allowed in these directories (extraneuous files can live in ``misc/utils/``. In addition, it is required to provide an implementation for ``courses.py`` and data in ``courses.json``, but it is not necessarily required to provide implmentations or data for the others filenames.
 
 The implementation of each parser must inherit the abstract base class ``Parser``. The simplified representation of Parser class is shown below:
 
