@@ -178,7 +178,11 @@
 <p><strong>Parsing</strong> in this context is the process of gathering and transforming data made available by universities into the Semesterly system.</p>
 <p>This process includes web retrieval and information extraction and formatting. Exploring concepts in Networks, Formal Languages, Databases, and good&#8217;ol hackery.</p>
 <p>The exposed system has been designed to provide both useful utilities and recommended patterns, yet also allows a developer freedom of design.</p>
-<p>Heretofore, all utilities can be assumed, unless explcitly stated, to be implemented in Python 2.7. Note, however, that parsers can be designed in other languages (see ...).</p>
+<p>Heretofore, all utilities can be assumed, unless explcitly stated, to be implemented in Python 2.7.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">I have a dream, that one day all will be implemented in Python 3.5. Why not start now?</p>
+</div>
 <div class="section" id="school-directory">
 <h2>School Directory<a class="headerlink" href="#school-directory" title="Permalink to this headline">¶</a></h2>
 <div class="section" id="directory-structure">
@@ -195,18 +199,28 @@
  9
 10
 11
-12</pre></div></td><td class="code"><div class="highlight"><pre><span></span><span class="o">|</span> <span class="o">--</span> <span class="o">&lt;</span><span class="n">school</span> <span class="p">(</span><span class="n">nick</span><span class="p">)</span><span class="n">name</span><span class="o">&gt;</span>
+12
+13
+14
+15
+16
+17</pre></div></td><td class="code"><div class="highlight"><pre><span></span><span class="o">|</span> <span class="o">--</span> <span class="o">&lt;</span><span class="n">school</span> <span class="p">(</span><span class="n">nick</span><span class="p">)</span><span class="n">name</span><span class="o">&gt;</span>
     <span class="o">*</span> <span class="o">----</span> <span class="n">__init__</span><span class="o">.</span><span class="n">py</span>
     <span class="o">*</span> <span class="o">----</span> <span class="n">config</span><span class="o">.</span><span class="n">json</span>
-    <span class="o">*</span> <span class="o">----</span> <span class="n">courses</span><span class="o">.</span><span class="n">py</span>
-    <span class="o">*</span> <span class="o">----</span> <span class="n">textbooks</span><span class="o">.</span><span class="n">py</span>
-    <span class="o">*</span> <span class="o">----</span> <span class="n">evals</span><span class="o">.</span><span class="n">py</span>
+    <span class="o">|</span> <span class="o">----</span> <span class="n">parsers</span>
+        <span class="o">*</span> <span class="o">--</span> <span class="n">courses</span><span class="o">.</span><span class="n">py</span>
+        <span class="o">*</span> <span class="o">--</span> <span class="n">textbooks</span><span class="o">.</span><span class="n">py</span>
+        <span class="o">*</span> <span class="o">--</span> <span class="n">evals</span><span class="o">.</span><span class="n">py</span>
+        <span class="o">*</span> <span class="o">--</span> <span class="n">instrs</span><span class="o">.</span><span class="n">py</span>
+        <span class="o">*</span> <span class="o">--</span> <span class="n">finals</span><span class="o">.</span><span class="n">py</span>
     <span class="o">|</span> <span class="o">----</span> <span class="n">misc</span>
         <span class="o">|</span> <span class="o">--</span> <span class="n">utils</span><span class="o">/</span>
     <span class="o">|</span> <span class="o">----</span> <span class="n">data</span>
         <span class="o">*</span> <span class="o">--</span> <span class="n">courses</span><span class="o">.</span><span class="n">json</span>
         <span class="o">*</span> <span class="o">--</span> <span class="n">textbooks</span><span class="o">.</span><span class="n">json</span>
         <span class="o">*</span> <span class="o">--</span> <span class="n">evals</span><span class="o">.</span><span class="n">json</span>
+        <span class="o">*</span> <span class="o">--</span> <span class="n">instrs</span><span class="o">.</span><span class="n">json</span>
+        <span class="o">*</span> <span class="o">--</span> <span class="n">finals</span><span class="o">.</span><span class="n">json</span>
 </pre></div>
 </td></tr></table></div>
 <p>The highest level directory is simply the <em>nickname</em> of the school. When giving a nickname to a school be sure to keep it short yet descriptive, following the <a class="reference external" href="https://en.wikipedia.org/wiki/Snake_case">snake case</a> naming convention if needed. This name is what will be used in the url seen by a user (i.e. <a class="reference external" href="https://jhu.semester.ly">jhu.semester.ly</a>). It is often prudent to use a colloqualism, for example:</p>
@@ -216,33 +230,88 @@ umich   University of Michigan in Ann Arbor
 udub    University of Washington in Seattle
 </pre></div>
 </div>
-<p><code class="docutils literal"><span class="pre">__init__.py</span></code> is simply a blank file needed in this directory for <a class="reference external" href="http://stackoverflow.com/questions/448271/what-is-init-py-for">Python to view this directory as containing packages</a>. <code class="docutils literal"><span class="pre">courses.py</span></code>, <code class="docutils literal"><span class="pre">textbooks.py</span></code>, and <code class="docutils literal"><span class="pre">evals.py</span></code> all contain the code needed to parse; they will be discussed in detail later. <code class="docutils literal"><span class="pre">misc/utils/</span></code> is, by design, a bit more undefined and is a place where you, the developer, can place any extraneous code you need for the parse.</p>
+<p><code class="docutils literal"><span class="pre">__init__.py</span></code> is simply a blank file needed in this directory for <a class="reference external" href="http://stackoverflow.com/questions/448271/what-is-init-py-for">Python to view this directory as containing packages</a>. The other <code class="docutils literal"><span class="pre">*.py</span></code> files contain the code needed to parse; they will be discussed in detail later. <code class="docutils literal"><span class="pre">misc/utils/</span></code> is, by design, a bit more undefined and is a place where you, the developer, can place any extraneous code you need for the parse.</p>
+<div class="admonition warning">
+<p class="first admonition-title">Warning</p>
+<p class="last"><code class="docutils literal"><span class="pre">misc/utils/</span></code> introduces potential security risks.</p>
+</div>
+<div class="admonition-todo admonition" id="index-0">
+<p class="first admonition-title">Todo</p>
+<p class="last">Do some analysis and set max size limit for directory and subdirectories</p>
+</div>
 </div>
 <div class="section" id="config-file">
 <h3>Config File<a class="headerlink" href="#config-file" title="Permalink to this headline">¶</a></h3>
 <p>The <code class="docutils literal"><span class="pre">config.json</span></code> is used in order for all components to link up properly on the front and backend.</p>
 <div class="highlight-json"><div class="highlight"><pre><span></span><span class="p">{</span>
-	<span class="nt">&quot;school_code&quot;</span><span class="p">:</span> <span class="s2">&quot;jhu&quot;</span><span class="p">,</span>
-	<span class="nt">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;Johns Hopkins University&quot;</span><span class="p">,</span>
-	<span class="nt">&quot;time_granularity&quot;</span><span class="p">:</span> <span class="mi">5</span><span class="p">,</span>
-	<span class="nt">&quot;textbooks&quot;</span><span class="p">:</span> <span class="kc">true</span><span class="p">,</span>
-	<span class="nt">&quot;evals&quot;</span><span class="p">:</span> <span class="kc">true</span><span class="p">,</span>
-	<span class="nt">&quot;time24&quot;</span><span class="p">:</span> <span class="kc">false</span><span class="p">,</span>
-	<span class="nt">&quot;live_data&quot;</span><span class="p">:</span> <span class="kc">true</span><span class="p">,</span>
-	<span class="nt">&quot;course_code_regex&quot;</span><span class="p">:</span> <span class="s2">&quot;([A-Z]{2}\\.\\d{3}\\.\\d{3})&quot;</span><span class="p">,</span>
-	<span class="nt">&quot;terms&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;Fall&quot;</span><span class="p">,</span> <span class="s2">&quot;Intersession&quot;</span><span class="p">,</span> <span class="s2">&quot;Spring&quot;</span><span class="p">,</span> <span class="s2">&quot;Summer&quot;</span><span class="p">],</span>
-	<span class="nt">&quot;registration_groupings&quot;</span><span class="p">:</span> <span class="p">[[</span><span class="s2">&quot;Fall&quot;</span><span class="p">],[</span><span class="s2">&quot;Intersession&quot;</span><span class="p">],[</span><span class="s2">&quot;Spring&quot;</span><span class="p">],[</span><span class="s2">&quot;Summer&quot;</span><span class="p">]],</span>
-	<span class="nt">&quot;campuses&quot;</span><span class="p">:</span> <span class="p">[</span>
-		<span class="s2">&quot;Homewood Campus&quot;</span><span class="p">,</span>
-		<span class="s2">&quot;Medical School&quot;</span><span class="p">,</span>
-		<span class="s2">&quot;Carey Business School&quot;</span><span class="p">,</span>
-		<span class="s2">&quot;Peabody Conservatory&quot;</span><span class="p">,</span>
-		<span class="s2">&quot;SAIS&quot;</span><span class="p">,</span>
-		<span class="s2">&quot;APL&quot;</span><span class="p">,</span>
-		<span class="s2">&quot;Online&quot;</span><span class="p">,</span>
-	<span class="p">],</span>
+  <span class="nt">&quot;school_code&quot;</span><span class="p">:</span> <span class="s2">&quot;jhu&quot;</span><span class="p">,</span>
+  <span class="nt">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;Johns Hopkins University&quot;</span><span class="p">,</span>
+  <span class="nt">&quot;time_granularity&quot;</span><span class="p">:</span> <span class="mi">5</span><span class="p">,</span>
+  <span class="nt">&quot;parsers_and_data&quot;</span><span class="p">:</span> <span class="p">[</span>
+    <span class="p">{</span>
+      <span class="nt">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;courses&quot;</span><span class="p">,</span>
+      <span class="nt">&quot;parser&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;courses.py&quot;</span><span class="p">,</span> <span class="s2">&quot;--quiet&quot;</span><span class="p">],</span>
+      <span class="nt">&quot;data&quot;</span><span class="p">:</span> <span class="s2">&quot;data/courses.json&quot;</span><span class="p">,</span>
+      <span class="nt">&quot;live_data&quot;</span><span class="p">:</span> <span class="kc">true</span><span class="p">,</span>
+    <span class="p">},</span>
+    <span class="p">{</span>
+      <span class="nt">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;textbooks&quot;</span><span class="p">,</span>
+      <span class="nt">&quot;parser&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;courses.py&quot;</span><span class="p">,</span> <span class="s2">&quot;--quiet&quot;</span><span class="p">,</span> <span class="s2">&quot;--with_textbooks&quot;</span><span class="p">],</span>
+      <span class="nt">&quot;data&quot;</span><span class="p">:</span> <span class="s2">&quot;data/courses.json&quot;</span>
+    <span class="p">},</span>
+    <span class="p">{</span>
+      <span class="nt">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;evals&quot;</span><span class="p">,</span>
+      <span class="nt">&quot;parser&quot;</span><span class="p">:</span> <span class="s2">&quot;evals.py&quot;</span><span class="p">,</span>
+      <span class="nt">&quot;data&quot;</span><span class="p">:</span> <span class="s2">&quot;data/evals.json&quot;</span>
+    <span class="p">},</span>
+    <span class="p">{</span>
+      <span class="nt">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;instrs&quot;</span><span class="p">,</span>
+      <span class="nt">&quot;data&quot;</span><span class="p">:</span> <span class="s2">&quot;data/courses.json&quot;</span><span class="p">,</span>
+    <span class="p">},</span>
+    <span class="p">{</span>
+      <span class="nt">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;finals&quot;</span><span class="p">,</span>
+      <span class="nt">&quot;parser&quot;</span><span class="p">:</span> <span class="s2">&quot;finals.py&quot;</span><span class="p">,</span>
+      <span class="nt">&quot;data&quot;</span><span class="p">:</span> <span class="s2">&quot;data/finals.json&quot;</span>
+    <span class="p">},</span>
+    <span class="p">{</span>
+      <span class="nt">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;logistics&quot;</span><span class="p">,</span>
+      <span class="nt">&quot;parser&quot;</span><span class="p">:</span> <span class="s2">&quot;manual&quot;</span><span class="p">,</span>
+      <span class="nt">&quot;data&quot;</span><span class="p">:</span> <span class="s2">&quot;data/logistics.json&quot;</span>
+    <span class="p">}</span>
+  <span class="p">],</span>
+  <span class="nt">&quot;time24&quot;</span><span class="p">:</span> <span class="kc">false</span><span class="p">,</span>
+  <span class="nt">&quot;course_code_regex&quot;</span><span class="p">:</span> <span class="s2">&quot;([A-Z]{2}\\.\\d{3}\\.\\d{3})&quot;</span><span class="p">,</span>
+  <span class="nt">&quot;terms&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;Fall&quot;</span><span class="p">,</span> <span class="s2">&quot;Intersession&quot;</span><span class="p">,</span> <span class="s2">&quot;Spring&quot;</span><span class="p">,</span> <span class="s2">&quot;Summer&quot;</span><span class="p">],</span>
+  <span class="nt">&quot;registration_groupings&quot;</span><span class="p">:</span> <span class="p">[[</span><span class="s2">&quot;Fall&quot;</span><span class="p">],[</span><span class="s2">&quot;Intersession&quot;</span><span class="p">],[</span><span class="s2">&quot;Spring&quot;</span><span class="p">],[</span><span class="s2">&quot;Summer&quot;</span><span class="p">]],</span>
+  <span class="nt">&quot;campuses&quot;</span><span class="p">:</span> <span class="p">[</span>
+    <span class="s2">&quot;Homewood Campus&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;Medical School&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;Carey Business School&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;Peabody Conservatory&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;SAIS&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;APL&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;Online&quot;</span><span class="p">,</span>
+  <span class="p">],</span>
+  <span class="nt">&quot;volatile&quot;</span><span class="p">:</span> <span class="p">{</span>
+    <span class="nt">&quot;registration_dates&quot;</span><span class="p">:</span> <span class="p">[</span>
+      <span class="s2">&quot;&quot;</span>
+    <span class="p">],</span>
+    <span class="nt">&quot;current&quot;</span><span class="p">:</span> <span class="p">{</span>
+      <span class="nt">&quot;term&quot;</span><span class="p">:</span> <span class="s2">&quot;Spring&quot;</span><span class="p">,</span>
+      <span class="nt">&quot;year&quot;</span><span class="p">:</span> <span class="s2">&quot;2017&quot;</span>
+    <span class="p">}</span>
+  <span class="p">},</span>
+  <span class="nt">&quot;meta&quot;</span><span class="p">:</span> <span class="p">{</span>
+    <span class="nt">&quot;author&quot;</span><span class="p">:</span> <span class="s2">&quot;Michael N. Miller&quot;</span><span class="p">,</span>
+    <span class="nt">&quot;date&quot;</span><span class="p">:</span> <span class="s2">&quot;01/13/2017&quot;</span><span class="p">,</span>
+    <span class="nt">&quot;link&quot;</span><span class="p">:</span> <span class="s2">&quot;semester.ly/about/emem&quot;</span>
+  <span class="p">}</span>
 <span class="p">}</span>
 </pre></div>
+</div>
+<div class="admonition-todo admonition" id="index-1">
+<p class="first admonition-title">Todo</p>
+<p class="last">write about updated <code class="docutils literal"><span class="pre">config.json</span></code> format once I sleep on it.</p>
 </div>
 <p>The fields displayed above are required in the <code class="docutils literal"><span class="pre">config.json</span></code> and must obey various other requirements:</p>
 <blockquote>
@@ -254,7 +323,7 @@ udub    University of Washington in Seattle
 </td>
 </tr>
 <tr class="field-even field"><th class="field-name" colspan="2">time_granularity:</th></tr>
-<tr class="field-even field"><td>&nbsp;</td><td class="field-body"><p class="first">refers to the minimum increment of time (in minutes) needed to encode all start and end times for courses.</p>
+<tr class="field-even field"><td>&nbsp;</td><td class="field-body"><p class="first">refers to the minimum increment of time (in minutes, multiple of 5) needed to encode all start and end times for courses.</p>
 </td>
 </tr>
 <tr class="field-odd field"><th class="field-name">textbooks:</th><td class="field-body"><p class="first">set to indicate whether this information is provided by your school/parser.</p>
@@ -290,18 +359,34 @@ udub    University of Washington in Seattle
 </tbody>
 </table>
 </div></blockquote>
+<div class="admonition seealso">
+<p class="first admonition-title">See also</p>
+<p class="last"><code class="docutils literal"><span class="pre">config.json</span></code> JSON schema defintion</p>
+</div>
 </div>
 <div class="section" id="parsers">
 <h3>Parsers<a class="headerlink" href="#parsers" title="Permalink to this headline">¶</a></h3>
-<p>The parsers can be found in the files:</p>
+<p>The parsers can be found in the directory <code class="docutils literal"><span class="pre">parsers</span></code> in files:</p>
 <blockquote>
 <div><ul class="simple">
 <li><code class="docutils literal"><span class="pre">courses.py</span></code></li>
 <li><code class="docutils literal"><span class="pre">textbooks.py</span></code></li>
 <li><code class="docutils literal"><span class="pre">evals.py</span></code></li>
+<li><code class="docutils literal"><span class="pre">instrs.py</span></code></li>
+<li><code class="docutils literal"><span class="pre">finals.py</span></code></li>
 </ul>
 </div></blockquote>
-<p>The seperation of the parsers is provided in order to handle the general case that the respective information is provided across various school resources. Ideally, the implementations for the above are modularized into these three components, however, they can be combined in any configuration as needed, but the filenames must remain the same. In addition, it is not required to provide an implementation for <code class="docutils literal"><span class="pre">textbooks.py</span></code> or <code class="docutils literal"><span class="pre">evals.py</span></code>, just be sure to indicate that in the <code class="docutils literal"><span class="pre">config.json</span></code>.</p>
+<p>And json data outputs are written to the files in directory <code class="docutils literal"><span class="pre">data</span></code>:</p>
+<blockquote>
+<div><ul class="simple">
+<li><code class="docutils literal"><span class="pre">courses.json</span></code></li>
+<li><code class="docutils literal"><span class="pre">textbooks.json</span></code></li>
+<li><code class="docutils literal"><span class="pre">evals.json</span></code></li>
+<li><code class="docutils literal"><span class="pre">instrs.json</span></code></li>
+<li><code class="docutils literal"><span class="pre">finals.json</span></code></li>
+</ul>
+</div></blockquote>
+<p>The seperation of the parsers and data into categories is provided in order to handle the general case that the respective information is provided across various school resources. Ideally, the data and implementations for the above are modularized into these components, however, they can be combined in any configuration as needed; note, however, that only these files are allowed in these directories (extraneuous files can live in <code class="docutils literal"><span class="pre">misc/utils/</span></code>. In addition, it is required to provide an implementation for <code class="docutils literal"><span class="pre">courses.py</span></code> and data in <code class="docutils literal"><span class="pre">courses.json</span></code>, but it is not necessarily required to provide implmentations or data for the others filenames.</p>
 <p>The implementation of each parser must inherit the abstract base class <code class="docutils literal"><span class="pre">Parser</span></code>. The simplified representation of Parser class is shown below:</p>
 <div class="highlight-python"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">abc</span> <span class="kn">import</span> <span class="n">ABCMeta</span>
 
@@ -313,6 +398,10 @@ udub    University of Washington in Seattle
 </pre></div>
 </div>
 <p>Since all parsers get imported into the same namespace, this ensures that the global namespace does not get polluted and that there is some sense of conformity between parsers.</p>
+<div class="admonition-todo admonition" id="index-2">
+<p class="first admonition-title">Todo</p>
+<p class="last">expand on these and show an example.</p>
+</div>
 </div>
 </div>
 <div class="section" id="output-format">
@@ -501,7 +590,7 @@ udub    University of Washington in Seattle
 28</pre></div></td><td class="code"><div class="highlight"><pre><span></span><span class="p">{</span>
 <span class="hll">  <span class="nt">&quot;kind&quot;</span><span class="p">:</span> <span class="s2">&quot;section&quot;</span><span class="p">,</span>
 </span><span class="hll">  <span class="nt">&quot;course_code&quot;</span><span class="p">:</span> <span class="s2">&quot;EN.600.418&quot;</span><span class="p">,</span>
-</span><span class="hll">  <span class="nt">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;01&quot;</span><span class="p">,</span>
+</span><span class="hll">  <span class="nt">&quot;section_code&quot;</span><span class="p">:</span> <span class="s2">&quot;01&quot;</span><span class="p">,</span>
 </span><span class="hll">  <span class="nt">&quot;term&quot;</span><span class="p">:</span> <span class="s2">&quot;Fall&quot;</span><span class="p">,</span>
 </span><span class="hll">  <span class="nt">&quot;year&quot;</span><span class="p">:</span> <span class="mi">2016</span><span class="p">,</span>
 </span>  <span class="nt">&quot;capacity&quot;</span><span class="p">:</span> <span class="mi">25</span><span class="p">,</span>
@@ -540,7 +629,7 @@ udub    University of Washington in Seattle
 <tr class="field-even field"><th class="field-name">course_code:</th><td class="field-body"><p class="first">must satisify the course_code_regex defined in <code class="docutils literal"><span class="pre">config.json</span></code>, must have already been defined the in a <code class="docutils literal"><span class="pre">course</span></code> listing, or may be left out if nested within <code class="docutils literal"><span class="pre">course</span></code> listing.</p>
 </td>
 </tr>
-<tr class="field-odd field"><th class="field-name">section_name:</th><td class="field-body"><p class="first">the identifier of a section.</p>
+<tr class="field-odd field"><th class="field-name">section_code:</th><td class="field-body"><p class="first">the identifier of a section.</p>
 </td>
 </tr>
 <tr class="field-even field"><th class="field-name">term:</th><td class="field-body"><p class="first">must match a term defined in <code class="docutils literal"><span class="pre">config.json</span></code>.</p>
@@ -762,7 +851,7 @@ udub    University of Washington in Seattle
 </span>  <span class="nt">&quot;detail_url&quot;</span><span class="p">:</span> <span class="s2">&quot;http://www.amazon.com/&quot;</span><span class="p">,</span>
   <span class="nt">&quot;image_url&quot;</span><span class="p">:</span> <span class="s2">&quot;http://ecx.images-amazon.com/&quot;</span><span class="p">,</span>
   <span class="nt">&quot;author&quot;</span><span class="p">:</span> <span class="s2">&quot;Hans Wehr&quot;</span><span class="p">,</span>
-  <span class="nt">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;Arabic-English Dictionary: The Hans Wehr Dictionary of Modern Written Arabic&quot;</span><span class="p">,</span>
+  <span class="nt">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;Arabic-English Dictionary: The Hans Wehr Dictionary of Modern Written Arabic&quot;</span>
 <span class="p">}</span>
 </pre></div>
 </td></tr></table></div>
