@@ -319,7 +319,7 @@ udub    University of Washington in Seattle
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">code:</th><td class="field-body"><p class="first">must match the directory name, discussed above.</p>
+<tr class="field-odd field"><th class="field-name">school_code:</th><td class="field-body"><p class="first">must match the directory name, discussed above. Must be unique, see <a class="reference download internal" href="../../_downloads/school_codes.txt" download=""><code class="xref download docutils literal"><span class="pre">list</span> <span class="pre">of</span> <span class="pre">used</span> <span class="pre">school</span> <span class="pre">codes</span></code></a>.</p>
 </td>
 </tr>
 <tr class="field-even field"><th class="field-name" colspan="2">time_granularity:</th></tr>
@@ -406,18 +406,26 @@ udub    University of Washington in Seattle
 </div>
 <div class="section" id="output-format">
 <h2>Output Format<a class="headerlink" href="#output-format" title="Permalink to this headline">¶</a></h2>
-<p>The output of each parser will be a json representation the follows the given structure. There are a few components used in the Semesterly framework. There is the</p>
+<p>The output of each parser will be a JSON representation the follows defined structure. There are a few components used in the Semesterly framework. There is the</p>
 <blockquote>
 <div><ol class="arabic simple">
 <li><code class="docutils literal"><span class="pre">course</span></code> which describes a course as seperate from its actual setting and location. <code class="docutils literal"><span class="pre">course</span></code> s are local per school but are <strong>not</strong> local per term.</li>
 <li><code class="docutils literal"><span class="pre">section</span></code> which describes a specific instance of a <code class="docutils literal"><span class="pre">course</span></code>. Sections are local per per term.</li>
 <li><code class="docutils literal"><span class="pre">offering</span></code> which are the individual times that are offered within a <code class="docutils literal"><span class="pre">section</span></code>.</li>
-<li><code class="docutils literal"><span class="pre">textbook</span> <span class="pre">link</span></code> which is a link to a textbook needed for a particular <code class="docutils literal"><span class="pre">section</span></code>.</li>
+<li><code class="docutils literal"><span class="pre">textbook</span> <span class="pre">link</span></code> which is a link between a textbook and a particular <code class="docutils literal"><span class="pre">section</span></code>.</li>
 <li><code class="docutils literal"><span class="pre">evaluation</span></code> which is an evaluation specific per <code class="docutils literal"><span class="pre">section</span></code>.</li>
 <li><code class="docutils literal"><span class="pre">textbook</span></code> information needed to render actual textbook. Textbooks are not local per term, nor local per school.</li>
 </ol>
 </div></blockquote>
-<p>We will go component by component explaining by example the fields and associated restrictions of each. At the end, we will put them all together. Note that <strong>highlighted fields are required</strong>. Setting a field equal to <code class="docutils literal"><span class="pre">null</span></code> is acceptable but it is treated as the equivalent of not defining the field.</p>
+<p>These JSON objects are modularized in such a way as to allow instances to be nested or listed side-by-side. We will go component by component explaining by example the fields and associated restrictions of each. At the end, we will put them all together. Note that <strong>highlighted fields are required</strong>. Setting a field equal to <code class="docutils literal"><span class="pre">null</span></code> is acceptable but it is treated as the equivalent of not defining the field.</p>
+<div class="admonition-todo admonition" id="index-3">
+<p class="first admonition-title">Todo</p>
+<p class="last">Talk about optimal format for speed.</p>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">Not all JSON properties are defined every time they are used, if they have already been described prior.</p>
+</div>
 <div class="section" id="course">
 <h3>Course<a class="headerlink" href="#course" title="Permalink to this headline">¶</a></h3>
 <div class="highlight-json"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre> 1
@@ -455,8 +463,8 @@ udub    University of Washington in Seattle
 33
 34</pre></div></td><td class="code"><div class="highlight"><pre><span></span><span class="p">{</span>
 <span class="hll">  <span class="nt">&quot;kind&quot;</span><span class="p">:</span> <span class="s2">&quot;course&quot;</span><span class="p">,</span>
-</span><span class="hll">  <span class="nt">&quot;school_code&quot;</span><span class="p">:</span> <span class="s2">&quot;jhu&quot;</span><span class="p">,</span>
-</span><span class="hll">  <span class="nt">&quot;course_code&quot;</span><span class="p">:</span> <span class="s2">&quot;EN.600.418&quot;</span><span class="p">,</span>
+</span>  <span class="nt">&quot;school_code&quot;</span><span class="p">:</span> <span class="s2">&quot;jhu&quot;</span><span class="p">,</span>
+<span class="hll">  <span class="nt">&quot;course_code&quot;</span><span class="p">:</span> <span class="s2">&quot;EN.600.418&quot;</span><span class="p">,</span>
 </span><span class="hll">  <span class="nt">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;Operating Systems&quot;</span><span class="p">,</span>
 </span>  <span class="nt">&quot;campus&quot;</span><span class="p">:</span> <span class="s2">&quot;Homewood Campus&quot;</span><span class="p">,</span>
 <span class="hll">  <span class="nt">&quot;credits&quot;</span><span class="p">:</span> <span class="mi">3</span><span class="p">,</span>
@@ -587,21 +595,23 @@ udub    University of Washington in Seattle
 25
 26
 27
-28</pre></div></td><td class="code"><div class="highlight"><pre><span></span><span class="p">{</span>
+28
+29</pre></div></td><td class="code"><div class="highlight"><pre><span></span><span class="p">{</span>
 <span class="hll">  <span class="nt">&quot;kind&quot;</span><span class="p">:</span> <span class="s2">&quot;section&quot;</span><span class="p">,</span>
-</span><span class="hll">  <span class="nt">&quot;course_code&quot;</span><span class="p">:</span> <span class="s2">&quot;EN.600.418&quot;</span><span class="p">,</span>
+</span>  <span class="nt">&quot;school_code&quot;</span><span class="p">:</span> <span class="s2">&quot;jhu&quot;</span><span class="p">,</span>
+<span class="hll">  <span class="nt">&quot;course_code&quot;</span><span class="p">:</span> <span class="s2">&quot;EN.600.418&quot;</span><span class="p">,</span>
 </span><span class="hll">  <span class="nt">&quot;section_code&quot;</span><span class="p">:</span> <span class="s2">&quot;01&quot;</span><span class="p">,</span>
 </span><span class="hll">  <span class="nt">&quot;term&quot;</span><span class="p">:</span> <span class="s2">&quot;Fall&quot;</span><span class="p">,</span>
-</span><span class="hll">  <span class="nt">&quot;year&quot;</span><span class="p">:</span> <span class="mi">2016</span><span class="p">,</span>
-</span>  <span class="nt">&quot;capacity&quot;</span><span class="p">:</span> <span class="mi">25</span><span class="p">,</span>
+</span>  <span class="nt">&quot;year&quot;</span><span class="p">:</span> <span class="mi">2016</span><span class="p">,</span>
+  <span class="nt">&quot;capacity&quot;</span><span class="p">:</span> <span class="mi">25</span><span class="p">,</span>
   <span class="nt">&quot;enrollment&quot;</span><span class="p">:</span> <span class="mi">23</span><span class="p">,</span>
   <span class="nt">&quot;waitlist&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
   <span class="nt">&quot;waitlist_size&quot;</span><span class="p">:</span> <span class="mi">-1</span><span class="p">,</span>
   <span class="nt">&quot;remaining_seats&quot;</span><span class="p">:</span> <span class="mi">-1</span><span class="p">,</span>
   <span class="nt">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;Lecture&quot;</span><span class="p">,</span>
-  <span class="nt">&quot;fees&quot;</span><span class="p">:</span> <span class="mf">0.00</span><span class="p">,</span>
-<span class="hll">  <span class="nt">&quot;instructors&quot;</span><span class="p">:</span> <span class="p">[</span>
-</span>      <span class="s2">&quot;P. Froelich&quot;</span><span class="p">,</span>
+<span class="hll">  <span class="nt">&quot;fees&quot;</span><span class="p">:</span> <span class="mf">0.00</span><span class="p">,</span>
+</span>  <span class="nt">&quot;instructors&quot;</span><span class="p">:</span> <span class="p">[</span>
+      <span class="s2">&quot;P. Froelich&quot;</span><span class="p">,</span>
       <span class="p">{</span>
           <span class="nt">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;Miller, Michael&quot;</span><span class="p">,</span>
           <span class="nt">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;CA&quot;</span><span class="p">,</span>
@@ -610,7 +620,7 @@ udub    University of Washington in Seattle
       <span class="p">},</span>
   <span class="p">],</span>
   <span class="nt">&quot;final_exam&quot;</span><span class="p">:</span> <span class="p">{</span>
-    <span class="nt">&quot;date&quot;</span><span class="p">:</span> <span class="s2">&quot;12/15/16&quot;</span><span class="p">,</span>
+    <span class="nt">&quot;date&quot;</span><span class="p">:</span> <span class="s2">&quot;12/15/2016&quot;</span><span class="p">,</span>
     <span class="nt">&quot;campus&quot;</span><span class="p">:</span> <span class="s2">&quot;Homewood Campus&quot;</span><span class="p">,</span>
     <span class="nt">&quot;location&quot;</span><span class="p">:</span> <span class="s2">&quot;Shaffer 300&quot;</span>
   <span class="p">}</span>
@@ -623,12 +633,6 @@ udub    University of Washington in Seattle
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">kind:</th><td class="field-body"><p class="first">indicates json object of kind <code class="docutils literal"><span class="pre">section</span></code></p>
-</td>
-</tr>
-<tr class="field-even field"><th class="field-name">course_code:</th><td class="field-body"><p class="first">must satisify the course_code_regex defined in <code class="docutils literal"><span class="pre">config.json</span></code>, must have already been defined the in a <code class="docutils literal"><span class="pre">course</span></code> listing, or may be left out if nested within <code class="docutils literal"><span class="pre">course</span></code> listing.</p>
-</td>
-</tr>
 <tr class="field-odd field"><th class="field-name">section_code:</th><td class="field-body"><p class="first">the identifier of a section.</p>
 </td>
 </tr>
@@ -660,7 +664,7 @@ udub    University of Washington in Seattle
 <tr class="field-even field"><th class="field-name">fees:</th><td class="field-body"><p class="first">A float or string that will default to 0.00.</p>
 </td>
 </tr>
-<tr class="field-odd field"><th class="field-name">instructurs:</th><td class="field-body"><p class="first">a list of course instructors; the first in the list is the primary instructor. The entries in the list can take the form of</p>
+<tr class="field-odd field"><th class="field-name">instructors:</th><td class="field-body"><p class="first">a list of course instructors; the first in the list is the primary instructor. The entries in the list can take the form of</p>
 <ol class="arabic simple">
 <li>a dictionary<table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -686,7 +690,7 @@ udub    University of Washington in Seattle
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">date:</th><td class="field-body">the (valid) date of the final exam.</td>
+<tr class="field-odd field"><th class="field-name">date:</th><td class="field-body">the (valid) date of the final exam. <em>Format: DD/MM/YYYY</em></td>
 </tr>
 <tr class="field-even field"><th class="field-name">time_start:</th><td class="field-body">24hr time.</td>
 </tr>
@@ -774,21 +778,15 @@ udub    University of Washington in Seattle
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">kind:</th><td class="field-body">indicates json object of kind <code class="docutils literal"><span class="pre">offering</span></code></td>
+<tr class="field-odd field"><th class="field-name">days:</th><td class="field-body">this is a list of valid days, <code class="regexp docutils literal"><span class="pre">[M|T|W|R|F|S|U]</span></code>. These days will be assumed to be repeated every week. In addition a valid date that satisfies the regex <code class="docutils literal"><span class="pre">date</span> <span class="pre">regex</span></code> and agrees with the term year provided in <code class="docutils literal"><span class="pre">section</span></code>. Ex: <code class="docutils literal"><span class="pre">&quot;days&quot;:</span> <span class="pre">[&quot;M&quot;,</span> <span class="pre">&quot;10/02/16&quot;,</span> <span class="pre">&quot;F&quot;]</span></code>.</td>
 </tr>
-<tr class="field-even field"><th class="field-name">course_code:</th><td class="field-body">must satisify the course_code_regex defined in <code class="docutils literal"><span class="pre">config.json</span></code>, must have already been defined the in a <code class="docutils literal"><span class="pre">course</span></code> listing, or may be omitted if nested within <code class="docutils literal"><span class="pre">course</span></code> listing</td>
+<tr class="field-even field"><th class="field-name">time_start:</th><td class="field-body">24-hour time.</td>
 </tr>
-<tr class="field-odd field"><th class="field-name">section_name:</th><td class="field-body">must already have defined a valid <code class="docutils literal"><span class="pre">course</span></code> that has a <code class="docutils literal"><span class="pre">section</span></code> defined that matches. May be omitted if nested within <code class="docutils literal"><span class="pre">section</span></code> listing.</td>
+<tr class="field-odd field"><th class="field-name">time_end:</th><td class="field-body">24-hour time. Must be after time_start.</td>
 </tr>
-<tr class="field-even field"><th class="field-name">days:</th><td class="field-body">this is a list of valid days, <code class="docutils literal"><span class="pre">M,</span> <span class="pre">T,</span> <span class="pre">W,</span> <span class="pre">R,</span> <span class="pre">F,</span> <span class="pre">S,</span> <span class="pre">U</span></code>. These days will be assumed to be repeated every week. In addition a valid date that satisfies the regex <code class="docutils literal"><span class="pre">date</span> <span class="pre">regex</span></code> and agrees with the term year provided in <code class="docutils literal"><span class="pre">section</span></code>. Ex: <code class="docutils literal"><span class="pre">&quot;days&quot;:</span> <span class="pre">[&quot;M&quot;,</span> <span class="pre">&quot;10/02/16&quot;,</span> <span class="pre">&quot;F&quot;]</span></code>.</td>
+<tr class="field-even field"><th class="field-name">campus:</th><td class="field-body">the campus must be defined in <code class="docutils literal"><span class="pre">config.json</span></code>.</td>
 </tr>
-<tr class="field-odd field"><th class="field-name">time_start:</th><td class="field-body">24-hour time.</td>
-</tr>
-<tr class="field-even field"><th class="field-name">time_end:</th><td class="field-body">24-hour time. Must be after time_start.</td>
-</tr>
-<tr class="field-odd field"><th class="field-name">campus:</th><td class="field-body">the campus must be defined in <code class="docutils literal"><span class="pre">config.json</span></code>.</td>
-</tr>
-<tr class="field-even field"><th class="field-name">location:</th><td class="field-body">the building and room of the offering.</td>
+<tr class="field-odd field"><th class="field-name">location:</th><td class="field-body">the building and room of the offering.</td>
 </tr>
 </tbody>
 </table>
@@ -819,15 +817,11 @@ udub    University of Washington in Seattle
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">kind:</th><td class="field-body">indicates json object of kind &#8220;eval&#8221;(uation).</td>
-</tr>
-<tr class="field-even field"><th class="field-name">course_code:</th><td class="field-body">the course the evaluation refers to. Must satisify the course_code_regex defined in <code class="docutils literal"><span class="pre">config.json</span></code>, must have already been defined the in a <code class="docutils literal"><span class="pre">course</span></code> listing, or may be omitted if nested within <code class="docutils literal"><span class="pre">course</span></code> listing.</td>
-</tr>
 <tr class="field-odd field"><th class="field-name">score:</th><td class="field-body">an integer or float score out of 5 (stars) for the course.</td>
 </tr>
 <tr class="field-even field"><th class="field-name">summary:</th><td class="field-body">the text of the evaluation.</td>
 </tr>
-<tr class="field-odd field"><th class="field-name">instructor:</th><td class="field-body">instructors of the course. May be list dictionary as defined in <code class="docutils literal"><span class="pre">section</span></code>.</td>
+<tr class="field-odd field"><th class="field-name">instructor:</th><td class="field-body">list of instructors of a course. Elements of the list may be strings or a dictionary as defined in <code class="docutils literal"><span class="pre">section</span></code>.</td>
 </tr>
 <tr class="field-even field"><th class="field-name">term_year:</th><td class="field-body">the term and year the evaluation pertains to.</td>
 </tr>
