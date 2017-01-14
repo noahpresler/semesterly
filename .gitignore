@@ -32,3 +32,4 @@ recommended.model
 timetable.features
 *.recommended.model
 *.timetable.features
+docs/build/
