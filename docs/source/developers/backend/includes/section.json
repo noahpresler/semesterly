@@ -1,5 +1,6 @@
 {
   "kind": "section",
+  "school_code": "jhu",
   "course_code": "EN.600.418",
   "section_code": "01",
   "term": "Fall",
@@ -21,7 +22,7 @@
       },
   ],
   "final_exam": {
-    "date": "12/15/16",
+    "date": "12/15/2016",
     "campus": "Homewood Campus",
     "location": "Shaffer 300"
   }
