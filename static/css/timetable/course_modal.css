@@ -536,68 +536,11 @@ h3.modal-module-header small {
 	}
 }
 
-
-/*
-#capacity-alert-wrapper {
-	line-height: 22px;
-	height: 22px;
-	text-align: center;
-	font-size: 16px;
-}
-
-#capacity-alert-wrapper #attention-tag {
-	display: inline-block;
-}
-
-#capacity-alert-wrapper #attention-tag div {
-	display: inline;
-}
-
-#capacity-alert-wrapper span.highlight {
-	color: rgb(177, 81, 80);
-}
-
-#capacity-alert-wrapper > div#attention-tag {
-	position:absolute;
-	background-color: rgb(177, 81, 80);
-	color: rgb(255, 255, 255);
-	border-radius: 5px;
-	padding-right: 10px;
-	float:left;
-}
-
-#capacity-alert-wrapper > div#attention-tag div#clock-icon {
-	padding-right: 10px;
-	padding-left: 15px;
-}
-
-#capacity-alert-wrapper > div#attention-tag div.slot-bar {
-	background-color: rgb(253, 116, 115);
-	border-bottom-left-radius: 5px;
-	border-top-left-radius: 5px;
-}
-
-#capacity-alert-wrapper.desktop > div#attention-text {
-	position:absolute;
-	margin-left:170px;
-}
-
-#capacity-alert-wrapper.mobile {
-	width:100%;
-	position:relative;
-}
-
-#capacity-alert-wrapper.mobile > div#attention-text {
-}
-
-*/
-
-
-#capacity-area {
+#capacity-area-wrapper {
 	text-align: center;
 }
 
-div#capacity-attention-wrapper {
+#capacity-attention-wrapper {
 	line-height: 25px;
 	height: 25px;
 	font-size: 16px;
@@ -639,11 +582,6 @@ div#capacity-attention-wrapper {
 	margin-left: 5px;
 }
 
-/*
-#capacity-attention-wrapper.mobile #attention-text {
-	float: none;
-}*/
-
 #capacity-attention-wrapper #attention-text .highlight {
 	color: rgb(177, 81, 80);
 }
@@ -657,7 +595,13 @@ div#capacity-attention-wrapper {
 		float: none;
 		margin: 5px 0 0 0;
 	}
-	div#capacity-attention-wrapper {
-		font-size: 14px;
+	#capacity-attention-wrapper {
+		font-size: 16px;
+	}
+}
+
+@media (max-width: 766px) {
+	#capacity-attention-wrapper {
+		font-size: 13px;
 	}
 }
