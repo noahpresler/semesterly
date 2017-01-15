@@ -13,7 +13,20 @@ export class CourseModalBody extends React.Component {
     constructor(props) {
         super(props);
         this.sendReact = this.sendReact.bind(this);
-        this.fetchCourseInfo = this.fetchCourseInfo.bind(this)
+        this.fetchCourseInfo = this.fetchCourseInfo.bind(this);
+        this.state = {
+            'mobile': $(window).width() < 767
+        }
+    }
+
+    componentWillMount() {
+        window.addEventListener('resize', (e) => {
+            if (this.state.mobile != $(window).width() < 767) {
+                this.setState({
+                    'mobile': $(window).width() < 767
+                });
+            }
+        });
     }
 
     sendReact(cid, title) {
@@ -222,6 +235,18 @@ export class CourseModalBody extends React.Component {
 
         let creditsSuffix = numCredits === 1 ? " credit" : " credits";
         let avgRating = evalInfo.reduce(function(sum, e) { return sum + parseFloat(e.score); },0) / evalInfo.length;
+        const attentionTag = (
+            <div id="capacity-area">
+                <div id="capacity-attention-wrapper" className="desktop">
+                    <AttentionTag />
+                    <div id="attention-text">
+                        <span>
+                            Over <span className="highlight">223/43</span> students have added this course!
+                        </span>
+                    </div>
+                </div>
+            </div>
+        );
         return (
         <div id="modal-body">
                 <div className="cf">
@@ -238,6 +263,9 @@ export class CourseModalBody extends React.Component {
                                 </div>
                             </div>
                         </div>
+                        { this.state.mobile &&
+                            attentionTag
+                        }
                         { prerequisitesDisplay }
                         { areasDisplay }
                         { academicSupportDisplay }
@@ -245,18 +273,9 @@ export class CourseModalBody extends React.Component {
                         { hasTakenDisplay }
                     </div>
                     <div className="col-8-16">
-
-                        <div id="attention-area">
-                            <div id="capacity-attention-wrapper" className="desktop">
-                                <AttentionTag />
-                                <div id="attention-text">
-                                    <span>
-                                        Over <span className="highlight">223/43</span> students have added this course!
-                                    </span>
-                                </div>
-                            </div>
-                        </div>
-
+                        { !this.state.mobile &&
+                            attentionTag
+                        }
                         <h3 className="modal-module-header">Reactions</h3>
                         <p>Check out your classmate's reactions – click an emoji to add your own opinion!</p>
                         <div id="reactions-wrapper">
