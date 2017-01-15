@@ -295,7 +295,7 @@ const AttentionTag = () => {
             <div id="clock-icon">
                 <i className="fa fa-clock-o"></i>
             </div>
-            Likely to Waitlist
+            <span>Likely to Waitlist</span>
         </div>
     );
 };
