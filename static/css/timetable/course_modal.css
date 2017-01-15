@@ -593,7 +593,7 @@ h3.modal-module-header small {
 */
 
 
-#attention-area {
+#capacity-area {
 	text-align: center;
 }
 
@@ -603,6 +603,7 @@ div#capacity-attention-wrapper {
 	font-size: 16px;
 	display: inline-block;
 	margin-bottom: 10px;
+	margin-top: 15px;
 }
 
 #capacity-attention-wrapper > div#attention-tag {
