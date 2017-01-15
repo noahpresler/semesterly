@@ -15,7 +15,8 @@ export class CourseModalBody extends React.Component {
         this.sendReact = this.sendReact.bind(this);
         this.fetchCourseInfo = this.fetchCourseInfo.bind(this);
         this.state = {
-            'mobile': $(window).width() < 767
+            'mobile': $(window).width() < 767,
+            'attention': false
         }
     }
 
@@ -235,8 +236,8 @@ export class CourseModalBody extends React.Component {
 
         let creditsSuffix = numCredits === 1 ? " credit" : " credits";
         let avgRating = evalInfo.reduce(function(sum, e) { return sum + parseFloat(e.score); },0) / evalInfo.length;
-        const attentionTag = (
-            <div id="capacity-tracker-wrapper">
+        const attentioncapacityTracker = (
+            <div className="capacity-tracker-wrapper">
                 <div id="capacity-attention-wrapper">
                     <div id="attention-tag">
                         <div className="slot-bar"></div>
@@ -247,9 +248,16 @@ export class CourseModalBody extends React.Component {
                     </div>
                     <div id="attention-text">
                         <span>
-                            Over <span className="highlight">552%</span> of seats added by students!
+                            Over <span className="highlight">5552%</span> of seats added by students!
                         </span>
                     </div>
+                </div>
+            </div>
+        );
+        const capacityTracker = (
+            <div className="capacity-tracker-wrapper">
+                <div id="capacity-tracker-text">
+                    <span>43% of seats added</span>
                 </div>
             </div>
         );
@@ -269,8 +277,11 @@ export class CourseModalBody extends React.Component {
                                 </div>
                             </div>
                         </div>
-                        { this.state.mobile &&
-                            attentionTag
+                        { !this.state.attention &&
+                            capacityTracker
+                        }
+                        { this.state.attention && this.state.mobile &&
+                            attentioncapacityTracker
                         }
                         { prerequisitesDisplay }
                         { areasDisplay }
@@ -279,8 +290,8 @@ export class CourseModalBody extends React.Component {
                         { hasTakenDisplay }
                     </div>
                     <div className="col-8-16">
-                        { !this.state.mobile &&
-                            attentionTag
+                        { this.state.attention && !this.state.mobile &&
+                            attentioncapacityTracker
                         }
                         <h3 className="modal-module-header">Reactions</h3>
                         <p>Check out your classmate's reactions – click an emoji to add your own opinion!</p>
