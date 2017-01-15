@@ -536,7 +536,7 @@ h3.modal-module-header small {
 	}
 }
 
-#capacity-tracker-wrapper {
+.capacity-tracker-wrapper {
 	text-align: center;
 }
 
@@ -546,7 +546,6 @@ h3.modal-module-header small {
 	font-size: 16px;
 	display: inline-block;
 	margin-bottom: 10px;
-	margin-top: 15px;
 }
 
 #capacity-attention-wrapper > div#attention-tag {
@@ -587,7 +586,8 @@ h3.modal-module-header small {
 	color: rgb(177, 81, 80);
 }
 
-@media (max-width: 930px) {
+/* NOTE: 950px is fluid up to XXXX% */
+@media (max-width: 950px) {
 	#capacity-attention-wrapper > div#attention-tag {
 		float: none;
 	}
@@ -598,6 +598,7 @@ h3.modal-module-header small {
 	}
 	#capacity-attention-wrapper {
 		font-size: 16px;
+		margin-top: 15px;
 	}
 }
 
@@ -605,4 +606,15 @@ h3.modal-module-header small {
 	#capacity-attention-wrapper {
 		font-size: 13px;
 	}
+}
+
+#capacity-tracker-text {
+	color: #777;
+	font-size: 12px;
+	margin-top: 30px;
+	margin-bottom: 5px;
+}
+
+#capacity-tracker-text span {
+	font-weight: 300;
 }
