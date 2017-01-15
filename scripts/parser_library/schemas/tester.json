@@ -1,0 +1,17 @@
+{
+	"schema": "http://json-schema.org/draft-04/schema#",
+	"title": "config.json",
+	"description": "Semesterly config.json definition",
+	"type": "object",
+	"properties": {
+		"name": {
+			"type": "string"
+		},
+		"time": {
+			"type": "object",
+			"properties": {
+				"$ref": "schemas/definitions.json#/time"
+			}
+		}
+	}
+}
