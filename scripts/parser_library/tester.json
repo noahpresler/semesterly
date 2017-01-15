@@ -1,0 +1,28 @@
+{
+	"$schema": "http://json-schema.org/draft-04/schema#",
+	"type": "object",
+	"properties": {
+		"name": {
+			"type": "string"
+		},
+		"time": {
+			"allOf": [
+				{
+					"$ref": "definitions.json#/"
+				}
+			],
+			"properties": {
+				"middle": {
+					"type": "string"
+				},
+				"start": {},
+				"end": {}
+			},
+			"additionalProperties": false
+		}
+	},
+	"additionalProperties": false,
+	"required": [
+		"name"
+	]
+}
