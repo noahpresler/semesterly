@@ -35,11 +35,23 @@ SOCIAL_AUTH_FACEBOOK_SCOPE = [
 SOCIAL_AUTH_FACEBOOK_PROFILE_EXTRA_PARAMS = {
     'fields': 'id,name,email,gender'
 }
+
+SOCIAL_AUTH_GOOGLE_OAUTH2_KEY = '***REMOVED***'
+SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = '***REMOVED***'
+SOCIAL_AUTH_GOOGLE_OAUTH2_SCOPE = [
+    'https://www.googleapis.com/auth/plus.login',
+    'https://www.googleapis.com/auth/plus.me',
+    'https://www.googleapis.com/auth/userinfo.profile',
+]
+GOOGLE_API_KEY = '***REMOVED***'
+
 SOCIAL_AUTH_LOGIN_REDIRECT_URL = '/'
 SOCIAL_AUTH_LOGIN_ERROR_URL = '/'
 
 SOCIAL_AUTH_AUTHENTICATION_BACKENDS = (
     'social.backends.facebook.FacebookOAuth2',
+    'social.backends.google.GooglePlusAuth',
+    'social.backends.google.GoogleOAuth2'
 )
 
 SOCIAL_AUTH_PIPELINE = (
@@ -71,7 +83,7 @@ SOCIAL_AUTH_PIPELINE = (
 
     # Associates the current social details with another user account with
     # a similar email address. Disabled by default.
-    # 'social.pipeline.social_auth.associate_by_email',
+    'social.pipeline.social_auth.associate_by_email',
 
     # Create a user account if we haven't found one yet.
     'social.pipeline.user.create_user',
@@ -91,6 +103,7 @@ SOCIAL_AUTH_PIPELINE = (
 # Application definition
 
 INSTALLED_APPS = (
+    'sslserver',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
