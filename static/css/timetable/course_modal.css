@@ -536,7 +536,7 @@ h3.modal-module-header small {
 	}
 }
 
-#capacity-area-wrapper {
+#capacity-tracker-wrapper {
 	text-align: center;
 }
 
@@ -580,13 +580,14 @@ h3.modal-module-header small {
 #capacity-attention-wrapper #attention-text {
 	float: left;
 	margin-left: 5px;
+	color: #555;
 }
 
 #capacity-attention-wrapper #attention-text .highlight {
 	color: rgb(177, 81, 80);
 }
 
-@media (max-width: 1051px) {
+@media (max-width: 930px) {
 	#capacity-attention-wrapper > div#attention-tag {
 		float: none;
 	}
@@ -600,7 +601,7 @@ h3.modal-module-header small {
 	}
 }
 
-@media (max-width: 766px) {
+@media (max-width: 670px) {
 	#capacity-attention-wrapper {
 		font-size: 13px;
 	}
