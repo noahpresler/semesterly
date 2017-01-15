@@ -623,20 +623,40 @@ div#capacity-attention-wrapper {
 }
 
 #capacity-attention-wrapper > div#attention-tag div#clock-icon {
-	float: left;
+	display: inline-block;
 	padding-right: 10px;
 	padding-left: 10px;
 }
 
-#capacity-attention-wrapper.desktop #attention-text {
+#capacity-attention-wrapper > div#attention-tag span {
+	display: inline-block;
+}
+
+
+#capacity-attention-wrapper #attention-text {
 	float: left;
 	margin-left: 5px;
 }
 
+/*
 #capacity-attention-wrapper.mobile #attention-text {
 	float: none;
-}
+}*/
 
 #capacity-attention-wrapper #attention-text .highlight {
 	color: rgb(177, 81, 80);
+}
+
+@media (max-width: 1051px) {
+	#capacity-attention-wrapper > div#attention-tag {
+		float: none;
+	}
+
+	#capacity-attention-wrapper #attention-text {
+		float: none;
+		margin: 5px 0 0 0;
+	}
+	div#capacity-attention-wrapper {
+		font-size: 14px;
+	}
 }
