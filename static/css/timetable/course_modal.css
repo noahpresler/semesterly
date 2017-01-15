@@ -535,3 +535,108 @@ h3.modal-module-header small {
 		background-color: #5BCE84;
 	}
 }
+
+
+/*
+#capacity-alert-wrapper {
+	line-height: 22px;
+	height: 22px;
+	text-align: center;
+	font-size: 16px;
+}
+
+#capacity-alert-wrapper #attention-tag {
+	display: inline-block;
+}
+
+#capacity-alert-wrapper #attention-tag div {
+	display: inline;
+}
+
+#capacity-alert-wrapper span.highlight {
+	color: rgb(177, 81, 80);
+}
+
+#capacity-alert-wrapper > div#attention-tag {
+	position:absolute;
+	background-color: rgb(177, 81, 80);
+	color: rgb(255, 255, 255);
+	border-radius: 5px;
+	padding-right: 10px;
+	float:left;
+}
+
+#capacity-alert-wrapper > div#attention-tag div#clock-icon {
+	padding-right: 10px;
+	padding-left: 15px;
+}
+
+#capacity-alert-wrapper > div#attention-tag div.slot-bar {
+	background-color: rgb(253, 116, 115);
+	border-bottom-left-radius: 5px;
+	border-top-left-radius: 5px;
+}
+
+#capacity-alert-wrapper.desktop > div#attention-text {
+	position:absolute;
+	margin-left:170px;
+}
+
+#capacity-alert-wrapper.mobile {
+	width:100%;
+	position:relative;
+}
+
+#capacity-alert-wrapper.mobile > div#attention-text {
+}
+
+*/
+
+
+#attention-area {
+	text-align: center;
+}
+
+div#capacity-attention-wrapper {
+	line-height: 25px;
+	height: 25px;
+	font-size: 16px;
+	display: inline-block;
+	margin-bottom: 10px;
+}
+
+#capacity-attention-wrapper > div#attention-tag {
+	float:left;
+	background-color: rgb(177, 81, 80);
+	color: rgb(255, 255, 255);
+	border-radius: 5px;
+	padding-right: 10px; 
+}
+
+#capacity-attention-wrapper > div#attention-tag div.slot-bar {
+	float:left;
+	position: relative;
+	background-color: rgb(253, 116, 115);
+	border-bottom-left-radius: 5px;
+	border-top-left-radius: 5px;
+	height: 25px;
+}
+
+#capacity-attention-wrapper > div#attention-tag div#clock-icon {
+	float: left;
+	padding-right: 10px;
+	padding-left: 10px;
+}
+
+#capacity-attention-wrapper.desktop #attention-text {
+	float: left;
+	margin-left: 5px;
+}
+
+#capacity-attention-wrapper.mobile #attention-text {
+	float: none;
+}
+
+#capacity-attention-wrapper #attention-text .highlight {
+	color: rgb(177, 81, 80);
+}
