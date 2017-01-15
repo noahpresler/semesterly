@@ -245,6 +245,18 @@ export class CourseModalBody extends React.Component {
                         { hasTakenDisplay }
                     </div>
                     <div className="col-8-16">
+
+                        <div id="attention-area">
+                            <div id="capacity-attention-wrapper" className="desktop">
+                                <AttentionTag />
+                                <div id="attention-text">
+                                    <span>
+                                        Over <span className="highlight">223/43</span> students have added this course!
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+
                         <h3 className="modal-module-header">Reactions</h3>
                         <p>Check out your classmate's reactions – click an emoji to add your own opinion!</p>
                         <div id="reactions-wrapper">
@@ -275,6 +287,18 @@ export class CourseModalBody extends React.Component {
         );
     }
 }
+
+const AttentionTag = () => {
+    return (
+        <div id="attention-tag">
+            <div className="slot-bar"></div>
+            <div id="clock-icon">
+                <i className="fa fa-clock-o"></i>
+            </div>
+            Likely to Waitlist
+        </div>
+    );
+};
 
 const FakeSlot = ({num, code, name}) => {
     let maxColourIndex = COLOUR_DATA.length - 1;
