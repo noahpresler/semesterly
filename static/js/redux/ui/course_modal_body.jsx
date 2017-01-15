@@ -236,18 +236,18 @@ export class CourseModalBody extends React.Component {
         let creditsSuffix = numCredits === 1 ? " credit" : " credits";
         let avgRating = evalInfo.reduce(function(sum, e) { return sum + parseFloat(e.score); },0) / evalInfo.length;
         const attentionTag = (
-            <div id="capacity-area-wrapper">
+            <div id="capacity-tracker-wrapper">
                 <div id="capacity-attention-wrapper">
                     <div id="attention-tag">
                         <div className="slot-bar"></div>
                         <div id="clock-icon">
                             <i className="fa fa-clock-o"></i>
                         </div>
-                        <span>Likely to Waitlist</span>
+                        <span>Waitlist Likely</span>
                     </div>
                     <div id="attention-text">
                         <span>
-                            Over <span className="highlight">223/43</span> students have added this course!
+                            Over <span className="highlight">552%</span> of seats added by students!
                         </span>
                     </div>
                 </div>
