@@ -45,6 +45,11 @@ SOCIAL_AUTH_GOOGLE_OAUTH2_SCOPE = [
     'https://www.googleapis.com/auth/calendar'
 ]
 GOOGLE_API_KEY = 'AIzaSyD-zqYiewSVAstidBlBtMWnmgWhDvBNTJo'
+SOCIAL_AUTH_GOOGLE_OAUTH2_AUTH_EXTRA_ARGUMENTS = {
+    'access_type': 'offline',  # Enables the refreshing grant
+    'approval_promt': 'force'  # Enables refresh_token
+}
+
 
 SOCIAL_AUTH_LOGIN_REDIRECT_URL = '/'
 SOCIAL_AUTH_LOGIN_ERROR_URL = '/'
