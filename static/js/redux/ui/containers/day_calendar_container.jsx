@@ -62,6 +62,7 @@ const mapDispatchToProps = (dispatch) => {
     fetchShareTimetableLink: () => dispatch(fetchShareTimetableLink()),
     togglePreferenceModal: () => dispatch({ type: 'TOGGLE_PREFERENCE_MODAL' }),
     addTTtoGCal: () => dispatch(addTTtoGCal()),
+    toggleSaveCalendarModal: () => {dispatch({type: "TRIGGER_SAVE_CALENDAR_MODAL"})},
     createiCalfromTimetable,
     handleCreateNewTimetable,    
   }
