@@ -234,7 +234,7 @@ export class CourseModalBody extends React.Component {
 
         let creditsSuffix = numCredits === 1 ? " credit" : " credits";
         let avgRating = evalInfo.reduce(function(sum, e) { return sum + parseFloat(e.score); },0) / evalInfo.length;
-        const show_capacity_attention = this.props.popularityPercent > 75;
+        const show_capacity_attention = this.props.popularityPercent > 60;
         const attentioncapacityTracker = (
             <div className="capacity-tracker-wrapper">
                 <div id="capacity-attention-wrapper">
@@ -247,7 +247,7 @@ export class CourseModalBody extends React.Component {
                     </div>
                     <div id="attention-text">
                         <span>
-                            Over <span className="highlight">{parseInt(this.props.popularityPercent)}%</span> of seats added by students!
+                            Over <span className="highlight">{parseInt(this.props.popularityPercent)}%</span> of seats added by students on Semesterly!
                         </span>
                     </div>
                 </div>
@@ -256,7 +256,7 @@ export class CourseModalBody extends React.Component {
         const capacityTracker = (
             <div className="capacity-tracker-wrapper">
                 <div id="capacity-tracker-text">
-                    <span>{parseInt(this.props.popularityPercent)}% of Seats Added</span>
+                    <span>{parseInt(this.props.popularityPercent)}% of Seats Added on Semesterly</span>
                 </div>
             </div>
         );
