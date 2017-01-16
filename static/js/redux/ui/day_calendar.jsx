@@ -129,7 +129,7 @@ class DayCalendar extends React.Component {
     		</div>
     	});
     	let saveToCalendarButton = (
-	    	<button onClick={() => console.log('clicked')}
+	    	<button onClick={() => this.props.createiCalfromTimetable(this.props.active)}
 	    					className="save-to-ical">
 	    		<i className="fa fa-calendar-plus-o" />
 	    	</button>
