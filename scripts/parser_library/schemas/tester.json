@@ -12,8 +12,24 @@
 				}
 			],
 			"properties": {
+				"days": {},
 				"start": {},
 				"end": {}
+			},
+			"additionalProperties": false
+		},
+		"location": {
+			"allOf": [
+				{
+					"$ref": "definitions.json#/location"
+				}
+			],
+			"properties": {
+				"school_code": {},
+				"campus": {},
+				"building": {},
+				"room": {},
+				"building_room": {}
 			},
 			"additionalProperties": false
 		}
