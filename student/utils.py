@@ -19,34 +19,6 @@ def next_weekday(d, weekday):
         days_ahead += 7
     return d + datetime.timedelta(days_ahead)
 
-def get_google_credentials():
-    """Gets valid user credentials from storage.
-
-    If nothing has been stored, or if the stored credentials are invalid,
-    the OAuth2 flow is completed to obtain the new credentials.
-
-    Returns:
-        Credentials, the obtained credential.
-    """
-    home_dir = os.path.expanduser('~')
-    credential_dir = os.path.join(home_dir, '.credentials')
-    if not os.path.exists(credential_dir):
-        os.makedirs(credential_dir)
-    credential_path = os.path.join(credential_dir,
-                                   'calendar-python-quickstart.json')
-
-    store = Storage(credential_path)
-    credentials = store.get()
-    if not credentials or credentials.invalid:
-        flow = client.flow_from_clientsecrets(CLIENT_SECRET_FILE, SCOPES)
-        flow.user_agent = APPLICATION_NAME
-        if flags:
-            credentials = tools.run_flow(flow, store, flags)
-        else: # Needed only for compatibility with Python 2.6
-            credentials = tools.run(flow, store)
-        print('Storing credentials to ' + credential_path)
-    return credentials
-
 def create_student(strategy, details, response, user, *args, **kwargs):
     backend_name = kwargs['backend'].name
     if Student.objects.filter(user=user).exists():
@@ -58,12 +30,11 @@ def create_student(strategy, details, response, user, *args, **kwargs):
         provider=backend_name,
     ).first()
 
-    try:
-        access_token = social_user.extra_data["access_token"]
-    except TypeError:
-      access_token = json.loads(social_user.extra_data)["access_token"]
-
     if backend_name == 'google-oauth2':
+      try:
+        access_token = social_user.extra_data["access_token"]
+      except TypeError:
+        access_token = json.loads(social_user.extra_data)["access_token"]
       response = requests.get(
           'https://www.googleapis.com/plus/v1/people/me'.format(
             social_user.uid,
@@ -75,6 +46,12 @@ def create_student(strategy, details, response, user, *args, **kwargs):
       new_student.save()
 
     elif backend_name == 'facebook':
+
+      try:
+        access_token = social_user.extra_data["access_token"]
+      except TypeError:
+        access_token = json.loads(social_user.extra_data)["access_token"]
+
       if social_user:
           url = u'https://graph.facebook.com/{0}/' \
                 u'?fields=picture&type=large' \
