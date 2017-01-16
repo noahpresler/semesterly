@@ -257,7 +257,7 @@ export class CourseModalBody extends React.Component {
         const capacityTracker = (
             <div className="capacity-tracker-wrapper">
                 <div id="capacity-tracker-text">
-                    <span>43% of seats added</span>
+                    <span>43% of Seats Added</span>
                 </div>
             </div>
         );
