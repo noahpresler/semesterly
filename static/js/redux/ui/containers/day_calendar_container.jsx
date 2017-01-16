@@ -53,6 +53,7 @@ const mapStateToProps = (state) => {
       isFetchingShareLink,
       shareLink,
       shareLinkValid,
+      active,
 	}
 }
 const mapDispatchToProps = (dispatch) => {
@@ -60,6 +61,7 @@ const mapDispatchToProps = (dispatch) => {
     saveTimetable: () => dispatch(saveTimetable()),
     fetchShareTimetableLink: () => dispatch(fetchShareTimetableLink()),
     togglePreferenceModal: () => dispatch({ type: 'TOGGLE_PREFERENCE_MODAL' }),
+    createiCalfromTimetable,
     handleCreateNewTimetable,    
   }
 }
