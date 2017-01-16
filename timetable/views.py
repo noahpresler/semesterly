@@ -432,7 +432,16 @@ def get_detailed_course_json(school, course, sem, student=None):
   json_data['regexed_courses'] = get_regexed_courses(school, json_data)
   if student and student.user.is_authenticated() and student.social_courses:
     json_data['classmates'] = get_classmates_from_course_id(school, student, course.id,sem)
+  json_data['popularity_percent'] = get_popularity_percent_from_course(course, sem)
   return json_data
+
+def get_popularity_percent_from_course(course, sem):
+    added = PersonalTimetable.objects.filter(courses__in=[course], semester=sem).values('student').distinct().count()
+    capacity = sum(Section.objects.filter(course=course, semester=sem).values_list('size', flat=True))
+    try:
+      return added / float(capacity)
+    except ZeroDivisionError:
+      return 0
 
 def get_basic_course_json(course, sem, extra_model_fields=[]):
   basic_fields = ['code','name', 'id', 'description', 'department', 'num_credits', 'areas', 'campus']
