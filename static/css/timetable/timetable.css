@@ -135,3 +135,15 @@ button.row-button:hover {
         margin: 5px 5px 0;
     }
 }
+
+.save-timetable img {
+    display: inline-block;
+    position: absolute;
+    width: 100%;
+    top: 4px;
+    left: 7px;
+    line-height: 30px;
+    font-size: 18px;
+    height: 18px;
+    width: 18px;
+}

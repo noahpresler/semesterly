@@ -80,7 +80,7 @@ class Calendar extends React.Component {
             link={this.props.shareLink}
             onClickOut={this.hideShareLink} /> :
         null;
-  	let addButton = (
+	let addButton = (
 			<button onClick={this.props.handleCreateNewTimetable}
 							className="save-timetable add-button">
 				<i className="fa fa-plus" />
@@ -97,16 +97,16 @@ class Calendar extends React.Component {
     		<i className="fa fa-cog" />
     	</button>
     );
-    let saveToCalendarButton = (
-    	<button onClick={() => this.props.createiCalfromTimetable()}
-    					className="save-timetable">
-    		<i className="fa fa-download" />
-    	</button>
-	);
-	let saveToGoogleCalendarButton = (
+ //    let saveToCalendarButton = (
+ //    	<button onClick={() => this.props.createiCalfromTimetable()}
+ //    					className="save-timetable">
+ //    		<i className="fa fa-download" />
+ //    	</button>
+	// );
+	let saveToCalendarButton = (
     	<button onClick={() => this.props.addTTtoGCal(this.props.active)}
     					className="save-timetable">
-    		<i className="fa fa-google" />
+    		<img src="static/img/addtocalendar.png"/>
     	</button>
 	);
 		return (
@@ -121,7 +121,6 @@ class Calendar extends React.Component {
 	          	{ addButton }
 	          	{ saveButton }
 	          	{ saveToCalendarButton }
-	          	{ saveToGoogleCalendarButton }
 	          	{ preferenceButton }
 	          </div>
 	          <div className="fc-center" />
