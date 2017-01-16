@@ -129,12 +129,11 @@ class DayCalendar extends React.Component {
     		</div>
     	});
     	let saveToCalendarButton = (
-	    	<button onClick={() => this.props.createiCalfromTimetable(this.props.active)}
-	    					className="save-to-ical">
-	    		<i className="fa fa-calendar-plus-o" />
+	    	<button onClick={() => this.props.addTTtoGCal(this.props.active)}
+	    					className="save-timetable">
+	    		<img src="static/img/addtocalendar.png"/>
 	    	</button>
 		);
-
 		return (
 	      <div id="calendar" className="fc fc-ltr fc-unthemed day-calendar">
 	        <div className="fc-toolbar no-print">
