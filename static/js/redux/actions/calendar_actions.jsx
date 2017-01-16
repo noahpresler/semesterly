@@ -1,4 +1,4 @@
-import { getRequestShareTimetableLinkEndpoint } from '../constants.jsx';
+import { getRequestShareTimetableLinkEndpoint, getAddTTtoGCalEndpoint } from '../constants.jsx';
 import { getActiveTimetable } from './user_actions.jsx';
 import { store } from '../init.jsx';
 import ical from 'ical-generator';
@@ -57,6 +57,24 @@ export function fetchShareTimetableLink() {
 				window.location.hostname + "/share/" + ref.link);
 		})
 
+	}
+}
+
+export function addTTtoGCal() {
+	return (dispatch) => {
+		let state = store.getState();
+		let timetableState = state.timetables;
+		fetch(getAddTTtoGCalEndpoint(), {
+			method: 'POST',
+			body: JSON.stringify({
+				timetable: getActiveTimetable(timetableState),
+			}),
+			credentials: 'include',
+		})
+		.then(response => response.json())
+		.then(json => {
+			console.log(json);
+		})
 	}
 }
 
