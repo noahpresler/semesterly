@@ -1,6 +1,6 @@
 .save-calendar-modal {
 	max-width: 450px;
-	height: 588px;
+	height:465px;
 	overflow: auto;
 }
 .save-calendar-modal > div {
@@ -114,12 +114,17 @@
 	.save-calendar-modal {
        max-width: 500px;
 	   max-width: 1200px;
-	   height: 85%;
-	   max-height: 900px;
 	}
 
 	.header-pic {
-       display: none;
+        height: 50px;
+	    width: 50px;
+	    background-size: cover;
+	    background-position: center;
+	    background-repeat: no-repeat;
+	    position: absolute;
+	    right: 7%;
+	    bottom: 10px;
 	}
 
  	.signup-modal #features{
