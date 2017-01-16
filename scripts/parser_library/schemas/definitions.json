@@ -1,0 +1,18 @@
+{
+	"time": {
+		"$schema": "http://json-schema.org/draft-04/schema#",
+		"type": "object",
+		"properties": {
+			"start": {
+				"type": "string"
+			},
+			"end": {
+				"type": "string"
+			}
+		},
+		"required": [
+			"start",
+			"end"
+		]
+	}
+}

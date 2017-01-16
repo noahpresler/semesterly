@@ -8,13 +8,10 @@
 		"time": {
 			"allOf": [
 				{
-					"$ref": "definitions.json#/"
+					"$ref": "definitions.json#/time"
 				}
 			],
 			"properties": {
-				"middle": {
-					"type": "string"
-				},
 				"start": {},
 				"end": {}
 			},
