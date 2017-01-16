@@ -3,6 +3,15 @@
 		"$schema": "http://json-schema.org/draft-04/schema#",
 		"type": "object",
 		"properties": {
+			"days": {
+				"type": "array",
+				"items": {
+					"type": "string",
+					"pattern": "(?:[U|M|T|W|R|F|S])|(?:\\d{1,2}\/\\d{1,2}\/\\d{4})"					
+				},
+				"minItems": 1,
+				"uniqueItems": true
+			},
 			"start": {
 				"type": "string"
 			},
@@ -11,8 +20,93 @@
 			}
 		},
 		"required": [
+			"days",
 			"start",
 			"end"
 		]
+	},
+	"location": {
+		"$schema": "http://json-schema.org/draft-04/schema#",
+		"type": "object",
+		"properties": {
+			"school_code": {
+				"type": "string"
+			},
+			"campus": {
+				"type": "string"
+			},
+			"building": {
+				"type": "string"
+			},
+			"room": {
+				"type": "string"
+			},
+			"building_room": {
+				"type": "string"
+			}
+		},
+		"_comment": "(building or (building and room)) xor building_room",
+		"oneOf": [
+			{
+				"anyOf": [
+					{
+						"required": ["building"]
+					}
+				]
+			},
+			{
+				"required": ["building_room"],
+				"not": {
+					"oneOf": [
+						{
+							"required": ["room"]
+						},
+						{
+							"required": ["building", "room"]
+						}
+					]
+				}
+			}
+		]
+	},
+	"department": {
+		"$schema": "http://json-schema.org/draft-04/schema#",
+		"type": "object",
+		"properties": {
+			"code": {
+				"type": "string"
+			},
+			"name": {
+				"type": "string"
+			}
+		},
+		"anyOf": [
+			{
+				"required": ["code"]
+			},
+			{
+				"required": ["name"]
+			}
+		]
+	},
+	"school": {
+		"$schema": "http://json-schema.org/draft-04/schema#",
+		"type": "object",
+		"properties": {
+			"code": {
+				"type": "string"
+			},
+			"name": {
+				"type": "string"
+			},
+			"anyOf": [
+				{
+					"required": ["code"]
+				},
+				{
+					"required": ["name"]
+				}
+			]
+		}
 	}
 }
