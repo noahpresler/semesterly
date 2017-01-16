@@ -25,6 +25,7 @@ const mapStateToProps = (state) => {
 		hasHoveredResult: activeTimetable.courses.some(course => course.fake),
 		prerequisites: state.courseInfo.data.prerequisites,
 		description: state.courseInfo.data.description,
+		popularityPercent: state.courseInfo.data.popularity_percent * 100,
 		inRoster: courseSections[state.courseInfo.id] !== undefined,
 		isLoggedIn: state.userInfo.data.isLoggedIn,
 		schoolSpecificInfo: getSchoolSpecificInfo(state.school.school),
