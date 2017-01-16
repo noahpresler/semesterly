@@ -2,7 +2,7 @@ import { connect } from 'react-redux';
 import DayCalendar from '../day_calendar.jsx';
 import { saveTimetable } from '../../actions/user_actions.jsx';
 import { handleCreateNewTimetable } from '../../actions/timetable_actions.jsx';
-import { fetchShareTimetableLink } from '../../actions/calendar_actions.jsx';
+import { fetchShareTimetableLink, createiCalfromTimetable, addTTtoGCal} from '../../actions/calendar_actions.jsx';
 
 const getMaxHourBasedOnWindowHeight = () => {
   let calRow = $(".cal-row");
@@ -61,6 +61,7 @@ const mapDispatchToProps = (dispatch) => {
     saveTimetable: () => dispatch(saveTimetable()),
     fetchShareTimetableLink: () => dispatch(fetchShareTimetableLink()),
     togglePreferenceModal: () => dispatch({ type: 'TOGGLE_PREFERENCE_MODAL' }),
+    addTTtoGCal: () => dispatch(addTTtoGCal()),
     createiCalfromTimetable,
     handleCreateNewTimetable,    
   }
