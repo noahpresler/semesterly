@@ -5,18 +5,38 @@ from django.views.decorators.csrf import csrf_exempt
 from django.forms.models import model_to_dict
 from django.db.models import Q
 from django.core.urlresolvers import reverse
+from django.conf import settings
 from django.template import RequestContext
 from hashids import Hashids
 from pytz import timezone
-import copy, functools, itertools, json, logging, os
+import copy, functools, itertools, json, logging, os, httplib2
+import datetime
 from timetable.models import *
 from student.models import *
 from django.forms.models import model_to_dict
 from django.contrib.auth.decorators import login_required
 from django.core.signing import TimestampSigner, BadSignature, SignatureExpired
 from django.db.models import Count
+from apiclient.discovery import build
+from oauth2client.client import AccessTokenCredentials
 
+from apiclient import discovery
+from oauth2client import client
+from oauth2client import tools
+from oauth2client.file import Storage
+
+from student.utils import *
 from timetable.utils import *
+
+DAY_MAP = {
+        'M' : 'mo',
+        'T' : 'tu',
+        'W' : 'we',
+        'R' : 'th',
+        'F' : 'fr',
+        'S' : 'sa',
+        'U' : 'su'
+    };
 
 def get_student(request):
   logged = request.user.is_authenticated()
@@ -371,3 +391,79 @@ def delete_registration_token(request):
         'token': 'deleted'
     }
     return HttpResponse(json.dumps(json_data), content_type="application/json")
+
+def get_semester_from_tt(tt):
+    try:
+        tt['semester']
+    except KeyError:
+        semester = 'F'
+        for course in tt['courses']:
+            for slot in course['slots']:
+                return slot['semester']
+        return semester
+
+@csrf_exempt
+@validate_subdomain
+def add_tt_to_gcal(request):
+    student = Student.objects.get(user=request.user)
+    tt = json.loads(request.body)['timetable']
+    social_user = student.user.social_auth.filter(
+        provider='google-oauth2',
+    ).first()
+    try:
+        access_token = social_user.extra_data["access_token"]
+    except TypeError:
+      access_token = json.loads(social_user.extra_data)["access_token"]
+
+    #set up credentials and API access
+    credentials = AccessTokenCredentials(access_token, 'my-user-agent/1.0')
+    http = credentials.authorize(httplib2.Http(timeout=100000000))
+    service = discovery.build('calendar', 'v3', http=http)
+
+    #create calendar
+    calendar = {'summary': 'Semester.ly Schedule', 'timeZone': 'America/New_York'}
+    created_calendar = service.calendars().insert(body=calendar).execute()
+
+    semester = get_semester_from_tt(tt)
+    if semester == 'F':
+        #ignore year, year is set to current year
+        sem_start = datetime.datetime(2017,8,30,17,0,0)
+        sem_end = datetime.datetime(2017,12,20,17,0,0)
+    else:
+        #ignore year, year is set to current year
+        sem_start = datetime.datetime(2017,1,30,17,0,0)
+        sem_end = datetime.datetime(2017,5,20,17,0,0)
+
+    #add events
+    for course in tt['courses']:
+        for slot in course['slots']:
+            start = next_weekday(sem_start, slot['day'])
+            start = start.replace(hour=int(slot['time_start'].split(':')[0]), minute=int(slot['time_start'].split(':')[1]))
+            end = next_weekday(sem_start, slot['day'])
+            end = end.replace(hour=int(slot['time_end'].split(':')[0]), minute=int(slot['time_end'].split(':')[1]))
+            until = next_weekday(sem_end, slot['day'])
+
+            description = course.get('description','')
+            instructors = 'Taught by: ' + slot['instructors'] + '\n' if len(slot.get('instructors','')) > 0 else ''
+
+            res = {
+              'summary': slot['name'] + " " + slot['code'] + slot['meeting_section'],
+              'location': slot['location'],
+              'description': slot['code'] + slot['meeting_section'] + '\n' + instructors + description + '\n\n' + 'Created by Semester.ly',
+              'start': {
+                'dateTime': start.strftime("%Y-%m-%dT%H:%M:%S"),
+                'timeZone': 'America/New_York',
+              },
+              'end': {
+                'dateTime': end.strftime("%Y-%m-%dT%H:%M:%S"),
+                'timeZone': 'America/New_York',
+              },
+              'recurrence': [
+                'RRULE:FREQ=WEEKLY;UNTIL=' + until.strftime("%Y%m%dT%H%M%SZ") + ';BYDAY=' + DAY_MAP[slot['day']]
+              ],
+            }
+            event = service.events().insert(calendarId=created_calendar['id'], body=res).execute()
+
+    print 'Calendar created: %s' % (created_calendar.get('htmlLink'))
+
+    return HttpResponse(json.dumps({}), content_type="application/json")

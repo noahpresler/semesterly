@@ -98,9 +98,15 @@ class Calendar extends React.Component {
     	</button>
     );
     let saveToCalendarButton = (
-    	<button onClick={() => this.props.createiCalfromTimetable(this.props.active)}
+    	<button onClick={() => this.props.createiCalfromTimetable()}
     					className="save-timetable">
     		<i className="fa fa-download" />
+    	</button>
+	);
+	let saveToGoogleCalendarButton = (
+    	<button onClick={() => this.props.addTTtoGCal(this.props.active)}
+    					className="save-timetable">
+    		<i className="fa fa-google" />
     	</button>
 	);
 		return (
@@ -115,6 +121,7 @@ class Calendar extends React.Component {
 	          	{ addButton }
 	          	{ saveButton }
 	          	{ saveToCalendarButton }
+	          	{ saveToGoogleCalendarButton }
 	          	{ preferenceButton }
 	          </div>
 	          <div className="fc-center" />
