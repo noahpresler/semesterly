@@ -13,7 +13,20 @@ export class CourseModalBody extends React.Component {
     constructor(props) {
         super(props);
         this.sendReact = this.sendReact.bind(this);
-        this.fetchCourseInfo = this.fetchCourseInfo.bind(this)
+        this.fetchCourseInfo = this.fetchCourseInfo.bind(this);
+        this.state = {
+            'mobile': $(window).width() < 767
+        }
+    }
+
+    componentWillMount() {
+        window.addEventListener('resize', (e) => {
+            if (this.state.mobile != $(window).width() < 767) {
+                this.setState({
+                    'mobile': $(window).width() < 767
+                });
+            }
+        });
     }
 
     sendReact(cid, title) {
@@ -72,7 +85,6 @@ export class CourseModalBody extends React.Component {
             this.props.fetchCourseInfo(courseId);
         }
     }
-
 
     render() {
         if (this.props.isFetching) {
@@ -222,6 +234,32 @@ export class CourseModalBody extends React.Component {
 
         let creditsSuffix = numCredits === 1 ? " credit" : " credits";
         let avgRating = evalInfo.reduce(function(sum, e) { return sum + parseFloat(e.score); },0) / evalInfo.length;
+        const show_capacity_attention = this.props.popularityPercent > 75;
+        const attentioncapacityTracker = (
+            <div className="capacity-tracker-wrapper">
+                <div id="capacity-attention-wrapper">
+                    <div id="attention-tag">
+                        <div className="slot-bar"></div>
+                        <div id="clock-icon">
+                            <i className="fa fa-clock-o"></i>
+                        </div>
+                        <span>Waitlist Likely</span>
+                    </div>
+                    <div id="attention-text">
+                        <span>
+                            Over <span className="highlight">{parseInt(this.props.popularityPercent)}%</span> of seats added by students!
+                        </span>
+                    </div>
+                </div>
+            </div>
+        );
+        const capacityTracker = (
+            <div className="capacity-tracker-wrapper">
+                <div id="capacity-tracker-text">
+                    <span>{parseInt(this.props.popularityPercent)}% of Seats Added</span>
+                </div>
+            </div>
+        );
         return (
         <div id="modal-body">
                 <div className="cf">
@@ -238,6 +276,12 @@ export class CourseModalBody extends React.Component {
                                 </div>
                             </div>
                         </div>
+                        { !show_capacity_attention &&
+                            capacityTracker
+                        }
+                        { show_capacity_attention && this.state.mobile &&
+                            attentioncapacityTracker
+                        }
                         { prerequisitesDisplay }
                         { areasDisplay }
                         { academicSupportDisplay }
@@ -245,6 +289,9 @@ export class CourseModalBody extends React.Component {
                         { hasTakenDisplay }
                     </div>
                     <div className="col-8-16">
+                        { show_capacity_attention && !this.state.mobile &&
+                            attentioncapacityTracker
+                        }
                         <h3 className="modal-module-header">Reactions</h3>
                         <p>Check out your classmate's reactions – click an emoji to add your own opinion!</p>
                         <div id="reactions-wrapper">
