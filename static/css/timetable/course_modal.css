@@ -591,7 +591,7 @@ h3.modal-module-header small {
 }
 
 /* NOTE: 950px is fluid up to XXXX% */
-@media (max-width: 950px) {
+@media (max-width: 1088px) {
 	#capacity-attention-wrapper > div#attention-tag {
 		float: none;
 	}
@@ -603,6 +603,12 @@ h3.modal-module-header small {
 	#capacity-attention-wrapper {
 		font-size: 16px;
 		margin-top: 15px;
+	}
+}
+
+@media (max-width: 801px) {
+	#capacity-attention-wrapper {
+		font-size: 14px;
 	}
 }
 
