@@ -45,7 +45,7 @@ export class SocialProfile extends React.Component {
 							<span>Privacy</span>
 						</a>
 						<a href="/user/logout/">
-							<i className="fa fa-sign-out"></i>
+							<i className="fa fa-sign-out" aria-hidden="true"></i>
 							<span>Sign out</span>
 						</a>
 					</div>
@@ -59,6 +59,9 @@ export class SocialProfile extends React.Component {
 					<span>Signup/Login</span>
 					<span className="mobile">Signup Login</span>
 					<i className="fa fa-facebook-square"></i>
+					<a href="/login/google-oauth2" style={{color: '#3B5998'}}>
+						<i className="fa fa-google-plus"></i>
+					</a>
 				</h2>
 			</a>
 		);
