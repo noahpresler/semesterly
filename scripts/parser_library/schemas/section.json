@@ -16,7 +16,8 @@
 			"properties": {
 				"code": {}
 			},
-			"additionalProperties": false
+			"additionalProperties": false,
+			"required": [ "code" ]
 		},
 		"course": {
 			"allOf": [
@@ -27,7 +28,8 @@
 			"properties": {
 				"code": {}
 			},
-			"additionalProperties": false
+			"additionalProperties": false,
+			"required": [ "code" ]
 		},
 		"code": {
 			"type": "string"
@@ -77,20 +79,34 @@
 						"type": "string"
 					},
 					{
-						"$ref": "schema_instructor.json#/"
+						"$ref": "instructor.json#/"
 					}
 				]
 			}
 		},
 		"final_exam": {
-			"$ref": "schema_final_exam.json#/"
+			"allOf": [
+				{
+					"$ref": "final_exam.json#/"
+				}	
+			]
+		},
+		"textbooks": {
+			"type": "array",
+			"items": {
+				"allOf": [
+					{
+						"$ref": "textbook.json#/"
+					}
+				],
+				"properties": {
+					"isbn": {},
+					"title": {},
+					"author": {}
+				},
+				"additionalProperties": false,
+			}
 		}
 	},
-	"additionalProperties": false,
-	"required": [
-		"section",
-		"term",
-		"year",
-		"instructors"
-	]
+	"required": [ "code" ]
 }
