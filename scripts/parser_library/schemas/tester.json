@@ -39,11 +39,9 @@
 				"building_room": {}
 			},
 			"additionalProperties": false,
-			"required": [ "school" ]
+			"required": [ ]
 		}
 	},
 	"additionalProperties": false,
-	"required": [
-		"name"
-	]
+	"required": [ "name" ]
 }
