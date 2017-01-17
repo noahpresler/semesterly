@@ -67,6 +67,18 @@
 		"title": {
 			"type": "string"
 		},
+		"department": {
+			"allOf": [
+				{
+					"$ref": "definitions.json#/department"
+				}
+			],
+			"properties": {
+				"code": {},
+				"name": {}
+			},
+			"additionalProperties": false
+		},
 		"email": {
 			"allOf": [
 				{

@@ -79,7 +79,17 @@
 						"type": "string"
 					},
 					{
-						"$ref": "instructor.json#/"
+						"allOf": [
+							{
+								"$ref": "instructor.json#/"
+							}
+						],
+						"properties": {
+							"name": {},
+							"email": {},
+							"homepage": {}
+						},
+						"additionalProperties": false
 					}
 				]
 			}
@@ -106,7 +116,24 @@
 				},
 				"additionalProperties": false,
 			}
-		}
+		},
+		"meetings": {
+			"type": "array",
+			"items": {
+				"allOf": [
+					{
+						"$ref": "meeting.json#/"
+					}
+				],
+				"properties": {
+					"dates": {},
+					"days": {},
+					"time": {},
+					"location": {},
+				},
+				"additionalProperties": false
+			}
+		}		
 	},
 	"required": [ "code" ]
 }
