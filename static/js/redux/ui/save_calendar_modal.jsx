@@ -17,7 +17,7 @@ export class SaveCalendarModal extends React.Component {
             <div id="modal-content">
                 <div id="modal-header">
                     <div className="header-pic" style={{backgroundImage: 'url(/static/img/addtocalendarfeature.png)'}}></div>
-                    <h1>Add to calendar</h1>
+                    <h1>Export calendar</h1>
                 </div>
             </div>
         let modalStyle = {
@@ -37,7 +37,7 @@ export class SaveCalendarModal extends React.Component {
         
         return (
             <Modal ref="modal"
-                className="save-calendar-modal max-modal"
+                className="save-calendar-modal abnb-modal max-modal"
                 modalStyle={modalStyle}
                 onHide={() => {
                     this.props.toggleSaveCalendarModal();
