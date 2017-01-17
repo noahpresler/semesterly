@@ -22,8 +22,9 @@ def color_json(j):
 	return colorful_json
 
 def pretty_format_error_message(path, message, schema_path):
-	location = '/'.join(p for p in path) + '/'
-	s = ['is valid under each of', 'is not valid under any of the given schema']
+	# NOTE: str(p) used to deal with indices (ex: #/time/days/1/), should make index []
+	location = '/'.join(str(p) for p in path) + '/'
+	s = ['is valid under each of', 'is not valid under any of the given schemas']
 	if s[0] in message:
 		s = s[0]
 		a, b = message.split(s, 1)
