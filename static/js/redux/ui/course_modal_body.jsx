@@ -239,7 +239,6 @@ export class CourseModalBody extends React.Component {
             <div className="capacity-tracker-wrapper">
                 <div id="capacity-attention-wrapper">
                     <div id="attention-tag">
-                        <div className="slot-bar"></div>
                         <div id="clock-icon">
                             <i className="fa fa-clock-o"></i>
                         </div>
