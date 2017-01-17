@@ -13,6 +13,9 @@ const mapDispatchToProps = (dispatch) => {
 			type: "OVERRIDE_SETTINGS_SHOW",
 			data: true,
 		}),
+		triggerAcquisitionModal: () => dispatch({
+			type: "TRIGGER_ACQUISITION_MODAL"
+		})
 	}
 }
 

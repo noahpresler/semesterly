@@ -61,6 +61,11 @@ def get_user_dict(school, student, semester):
         user_dict["userFirstName"] = student.user.first_name
         user_dict["userLastName"] = student.user.last_name
 
+        facebook_user_exists = student.user.social_auth.filter(
+            provider='facebook',
+        ).exists()
+        user_dict["FacebookSignedUp"] = facebook_user_exists
+
         google_user_exists = student.user.social_auth.filter(
             provider='google-oauth2',
         ).exists()
