@@ -437,10 +437,10 @@ def get_detailed_course_json(school, course, sem, student=None):
 
 def eval_dopple_modify(course, evals):
   """
-  Flag all evals s.t. there exists repeated term+year values. Call such instances dopples.
+  Flag all eval instances s.t. there exists repeated term+year values. Call such instances dopples.
 
   Return:
-    Modified evaluations dictionary (added 'dopple' flag)
+    List of modified evaluation dictionaries (added 'dopple' flag)
   """
   years = Evaluation.objects.filter(course=course).values('year').annotate(Count('id')).filter(id__count__gt=1).values_list('year')
   years = { e[0] for e in years }
