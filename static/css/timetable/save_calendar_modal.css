@@ -1,13 +1,13 @@
-.save-calendar-modal {
+.abnb-modal {
 	max-width: 450px;
 	height:465px;
 	overflow: auto;
 }
-.save-calendar-modal > div {
+.abnb-modal > div {
 	outline:none;
 }
 
-.save-calendar-modal #modal-header {
+.abnb-modal #modal-header {
 	background-color: #eee;
 	padding: 25px 25px;
 	position: relative;
@@ -132,7 +132,7 @@
 
 @media(max-width: 776px) {
 	
-	.save-calendar-modal {
+	.abnb-modal {
        max-width: 500px;
 	   max-width: 1200px;
 	}
