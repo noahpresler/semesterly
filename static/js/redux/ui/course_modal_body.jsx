@@ -14,16 +14,17 @@ export class CourseModalBody extends React.Component {
         super(props);
         this.sendReact = this.sendReact.bind(this);
         this.fetchCourseInfo = this.fetchCourseInfo.bind(this);
+        this.mobile_width = 767; // NOTE: should be static const (...ES7)
         this.state = {
-            'mobile': $(window).width() < 767
+            'mobile': $(window).width() < this.mobile_width
         }
     }
 
     componentWillMount() {
         window.addEventListener('resize', (e) => {
-            if (this.state.mobile != $(window).width() < 767) {
+            if (this.state.mobile != $(window).width() < this.mobile_width) {
                 this.setState({
-                    'mobile': $(window).width() < 767
+                    'mobile': $(window).width() < this.mobile_width
                 });
             }
         });
@@ -239,7 +240,6 @@ export class CourseModalBody extends React.Component {
             <div className="capacity-tracker-wrapper">
                 <div id="capacity-attention-wrapper">
                     <div id="attention-tag">
-                        <div className="slot-bar"></div>
                         <div id="clock-icon">
                             <i className="fa fa-clock-o"></i>
                         </div>
