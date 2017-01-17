@@ -1,7 +1,7 @@
 {
 	"$schema": "http://json-schema.org/draft-04/schema#",
 	"title": "Course",
-	"description": "Semesterly Course JSON definition",
+	"description": "Semesterly Course JSON schema",
 	"type": "object",
 	"properties": {
 		"kind": {
@@ -23,9 +23,6 @@
 			"type": "string"
 		},
 		"name": {
-			"type": "string"
-		},
-		"campus": {
 			"type": "string"
 		},
 		"credits": {
@@ -105,11 +102,5 @@
 			}
 		}
 	},
-	"additionalProperties": false,
-	"required": [
-		"code",
-		"name",
-		"credits",
-		"department"
-	]
+	"required": [ "code" ]
 }
