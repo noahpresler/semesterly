@@ -1,17 +1,15 @@
 {
 	"name": "Michael",
 	"time": {
-		"days": ["2/13/2016", "2/13/2016", "M", "S"],
+		"days": ["M", "S"],
 		"start": "12",
 		"end": "14:50"
 	},
 	"location": {
-		"school": {
-			"code": "jhu"
-		},
 		"campus": "Homewood",
-		"room": "301",
-		"building": "Shaffer"
+		"room": "1",
+		"building": "there",
+		"building_room": "here"
 	},
 	"homepage": "http://www.google.com"
 }
