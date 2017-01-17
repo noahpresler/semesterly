@@ -18,6 +18,13 @@
 			},
 			"additionalProperties": false
 		},
+		"homepage": {
+			"allOf": [
+				{
+					"$ref": "definitions.json#/url"
+				}
+			]
+		},
 		"location": {
 			"allOf": [
 				{
@@ -25,13 +32,14 @@
 				}
 			],
 			"properties": {
-				"school_code": {},
+				"school": {},
 				"campus": {},
 				"building": {},
 				"room": {},
 				"building_room": {}
 			},
-			"additionalProperties": false
+			"additionalProperties": false,
+			"required": [ "school" ]
 		}
 	},
 	"additionalProperties": false,
