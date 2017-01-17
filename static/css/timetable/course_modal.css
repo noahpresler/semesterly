@@ -590,7 +590,7 @@ h3.modal-module-header small {
 	color: rgb(177, 81, 80);
 }
 
-/* NOTE: 950px is fluid up to XXXX% */
+/* NOTE: 1088px is fluid up to XXXX% */
 @media (max-width: 1088px) {
 	#capacity-attention-wrapper > div#attention-tag {
 		float: none;
