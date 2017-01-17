@@ -7,10 +7,29 @@
 		"kind": {
 			"enum": ["section"]
 		},
-		"course_code": {
-			"type": "string"
+		"school": {
+			"allOf": [
+				{
+					"$ref": "definitions.json#/school"
+				}
+			],
+			"properties": {
+				"code": {}
+			},
+			"additionalProperties": false
 		},
-		"name": {
+		"course": {
+			"allOf": [
+				{
+					"$ref": "course.json#/"
+				}
+			],
+			"properties": {
+				"code": {}
+			},
+			"additionalProperties": false
+		},
+		"code": {
 			"type": "string"
 		},
 		"term": {
@@ -42,7 +61,7 @@
 			"oneOf": [
 				{
 					"type": "string",
-					"pattern": "\\d(.\\d{2})?"
+					"pattern": "\\d+(?:.\\d{1,2})?"
 				},
 				{
 					"type": "number",

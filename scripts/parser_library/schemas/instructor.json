@@ -5,31 +5,126 @@
 	"type": "object",
 	"properties": {
 		"school": {
-			"type": "string"
+			"allOf": [
+				{
+					"$ref": "definitions.json#/school"
+				}
+			],
+			"properties": {
+				"code": {}
+			},
+			"additionalProperties": false
 		},
-		"course_code": {
-			"type": "string"
-		},
-		"section_name": {
-			"type": "string"
+		"classes": {
+			"type": "array",
+			"items": {
+				"type": "object",
+				"properties": {
+					"course": {
+						"allOf": [
+							{
+								"$ref": "course.json#/"
+							}
+						],
+						"properties": {
+							"code": {}
+						},
+						"additionalProperties": false,
+						"required": [ "code" ]
+					},
+					"section": {
+						"allOf": [
+							{
+								"$ref": "section.json#/"
+							}
+						],
+						"properties": {
+							"code": {}
+						},
+						"additionalProperties": false,
+						"required": [ "code" ]
+					}
+				},
+				"additionalProperties": false,
+				"required": [
+					"course",
+					"section"
+				]
+			},
+			"minItems": 1
 		},
 		"name": {
-			"type": "string"
+			"oneOf": [
+				{
+					"type": "string"
+				},
+				{
+					"type": "object",
+					"properties": {
+						"first": {
+							"type": "string"
+						},
+						"last": {
+							"type": "string"
+						}
+					}
+				}
+			]
 		},
 		"title": {
 			"type": "string"
 		},
 		"email": {
-			"type": "string",
-			"pattern": "(^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\\.[a-zA-Z0-9-.]+$)"
+			"allOf": [
+				{
+					"$ref": "definitions.json#/email"
+				}
+			]
 		},
 		"homepage": {
-			"type": "string",
-			"pattern": "(http(s)?:\/\/.)?(www\\.)?[-a-zA-Z0-9@:%._\\+~#=]{2,256}\\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\\+.~#?&//=]*)"
+			"allOf": [
+				{
+					"$ref": "definitions.json#/url"
+				}
+			],
+		},
+		"office": {
+			"type": "object",
+			"properties": {
+				"location": {
+					"allOf": [
+						{
+							"$ref": "definitions.json#/location"
+						}
+					],
+					"properties": {
+						"school": {},
+						"campus": {},
+						"building": {},
+						"room": {},
+						"building_room": {}
+					},
+					"additionalProperties": false
+				},
+				"hours": {
+					"type": "array",
+					"items": {
+						"allOf": [
+							{
+								"$ref": "definitions.json#/time"
+							}
+						],
+						"properties": {
+							"days": {},
+							"start": {},
+							"end": {}
+						},
+						"additionalProperties": false
+					}
+				}
+			}
 		}
 	},
 	"additionalProperties": false,
-	"required": [ 
-		"name" 
-	]
+	"required": [ "name" ]
 }

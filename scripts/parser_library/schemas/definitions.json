@@ -1,13 +1,26 @@
 {
+	"day": {
+		"type": "string",
+		"pattern": "[U|M|T|W|R|F|S]"
+	},
+	"date": {
+		"type": "string",
+		"pattern": "\\d{1,2}\/\\d{1,2}\/\\d{4}"
+	},
 	"time": {
-		"$schema": "http://json-schema.org/draft-04/schema#",
 		"type": "object",
 		"properties": {
 			"days": {
 				"type": "array",
 				"items": {
-					"type": "string",
-					"pattern": "(?:[U|M|T|W|R|F|S])|(?:\\d{1,2}\/\\d{1,2}\/\\d{4})"					
+					"oneOf": [
+						{
+							"$ref": "#/day"
+						},
+						{
+							"$ref": "#/date"
+						}
+					]
 				},
 				"minItems": 1,
 				"uniqueItems": true
@@ -26,11 +39,18 @@
 		]
 	},
 	"location": {
-		"$schema": "http://json-schema.org/draft-04/schema#",
 		"type": "object",
 		"properties": {
-			"school_code": {
-				"type": "string"
+			"school": {
+				"allOf": [
+					{
+						"$ref": "#/school"
+					}
+				],
+				"properties": {
+					"code": {}
+				},
+				"additionalProperties": false
 			},
 			"campus": {
 				"type": "string"
@@ -70,7 +90,6 @@
 		]
 	},
 	"department": {
-		"$schema": "http://json-schema.org/draft-04/schema#",
 		"type": "object",
 		"properties": {
 			"code": {
@@ -90,7 +109,6 @@
 		]
 	},
 	"school": {
-		"$schema": "http://json-schema.org/draft-04/schema#",
 		"type": "object",
 		"properties": {
 			"code": {
@@ -99,14 +117,38 @@
 			"name": {
 				"type": "string"
 			},
-			"anyOf": [
-				{
-					"required": ["code"]
-				},
-				{
-					"required": ["name"]
+			"enrollment": {
+				"type": "object",
+				"properties": {
+					"undergraduate": {
+						"type": "integer"
+					},
+					"graduate": {
+						"type": "integer"
+					},
+					"professional": {
+						"type": "integer"
+					},
+					"faculty": {
+						"type": "integer"
+					}
 				}
-			]
-		}
+			}
+		},
+		"anyOf": [
+			{
+				"required": ["code"]
+			},
+			{
+				"required": ["name"]
+			}
+		]
+	},
+	"url": {
+		"type": "string"
+	},
+	"email": {
+		"type": "string",
+		"pattern": "[^@]+@[^@]+\\.[^@]+"
 	}
 }
