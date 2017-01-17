@@ -93,19 +93,12 @@
 			"additionalProperties": false
 		}
 	},
-	"allOf": [
+	"anyOf": [
 		{
-			"required": [ "time" ]
+			"required": [ "days" ]
 		},
 		{
-			"anyOf": [
-				{
-					"required": [ "days" ]
-				},
-				{
-					"required": [ "dates" ]
-				}
-			]
+			"required": [ "dates" ]
 		}
 	]
 }
