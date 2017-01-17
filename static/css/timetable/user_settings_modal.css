@@ -1,7 +1,6 @@
 .welcome-modal {
 	max-width: 500px;
-	height: 700px;
-	max-height: 85%;
+	max-height: 700px;
 }
 .welcome-modal > div {
 	outline:none;
