@@ -40,6 +40,27 @@
     float: left;
 }
 
+.img-icon > .done {
+    color: #42A770;
+    transform: scale(1.1);
+    transition: all .2s ease-in-out;
+}
+
+.img-icon > .loader {
+    float: left;
+    border: 10px solid #f3f3f3; /* Light grey */
+    border-radius: 50%;
+    border-top: 10px solid #3498db; /* Blue */
+    width: 10px;
+    height: 10px;
+    animation: spin 2s linear infinite;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
 .abnb-btn {
     width: 100%;
     background: white;

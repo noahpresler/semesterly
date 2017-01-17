@@ -97,12 +97,6 @@ class Calendar extends React.Component {
     		<i className="fa fa-cog" />
     	</button>
     );
- //    let saveToCalendarButton = (
- //    	<button onClick={() => this.props.createiCalfromTimetable()}
- //    					className="save-timetable">
- //    		<i className="fa fa-download" />
- //    	</button>
-	// );
 	let saveToCalendarButton = (
     	<button onClick={() => this.props.toggleSaveCalendarModal()}
     					className="save-timetable">
