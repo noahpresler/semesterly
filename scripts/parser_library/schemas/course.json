@@ -7,11 +7,19 @@
 		"kind": {
 			"enum": ["course"]
 		},
-		"school_code": {
-			"type": "string",
-			"pattern": "([a-z0-9]*_*)*"
+		"school": {
+			"allOf": [
+				{
+					"$ref": "definitions.json#/school"
+				}
+			],
+			"properties": {
+				"code": {},
+				"name": {}
+			},
+			"additionalProperties": false
 		},
-		"course_code": {
+		"code": {
 			"type": "string"
 		},
 		"name": {
@@ -24,40 +32,22 @@
 			"type": "number"
 		},
 		"department": {
-			"oneOf": [
+			"allOf": [
 				{
-					"type": "string"
-				},
-				{
-					"type": "object",
-					"properties": {
-						"code": {
-							"type": "string"
-						},
-						"name": {
-							"type": "string"
-						}
-					},
-					"additionalProperties": false,
-					"required": [
-						"code",
-						"name"
-					]
+					"$ref": "definitions.json#/department"
 				}
-			]
+			],
+			"properties": {
+				"code": {},
+				"name": {}
+			},
+			"additionalProperties": false
 		},
 		"description": {
-			"oneOf": [
-				{
-					"type": "string"
-				},
-				{
-					"type": "array",
-					"items": {
-						"type": "string"
-					}
+			"type": "array",
+			"items": {
+				"type": "string"
 				}
-			]
 		},
 		"prerequisites": {
 			"type": "array",
@@ -102,8 +92,11 @@
 			}
 		},
 		"homepage": {
-			"type": "string",
-			"pattern": "(http(s)?:\/\/.)?(www\\.)?[-a-zA-Z0-9@:%._\\+~#=]{2,256}\\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\\+.~#?&//=]*)"
+			"allOf": [
+				{
+					"$ref": "definitions.json#/url"
+				}
+			]
 		},
 		"related": {
 			"type": "array",
@@ -114,8 +107,7 @@
 	},
 	"additionalProperties": false,
 	"required": [
-		"school_code",
-		"course_code",
+		"code",
 		"name",
 		"credits",
 		"department"
