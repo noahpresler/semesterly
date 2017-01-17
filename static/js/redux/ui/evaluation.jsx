@@ -30,7 +30,7 @@ class Evaluation extends React.Component {
 			if (words.length == 0) {
 				return '';
 			} else if (words.length >= 2) {
-				return wrapParen(words[1])
+				return wrapParen(words[1]);
 			} else {
 				return wrapParen(words[0]);
 			}
