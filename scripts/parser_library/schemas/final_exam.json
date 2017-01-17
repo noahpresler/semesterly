@@ -4,17 +4,20 @@
 	"description": "Semesterly Final Exam JSON definition",
 	"type": "object",
 	"properties": {
-		"date": {
+		"school": {
+			"allOf": [
+				{
+					"$ref": "definitions.json#/school"
+				}
+			],
+			"properties": {
+				"code": {}
+			},
+			"additionalProperties": false
+		},
+		"time": {
 			"type": "string",
 			"pattern": "[0-9]{2}/[0-9]{2}/[0-9]{4}"
-		},
-		"time_start": {
-			"type": "string",
-			"pattern": "^([01]\\d|2[0-3]):?([0-5]\\d)$"
-		},
-		"time_end": {
-			"type": "string",
-			"pattern": "^([01]\\d|2[0-3]):?([0-5]\\d)$"
 		},
 		"campus": {
 			"type": "string"
