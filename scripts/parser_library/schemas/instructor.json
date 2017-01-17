@@ -29,8 +29,7 @@
 						"properties": {
 							"code": {}
 						},
-						"additionalProperties": false,
-						"required": [ "code" ]
+						"additionalProperties": false
 					},
 					"section": {
 						"allOf": [
@@ -41,17 +40,11 @@
 						"properties": {
 							"code": {}
 						},
-						"additionalProperties": false,
-						"required": [ "code" ]
+						"additionalProperties": false
 					}
 				},
-				"additionalProperties": false,
-				"required": [
-					"course",
-					"section"
-				]
-			},
-			"minItems": 1
+				"additionalProperties": false
+			}
 		},
 		"name": {
 			"oneOf": [
@@ -86,7 +79,7 @@
 				{
 					"$ref": "definitions.json#/url"
 				}
-			],
+			]
 		},
 		"office": {
 			"type": "object",
@@ -111,13 +104,18 @@
 					"items": {
 						"allOf": [
 							{
-								"$ref": "definitions.json#/time"
+								"$ref": "meeting.json#/"
 							}
 						],
 						"properties": {
+							"kind": {},
+							"school": {},
+							"course": {},
+							"section": {},
+							"dates": {},
 							"days": {},
-							"start": {},
-							"end": {}
+							"time": {},
+							"location": {}
 						},
 						"additionalProperties": false
 					}
@@ -125,6 +123,5 @@
 			}
 		}
 	},
-	"additionalProperties": false,
 	"required": [ "name" ]
 }

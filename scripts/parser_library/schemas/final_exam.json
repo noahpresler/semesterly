@@ -4,16 +4,19 @@
 	"description": "Semesterly Final Exam JSON definition",
 	"type": "object",
 	"properties": {
-		"school": {
+		"meeting": {
 			"allOf": [
 				{
-					"$ref": "definitions.json#/school"
+					"$ref": "meeting.json#/"
 				}
 			],
 			"properties": {
-				"code": {}
-			},
-			"additionalProperties": false
+				"school": {},
+				"class": {},
+				"course": {},
+				"section": {},
+
+			}
 		},
 		"time": {
 			"type": "string",
@@ -26,7 +29,6 @@
 			"type": "string"
 		}
 	},
-	"additionalProperties": false,
 	"anyOf": [
 		{
 			"required": [

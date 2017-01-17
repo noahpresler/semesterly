@@ -10,21 +10,6 @@
 	"time": {
 		"type": "object",
 		"properties": {
-			"days": {
-				"type": "array",
-				"items": {
-					"oneOf": [
-						{
-							"$ref": "#/day"
-						},
-						{
-							"$ref": "#/date"
-						}
-					]
-				},
-				"minItems": 1,
-				"uniqueItems": true
-			},
 			"start": {
 				"type": "string"
 			},
@@ -33,7 +18,6 @@
 			}
 		},
 		"required": [
-			"days",
 			"start",
 			"end"
 		]
@@ -52,6 +36,9 @@
 				},
 				"additionalProperties": false
 			},
+			"address": {
+				"type": "string"
+			},
 			"campus": {
 				"type": "string"
 			},
@@ -63,26 +50,24 @@
 			},
 			"building_room": {
 				"type": "string"
+			},
+			"where": {
+				"type": "string"
 			}
 		},
-		"_comment": "(building or (building and room)) xor building_room",
 		"oneOf": [
 			{
-				"anyOf": [
-					{
-						"required": ["building"]
-					}
-				]
+				"required": ["building"]
 			},
 			{
 				"required": ["building_room"],
 				"not": {
 					"oneOf": [
 						{
-							"required": ["room"]
+							"required": ["building", "room"]
 						},
 						{
-							"required": ["building", "room"]
+							"required": ["room"]
 						}
 					]
 				}
@@ -135,14 +120,7 @@
 				}
 			}
 		},
-		"anyOf": [
-			{
-				"required": ["code"]
-			},
-			{
-				"required": ["name"]
-			}
-		]
+		"required": [ "code" ]
 	},
 	"url": {
 		"type": "string"
