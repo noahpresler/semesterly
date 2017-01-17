@@ -443,8 +443,14 @@ def add_tt_to_gcal(request):
     http = credentials.authorize(httplib2.Http(timeout=100000000))
     service = discovery.build('calendar', 'v3', http=http)
 
+    tt_name = tt.get('name')
+    if  not tt_name or "Untitled Schedule" in tt_name > -1 or len(tt_name) == 0:
+        tt_name = "Semester.ly Schedule"
+    else:
+        tt_name + " - Semester.ly"
+
     #create calendar
-    calendar = {'summary': 'Semester.ly Schedule', 'timeZone': 'America/New_York'}
+    calendar = {'summary': tt_name, 'timeZone': 'America/New_York'}
     created_calendar = service.calendars().insert(body=calendar).execute()
 
     semester = get_semester_from_tt(tt)
@@ -486,7 +492,5 @@ def add_tt_to_gcal(request):
               ],
             }
             event = service.events().insert(calendarId=created_calendar['id'], body=res).execute()
-
-    print 'Calendar created: %s' % (created_calendar.get('htmlLink'))
 
     return HttpResponse(json.dumps({}), content_type="application/json")
