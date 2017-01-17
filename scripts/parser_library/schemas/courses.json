@@ -1,7 +1,7 @@
 {
 	"$schema": "http://json-schema.org/draft-04/schema#",
 	"title": "Courses",
-	"description": "Courses full definition",
+	"description": "Courses schema",
 	"type": "array",
 	"items": {
 		"title": "Course",
@@ -11,5 +11,3 @@
 		}
 	}
 }
-
-//https://spacetelescope.github.io/understanding-json-schema/structuring.html
