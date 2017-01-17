@@ -54,14 +54,10 @@ export class SocialProfile extends React.Component {
 
 		);
 		let loggedOut = (
-			<a id="social-login" href="/login/facebook/">
+			<a id="social-login" onClick={() => this.props.triggerAcquisitionModal() }>
 				<h2>
 					<span>Signup/Login</span>
 					<span className="mobile">Signup Login</span>
-					<i className="fa fa-facebook-square"></i>
-					<a href="/login/google-oauth2" style={{color: '#3B5998'}}>
-						<i className="fa fa-google-plus"></i>
-					</a>
 				</h2>
 			</a>
 		);
