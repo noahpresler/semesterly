@@ -55,7 +55,7 @@ export class UserSettingsModal extends React.Component {
         this.props.saveSettings();
     }
     shouldShow(props) {
-        return props.userInfo.isLoggedIn && (props.showOverrided || this.isIncomplete(props.userInfo.social_offerings) || this.isIncomplete(props.userInfo.social_courses) || this.isIncomplete(props.userInfo.major) || this.isIncomplete(props.userInfo.class_year));
+        return !gcalCallback && props.userInfo.isLoggedIn && (props.showOverrided || this.isIncomplete(props.userInfo.social_offerings) || this.isIncomplete(props.userInfo.social_courses) || this.isIncomplete(props.userInfo.major) || this.isIncomplete(props.userInfo.class_year));
     }
     isIncomplete(prop) {
         return prop === undefined || prop === "";
