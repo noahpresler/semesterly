@@ -1,7 +1,11 @@
 {
   "kind": "textbook_link",
-  "course_code": "EN.600.418",
-  "section_name": "01",
+  "course": {
+  	"code": "EN.600.418"
+  },
+  "section": {
+  	"code": "01"
+  },
   "isbn": 9780879500030,
   "required": true,
 }
