@@ -135,6 +135,8 @@ class CustomSlot extends React.Component {
             <i className="fa fa-times" 
                onClick={ (event) => this.stopPropagation(this.props.removeCustomSlot, event) }></i> : null;
 
+        let converted_start = uses12HrTime && parseInt(this.props.time_start.split(':')[0]) > 12 ? (parseInt(this.props.time_start.split(':')[0]) - 12) + ":" + this.props.time_start.split(':')[1] : this.props.time_start
+        let converted_end = uses12HrTime && parseInt(this.props.time_end.split(':')[0]) > 12 ? (parseInt(this.props.time_end.split(':')[0]) - 12) + ":" + this.props.time_end.split(':')[1] : this.props.time_end
         return this.props.connectCreateTarget(this.props.connectDragTarget(this.props.connectDragSource(
             <div className="fc-event-container">
                 <div className={"fc-time-grid-event fc-event slot"}
@@ -146,7 +148,7 @@ class CustomSlot extends React.Component {
                         {removeButton}
                     <div className="fc-content">
                         <div className="fc-time">
-                            <span>{ this.props.time_start } – { this.props.time_end }</span>
+                            <span>{ converted_start } – { converted_end }</span>
                         </div>
                         <div className="fc-time">
                             <input type="text" 
