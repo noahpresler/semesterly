@@ -11,6 +11,7 @@ import { loadTimetable, lockTimetable, loadCachedTimetable } from './actions/tim
 import { fetchSchoolInfo } from './actions/school_actions.jsx';
 import { setCourseInfo } from './actions/modal_actions.jsx';
 import { browserSupportsLocalStorage, setFirstVisit, timeLapsedGreaterThan } from './util.jsx';
+import { addTTtoGCal } from './actions/calendar_actions.jsx';
 
 export const store = createStore(rootReducer, window.devToolsExtension && window.devToolsExtension(), applyMiddleware(thunkMiddleware));
 
@@ -40,8 +41,13 @@ function setup(dispatch) {
   uses12HrTime = uses12HrTime === "True";
   studentIntegrations = JSON.parse(studentIntegrations);
   signup = signup === "True";
+  gcalCallback = gcalCallback === "True";
   if (signup) {
     dispatch({type: 'TRIGGER_SIGNUP_MODAL'});
+  }
+  if (gcalCallback) {
+    dispatch({type: 'TRIGGER_SAVE_CALENDAR_MODAL'});
+    dispatch(addTTtoGCal());
   }
   /* first setup the user's state */
   let user = JSON.parse(currentUser); // currentUser comes from timetable.html
