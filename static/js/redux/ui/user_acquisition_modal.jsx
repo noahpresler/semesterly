@@ -73,12 +73,12 @@ export class UserAcquisitionModal extends React.Component {
 
 
                     <button className="btn abnb-btn secondary eight-px-top" onClick={() => {
-                        this.props.createiCalfromTimetable();
-                    }}>
+                        // this.props.createiCalfromTimetable();
+                    }} disabled>
                         <span className="img-icon">
                             <i className="fa fa-envelope-o" />
                         </span>
-                        <span>Continue With Email</span>
+                        <span>Email Coming Soon</span>
                     </button>
                 </div>
             </Modal>
