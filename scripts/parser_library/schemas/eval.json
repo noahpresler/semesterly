@@ -5,7 +5,7 @@
 	"type": "object",
 	"properties": {
 		"kind": {
-			"enum": [ "eval" ]
+			"enum": [ "eval", "eval_course", "eval_instr" ]
 		},
 		"course": {
 			"allOf": [
@@ -53,5 +53,7 @@
 		"year": {
 			"type": "string",
 			"pattern": "20[1,2]\\d"
-		}
+		},
+		"_comment": "TODO (singular) instructor is to allow instr specific evals"
+	}
 }
