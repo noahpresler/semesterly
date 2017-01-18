@@ -18,6 +18,7 @@ class FriendsInClassAlert extends React.Component {
 		this.props.dismissSelf();
 	}
 
+
 	render() {
 		let maxColourIndex = COLOUR_DATA.length - 1;
 		console.log(this.props.active_tt);
