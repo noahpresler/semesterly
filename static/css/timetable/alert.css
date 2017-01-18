@@ -182,3 +182,39 @@
 .enable-notification-alert a.decline-notifications:hover {
   opacity: 1;
 }
+
+.friends-in-class-alert-icon {
+  width: 0px;
+}
+
+.friends-in-class-alert {
+  margin: 0px 10px;
+}
+.friends-in-class-fb {
+  margin-top: 20px;
+}
+
+.friends-in-class-fb .abnb-btn {
+  width: 100%;
+  background: white;
+  color: #484848;
+  border-radius: 4px;
+  border: 1px solid;
+  border-color: #c4c4c4;
+  padding-top: 10px !important;
+  padding-bottom: 10px !important;
+  padding-left: 13px !important;
+  padding-right: 40px !important;
+}
+
+.friends-in-class-fb .img-icon {
+  padding-right: 20px;
+}
+
+.friends-in-class-fb .img-icon > i {
+  font-size: 19px;
+}
+
+.friends-in-class-fb .facebook-text {
+  font-size: 13px;
+}
