@@ -99,7 +99,11 @@
 				{
 					"$ref": "final_exam.json#/"
 				}	
-			]
+			],
+			"properties": {
+				"meeting": {}
+			},
+			"additionalProperties": false
 		},
 		"textbooks": {
 			"type": "array",
