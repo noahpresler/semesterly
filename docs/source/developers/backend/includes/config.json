@@ -1,6 +1,8 @@
 {
-  "school_code": "jhu",
-  "name": "Johns Hopkins University",
+  "school": {
+    "code": "jhu",
+    "name": "Johns Hopkins University"
+  },
   "time_granularity": 5,
   "parsers_and_data": [
     {
@@ -39,26 +41,44 @@
   "terms": ["Fall", "Intersession", "Spring", "Summer"],
   "registration_groupings": [["Fall"],["Intersession"],["Spring"],["Summer"]],
   "campuses": [
-    "Homewood Campus",
+    {
+      "name": "Homewood Campus",
+      "buildings": [
+        "Hackerman Hall",
+        "Malone Hall",
+        "Gilman Hall",
+        "Brody Learning Commons"
+      ]
+    },
     "Medical School",
     "Carey Business School",
     "Peabody Conservatory",
-    "SAIS",
+    {
+      "name": "SAIS"
+    },
     "APL",
-    "Online",
+    "Online"
   ],
-  "volatile": {
-    "registration_dates": [
-      ""
-    ],
-    "current": {
-      "term": "Spring",
-      "year": "2017"
-    }
+  "registration_dates": [
+    ""
+  ],
+  "current_term_year": {
+    "term": "Spring",
+    "year": "2017"
   },
+  "holidays_breaks": [
+    "Sprint, Winter, etc + dates"
+  ],
+  "buildings": [
+    "Hackerman Hall",
+    "Malone Hall",
+    "Gilman Hall",
+    "Brody Learning Commons"
+  ],
   "meta": {
     "author": "Michael N. Miller",
     "date": "01/13/2017",
+    "email": "fake@email.com",
     "link": "semester.ly/about/emem"
   }
 }
