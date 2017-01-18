@@ -128,6 +128,21 @@ export class UserSettingsModal extends React.Component {
         );
         let googpic = this.props.userInfo.isLoggedIn ? this.props.userInfo.img_url.replace('sz=50','sz=100') : ''
         let propic = this.props.userInfo.FacebookSignedUp ? 'url(https://graph.facebook.com/' + JSON.parse(currentUser).fbook_uid + '/picture?type=normal)' : 'url(' + googpic + ')';
+        let fb_upsell = this.props.userInfo.isLoggedIn && !this.props.userInfo.FacebookSignedUp ? (
+            <div className={classnames('preference notifications second cf', {'preference-attn' : enableNotifs})}>
+                <button className="btn abnb-btn fb-btn" onClick={() => {
+                        let link = document.createElement('a');
+                        link.href = '/login/facebook?student_token=' + this.props.userInfo.LoginToken + "&login_hash=" + this.props.userInfo.LoginHash
+                        document.body.appendChild(link);
+                        link.click()
+                    }}>
+                    <span className="img-icon">
+                       <i className="fa fa-facebook" />
+                    </span>
+                    <span>Continue with Facebook</span>
+                </button>
+                <p className="disclaimer ctr">Connecting your Facebook allows you to see which of your Facebook friends are in your classes! Only friends in your course will see your name – your information is never shared with any other party.</p>
+            </div>) : null;
         return (
             <Modal ref="modal"
                 className="welcome-modal max-modal"
@@ -173,6 +188,7 @@ export class UserSettingsModal extends React.Component {
                         </div>
                         { preferences }
                         { notifications }
+                        { fb_upsell }
                         <div className="button-wrapper">
                             <button className="signup-button" onClick={() => {
                                 this.changeForm();

@@ -71,6 +71,8 @@ def get_user_dict(school, student, semester):
         ).exists()
         user_dict["GoogleSignedUp"] = google_user_exists
         user_dict["GoogleLoggedIn"] = False
+        user_dict['LoginToken'] = make_token(student).split(":", 1)[1]
+        user_dict['LoginHash'] = hashids.encrypt(student.id)
         if google_user_exists:
             social_user = student.user.social_auth.filter(
                 provider='google-oauth2',
@@ -370,18 +372,10 @@ def create_unsubscribe_link(student):
 def make_token(student):
   return TimestampSigner().sign(student.id)
 
-def check_token(student, token):
-  try:
-    key = '%s:%s' % (student.id, token)
-    TimestampSigner().unsign(key, max_age=60 * 60 * 48) # Valid for 2 days
-  except (BadSignature, SignatureExpired):
-    return False
-  return True
-
 def unsubscribe(request, id, token):
   student = Student.objects.get(id = id)
 
-  if student and check_token(student, token):
+  if student and check_student_token(student, token):
     # Link is valid
     student.emails_enabled = False
     student.save()
