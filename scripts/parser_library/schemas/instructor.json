@@ -109,7 +109,8 @@
 						"campus": {},
 						"building": {},
 						"room": {},
-						"building_room": {}
+						"building_room": {},
+						"where": {}
 					},
 					"additionalProperties": false
 				},

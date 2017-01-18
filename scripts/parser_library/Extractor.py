@@ -39,7 +39,8 @@ def extract_info(course, text):
     extractions = {
         'prereqs' : r'[Pp]r(?:-?)e[rR]eq(?:uisite)?(?:s?)[:,\s]\s*(.*?)(?:\.|$)\s*',
         'coreqs'  : r'[Cc]o(?:-?)[rR]eq(?:uisite)?(?:s?)[:,\s]\s*(.*?)(?:\.|$)\s*',
-        'geneds' : r'(GE .*)'
+        'geneds'  : r'(GE .*)',
+        'fees'    : r'[Ff]ees?[:\s]?.*?\$(.*?)\.'
     }
 
     for ex in extractions:
