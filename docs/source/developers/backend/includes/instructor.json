@@ -51,7 +51,9 @@
         }
       },
       {
-        "course": "EN.400.418",
+        "course": {
+          "code": "EN.400.418"
+        },
         "days": ["F"],
         "time": {
           "start": "11:00",
