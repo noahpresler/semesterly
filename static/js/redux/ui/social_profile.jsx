@@ -45,7 +45,7 @@ export class SocialProfile extends React.Component {
 							<span>Privacy</span>
 						</a>
 						<a href="/user/logout/">
-							<i className="fa fa-sign-out"></i>
+							<i className="fa fa-sign-out" aria-hidden="true"></i>
 							<span>Sign out</span>
 						</a>
 					</div>
@@ -54,11 +54,10 @@ export class SocialProfile extends React.Component {
 
 		);
 		let loggedOut = (
-			<a id="social-login" href="/login/facebook/">
+			<a id="social-login" onClick={() => this.props.triggerAcquisitionModal() }>
 				<h2>
 					<span>Signup/Login</span>
 					<span className="mobile">Signup Login</span>
-					<i className="fa fa-facebook-square"></i>
 				</h2>
 			</a>
 		);

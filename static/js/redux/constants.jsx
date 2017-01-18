@@ -21,6 +21,9 @@ export const VALID_SCHOOLS = [
 ];
 
 /* server endpoints */
+export const getAddTTtoGCalEndpoint = (timetable) => {
+  return "/user/add_to_gcal/"
+};
 export const getCourseInfoEndpoint = (course_id) => {
 	return "/courses/" + getSchool() + "/" + getSemester() + "/id/" + course_id + "/";
 };
