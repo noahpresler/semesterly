@@ -8,9 +8,36 @@ from apiclient import discovery
 from oauth2client import client
 from oauth2client import tools
 from oauth2client.file import Storage
+from hashids import Hashids
+from django.core.signing import TimestampSigner, BadSignature, SignatureExpired
 
 
 DAY_LIST = ['M','T','W','R','F','S','U'];
+hashids = Hashids(salt="***REMOVED***")
+
+def check_student_token(student, token):
+  try:
+    key = '%s:%s' % (student.id, token)
+    TimestampSigner().unsign(key, max_age=60 * 60 * 48) # Valid for 2 days
+  except (BadSignature, SignatureExpired):
+    return False
+  return True
+
+def associate_students(strategy, details, response, user, *args, **kwargs):
+    try:
+        email = kwargs['details']['email']
+        kwargs['user'] = User.objects.get(email=email)
+    except:
+        pass
+    try: 
+        token = strategy.session_get('student_token')
+        ref = strategy.session_get('login_hash')
+        student = Student.objects.get(id=hashids.decrypt(ref)[0])
+        if check_student_token(student,token):
+          kwargs['user'] = student.user
+    except: 
+      pass
+    return kwargs
 
 def next_weekday(d, weekday):
     d = d - datetime.timedelta(days=1)
