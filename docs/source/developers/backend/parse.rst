@@ -36,6 +36,8 @@ The highest level directory is simply the *nickname* of the school. When giving 
     umich   University of Michigan in Ann Arbor
     udub    University of Washington in Seattle
 
+See: :download:`taken school codes <../school_codes.txt>`.
+
 ``__init__.py`` is simply a blank file needed in this directory for `Python to view this directory as containing packages <http://stackoverflow.com/questions/448271/what-is-init-py-for>`_. The other ``*.py`` files contain the code needed to parse; they will be discussed in detail later. ``misc/utils/`` is, by design, a bit more undefined and is a place where you, the developer, can place any extraneous code you need for the parse.
 
 .. warning::
@@ -60,7 +62,7 @@ The ``config.json`` is used in order for all components to link up properly on t
 
 The fields displayed above are required in the ``config.json`` and must obey various other requirements:
     
-    :school_code: must match the directory name, discussed above. Must be unique, see :download:`list of used school codes <../school_codes.txt>`.
+    :school_code: must match the directory name, discussed above.
     :time_granularity: refers to the minimum increment of time (in minutes, multiple of 5) needed to encode all start and end times for courses.
     :textbooks: set to indicate whether this information is provided by your school/parser.
     :evals: set to indicate whether this information is provided by your school/parser.
@@ -140,7 +142,7 @@ These JSON objects are modularized in such a way as to allow instances to be nes
 
 .. note::
 
-    Not all JSON properties are defined every time they are used, if they have already been described prior.
+    Not all JSON properties are defined every time they are used if they have already been described via nesting.
 
 Course
 ~~~~~~~~
