@@ -1,9 +1,10 @@
 {
   "kind": "course",
-  "school_code": "jhu",
-  "course_code": "EN.600.418",
+  "school": {
+    "code": "jhu"
+  },
+  "code": "EN.600.418",
   "name": "Operating Systems",
-  "campus": "Homewood Campus",
   "credits": 3,
   "department": {
     "code": "CS",
