@@ -55,6 +55,10 @@
 	opacity: 0;
 	visibility: hidden;
 }
+.trans .capacity-tracker-wrapper {
+	opacity: 0;
+	visibility: hidden;
+}
 .course-modal .master-slot .slot-bar {
     border-top-left-radius: 5px;
     border-bottom-left-radius: 5px;
@@ -534,4 +538,93 @@ h3.modal-module-header small {
 	#modal-save:hover {
 		background-color: #5BCE84;
 	}
+}
+
+.capacity-tracker-wrapper {
+	text-align: center;
+}
+
+#capacity-attention-wrapper {
+	line-height: 25px;
+	height: 25px;
+	font-size: 16px;
+	display: inline-block;
+	margin-bottom: 10px;
+}
+
+#capacity-attention-wrapper > div#attention-tag {
+	float:left;
+	background-color: rgb(177, 81, 80);
+	color: rgb(255, 255, 255);
+	border-radius: 5px;
+	padding-right: 10px; 
+}
+
+#capacity-attention-wrapper > div#attention-tag div.slot-bar {
+	float:left;
+	position: relative;
+	background-color: rgb(253, 116, 115);
+	border-bottom-left-radius: 5px;
+	border-top-left-radius: 5px;
+	height: 25px;
+}
+
+#capacity-attention-wrapper > div#attention-tag div#clock-icon {
+	display: inline-block;
+	padding-right: 10px;
+	padding-left: 10px;
+}
+
+#capacity-attention-wrapper > div#attention-tag span {
+	display: inline-block;
+}
+
+
+#capacity-attention-wrapper #attention-text {
+	float: left;
+	margin-left: 5px;
+	color: #555;
+}
+
+#capacity-attention-wrapper #attention-text .highlight {
+	color: rgb(177, 81, 80);
+}
+
+/* NOTE: 1088px is fluid up to XXXX% */
+@media (max-width: 1088px) {
+	#capacity-attention-wrapper > div#attention-tag {
+		float: none;
+	}
+
+	#capacity-attention-wrapper #attention-text {
+		float: none;
+		margin: 5px 0 0 0;
+	}
+	#capacity-attention-wrapper {
+		font-size: 16px;
+		margin-top: 15px;
+	}
+}
+
+@media (max-width: 801px) {
+	#capacity-attention-wrapper {
+		font-size: 14px;
+	}
+}
+
+@media (max-width: 670px) {
+	#capacity-attention-wrapper {
+		font-size: 13px;
+	}
+}
+
+#capacity-tracker-text {
+	color: #777;
+	font-size: 12px;
+	margin-top: 30px;
+	margin-bottom: 5px;
+}
+
+#capacity-tracker-text span {
+	font-weight: 300;
 }
