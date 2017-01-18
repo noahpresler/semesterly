@@ -72,10 +72,7 @@
 			}
 		},
 		"level": {
-			"type": "array",
-			"items": {
-				"type": "string"
-			}
+			"type": "string"
 		},
 		"cores": {
 			"type": "array",
