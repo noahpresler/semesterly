@@ -46,21 +46,45 @@ def pretty_format_error_message(path, message, schema_path):
 		return '#/' + location + '\n' + subject + '\n' + s
 
 absolute_path_to_base_directory = '/home/mike/Documents/semesterly/scripts/parser_library/schemas/'
-base_filename = 'tester.json'
+base_filename = 'eval.json'
 
-with open('test01.json') as g:
-	data = json.loads(g.read(), object_pairs_hook=dict_raise_on_duplicates)
+test_dir = '/home/mike/Documents/semesterly/docs/source/developers/backend/includes/'
+
+# NOTE: course.json needs .replace('\n', '')
+with open(test_dir + 'eval.json') as g:
+	try:
+		data = json.loads(g.read(), object_pairs_hook=dict_raise_on_duplicates)
+	except ValueError as e:
+		print 'SUBJECT JSON INVALID'
+		print e
+		exit(1)
+
 with open(os.path.join(absolute_path_to_base_directory, base_filename)) as f:
-	schema = json.load(f)
+	try:
+		schema = json.load(f)
+	except ValueError as e:
+		print 'SCHEMA JSON INVALID'
+		print e
+		exit(1)
+
 resolver = jsonschema.RefResolver('file://' + absolute_path_to_base_directory + '/', schema)
 
 try:
 	jsonschema.Draft4Validator(schema, resolver=resolver).validate(data)
 except jsonschema.ValidationError as error:
 	print 'VALIDATION ERROR'
-	print error.message
+	print error
+
+	print ''
+	print 'message:', error.message
+	print 'instance:', error.instance
+	print 'parent:', error.parent
+	print 'schema_path', error.path
 	print pretty_format_error_message(error.path, error.message, error.relative_schema_path)
 except jsonschema.exceptions.SchemaError as e:
 	print 'SCHEMA FAILED'
+	print e
+except Exception as e:
+	print 'SCHEMA (probably) FAILED'
 	print e
 

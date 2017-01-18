@@ -38,8 +38,11 @@
 			"type": "string"
 		},
 		"year": {
-			"type": "integer",
-			"pattern": "/(201[0-9])/"
+			"allOf": [
+				{
+					"$ref": "definitions.json#/year"
+				}
+			]
 		},
 		"capacity": {
 			"type": "integer"
@@ -87,7 +90,8 @@
 						"properties": {
 							"name": {},
 							"email": {},
-							"homepage": {}
+							"homepage": {},
+							"title": {}
 						},
 						"additionalProperties": false
 					}
@@ -118,7 +122,7 @@
 					"title": {},
 					"author": {}
 				},
-				"additionalProperties": false,
+				"additionalProperties": false
 			}
 		},
 		"meetings": {
@@ -133,7 +137,7 @@
 					"dates": {},
 					"days": {},
 					"time": {},
-					"location": {},
+					"location": {}
 				},
 				"additionalProperties": false
 			}
