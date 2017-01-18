@@ -59,6 +59,7 @@ SOCIAL_AUTH_AUTHENTICATION_BACKENDS = (
     'social.backends.google.GooglePlusAuth',
     'social.backends.google.GoogleOAuth2',
 )
+FIELDS_STORED_IN_SESSION = ['student_token','login_hash']
 
 SOCIAL_AUTH_PIPELINE = (
     # Get the information we can about the user and return it in a simple
@@ -89,7 +90,8 @@ SOCIAL_AUTH_PIPELINE = (
 
     # Associates the current social details with another user account with
     # a similar email address. Disabled by default.
-    'social.pipeline.social_auth.associate_by_email',
+    # 'social.pipeline.social_auth.associate_by_email',
+    'student.utils.associate_students',
 
     # Create a user account if we haven't found one yet.
     'social.pipeline.user.create_user',
