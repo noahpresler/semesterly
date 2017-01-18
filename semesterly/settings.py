@@ -35,12 +35,31 @@ SOCIAL_AUTH_FACEBOOK_SCOPE = [
 SOCIAL_AUTH_FACEBOOK_PROFILE_EXTRA_PARAMS = {
     'fields': 'id,name,email,gender'
 }
+
+SOCIAL_AUTH_GOOGLE_OAUTH2_KEY = '1033039203403-ffu02ldu6ifcoeuv6vudaq31dmsjpafe.apps.googleusercontent.com'
+SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = 'CousME2J0Ke7Ht0sMp9Bdm3I'
+SOCIAL_AUTH_GOOGLE_OAUTH2_SCOPE = [
+    'https://www.googleapis.com/auth/plus.login',
+    'https://www.googleapis.com/auth/plus.me',
+    'https://www.googleapis.com/auth/userinfo.profile',
+    'https://www.googleapis.com/auth/calendar'
+]
+GOOGLE_API_KEY = 'AIzaSyD-zqYiewSVAstidBlBtMWnmgWhDvBNTJo'
+SOCIAL_AUTH_GOOGLE_OAUTH2_AUTH_EXTRA_ARGUMENTS = {
+    'access_type': 'offline',  # Enables the refreshing grant
+    'approval_promt': 'force'  # Enables refresh_token
+}
+
+
 SOCIAL_AUTH_LOGIN_REDIRECT_URL = '/'
 SOCIAL_AUTH_LOGIN_ERROR_URL = '/'
 
 SOCIAL_AUTH_AUTHENTICATION_BACKENDS = (
     'social.backends.facebook.FacebookOAuth2',
+    'social.backends.google.GooglePlusAuth',
+    'social.backends.google.GoogleOAuth2',
 )
+FIELDS_STORED_IN_SESSION = ['student_token','login_hash']
 
 SOCIAL_AUTH_PIPELINE = (
     # Get the information we can about the user and return it in a simple
@@ -72,6 +91,7 @@ SOCIAL_AUTH_PIPELINE = (
     # Associates the current social details with another user account with
     # a similar email address. Disabled by default.
     # 'social.pipeline.social_auth.associate_by_email',
+    'student.utils.associate_students',
 
     # Create a user account if we haven't found one yet.
     'social.pipeline.user.create_user',
