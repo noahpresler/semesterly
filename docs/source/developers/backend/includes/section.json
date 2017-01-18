@@ -1,10 +1,14 @@
 {
   "kind": "section",
-  "school_code": "jhu",
-  "course_code": "EN.600.418",
-  "section_code": "01",
+  "school": {
+    "code": "jhu"
+  },
+  "course": {
+    "code": "EN.600.418",
+  },
+  "code": "01",
   "term": "Fall",
-  "year": 2016,
+  "year": "2016",
   "capacity": 25,
   "enrollment": 23,
   "waitlist": 0,
@@ -13,17 +17,38 @@
   "type": "Lecture",
   "fees": 0.00,
   "instructors": [
-      "P. Froelich",
       {
-          "name": "Miller, Michael",
-          "title": "CA",
-          "email": "mmill178@jhu.edu",
-          "homepage": "http://michaelm.me"
+        "name": {
+          "first": "Peter",
+          "last": "Froelich"
+        },
+        "homepage": "gaming.jhu.edu/~phf",
+        "email": "phf@cs.jhu.edu"
       },
+      {
+        "name": "Miller, Michael",
+        "title": "CA",
+      },
+      {
+        "name": {
+          "first": "Noah",
+          "last": "Presler"
+        },
+        "title": "CA"
+      }
   ],
   "final_exam": {
-    "date": "12/15/2016",
-    "campus": "Homewood Campus",
-    "location": "Shaffer 300"
+    "meeting": {
+      "dates": ["12/15/2016"],
+      "time": {
+        "start": "13:50",
+        "end": "13:00"
+      },
+      "location": {
+        "campus": "Homewood",
+        "buidling": "Shaffer Hall",
+        "room": "301"
+      }
+    }
   }
 }
