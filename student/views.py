@@ -5,18 +5,38 @@ from django.views.decorators.csrf import csrf_exempt
 from django.forms.models import model_to_dict
 from django.db.models import Q
 from django.core.urlresolvers import reverse
+from django.conf import settings
 from django.template import RequestContext
 from hashids import Hashids
 from pytz import timezone
-import copy, functools, itertools, json, logging, os
+import copy, functools, itertools, json, logging, os, httplib2
+import datetime
 from timetable.models import *
 from student.models import *
 from django.forms.models import model_to_dict
 from django.contrib.auth.decorators import login_required
 from django.core.signing import TimestampSigner, BadSignature, SignatureExpired
 from django.db.models import Count
+from apiclient.discovery import build
+from oauth2client.client import GoogleCredentials
 
+from apiclient import discovery
+from oauth2client import client
+from oauth2client import tools
+from oauth2client.file import Storage
+
+from student.utils import *
 from timetable.utils import *
+
+DAY_MAP = {
+        'M' : 'mo',
+        'T' : 'tu',
+        'W' : 'we',
+        'R' : 'th',
+        'F' : 'fr',
+        'S' : 'sa',
+        'U' : 'su'
+    };
 
 def get_student(request):
   logged = request.user.is_authenticated()
@@ -40,6 +60,33 @@ def get_user_dict(school, student, semester):
         user_dict["timetables"] = get_student_tts(student, school, semester)
         user_dict["userFirstName"] = student.user.first_name
         user_dict["userLastName"] = student.user.last_name
+
+        facebook_user_exists = student.user.social_auth.filter(
+            provider='facebook',
+        ).exists()
+        user_dict["FacebookSignedUp"] = facebook_user_exists
+
+        google_user_exists = student.user.social_auth.filter(
+            provider='google-oauth2',
+        ).exists()
+        user_dict["GoogleSignedUp"] = google_user_exists
+        user_dict["GoogleLoggedIn"] = False
+        user_dict['LoginToken'] = make_token(student).split(":", 1)[1]
+        user_dict['LoginHash'] = hashids.encrypt(student.id)
+        if google_user_exists:
+            social_user = student.user.social_auth.filter(
+                provider='google-oauth2',
+            ).first()
+            try:
+                access_token = social_user.extra_data["access_token"]
+                refresh_token = social_user.extra_data["refresh_token"]
+                expires_at = social_user.extra_data["expires"]
+            except TypeError:
+              access_token = json.loads(social_user.extra_data)["access_token"]
+              refresh_token = json.loads(social_user.extra_data)["refresh_token"]
+              expires_at = json.loads(social_user.extra_data)["expires"]
+            credentials = GoogleCredentials(access_token,settings.SOCIAL_AUTH_GOOGLE_OAUTH2_KEY,settings.SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET,refresh_token,expires_at,"https://accounts.google.com/o/oauth2/token",'my-user-agent/1.0')
+            user_dict["GoogleLoggedIn"] = not(credentials is None or credentials.invalid)
     
     user_dict["isLoggedIn"] = student is not None
 
@@ -325,18 +372,10 @@ def create_unsubscribe_link(student):
 def make_token(student):
   return TimestampSigner().sign(student.id)
 
-def check_token(student, token):
-  try:
-    key = '%s:%s' % (student.id, token)
-    TimestampSigner().unsign(key, max_age=60 * 60 * 48) # Valid for 2 days
-  except (BadSignature, SignatureExpired):
-    return False
-  return True
-
 def unsubscribe(request, id, token):
   student = Student.objects.get(id = id)
 
-  if student and check_token(student, token):
+  if student and check_student_token(student, token):
     # Link is valid
     student.emails_enabled = False
     student.save()
@@ -371,3 +410,86 @@ def delete_registration_token(request):
         'token': 'deleted'
     }
     return HttpResponse(json.dumps(json_data), content_type="application/json")
+
+def get_semester_from_tt(tt):
+    try:
+        tt['semester']
+    except KeyError:
+        semester = 'F'
+        for course in tt['courses']:
+            for slot in course['slots']:
+                return slot['semester']
+        return semester
+
+@csrf_exempt
+@validate_subdomain
+def add_tt_to_gcal(request):
+    student = Student.objects.get(user=request.user)
+    tt = json.loads(request.body)['timetable']
+    social_user = student.user.social_auth.filter(
+        provider='google-oauth2',
+    ).first()
+    try:
+        access_token = social_user.extra_data["access_token"]
+        refresh_token = social_user.extra_data["refresh_token"]
+        expires_at = social_user.extra_data["expires"]
+    except TypeError:
+      access_token = json.loads(social_user.extra_data)["access_token"]
+      refresh_token = json.loads(social_user.extra_data)["refresh_token"]
+      expires_at = json.loads(social_user.extra_data)["expires"]
+
+    credentials = GoogleCredentials(access_token,settings.SOCIAL_AUTH_GOOGLE_OAUTH2_KEY,settings.SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET,refresh_token,expires_at,"https://accounts.google.com/o/oauth2/token",'my-user-agent/1.0')
+    http = credentials.authorize(httplib2.Http(timeout=100000000))
+    service = discovery.build('calendar', 'v3', http=http)
+
+    tt_name = tt.get('name')
+    if  not tt_name or "Untitled Schedule" in tt_name > -1 or len(tt_name) == 0:
+        tt_name = "Semester.ly Schedule"
+    else:
+        tt_name + " - Semester.ly"
+
+    #create calendar
+    calendar = {'summary': tt_name, 'timeZone': 'America/New_York'}
+    created_calendar = service.calendars().insert(body=calendar).execute()
+
+    semester = get_semester_from_tt(tt)
+    if semester == 'F':
+        #ignore year, year is set to current year
+        sem_start = datetime.datetime(2017,8,30,17,0,0)
+        sem_end = datetime.datetime(2017,12,20,17,0,0)
+    else:
+        #ignore year, year is set to current year
+        sem_start = datetime.datetime(2017,1,30,17,0,0)
+        sem_end = datetime.datetime(2017,5,20,17,0,0)
+
+    #add events
+    for course in tt['courses']:
+        for slot in course['slots']:
+            start = next_weekday(sem_start, slot['day'])
+            start = start.replace(hour=int(slot['time_start'].split(':')[0]), minute=int(slot['time_start'].split(':')[1]))
+            end = next_weekday(sem_start, slot['day'])
+            end = end.replace(hour=int(slot['time_end'].split(':')[0]), minute=int(slot['time_end'].split(':')[1]))
+            until = next_weekday(sem_end, slot['day'])
+
+            description = course.get('description','')
+            instructors = 'Taught by: ' + slot['instructors'] + '\n' if len(slot.get('instructors','')) > 0 else ''
+
+            res = {
+              'summary': slot['name'] + " " + slot['code'] + slot['meeting_section'],
+              'location': slot['location'],
+              'description': slot['code'] + slot['meeting_section'] + '\n' + instructors + description + '\n\n' + 'Created by Semester.ly',
+              'start': {
+                'dateTime': start.strftime("%Y-%m-%dT%H:%M:%S"),
+                'timeZone': 'America/New_York',
+              },
+              'end': {
+                'dateTime': end.strftime("%Y-%m-%dT%H:%M:%S"),
+                'timeZone': 'America/New_York',
+              },
+              'recurrence': [
+                'RRULE:FREQ=WEEKLY;UNTIL=' + until.strftime("%Y%m%dT%H%M%SZ") + ';BYDAY=' + DAY_MAP[slot['day']]
+              ],
+            }
+            event = service.events().insert(calendarId=created_calendar['id'], body=res).execute()
+
+    return HttpResponse(json.dumps({}), content_type="application/json")
