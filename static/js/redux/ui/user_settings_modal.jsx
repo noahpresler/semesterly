@@ -126,6 +126,8 @@ export class UserSettingsModal extends React.Component {
                 </div>
             </div>
         );
+        let googpic = this.props.userInfo.isLoggedIn ? this.props.userInfo.img_url.replace('sz=50','sz=100') : ''
+        let propic = this.props.userInfo.FacebookSignedUp ? 'url(https://graph.facebook.com/' + JSON.parse(currentUser).fbook_uid + '/picture?type=normal)' : 'url(' + googpic + ')';
         return (
             <Modal ref="modal"
                 className="welcome-modal max-modal"
@@ -135,7 +137,7 @@ export class UserSettingsModal extends React.Component {
                 >
                 <div id="modal-content">
                     <div id="modal-header">
-                        <div className="pro-pic" style={{backgroundImage: 'url(https://graph.facebook.com/' + JSON.parse(currentUser).fbook_uid + '/picture?type=normal)'}}></div>
+                        <div className="pro-pic" style={{backgroundImage: propic}}></div>
                         <h1>Welcome!</h1>
                     </div>
                     <div id="modal-body">
