@@ -56,7 +56,7 @@
 					"$ref": "definitions.json#/year"
 				}
 			]
-		},
-		"_comment": "TODO (singular) instructor is to allow instr specific evals"
-	}
+		}
+	},
+	"_comment": "TODO (singular) instructor is to allow instr specific evals"
 }
