@@ -40,7 +40,7 @@
 							}
 						],
 						"properties": {
-							"name": {},
+							"name": {}
 						},
 						"additionalProperties": false
 					}
@@ -51,8 +51,11 @@
 			"type": "string"
 		},
 		"year": {
-			"type": "string",
-			"pattern": "20[1,2]\\d"
+			"allOf": [
+				{
+					"$ref": "definitions.json#/year"
+				}
+			]
 		},
 		"_comment": "TODO (singular) instructor is to allow instr specific evals"
 	}

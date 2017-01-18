@@ -5,7 +5,7 @@
 	"type": "object",
 	"properties": {
 		"kind": {
-			"enum": ["textbook, textbook_link"]
+			"enum": ["textbook", "textbook_link"]
 		},
 		"school": {
 			"allOf": [
