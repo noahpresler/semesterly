@@ -1,7 +1,7 @@
 {
 	"year": {
 		"type": "string",
-		"pattern": "20[1,2]\\d"
+		"pattern": "20[0,1,2]\\d"
 	},
 	"day": {
 		"type": "string",
