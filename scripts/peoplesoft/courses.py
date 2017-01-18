@@ -39,7 +39,7 @@ class PeopleSoftParser:
 	def __init__(self, school, url, do_tbks=True):
 		self.base_url = url
 		self.do_tbks = do_tbks
-		self.course = Ingestor(school) # Model(School)
+		self.ingest = Ingestor(school) # Model(School)
 		self.requester = Requester()
 		self.actions = {
 			'adv_search':	'DERIVED_CLSRCH_SSR_EXPAND_COLLAPS$149$$1',
@@ -53,7 +53,7 @@ class PeopleSoftParser:
 			'isbns':	lambda soup: zip(soup.find_all('span', id=re.compile(r'DERIVED_SSR_TXB_SSR_TXBDTL_ISBN\$\d*')), soup.find_all('span', id=re.compile(r'DERIVED_SSR_TXB_SSR_TXB_STATDESCR\$\d*'))),
 		}
 
-	def parse(self, terms, **kwargs):
+	def parse(self, years, **kwargs):
 
 		soup = self.requester.get(self.base_url, params=kwargs.get('url_params', {}))
 
@@ -63,40 +63,43 @@ class PeopleSoftParser:
 		soup = self.requester.post(self.base_url, params=params)
 		params.update(PeopleSoftParser.refine_search(soup))
 
-		self.course_cleanup() # NOTE: this is neccessary, but bad hack
+		self.cleanup() # NOTE: this is neccessary, but bad hack
 
-		for term in terms:
-			self.course['term'] = term
-			print 'Parsing courses for term', self.course['term']
+		for year, terms in years.items():
+			self.ingest['year'] = year
+			for term_name, term_code in terms.items():
+				self.ingest['term'] = term_name
+				print 'Parsing courses for', term_name, year
 
-			# update search payload with term as parameter
-			params[self.actions['term_update']] = terms[term]
-			params.update(self.action('term_update'))
-			params.update(PeopleSoftParser.ajax_params);
-			soup = self.requester.post(self.base_url, params=params)
-
-			# update search params to get course list
-			map(lambda k: params.__delitem__(k), PeopleSoftParser.ajax_params.keys())
-			params.update(self.action('class_search'))
-
-			dept_code = soup.find('select', id=re.compile(r'SSR_CLSRCH_WRK_SUBJECT_SRCH\$\d'))['id']
-			depts = {dept['value']: dept.text for dept in self.find_all['depts'](soup)}
-
-			for dept in depts:
-				self.course['dept'] = depts[dept]
-				print '> Parsing courses in department', self.course['dept']
-
-				# Update search payload with department code
-				params[dept_code] = dept
-
-				# Get course listing page for department
+				# update search payload with term as parameter
+				params[self.actions['term_update']] = term_code
+				params.update(self.action('term_update'))
+				params.update(PeopleSoftParser.ajax_params);
 				soup = self.requester.post(self.base_url, params=params)
-				if not self.valid_search_page(soup):
-					continue
 
-				self.parse_course_list(self.find_all['courses'](soup), soup)
+				# update search params to get course list
+				map(lambda k: params.__delitem__(k), PeopleSoftParser.ajax_params.keys())
+				params.update(self.action('class_search'))
 
-			self.course.wrap_up()
+				dept_key = soup.find('select', id=re.compile(r'SSR_CLSRCH_WRK_SUBJECT_SRCH\$\d'))['id']
+				depts = {dept['value']: dept.text for dept in self.find_all['depts'](soup)}
+
+				for dept_code, dept_name in depts.items():
+					self.ingest['dept_name'] = dept_name
+					self.ingest['dept_code'] = dept_code
+					print '> Parsing courses in department', dept_name
+
+					# Update search payload with department code
+					params[dept_key] = dept_code
+
+					# Get course listing page for department
+					soup = self.requester.post(self.base_url, params=params)
+					if not self.valid_search_page(soup):
+						continue
+
+					self.parse_course_list(self.find_all['courses'](soup), soup)
+
+		self.ingest.wrap_up()
 
 	def parse_course_list(self, courses, soup):
 		# fill payload for course description page request
@@ -133,28 +136,35 @@ class PeopleSoftParser:
 		# Extract info from title
 		print '\t' + title
 		rtitle = re.match(r'(.+?\s*\w+) - (\w+)\s*(\S.+)', title)
-		self.course['section_type'] = PeopleSoftParser.SECTION_MAP.get(subtitle.split('|')[2].strip(), 'L')
+		# self.ingest['section_type'] = PeopleSoftParser.SECTION_MAP.get(subtitle.split('|')[2].strip(), 'L')
+		self.ingest['section_type'] = subtitle.split('|')[2].strip()
 
 		# Place course info into course model
-		self.course['code'] 	= rtitle.group(1)
-		self.course['section'] 	= rtitle.group(2)
-		self.course['name'] 	= rtitle.group(3)
-		self.course['credits']	= float(re.match(r'(\d*).*', units).group(1))
-		self.course['descr'] 	= extract_info(self.course, descr.text) if descr else ''
-		self.course['notes'] 	= extract_info(self.course, notes.text) if notes else ''
-		self.course['info'] 	= extract_info(self.course, info.text) if info else ''
-		self.course['units'] 	= re.match(r'(\d*).*', units).group(1)
-		self.course['size'] 	= int(capacity)
-		self.course['enrolment'] = int(enrollment)
-		self.course['instrs'] 	= ', '.join({instr.text for instr in instrs})
-		self.course['areas'] 	= ', '.join((extract_info(self.course, l) for l in re.sub(r'(<.*?>)', '\n', str(areas)).splitlines() if l.strip())) if areas else '' # FIXME -- small bug
+		self.ingest['code'] 	= rtitle.group(1)
+		self.ingest['section'] 	= rtitle.group(2)
+		self.ingest['name'] 	= rtitle.group(3)
+		self.ingest['credits']	= float(re.match(r'(\d*).*', units).group(1))
+		self.ingest['descr'] 	= [
+			extract_info(self.ingest, descr.text) if descr else '',
+			extract_info(self.ingest, notes.text) if notes else '',
+			extract_info(self.ingest, info.text) if info else ''
+		]
+		self.ingest['units'] 	= re.match(r'(\d*).*', units).group(1)
+		self.ingest['size'] 	= int(capacity)
+		self.ingest['enrolment'] = int(enrollment)
+		self.ingest['instrs'] 	= ', '.join({instr.text for instr in instrs})
+		self.ingest['areas'] 	= ', '.join((extract_info(self.ingest, l) for l in re.sub(r'(<.*?>)', '\n', str(areas)).splitlines() if l.strip())) if areas else '' # FIXME -- small bug
 
-		course = self.course.create_course()
-		section = self.course.create_section(course)
+		course = self.ingest.create_course()
+		section = self.ingest.create_section(course)
 
-		# create textbooks
-		if self.do_tbks:
-			map(lambda isbn: make_textbook(isbn[1], isbn[0], section), isbns)
+		# # NOTE: section is no longer a django object
+		# # TODO - change query to handle class code
+		# # create textbooks
+		# if self.do_tbks:
+		# 	for isbn in isbns:
+		# 		print isbn[1], isbn[0], section
+		# 	map(lambda isbn: make_textbook(isbn[1], isbn[0], section['code']), isbns)
 
 		# offering details
 		for sched, loc, date in zip(scheds, locs, dates):
@@ -168,14 +178,15 @@ class PeopleSoftParser:
 				days = None
 				time = (None, None)
 
-			self.course['time_start'] = time[0]
-			self.course['time_end'] = time[1]
-			self.course['location'] = loc.text
-			self.course['days'] = days
+			self.ingest['time_start'] = time[0]
+			self.ingest['time_end'] = time[1]
+			re.match(r'(.*) (\d+)', loc.text)
+			self.ingest['location'] = loc.text
+			self.ingest['days'] = days
 
-			self.course.create_offerings(section)
+			self.ingest.create_offerings(section)
 
-		self.course_cleanup()
+		self.cleanup()
 
 	@staticmethod
 	def parse_textbooks(soup):
@@ -185,10 +196,11 @@ class PeopleSoftParser:
 		return isbns
 		# return map(lambda i: (filter(lambda x: x.isdigit(), isbns[i][0].text), isbns[i][1].text[0].upper() == 'R'), range(len(isbns)))
 
-	def course_cleanup(self):
-		self.course['prereqs'] = ''
-		self.course['coreqs'] = ''
-		self.course['geneds'] = ''
+	def cleanup(self):
+		self.ingest['prereqs'] = ''
+		self.ingest['coreqs'] = ''
+		self.ingest['geneds'] = ''
+		self.ingest['fees'] = '' # NOTE: caused issue with extractor
 
 	@staticmethod
 	def hidden_params(soup, params=None, ajax=False):
@@ -244,6 +256,6 @@ class PeopleSoftParser:
 
 # FOR PENNSTATE
 # if kwargs.get('department_regex'):
-# 	self.course['department'] = kwargs['department_regex'].match(dept.text).group(1)
+# 	self.ingest['department'] = kwargs['department_regex'].match(dept.text).group(1)
 # else:
-# 	self.course['department'] = dept.text
+# 	self.ingest['department'] = dept.text
