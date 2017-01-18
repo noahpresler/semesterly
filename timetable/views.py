@@ -424,7 +424,7 @@ def get_minute_from_string_time(time_string):
 def get_detailed_course_json(school, course, sem, student=None):
   json_data = get_basic_course_json(course, sem, ['prerequisites', 'exclusions', 'areas'])
   # json_data['textbook_info'] = course.get_all_textbook_info()
-  json_data['eval_info'] = course.get_eval_info()
+  json_data['eval_info'] = eval_add_unique_term_year_flag(course, course.get_eval_info())
   json_data['related_courses'] = course.get_related_course_info(sem, limit=5)
   json_data['reactions'] = course.get_reactions(student)
   json_data['textbooks'] = course.get_textbooks(sem)
@@ -434,6 +434,19 @@ def get_detailed_course_json(school, course, sem, student=None):
     json_data['classmates'] = get_classmates_from_course_id(school, student, course.id,sem)
   json_data['popularity_percent'] = get_popularity_percent_from_course(course, sem)
   return json_data
+
+def eval_add_unique_term_year_flag(course, evals):
+  """
+  Flag all eval instances s.t. there exists repeated term+year values.
+
+  Return:
+    List of modified evaluation dictionaries (added flag 'unique_term_year')
+  """
+  years = Evaluation.objects.filter(course=course).values('year').annotate(Count('id')).filter(id__count__gt=1).values_list('year')
+  years = { e[0] for e in years }
+  for eval in evals:
+      eval['unique_term_year'] = not eval['year'] in years
+  return evals
 
 def get_popularity_percent_from_course(course, sem):
     added = PersonalTimetable.objects.filter(courses__in=[course], semester=sem).values('student').distinct().count()
