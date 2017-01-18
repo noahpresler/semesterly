@@ -114,6 +114,22 @@
 .welcome-modal .notifications a:active {
 	color: #51a9d2;
 }
+.welcome-modal #modal-body .notifications.second {
+	border-top: none;
+}
+.welcome-modal #modal-body .abnb-btn {
+    padding-top: 15px !important;
+    padding-bottom: 14px !important;
+}
+.welcome-modal #modal-body .abnb-btn.small .img-icon > i {
+    font-size: 14px;
+    margin-top: 2px;
+}
+.welcome-modal #modal-body .disclaimer.ctr {
+	text-align: center;
+    margin-top: 11px;
+    margin-bottom: 0px;
+}
 
 @media (max-width: 766px) {
 	.welcome-modal #modal-body {
