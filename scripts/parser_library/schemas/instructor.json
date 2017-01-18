@@ -4,6 +4,9 @@
 	"description": "Semesterly Section JSON definition",
 	"type": "object",
 	"properties": {
+		"kind": {
+			"enum": [ "instructor" ]
+		},
 		"school": {
 			"allOf": [
 				{
@@ -103,7 +106,6 @@
 						}
 					],
 					"properties": {
-						"school": {},
 						"campus": {},
 						"building": {},
 						"room": {},
@@ -120,8 +122,6 @@
 							}
 						],
 						"properties": {
-							"kind": {},
-							"school": {},
 							"course": {},
 							"section": {},
 							"dates": {},

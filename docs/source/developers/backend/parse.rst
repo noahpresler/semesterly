@@ -180,6 +180,11 @@ Explanation:
     :homepage: a valid url for the course.
     :related: a list of valid course codes. This will be used in our recommendation engine.
 
+Requirements:
+
+    TODO write some reqs
+
+
 Section
 ~~~~~~~~
 .. literalinclude:: includes/section.json
@@ -219,6 +224,9 @@ Explanation:
         :location: the building and room of the final exam.
         :notes: any notes pertaining to final exam.
 
+Requirements:
+
+    TODO write some reqs
 
 Textbook Link
 ~~~~~~~~~~~~~~
@@ -238,12 +246,12 @@ Explanation:
     :required: a bool indicating whether a textbook is required for a section or not. Defaults to true.
 
 
-Offering
+Meeting
 ~~~~~~~~~
 
 An offering 
 
-.. literalinclude:: includes/offering.json
+.. literalinclude:: includes/meeting.json
     :language: json
     :linenos:
     :emphasize-lines: 2-7
@@ -283,6 +291,19 @@ This should be handled in our amazon textbook library methods. **Leaving out dis
 Explanation:
 
     :kind: indicates json object of kind ``textbook``.
+
+
+Instructor
+~~~~~~~~~~~
+
+.. literalinclude:: includes/instructor.json
+    :language: json
+    :linenos:
+
+Explanation:
+
+    :kind: indicates json object of kind ``instructor``.
+
 
 
 Nesting and Omissions
