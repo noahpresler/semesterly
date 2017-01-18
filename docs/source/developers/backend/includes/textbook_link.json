@@ -6,6 +6,6 @@
   "section": {
   	"code": "01"
   },
-  "isbn": 9780879500030,
-  "required": true,
+  "isbn": "9780879500030",
+  "required": true
 }
