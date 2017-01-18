@@ -8,6 +8,7 @@ django-extensions==1.6.7
 fake-useragent==0.1.2
 fuzzywuzzy==0.10.0
 gunicorn==17.5
+google-api-python-client==1.6.1
 hashids==1.1.0
 html5lib==0.999
 jsonpatch==1.3
