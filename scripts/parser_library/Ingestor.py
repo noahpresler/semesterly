@@ -12,6 +12,8 @@ class Ingestor:
 	def __init__(self, school):
 		self.map = {}
 		self.school = school
+		self.file = open('/home/mike/Documents/semesterly/scripts/parser_library/ex_school/data/courses.json', 'w')
+		self.file.write('[')
 
 	def __setitem__(self, key, value):
 		self.map[key] = value
@@ -82,7 +84,10 @@ class Ingestor:
 			'fees': self.map.get('fees')
 		}
 		course = Ingestor.cleandict(course)
-		print Ingestor.color_json(json.dumps(course, sort_keys=True, indent=4, separators=(',', ': ')))
+		j = json.dumps(course, sort_keys=True, indent=4, separators=(',', ': '))
+		self.file.write(j)
+		self.file.write(',')
+		print Ingestor.color_json(j)
 		return course
 
 	def create_section(self, course):
@@ -115,7 +120,10 @@ class Ingestor:
 		}
 
 		section = Ingestor.cleandict(section)
-		print Ingestor.color_json(json.dumps(section, sort_keys=True, indent=4, separators=(',', ': ')))
+		j = json.dumps(section, sort_keys=True, indent=4, separators=(',', ': '))
+		self.file.write(j)
+		self.file.write(',')
+		print Ingestor.color_json(j)
 		return section
 
 	def create_offerings(self, section_model):
@@ -151,12 +159,18 @@ class Ingestor:
 		}
 
 		offering = Ingestor.cleandict(offering)
-		print Ingestor.color_json(json.dumps(offering, sort_keys=True, indent=4, separators=(',', ': ')))
+		j = Ingestor.color_json(json.dumps(offering, sort_keys=True, indent=4, separators=(',', ': ')))
+		self.file.write(j)
+		self.file.write(',')
+		print Ingestor.color_json(j)
 		return offering
 
 	# TODO - close json list
 	def wrap_up(self):
 		self.map.clear()
+		self.file.write(']')
+		self.file.close()
+		exit(1)
 
 	@staticmethod
 	def cleandict(d):
