@@ -52,7 +52,7 @@ def custom_500(request):
 # ******************************************************************************
 
 @validate_subdomain
-def view_timetable(request, code=None, sem=None, shared_timetable=None, find_friends=False, enable_notifs=False,signup=False):
+def view_timetable(request, code=None, sem=None, shared_timetable=None, find_friends=False, enable_notifs=False,signup=False,gcal_callback=False):
   school = request.subdomain
   student = get_student(request)
   course_json = None
@@ -86,9 +86,17 @@ def view_timetable(request, code=None, sem=None, shared_timetable=None, find_fri
     'enable_notifs': enable_notifs,
     'uses_12hr_time': school in AM_PM_SCHOOLS,
     'student_integrations': json.dumps(integrations),
-    'signup': signup
+    'signup': signup,
+    'gcal_callback': gcal_callback,
   },
   context_instance=RequestContext(request))
+
+@validate_subdomain
+def google_calendar_callback(request):
+  try:
+    return view_timetable(request, gcal_callback=True)
+  except Exception as e:
+    raise Http404
 
 @validate_subdomain
 def signup(request):
@@ -716,12 +724,21 @@ def profile(request):
   if logged and Student.objects.filter(user=request.user).exists():
     student = Student.objects.get(user=request.user)
     reactions =  Reaction.objects.filter(student=student).values('title').annotate(count=Count('title'))
+    # googpic = this.props.userInfo.img_url.replace('sz=50','sz=100') if this.props.userInfo.isLoggedIn else ''
+    # propic = 'url(https://graph.facebook.com/' + JSON.parse(currentUser).fbook_uid + '/picture?type=normal)' if this.props.userInfo.FacebookSignedUp else 'url(' + googpic + ')'
+    if student.user.social_auth.filter(provider='google-oauth2').exists():
+      social_user = student.user.social_auth.filter(provider='google-oauth2').first()
+      img_url = student.img_url.replace('sz=50','sz=700')
+    else:
+      social_user = student.user.social_auth.filter(provider='facebook').first()
+      img_url = 'https://graph.facebook.com/' + student.fbook_uid + '/picture?width=700&height=700'
     context = {
       'name': student.user,
       'major': student.major,
       'class': student.class_year,
       'student': student,
-      'total': 0
+      'total': 0,
+      'img_url': img_url,
     }
     for r in reactions:
         context[r['title']] = r['count']

@@ -21,14 +21,16 @@ export class UserSettingsModal extends React.Component {
         this.isIncomplete = this.isIncomplete.bind(this);
     }
     changeForm() {
-        let newUserSettings = {
-            social_courses: this.refs.share_all.checked || this.refs.share_courses.checked,
-            social_offerings: this.refs.share_all.checked || this.refs.share_sections.checked,
-            social_all: this.refs.share_all.checked
+        if (this.props.userInfo.FacebookSignedUp) {
+            let newUserSettings = {
+                social_courses: this.refs.share_all.checked || this.refs.share_courses.checked,
+                social_offerings: this.refs.share_all.checked || this.refs.share_sections.checked,
+                social_all: this.refs.share_all.checked
+            }
+            let userSettings = Object.assign({}, this.props.userInfo, newUserSettings);
+            this.props.changeUserInfo(userSettings);
+            this.props.saveSettings();
         }
-        let userSettings = Object.assign({}, this.props.userInfo, newUserSettings);
-        this.props.changeUserInfo(userSettings);
-        this.props.saveSettings();
     }
     componentDidMount() {
         if (this.shouldShow(this.props))
@@ -55,7 +57,11 @@ export class UserSettingsModal extends React.Component {
         this.props.saveSettings();
     }
     shouldShow(props) {
-        return props.userInfo.isLoggedIn && (props.showOverrided || this.isIncomplete(props.userInfo.social_offerings) || this.isIncomplete(props.userInfo.social_courses) || this.isIncomplete(props.userInfo.major) || this.isIncomplete(props.userInfo.class_year));
+        if (!this.props.userInfo.FacebookSignedUp) {
+            return !gcalCallback && props.userInfo.isLoggedIn && (props.showOverrided || this.isIncomplete(props.userInfo.major) || this.isIncomplete(props.userInfo.class_year))
+        } else {
+            return !gcalCallback && props.userInfo.isLoggedIn && (props.showOverrided || this.isIncomplete(props.userInfo.social_offerings) || this.isIncomplete(props.userInfo.social_courses) || this.isIncomplete(props.userInfo.major) || this.isIncomplete(props.userInfo.class_year));
+        }
     }
     isIncomplete(prop) {
         return prop === undefined || prop === "";
@@ -83,6 +89,60 @@ export class UserSettingsModal extends React.Component {
                 <h3>Use Another Browser To Enable Device Notifications</h3>
             </div>
         ;
+        let preferences = !this.props.userInfo.FacebookSignedUp ? null : (
+            <div>
+                <div className="preference cf">
+                    <label className="switch switch-slide">
+                        <input ref="share_courses" className="switch-input" type="checkbox" checked={this.props.userInfo.social_courses} onChange={this.changeForm} defaultChecked={true}/>
+                        <span className="switch-label" data-on="Yes" data-off="No"></span>
+                        <span className="switch-handle"></span>
+                    </label>
+                    <div className="preference-wrapper">
+                        <h3>Would you like to find classes with friends?</h3>
+                        <p className="disclaimer">See which Facebook friends will be your classmates! Only friends in your course will see your name.</p>
+                    </div>
+                </div>
+                <div className="preference cf">
+                    <label className="switch switch-slide">
+                        <input ref="share_sections" className="switch-input" type="checkbox" checked={this.props.userInfo.social_offerings === true} onChange={this.changeForm}/>
+                        <span className="switch-label" data-on="Yes" data-off="No"></span>
+                        <span className="switch-handle"></span>
+                    </label>
+                    <div className="preference-wrapper">
+                        <h3>Would you like to find sections with friends?</h3>
+                        <p className="disclaimer">See which Facebook friends will be in your section! Only friends in your section will see your name.</p>
+                    </div>
+                </div>
+                <div className="preference cf">
+                    <label className="switch switch-slide">
+                        <input ref="share_all" className="switch-input" type="checkbox" checked={this.props.userInfo.social_all === true} onChange={this.changeForm}/>
+                        <span className="switch-label" data-on="Yes" data-off="No"></span>
+                        <span className="switch-handle"></span>
+                    </label>
+                    <div className="preference-wrapper">
+                        <h3>Find new friends in your classes!</h3>
+                        <p className="disclaimer">Find your peers for this semester. All students in your courses will be able to view your name and public Facebook profile.</p>
+                    </div>
+                </div>
+            </div>
+        );
+        let googpic = this.props.userInfo.isLoggedIn ? this.props.userInfo.img_url.replace('sz=50','sz=100') : ''
+        let propic = this.props.userInfo.FacebookSignedUp ? 'url(https://graph.facebook.com/' + JSON.parse(currentUser).fbook_uid + '/picture?type=normal)' : 'url(' + googpic + ')';
+        let fb_upsell = this.props.userInfo.isLoggedIn && !this.props.userInfo.FacebookSignedUp ? (
+            <div className={classnames('preference notifications second cf', {'preference-attn' : enableNotifs})}>
+                <button className="btn abnb-btn fb-btn" onClick={() => {
+                        let link = document.createElement('a');
+                        link.href = '/login/facebook?student_token=' + this.props.userInfo.LoginToken + "&login_hash=" + this.props.userInfo.LoginHash
+                        document.body.appendChild(link);
+                        link.click()
+                    }}>
+                    <span className="img-icon">
+                       <i className="fa fa-facebook" />
+                    </span>
+                    <span>Continue with Facebook</span>
+                </button>
+                <p className="disclaimer ctr">Connecting your Facebook allows you to see which of your Facebook friends are in your classes! Only friends in your course will see your name – your information is never shared with any other party.</p>
+            </div>) : null;
         return (
             <Modal ref="modal"
                 className="welcome-modal max-modal"
@@ -92,7 +152,7 @@ export class UserSettingsModal extends React.Component {
                 >
                 <div id="modal-content">
                     <div id="modal-header">
-                        <div className="pro-pic" style={{backgroundImage: 'url(https://graph.facebook.com/' + JSON.parse(currentUser).fbook_uid + '/picture?type=normal)'}}></div>
+                        <div className="pro-pic" style={{backgroundImage: propic}}></div>
                         <h1>Welcome!</h1>
                     </div>
                     <div id="modal-body">
@@ -126,40 +186,9 @@ export class UserSettingsModal extends React.Component {
                                 onChange={this.changeClassYear}
                             />
                         </div>
-                        <div className="preference cf">
-                            <label className="switch switch-slide">
-                                <input ref="share_courses" className="switch-input" type="checkbox" checked={this.props.userInfo.social_courses} onChange={this.changeForm} defaultChecked={true}/>
-                                <span className="switch-label" data-on="Yes" data-off="No"></span>
-                                <span className="switch-handle"></span>
-                            </label>
-                            <div className="preference-wrapper">
-                                <h3>Would you like to find classes with friends?</h3>
-                                <p className="disclaimer">See which Facebook friends will be your classmates! Only friends in your course will see your name.</p>
-                            </div>
-                        </div>
-                        <div className="preference cf">
-                            <label className="switch switch-slide">
-                                <input ref="share_sections" className="switch-input" type="checkbox" checked={this.props.userInfo.social_offerings === true} onChange={this.changeForm}/>
-                                <span className="switch-label" data-on="Yes" data-off="No"></span>
-                                <span className="switch-handle"></span>
-                            </label>
-                            <div className="preference-wrapper">
-                                <h3>Would you like to find sections with friends?</h3>
-                                <p className="disclaimer">See which Facebook friends will be in your section! Only friends in your section will see your name.</p>
-                            </div>
-                        </div>
-                        <div className="preference cf">
-                            <label className="switch switch-slide">
-                                <input ref="share_all" className="switch-input" type="checkbox" checked={this.props.userInfo.social_all === true} onChange={this.changeForm}/>
-                                <span className="switch-label" data-on="Yes" data-off="No"></span>
-                                <span className="switch-handle"></span>
-                            </label>
-                            <div className="preference-wrapper">
-                                <h3>Find new friends in your classes!</h3>
-                                <p className="disclaimer">Find your peers for this semester. All students in your courses will be able to view your name and public Facebook profile.</p>
-                            </div>
-                        </div>
+                        { preferences }
                         { notifications }
+                        { fb_upsell }
                         <div className="button-wrapper">
                             <button className="signup-button" onClick={() => {
                                 this.changeForm();
