@@ -42,7 +42,7 @@ class Evaluation extends React.Component {
 		return (
 		<div className={classnames("eval-item", {"mini": this.props.mini, "selected": !this.props.mini})}>
 			<div className="eval-wrapper">
-				<div className="year">
+				<div className="year truncate">
 					<b>
 						{year}
 						{evalData.dopple &&
