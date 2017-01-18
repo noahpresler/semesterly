@@ -64,6 +64,9 @@
 		},
 		"title": {
 			"type": "string"
+		},
+		"required": {
+			"type": "boolean"
 		}
 	}
 }
