@@ -31,3 +31,7 @@
     font-size: 17px;
     color: #484848;
 }
+
+.abnb-btn.disabled, .abnb-btn[disabled], fieldset[disabled] .abnb-btn{
+    opacity: .25;
+}
