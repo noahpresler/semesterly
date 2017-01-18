@@ -138,3 +138,10 @@
       width: 48.2%;
     }
 }
+
+/* Deal with long instr names on one line. */
+.year.truncate {
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+}
