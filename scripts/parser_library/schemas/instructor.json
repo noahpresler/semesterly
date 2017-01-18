@@ -46,7 +46,7 @@
 						"additionalProperties": false
 					}
 				},
-				"additionalProperties": false
+				"minItems": 1
 			}
 		},
 		"name": {
@@ -63,7 +63,12 @@
 						"last": {
 							"type": "string"
 						}
-					}
+					},
+					"additionalProperties": false,
+					"required": [
+						"first",
+						"last"
+					]
 				}
 			]
 		},
