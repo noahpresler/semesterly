@@ -1,4 +1,8 @@
 {
+	"year": {
+		"type": "string",
+		"pattern": "20[1,2]\\d"
+	},
 	"day": {
 		"type": "string",
 		"pattern": "[U|M|T|W|R|F|S]"
