@@ -76,3 +76,7 @@ a .textbook h4 {
 a .textbook h4:hover {
     color: #1abc9c;
 }
+
+.textbook-ctn {
+    display: inline-block
+}
