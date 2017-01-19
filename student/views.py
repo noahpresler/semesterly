@@ -18,7 +18,6 @@ from django.contrib.auth.decorators import login_required
 from django.core.signing import TimestampSigner, BadSignature, SignatureExpired
 from django.db.models import Count
 from googleapiclient.discovery import build
-from oauth2client.client import GoogleCredentials
 
 from googleapiclient import discovery
 from oauth2client import client
@@ -74,18 +73,7 @@ def get_user_dict(school, student, semester):
         user_dict['LoginToken'] = make_token(student).split(":", 1)[1]
         user_dict['LoginHash'] = hashids.encrypt(student.id)
         if google_user_exists:
-            social_user = student.user.social_auth.filter(
-                provider='google-oauth2',
-            ).first()
-            try:
-                access_token = social_user.extra_data["access_token"]
-                refresh_token = social_user.extra_data["refresh_token"]
-                expires_at = social_user.extra_data["expires"]
-            except TypeError:
-              access_token = json.loads(social_user.extra_data)["access_token"]
-              refresh_token = json.loads(social_user.extra_data)["refresh_token"]
-              expires_at = json.loads(social_user.extra_data)["expires"]
-            credentials = GoogleCredentials(access_token,settings.SOCIAL_AUTH_GOOGLE_OAUTH2_KEY,settings.SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET,refresh_token,expires_at,"https://accounts.google.com/o/oauth2/token",'my-user-agent/1.0')
+            credentials = get_google_credentials(student)
             user_dict["GoogleLoggedIn"] = not(credentials is None or credentials.invalid)
     
     user_dict["isLoggedIn"] = student is not None
@@ -426,19 +414,7 @@ def get_semester_from_tt(tt):
 def add_tt_to_gcal(request):
     student = Student.objects.get(user=request.user)
     tt = json.loads(request.body)['timetable']
-    social_user = student.user.social_auth.filter(
-        provider='google-oauth2',
-    ).first()
-    try:
-        access_token = social_user.extra_data["access_token"]
-        refresh_token = social_user.extra_data["refresh_token"]
-        expires_at = social_user.extra_data["expires"]
-    except TypeError:
-      access_token = json.loads(social_user.extra_data)["access_token"]
-      refresh_token = json.loads(social_user.extra_data)["refresh_token"]
-      expires_at = json.loads(social_user.extra_data)["expires"]
-
-    credentials = GoogleCredentials(access_token,settings.SOCIAL_AUTH_GOOGLE_OAUTH2_KEY,settings.SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET,refresh_token,expires_at,"https://accounts.google.com/o/oauth2/token",'my-user-agent/1.0')
+    credentials = get_google_credentials(student)
     http = credentials.authorize(httplib2.Http(timeout=100000000))
     service = discovery.build('calendar', 'v3', http=http)
 
