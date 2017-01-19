@@ -190,6 +190,28 @@
 .friends-in-class-alert {
   margin: 0px 10px;
 }
+
+.friends-in-class-alert .conflict-alert-btn {
+  margin-top: 20px;
+  font-size: 13px;
+  height: 36px;
+}
+
+.friends-in-class-alert .master-slot {
+  margin-top: 10px;
+  margin-bottom: 0px;
+}
+
+.friends-in-class-alert .master-slot-content {
+  text-align: left;
+  text-transform: none;
+  width: 190px;
+}
+
+.friends-in-class-alert .master-slot-actions {
+  display: none;
+}
+
 .friends-in-class-fb {
   margin-top: 20px;
 }
