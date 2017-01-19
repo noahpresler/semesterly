@@ -49,9 +49,6 @@ SOCIAL_AUTH_GOOGLE_OAUTH2_AUTH_EXTRA_ARGUMENTS = {
     'access_type': 'offline',  # Enables the refreshing grant
     'approval_promt': 'force'  # Enables refresh_token
 }
-SOCIAL_AUTH_GOOGLE_PLUS_AUTH_EXTRA_ARGUMENTS = {
-      'access_type': 'offline'
-}
 
 
 SOCIAL_AUTH_LOGIN_REDIRECT_URL = '/'
@@ -82,8 +79,6 @@ SOCIAL_AUTH_PIPELINE = (
 
     # Checks if the current social-account is already associated in the site.
     'social.pipeline.social_auth.social_user',
-
-    'student.utils.redirect_if_no_refresh_token',
 
     # Make up a username for this person, appends a random string at the end if
     # there's any collision.
