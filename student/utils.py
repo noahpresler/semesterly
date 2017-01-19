@@ -4,7 +4,7 @@ import urllib2, json, pprint, datetime
 from django.conf import settings
 from django.db import models
 import json, requests, httplib2
-from apiclient import discovery
+from googleapiclient import discovery
 from oauth2client import client
 from oauth2client import tools
 from oauth2client.file import Storage
