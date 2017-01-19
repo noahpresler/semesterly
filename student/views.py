@@ -85,6 +85,8 @@ def get_user_dict(school, student, semester):
               access_token = json.loads(social_user.extra_data)["access_token"]
               refresh_token = json.loads(social_user.extra_data)["refresh_token"]
               expires_at = json.loads(social_user.extra_data)["expires"]
+            except KeyError:
+                refresh_token = None
             credentials = GoogleCredentials(access_token,settings.SOCIAL_AUTH_GOOGLE_OAUTH2_KEY,settings.SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET,refresh_token,expires_at,"https://accounts.google.com/o/oauth2/token",'my-user-agent/1.0')
             user_dict["GoogleLoggedIn"] = not(credentials is None or credentials.invalid)
     
