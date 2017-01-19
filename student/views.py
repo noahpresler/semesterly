@@ -17,10 +17,10 @@ from django.forms.models import model_to_dict
 from django.contrib.auth.decorators import login_required
 from django.core.signing import TimestampSigner, BadSignature, SignatureExpired
 from django.db.models import Count
-from apiclient.discovery import build
+from googleapiclient.discovery import build
 from oauth2client.client import GoogleCredentials
 
-from apiclient import discovery
+from googleapiclient import discovery
 from oauth2client import client
 from oauth2client import tools
 from oauth2client.file import Storage
