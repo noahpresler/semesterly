@@ -10,10 +10,26 @@ from oauth2client import tools
 from oauth2client.file import Storage
 from hashids import Hashids
 from django.core.signing import TimestampSigner, BadSignature, SignatureExpired
+from googleapiclient.discovery import build
+from oauth2client.client import GoogleCredentials
 
 
 DAY_LIST = ['M','T','W','R','F','S','U'];
 hashids = Hashids(salt="x98as7dhg&h*askdj^has!kj?xz<!9")
+
+def get_google_credentials(student):
+  social_user = student.user.social_auth.filter(
+      provider='google-oauth2',
+  ).first()
+  try:
+      access_token = social_user.extra_data["access_token"]
+      expires_at = social_user.extra_data["expires"]
+      refresh_token = social_user.extra_data.get("refresh_token",None)
+  except TypeError:
+    access_token = json.loads(social_user.extra_data)["access_token"]
+    refresh_token = json.loads(social_user.extra_data)["refresh_token"]
+    expires_at = json.loads(social_user.extra_data)["expires"]
+  return GoogleCredentials(access_token,settings.SOCIAL_AUTH_GOOGLE_OAUTH2_KEY,settings.SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET,refresh_token,expires_at,"https://accounts.google.com/o/oauth2/token",'my-user-agent/1.0')
 
 def check_student_token(student, token):
   try:
