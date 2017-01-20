@@ -49,7 +49,7 @@ export class SaveCalendarModal extends React.Component {
                     <button className="btn abnb-btn" onClick={() => {
                             if (!this.props.userInfo.isLoggedIn || !this.props.userInfo.GoogleSignedUp || !this.props.userInfo.GoogleLoggedIn) {
                                 let link = document.createElement('a');
-                                link.href = '/login/google-oauth2?next=' + location.protocol + "//" + location.host + "/callback/google_calendar"+ '&student_token=' + this.props.userInfo.LoginToken + "&login_hash=" + this.props.userInfo.LoginHash
+                                link.href = '/login/google-oauth2/?next=' + location.protocol + "//" + location.host + "/callback/google_calendar"+ '&student_token=' + this.props.userInfo.LoginToken + "&login_hash=" + this.props.userInfo.LoginHash
                                 document.body.appendChild(link);
                                 link.click()
                             } else {
