@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 
-import os, re, json, jsonschema
+import os, re, jsonschema
+import simplejson as json
 
 # color json output of error message
 from pygments import highlight, lexers, formatters, filters
@@ -46,12 +47,12 @@ def pretty_format_error_message(path, message, schema_path):
 		return '#/' + location + '\n' + subject + '\n' + s
 
 absolute_path_to_base_directory = '/home/mike/Documents/semesterly/scripts/parser_library/schemas/'
-base_filename = 'eval.json'
+base_filename = 'courses.json'
 
-test_dir = '/home/mike/Documents/semesterly/docs/source/developers/backend/includes/'
+test_dir = '/home/mike/Documents/semesterly/scripts/parser_library/ex_school/data/'
 
 # NOTE: course.json needs .replace('\n', '')
-with open(test_dir + 'eval.json') as g:
+with open(test_dir + 'courses.json') as g:
 	try:
 		data = json.loads(g.read(), object_pairs_hook=dict_raise_on_duplicates)
 	except ValueError as e:
