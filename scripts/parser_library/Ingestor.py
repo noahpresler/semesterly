@@ -67,8 +67,8 @@ class Ingestor:
 			'code': self.map['code'],
 			'name': self.map['name'],
 			'department': {
-				'name': self.map.get('dept_name'),
-				'code': self.map.get('dept_code')
+				'name': clean_empty(self.map.get('dept_name')),
+				'code': clean_empty(self.map.get('dept_code'))
 			},
 			'credits': self.map['credits'],
 			'prerequisites': make_list(self.map.get('prereqs')),
@@ -76,12 +76,11 @@ class Ingestor:
 			'exclusions': make_list(self.map.get('exclusions')),
 			'description': make_list(self.map.get('descr', '')),
 			'areas': make_list(self.map.get('areas')),
-			'level': self.map.get('level'),
+			'level': clean_empty(self.map.get('level')),
 			'cores': make_list(self.map.get('cores')),
 			'geneds': make_list(self.map.get('geneds')),
 			'sections': make_list(self.map.get('sections')),
-			'homepage': self.map.get('homepage'),
-			'fees': self.map.get('fees')
+			'homepage': clean_empty(self.map.get('homepage')),
 		}
 		course = Ingestor.cleandict(course)
 		j = json.dumps(course, sort_keys=True, indent=4, separators=(',', ': '))
@@ -113,10 +112,10 @@ class Ingestor:
 			'waitlist': self.map.get('waitlist'),
 			'waitlist_size': self.map.get('waitlist_size'),
 			'remaining_seats': self.map.get('remaining_seats'),
-			'type': self.map.get('section_type'),
-			'fees': self.map.get('fees'),
-			'final_exam': self.map.get('final_exam'),
-			'offerings': self.map.get('offerings')
+			'type': clean_empty(self.map.get('section_type')),
+			'fees': clean_empty(self.map.get('fees')),
+			'final_exam': clean_empty(self.map.get('final_exam')),
+			'offerings': clean_empty(self.map.get('offerings'))
 		}
 
 		section = Ingestor.cleandict(section)
@@ -150,7 +149,7 @@ class Ingestor:
 			'dates': make_list(self.map.get('dates')),
 			'time': {
 				'start': self.map['time_start'],
-				'time': self.map['time_end']
+				'end': self.map['time_end']
 			},
 			'location': {
 				'where': self.map.get('location'),
@@ -159,7 +158,7 @@ class Ingestor:
 		}
 
 		offering = Ingestor.cleandict(offering)
-		j = Ingestor.color_json(json.dumps(offering, sort_keys=True, indent=4, separators=(',', ': ')))
+		j = json.dumps(offering, sort_keys=True, indent=4, separators=(',', ': '))
 		self.file.write(j)
 		self.file.write(',')
 		print Ingestor.color_json(j)
