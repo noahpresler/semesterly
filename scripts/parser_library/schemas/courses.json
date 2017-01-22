@@ -33,7 +33,7 @@
 				"additionalProperties": false,
 				"required": [
 					"kind",
-					"code",
+					"code"
 				]
 			},
 			{
@@ -135,7 +135,7 @@
 							"detail_url": {},
 							"image_url": {},
 							"author": {},
-							"title": {},
+							"title": {}
 						},
 						"additionalProperties": false,
 						"required": [
