@@ -144,8 +144,6 @@
 		}		
 	},
 	"required": [
-		"code",
-		"term",
-		"year"
+		"code"
 	]
 }
