@@ -192,14 +192,28 @@
 }
 
 .friends-in-class-alert .conflict-alert-btn {
-  margin-top: 20px;
+  margin-top: 25px;
+  padding-top: 0px;
+  margin-right: 2px;
   font-size: 13px;
-  height: 36px;
+  height: 38px;
+  background-color: #3B5998;
+  border-bottom: 2px solid #2b406e;
+  box-shadow: inset -3px -2px #2b406e;
+}
+
+.friends-in-class-alert .conflict-alert-btn:hover {
+  margin-top: 26px;
+  padding-top: 1px;
+  margin-right: 0px;
+  background-color: #3B5998;
+  border-bottom: 2px solid #3B5998;
+  box-shadow: none;
 }
 
 .friends-in-class-alert .master-slot {
-  margin-top: 10px;
-  margin-bottom: 0px;
+  margin-top: 15px;
+  margin-bottom: 5px;
 }
 
 .friends-in-class-alert .master-slot-content {
