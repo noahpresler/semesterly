@@ -45,10 +45,6 @@ function setup(dispatch) {
   if (signup) {
     dispatch({type: 'TRIGGER_SIGNUP_MODAL'});
   }
-  if (gcalCallback) {
-    dispatch({type: 'TRIGGER_SAVE_CALENDAR_MODAL'});
-    dispatch(addTTtoGCal());
-  }
   /* first setup the user's state */
   let user = JSON.parse(currentUser); // currentUser comes from timetable.html
   dispatch(getUserInfo(user));
@@ -64,6 +60,10 @@ function setup(dispatch) {
         loadCachedTimetable();
       }
     }
+  }
+  if (gcalCallback) {
+    dispatch({type: 'TRIGGER_SAVE_CALENDAR_MODAL'});
+    dispatch(addTTtoGCal());
   }
   // check if registered for chrome notifications
   isRegistered();
