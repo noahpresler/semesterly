@@ -88,9 +88,13 @@ SOCIAL_AUTH_PIPELINE = (
     # Disabled by default.
     # 'social.pipeline.mail.mail_validation',
 
+    # 'student.utils.require_email',
+    # 'social.pipeline.mail.mail_validation',
+
     # Associates the current social details with another user account with
     # a similar email address. Disabled by default.
-    # 'social.pipeline.social_auth.associate_by_email',
+    'social.pipeline.social_auth.associate_by_email',
+
     'student.utils.associate_students',
 
     # Create a user account if we haven't found one yet.
@@ -233,7 +237,7 @@ ADMINS = [
 STAGING_NOTIFIED_ADMINS = ['rohan@semester.ly', 'noah@semester.ly']
 
 EMAIL_USE_TLS = True
-EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_HOST = 'it checko'
 EMAIL_PORT = 587
 
 DEFAULT_FROM_EMAIL = 'semesterly.logging@gmail.com'

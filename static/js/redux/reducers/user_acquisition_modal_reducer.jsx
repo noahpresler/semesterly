@@ -4,6 +4,8 @@ export const userAcquisitionModal = (state = { isVisible: false}, action) => {
 			return {isVisible: !state.isVisible};
 		case 'TRIGGER_ACQUISITION_MODAL':
 			return {isVisible: true};
+		case 'CLOSE_ACQUISITION_MODAL':
+			return {isVisible: false};
 		default:
 			return state;
 	}
