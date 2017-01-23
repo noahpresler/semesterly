@@ -84,9 +84,9 @@ class Ingestor:
 		}
 		course = Ingestor.cleandict(course)
 		j = json.dumps(course, sort_keys=True, indent=4, separators=(',', ': '))
+		print Ingestor.color_json(j)
 		self.file.write(j)
 		self.file.write(',')
-		print Ingestor.color_json(j)
 		return course
 
 	def create_section(self, course):
@@ -106,7 +106,7 @@ class Ingestor:
 			'code': self.map['section'],
 			'term': self.map['term'],
 			'year': self.map.get('year'), # NOTE: should be required
-			'instructors': make_list(self.map.get('instrs')),
+			'instructors': [ {'name': name} for name in make_list(self.map.get('instrs'))],
 			'capacity': self.map.get('size'),
 			'enrollment': self.map.get('enrolment'), #NOTE: change to enrollment
 			'waitlist': self.map.get('waitlist'),
@@ -115,7 +115,7 @@ class Ingestor:
 			'type': clean_empty(self.map.get('section_type')),
 			'fees': clean_empty(self.map.get('fees')),
 			'final_exam': clean_empty(self.map.get('final_exam')),
-			'offerings': clean_empty(self.map.get('offerings'))
+			'meetings': clean_empty(self.map.get('offerings'))
 		}
 
 		section = Ingestor.cleandict(section)
@@ -129,17 +129,17 @@ class Ingestor:
 		self.create_meeting(section_model)
 
 	def create_meeting(self, section):
-		''' Create offering in database from info in model map.
+		''' Create meeting ingested json map.
 
 		Args:
 			section: section info mapping
 
 		Returns:
-			json object model for a section
+			json object model for a meeting
 
 		'''
 
-		offering = {
+		meeting = {
 			'kind': 'meeting',
 			'course': section['course'],
 			'section': {
@@ -152,17 +152,17 @@ class Ingestor:
 				'end': self.map['time_end']
 			},
 			'location': {
-				'where': self.map.get('location'),
-				'building': 'TODO - location is optionally string'
+				'building': 'TODO',
+				'where': self.map.get('location')
 			}
 		}
 
-		offering = Ingestor.cleandict(offering)
-		j = json.dumps(offering, sort_keys=True, indent=4, separators=(',', ': '))
+		meeting = Ingestor.cleandict(meeting)
+		j = json.dumps(meeting, sort_keys=True, indent=4, separators=(',', ': '))
 		self.file.write(j)
 		self.file.write(',')
 		print Ingestor.color_json(j)
-		return offering
+		return meeting
 
 	# TODO - close json list
 	def wrap_up(self):
@@ -175,12 +175,11 @@ class Ingestor:
 	def cleandict(d):
 		if not isinstance(d, dict):
 			return d
-		return dict((k, Ingestor.cleandict(v)) for k,v in d.iteritems() if v is not None)
+		return dict((k, Ingestor.cleandict(v)) for k,v in d.iteritems() if v is not None) # and len(filter(None, v)) > 0
 
 	@staticmethod
 	def DEBUG():
-		# TODO
-		pass
+		pass # TODO
 
 	# color json output of error message
 	@staticmethod
