@@ -451,9 +451,9 @@ def add_tt_to_gcal(request):
             instructors = 'Taught by: ' + slot['instructors'] + '\n' if len(slot.get('instructors','')) > 0 else ''
 
             res = {
-              'summary': slot['name'] + " " + slot['code'] + slot['meeting_section'],
+              'summary': course['name'] + " " + course['code'] + slot['meeting_section'],
               'location': slot['location'],
-              'description': slot['code'] + slot['meeting_section'] + '\n' + instructors + description + '\n\n' + 'Created by Semester.ly',
+              'description': course['code'] + slot['meeting_section'] + '\n' + instructors + description + '\n\n' + 'Created by Semester.ly',
               'start': {
                 'dateTime': start.strftime("%Y-%m-%dT%H:%M:%S"),
                 'timeZone': 'America/New_York',
