@@ -32,7 +32,8 @@
 						"properties": {
 							"code": {}
 						},
-						"additionalProperties": false
+						"additionalProperties": false,
+						"required": [ "code" ]
 					},
 					"section": {
 						"allOf": [
@@ -43,8 +44,10 @@
 						"properties": {
 							"code": {}
 						},
-						"additionalProperties": false
-					}
+						"additionalProperties": false,
+						"required": [ "code" ]
+					},
+					"additionalProperties": false
 				},
 				"minItems": 1
 			}
