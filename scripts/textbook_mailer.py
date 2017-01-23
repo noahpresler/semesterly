@@ -17,7 +17,7 @@ if len(sys.argv) < 2:
     exit(0)
 school = sys.argv[1]
 
-students = PersonalTimetable.objects.filter(school=school).values_list("student", flat=True).distinct()
+students = PersonalTimetable.objects.filter(school=school, semester='S').values_list("student", flat=True).distinct()
 
 # Create server object with SSL option
 server = smtplib.SMTP_SSL('email-smtp.us-east-1.amazonaws.com')
