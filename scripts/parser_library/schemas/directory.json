@@ -1,0 +1,74 @@
+{
+	"$schema": "http://json-schema.org/draft-04/schema#",
+	"title": "Directory",
+	"description": "Semesterly School Directory JSON schema",
+	"type": "object",
+	"properties": {
+		"children": {
+			"type": "array",
+			"items": [
+				{
+					"type": "object",
+					"properties": {
+						"children": {
+							"type": "array",
+							"items": [
+								{
+									"type": "object",
+									"properties": {
+										"kind": "file",
+										"name": "courses.json"
+									}
+								}
+							]
+						},
+						"name": {
+							"enum": ["data"]
+						},
+						"kind": {
+							"enum": ["directory"]
+						}
+					}
+				},
+				{
+					"type": "object",
+					"properties": {
+						"name": {
+							"enum": ["config.json"]
+						},
+						"kind": {
+							"enum": ["file"]
+						}
+					},
+					"additionalProperties": false,
+					"required": [ "name", "kind" ]
+				},
+				{
+					"type": "object",
+					"properties": {
+						"name": {
+							"enum": ["__init__.py"]
+						},
+						"kind": {
+							"enum": ["file"]
+						}
+					},
+					"additionalProperties": false,
+					"required": [ "name", "kind" ]
+				}
+			]
+		},
+		"kind": {
+			"enum": ["directory"]
+		},
+		"name": {
+			"type": "string"
+		},
+		"additionalItems": false,
+		"minItems": 3,
+		"maxItems": 3,
+		"uniqueItems": true
+	},
+	"additionalProperties": false,
+	"required": [ "children", "name", "kind" ]
+}
