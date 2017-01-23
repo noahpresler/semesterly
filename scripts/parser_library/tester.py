@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 
 import os, re, jsonschema
-import simplejson as json
+import simplejson as json # NOTE: better error message than json library
 
 # color json output of error message
 from pygments import highlight, lexers, formatters, filters
