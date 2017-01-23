@@ -62,8 +62,11 @@ export function fetchShareTimetableLink() {
 
 export function addTTtoGCal() {
 	return (dispatch) => {
+		gcalCallback = false;
 		let state = store.getState();
 		let timetableState = state.timetables;
+		// Wait for timetable to load
+		if (gcalCallback) { while (state.timetables.items.length <= 0) {} }
 		if (!state.saveCalendarModal.isUploading && !state.saveCalendarModal.hasUploaded) {
 			dispatch({type: "UPLOAD_CALENDAR"});
 			fetch(getAddTTtoGCalEndpoint(), {
