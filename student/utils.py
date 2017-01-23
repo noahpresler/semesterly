@@ -73,7 +73,7 @@ def create_student(strategy, details, response, user, *args, **kwargs):
         provider=backend_name,
     ).first()
 
-    if backend_name == 'google-oauth2':
+    if backend_name == 'google-oauth2' and not user.social_auth.filter(provider='facebook').exists():
       try:
         access_token = social_user.extra_data["access_token"]
       except TypeError:
