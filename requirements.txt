@@ -45,3 +45,5 @@ sphinx-autobuild==0.6.0
 sphinx-rtd-theme==0.1.9
 sphinxcontrib-inlinesyntaxhighlight==0.2
 jsonschema==2.5.1
+simplejson==3.10.0
+jsonschema==2.5.1
