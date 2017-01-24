@@ -52,7 +52,7 @@ def custom_500(request):
 # ******************************************************************************
 
 @validate_subdomain
-def view_timetable(request, code=None, sem=None, shared_timetable=None, find_friends=False, enable_notifs=False,signup=False,gcal_callback=False):
+def view_timetable(request, code=None, sem=None, shared_timetable=None, find_friends=False, enable_notifs=False,signup=False,gcal_callback=False, export_calendar=False):
   school = request.subdomain
   student = get_student(request)
   course_json = None
@@ -88,6 +88,7 @@ def view_timetable(request, code=None, sem=None, shared_timetable=None, find_fri
     'student_integrations': json.dumps(integrations),
     'signup': signup,
     'gcal_callback': gcal_callback,
+    'export_calendar': export_calendar
   },
   context_instance=RequestContext(request))
 
@@ -95,6 +96,13 @@ def view_timetable(request, code=None, sem=None, shared_timetable=None, find_fri
 def google_calendar_callback(request):
   try:
     return view_timetable(request, gcal_callback=True)
+  except Exception as e:
+    raise Http404
+
+@validate_subdomain
+def export_calendar(request):
+  try:
+    return view_timetable(request, export_calendar=True)
   except Exception as e:
     raise Http404
 

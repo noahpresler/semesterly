@@ -42,8 +42,16 @@ function setup(dispatch) {
   studentIntegrations = JSON.parse(studentIntegrations);
   signup = signup === "True";
   gcalCallback = gcalCallback === "True";
+  exportCalendar = exportCalendar === "True";
   if (signup) {
     dispatch({type: 'TRIGGER_SIGNUP_MODAL'});
+  }
+  if (gcalCallback) {
+    dispatch({type: 'TRIGGER_SAVE_CALENDAR_MODAL'});
+    dispatch(addTTtoGCal());
+  }
+  if (exportCalendar) {
+    dispatch({type: 'TRIGGER_SAVE_CALENDAR_MODAL'});
   }
   /* first setup the user's state */
   let user = JSON.parse(currentUser); // currentUser comes from timetable.html
