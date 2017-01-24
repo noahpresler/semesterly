@@ -3,7 +3,7 @@
 # @author   Michael N. Miller
 # @date     1/13/17
 
-import json
+import simplejson as json
 from pygments import highlight, lexers, formatters, filters
 
 class Ingestor:
