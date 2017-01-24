@@ -1,31 +1,31 @@
 import os, time, progressbar, argparse
 
-from abc import ABCMeta
+from abc import ABCMeta, abstractmethod
 from scripts.parser_library.Requester import Requester
 from scripts.parser_library.Ingestor import Ingestor
 
-bar = progressbar.ProgressBar(max_value=progressbar.UnknownLength)
-for i in range(20):
-	time.sleep(0.1)
-	bar.update(i)
+# bar = progressbar.ProgressBar(max_value=progressbar.UnknownLength)
+# for i in range(20):
+# 	time.sleep(0.1)
+# 	bar.update(i)
 
-bar = progressbar.ProgressBar()
-for i in bar(range(100)):
-	time.sleep(0.02)
+# bar = progressbar.ProgressBar()
+# for i in bar(range(100)):
+# 	time.sleep(0.02)
 
-bar = progressbar.ProgressBar(redirect_stdout=True)
-for i in range(100):
-	print 'Some text', i
-	time.sleep(0.1)
-	bar.update(i)
+# bar = progressbar.ProgressBar(redirect_stdout=True)
+# for i in range(100):
+# 	print 'Some text', i
+# 	time.sleep(0.1)
+# 	bar.update(i)
 
-bar = progressbar.ProgressBar(widgets=[
-	' [', progressbar.Timer(), '] ',
-	progressbar.Bar(),
-	' (', progressbar.ETA(), ') ',
-])
-for i in bar(range(20)):
-	time.sleep(0.1)
+# bar = progressbar.ProgressBar(widgets=[
+# 	' [', progressbar.Timer(), '] ',
+# 	progressbar.Bar(),
+# 	' (', progressbar.ETA(), ') ',
+# ])
+# for i in bar(range(20)):
+# 	time.sleep(0.1)
 
 class Parser:
 	__metaclass__ = ABCMeta
