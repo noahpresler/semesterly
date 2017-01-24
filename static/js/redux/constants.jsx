@@ -24,6 +24,9 @@ export const VALID_SCHOOLS = [
 export const getAddTTtoGCalEndpoint = (timetable) => {
   return "/user/add_to_gcal/"
 };
+export const getLogiCalEndpoint = () => { 
+  return "/user/log_ical/"
+};
 export const getCourseInfoEndpoint = (course_id) => {
 	return "/courses/" + getSchool() + "/" + getSemester() + "/id/" + course_id + "/";
 };
