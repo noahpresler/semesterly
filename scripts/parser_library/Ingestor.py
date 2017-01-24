@@ -12,7 +12,7 @@ class Ingestor:
 	def __init__(self, school):
 		self.map = {}
 		self.school = school
-		self.file = open('/home/mike/Documents/semesterly/scripts/parser_library/ex_school/data/courses.json', 'w')
+		self.file = open('scripts/parser_library/ex_school/data/courses.json', 'w')
 		self.file.write('[')
 
 	def __setitem__(self, key, value):
