@@ -75,7 +75,7 @@ class Ingestor:
 			'corequisites': make_list(self.map.get('coreqs')),
 			'exclusions': make_list(self.map.get('exclusions')),
 			'description': make_list(self.map.get('descr', '')),
-			'areas': make_list(self.map.get('areas')),
+			'areas': self.map.get('areas'),
 			'level': clean_empty(self.map.get('level')),
 			'cores': make_list(self.map.get('cores')),
 			'geneds': make_list(self.map.get('geneds')),
