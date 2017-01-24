@@ -13,6 +13,7 @@ import copy, functools, itertools, json, logging, os, httplib2
 import datetime
 from timetable.models import *
 from student.models import *
+from analytics.models import *
 from django.forms.models import model_to_dict
 from django.contrib.auth.decorators import login_required
 from django.core.signing import TimestampSigner, BadSignature, SignatureExpired
@@ -467,5 +468,12 @@ def add_tt_to_gcal(request):
               ],
             }
             event = service.events().insert(calendarId=created_calendar['id'], body=res).execute()
+
+    analytic = CalendarExport.objects.create(
+        student = student,
+        school = school,
+        is_google_calendar = True
+    )
+    analytic.save()
 
     return HttpResponse(json.dumps({}), content_type="application/json")
