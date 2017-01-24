@@ -36,7 +36,7 @@ class Parser:
 		self.ingest = Ingestor(school)
 
 	@abstractmethod
-	def parse(self, **kwargs): pass
+	def start(self, **kwargs): pass
 
 class CourseParser(Parser):
 	__metaclass__ = ABCMeta
@@ -45,7 +45,7 @@ class CourseParser(Parser):
 		Parser.__init__(self, school)
 
 	@abstractmethod
-	def parse(self, **kwargs): pass
+	def start(self, **kwargs): pass
 
 	def get_args():
 		parser = argparse.ArgumentParser(description='arg parse')
