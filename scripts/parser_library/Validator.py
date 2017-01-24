@@ -21,6 +21,8 @@ class Validator:
 		self.directory = directory
 		self.schema_directory = schema_directory
 
+		self.validated_course_codes = {}
+
 		self.count24 = 0
 		self.granularity = 60
 
@@ -114,6 +116,7 @@ class Validator:
 				if 'course' in section and section['course']['code'] != course['code']:
 					raise ValueError('course code "%s" in nested section does not match parent course code "%s"'
 					 % (section['course']['code'], course['code']))
+				# NOTE: mutating dictionary
 				section['course'] = { 'code': course['code'] }
 				self.validate_section(section)
 
@@ -152,6 +155,7 @@ class Validator:
 				if 'section' in meeting and meeting['section']['code'] != section['code']:
 					raise ValueError('section code "%s" in nested meeting does not match parent section code "%s"'
 					 % (meeting['section']['code'], section['code']))
+				# NOTE: mutating dictionary
 				meeting['course'] = section['course']
 				meeting['section'] = { 'code': section['code'] }
 				self.validate_meeting(meeting)
