@@ -35,24 +35,9 @@ class Parser:
 		self.requester = Requester()
 		self.ingest = Ingestor(school)
 
-	def getargs():
-		parser = argparse.ArguementParser(description='arg parse')
-		parser.add_argument('-v', '--verbosity', action='count', default=1, required=False, 
-			help='increase output verbosity (none + terms + depts + courses + all)') 
-		parser.add_argument('--department', required=False, 
-			help='parse specific department by code')
-		parser.add_argument('--term',)
-		textbooks = parser.add_mutually_exclusive_group(required=False)
-		textbooks.add_argument('--textbooks', dest='textbooks', action='store_true')
-		textbooks.add_argument('--no-textbooks', dest='textbooks', action='store_false')
-		textbooks.set_defaults(textbooks=True)
-
-		args = parser.parse_args()
-		# TODO - check args
-		return args
 
 	@abstractmethod
-	def parse(self, terms=None):
+	def parse(self, **kwargs): pass
 		''' Parse! '''
 
 class CourseParser(Parser):
@@ -60,3 +45,28 @@ class CourseParser(Parser):
 
 	def __init__(self, school):
 		Parser.__init__(self, school)
+
+	@abstractmethod
+	def parse(self, **kwargs): pass
+		''' Parse! '''
+
+	def get_args():
+		parser = argparse.ArgumentParser(description='arg parse')
+		parser.add_argument('-v', '--verbosity', action='count', default=1, required=False, 
+			help='increase output verbosity (none + terms + depts + courses + all)') 
+		parser.add_argument('--department', required=False, 
+			help='parse specific department by code')
+		parser.add_argument('--year-and-term', nargs=2, type=str, required=False)
+		parser.add_argument('--detail', type=str, required=False,
+			help='parser specific handle')
+		textbooks = parser.add_mutually_exclusive_group(required=False)
+		textbooks.add_argument('--textbooks', dest='textbooks', action='store_true',
+			help='parse textbooks')
+		textbooks.add_argument('--no-textbooks', dest='textbooks', action='store_false',
+			help='don\'t parse textbooks')
+		textbooks.set_defaults(textbooks=True)
+
+		args = parser.parse_args()
+
+	def check_args(args):
+		return args
