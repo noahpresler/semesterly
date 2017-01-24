@@ -35,10 +35,8 @@ class Parser:
 		self.requester = Requester()
 		self.ingest = Ingestor(school)
 
-
 	@abstractmethod
 	def parse(self, **kwargs): pass
-		''' Parse! '''
 
 class CourseParser(Parser):
 	__metaclass__ = ABCMeta
@@ -48,7 +46,6 @@ class CourseParser(Parser):
 
 	@abstractmethod
 	def parse(self, **kwargs): pass
-		''' Parse! '''
 
 	def get_args():
 		parser = argparse.ArgumentParser(description='arg parse')
