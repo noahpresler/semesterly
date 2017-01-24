@@ -418,6 +418,7 @@ def add_tt_to_gcal(request):
     credentials = get_google_credentials(student)
     http = credentials.authorize(httplib2.Http(timeout=100000000))
     service = discovery.build('calendar', 'v3', http=http)
+    school = request.subdomain
 
     tt_name = tt.get('name')
     if  not tt_name or "Untitled Schedule" in tt_name > -1 or len(tt_name) == 0:
