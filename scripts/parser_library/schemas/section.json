@@ -60,7 +60,8 @@
 			"type": "integer"
 		},
 		"type": {
-			"type": "string"
+			"type": "string",
+			"minLength": 1
 		},
 		"fees": {
 			"oneOf": [
@@ -139,9 +140,10 @@
 					"time": {},
 					"location": {}
 				},
-				"additionalProperties": false
+				"additionalProperties": false,
+				"required": [ "time" ]
 			}
-		}		
+		}
 	},
 	"required": [
 		"code"
