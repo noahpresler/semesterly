@@ -1,4 +1,4 @@
-import { getRequestShareTimetableLinkEndpoint, getAddTTtoGCalEndpoint } from '../constants.jsx';
+import { getRequestShareTimetableLinkEndpoint, getAddTTtoGCalEndpoint, getLogiCalEndpoint } from '../constants.jsx';
 import { getActiveTimetable } from './user_actions.jsx';
 import { store } from '../init.jsx';
 import ical from 'ical-generator';
@@ -142,6 +142,10 @@ export function createiCalfromTimetable(active) {
 			}
 			let file = new Blob([cal.toString()], {type: "data:text/calendar;charset=utf8,"});
 			FileSaver.saveAs(file, "my_semester.ics");
+			fetch(getLogiCalEndpoint(), {
+				method: 'POST',
+				credentials: 'include',
+			})
 			dispatch({type: "CALENDAR_DOWNLOADED"});
 		}
 	}
