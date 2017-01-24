@@ -11,8 +11,9 @@ from scripts.parser_library.Requester import Requester
 from scripts.parser_library.Extractor import *
 from scripts.parser_library.Model import Model
 from scripts.parser_library.Ingestor import Ingestor
+from scripts.parser_library.Base import CourseParser
 
-class PeopleSoftParser:
+class PeopleSoftParser(CourseParser):
 
 	DAY_MAP = {
 		'Mo' : 'M',
@@ -52,6 +53,9 @@ class PeopleSoftParser:
 			'courses':	lambda soup: soup.find_all('table', {'class' : 'PSLEVEL1GRIDNBONBO'}),
 			'isbns':	lambda soup: zip(soup.find_all('span', id=re.compile(r'DERIVED_SSR_TXB_SSR_TXBDTL_ISBN\$\d*')), soup.find_all('span', id=re.compile(r'DERIVED_SSR_TXB_SSR_TXB_STATDESCR\$\d*'))),
 		}
+
+	def start(self, **kwargs):
+		pass # TODO
 
 	def parse(self, years, **kwargs):
 
