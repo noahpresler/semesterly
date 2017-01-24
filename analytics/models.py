@@ -56,3 +56,12 @@ class DeviceCookie(models.Model):
     student = models.ForeignKey(Student, null=True, default=None)
     last_online = models.DateTimeField(auto_now_add=True)
 
+class CalendarExport(models.Model):
+    """
+    Logs save calendar export events: save to ics or to google calendar
+    """
+    student = models.ForeignKey(Student, null=True, default=None)
+    time_created = models.DateTimeField(auto_now_add=True)
+    school = models.CharField(max_length=50)
+    is_google_calendar = models.BooleanField(blank=True, default=False)
+
