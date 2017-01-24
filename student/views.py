@@ -478,3 +478,20 @@ def add_tt_to_gcal(request):
     analytic.save()
 
     return HttpResponse(json.dumps({}), content_type="application/json")
+
+@csrf_exempt
+@validate_subdomain
+def log_ical_export(request):
+    try:
+        student = Student.objects.get(user=request.user)
+    except:
+        student = None
+    school = request.subdomain
+    analytic = CalendarExport.objects.create(
+        student = student,
+        school = school,
+        is_google_calendar = False
+    )
+    analytic.save()
+    return HttpResponse(json.dumps({}), content_type="application/json")
+
