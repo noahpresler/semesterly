@@ -13,6 +13,7 @@ import copy, functools, itertools, json, logging, os, httplib2
 import datetime
 from timetable.models import *
 from student.models import *
+from analytics.models import *
 from django.forms.models import model_to_dict
 from django.contrib.auth.decorators import login_required
 from django.core.signing import TimestampSigner, BadSignature, SignatureExpired
@@ -417,6 +418,7 @@ def add_tt_to_gcal(request):
     credentials = get_google_credentials(student)
     http = credentials.authorize(httplib2.Http(timeout=100000000))
     service = discovery.build('calendar', 'v3', http=http)
+    school = request.subdomain
 
     tt_name = tt.get('name')
     if  not tt_name or "Untitled Schedule" in tt_name > -1 or len(tt_name) == 0:
@@ -468,4 +470,28 @@ def add_tt_to_gcal(request):
             }
             event = service.events().insert(calendarId=created_calendar['id'], body=res).execute()
 
+    analytic = CalendarExport.objects.create(
+        student = student,
+        school = school,
+        is_google_calendar = True
+    )
+    analytic.save()
+
     return HttpResponse(json.dumps({}), content_type="application/json")
+
+@csrf_exempt
+@validate_subdomain
+def log_ical_export(request):
+    try:
+        student = Student.objects.get(user=request.user)
+    except:
+        student = None
+    school = request.subdomain
+    analytic = CalendarExport.objects.create(
+        student = student,
+        school = school,
+        is_google_calendar = False
+    )
+    analytic.save()
+    return HttpResponse(json.dumps({}), content_type="application/json")
+
