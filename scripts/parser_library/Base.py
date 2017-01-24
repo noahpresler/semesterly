@@ -67,6 +67,7 @@ class CourseParser(Parser):
 		textbooks.set_defaults(textbooks=True)
 
 		args = parser.parse_args()
+		return args
 
 	def check_args(args):
 		return args
