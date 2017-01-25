@@ -6,6 +6,7 @@
 import simplejson as json
 from pygments import highlight, lexers, formatters, filters
 from scripts.parser_library.Validator import Validator
+from InternalUtils import *
 
 class Ingestor:
 
@@ -99,7 +100,7 @@ class Ingestor:
 		course = cleandict(course)
 		j = json.dumps(course, sort_keys=True, indent=4, separators=(',', ': '))
 		Ingestor.run_validator(lambda x: self.validator.validate_course(x), course)
-		print Ingestor.pretty_json(j)
+		print pretty_json(j)
 		self.file.write(j)
 		self.file.write(',')
 		return course
@@ -149,7 +150,7 @@ class Ingestor:
 		Ingestor.run_validator(lambda x: self.validator.validate_section(x), section)
 		self.file.write(j)
 		self.file.write(',')
-		print Ingestor.pretty_json(j)
+		print pretty_json(j)
 		return section
 
 	def create_offerings(self, section):
@@ -196,16 +197,17 @@ class Ingestor:
 		Ingestor.run_validator(lambda x: self.validator.validate_meeting(x), meeting)
 		self.file.write(j)
 		self.file.write(',')
-		print Ingestor.pretty_json(j)
+		print pretty_json(j)
 		return meeting
 
+	# TODO - output to logger (should be integrated into validator itself) 
 	@staticmethod
 	def run_validator(validate, data):
 		try:
 			validate(data)
 		except ValueError as e:
 			print e
-			print Ingestor.pretty_json(data)
+			print pretty_json(data)
 			exit(1)
 
 	# TODO - close json list properly
@@ -218,32 +220,3 @@ class Ingestor:
 	@staticmethod
 	def DEBUG():
 		pass # TODO
-
-	@staticmethod
-	def pretty_json(j):
-		if isinstance(j, dict):
-			j = json.dumps(j, sort_keys=True, indent=2, separators=(',', ': '))
-		l = lexers.JsonLexer()
-		l.add_filter('whitespace')
-		colorful_json = highlight(unicode(j, 'UTF-8'), l, formatters.TerminalFormatter())
-		return colorful_json
-
-def make_list(l, base_type=basestring):
-	if isinstance(l, base_type):
-		l = [l]
-	return clean_empty(l)
-
-def clean_empty(a):
-	if not a: return None
-	try:
-		a = filter(None, a)
-		if len(a) == 0:
-			return None
-	except TypeError:
-		pass
-	return a
-
-def cleandict(d):
-	if not isinstance(d, dict):
-		return clean_empty(d)
-	return dict((k, cleandict(v)) for k,v in d.iteritems() if clean_empty(v) is not None)
