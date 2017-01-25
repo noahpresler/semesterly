@@ -61,22 +61,29 @@
 				"type": "string"
 			}
 		},
-		"oneOf": [
+		"anyOf": [
 			{
-				"required": ["building"]
+				"required": [ "where" ]
 			},
 			{
-				"required": ["building_room"],
-				"not": {
-					"oneOf": [
-						{
-							"required": ["building", "room"]
-						},
-						{
-							"required": ["room"]
+				"oneOf": [
+					{
+						"required": ["building"]
+					},
+					{
+						"required": ["building_room"],
+						"not": {
+							"oneOf": [
+								{
+									"required": ["building", "room"]
+								},
+								{
+									"required": ["room"]
+								}
+							]
 						}
-					]
-				}
+					}
+				]
 			}
 		]
 	},
