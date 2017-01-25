@@ -40,6 +40,12 @@ def view_analytics_dashboard(request):
             num_users = number_timetables(**args)
             percent_users = format(float(num_users) / total_signups * 100, '.2f')
             num_users_by_permission[permission] = (num_users, percent_users)
+
+        total_calendar_exports = number_timetables(Timetable=CalendarExport)
+        google_calendar_exports = number_timetables(Timetable=CalendarExport, is_google_calendar=True)
+        ics_calendar_exports = total_calendar_exports - google_calendar_exports
+        unique_users_calendar_exports = number_timetables(Timetable=CalendarExport, distinct="student")
+
         return render_to_response('analytics_dashboard.html', {
                 "signups_per_hour":number_timetables_per_hour(Timetable=Student,start_delta_days=7, interval_delta_hours=24),
                 "total_timetables_by_school":json.dumps(total_timetables_by_school),
@@ -54,6 +60,11 @@ def view_analytics_dashboard(request):
                 "total_timetables_fall":number_timetables(semester="F"),
                 "total_timetables_spring":number_timetables(semester="S"),
                 "number_of_reactions":json.dumps(number_of_reactions()),
+                "total_calendar_exports":total_calendar_exports,
+                "google_calendar_exports":google_calendar_exports,
+                "ics_calendar_exports":ics_calendar_exports,
+                "unique_users_calendar_exports":unique_users_calendar_exports,
+                "calendar_exports_by_type":json.dumps({"ics":ics_calendar_exports, "google":google_calendar_exports}),
                 "jhu_most_popular_courses":[], # needs to be refactored; was causing timeout on server because too slow
                 "uoft_most_popular_courses":[], # needs to be refactored; was causing timeout on server because too slow
                 "umd_most_popular_courses":[] # needs to be refactored; was causing timeout on server because too slow
@@ -106,6 +117,10 @@ def number_timetables(**parameters):
         )
         parameters.pop("time_start")
         parameters.pop("time_end")
+
+    if "distinct" in parameters:
+        timetables = timetables.distinct(parameters["distinct"])
+        parameters.pop("distinct")
 
     for parameter in parameters:
         if parameters[parameter] != None:
