@@ -5,6 +5,7 @@
 
 import simplejson as json
 from pygments import highlight, lexers, formatters, filters
+from scripts.parser_library.Validator import Validator
 
 class Ingestor:
 
@@ -14,6 +15,7 @@ class Ingestor:
 		self.school = school
 		self.file = open('scripts/parser_library/ex_school/data/courses.json', 'w')
 		self.file.write('[')
+		self.validator = Validator()
 
 	def __setitem__(self, key, value):
 		self.map[key] = value
@@ -75,14 +77,15 @@ class Ingestor:
 			'corequisites': make_list(self.map.get('coreqs')),
 			'exclusions': make_list(self.map.get('exclusions')),
 			'description': make_list(self.map.get('descr', '')),
-			'areas': self.map.get('areas'),
+			'areas': clean_empty(self.map.get('areas')),
 			'level': clean_empty(self.map.get('level')),
 			'cores': make_list(self.map.get('cores')),
 			'geneds': make_list(self.map.get('geneds')),
-			'sections': make_list(self.map.get('sections')),
+			'sections': self.map.get('sections'),
 			'homepage': clean_empty(self.map.get('homepage')),
 		}
 		course = Ingestor.cleandict(course)
+		self.validator.validate_course(course)
 		j = json.dumps(course, sort_keys=True, indent=4, separators=(',', ': '))
 		print Ingestor.color_json(j)
 		self.file.write(j)
@@ -119,6 +122,7 @@ class Ingestor:
 		}
 
 		section = Ingestor.cleandict(section)
+		self.validator.validate_section(section)
 		j = json.dumps(section, sort_keys=True, indent=4, separators=(',', ': '))
 		self.file.write(j)
 		self.file.write(',')
@@ -158,6 +162,7 @@ class Ingestor:
 		}
 
 		meeting = Ingestor.cleandict(meeting)
+		self.validator.validate_section(section)
 		j = json.dumps(meeting, sort_keys=True, indent=4, separators=(',', ': '))
 		self.file.write(j)
 		self.file.write(',')
