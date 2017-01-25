@@ -138,10 +138,16 @@
 					"dates": {},
 					"days": {},
 					"time": {},
-					"location": {}
+					"location": {},
+					"course": {},
+					"section": {}
 				},
 				"additionalProperties": false,
-				"required": [ "time" ]
+				"required": [ 
+					"time",
+					"course",
+					"section"
+				]
 			}
 		}
 	},

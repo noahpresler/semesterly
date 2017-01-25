@@ -80,7 +80,7 @@ class Validator:
 					j = json.load(f)
 				else:
 					j = json.loads(f.read(), object_pairs_hook=Validator.dict_raise_on_duplicates)
-			except ValueError as e:
+			except JsonValidationError as e:
 				print file
 				self.logger.log('INVALID_JSON', e)
 				return None
@@ -102,104 +102,103 @@ class Validator:
 					'textbook'  : lambda x: self.validate_textbook(x, schema=False),
 					'textbook_link': lambda x: self.validate_textbook_link(x, schema=False)
 				}[obj.kind](obj)
-			except ValueError as error:
+			except JsonValidationError as error:
 				print 'ERROR:', error
 				print pretty_json(obj)
 
 	def validate_course(self, course, schema=True, relative=True):
 		if not isinstance(course, dotdict):
 			course = dotdict(course)
-		try:
-			if schema:
-				self.validate_schema(course, *self.schema.course)
 
-			if 'kind' in course and course.kind != 'course':
-				raise ValueError('course object must be of kind course')
+		if schema:
+			self.validate_schema(course, *self.schema.course)
 
-			if self.course_code_regex.match(course.code) is None:
-				raise ValueError('course code "%s" does not match r\'%s\''
-				 %(course.code, self.config.course_code_regex))
+		if 'kind' in course and course.kind != 'course':
+			raise JsonValidationError('course object must be of kind course', course)
 
-			if 'department' in course and 'code' in course.department and 'departments' in self.config:
-				if course.department.code not in {d.code for d in self.config.departments}:
-					raise ValueError('department %s is not in config.json department list'
-					 %(course.department))
+		if self.course_code_regex.match(course.code) is None:
+			raise JsonValidationError('course code "%s" does not match r\'%s\''
+			 %(course.code, self.config.course_code_regex), course)
 
-			if 'homepage' in course:
-				validate_website(course.homepage)
+		if 'department' in course and 'code' in course.department and 'departments' in self.config:
+			if course.department.code not in {d.code for d in self.config.departments}:
+				raise JsonValidationError('department %s is not in config.json department list'
+				 %(course.department), course)
 
-			for section in course.get('sections', []):
-				if 'course' in section and section.course.code != course.code:
-					raise ValueError('course code "%s" in nested section does not match parent course code "%s"'
-					 % (section.course.code, course.code))
-				# NOTE: mutating dictionary
-				section.course = { 'code': course.code }
-				self.validate_section(section, schema=False)
+		if 'homepage' in course:
+			validate_website(course.homepage)
 
-			if relative:
-				if course.code in self.validated:
-					raise ValueError('multiple definitions of course "%s"' % (course.code)) # TODO - should be warning
-				if course.code not in self.validated:
-					self.validated[course.code] = set()
+		for section in course.get('sections', []):
+			if 'course' in section and section.course.code != course.code:
+				raise JsonValidationError('course code "%s" in nested section does not match parent course code "%s"'
+				 % (section.course.code, course.code), course)
+			# NOTE: mutating dictionary; TODO - not needed anymore, remove when able
+			section.course = { 'code': course.code }
+			self.validate_section(section, schema=False)
 
-		except ValueError as error:
-			raise ValueError("in course %s, %s" % (course.code, str(error)))
+		if relative:
+			if course.code in self.validated:
+				self.validation_warning('multiple definitions of course "%s"' % (course.code), course) # TODO - should be warning
+			if course.code not in self.validated:
+				self.validated[course.code] = set()
 
 	def validate_section(self, section, schema=True, relative=True):
 		if not isinstance(section, dotdict):
 			section = dotdict(section)
-		try:
-			if schema:
-				self.validate_schema(section, *self.schema.section)
 
-			if 'course' not in section:
-				raise ValueError('section does not define a parent course')
+		if schema:
+			self.validate_schema(section, *self.schema.section)
 
-			if 'kind' in section and section.kind != 'section':
-				raise ValueError('section object must be of kind "section"')
+		if 'course' not in section:
+			raise JsonValidationError('section does not define a parent course', section)
 
-			if 'course' in section and self.course_code_regex.match(section.course.code) is None:
-				raise ValueError('course code "%s" does not match r\'%s\''
-				 %(course.code, self.config.course_code_regex))
+		if 'kind' in section and section.kind != 'section':
+			raise JsonValidationError('section object must be of kind "section"', section)
 
-			if 'term' in section and section.term not in self.config.terms:
-				raise ValueError('term "%s" not in config.json term list' % (section.term))
+		if 'course' in section and self.course_code_regex.match(section.course.code) is None:
+			raise JsonValidationError('course code "%s" does not match r\'%s\''
+			 %(course.code, self.config.course_code_regex), section)
 
-			for instructor in section.get('instructors', []):
-				# TODO
-				self.validate_instructor(instructor)
+		if 'term' in section and section.term not in self.config.terms:
+			raise JsonValidationError('term "%s" not in config.json term list' % (section.term), section)
 
-			if 'final_exam' in section:
-				if 'course' in section.final_exam and section.final_exam.course.code != section.course.code:
-					raise ValueError('section final exam course "%s" does not match section course "%s"'
-					 % (section.final_exam.course.code, section.course.code))
-				if 'section' in section.final_exam and section.final_exam.section.code != section.code:
-					raise ValueError('section final exam section code "%s" does not match section code "%s"'
-					 % (section.final_exam.section.code, section.code))
-				self.validate_final_exam(section.final_exam)
+		for instructor in section.get('instructors', []):
+			self.validate_instructor(instructor)
 
-			for meeting in section.get('meetings', []):
-				if 'course' in meeting and meeting.course.code != section.course.code:
-					raise ValueError('course code "%s" in nested meeting does not match parent section course code "%s"'
-					 % (meeting.course.code, section.course.code))
-				if 'section' in meeting and meeting.section.code != section.code:
-					raise ValueError('section code "%s" in nested meeting does not match parent section code "%s"'
-					 % (meeting.section.code, section.code))
-				# NOTE: mutating dictionary
-				meeting.course = section.course
-				meeting.section = { 'code': section.code }
-				self.validate_meeting(meeting, schema=False)
+		if 'final_exam' in section:
+			if 'course' in section.final_exam and section.final_exam.course.code != section.course.code:
+				raise JsonValidationError('section final exam course "%s" does not match section course code "%s"'
+				 % (section.final_exam.course.code, section.course.code), section)
+			if 'section' in section.final_exam and section.final_exam.section.code != section.code:
+				raise JsonValidationError('section final exam section code "%s" does not match section code "%s"'
+				 % (section.final_exam.section.code, section.code), section)
+			final_exam['course'] = section.course
+			final_exam['section'] = { 'code': section.code }
+			self.validate_final_exam(section.final_exam)
 
-			if relative:
-				if section.course.code not in self.validated:
-					raise ValueError('course code "%s" is not defined' % (section.course.code))
-				if section.code in self.validated[section.course.code]:
-					raise ValueError('for course "%s" section "%s" already defined'
-					 % (section.course.code, section.code)) # TODO - should be warning
-				self.validated[section.course.code].add(section.code)
+		for meeting in section.get('meetings', []):
+			if 'course' in meeting and meeting.course.code != section.course.code:
+				raise JsonValidationError('course code "%s" in nested meeting does not match parent section course code "%s"'
+				 % (meeting.course.code, section.course.code), section)
+			if 'section' in meeting and meeting.section.code != section.code:
+				raise JsonValidationError('section code "%s" in nested meeting does not match parent section code "%s"'
+				 % (meeting.section.code, section.code), section)
+			# NOTE: mutating dictionary; TODO - not needed anymore, remove when able
+			meeting.course = section.course
+			meeting.section = { 'code': section.code }
+			self.validate_meeting(meeting, schema=False)
 
-		except ValueError as error:
-			raise ValueError('in section "%s", %s' % (section.code, str(error)))
+		if relative:
+			if section.course.code not in self.validated:
+				raise JsonValidationError('course code "%s" is not defined' % (section.course.code), section)
+			if section.code in self.validated[section.course.code]:
+				self.validation_warning('for course "%s" section "%s" already defined'
+				 % (section.course.code, section.code), section)
+			self.validated[section.course.code].add(section.code)
+
+	def validation_warning(self, message, j):
+		print 'WARNING:', message
+		print pretty_json(j)
 
 	def validate_meeting(self, meeting, schema=True, relative=True):
 		if not isinstance(meeting, dotdict):
@@ -207,50 +206,71 @@ class Validator:
 		if schema:
 			self.validate_schema(meeting, *self.schema.meeting)
 		if 'kind' in meeting and meeting.kind != 'meeting':
-			raise ValueError('meeting object must be of kind "instructor"')
+			raise JsonValidationError('meeting object must be of kind "instructor"', meeting)
 		if 'course' in meeting and self.course_code_regex.match(meeting.course.code) is None:
-			raise ValueError('course code "%s" does not match r\'%s\''
-			 % (course.code, self.config.course_code_regex))
+			raise JsonValidationError('course code "%s" does not match r\'%s\''
+			 % (course.code, self.config.course_code_regex), meeting)
 		if 'time' in meeting:
-			self.validate_time_range(meeting.time.start, meeting.time.end)
+			try:
+				self.validate_time_range(meeting.time)
+			except JsonValidationError as e:
+				e.message = 'meeting for %s %s, ' % (meeting.course.code, meeting.section.code) + e.message
+				raise e
 		if 'location' in meeting:
-			self.validate_location(meeting.location)
+			try:
+				self.validate_location(meeting.location)
+			except JsonValidationError as e:
+				e.message = 'meeting for %s %s, ' % (meeting.course.code, meeting.section.code) + e.message
+				raise e
 		if relative:
 			if meeting.course.code not in self.validated:
-				raise ValueError('course code "%s" is not defined' % (meeting.course.code))
+				raise JsonValidationError('course code "%s" is not defined' % (meeting.course.code), meeting)
 			if meeting.section.code not in self.validated[meeting.course.code]:
-				raise ValueError('section "%s" is not defined' % (meeting.section.code))
+				raise JsonValidationError('section "%s" is not defined' % (meeting.section.code), meeting)
 
 	def validate_instructor(self, instructor, schema=False, relative=True):
 		if not isinstance(instructor, dotdict):
 			instructor = dotdict(instructor)
 		if 'kind' in instructor and instructor.kind != 'instructor':
-			raise ValueError('instructor object must be of kind instructor')
+			raise JsonValidationError('instructor object must be of kind instructor', instructor)
 
 		for _class in instructor.get('classes', []):
 			if 'course' in _class and self.course_code_regex.match(_class.course.code) is None:
-				raise ValueError('course code "%s" does not match given regex "%s"'
-				 % (_class.course.code, self.config.course_code_regex))
+				raise JsonValidationError('course code "%s" does not match given regex "%s"'
+				 % (_class.course.code, self.config.course_code_regex), instructor)
 
 		if 'department' in instructor and 'departments' in self.config:
 			if instructor.department not in { d.code for d in self.config.departments }:
-				raise ValueError('department %s not listed in config.json' % (instructor.department))
+				raise JsonValidationError('department %s not listed in config.json'
+				 % (instructor.department), instructor)
 
 		if 'homepage' in instructor:
-			self.validate_homepage(instructor.homepage)
+			try:
+				self.validate_homepage(instructor.homepage)
+			except JsonValidationError as e:
+				e.message = '@instructor %s\'s office, ' % (instructor.name) + e.message
+				raise e
 
 		if 'office' in instructor:
-			if 'location' in instructor.office:
-				self.validate_location(instructor.office.location)
-			for office_hour in instructor.office.get('hours', []):
-				self.validate_meeting(instructor.office.hours)
+			try:
+				if 'location' in instructor.office:
+					self.validate_location(instructor.office.location)
+				for office_hour in instructor.office.get('hours', []):
+					self.validate_meeting(office_hour)
+			except JsonValidationError as e:
+				e.message = '@instructor %s\'s office, ' % (instructor.name) + e.message
+				raise e
 
 	def validate_final_exam(self, final_exam, schema=False, relative=True):
 		if not isinstance(final_exam, dotdict):
 			final_exam = dotdict(final_exam)
 		if 'kind' in final_exam and final_exam.kind != 'final_exam':
-			raise ValueError('final_exam object must be of kind "final_exam"')
-		# TODO
+			raise JsonValidationError('final_exam object must be of kind "final_exam"', final_exam)
+		try:
+			self.validate_meeting(final_exam.meeting)
+		except JsonValidationError as e:
+			e.message = '@final_exam ' + e.message
+			raise e
 
 	def validate_textbook(self, textbook, schema=False, relative=True):
 		if not isinstance(textbook, dotdict):
@@ -260,26 +280,28 @@ class Validator:
 	def validate_texbook_link(self, textbook_link, schema=False, relative=True):
 		if not isinstance(textbook_link, dotdict):
 			textbook_link = dotdict(textbook_link)
-		pass # TODO
+		if 'course' in textbook_link and self.course_code_regex.match(meeting.course.code) is None:
+			raise JsonValidationError('textbook_link course code does not match course code regex in config.json', textbook_link)
 
 	def validate_location(self, location):
 		if 'campus' in location and 'campuses' in self.config:
 			if location.campus not in self.config.campuses:
-				raise ValueError('location at campus %s not defined in config.json campuses'
-				 % (location.campus))
+				raise JsonValidationError('location at campus %s not defined in config.json campuses'
+				 % (location.campus), location)
 		if 'building' in location and 'buildings' in self.config:
 			if location.building not in self.config.buildings:
-				raise ValueError('location at building %s not defined in config.json buildings'
-				 % (location.building))
+				raise JsonValidationError('location at building %s not defined in config.json buildings'
+				 % (location.building), location)
 
 	def validate_website(url):
 		c = httplib.HTTPConnection(url)
 		c.request("HEAD", '')
 		if c.getresponse().status != 200:
-			raise ValueError('invalid website url "%s"' % (url))
+			raise JsonValidationError('invalid website url "%s"' % (url), {'url': url})
 
 	# NOTE: somewhat redundant but readable
-	def validate_time_range(self, start, end):
+	def validate_time_range(self, time):
+		start, end = time.start, time.end
 		match = lambda x: re.match(r'(\d{1,2}):(\d{2})', x)
 
 		# Check individual time bounds
@@ -287,9 +309,10 @@ class Validator:
 			rtime = match(time)
 			hour, minute = int(rtime.group(1)), int(rtime.group(2))
 			if hour > 23 or minute > 59:
-				raise ValueError('"%s" is not a valid time' %(time))
+				raise JsonValidationError('"%s" is not a valid time' %(time))
 			self.update_time_granularity(hour, minute)
 			if hour < 8 or hour > 20:
+				self.validation_warning('time range will not land on timetable', time)
 				pass # TODO - warn that will not be on timetable
 
 		# Check interaction between times
@@ -301,7 +324,7 @@ class Validator:
 			i = int(i)
 
 		if start_hour > end_hour or (start_hour == end_hour and start_minute > end_minute):
-			raise ValueError('start time "%s" is greater than end time "%s"' % (start, end))
+			raise JsonValidationError('start time is greater than end time', time)
 
 		# Count valid 24 hour times
 		if start_hour > 12 or end_hour > 12:
@@ -340,7 +363,7 @@ class Validator:
 		with open(os.path.join(self.absolute_path_to_schema_base_directory, 'directory.json'), 'r') as f:
 			try:
 				self.directory_schema = json.load(f)
-			except ValueError as e:
+			except JsonValidationError as e:
 				self.logger.log('DIRECTORY_SCHEMA_JSON', e)
 				exit(1)
 
@@ -381,7 +404,7 @@ class Validator:
 		d = {}
 		for k, v in ordered_pairs:
 			if k in d:
-				 raise ValueError("duplicate key: %r" % (k,))
+				 raise JsonValidationError("duplicate key: %r" % (k,))
 			else:
 				 d[k] = v
 		return d
@@ -413,7 +436,13 @@ class Logger:
 		print error
 
 # TODO
-class ValidationError:
+class JsonValidationError(ValueError):
+	'''Raise when fails validation condition.'''
+	def __init__(self, message, json=None, *args):
+		self.message = message
+		self.json = json
+		super(JsonValidationError, self).__init__(message, message, json, *args)
+
 	@staticmethod
 	def schema_json_error(error):
 		print 'SCHEMA_JSON'
