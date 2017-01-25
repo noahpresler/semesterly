@@ -16,6 +16,7 @@ class Ingestor:
 		self.file = open('scripts/parser_library/ex_school/data/courses.json', 'w') # TODO - warn if overwriting file
 		self.file.write('[')
 		self.validator = Validator(directory='scripts/parser_library/ex_school/')
+		self.map[''] = ''
 
 	def __setitem__(self, key, value):
 		self.map[key] = value
@@ -54,6 +55,12 @@ class Ingestor:
 		self.map.clear()
 		self.school = ''
 
+	def getchain(self, *keys):
+		for key in keys:
+			if key in self.map:
+				return self.map[key]
+		return None
+
 	def create_course(self):
 		''' Create course json from info in model map.
 
@@ -61,38 +68,38 @@ class Ingestor:
 			json object model for a course
 		'''
 
+		# support nested and non-nested department ingestion
+		if 'department' in self.map or 'dept' in self.map:
+			if not isinstance(self.getchain('department', 'dept'), dict):
+				self.map['department'] = {
+					'name': self.getchain('department_name', 'dept_name'),
+					'code': self.getchain('department_code', 'dept_code')
+				}
+
 		course = {
 			'kind': 'course',
 			'school': {
 				'code': self.school
 			},
-			'code': self.map['code'],
-			'name': self.map['name'],
-			'department': {
-				'name': clean_empty(self.map.get('dept_name')),
-				'code': clean_empty(self.map.get('dept_code'))
-			},
-			'credits': self.map['credits'],
-			'prerequisites': make_list(self.map.get('prereqs')),
-			'corequisites': make_list(self.map.get('coreqs')),
+			'code': self.getchain('code', 'course_code'),
+			'name': self.getchain('name', 'course_name'),
+			'department': self.map.get('department'),
+			'credits': self.getchain('credits', 'num_credits'),
+			'prerequisites': make_list(self.getchain('prerequisites', 'prereqs')),
+			'corequisites': make_list(self.getchain('corequisites', 'coreqs')),
 			'exclusions': make_list(self.map.get('exclusions')),
-			'description': make_list(self.map.get('descr', '')),
-			'areas': clean_empty(self.map.get('areas')),
-			'level': clean_empty(self.map.get('level')),
+			'description': make_list(self.getchain('description', 'descr')),
+			'areas': self.map.get('areas'),
+			'level': self.map.get('level'),
 			'cores': make_list(self.map.get('cores')),
 			'geneds': make_list(self.map.get('geneds')),
 			'sections': self.map.get('sections'),
-			'homepage': clean_empty(self.map.get('homepage')),
+			'homepage': self.getchain('homepage', 'website'),
 		}
-		course = Ingestor.cleandict(course)
+		course = cleandict(course)
 		j = json.dumps(course, sort_keys=True, indent=4, separators=(',', ': '))
-		try:
-			self.validator.validate_course(course)
-		except ValueError as e:
-			print e
-			print Ingestor.color_json(j)
-			exit(1)
-		print Ingestor.color_json(j)
+		Ingestor.run_validator(lambda x: self.validator.validate_course(x), course)
+		print Ingestor.pretty_json(j)
 		self.file.write(j)
 		self.file.write(',')
 		return course
@@ -106,41 +113,49 @@ class Ingestor:
 		Returns:
 			json object model for a section
 		'''
+
+		# handle nested instructor definition and resolution
+		for key in [k for k in ['instructors', 'instrs', 'instructor', 'instr'] if k in self.map]:
+			self.map[key] = make_list(self.map[key])
+			instructors = self.map[key]
+			for i in range(len(instructors)):
+				if isinstance(instructors[i], basestring):
+					instructors[i] = { 'name': instructors[i] }
+			self.map['instructors'] = instructors
+			break
+
 		section = {
 			'kind': 'section',
 			'course': {
 				'code': course['code']
 			},
-			'code': self.map['section'],
-			'term': self.map['term'],
+			'code': self.getchain('section_code', 'section'), # NOTE: design conflict with code in course
+			'term': self.getchain('term', 'semester'),
 			'year': self.map.get('year'), # NOTE: should be required
-			'instructors': [ {'name': name} for name in make_list(self.map.get('instrs'))],
-			'capacity': self.map.get('size'),
-			'enrollment': self.map.get('enrolment'), #NOTE: change to enrollment
+			'instructors': self.map.get('instructors'),
+			'capacity': self.getchain('capacity', 'size'),
+			'enrollment': self.getchain('enrollment', 'enrolment'), # NOTE: change to enrollment
 			'waitlist': self.map.get('waitlist'),
 			'waitlist_size': self.map.get('waitlist_size'),
 			'remaining_seats': self.map.get('remaining_seats'),
-			'type': clean_empty(self.map.get('section_type')),
-			'fees': clean_empty(self.map.get('fees')),
-			'final_exam': clean_empty(self.map.get('final_exam')),
-			'meetings': clean_empty(self.map.get('offerings'))
+			'type': self.getchain('type', 'section_type'),
+			'fees': self.getchain('fees', 'fee'),
+			'final_exam': self.map.get('final_exam'),
+			'meetings': self.map.get('offerings')
 		}
 
-		section = Ingestor.cleandict(section)
+		section = cleandict(section)
 		j = json.dumps(section, sort_keys=True, indent=4, separators=(',', ': '))
-		try:
-			self.validator.validate_section(section)
-		except ValueError as e:
-			print e
-			print Ingestor.color_json(j)
-			exit(1)
+		Ingestor.run_validator(lambda x: self.validator.validate_section(x), section)
 		self.file.write(j)
 		self.file.write(',')
-		print Ingestor.color_json(j)
+		print Ingestor.pretty_json(j)
 		return section
 
-	def create_offerings(self, section_model):
-		self.create_meeting(section_model)
+	def create_offerings(self, section):
+		self.create_meeting(section)
+	def create_offering(self, section):
+		self.create_meeting(section)
 
 	def create_meeting(self, section):
 		''' Create meeting ingested json map.
@@ -153,36 +168,45 @@ class Ingestor:
 
 		'''
 
+		# handle nested time definition
+		if 'time' not in self.map:
+			self.map['time'] = {
+				'start': self.getchain('time_start', 'start_time'),
+				'end': self.getchain('time_end', 'end_time')
+			}
+
+		# handle nested location definition
+		if isinstance(self.getchain('location', 'loc'), basestring):
+			self.map['location'] = { 'where': self.map['location'] }
+
 		meeting = {
 			'kind': 'meeting',
 			'course': section['course'],
 			'section': {
 				'code': section['code']
 			},
-			'days': make_list(self.map.get('days')),
-			'dates': make_list(self.map.get('dates')),
-			'time': {
-				'start': self.map['time_start'],
-				'end': self.map['time_end']
-			},
-			'location': {
-				'building': 'TODO',
-				'where': self.map.get('location')
-			}
+			'days': make_list(self.getchain('days', 'day')),
+			'dates': make_list(self.getchain('dates', 'date')),
+			'time': self.map['time'],
+			'location': self.map.get('location')
 		}
 
-		meeting = Ingestor.cleandict(meeting)
+		meeting = cleandict(meeting)
 		j = json.dumps(meeting, sort_keys=True, indent=4, separators=(',', ': '))
-		try:
-			self.validator.validate_meeting(meeting)
-		except ValueError as e:
-			print e
-			print Ingestor.color_json(j)
-			exit(1)
+		Ingestor.run_validator(lambda x: self.validator.validate_meeting(x), meeting)
 		self.file.write(j)
 		self.file.write(',')
-		print Ingestor.color_json(j)
+		print Ingestor.pretty_json(j)
 		return meeting
+
+	@staticmethod
+	def run_validator(validate, data):
+		try:
+			validate(data)
+		except ValueError as e:
+			print e
+			print Ingestor.pretty_json(data)
+			exit(1)
 
 	# TODO - close json list properly
 	def wrap_up(self):
@@ -192,18 +216,13 @@ class Ingestor:
 		exit(1)
 
 	@staticmethod
-	def cleandict(d):
-		if not isinstance(d, dict):
-			return d
-		return dict((k, Ingestor.cleandict(v)) for k,v in d.iteritems() if v is not None) # and len(filter(None, v)) > 0
-
-	@staticmethod
 	def DEBUG():
 		pass # TODO
 
-	# color json output of error message
 	@staticmethod
-	def color_json(j):
+	def pretty_json(j):
+		if isinstance(j, dict):
+			j = json.dumps(j, sort_keys=True, indent=2, separators=(',', ': '))
 		l = lexers.JsonLexer()
 		l.add_filter('whitespace')
 		colorful_json = highlight(unicode(j, 'UTF-8'), l, formatters.TerminalFormatter())
@@ -216,7 +235,15 @@ def make_list(l, base_type=basestring):
 
 def clean_empty(a):
 	if not a: return None
-	a = filter(None, a)
-	if len(a) == 0:
-		return None
+	try:
+		a = filter(None, a)
+		if len(a) == 0:
+			return None
+	except TypeError:
+		pass
 	return a
+
+def cleandict(d):
+	if not isinstance(d, dict):
+		return clean_empty(d)
+	return dict((k, cleandict(v)) for k,v in d.iteritems() if clean_empty(v) is not None)
