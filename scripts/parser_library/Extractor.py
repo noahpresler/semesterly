@@ -5,6 +5,13 @@
 
 import re, sys
 
+def is_float(f):
+    try:
+        float(f)
+        return True
+    except TypeError:
+        return False
+
 def time_12to24(time12):
     ''' Attempts to convert 12hr time to 24hr time
 
