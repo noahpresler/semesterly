@@ -11,10 +11,23 @@ import os, sys, re, jsonschema, argparse, httplib
 import simplejson as json
 from pygments import highlight, lexers, formatters, filters
 
+# TODO - move to own file
+class dotdict(dict):
+	"""dot.notation access to dictionary attributes"""
+	__getattr__ = dict.get
+	__setattr__ = dict.__setitem__
+	__delattr__ = dict.__delitem__
+
+	def __init__(self, dct):
+		for key, value in dct.items():
+			if hasattr(value, 'keys'):
+				value = dotdict(value)
+			self[key] = value
+
 class Validator:
 	def __init__(self,
 		directory=None,
-		schema_directory='/home/mike/Documents/semesterly/scripts/parser_library/schemas/', 
+		schema_directory='scripts/parser_library/schemas/', 
 		error_log_filename='/dev/null'):
 
 		self.logger = Logger(error_log_filename)
@@ -26,6 +39,21 @@ class Validator:
 		self.count24 = 0
 		self.granularity = 60
 
+		resolve = lambda schema: jsonschema.RefResolver('file://' + self.schema_directory, schema)
+		load = lambda schema: file_to_json(self.directory + schema)
+		self.schema = dotdict({
+			'all': {
+				'schema': file_to_json('data/courses.json'),
+				'resolver': resolve('courses.json')
+			},
+			'config'
+		})
+
+	@staticmethod
+	def create_jsonschema_resolver(schema, schema_directory='scripts/parser_library/schemas/'):
+		resolver = jsonschema.RefResolver('file://' + schema_directory, schema)
+		return resolver
+
 	def jsonschema_validate(self, schema_directory, schema, subject):
 		if isinstance(schema, str):
 			schema = self.file_to_json(schema, allow_duplicates=True)
@@ -33,9 +61,9 @@ class Validator:
 			subject = self.file_to_json(subject)
 
 		# Set JSON Schema $ref resolver
-		resolver = jsonschema.RefResolver('file://' + schema_directory, schema)
+		resolver = Validator.create_jsonschema_resolver(schema, schema_directory)
 		try:
-			jsonschema.Draft4Validator(schema, resolver=resolver).validate(subject)
+			jsonschema.Draft4Validator(schema.schema, resolver=schema.resolver).validate(subject)
 		except jsonschema.ValidationError as error:
 			self.logger.log('SUBJECT_DEFINITION', error, 
 				path=schema_directory,
@@ -73,30 +101,40 @@ class Validator:
 		schema = lambda f: self.schema_directory + f
 		subject = lambda f: self.directory + f
 
-		self.config = self.jsonschema_validate(self.schema_directory, schema('config.json'), subject('config.json'))
-		courses = self.jsonschema_validate(self.schema_directory, schema('courses.json'), subject('data/courses.json'))
-
+		self.config = self.jsonschema_validate(self.schema.config, file_to_json(self.schema_directory + 'config.json'))
 		print Validator.pretty_json(self.config)
 
+
+		# self.jsonschema_validate(self.schema.config, 'data/courses.json')
+		# self.config = self.jsonschema_validate(self.schema_directory, schema('config.json'), subject('config.json'))
+		# courses = self.jsonschema_validate(self.schema_directory, schema('courses.json'), subject('data/courses.json'))
+
+		courses = self.jsonschema_validate(self.schema.config, file_to_json(self.directory + 'data/courses.json'))
 		self.course_code_regex = re.compile(self.config['course_code_regex'])
 
 		for obj in courses:
 			try:
 				{
-					'course': lambda x: self.validate_course(x),
-					'section': lambda x: self.validate_section(x),
-					'meeting': lambda x: self.validate_meeting(x),
-					'instructor': lambda x: self.validate_instructor(x),
-					'final_exam': lambda x: self.validate_final_exam(x),
-					'textbook': lambda x: self.validate_textbook(x),
-					'textbook_link': lambda x: self.validate_textbook_link(x)
-				}[obj['kind']](obj)
+					'course': lambda x: self.validate_course(x, validate_schema=False),
+					'section': lambda x: self.validate_section(x, validate_schema=False),
+					'meeting': lambda x: self.validate_meeting(x, validate_schema=False),
+					'instructor': lambda x: self.validate_instructor(x, validate_schema=False),
+					'final_exam': lambda x: self.validate_final_exam(x, validate_schema=False),
+					'textbook': lambda x: self.validate_textbook(x, validate_schema=False),
+					'textbook_link': lambda x: self.validate_textbook_link(x, validate_schema=False)
+				}[obj['kind']](obj)`
 			except ValueError as error:
 				print 'ERROR:', error
 				print Validator.pretty_json(obj)
 
-	def validate_course(self, course):
+	def validate_course(self, course, validate_schema=True, enforce_relative_order=True):
 		try:
+			if validate_schema:
+				self.jsonschema_validate(self.schema.course, course)
+
+			if enforce_relative_order:
+				pass # TODO
+
 			if 'kind' in course and course['kind'] != 'course':
 				raise ValueError('course object must be of kind course')
 
@@ -123,7 +161,7 @@ class Validator:
 		except ValueError as error:
 			raise ValueError("in course %s, %s" % (course['code'], str(error)))
 
-	def validate_section(self, section):
+	def validate_section(self, section, schema=False, enforce_relative_order=True):
 		try:
 			if 'kind' in section and section['kind'] != 'section':
 				raise ValueError('section object must be of kind "section"')
@@ -163,7 +201,7 @@ class Validator:
 		except ValueError as error:
 			raise ValueError('in section "%s", %s' % (section['code'], str(error)))
 
-	def validate_meeting(self, meeting):
+	def validate_meeting(self, meeting, schema=False, enforce_relative_order=True):
 		if 'kind' in meeting and meeting['kind'] != 'meeting':
 			raise ValueError('meeting object must be of kind "instructor"')
 		if 'course' in meeting and self.course_code_regex.match(meeting['course']['code']) is None:
@@ -184,7 +222,7 @@ class Validator:
 				raise ValueError('location at building %s not defined in config.json buildings'
 				 % (location['building']))
 
-	def validate_instructor(self, instructor):
+	def validate_instructor(self, instructor, schema=False, enforce_relative_order=True):
 		if 'kind' in instructor and instructor['kind'] != 'instructor':
 			raise ValueError('instructor object must be of kind instructor')
 
@@ -206,7 +244,7 @@ class Validator:
 			for office_hour in instructor['office'].get('hours', []):
 				self.validate_meeting(instructor['office']['hours'])
 
-	def validate_final_exam(self, final_exam):
+	def validate_final_exam(self, final_exam, schema=False, enforce_relative_order=True):
 		if 'kind' in final_exam and final_exam['kind'] != 'final_exam':
 			raise ValueError('final_exam object must be of kind "final_exam"')
 
