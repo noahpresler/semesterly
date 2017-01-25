@@ -12,19 +12,6 @@ import simplejson as json
 from pygments import highlight, lexers, formatters, filters
 from InternalUtils import *
 
-# TODO - move to own file
-class dotdict(dict):
-	"""dot.notation access to dictionary attributes, recursive"""
-	__getattr__ = dict.get
-	__setattr__ = dict.__setitem__
-	__delattr__ = dict.__delitem__
-
-	def __init__(self, dct):
-		for key, value in dct.items():
-			if hasattr(value, 'keys'):
-				value = dotdict(value)
-			self[key] = value
-
 class Validator:
 	def __init__(self,
 		directory=None,
