@@ -20,16 +20,16 @@
 		"course_code_regex": {
 			"type": "string"
 		},
-		"time_granularity": {
-			"type": "integer",
-			"minimum": 0,
-			"exclusiveMinimum": true
-		},
 		"terms": {
 			"type": "array",
 			"items": {
 				"type": "string"
 			}
+		},
+		"time_granularity": {
+			"type": "integer",
+			"minimum": 0,
+			"exclusiveMinimum": true
 		},
 		"registration_groupings": {
 			"type": "array",

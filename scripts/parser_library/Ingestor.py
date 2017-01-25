@@ -13,9 +13,9 @@ class Ingestor:
 	def __init__(self, school):
 		self.map = {}
 		self.school = school
-		self.file = open('scripts/parser_library/ex_school/data/courses.json', 'w')
+		self.file = open('scripts/parser_library/ex_school/data/courses.json', 'w') # TODO - warn if overwriting file
 		self.file.write('[')
-		self.validator = Validator()
+		self.validator = Validator(directory='scripts/parser_library/ex_school/')
 
 	def __setitem__(self, key, value):
 		self.map[key] = value
@@ -85,8 +85,13 @@ class Ingestor:
 			'homepage': clean_empty(self.map.get('homepage')),
 		}
 		course = Ingestor.cleandict(course)
-		self.validator.validate_course(course)
 		j = json.dumps(course, sort_keys=True, indent=4, separators=(',', ': '))
+		try:
+			self.validator.validate_course(course)
+		except ValueError as e:
+			print e
+			print Ingestor.color_json(j)
+			exit(1)
 		print Ingestor.color_json(j)
 		self.file.write(j)
 		self.file.write(',')
@@ -122,8 +127,13 @@ class Ingestor:
 		}
 
 		section = Ingestor.cleandict(section)
-		self.validator.validate_section(section)
 		j = json.dumps(section, sort_keys=True, indent=4, separators=(',', ': '))
+		try:
+			self.validator.validate_section(section)
+		except ValueError as e:
+			print e
+			print Ingestor.color_json(j)
+			exit(1)
 		self.file.write(j)
 		self.file.write(',')
 		print Ingestor.color_json(j)
@@ -162,14 +172,19 @@ class Ingestor:
 		}
 
 		meeting = Ingestor.cleandict(meeting)
-		self.validator.validate_section(section)
 		j = json.dumps(meeting, sort_keys=True, indent=4, separators=(',', ': '))
+		try:
+			self.validator.validate_meeting(meeting)
+		except ValueError as e:
+			print e
+			print Ingestor.color_json(j)
+			exit(1)
 		self.file.write(j)
 		self.file.write(',')
 		print Ingestor.color_json(j)
 		return meeting
 
-	# TODO - close json list
+	# TODO - close json list properly
 	def wrap_up(self):
 		self.map.clear()
 		self.file.write(']')
