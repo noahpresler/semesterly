@@ -31,9 +31,9 @@ class Validator:
 		log_filename='/dev/null'):
 
 		try:
-			self.schema_directory = os.environ['SEMESTERLY_HOME'] + '/' + schema_directory
+			schema_directory = os.environ['SEMESTERLY_HOME'] + '/' + schema_directory
 		except KeyError as error:
-			sys.stderr.write('environment variable "SEMESTERLY_HOME" unset')
+			sys.stderr.write('environment variable "SEMESTERLY_HOME" unset \ntry running:\nexport SEMESTERLY_HOME=$(pwd)\n')
 			exit(1)
 
 		if directory is None:
