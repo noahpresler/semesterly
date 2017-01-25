@@ -37,7 +37,8 @@
 				}
 			],
 			"properties": {
-				"code": {}
+				"code": {},
+				"course": {}
 			},
 			"additionalProperties": false
 		},
