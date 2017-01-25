@@ -16,7 +16,7 @@ class Extractor():
         Returns:
             str: 24 hr time in format hrhr:minmin
         '''
-        match = re.match("(\d*):(\d*).*?(\S)", time12)
+        match = re.match("(\d*):(\d*).*?(\S)", time12.strip())
 
         # Transform to 24 hours
         hours = int(match.group(1))
