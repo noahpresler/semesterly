@@ -27,7 +27,7 @@ def cleandict(d):
 	return dict((k, cleandict(v)) for k,v in d.iteritems() if clean_empty(v) is not None)
 
 class dotdict(dict):
-	"""dot.notation access to dictionary attributes"""
+	"""dot.notation access to dictionary attributes, recursive"""
 	__getattr__ = dict.get
 	__setattr__ = dict.__setitem__
 	__delattr__ = dict.__delitem__
