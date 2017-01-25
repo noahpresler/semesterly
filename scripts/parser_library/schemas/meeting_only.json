@@ -1,0 +1,28 @@
+{
+	"$schema": "http://json-schema.org/draft-04/schema#",
+	"title": "Individual Meeting",
+	"description": "Semesterly Meeting JSON schema - individual",
+	"allOf": [
+		{
+			"$ref": "meeting.json#/"
+		}
+	],
+	"properties": {
+		"kind": {},
+		"school": {},
+		"course": {},
+		"section": {},
+		"dates": {},
+		"days": {},
+		"time": {},
+		"location": {}
+	},
+	"additionalProperties": false,
+	"required": [
+		"kind",
+		"course",
+		"section",
+		"time"
+	],
+	"_comment": "'days' or 'dates' requirement nested into meeting structure"
+}
