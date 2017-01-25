@@ -3,10 +3,6 @@
 # @author   Michael N. Miller
 # @date     1/12/17
 
-# https://tools.ietf.org/html/draft-fge-json-schema-validation-00#section-5.4.3
-# http://json-schema.org/
-# https://spacetelescope.github.io/understanding-json-schema/reference/combining.html
-
 import os, sys, re, jsonschema, argparse, httplib
 import simplejson as json
 from pygments import highlight, lexers, formatters, filters
