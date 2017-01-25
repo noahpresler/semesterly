@@ -1,7 +1,7 @@
 {
 	"$schema": "http://json-schema.org/draft-04/schema#",
-	"title": "Courses",
-	"description": "Courses list schema",
+	"title": "DataList",
+	"description": "schema for list of all data types",
 	"type": "array",
 	"items": {
 		"anyOf": [
