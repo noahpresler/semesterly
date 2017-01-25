@@ -17,23 +17,23 @@ class HopkinsParser(CourseParser):
         'sa': 'S',
         's': 'U'}
 
-    def __init__(self,school):
+    def __init__(self,school,sem="Spring 2017"):
         CourseParser.__init__(self, school)
         self.schools = []
+        self.semester = sem
 
     def get_schools(self):
-        url = API_INFO.url + '/codes/schools?key=' + API_INFOP.key
-        self.schools = self.get_json(url)
+        url = API_URL + '/codes/schools?key=' + KEY
+        self.schools = self.requester.get(url=url)
 
     def get_courses(self,school):
         print "Getting courses in: " + school['Name']
         url = API_URL + '/' + school['Name'] + '/'+ self.semester + '?key=' + KEY
-        courses = self.get_json(url)
-        return courses
+        return self.requester.get(url=url)
 
     def get_section(self,course):
         url = API_URL + '/' + course['OfferingName'].replace(".", "") + course['SectionName'] +'/' + self.semester + '?key=' + KEY
-        return self.get_json(url)
+        return self.requester.get(url=url)
 
     def parse_schools(self):
         for school in self.schools:
@@ -49,10 +49,21 @@ class HopkinsParser(CourseParser):
                 print "Unexpected error:", sys.exc_info()[0], sys.exc_info()[1]
                 traceback.print_tb(sys.exc_info()[2], file=sys.stdout)
 
+    def compute_size_enrollment(self,course):
+        try:
+            section_size = int(course['MaxSeats'])
+        except:
+            section_size = 0
+        try:
+            section_enrolment = section_size - int(course['SeatsAvailable'].split("/")[0])
+            if section_enrolment < 0:
+                section_enrolment = 0
+        except:
+            section_enrolment = 0
+        return (section_size,section_enrolment)
+
     def load_ingestor(self,course,section):
         SectionDetails = section[0]['SectionDetails']
-        Meetings = SectionDetails[0]['Meetings']
-        SectionCode = section[0]['SectionName']
         try:
             num_credits=int(float(course['Credits']))
         except:
@@ -75,10 +86,30 @@ class HopkinsParser(CourseParser):
             for match in re.findall(cs_areas_regex,description):
                 self.ingest['areas'] += [match]
 
-        course = self.ingest.create_course()
+        created_course = self.ingest.create_course()
 
-        # Load core section fields
-        self.ingest['code']
+        for meeting in SectionDetails[0]['Meetings']:
+            # Load core section fields
+            self.ingest['section'] = "(" + section[0]['SectionName'] + ")"
+            self.ingest['semester'] = self.semester[0].upper()
+            self.ingest['instructors'] = course['Instructors']
+            self.ingest['size'], self.ingest['enrolment'] = self.compute_size_enrollment(coure)
+
+            created_section = self.ingest.create_section(created_course)
+
+            #load offering fields
+            times = Meeting['Times']
+            for time in filter(lambda t: len(t) > 0, times.split(',')):
+                time_pieces = re.search(r"(\d\d:\d\d [AP]M) - (\d\d:\d\d [AP]M)",time)
+                self.ingest['time_start'] = self.extract.time_12to24(time_pieces.group(1))
+                self.ingest['time_end'] = self.extract.time_12to24(time_pieces.group(2))
+                if meeting['DOW'] != "TBA" and meeting['DOW'] !="None":
+                    self.ingest['days'] = re.findall(r"([A-Z][a-z]*)+?",days)
+                    self.ingest['location'] = {
+                        'building' : meeting['Building'],
+                        'room' : meeting['Room']
+                    }
+                created_meeting = self.ingest.create_offerings(created_section)
 
     def start(self):
         self.get_schools()

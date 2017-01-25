@@ -34,6 +34,7 @@ class Parser:
 		self.school = school
 		self.requester = Requester()
 		self.ingest = Ingestor(school)
+		self.extract = Extractor()
 
 	@abstractmethod
 	def start(self, **kwargs): pass
