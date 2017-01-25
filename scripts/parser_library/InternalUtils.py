@@ -1,5 +1,7 @@
+import re
 import simplejson as json
 from pygments import highlight, lexers, formatters, filters
+
 
 def pretty_json(j):
 	if isinstance(j, dict):
@@ -12,10 +14,18 @@ def pretty_json(j):
 def make_list(l, base_type=basestring):
 	if isinstance(l, base_type):
 		l = [l]
-	return clean_empty(l)
+	return clean(l)
 
-def clean_empty(a):
+# NOTE: mutates text, unicode whitspace removal should be part of extractor
+def clean(a):
 	if not a: return None
+	whitespace = re.compile(r'(?:\u00a0)|(?:\xc2\xa0)', re.IGNORECASE)
+	if isinstance(a, list):
+		for i in range(len(a)):
+			if isinstance(a[i], basestring):
+				a[i] = whitespace.sub(' ', a[i]).strip()
+	if isinstance(a, basestring):
+		a = whitespace.sub(' ', a).strip()
 	try:
 		a = filter(None, a)
 		if len(a) == 0:
@@ -26,8 +36,8 @@ def clean_empty(a):
 
 def cleandict(d):
 	if not isinstance(d, dict):
-		return clean_empty(d)
-	return dict((k, cleandict(v)) for k,v in d.iteritems() if clean_empty(v) is not None)
+		return clean(d)
+	return dict((k, cleandict(v)) for k,v in d.iteritems() if clean(v) is not None)
 
 class dotdict(dict):
 	"""dot.notation access to dictionary attributes, recursive"""
