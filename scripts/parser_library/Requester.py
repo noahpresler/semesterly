@@ -54,7 +54,7 @@ class Requester:
         if not parse:
             return r
 
-        soup = Requester.soupify(r.text)
+        soup = Requester.markup(r)
         if soup:
             return soup
         else:
@@ -102,27 +102,31 @@ class Requester:
         if not parse:
             return r
 
-        soup = Requester.soupify(r.text)
+        soup = Requester.markup(r)
         if soup:
             return soup
         else:
             return r
 
     @staticmethod
-    def soupify(markup):
-        ''' Soupifies markup of given request. Additionally, autodects html or xml format.
+    def markup(response):
+        ''' Marks up response of given response. Additionally, autodects html, json, or xml format.
 
         Args:
-            markup: raw markup text
+            response: raw response object
 
         Returns:
-            soupified markup
+            markedup response
         '''
-        if markup is None:
+        if response is None:
             return None
-        soup = lambda parser: BeautifulSoup(markup, parser)
-        if "</html>"[::-1] in markup[::-1]:
-        # NOTE: ^quite inefficient so do fun things w/reversals :-)
+        soup = lambda parser: BeautifulSoup(response.text, parser)
+        try:
+            return response.json()
+        except ValueError:
+            pass
+        if "</html>"[::-1] in response.text[::-1]:
+            print response
             return soup('html.parser')
         else:
             return soup('lxml')
