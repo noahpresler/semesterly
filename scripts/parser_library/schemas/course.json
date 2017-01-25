@@ -124,13 +124,15 @@
 					"instructors": {},
 					"final_exam": {},
 					"textbooks": {},
-					"meetings": {}
+					"meetings": {},
+					"course": {}
 				},
 				"additionalProperties": false,
 				"required": [
 					"code",
 					"term",
-					"year"
+					"year",
+					"course"
 				]
 			}
 		}
