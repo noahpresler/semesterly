@@ -64,6 +64,7 @@ def view_analytics_dashboard(request):
                 "google_calendar_exports":google_calendar_exports,
                 "ics_calendar_exports":ics_calendar_exports,
                 "unique_users_calendar_exports":unique_users_calendar_exports,
+                "calendar_exports_by_type":json.dumps({"ics":ics_calendar_exports, "google":google_calendar_exports}),
                 "jhu_most_popular_courses":[], # needs to be refactored; was causing timeout on server because too slow
                 "uoft_most_popular_courses":[], # needs to be refactored; was causing timeout on server because too slow
                 "umd_most_popular_courses":[] # needs to be refactored; was causing timeout on server because too slow
