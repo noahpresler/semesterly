@@ -5,7 +5,6 @@
 
 import os, sys, re, jsonschema, argparse, httplib
 import simplejson as json
-from pygments import highlight, lexers, formatters, filters
 from InternalUtils import *
 
 class Validator:
@@ -108,6 +107,8 @@ class Validator:
 				print pretty_json(obj)
 
 	def validate_course(self, course, schema=True, relative=True):
+		if not isinstance(course, dotdict):
+			course = dotdict(course)
 		try:
 			if schema:
 				self.validate_schema(course, *self.schema.course)
@@ -145,6 +146,8 @@ class Validator:
 			raise ValueError("in course %s, %s" % (course.code, str(error)))
 
 	def validate_section(self, section, schema=True, relative=True):
+		if not isinstance(section, dotdict):
+			section = dotdict(section)
 		try:
 			if schema:
 				self.validate_schema(section, *self.schema.section)
@@ -199,6 +202,8 @@ class Validator:
 			raise ValueError('in section "%s", %s' % (section.code, str(error)))
 
 	def validate_meeting(self, meeting, schema=True, relative=True):
+		if not isinstance(meeting, dotdict):
+			meeting = dotdict(meeting)
 		if schema:
 			self.validate_schema(meeting, *self.schema.meeting)
 		if 'kind' in meeting and meeting.kind != 'meeting':
@@ -217,6 +222,8 @@ class Validator:
 				raise ValueError('section "%s" is not defined' % (meeting.section.code))
 
 	def validate_instructor(self, instructor, schema=False, relative=True):
+		if not isinstance(instructor, dotdict):
+			instructor = dotdict(instructor)
 		if 'kind' in instructor and instructor.kind != 'instructor':
 			raise ValueError('instructor object must be of kind instructor')
 
@@ -239,13 +246,20 @@ class Validator:
 				self.validate_meeting(instructor.office.hours)
 
 	def validate_final_exam(self, final_exam, schema=False, relative=True):
+		if not isinstance(final_exam, dotdict):
+			final_exam = dotdict(final_exam)
 		if 'kind' in final_exam and final_exam.kind != 'final_exam':
 			raise ValueError('final_exam object must be of kind "final_exam"')
+		# TODO
 
 	def validate_textbook(self, textbook, schema=False, relative=True):
+		if not isinstance(textbook, dotdict):
+			textbook = dotdict(textbook)
 		pass # TODO
 
 	def validate_texbook_link(self, textbook_link, schema=False, relative=True):
+		if not isinstance(textbook_link, dotdict):
+			textbook_link = dotdict(textbook_link)
 		pass # TODO
 
 	def validate_location(self, location):
