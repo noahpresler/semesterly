@@ -5,7 +5,7 @@
 
 import simplejson as json
 from pygments import highlight, lexers, formatters, filters
-from scripts.parser_library.Validator import Validator
+from scripts.parser_library.Validator import Validator, JsonValidationError
 from InternalUtils import *
 
 class Ingestor:
@@ -205,9 +205,10 @@ class Ingestor:
 	def run_validator(validate, data):
 		try:
 			validate(data)
-		except ValueError as e:
-			print e
-			print pretty_json(data)
+		except JsonValidationError as e:
+			print e.message
+			if e.json:
+				print pretty_json(e.json)
 			exit(1)
 
 	# TODO - close json list properly
