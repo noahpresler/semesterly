@@ -12,18 +12,6 @@ import jsondiff, simplejson as json
 from pygments import highlight, lexers, formatters, filters
 from InternalUtils import *
 
-class dotdict(dict):
-	"""dot.notation access to dictionary attributes"""
-	__getattr__ = dict.get
-	__setattr__ = dict.__setitem__
-	__delattr__ = dict.__delitem__
-
-	def __init__(self, dct):
-		for key, value in dct.items():
-			if hasattr(value, 'keys'):
-				value = dotdict(value)
-			self[key] = value
-
 class Digestor:
 
 	def __init__(self, school, data_file):
