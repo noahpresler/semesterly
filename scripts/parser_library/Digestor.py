@@ -251,7 +251,6 @@ class Digestor:
 
 		return offering_models
 
-
 	def remove_section(self, course_model):
 		''' Remove section specified in model map from django database. '''
 		if Section.objects.filter(course = course_model, meeting_section = self.map.get('section')).exists():
