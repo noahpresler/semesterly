@@ -10,6 +10,7 @@ django.setup()
 from timetable.models import *
 import jsondiff, simplejson as json
 from pygments import highlight, lexers, formatters, filters
+from InternalUtils import *
 
 class dotdict(dict):
 	"""dot.notation access to dictionary attributes"""
@@ -85,15 +86,6 @@ class Digestor:
 		self.wrap_up()
 
 	@staticmethod
-	def pretty_json(j):
-		if isinstance(j, dict):
-			j = json.dumps(j, sort_keys=True, indent=2, separators=(',', ': '))
-		l = lexers.JsonLexer()
-		l.add_filter('whitespace')
-		colorful_json = highlight(unicode(j, 'UTF-8'), l, formatters.TerminalFormatter())
-		return colorful_json
-
-	@staticmethod
 	def diff(a, b):
 		name = ''
 		add = {}
@@ -110,7 +102,7 @@ class Digestor:
 				if k in blacklist:
 					del d[k]
 		diffed = jsondiff.diff(c, a, syntax='symmetric', dump=True)
-		print Digestor.pretty_json(json.loads(diffed))
+		print pretty_json(json.loads(diffed))
 		return b, True
 
 	def create_instructor(self, instructor):
