@@ -25,3 +25,15 @@ def cleandict(d):
 	if not isinstance(d, dict):
 		return clean_empty(d)
 	return dict((k, cleandict(v)) for k,v in d.iteritems() if clean_empty(v) is not None)
+
+class dotdict(dict):
+	"""dot.notation access to dictionary attributes"""
+	__getattr__ = dict.get
+	__setattr__ = dict.__setitem__
+	__delattr__ = dict.__delitem__
+
+	def __init__(self, dct):
+		for key, value in dct.items():
+			if hasattr(value, 'keys'):
+				value = dotdict(value)
+			self[key] = value
