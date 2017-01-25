@@ -102,7 +102,7 @@ class Validator:
 					'final_exam': lambda x: self.validate_final_exam(x, schema=False),
 					'textbook'  : lambda x: self.validate_textbook(x, schema=False),
 					'textbook_link': lambda x: self.validate_textbook_link(x, schema=False)
-				}[obj['kind']](obj)
+				}[obj.kind](obj)
 			except ValueError as error:
 				print 'ERROR:', error
 				print pretty_json(obj)
@@ -112,37 +112,37 @@ class Validator:
 			if schema:
 				self.validate_schema(course, *self.schema.course)
 
-			if 'kind' in course and course['kind'] != 'course':
+			if 'kind' in course and course.kind != 'course':
 				raise ValueError('course object must be of kind course')
 
-			if self.course_code_regex.match(course['code']) is None:
+			if self.course_code_regex.match(course.code) is None:
 				raise ValueError('course code "%s" does not match r\'%s\''
-				 %(course['code'], self.config['course_code_regex']))
+				 %(course.code, self.config.course_code_regex))
 
-			if 'department' in course and 'code' in course['department'] and 'departments' in self.config:
-				if course['department']['code'] not in {d['code'] for d in self.config['departments']}:
+			if 'department' in course and 'code' in course.department and 'departments' in self.config:
+				if course.department.code not in {d.code for d in self.config.departments}:
 					raise ValueError('department %s is not in config.json department list'
-					 %(course['department']))
+					 %(course.department))
 
 			if 'homepage' in course:
-				validate_website(course['homepage'])
+				validate_website(course.homepage)
 
 			for section in course.get('sections', []):
-				if 'course' in section and section['course']['code'] != course['code']:
+				if 'course' in section and section.course.code != course.code:
 					raise ValueError('course code "%s" in nested section does not match parent course code "%s"'
-					 % (section['course']['code'], course['code']))
+					 % (section.course.code, course.code))
 				# NOTE: mutating dictionary
-				section['course'] = { 'code': course['code'] }
+				section.course = { 'code': course.code }
 				self.validate_section(section, schema=False)
 
 			if relative:
-				if course['code'] in self.validated:
-					raise ValueError('multiple definitions of course "%s"' % (course['code'])) # TODO - should be warning
-				if course['code'] not in self.validated:
-					self.validated[course['code']] = set()
+				if course.code in self.validated:
+					raise ValueError('multiple definitions of course "%s"' % (course.code)) # TODO - should be warning
+				if course.code not in self.validated:
+					self.validated[course.code] = set()
 
 		except ValueError as error:
-			raise ValueError("in course %s, %s" % (course['code'], str(error)))
+			raise ValueError("in course %s, %s" % (course.code, str(error)))
 
 	def validate_section(self, section, schema=True, relative=True):
 		try:
@@ -152,94 +152,94 @@ class Validator:
 			if 'course' not in section:
 				raise ValueError('section does not define a parent course')
 
-			if 'kind' in section and section['kind'] != 'section':
+			if 'kind' in section and section.kind != 'section':
 				raise ValueError('section object must be of kind "section"')
 
-			if 'course' in section and self.course_code_regex.match(section['course']['code']) is None:
+			if 'course' in section and self.course_code_regex.match(section.course.code) is None:
 				raise ValueError('course code "%s" does not match r\'%s\''
-				 %(course['code'], self.config['course_code_regex']))
+				 %(course.code, self.config.course_code_regex))
 
-			if 'term' in section and section['term'] not in self.config['terms']:
-				raise ValueError('term "%s" not in config.json term list' % (section['term']))
+			if 'term' in section and section.term not in self.config.terms:
+				raise ValueError('term "%s" not in config.json term list' % (section.term))
 
 			for instructor in section.get('instructors', []):
 				# TODO
 				self.validate_instructor(instructor)
 
 			if 'final_exam' in section:
-				if 'course' in section['final_exam'] and section['final_exam']['course']['code'] != section['course']['code']:
+				if 'course' in section.final_exam and section.final_exam.course.code != section.course.code:
 					raise ValueError('section final exam course "%s" does not match section course "%s"'
-					 % (section['final_exam']['course']['code'], section['course']['code']))
-				if 'section' in section['final_exam'] and section['final_exam']['section']['code'] != section['code']:
+					 % (section.final_exam.course.code, section.course.code))
+				if 'section' in section.final_exam and section.final_exam.section.code != section.code:
 					raise ValueError('section final exam section code "%s" does not match section code "%s"'
-					 % (section['final_exam']['section']['code'], section['code']))
-				self.validate_final_exam(section['final_exam'])
+					 % (section.final_exam.section.code, section.code))
+				self.validate_final_exam(section.final_exam)
 
 			for meeting in section.get('meetings', []):
-				if 'course' in meeting and meeting['course']['code'] != section['course']['code']:
+				if 'course' in meeting and meeting.course.code != section.course.code:
 					raise ValueError('course code "%s" in nested meeting does not match parent section course code "%s"'
-					 % (meeting['course']['code'], section['course']['code']))
-				if 'section' in meeting and meeting['section']['code'] != section['code']:
+					 % (meeting.course.code, section.course.code))
+				if 'section' in meeting and meeting.section.code != section.code:
 					raise ValueError('section code "%s" in nested meeting does not match parent section code "%s"'
-					 % (meeting['section']['code'], section['code']))
+					 % (meeting.section.code, section.code))
 				# NOTE: mutating dictionary
-				meeting['course'] = section['course']
-				meeting['section'] = { 'code': section['code'] }
+				meeting.course = section.course
+				meeting.section = { 'code': section.code }
 				self.validate_meeting(meeting, schema=False)
 
 			if relative:
-				if section['course']['code'] not in self.validated:
-					raise ValueError('course code "%s" is not defined' % (section['course']['code']))
-				if section['code'] in self.validated[section['course']['code']]:
+				if section.course.code not in self.validated:
+					raise ValueError('course code "%s" is not defined' % (section.course.code))
+				if section.code in self.validated[section.course.code]:
 					raise ValueError('for course "%s" section "%s" already defined'
-					 % (section['course']['code'], section['code'])) # TODO - should be warning
-				self.validated[section['course']['code']].add(section['code'])
+					 % (section.course.code, section.code)) # TODO - should be warning
+				self.validated[section.course.code].add(section.code)
 
 		except ValueError as error:
-			raise ValueError('in section "%s", %s' % (section['code'], str(error)))
+			raise ValueError('in section "%s", %s' % (section.code, str(error)))
 
 	def validate_meeting(self, meeting, schema=True, relative=True):
 		if schema:
-			self.validate_schema(meeting,*self.schema.meeting)
-		if 'kind' in meeting and meeting['kind'] != 'meeting':
+			self.validate_schema(meeting, *self.schema.meeting)
+		if 'kind' in meeting and meeting.kind != 'meeting':
 			raise ValueError('meeting object must be of kind "instructor"')
-		if 'course' in meeting and self.course_code_regex.match(meeting['course']['code']) is None:
+		if 'course' in meeting and self.course_code_regex.match(meeting.course.code) is None:
 			raise ValueError('course code "%s" does not match r\'%s\''
-			 % (course['code'], self.config['course_code_regex']))
+			 % (course.code, self.config.course_code_regex))
 		if 'time' in meeting:
-			self.validate_time_range(meeting['time']['start'], meeting['time']['end'])
+			self.validate_time_range(meeting.time.start, meeting.time.end)
 		if 'location' in meeting:
-			self.validate_location(meeting['location'])
+			self.validate_location(meeting.location)
 		if relative:
-			if meeting['course']['code'] not in self.validated:
-				raise ValueError('course code "%s" is not defined' % (meeting['course']['code']))
-			if meeting['section']['code'] not in self.validated[meeting['course']['code']]:
-				raise ValueError('section "%s" is not defined' % (meeting['section']['code']))
+			if meeting.course.code not in self.validated:
+				raise ValueError('course code "%s" is not defined' % (meeting.course.code))
+			if meeting.section.code not in self.validated[meeting.course.code]:
+				raise ValueError('section "%s" is not defined' % (meeting.section.code))
 
 	def validate_instructor(self, instructor, schema=False, relative=True):
-		if 'kind' in instructor and instructor['kind'] != 'instructor':
+		if 'kind' in instructor and instructor.kind != 'instructor':
 			raise ValueError('instructor object must be of kind instructor')
 
 		for _class in instructor.get('classes', []):
-			if 'course' in _class and self.course_code_regex.match(_class['course']['code']) is None:
+			if 'course' in _class and self.course_code_regex.match(_class.course.code) is None:
 				raise ValueError('course code "%s" does not match given regex "%s"'
-				 % (_class['course']['code'], self.config['course_code_regex']))
+				 % (_class.course.code, self.config.course_code_regex))
 
 		if 'department' in instructor and 'departments' in self.config:
-			if instructor['department'] not in { d['code'] for d in self.config['departments'] }:
-				raise ValueError('department %s not listed in config.json' % (instructor['department']))
+			if instructor.department not in { d.code for d in self.config.departments }:
+				raise ValueError('department %s not listed in config.json' % (instructor.department))
 
 		if 'homepage' in instructor:
-			self.validate_homepage(instructor['homepage'])
+			self.validate_homepage(instructor.homepage)
 
 		if 'office' in instructor:
-			if 'location' in instructor['office']:
-				self.validate_location(instructor['office']['location'])
-			for office_hour in instructor['office'].get('hours', []):
-				self.validate_meeting(instructor['office']['hours'])
+			if 'location' in instructor.office:
+				self.validate_location(instructor.office.location)
+			for office_hour in instructor.office.get('hours', []):
+				self.validate_meeting(instructor.office.hours)
 
 	def validate_final_exam(self, final_exam, schema=False, relative=True):
-		if 'kind' in final_exam and final_exam['kind'] != 'final_exam':
+		if 'kind' in final_exam and final_exam.kind != 'final_exam':
 			raise ValueError('final_exam object must be of kind "final_exam"')
 
 	def validate_textbook(self, textbook, schema=False, relative=True):
@@ -250,13 +250,13 @@ class Validator:
 
 	def validate_location(self, location):
 		if 'campus' in location and 'campuses' in self.config:
-			if location['campus'] not in self.config['campuses']:
+			if location.campus not in self.config.campuses:
 				raise ValueError('location at campus %s not defined in config.json campuses'
-				 % (location['campus']))
+				 % (location.campus))
 		if 'building' in location and 'buildings' in self.config:
-			if location['building'] not in self.config['buildings']:
+			if location.building not in self.config.buildings:
 				raise ValueError('location at building %s not defined in config.json buildings'
-				 % (location['building']))
+				 % (location.building))
 
 	def validate_website(url):
 		c = httplib.HTTPConnection(url)
@@ -356,7 +356,7 @@ class Validator:
 		d = {'name': os.path.basename(path)}
 		if os.path.isdir(path):
 			d['kind'] = "directory"
-			d['children'] = [Validator.path_to_dict(os.path.join(path,x)) for x in os.listdir(path)]
+			d['children'] = [ Validator.path_to_dict(os.path.join(path,x)) for x in os.listdir(path) ]
 		else:
 			d['kind'] = "file"
 		return d
