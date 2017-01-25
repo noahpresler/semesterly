@@ -97,6 +97,7 @@
       var num_users_by_school = JSON.parse("{{num_users_by_school|escapejs}}");
       var total_timetables_by_school = JSON.parse("{{total_timetables_by_school|escapejs}}");
       var number_of_reactions = JSON.parse("{{number_of_reactions|escapejs}}");
+      var calendar_exports_by_type = JSON.parse("{{calendar_exports_by_type|escapejs}}");
       // var timetables_per_hour = JSON.parse("{{timetables_per_hour|escapejs}}");
       // var shared_timetables_per_hour = JSON.parse("{{shared_timetables_per_hour|escapejs}}");
       var signups_per_hour = JSON.parse("{{signups_per_hour|escapejs}}");
@@ -110,6 +111,9 @@
 
     <h4>Number of timetables by school:</h4>
     <canvas id="timetables_by_schools"></canvas>
+
+    <h4>Number of calendar exports by type:</h4>
+    <canvas id="calendar_exports_by_type"></canvas>
 
 <!--     <h4>Number of timetables created per hour per school for the past 24 hours:</h4>
     <canvas id="timetables_per_hours_chart"></canvas>
@@ -255,6 +259,15 @@
           hoverBackgroundColor: secondary_colors
         }]
     };
+    var calendar_exports_by_type_data = {
+      labels: Object.keys(calendar_exports_by_type),
+      datasets: [
+        {
+          data: Object.keys(calendar_exports_by_type).map(function(key){return calendar_exports_by_type[key]}),
+          backgroundColor: primary_colors,
+          hoverBackgroundColor: secondary_colors
+        }]
+    };
 
     // var ctx = document.getElementById("timetables_per_hours_chart");
     // var line_chart_24_hours = new Chart(ctx, {
@@ -269,7 +282,7 @@
     // });
 
     var utx = document.getElementById("signups_chart");
-    var myPieChart = new Chart(utx, {
+    var SignupsPieChart = new Chart(utx, {
       type: 'line',
       data: signups_per_hour_data,
     });
@@ -281,21 +294,27 @@
     });
 
     var btx = document.getElementById("num_users_by_school");
-    var myPieChart = new Chart(btx, {
+    var UsersBySchoolPieChart = new Chart(btx, {
       type: 'pie',
       data: num_users_by_school_data,
     });
 
     var ytx = document.getElementById("num_users_by_class_year");
-    var myPieChart = new Chart(ytx, {
+    var UsersByYearPieChart = new Chart(ytx, {
       type: 'pie',
       data: num_users_by_class_year_data,
     });
 
     var ptx = document.getElementById("timetables_by_schools");
-    var myPieChart = new Chart(ptx, {
+    var TimetablesBySchoolPieChart = new Chart(ptx, {
       type: 'pie',
       data: timetables_by_schools_data,
+    });
+
+    var ctx = document.getElementById("calendar_exports_by_type");
+    var CalendarExportsPieChart = new Chart(ctx, {
+      type: 'pie',
+      data: calendar_exports_by_type_data,
     });
     </script>
 
