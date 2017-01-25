@@ -1,3 +1,6 @@
+import simplejson as json
+from pygments import highlight, lexers, formatters, filters
+
 def pretty_json(j):
 	if isinstance(j, dict):
 		j = json.dumps(j, sort_keys=True, indent=2, separators=(',', ': '))
