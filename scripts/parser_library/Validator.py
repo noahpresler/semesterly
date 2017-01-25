@@ -27,8 +27,14 @@ class dotdict(dict):
 class Validator:
 	def __init__(self,
 		directory=None,
-		schema_directory= os.environ['SEMESTERLY_HOME'] + '/scripts/parser_library/schemas/', # TODO - add env to install, make static function
+		schema_directory='scripts/parser_library/schemas/',
 		log_filename='/dev/null'):
+
+		try:
+			self.schema_directory = os.environ['SEMESTERLY_HOME'] + '/' + schema_directory
+		except KeyError as error:
+			sys.stderr.write('environment variable "SEMESTERLY_HOME" unset')
+			exit(1)
 
 		if directory is None:
 			raise NotImplementedError('directory must be defined as of now')
