@@ -13,7 +13,7 @@ from pygments import highlight, lexers, formatters, filters
 
 # TODO - move to own file
 class dotdict(dict):
-	"""dot.notation access to dictionary attributes"""
+	"""dot.notation access to dictionary attributes, recursive"""
 	__getattr__ = dict.get
 	__setattr__ = dict.__setitem__
 	__delattr__ = dict.__delitem__
@@ -27,60 +27,61 @@ class dotdict(dict):
 class Validator:
 	def __init__(self,
 		directory=None,
-		schema_directory='scripts/parser_library/schemas/', 
-		error_log_filename='/dev/null'):
+		schema_directory= os.environ['SEMESTERLY_HOME'] + '/scripts/parser_library/schemas/', # TODO - add env to install, make static function
+		log_filename='/dev/null'):
 
-		self.logger = Logger(error_log_filename)
+		if directory is None:
+			raise NotImplementedError('directory must be defined as of now')
+
+		self.logger = Logger(log_filename)
 		self.directory = directory
 		self.schema_directory = schema_directory
 
-		self.validated_course_codes = {}
+		# Running tracker of validated course and section codes
+		self.validated = {}
 
-		self.count24 = 0
+		self.count24 = 0.0
 		self.granularity = 60
 
+		load = lambda file: self.file_to_json(self.schema_directory + file, allow_duplicates=True)
 		resolve = lambda schema: jsonschema.RefResolver('file://' + self.schema_directory, schema)
-		load = lambda schema: file_to_json(self.directory + schema)
+		schema_and_resolver = lambda schema: (schema, resolve(schema))
+		# NOTE: it can be argued that in init loading all schemas directly to json
+		#       is inefficient. However, it eliminates i/o overhead for successive
+		#       calls without introducing complications of caching read json.
+		#       Schemas are not expected to exceed a reasonable size.
 		self.schema = dotdict({
-			'all': {
-				'schema': file_to_json('data/courses.json'),
-				'resolver': resolve('courses.json')
-			},
-			'config'
+			'config'  : schema_and_resolver(load('config.json')),
+			'datalist': schema_and_resolver(load('datalist.json')),
+			'course'  : schema_and_resolver(load('course_only.json')),
+			'section' : schema_and_resolver(load('section_only.json')),
+			'meeting' : schema_and_resolver(load('meeting_only.json'))
 		})
 
-	@staticmethod
-	def create_jsonschema_resolver(schema, schema_directory='scripts/parser_library/schemas/'):
-		resolver = jsonschema.RefResolver('file://' + schema_directory, schema)
-		return resolver
+		# TODO - directory validation
 
-	def jsonschema_validate(self, schema_directory, schema, subject):
-		if isinstance(schema, str):
-			schema = self.file_to_json(schema, allow_duplicates=True)
-		if isinstance(subject, str):
-			subject = self.file_to_json(subject)
+		config = self.file_to_json(self.directory + 'config.json')
+		self.validate_schema(config, *self.schema.config)
+		self.config = dotdict(config)
+		self.course_code_regex = re.compile(self.config.course_code_regex)
 
-		# Set JSON Schema $ref resolver
-		resolver = Validator.create_jsonschema_resolver(schema, schema_directory)
+	def validate_schema(self, subject, schema, resolver=None):
 		try:
-			jsonschema.Draft4Validator(schema.schema, resolver=schema.resolver).validate(subject)
+			jsonschema.Draft4Validator(schema, resolver=resolver).validate(subject)
 		except jsonschema.ValidationError as error:
 			self.logger.log('SUBJECT_DEFINITION', error, 
-				path=schema_directory,
 				schema=schema,
 				subject=subject)
 		except jsonschema.exceptions.SchemaError as error:
 			self.logger.log('SCHEMA_DEFINITION', error,
-				path=schema_directory,
 				schema=schema,
 				subject=subject)
-		except Exception as error:
-			self.logger.log('UNKNOWN', error,
-				path=schema_directory,
-				schema=schema,
-				subject=subject)
+		# except RefResolutionError as error: # TODO
+		# 	self.logger.log('UNKNOWN', error,
+		# 		schema=schema,
+		# 		subject=subject)
 
-		return subject
+		# return subject # TODO - modifier vs accessor conventions?
 
 	def file_to_json(self, file, allow_duplicates=False):
 		j = None
@@ -97,43 +98,29 @@ class Validator:
 		return j
 
 	def validate(self):
-		# helpers
-		schema = lambda f: self.schema_directory + f
-		subject = lambda f: self.directory + f
+		datalist = self.file_to_json(self.directory + 'data/courses.json')
+		self.validate_schema(datalist, *self.schema.datalist)
+		datalist = dotdict(datalist)
 
-		self.config = self.jsonschema_validate(self.schema.config, file_to_json(self.schema_directory + 'config.json'))
-		print Validator.pretty_json(self.config)
-
-
-		# self.jsonschema_validate(self.schema.config, 'data/courses.json')
-		# self.config = self.jsonschema_validate(self.schema_directory, schema('config.json'), subject('config.json'))
-		# courses = self.jsonschema_validate(self.schema_directory, schema('courses.json'), subject('data/courses.json'))
-
-		courses = self.jsonschema_validate(self.schema.config, file_to_json(self.directory + 'data/courses.json'))
-		self.course_code_regex = re.compile(self.config['course_code_regex'])
-
-		for obj in courses:
+		for obj in datalist:
 			try:
 				{
-					'course': lambda x: self.validate_course(x, validate_schema=False),
-					'section': lambda x: self.validate_section(x, validate_schema=False),
-					'meeting': lambda x: self.validate_meeting(x, validate_schema=False),
-					'instructor': lambda x: self.validate_instructor(x, validate_schema=False),
-					'final_exam': lambda x: self.validate_final_exam(x, validate_schema=False),
-					'textbook': lambda x: self.validate_textbook(x, validate_schema=False),
-					'textbook_link': lambda x: self.validate_textbook_link(x, validate_schema=False)
-				}[obj['kind']](obj)`
+					'course'    : lambda x: self.validate_course(x, schema=False),
+					'section'   : lambda x: self.validate_section(x, schema=False),
+					'meeting'   : lambda x: self.validate_meeting(x, schema=False),
+					'instructor': lambda x: self.validate_instructor(x, schema=False),
+					'final_exam': lambda x: self.validate_final_exam(x, schema=False),
+					'textbook'  : lambda x: self.validate_textbook(x, schema=False),
+					'textbook_link': lambda x: self.validate_textbook_link(x, schema=False)
+				}[obj['kind']](obj)
 			except ValueError as error:
 				print 'ERROR:', error
 				print Validator.pretty_json(obj)
 
-	def validate_course(self, course, validate_schema=True, enforce_relative_order=True):
+	def validate_course(self, course, schema=True, relative=True):
 		try:
-			if validate_schema:
-				self.jsonschema_validate(self.schema.course, course)
-
-			if enforce_relative_order:
-				pass # TODO
+			if schema:
+				self.validate_schema(course, *self.schema.course)
 
 			if 'kind' in course and course['kind'] != 'course':
 				raise ValueError('course object must be of kind course')
@@ -156,13 +143,25 @@ class Validator:
 					 % (section['course']['code'], course['code']))
 				# NOTE: mutating dictionary
 				section['course'] = { 'code': course['code'] }
-				self.validate_section(section)
+				self.validate_section(section, schema=False)
+
+			if relative:
+				if course['code'] in self.validated:
+					raise ValueError('multiple definitions of course "%s"' % (course['code'])) # TODO - should be warning
+				if course['code'] not in self.validated:
+					self.validated[course['code']] = set()
 
 		except ValueError as error:
 			raise ValueError("in course %s, %s" % (course['code'], str(error)))
 
-	def validate_section(self, section, schema=False, enforce_relative_order=True):
+	def validate_section(self, section, schema=True, relative=True):
 		try:
+			if schema:
+				self.validate_schema(section, *self.schema.section)
+
+			if 'course' not in section:
+				raise ValueError('section does not define a parent course')
+
 			if 'kind' in section and section['kind'] != 'section':
 				raise ValueError('section object must be of kind "section"')
 
@@ -196,12 +195,22 @@ class Validator:
 				# NOTE: mutating dictionary
 				meeting['course'] = section['course']
 				meeting['section'] = { 'code': section['code'] }
-				self.validate_meeting(meeting)
+				self.validate_meeting(meeting, schema=False)
+
+			if relative:
+				if section['course']['code'] not in self.validated:
+					raise ValueError('course code "%s" is not defined' % (section['course']['code']))
+				if section['code'] in self.validated[section['course']['code']]:
+					raise ValueError('for course "%s" section "%s" already defined'
+					 % (section['course']['code'], section['code'])) # TODO - should be warning
+				self.validated[section['course']['code']].add(section['code'])
 
 		except ValueError as error:
 			raise ValueError('in section "%s", %s' % (section['code'], str(error)))
 
-	def validate_meeting(self, meeting, schema=False, enforce_relative_order=True):
+	def validate_meeting(self, meeting, schema=True, relative=True):
+		if schema:
+			self.validate_schema(meeting,*self.schema.meeting)
 		if 'kind' in meeting and meeting['kind'] != 'meeting':
 			raise ValueError('meeting object must be of kind "instructor"')
 		if 'course' in meeting and self.course_code_regex.match(meeting['course']['code']) is None:
@@ -211,18 +220,13 @@ class Validator:
 			self.validate_time_range(meeting['time']['start'], meeting['time']['end'])
 		if 'location' in meeting:
 			self.validate_location(meeting['location'])
+		if relative:
+			if meeting['course']['code'] not in self.validated:
+				raise ValueError('course code "%s" is not defined' % (meeting['course']['code']))
+			if meeting['section']['code'] not in self.validated[meeting['course']['code']]:
+				raise ValueError('section "%s" is not defined' % (meeting['section']['code']))
 
-	def validate_location(self, location):
-		if 'campus' in location and 'campuses' in self.config:
-			if location['campus'] not in self.config['campuses']:
-				raise ValueError('location at campus %s not defined in config.json campuses'
-				 % (location['campus']))
-		if 'building' in location and 'buildings' in self.config:
-			if location['building'] not in self.config['buildings']:
-				raise ValueError('location at building %s not defined in config.json buildings'
-				 % (location['building']))
-
-	def validate_instructor(self, instructor, schema=False, enforce_relative_order=True):
+	def validate_instructor(self, instructor, schema=False, relative=True):
 		if 'kind' in instructor and instructor['kind'] != 'instructor':
 			raise ValueError('instructor object must be of kind instructor')
 
@@ -244,21 +248,31 @@ class Validator:
 			for office_hour in instructor['office'].get('hours', []):
 				self.validate_meeting(instructor['office']['hours'])
 
-	def validate_final_exam(self, final_exam, schema=False, enforce_relative_order=True):
+	def validate_final_exam(self, final_exam, schema=False, relative=True):
 		if 'kind' in final_exam and final_exam['kind'] != 'final_exam':
 			raise ValueError('final_exam object must be of kind "final_exam"')
+
+	def validate_textbook(self, textbook, schema=False, relative=True):
+		pass # TODO
+
+	def validate_texbook_link(self, textbook_link, schema=False, relative=True):
+		pass # TODO
+
+	def validate_location(self, location):
+		if 'campus' in location and 'campuses' in self.config:
+			if location['campus'] not in self.config['campuses']:
+				raise ValueError('location at campus %s not defined in config.json campuses'
+				 % (location['campus']))
+		if 'building' in location and 'buildings' in self.config:
+			if location['building'] not in self.config['buildings']:
+				raise ValueError('location at building %s not defined in config.json buildings'
+				 % (location['building']))
 
 	def validate_website(url):
 		c = httplib.HTTPConnection(url)
 		c.request("HEAD", '')
 		if c.getresponse().status != 200:
 			raise ValueError('invalid website url "%s"' % (url))
-
-	def validate_textbook(self, textbook):
-		pass # TODO
-
-	def validate_texbook_link(self, textbook_link):
-		pass # TODO
 
 	# NOTE: somewhat redundant but readable
 	def validate_time_range(self, start, end):
@@ -377,6 +391,7 @@ class Validator:
 				 d[k] = v
 		return d
 
+# TODO
 class Logger:
 	def __init__(self, filename):
 		self.file = open(filename, 'w+')
@@ -402,34 +417,42 @@ class Logger:
 		print message
 		print error
 
+# TODO
 class ValidationError:
 	@staticmethod
 	def schema_json_error(error):
 		print 'SCHEMA_JSON'
+		print error
 
 	@staticmethod
 	def schema_definition_error(error):
 		print 'SCHEMA_DEFINITION'
+		print error
 
 	@staticmethod
 	def subject_json_error(error):
 		print 'SUBJECT_JSON'
+		print error
 
 	@staticmethod
 	def subject_definition_error(error):
 		print 'SUBJECT_DEFINITION'
+		print error
 
 	@staticmethod
 	def extended_definition_error(error):
 		print 'EXTENDED DEFINITION'
+		print error
 
 	@staticmethod
 	def unknown_error(error):
 		print 'UNKNOWN'
+		print error
 
 	@staticmethod
 	def invalid_json_error(error):
 		print 'INVALID JSON'
+		print error
 
 def get_args():
 	pass
@@ -439,8 +462,8 @@ def check_args(args):
 
 def main():
 	v = Validator(
-		schema_directory='/home/mike/Documents/semesterly/scripts/parser_library/schemas/',
-		directory='/home/mike/Documents/semesterly/scripts/parser_library/ex_school/')
+		schema_directory='scripts/parser_library/schemas/',
+		directory='scripts/parser_library/ex_school/')
 
 	v.validate()
 
