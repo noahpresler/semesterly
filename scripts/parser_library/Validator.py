@@ -10,6 +10,7 @@
 import os, sys, re, jsonschema, argparse, httplib
 import simplejson as json
 from pygments import highlight, lexers, formatters, filters
+from InternalUtils import *
 
 # TODO - move to own file
 class dotdict(dict):
@@ -121,7 +122,7 @@ class Validator:
 				}[obj['kind']](obj)
 			except ValueError as error:
 				print 'ERROR:', error
-				print Validator.pretty_json(obj)
+				print pretty_json(obj)
 
 	def validate_course(self, course, schema=True, relative=True):
 		try:
@@ -358,15 +359,6 @@ class Validator:
 			self.logger.log('DIRECTORY_SCHEMA', error)
 		except Exception as error:
 			self.logger.log('UNKNOWN', error)
-
-	@staticmethod
-	def pretty_json(j):
-		if isinstance(j, dict):
-			j = json.dumps(j, sort_keys=True, indent=2, separators=(',', ': '))
-		l = lexers.JsonLexer()
-		l.add_filter('whitespace')
-		colorful_json = highlight(unicode(j, 'UTF-8'), l, formatters.TerminalFormatter())
-		return colorful_json
 
 	@staticmethod
 	def path_to_json(path):
