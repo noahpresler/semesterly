@@ -5,148 +5,33 @@
 
 import django, datetime, os, copy, jsondiff, simplejson as json
 from pygments import highlight, lexers, formatters, filters
+from abc import ABCMeta, abstractmethod
 
 from django.utils.encoding import smart_str, smart_unicode
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "semesterly.settings")
 django.setup()
 from timetable.models import *
-from InternalUtils import *
-from Logger import Logger
+from scripts.parser_library.InternalUtils import *
+from scripts.parser_library.Logger import Logger
 
-class Digestor:
-
-	def __init__(self, school, data_file, log_file=None, quiet=False):
+class DigestionAdapter:
+	def __init__(self, school, cached):
 		self.school = school
-		with open(data_file, 'r') as f:
-			self.data = json.load(f)
-		self.data = [ dotdict(obj) for obj in self.data ]
 
-		# Log digestor messages to stdout and/or file
-		self.logger = Logger()
-		self.count = dotdict({
+		# Cache last created course and section to avoid redundant Django calls
+		self.cached = cached
 
-		})
+	def adapt_course(self, course):
+		''' Digest course.
+		Args:
+			course: json object
 
-
-		# Cache last created course and section
-		self.cached_course = dotdict({'code': '_'})
-		self.cached_section = dotdict({'code': '_'})
-
-	def set_operation(self, diff, dry):
-		'''lambda madness... good luck Noah ;-)'''
-
-		diff = dotdict({
-			'course': lambda kwargs: Digestor.diff(kwargs, Course.objects.filter(**exclude(kwargs)).first()),
-			'section': lambda kwargs: Digestor.diff(kwargs, Section.objects.filter(**exclude(kwargs)).first()),
-			'offering': lambda kwargs: Digestor.diff(kwargs, Offering.objects.filter(**exclude(kwargs)).first())
-		})
-
-		dbload = dotdict({
-			'course': lambda kwargs: Course.objects.update_or_create(**kwargs),
-			'section': lambda kwargs: Section.objects.update_or_create(**kwargs),
-			'offering': lambda kwargs: Offering.objects.update_or_create(**kwargs)
-		})
-
-		# run diff, return from diff
-		if diff and dry:
-			self.operate = {
-				'course' : lambda kwargs: diff.course(kwargs),
-				'section': lambda kwargs: diff.section(kwargs),
-				'meeting': lambda kwargs: diff.offering(kwargs)
-			}
-
-		# run django, return from django
-		elif not diff and not dry:
-			self.operate = {
-				'course' : lambda kwargs: dbload.course(kwargs),
-				'section': lambda kwargs: dbload.section(kwargs),
-				'meeting': lambda kwargs: dbload.meeting(kwargs)
-			}
-
-		# run both, return from django call
-		elif diff and not dry:
-			self.operate = {
-				'course' : lambda kwargs: map(lambda f: f(kwargs), (diff.course(kwargs), dbload.course(kwargs)))[1],
-				'section' : lambda kwargs: map(lambda f: f(kwargs), (diff.section(kwargs), dbload.section(kwargs)))[1],
-				'meeting' : lambda kwargs: map(lambda f: f(kwargs), (diff.meeting(kwargs), dbload.meeting(kwargs)))[1],
-			}
-
-		# nothing to do...
-		else not diff and dry:
-			sys.stderr.write('Nothing to run.')
-			exit(1)
-
-		self.operate = dotdict(self.operate)
-
-	def digest(self, diff=True, dry=True):
-		self.set_operation(diff, dry)
-
-		for obj in self.data:
-			# try:
-			res = {
-				'course': lambda x: self.create_course(x),
-				'section': lambda x: self.create_section(x, clean=not diff),
-				'meeting': lambda x: self.create_meeting(x),
-				'instructor': lambda x: self.create_instructor(x),
-				'final_exam': lambda x: self.create_final_exam(x),
-				'textbook': lambda x: self.create_textbook(x),
-				'textbook_link': lambda x: self.create_textbook_link(x)
-			}[obj.kind](obj)
-
-			# save
-			if not diff:
-				if isinstance(res, list):
-					for r in res:
-						r.save()
-				else:
-					res.save()
-
-
-			print res
-			print '-------------'
-
-			# print 'Digested', obj
-			# except django.core.exceptions.DataError as error:
-			# 	print 'ERROR'
-			# 	print obj
-			# 	print error
-		self.wrap_up()
-
-	@staticmethod
-	def diff(dct, model):
-		name = ''
-		add = {}
-		if dct is None or model is None:
-			return None, False
-		c = copy.deepcopy(b.__dict__)
-		for d in [dct, c]:
-			if 'defaults' in d:
-				defaults = d['defaults']
-				del d['defaults']
-				d.update(defaults)
-			blacklist = {'_state', 'id', 'course', 'section', 'section_id', 'course_id'}
-			for k in d.keys():
-				if k in blacklist:
-					del d[k]
-		diffed = jsondiff.diff(model, dct, syntax='symmetric', dump=True)
-		print self.logger.log(json.loads(diffed))
-		return model, True
-
-	def create_instructor(self, instructor):
-		pass # TODO
-	def create_final_exam(self, final_exam):
-		pass # TODO
-	def create_textbook(self, textbook):
-		pass # TODO
-	def create_textbook_link(self, textbook_link):
-		pass # TODO
-
-	def create_course(self, course):
-		''' Create course in database from info in json model.
-
-		Returns:
-			django course model object
+		Returns: (django) formatted course dictionary
 		'''
+
+		if course is None:
+			raise DigestionError()
+
 		adapted = {}
 		adapted['name'] = course.get('name', '')
 		if 'credits' in course:
@@ -173,34 +58,26 @@ class Digestor:
 		if 'level' in course:
 			adapated['level'] = course.level
 
-		course_model, created = self.operate.course({
+		return {
 			'code': course.code,
 			'school': self.school,
 			'defaults': adapted
-		})
+		}
 
-		if course_model:
-			self.cached_course = course_model
-			for section in course.get('sections', []):
-				self.create_section(section, course_model)
-
-		return course_model
-
-	def create_section(self, section, course_model=None, clean=True):
-		''' Create section in database from info in model map. 
-		
+	def adapt_section(self, section, course_model=None):
+		''' Digest course.
 		Args:
-			course_model: django course model object
+			section: json object
 
-		Keyword args:
-			clean (boolean): removes course offerings associated with section if set
-
-		Returns:
-			django section model object
+		Returns: (django) formatted section dictionary
 		'''
+
+		if section is None:
+			raise DigestionError()
+
 		if course_model is None:
-			if section.course.code == self.cached_course.code:
-				course_model = self.cached_course
+			if section.course.code == self.cached.course.code:
+				course_model = self.cached.course
 			else:
 				course_model = Course.objects.filter(school=self.school, code=section.course.code).first()
 				if course_model is None:
@@ -232,52 +109,44 @@ class Digestor:
 		if 'final_exam' in section:
 			pass # TODO - add to database
 
-		section_model, created = self.operate.section({
+		return {
 			'course': course_model,
-			'semester': 'S', #section.term[0], # TODO - add year to django model
+			'semester': 'S', #section.term[0], # TODO - add full term to django model
 			'meeting_section': section.code,
 			'defaults': adapted
-		})
+		}
 
-		if section_model:
-			self.cached_course = course_model
-			self.cached_section = section_model
-			for meeting in section.get('meetings', []):
-				self.create_offerings(meeting, section_model)
-
-			if clean:
-				Digestor.remove_offerings(section_model)
-
-		return section_model
-
-	def create_meeting(self, meeting, section_model=None):
-		''' Create offering in database from info in model map.
-
+	def adapt_meeting(self, meeting, section_model=None):
+		''' Digest course.
 		Args:
-			section_model: JSON course model object
+			section: json object
+
+		Returns: (django) formatted offering dictionaries (IMPORTANT: return generator of offerings)
 		'''
+
+		if meeting is None:
+			raise DigestionError()
 
 		if section_model is None:
 			course_model = None
-			if meeting.course.code == self.cached_course.code:
-				course_model = self.cached_course
+			if self.cached.code and meeting.course.code == self.cached.course.code:
+				course_model = self.cached.course
 			else:
 				course_model = Course.objects.filter(school=self.school, code=meeting.course.code).first()
 				if course_model is None:
-					return # TODO - raise Error
-			if course_model.code == self.cached_course.code and meeting.section.code == self.cached_section.meeting_section:
-					section_model = self.cached_section
+					raise DigestionError()
+			if self.cached.course and course_model.code == self.cached.course.code and meeting.section.code == self.cached.section.meeting_section:
+					section_model = self.cached.section
 			else:
 				section_model = Section.objects.filter(course=course_model, meeting_section=meeting.section.code).first()
 				if section_model is None:
-					return # TODO - raise Error
+					raise DigestionError()
 				self.cached_course = course_model
 				self.cached_section = section_model
 
 		# NOTE: ignoring dates for now
-		offering_models = []
 		for day in meeting.get('days', []):
-			offering_model, created = self.operate.offering({
+			offering = {
 				'section': section_model,
 				'day': day,
 				'time_start': meeting.time.start,
@@ -285,10 +154,137 @@ class Digestor:
 				'defaults': {
 					'location': meeting.location.get('where', '')
 				}
-			})
-			offering_models.append(offering_model)
+			}
+			yield offering
 
-		return offering_models
+class DigestionStrategy:
+	__metaclass__ = ABCMeta
+
+	def __init__(self):
+
+		# Log digestor messages to stdout and/or file
+		self.logger = Logger()
+
+		count = {
+			'created': 0,
+			'updated': 0,
+			'total': 0
+		}
+		self.count = {
+			'courses': count,
+			'sections': count,
+			'offerings': count
+		}
+
+	@abstractmethod
+	def digest_course(self, kwargs):
+		''' Digest course.
+		Args:
+			course: json dictionary
+
+		Returns: (django) formatted course model
+		'''
+
+
+	@abstractmethod
+	def digest_section(self, kwargs):
+		''' Digest course.
+		Args:
+			section: json dictionary
+
+		Returns: (django) formatted section model
+		'''
+
+	@abstractmethod
+	def digest_offering(self, kwargs):
+		''' Digest course.
+		Args:
+			course: json dictionary
+
+		Returns: (django) formatted meeting model
+		'''
+
+	def create_instructor(self, instructor):
+		pass # TODO
+	def create_final_exam(self, final_exam):
+		pass # TODO
+	def create_textbook(self, textbook):
+		pass # TODO
+	def create_textbook_link(self, textbook_link):
+		pass # TODO
+
+
+class Vommit(DigestionStrategy):
+	def __init__(self):
+		super(Vommit, self).__init__()
+
+	@staticmethod
+	def exclude(dct):
+		return {k: v for k,v in dct.items() if k != 'defaults'}
+
+	def digest_course(self, kwargs):
+		model, new = self.diff(kwargs, Course.objects.filter(**Vommit.exclude(kwargs)).first())
+		return model
+
+	def digest_section(self, kwargs):
+		model, new = self.diff(kwargs, Section.objects.filter(**Vommit.exclude(kwargs)).first())
+		return model
+
+	def digest_offering(self, kwargs):
+		model, new = self.diff(kwargs, Offering.objects.filter(**Vommit.exclude(kwargs)).first())
+		return model
+
+	def diff(self, dct, model):
+		if dct is None or model is None:
+			return None, False
+		c = copy.deepcopy(model.__dict__)
+		for d in [dct, c]:
+			if 'defaults' in d:
+				defaults = d['defaults']
+				del d['defaults']
+				d.update(defaults)
+			blacklist = {'_state', 'id', 'course', 'section', 'section_id', 'course_id'}
+			for k in d.keys():
+				if k in blacklist:
+					del d[k]
+		diffed = jsondiff.diff(c, dct, syntax='symmetric', dump=True)
+		diffed = json.loads(diffed)
+		# diffed.update({ '$what': dct })
+		self.logger.log_json(diffed)
+		return model, True
+
+
+class Absorb(DigestionStrategy):
+	def __init__(self, clean=True):
+		self.clean = clean
+		super(Absorb, self).__init__()
+
+	def digest_course(self, kwargs):
+		print kwargs
+		model, created = Course.objects.update_or_create(**kwargs)
+		if created:
+			self.count['courses']['created'] += 1
+		if model:
+			self.count['courses']['total'] += 1
+
+		return model
+
+	def digest_section(self, kwargs):
+		print kwargs
+		model, created = Section.objects.update_or_create(**kwargs)
+		if created:
+			self.count['sections']['created'] += 1
+		if model:
+			self.count['sections']['total'] += 1
+
+			if self.clean:
+				Absorb.remove_offerings(model)
+
+		return model
+
+	def digest_offering(self, kwargs):
+		print kwargs
+		model, created = Offering.objects.update_or_create(**kwargs)
 
 	def remove_section(self, course_model):
 		''' Remove section specified in model map from django database. '''
@@ -310,9 +306,113 @@ class Digestor:
 		)
 		update_object.save()
 
+class Burp(DigestionStrategy):
+	def __init__(self, cached):
+		super(Burp, self).__init__()
+
+class Digestor:
+	def __init__(self, school, data_file, log_file=None, quiet=False):
+		self.school = school
+		with open(data_file, 'r') as f:
+			self.data = json.load(f)
+		self.data = [ dotdict(obj) for obj in self.data ]
+
+		self.cached = dotdict({
+			'course': { 'code': '_' },
+			'section': { 'code': '_' }
+		})
+
+		self.adapter = DigestionAdapter(school, self.cached)
+		self.strategy = Vommit()
+
+	def set_strategy(self, diff, dry):
+		if diff and dry:
+			self.strategy = Vommit() # diff only
+		elif not diff and not dry:
+			self.strategy = Absorb() # load db only
+		elif diff and not dry:
+			self.strategy = Burp() # load db and log diff
+		else: # nothing to do...
+			sys.stderr.write('Nothing to run.')
+			exit(1)
+
+	def digest(self, diff=True, dry=True):
+		# TODO - handle single object not in list
+
+		self.set_strategy(diff, dry)
+
+		for obj in self.data:
+			# try:
+			res = {
+				'course': lambda x: self.digest_course(x),
+				'section': lambda x: self.digest_section(x, clean=not diff),
+				'meeting': lambda x: self.digest_meeting(x),
+				'instructor': lambda x: self.digest_instructor(x),
+				'final_exam': lambda x: self.digest_final_exam(x),
+				'textbook': lambda x: self.digest_textbook(x),
+				'textbook_link': lambda x: self.digest_textbook_link(x)
+			}[obj.kind](obj)
+
+	def digest_course(self, course):
+		''' Create course in database from info in json model.
+
+		Returns:
+			django course model object
+		'''
+
+		course_model = self.strategy.digest_course(self.adapter.adapt_course(course))
+
+		if course_model:
+			self.cached.course = course_model
+			for section in course.get('sections', []):
+				self.digest_section(section, course_model)
+
+		return course_model
+
+	def digest_section(self, section, course_model=None, clean=True):
+		''' Create section in database from info in model map.
+
+		Args:
+			course_model: django course model object
+
+		Keyword args:
+			clean (boolean): removes course offerings associated with section if set
+
+		Returns:
+			django section model object
+		'''
+
+		section_model = self.strategy.digest_section(self.adapter.adapt_section(section))
+
+		if section_model:
+			self.cached.course = course_model
+			self.cached.section = section_model
+			for meeting in section.get('meetings', []):
+				self.digest_meeting(meeting, section_model)
+
+		return section_model
+
+	def digest_meeting(self, meeting, section_model=None):
+		''' Create offering in database from info in model map.
+
+		Args:
+			section_model: JSON course model object
+		'''
+
+		# NOTE: ignoring dates for now
+		offering_models = []
+		for offering in self.adapter.adapt_meeting(meeting):
+			offering_model = self.strategy.digest_offering(offering)
+			offering_models.append(offering_model)
+
+		return offering_models
+
 def main():
 	d = Digestor('chapman', '/home/mike/Documents/semesterly/scripts/parser_library/ex_school/data/courses.json')
 	d.digest()
 
 if __name__ == '__main__':
 	main()
+
+class DigestionError(ValueError):
+	'''Raise when fails digestion invariant.'''
