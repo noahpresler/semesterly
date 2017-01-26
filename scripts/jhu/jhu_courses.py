@@ -3,7 +3,7 @@
 # @author   Noah Presler
 # @date     1/24/17
 
-from scripts.parser_library.Base import CourseParser
+from scripts.parser_library.Base import *
 
 class HopkinsParser(CourseParser):
 
@@ -17,22 +17,23 @@ class HopkinsParser(CourseParser):
         'sa': 'S',
         's': 'U'}
 
-    def __init__(self,school,sem="Spring 2017"):
-        CourseParser.__init__(self, school)
+    def __init__(self,sem="Spring 2017"):
+        # CourseParser.__init__(self, school)
         self.schools = []
         self.semester = sem
+        super(HopkinsParser, self).__init__('jhu')
 
     def get_schools(self):
-        url = API_URL + '/codes/schools?key=' + KEY
+        url = HopkinsParser.API_URL + '/codes/schools?key=' + HopkinsParser.KEY
         self.schools = self.requester.get(url=url)
 
     def get_courses(self,school):
         print "Getting courses in: " + school['Name']
-        url = API_URL + '/' + school['Name'] + '/'+ self.semester + '?key=' + KEY
+        url = HopkinsParser.API_URL + '/' + school['Name'] + '/'+ self.semester + '?key=' + HopkinsParser.KEY
         return self.requester.get(url=url)
 
     def get_section(self,course):
-        url = API_URL + '/' + course['OfferingName'].replace(".", "") + course['SectionName'] +'/' + self.semester + '?key=' + KEY
+        url = HopkinsParser.API_URL + '/' + course['OfferingName'].replace(".", "") + course['SectionName'] +'/' + self.semester + '?key=' + HopkinsParser.KEY
         return self.requester.get(url=url)
 
     def parse_schools(self):
@@ -43,11 +44,7 @@ class HopkinsParser(CourseParser):
         courses = self.get_courses(school)
         for course in courses:
             section = self.get_section(course)
-            try:
-                self.load_ingestor(course,section)
-            except:
-                print "Unexpected error:", sys.exc_info()[0], sys.exc_info()[1]
-                traceback.print_tb(sys.exc_info()[2], file=sys.stdout)
+            self.load_ingestor(course,section)
 
     def compute_size_enrollment(self,course):
         try:
@@ -72,12 +69,12 @@ class HopkinsParser(CourseParser):
         # Load core course fields
         self.ingest['areas'] = course['Areas'].split(',')
         self.ingest['areas'] += ['Writing Intensive'] if course['IsWritingIntensive'] == "Yes" else []
-        self.ingest['prerequisites'] = SectionDetails[0].get('Prerequisites',{})[0].get('Description','')
+        self.ingest['prerequisites'] = SectionDetails[0]['Prerequisites'][0].get('Description','') if len(SectionDetails[0]['Prerequisites']) > 0 else ''
         self.ingest['level'] = re.findall(re.compile(r".+?\..+?\.(.{1}).+"),course['OfferingName'])[0] + "00"
         self.ingest['descrption'] = SectionDetails[0]['Description']
         self.ingest['code'] = course['OfferingName'].strip()
         self.ingest['num_credits'] = num_credits
-        self.ingest['department'] = course['Department']
+        self.ingest['department_name'] = course['Department']
         self.ingest['campus'] = 1
 
         # Add specialty areas for computer science department
@@ -104,7 +101,7 @@ class HopkinsParser(CourseParser):
                 self.ingest['time_start'] = self.extract.time_12to24(time_pieces.group(1))
                 self.ingest['time_end'] = self.extract.time_12to24(time_pieces.group(2))
                 if meeting['DOW'] != "TBA" and meeting['DOW'] !="None":
-                    self.ingest['days'] = re.findall(r"([A-Z][a-z]*)+?",days)
+                    self.ingest['days'] = map(lambda d: HopkinsParser.DAY_TO_LETTER_MAP[d],re.findall(r"([A-Z][a-z]*)+?",days))
                     self.ingest['location'] = {
                         'building' : meeting['Building'],
                         'room' : meeting['Room']
@@ -114,4 +111,7 @@ class HopkinsParser(CourseParser):
     def start(self):
         self.get_schools()
         self.parse_schools()
-        self.wrap_up()
+
+if __name__ == "__main__":
+    parser = HopkinsParser()
+    parser.start()
