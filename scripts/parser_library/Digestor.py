@@ -3,51 +3,90 @@
 # @author   Michael N. Miller
 # @date     1/22/17
 
-import django, datetime, os, copy
+import django, datetime, os, copy, jsondiff, simplejson as json
+from pygments import highlight, lexers, formatters, filters
+
 from django.utils.encoding import smart_str, smart_unicode
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "semesterly.settings")
 django.setup()
 from timetable.models import *
-import jsondiff, simplejson as json
-from pygments import highlight, lexers, formatters, filters
 from InternalUtils import *
+from Logger import Logger
 
 class Digestor:
 
-	def __init__(self, school, data_file):
+	def __init__(self, school, data_file, log_file=None, quiet=False):
 		self.school = school
 		with open(data_file, 'r') as f:
 			self.data = json.load(f)
 		self.data = [ dotdict(obj) for obj in self.data ]
 
+		# Log digestor messages to stdout and/or file
+		self.logger = Logger()
+		self.count = dotdict({
+
+		})
+
+
 		# Cache last created course and section
 		self.cached_course = dotdict({'code': '_'})
 		self.cached_section = dotdict({'code': '_'})
 
-	def digest(self, diff=True):
+	def set_operation(self, diff, dry):
+		'''lambda madness... good luck Noah ;-)'''
 
-		self.operate = None
-		if diff:
-			exclude = lambda d: {x: d[x] for x in d if x != 'defaults'}
+		diff = dotdict({
+			'course': lambda kwargs: Digestor.diff(kwargs, Course.objects.filter(**exclude(kwargs)).first()),
+			'section': lambda kwargs: Digestor.diff(kwargs, Section.objects.filter(**exclude(kwargs)).first()),
+			'offering': lambda kwargs: Digestor.diff(kwargs, Offering.objects.filter(**exclude(kwargs)).first())
+		})
+
+		dbload = dotdict({
+			'course': lambda kwargs: Course.objects.update_or_create(**kwargs),
+			'section': lambda kwargs: Section.objects.update_or_create(**kwargs),
+			'offering': lambda kwargs: Offering.objects.update_or_create(**kwargs)
+		})
+
+		# run diff, return from diff
+		if diff and dry:
 			self.operate = {
-				'course': lambda kwargs: Digestor.diff(kwargs, Course.objects.filter(**exclude(kwargs)).first()),
-				'section': lambda kwargs: Digestor.diff(kwargs, Section.objects.filter(**exclude(kwargs)).first()),
-				'offering': lambda kwargs: Digestor.diff(kwargs, Offering.objects.filter(**exclude(kwargs)).first())
+				'course' : lambda kwargs: diff.course(kwargs),
+				'section': lambda kwargs: diff.section(kwargs),
+				'meeting': lambda kwargs: diff.offering(kwargs)
 			}
-		else:
+
+		# run django, return from django
+		elif not diff and not dry:
 			self.operate = {
-				'course': lambda kwargs: Course.objects.update_or_create(**kwargs),
-				'section': lambda kwargs: Section.objects.update_or_create(**kwargs),
-				'offering': lambda kwargs: Offering.objects.update_or_create(**kwargs)
+				'course' : lambda kwargs: dbload.course(kwargs),
+				'section': lambda kwargs: dbload.section(kwargs),
+				'meeting': lambda kwargs: dbload.meeting(kwargs)
 			}
+
+		# run both, return from django call
+		elif diff and not dry:
+			self.operate = {
+				'course' : lambda kwargs: map(lambda f: f(kwargs), (diff.course(kwargs), dbload.course(kwargs)))[1],
+				'section' : lambda kwargs: map(lambda f: f(kwargs), (diff.section(kwargs), dbload.section(kwargs)))[1],
+				'meeting' : lambda kwargs: map(lambda f: f(kwargs), (diff.meeting(kwargs), dbload.meeting(kwargs)))[1],
+			}
+
+		# nothing to do...
+		else not diff and dry:
+			sys.stderr.write('Nothing to run.')
+			exit(1)
+
 		self.operate = dotdict(self.operate)
+
+	def digest(self, diff=True, dry=True):
+		self.set_operation(diff, dry)
 
 		for obj in self.data:
 			# try:
 			res = {
 				'course': lambda x: self.create_course(x),
 				'section': lambda x: self.create_section(x, clean=not diff),
-				'meeting': lambda x: self.create_offerings(x),
+				'meeting': lambda x: self.create_meeting(x),
 				'instructor': lambda x: self.create_instructor(x),
 				'final_exam': lambda x: self.create_final_exam(x),
 				'textbook': lambda x: self.create_textbook(x),
@@ -74,13 +113,13 @@ class Digestor:
 		self.wrap_up()
 
 	@staticmethod
-	def diff(a, b):
+	def diff(dct, model):
 		name = ''
 		add = {}
-		if a is None or b is None:
+		if dct is None or model is None:
 			return None, False
 		c = copy.deepcopy(b.__dict__)
-		for d in [a, c]:
+		for d in [dct, c]:
 			if 'defaults' in d:
 				defaults = d['defaults']
 				del d['defaults']
@@ -89,9 +128,9 @@ class Digestor:
 			for k in d.keys():
 				if k in blacklist:
 					del d[k]
-		diffed = jsondiff.diff(c, a, syntax='symmetric', dump=True)
-		print pretty_json(json.loads(diffed))
-		return b, True
+		diffed = jsondiff.diff(model, dct, syntax='symmetric', dump=True)
+		print self.logger.log(json.loads(diffed))
+		return model, True
 
 	def create_instructor(self, instructor):
 		pass # TODO
@@ -211,11 +250,11 @@ class Digestor:
 
 		return section_model
 
-	def create_offerings(self, meeting, section_model=None):
+	def create_meeting(self, meeting, section_model=None):
 		''' Create offering in database from info in model map.
 
 		Args:
-			course_model: django course model object
+			section_model: JSON course model object
 		'''
 
 		if section_model is None:
