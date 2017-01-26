@@ -10,12 +10,12 @@ from InternalUtils import *
 
 class Ingestor:
 
-	def __init__(self, school):
+	def __init__(self, school, directory='scripts/parser_library/ex_school/'):
 		self.map = {}
 		self.school = school
-		self.file = open('scripts/parser_library/ex_school/data/courses.json', 'w') # TODO - warn if overwriting file
+		self.file = open(directory + 'data/courses.json', 'w') # TODO - warn if overwriting file
 		self.file.write('[')
-		self.validator = Validator(directory='scripts/parser_library/ex_school/')
+		self.validator = Validator(directory=directory)
 		self.map[''] = ''
 
 	def __setitem__(self, key, value):
