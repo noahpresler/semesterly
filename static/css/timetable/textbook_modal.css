@@ -1,0 +1,9 @@
+.abnb-modal.textbook-modal {
+    max-width: 450px;
+    height:495px;
+    overflow: auto;
+}
+
+.textbook-modal #tb-list-container {
+    padding: 30px 30px 30px 30px;
+}
