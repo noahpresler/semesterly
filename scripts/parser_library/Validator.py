@@ -21,7 +21,7 @@ class Validator:
 			exit(1)
 
 		if directory is None:
-			raise NotImplementedError('directory must be defined as of now')
+			raise NotImplementedError('school directory must be defined as of now')
 
 		self.logger = Logger(log_filename)
 		self.directory = directory
@@ -81,7 +81,7 @@ class Validator:
 					j = json.load(f)
 				else:
 					j = json.loads(f.read(), object_pairs_hook=Validator.dict_raise_on_duplicates)
-			except JsonValidationError as e:
+			except json.scanner.JSONDecodeError as e:
 				print file
 				self.logger.log('INVALID_JSON', e)
 				return None
@@ -90,7 +90,7 @@ class Validator:
 	def validate(self):
 		datalist = self.file_to_json(self.directory + 'data/courses.json')
 		self.validate_schema(datalist, *self.schema.datalist)
-		datalist = dotdict(datalist)
+		datalist = [ dotdict(data) for data in datalist ]
 
 		for obj in datalist:
 			try:
@@ -104,8 +104,8 @@ class Validator:
 					'textbook_link': lambda x: self.validate_textbook_link(x, schema=False)
 				}[obj.kind](obj)
 			except JsonValidationError as error:
-				print 'ERROR:', error
-				print pretty_json(obj)
+				print 'ERROR:', error.message
+				print pretty_json(error.json)
 
 	def validate_course(self, course, schema=True, relative=True):
 		if not isinstance(course, dotdict):
@@ -118,7 +118,7 @@ class Validator:
 			raise JsonValidationError('course object must be of kind course', course)
 
 		if self.course_code_regex.match(course.code) is None:
-			raise JsonValidationError('course code "%s" does not match r\'%s\''
+			raise JsonValidationError('course code "%s" does not match regex \'%s\''
 			 %(course.code, self.config.course_code_regex), course)
 
 		if 'department' in course and 'code' in course.department and 'departments' in self.config:
@@ -158,7 +158,7 @@ class Validator:
 
 		if 'course' in section and self.course_code_regex.match(section.course.code) is None:
 			raise JsonValidationError('course code "%s" does not match r\'%s\''
-			 %(course.code, self.config.course_code_regex), section)
+			 %(section.course.code, self.config.course_code_regex), section)
 
 		if 'term' in section and section.term not in self.config.terms:
 			raise JsonValidationError('term "%s" not in config.json term list' % (section.term), section)
@@ -209,7 +209,7 @@ class Validator:
 		if 'kind' in meeting and meeting.kind != 'meeting':
 			raise JsonValidationError('meeting object must be of kind "instructor"', meeting)
 		if 'course' in meeting and self.course_code_regex.match(meeting.course.code) is None:
-			raise JsonValidationError('course code "%s" does not match r\'%s\''
+			raise JsonValidationError('course code "%s" does not match regex \'%s\''
 			 % (course.code, self.config.course_code_regex), meeting)
 		if 'time' in meeting:
 			try:
