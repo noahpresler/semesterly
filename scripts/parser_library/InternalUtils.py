@@ -12,6 +12,8 @@ def pretty_json(j):
 	return colorful_json
 
 def make_list(l, base_type=basestring):
+	if not isinstance(l, list):
+		l =[l]
 	if isinstance(l, base_type):
 		l = [l]
 	return clean(l)
