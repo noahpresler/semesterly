@@ -11,6 +11,8 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch) => {
 	return {
 		toggleUserAcquisitionModal: () => {dispatch({type: "TOGGLE_ACQUISITION_MODAL"})},
+		triggerEmailSignupModal: () => {dispatch({type: "TOGGLE_EMAIL_SIGNUP_MODAL"})},
+		closeUserAcquisitionModal: () => {dispatch({type: "CLOSE_ACQUISITION_MODAL"})},
 	}
 }
 

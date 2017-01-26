@@ -12,7 +12,9 @@ from hashids import Hashids
 from django.core.signing import TimestampSigner, BadSignature, SignatureExpired
 from googleapiclient.discovery import build
 from oauth2client.client import GoogleCredentials
-
+from django.shortcuts import redirect
+from social.pipeline.partial import partial
+from social.pipeline.user import USER_FIELDS
 
 DAY_LIST = ['M','T','W','R','F','S','U'];
 hashids = Hashids(salt="x98as7dhg&h*askdj^has!kj?xz<!9")

@@ -19,6 +19,7 @@ import PeerModalContainer from './containers/peer_modal_container.jsx';
 import IntegrationModalContainer from './containers/integration_modal_container.jsx';
 import SaveCalendarModalContainer from './containers/save_calendar_modal_container.jsx';
 import UserAcquisitionModalContainer from './containers/user_acquisition_modal_container.jsx';
+import EmailSignupModalContainer from './containers/email_signup_modal_container.jsx';
 
 class Semesterly extends React.Component {
 	constructor(props) {
@@ -121,6 +122,7 @@ class Semesterly extends React.Component {
 				<PeerModalContainer />
 				<SaveCalendarModalContainer />
 				<UserAcquisitionModalContainer />
+				<EmailSignupModalContainer />
 				<AlertBox ref={a => this.msg = a} {...this.alertOptions} />
 				<div id="all-cols">
 					<div id="main-bar">

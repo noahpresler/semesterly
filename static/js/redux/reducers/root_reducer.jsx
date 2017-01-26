@@ -23,6 +23,7 @@ import { notificationToken } from './notification_token_reducer.jsx';
 import { integrationModal } from './integration_modal_reducer.jsx'
 import { saveCalendarModal } from './save_calendar_modal_reducer.jsx'
 import { userAcquisitionModal } from './user_acquisition_modal_reducer.jsx'
+import { emailSignupModal } from './email_signup_modal_reducer.jsx'
 
 export const rootReducer = combineReducers({
   school,
@@ -48,5 +49,6 @@ export const rootReducer = combineReducers({
   notificationToken,
   integrationModal,
   saveCalendarModal,
-  userAcquisitionModal
+  userAcquisitionModal,
+  emailSignupModal
 });

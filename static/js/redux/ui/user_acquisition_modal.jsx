@@ -10,7 +10,9 @@ export class UserAcquisitionModal extends React.Component {
 	componentDidUpdate(nextProps) {
 		if (this.props.isVisible) {
 			this.refs.modal.show();
-		}
+		} else {
+            this.refs.modal.hide()
+        }
 	}
 	render() {
         let modalHeader =
@@ -28,7 +30,7 @@ export class UserAcquisitionModal extends React.Component {
                 className="user-acquisition-modal abnb-modal max-modal"
                 modalStyle={modalStyle}
                 onHide={() => {
-                    this.props.toggleUserAcquisitionModal();
+                    this.props.closeUserAcquisitionModal();
                     history.replaceState( {} , 'Semester.ly', '/');
                 }}
                 >
@@ -41,7 +43,7 @@ export class UserAcquisitionModal extends React.Component {
                     <button className="btn abnb-btn fb-btn" onClick={() => {
                             let link = document.createElement('a');
                             link.href = '/login/facebook/?student_token=' + this.props.userInfo.LoginToken + "&login_hash=" + this.props.userInfo.LoginHash
-                            document.body.appendChild(link);
+                            document.body.appendChild(link);``
                             link.click()
                         }}>
                         <span className="img-icon">
@@ -52,7 +54,7 @@ export class UserAcquisitionModal extends React.Component {
                     <p className="method-details">Allows the option to friends in your classes.</p>
                    
 
-                   <div className="or-separator">
+                    <div className="or-separator">
                         <span className="h6 or-separator--text">or</span>
                         <hr />
                     </div>
@@ -73,12 +75,12 @@ export class UserAcquisitionModal extends React.Component {
 
 
                     <button className="btn abnb-btn secondary eight-px-top" onClick={() => {
-                        // this.props.createiCalfromTimetable();
-                    }} disabled>
+                        this.props.triggerEmailSignupModal();
+                    }}>
                         <span className="img-icon">
                             <i className="fa fa-envelope-o" />
                         </span>
-                        <span>Email Coming Soon</span>
+                        <span>Continue with Email</span>
                     </button>
                 </div>
             </Modal>
