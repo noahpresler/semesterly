@@ -33,7 +33,11 @@ export class TextbookModal extends React.Component {
                 }
             }
         }
-        console.log(tbs);
+
+        let modalContent = Object.keys(tbs).map((course_name) =>
+            <h3 key={course_name} className="modal-module-header">{course_name}</h3>
+        )
+        console.log('yo',modalContent);
 
         return (
             <Modal ref="modal"
@@ -46,6 +50,10 @@ export class TextbookModal extends React.Component {
                 >
 
                 {modalHeader}
+
+                 <div id="tb-list-container">
+                    {modalContent}
+                </div>
 
             </Modal>
         );
