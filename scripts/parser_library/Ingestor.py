@@ -10,7 +10,6 @@ from InternalUtils import *
 
 class Ingestor:
 
-	# TODO - abstract dictionary methods into ABC
 	def __init__(self, school):
 		self.map = {}
 		self.school = school
@@ -57,6 +56,7 @@ class Ingestor:
 		self.school = ''
 
 	def getchain(self, *keys):
+		'''Match the first key found in self.map dictionary.'''
 		for key in keys:
 			if key in self.map:
 				return self.map[key]
