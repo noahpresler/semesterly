@@ -1,8 +1,9 @@
-import os, time, progressbar, argparse
+import os, time, progressbar, argparse, re
 
 from abc import ABCMeta, abstractmethod
 from scripts.parser_library.Requester import Requester
 from scripts.parser_library.Ingestor import Ingestor
+from scripts.parser_library.Extractor import Extractor
 
 # bar = progressbar.ProgressBar(max_value=progressbar.UnknownLength)
 # for i in range(20):
