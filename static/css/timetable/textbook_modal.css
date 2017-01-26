@@ -5,5 +5,16 @@
 }
 
 .textbook-modal #tb-list-container {
-    padding: 30px 30px 30px 30px;
+    padding: 10px 30px 30px 30px;
+}
+
+.abnb-modal h3.modal-module-header {
+    font-size: 14px;
+    padding: 10px 5px;
+    margin: 0;
+    color: #777;
+    font-weight: 300;
+    clear: both;
+    position: relative;
+    transition: color .2s;
 }
