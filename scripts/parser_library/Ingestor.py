@@ -178,7 +178,7 @@ class Ingestor:
 
 		# handle nested location definition
 		if isinstance(self.getchain('location', 'loc'), basestring):
-			self.map['location'] = { 'where': self.map['location'] }
+			self.map['location'] = { 'where': self.getchain('location', 'loc') }
 
 		meeting = {
 			'kind': 'meeting',
