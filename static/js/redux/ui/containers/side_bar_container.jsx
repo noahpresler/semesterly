@@ -31,9 +31,10 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch) => {
 	return {
 		fetchCourseInfo: (courseId) => dispatch(fetchCourseInfo(courseId)),
-    removeCourse: (courseId) => addOrRemoveCourse(courseId),
-    removeOptionalCourse: (course) => dispatch(addOrRemoveOptionalCourse(course)),
-    launchPeerModal: () => dispatch({type:'TOGGLE_PEER_MODAL'}),
+	    removeCourse: (courseId) => addOrRemoveCourse(courseId),
+	    removeOptionalCourse: (course) => dispatch(addOrRemoveOptionalCourse(course)),
+	    launchPeerModal: () => dispatch({type:'TOGGLE_PEER_MODAL'}),
+	    launchTextbookModal: () => dispatch({type:'TRIGGER_TEXTBOOK_MODAL'}),
 		duplicateTimetable: (tt) => dispatch(duplicateTimetable(tt)),
 		deleteTimetable: (tt) => dispatch(deleteTimetable(tt)),
 		loadTimetable
