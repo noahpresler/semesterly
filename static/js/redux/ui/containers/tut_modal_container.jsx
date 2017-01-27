@@ -5,7 +5,8 @@ const mapStateToProps = (state) => {
 	return {
 		signUpModalVisible: state.signupModal.isVisible,
 		courseModalVisible: state.courseInfo.id != null,
-		courseModalVisible: state.userInfo.overrideShow
+		courseModalVisible: state.userInfo.overrideShow,
+		textbookModalVisible: state.textbookModal.isVisible
 	}
 }
 
