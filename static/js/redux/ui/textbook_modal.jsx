@@ -36,13 +36,16 @@ export class TextbookModal extends React.Component {
             }
         }
 
-        let textbookList = Object.keys(tbs).map((course_name) => 
+        let keys = Object.keys(tbs).sort(function(a, b) {
+            return tbs[b].length - tbs[a].length;
+        });
+        let textbookList = keys.map((course_name) => 
             <div key={course_name} className="tb-list-entry">
                 <h3 className="modal-module-header">{course_name}</h3>
                 {
-                    _.uniq(tbs[course_name], 'isbn').map(tb =>
-                    <Textbook tb={tb} key={tb.isbn} />
-                )}
+                    tbs[course_name].length > 0 ? _.uniq(tbs[course_name], 'isbn').map(tb =>
+                    <Textbook tb={tb} key={tb.isbn} />) : <p className="no-tbs">No textbooks found for this course.</p>
+                }
             </div>
         );
 
