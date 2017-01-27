@@ -8,6 +8,7 @@
 .textbook-modal #tb-list-container {
     padding: 10px 30px 30px 30px;
     max-height: 550px;
+    min-height: 300px;
     overflow: scroll;
 
 }
@@ -74,4 +75,34 @@
 
 .textbook-modal #modal-header h1 {
     font-size: 30px
+}
+
+.loader-container p {
+    font-size: 15px;
+    margin-top: 15px;
+}
+
+.loader-container {
+    text-align: center;
+    top: -50%;
+    transform: translateY(50%);
+    position: relative;
+}
+
+.spinner-container {
+    width: 100%;
+}
+
+.spinner-container i {
+    font-size: 80px;
+}
+
+.textbook-modal .loader {
+    margin: 0 auto;
+    border: 10px solid #f3f3f3; /* Light grey */
+    border-radius: 50%;
+    border-top: 10px solid #3498db; /* Blue */
+    width: 80px;
+    height: 80px;
+    animation: spin 2s linear infinite;
 }
