@@ -43,6 +43,7 @@ function setup(dispatch) {
   signup = signup === "True";
   gcalCallback = gcalCallback === "True";
   exportCalendar = exportCalendar === "True";
+  viewTextbooks = viewTextbooks === "True";
   if (signup) {
     dispatch({type: 'TRIGGER_SIGNUP_MODAL'});
   }
@@ -72,6 +73,9 @@ function setup(dispatch) {
   if (gcalCallback) {
     dispatch({type: 'TRIGGER_SAVE_CALENDAR_MODAL'});
     dispatch(addTTtoGCal());
+  }
+  if (viewTextbooks) {
+    dispatch({type: 'TRIGGER_TEXTBOOK_MODAL'})
   }
   // check if registered for chrome notifications
   isRegistered();
