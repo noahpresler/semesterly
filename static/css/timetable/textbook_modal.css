@@ -106,3 +106,9 @@
     height: 80px;
     animation: spin 2s linear infinite;
 }
+
+.tb-list-entry .no-tbs {
+    text-align: center;
+    font-weight: 300;
+    margin-top: 15px;
+}
