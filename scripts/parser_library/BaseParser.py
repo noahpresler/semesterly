@@ -28,7 +28,7 @@ from scripts.parser_library.Extractor import Extractor
 # for i in bar(range(20)):
 # 	time.sleep(0.1)
 
-class Parser:
+class BaseParser:
 	__metaclass__ = ABCMeta
 
 	def __init__(self, school):
@@ -40,7 +40,7 @@ class Parser:
 	@abstractmethod
 	def start(self, **kwargs): pass
 
-class CourseParser(Parser):
+class CourseParser(BaseParser):
 	__metaclass__ = ABCMeta
 
 	def __init__(self, school):
