@@ -1,11 +1,15 @@
 .abnb-modal.textbook-modal {
-    max-width: 450px;
-    height:495px;
+    max-width: 600px;
+    height:85%;
+    max-height: 700px;
     overflow: auto;
 }
 
 .textbook-modal #tb-list-container {
     padding: 10px 30px 30px 30px;
+    max-height: 550px;
+    overflow: scroll;
+
 }
 
 .abnb-modal h3.modal-module-header {
@@ -17,4 +21,57 @@
     clear: both;
     position: relative;
     transition: color .2s;
+}
+
+.textbook-modal .tb-image-wrapper {
+    height: 100px;
+}
+
+.textbook-modal .textbook img {
+    width: 75px;
+}
+
+#add-to-cart {
+    background-color: #FF9900;
+    position: absolute;
+    bottom: 12px;
+    right: 25px;
+    height: 40px;
+    width: 140px;
+    border-radius: 6px;
+    color: white;
+    font-size: 15px;
+    text-align: center;
+    vertical-align: middle;
+    border: none;
+}
+
+#add-to-cart .button-label i {
+    margin-right: 5px;
+}
+
+.textbook-modal .modal-footer {
+    height: 66px;
+    width: 100%;
+    border: 1px solid #ddd;
+    position: absolute;
+    bottom: -65px;
+    background-color: #eee;
+}
+
+.textbook-modal .modal-footer p {
+    font-size: 12px;
+    color: #777;
+    text-align: left;
+    font-weight: 300;
+    padding-right: 162px;
+    line-height: 16px;
+}
+
+.textbook-modal #modal-header {
+    padding: 20px 20px;
+}
+
+.textbook-modal #modal-header h1 {
+    font-size: 30px
 }
