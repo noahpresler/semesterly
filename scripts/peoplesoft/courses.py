@@ -11,7 +11,7 @@ from scripts.parser_library.Requester import Requester
 from scripts.parser_library.Extractor import *
 from scripts.parser_library.Model import Model
 from scripts.parser_library.Ingestor import Ingestor
-from scripts.parser_library.Base import CourseParser
+from scripts.parser_library.BaseParser import CourseParser
 
 class PeopleSoftParser(CourseParser):
 
@@ -159,8 +159,8 @@ class PeopleSoftParser(CourseParser):
 		self.ingest['instrs'] 	= ', '.join({instr.text for instr in instrs})
 		self.ingest['areas'] 	= ', '.join((extract_info(self.ingest, l) for l in re.sub(r'(<.*?>)', '\n', str(areas)).splitlines() if l.strip())) if areas else '' # FIXME -- small bug
 
-		course = self.ingest.create_course()
-		section = self.ingest.create_section(course)
+		course = self.ingest.ingest_course()
+		section = self.ingest.ingest_section(course)
 
 		# # NOTE: section is no longer a django object
 		# # TODO - change query to handle class code
@@ -188,7 +188,7 @@ class PeopleSoftParser(CourseParser):
 			self.ingest['location'] = loc.text
 			self.ingest['days'] = days
 
-			self.ingest.create_offerings(section)
+			self.ingest.ingest_offerings(section)
 
 		self.cleanup()
 
