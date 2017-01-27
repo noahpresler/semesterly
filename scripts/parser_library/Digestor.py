@@ -11,8 +11,9 @@ from django.utils.encoding import smart_str, smart_unicode
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "semesterly.settings")
 django.setup()
 from timetable.models import *
-from scripts.parser_library.InternalUtils import *
+from scripts.parser_library.internal_utils import *
 from scripts.parser_library.Logger import Logger
+from scripts.parser_library.internal_exceptions import DigestionError
 
 class DigestionAdapter:
 	def __init__(self, school, cached):
@@ -81,7 +82,7 @@ class DigestionAdapter:
 			else:
 				course_model = Course.objects.filter(school=self.school, code=section.course.code).first()
 				if course_model is None:
-					return # TODO - raise Error
+					raise DigestionError()
 
 		adapted = {}
 		if 'capacity' in section:
@@ -250,7 +251,7 @@ class Vommit(DigestionStrategy):
 		diffed = jsondiff.diff(c, dct, syntax='symmetric', dump=True)
 		diffed = json.loads(diffed)
 		# diffed.update({ '$what': dct })
-		self.logger.log_json(diffed)
+		self.logger.log(diffed)
 		return model, True
 
 
@@ -413,6 +414,3 @@ def main():
 
 if __name__ == '__main__':
 	main()
-
-class DigestionError(ValueError):
-	'''Raise when fails digestion invariant.'''
