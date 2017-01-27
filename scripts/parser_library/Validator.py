@@ -6,13 +6,13 @@
 import os, sys, re, jsonschema, argparse, httplib
 import simplejson as json
 from scripts.parser_library.Logger import Logger
-from scripts.parser_library.InternalUtils import *
+from scripts.parser_library.internal_utils import *
+from scripts.parser_library.internal_exceptions import JsonValidationError, JsonValidationWarning
 
 class Validator:
 	def __init__(self,
 		directory=None,
-		schema_directory='scripts/parser_library/schemas/',
-		log_filename='/dev/null'):
+		schema_directory='scripts/parser_library/schemas/'):
 
 		try:
 			schema_directory = os.environ['SEMESTERLY_HOME'] + '/' + schema_directory
@@ -23,7 +23,7 @@ class Validator:
 		if directory is None:
 			raise NotImplementedError('school directory must be defined as of now')
 
-		self.logger = Logger(log_filename)
+		self.logger = Logger()
 		self.directory = directory
 		self.schema_directory = schema_directory
 
@@ -52,7 +52,8 @@ class Validator:
 		try:
 			config = self.file_to_json(self.directory + 'config.json')
 		except IOError as e:
-			self.logger.log_error(e, note='config.json not defined')
+			e.message += ', config.json not defined'
+			self.logger.log(e)
 			exit(1)
 		self.validate_schema(config, *self.schema.config)
 		self.config = dotdict(config)
@@ -61,23 +62,12 @@ class Validator:
 	def validate_schema(self, subject, schema, resolver=None):
 		try:
 			jsonschema.Draft4Validator(schema, resolver=resolver).validate(subject)
-		except jsonschema.ValidationError as error:
-			self.logger.log_error(error, 
-				type='SUBJECT_DEFINITION',
-				schema=schema,
-				subject=subject)
-		except jsonschema.exceptions.SchemaError as error:
-			self.logger.log(error,
-				type='SCHEMA_DEFINITION',
-				schema=schema,
-				subject=subject)
-		except jsonschema.exceptions.RefResolutionError as error: # TODO
-			self.logger.log(error,
-				type='REFRESOLUTION_FAILURE',
-				schema=schema,
-				subject=subject)
-
-		# return subject # TODO - modifier vs accessor conventions?
+		except jsonschema.ValidationError as e:
+			self.logger.log(e)
+		except jsonschema.exceptions.SchemaError as e:
+			self.logger.log(e)
+		except jsonschema.exceptions.RefResolutionError as e:
+			self.logger.log(e)
 
 	def file_to_json(self, file, allow_duplicates=False):
 		j = None
@@ -88,8 +78,7 @@ class Validator:
 				else:
 					j = json.loads(f.read(), object_pairs_hook=Validator.dict_raise_on_duplicates)
 			except json.scanner.JSONDecodeError as e:
-				print file
-				self.logger.log('INVALID_JSON', e)
+				self.logger.log(e)
 				return None
 		return j
 
@@ -110,9 +99,8 @@ class Validator:
 					'textbook'  : lambda x: self.validate_textbook(x, schema=False),
 					'textbook_link': lambda x: self.validate_textbook_link(x, schema=False)
 				}[obj.kind](obj)
-			except JsonValidationError as error:
-				print 'ERROR:', error.message
-				print pretty_json(error.json)
+			except JsonValidationError as e:
+				self.logger.log(e)
 
 	def validate_course(self, course, schema=True, relative=True):
 		if not isinstance(course, dotdict):
@@ -200,13 +188,12 @@ class Validator:
 			if section.course.code not in self.validated:
 				raise JsonValidationError('course code "%s" is not defined' % (section.course.code), section)
 			if section.code in self.validated[section.course.code]:
-				self.validation_warning('for course "%s" section "%s" already defined'
-				 % (section.course.code, section.code), section)
+				self.validation_warning('multiple definitions for course "%s" section "%s" - %s already defined'
+				 % (section.course.code, section.code, section.year), section)
 			self.validated[section.course.code].add(section.code)
 
-	def validation_warning(self, message, j):
-		print 'WARNING:', message
-		print pretty_json(j)
+	def validation_warning(self, message, dct):
+		self.logger.log(JsonValidationWarning(message, dct))
 
 	def validate_meeting(self, meeting, schema=True, relative=True):
 		if not isinstance(meeting, dotdict):
@@ -372,7 +359,6 @@ class Validator:
 				directory['name'] = name
 			except IOError as e:
 				sys.stderr.write('ERROR: invalid directory path\n' + str(e))
-		print pretty_json(directory)
 		self.validate_schema(directory, *self.schema.directory)
 
 	@staticmethod
@@ -403,14 +389,6 @@ class Validator:
 			else:
 				 d[k] = v
 		return d
-
-class JsonValidationError(ValueError):
-	'''Raise when fails validation condition.'''
-
-	def __init__(self, message, json=None, *args):
-		self.message = message
-		self.json = json
-		super(JsonValidationError, self).__init__(message, message, json, *args)
 
 def get_args():
 	pass # TODO

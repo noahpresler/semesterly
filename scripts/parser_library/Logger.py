@@ -1,29 +1,88 @@
-# TODO
-# - handles for file
-# - handles for verbosity
+import sys, pipes, simplejson as json
+from datetime import datetime
+from scripts.parser_library.internal_utils import *
+from scripts.parser_library.internal_exceptions import JsonValidationError, JsonValidationWarning, DigestionError
 
-from scripts.parser_library.InternalUtils import *
+class Logger(object):
+	def __init__(self, logfile=None, errorfile=None):
+		if logfile:
+			# Remove special character formatting (ex: pretty_json)
+			t = pipes.Template()
+			t.append('sed "s,\x1B\[[0-9;]*[a-zA-Z],,g"', '--')
+			self.logfile = t.open(logfile, 'w')
+		else:
+			self.logfile = sys.stdout
 
+		if errorfile:
+			# Remove special character formatting
+			t = pipes.Template()
+			t.append('sed "s,\x1B\[[0-9;]*[a-zA-Z],,g"', '--')
+			self.errorfile = t.open(errorfile, 'w')
+		else:
+			self.errorfile = sys.stderr
 
-class Logger:
-	def __init__(self, filename=None, quiet=False):
-		self.quiet = quiet
-		if filename and not quiet:
-			self.file = open(filename, 'w+')
- 
-	def log_json(self, j):
-		if not j or len(j) == 0:
-			return
-		if not self.quiet:
-			print pretty_json(j)
+		self.first_json = False
 
-	def log_error(self, message, note='', priority=3, **kwargs):
-		print message
+	# datetime.now().strftime("%Y%m%d-%H%M%S")
 
-	def log(self, error, note='', priority=3):
-		print error
+	def log_exception(self, error):
+		output = '='*25 + '\n'
+		if isinstance(error, ValueError):
+			output += 'error: '
+			if isinstance(error, JsonValidationError):
+				output += error.message
+				if error.json:
+					output += '\n' + pretty_json(error.json)
+			elif isinstance(error, DigestionError):
+				output += error.message
+			else:
+				output += str(error)
+		elif isinstance(error, UserWarning):
+			output += 'warning: '
+			if isinstance(error, JsonValidationWarning):
+				output += error.message
+				if error.json:
+					output += '\n' + pretty_json(error.json)
+			else:
+				output += str(error)
+		else:
+			output += str(error)
+		self.errorfile.write(output + '\n')
 
-		# message = message(error)
-		# self.file.write(str(message))
-		# print message
-		# print error
+	def log_json(self, entry, part_of_list=True):
+		output = json.loads(entry)
+		if part_of_list:
+			output = '[' if self.first_json else ',' + output
+			self.first_json &= False # always set to zero
+		self.logfile.write(pretty_json(output))
+
+	def log_normal(self, entry):
+		self.logfile.write(str(entry) + '\n')
+
+	def log(self, entry):
+		if isinstance(entry, Exception):
+			self.log_exception(entry)
+		else:
+			try:
+				self.log_json(entry)
+			except json.scanner.JSONDecodeError:
+				self.log_normal(entry)
+
+class JsonListLogger(Logger):
+	def __init__(self, logfile=None, errorfile=None):
+		self.first = True # unset after open entry added
+		super(JsonListLogger, self).__init__(logfile, errorfile)
+
+	def open(self):
+		self.logfile.write('[\n')
+
+	def close(self):
+		self.logfile.write('\n]')
+
+	def log(self, entry):
+		output = ',' if not self.first else ''
+		self.first = False # always set to zero
+		if isinstance(entry, basestring):
+			entry = json.loads(entry)
+		output += '\t' + '\t'.join(pretty_json(entry).splitlines(True)) # preserve and tab each newline
+		self.logfile.write(output)
