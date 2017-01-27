@@ -6,6 +6,7 @@ const mapStateToProps = (state) => {
 	return {
 		isVisible: state.textbookModal.isVisible,
 		liveTimetableCourses: activeTimetable.courses.filter(c => !c.fake),
+		isLoading: state.timetables.isFetching
 	}
 }
 
