@@ -5,18 +5,22 @@
 
 import simplejson as json
 from pygments import highlight, lexers, formatters, filters
-from scripts.parser_library.Validator import Validator, JsonValidationError
-from InternalUtils import *
+from scripts.parser_library.Validator import Validator
+from scripts.parser_library.internal_exceptions import JsonValidationError, JsonValidationWarning
+from internal_utils import *
+from scripts.parser_library.Logger import Logger, JsonListLogger
 
 class Ingestor:
 
-	def __init__(self, school, directory='scripts/parser_library/ex_school/'):
+	def __init__(self, school, directory='scripts/parser_library/ex_school/', output=None):
 		self.map = {}
 		self.school = school
 		self.file = open(directory + 'data/courses.json', 'w') # TODO - warn if overwriting file
-		self.file.write('[')
 		self.validator = Validator(directory=directory)
 		self.map[''] = ''
+		self.logger = Logger()
+		self.json_logger = JsonListLogger(logfile=output)
+		self.json_logger.open()
 
 	def __setitem__(self, key, value):
 		self.map[key] = value
@@ -62,7 +66,7 @@ class Ingestor:
 				return self.map[key]
 		return None
 
-	def create_course(self):
+	def ingest_course(self):
 		''' Create course json from info in model map.
 
 		Returns:
@@ -98,14 +102,11 @@ class Ingestor:
 			'homepage': self.getchain('homepage', 'website'),
 		}
 		course = cleandict(course)
-		j = json.dumps(course, sort_keys=True, indent=4, separators=(',', ': '))
 		Ingestor.run_validator(lambda x: self.validator.validate_course(x), course)
-		print pretty_json(j)
-		self.file.write(j)
-		self.file.write(',')
+		self.json_logger.log(course)
 		return course
 
-	def create_section(self, course):
+	def ingest_section(self, course):
 		''' Create section json object from info in model map. 
 
 		Args:
@@ -146,19 +147,16 @@ class Ingestor:
 		}
 
 		section = cleandict(section)
-		j = json.dumps(section, sort_keys=True, indent=4, separators=(',', ': '))
 		Ingestor.run_validator(lambda x: self.validator.validate_section(x), section)
-		self.file.write(j)
-		self.file.write(',')
-		print pretty_json(j)
+		self.json_logger.log(section)
 		return section
 
-	def create_offerings(self, section):
-		self.create_meeting(section)
-	def create_offering(self, section):
-		self.create_meeting(section)
+	def ingest_offerings(self, section):
+		self.ingest_meeting(section)
+	def ingest_offering(self, section):
+		self.ingest_meeting(section)
 
-	def create_meeting(self, section):
+	def ingest_meeting(self, section):
 		''' Create meeting ingested json map.
 
 		Args:
@@ -193,11 +191,8 @@ class Ingestor:
 		}
 
 		meeting = cleandict(meeting)
-		j = json.dumps(meeting, sort_keys=True, indent=4, separators=(',', ': '))
 		Ingestor.run_validator(lambda x: self.validator.validate_meeting(x), meeting)
-		self.file.write(j)
-		self.file.write(',')
-		print pretty_json(j)
+		self.json_logger.log(meeting)
 		return meeting
 
 	# TODO - output to logger (should be integrated into validator itself) 
@@ -206,18 +201,11 @@ class Ingestor:
 		try:
 			validate(data)
 		except JsonValidationError as e:
-			print e.message
-			if e.json:
-				print pretty_json(e.json)
-			exit(1)
+			self.logger.log(e)
+		except JsonValidationWarning as e:
+			self.logger.log(e)
 
-	# TODO - close json list properly
+	# TODO - close json list properly on KeyBoardInterrupt
 	def wrap_up(self):
+		self.json_logger.close()
 		self.map.clear()
-		self.file.write(']')
-		self.file.close()
-		exit(1)
-
-	@staticmethod
-	def DEBUG():
-		pass # TODO
