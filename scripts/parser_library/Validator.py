@@ -5,8 +5,8 @@
 
 import os, sys, re, jsonschema, argparse, httplib
 import simplejson as json
-from Logger import Logger
-from InternalUtils import *
+from scripts.parser_library.Logger import Logger
+from scripts.parser_library.InternalUtils import *
 
 class Validator:
 	def __init__(self,
@@ -45,12 +45,15 @@ class Validator:
 			'datalist': schema_and_resolver(load('datalist.json')),
 			'course'  : schema_and_resolver(load('course_only.json')),
 			'section' : schema_and_resolver(load('section_only.json')),
-			'meeting' : schema_and_resolver(load('meeting_only.json'))
+			'meeting' : schema_and_resolver(load('meeting_only.json')),
+			'directory': schema_and_resolver(load('directory.json'))
 		})
 
-		# TODO - directory validation
-
-		config = self.file_to_json(self.directory + 'config.json')
+		try:
+			config = self.file_to_json(self.directory + 'config.json')
+		except IOError as e:
+			self.logger.log_error(e, note='config.json not defined')
+			exit(1)
 		self.validate_schema(config, *self.schema.config)
 		self.config = dotdict(config)
 		self.course_code_regex = re.compile(self.config.course_code_regex)
@@ -59,17 +62,20 @@ class Validator:
 		try:
 			jsonschema.Draft4Validator(schema, resolver=resolver).validate(subject)
 		except jsonschema.ValidationError as error:
-			self.logger.log('SUBJECT_DEFINITION', error, 
+			self.logger.log_error(error, 
+				type='SUBJECT_DEFINITION',
 				schema=schema,
 				subject=subject)
 		except jsonschema.exceptions.SchemaError as error:
-			self.logger.log('SCHEMA_DEFINITION', error,
+			self.logger.log(error,
+				type='SCHEMA_DEFINITION',
 				schema=schema,
 				subject=subject)
-		# except RefResolutionError as error: # TODO
-		# 	self.logger.log('UNKNOWN', error,
-		# 		schema=schema,
-		# 		subject=subject)
+		except jsonschema.exceptions.RefResolutionError as error: # TODO
+			self.logger.log(error,
+				type='REFRESOLUTION_FAILURE',
+				schema=schema,
+				subject=subject)
 
 		# return subject # TODO - modifier vs accessor conventions?
 
@@ -88,6 +94,7 @@ class Validator:
 		return j
 
 	def validate(self):
+		self.validate_directory(self.directory)
 		datalist = self.file_to_json(self.directory + 'data/courses.json')
 		self.validate_schema(datalist, *self.schema.datalist)
 		datalist = [ dotdict(data) for data in datalist ]
@@ -354,32 +361,19 @@ class Validator:
 		if grain < self.granularity:
 			self.granularity = grain
 
-	def validate_directory(self):
+	def validate_directory(self, directory):
 		if self.directory is None:
-			return
-
-		resolver = jsonschema.RefResolver('file://' + self.absolute_path_to_schema_base_directory, self.directory)
-		directory = Validator.path_to_dict(self.directory)
-
-		with open(os.path.join(self.absolute_path_to_schema_base_directory, 'directory.json'), 'r') as f:
+			sys.stderr.write('cannot validate None directory')
+			exit(1)
+		if isinstance(directory, str):
 			try:
-				self.directory_schema = json.load(f)
-			except JsonValidationError as e:
-				self.logger.log('DIRECTORY_SCHEMA_JSON', e)
-				exit(1)
-
-		print self.directory_schema.get('')
-		print directory.get('')
-		jsonschema.Draft4Validator(self.directory_schema, resolver=resolver).validate(directory)
-
-		try:
-			pass
-		except jsonschema.ValidationError as error:
-			self.logger.log('DIRECTORY_VALIDATION', error)
-		except jsonschema.exceptions.SchemaError as error:
-			self.logger.log('DIRECTORY_SCHEMA', error)
-		except Exception as error:
-			self.logger.log('UNKNOWN', error)
+				name = directory
+				directory = Validator.path_to_dict(directory)
+				directory['name'] = name
+			except IOError as e:
+				sys.stderr.write('ERROR: invalid directory path\n' + str(e))
+		print pretty_json(directory)
+		self.validate_schema(directory, *self.schema.directory)
 
 	@staticmethod
 	def path_to_json(path):
@@ -418,51 +412,16 @@ class JsonValidationError(ValueError):
 		self.json = json
 		super(JsonValidationError, self).__init__(message, message, json, *args)
 
-	@staticmethod
-	def schema_json_error(error):
-		print 'SCHEMA_JSON'
-		print error
-
-	@staticmethod
-	def schema_definition_error(error):
-		print 'SCHEMA_DEFINITION'
-		print error
-
-	@staticmethod
-	def subject_json_error(error):
-		print 'SUBJECT_JSON'
-		print error
-
-	@staticmethod
-	def subject_definition_error(error):
-		print 'SUBJECT_DEFINITION'
-		print error
-
-	@staticmethod
-	def extended_definition_error(error):
-		print 'EXTENDED DEFINITION'
-		print error
-
-	@staticmethod
-	def unknown_error(error):
-		print 'UNKNOWN'
-		print error
-
-	@staticmethod
-	def invalid_json_error(error):
-		print 'INVALID JSON'
-		print error
-
 def get_args():
-	pass
+	pass # TODO
 
 def check_args(args):
-	pass
+	pass # TODO
 
 def main():
 	v = Validator(
-		schema_directory='scripts/parser_library/schemas/',
-		directory='scripts/parser_library/ex_school/')
+			schema_directory='scripts/parser_library/schemas/',
+			directory='scripts/parser_library/ex_school/')
 
 	v.validate()
 
