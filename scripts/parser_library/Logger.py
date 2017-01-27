@@ -4,10 +4,11 @@
 
 from scripts.parser_library.InternalUtils import *
 
+
 class Logger:
 	def __init__(self, filename=None, quiet=False):
 		self.quiet = quiet
-		if filename:
+		if filename and not quiet:
 			self.file = open(filename, 'w+')
  
 	def log_json(self, j):
@@ -16,7 +17,7 @@ class Logger:
 		if not self.quiet:
 			print pretty_json(j)
 
-	def log_error(self, message, note='', priority=3):
+	def log_error(self, message, note='', priority=3, **kwargs):
 		print message
 
 	def log(self, error, note='', priority=3):
