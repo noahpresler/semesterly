@@ -12,7 +12,7 @@ os.environ.setdefault("DJANGO_SETTINGS_MODULE", "semesterly.settings")
 django.setup()
 from timetable.models import *
 from scripts.parser_library.internal_utils import *
-from scripts.parser_library.Logger import Logger
+from scripts.parser_library.Logger import Logger, JsonListLogger
 from scripts.parser_library.internal_exceptions import DigestionError
 
 class DigestionAdapter:
@@ -217,6 +217,11 @@ class DigestionStrategy:
 
 class Vommit(DigestionStrategy):
 	def __init__(self):
+		self.json_logger = JsonListLogger()
+		self.json_logger.open()
+
+		self.defaults = Vommit.get_model_defaults()
+
 		super(Vommit, self).__init__()
 
 	@staticmethod
@@ -224,18 +229,18 @@ class Vommit(DigestionStrategy):
 		return {k: v for k,v in dct.items() if k != 'defaults'}
 
 	def digest_course(self, kwargs):
-		model, new = self.diff(kwargs, Course.objects.filter(**Vommit.exclude(kwargs)).first())
+		model, new = self.diff('course', kwargs, Course.objects.filter(**Vommit.exclude(kwargs)).first())
 		return model
 
 	def digest_section(self, kwargs):
-		model, new = self.diff(kwargs, Section.objects.filter(**Vommit.exclude(kwargs)).first())
+		model, new = self.diff('section', kwargs, Section.objects.filter(**Vommit.exclude(kwargs)).first())
 		return model
 
 	def digest_offering(self, kwargs):
-		model, new = self.diff(kwargs, Offering.objects.filter(**Vommit.exclude(kwargs)).first())
+		model, new = self.diff('offering', kwargs, Offering.objects.filter(**Vommit.exclude(kwargs)).first())
 		return model
 
-	def diff(self, dct, model):
+	def diff(self, kind, dct, model, hide_defaults=True):
 		if dct is None or model is None:
 			return None, False
 		c = copy.deepcopy(model.__dict__)
@@ -248,12 +253,48 @@ class Vommit(DigestionStrategy):
 			for k in d.keys():
 				if k in blacklist:
 					del d[k]
-		diffed = jsondiff.diff(c, dct, syntax='symmetric', dump=True)
-		diffed = json.loads(diffed)
-		# diffed.update({ '$what': dct })
-		self.logger.log(diffed)
+		diffed = json.loads(jsondiff.diff(c, dct, syntax='symmetric', dump=True))
+		if hide_defaults and '$delete' in diffed:
+			self.remove_defaulted_keys(kind, diffed['$delete'])
+			if len(diffed['$delete']) == 0:
+				del diffed['$delete']
+		if len(diffed) > 0:
+			diffed.update({ '$what': dct })
+			self.json_logger.log(diffed)
 		return model, True
 
+	def remove_defaulted_keys(self, kind, dct):
+		for default in self.defaults[kind]:
+			if default in dct:
+				del dct[default]
+		return dct
+
+	@staticmethod
+	def get_model_defaults():
+
+		models = {
+			'course': Course,
+			'section': Section,
+			'offering': Offering,
+			'textbook': Textbook,
+			'textbook_link': TextbookLink,
+			'evaluation': Evaluation
+		}
+
+		defaults = {}
+
+		for model_name, model in models.items():
+			defaults[model_name] = {}
+			for field in model._meta.get_all_field_names():
+				try:
+					default = model._meta.get_field_by_name(field)[0].default
+				except AttributeError:
+					continue
+				if default is django.db.models.fields.NOT_PROVIDED:
+					continue
+				defaults[model_name][field] = default
+
+		return defaults
 
 class Absorb(DigestionStrategy):
 	def __init__(self, clean=True):
