@@ -32,7 +32,8 @@
 			"required": [ "code" ]
 		},
 		"code": {
-			"type": "string"
+			"type": "string",
+			"maxLength": 50
 		},
 		"term": {
 			"type": "string"
@@ -61,7 +62,8 @@
 		},
 		"type": {
 			"type": "string",
-			"minLength": 1
+			"minLength": 1,
+			"maxLength": 50
 		},
 		"fees": {
 			"oneOf": [
