@@ -55,16 +55,19 @@
 		"name": {
 			"oneOf": [
 				{
-					"type": "string"
+					"type": "string",
+					"maxLength": 200
 				},
 				{
 					"type": "object",
 					"properties": {
 						"first": {
-							"type": "string"
+							"type": "string",
+							"maxLength": 100
 						},
 						"last": {
-							"type": "string"
+							"type": "string",
+							"maxLength": 100
 						}
 					},
 					"additionalProperties": false,
