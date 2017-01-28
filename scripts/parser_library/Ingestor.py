@@ -56,6 +56,9 @@ class Ingestor:
 			l += smart_str(label) + ':' + smart_str(value) + '\n'
 		return l
 
+	def get(self, key, default=None):
+		return self.map.get(key, default)
+
 	def update(self, other=None, **kwargs):
 		if other is not None:
 			for k, v in other.items(): 
