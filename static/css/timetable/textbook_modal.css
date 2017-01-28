@@ -4,6 +4,15 @@
     overflow: auto;
 }
 
+.abnb-modal.textbook-modal > div {
+    height: 100%;
+}
+
+.abnb-modal.textbook-modal form {
+    height: 100%;
+    position: relative;
+}
+
 .textbook-modal #tb-list-container {
     padding: 10px 30px 30px 30px;
     max-height: 550px;
@@ -55,7 +64,7 @@
     width: 100%;
     border: 1px solid #ddd;
     position: absolute;
-    bottom: -65px;
+    bottom: 0px;
     background-color: #eee;
 }
 
@@ -125,7 +134,9 @@
     }
 
     .textbook-modal #tb-list-container {
-        max-height: 350px;
+        position: absolute;
+        top: 0;
+        bottom: 66px;
     }
 
     .textbook-modal .modal-footer p {
