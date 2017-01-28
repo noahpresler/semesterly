@@ -137,7 +137,6 @@ class Validator:
 		if relative:
 			if course.code in self.validated:
 				raise JsonValidationWarning('multiple definitions of course "%s"' % (course.code), course)
-				# self.validation_warning('multiple definitions of course "%s"' % (course.code), course) # TODO - should be warning
 			if course.code not in self.validated:
 				self.validated[course.code] = set()
 
@@ -192,7 +191,6 @@ class Validator:
 				raise JsonValidationError('course code "%s" is not defined' % (section.course.code), section)
 			if section.code in self.validated[section.course.code]:
 				raise JsonValidationWarning('multiple definitions for course "%s" section "%s" - %s already defined'
-				# self.validation_warning('multiple definitions for course "%s" section "%s" - %s already defined'
 				 % (section.course.code, section.code, section.year), section)
 			self.validated[section.course.code].add(section.code)
 

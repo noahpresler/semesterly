@@ -21,11 +21,11 @@ class Ingestor:
 		self.break_on_error = break_on_error
 		self.break_on_warning = break_on_warning
 
-		self.map = {}
 		self.school = school
-		self.file = open(directory + 'data/courses.json', 'w') # TODO - warn if overwriting file
-		self.validator = Validator(directory=directory)
+		self.map = {}
 		self.map[''] = ''
+
+		self.validator = Validator(directory=directory)
 		self.logger = Logger()
 		self.json_logger = JsonListLogger(logfile=output)
 		self.json_logger.open()
@@ -203,10 +203,11 @@ class Ingestor:
 		self.json_logger.log(meeting)
 		return meeting
 
-	# TODO - output to logger (should be integrated into validator itself) 
 	def run_validator(self, validate, data):
+		is_valid = False
 		try:
 			validate(data)
+			is_valid = True
 		except (jsonschema.exceptions.ValidationError, JsonValidationError) as e:
 			self.logger.log(e)
 			if self.break_on_error:
@@ -215,6 +216,8 @@ class Ingestor:
 			self.logger.log(e)
 			if self.break_on_warning:
 				raise e
+
+		return is_valid
 
 	# TODO - close json list properly on KeyBoardInterrupt
 	def wrap_up(self):
