@@ -58,7 +58,7 @@ class Ingestor:
 		return l
 
 	def get(self, key, default=None):
-		return self.get(key, default)
+		return self.map.get(key, default)
 
 	def update(self, other=None, **kwargs):
 		if other is not None:
