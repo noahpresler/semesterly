@@ -15,12 +15,10 @@ export class TextbookModal extends React.Component {
 	}
 	render() {
         let modalHeader =
-            <div id="modal-content">
-                <div id="modal-header">
-                    <h1>Your Textbooks</h1>
-                    <div id="modal-close" onClick={() => this.refs.modal.hide()}>
-                        <i className="fa fa-times"></i>
-                    </div>
+            <div id="modal-header">
+                <h1>Your Textbooks</h1>
+                <div id="modal-close" onClick={() => this.refs.modal.hide()}>
+                    <i className="fa fa-times"></i>
                 </div>
             </div>
         let modalStyle = {
@@ -148,9 +146,12 @@ export class TextbookModal extends React.Component {
                 }}
                 >
 
-                { modalHeader }
+                <div id="modal-content">
+                    { modalHeader }
 
-                { modalContent }
+                    { modalContent }
+                </div>
+
 
             </Modal>
         );
