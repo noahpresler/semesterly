@@ -144,20 +144,22 @@ class PeopleSoftParser(CourseParser):
 		self.ingest['section_type'] = subtitle.split('|')[2].strip()
 
 		# Place course info into course model
-		self.ingest['code'] 	= rtitle.group(1)
-		self.ingest['section'] 	= rtitle.group(2)
-		self.ingest['name'] 	= rtitle.group(3)
+		self.ingest['course_code'] 	= rtitle.group(1)
+		self.ingest['course_name'] 	= rtitle.group(3)
+		self.ingest['section_code'] = rtitle.group(2)
 		self.ingest['credits']	= float(re.match(r'(\d*).*', units).group(1))
-		self.ingest['descr'] 	= [
+		self.ingest['description'] 	= [
 			extract_info(self.ingest, descr.text) if descr else '',
 			extract_info(self.ingest, notes.text) if notes else '',
 			extract_info(self.ingest, info.text) if info else ''
 		]
-		self.ingest['units'] 	= re.match(r'(\d*).*', units).group(1)
 		self.ingest['size'] 	= int(capacity)
 		self.ingest['enrolment'] = int(enrollment)
 		self.ingest['instrs'] 	= ', '.join({instr.text for instr in instrs})
-		self.ingest['areas'] 	= ', '.join((extract_info(self.ingest, l) for l in re.sub(r'(<.*?>)', '\n', str(areas)).splitlines() if l.strip())) if areas else '' # FIXME -- small bug
+		self.ingest['areas'] 	= (extract_info(self.ingest, l) for l in re.sub(r'(<.*?>)', '\n', str(areas)).splitlines() if l.strip()) if areas else '' # FIXME -- small bug
+		# print 'areas:', areas
+		# print 'areas', list(self.ingest['areas'])
+		# print 'areas - geneds', list(self.ingest['geneds'])
 
 		course = self.ingest.ingest_course()
 		section = self.ingest.ingest_section(course)
