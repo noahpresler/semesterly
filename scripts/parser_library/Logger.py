@@ -21,8 +21,6 @@ class Logger(object):
 		else:
 			self.errorfile = sys.stderr
 
-		self.first_json = False
-
 	# datetime.now().strftime("%Y%m%d-%H%M%S")
 
 	def log_exception(self, error):
@@ -49,12 +47,10 @@ class Logger(object):
 			output += str(error)
 		self.errorfile.write(output + '\n')
 
-	def log_json(self, entry, part_of_list=True):
-		output = json.loads(entry)
-		if part_of_list:
-			output = '[' if self.first_json else ',' + output
-			self.first_json &= False # always set to zero
-		self.logfile.write(pretty_json(output))
+	def log_json(self, entry):
+		if isinstance(entry, basestring):
+			entry = json.loads(entry)
+		self.logfile.write(pretty_json(entry))
 
 	def log_normal(self, entry):
 		self.logfile.write(str(entry) + '\n')
@@ -77,12 +73,12 @@ class JsonListLogger(Logger):
 		self.logfile.write('[\n')
 
 	def close(self):
-		self.logfile.write('\n]')
+		self.logfile.write(']\n')
 
 	def log(self, entry):
 		output = ',' if not self.first else ''
 		self.first = False # always set to zero
 		if isinstance(entry, basestring):
 			entry = json.loads(entry)
-		output += '\t' + '\t'.join(pretty_json(entry).splitlines(True)) # preserve and tab each newline
+		output += '  ' + '  '.join(pretty_json(entry).splitlines(True)) # preserve and tab each newline
 		self.logfile.write(output)
