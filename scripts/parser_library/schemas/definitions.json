@@ -46,7 +46,8 @@
 				"type": "string"
 			},
 			"campus": {
-				"type": "string"
+				"type": "string",
+				"maxLength": 300
 			},
 			"building": {
 				"type": "string"
@@ -110,10 +111,12 @@
 		"type": "object",
 		"properties": {
 			"code": {
-				"type": "string"
+				"type": "string",
+				"maxLength": 20
 			},
 			"name": {
-				"type": "string"
+				"type": "string",
+				"maxLength": 100
 			},
 			"enrollment": {
 				"type": "object",
