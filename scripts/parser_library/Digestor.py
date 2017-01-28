@@ -3,7 +3,7 @@
 # @author   Michael N. Miller
 # @date     1/22/17
 
-import django, datetime, os, copy, jsondiff, simplejson as json
+import django, datetime, os, sys, copy, jsondiff, simplejson as json
 from pygments import highlight, lexers, formatters, filters
 from abc import ABCMeta, abstractmethod
 
@@ -240,6 +240,9 @@ class Vommit(DigestionStrategy):
 		model, new = self.diff('offering', kwargs, Offering.objects.filter(**Vommit.exclude(kwargs)).first())
 		return model
 
+	def wrap_up(self):
+		self.json_logger.close()
+
 	def diff(self, kind, dct, model, hide_defaults=True):
 		if dct is None or model is None:
 			return None, False
@@ -349,14 +352,22 @@ class Absorb(DigestionStrategy):
 		update_object.save()
 
 class Burp(DigestionStrategy):
-	def __init__(self, cached):
+	def __init__(self):
 		super(Burp, self).__init__()
 
 class Digestor:
-	def __init__(self, school, data_file, log_file=None, quiet=False):
+	def __init__(self, school, data=None, log_file=None, diff=True, dry=True):
 		self.school = school
-		with open(data_file, 'r') as f:
-			self.data = json.load(f)
+
+		if data:
+			if isinstance(data, dict):
+				self.data = data
+			else:
+				with open(data, 'r') as f:
+					self.data = json.load(f)
+		else:
+			self.data = json.load(sys.stdin)
+
 		self.data = [ dotdict(obj) for obj in self.data ]
 
 		self.cached = dotdict({
@@ -365,29 +376,30 @@ class Digestor:
 		})
 
 		self.adapter = DigestionAdapter(school, self.cached)
-		self.strategy = Vommit()
+
+		self.diff = diff
+		self.dry = dry
+		self.set_strategy(diff, dry)
 
 	def set_strategy(self, diff, dry):
 		if diff and dry:
 			self.strategy = Vommit() # diff only
 		elif not diff and not dry:
-			self.strategy = Absorb() # load db only
+			self.strategy = Absorb() # load db only + clean
 		elif diff and not dry:
 			self.strategy = Burp() # load db and log diff
 		else: # nothing to do...
 			sys.stderr.write('Nothing to run.')
 			exit(1)
 
-	def digest(self, diff=True, dry=True):
+	def digest(self):
 		# TODO - handle single object not in list
-
-		self.set_strategy(diff, dry)
 
 		for obj in self.data:
 			# try:
 			res = {
 				'course': lambda x: self.digest_course(x),
-				'section': lambda x: self.digest_section(x, clean=not diff),
+				'section': lambda x: self.digest_section(x),
 				'meeting': lambda x: self.digest_meeting(x),
 				'instructor': lambda x: self.digest_instructor(x),
 				'final_exam': lambda x: self.digest_final_exam(x),
@@ -411,7 +423,7 @@ class Digestor:
 
 		return course_model
 
-	def digest_section(self, section, course_model=None, clean=True):
+	def digest_section(self, section, course_model=None):
 		''' Create section in database from info in model map.
 
 		Args:
@@ -446,12 +458,16 @@ class Digestor:
 		for offering in self.adapter.adapt_meeting(meeting):
 			offering_model = self.strategy.digest_offering(offering)
 			offering_models.append(offering_model)
-
+			# TODO - could yield here
 		return offering_models
 
+	def wrap_up(self):
+		self.strategy.wrap_up()
+
 def main():
-	d = Digestor('chapman', '/home/mike/Documents/semesterly/scripts/parser_library/ex_school/data/courses.json')
+	d = Digestor('chapman',)
 	d.digest()
+	d.wrap_up()
 
 if __name__ == '__main__':
 	main()
