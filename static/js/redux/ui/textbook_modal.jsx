@@ -18,6 +18,9 @@ export class TextbookModal extends React.Component {
             <div id="modal-content">
                 <div id="modal-header">
                     <h1>Your Textbooks</h1>
+                    <div id="modal-close" onClick={() => this.refs.modal.hide()}>
+                        <i className="fa fa-times"></i>
+                    </div>
                 </div>
             </div>
         let modalStyle = {
