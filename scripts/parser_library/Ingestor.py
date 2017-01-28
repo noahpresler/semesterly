@@ -26,6 +26,7 @@ class Ingestor:
 		self.map[''] = ''
 
 		self.validator = Validator(directory=directory)
+		# TODO - validate directory
 		self.logger = Logger()
 		self.json_logger = JsonListLogger(logfile=output)
 		self.json_logger.open()
@@ -57,7 +58,7 @@ class Ingestor:
 		return l
 
 	def get(self, key, default=None):
-		return self.map.get(key, default)
+		return self.get(key, default)
 
 	def update(self, other=None, **kwargs):
 		if other is not None:
@@ -99,17 +100,17 @@ class Ingestor:
 			},
 			'code': self.getchain('code', 'course_code'),
 			'name': self.getchain('name', 'course_name'),
-			'department': self.map.get('department'),
+			'department': self.get('department'),
 			'credits': self.getchain('credits', 'num_credits'),
 			'prerequisites': make_list(self.getchain('prerequisites', 'prereqs')),
 			'corequisites': make_list(self.getchain('corequisites', 'coreqs')),
-			'exclusions': make_list(self.map.get('exclusions')),
+			'exclusions': make_list(self.get('exclusions')),
 			'description': make_list(self.getchain('description', 'descr')),
-			'areas': self.map.get('areas'),
-			'level': self.map.get('level'),
-			'cores': make_list(self.map.get('cores')),
-			'geneds': make_list(self.map.get('geneds')),
-			'sections': self.map.get('sections'),
+			'areas': self.get('areas'),
+			'level': self.get('level'),
+			'cores': make_list(self.get('cores')),
+			'geneds': make_list(self.get('geneds')),
+			'sections': self.get('sections'),
 			'homepage': self.getchain('homepage', 'website'),
 		}
 		course = cleandict(course)
@@ -144,17 +145,17 @@ class Ingestor:
 			},
 			'code': self.getchain('section_code', 'section'), # NOTE: design conflict with code in course
 			'term': self.getchain('term', 'semester'),
-			'year': self.map.get('year'), # NOTE: should be required
-			'instructors': self.map.get('instructors'),
+			'year': self.get('year'), # NOTE: should be required
+			'instructors': self.get('instructors'),
 			'capacity': self.getchain('capacity', 'size'),
 			'enrollment': self.getchain('enrollment', 'enrolment'), # NOTE: change to enrollment
-			'waitlist': self.map.get('waitlist'),
-			'waitlist_size': self.map.get('waitlist_size'),
-			'remaining_seats': self.map.get('remaining_seats'),
+			'waitlist': self.get('waitlist'),
+			'waitlist_size': self.get('waitlist_size'),
+			'remaining_seats': self.get('remaining_seats'),
 			'type': self.getchain('type', 'section_type'),
 			'fees': self.getchain('fees', 'fee'),
-			'final_exam': self.map.get('final_exam'),
-			'meetings': self.map.get('offerings')
+			'final_exam': self.get('final_exam'),
+			'meetings': self.get('offerings')
 		}
 
 		section = cleandict(section)
@@ -198,7 +199,7 @@ class Ingestor:
 			'days': make_list(self.getchain('days', 'day')),
 			'dates': make_list(self.getchain('dates', 'date')),
 			'time': self.map['time'],
-			'location': self.map.get('location')
+			'location': self.get('location')
 		}
 
 		meeting = cleandict(meeting)
