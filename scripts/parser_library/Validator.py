@@ -60,14 +60,11 @@ class Validator:
 		self.course_code_regex = re.compile(self.config.course_code_regex)
 
 	def validate_schema(self, subject, schema, resolver=None):
-		try:
-			jsonschema.Draft4Validator(schema, resolver=resolver).validate(subject)
-		except jsonschema.ValidationError as e:
-			self.logger.log(e)
-		except jsonschema.exceptions.SchemaError as e:
-			self.logger.log(e)
-		except jsonschema.exceptions.RefResolutionError as e:
-			self.logger.log(e)
+		jsonschema.Draft4Validator(schema, resolver=resolver).validate(subject)
+		# except jsonschema.exceptions.SchemaError as e:
+		# 	raise e
+		# except jsonschema.exceptions.RefResolutionError as e:
+		# 	raise e
 
 	def file_to_json(self, file, allow_duplicates=False):
 		j = None
@@ -79,10 +76,9 @@ class Validator:
 					j = json.loads(f.read(), object_pairs_hook=Validator.dict_raise_on_duplicates)
 			except json.scanner.JSONDecodeError as e:
 				self.logger.log(e)
-				return None
 		return j
 
-	def validate(self):
+	def validate(self, break_on_error=False, break_on_warning=False):
 		self.validate_directory(self.directory)
 		datalist = self.file_to_json(self.directory + 'data/courses.json')
 		self.validate_schema(datalist, *self.schema.datalist)
@@ -101,6 +97,12 @@ class Validator:
 				}[obj.kind](obj)
 			except JsonValidationError as e:
 				self.logger.log(e)
+				if break_on_error:
+					raise e
+			except JsonValidationWarning as e:
+				self.logger.log(e)
+				if break_on_warning:
+					raise e
 
 	def validate_course(self, course, schema=True, relative=True):
 		if not isinstance(course, dotdict):
@@ -134,7 +136,8 @@ class Validator:
 
 		if relative:
 			if course.code in self.validated:
-				self.validation_warning('multiple definitions of course "%s"' % (course.code), course) # TODO - should be warning
+				raise JsonValidationWarning('multiple definitions of course "%s"' % (course.code), course)
+				# self.validation_warning('multiple definitions of course "%s"' % (course.code), course) # TODO - should be warning
 			if course.code not in self.validated:
 				self.validated[course.code] = set()
 
@@ -188,7 +191,8 @@ class Validator:
 			if section.course.code not in self.validated:
 				raise JsonValidationError('course code "%s" is not defined' % (section.course.code), section)
 			if section.code in self.validated[section.course.code]:
-				self.validation_warning('multiple definitions for course "%s" section "%s" - %s already defined'
+				raise JsonValidationWarning('multiple definitions for course "%s" section "%s" - %s already defined'
+				# self.validation_warning('multiple definitions for course "%s" section "%s" - %s already defined'
 				 % (section.course.code, section.code, section.year), section)
 			self.validated[section.course.code].add(section.code)
 
@@ -204,7 +208,7 @@ class Validator:
 			raise JsonValidationError('meeting object must be of kind "instructor"', meeting)
 		if 'course' in meeting and self.course_code_regex.match(meeting.course.code) is None:
 			raise JsonValidationError('course code "%s" does not match regex \'%s\''
-			 % (course.code, self.config.course_code_regex), meeting)
+			 % (meeting.course.code, self.config.course_code_regex), meeting)
 		if 'time' in meeting:
 			try:
 				self.validate_time_range(meeting.time)
@@ -389,6 +393,11 @@ class Validator:
 			else:
 				 d[k] = v
 		return d
+
+	@staticmethod
+	def json_is_equal(a, b):
+		a, b = json.dumps(a, sort_keys=True), json.dumps(b, sort_keys=True)
+		return a == b
 
 def get_args():
 	pass # TODO
