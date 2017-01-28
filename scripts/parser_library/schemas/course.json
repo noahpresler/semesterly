@@ -20,10 +20,12 @@
 			"additionalProperties": false
 		},
 		"code": {
-			"type": "string"
+			"type": "string",
+			"maxLength": 20
 		},
 		"name": {
-			"type": "string"
+			"type": "string",
+			"maxLength": 250
 		},
 		"credits": {
 			"type": "number",
@@ -99,8 +101,9 @@
 				"type": "string"
 			}
 		},
-		"formerly": {
-			"type": "string"
+		"same_as": {
+			"type": "string",
+			"maxLength": 20
 		},
 		"sections": {
 			"type": "array",
