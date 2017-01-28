@@ -1,7 +1,6 @@
 .abnb-modal.textbook-modal {
     max-width: 600px;
     height:85%;
-    max-height: 700px;
     overflow: auto;
 }
 
@@ -111,4 +110,31 @@
     text-align: center;
     font-weight: 300;
     margin-top: 15px;
+}
+
+@media(max-width: 776px) {
+
+    .signup-modal #features{
+       padding: 0px 10px 10px 10px;
+       width: 100%;
+       font-size: 17px;
+    }
+
+    .textbook-modal #modal-header h1 {
+        font-size: 20px;
+    }
+
+    .textbook-modal #tb-list-container {
+        max-height: 350px;
+    }
+
+    .textbook-modal .modal-footer p {
+        display: none;
+    }
+
+    .abnb-modal.textbook-modal {
+        max-width: 600px;
+        height:100%;
+        overflow: auto;
+    }
 }
