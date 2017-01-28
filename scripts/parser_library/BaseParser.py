@@ -15,7 +15,7 @@ from scripts.parser_library.Extractor import Extractor
 # 	time.sleep(0.02)
 
 # bar = progressbar.ProgressBar(redirect_stdout=True)
-# for i in range(100):
+# for i in range(50):
 # 	print 'Some text', i
 # 	time.sleep(0.1)
 # 	bar.update(i)

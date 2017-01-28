@@ -3,7 +3,7 @@
 # @author   Michael N. Miller
 # @date     1/13/17
 
-import simplejson as json
+import simplejson as json, jsonschema
 from pygments import highlight, lexers, formatters, filters
 from scripts.parser_library.Validator import Validator
 from scripts.parser_library.internal_exceptions import JsonValidationError, JsonValidationWarning
@@ -12,7 +12,15 @@ from scripts.parser_library.Logger import Logger, JsonListLogger
 
 class Ingestor:
 
-	def __init__(self, school, directory='scripts/parser_library/ex_school/', output=None):
+	def __init__(self, school, 
+		directory='scripts/parser_library/ex_school/', 
+		output=None, 
+		break_on_error=True, 
+		break_on_warning=False):
+
+		self.break_on_error = break_on_error
+		self.break_on_warning = break_on_warning
+
 		self.map = {}
 		self.school = school
 		self.file = open(directory + 'data/courses.json', 'w') # TODO - warn if overwriting file
@@ -102,7 +110,7 @@ class Ingestor:
 			'homepage': self.getchain('homepage', 'website'),
 		}
 		course = cleandict(course)
-		Ingestor.run_validator(lambda x: self.validator.validate_course(x), course)
+		self.run_validator(lambda x: self.validator.validate_course(x), course)
 		self.json_logger.log(course)
 		return course
 
@@ -147,7 +155,7 @@ class Ingestor:
 		}
 
 		section = cleandict(section)
-		Ingestor.run_validator(lambda x: self.validator.validate_section(x), section)
+		self.run_validator(lambda x: self.validator.validate_section(x), section)
 		self.json_logger.log(section)
 		return section
 
@@ -191,19 +199,22 @@ class Ingestor:
 		}
 
 		meeting = cleandict(meeting)
-		Ingestor.run_validator(lambda x: self.validator.validate_meeting(x), meeting)
+		self.run_validator(lambda x: self.validator.validate_meeting(x), meeting)
 		self.json_logger.log(meeting)
 		return meeting
 
 	# TODO - output to logger (should be integrated into validator itself) 
-	@staticmethod
-	def run_validator(validate, data):
+	def run_validator(self, validate, data):
 		try:
 			validate(data)
-		except JsonValidationError as e:
+		except (jsonschema.exceptions.ValidationError, JsonValidationError) as e:
 			self.logger.log(e)
+			if self.break_on_error:
+				raise e
 		except JsonValidationWarning as e:
 			self.logger.log(e)
+			if self.break_on_warning:
+				raise e
 
 	# TODO - close json list properly on KeyBoardInterrupt
 	def wrap_up(self):
