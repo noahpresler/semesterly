@@ -18,6 +18,9 @@ export class SaveCalendarModal extends React.Component {
                 <div id="modal-header">
                     <div className="header-pic" style={{backgroundImage: 'url(/static/img/addtocalendarfeature.png)'}}></div>
                     <h1>Export calendar</h1>
+                    <div id="modal-close" onClick={() => this.refs.modal.hide()}>
+                        <i className="fa fa-times"></i>
+                    </div>
                 </div>
             </div>
         let modalStyle = {
