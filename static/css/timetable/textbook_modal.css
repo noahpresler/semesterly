@@ -1,8 +1,16 @@
 .abnb-modal.textbook-modal {
     max-width: 600px;
     height:85%;
-    max-height: 700px;
     overflow: auto;
+}
+
+.abnb-modal.textbook-modal > div {
+    height: 100%;
+}
+
+.abnb-modal.textbook-modal form {
+    height: 100%;
+    position: relative;
 }
 
 .textbook-modal #tb-list-container {
@@ -56,7 +64,7 @@
     width: 100%;
     border: 1px solid #ddd;
     position: absolute;
-    bottom: -65px;
+    bottom: 0px;
     background-color: #eee;
 }
 
@@ -111,4 +119,33 @@
     text-align: center;
     font-weight: 300;
     margin-top: 15px;
+}
+
+@media(max-width: 776px) {
+
+    .signup-modal #features{
+       padding: 0px 10px 10px 10px;
+       width: 100%;
+       font-size: 17px;
+    }
+
+    .textbook-modal #modal-header h1 {
+        font-size: 20px;
+    }
+
+    .textbook-modal #tb-list-container {
+        position: absolute;
+        top: 0;
+        bottom: 66px;
+    }
+
+    .textbook-modal .modal-footer p {
+        display: none;
+    }
+
+    .abnb-modal.textbook-modal {
+        max-width: 600px;
+        height:100%;
+        overflow: auto;
+    }
 }
