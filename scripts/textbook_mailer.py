@@ -67,7 +67,7 @@ for student_id in students:
         recipient = student.user.email
         msg = MIMEText(msg_html.encode('utf-8'),'html')
 
-        msg['Subject'] = "Your Textbooks from Semester.ly"
+        msg['Subject'] = "Happy First Day of Classes - Textbooks from Semester.ly"
         msg['From'] = sender
         msg['To'] = recipient
         print "Sending to: " + str(recipient)
