@@ -14,11 +14,13 @@
 }
 
 .textbook-modal #tb-list-container {
-    padding: 10px 30px 30px 30px;
-    max-height: 550px;
-    min-height: 300px;
+    padding: 10px 30px 75px;
+    height: 100%;
+    width: 100%;
+    position: absolute;
+    top: 0;
+    bottom: 66px;
     overflow: scroll;
-
 }
 
 .abnb-modal h3.modal-module-header {
