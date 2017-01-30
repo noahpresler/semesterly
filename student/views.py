@@ -438,7 +438,7 @@ def add_tt_to_gcal(request):
     else:
         #ignore year, year is set to current year
         sem_start = datetime.datetime(2017,1,30,17,0,0)
-        sem_end = datetime.datetime(2017,5,20,17,0,0)
+        sem_end = datetime.datetime(2017,5,5,17,0,0)
 
     #add events
     for course in tt['courses']:
