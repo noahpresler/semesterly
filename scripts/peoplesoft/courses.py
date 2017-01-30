@@ -38,9 +38,9 @@ class PeopleSoftParser(CourseParser):
 	}
 
 	def __init__(self, school, url, do_tbks=False):
+		super(PeopleSoftParser, self).__init__(school)
 		self.base_url = url
 		self.do_tbks = do_tbks
-		self.ingest = Ingestor(school) # Model(School)
 		self.requester = Requester()
 		self.actions = {
 			'adv_search':	'DERIVED_CLSRCH_SSR_EXPAND_COLLAPS$149$$1',
@@ -55,7 +55,7 @@ class PeopleSoftParser(CourseParser):
 		}
 
 	def start(self, **kwargs):
-		pass # TODO
+		self.parse(kwargs['years'], kwargs)
 
 	def parse(self, years, **kwargs):
 
