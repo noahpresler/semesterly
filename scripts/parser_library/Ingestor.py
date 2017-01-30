@@ -16,10 +16,13 @@ class Ingestor:
 		directory='scripts/parser_library/ex_school/', 
 		output=None, 
 		break_on_error=True, 
-		break_on_warning=False):
+		break_on_warning=False,
+		update_progress=lambda **kwargs: None):
 
 		self.break_on_error = break_on_error
 		self.break_on_warning = break_on_warning
+
+		self.update_progress = update_progress
 
 		self.school = school
 		self.map = {}
@@ -30,6 +33,35 @@ class Ingestor:
 		self.logger = Logger()
 		self.json_logger = JsonListLogger(logfile=output)
 		self.json_logger.open()
+
+		# initialize counters
+		count = {
+			'valid': 0,
+			'total': 0
+		}
+		self.counter = {
+			'courses': {
+				'valid': 0,
+				'total': 0
+			},
+			'sections': {
+				'valid': 0,
+				'total': 0
+			},
+			'meetings': {
+				'valid': 0,
+				'total': 0
+			},
+			'textbooks': {
+				'valid': 0,
+				'total': 0
+			},
+			'evaluations': count,
+			'_format': {
+				'function': lambda counter: '%s/%s' % (counter['valid'], counter['total']),
+				'label': 'valid/total'
+			}
+		}
 
 	def __setitem__(self, key, value):
 		self.map[key] = value
@@ -78,6 +110,9 @@ class Ingestor:
 				return self.map[key]
 		return None
 
+	def get_counters(self):
+		return self.counters
+
 	def ingest_course(self):
 		''' Create course json from info in model map.
 
@@ -114,8 +149,12 @@ class Ingestor:
 			'homepage': self.getchain('homepage', 'website'),
 		}
 		course = cleandict(course)
-		self.run_validator(lambda x: self.validator.validate_course(x), course)
+		is_valid = self.run_validator(lambda x: self.validator.validate_course(x), course)
+		self.counter['courses']['total'] += 1
+		if is_valid:
+			self.counter['courses']['valid'] += 1
 		self.json_logger.log(course)
+		self.update_progress(mode='ingesting', **self.counter)
 		return course
 
 	def ingest_section(self, course):
@@ -159,8 +198,12 @@ class Ingestor:
 		}
 
 		section = cleandict(section)
-		self.run_validator(lambda x: self.validator.validate_section(x), section)
+		is_valid = self.run_validator(lambda x: self.validator.validate_section(x), section)
+		self.counter['sections']['total'] += 1
+		if is_valid:
+			self.counter['sections']['valid'] += 1
 		self.json_logger.log(section)
+		self.update_progress(mode='ingesting', **self.counter)
 		return section
 
 	def ingest_offerings(self, section):
@@ -203,8 +246,12 @@ class Ingestor:
 		}
 
 		meeting = cleandict(meeting)
-		self.run_validator(lambda x: self.validator.validate_meeting(x), meeting)
+		is_valid = self.run_validator(lambda x: self.validator.validate_meeting(x), meeting)
+		self.counter['meetings']['total'] += 1
+		if is_valid:
+			self.counter['meetings']['valid'] += 1
 		self.json_logger.log(meeting)
+		self.update_progress(mode='ingesting', **self.counter)
 		return meeting
 
 	def run_validator(self, validate, data):

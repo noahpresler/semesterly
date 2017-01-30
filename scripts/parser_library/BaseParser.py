@@ -1,32 +1,12 @@
 import os, time, progressbar, argparse, re
 
 from abc import ABCMeta, abstractmethod
+
+import time, progressbar
+
 from scripts.parser_library.Requester import Requester
 from scripts.parser_library.Ingestor import Ingestor
 from scripts.parser_library.Extractor import Extractor
-
-# bar = progressbar.ProgressBar(max_value=progressbar.UnknownLength)
-# for i in range(20):
-# 	time.sleep(0.1)
-# 	bar.update(i)
-
-# bar = progressbar.ProgressBar()
-# for i in bar(range(100)):
-# 	time.sleep(0.02)
-
-# bar = progressbar.ProgressBar(redirect_stdout=True)
-# for i in range(50):
-# 	print 'Some text', i
-# 	time.sleep(0.1)
-# 	bar.update(i)
-
-# bar = progressbar.ProgressBar(widgets=[
-# 	' [', progressbar.Timer(), '] ',
-# 	progressbar.Bar(),
-# 	' (', progressbar.ETA(), ') ',
-# ])
-# for i in bar(range(20)):
-# 	time.sleep(0.1)
 
 class BaseParser:
 	__metaclass__ = ABCMeta
@@ -34,17 +14,52 @@ class BaseParser:
 	def __init__(self, school):
 		self.school = school
 		self.requester = Requester()
-		self.ingest = Ingestor(school)
-		self.extract = Extractor()
+		self.ingest = Ingestor(school, update_progress=lambda **kwargs: self.update_progress(**kwargs))
+
+		# Set progress bar to long or short dependent on terminal width
+		if progressbar.utils.get_terminal_size()[0] < 70:
+			self.progressbar = progressbar.ProgressBar(
+				# redirect_stdout=True,
+				# redirect_stderr=True,
+				max_value=progressbar.UnknownLength,
+				widgets=[
+					' (', self.school, ') ',
+					progressbar.FormatLabel('%(value)s')
+				])
+		else:
+			self.progressbar = progressbar.ProgressBar(
+				# redirect_stdout=True,
+				# redirect_stderr=True,
+				max_value=progressbar.UnknownLength,
+				widgets=[
+					' (', self.school, ')',
+					' [', progressbar.Timer(), '] ',
+					progressbar.FormatLabel('%(value)s')
+				])
 
 	@abstractmethod
 	def start(self, **kwargs): pass
+
+	def update_progress(self, **kwargs):
+		'''Format progress bar and readjust size to fit terminal width.
+		Two progress bars are defined in order to handle cramped scenarios more naturally. '''
+
+		mode = ''
+		if 'mode' in kwargs:
+			mode = '==%s==' % (kwargs['mode'].title())
+
+		format_stats = kwargs['_format']['function']
+		contents = {key: value for key, value in kwargs.items() if key != 'mode' and key != '_format'}
+		label_string = lambda x=None: ' | '.join('%s: %s' % (key[:x].title(), format_stats(contents[key])) for key in contents if contents[key]['total'] > 0)
+		formatted_string = '%s | %s' % (mode, label_string(3))
+
+		self.progressbar.update(formatted_string)
 
 class CourseParser(BaseParser):
 	__metaclass__ = ABCMeta
 
 	def __init__(self, school):
-		Parser.__init__(self, school)
+		super(CourseParser, self).__init__(school)
 
 	@abstractmethod
 	def start(self, **kwargs): pass
