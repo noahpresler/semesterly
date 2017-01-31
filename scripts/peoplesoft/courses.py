@@ -86,9 +86,15 @@ class PeopleSoftParser(CourseParser):
 				params.update(self.action('class_search'))
 
 				dept_key = soup.find('select', id=re.compile(r'SSR_CLSRCH_WRK_SUBJECT_SRCH\$\d'))['id']
-				depts = {dept['value']: dept.text for dept in self.find_all['depts'](soup)}
+				departments = {dept['value']: dept.text for dept in self.find_all['depts'](soup)}
 
-				for dept_code, dept_name in depts.items():
+				if self.options.get('department', 'all') != 'all':
+					department_code = self.options['departments']
+					if department_code not in departments:
+						raise CourseParserError('invalid department code')
+					departments = {department_code: departments[department_code]}
+
+				for dept_code, dept_name in departments.items():
 					self.ingest['dept_name'] = dept_name
 					self.ingest['dept_code'] = dept_code
 					print '> Parsing courses in department', dept_name
