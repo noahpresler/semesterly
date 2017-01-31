@@ -11,14 +11,17 @@ from scripts.parser_library.Extractor import Extractor
 class BaseParser:
 	__metaclass__ = ABCMeta
 
-	def __init__(self, school):
+	def __init__(self, school, **kwargs):
 		self.school = school
 		self.requester = Requester()
 		self.ingest = Ingestor(school, update_progress=lambda **kwargs: self.update_progress(**kwargs))
 
 		# Set progress bar to long or short dependent on terminal width
+		self.progressbar = self.set_progressbar()
+
+	def set_progressbar(self):
 		if progressbar.utils.get_terminal_size()[0] < 70:
-			self.progressbar = progressbar.ProgressBar(
+			return progressbar.ProgressBar(
 				# redirect_stdout=True,
 				# redirect_stderr=True,
 				max_value=progressbar.UnknownLength,
@@ -27,7 +30,7 @@ class BaseParser:
 					progressbar.FormatLabel('%(value)s')
 				])
 		else:
-			self.progressbar = progressbar.ProgressBar(
+			return progressbar.ProgressBar(
 				# redirect_stdout=True,
 				# redirect_stderr=True,
 				max_value=progressbar.UnknownLength,
