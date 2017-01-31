@@ -27,6 +27,9 @@ class ChapmanParser(PeopleSoftParser):
 				'Spring':'2174'
 			}
 		}
+
+		if 
+
 		PeopleSoftParser.parse(self, terms)
 
 def main():
