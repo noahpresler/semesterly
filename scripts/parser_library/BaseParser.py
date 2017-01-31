@@ -58,7 +58,8 @@ class BaseParser:
 class CourseParser(BaseParser):
 	__metaclass__ = ABCMeta
 
-	def __init__(self, school):
+	def __init__(self, school, **kwargs):
+		self.options = kwargs
 		super(CourseParser, self).__init__(school)
 
 	@abstractmethod
