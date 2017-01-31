@@ -1,4 +1,4 @@
-from django.core.management.base import BaseCommand, CommandError
+from django.core.management.base import BaseCommand, CommandParser, CommandError
 import os
 import django
 from timetable.models import Updates
@@ -11,6 +11,19 @@ class Command(BaseCommand):
   def add_arguments(self, parser):
   	 	# optional argument to specify parser for specific school
   	 	parser.add_argument('school', nargs='?', default='')
+		parser.add_argument('-x', '--xerbosity', action='count', default=0,  
+			help='increase output verbosity (none + terms + depts + courses + all)') 
+		parser.add_argument('--department',  
+			help='parse specific department by code')
+		parser.add_argument('--year-and-term', nargs=2, type=str) 
+		parser.add_argument('--detail', type=str, 
+			help='parser specific handle')
+		textbooks = parser.add_mutually_exclusive_group()
+		textbooks.add_argument('--textbooks', dest='textbooks', action='store_true',
+			help='parse textbooks')
+		textbooks.add_argument('--no-textbooks', dest='textbooks', action='store_false',
+			help='don\'t parse textbooks')
+		textbooks.set_defaults(textbooks=False)
 
   def success_print(self, message):
   	try:
@@ -19,6 +32,10 @@ class Command(BaseCommand):
 		self.stdout.write(message)
 
   def handle(self, *args, **options):
+  	print options.get('textbooks')
+  	print options.get('xerbosity')
+  	exit(2)
+
   	logging.basicConfig(level=logging.ERROR, filename='parse_errors.log')
 
   	schools_to_parse = course_parsers.keys()
