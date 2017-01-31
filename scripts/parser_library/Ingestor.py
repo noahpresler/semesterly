@@ -15,24 +15,24 @@ class Ingestor:
 	def __init__(self, school, 
 		directory='scripts/parser_library/ex_school/', 
 		output=None, 
+		validate=True,
 		break_on_error=True, 
 		break_on_warning=False,
 		update_progress=lambda **kwargs: None):
 
+		self.school = school
+		self.validate = validate
 		self.break_on_error = break_on_error
 		self.break_on_warning = break_on_warning
-
 		self.update_progress = update_progress
 
-		self.school = school
-		self.map = {}
-		self.map[''] = ''
+		self.map = {'':''}
 
 		self.validator = Validator(directory=directory)
 		# TODO - validate directory
 		self.logger = Logger()
 		self.json_logger = JsonListLogger(logfile=output)
-		self.json_logger.open()
+		self.json_logger.open() # write `[` at top of file
 
 		# initialize counters
 		count = {
@@ -62,6 +62,16 @@ class Ingestor:
 				'label': 'valid/total'
 			}
 		}
+
+	def update_options(self, **kwargs):
+		if 'hide_progress_bar' in kwargs and kwargs['hide_progress_bar']:
+			self.update_progress = lambda **kwargs: None # set to noop
+		if 'validate' in kwargs:
+			self.validate = kwargs['validate']
+		if 'break_on_errors' in kwargs:
+			self.break_on_error = kwargs['break_on_errors']
+		if 'break_on_warnings' in kwargs:
+			self.break_on_warning = kwargs['break_on_warnings']
 
 	def __setitem__(self, key, value):
 		self.map[key] = value
@@ -149,10 +159,11 @@ class Ingestor:
 			'homepage': self.getchain('homepage', 'website'),
 		}
 		course = cleandict(course)
-		is_valid = self.run_validator(lambda x: self.validator.validate_course(x), course)
+		if self.validate:
+			is_valid = self.run_validator(lambda x: self.validator.validate_course(x), course)
+			if is_valid:
+				self.counter['courses']['valid'] += 1
 		self.counter['courses']['total'] += 1
-		if is_valid:
-			self.counter['courses']['valid'] += 1
 		self.json_logger.log(course)
 		self.update_progress(mode='ingesting', **self.counter)
 		return course
@@ -198,10 +209,11 @@ class Ingestor:
 		}
 
 		section = cleandict(section)
-		is_valid = self.run_validator(lambda x: self.validator.validate_section(x), section)
+		if self.validate:
+			is_valid = self.run_validator(lambda x: self.validator.validate_section(x), section)
+			if is_valid:
+				self.counter['sections']['valid'] += 1
 		self.counter['sections']['total'] += 1
-		if is_valid:
-			self.counter['sections']['valid'] += 1
 		self.json_logger.log(section)
 		self.update_progress(mode='ingesting', **self.counter)
 		return section
@@ -246,18 +258,19 @@ class Ingestor:
 		}
 
 		meeting = cleandict(meeting)
-		is_valid = self.run_validator(lambda x: self.validator.validate_meeting(x), meeting)
+		if self.validate:
+			is_valid = self.run_validator(lambda x: self.validator.validate_meeting(x), meeting)
+			if is_valid:
+				self.counter['meetings']['valid'] += 1
 		self.counter['meetings']['total'] += 1
-		if is_valid:
-			self.counter['meetings']['valid'] += 1
 		self.json_logger.log(meeting)
 		self.update_progress(mode='ingesting', **self.counter)
 		return meeting
 
-	def run_validator(self, validate, data):
+	def run_validator(self, validate_function, data):
 		is_valid = False
 		try:
-			validate(data)
+			validate_function(data)
 			is_valid = True
 		except (jsonschema.exceptions.ValidationError, JsonValidationError) as e:
 			self.logger.log(e)
