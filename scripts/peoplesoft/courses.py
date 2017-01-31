@@ -37,8 +37,8 @@ class PeopleSoftParser(CourseParser):
 		'ICNAVTYPEDROPDOWN': '0'
 	}
 
-	def __init__(self, school, url, do_tbks=False):
-		super(PeopleSoftParser, self).__init__(school)
+	def __init__(self, school, url, do_tbks=False, **kwargs):
+		super(PeopleSoftParser, self).__init__(school, kwargs)
 		self.base_url = url
 		self.do_tbks = do_tbks
 		self.requester = Requester()
