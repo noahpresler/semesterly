@@ -2,8 +2,8 @@ import os, argparse
 
 def parser_argparser(parser, subparser_class=None):
 	parser.add_argument('--term-and-year', nargs=2, type=str,
-		help='parse for term and year as two args') 
-	parser.add_argument('--department',
+		help='parse for term and year - two args') 
+	parser.add_argument('--department', default='all',
 		help='parse specific department by code')
 	parser.add_argument('-o', '--output', default='stdout', 
 		help='(default: stdout)')
