@@ -130,7 +130,7 @@ class Validator:
 			if 'course' in section and section.course.code != course.code:
 				raise JsonValidationError('course code "%s" in nested section does not match parent course code "%s"'
 				 % (section.course.code, course.code), course)
-			# NOTE: mutating dictionary; TODO - not needed anymore, remove when able
+			# NOTE: mutating dictionary
 			section.course = { 'code': course.code }
 			self.validate_section(section, schema=False)
 
@@ -181,7 +181,7 @@ class Validator:
 			if 'section' in meeting and meeting.section.code != section.code:
 				raise JsonValidationError('section code "%s" in nested meeting does not match parent section code "%s"'
 				 % (meeting.section.code, section.code), section)
-			# NOTE: mutating dictionary; TODO - not needed anymore, remove when able
+			# NOTE: mutating dictionary
 			meeting.course = section.course
 			meeting.section = { 'code': section.code }
 			self.validate_meeting(meeting, schema=False)
@@ -193,9 +193,6 @@ class Validator:
 				raise JsonValidationWarning('multiple definitions for course "%s" section "%s" - %s already defined'
 				 % (section.course.code, section.code, section.year), section)
 			self.validated[section.course.code].add(section.code)
-
-	def validation_warning(self, message, dct):
-		self.logger.log(JsonValidationWarning(message, dct))
 
 	def validate_meeting(self, meeting, schema=True, relative=True):
 		if not isinstance(meeting, dotdict):
@@ -272,7 +269,6 @@ class Validator:
 	def validate_textbook(self, textbook, schema=False, relative=True):
 		if not isinstance(textbook, dotdict):
 			textbook = dotdict(textbook)
-		pass # TODO
 
 	def validate_texbook_link(self, textbook_link, schema=False, relative=True):
 		if not isinstance(textbook_link, dotdict):
@@ -283,11 +279,11 @@ class Validator:
 	def validate_location(self, location):
 		if 'campus' in location and 'campuses' in self.config:
 			if location.campus not in self.config.campuses:
-				raise JsonValidationError('location at campus %s not defined in config.json campuses'
+				raise JsonValidationWarning('location at campus %s not defined in config.json campuses'
 				 % (location.campus), location)
 		if 'building' in location and 'buildings' in self.config:
 			if location.building not in self.config.buildings:
-				raise JsonValidationError('location at building %s not defined in config.json buildings'
+				raise JsonValidationWarning('location at building %s not defined in config.json buildings'
 				 % (location.building), location)
 
 	def validate_website(url):
@@ -309,8 +305,7 @@ class Validator:
 				raise JsonValidationError('"%s" is not a valid time' %(time))
 			self.update_time_granularity(hour, minute)
 			if hour < 8 or hour > 20:
-				self.validation_warning('time range will not land on timetable', time)
-				pass # TODO - warn that will not be on timetable
+				raise JsonValidationWarning('time range will not land on timetable', time)
 
 		# Check interaction between times
 		rstart = match(start)
@@ -327,6 +322,7 @@ class Validator:
 		if start_hour > 12 or end_hour > 12:
 			self.count24 += 1 # NOTE: should be changed to percentage
 
+	# TODO - spit this data out at the end.
 	def update_time_granularity(self, hour, minute):
 		grain = 1
 		if minute % 60 == 0:
