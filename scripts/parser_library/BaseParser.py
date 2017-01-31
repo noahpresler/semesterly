@@ -78,7 +78,7 @@ class CourseParser(BaseParser):
 			help='parse textbooks')
 		textbooks.add_argument('--no-textbooks', dest='textbooks', action='store_false',
 			help='don\'t parse textbooks')
-		textbooks.set_defaults(textbooks=True)
+		textbooks.set_defaults(textbooks=False)
 
 		args = parser.parse_args()
 		return args
