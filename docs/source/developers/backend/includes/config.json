@@ -3,7 +3,13 @@
     "code": "jhu",
     "name": "Johns Hopkins University"
   },
+  "valid": true,
   "time_granularity": 5,
+  "parsers": {
+    "courses": {
+
+    }
+  },
   "parsers_and_data": [
     {
       "name": "courses",
@@ -38,8 +44,15 @@
   ],
   "time24": false,
   "course_code_regex": "([A-Z]{2}\\.\\d{3}\\.\\d{3})",
-  "terms": ["Fall", "Intersession", "Spring", "Summer"],
-  "registration_groupings": [["Fall"],["Intersession"],["Spring"],["Summer"]],
+  "course_code_regex_relaxed": [
+    "((:?[A-Z]{2}\\.)?\\d{3}\\.\\d{3}))"
+  ],
+  "terms": [
+    "Fall", 
+    "Intersession", 
+    "Spring", 
+    "Summer"
+  ],
   "campuses": [
     {
       "name": "Homewood Campus",
@@ -50,24 +63,60 @@
         "Brody Learning Commons"
       ]
     },
-    "Medical School",
-    "Carey Business School",
-    "Peabody Conservatory",
+    {
+      "name": "Medical School"
+    },
+    {
+      "name": "Carey Business School"
+    },
+    {
+      "name": "Peabody Conservatory"  
+    },
     {
       "name": "SAIS"
     },
-    "APL",
-    "Online"
+    {
+      "name": "APL"
+    },
+    {
+      "name": "Online"
+    }
   ],
-  "registration_dates": [
-    ""
+  "registrations": [
+    {
+      "date": "11/10/2016",
+      "terms_and_years": [
+        {
+          "term": "Spring",
+          "year": "2017"
+        }
+      ]
+    },
+    {
+      "date": "03/10/2017",
+      "terms_and_years": [
+        {
+          "term": "Fall",
+          "year": "2017"
+        }
+      ]
+    },
+    {
+      "date": "02/11/2017",
+      "terms_and_years": [
+        {
+          "term": "Summer",
+          "year": "2017"
+        }
+      ]
+    },
   ],
-  "current_term_year": {
+  "current_term_and_year": {
     "term": "Spring",
     "year": "2017"
   },
   "holidays_breaks": [
-    "Sprint, Winter, etc + dates"
+    "_comment: TODO"
   ],
   "buildings": [
     "Hackerman Hall",
