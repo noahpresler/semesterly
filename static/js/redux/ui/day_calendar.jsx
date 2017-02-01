@@ -49,10 +49,10 @@ class DayCalendar extends React.Component {
 	}
 
 	componentDidMount() {
-		console.log(33);
+		console.log(30);
 		$('#all-cols').scroll(function() {
 		    var pos = $('#all-cols').scrollTop();
-		    if (pos > 33) {
+		    if (pos > 30) {
 		        $('.fc-toolbar').addClass('up');
 		        $('#calendar').addClass('up');
 		    } else {
