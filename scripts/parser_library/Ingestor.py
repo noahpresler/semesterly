@@ -13,9 +13,10 @@ from scripts.parser_library.Logger import Logger, JsonListLogger
 class Ingestor:
 
 	def __init__(self, school, 
-		directory='scripts/parser_library/ex_school/', 
-		output=None, 
+		directory=None, 
 		validate=True,
+		json_output_file=None,
+		error_output_file=None,
 		break_on_error=True, 
 		break_on_warning=False,
 		update_progress=lambda **kwargs: None):
@@ -29,10 +30,9 @@ class Ingestor:
 		self.map = {'':''}
 
 		self.validator = Validator(directory=directory)
-		# TODO - validate directory
-		self.logger = Logger()
-		self.json_logger = JsonListLogger(logfile=output)
-		self.json_logger.open() # write `[` at top of file
+		self.error_logger = Logger(errorfile=error_output_file)
+		self.json_logger = JsonListLogger(logfile=json_output_file)
+		self.json_logger.open() # writes '[' at top of file
 
 		# initialize counters
 		count = {
@@ -273,11 +273,11 @@ class Ingestor:
 			validate_function(data)
 			is_valid = True
 		except (jsonschema.exceptions.ValidationError, JsonValidationError) as e:
-			self.logger.log(e)
+			self.error_logger.log(e)
 			if self.break_on_error:
 				raise e
 		except JsonValidationWarning as e:
-			self.logger.log(e)
+			self.error_logger.log(e)
 			if self.break_on_warning:
 				raise e
 
