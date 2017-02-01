@@ -81,3 +81,15 @@
         background-color: transparent;
     }
 }
+
+#calendar .up.fc-toolbar {
+    position: fixed;
+    width: 100%;
+    z-index: 100;
+    top: 20px;
+    border-bottom: 2px solid #ddd;
+}
+
+#calendar.up {
+    margin-top: 50px;
+}
