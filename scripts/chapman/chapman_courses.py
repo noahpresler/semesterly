@@ -14,7 +14,7 @@ class ChapmanParser(PeopleSoftParser):
 	def __init__(self, **kwargs):
 		school = 'chapman'
 		url = 'https://cs90prod.chapman.edu/psc/CS90PROD_1/EMPLOYEE/SA/c/COMMUNITY_ACCESS.CLASS_SEARCH.GBL'
-		PeopleSoftParser.__init__(self, school, url, kwargs)
+		PeopleSoftParser.__init__(self, school, url, **kwargs)
 
 	def parse(self):
 		# NOTE: hardcoded semesters Fall, Interim, Spring 2016-2017
