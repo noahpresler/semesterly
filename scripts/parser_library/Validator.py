@@ -12,12 +12,17 @@ from scripts.parser_library.internal_exceptions import JsonValidationError, Json
 class Validator:
 	def __init__(self,
 		directory=None,
-		schema_directory='scripts/parser_library/schemas/'):
+		config_file=None):
+
+		schema_directory='scripts/parser_library/schemas/'
 
 		try:
 			schema_directory = os.environ['SEMESTERLY_HOME'] + '/' + schema_directory
 		except KeyError as error:
-			sys.stderr.write('environment variable "SEMESTERLY_HOME" unset \ntry running:\nexport SEMESTERLY_HOME=$(pwd)\n')
+			sys.stderr.write(
+				'environment variable "SEMESTERLY_HOME" unset \
+				\ntry running:\
+				\nexport SEMESTERLY_HOME=$(pwd)\n')
 			exit(1)
 
 		if directory is None:
@@ -50,7 +55,8 @@ class Validator:
 		})
 
 		try:
-			config = self.file_to_json(self.directory + 'config.json')
+			config_file_path = config_file if config_file else self.directory + 'config.json'
+			config = self.file_to_json(config_file_path)
 		except IOError as e:
 			e.message += ', config.json not defined'
 			self.logger.log(e)
