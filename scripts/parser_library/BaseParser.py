@@ -14,7 +14,13 @@ class BaseParser:
 	def __init__(self, school, **kwargs):
 		self.school = school
 		self.requester = Requester()
-		self.ingest = Ingestor(school, update_progress=lambda **kwargs: self.update_progress(**kwargs))
+
+		self.ingest = Ingestor(school,
+			validate=kwargs.get('validate'),
+			directory=kwargs.get('directory'), # TODO - not in argparse yet
+			json_output_file=kwargs.get('output_json'),
+			error_output_file=kwargs.get('output_error'),
+			update_progress=lambda **kwargs: self.update_progress(**kwargs))
 
 		# Set progress bar to long or short dependent on terminal width
 		self.progressbar = self.set_progressbar()
@@ -63,7 +69,7 @@ class CourseParser(BaseParser):
 
 	def __init__(self, school, **kwargs):
 		self.options = kwargs
-		super(CourseParser, self).__init__(school)
+		super(CourseParser, self).__init__(school, **kwargs)
 
 	@abstractmethod
 	def start(self, **kwargs): pass
