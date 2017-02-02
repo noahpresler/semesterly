@@ -10,42 +10,41 @@ from scripts.parser_library.internal_utils import *
 from scripts.parser_library.internal_exceptions import JsonValidationError, JsonValidationWarning
 
 class Validator:
-	def __init__(self,
-		directory=None,
-		config_file=None):
+	def __init__(self, config):
 
-		schema_directory='scripts/parser_library/schemas/'
+		# Load/Cache schema definitions into memory
+		schema_directory ='scripts/parser_library/schemas/'
+		schema_directory = Validator.load_schema_directory(schema_directory)
+		self.schema = Validator.initiate_schemas(schema_directory)
 
-		try:
-			schema_directory = os.environ['SEMESTERLY_HOME'] + '/' + schema_directory
-		except KeyError as error:
-			sys.stderr.write(
-				'environment variable "SEMESTERLY_HOME" unset \
-				\ntry running:\
-				\nexport SEMESTERLY_HOME=$(pwd)\n')
-			exit(1)
-
-		if directory is None:
-			raise NotImplementedError('school directory must be defined as of now')
-
-		self.logger = Logger()
-		self.directory = directory
-		self.schema_directory = schema_directory
+		self.config = self.validate_config(config)
+		self.course_code_regex = re.compile(self.config.course_code_regex)
 
 		# Running tracker of validated course and section codes
 		self.validated = {}
 
+		# Track stats throughout validation
 		self.count24 = 0.0
 		self.granularity = 60
+		# TODO - report these values
 
-		load = lambda file: self.file_to_json(self.schema_directory + file, allow_duplicates=True)
-		resolve = lambda schema: jsonschema.RefResolver('file://' + self.schema_directory, schema)
+	@staticmethod
+	def load_schema_directory(directory):
+		try:
+			return os.environ['SEMESTERLY_HOME'] + '/' + directory
+		except KeyError as e:
+			raise KeyError('environment variable "SEMESTERLY_HOME" unset; try running: export SEMESTERLY_HOME=$(pwd)')
+
+	@staticmethod
+	def initiate_schemas(directory):
+		load = lambda file: Validator.filepath_to_json(directory + file, allow_duplicates=True)
+		resolve = lambda schema: jsonschema.RefResolver('file://' + directory, schema)
 		schema_and_resolver = lambda schema: (schema, resolve(schema))
 		# NOTE: it can be argued that in init loading all schemas directly to json
 		#       is inefficient. However, it eliminates i/o overhead for successive
-		#       calls without introducing complications of caching read json.
+		#       calls without introducing complications of caching already read json.
 		#       Schemas are not expected to exceed a reasonable size.
-		self.schema = dotdict({
+		return dotdict({
 			'config'  : schema_and_resolver(load('config.json')),
 			'datalist': schema_and_resolver(load('datalist.json')),
 			'course'  : schema_and_resolver(load('course_only.json')),
@@ -54,43 +53,40 @@ class Validator:
 			'directory': schema_and_resolver(load('directory.json'))
 		})
 
-		try:
-			config_file_path = config_file if config_file else self.directory + 'config.json'
-			config = self.file_to_json(config_file_path)
-		except IOError as e:
-			e.message += ', config.json not defined'
-			self.logger.log(e)
-			exit(1)
-		self.validate_schema(config, *self.schema.config)
-		self.config = dotdict(config)
-		self.course_code_regex = re.compile(self.config.course_code_regex)
-
-	def validate_schema(self, subject, schema, resolver=None):
+	@staticmethod
+	def validate_schema(subject, schema, resolver=None):
 		jsonschema.Draft4Validator(schema, resolver=resolver).validate(subject)
+		# TODO - Create iter_errors from jsonschema validator
 		# except jsonschema.exceptions.SchemaError as e:
 		# 	raise e
 		# except jsonschema.exceptions.RefResolutionError as e:
 		# 	raise e
 
-	def file_to_json(self, file, allow_duplicates=False):
-		j = None
+	@staticmethod
+	def filepath_to_json(file, allow_duplicates=False):
+		'''Load file pointed to by path into json object dictionary.'''
 		with open(file, 'r') as f:
-			try:
-				if allow_duplicates:
-					j = json.load(f)
-				else:
-					j = json.loads(f.read(), object_pairs_hook=Validator.dict_raise_on_duplicates)
-			except json.scanner.JSONDecodeError as e:
-				self.logger.log(e)
-		return j
+			if allow_duplicates:
+				return json.load(f)
+			else:
+				return json.loads(f.read(), object_pairs_hook=Validator.dict_raise_on_duplicates)
 
-	def validate(self, break_on_error=False, break_on_warning=False):
-		self.validate_directory(self.directory)
-		datalist = self.file_to_json(self.directory + 'data/courses.json')
-		self.validate_schema(datalist, *self.schema.datalist)
-		datalist = [ dotdict(data) for data in datalist ]
+	def validate(self, directory, break_on_error=False, break_on_warning=False, logfile=None, errorfile=None):
+		# TODO - iter errors and catch exceptions within method
+		# TODO - load config file as well
+		# TODO - handle single objects smoothly
+		self.logger = Logger(logfile=logfile, errorfile=errorfile)
 
-		for obj in datalist:
+		try:
+			self.validate_directory(directory)
+			data = Validator.filepath_to_json(directory + 'data/courses.json')
+			Validator.validate_schema(data, *self.schema.data)
+			data = [ dotdict(data) for data in data ]
+		except (JsonValidationError, json.scanner.JSONDecodeError) as e:
+			self.logger.log(e)
+			raise e	# fatal error, cannot continue
+
+		for obj in data:
 			try:
 				{
 					'course'    : lambda x: self.validate_course(x, schema=False),
@@ -104,18 +100,28 @@ class Validator:
 			except JsonValidationError as e:
 				self.logger.log(e)
 				if break_on_error:
-					raise e
+					break
 			except JsonValidationWarning as e:
 				self.logger.log(e)
 				if break_on_warning:
-					raise e
+					break
+
+	def validate_config(self, config):
+		if not isinstance(config, dict):
+			try:
+				config = Validator.filepath_to_json(config)
+			except IOError as e:
+				e.message += '\nconfig.json not defined'
+				raise e
+		return dotdict(config)
+		Validator.validate_schema(config, *self.schema.config)
 
 	def validate_course(self, course, schema=True, relative=True):
 		if not isinstance(course, dotdict):
 			course = dotdict(course)
 
 		if schema:
-			self.validate_schema(course, *self.schema.course)
+			Validator.validate_schema(course, *self.schema.course)
 
 		if 'kind' in course and course.kind != 'course':
 			raise JsonValidationError('course object must be of kind course', course)
@@ -151,7 +157,7 @@ class Validator:
 			section = dotdict(section)
 
 		if schema:
-			self.validate_schema(section, *self.schema.section)
+			Validator.validate_schema(section, *self.schema.section)
 
 		if 'course' not in section:
 			raise JsonValidationError('section does not define a parent course', section)
@@ -204,7 +210,7 @@ class Validator:
 		if not isinstance(meeting, dotdict):
 			meeting = dotdict(meeting)
 		if schema:
-			self.validate_schema(meeting, *self.schema.meeting)
+			Validator.validate_schema(meeting, *self.schema.meeting)
 		if 'kind' in meeting and meeting.kind != 'meeting':
 			raise JsonValidationError('meeting object must be of kind "instructor"', meeting)
 		if 'course' in meeting and self.course_code_regex.match(meeting.course.code) is None:
@@ -293,42 +299,44 @@ class Validator:
 				 % (location.building), location)
 
 	def validate_website(url):
+		'''Validate url by sending HEAD request and analyzing response.'''
 		c = httplib.HTTPConnection(url)
 		c.request("HEAD", '')
-		if c.getresponse().status != 200:
-			raise JsonValidationError('invalid website url "%s"' % (url), {'url': url})
+		# NOTE: 200 - good status
+		#       301 - redirected
+		if c.getresponse().status != 200 and c.getresponse().status != 301:
+			raise JsonValidationError('invalid website w/url "%s"' % (url), {'url': url})
 
 	# NOTE: somewhat redundant but readable
-	def validate_time_range(self, time):
-		start, end = time.start, time.end
-		match = lambda x: re.match(r'(\d{1,2}):(\d{2})', x)
+	def validate_time_range(self, time_range):
+		start, end = time_range.start, time_range.end
+		extract = lambda x: re.match(r'(\d{1,2}):(\d{2})', x)
 
 		# Check individual time bounds
 		for time in [start, end]:
-			rtime = match(time)
+			rtime = extract(time)
 			hour, minute = int(rtime.group(1)), int(rtime.group(2))
 			if hour > 23 or minute > 59:
 				raise JsonValidationError('"%s" is not a valid time' %(time))
 			self.update_time_granularity(hour, minute)
 			if hour < 8 or hour > 20:
-				raise JsonValidationWarning('time range will not land on timetable', time)
+				raise JsonValidationWarning('time range will not land on timetable', time_range)
 
 		# Check interaction between times
-		rstart = match(start)
-		rend = match(end)
+		rstart = extract(start)
+		rend = extract(end)
 		start_hour, start_minute = int(rstart.group(1)), int(rstart.group(2))
 		end_hour, end_minute = int(rend.group(1)), int(rend.group(2))
 		for i in [start_hour, start_minute, end_hour, end_minute]:
 			i = int(i)
 
 		if start_hour > end_hour or (start_hour == end_hour and start_minute > end_minute):
-			raise JsonValidationError('start time is greater than end time', time)
+			raise JsonValidationError('start time is greater than end time', time_range)
 
 		# Count valid 24 hour times
 		if start_hour > 12 or end_hour > 12:
 			self.count24 += 1 # NOTE: should be changed to percentage
 
-	# TODO - spit this data out at the end.
 	def update_time_granularity(self, hour, minute):
 		grain = 1
 		if minute % 60 == 0:
@@ -353,32 +361,33 @@ class Validator:
 			self.granularity = grain
 
 	def validate_directory(self, directory):
-		if self.directory is None:
+		if directory is None:
 			sys.stderr.write('cannot validate None directory')
 			exit(1)
 		if isinstance(directory, str):
 			try:
 				name = directory
-				directory = Validator.path_to_dict(directory)
+				directory = Validator.dir_to_dict(directory)
 				directory['name'] = name
 			except IOError as e:
 				sys.stderr.write('ERROR: invalid directory path\n' + str(e))
-		self.validate_schema(directory, *self.schema.directory)
+				raise e
+		Validator.validate_schema(directory, *self.schema.directory)
+
+	# TODO - delete below
+	# @staticmethod
+	# def path_to_json(path):
+	# 	return Validator.dict_to_json(Validator.dir_to_dict(path))
+	# @staticmethod
+	# def dict_to_json(d):
+	# 	return json.dumps(d)
 
 	@staticmethod
-	def path_to_json(path):
-		return Validator.dict_to_json(Validator.path_to_dict(path))
-
-	@staticmethod
-	def dict_to_json(d):
-		return json.dumps(d)
-
-	@staticmethod
-	def path_to_dict(path):
+	def dir_to_dict(path):
 		d = {'name': os.path.basename(path)}
 		if os.path.isdir(path):
 			d['kind'] = "directory"
-			d['children'] = [ Validator.path_to_dict(os.path.join(path,x)) for x in os.listdir(path) ]
+			d['children'] = [ Validator.dir_to_dict(os.path.join(path,x)) for x in os.listdir(path) ]
 		else:
 			d['kind'] = "file"
 		return d
@@ -406,11 +415,13 @@ def check_args(args):
 	pass # TODO
 
 def main():
-	v = Validator(
-			schema_directory='scripts/parser_library/schemas/',
-			directory='scripts/parser_library/ex_school/')
+	sys.stderr.write('not implemented for self run yet')
+	exit(1)
+	# v = Validator(
+	# 		schema_directory='scripts/parser_library/schemas/',
+	# 		directory='scripts/parser_library/ex_school/')
 
-	v.validate()
+	# v.validate()
 
 if __name__ == '__main__':
 	main()
