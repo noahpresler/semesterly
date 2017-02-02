@@ -48,6 +48,20 @@ class DayCalendar extends React.Component {
 		}
 	}
 
+	componentDidMount() {
+		console.log(30);
+		$('#all-cols').scroll(function() {
+		    var pos = $('#all-cols').scrollTop();
+		    if (pos > 30) {
+		        $('.fc-toolbar').addClass('up');
+		        $('#calendar').addClass('up');
+		    } else {
+		        $('.fc-toolbar').removeClass('up');
+		        $('#calendar').removeClass('up');
+		    }
+		});
+	}
+
 	swipedLeft() {
 		let d = this.state.day+1
 		if (d === -1 || d === 5) { // Sunday or Saturday, respectively
@@ -204,12 +218,6 @@ class DayCalendar extends React.Component {
     	);
   	}
 
-  	componentDidMount() {
-	    // let days = {1: 'mon', 2: 'tue', 3: 'wed', 4: 'thu', 5: 'fri'};
-	    // let d = new Date("October 13, 2014 11:13:00");
-	    // let selector = ".fc-" + days[d.getDay()];
-	    // $(selector).addClass("fc-today");
-  	}
 
 }
 
