@@ -1,12 +1,18 @@
 import sys, pipes, simplejson as json
 from datetime import datetime
+from pygments import highlight, lexers, formatters, filters
 from scripts.parser_library.internal_utils import *
 from scripts.parser_library.internal_exceptions import JsonValidationError, JsonValidationWarning, DigestionError
 
+# TODO - look at logging library and integrate into Logger
+#        might be able to remove all of this!!! :'(
+
 class Logger(object):
+
+	# NOTE: interface is rather confusing, consider revising
 	def __init__(self, logfile=None, errorfile=None):
 		if logfile:
-			# Remove special character formatting (ex: pretty_json)
+			# Remove special character formatting (ex: Logger.pretty_json)
 			t = pipes.Template()
 			t.append('sed "s,\x1B\[[0-9;]*[a-zA-Z],,g"', '--')
 			self.logfile = t.open(logfile, 'w')
@@ -21,6 +27,7 @@ class Logger(object):
 		else:
 			self.errorfile = sys.stderr
 
+	# TODO - name created files with dates and labels
 	# datetime.now().strftime("%Y%m%d-%H%M%S")
 
 	def log_exception(self, error):
@@ -30,7 +37,7 @@ class Logger(object):
 			if isinstance(error, JsonValidationError):
 				output += error.message
 				if error.json:
-					output += '\n' + pretty_json(error.json)
+					output += '\n' + Logger.pretty_json(error.json)
 			elif isinstance(error, DigestionError):
 				output += error.message
 			else:
@@ -40,7 +47,7 @@ class Logger(object):
 			if isinstance(error, JsonValidationWarning):
 				output += error.message
 				if error.json:
-					output += '\n' + pretty_json(error.json)
+					output += '\n' + Logger.pretty_json(error.json)
 			else:
 				output += str(error)
 		else:
@@ -50,7 +57,7 @@ class Logger(object):
 	def log_json(self, entry):
 		if isinstance(entry, basestring):
 			entry = json.loads(entry)
-		self.logfile.write(pretty_json(entry))
+		self.logfile.write(Logger.pretty_json(entry))
 
 	def log_normal(self, entry):
 		self.logfile.write(str(entry) + '\n')
@@ -64,6 +71,16 @@ class Logger(object):
 			except json.scanner.JSONDecodeError:
 				self.log_normal(entry)
 
+	@staticmethod
+	def pretty_json(j):
+		'''Format and colorize json for prettified output.'''
+		if isinstance(j, dict):
+			j = json.dumps(j, sort_keys=True, indent=2, separators=(',', ': '))
+		l = lexers.JsonLexer()
+		l.add_filter('whitespace')
+		colorful_json = highlight(unicode(j, 'UTF-8'), l, formatters.TerminalFormatter())
+		return colorful_json
+
 class JsonListLogger(Logger):
 	def __init__(self, logfile=None, errorfile=None):
 		self.first = True # unset after open entry added
@@ -76,9 +93,12 @@ class JsonListLogger(Logger):
 		self.logfile.write(']\n')
 
 	def log(self, entry):
-		output = ',' if not self.first else ''
-		self.first = False # always set to zero
-		if isinstance(entry, basestring):
-			entry = json.loads(entry)
-		output += '  ' + '  '.join(pretty_json(entry).splitlines(True)) # preserve and tab each newline
-		self.logfile.write(output)
+		if isinstance(entry, Exception):
+			self.log_exception(entry)
+		else:
+			output = ',' if not self.first else ''
+			self.first = False # always set to zero
+			if isinstance(entry, basestring):
+				entry = json.loads(entry)
+			output += '  ' + '  '.join(Logger.pretty_json(entry).splitlines(True)) # preserve and tab each newline
+			self.logfile.write(output)

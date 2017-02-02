@@ -4,6 +4,7 @@
 # @date	11/22/16
 
 import re, sys
+from abc import ABCMeta, abstractmethod
 
 # parser library
 from scripts.textbooks.amazon import make_textbook
@@ -12,8 +13,10 @@ from scripts.parser_library.Extractor import *
 from scripts.parser_library.Model import Model
 from scripts.parser_library.Ingestor import Ingestor
 from scripts.parser_library.BaseParser import CourseParser
+from scripts.parser_library.internal_exceptions import CourseParseError
 
 class PeopleSoftParser(CourseParser):
+	__metaclass__ = ABCMeta
 
 	DAY_MAP = {
 		'Mo' : 'M',
@@ -37,11 +40,9 @@ class PeopleSoftParser(CourseParser):
 		'ICNAVTYPEDROPDOWN': '0'
 	}
 
-	def __init__(self, school, url, do_tbks=False, **kwargs):
-		super(PeopleSoftParser, self).__init__(school, kwargs)
+	def __init__(self, school, url, textbooks=True, **kwargs):
 		self.base_url = url
-		self.do_tbks = do_tbks
-		self.requester = Requester()
+		self.do_tbks = textbooks
 		self.actions = {
 			'adv_search':	'DERIVED_CLSRCH_SSR_EXPAND_COLLAPS$149$$1',
 			'save':			'#ICSave',
@@ -53,11 +54,20 @@ class PeopleSoftParser(CourseParser):
 			'courses':	lambda soup: soup.find_all('table', {'class' : 'PSLEVEL1GRIDNBONBO'}),
 			'isbns':	lambda soup: zip(soup.find_all('span', id=re.compile(r'DERIVED_SSR_TXB_SSR_TXBDTL_ISBN\$\d*')), soup.find_all('span', id=re.compile(r'DERIVED_SSR_TXB_SSR_TXB_STATDESCR\$\d*'))),
 		}
+		super(PeopleSoftParser, self).__init__(school, **kwargs)
 
+	@abstractmethod
 	def start(self, **kwargs):
-		self.parse(kwargs['years'], kwargs)
+		'''Start parsing courses!'''
 
-	def parse(self, years, **kwargs):
+	def parse(self, years,
+		department=None,
+		textbooks=True,
+		verbosity=3,
+		**kwargs):
+
+		self.verbosity = verbosity
+		self.textbooks = textbooks
 
 		soup = self.requester.get(self.base_url, params=kwargs.get('url_params', {}))
 
@@ -73,7 +83,9 @@ class PeopleSoftParser(CourseParser):
 			self.ingest['year'] = year
 			for term_name, term_code in terms.items():
 				self.ingest['term'] = term_name
-				print 'Parsing courses for', term_name, year
+
+				if self.verbosity >= 0:
+					print 'Parsing courses for', term_name, year
 
 				# update search payload with term as parameter
 				params[self.actions['term_update']] = term_code
@@ -88,16 +100,18 @@ class PeopleSoftParser(CourseParser):
 				dept_key = soup.find('select', id=re.compile(r'SSR_CLSRCH_WRK_SUBJECT_SRCH\$\d'))['id']
 				departments = {dept['value']: dept.text for dept in self.find_all['depts'](soup)}
 
-				if self.options.get('department', 'all') != 'all':
-					department_code = self.options['departments']
+				if department and department != 'all':
+					department_code = department
 					if department_code not in departments:
-						raise CourseParserError('invalid department code')
+						raise CourseParseError('invalid department code %(department)s')
 					departments = {department_code: departments[department_code]}
 
 				for dept_code, dept_name in departments.items():
 					self.ingest['dept_name'] = dept_name
 					self.ingest['dept_code'] = dept_code
-					print '> Parsing courses in department', dept_name
+
+					if self.verbosity >= 1:
+						print '> Parsing courses in department', dept_name
 
 					# Update search payload with department code
 					params[dept_key] = dept_code
@@ -144,7 +158,9 @@ class PeopleSoftParser(CourseParser):
 		isbns 	= PeopleSoftParser.parse_textbooks(soup)
 
 		# Extract info from title
-		print '\t' + title
+		if self.verbosity >=2:
+			print '\t' + title
+
 		rtitle = re.match(r'(.+?\s*\w+) - (\w+)\s*(\S.+)', title)
 		# self.ingest['section_type'] = PeopleSoftParser.SECTION_MAP.get(subtitle.split('|')[2].strip(), 'L')
 		self.ingest['section_type'] = subtitle.split('|')[2].strip()
@@ -173,7 +189,7 @@ class PeopleSoftParser(CourseParser):
 		# # NOTE: section is no longer a django object
 		# # TODO - change query to handle class code
 		# # create textbooks
-		# if self.do_tbks:
+		# if self.textbooks:
 		# 	for isbn in isbns:
 		# 		print isbn[1], isbn[0], section
 		# 	map(lambda isbn: make_textbook(isbn[1], isbn[0], section['code']), isbns)
