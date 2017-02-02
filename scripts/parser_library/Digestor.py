@@ -15,6 +15,121 @@ from scripts.parser_library.internal_utils import *
 from scripts.parser_library.Logger import Logger, JsonListLogger
 from scripts.parser_library.internal_exceptions import DigestionError
 
+
+class Digestor:
+	def __init__(self, school, 
+		data=None, 
+		log_file=None, 
+		diff=True, 
+		dry=True):
+
+		self.school = school
+
+		if data:
+			if isinstance(data, dict):
+				self.data = data
+			else:
+				with open(data, 'r') as f:
+					self.data = json.load(f)
+		else:
+			self.data = json.load(sys.stdin)
+
+		self.data = [ dotdict(obj) for obj in self.data ]
+
+		self.cached = dotdict({
+			'course': { 'code': '_' },
+			'section': { 'code': '_' }
+		})
+
+		self.adapter = DigestionAdapter(school, self.cached)
+
+		self.diff = diff
+		self.dry = dry
+		self.strategy = self.set_strategy(diff, dry)
+
+	def set_strategy(diff, dry):
+		if diff and dry:
+			return Vommit() # diff only
+		elif not diff and not dry:
+			return Absorb() # load db only + clean
+		elif diff and not dry:
+			return Burp() # load db and log diff
+		else: # nothing to do...
+			sys.stderr.write('Nothing to run.')
+			exit(1)
+
+	def digest(self):
+		# TODO - handle single object not in list
+
+		for obj in self.data:
+			# try:
+			res = {
+				'course': lambda x: self.digest_course(x),
+				'section': lambda x: self.digest_section(x),
+				'meeting': lambda x: self.digest_meeting(x),
+				'instructor': lambda x: self.digest_instructor(x),
+				'final_exam': lambda x: self.digest_final_exam(x),
+				'textbook': lambda x: self.digest_textbook(x),
+				'textbook_link': lambda x: self.digest_textbook_link(x)
+			}[obj.kind](obj)
+
+	def digest_course(self, course):
+		''' Create course in database from info in json model.
+
+		Returns:
+			django course model object
+		'''
+
+		course_model = self.strategy.digest_course(self.adapter.adapt_course(course))
+
+		if course_model:
+			self.cached.course = course_model
+			for section in course.get('sections', []):
+				self.digest_section(section, course_model)
+
+		return course_model
+
+	def digest_section(self, section, course_model=None):
+		''' Create section in database from info in model map.
+
+		Args:
+			course_model: django course model object
+
+		Keyword args:
+			clean (boolean): removes course offerings associated with section if set
+
+		Returns:
+			django section model object
+		'''
+
+		section_model = self.strategy.digest_section(self.adapter.adapt_section(section))
+
+		if section_model:
+			self.cached.course = course_model
+			self.cached.section = section_model
+			for meeting in section.get('meetings', []):
+				self.digest_meeting(meeting, section_model)
+
+		return section_model
+
+	def digest_meeting(self, meeting, section_model=None):
+		''' Create offering in database from info in model map.
+
+		Args:
+			section_model: JSON course model object
+		'''
+
+		# NOTE: ignoring dates for now
+		offering_models = []
+		for offering in self.adapter.adapt_meeting(meeting):
+			offering_model = self.strategy.digest_offering(offering)
+			offering_models.append(offering_model)
+			# TODO - could yield here
+		return offering_models
+
+	def wrap_up(self):
+		self.strategy.wrap_up()
+
 class DigestionAdapter:
 	def __init__(self, school, cached):
 		self.school = school
@@ -354,115 +469,6 @@ class Absorb(DigestionStrategy):
 class Burp(DigestionStrategy):
 	def __init__(self):
 		super(Burp, self).__init__()
-
-class Digestor:
-	def __init__(self, school, data=None, log_file=None, diff=True, dry=True):
-		self.school = school
-
-		if data:
-			if isinstance(data, dict):
-				self.data = data
-			else:
-				with open(data, 'r') as f:
-					self.data = json.load(f)
-		else:
-			self.data = json.load(sys.stdin)
-
-		self.data = [ dotdict(obj) for obj in self.data ]
-
-		self.cached = dotdict({
-			'course': { 'code': '_' },
-			'section': { 'code': '_' }
-		})
-
-		self.adapter = DigestionAdapter(school, self.cached)
-
-		self.diff = diff
-		self.dry = dry
-		self.set_strategy(diff, dry)
-
-	def set_strategy(self, diff, dry):
-		if diff and dry:
-			self.strategy = Vommit() # diff only
-		elif not diff and not dry:
-			self.strategy = Absorb() # load db only + clean
-		elif diff and not dry:
-			self.strategy = Burp() # load db and log diff
-		else: # nothing to do...
-			sys.stderr.write('Nothing to run.')
-			exit(1)
-
-	def digest(self):
-		# TODO - handle single object not in list
-
-		for obj in self.data:
-			# try:
-			res = {
-				'course': lambda x: self.digest_course(x),
-				'section': lambda x: self.digest_section(x),
-				'meeting': lambda x: self.digest_meeting(x),
-				'instructor': lambda x: self.digest_instructor(x),
-				'final_exam': lambda x: self.digest_final_exam(x),
-				'textbook': lambda x: self.digest_textbook(x),
-				'textbook_link': lambda x: self.digest_textbook_link(x)
-			}[obj.kind](obj)
-
-	def digest_course(self, course):
-		''' Create course in database from info in json model.
-
-		Returns:
-			django course model object
-		'''
-
-		course_model = self.strategy.digest_course(self.adapter.adapt_course(course))
-
-		if course_model:
-			self.cached.course = course_model
-			for section in course.get('sections', []):
-				self.digest_section(section, course_model)
-
-		return course_model
-
-	def digest_section(self, section, course_model=None):
-		''' Create section in database from info in model map.
-
-		Args:
-			course_model: django course model object
-
-		Keyword args:
-			clean (boolean): removes course offerings associated with section if set
-
-		Returns:
-			django section model object
-		'''
-
-		section_model = self.strategy.digest_section(self.adapter.adapt_section(section))
-
-		if section_model:
-			self.cached.course = course_model
-			self.cached.section = section_model
-			for meeting in section.get('meetings', []):
-				self.digest_meeting(meeting, section_model)
-
-		return section_model
-
-	def digest_meeting(self, meeting, section_model=None):
-		''' Create offering in database from info in model map.
-
-		Args:
-			section_model: JSON course model object
-		'''
-
-		# NOTE: ignoring dates for now
-		offering_models = []
-		for offering in self.adapter.adapt_meeting(meeting):
-			offering_model = self.strategy.digest_offering(offering)
-			offering_models.append(offering_model)
-			# TODO - could yield here
-		return offering_models
-
-	def wrap_up(self):
-		self.strategy.wrap_up()
 
 def main():
 	d = Digestor('chapman',)
