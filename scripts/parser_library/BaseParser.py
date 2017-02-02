@@ -11,21 +11,14 @@ from scripts.parser_library.Extractor import Extractor
 class BaseParser:
 	__metaclass__ = ABCMeta
 
-	def __init__(self, school, **kwargs):
+	def __init__(self, school):
+		
 		self.school = school
 		self.requester = Requester()
-
-		self.ingest = Ingestor(school,
-			validate=kwargs.get('validate'),
-			directory=kwargs.get('directory'), # TODO - not in argparse yet
-			json_output_file=kwargs.get('output_json'),
-			error_output_file=kwargs.get('output_error'),
-			update_progress=lambda **kwargs: self.update_progress(**kwargs))
-
-		# Set progress bar to long or short dependent on terminal width
 		self.progressbar = self.set_progressbar()
 
 	def set_progressbar(self):
+		# Set progress bar to long or short dependent on terminal width
 		if progressbar.utils.get_terminal_size()[0] < 70:
 			return progressbar.ProgressBar(
 				# redirect_stdout=True,
@@ -49,9 +42,9 @@ class BaseParser:
 	@abstractmethod
 	def start(self, **kwargs): pass
 
-	def update_progress(self, **kwargs):
+	def update_progress(self, **kwargs): # TODO - remove kwargs and make counter raw dictionary
 		'''Format progress bar and readjust size to fit terminal width.
-		Two progress bars are defined in order to handle cramped scenarios more naturally. '''
+		Two progress bars are defined in order to handle cramped scenarios more naturally.'''
 
 		mode = ''
 		if 'mode' in kwargs:
@@ -67,31 +60,27 @@ class BaseParser:
 class CourseParser(BaseParser):
 	__metaclass__ = ABCMeta
 
-	def __init__(self, school, **kwargs):
-		self.options = kwargs
-		super(CourseParser, self).__init__(school, **kwargs)
+	def __init__(self, school,
+		validate=True,
+		config=None,
+		output_filepath=None, # TODO - support stdout
+		output_error_filepath=None,
+		break_on_error=True,
+		break_on_warning=False,
+		hide_progress_bar=False):
+
+		super(CourseParser, self).__init__(school)
+
+		update_progress = lambda *args, **kwargs: None if hide_progress_bar else lambda **kwargs: self.update_progress(**kwargs)
+
+		self.ingest = Ingestor(school,
+			validate=validate,
+			config=config,
+			output_filepath=output_filepath,
+			output_error_filepath=output_error_filepath,
+			break_on_error=break_on_error,
+			break_on_warning=break_on_warning,
+			update_progress=update_progress)
 
 	@abstractmethod
 	def start(self, **kwargs): pass
-
-	def get_args():
-		parser = argparse.ArgumentParser(description='arg parse')
-		parser.add_argument('-v', '--verbosity', action='count', default=1, required=False, 
-			help='increase output verbosity (none + terms + depts + courses + all)') 
-		parser.add_argument('--department', required=False, 
-			help='parse specific department by code')
-		parser.add_argument('--year-and-term', nargs=2, type=str, required=False)
-		parser.add_argument('--detail', type=str, required=False,
-			help='parser specific handle')
-		textbooks = parser.add_mutually_exclusive_group(required=False)
-		textbooks.add_argument('--textbooks', dest='textbooks', action='store_true',
-			help='parse textbooks')
-		textbooks.add_argument('--no-textbooks', dest='textbooks', action='store_false',
-			help='don\'t parse textbooks')
-		textbooks.set_defaults(textbooks=False)
-
-		args = parser.parse_args()
-		return args
-
-	def check_args(args):
-		return args
