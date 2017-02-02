@@ -8,17 +8,26 @@ os.environ.setdefault("DJANGO_SETTINGS_MODULE", "semesterly.settings")
 django.setup()
 
 from scripts.peoplesoft.courses import PeopleSoftParser
+from scripts.parser_library.BaseParser import CourseParser
+from scripts.parser_library.internal_exceptions import CourseParseError
 
 class ChapmanParser(PeopleSoftParser):
 
-	def __init__(self, **kwargs):
+	def __init__(self, school, **kwargs):
 		school = 'chapman'
 		url = 'https://cs90prod.chapman.edu/psc/CS90PROD_1/EMPLOYEE/SA/c/COMMUNITY_ACCESS.CLASS_SEARCH.GBL'
-		PeopleSoftParser.__init__(self, school, url, **kwargs)
+		super(ChapmanParser, self).__init__(school, url, **kwargs)
 
-	def parse(self):
-		# NOTE: hardcoded semesters Fall, Interim, Spring 2016-2017
-		terms = {
+	def start(self,
+		year=None,
+		term=None,
+		department=None,
+		textbooks=True,
+		verbosity=3,
+		**kwargs):
+
+		# NOTE: hardcoded semesters Fall 2016, Interim, Spring 2017
+		years_and_terms = {
 			"2016": {
 				'Fall':'2168', 
 			},
@@ -28,20 +37,23 @@ class ChapmanParser(PeopleSoftParser):
 			}
 		}
 
-		if 'term_and_year' in self.options:
-			term = self.options['term_and_year'][0]
-			year = self.options['term_and_year'][1]
-			if year not in terms:
-				raise CourseParserError('year %(year)s not defined')
-			if term not in terms[year]:
-				raise CourseParserError('term not defined for year %(year)s')
-			terms = {year: {term: terms[year][term]}}
+		# Selective parsing by year and term
+		if term and year:
+			if year not in years_and_terms:
+				raise CourseParseError('year %(year)s not defined')
+			if term not in years_and_terms[year]:
+				raise CourseParseError('term not defined for year %(year)s')
+			years_and_terms = {year: {term: years_and_terms[year][term]}}
 
-		PeopleSoftParser.parse(self, terms)
+		# Call PeopleSoft parse method
+		self.parse(years_and_terms,
+			department=department,
+			textbooks=textbooks,
+			verbosity=verbosity)
 
 def main():
 	p = ChapmanParser()
-	p.parse()
+	p.start()
 
 if __name__ == "__main__":
 	main()

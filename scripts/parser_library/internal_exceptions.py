@@ -1,4 +1,6 @@
-# TODO - create base library exception class, deal with multiple inheritance
+class CourseParseError(Exception):
+	'''Raise during runtime login error in course parsers.'''
+	# TODO - add stats here like department, course, current request, etc.
 
 class JsonValidationError(ValueError):
 	'''Raise when fails validation condition.'''

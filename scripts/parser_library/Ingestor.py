@@ -11,96 +11,72 @@ from internal_utils import *
 from scripts.parser_library.Logger import Logger, JsonListLogger
 
 class Ingestor:
-
-	def __init__(self, school, 
-		directory=None, 
+	def __init__(self, school,
+		update_progress=lambda *args, **kwargs: None, # noop
+		config=None, # TODO - non-intuitive meaning in context, conflicts with validate
 		validate=True,
-		json_output_file=None,
-		error_output_file=None,
+		output_filepath=None,
+		output_error_filepath=None,
 		break_on_error=True, 
-		break_on_warning=False,
-		update_progress=lambda **kwargs: None):
+		break_on_warning=False):
 
 		self.school = school
-		self.validate = validate
+		self.validate = bool(config) and validate
 		self.break_on_error = break_on_error
 		self.break_on_warning = break_on_warning
 		self.update_progress = update_progress
 
-		self.map = {'':''}
+		# NOTE: unsure of where to put this, may belong in validator
+		# FIXME -- validate that this directory actually exists and is correctly formatted
+		directory = 'scripts/' + school
+		if not config:
+			config = '{0}/config.json'.format(directory)
+		if not output_filepath:
+			output_filepath = '{0}/data/courses2.json'.format(directory)
+		if not output_error_filepath:
+			output_error_filepath = '{0}/logs/error2.log'.format(directory)
 
-		self.validator = Validator(directory=directory)
-		self.error_logger = Logger(errorfile=error_output_file)
-		self.json_logger = JsonListLogger(logfile=json_output_file)
-		self.json_logger.open() # writes '[' at top of file
+		self.validator = Validator(config)
+
+		# Dictionary that holds info before being committed as json object
+		self.mouth = {'':''}
+
+		# Initialize loggers for json and errors
+		self.logger = JsonListLogger(logfile=output_filepath, errorfile=output_error_filepath)
+		# TODO - needs to default write to logs in school directory
+		self.logger.open() # writes '[' at top of file
 
 		# initialize counters
-		count = {
-			'valid': 0,
-			'total': 0
-		}
-		self.counter = {
-			'courses': {
-				'valid': 0,
-				'total': 0
-			},
-			'sections': {
-				'valid': 0,
-				'total': 0
-			},
-			'meetings': {
-				'valid': 0,
-				'total': 0
-			},
-			'textbooks': {
-				'valid': 0,
-				'total': 0
-			},
-			'evaluations': count,
-			'_format': {
-				'function': lambda counter: '%s/%s' % (counter['valid'], counter['total']),
-				'label': 'valid/total'
-			}
-		}
-
-	def update_options(self, **kwargs):
-		if 'hide_progress_bar' in kwargs and kwargs['hide_progress_bar']:
-			self.update_progress = lambda **kwargs: None # set to noop
-		if 'validate' in kwargs:
-			self.validate = kwargs['validate']
-		if 'break_on_errors' in kwargs:
-			self.break_on_error = kwargs['break_on_errors']
-		if 'break_on_warnings' in kwargs:
-			self.break_on_warning = kwargs['break_on_warnings']
+		self.counter = Ingestor.initialize_counter()
 
 	def __setitem__(self, key, value):
-		self.map[key] = value
+		self.mouth[key] = value
 		return self
 
 	def __getitem__(self, key):
-		return self.map[key]
+		return self.mouth[key]
 
 	def __delitem__(self, key):
-		del self.map[key]
+		del self.mouth[key]
 
 	def __contains__(self, key):
-		return key in self.map
+		return key in self.mouth
 
 	def __iter__(self):
-		for key in self.map:
+		for key in self.mouth:
 			yield key
 
 	def __len__(self):
-		return len(self.map)
+		return len(self.mouth)
 
 	def __str__(self):
 		l = ''
-		for label, value in self.map.items():
+		for label, value in self.mouth.items():
 			l += smart_str(label) + ':' + smart_str(value) + '\n'
 		return l
 
 	def get(self, key, default=None):
-		return self.map.get(key, default)
+		return self.mouth.get(key, default)
 
 	def update(self, other=None, **kwargs):
 		if other is not None:
@@ -110,14 +86,14 @@ class Ingestor:
 			self[k] = v
 
 	def clear(self):
-		self.map.clear()
+		self.mouth.clear()
 		self.school = ''
 
 	def getchain(self, *keys):
-		'''Match the first key found in self.map dictionary.'''
+		'''Match the first key found in self.mouth dictionary.'''
 		for key in keys:
-			if key in self.map:
-				return self.map[key]
+			if key in self.mouth:
+				return self.mouth[key]
 		return None
 
 	def get_counters(self):
@@ -131,9 +107,9 @@ class Ingestor:
 		'''
 
 		# support nested and non-nested department ingestion
-		if 'department' in self.map or 'dept' in self.map:
+		if 'department' in self.mouth or 'dept' in self.mouth:
 			if not isinstance(self.getchain('department', 'dept'), dict):
-				self.map['department'] = {
+				self.mouth['department'] = {
 					'name': self.getchain('department_name', 'dept_name'),
 					'code': self.getchain('department_code', 'dept_code')
 				}
@@ -164,7 +140,7 @@ class Ingestor:
 			if is_valid:
 				self.counter['courses']['valid'] += 1
 		self.counter['courses']['total'] += 1
-		self.json_logger.log(course)
+		self.logger.log(course)
 		self.update_progress(mode='ingesting', **self.counter)
 		return course
 
@@ -179,13 +155,13 @@ class Ingestor:
 		'''
 
 		# handle nested instructor definition and resolution
-		for key in [k for k in ['instructors', 'instrs', 'instructor', 'instr'] if k in self.map]:
-			self.map[key] = make_list(self.map[key])
-			instructors = self.map[key]
+		for key in [k for k in ['instructors', 'instrs', 'instructor', 'instr'] if k in self.mouth]:
+			self.mouth[key] = make_list(self.mouth[key])
+			instructors = self.mouth[key]
 			for i in range(len(instructors)):
 				if isinstance(instructors[i], basestring):
 					instructors[i] = { 'name': instructors[i] }
-			self.map['instructors'] = instructors
+			self.mouth['instructors'] = instructors
 			break
 
 		section = {
@@ -214,7 +190,7 @@ class Ingestor:
 			if is_valid:
 				self.counter['sections']['valid'] += 1
 		self.counter['sections']['total'] += 1
-		self.json_logger.log(section)
+		self.logger.log(section)
 		self.update_progress(mode='ingesting', **self.counter)
 		return section
 
@@ -235,15 +211,15 @@ class Ingestor:
 		'''
 
 		# handle nested time definition
-		if 'time' not in self.map:
-			self.map['time'] = {
+		if 'time' not in self.mouth:
+			self.mouth['time'] = {
 				'start': self.getchain('time_start', 'start_time'),
 				'end': self.getchain('time_end', 'end_time')
 			}
 
 		# handle nested location definition
 		if isinstance(self.getchain('location', 'loc'), basestring):
-			self.map['location'] = { 'where': self.getchain('location', 'loc') }
+			self.mouth['location'] = { 'where': self.getchain('location', 'loc') }
 
 		meeting = {
 			'kind': 'meeting',
@@ -253,7 +229,7 @@ class Ingestor:
 			},
 			'days': make_list(self.getchain('days', 'day')),
 			'dates': make_list(self.getchain('dates', 'date')),
-			'time': self.map['time'],
+			'time': self.mouth['time'],
 			'location': self.get('location')
 		}
 
@@ -263,7 +239,7 @@ class Ingestor:
 			if is_valid:
 				self.counter['meetings']['valid'] += 1
 		self.counter['meetings']['total'] += 1
-		self.json_logger.log(meeting)
+		self.logger.log(meeting)
 		self.update_progress(mode='ingesting', **self.counter)
 		return meeting
 
@@ -272,12 +248,18 @@ class Ingestor:
 		try:
 			validate_function(data)
 			is_valid = True
-		except (jsonschema.exceptions.ValidationError, JsonValidationError) as e:
-			self.error_logger.log(e)
+		except jsonschema.exceptions.ValidationError as e:
+			# Wrap error in another (self-developed) error
+			e = JsonValidationError(str(e), data)
+			self.logger.log(e)
+			if self.break_on_error:
+				raise e
+		except JsonValidationError as e:
+			self.logger.log(e)
 			if self.break_on_error:
 				raise e
 		except JsonValidationWarning as e:
-			self.error_logger.log(e)
+			self.logger.log(e)
 			if self.break_on_warning:
 				raise e
 
@@ -285,5 +267,34 @@ class Ingestor:
 
 	# TODO - close json list properly on KeyBoardInterrupt
 	def wrap_up(self):
-		self.json_logger.close()
-		self.map.clear()
+		self.logger.close()
+		self.mouth.clear()
+
+	@staticmethod
+	def initialize_counter():
+		return {
+			'courses': {
+				'valid': 0,
+				'total': 0
+			},
+			'sections': {
+				'valid': 0,
+				'total': 0
+			},
+			'meetings': {
+				'valid': 0,
+				'total': 0
+			},
+			'textbooks': {
+				'valid': 0,
+				'total': 0
+			},
+			'evaluations': {
+				'valid': 0,
+				'total': 0
+			},
+			'_format': {
+				'function': lambda counter: '%s/%s' % (counter['valid'], counter['total']),
+				'label': 'valid/total'
+			}
+		}

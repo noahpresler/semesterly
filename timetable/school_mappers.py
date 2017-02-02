@@ -87,6 +87,11 @@ course_parsers = {
   # 'queens': lambda: QueensParser().parse_courses()
 }
 
+new_course_parsers = {
+  'chapman': lambda *args, **kwargs: ChapmanParser(*args, **kwargs),
+  'jhu': lambda *args, **kwargs: None
+}
+
 eval_parsers = {
   'jhu': lambda: HopkinsEvalParser().parse_evals(),
   'uoft': lambda: None,
