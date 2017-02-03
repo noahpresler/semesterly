@@ -24,6 +24,14 @@ def schoollist_argparser(parser):
 		help='(default: all parseable schools)')
 	# NOTE: list of schools cannot support single config file arg (see: single_school_action)
 
+def validate_switch_argparser(parser):
+	validation = parser.add_mutually_exclusive_group()
+	validation.add_argument('--validate', dest='validate', action='store_true',
+		help='validate parser output (default)')
+	validation.add_argument('--no-validate', dest='validate', action='store_false',
+		help='do not validate parser output')
+	validation.set_defaults(validate=True)
+
 def parser_argparser(parser):
 	parser.add_argument('--term-and-year', nargs=2, type=str,
 		help='parse for term and year - two args') 
@@ -41,12 +49,7 @@ def parser_argparser(parser):
 		help='don\'t parse textbooks')
 	textbooks.set_defaults(textbooks=False)
 
-	validation = parser.add_mutually_exclusive_group()
-	validation.add_argument('--validate', dest='validate', action='store_true',
-		help='validate parser output (default)')
-	validation.add_argument('--no-validate', dest='validate', action='store_false',
-		help='do not validate parser output')
-	validation.set_defaults(validate=True)
+	validate_switch_argparser(parser)
 
 def validator_argparser(parser):
 	# enforce that non-default config can only be applied to single school
@@ -71,14 +74,27 @@ def validator_argparser(parser):
 	break_warning.add_argument('--no-break-on-warning', dest='break_on_warning', action='store_false', help='(default)')
 	break_warning.set_defaults(break_on_warnings=False)
 
-def digestor_argparser(parser, writable_file_action=None):
+def digestor_argparser(parser):
+	class set_false_error_on_no_diff_no_load_action(argparse.Action):
+		def __call__(self, parser, namespace, values, option_string=None):
+			attr_name = option_string.strip('-').strip('no').strip('-').replace('-', '_')
+			setattr(namespace, attr_name, False)
+			other_attr_name = 'diff' if attr_name == 'load' else 'load'
+			if not getattr(namespace, attr_name) and not getattr(namespace, other_attr_name):
+				raise parser.error('--no-diff and --no-load performs no action')
+
 	diff = parser.add_mutually_exclusive_group()
-	diff.add_argument('--diff', dest='diff', action='store_true')
-	diff.add_argument('--no-diff', dest='diff', action='store_false')
+	diff.add_argument('--diff', dest='diff', action='store_true', 
+		help='output diff between input and django db')
+	diff.add_argument('--no-diff', dest='diff', nargs=0,
+		action=set_false_error_on_no_diff_no_load_action)
+	diff.set_defaults(diff=True)
 	load = parser.add_mutually_exclusive_group()
-	load.add_argument('--load', dest='load', action='store_true')
-	load.add_argument('--no-load', dset='load', action='store_false')
-	# parser.add_argument('--strategy', default='burp', choices=['vommit', 'absorb', 'burp', 'dbdiff', 'dbload', 'dbdiff_and_dbload'])
+	load.add_argument('--load', dest='load', action='store_true',
+		help='load django db models with info from json')
+	load.add_argument('--no-load', dest='load', nargs=0,
+		action=set_false_error_on_no_diff_no_load_action)
+	load.set_defaults(load=True)
 
 # Argparse hook to check for writable file within directory
 class writable_file_action(argparse.Action):
