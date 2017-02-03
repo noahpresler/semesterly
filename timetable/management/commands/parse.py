@@ -2,7 +2,7 @@ import os, django, datetime, logging, sys, argparse
 from django.core.management.base import BaseCommand, CommandParser, CommandError
 from timetable.models import Updates
 from timetable.school_mappers import course_parsers, new_course_parsers
-from timetable.management.commands.args_parse import school_argparser, parser_argparser, validator_argparser
+from timetable.management.commands.args_parse import schoollist_argparser, parser_argparser, validator_argparser
 
 class Command(BaseCommand):
 	help = "Initiates specified parsers for specified schools. If no school is provided, starts parsers for all schools."
@@ -14,7 +14,7 @@ class Command(BaseCommand):
 		#       --verbosity
 
 		# Provide list of schools to parse; none implies all
-		school_argparser(parser)
+		schoollist_argparser(parser)
 
 		# Options for course parsers
 		parser_argparser(parser)
