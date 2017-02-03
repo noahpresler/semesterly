@@ -3,7 +3,7 @@
 import os, argparse
 from timetable.school_mappers import course_parsers, new_course_parsers
 
-def school_argparser(parser):
+def schoollist_argparser(parser):
 	# Handles nargs='*' with strict choices and set to all schools if empty
 	class school_verifier_action(argparse.Action):
 		VALID_SCHOOLS = new_course_parsers.keys()
@@ -13,12 +13,14 @@ def school_argparser(parser):
 					raise parser.error('invalid school: {0!r} (choose from [{1}])'
 						.format(value, ', '.join(school_verifier_action.VALID_SCHOOLS)))
 			if values:
-				setattr(namespace, self.dest, values)
+				# NOTE: set(values) to uniqueify list of schools
+				setattr(namespace, self.dest, set(values))
 			else:
+				# set list of schools to all schools that are parseable
 				setattr(namespace, self.dest, school_verifier_action.VALID_SCHOOLS)
 
 	# optional argument to specify parser for specific school
-	parser.add_argument('schools', type=str, nargs=1, action=school_verifier_action,
+	parser.add_argument('schools', type=str, nargs='*', action=school_verifier_action,
 		help='(default: all parseable schools)')
 	# NOTE: Cannot support list of schools b/c conflicting cmd line flags, consider revising
 
@@ -47,14 +49,19 @@ def parser_argparser(parser):
 	validation.set_defaults(validate=True)
 
 def validator_argparser(parser):
+	# enforce that non-default config can only be applied to single school
+	class single_school_action(argparse.Action):
+		def __call__(self, parser, namespace, values, option_string=None):
+			if 'schools' in namespace and len(namespace.schools) > 1:
+				raise parser.error('non-default config can only apply to single school')
 	class config_file_action(argparse.Action):
 		def __call__(self, parser, namespace, values, option_string=None):
-			single_school_action.__call__(parser, namespace, values, option_string)
-			writable_file_action.__call__(parser, namespace, values, option_string)
+			single_school_action('','').__call__(parser, namespace, values, option_string)
+			writable_file_action('','').__call__(parser, namespace, values, option_string)
 
 	parser.add_argument('--output-error', help='(default:  %(default)s)', action=writable_file_action)
-	parser.add_argument('--config-file', dest='config_file', metavar='', action=None,
-		help='pull config file from this path')
+	parser.add_argument('--config-file', dest='config_file', metavar='', action=config_file_action,
+		help='load config file from this path')
 	break_error = parser.add_mutually_exclusive_group()
 	break_error.add_argument('--break-on-error', dest='break_on_error', action='store_true', help='(default)')
 	break_error.add_argument('--no-break-on-error', dest='break_on_error', action='store_false')
