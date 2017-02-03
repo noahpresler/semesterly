@@ -137,6 +137,10 @@ h3, h4, h5, h6, p, a, span, input, textarea {
 		width: 100%;
 	}
 	#side-bar {
+		position: fixed;
+		top: 50px;
+		bottom: 0;
+		overflow-y: auto;
 		width: 100%;
 		left: 100%;
 		-webkit-transform: translateX(0%);
