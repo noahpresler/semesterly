@@ -22,7 +22,7 @@ def schoollist_argparser(parser):
 	# optional argument to specify parser for specific school
 	parser.add_argument('schools', type=str, nargs='*', action=school_verifier_action,
 		help='(default: all parseable schools)')
-	# NOTE: Cannot support list of schools b/c conflicting cmd line flags, consider revising
+	# NOTE: list of schools cannot support single config file arg (see: single_school_action)
 
 def parser_argparser(parser):
 	parser.add_argument('--term-and-year', nargs=2, type=str,
@@ -72,7 +72,13 @@ def validator_argparser(parser):
 	break_warning.set_defaults(break_on_warnings=False)
 
 def digestor_argparser(parser, writable_file_action=None):
-	parser.add_argument('--strategy', default='burp', choices=['vommit', 'absorb', 'burp', 'dbdiff', 'dbload', 'dbdiff_and_dbload'])
+	diff = parser.add_mutually_exclusive_group()
+	diff.add_argument('--diff', dest='diff', action='store_true')
+	diff.add_argument('--no-diff', dest='diff', action='store_false')
+	load = parser.add_mutually_exclusive_group()
+	load.add_argument('--load', dest='load', action='store_true')
+	load.add_argument('--no-load', dset='load', action='store_false')
+	# parser.add_argument('--strategy', default='burp', choices=['vommit', 'absorb', 'burp', 'dbdiff', 'dbload', 'dbdiff_and_dbload'])
 
 # Argparse hook to check for writable file within directory
 class writable_file_action(argparse.Action):
