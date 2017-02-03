@@ -1,10 +1,8 @@
+import os, django, datetime, logging, sys, argparse
 from django.core.management.base import BaseCommand, CommandParser, CommandError
-import os
-import django
 from timetable.models import Updates
 from timetable.school_mappers import course_parsers, new_course_parsers
-import datetime, logging, os, sys, argparse
-from timetable.management.commands.args_parse import parser_argparser, validator_argparser
+from timetable.management.commands.args_parse import school_argparser, parser_argparser, validator_argparser
 
 class Command(BaseCommand):
 	help = "Initiates specified parsers for specified schools. If no school is provided, starts parsers for all schools."
@@ -15,23 +13,8 @@ class Command(BaseCommand):
 		#       --no-color        
 		#       --verbosity
 
-		# Handles nargs='*' with strict choices and set to all schools if empty
-		class school_verifier_action(argparse.Action):
-			VALID_SCHOOLS = new_course_parsers.keys()
-			def __call__(self, parser, namespace, values, option_string=None):
-				for value in values:
-					if value not in school_verifier_action.VALID_SCHOOLS:
-						raise parser.error('invalid school: {0!r} (choose from [{1}])'
-							.format(value, ', '.join(school_verifier_action.VALID_SCHOOLS)))
-				if values:
-					setattr(namespace, self.dest, values)
-				else:
-					setattr(namespace, self.dest, school_verifier_action.VALID_SCHOOLS)
-
-		# optional argument to specify parser for specific school
-		parser.add_argument('schools', type=str, nargs=1, action=school_verifier_action,
-			help='(default: all parseable schools)')
-		# NOTE: Cannot support list of schools b/c conflicting cmd line flags, consider revising
+		# Provide list of schools to parse; none implies all
+		school_argparser(parser)
 
 		# Options for course parsers
 		parser_argparser(parser)
