@@ -15,6 +15,7 @@ from scripts.parser_library.internal_utils import *
 from scripts.parser_library.Logger import Logger, JsonListLogger
 from scripts.parser_library.internal_exceptions import DigestionError
 
+# TODO - DigestionError should be removed with failure, user should not be able to produce direct DigestionError
 
 class Digestor:
 	def __init__(self, school, 
