@@ -1,6 +1,28 @@
-import os, argparse
+# TODO - https://github.com/kislyuk/argcomplete
 
-def parser_argparser(parser, subparser_class=None):
+import os, argparse
+from timetable.school_mappers import course_parsers, new_course_parsers
+
+def school_argparser(parser):
+	# Handles nargs='*' with strict choices and set to all schools if empty
+	class school_verifier_action(argparse.Action):
+		VALID_SCHOOLS = new_course_parsers.keys()
+		def __call__(self, parser, namespace, values, option_string=None):
+			for value in values:
+				if value not in school_verifier_action.VALID_SCHOOLS:
+					raise parser.error('invalid school: {0!r} (choose from [{1}])'
+						.format(value, ', '.join(school_verifier_action.VALID_SCHOOLS)))
+			if values:
+				setattr(namespace, self.dest, values)
+			else:
+				setattr(namespace, self.dest, school_verifier_action.VALID_SCHOOLS)
+
+	# optional argument to specify parser for specific school
+	parser.add_argument('schools', type=str, nargs=1, action=school_verifier_action,
+		help='(default: all parseable schools)')
+	# NOTE: Cannot support list of schools b/c conflicting cmd line flags, consider revising
+
+def parser_argparser(parser):
 	parser.add_argument('--term-and-year', nargs=2, type=str,
 		help='parse for term and year - two args') 
 	parser.add_argument('--department', default='all',
@@ -25,6 +47,11 @@ def parser_argparser(parser, subparser_class=None):
 	validation.set_defaults(validate=True)
 
 def validator_argparser(parser):
+	class config_file_action(argparse.Action):
+		def __call__(self, parser, namespace, values, option_string=None):
+			single_school_action.__call__(parser, namespace, values, option_string)
+			writable_file_action.__call__(parser, namespace, values, option_string)
+
 	parser.add_argument('--output-error', help='(default:  %(default)s)', action=writable_file_action)
 	parser.add_argument('--config-file', dest='config_file', metavar='', action=None,
 		help='pull config file from this path')
