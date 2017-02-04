@@ -135,13 +135,7 @@ class Ingestor:
 			'homepage': self.getchain('homepage', 'website'),
 		}
 		course = cleandict(course)
-		if self.validate:
-			is_valid = self.run_validator(lambda x: self.validator.validate(x), course)
-			if is_valid:
-				self.counter['courses']['valid'] += 1
-		self.counter['courses']['total'] += 1
-		self.logger.log(course)
-		self.update_progress(mode='ingesting', **self.counter)
+		self.validate_and_log(course)
 		return course
 
 	def ingest_section(self, course):
@@ -155,7 +149,7 @@ class Ingestor:
 		'''
 
 		# handle nested instructor definition and resolution
-		for key in [k for k in ['instructors', 'instrs', 'instructor', 'instr'] if k in self.mouth]:
+		for key in [k for k in ['instructors', 'instrs', 'instructor', 'instr', 'prof', 'professor'] if k in self.mouth]:
 			self.mouth[key] = make_list(self.mouth[key])
 			instructors = self.mouth[key]
 			for i in range(len(instructors)):
@@ -185,13 +179,7 @@ class Ingestor:
 		}
 
 		section = cleandict(section)
-		if self.validate:
-			is_valid = self.run_validator(lambda x: self.validator.validate(x), section)
-			if is_valid:
-				self.counter['sections']['valid'] += 1
-		self.counter['sections']['total'] += 1
-		self.logger.log(section)
-		self.update_progress(mode='ingesting', **self.counter)
+		self.validate_and_log(section)
 		return section
 
 	def ingest_offerings(self, section):
@@ -234,19 +222,23 @@ class Ingestor:
 		}
 
 		meeting = cleandict(meeting)
-		if self.validate:
-			is_valid = self.run_validator(lambda x: self.validator.validate(x), meeting)
-			if is_valid:
-				self.counter['meetings']['valid'] += 1
-		self.counter['meetings']['total'] += 1
-		self.logger.log(meeting)
-		self.update_progress(mode='ingesting', **self.counter)
+		self.validate_and_log(meeting)
 		return meeting
 
-	def run_validator(self, validate_function, data):
+	def validate_and_log(self, obj):
+		# sys.stderr.write(str(obj))
+		if self.validate:
+			is_valid = self.run_validator(obj)
+			if is_valid:
+				self.counter[obj['kind']]['valid'] += 1
+		self.counter[obj['kind']]['total'] += 1
+		self.logger.log(obj)
+		self.update_progress(mode='ingesting', **self.counter)
+
+	def run_validator(self, data):
 		is_valid = False
 		try:
-			validate_function(data)
+			self.validator.validate(data)
 			is_valid = True
 		except jsonschema.exceptions.ValidationError as e:
 			# Wrap error in another (self-developed) error
@@ -273,23 +265,23 @@ class Ingestor:
 	@staticmethod
 	def initialize_counter():
 		return {
-			'courses': {
+			'course': {
 				'valid': 0,
 				'total': 0
 			},
-			'sections': {
+			'section': {
 				'valid': 0,
 				'total': 0
 			},
-			'meetings': {
+			'meeting': {
 				'valid': 0,
 				'total': 0
 			},
-			'textbooks': {
+			'textbook': {
 				'valid': 0,
 				'total': 0
 			},
-			'evaluations': {
+			'evaluation': {
 				'valid': 0,
 				'total': 0
 			},
