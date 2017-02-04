@@ -20,7 +20,7 @@ from scripts.parser_library.internal_exceptions import DigestionError
 class Digestor:
 	def __init__(self, school, 
 		data=None, 
-		log_file=None, 
+		output=None, 
 		diff=True, 
 		dry=True):
 
@@ -46,18 +46,17 @@ class Digestor:
 
 		self.diff = diff
 		self.dry = dry
-		self.strategy = self.set_strategy(diff, dry)
+		self.strategy = self.set_strategy(diff, dry, output)
 
-	def set_strategy(diff, dry):
+	def set_strategy(diff, dry, output=None):
 		if diff and dry:
-			return Vommit() # diff only
+			return Vommit(output) # diff only
 		elif not diff and not dry:
 			return Absorb() # load db only + clean
 		elif diff and not dry:
 			return Burp() # load db and log diff
 		else: # nothing to do...
-			sys.stderr.write('Nothing to run.')
-			exit(1)
+			raise DigestionError('Nothing to run with --no-diff and --no-load.')
 
 	def digest(self):
 		# TODO - handle single object not in list
@@ -280,7 +279,6 @@ class DigestionStrategy:
 	def __init__(self):
 
 		# Log digestor messages to stdout and/or file
-		self.logger = Logger()
 
 		count = {
 			'created': 0,
@@ -332,8 +330,8 @@ class DigestionStrategy:
 
 
 class Vommit(DigestionStrategy):
-	def __init__(self):
-		self.json_logger = JsonListLogger()
+	def __init__(self, output=None):
+		self.json_logger = JsonListLogger(output)
 		self.json_logger.open()
 
 		self.defaults = Vommit.get_model_defaults()
@@ -470,6 +468,7 @@ class Absorb(DigestionStrategy):
 class Burp(DigestionStrategy):
 	def __init__(self):
 		super(Burp, self).__init__()
+	# TODO
 
 def main():
 	d = Digestor('chapman',)

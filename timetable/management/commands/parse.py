@@ -40,7 +40,7 @@ class Command(BaseCommand):
 
 			try:
 				parser(school,
-					validate=options.get('validate'),
+					validate=options['validate'],
 					config=options.get('config_file'),
 					output_filepath=options.get('output'),
 					output_error_filepath=options.get('output_error'),
@@ -57,7 +57,7 @@ class Command(BaseCommand):
 
 			# TODO - catch JsonValidationError
 			# TODO - catch CourseParseError as well
-			except ValueError as e:
+			except KeyError as e:
 				error = "Error while parsing %s:\n\n%s\n" % (school, str(e))
 				logging.exception(error)
 				self.stderr.write(self.style.ERROR(error))
