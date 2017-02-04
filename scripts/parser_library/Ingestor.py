@@ -35,8 +35,8 @@ class Ingestor:
 			output_filepath = '{0}/data/courses2.json'.format(directory)
 		if not output_error_filepath:
 			output_error_filepath = '{0}/logs/error2.log'.format(directory)
-
-		self.validator = Validator(config)
+ 
+		self.validator = Validator(config=config)
 
 		# Dictionary that holds info before being committed as json object
 		self.mouth = {'':''}
@@ -136,7 +136,7 @@ class Ingestor:
 		}
 		course = cleandict(course)
 		if self.validate:
-			is_valid = self.run_validator(lambda x: self.validator.validate_course(x), course)
+			is_valid = self.run_validator(lambda x: self.validator.validate(x), course)
 			if is_valid:
 				self.counter['courses']['valid'] += 1
 		self.counter['courses']['total'] += 1
@@ -169,7 +169,7 @@ class Ingestor:
 			'course': {
 				'code': course['code']
 			},
-			'code': self.getchain('section_code', 'section'), # NOTE: design conflict with code in course
+			'code': self.getchain('section_code', 'section', 'meeting_section'), # NOTE: design conflict with code in course
 			'term': self.getchain('term', 'semester'),
 			'year': self.get('year'), # NOTE: should be required
 			'instructors': self.get('instructors'),
@@ -186,7 +186,7 @@ class Ingestor:
 
 		section = cleandict(section)
 		if self.validate:
-			is_valid = self.run_validator(lambda x: self.validator.validate_section(x), section)
+			is_valid = self.run_validator(lambda x: self.validator.validate(x), section)
 			if is_valid:
 				self.counter['sections']['valid'] += 1
 		self.counter['sections']['total'] += 1
@@ -235,7 +235,7 @@ class Ingestor:
 
 		meeting = cleandict(meeting)
 		if self.validate:
-			is_valid = self.run_validator(lambda x: self.validator.validate_meeting(x), meeting)
+			is_valid = self.run_validator(lambda x: self.validator.validate(x), meeting)
 			if is_valid:
 				self.counter['meetings']['valid'] += 1
 		self.counter['meetings']['total'] += 1

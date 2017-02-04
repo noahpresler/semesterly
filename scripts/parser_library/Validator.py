@@ -10,7 +10,7 @@ from scripts.parser_library.internal_utils import *
 from scripts.parser_library.internal_exceptions import JsonValidationError, JsonValidationWarning
 
 class Validator:
-	def __init__(self, config):
+	def __init__(self, config=None):
 
 		# Load/Cache schema definitions into memory
 		schema_directory ='scripts/parser_library/schemas/'
@@ -71,32 +71,40 @@ class Validator:
 			else:
 				return json.loads(f.read(), object_pairs_hook=Validator.dict_raise_on_duplicates)
 
-	def validate(self, directory, break_on_error=False, break_on_warning=False, logfile=None, errorfile=None):
-		# TODO - iter errors and catch exceptions within method
-		# TODO - load config file as well
-		# TODO - handle single objects smoothly
-		self.logger = Logger(logfile=logfile, errorfile=errorfile)
+	def kind_to_validation_function(self, kind):
+		return {
+			'course'    : lambda x, schema=False: self.validate_course(x, schema=schema),
+			'section'   : lambda x, schema=False: self.validate_section(x, schema=schema),
+			'meeting'   : lambda x, schema=False: self.validate_meeting(x, schema=schema),
+			'instructor': lambda x, schema=False: self.validate_instructor(x, schema=schema),
+			'final_exam': lambda x, schema=False: self.validate_final_exam(x, schema=schema),
+			'textbook'  : lambda x, schema=False: self.validate_textbook(x, schema=schema),
+			'textbook_link': lambda x, schema=False: self.validate_textbook_link(x, schema=schema)
+		}[kind]
 
-		try:
-			self.validate_directory(directory)
-			data = Validator.filepath_to_json(directory + 'data/courses.json')
-			Validator.validate_schema(data, *self.schema.data)
-			data = [ dotdict(data) for data in data ]
-		except (JsonValidationError, json.scanner.JSONDecodeError) as e:
-			self.logger.log(e)
-			raise e	# fatal error, cannot continue
+	def validate(self, data):
+
+		# Convert to dotdict for `easy-on-the-eyes` element access
+		if isinstance(data, list):
+			data = [ dotdict(d) for d in data ]
+			for obj in data:
+				self.kind_to_validation_function(obj.kind)(obj, schema=True)
+		else:
+			data = dotdict(data)
+			self.kind_to_validation_function(data.kind)(data, schema=True)
+
+	def validate_self_contained(self, data,
+		break_on_error=False,
+		break_on_warning=False,
+		output_error=None):
+
+		self.logger = Logger(errorfile=output_error)
+
+		data = dotdict(data)
 
 		for obj in data:
 			try:
-				{
-					'course'    : lambda x: self.validate_course(x, schema=False),
-					'section'   : lambda x: self.validate_section(x, schema=False),
-					'meeting'   : lambda x: self.validate_meeting(x, schema=False),
-					'instructor': lambda x: self.validate_instructor(x, schema=False),
-					'final_exam': lambda x: self.validate_final_exam(x, schema=False),
-					'textbook'  : lambda x: self.validate_textbook(x, schema=False),
-					'textbook_link': lambda x: self.validate_textbook_link(x, schema=False)
-				}[obj.kind](obj)
+				Validator.kind_to_validation_function[obj.kind](obj, schema=False)
 			except JsonValidationError as e:
 				self.logger.log(e)
 				if break_on_error:
@@ -106,6 +114,28 @@ class Validator:
 				if break_on_warning:
 					break
 
+	def _validate(self, directory, 
+		break_on_error=False, 
+		break_on_warning=False, 
+		errorfile=None):	
+
+		# TODO - iter errors and catch exceptions within method
+		# TODO - load config file as well
+		# TODO - handle single objects smoothly
+		self.logger = Logger(errorfile=errorfile)
+
+		try:
+			self.validate_directory(directory)
+			data = Validator.filepath_to_json(directory + 'data/courses.json')
+			Validator.validate_schema(data, *self.schema.data)
+		except (JsonValidationError, json.scanner.JSONDecodeError) as e:
+			self.logger.log(e)
+			raise e	# fatal error, cannot continue
+
+		self.validate_self_contained(data, break_on_error=break_on_error, break_on_warning=break_on_warning, output_error=errorfile)
+
+# ###############################################
+
 	def validate_config(self, config):
 		if not isinstance(config, dict):
 			try:
@@ -113,8 +143,8 @@ class Validator:
 			except IOError as e:
 				e.message += '\nconfig.json not defined'
 				raise e
-		return dotdict(config)
-		Validator.validate_schema(config, *self.schema.config)
+		return dotdict(config) # FIXME - dotdict should work here
+		# Validator.validate_schema(config, *self.schema.config)
 
 	def validate_course(self, course, schema=True, relative=True):
 		if not isinstance(course, dotdict):

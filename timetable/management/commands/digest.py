@@ -1,5 +1,7 @@
 from django.core.management.base import BaseCommand, CommandParser, CommandError
 from timetable.management.commands.args_parse import schoollist_argparser, digestor_argparser, validator_argparser, validate_switch_argparser
+from scripts.parser_library.Digestor import Digestor
+from scripts.parser_library.Validator import Validator
 
 class Command(BaseCommand):
 	def add_arguments(self, parser):
@@ -8,4 +10,4 @@ class Command(BaseCommand):
 		validator_argparser(parser)
 
 	def handle(self, *args, **options):
-		pass
+		Digestor('jhu')

@@ -114,6 +114,7 @@
 					}
 				],
 				"properties": {
+					"kind": {},
 					"code": {},
 					"term": {},
 					"year": {},
@@ -132,6 +133,7 @@
 				},
 				"additionalProperties": false,
 				"required": [
+					"kind",
 					"code",
 					"term",
 					"year",
