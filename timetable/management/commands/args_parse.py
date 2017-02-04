@@ -60,10 +60,10 @@ def validator_argparser(parser):
 	class config_file_action(argparse.Action):
 		def __call__(self, parser, namespace, values, option_string=None):
 			single_school_action('','').__call__(parser, namespace, values, option_string)
-			writable_file_action('','').__call__(parser, namespace, values, option_string)
+			writable_file_action(option_string, self.dest).__call__(parser, namespace, values, option_string)
 
-	parser.add_argument('--output-error', help='(default:  %(default)s)', action=writable_file_action)
-	parser.add_argument('--config-file', dest='config_file', metavar='', action=config_file_action,
+	parser.add_argument('--output-error', help='(default: in school dir)', action=writable_file_action)
+	parser.add_argument('--config-file', action=config_file_action,
 		help='load config file from this path')
 	break_error = parser.add_mutually_exclusive_group()
 	break_error.add_argument('--break-on-error', dest='break_on_error', action='store_true', help='(default)')
