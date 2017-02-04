@@ -121,11 +121,15 @@
 					}
 				],
 				"properties": {
+					"kind": {},
 					"isbn": {},
 					"title": {},
 					"author": {}
 				},
-				"additionalProperties": false
+				"additionalProperties": false,
+				"required": [
+					"kind"
+				]
 			}
 		},
 		"meetings": {
@@ -137,6 +141,7 @@
 					}
 				],
 				"properties": {
+					"kind": {},
 					"dates": {},
 					"days": {},
 					"time": {},
@@ -146,6 +151,7 @@
 				},
 				"additionalProperties": false,
 				"required": [ 
+					"kind",
 					"time",
 					"course",
 					"section"
