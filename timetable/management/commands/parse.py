@@ -57,7 +57,7 @@ class Command(BaseCommand):
 
 			# TODO - catch JsonValidationError
 			# TODO - catch CourseParseError as well
-			except KeyError as e:
+			except ValueError as e:
 				error = "Error while parsing %s:\n\n%s\n" % (school, str(e))
 				logging.exception(error)
 				self.stderr.write(self.style.ERROR(error))
