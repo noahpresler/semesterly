@@ -1,11 +1,9 @@
 """This file contains all dicts which map a school to its associated object"""
-import os
-import django
+import os, sys, django
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "semesterly.settings")
 django.setup()
 from timetable.models import *
 from student.models import *
-import sys
 
 # the smallest block size (in minutes) needed to describe start/end times
 # e.g. uoft classes only start on the hour or half hour, so granularity is 30min
