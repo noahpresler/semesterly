@@ -15,6 +15,7 @@ class BaseParser:
 		
 		self.school = school
 		self.requester = Requester()
+		self.extractor = Extractor()
 
 	@abstractmethod
 	def start(self, **kwargs): pass
@@ -37,7 +38,7 @@ class CourseParser(BaseParser):
 			self.progressbar = self.set_progressbar()
 		update_progress = (lambda *args, **kwargs: None) if hide_progress_bar else (lambda **kwargs: self.update_progress(**kwargs))
 
-		self.ingest = Ingestor(school,
+		self.ingestor = Ingestor(school,
 			validate=validate,
 			config=config,
 			output_filepath=output_filepath,
