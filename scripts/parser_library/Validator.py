@@ -7,7 +7,7 @@ import os, sys, re, jsonschema, argparse, httplib
 import simplejson as json
 from scripts.parser_library.Logger import Logger
 from scripts.parser_library.internal_utils import *
-from scripts.parser_library.internal_exceptions import JsonValidationError, JsonValidationWarning
+from scripts.parser_library.internal_exceptions import JsonValidationError, JsonValidationWarning, JsonDuplicationWarning
 
 class Validator:
 	def __init__(self, config=None):
@@ -191,7 +191,7 @@ class Validator:
 
 		if relative:
 			if course.code in self.seen:
-				raise JsonValidationWarning('multiple definitions of course "%s"' % (course.code), course)
+				raise JsonDuplicationWarning('multiple definitions of course "%s"' % (course.code), course)
 			if course.code not in self.seen:
 				self.seen[course.code] = {}
 
@@ -247,7 +247,7 @@ class Validator:
 			elif section.code in self.seen[section.course.code] and \
 			     section.year in self.seen[section.course.code][section.code] and \
 			     section.term in self.seen[section.course.code][section.code][section.year]:
-				raise JsonValidationWarning('multiple definitions for course "%s" section "%s" - %s already defined'
+				raise JsonDuplicationWarning('multiple definitions for course "%s" section "%s" - %s already defined'
 				 % (section.course.code, section.code, section.year), section)
 			else:
 				section_essence = {
