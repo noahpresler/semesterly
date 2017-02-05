@@ -21,7 +21,7 @@ class Validator:
 		self.course_code_regex = re.compile(self.config.course_code_regex)
 
 		# Running tracker of validated course and section codes
-		self.validated = {}
+		self.seen = {}
 
 		# Track stats throughout validation
 		self.count24 = 0.0
@@ -110,6 +110,7 @@ class Validator:
 
 		data = [ dotdict(d) for d in data ]
 
+		# TODO - iter errors and catch exceptions within method
 		for obj in data:
 			try:
 				self.kind_to_validation_function(obj.kind)(obj, schema=False)
@@ -122,6 +123,7 @@ class Validator:
 				if break_on_warning:
 					break
 
+	# DEPRECATED: delete at some point
 	def _validate(self, directory, 
 		break_on_error=False, 
 		break_on_warning=False, 
@@ -140,7 +142,10 @@ class Validator:
 			self.logger.log(e)
 			raise e	# fatal error, cannot continue
 
-		self.validate_self_contained(data, break_on_error=break_on_error, break_on_warning=break_on_warning, output_error=errorfile)
+		self.validate_self_contained(data, 
+			break_on_error=break_on_error, 
+			break_on_warning=break_on_warning, 
+			output_error=errorfile)
 
 # ###############################################
 
@@ -185,10 +190,10 @@ class Validator:
 			self.validate_section(section, schema=False)
 
 		if relative:
-			if course.code in self.validated:
+			if course.code in self.seen:
 				raise JsonValidationWarning('multiple definitions of course "%s"' % (course.code), course)
-			if course.code not in self.validated:
-				self.validated[course.code] = set()
+			if course.code not in self.seen:
+				self.seen[course.code] = {}
 
 	def validate_section(self, section, schema=True, relative=True):
 		if not isinstance(section, dotdict):
@@ -237,12 +242,23 @@ class Validator:
 			self.validate_meeting(meeting, schema=False)
 
 		if relative:
-			if section.course.code not in self.validated:
+			if section.course.code not in self.seen:
 				raise JsonValidationError('course code "%s" is not defined' % (section.course.code), section)
-			if section.code in self.validated[section.course.code]:
+			elif section.code in self.seen[section.course.code] and \
+			     section.year in self.seen[section.course.code][section.code] and \
+			     section.term in self.seen[section.course.code][section.code][section.year]:
 				raise JsonValidationWarning('multiple definitions for course "%s" section "%s" - %s already defined'
 				 % (section.course.code, section.code, section.year), section)
-			self.validated[section.course.code].add(section.code)
+			else:
+				section_essence = {
+					section.code: {
+						section.year: {
+							section.term
+						}
+					}	
+				}
+
+				update(self.seen[section.course.code], section_essence)
 
 	def validate_meeting(self, meeting, schema=True, relative=True):
 		if not isinstance(meeting, dotdict):
@@ -267,9 +283,9 @@ class Validator:
 				e.message = 'meeting for %s %s, ' % (meeting.course.code, meeting.section.code) + e.message
 				raise e
 		if relative:
-			if meeting.course.code not in self.validated:
+			if meeting.course.code not in self.seen:
 				raise JsonValidationError('course code "%s" is not defined' % (meeting.course.code), meeting)
-			if meeting.section.code not in self.validated[meeting.course.code]:
+			if meeting.section.code not in self.seen[meeting.course.code]:
 				raise JsonValidationError('section "%s" is not defined' % (meeting.section.code), meeting)
 
 	def validate_instructor(self, instructor, schema=False, relative=True):
