@@ -30,7 +30,8 @@ class CourseParser(BaseParser):
 		output_error_filepath=None,
 		break_on_error=True,
 		break_on_warning=False,
-		hide_progress_bar=False):
+		hide_progress_bar=False,
+		skip_shallow_duplicates=True):
 
 		super(CourseParser, self).__init__(school)
 
@@ -45,7 +46,8 @@ class CourseParser(BaseParser):
 			output_error_filepath=output_error_filepath,
 			break_on_error=break_on_error,
 			break_on_warning=break_on_warning,
-			update_progress=update_progress)
+			update_progress=update_progress,
+			skip_shallow_duplicates=skip_shallow_duplicates)
 
 	@abstractmethod
 	def start(self, **kwargs): pass
