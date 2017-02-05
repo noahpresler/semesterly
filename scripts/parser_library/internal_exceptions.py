@@ -3,20 +3,23 @@ class CourseParseError(Exception):
 	# TODO - add stats here like department, course, current request, etc.
 
 class JsonValidationError(ValueError):
-	'''Raise when fails validation condition.'''
-
+	'''Raise when fatal failure of validation condition.'''
 	def __init__(self, message, json=None, *args):
 		self.message = message
 		self.json = json # TODO - validate json
 		super(JsonValidationError, self).__init__(message, json, *args)
 
 class JsonValidationWarning(UserWarning):
-	'''Create when triggers validation warning.'''
-
+	'''Raise when user `should` be made aware of non-optimal, non-fatal condition.'''
 	def __init__(self, message, json=None, *args):
 		self.message = message
 		self.json = json
 		super(JsonValidationWarning, self).__init__(message, json, *args)
+
+class JsonDuplicationWarning(JsonValidationWarning):
+	'''Raise when validation detects duplicate json objects in the same parse.'''
+	def __init__(self, message, json=None, *args):
+		super(JsonDuplicationWarning, self).__init__(message, json, *args)
 
 class DigestionError(ValueError):
 	'''Raise when fails digestion invariant.'''
