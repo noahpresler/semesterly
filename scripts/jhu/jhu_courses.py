@@ -89,7 +89,6 @@ class HopkinsParser(CourseParser):
             # Load core section fields
             self.ingestor['section'] = "(" + section[0]['SectionName'] + ")"
             self.ingestor['semester'] = self.semester.split()[0]
-            print course['Instructors']
             self.ingestor['instructors'] = map(lambda i: i.strip(), course['Instructors'].split(','))
             self.ingestor['size'], self.ingestor['enrolment'] = self.compute_size_enrollment(course)
             self.ingestor['year'] = self.semester.split()[1]
