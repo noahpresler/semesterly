@@ -20,12 +20,13 @@ from scripts.parser_library.internal_exceptions import DigestionError
 class Digestor:
 	def __init__(self, school, 
 		data=None, 
-		output=None, 
+		output=None,
 		diff=True, 
-		dry=True):
+		load=True):
 
 		self.school = school
 
+		# TODO - extrapolate datafile/dict/string resolution to decorator
 		if data:
 			if isinstance(data, dict):
 				self.data = data
@@ -45,18 +46,18 @@ class Digestor:
 		self.adapter = DigestionAdapter(school, self.cached)
 
 		self.diff = diff
-		self.dry = dry
-		self.strategy = self.set_strategy(diff, dry, output)
+		self.load = load
+		self.strategy = self.set_strategy(diff, load, output)
 
-	def set_strategy(diff, dry, output=None):
-		if diff and dry:
+	def set_strategy(self, diff, load, output=None):
+		if diff and load:
 			return Vommit(output) # diff only
-		elif not diff and not dry:
+		elif not diff and load:
 			return Absorb() # load db only + clean
-		elif diff and not dry:
-			return Burp() # load db and log diff
+		elif diff and not load:
+			return Burp(output) # load db and log diff
 		else: # nothing to do...
-			raise DigestionError('Nothing to run with --no-diff and --no-load.')
+			raise ValueError('Nothing to run with --no-diff and --no-load.')
 
 	def digest(self):
 		# TODO - handle single object not in list
@@ -64,14 +65,16 @@ class Digestor:
 		for obj in self.data:
 			# try:
 			res = {
-				'course': lambda x: self.digest_course(x),
-				'section': lambda x: self.digest_section(x),
-				'meeting': lambda x: self.digest_meeting(x),
+				'course'	: lambda x: self.digest_course(x),
+				'section'	: lambda x: self.digest_section(x),
+				'meeting'	: lambda x: self.digest_meeting(x),
 				'instructor': lambda x: self.digest_instructor(x),
 				'final_exam': lambda x: self.digest_final_exam(x),
-				'textbook': lambda x: self.digest_textbook(x),
+				'textbook'	: lambda x: self.digest_textbook(x),
 				'textbook_link': lambda x: self.digest_textbook_link(x)
 			}[obj.kind](obj)
+
+		self.wrap_up()
 
 	def digest_course(self, course):
 		''' Create course in database from info in json model.
@@ -319,15 +322,18 @@ class DigestionStrategy:
 		Returns: (django) formatted meeting model
 		'''
 
-	def create_instructor(self, instructor):
+	def digest_instructor(self, instructor):
 		pass # TODO
-	def create_final_exam(self, final_exam):
+	def digest_final_exam(self, final_exam):
 		pass # TODO
-	def create_textbook(self, textbook):
+	def digest_textbook(self, textbook):
 		pass # TODO
-	def create_textbook_link(self, textbook_link):
+	def digest_textbook_link(self, textbook_link):
 		pass # TODO
 
+	@abstractmethod
+	def wrap_up(self):
+		'''Do whatever needs to be done to end digestions session.'''
 
 class Vommit(DigestionStrategy):
 	def __init__(self, output=None):
@@ -388,7 +394,6 @@ class Vommit(DigestionStrategy):
 
 	@staticmethod
 	def get_model_defaults():
-
 		models = {
 			'course': Course,
 			'section': Section,
@@ -399,7 +404,6 @@ class Vommit(DigestionStrategy):
 		}
 
 		defaults = {}
-
 		for model_name, model in models.items():
 			defaults[model_name] = {}
 			for field in model._meta.get_all_field_names():
@@ -410,7 +414,6 @@ class Vommit(DigestionStrategy):
 				if default is django.db.models.fields.NOT_PROVIDED:
 					continue
 				defaults[model_name][field] = default
-
 		return defaults
 
 class Absorb(DigestionStrategy):
@@ -466,7 +469,7 @@ class Absorb(DigestionStrategy):
 		update_object.save()
 
 class Burp(DigestionStrategy):
-	def __init__(self):
+	def __init__(self, output):
 		super(Burp, self).__init__()
 	# TODO
 
