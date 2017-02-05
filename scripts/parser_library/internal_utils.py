@@ -3,7 +3,7 @@ import re
 def cleandict(d):
 	if not isinstance(d, dict):
 		return deep_clean(d)
-	return dict((k, cleandict(v)) for k,v in d.iteritems() if deep_clean(v) is not None)
+	return { k: cleandict(v) for k,v in d.iteritems() if deep_clean(v) is not None }
 
 def make_list(l, base_type=basestring):
 	if not isinstance(l, list):
@@ -17,11 +17,13 @@ def make_list(l, base_type=basestring):
 def deep_clean(a):
 	if not a: return None
 	whitespace = re.compile(r'(?:\u00a0)|(?:\xc2\xa0)', re.IGNORECASE)
-	if isinstance(a, list):
+	if isinstance(a, dict):
+		a = cleandict(a) # recursively remove nested empty dictionaries
+	elif isinstance(a, list):
 		for i in range(len(a)):
 			if isinstance(a[i], basestring):
 				a[i] = whitespace.sub(' ', a[i]).strip()
-	if isinstance(a, basestring):
+	elif isinstance(a, basestring):
 		a = whitespace.sub(' ', a).strip()
 	try:
 		b = filter(None, a)
