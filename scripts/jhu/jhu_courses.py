@@ -2,7 +2,7 @@
 # @org      Semeseter.parser_library
 # @author   Noah Presler
 # @date     1/24/17
-
+import sys
 from scripts.parser_library.BaseParser import *
 
 class HopkinsParser(CourseParser):
@@ -17,11 +17,11 @@ class HopkinsParser(CourseParser):
         'sa': 'S',
         's': 'U'}
 
-    def __init__(self,sem="Spring 2017"):
+    def __init__(self,sem="Spring 2017",**kwargs):
         # CourseParser.__init__(self, school)
         self.schools = []
         self.semester = sem
-        super(HopkinsParser, self).__init__('jhu')
+        super(HopkinsParser, self).__init__('jhu',**kwargs)
 
     def get_schools(self):
         url = HopkinsParser.API_URL + '/codes/schools?key=' + HopkinsParser.KEY
@@ -111,7 +111,7 @@ class HopkinsParser(CourseParser):
                     }
                 created_meeting = self.ingestor.ingest_offerings(created_section)
 
-    def start(self):
+    def start(self,**kwargs):
         self.get_schools()
         self.parse_schools()
 
