@@ -86,11 +86,7 @@ class HopkinsParser(CourseParser):
                 self.ingestor['areas'] += [match]
 
         # print "LAST " + str(self.last_course.get('code', None)) + " NEW " + str(self.ingestor['code']) + " CREATING " + str(self.last_course.get('code', None) != self.ingestor['code'])
-        if self.last_course.get('code', None) != self.ingestor['code']:
-            created_course = self.ingestor.ingest_course()
-            self.last_course = created_course
-        else: 
-            created_course = self.last_course
+        created_course = self.ingestor.ingest_course()
 
         for meeting in SectionDetails[0]['Meetings']:
             # Load core section fields
@@ -100,11 +96,7 @@ class HopkinsParser(CourseParser):
             self.ingestor['size'], self.ingestor['enrolment'] = self.compute_size_enrollment(course)
             self.ingestor['year'] = self.semester.split()[1]
 
-            if self.last_course.get('code', None) != self.ingestor['code'] or self.last_section.get('section', None) != self.ingestor['section']:
-                created_section = self.ingestor.ingest_section(created_course)
-                self.last_section = created_section
-            else: 
-                created_section = self.last_section
+            created_section = self.ingestor.ingest_section(created_course)
 
             #load offering fields
             times = meeting['Times']

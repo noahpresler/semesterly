@@ -6,27 +6,29 @@
 import simplejson as json, jsonschema
 from pygments import highlight, lexers, formatters, filters
 from scripts.parser_library.Validator import Validator
-from scripts.parser_library.internal_exceptions import JsonValidationError, JsonValidationWarning
+from scripts.parser_library.internal_exceptions import JsonValidationError, JsonValidationWarning, JsonDuplicationWarning
 from internal_utils import *
 from scripts.parser_library.Logger import Logger, JsonListLogger
 
 class Ingestor:
 	def __init__(self, school,
 		update_progress=lambda *args, **kwargs: None, # noop
-		config=None, # TODO - non-intuitive meaning in context, conflicts with validate
 		validate=True,
+		config=None, # TODO - non-intuitive meaning in context, conflicts with validate
 		output_filepath=None,
 		output_error_filepath=None,
 		break_on_error=True, 
-		break_on_warning=False):
+		break_on_warning=False,
+		skip_shallow_duplicates=True):
 
 		self.school = school
 		self.validate = validate
 		self.break_on_error = break_on_error
 		self.break_on_warning = break_on_warning
 		self.update_progress = update_progress
+		self.skip_shallow_duplicates = skip_shallow_duplicates
 
-		# NOTE: unsure of where to put this, may belong in validator
+		# NOTE: unsure of where to put this, may belong in validator or in manage.py wrapper
 		# FIXME -- validate that this directory actually exists and is correctly formatted
 		directory = 'scripts/' + school
 		if not config:
@@ -226,22 +228,25 @@ class Ingestor:
 		return meeting
 
 	def validate_and_log(self, obj):
-		# sys.stderr.write(str(obj))
 		if self.validate:
-			is_valid = self.run_validator(obj)
+			is_valid, skip = self.run_validator(obj)
+			if skip:
+				return
 			if is_valid:
-				self.counter[obj['kind']]['valid'] += 1
+				self.logger.log(obj)
+		else:
+			self.logger.log(obj)
 		self.counter[obj['kind']]['total'] += 1
-		self.logger.log(obj)
 		self.update_progress(mode='ingesting', **self.counter)
 
 	def run_validator(self, data):
-		is_valid = False
+		is_valid, full_skip = False, False
 		try:
 			self.validator.validate(data)
+			self.counter[data['kind']]['valid'] += 1
 			is_valid = True
 		except jsonschema.exceptions.ValidationError as e:
-			# Wrap error in another (self-developed) error
+			# Wrap error along with json object in another error
 			e = JsonValidationError(str(e), data)
 			self.logger.log(e)
 			if self.break_on_error:
@@ -250,12 +255,16 @@ class Ingestor:
 			self.logger.log(e)
 			if self.break_on_error:
 				raise e
-		except JsonValidationWarning as e:
-			self.logger.log(e)
-			if self.break_on_warning:
-				raise e
+		except (JsonValidationWarning, JsonDuplicationWarning) as e:
+			if isinstance(e, JsonDuplicationWarning) and self.skip_shallow_duplicates:
+				full_skip = True # NOTE: potentially hides inefficient and redundant scraper design
+			else:
+				is_valid = True
+				self.logger.log(e)
+				if self.break_on_warning:
+					raise e
 
-		return is_valid
+		return is_valid, full_skip
 
 	# TODO - close json list properly on KeyBoardInterrupt
 	def wrap_up(self):
