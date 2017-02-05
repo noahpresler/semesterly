@@ -165,7 +165,7 @@ class Ingestor:
 			},
 			'code': self.getchain('section_code', 'section', 'meeting_section'), # NOTE: design conflict with code in course
 			'term': self.getchain('term', 'semester'),
-			'year': self.get('year'), # NOTE: should be required
+			'year': self.get('year'), # NOTE: should be required # FIXME -- different years for parsed sections
 			'instructors': self.get('instructors'),
 			'capacity': self.getchain('capacity', 'size'),
 			'enrollment': self.getchain('enrollment', 'enrolment'), # NOTE: change to enrollment
