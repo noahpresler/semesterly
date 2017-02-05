@@ -1,9 +1,9 @@
 # @what     JHU Course Parser
-# @org      Semeseter.ly
+# @org      Semeseter.parser_library
 # @author   Noah Presler
 # @date     1/24/17
 
-from scripts.parser_library.Base import *
+from scripts.parser_library.BaseParser import *
 
 class HopkinsParser(CourseParser):
 
@@ -67,46 +67,50 @@ class HopkinsParser(CourseParser):
             num_credits=0
 
         # Load core course fields
-        self.ingest['areas'] = course['Areas'].split(',')
-        self.ingest['areas'] += ['Writing Intensive'] if course['IsWritingIntensive'] == "Yes" else []
-        self.ingest['prerequisites'] = SectionDetails[0]['Prerequisites'][0].get('Description','') if len(SectionDetails[0]['Prerequisites']) > 0 else ''
-        self.ingest['level'] = re.findall(re.compile(r".+?\..+?\.(.{1}).+"),course['OfferingName'])[0] + "00"
-        self.ingest['descrption'] = SectionDetails[0]['Description']
-        self.ingest['code'] = course['OfferingName'].strip()
-        self.ingest['num_credits'] = num_credits
-        self.ingest['department_name'] = course['Department']
-        self.ingest['campus'] = 1
+        self.ingestor['areas'] = filter(lambda a: a != "None", course['Areas'].split(','))
+        self.ingestor['areas'] += ['Writing Intensive'] if course['IsWritingIntensive'] == "Yes" else []
+        self.ingestor['prerequisites'] = SectionDetails[0]['Prerequisites'][0].get('Description','') if len(SectionDetails[0]['Prerequisites']) > 0 else ''
+        self.ingestor['level'] = re.findall(re.compile(r".+?\..+?\.(.{1}).+"),course['OfferingName'])[0] + "00"
+        self.ingestor['descrption'] = SectionDetails[0]['Description']
+        self.ingestor['code'] = course['OfferingName'].strip()
+        self.ingestor['num_credits'] = num_credits
+        self.ingestor['department_name'] = course['Department']
+        self.ingestor['campus'] = 1
 
         # Add specialty areas for computer science department
         if course['Department'] == 'EN Computer Science':
             cs_areas_regex = r'\bApplications|\bAnalysis|\bSystems|\bGeneral'
             for match in re.findall(cs_areas_regex,description):
-                self.ingest['areas'] += [match]
+                self.ingestor['areas'] += [match]
 
-        created_course = self.ingest.create_course()
+        created_course = self.ingestor.ingest_course()
 
         for meeting in SectionDetails[0]['Meetings']:
             # Load core section fields
-            self.ingest['section'] = "(" + section[0]['SectionName'] + ")"
-            self.ingest['semester'] = self.semester[0].upper()
-            self.ingest['instructors'] = course['Instructors']
-            self.ingest['size'], self.ingest['enrolment'] = self.compute_size_enrollment(coure)
+            self.ingestor['section'] = "(" + section[0]['SectionName'] + ")"
+            self.ingestor['semester'] = self.semester.split()[0]
+            print course['Instructors']
+            self.ingestor['instructors'] = map(lambda i: i.strip(), course['Instructors'].split(','))
+            self.ingestor['size'], self.ingestor['enrolment'] = self.compute_size_enrollment(course)
+            self.ingestor['year'] = self.semester.split()[1]
 
-            created_section = self.ingest.create_section(created_course)
+            created_section = self.ingestor.ingest_section(created_course)
 
             #load offering fields
-            times = Meeting['Times']
+            times = meeting['Times']
             for time in filter(lambda t: len(t) > 0, times.split(',')):
                 time_pieces = re.search(r"(\d\d:\d\d [AP]M) - (\d\d:\d\d [AP]M)",time)
-                self.ingest['time_start'] = self.extract.time_12to24(time_pieces.group(1))
-                self.ingest['time_end'] = self.extract.time_12to24(time_pieces.group(2))
+                self.ingestor['time_start'] = self.extractor.time_12to24(time_pieces.group(1))
+                self.ingestor['time_end'] = self.extractor.time_12to24(time_pieces.group(2))
                 if meeting['DOW'] != "TBA" and meeting['DOW'] !="None":
-                    self.ingest['days'] = map(lambda d: HopkinsParser.DAY_TO_LETTER_MAP[d],re.findall(r"([A-Z][a-z]*)+?",days))
-                    self.ingest['location'] = {
+                    self.ingestor['days'] = map(lambda d: HopkinsParser.DAY_TO_LETTER_MAP[d.lower()], re.findall(
+                        r"([A-Z][a-z]*)+?", meeting['DOW']
+                    ))
+                    self.ingestor['location'] = {
                         'building' : meeting['Building'],
                         'room' : meeting['Room']
                     }
-                created_meeting = self.ingest.create_offerings(created_section)
+                created_meeting = self.ingestor.ingest_offerings(created_section)
 
     def start(self):
         self.get_schools()
