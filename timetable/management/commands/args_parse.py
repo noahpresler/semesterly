@@ -51,6 +51,11 @@ def parser_argparser(parser):
 
 	validate_switch_argparser(parser)
 
+def validate_argparser(parser):
+	parser.add_argument('school', type=str)
+	parser.add_argument('--data', required=True, action=readable_file_action,
+		help='data to interact with db')
+
 def validator_argparser(parser):
 	# enforce that non-default config can only be applied to single school
 	class single_school_action(argparse.Action):
@@ -64,7 +69,7 @@ def validator_argparser(parser):
 
 	parser.add_argument('--output-error', help='(default: in school dir)', action=writable_file_action)
 	parser.add_argument('--config-file', action=config_file_action,
-		help='load config file from this path')
+		help='load config file from this path (default: [school]/config.json)')
 	break_error = parser.add_mutually_exclusive_group()
 	break_error.add_argument('--break-on-error', dest='break_on_error', action='store_true', help='(default)')
 	break_error.add_argument('--no-break-on-error', dest='break_on_error', action='store_false')
@@ -72,9 +77,13 @@ def validator_argparser(parser):
 	break_warning = parser.add_mutually_exclusive_group()
 	break_warning.add_argument('--break-on-warning', dest='break_on_warning', action='store_true')
 	break_warning.add_argument('--no-break-on-warning', dest='break_on_warning', action='store_false', help='(default)')
-	break_warning.set_defaults(break_on_warnings=False)
+	break_warning.set_defaults(break_on_warning=False)
 
 def digestor_argparser(parser):
+	parser.add_argument('school', type=str)
+	parser.add_argument('--data', required=True, action=readable_file_action,
+		help='data to interact with db')
+
 	class set_false_error_on_no_diff_no_load_action(argparse.Action):
 		def __call__(self, parser, namespace, values, option_string=None):
 			attr_name = option_string.strip('-').strip('no').strip('-').replace('-', '_')
@@ -83,6 +92,7 @@ def digestor_argparser(parser):
 			if not getattr(namespace, attr_name) and not getattr(namespace, other_attr_name):
 				raise parser.error('--no-diff and --no-load performs no action')
 
+	parser.add_argument('--output-diff', type=str, action=writable_file_action)
 	diff = parser.add_mutually_exclusive_group()
 	diff.add_argument('--diff', dest='diff', action='store_true', 
 		help='output diff between input and django db')
@@ -99,6 +109,8 @@ def digestor_argparser(parser):
 # Argparse hook to check for writable file within directory
 class writable_file_action(argparse.Action):
 	def __call__(self, parser, namespace, values, option_string=None):
+		if not values:
+			return
 		prospective_file = values
 		prospective_dir = os.path.dirname(os.path.abspath(prospective_file))
 		if not os.path.isdir(prospective_dir):
@@ -107,6 +119,18 @@ class writable_file_action(argparse.Action):
 			setattr(namespace, self.dest, prospective_file)
 		else:
 			raise parser.error('writable_file: `%s` is not a writable file' % (prospective_file) )
+class readable_file_action(argparse.Action):
+	def __call__(self, parser, namespace, values, option_string=None):
+		if not values:
+			return
+		prospective_file = values
+		prospective_dir = os.path.dirname(os.path.abspath(prospective_file))
+		if not os.path.isdir(prospective_dir):
+			raise parser.error('readable_file: `%s` is not a valid file path' % (prospective_file) )
+		if os.access(prospective_dir, os.R_OK):
+			setattr(namespace, self.dest, prospective_file)
+		else:
+			raise parser.error('readable_file: `%s` is not a writable file' % (prospective_file) )
 
 # Setup Object for creating valid Django subparsers
 # REF: http://stackoverflow.com/questions/36706220/is-it-possible-to-create-subparsers-in-a-django-management-command
