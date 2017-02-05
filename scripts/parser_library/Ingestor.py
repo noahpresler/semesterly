@@ -21,7 +21,7 @@ class Ingestor:
 		break_on_warning=False):
 
 		self.school = school
-		self.validate = bool(config) and validate
+		self.validate = validate
 		self.break_on_error = break_on_error
 		self.break_on_warning = break_on_warning
 		self.update_progress = update_progress
