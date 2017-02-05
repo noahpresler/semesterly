@@ -1,4 +1,4 @@
-import re
+import re, collections
 
 def cleandict(d):
 	if not isinstance(d, dict):
@@ -33,6 +33,18 @@ def deep_clean(a):
 	except TypeError:
 		pass
 	return a
+
+def update(d, u):
+	'''Recursive update to dictionary w/o overwriting upper levels.
+	REF: http://stackoverflow.com/questions/3232943/update-value-of-a-nested-dictionary-of-varying-depth'''
+
+	for k, v in u.iteritems():
+		if isinstance(v, collections.Mapping):
+			r = update(d.get(k, {}), v)
+			d[k] = r
+		else:
+			d[k] = u[k]
+	return d
 
 class dotdict(dict):
 	"""dot.notation access to dictionary attributes, recursive"""
