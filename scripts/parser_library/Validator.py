@@ -93,18 +93,26 @@ class Validator:
 			data = dotdict(data)
 			self.kind_to_validation_function(data.kind)(data, schema=True)
 
-	def validate_self_contained(self, data,
+	def validate_self_contained(self, datafile,
 		break_on_error=False,
 		break_on_warning=False,
 		output_error=None):
 
 		self.logger = Logger(errorfile=output_error)
 
-		data = dotdict(data)
+		try:
+			# self.validate_directory(directory)
+			data = Validator.filepath_to_json(datafile)
+			Validator.validate_schema(data, *self.schema.datalist)
+		except (JsonValidationError, json.scanner.JSONDecodeError) as e:
+			self.logger.log(e)
+			raise e	# fatal error, cannot continue
+
+		data = [ dotdict(d) for d in data ]
 
 		for obj in data:
 			try:
-				Validator.kind_to_validation_function[obj.kind](obj, schema=False)
+				self.kind_to_validation_function(obj.kind)(obj, schema=False)
 			except JsonValidationError as e:
 				self.logger.log(e)
 				if break_on_error:
