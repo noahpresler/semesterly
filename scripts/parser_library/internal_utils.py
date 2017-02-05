@@ -24,9 +24,10 @@ def deep_clean(a):
 	if isinstance(a, basestring):
 		a = whitespace.sub(' ', a).strip()
 	try:
-		a = filter(None, a)
+		b = filter(None, a)
 		if len(a) == 0:
 			return None
+		a = b
 	except TypeError:
 		pass
 	return a
