@@ -46,7 +46,8 @@ class Command(BaseCommand):
 					output_error_filepath=options.get('output_error'),
 					break_on_error=options['break_on_error'],
 					break_on_warning=options['break_on_warning'],
-					hide_progress_bar=options['hide_progress_bar']
+					hide_progress_bar=options['hide_progress_bar'],
+					skip_shallow_duplicates=options['skip_shallow_duplicates']
 				).start(
 					verbosity=options['verbosity'],
 					year=options['term_and_year'][1] if options.get('term_and_year') else None,

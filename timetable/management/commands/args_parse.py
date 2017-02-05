@@ -76,8 +76,14 @@ def validator_argparser(parser):
 	break_error.set_defaults(break_on_error=True)
 	break_warning = parser.add_mutually_exclusive_group()
 	break_warning.add_argument('--break-on-warning', dest='break_on_warning', action='store_true')
-	break_warning.add_argument('--no-break-on-warning', dest='break_on_warning', action='store_false', help='(default)')
+	break_warning.add_argument('--no-break-on-warning', dest='break_on_warning', action='store_false', 
+		help='(default)')
 	break_warning.set_defaults(break_on_warning=False)
+	duplicate = parser.add_mutually_exclusive_group()
+	duplicate.add_argument('--skip-shallow-duplicates', dest='skip_shallow_duplicates', action='store_true',
+		help='(default) hide duplicate course/section ingestions')
+	duplicate.add_argument('--no-skip-shallow-duplicates', dest='skip_shallow_duplicates', action='store_false')
+	duplicate.set_defaults(skip_shallow_duplicates=True)
 
 def digestor_argparser(parser):
 	parser.add_argument('school', type=str)
