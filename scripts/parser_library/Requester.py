@@ -103,7 +103,7 @@ class Requester:
             return r
 
         soup = Requester.markup(r)
-        if soup:
+        if soup or soup == []:
             return soup
         else:
             return r
