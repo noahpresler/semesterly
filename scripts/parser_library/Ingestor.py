@@ -12,7 +12,8 @@ from internal_exceptions import IngestorWarning
 from scripts.parser_library.Logger import Logger, JsonListLogger
 
 class Ingestor:
-	'ALL_KEYS' = {
+	ALL_KEYS = {
+		'',
 		'department',
 		'dept',
 		'department_name',
@@ -73,7 +74,10 @@ class Ingestor:
 		'day',
 		'dates',
 		'date',
-		'time'
+		'time',
+		'credits',
+		'num_credits',
+		'campus' # NOTE: not really
 	}
 
 	def __init__(self, school,
@@ -300,9 +304,15 @@ class Ingestor:
 			if is_valid:
 				self.logger.log(obj)
 			# Ingestor warning
-			for key in self.mouth:
-				if key not in Ingestor.ALL_KEYS:
-					raise IngestorWarning('Ingestor does not support key `%s`' % (str(key)), self.mouth)
+			try:
+				for key in self.mouth:
+					if key not in Ingestor.ALL_KEYS:
+						raise IngestorWarning('Ingestor does not support key `%s`' % (str(key)), self.mouth)
+			except IngestorWarning as e:
+				is_valid = True
+				self.logger.log(e)
+				if self.break_on_warning:
+					raise e
 		else:
 			self.logger.log(obj)
 		self.counter[obj['kind']]['total'] += 1
@@ -332,11 +342,6 @@ class Ingestor:
 				self.logger.log(e)
 				if self.break_on_warning:
 					raise e
-		except IngestorWarning as e:
-			is_valid = True
-			self.logger.log(e)
-			if self.break_on_warning:
-				raise e
 
 
 		return is_valid, full_skip

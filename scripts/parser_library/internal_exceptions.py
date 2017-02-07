@@ -9,6 +9,9 @@ class JsonValidationError(ValueError):
 		self.json = json # TODO - validate json
 		super(JsonValidationError, self).__init__(message, json, *args)
 
+	def __str__(self):
+		return 'error: ' + self.message + '\n' + pretty_json(self.json)
+
 class JsonValidationWarning(UserWarning):
 	'''Raise when user `should` be made aware of non-optimal, non-fatal condition.'''
 	def __init__(self, message, json=None, *args):
@@ -16,10 +19,16 @@ class JsonValidationWarning(UserWarning):
 		self.json = json
 		super(JsonValidationWarning, self).__init__(message, json, *args)
 
+	def __str__(self):
+		return 'warning: ' + self.message + '\n' + pretty_json(self.json)
+
 class JsonDuplicationWarning(JsonValidationWarning):
 	'''Raise when validation detects duplicate json objects in the same parse.'''
 	def __init__(self, message, json=None, *args):
 		super(JsonDuplicationWarning, self).__init__(message, json, *args)
+
+	def __str__(self):
+		return 'warning: ' + self.message + '\n' + pretty_json(self.json)
 
 class DigestionError(ValueError):
 	'''Raise when fails digestion invariant.'''
@@ -27,4 +36,15 @@ class DigestionError(ValueError):
 class IngestorWarning(UserWarning):
 	'''Raise when user should be notified of non-optimal usage of ingestor.'''
 	def __init__(self, message, json=None, *args):
-	super(IngestorWarning, self).__init__(message, json, *args)
+		self.message = message
+		self.json = json
+		super(IngestorWarning, self).__init__(message, json, *args)
+
+	def __str__(self):
+		return 'warning: ' + self.message + '\n' + pretty_json(self.json)
+
+import simplejson as json
+def pretty_json(j):
+	if j is None:
+		return None
+	return json.dumps(j, sort_keys=True, indent=2, separators=(',', ': '))
