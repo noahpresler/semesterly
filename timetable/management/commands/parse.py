@@ -3,6 +3,7 @@ from django.core.management.base import BaseCommand, CommandParser, CommandError
 from timetable.models import Updates
 from timetable.school_mappers import course_parsers, new_course_parsers
 from timetable.management.commands.args_parse import schoollist_argparser, parser_argparser, validator_argparser
+from scripts.parser_library.internal_exceptions import *
 
 class Command(BaseCommand):
 	help = "Initiates specified parsers for specified schools. If no school is provided, starts parsers for all schools."
@@ -58,9 +59,13 @@ class Command(BaseCommand):
 
 			# TODO - catch JsonValidationError
 			# TODO - catch CourseParseError as well
-			except ValueError as e:
+			except CourseParseError as e:
 				error = "Error while parsing %s:\n\n%s\n" % (school, str(e))
-				logging.exception(error)
-				self.stderr.write(self.style.ERROR(error))
+				logging.exception(e)
+				self.stderr.write(self.style.ERROR(str(e)))
+			except (JsonValidationError, JsonValidationWarning, IngestorWarning) as e:
+				error = "Error while parsing %s:\n\n%s\n" % (school, str(e))
+				logging.exception(e)
+				self.stderr.write(self.style.ERROR(str(e)))
 
 		self.success_print("Finished!")
