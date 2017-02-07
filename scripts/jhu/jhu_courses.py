@@ -77,19 +77,21 @@ class HopkinsParser(CourseParser):
         self.ingestor['areas'] += ['Writing Intensive'] if course['IsWritingIntensive'] == "Yes" else []
         self.ingestor['prerequisites'] = SectionDetails[0]['Prerequisites'][0].get('Description','') if len(SectionDetails[0]['Prerequisites']) > 0 else ''
         self.ingestor['level'] = re.findall(re.compile(r".+?\..+?\.(.{1}).+"),course['OfferingName'])[0] + "00"
-        self.ingestor['descrption'] = SectionDetails[0]['Description']
+        self.ingestor['name'] = course['Title']
+        self.ingestor['description'] = SectionDetails[0]['Description']
         self.ingestor['code'] = course['OfferingName'].strip()
         self.ingestor['num_credits'] = num_credits
         self.ingestor['department_name'] = course['Department']
         self.ingestor['campus'] = 1
+        if SectionDetails[0].get('EnrollmentRestrictedTo'):
+            self.ingestor['restrictions'] = SectionDetails[0].get('EnrollmentRestrictedTo')
 
         # Add specialty areas for computer science department
         if course['Department'] == 'EN Computer Science':
             cs_areas_regex = r'\bApplications|\bAnalysis|\bSystems|\bGeneral'
-            for match in re.findall(cs_areas_regex,description):
+            for match in re.findall(cs_areas_regex,self.ingestor['description']):
                 self.ingestor['areas'] += [match]
 
-        # print "LAST " + str(self.last_course.get('code', None)) + " NEW " + str(self.ingestor['code']) + " CREATING " + str(self.last_course.get('code', None) != self.ingestor['code'])
         created_course = self.ingestor.ingest_course()
 
         for meeting in SectionDetails[0]['Meetings']:
@@ -97,7 +99,7 @@ class HopkinsParser(CourseParser):
             self.ingestor['section'] = "(" + section[0]['SectionName'] + ")"
             self.ingestor['semester'] = self.semester.split()[0]
             self.ingestor['instructors'] = map(lambda i: i.strip(), course['Instructors'].split(','))
-            self.ingestor['size'], self.ingestor['enrolment'] = self.compute_size_enrollment(course)
+            self.ingestor['size'], self.ingestor['enrollment'] = self.compute_size_enrollment(course)
             self.ingestor['year'] = self.semester.split()[1]
 
             created_section = self.ingestor.ingest_section(created_course)
