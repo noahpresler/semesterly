@@ -175,7 +175,7 @@ class DigestionAdapter:
 		if 'geneds' in course:
 			adapted['geneds'] = ', '.join(course.geneds)
 		if 'level' in course:
-			adapated['level'] = course.level
+			adapted['level'] = course.level
 
 		return {
 			'code': course.code,
@@ -195,7 +195,7 @@ class DigestionAdapter:
 			raise DigestionError()
 
 		if course_model is None:
-			if section.course.code == self.cached.course.code:
+			if self.cached.course and section.course.code == self.cached.course.code:
 				course_model = self.cached.course
 			else:
 				course_model = Course.objects.filter(school=self.school, code=section.course.code).first()
@@ -271,7 +271,7 @@ class DigestionAdapter:
 				'time_start': meeting.time.start,
 				'time_end': meeting.time.end,
 				'defaults': {
-					'location': meeting.location.get('where', '')
+					'location': meeting.get('location',{}).get('where', '')
 				}
 			}
 			yield offering
