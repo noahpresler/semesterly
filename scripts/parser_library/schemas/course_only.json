@@ -29,6 +29,7 @@
 	"additionalProperties": false,
 	"required": [
 		"kind",
-		"code"
+		"code",
+		"name"
 	]
 }
