@@ -23,3 +23,8 @@ class JsonDuplicationWarning(JsonValidationWarning):
 
 class DigestionError(ValueError):
 	'''Raise when fails digestion invariant.'''
+
+class IngestorWarning(UserWarning):
+	'''Raise when user should be notified of non-optimal usage of ingestor.'''
+	def __init__(self, message, json=None, *args):
+	super(IngestorWarning, self).__init__(message, json, *args)
