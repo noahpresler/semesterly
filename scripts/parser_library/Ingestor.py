@@ -8,9 +8,74 @@ from pygments import highlight, lexers, formatters, filters
 from scripts.parser_library.Validator import Validator
 from scripts.parser_library.internal_exceptions import JsonValidationError, JsonValidationWarning, JsonDuplicationWarning
 from internal_utils import *
+from internal_exceptions import IngestorWarning
 from scripts.parser_library.Logger import Logger, JsonListLogger
 
 class Ingestor:
+	'ALL_KEYS' = {
+		'department',
+		'dept',
+		'department_name',
+		'department_code',
+		'dept_name',
+		'dept_code',
+		'code',
+		'course_code',
+		'name',
+		'course_name',
+		'prerequisites',
+		'prereqs',
+		'corequisites',
+		'coreqs',
+		'exclusions',
+		'description',
+		'descr',
+		'areas',
+		'level',
+		'cores',
+		'geneds',
+		'sections',
+		'homepage',
+		'website',
+		'instructors',
+		'instructor',
+		'instr',
+		'prof',
+		'professor',
+		'section_code',
+		'section',
+		'meeting_section',
+		'term',
+		'semester',
+		'year',
+		'instructors',
+		'capacity',
+		'size',
+		'enrollment',
+		'enrolment',
+		'waitlist',
+		'waitlist_size',
+		'remaining_seats',
+		'type',
+		'section_type',
+		'fees',
+		'fee',
+		'final_exam',
+		'offerings',
+		'time_start',
+		'start_time',
+		'time_end',
+		'end_time',
+		'location',
+		'loc',
+		'where',
+		'days',
+		'day',
+		'dates',
+		'date',
+		'time'
+	}
+
 	def __init__(self, school,
 		update_progress=lambda *args, **kwargs: None, # noop
 		validate=True,
@@ -208,8 +273,8 @@ class Ingestor:
 			}
 
 		# handle nested location definition
-		if isinstance(self.getchain('location', 'loc'), basestring):
-			self.mouth['location'] = { 'where': self.getchain('location', 'loc') }
+		if isinstance(self.getchain('location', 'loc', 'where'), basestring):
+			self.mouth['location'] = { 'where': self.getchain('location', 'loc', 'where') }
 
 		meeting = {
 			'kind': 'meeting',
@@ -234,6 +299,10 @@ class Ingestor:
 				return
 			if is_valid:
 				self.logger.log(obj)
+			# Ingestor warning
+			for key in self.mouth:
+				if key not in Ingestor.ALL_KEYS:
+					raise IngestorWarning('Ingestor does not support key `%s`' % (str(key)), self.mouth)
 		else:
 			self.logger.log(obj)
 		self.counter[obj['kind']]['total'] += 1
@@ -263,6 +332,12 @@ class Ingestor:
 				self.logger.log(e)
 				if self.break_on_warning:
 					raise e
+		except IngestorWarning as e:
+			is_valid = True
+			self.logger.log(e)
+			if self.break_on_warning:
+				raise e
+
 
 		return is_valid, full_skip
 
