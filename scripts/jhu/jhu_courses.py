@@ -23,11 +23,15 @@ class HopkinsParser(CourseParser):
         self.semester = sem
         self.last_course = {}
         self.last_section = {}
+        self.department = None
         super(HopkinsParser, self).__init__('jhu',**kwargs)
 
     def get_schools(self):
-        url = HopkinsParser.API_URL + '/codes/schools?key=' + HopkinsParser.KEY
-        self.schools = self.requester.get(url=url)
+        if self.department:
+            self.schools = [{'Name': self.department}]
+        else:
+            url = HopkinsParser.API_URL + '/codes/schools?key=' + HopkinsParser.KEY
+            self.schools = self.requester.get(url=url)
 
     def get_courses(self,school):
         print "Getting courses in: " + school['Name']
@@ -104,7 +108,7 @@ class HopkinsParser(CourseParser):
                 time_pieces = re.search(r"(\d\d:\d\d [AP]M) - (\d\d:\d\d [AP]M)",time)
                 self.ingestor['time_start'] = self.extractor.time_12to24(time_pieces.group(1))
                 self.ingestor['time_end'] = self.extractor.time_12to24(time_pieces.group(2))
-                if meeting['DOW'] != "TBA" and meeting['DOW'] !="None":
+                if len(meeting['DOW'].strip()) > 0 and meeting['DOW'] != "TBA" and meeting['DOW'] !="None":
                     self.ingestor['days'] = map(lambda d: HopkinsParser.DAY_TO_LETTER_MAP[d.lower()], re.findall(
                         r"([A-Z][a-z]*)+?", meeting['DOW']
                     ))
@@ -112,11 +116,22 @@ class HopkinsParser(CourseParser):
                         'building' : meeting['Building'],
                         'room' : meeting['Room']
                     }
-                created_meeting = self.ingestor.ingest_offerings(created_section)
+                    created_meeting = self.ingestor.ingest_offerings(created_section)
 
-    def start(self,**kwargs):
+    def start(self,
+        year=None,
+        term=None,
+        department=None,
+        textbooks=True,
+        verbosity=3,
+        **kwargs):
+        if year and term:
+            self.semester = term + " " + str(year)
+        if department:
+            self.department = department
         self.get_schools()
         self.parse_schools()
+        self.ingestor.wrap_up()
 
 if __name__ == "__main__":
     parser = HopkinsParser()
