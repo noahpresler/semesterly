@@ -765,3 +765,11 @@ def profile(request):
     return render_to_response("profile.html", context, context_instance=RequestContext(request))
   else:
     return signup(request)
+
+@csrf_exempt
+def final_exam_scheduler(request):
+  return HttpResponse(request.body, content_type="application/json")
+
+
+
+
