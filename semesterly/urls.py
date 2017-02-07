@@ -19,6 +19,7 @@ handler500 = 'timetable.views.custom_500'
 
 urlpatterns = patterns('',
     # url(r'^admin/', include(admin.site.urls)),
+
     #finding frandsssss
     url(r'^find_friends/$', 'timetable.views.find_friends'),
     url('', include('social.apps.django_app.urls', namespace='social')),
@@ -101,7 +102,10 @@ urlpatterns = patterns('',
 
     # for testing 404, so i don't have to turn off debug
 	url(r'^404testing/', 'timetable.views.custom_404'),
-    url(r'^500testing/', 'timetable.views.custom_500')
+    url(r'^500testing/', 'timetable.views.custom_500'),
+
+    # final exam scheduler
+    url(r'^final_exams/*$', 'timetable.views.final_exam_scheduler')
 )
 
 if getattr(settings, 'STAGING', False):
