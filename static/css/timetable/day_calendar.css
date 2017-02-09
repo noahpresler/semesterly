@@ -93,3 +93,24 @@
 #calendar.up {
     margin-top: 65px;
 }
+
+#calendar .fc-timeline:before {
+    content: '';
+    display: block;
+    height: 10px;
+    width: 10px;
+    border-radius: 10px;
+    background-color: rgb(253, 116, 115);
+    z-index: 1000;
+    position: absolute;
+    bottom: -4px;
+}
+
+#calendar .fc-timeline {
+    background-color: rgb(253, 116, 115);
+    height: 1px;
+    width: 100%;
+    position: absolute;
+    top: 300px;
+    z-index: 1000;
+}
