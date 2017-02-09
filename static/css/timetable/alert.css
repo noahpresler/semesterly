@@ -179,15 +179,17 @@
   opacity: .77;
   transition: opacity .3s;
 }
+
+.friends-in-class-alert-container .icon {
+  display: none;
+}
+
 .enable-notification-alert a.decline-notifications:hover {
   opacity: 1;
 }
 
-.friends-in-class-alert-icon {
-  width: 0px;
-}
-
 .friends-in-class-alert {
+  width: 230px;
   margin: 0px 10px;
 }
 
