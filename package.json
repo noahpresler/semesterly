@@ -46,6 +46,7 @@
     "react-redux": "^5.0.2",
     "react-select": "^1.0.0-beta13",
     "react-swipeable": "^3.6.0",
+    "react-tooltip": "^3.2.6",
     "reactify": "^1.1.1",
     "redux": "^3.3.1",
     "redux-thunk": "^2.0.1",
