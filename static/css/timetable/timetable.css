@@ -17,6 +17,10 @@ body {
     font-family: "Palanquin",Arial,sans-serif;
 }
 
+.cal-btn-wrapper {
+    font-size: 0;
+}
+
 button.save-timetable {
     border: none;
     outline: none;
