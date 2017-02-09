@@ -41,6 +41,7 @@ class DayCalendar extends React.Component {
 		this.hideShareLink = this.hideShareLink.bind(this);
 		this.swipedLeft = this.swipedLeft.bind(this);
 		this.swipedRight = this.swipedRight.bind(this);
+		this.getTimelineStyle = this.getTimelineStyle.bind(this);
 	}
 	componentWillReceiveProps(nextProps) {
 		if (this.props.isFetchingShareLink && !nextProps.isFetchingShareLink) {
@@ -48,8 +49,14 @@ class DayCalendar extends React.Component {
 		}
 	}
 
+	getTimelineStyle() { 
+		let diff = Math.abs(new Date() - new Date().setHours(8,0,0));
+		let mins = Math.ceil((diff/1000)/60);
+		let top = mins/15.0 * 13 + 65;
+		return {top: top};
+	}
+
 	componentDidMount() {
-		console.log(30);
 		$('#all-cols').scroll(function() {
 		    var pos = $('#all-cols').scrollTop();
 		    if (pos > 30) {
@@ -175,6 +182,7 @@ class DayCalendar extends React.Component {
 		        onSwipedRight={this.swipedRight}
 		        onSwipedLeft={this.swipedLeft}>
 		        <div className="fc-view-container" style={{}}>
+		          <div className="fc-timeline" style={this.getTimelineStyle()}/>
 		          <div className="fc-view fc-settimana-view fc-agenda-view">
 		            <table>
 		              <tbody className="fc-body">
