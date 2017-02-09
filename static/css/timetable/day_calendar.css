@@ -112,5 +112,5 @@
     width: 100%;
     position: absolute;
     top: 300px;
-    z-index: 1000;
+    z-index: 3;
 }
