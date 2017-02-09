@@ -46,7 +46,7 @@ class Calendar extends React.Component {
 		let diff = Math.abs(new Date() - new Date().setHours(8,0,0));
 		let mins = Math.ceil((diff/1000)/60);
 		let top = mins/15.0 * 13 + 29;
-		return {top: top, zIndex: 0};
+		return {top: top, zIndex: 2};
 	}
 
 	getCalendarRows() {
