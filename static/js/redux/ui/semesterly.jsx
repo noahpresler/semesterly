@@ -72,6 +72,7 @@ class Semesterly extends React.Component {
 		this.msg.show(<FriendsInClassAlertContainer />,  {
 			type: 'info',
 			time: 99999,
+			additionalClass: 'friends-in-class-alert-container',
 			icon: <div className="friends-in-class-alert-icon"></div>
 		});
 		if (this.props.alertEnableNotifications) {
