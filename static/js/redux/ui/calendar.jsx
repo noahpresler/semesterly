@@ -34,11 +34,19 @@ class Calendar extends React.Component {
 		this.state = {shareLinkShown: false};
 		this.fetchShareTimetableLink = this.fetchShareTimetableLink.bind(this);
 		this.hideShareLink = this.hideShareLink.bind(this);
+		this.getTimelineStyle = this.getTimelineStyle.bind(this);
 	}
 	componentWillReceiveProps(nextProps) {
 		if (this.props.isFetchingShareLink && !nextProps.isFetchingShareLink) {
 			this.setState({shareLinkShown: true});
 		}
+	}
+
+	getTimelineStyle() { 
+		let diff = Math.abs(new Date() - new Date().setHours(8,0,0));
+		let mins = Math.ceil((diff/1000)/60);
+		let top = mins/15.0 * 13 + 29;
+		return {top: top, zIndex: 0};
 	}
 
 	getCalendarRows() {
@@ -135,7 +143,8 @@ class Calendar extends React.Component {
 	          <div className="fc-clear" />
 
 	        </div>
-	        <div className="fc-view-container" style={{}}>
+	        <div className="fc-view-container" style={{position: 'relative'}}>
+		     <div className="fc-timeline" style={this.getTimelineStyle()}/>
 	          <div className="fc-view fc-settimana-view fc-agenda-view">
 	            <table>
 	              <thead className="fc-head">
