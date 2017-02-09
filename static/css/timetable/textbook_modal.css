@@ -62,6 +62,7 @@
 }
 
 .textbook-modal .modal-footer {
+    z-index: 11;
     height: 66px;
     width: 100%;
     border: 1px solid #ddd;
