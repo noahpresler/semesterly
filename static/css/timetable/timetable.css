@@ -68,6 +68,9 @@ button.row-button:hover {
 .fc-time-grid .fc-slats td {
 	height:25px;
 }
+.fc-time-grid .fc-slats, .fc-time-grid>hr {
+    z-index: 1;
+}
 .slot-bar {
     width: 5px !important;
     height: 100%;
