@@ -91,40 +91,58 @@ class Calendar extends React.Component {
 			</div>
 		)
 		let shareLink = this.state.shareLinkShown ?
-			<div className="cal-btn-wrapper">
-				<span data-tip data-for='add-btn-tooltip'>
-			        <ShareLink
-		        	    link={this.props.shareLink}
-	    		        onClickOut={this.hideShareLink}/>
-	    		</span>
-	    	    <ReactTooltip id='add-btn-tooltip' class='tooltip' type='dark' place='bottom' effect='solid'>
-					<span>New Timetable</span>
-				</ReactTooltip>
-	    	</div> :
+	        <ShareLink
+	            link={this.props.shareLink}
+	            onClickOut={this.hideShareLink} /> :
 	        null;
 		let addButton = (
+			<div className="cal-btn-wrapper">
 				<button onClick={this.props.handleCreateNewTimetable}
-								className="save-timetable add-button">
+						className="save-timetable add-button"
+						data-tip data-for='add-btn-tooltip'>
 					<i className="fa fa-plus" />
 				</button>
-			)
-			let saveButton = (
-	      <button className="save-timetable add-button" onMouseDown={ this.props.saveTimetable }>
-	      	{saveIcon}
-	      </button>
-			);
-	    let preferenceButton = (
-	    	<button onClick={this.props.togglePreferenceModal}
-	    					className="save-timetable">
-	    		<i className="fa fa-cog" />
-	    	</button>
-	    );
-		let saveToCalendarButton = (
-	    	<button onClick={() => this.props.toggleSaveCalendarModal()}
-	    					className="save-timetable">
-	    		<img src="static/img/addtocalendar.png"/>
-	    	</button>
+				<ReactTooltip id='add-btn-tooltip' class='tooltip' type='dark' place='bottom' effect='solid'>
+					<span>New Timetable</span>
+				</ReactTooltip>
+			</div>
 		);
+		let saveButton = (
+			<div className="cal-btn-wrapper">
+				<button className="save-timetable add-button"
+						onMouseDown={ this.props.saveTimetable }
+						data-tip data-for='save-btn-tooltip'>
+					{saveIcon}
+				</button>
+				<ReactTooltip id='save-btn-tooltip' class='tooltip' type='dark' place='bottom' effect='solid'>
+					<span>Save Timetable</span>
+				</ReactTooltip>
+			</div>
+		);
+		let saveToCalendarButton = (
+			<div className="cal-btn-wrapper">
+		    	<button onClick={() => this.props.toggleSaveCalendarModal()}
+		    			className="save-timetable"
+		    			data-tip data-for='saveToCal-btn-tooltip'>
+		    		<img src="static/img/addtocalendar.png"/>
+		    	</button>
+		    	<ReactTooltip id='saveToCal-btn-tooltip' class='tooltip' type='dark' place='bottom' effect='solid'>
+					<span>Save to Calendar</span>
+				</ReactTooltip>
+			</div>
+		);
+	    let preferenceButton = (
+	    	<div className="cal-btn-wrapper">
+		    	<button onClick={this.props.togglePreferenceModal}
+		    			className="save-timetable"
+		    			 data-tip data-for='pref-btn-tooltip'>
+		    		<i className="fa fa-cog" />
+		    	</button>
+		    	<ReactTooltip id='pref-btn-tooltip' class='tooltip' type='dark' place='bottom' effect='solid'>
+					<span>Preferences</span>
+				</ReactTooltip>
+			</div>
+	    );
 		return (
 	      <div id="calendar" className="fc fc-ltr fc-unthemed week-calendar">
 	        <div className="fc-toolbar no-print">
