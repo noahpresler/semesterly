@@ -296,7 +296,6 @@ class DigestionStrategy:
 
 		count = {
 			'created': 0,
-			'updated': 0,
 			'total': 0
 		}
 		self.count = {
@@ -393,6 +392,9 @@ class Vommit(DigestionStrategy):
 		dbmodel = remove_blacklist(dbmodel)
 		inmodel = remove_blacklist(inmodel)
 
+		# Remove null values from dictionaries
+		dbmodel = {k: v for k, v in dbmodel.iteritems() if v is not None}
+
 		# move contents of default dictionary to first-level of dictionary
 		if 'defaults' in inmodel:
 			defaults = inmodel['defaults']
@@ -453,27 +455,19 @@ class Absorb(DigestionStrategy):
 
 	def digest_course(self, model_args):
 		model, created = Course.objects.update_or_create(**model_args)
-		if created:
-			self.count['courses']['created'] += 1
-		if model:
-			self.count['courses']['total'] += 1
-
+		self.update_progress('courses', bool(model), bool(created))
 		return model
 
 	def digest_section(self, model_args):
 		model, created = Section.objects.update_or_create(**model_args)
-		if created:
-			self.count['sections']['created'] += 1
-		if model:
-			self.count['sections']['total'] += 1
-
-			if self.clean:
+		if model and self.clean:
 				Absorb.remove_offerings(model)
-
+		self.update_progress('sections', bool(model), bool(created))
 		return model
 
 	def digest_offering(self, model_args):
 		model, created = Offering.objects.update_or_create(**model_args)
+		self.update_progress('offerings', bool(model), bool(created))
 
 	def remove_section(self, course_model):
 		''' Remove section specified in model map from django database. '''
@@ -494,6 +488,12 @@ class Absorb(DigestionStrategy):
 				defaults={'last_updated': datetime.datetime.now()}
 		)
 		update_object.save()
+
+	def update_progress(self, key, exists, new):
+		if exists:
+			self.counter[key]['total'] += 1
+		if new:
+			self.counter[key]['created'] += 1
 
 class Burp(DigestionStrategy):
 	'''Load valid data into Django db and output diff between input and db data.'''
