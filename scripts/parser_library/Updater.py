@@ -24,8 +24,8 @@ class ProgressBar:
 				])
 
 	def update(self, mode, counters, formatter=lambda x: x):
-		mode = '=={}=='.format(mode.title())
+		mode = '=={}=='.format(mode.upper())
 		contents = {key: value for key, value in counters.items()}
-		label_string = lambda x=None: ' | '.join('{}: {}'.format(k[:x].title(), formatter(contents[k])) for k in contents if contents[k]['total'] > 0)
-		formatted_string = '{} | {}'.format(mode, label_string(3))
+		label_string = ' | '.join('{}: {}'.format(k[:3].title(), formatter(contents[k])) for k in contents if contents[k]['total'] > 0)
+		formatted_string = '{} | {}'.format(mode, label_string)
 		self.bar.update(formatted_string)
