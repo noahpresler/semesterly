@@ -44,6 +44,7 @@ class Ingestor:
 		'prof',
 		'professor',
 		'section_code',
+		'section_name'
 		'section',
 		'meeting_section',
 		'term',
@@ -235,6 +236,7 @@ class Ingestor:
 				'code': course['code']
 			},
 			'code': self.getchain('section_code', 'section', 'meeting_section'), # NOTE: design conflict with code in course
+			'name': self.get('section_name'),
 			'term': self.getchain('term', 'semester'),
 			'year': self.get('year'), # NOTE: should be required # FIXME -- different years for parsed sections
 			'instructors': self.get('instructors'),
