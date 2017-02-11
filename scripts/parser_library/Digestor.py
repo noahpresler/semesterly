@@ -76,13 +76,7 @@ class Digestor:
 	def digest(self):
 		'''Digest data.'''
 
-		data = self.data
-
-		# convert data to iterable
-		if not isinstance(data, collections.Iterable) or isinstance(data, basestring):
-			data = (self.data,)
-
-		for obj in data:
+		for obj in iterrify(self.data):
 			res = {
 				'course'	: lambda x: self.digest_course(x),
 				'section'	: lambda x: self.digest_section(x),
