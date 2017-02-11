@@ -3,7 +3,7 @@
 # @author   Noah Presler
 # @date     1/24/17
 import sys
-from scripts.parser_library.BaseParser import *
+from scripts.parser_library.BaseParser import CourseParser
 
 class HopkinsParser(CourseParser):
 
