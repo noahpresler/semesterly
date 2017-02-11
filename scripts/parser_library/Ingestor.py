@@ -318,7 +318,9 @@ class Ingestor:
 		else:
 			self.logger.log(obj)
 		self.counter[obj['kind']]['total'] += 1
-		self.update_progress(mode='ingesting', **self.counter)
+		formatter = lambda stats: '{}/{}'.format(stats['valid'], stats['total'])
+		self.update_progress('ingesting', self.counter, formatter)
+		# self.update_progress('ingesting', self.counter, formatter)
 
 	def run_validator(self, data):
 		is_valid, full_skip = False, False
@@ -344,11 +346,8 @@ class Ingestor:
 				self.logger.log(e)
 				if self.break_on_warning:
 					raise e
-
-
 		return is_valid, full_skip
 
-	# TODO - close json list properly on KeyBoardInterrupt
 	def wrap_up(self):
 		self.logger.close()
 		self.mouth.clear()
@@ -375,9 +374,5 @@ class Ingestor:
 			'evaluation': {
 				'valid': 0,
 				'total': 0
-			},
-			'_format': {
-				'function': lambda counter: '%s/%s' % (counter['valid'], counter['total']),
-				'label': 'valid/total'
 			}
 		}
