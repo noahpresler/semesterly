@@ -35,6 +35,10 @@
 			"type": "string",
 			"maxLength": 50
 		},
+		"name": {
+			"type": "string",
+			"maxLength": 250
+		},
 		"term": {
 			"type": "string"
 		},
