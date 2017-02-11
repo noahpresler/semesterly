@@ -11,7 +11,7 @@ from internal_utils import *
 from internal_exceptions import IngestorWarning
 from scripts.parser_library.Logger import Logger, JsonListLogger
 
-class Ingestor:
+class Ingestor(dict):
 	ALL_KEYS = {
 		'',
 		'department',
@@ -110,9 +110,6 @@ class Ingestor:
  
 		self.validator = Validator(config=config)
 
-		# Dictionary that holds info before being committed as json object
-		self.mouth = {'':''}
-
 		# Initialize loggers for json and errors
 		self.logger = JsonListLogger(logfile=output_filepath, errorfile=output_error_filepath)
 		# TODO - needs to default write to logs in school directory
@@ -121,55 +118,15 @@ class Ingestor:
 		# initialize counters
 		self.counter = Ingestor.initialize_counter()
 
-	def __setitem__(self, key, value):
-		self.mouth[key] = value
-		return self
-
-	def __getitem__(self, key):
-		return self.mouth[key]
-
-	def __delitem__(self, key):
-		del self.mouth[key]
-
-	def __contains__(self, key):
-		return key in self.mouth
-
-	def __iter__(self):
-		for key in self.mouth:
-			yield key
-
-	def __len__(self):
-		return len(self.mouth)
-
 	def __str__(self):
-		l = ''
-		for label, value in self.mouth.items():
-			l += smart_str(label) + ':' + smart_str(value) + '\n'
-		return l
-
-	def get(self, key, default=None):
-		return self.mouth.get(key, default)
-
-	def update(self, other=None, **kwargs):
-		if other is not None:
-			for k, v in other.items(): 
-				self[k] = v
-		for k, v in kwargs.items():
-			self[k] = v
-
-	def clear(self):
-		self.mouth.clear()
-		self.school = ''
+		return '\n'.join('{}:{}'.format(l, v) for l, v in self.iteritems())
 
 	def getchain(self, *keys):
 		'''Match the first key found in self.mouth dictionary.'''
 		for key in keys:
-			if key in self.mouth:
-				return self.mouth[key]
+			if key in self:
+				return self[key]
 		return None
-
-	def get_counters(self):
-		return self.counters
 
 	def ingest_course(self):
 		''' Create course json from info in model map.
@@ -179,9 +136,9 @@ class Ingestor:
 		'''
 
 		# support nested and non-nested department ingestion
-		if 'department' in self.mouth or 'dept' in self.mouth:
+		if 'department' in self or 'dept' in self:
 			if not isinstance(self.getchain('department', 'dept'), dict):
-				self.mouth['department'] = {
+				self['department'] = {
 					'name': self.getchain('department_name', 'dept_name'),
 					'code': self.getchain('department_code', 'dept_code')
 				}
@@ -221,13 +178,13 @@ class Ingestor:
 		'''
 
 		# handle nested instructor definition and resolution
-		for key in [k for k in ['instructors', 'instrs', 'instructor', 'instr', 'prof', 'professor'] if k in self.mouth]:
-			self.mouth[key] = make_list(self.mouth[key])
-			instructors = self.mouth[key]
+		for key in [k for k in ['instructors', 'instrs', 'instructor', 'instr', 'prof', 'professor'] if k in self]:
+			self[key] = make_list(self[key])
+			instructors = self[key]
 			for i in range(len(instructors)):
 				if isinstance(instructors[i], basestring):
 					instructors[i] = { 'name': instructors[i] }
-			self.mouth['instructors'] = instructors
+			self['instructors'] = instructors
 			break
 
 		section = {
@@ -259,7 +216,6 @@ class Ingestor:
 		self.ingest_meeting(section)
 	def ingest_offering(self, section):
 		self.ingest_meeting(section)
-
 	def ingest_meeting(self, section):
 		''' Create meeting ingested json map.
 
@@ -272,15 +228,15 @@ class Ingestor:
 		'''
 
 		# handle nested time definition
-		if 'time' not in self.mouth:
-			self.mouth['time'] = {
+		if 'time' not in self:
+			self['time'] = {
 				'start': self.getchain('time_start', 'start_time'),
 				'end': self.getchain('time_end', 'end_time')
 			}
 
 		# handle nested location definition
 		if isinstance(self.getchain('location', 'loc', 'where'), basestring):
-			self.mouth['location'] = { 'where': self.getchain('location', 'loc', 'where') }
+			self['location'] = { 'where': self.getchain('location', 'loc', 'where') }
 
 		meeting = {
 			'kind': 'meeting',
@@ -290,7 +246,7 @@ class Ingestor:
 			},
 			'days': make_list(self.getchain('days', 'day')),
 			'dates': make_list(self.getchain('dates', 'date')),
-			'time': self.mouth['time'],
+			'time': self['time'],
 			'location': self.get('location')
 		}
 
@@ -307,9 +263,9 @@ class Ingestor:
 				self.logger.log(obj)
 			# Ingestor warning
 			try:
-				for key in self.mouth:
+				for key in self:
 					if key not in Ingestor.ALL_KEYS:
-						raise IngestorWarning('Ingestor does not support key `%s`' % (str(key)), self.mouth)
+						raise IngestorWarning('Ingestor does not support key `%s`' % (str(key)), self)
 			except IngestorWarning as e:
 				is_valid = True
 				self.logger.log(e)
@@ -350,7 +306,7 @@ class Ingestor:
 
 	def wrap_up(self):
 		self.logger.close()
-		self.mouth.clear()
+		self.clear()
 
 	@staticmethod
 	def initialize_counter():
