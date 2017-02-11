@@ -35,4 +35,5 @@ class Command(BaseCommand):
 				load=options['load']
 			).digest()
 		except DigestionError as e:
+			print 'Digestion ERROR CAUGHT'
 			print e

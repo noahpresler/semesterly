@@ -32,6 +32,13 @@ class JsonDuplicationWarning(JsonValidationWarning):
 
 class DigestionError(ValueError):
 	'''Raise when fails digestion invariant.'''
+	def __init__(self, message, json=None, *args):
+		self.message = message
+		self.json = json
+		super(DigestionError, self).__init__(message, json, *args)
+
+	def __str__(self):
+		return 'error (digestion): ' + self.message + '\n' + pretty_json(self.json)
 
 class IngestorWarning(UserWarning):
 	'''Raise when user should be notified of non-optimal usage of ingestor.'''
@@ -46,5 +53,5 @@ class IngestorWarning(UserWarning):
 import simplejson as json
 def pretty_json(j):
 	if j is None:
-		return None
+		return ''
 	return json.dumps(j, sort_keys=True, indent=2, separators=(',', ': '))
