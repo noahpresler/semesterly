@@ -1,12 +1,12 @@
-# @what     Parsing library Digestor Adapter
+# @what     Parsing Digestor (db adapter)
 # @org      Semeseter.ly
 # @author   Michael N. Miller
 # @date     1/22/17
 
-import django, datetime, os, sys, copy, jsondiff, simplejson as json, collections
-from pygments import highlight, lexers, formatters, filters
+import datetime, os, sys, copy, jsondiff, simplejson as json, collections
 from abc import ABCMeta, abstractmethod
 
+import django
 from django.utils.encoding import smart_str, smart_unicode
 from django.utils.functional import cached_property
 from django.core import serializers
@@ -17,8 +17,10 @@ from timetable.models import *
 from scripts.parser_library.internal_utils import *
 from scripts.parser_library.Logger import Logger, JsonListLogger
 from scripts.parser_library.internal_exceptions import DigestionError
+from scripts.parser_library.Updater import ProgressBar
 
-# TODO - DigestionError should be removed with failure, user should not be able to produce direct DigestionError
+# TODO - DigestionError should be removed with failure,
+# user should not be able to produce direct DigestionError
 
 class Digestor:
 	def __init__(self, school, 
@@ -28,6 +30,7 @@ class Digestor:
 		load=True):
 
 		self.school = school
+		self.progressbar = ProgressBar(school)
 
 		# TODO - extrapolate datafile/dict/string resolution to decorator
 		if data:
@@ -49,18 +52,20 @@ class Digestor:
 		self.adapter = DigestionAdapter(school, self.cached)
 		self.strategy = self.set_strategy(diff, load, output)
 
-	def update_progressbar(self, labels_and_counters, format):
-		'''Update progress bar.
-		Args:
-			labels_and_counters:
-				{ label: {
-					total: #,
-					valid: #
-					}
-				}
-		'''
-		self.progressbar.update('')
-		# TODO
+		self.counter = {
+			'courses': {
+				'created': 0,
+				'total': 0
+			},
+			'sections': {
+				'created': 0,
+				'total': 0
+			},
+			'offerings': {
+				'created': 0,
+				'total': 0
+			}
+		}
 
 	def set_strategy(self, diff, load, output=None):
 		if diff and load:
@@ -75,19 +80,27 @@ class Digestor:
 
 	def digest(self):
 		'''Digest data.'''
+		
+		do_digestion = {
+			'course'	: lambda x: self.digest_course(x),
+			'section'	: lambda x: self.digest_section(x),
+			'meeting'	: lambda x: self.digest_meeting(x),
+			'instructor': lambda x: self.digest_instructor(x),
+			'final_exam': lambda x: self.digest_final_exam(x),
+			'textbook'	: lambda x: self.digest_textbook(x),
+			'textbook_link': lambda x: self.digest_textbook_link(x)
+		}
 
 		for obj in iterrify(self.data):
-			res = {
-				'course'	: lambda x: self.digest_course(x),
-				'section'	: lambda x: self.digest_section(x),
-				'meeting'	: lambda x: self.digest_meeting(x),
-				'instructor': lambda x: self.digest_instructor(x),
-				'final_exam': lambda x: self.digest_final_exam(x),
-				'textbook'	: lambda x: self.digest_textbook(x),
-				'textbook_link': lambda x: self.digest_textbook_link(x)
-			}[obj.kind](obj)
+			do_digestion[obj.kind](obj)
 
 		self.wrap_up()
+
+	def update_progress(self, key, exists):
+		if exists:
+			self.counter[key]['total'] += 1
+		formatter = lambda stats: '{}'.format(stats['total'])
+		self.progressbar.update('digesting ({})'.format(self.strategy.__class__.__name__.lower()), self.counter, formatter)
 
 	def digest_course(self, course):
 		''' Create course in database from info in json model.
@@ -102,6 +115,8 @@ class Digestor:
 			self.cached.course = course_model
 			for section in course.get('sections', []):
 				self.digest_section(section, course_model)
+
+		self.update_progress('courses', bool(course_model))
 
 		return course_model
 
@@ -126,6 +141,8 @@ class Digestor:
 			for meeting in section.get('meetings', []):
 				self.digest_meeting(meeting, section_model)
 
+		self.update_progress('sections', bool(section_model))
+
 		return section_model
 
 	def digest_meeting(self, meeting, section_model=None):
@@ -133,15 +150,16 @@ class Digestor:
 
 		Args:
 			section_model: JSON course model object
+		
+		Return: Offerings as generator
 		'''
 
 		# NOTE: ignoring dates for now
-		offering_models = []
 		for offering in self.adapter.adapt_meeting(meeting):
 			offering_model = self.strategy.digest_offering(offering)
 			offering_models.append(offering_model)
-			# TODO - could yield here
-		return offering_models
+			self.update_progress('offerings', bool(offering_model))
+			yield offering_model
 
 	def wrap_up(self):
 		self.strategy.wrap_up()
@@ -174,7 +192,7 @@ class DigestionAdapter:
 			if 'code' in course.department:
 				adapted['department'] = course.department.code
 			if 'name' in course.department:
-				adapted['department'] = course.department.name # TODO - add field for code+name in django
+				adapted['department'] = course.department.name
 		if 'prerequisites' in course:
 			adapted['prerequisites'] = ', '.join(course.prerequisites)
 		if 'corequisites' in course:
@@ -214,7 +232,7 @@ class DigestionAdapter:
 				course_model = Course.objects.filter(school=self.school, code=section.course.code).first()
 				if course_model is None:
 					# TODO - run tests with different database
-					print 'course %s section not already in database' % (section.course.code)
+					print 'course %s section not already in database'.format(section.course.code)
 					# print self.cached.course
 					# raise DigestionError('course does not exist for section', section)
 
@@ -246,7 +264,7 @@ class DigestionAdapter:
 
 		return {
 			'course': course_model,
-			'semester': 'S', #section.term[0], # TODO - add full term to django model
+			'semester': section.term[0], # TODO - add full term to django model
 			'meeting_section': section.code,
 			'defaults': adapted
 		}
@@ -256,7 +274,7 @@ class DigestionAdapter:
 		Args:
 			section: json object
 
-		Returns: (django) formatted offering dictionaries (IMPORTANT: return generator of offerings)
+		Returns: (django) formatted offering dictionaries (generator).
 		'''
 
 		if meeting is None:
@@ -269,14 +287,14 @@ class DigestionAdapter:
 			else:
 				course_model = Course.objects.filter(school=self.school, code=meeting.course.code).first()
 				if course_model is None:
-					print 'no course object for ' + meeting.course.code
+					print 'no course object for {}'.format(meeting.course.code)
 					# raise DigestionError('no course object for meeting')
 			if self.cached.course and course_model.code == self.cached.course.code and meeting.section.code == self.cached.section.meeting_section:
 					section_model = self.cached.section
 			else:
 				section_model = Section.objects.filter(course=course_model, meeting_section=meeting.section.code).first()
 				if section_model is None:
-					print 'no section %s %s for meeting' % (meeting.course.code, meeting.section.code)
+					print 'no section {} {} for meeting'.format(meeting.course.code, meeting.section.code)
 					# raise DigestionError('no section object for meeting', meeting)
 				self.cached_course = course_model
 				self.cached_section = section_model
@@ -296,20 +314,6 @@ class DigestionAdapter:
 
 class DigestionStrategy:
 	__metaclass__ = ABCMeta
-
-	def __init__(self):
-
-		# TODO - Log digestor messages to stdout and/or file
-
-		count = {
-			'created': 0,
-			'total': 0
-		}
-		self.count = {
-			'courses': count,
-			'sections': count,
-			'offerings': count
-		}
 
 	@abstractmethod
 	def digest_course(self, model_args):
@@ -462,24 +466,21 @@ class Absorb(DigestionStrategy):
 
 	def digest_course(self, model_args):
 		model, created = Course.objects.update_or_create(**model_args)
-		self.update_progress('courses', bool(model), bool(created))
 		return model
 
 	def digest_section(self, model_args):
 		model, created = Section.objects.update_or_create(**model_args)
 		if model and self.clean:
 				Absorb.remove_offerings(model)
-		self.update_progress('sections', bool(model), bool(created))
 		return model
 
 	def digest_offering(self, model_args):
 		model, created = Offering.objects.update_or_create(**model_args)
-		self.update_progress('offerings', bool(model), bool(created))
 
-	def remove_section(self, course_model):
-		''' Remove section specified in model map from django database. '''
-		if Section.objects.filter(course = course_model, meeting_section = self.map.get('section')).exists():
-			s = Section.objects.get(course = course_model, meeting_section = self.map.get('section'))
+	def remove_section(self, section, course_model):
+		''' Remove section specified from django database. '''
+		if Section.objects.filter(course=course_model, meeting_section=section).exists():
+			s = Section.objects.get(course=course_model, meeting_section=section)
 			s.delete()
 
 	@staticmethod
@@ -495,12 +496,6 @@ class Absorb(DigestionStrategy):
 				defaults={'last_updated': datetime.datetime.now()}
 		)
 		update_object.save()
-
-	def update_progress(self, key, exists, new):
-		if exists:
-			self.counter[key]['total'] += 1
-		if new:
-			self.counter[key]['created'] += 1
 
 class Burp(DigestionStrategy):
 	'''Load valid data into Django db and output diff between input and db data.'''
