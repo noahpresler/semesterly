@@ -3,11 +3,12 @@
 # @author   Michael N. Miller
 # @date     1/22/17
 
-import django, datetime, os, sys, copy, jsondiff, simplejson as json
+import django, datetime, os, sys, copy, jsondiff, simplejson as json, collections
 from pygments import highlight, lexers, formatters, filters
 from abc import ABCMeta, abstractmethod
 
 from django.utils.encoding import smart_str, smart_unicode
+from django.utils.functional import cached_property
 from django.core import serializers
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "semesterly.settings")
 django.setup()
@@ -46,9 +47,6 @@ class Digestor:
 		})
 
 		self.adapter = DigestionAdapter(school, self.cached)
-
-		self.diff = diff
-		self.load = load
 		self.strategy = self.set_strategy(diff, load, output)
 
 	def set_strategy(self, diff, load, output=None):
@@ -56,17 +54,22 @@ class Digestor:
 			raise NotImplementedError('Burp not implemented yet.')
 			return Burp(output) # diff only
 		elif not diff and load:
-			return Absorb() # load db only + clean
+			return Absorb(self.school) # load db only + clean
 		elif diff and not load:
 			return Vommit(output) # load db and log diff
 		else: # nothing to do...
 			raise ValueError('Nothing to run with --no-diff and --no-load.')
 
 	def digest(self):
-		# TODO - handle single object not in list
+		'''Digest data.'''
 
-		for obj in self.data:
-			# try:
+		data = self.data
+
+		# convert data to iterable
+		if not isinstance(data, collections.Iterable) or isinstance(data, basestring):
+			data = (self.data,)
+
+		for obj in data:
 			res = {
 				'course'	: lambda x: self.digest_course(x),
 				'section'	: lambda x: self.digest_section(x),
@@ -203,6 +206,7 @@ class DigestionAdapter:
 			else:
 				course_model = Course.objects.filter(school=self.school, code=section.course.code).first()
 				if course_model is None:
+					# TODO - run tests with different database
 					print 'course %s section not already in database' % (section.course.code)
 					# print self.cached.course
 					# raise DigestionError('course does not exist for section', section)
@@ -288,7 +292,7 @@ class DigestionStrategy:
 
 	def __init__(self):
 
-		# Log digestor messages to stdout and/or file
+		# TODO - Log digestor messages to stdout and/or file
 
 		count = {
 			'created': 0,
@@ -302,7 +306,7 @@ class DigestionStrategy:
 		}
 
 	@abstractmethod
-	def digest_course(self, kwargs):
+	def digest_course(self, model_args):
 		''' Digest course.
 		Args:
 			course: json dictionary
@@ -310,9 +314,8 @@ class DigestionStrategy:
 		Returns: (django) formatted course model
 		'''
 
-
 	@abstractmethod
-	def digest_section(self, kwargs):
+	def digest_section(self, model_args):
 		''' Digest course.
 		Args:
 			section: json dictionary
@@ -321,7 +324,7 @@ class DigestionStrategy:
 		'''
 
 	@abstractmethod
-	def digest_offering(self, kwargs):
+	def digest_offering(self, model_args):
 		''' Digest course.
 		Args:
 			course: json dictionary
@@ -340,65 +343,64 @@ class DigestionStrategy:
 
 	@abstractmethod
 	def wrap_up(self):
-		'''Do whatever needs to be done to end digestions session.'''
+		'''Do whatever needs to be done to end digestion session.'''
 
 class Vommit(DigestionStrategy):
+	'''Output diff between input and db data.'''
+
 	def __init__(self, output=None):
 		self.json_logger = JsonListLogger(output)
 		self.json_logger.open()
-
 		self.defaults = Vommit.get_model_defaults()
-
 		super(Vommit, self).__init__()
 
 	@staticmethod
 	def exclude(dct):
 		return {k: v for k,v in dct.items() if k != 'defaults'}
 
-	def digest_course(self, kwargs):
-		return self.diff('course', kwargs, Course.objects.filter(**Vommit.exclude(kwargs)).first())
+	def digest_course(self, model_args):
+		model = Course.objects.filter(**Vommit.exclude(model_args)).first()
+		self.diff('course', model_args, model)
+		return model
 
-	def digest_section(self, kwargs):
-		return self.diff('section', kwargs, Section.objects.filter(**Vommit.exclude(kwargs)).first())
+	def digest_section(self, model_args):
+		model = Section.objects.filter(**Vommit.exclude(model_args)).first()
+		self.diff('section', model_args, model)
+		return model
 
-	def digest_offering(self, kwargs):
-		return self.diff('offering', kwargs, Offering.objects.filter(**Vommit.exclude(kwargs)).first())
+	def digest_offering(self, model_args):
+		model = Offering.objects.filter(**Vommit.exclude(model_args)).first()
+		self.diff('offering', model_args, model)
+		return model
 
 	def wrap_up(self):
 		self.json_logger.close()
 
 	def diff(self, kind, inmodel, dbmodel, hide_defaults=True):
-
-		# Remove these keys from the diff output
-		blacklist = {'_state', 'id', 'section_id', 'course_id', 'course', 'section'}
-		remove_blacklist = lambda d: {k: v for k,v in d.iteritems() if k not in blacklist}
-
-		serialize_list = {'course', 'section'}
-		serialize_django = lambda m: serializers.serialize("json", m, fields=('code', 'meeting_section'))
-
 		# Check for empty inputs
 		if inmodel is None:
 			return None
 		if dbmodel is None:
-			inmodel = remove_blacklist(inmodel)
-			# for k in inmodel.keys():
-			# 	if k in serialize_list:
-			# 		inmodel[k] = serialize_django(inmodel[k].__dict__)
-			self.json_logger.log({ '$new': inmodel })
-			return None
+			dbmodel = {}
+		else:
+			# Transform django object to dictionary
+			dbmodel = dbmodel.__dict__
 
-		blacklist.update({'course', 'section'})
-		print blacklist
+		# Remove db specific content from model
+		blacklist = {'_state', 'id', 'section_id', 'course_id', 'course', 'section', '_course_cache'}
+		# FIXME -- `course` and `section` keys WILL cause issues when db is modified for new defs
+		remove_blacklist = lambda d: {k: v for k, v in d.iteritems() if k not in blacklist}
+		dbmodel = remove_blacklist(dbmodel)
+		inmodel = remove_blacklist(inmodel)
 
-		c = copy.deepcopy(dbmodel.__dict__)
-		for d in [inmodel, c]:
-			if 'defaults' in d:
-				defaults = d['defaults']
-				del d['defaults']
-				d.update(defaults)
-			d = remove_blacklist(d)
-		print inmodel
-		diffed = json.loads(jsondiff.diff(c, inmodel, syntax='symmetric', dump=True))
+		# move contents of default dictionary to first-level of dictionary
+		if 'defaults' in inmodel:
+			defaults = inmodel['defaults']
+			del inmodel['defaults']
+			inmodel.update(defaults)
+
+		# Diff the in-model and db-model
+		diffed = json.loads(jsondiff.diff(dbmodel, inmodel, syntax='symmetric', dump=True))
 
 		# Remove defaulted values from diff output
 		if hide_defaults and '$delete' in diffed:
@@ -410,8 +412,6 @@ class Vommit(DigestionStrategy):
 		if len(diffed) > 0:
 			diffed.update({ '$what': inmodel })
 			self.json_logger.log(diffed)
-
-		return dbmodel
 
 	def remove_defaulted_keys(self, kind, dct):
 		for default in self.defaults[kind]:
@@ -444,13 +444,15 @@ class Vommit(DigestionStrategy):
 		return defaults
 
 class Absorb(DigestionStrategy):
-	def __init__(self, clean=True):
+	'''Load valid data into Django db.'''
+
+	def __init__(self, school, clean=True):
+		self.school = school
 		self.clean = clean
 		super(Absorb, self).__init__()
 
-	def digest_course(self, kwargs):
-		print kwargs
-		model, created = Course.objects.update_or_create(**kwargs)
+	def digest_course(self, model_args):
+		model, created = Course.objects.update_or_create(**model_args)
 		if created:
 			self.count['courses']['created'] += 1
 		if model:
@@ -458,9 +460,8 @@ class Absorb(DigestionStrategy):
 
 		return model
 
-	def digest_section(self, kwargs):
-		print kwargs
-		model, created = Section.objects.update_or_create(**kwargs)
+	def digest_section(self, model_args):
+		model, created = Section.objects.update_or_create(**model_args)
 		if created:
 			self.count['sections']['created'] += 1
 		if model:
@@ -471,9 +472,8 @@ class Absorb(DigestionStrategy):
 
 		return model
 
-	def digest_offering(self, kwargs):
-		print kwargs
-		model, created = Offering.objects.update_or_create(**kwargs)
+	def digest_offering(self, model_args):
+		model, created = Offering.objects.update_or_create(**model_args)
 
 	def remove_section(self, course_model):
 		''' Remove section specified in model map from django database. '''
@@ -496,14 +496,8 @@ class Absorb(DigestionStrategy):
 		update_object.save()
 
 class Burp(DigestionStrategy):
+	'''Load valid data into Django db and output diff between input and db data.'''
 	def __init__(self, output):
+		raise NotImplementedError('Burp not implemented yet!')
 		super(Burp, self).__init__()
 	# TODO
-
-def main():
-	d = Digestor('chapman',)
-	d.digest()
-	d.wrap_up()
-
-if __name__ == '__main__':
-	main()
