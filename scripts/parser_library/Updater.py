@@ -29,7 +29,3 @@ class ProgressBar:
 		label_string = lambda x=None: ' | '.join('{}: {}'.format(k[:x].title(), formatter(contents[k])) for k in contents if contents[k]['total'] > 0)
 		formatted_string = '{} | {}'.format(mode, label_string(3))
 		self.bar.update(formatted_string)
-
-# class Counter(dict):
-# 	def __init__(self):
-# 		pass
