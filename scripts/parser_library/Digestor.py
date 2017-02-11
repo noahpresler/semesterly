@@ -49,6 +49,19 @@ class Digestor:
 		self.adapter = DigestionAdapter(school, self.cached)
 		self.strategy = self.set_strategy(diff, load, output)
 
+	def update_progressbar(self, labels_and_counters, format):
+		'''Update progress bar.
+		Args:
+			labels_and_counters:
+				{ label: {
+					total: #,
+					valid: #
+					}
+				}
+		'''
+		self.progressbar.update('')
+		# TODO
+
 	def set_strategy(self, diff, load, output=None):
 		if diff and load:
 			raise NotImplementedError('Burp not implemented yet.')
