@@ -5,7 +5,7 @@ from abc import ABCMeta, abstractmethod
 from scripts.parser_library.Requester import Requester
 from scripts.parser_library.Ingestor import Ingestor
 from scripts.parser_library.Extractor import Extractor
-from scripts.parser_library.ProgressBar import ProgressBar
+from scripts.parser_library.Updater import ProgressBar
 
 class BaseParser:
 	__metaclass__ = ABCMeta
