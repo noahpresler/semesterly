@@ -2,7 +2,7 @@
 # @org      Semeseter.parser_library
 # @author   Noah Presler
 # @date     1/24/17
-import sys
+import sys, re
 from scripts.parser_library.BaseParser import CourseParser
 
 class HopkinsParser(CourseParser):
@@ -18,7 +18,6 @@ class HopkinsParser(CourseParser):
         's': 'U'}
 
     def __init__(self,sem="Spring 2017",**kwargs):
-        # CourseParser.__init__(self, school)
         self.schools = []
         self.semester = sem
         self.last_course = {}
