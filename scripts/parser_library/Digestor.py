@@ -8,9 +8,11 @@ from pygments import highlight, lexers, formatters, filters
 from abc import ABCMeta, abstractmethod
 
 from django.utils.encoding import smart_str, smart_unicode
+from django.core import serializers
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "semesterly.settings")
 django.setup()
 from timetable.models import *
+
 from scripts.parser_library.internal_utils import *
 from scripts.parser_library.Logger import Logger, JsonListLogger
 from scripts.parser_library.internal_exceptions import DigestionError
@@ -51,11 +53,12 @@ class Digestor:
 
 	def set_strategy(self, diff, load, output=None):
 		if diff and load:
-			return Vommit(output) # diff only
+			raise NotImplementedError('Burp not implemented yet.')
+			return Burp(output) # diff only
 		elif not diff and load:
 			return Absorb() # load db only + clean
 		elif diff and not load:
-			return Burp(output) # load db and log diff
+			return Vommit(output) # load db and log diff
 		else: # nothing to do...
 			raise ValueError('Nothing to run with --no-diff and --no-load.')
 
@@ -149,7 +152,7 @@ class DigestionAdapter:
 		'''
 
 		if course is None:
-			raise DigestionError()
+			raise DigestionError('none course')
 
 		adapted = {}
 		adapted['name'] = course.get('name', '')
@@ -192,7 +195,7 @@ class DigestionAdapter:
 		'''
 
 		if section is None:
-			raise DigestionError()
+			raise DigestionError('none section')
 
 		if course_model is None:
 			if self.cached.course and section.course.code == self.cached.course.code:
@@ -200,7 +203,9 @@ class DigestionAdapter:
 			else:
 				course_model = Course.objects.filter(school=self.school, code=section.course.code).first()
 				if course_model is None:
-					raise DigestionError()
+					print 'course %s section not already in database' % (section.course.code)
+					# print self.cached.course
+					# raise DigestionError('course does not exist for section', section)
 
 		adapted = {}
 		if 'capacity' in section:
@@ -244,7 +249,7 @@ class DigestionAdapter:
 		'''
 
 		if meeting is None:
-			raise DigestionError()
+			raise DigestionError('none meeting')
 
 		if section_model is None:
 			course_model = None
@@ -253,13 +258,15 @@ class DigestionAdapter:
 			else:
 				course_model = Course.objects.filter(school=self.school, code=meeting.course.code).first()
 				if course_model is None:
-					raise DigestionError()
+					print 'no course object for ' + meeting.course.code
+					# raise DigestionError('no course object for meeting')
 			if self.cached.course and course_model.code == self.cached.course.code and meeting.section.code == self.cached.section.meeting_section:
 					section_model = self.cached.section
 			else:
 				section_model = Section.objects.filter(course=course_model, meeting_section=meeting.section.code).first()
 				if section_model is None:
-					raise DigestionError()
+					print 'no section %s %s for meeting' % (meeting.course.code, meeting.section.code)
+					# raise DigestionError('no section object for meeting', meeting)
 				self.cached_course = course_model
 				self.cached_section = section_model
 
@@ -349,42 +356,62 @@ class Vommit(DigestionStrategy):
 		return {k: v for k,v in dct.items() if k != 'defaults'}
 
 	def digest_course(self, kwargs):
-		model, new = self.diff('course', kwargs, Course.objects.filter(**Vommit.exclude(kwargs)).first())
-		return model
+		return self.diff('course', kwargs, Course.objects.filter(**Vommit.exclude(kwargs)).first())
 
 	def digest_section(self, kwargs):
-		model, new = self.diff('section', kwargs, Section.objects.filter(**Vommit.exclude(kwargs)).first())
-		return model
+		return self.diff('section', kwargs, Section.objects.filter(**Vommit.exclude(kwargs)).first())
 
 	def digest_offering(self, kwargs):
-		model, new = self.diff('offering', kwargs, Offering.objects.filter(**Vommit.exclude(kwargs)).first())
-		return model
+		return self.diff('offering', kwargs, Offering.objects.filter(**Vommit.exclude(kwargs)).first())
 
 	def wrap_up(self):
 		self.json_logger.close()
 
-	def diff(self, kind, dct, model, hide_defaults=True):
-		if dct is None or model is None:
-			return None, False
-		c = copy.deepcopy(model.__dict__)
-		for d in [dct, c]:
+	def diff(self, kind, inmodel, dbmodel, hide_defaults=True):
+
+		# Remove these keys from the diff output
+		blacklist = {'_state', 'id', 'section_id', 'course_id', 'course', 'section'}
+		remove_blacklist = lambda d: {k: v for k,v in d.iteritems() if k not in blacklist}
+
+		serialize_list = {'course', 'section'}
+		serialize_django = lambda m: serializers.serialize("json", m, fields=('code', 'meeting_section'))
+
+		# Check for empty inputs
+		if inmodel is None:
+			return None
+		if dbmodel is None:
+			inmodel = remove_blacklist(inmodel)
+			# for k in inmodel.keys():
+			# 	if k in serialize_list:
+			# 		inmodel[k] = serialize_django(inmodel[k].__dict__)
+			self.json_logger.log({ '$new': inmodel })
+			return None
+
+		blacklist.update({'course', 'section'})
+		print blacklist
+
+		c = copy.deepcopy(dbmodel.__dict__)
+		for d in [inmodel, c]:
 			if 'defaults' in d:
 				defaults = d['defaults']
 				del d['defaults']
 				d.update(defaults)
-			blacklist = {'_state', 'id', 'course', 'section', 'section_id', 'course_id'}
-			for k in d.keys():
-				if k in blacklist:
-					del d[k]
-		diffed = json.loads(jsondiff.diff(c, dct, syntax='symmetric', dump=True))
+			d = remove_blacklist(d)
+		print inmodel
+		diffed = json.loads(jsondiff.diff(c, inmodel, syntax='symmetric', dump=True))
+
+		# Remove defaulted values from diff output
 		if hide_defaults and '$delete' in diffed:
 			self.remove_defaulted_keys(kind, diffed['$delete'])
 			if len(diffed['$delete']) == 0:
 				del diffed['$delete']
+
+		# Add `what` tag to diff output
 		if len(diffed) > 0:
-			diffed.update({ '$what': dct })
+			diffed.update({ '$what': inmodel })
 			self.json_logger.log(diffed)
-		return model, True
+
+		return dbmodel
 
 	def remove_defaulted_keys(self, kind, dct):
 		for default in self.defaults[kind]:
