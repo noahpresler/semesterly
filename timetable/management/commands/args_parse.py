@@ -32,6 +32,10 @@ def validate_switch_argparser(parser):
 		help='do not validate parser output')
 	validation.set_defaults(validate=True)
 
+def progressbar_argparser(parser):
+	parser.add_argument('--hide-progress-bar', dest='hide_progress_bar', action='store_true', default=False,
+		help='flag to hide progress bar (default is visible)')
+
 def parser_argparser(parser):
 	parser.add_argument('--term-and-year', nargs=2, type=str,
 		help='parse for term and year - two args') 
@@ -39,9 +43,6 @@ def parser_argparser(parser):
 		help='parse specific department by code')
 	parser.add_argument('-o', '--output', action=writable_file_action,
 		help='(default:  scripts/[school]/data/courses.json)')
-	parser.add_argument('--hide-progress-bar', dest='hide_progress_bar', action='store_true', default=False,
-		help='flag to hide progress bar (default is visible)')
-
 	textbooks = parser.add_mutually_exclusive_group()
 	textbooks.add_argument('--textbooks', dest='textbooks', action='store_true',
 		help='parse textbooks')
@@ -50,6 +51,7 @@ def parser_argparser(parser):
 	textbooks.set_defaults(textbooks=False)
 
 	validate_switch_argparser(parser)
+	progressbar_argparser(parser)
 
 def validate_argparser(parser):
 	parser.add_argument('school', type=str)

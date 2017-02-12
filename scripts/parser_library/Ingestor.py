@@ -5,11 +5,13 @@
 
 import simplejson as json, jsonschema
 from pygments import highlight, lexers, formatters, filters
+from internal_utils import *
+
+from scripts.parser_library.internal_exceptions import IngestorWarning
 from scripts.parser_library.Validator import Validator
 from scripts.parser_library.internal_exceptions import JsonValidationError, JsonValidationWarning, JsonDuplicationWarning
-from internal_utils import *
-from internal_exceptions import IngestorWarning
 from scripts.parser_library.Logger import Logger, JsonListLogger
+from scripts.parser_library.Updater import Counter
 
 class Ingestor(dict):
 	ALL_KEYS = {
@@ -116,7 +118,7 @@ class Ingestor(dict):
 		self.logger.open() # writes '[' at top of file
 
 		# initialize counters
-		self.counter = Ingestor.initialize_counter()
+		self.counter = Counter()
 
 	def __str__(self):
 		return '\n'.join('{}:{}'.format(l, v) for l, v in self.iteritems())
@@ -152,14 +154,14 @@ class Ingestor(dict):
 			'name': self.getchain('name', 'course_name'),
 			'department': self.get('department'),
 			'credits': self.getchain('credits', 'num_credits'),
-			'prerequisites': make_list(self.getchain('prerequisites', 'prereqs')),
-			'corequisites': make_list(self.getchain('corequisites', 'coreqs')),
-			'exclusions': make_list(self.get('exclusions')),
-			'description': make_list(self.getchain('description', 'descr')),
+			'prerequisites': deep_clean(make_list(self.getchain('prerequisites', 'prereqs'))),
+			'corequisites': deep_clean(make_list(self.getchain('corequisites', 'coreqs'))),
+			'exclusions': deep_clean(make_list(self.get('exclusions'))),
+			'description': deep_clean(make_list(self.getchain('description', 'descr'))),
 			'areas': self.get('areas'),
 			'level': self.get('level'),
-			'cores': make_list(self.get('cores')),
-			'geneds': make_list(self.get('geneds')),
+			'cores': deep_clean(make_list(self.get('cores'))),
+			'geneds': deep_clean(make_list(self.get('geneds'))),
 			'sections': self.get('sections'),
 			'homepage': self.getchain('homepage', 'website'),
 		}
@@ -179,7 +181,7 @@ class Ingestor(dict):
 
 		# handle nested instructor definition and resolution
 		for key in [k for k in ['instructors', 'instrs', 'instructor', 'instr', 'prof', 'professor'] if k in self]:
-			self[key] = make_list(self[key])
+			self[key] = deep_clean(make_list(self[key]))
 			instructors = self[key]
 			for i in range(len(instructors)):
 				if isinstance(instructors[i], basestring):
@@ -244,8 +246,8 @@ class Ingestor(dict):
 			'section': {
 				'code': section['code']
 			},
-			'days': make_list(self.getchain('days', 'day')),
-			'dates': make_list(self.getchain('dates', 'date')),
+			'days': deep_clean(make_list(self.getchain('days', 'day'))),
+			'dates': deep_clean(make_list(self.getchain('dates', 'date'))),
 			'time': self['time'],
 			'location': self.get('location')
 		}
@@ -273,16 +275,15 @@ class Ingestor(dict):
 					raise e
 		else:
 			self.logger.log(obj)
-		self.counter[obj['kind']]['total'] += 1
+		self.counter.increment(obj['kind'], 'total')
 		formatter = lambda stats: '{}/{}'.format(stats['valid'], stats['total'])
-		self.update_progress('ingesting', self.counter, formatter)
-		# self.update_progress('ingesting', self.counter, formatter)
+		self.update_progress('ingesting', self.counter.dict(), formatter)
 
 	def run_validator(self, data):
 		is_valid, full_skip = False, False
 		try:
 			self.validator.validate(data)
-			self.counter[data['kind']]['valid'] += 1
+			self.counter.increment(data['kind'], 'valid')
 			is_valid = True
 		except jsonschema.exceptions.ValidationError as e:
 			# Wrap error along with json object in another error
@@ -307,28 +308,3 @@ class Ingestor(dict):
 	def wrap_up(self):
 		self.logger.close()
 		self.clear()
-
-	@staticmethod
-	def initialize_counter():
-		return {
-			'course': {
-				'valid': 0,
-				'total': 0
-			},
-			'section': {
-				'valid': 0,
-				'total': 0
-			},
-			'meeting': {
-				'valid': 0,
-				'total': 0
-			},
-			'textbook': {
-				'valid': 0,
-				'total': 0
-			},
-			'evaluation': {
-				'valid': 0,
-				'total': 0
-			}
-		}

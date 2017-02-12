@@ -8,7 +8,7 @@ def cleandict(dirt):
 def make_list(l):
 	if not isinstance(l, list) or isinstance(l, basestring):
 		l = [l]
-	return deep_clean(l)
+	return l
 
 # FIXME -- 
 # NOTE: mutates text, unicode whitspace removal should be part of extractor
@@ -63,6 +63,7 @@ class dotdict(dict):
 			self[key] = value
 
 def iterrify(x):
+	print x
 	if isinstance(x, collections.Iterable) and not isinstance(x, basestring):
 		return x
 	else:
