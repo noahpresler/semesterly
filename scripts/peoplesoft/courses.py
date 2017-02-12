@@ -168,14 +168,14 @@ class PeopleSoftParser(CourseParser):
 		self.ingestor['section_code'] = rtitle.group(2)
 		self.ingestor['credits']	= float(re.match(r'(\d*).*', units).group(1))
 		self.ingestor['description'] 	= [
-			extract_info(self.ingestor, descr.text) if descr else '',
-			extract_info(self.ingestor, notes.text) if notes else '',
-			extract_info(self.ingestor, info.text) if info else ''
+			self.extractor.extract_info(self.ingestor, descr.text) if descr else '',
+			self.extractor.extract_info(self.ingestor, notes.text) if notes else '',
+			self.extractor.extract_info(self.ingestor, info.text) if info else ''
 		]
 		self.ingestor['size'] 	= int(capacity)
 		self.ingestor['enrolment'] = int(enrollment)
 		self.ingestor['instrs'] 	= ', '.join({instr.text for instr in instrs})
-		self.ingestor['areas'] 	= (extract_info(self.ingestor, l) for l in re.sub(r'(<.*?>)', '\n', str(areas)).splitlines() if l.strip()) if areas else '' # FIXME -- small bug
+		self.ingestor['areas'] 	= (self.extractor.extract_info(self.ingestor, l) for l in re.sub(r'(<.*?>)', '\n', str(areas)).splitlines() if l.strip()) if areas else '' # FIXME -- small bug
 		# print 'areas:', areas
 		# print 'areas', list(self.ingestor['areas'])
 		# print 'areas - geneds', list(self.ingestor['geneds'])
