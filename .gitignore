@@ -34,6 +34,5 @@ timetable.features
 *.timetable.features
 docs/build/
 scripts/parser_library/ex_school/data/*
-scripts/*/logs/*
-scripts/*/data/*
+*.log
 *.swp
