@@ -14,7 +14,7 @@ def schoollist_argparser(parser):
 						.format(value, ', '.join(school_verifier_action.VALID_SCHOOLS)))
 			if values:
 				# NOTE: set(values) to uniqueify list of schools
-				setattr(namespace, self.dest, set(values))
+				setattr(namespace, self.dest, list(set(values)))
 			else:
 				# set list of schools to all schools that are parseable
 				setattr(namespace, self.dest, school_verifier_action.VALID_SCHOOLS)
@@ -23,6 +23,9 @@ def schoollist_argparser(parser):
 	parser.add_argument('schools', type=str, nargs='*', action=school_verifier_action,
 		help='(default: all parseable schools)')
 	# NOTE: list of schools cannot support single config file arg (see: single_school_action)
+
+def masterlog_argparser(parser):
+	parser.add_argument('--log-stats', type=str, action=writable_file_action)
 
 def validate_switch_argparser(parser):
 	validation = parser.add_mutually_exclusive_group()
@@ -41,6 +44,8 @@ def parser_argparser(parser):
 		help='parse for term and year - two args') 
 	parser.add_argument('--department',
 		help='parse specific department by code')
+	parser.add_argument('--course',
+		help='parse specific course code (note: unstable if invalid course code)')
 	parser.add_argument('-o', '--output', action=writable_file_action,
 		help='(default:  scripts/[school]/data/courses.json)')
 	textbooks = parser.add_mutually_exclusive_group()
