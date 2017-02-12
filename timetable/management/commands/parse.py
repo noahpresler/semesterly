@@ -1,4 +1,4 @@
-import os, django, datetime, logging, sys, argparse
+import os, django, datetime, logging, sys, argparse, simplejson as json
 from django.core.management.base import BaseCommand, CommandParser, CommandError
 from timetable.models import Updates
 from timetable.school_mappers import course_parsers, new_course_parsers
@@ -34,12 +34,25 @@ class Command(BaseCommand):
 
 			parser = new_course_parsers[school]
 
+
+			timestamp = datetime.datetime.now().strftime("%Y/%m/%d-%H:%M:%S")
+
+			directory = 'scripts/' + school
+			if not options.get('config_file'):
+				options['config_file'] = '{0}/config.json'.format(directory)
+			if not options.get('output'):
+				options['output'] = '{0}/data/courses.json'.format(directory)
+			if not options.get('output_error_filepath'):
+				options['output_error_filepath'] = '{0}/logs/error.log'.format(directory)
+			if not options.get('master_log'):
+				options['log_stats'] = '{0}/logs/master.log'.format(directory)
+
 			try:
 				parser(school,
 					validate=options['validate'],
-					config=options.get('config_file'),
-					output_filepath=options.get('output'),
-					output_error_filepath=options.get('output_error'),
+					config=options['config_file'],
+					output_filepath=options['output'],
+					output_error_filepath=options['output_error'],
 					break_on_error=options['break_on_error'],
 					break_on_warning=options['break_on_warning'],
 					hide_progress_bar=options['hide_progress_bar'],
@@ -62,5 +75,24 @@ class Command(BaseCommand):
 				error = "Error while parsing %s:\n\n%s\n" % (school, str(e))
 				logging.exception(e)
 				self.stderr.write(self.style.ERROR(str(e)))
-	
+
+			# TODO - add more info to master logger
+			self.log_stats(options['log_stats'], stats='INGESTING', timestamp=timestamp)
+
+		self.log_stats(options['log_stats'], options=options, timestamp=timestamp)
 		self.stdout.write(self.style.SUCCESS("Parsing Finished!"))
+
+	def log_stats(self, filepath, options='', stats='', timestamp=''):
+		'''Append run stat to master log.'''
+		formatted_string = ''
+
+		if timestamp:
+			formatted_string += 'TIMESTAMP: ' + timestamp + '\n'
+		if stats:
+			formatted_string += stats + '\n'
+		if options:
+			formatted_string += 'OPTIONS:\n' + json.dumps(options, sort_keys=True, indent=2, separators=(',', ': ')) + '\n'
+
+		with open(filepath, 'a') as log:
+			log.write(formatted_string)
+			log.write('='*40 + '\n')
