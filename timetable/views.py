@@ -21,9 +21,12 @@ from timetable.models import *
 from timetable.school_mappers import school_to_granularity, VALID_SCHOOLS, school_code_to_name, AM_PM_SCHOOLS, school_to_course_regex
 from timetable.utils import *
 from timetable.scoring import *
+from timetable.jhu_final_exam_scheduler import *
+from timetable.jhu_final_exam_test import *
 from student.models import Student
 from student.views import get_student, get_user_dict, convert_tt_to_dict, get_classmates_from_course_id
 from django.db.models import Count
+
 
 MAX_RETURN = 60 # Max number of timetables we want to consider
 
@@ -31,6 +34,7 @@ SCHOOL = ""
 
 hashids = Hashids(salt="***REMOVED***")
 logger = logging.getLogger(__name__)
+jhu_final_exam_scheduler = JHUFinalExamScheduler()
 
 def redirect_to_home(request):
   return HttpResponseRedirect("/")
@@ -739,7 +743,7 @@ def profile(request):
   logged = request.user.is_authenticated()
   if logged and Student.objects.filter(user=request.user).exists():
     student = Student.objects.get(user=request.user)
-    reactions =  Reaction.objects.filter(student=student).values('title').annotate(count=Count('title'))
+    reactions = Reaction.objects.filter(student=student).values('title').annotate(count=Count('title'))
     # googpic = this.props.userInfo.img_url.replace('sz=50','sz=100') if this.props.userInfo.isLoggedIn else ''
     # propic = 'url(https://graph.facebook.com/' + JSON.parse(currentUser).fbook_uid + '/picture?type=normal)' if this.props.userInfo.FacebookSignedUp else 'url(' + googpic + ')'
     if student.user.social_auth.filter(provider='google-oauth2').exists():
@@ -768,7 +772,11 @@ def profile(request):
 
 @csrf_exempt
 def final_exam_scheduler(request):
-  return HttpResponse(request.body, content_type="application/json")
+  #request.body contains the json of the courses (timetable)
+  final_exam_schedule = jhu_final_exam_scheduler.make_schedule(json.loads(request.body))
+  return HttpResponse(json.dumps(final_exam_schedule), content_type="application/json")
+
+
 
 
 
