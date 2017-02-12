@@ -69,6 +69,7 @@ class Semesterly extends React.Component {
 	}
 
 	componentDidMount() {
+		console.log("semesterly mounted");
 		this.msg.show(<FriendsInClassAlertContainer />,  {
 			type: 'info',
 			time: 99999,
