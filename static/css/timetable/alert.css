@@ -180,6 +180,11 @@
   transition: opacity .3s;
 }
 
+.react-alerts .friends-in-class-alert-container {
+  width: 320px;
+  padding-left: 20px;
+}
+
 .friends-in-class-alert-container .icon {
   display: none;
 }
