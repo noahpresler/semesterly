@@ -21,7 +21,6 @@ class HopkinsParser(CourseParser):
         self.schools = []
         self.semester = sem
         self.last_course = {}
-        self.last_section = {}
         self.department = None
         super(HopkinsParser, self).__init__('jhu',**kwargs)
 
@@ -92,6 +91,9 @@ class HopkinsParser(CourseParser):
                 self.ingestor['areas'] += [match]
 
         created_course = self.ingestor.ingest_course()
+        if self.last_course and created_course['code'] == course['OfferingName'].strip() and created_course['name'] != course['Title']:
+            self.ingestor['section_name'] = course['OfferingName'].strip()
+        self.last_course = created_course
 
         for meeting in SectionDetails[0]['Meetings']:
             # Load core section fields
