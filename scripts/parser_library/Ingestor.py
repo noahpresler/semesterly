@@ -41,10 +41,7 @@ class Ingestor(dict):
 		'homepage',
 		'website',
 		'instructors',
-		'instructor',
-		'instr',
-		'prof',
-		'professor',
+		'instructor', 'instr', 'instrs', 'instr_name', 'instr_names', 'instructor', 'instructor_name',
 		'section_code',
 		'section_name'
 		'section',
@@ -162,7 +159,7 @@ class Ingestor(dict):
 			'corequisites': deep_clean(make_list(self.getchain('corequisites', 'coreqs'))),
 			'exclusions': deep_clean(make_list(self.get('exclusions'))),
 			'description': deep_clean(make_list(self.getchain('description', 'descr'))),
-			'areas': self.get('areas'),
+			'areas': deep_clean(self.get('areas')),
 			'level': self.get('level'),
 			'cores': deep_clean(make_list(self.get('cores'))),
 			'geneds': deep_clean(make_list(self.get('geneds'))),
@@ -184,14 +181,19 @@ class Ingestor(dict):
 		'''
 
 		# handle nested instructor definition and resolution
-		for key in [k for k in ['instructors', 'instrs', 'instructor', 'instr', 'prof', 'professor'] if k in self]:
-			self[key] = deep_clean(make_list(self[key]))
-			instructors = self[key]
+		# if 'instructors' in self and isinstance(self['instructors'], dict):
+		instr_keys = set(['instructor', 'instr', 'instrs', 'instr_name', 'instr_names', 'instructor', 'instructor_name']) & set(self)
+		if len(instr_keys) == 0:
+			pass
+		elif len(instr_keys) > 1:
+			raise IngestorWarning('cannot resolve instructors data')
+		else: # len(instr_keys) == 1
+			instructors = self[list(instr_keys)[0]]
+			instructors = deep_clean(make_list(instructors))
 			for i in range(len(instructors)):
 				if isinstance(instructors[i], basestring):
 					instructors[i] = { 'name': instructors[i] }
 			self['instructors'] = instructors
-			break
 
 		section = {
 			'kind': 'section',
