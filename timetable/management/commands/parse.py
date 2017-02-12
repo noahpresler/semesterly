@@ -23,21 +23,16 @@ class Command(BaseCommand):
 		# Options for validation
 		validator_argparser(parser)
 
-	def success_print(self, message):
-		try:
-			self.stdout.write(self.style.SUCCESS(message))
-		except: # TODO - why this except block? when will this fail?
-			self.stdout.write(message) 
-
 	def handle(self, *args, **options):
 		logging.basicConfig(level=logging.ERROR, filename='parse_errors.log')
 
 		for school in options['schools']:
-			parser = new_course_parsers[school]
-			message = "Starting parser for %s.\n" % (school)
-			self.success_print(message)
+			message = 'Starting parser for {}.\n'.format(school)
+			self.stdout.write(self.style.SUCCESS(message))
 			logging.exception(message) # TODO - WHY IS THIS an exception?
 			# TODO - log command line options
+
+			parser = new_course_parsers[school]
 
 			try:
 				parser(school,
@@ -67,5 +62,5 @@ class Command(BaseCommand):
 				error = "Error while parsing %s:\n\n%s\n" % (school, str(e))
 				logging.exception(e)
 				self.stderr.write(self.style.ERROR(str(e)))
-
-		self.success_print("Finished!")
+	
+		self.stdout.write(self.style.SUCCESS("Parsing Finished!"))
