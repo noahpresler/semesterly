@@ -25,12 +25,14 @@ class ProgressBar:
 					' [', progressbar.Timer(), '] ',
 					progressbar.FormatLabel('%(value)s')
 				])
+		self.stats = ''
 
 	def update(self, mode, counters, formatter=(lambda x: x)):
 		mode = '=={}=='.format(mode.upper())
 		label_string = ' | '.join(('{}: {}'.format(k[:3].title(), formatter(counters[k])) for k in counters if counters[k]['total'] > 0))
 		formatted_string = '{} | {}'.format(mode, label_string)
 		self.bar.update(formatted_string)
+		self.stats = formatted_string # grab run stats
 
 class Counter:
 	'''Dictionary counter for various stats; to be passed with dict to update method in ProgressBar.'''

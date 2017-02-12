@@ -106,9 +106,9 @@ class Ingestor(dict):
 		if not config:
 			config = '{0}/config.json'.format(directory)
 		if not output_filepath:
-			output_filepath = '{0}/data/courses2.json'.format(directory)
+			output_filepath = '{0}/data/courses.json'.format(directory)
 		if not output_error_filepath:
-			output_error_filepath = '{0}/logs/error2.log'.format(directory)
+			output_error_filepath = '{0}/logs/error.log'.format(directory)
  
 		self.validator = Validator(config=config)
 
