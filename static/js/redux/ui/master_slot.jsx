@@ -45,6 +45,14 @@ class MasterSlot extends React.Component {
         let friendCircles = this.props.classmates && this.props.classmates.classmates ? this.props.classmates.classmates.map(c => {
             return <div className="ms-friend" key={c.img_url} style={{backgroundImage: 'url(' + c.img_url + ')'}}></div>;
         }) : null;
+        console.log("friendCircles", friendCircles);
+        console.log(this.props.fakeFriends > 0);
+
+        if (this.props.fakeFriends) {
+            let friendCircles = return <div className="ms-friend" style={{backgroundImage: 'url(../../../../img/blank.png)'}}></div>;
+            console.log("in fake friends", friendCircles);
+        } 
+        
         if (this.props.classmates && this.props.classmates.classmates && friendCircles.length > 4) {
             let plusMore = friendCircles.length - 3 + '+';
             friendCircles = [<div className="ms-friend" key={4}>{plusMore}</div>].concat(friendCircles.slice(0,3))
