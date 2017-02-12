@@ -31,6 +31,7 @@ class FriendsInClassAlert extends React.Component {
                 onTimetable={true}
                 hideCloseButton={true}
                 inModal={true}
+                fakeFriends={5}
                 fetchCourseInfo={() => this.fetchCourseInfo(rc.id)}
                 />
 			<small className="alert-extra">
