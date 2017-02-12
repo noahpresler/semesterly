@@ -42,8 +42,8 @@ def progressbar_argparser(parser):
 def parser_argparser(parser):
 	parser.add_argument('--term-and-year', nargs=2, type=str,
 		help='parse for term and year - two args') 
-	parser.add_argument('--department',
-		help='parse specific department by code')
+	parser.add_argument('--department', nargs='+',
+		help='parse specific departments by code')
 	parser.add_argument('--course',
 		help='parse specific course code (note: unstable if invalid course code)')
 	parser.add_argument('-o', '--output', action=writable_file_action,
