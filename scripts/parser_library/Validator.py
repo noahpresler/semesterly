@@ -8,6 +8,7 @@ import simplejson as json
 from scripts.parser_library.Logger import Logger
 from scripts.parser_library.internal_utils import *
 from scripts.parser_library.internal_exceptions import JsonValidationError, JsonValidationWarning, JsonDuplicationWarning
+from scripts.parser_library.Updater import ProgressBar, Counter
 
 class Validator:
 	def __init__(self, config=None):
@@ -85,18 +86,20 @@ class Validator:
 	def validate(self, data):
 
 		# Convert to dotdict for `easy-on-the-eyes` element access
-		if isinstance(data, list):
-			data = [ dotdict(d) for d in data ]
-			for obj in data:
-				self.kind_to_validation_function(obj.kind)(obj, schema=True)
-		else:
-			data = dotdict(data)
-			self.kind_to_validation_function(data.kind)(data, schema=True)
+		data = [ dotdict(d) for d in make_list(data) ]
+		for obj in data:
+			self.kind_to_validation_function(obj.kind)(obj, schema=True)
 
 	def validate_self_contained(self, datafile,
 		break_on_error=False,
 		break_on_warning=False,
-		output_error=None):
+		output_error=None,
+		hide_progress_bar=False):
+
+		if not hide_progress_bar:
+			self.progressbar = ProgressBar(self.config.school.code)
+		
+		self.counters = Counter()
 
 		self.logger = Logger(errorfile=output_error)
 
@@ -114,40 +117,19 @@ class Validator:
 		for obj in data:
 			try:
 				self.kind_to_validation_function(obj.kind)(obj, schema=False)
+				self.counters.increment(obj.kind, 'valid')
 			except JsonValidationError as e:
 				self.logger.log(e)
 				if break_on_error:
-					break
+					raise e
 			except JsonValidationWarning as e:
 				self.logger.log(e)
 				if break_on_warning:
-					break
-
-	# DEPRECATED: delete at some point
-	def _validate(self, directory, 
-		break_on_error=False, 
-		break_on_warning=False, 
-		errorfile=None):	
-
-		# TODO - iter errors and catch exceptions within method
-		# TODO - load config file as well
-		# TODO - handle single objects smoothly
-		self.logger = Logger(errorfile=errorfile)
-
-		try:
-			self.validate_directory(directory)
-			data = Validator.filepath_to_json(directory + 'data/courses.json')
-			Validator.validate_schema(data, *self.schema.data)
-		except (JsonValidationError, json.scanner.JSONDecodeError) as e:
-			self.logger.log(e)
-			raise e	# fatal error, cannot continue
-
-		self.validate_self_contained(data, 
-			break_on_error=break_on_error, 
-			break_on_warning=break_on_warning, 
-			output_error=errorfile)
-
-# ###############################################
+					raise e
+			self.counters.increment(obj.kind, 'total')
+			formatter = lambda stats: '{}/{}'.format(stats['valid'], stats['total'])
+			if not hide_progress_bar:
+				self.progressbar.update('validate', self.counters.dict(), formatter)
 
 	def validate_config(self, config):
 		if not isinstance(config, dict):
@@ -428,14 +410,6 @@ class Validator:
 				raise e
 		Validator.validate_schema(directory, *self.schema.directory)
 
-	# TODO - delete below
-	# @staticmethod
-	# def path_to_json(path):
-	# 	return Validator.dict_to_json(Validator.dir_to_dict(path))
-	# @staticmethod
-	# def dict_to_json(d):
-	# 	return json.dumps(d)
-
 	@staticmethod
 	def dir_to_dict(path):
 		d = {'name': os.path.basename(path)}
@@ -462,20 +436,7 @@ class Validator:
 		a, b = json.dumps(a, sort_keys=True), json.dumps(b, sort_keys=True)
 		return a == b
 
-def get_args():
-	pass # TODO
-
-def check_args(args):
-	pass # TODO
-
 def main():
-	sys.stderr.write('not implemented for self run yet')
-	exit(1)
-	# v = Validator(
-	# 		schema_directory='scripts/parser_library/schemas/',
-	# 		directory='scripts/parser_library/ex_school/')
-
-	# v.validate()
-
+	raise NotImplementedError('cannot run validator by itself yet')
 if __name__ == '__main__':
 	main()
