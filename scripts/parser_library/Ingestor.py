@@ -120,6 +120,8 @@ class Ingestor(dict):
 		# initialize counters
 		self.counter = Counter()
 
+		super(Ingestor, self).__init__()
+
 	def __str__(self):
 		return '\n'.join('{}:{}'.format(l, v) for l, v in self.iteritems())
 
@@ -138,12 +140,14 @@ class Ingestor(dict):
 		'''
 
 		# support nested and non-nested department ingestion
-		if 'department' in self or 'dept' in self:
-			if not isinstance(self.getchain('department', 'dept'), dict):
-				self['department'] = {
-					'name': self.getchain('department_name', 'dept_name'),
-					'code': self.getchain('department_code', 'dept_code')
-				}
+		department = self.get('department')
+		if ('department' not in self) or ('department_name' in self or 'department_code' in self or 'dept_name' in self or 'dept_code' in self):
+			# if not isinstance(self.getchain('department', 'dept'), dict):
+			department = {
+				'name': self.getchain('department_name', 'dept_name'),
+				'code': self.getchain('department_code', 'dept_code')
+			}
+		self['department'] = department
 
 		course = {
 			'kind': 'course',
@@ -230,15 +234,17 @@ class Ingestor(dict):
 		'''
 
 		# handle nested time definition
+		time = self.get('time')
 		if 'time' not in self:
-			self['time'] = {
+			time = {
 				'start': self.getchain('time_start', 'start_time'),
 				'end': self.getchain('time_end', 'end_time')
 			}
 
 		# handle nested location definition
+		location = self.get('location')
 		if isinstance(self.getchain('location', 'loc', 'where'), basestring):
-			self['location'] = { 'where': self.getchain('location', 'loc', 'where') }
+			location = { 'where': self.getchain('location', 'loc', 'where') }
 
 		meeting = {
 			'kind': 'meeting',
@@ -248,8 +254,8 @@ class Ingestor(dict):
 			},
 			'days': deep_clean(make_list(self.getchain('days', 'day'))),
 			'dates': deep_clean(make_list(self.getchain('dates', 'date'))),
-			'time': self['time'],
-			'location': self.get('location')
+			'time': time,
+			'location': location
 		}
 
 		meeting = cleandict(meeting)
