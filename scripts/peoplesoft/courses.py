@@ -3,7 +3,7 @@
 # @author	Michael N. Miller
 # @date	11/22/16
 
-import re, sys
+import re, sys, itertools
 from abc import ABCMeta, abstractmethod
 
 # parser library
@@ -59,6 +59,7 @@ class PeopleSoftParser(CourseParser):
 
 	def parse(self, years,
 		department=None,
+		course=None, # NOTE: not implemented yet
 		textbooks=True,
 		verbosity=3,
 		**kwargs):
@@ -73,8 +74,6 @@ class PeopleSoftParser(CourseParser):
 		params.update(self.action('adv_search'))
 		soup = self.requester.post(self.base_url, params=params)
 		params.update(PeopleSoftParser.refine_search(soup))
-
-		self.cleanup() # NOTE: this is neccessary, but bad hack
 
 		for year, terms in years.items():
 			self.ingestor['year'] = year
@@ -94,35 +93,52 @@ class PeopleSoftParser(CourseParser):
 				map(lambda k: params.__delitem__(k), PeopleSoftParser.ajax_params.keys())
 				params.update(self.action('class_search'))
 
-				dept_key = soup.find('select', id=re.compile(r'SSR_CLSRCH_WRK_SUBJECT_SRCH\$\d'))['id']
-				departments = {dept['value']: dept.text for dept in self.find_all['depts'](soup)}
+				# dept_param_key = soup.find('select', id=re.compile(r'SSR_CLSRCH_WRK_SUBJECT_SRCH\$\d'))['id']
+				# departments = {dept['value']: dept.text for dept in self.find_all['depts'](soup)}
 
-				if department and department != 'all':
-					department_code = department
-					if department_code not in departments:
-						raise CourseParseError('invalid department code %(department)s')
-					departments = {department_code: departments[department_code]}
+				# if department:
+				# 	department_code = department
+				# 	if department_code not in departments:
+				# 		raise CourseParseError('invalid department code {}'.format(department))
+				# 	departments = {department_code: departments[department_code]}
 
-				for dept_code, dept_name in departments.items():
+				departments, dept_param_key = self.get_departments(soup, cmd_departments=department) # FIXME -- change to cmd_department and its already a list
+				for dept_code, dept_name in departments.iteritems():
 					self.ingestor['dept_name'] = dept_name
 					self.ingestor['dept_code'] = dept_code
 
 					if self.verbosity >= 1:
-						print '> Parsing courses in department', dept_name
+						print '> Parsing courses in department', dept_name, dept_code
 
 					# Update search payload with department code
-					params[dept_key] = dept_code
+					params[dept_param_key] = dept_code
 
 					# Get course listing page for department
 					soup = self.requester.post(self.base_url, params=params)
 					if not self.valid_search_page(soup):
 						continue
 
-					self.parse_course_list(self.find_all['courses'](soup), soup)
+					courses = self.get_course_list_as_soup(self.find_all['courses'](soup), soup)
+					for course in courses:
+						# NOTE: course is soup
+						self.parse_course_description(course)
 
 		self.ingestor.wrap_up()
 
-	def parse_course_list(self, courses, soup):
+	def get_departments(self, soup, cmd_departments=None):
+		dept_param_key = soup.find('select', id=re.compile(r'SSR_CLSRCH_WRK_SUBJECT_SRCH\$\d'))['id']
+		departments = { dept['value']: dept.text for dept in self.find_all['depts'](soup) }
+
+		# department list specified as cmd line arg
+		if cmd_departments and len(cmd_departments) > 0:
+			for cmd_dept_code in cmd_departments:
+				if cmd_dept_code not in departments:
+					raise CourseParseError('invalid department code {}'.format(cmd_dept_code))
+			departments = {cmd_dept_code: departments[cmd_dept_code] for cmd_dept_code in cmd_departments}
+
+		return departments, dept_param_key
+
+	def get_course_list_as_soup(self, courses, soup):
 		# fill payload for course description page request
 		payload = PeopleSoftParser.hidden_params(soup)
 
@@ -130,7 +146,7 @@ class PeopleSoftParser(CourseParser):
 			self.actions['details'] = 'MTG_CLASS_NBR$' + str(i)
 			payload.update(self.action('details'))
 			soup = self.requester.get(self.base_url, params=payload)
-			self.parse_course_description(soup)
+			yield soup
 
 	def parse_course_description(self, soup):
 		# scrape info from page
@@ -142,7 +158,7 @@ class PeopleSoftParser(CourseParser):
 		waitlist 	= soup.find('span', {'id' : 'SSR_CLS_DTL_WRK_WAIT_TOT'}).text
 		descr 		= soup.find('span', {'id' : 'DERIVED_CLSRCH_DESCRLONG'})
 		notes 		= soup.find('span', {'id' : 'DERIVED_CLSRCH_SSR_CLASSNOTE_LONG'})
-		info 		= soup.find('span', {'id' : 'SSR_CLS_DTL_WRK_SSR_REQUISITE_LONG'})
+		req 		= soup.find('span', {'id' : 'SSR_CLS_DTL_WRK_SSR_REQUISITE_LONG'})
 		areas		= soup.find('span', {'id' : 'SSR_CLS_DTL_WRK_SSR_CRSE_ATTR_LONG'})
 
 		# parse table of times
@@ -163,22 +179,25 @@ class PeopleSoftParser(CourseParser):
 		self.ingestor['section_type'] = subtitle.split('|')[2].strip()
 
 		# Place course info into course model
-		self.ingestor['course_code'] 	= rtitle.group(1)
-		self.ingestor['course_name'] 	= rtitle.group(3)
+		self.ingestor['course_code']  = rtitle.group(1)
+		self.ingestor['course_name']  = rtitle.group(3)
 		self.ingestor['section_code'] = rtitle.group(2)
-		self.ingestor['credits']	= float(re.match(r'(\d*).*', units).group(1))
-		self.ingestor['description'] 	= [
+		self.ingestor['credits']      = float(re.match(r'(\d*).*', units).group(1))
+		self.ingestor['prereqs']      = [req.text] if req else None
+		self.ingestor['description']  = [
 			self.extractor.extract_info(self.ingestor, descr.text) if descr else '',
-			self.extractor.extract_info(self.ingestor, notes.text) if notes else '',
-			self.extractor.extract_info(self.ingestor, info.text) if info else ''
+			self.extractor.extract_info(self.ingestor, notes.text) if notes else ''
 		]
-		self.ingestor['size'] 	= int(capacity)
+		self.ingestor['size'] 	   = int(capacity)
 		self.ingestor['enrolment'] = int(enrollment)
-		self.ingestor['instrs'] 	= ', '.join({instr.text for instr in instrs})
-		self.ingestor['areas'] 	= (self.extractor.extract_info(self.ingestor, l) for l in re.sub(r'(<.*?>)', '\n', str(areas)).splitlines() if l.strip()) if areas else '' # FIXME -- small bug
-		# print 'areas:', areas
-		# print 'areas', list(self.ingestor['areas'])
-		# print 'areas - geneds', list(self.ingestor['geneds'])
+		self.ingestor['instrs']    = [instr.text for instr in instrs]
+
+		self.ingestor['areas'] = [self.extractor.extract_info(self.ingestor, areas.text)] if areas else None
+			# print self.ingestor['areas']
+		# self.ingestor['areas'] = list(self.extractor.extract_info(self.ingestor, l) for l in re.sub(r'(<.*?>)', '\n', str(areas)).splitlines() if l.strip()) if areas else '' # FIXME -- small bug
+		# if 'geneds' in self.ingestor:
+		# 	self.ingestor['areas'] = list(itertools.chain(self.ingestor['areas'], self.ingestor['geneds']))
+			# self.ingestor['areas'] += self.ingestor['geneds']
 
 		course = self.ingestor.ingest_course()
 		section = self.ingestor.ingest_section(course)
@@ -222,10 +241,10 @@ class PeopleSoftParser(CourseParser):
 		# return map(lambda i: (filter(lambda x: x.isdigit(), isbns[i][0].text), isbns[i][1].text[0].upper() == 'R'), range(len(isbns)))
 
 	def cleanup(self):
-		self.ingestor['prereqs'] = ''
-		self.ingestor['coreqs'] = ''
-		self.ingestor['geneds'] = ''
-		self.ingestor['fees'] = '' # NOTE: caused issue with extractor
+		self.ingestor['prereqs'] = []
+		self.ingestor['coreqs'] = []
+		self.ingestor['geneds'] = []
+		self.ingestor['fees'] = [] # NOTE: caused issue with extractor
 
 	@staticmethod
 	def hidden_params(soup, params=None, ajax=False):
@@ -248,7 +267,8 @@ class PeopleSoftParser(CourseParser):
 		errmsg = soup.find('div', {'id' : 'win1divDERIVED_CLSMSG_ERROR_TEXT'})
 		if soup.find('td', {'id' : 'PTBADPAGE_' }) or errmsg:
 			if errmsg:
-				print 'Error on search: ' + errmsg.text
+				if self.verbosity >= 3:
+					print 'Error on search: ' + errmsg.text
 			return False
 		elif soup.find('span', {'class','SSSMSGINFOTEXT'}):
 			# too many search results
@@ -272,7 +292,8 @@ class PeopleSoftParser(CourseParser):
 		return query
 
 	def handle_special_case_on_search(self, soup):
-		print 'SPECIAL SEARCH MESSAGE: ' + soup.find('span', {'class','SSSMSGINFOTEXT'}).text
+		if self.verbosity >= 3:
+			print 'SPECIAL SEARCH MESSAGE: ' + soup.find('span', {'class','SSSMSGINFOTEXT'}).text
 
 		query = PeopleSoftParser.hidden_params(soup, ajax=True)
 		query['ICAction'] = '#ICSave'
