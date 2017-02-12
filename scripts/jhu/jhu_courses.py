@@ -137,5 +137,6 @@ class HopkinsParser(CourseParser):
         self.ingestor.wrap_up()
 
 if __name__ == "__main__":
-    parser = HopkinsParser()
-    parser.start()
+    raise NotImplementedError('run parsers with manage.py')
+    # parser = HopkinsParser()
+    # parser.start()
