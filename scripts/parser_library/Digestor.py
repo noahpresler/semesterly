@@ -17,7 +17,7 @@ from timetable.models import *
 from scripts.parser_library.internal_utils import *
 from scripts.parser_library.Logger import Logger, JsonListLogger
 from scripts.parser_library.internal_exceptions import DigestionError
-from scripts.parser_library.Updater import ProgressBar
+from scripts.parser_library.Updater import ProgressBar, Counter
 
 # TODO - DigestionError should be removed with failure,
 # user should not be able to produce direct DigestionError
@@ -27,45 +27,34 @@ class Digestor:
 		data=None, 
 		output=None,
 		diff=True, 
-		load=True):
+		load=True,
+		hide_progress_bar=False):
 
-		self.school = school
-		self.progressbar = ProgressBar(school)
-
-		# TODO - extrapolate datafile/dict/string resolution to decorator
+		# TODO - extrapolate datafile/dict/string resolution to another manager
 		if data:
 			if isinstance(data, dict):
-				self.data = data
+				data = data
 			else:
 				with open(data, 'r') as f:
-					self.data = json.load(f)
+					data = json.load(f)
 		else:
-			self.data = json.load(sys.stdin)
+			data = json.load(sys.stdin)
 
-		self.data = [ dotdict(obj) for obj in self.data ]
+		self.hide_progress_bar = hide_progress_bar
+		if not hide_progress_bar:
+			self.progressbar = ProgressBar(school)
+
+		self.data = [ dotdict(obj) for obj in data ]
 
 		self.cached = dotdict({
 			'course': { 'code': '_' },
 			'section': { 'code': '_' }
 		})
 
+		self.school = school
 		self.adapter = DigestionAdapter(school, self.cached)
 		self.strategy = self.set_strategy(diff, load, output)
-
-		self.counter = {
-			'courses': {
-				'created': 0,
-				'total': 0
-			},
-			'sections': {
-				'created': 0,
-				'total': 0
-			},
-			'offerings': {
-				'created': 0,
-				'total': 0
-			}
-		}
+		self.counter = Counter()
 
 	def set_strategy(self, diff, load, output=None):
 		if diff and load:
@@ -80,7 +69,7 @@ class Digestor:
 
 	def digest(self):
 		'''Digest data.'''
-		
+
 		do_digestion = {
 			'course'	: lambda x: self.digest_course(x),
 			'section'	: lambda x: self.digest_section(x),
@@ -91,16 +80,18 @@ class Digestor:
 			'textbook_link': lambda x: self.digest_textbook_link(x)
 		}
 
-		for obj in iterrify(self.data):
+		for obj in make_list(self.data):
 			do_digestion[obj.kind](obj)
 
 		self.wrap_up()
 
 	def update_progress(self, key, exists):
+		# FIXME -- exists does not count new courses in diff strategy
 		if exists:
-			self.counter[key]['total'] += 1
-		formatter = lambda stats: '{}'.format(stats['total'])
-		self.progressbar.update('digesting ({})'.format(self.strategy.__class__.__name__.lower()), self.counter, formatter)
+			self.counter.increment(key, 'total')
+		if not self.hide_progress_bar:
+			formatter = lambda stats: '{}'.format(stats['total'])
+			self.progressbar.update('digesting ({})'.format(self.strategy.__class__.__name__.lower()), self.counter.dict(), formatter)
 
 	def digest_course(self, course):
 		''' Create course in database from info in json model.
@@ -116,7 +107,7 @@ class Digestor:
 			for section in course.get('sections', []):
 				self.digest_section(section, course_model)
 
-		self.update_progress('courses', bool(course_model))
+		self.update_progress('course', bool(course_model))
 
 		return course_model
 
@@ -141,7 +132,7 @@ class Digestor:
 			for meeting in section.get('meetings', []):
 				self.digest_meeting(meeting, section_model)
 
-		self.update_progress('sections', bool(section_model))
+		self.update_progress('section', bool(section_model))
 
 		return section_model
 
@@ -155,11 +146,12 @@ class Digestor:
 		'''
 
 		# NOTE: ignoring dates for now
+		offering_models = []
 		for offering in self.adapter.adapt_meeting(meeting):
 			offering_model = self.strategy.digest_offering(offering)
 			offering_models.append(offering_model)
-			self.update_progress('offerings', bool(offering_model))
-			yield offering_model
+			self.update_progress('offering', bool(offering_model))
+		return offering_models
 
 	def wrap_up(self):
 		self.strategy.wrap_up()
@@ -396,12 +388,22 @@ class Vommit(DigestionStrategy):
 			# Transform django object to dictionary
 			dbmodel = dbmodel.__dict__
 
+		whats = {}
+		for k, v in inmodel.iteritems():
+			if k in {'section', 'course'}:
+				try:
+					whats[k] = str(v)
+				except django.utils.encoding.DjangoUnicodeDecodeError as e:
+					whats[k] = '<{}: [Bad Unicode data]'.format(k)
+
 		# Remove db specific content from model
-		blacklist = {'_state', 'id', 'section_id', 'course_id', 'course', 'section', '_course_cache'}
-		# FIXME -- `course` and `section` keys WILL cause issues when db is modified for new defs
-		remove_blacklist = lambda d: {k: v for k, v in d.iteritems() if k not in blacklist}
-		dbmodel = remove_blacklist(dbmodel)
-		inmodel = remove_blacklist(inmodel)
+		blacklist = {'_state', 'id', 'section_id', 'course_id', '_course_cache', 'section', 'course'}
+		prune = lambda d: {k: v for k, v in d.iteritems() if k not in blacklist}
+		dbmodel = prune(dbmodel)
+		inmodel = prune(inmodel)
+
+		if 'course' in dbmodel:
+			dbmodel['course'] = str(dbmodel['course'])
 
 		# Remove null values from dictionaries
 		dbmodel = {k: v for k, v in dbmodel.iteritems() if v is not None}
@@ -415,15 +417,19 @@ class Vommit(DigestionStrategy):
 		# Diff the in-model and db-model
 		diffed = json.loads(jsondiff.diff(dbmodel, inmodel, syntax='symmetric', dump=True))
 
-		# Remove defaulted values from diff output
+		# Remove db defaulted values from diff output
 		if hide_defaults and '$delete' in diffed:
 			self.remove_defaulted_keys(kind, diffed['$delete'])
 			if len(diffed['$delete']) == 0:
 				del diffed['$delete']
 
-		# Add `what` tag to diff output
+		# Add `what` and `context` tag to diff output
 		if len(diffed) > 0:
-			diffed.update({ '$what': inmodel })
+			if isinstance(diffed, list) and len(diffed[0]) == 0:
+				diffed = { '$new': diffed[1] }
+			elif isinstance(diffed, dict):
+				diffed.update({ '$what': inmodel })
+			diffed.update({'$context': whats})
 			self.json_logger.log(diffed)
 
 	def remove_defaulted_keys(self, kind, dct):
@@ -476,6 +482,7 @@ class Absorb(DigestionStrategy):
 
 	def digest_offering(self, model_args):
 		model, created = Offering.objects.update_or_create(**model_args)
+		return model
 
 	def remove_section(self, section, course_model):
 		''' Remove section specified from django database. '''
