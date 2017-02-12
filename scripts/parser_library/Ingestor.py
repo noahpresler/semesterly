@@ -181,7 +181,6 @@ class Ingestor(dict):
 		'''
 
 		# handle nested instructor definition and resolution
-		# if 'instructors' in self and isinstance(self['instructors'], dict):
 		instr_keys = set(['instructor', 'instr', 'instrs', 'instr_name', 'instr_names', 'instructor', 'instructor_name']) & set(self)
 		if len(instr_keys) == 0:
 			pass
