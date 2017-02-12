@@ -48,7 +48,7 @@ class Requester:
             except (requests.exceptions.Timeout,
                 requests.exceptions.ConnectionError):
                 sys.stderr.write("Timeout error: (GET) " + str(sys.exc_info()[0]) + '\n')
-                raw_input("Press Enter to try again...")
+                # raw_input("Press Enter to try again...")
                 r = None
 
         if not parse:
@@ -96,7 +96,7 @@ class Requester:
             except (requests.exceptions.Timeout,
                 requests.exceptions.ConnectionError):
                 sys.stderr.write("Unexpected error POST: " + str(sys.exc_info()[0]) + '\n')
-                raw_input("Press Enter to try again...")
+                # raw_input("Press Enter to try again...")
                 r = None
 
         if not parse:
