@@ -39,20 +39,49 @@ class Extractor():
         '''
         text = text.encode('utf-8', 'ignore')
         extractions = {
-            'prereqs' : r'[Pp]r(?:-?)e[rR]eq(?:uisite)?(?:s?)[:,\s]\s*(.*?)(?:\.|$)\s*',
-            'coreqs'  : r'[Cc]o(?:-?)[rR]eq(?:uisite)?(?:s?)[:,\s]\s*(.*?)(?:\.|$)\s*',
-            'geneds'  : r'(GE .*)',
-            'fees'    : r'Fees?[:\s]?.*?\$(\d*(?:\.\d{1,2})?)'
+            'prereqs' : [
+                r'[Pp]r(?:-?)e[rR]eq(?:uisite)?(?:s?)[:,\s]\s*(.*?)(?:\.|$)\s*',
+                r'T[Aa][Kk][Ee] (.*)\.?$'
+            ],
+            'coreqs'  : [r'[Cc]o(?:-?)[rR]eq(?:uisite)?(?:s?)[:,\s]\s*(.*?)(?:\.|$)\s*'],
+            'geneds'  : [r'GE (.*)'],
+            'fees'    : [r'(?:Lab )?Fees?:?\s{1,2}?\$?\s?(\d+(?:\.\d{1,2})?)']
         }
 
-        for ex in extractions:
-            rex = re.compile(extractions[ex])
-            extracted = rex.search(text)
-            if extracted:
-                if len(course[ex]) > 0:
-                    course[ex] += ', '
-                course[ex] += extracted.group(1) # okay b/c of course_cleanup
-                # FIXME -- this library does not enforce this, unsafe!
-            text = rex.sub('', text).strip()
+        for key, extraction_list in extractions.items():
+            for extraction in extraction_list:
+                rex = re.compile(extraction)
+                extracted = rex.search(text)
+                if extracted:
+                    if not course.get(key):
+                        course[key] = []
+                    if 'fees' == key and isinstance(course.get(key), float):
+                        continue # NOTE: edge case if multiple fees present
+                    course[key] += [extracted.group(1)] # okay b/c of course_cleanup
+                    # FIXME -- this library does not enforce this, unsafe!
+                text = rex.sub('', text).strip()
 
+        # Convert fees to float
+        # NOTE: edge case, if mutliple fees have been extracted will take the first one
+        if course.get('fees') and isinstance(course['fees'], list):
+            try:
+                course['fees'] = float(course['fees'][0])
+            except ValueError:
+                course['fees'] = None
         return text
+
+    '''REGEX Analysis: (regex101.com)
+        r'(?:Lab )?Fees?:?\s{1,2}?\$?\s?(\d+(?:\.\d{1,2})?)'
+            Fee 30
+            Fee $30
+            Fees 3000.00
+            Fees: $125
+            Fees: $ 125.00
+            Fees:  125
+            Fee fdgdsad 123
+            Lab Fee fdgdsad 123
+            Fee: 30
+            Fees: $400.
+            Fees: $400.00
+            Lab Fee 20
+    '''
