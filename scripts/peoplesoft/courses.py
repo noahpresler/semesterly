@@ -8,9 +8,6 @@ from abc import ABCMeta, abstractmethod
 
 # parser library
 from scripts.textbooks.amazon import make_textbook
-from scripts.parser_library.Requester import Requester
-from scripts.parser_library.Extractor import *
-from scripts.parser_library.Model import Model
 from scripts.parser_library.Ingestor import Ingestor
 from scripts.parser_library.BaseParser import CourseParser
 from scripts.parser_library.internal_exceptions import CourseParseError
@@ -80,9 +77,9 @@ class PeopleSoftParser(CourseParser):
 		self.cleanup() # NOTE: this is neccessary, but bad hack
 
 		for year, terms in years.items():
-			self.ingest['year'] = year
+			self.ingestor['year'] = year
 			for term_name, term_code in terms.items():
-				self.ingest['term'] = term_name
+				self.ingestor['term'] = term_name
 
 				if self.verbosity >= 0:
 					print 'Parsing courses for', term_name, year
@@ -107,8 +104,8 @@ class PeopleSoftParser(CourseParser):
 					departments = {department_code: departments[department_code]}
 
 				for dept_code, dept_name in departments.items():
-					self.ingest['dept_name'] = dept_name
-					self.ingest['dept_code'] = dept_code
+					self.ingestor['dept_name'] = dept_name
+					self.ingestor['dept_code'] = dept_code
 
 					if self.verbosity >= 1:
 						print '> Parsing courses in department', dept_name
@@ -123,7 +120,7 @@ class PeopleSoftParser(CourseParser):
 
 					self.parse_course_list(self.find_all['courses'](soup), soup)
 
-		self.ingest.wrap_up()
+		self.ingestor.wrap_up()
 
 	def parse_course_list(self, courses, soup):
 		# fill payload for course description page request
@@ -162,29 +159,29 @@ class PeopleSoftParser(CourseParser):
 			print '\t' + title
 
 		rtitle = re.match(r'(.+?\s*\w+) - (\w+)\s*(\S.+)', title)
-		# self.ingest['section_type'] = PeopleSoftParser.SECTION_MAP.get(subtitle.split('|')[2].strip(), 'L')
-		self.ingest['section_type'] = subtitle.split('|')[2].strip()
+		# self.ingestor['section_type'] = PeopleSoftParser.SECTION_MAP.get(subtitle.split('|')[2].strip(), 'L')
+		self.ingestor['section_type'] = subtitle.split('|')[2].strip()
 
 		# Place course info into course model
-		self.ingest['course_code'] 	= rtitle.group(1)
-		self.ingest['course_name'] 	= rtitle.group(3)
-		self.ingest['section_code'] = rtitle.group(2)
-		self.ingest['credits']	= float(re.match(r'(\d*).*', units).group(1))
-		self.ingest['description'] 	= [
-			extract_info(self.ingest, descr.text) if descr else '',
-			extract_info(self.ingest, notes.text) if notes else '',
-			extract_info(self.ingest, info.text) if info else ''
+		self.ingestor['course_code'] 	= rtitle.group(1)
+		self.ingestor['course_name'] 	= rtitle.group(3)
+		self.ingestor['section_code'] = rtitle.group(2)
+		self.ingestor['credits']	= float(re.match(r'(\d*).*', units).group(1))
+		self.ingestor['description'] 	= [
+			extract_info(self.ingestor, descr.text) if descr else '',
+			extract_info(self.ingestor, notes.text) if notes else '',
+			extract_info(self.ingestor, info.text) if info else ''
 		]
-		self.ingest['size'] 	= int(capacity)
-		self.ingest['enrolment'] = int(enrollment)
-		self.ingest['instrs'] 	= ', '.join({instr.text for instr in instrs})
-		self.ingest['areas'] 	= (extract_info(self.ingest, l) for l in re.sub(r'(<.*?>)', '\n', str(areas)).splitlines() if l.strip()) if areas else '' # FIXME -- small bug
+		self.ingestor['size'] 	= int(capacity)
+		self.ingestor['enrolment'] = int(enrollment)
+		self.ingestor['instrs'] 	= ', '.join({instr.text for instr in instrs})
+		self.ingestor['areas'] 	= (extract_info(self.ingestor, l) for l in re.sub(r'(<.*?>)', '\n', str(areas)).splitlines() if l.strip()) if areas else '' # FIXME -- small bug
 		# print 'areas:', areas
-		# print 'areas', list(self.ingest['areas'])
-		# print 'areas - geneds', list(self.ingest['geneds'])
+		# print 'areas', list(self.ingestor['areas'])
+		# print 'areas - geneds', list(self.ingestor['geneds'])
 
-		course = self.ingest.ingest_course()
-		section = self.ingest.ingest_section(course)
+		course = self.ingestor.ingest_course()
+		section = self.ingestor.ingest_section(course)
 
 		# # NOTE: section is no longer a django object
 		# # TODO - change query to handle class code
@@ -201,18 +198,18 @@ class PeopleSoftParser(CourseParser):
 
 			if rsched:
 				days = map(lambda d: PeopleSoftParser.DAY_MAP[d], re.findall(r'[A-Z][^A-Z]*', rsched.group(1)))
-				time = (time_12to24(rsched.group(2)), time_12to24(rsched.group(3)))
+				time = (self.extractor.time_12to24(rsched.group(2)), self.extractor.time_12to24(rsched.group(3)))
 			else: # handle TBA classes
 				days = None
 				time = (None, None)
 
-			self.ingest['time_start'] = time[0]
-			self.ingest['time_end'] = time[1]
+			self.ingestor['time_start'] = time[0]
+			self.ingestor['time_end'] = time[1]
 			re.match(r'(.*) (\d+)', loc.text)
-			self.ingest['location'] = loc.text
-			self.ingest['days'] = days
+			self.ingestor['location'] = loc.text
+			self.ingestor['days'] = days
 
-			self.ingest.ingest_offerings(section)
+			self.ingestor.ingest_offerings(section)
 
 		self.cleanup()
 
@@ -225,10 +222,10 @@ class PeopleSoftParser(CourseParser):
 		# return map(lambda i: (filter(lambda x: x.isdigit(), isbns[i][0].text), isbns[i][1].text[0].upper() == 'R'), range(len(isbns)))
 
 	def cleanup(self):
-		self.ingest['prereqs'] = ''
-		self.ingest['coreqs'] = ''
-		self.ingest['geneds'] = ''
-		self.ingest['fees'] = '' # NOTE: caused issue with extractor
+		self.ingestor['prereqs'] = ''
+		self.ingestor['coreqs'] = ''
+		self.ingestor['geneds'] = ''
+		self.ingestor['fees'] = '' # NOTE: caused issue with extractor
 
 	@staticmethod
 	def hidden_params(soup, params=None, ajax=False):
@@ -284,6 +281,6 @@ class PeopleSoftParser(CourseParser):
 
 # FOR PENNSTATE
 # if kwargs.get('department_regex'):
-# 	self.ingest['department'] = kwargs['department_regex'].match(dept.text).group(1)
+# 	self.ingestor['department'] = kwargs['department_regex'].match(dept.text).group(1)
 # else:
-# 	self.ingest['department'] = dept.text
+# 	self.ingestor['department'] = dept.text
