@@ -35,7 +35,8 @@ class CourseParser(BaseParser):
 
 		super(CourseParser, self).__init__(school)
 
-		if not hide_progress_bar:
+		self.hide_progress_bar = hide_progress_bar
+		if not self.hide_progress_bar:
 			self.progressbar = ProgressBar(school)
 
 		self.ingestor = Ingestor(school,
@@ -50,3 +51,9 @@ class CourseParser(BaseParser):
 
 	@abstractmethod
 	def start(self, **kwargs): pass
+
+	def get_stats(self):
+		if not self.hide_progress_bar:
+			return self.progressbar.stats
+		else:
+			return 'stats not logged'
