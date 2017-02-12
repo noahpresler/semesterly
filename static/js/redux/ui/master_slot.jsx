@@ -42,18 +42,22 @@ class MasterSlot extends React.Component {
     }
 
 	render() {
-        let friendCircles = this.props.classmates && this.props.classmates.classmates ? this.props.classmates.classmates.map(c => {
-            return <div className="ms-friend" key={c.img_url} style={{backgroundImage: 'url(' + c.img_url + ')'}}></div>;
-        }) : null;
-        console.log("friendCircles", friendCircles);
+        let friendCircles = null;
         console.log(this.props.fakeFriends > 0);
-
         if (this.props.fakeFriends) {
-            let friendCircles = return <div className="ms-friend" style={{backgroundImage: 'url(../../../../img/blank.png)'}}></div>;
-            console.log("in fake friends", friendCircles);
-        } 
+            friendCircles = new Array(this.props.fakeFriends);
+            for (let i = 0; i < this.props.fakeFriends; i++) {
+                friendCircles[i] = <div className="ms-friend" key={i} style={{backgroundImage: 'url(/static/img/blank.jpg)'}}></div>
+            }
+        } else {
+            friendCircles = this.props.classmates && this.props.classmates.classmates ? this.props.classmates.classmates.map(c => {
+                return <div className="ms-friend" key={c.img_url} style={{backgroundImage: 'url(' + c.img_url + ')'}}></div>;
+            }) : null;
+        }
+        console.log("finished circle render");
         
-        if (this.props.classmates && this.props.classmates.classmates && friendCircles.length > 4) {
+        if ((this.props.classmates && this.props.classmates.classmates && friendCircles.length > 4) 
+            ||(this.props.fakeFriends && this.props.fakeFriends > 4)) {
             let plusMore = friendCircles.length - 3 + '+';
             friendCircles = [<div className="ms-friend" key={4}>{plusMore}</div>].concat(friendCircles.slice(0,3))
         }

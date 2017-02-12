@@ -21,12 +21,20 @@ class FriendsInClassAlert extends React.Component {
 	render() {
 		let maxColourIndex = COLOUR_DATA.length - 1;
 		console.log(this.props.active_tt);
+
+		let professors = []
+        if (rc.slots.length == 0 && rc.oldSlots && rc.oldSlots.length > 0) {
+            professors = [ ...new Set(rc.oldSlots.map(s => s.instructors)) ];
+        } else {
+            professors = [ ...new Set(rc.slots.map(s => s.instructors)) ];
+        }
+
 		return (
 		<div className="enable-notification-alert friends-in-class-alert">
 			<h2>{ this.props.msg }</h2>
 			<MasterSlot 
                 key={rc.id} course={rc} 
-                professors={null}
+                professors={professors}
                 colourIndex={0}
                 onTimetable={true}
                 hideCloseButton={true}
