@@ -1,0 +1,11 @@
+{
+	"school": {
+		"code": "umich2",
+		"name": "University of Michigan"
+	},
+	"course_code_regex": ".*",
+	"terms": [
+		"Fall",
+		"Spring"
+	]
+}
