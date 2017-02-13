@@ -250,12 +250,12 @@ class Validator:
 		if 'kind' in meeting and meeting.kind != 'meeting':
 			raise JsonValidationError('meeting object must be of kind "instructor"', meeting)
 		if 'course' in meeting and self.course_code_regex.match(meeting.course.code) is None:
-			raise JsonValidationError('course code "%s" does not match regex \'%s\''
-			 % (meeting.course.code, self.config.course_code_regex), meeting)
+			raise JsonValidationError('course code {} does not match regex \'{}\''
+				.format(meeting.course.code, self.config.course_code_regex), meeting)
 		if 'time' in meeting:
 			try:
 				self.validate_time_range(meeting.time)
-			except JsonValidationError as e:
+			except (JsonValidationError, JsonValidationWarning) as e:
 				e.message = 'meeting for %s %s, ' % (meeting.course.code, meeting.section.code) + e.message
 				raise e
 		if 'location' in meeting:
