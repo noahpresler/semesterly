@@ -1,19 +1,13 @@
-# @what	Chapman Course Parser
-# @org	Semeseter.ly
-# @author	Michael N. Miller
-# @date	10/19/16
+# @what    Chapman Course Parser
+# @org     Semester.ly
+# @author  Michael N. Miller
+# @date	   2/13/17
 
-import django, os
-os.environ.setdefault("DJANGO_SETTINGS_MODULE", "semesterly.settings")
-django.setup()
+from scripts.peoplesoft.courses import PeoplesoftParser
 
-from scripts.peoplesoft.courses import PeopleSoftParser
-from scripts.parser_library.BaseParser import CourseParser
-from scripts.parser_library.internal_exceptions import CourseParseError
+class ChapmanParser(PeoplesoftParser):
 
-class ChapmanParser(PeopleSoftParser):
-
-	def __init__(self, school, **kwargs):
+	def __init__(self, **kwargs):
 		school = 'chapman'
 		url = 'https://cs90prod.chapman.edu/psc/CS90PROD_1/EMPLOYEE/SA/c/COMMUNITY_ACCESS.CLASS_SEARCH.GBL'
 		super(ChapmanParser, self).__init__(school, url, **kwargs)
@@ -37,23 +31,16 @@ class ChapmanParser(PeopleSoftParser):
 			}
 		}
 
-		# Selective parsing by year and term
 		if term and year:
-			if year not in years_and_terms:
-				raise CourseParseError('year %(year)s not defined')
-			if term not in years_and_terms[year]:
-				raise CourseParseError('term not defined for year %(year)s')
-			years_and_terms = {year: {term: years_and_terms[year][term]}}
+			years_and_terms = super(ChapmanParser, self).filter_term_and_year(years_and_terms, year, term)
 
-		# Call PeopleSoft parse method
+		# Call Peoplesoft parse method
 		self.parse(years_and_terms,
 			department=department,
 			textbooks=textbooks,
 			verbosity=verbosity)
 
 def main():
-	p = ChapmanParser()
-	p.start()
-
+	raise NotImplementedError('run with manage.py')
 if __name__ == "__main__":
 	main()

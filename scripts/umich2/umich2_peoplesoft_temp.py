@@ -15,7 +15,7 @@ from sets import Set
 
 from scripts.textbooks.amazon import make_textbook
 
-class PeopleSoftParser:
+class PeoplesoftParser:
 
 	DAY_MAP = {
 		'Mo' : 'M',
@@ -136,6 +136,7 @@ class PeopleSoftParser:
 				departments = soup.find_all('a', id=re.compile(r'CLASS_SRCH_WRK2_SSR_PB_CLASS_SRCH\$\d'))
 				department_names = soup.find_all('span', id=re.compile(r'M_SR_SS_SUBJECT_DESCR\$\d'))
 				depts = {dept['id']: dept_name.text for dept, dept_name in zip(departments, department_names)}
+				print depts
 
 				for dept in depts:
 
@@ -200,7 +201,7 @@ class PeopleSoftParser:
 						rtitle = re.match(r'(.+?\s*\w+) - (\w+)\s*(\S.+)', title)
 						
 						# Extract info from subtitle
-						self.course['section_type'] = PeopleSoftParser.SECTION_TYPE_MAP.get(subtitle.split('|')[2].strip(), 'L')
+						self.course['section_type'] = PeoplesoftParser.SECTION_TYPE_MAP.get(subtitle.split('|')[2].strip(), 'L')
 
 						# Place course info into course model
 						self.course['code'] 	= '-'.join(rtitle.group(1).split())
@@ -229,8 +230,8 @@ class PeopleSoftParser:
 							rsched = re.match(r'([a-zA-Z]*) (.*) - (.*)', sched.text)
 
 							if rsched:
-								days = map(lambda d: PeopleSoftParser.DAY_MAP[d], re.findall(r'[A-Z][^A-Z]*', rsched.group(1)))
-								time = (PeopleSoftParser.time_12to24(rsched.group(2)), PeopleSoftParser.time_12to24(rsched.group(3)))
+								days = map(lambda d: PeoplesoftParser.DAY_MAP[d], re.findall(r'[A-Z][^A-Z]*', rsched.group(1)))
+								time = (PeoplesoftParser.time_12to24(rsched.group(2)), PeoplesoftParser.time_12to24(rsched.group(3)))
 							else: # handle TBA classes
 								days = None
 								time = (None, None)
