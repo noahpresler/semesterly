@@ -24,6 +24,7 @@ import { integrationModal } from './integration_modal_reducer.jsx'
 import { saveCalendarModal } from './save_calendar_modal_reducer.jsx'
 import { userAcquisitionModal } from './user_acquisition_modal_reducer.jsx'
 import { textbookModal } from './textbook_modal_reducer.jsx'
+import { finalExamsModal } from './final_exams_modal_reducer.jsx'
 
 export const rootReducer = combineReducers({
   school,
@@ -50,5 +51,6 @@ export const rootReducer = combineReducers({
   integrationModal,
   saveCalendarModal,
   userAcquisitionModal,
-  textbookModal
+  textbookModal,
+  finalExamsModal
 });
