@@ -207,10 +207,10 @@ class PeoplesoftParser(CourseParser):
 		areas		= soup.find('span', {'id' : 'SSR_CLS_DTL_WRK_SSR_CRSE_ATTR_LONG'})
 
 		# parse table of times
-		scheds 	= soup.find_all('span', id=re.compile(r'MTG_SCHED\$\d*'))
-		locs 	= soup.find_all('span', id=re.compile(r'MTG_LOC\$\d*'))
-		instrs 	= soup.find_all('span', id=re.compile(r'MTG_INSTR\$\d*'))
-		dates 	= soup.find_all('span', id=re.compile(r'MTG_DATE\$\d*'))
+		scheds  = soup.find_all('span', id=re.compile(r'MTG_SCHED\$\d*'))
+		locs    = soup.find_all('span', id=re.compile(r'MTG_LOC\$\d*'))
+		instrs  = soup.find_all('span', id=re.compile(r'MTG_INSTR\$\d*'))
+		dates   = soup.find_all('span', id=re.compile(r'MTG_DATE\$\d*'))
 
 		# parse textbooks
 		isbns 	= PeoplesoftParser.parse_textbooks(soup)
@@ -235,7 +235,7 @@ class PeoplesoftParser(CourseParser):
 		]
 		self.ingestor['size'] 	   = int(capacity)
 		self.ingestor['enrollment'] = int(enrollment)
-		self.ingestor['instrs']    = [instr.text for instr in instrs]
+		self.ingestor['instrs']    = instr.text for instr in instrs # TODO - make this split(' \r')
 
 		self.ingestor['areas'] = [self.extractor.extract_info(self.ingestor, areas.text)] if areas else None
 			# print self.ingestor['areas']
