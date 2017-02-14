@@ -83,7 +83,7 @@ class Requester:
             try:
                 r = self.session.post(
                     url,
-                    data = form if form else '',
+                    data = form if form else '', # TODO - change form to data
                     params = params if params else '',
                     cookies = self.cookies,
                     headers = self.headers,
