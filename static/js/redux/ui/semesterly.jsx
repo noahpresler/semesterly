@@ -18,6 +18,7 @@ import TutModalContainer from './containers/tut_modal_container.jsx';
 import PeerModalContainer from './containers/peer_modal_container.jsx';
 import IntegrationModalContainer from './containers/integration_modal_container.jsx';
 import SaveCalendarModalContainer from './containers/save_calendar_modal_container.jsx';
+import FinalExamsModalContainer from './containers/final_exams_modal_container.jsx';
 import UserAcquisitionModalContainer from './containers/user_acquisition_modal_container.jsx';
 import TextbookModalContainer from './containers/textbook_modal_container.jsx';
 
@@ -121,6 +122,7 @@ class Semesterly extends React.Component {
 				<TutModalContainer />
 				<PeerModalContainer />
 				<SaveCalendarModalContainer />
+				<FinalExamsModalContainer />
 				<UserAcquisitionModalContainer />
 				<TextbookModalContainer />
 				<AlertBox ref={a => this.msg = a} {...this.alertOptions} />
