@@ -108,7 +108,7 @@ class SideBar extends React.Component {
                 </div>);
         }
         let finalScheduleLink = (masterSlots.length > 0 ) ? 
-            <div
+            <div className="final-schedule-link"
                 onClick = {this.props.launchFinalExamsModal}>
                 See Finals Schedule
             </div>
