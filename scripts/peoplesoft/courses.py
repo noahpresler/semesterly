@@ -104,7 +104,6 @@ class PeoplesoftParser(CourseParser):
 					# extract department list info
 					dept_param_key = self.get_dept_param_key(soup)
 					departments, department_ids = self.get_departments(soup, cmd_departments=department)
-					print departments
 					for dept_code, dept_name in departments.iteritems():
 						self.ingestor['dept_name'] = dept_name
 						self.ingestor['dept_code'] = dept_code
@@ -235,7 +234,10 @@ class PeoplesoftParser(CourseParser):
 		]
 		self.ingestor['size'] 	   = int(capacity)
 		self.ingestor['enrollment'] = int(enrollment)
-		self.ingestor['instrs']    = instr.text for instr in instrs # TODO - make this split(' \r')
+		instructors = []
+		for instr in instrs:
+			instructors += instr.text.split(', \r')
+		self.ingestor['instrs']    = instructors
 
 		self.ingestor['areas'] = [self.extractor.extract_info(self.ingestor, areas.text)] if areas else None
 			# print self.ingestor['areas']
@@ -292,21 +294,19 @@ class PeoplesoftParser(CourseParser):
 
 	@staticmethod
 	def hidden_params(soup, params=None, ajax=False):
-		if params is None: params = {}
-
+		if params is None:
+			params = {}
 		find = lambda tag: soup.find(tag, id=re.compile(r'win\ddivPSHIDDENFIELDS'))
 
 		hidden = find('div')
 		if not hidden:
-			print 'FIELD'
 			hidden = find('field')
-		else:
-			print 'DIV'
 
 		params.update({ a['name']: a['value'] for a in hidden.find_all('input') })
 
 		if ajax:
 			params.update(PeoplesoftParser.ajax_params)
+
 		return params
 
 	def valid_search_page(self, soup):
