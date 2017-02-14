@@ -86,16 +86,14 @@ class PeoplesoftParser(CourseParser):
 					print 'Parsing courses for', term_name, year
 				soup = self.term_update(term_code, params)
 
-				groups = self.get_groups(soup)
+				groups = self.get_groups(soup, params)
 				for group_id, group_name in groups.items():
-
-					params2 = {}
-
+					params2 = {} # second search payload
 					if group_id is not None: # NOTE: true for umich parse
-						print self.verbosity
 						if self.verbosity >= 0:
 							print '> Parsing courses in group', group_name
 						soup = self.group_update(group_id, params)
+						params2 = PeoplesoftParser.hidden_params(soup, ajax=True)
 					else:
 						assert(len(groups) == 1) # sanity check
 						# update search params to get course list
@@ -105,9 +103,8 @@ class PeoplesoftParser(CourseParser):
 
 					# extract department list info
 					dept_param_key = self.get_dept_param_key(soup)
-					departments = self.get_departments(soup, cmd_departments=department)
+					departments, department_ids = self.get_departments(soup, cmd_departments=department)
 					print departments
-
 					for dept_code, dept_name in departments.iteritems():
 						self.ingestor['dept_name'] = dept_name
 						self.ingestor['dept_code'] = dept_code
@@ -116,19 +113,22 @@ class PeoplesoftParser(CourseParser):
 							print '>> Parsing courses in department', dept_name, dept_code
 
 						# Update search payload with department code
-						params[dept_param_key] = dept_code
+						params2[dept_param_key] = dept_code if department_ids is None else department_ids[dept_code]
 
 						# Get course listing page for department
-						soup = self.requester.post(self.base_url, params=params)
+						soup = self.requester.post(self.base_url, params=params2)
 						if not self.valid_search_page(soup):
 							continue
 
-						courses = self.get_course_list_as_soup(self.find_all['courses'](soup), soup)
-						for course in courses:
-							# NOTE: course is soup
-							self.parse_course_description(course)
+						courses = self.get_courses(soup)
+						course_soups = self.get_course_list_as_soup(courses, soup)
+						for course_soup in course_soups:
+							self.parse_course_description(course_soup)
 
 		self.ingestor.wrap_up()
+
+	def get_courses(self, soup):
+		return self.find_all['courses'](soup)
 
 	def goto_search_page(self, url_params):
 		soup = self.requester.get(self.base_url, params=self.url_params)
@@ -140,7 +140,7 @@ class PeoplesoftParser(CourseParser):
 		params.update(PeoplesoftParser.refine_search(soup))
 		return params
 
-	def get_groups(self, soup):
+	def get_groups(self, soup, params):
 		return {None: None} # No groups
 
 	def group_update(self, group_id, params):
@@ -156,7 +156,7 @@ class PeoplesoftParser(CourseParser):
 
 	@staticmethod
 	def exclude_ajax_params(params):
-		return {k: v for k, v in params.items() if k not in PeoplesoftParser.ajax_params.keys()}
+		return { k: v for k, v in params.items() if k not in PeoplesoftParser.ajax_params.keys() }
 
 	def get_dept_param_key(self, soup):
 		return soup.find('select', id=re.compile(r'SSR_CLSRCH_WRK_SUBJECT_SRCH\$\d'))['id']
@@ -165,7 +165,7 @@ class PeoplesoftParser(CourseParser):
 		extract_dept_name = lambda d: self.department_name_regex.match(d).group(1)
 		departments = { dept['value']: extract_dept_name(dept.text) for dept in self.find_all['depts'](soup) }
 		departments = self.filter_departments(departments, cmd_departments)
-		return departments
+		return departments, None
 
 	def filter_departments(self, departments, cmd_departments):
 		'''Filter department dictionary to only include those departments listed in cmd_departments, if given
@@ -264,8 +264,7 @@ class PeoplesoftParser(CourseParser):
 				days = map(lambda d: PeoplesoftParser.DAY_MAP[d], re.findall(r'[A-Z][^A-Z]*', rsched.group(1)))
 				time = (self.extractor.time_12to24(rsched.group(2)), self.extractor.time_12to24(rsched.group(3)))
 			else: # handle TBA classes
-				days = None
-				time = (None, None)
+				continue
 
 			self.ingestor['time_start'] = time[0]
 			self.ingestor['time_end'] = time[1]
@@ -299,12 +298,12 @@ class PeoplesoftParser(CourseParser):
 
 		hidden = find('div')
 		if not hidden:
-			print 'HERE'
+			print 'FIELD'
 			hidden = find('field')
 		else:
-			print 'THERE'
+			print 'DIV'
 
-		params.update({a['name']: a['value'] for a in hidden.find_all('input')})
+		params.update({ a['name']: a['value'] for a in hidden.find_all('input') })
 
 		if ajax:
 			params.update(PeoplesoftParser.ajax_params)
@@ -361,10 +360,10 @@ class UPeoplesoftParser(PeoplesoftParser):
 		# extract department query list
 		departments = soup.find_all('a', id=re.compile(r'CLASS_SRCH_WRK2_SSR_PB_CLASS_SRCH\$\d'))
 		department_names = soup.find_all('span', id=re.compile(r'M_SR_SS_SUBJECT_DESCR\$\d'))
-		depts = { dept['id']: dept_name.text for dept, dept_name in zip(departments, department_names) }
-		print depts
+		depts = { dept.text: dept_name.text for dept, dept_name in zip(departments, department_names) }
+		dept_ids = { dept.text: dept['id'] for dept in departments }
 		depts = self.filter_departments(depts, cmd_departments)
-		return depts
+		return depts, dept_ids
 
 	def get_dept_param_key(self, soup):
 		return 'ICAction'
@@ -375,16 +374,18 @@ class UPeoplesoftParser(PeoplesoftParser):
 			self.term_base_url = self.base_url
 		return self.requester.get(self.term_base_url, { 'strm': term_code })
 
-	def get_groups(self, soup):
+	def get_groups(self, soup, params):
+		params.update(PeoplesoftParser.hidden_params(soup, ajax=True))
 		groups = soup.find_all('a', id=re.compile(r'M_SR_DERIVED2_GROUP1\$\d'))
 		return { group['id']: group.text for group in groups }
 
 	def group_update(self, group_id, params):
 		params['ICAction'] = group_id
 		soup = self.requester.post(self.base_url, form=params)
-		params.clear()
-		PeoplesoftParser.hidden_params(soup, params=params, ajax=True)
 		return soup
 
 	def goto_search_page(self, url_params):
 		return {} # No search page
+
+	def get_courses(self, soup):
+		return soup.find_all('table', {'class' : 'PSLEVEL1GRIDROWNBO'})
