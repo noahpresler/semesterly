@@ -107,6 +107,12 @@ class SideBar extends React.Component {
                     <h3>Load this list with courses you aren't 100% sure you want to take - we'll fit as many as possible, automatically</h3>
                 </div>);
         }
+        let finalScheduleLink = (masterSlots.length > 0 ) ? 
+            <div
+                onClick = {this.props.launchFinalExamsModal}>
+                See Finals Schedule
+            </div>
+            : null
         return (
             <div id="side-bar" className="no-print">
                 <div id="sb-name">
@@ -138,6 +144,7 @@ class SideBar extends React.Component {
                 <h4 className="sb-tip"><b>ProTip:</b> use <i className="fa fa-lock"/> to lock a section in place.</h4>
                 <div id="sb-master-slots">
                     { masterSlots }
+                    { finalScheduleLink }
                 </div>
                 <h4 className="sb-header">Optional Courses</h4>
                     { optionalSlots }
