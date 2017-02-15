@@ -347,11 +347,9 @@ class PeoplesoftParser(CourseParser):
 
 		return self.requester.post(self.base_url, params=query)
 
-class CPeoplesoftParser(PeoplesoftParser):
-	def __init__(self, school, url, **kwargs):
-		super(CPeoplesoftParser, self).__init__(school, url, **kwargs)
-
 class UPeoplesoftParser(PeoplesoftParser):
+	'''Modifies Peoplesoft parser to accomodate different structure (umich).'''
+
 	def __init__(self, school, url, term_base_url=None, **kwargs):
 		self.term_base_url = term_base_url # NOTE: each term has its own page that must be requested from base url
 		super(UPeoplesoftParser, self).__init__(school, url, **kwargs)
