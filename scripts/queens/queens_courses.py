@@ -1,110 +1,125 @@
-from qcumber_scraper.main import JobManager
-from scripts.base_parser import BaseParser
-from pprint import pprint
-days = ['_', 'M', 'T', 'W', 'R', 'F']
+# @what   Queens Course Parser
+# @org    Semeseter.ly
+# @author Noah Presler & Michael N. Miller
+# @date   2/15/17
 
-class QueensParser(BaseParser):
-  def __init__(self, semester):
-    BaseParser.__init__(self, semester)
-    self.section_type_map = {
-      'LEC': 'L',
-      'TUT': 'T',
-      'LAB': 'P',
-    }
-    self.semester = 'Fall' if semester == 'F' else 'Winter'
+import socket
+from selenium import webdriver
+from selenium.webdriver.support.ui import Select
 
-  def get_course_elements(self):
-    try:
-        from qcumber_scraper.queens_config import USER, PASS
-    except ImportError:
-        print "No credentials found. Create a queens_config.py file with" + \
-              " USER and PASS constants"
-        return
+from scripts.peoplesoft.courses import PeoplesoftParser
 
-    # valid "seasons": Fall, Winter, Summer
-    for course in JobManager(USER, PASS, True, {'semesters': [('Fall', '2016'), ('Winter', '2017')]}).parse_courses():
-      yield course
+# TODO - does this need to be global?
+cap = webdriver.DesiredCapabilities.PHANTOMJS
+cap["phantomjs.page.settings.resourceTimeout"] = 50000000
+cap["phantomjs.page.settings.loadImages"] = False
+cap["phantomjs.page.settings.userAgent"] = 'Mozilla/5.0 (Windows NT 6.1; Win64; x64; rv:16.0) Gecko/20121026 Firefox/16.0'
+driver = webdriver.PhantomJS('./node_modules/phantomjs-prebuilt/bin/phantomjs',desired_capabilities=cap)
 
-  def parse_course_element(self, course_element):
-    ce = course_element
-    course_code = ce['basic']['subject'] + ' ' + ce['basic']['number']
-    course_data = {
-      'name': ce['basic']['title'],
-      'school': 'queens',
-      'description': ce['basic']['description'],
-      'num_credits': int(float(ce['extra']['units'])),
-      'prerequisites': ce['extra'].get('enrollment_requirement', ''),
-      'department': ce['basic']['subject'],
-      'level': ce['basic']['number']
-    }
-    return course_code, course_data
+class QueensParser(PeoplesoftParser):
 
-  def get_section_elements(self, course_element):
-    for section in course_element['sections']:
-      if valid_section(section):
-        yield section
+	BASE_URL = 'https://saself.ps.queensu.ca/psc/saself/EMPLOYEE/HRMS/c/SA_LEARNER_SERVICES.CLASS_SEARCH.GBL'
+	
+	# TODO - should not be visible in parser
+	USER = '1dc4'
+	PASS = '***REMOVED***'
 
-  def parse_section_element(self, section_element):
-    se = section_element
+	def __init__(self, **kwargs):
+		params = {
+			'Page': 'SSR_CLSRCH_ENTRY',
+			'Action': 'U',
+			'ExactKeys': 'Y',
+			'TargetFrameName': 'None'
+		}
+		super(QueensParser, self).__init__('queens', QueensParser.BASE_URL, url_params=params, **kwargs)
 
-    # get list of instructors
-    instructors = set()
-    for meeting in section_element['classes']:
-      for instructor in (meeting['instructors'] or []):
-        instructors.add(instructor)
+	def seleni_run(self, code):
+		while True:
+			try:
+				return code()
+				break
+			except:
+				import traceback
+				traceback.print_exc()
+				exit()
+				continue
 
-    section_code = se['_unique']
-    section_data = {
-      'section_type': self.section_type_map.get(se['basic']['type'], 'L'),
-      'instructors': '; '.join(instructors) if instructors else 'TBD',
-      'semester': 'F' if se['basic']['season'] == 'Fall' else 'S'
-    }
+	def focus_iframe(self):
+		iframe = self.seleni_run(lambda: driver.find_element_by_xpath("//iframe[@id='ptifrmtgtframe']"))
+		driver.switch_to_frame(iframe)
 
-    if 'availability' in section_element:
-      try:
-        avail_data = {
-          'size': int(se['availability']['class_max']),
-          'waitlist_size': int(se['availability']['wait_max']),
-          'enrolment': int(se['availability']['class_curr']),
-          'waitlist': int(se['availability']['wait_curr'])
-        }
-        section_data.update(avail_data)
-      except KeyError:
-        pass
-    return section_code, section_data
+	def login(self):
+		socket.setdefaulttimeout(60)
+		driver.set_page_load_timeout(30)
+		driver.implicitly_wait(30)
+		driver.get('https://my.queensu.ca/')
+		self.seleni_run(lambda: driver.find_element_by_id('username').send_keys('1dc4'))
+		self.seleni_run(lambda: driver.find_element_by_id('password').send_keys('***REMOVED***'))
+		self.seleni_run(lambda: driver.find_element_by_class_name('Btn1Def').click())
+		self.seleni_run(lambda: driver.find_element_by_link_text("SOLUS").click())
+		self.focus_iframe()
+		self.seleni_run(lambda: driver.find_element_by_link_text("Search").click())
 
-  def get_meeting_elements(self, section_element):
-    for meeting in section_element['classes']:
-      yield meeting
+		# transfer Selenium cookies to Requester cookies
+		for cookie in driver.get_cookies():
+		    c = {cookie['name']: cookie['value']}
+		    self.requester.session.cookies.update(c)
 
-  def parse_meeting_element(self, meeting_element):
-    weekend_meeting = int(meeting_element['day_of_week'] or 6) > 5
-    if missing_info(meeting_element) or weekend_meeting:
-      return False
+		headers = {
+		    'Pragma': 'no-cache',
+		    'Accept-Encoding': 'gzip, deflate, sdch, br',
+		    'Accept-Language': 'en-US,en;q=0.8',
+		    'Upgrade-Insecure-Requests': '1',
+		    'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_3) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/56.0.2924.87 Safari/537.36',
+		    'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8',
+		    'Referer': 'https://saself.ps.queensu.ca/psc/saself/EMPLOYEE/HRMS/c/SA_LEARNER_SERVICES.SSS_STUDENT_CENTER.GBL?PortalActualURL=https%3a%2f%2fsaself.ps.queensu.ca%2fpsc%2fsaself%2fEMPLOYEE%2fHRMS%2fc%2fSA_LEARNER_SERVICES.SSS_STUDENT_CENTER.GBL&PortalContentURL=https%3a%2f%2fsaself.ps.queensu.ca%2fpsc%2fsaself%2fEMPLOYEE%2fHRMS%2fc%2fSA_LEARNER_SERVICES.SSS_STUDENT_CENTER.GBL&PortalContentProvider=HRMS&PortalCRefLabel=Student%20Center&PortalRegistryName=EMPLOYEE&PortalServletURI=https%3a%2f%2fsaself.ps.queensu.ca%2fpsp%2fsaself%2f&PortalURI=https%3a%2f%2fsaself.ps.queensu.ca%2fpsc%2fsaself%2f&PortalHostNode=HRMS&NoCrumbs=yes&PortalKeyStruct=yes',
+		    'Connection': 'keep-alive',
+		    'Cache-Control': 'no-cache',
+		}
 
-    meeting_data = {
-      'day': days[int(meeting_element['day_of_week'])],
-      'time_start': process_time(meeting_element['start_time']),
-      'time_end': process_time(meeting_element['end_time']),
-      'location': meeting_element['location']
-    }
-    return meeting_data
+		self.requester.headers = headers
 
-def process_time(s):
-  """datetime.time -> ?H:MM"""
-  string = s.strftime('%H:%M')
-  return string[1:] if string[0] == '0' else string
+		# NOTE: get request will update CookieJar
+		self.requester.get('https://saself.ps.queensu.ca/psc/saself/EMPLOYEE/HRMS/c/SA_LEARNER_SERVICES.CLASS_SEARCH.GBL?Page=SSR_CLSRCH_ENTRY&Action=U&ExactKeys=Y&TargetFrameName=None').prettify()
 
-def valid_section(section_element):
-  summer = section_element['basic']['season'] != 'Summer'
-  return summer or any((missing_info(me) for me in section_element['classes']))
+	def start(self,
+		year=None,
+		term=None,
+		department=None,
+		textbooks=True,
+		verbosity=3,
+		**kwargs):
 
-def missing_info(meeting_element):
-  return not all([meeting_element[info] for info in ['day_of_week', 'end_time', 'start_time']])
+		if verbosity >= 1:
+			print 'Logging in'
 
-def parse_queens(semesters):
-  for semester in semesters:
-    QueensParser(semester).parse_courses()
+		self.login()
 
-if __name__ == '__main__':
-  parse_queens('FS')
+		if verbosity >= 1:
+			print 'Completed login'
+
+		# NOTE: hardcoded semesters Fall 2016, Interim, Spring 2017
+		years_and_terms = {
+			"2016": {
+				'Fall':'2169', 
+			},
+			"2017": {
+				'Summer': '2175',
+				'Winter':'2171'
+			}
+		}
+
+		if term and year:
+			years_and_terms = super(ChapmanParser, self).filter_term_and_year(years_and_terms, year, term)
+
+		# Call Peoplesoft parse method
+		self.parse(years_and_terms,
+			department=department,
+			textbooks=textbooks,
+			verbosity=verbosity)
+
+def main():
+	raise NotImplementedError('run with manage.py')
+
+if __name__ == "__main__":
+	main()

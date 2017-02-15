@@ -88,7 +88,8 @@ course_parsers = {
 new_course_parsers = {
   'chapman': lambda *args, **kwargs: ChapmanParser(**kwargs),
   'jhu': lambda *args, **kwargs: HopkinsParser(**kwargs),
-  'umich2': lambda *args, **kwargs: Umich2Parser(**kwargs)
+  'umich': lambda *args, **kwargs: Umich2Parser(**kwargs),
+  'queens': lambda *args, **kwargs: QueensParser(**kwargs)
 }
 
 eval_parsers = {
