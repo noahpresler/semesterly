@@ -174,6 +174,9 @@ class PeoplesoftParser(CourseParser):
 			cmd_departments: department code list
 		Return: filtered list of departments.
 		'''
+
+		# FIXME -- if groups exists, will only search current group
+
 		if cmd_departments is None:
 			return departments
 
