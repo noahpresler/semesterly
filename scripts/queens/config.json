@@ -8,5 +8,5 @@
 		"Winter",
 		"Summer"
 	],
-	"course_code_regex": ".*"
+	"course_code_regex": "\\w{2,4} [A-Z]?\\d{2,3}[A-Z]?"
 }
