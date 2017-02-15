@@ -1,0 +1,12 @@
+{
+	"school": {
+		"code": "queens",
+		"name": "Queens University"
+	},
+	"terms": [
+		"Fall",
+		"Winter",
+		"Summer"
+	],
+	"course_code_regex": ".*"
+}

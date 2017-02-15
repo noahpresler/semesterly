@@ -30,7 +30,7 @@ class CourseParser(BaseParser):
 		output_error_filepath=None,
 		break_on_error=True,
 		break_on_warning=False,
-		hide_progress_bar=False,
+		hide_progress_bar=True,
 		skip_shallow_duplicates=True):
 
 		super(CourseParser, self).__init__(school)
