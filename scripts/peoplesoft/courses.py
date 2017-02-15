@@ -82,7 +82,7 @@ class PeoplesoftParser(CourseParser):
 
 			for term_name, term_code in terms.items():
 				self.ingestor['term'] = term_name
-				if self.verbosity >= 0:
+				if self.verbosity >= 1:
 					print 'Parsing courses for', term_name, year
 				soup = self.term_update(term_code, params)
 
@@ -90,7 +90,7 @@ class PeoplesoftParser(CourseParser):
 				for group_id, group_name in groups.items():
 					params2 = {} # second search payload
 					if group_id is not None: # NOTE: true for umich parse
-						if self.verbosity >= 0:
+						if self.verbosity >= 1:
 							print '> Parsing courses in group', group_name
 						soup = self.group_update(group_id, params)
 						params2 = PeoplesoftParser.hidden_params(soup, ajax=True)
@@ -215,7 +215,7 @@ class PeoplesoftParser(CourseParser):
 		isbns 	= PeoplesoftParser.parse_textbooks(soup)
 
 		# Extract info from title
-		if self.verbosity >=2:
+		if self.verbosity >= 2:
 			print '\t' + title
 
 		rtitle = re.match(r'(.+?\s*\w+) - (\w+)\s*(\S.+)', title)
@@ -237,7 +237,7 @@ class PeoplesoftParser(CourseParser):
 		instructors = []
 		for instr in instrs:
 			instructors += instr.text.split(', \r')
-		self.ingestor['instrs']    = instructors
+		self.ingestor['instrs']    = list(set(instructors)) # uniqueify list of instructors
 
 		self.ingestor['areas'] = [self.extractor.extract_info(self.ingestor, areas.text)] if areas else None
 			# print self.ingestor['areas']

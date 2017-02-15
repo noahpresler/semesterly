@@ -34,7 +34,6 @@ class Command(BaseCommand):
 
 			parser = new_course_parsers[school]
 
-
 			timestamp = datetime.datetime.now().strftime("%Y/%m/%d-%H:%M:%S")
 
 			directory = 'scripts/' + school
