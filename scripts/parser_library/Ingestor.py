@@ -80,7 +80,13 @@ class Ingestor(dict):
 		'time',
 		'credits',
 		'num_credits',
-		'campus' # NOTE: not really
+		'campus', # NOTE: not really
+		'textbooks',
+		'isbn',
+		'detail_url',
+		'image_url',
+		'author',
+		'title'
 	}
 
 	def __init__(self, school,
@@ -211,6 +217,7 @@ class Ingestor(dict):
 			'type': self.getchain('type', 'section_type'),
 			'fees': self.getchain('fees', 'fee'),
 			'final_exam': self.get('final_exam'),
+			'textbooks': self.get('textbooks')
 			'meetings': self.get('offerings')
 		}
 
@@ -261,6 +268,37 @@ class Ingestor(dict):
 		meeting = cleandict(meeting)
 		self.validate_and_log(meeting)
 		return meeting
+
+	def ingest_textbook_link(self, section):
+
+		textbook_link = {
+			'kind': 'textbook_link',
+			'school': {
+				'code': self.get('school_code')
+			},
+		}
+
+		textbook_link = cleandict(textbook_link)
+		self.validate_and_log(textbook_link)
+		return textbook_link
+
+	def ingest_textbook(self):
+		''' Create textbook json object.
+		Returns:
+			json object model for textbook
+		'''
+		textbook = {
+			'kind': 'textbook',
+			'isbn': self.get('isbn'),
+			'detail_url': self.get('detail_url'),
+			'image_url': self.get('image_url'),
+			'author': self.get('author'),
+			'title': self.get('title')
+		}
+
+		textbook = cleandict(textbook)
+		self.validate_and_log(textbook)
+		return textbook
 
 	def validate_and_log(self, obj):
 		if self.validate:
