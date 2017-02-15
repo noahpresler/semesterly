@@ -109,7 +109,7 @@ class PeoplesoftParser(CourseParser):
 						self.ingestor['dept_code'] = dept_code
 
 						if self.verbosity >= 1:
-							print '>> Parsing courses in department', dept_name, dept_code
+							print '>> Parsing courses in department {} ({})'.format(dept_name, dept_code)
 
 						# Update search payload with department code
 						params2[dept_param_key] = dept_code if department_ids is None else department_ids[dept_code]
