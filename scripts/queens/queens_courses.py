@@ -9,13 +9,6 @@ from selenium.webdriver.support.ui import Select
 
 from scripts.peoplesoft.courses import PeoplesoftParser
 
-# TODO - does this need to be global?
-cap = webdriver.DesiredCapabilities.PHANTOMJS
-cap["phantomjs.page.settings.resourceTimeout"] = 50000000
-cap["phantomjs.page.settings.loadImages"] = False
-cap["phantomjs.page.settings.userAgent"] = 'Mozilla/5.0 (Windows NT 6.1; Win64; x64; rv:16.0) Gecko/20121026 Firefox/16.0'
-driver = webdriver.PhantomJS('./node_modules/phantomjs-prebuilt/bin/phantomjs',desired_capabilities=cap)
-
 class QueensParser(PeoplesoftParser):
 
 	BASE_URL = 'https://saself.ps.queensu.ca/psc/saself/EMPLOYEE/HRMS/c/SA_LEARNER_SERVICES.CLASS_SEARCH.GBL'
@@ -31,37 +24,39 @@ class QueensParser(PeoplesoftParser):
 			'ExactKeys': 'Y',
 			'TargetFrameName': 'None'
 		}
+		self.cap = webdriver.DesiredCapabilities.PHANTOMJS
+		self.cap["phantomjs.page.settings.resourceTimeout"] = 50000000
+		self.cap["phantomjs.page.settings.loadImages"] = False
+		self.cap["phantomjs.page.settings.userAgent"] = 'Mozilla/5.0 (Windows NT 6.1; Win64; x64; rv:16.0) Gecko/20121026 Firefox/16.0'
+		self.driver = webdriver.PhantomJS('./node_modules/phantomjs-prebuilt/bin/phantomjs',desired_capabilities=self.cap)
+
 		super(QueensParser, self).__init__('queens', QueensParser.BASE_URL, url_params=params, **kwargs)
 
 	def seleni_run(self, code):
 		while True:
 			try:
 				return code()
-				break
 			except:
-				import traceback
-				traceback.print_exc()
-				exit()
 				continue
 
 	def focus_iframe(self):
-		iframe = self.seleni_run(lambda: driver.find_element_by_xpath("//iframe[@id='ptifrmtgtframe']"))
-		driver.switch_to_frame(iframe)
+		iframe = self.seleni_run(lambda: self.driver.find_element_by_xpath("//iframe[@id='ptifrmtgtframe']"))
+		self.driver.switch_to_frame(iframe)
 
 	def login(self):
 		socket.setdefaulttimeout(60)
-		driver.set_page_load_timeout(30)
-		driver.implicitly_wait(30)
-		driver.get('https://my.queensu.ca/')
-		self.seleni_run(lambda: driver.find_element_by_id('username').send_keys('1dc4'))
-		self.seleni_run(lambda: driver.find_element_by_id('password').send_keys('***REMOVED***'))
-		self.seleni_run(lambda: driver.find_element_by_class_name('Btn1Def').click())
-		self.seleni_run(lambda: driver.find_element_by_link_text("SOLUS").click())
+		self.driver.set_page_load_timeout(30)
+		self.driver.implicitly_wait(30)
+		self.driver.get('https://my.queensu.ca/')
+		self.seleni_run(lambda: self.driver.find_element_by_id('username').send_keys('1dc4'))
+		self.seleni_run(lambda: self.driver.find_element_by_id('password').send_keys('***REMOVED***'))
+		self.seleni_run(lambda: self.driver.find_element_by_class_name('Btn1Def').click())
+		self.seleni_run(lambda: self.driver.find_element_by_link_text("SOLUS").click())
 		self.focus_iframe()
-		self.seleni_run(lambda: driver.find_element_by_link_text("Search").click())
+		self.seleni_run(lambda: self.driver.find_element_by_link_text("Search").click())
 
 		# transfer Selenium cookies to Requester cookies
-		for cookie in driver.get_cookies():
+		for cookie in self.driver.get_cookies():
 		    c = {cookie['name']: cookie['value']}
 		    self.requester.session.cookies.update(c)
 
