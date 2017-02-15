@@ -75,7 +75,7 @@ class QueensParser(PeoplesoftParser):
 		self.requester.headers = headers
 
 		# NOTE: get request will update CookieJar
-		self.requester.get('https://saself.ps.queensu.ca/psc/saself/EMPLOYEE/HRMS/c/SA_LEARNER_SERVICES.CLASS_SEARCH.GBL?Page=SSR_CLSRCH_ENTRY&Action=U&ExactKeys=Y&TargetFrameName=None').prettify()
+		self.requester.get('https://saself.ps.queensu.ca/psc/saself/EMPLOYEE/HRMS/c/SA_LEARNER_SERVICES.CLASS_SEARCH.GBL?Page=SSR_CLSRCH_ENTRY&Action=U&ExactKeys=Y&TargetFrameName=None')
 
 	def start(self,
 		year=None,
