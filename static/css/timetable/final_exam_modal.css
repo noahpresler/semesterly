@@ -1,3 +1,13 @@
+.final-exam-modal {
+	max-width: 1200px;
+	height: 85%;
+	max-height: 900px;
+}
+.final_exam-modal > div {
+	outline: none;
+	width: 100%;
+	height: 100%;
+}
 .final-schedule-link {
 	cursor: pointer;
 }
