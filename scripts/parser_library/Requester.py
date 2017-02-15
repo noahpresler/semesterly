@@ -12,7 +12,7 @@ class Requester:
     def __init__(self):
         self.session = requests.Session()
         self.headers = {'User-Agent' : 'UserAgent 1.0'} # UserAgent().random
-        self.cookies = cookielib.CookieJar()
+        self.cookies = cookielib.CookieJar() # TODO - maybe this is not needed
 
     def get(self, url, params=None, parse=True, quiet=True):
         ''' HTTP GET.
