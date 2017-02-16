@@ -21,6 +21,12 @@ export const getSchool = () => {
 export const getSemester = () => {
   return store.getState().semester;
 }
+
+function getCookie(name) {
+  var value = "; " + document.cookie;
+  var parts = value.split("; " + name + "=");
+  if (parts.length == 2) return parts.pop().split(";").shift();
+}
 // setup the state. loads the user's timetables if logged in; cached timetable if not.
 // also handles sharing courses and sharing timetables
 function setup(dispatch) {
@@ -101,6 +107,13 @@ function setup(dispatch) {
         }
       }
     }
+  }
+
+  if (browserSupportsLocalStorage()) {
+    var parts = location.hostname.split('.');
+    var subdomain = parts.shift();
+    var upperleveldomain = "." + parts.join('.');
+    document.cookie="school=" + school + "; domain=" + upperleveldomain + "; path=/";
   }
 
   /* now setup sharing state */
