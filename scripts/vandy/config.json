@@ -1,0 +1,32 @@
+{
+	"school": {
+		"code": "vandy",
+		"name": "Vanderbilt University"
+	},
+	"course_code_regex": "([A-Z-&]{2,8}\\d{4}[W]?)",
+	"terms": [
+		"Fall",
+		"Spring",
+		"Summer"
+	],
+	"campuses": [
+		"Allied Health",
+		"Blair School of Music",
+		"College of Arts and Science",
+		"Divinity School",
+		"Division Unclassified Studies",
+		"Fisk University",
+		"Graduate School",
+		"Law School",
+		"Lipscomb",
+		"Meharry Medical College",
+		"Owen Grad School of Management",
+		"Peabody College",
+		"School of Engineering",
+		"School of Medicine",
+		"School of Nursing",
+		"Sewanee: The Univ of the South",
+		"Tennessee State University",
+		"Vanderbilt"
+	]
+}
