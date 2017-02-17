@@ -3,7 +3,7 @@
 # @author   Michael N. Miller and Maxwell Yeo
 # @date	    2/5/17
 import sys
-from scripts.parser_library.BaseParser import *
+from scripts.parser_library.BaseParser import CourseParser
 
 class VandyParser(CourseParser):
 
