@@ -23,7 +23,7 @@ def view_dtm_root(request, code=None, sem=None, shared_timetable=None, find_frie
 	sem = 'S'
     else:
 	sem = 'F'
-  print get_free_busy_from_cals(['noah@presler.me'], student)
+  print get_free_busy_from_cals(['noah@presler.me'], student, 1)
   return render_to_response("dtm_root.html", {
     'school': school,
     'student': json.dumps(get_user_dict(school, student, sem)),
@@ -53,10 +53,10 @@ def get_calendar_list(student):
   else:
     return []
 
-def get_free_busy_from_cals(cal_ids, student):
+def get_free_busy_from_cals(cal_ids, student, week_offset=0):
   tz = pytz.timezone('US/Eastern')
-  start = tz.localize(last_weekday(datetime.datetime.today(), 'sunday')) + datetime.timedelta(minutes=5)
-  end = tz.localize(next_weekday(datetime.datetime.today(), 'S'))
+  start = tz.localize(last_weekday(datetime.datetime.today(), 'sunday')) + datetime.timedelta(weeks=week_offset, minutes=5)
+  end = tz.localize(next_weekday(datetime.datetime.today(), 'S')) + datetime.timedelta(weeks=week_offset)
   body = {
     "timeMin": start.isoformat(),
     "timeMax": end.isoformat(),
