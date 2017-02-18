@@ -10,6 +10,13 @@
 	height: 100%;
 }
 
+#peer-loader {
+	width: 90px;
+	height: 90px;
+	/*border-top: 20px solid #3498db;*/
+	/*border: 20px solid #f3f3f3;*/
+}
+
 #pm-side-bar {
 	position: absolute;
 	width: 200px;
