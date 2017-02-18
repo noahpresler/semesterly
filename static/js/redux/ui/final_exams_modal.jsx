@@ -16,6 +16,49 @@ export class FinalExamsModal extends React.Component {
 			this.refs.modal.show();
 		}
 	}
+    findFirstFinal() {
+        let finals = this.props.finalExamSchedule
+        let minDate = Infinity;
+        for (let course in finals) {
+            let m = finals[course].split(' ')[0].split('/')['0'];
+            let d = finals[course].split(' ')[0].split('/')['1'];
+            minDate = (new Date(2017, Number(m), Number(d)) < minDate) ? new Date(2017, Number(m), Number(d)) : minDate;
+        }
+        return minDate;
+    }
+    loadFinalsToDivs() {
+        let days = ['N', 'M', 'T', 'W', 'R', 'F', 'S']
+
+        let finalsToRender = this.props.finalExamSchedule
+        while (finalsToRender.length > 0) {
+            let daysOfWeek = this.findDaysOfWeek(this.findFirstFinal()); // return array of the 7 days
+            let weekHeadersHtml = this.generateWeekHeaders(daysOfWeek); //tke an array spit out html
+            let finalsInCells = this.generateFinals(daysOfWeek)
+            // remove from finalsToRender
+        }
+
+        return <div id="final-exam-calendar-ctn">
+                <div id="final-exam-calender-days">
+                    <h3>Sun</h3>
+                    <h3>Mon</h3>
+                    <h3>Tue</h3>
+                    <h3>Wed</h3>
+                    <h3>Thu</h3>
+                    <h3>Fri</h3>
+                    <h3>Sat</h3>
+                </div>
+                <div className="final-exam-week">
+                    <div className="final-exam-day"></div>
+                    <div className="final-exam-day"></div>
+                    <div className="final-exam-day"></div>
+                    <div className="final-exam-day"></div>
+                    <div className="final-exam-day"></div>
+                    <div className="final-exam-day"></div>
+                    <div className="final-exam-day"></div>
+                </div>
+                {JSON.stringify(this.props.finalExamSchedule)}
+            </div>;
+    }
 	render() {
         let modalHeader =
             <div id="modal-content">
@@ -28,37 +71,7 @@ export class FinalExamsModal extends React.Component {
         };
         let display = "not loaded"
         if (this.props.hasRecievedSchedule) {
-            display = 
-            <div id="final-exam-calendar-ctn">
-                <div id="final-exam-calendar-header">
-                    <div id="final-exam-calender-days">
-                        <h3>Sun</h3>
-                        <h3>Mon</h3>
-                        <h3>Tue</h3>
-                        <h3>Wed</h3>
-                        <h3>Thu</h3>
-                        <h3>Fri</h3>
-                        <h3>Sat</h3>
-                    </div>
-                    <div className="final-exam-week">
-                        <div className="final-exam-day">
-                        </div>
-                        <div className="final-exam-day">
-                        </div>
-                        <div className="final-exam-day">
-                        </div>
-                        <div className="final-exam-day">
-                        </div>
-                        <div className="final-exam-day">
-                        </div>
-                        <div className="final-exam-day">
-                        </div>
-                        <div className="final-exam-day">
-                        </div>
-                        {JSON.stringify(this.props.finalExamSchedule)}
-                    </div>
-                </div>
-            </div>
+            display = this.loadFinalsToDivs()
         } else if (this.props.loading) {
             display = "loading"
         }
@@ -74,7 +87,6 @@ export class FinalExamsModal extends React.Component {
 
                 <div id="modal-content">
                     {
-
                         display
                     }
                 </div>
