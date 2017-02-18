@@ -16,6 +16,8 @@ semester = sys.argv[2]
 
 client = Mailer()
 
+students = PersonalTimetable.objects.filter(school=school, semester='S').values_list("student", flat=True).distinct()
+
 for student_id in students:
     student = Student.objects.get(id=student_id)
 
