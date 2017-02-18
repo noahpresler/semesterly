@@ -35,6 +35,7 @@ def view_dtm_root(request, code=None, sem=None, shared_timetable=None, find_frie
     'signup': signup,
     'gcal_callback': gcal_callback,
     'export_calendar': export_calendar,
-    'view_textbooks': view_textbooks
+    'view_textbooks': view_textbooks,
+    'is_poll': True
   },
   context_instance=RequestContext(request))

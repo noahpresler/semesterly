@@ -6,6 +6,7 @@ import thunkMiddleware from 'redux-thunk';
 import { Provider } from 'react-redux';
 import { rootReducer } from './reducers/root_reducer.jsx';
 import SemesterlyContainer from './ui/containers/semesterly_container.jsx';
+import DTMContainer from './ui/containers/dtm_container.jsx';
 import { getUserInfo, setARegistrationToken, isRegistered } from './actions/user_actions.jsx';
 import { loadTimetable, lockTimetable, loadCachedTimetable } from './actions/timetable_actions.jsx'
 import { fetchSchoolInfo } from './actions/school_actions.jsx';
@@ -131,7 +132,14 @@ store.dispatch(
   fetchSchoolInfo()
 )
 
-render(
-  <Provider store={store}>
-    <SemesterlyContainer />
-  </Provider>, document.getElementById("page"));
+if (isPoll) {
+  render(
+    <Provider store={store}>
+      <DTMContainer />
+    </Provider>, document.getElementById("page"));
+} else {
+  render(
+    <Provider store={store}>
+      <SemesterlyContainer />
+    </Provider>, document.getElementById("page"));
+}
