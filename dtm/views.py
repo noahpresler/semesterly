@@ -1,4 +1,4 @@
-import json
+import json, pytz, datetime
 from django.shortcuts import render_to_response, render
 from django.http import HttpResponse, HttpResponseRedirect, Http404
 from django.template import RequestContext
@@ -23,6 +23,7 @@ def view_dtm_root(request, code=None, sem=None, shared_timetable=None, find_frie
 	sem = 'S'
     else:
 	sem = 'F'
+  get_free_busy_from_cals([], student)
   return render_to_response("dtm_root.html", {
     'school': school,
     'student': json.dumps(get_user_dict(school, student, sem)),
@@ -51,3 +52,19 @@ def get_calendar_list(student):
     return json.dumps(map(lambda cal: {'name': cal['summary'], 'id': cal['id']}, cal_list['items']))
   else:
     return []
+
+def get_free_busy_from_cals(cal_ids, student):
+  tz = pytz.timezone('US/Eastern')
+  start = tz.localize(datetime.datetime.today())
+  end = start + datetime.timedelta(hours=24)
+  body = {
+    "timeMin": start.isoformat(),
+    "timeMax": end.isoformat(),
+    "timeZone": 'US/Central',
+    "items": [{"id": 'noah@presler.me'}]
+  }
+  credentials = get_google_credentials(student)
+  http = credentials.authorize(httplib2.Http(timeout=100000000))
+  service = discovery.build('calendar', 'v3', http=http)
+  print service.freebusy().query(body=body).execute()
+
