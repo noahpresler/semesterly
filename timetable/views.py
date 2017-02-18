@@ -735,6 +735,20 @@ def manifest_json(request, js):
     html = template.render()
     return HttpResponse(html, content_type="application/json")
 
+def poll(request, code=None, sem=None, shared_timetable=None, find_friends=False, enable_notifs=False,signup=False,gcal_callback=False, export_calendar=False, view_textbooks=False):
+  school = request.subdomain
+  student = get_student(request)
+  return render_to_response("poll.html", {
+    'school': school,
+    'student': json.dumps(get_user_dict(school, student, sem)),
+    'semester': sem,
+    'uses_12hr_time': school in AM_PM_SCHOOLS,
+    'signup': signup,
+    'gcal_callback': gcal_callback,
+    'export_calendar': export_calendar,
+  },
+  context_instance=RequestContext(request))
+
 def profile(request):
   logged = request.user.is_authenticated()
   if logged and Student.objects.filter(user=request.user).exists():

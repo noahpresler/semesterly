@@ -86,6 +86,9 @@ urlpatterns = patterns('',
 
     # profile page
     url(r'me/*', 'timetable.views.profile'),
+
+    #polls, down to meet, meeting maker
+    url(r'poll/*', 'timetable.views.poll'),
     
     url(r'^unsubscribe/(?P<id>[\w.@+-]+)/(?P<token>[\w.:\-_=]+)/$', 'student.views.unsubscribe'),
 
