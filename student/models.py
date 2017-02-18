@@ -2,6 +2,10 @@ from django.db import models
 from django.contrib.auth.models import User
 from timetable.models import *
 
+class CalendarPreference(models.Model):
+    calendar = models.ForeignKey('dtm.GoogleCalendar')
+    visible = models.NullBooleanField(default=True)
+
 class Student(models.Model):
     FRESHMAN = 'FR'
     SOPHOMORE = 'SO'
@@ -21,6 +25,7 @@ class Student(models.Model):
     integrations = models.ManyToManyField(Integration, blank=True)
     time_created = models.DateTimeField(auto_now_add=True)
     school = models.CharField(max_length=100, null=True)
+    calendar_preferences = models.ManyToManyField(CalendarPreference, blank=True)
 
 class Reaction(models.Model):
   REACTION_CHOICES = (

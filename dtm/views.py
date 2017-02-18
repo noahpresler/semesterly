@@ -67,3 +67,4 @@ def get_free_busy_from_cals(cal_ids, student, week_offset=0):
   http = credentials.authorize(httplib2.Http(timeout=100000000))
   service = discovery.build('calendar', 'v3', http=http)
   return service.freebusy().query(body=body).execute()
+  
