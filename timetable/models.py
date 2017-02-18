@@ -100,6 +100,7 @@ class Section(models.Model):
   instructors = models.CharField(max_length=500, default='TBA')
   semester = models.CharField(max_length=2)
   textbooks = models.ManyToManyField(Textbook, through='TextbookLink')
+  was_full = models.BooleanField(default=False)
 
   def get_textbooks(self):
     return [tb.get_info() for tb in self.textbooks.all()]
