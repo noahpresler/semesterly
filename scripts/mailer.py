@@ -7,57 +7,57 @@ from student.models import *
 from student.views import create_unsubscribe_link
 
 class Mailer():
-    def send_mail(students, template, subject, params={}):
+    def __init__(self):
+        # Create server object with SSL option
+        self.server = smtplib.SMTP_SSL('email-smtp.us-east-1.amazonaws.com')
+        self.server.login('AKIAJWXCNDO3CMYAIC6A', 'AonOaLbp9FjBkyhP9ihHBge92CEqgMPMbgrUweYxT9Ar')
+
+        # Define to
+        self.sender = 'textbooks@semester.ly'
+
+    def cleanup(self):
+        self.server.quit()
+
+    def send_mail(self, student, subject, template, params={}):
         '''
-        Sends emails with students
+        Sends email to a student
         Parameters:
-            students: Students to send email to 
+            student: Student to send email to 
             subject: Subject of the email
             params: Dictionary of things to go into template
             template: HTML email template
         '''
-        # Create server object with SSL option
-        server = smtplib.SMTP_SSL('email-smtp.us-east-1.amazonaws.com')
-        server.login('AKIAJWXCNDO3CMYAIC6A', 'AonOaLbp9FjBkyhP9ihHBge92CEqgMPMbgrUweYxT9Ar')
+        if not student.emails_enabled or not student.user.email:
+            return
 
-        # Define to
-        sender = 'textbooks@semester.ly'
+        unsub_link = "https://semester.ly" + create_unsubscribe_link(student)
+        student.user.first_name = student.user.first_name.encode('utf-8')
+        student.user.last_name = student.user.last_name.encode('utf-8')
 
-        for student_id in self.students:
-            student = Student.objects.get(id=student_id)
+        params.update({
+            'user': student,
+            'unsub_link': unsub_link,
+        })
 
-            if not student.emails_enabled or not student.user.email:
-                continue
+        msg_html = render_to_string(template, params)
 
-            try:
-                unsub_link = "https://semester.ly" + create_unsubscribe_link(student)
-                student.user.first_name = student.user.first_name.encode('utf-8')
-                student.user.last_name = student.user.last_name.encode('utf-8')
+        # Create message
+        recipient = student.user.email
+        msg = MIMEText(msg_html.encode('utf-8'),'html')
 
-                params.update({
-                    'user': student,
-                    'unsub_link': unsub_link,
-                })
+        msg['subject'] = subject
+        msg['From'] = self.sender
+        msg['To'] = recipient
+        print "Sending to: " + str(recipient)
 
-                msg_html = render_to_string(template, params)
+        try:
+            # Perform operations via server
+            # TODO: Ping their email address to make sure it's fine
+            self.server.sendmail(self.sender, [recipient], msg.as_string())
+        except:
+            e = sys.exc_info()[0]
+            print("skipped " + str(student.user.email))
+            traceback.print_exc()
 
-                # Create message
-                recipient = student.user.email
-                msg = MIMEText(msg_html.encode('utf-8'),'html')
-
-                msg['subject'] = subject
-                msg['From'] = sender
-                msg['To'] = recipient
-                print "Sending to: " + str(recipient)
-
-                # Perform operations via server
-                # TODO: Ping their email address to make sure it's fine
-                server.sendmail(sender, [recipient], msg.as_string())
-            except:
-                e = sys.exc_info()[0]
-                print("skipped " + str(student.user.email))
-                traceback.print_exc()
-
-                server = smtplib.SMTP_SSL('email-smtp.us-east-1.amazonaws.com')
-                server.login('AKIAJWXCNDO3CMYAIC6A', 'AonOaLbp9FjBkyhP9ihHBge92CEqgMPMbgrUweYxT9Ar')
-        server.quit()
+            self.server = smtplib.SMTP_SSL('email-smtp.us-east-1.amazonaws.com')
+            self.server.login('AKIAJWXCNDO3CMYAIC6A', 'AonOaLbp9FjBkyhP9ihHBge92CEqgMPMbgrUweYxT9Ar')
