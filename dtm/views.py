@@ -23,7 +23,7 @@ def view_dtm_root(request, code=None, sem=None, shared_timetable=None, find_frie
 	sem = 'S'
     else:
 	sem = 'F'
-  get_free_busy_from_cals([], student)
+  print get_free_busy_from_cals(['noah@presler.me'], student)
   return render_to_response("dtm_root.html", {
     'school': school,
     'student': json.dumps(get_user_dict(school, student, sem)),
@@ -55,16 +55,15 @@ def get_calendar_list(student):
 
 def get_free_busy_from_cals(cal_ids, student):
   tz = pytz.timezone('US/Eastern')
-  start = tz.localize(datetime.datetime.today())
-  end = start + datetime.timedelta(hours=24)
+  start = tz.localize(last_weekday(datetime.datetime.today(), 'sunday')) + datetime.timedelta(minutes=5)
+  end = tz.localize(next_weekday(datetime.datetime.today(), 'S'))
   body = {
     "timeMin": start.isoformat(),
     "timeMax": end.isoformat(),
     "timeZone": 'US/Central',
-    "items": [{"id": 'noah@presler.me'}]
+    "items": map(lambda cid: {"id": cid}, cal_ids)
   }
   credentials = get_google_credentials(student)
   http = credentials.authorize(httplib2.Http(timeout=100000000))
   service = discovery.build('calendar', 'v3', http=http)
-  print service.freebusy().query(body=body).execute()
-
+  return service.freebusy().query(body=body).execute()

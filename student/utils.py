@@ -62,6 +62,14 @@ def next_weekday(d, weekday):
         days_ahead += 7
     return d + datetime.timedelta(days_ahead)
 
+def last_weekday(d, day_name):
+    days_of_week = ['sunday','monday','tuesday','wednesday',
+                        'thursday','friday','saturday']
+    target_day = days_of_week.index(day_name.lower())
+    delta_day = target_day - d.isoweekday()
+    if delta_day >= 0: delta_day -= 7 # go back 7 days
+    return d + datetime.timedelta(days=delta_day)
+
 def create_student(strategy, details, response, user, *args, **kwargs):
     backend_name = kwargs['backend'].name
     if Student.objects.filter(user=user).exists():
