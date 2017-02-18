@@ -2,7 +2,7 @@ import React from 'react';
 import classnames from 'classnames';
 import ReactTooltip from 'react-tooltip';
 import PaginationContainer  from './containers/pagination_container.jsx';
-import SlotManagerContainer from './containers/slot_manager_container.jsx';
+import SlotManagerWeeklyContainer from './containers/slot_manager_weekly_container.jsx';
 import CellContainer from './containers/cell_container.jsx'
 import { DAYS, DRAGTYPES } from '../constants.jsx';
 import { DropTarget } from 'react-dnd';
@@ -221,7 +221,7 @@ class Calendar extends React.Component {
 	                        </div>
 	                        <div className="fc-timeline" style={this.getTimelineStyle()}/>
 	                        <div className="fc-content-skeleton">
-	                          <SlotManagerContainer days={DAYS} />
+	                          <SlotManagerWeeklyContainer days={DAYS} />
 	                        </div>
 	                        <hr className="fc-divider fc-widget-header" style={{display: 'none'}} />
 	                      </div>
