@@ -6,6 +6,7 @@ from django.template import RequestContext
 from timetable.models import *
 from timetable.school_mappers import school_to_granularity, VALID_SCHOOLS, school_code_to_name, AM_PM_SCHOOLS, school_to_course_regex
 from timetable.utils import *
+from student.utils import *
 from student.models import Student
 from student.views import get_student, get_user_dict, convert_tt_to_dict, get_classmates_from_course_id
 from django.db.models import Count
@@ -36,6 +37,17 @@ def view_dtm_root(request, code=None, sem=None, shared_timetable=None, find_frie
     'gcal_callback': gcal_callback,
     'export_calendar': export_calendar,
     'view_textbooks': view_textbooks,
-    'is_poll': True
+    'is_poll': True,
+    'calendar_list': get_calendar_list(student)
   },
   context_instance=RequestContext(request))
+
+def get_calendar_list(student):
+  if student and student.user.is_authenticated():
+    credentials = get_google_credentials(student)
+    http = credentials.authorize(httplib2.Http(timeout=100000000))
+    service = discovery.build('calendar', 'v3', http=http)
+    cal_list = service.calendarList().list(pageToken=None).execute()
+    return json.dumps(map(lambda cal: cal['summary'], cal_list['items']))
+  else:
+    return []

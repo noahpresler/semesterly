@@ -45,6 +45,7 @@ function setup(dispatch) {
   gcalCallback = gcalCallback === "True";
   exportCalendar = exportCalendar === "True";
   viewTextbooks = viewTextbooks === "True";
+  calendarList = calendarList ? JSON.parse(calendarList) : null;
   if (signup) {
     dispatch({type: 'TRIGGER_SIGNUP_MODAL'});
   }
