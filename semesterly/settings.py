@@ -123,7 +123,8 @@ INSTALLED_APPS = (
     'timetable',
     'analytics',
     'scripts',
-    'student'
+    'student',
+    'dtm'
 )
 
 MIDDLEWARE_CLASSES = (
