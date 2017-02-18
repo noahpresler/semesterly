@@ -37,8 +37,8 @@ def view_dtm_root(request, code=None, sem=None, shared_timetable=None, find_frie
     'gcal_callback': gcal_callback,
     'export_calendar': export_calendar,
     'view_textbooks': view_textbooks,
-    'is_poll': True,
-    'calendar_list': get_calendar_list(student)
+    'calendar_list': get_calendar_list(student),
+    'is_poll': True
   },
   context_instance=RequestContext(request))
 
@@ -48,6 +48,6 @@ def get_calendar_list(student):
     http = credentials.authorize(httplib2.Http(timeout=100000000))
     service = discovery.build('calendar', 'v3', http=http)
     cal_list = service.calendarList().list(pageToken=None).execute()
-    return json.dumps(map(lambda cal: cal['summary'], cal_list['items']))
+    return json.dumps(map(lambda cal: {'name': cal['summary'], 'id': cal['id']}, cal_list['items']))
   else:
     return []
