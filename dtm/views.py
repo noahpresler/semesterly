@@ -67,4 +67,13 @@ def get_free_busy_from_cals(cal_ids, student, week_offset=0):
   http = credentials.authorize(httplib2.Http(timeout=100000000))
   service = discovery.build('calendar', 'v3', http=http)
   return service.freebusy().query(body=body).execute()
+
+def create_availability_share(cal_ids, student, week_offset):
+  start_day = last_weekday(datetime.datetime.today(), 'sunday') + datetime.timedelta(weeks=week_offset, minutes=5)
+  share = AvailabilityShare.objects.create(
+    student=student,
+    start_day=start_day,
+    expiry=None,
+  )
   
+

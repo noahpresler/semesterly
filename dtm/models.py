@@ -8,9 +8,9 @@ class GoogleCalendar(models.Model):
 	calendar_id = models.CharField(max_length=1024)
 	name = models.CharField(max_length=1024)
 
-class ScheduleShare(models.Model):
+class AvailabilityShare(models.Model):
 	student = models.ForeignKey('student.Student')
 	time_created = models.DateTimeField(auto_now_add=True)
 	start_day = models.DateTimeField(auto_now_add=False, default=None)
-	expiry = models.DateTimeField(auto_now_add=False)
+	expiry = models.DateTimeField(auto_now_add=False, default=None)
 	google_calendars = models.ManyToManyField(GoogleCalendar, blank=True)
