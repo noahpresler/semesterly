@@ -118,6 +118,7 @@ def convert_share_to_dict(share):
 
 '''
 View shared availability
+Requires url: /dtm/share/{hashed id}
 '''
 @validate_subdomain
 def share_availability(request, ref):
