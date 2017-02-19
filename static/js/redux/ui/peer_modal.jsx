@@ -140,7 +140,7 @@ export class PeerModal extends React.Component {
                     </div>
                 </div>
         let ghostCards = !this.props.userInfo.social_all || peerCards.length == 0 ? <div>{ghostCard}{ghostCard}{ghostCard}{ghostCard}</div> : null;
-        let display = (this.props.hasRecievedSchedule) ?
+        let display = (!this.props.isLoading) ?
             <div id="main-modal-wrapper">
                 <div id="pm-header">
                     <h4>Your Classmates</h4>
