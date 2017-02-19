@@ -4,5 +4,7 @@ from django.conf import settings
 from django.contrib import admin
 
 urlpatterns = patterns('',
-	url(r'test/*$', 'dtm.views.test'),
+    #polls, down to meet, meeting maker
+    url(r'$', 'dtm.views.view_dtm_root'),
+	# url(r'share/(?P<ref>.+)/*$', 'timetable.views.share_timetable'),
 )

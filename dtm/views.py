@@ -7,6 +7,7 @@ from timetable.models import *
 from timetable.school_mappers import school_to_granularity, VALID_SCHOOLS, school_code_to_name, AM_PM_SCHOOLS, school_to_course_regex
 from timetable.utils import *
 from student.utils import *
+from dtm.models import *
 from student.models import Student
 from student.views import get_student, get_user_dict, convert_tt_to_dict, get_classmates_from_course_id
 from django.db.models import Count
@@ -24,7 +25,7 @@ def view_dtm_root(request, code=None, sem=None, shared_timetable=None, find_frie
 	sem = 'S'
     else:
 	sem = 'F'
-  # print get_free_busy_from_cals(['noah@presler.me'], student, 1)
+  print get_free_busy_from_cals(['noah@presler.me'], student, 1)
   return render_to_response("dtm_root.html", {
     'school': school,
     'student': json.dumps(get_user_dict(school, student, sem)),
@@ -44,15 +45,12 @@ def view_dtm_root(request, code=None, sem=None, shared_timetable=None, find_frie
   },
   context_instance=RequestContext(request))
 
-def test(request):
-  return HttpResponse(json.dumps({"ASDF":"ASDF"}), content_type='application/json')
-
 '''
 Iterate over calendars in calendar list
 Creates all GoogleCalendar models that DNE
 '''
-def make_unmade_calendars(calendar_list):
-  for cal in calendar_list:
+def make_unmade_calendars(calendar_list, student):
+  for cal in calendar_list['items']:
     GoogleCalendar.objects.get_or_create(
       student=student,
       calendar_id=cal['id'],
@@ -70,7 +68,7 @@ def get_calendar_list(student):
     http = credentials.authorize(httplib2.Http(timeout=100000000))
     service = discovery.build('calendar', 'v3', http=http)
     cal_list = service.calendarList().list(pageToken=None).execute()
-    make_unmade_calendars(cal_list)
+    make_unmade_calendars(cal_list, student)
     return json.dumps(map(lambda cal: {'name': cal['summary'], 'id': cal['id']}, cal_list['items']))
   else:
     return []
