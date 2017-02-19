@@ -367,6 +367,9 @@ export function fetchFriends() {
 	let semester = state.semester !== undefined ? state.semester : currentSemester;
 	return (dispatch) => {
 		dispatch(requestFriends());
+		dispatch({
+			type: "PEER_MODAL_LOADING"
+		});
 		fetch(getFriendsEndpoint(), {
 			credentials: 'include',
 			method: 'POST',
