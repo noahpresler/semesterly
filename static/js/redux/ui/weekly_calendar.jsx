@@ -4,7 +4,7 @@ import ReactTooltip from 'react-tooltip';
 import SlotManagerWeeklyContainer from './containers/slot_manager_weekly_container.jsx';
 import CellContainer from './containers/cell_container.jsx'
 import WeeklyPaginationContainer from './containers/weekly_pagination_container.jsx'
-import { getSunday } from '../actions/calendar_actions.jsx';
+import { getSunday, isActiveDateFromSunday } from '../actions/calendar_actions.jsx';
 import { DAYS_SEVEN, DRAGTYPES, DAY_ABBR, MONTHS } from '../constants.jsx';
 import { DropTarget } from 'react-dnd';
 import { ShareLink } from './master_slot.jsx';
@@ -53,14 +53,13 @@ class Calendar extends React.Component {
     }
 
     getCalendarRows() {
-    let rows = [];
-    for (let i = 8; i <= this.props.endHour; i++) { // one row for each hour, starting from 8am
-      let hour = uses12HrTime && i > 12 ? i - 12 : i;
-      rows.push(<Row displayTime={hour + ':00'} time={i + ':00'} isLoggedIn={this.props.isLoggedIn} key={i}/>);
-      rows.push(<Row time={i + ':30'} isLoggedIn={this.props.isLoggedIn} key={i + 0.5}/>);
-    }
-
-    return rows;
+        let rows = [];
+        for (let i = 8; i <= this.props.endHour; i++) { // one row for each hour, starting from 8am
+            let hour = uses12HrTime && i > 12 ? i - 12 : i;
+            rows.push(<Row displayTime={hour + ':00'} time={i + ':00'} isLoggedIn={this.props.isLoggedIn} key={i}/>);
+            rows.push(<Row time={i + ':30'} isLoggedIn={this.props.isLoggedIn} key={i + 0.5}/>);
+        }
+        return rows;
     }
     fetchShareTimetableLink() {
         if (this.props.shareLinkValid) {
@@ -70,15 +69,13 @@ class Calendar extends React.Component {
             this.props.fetchShareTimetableLink();
         }
     }
-
     hideShareLink() {
         this.setState({shareLinkShown: false});
     }
-
     render() {
         let calendarHeader = DAYS_SEVEN.map((d, index) =>  (
             <th className="fc-day-header fc-widget-header fc-fri" key={d}>
-                {DAY_ABBR[index]} {this.props.activeWeek.getDate() + index}
+                {DAY_ABBR[index]}<span className={(isActiveDateFromSunday(this.props.activeWeek, index) ? 'active' : '')}>{this.props.activeWeek.getDate() + index}</span>
             </th>))
         return (
           <div id="calendar" className="fc fc-ltr fc-unthemed week-calendar seven-days">
