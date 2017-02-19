@@ -4,13 +4,13 @@ import ReactTooltip from 'react-tooltip';
 import PaginationContainer  from './containers/pagination_container.jsx';
 import SlotManagerWeeklyContainer from './containers/slot_manager_weekly_container.jsx';
 import CellContainer from './containers/cell_container.jsx'
-import { DAYS, DRAGTYPES } from '../constants.jsx';
+import { DAYS_SEVEN, DRAGTYPES } from '../constants.jsx';
 import { DropTarget } from 'react-dnd';
 import { ShareLink } from './master_slot.jsx';
 
 const Row = (props) => {
 	let timeText = props.displayTime ? <span>{props.displayTime}</span> : null;
-	let dayCells = DAYS.map(day => <CellContainer day={day}
+	let dayCells = DAYS_SEVEN.map(day => <CellContainer day={day}
 																								time={props.time}
 																								key={day+props.time}
 																								loggedIn={props.isLoggedIn} />)
@@ -221,7 +221,7 @@ class Calendar extends React.Component {
 	                        </div>
 	                        <div className="fc-timeline" style={this.getTimelineStyle()}/>
 	                        <div className="fc-content-skeleton">
-	                          <SlotManagerWeeklyContainer days={DAYS} />
+	                          <SlotManagerWeeklyContainer days={DAYS_SEVEN} />
 	                        </div>
 	                        <hr className="fc-divider fc-widget-header" style={{display: 'none'}} />
 	                      </div>

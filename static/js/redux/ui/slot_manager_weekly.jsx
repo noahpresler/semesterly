@@ -5,7 +5,7 @@ import CustomSlot from './custom_slot.jsx'
 import { index as IntervalTree, matches01 as getIntersections } from 'static-interval-tree'
 import { HALF_HOUR_HEIGHT, COLOUR_DATA } from '../constants.jsx';
 
-class SlotManager extends React.Component {
+class SlotManagerWeekly extends React.Component {
 
 	render() {
         let slots_by_day = this.getSlotsByDay();
@@ -169,4 +169,4 @@ class SlotManager extends React.Component {
     }
 }
 
-export default SlotManager;
+export default SlotManagerWeekly;
