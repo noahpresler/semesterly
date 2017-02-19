@@ -140,18 +140,7 @@ export class PeerModal extends React.Component {
                     </div>
                 </div>
         let ghostCards = !this.props.userInfo.social_all || peerCards.length == 0 ? <div>{ghostCard}{ghostCard}{ghostCard}{ghostCard}</div> : null;
-        let loading = (
-            <div id="main-modal-wrapper">
-                <div id="pm-header">
-                    <h4>Your Classmates</h4>
-                    <span className="img-icon">
-                        <div className="loader"id = "peer-loader"/>
-                    </span>
-                </div>
-            </div>
-            )
-
-        let loaded = (
+        let display = (this.props.hasRecievedSchedule) ?
             <div id="main-modal-wrapper">
                 <div id="pm-header">
                     <h4>Your Classmates</h4>
@@ -170,9 +159,15 @@ export class PeerModal extends React.Component {
                     {peerCards.length == 0 && this.props.userInfo.social_all ? emptyState : null}
                     {this.props.userInfo.social_all ? peerCards : null}
                     {ghostCards}
+            </div> :
+            <div id="main-modal-wrapper">
+                <span className="img-icon">
+                        <div className="loader"/>
+                </span>
+                <div id="pm-header">
+                    <h4>Your Classmates</h4>
+                </div>
             </div>
-            )
-            
         return (
             <Modal ref="modal"
                 className='peer-modal'
@@ -182,7 +177,7 @@ export class PeerModal extends React.Component {
                 <div id="modal-content">
                     <div id="split-modal-wrapper">
                         {sideBar}
-                        {loading}
+                        {display}
                     </div>
                 </div>
             </Modal>
