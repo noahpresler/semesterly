@@ -1,6 +1,7 @@
 export const dtmCalendars = (state = { 
 	isLoading: false,
-	calendars: {}
+	calendars: {},
+	availability: {}
 }, action) => {
 	switch (action.type) {
 		case 'RECEIVE_GOOGLE_CALENDARS':
@@ -15,6 +16,8 @@ export const dtmCalendars = (state = {
 				return cal
 			})
 			return Object.assign({}, state, { calendars: new_calendars });
+		case "RECEIVE_AVAILABILITY":
+			return Object.assign({}, state, { availability: action.availability });
 		default:
 			return state;
 	}

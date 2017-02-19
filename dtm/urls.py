@@ -5,7 +5,7 @@ from django.contrib import admin
 
 urlpatterns = patterns('',
     #polls, down to meet, meeting maker
-    url(r'$', 'dtm.views.view_dtm_root'),
+	url(r'availability/*$', 'dtm.views.get_availability'),
 	url(r'share/(?P<ref>.+)/*$', 'dtm.views.share_availability'),
-	url(r'/availability*$', 'dtm.views.get_availability'),
+    url(r'^$', 'dtm.views.view_dtm_root'),
 )

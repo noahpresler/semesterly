@@ -87,6 +87,9 @@ export const getIntegrationDelEndpoint = (integration_id, course_id) => {
 export const getIntegrationAddEndpoint = (integration_id, course_id) => {
   return "/integration/add/" + integration_id + "/course/" + course_id + "/";
 }
+export const getAvailabilityEndpoint = () => {
+  return "/dtm/availability/";
+}
 
 export const getSchoolSpecificInfo = (school) => {
 	switch(school) {

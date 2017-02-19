@@ -27,7 +27,6 @@ def view_dtm_root(request, code=None, sem=None, share_availability=None):
 	sem = 'S'
     else:
 	sem = 'F'
-  print get_free_busy_from_cals(['noah@presler.me'], student, 1)
   return render_to_response("dtm_root.html", {
     'school': school,
     'student': json.dumps(get_user_dict(school, student, sem)),
@@ -80,6 +79,7 @@ week_offset acts as pagination: tells the function
   how many weeks away from today to start the query for
 
 '''
+@csrf_exempt
 def get_free_busy_from_cals(cal_ids, student, week_offset=0):
   #TODO CHECK THAT THE CALENDAR BELONGS TO THEM
   tz = pytz.timezone('US/Eastern')
@@ -143,7 +143,6 @@ Must have
     week_offset: int, how many weeks forward we are looking
   }
 '''
-@validate_subdomain
 @csrf_exempt
 def get_availability(request):
   student = get_student(request)

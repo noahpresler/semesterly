@@ -13,6 +13,7 @@ import { fetchSchoolInfo } from './actions/school_actions.jsx';
 import { setCourseInfo } from './actions/modal_actions.jsx';
 import { browserSupportsLocalStorage, setFirstVisit, timeLapsedGreaterThan } from './util.jsx';
 import { addTTtoGCal } from './actions/calendar_actions.jsx';
+import { fetchAvailability } from './actions/dtm_actions.jsx';
 
 export const store = createStore(rootReducer, window.devToolsExtension && window.devToolsExtension(), applyMiddleware(thunkMiddleware));
 
@@ -44,6 +45,7 @@ function setup(dispatch) {
       type: "RECEIVE_GOOGLE_CALENDARS",
       calendars: calendarList, 
     });
+    dispatch(fetchAvailability());
   } else {
     sharedTimetable = JSON.parse(sharedTimetable);
     sharedCourse = JSON.parse(sharedCourse);
