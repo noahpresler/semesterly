@@ -12,6 +12,7 @@ from student.models import Student
 from student.views import get_student, get_user_dict, convert_tt_to_dict, get_classmates_from_course_id
 from django.db.models import Count
 from django.forms.models import model_to_dict
+from django.views.decorators.csrf import csrf_exempt
 
 hashids = Hashids(salt="***REMOVED***")
 
@@ -138,7 +139,6 @@ Must have
   }
 '''
 @validate_subdomain
-@require_login
 @csrf_exempt
 def get_availability(request):
   student = get_student(request)

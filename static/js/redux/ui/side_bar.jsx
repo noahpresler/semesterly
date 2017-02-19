@@ -10,39 +10,12 @@ import CreditTickerContainer from './containers/credit_ticker_container.jsx';
 import Textbook from './textbook.jsx';
 
 class SideBar extends React.Component {
-    constructor(props) {
-        super(props);
-        this.state = { showDropdown: false };
-        this.toggleDropdown = this.toggleDropdown.bind(this);
-        this.hideDropdown = this.hideDropdown.bind(this);
-    }
-    hideDropdown() {
-        this.setState({ showDropdown: false });
-    }
-    toggleDropdown() {
-    	this.setState({ showDropdown: !this.state.showDropdown });
-    }
     stopPropagation(callback, event) {
         event.stopPropagation();
         this.hideDropdown();
         callback();
     }
     render() {
-        let savedTimetables = this.props.savedTimetables ? this.props.savedTimetables.map(t => {
-            return (
-                <div className="tt-name" key={t.id} onMouseDown={() => this.props.loadTimetable(t)}>
-                    {t.name}
-                    <button onClick={(event) => this.stopPropagation(() => this.props.deleteTimetable(t), event)}
-                            className="row-button">
-                        <i className="fa fa-trash-o" />
-                    </button>
-                    <button onClick={(event) => this.stopPropagation(() => this.props.duplicateTimetable(t), event)}
-                            className="row-button">
-                        <i className="fa fa-clone" />
-                    </button>
-                </div>
-            )
-        }) : null;
         let masterSlots = this.props.mandatoryCourses ?
             this.props.mandatoryCourses.map(c => {
                 let colourIndex = this.props.courseToColourIndex[c.id] || 0;
@@ -85,11 +58,6 @@ class SideBar extends React.Component {
                     fetchCourseInfo={() => this.props.fetchCourseInfo(c.id)}
                     removeCourse={() => this.props.removeOptionalCourse(c)}/>
         }) : null;
-        let dropItDown = savedTimetables && savedTimetables.length !== 0 ?
-             <div id="timetable-drop-it-down"
-                onMouseDown={this.toggleDropdown.bind(this)}>
-                <span className={classNames("tip-down", {'down' : this.state.showDropdown})}></span>
-            </div> : null;
         if (masterSlots.length === 0) {
             masterSlots = (
                 <div className="empty-state">
@@ -109,21 +77,8 @@ class SideBar extends React.Component {
         }
         return (
             <div id="side-bar" className="no-print">
-                <div id="sb-name">
-                    <TimetableNameInputContainer />
-                    <ClickOutHandler onClickOut={this.hideDropdown}>
-                        {dropItDown}
-                        <div id="timetable-names-dropdown"
-                        	className={classNames({'down' : this.state.showDropdown})}
-                            >
-                            <div className="tip-border"></div>
-                            <div className="tip"></div>
-                            <h4>{ this.props.semesterName }</h4>
-                            { savedTimetables }
-                        </div>
-                    </ClickOutHandler>
-                </div>
-                <CreditTickerContainer />
+                <SemesterOverview />
+                <CreditTickerContainer {...this.props} />
                 <div id="sb-rating" className="col-2-3">
                     <h3>Average Course Rating</h3>
                     <div className="sub-rating-wrapper">
@@ -180,5 +135,59 @@ export const TextbookList = ({courses}) => {
             })}
         </div>
     )
+}
+
+export class SemesterOverview extends React.Component {
+    constructor(props) {
+        super(props);
+        this.state = { showDropdown: false };
+        this.toggleDropdown = this.toggleDropdown.bind(this);
+        this.hideDropdown = this.hideDropdown.bind(this);
+    }
+    hideDropdown() {
+        this.setState({ showDropdown: false });
+    }
+    toggleDropdown() {
+        this.setState({ showDropdown: !this.state.showDropdown });
+    }
+    render() {
+        let savedTimetables = this.props.savedTimetables ? this.props.savedTimetables.map(t => {
+            return (
+                <div className="tt-name" key={t.id} onMouseDown={() => this.props.loadTimetable(t)}>
+                    {t.name}
+                    <button onClick={(event) => this.stopPropagation(() => this.props.deleteTimetable(t), event)}
+                            className="row-button">
+                        <i className="fa fa-trash-o" />
+                    </button>
+                    <button onClick={(event) => this.stopPropagation(() => this.props.duplicateTimetable(t), event)}
+                            className="row-button">
+                        <i className="fa fa-clone" />
+                    </button>
+                </div>
+            )
+        }) : null;
+        let dropItDown = savedTimetables && savedTimetables.length !== 0 ?
+             <div id="timetable-drop-it-down"
+                onMouseDown={this.toggleDropdown.bind(this)}>
+                <span className={classNames("tip-down", {'down' : this.state.showDropdown})}></span>
+            </div> : null;
+        return (
+            <div id="sb-name">
+                <TimetableNameInputContainer />
+                <ClickOutHandler onClickOut={this.hideDropdown}>
+                    {dropItDown}
+                    <div id="timetable-names-dropdown"
+                        className={classNames({'down' : this.state.showDropdown})}
+                        >
+                        <div className="tip-border"></div>
+                        <div className="tip"></div>
+                        <h4>{ this.props.semesterName }</h4>
+                        { savedTimetables }
+                    </div>
+                </ClickOutHandler>
+            </div>
+        )
+    }
+
 }
 

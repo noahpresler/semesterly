@@ -38,7 +38,12 @@ function setup(dispatch) {
 
   uses12HrTime = uses12HrTime === "True";
   if (isPoll) {
-    let sharedTimetable, sharedCourse, findFriends, enableNotifs, studentIntegrations, signup, gcalCallback, exportCalendar, viewTextbooks, calendarList = false;
+    let sharedTimetable, sharedCourse, findFriends, enableNotifs, studentIntegrations, signup, gcalCallback, exportCalendar, viewTextbooks;
+    calendarList = calendarList ? JSON.parse(calendarList) : null;
+    dispatch({
+      type: "RECEIVE_GOOGLE_CALENDARS",
+      calendars: calendarList, 
+    });
   } else {
     sharedTimetable = JSON.parse(sharedTimetable);
     sharedCourse = JSON.parse(sharedCourse);
