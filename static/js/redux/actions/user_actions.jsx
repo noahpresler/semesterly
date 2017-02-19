@@ -375,6 +375,9 @@ export function fetchFriends() {
 	    .then(response => response.json())
 	    .then(json => {
 	    	dispatch(getFriends(json))
+	    	dispatch({
+				type: "PEER_MODAL_LOADED"
+			});
 	    });
 	}
 }
