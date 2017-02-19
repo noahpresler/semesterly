@@ -11,6 +11,7 @@ from student.models import Student
 from student.views import get_student, get_user_dict, convert_tt_to_dict, get_classmates_from_course_id
 from django.db.models import Count
 
+hashids = Hashids(salt="***REMOVED***")
 
 # Create your views here.
 @validate_subdomain
@@ -43,12 +44,21 @@ def view_dtm_root(request, code=None, sem=None, shared_timetable=None, find_frie
   },
   context_instance=RequestContext(request))
 
+def make_unmade_calendars(calendar_list):
+  for cal in calendar_list:
+    GoogleCalendar.objects.get_or_create(
+      student=student,
+      calendar_id=cal['id'],
+      defaults={'name': cal['summary']}
+    )
+
 def get_calendar_list(student):
   if student and student.user.is_authenticated():
     credentials = get_google_credentials(student)
     http = credentials.authorize(httplib2.Http(timeout=100000000))
     service = discovery.build('calendar', 'v3', http=http)
     cal_list = service.calendarList().list(pageToken=None).execute()
+    make_unmade_calendars(cal_list)
     return json.dumps(map(lambda cal: {'name': cal['summary'], 'id': cal['id']}, cal_list['items']))
   else:
     return []
@@ -75,5 +85,13 @@ def create_availability_share(cal_ids, student, week_offset):
     start_day=start_day,
     expiry=None,
   )
-  
+  for cid in cal_ids:
+    share.google_calendars.add(
+      GoogleCalendar.objects.get(
+        student=student,
+        calendar_id=cid
+      )
+    )
+  share.save()
+  return hashids.encrypt(share.id)
 
