@@ -25,6 +25,9 @@ urlpatterns = patterns('',
     url('', include('django.contrib.auth.urls', namespace='auth')),
     url(r'^complete/facebook/.*$', 'timetable.views.view_timetable'),
 
+    #DTM
+    url(r'^dtm/', include('dtm.urls')),
+
     # home
     url(r'^$', 'timetable.views.view_timetable'),
 

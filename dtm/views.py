@@ -24,7 +24,7 @@ def view_dtm_root(request, code=None, sem=None, shared_timetable=None, find_frie
 	sem = 'S'
     else:
 	sem = 'F'
-  print get_free_busy_from_cals(['noah@presler.me'], student, 1)
+  # print get_free_busy_from_cals(['noah@presler.me'], student, 1)
   return render_to_response("dtm_root.html", {
     'school': school,
     'student': json.dumps(get_user_dict(school, student, sem)),
@@ -44,6 +44,13 @@ def view_dtm_root(request, code=None, sem=None, shared_timetable=None, find_frie
   },
   context_instance=RequestContext(request))
 
+def test(request):
+  return HttpResponse(json.dumps({"ASDF":"ASDF"}), content_type='application/json')
+
+'''
+Iterate over calendars in calendar list
+Creates all GoogleCalendar models that DNE
+'''
 def make_unmade_calendars(calendar_list):
   for cal in calendar_list:
     GoogleCalendar.objects.get_or_create(
@@ -52,6 +59,11 @@ def make_unmade_calendars(calendar_list):
       defaults={'name': cal['summary']}
     )
 
+'''
+Requests the users calendars from Google API
+Creates all unmade calendar
+Returns list of name/id pairs
+'''
 def get_calendar_list(student):
   if student and student.user.is_authenticated():
     credentials = get_google_credentials(student)
@@ -63,7 +75,15 @@ def get_calendar_list(student):
   else:
     return []
 
+'''
+Given a student and list of calendar ids, return freebusy
+Returns lists of time ranges where user is busy
+week_offset acts as pagination: tells the function
+  how many weeks away from today to start the query for
+
+'''
 def get_free_busy_from_cals(cal_ids, student, week_offset=0):
+  #TODO CHECK THAT THE CALENDAR BELONGS TO THEM
   tz = pytz.timezone('US/Eastern')
   start = tz.localize(last_weekday(datetime.datetime.today(), 'sunday')) + datetime.timedelta(weeks=week_offset, minutes=5)
   end = tz.localize(next_weekday(datetime.datetime.today(), 'S')) + datetime.timedelta(weeks=week_offset)
@@ -78,6 +98,10 @@ def get_free_busy_from_cals(cal_ids, student, week_offset=0):
   service = discovery.build('calendar', 'v3', http=http)
   return service.freebusy().query(body=body).execute()
 
+'''
+Creates AvailabilityShare object for a student with calendarids and weekoffset
+Returns encryped hash of the id for the share
+'''
 def create_availability_share(cal_ids, student, week_offset):
   start_day = last_weekday(datetime.datetime.today(), 'sunday') + datetime.timedelta(weeks=week_offset, minutes=5)
   share = AvailabilityShare.objects.create(
