@@ -3,6 +3,7 @@ import classnames from 'classnames';
 import ReactTooltip from 'react-tooltip';
 import SlotManagerWeeklyContainer from './containers/slot_manager_weekly_container.jsx';
 import CellContainer from './containers/cell_container.jsx'
+import WeeklyPaginationContainer from './containers/weekly_pagination_container.jsx'
 import { DAYS_SEVEN, DRAGTYPES, DAY_ABBR, MONTHS } from '../constants.jsx';
 import { DropTarget } from 'react-dnd';
 import { ShareLink } from './master_slot.jsx';
@@ -77,7 +78,6 @@ class Calendar extends React.Component {
     }
 
     render() {
-        
         let calendarHeader = DAYS_SEVEN.map((d, index) =>  (
             <th className="fc-day-header fc-widget-header fc-fri" key={d}>
                 {DAY_ABBR[index]} {this.state.activeWeek.getDate() + index}
