@@ -331,6 +331,8 @@ export const REACTION_MAP = {
 
 export const DAYS = ['M', 'T', 'W', 'R', 'F']
 export const DAYS_SEVEN = ['N', 'M', 'T', 'W', 'R', 'F', 'S']
+export const DAY_ABBR = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat']
+export const MONTHS = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December']
 
 export const DRAGTYPES = {
   DRAG: 'drag', // drag a custom slot to a new location
