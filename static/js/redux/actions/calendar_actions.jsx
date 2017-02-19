@@ -30,7 +30,6 @@ export function getSunday(date) {
 export function isActiveDateFromSunday(sunday, number) {
 	let checking = (new Date(sunday.getTime() + (number * 24 * 60 * 60 * 1000))).setHours(0,0,0,0)
 	let today = (new Date(Date.now())).setHours(0,0,0,0)
-	console.log(checking, today)
 	return (checking === today)
 }
 
