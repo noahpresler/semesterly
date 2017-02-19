@@ -3,7 +3,7 @@ import { fetchCourseInfo } from '../../actions/modal_actions.jsx'
 import { addOrRemoveCourse, addOrRemoveOptionalCourse } from '../../actions/timetable_actions.jsx'
 import { getSchoolSpecificInfo } from '../../constants.jsx';
 import { removeCustomSlot, updateCustomSlot, addCustomSlot } from '../../actions/timetable_actions.jsx';
-import SlotManager from '../slot_manager.jsx';
+import SlotManagerWeekly from '../slot_manager_weekly.jsx';
 
 const mapStateToProps = (state,ownProps) => {
 	let activeTimetable = state.timetables.items[state.timetables.active];
@@ -51,6 +51,6 @@ const mapDispatchToProps = (dispatch) => {
 const SlotManagerContainer = connect(
 	mapStateToProps,
 	mapDispatchToProps
-)(SlotManager);
+)(SlotManagerWeekly);
 
 export default SlotManagerContainer;
