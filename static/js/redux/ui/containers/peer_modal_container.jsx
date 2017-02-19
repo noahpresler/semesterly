@@ -10,6 +10,7 @@ const mapStateToProps = (state) => {
 		peers: state.friends.peers,
 		userInfo: state.userInfo.data,
 		isVisible: state.peerModal.isVisible,
+		hasRecievedSchedule: state.peerModal.isLoaded
 	}
 }
 
