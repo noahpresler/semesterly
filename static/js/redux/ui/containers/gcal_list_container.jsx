@@ -9,6 +9,10 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
 	return {
+		toggleCalendar: (id) => dispatch({
+			type: "TOGGLE_CALENDAR_VISIBILITY",
+			id: id
+		})
 	}
 }
 
