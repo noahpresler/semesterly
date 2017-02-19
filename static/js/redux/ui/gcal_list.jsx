@@ -10,8 +10,8 @@ class GCalList extends React.Component {
                 {
                 	this.props.calendars.map(c => 
                 		(
-                			<div className="calendar-li">
-                				<div className="check"/>
+                			<div key={c.id} className="calendar-li">
+                				<div className="check" style={{backgroundColor: c.color}}/>
                 				<h4>{c.name}</h4>
                 			</div>
                 		)

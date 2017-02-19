@@ -64,7 +64,7 @@ def get_calendar_list(student):
     service = discovery.build('calendar', 'v3', http=http)
     cal_list = service.calendarList().list(pageToken=None).execute()
     make_unmade_calendars(cal_list, student)
-    return json.dumps(map(lambda cal: {'name': cal['summary'], 'id': cal['id']}, cal_list['items']))
+    return json.dumps(map(lambda cal: {'name': cal['summary'], 'id': cal['id'], 'color': cal['backgroundColor']}, cal_list['items']))
   else:
     return []
 
