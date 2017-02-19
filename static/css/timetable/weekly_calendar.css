@@ -1,0 +1,7 @@
+#calendar.seven-days h2 {
+	font-size: 20px;
+	font-weight: 700;
+}
+#calendar.seven-days h2 span {
+	margin-left: 5px;
+}

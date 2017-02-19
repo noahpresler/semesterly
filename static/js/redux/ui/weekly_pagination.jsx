@@ -6,7 +6,7 @@ const Bubble = ({index, active, setActive}) =>
         <span>{index + 1}</span>
     </li>;
 
-export class Pagination extends React.Component {
+export class WeeklyPagination extends React.Component {
     constructor(props) {
         super(props);
         this.state = {numBubbles: this.getNumBubbles()};
