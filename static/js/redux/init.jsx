@@ -35,21 +35,22 @@ function setup(dispatch) {
     type: "SET_SEMESTER",
     semester: currentSemester, // currentSemester comes from timetable.html (rendered by the server). if the user is loading a share course link, we need to set the appropriate semester, so we can't default it to any particular value
   });
-  sharedTimetable = JSON.parse(sharedTimetable);
-  sharedCourse = JSON.parse(sharedCourse);
-  findFriends = findFriends === "True";
-  enableNotifs = enableNotifs === "True";
+
   uses12HrTime = uses12HrTime === "True";
-  studentIntegrations = JSON.parse(studentIntegrations);
-  signup = signup === "True";
-  gcalCallback = gcalCallback === "True";
-  exportCalendar = exportCalendar === "True";
-  viewTextbooks = viewTextbooks === "True";
-  try {
-    calendarList = calendarList ? JSON.parse(calendarList) : null;
-  } catch(err) {
-    let calendarList = null;
+  if (isPoll) {
+    let sharedTimetable, sharedCourse, findFriends, enableNotifs, studentIntegrations, signup, gcalCallback, exportCalendar, viewTextbooks, calendarList = false;
+  } else {
+    sharedTimetable = JSON.parse(sharedTimetable);
+    sharedCourse = JSON.parse(sharedCourse);
+    findFriends = findFriends === "True";
+    enableNotifs = enableNotifs === "True";
+    studentIntegrations = JSON.parse(studentIntegrations);
+    signup = signup === "True";
+    gcalCallback = gcalCallback === "True";
+    exportCalendar = exportCalendar === "True";
+    viewTextbooks = viewTextbooks === "True";
   }
+
   if (signup) {
     dispatch({type: 'TRIGGER_SIGNUP_MODAL'});
   }

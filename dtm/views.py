@@ -11,12 +11,13 @@ from dtm.models import *
 from student.models import Student
 from student.views import get_student, get_user_dict, convert_tt_to_dict, get_classmates_from_course_id
 from django.db.models import Count
+from django.forms.models import model_to_dict
 
 hashids = Hashids(salt="***REMOVED***")
 
 # Create your views here.
 @validate_subdomain
-def view_dtm_root(request, code=None, sem=None, shared_timetable=None, find_friends=False, enable_notifs=False,signup=False,gcal_callback=False, export_calendar=False, view_textbooks=False):
+def view_dtm_root(request, code=None, sem=None, share_availability=None):
   school = request.subdomain
   student = get_student(request)
 
@@ -31,16 +32,9 @@ def view_dtm_root(request, code=None, sem=None, shared_timetable=None, find_frie
     'student': json.dumps(get_user_dict(school, student, sem)),
     'course': json.dumps(None),
     'semester': sem,
-    'shared_timetable': json.dumps(shared_timetable),
-    'find_friends': find_friends,
-    'enable_notifs': enable_notifs,
     'uses_12hr_time': school in AM_PM_SCHOOLS,
-    'student_integrations': json.dumps(None),
-    'signup': signup,
-    'gcal_callback': gcal_callback,
-    'export_calendar': export_calendar,
-    'view_textbooks': view_textbooks,
     'calendar_list': get_calendar_list(student),
+    'share_availability': share_availability,
     'is_poll': True
   },
   context_instance=RequestContext(request))
@@ -117,3 +111,18 @@ def create_availability_share(cal_ids, student, week_offset):
   share.save()
   return hashids.encrypt(share.id)
 
+def convert_share_to_dict(share):
+  share_dict = model_to_dict(share,exclude=['id','student'])
+  share_dict['google_calendars'] = map(lambda gc: model_to_dict(gc,exclude=['id','student']), share.google_calendars.all())
+  return share_dict
+
+'''
+View shared availability
+'''
+@validate_subdomain
+def share_availability(request, ref):
+  try:
+    share = AvailabilityShare.objects.get(id=hashids.decrypt(ref)[0])
+    return view_dtm_root(request,share_availability=convert_share_to_dict(share))
+  except Exception as e:
+    raise Http404
