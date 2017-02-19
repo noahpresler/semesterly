@@ -4,6 +4,7 @@ import ReactTooltip from 'react-tooltip';
 import SlotManagerWeeklyContainer from './containers/slot_manager_weekly_container.jsx';
 import CellContainer from './containers/cell_container.jsx'
 import WeeklyPaginationContainer from './containers/weekly_pagination_container.jsx'
+import { getSunday } from '../actions/calendar_actions.jsx';
 import { DAYS_SEVEN, DRAGTYPES, DAY_ABBR, MONTHS } from '../constants.jsx';
 import { DropTarget } from 'react-dnd';
 import { ShareLink } from './master_slot.jsx';
@@ -31,7 +32,7 @@ const Row = (props) => {
 class Calendar extends React.Component {
     constructor(props) {
         super(props);
-        this.state = {shareLinkShown: false, activeWeek: this.getSunday(Date.now())};
+        this.state = {shareLinkShown: false};
         this.fetchShareTimetableLink = this.fetchShareTimetableLink.bind(this);
         this.hideShareLink = this.hideShareLink.bind(this);
         this.getTimelineStyle = this.getTimelineStyle.bind(this);
@@ -40,9 +41,6 @@ class Calendar extends React.Component {
         if (this.props.isFetchingShareLink && !nextProps.isFetchingShareLink) {
             this.setState({shareLinkShown: true});
         }
-    }
-    getSunday(d) {
-        return new Date((d - (new Date(d)).getDay() * 24 * 60 * 60 * 1000))
     }
     getTimelineStyle() { 
         if ((new Date()).getHours() > this.props.endHour || (new Date()).getHours() < 8) {
@@ -80,13 +78,13 @@ class Calendar extends React.Component {
     render() {
         let calendarHeader = DAYS_SEVEN.map((d, index) =>  (
             <th className="fc-day-header fc-widget-header fc-fri" key={d}>
-                {DAY_ABBR[index]} {this.state.activeWeek.getDate() + index}
+                {DAY_ABBR[index]} {this.props.activeWeek.getDate() + index}
             </th>))
         return (
           <div id="calendar" className="fc fc-ltr fc-unthemed week-calendar seven-days">
             <div className="fc-toolbar no-print">
               <div className="fc-left">
-                <h2>{ MONTHS[this.state.activeWeek.getMonth()] } <span>{this.state.activeWeek.getFullYear()}</span></h2>
+                <h2>{ MONTHS[this.props.activeWeek.getMonth()] } <span>{this.props.activeWeek.getFullYear()}</span></h2>
               </div>
               <div className="fc-right">
                 <WeeklyPaginationContainer />

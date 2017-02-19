@@ -25,6 +25,7 @@ import { saveCalendarModal } from './save_calendar_modal_reducer.jsx'
 import { userAcquisitionModal } from './user_acquisition_modal_reducer.jsx'
 import { textbookModal } from './textbook_modal_reducer.jsx'
 import { dtmCalendars } from './dtm_calendar_reducer.jsx'
+import { weeklyCalendar } from './weekly_calendar_reducer.jsx'
 
 export const rootReducer = combineReducers({
   school,
@@ -52,5 +53,6 @@ export const rootReducer = combineReducers({
   saveCalendarModal,
   userAcquisitionModal,
   textbookModal,
-  dtmCalendars
+  dtmCalendars,
+  weeklyCalendar
 });

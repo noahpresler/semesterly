@@ -23,6 +23,10 @@ function getNextDayOfWeek(date, dayOfWeek) {
     return resultDate;
 }
 
+export function getSunday(date) {
+    return new Date((date - (new Date(date)).getDay() * 24 * 60 * 60 * 1000))
+}
+
 function receiveShareLink(dispatch, shareLink) {
 	dispatch({
 		type: "RECEIVE_SHARE_TIMETABLE_LINK",
