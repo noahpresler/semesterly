@@ -126,3 +126,24 @@ def share_availability(request, ref):
     return view_dtm_root(request,share_availability=convert_share_to_dict(share))
   except Exception as e:
     raise Http404
+
+'''
+Returns the free busy availability from Google api
+Rquires a JSON body POSTED to url: /dtm/availability
+Must have 
+  {
+    cal_ids: [..list of calendar ids that are visible...],
+    week_offset: int, how many weeks forward we are looking
+  }
+'''
+@validate_subdomain
+@require_login
+@csrf_exempt
+def get_availability(request):
+  student = get_student(request)
+  cal_ids = json.loads(request.body)['cal_ids']
+  week_offset = json.loads(request.body)['week_offset']
+  response = get_free_busy_from_cals(cal_ids,student,week_offset)
+  return HttpResponse(json.dumps(response), content_type='application/json')
+
+  

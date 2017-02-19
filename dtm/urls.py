@@ -7,4 +7,5 @@ urlpatterns = patterns('',
     #polls, down to meet, meeting maker
     url(r'$', 'dtm.views.view_dtm_root'),
 	url(r'share/(?P<ref>.+)/*$', 'dtm.views.share_availability'),
+	url(r'/availability*$', 'dtm.views.get_availability'),
 )
