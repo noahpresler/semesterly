@@ -56,6 +56,8 @@ def associate_students(strategy, details, response, user, *args, **kwargs):
     return kwargs
 
 def next_weekday(d, weekday):
+    if DAY_LIST.index(weekday) - d.weekday() == 0:
+        return d
     d = d - datetime.timedelta(days=1)
     days_ahead = DAY_LIST.index(weekday) - d.weekday()
     if days_ahead <= 0: # Target day already happened this week

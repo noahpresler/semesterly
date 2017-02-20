@@ -3,7 +3,7 @@ import { renderCourseModal } from './course_modal.jsx';
 import Slot from './slot.jsx'
 import CustomSlot from './custom_slot.jsx'
 import { index as IntervalTree, matches01 as getIntersections } from 'static-interval-tree'
-import { HALF_HOUR_HEIGHT, COLOUR_DATA } from '../constants.jsx';
+import { DAYS_SEVEN, HALF_HOUR_HEIGHT, COLOUR_DATA } from '../constants.jsx';
 
 class SlotManagerWeekly extends React.Component {
 
@@ -15,23 +15,30 @@ class SlotManagerWeekly extends React.Component {
                 let locked = this.props.isLocked(courseId, slot.meeting_section);
                 let isOptional = this.props.isCourseOptional(courseId);
                 let optionalCourse = isOptional ? this.props.getOptionalCourseById(courseId) : null;
-                return slot.custom ?
-                <CustomSlot {...slot}
-                    key={ i.toString() + j.toString() + " custom" }
-                    removeCustomSlot={ () => this.props.removeCustomSlot(slot.id) }
-                    updateCustomSlot={ this.props.updateCustomSlot } 
-                    addCustomSlot={ this.props.addCustomSlot } />
-                :
-                <Slot {...slot}
-                    fetchCourseInfo={ () => this.props.fetchCourseInfo(courseId) }
-                    key={ slot.fake ? -slot.id : slot.id + i.toString() + j.toString()}
-                    locked={ locked }
-                    classmates={this.props.socialSections ? this.props.classmates(courseId, slot.meeting_section) : []}
-                    lockOrUnlockSection={ () => this.props.addOrRemoveCourse(courseId, slot.meeting_section) }
-                    removeCourse={ () =>  !isOptional ? (this.props.addOrRemoveCourse(courseId)) : (this.props.addOrRemoveOptionalCourse(optionalCourse)) }
-                    primaryDisplayAttribute={this.props.primaryDisplayAttribute}
-                    updateCustomSlot={ this.props.updateCustomSlot } 
-                    addCustomSlot={ this.props.addCustomSlot } />
+                if (slot.custom) {
+                    return <CustomSlot {...slot}
+                            key={ i.toString() + j.toString() + " custom" }
+                            removeCustomSlot={ () => this.props.removeCustomSlot(slot.id) }
+                            updateCustomSlot={ this.props.updateCustomSlot } 
+                            addCustomSlot={ this.props.addCustomSlot } />;
+                } else if (slot.busy) {
+                    return <CustomSlot {...slot}
+                        key={ i.toString() + j.toString() + " custom" }
+                        removeCustomSlot={ () => this.props.removeCustomSlot(slot.id) }
+                        updateCustomSlot={ this.props.updateCustomSlot } 
+                        addCustomSlot={ this.props.addCustomSlot } />;
+                } else {
+                    return <Slot {...slot}
+                            fetchCourseInfo={ () => this.props.fetchCourseInfo(courseId) }
+                            key={ slot.fake ? -slot.id : slot.id + i.toString() + j.toString()}
+                            locked={ locked }
+                            classmates={this.props.socialSections ? this.props.classmates(courseId, slot.meeting_section) : []}
+                            lockOrUnlockSection={ () => this.props.addOrRemoveCourse(courseId, slot.meeting_section) }
+                            removeCourse={ () =>  !isOptional ? (this.props.addOrRemoveCourse(courseId)) : (this.props.addOrRemoveOptionalCourse(optionalCourse)) }
+                            primaryDisplayAttribute={this.props.primaryDisplayAttribute}
+                            updateCustomSlot={ this.props.updateCustomSlot } 
+                            addCustomSlot={ this.props.addCustomSlot } />
+                }
             });
             return (
                     <td key={day}>
@@ -57,7 +64,7 @@ class SlotManagerWeekly extends React.Component {
     getSlotsByDay() {
         // Sunday is N, Thursday is R, Saturday is S
     	let slots_by_day = {
-            'N': [], 'M': [], 'T': [], 'W': [], 'R': [], 'F': [], 'S': []
+            'U': [], 'M': [], 'T': [], 'W': [], 'R': [], 'F': [], 'S': []
         };
         let courses = this.props.timetable.courses;
 
@@ -86,6 +93,22 @@ class SlotManagerWeekly extends React.Component {
             custom_slot['custom'] = true;
             custom_slot['key'] = custom_slot.id;
             slots_by_day[custom_slot.day].push(custom_slot)
+        }
+        for (let cal in this.props.busyRanges.calendars) {
+            console.log(cal)
+            for (let i in this.props.busyRanges.calendars[cal].busy){
+                let busy_slot = this.props.busyRanges.calendars[cal].busy[i];
+                busy_slot['key'] = cal + i;
+                busy_slot['busy'] = true;
+                let start = new Date(busy_slot.start)
+                let end = new Date(busy_slot.end)
+                busy_slot['time_start'] = start.getHours() + ":" + start.getMinutes();
+                busy_slot['time_end'] = end.getHours() + ":" + end.getMinutes();
+                busy_slot['name'] = "Busy";
+                busy_slot['id'] = parseInt(i);
+                let day = new Date(busy_slot.start).getDay();
+                slots_by_day[DAYS_SEVEN[day]].push(busy_slot);
+            }
         }
         return this.getConflictStyles(slots_by_day)
     }
