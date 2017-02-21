@@ -1,5 +1,6 @@
 import { connect } from 'react-redux';
 import GCalList from '../gcal_list.jsx';
+import { fetchAvailability } from '../../actions/dtm_actions.jsx'
 
 const mapStateToProps = (state) => {
 	return {
@@ -9,10 +10,13 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
 	return {
-		toggleCalendar: (id) => dispatch({
-			type: "TOGGLE_CALENDAR_VISIBILITY",
-			id: id
-		})
+		toggleCalendar: (id) => {
+			dispatch({
+				type: "TOGGLE_CALENDAR_VISIBILITY",
+				id: id
+			});
+			dispatch(fetchAvailability());
+		}
 	}
 }
 
