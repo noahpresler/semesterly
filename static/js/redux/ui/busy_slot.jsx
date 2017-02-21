@@ -151,17 +151,17 @@ class BusySlot extends React.Component {
                             <span>{ converted_start } – { converted_end }</span>
                         </div>
                         <div className="fc-time">
-                            <input type="text" 
-                                    name="eventName" 
-                                    style={ {
-                                        backgroundColor: this.props.color,
-                                        borderStyle: 'none',
-                                        outlineColor: '#aaa',
-                                        outlineWidth: '2px',
-                                        width: '95%'
-                                    } } 
-                                    value={ this.props.name } 
-                                    onChange={ (event) => this.updateName(event) }/>
+                            {/*<input type="text" 
+                                name="eventName" 
+                                style={ {
+                                    backgroundColor: 'transparent',
+                                    borderStyle: 'none',
+                                    outlineColor: '#aaa',
+                                    outlineWidth: '2px',
+                                    width: '95%'
+                                } } 
+                                value={ this.props.name } 
+                                onChange={ (event) => this.updateName(event) }/>*/}
                         </div>
                     </div>
                 </div>
@@ -181,8 +181,8 @@ class BusySlot extends React.Component {
         if (this.props.preview) { // don't take into account conflicts, reduce opacity, increase z-index
             return {
                 top: top, bottom: -bottom, zIndex: 10, left: '0%', right: '0%', 
-                backgroundColor: this.props.color,
-                color: "#222",
+                backgroundColor: '#ccc',
+                color: "#fff",
                 width: '100%',
                 left: 0,
                 opacity: 0.5
@@ -199,7 +199,7 @@ class BusySlot extends React.Component {
             }
             return {
                 top: top, bottom: -bottom, zIndex: 1, left: '0%', right: '0%', 
-                backgroundColor: this.props.color,
+                backgroundColor: '#ccc',
                 width: slot_width_percentage + "%",
                 left: push_left + "%",
                 zIndex: 10 * this.props.depth_level,
