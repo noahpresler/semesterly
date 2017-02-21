@@ -98,7 +98,9 @@ class Section(models.Model):
   waitlist_size = models.IntegerField(default=-1)
   section_type = models.CharField(max_length=50, default='L')
   instructors = models.CharField(max_length=500, default='TBA')
-  semester = models.CharField(max_length=2)
+  semester = models.CharField(max_length=2) # will evenutally be replaced by sem_name
+  sem_name = models.CharField(max_length=50)
+  year = models.CharField(max_length=4)
   textbooks = models.ManyToManyField(Textbook, through='TextbookLink')
 
   def get_textbooks(self):
