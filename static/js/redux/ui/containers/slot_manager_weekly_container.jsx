@@ -28,6 +28,7 @@ const mapStateToProps = (state,ownProps) => {
 		courseToColourIndex: state.ui.courseToColourIndex,
 		custom: state.customSlots,
 		busyRanges: state.dtmCalendars.availability,
+		visibleCalendars: state.dtmCalendars.calendars.filter(c => c.visible).map(c => c.id),
 		isCourseOptional: (cid) => state.optionalCourses.courses.findIndex(c => c.id === cid) > -1,
 		getOptionalCourseById: (cid) => state.optionalCourses.courses.find(c => c.id === cid),
 		classmates: (id,sec) => {

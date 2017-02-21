@@ -15,7 +15,6 @@ const mapDispatchToProps = (dispatch) => {
 				type: "TOGGLE_CALENDAR_VISIBILITY",
 				id: id
 			});
-			dispatch(fetchAvailability());
 		}
 	}
 }
