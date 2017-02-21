@@ -28,15 +28,16 @@ for section in sections:
                 # Only applies for the student's last modified schedule.
                 continue
             # NOTIFIY STUDENT
-            d[student] = section
+            if student not in d:
+                d[student] = []
+            d[student].append(section)
 
     elif section.was_full and section.enrolment < section.size:
         section.was_full = False
         section.save()
 
-for student, section in d.items():
-    print ("Sending email to: " + str(student.user.username))
-    client.send_mail(student, "Course Waitlist Notification from Semester.ly", "email_waitlist.html", {'section': section})
+for student, sections in d.items():
+    client.send_mail(student, "Course Waitlist Notification from Semester.ly", "email_waitlist.html", {'sections': sections})
 
 
 client.cleanup()

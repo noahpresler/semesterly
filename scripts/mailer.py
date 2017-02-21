@@ -48,7 +48,7 @@ class Mailer():
         msg['subject'] = subject
         msg['From'] = self.sender
         msg['To'] = recipient
-        print "Sending to: " + str(recipient)
+        print ("Sending to: " + str(recipient))
 
         try:
             # Perform operations via server
