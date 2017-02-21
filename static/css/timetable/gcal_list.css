@@ -26,10 +26,15 @@
 	height: 15px;
 	margin-top: 10px;
 }
+.calendar-li:first-child {
+	margin-top: 5px;
+}
 
 #gcal-list {
 	max-height: 250px;
 	overflow: auto;
 	padding: 5px;
 	border: 1px solid #DDDDDD;
+	border-left: none;
+	border-right: none;
 }
