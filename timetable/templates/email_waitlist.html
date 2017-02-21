@@ -89,7 +89,7 @@
 	</style>
 </head>
 <body bgcolor="#ececec" style="background-color:#ececec;">
-	<div style="display: none; font-size: 0; line-height: 0; max-height: 0; max-width: 0; width: 0; opacity: 0; overflow: hidden;">Semester.ly has found all the textbooks on Amazon you need for the courses you signed up for!</div>
+	<div style="display: none; font-size: 0; line-height: 0; max-height: 0; max-width: 0; width: 0; opacity: 0; overflow: hidden;">Spring 2017 course have been released! Launch Semester.ly to find your schedule today. </div>
 	<div style="background-color:#ececec;">
 		<center>
 			<table width="600" class="table-600" border="0" align="center" cellpadding="0" cellspacing="0" bgcolor="#ececec">
@@ -103,25 +103,46 @@
 		<tr>
 			<td align="center" valign="top" bgcolor="#ffffff" style="padding: 0; margin: 0;font-family: Helvetica, Arial, sans-serif; font-size: 20px; font-weight: 500; color: #00adee;">
 				<div class="mbl" style="display:none; width:0px; height: 0px;max-height: 0; width: 0;">
-					<img src="http://maxwellyeo.com/img/email-textbooks.jpg" border="0" class="mbl" style="display:none; width:0px; height:0px; " alt="Semester.ly Textbooks"/>
+					<img src="http://i.imgur.com/kImvm4q.jpg" border="0" class="mbl" style="display:none; width:0px; height:0px; " alt="Semester.ly Textbooks"/>
 				</div>
-				<img src="http://maxwellyeo.com/img/email-textbooks.jpg" width="600" height="auto" style="display: block;" border="0" class="no-mbl" alt="Semester.ly Textbooks"/>
+				<img src="http://i.imgur.com/kImvm4q.jpg" width="600" height="auto" style="display: block;" border="0" class="no-mbl" alt="Semester.ly Textbooks"/>
 			</td>
 		</tr>
 		<tr>
-			<td class="mbl_text_style_2" valign="top" align="center" style="font-family:Avenir, 'Helvetica Neue', Helvetica, Arial, sans-serif; text-align:center; color:#6a6a6a; font-size:16px; line-height:30px; font-weight:700; padding-left:20px; padding-right:20px; padding-top:20px; padding-bottom:0px;">Hi {{ user.user.first_name }}! We found your textbooks on Amazon!</td>
+			<td class="mbl_text_style_2" valign="top" align="center" style="font-family:Avenir, 'Helvetica Neue', Helvetica, Arial, sans-serif; text-align:center; color:#6a6a6a; font-size:16px; line-height:30px; font-weight:700; padding-left:20px; padding-right:20px; padding-top:20px; padding-bottom:0px;">
+				Hi {{ user.user.first_name }},
+			</td>
 		</tr>
 	</table>
 	<!-- END OF HEADER-->
 
-	<!-- START OF SECTIONS-->
 	<table class="table-600" width="600" border="0" cellspacing="0" cellpadding="0" bgcolor="#FFFFFF" align="center" style="background:#ffffff; text-align:center;">
-	<tr>
-		<td class="horiz-row" style="padding-left:50px; padding-right:50px; padding-top:10px; padding-bottom:10px; text-align:left;">
-			{{ section.course.name}}
-		</td>
-	</tr>
-	<!-- END OF SECTIONS-->
+	{% for section in sections %}
+		<tr>
+			<td class="horiz-row" style="padding-left:50px; padding-right:50px; padding-top:10px; padding-bottom:10px; text-align:left;">
+				<table class="textbook_info_wrapper" border="0" cellspacing="0" cellpadding="0" style="width:100%; height:140px; margin: 0;border-collapse:collapse; mso-table-lspace:0pt; mso-table-rspace:0pt;">
+							<tr><td align="left" class="textbook_info" style="padding-left:0px; padding-top:10px; padding-bottom:0px; font-family:Avenir, 'Helvetica Neue', Helvetica, Arial, sans-serif; text-align:center;">
+									<span style="display:block; color:#6a6a6a; font-size:14px; line-height:18px; font-weight:200; margin-top: 0px; margin-bottom: 20px;">
+										{{ section.course.name }} {{ section.meeting_section }}
+
+									</span>
+							</td></tr>
+						</table>
+			</td>
+		</tr>
+	{% endfor %}
+		<tr>
+			<td class="horiz-row" style="padding-left:50px; padding-right:50px; padding-top:10px; padding-bottom:10px; text-align:left;">
+				<table class="textbook_info_wrapper" border="0" cellspacing="0" cellpadding="0" style="width:100%; height:140px; margin: 0;border-collapse:collapse; mso-table-lspace:0pt; mso-table-rspace:0pt;">
+							<tr><td align="left" class="textbook_info" style="padding-left:0px; padding-top:10px; padding-bottom:0px; font-family:Avenir, 'Helvetica Neue', Helvetica, Arial, sans-serif; text-align:center;">
+									<a href="https://jhu.semester.ly/" style="background-color:#36debb; padding: 7px 15px; border-radius: 5px; margin-top:25px; text-decoration: none;">
+										<span style="display:inline-block; vertical-align:middle; color:#fff; font-weight:700; font-size:14px; line-height: 20px; text-decoration: none;">Launch Semester.ly</span>
+									</a>
+							</td></tr>
+				</table>
+			</td>
+		</tr>
+	</table>
 
 	<!-- START OF FOOTER AREA BLOCK-->
 	<table class="table-600" width="600" border="0" align="center" cellpadding="0" cellspacing="0" bgcolor="#ffffff" style="padding:0; margin:0;">
