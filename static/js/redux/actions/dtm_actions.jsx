@@ -21,7 +21,7 @@ export function getCookie(name) {
 export function fetchAvailability() {
 	return (dispatch) => {
 		let state = store.getState();
-		let ids = state.dtmCalendars.calendars.filter(c => c.visible).map(c => c.name);
+		let ids = state.dtmCalendars.calendars.filter(c => c.visible).map(c => c.id);
 		fetch(getAvailabilityEndpoint(), {
 			method: 'POST',
 			headers: {
@@ -42,3 +42,11 @@ export function fetchAvailability() {
 		})
 	}
 }	
+
+export function getCalendarColorFromId(cid) {
+	return (dispatch) => {
+		let state = store.getState();
+		let cal = state.dtmCalendars.calendars.find(c => c.id == cid);
+		return cal.color;
+	}
+}

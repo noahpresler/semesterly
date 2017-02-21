@@ -2,6 +2,7 @@ import React from 'react';
 import { renderCourseModal } from './course_modal.jsx';
 import Slot from './slot.jsx'
 import CustomSlot from './custom_slot.jsx'
+import BusySlot from './busy_slot.jsx'
 import { index as IntervalTree, matches01 as getIntersections } from 'static-interval-tree'
 import { DAYS_SEVEN, HALF_HOUR_HEIGHT, COLOUR_DATA } from '../constants.jsx';
 
@@ -22,8 +23,9 @@ class SlotManagerWeekly extends React.Component {
                             updateCustomSlot={ this.props.updateCustomSlot } 
                             addCustomSlot={ this.props.addCustomSlot } />;
                 } else if (slot.busy) {
-                    return <CustomSlot {...slot}
+                    return <BusySlot {...slot}
                         key={ i.toString() + j.toString() + " custom" }
+                        color={ slot.color }
                         removeCustomSlot={ () => this.props.removeCustomSlot(slot.id) }
                         updateCustomSlot={ this.props.updateCustomSlot } 
                         addCustomSlot={ this.props.addCustomSlot } />;
@@ -95,7 +97,6 @@ class SlotManagerWeekly extends React.Component {
             slots_by_day[custom_slot.day].push(custom_slot)
         }
         for (let cal in this.props.busyRanges.calendars) {
-            console.log(cal)
             for (let i in this.props.busyRanges.calendars[cal].busy){
                 let busy_slot = this.props.busyRanges.calendars[cal].busy[i];
                 busy_slot['key'] = cal + i;
@@ -104,8 +105,13 @@ class SlotManagerWeekly extends React.Component {
                 let end = new Date(busy_slot.end)
                 busy_slot['time_start'] = start.getHours() + ":" + start.getMinutes();
                 busy_slot['time_end'] = end.getHours() + ":" + end.getMinutes();
-                busy_slot['name'] = "Busy";
+                if (start.toDateString() !== end.toDateString()) {
+                    //TOOD(noah) - handle multi day events
+                    busy_slot['time_end'] = "24:00"
+                }
+                busy_slot['name'] = "";
                 busy_slot['id'] = parseInt(i);
+                busy_slot['color'] = this.props.getCalColorFromId(cal);
                 let day = new Date(busy_slot.start).getDay();
                 slots_by_day[DAYS_SEVEN[day]].push(busy_slot);
             }

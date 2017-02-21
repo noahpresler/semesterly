@@ -4,6 +4,7 @@ import { addOrRemoveCourse, addOrRemoveOptionalCourse } from '../../actions/time
 import { getSchoolSpecificInfo } from '../../constants.jsx';
 import { removeCustomSlot, updateCustomSlot, addCustomSlot } from '../../actions/timetable_actions.jsx';
 import SlotManagerWeekly from '../slot_manager_weekly.jsx';
+import { getCalendarColorFromId } from '../../actions/dtm_actions.jsx'
 
 const mapStateToProps = (state,ownProps) => {
 	let activeTimetable = state.timetables.items[state.timetables.active];
@@ -42,6 +43,7 @@ const mapDispatchToProps = (dispatch) => {
 	return {
 		fetchCourseInfo: (courseId) => dispatch(fetchCourseInfo(courseId)),
 		addOrRemoveOptionalCourse: (course) => dispatch(addOrRemoveOptionalCourse(course)),
+		getCalColorFromId: (cid) => dispatch(getCalendarColorFromId(cid)),
 		addOrRemoveCourse: addOrRemoveCourse,
     	removeCustomSlot: removeCustomSlot,
     	updateCustomSlot: updateCustomSlot,
