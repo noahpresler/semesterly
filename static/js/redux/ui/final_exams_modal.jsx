@@ -4,6 +4,16 @@ import Modal from 'boron/WaveModal';
 import classNames from 'classnames';
 
 export class FinalExamsModal extends React.Component {
+    constructor(props) {
+        super(props);
+        this.hide = this.hide.bind(this);
+    }
+    hide() {
+        this.refs.modal.hide();
+        if (this.props.isVisible) {
+            this.props.toggleFinalExamsModal();
+        }
+    }
     componentDidMount() {
         if (this.props.isVisible) {
             this.props.fetchFinalExamSchedule()
@@ -95,9 +105,7 @@ export class FinalExamsModal extends React.Component {
             <Modal ref="modal"
                 className="final-exam-modal max-modal"
                 modalStyle={modalStyle}
-                onHide={() => {
-                    this.props.toggleFinalExamsModal();
-                }}
+                onHide={this.hide}
                 >
                 {modalHeader}
 
