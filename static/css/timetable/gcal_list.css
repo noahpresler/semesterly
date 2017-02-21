@@ -1,5 +1,6 @@
 .calendar-li h4 {
 	font-size: 15px;
+	line-height: 25px;
 	margin: 0px;
 	float: left;
 	text-overflow: ellipsis;
@@ -15,6 +16,7 @@
 	width: 15px;
 	float:left;
 	margin-right: 5px;
+	margin-top: 5px;
     border-style: solid;
     border-width: 1.5px;
     border-radius: 10px;
@@ -23,11 +25,7 @@
 .calendar-li {
 	position: relative;
 	clear: both;
-	height: 15px;
-	margin-top: 10px;
-}
-.calendar-li:first-child {
-	margin-top: 5px;
+	height: 25px;
 }
 
 #gcal-list {
