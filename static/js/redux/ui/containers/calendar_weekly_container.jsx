@@ -36,7 +36,7 @@ const getMaxEndHour = (timetable, hasCourses) => {
     //     maxEndHour = Math.max(maxEndHour, end_hour);
     //   }
     // }
-    return Math.max(maxEndHour, 24);
+    return Math.max(maxEndHour, 23);
 }
 const mapStateToProps = (state) => {
 	let timetables = state.timetables.items;

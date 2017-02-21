@@ -18,7 +18,7 @@ export function getCookie(name) {
     return cookieValue;
 }
 
-export function fetchAvailability() {
+export function fetchAvailability(weekOffset) {
 	return (dispatch) => {
 		let state = store.getState();
 		let ids = state.dtmCalendars.calendars.filter(c => c.visible).map(c => c.id);
@@ -29,7 +29,7 @@ export function fetchAvailability() {
 			},
 			body: JSON.stringify({
 				cal_ids: ids,
-				week_offset: 0
+				week_offset: (weekOffset) ? weekOffset : 0
 			}),
 			credentials: 'same-origin',
 		})
