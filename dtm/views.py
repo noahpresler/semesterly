@@ -87,7 +87,7 @@ def get_free_busy_from_cals(cal_ids, student, week_offset=0):
   end = tz.localize(next_weekday(datetime.datetime.today(), 'S')) + datetime.timedelta(weeks=week_offset)
   body = {
     "timeMin": start.isoformat(),
-    "timeMax": end.isoformat(),
+    "timeMax": end.replace(hour=23, minute=59).isoformat(),
     "timeZone": 'US/Central',
     "items": map(lambda cid: {"id": cid}, cal_ids)
   }
