@@ -22,7 +22,7 @@ const getMaxHourBasedOnWindowHeight = () => {
 gets the end hour of the current timetable, based on the class that ends latest
 */
 const getMaxEndHour = (timetable, hasCourses) => {
-    // let maxEndHour = 17;
+    let maxEndHour = 17;
     // if (!hasCourses) {
     //   return maxEndHour;
     // }
