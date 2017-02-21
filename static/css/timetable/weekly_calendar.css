@@ -1,6 +1,14 @@
 #calendar.seven-days .fc-toolbar {
 	margin-top: 10px;
 }
+#calendar.seven-days .current-week-number {
+	font-size: 14px;
+	color: #aaa;
+	margin-right: 2px;
+}
+#calendar.seven-days .current-week-number.active {
+	color: #fd7473;
+}
 #calendar.seven-days h2 {
 	font-size: 20px;
 	font-weight: 400;

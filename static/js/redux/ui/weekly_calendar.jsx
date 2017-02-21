@@ -29,7 +29,7 @@ const Row = (props) => {
     )
 }
 
-class Calendar extends React.Component {
+class WeeklyCalendar extends React.Component {
     constructor(props) {
         super(props);
         this.state = {shareLinkShown: false};
@@ -77,6 +77,7 @@ class Calendar extends React.Component {
             <th className="fc-day-header fc-widget-header fc-fri" key={d}>
                 {DAY_ABBR[index]}<span className={(isActiveDateFromSunday(this.props.activeWeek, index) ? 'active' : '')}>{this.props.activeWeek.getDate() + index}</span>
             </th>))
+        let currentWeekNumber = <span className='current-week-number'>W{ this.props.activeWeek.getWeekNumber() }</span>
         return (
           <div id="calendar" className="fc fc-ltr fc-unthemed week-calendar seven-days">
             <div className="fc-toolbar no-print">
@@ -99,7 +100,7 @@ class Calendar extends React.Component {
                           <table>
                             <thead>
                               <tr>
-                                <th className="fc-axis fc-widget-header" style={{width: 49}} />
+                                <th className="fc-axis fc-widget-header" style={{width: 49}}>{ currentWeekNumber }</th>
                                 { calendarHeader }
                               </tr>
                             </thead>
@@ -164,4 +165,4 @@ class Calendar extends React.Component {
 
 }
 
-export default Calendar;
+export default WeeklyCalendar;

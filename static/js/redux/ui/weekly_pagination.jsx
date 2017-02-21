@@ -32,7 +32,6 @@ export class WeeklyPagination extends React.Component {
     render() {
         let options = [], count = this.props.count, current = this.props.active;
 
-        if (count <= 1) { return null; } // don't display if there aren't enough schedules
         let first = current - (current % this.state.numBubbles); // round down to nearest multiple of this.props.numBubbles
         let limit = Math.min(first + this.state.numBubbles, count);
         for (let i = first; i < limit; i++) {
