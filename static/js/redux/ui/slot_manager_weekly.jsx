@@ -102,8 +102,6 @@ class SlotManagerWeekly extends React.Component {
                     let busy_slot = this.props.busyRanges.calendars[cal].busy[i];
                     busy_slot['key'] = cal + i;
                     busy_slot['busy'] = true;
-                    console.log("S",busy_slot.start)
-                    console.log("E",busy_slot.end)
                     let start = new Date(busy_slot.start)
                     let end = new Date(busy_slot.end)
                     busy_slot['time_start'] = start.getHours() + ":" + start.getMinutes();

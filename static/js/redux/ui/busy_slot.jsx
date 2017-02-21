@@ -190,10 +190,10 @@ class BusySlot extends React.Component {
         } else {
             // the cumulative width of this slot and all of the slots it is conflicting with
             let total_slot_widths = 100 - (5 * this.props.depth_level);
-            // the width of this particular slot
-            let slot_width_percentage = total_slot_widths / this.props.num_conflicts;
+            // WIDTH NOW ONLY DEPEDENT ON THE TOTAL SLOT WITH, SUBTRACTING FOR EACH DEPTH LEVEL
+            let slot_width_percentage = total_slot_widths;
             // the amount of left margin of this particular slot, in percentage
-            let push_left = (this.props.shift_index * slot_width_percentage) + 5 * this.props.depth_level;
+            let push_left = 5 * this.props.depth_level;
             if (push_left == 50) {
                 push_left += .5;
             }
