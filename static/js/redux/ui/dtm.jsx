@@ -106,7 +106,7 @@ class DTM extends React.Component {
 		let mobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
 		let cal = mobile && $(window).width() < 767 && this.state.orientation == 'portrait' ? <DayCalendarContainer /> : <CalendarWeeklyContainer />;
 		return (
-			<div id="page-wrapper">
+			<div id="page-wrapper" className="dtm">
 				<TopBarContainer />
 				<UserSettingsModalContainer />
 				<SignupModalContainer />

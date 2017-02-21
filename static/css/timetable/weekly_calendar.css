@@ -1,3 +1,6 @@
+#calendar.seven-days .fc-toolbar {
+	margin-top: 10px;
+}
 #calendar.seven-days h2 {
 	font-size: 20px;
 	font-weight: 400;
@@ -7,9 +10,15 @@
 }
 #calendar.seven-days th {
 	font-weight: 400;
+	height: 25px;
+	font-size: 15px;
+	vertical-align: middle;
 }
 #calendar.seven-days th span {
 	margin-left: 2px;
+	display: inline-block;
+	width: 22px;
+	height: 22px;
 }
 #calendar.seven-days th span.active {
 	background-color: #fd7473;

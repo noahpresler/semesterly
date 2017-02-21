@@ -23,21 +23,20 @@ gets the end hour of the current timetable, based on the class that ends latest
 */
 const getMaxEndHour = (timetable, hasCourses) => {
     let maxEndHour = 17;
-    if (!hasCourses) {
-      return maxEndHour;
-    }
-    getMaxHourBasedOnWindowHeight();
-    let courses = timetable.courses;
-    for (let course_index in courses) {
-      let course = courses[course_index];
-      for (let slot_index in course.slots) {
-        let slot = course.slots[slot_index];
-        let end_hour = parseInt(slot.time_end.split(":")[0]);
-        maxEndHour = Math.max(maxEndHour, end_hour);
-      }
-    }
-    return Math.max(maxEndHour, getMaxHourBasedOnWindowHeight());
-
+    // if (!hasCourses) {
+    //   return maxEndHour;
+    // }
+    // getMaxHourBasedOnWindowHeight();
+    // let courses = timetable.courses;
+    // for (let course_index in courses) {
+    //   let course = courses[course_index];
+    //   for (let slot_index in course.slots) {
+    //     let slot = course.slots[slot_index];
+    //     let end_hour = parseInt(slot.time_end.split(":")[0]);
+    //     maxEndHour = Math.max(maxEndHour, end_hour);
+    //   }
+    // }
+    return Math.max(maxEndHour, 24);
 }
 const mapStateToProps = (state) => {
 	let timetables = state.timetables.items;
