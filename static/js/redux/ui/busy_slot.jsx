@@ -175,8 +175,8 @@ class BusySlot extends React.Component {
             end_hour     = parseInt(this.props.time_end.split(":")[0]),
             end_minute   = parseInt(this.props.time_end.split(":")[1]);
 
-        let top = (start_hour - 8)*(HALF_HOUR_HEIGHT*2 + 2) + (start_minute)*(HALF_HOUR_HEIGHT/30);
-        let bottom = (end_hour - 8)*(HALF_HOUR_HEIGHT*2 + 2) + (end_minute)*(HALF_HOUR_HEIGHT/30) - 1;
+        let top = (start_hour - 0)*(HALF_HOUR_HEIGHT*2 + 2) + (start_minute)*(HALF_HOUR_HEIGHT/30);
+        let bottom = (end_hour - 0)*(HALF_HOUR_HEIGHT*2 + 2) + (end_minute)*(HALF_HOUR_HEIGHT/30) - 1;
         let height = bottom - top - 2;
         if (this.props.preview) { // don't take into account conflicts, reduce opacity, increase z-index
             return {

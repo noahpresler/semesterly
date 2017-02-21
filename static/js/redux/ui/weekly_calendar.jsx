@@ -54,7 +54,7 @@ class WeeklyCalendar extends React.Component {
 
     getCalendarRows() {
         let rows = [];
-        for (let i = 8; i <= this.props.endHour; i++) { // one row for each hour, starting from 8am
+        for (let i = 0; i <= this.props.endHour; i++) { // one row for each hour, starting from 8am
             let hour = uses12HrTime && i > 12 ? i - 12 : i;
             rows.push(<Row displayTime={hour + ':00'} time={i + ':00'} isLoggedIn={this.props.isLoggedIn} key={i}/>);
             rows.push(<Row time={i + ':30'} isLoggedIn={this.props.isLoggedIn} key={i + 0.5}/>);

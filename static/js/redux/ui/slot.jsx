@@ -201,10 +201,11 @@ class Slot extends React.Component {
         let start_hour   = parseInt(this.props.time_start.split(":")[0]),
             start_minute = parseInt(this.props.time_start.split(":")[1]),
             end_hour     = parseInt(this.props.time_end.split(":")[0]),
-            end_minute   = parseInt(this.props.time_end.split(":")[1]);
+            end_minute   = parseInt(this.props.time_end.split(":")[1]),
+            hour_offset  = isPoll ? 0 : 8;
 
-        let top = (start_hour - 8)*(HALF_HOUR_HEIGHT*2 + 2) + (start_minute)*(HALF_HOUR_HEIGHT/30);
-        let bottom = (end_hour - 8)*(HALF_HOUR_HEIGHT*2 + 2) + (end_minute)*(HALF_HOUR_HEIGHT/30) - 1;
+        let top = (start_hour - hour_offset)*(HALF_HOUR_HEIGHT*2 + 2) + (start_minute)*(HALF_HOUR_HEIGHT/30);
+        let bottom = (end_hour - hour_offset)*(HALF_HOUR_HEIGHT*2 + 2) + (end_minute)*(HALF_HOUR_HEIGHT/30) - 1;
         let height = bottom - top - 2;
         // the cumulative width of this slot and all of the slots it is conflicting with
         let total_slot_widths = 100 - (5 * this.props.depth_level);

@@ -1,0 +1,10 @@
+.dtm #main-bar {
+	position: absolute;
+	top: 0;
+	bottom: 0;
+}
+.dtm #side-bar {
+	position: fixed;
+	top: 50px;
+	background-color: transparent;
+}

@@ -1,6 +1,8 @@
 #calendar.seven-days .fc-toolbar {
 	margin-top: 10px;
+	padding-left: 0;
 }
+/* Calendar Header */
 #calendar.seven-days .current-week-number {
 	font-size: 14px;
 	color: #aaa;
@@ -22,6 +24,7 @@
 	height: 25px;
 	font-size: 15px;
 	vertical-align: middle;
+	border-width: 0px;
 }
 #calendar.seven-days th span {
 	margin-left: 2px;
@@ -33,4 +36,18 @@
 	background-color: #fd7473;
 	color: #fff;
 	border-radius: 100%;
+}
+/* Calendar Table Styles */
+.dtm .fc td.fc-head-container {
+	border-width: 0px;
+}
+.dtm .fc td {
+	border-left-width: 0px;
+}
+.dtm .fc td.fc-axis {
+	border-top-width: 0px;
+}
+.dtm .fc td.fc-axis span {
+	position: relative;
+	/*top: -12px;*/
 }
