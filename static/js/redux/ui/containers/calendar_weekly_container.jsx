@@ -45,6 +45,7 @@ const mapStateToProps = (state) => {
   let { isFetchingShareLink, shareLink, shareLinkValid } = state.calendar;
 	return {
       activeWeek: state.weeklyCalendar.activeWeek,
+      activeWeekOffset: state.weeklyCalendar.activeWeekOffset,
     	endHour: getMaxEndHour(timetables[active], hasTimetables),
       saving: state.savingTimetable.saving,
       dataLastUpdated: state.school.dataLastUpdated,

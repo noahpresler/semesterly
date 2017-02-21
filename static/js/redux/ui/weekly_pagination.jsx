@@ -1,68 +1,36 @@
 import React from 'react';
 
-const Bubble = ({index, active, setActive}) => 
-    <li onClick={() => setActive(index)}
-        className={ active ? "sem-page active" : "sem-page"}>
-        <span>{index + 1}</span>
-    </li>;
-
 export class WeeklyPagination extends React.Component {
     constructor(props) {
         super(props);
-        this.state = {numBubbles: this.getNumBubbles()};
         this.prev = this.prev.bind(this);
         this.next = this.next.bind(this);
-        this.resetBubbles = this.resetBubbles.bind(this);
-    }
-    getNumBubbles() {
-        let bubbles = $(window).width() > 700 ? 10 : 4;
-        return bubbles;
+        this.today = this.today.bind(this);
     }
     prev() {
-        if (this.props.active > 0) {
-            this.props.setActive(this.props.active - 1);
-        }
+        this.props.setActive(this.props.activeWeek.getTime() - (7 * 24 * 60 * 60 * 1000), this.props.activeWeekOffset - 1)
     }
     next() {
-        if (this.props.active + 1 < this.props.count) {
-            this.props.setActive(this.props.active + 1);
-        }
+        this.props.setActive(this.props.activeWeek.getTime() + (7 * 24 * 60 * 60 * 1000), this.props.activeWeekOffset + 1)
+    }
+    today() {
+        this.props.setTodayActive()
     }
 
     render() {
-        let options = [], count = this.props.count, current = this.props.active;
-
-        let first = current - (current % this.state.numBubbles); // round down to nearest multiple of this.props.numBubbles
-        let limit = Math.min(first + this.state.numBubbles, count);
-        for (let i = first; i < limit; i++) {
-            options.push(
-                <Bubble key={i} index={i} 
-                    active={this.props.active == i} setActive={this.props.setActive} />
-            );
-        }
-
+        let prevButton = (this.props.activeWeekOffset != 0) ? <div className="sem-pagination-nav" onClick={this.prev}>
+                    <i className="fa fa-angle-left sem-pagination-prev sem-pagination-icon" />
+                </div> : null
         return (
             <div className="sem-pagination">
-                <div className="sem-pagination-nav" onClick={this.prev}>
-                    <i className="fa fa-angle-left sem-pagination-prev sem-pagination-icon" />
+                { prevButton }
+                <div className="sem-pages">
+                    <span onClick={this.today}>Today</span>
                 </div>
-                <ol className="sem-pages">
-                    {options}
-                </ol>
                 <div className="sem-pagination-nav" onClick={this.next}>
                     <i className="fa fa-angle-right sem-pagination-next sem-pagination-icon" />
                 </div>
             </div>
         );
-    }
-    
-    resetBubbles(){
-        this.setState({ numBubbles: this.getNumBubbles() });
-    }
-    componentWillUnmount() {
-        window.removeEventListener('resize', this.resetBubbles)
-    }
-    componentDidMount() {
-        window.addEventListener('resize', this.resetBubbles);
     }
 }

@@ -75,9 +75,9 @@ class WeeklyCalendar extends React.Component {
     render() {
         let calendarHeader = DAYS_SEVEN.map((d, index) =>  (
             <th className="fc-day-header fc-widget-header fc-fri" key={d}>
-                {DAY_ABBR[index]}<span className={(isActiveDateFromSunday(this.props.activeWeek, index) ? 'active' : '')}>{this.props.activeWeek.getDate() + index}</span>
+                {DAY_ABBR[index]}<span className={(isActiveDateFromSunday(this.props.activeWeek, index) ? 'active' : '')}>{(new Date(this.props.activeWeek.getTime() + (index * 24 * 60 * 60 * 1000))).getDate()}</span>
             </th>))
-        let currentWeekNumber = <span className='current-week-number'>W{ this.props.activeWeek.getWeekNumber() }</span>
+        let currentWeekNumber = <span className={'current-week-number' + ((this.props.activeWeekOffset != 0) ? ' future' : '') }>W{ this.props.activeWeek.getWeekNumber() }</span>
         return (
           <div id="calendar" className="fc fc-ltr fc-unthemed week-calendar seven-days">
             <div className="fc-toolbar no-print">

@@ -5,8 +5,9 @@
 	font-size: 14px;
 	color: #aaa;
 	margin-right: 2px;
+	width: auto;
 }
-#calendar.seven-days .current-week-number.active {
+#calendar.seven-days .current-week-number.future {
 	color: #fd7473;
 }
 #calendar.seven-days h2 {
