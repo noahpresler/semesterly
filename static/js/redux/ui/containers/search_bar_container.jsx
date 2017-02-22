@@ -18,10 +18,10 @@ const mapStateToProps = (state) => {
 		getSemesterName: schoolSpecificSemesters,
 		campuses: schoolSpecificCampuses,
 		availableSemesters: ["F", "S"],
-    	searchResults: state.searchResults.items,
-    	isFetching: state.searchResults.isFetching,
-    	isCourseInRoster: (course_id) => courseSections[course_id] !== undefined,
-    	isCourseOptional: (course_id) => state.optionalCourses.courses.some(c => c.id === course_id),
+  	searchResults: state.searchResults.items,
+  	isFetching: state.searchResults.isFetching,
+  	isCourseInRoster: (course_id) => courseSections[course_id] !== undefined,
+  	isCourseOptional: (course_id) => state.optionalCourses.courses.some(c => c.id === course_id),
 		hasHoveredResult: state.timetables.items[state.timetables.active].courses.some(course => course.fake),
 		isHovered: (position) => state.ui.searchHover === position,
 		hoveredPosition: state.ui.searchHover,
@@ -31,15 +31,11 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
 	return {
-	  	fetchCourses: (query) => dispatch(fetchSearchResults(query)),
-	  	addCourse: addOrRemoveCourse,
-	  	addRemoveOptionalCourse: (course) => dispatch(addOrRemoveOptionalCourse(course)),
+  	fetchCourses: (query) => dispatch(fetchSearchResults(query)),
+  	addCourse: addOrRemoveCourse,
+  	addRemoveOptionalCourse: (course) => dispatch(addOrRemoveOptionalCourse(course)),
 		fetchCourseInfo: (id) => dispatch(fetchCourseInfo(id)), 
 		showExplorationModal: () => dispatch({type: 'SHOW_EXPLORATION_MODAL'}),
-		// {
-		//     type: "REQUEST_COURSE_INFO",
-		//     course_id: course_id,
-		//   }
 		showIntegrationModal: (id, integrationID) => openIntegrationModal(integrationID, id),
 		hoverSearchResult: (position) => {
 			dispatch({
