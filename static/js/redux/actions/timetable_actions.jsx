@@ -145,7 +145,7 @@ Returns the body of the request used to get new timetables
 function getBaseReqBody(state){
 	return {
 		school: state.school.school,
-		semester: getSchoolSpecificInfo(state.school.school)[state.semester],
+		semester: getSchoolSpecificInfo(state.school.school).semesters[state.semester],
 		courseSections: state.courseSections.objects,
 		preferences: state.preferences,
 		sid: SID
