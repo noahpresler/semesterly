@@ -193,4 +193,8 @@ def get_availability(request):
   response = get_free_busy_from_cals(cal_ids,student,week_offset)
   return HttpResponse(json.dumps(response), content_type='application/json')
 
-  
+
+@csrf_exempt
+def update_cal_prefs(request):
+  print "YOYOYOYOYO WE DID IT!!!!!!!!!!!!!!!!!!!!\n" + request.body
+  return HttpResponse(json.dumps({"now frotend":"has the data"}), content_type='application/json')

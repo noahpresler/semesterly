@@ -90,6 +90,9 @@ export const getIntegrationAddEndpoint = (integration_id, course_id) => {
 export const getAvailabilityEndpoint = () => {
   return "/dtm/availability/";
 }
+export const getUpdateCalPreferencesEndpoint = () => {
+  return "/dtm/update_cal_prefs/";
+}
 
 export const getSchoolSpecificInfo = (school) => {
 	switch(school) {

@@ -1,6 +1,6 @@
 import fetch from 'isomorphic-fetch';
 import { store } from '../init.jsx';
-import { getAvailabilityEndpoint } from '../constants.jsx';
+import { getAvailabilityEndpoint, getUpdateCalPreferencesEndpoint } from '../constants.jsx';
 
 export function getCookie(name) {
     var cookieValue = null;
@@ -48,5 +48,27 @@ export function getCalendarColorFromId(cid) {
 		let state = store.getState();
 		let cal = state.dtmCalendars.calendars.find(c => c.id == cid);
 		return cal.color;
+	}
+}
+
+export function updateCalendarPreferences() {
+	return (dispatch) => {
+		let state = store.getState().dtmCalendars.calendars;
+		let json = state.reduce((json,cal) => {
+			json[cal.id] = cal.visible;
+			return json;
+		}, {})
+		fetch(getUpdateCalPreferencesEndpoint(), {
+			method: 'POST',
+			headers: {
+				'X-CSRFToken': getCookie('csrftoken')
+			},
+			body: JSON.stringify(json),
+			credentials: 'same-origin',
+		})
+		.then(response => response.json())
+		.then(json => {
+			console.log(json);
+		})
 	}
 }
