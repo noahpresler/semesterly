@@ -118,7 +118,7 @@ class SideBar extends React.Component {
                             >
                             <div className="tip-border"></div>
                             <div className="tip"></div>
-                            <h4>{ this.props.semesterName }</h4>
+                            <h4>{ this.props.semester }</h4>
                             { savedTimetables }
                         </div>
                     </ClickOutHandler>

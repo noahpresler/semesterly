@@ -14,10 +14,8 @@ const mapStateToProps = (state) => {
 	let schoolSpecificCampuses = schoolSpecificInfo.campuses;
 	return {
 		semester: state.semester,
-		semesterName: schoolSpecificSemesters[state.semester],
-		getSemesterName: schoolSpecificSemesters,
 		campuses: schoolSpecificCampuses,
-		availableSemesters: ["F", "S"],
+		availableSemesters: schoolSpecificSemesters,
   	searchResults: state.searchResults.items,
   	isFetching: state.searchResults.isFetching,
   	isCourseInRoster: (course_id) => courseSections[course_id] !== undefined,
