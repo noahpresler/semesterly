@@ -2,7 +2,8 @@ import fetch from 'isomorphic-fetch';
 import { getTimetablesEndpoint } from '../constants.jsx';
 import { randomString, browserSupportsLocalStorage } from '../util.jsx';
 import { store } from '../init.jsx';
-import { getClassmatesEndpoint } from '../constants.jsx'
+import { getClassmatesEndpoint,
+				getSchoolSpecificInfo } from '../constants.jsx'
 import { lockActiveSections, fetchClassmates, autoSave } from './user_actions.jsx';
 import { saveLocalSemester, saveLocalPreferences, saveLocalCourseSections, saveLocalActiveIndex } from '../util.jsx';
 
@@ -144,7 +145,7 @@ Returns the body of the request used to get new timetables
 function getBaseReqBody(state){
 	return {
 		school: state.school.school,
-		semester: state.semester,
+		semester: getSchoolSpecificInfo(state.school.school)[state.semester],
 		courseSections: state.courseSections.objects,
 		preferences: state.preferences,
 		sid: SID

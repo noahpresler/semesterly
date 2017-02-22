@@ -57,7 +57,9 @@ def view_timetable(request, code=None, sem=None, shared_timetable=None, find_fri
   student = get_student(request)
   course_json = None
 
-  sem = sem or ('S' if school in AM_PM_SCHOOLS else 'F')
+  # sem = sem or ('S' if school in AM_PM_SCHOOLS else 'F')
+  # temporarily hard code
+  sem = sem or {'name': 'Fall', 'year': '2017'}
   if code: # user is loading a share course link, since code was included
     sem = sem.upper()
     code = code.upper()
