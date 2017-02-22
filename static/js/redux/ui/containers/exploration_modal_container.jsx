@@ -9,17 +9,14 @@ const mapStateToProps = (state) => {
 	let { isVisible, advancedSearchResults, isFetching, active } = state.explorationModal;
 	let courseSections = state.courseSections.objects;
 	let course = advancedSearchResults[active];
-	let inRoster = false;
-	if (course) {
-		inRoster = courseSections[course.id] !== undefined
-	}
+	let inRoster = course && (courseSections[course.id] !== undefined);
 	let activeTimetable = state.timetables.items[state.timetables.active];
 	let { areas, departments, levels } = state.school;
 	let schoolSpecificSemesters = getSchoolSpecificInfo(state.school.school).semesters;
 	let semesterName = schoolSpecificSemesters[state.semester];
 	return {
 		isVisible,
-    	isFetching,
+    isFetching,
 		advancedSearchResults,
 		active,
 		course,
@@ -49,9 +46,9 @@ const mapDispatchToProps = (dispatch) => {
 	return {
 		hideModal: () => dispatch({ type: "HIDE_EXPLORATION_MODAL" }),
 		openSignupModal: () => dispatch({ type: "TOGGLE_SIGNUP_MODAL" }),
-	  	fetchAdvancedSearchResults: (query, filters) => dispatch(fetchAdvancedSearchResults(query, filters)),
-	  	setAdvancedSearchResultIndex: (i) => dispatch({ type: "SET_ACTIVE_RESULT", active: i }),
-	  	addOrRemoveOptionalCourse: (course) => dispatch(addOrRemoveOptionalCourse(course)),
+  	fetchAdvancedSearchResults: (query, filters) => dispatch(fetchAdvancedSearchResults(query, filters)),
+  	setAdvancedSearchResultIndex: (i) => dispatch({ type: "SET_ACTIVE_RESULT", active: i }),
+  	addOrRemoveOptionalCourse: (course) => dispatch(addOrRemoveOptionalCourse(course)),
 		hoverSection: hoverSection(dispatch),
 		unhoverSection: unhoverSection(dispatch),
 		addOrRemoveCourse,
