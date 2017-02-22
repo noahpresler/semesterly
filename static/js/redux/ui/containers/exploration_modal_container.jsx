@@ -13,7 +13,7 @@ const mapStateToProps = (state) => {
 	let activeTimetable = state.timetables.items[state.timetables.active];
 	let { areas, departments, levels } = state.school;
 	let schoolSpecificSemesters = getSchoolSpecificInfo(state.school.school).semesters;
-	let semester = schoolSpecificSemesters(state.school.school)[state.semester];
+	let semester = schoolSpecificSemesters[state.semester];
 	return {
 		isVisible,
     isFetching,
