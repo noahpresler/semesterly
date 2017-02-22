@@ -1,4 +1,4 @@
-import json, pytz, datetime
+import json, pytz, datetime, copy
 from django.shortcuts import render_to_response, render
 from django.http import HttpResponse, HttpResponseRedirect, Http404
 from django.template import RequestContext
@@ -13,6 +13,7 @@ from student.views import get_student, get_user_dict, convert_tt_to_dict, get_cl
 from django.db.models import Count
 from django.forms.models import model_to_dict
 from django.views.decorators.csrf import csrf_exempt
+import dateutil.parser
 
 hashids = Hashids(salt="***REMOVED***")
 
@@ -94,7 +95,48 @@ def get_free_busy_from_cals(cal_ids, student, week_offset=0):
   credentials = get_google_credentials(student)
   http = credentials.authorize(httplib2.Http(timeout=100000000))
   service = discovery.build('calendar', 'v3', http=http)
-  return service.freebusy().query(body=body).execute()
+  result = service.freebusy().query(body=body).execute()
+  return result
+
+'''
+Reconstructs the free busy api call with merged intervals
+NOTE THAT this returns to the calendar called "default"
+'''
+def merge_free_busy(free_busy_body):
+  free_busy_body = copy.deepcopy(free_busy_body)
+  intervals = []
+  for calid in free_busy_body['calendars']:
+    #concatenate all ranges
+    cal = free_busy_body['calendars'][calid]
+    for interval in cal['busy']:
+      #convert times to python types
+      interval['start'] = dateutil.parser.parse(interval['start'])
+      interval['end'] = dateutil.parser.parse(interval['end'])
+      
+      #TODO if multi day split into single day
+
+      intervals.append(interval)
+
+  if len(intervals) <= 1:
+    return free_busy_body
+
+  intervals.sort(key=lambda x: x['start'])
+  result = [intervals[0]]
+  for i in xrange(1, len(intervals)):
+      prev, current = result[-1], intervals[i]
+      if current['start'] - prev['end'] <= datetime.timedelta(minutes=5): 
+          prev['end'] = max(prev['end'], current['end'])
+      else:
+          result.append(current)
+
+  ret = {u'calendars': 
+          {
+            u'default': {
+              u'busy': map(lambda i: {'start': i['start'].isoformat(), 'end': i['end'].isoformat()}, result)
+              }
+            }
+         }
+  return ret
 
 '''
 Creates AvailabilityShare object for a student with calendarids and weekoffset

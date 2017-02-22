@@ -113,9 +113,6 @@ class SlotManagerWeekly extends React.Component {
                     busy_slot['name'] = "";
                     busy_slot['id'] = parseInt(i);
                     busy_slot['color'] = this.props.getCalColorFromId(cal);
-                    if (cal == "b92jlqr5h9f385e5atlqkdn08o@group.calendar.google.com") {
-                        console.log(busy_slot)
-                    }
                     let day = new Date(busy_slot.start).getDay();
                     slots_by_day[DAYS_SEVEN[day]].push(busy_slot);
                 }
