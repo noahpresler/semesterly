@@ -28,7 +28,6 @@ const mapStateToProps = (state) => {
 		popularityPercent: state.courseInfo.data.popularity_percent * 100,
 		inRoster: courseSections[state.courseInfo.id] !== undefined,
 		isLoggedIn: state.userInfo.data.isLoggedIn,
-		schoolSpecificInfo: getSchoolSpecificInfo(state.school.school),
 		isSectionLocked: (courseId, section) => {
 			if (courseSections[courseId] === undefined) {
 				return false;
