@@ -88,7 +88,7 @@ export class SearchBar extends React.Component {
                 this.getAbbreviatedSemesterName(semester) :
                 this.getSemesterName(semester)
             return (
-                <div key={name} 
+                <div key={ name }
                     className="semester-option" 
                     onMouseDown={ () => this.setSemester(semester) }> 
                     { name } 
