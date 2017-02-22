@@ -11,7 +11,8 @@ import { getUserInfoEndpoint,
 	getFriendsEndpoint,
 	getIntegrationGetEndpoint,
 	getIntegrationDelEndpoint,
-	getIntegrationAddEndpoint } from '../constants.jsx';
+	getIntegrationAddEndpoint,
+	getSchoolSpecificInfo } from '../constants.jsx';
 import { store } from '../init.jsx';
 import { loadTimetable, nullifyTimetable, getNumberedName } from './timetable_actions.jsx';
 import { browserSupportsLocalStorage, setDeclinedNotifications } from '../util.jsx';
@@ -60,12 +61,12 @@ export function requestFriends() {
 function getSaveTimetablesRequestBody() {
 	let state = store.getState();
 	let timetableState = state.timetables;
-	let semester = state.semester;
+	let allSemesters = getSchoolSpecificInfo(state.school.school);
 	let name = state.savingTimetable.activeTimetable.name;
 	let id = state.savingTimetable.activeTimetable.id || 0;
 	return {
 		timetable: getActiveTimetable(timetableState),
-		semester,
+		semester: allSemesters[state.semester],
 		name,
 		id,
 	}
