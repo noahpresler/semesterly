@@ -540,18 +540,26 @@ def get_regexed_courses(school, json_data):
 
 ### COURSE SEARCH ###
 
-def get_course_matches(school, query, semester):
-  param_values = query.split()
-
+def get_course_matches(school, query, semester, year):
   if query == "":
     return Course.objects.filter(school=school)
+  
+  query_tokens = query.split()
+  course_name_contains_query = reduce(
+    operator.and_, map(course_name_contains_token, query_tokens))
+  return Course.objects.filter(school=school)\
+                        .filter(course_name_contains_query)\
+                        .filter((Q(section__semester__in=[semester, 'Y'])))
 
-  return Course.objects.filter(school=school).filter(reduce(operator.and_, (Q(code__icontains=param) | Q(name__icontains=param.replace("&", "and")) | Q(name__icontains=param.replace("and", "&")) for param in param_values))).filter((Q(section__semester__in=[semester, 'Y'])))
+def course_name_contains_token(token):
+  return (Q(code__icontains=token) | \
+          Q(name__icontains=token.replace("&", "and")) | \
+          Q(name__icontains=token.replace("and", "&")))
 
 @csrf_exempt
 @validate_subdomain
-def course_search(request, school, sem, query):
-  course_match_objs = get_course_matches(school, query, sem)
+def course_search(request, school, sem, year, query):
+  course_match_objs = get_course_matches(school, query, sem, year)
   course_match_objs = course_match_objs.distinct('code')[:4]
   save_analytics_course_search(query[:200], course_match_objs[:2], sem, school, get_student(request))
   course_matches = [get_basic_course_json(course, sem) for course in course_match_objs]
