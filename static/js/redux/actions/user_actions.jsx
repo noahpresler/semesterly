@@ -61,7 +61,7 @@ export function requestFriends() {
 function getSaveTimetablesRequestBody() {
 	let state = store.getState();
 	let timetableState = state.timetables;
-	let allSemesters = getSchoolSpecificInfo(state.school.school);
+	let allSemesters = getSchoolSpecificInfo(state.school.school).semesters;
 	let name = state.savingTimetable.activeTimetable.name;
 	let id = state.savingTimetable.activeTimetable.id || 0;
 	return {
