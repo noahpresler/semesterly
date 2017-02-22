@@ -13,7 +13,7 @@ const mapStateToProps = (state) => {
 	let schoolSpecificSemesters = schoolSpecificInfo.semesters;
 	let schoolSpecificCampuses = schoolSpecificInfo.campuses;
 	return {
-		semester: state.semester,
+		semester: schoolSpecificSemesters[state.semester],
 		campuses: schoolSpecificCampuses,
 		availableSemesters: schoolSpecificSemesters,
   	searchResults: state.searchResults.items,

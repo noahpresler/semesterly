@@ -1,4 +1,7 @@
-import { getRequestShareTimetableLinkEndpoint, getAddTTtoGCalEndpoint, getLogiCalEndpoint } from '../constants.jsx';
+import { getRequestShareTimetableLinkEndpoint, 
+				getAddTTtoGCalEndpoint, 
+				getLogiCalEndpoint, 
+				getSchoolSpecificInfo } from '../constants.jsx';
 import { getActiveTimetable } from './user_actions.jsx';
 import { store } from '../init.jsx';
 import ical from 'ical-generator';
@@ -33,7 +36,7 @@ function receiveShareLink(dispatch, shareLink) {
 export function fetchShareTimetableLink() {
 	return (dispatch) => {
 		let state = store.getState();
-		let semester = state.semester;
+		let semester = getSchoolSpecificInfo(state.school.school).semesters[state.semester];
 		let timetableState = state.timetables;
 		let { shareLink, shareLinkValid } = state.calendar;
 		dispatch({
