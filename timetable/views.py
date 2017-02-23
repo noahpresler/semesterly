@@ -525,7 +525,7 @@ def get_course(request, school, sem_name, year, id):
   return HttpResponse(json.dumps(json_data), content_type="application/json")
 
 @csrf_exempt
-def get_course_id(request, school, sem, year, code):
+def get_course_id(request, school, code):
   school = school.lower()
   try:
     course = Course.objects.filter(school=school, code__icontains=code)[0]
