@@ -84,7 +84,6 @@ export class SearchBar extends React.Component {
             </ul>
         );
         let availableSemesters = this.props.availableSemesters.map((semester, index) => {
-            console.log(index)
             let name = ($(window).width() < 767) ? 
                 this.getAbbreviatedSemesterName(semester) :
                 this.getSemesterName(semester)
