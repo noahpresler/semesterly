@@ -40,7 +40,7 @@ export class UserAcquisitionModal extends React.Component {
                     <h3>Recommended:</h3>
                     <button className="btn abnb-btn fb-btn" onClick={() => {
                             let link = document.createElement('a');
-                            link.href = '/login/facebook/?student_token=' + this.props.userInfo.LoginToken + "&login_hash=" + this.props.userInfo.LoginHash
+                            link.href = '/login/facebook/?student_token=' + this.props.userInfo.LoginToken + "&login_hash=" + this.props.userInfo.LoginHash + "/"
                             document.body.appendChild(link);
                             link.click()
                         }}>
@@ -60,7 +60,7 @@ export class UserAcquisitionModal extends React.Component {
 
                     <button className="btn abnb-btn secondary" onClick={() => {
                             let link = document.createElement('a');
-                            link.href = '/login/google-oauth2/?student_token=' + this.props.userInfo.LoginToken + "&login_hash=" + this.props.userInfo.LoginHash
+                            link.href = '/login/google-oauth2/?student_token=' + this.props.userInfo.LoginToken + "&login_hash=" + this.props.userInfo.LoginHash + "/"
                             document.body.appendChild(link);
                             link.click()
                         }}>
