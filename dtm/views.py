@@ -68,7 +68,10 @@ def get_calendar_list(student):
       'name': cal['summary'],
       'id': cal['id'],
       'color': cal['backgroundColor'],
-      'visible': True
+      'visible': student.calendar_preferences.get(
+        calendar=GoogleCalendar.objects.get(
+          calendar_id=cal['id']
+        )).visible,
     }, cal_list['items']))
   else:
     return []
@@ -196,5 +199,13 @@ def get_availability(request):
 
 @csrf_exempt
 def update_cal_prefs(request):
-  print "YOYOYOYOYO WE DID IT!!!!!!!!!!!!!!!!!!!!\n" + request.body
+  visibility = json.loads(request.body)
+  student = get_student(request)
+  for cid in visibility:
+    cal = GoogleCalendar.objects.get(calendar_id=cid)
+    student.calendar_preferences.update_or_create(  
+            calendar = cal,
+            defaults = {
+                'visible': visibility[cid]
+            })
   return HttpResponse(json.dumps({"now frotend":"has the data"}), content_type='application/json')
