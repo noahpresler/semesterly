@@ -65,8 +65,6 @@ def view_analytics_dashboard(request):
                 "num_users_by_permission": num_users_by_permission,
                 "num_users_by_class_year": json.dumps(number_students_by_year()),
                 "num_users_by_school": json.dumps(number_students_by_school()),
-                "total_timetables_fall": number_timetables(semester="F"),
-                "total_timetables_spring": number_timetables(semester="S"),
                 "number_of_reactions": json.dumps(number_of_reactions()),
                 # needs to be refactored; was causing timeout on server because too slow
                 "jhu_most_popular_courses": [], 
@@ -79,20 +77,24 @@ def view_analytics_dashboard(request):
 
 def save_analytics_timetable(courses, semester, school, student=None):
     """Create an analytics time table entry."""
-    analytics_timetable = AnalyticsTimetable.objects.create(semester=semester,
-                                                          school=school,
-                                                          time_created=datetime.now(),
-                                                          student=student)
+    analytics_timetable = AnalyticsTimetable.objects.create(
+        sem_name=semester.sem_name,
+        year=semester.year,
+        school=school,
+        time_created=datetime.now(),
+        student=student)
     analytics_timetable.courses.add(*courses)
     analytics_timetable.save()
 
 def save_analytics_course_search(query, courses, semester, school, student=None, advanced=False):
     """Create an analytics course search entry."""
-    course_search = AnalyticsCourseSearch.objects.create(query=query,
-                                                          semester=semester,
-                                                          school=school,
-                                                          student=student,
-                                                          is_advanced=advanced)
+    course_search = AnalyticsCourseSearch.objects.create(
+        query=query,
+        sem_name=semester.sem_name,
+        year=semester.year,
+        school=school,
+        student=student,
+        is_advanced=advanced)
     course_search.courses.add(*courses)
     course_search.save()
 
@@ -163,7 +165,8 @@ def most_popular_courses(n, school, semester, Table=AnalyticsTimetable):
     timetable (AnalyticsTimetable).
     """
     num_courses = {}
-    link_to_courses = Table.objects.filter(school=school, semester=semester)
+    link_to_courses = Table.objects.filter(
+        school=school, sem_name=semester.sem_name, year=semester.year)
     for link_to_course in link_to_courses:
         for course in link_to_course.courses.all():
             if course.id in num_courses:

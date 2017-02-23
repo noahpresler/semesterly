@@ -183,15 +183,18 @@ def get_timetables(request):
   except ValueError: # someone is trying to manually send requests
     return HttpResponse(json.dumps({'timetables': [], 'new_c_to_s': {}}), 
                         content_type='application/json')
-  sid = params['sid']
+  else:
+    params['semester'] = Semester(**params['semester'])
 
   SCHOOL = request.subdomain
 
+  sid = params['sid']
   course_ids = params['courseSections'].keys()
   courses = [Course.objects.get(id=cid) for cid in course_ids]
-  # TODO
-  # save_analytics_timetable(courses, params['semester'], SCHOOL, get_student(request))
   locked_sections = params['courseSections']
+
+  save_analytics_timetable(courses, params['semester'], SCHOOL, get_student(request))
+
   for updated_course in params.get('updated_courses', []):
     cid = str(updated_course['course_id'])
     locked_sections[cid] = locked_sections.get(cid, {})
@@ -244,7 +247,7 @@ class TimetableGenerator:
                 optional_course_ids=[]):
     self.school = school
     self.slots_per_hour = 60 / school_to_granularity[school]
-    self.semester = Semester(**semester)
+    self.semester = semester
     self.with_conflicts = preferences.get('try_with_conflicts', False)
     self.sort_metrics = [(m['metric'], m['order']) \
                             for m in preferences.get('sort_metrics', []) \
@@ -570,8 +573,7 @@ def course_search(request, school, sem_name, year, query):
   sem = Semester(sem_name, year)
   course_match_objs = get_course_matches(school, query, sem)
   course_match_objs = course_match_objs.distinct('code')[:4]
-  # TODO
-  # save_analytics_course_search(query[:200], course_match_objs[:2], sem, school, get_student(request))
+  save_analytics_course_search(query[:200], course_match_objs[:2], sem, school, get_student(request))
   course_matches = [get_basic_course_json(course, sem) for course in course_match_objs]
   json_data = {'results': course_matches}
   return HttpResponse(json.dumps(json_data), content_type="application/json")
@@ -593,12 +595,6 @@ def advanced_course_search(request):
   # filtering now by departments, areas, or levels if provided
   if filters['areas']:
     course_match_objs = course_match_objs.filter(areas__in=filters['areas'])
-    '''
-      TODO(rohan)
-
-      Use:
-      course_match_objs.objects.filter(reduce(operator.or_, (Q(areas__contains=x) for x in filters['areas'])))
-    '''
   if filters['departments']:
     course_match_objs = course_match_objs.filter(department__in=filters['departments'])
   if filters['levels']:
