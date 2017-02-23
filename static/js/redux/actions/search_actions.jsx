@@ -23,8 +23,9 @@ export function setSemester(semester) {
 	let state = store.getState();
 	let dispatch = store.dispatch;
 
+	let allSemesters = getSchoolSpecificInfo(state.school.school).semesters
 	if (state.userInfo.data.isLoggedIn) {
-		dispatch(getUserSavedTimetables(semester));
+		dispatch(getUserSavedTimetables(allSemesters[semester]));
 	}
 	else {
 		nullifyTimetable(dispatch);
