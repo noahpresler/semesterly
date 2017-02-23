@@ -29,7 +29,7 @@ urlpatterns = patterns('',
     url(r'^$', 'timetable.views.view_timetable'),
 
     # sharing course
-    url(r'course/(?P<code>.+?)/(?P<sem>.+)/*$', 'timetable.views.view_timetable'),
+    url(r'course/(?P<code>.+?)/(?P<sem_name>.+?)/(?P<year>.+?)/*$', 'timetable.views.view_timetable'),
 
     # request sharing timetable link
     url(r'share/link/*$', 'timetable.views.create_share_link'),
@@ -67,7 +67,7 @@ urlpatterns = patterns('',
     url(r'^courses/(?P<school>.+?)/(?P<sem_name>.+)/(?P<year>[0-9]{4})/id/(?P<id>[0-9]+)/*$', 'timetable.views.get_course'),
     url(r'^jhu/countdown/*$', 'timetable.views.jhu_timer'),
     url(r'^get_timetables/$', 'timetable.views.get_timetables'),
-    url(r'^search/(?P<school>.+?)/(?P<sem_name>.+?)/(?P<year>.+?)/(?P<query>.+?)/', 'timetable.views.course_search'),
+    url(r'^search/(?P<school>.+?)/(?P<sem_name>.+?)/(?P<year>[0-9]{4})/(?P<query>.+?)/', 'timetable.views.course_search'),
     url(r'^advanced_search/', 'timetable.views.advanced_course_search'),
     url(r'^school_info/(?P<school>.+?)/', 'timetable.views.school_info'),
     url(r'react/*', 'student.views.react_to_course'),
