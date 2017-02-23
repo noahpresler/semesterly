@@ -44,9 +44,9 @@ export class SearchBar extends React.Component {
     onClickOut(e) {
         this.setState({ showDropdown: false });
     }
-    setSemester(semester) {
+    maybeSetSemester(semester) {
         this.setState({ showDropdown: false });
-        this.props.setSemester(semester);
+        this.props.maybeSetSemester(semester);
     }
     getSemesterName(semester) {
         return semester.name + " " + semester.year
@@ -91,7 +91,7 @@ export class SearchBar extends React.Component {
             return (
                 <div key={ name }
                     className="semester-option" 
-                    onMouseDown={ () => this.setSemester(index) }> 
+                    onMouseDown={ () => this.maybeSetSemester(index) }> 
                     { name } 
                 </div>
             )

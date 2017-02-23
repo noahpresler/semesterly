@@ -17,7 +17,7 @@ export function receiveCourses(json) {
   }
 }
 
-function _setSemester(semester) {
+export function setSemester(semester) {
 	let state = store.getState();
 	let dispatch = store.dispatch;
 
@@ -38,7 +38,7 @@ function _setSemester(semester) {
 	});
 }
 
-export function setSemester(semester) {
+export function maybeSetSemester(semester) {
 	let state = store.getState();
 	let dispatch = store.dispatch;
 
@@ -46,10 +46,10 @@ export function setSemester(semester) {
 
 	if (state.timetables.items[state.timetables.active].courses.length > 0) {
 		if (state.userInfo.data.isLoggedIn && !state.savingTimetable.upToDate) {
-			dispatch(saveTimetable(false, () => _setSemester(semester)));
+			dispatch(saveTimetable(false, () => setSemester(semester)));
 		}
 		else if (state.userInfo.data.isLoggedIn) {
-			_setSemester(semester);
+			setSemester(semester);
 		}
 		else {
 			dispatch({
@@ -58,18 +58,8 @@ export function setSemester(semester) {
 			});
 		}
 	} else {
-		_setSemester(semester);
+		setSemester(semester);
 	}		
-}
-
-export function handleChangeSemester() {
-	let state = store.getState();
-	let dispatch = store.dispatch;
-	let changingToSemester = state.semester === "F" ? "S" : "F";
-	// TODO(Rohan): Load user's saved timetables for the new semester?
-	let userInfo = state.userInfo.data;
-	setSemester(changingToSemester);
-	
 }
 
 export function fetchSearchResults(query) {
