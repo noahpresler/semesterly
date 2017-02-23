@@ -93,6 +93,10 @@ export const getAvailabilityEndpoint = () => {
 export const getUpdateCalPreferencesEndpoint = () => {
   return "/dtm/update_cal_prefs/";
 }
+export const getCreateAvailabilityShareEndpoint = () => {
+  return "/dtm/create/share/";
+}
+
 
 export const getSchoolSpecificInfo = (school) => {
 	switch(school) {

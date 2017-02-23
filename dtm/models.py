@@ -12,5 +12,5 @@ class AvailabilityShare(models.Model):
 	student = models.ForeignKey('student.Student')
 	time_created = models.DateTimeField(auto_now_add=True)
 	start_day = models.DateTimeField(auto_now_add=False, default=None)
-	expiry = models.DateTimeField(auto_now_add=False, default=None)
+	expiry = models.DateTimeField(auto_now_add=False, default=None, null=True)
 	google_calendars = models.ManyToManyField(GoogleCalendar, blank=True)

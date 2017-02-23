@@ -3,6 +3,7 @@ import DTMSideBar from '../dtm_side_bar.jsx';
 import { fetchCourseInfo } from '../../actions/modal_actions.jsx'
 import { addOrRemoveCourse, loadTimetable, addOrRemoveOptionalCourse } from '../../actions/timetable_actions.jsx';
 import { duplicateTimetable, deleteTimetable } from '../../actions/user_actions.jsx'
+import { fetchShareAvailabilityLink } from '../../actions/dtm_actions.jsx'
 import { getSchoolSpecificInfo } from '../../constants.jsx'
 
 const mapStateToProps = (state) => {
@@ -13,6 +14,7 @@ const mapStateToProps = (state) => {
 	let mandatoryCourses = activeTimetable.courses.filter(c => !c.is_optional && !c.fake);
 	let optionalCourses = state.optionalCourses.courses;
 
+	let { isFetchingShareLink, shareLink, shareLinkValid } = state.dtmShare;
 
 	return {
 		semester: state.semester,
@@ -25,6 +27,9 @@ const mapStateToProps = (state) => {
 		isCourseInRoster: (course_id) => activeTimetable.courses.some(c => c.id === course_id),
 		mandatoryCourses,
 		optionalCourses,
+		isFetchingShareLink,
+		shareLink,
+		shareLinkValid,
 	}
 }
 
@@ -37,6 +42,7 @@ const mapDispatchToProps = (dispatch) => {
 	    launchTextbookModal: () => dispatch({type:'TRIGGER_TEXTBOOK_MODAL'}),
 		duplicateTimetable: (tt) => dispatch(duplicateTimetable(tt)),
 		deleteTimetable: (tt) => dispatch(deleteTimetable(tt)),
+		fetchShareAvailabilityLink: () => dispatch(fetchShareAvailabilityLink()),
 		loadTimetable
 	}
 }

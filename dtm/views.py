@@ -144,6 +144,12 @@ def merge_free_busy(free_busy_body):
          }
   return ret
 
+def get_availability_share(request):
+  student = get_student(request)
+  cal_ids = json.loads(request.body)['cal_ids']
+  week_offset = json.loads(request.body)['week_offset']
+  return HttpResponse(json.dumps({"link": create_availability_share(cal_ids, student, week_offset)}), content_type='application/json')
+
 '''
 Creates AvailabilityShare object for a student with calendarids and weekoffset
 Returns encryped hash of the id for the share
@@ -214,4 +220,4 @@ def update_cal_prefs(request):
             defaults = {
                 'visible': visibility[cid]
             })
-  return HttpResponse(json.dumps({"now frotend":"has the data"}), content_type='application/json')
+  return HttpResponse(json.dumps({"success":"200"}), content_type='application/json')
