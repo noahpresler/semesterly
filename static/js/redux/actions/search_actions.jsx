@@ -20,46 +20,37 @@ export function receiveCourses(json) {
 export function setSemester(semester) {
 	let state = store.getState();
 	let dispatch = store.dispatch;
-	if (state.userInfo.data.isLoggedIn) {
-		dispatch(getUserSavedTimetables(semester));
-	}
-	else {
-		nullifyTimetable(dispatch);
-	}
 
-	dispatch({
-		type: "SET_SEMESTER",
-		semester
-	});
-	dispatch({
-		type: "RECEIVE_COURSES",
-		courses: []
-	});
-}
-
-export function setSemesterWrapper(semester) {
-	let state = store.getState();
-	let dispatch = store.dispatch;
 	if (semester === state.semester) { return; }
-	if (state.timetables.items[state.timetables.active].courses.length > 0) {
-		if (state.userInfo.data.isLoggedIn && !state.savingTimetable.upToDate) {
-			dispatch(saveTimetable(false, () => setSemester(semester)));
-		}
-		else if (state.userInfo.data.isLoggedIn) {
-			setSemester(semester);
-		}
-		else {
-			dispatch({
-				type: "ALERT_CHANGE_SEMESTER",
-				semester,
-			});
+
+	let existsCourses = state.timetables.items[state.timetables.active].courses.length > 0
+	let isLoggedIn = state.userInfo.data.isLoggedIn
+	let upToDate = state.savingTimetable.upToDate
+
+	if (existsCourses && !isLoggedIn) {
+		dispatch({
+			type: "ALERT_CHANGE_SEMESTER",
+			semester,
+		});
+	} else {
+		if (isLoggedIn) {
+			if (existsCourses && !upToDate) {
+				dispatch(saveTimetable(false));
+			}
+			dispatch(getUserSavedTimetables(semester));
+		} else {
+			nullifyTimetable(dispatch);
 		}
 
+		dispatch({
+			type: "SET_SEMESTER",
+			semester
+		});
+		dispatch({
+			type: "RECEIVE_COURSES",
+			courses: []
+		});
 	}
-	else {
-		setSemester(semester);
-	}
-			
 }
 
 export function handleChangeSemester() {
