@@ -67,7 +67,7 @@ export const getReactToCourseEndpoint = () => {
   return "/react/";
 }
 export const getLoadSavedTimetablesEndpoint = (semester) => {
-  return "/user/get_saved_timetables/" + getSchool() + "/" + semester + "/";
+  return "/user/get_saved_timetables/" + getSchool() + "/" + semester.name + "/" + semester.year + "/";
 }
 export const getRequestShareTimetableLinkEndpoint = () => {
   return "/share/link/";
