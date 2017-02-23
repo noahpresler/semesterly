@@ -16,6 +16,7 @@ const mapStateToProps = (state) => {
 	let courseSections = state.courseSections.objects;
 	let activeTimetable = state.timetables.items[state.timetables.active];
 	return {
+		schoolSpecificInfo: getSchoolSpecificInfo(state.school.school),
 		isFetching: state.courseInfo.isFetching,
 		data: state.courseInfo.data,
 		id: state.courseInfo.id,
