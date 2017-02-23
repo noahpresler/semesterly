@@ -21,7 +21,7 @@ export function getCookie(name) {
 export function fetchAvailability(weekOffset) {
 	return (dispatch) => {
 		let state = store.getState();
-		let ids = state.dtmCalendars.calendars.filter(c => c.visible).map(c => c.id);
+		let ids = state.dtmCalendars.calendars.map(c => c.id);
 		fetch(getAvailabilityEndpoint(), {
 			method: 'POST',
 			headers: {
@@ -65,10 +65,6 @@ export function updateCalendarPreferences() {
 			},
 			body: JSON.stringify(json),
 			credentials: 'same-origin',
-		})
-		.then(response => response.json())
-		.then(json => {
-			console.log(json);
 		})
 	}
 }
