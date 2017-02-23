@@ -328,14 +328,15 @@ export function getUserSavedTimetables(semester) {
 }
 
 export function fetchClassmates(courses) {
-	return (dispatch) => 
-{		let state = store.getState();
-		let semester = state.semester !== undefined ? state.semester : currentSemester;
+	return (dispatch) => {		
+		let state = store.getState();
+		let semesterIndex = state.semester !== undefined ? state.semester : currentSemester;
+		let allSemesters = getSchoolSpecificInfo(state.school.school).semesters
 		dispatch(requestClassmates());
 		fetch(getClassmatesEndpoint(), {
 			credentials: 'include',
 			method: 'POST',
-			body: JSON.stringify({ course_ids: courses, semester: semester })
+			body: JSON.stringify({ course_ids: courses, semester: allSemesters[semesterIndex] })
 		})
 	    .then(response => response.json())
 	    .then(json => {
@@ -346,7 +347,8 @@ export function fetchClassmates(courses) {
 
 export function fetchFriends() {
 	let state = store.getState();
-	let semester = state.semester !== undefined ? state.semester : currentSemester;
+	let semesterIndex = state.semester !== undefined ? state.semester : currentSemester;
+	let allSemesters = getSchoolSpecificInfo(state.school.school).semesters
 	return (dispatch) => {
 		dispatch(requestFriends());
 		dispatch({
@@ -355,7 +357,7 @@ export function fetchFriends() {
 		fetch(getFriendsEndpoint(), {
 			credentials: 'include',
 			method: 'POST',
-			body: JSON.stringify({ semester: semester })
+			body: JSON.stringify({ semester: allSemesters[semesterIndex] })
 		})
 	    .then(response => response.json())
 	    .then(json => {
