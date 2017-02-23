@@ -58,7 +58,8 @@ class Course(models.Model):
     info = []
     related = self.related_courses.all()
     if semester:
-      related = related.filter(section__semester__in=[semester, 'Y']).distinct()
+      related = related.filter(section__sem_name__in=[semester.name, 'Y'],
+                              section__year=semester.year).distinct()
     if limit and limit > 0:
       related = related[:limit]
     for c in related:
@@ -77,7 +78,8 @@ class Course(models.Model):
   def get_textbooks(self, semester):
     textbooks = []
     isbns = set()
-    for section in self.section_set.filter(semester__in=[semester, 'Y']):
+    for section in self.section_set.filter(sem_name__in=[semester.name, 'Y'], 
+                                          year=semester.year):
       for textbook in section.textbooks.all():
         if textbook.isbn not in isbns:
           textbooks.append(textbook.get_info())
