@@ -12,14 +12,20 @@ import { fetchSchoolInfo } from './actions/school_actions.jsx';
 import { setCourseInfo } from './actions/modal_actions.jsx';
 import { browserSupportsLocalStorage, setFirstVisit, timeLapsedGreaterThan } from './util.jsx';
 import { addTTtoGCal } from './actions/calendar_actions.jsx';
+import { getSchoolSpecificInfo } from './constants.jsx';
+
 
 export const store = createStore(rootReducer, window.devToolsExtension && window.devToolsExtension(), applyMiddleware(thunkMiddleware));
 
+// get functions used to get backend endpoints
 export const getSchool = () => {
   return store.getState().school.school;
 }
 export const getSemester = () => {
-  return store.getState().semester;
+  let state = store.getState()
+  let allSemesters = getSchoolSpecificInfo(state.school.school).semesters
+  let currSemester = allSemesters[state.semester]
+  return currSemester.name + "/" + currSemester.year
 }
 // setup the state. loads the user's timetables if logged in; cached timetable if not.
 // also handles sharing courses and sharing timetables
