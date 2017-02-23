@@ -552,10 +552,12 @@ def get_course_matches(school, query, semester):
   query_tokens = query.split()
   course_name_contains_query = reduce(
     operator.and_, map(course_name_contains_token, query_tokens))
-  return Course.objects.filter(school=school)\
-                        .filter(course_name_contains_query)\
-                        .filter((Q(section__year=semester.year)))\
-                        .filter((Q(section__sem_name__in=[semester.name, 'Full year'])))
+  return Course.objects.filter(
+    Q(school=school) &\
+    course_name_contains_query &\
+    Q(section__year=semester.year) &\
+    Q(section__sem_name__in=[semester.name, 'Full year'])
+  )
 
 def course_name_contains_token(token):
   return (Q(code__icontains=token) | \
