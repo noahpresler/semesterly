@@ -7,6 +7,7 @@ export class FinalExamsModal extends React.Component {
     constructor(props) {
         super(props);
         this.hide = this.hide.bind(this);
+        this.state = {"finalsToRender": jQuery.extend(true, {}, this.props.finalExamSchedule)};
     }
     hide() {
         this.refs.modal.hide();
@@ -53,34 +54,40 @@ export class FinalExamsModal extends React.Component {
             { html }
         </div>
     }
+    renderWeek() {
+
+    }
     loadFinalsToDivs() {
         let days = ['N', 'M', 'T', 'W', 'R', 'F', 'S']
 
-        let finalsToRender = this.props.finalExamSchedule
+        let finalsToRender = jQuery.extend(true, {}, this.props.finalExamSchedule);
+        let finalExamDays = []
         let daysOfWeek = this.findDaysOfWeek(this.findFirstFinal(), days)
+
         let weekHeadersHtml = this.generateWeekHeaders(daysOfWeek);
         for (let day in daysOfWeek) {
+            let rendered = false;
+            let html = "";
             for (let final in finalsToRender) {
-                if (finalsToRender[final].includes(day)) {
-                    console.log(finalsToRender['final']);
+                if (finalsToRender[final].includes(daysOfWeek[day])) {
+                    html += finalsToRender[final];
+                    rendered = true;
+                    delete finalsToRender[final];
                 }
+
             }
+            console.log(finalsToRender);
+            finalExamDays.push(<div key={day} className="final-exam-day">{ html }</div>)
         }
 
-        // while (finalsToRender.length > 0) {
-            // remove from finalsToRender
-        // }
+        while (finalsToRender.length > 0) {
+            remove from finalsToRender
+        }
 
         return <div id="final-exam-calendar-ctn">
-                { weekHeadersHtml }
+                    { weekHeadersHtml }
                 <div className="final-exam-week">
-                    <div className="final-exam-day"></div>
-                    <div className="final-exam-day"></div>
-                    <div className="final-exam-day"></div>
-                    <div className="final-exam-day"></div>
-                    <div className="final-exam-day"></div>
-                    <div className="final-exam-day"></div>
-                    <div className="final-exam-day"></div>
+                    { finalExamDays }
                 </div>
                 {JSON.stringify(this.props.finalExamSchedule)}
             </div>;
