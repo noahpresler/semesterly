@@ -1,5 +1,5 @@
 import { connect } from 'react-redux';
-import { fetchSearchResults, setSemester } from '../../actions/search_actions.jsx';
+import { fetchSearchResults, maybeSetSemester } from '../../actions/search_actions.jsx';
 import { addOrRemoveCourse, addOrRemoveOptionalCourse } from '../../actions/timetable_actions.jsx';
 import { SearchBar } from '../search_bar.jsx';
 import { fetchCourseInfo } from '../../actions/modal_actions.jsx';
@@ -41,7 +41,7 @@ const mapDispatchToProps = (dispatch) => {
 				position
 			});
 		},
-		setSemester
+		maybeSetSemester
 	}
 }
 
