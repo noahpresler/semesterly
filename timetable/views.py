@@ -59,10 +59,8 @@ def view_timetable(request, code=None, sem_name=None, year=None, shared_timetabl
   school = request.subdomain
   student = get_student(request)
   course_json = None
-  sem = None
+  sem = Semester('Fall', '2016') # temporarily hard code default semester
 
-  # temporarily hard code semester
-  # sem = sem or ('S' if school in AM_PM_SCHOOLS else 'F')
   if code: # user is loading a share course link, since code was included
     sem = Semester(sem_name, year)
     code = code.upper()

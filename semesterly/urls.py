@@ -4,8 +4,8 @@ from django.conf import settings
 from django.contrib import admin
 
 # from haystack.views import SearchView
-
 # from haystack.query import SearchQuerySet
+
 
 admin.autodiscover()
 
@@ -59,7 +59,7 @@ urlpatterns = patterns('',
     url(r'^textbooks*$', 'timetable.views.view_textbooks'),
     url(r'^export_calendar/*$', 'timetable.views.export_calendar'),
     url(r'^notifyme/*$', 'timetable.views.enable_notifs'),
-    url(r'^user/get_saved_timetables/(?P<school>.+)/(?P<sem>[fFsS]{1})', 'student.views.get_student_tts_wrapper'),
+    url(r'^user/get_saved_timetables/(?P<school>.+)/(?P<sem_name>.+)/(?P<year>[0-9]{4})', 'student.views.get_student_tts_wrapper'),
     url(r'^user/add_to_gcal/*$', 'student.views.add_tt_to_gcal'),
     url(r'^user/log_ical/*$', 'student.views.log_ical_export'),
     
