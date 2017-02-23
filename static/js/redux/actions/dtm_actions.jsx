@@ -55,6 +55,9 @@ export function fetchShareAvailabilityLink(weekOffset) {
 	return (dispatch) => {
 		let state = store.getState();
 		let ids = state.dtmCalendars.calendars.filter(c => c.visible).map(c => c.id);
+		dispatch({
+			type: "REQUEST_SHARE_AVAILABILITY_LINK"
+		});
 		fetch(getCreateAvailabilityShareEndpoint(), {
 			method: 'POST',
 			headers: {
@@ -70,6 +73,9 @@ export function fetchShareAvailabilityLink(weekOffset) {
 		.then(ref => {
 			receiveDtmShareLink(store.dispatch, 
 				window.location.hostname + "dtm/share/" + ref.link);
+			dispatch({
+				type: "CLEAN_AVAILABILITY"
+			});
 		})
 	}
 }	

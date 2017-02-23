@@ -21,8 +21,15 @@ class DTMSideBar extends React.Component {
 		this.hideShareLink = this.hideShareLink.bind(this);
 	}
 
+	componentWillReceiveProps(nextProps) {
+		if (this.props.isFetchingShareLink && !nextProps.isFetchingShareLink) {
+			this.setState({shareLinkShown: true});
+		}
+	}
+
 	fetchShareLink() {
-		if (this.props.shareLinkValid) {
+		console.log(this.props.shareLinkDirty);
+		if (this.props.shareLinkValid && !this.props.shareLinkDirty) {
 			this.setState({shareLinkShown: true});
 		} else if (!this.props.isFetchingShareLink) {
 			this.props.fetchShareAvailabilityLink();

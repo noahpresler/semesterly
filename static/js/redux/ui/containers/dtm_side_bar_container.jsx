@@ -25,6 +25,7 @@ const mapStateToProps = (state) => {
 		classmates: state.classmates.courseToClassmates,
 		avgRating: activeTimetable.avg_rating,
 		isCourseInRoster: (course_id) => activeTimetable.courses.some(c => c.id === course_id),
+		shareLinkDirty: state.dtmCalendars.dirty,
 		mandatoryCourses,
 		optionalCourses,
 		isFetchingShareLink,
