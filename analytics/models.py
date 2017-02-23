@@ -11,7 +11,9 @@ class SharedTimetable(models.Model):
     """
     courses = models.ManyToManyField(Course)
     sections = models.ManyToManyField(Section)
-    semester = models.CharField(max_length=2)
+    semester = models.CharField(max_length=2) # will eventually be replaced by sem_name
+    sem_name = models.CharField(max_length=50)
+    year = models.CharField(max_length=4)
     school = models.CharField(max_length=50)
     name = models.CharField(max_length=100, null=True)
     has_conflict = models.BooleanField(blank=True, default=False)
@@ -25,7 +27,9 @@ class AnalyticsTimetable(models.Model):
     when they are not saved.
     """
     courses = models.ManyToManyField(Course)
-    semester = models.CharField(max_length=2)
+    semester = models.CharField(max_length=2) # will eventually be replaced by sem_name
+    sem_name = models.CharField(max_length=50)
+    year = models.CharField(max_length=4)
     school = models.CharField(max_length=50)
     has_conflict = models.BooleanField(blank=True, default=False)
     time_created = models.DateTimeField(auto_now_add=True)
@@ -39,7 +43,9 @@ class AnalyticsCourseSearch(models.Model):
     query = models.CharField(max_length=200)
     courses = models.ManyToManyField(Course)
     is_advanced = models.BooleanField(blank=True, default=False)
-    semester = models.CharField(max_length=2)
+    semester = models.CharField(max_length=2) # will eventually be replaced by sem_name
+    sem_name = models.CharField(max_length=50)
+    year = models.CharField(max_length=4)
     school = models.CharField(max_length=50)
     student = models.ForeignKey(Student, null=True, default=None)
 
