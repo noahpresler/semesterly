@@ -1,5 +1,6 @@
 import collections
 import copy
+from datetime import datetime
 import functools
 import itertools
 import json
@@ -11,7 +12,7 @@ from django.shortcuts import render_to_response, render
 from django.http import HttpResponse, HttpResponseRedirect, Http404
 from django.views.decorators.csrf import csrf_exempt
 from django.forms.models import model_to_dict
-from django.db.models import Q
+from django.db.models import Q, Count
 from hashids import Hashids
 from pytz import timezone
 
@@ -23,7 +24,7 @@ from timetable.utils import *
 from timetable.scoring import *
 from student.models import Student
 from student.views import get_student, get_user_dict, convert_tt_to_dict, get_classmates_from_course_id
-from django.db.models import Count
+
 
 MAX_RETURN = 60 # Max number of timetables we want to consider
 
@@ -484,7 +485,7 @@ def get_basic_course_json(course, sem, extra_model_fields=[]):
   course_json['integrations'] = list(course.get_course_integrations())
   course_json['sections'] = {}
 
-  course_section_list = sorted(course.section_set.filter(semester__in=[sem, "Y"]),
+  course_section_list = sorted(course.section_set.filter(semester__in=[sem.name, "Y"], year=sem.year),
                               key=lambda section: section.section_type)
 
   for section_type, sections in itertools.groupby(course_section_list, lambda s: s.section_type):
@@ -540,16 +541,17 @@ def get_regexed_courses(school, json_data):
 
 ### COURSE SEARCH ###
 
-def get_course_matches(school, query, semester, year):
+def get_course_matches(school, query, semester):
   if query == "":
     return Course.objects.filter(school=school)
-  
+
   query_tokens = query.split()
   course_name_contains_query = reduce(
     operator.and_, map(course_name_contains_token, query_tokens))
   return Course.objects.filter(school=school)\
                         .filter(course_name_contains_query)\
-                        .filter((Q(section__semester__in=[semester, 'Y'])))
+                        .filter((Q(section__year=semester.year)))\
+                        .filter((Q(section__sem_name__in=[semester.name, 'Full year'])))
 
 def course_name_contains_token(token):
   return (Q(code__icontains=token) | \
@@ -558,10 +560,12 @@ def course_name_contains_token(token):
 
 @csrf_exempt
 @validate_subdomain
-def course_search(request, school, sem, year, query):
-  course_match_objs = get_course_matches(school, query, sem, year)
+def course_search(request, school, sem_name, year, query):
+  sem = Semester(sem_name, year)
+  course_match_objs = get_course_matches(school, query, sem)
   course_match_objs = course_match_objs.distinct('code')[:4]
-  save_analytics_course_search(query[:200], course_match_objs[:2], sem, school, get_student(request))
+  # TODO
+  # save_analytics_course_search(query[:200], course_match_objs[:2], sem, school, get_student(request))
   course_matches = [get_basic_course_json(course, sem) for course in course_match_objs]
   json_data = {'results': course_matches}
   return HttpResponse(json.dumps(json_data), content_type="application/json")
@@ -624,7 +628,7 @@ def course_page(request, code):
   try:
     school_name = school_code_to_name[school]
     course_obj = Course.objects.filter(code__iexact=code)[0]
-    course_dict = get_basic_course_json(course_obj, "F")
+    course_dict = get_basic_course_json(course_obj, Semester('Fall', datetime.now().year))
     # TODO: section types should never be hardcoded
     l = course_dict['sections'].get('L', {}).values()
     t = course_dict['sections'].get('T', {}).values()
