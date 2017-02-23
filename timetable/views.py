@@ -53,17 +53,18 @@ def custom_500(request):
 # ******************************************************************************
 
 @validate_subdomain
-def view_timetable(request, code=None, sem=None, shared_timetable=None, 
+def view_timetable(request, code=None, sem_name=None, year=None, shared_timetable=None, 
                   find_friends=False, enable_notifs=False, signup=False,
                   gcal_callback=False, export_calendar=False, view_textbooks=False):
   school = request.subdomain
   student = get_student(request)
   course_json = None
+  sem = None
 
   # temporarily hard code semester
   # sem = sem or ('S' if school in AM_PM_SCHOOLS else 'F')
   if code: # user is loading a share course link, since code was included
-    sem = sem.upper()
+    sem = Semester(sem_name, year)
     code = code.upper()
     try:
       course = Course.objects.get(school=school, code=code)
@@ -78,7 +79,7 @@ def view_timetable(request, code=None, sem=None, shared_timetable=None,
       integrations['integrations'].append(i.name)
   return render_to_response("timetable.html", {
     'school': school,
-    'student': json.dumps(get_user_dict(school, student, sem)),
+    'student': json.dumps(get_user_dict(school, student, sem)), # TODO
     'course': json.dumps(course_json),
     'semester': '0',
     'shared_timetable': json.dumps(shared_timetable),
@@ -140,10 +141,14 @@ def enable_notifs(request):
 def share_timetable(request, ref):
   try:
     timetable_id = hashids.decrypt(ref)[0]
-    shared_timetable = convert_tt_to_dict(SharedTimetable.objects.get(school=request.subdomain, id=timetable_id),
+    shared_timetable = convert_tt_to_dict(SharedTimetable.objects.get(
+                                            school=request.subdomain, id=timetable_id),
                                           include_last_updated=False)
-    semester = shared_timetable['semester']
-    return view_timetable(request, sem=semester, shared_timetable=shared_timetable)
+    sem_name = shared_timetable['sem_name']
+    year = shared_timetable['year']
+    return view_timetable(request, sem_name=sem_name, 
+                                  year=year,
+                                  shared_timetable=shared_timetable)
   except Exception as e:
     raise Http404
 
@@ -157,11 +162,11 @@ def create_share_link(request):
     has_conflict = params['timetable']['has_conflict']
   except:
     has_conflict = False
-  semester = params['semester']
+  semester = Semester(**params['semester'])
   student = get_student(request)
   shared_timetable = SharedTimetable.objects.create(
-    student=student, school=school, semester=semester,
-    has_conflict=has_conflict)
+    student=student, school=school, sem_name=semester.name, year=semester.year,
+    has_conflict=has_conflict, semester='T') # placeholder for semester until it is replaced
   shared_timetable.save()
 
   for course in courses:
@@ -169,7 +174,10 @@ def create_share_link(request):
     shared_timetable.courses.add(course_obj)
     enrolled_sections = course['enrolled_sections']
     for section in enrolled_sections:
-      shared_timetable.sections.add(course_obj.section_set.get(meeting_section=section, semester__in=[semester, "Y"]))
+      section_obj = course_obj.section_set.get(meeting_section=section, 
+                                            sem_name__in=[semester.name, "Full year"],
+                                            year=semester.year)
+      shared_timetable.sections.add(section_obj)
   shared_timetable.save()
 
   response = {'link': hashids.encrypt(shared_timetable.id)}
@@ -706,12 +714,22 @@ def school_info(request, school):
   school = request.subdomain
   last_updated = None
   if Updates.objects.filter(school=school, update_field="Course").exists():
-    update_time_obj = Updates.objects.get(school=school, update_field="Course").last_updated.astimezone(timezone('US/Eastern'))
+    update_time_obj = Updates.objects.get(school=school, update_field="Course")\
+                                    .last_updated.astimezone(timezone('US/Eastern'))
     last_updated = update_time_obj.strftime('%Y-%m-%d %H:%M') + " " + update_time_obj.tzname()
-  json_data = { # TODO(rohan): Get all relevant fields (areas, departments, levels) properly
-    'areas': sorted(list(Course.objects.filter(school=school).exclude(areas__exact='').values_list('areas', flat=True).distinct())),
-    'departments': sorted(list(Course.objects.filter(school=school).exclude(department__exact='').values_list('department', flat=True).distinct())),
-    'levels': sorted(list(Course.objects.filter(school=school).exclude(level__exact='').values_list('level', flat=True).distinct())),
+  json_data = {
+    'areas': sorted(list(Course.objects.filter(school=school)\
+                                      .exclude(areas__exact='')\
+                                      .values_list('areas', flat=True)\
+                                      .distinct())),
+    'departments': sorted(list(Course.objects.filter(school=school)\
+                                            .exclude(department__exact='')\
+                                            .values_list('department', flat=True)\
+                                            .distinct())),
+    'levels': sorted(list(Course.objects.filter(school=school)\
+                                        .exclude(level__exact='')\
+                                        .values_list('level', flat=True)\
+                                        .distinct())),
     'last_updated': last_updated
   }
   return HttpResponse(json.dumps(json_data), content_type="application/json")
