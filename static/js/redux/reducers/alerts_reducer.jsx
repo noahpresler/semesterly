@@ -1,8 +1,13 @@
-export const alerts = (state = {alertConflict: false, 
-								alertTimetableExists: false, 
-								alertChangeSemester: false,
-								alertNewTimetable: false,
-								alertEnableNotifications: false}, action) => {
+
+let defaultState = {
+	alertConflict: false, 
+	alertTimetableExists: false, 
+	alertChangeSemester: false,
+	alertNewTimetable: false,
+	alertEnableNotifications: false
+}
+
+export const alerts = (state = defaultState, action) => {
 	switch (action.type) {
 		// dispatched when there's a conflict
 		case "ALERT_CONFLICT":
