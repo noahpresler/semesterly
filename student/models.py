@@ -43,6 +43,8 @@ class PersonalTimetable(models.Model):
     school = models.CharField(max_length=50)
     name = models.CharField(max_length=100)
     semester = models.CharField(max_length=2)
+    sem_name = models.CharField(max_length=50)
+    year = models.CharField(max_length=4)
     time_updated = models.DateTimeField(auto_now_add=True)
     student = models.ForeignKey(Student)
     last_updated = models.DateTimeField(auto_now=True)
