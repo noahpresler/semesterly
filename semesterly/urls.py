@@ -63,7 +63,7 @@ urlpatterns = patterns('',
     url(r'^user/add_to_gcal/*$', 'student.views.add_tt_to_gcal'),
     url(r'^user/log_ical/*$', 'student.views.log_ical_export'),
     
-    url(r'^courses/(?P<school>.+?)/(?P<sem_name>.+)/(?P<year>[0-9]{4})/code/(?P<course_id>.+)/*$', 'timetable.views.get_course_id'),
+    url(r'^courses/(?P<school>.+?)/code/(?P<course_id>.+)/*$', 'timetable.views.get_course_id'),
     url(r'^courses/(?P<school>.+?)/(?P<sem_name>.+)/(?P<year>[0-9]{4})/id/(?P<id>[0-9]+)/*$', 'timetable.views.get_course'),
     url(r'^jhu/countdown/*$', 'timetable.views.jhu_timer'),
     url(r'^get_timetables/$', 'timetable.views.get_timetables'),
