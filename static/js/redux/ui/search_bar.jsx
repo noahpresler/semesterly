@@ -83,14 +83,15 @@ export class SearchBar extends React.Component {
                 <SearchSideBarContainer />
             </ul>
         );
-        let availableSemesters = this.props.availableSemesters.map(semester => {
+        let availableSemesters = this.props.availableSemesters.map((semester, index) => {
+            console.log(index)
             let name = ($(window).width() < 767) ? 
                 this.getAbbreviatedSemesterName(semester) :
                 this.getSemesterName(semester)
             return (
                 <div key={ name }
                     className="semester-option" 
-                    onMouseDown={ () => this.setSemester(semester) }> 
+                    onMouseDown={ () => this.setSemester(index) }> 
                     { name } 
                 </div>
             )
