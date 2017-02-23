@@ -1,5 +1,7 @@
 import fetch from 'isomorphic-fetch';
-import { getCourseSearchEndpoint, getAdvancedSearchEndpoint } from '../constants.jsx';
+import { getCourseSearchEndpoint, 
+				getAdvancedSearchEndpoint,
+				getSchoolSpecificInfo } from '../constants.jsx';
 import { store } from '../init.jsx';
 import { getUserSavedTimetables, saveTimetable } from './user_actions.jsx';
 import { nullifyTimetable } from './timetable_actions.jsx';
@@ -99,13 +101,15 @@ export function fetchAdvancedSearchResults(query, filters) {
 			type: "REQUEST_ADVANCED_SEARCH_RESULTS",
 		});
 		// send a request (via fetch) to the appropriate endpoint to get courses
+		let state = store.getState()
+		let allSemesters = getSchoolSpecificInfo(state.school.school).semesters
 		fetch(getAdvancedSearchEndpoint(), {
 			credentials: 'include',
 			method: 'POST',
 			body: JSON.stringify({
 				query,
 				filters,
-				semester: store.getState().semester
+				semester: allSemesters[state.semester]
 			})
 		})
 		.then(response => response.json()) // TODO(rohan): error-check the response

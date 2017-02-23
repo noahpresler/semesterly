@@ -584,7 +584,7 @@ def course_search(request, school, sem_name, year, query):
 def advanced_course_search(request):
   school = request.subdomain
   params = json.loads(request.body)
-  sem = params['semester']
+  sem = Semester(**params['semester'])
   query = params['query']
   filters = params['filters']
   times = filters['times']
