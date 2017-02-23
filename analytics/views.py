@@ -21,7 +21,6 @@ to_zone = tz.gettz('America/New_York')
 def view_analytics_dashboard(request):
     student = get_student(request)
     if student and student.user.is_staff:
-
         # Number of time tables by school
         total_timetables_by_school = {}
         # timetables_per_hour = {}
@@ -115,8 +114,7 @@ def number_timetables(**parameters):
     if "distinct" in parameters:
         timetables = timetables.distinct(parameters.pop("distinct"))
     timetables = timetables.filter(
-        **{param: val for (param, val) in parameters.iteriterms() if val is not None})
-    
+        **{param: val for (param, val) in parameters.iteritems() if val is not None})
     return timetables.count()
 
 def number_timetables_per_hour(Timetable=AnalyticsTimetable, school=None, 
