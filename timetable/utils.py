@@ -1,5 +1,10 @@
+from collections import namedtuple
+
 from school_mappers import VALID_SCHOOLS
 from django.shortcuts import render
+
+
+Semester = namedtuple('Semester', 'name year')
 
 def validate_subdomain(view_func):
   def wrapper(request, *args, **kwargs):
