@@ -8,3 +8,13 @@
 	top: 50px;
 	background-color: transparent;
 }
+
+.dtm footer {
+	margin-top: 0;
+}
+.dtm footer li {
+	margin: 0 3px;
+}
+.dtm footer .nav > li > a {
+	padding: 0 5px;
+}

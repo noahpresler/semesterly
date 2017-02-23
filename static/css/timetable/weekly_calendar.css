@@ -60,7 +60,7 @@
 }
 /* Calendar Table Styles */
 .dtm #calendar-body {
-	margin-top: 73px;
+	margin: 73px 0 20px 0;
 	position: relative;
 }
 .dtm .fc td {

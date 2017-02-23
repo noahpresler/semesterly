@@ -323,10 +323,6 @@ ul.nav.nav-pills {
 	margin-right: 0;
 }
 
-.footer-button a {
-	padding: 0 15px !important;
-}
-
 .footer-button div {
 	line-height:  20px;
 }
@@ -348,6 +344,9 @@ footer li a {
 	font-weight: 400;
 	font-size: 12px;
 	color: #aaa;
+}
+footer .nav > li > a {
+	padding: 0 15px;
 }
 footer li a:hover {
 	color: #aaa;
