@@ -53,7 +53,9 @@ def custom_500(request):
 # ******************************************************************************
 
 @validate_subdomain
-def view_timetable(request, code=None, sem=None, shared_timetable=None, find_friends=False, enable_notifs=False,signup=False,gcal_callback=False, export_calendar=False, view_textbooks=False):
+def view_timetable(request, code=None, sem=None, shared_timetable=None, 
+                  find_friends=False, enable_notifs=False, signup=False,
+                  gcal_callback=False, export_calendar=False, view_textbooks=False):
   school = request.subdomain
   student = get_student(request)
   course_json = None
@@ -502,10 +504,11 @@ def get_basic_course_json(course, sem, extra_model_fields=[]):
 
   return course_json
 
-def get_course(request, school, sem, id):
+def get_course(request, school, sem_name, year, id):
   global SCHOOL
   SCHOOL = school.lower()
 
+  sem = Semester(sem_name, year)
   try:
     course = Course.objects.get(school=school, id=id)
     student = None
@@ -522,7 +525,7 @@ def get_course(request, school, sem, id):
   return HttpResponse(json.dumps(json_data), content_type="application/json")
 
 @csrf_exempt
-def get_course_id(request, school, sem, code):
+def get_course_id(request, school, sem, year, code):
   school = school.lower()
   try:
     course = Course.objects.filter(school=school, code__icontains=code)[0]
