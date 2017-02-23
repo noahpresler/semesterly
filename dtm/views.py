@@ -71,7 +71,10 @@ def get_calendar_list(student):
       'visible': student.calendar_preferences.get(
         calendar=GoogleCalendar.objects.get(
           calendar_id=cal['id']
-        )).visible,
+        )).visible if student.calendar_preferences.filter(
+        calendar=GoogleCalendar.objects.get(
+          calendar_id=cal['id']
+        )).exists() else True,
     }, cal_list['items']))
   else:
     return []
