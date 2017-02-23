@@ -196,7 +196,10 @@ def get_availability(request):
   response = get_free_busy_from_cals(cal_ids,student,week_offset)
   return HttpResponse(json.dumps(response), content_type='application/json')
 
-
+'''
+For each calendar id get its corresponding model, update its visibility 
+based on the request json which is a dictionary mapping id => visibility (bool)
+'''
 @csrf_exempt
 def update_cal_prefs(request):
   visibility = json.loads(request.body)
