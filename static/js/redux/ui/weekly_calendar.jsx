@@ -74,45 +74,33 @@ class WeeklyCalendar extends React.Component {
     }
     render() {
         let calendarHeader = DAYS_SEVEN.map((d, index) =>  (
-            <th className="fc-day-header fc-widget-header fc-fri" key={d}>
+            <h4 className="fc-day-header fc-widget-header fc-fri" key={d}>
                 {DAY_ABBR[index]}<span className={(isActiveDateFromSunday(this.props.activeWeek, index) ? 'active' : '')}>{(new Date(this.props.activeWeek.getTime() + (index * 24 * 60 * 60 * 1000))).getDate()}</span>
-            </th>))
-        let currentWeekNumber = <span className={'current-week-number' + ((this.props.activeWeekOffset != 0) ? ' future' : '') }>W{ this.props.activeWeek.getWeekNumber() }</span>
+            </h4>))
         return (
           <div id="calendar" className="fc fc-ltr fc-unthemed week-calendar seven-days">
-            <div className="fc-toolbar no-print">
-              <div className="fc-left">
-                <h2>{ MONTHS[this.props.activeWeek.getMonth()] } <span>{this.props.activeWeek.getFullYear()}</span></h2>
+            <div id="calendar-header">
+              <div className="fc-toolbar no-print">
+                <div className="fc-left">
+                  <h2>{ MONTHS[this.props.activeWeek.getMonth()] } <span>{this.props.activeWeek.getFullYear()}</span></h2>
+                </div>
+                <div className="fc-right">
+                  <WeeklyPaginationContainer />
+                </div>
+                <div className="fc-center" />
+                <div className="fc-clear" />
               </div>
-              <div className="fc-right">
-                <WeeklyPaginationContainer />
+              <div id="header-days">
+                <h4 id="current-week-number" className={this.props.activeWeekOffset != 0 ? ' future' : ''}>W{ this.props.activeWeek.getWeekNumber() }</h4>
+                { calendarHeader }
               </div>
-              <div className="fc-center" />
-              <div className="fc-clear" />
             </div>
-            <div className="fc-view-container" style={{position: 'relative'}}>
+            <div id="calendar-body" className="fc-view-container">
               <div className="fc-view fc-settimana-view fc-agenda-view">
                 <table>
-                  <thead className="fc-head">
-                    <tr>
-                      <td className="fc-head-container fc-widget-header">
-                        <div className="fc-row fc-widget-header">
-                          <table>
-                            <thead>
-                              <tr>
-                                <th className="fc-axis fc-widget-header" style={{width: 49}}>{ currentWeekNumber }</th>
-                                { calendarHeader }
-                              </tr>
-                            </thead>
-                          </table>
-                        </div>
-                      </td>
-                    </tr>
-                  </thead>
                   <tbody className="fc-body">
                     <tr>
                       <td className="fc-widget-content">
-                        <hr className="fc-divider fc-widget-header" />
                         <div className="fc-time-grid-container">
                           <div className="fc-time-grid">
                             <div className="fc-bg">

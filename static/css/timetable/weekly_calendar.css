@@ -3,14 +3,16 @@
 	padding-left: 0;
 }
 /* Calendar Header */
-#calendar.seven-days .current-week-number {
-	font-size: 14px;
-	color: #aaa;
-	margin-right: 2px;
-	width: auto;
-}
-#calendar.seven-days .current-week-number.future {
-	color: #fd7473;
+#calendar-header {
+	position: fixed;
+	top: 50px;
+	left: 0;
+	padding: 0 20px;
+	background-color: #fff;
+	z-index: 100;
+	opacity: 1;
+	visibility: visible;
+	transition: width .3s, opacity .3s, visibility .3s;
 }
 #calendar.seven-days h2 {
 	font-size: 20px;
@@ -19,27 +21,47 @@
 #calendar.seven-days h2 span {
 	font-weight: 100;
 }
-#calendar.seven-days th {
+#calendar.seven-days #header-days {
+	font-size: 0;
+	border-bottom: 3px solid #ddd;
+}
+#calendar.seven-days #header-days h4#current-week-number {
+	display: inline-block;
+	width: 57px;
+	font-size: 14px;
+	color: #aaa;
+	margin: 0;
+	padding: 0 4px;
+}
+#calendar.seven-days #header-days h4#current-week-number.future {
+	color: #fd7473;
+}
+#calendar.seven-days #header-days h4 {
 	font-weight: 400;
 	height: 25px;
 	font-size: 15px;
+	display: inline-block;
 	vertical-align: middle;
-	border-width: 0px;
+	width: calc((100% - 58px)/7);
+	margin: 0;
+	text-align: center;
+	line-height: 25px;
 }
-#calendar.seven-days th span {
+#calendar.seven-days #header-days h4 span {
 	margin-left: 2px;
 	display: inline-block;
 	width: 22px;
 	height: 22px;
 }
-#calendar.seven-days th span.active {
+#calendar.seven-days #header-days h4 span.active {
 	background-color: #fd7473;
 	color: #fff;
 	border-radius: 100%;
 }
 /* Calendar Table Styles */
-.dtm .fc td.fc-head-container {
-	border-width: 0px;
+.dtm #calendar-body {
+	margin-top: 73px;
+	position: relative;
 }
 .dtm .fc td {
 	border-left-width: 0px;
