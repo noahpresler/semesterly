@@ -189,7 +189,8 @@ def get_timetables(request):
 
   course_ids = params['courseSections'].keys()
   courses = [Course.objects.get(id=cid) for cid in course_ids]
-  save_analytics_timetable(courses, params['semester'], SCHOOL, get_student(request))
+  # TODO
+  # save_analytics_timetable(courses, params['semester'], SCHOOL, get_student(request))
   locked_sections = params['courseSections']
   for updated_course in params.get('updated_courses', []):
     cid = str(updated_course['course_id'])
@@ -217,6 +218,7 @@ def get_timetables(request):
   result = [timetable for opt_courses in optional_course_subsets \
       for timetable in generator.courses_to_timetables(courses + list(opt_courses))]
 
+
   # updated roster object
   response = {'timetables': result, 'new_c_to_s': locked_sections}
   return HttpResponse(json.dumps(response), content_type='application/json')
@@ -242,7 +244,7 @@ class TimetableGenerator:
                 optional_course_ids=[]):
     self.school = school
     self.slots_per_hour = 60 / school_to_granularity[school]
-    self.semester = semester
+    self.semester = Semester(**semester)
     self.with_conflicts = preferences.get('try_with_conflicts', False)
     self.sort_metrics = [(m['metric'], m['order']) \
                             for m in preferences.get('sort_metrics', []) \
@@ -350,8 +352,10 @@ class TimetableGenerator:
     """
     all_sections = []
     for c in courses:
-      sections = sorted(c.section_set.filter(Q(semester__in=[self.semester, 'Y'])),
-                        key=lambda s: s.section_type)
+      sections = c.section_set.filter(
+        Q(sem_name__in=[self.semester.name, 'Full year']) &\
+        Q(year=self.semester.year))
+      sections = sorted(sections, key=lambda s: s.section_type)
       grouped = itertools.groupby(sections, lambda s: s.section_type)
       for section_type, sections in grouped:
         if str(c.id) in self.locked_sections and self.locked_sections[str(c.id)].get(section_type, False):
