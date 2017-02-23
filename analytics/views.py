@@ -130,7 +130,7 @@ def number_timetables_per_hour(Timetable=AnalyticsTimetable, school=None,
     length = timedelta(days = start_delta_days)
     time_start = time_end - length
 
-    time_delta = timedelta(hours = interval_delta_hours)
+    time_delta = timedelta(hours=interval_delta_hours)
     num_timetables = []
     while time_start < time_end:
         num_timetables.append(number_timetables(
