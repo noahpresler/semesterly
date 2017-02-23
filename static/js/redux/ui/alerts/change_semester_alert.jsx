@@ -8,7 +8,7 @@ class ChangeSemesterAlert extends React.Component {
 		this.props.dismissSelf();
 	}
 	handleClick() {
-		this.props.handleChangeSemester();	
+		this.props.setSemester(this.props.desiredSemester);	
 		this.props.dismissSelf();
 	}
 	render() {
