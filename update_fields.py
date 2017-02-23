@@ -8,6 +8,7 @@ from pprint import pprint
 
 from timetable.models import Section
 from analytics.models import *
+from student.models import PersonalTimetable
 from timetable.school_mappers import VALID_SCHOOLS
 
 
@@ -45,5 +46,5 @@ def code_to_name(semester_code, school):
     
 if __name__ == '__main__':
   update_sem_fields(Section, get_school=attrgetter('course.school'))
-  for table in [SharedTimetable, AnalyticsTimetable, AnalyticsCourseSearch]:
+  for table in [SharedTimetable, AnalyticsTimetable, AnalyticsCourseSearch, PersonalTimetable]:
     update_sem_fields(table, get_school=attrgetter('school'))
