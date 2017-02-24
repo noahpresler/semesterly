@@ -1,6 +1,6 @@
 import React, { PropTypes } from 'react';
 import { DragSource, DropTarget } from 'react-dnd'
-import { HALF_HOUR_HEIGHT, DRAGTYPES } from '../constants.jsx';
+import { HALF_HOUR_HEIGHT_WEEKLY, DRAGTYPES } from '../constants.jsx';
 
 
 function convertToHalfHours(str) {
@@ -43,7 +43,7 @@ const dragSlotTarget = {
     let slotStart = props.time_start
     let slotTop = $('#' + props.id).offset().top
     // number half hours from slot start
-    let n = Math.floor((monitor.getClientOffset().y - slotTop)/HALF_HOUR_HEIGHT)
+    let n = Math.floor((monitor.getClientOffset().y - slotTop)/HALF_HOUR_HEIGHT_WEEKLY)
 
     let newStartHour = convertToHalfHours(props.time_start) + n
     let newEndHour = newStartHour + (endHalfhour - startHalfhour)
@@ -71,7 +71,7 @@ const createSlotTarget = {
         // get the time that the mouse dropped on
         let slotStart = props.time_start
         let slotTop = $('#' + props.id).offset().top
-        let n = Math.floor((monitor.getClientOffset().y - slotTop)/HALF_HOUR_HEIGHT)
+        let n = Math.floor((monitor.getClientOffset().y - slotTop)/HALF_HOUR_HEIGHT_WEEKLY)
         let timeEnd = convertToStr(convertToHalfHours(props.time_start) + n)
 
         if (timeStart > timeEnd) {
@@ -90,7 +90,7 @@ const createSlotTarget = {
         // get the time that the mouse dropped on
         let slotStart = props.time_start
         let slotTop = $('#' + props.id).offset().top
-        let n = Math.floor((monitor.getClientOffset().y - slotTop)/HALF_HOUR_HEIGHT)
+        let n = Math.floor((monitor.getClientOffset().y - slotTop)/HALF_HOUR_HEIGHT_WEEKLY)
         if (n == lastPreview) {
             return
         }
@@ -175,8 +175,8 @@ class BusySlot extends React.Component {
             end_hour     = parseInt(this.props.time_end.split(":")[0]),
             end_minute   = parseInt(this.props.time_end.split(":")[1]);
 
-        let top = (start_hour - 0)*(HALF_HOUR_HEIGHT*2 + 2) + (start_minute)*(HALF_HOUR_HEIGHT/30);
-        let bottom = (end_hour - 0)*(HALF_HOUR_HEIGHT*2 + 2) + (end_minute)*(HALF_HOUR_HEIGHT/30) - 1;
+        let top = (start_hour - 0)*(HALF_HOUR_HEIGHT_WEEKLY*2 + 2) + (start_minute)*(HALF_HOUR_HEIGHT_WEEKLY/30);
+        let bottom = (end_hour - 0)*(HALF_HOUR_HEIGHT_WEEKLY*2 + 2) + (end_minute)*(HALF_HOUR_HEIGHT_WEEKLY/30) - 1;
         let height = bottom - top - 2;
         if (this.props.preview) { // don't take into account conflicts, reduce opacity, increase z-index
             return {

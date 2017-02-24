@@ -59,17 +59,46 @@
 	border-radius: 100%;
 }
 /* Calendar Table Styles */
+.dtm #calendar.seven-days {
+	position: absolute;
+	top: 73px;
+	bottom: 0;
+	width: auto;
+	left: 20px;
+	right: 20px;
+	overflow-y: auto;
+}
 .dtm #calendar-body {
-	margin: 73px 0 20px 0;
+	margin: 10px 0 20px 0;
 	position: relative;
+}
+.dtm .fc .fc-body > tr:first-child > td.fc-widget-content {
+	border-top-width: 0px;
+}
+.dtm .fc .fc-slats tr:first-child .week-col {
+	border-top: 1px solid #ddd;
 }
 .dtm .fc td {
 	border-left-width: 0px;
+	height: 20px;
 }
 .dtm .fc td.fc-axis {
 	border-top-width: 0px;
 }
 .dtm .fc td.fc-axis span {
 	position: relative;
-	/*top: -12px;*/
+	top: -10px;
+	height: 19px;
+	display: block;
+	padding-right: 5px;
+}
+.dtm .fc td.fc-axis span:after {
+	content: '';
+	display: block;
+	position: absolute;
+	top: 9px;
+	right: -8px;
+	height: 1px;
+	width: 10px;
+	background-color: #ddd;
 }

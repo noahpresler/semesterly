@@ -137,7 +137,7 @@ h3, h4, h5, h6, p, a, span, input, textarea {
 
 @media (max-width: 999px) {
 	#main-bar,
-	.dtm #calendar-header {
+	.dtm #main-bar #calendar-header {
 		width: 100%;
 	}
 	#side-bar {

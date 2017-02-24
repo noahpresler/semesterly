@@ -4,7 +4,7 @@ import Slot from './slot.jsx'
 import CustomSlot from './custom_slot.jsx'
 import BusySlot from './busy_slot.jsx'
 import { index as IntervalTree, matches01 as getIntersections } from 'static-interval-tree'
-import { DAYS_SEVEN, HALF_HOUR_HEIGHT, COLOUR_DATA } from '../constants.jsx';
+import { DAYS_SEVEN, HALF_HOUR_HEIGHT_WEEKLY, COLOUR_DATA } from '../constants.jsx';
 
 class SlotManagerWeekly extends React.Component {
 
