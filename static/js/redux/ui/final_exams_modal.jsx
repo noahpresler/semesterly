@@ -76,7 +76,7 @@ export class FinalExamsModal extends React.Component {
         }
         return <div className="final-exam-week">
                     { weekHeadersHtml }
-                    { finalExamDays }
+                    <div>{ finalExamDays }</div>
                 </div>
 
     }
