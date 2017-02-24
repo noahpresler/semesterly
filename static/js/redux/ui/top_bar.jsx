@@ -46,7 +46,11 @@ class TopBar extends React.Component {
       <img className="usr-pic print" src={'https://graph.facebook.com/' + JSON.parse(currentUser).fbook_uid + '/picture?type=normal'}/>
       <div id="print-name-major" className="print">
         <span id="print-name" className="print">{userInfo.userFirstName + ' ' + userInfo.userLastName}</span>
-        <span id="print-major" className="print">{userInfo.major} {userInfo.class_year ? '| Class of ' + userInfo.class_year : null} | {this.props.currentSemester}</span>
+        <span id="print-major" className="print">
+        	{userInfo.major} 
+        	{userInfo.class_year ? '| Class of ' + userInfo.class_year : null} | 
+        	{this.props.currentSemester.name + " " + this.props.currentSemester.year}
+        </span>
       </div>
     </div>
     );
