@@ -19,27 +19,28 @@ def update_sem_fields(table, get_school):
   """ Link each row to corresponding Semester based on row._semester """
   num_updated = 0
   name_year_to_semester = {}
-  bad_semesters = Counter()
+  bad_inputs = Counter()
   for row in table.objects.all():
     semester_code = row._semester
     name = code_to_name(semester_code, get_school(row))
     year = '2017' if semester_code == 'S' else '2016'
 
-    if semester_code not in valid_semesters:
-      bad_semesters[semester_code] += 1
-    else:
-      # avoid .get or .setdefault because of eager evaluation of DB access
-      if (name, year) not in name_year_to_semester:
+    # avoid .get or .setdefault because of eager evaluation of DB access
+    if (name, year) not in name_year_to_semester:
+      try:
         name_year_to_semester[(name, year)] = Semester.objects.get(name=name, year=year)
-      semester = name_year_to_semester[(name, year)]
+      except:
+        bad_inputs[semester_code] += 1
+        continue
+    semester = name_year_to_semester[(name, year)]
 
-      row.semester = semester
-      row.save()
-      num_updated += 1
+    row.semester = semester
+    row.save()
+    num_updated += 1
 
   print "Updated {0}/{1} rows from table {2}".format(num_updated, len(table.objects.all()), str(table))
-  print "Ignored the following invalid semester codes:"
-  pprint(bad_semesters)
+  print "Ignored the following unknown semester codes:"
+  pprint(bad_inputs)
   print
 
 def code_to_name(semester_code, school):
@@ -47,7 +48,7 @@ def code_to_name(semester_code, school):
   if semester_code == 'F':
     return 'Fall'
   elif semester_code == 'Y':
-    return 'Full year'
+    return 'Full Year'
   else:
     return 'Winter' if school in winter_schools else 'Spring'
 
