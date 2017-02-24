@@ -91,6 +91,7 @@ week_offset acts as pagination: tells the function
 @csrf_exempt
 def get_free_busy_from_cals(cal_ids, student, week_offset=0):
   #TODO CHECK THAT THE CALENDAR BELONGS TO THEM
+  if 'default' in cal_ids: cal_ids.remove('default')
   start = tz.localize(last_weekday(datetime.datetime.today(), 'sunday')) + datetime.timedelta(weeks=week_offset, minutes=5)
   end = tz.localize(next_weekday(datetime.datetime.today(), 'S')) + datetime.timedelta(weeks=week_offset)
   body = {
@@ -156,6 +157,7 @@ Creates AvailabilityShare object for a student with calendarids and weekoffset
 Returns encryped hash of the id for the share
 '''
 def create_availability_share(cal_ids, student, week_offset):
+  if 'default' in cal_ids: cal_ids.remove('default')
   start_day = last_weekday(datetime.datetime.today(), 'sunday') + datetime.timedelta(weeks=week_offset, minutes=5)
   share = AvailabilityShare.objects.create(
     student=student,
@@ -189,7 +191,6 @@ def share_availability(request, ref):
   share = AvailabilityShare.objects.get(id=hashids.decrypt(ref)[0])
   cal_ids = map(lambda gc: gc.calendar_id, share.google_calendars.all())
   week_offset = int(float((share.start_day - tz.localize(datetime.datetime.today())).days) / 7 )
-  print "OFFSET", week_offset
   return view_dtm_root(request, share_availability=merge_free_busy(get_free_busy_from_cals(cal_ids, student, week_offset=week_offset)))
   # except Exception as e:
   #   raise Http404
