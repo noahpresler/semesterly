@@ -7,7 +7,6 @@ export class FinalExamsModal extends React.Component {
     constructor(props) {
         super(props);
         this.hide = this.hide.bind(this);
-        this.state = {"finalsToRender": jQuery.extend(true, {}, this.props.finalExamSchedule)};
     }
     hide() {
         this.refs.modal.hide();
@@ -28,13 +27,16 @@ export class FinalExamsModal extends React.Component {
 		}
 	}
 
-    findFirstFinal() {
-        let finals = this.props.finalExamSchedule
+    findNextFinalToRender(finalsToRender) {
+        let finals = finalsToRender
         let minDate = Infinity;
         for (let course in finals) {
             let m = finals[course].split(' ')[0].split('/')['0'];
             let d = finals[course].split(' ')[0].split('/')['1'];
             minDate = (new Date(2017, Number(m - 1), Number(d)) < minDate) ? new Date(2017, Number(m - 1), Number(d)) : minDate;
+            if (finals[course].includes('Exam time not found')) {
+                delete finalsToRender[course]
+            }
         }
         return minDate;
     }
@@ -54,15 +56,9 @@ export class FinalExamsModal extends React.Component {
             { html }
         </div>
     }
-    renderWeek() {
-
-    }
-    loadFinalsToDivs() {
-        let days = ['N', 'M', 'T', 'W', 'R', 'F', 'S']
-
-        let finalsToRender = jQuery.extend(true, {}, this.props.finalExamSchedule);
+    renderWeek(day, days, finalsToRender) {
         let finalExamDays = []
-        let daysOfWeek = this.findDaysOfWeek(this.findFirstFinal(), days)
+        let daysOfWeek = this.findDaysOfWeek(day, days)
 
         let weekHeadersHtml = this.generateWeekHeaders(daysOfWeek);
         for (let day in daysOfWeek) {
@@ -70,25 +66,33 @@ export class FinalExamsModal extends React.Component {
             let html = "";
             for (let final in finalsToRender) {
                 if (finalsToRender[final].includes(daysOfWeek[day])) {
-                    html += finalsToRender[final];
+                    html += finalsToRender[final]
                     rendered = true;
-                    delete finalsToRender[final];
+                    delete finalsToRender[final]
                 }
 
             }
-            console.log(finalsToRender);
             finalExamDays.push(<div key={day} className="final-exam-day">{ html }</div>)
         }
+        return <div className="final-exam-week">
+                    { weekHeadersHtml }
+                    { finalExamDays }
+                </div>
 
-        while (finalsToRender.length > 0) {
-            remove from finalsToRender
+    }
+    loadFinalsToDivs() {
+        let days = ['N', 'M', 'T', 'W', 'R', 'F', 'S']
+        let finalsToRender = jQuery.extend(true, {}, this.props.finalExamSchedule);
+        let day = this.findNextFinalToRender(finalsToRender)
+
+        let finalsWeeks = []
+        while (Object.keys(finalsToRender).length > 0) {
+            finalsWeeks.push(<div key={day}>{ this.renderWeek(day, days, finalsToRender) }</div>)
+            day = new Date(day.getTime() + (7 * 24 * 60 * 60 * 1000));
         }
 
         return <div id="final-exam-calendar-ctn">
-                    { weekHeadersHtml }
-                <div className="final-exam-week">
-                    { finalExamDays }
-                </div>
+                { finalsWeeks }
                 {JSON.stringify(this.props.finalExamSchedule)}
             </div>;
     }
