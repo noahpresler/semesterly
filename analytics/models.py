@@ -11,7 +11,8 @@ class SharedTimetable(models.Model):
     """
     courses = models.ManyToManyField(Course)
     sections = models.ManyToManyField(Section)
-    semester = models.CharField(max_length=2) # will eventually be replaced by sem_name
+    _semester = models.CharField(max_length=2) # deprecated
+    semester = models.ForeignKey('timetable.Semester')
     sem_name = models.CharField(max_length=50)
     year = models.CharField(max_length=4)
     school = models.CharField(max_length=50)
@@ -27,7 +28,8 @@ class AnalyticsTimetable(models.Model):
     when they are not saved.
     """
     courses = models.ManyToManyField(Course)
-    semester = models.CharField(max_length=2) # will eventually be replaced by sem_name
+    _semester = models.CharField(max_length=2) # deprecated
+    semester = models.ForeignKey('timetable.Semester')
     sem_name = models.CharField(max_length=50)
     year = models.CharField(max_length=4)
     school = models.CharField(max_length=50)
@@ -43,7 +45,8 @@ class AnalyticsCourseSearch(models.Model):
     query = models.CharField(max_length=200)
     courses = models.ManyToManyField(Course)
     is_advanced = models.BooleanField(blank=True, default=False)
-    semester = models.CharField(max_length=2) # will eventually be replaced by sem_name
+    _semester = models.CharField(max_length=2) # deprecated
+    semester = models.ForeignKey('timetable.Semester')
     sem_name = models.CharField(max_length=50)
     year = models.CharField(max_length=4)
     school = models.CharField(max_length=50)
