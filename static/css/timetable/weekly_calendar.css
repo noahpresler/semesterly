@@ -102,3 +102,6 @@
 	width: 10px;
 	background-color: #ddd;
 }
+.dtm .fc .fc-slats tr:first-child span:after {
+	top: 10px;
+}
