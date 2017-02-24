@@ -2,6 +2,7 @@ export const dtmCalendars = (state = {
 	isLoading: false,
 	calendars: {},
 	availability: {},
+	sharedAvailability: null,
 	dirty: true
 }, action) => {
 	switch (action.type) {
@@ -19,6 +20,9 @@ export const dtmCalendars = (state = {
 			return Object.assign({}, state, { calendars: new_calendars, dirty: true});
 		case "RECEIVE_AVAILABILITY":
 			return Object.assign({}, state, { availability: action.availability, dirty: true });
+		case "RECEIVE_SHARED_AVAILABILITY":
+			let def = {name: 'default', id: 'default', color: '#EB6B68', visible: true}
+			return Object.assign({}, state, { sharedAvailability: action.shareAvailability, calendars: state.calendars.concat(def)});
 		case "CLEAN_AVAILABILITY":
 			return Object.assign({}, state, { dirty: false });
 		default:

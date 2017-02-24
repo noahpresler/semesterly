@@ -27,7 +27,7 @@ const mapStateToProps = (state,ownProps) => {
 		primaryDisplayAttribute: getSchoolSpecificInfo(state.school.school).primaryDisplay,
 		courseToColourIndex: state.ui.courseToColourIndex,
 		custom: state.customSlots,
-		busyRanges: state.dtmCalendars.availability,
+		busyRanges: shareAvailability ? state.dtmCalendars.sharedAvailability : state.dtmCalendars.availability,
 		visibleCalendars: state.dtmCalendars.calendars.filter(c => c.visible).map(c => c.id),
 		isCourseOptional: (cid) => state.optionalCourses.courses.findIndex(c => c.id === cid) > -1,
 		getOptionalCourseById: (cid) => state.optionalCourses.courses.find(c => c.id === cid),

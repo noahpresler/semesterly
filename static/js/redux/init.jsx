@@ -46,6 +46,11 @@ function setup(dispatch) {
       calendars: calendarList, 
     });
     dispatch(fetchAvailability());
+    shareAvailability = JSON.parse(shareAvailability);
+    dispatch({
+      type: "RECEIVE_SHARED_AVAILABILITY",
+      shareAvailability
+    })
   } else {
     sharedTimetable = JSON.parse(sharedTimetable);
     sharedCourse = JSON.parse(sharedCourse);

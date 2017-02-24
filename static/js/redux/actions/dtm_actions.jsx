@@ -71,8 +71,7 @@ export function fetchShareAvailabilityLink(weekOffset) {
 		})
 		.then(response => response.json())
 		.then(ref => {
-			receiveDtmShareLink(store.dispatch, 
-				window.location.hostname + "dtm/share/" + ref.link);
+			receiveDtmShareLink(store.dispatch, window.location.href.split("/")[2] + "/dtm/share/" + ref.link);
 			dispatch({
 				type: "CLEAN_AVAILABILITY"
 			});

@@ -1,6 +1,7 @@
 import json, pytz, datetime, copy
 from django.shortcuts import render_to_response, render
 from django.http import HttpResponse, HttpResponseRedirect, Http404
+from django.core.serializers.json import DjangoJSONEncoder
 from django.template import RequestContext
 
 from timetable.models import *
@@ -16,6 +17,7 @@ from django.views.decorators.csrf import csrf_exempt
 import dateutil.parser
 
 hashids = Hashids(salt="***REMOVED***")
+tz = pytz.timezone('US/Eastern')
 
 # Create your views here.
 @validate_subdomain
@@ -35,7 +37,7 @@ def view_dtm_root(request, code=None, sem=None, share_availability=None):
     'semester': sem,
     'uses_12hr_time': school in AM_PM_SCHOOLS,
     'calendar_list': get_calendar_list(student),
-    'share_availability': share_availability,
+    'share_availability': json.dumps(share_availability, cls=DjangoJSONEncoder),
     'is_poll': True
   },
   context_instance=RequestContext(request))
@@ -89,7 +91,6 @@ week_offset acts as pagination: tells the function
 @csrf_exempt
 def get_free_busy_from_cals(cal_ids, student, week_offset=0):
   #TODO CHECK THAT THE CALENDAR BELONGS TO THEM
-  tz = pytz.timezone('US/Eastern')
   start = tz.localize(last_weekday(datetime.datetime.today(), 'sunday')) + datetime.timedelta(weeks=week_offset, minutes=5)
   end = tz.localize(next_weekday(datetime.datetime.today(), 'S')) + datetime.timedelta(weeks=week_offset)
   body = {
@@ -176,17 +177,22 @@ def convert_share_to_dict(share):
   share_dict['google_calendars'] = map(lambda gc: model_to_dict(gc,exclude=['id','student']), share.google_calendars.all())
   return share_dict
 
+
 '''
 View shared availability
 Requires url: /dtm/share/{hashed id}
 '''
 @validate_subdomain
 def share_availability(request, ref):
-  try:
-    share = AvailabilityShare.objects.get(id=hashids.decrypt(ref)[0])
-    return view_dtm_root(request,share_availability=convert_share_to_dict(share))
-  except Exception as e:
-    raise Http404
+  student = get_student(request)
+  # try:
+  share = AvailabilityShare.objects.get(id=hashids.decrypt(ref)[0])
+  cal_ids = map(lambda gc: gc.calendar_id, share.google_calendars.all())
+  week_offset = int(float((share.start_day - tz.localize(datetime.datetime.today())).days) / 7 )
+  print "OFFSET", week_offset
+  return view_dtm_root(request, share_availability=merge_free_busy(get_free_busy_from_cals(cal_ids, student, week_offset=week_offset)))
+  # except Exception as e:
+  #   raise Http404
 
 '''
 Returns the free busy availability from Google api
@@ -214,10 +220,11 @@ def update_cal_prefs(request):
   visibility = json.loads(request.body)
   student = get_student(request)
   for cid in visibility:
-    cal = GoogleCalendar.objects.get(calendar_id=cid)
-    student.calendar_preferences.update_or_create(  
-            calendar = cal,
-            defaults = {
-                'visible': visibility[cid]
-            })
+    if cid != "default":
+      cal = GoogleCalendar.objects.get(calendar_id=cid)
+      student.calendar_preferences.update_or_create(  
+              calendar = cal,
+              defaults = {
+                  'visible': visibility[cid]
+              })
   return HttpResponse(json.dumps({"success":"200"}), content_type='application/json')
