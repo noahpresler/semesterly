@@ -5,7 +5,11 @@ from django.forms.models import model_to_dict
 from django.db import models
 
 
-#----------- Global Models  ----------------
+class Semester(models.Model):
+  name = models.CharField(max_length=50)
+  year = models.CharField(max_length=4)
+
+
 class Textbook(models.Model):
   isbn = models.BigIntegerField(primary_key=True)
   detail_url = models.URLField(max_length=1000)
@@ -16,11 +20,13 @@ class Textbook(models.Model):
   def get_info(self):
     return model_to_dict(self)
 
+
 class Updates(models.Model):
   school = models.CharField(max_length=100)
   update_field = models.CharField(max_length=100) #e.g. 'textbook', 'course'
   last_updated = models.DateTimeField(auto_now=True)
   reason = models.CharField(max_length=200, default='Scheduled Update')
+
 
 class Course(models.Model):
   school = models.CharField(db_index=True, max_length=100)
@@ -91,6 +97,7 @@ class Course(models.Model):
     ids = CourseIntegration.objects.filter(course__id=self.id).values_list("integration", flat=True)
     return Integration.objects.filter(id__in = ids).values_list("name", flat=True)
 
+
 class Section(models.Model):
   course = models.ForeignKey(Course)
   meeting_section = models.CharField(max_length=50)
@@ -141,6 +148,7 @@ class TextbookLink(models.Model):
 
 class Integration(models.Model):
   name = models.CharField(max_length=250)
+
 
 class CourseIntegration(models.Model):
   course = models.ForeignKey(Course)
