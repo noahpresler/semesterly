@@ -8,11 +8,6 @@ from timetable.school_mappers import VALID_SCHOOLS
 
 
 def create_new_semesters():
-  """ 
-  Return a dictionary mapping (school, semester) to the corresponding Term obj,
-  creating any missing Terms along the way.
-  school is a valid school code, semester is 'F' or 'S', e.g. {('jhu', 'F'): obj}
-  """
   new_rows = [
     Semester.objects.get_or_create(name='Full Year', year='2016'),
     Semester.objects.get_or_create(name='Fall', year='2016'),
