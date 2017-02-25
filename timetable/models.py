@@ -109,8 +109,6 @@ class Section(models.Model):
   instructors = models.CharField(max_length=500, default='TBA')
   _semester = models.CharField(max_length=2) # deprecated
   semester = models.ForeignKey(Semester)
-  sem_name = models.CharField(max_length=50)
-  year = models.CharField(max_length=4)
   textbooks = models.ManyToManyField(Textbook, through='TextbookLink')
 
   def get_textbooks(self):
