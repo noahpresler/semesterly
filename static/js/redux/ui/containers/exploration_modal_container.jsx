@@ -12,8 +12,7 @@ const mapStateToProps = (state) => {
 	let inRoster = course && (courseSections[course.id] !== undefined);
 	let activeTimetable = state.timetables.items[state.timetables.active];
 	let { areas, departments, levels } = state.school;
-	let schoolSpecificSemesters = getSchoolSpecificInfo(state.school.school).semesters;
-	let semester = schoolSpecificSemesters[state.semester];
+	let semester = allSemesters[state.semesterIndex];
 	return {
 		isVisible,
     isFetching,
