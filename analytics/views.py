@@ -13,6 +13,7 @@ from django.http import Http404
 from student.views import get_student
 from student.models import *
 from analytics.models import *
+from timetable.models import Semester
 from timetable.school_mappers import VALID_SCHOOLS
 
 
@@ -77,8 +78,7 @@ def view_analytics_dashboard(request):
 def save_analytics_timetable(courses, semester, school, student=None):
     """Create an analytics time table entry."""
     analytics_timetable = AnalyticsTimetable.objects.create(
-        sem_name=semester.name,
-        year=semester.year,
+        semester=semester,
         school=school,
         time_created=datetime.now(),
         student=student)
@@ -89,8 +89,7 @@ def save_analytics_course_search(query, courses, semester, school, student=None,
     """Create an analytics course search entry."""
     course_search = AnalyticsCourseSearch.objects.create(
         query=query,
-        sem_name=semester.name,
-        year=semester.year,
+        semester=semester,
         school=school,
         student=student,
         is_advanced=advanced)
@@ -163,8 +162,7 @@ def most_popular_courses(n, school, semester, Table=AnalyticsTimetable):
     timetable (AnalyticsTimetable).
     """
     num_courses = {}
-    link_to_courses = Table.objects.filter(
-        school=school, sem_name=semester.name, year=semester.year)
+    link_to_courses = Table.objects.filter(school=school, semester=semester)
     for link_to_course in link_to_courses:
         for course in link_to_course.courses.all():
             if course.id in num_courses:
