@@ -110,6 +110,7 @@ class SideBar extends React.Component {
         let finalScheduleLink = (masterSlots.length > 0 ) ? 
             <div className="final-schedule-link"
                 onClick = {this.props.launchFinalExamsModal}>
+                <i className="fa fa-calendar" aria-hidden="true"></i>
                 See Finals Schedule
             </div>
             : null

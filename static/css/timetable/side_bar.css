@@ -302,7 +302,20 @@ h3.master-slot-credits {
     background-color: rgba(0,0,0,.5);
 }
 
+.final-schedule-link {
+    font-size: 14px;
+    padding: 10px 5px;
+    margin: 0;
+    color: #777;
+    font-weight: 200;
+    clear: both;
+    position: relative;
+    text-align: center;
+}
 
+.final-schedule-link i {
+    margin-right: 3px;
+}
 /* EMPTY STATES */
 
 #side-bar .empty-state {
