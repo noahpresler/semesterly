@@ -61,12 +61,11 @@ export function requestFriends() {
 function getSaveTimetablesRequestBody() {
 	let state = store.getState();
 	let timetableState = state.timetables;
-	let allSemesters = getSchoolSpecificInfo(state.school.school).semesters;
 	let name = state.savingTimetable.activeTimetable.name;
 	let id = state.savingTimetable.activeTimetable.id || 0;
 	return {
 		timetable: getActiveTimetable(timetableState),
-		semester: allSemesters[state.semester],
+		semester: allSemesters[state.semesterIndex],
 		name,
 		id,
 	}
@@ -330,8 +329,7 @@ export function getUserSavedTimetables(semester) {
 export function fetchClassmates(courses) {
 	return (dispatch) => {		
 		let state = store.getState();
-		let semesterIndex = state.semester !== undefined ? state.semester : currentSemester;
-		let allSemesters = getSchoolSpecificInfo(state.school.school).semesters
+		let semesterIndex = state.semesterIndex !== undefined ? state.semesterIndex : currentSemester;
 		dispatch(requestClassmates());
 		fetch(getClassmatesEndpoint(), {
 			credentials: 'include',
@@ -347,8 +345,7 @@ export function fetchClassmates(courses) {
 
 export function fetchFriends() {
 	let state = store.getState();
-	let semesterIndex = state.semester !== undefined ? state.semester : currentSemester;
-	let allSemesters = getSchoolSpecificInfo(state.school.school).semesters
+	let semesterIndex = state.semesterIndex !== undefined ? state.semesterIndex : currentSemester;
 	return (dispatch) => {
 		dispatch(requestFriends());
 		dispatch({

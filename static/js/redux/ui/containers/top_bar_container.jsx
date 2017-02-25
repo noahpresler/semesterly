@@ -4,10 +4,9 @@ import { getSchoolSpecificInfo } from '../../constants.jsx';
 
 
 const mapStateToProps = (state) => {
-  let allSemesters = getSchoolSpecificInfo(state.school.school).semesters;
   return {
     userInfo: state.userInfo.data,
-    currentSemester: allSemesters[state.semester]
+    currentSemester: allSemesters[state.semesterIndex]
   }
 }
 
