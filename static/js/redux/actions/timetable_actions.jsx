@@ -144,7 +144,7 @@ Returns the body of the request used to get new timetables
 function getBaseReqBody(state){
 	return {
 		school: state.school.school,
-		semester: getSchoolSpecificInfo(state.school.school).semesters[state.semester],
+		semester: allSemesters[state.semesterIndex],
 		courseSections: state.courseSections.objects,
 		preferences: state.preferences,
 		sid: SID
@@ -277,8 +277,8 @@ function fetchTimetables(requestBody, removing, newActive=0) {
 		// are always "up-to-date" (correspond to last loaded timetable).
 		// same for the semester
 		saveLocalPreferences(requestBody.preferences);
-		if (localStorage.semester !== state.semester) {
-			saveLocalSemester(state.semester);
+		if (localStorage.semester !== state.semesterIndex) {
+			saveLocalSemester(state.semesterIndex);
 		}		
 	}
 }
