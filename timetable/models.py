@@ -9,6 +9,8 @@ class Semester(models.Model):
   name = models.CharField(max_length=50)
   year = models.CharField(max_length=4)
 
+  def __unicode__(self):
+    return "%s %s" % (self.name, self.year)
 
 class Textbook(models.Model):
   isbn = models.BigIntegerField(primary_key=True)
@@ -64,8 +66,7 @@ class Course(models.Model):
     info = []
     related = self.related_courses.all()
     if semester:
-      related = related.filter(section__sem_name__in=[semester.name, 'Y'],
-                              section__year=semester.year).distinct()
+      related = related.filter(section__semester=semester).distinct()
     if limit and limit > 0:
       related = related[:limit]
     for c in related:
@@ -84,8 +85,7 @@ class Course(models.Model):
   def get_textbooks(self, semester):
     textbooks = []
     isbns = set()
-    for section in self.section_set.filter(sem_name__in=[semester.name, 'Y'], 
-                                          year=semester.year):
+    for section in self.section_set.filter(semester=semester):
       for textbook in section.textbooks.all():
         if textbook.isbn not in isbns:
           textbooks.append(textbook.get_info())
@@ -115,7 +115,7 @@ class Section(models.Model):
     return [tb.get_info() for tb in self.textbooks.all()]
 
   def __unicode__(self):
-    return "Course: %s; Section: %s; Semester: %s" % (str(self.course), self.meeting_section, self.semester)
+    return "Course: %s; Section: %s; Semester: %s" % (str(self.course), self.meeting_section, str(self.semester))
 
 
 class Offering(models.Model):
