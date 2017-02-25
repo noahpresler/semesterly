@@ -23,8 +23,7 @@ export const getSchool = () => {
 }
 export const getSemester = () => {
   let state = store.getState()
-  let allSemesters = getSchoolSpecificInfo(state.school.school).semesters
-  let currSemester = allSemesters[state.semester]
+  let currSemester = allSemesters[state.semesterIndex]
   return currSemester.name + "/" + currSemester.year
 }
 // setup the state. loads the user's timetables if logged in; cached timetable if not.
@@ -40,7 +39,9 @@ function setup(dispatch) {
     type: "SET_SEMESTER",
     semester: parseInt(currentSemester), // currentSemester comes from timetable.html (rendered by the server). if the user is loading a share course link, we need to set the appropriate semester, so we can't default it to any particular value
   });
-  console.log(JSON.parse(allPossibleSemesters));
+  console.log("WTF?");
+  allSemesters = JSON.parse(allSemesters);
+  console.log(allSemesters);
   sharedTimetable = JSON.parse(sharedTimetable);
   sharedCourse = JSON.parse(sharedCourse);
   findFriends = findFriends === "True";
