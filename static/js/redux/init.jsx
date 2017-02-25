@@ -39,9 +39,7 @@ function setup(dispatch) {
     type: "SET_SEMESTER",
     semester: parseInt(currentSemester), // currentSemester comes from timetable.html (rendered by the server). if the user is loading a share course link, we need to set the appropriate semester, so we can't default it to any particular value
   });
-  console.log("WTF?");
   allSemesters = JSON.parse(allSemesters);
-  console.log(allSemesters);
   sharedTimetable = JSON.parse(sharedTimetable);
   sharedCourse = JSON.parse(sharedCourse);
   findFriends = findFriends === "True";
