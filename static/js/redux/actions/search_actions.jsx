@@ -23,7 +23,6 @@ export function setSemester(semester) {
 	let state = store.getState();
 	let dispatch = store.dispatch;
 
-	let allSemesters = getSchoolSpecificInfo(state.school.school).semesters
 	if (state.userInfo.data.isLoggedIn) {
 		dispatch(getUserSavedTimetables(allSemesters[semester]));
 	}
@@ -45,7 +44,7 @@ export function maybeSetSemester(semester) {
 	let state = store.getState();
 	let dispatch = store.dispatch;
 
-	if (semester === state.semester) { return; }
+	if (semester === state.semesterIndex) { return; }
 
 	if (state.timetables.items[state.timetables.active].courses.length > 0) {
 		if (state.userInfo.data.isLoggedIn && !state.savingTimetable.upToDate) {
@@ -103,14 +102,13 @@ export function fetchAdvancedSearchResults(query, filters) {
 		});
 		// send a request (via fetch) to the appropriate endpoint to get courses
 		let state = store.getState()
-		let allSemesters = getSchoolSpecificInfo(state.school.school).semesters
 		fetch(getAdvancedSearchEndpoint(), {
 			credentials: 'include',
 			method: 'POST',
 			body: JSON.stringify({
 				query,
 				filters,
-				semester: allSemesters[state.semester]
+				semester: allSemesters[state.semesterIndex]
 			})
 		})
 		.then(response => response.json()) // TODO(rohan): error-check the response
