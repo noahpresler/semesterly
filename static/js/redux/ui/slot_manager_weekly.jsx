@@ -7,7 +7,13 @@ import { index as IntervalTree, matches01 as getIntersections } from 'static-int
 import { DAYS_SEVEN, HALF_HOUR_HEIGHT_WEEKLY, COLOUR_DATA } from '../constants.jsx';
 
 class SlotManagerWeekly extends React.Component {
-
+    constructor(props) {
+        super(props);
+        this.state = {earliestHour: 23};
+    }
+    componentDidUpdate() {
+        $('#calendar').scrollTop(Math.min(8, this.state.earliestHour) * (HALF_HOUR_HEIGHT_WEEKLY + 1) * 2);
+    }
 	render() {
         let slots_by_day = this.getSlotsByDay();
         let all_slots = this.props.days.map((day, i) => {
@@ -16,6 +22,9 @@ class SlotManagerWeekly extends React.Component {
                 let locked = this.props.isLocked(courseId, slot.meeting_section);
                 let isOptional = this.props.isCourseOptional(courseId);
                 let optionalCourse = isOptional ? this.props.getOptionalCourseById(courseId) : null;
+                if (Number(slot.time_start.split(':')[0]) < this.state.earliestHour) {
+                    this.state.earliestHour = Number(slot.time_start.split(':')[0])
+                }
                 if (slot.custom) {
                     return <CustomSlot {...slot}
                             key={ i.toString() + j.toString() + " custom" }

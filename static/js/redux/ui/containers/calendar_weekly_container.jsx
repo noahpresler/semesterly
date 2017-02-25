@@ -18,24 +18,6 @@ const getMaxHourBasedOnWindowHeight = () => {
   }
   return Math.min(24, parseInt(maxHour));
 }
-const getEarliestStartHour = (availability) => {
-    let earliestStartHour = 8;
-    console.log(availability);
-    // if (!hasCourses) {
-    //   return maxEndHour;
-    // }
-    // getMaxHourBasedOnWindowHeight();
-    // let courses = timetable.courses;
-    // for (let course_index in courses) {
-    //   let course = courses[course_index];
-    //   for (let slot_index in course.slots) {
-    //     let slot = course.slots[slot_index];
-    //     let end_hour = parseInt(slot.time_end.split(":")[0]);
-    //     maxEndHour = Math.max(maxEndHour, end_hour);
-    //   }
-    // }
-    return Math.min(earliestStartHour, 23);
-}
 /*
 gets the end hour of the current timetable, based on the class that ends latest
 */
@@ -65,7 +47,6 @@ const mapStateToProps = (state) => {
       activeWeek: state.weeklyCalendar.activeWeek,
       activeWeekOffset: state.weeklyCalendar.activeWeekOffset,
     	endHour: getMaxEndHour(timetables[active], hasTimetables),
-      startHous: getEarliestStartHour(state.dtmCalendars.availability),
       saving: state.savingTimetable.saving,
       dataLastUpdated: state.school.dataLastUpdated,
       isLoggedIn: state.userInfo.data.isLoggedIn,
