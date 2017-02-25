@@ -10,12 +10,10 @@ const mapStateToProps = (state) => {
 	let { isVisible } = state.explorationModal;
 	let courseSections = state.courseSections.objects;
 	let schoolSpecificInfo = getSchoolSpecificInfo(state.school.school);
-	let schoolSpecificSemesters = schoolSpecificInfo.semesters;
 	let schoolSpecificCampuses = schoolSpecificInfo.campuses;
 	return {
 		semester: allSemesters[state.semesterIndex],
 		campuses: schoolSpecificCampuses,
-		availableSemesters: schoolSpecificSemesters,
   	searchResults: state.searchResults.items,
   	isFetching: state.searchResults.isFetching,
   	isCourseInRoster: (course_id) => courseSections[course_id] !== undefined,
