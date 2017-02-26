@@ -13,8 +13,11 @@ def make_list(l):
 # FIXME -- 
 # NOTE: mutates text, unicode whitspace removal should be part of extractor
 def deep_clean(dirt):
-	if not dirt: return None
+	if not dirt:
+		return None
 	whitespace = re.compile(r'(?:\u00a0)|(?:\xc2\xa0)', re.IGNORECASE)
+	if isinstance(dirt, basestring):
+		return whitespace.sub(' ', dirt).strip()
 	if isinstance(dirt, dict):
 		dirt = cleandict(dirt) # recursively remove nested empty dictionaries
 	elif isinstance(dirt, list):
@@ -63,7 +66,6 @@ class dotdict(dict):
 			self[key] = value
 
 def iterrify(x):
-	print x
 	if isinstance(x, collections.Iterable) and not isinstance(x, basestring):
 		return x
 	else:

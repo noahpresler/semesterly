@@ -38,9 +38,16 @@
 			],
 			"properties": {
 				"code": {},
-				"course": {}
+				"course": {},
+				"year": {},
+				"term": {}
 			},
-			"additionalProperties": false
+			"additionalProperties": false,
+			"required": [
+				"code",
+				"year",
+				"term"
+			]
 		},
 		"dates": {
 			"type": "array",
