@@ -1,7 +1,7 @@
 import os, django, datetime, logging, sys, argparse, simplejson as json
 from django.core.management.base import BaseCommand, CommandParser, CommandError
 from timetable.models import Updates
-from timetable.school_mappers import course_parsers, new_course_parsers
+from timetable.school_mappers import course_parsers, new_course_parsers, new_textbook_parsers
 from timetable.management.commands.args_parse import schoollist_argparser, parser_argparser, validator_argparser
 from scripts.parser_library.internal_exceptions import *
 
@@ -27,25 +27,29 @@ class Command(BaseCommand):
 		logging.basicConfig(level=logging.ERROR, filename='parse_errors.log')
 
 		for school in options['schools']:
-			message = 'Starting parser for {}.\n'.format(school)
+			timestamp = datetime.datetime.now().strftime("%Y/%m/%d-%H:%M:%S")
+
+			parser, parser_type = None, ''
+			if options['textbooks']:
+				parser = new_textbook_parsers[school]
+				parser_type = 'textbooks'
+			else:
+				parser = new_course_parsers[school]
+				parser_type = 'courses'
+
+			message = 'Starting {} parser for {}.\n'.format(parser_type, school)
 			self.stdout.write(self.style.SUCCESS(message))
 			logging.exception(message) # TODO - WHY IS THIS an exception?
-			# TODO - log command line options
-
-			parser = new_course_parsers[school]
-
-
-			timestamp = datetime.datetime.now().strftime("%Y/%m/%d-%H:%M:%S")
 
 			directory = 'scripts/' + school
 			if not options.get('config_file'):
-				options['config_file'] = '{0}/config.json'.format(directory)
+				options['config_file'] = '{}/config.json'.format(directory)
 			if not options.get('output'):
-				options['output'] = '{0}/data/courses.json'.format(directory)
+				options['output'] = '{}/data/{}.json'.format(directory, parser_type)
 			if not options.get('output_error_filepath'):
-				options['output_error_filepath'] = '{0}/logs/error.log'.format(directory)
+				options['output_error_filepath'] = '{}/logs/error.log'.format(directory)
 			if not options.get('master_log'):
-				options['log_stats'] = '{0}/logs/master.log'.format(directory)
+				options['log_stats'] = '{}/logs/master.log'.format(directory)
 
 			try:
 				parser(school,

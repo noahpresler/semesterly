@@ -12,10 +12,11 @@ class Logger(object):
 	# NOTE: interface is rather confusing, consider revising
 	def __init__(self, logfile=None, errorfile=None):
 		if logfile:
+			# FIXME -- does not work
 			# Remove special character formatting (ex: Logger.pretty_json)
-			t = pipes.Template()
-			t.append('sed "s,\x1B\[[0-9;]*[a-zA-Z],,g"', '--')
-			self.logfile = t.open(logfile, 'w')
+			# t = pipes.Template()
+			# t.append('sed "s,\x1B\[[0-9;]*[a-zA-Z],,g"', '--')
+			self.logfile = open(logfile, 'w')
 		else:
 			self.logfile = sys.stdout
 
@@ -74,12 +75,17 @@ class Logger(object):
 	@staticmethod
 	def pretty_json(j):
 		'''Format and colorize json for prettified output.'''
-		if isinstance(j, dict):
-			j = json.dumps(j, sort_keys=True, indent=2, separators=(',', ': '))
+		# if isinstance(j, dict):
+			# j = json.dumps(j, sort_keys=True, indent=2, separators=(',', ': '))
+		return json.dumps(j, sort_keys=True, indent=2, separators=(',', ': '))
+
+	@staticmethod
+	def colored_json(j):
+		j = pretty_json(j)
 		l = lexers.JsonLexer()
 		l.add_filter('whitespace')
 		colorful_json = highlight(unicode(j, 'UTF-8'), l, formatters.TerminalFormatter())
-		return colorful_json
+		return colorful_json		
 
 class JsonListLogger(Logger):
 	def __init__(self, logfile=None, errorfile=None):
