@@ -56,11 +56,17 @@ def associate_students(strategy, details, response, user, *args, **kwargs):
     return kwargs
 
 def next_weekday(d, weekday):
+    weekday = DAY_LIST.index(weekday)
     today = datetime.datetime.today()
-    return today + datetime.timedelta(days=-today.weekday(), weeks=1)
+    delta = weekday - today.weekday()
+    week = 1 if delta < 0 else 1
+    return today + datetime.timedelta(days=delta, weeks=week)
 
 def last_weekday(d, weekday):
+    weekday = DAY_LIST.index(weekday)
     today = datetime.datetime.today()
+    if today.weekday() == weekday:
+      return today
     return today - datetime.timedelta(days=today.weekday())
 
 def create_student(strategy, details, response, user, *args, **kwargs):

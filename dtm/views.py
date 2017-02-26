@@ -108,7 +108,10 @@ def get_free_busy_from_cals(cal_ids, student, week_offset=0):
 
 
 def get_merged_availability(request):
-  free_busy_body = copy.deepcopy(free_busy_body)
+  student = get_student(request)
+  cal_ids = json.loads(request.body)['cal_ids']
+  week_offset = json.loads(request.body)['week_offset']
+  free_busy_body = get_free_busy_from_cals(cal_ids,student,week_offset)
   print "BEFORE", free_busy_body
   intervals = []
   for calid in free_busy_body['calendars']:
