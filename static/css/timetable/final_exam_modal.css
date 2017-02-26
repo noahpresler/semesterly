@@ -14,7 +14,6 @@
 
 #final-exam-calendar-ctn {
 	width: 100%;
-	padding: 30px;
 }
 
 #final-exam-calendar-header {
@@ -54,6 +53,16 @@
 	border-left: 1px solid #ddd;
 }
 
-.final-exam-calender-days {
-
+#final-exam-main {
+	padding: 30px 0 30px 30px;
+    width: 70%;
+    float: left;
+}
+#final-exam-sidebar {
+	float: left;
+    width: 30%;
+    padding: 30px;
+}
+#final-exam-sidebar h3 {
+	padding-top: 0;
 }
