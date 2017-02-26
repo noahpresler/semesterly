@@ -7,6 +7,7 @@ export class FinalExamsModal extends React.Component {
     constructor(props) {
         super(props);
         this.hide = this.hide.bind(this);
+        this.noTimeFinals = [];
     }
     hide() {
         this.refs.modal.hide();
@@ -35,6 +36,7 @@ export class FinalExamsModal extends React.Component {
             let d = finals[course].split(' ')[0].split('/')['1'];
             minDate = (new Date(2017, Number(m - 1), Number(d)) < minDate) ? new Date(2017, Number(m - 1), Number(d)) : minDate;
             if (finals[course].includes('Exam time not found')) {
+                this.noTimeFinals.push(course);
                 delete finalsToRender[course]
             }
         }
@@ -52,7 +54,7 @@ export class FinalExamsModal extends React.Component {
     generateWeekHeaders(dates) {
         let days = ['Sun', 'Mon', 'Tues', 'Wed', 'Thu', 'Fri', 'Sat']
         let html = dates.map((date, index) => {return <h3 key={date}>{days[index]} {date}</h3>})
-        return <div id="final-exam-calender-days">
+        return <div id="final-exam-calender-days" className="cf">
             { html }
         </div>
     }
@@ -76,7 +78,7 @@ export class FinalExamsModal extends React.Component {
         }
         return <div className="final-exam-week">
                     { weekHeadersHtml }
-                    <div>{ finalExamDays }</div>
+                    <div className="cf">{ finalExamDays }</div>
                 </div>
 
     }
@@ -90,9 +92,15 @@ export class FinalExamsModal extends React.Component {
             finalsWeeks.push(<div key={day}>{ this.renderWeek(day, days, finalsToRender) }</div>)
             day = new Date(day.getTime() + (7 * 24 * 60 * 60 * 1000));
         }
-
+        console.log(this.props.courseDetails);
         return <div id="final-exam-calendar-ctn">
-                { finalsWeeks }
+                <div id="final-exam-main">
+                    { finalsWeeks }
+                </div>
+                <div id="final-exam-sidebar">
+                    <h3 className="modal-module-header">Schedule Unavailable</h3>
+                    { this.noTimeFinals }
+                </div>
                 {JSON.stringify(this.props.finalExamSchedule)}
             </div>;
     }
@@ -118,12 +126,9 @@ export class FinalExamsModal extends React.Component {
                 modalStyle={modalStyle}
                 onHide={this.hide}
                 >
-                {modalHeader}
-
+                { modalHeader }
                 <div id="modal-content">
-                    {
-                        display
-                    }
+                    { display }
                 </div>
             </Modal>
         );
