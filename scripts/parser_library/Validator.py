@@ -318,10 +318,10 @@ class Validator:
 		if not isinstance(textbook, dotdict):
 			textbook = dotdict(textbook)
 
-	def validate_texbook_link(self, textbook_link, schema=False, relative=True):
+	def validate_textbook_link(self, textbook_link, schema=False, relative=True):
 		if not isinstance(textbook_link, dotdict):
 			textbook_link = dotdict(textbook_link)
-		if 'course' in textbook_link and self.course_code_regex.match(meeting.course.code) is None:
+		if 'course' in textbook_link and self.course_code_regex.match(textbook_link.course.code) is None:
 			raise JsonValidationError('textbook_link course code does not match course code regex in config.json', textbook_link)
 
 	def validate_location(self, location):

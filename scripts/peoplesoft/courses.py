@@ -7,7 +7,10 @@ import re, sys, itertools
 from abc import ABCMeta, abstractmethod
 
 # parser library
-from scripts.textbooks.amazon import make_textbook
+# from scripts.textbooks.amazon import make_textbook
+from scripts.parser_library.Requester import Requester
+from scripts.parser_library.Extractor import *
+from scripts.parser_library.Model import Model
 from scripts.parser_library.Ingestor import Ingestor
 from scripts.parser_library.BaseParser import CourseParser
 from scripts.parser_library.internal_exceptions import CourseParseError
