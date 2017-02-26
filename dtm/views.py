@@ -112,10 +112,10 @@ def get_merged_availability(request):
   cal_ids = json.loads(request.body)['cal_ids']
   week_offset = json.loads(request.body)['week_offset']
   free_busy_body = get_free_busy_from_cals(cal_ids,student,week_offset)
-  print "BEFORE", free_busy_body
-  intervals = []
+
   for calid in free_busy_body['calendars']:
     #concatenate all ranges
+    intervals = []
     cal = free_busy_body['calendars'][calid]
     for interval in cal['busy']:
       #convert times to python types
@@ -123,12 +123,12 @@ def get_merged_availability(request):
       interval['end'] = dateutil.parser.parse(interval['end'])
       
       #TODO if multi day split into single day
-
       intervals.append(interval)
+
     if len(intervals) > 1:
       result = merge_intervals(intervals)
       free_busy_body['calendars'][calid]['busy'] = map(lambda i: {'start': i['start'].isoformat(), 'end': i['end'].isoformat()}, result)
-  print "AFTER", free_busy_body
+
   return HttpResponse(json.dumps(free_busy_body), content_type='application/json')
 
 
