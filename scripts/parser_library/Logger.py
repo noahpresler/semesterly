@@ -75,13 +75,15 @@ class Logger(object):
 	@staticmethod
 	def pretty_json(j):
 		'''Format and colorize json for prettified output.'''
-		# if isinstance(j, dict):
-			# j = json.dumps(j, sort_keys=True, indent=2, separators=(',', ': '))
-		return json.dumps(j, sort_keys=True, indent=2, separators=(',', ': '))
+		if isinstance(j, basestring):
+			j = json.loads(j)
+		if isinstance(j, dict):
+			j = json.dumps(j, sort_keys=True, indent=2, separators=(',', ': '))
+		return j
 
 	@staticmethod
 	def colored_json(j):
-		j = pretty_json(j)
+		j = Logger.pretty_json(j)
 		l = lexers.JsonLexer()
 		l.add_filter('whitespace')
 		colorful_json = highlight(unicode(j, 'UTF-8'), l, formatters.TerminalFormatter())
