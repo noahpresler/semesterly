@@ -8,7 +8,7 @@ const mapStateToProps = (state) => {
 		finalExamSchedule: state.finalExamsModal.finalExams,
 		hasRecievedSchedule: Boolean(state.finalExamsModal.finalExams),
 		loading: state.finalExamsModal.isLoading,
-		finalExamSchedule: state.finalExamsModal.finalExams
+		courseDetails: state.timetables.items[0].courses
 	}
 }
 
