@@ -90,6 +90,11 @@ new_course_parsers = {
   'jhu': lambda *args, **kwargs: HopkinsParser(**kwargs)
 }
 
+new_textbook_parsers = {
+  'chapman': lambda *args, **kwargs: ChapmanParser(*args, **kwargs),
+  'gw': lambda *args, **kwargs: GWTextbookParser(**kwargs)
+}
+
 eval_parsers = {
   'jhu': lambda: HopkinsEvalParser().parse_evals(),
   'uoft': lambda: None,
