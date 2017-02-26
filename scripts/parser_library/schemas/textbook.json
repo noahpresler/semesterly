@@ -37,9 +37,14 @@
 				}
 			],
 			"properties": {
-				"code": {}
+				"code": {},
+				"year": {},
+				"term": {},
 			},
-			"additionalProperties": false
+			"additionalProperties": false,
+			"required": [
+				"code", "year", "term"
+			]
 		},
 		"isbn": {
 			"type": "string",

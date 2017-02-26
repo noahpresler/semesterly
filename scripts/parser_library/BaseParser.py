@@ -1,3 +1,8 @@
+# @what   Base Parse (Course)
+# @org    Semeseter.ly
+# @author Michael N. Miller
+# @date	  2/01/2017
+
 import os, progressbar, argparse, re
 
 from abc import ABCMeta, abstractmethod
@@ -10,31 +15,18 @@ from scripts.parser_library.Updater import ProgressBar
 class BaseParser:
 	__metaclass__ = ABCMeta
 
-	def __init__(self, school):
-		
-		self.school = school
-		self.requester = Requester()
-		self.extractor = Extractor()
-
-	@abstractmethod
-	def start(self, **kwargs): pass
-
-class CourseParser(BaseParser):
-	__metaclass__ = ABCMeta
-
-	@abstractmethod
-	def __init__(self, school,
+	def __init__(self, school, 
 		validate=True,
 		config=None,
 		output_filepath=None, # TODO - support stdout
 		output_error_filepath=None,
 		break_on_error=True,
 		break_on_warning=False,
-		hide_progress_bar=True,
-		skip_shallow_duplicates=True):
-
-		super(CourseParser, self).__init__(school)
-
+		skip_shallow_duplicates=True,
+		hide_progress_bar=True):
+		self.school = school
+		self.requester = Requester()
+		self.extractor = Extractor()
 		self.hide_progress_bar = hide_progress_bar
 		if not self.hide_progress_bar:
 			self.progressbar = ProgressBar(school)
@@ -50,10 +42,22 @@ class CourseParser(BaseParser):
 			skip_shallow_duplicates=skip_shallow_duplicates)
 
 	@abstractmethod
-	def start(self, **kwargs): pass
+	def start(self, **kwargs):
+		'''Start the parse.'''
 
 	def get_stats(self):
 		if not self.hide_progress_bar:
 			return self.progressbar.stats
 		else:
 			return 'stats not logged'
+
+class CourseParser(BaseParser):
+	__metaclass__ = ABCMeta
+
+	@abstractmethod
+	def __init__(self, school, **kwargs):
+		super(CourseParser, self).__init__(school, **kwargs)
+
+	@abstractmethod
+	def start(self, **kwargs):
+		'''Start the parse.'''
