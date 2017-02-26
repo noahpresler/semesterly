@@ -98,53 +98,49 @@
 				"_comment": "'days' or 'dates' requirement nested into structure"
 			},
 			{
-				"anyOf": [
+				"allOf": [
 					{
-						"allOf": [
-							{
-								"$ref": "textbook.json#/"
-							}
-						],
-						"properties": {
-							"kind": {
-								"enum": ["textbook_link"]
-							},
-							"school": {},
-							"course": {},
-							"section": {},
-							"isbn": {},
-							"required": {}
-						},
-						"additionalProperties": false,
-						"required": [
-							"kind",
-							"course",
-							"section",
-							"isbn"
-						]
-					},
-					{
-						"allOf": [
-							{
-								"$ref": "textbook.json#/"
-							}
-						],
-						"properties": {
-							"kind": {
-								"enum": ["textbook"]
-							},
-							"isbn": {},
-							"detail_url": {},
-							"image_url": {},
-							"author": {},
-							"title": {}
-						},
-						"additionalProperties": false,
-						"required": [
-							"kind",
-							"isbn"
-						]
+						"$ref": "textbook.json#/"
 					}
+				],
+				"properties": {
+					"kind": {
+						"enum": ["textbook_link"]
+					},
+					"school": {},
+					"course": {},
+					"section": {},
+					"isbn": {},
+					"required": {}
+				},
+				"additionalProperties": false,
+				"required": [
+					"kind",
+					"course",
+					"section",
+					"isbn"
+				]
+			},
+			{
+				"allOf": [
+					{
+						"$ref": "textbook.json#/"
+					}
+				],
+				"properties": {
+					"kind": {
+						"enum": ["textbook"]
+					},
+					"isbn": {},
+					"detail_url": {},
+					"image_url": {},
+					"author": {},
+					"title": {}
+				},
+				"additionalProperties": false,
+				"required": [
+					"kind",
+					"isbn"
 				]
 			},
 			{

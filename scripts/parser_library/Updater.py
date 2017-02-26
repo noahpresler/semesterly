@@ -37,7 +37,7 @@ class ProgressBar:
 class Counter:
 	'''Dictionary counter for various stats; to be passed with dict to update method in ProgressBar.'''
 	def __init__(self):
-		subjects = ['course', 'section', 'meeting', 'textbook', 'evaluation', 'offering']
+		subjects = ['course', 'section', 'meeting', 'textbook', 'evaluation', 'offering', 'textbook_link']
 		stats = ['valid', 'created', 'new', 'updated', 'total']
 		self.counters = {subject: {stat: 0 for stat in stats} for subject in subjects}
 
