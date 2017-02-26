@@ -6,8 +6,8 @@ const remapCourseDetails = (courses) => {
 	let remap = {}
 	for (let course in courses) {
 		remap[courses[course].id] = {
-			"courseName" : courses[course].name,
-			"courseCode" : courses[course].code
+			"name" : courses[course].name,
+			"code" : courses[course].code
 		}
 	}
 	return remap
@@ -19,6 +19,7 @@ const mapStateToProps = (state) => {
 		finalExamSchedule: state.finalExamsModal.finalExams,
 		hasRecievedSchedule: Boolean(state.finalExamsModal.finalExams),
 		loading: state.finalExamsModal.isLoading,
+		courseToColourIndex: state.ui.courseToColourIndex,
 		courseDetails: remapCourseDetails(state.timetables.items[0].courses)
 	}
 }
