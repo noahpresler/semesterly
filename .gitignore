@@ -35,6 +35,7 @@ timetable.features
 docs/build/
 scripts/parser_library/ex_school/data/*
 *.log
+scripts/**/data/*.json
 scripts/*/data/*.json
 scripts/*/logs/*.json
 *.swp
