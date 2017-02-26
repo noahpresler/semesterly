@@ -126,7 +126,6 @@ class Requester:
         except ValueError:
             pass
         if "</html>"[::-1] in response.text[::-1]:
-            print response
             return soup('html.parser')
         else:
             return soup('lxml')
