@@ -1,12 +1,12 @@
 # TODO - https://github.com/kislyuk/argcomplete
 
 import os, argparse
-from timetable.school_mappers import course_parsers, new_course_parsers
+from timetable.school_mappers import course_parsers, new_course_parsers, new_textbook_parsers
 
 def schoollist_argparser(parser):
 	# Handles nargs='*' with strict choices and set to all schools if empty
 	class school_verifier_action(argparse.Action):
-		VALID_SCHOOLS = new_course_parsers.keys()
+		VALID_SCHOOLS = set(new_course_parsers.keys()) | set(new_textbook_parsers.keys())
 		def __call__(self, parser, namespace, values, option_string=None):
 			for value in values:
 				if value not in school_verifier_action.VALID_SCHOOLS:
