@@ -61,6 +61,8 @@ class IngestorWarning(UserWarning):
 import simplejson as json
 from pygments import highlight, lexers, formatters, filters
 def pretty_colored_json(j):
+	if j is None:
+		return 'None'
 	'''Format and colorize json for prettified output.'''
 	if isinstance(j, dict):
 		j = json.dumps(j, sort_keys=True, indent=2, separators=(',', ': '))

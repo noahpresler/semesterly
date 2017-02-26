@@ -188,18 +188,19 @@ class Ingestor(dict):
 		'''
 
 		# handle nested instructor definition and resolution
-		instr_keys = set(['instructors', 'instructor', 'instr', 'instrs', 'instr_name', 'instr_names', 'instructor', 'instructor_name']) & set(self)
+		instructors = None
+		instr_keys = set(['instructor', 'instr', 'instrs', 'instr_name', 'instr_names', 'instructor', 'instructor_name', 'instructors']) & set(self)
 		if len(instr_keys) == 0:
 			pass
 		elif len(instr_keys) > 1:
-			raise IngestorWarning('cannot resolve instructors data')
+			raise IngestorWarning('cannot resolve instructors data ({})'.format(','.join(instr_keys)), self)
 		else: # len(instr_keys) == 1
 			instructors = self[list(instr_keys)[0]]
 			instructors = deep_clean(make_list(instructors))
 			for i in range(len(instructors)):
 				if isinstance(instructors[i], basestring):
 					instructors[i] = { 'name': instructors[i] }
-			self['instructors'] = instructors
+			# self['instructors'] = instructors
 
 		section = {
 			'kind': 'section',
@@ -210,7 +211,7 @@ class Ingestor(dict):
 			'name': self.get('section_name'),
 			'term': self.getchain('term', 'semester'),
 			'year': self.get('year'), # NOTE: should be required # FIXME -- different years for parsed sections
-			'instructors': self.get('instructors'),
+			'instructors': instructors, #self.get('instructors'),
 			'capacity': self.getchain('capacity', 'size'),
 			'enrollment': self.getchain('enrollment', 'enrolment'), # NOTE: change to enrollment
 			'waitlist': self.get('waitlist'),
@@ -259,7 +260,9 @@ class Ingestor(dict):
 			'kind': 'meeting',
 			'course': section['course'],
 			'section': {
-				'code': section['code']
+				'code': section['code'],
+				'year': self.get('year'),
+				'term': self.getchain('term', 'semester')
 			},
 			'days': deep_clean(make_list(self.getchain('days', 'day'))),
 			'dates': deep_clean(make_list(self.getchain('dates', 'date'))),
@@ -284,7 +287,7 @@ class Ingestor(dict):
 			'section': {
 				'code': self.get('section_code'),
 				'year': self.get('year'),
-				'term': self.get('term')
+				'term': self.getchain('term', 'semester')
 			},
 			'isbn': self.get('isbn'),
 			'required': self.get('required')
