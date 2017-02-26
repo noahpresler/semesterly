@@ -2,6 +2,24 @@ import React from 'react';
 import Slot from './slot.jsx'
 import Modal from 'boron/WaveModal';
 import classNames from 'classnames';
+import { COLOUR_DATA } from '../constants.jsx';
+
+const InSlot = (props) => {
+    let displayTime = (props.time) ? <h3>{ props.time }</h3> : null
+    return (
+        <div className='master-slot'
+            style={ { backgroundColor: COLOUR_DATA[props.color].background }}>
+            <div className="slot-bar"
+                style={ { backgroundColor: COLOUR_DATA[props.color].border } }
+            ></div>
+            <div className="master-slot-content">
+                { displayTime }
+                <h3>{ props.code }</h3>
+                <h3>{ props.name }</h3>
+            </div>
+        </div>
+    )
+}
 
 export class FinalExamsModal extends React.Component {
     constructor(props) {
@@ -31,6 +49,7 @@ export class FinalExamsModal extends React.Component {
     findNextFinalToRender(finalsToRender) {
         let finals = finalsToRender
         let minDate = Infinity;
+        this.noTimeFinals = [];
         for (let course in finals) {
             let m = finals[course].split(' ')[0].split('/')['0'];
             let d = finals[course].split(' ')[0].split('/')['1'];
@@ -65,10 +84,16 @@ export class FinalExamsModal extends React.Component {
         let weekHeadersHtml = this.generateWeekHeaders(daysOfWeek);
         for (let day in daysOfWeek) {
             let rendered = false;
-            let html = "";
+            let html = [];
+            console.log(finalsToRender)
             for (let final in finalsToRender) {
                 if (finalsToRender[final].includes(daysOfWeek[day])) {
-                    html += finalsToRender[final]
+                    console.log(this.props.courseDetails)
+                    html.push(<InSlot code={this.props.courseDetails[final].code} 
+                                    name={this.props.courseDetails[final].name}
+                                    color={this.props.courseToColourIndex[final]}
+                                    time={finalsToRender[final]}
+                                    key={final} />)
                     rendered = true;
                     delete finalsToRender[final]
                 }
@@ -92,16 +117,29 @@ export class FinalExamsModal extends React.Component {
             finalsWeeks.push(<div key={day}>{ this.renderWeek(day, days, finalsToRender) }</div>)
             day = new Date(day.getTime() + (7 * 24 * 60 * 60 * 1000));
         }
-        return <div id="final-exam-calendar-ctn">
+
+        let unscheduledFinal = this.noTimeFinals.map((final, index) => {
+                       return <InSlot code={this.props.courseDetails[final].code} 
+                            name={this.props.courseDetails[final].name}
+                            color={this.props.courseToColourIndex[final]}
+                            key={index} /> 
+                    })
+
+        return (this.noTimeFinals.length > 0) ? 
+            <div id="final-exam-calendar-ctn">
                 <div id="final-exam-main">
                     { finalsWeeks }
                 </div>
                 <div id="final-exam-sidebar">
                     <h3 className="modal-module-header">Schedule Unavailable</h3>
-                    { this.noTimeFinals }
+                    { unscheduledFinal }
                 </div>
-                {JSON.stringify(this.props.finalExamSchedule)}
-            </div>;
+            </div> :
+            <div id="final-exam-calendar-ctn">
+                <div id="final-exam-main" className="main-full">
+                    { finalsWeeks }
+                </div>
+            </div>
     }
 	render() {
         let modalHeader =

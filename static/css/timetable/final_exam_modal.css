@@ -55,12 +55,16 @@
 
 #final-exam-main {
 	padding: 30px 0 30px 30px;
-    width: 70%;
+    width: 80%;
     float: left;
+}
+#final-exam-main.main-full {
+	width: 100%;
+	padding: 30px;
 }
 #final-exam-sidebar {
 	float: left;
-    width: 30%;
+    width: 20%;
     padding: 30px;
 }
 #final-exam-sidebar h3 {
