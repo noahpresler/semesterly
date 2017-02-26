@@ -192,7 +192,7 @@ class BusySlot extends React.Component {
         }
         return {
             top: top, bottom: -bottom, zIndex: 1, left: '0%', right: '0%', 
-            backgroundColor: '#ccc',
+            backgroundColor: this.props.foreign ? 'grey' : '#ccc',
             width: slot_width_percentage + "%",
             left: push_left + "%",
             zIndex: foreign_level + 10 * this.props.depth_level,
