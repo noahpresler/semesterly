@@ -92,7 +92,6 @@ export class FinalExamsModal extends React.Component {
             finalsWeeks.push(<div key={day}>{ this.renderWeek(day, days, finalsToRender) }</div>)
             day = new Date(day.getTime() + (7 * 24 * 60 * 60 * 1000));
         }
-        console.log(this.props.courseDetails);
         return <div id="final-exam-calendar-ctn">
                 <div id="final-exam-main">
                     { finalsWeeks }
