@@ -1,7 +1,7 @@
 {
 	"school": {
-		"code": "umich2",
-		"name": "University of Michigan"
+		"code": "umich",
+		"name": "University of Michigan in Ann Arbor"
 	},
 	"course_code_regex": ".*",
 	"terms": [
