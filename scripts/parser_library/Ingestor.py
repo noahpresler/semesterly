@@ -15,7 +15,7 @@ from scripts.parser_library.Updater import Counter
 
 class Ingestor(dict):
 	ALL_KEYS = {
-		'',
+		'kind',
 		'department',
 		'dept',
 		'department_name',
@@ -86,7 +86,8 @@ class Ingestor(dict):
 		'detail_url',
 		'image_url',
 		'author',
-		'title'
+		'title',
+		'required',
 	}
 
 	def __init__(self, school,
@@ -217,7 +218,7 @@ class Ingestor(dict):
 			'type': self.getchain('type', 'section_type'),
 			'fees': self.getchain('fees', 'fee'),
 			'final_exam': self.get('final_exam'),
-			'textbooks': self.get('textbooks')
+			'textbooks': self.get('textbooks'),
 			'meetings': self.get('offerings')
 		}
 
@@ -269,13 +270,23 @@ class Ingestor(dict):
 		self.validate_and_log(meeting)
 		return meeting
 
-	def ingest_textbook_link(self, section):
+	def ingest_textbook_link(self, section=None):
 
 		textbook_link = {
 			'kind': 'textbook_link',
 			'school': {
 				'code': self.get('school_code')
 			},
+			'course': {
+				'code': self.get('course_code')
+			},
+			'section': {
+				'code': self.get('section_code'),
+				'year': self.get('year'),
+				'term': self.get('term')
+			},
+			'isbn': self.get('isbn'),
+			'required': self.get('required')
 		}
 
 		textbook_link = cleandict(textbook_link)
@@ -296,8 +307,10 @@ class Ingestor(dict):
 			'title': self.get('title')
 		}
 
+		print self.logger.logfile
 		textbook = cleandict(textbook)
 		self.validate_and_log(textbook)
+		print textbook
 		return textbook
 
 	def validate_and_log(self, obj):
