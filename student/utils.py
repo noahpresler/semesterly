@@ -56,21 +56,12 @@ def associate_students(strategy, details, response, user, *args, **kwargs):
     return kwargs
 
 def next_weekday(d, weekday):
-    if DAY_LIST.index(weekday) - d.weekday() == 0:
-        return d
-    d = d - datetime.timedelta(days=1)
-    days_ahead = DAY_LIST.index(weekday) - d.weekday()
-    if days_ahead <= 0: # Target day already happened this week
-        days_ahead += 7
-    return d + datetime.timedelta(days_ahead)
+    today = datetime.datetime.today()
+    return today + datetime.timedelta(days=-today.weekday(), weeks=1)
 
-def last_weekday(d, day_name):
-    days_of_week = ['sunday','monday','tuesday','wednesday',
-                        'thursday','friday','saturday']
-    target_day = days_of_week.index(day_name.lower())
-    delta_day = target_day - d.isoweekday()
-    if delta_day >= 0: delta_day -= 7 # go back 7 days
-    return d + datetime.timedelta(days=delta_day)
+def last_weekday(d, weekday):
+    today = datetime.datetime.today()
+    return today - datetime.timedelta(days=today.weekday())
 
 def create_student(strategy, details, response, user, *args, **kwargs):
     backend_name = kwargs['backend'].name

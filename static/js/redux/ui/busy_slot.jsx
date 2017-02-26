@@ -137,6 +137,7 @@ class BusySlot extends React.Component {
 
         let converted_start = uses12HrTime && parseInt(this.props.time_start.split(':')[0]) > 12 ? (parseInt(this.props.time_start.split(':')[0]) - 12) + ":" + this.props.time_start.split(':')[1] : this.props.time_start
         let converted_end = uses12HrTime && parseInt(this.props.time_end.split(':')[0]) > 12 ? (parseInt(this.props.time_end.split(':')[0]) - 12) + ":" + this.props.time_end.split(':')[1] : this.props.time_end
+        let time = shareAvailability && this.props.foreign ? null : <span>{ converted_start } – { converted_end }</span>;
         return this.props.connectCreateTarget(this.props.connectDragTarget(this.props.connectDragSource(
             <div className="fc-event-container">
                 <div className={"fc-time-grid-event fc-event slot"}
@@ -148,7 +149,7 @@ class BusySlot extends React.Component {
                         {removeButton}
                     <div className="fc-content">
                         <div className="fc-time">
-                            <span>{ converted_start } – { converted_end }</span>
+                            {time}
                         </div>
                         <div className="fc-time">
                             {/*<input type="text" 
@@ -178,34 +179,25 @@ class BusySlot extends React.Component {
         let top = (start_hour - 0)*(HALF_HOUR_HEIGHT_WEEKLY*2 + 2) + (start_minute)*(HALF_HOUR_HEIGHT_WEEKLY/30);
         let bottom = (end_hour - 0)*(HALF_HOUR_HEIGHT_WEEKLY*2 + 2) + (end_minute)*(HALF_HOUR_HEIGHT_WEEKLY/30) - 1;
         let height = bottom - top - 2;
-        if (this.props.preview) { // don't take into account conflicts, reduce opacity, increase z-index
-            return {
-                top: top, bottom: -bottom, zIndex: 10, left: '0%', right: '0%', 
-                backgroundColor: '#ccc',
-                color: "#fff",
-                width: '100%',
-                left: 0,
-                opacity: 0.5
-            };
-        } else {
-            // the cumulative width of this slot and all of the slots it is conflicting with
-            let total_slot_widths = 100 - (5 * this.props.depth_level);
-            // WIDTH NOW ONLY DEPEDENT ON THE TOTAL SLOT WITH, SUBTRACTING FOR EACH DEPTH LEVEL
-            let slot_width_percentage = total_slot_widths;
-            // the amount of left margin of this particular slot, in percentage
-            let push_left = 5 * this.props.depth_level;
-            if (push_left == 50) {
-                push_left += .5;
-            }
-            return {
-                top: top, bottom: -bottom, zIndex: 1, left: '0%', right: '0%', 
-                backgroundColor: '#ccc',
-                width: slot_width_percentage + "%",
-                left: push_left + "%",
-                zIndex: 10 * this.props.depth_level,
-                opacity: this.props.isDragging ? 0 : 1 // hide while dragging
-            };
+    
+        // the cumulative width of this slot and all of the slots it is conflicting with
+        let total_slot_widths = 100 - (5 * this.props.depth_level);
+        // WIDTH NOW ONLY DEPEDENT ON THE TOTAL SLOT WITH, SUBTRACTING FOR EACH DEPTH LEVEL
+        let slot_width_percentage = total_slot_widths;
+        // the amount of left margin of this particular slot, in percentage
+        let push_left = 5 * this.props.depth_level;
+        let foreign_level = shareAvailability && !this.props.foreign ? 100 : 0;
+        if (push_left == 50) {
+            push_left += .5;
         }
+        return {
+            top: top, bottom: -bottom, zIndex: 1, left: '0%', right: '0%', 
+            backgroundColor: '#ccc',
+            width: slot_width_percentage + "%",
+            left: push_left + "%",
+            zIndex: foreign_level + 10 * this.props.depth_level,
+            opacity: shareAvailability && this.props.foreign ? .75 : 1
+        };
     }
 }
 

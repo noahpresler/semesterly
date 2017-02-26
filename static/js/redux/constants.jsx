@@ -91,6 +91,9 @@ export const getIntegrationAddEndpoint = (integration_id, course_id) => {
 export const getAvailabilityEndpoint = () => {
   return "/dtm/availability/";
 }
+export const getMergedAvailabilityEndpoint = () => {
+  return "/dtm/merged_availability/";
+}
 export const getUpdateCalPreferencesEndpoint = () => {
   return "/dtm/update_cal_prefs/";
 }

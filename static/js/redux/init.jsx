@@ -45,8 +45,8 @@ function setup(dispatch) {
       type: "RECEIVE_GOOGLE_CALENDARS",
       calendars: calendarList, 
     });
-    dispatch(fetchAvailability());
     shareAvailability = JSON.parse(shareAvailability);
+    dispatch(fetchAvailability());
     dispatch({
       type: "RECEIVE_SHARED_AVAILABILITY",
       shareAvailability

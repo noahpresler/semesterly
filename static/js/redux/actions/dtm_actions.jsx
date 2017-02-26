@@ -1,6 +1,6 @@
 import fetch from 'isomorphic-fetch';
 import { store } from '../init.jsx';
-import { getAvailabilityEndpoint ,getCreateAvailabilityShareEndpoint, getUpdateCalPreferencesEndpoint } from '../constants.jsx';
+import { getAvailabilityEndpoint, getMergedAvailabilityEndpoint, getCreateAvailabilityShareEndpoint, getUpdateCalPreferencesEndpoint } from '../constants.jsx';
 
 export function getCookie(name) {
     var cookieValue = null;
@@ -22,6 +22,7 @@ export function fetchAvailability(weekOffset) {
 	return (dispatch) => {
 		let state = store.getState();
 		let ids = state.dtmCalendars.calendars.map(c => c.id);
+		let endpoint = shareAvailability ? getMergedAvailabilityEndpoint() : getAvailabilityEndpoint();
 		fetch(getAvailabilityEndpoint(), {
 			method: 'POST',
 			headers: {

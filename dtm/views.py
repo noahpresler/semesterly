@@ -92,7 +92,7 @@ week_offset acts as pagination: tells the function
 def get_free_busy_from_cals(cal_ids, student, week_offset=0):
   #TODO CHECK THAT THE CALENDAR BELONGS TO THEM
   if 'default' in cal_ids: cal_ids.remove('default')
-  start = tz.localize(last_weekday(datetime.datetime.today(), 'sunday')) + datetime.timedelta(weeks=week_offset, minutes=5)
+  start = tz.localize(last_weekday(datetime.datetime.today(), 'U')) + datetime.timedelta(weeks=week_offset, minutes=5)
   end = tz.localize(next_weekday(datetime.datetime.today(), 'S')) + datetime.timedelta(weeks=week_offset)
   body = {
     "timeMin": start.isoformat(),
@@ -104,6 +104,42 @@ def get_free_busy_from_cals(cal_ids, student, week_offset=0):
   http = credentials.authorize(httplib2.Http(timeout=100000000))
   service = discovery.build('calendar', 'v3', http=http)
   result = service.freebusy().query(body=body).execute()
+  return result
+
+
+def get_merged_availability(request):
+  free_busy_body = copy.deepcopy(free_busy_body)
+  print "BEFORE", free_busy_body
+  intervals = []
+  for calid in free_busy_body['calendars']:
+    #concatenate all ranges
+    cal = free_busy_body['calendars'][calid]
+    for interval in cal['busy']:
+      #convert times to python types
+      interval['start'] = dateutil.parser.parse(interval['start'])
+      interval['end'] = dateutil.parser.parse(interval['end'])
+      
+      #TODO if multi day split into single day
+
+      intervals.append(interval)
+    if len(intervals) > 1:
+      result = merge_intervals(intervals)
+      free_busy_body['calendars'][calid]['busy'] = map(lambda i: {'start': i['start'].isoformat(), 'end': i['end'].isoformat()}, result)
+  print "AFTER", free_busy_body
+  return HttpResponse(json.dumps(free_busy_body), content_type='application/json')
+
+
+
+
+def merge_intervals(intervals):
+  intervals.sort(key=lambda x: x['start'])
+  result = [intervals[0]]
+  for i in xrange(1, len(intervals)):
+      prev, current = result[-1], intervals[i]
+      if current['start'] - prev['end'] <= datetime.timedelta(minutes=5) and current['start'].date() == prev['end'].date(): 
+          prev['end'] = max(prev['end'], current['end'])
+      else:
+          result.append(current)
   return result
 
 '''
@@ -128,14 +164,7 @@ def merge_free_busy(free_busy_body):
   if len(intervals) <= 1:
     return free_busy_body
 
-  intervals.sort(key=lambda x: x['start'])
-  result = [intervals[0]]
-  for i in xrange(1, len(intervals)):
-      prev, current = result[-1], intervals[i]
-      if current['start'] - prev['end'] <= datetime.timedelta(minutes=5): 
-          prev['end'] = max(prev['end'], current['end'])
-      else:
-          result.append(current)
+  result = merge_intervals(intervals)
 
   ret = {u'calendars': 
           {
@@ -158,7 +187,7 @@ Returns encryped hash of the id for the share
 '''
 def create_availability_share(cal_ids, student, week_offset):
   if 'default' in cal_ids: cal_ids.remove('default')
-  start_day = last_weekday(datetime.datetime.today(), 'sunday') + datetime.timedelta(weeks=week_offset, minutes=5)
+  start_day = last_weekday(datetime.datetime.today(), 'U') + datetime.timedelta(weeks=week_offset, minutes=5)
   share = AvailabilityShare.objects.create(
     student=student,
     start_day=start_day,
