@@ -41,7 +41,7 @@ class Ingestor(dict):
 		'homepage',
 		'website',
 		'instructors',
-		'instructor', 'instr', 'instrs', 'instr_name', 'instr_names', 'instructor', 'instructor_name',
+		'instructors', 'instructor', 'instr', 'instrs', 'instr_name', 'instr_names', 'instructor', 'instructor_name',
 		'section_code',
 		'section_name'
 		'section',
@@ -188,7 +188,7 @@ class Ingestor(dict):
 		'''
 
 		# handle nested instructor definition and resolution
-		instr_keys = set(['instructor', 'instr', 'instrs', 'instr_name', 'instr_names', 'instructor', 'instructor_name']) & set(self)
+		instr_keys = set(['instructors', 'instructor', 'instr', 'instrs', 'instr_name', 'instr_names', 'instructor', 'instructor_name']) & set(self)
 		if len(instr_keys) == 0:
 			pass
 		elif len(instr_keys) > 1:
