@@ -13,7 +13,7 @@ from bs4 import BeautifulSoup
 
 from sets import Set
 
-from scripts.textbooks.amazon import make_textbook
+# from scripts.textbooks.amazon import make_textbook
 
 class PeoplesoftParser:
 
