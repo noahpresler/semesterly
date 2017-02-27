@@ -5,8 +5,8 @@ import classNames from 'classnames';
 import { COLOUR_DATA } from '../constants.jsx';
 
 const InSlot = (props) => {
-    let displayTime = (props.time) ? <h3>{ props.time }</h3> : null
-    let displayCode = (props.code) ? <h3>{ props.code }</h3> : null
+    let displayTime = (props.time) ? <h3 className="time">{ props.time }</h3> : null
+    let displayCode = (props.code) ? <h3 className="code">{ props.code }</h3> : null
 
     return (
         <div className={'master-slot' + ((props.numberOfFinalsAtThisTime > 1) ? ' conflict' : '')}
@@ -18,7 +18,7 @@ const InSlot = (props) => {
             <div className="master-slot-content">
                 { displayTime }
                 { displayCode }
-                <h3>{ props.name }</h3>
+                <h3 className="name">{ props.name }</h3>
             </div>
         </div>
     )

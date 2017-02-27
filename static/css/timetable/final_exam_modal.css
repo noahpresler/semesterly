@@ -34,10 +34,13 @@
 }
 .final-exam-modal .master-slot-content h3 {
 	height: auto;
-	max-height: 46px;
+	max-height: 30px;
 	white-space: normal;
 	text-overflow: initial;
 }
+/*.final-exam-modal .master-slot-content h3.time {
+	max-height: 30px;
+}*/
 .final-exam-modal .master-slot.conflict {
 	float: left;
 	clear: none;
