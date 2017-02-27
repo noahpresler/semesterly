@@ -11,7 +11,8 @@ import { getUserInfoEndpoint,
 	getFriendsEndpoint,
 	getIntegrationGetEndpoint,
 	getIntegrationDelEndpoint,
-	getIntegrationAddEndpoint } from '../constants.jsx';
+	getIntegrationAddEndpoint,
+	getMostClassmatesCountEndpoint } from '../constants.jsx';
 import { store } from '../init.jsx';
 import { loadTimetable, nullifyTimetable, getNumberedName } from './timetable_actions.jsx';
 import { browserSupportsLocalStorage, setDeclinedNotifications } from '../util.jsx';
@@ -492,4 +493,34 @@ export function addIntegration(integrationID, courseID, json) {
 
 export function createiCal(timetable) {
 	console.log(timetable)
+}
+
+export function requestMostClassmates() {
+  return {
+    type: "REQUEST_MOST_CLASSMATES",
+  }
+}
+
+export function fetchMostClassmatesCount(courses) {
+  return (dispatch) => 
+{   let state = store.getState();
+    let semester = state.semester !== undefined ? state.semester : currentSemester;
+    dispatch(requestMostClassmates());
+    fetch(getMostClassmatesCountEndpoint(), {
+      credentials: 'include',
+      method: 'POST',
+      body: JSON.stringify({ course_ids: courses, semester: semester })
+    })
+      .then(response => response.json())
+      .then(json => {
+      	dispatch({
+			type: "CHANGE_MOST_FRIENDS_CLASS",
+			classId: json.id,
+			count: json.count
+		});
+		// dispatch({
+		// 	type: "ALERT_FACEBOOK_FRIENDS",
+		// });
+      });
+  }
 }
