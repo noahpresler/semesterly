@@ -6,15 +6,18 @@ import { COLOUR_DATA } from '../constants.jsx';
 
 const InSlot = (props) => {
     let displayTime = (props.time) ? <h3>{ props.time }</h3> : null
+    let displayCode = (props.code) ? <h3>{ props.code }</h3> : null
+
     return (
-        <div className='master-slot'
-            style={ { backgroundColor: COLOUR_DATA[props.color].background }}>
+        <div className={'master-slot' + ((props.numberOfFinalsAtThisTime > 1) ? ' conflict' : '')}
+            style={ { backgroundColor: COLOUR_DATA[props.color].background,
+                    width: (1 / props.numberOfFinalsAtThisTime) * 100 + '%' }}>
             <div className="slot-bar"
                 style={ { backgroundColor: COLOUR_DATA[props.color].border } }
             ></div>
             <div className="master-slot-content">
                 { displayTime }
-                <h3>{ props.code }</h3>
+                { displayCode }
                 <h3>{ props.name }</h3>
             </div>
         </div>
@@ -83,27 +86,31 @@ export class FinalExamsModal extends React.Component {
 
         let weekHeadersHtml = this.generateWeekHeaders(daysOfWeek);
         for (let day in daysOfWeek) {
-            let rendered = false;
             let html = [];
-            console.log(finalsToRender)
+            let conflictTime = {};
             for (let final in finalsToRender) {
                 if (finalsToRender[final].includes(daysOfWeek[day])) {
-                    console.log(this.props.courseDetails)
-                    html.push(<InSlot code={this.props.courseDetails[final].code} 
-                                    name={this.props.courseDetails[final].name}
-                                    color={this.props.courseToColourIndex[final]}
-                                    time={finalsToRender[final]}
-                                    key={final} />)
-                    rendered = true;
-                    delete finalsToRender[final]
+                    conflictTime[finalsToRender[final].split(' ')[1]] = 
+                        (conflictTime[finalsToRender[final].split(' ')[1]] == undefined) ? [final] :
+                        jQuery.merge(conflictTime[finalsToRender[final].split(' ')[1]], [final])
                 }
-
             }
+            for (let timeFrame in conflictTime) {
+                for (let final in conflictTime[timeFrame]) {
+                    html.push(<InSlot name={this.props.courseDetails[conflictTime[timeFrame][final]].name}
+                                    color={this.props.courseToColourIndex[conflictTime[timeFrame][final]]}
+                                    time={finalsToRender[conflictTime[timeFrame][final]]}
+                                    key={conflictTime[timeFrame][final]} 
+                                    numberOfFinalsAtThisTime={conflictTime[timeFrame].length}/>)
+                    delete finalsToRender[conflictTime[timeFrame][final]]
+                }
+            }
+            console.log(conflictTime)
             finalExamDays.push(<div key={day} className="final-exam-day">{ html }</div>)
         }
         return <div className="final-exam-week">
                     { weekHeadersHtml }
-                    <div className="cf">{ finalExamDays }</div>
+                    <div className="final-exam-days-ctn">{ finalExamDays }</div>
                 </div>
 
     }
