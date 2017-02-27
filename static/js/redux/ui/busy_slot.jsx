@@ -135,8 +135,8 @@ class BusySlot extends React.Component {
             <i className="fa fa-times" 
                onClick={ (event) => this.stopPropagation(this.props.removeCustomSlot, event) }></i> : null;
 
-        let converted_start = uses12HrTime && parseInt(this.props.time_start.split(':')[0]) > 12 ? (parseInt(this.props.time_start.split(':')[0]) - 12) + ":" + this.props.time_start.split(':')[1] : this.props.time_start
-        let converted_end = uses12HrTime && parseInt(this.props.time_end.split(':')[0]) > 12 ? (parseInt(this.props.time_end.split(':')[0]) - 12) + ":" + this.props.time_end.split(':')[1] : this.props.time_end
+        let converted_start = uses12HrTime && parseInt(this.props.time_start.split(':')[0]) > 12 ? (parseInt(this.props.time_start.split(':')[0]) - 12) + ":" + ((this.props.time_start.split(':')[1] == 0) ? "00" : this.props.time_start.split(':')[1]) : this.props.time_start
+        let converted_end = uses12HrTime && parseInt(this.props.time_end.split(':')[0]) > 12 ? (parseInt(this.props.time_end.split(':')[0]) - 12) + ":" + ((this.props.time_end.split(':')[1] == 0) ? "00" : this.props.time_end.split(':')[1]) : this.props.time_end
         let time = shareAvailability && this.props.foreign ? null : <span>{ converted_start } – { converted_end }</span>;
         return this.props.connectCreateTarget(this.props.connectDragTarget(this.props.connectDragSource(
             <div className="fc-event-container">

@@ -43,12 +43,12 @@ class WeeklyCalendar extends React.Component {
         }
     }
     getTimelineStyle() { 
-        if ((new Date()).getHours() > this.props.endHour || (new Date()).getHours() < 8) {
-            return {display: 'none'}
-        }
-        let diff = Math.abs(new Date() - new Date().setHours(8,0,0));
+        // if ((new Date()).getHours() > this.props.endHour || (new Date()).getHours() < 8) {
+        //     return {display: 'none'}
+        // }
+        let diff = Math.abs(new Date() - new Date().setHours(0,0,0));
         let mins = Math.ceil((diff/1000)/60);
-        let top = mins/15.0 * 13;
+        let top = mins/15.0 * 10.5;
         return {top: top, zIndex: 1};
     }
 
