@@ -57,6 +57,9 @@ export const getSaveSettingsEndpoint = () => {
 export const getClassmatesEndpoint = () => {
 	return "/user/get_classmates/"
 }
+export const getMostClassmatesCountEndpoint = () => {
+  return "user/get_most_classmates_count/"
+}
 export const getFriendsEndpoint = () => {
   return "/user/find_friends/"
 }

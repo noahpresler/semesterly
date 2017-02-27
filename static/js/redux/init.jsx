@@ -10,8 +10,9 @@ import { getUserInfo, setARegistrationToken, isRegistered } from './actions/user
 import { loadTimetable, lockTimetable, loadCachedTimetable } from './actions/timetable_actions.jsx'
 import { fetchSchoolInfo } from './actions/school_actions.jsx';
 import { setCourseInfo } from './actions/modal_actions.jsx';
-import { browserSupportsLocalStorage, setFirstVisit, timeLapsedGreaterThan } from './util.jsx';
+import { browserSupportsLocalStorage, setFirstVisit, timeLapsedGreaterThan, setFriendsCookie } from './util.jsx';
 import { addTTtoGCal } from './actions/calendar_actions.jsx';
+import { fetchMostClassmatesCount } from './actions/user_actions.jsx';
 
 export const store = createStore(rootReducer, window.devToolsExtension && window.devToolsExtension(), applyMiddleware(thunkMiddleware));
 
@@ -21,6 +22,7 @@ export const getSchool = () => {
 export const getSemester = () => {
   return store.getState().semester;
 }
+
 // setup the state. loads the user's timetables if logged in; cached timetable if not.
 // also handles sharing courses and sharing timetables
 function setup(dispatch) {
@@ -62,6 +64,9 @@ function setup(dispatch) {
       // load one of the user's saved timetables (after initial page load). also fetches classmates
       loadTimetable(user.timetables[0]);
       dispatch({ type: "RECEIVE_TIMETABLE_SAVED", upToDate: true });
+      setTimeout(() => {
+        dispatch(fetchMostClassmatesCount(user.timetables[0].courses.map(c => c['id'])));
+      }, 500);
     }
     else { // user isn't logged in (or has no saved timetables); load last browser-cached timetable, under certain conditions.
     // we only load the browser-cached timetable if the shared course's semester is the same as the browser-cached timetable's semester OR the user is not trying to load a shared course at all. This results in problematic edge cases, such as showing the course modal of an S course in the F semester, being completely avoided.
@@ -70,6 +75,7 @@ function setup(dispatch) {
       }
     }
   }
+
   if (gcalCallback) {
     dispatch({type: 'TRIGGER_SAVE_CALENDAR_MODAL'});
     dispatch(addTTtoGCal());
@@ -99,6 +105,21 @@ function setup(dispatch) {
         } else {
           // console.log(localStorage.getItem("declinedNotifications"), timeLapsedGreaterThan(localStorage.getItem("declinedNotifications"), .0001157));
         }
+      }
+    }
+  }
+
+  //check if showed friends alert in the last 3 days
+  if (browserSupportsLocalStorage() && 'serviceWorker' in navigator) {
+    if (localStorage.getItem("friendsCookie") === null) {
+      let time = new Date();
+      setFriendsCookie(time.getTime());
+      dispatch({type: "ALERT_FACEBOOK_FRIENDS"});
+    } else {
+      if (timeLapsedGreaterThan(localStorage.getItem("friendsCookie"), 3) === true) { // if visit is more than 3 days of last friend alert
+        let time = new Date();
+        setFriendsCookie(time.getTime());
+        dispatch({type: "ALERT_FACEBOOK_FRIENDS"});
       }
     }
   }

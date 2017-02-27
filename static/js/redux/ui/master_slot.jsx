@@ -43,7 +43,6 @@ class MasterSlot extends React.Component {
 
 	render() {
         let friendCircles = null;
-        console.log(this.props.fakeFriends > 0);
         if (this.props.fakeFriends) {
             friendCircles = new Array(this.props.fakeFriends);
             for (let i = 0; i < this.props.fakeFriends; i++) {
@@ -54,7 +53,6 @@ class MasterSlot extends React.Component {
                 return <div className="ms-friend" key={c.img_url} style={{backgroundImage: 'url(' + c.img_url + ')'}}></div>;
             }) : null;
         }
-        console.log("finished circle render");
         
         if ((this.props.classmates && this.props.classmates.classmates && friendCircles.length > 4) 
             ||(this.props.fakeFriends && this.props.fakeFriends > 4)) {
