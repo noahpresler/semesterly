@@ -20,20 +20,27 @@
 
 }
 
+.final-exam-days-ctn {
+	display: flex;
+}
 .final-exam-day {
-	float: left;
 	width: 14.27%;
-	height: 100px;
+	min-height: 100px;
 	border-right: 1px solid #ddd;
 	border-bottom: 1px solid #ddd;
 }
-
 .final-exam-day:first-child {
 	border-left: 1px solid #ddd;
 }
-
-.final-exam-week {
-
+.final-exam-modal .master-slot-content h3 {
+	height: auto;
+	max-height: 46px;
+	white-space: normal;
+	text-overflow: initial;
+}
+.final-exam-modal .master-slot.conflict {
+	float: left;
+	clear: none;
 }
 
 #final-exam-calender-days h3 {
