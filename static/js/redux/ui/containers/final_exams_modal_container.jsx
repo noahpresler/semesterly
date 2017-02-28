@@ -20,7 +20,8 @@ const mapStateToProps = (state) => {
 		hasRecievedSchedule: Boolean(state.finalExamsModal.finalExams),
 		loading: state.finalExamsModal.isLoading,
 		courseToColourIndex: state.ui.courseToColourIndex,
-		courseDetails: remapCourseDetails(state.timetables.items[0].courses)
+		courseDetails: remapCourseDetails(state.timetables.items[0].courses),
+		activeLoadedTimetableName: state.savingTimetable.activeTimetable.name
 	}
 }
 

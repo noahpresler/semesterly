@@ -1,3 +1,9 @@
+/* link in sidebar */
+.final-schedule-link {
+	cursor: pointer;
+}
+
+/* Overriding Default Modal Styles */
 .final-exam-modal {
 	max-width: 1200px;
 	/*height: 85%;*/
@@ -8,18 +14,42 @@
 	width: 100%;
 	height: 100%;
 }
-.final-schedule-link {
-	cursor: pointer;
+.final-exam-modal #modal-header {
+	padding: 20px 30px 10px;
 }
-
+/* Final Exams Modal */
 #final-exam-calendar-ctn {
 	width: 100%;
+	padding: 30px;
 }
-
-#final-exam-calendar-header {
-
+#final-exam-main {
+    width: 80%;
+    float: left;
 }
-
+#final-exam-main.main-full {
+	width: 100%;
+}
+#final-exam-sidebar {
+	float: left;
+    width: 20%;
+    padding: 0 0 0 20px;
+}
+#final-exam-sidebar h3 {
+	padding-top: 0;
+}
+@media (max-width: 766px) {
+	#final-exam-calendar-ctn {
+		padding: 30px 10px;
+	}
+	#final-exam-main {
+		width: 100%;
+	}
+	#final-exam-sidebar {
+		width: 100%;
+		padding: 20px 0 0;
+	}
+}
+/* For Each Week */
 .final-exam-days-ctn {
 	display: flex;
 }
@@ -32,15 +62,7 @@
 .final-exam-day:first-child {
 	border-left: 1px solid #ddd;
 }
-.final-exam-modal .master-slot-content h3 {
-	height: auto;
-	max-height: 30px;
-	white-space: normal;
-	text-overflow: initial;
-}
-/*.final-exam-modal .master-slot-content h3.time {
-	max-height: 30px;
-}*/
+/*  For the Slots in the Modal */
 .final-exam-modal .master-slot {
 	cursor: default;
 }
@@ -48,60 +70,61 @@
 	float: left;
 	clear: none;
 }
-
-.final-exam-disclaimer {
-	padding: 0px 0px 0px 25px;
-	margin: 0px;
-	color: #AFAFAF;
-	font-size: 15px;
+@media (max-width: 766px) {
+	.final-exam-modal .master-slot-content h3 {
+		font-size: 12px;
+	}
 }
-
-.final-exam-link {
-	display: inline-block;
-	padding: 0px 0px 0px 30px;
-	margin: 0px;
-	color: #AFAFAF;
-	font-size: 15px;
-}
-
-.final-exam-link a {
-	text-decoration: underline;	
-	color: #AFAFAF;
-}
-
+/*.final-exam-modal .master-slot-content h3 {
+	height: auto;
+	max-height: 30px;
+	white-space: normal;
+	text-overflow: initial;
+}*/
 #final-exam-calender-days h3 {
 	float: left;
-	font-weight: bold;
+	font-weight: normal;
 	width: 14.27%;
 	border-right: 1px solid #ddd;
 	border-top: 1px solid #ddd;
 	border-bottom: 3px solid #ddd;
-	line-height: 25px; 
-	font-size: 18px;
+	font-size: 15px;
 	margin: 0;
 	text-align: center;
 }
-
 #final-exam-calender-days h3:first-child {
 	border-left: 1px solid #ddd;
 }
-
-#final-exam-main {
-	padding: 0px 0px 30px 30px;
-    width: 80%;
-    float: left;
+#final-exam-calender-days h3 .day {
+	display: inline-block;
+	color: #999;
 }
-#final-exam-main.main-full {
-	width: 100%;
-	padding: 5px 30px 30px 30px;
+#final-exam-calender-days h3 .date {
+	display: inline-block;
+	margin-left: 5px;
 }
-#final-exam-sidebar {
-	float: left;
-    width: 20%;
-    padding: 0px 15px 15px 15px;
+@media (max-width: 766px) {
+	#final-exam-calender-days h3 .day {
+		display: block;
+	}
+	#final-exam-calender-days h3 .date {
+		display: block;
+		margin-left: 0;
+	}
 }
-#final-exam-sidebar h3 {
-	padding-top: 0;
+/* Links in Modal */
+p.final-exam-disclaimer {
+	clear: both;
+	padding: 5px 0 0;
+	color: #AFAFAF;
+	font-size: 12px;
 }
-
-
+p.final-exam-disclaimer i {
+	margin-right: 3px;
+}
+p.final-exam-disclaimer a {
+	display: block;
+	text-decoration: underline;	
+	margin: -3px 0 0;
+	color: #3895db;
+}
