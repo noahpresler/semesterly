@@ -60,8 +60,8 @@ def parser_argparser(parser):
 
 def validate_argparser(parser):
 	parser.add_argument('school', type=str)
-	parser.add_argument('--data', required=True, action=readable_file_action,
-		help='data to interact with db')
+	parser.add_argument('--data', action=readable_file_action,
+		help='default(scripts/[school]/data/courses.json)')
 
 def validator_argparser(parser):
 	# enforce that non-default config can only be applied to single school
@@ -74,7 +74,7 @@ def validator_argparser(parser):
 			single_school_action('','').__call__(parser, namespace, values, option_string)
 			writable_file_action(option_string, self.dest).__call__(parser, namespace, values, option_string)
 
-	parser.add_argument('--output-error', help='(default: in school dir)', action=writable_file_action)
+	parser.add_argument('--output-error', help='(default: /scripts/[school]/logs/error_<ptype>.log)', action=writable_file_action)
 	parser.add_argument('--config-file', action=config_file_action,
 		help='load config file from this path (default: [school]/config.json)')
 	break_error = parser.add_mutually_exclusive_group()
@@ -94,8 +94,8 @@ def validator_argparser(parser):
 
 def digestor_argparser(parser):
 	parser.add_argument('school', type=str)
-	parser.add_argument('--data', required=True, action=readable_file_action,
-		help='data to interact with db')
+	parser.add_argument('--data', action=readable_file_action,
+		help='default: (scripts/[school]/data/courses.json)')
 
 	class set_false_error_on_no_diff_no_load_action(argparse.Action):
 		def __call__(self, parser, namespace, values, option_string=None):

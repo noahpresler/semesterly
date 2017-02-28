@@ -16,12 +16,17 @@ class Command(BaseCommand):
 		self.stdout.write(self.style.SUCCESS(message))
 		directory = 'scripts/' + options['school']
 
+		# default data
+		if not options.get('data'):
+			options['data'] = '{}/data/courses.json'.format(directory)
+
 		# Perform pre-digestion validation
 		if options['validate']:
 			if not options.get('config_file'):
-				options['config_file'] = directory + '/config.json'
+				options['config_file'] = '{}/config.json'.format(directory)
 			if not options.get('output_error'):
-				options['output_error'] = directory + '/logs/validate_error.log.json'
+				options['output_error'] = '{}/logs/validate_error.log.json'.format(directory)
+
 			try:
 				Validator(options['config_file']).validate_self_contained(options['data'],
 					break_on_error=True, # Do not allow digestion if error present
