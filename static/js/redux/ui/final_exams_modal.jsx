@@ -5,8 +5,17 @@ import classNames from 'classnames';
 import { COLOUR_DATA } from '../constants.jsx';
 
 const InSlot = (props) => {
-    let displayTime = (props.time) ? <h3 className="time">{ props.time }</h3> : null
-    let displayCode = (props.code) ? <h3 className="code">{ props.code }</h3> : null
+    let displayTime = (props.time) ? <h3 className="time">{ props.time }</h3> : null;
+    let displayCode = (props.code) ? <h3 className="code">{ props.code }</h3> : null;
+
+    if (displayTime) {
+        let time = (props.time.split(" "))[1];
+        let beginTime = (time.split("-"))[0];
+        beginTime += beginTime > 8 && beginTime < 12 ? 'am' : 'pm';
+        let endTime = (time.split("-"))[1];
+        endTime += endTime > 8 && endTime < 12 ? 'am' : 'pm';
+        displayTime = <h3 className="time">{ beginTime + "-" + endTime }</h3>;
+    }
 
     return (
         <div className={'master-slot' + ((props.numberOfFinalsAtThisTime > 1) ? ' conflict' : '')}
@@ -134,6 +143,11 @@ export class FinalExamsModal extends React.Component {
 
         return (this.noTimeFinals.length > 0) ? 
             <div id="final-exam-calendar-ctn">
+                <p className="final-exam-disclaimer">Note: Some courses do not have finals, check with your syllabus or instructor to confirm </p>
+                <div className="final-exam-link">
+                    <i className="fa fa-link" aria-hidden="true"></i>
+                    <a href="http://web.jhu.edu/registrar/forms-pdfs/Final_Exam_Schedule_Spring_2017.pdf">Link to registar's final exams schedule</a>
+                </div>
                 <div id="final-exam-main">
                     { finalsWeeks }
                 </div>
@@ -141,11 +155,18 @@ export class FinalExamsModal extends React.Component {
                     <h3 className="modal-module-header">Schedule Unavailable</h3>
                     { unscheduledFinal }
                 </div>
+                
             </div> :
             <div id="final-exam-calendar-ctn">
+                <p className="final-exam-disclaimer">Note: Some courses do not have finals, check with your syllabus or instructor to confirm </p>
+                <div className="final-exam-link">
+                    <i className="fa fa-link" aria-hidden="true"></i>
+                    <a href="http://web.jhu.edu/registrar/forms-pdfs/Final_Exam_Schedule_Spring_2017.pdf">Link to registar's final exams schedule</a>
+                </div>
                 <div id="final-exam-main" className="main-full">
                     { finalsWeeks }
                 </div>
+                
             </div>
     }
 	render() {
