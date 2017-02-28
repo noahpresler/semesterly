@@ -41,6 +41,9 @@
 /*.final-exam-modal .master-slot-content h3.time {
 	max-height: 30px;
 }*/
+.final-exam-modal .master-slot {
+	cursor: default;
+}
 .final-exam-modal .master-slot.conflict {
 	float: left;
 	clear: none;
