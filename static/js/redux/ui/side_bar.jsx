@@ -107,7 +107,7 @@ class SideBar extends React.Component {
                     <h3>Load this list with courses you aren't 100% sure you want to take - we'll fit as many as possible, automatically</h3>
                 </div>);
         }
-        let finalScheduleLink = (masterSlots.length > 0 ) ? 
+        let finalScheduleLink = (masterSlots.length > 0 && school == 'jhu') ? 
             <div className="final-schedule-link"
                 onClick = {this.props.launchFinalExamsModal}>
                 <i className="fa fa-calendar" aria-hidden="true"></i>
