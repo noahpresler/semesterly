@@ -1,4 +1,6 @@
-import os, django, datetime, logging, sys, argparse, simplejson as json
+import os, django, datetime, logging, sys, argparse, simplejson as json, logging
+from timeit import default_timer as timer
+
 from django.core.management.base import BaseCommand, CommandParser, CommandError
 from timetable.models import Updates
 from timetable.school_mappers import course_parsers, new_course_parsers, new_textbook_parsers
@@ -25,6 +27,7 @@ class Command(BaseCommand):
 
 	def handle(self, *args, **options):
 		logging.basicConfig(level=logging.ERROR, filename='parse_errors.log')
+		stat_log = []
 
 		for school in options['schools']:
 			timestamp = datetime.datetime.now().strftime("%Y/%m/%d-%H:%M:%S")
@@ -49,10 +52,10 @@ class Command(BaseCommand):
 			if not options.get('output_error_filepath'):
 				options['output_error_filepath'] = '{}/logs/error_{}.log'.format(directory, parser_type)
 			if not options.get('master_log'):
-				options['log_stats'] = '{}/logs/master.log'.format(directory)
+				options['log_stats'] = 'scripts/logs/master.log'
 
 			try:
-				parser(school,
+				p = parser(school,
 					validate=options['validate'],
 					config=options['config_file'],
 					output_filepath=options['output'],
@@ -61,16 +64,23 @@ class Command(BaseCommand):
 					break_on_warning=options['break_on_warning'],
 					hide_progress_bar=options['hide_progress_bar'],
 					skip_shallow_duplicates=options['skip_shallow_duplicates']
-				).start(
+				)
+
+				start_time = timer()
+				p.start(
 					verbosity=options['verbosity'],
 					year=options['term_and_year'][1] if options.get('term_and_year') else None,
 					term=options['term_and_year'][0] if options.get('term_and_year') else None,
 					department=options.get('department'),
 					textbooks=options['textbooks']
 				)
+				end_time = timer()
 
-			# TODO - catch JsonValidationError
-			# TODO - catch CourseParseError as well
+				if hasattr(p, 'get_stats') and callable(p.get_stats):
+					stat_log.append('({}) [Elapsed Time: {:.2f}s] {}'.format(school, end_time - start_time, p.get_stats()))
+				else:
+					stat_log.append('({}) [Elapsed Time: {:.2f}s] ==INGESTING=='.format(school, end_time - start_time))
+
 			except CourseParseError as e:
 				error = "Error while parsing %s:\n\n%s\n" % (school, str(e))
 				logging.exception(e)
@@ -80,20 +90,19 @@ class Command(BaseCommand):
 				logging.exception(e)
 				self.stderr.write(self.style.ERROR(str(e)))
 
-			# TODO - add more info to master logger
-			self.log_stats(options['log_stats'], stats='INGESTING', timestamp=timestamp)
-
-		self.log_stats(options['log_stats'], options=options, timestamp=timestamp)
+		self.log_stats(options['log_stats'], stats=stat_log, options=options, timestamp=timestamp)
 		self.stdout.write(self.style.SUCCESS("Parsing Finished!"))
 
-	def log_stats(self, filepath, options='', stats='', timestamp=''):
+	def log_stats(self, filepath, options='', stats=[], timestamp='', elapsed=None):
 		'''Append run stat to master log.'''
 		formatted_string = ''
 
 		if timestamp:
 			formatted_string += 'TIMESTAMP: ' + timestamp + '\n'
+		if elapsed:
+			formatted_string += 'ELAPSED: ' + str(elapsed) + '\n'
 		if stats:
-			formatted_string += stats + '\n'
+			formatted_string += '\n'.join(stat for stat in stats) + '\n'
 		if options:
 			formatted_string += 'OPTIONS:\n' + json.dumps(options, sort_keys=True, indent=2, separators=(',', ': ')) + '\n'
 
