@@ -66,6 +66,7 @@ class DTMSideBar extends React.Component {
 					</ReactTooltip>
 				</div>
             	{shareLink}
+            	<span className="share-dtm">Share Availability</span>
             	<footer className="footer navbar no-print">
 					<ul className="nav nav-pills no-print">
 						<li className="footer-button" role="presentation"><a href="mailto:contact@semester.ly?Subject=Semesterly">Contact us</a></li>

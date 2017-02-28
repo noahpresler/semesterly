@@ -8,7 +8,7 @@ import TimetableExistsAlertContainer from './alerts/timetable_exists_alert_conta
 import ChangeSemesterAlertContainer from './alerts/change_semester_alert_container.jsx';
 import NewTimetableAlertContainer from './alerts/new_timetable_alert_container.jsx'
 import EnableNotificationsAlertContainer from './alerts/enable_notifications_alert_container.jsx'
-import TopBarContainer from './containers/top_bar_container.jsx';
+import DTMTopBarContainer from './containers/dtm_top_bar_container.jsx';
 import DTMSideBarContainer from './containers/dtm_side_bar_container.jsx';
 import SideBarContainer from './containers/side_bar_container.jsx';
 import UserSettingsModalContainer from './containers/user_settings_modal_container.jsx';
@@ -107,7 +107,7 @@ class DTM extends React.Component {
 		let cal = mobile && $(window).width() < 767 && this.state.orientation == 'portrait' ? <DayCalendarContainer /> : <CalendarWeeklyContainer />;
 		return (
 			<div id="page-wrapper" className="dtm">
-				<TopBarContainer />
+				<DTMTopBarContainer />
 				<UserSettingsModalContainer />
 				<SignupModalContainer />
 				<SaveCalendarModalContainer />
