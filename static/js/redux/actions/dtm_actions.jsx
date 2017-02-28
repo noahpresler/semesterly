@@ -22,8 +22,7 @@ export function fetchAvailability(weekOffset) {
 	return (dispatch) => {
 		let state = store.getState();
 		let ids = state.dtmCalendars.calendars.map(c => c.id);
-		let endpoint = shareAvailability ? getMergedAvailabilityEndpoint() : getAvailabilityEndpoint();
-		fetch(endpoint, {
+		fetch(getAvailabilityEndpoint(), {
 			method: 'POST',
 			headers: {
 				'X-CSRFToken': getCookie('csrftoken')
