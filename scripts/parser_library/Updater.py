@@ -6,7 +6,7 @@ class ProgressBar:
 	'''Wrapper class to add some more formatting to Python progressbar package.'''
 	def __init__(self, school):
 		# Set progress bar to long or short dependent on terminal width
-		if progressbar.utils.get_terminal_size()[0] < 200:
+		if progressbar.utils.get_terminal_size()[0] < 100:
 			self.bar = progressbar.ProgressBar(
 				redirect_stdout=True,
 				# redirect_stderr=True,
