@@ -56,6 +56,12 @@ class Digestor:
 		self.strategy = self.set_strategy(diff, load, output)
 		self.counter = Counter()
 
+	def get_stats(self):
+		if not self.hide_progress_bar:
+			return self.progressbar.stats
+		else:
+			return 'stats not logged'
+
 	def set_strategy(self, diff, load, output=None):
 		if diff and load:
 			raise NotImplementedError('Burp not implemented yet.')
