@@ -83,8 +83,9 @@ export class FinalExamsModal extends React.Component {
         return week
     }
     generateWeekHeaders(dates) {
-        let days = ['Sun', 'Mon', 'Tues', 'Wed', 'Thu', 'Fri', 'Sat']
-        let html = dates.map((date, index) => {return <h3 key={date}>{days[index]} {date}</h3>})
+        let days = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat']
+        let mobileDays = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat']//['S', 'M', 'T', 'W', 'T', 'F', 'S']
+        let html = dates.map((date, index) => {return <h3 key={date}><span className='day'>{($(window).width() > 766) ? days[index] : mobileDays[index]}</span><span className='date'>{date}</span></h3>})
         return <div id="final-exam-calender-days" className="cf">
             { html }
         </div>
@@ -139,14 +140,15 @@ export class FinalExamsModal extends React.Component {
                             color={this.props.courseToColourIndex[final]}
                             key={index} /> 
                     })
-
+        let disclaimer = <p className="final-exam-disclaimer">
+                                Some courses do not have finals, check with your syllabus or instructor to confirm.
+                                <a href="http://web.jhu.edu/registrar/forms-pdfs/Final_Exam_Schedule_Spring_2017.pdf">
+                                    <i className="fa fa-link" aria-hidden="true"></i>
+                                    Link to registar's final exams schedule
+                                </a>
+                            </p>
         return (this.noTimeFinals.length > 0) ? 
             <div id="final-exam-calendar-ctn">
-                <p className="final-exam-disclaimer">Note: Some courses do not have finals, check with your syllabus or instructor to confirm </p>
-                <div className="final-exam-link">
-                    <i className="fa fa-link" aria-hidden="true"></i>
-                    <a href="http://web.jhu.edu/registrar/forms-pdfs/Final_Exam_Schedule_Spring_2017.pdf">Link to registar's final exams schedule</a>
-                </div>
                 <div id="final-exam-main">
                     { finalsWeeks }
                 </div>
@@ -154,18 +156,13 @@ export class FinalExamsModal extends React.Component {
                     <h3 className="modal-module-header">Schedule Unavailable</h3>
                     { unscheduledFinal }
                 </div>
-                
+                { disclaimer }
             </div> :
             <div id="final-exam-calendar-ctn">
-                <p className="final-exam-disclaimer">Note: Some courses do not have finals, check with your syllabus or instructor to confirm </p>
-                <div className="final-exam-link">
-                    <i className="fa fa-link" aria-hidden="true"></i>
-                    <a href="http://web.jhu.edu/registrar/forms-pdfs/Final_Exam_Schedule_Spring_2017.pdf">Link to registar's final exams schedule</a>
-                </div>
                 <div id="final-exam-main" className="main-full">
                     { finalsWeeks }
                 </div>
-                
+                { disclaimer }
             </div>
     }
 	render() {
@@ -173,6 +170,7 @@ export class FinalExamsModal extends React.Component {
             <div id="modal-content">
                 <div id="modal-header">
                     <h1>Final Exam Scheduler</h1>
+                    <h2>{ this.props.activeLoadedTimetableName }</h2>
                 </div>
             </div>
         let modalStyle = {
