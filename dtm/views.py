@@ -94,6 +94,8 @@ def get_free_busy_from_cals(cal_ids, student, week_offset=0):
   if 'default' in cal_ids: cal_ids.remove('default')
   start = tz.localize(last_weekday(datetime.datetime.today(), 'U')) + datetime.timedelta(weeks=week_offset, minutes=5)
   end = tz.localize(next_weekday(datetime.datetime.today(), 'S')) + datetime.timedelta(weeks=week_offset)
+  print "START", start
+  print "END", end
   body = {
     "timeMin": start.isoformat(),
     "timeMax": end.replace(hour=23, minute=59).isoformat(),

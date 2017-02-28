@@ -59,15 +59,15 @@ def next_weekday(d, weekday):
     weekday = DAY_LIST.index(weekday)
     today = datetime.datetime.today()
     delta = weekday - today.weekday()
-    week = 1 if delta < 0 else 1
+    week = 1 if delta == 0 else 0
     return today + datetime.timedelta(days=delta, weeks=week)
 
 def last_weekday(d, weekday):
     weekday = DAY_LIST.index(weekday)
     today = datetime.datetime.today()
-    if today.weekday() == weekday:
-      return today
-    return today - datetime.timedelta(days=today.weekday())
+    delta =  - ((today.weekday() - weekday) % 7 )
+    print delta
+    return today + datetime.timedelta(days=delta)
 
 def create_student(strategy, details, response, user, *args, **kwargs):
     backend_name = kwargs['backend'].name
