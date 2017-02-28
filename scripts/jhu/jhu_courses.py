@@ -73,9 +73,13 @@ class HopkinsParser(CourseParser):
         # Load core course fields
         self.ingestor['areas'] = filter(lambda a: a != "None", course['Areas'].split(','))
         self.ingestor['areas'] += ['Writing Intensive'] if course['IsWritingIntensive'] == "Yes" else []
-        self.ingestor['prerequisites'] = SectionDetails[0]['Prerequisites'][0].get('Description','') if len(SectionDetails[0]['Prerequisites']) > 0 else ''
+        # if len(SectionDetails[0]['Prerequisites']) > 0:
+            # print ':::'.join(p['Description'] for p in SectionDetails[0]['Prerequisites'])
+        # if len(SectionDetails[0]['Corequisites']) > 0:
+        #     print SectionDetails[0]['Corequisites']
+        self.ingestor['prerequisites'] = ' '.join(p['Description'] for p in SectionDetails[0]['Prerequisites']) if len(SectionDetails[0]['Prerequisites']) > 0 else ''
         self.ingestor['level'] = re.findall(re.compile(r".+?\..+?\.(.{1}).+"),course['OfferingName'])[0] + "00"
-        self.ingestor['name'] = course['Title']
+        self.ingestor['name'] = re.sub(r' ([IiVv]+[ $])', lambda match: ' {}'.format(match.group(1).upper()), course['Title'].title()) # title and keep roman numerals uppercase
         self.ingestor['description'] = SectionDetails[0]['Description']
         self.ingestor['code'] = course['OfferingName'].strip()
         self.ingestor['num_credits'] = num_credits
