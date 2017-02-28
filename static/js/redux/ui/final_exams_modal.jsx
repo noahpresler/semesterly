@@ -114,7 +114,6 @@ export class FinalExamsModal extends React.Component {
                     delete finalsToRender[conflictTime[timeFrame][final]]
                 }
             }
-            console.log(conflictTime)
             finalExamDays.push(<div key={day} className="final-exam-day">{ html }</div>)
         }
         return <div className="final-exam-week">
