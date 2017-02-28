@@ -47,7 +47,7 @@ class Command(BaseCommand):
 			if not options.get('output'):
 				options['output'] = '{}/data/{}.json'.format(directory, parser_type)
 			if not options.get('output_error_filepath'):
-				options['output_error_filepath'] = '{}/logs/error.log'.format(directory)
+				options['output_error_filepath'] = '{}/logs/error_{}.log'.format(directory, parser_type)
 			if not options.get('master_log'):
 				options['log_stats'] = '{}/logs/master.log'.format(directory)
 
