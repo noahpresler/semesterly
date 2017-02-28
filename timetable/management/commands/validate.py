@@ -32,3 +32,4 @@ class Command(BaseCommand):
 			self.stderr.write(str(e))
 
 		self.stdout.write(self.style.SUCCESS("Validation Finished!"))
+		# TODO - add to master logger
