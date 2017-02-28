@@ -90,10 +90,11 @@ class Command(BaseCommand):
 				logging.exception(e)
 				self.stderr.write(self.style.ERROR(str(e)))
 
-		self.log_stats(options['log_stats'], stats=stat_log, options=options, timestamp=timestamp)
 		self.stdout.write(self.style.SUCCESS("Parsing Finished!"))
+		Command.log_stats(options['log_stats'], stats=stat_log, options=options, timestamp=timestamp)
 
-	def log_stats(self, filepath, options='', stats=[], timestamp='', elapsed=None):
+	@staticmethod
+	def log_stats(filepath, options='', stats=None, timestamp='', elapsed=None):
 		'''Append run stat to master log.'''
 		formatted_string = ''
 
