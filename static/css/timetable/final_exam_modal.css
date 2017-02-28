@@ -91,6 +91,7 @@
 	font-size: 15px;
 	margin: 0;
 	text-align: center;
+	line-height: 25px;
 }
 #final-exam-calender-days h3:first-child {
 	border-left: 1px solid #ddd;
@@ -104,6 +105,10 @@
 	margin-left: 5px;
 }
 @media (max-width: 766px) {
+	#final-exam-calender-days h3 {
+		line-height: 15px;
+		padding: 3px 0;
+	}
 	#final-exam-calender-days h3 .day {
 		display: block;
 	}
