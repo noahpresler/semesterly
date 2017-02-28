@@ -151,7 +151,6 @@ class Ingestor(dict):
 				'name': self.getchain('department_name', 'dept_name'),
 				'code': self.getchain('department_code', 'dept_code')
 			}
-		self['department'] = department
 
 		course = {
 			'kind': 'course',
@@ -160,7 +159,7 @@ class Ingestor(dict):
 			},
 			'code': self.getchain('code', 'course_code'),
 			'name': self.getchain('name', 'course_name'),
-			'department': self.get('department'),
+			'department': department,
 			'credits': self.getchain('credits', 'num_credits'),
 			'prerequisites': deep_clean(make_list(self.getchain('prerequisites', 'prereqs'))),
 			'corequisites': deep_clean(make_list(self.getchain('corequisites', 'coreqs'))),
@@ -200,7 +199,6 @@ class Ingestor(dict):
 			for i in range(len(instructors)):
 				if isinstance(instructors[i], basestring):
 					instructors[i] = { 'name': instructors[i] }
-			# self['instructors'] = instructors
 
 		section = {
 			'kind': 'section',
