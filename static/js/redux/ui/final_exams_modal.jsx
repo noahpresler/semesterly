@@ -38,6 +38,7 @@ export class FinalExamsModal extends React.Component {
         super(props);
         this.hide = this.hide.bind(this);
         this.noTimeFinals = [];
+        this.finalsToRender = {};
     }
     hide() {
         this.refs.modal.hide();
@@ -58,17 +59,16 @@ export class FinalExamsModal extends React.Component {
 		}
 	}
 
-    findNextFinalToRender(finalsToRender) {
-        let finals = finalsToRender
+    findNextFinalToRender() {
         let minDate = Infinity;
         this.noTimeFinals = [];
-        for (let course in finals) {
-            let m = finals[course].split(' ')[0].split('/')['0'];
-            let d = finals[course].split(' ')[0].split('/')['1'];
+        for (let course in this.finalsToRender) {
+            let m = this.finalsToRender[course].split(' ')[0].split('/')['0'];
+            let d = this.finalsToRender[course].split(' ')[0].split('/')['1'];
             minDate = (new Date(2017, Number(m - 1), Number(d)) < minDate) ? new Date(2017, Number(m - 1), Number(d)) : minDate;
-            if (finals[course].includes('Exam time not found')) {
+            if (this.finalsToRender[course].includes('Exam time not found')) {
                 this.noTimeFinals.push(course);
-                delete finalsToRender[course]
+                delete this.finalsToRender[course]
             }
         }
         return minDate;
@@ -90,7 +90,7 @@ export class FinalExamsModal extends React.Component {
             { html }
         </div>
     }
-    renderWeek(day, days, finalsToRender) {
+    renderWeek(day, days) {
         let finalExamDays = []
         let daysOfWeek = this.findDaysOfWeek(day, days)
 
@@ -98,21 +98,21 @@ export class FinalExamsModal extends React.Component {
         for (let day in daysOfWeek) {
             let html = [];
             let conflictTime = {};
-            for (let final in finalsToRender) {
-                if (finalsToRender[final].includes(daysOfWeek[day])) {
-                    conflictTime[finalsToRender[final].split(' ')[1]] = 
-                        (conflictTime[finalsToRender[final].split(' ')[1]] == undefined) ? [final] :
-                        jQuery.merge(conflictTime[finalsToRender[final].split(' ')[1]], [final])
+            for (let final in this.finalsToRender) {
+                if (this.finalsToRender[final].includes(daysOfWeek[day])) {
+                    conflictTime[this.finalsToRender[final].split(' ')[1]] = 
+                        (conflictTime[this.finalsToRender[final].split(' ')[1]] == undefined) ? [final] :
+                        jQuery.merge(conflictTime[this.finalsToRender[final].split(' ')[1]], [final])
                 }
             }
             for (let timeFrame in conflictTime) {
                 for (let final in conflictTime[timeFrame]) {
                     html.push(<InSlot name={this.props.courseDetails[conflictTime[timeFrame][final]].name}
                                     color={this.props.courseToColourIndex[conflictTime[timeFrame][final]]}
-                                    time={finalsToRender[conflictTime[timeFrame][final]]}
+                                    time={this.finalsToRender[conflictTime[timeFrame][final]]}
                                     key={conflictTime[timeFrame][final]} 
                                     numberOfFinalsAtThisTime={conflictTime[timeFrame].length}/>)
-                    delete finalsToRender[conflictTime[timeFrame][final]]
+                    delete this.finalsToRender[conflictTime[timeFrame][final]]
                 }
             }
             finalExamDays.push(<div key={day} className="final-exam-day">{ html }</div>)
@@ -125,12 +125,12 @@ export class FinalExamsModal extends React.Component {
     }
     loadFinalsToDivs() {
         let days = ['N', 'M', 'T', 'W', 'R', 'F', 'S']
-        let finalsToRender = jQuery.extend(true, {}, this.props.finalExamSchedule);
-        let day = this.findNextFinalToRender(finalsToRender)
+        this.finalsToRender = jQuery.extend(true, {}, this.props.finalExamSchedule);
+        let day = this.findNextFinalToRender()
 
         let finalsWeeks = []
-        while (Object.keys(finalsToRender).length > 0) {
-            finalsWeeks.push(<div key={day}>{ this.renderWeek(day, days, finalsToRender) }</div>)
+        while (Object.keys(this.finalsToRender).length > 0) {
+            finalsWeeks.push(<div key={day}>{ this.renderWeek(day, days) }</div>)
             day = new Date(day.getTime() + (7 * 24 * 60 * 60 * 1000));
         }
 
