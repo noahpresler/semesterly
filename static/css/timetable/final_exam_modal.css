@@ -46,6 +46,26 @@
 	clear: none;
 }
 
+.final-exam-disclaimer {
+	padding: 0px 0px 0px 25px;
+	margin: 0px;
+	color: #AFAFAF;
+	font-size: 15px;
+}
+
+.final-exam-link {
+	display: inline-block;
+	padding: 0px 0px 0px 30px;
+	margin: 0px;
+	color: #AFAFAF;
+	font-size: 15px;
+}
+
+.final-exam-link a {
+	text-decoration: underline;	
+	color: #AFAFAF;
+}
+
 #final-exam-calender-days h3 {
 	float: left;
 	font-weight: bold;
@@ -64,19 +84,21 @@
 }
 
 #final-exam-main {
-	padding: 30px 0 30px 30px;
+	padding: 0px 0px 30px 30px;
     width: 80%;
     float: left;
 }
 #final-exam-main.main-full {
 	width: 100%;
-	padding: 30px;
+	padding: 5px 30px 30px 30px;
 }
 #final-exam-sidebar {
 	float: left;
     width: 20%;
-    padding: 30px;
+    padding: 0px 15px 15px 15px;
 }
 #final-exam-sidebar h3 {
 	padding-top: 0;
 }
+
+
