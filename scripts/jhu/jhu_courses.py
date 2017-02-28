@@ -86,7 +86,7 @@ class HopkinsParser(CourseParser):
         self.ingestor['department_name'] = course['Department']
         self.ingestor['campus'] = 1
         if SectionDetails[0].get('EnrollmentRestrictedTo'):
-            self.ingestor['restrictions'] = SectionDetails[0].get('EnrollmentRestrictedTo')
+            self.ingestor['exclusions'] = SectionDetails[0].get('EnrollmentRestrictedTo')
 
         # Add specialty areas for computer science department
         if course['Department'] == 'EN Computer Science':
