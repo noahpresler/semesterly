@@ -14,6 +14,8 @@ class Command(BaseCommand):
 		self.stdout.write(self.style.SUCCESS(message))
 
 		directory = 'scripts/' + options['school']
+		if not options.get('data'):
+			options['data'] = '{}/data/courses.json'.format(directory)
 		if not options.get('config_file'):
 			options['config_file'] = directory + '/config.json'
 		if not options.get('output_error'):
