@@ -27,7 +27,10 @@ touch "${dir}/__init__.py"
 touch "${dir}/config.json"
 mkdir "${dir}/data"
 mkdir "${dir}/logs"
+touch "${dir}/${school}_courses.py"
+touch "${dir}/${school}_textbooks.py"
+touch "${dir}/${school}_evals.py"
 
-echo "{\"school\": {\"code\": ${school}, \"name\":\"TODO\"}" > ${dir}/config.json
+echo "{\"school\": {\"code\": \"${school}\", \"name\":\"TODO\"}}" > ${dir}/config.json
 
 echo -e "Finished creating rudimentary scaffolding for ${school}. Edit ${dir}/config.json"
