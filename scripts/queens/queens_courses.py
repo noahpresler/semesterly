@@ -24,10 +24,10 @@ class QueensParser(PeoplesoftParser):
 			'ExactKeys': 'Y',
 			'TargetFrameName': 'None'
 		}
-		# self.cap = webdriver.DesiredCapabilities.PHANTOMJS
-		# self.cap["phantomjs.page.settings.resourceTimeout"] = 50000000
-		# self.cap["phantomjs.page.settings.loadImages"] = False
-		# self.cap["phantomjs.page.settings.userAgent"] = 'Mozilla/5.0 (Windows NT 6.1; Win64; x64; rv:16.0) Gecko/20121026 Firefox/16.0'
+		self.cap = webdriver.DesiredCapabilities.PHANTOMJS
+		self.cap["phantomjs.page.settings.resourceTimeout"] = 50000000
+		self.cap["phantomjs.page.settings.loadImages"] = False
+		self.cap["phantomjs.page.settings.userAgent"] = 'Mozilla/5.0 (Windows NT 6.1; Win64; x64; rv:16.0) Gecko/20121026 Firefox/16.0'
 		self.driver = webdriver.PhantomJS('./node_modules/phantomjs-prebuilt/bin/phantomjs',desired_capabilities=self.cap)
 		# self.driver = webdriver.Chrome() #FOR DEBUG PURPOSES ONLY
 
@@ -77,6 +77,8 @@ class QueensParser(PeoplesoftParser):
 
 		# NOTE: get request will update CookieJar
 		self.requester.get('https://saself.ps.queensu.ca/psc/saself/EMPLOYEE/HRMS/c/SA_LEARNER_SERVICES.CLASS_SEARCH.GBL?Page=SSR_CLSRCH_ENTRY&Action=U&ExactKeys=Y&TargetFrameName=None')
+
+		self.driver.close()
 
 	def start(self,
 		year=None,
