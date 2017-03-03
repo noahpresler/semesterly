@@ -783,6 +783,6 @@ def profile(request):
 def final_exam_scheduler(request):
   #request.body contains the json of the courses (timetable)
   final_exam_schedule = jhu_final_exam_scheduler.make_schedule(json.loads(request.body))
-  # from time import sleep
-  # sleep(3)
+  #from time import sleep
+  #sleep(3)
   return HttpResponse(json.dumps(final_exam_schedule), content_type="application/json")
