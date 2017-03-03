@@ -27,7 +27,7 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
 	return {
-		toggleFinalExamsModal: () => {dispatch({type: "TOGGLE_FINAL_EXAMS_MODAL"})},
+		hideFinalExamsModal: () => {dispatch({type: "HIDE_FINAL_EXAMS_MODAL"})},
 		fetchFinalExamSchedule: () => {dispatch(fetchFinalExamSchedule())}
 	}
 }
