@@ -159,6 +159,10 @@ class Digestor:
 			self.update_progress('offering', bool(offering_model))
 		return offering_models
 
+	def digest_textbook(self, textbook):
+		textbook_model = self.strategy.digest_textbook(self.adapter.adapt_textbook(textbook))
+		self.update_progress('textbook', bool(textbook_model))
+
 	def wrap_up(self):
 		self.strategy.wrap_up()
 
@@ -309,6 +313,9 @@ class DigestionAdapter:
 				}
 			}
 			yield offering
+
+	def adapt_textbook(self, textbook):
+		return textbook
 
 class DigestionStrategy:
 	__metaclass__ = ABCMeta
