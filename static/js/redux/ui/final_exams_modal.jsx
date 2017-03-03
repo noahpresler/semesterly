@@ -149,7 +149,7 @@ export class FinalExamsModal extends React.Component {
                     })
         let disclaimer = <p className="final-exam-disclaimer">
                                 Some courses do not have finals, check with your syllabus or instructor to confirm.
-                                <a href="http://web.jhu.edu/registrar/forms-pdfs/Final_Exam_Schedule_Spring_2017.pdf">
+                                <a href="http://web.jhu.edu/registrar/forms-pdfs/Final_Exam_Schedule_Spring_2017.pdf" target="_blank">
                                     <i className="fa fa-link" aria-hidden="true"></i>
                                     Link to registar's final exams schedule
                                 </a>
