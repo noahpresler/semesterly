@@ -1,15 +1,15 @@
-export const finalExamsModal = (state = { isVisible: false, isDownloading: false, isLoading: false, finalExams: null }, action) => {
+export const finalExamsModal = (state = { isVisible: false, isLoading: false, finalExams: null }, action) => {
 	switch (action.type) {
-		case 'TOGGLE_FINAL_EXAMS_MODAL':
-			return {isVisible: !state.isVisible};
-		case 'TRIGGER_FINAL_EXAMS_MODAL':
-			return {isVisible: true, isDownloading: false};
+		case 'HIDE_FINAL_EXAMS_MODAL':
+			return Object.assign({}, state, {isVisible: false});
+		case 'SHOW_FINAL_EXAMS_MODAL':
+			return Object.assign({}, state, {isVisible: true});
 		case 'FETCH_FINAL_EXAMS':
-			return {isLoading: true}
+			return Object.assign({}, state, {isLoading: true, finalExams: null});
 		case 'RECIEVE_FINAL_EXAMS':
-			return {isLoading: false, finalExams: action.json}
-		case 'DOWNLOAD_CALENDAR':
-			return Object.assign({}, state, {isDownloading: true});
+			return Object.assign({}, state, {isLoading: false, finalExams: action.json});
+		case 'CHANGE_ACTIVE_SAVED_TIMETABLE':
+			return Object.assign({}, state, {finalExams: null});
 		default:
 			return state;
 	}
