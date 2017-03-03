@@ -31,7 +31,8 @@ VALID_SCHOOLS = [
   "vandy",
   "gw",
   "umich",
-  "chapman"
+  "chapman",
+  "salisbury"
 ]
 
 AM_PM_SCHOOLS = [
@@ -85,10 +86,11 @@ course_parsers = {
 }
 
 new_course_parsers = {
-  'chapman': lambda *args, **kwargs: ChapmanParser(**kwargs),
-  'jhu': lambda *args, **kwargs: HopkinsParser(**kwargs),
-  'umich': lambda *args, **kwargs: UmichParser(**kwargs),
-  'queens': lambda *args, **kwargs: QueensParser(**kwargs)
+  'chapman':   lambda *args, **kwargs: ChapmanParser(**kwargs),
+  'jhu':       lambda *args, **kwargs: HopkinsParser(**kwargs),
+  'umich':     lambda *args, **kwargs: UmichParser(**kwargs),
+  'queens':    lambda *args, **kwargs: QueensParser(**kwargs),
+  'salisbury': lambda *args, **kwargs: SalisburyParser(**kwargs)
 }
 
 new_textbook_parsers = {
