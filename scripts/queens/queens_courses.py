@@ -24,11 +24,12 @@ class QueensParser(PeoplesoftParser):
 			'ExactKeys': 'Y',
 			'TargetFrameName': 'None'
 		}
-		self.cap = webdriver.DesiredCapabilities.PHANTOMJS
-		self.cap["phantomjs.page.settings.resourceTimeout"] = 50000000
-		self.cap["phantomjs.page.settings.loadImages"] = False
-		self.cap["phantomjs.page.settings.userAgent"] = 'Mozilla/5.0 (Windows NT 6.1; Win64; x64; rv:16.0) Gecko/20121026 Firefox/16.0'
-		self.driver = webdriver.PhantomJS('./node_modules/phantomjs-prebuilt/bin/phantomjs',desired_capabilities=self.cap)
+		# self.cap = webdriver.DesiredCapabilities.PHANTOMJS
+		# self.cap["phantomjs.page.settings.resourceTimeout"] = 50000000
+		# self.cap["phantomjs.page.settings.loadImages"] = False
+		# self.cap["phantomjs.page.settings.userAgent"] = 'Mozilla/5.0 (Windows NT 6.1; Win64; x64; rv:16.0) Gecko/20121026 Firefox/16.0'
+		# self.driver = webdriver.PhantomJS('./node_modules/phantomjs-prebuilt/bin/phantomjs',desired_capabilities=self.cap)
+		self.driver = webdriver.Chrome()
 
 		super(QueensParser, self).__init__('queens', QueensParser.BASE_URL, url_params=params, **kwargs)
 
@@ -50,7 +51,7 @@ class QueensParser(PeoplesoftParser):
 		self.driver.get('https://my.queensu.ca/')
 		self.seleni_run(lambda: self.driver.find_element_by_id('username').send_keys('1dc4'))
 		self.seleni_run(lambda: self.driver.find_element_by_id('password').send_keys('***REMOVED***'))
-		self.seleni_run(lambda: self.driver.find_element_by_class_name('Btn1Def').click())
+		self.seleni_run(lambda: self.driver.find_element_by_class_name('form-button').click())
 		self.seleni_run(lambda: self.driver.find_element_by_link_text("SOLUS").click())
 		self.focus_iframe()
 		self.seleni_run(lambda: self.driver.find_element_by_link_text("Search").click())
