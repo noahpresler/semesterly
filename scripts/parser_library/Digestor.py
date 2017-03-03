@@ -163,6 +163,10 @@ class Digestor:
 		textbook_model = self.strategy.digest_textbook(self.adapter.adapt_textbook(textbook))
 		self.update_progress('textbook', bool(textbook_model))
 
+	def digest_textbook_link(self, textbook_link, textbook):
+		textbook_link_model = self.strategy.digest_textbook_link(self.adapter.adapt_textbook_link(textbook_link, textbook))
+		self.update_progress('textbook_link', bool(textbook_link))
+
 	def wrap_up(self):
 		self.strategy.wrap_up()
 
@@ -315,7 +319,37 @@ class DigestionAdapter:
 			yield offering
 
 	def adapt_textbook(self, textbook):
-		return textbook
+		return {
+			'isbn': textbook.isbn,
+			'defaults': {
+				'detail_url': textbook.detail_url,
+				'image_url': textbook.image_url,
+				'author': textbook.author,
+				'title': textbook.title
+			}
+		}
+
+	def adapt_textbook_link(self, textbook_link, textbook):
+		if 'required' not in textbook_link:
+			textbook_link.required = True
+		if 'section' not in textbook_link:
+			sections = Section.objects.filter(course=textbook_link.course.code)
+			for section in sections:
+				yield {
+					'section': section
+					'is_required': textbook_link.required,
+					'textbook': textbook
+				}
+		else:
+			section = Section.objects.filter(
+				course=textbook_link.course.code, 
+				meeting_section=textbook_link.section.code
+			)[0]
+			yield {
+				'section': section
+				'is_required': textbook_link.required,
+				'textbook': textbook
+			}
 
 class DigestionStrategy:
 	__metaclass__ = ABCMeta
@@ -347,13 +381,17 @@ class DigestionStrategy:
 		Returns: (django) formatted meeting model
 		'''
 
+	@abstractmethod
+	def digest_textbook(self, textbook):
+		'''Digest textbook.'''
+
+	@abstractmethod
+	def digest_textbook_link(self, textbook_link):
+		'''Digest Textbook Link.'''
+
 	def digest_instructor(self, instructor):
 		pass # TODO
 	def digest_final_exam(self, final_exam):
-		pass # TODO
-	def digest_textbook(self, textbook):
-		pass # TODO
-	def digest_textbook_link(self, textbook_link):
 		pass # TODO
 
 	@abstractmethod
@@ -386,6 +424,16 @@ class Vommit(DigestionStrategy):
 	def digest_offering(self, model_args):
 		model = Offering.objects.filter(**Vommit.exclude(model_args)).first()
 		self.diff('offering', model_args, model)
+		return model
+
+	def digest_textbook(self, model_args):
+		model = Textbook.objects.filter(**Vommit.exclude(model_args)).first()
+		self.diff('textbook', model_args, model)
+		return model
+
+	def digest_textbook_link(self, model_args):
+		model = TextbookLink.objects.filter(**Vommit.exclude(model_args)).first()
+		self.diff('textbook_link', model_args, model)
 		return model
 
 	def wrap_up(self):
@@ -495,6 +543,14 @@ class Absorb(DigestionStrategy):
 
 	def digest_offering(self, model_args):
 		model, created = Offering.objects.update_or_create(**model_args)
+		return model
+
+	def digest_textbook(self, models_args):
+		model, created = Textbook.objects.update_or_create(**model_args)
+		return model
+
+	def digest_textbook_link(self, model_args):
+		model, created = TextbookLink.objects.update_or_create(**model_args)
 		return model
 
 	def remove_section(self, section, course_model):
