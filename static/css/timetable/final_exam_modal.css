@@ -17,6 +17,21 @@
 .final-exam-modal #modal-header {
 	padding: 20px 30px 10px;
 }
+/* Style the loader */
+#modal-content .img-icon {
+	position: absolute;
+ 	top: 50%;
+ 	left: 50%;
+ 	transform: translate(-50%, -50%);
+}
+#modal-content .loader {
+	width: 90px;
+  	height: 90px;
+}
+#final-exam-loader-wrapper {
+	height: 350px;
+}
+
 /* Final Exams Modal */
 #final-exam-calendar-ctn {
 	width: 100%;
