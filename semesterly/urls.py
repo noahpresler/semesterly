@@ -105,7 +105,8 @@ urlpatterns = patterns('',
     url(r'^500testing/', 'timetable.views.custom_500'),
 
     # final exam scheduler
-    url(r'^final_exams/*$', 'timetable.views.final_exam_scheduler')
+    (r'^get_final_exams/*$', 'timetable.views.final_exam_scheduler'),
+    url(r'^final_exams/*$', 'timetable.views.view_final_exams')
 )
 
 if getattr(settings, 'STAGING', False):
