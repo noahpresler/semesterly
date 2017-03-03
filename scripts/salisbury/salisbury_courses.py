@@ -1,7 +1,7 @@
 # @what    Salisbury Course Parser
 # @org     Semester.ly
 # @author  Michael N. Miller
-# @date	   2/13/17
+# @date	   3/3/17
 
 from scripts.peoplesoft.courses import PeoplesoftParser
 
