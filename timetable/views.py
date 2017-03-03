@@ -56,7 +56,7 @@ def custom_500(request):
 # ******************************************************************************
 
 @validate_subdomain
-def view_timetable(request, code=None, sem=None, shared_timetable=None, find_friends=False, enable_notifs=False,signup=False,gcal_callback=False, export_calendar=False, view_textbooks=False):
+def view_timetable(request, code=None, sem=None, shared_timetable=None, find_friends=False, enable_notifs=False,signup=False,gcal_callback=False, export_calendar=False, view_textbooks=False, final_exams=False):
   school = request.subdomain
   student = get_student(request)
   course_json = None
@@ -93,7 +93,8 @@ def view_timetable(request, code=None, sem=None, shared_timetable=None, find_fri
     'signup': signup,
     'gcal_callback': gcal_callback,
     'export_calendar': export_calendar,
-    'view_textbooks': view_textbooks
+    'view_textbooks': view_textbooks,
+    'final_exams': final_exams
   },
   context_instance=RequestContext(request))
 
@@ -101,6 +102,13 @@ def view_timetable(request, code=None, sem=None, shared_timetable=None, find_fri
 def google_calendar_callback(request):
   try:
     return view_timetable(request, gcal_callback=True)
+  except Exception as e:
+    raise Http404
+
+@validate_subdomain
+def view_final_exams(request):
+  try:
+    return view_timetable(request, final_exams=True)
   except Exception as e:
     raise Http404
 
@@ -770,6 +778,7 @@ def profile(request):
   else:
     return signup(request)
 
+
 @csrf_exempt
 def final_exam_scheduler(request):
   #request.body contains the json of the courses (timetable)
@@ -777,9 +786,3 @@ def final_exam_scheduler(request):
   # from time import sleep
   # sleep(3)
   return HttpResponse(json.dumps(final_exam_schedule), content_type="application/json")
-
-
-
-
-
-
