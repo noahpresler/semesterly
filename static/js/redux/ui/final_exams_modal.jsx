@@ -43,22 +43,29 @@ export class FinalExamsModal extends React.Component {
     hide() {
         this.refs.modal.hide();
         if (this.props.isVisible) {
-            this.props.toggleFinalExamsModal();
+            this.props.hideFinalExamsModal();
         }
     }
     componentDidMount() {
         if (this.props.isVisible) {
             this.props.fetchFinalExamSchedule()
+            this.noTimeFinals = [];
+            this.finalsToRender = {};
             this.refs.modal.show();
         }
     }
+    componentWillUpdate(nextProps) {
+        this.noTimeFinals = [];
+        this.finalsToRender = {};
+    }
 	componentDidUpdate(nextProps) {
-		if (this.props.isVisible) {
+		if (this.props.isVisible && !nextProps.isVisible) {
             this.props.fetchFinalExamSchedule()
+            this.noTimeFinals = [];
+            this.finalsToRender = {};
 			this.refs.modal.show();
 		}
 	}
-
     findNextFinalToRender() {
         let minDate = Infinity;
         this.noTimeFinals = [];
@@ -177,7 +184,7 @@ export class FinalExamsModal extends React.Component {
             width: '100%'
         };
         let display = "not loaded"
-        if (this.props.hasRecievedSchedule) {
+        if (this.props.hasRecievedSchedule && this.props.isVisible) {
             display = this.loadFinalsToDivs()
         } else if (this.props.loading) {
             display = "loading"
