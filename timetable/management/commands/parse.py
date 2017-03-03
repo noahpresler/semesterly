@@ -29,8 +29,15 @@ class Command(BaseCommand):
 		logging.basicConfig(level=logging.ERROR, filename='parse_errors.log')
 		stat_log = []
 
+		timestamp = datetime.datetime.now().strftime("%Y/%m/%d-%H:%M:%S")
+
 		for school in options['schools']:
-			timestamp = datetime.datetime.now().strftime("%Y/%m/%d-%H:%M:%S")
+
+			# Use old parser framework if no new parser available
+			if school not in new_course_parsers or (options['textbooks'] and school not in new_textbook_parsers):
+				do_parse = course_parsers[school]
+				self.old_parser(do_parse)
+				continue
 
 			parser, parser_type = None, ''
 			if options['textbooks']:
@@ -92,6 +99,15 @@ class Command(BaseCommand):
 
 		self.stdout.write(self.style.SUCCESS("Parsing Finished!"))
 		Command.log_stats(options['log_stats'], stats=stat_log, options=options, timestamp=timestamp)
+
+	def old_parser(self, do_parse):
+		message = 'Starting {} parser for {}.\n'.format(parser_type, school)
+		self.stdout.write(self.style.SUCCESS(message))
+		try:
+			do_parse()
+		except Exception as e:
+			self.stderr.write(str(e))
+			raise e
 
 	@staticmethod
 	def log_stats(filepath, options='', stats=None, timestamp='', elapsed=None):
