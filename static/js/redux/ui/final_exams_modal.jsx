@@ -183,11 +183,14 @@ export class FinalExamsModal extends React.Component {
         let modalStyle = {
             width: '100%'
         };
-        let display = "not loaded"
+        let display =
+             <div id="final-exam-loader-wrapper">
+                 <span className="img-icon">
+                         <div className="loader"/>
+                 </span>
+             </div>
         if (this.props.hasRecievedSchedule && this.props.isVisible) {
             display = this.loadFinalsToDivs()
-        } else if (this.props.loading) {
-            display = "loading"
         }
         return (
             <Modal ref="modal"
