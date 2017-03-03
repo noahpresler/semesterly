@@ -109,31 +109,52 @@ def get_free_busy_from_cals(cal_ids, student, week_offset=0):
   return result
 
 
-# def get_merged_availability(request):
-#   student = get_student(request)
-#   cal_ids = json.loads(request.body)['cal_ids']
-#   week_offset = json.loads(request.body)['week_offset']
-#   free_busy_body = get_free_busy_from_cals(cal_ids,student,week_offset)
+def find_mutually_free(freeBusyA, freeBusyB, week_offset=0):
+  #merge all the calendars of the individual user's agendas togetyher
+  mergedFreeBusyA = merge_free_busy(freeBusyA)
+  mergedFreeBusyB = merge_free_busy(freeBusyB)
 
-#   for calid in free_busy_body['calendars']:
-#     #concatenate all ranges
-#     intervals = []
-#     cal = free_busy_body['calendars'][calid]
-#     for interval in cal['busy']:
-#       #convert times to python types
-#       interval['start'] = dateutil.parser.parse(interval['start'])
-#       interval['end'] = dateutil.parser.parse(interval['end'])
-      
-#       #TODO if multi day split into single day
-#       intervals.append(interval)
+  #merging the two user's merged availability together
+  freeBusy = {
+    'calendars': {
+      'default': {
+        'busy' : mergedFreeBusyA + mergedFreeBusyB
+      }
+    }
+  }
+  busy = merge_free_busy(freeBusy, keep_datetime=True)
+  busy_by_day = {}
+  free_by_day = {}
 
-#     if len(intervals) > 1:
-#       result = merge_intervals(intervals)
-#       free_busy_body['calendars'][calid]['busy'] = map(lambda i: {'start': i['start'].isoformat(), 'end': i['end'].isoformat()}, result)
+  #intialize busy_by_day to be the times busy seperated by day
+  for interval in busy: 
+    if interval.start.weekday() not in busy_by_day:
+      busy_by_day[interval.start.weekday()] = []
+    busy_by_day.append(interval)
 
-#   return HttpResponse(json.dumps(free_busy_body), content_type='application/json')
+  #initialize each day of the week to be completely free
+  for day in range(7):
+    free_by_day[day] = {'start':datetime.time(0,00) ,'end': datetime.time(23,59)}
 
+  for day in range(7):
+    for busy_slot in busy_by_day[day]:
+      for free_slot in free_by_day[day]:
+        # busy starts after and ends before - split free
+        if busy_slot.start > free_slot.start and busy_slot.end < free_slot.end:
+          free_by_day[day].append({'start': free_slot.start, 'end': busy_slot.start })
+          free_by_day[day].append({'start': busy_slot.end, 'end': free_slot.end })
+          free_by_day[day].remove(free_slot)
 
+        # if busy overlaps on only one end - resize free
+        elif (busy_slot.start <= free_slot.start and busy_slot.end < free_slot.end) or (busy_slot.start > free_slot.start and busy_slot.end >= free_slot.end): 
+          free_slot['start'] = max(busy_slot['end'],free_slot['start'])
+          free_slot['end'] = min(free_slot['end'],busy_slot['start'])
+
+        #if busy larger than/equal to free on both ends – remove free
+        elif busy_slot.start <= free_slot.start and busy_slot.end >= free_slot.end:
+          free_by_day[day].remove(free_slot)
+
+  return reduce(lambda l,k: l + free_by_day[k] , free_by_day.keys(),[])
 
 
 def merge_intervals(intervals):
@@ -151,7 +172,7 @@ def merge_intervals(intervals):
 Reconstructs the free busy api call with merged intervals
 NOTE THAT this returns to the calendar called "default"
 '''
-def merge_free_busy(free_busy_body):
+def merge_free_busy(free_busy_body, keep_datetime=False):
   free_busy_body = copy.deepcopy(free_busy_body)
   intervals = []
   for calid in free_busy_body['calendars']:
@@ -171,14 +192,11 @@ def merge_free_busy(free_busy_body):
 
   result = merge_intervals(intervals)
 
-  ret = {u'calendars': 
-          {
-            u'default': {
-              u'busy': map(lambda i: {'start': i['start'].isoformat(), 'end': i['end'].isoformat()}, result)
-              }
-            }
-         }
-  return ret
+  if keep_datetime:
+    return result
+  else:
+    return map(lambda i: {'start': i['start'].isoformat(), 'end': i['end'].isoformat()}, result)
+
 
 def get_availability_share(request):
   student = get_student(request)

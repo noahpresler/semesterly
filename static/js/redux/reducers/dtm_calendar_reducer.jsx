@@ -21,8 +21,7 @@ export const dtmCalendars = (state = {
 		case "RECEIVE_AVAILABILITY":
 			return Object.assign({}, state, { availability: action.availability, dirty: true });
 		case "RECEIVE_SHARED_AVAILABILITY":
-			let def = {name: 'default', id: 'default', color: 'rgb(204, 204, 204)', visible: true}
-			return Object.assign({}, state, { sharedAvailability: action.shareAvailability, calendars: state.calendars.concat(def)});
+			return Object.assign({}, state, { sharedAvailability: action.shareAvailability });
 		case "CLEAN_AVAILABILITY":
 			return Object.assign({}, state, { dirty: false });
 		default:
