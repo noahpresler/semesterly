@@ -5,8 +5,9 @@
 	},
 	"course_code_regex": ".*",
 	"terms": [
+		"Fall",
+		"Winter",
 		"Spring",
-		"Summer",
-		"Fall"
+		"Summer"
 	]
 }
