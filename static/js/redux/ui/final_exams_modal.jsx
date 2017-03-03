@@ -39,6 +39,11 @@ export class FinalExamsModal extends React.Component {
         this.hide = this.hide.bind(this);
         this.noTimeFinals = [];
         this.finalsToRender = {};
+        let mql = window.matchMedia("(orientation: portrait)");
+        this.state = { 
+            orientation: !mql.matches ? 'landscape' : 'portrait'
+        };
+        this.updateOrientation = this.updateOrientation.bind(this);
     }
     hide() {
         this.refs.modal.hide();
@@ -54,6 +59,26 @@ export class FinalExamsModal extends React.Component {
             this.refs.modal.show();
         }
     }
+    componentWillMount() {
+        window.addEventListener('orientationchange', (e) => {
+            this.updateOrientation();
+        });
+        window.addEventListener('resize', (e) => {
+            if (!$('#search-bar-input-wrapper input').is(":focus"))
+                this.updateOrientation();
+        });
+    }
+    updateOrientation() {
+        let orientation = 'portrait'
+        if (window.matchMedia("(orientation: portrait)").matches) {
+            orientation = 'portrait';
+        } if (window.matchMedia("(orientation: landscape)").matches) {
+            orientation = 'landscape';
+        }
+        if (orientation != this.state.orientation) {
+            this.setState({orientation: orientation});
+        }
+    }
     componentWillUpdate(nextProps) {
         this.noTimeFinals = [];
         this.finalsToRender = {};
@@ -66,16 +91,18 @@ export class FinalExamsModal extends React.Component {
 			this.refs.modal.show();
 		}
 	}
-    findNextFinalToRender() {
+    findNextFinalToRender(finalStack) {
         let minDate = Infinity;
+        let courseCode = "";
         this.noTimeFinals = [];
-        for (let course in this.finalsToRender) {
-            let m = this.finalsToRender[course].split(' ')[0].split('/')['0'];
-            let d = this.finalsToRender[course].split(' ')[0].split('/')['1'];
+        let finals = finalStack ? finalStack : this.finalsToRender
+        for (let course in finals) {
+            let m = finals[course].split(' ')[0].split('/')['0'];
+            let d = finals[course].split(' ')[0].split('/')['1'];
             minDate = (new Date(2017, Number(m - 1), Number(d)) < minDate) ? new Date(2017, Number(m - 1), Number(d)) : minDate;
-            if (this.finalsToRender[course].includes('Exam time not found')) {
-                this.noTimeFinals.push(course);
-                delete this.finalsToRender[course]
+            if (finals[course].includes('Exam time not found')) {
+                finals.push(course);
+                delete finals[course]
             }
         }
         return minDate;
@@ -130,12 +157,41 @@ export class FinalExamsModal extends React.Component {
                 </div>
 
     }
-    loadFinalsToDivs() {
+    finalListHTML() {
+        let finalExamDays = []
+        let finalStack = jQuery.extend(true, {}, this.finalsToRender);
+        while (Object.keys(finalStack).length > 0) {
+            let day = this.findNextFinalToRender(finalStack)
+            let html = [];
+            let conflictTime = {};
+            for (let final in finalStack) {
+                if (finalStack[final].includes((day.getMonth() + 1) + "/" + day.getDate())) {
+                    conflictTime[finalStack[final].split(' ')[1]] = 
+                        (conflictTime[finalStack[final].split(' ')[1]] == undefined) ? [final] :
+                        jQuery.merge(conflictTime[finalStack[final].split(' ')[1]], [final])
+                }
+            }
+            for (let timeFrame in conflictTime) {
+                for (let final in conflictTime[timeFrame]) {
+                    html.push(<InSlot name={this.props.courseDetails[conflictTime[timeFrame][final]].name}
+                                    color={this.props.courseToColourIndex[conflictTime[timeFrame][final]]}
+                                    time={finalStack[conflictTime[timeFrame][final]]}
+                                    key={conflictTime[timeFrame][final]} 
+                                    numberOfFinalsAtThisTime={conflictTime[timeFrame].length}/>)
+                    delete finalStack[conflictTime[timeFrame][final]]
+                }
+            }
+            finalExamDays.push(<div key={day} className="final-exam-day">{ html }</div>)
+        }
+        return finalExamDays
+    }
+    loadFinalsToDivs(mobile) {
         let days = ['N', 'M', 'T', 'W', 'R', 'F', 'S']
         this.finalsToRender = jQuery.extend(true, {}, this.props.finalExamSchedule);
         let day = this.findNextFinalToRender()
 
         let finalsWeeks = []
+        let finalList = this.finalListHTML()
         while (Object.keys(this.finalsToRender).length > 0) {
             finalsWeeks.push(<div key={day}>{ this.renderWeek(day, days) }</div>)
             day = new Date(day.getTime() + (7 * 24 * 60 * 60 * 1000));
@@ -147,6 +203,7 @@ export class FinalExamsModal extends React.Component {
                             color={this.props.courseToColourIndex[final]}
                             key={index} /> 
                     })
+        let unscheduledFinalCtn = (this.noTimeFinals.length > 0) ? { unscheduledFinal } : null
         let disclaimer = <p className="final-exam-disclaimer">
                                 Some courses do not have finals, check with your syllabus or instructor to confirm.
                                 <a href="http://web.jhu.edu/registrar/forms-pdfs/Final_Exam_Schedule_Spring_2017.pdf" target="_blank">
@@ -154,21 +211,16 @@ export class FinalExamsModal extends React.Component {
                                     Link to registar's final exams schedule
                                 </a>
                             </p>
-        return (this.noTimeFinals.length > 0) ? 
-            <div id="final-exam-calendar-ctn">
-                <div id="final-exam-main">
-                    { finalsWeeks }
-                </div>
-                <div id="final-exam-sidebar">
-                    <h3 className="modal-module-header">Schedule Unavailable</h3>
-                    { unscheduledFinal }
-                </div>
-                { disclaimer }
-            </div> :
-            <div id="final-exam-calendar-ctn">
+        let finalsCtn = (mobile) ?
+                <div id="final-exam-main" className="main-full">
+                    { finalList }
+                </div> :
                 <div id="final-exam-main" className="main-full">
                     { finalsWeeks }
                 </div>
+        return <div id="final-exam-calendar-ctn">
+                { finalsCtn }
+                { unscheduledFinalCtn }
                 { disclaimer }
             </div>
     }
@@ -190,7 +242,8 @@ export class FinalExamsModal extends React.Component {
                  </span>
              </div>
         if (this.props.hasRecievedSchedule && this.props.isVisible) {
-            display = this.loadFinalsToDivs()
+            let mobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+            display = mobile && $(window).width() < 767 && this.state.orientation == 'portrait' ? this.loadFinalsToDivs(true) : this.loadFinalsToDivs(false);
         }
         return (
             <Modal ref="modal"
