@@ -11,7 +11,7 @@ class SlotManagerWeekly extends React.Component {
         super(props);
         this.state = {earliestHour: 23};
     }
-    componentDidUpdate() {
+    componentDidMount() {
         $('#calendar').scrollTop(Math.min(8, this.state.earliestHour) * (HALF_HOUR_HEIGHT_WEEKLY + 1) * 2);
     }
 	render() {
