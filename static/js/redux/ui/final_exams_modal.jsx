@@ -158,6 +158,7 @@ export class FinalExamsModal extends React.Component {
 
     }
     finalListHTML() {
+        let days = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat']
         let finalExamDays = []
         let finalStack = jQuery.extend(true, {}, this.finalsToRender);
         while (Object.keys(finalStack).length > 0) {
@@ -181,7 +182,10 @@ export class FinalExamsModal extends React.Component {
                     delete finalStack[conflictTime[timeFrame][final]]
                 }
             }
-            finalExamDays.push(<div key={day} className="final-exam-day">{ html }</div>)
+            finalExamDays.push(<div key={day} className="final-exam-day">
+                    <h3 className="modal-module-header">{ days[day.getDay()] + " " + (day.getMonth() + 1) + "/" + day.getDate() }</h3>
+                    { html }
+                </div>)
         }
         return finalExamDays
     }
