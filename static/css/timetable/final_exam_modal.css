@@ -57,7 +57,7 @@
 }
 @media (max-width: 766px) {
 	.final-exam-modal {
-		height: 100%;
+		height: 85%;
 	}
 	.final-exam-modal #modal-header {
 		padding: 20px 10px 10px;
