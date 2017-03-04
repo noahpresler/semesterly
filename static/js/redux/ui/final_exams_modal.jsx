@@ -47,6 +47,7 @@ export class FinalExamsModal extends React.Component {
     }
     hide() {
         this.refs.modal.hide();
+        history.replaceState( {} , 'Semester.ly', '/');
         if (this.props.isVisible) {
             this.props.hideFinalExamsModal();
         }
@@ -57,6 +58,7 @@ export class FinalExamsModal extends React.Component {
             this.noTimeFinals = [];
             this.finalsToRender = {};
             this.refs.modal.show();
+            history.replaceState( {} , 'Semester.ly', '/final_exams');
         }
     }
     componentWillMount() {
@@ -89,6 +91,7 @@ export class FinalExamsModal extends React.Component {
             this.noTimeFinals = [];
             this.finalsToRender = {};
 			this.refs.modal.show();
+            history.replaceState( {} , 'Semester.ly', '/final_exams');
 		}
 	}
     findNextFinalToRender(finalStack) {
