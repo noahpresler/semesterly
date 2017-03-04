@@ -101,7 +101,7 @@ export class FinalExamsModal extends React.Component {
             let d = finals[course].split(' ')[0].split('/')['1'];
             minDate = (new Date(2017, Number(m - 1), Number(d)) < minDate) ? new Date(2017, Number(m - 1), Number(d)) : minDate;
             if (finals[course].includes('Exam time not found')) {
-                finals.push(course);
+                this.noTimeFinals.push(course);
                 delete finals[course]
             }
         }
@@ -190,6 +190,16 @@ export class FinalExamsModal extends React.Component {
         this.finalsToRender = jQuery.extend(true, {}, this.props.finalExamSchedule);
         let day = this.findNextFinalToRender()
 
+        let unscheduledFinalCtn = this.noTimeFinals.length > 0 ? 
+                        <div id="final-exam-sidebar">
+                            <h3 className="modal-module-header">Schedule Unavailable</h3>
+                            {this.noTimeFinals.map((final, index) => {
+                                return <InSlot code={this.props.courseDetails[final].code} 
+                                    name={this.props.courseDetails[final].name}
+                                    color={this.props.courseToColourIndex[final]}
+                                    key={index} /> })}
+                        </div> : null
+
         let finalsWeeks = []
         let finalList = this.finalListHTML()
         while (Object.keys(this.finalsToRender).length > 0) {
@@ -197,13 +207,6 @@ export class FinalExamsModal extends React.Component {
             day = new Date(day.getTime() + (7 * 24 * 60 * 60 * 1000));
         }
 
-        let unscheduledFinal = this.noTimeFinals.map((final, index) => {
-                       return <InSlot code={this.props.courseDetails[final].code} 
-                            name={this.props.courseDetails[final].name}
-                            color={this.props.courseToColourIndex[final]}
-                            key={index} /> 
-                    })
-        let unscheduledFinalCtn = (this.noTimeFinals.length > 0) ? { unscheduledFinal } : null
         let disclaimer = <p className="final-exam-disclaimer">
                                 Some courses do not have finals, check with your syllabus or instructor to confirm.
                                 <a href="http://web.jhu.edu/registrar/forms-pdfs/Final_Exam_Schedule_Spring_2017.pdf" target="_blank">
@@ -211,25 +214,29 @@ export class FinalExamsModal extends React.Component {
                                     Link to registar's final exams schedule
                                 </a>
                             </p>
-        let finalsCtn = (mobile) ?
-                <div id="final-exam-main" className="main-full">
+        return (mobile) ?
+            <div id="final-exam-calendar-ctn" className="mobile">
+                { disclaimer }
+                <div id="final-exam-main">
                     { finalList }
-                </div> :
-                <div id="final-exam-main" className="main-full">
+                </div>
+                { unscheduledFinalCtn }
+            </div> :
+            <div id="final-exam-calendar-ctn">
+                <div id="final-exam-main" className={ (unscheduledFinalCtn == null) ? "main-full" : "" }>
                     { finalsWeeks }
                 </div>
-        return <div id="final-exam-calendar-ctn">
-                { finalsCtn }
                 { unscheduledFinalCtn }
                 { disclaimer }
             </div>
     }
 	render() {
         let modalHeader =
-            <div id="modal-content">
-                <div id="modal-header">
-                    <h1>Final Exam Scheduler</h1>
-                    <h2>{ this.props.activeLoadedTimetableName }</h2>
+            <div id="modal-header">
+                <h1>Final Exam Scheduler</h1>
+                <h2>{ this.props.activeLoadedTimetableName }</h2>
+                <div id="modal-close" onClick={() => this.hide()}>
+                    <i className="fa fa-times"></i>
                 </div>
             </div>
         let modalStyle = {
@@ -251,9 +258,11 @@ export class FinalExamsModal extends React.Component {
                 modalStyle={modalStyle}
                 onHide={this.hide}
                 >
-                { modalHeader }
                 <div id="modal-content">
-                    { display }
+                    { modalHeader }
+                    <div id="modal-body">
+                        { display }
+                    </div>
                 </div>
             </Modal>
         );
