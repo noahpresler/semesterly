@@ -32,7 +32,7 @@ class ChapmanParser(PeoplesoftParser):
 		}
 
 		if term and year:
-			years_and_terms = super(ChapmanParser, self).filter_term_and_year(years_and_terms, year, term)
+			years_and_terms = ChapmanParser.filter_term_and_year(years_and_terms, year, term)
 
 		# Call Peoplesoft parse method
 		self.parse(years_and_terms,
