@@ -69,6 +69,7 @@ class Semesterly extends React.Component {
 	}
 
 	componentDidMount() {
+		console.log(this.props.alertFacebookFriends);
 		if (this.props.alertEnableNotifications) {
 			this.msg.show(<EnableNotificationsAlertContainer />, {
 			  type: 'info',
@@ -80,6 +81,7 @@ class Semesterly extends React.Component {
 	}
 
 	componentWillReceiveProps(nextProps) {
+		console.log(this.props.alertFacebookFriends);
 		if (nextProps != this.props) {
 			console.log("DIFFIRENT PROPS => " + this.props.alertFacebookFriends);
 			if (nextProps.alertConflict && !this.props.alertConflict) {
@@ -100,7 +102,7 @@ class Semesterly extends React.Component {
 			else if (nextProps.alertFacebookFriends && !this.props.alertFacebookFriends) {
 				this.msg.show(<FriendsInClassAlertContainer />,  {
 					type: 'info',
-					time: 15000,
+					time: 20000,
 					additionalClass: 'friends-in-class-alert-container',
 					icon: <div className="friends-in-class-alert-icon"></div>
 				});
