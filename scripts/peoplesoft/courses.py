@@ -158,29 +158,8 @@ class PeoplesoftParser(CourseParser):
 	def get_departments(self, soup, cmd_departments=None):
 		extract_dept_name = lambda d: self.department_name_regex.match(d).group(1)
 		departments = { dept['value']: extract_dept_name(dept.text) for dept in self.find_all['depts'](soup) }
-		departments = self.filter_departments(departments, cmd_departments)
+		departments = UPeoplesoftParser.filter_departments(departments, cmd_departments)
 		return departments, None
-
-	def filter_departments(self, departments, cmd_departments):
-		'''Filter department dictionary to only include those departments listed in cmd_departments, if given
-		Args:
-			department: dictionary of item <dept_code, dept_name>
-		KwArgs:
-			cmd_departments: department code list
-		Return: filtered list of departments.
-		'''
-
-		# FIXME -- if groups exists, will only search current group
-
-		if cmd_departments is None:
-			return departments
-
-		# department list specified as cmd line arg
-		for cmd_dept_code in cmd_departments:
-			if cmd_dept_code not in departments:
-				raise CourseParseError('invalid department code {}'.format(cmd_dept_code))
-		departments = {cmd_dept_code: departments[cmd_dept_code] for cmd_dept_code in cmd_departments}
-		return departments
 
 	def get_course_list_as_soup(self, courses, soup):
 		# fill payload for course description page request
@@ -358,7 +337,7 @@ class UPeoplesoftParser(PeoplesoftParser):
 		department_names = soup.find_all('span', id=re.compile(r'M_SR_SS_SUBJECT_DESCR\$\d'))
 		depts = { dept.text: dept_name.text for dept, dept_name in zip(departments, department_names) }
 		dept_ids = { dept.text: dept['id'] for dept in departments }
-		depts = self.filter_departments(depts, cmd_departments)
+		depts = UPeoplesoftParser.filter_departments(depts, cmd_departments)
 		return depts, dept_ids
 
 	def get_dept_param_key(self, soup):
