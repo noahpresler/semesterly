@@ -63,13 +63,18 @@ function setup(dispatch) {
       // load one of the user's saved timetables (after initial page load). also fetches classmates
       loadTimetable(user.timetables[0]);
       dispatch({ type: "RECEIVE_TIMETABLE_SAVED", upToDate: true });
+      dispatch({type: "CACHED_TT_LOADED"});
     }
     else { // user isn't logged in (or has no saved timetables); load last browser-cached timetable, under certain conditions.
     // we only load the browser-cached timetable if the shared course's semester is the same as the browser-cached timetable's semester OR the user is not trying to load a shared course at all. This results in problematic edge cases, such as showing the course modal of an S course in the F semester, being completely avoided.
       if (browserSupportsLocalStorage() && (localStorage.semester === currentSemester || !sharedCourse)) {
-        loadCachedTimetable();
+        loadCachedTimetable(dispatch);
+      } else {
+        dispatch({type: "CACHED_TT_LOADED"});
       }
     }
+  } else {
+    dispatch({type: "CACHED_TT_LOADED"});
   }
   if (gcalCallback) {
     dispatch({type: 'TRIGGER_SAVE_CALENDAR_MODAL'});
