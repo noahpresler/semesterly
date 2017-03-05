@@ -13,7 +13,7 @@ const InSlot = (props) => {
         let beginTime = (time.split("-"))[0];
         beginTime += beginTime > 8 && beginTime < 12 ? 'am' : 'pm';
         let endTime = (time.split("-"))[1];
-        endTime += endTime > 8 && endTime < 12 ? 'am' : 'pm';
+        endTime +='pm';
         displayTime = <h3 className="time">{ beginTime + "-" + endTime }</h3>;
     }
 
