@@ -27,6 +27,9 @@ export const getAddTTtoGCalEndpoint = (timetable) => {
 export const getLogiCalEndpoint = () => { 
   return "/user/log_ical/"
 };
+export const getLogFinalExamViewEndpoint = () => { 
+  return "/user/log_final_exam/"
+};
 export const getCourseInfoEndpoint = (course_id) => {
 	return "/courses/" + getSchool() + "/" + getSemester() + "/id/" + course_id + "/";
 };

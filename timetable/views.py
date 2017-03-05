@@ -781,8 +781,17 @@ def profile(request):
 
 @csrf_exempt
 def final_exam_scheduler(request):
-  #request.body contains the json of the courses (timetable)
   final_exam_schedule = jhu_final_exam_scheduler.make_schedule(json.loads(request.body))
-  #from time import sleep
-  #sleep(3)
   return HttpResponse(json.dumps(final_exam_schedule), content_type="application/json")
+
+
+@csrf_exempt
+def log_final_exam_view(request):
+  try:
+        student = Student.objects.get(user=request.user)
+  except:
+      student = None
+  FinalExamModalView.objects.create(
+    student=student,
+    school=request.subdomain
+  ).save()
