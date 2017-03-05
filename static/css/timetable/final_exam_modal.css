@@ -12,10 +12,10 @@
 .final-exam-modal > div {
 	outline: none;
 	width: 100%;
-	height: 50%;
+	height: 100%;
 }
 .final-exam-modal #modal-header {
-	padding: 20px 30px 10px;
+	padding: 10px 10px 3px;
 }
 /* Style the loader */
 #modal-content .img-icon {
@@ -55,12 +55,12 @@
 #final-exam-calendar-ctn.mobile {
 	padding: 0 10px 20px;
 }
+.final-exam-modal.is-mobile {
+	height: 75%;
+}
 @media (max-width: 766px) {
-	.final-exam-modal {
-		height: 85%;
-	}
 	.final-exam-modal #modal-header {
-		padding: 20px 10px 10px;
+		padding: 10px 10px 3px;
 	}
 	#final-exam-calendar-ctn {
 		padding: 30px 10px;
