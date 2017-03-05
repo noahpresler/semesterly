@@ -2,7 +2,7 @@ from scripts.textbooks.base_bn_textbook_parser import *
 
 class JHUTextbookParser(BNParser):
     def __init__(self, term="Spring", year=2017,**kwargs):
-        super(HopkinsParser, self).__init__(
+        super(JHUTextbookParser, self).__init__(
             "18053",
             "johns-hopkins.bncollege.com",
             "jhu",
