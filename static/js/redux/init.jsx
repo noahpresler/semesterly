@@ -45,9 +45,6 @@ function setup(dispatch) {
   exportCalendar = exportCalendar === "True";
   viewTextbooks = viewTextbooks === "True";
   finalExams = finalExams === "True";
-  if (finalExams) {
-    dispatch({type: 'SHOW_FINAL_EXAMS_MODAL'});
-  }
   if (signup) {
     dispatch({type: 'TRIGGER_SIGNUP_MODAL'});
   }
@@ -124,6 +121,9 @@ function setup(dispatch) {
         data: true,
       })
     }
+  }
+  if (finalExams) {
+    dispatch({type: 'SHOW_FINAL_EXAMS_MODAL'});
   }
 }
 
