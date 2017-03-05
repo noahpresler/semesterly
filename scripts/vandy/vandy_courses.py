@@ -4,6 +4,7 @@
 # @date	    2/5/17
 import sys, re
 from scripts.parser_library.BaseParser import CourseParser
+from scripts.parser_library.internal_exceptions import CourseParseError
 
 class VandyParser(CourseParser):
 
@@ -72,17 +73,17 @@ class VandyParser(CourseParser):
 			}
 		}
 
-		years_and_terms = super(VandyParser, self).filter_term_and_year(years_and_terms, year, term)
+		years_and_terms = VandyParser.filter_term_and_year(years_and_terms, year, term)
 
 		for year, semesters in years_and_terms.items():
 			if self.verbosity > 2:
-				print 'Parsing year ' + year
+				print '>   Parsing year ' + year
 			self.ingestor['year'] = year
 
 			for semester_name, semester_code in semesters.items():
 
 				if self.verbosity > 2:
-					print 'Parsing semester ' + semester_name
+					print '>>  Parsing semester ' + semester_name
 				self.ingestor['semester'] = semester_name
 
 				# Load environment for targeted semester
@@ -91,6 +92,7 @@ class VandyParser(CourseParser):
 
 				# Get a list of all the department codes
 				department_codes = self.extract_department_codes()
+				department_codes = VandyParser.filter_departments(department_codes, department)
 
 				# Create payload to request course list from server
 				payload = {
@@ -101,7 +103,7 @@ class VandyParser(CourseParser):
 				for department_code in department_codes:
 
 					if self.verbosity > 2:
-						print 'Parsing courses in \"' + self.departments[department_code] + '\"'
+						print '>>> Parsing courses in \"' + self.departments[department_code] + '\"'
 
 					# Construct payload with department code
 					payload.update({'searchCriteria.subjectAreaCodes': department_code})
@@ -207,7 +209,8 @@ class VandyParser(CourseParser):
 
 		# perform more targeted searches if needed
 		if numHits == 300:
-			self.parseByDay(VandyParser.API_URL + '/SearchClassesExecute!search.action', payload)
+			raise CourseParseError('vandy numHits greater than 300')
+			# self.parseByDay(VandyParser.API_URL + '/SearchClassesExecute!search.action', payload)
 		else:
 			self.parse_set_of_courses(html)
 
@@ -422,9 +425,7 @@ class VandyParser(CourseParser):
 				else:
 					self.update_current_course(label, value)
 
-
 	def parse_days(self, unformatted_days):
-
 		if unformatted_days == "TBA" or unformatted_days == "":
 			self.update_current_course("days", "")
 		else:
@@ -443,24 +444,10 @@ class VandyParser(CourseParser):
 
 			search = re.match("(.*) \- (.*)", unformatted_time_range)
 			if search is not None:
-				self.update_current_course('time_start', self.time_12_to_24(search.group(1)))
-				self.update_current_course('time_end', self.time_12_to_24(search.group(2)))
+				self.update_current_course('time_start', self.extractor.time_12to24(search.group(1)))
+				self.update_current_course('time_end', self.extractor.time_12to24(search.group(2)))
 			else:
 				sys.stderr.write('ERROR: invalid time format')
-
-	def time_12_to_24(self, time12):
-
-		# Regex extract
-		match = re.match("(\d*):(\d*)(.)", time12)
-
-		# Transform to 24 hours
-		minutes = match.group(2)
-		hours = int(match.group(1))
-		if match.group(3) == 'p':
-			hours = (hours%12)+12
-
-		# Return as string
-		return str(hours) + ":" + str(minutes)
 
 	def extract_instructors(self, string):
 
