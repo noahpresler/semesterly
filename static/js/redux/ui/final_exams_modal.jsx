@@ -53,12 +53,8 @@ export class FinalExamsModal extends React.Component {
         }
     }
     componentDidMount() {
-        console.log("HERE!");
         if (this.props.isVisible) {
-            if (!this.props.hasNoCourses) {
-                this.props.fetchFinalExamSchedule()  
-                console.log("FETCHING")              
-            }
+            this.props.fetchFinalExamSchedule();
             this.noTimeFinals = [];
             this.finalsToRender = {};
             this.refs.modal.show();
@@ -90,10 +86,11 @@ export class FinalExamsModal extends React.Component {
         this.finalsToRender = {};
     }
 	componentDidUpdate(nextProps) {
-        if (this.props.courses != nextProps.courses && !this.props.hasNoCourses) {
-            this.props.fetchFinalExamSchedule()
+        if (this.props.courses != nextProps.courses) {
+            console.log("updating", this.props.courses)
+            this.props.fetchFinalExamSchedule();
         }
-		if (this.props.isVisible && !nextProps.isVisible) {
+        if (this.props.isVisible && !nextProps.isVisible) {
             this.noTimeFinals = [];
             this.finalsToRender = {};
 			this.refs.modal.show();
@@ -262,7 +259,11 @@ export class FinalExamsModal extends React.Component {
                          <div className="loader"/>
                  </span>
              </div>
-        if (this.props.hasNoCourses && this.props.hasRecievedSchedule) {
+        console.log("LOADER")
+        if (this.props.loading) {
+            // Leave as is
+        } else if (this.props.hasNoCourses && !this.props.loadingCachedTT ) {
+            console.log("UPSELL")
             display =
                 <div className="peer-card upsell">
                     <div className="peer-card-wrapper upsell cf">
@@ -271,7 +272,8 @@ export class FinalExamsModal extends React.Component {
                     </div>
                 </div>
         }
-        else if (this.props.hasRecievedSchedule && this.props.isVisible) {
+        else if (this.props.hasRecievedSchedule && this.props.isVisible && !this.props.loadingCachedTT) {
+            console.log("NORMAL")
             let mobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
             display = mobile && $(window).width() < 767 && this.state.orientation == 'portrait' ? this.loadFinalsToDivs(true) : this.loadFinalsToDivs(false);
         }
