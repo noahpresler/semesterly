@@ -28,6 +28,10 @@ class JHUFinalExamScheduler(FinalExamScheduler):
 		self.list_of_rules = [
 			Rule(list_of_codes = ['AS.110.105','AS.110.106','AS.110.107','AS.110.108','AS.110.109','AS.110.201', 'AS.110.202', 'AS.110.302'], result = '5/10 9-12'),
 			Rule(code_regex = r'AS\.(210|373|375|377|378|380|381|384).(1|2)..', result = 'Exam time not found'),
+			Rule(list_of_codes = ['AS.171.102','AS.171.108'], result = '5/18 9-12'),
+			Rule(list_of_codes = ['AS.020.152'], result = '5/14 9-12'),
+			Rule(list_of_codes = ['EN.600.226'], result = '5/14 2-5'),
+			Rule(list_of_codes = ['EN.600.120'], result = '5/10 6-9'),
 			Rule(list_of_days = ['M'], start_time ='8:00', result= '5/18 9-12',start_only = True),
 			Rule(list_of_days = ['M'], start_time ='9:00', result= '5/17 9-12',start_only = True),
 			Rule(list_of_days = ['M'], start_time ='10:00', result= '5/16 9-12',start_only = True),
