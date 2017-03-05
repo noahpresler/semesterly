@@ -1,4 +1,4 @@
-import os, django, datetime, logging, sys, argparse, simplejson as json, logging
+import os, django, datetime, logging, sys, argparse, simplejson as json, logging, traceback
 from timeit import default_timer as timer
 
 from django.core.management.base import BaseCommand, CommandParser, CommandError
@@ -99,6 +99,7 @@ class Command(BaseCommand):
 			except Exception as e:
 				logging.exception(e)
 				self.stderr.write(self.style.ERROR(str(e)))
+				traceback.print_exc()
 
 		self.stdout.write(self.style.SUCCESS("Parsing Finished!"))
 		Command.log_stats(options['log_stats'], stats=stat_log, options=options, timestamp=timestamp)

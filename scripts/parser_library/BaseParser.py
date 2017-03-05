@@ -72,3 +72,31 @@ class CourseParser(BaseParser):
 			if term not in years_and_terms[year]:
 				raise CourseParseError('term not defined for year {}'.format(term))
 			return {year: {term: years_and_terms[year][term]}}
+
+	@staticmethod
+	def filter_departments(departments, cmd_departments):
+		'''Filter department dictionary to only include those departments listed in cmd_departments, if given
+		Args:
+			department: dictionary of item <dept_code, dept_name>
+		KwArgs:
+			cmd_departments: department code list
+		Return: filtered list of departments.
+		'''
+
+		# FIXME -- if groups exists, will only search current group
+
+		if cmd_departments is None:
+			return departments
+
+		# department list specified as cmd line arg
+		for cmd_dept_code in cmd_departments:
+			if cmd_dept_code not in departments:
+				raise CourseParseError('invalid department code {}'.format(cmd_dept_code))
+
+		# Return dictionary of {code: name} or set {code}
+		if isinstance(departments, dict):
+			departments = {cmd_dept_code: departments[cmd_dept_code] for cmd_dept_code in cmd_departments}
+		else:
+			departments = {dept for dept in departments if dept in cmd_departments}
+
+		return departments
