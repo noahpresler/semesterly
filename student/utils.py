@@ -59,7 +59,7 @@ def next_weekday(d, weekday):
     weekday = DAY_LIST.index(weekday)
     today = datetime.datetime.today()
     delta = weekday - today.weekday()
-    week = 1 if delta == 0 else 0
+    week = 1 if delta <= 0 else 0
     return today + datetime.timedelta(days=delta, weeks=week)
 
 def last_weekday(d, weekday):

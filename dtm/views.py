@@ -102,6 +102,7 @@ def get_free_busy_from_cals(cal_ids, student, week_offset=0):
     "timeZone": 'US/Central',
     "items": map(lambda cid: {"id": cid}, cal_ids)
   }
+  print body
   credentials = get_google_credentials(student)
   http = credentials.authorize(httplib2.Http(timeout=100000000))
   service = discovery.build('calendar', 'v3', http=http)
