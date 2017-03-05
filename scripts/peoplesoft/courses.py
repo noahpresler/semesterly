@@ -54,14 +54,6 @@ class PeoplesoftParser(CourseParser):
 
 		super(PeoplesoftParser, self).__init__(school, **kwargs)
 
-	@staticmethod
-	def filter_term_and_year(years_and_terms, year, term):
-			if year not in years_and_terms:
-				raise CourseParseError('year {} not defined'.format(year))
-			if term not in years_and_terms[year]:
-				raise CourseParseError('term not defined for year {}'.format(term))
-			return {year: {term: years_and_terms[year][term]}}
-
 	@abstractmethod
 	def start(self, **kwargs):
 		'''Start parsing courses!'''
