@@ -188,7 +188,7 @@ class Ingestor(dict):
 
 		# handle nested instructor definition and resolution
 		instructors = None
-		instr_keys = set(['instructor', 'instr', 'instrs', 'instr_name', 'instr_names', 'instructor', 'instructor_name', 'instructors']) & set(self)
+		instr_keys = set(['instructors', 'instructor', 'instr', 'instrs', 'instr_name', 'instr_names', 'instructor', 'instructor_name', 'instructors']) & set(self)
 		if len(instr_keys) == 0:
 			pass
 		elif len(instr_keys) > 1:
