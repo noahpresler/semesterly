@@ -8,11 +8,9 @@ export const timetables = (state = initialState, action) => {
 	switch(action.type) {
 
 		case 'LOADING_CACHED_TT':
-			console.log("LOADING")
 			return Object.assign({}, state, {loadingCachedTT: true});
 
 		case 'CACHED_TT_LOADED':
-			console.log("LOADED")
 			return Object.assign({}, state, {loadingCachedTT: false});
 		
 		case 'REQUEST_TIMETABLES':
