@@ -1,10 +1,9 @@
 import os, re
 from random import randint
-from scripts.parser_library.BaseParser import CourseParser
-from amazon import amazon_textbook_fields
-
-
 from fake_useragent import UserAgent
+
+from scripts.parser_library.BaseParser import BaseParser
+from amazon import amazon_textbook_fields
 
 class TextbookSection:
     def __init__(self, section_id, name):
@@ -50,9 +49,8 @@ class TextbookSemester:
             "Semester id: " + self.id + ", name: " + self.name
         )
 
-class BNParser(CourseParser):
-    def __init__(self, store_id, store_link, school, delimeter, term = None, year = None, **kwargs):
-        self.ingestor = ingestor
+class BNParser(BaseParser):
+    def __init__(self, store_id, store_link, school, delimeter, term=None, year=None, **kwargs):
         self.year = year
         self.term = term
         self.semesters = []
@@ -62,7 +60,6 @@ class BNParser(CourseParser):
         self.identified_count = 0
         self.isbn_pattern = pattern = re.compile(r"(?:\b\d{13}\b)", re.MULTILINE)
         self.code_pattern = pattern = re.compile(r".*\.(.*)\.(.*)\s\((.*)\)")
-        self.textbook_link = TextbookLink
 
         # TODO: This is unique to each university.
         self.store_id = store_id
@@ -73,6 +70,7 @@ class BNParser(CourseParser):
         self.textbook_payload = "-----011000010111000001101001\r\nContent-Disposition: form-data; name=\"storeId\"\r\n\r\n" + self.store_id + "\r\n-----011000010111000001101001\r\nContent-Disposition: form-data; name=\"catalogId\"\r\n\r\n10001\r\n-----011000010111000001101001\r\nContent-Disposition: form-data; name=\"langId\"\r\n\r\n-1\r\n-----011000010111000001101001\r\nContent-Disposition: form-data; name=\"clearAll\"\r\n\r\n\r\n-----011000010111000001101001\r\nContent-Disposition: form-data; name=\"viewName\"\r\n\r\nTBWizardView\r\n-----011000010111000001101001\r\nContent-Disposition: form-data; name=\"secCatList\"\r\n\r\n\r\n-----011000010111000001101001\r\nContent-Disposition: form-data; name=\"removeSectionId\"\r\n\r\n\r\n-----011000010111000001101001\r\nContent-Disposition: form-data; name=\"mcEnabled\"\r\n\r\nN\r\n-----011000010111000001101001\r\nContent-Disposition: form-data; name=\"showCampus\"\r\n\r\nfalse\r\n-----011000010111000001101001\r\nContent-Disposition: form-data; name=\"selectTerm\"\r\n\r\nSelect+Term\r\n-----011000010111000001101001\r\nContent-Disposition: form-data; name=\"selectDepartment\"\r\n\r\nSelect+Department\r\n-----011000010111000001101001\r\nContent-Disposition: form-data; name=\"selectSection\"\r\n\r\nSelect+Section\r\n-----011000010111000001101001\r\nContent-Disposition: form-data; name=\"selectCourse\"\r\n\r\nSelect+Course\r\n-----011000010111000001101001\r\nContent-Disposition: form-data; name=\"campus1\"\r\n\r\n14704480\r\n-----011000010111000001101001\r\nContent-Disposition: form-data; name=\"firstTermName_14704480\"\r\n\r\nFall+2016\r\n-----011000010111000001101001\r\nContent-Disposition: form-data; name=\"firstTermId_14704480\"\r\n\r\n73256452\r\n-----011000010111000001101001"
 
         self.ua = UserAgent()
+        super(BNParser, self).__init__(school, **kwargs)
 
     def parse(self):
         print("Parsing semester.")
