@@ -128,13 +128,6 @@ class VandyParser(CourseParser):
 
 	def create_section(self, created_course):
 		if self.course.get('cancelled'):
-
-			# deletes sections from cancelled course TODO:
-			# if Section.objects.filter(course = course_model, meeting_section = self.course.get('section')).exists():
-			# 	s = Section.objects.get(course = course_model, meeting_section = self.course.get('section'))
-			# 	Offering.objects.filter(section = s).delete()
-			# 	s.delete()
-
 			self.course['cancelled'] = False
 			return None
 
