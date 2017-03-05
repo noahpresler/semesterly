@@ -43,7 +43,7 @@ class SalisburyParser(PeoplesoftParser):
 		}
 
 		if term and year:
-			years_and_terms = super(SalisburyParser, self).filter_term_and_year(years_and_terms, year, term)
+			years_and_terms = SalisburyParser.filter_term_and_year(years_and_terms, year, term)
 
 		# Call Peoplesoft parse method
 		self.parse(years_and_terms,
