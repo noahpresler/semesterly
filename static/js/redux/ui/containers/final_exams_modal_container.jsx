@@ -25,7 +25,8 @@ const mapStateToProps = (state) => {
 		courseDetails: remapCourseDetails(timetables[active].courses),
 		activeLoadedTimetableName: state.savingTimetable.activeTimetable.name,
 		hasNoCourses: timetables[active].courses.length == 0,
-		courses: timetables[active].courses
+		courses: timetables[active].courses,
+		loadingCachedTT: state.timetables.loadingCachedTT
 	}
 }
 
