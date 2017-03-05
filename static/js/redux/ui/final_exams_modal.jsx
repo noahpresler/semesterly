@@ -54,6 +54,7 @@ export class FinalExamsModal extends React.Component {
     }
     componentDidMount() {
         if (this.props.isVisible) {
+            this.props.logFinalExamView();
             this.props.fetchFinalExamSchedule();
             this.noTimeFinals = [];
             this.finalsToRender = {};
@@ -86,11 +87,11 @@ export class FinalExamsModal extends React.Component {
         this.finalsToRender = {};
     }
 	componentDidUpdate(nextProps) {
-        if (this.props.courses != nextProps.courses) {
-            console.log("updating", this.props.courses)
+        if (this.props.courses != nextProps.courses && this.props.isVisible) {
             this.props.fetchFinalExamSchedule();
         }
         if (this.props.isVisible && !nextProps.isVisible) {
+            this.props.logFinalExamView();
             this.noTimeFinals = [];
             this.finalsToRender = {};
 			this.refs.modal.show();
@@ -241,7 +242,6 @@ export class FinalExamsModal extends React.Component {
             </div>
     }
 	render() {
-        console.log(this.props);
         let modalHeader =
             <div id="modal-header">
                 <h1>Final Exam Schedule</h1>
@@ -259,11 +259,9 @@ export class FinalExamsModal extends React.Component {
                          <div className="loader"/>
                  </span>
              </div>
-        console.log("LOADER")
         if (this.props.loading) {
             // Leave as is
         } else if (this.props.hasNoCourses && !this.props.loadingCachedTT ) {
-            console.log("UPSELL")
             display =
                 <div className="peer-card upsell">
                     <div className="peer-card-wrapper upsell cf">
@@ -273,7 +271,6 @@ export class FinalExamsModal extends React.Component {
                 </div>
         }
         else if (this.props.hasRecievedSchedule && this.props.isVisible && !this.props.loadingCachedTT) {
-            console.log("NORMAL")
             let mobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
             display = mobile && $(window).width() < 767 && this.state.orientation == 'portrait' ? this.loadFinalsToDivs(true) : this.loadFinalsToDivs(false);
         }
