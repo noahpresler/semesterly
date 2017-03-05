@@ -2,7 +2,7 @@
 # @org      Semeseter.ly
 # @author   Michael N. Miller and Maxwell Yeo
 # @date	    2/5/17
-import sys
+import sys, re
 from scripts.parser_library.BaseParser import CourseParser
 
 class VandyParser(CourseParser):
