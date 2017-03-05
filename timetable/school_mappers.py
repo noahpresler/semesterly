@@ -91,7 +91,8 @@ new_course_parsers = {
   'jhu':       lambda *args, **kwargs: HopkinsParser(**kwargs),
   'umich':     lambda *args, **kwargs: UmichParser(**kwargs),
   'queens':    lambda *args, **kwargs: QueensParser(**kwargs),
-  'salisbury': lambda *args, **kwargs: SalisburyParser(**kwargs)
+  'salisbury': lambda *args, **kwargs: SalisburyParser(**kwargs),
+  'vandy':     lambda *args, **kwargs: VandyParser(**kwargs),
 }
 
 new_textbook_parsers = {
