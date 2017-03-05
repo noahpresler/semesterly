@@ -63,6 +63,8 @@ urlpatterns = patterns('',
     url(r'^user/get_saved_timetables/(?P<school>.+)/(?P<sem>[fFsS]{1})', 'student.views.get_student_tts_wrapper'),
     url(r'^user/add_to_gcal/*$', 'student.views.add_tt_to_gcal'),
     url(r'^user/log_ical/*$', 'student.views.log_ical_export'),
+    url(r'^user/log_final_exam/*$', 'timetable.views.log_final_exam_view'),
+
     
     url(r'^courses/(?P<school>.+?)/(?P<sem>[fFsS]{1}?)/code/(?P<course_id>.+)/*$', 'timetable.views.get_course_id'),
     url(r'^jhu/countdown/*$', 'timetable.views.jhu_timer'),
