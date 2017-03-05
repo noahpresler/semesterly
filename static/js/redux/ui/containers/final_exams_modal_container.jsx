@@ -14,14 +14,17 @@ const remapCourseDetails = (courses) => {
 }
 
 const mapStateToProps = (state) => {
+	let active = state.timetables.active
+	let timetables = state.timetables.items
 	return {
 		isVisible: state.finalExamsModal.isVisible,
 		finalExamSchedule: state.finalExamsModal.finalExams,
 		hasRecievedSchedule: Boolean(state.finalExamsModal.finalExams),
 		loading: state.finalExamsModal.isLoading,
 		courseToColourIndex: state.ui.courseToColourIndex,
-		courseDetails: remapCourseDetails(state.timetables.items[0].courses),
-		activeLoadedTimetableName: state.savingTimetable.activeTimetable.name
+		courseDetails: remapCourseDetails(timetables[active].courses),
+		activeLoadedTimetableName: state.savingTimetable.activeTimetable.name,
+		hasNoCourses: timetables[active].courses.length == 0
 	}
 }
 
