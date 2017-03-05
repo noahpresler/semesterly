@@ -255,7 +255,11 @@ export class FinalExamsModal extends React.Component {
                          <div className="loader"/>
                  </span>
              </div>
-        if (this.props.hasRecievedSchedule && this.props.isVisible) {
+        console.log(this.props.hasNoCourses)
+        if (this.props.hasNoCourses) {
+            display = <p>no courses</p>
+        }
+        else if (this.props.hasRecievedSchedule && this.props.isVisible) {
             let mobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
             display = mobile && $(window).width() < 767 && this.state.orientation == 'portrait' ? this.loadFinalsToDivs(true) : this.loadFinalsToDivs(false);
         }
