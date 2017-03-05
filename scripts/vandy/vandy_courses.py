@@ -21,7 +21,8 @@ class VandyParser(CourseParser):
 		super(VandyParser, self).__init__('vandy',**kwargs)
 
 	def login(self):
-		print "Logging in..."
+		if self.verbosity > 2:
+			print "Logging in..."
 		login_url = 'https://login.mis.vanderbilt.edu'
 		get_login_url = login_url + '/login'
 		params = {
@@ -42,40 +43,50 @@ class VandyParser(CourseParser):
 		# TODO - not sure if this is necessary but it works
 		self.requester.get(VandyParser.API_URL + '/Entry.action', parse=False)
 
-	def start(self, **kwargs):
-		self.parse()
+	def start(self,
+		year=None,
+		term=None,
+		department=None,
+		textbooks=True,
+		verbosity=3,
+		**kwargs):
+		self.verbosity = verbosity
+		self.parse(year=year, term=term, department=department, textbooks=textbooks, verbosity=verbosity)
 
-	def parse(self):
+	def parse(self,
+		year=None,
+		term=None,
+		department=None,
+		textbooks=True,
+		verbosity=3):
+
 		self.login()
 
 		# FIXME - hack to deal with Fall 2016 & Spring 2017
-		semester_codes = {
+		years_and_terms = {
 			'2016': {
-				'F' : {
-					'term_code':'0875',
-					'name':'Fall'
-				}
+				'Fall': '0875'
 			},
 			'2017': {
-				'S' : {
-					'term_code':'0880',
-					'name':'Spring'
-				}
+				'Spring': '0880'
 			}
 		}
 
-		for year in semester_codes:
+		years_and_terms = super(VandyParser, self).filter_term_and_year(years_and_terms, year, term)
 
-			print 'Parsing year ' + year
+		for year, semesters in years_and_terms.items():
+			if self.verbosity > 2:
+				print 'Parsing year ' + year
 			self.ingestor['year'] = year
 
-			for semester in semester_codes[year]:
+			for semester_name, semester_code in semesters.items():
 
-				print 'Parsing semester ' + semester
-				self.ingestor['semester'] = semester_codes[year][semester]['name']
+				if self.verbosity > 2:
+					print 'Parsing semester ' + semester_name
+				self.ingestor['semester'] = semester_name
 
 				# Load environment for targeted semester
-				self.requester.get(VandyParser.API_URL + '/SelectTerm!selectTerm.action', {'selectedTermCode' : semester_codes[year][semester]['term_code']}, parse=False)
+				self.requester.get(VandyParser.API_URL + '/SelectTerm!selectTerm.action', {'selectedTermCode' : semester_code}, parse=False)
 				self.requester.get(VandyParser.API_URL + '/SelectTerm!updateSessions.action', parse=False)
 
 				# Get a list of all the department codes
@@ -89,7 +100,8 @@ class VandyParser(CourseParser):
 
 				for department_code in department_codes:
 
-					print 'Parsing courses in \"' + self.departments[department_code] + '\"'
+					if self.verbosity > 2:
+						print 'Parsing courses in \"' + self.departments[department_code] + '\"'
 
 					# Construct payload with department code
 					payload.update({'searchCriteria.subjectAreaCodes': department_code})
@@ -172,8 +184,6 @@ class VandyParser(CourseParser):
 
 		# Query Vandy class search website
 		soup = self.requester.get(VandyParser.API_URL + '/SearchClasses!input.action', parse=True)
-		# print soup.prettify().encode('utf-8')
-		# exit(1)
 
 		# Retrieve all deparments from dropdown in advanced search
 		department_entries = soup.find_all(id=re.compile("subjAreaMultiSelectOption[0-9]"))
@@ -260,7 +270,6 @@ class VandyParser(CourseParser):
 		
 		try:
 			self.parse_course_details(self.requester.get(course_details_url, payload))
-			# self.print_course()
 
 			# Create models
 			created_section = self.create_section(self.create_course())
@@ -293,7 +302,8 @@ class VandyParser(CourseParser):
 			raise ParseException()
 
 		departmentCode, catalogID, sectionNumber = title.group(1), title.group(2), title.group(3)
-		print '\t-', departmentCode, catalogID, sectionNumber.strip(), '-'
+		if self.verbosity > 2:
+			print '\t-', departmentCode, catalogID, sectionNumber.strip(), '-'
 
 		self.update_current_course("name", courseName)
 		self.update_current_course("code", departmentCode + '-' + catalogID)
