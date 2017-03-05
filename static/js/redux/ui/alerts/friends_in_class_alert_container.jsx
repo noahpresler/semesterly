@@ -1,6 +1,6 @@
 import { connect } from 'react-redux';
 import { setDeclinedNotifications, getDeclinedNotifications } from '../../util.jsx';
-import { fetchFriends, saveSettings } from '../../actions/user_actions.jsx'
+import { fetchClassmates, saveSettings } from '../../actions/user_actions.jsx'
 import FriendsInClassAlert from './friends_in_class_alert.jsx';
 
 const mapStateToProps = (state) => {
@@ -31,7 +31,7 @@ const mapDispatchToProps = (dispatch) => {
 			type: "CHANGE_USER_INFO",
 			data: info,
 		}),
-		fetchFriends: () => dispatch(fetchFriends()),
+		fetchClassmates: () => {dispatch(fetchClassmates(courses))},
 	}
 }
 
