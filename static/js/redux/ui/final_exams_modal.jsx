@@ -240,7 +240,7 @@ export class FinalExamsModal extends React.Component {
 	render() {
         let modalHeader =
             <div id="modal-header">
-                <h1>Final Exam Scheduler</h1>
+                <h1>Final Exam Schedule</h1>
                 <h2>{ this.props.activeLoadedTimetableName }</h2>
                 <div id="modal-close" onClick={() => this.hide()}>
                     <i className="fa fa-times"></i>
