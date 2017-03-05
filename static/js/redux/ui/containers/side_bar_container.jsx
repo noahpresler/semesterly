@@ -37,6 +37,7 @@ const mapDispatchToProps = (dispatch) => {
 	    launchTextbookModal: () => dispatch({type:'TRIGGER_TEXTBOOK_MODAL'}),
 		duplicateTimetable: (tt) => dispatch(duplicateTimetable(tt)),
 		deleteTimetable: (tt) => dispatch(deleteTimetable(tt)),
+		launchFinalExamsModal: () => dispatch({type: 'SHOW_FINAL_EXAMS_MODAL'}),
 		loadTimetable
 	}
 }

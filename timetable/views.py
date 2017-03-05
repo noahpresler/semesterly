@@ -21,9 +21,12 @@ from timetable.models import *
 from timetable.school_mappers import school_to_granularity, VALID_SCHOOLS, school_code_to_name, AM_PM_SCHOOLS, school_to_course_regex
 from timetable.utils import *
 from timetable.scoring import *
+from timetable.jhu_final_exam_scheduler import *
+from timetable.jhu_final_exam_test import *
 from student.models import Student
 from student.views import get_student, get_user_dict, convert_tt_to_dict, get_classmates_from_course_id
 from django.db.models import Count
+
 
 MAX_RETURN = 60 # Max number of timetables we want to consider
 
@@ -31,6 +34,7 @@ SCHOOL = ""
 
 hashids = Hashids(salt="***REMOVED***")
 logger = logging.getLogger(__name__)
+jhu_final_exam_scheduler = JHUFinalExamScheduler()
 
 def redirect_to_home(request):
   return HttpResponseRedirect("/")
@@ -52,7 +56,7 @@ def custom_500(request):
 # ******************************************************************************
 
 @validate_subdomain
-def view_timetable(request, code=None, sem=None, shared_timetable=None, find_friends=False, enable_notifs=False,signup=False,gcal_callback=False, export_calendar=False, view_textbooks=False):
+def view_timetable(request, code=None, sem=None, shared_timetable=None, find_friends=False, enable_notifs=False,signup=False,gcal_callback=False, export_calendar=False, view_textbooks=False, final_exams=False):
   school = request.subdomain
   student = get_student(request)
   course_json = None
@@ -89,7 +93,8 @@ def view_timetable(request, code=None, sem=None, shared_timetable=None, find_fri
     'signup': signup,
     'gcal_callback': gcal_callback,
     'export_calendar': export_calendar,
-    'view_textbooks': view_textbooks
+    'view_textbooks': view_textbooks,
+    'final_exams': final_exams
   },
   context_instance=RequestContext(request))
 
@@ -97,6 +102,13 @@ def view_timetable(request, code=None, sem=None, shared_timetable=None, find_fri
 def google_calendar_callback(request):
   try:
     return view_timetable(request, gcal_callback=True)
+  except Exception as e:
+    raise Http404
+
+@validate_subdomain
+def view_final_exams(request):
+  try:
+    return view_timetable(request, final_exams=True)
   except Exception as e:
     raise Http404
 
@@ -739,7 +751,7 @@ def profile(request):
   logged = request.user.is_authenticated()
   if logged and Student.objects.filter(user=request.user).exists():
     student = Student.objects.get(user=request.user)
-    reactions =  Reaction.objects.filter(student=student).values('title').annotate(count=Count('title'))
+    reactions = Reaction.objects.filter(student=student).values('title').annotate(count=Count('title'))
     # googpic = this.props.userInfo.img_url.replace('sz=50','sz=100') if this.props.userInfo.isLoggedIn else ''
     # propic = 'url(https://graph.facebook.com/' + JSON.parse(currentUser).fbook_uid + '/picture?type=normal)' if this.props.userInfo.FacebookSignedUp else 'url(' + googpic + ')'
     if student.user.social_auth.filter(provider='google-oauth2').exists():
@@ -765,3 +777,12 @@ def profile(request):
     return render_to_response("profile.html", context, context_instance=RequestContext(request))
   else:
     return signup(request)
+
+
+@csrf_exempt
+def final_exam_scheduler(request):
+  #request.body contains the json of the courses (timetable)
+  final_exam_schedule = jhu_final_exam_scheduler.make_schedule(json.loads(request.body))
+  #from time import sleep
+  #sleep(3)
+  return HttpResponse(json.dumps(final_exam_schedule), content_type="application/json")
