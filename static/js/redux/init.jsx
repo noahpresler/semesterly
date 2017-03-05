@@ -116,7 +116,7 @@ function setup(dispatch) {
       setFriendsCookie(time.getTime());
       dispatch({type: "ALERT_FACEBOOK_FRIENDS"});
     } else {
-      if (timeLapsedGreaterThan(localStorage.getItem("friendsCookie"), 3) === true) { // if visit is more than 3 days of last friend alert
+      if (timeLapsedGreaterThan(localStorage.getItem("friendsCookie"), 0.000694) === true) { // if visit is more than 3 days of last friend alert
         let time = new Date();
         setFriendsCookie(time.getTime());
         dispatch({type: "ALERT_FACEBOOK_FRIENDS"});

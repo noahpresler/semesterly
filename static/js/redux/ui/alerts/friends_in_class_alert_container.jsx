@@ -1,5 +1,6 @@
 import { connect } from 'react-redux';
 import { setDeclinedNotifications, getDeclinedNotifications } from '../../util.jsx';
+import { fetchFriends, saveSettings } from '../../actions/user_actions.jsx'
 import FriendsInClassAlert from './friends_in_class_alert.jsx';
 
 const mapStateToProps = (state) => {
@@ -14,7 +15,8 @@ const mapStateToProps = (state) => {
 		//Maybe pass in a new course?
 		mostFriendsClass: active_tt.courses.filter((c) => c.id == state.alerts.mostFriendsClassId)[0],
 		mostFriendsCount: state.alerts.mostFriendsCount,
-		mostFriendsKey: state.ui.courseToColourIndex[state.alerts.mostFriendsClassId]
+		mostFriendsKey: state.ui.courseToColourIndex[state.alerts.mostFriendsClassId],
+		userInfo: state.userInfo.data
 	}
 }
 const mapDispatchToProps = (dispatch) => {
@@ -24,6 +26,12 @@ const mapDispatchToProps = (dispatch) => {
     	},
     	declineNotifications: () => setDeclinedNotifications(true),
     	enableNotifications:() => setDeclinedNotifications(false),
+    	saveSettings: () => dispatch(saveSettings()),
+		changeUserInfo: (info) => dispatch({
+			type: "CHANGE_USER_INFO",
+			data: info,
+		}),
+		fetchFriends: () => dispatch(fetchFriends()),
 	}
 }
 

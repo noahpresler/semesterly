@@ -18,6 +18,20 @@ class FriendsInClassAlert extends React.Component {
 		this.props.dismissSelf();
 	}
 
+	allowFacebook() {
+		console.log("allow facebook");
+		// console.log(this.props.userInfo);
+        let newUserSettings = {
+            social_courses: true,
+            social_offerings: true,
+            social_all: true
+        }
+        let userSettings = Object.assign({}, this.props.userInfo, newUserSettings);
+        this.props.changeUserInfo(userSettings);
+        this.props.saveSettings(() => {this.props.fetchFriends();});
+        this.props.dismissSelf();
+	}
+
 	render() {
 		let maxColourIndex = COLOUR_DATA.length - 1;
 		let professors = []
@@ -44,7 +58,7 @@ class FriendsInClassAlert extends React.Component {
 				Plus 89 more in other classes. Enable the friend feature to find out who!
 			</small>
 			<button 
-				onClick={() => this.clickEnable()}
+				onClick={() => {this.allowFacebook();}}
 				className="conflict-alert-btn change-semester-btn">
 				Find Friends in Classes
 			</button>
