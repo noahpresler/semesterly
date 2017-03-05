@@ -53,8 +53,12 @@ export class FinalExamsModal extends React.Component {
         }
     }
     componentDidMount() {
+        console.log("HERE!");
         if (this.props.isVisible) {
-            this.props.fetchFinalExamSchedule()
+            if (!this.props.hasNoCourses) {
+                this.props.fetchFinalExamSchedule()  
+                console.log("FETCHING")              
+            }
             this.noTimeFinals = [];
             this.finalsToRender = {};
             this.refs.modal.show();
@@ -86,9 +90,8 @@ export class FinalExamsModal extends React.Component {
         this.finalsToRender = {};
     }
 	componentDidUpdate(nextProps) {
-        if (this.props.courses != nextProps.courses) {
+        if (this.props.courses != nextProps.courses && !this.props.hasNoCourses) {
             this.props.fetchFinalExamSchedule()
-            console.log("REFETCH")
         }
 		if (this.props.isVisible && !nextProps.isVisible) {
             this.noTimeFinals = [];
@@ -241,6 +244,7 @@ export class FinalExamsModal extends React.Component {
             </div>
     }
 	render() {
+        console.log(this.props);
         let modalHeader =
             <div id="modal-header">
                 <h1>Final Exam Schedule</h1>
@@ -258,7 +262,7 @@ export class FinalExamsModal extends React.Component {
                          <div className="loader"/>
                  </span>
              </div>
-        if (this.props.hasNoCourses) {
+        if (this.props.hasNoCourses && this.props.hasRecievedSchedule) {
             display =
                 <div className="peer-card upsell">
                     <div className="peer-card-wrapper upsell cf">
