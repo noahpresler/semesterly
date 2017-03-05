@@ -11,6 +11,7 @@ from scripts.parser_library.Requester import Requester
 from scripts.parser_library.Ingestor import Ingestor
 from scripts.parser_library.Extractor import Extractor
 from scripts.parser_library.Updater import ProgressBar
+from scripts.parser_library.internal_exceptions import CourseParseError
 
 class BaseParser:
 	__metaclass__ = ABCMeta
@@ -61,3 +62,13 @@ class CourseParser(BaseParser):
 	@abstractmethod
 	def start(self, **kwargs):
 		'''Start the parse.'''
+
+	@staticmethod
+	def filter_term_and_year(years_and_terms, year, term):
+			if year is None and term is None:
+				return years_and_terms
+			if year not in years_and_terms:
+				raise CourseParseError('year {} not defined'.format(year))
+			if term not in years_and_terms[year]:
+				raise CourseParseError('term not defined for year {}'.format(term))
+			return {year: {term: years_and_terms[year][term]}}
