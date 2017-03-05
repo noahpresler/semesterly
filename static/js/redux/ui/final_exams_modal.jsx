@@ -257,7 +257,13 @@ export class FinalExamsModal extends React.Component {
              </div>
         console.log(this.props.hasNoCourses)
         if (this.props.hasNoCourses) {
-            display = <p>no courses</p>
+            display =
+                <div className="peer-card upsell">
+                    <div className="peer-card-wrapper upsell cf">
+                        <h4>You Have No Courses Yet</h4>
+                        <p className="description">Add courses to find your final exams in a simple and intuitive calendar form.</p>
+                    </div>
+                </div>
         }
         else if (this.props.hasRecievedSchedule && this.props.isVisible) {
             let mobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
