@@ -150,7 +150,7 @@ def find_mutually_free(freeBusyA, freeBusyB, week_offset=0):
           free_slot['start'] = max(busy_slot['end'],free_slot['start'])
           free_slot['end'] = min(free_slot['end'],busy_slot['start'])
 
-        #if busy larger than/equal to free on both ends – remove free
+        #if busy larger than/equal to free on both ends remove free
         elif busy_slot.start <= free_slot.start and busy_slot.end >= free_slot.end:
           free_by_day[day].remove(free_slot)
 
