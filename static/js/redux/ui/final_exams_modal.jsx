@@ -86,8 +86,11 @@ export class FinalExamsModal extends React.Component {
         this.finalsToRender = {};
     }
 	componentDidUpdate(nextProps) {
-		if (this.props.isVisible && !nextProps.isVisible) {
+        if (this.props.courses != nextProps.courses) {
             this.props.fetchFinalExamSchedule()
+            console.log("REFETCH")
+        }
+		if (this.props.isVisible && !nextProps.isVisible) {
             this.noTimeFinals = [];
             this.finalsToRender = {};
 			this.refs.modal.show();
@@ -255,7 +258,6 @@ export class FinalExamsModal extends React.Component {
                          <div className="loader"/>
                  </span>
              </div>
-        console.log(this.props.hasNoCourses)
         if (this.props.hasNoCourses) {
             display =
                 <div className="peer-card upsell">

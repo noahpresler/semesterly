@@ -24,7 +24,8 @@ const mapStateToProps = (state) => {
 		courseToColourIndex: state.ui.courseToColourIndex,
 		courseDetails: remapCourseDetails(timetables[active].courses),
 		activeLoadedTimetableName: state.savingTimetable.activeTimetable.name,
-		hasNoCourses: timetables[active].courses.length == 0
+		hasNoCourses: timetables[active].courses.length == 0,
+		courses: timetables[active].courses
 	}
 }
 
