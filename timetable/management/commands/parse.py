@@ -36,7 +36,7 @@ class Command(BaseCommand):
 			# Use old parser framework if no new parser available
 			if school not in new_course_parsers or (options['textbooks'] and school not in new_textbook_parsers):
 				do_parse = course_parsers[school]
-				self.old_parser(do_parse)
+				self.old_parser(do_parse, school)
 				continue
 
 			parser, parser_type = None, ''
@@ -96,18 +96,21 @@ class Command(BaseCommand):
 				error = "Error while parsing %s:\n\n%s\n" % (school, str(e))
 				logging.exception(e)
 				self.stderr.write(self.style.ERROR(str(e)))
+			except Exception as e:
+				logging.exception(e)
+				self.stderr.write(self.style.ERROR(str(e)))
 
 		self.stdout.write(self.style.SUCCESS("Parsing Finished!"))
 		Command.log_stats(options['log_stats'], stats=stat_log, options=options, timestamp=timestamp)
 
-	def old_parser(self, do_parse):
-		message = 'Starting {} parser for {}.\n'.format(parser_type, school)
+	def old_parser(self, do_parse, school):
+		message = 'Starting {} parser for {}.\n'.format('courses', school)
 		self.stdout.write(self.style.SUCCESS(message))
 		try:
 			do_parse()
 		except Exception as e:
 			self.stderr.write(str(e))
-			raise e
+			Command.log_stats('scripts/logs/master.log', timestamp=str(e))
 
 	@staticmethod
 	def log_stats(filepath, options='', stats=None, timestamp='', elapsed=None):
