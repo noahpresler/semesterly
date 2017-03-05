@@ -795,3 +795,4 @@ def log_final_exam_view(request):
     student=student,
     school=request.subdomain
   ).save()
+  return HttpResponse(json.dumps({}), content_type="application/json")
