@@ -241,7 +241,7 @@ export class FinalExamsModal extends React.Component {
             </div>
     }
 	render() {
-        console.log(this.props);
+        let mobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
         let modalHeader =
             <div id="modal-header">
                 <h1>Final Exam Schedule</h1>
@@ -274,12 +274,11 @@ export class FinalExamsModal extends React.Component {
         }
         else if (this.props.hasRecievedSchedule && this.props.isVisible && !this.props.loadingCachedTT) {
             console.log("NORMAL")
-            let mobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
             display = mobile && $(window).width() < 767 && this.state.orientation == 'portrait' ? this.loadFinalsToDivs(true) : this.loadFinalsToDivs(false);
         }
         return (
             <Modal ref="modal"
-                className="final-exam-modal max-modal"
+                className={ "final-exam-modal max-modal" + ((mobile) ? " is-mobile" : "") }
                 modalStyle={modalStyle}
                 onHide={this.hide}
                 >
