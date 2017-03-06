@@ -54,7 +54,8 @@ export class FinalExamsModal extends React.Component {
     }
     componentDidMount() {
         if (this.props.isVisible) {
-            this.props.fetchFinalExamSchedule()
+            this.props.logFinalExamView();
+            this.props.fetchFinalExamSchedule();
             this.noTimeFinals = [];
             this.finalsToRender = {};
             this.refs.modal.show();
@@ -86,8 +87,15 @@ export class FinalExamsModal extends React.Component {
         this.finalsToRender = {};
     }
 	componentDidUpdate(nextProps) {
-		if (this.props.isVisible && !nextProps.isVisible) {
-            this.props.fetchFinalExamSchedule()
+        if (this.props.isVisible && !nextProps.isVisible) {
+            this.hide();
+        }
+        if (this.props.courses != nextProps.courses && this.props.isVisible) {
+            this.props.fetchFinalExamSchedule();
+        }
+        if (this.props.isVisible && !nextProps.isVisible) {
+            this.props.fetchFinalExamSchedule();
+            this.props.logFinalExamView();
             this.noTimeFinals = [];
             this.finalsToRender = {};
 			this.refs.modal.show();
@@ -238,9 +246,10 @@ export class FinalExamsModal extends React.Component {
             </div>
     }
 	render() {
+        let mobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
         let modalHeader =
             <div id="modal-header">
-                <h1>Final Exam Scheduler</h1>
+                <h1>Final Exam Schedule</h1>
                 <h2>{ this.props.activeLoadedTimetableName }</h2>
                 <div id="modal-close" onClick={() => this.hide()}>
                     <i className="fa fa-times"></i>
@@ -255,23 +264,40 @@ export class FinalExamsModal extends React.Component {
                          <div className="loader"/>
                  </span>
              </div>
-        console.log(this.props.hasNoCourses)
-        if (this.props.hasNoCourses) {
+        let signin = !this.props.userInfo.isLoggedIn ? (
+            <div>
+                <button className="btn abnb-btn fb-btn" onClick={() => {
+                        this.hide();
+                        this.props.launchUserAcquisitionModal();
+                }}>
+                    <span>Sign In</span>
+                </button>
+                 <div className="or-separator">
+                    <span className="h6 or-separator--text">or</span>
+                    <hr />
+                 </div>
+            </div>) : null;
+        if (this.props.loading) {
+            // Leave as is
+        } else if (this.props.hasNoCourses && !this.props.loadingCachedTT ) {
             display =
                 <div className="peer-card upsell">
                     <div className="peer-card-wrapper upsell cf">
                         <h4>You Have No Courses Yet</h4>
-                        <p className="description">Add courses to find your final exams in a simple and intuitive calendar form.</p>
+                        <p className="description">Add courses to find your final exams in a simple and intuitive calendar form or sign in to find your schedule from the cloud.</p>
+                        { signin }
+                        <button className="btn abnb-btn add-courses-button secondary" onClick={this.hide}>
+                            <span>Close & Add Courses</span>
+                        </button>
                     </div>
                 </div>
         }
-        else if (this.props.hasRecievedSchedule && this.props.isVisible) {
-            let mobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+        else if (this.props.hasRecievedSchedule && !this.props.loadingCachedTT) {
             display = mobile && $(window).width() < 767 && this.state.orientation == 'portrait' ? this.loadFinalsToDivs(true) : this.loadFinalsToDivs(false);
         }
         return (
             <Modal ref="modal"
-                className="final-exam-modal max-modal"
+                className={ "final-exam-modal max-modal" + ((mobile) ? " is-mobile" : "") }
                 modalStyle={modalStyle}
                 onHide={this.hide}
                 >

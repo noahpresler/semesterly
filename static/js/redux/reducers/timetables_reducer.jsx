@@ -1,11 +1,17 @@
 import update from 'react/lib/update';
 import { saveLocalActiveIndex } from '../util.jsx';
 
-let initialState = { isFetching: false, items: [{courses: [], has_conflict: false}], active: 0 };
+let initialState = { isFetching: false, items: [{courses: [], has_conflict: false}], active: 0, loadingCachedTT: true};
 
 export const timetables = (state = initialState, action) => {
 
 	switch(action.type) {
+
+		case 'LOADING_CACHED_TT':
+			return Object.assign({}, state, {loadingCachedTT: true});
+
+		case 'CACHED_TT_LOADED':
+			return Object.assign({}, state, {loadingCachedTT: false});
 		
 		case 'REQUEST_TIMETABLES':
 			return Object.assign({}, state, {isFetching: true});
