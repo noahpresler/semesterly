@@ -15,6 +15,7 @@ from scripts.parser_library.Updater import Counter
 
 class Ingestor(dict):
 	ALL_KEYS = {
+		'school',
 		'kind',
 		'department',
 		'dept',

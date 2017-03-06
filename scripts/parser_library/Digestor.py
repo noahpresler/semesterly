@@ -64,8 +64,7 @@ class Digestor:
 
 	def set_strategy(self, diff, load, output=None):
 		if diff and load:
-			raise NotImplementedError('Burp not implemented yet.')
-			return Burp(output) # diff only
+			return Burp(self.school, output) # diff only
 		elif not diff and load:
 			return Absorb(self.school) # load db only + clean
 		elif diff and not load:
@@ -336,7 +335,7 @@ class DigestionAdapter:
 			sections = Section.objects.filter(course=textbook_link.course.code)
 			for section in sections:
 				yield {
-					'section': section
+					'section': section,
 					'is_required': textbook_link.required,
 					'textbook': textbook
 				}
@@ -346,7 +345,7 @@ class DigestionAdapter:
 				meeting_section=textbook_link.section.code
 			)[0]
 			yield {
-				'section': section
+				'section': section,
 				'is_required': textbook_link.required,
 				'textbook': textbook
 			}
@@ -575,7 +574,26 @@ class Absorb(DigestionStrategy):
 
 class Burp(DigestionStrategy):
 	'''Load valid data into Django db and output diff between input and db data.'''
-	def __init__(self, output):
-		raise NotImplementedError('Burp not implemented yet!')
+	def __init__(self, school, output=None):
+		self.vommit = Vommit(output)
+		self.absorb = Absorb(school)
 		super(Burp, self).__init__()
-	# TODO
+
+	def digest_course(self, model_args):
+		self.vommit.digest_course(model_args)
+		return self.absorb.digest_course(model_args)
+	def digest_section(self, model_args):
+		self.vommit.digest_section(model_args)
+		return self.absorb.digest_section(model_args)
+	def digest_offering(self, model_args):
+		self.vommit.digest_offering(model_args)
+		return self.absorb.digest_offering(model_args)
+	def digest_textbook(self, models_args):
+		self.vommit.digest_textbook(model_args)
+		return self.absorb.digest_textbook(model_args)
+	def digest_textbook_link(self, model_args):
+		self.vommit.digest_textbook_link(model_args)
+		return self.absorb.digest_textbook_link(model_args)
+	def wrap_up(self):
+		self.vommit.wrap_up()
+		self.absorb.wrap_up()
