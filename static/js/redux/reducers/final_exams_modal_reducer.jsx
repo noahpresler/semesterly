@@ -1,4 +1,4 @@
-export const finalExamsModal = (state = { isVisible: false, isLoading: false, finalExams: null }, action) => {
+export const finalExamsModal = (state = { isVisible: false, isLoading: true, finalExams: null }, action) => {
 	switch (action.type) {
 		case 'HIDE_FINAL_EXAMS_MODAL':
 			return Object.assign({}, state, {isVisible: false});
