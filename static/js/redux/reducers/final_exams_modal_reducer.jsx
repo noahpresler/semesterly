@@ -8,7 +8,7 @@ export const finalExamsModal = (state = { isVisible: false, isLoading: true, fin
 			return Object.assign({}, state, {isLoading: true, finalExams: null});
 		case 'RECIEVE_FINAL_EXAMS':
 			return Object.assign({}, state, {isLoading: false, finalExams: action.json});
-		case 'CHANGE_ACTIVE_SAVED_TIMETABLE':
+		case 'RECEIVE_TIMETABLES':
 			return Object.assign({}, state, {finalExams: null});
 		default:
 			return state;
