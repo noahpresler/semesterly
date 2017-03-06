@@ -10,6 +10,9 @@ class JsonException(Exception):
 		self.json = json
 		super(JsonException, self).__init__(message, json, *args)
 
+	def __str__(self):
+		return self.message + '\n' + pretty_json(self.json)
+
 class JsonValidationError(JsonException, ValueError):
 	'''Raise when fatal failure of validation condition.'''
 	def __init__(self, message, json=None, *args):
@@ -18,9 +21,9 @@ class JsonValidationError(JsonException, ValueError):
 		super(JsonValidationError, self).__init__(message, json, *args)
 
 	def __str__(self):
-		return 'error: ' + self.message + '\n' + pretty_colored_json(self.json)
+		return 'error: ' + super(JsonValidationError, self).__str__()
 
-class JsonValidationWarning(UserWarning):
+class JsonValidationWarning(JsonException, UserWarning):
 	'''Raise when user `should` be made aware of non-optimal, non-fatal condition.'''
 	def __init__(self, message, json=None, *args):
 		self.message = message
@@ -28,7 +31,7 @@ class JsonValidationWarning(UserWarning):
 		super(JsonValidationWarning, self).__init__(message, json, *args)
 
 	def __str__(self):
-		return 'warning: ' + self.message + '\n' + pretty_colored_json(self.json)
+		return 'warning: ' + self.message + '\n' + pretty_json(self.json)
 
 class JsonDuplicationWarning(JsonValidationWarning):
 	'''Raise when validation detects duplicate json objects in the same parse.'''
@@ -36,7 +39,7 @@ class JsonDuplicationWarning(JsonValidationWarning):
 		super(JsonDuplicationWarning, self).__init__(message, json, *args)
 
 	def __str__(self):
-		return 'warning: ' + self.message + '\n' + pretty_colored_json(self.json)
+		return 'warning: ' + self.message + '\n' + pretty_json(self.json)
 
 class DigestionError(ValueError):
 	'''Raise when fails digestion invariant.'''
@@ -46,7 +49,7 @@ class DigestionError(ValueError):
 		super(DigestionError, self).__init__(message, json, *args)
 
 	def __str__(self):
-		return 'error (digestion): ' + self.message + '\n' + pretty_colored_json(self.json)
+		return 'error (digestion): ' + self.message + '\n' + pretty_json(self.json)
 
 class IngestorWarning(UserWarning):
 	'''Raise when user should be notified of non-optimal usage of ingestor.'''
@@ -56,7 +59,7 @@ class IngestorWarning(UserWarning):
 		super(IngestorWarning, self).__init__(message, json, *args)
 
 	def __str__(self):
-		return 'warning: ' + self.message + '\n' + pretty_colored_json(self.json)
+		return 'warning: ' + self.message + '\n' + pretty_json(self.json)
 
 import simplejson as json
 from pygments import highlight, lexers, formatters, filters
@@ -64,9 +67,16 @@ def pretty_colored_json(j):
 	if j is None:
 		return 'None'
 	'''Format and colorize json for prettified output.'''
-	if isinstance(j, dict):
-		j = json.dumps(j, sort_keys=True, indent=2, separators=(',', ': '))
+	j = pretty_json(j)
 	l = lexers.JsonLexer()
 	l.add_filter('whitespace')
 	colorful_json = highlight(unicode(j, 'UTF-8'), l, formatters.TerminalFormatter())
 	return colorful_json
+
+def pretty_json(j):
+	'''Format and colorize json for prettified output.'''
+	if isinstance(j, basestring):
+		j = json.loads(j)
+	if isinstance(j, dict):
+		j = json.dumps(j, sort_keys=True, indent=2, separators=(',', ': '))
+	return j
