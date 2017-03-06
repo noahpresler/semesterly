@@ -15,7 +15,7 @@
 	height: 100%;
 }
 .final-exam-modal #modal-header {
-	padding: 20px 30px 10px;
+	padding: 10px 10px 3px;
 }
 /* Style the loader */
 #modal-content .img-icon {
@@ -55,12 +55,12 @@
 #final-exam-calendar-ctn.mobile {
 	padding: 0 10px 20px;
 }
+.final-exam-modal.is-mobile {
+	height: 75%;
+}
 @media (max-width: 766px) {
-	.final-exam-modal {
-		height: 85%;
-	}
 	.final-exam-modal #modal-header {
-		padding: 20px 10px 10px;
+		padding: 10px 10px 3px;
 	}
 	#final-exam-calendar-ctn {
 		padding: 30px 10px;
@@ -203,4 +203,37 @@
     transition: color .2s;
     word-wrap: break-word;
     margin-bottom: 20px;
+}
+
+.final-exam-modal .abnb-btn {
+	margin-top: 30px;
+}
+
+.final-exam-modal .abnb-btn ~ .abnb-btn {
+    margin-top: 0px;
+}
+
+.final-exam-modal .abnb-btn {
+	color: white;
+    border-color: #3B5998;
+    background-color: #3B5998;
+    color: #fff;
+    max-width: 300px;
+}
+
+.final-exam-modal .add-courses-button {
+	background-color: #BBB;
+	border-color: #BBB;
+	margin-bottom: 40px;
+}
+
+.abnb-btn.secondary > span{
+	font-weight: 300;
+	color: white;
+}
+
+.or-separator {
+    margin: 0 auto;
+    margin-bottom: 22px;
+    max-width: 500px;
 }
