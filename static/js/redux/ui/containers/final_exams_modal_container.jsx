@@ -1,6 +1,7 @@
 import { connect } from 'react-redux';
 import { FinalExamsModal } from '../final_exams_modal.jsx';
 import { fetchFinalExamSchedule } from '../../actions/user_actions.jsx';
+import { logFinalExamView } from '../../actions/calendar_actions.jsx';
 
 const remapCourseDetails = (courses) => {
 	let remap = {}
@@ -24,14 +25,21 @@ const mapStateToProps = (state) => {
 		courseToColourIndex: state.ui.courseToColourIndex,
 		courseDetails: remapCourseDetails(timetables[active].courses),
 		activeLoadedTimetableName: state.savingTimetable.activeTimetable.name,
-		hasNoCourses: timetables[active].courses.length == 0
+		hasNoCourses: timetables[active].courses.length == 0,
+		courses: timetables[active].courses,
+		loadingCachedTT: state.timetables.loadingCachedTT,
+		userInfo: state.userInfo.data
 	}
 }
 
 const mapDispatchToProps = (dispatch) => {
 	return {
 		hideFinalExamsModal: () => {dispatch({type: "HIDE_FINAL_EXAMS_MODAL"})},
-		fetchFinalExamSchedule: () => {dispatch(fetchFinalExamSchedule())}
+		fetchFinalExamSchedule: () => {dispatch(fetchFinalExamSchedule())},
+		launchUserAcquisitionModal: () => {
+			dispatch({type: "TRIGGER_ACQUISITION_MODAL"});
+		},
+		logFinalExamView
 	}
 }
 

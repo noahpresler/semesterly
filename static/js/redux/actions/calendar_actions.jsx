@@ -1,4 +1,4 @@
-import { getRequestShareTimetableLinkEndpoint, getAddTTtoGCalEndpoint, getLogiCalEndpoint } from '../constants.jsx';
+import { getRequestShareTimetableLinkEndpoint, getAddTTtoGCalEndpoint, getLogiCalEndpoint, getLogFinalExamViewEndpoint } from '../constants.jsx';
 import { getActiveTimetable } from './user_actions.jsx';
 import { store } from '../init.jsx';
 import ical from 'ical-generator';
@@ -28,6 +28,13 @@ function receiveShareLink(dispatch, shareLink) {
 		type: "RECEIVE_SHARE_TIMETABLE_LINK",
 		shareLink,
 	});
+}
+
+export function logFinalExamView() {
+	fetch(getLogFinalExamViewEndpoint(), {
+		method: 'POST',
+		credentials: 'include',
+	})
 }
 
 export function fetchShareTimetableLink() {

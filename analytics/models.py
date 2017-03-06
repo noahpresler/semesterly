@@ -65,3 +65,11 @@ class CalendarExport(models.Model):
     school = models.CharField(max_length=50)
     is_google_calendar = models.BooleanField(blank=True, default=False)
 
+class FinalExamModalView(models.Model):
+    """
+    Logs that a final exam schedule has been viewed
+    """
+    student = models.ForeignKey(Student, null=True, default=None)
+    time_created = models.DateTimeField(auto_now_add=True)
+    school = models.CharField(max_length=50)
+
