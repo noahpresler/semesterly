@@ -7,9 +7,9 @@ import socket
 from selenium import webdriver
 from selenium.webdriver.support.ui import Select
 
-from scripts.peoplesoft.courses import PeoplesoftParser
+from scripts.peoplesoft.courses import QPeoplesoftParser
 
-class QueensParser(PeoplesoftParser):
+class QueensParser(QPeoplesoftParser):
 
 	BASE_URL = 'https://saself.ps.queensu.ca/psc/saself/EMPLOYEE/HRMS/c/SA_LEARNER_SERVICES.CLASS_SEARCH.GBL'
 	
@@ -99,16 +99,16 @@ class QueensParser(PeoplesoftParser):
 		# NOTE: hardcoded semesters Fall 2016, Interim, Spring 2017
 		years_and_terms = {
 			"2016": {
-				'Fall':'2169', 
+				'Fall': '2169',
 			},
 			"2017": {
 				'Summer': '2175',
-				'Winter':'2171'
+				'Winter': '2171'
 			}
 		}
 
 		if term and year:
-			years_and_terms = super(ChapmanParser, self).filter_term_and_year(years_and_terms, year, term)
+			years_and_terms = self.filter_term_and_year(years_and_terms, year, term)
 
 		# Call Peoplesoft parse method
 		self.parse(years_and_terms,
