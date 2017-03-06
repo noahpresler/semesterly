@@ -102,7 +102,6 @@ class PeoplesoftParser(CourseParser):
 					for dept_code, dept_name in departments.iteritems():
 						self.ingestor['dept_name'] = dept_name
 						self.ingestor['dept_code'] = dept_code
-
 						if self.verbosity >= 1:
 							print '>> Parsing courses in department {} ({})'.format(dept_name, dept_code)
 
