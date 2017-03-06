@@ -11,7 +11,7 @@ class UmichParser(UPeoplesoftParser):
 		school = 'umich'
 		url = 'https://csprod.dsc.umich.edu/psc/csprodpa/EMPLOYEE/HRMS/c/COMMUNITY_ACCESS.M_SR_SC_CLS_SRCH.GBL'
 		super(UmichParser,self).__init__(school, url,
-			term_base_url = 'https://csprod.dsc.umich.edu/services/schedofclasses', **kwargs)
+			term_base_url='https://csprod.dsc.umich.edu/services/schedofclasses', **kwargs)
 
 	def start(self, 
 		year=None,
