@@ -310,10 +310,8 @@ class Ingestor(dict):
 			'title': self.get('title')
 		}
 
-		print self.logger.logfile
 		textbook = cleandict(textbook)
 		self.validate_and_log(textbook)
-		print textbook
 		return textbook
 
 	def validate_and_log(self, obj):
