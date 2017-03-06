@@ -27,7 +27,8 @@ const mapStateToProps = (state) => {
 		activeLoadedTimetableName: state.savingTimetable.activeTimetable.name,
 		hasNoCourses: timetables[active].courses.length == 0,
 		courses: timetables[active].courses,
-		loadingCachedTT: state.timetables.loadingCachedTT
+		loadingCachedTT: state.timetables.loadingCachedTT,
+		userInfo: state.userInfo.data
 	}
 }
 
@@ -35,6 +36,9 @@ const mapDispatchToProps = (dispatch) => {
 	return {
 		hideFinalExamsModal: () => {dispatch({type: "HIDE_FINAL_EXAMS_MODAL"})},
 		fetchFinalExamSchedule: () => {dispatch(fetchFinalExamSchedule())},
+		launchUserAcquisitionModal: () => {
+			dispatch({type: "TRIGGER_ACQUISITION_MODAL"});
+		},
 		logFinalExamView
 	}
 }
