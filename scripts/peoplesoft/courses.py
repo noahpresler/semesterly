@@ -70,9 +70,9 @@ class PeoplesoftParser(CourseParser):
 		self.textbooks = textbooks
 
 		# NOTE: umich child will do nothing and return an empty dict
-		params = self.goto_search_page(self.url_params)
-
-		for year, terms in years.items():
+		soup, params = self.goto_search_page(self.url_params)
+		years_and_terms = self.get_years_and_terms(soup)
+		for year, terms in years_and_terms.items():
 			self.ingestor['year'] = year
 
 			for term_name, term_code in terms.items():
@@ -93,7 +93,7 @@ class PeoplesoftParser(CourseParser):
 						assert(len(groups) == 1) # sanity check
 						# update search params to get course list
 						params = PeoplesoftParser.exclude_ajax_params(params)
-						params.update(self.action('class_search'))						
+						params.update(self.action('class_search'))
 						params2 = params
 
 					# extract department list info
@@ -120,25 +120,47 @@ class PeoplesoftParser(CourseParser):
 
 		self.ingestor.wrap_up()
 
+	def get_years_and_terms(self, soup):
+		term_datas = soup.find('select', id='CLASS_SRCH_WRK2_STRM$35$').find_all('option')
+		years_terms_values = {}
+		for term_data in term_datas[1:]:
+			# differentiate between term name and years
+			year_or_term1, year_or_term2 = term_data.text.split()
+			try:
+				year = str(int(year_or_term1))
+				term = year_or_term2
+			except ValueError:
+				year = str(int(year_or_term2))
+				term = year_or_term1
+
+			if year not in years_terms_values:
+				years_terms_values[year] = {}
+			years_terms_values[year][term] = term_data['value']
+		return years_terms_values
+
+	def parse_term_and_years(term_and_years):
+			years = { term_and_year.split()[1]: {term_and_year.split()[0]: code} for term_and_year, code in term_and_years.items() }
+			for year in years:
+				years[year].update({term_and_year.split()[0].title(): code for term_and_year, code in term_and_years.items() if term_and_year.split()[1] == year})
+			return years
+
 	def get_courses(self, soup):
 		return self.find_all['courses'](soup)
 
 	def goto_search_page(self, url_params):
 		soup = self.requester.get(self.base_url, params=self.url_params)
-
 		# create search payload (adv search)
 		params = PeoplesoftParser.hidden_params(soup)
 		params.update(self.action('adv_search'))
 		soup = self.requester.post(self.base_url, params=params)
 		params.update(PeoplesoftParser.refine_search(soup))
-		return params
+		return soup, params
 
 	def get_groups(self, soup, params):
 		return {None: None} # No groups
 
 	def group_update(self, group_id, params):
-		raise RuntimeError('fatal error in code logic')
-		# TODO - remove this and make it cleaner
+		return # Do nothing.
 
 	def term_update(self, term_code, params):
 		'''Update search page with term as parameter.'''
@@ -322,6 +344,37 @@ class PeoplesoftParser(CourseParser):
 		query['ICAction'] = '#ICSave'
 
 		return self.requester.post(self.base_url, params=query)
+
+
+class QPeoplesoftParser(PeoplesoftParser):
+	'''Queens modification, handles situation where initially selected term departments wont load.'''
+
+	def __init__(self, *args, **kwargs):
+		super(QPeoplesoftParser, self).__init__(*args, **kwargs)
+
+	def parse(self, *args, **kwargs):
+		soup, _ = self.goto_search_page(kwargs.get('url_params', {}))
+		self.intially_selected_term = self.get_selected_term(soup)
+		self.saved_dept_param_key = super(QPeoplesoftParser, self).get_dept_param_key(soup)
+		self.saved_departments = super(QPeoplesoftParser, self).get_departments(soup)
+		return super(QPeoplesoftParser, self).parse(*args, **kwargs)
+
+	@staticmethod
+	def get_selected_term(soup):
+		for term in soup.find('select', id='CLASS_SRCH_WRK2_STRM$35$').find_all('option'):
+			if term.get('selected') is not None:
+				return term.text
+
+	def get_departments(self, soup, cmd_departments):
+		if self.get_selected_term(soup) == self.intially_selected_term:
+			return self.saved_departments, None
+		return super(QPeoplesoftParser, self).get_departments(soup)
+
+	def get_dept_param_key(self, soup):
+		if self.get_selected_term(soup) == self.intially_selected_term:
+			return self.saved_dept_param_key
+		return super(QPeoplesoftParser, self).get_dept_param_key(soup)
+
 
 class UPeoplesoftParser(PeoplesoftParser):
 	'''Modifies Peoplesoft parser to accomodate different structure (umich).'''
