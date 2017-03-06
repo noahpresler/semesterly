@@ -84,7 +84,7 @@ class TextbookParser:
         while True:
             try:
                 response = self.make_request(request_type, url, params, headers, payload)
-                return eval(response.text)
+                return response.json()
                 break
             except:
                 self.retry_request(headers)
@@ -266,11 +266,11 @@ class TextbookParser:
                 if len(match) > 0:
                     isbn_number = match[0]
                     is_required = self.check_required(tb.find('span', class_="recommendBookType").get_text())
-                    self.make_textbook(is_required, isbn_number, course_code, section)
-        try:
-            print "\n"
-        except UnicodeEncodeError:
-            pass
+                    # self.make_textbook(is_required, isbn_number, course_code, section)
+        # try:
+        #     print "\n"
+        # except UnicodeEncodeError:
+        #     pass
 
     def make_textbook(self, is_required, isbn_number, course_code, section):
         try:
