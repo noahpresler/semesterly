@@ -788,7 +788,7 @@ def final_exam_scheduler(request):
 @csrf_exempt
 def log_final_exam_view(request):
   try:
-        student = Student.objects.get(user=request.user)
+      student = Student.objects.get(user=request.user)
   except:
       student = None
   FinalExamModalView.objects.create(
