@@ -17,7 +17,7 @@ def schoollist_argparser(parser):
 				setattr(namespace, self.dest, list(set(values)))
 			else:
 				# set list of schools to all schools that are parseable
-				setattr(namespace, self.dest, school_verifier_action.VALID_SCHOOLS)
+				setattr(namespace, self.dest, list(school_verifier_action.VALID_SCHOOLS))
 
 	# optional argument to specify parser for specific school
 	parser.add_argument('schools', type=str, nargs='*', action=school_verifier_action,
@@ -39,7 +39,7 @@ def progressbar_argparser(parser):
 	parser.add_argument('--hide-progress-bar', dest='hide_progress_bar', action='store_true', default=False,
 		help='flag to hide progress bar (default is visible)')
 
-def parser_argparser(parser):
+def scraper_argparser(parser):
 	parser.add_argument('--term-and-year', nargs=2, type=str,
 		help='parse for term and year - two args') 
 	parser.add_argument('--department', nargs='+',
@@ -64,17 +64,7 @@ def validate_argparser(parser):
 		help='default(scripts/[school]/data/courses.json)')
 
 def validator_argparser(parser):
-	# enforce that non-default config can only be applied to single school
-	class single_school_action(argparse.Action):
-		def __call__(self, parser, namespace, values, option_string=None):
-			if 'schools' in namespace and len(namespace.schools) > 1:
-				raise parser.error('non-default config can only apply to single school')
-	class config_file_action(argparse.Action):
-		def __call__(self, parser, namespace, values, option_string=None):
-			single_school_action('','').__call__(parser, namespace, values, option_string)
-			writable_file_action(option_string, self.dest).__call__(parser, namespace, values, option_string)
-
-	parser.add_argument('--output-error', help='(default: /scripts/[school]/logs/error_<ptype>.log)', action=writable_file_action)
+	parser.add_argument('--output-error', help='(default: /scripts/[school]/logs/error_<ptype>.log)', action=config_file_action)
 	parser.add_argument('--config-file', action=config_file_action,
 		help='load config file from this path (default: [school]/config.json)')
 	break_error = parser.add_mutually_exclusive_group()
@@ -93,8 +83,8 @@ def validator_argparser(parser):
 	duplicate.set_defaults(skip_shallow_duplicates=True)
 
 def digestor_argparser(parser):
-	parser.add_argument('school', type=str)
-	parser.add_argument('--data', action=readable_file_action,
+	# parser.add_argument('school', type=str)
+	parser.add_argument('--data', action=data_file_action,
 		help='default: (scripts/[school]/data/courses.json)')
 
 	class set_false_error_on_no_diff_no_load_action(argparse.Action):
@@ -105,7 +95,7 @@ def digestor_argparser(parser):
 			if not getattr(namespace, attr_name) and not getattr(namespace, other_attr_name):
 				raise parser.error('--no-diff and --no-load performs no action')
 
-	parser.add_argument('--output-diff', type=str, action=writable_file_action)
+	parser.add_argument('--output-diff', type=str, action=config_file_action)
 	diff = parser.add_mutually_exclusive_group()
 	diff.add_argument('--diff', dest='diff', action='store_true', 
 		help='output diff between input and django db')
@@ -118,6 +108,8 @@ def digestor_argparser(parser):
 	load.add_argument('--no-load', dest='load', nargs=0,
 		action=set_false_error_on_no_diff_no_load_action)
 	load.set_defaults(load=True)
+
+	parser.add_argument('--type', nargs='*', dest='types', default=['courses', 'textbooks', 'evals'])
 
 # Argparse hook to check for writable file within directory
 class writable_file_action(argparse.Action):
@@ -144,12 +136,19 @@ class readable_file_action(argparse.Action):
 			setattr(namespace, self.dest, prospective_file)
 		else:
 			raise parser.error('readable_file: `%s` is not a writable file' % (prospective_file) )
-
-# Setup Object for creating valid Django subparsers
-# REF: http://stackoverflow.com/questions/36706220/is-it-possible-to-create-subparsers-in-a-django-management-command
-# class SubParser(CommandParser):
-# 	def __init__(self, **kwargs):
-# 		super(SubParser, self).__init__(cmd, **kwargs)
+class single_school_action(argparse.Action):
+	def __call__(self, parser, namespace, values, option_string=None):
+		if 'schools' in namespace and len(namespace.schools) > 1:
+			raise parser.error('non-default config can only apply to single school')
+# enforce that non-default config can only be applied to single school
+class config_file_action(argparse.Action):
+	def __call__(self, parser, namespace, values, option_string=None):
+		single_school_action('','').__call__(parser, namespace, values, option_string)
+		writable_file_action(option_string, self.dest).__call__(parser, namespace, values, option_string)
+class data_file_action(argparse.Action):
+	def __call__(self, parser, namespace, values, option_string=None):
+		single_school_action('','').__call__(parser, namespace, values, option_string)
+		readable_file_action(option_string, self.dest).__call__(parser, namespace, values, option_string)
 
 # FIXME --no-validate and validator conflict without resolutoin
 # validator_sub_parser = parser.add_subparsers(title="validator", parser_class=SubParser, help='options when validating parser output')

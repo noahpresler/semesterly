@@ -29,6 +29,10 @@ class Validator:
 		self.granularity = 60
 		# TODO - report these values
 
+	def report(self):
+		pass
+		# TODO
+
 	@staticmethod
 	def load_schema_directory(directory):
 		try:
@@ -130,6 +134,11 @@ class Validator:
 			formatter = lambda stats: '{}/{}'.format(stats['valid'], stats['total'])
 			if not hide_progress_bar:
 				self.progressbar.update('validate', self.counters.dict(), formatter)
+
+		if not hide_progress_bar:
+			return self.progressbar.stats
+		else:
+			return ''
 
 	def validate_config(self, config):
 		if not isinstance(config, dict):
@@ -437,6 +446,6 @@ class Validator:
 		return a == b
 
 def main():
-	raise NotImplementedError('cannot run validator by itself yet')
+	raise NotImplementedError('usage: python manage.py validate --help')
 if __name__ == '__main__':
 	main()
