@@ -1,9 +1,9 @@
 # @what     Parsing library HTTP Requester
 # @org      Semeseter.ly
 # @author   Michael N. Miller
-# @date     11/21/16
+# @date     3/5/17
 
-import os, datetime, requests, cookielib, re, sys
+import os, datetime, requests, cookielib, re, sys, interruptingcow
 from fake_useragent import UserAgent
 from bs4 import BeautifulSoup
 
@@ -11,10 +11,59 @@ class Requester:
 
     def __init__(self):
         self.session = requests.Session()
-        self.headers = {'User-Agent' : 'UserAgent 1.0'} # UserAgent().random
+        self.headers = {'User-Agent': UserAgent().random}
         self.cookies = cookielib.CookieJar() # TODO - maybe this is not needed
 
-    def get(self, url, params=None, parse=True, quiet=True):
+    def new_user_agent(self):
+        self.headers['User-Agent'] = UserAgent().random
+
+    def overwrite_header(self, new_headers):
+        self.headers = new_headers
+
+    def http_request(self, do_http_request, type,  parse=True, quiet=True, timeout=30, throttle=(lambda: None)):
+        ''' Perform HTTP Request.
+        Args:
+            do_http_request: function that returns request object
+        Kwargs:
+            quiet (bool): suppress output if True (default True)
+            parse (bool): specifies if return should be transformed into soup (default False)
+                autodetects parse type as 'html.parser' or 'lxml'
+        Returns:
+            request object: if parse is False
+            soup: soupified/jsonified text of http request
+        '''
+        response = None
+        for i in range(10):
+            try:
+                with interruptingcow.timeout(timeout, exception=requests.exceptions.Timeout):
+                    response = do_http_request()
+            except (requests.exceptions.Timeout, requests.exceptions.ConnectionError):
+                if i > 1:
+                    sys.stderr.write('THROTTLING REQUESTER') # TODO - should not be stderr, maybe warning?
+                    throttle()
+                sys.stderr.write("Unexpected error: " + str(sys.exc_info()[0]) + '\n')
+                continue
+
+            if response is not None:
+                break
+
+            if i > 1:
+                sys.stderr.write('THROTTLING REQUESTER') # TODO - should not be stderr, maybe warning?
+                throttle()
+
+        if not quiet:
+            print type, response.url
+
+        if not parse:
+            return response
+
+        soup = Requester.markup(response)
+        if soup or soup == []:
+            return soup
+        else:
+            return response
+
+    def get(self, url, params=None, **kwargs):
         ''' HTTP GET.
 
         Args:
@@ -26,91 +75,46 @@ class Requester:
 
         Returns:
             request object: if parse is False
-            soup: soupified text of http request
+            soup: soupified/jsonified text of http request
 
         Examples:
             TODO
         '''
-        r = None
-        while r is None:
-            try:
-                r = self.session.get(
-                    url,
-                    params = params if params else '',
-                    cookies = self.cookies,
-                    headers = self.headers,
-                    verify = True
-                )
+        request = lambda: self.session.get(
+                url,
+                params = params if params else '',
+                cookies = self.cookies,
+                headers = self.headers,
+                verify = False,
+            )
 
-                if not quiet:
-                    print 'GET', r, r.url
+        return self.http_request(request, 'GET', **kwargs)
 
-            except (requests.exceptions.Timeout,
-                requests.exceptions.ConnectionError):
-                sys.stderr.write("Timeout error: (GET) " + str(sys.exc_info()[0]) + '\n')
-                # raw_input("Press Enter to try again...")
-                r = None
-
-        if not parse:
-            return r
-
-        soup = Requester.markup(r)
-        if soup or soup == []:
-            return soup
-        else:
-            return r
-
-    def post(self, url, form=None, params=None, parse=True, quiet=True):
+    def post(self, url, form=None, params=None, data=None, **kwargs):
         ''' HTTP POST.
 
         Args:
             url (str): url to query
             form (dict): HTTP form key-value dictionary (defualt None)
             params (dict): payload dictionary of HTTP params 
-            quiet (bool): suppress output if True (default True)
-            parse (bool): specifies if return should be transformed into soup (default False)
-                autodetects parse type as 'html.parser' or 'lxml'
 
         Returns:
             request object: if parse is False
-            soup: soupified text of http request
-
-        Examples:
-            TODO
+            soup: soupified/jsonified text of http request
         '''
-        r = None
-        while r is None:
-            try:
-                r = self.session.post(
-                    url,
-                    data = form if form else '', # TODO - change form to data
-                    params = params if params else '',
-                    cookies = self.cookies,
-                    headers = self.headers,
-                    verify = True,
-                )
-
-                if not quiet:
-                    print 'POST', r.url
-
-            except (requests.exceptions.Timeout,
-                requests.exceptions.ConnectionError):
-                sys.stderr.write("Unexpected error POST: " + str(sys.exc_info()[0]) + '\n')
-                # raw_input("Press Enter to try again...")
-                r = None
-
-        if not parse:
-            return r
-
-        soup = Requester.markup(r)
-        if soup or soup == []:
-            return soup
-        else:
-            return r
+        request = lambda: self.session.post(
+                url,
+                data = data if data else form if form else '', # TODO - change form to data
+                params = params if params else '',
+                cookies = self.cookies,
+                headers = self.headers,
+                verify = False,
+            )
+        return self.http_request(request, 'POST', **kwargs)
 
     @staticmethod
     def markup(response):
-        ''' Marks up response of given response. Additionally, autodects html, json, or xml format.
+        '''Autodects html, json, or xml format in response.
 
         Args:
             response: raw response object
