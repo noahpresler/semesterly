@@ -120,12 +120,12 @@ class Requester:
         '''
         if response is None:
             return None
-        soup = lambda parser: BeautifulSoup(response.text, parser)
+        soupify = lambda parser: BeautifulSoup(response.text, parser)
         try:
             return response.json()
         except ValueError:
             pass
         if "</html>"[::-1] in response.text[::-1]:
-            return soup('html.parser')
+            return soupify('html.parser')
         else:
-            return soup('lxml')
+            return soupify('lxml')
