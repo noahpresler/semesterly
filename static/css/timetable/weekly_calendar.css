@@ -91,6 +91,7 @@
 	height: 19px;
 	display: block;
 	padding-right: 5px;
+	transition: height .3s;
 }
 .dtm .fc td.fc-axis span:after {
 	content: '';
@@ -101,7 +102,62 @@
 	height: 1px;
 	width: 10px;
 	background-color: #ddd;
+	transition: top .3s;
 }
 .dtm .fc .fc-slats tr:first-child span:after {
 	top: 10px;
 }
+/* The FAKE MODAL, WOOMF MODAL */
+#calendar.seven-days.fake-modal {
+	position: fixed;
+    top: 0%;
+    bottom: 0%;
+    right: 0%;
+    left: 0%;
+    z-index: 1001;
+    background-color: rgba(0,0,0,.8);
+    overflow-y: hidden;
+}
+#calendar.seven-days.fake-modal #share-availability-header{
+	position: absolute;
+	top: 7%;
+	width: 100%;
+	background-color: #F3F3F3;
+	border-bottom: 1px solid #ddd;
+	padding: 20px 20px 10px
+}
+#calendar.seven-days.fake-modal #share-availability-header h1 {
+	margin: 0;
+    font-size: 36px;
+    color: #34495E;
+}
+#calendar.seven-days.fake-modal #share-availability-header p {
+	margin: 10px 0;
+    font-size: 16px;
+    color: #777;
+    font-weight: 400;
+    font-family: Roboto,Arial,sans-serif;
+}
+#calendar.seven-days.fake-modal #calendar-header {
+	position: absolute;
+	top: calc(7% + 117px);
+	width: 100%;
+}
+#calendar.seven-days.fake-modal #calendar-body {
+	margin: 0;
+	position: absolute;
+	top: calc(7% + 190px);
+	bottom: 7%;
+	width: 100%;
+	background-color: #fff;
+	overflow-y: auto;
+	padding: 0 20px;
+}
+#calendar.seven-days.fake-modal #calendar-body td,
+#calendar.seven-days.fake-modal #calendar-body td.fc-axis span {
+	height: 10px;
+}
+#calendar.seven-days.fake-modal #calendar-body td.fc-axis span:after {
+	top: 10px;
+}
+/* End The FAKE MODAL, WOOMF MODAL */

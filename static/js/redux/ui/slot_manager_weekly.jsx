@@ -4,7 +4,7 @@ import Slot from './slot.jsx'
 import CustomSlot from './custom_slot.jsx'
 import BusySlot from './busy_slot.jsx'
 import { index as IntervalTree, matches01 as getIntersections } from 'static-interval-tree'
-import { DAYS_SEVEN, HALF_HOUR_HEIGHT_WEEKLY, COLOUR_DATA } from '../constants.jsx';
+import { DAYS_SEVEN, HALF_HOUR_HEIGHT_WEEKLY, HALF_HOUR_HEIGHT_WEEKLY_FAKE_MODAL, COLOUR_DATA } from '../constants.jsx';
 
 class SlotManagerWeekly extends React.Component {
     constructor(props) {
@@ -12,7 +12,7 @@ class SlotManagerWeekly extends React.Component {
         this.state = {earliestHour: 23};
     }
     componentDidMount() {
-        $('#calendar').scrollTop(Math.min(8, this.state.earliestHour) * (HALF_HOUR_HEIGHT_WEEKLY + 1) * 2);
+        $('#calendar').scrollTop(Math.min(8, this.state.earliestHour) * (((this.props.isModal) ? HALF_HOUR_HEIGHT_WEEKLY_FAKE_MODAL : HALF_HOUR_HEIGHT_WEEKLY) + 1) * 2);
     }
 	render() {
         let slots_by_day = this.getSlotsByDay();

@@ -63,7 +63,7 @@ class DTMTopBar extends React.Component {
 					<img id="semesterly-logo-print" className="print" src="/static/img/logo2.0-32x32.png"/>
 				</div>
 			</div>
-			<span className="share-dtm">Share Availability</span>
+			<span className="share-dtm" onClick={this.props.launchShareAvailabilityModal}>Share Availability</span>
 			<CourseModalContainer />
 			<SocialProfileContainer />
 		    <TimetableLoaderContainer />

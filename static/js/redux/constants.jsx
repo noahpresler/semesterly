@@ -6,6 +6,7 @@ export const REQUEST_TIMETABLES = "REQUEST_TIMETABLES";
 export const RECEIVE_TIMETABLES = "RECEIVE_TIMETABLES";
 export const HALF_HOUR_HEIGHT = 25;
 export const HALF_HOUR_HEIGHT_WEEKLY = 20;
+export const HALF_HOUR_HEIGHT_WEEKLY_FAKE_MODAL = 10;
 export const MAX_TIMETABLE_NAME_LENGTH = 30; // Length of "This is my fucking timetable!!"
 export const VALID_SCHOOLS = [
   "uoft", 

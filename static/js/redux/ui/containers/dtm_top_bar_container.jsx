@@ -7,9 +7,15 @@ const mapStateToProps = (state) => {
   }
 }
 
+const mapDispatchToProps = (dispatch) => {
+  return {
+    launchShareAvailabilityModal: () => {dispatch({type: "LAUNCH_SHARE_AVAILABILITY_MODAL"})}
+  }
+}
+
 const DTMTopBarContainer = connect(
   mapStateToProps,
-  null
+  mapDispatchToProps
 )(DTMTopBar);
 
 export default DTMTopBarContainer;

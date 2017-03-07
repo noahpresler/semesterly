@@ -34,7 +34,7 @@ class WeeklyCalendar extends React.Component {
         super(props);
         this.state = {shareLinkShown: false};
         this.fetchShareTimetableLink = this.fetchShareTimetableLink.bind(this);
-        this.hideShareLink = this.hideShareLink.bind(this);
+        this.hideFakeModal = this.hideFakeModal.bind(this);
         this.getTimelineStyle = this.getTimelineStyle.bind(this);
     }
     componentWillReceiveProps(nextProps) {
@@ -69,16 +69,25 @@ class WeeklyCalendar extends React.Component {
             this.props.fetchShareTimetableLink();
         }
     }
-    hideShareLink() {
-        this.setState({shareLinkShown: false});
+    hideFakeModal() {
+        this.prop
     }
     render() {
         let calendarHeader = DAYS_SEVEN.map((d, index) =>  (
             <h4 className="fc-day-header fc-widget-header fc-fri" key={d}>
                 {DAY_ABBR[index]}<span className={(isActiveDateFromSunday(this.props.activeWeek, index) ? 'active' : '')}>{(new Date(this.props.activeWeek.getTime() + (index * 24 * 60 * 60 * 1000))).getDate()}</span>
             </h4>))
+        let shareAvailabilityHeader = (this.props.isModal) ?
+            <div id="share-availability-header">
+                <h1>Share Availability</h1>
+                <p>Share this link with a friend and they will see when you're busy.  Links expire in 30 minutes</p>
+                <span>{ this.props.shareLink }</span>
+            </div> : null
         return (
-          <div id="calendar" className="fc fc-ltr fc-unthemed week-calendar seven-days">
+          <div id="calendar" 
+            className={"fc fc-ltr fc-unthemed week-calendar seven-days" + ((this.props.isModal) ? " fake-modal" : "")}
+            onClick={this.props.hideShareAvailabilityModal}>
+            { shareAvailabilityHeader }
             <div id="calendar-header">
               <div className="fc-toolbar no-print">
                 <div className="fc-left">
