@@ -1,3 +1,8 @@
+# @what     argparse parse modification functions for manage.py.
+# @org      Semeseter.ly
+# @author   Michael N. Miller
+# @date     1/12/17
+
 # TODO - https://github.com/kislyuk/argcomplete
 
 import os, argparse

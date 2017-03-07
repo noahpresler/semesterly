@@ -10,8 +10,6 @@ from scripts.parser_library.internal_exceptions import *
 class Command(BaseCommand):
 	help = "Initiates specified parsers for specified schools. If no school is provided, starts parsers for all schools."
 	def add_arguments(self, parser):
-		cmd = self
-
 		# NOTE: already specified:
 		#       --no-color        
 		#       --verbosity
