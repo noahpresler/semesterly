@@ -151,7 +151,7 @@ class GWParser:
 					info = row.find_all('td')
 					if info[1].find('a'):
 
-						print '\t', info[2].text, info[3].text, info[4].text
+						# print '\t', info[2].text, info[3].text, info[4].text
 
 						# general info
 						self.course.update({
