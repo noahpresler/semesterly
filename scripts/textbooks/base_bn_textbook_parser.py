@@ -239,7 +239,7 @@ class BNParser(BaseParser):
 
         # Update/Create textbook.
         self.ingestor['isbn'] = isbn_number
-        self.ingestor.update(amazon_textbook_fields(isbn_number))
+        self.ingestor.update(amazon_textbook_fields(str(isbn_number)))
         self.ingestor.ingest_textbook()
 
         # Link to all course offerings.
