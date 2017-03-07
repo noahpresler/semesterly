@@ -1,5 +1,6 @@
-import sys
+import sys, re
 from scripts.parser_library.BaseParser import CourseParser
+from __future__ import print_function # NOTE: slowly move toward Python3
 
 def get_valid_time(time):
   """Take convert time to 24hr format and remove trailing am/pm."""
@@ -162,7 +163,7 @@ class UMDParser(CourseParser):
       days = day.replace('Tu', 'T').replace('Th', 'R')
       valid_days = set(["M", "T", "W", "R", "F", "S", "U"])
       for day in days:
-        if day not in valid_days:
+        if day not in valid_days or not start_time or not end_time:
           continue
         self.ingestor['day'] = day
         self.ingestor['time_start'] = get_valid_time(start_time)
