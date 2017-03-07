@@ -1,5 +1,5 @@
 import sys
-from scripts.parser_library.BaseParser import *
+from scripts.parser_library.BaseParser import CourseParser
 
 def get_valid_time(time):
   """Take convert time to 24hr format and remove trailing am/pm."""
@@ -18,8 +18,7 @@ def get_profs(profs):
   return ', '.join(map(shorten_name, list(set(profs))))
 
 def shorten_name(prof):
-  return prof[12:] if prof.startswith('Instructor: ')\
-                          else prof
+  return prof[12:] if prof.startswith('Instructor: ') else prof
 
 class UMDParser(CourseParser):
   def __init__(self, sem="Spring", year="2017", **kwargs):
