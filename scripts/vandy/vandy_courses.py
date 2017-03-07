@@ -2,6 +2,9 @@
 # @org      Semeseter.ly
 # @author   Michael N. Miller and Maxwell Yeo
 # @date	    2/5/17
+
+from __future__ import print_function # NOTE: slowly move toward Python3
+
 import sys, re
 from scripts.parser_library.BaseParser import CourseParser
 from scripts.parser_library.internal_exceptions import CourseParseError
@@ -23,7 +26,7 @@ class VandyParser(CourseParser):
 
 	def login(self):
 		if self.verbosity > 2:
-			print "Logging in..."
+			print("Logging in...")
 		login_url = 'https://login.mis.vanderbilt.edu'
 		get_login_url = login_url + '/login'
 		params = {
@@ -76,14 +79,14 @@ class VandyParser(CourseParser):
 		years_and_terms = VandyParser.filter_term_and_year(years_and_terms, year, term)
 
 		for year, semesters in years_and_terms.items():
-			if self.verbosity > 2:
-				print '>   Parsing year ' + year
+			if self.verbosity >= 1:
+				print('>   Parsing year ' + year)
 			self.ingestor['year'] = year
 
 			for semester_name, semester_code in semesters.items():
 
-				if self.verbosity > 2:
-					print '>>  Parsing semester ' + semester_name
+				if self.verbosity >= 1:
+					print('>>  Parsing semester ' + semester_name)
 				self.ingestor['semester'] = semester_name
 
 				# Load environment for targeted semester
@@ -102,8 +105,8 @@ class VandyParser(CourseParser):
 
 				for department_code in department_codes:
 
-					if self.verbosity > 2:
-						print '>>> Parsing courses in \"' + self.departments[department_code] + '\"'
+					if self.verbosity >= 1:
+						print('>>> Parsing courses in \"' + self.departments[department_code] + '\"')
 
 					# Construct payload with department code
 					payload.update({'searchCriteria.subjectAreaCodes': department_code})
@@ -166,20 +169,19 @@ class VandyParser(CourseParser):
 				# yield offering_model
 
 	def print_course(self):
-
 		for label in self.course:
 			try:
-				print label + "::" + self.course[label] + '::'
+				print(label + "::" + self.course[label] + '::')
 			except:
 				sys.stderr.write("error: UNICODE ERROR\n")
-				print sys.exc_info()[0]
+				print(sys.exc_info()[0])
 
 	def update_current_course(self, label, value):
 		try:
 			# self.course[label.encode('utf-8')] = value.encode('utf-8').strip()
 			self.course[label] = value.strip()
 		except:
-			print 'label:', label, sys.exc_info()[0]
+			print('label:', label, sys.exc_info()[0])
 			sys.stderr.write("UNICODE ERROR\n")
 
 	def extract_department_codes(self):
@@ -285,7 +287,7 @@ class VandyParser(CourseParser):
 			# Return course number to track end of course pages
 
 		except ParseException:
-			print 'invalid course, parse exception'
+			print('invalid course, parse exception')
 
 		return course_number
 
@@ -306,7 +308,7 @@ class VandyParser(CourseParser):
 
 		departmentCode, catalogID, sectionNumber = title.group(1), title.group(2), title.group(3)
 		if self.verbosity > 2:
-			print '\t-', departmentCode, catalogID, sectionNumber.strip(), '-'
+			print('\t-', departmentCode, catalogID, sectionNumber.strip(), '-')
 
 		self.update_current_course("name", courseName)
 		self.update_current_course("code", departmentCode + '-' + catalogID)

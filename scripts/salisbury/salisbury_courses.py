@@ -27,7 +27,7 @@ class SalisburyParser(PeoplesoftParser):
 		self.parse(
 			cmd_years=years,
 			cmd_terms=terms,
-			cmd_department=departments,
+			cmd_departments=departments,
 			cmd_textbooks=textbooks,
 			verbosity=verbosity)
 
