@@ -81,9 +81,11 @@ class QueensParser(QPeoplesoftParser):
 		self.driver.close()
 
 	def start(self,
-		year=None,
-		term=None,
-		department=None,
+		years=None,
+		terms=None,
+		year=None, # deprecated
+		term=None, # deprecated
+		departments=None,
 		textbooks=True,
 		verbosity=3,
 		**kwargs):
@@ -96,24 +98,11 @@ class QueensParser(QPeoplesoftParser):
 		if verbosity >= 1:
 			print 'Completed login'
 
-		# NOTE: hardcoded semesters Fall 2016, Interim, Spring 2017
-		years_and_terms = {
-			"2016": {
-				'Fall': '2169',
-			},
-			"2017": {
-				'Summer': '2175',
-				'Winter': '2171'
-			}
-		}
-
-		if term and year:
-			years_and_terms = self.filter_term_and_year(years_and_terms, year, term)
-
-		# Call Peoplesoft parse method
-		self.parse(years_and_terms,
-			department=department,
-			textbooks=textbooks,
+		self.parse(
+			cmd_years=years,
+			cmd_terms=terms,
+			cmd_departments=department,
+			cmd_textbooks=textbooks,
 			verbosity=verbosity)
 
 def main():
