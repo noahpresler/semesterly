@@ -3,7 +3,7 @@
 		"code": "salisbury", 
 		"name": "Salisbury University"
 	},
-	"course_code_regex": "(.*)",
+	"course_code_regex": "([A-Z]{3,4} \\d{3})$",
 	"terms": [
 		"Fall",
 		"Winter",
