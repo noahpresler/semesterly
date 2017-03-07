@@ -84,7 +84,9 @@ class Command(BaseCommand):
 					verbosity=options['verbosity'],
 					year=options['term_and_year'][1] if options.get('term_and_year') else None,
 					term=options['term_and_year'][0] if options.get('term_and_year') else None,
-					department=options.get('department'),
+					years=options.get('years'),
+					terms=options.get('terms'),
+					department=options.get('departments'),
 					textbooks=options['textbooks']
 				)
 				end_time = timer()
