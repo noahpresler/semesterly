@@ -15,8 +15,6 @@ class SalisburyParser(PeoplesoftParser):
 	def start(self,
 		years=None,
 		terms=None,
-		year=None, # deprecated
-		term=None, # deprecated
 		departments=None,
 		textbooks=True,
 		verbosity=3,
@@ -33,7 +31,5 @@ class SalisburyParser(PeoplesoftParser):
 			cmd_textbooks=textbooks,
 			verbosity=verbosity)
 
-def main():
-	raise NotImplementedError('run with manage.py')
 if __name__ == "__main__":
-	main()
+	raise NotImplementedError('run with manage.py')
