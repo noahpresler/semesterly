@@ -3,6 +3,8 @@
 # @author   Michael N. Miller
 # @date     1/13/17
 
+from __future__ import print_function # NOTE: slowly move toward Python3
+
 import simplejson as json, jsonschema
 from pygments import highlight, lexers, formatters, filters
 from internal_utils import *
