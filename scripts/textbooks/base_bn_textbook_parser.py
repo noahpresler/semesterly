@@ -86,7 +86,7 @@ class BNParser(BaseParser):
         **kwargs):
         if years is None:
             years = [self.year]
-        if term is None:
+        if terms is None:
             terms = [self.term]
         for year in years:
             self.year = year
@@ -119,10 +119,9 @@ class BNParser(BaseParser):
                 for course in courses:
                     sections = self.parse_sections(semester, department, course)
                     for section in sections:
-                        textbooks, go = self.get_textbooks(section.id)
-                        # if go:
-                        #     for textbook in textbooks:
-                        #         self.make_textbook(semester, department, course, section, textbook)
+                        textbooks = self.get_textbooks(section.id)
+        if self.textbook_payload.counter != self.textbook_payload.max:
+            textbooks = self.get_textbooks(section.id, True)
 
     def parse_semesters(self, is_retry=False):
         url = self.url + 'TBWizardView'
@@ -215,26 +214,6 @@ class BNParser(BaseParser):
             self.parse_semesters(True)
             return False
 
-    # def get_textbooks(self):
-    #     self.requester.headers = {
-    #         'content-type': "multipart/form-data; boundary=---011000010111000001101001",
-    #         'host': self.store_link,
-    #         'connection': "keep-alive",
-    #         'accept': "application/json, text/javascript, */*; q=0.01",
-    #         'origin': "http://{}".format(self.store_link),
-    #         'x-requested-with': "XMLHttpRequest",
-    #         'referer': "http://{}/webapp/wcs/stores/servlet/TBWizardView?catalogId=10001&langId=-1&storeId={}".format(self.store_link, self.store_id),
-    #     }
-    #     textbook_payload = self.beginging_textbook_payload
-    #     self.num_textbooks += 1
-    #     textbook_payload = self.add_textbook(section.id, textbook_payload, False)
-    #     if self.num_textbooks != self.max_textbooks:
-    #         textbook_payload = self.add_textbook(section.id, textbook_payload, True)
-# TODO ^^^^^ ENDING CASE do a force dump
-# FIXME
-# NOTE
-# hi eric :-)
-
     def parse_textbooks(self, soup):
         textbooks = soup.find_all('div', class_='book_details')
         textbook_sections = soup.find_all('div',class_="book_sec")
@@ -254,7 +233,7 @@ class BNParser(BaseParser):
                 if len(match) > 0:
                     isbn_number = match[0]
                     is_required = self.check_required(tb.find('span', class_="recommendBookType").get_text())
-                    # self.make_textbook(is_required, isbn_number, course_code, section)
+                    self.make_textbook(is_required, isbn_number, course_code, section)
 
     def make_textbook(self, is_required, isbn_number, course_code, section_code):
 
@@ -279,10 +258,10 @@ class BNParser(BaseParser):
         else:
             return False
 
-    def get_textbooks(self, section_id):
-        payload = self.textbook_payload.add_textbook(section_id)
+    def get_textbooks(self, section_id, forced=False):
+        payload = self.textbook_payload.add_textbook(section_id, forced)
         if payload is None:
-            return None, False
+            return None
 
         self.requester.headers = {
             'content-type': "multipart/form-data; boundary=---011000010111000001101001",
@@ -292,7 +271,7 @@ class BNParser(BaseParser):
         soup = self.requester.post(url, data=payload, throttle=lambda:sleep(randint(300, 500)))
         textbooks = self.parse_textbooks(soup)
 
-        return textbooks, True
+        return textbooks
 
 class TextbookPayload:
     def __init__(self, store_id):
@@ -301,7 +280,9 @@ class TextbookPayload:
         self.begining_payload = '-----011000010111000001101001\r\nContent-Disposition: form-data; name="storeId"\r\n\r\n{}'.format(store_id) + '\r\n-----011000010111000001101001\r\nContent-Disposition: form-data; name="catalogId"\r\n\r\n10001\r\n-----011000010111000001101001\r\nContent-Disposition: form-data; name="langId"\r\n\r\n-1\r\n-----011000010111000001101001\r\nContent-Disposition: form-data; name="clearAll"\r\n\r\n\r\n-----011000010111000001101001\r\nContent-Disposition: form-data; name="viewName"\r\n\r\nTBWizardView\r\n-----011000010111000001101001\r\nContent-Disposition: form-data; name="secCatList"\r\n\r\n\r\n-----011000010111000001101001\r\nContent-Disposition: form-data; name="removeSectionId"\r\n\r\n\r\n-----011000010111000001101001\r\nContent-Disposition: form-data; name="mcEnabled"\r\n\r\nN\r\n-----011000010111000001101001\r\nContent-Disposition: form-data; name="showCampus"\r\n\r\nfalse\r\n-----011000010111000001101001\r\nContent-Disposition: form-data; name="selectTerm"\r\n\r\nSelect+Term\r\n-----011000010111000001101001\r\nContent-Disposition: form-data; name="selectDepartment"\r\n\r\nSelect+Department\r\n-----011000010111000001101001\r\nContent-Disposition: form-data; name="selectSection"\r\n\r\nSelect+Section\r\n-----011000010111000001101001\r\nContent-Disposition: form-data; name="selectCourse"\r\n\r\nSelect+Course\r\n-----011000010111000001101001\r\nContent-Disposition: form-data; name="campus1"\r\n\r\n14704480\r\n-----011000010111000001101001\r\nContent-Disposition: form-data; name="firstTermName_14704480"\r\n\r\nFall+2016\r\n-----011000010111000001101001\r\nContent-Disposition: form-data; name="firstTermId_14704480"\r\n\r\n73256452\r\n-----011000010111000001101001'
         self.payload = self.begining_payload
 
-    def add_textbook(self, section_id):
+    def add_textbook(self, section_id, forced=False):
+        if forced:
+            return self.dump()
         self.counter += 1
         self.payload += '\r\nContent-Disposition: form-data; name="section_{}"\r\n\r\n{}\r\n-----011000010111000001101001'.format(str(self.counter), str(section_id))
         if self.counter >= self.max:
