@@ -13,42 +13,24 @@ class SalisburyParser(PeoplesoftParser):
 		super(SalisburyParser, self).__init__(school, url, **kwargs)
 
 	def start(self,
-		year=None,
-		term=None,
-		department=None,
+		years=None,
+		terms=None,
+		year=None, # deprecated
+		term=None, # deprecated
+		departments=None,
 		textbooks=True,
 		verbosity=3,
 		**kwargs):
 
-		years_and_terms = {
-			'2015': {
-				'Fall':   '2158',
-				'Spring': '2154',
-				'Summer': '2156',
-				'Winter': '2152'
-				''
-			},
-			'2016': {
-				'Fall':   '2168',
-				'Spring': '2164',
-				'Summer': '2166',
-				'Winter': '2162'
-			},
-			'2017': {
-				'Fall': '2178',
-				'Spring': '2174',
-				'Summer': '2176',
-				'Winter': '2172'
-			}
-		}
+		# Hotfix to narrow parsing range.
+		if years is None:
+			years = ['2016', '2017', '2018']
 
-		if term and year:
-			years_and_terms = SalisburyParser.filter_term_and_year(years_and_terms, year, term)
-
-		# Call Peoplesoft parse method
-		self.parse(years_and_terms,
-			department=department,
-			textbooks=textbooks,
+		self.parse(
+			cmd_years=years,
+			cmd_terms=terms,
+			cmd_department=departments,
+			cmd_textbooks=textbooks,
 			verbosity=verbosity)
 
 def main():
