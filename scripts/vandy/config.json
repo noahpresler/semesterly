@@ -3,7 +3,7 @@
 		"code": "vandy",
 		"name": "Vanderbilt University"
 	},
-	"course_code_regex": "([A-Z-&]{2,8}\\d{4}[W]?)$",
+	"course_code_regex": "([A-Z]{2,8}-\\d{4}[A-Z]?)$",
 	"terms": [
 		"Fall",
 		"Spring",
