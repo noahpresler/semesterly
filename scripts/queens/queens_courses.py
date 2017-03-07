@@ -83,8 +83,6 @@ class QueensParser(QPeoplesoftParser):
 	def start(self,
 		years=None,
 		terms=None,
-		year=None, # deprecated
-		term=None, # deprecated
 		departments=None,
 		textbooks=True,
 		verbosity=3,
@@ -101,7 +99,7 @@ class QueensParser(QPeoplesoftParser):
 		self.parse(
 			cmd_years=years,
 			cmd_terms=terms,
-			cmd_departments=department,
+			cmd_departments=departments,
 			cmd_textbooks=textbooks,
 			verbosity=verbosity)
 
