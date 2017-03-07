@@ -3,7 +3,7 @@
 		"code": "gw",
 		"name": "George Washington University"
 	},
-	"course_code_regex": ".*",
+	"course_code_regex": "(.*)",
 	"terms": [
 		"Fall"
 	]
