@@ -2,7 +2,10 @@
 # @org      Semeseter.parser_library
 # @author   Noah Presler
 # @date     1/24/17
-import sys, re
+
+from __future__ import print_function # NOTE: slowly move toward Python3
+
+import re
 from scripts.parser_library.BaseParser import CourseParser
 
 class HopkinsParser(CourseParser):

@@ -3,6 +3,8 @@
 # @author   Michael N. Miller
 # @date     3/5/17
 
+from __future__ import print_function # NOTE: slowly move toward Python3
+
 import os, datetime, requests, cookielib, re, sys, interruptingcow
 from fake_useragent import UserAgent
 from bs4 import BeautifulSoup
@@ -52,7 +54,7 @@ class Requester:
                 throttle()
 
         if not quiet:
-            print type, response.url
+            print(type, response.url)
 
         if not parse:
             return response
