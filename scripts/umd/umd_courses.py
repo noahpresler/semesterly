@@ -182,11 +182,12 @@ class UMDParser(CourseParser):
     if department:
       print("Error: Departments inputs are not supported.", file=sys.stderr)
     if years and terms:
-      for year, term in zip(years, terms):
+      for year, term in years:
         self.year = year
-        self.term = term
-      departments = self.get_departments()
-      self.get_courses(departments)
+        for term in terms:
+          self.term = term
+          departments = self.get_departments()
+          self.get_courses(departments)
     else:
       departments = self.get_departments()
       self.get_courses(departments)      
