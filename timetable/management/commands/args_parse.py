@@ -41,8 +41,12 @@ def progressbar_argparser(parser):
 
 def scraper_argparser(parser):
 	parser.add_argument('--term-and-year', nargs=2, type=str,
-		help='parse for term and year - two args') 
-	parser.add_argument('--department', nargs='+',
+		help='parse for term and year - two args')
+	parser.add_argument('--term', nargs='+', type=str, dest='terms',
+		help='parse for term(s)')
+	parser.add_argument('--year', nargs='+', type=str, dest='years',
+		help='parse for year(s)')
+	parser.add_argument('--department', nargs='+', type=str, dest='departments',
 		help='parse specific departments by code')
 	parser.add_argument('--course',
 		help='parse specific course code (note: unstable if invalid course code)')

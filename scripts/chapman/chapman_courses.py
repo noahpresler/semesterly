@@ -13,31 +13,20 @@ class ChapmanParser(PeoplesoftParser):
 		super(ChapmanParser, self).__init__(school, url, **kwargs)
 
 	def start(self,
-		year=None,
-		term=None,
+		years=None,
+		terms=None,
+		year=None, # deprecated
+		term=None, # deprecated
 		department=None,
 		textbooks=True,
 		verbosity=3,
 		**kwargs):
 
-		# NOTE: hardcoded semesters Fall 2016, Interim, Spring 2017
-		years_and_terms = {
-			"2016": {
-				'Fall':'2168', 
-			},
-			"2017": {
-				'Interim':'2172', 
-				'Spring':'2174'
-			}
-		}
-
-		if term and year:
-			years_and_terms = ChapmanParser.filter_term_and_year(years_and_terms, year, term)
-
-		# Call Peoplesoft parse method
-		self.parse(years_and_terms,
-			department=department,
-			textbooks=textbooks,
+		self.parse(
+			cmd_years=years,
+			cmd_terms=terms,
+			cmd_departments=department,
+			cmd_textbooks=textbooks,
 			verbosity=verbosity)
 
 def main():

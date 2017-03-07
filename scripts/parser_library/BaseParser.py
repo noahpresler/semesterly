@@ -64,17 +64,21 @@ class CourseParser(BaseParser):
 		'''Start the parse.'''
 
 	@staticmethod
-	def filter_term_and_year(years_and_terms, year, term):
-			if year is None and term is None:
+	def filter_term_and_year(years_and_terms, cmd_years=None, cmd_terms=None):
+			if cmd_years is None and cmd_terms is None:
 				return years_and_terms
-			if year not in years_and_terms:
-				raise CourseParseError('year {} not defined'.format(year))
-			if term not in years_and_terms[year]:
-				raise CourseParseError('term not defined for year {}'.format(term))
-			return {year: {term: years_and_terms[year][term]}}
+			years = cmd_years if cmd_years is not None else years_and_terms
+			for year in years:
+				if year not in years_and_terms:
+					raise CourseParseError('year {} not defined'.format(year))
+				terms = cmd_terms if cmd_terms is not None else years_and_terms[year]
+				for term in terms:
+					if term not in years_and_terms[year]:
+						raise CourseParseError('term not defined for {} {}'.format(term, year))
+			return {year: {term: years_and_terms[year][term] for term in terms} for year in years}
 
 	@staticmethod
-	def filter_departments(departments, cmd_departments):
+	def filter_departments(departments, cmd_departments=None):
 		'''Filter department dictionary to only include those departments listed in cmd_departments, if given
 		Args:
 			department: dictionary of item <dept_code, dept_name>
@@ -84,7 +88,6 @@ class CourseParser(BaseParser):
 		'''
 
 		# FIXME -- if groups exists, will only search current group
-
 		if cmd_departments is None:
 			return departments
 
