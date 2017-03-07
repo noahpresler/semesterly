@@ -3,6 +3,8 @@
 # @author	Michael N. Miller
 # @date	11/22/16
 
+from __future__ import print_function # NOTE: slowly move toward Python3
+
 import re, sys, itertools
 from abc import ABCMeta, abstractmethod
 
@@ -82,7 +84,7 @@ class PeoplesoftParser(CourseParser):
 			for term_name, term_code in terms.items():
 				self.ingestor['term'] = term_name
 				if self.verbosity >= 1:
-					print 'Parsing courses for', term_name, year
+					print('Parsing courses for', term_name, year)
 				soup = self.term_update(term_code, params)
 
 				groups = self.get_groups(soup, params)
@@ -90,7 +92,7 @@ class PeoplesoftParser(CourseParser):
 					params2 = {} # second search payload
 					if group_id is not None: # NOTE: true for umich parse
 						if self.verbosity >= 1:
-							print '> Parsing courses in group', group_name
+							print('> Parsing courses in group', group_name)
 						soup = self.group_update(group_id, params)
 						params2 = PeoplesoftParser.hidden_params(soup, ajax=True)
 					else:
@@ -107,7 +109,7 @@ class PeoplesoftParser(CourseParser):
 						self.ingestor['dept_name'] = dept_name
 						self.ingestor['dept_code'] = dept_code
 						if self.verbosity >= 1:
-							print '>> Parsing courses in department {} ({})'.format(dept_name, dept_code)
+							print('>> Parsing courses in department {} ({})'.format(dept_name, dept_code))
 
 						# Update search payload with department code
 						params2[dept_param_key] = dept_code if department_ids is None else department_ids[dept_code]
@@ -217,7 +219,7 @@ class PeoplesoftParser(CourseParser):
 
 		# Extract info from title
 		if self.verbosity >= 2:
-			print '\t' + title
+			print('\t' + title)
 
 		rtitle = re.match(r'(.+?\s*\w+) - (\w+)\s*(\S.+)', title)
 		# self.ingestor['section_type'] = PeoplesoftParser.SECTION_MAP.get(subtitle.split('|')[2].strip(), 'L')
@@ -241,7 +243,7 @@ class PeoplesoftParser(CourseParser):
 		self.ingestor['instrs']    = list(set(instructors)) # uniqueify list of instructors
 
 		self.ingestor['areas'] = [self.extractor.extract_info(self.ingestor, areas.text)] if areas else None
-			# print self.ingestor['areas']
+			# print(self.ingestor['areas'])
 		# self.ingestor['areas'] = list(self.extractor.extract_info(self.ingestor, l) for l in re.sub(r'(<.*?>)', '\n', str(areas)).splitlines() if l.strip()) if areas else '' # FIXME -- small bug
 		# if 'geneds' in self.ingestor:
 		# 	self.ingestor['areas'] = list(itertools.chain(self.ingestor['areas'], self.ingestor['geneds']))
@@ -255,7 +257,7 @@ class PeoplesoftParser(CourseParser):
 		# # create textbooks
 		# if self.textbooks:
 		# 	for isbn in isbns:
-		# 		print isbn[1], isbn[0], section
+		# 		print(isbn[1], isbn[0], section)
 		# 	map(lambda isbn: make_textbook(isbn[1], isbn[0], section['code']), isbns)
 
 		# offering details
