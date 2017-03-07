@@ -84,9 +84,10 @@ class TextbookParser:
         while True:
             try:
                 response = self.make_request(request_type, url, params, headers, payload)
-                return response.json()
+                return eval(response)
                 break
             except:
+                print(response.text)
                 self.retry_request(headers)
 
     def make_request(self, request_type, url, params, headers, payload):
@@ -145,7 +146,7 @@ class TextbookParser:
         return semesters
 
     def parse_departments(self):
-        for semester in self.semesters:
+        for semester in self.semesters[:1]:
             url = "http://" + self.store_link + "/webapp/wcs/stores/servlet/TextBookProcessDropdownsCmd"
 
             params = {"campusId":"14704480","termId":semester.id,"deptId":"","courseId":"","sectionId":"","storeId": self.store_id,"catalogId":"10001","langId":"-1","dropdown":"term"}
@@ -163,7 +164,7 @@ class TextbookParser:
 
             departments = self.eval_response("POST", url, params, headers, payload)
 
-            for dep in departments:
+            for dep in departments[:1]:
                 dep_id = dep["categoryId"]
                 dep_name = dep["categoryName"]
                 department = TextbookDepartment(dep_id, dep_name)
