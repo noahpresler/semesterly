@@ -15,8 +15,6 @@ class ChapmanParser(PeoplesoftParser):
 	def start(self,
 		years=None,
 		terms=None,
-		year=None, # deprecated
-		term=None, # deprecated
 		department=None,
 		textbooks=True,
 		verbosity=3,

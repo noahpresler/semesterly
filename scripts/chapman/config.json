@@ -6,7 +6,7 @@
 	"course_code_regex": "(\\w{1,4} \\d{1,4}\\w)$",
 	"terms": [
 		"Fall",
-		"Interim",
+		"Interterm",
 		"Spring",
 		"Summer"
 	],
