@@ -48,3 +48,4 @@ sphinxcontrib-inlinesyntaxhighlight==0.2
 simplejson==3.10.0
 jsonschema==2.5.1
 jsondiff==1.1.0
+interruptingcow==0.6
