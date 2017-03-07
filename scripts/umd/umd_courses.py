@@ -1,6 +1,6 @@
+from __future__ import print_function # NOTE: slowly move toward Python3
 import sys, re
 from scripts.parser_library.BaseParser import CourseParser
-from __future__ import print_function # NOTE: slowly move toward Python3
 
 def get_valid_time(time):
   """Take convert time to 24hr format and remove trailing am/pm."""
@@ -173,19 +173,23 @@ class UMDParser(CourseParser):
 
 
   def start(self,
-        year=None,
-        term=None,
+        years=None,
+        terms=None,
         department=None,
         textbooks=True,
         verbosity=3,
         **kwargs):
-    if year and term:
-      self.year = year
-      self.term = term
     if department:
-      print("CURRENTLY NOT SUPPORTED")
-    departments = self.get_departments()
-    self.get_courses(departments)
+      print("Error: Departments inputs are not supported.", file=sys.stderr)
+    if years and terms:
+      for year, term in zip(years, terms):
+        self.year = year
+        self.term = term
+      departments = self.get_departments()
+      self.get_courses(departments)
+    else:
+      departments = self.get_departments()
+      self.get_courses(departments)      
     self.ingestor.wrap_up()
 
 if __name__ == '__main__':
