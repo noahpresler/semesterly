@@ -3,7 +3,7 @@
 		"code": "jhu",
 		"name": "Johns Hopkins University"
 	},
-	"course_code_regex": "([A-Z]{2}\\.\\d{3}\\.\\d{3})",
+	"course_code_regex": "([A-Z]{2}\\.\\d{3}\\.\\d{3})$",
 	"terms": [
 		"Fall",
 		"Spring"

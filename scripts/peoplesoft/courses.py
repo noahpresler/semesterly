@@ -59,6 +59,7 @@ class PeoplesoftParser(CourseParser):
 		'''Start parsing courses!'''
 
 	def parse(self,
+		years_and_terms=None,
 		cmd_years=None,
 		cmd_terms=None,
 		cmd_departments=None,
@@ -73,7 +74,8 @@ class PeoplesoftParser(CourseParser):
 
 		# NOTE: umich child will do nothing and return an empty dict
 		soup, params = self.goto_search_page(self.url_params)
-		years_and_terms = self.get_years_and_terms(soup, cmd_years, cmd_terms)
+		if years_and_terms is None:
+			years_and_terms = self.get_years_and_terms(soup, cmd_years, cmd_terms)
 		for year, terms in years_and_terms.items():
 			self.ingestor['year'] = year
 
@@ -413,7 +415,7 @@ class UPeoplesoftParser(PeoplesoftParser):
 		return soup
 
 	def goto_search_page(self, url_params):
-		return {} # No search page
+		return None, {} # No search page
 
 	def get_courses(self, soup):
 		return soup.find_all('table', {'class' : 'PSLEVEL1GRIDROWNBO'})

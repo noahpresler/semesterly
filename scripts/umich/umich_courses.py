@@ -13,7 +13,7 @@ class UmichParser(UPeoplesoftParser):
 		super(UmichParser,self).__init__(school, url,
 			term_base_url='https://csprod.dsc.umich.edu/services/schedofclasses', **kwargs)
 
-	def start(self, 
+	def start(self,
 		years=None,
 		terms=None,
 		year=None, # deprecated
@@ -23,7 +23,23 @@ class UmichParser(UPeoplesoftParser):
 		verbosity=3,
 		**kwargs):
 
+		# Hardcoded years-term codes.
+		years_and_terms = {
+			'2016': {
+				'Summer': '2100',
+				'Fall': '2110',
+			},
+			'2017': {
+				'Winter': '2120',
+				'Spring': '2130',
+				'Spring/Summer': '2140',
+				'Summer': '2150',
+				'Fall': '2160',
+			}
+		}
+
 		self.parse(
+			years_and_terms=years_and_terms,
 			cmd_years=years,
 			cmd_terms=terms,
 			cmd_departments=department,
