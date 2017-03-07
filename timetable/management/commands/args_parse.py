@@ -40,8 +40,8 @@ def progressbar_argparser(parser):
 		help='flag to hide progress bar (default is visible)')
 
 def scraper_argparser(parser):
-	parser.add_argument('--term-and-year', nargs=2, type=str,
-		help='parse for term and year - two args')
+	# parser.add_argument('--term-and-year', nargs=2, type=str,
+		# help='parse for term and year - two args')
 	parser.add_argument('--term', nargs='+', type=str, dest='terms',
 		help='parse for term(s)')
 	parser.add_argument('--year', nargs='+', type=str, dest='years',
