@@ -1,3 +1,10 @@
+# @what     B&N generalized scraper.
+# @org      Semeseter.ly
+# @author   Michael N. Miller & Eric Calder
+# @date     3/6/17
+
+from __future__ import print_function # NOTE: slowly move toward Python3
+
 import os, re, requests
 from random import randint
 from fake_useragent import UserAgent
@@ -71,17 +78,21 @@ class BNParser(BaseParser):
         super(BNParser, self).__init__(school, **kwargs)
 
     def start(self,
-        year=None,
-        term=None,
-        department=None,
+        years=None,
+        terms=None,
+        departments=None,
         textbooks=True,
         verbosity=3,
         **kwargs):
-        if year:
+        if years is None:
+            years = [self.year]
+        if term is None:
+            terms = [self.term]
+        for year in years:
             self.year = year
-        if term:
-            self.term = term
-        self.parse()
+            for term in terms:
+                self.term = term
+                self.parse()
         self.ingestor.wrap_up()
 
     def parse(self):
@@ -219,22 +230,15 @@ class BNParser(BaseParser):
     #     textbook_payload = self.add_textbook(section.id, textbook_payload, False)
     #     if self.num_textbooks != self.max_textbooks:
     #         textbook_payload = self.add_textbook(section.id, textbook_payload, True)
-# TODO ^^^^^ ENDING CASE
-
-    # def add_textbook(self, section_id, textbook_payload, force_request):
-    #     if self.num_textbooks == self.max_textbooks or force_request:
-    #         textbook_url = self.url + 'BNCBTBListView'
-    #         textbook_payload += "--"
-    #         soup = self.requester.post(textbook_url, form=textbook_payload, throttle=lambda:sleep(randint(300, 500)))
-    #         self.parse_textbooks(soup)
-    #         self.num_textbooks = 0
-    #         return self.begining_textbook_payload
-    #     return textbook_payload + "\r\nContent-Disposition: form-data; name=\"section_" + str(self.num_textbooks) + "\"\r\n\r\n" + str(section_id) + "\r\n-----011000010111000001101001"
+# TODO ^^^^^ ENDING CASE do a force dump
+# FIXME
+# NOTE
+# hi eric :-)
 
     def parse_textbooks(self, soup):
         textbooks = soup.find_all('div', class_='book_details')
         textbook_sections = soup.find_all('div',class_="book_sec")
-        print "( Request #: " + str(self.book_request_count) + ") " + str(len(textbooks)) + " textbooks found."
+        print("( Request #: " + str(self.book_request_count) + ") " + str(len(textbooks)) + " textbooks found.")
         self.book_request_count += 1
         self.last_num_found = len(textbooks)
         for tbsec in textbook_sections:
@@ -282,13 +286,7 @@ class BNParser(BaseParser):
 
         self.requester.headers = {
             'content-type': "multipart/form-data; boundary=---011000010111000001101001",
-            # 'host': self.store_link,
-            # 'connection': "keep-alive",
-            # 'accept': "application/json, text/javascript, */*; q=0.01",
-            # 'origin': "http://{}".format(self.store_link),
-            # 'x-requested-with': "XMLHttpRequest",
             'User-Agent': UserAgent().random,
-            # 'referer': "http://{}/webapp/wcs/stores/servlet/TBWizardView?catalogId=10001&langId=-1&storeId={}".format(self.store_link, self.store_id),
         }
         url = self.url + 'BNCBTBListView'
         soup = self.requester.post(url, data=payload, throttle=lambda:sleep(randint(300, 500)))
