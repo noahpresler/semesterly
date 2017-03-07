@@ -41,7 +41,7 @@ class Requester:
                 if i > 1:
                     sys.stderr.write('THROTTLING REQUESTER') # TODO - should not be stderr, maybe warning?
                     throttle()
-                sys.stderr.write("Unexpected error: " + str(sys.exc_info()[0]) + '\n')
+                sys.stderr.write("Requester error: " + str(sys.exc_info()[0]) + '\n')
                 continue
 
             if response is not None:
