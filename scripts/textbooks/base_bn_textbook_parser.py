@@ -147,23 +147,7 @@ class BNParser(BaseParser):
             'User-Agent': UserAgent().random,
         }
 
-        raw_departments = self.requester.post(url, 
-            params=self.params, 
-            throttle=lambda:sleep(randint(300, 500))
-        )
-
-        departments = []
-        for department in raw_departments:
-            while True:
-                try:
-                    dep_id = department["categoryId"]
-                    dep_name = department["categoryName"]
-                    break
-                except KeyError:
-                    self.requester.session = requests.Session()
-                    self.parse_semesters(True)
-            departments.append(TextbookDepartment(dep_id, dep_name))
-        return departments
+        return self.get_objects(url, self.params)
 
     def parse_courses(self, semester, department):
         url = self.url + 'TextBookProcessDropdownsCmd'
@@ -175,23 +159,7 @@ class BNParser(BaseParser):
             'User-Agent': UserAgent().random,
         }
 
-        raw_courses = self.requester.post(url, 
-            params=self.params, 
-            throttle=lambda:sleep(randint(300, 500))
-        )
-
-        courses = []
-        for course in raw_courses:
-            while True:
-                try:
-                    c_id = course["categoryId"]
-                    c_name = course["categoryName"]
-                    break
-                except KeyError:
-                    self.requester.session = requests.Session()
-                    self.parse_semesters(True)
-            courses.append(TextbookCourse(c_id, c_name))
-        return courses
+        return self.get_objects(url, self.params)
 
     def parse_sections(self, semester, department, course):
         url = self.url + 'TextBookProcessDropdownsCmd'
@@ -203,23 +171,38 @@ class BNParser(BaseParser):
             'User-Agent': UserAgent().random,
         }
 
-        raw_sections = self.requester.post(url,
-            params=self.params,
-            throttle=lambda:sleep(randint(300, 500))
-        )
+        return self.get_objects(url, self.params)
 
-        sections = []
-        for section in raw_sections:
-            while True:
-                try:
-                    s_id = section["categoryId"]
-                    s_name = section["categoryName"]
+    def get_objects(self, url, params):
+        objs = []
+        while True:
+            raw_objs = self.requester.post(url,
+                params=params,
+                throttle=lambda:sleep(randint(300, 500))
+            )
+            objs = []
+            success = True
+            for obj in raw_objs:
+                extracted = self.extract_id_and_name(obj)
+                if extracted is False:
+                    success = False
                     break
-                except KeyError:
-                    self.requester.session = requests.Session()
-                    self.parse_semesters(True)
-            sections.append(TextbookSection(s_id, s_name))
-        return sections
+                id_, name = extracted
+                objs.append(TextbookSection(id_, name))
+            if success is True:
+                break
+        return objs
+
+    def extract_id_and_name(self, obj):
+        try:   
+            id_ = obj["categoryId"]
+            name = obj["categoryName"]
+            return id_, name
+        except KeyError:
+            self.requester.session = requests.Session()
+            self.requester.headers = {'User-Agent': UserAgent().random}
+            self.parse_semesters(True)
+            return False
 
     # def get_textbooks(self):
     #     self.requester.headers = {
@@ -323,7 +306,7 @@ class TextbookPayload:
     def add_textbook(self, section_id):
         self.counter += 1
         self.payload += '\r\nContent-Disposition: form-data; name="section_{}"\r\n\r\n{}\r\n-----011000010111000001101001'.format(str(self.counter), str(section_id))
-        if self.counter > self.max:
+        if self.counter >= self.max:
             return self.dump()
         return None
 
