@@ -78,7 +78,7 @@ class HopkinsParser(CourseParser):
         #     print SectionDetails[0]['Corequisites']
         self.ingestor['prerequisites'] = ' '.join(p['Description'] for p in SectionDetails[0]['Prerequisites']) if len(SectionDetails[0]['Prerequisites']) > 0 else ''
         self.ingestor['level'] = re.findall(re.compile(r".+?\..+?\.(.{1}).+"),course['OfferingName'])[0] + "00"
-        self.ingestor['name'] = re.sub(r' ([IiVv]+[ $])', lambda match: ' {}'.format(match.group(1).upper()), course['Title'].title()) # title and keep roman numerals uppercase
+        self.ingestor['name'] = CourseParser.titlize(course['Title'])
         self.ingestor['description'] = SectionDetails[0]['Description']
         self.ingestor['code'] = course['OfferingName'].strip()
         self.ingestor['num_credits'] = num_credits

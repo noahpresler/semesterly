@@ -17,8 +17,8 @@ school_to_granularity = {
     'vandy': 5,
     'gw':5,
     'umich': 5,
-    'umich2': 5,
-    'chapman': 5
+    'chapman': 5,
+    'salisbury': 5,
 }
 
 VALID_SCHOOLS = [
@@ -26,13 +26,13 @@ VALID_SCHOOLS = [
   "jhu", 
   "umd", 
   "uo", 
-  "rutgers", 
+  # "rutgers", 
   "queens",
   "vandy",
   "gw",
   "umich",
   "chapman",
-  "salisbury"
+  "salisbury",
 ]
 
 AM_PM_SCHOOLS = [
@@ -42,31 +42,32 @@ AM_PM_SCHOOLS = [
   "vandy",
   "gw",
   "umich",
-  "umich2",
-  "chapman"
+  "chapman",
+  "salisbury",
 ]
 
 school_code_to_name = {
-  'jhu': 'Johns Hopkins University',
-  'uoft': 'University of Toronto',
-  'umd': 'University of Maryland',
-  'rutgers': 'Rutgers University',
-  'uo': 'University of Ottawa',
-  'queens': 'Queens University',
-  'vandy': 'Vanderbilt University',
-  'gw':'George Washington University',
-  'umich': 'University of Michigan',
-  'umich2': 'University of Michigan 2!',
-  'chapman': 'Chapman University'
+  'jhu':       'Johns Hopkins University',
+  'uoft':      'University of Toronto',
+  'umd':       'University of Maryland',
+  'rutgers':   'Rutgers University',
+  'uo':        'University of Ottawa',
+  'queens':    'Queens University',
+  'vandy':     'Vanderbilt University',
+  'gw':        'George Washington University',
+  'umich':     'University of Michigan',
+  'chapman':   'Chapman University',
+  'salisbury': 'Salisbury University',
 }
 
 school_to_course_regex = {
-  'jhu': '([A-Z]{2}\.\d{3}\.\d{3})',
-  'uoft': '([A-Z]{3}[A-Z0-9]\d{2}[HY]\d)',
-  'vandy': '([A-Z-&]{2,7}\s\d{4}[W]?)',
-  'gw': '([A-Z]{2,5}\s\d{4}[W]?)',
-  'umich': '([A-Z]{2,8}\s\d{3})',
-  'chapman': '([A-Z]{2,4}\s\d{3})'
+  'jhu':       r'([A-Z]{2}\.\d{3}\.\d{3})',
+  'uoft':      r'([A-Z]{3}[A-Z0-9]\d{2}[HY]\d)',
+  'vandy':     r'([A-Z-&]{2,7}\s\d{4}[W]?)',
+  'gw':        r'([A-Z]{2,5}\s\d{4}[W]?)',
+  'umich':     r'([A-Z]{2,8}\s\d{3})',
+  'chapman':   r'([A-Z]{2,4}\s\d{3})',
+  'salisbury': r'([A-Z]{3,4} \d{2,3})',
 }
 
 # do the imports: assumes all parser follow the same naming conventions: 
@@ -77,7 +78,7 @@ for school in VALID_SCHOOLS:
     exec "from scripts.{0}.{0}_{1} import *".format(school, p_type)
 
 course_parsers = {
-  'jhu': lambda: HopkinsParser("Spring 2017").start(), # avoid calling constructor lazily
+  # 'jhu': lambda: HopkinsParser("Spring 2017").start(), # avoid calling constructor lazily
   'uoft': lambda: UofTParser().start(),
   'umd': parse_umd,
   # 'rutgers': parse_rutgers,
@@ -97,8 +98,8 @@ new_course_parsers = {
 
 new_textbook_parsers = {
   'chapman': lambda *args, **kwargs: ChapmanParser(*args, **kwargs),
-  'gw': lambda *args, **kwargs: GWTextbookParser(**kwargs),
-  'jhu': lambda *args, **kwargs: JHUTextbookParser(**kwargs)
+  'gw':      lambda *args, **kwargs: GWTextbookParser(**kwargs),
+  'jhu':     lambda *args, **kwargs: JHUTextbookParser(**kwargs)
 }
 
 eval_parsers = {
