@@ -3,6 +3,8 @@
 # @author Noah Presler & Michael N. Miller
 # @date   2/15/17
 
+from __future__ import print_function # NOTE: slowly move toward Python3
+
 import socket
 from selenium import webdriver
 from selenium.webdriver.support.ui import Select
@@ -89,12 +91,12 @@ class QueensParser(QPeoplesoftParser):
 		**kwargs):
 
 		if verbosity >= 1:
-			print 'Logging in'
+			print('Logging in')
 
 		self.login()
 
 		if verbosity >= 1:
-			print 'Completed login'
+			print('Completed login')
 
 		self.parse(
 			cmd_years=years,
@@ -103,8 +105,5 @@ class QueensParser(QPeoplesoftParser):
 			cmd_textbooks=textbooks,
 			verbosity=verbosity)
 
-def main():
-	raise NotImplementedError('run with manage.py')
-
 if __name__ == "__main__":
-	main()
+	raise NotImplementedError('run with manage.py')

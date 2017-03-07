@@ -1,7 +1,9 @@
-# @what     Parsing library - Validator
+# @what     Parsing library - Data Validator
 # @org      Semeseter.ly
 # @author   Michael N. Miller
 # @date     1/12/17
+
+from __future__ import print_function # NOTE: slowly move toward Python3
 
 import os, sys, re, jsonschema, argparse, httplib
 import simplejson as json
@@ -407,15 +409,15 @@ class Validator:
 
 	def validate_directory(self, directory):
 		if directory is None:
-			sys.stderr.write('cannot validate None directory')
-			exit(1)
+			print('cannot validate None directory', file=sys.stderr)
+			exit(1) # FIXME -- should not exit w/in Validator, throw error or remove this altogether
 		if isinstance(directory, str):
 			try:
 				name = directory
 				directory = Validator.dir_to_dict(directory)
 				directory['name'] = name
 			except IOError as e:
-				sys.stderr.write('ERROR: invalid directory path\n' + str(e))
+				print('ERROR: invalid directory path\n' + str(e), file=sys.stderr)
 				raise e
 		Validator.validate_schema(directory, *self.schema.directory)
 
