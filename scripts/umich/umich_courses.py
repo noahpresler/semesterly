@@ -14,30 +14,20 @@ class UmichParser(UPeoplesoftParser):
 			term_base_url='https://csprod.dsc.umich.edu/services/schedofclasses', **kwargs)
 
 	def start(self, 
-		year=None,
-		term=None,
+		years=None,
+		terms=None,
+		year=None, # deprecated
+		term=None, # deprecated
 		department=None,
 		textbooks=True,
 		verbosity=3,
 		**kwargs):
 
-		# NOTE: hardcoded semesters Fall, Interim, Spring 2016-2017
-		years_and_terms = {
-			"2016": {
-				'Fall':'2110', 
-			},
-			"2017": {
-				'Spring':'2120'
-			}
-		}
-
-		if term and year:
-			years_and_terms = UmichParser.filter_term_and_year(years_and_terms, year, term)
-
-		# Call Peoplesoft parse method
-		self.parse(years_and_terms,
-			department=department,
-			textbooks=textbooks,
+		self.parse(
+			cmd_years=years,
+			cmd_terms=terms,
+			cmd_departments=department,
+			cmd_textbooks=textbooks,
 			verbosity=verbosity)
 
 def main():
