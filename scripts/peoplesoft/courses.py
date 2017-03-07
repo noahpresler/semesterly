@@ -227,7 +227,7 @@ class PeoplesoftParser(CourseParser):
 
 		# Place course info into course model
 		self.ingestor['course_code']  = rtitle.group(1)
-		self.ingestor['course_name']  = rtitle.group(3)
+		self.ingestor['course_name']  = CourseParser.titlize(rtitle.group(3))
 		self.ingestor['section_code'] = rtitle.group(2)
 		self.ingestor['credits']      = float(re.match(r'(\d*).*', units).group(1))
 		self.ingestor['prereqs']      = [req.text] if req else None
