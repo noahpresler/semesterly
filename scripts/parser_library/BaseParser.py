@@ -3,7 +3,7 @@
 # @author Michael N. Miller
 # @date	  2/01/2017
 
-import os, progressbar, argparse, re
+import re, os, progressbar, argparse
 
 from abc import ABCMeta, abstractmethod
 
@@ -103,3 +103,21 @@ class CourseParser(BaseParser):
 			departments = {dept for dept in departments if dept in cmd_departments}
 
 		return departments
+
+	with open('scripts/parser_library/conjunctions.txt', 'r') as f, open('scripts/parser_library/prepositions.txt', 'r') as g:
+		LOWERCASE = set(f.read().splitlines()) | set(g.read().splitlines())
+	ROMAN_NUMERAL = re.compile(r'^[iv]+$')
+
+	@staticmethod
+	def titlize(name):
+		'''Title and keep roman numerals uppercase.'''
+		name = name.lower()
+		titled = ''
+		for word in name.split():
+			if CourseParser.ROMAN_NUMERAL.match(word) is not None:
+				titled += word.upper()
+			else:
+				titled += word.lower() if word in CourseParser.LOWERCASE else word.title()
+			titled += ' '
+		return titled.strip()
+		# re.sub(r' ([IiVv]+[ $])', lambda match: ' {}'.format(match.group(1).upper()), course['Title'].title())
