@@ -17,28 +17,24 @@ class HopkinsParser(CourseParser):
         'sa': 'S',
         's': 'U'}
 
-    def __init__(self,sem="Spring 2017",**kwargs):
+    def __init__(self, **kwargs):
         self.schools = []
-        self.semester = sem
         self.last_course = {}
-        self.department = None
         super(HopkinsParser, self).__init__('jhu',**kwargs)
 
     def get_schools(self):
-        if self.department:
-            self.schools = [{'Name': self.department}]
-        else:
-            url = HopkinsParser.API_URL + '/codes/schools?key=' + HopkinsParser.KEY
-            self.schools = self.requester.get(url=url)
+        url = HopkinsParser.API_URL + '/codes/schools?key=' + HopkinsParser.KEY
+        self.schools = self.requester.get(url)
 
     def get_courses(self,school):
-        print "Getting courses in: " + school['Name']
+        if self.verbosity >= 1:
+            print("Getting courses in: " + school['Name'])
         url = HopkinsParser.API_URL + '/' + school['Name'] + '/'+ self.semester + '?key=' + HopkinsParser.KEY
-        return self.requester.get(url=url)
+        return self.requester.get(url)
 
     def get_section(self,course):
         url = HopkinsParser.API_URL + '/' + course['OfferingName'].replace(".", "") + course['SectionName'] +'/' + self.semester + '?key=' + HopkinsParser.KEY
-        return self.requester.get(url=url)
+        return self.requester.get(url)
 
     def parse_schools(self):
         for school in self.schools:
@@ -126,21 +122,28 @@ class HopkinsParser(CourseParser):
                     created_meeting = self.ingestor.ingest_offerings(created_section)
 
     def start(self,
-        year=None,
-        term=None,
-        department=None,
+        years=None,
+        terms=None,
+        departments=None,
         textbooks=True,
         verbosity=3,
         **kwargs):
-        if year and term:
-            self.semester = term + " " + str(year)
-        if department:
-            self.department = department
-        self.get_schools()
-        self.parse_schools()
-        self.ingestor.wrap_up()
+
+        self.verbosity = verbosity
+
+        # Defualt to hardcoded current year.
+        if not years:
+            years = ['2017']
+        if not terms:
+            terms = ['Spring']
+
+        # Run parser for all semesters specified.
+        for year in years:
+            for term in terms:
+                self.semester = '{} {}'.format(term, str(year))
+                self.get_schools()
+                self.parse_schools()
+                self.ingestor.wrap_up()
 
 if __name__ == "__main__":
     raise NotImplementedError('run parsers with manage.py')
-    # parser = HopkinsParser()
-    # parser.start()
