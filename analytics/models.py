@@ -18,6 +18,10 @@ class SharedTimetable(models.Model):
     time_created = models.DateTimeField(auto_now_add=True)
     student = models.ForeignKey(Student, null=True, default=None)
 
+class SharedTimetableView(models.Model):
+    shared_timetable = models.ForeignKey(SharedTimetable)
+    time_created = models.DateTimeField(auto_now_add=True)
+
 class AnalyticsTimetable(models.Model):
     """
     A timetable that is generated everytime a user makes a change to a timetable.
