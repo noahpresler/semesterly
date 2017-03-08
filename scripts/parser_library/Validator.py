@@ -367,6 +367,7 @@ class Validator:
 				raise JsonValidationError('"%s" is not a valid time' %(time))
 			self.update_time_granularity(hour, minute)
 			if hour < 8 or hour > 20:
+				# NOTE: allows midnight times (00:00) to fly under the radar, unintended but useful hack
 				raise JsonValidationWarning('time range will not land on timetable', time_range)
 
 		# Check interaction between times
