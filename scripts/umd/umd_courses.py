@@ -194,5 +194,4 @@ class UMDParser(CourseParser):
     self.ingestor.wrap_up()
 
 if __name__ == '__main__':
-  parser = UMDParser()
-  parser.start()
+  raise NotImplementedError('run with manage.py')
