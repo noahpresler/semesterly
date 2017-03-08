@@ -61,7 +61,7 @@ export function fetchShareTimetableLink() {
 		.then(response => response.json())
 		.then(ref => {
 			receiveShareLink(store.dispatch, 
-				window.location.hostname + "/share/" + ref.link);
+				window.location.href.split("/")[2] + "/share/" + ref.link);
 		})
 
 	}
