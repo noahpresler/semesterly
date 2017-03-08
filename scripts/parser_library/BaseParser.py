@@ -13,6 +13,8 @@ from scripts.parser_library.Extractor import Extractor
 from scripts.parser_library.Updater import ProgressBar
 from scripts.parser_library.internal_exceptions import CourseParseError
 
+from scripts.parser_library.words import conjunctions_and_prepositions
+
 class BaseParser:
 	__metaclass__ = ABCMeta
 
@@ -104,8 +106,8 @@ class CourseParser(BaseParser):
 
 		return departments
 
-	with open('scripts/parser_library/conjunctions.txt', 'r') as f, open('scripts/parser_library/prepositions.txt', 'r') as g:
-		LOWERCASE = set(f.read().splitlines()) | set(g.read().splitlines())
+	# with open('scripts/parser_library/conjunctions.txt', 'r') as f, open('scripts/parser_library/prepositions.txt', 'r') as g:
+		# LOWERCASE = set(f.read().splitlines()) | set(g.read().splitlines())
 	ROMAN_NUMERAL = re.compile(r'^[iv]+$')
 
 	@staticmethod
@@ -117,7 +119,7 @@ class CourseParser(BaseParser):
 			if CourseParser.ROMAN_NUMERAL.match(word) is not None:
 				titled += word.upper()
 			else:
-				titled += word.lower() if word in CourseParser.LOWERCASE else word.title()
+				titled += word.lower() if word in conjunctions_and_prepositions else word.title()
 			titled += ' '
 		return titled.strip()
 		# re.sub(r' ([IiVv]+[ $])', lambda match: ' {}'.format(match.group(1).upper()), course['Title'].title())
