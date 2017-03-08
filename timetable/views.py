@@ -72,6 +72,10 @@ def view_timetable(request, code=None, sem=None, shared_timetable=None, find_fri
     try:
       course = Course.objects.get(school=school, code=code)
       course_json = get_detailed_course_json(school, course, sem, student)
+      SharedCourseView.objects.create(
+        student = student,
+        shared_course = course,
+      ).save()
     except:
       raise Http404
   integrations = {'integrations': []}
@@ -150,11 +154,12 @@ def enable_notifs(request):
 
 @validate_subdomain
 def share_timetable(request, ref):
+  student = get_student(request)
   try:
     timetable_id = hashids.decrypt(ref)[0]
     shared_timetable_obj = SharedTimetable.objects.get(school=request.subdomain, id=timetable_id)
     shared_timetable = convert_tt_to_dict(shared_timetable_obj, include_last_updated=False)
-    view_shared_timetable = SharedTimetableView.objects.create(shared_timetable=shared_timetable_obj)
+    view_shared_timetable = SharedTimetableView.objects.create(shared_timetable=shared_timetable_obj, student=student)
     print(view_shared_timetable)
     semester = shared_timetable['semester']
     return view_timetable(request, sem=semester, shared_timetable=shared_timetable)
