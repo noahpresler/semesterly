@@ -21,6 +21,12 @@ class SharedTimetable(models.Model):
 class SharedTimetableView(models.Model):
     shared_timetable = models.ForeignKey(SharedTimetable)
     time_created = models.DateTimeField(auto_now_add=True)
+    student = models.ForeignKey(Student, null=True, default=None)
+
+class SharedCourseView(models.Model):
+    shared_course = models.ForeignKey(Course)
+    time_created = models.DateTimeField(auto_now_add=True)
+    student = models.ForeignKey(Student, null=True, default=None)
 
 class AnalyticsTimetable(models.Model):
     """
