@@ -48,6 +48,7 @@ def view_analytics_dashboard(request):
 
         total_final_exam_views = number_timetables(Timetable=FinalExamModalView)
         unique_users_final_exam_views = number_timetables(Timetable=FinalExamModalView, distinct="student")
+        total_shared_timetable_views = number_timetables(Timetable=SharedTimetableView)
 
         return render_to_response('analytics_dashboard.html', {
                 "signups_per_hour":number_timetables_per_hour(Timetable=Student,start_delta_days=7, interval_delta_hours=24),
@@ -69,6 +70,7 @@ def view_analytics_dashboard(request):
                 "unique_users_calendar_exports":unique_users_calendar_exports,
                 "total_final_exam_views":total_final_exam_views,
                 "unique_users_final_exam_views":unique_users_final_exam_views,
+                "total_shared_timetable_views":total_shared_timetable_views,
                 "calendar_exports_by_type":json.dumps({"ics":ics_calendar_exports, "google":google_calendar_exports}),
                 "jhu_most_popular_courses":[], # needs to be refactored; was causing timeout on server because too slow
                 "uoft_most_popular_courses":[], # needs to be refactored; was causing timeout on server because too slow
