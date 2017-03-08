@@ -1,4 +1,4 @@
-from scripts.textbooks.base_bn_textbook_parser import *
+from scripts.textbooks.bn_textbook_parser import *
 
 class JHUTextbookParser(BNParser):
     def __init__(self, term="Spring", year=2017,**kwargs):
