@@ -4,6 +4,7 @@
 # @date     11/22/16
 
 import re, sys
+import dateutil.parser as dparser
 
 class Extractor():
 
@@ -16,15 +17,19 @@ class Extractor():
         Returns:
             str: 24 hr time in format hrhr:minmin
         '''
-        match = re.match("(\d*):(\d*).*?(\S)", time12.strip())
 
-        # Transform to 24 hours
-        hours = int(match.group(1))
-        if re.search(r'[pP]', match.group(3)):
-            hours = (hours%12)+12
+        time24 = dparser.parse(time12)
+        return time24.strftime('%H:%M')
 
-        # Return as 24hr-time string
-        return str(hours) + ":" + match.group(2)
+        # match = re.match("(\d*):(\d*).*?(\S)", time12.strip())
+
+        # # Transform to 24 hours
+        # hours = int(match.group(1))
+        # if re.search(r'[pP]', match.group(3)):
+        #     hours = (hours%12)+12
+
+        # # Return as 24hr-time string
+        # return str(hours) + ":" + match.group(2)
 
     def extract_info(self, course, text):
         ''' Attempts to extract info from text and put it into course object.
