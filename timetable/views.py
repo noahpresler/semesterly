@@ -152,8 +152,10 @@ def enable_notifs(request):
 def share_timetable(request, ref):
   try:
     timetable_id = hashids.decrypt(ref)[0]
-    shared_timetable = convert_tt_to_dict(SharedTimetable.objects.get(school=request.subdomain, id=timetable_id),
-                                          include_last_updated=False)
+    shared_timetable_obj = SharedTimetable.objects.get(school=request.subdomain, id=timetable_id)
+    shared_timetable = convert_tt_to_dict(shared_timetable_obj, include_last_updated=False)
+    view_shared_timetable = SharedTimetableView.objects.create(shared_timetable=shared_timetable_obj)
+    print(view_shared_timetable)
     semester = shared_timetable['semester']
     return view_timetable(request, sem=semester, shared_timetable=shared_timetable)
   except Exception as e:
@@ -788,7 +790,7 @@ def final_exam_scheduler(request):
 @csrf_exempt
 def log_final_exam_view(request):
   try:
-      student = Student.objects.get(user=request.user)
+        student = Student.objects.get(user=request.user)
   except:
       student = None
   FinalExamModalView.objects.create(
