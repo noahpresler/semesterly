@@ -40,21 +40,26 @@ class WeeklyCalendar extends React.Component {
         if (this.props.isFetchingShareLink && !nextProps.isFetchingShareLink) {
             this.setState({shareLinkShown: true});
         }
-        if (nextProps.isModal) {
-            // history.replaceState( {} , 'Semester.ly', );
-            console.log('show', this.props.shareLink)
+        if (nextProps.isModal && nextProps.shareLink) {
+            $('#main-bar, #side-bar').removeClass('less-cal').addClass('full-cal');
+            history.replaceState( {} , 'Semester.ly', nextProps.shareLink.substring(nextProps.shareLink.indexOf("/dtm/share")))
         } else {
-            history.replaceState( {} , 'Semester.ly', '/dtm');
-            console.log('hide')
+            if ($(window).width() > 999) {
+                setTimeout(function(){
+                    $('#main-bar, #side-bar').removeClass('full-cal').addClass('less-cal');
+                }, 900);   
+            }
+            history.replaceState( {} , 'Semester.ly', '/dtm')
         }
     }
     getTimelineStyle() { 
         // if ((new Date()).getHours() > this.props.endHour || (new Date()).getHours() < 8) {
         //     return {display: 'none'}
         // }
+        let slotHeight = this.props.isModal ? 5.5 : 10.5
         let diff = Math.abs(new Date() - new Date().setHours(0,0,0));
         let mins = Math.ceil((diff/1000)/60);
-        let top = mins/15.0 * 10.5;
+        let top = mins/15.0 * slotHeight;
         return {top: top, zIndex: 1};
     }
 
@@ -80,12 +85,12 @@ class WeeklyCalendar extends React.Component {
             <h4 className="fc-day-header fc-widget-header fc-fri" key={d}>
                 {DAY_ABBR[index]}<span className={(isActiveDateFromSunday(this.props.activeWeek, index) ? 'active' : '')}>{(new Date(this.props.activeWeek.getTime() + (index * 24 * 60 * 60 * 1000))).getDate()}</span>
             </h4>))
-        let shareAvailabilityHeader = (this.props.isModal) ?
-            <div id="share-availability-header" onClick={(e) => e.stopPropagation()}>
+        let shareAvailabilityHeader =
+            <div id="share-availability-header" className={(this.props.isModal) ? "mobile" : ""} onClick={(e) => e.stopPropagation()}>
                 <h1>Share Availability</h1>
                 <p>Share this link with a friend and they will see when you're busy.  Links expire in 30 minutes</p>
                 <span>{ this.props.shareLink }</span>
-            </div> : null
+            </div>
         return (
           <div id="calendar" 
             className={"fc fc-ltr fc-unthemed week-calendar seven-days" + ((this.props.isModal) ? " fake-modal" : "")}

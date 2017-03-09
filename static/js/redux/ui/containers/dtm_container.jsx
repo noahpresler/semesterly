@@ -14,12 +14,14 @@ const mapStateToProps = (state) => {
     	explorationModalIsVisible: state.explorationModal.isVisible,
 		PgCount: state.timetables.items.length,
     	PgActive: state.timetables.active,
+    	isModal: state.weeklyCalendar.isModal,
 	}
 }
 
 const mapDispatchToProps = (dispatch) => {
 	return {
 		saveTimetable: () => dispatch(saveTimetable()),
+		hideShareAvailabilityModal: () => {dispatch({type: "HIDE_SHARE_AVAILABILITY_MODAL"})},
 		setPgActive: (newActive) => {
 			dispatch( {type: "CHANGE_ACTIVE_TIMETABLE", newActive} );
 			autoSave();

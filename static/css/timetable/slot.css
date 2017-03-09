@@ -20,6 +20,9 @@
 	cursor: pointer;
 	transition: color .3s, background-color .3s, width .3s, left .3s;
 }
+.dtm .slot {
+	transition: color .3s, background-color .3s, width .3s, left .3s, top .3s;
+}
 .slot:hover {
 	color: #222;
 }

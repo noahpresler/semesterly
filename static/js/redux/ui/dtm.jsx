@@ -106,7 +106,7 @@ class DTM extends React.Component {
 		let mobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
 		let cal = mobile && $(window).width() < 767 && this.state.orientation == 'portrait' ? <DayCalendarContainer /> : <CalendarWeeklyContainer />;
 		return (
-			<div id="page-wrapper" className="dtm">
+			<div id="page-wrapper" className={ this.props.isModal ? "dtm shade" : "dtm" }>
 				<DTMTopBarContainer />
 				<UserSettingsModalContainer />
 				<SignupModalContainer />
@@ -119,6 +119,7 @@ class DTM extends React.Component {
 					</div>
 					<DTMSideBarContainer />
 				</div>
+				<div id="calendar-shade" onClick={this.props.hideShareAvailabilityModal}></div>
 			</div>);
 	}
 }

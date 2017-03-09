@@ -50,9 +50,10 @@ h3, h4, h5, h6, p, a, span, input, textarea {
 	bottom: auto;
 }
 
-#main-bar {
+#main-bar, 
+.dtm #calendar {
 	width: calc(100% - 300px);
-	float:left;
+	float: left;
 	opacity: 1;
 	visibility: visible;
 	transition: width .3s, opacity .3s, visibility .3s;
@@ -113,7 +114,7 @@ h3, h4, h5, h6, p, a, span, input, textarea {
 }
 
 #main-bar.full-cal,
-.dtm #main-bar.full-cal #calendar-header {
+.dtm .full-cal #calendar {
 	width: 100%;
 }
 #side-bar.full-cal {
@@ -123,8 +124,7 @@ h3, h4, h5, h6, p, a, span, input, textarea {
 	transform: translateX(100%);
 }
 #main-bar.less-cal,
-.dtm #main-bar #calendar-header,
-.dtm #main-bar.less-cal #calendar-header {
+.dtm .less-cal #calendar {
 	width: calc(100% - 300px);
 }
 #side-bar.less-cal {
@@ -137,8 +137,10 @@ h3, h4, h5, h6, p, a, span, input, textarea {
 
 @media (max-width: 999px) {
 	#main-bar,
-	.dtm #main-bar #calendar-header {
+	.dtm #calendar {
 		width: 100%;
+		transition: transform .3s;
+		position: fixed;
 	}
 	#side-bar {
 		position: fixed;
@@ -154,8 +156,10 @@ h3, h4, h5, h6, p, a, span, input, textarea {
 		padding: 10px;
 	}
 	#main-bar.full-cal,
-	.dtm #main-bar.full-cal #calendar-header {
+	.dtm .full-cal #calendar {
 		width: 100%;
+		transform: translateX(0%);
+		position: fixed;
 	}
 	#side-bar.full-cal {
 		-webkit-transform: translateX(0%);
@@ -164,8 +168,8 @@ h3, h4, h5, h6, p, a, span, input, textarea {
 		transform: translateX(0%);
 	}
 	#main-bar.less-cal,
-	.dtm #main-bar.less-cal #calendar-header {
-		width: 0%;
+	.dtm .less-cal #calendar {
+		transform: translateX(-100%);
 		opacity: 0;
 		visibility: visible;
 	}

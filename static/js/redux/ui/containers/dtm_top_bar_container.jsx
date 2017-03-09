@@ -1,5 +1,6 @@
 import { connect } from 'react-redux';
 import DTMTopBar from '../dtm_top_bar.jsx';
+import { fetchShareAvailabilityLink } from '../../actions/dtm_actions.jsx'
 
 const mapStateToProps = (state) => {
   return {
@@ -9,7 +10,10 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    launchShareAvailabilityModal: () => {dispatch({type: "LAUNCH_SHARE_AVAILABILITY_MODAL"})}
+    launchShareAvailabilityModal: () => {
+    	dispatch({type: "LAUNCH_SHARE_AVAILABILITY_MODAL"})
+    	dispatch(fetchShareAvailabilityLink())
+    }
   }
 }
 
