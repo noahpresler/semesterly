@@ -240,13 +240,18 @@ Requires url: /dtm/share/{hashed id}
 @validate_subdomain
 def share_availability(request, ref):
   student = get_student(request)
-  # try:
-  share = AvailabilityShare.objects.get(id=hashids.decrypt(ref)[0])
-  cal_ids = map(lambda gc: gc.calendar_id, share.google_calendars.all())
-  week_offset = int(float((share.start_day - tz.localize(datetime.datetime.today())).days) / 7 )
-  return view_dtm_root(request, share_availability=merge_free_busy(get_free_busy_from_cals(cal_ids, student, week_offset=week_offset)))
-  # except Exception as e:
-  #   raise Http404
+  try:
+    share = AvailabilityShare.objects.get(id=hashids.decrypt(ref)[0])
+    if not share.expiry and share.duration:
+      share.expiry = datetime.datetime.today() + share.duration
+      share.save()
+    elif share.expiry and share.expiry < tz.localize(datetime.datetime.today()):
+      return render(request, "expired.html")
+    cal_ids = map(lambda gc: gc.calendar_id, share.google_calendars.all())
+    week_offset = int(float((share.start_day - tz.localize(datetime.datetime.today())).days) / 7 )
+    return view_dtm_root(request, share_availability=merge_free_busy(get_free_busy_from_cals(cal_ids, student, week_offset=week_offset)))
+  except Exception as e:
+    raise Http404
 
 '''
 Returns the free busy availability from Google api
