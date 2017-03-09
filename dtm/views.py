@@ -95,7 +95,7 @@ def get_free_busy_from_cals(cal_ids, student, week_offset=0):
   start = tz.localize(last_weekday(datetime.datetime.today(), 'U')) + datetime.timedelta(weeks=week_offset, minutes=5)
   end = tz.localize(next_weekday(datetime.datetime.today(), 'S')) + datetime.timedelta(weeks=week_offset)
   body = {
-    "timeMin": start.isoformat(),
+    "timeMin": start.replace(hour=0, minute=0).isoformat(),
     "timeMax": end.replace(hour=23, minute=59).isoformat(),
     "timeZone": 'US/Central',
     "items": map(lambda cid: {"id": cid}, cal_ids)
@@ -114,12 +114,10 @@ def get_mutually_free(request):
   return HttpResponse(json.dumps(find_mutually_free(freeBusyA, freeBusyB),cls=DjangoJSONEncoder), content_type='application/json')
 
 def find_mutually_free(freeBusyA, freeBusyB, week_offset=0):
-  #merge all the calendars of the individual user's agendas togetyher
-  
-  return {}
-  
-  mergedFreeBusyA = merge_free_busy(freeBusyA)
-  mergedFreeBusyB = freeBusyB
+  rotated_days = [6,0,1,2,3,4,5]
+
+  #merge all the calendars of the individual user's agendas together
+  busy = merge_free_busy(freeBusyA, merge_in_list=freeBusyB, keep_datetime=True)
 
   busy_by_day = {}
   free_by_day = {}
@@ -127,18 +125,15 @@ def find_mutually_free(freeBusyA, freeBusyB, week_offset=0):
   for day in range(7):
     busy_by_day[day] = []
 
+  print busy
+
   #intialize busy_by_day to be the times busy seperated by day
-  print "A"
-  pprint.pprint(mergedFreeBusyA)
-  print "B"
-  pprint.pprint(mergedFreeBusyB)
-  for interval in mergedFreeBusyA + mergedFreeBusyB: 
+  for interval in busy:
     new_interval = copy.copy(interval)
-    new_interval['start'] = dateutil.parser.parse(new_interval['start']).time()
-    new_interval['end'] = dateutil.parser.parse(new_interval['end']).time()
-    busy_by_day[dateutil.parser.parse(interval['start']).weekday()].append(new_interval)
-  # print "BUSY"
-  # pprint.pprint(busy_by_day)
+    weekday = rotated_days.index(interval['start'].weekday())
+    new_interval['start'] = new_interval['start'].time()
+    new_interval['end'] = new_interval['end'].time()
+    busy_by_day[weekday].append(new_interval)
 
   #initialize each day of the week to be completely free
   for day in range(7):
@@ -149,20 +144,24 @@ def find_mutually_free(freeBusyA, freeBusyB, week_offset=0):
       for free_slot in free_by_day[day]:
         # busy starts after and ends before - split free
         if busy_slot['start'] > free_slot['start'] and busy_slot['end'] < free_slot['end']:
-          print "A"
           free_by_day[day].append({'start': free_slot['start'], 'end': busy_slot['start'] })
           free_by_day[day].append({'start': busy_slot['end'], 'end': free_slot['end'] })
           free_by_day[day].remove(free_slot)
 
-        # if busy overlaps on only one end - resize free
-        elif (busy_slot['start'] <= free_slot['start'] and busy_slot['end'] < free_slot['end']) or (busy_slot['start'] > free_slot['start'] and busy_slot['end'] >= free_slot['end']): 
-          print "B"
-          free_slot['start'] = max(busy_slot['end'],free_slot['start'])
-          free_slot['end'] = min(free_slot['end'],busy_slot['start'])
+        # if busy overlaps bottom of free
+        elif busy_slot['start'] <= free_slot['start'] < busy_slot['end'] < free_slot['end']:
+          free_by_day[day].remove(free_slot)
+          free_slot['start'] = busy_slot['end']
+          free_by_day[day].append(free_slot)
+
+        #busy overlaps top of free
+        elif free_slot['start'] < busy_slot['start'] < free_slot['end'] <= busy_slot['end']:
+          free_by_day[day].remove(free_slot)
+          free_slot['end'] = busy_slot['start']
+          free_by_day[day].append(free_slot)
 
         #if busy larger than/equal to free on both ends remove free
         elif busy_slot['start'] <= free_slot['start'] and busy_slot['end'] >= free_slot['end']:
-          print "C"
           free_by_day[day].remove(free_slot)
 
   # return reduce(lambda l,k: l + free_by_day[k] , free_by_day.keys(),[])
@@ -183,7 +182,7 @@ def merge_intervals(intervals):
 Reconstructs the free busy api call with merged intervals
 NOTE THAT this returns to the calendar called "default"
 '''
-def merge_free_busy(free_busy_body, keep_datetime=False):
+def merge_free_busy(free_busy_body, keep_datetime=False, merge_in_list=[]):
   free_busy_body = copy.deepcopy(free_busy_body)
   intervals = []
   for calid in free_busy_body['calendars']:
@@ -191,12 +190,24 @@ def merge_free_busy(free_busy_body, keep_datetime=False):
     cal = free_busy_body['calendars'][calid]
     for interval in cal['busy']:
       #convert times to python types
-      interval['start'] = dateutil.parser.parse(interval['start'])
-      interval['end'] = dateutil.parser.parse(interval['end'])
+      new_interval = {
+        'start' : dateutil.parser.parse(interval['start']),
+        'end' : dateutil.parser.parse(interval['end'])
+      }
       
       #TODO if multi day split into single day
 
-      intervals.append(interval)
+      intervals.append(new_interval)
+
+  for interval in merge_in_list:
+    new_interval = {
+      'start' : dateutil.parser.parse(interval['start']),
+      'end' : dateutil.parser.parse(interval['end'])
+    }
+
+    #TODO if multi day split into single day
+
+    intervals.append(new_interval)
 
   if len(intervals) <= 1:
     return free_busy_body
