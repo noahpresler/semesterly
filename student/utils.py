@@ -66,7 +66,6 @@ def last_weekday(d, weekday):
     weekday = DAY_LIST.index(weekday)
     today = datetime.datetime.today()
     delta =  - ((today.weekday() - weekday) % 7 )
-    print delta
     return today + datetime.timedelta(days=delta)
 
 def create_student(strategy, details, response, user, *args, **kwargs):

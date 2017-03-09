@@ -1,0 +1,81 @@
+{% load staticfiles %}
+<!DOCTYPE html>
+
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+		<meta name="description" content="Now with a new and improved UI: find courses with friends, view course reactions, and use Advanced Search to find the course that fits all your needs. Alternatively, explore new options with our recommendation engine – helping you find new and exciting courses on the fly. Not sure if the class is worthwhile? Instantly see what your peers think, alongside detailed comments from past course evaluations. Currently supporting course finding software for the Johns Hopkins University (JHU), the University of Toronto (UofT) and the University of Maryland (UMD).">
+		<meta name="author" content="Noah Presler, Rohan Das, Felix Zhu, Max Yeo, Eric Calder">
+
+		<!-- Facebook thumbnail info -->
+		<meta property="og:title" content="Share Expired | Semester.ly - Course Scheduling Made Easy" />
+		<meta property="og:type" content="website" />
+		<meta property="og:site_name" content="Semesterly" />
+		<meta property="og:url" content="http://semester.ly" />
+		<meta property="og:image" content="http://i.imgur.com/Eem4KTj.png" />
+		<meta property="og:description" content="Now with a new and improved UI: find courses with friends, view course reactions, and use Advanced Search to find the course that fits all your needs. Alternatively, explore new options with our recommendation engine – helping you find new and exciting courses on the fly. Not sure if the class is worthwhile? Instantly see what your peers think, alongside detailed comments from past course evaluations." />
+		<meta property="fb:admins" content="535129063" />
+
+		<title>Share Expired | Semester.ly: Course Scheduling, Textbooks, Social & More</title>
+		<link rel="shortcut icon" type="image/x-icon" href="{% static 'img/logo2.0-310x310.png' %}" />
+
+		<link href="https://fonts.googleapis.com/css?family=Palanquin:500|Roboto:100,300,400" rel="stylesheet" type='text/css'>
+		<link rel="stylesheet" href="{% static 'css/timetable/global.css'%}">
+		<link rel="stylesheet" href="{% static 'css/course-page.css'%}">
+		<link rel="stylesheet" href="{% static 'css/unsubscribe.css'%}">
+		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css">
+
+		 <!-- Google Analytics script -->
+	    <script>
+	      (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+	      (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+	      m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+	      })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+	      ga('create', 'UA-68704308-1', 'auto');
+	      ga('send', 'pageview');
+
+	    </script>
+	</head>
+	<body>
+		<header>
+			<div class="grid cf">
+				<a href="/">
+					<span id="logo"></span>
+					<h1>Semester.ly</h1>
+				</a>
+				<!-- <div id="social">
+					<div id="social-card">
+						<div id="social-pro-pic" style="background-image: url();"></div>
+						<h2>Max</h2>
+						<span class="tip-down"></span>
+					</div>
+					<div id="social-dropdown">
+						<div class="tip-border"></div>
+						<div class="tip"></div>
+						<a href="/user/logout">
+							<i class="fa fa-sign-out"></i>
+							<span>Sign out</span>
+						</a>
+					</div>
+					<a id="social-login" href="/login/facebook">
+						<h2>Signup/Login <i className="fa fa-facebook-square"></i></h2>
+					</a>
+				</div> -->
+			</div>
+		</header>
+		
+		<div id="error-404">
+			<div id="error-404-center">
+				<img height="250px" src="{% static 'img/email/clock.jpg' %}" />
+				<h2>Tick Tock</h2>
+				<h3>This share has expired.<br> Go back to <a href="/dtm">Semester.ly/dtm</a></h3>
+			</div>
+		</div>
+
+      	<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+      	<script type="text/javascript">(function(d,n){var s,a,p;s=document.createElement("script");s.type="text/javascript";s.async=true;s.src=(document.location.protocol==="https:"?"https:":"http:")+"//cdn.nudgespot.com"+"/nudgespot.js";a=document.getElementsByTagName("script");p=a[a.length-1];p.parentNode.insertBefore(s,p.nextSibling);window.nudgespot=n;n.init=function(t){function f(n,m){var a=m.split('.');2==a.length&&(n=n[a[0]],m=a[1]);n[m]=function(){n.push([m].concat(Array.prototype.slice.call(arguments,0)))}}n._version=0.1;n._globals=[t];n.people=n.people||[];n.params=n.params||[];m="track register unregister identify set_config people.delete people.create people.update people.create_property people.tag people.remove_Tag".split(" ");for(var i=0;i<m.length;i++)f(n,m[i])}})(document,window.nudgespot||[]);nudgespot.init("78e9e3015a898741a1284cd2cafcfb07");</script>
+		<script type="text/javascript" src="{% static 'js/splash.js'%}"></script>
+	</body>
+</html>

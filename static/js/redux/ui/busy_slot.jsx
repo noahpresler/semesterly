@@ -137,7 +137,7 @@ class BusySlot extends React.Component {
 
         let converted_start = uses12HrTime && parseInt(this.props.time_start.split(':')[0]) > 12 ? (parseInt(this.props.time_start.split(':')[0]) - 12) + ":" + ((this.props.time_start.split(':')[1] == 0) ? "00" : this.props.time_start.split(':')[1]) : this.props.time_start
         let converted_end = uses12HrTime && parseInt(this.props.time_end.split(':')[0]) > 12 ? (parseInt(this.props.time_end.split(':')[0]) - 12) + ":" + ((this.props.time_end.split(':')[1] == 0) ? "00" : this.props.time_end.split(':')[1]) : this.props.time_end
-        let time = shareAvailability && this.props.foreign ? null : <span>{ converted_start } – { converted_end }</span>;
+        let time = this.props.share && this.props.foreign ? null : <span>{ converted_start } – { converted_end }</span>;
         return this.props.connectCreateTarget(this.props.connectDragTarget(this.props.connectDragSource(
             <div className="fc-event-container">
                 <div className={"fc-time-grid-event fc-event slot"}
@@ -187,7 +187,7 @@ class BusySlot extends React.Component {
         let slot_width_percentage = total_slot_widths;
         // the amount of left margin of this particular slot, in percentage
         let push_left = 5 * this.props.depth_level;
-        let foreign_level = shareAvailability && !this.props.foreign ? 100 : 0;
+        let foreign_level = this.props.share && !this.props.foreign ? 100 : 0;
         if (push_left == 50) {
             push_left += .5;
         }
@@ -197,7 +197,7 @@ class BusySlot extends React.Component {
             width: slot_width_percentage + "%",
             left: push_left + "%",
             zIndex: foreign_level + 10 * this.props.depth_level,
-            opacity: shareAvailability && this.props.foreign ? .75 : 1
+            opacity: this.props.share && this.props.foreign ? .75 : 1
         };
     }
 }
