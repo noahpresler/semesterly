@@ -97,7 +97,9 @@ export const getUpdateCalPreferencesEndpoint = () => {
 export const getCreateAvailabilityShareEndpoint = () => {
   return "/dtm/create/share/";
 }
-
+export const getFindMutuallyFreeEndpoint = () => {
+  return "/dtm/mutually_free/";
+}
 
 export const getSchoolSpecificInfo = (school) => {
 	switch(school) {

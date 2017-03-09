@@ -1,6 +1,6 @@
 import fetch from 'isomorphic-fetch';
 import { store } from '../init.jsx';
-import { getAvailabilityEndpoint, getMergedAvailabilityEndpoint, getCreateAvailabilityShareEndpoint, getUpdateCalPreferencesEndpoint } from '../constants.jsx';
+import { getAvailabilityEndpoint, getMergedAvailabilityEndpoint, getCreateAvailabilityShareEndpoint, getUpdateCalPreferencesEndpoint, getFindMutuallyFreeEndpoint } from '../constants.jsx';
 
 export function getCookie(name) {
     var cookieValue = null;
@@ -39,6 +39,37 @@ export function fetchAvailability(weekOffset) {
 				type: "RECEIVE_AVAILABILITY",
 				availability: json
 			})
+		}).then(() => {
+				if (state.dtmCalendars.sharedAvailability) {
+					dispatch(fetchMutuallyFree());
+				}
+			}
+		)
+	}
+}
+
+export function fetchMutuallyFree() {
+	return (dispatch) => {
+		let state = store.getState();
+		let ids = state.dtmCalendars.calendars.filter(c => c.visible).map(c => c.id);
+		let myAvailability = JSON.parse(JSON.stringify(state.dtmCalendars.availability))
+		for (var key in myAvailability['calendars']) {
+		  if (myAvailability['calendars'].hasOwnProperty(key)) {
+		  	if (ids.indexOf(key) < 0) {
+		  		delete myAvailability['calendars'][key];
+		  	}
+		  }
+		}
+		fetch(getFindMutuallyFreeEndpoint(), {
+			method: 'POST',
+			headers: {
+				'X-CSRFToken': getCookie('csrftoken')
+			},
+			body: JSON.stringify({
+				A: myAvailability,
+				B: state.dtmCalendars.sharedAvailability
+			}),
+			credentials: 'same-origin',
 		})
 	}
 }

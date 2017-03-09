@@ -10,5 +10,6 @@ urlpatterns = patterns('',
 	url(r'create/share/*$', 'dtm.views.get_availability_share'),
 	url(r'share/(?P<ref>.+)/*$', 'dtm.views.share_availability'),
 	url(r'update_cal_prefs/*$', 'dtm.views.update_cal_prefs'),
+	url(r'mutually_free/*$', 'dtm.views.get_mutually_free'),
     url(r'^$', 'dtm.views.view_dtm_root'),
 )

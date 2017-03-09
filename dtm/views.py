@@ -94,15 +94,12 @@ def get_free_busy_from_cals(cal_ids, student, week_offset=0):
   if 'default' in cal_ids: cal_ids.remove('default')
   start = tz.localize(last_weekday(datetime.datetime.today(), 'U')) + datetime.timedelta(weeks=week_offset, minutes=5)
   end = tz.localize(next_weekday(datetime.datetime.today(), 'S')) + datetime.timedelta(weeks=week_offset)
-  print "START", start
-  print "END", end
   body = {
     "timeMin": start.isoformat(),
     "timeMax": end.replace(hour=23, minute=59).isoformat(),
     "timeZone": 'US/Central',
     "items": map(lambda cid: {"id": cid}, cal_ids)
   }
-  print body
   credentials = get_google_credentials(student)
   http = credentials.authorize(httplib2.Http(timeout=100000000))
   service = discovery.build('calendar', 'v3', http=http)
@@ -110,53 +107,66 @@ def get_free_busy_from_cals(cal_ids, student, week_offset=0):
   return result
 
 
+@csrf_exempt
+def get_mutually_free(request):
+  body = json.loads(request.body)
+  freeBusyA, freeBusyB = body['A'], body['B']
+  return HttpResponse(json.dumps(find_mutually_free(freeBusyA, freeBusyB),cls=DjangoJSONEncoder), content_type='application/json')
+
 def find_mutually_free(freeBusyA, freeBusyB, week_offset=0):
   #merge all the calendars of the individual user's agendas togetyher
+  
+  return {}
+  
   mergedFreeBusyA = merge_free_busy(freeBusyA)
-  mergedFreeBusyB = merge_free_busy(freeBusyB)
+  mergedFreeBusyB = freeBusyB
 
-  #merging the two user's merged availability together
-  freeBusy = {
-    'calendars': {
-      'default': {
-        'busy' : mergedFreeBusyA + mergedFreeBusyB
-      }
-    }
-  }
-  busy = merge_free_busy(freeBusy, keep_datetime=True)
   busy_by_day = {}
   free_by_day = {}
 
+  for day in range(7):
+    busy_by_day[day] = []
+
   #intialize busy_by_day to be the times busy seperated by day
-  for interval in busy: 
-    if interval.start.weekday() not in busy_by_day:
-      busy_by_day[interval.start.weekday()] = []
-    busy_by_day.append(interval)
+  print "A"
+  pprint.pprint(mergedFreeBusyA)
+  print "B"
+  pprint.pprint(mergedFreeBusyB)
+  for interval in mergedFreeBusyA + mergedFreeBusyB: 
+    new_interval = copy.copy(interval)
+    new_interval['start'] = dateutil.parser.parse(new_interval['start']).time()
+    new_interval['end'] = dateutil.parser.parse(new_interval['end']).time()
+    busy_by_day[dateutil.parser.parse(interval['start']).weekday()].append(new_interval)
+  # print "BUSY"
+  # pprint.pprint(busy_by_day)
 
   #initialize each day of the week to be completely free
   for day in range(7):
-    free_by_day[day] = {'start':datetime.time(0,00) ,'end': datetime.time(23,59)}
+    free_by_day[day] = [{'start':datetime.time(0,00) ,'end': datetime.time(23,59)}]
 
   for day in range(7):
     for busy_slot in busy_by_day[day]:
       for free_slot in free_by_day[day]:
         # busy starts after and ends before - split free
-        if busy_slot.start > free_slot.start and busy_slot.end < free_slot.end:
-          free_by_day[day].append({'start': free_slot.start, 'end': busy_slot.start })
-          free_by_day[day].append({'start': busy_slot.end, 'end': free_slot.end })
+        if busy_slot['start'] > free_slot['start'] and busy_slot['end'] < free_slot['end']:
+          print "A"
+          free_by_day[day].append({'start': free_slot['start'], 'end': busy_slot['start'] })
+          free_by_day[day].append({'start': busy_slot['end'], 'end': free_slot['end'] })
           free_by_day[day].remove(free_slot)
 
         # if busy overlaps on only one end - resize free
-        elif (busy_slot.start <= free_slot.start and busy_slot.end < free_slot.end) or (busy_slot.start > free_slot.start and busy_slot.end >= free_slot.end): 
+        elif (busy_slot['start'] <= free_slot['start'] and busy_slot['end'] < free_slot['end']) or (busy_slot['start'] > free_slot['start'] and busy_slot['end'] >= free_slot['end']): 
+          print "B"
           free_slot['start'] = max(busy_slot['end'],free_slot['start'])
           free_slot['end'] = min(free_slot['end'],busy_slot['start'])
 
         #if busy larger than/equal to free on both ends remove free
-        elif busy_slot.start <= free_slot.start and busy_slot.end >= free_slot.end:
+        elif busy_slot['start'] <= free_slot['start'] and busy_slot['end'] >= free_slot['end']:
+          print "C"
           free_by_day[day].remove(free_slot)
 
-  return reduce(lambda l,k: l + free_by_day[k] , free_by_day.keys(),[])
-
+  # return reduce(lambda l,k: l + free_by_day[k] , free_by_day.keys(),[])
+  return free_by_day
 
 def merge_intervals(intervals):
   intervals.sort(key=lambda x: x['start'])
@@ -240,18 +250,18 @@ Requires url: /dtm/share/{hashed id}
 @validate_subdomain
 def share_availability(request, ref):
   student = get_student(request)
-  try:
-    share = AvailabilityShare.objects.get(id=hashids.decrypt(ref)[0])
-    if not share.expiry and share.duration:
-      share.expiry = datetime.datetime.today() + share.duration
-      share.save()
-    elif share.expiry and share.expiry < tz.localize(datetime.datetime.today()):
-      return render(request, "expired.html")
-    cal_ids = map(lambda gc: gc.calendar_id, share.google_calendars.all())
-    week_offset = int(float((share.start_day - tz.localize(datetime.datetime.today())).days) / 7 )
-    return view_dtm_root(request, share_availability=merge_free_busy(get_free_busy_from_cals(cal_ids, student, week_offset=week_offset)))
-  except Exception as e:
-    raise Http404
+  # try:
+  share = AvailabilityShare.objects.get(id=hashids.decrypt(ref)[0])
+  if not share.expiry and share.duration:
+    share.expiry = datetime.datetime.today() + share.duration
+    share.save()
+  elif share.expiry and share.expiry < tz.localize(datetime.datetime.today()):
+    return render(request, "expired.html")
+  cal_ids = map(lambda gc: gc.calendar_id, share.google_calendars.all())
+  week_offset = int(float((share.start_day - tz.localize(datetime.datetime.today())).days) / 7 )
+  return view_dtm_root(request, share_availability=merge_free_busy(get_free_busy_from_cals(cal_ids, student, week_offset=week_offset)))
+  # except Exception as e:
+  #   raise Http404
 
 '''
 Returns the free busy availability from Google api

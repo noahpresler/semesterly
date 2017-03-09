@@ -26,7 +26,6 @@ export const getSemester = () => {
 // setup the state. loads the user's timetables if logged in; cached timetable if not.
 // also handles sharing courses and sharing timetables
 function setup(dispatch) {
-
   dispatch({
     type: "SET_SCHOOL",
     school // comes from timetable.html
@@ -45,12 +44,14 @@ function setup(dispatch) {
       type: "RECEIVE_GOOGLE_CALENDARS",
       calendars: calendarList, 
     });
-    shareAvailability = JSON.parse(shareAvailability);
+    if (shareAvailability) {
+      let share = JSON.parse(shareAvailability);
+      dispatch({
+        type: "RECEIVE_SHARED_AVAILABILITY",
+        shareAvailability: share
+      });
+    }
     dispatch(fetchAvailability());
-    dispatch({
-      type: "RECEIVE_SHARED_AVAILABILITY",
-      shareAvailability
-    })
   } else {
     sharedTimetable = JSON.parse(sharedTimetable);
     sharedCourse = JSON.parse(sharedCourse);

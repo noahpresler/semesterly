@@ -109,6 +109,7 @@ class SlotManagerWeekly extends React.Component {
             let busy_slot = this.props.sharedAvailabilityRanges[i];
             busy_slot['key'] = 'shared' + i;
             busy_slot['busy'] = true;
+            busy_slot['share'] = true;
             busy_slot['foreign'] = true;
             let start = new Date(busy_slot.start)
             let end = new Date(busy_slot.end)
@@ -131,6 +132,7 @@ class SlotManagerWeekly extends React.Component {
                     busy_slot['key'] = cal + i;
                     busy_slot['busy'] = true;
                     busy_slot['foreign'] = false;
+                    busy_slot['share'] = Object.keys(this.props.sharedAvailabilityRanges.length).length > 0;
                     let start = new Date(busy_slot.start)
                     let end = new Date(busy_slot.end)
                     busy_slot['time_start'] = start.getHours() + ":" + start.getMinutes();
