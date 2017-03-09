@@ -27,6 +27,7 @@ const mapStateToProps = (state,ownProps) => {
 		primaryDisplayAttribute: getSchoolSpecificInfo(state.school.school).primaryDisplay,
 		courseToColourIndex: state.ui.courseToColourIndex,
 		custom: state.customSlots,
+		isModal: state.weeklyCalendar.isModal,
 		availabilityRanges: state.dtmCalendars.availability,
 		sharedAvailabilityRanges: state.dtmCalendars.sharedAvailability ? state.dtmCalendars.sharedAvailability : [],
 		visibleCalendars: state.dtmCalendars.calendars.filter(c => c.visible).map(c => c.id),

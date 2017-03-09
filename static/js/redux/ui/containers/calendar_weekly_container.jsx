@@ -42,7 +42,8 @@ const mapStateToProps = (state) => {
 	let timetables = state.timetables.items;
 	let active = state.timetables.active;
 	let hasTimetables = timetables[active].courses.length > 0;
-  let { isFetchingShareLink, shareLink, shareLinkValid } = state.calendar;
+  // let { isFetchingShareLink, shareLink, shareLinkValid } = state.calendar;
+  let { isFetchingShareLink, shareLink, shareLinkValid } = state.dtmShare;
 	return {
       activeWeek: state.weeklyCalendar.activeWeek,
       activeWeekOffset: state.weeklyCalendar.activeWeekOffset,
@@ -50,6 +51,7 @@ const mapStateToProps = (state) => {
       saving: state.savingTimetable.saving,
       dataLastUpdated: state.school.dataLastUpdated,
       isLoggedIn: state.userInfo.data.isLoggedIn,
+      isModal: state.weeklyCalendar.isModal,
       hasTimetables,
       isFetchingShareLink,
       shareLink,
@@ -64,6 +66,7 @@ const mapDispatchToProps = (dispatch) => {
     togglePreferenceModal: () => dispatch({ type: 'TOGGLE_PREFERENCE_MODAL' }),
     addTTtoGCal: () => dispatch(addTTtoGCal()),
     toggleSaveCalendarModal: () => {dispatch({type: "TRIGGER_SAVE_CALENDAR_MODAL"})},
+    hideShareAvailabilityModal: () => {dispatch({type: "HIDE_SHARE_AVAILABILITY_MODAL"})},
     createiCalfromTimetable,
     handleCreateNewTimetable,
   }

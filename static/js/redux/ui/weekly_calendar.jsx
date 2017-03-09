@@ -34,12 +34,18 @@ class WeeklyCalendar extends React.Component {
         super(props);
         this.state = {shareLinkShown: false};
         this.fetchShareTimetableLink = this.fetchShareTimetableLink.bind(this);
-        this.hideShareLink = this.hideShareLink.bind(this);
         this.getTimelineStyle = this.getTimelineStyle.bind(this);
     }
     componentWillReceiveProps(nextProps) {
         if (this.props.isFetchingShareLink && !nextProps.isFetchingShareLink) {
             this.setState({shareLinkShown: true});
+        }
+        if (nextProps.isModal) {
+            // history.replaceState( {} , 'Semester.ly', );
+            console.log('show', this.props.shareLink)
+        } else {
+            history.replaceState( {} , 'Semester.ly', '/dtm');
+            console.log('hide')
         }
     }
     getTimelineStyle() { 
@@ -69,17 +75,23 @@ class WeeklyCalendar extends React.Component {
             this.props.fetchShareTimetableLink();
         }
     }
-    hideShareLink() {
-        this.setState({shareLinkShown: false});
-    }
     render() {
         let calendarHeader = DAYS_SEVEN.map((d, index) =>  (
             <h4 className="fc-day-header fc-widget-header fc-fri" key={d}>
                 {DAY_ABBR[index]}<span className={(isActiveDateFromSunday(this.props.activeWeek, index) ? 'active' : '')}>{(new Date(this.props.activeWeek.getTime() + (index * 24 * 60 * 60 * 1000))).getDate()}</span>
             </h4>))
+        let shareAvailabilityHeader = (this.props.isModal) ?
+            <div id="share-availability-header" onClick={(e) => e.stopPropagation()}>
+                <h1>Share Availability</h1>
+                <p>Share this link with a friend and they will see when you're busy.  Links expire in 30 minutes</p>
+                <span>{ this.props.shareLink }</span>
+            </div> : null
         return (
-          <div id="calendar" className="fc fc-ltr fc-unthemed week-calendar seven-days">
-            <div id="calendar-header">
+          <div id="calendar" 
+            className={"fc fc-ltr fc-unthemed week-calendar seven-days" + ((this.props.isModal) ? " fake-modal" : "")}
+            onClick={this.props.hideShareAvailabilityModal}>
+            { shareAvailabilityHeader }
+            <div id="calendar-header" onClick={(e) => e.stopPropagation()}>
               <div className="fc-toolbar no-print">
                 <div className="fc-left">
                   <h2>{ MONTHS[this.props.activeWeek.getMonth()] } <span>{this.props.activeWeek.getFullYear()}</span></h2>
@@ -95,7 +107,7 @@ class WeeklyCalendar extends React.Component {
                 { calendarHeader }
               </div>
             </div>
-            <div id="calendar-body" className="fc-view-container">
+            <div id="calendar-body" className="fc-view-container" onClick={(e) => e.stopPropagation()}>
               <div className="fc-view fc-settimana-view fc-agenda-view">
                 <table>
                   <tbody className="fc-body">

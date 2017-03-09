@@ -4,7 +4,7 @@ import Slot from './slot.jsx'
 import CustomSlot from './custom_slot.jsx'
 import BusySlot from './busy_slot.jsx'
 import { index as IntervalTree, matches01 as getIntersections } from 'static-interval-tree'
-import { DAYS_SEVEN, HALF_HOUR_HEIGHT_WEEKLY, COLOUR_DATA } from '../constants.jsx';
+import { DAYS_SEVEN, HALF_HOUR_HEIGHT_WEEKLY, HALF_HOUR_HEIGHT_WEEKLY_FAKE_MODAL, COLOUR_DATA } from '../constants.jsx';
 
 class SlotManagerWeekly extends React.Component {
     constructor(props) {
@@ -12,7 +12,7 @@ class SlotManagerWeekly extends React.Component {
         this.state = {earliestHour: 23};
     }
     componentDidMount() {
-        $('#calendar').scrollTop(Math.min(8, this.state.earliestHour) * (HALF_HOUR_HEIGHT_WEEKLY + 1) * 2);
+        $('#calendar').scrollTop(Math.min(8, this.state.earliestHour) * (((this.props.isModal) ? HALF_HOUR_HEIGHT_WEEKLY_FAKE_MODAL : HALF_HOUR_HEIGHT_WEEKLY) + 1) * 2);
     }
 	render() {
         let slots_by_day = this.getSlotsByDay();
@@ -28,6 +28,7 @@ class SlotManagerWeekly extends React.Component {
                 if (slot.custom) {
                     return <CustomSlot {...slot}
                             key={ i.toString() + j.toString() + " custom" }
+                            isModal = { this.props.isModal }
                             removeCustomSlot={ () => this.props.removeCustomSlot(slot.id) }
                             updateCustomSlot={ this.props.updateCustomSlot } 
                             addCustomSlot={ this.props.addCustomSlot } />;
@@ -35,6 +36,7 @@ class SlotManagerWeekly extends React.Component {
                     return <BusySlot {...slot}
                         key={ i.toString() + j.toString() + " custom" }
                         color={ slot.color }
+                        isModal = { this.props.isModal }
                         removeCustomSlot={ () => this.props.removeCustomSlot(slot.id) }
                         updateCustomSlot={ this.props.updateCustomSlot } 
                         addCustomSlot={ this.props.addCustomSlot } />;
@@ -43,6 +45,7 @@ class SlotManagerWeekly extends React.Component {
                             fetchCourseInfo={ () => this.props.fetchCourseInfo(courseId) }
                             key={ slot.fake ? -slot.id : slot.id + i.toString() + j.toString()}
                             locked={ locked }
+                            isModal = { this.props.isModal }
                             classmates={this.props.socialSections ? this.props.classmates(courseId, slot.meeting_section) : []}
                             lockOrUnlockSection={ () => this.props.addOrRemoveCourse(courseId, slot.meeting_section) }
                             removeCourse={ () =>  !isOptional ? (this.props.addOrRemoveCourse(courseId)) : (this.props.addOrRemoveOptionalCourse(optionalCourse)) }
