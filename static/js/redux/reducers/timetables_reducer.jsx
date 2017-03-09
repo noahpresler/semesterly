@@ -1,7 +1,7 @@
 import update from 'react/lib/update';
 import { saveLocalActiveIndex } from '../util.jsx';
 
-let initialState = { isFetching: false, items: [{courses: [], has_conflict: false}], active: 0, loadingCachedTT: true};
+let initialState = { isFetching: false, items: [{courses: [], has_conflict: false}], active: 0, loadingCachedTT: true, lastCourseAdded: null};
 
 export const timetables = (state = initialState, action) => {
 
@@ -118,6 +118,9 @@ export const timetables = (state = initialState, action) => {
 
 		case 'ALERT_CONFLICT':
 			return Object.assign({}, state, { isFetching: false });
+
+		case 'UPDATE_LAST_COURSE_ADDED':
+			return Object.assign({}, state, {lastCourseAdded: action.course});
 
 		default:
 			return state;
