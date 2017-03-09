@@ -28,6 +28,7 @@ class SlotManagerWeekly extends React.Component {
                 if (slot.custom) {
                     return <CustomSlot {...slot}
                             key={ i.toString() + j.toString() + " custom" }
+                            isModal = { this.props.isModal }
                             removeCustomSlot={ () => this.props.removeCustomSlot(slot.id) }
                             updateCustomSlot={ this.props.updateCustomSlot } 
                             addCustomSlot={ this.props.addCustomSlot } />;
@@ -35,6 +36,7 @@ class SlotManagerWeekly extends React.Component {
                     return <BusySlot {...slot}
                         key={ i.toString() + j.toString() + " custom" }
                         color={ slot.color }
+                        isModal = { this.props.isModal }
                         removeCustomSlot={ () => this.props.removeCustomSlot(slot.id) }
                         updateCustomSlot={ this.props.updateCustomSlot } 
                         addCustomSlot={ this.props.addCustomSlot } />;
@@ -43,6 +45,7 @@ class SlotManagerWeekly extends React.Component {
                             fetchCourseInfo={ () => this.props.fetchCourseInfo(courseId) }
                             key={ slot.fake ? -slot.id : slot.id + i.toString() + j.toString()}
                             locked={ locked }
+                            isModal = { this.props.isModal }
                             classmates={this.props.socialSections ? this.props.classmates(courseId, slot.meeting_section) : []}
                             lockOrUnlockSection={ () => this.props.addOrRemoveCourse(courseId, slot.meeting_section) }
                             removeCourse={ () =>  !isOptional ? (this.props.addOrRemoveCourse(courseId)) : (this.props.addOrRemoveOptionalCourse(optionalCourse)) }

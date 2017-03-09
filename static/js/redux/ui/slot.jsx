@@ -1,7 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom'
 import { DropTarget } from 'react-dnd'
-import { HALF_HOUR_HEIGHT, COLOUR_DATA, DRAGTYPES, HALF_HOUR_HEIGHT_WEEKLY } from '../constants.jsx';
+import { HALF_HOUR_HEIGHT, COLOUR_DATA, DRAGTYPES, HALF_HOUR_HEIGHT_WEEKLY, HALF_HOUR_HEIGHT_WEEKLY_FAKE_MODAL } from '../constants.jsx';
 import Radium, { StyleRoot } from 'radium';
 
 function convertToHalfHours(str) {
@@ -204,8 +204,9 @@ class Slot extends React.Component {
             end_minute   = parseInt(this.props.time_end.split(":")[1]),
             hour_offset  = isPoll ? 0 : 8;
 
-        let top = (start_hour - hour_offset)*(((isPoll) ? HALF_HOUR_HEIGHT_WEEKLY : HALF_HOUR_HEIGHT)*2 + 2) + (start_minute)*(((isPoll) ? HALF_HOUR_HEIGHT_WEEKLY : HALF_HOUR_HEIGHT)/30);
-        let bottom = (end_hour - hour_offset)*(((isPoll) ? HALF_HOUR_HEIGHT_WEEKLY : HALF_HOUR_HEIGHT)*2 + 2) + (end_minute)*(((isPoll) ? HALF_HOUR_HEIGHT_WEEKLY : HALF_HOUR_HEIGHT)/30) - 1;
+        let slotHeight = this.props.isModal ? HALF_HOUR_HEIGHT_WEEKLY_FAKE_MODAL : HALF_HOUR_HEIGHT_WEEKLY
+        let top = (start_hour - hour_offset)*(((isPoll) ? slotHeight : HALF_HOUR_HEIGHT)*2 + 2) + (start_minute)*(((isPoll) ? slotHeight : HALF_HOUR_HEIGHT)/30);
+        let bottom = (end_hour - hour_offset)*(((isPoll) ? slotHeight : HALF_HOUR_HEIGHT)*2 + 2) + (end_minute)*(((isPoll) ? slotHeight : HALF_HOUR_HEIGHT)/30) - 1;
         let height = bottom - top - 2;
         // the cumulative width of this slot and all of the slots it is conflicting with
         let total_slot_widths = 100 - (5 * this.props.depth_level);

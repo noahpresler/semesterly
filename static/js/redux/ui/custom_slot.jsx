@@ -1,6 +1,6 @@
 import React, { PropTypes } from 'react';
 import { DragSource, DropTarget } from 'react-dnd'
-import { HALF_HOUR_HEIGHT, DRAGTYPES } from '../constants.jsx';
+import { HALF_HOUR_HEIGHT, HALF_HOUR_HEIGHT_WEEKLY_FAKE_MODAL, DRAGTYPES } from '../constants.jsx';
 
 
 function convertToHalfHours(str) {
@@ -175,8 +175,9 @@ class CustomSlot extends React.Component {
             end_hour     = parseInt(this.props.time_end.split(":")[0]),
             end_minute   = parseInt(this.props.time_end.split(":")[1]);
 
-        let top = (start_hour - 8)*(HALF_HOUR_HEIGHT*2 + 2) + (start_minute)*(HALF_HOUR_HEIGHT/30);
-        let bottom = (end_hour - 8)*(HALF_HOUR_HEIGHT*2 + 2) + (end_minute)*(HALF_HOUR_HEIGHT/30) - 1;
+        let slotHeight = this.props.isModal ? HALF_HOUR_HEIGHT_WEEKLY_FAKE_MODAL : HALF_HOUR_HEIGHT_WEEKLY
+        let top = (start_hour - 8)*(slotHeight*2 + 2) + (start_minute)*(slotHeight/30);
+        let bottom = (end_hour - 8)*(slotHeight*2 + 2) + (end_minute)*(slotHeight/30) - 1;
         let height = bottom - top - 2;
         if (this.props.preview) { // don't take into account conflicts, reduce opacity, increase z-index
             return {
