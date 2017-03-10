@@ -108,47 +108,70 @@ class SlotManagerWeekly extends React.Component {
             custom_slot['key'] = custom_slot.id;
             slots_by_day[custom_slot.day].push(custom_slot)
         }
-        for (let i in this.props.sharedAvailabilityRanges){
-            let busy_slot = this.props.sharedAvailabilityRanges[i];
-            busy_slot['key'] = 'shared' + i;
-            busy_slot['busy'] = true;
-            busy_slot['share'] = true;
-            busy_slot['foreign'] = true;
-            let start = new Date(busy_slot.start)
-            let end = new Date(busy_slot.end)
-            busy_slot['time_start'] = start.getHours() + ":" + start.getMinutes();
-            busy_slot['time_end'] = end.getHours() + ":" + end.getMinutes();
-            if (start.toDateString() !== end.toDateString()) {
-                //TOOD(noah) - handle multi day events
-                busy_slot['time_end'] = "24:00"
+        if (this.props.mergedAvailabilityRanges) {
+            for (let i in this.props.mergedAvailabilityRanges){
+                let busy_slot = this.props.mergedAvailabilityRanges[i];
+                busy_slot['key'] = 'shared' + i;
+                busy_slot['busy'] = true;
+                busy_slot['share'] = true;
+                busy_slot['foreign'] = false;
+                let start = new Date(busy_slot.start)
+                let end = new Date(busy_slot.end)
+                busy_slot['time_start'] = start.getHours() + ":" + start.getMinutes();
+                busy_slot['time_end'] = end.getHours() + ":" + end.getMinutes();
+                if (start.toDateString() !== end.toDateString()) {
+                    //TOOD(noah) - handle multi day events
+                    busy_slot['time_end'] = "24:00"
+                }
+                busy_slot['name'] = "";
+                busy_slot['id'] = parseInt(i);
+                busy_slot['color'] = 'rgb(208, 107, 100)';
+                let day = new Date(busy_slot.start).getDay();
+                slots_by_day[DAYS_SEVEN[day]].push(busy_slot);
             }
-            busy_slot['name'] = "";
-            busy_slot['id'] = parseInt(i);
-            busy_slot['color'] = 'grey';
-            let day = new Date(busy_slot.start).getDay();
-            slots_by_day[DAYS_SEVEN[day]].push(busy_slot);
-        }
-        for (let cal in this.props.availabilityRanges.calendars) {
-            if (this.props.visibleCalendars.indexOf(cal) > -1) {
-                for (let i in this.props.availabilityRanges.calendars[cal].busy){
-                    let busy_slot = this.props.availabilityRanges.calendars[cal].busy[i];
-                    busy_slot['key'] = cal + i;
-                    busy_slot['busy'] = true;
-                    busy_slot['foreign'] = false;
-                    busy_slot['share'] = Object.keys(this.props.sharedAvailabilityRanges.length).length > 0;
-                    let start = new Date(busy_slot.start)
-                    let end = new Date(busy_slot.end)
-                    busy_slot['time_start'] = start.getHours() + ":" + start.getMinutes();
-                    busy_slot['time_end'] = end.getHours() + ":" + end.getMinutes();
-                    if (start.toDateString() !== end.toDateString()) {
-                        //TOOD(noah) - handle multi day events
-                        busy_slot['time_end'] = "24:00"
+        } else {
+            for (let i in this.props.sharedAvailabilityRanges){
+                let busy_slot = this.props.sharedAvailabilityRanges[i];
+                busy_slot['key'] = 'shared' + i;
+                busy_slot['busy'] = true;
+                busy_slot['share'] = true;
+                busy_slot['foreign'] = true;
+                let start = new Date(busy_slot.start)
+                let end = new Date(busy_slot.end)
+                busy_slot['time_start'] = start.getHours() + ":" + start.getMinutes();
+                busy_slot['time_end'] = end.getHours() + ":" + end.getMinutes();
+                if (start.toDateString() !== end.toDateString()) {
+                    //TOOD(noah) - handle multi day events
+                    busy_slot['time_end'] = "24:00"
+                }
+                busy_slot['name'] = "";
+                busy_slot['id'] = parseInt(i);
+                busy_slot['color'] = 'grey';
+                let day = new Date(busy_slot.start).getDay();
+                slots_by_day[DAYS_SEVEN[day]].push(busy_slot);
+            }
+            for (let cal in this.props.availabilityRanges.calendars) {
+                if (this.props.visibleCalendars.indexOf(cal) > -1) {
+                    for (let i in this.props.availabilityRanges.calendars[cal].busy){
+                        let busy_slot = this.props.availabilityRanges.calendars[cal].busy[i];
+                        busy_slot['key'] = cal + i;
+                        busy_slot['busy'] = true;
+                        busy_slot['foreign'] = false;
+                        busy_slot['share'] = Object.keys(this.props.sharedAvailabilityRanges.length).length > 0;
+                        let start = new Date(busy_slot.start)
+                        let end = new Date(busy_slot.end)
+                        busy_slot['time_start'] = start.getHours() + ":" + start.getMinutes();
+                        busy_slot['time_end'] = end.getHours() + ":" + end.getMinutes();
+                        if (start.toDateString() !== end.toDateString()) {
+                            //TOOD(noah) - handle multi day events
+                            busy_slot['time_end'] = "24:00"
+                        }
+                        busy_slot['name'] = "";
+                        busy_slot['id'] = parseInt(i);
+                        busy_slot['color'] = this.props.getCalColorFromId(cal);
+                        let day = new Date(busy_slot.start).getDay();
+                        slots_by_day[DAYS_SEVEN[day]].push(busy_slot);
                     }
-                    busy_slot['name'] = "";
-                    busy_slot['id'] = parseInt(i);
-                    busy_slot['color'] = this.props.getCalColorFromId(cal);
-                    let day = new Date(busy_slot.start).getDay();
-                    slots_by_day[DAYS_SEVEN[day]].push(busy_slot);
                 }
             }
         }

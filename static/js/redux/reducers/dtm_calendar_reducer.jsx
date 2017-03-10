@@ -3,6 +3,7 @@ export const dtmCalendars = (state = {
 	calendars: {},
 	availability: {},
 	sharedAvailability: null,
+	mergedAvailability: null,
 	dirty: true
 }, action) => {
 	switch (action.type) {
@@ -22,6 +23,8 @@ export const dtmCalendars = (state = {
 			return Object.assign({}, state, { availability: action.availability, dirty: true });
 		case "RECEIVE_SHARED_AVAILABILITY":
 			return Object.assign({}, state, { sharedAvailability: action.shareAvailability });
+		case "RECEIVE_MERGED_AVAILABILITY":
+			return Object.assign({}, state, { mergedAvailability: action.mergedAvailability });
 		case "CLEAN_AVAILABILITY":
 			return Object.assign({}, state, { dirty: false });
 		default:

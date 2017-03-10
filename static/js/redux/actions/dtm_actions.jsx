@@ -106,6 +106,10 @@ export function fetchShareAvailabilityLink(weekOffset) {
 			dispatch({
 				type: "CLEAN_AVAILABILITY"
 			});
+			dispatch({
+		        type: "RECEIVE_MERGED_AVAILABILITY",
+		        mergedAvailability: ref.merged_availability
+		    });
 		})
 	}
 }	

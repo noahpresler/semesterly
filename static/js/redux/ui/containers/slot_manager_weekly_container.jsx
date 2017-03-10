@@ -29,6 +29,7 @@ const mapStateToProps = (state,ownProps) => {
 		custom: state.customSlots,
 		isModal: state.weeklyCalendar.isModal,
 		availabilityRanges: state.dtmCalendars.availability,
+		mergedAvailabilityRanges: state.weeklyCalendar.isModal && state.dtmCalendars.mergedAvailability ? state.dtmCalendars.mergedAvailability : null,
 		sharedAvailabilityRanges: state.dtmCalendars.sharedAvailability ? state.dtmCalendars.sharedAvailability : [],
 		visibleCalendars: state.dtmCalendars.calendars.filter(c => c.visible).map(c => c.id),
 		isCourseOptional: (cid) => state.optionalCourses.courses.findIndex(c => c.id === cid) > -1,

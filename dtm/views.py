@@ -224,7 +224,10 @@ def get_availability_share(request):
   student = get_student(request)
   cal_ids = json.loads(request.body)['cal_ids']
   week_offset = json.loads(request.body)['week_offset']
-  return HttpResponse(json.dumps({"link": create_availability_share(cal_ids, student, week_offset)}), content_type='application/json')
+  return HttpResponse(json.dumps({
+    'link': create_availability_share(cal_ids, student, week_offset),
+    'merged_availability': merge_free_busy(get_free_busy_from_cals(cal_ids, student, week_offset=week_offset))
+  }), content_type='application/json')
 
 '''
 Creates AvailabilityShare object for a student with calendarids and weekoffset
