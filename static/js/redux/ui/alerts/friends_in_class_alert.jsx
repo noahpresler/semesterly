@@ -28,7 +28,7 @@ class FriendsInClassAlert extends React.Component {
         }
         let userSettings = Object.assign({}, this.props.userInfo, newUserSettings);
         this.props.changeUserInfo(userSettings);
-        this.props.saveSettings(() => {this.props.fetchClassmates(this.props.active_tt.courses.map( c => c['id']));});
+        this.props.saveSettings();
         this.props.dismissSelf();
 	}
 

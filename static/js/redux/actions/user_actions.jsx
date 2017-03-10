@@ -291,6 +291,17 @@ export function saveSettings(callback) {
 			credentials: 'include',
 		})
 		.then(response => {
+			let state = store.getState();
+			
+			console.log(state.userInfo.data.social_courses);
+
+			let timetables = state.timetables.items;
+			let active = state.timetables.active;
+			let active_tt = timetables[active];
+
+			if (state.userInfo.data.social_courses) {
+				dispatch(fetchClassmates(active_tt.courses.map( c => c['id'])));
+			}
 			dispatch({
 				type: "RECEIVE_USER_INFO_SAVED"
 			})
@@ -328,6 +339,8 @@ export function getUserSavedTimetables(semester) {
 }
 
 export function fetchClassmates(courses) {
+	console.log("in fetch class");
+	console.log(courses);
 	return (dispatch) => 
 {		let state = store.getState();
 		let semester = state.semester !== undefined ? state.semester : currentSemester;
