@@ -32,14 +32,9 @@ const Row = (props) => {
 class WeeklyCalendar extends React.Component {
     constructor(props) {
         super(props);
-        this.state = {shareLinkShown: false};
-        this.fetchShareTimetableLink = this.fetchShareTimetableLink.bind(this);
         this.getTimelineStyle = this.getTimelineStyle.bind(this);
     }
     componentWillReceiveProps(nextProps) {
-        if (this.props.isFetchingShareLink && !nextProps.isFetchingShareLink) {
-            this.setState({shareLinkShown: true});
-        }
         if (nextProps.isModal && nextProps.shareLink) {
             $('#main-bar, #side-bar').removeClass('less-cal').addClass('full-cal');
             history.replaceState( {} , 'Semester.ly', nextProps.shareLink.substring(nextProps.shareLink.indexOf("/dtm/share")))
@@ -72,14 +67,6 @@ class WeeklyCalendar extends React.Component {
         }
         return rows;
     }
-    fetchShareTimetableLink() {
-        if (this.props.shareLinkValid) {
-            this.setState({shareLinkShown: true});
-        }
-        if (!this.props.isFetchingShareLink) {
-            this.props.fetchShareTimetableLink();
-        }
-    }
     render() {
         let calendarHeader = DAYS_SEVEN.map((d, index) =>  (
             <h4 className="fc-day-header fc-widget-header fc-fri" key={d}>
@@ -87,9 +74,8 @@ class WeeklyCalendar extends React.Component {
             </h4>))
         let shareAvailabilityHeader =
             <div id="share-availability-header" className={(this.props.isModal) ? "mobile" : ""} onClick={(e) => e.stopPropagation()}>
-                <h1>Share Availability</h1>
-                <p>Share this link with a friend and they will see when you're busy.  Links expire in 30 minutes</p>
                 <span>{ this.props.shareLink }</span>
+                <p>Share this link with a friend and they will see when you're busy.  Links expire in 30 minutes</p>
             </div>
         return (
           <div id="calendar" 

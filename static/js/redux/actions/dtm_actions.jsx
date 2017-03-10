@@ -112,7 +112,16 @@ export function fetchShareAvailabilityLink(weekOffset) {
 		    });
 		})
 	}
-}	
+}
+
+export function getShareAvailabilityLink(weekOffset) {
+	return (dispatch) => {
+		let state = store.getState();
+		if (state.dtmCalendars.dirty && !state.dtmShare.isFetchingShareLink) {
+			dispatch(fetchShareAvailabilityLink(weekOffset));
+		}
+	}
+}
 
 export function getCalendarColorFromId(cid) {
 	return (dispatch) => {
