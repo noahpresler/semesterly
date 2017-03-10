@@ -21,7 +21,7 @@ tz = pytz.timezone('US/Eastern')
 
 # Create your views here.
 @validate_subdomain
-def view_dtm_root(request, code=None, sem=None, share_availability=None):
+def view_dtm_root(request, code=None, sem=None, share_availability=None, is_my_share=False):
   school = request.subdomain
   student = get_student(request)
 
@@ -38,6 +38,7 @@ def view_dtm_root(request, code=None, sem=None, share_availability=None):
     'uses_12hr_time': school in AM_PM_SCHOOLS,
     'calendar_list': get_calendar_list(student),
     'share_availability': json.dumps(share_availability, cls=DjangoJSONEncoder),
+    'is_my_share': is_my_share,
     'is_poll': True
   },
   context_instance=RequestContext(request))
@@ -264,18 +265,21 @@ Requires url: /dtm/share/{hashed id}
 @validate_subdomain
 def share_availability(request, ref):
   student = get_student(request)
-  # try:
-  share = AvailabilityShare.objects.get(id=hashids.decrypt(ref)[0])
-  if not share.expiry and share.duration:
-    share.expiry = datetime.datetime.today() + share.duration
-    share.save()
-  elif share.expiry and share.expiry < tz.localize(datetime.datetime.today()):
-    return render(request, "expired.html")
-  cal_ids = map(lambda gc: gc.calendar_id, share.google_calendars.all())
-  week_offset = int(float((share.start_day - tz.localize(datetime.datetime.today())).days) / 7 )
-  return view_dtm_root(request, share_availability=merge_free_busy(get_free_busy_from_cals(cal_ids, student, week_offset=week_offset)))
-  # except Exception as e:
-  #   raise Http404
+  try:
+    share = AvailabilityShare.objects.get(id=hashids.decrypt(ref)[0])
+    if not share.expiry and share.duration:
+      share.expiry = datetime.datetime.today() + share.duration
+      share.save()
+    elif share.expiry and share.expiry < tz.localize(datetime.datetime.today()):
+      return render(request, "expired.html")
+    cal_ids = map(lambda gc: gc.calendar_id, share.google_calendars.all())
+    week_offset = int(float((share.start_day - tz.localize(datetime.datetime.today())).days) / 7 )
+    if student == share.student:
+      return view_dtm_root(request, share_availability=merge_free_busy(get_free_busy_from_cals(cal_ids, student, week_offset=week_offset)), is_my_share=True)
+    else: 
+      return view_dtm_root(request, share_availability=merge_free_busy(get_free_busy_from_cals(cal_ids, student, week_offset=week_offset)))
+  except Exception as e:
+    raise Http404
 
 '''
 Returns the free busy availability from Google api

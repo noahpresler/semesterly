@@ -46,10 +46,20 @@ function setup(dispatch) {
     });
     if (shareAvailability) {
       let share = JSON.parse(shareAvailability);
-      dispatch({
-        type: "RECEIVE_SHARED_AVAILABILITY",
-        shareAvailability: share
-      });
+      if (isMyShare === "True") {
+        dispatch({
+            type: "RECEIVE_MERGED_AVAILABILITY",
+            mergedAvailability: share
+        });
+        dispatch({
+          type: "LAUNCH_SHARE_AVAILABILITY_MODAL"
+        })
+      } else {
+        dispatch({
+          type: "RECEIVE_SHARED_AVAILABILITY",
+          shareAvailability: share
+        });
+      }
     }
     dispatch(fetchAvailability());
   } else {
