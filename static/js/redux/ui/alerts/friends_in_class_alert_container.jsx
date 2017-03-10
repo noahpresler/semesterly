@@ -31,7 +31,7 @@ const mapDispatchToProps = (dispatch) => {
 			type: "CHANGE_USER_INFO",
 			data: info,
 		}),
-		fetchClassmates: () => {dispatch(fetchClassmates(courses))},
+		fetchClassmates: (c) => dispatch(fetchClassmates(c)),
 	}
 }
 
