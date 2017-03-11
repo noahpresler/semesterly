@@ -15,7 +15,7 @@ from student.models import PersonalTimetable
 winter_schools = {'uoft', 'queens', 'umich', 'umich2'}
 valid_semesters = 'FSY'
 
-def update_sem_fields(table, get_school):
+def update_sem_fields(table, get_school, sem_table=Semester):
   """ Link each row to corresponding Semester based on row._semester """
   num_updated = 0
   name_year_to_semester = {}
@@ -28,7 +28,7 @@ def update_sem_fields(table, get_school):
     # avoid .get or .setdefault because of eager evaluation of DB access
     if (name, year) not in name_year_to_semester:
       try:
-        name_year_to_semester[(name, year)] = Semester.objects.get(name=name, year=year)
+        name_year_to_semester[(name, year)] = sem_table.objects.get(name=name, year=year)
       except:
         bad_inputs[semester_code] += 1
         continue
