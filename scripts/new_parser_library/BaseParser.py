@@ -12,8 +12,7 @@ from scripts.new_parser_library.Ingestor import Ingestor
 from scripts.new_parser_library.Extractor import Extractor
 from scripts.new_parser_library.Updater import ProgressBar
 from scripts.new_parser_library.internal_exceptions import CourseParseError
-
-from scripts.parser_library.words import conjunctions_and_prepositions
+from scripts.new_parser_library.words import conjunctions_and_prepositions
 
 class BaseParser:
 	__metaclass__ = ABCMeta
