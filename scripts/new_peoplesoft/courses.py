@@ -12,7 +12,6 @@ from abc import ABCMeta, abstractmethod
 # from scripts.textbooks.amazon import make_textbook
 from scripts.new_parser_library.Requester import Requester
 from scripts.new_parser_library.Extractor import *
-from scripts.new_parser_library.Model import Model
 from scripts.new_parser_library.Ingestor import Ingestor
 from scripts.new_parser_library.BaseParser import CourseParser
 from scripts.new_parser_library.internal_exceptions import CourseParseError
