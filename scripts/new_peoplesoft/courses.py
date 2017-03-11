@@ -115,8 +115,10 @@ class PeoplesoftParser(CourseParser):
 
 						# Get course listing page for department
 						soup = self.requester.post(self.base_url, params=params2)
-						if not self.valid_search_page(soup):
+						if not self.is_valid_search_page(soup):
 							continue
+						if self.is_special_search(soup): # too many results
+							soup = self.handle_special_case_on_search(soup)
 
 						courses = self.get_courses(soup)
 						course_soups = self.get_course_list_as_soup(courses, soup)
@@ -311,7 +313,7 @@ class PeoplesoftParser(CourseParser):
 
 		return params
 
-	def valid_search_page(self, soup):
+	def is_valid_search_page(self, soup):
 		# check for valid search/page
 		errmsg = soup.find('div', {'id' : 'win1divDERIVED_CLSMSG_ERROR_TEXT'})
 		if soup.find('td', {'id' : 'PTBADPAGE_' }) or errmsg:
@@ -319,11 +321,10 @@ class PeoplesoftParser(CourseParser):
 				if self.verbosity >= 3:
 					sys.stderr.write('Error on search: {}'.format(errmsg.text))
 			return False
-		elif soup.find('span', {'class','SSSMSGINFOTEXT'}):
-			# too many search results
-			soup = self.handle_special_case_on_search(soup)
-
 		return True
+
+	def is_special_search(self, soup):
+		return soup.find('span', {'class','SSSMSGINFOTEXT'}) or soup.find('span', id='DERIVED_SSE_DSP_SSR_MSG_TEXT')
 
 	def action(self, act):
 		return {'ICAction' : self.ic_actions[act]}
