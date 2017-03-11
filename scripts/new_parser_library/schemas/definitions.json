@@ -1,0 +1,148 @@
+{
+	"year": {
+		"type": "string",
+		"pattern": "20[012]\\d"
+	},
+	"day": {
+		"type": "string",
+		"pattern": "[UMTWRFS]"
+	},
+	"date": {
+		"type": "string",
+		"pattern": "\\d{1,2}\/\\d{1,2}\/20[012]\\d"
+	},
+	"time": {
+		"type": "object",
+		"properties": {
+			"start": {
+				"type": "string",
+				"pattern": "\\d{1,2}:\\d{2}"
+			},
+			"end": {
+				"type": "string",
+				"pattern": "\\d{1,2}:\\d{2}"
+			}
+		},
+		"required": [
+			"start",
+			"end"
+		]
+	},
+	"location": {
+		"type": "object",
+		"properties": {
+			"school": {
+				"allOf": [
+					{
+						"$ref": "#/school"
+					}
+				],
+				"properties": {
+					"code": {}
+				},
+				"additionalProperties": false
+			},
+			"address": {
+				"type": "string"
+			},
+			"campus": {
+				"type": "string",
+				"maxLength": 300
+			},
+			"building": {
+				"type": "string"
+			},
+			"room": {
+				"type": "string"
+			},
+			"building_room": {
+				"type": "string"
+			},
+			"where": {
+				"type": "string"
+			}
+		},
+		"anyOf": [
+			{
+				"required": [ "where" ]
+			},
+			{
+				"oneOf": [
+					{
+						"required": ["building"]
+					},
+					{
+						"required": ["building_room"],
+						"not": {
+							"oneOf": [
+								{
+									"required": ["building", "room"]
+								},
+								{
+									"required": ["room"]
+								}
+							]
+						}
+					}
+				]
+			}
+		]
+	},
+	"department": {
+		"type": "object",
+		"properties": {
+			"code": {
+				"type": "string"
+			},
+			"name": {
+				"type": "string"
+			}
+		},
+		"anyOf": [
+			{
+				"required": ["code"]
+			},
+			{
+				"required": ["name"]
+			}
+		]
+	},
+	"school": {
+		"type": "object",
+		"properties": {
+			"code": {
+				"type": "string",
+				"maxLength": 20
+			},
+			"name": {
+				"type": "string",
+				"maxLength": 100
+			},
+			"enrollment": {
+				"type": "object",
+				"properties": {
+					"undergraduate": {
+						"type": "integer"
+					},
+					"graduate": {
+						"type": "integer"
+					},
+					"professional": {
+						"type": "integer"
+					},
+					"faculty": {
+						"type": "integer"
+					}
+				}
+			}
+		},
+		"required": [ "code" ]
+	},
+	"url": {
+		"type": "string"
+	},
+	"email": {
+		"type": "string",
+		"pattern": "[^@]+@[^@]+\\.[^@]+"
+	}
+}
