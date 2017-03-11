@@ -52,6 +52,7 @@ def main():
 	options['output_error_filepath'] = '{}/logs/error_{}.log'.format(directory, type_)
 	options['log_stats'] = 'scripts/logs/master.log'
 
+	has_validation_error = True
 	stat_log = []
 	try:
 		p = SalisburyParser(
@@ -80,6 +81,7 @@ def main():
 		else:
 			stat_log.append('({}) [Elapsed Time: {:.2f}s] ==INGESTING=='.format(school, end_time - start_time))
 
+		has_validation_error = False
 	except CourseParseError as e:
 		error = "Error while parsing %s:\n\n%s\n" % (school, str(e))
 		stat_log.append(error + '\n' + traceback.format_exc())
@@ -91,6 +93,10 @@ def main():
 		stat_log.append(error + '\n' + traceback.format_exc())
 
 	log_stats(options['log_stats'], stats=stat_log, options=options, timestamp=timestamp)
+
+	# Do not digest invalid data
+	if has_validation_error:
+		return
 
 	# Digestor.
 	stats = []
