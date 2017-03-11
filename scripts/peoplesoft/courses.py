@@ -6,10 +6,10 @@
 import re, sys
 
 # parser library
-from scripts.textbooks.amazon import make_textbook
-from scripts.parser_library.Requester import Requester
-from scripts.parser_library.Extractor import *
-from scripts.parser_library.Model import Model
+# from scripts.textbooks.amazon import make_textbook
+from scripts.new_parser_library.Requester import Requester
+from scripts.new_parser_library.Extractor import *
+from scripts.new_parser_library.Model import Model
 
 class PeopleSoftParser:
 
