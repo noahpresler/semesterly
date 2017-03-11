@@ -99,6 +99,7 @@ def main():
 		return
 
 	# Digestor.
+	timestamp = datetime.datetime.now().strftime("%Y/%m/%d-%H:%M:%S")
 	stats = []
 	options = {}
 	options['data'] = '{}/data/{}.json'.format(directory, type_)
