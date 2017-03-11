@@ -40,7 +40,7 @@ from timeit import default_timer as timer
 from simplejson.scanner import JSONDecodeError
 import datetime, os, traceback
 
-def main():
+def go():
 	timestamp = datetime.datetime.now().strftime("%Y/%m/%d-%H:%M:%S")
 	options = {}
 	type_ = 'courses'
@@ -147,5 +147,5 @@ def log_stats(filepath, options='', stats=None, timestamp='', elapsed=None):
 		log.write(formatted_string)
 		log.write('='*40 + '\n')
 
-if __name__ == "__main__":
-	main()
+# if __name__ == "__main__":
+# 	main()
