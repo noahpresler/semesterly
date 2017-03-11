@@ -27,11 +27,11 @@ export function fetchCourseInfo(courseId) {
 		dispatch(requestCourseInfo(courseId));
 		fetch(getCourseInfoEndpoint(courseId), {
 				'credentials': 'include'
-			})
-		    .then(response => response.json()) // TODO(rohan): error-check the response
-		    .then(json => {
-		        dispatch(setCourseInfo(json))
-		    });
+		})
+    .then(response => response.json()) // TODO(rohan): error-check the response
+    .then(json => {
+        dispatch(setCourseInfo(json))
+    });
 	}
 }
 
