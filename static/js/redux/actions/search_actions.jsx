@@ -40,6 +40,11 @@ export function setSemester(semester) {
 	});
 }
 
+/*
+ * Check whether the user is logged in and whether their timetable is up to date
+ * and set semester if appropriate. Otherwise show an alert modal and save the
+ * semester they were trying to switch to in the modal state.
+ */
 export function maybeSetSemester(semester) {
 	let state = store.getState();
 	let dispatch = store.dispatch;
