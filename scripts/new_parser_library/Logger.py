@@ -99,6 +99,7 @@ class JsonListLogger(Logger):
 
 	def close(self):
 		self.logfile.write(']\n')
+		self.logfile.close()
 
 	def log(self, entry):
 		if isinstance(entry, Exception):
