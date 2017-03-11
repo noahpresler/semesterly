@@ -1,0 +1,113 @@
+{
+	"$schema": "http://json-schema.org/draft-04/schema#",
+	"title": "Meeting",
+	"description": "Semesterly Meeting JSON schema",
+	"type": "object",
+	"properties": {
+		"kind": {
+			"enum": ["meeting"]
+		},
+		"school": {
+			"allOf": [
+				{
+					"$ref": "definitions.json#/school"
+				}
+			],
+			"properties": {
+				"code": {}
+			},
+			"additionalProperties": false,
+			"required": [ "code" ]
+		},
+		"course": {
+			"allOf": [
+				{
+					"$ref": "course.json#/"
+				}
+			],
+			"properties": {
+				"code": {}
+			},
+			"additionalProperties": false
+		},
+		"section": {
+			"allOf": [
+				{
+					"$ref": "section.json#/"
+				}
+			],
+			"properties": {
+				"code": {},
+				"course": {},
+				"year": {},
+				"term": {}
+			},
+			"additionalProperties": false,
+			"required": [
+				"code",
+				"year",
+				"term"
+			]
+		},
+		"dates": {
+			"type": "array",
+			"items": {
+				"allOf": [
+					{
+						"$ref": "definitions.json#/date"
+					}
+				]
+			},
+			"uniqueItems": true,
+			"minItems": 1
+		},
+		"days": {
+			"type": "array",
+			"items": {
+				"allOf": [
+					{
+						"$ref": "definitions.json#/day"
+					}
+				]
+			},
+			"uniqueItems": true,
+			"minItems": 1
+		},
+		"time": {
+			"allOf": [
+				{
+					"$ref": "definitions.json#/time"
+				}
+			],
+			"properties": {
+				"start": {},
+				"end": {}
+			},
+			"additionalProperties": false
+		},
+		"location": {
+			"allOf": [
+				{
+					"$ref": "definitions.json#/location"
+				}
+			],
+			"properties": {
+				"school": {},
+				"campus": {},
+				"building": {},
+				"room": {},
+				"building_room": {},
+				"where": {}
+			},
+			"additionalProperties": false
+		}
+	},
+	"anyOf": [
+		{
+			"required": [ "days" ]
+		},
+		{
+			"required": [ "dates" ]
+		}
+	]
+}
