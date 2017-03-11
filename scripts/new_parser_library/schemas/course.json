@@ -1,0 +1,146 @@
+{
+	"$schema": "http://json-schema.org/draft-04/schema#",
+	"title": "Course",
+	"description": "Semesterly Course JSON schema",
+	"type": "object",
+	"properties": {
+		"kind": {
+			"enum": ["course"]
+		},
+		"school": {
+			"allOf": [
+				{
+					"$ref": "definitions.json#/school"
+				}
+			],
+			"properties": {
+				"code": {},
+				"name": {}
+			},
+			"additionalProperties": false
+		},
+		"code": {
+			"type": "string",
+			"maxLength": 20
+		},
+		"name": {
+			"type": "string",
+			"maxLength": 250
+		},
+		"credits": {
+			"type": "number",
+			"minimum": 0
+		},
+		"department": {
+			"allOf": [
+				{
+					"$ref": "definitions.json#/department"
+				}
+			],
+			"properties": {
+				"code": {},
+				"name": {}
+			},
+			"additionalProperties": false
+		},
+		"description": {
+			"type": "array",
+			"items": {
+				"type": "string"
+			}
+		},
+		"prerequisites": {
+			"type": "array",
+			"items": {
+				"type": "string"
+			}
+		},
+		"corequisites": {
+			"type": "array",
+			"items": {
+				"type": "string"
+			}
+		},
+		"exclusions": {
+			"type": "array",
+			"items": {
+				"type": "string"
+			}
+		},
+		"areas": {
+			"type": "array",
+			"items": {
+				"type": "string"
+			}
+		},
+		"level": {
+			"type": "string"
+		},
+		"cores": {
+			"type": "array",
+			"items": {
+				"type": "string"
+			}
+		},
+		"geneds": {
+			"type": "array",
+			"items": {
+				"type": "string"
+			}
+		},
+		"homepage": {
+			"allOf": [
+				{
+					"$ref": "definitions.json#/url"
+				}
+			]
+		},
+		"related": {
+			"type": "array",
+			"items": {
+				"type": "string"
+			}
+		},
+		"same_as": {
+			"type": "string",
+			"maxLength": 20
+		},
+		"sections": {
+			"type": "array",
+			"items": {
+				"allOf": [
+					{
+						"$ref": "section.json#/"
+					}
+				],
+				"properties": {
+					"kind": {},
+					"code": {},
+					"term": {},
+					"year": {},
+					"capacity": {},
+					"enrollment": {},
+					"waitlist": {},
+					"waitlist_size": {},
+					"remaining_seats": {},
+					"type": {},
+					"fees": {},
+					"instructors": {},
+					"final_exam": {},
+					"textbooks": {},
+					"meetings": {},
+					"course": {}
+				},
+				"additionalProperties": false,
+				"required": [
+					"kind",
+					"code",
+					"term",
+					"year",
+					"course"
+				]
+			}
+		}
+	},
+	"required": [ "code" ]
+}
