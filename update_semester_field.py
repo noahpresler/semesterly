@@ -1,21 +1,16 @@
 from collections import Counter
-import os
-import django
-os.environ.setdefault("DJANGO_SETTINGS_MODULE", "semesterly.settings")
-django.setup()
-from operator import attrgetter
 from pprint import pprint
-
-from timetable.models import Section, Semester
-from analytics.models import *
-from student.models import PersonalTimetable
 
 
 # schools whose second semester is called the winter semester (instead of spring)
 winter_schools = {'uoft', 'queens', 'umich', 'umich2'}
-valid_semesters = 'FSY'
 
 def get_update_operation(app_name, table_names, get_school):
+  """
+  Take an app name and a list of table names and return a function that can
+  be passed in to migrations.RunPython and that updates the semester field of each
+  row of each table based on the old _semester field.
+  """
   def update_operation(apps, schema_editor):
     for table_name in table_names:
       update_sem_fields(apps.get_model(app_name, table_name), 
@@ -23,8 +18,12 @@ def get_update_operation(app_name, table_names, get_school):
                         apps.get_model('timetable', 'Semester'))
   return update_operation
 
-def update_sem_fields(table, get_school, sem_table=Semester):
-  """ Link each row to corresponding Semester based on row._semester """
+def update_sem_fields(table, get_school, sem_table):
+  """ 
+  Take a Django table object, a function which takes an instance of that object
+  and returns the associated school, and the corresponding Semester object and
+  update the semester field of each row of the input table.
+  """
   num_updated = 0
   name_year_to_semester = {}
   bad_inputs = Counter()
