@@ -16,13 +16,16 @@ const mapStateToProps = (state) => {
 		mostFriendsClass: active_tt.courses.filter((c) => c.id == state.alerts.mostFriendsClassId)[0],
 		mostFriendsCount: state.alerts.mostFriendsCount,
 		mostFriendsKey: state.ui.courseToColourIndex[state.alerts.mostFriendsClassId],
-		userInfo: state.userInfo.data
+		userInfo: state.userInfo.data,
 	}
 }
 const mapDispatchToProps = (dispatch) => {
 	return {
     	dismissSelf: () => {
     		dispatch({type: "DISMISS_ENABLE_NOTIFICATIONS"});
+    	},
+    	showNotification: () => {
+    		dispatch({type: "SHOW_FACEBOOK_ALERT"});
     	},
     	declineNotifications: () => setDeclinedNotifications(true),
     	enableNotifications:() => setDeclinedNotifications(false),
