@@ -255,7 +255,7 @@ class DigestionAdapter:
 			# FIXME -- possible logic conflict with other data
 			adapted['remaining_seats'] = section.remaining_seats
 		if 'type' in section:
-			adapted['section_type'] = section.type[0]
+			adapted['section_type'] = 'P' if section.type == 'Laboratory' else section.type[0]
 		if 'fees' in section:
 			pass # TODO - add fees to database
 		if 'instructors' in section:
