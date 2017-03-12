@@ -20,7 +20,8 @@ school_to_granularity = {
     'gw':5,
     'umich': 5,
     'umich2': 5,
-    'chapman': 5
+    'chapman': 5,
+    'salisbury': 5,
 }
 
 VALID_SCHOOLS = [
@@ -34,7 +35,8 @@ VALID_SCHOOLS = [
   "gw",
   "umich",
   "umich2",
-  "chapman"
+  "chapman",
+  "salisbury",
 ]
 
 AM_PM_SCHOOLS = [
@@ -45,7 +47,8 @@ AM_PM_SCHOOLS = [
   "gw",
   "umich",
   "umich2",
-  "chapman"
+  "chapman",
+  "salisbury",
 ]
 
 school_code_to_name = {
@@ -59,7 +62,8 @@ school_code_to_name = {
   'gw':'George Washington University',
   'umich': 'University of Michigan',
   'umich2': 'University of Michigan 2!',
-  'chapman': 'Chapman University'
+  'chapman': 'Chapman University',
+  'salisbury': 'Salisbury University',
 }
 
 school_to_course_regex = {
@@ -68,7 +72,8 @@ school_to_course_regex = {
   'vandy': '([A-Z-&]{2,7}\s\d{4}[W]?)',
   'gw': '([A-Z]{2,5}\s\d{4}[W]?)',
   'umich': '([A-Z]{2,8}\s\d{3})',
-  'chapman': '([A-Z]{2,4}\s\d{3})'
+  'chapman': '([A-Z]{2,4}\s\d{3})',
+  'salisbury': '([A-Z]{3,4} \\d{2,3})',
 }
 
 # do the imports: assumes all parser follow the same naming conventions: 
