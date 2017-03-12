@@ -3,17 +3,18 @@
 # @author   Michael N. Miller
 # @date     1/13/17
 
-from __future__ import print_function # NOTE: slowly move toward Python3
+from __future__ import print_function, division, absolute_import # NOTE: slowly move toward Python3
 
 import simplejson as json, jsonschema
 from pygments import highlight, lexers, formatters, filters
-from internal_utils import *
+from scripts.parser_library.internal_utils import *
 
 from scripts.parser_library.internal_exceptions import IngestorWarning
 from scripts.parser_library.Validator import Validator
 from scripts.parser_library.internal_exceptions import JsonValidationError, JsonValidationWarning, JsonDuplicationWarning
 from scripts.parser_library.Logger import Logger, JsonListLogger
 from scripts.parser_library.Updater import Counter
+from scripts.parser_library.Tracker import * # TODO - change to more specific when ready
 
 class Ingestor(dict):
 	ALL_KEYS = {
@@ -77,20 +78,19 @@ class Ingestor(dict):
 	}
 
 	def __init__(self, school,
-		update_progress=lambda *args, **kwargs: None, # noop
 		validate=True,
 		config=None, # TODO - non-intuitive meaning in context, conflicts with validate
 		output_filepath=None,
 		output_error_filepath=None,
 		break_on_error=True, 
 		break_on_warning=False,
-		skip_shallow_duplicates=True):
+		skip_shallow_duplicates=True,
+		hide_progress_bar=False):
 
 		self.school = school
 		self.validate = validate
 		self.break_on_error = break_on_error
 		self.break_on_warning = break_on_warning
-		self.update_progress = update_progress
 		self.skip_shallow_duplicates = skip_shallow_duplicates
 
 		# NOTE: unsure of where to put this, may belong in validator or in manage.py wrapper
@@ -103,17 +103,23 @@ class Ingestor(dict):
 		if not output_error_filepath:
 			output_error_filepath = '{0}/logs/error.log'.format(directory)
  
-		self.validator = Validator(config=config)
-
 		# Initialize loggers for json and errors
 		self.logger = JsonListLogger(logfile=output_filepath, errorfile=output_error_filepath)
 		# TODO - needs to default write to logs in school directory
 		self.logger.open() # writes '[' at top of file
 
-		# initialize counters
-		self.counter = Counter()
+		# Setup tracker.
+		self.tracker = Tracker(school)
+		self.tracker.set_mode('ingesting')
+		self.tracker.add_viewer(LogFormatted())
+		if not hide_progress_bar:
+			formatter = lambda stats: '{}/{}'.format(stats['valid'], stats['total'])
+			self.tracker.add_viewer(ProgressBar(self.school))
+		self.tracker.start()
 
-		super(Ingestor, self).__init__()
+		self.validator = Validator(config, tracker=self.tracker)
+
+		super(Ingestor, self).__init__() # Adds dictionary functionality.
 
 	def __str__(self):
 		return '\n'.join('{}:{}'.format(l, v) for l, v in self.iteritems())
@@ -321,15 +327,17 @@ class Ingestor(dict):
 					raise e
 		else:
 			self.logger.log(obj)
-		self.counter.increment(obj['kind'], 'total')
-		formatter = lambda stats: '{}/{}'.format(stats['valid'], stats['total'])
-		self.update_progress('ingesting', self.counter.dict(), formatter)
+		self.tracker.track_count(obj['kind'], 'total')
+		# self.counter.increment(obj['kind'], 'total')
+		# formatter = lambda stats: '{}/{}'.format(stats['valid'], stats['total'])
+		# self.tracker.track_counter(self.counter.dict(), formatter)
 
 	def run_validator(self, data):
 		is_valid, full_skip = False, False
 		try:
 			self.validator.validate(data)
-			self.counter.increment(data['kind'], 'valid')
+			# self.counter.increment(data['kind'], 'valid')
+			self.tracker.track_count(data['kind'], 'valid')
 			is_valid = True
 		except jsonschema.exceptions.ValidationError as e:
 			# Wrap error along with json object in another error
