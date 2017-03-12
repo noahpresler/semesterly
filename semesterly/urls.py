@@ -19,6 +19,7 @@ handler500 = 'timetable.views.custom_500'
 
 urlpatterns = patterns('',
     # url(r'^admin/', include(admin.site.urls)),
+
     #finding frandsssss
     url(r'^find_friends/$', 'timetable.views.find_friends'),
     url('', include('social.apps.django_app.urls', namespace='social')),
@@ -62,6 +63,8 @@ urlpatterns = patterns('',
     url(r'^user/get_saved_timetables/(?P<school>.+)/(?P<sem_name>.+)/(?P<year>[0-9]{4})', 'student.views.get_student_tts_wrapper'),
     url(r'^user/add_to_gcal/*$', 'student.views.add_tt_to_gcal'),
     url(r'^user/log_ical/*$', 'student.views.log_ical_export'),
+    url(r'^user/log_final_exam/*$', 'timetable.views.log_final_exam_view'),
+
     
     url(r'^courses/(?P<school>.+?)/code/(?P<course_id>.+)/*$', 'timetable.views.get_course_id'),
     url(r'^courses/(?P<school>.+?)/(?P<sem_name>.+)/(?P<year>[0-9]{4})/id/(?P<id>[0-9]+)/*$', 'timetable.views.get_course'),
@@ -101,7 +104,11 @@ urlpatterns = patterns('',
 
     # for testing 404, so i don't have to turn off debug
 	url(r'^404testing/', 'timetable.views.custom_404'),
-    url(r'^500testing/', 'timetable.views.custom_500')
+    url(r'^500testing/', 'timetable.views.custom_500'),
+
+    # final exam scheduler
+    (r'^get_final_exams/*$', 'timetable.views.final_exam_scheduler'),
+    url(r'^final_exams/*$', 'timetable.views.view_final_exams')
 )
 
 if getattr(settings, 'STAGING', False):
