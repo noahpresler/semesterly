@@ -112,7 +112,7 @@ class HopkinsParser:
         wrapped_code = "(" + str(SectionCode) + ")"
         section, section_created = Section.objects.update_or_create(
                 course = CourseModel,
-                semester = self.semester[0].upper(),
+                semester = Semester.objects.update_or_create(name=self.semester.split()[0], year=self.semester.split()[1])[0],
                 meeting_section = wrapped_code,
             )
         Offering.objects.filter(section = section).all().delete()
@@ -130,7 +130,7 @@ class HopkinsParser:
 
             section, section_created = Section.objects.update_or_create(
                 course = CourseModel,
-                semester = self.semester[0].upper(),
+                semester =  Semester.objects.update_or_create(name=self.semester.split()[0], year=self.semester.split()[1])[0],
                 meeting_section = wrapped_code,
                 defaults = {
                     'instructors': course['Instructors'],
