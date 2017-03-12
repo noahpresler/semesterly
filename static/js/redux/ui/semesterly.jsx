@@ -102,7 +102,7 @@ class Semesterly extends React.Component {
 			else if (nextProps.alertFacebookFriends && !this.props.alertFacebookFriends) {
 				this.msg.show(<FriendsInClassAlertContainer />,  {
 					type: 'info',
-					time: 20000,
+					time: 99000,
 					additionalClass: 'friends-in-class-alert-container',
 					icon: <div className="friends-in-class-alert-icon"></div>
 				});
