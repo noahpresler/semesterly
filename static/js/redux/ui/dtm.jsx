@@ -115,11 +115,11 @@ class DTM extends React.Component {
 				<AlertBox ref={a => this.msg = a} {...this.alertOptions} />
 				<div id="all-cols">
 					<div id="main-bar">
+						<div id="calendar-shade" onClick={this.props.hideShareAvailabilityModal}></div>
 						{cal}
 					</div>
 					<DTMSideBarContainer />
 				</div>
-				<div id="calendar-shade" onClick={this.props.hideShareAvailabilityModal}></div>
 			</div>);
 	}
 }

@@ -1,3 +1,6 @@
+.dtm.shade #top-bar {
+	z-index: 0;
+}
 .dtm #main-bar {
 	position: absolute;
 	top: 0;

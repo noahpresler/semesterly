@@ -148,7 +148,7 @@
 .shade #calendar-shade {
 	opacity: 1;
 	visibility: visible;
-	transition: opacity .3s .3s, visibility .3s .3s;
+	transition: opacity .3s, visibility .3s;
 }
 #calendar #share-availability-header {
 	position: absolute;
@@ -170,13 +170,15 @@
 	opacity: 1;
 	transform: translateY(-100%);
 }
-#calendar #share-availability-header span {
+#calendar #share-availability-header input {
     font-size: 30px;
     line-height: 50px;
     display: inline-block;
-    padding: 0 15px;
+    min-width: 460px;
+    text-align: center;
     border: 1px solid #e8e8e8;
     font-weight: 300;
+    outline: none;
     background-color: rgba(255, 255, 255, 0.72);
     color: #34495E;
     -webkit-touch-callout: initial;
