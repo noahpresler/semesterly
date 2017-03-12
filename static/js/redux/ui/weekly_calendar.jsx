@@ -8,6 +8,7 @@ import { getSunday, isActiveDateFromSunday } from '../actions/calendar_actions.j
 import { DAYS_SEVEN, DRAGTYPES, DAY_ABBR, MONTHS } from '../constants.jsx';
 import { DropTarget } from 'react-dnd';
 import { ShareLink } from './master_slot.jsx';
+import Clipboard from 'clipboard';
 
 const Row = (props) => {
     let timeText = props.displayTime ? <span>{props.displayTime}</span> : null;
@@ -33,7 +34,6 @@ class WeeklyCalendar extends React.Component {
     constructor(props) {
         super(props);
         this.getTimelineStyle = this.getTimelineStyle.bind(this);
-        this.copyToClipboard = this.copyToClipboard.bind(this);
         this.state = { "shareLink": this.props.shareLink ? this.props.shareLink : ""}
     }
     componentWillReceiveProps(nextProps) {
@@ -55,14 +55,20 @@ class WeeklyCalendar extends React.Component {
         }
     }
     componentWillMount() {
-        
-    }
-    copyToClipboard() {
-        $('#share-availability-header input').select();
-        $('#copied-to-clipboard-notification').addClass('show');
-        setTimeout(function() {
-            $('#copied-to-clipboard-notification').removeClass('show');
-        }, 3000);
+        var clipboard = new Clipboard('#share-availability-header span');
+        clipboard.on('success', function(e) {
+            $('#share-availability-header input').select();
+            $('#copied-to-clipboard-notification').addClass('show');
+            setTimeout(function() {
+                $('#copied-to-clipboard-notification').removeClass('show');
+            }, 3000);
+            e.clearSelection();
+        });
+        clipboard.on('error', function(e) {
+            $('#share-availability-header input').select();
+            console.error('Action:', e.action);
+            console.error('Trigger:', e.trigger);
+        });
     }
     getTimelineStyle() { 
         // if ((new Date()).getHours() > this.props.endHour || (new Date()).getHours() < 8) {
@@ -93,7 +99,7 @@ class WeeklyCalendar extends React.Component {
             <div id="share-availability-header" className={(this.props.isModal) ? "mobile" : ""} onClick={(e) => e.stopPropagation()}>
                 <div>
                     <input onClick={(e) => e.target.select()} value={ this.state.shareLink } />
-                    <span onClick={this.copyToClipboard}>Copy to<br />Clipboard</span>
+                    <span data-clipboard-text={ this.state.shareLink }>Copy to<br />Clipboard</span>
                 </div>
                 <div id="copied-to-clipboard-notification">
                     <i className="fa fa-clipboard"></i>
