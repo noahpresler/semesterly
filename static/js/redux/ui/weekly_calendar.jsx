@@ -33,6 +33,7 @@ class WeeklyCalendar extends React.Component {
     constructor(props) {
         super(props);
         this.getTimelineStyle = this.getTimelineStyle.bind(this);
+        this.copyToClipboard = this.copyToClipboard.bind(this);
         this.state = { "shareLink": this.props.shareLink ? this.props.shareLink : ""}
     }
     componentWillReceiveProps(nextProps) {
@@ -52,6 +53,16 @@ class WeeklyCalendar extends React.Component {
         if (nextProps.hasMergedAvailability) {
             this.setState({ "shareLink": window.location.href.split('/')[2] + window.location.pathname })
         }
+    }
+    componentWillMount() {
+        
+    }
+    copyToClipboard() {
+        $('#share-availability-header input').select();
+        $('#copied-to-clipboard-notification').addClass('show');
+        setTimeout(function() {
+            $('#copied-to-clipboard-notification').removeClass('show');
+        }, 3000);
     }
     getTimelineStyle() { 
         // if ((new Date()).getHours() > this.props.endHour || (new Date()).getHours() < 8) {
@@ -80,7 +91,14 @@ class WeeklyCalendar extends React.Component {
             </h4>))
         let shareAvailabilityHeader =
             <div id="share-availability-header" className={(this.props.isModal) ? "mobile" : ""} onClick={(e) => e.stopPropagation()}>
-                <input onClick={(e) => e.target.select()} value={ this.state.shareLink } />
+                <div>
+                    <input onClick={(e) => e.target.select()} value={ this.state.shareLink } />
+                    <span onClick={this.copyToClipboard}>Copy to<br />Clipboard</span>
+                </div>
+                <div id="copied-to-clipboard-notification">
+                    <i className="fa fa-clipboard"></i>
+                    <span>Link copied to clipboard.</span>
+                </div>
                 <p>Share this link with a friend and they will see when you're busy.  Links expire in 30 minutes</p>
             </div>
         return (

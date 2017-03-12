@@ -150,7 +150,7 @@
 	visibility: visible;
 	transition: opacity .3s, visibility .3s;
 }
-#calendar #share-availability-header {
+#share-availability-header {
 	position: absolute;
 	top: 0;
 	width: 100%;
@@ -164,21 +164,22 @@
 	transform: translateY(0%);
 	transition: transform .3s .6s;
 }
-#calendar.fake-modal #share-availability-header {
+.fake-modal #share-availability-header {
 	height: 117px;
 	visibility: visible;
 	opacity: 1;
 	transform: translateY(-100%);
 }
-#calendar #share-availability-header input {
+#share-availability-header input {
     font-size: 30px;
     line-height: 50px;
     display: inline-block;
     min-width: 460px;
     text-align: center;
-    border: 1px solid #e8e8e8;
+    border: 1px solid #d8d8d8;
     font-weight: 300;
     outline: none;
+    padding: 0;
     background-color: rgba(255, 255, 255, 0.72);
     color: #34495E;
     -webkit-touch-callout: initial;
@@ -187,13 +188,57 @@
     -moz-user-select: initial;
     -ms-user-select: initial;
     user-select: initial;
+    vertical-align: middle;
 }
-#calendar #share-availability-header p {
+#share-availability-header span {
+	display: inline-block;
+    vertical-align: middle;
+    height: 52px;
+    text-align: center;
+    font-size: 12px;
+    line-height: 14px;
+    padding: 10px 8px;
+    background-color: #e6e6e6;
+    border: 1px solid #d8d8d8;
+    border-left: none;
+    cursor: pointer;
+}
+#share-availability-header p {
 	margin: 5px 0 0;
     font-size: 16px;
     color: #777;
     font-weight: 400;
     font-family: Roboto,Arial,sans-serif;
+}
+#copied-to-clipboard-notification {
+	position: fixed;
+	top: -38px;
+	left: 50%;
+	padding: 0 10px;
+	border-radius: 3px;
+	background-color: rgb(234, 230, 71);
+	transform: translateX(-50%);
+	visibility: hidden;
+	opacity: 0;
+	transition: visibility .3s, opacity .3s;
+}
+#copied-to-clipboard-notification.show {
+	visibility: visible;
+	opacity: 1;
+}
+#copied-to-clipboard-notification i {
+	vertical-align: middle;
+	font-size: 12px;
+	margin-right: 3px;
+}
+#copied-to-clipboard-notification span {
+	vertical-align: middle;
+	font-size: 12px;
+	line-height: 25px;
+	padding: 0;
+	height: auto;
+	background-color: transparent;
+	border: none;
 }
 .dtm #calendar.fake-modal #calendar-body td,
 .dtm #calendar.fake-modal #calendar-body td.fc-axis span {
