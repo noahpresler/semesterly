@@ -292,9 +292,6 @@ export function saveSettings(callback) {
 		})
 		.then(response => {
 			let state = store.getState();
-			
-			console.log(state.userInfo.data.social_courses);
-
 			let timetables = state.timetables.items;
 			let active = state.timetables.active;
 			let active_tt = timetables[active];
@@ -339,8 +336,6 @@ export function getUserSavedTimetables(semester) {
 }
 
 export function fetchClassmates(courses) {
-	console.log("in fetch class");
-	console.log(courses);
 	return (dispatch) => 
 {		let state = store.getState();
 		let semester = state.semester !== undefined ? state.semester : currentSemester;
