@@ -15,6 +15,14 @@ from student.models import PersonalTimetable
 winter_schools = {'uoft', 'queens', 'umich', 'umich2'}
 valid_semesters = 'FSY'
 
+def get_update_operation(app_name, table_names, get_school):
+  def update_operation(apps, schema_editor):
+    for table_name in table_names:
+      update_sem_fields(apps.get_model(app_name, table_name), 
+                        get_school, 
+                        apps.get_model('timetable', 'Semester'))
+  return update_operation
+
 def update_sem_fields(table, get_school, sem_table=Semester):
   """ Link each row to corresponding Semester based on row._semester """
   num_updated = 0
@@ -51,9 +59,3 @@ def code_to_name(semester_code, school):
     return 'Full Year'
   else:
     return 'Winter' if school in winter_schools else 'Spring'
-
-
-if __name__ == '__main__':
-  update_sem_fields(Section, get_school=attrgetter('course.school'))
-  for table in [SharedTimetable, AnalyticsTimetable, AnalyticsCourseSearch, PersonalTimetable]:
-    update_sem_fields(table, get_school=attrgetter('school'))
