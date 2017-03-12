@@ -17,7 +17,8 @@ export const VALID_SCHOOLS = [
   "gw",
   "umich",
   "umich2",
-  "chapman"
+  "chapman",
+  "salisbury",
 ];
 
 /* server endpoints */
@@ -26,6 +27,9 @@ export const getAddTTtoGCalEndpoint = (timetable) => {
 };
 export const getLogiCalEndpoint = () => { 
   return "/user/log_ical/"
+};
+export const getLogFinalExamViewEndpoint = () => { 
+  return "/user/log_final_exam/"
 };
 export const getCourseInfoEndpoint = (course_id) => {
 	return "/courses/" + getSchool() + "/" + getSemester() + "/id/" + course_id + "/";
@@ -86,6 +90,9 @@ export const getIntegrationDelEndpoint = (integration_id, course_id) => {
 }
 export const getIntegrationAddEndpoint = (integration_id, course_id) => {
   return "/integration/add/" + integration_id + "/course/" + course_id + "/";
+}
+export const getFinalExamSchedulerEndpoint = () => {
+  return "/get_final_exams/";
 }
 
 export const getSchoolSpecificInfo = (school) => {
@@ -196,6 +203,21 @@ export const getSchoolSpecificInfo = (school) => {
         departmentsName: "Departments",
         levelsName: "Levels",
         timesName: "Times",
+        campuses: {
+          1: ""
+        }
+      }
+    case "salisbury":
+      return {
+        primaryDisplay: "name",
+        areasName: "Areas",
+        departmentsName: "Departments",
+        levelsName: "Levels",
+        timesName: "Times",
+        semesters: {
+          F: "Fall 2016",
+          S: "Spring 2017"
+        },
         campuses: {
           1: ""
         }

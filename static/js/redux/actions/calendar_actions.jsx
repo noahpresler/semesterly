@@ -1,6 +1,7 @@
 import { getRequestShareTimetableLinkEndpoint, 
 				getAddTTtoGCalEndpoint, 
 				getLogiCalEndpoint, 
+        getLogFinalExamViewEndpoint,
 				getSchoolSpecificInfo } from '../constants.jsx';
 import { getActiveTimetable } from './user_actions.jsx';
 import { store } from '../init.jsx';
@@ -31,6 +32,13 @@ function receiveShareLink(dispatch, shareLink) {
 		type: "RECEIVE_SHARE_TIMETABLE_LINK",
 		shareLink,
 	});
+}
+
+export function logFinalExamView() {
+	fetch(getLogFinalExamViewEndpoint(), {
+		method: 'POST',
+		credentials: 'include',
+	})
 }
 
 export function fetchShareTimetableLink() {
