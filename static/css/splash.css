@@ -390,6 +390,11 @@ header nav a:hover {
 	text-align: center;
 	transition: transform .3s;
 }
+.reason-text ul a.fifth,
+.reason-text ul a.fifth:link,
+.reason-text ul a.fifth:visited {
+	width: 19.8%;
+}
 .reason-text ul a:hover:active {
 	transform: scale(1.05);
 }
@@ -564,7 +569,7 @@ footer h6 {
 		display: none;
 	}
 }
-@media(max-width: 640px) {
+@media(max-width: 820px) {
 	header h1 {
 		display: none;
 	}
