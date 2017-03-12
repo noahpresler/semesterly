@@ -16,7 +16,7 @@ const mapStateToProps = (state) => {
     	alertNewTimetable: state.alerts.alertNewTimetable,
     	alertFacebookFriends: state.alerts.alertFacebookFriends 
     	&& state.userInfo.data.FacebookSignedUp 
-    	&& !state.userInfo.data.social_courses 
+    	&& (!state.userInfo.data.social_courses || state.alerts.facebookAlertIsOn)
     	&& !state.userInfo.overrideShow 
     	&& state.alerts.mostFriendsCount >= 1
     	&& active_tt_length >= 1,

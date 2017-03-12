@@ -4,6 +4,7 @@ export const alerts = (state = {alertConflict: false,
 								alertNewTimetable: false,
 								alertEnableNotifications: false,
 								alertFacebookFriends: false,
+								facebookAlertIsOn: false,
 								mostFriendsClassId: null,
 								mostFriendsCount: 0,}, action) => {
 	switch (action.type) {
@@ -39,8 +40,10 @@ export const alerts = (state = {alertConflict: false,
 			return Object.assign({}, state, {mostFriendsCount: action.count, mostFriendsClassId: action.classId});
 		case "ALERT_FACEBOOK_FRIENDS":
 			return Object.assign({}, state, {alertFacebookFriends: true});
+		case "SHOW_FACEBOOK_ALERT":
+			return Object.assign({}, state, {facebookAlertIsOn: true});
 		case "DISMISS_FACEBOOK_FRIENDS":
-			return Object.assign({}, state, {alertFacebookFriends: false});
+			return Object.assign({}, state, {alertFacebookFriends: false, facebookAlertIsOn: false});
 		default:
 			return state;
 	}
