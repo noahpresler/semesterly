@@ -17,7 +17,8 @@ export const VALID_SCHOOLS = [
   "gw",
   "umich",
   "umich2",
-  "chapman"
+  "chapman",
+  "salisbury",
 ];
 
 /* server endpoints */
@@ -237,6 +238,21 @@ export const getSchoolSpecificInfo = (school) => {
         semesters: {
           F: "Fall 2016",
           S: "Winter 2017"
+        },
+        campuses: {
+          1: ""
+        }
+      }
+    case "salisbury":
+      return {
+        primaryDisplay: "name",
+        areasName: "Areas",
+        departmentsName: "Departments",
+        levelsName: "Levels",
+        timesName: "Times",
+        semesters: {
+          F: "Fall 2016",
+          S: "Spring 2017"
         },
         campuses: {
           1: ""
