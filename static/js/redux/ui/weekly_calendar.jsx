@@ -33,6 +33,7 @@ class WeeklyCalendar extends React.Component {
     constructor(props) {
         super(props);
         this.getTimelineStyle = this.getTimelineStyle.bind(this);
+        this.state = { "shareLink": this.props.shareLink }
     }
     componentWillReceiveProps(nextProps) {
         if (nextProps.isModal && nextProps.shareLink) {
@@ -44,7 +45,12 @@ class WeeklyCalendar extends React.Component {
                     $('#main-bar, #side-bar').removeClass('full-cal').addClass('less-cal');
                 }, 900);   
             }
+        }
+        if (this.props.isModal && !nextProps.isModal) {
             history.replaceState( {} , 'Semester.ly', '/dtm')
+        }
+        if (nextProps.hasMergedAvailability) {
+            this.setState({ "shareLink": window.location.hostname + window.location.pathname })
         }
     }
     getTimelineStyle() { 
@@ -74,7 +80,7 @@ class WeeklyCalendar extends React.Component {
             </h4>))
         let shareAvailabilityHeader =
             <div id="share-availability-header" className={(this.props.isModal) ? "mobile" : ""} onClick={(e) => e.stopPropagation()}>
-                <span>{ this.props.shareLink }</span>
+                <span>{ this.state.shareLink }</span>
                 <p>Share this link with a friend and they will see when you're busy.  Links expire in 30 minutes</p>
             </div>
         return (

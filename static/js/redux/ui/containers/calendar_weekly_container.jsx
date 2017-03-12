@@ -52,6 +52,7 @@ const mapStateToProps = (state) => {
       dataLastUpdated: state.school.dataLastUpdated,
       isLoggedIn: state.userInfo.data.isLoggedIn,
       isModal: state.weeklyCalendar.isModal,
+      hasMergedAvailability: state.dtmCalendars.mergedAvailability != null,
       hasTimetables,
       isFetchingShareLink,
       shareLink,
