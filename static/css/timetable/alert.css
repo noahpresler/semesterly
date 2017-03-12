@@ -212,6 +212,13 @@
   color: #42A770;
 }
 
+.react-alerts .friends-in-class-alert-container .close {
+  /* The way the close button is setup for alert is that it takes the initial heigh of the container
+      So !important is the only way to override it now.
+      TODO: create a generalized alert completion alert to display */
+  height: 120px !important;
+}
+
 .friends-in-class-alert .conflict-alert-btn {
   margin-top: 25px;
   padding-top: 0px;
