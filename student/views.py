@@ -328,6 +328,7 @@ def get_most_classmate_count(request):
     course_ids = json.loads(request.body)['course_ids']
     semester = json.loads(request.body)['semester']
     course = []
+    total_count = 0
     count = 0
     most_friend_course_id = -1
     for course_id in course_ids:
@@ -335,7 +336,8 @@ def get_most_classmate_count(request):
         if temp_count > count:
             count = temp_count
             most_friend_course_id = course_id
-    course = {"id" : most_friend_course_id, "count" : count}
+        total_count += temp_count
+    course = {"id" : most_friend_course_id, "count" : count, "total_count" : total_count}
     return HttpResponse(json.dumps(course))
     #TODO will go through each course id
         #call get_friend count

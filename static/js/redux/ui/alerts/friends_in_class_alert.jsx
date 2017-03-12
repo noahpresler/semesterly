@@ -9,7 +9,12 @@ import { setDeclinedNotifications, getDeclinedNotifications } from '../../util.j
 class FriendsInClassAlert extends React.Component {
 	constructor(props) {
 		super(props);
+		this.state = { isComplete: false };
 	}
+	componentWillMount() {
+		this.props.showNotification();
+	}
+
 	componentWillUnmount() {
 		if (!(localStorage.getItem("declinedNotifications") === "true" || localStorage.getItem("declinedNotifications") === "false")) {
 			let date = new Date;
@@ -20,6 +25,7 @@ class FriendsInClassAlert extends React.Component {
 
 	allowFacebook() {
 		console.log("allow facebook");
+
 		// console.log(this.props.userInfo);
         let newUserSettings = {
             social_courses: true,
@@ -29,7 +35,12 @@ class FriendsInClassAlert extends React.Component {
         let userSettings = Object.assign({}, this.props.userInfo, newUserSettings);
         this.props.changeUserInfo(userSettings);
         this.props.saveSettings();
-        this.props.dismissSelf();
+		this.setState({ isComplete: true });
+		setTimeout(() => {
+			console.log("I'm here");
+			this.props.dismissSelf();
+		}, 3000);
+        // this.props.dismissSelf();
 	}
 
 	render() {
@@ -42,26 +53,34 @@ class FriendsInClassAlert extends React.Component {
         }
 
 		return (
-		<div className="enable-notification-alert friends-in-class-alert">
-			<h2>{ this.props.msg }</h2>
-			<MasterSlot 
-                key={this.props.mostFriendsKey} course={this.props.mostFriendsClass} 
-                professors={professors}
-                colourIndex={Math.min(this.props.mostFriendsKey, maxColourIndex)}
-                onTimetable={true}
-                hideCloseButton={true}
-                inModal={true}
-                fakeFriends={this.props.mostFriendsCount}
-                fetchCourseInfo={() => this.fetchCourseInfo(this.props.mostFriendsClass.id)}
-                />
-			<small className="alert-extra">
-				Plus 89 more in other classes. Enable the friend feature to find out who!
-			</small>
-			<button 
-				onClick={() => {this.allowFacebook();}}
-				className="conflict-alert-btn change-semester-btn">
-				Find Friends in Classes
-			</button>
+		<div>		
+			<div className={(this.state.isComplete ? "friends-in-class-show" : "friends-in-class-hide") + " enable-notification-alert friends-in-class-alert"}>
+				<i className="friends-in-class-done fa fa-check" />
+				<small className={"alert-extra"}>
+					You can now see your friends in classes! To revert these changes, head to Account Settings.
+				</small>
+			</div>
+			<div className={(this.state.isComplete ? "friends-in-class-hide" : "") + " enable-notification-alert friends-in-class-alert"}>
+				<h2>{ this.props.msg }</h2>
+				<MasterSlot 
+	                key={this.props.mostFriendsKey} course={this.props.mostFriendsClass} 
+	                professors={professors}
+	                colourIndex={Math.min(this.props.mostFriendsKey, maxColourIndex)}
+	                onTimetable={true}
+	                hideCloseButton={true}
+	                inModal={true}
+	                fakeFriends={this.props.mostFriendsCount}
+	                fetchCourseInfo={() => this.fetchCourseInfo(this.props.mostFriendsClass.id)}
+	                />
+				<small className="alert-extra">
+					Plus 89 more in other classes. Enable the friend feature to find out who!
+				</small>
+				<button 
+					onClick={() => {this.allowFacebook();}}
+					className="conflict-alert-btn change-semester-btn">
+					Find Friends in Classes
+				</button>
+		 	</div>
 	 	</div>);
  	}
 };

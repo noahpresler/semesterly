@@ -198,6 +198,20 @@
   margin: 0px 10px;
 }
 
+.friends-in-class-hide {
+  display: none;
+}
+
+.friends-in-class-show {
+  display: block;
+}
+
+.friends-in-class-done {
+  display: block;
+  font-size: 50px;
+  color: #42A770;
+}
+
 .friends-in-class-alert .conflict-alert-btn {
   margin-top: 25px;
   padding-top: 0px;
