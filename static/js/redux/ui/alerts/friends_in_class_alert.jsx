@@ -39,7 +39,7 @@ class FriendsInClassAlert extends React.Component {
 		setTimeout(() => {
 			console.log("I'm here");
 			this.props.dismissSelf();
-		}, 3000);
+		}, 4000);
         // this.props.dismissSelf();
 	}
 
