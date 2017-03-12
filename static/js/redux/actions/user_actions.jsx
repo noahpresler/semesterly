@@ -12,7 +12,8 @@ import { getUserInfoEndpoint,
 	getIntegrationGetEndpoint,
 	getIntegrationDelEndpoint,
 	getIntegrationAddEndpoint,
-	getSchoolSpecificInfo } from '../constants.jsx';
+	getSchoolSpecificInfo,
+  getFinalExamSchedulerEndpoint} from '../constants.jsx';
 import { store } from '../init.jsx';
 import { loadTimetable, nullifyTimetable, getNumberedName } from './timetable_actions.jsx';
 import { browserSupportsLocalStorage, setDeclinedNotifications } from '../util.jsx';
@@ -323,6 +324,24 @@ export function getUserSavedTimetables(semester) {
 			}
 		})
 
+	}
+}
+
+export function fetchFinalExamSchedule() {
+	return (dispatch) => 
+	{		
+		let state = store.getState();
+		let timetable = getActiveTimetable(state.timetables);
+		dispatch({type: 'FETCH_FINAL_EXAMS'})
+		fetch(getFinalExamSchedulerEndpoint(),{
+			credentials: 'include',
+			method: 'POST',
+			body: JSON.stringify(timetable)
+		})
+		.then(response => response.json())
+	    .then(json => {
+	    	dispatch({type: 'RECIEVE_FINAL_EXAMS', json: json})
+	    });
 	}
 }
 
