@@ -22,7 +22,7 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch) => {
 	return {
     	dismissSelf: () => {
-    		dispatch({type: "DISMISS_ENABLE_NOTIFICATIONS"});
+    		dispatch({type: "DISMISS_FACEBOOK_FRIENDS"});
     	},
     	showNotification: () => {
     		dispatch({type: "SHOW_FACEBOOK_ALERT"});
