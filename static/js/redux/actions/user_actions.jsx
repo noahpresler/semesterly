@@ -12,7 +12,8 @@ import { getUserInfoEndpoint,
 	getIntegrationGetEndpoint,
 	getIntegrationDelEndpoint,
 	getIntegrationAddEndpoint,
-	getFinalExamSchedulerEndpoint } from '../constants.jsx';
+	getSchoolSpecificInfo,
+  getFinalExamSchedulerEndpoint} from '../constants.jsx';
 import { store } from '../init.jsx';
 import { loadTimetable, nullifyTimetable, getNumberedName } from './timetable_actions.jsx';
 import { browserSupportsLocalStorage, setDeclinedNotifications } from '../util.jsx';
@@ -61,12 +62,11 @@ export function requestFriends() {
 function getSaveTimetablesRequestBody() {
 	let state = store.getState();
 	let timetableState = state.timetables;
-	let semester = state.semester;
 	let name = state.savingTimetable.activeTimetable.name;
 	let id = state.savingTimetable.activeTimetable.id || 0;
 	return {
 		timetable: getActiveTimetable(timetableState),
-		semester,
+		semester: allSemesters[state.semesterIndex],
 		name,
 		id,
 	}
@@ -346,14 +346,14 @@ export function fetchFinalExamSchedule() {
 }
 
 export function fetchClassmates(courses) {
-	return (dispatch) => 
-{		let state = store.getState();
-		let semester = state.semester !== undefined ? state.semester : currentSemester;
+	return (dispatch) => {		
+		let state = store.getState();
+		let semesterIndex = state.semesterIndex !== undefined ? state.semesterIndex : currentSemester;
 		dispatch(requestClassmates());
 		fetch(getClassmatesEndpoint(), {
 			credentials: 'include',
 			method: 'POST',
-			body: JSON.stringify({ course_ids: courses, semester: semester })
+			body: JSON.stringify({ course_ids: courses, semester: allSemesters[semesterIndex] })
 		})
 	    .then(response => response.json())
 	    .then(json => {
@@ -364,7 +364,7 @@ export function fetchClassmates(courses) {
 
 export function fetchFriends() {
 	let state = store.getState();
-	let semester = state.semester !== undefined ? state.semester : currentSemester;
+	let semesterIndex = state.semesterIndex !== undefined ? state.semesterIndex : currentSemester;
 	return (dispatch) => {
 		dispatch(requestFriends());
 		dispatch({
@@ -373,7 +373,7 @@ export function fetchFriends() {
 		fetch(getFriendsEndpoint(), {
 			credentials: 'include',
 			method: 'POST',
-			body: JSON.stringify({ semester: semester })
+			body: JSON.stringify({ semester: allSemesters[semesterIndex] })
 		})
 	    .then(response => response.json())
 	    .then(json => {
