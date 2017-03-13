@@ -13,10 +13,8 @@ const mapStateToProps = (state) => {
 	let mandatoryCourses = activeTimetable.courses.filter(c => !c.is_optional && !c.fake);
 	let optionalCourses = state.optionalCourses.courses;
 
-
 	return {
-		semester: state.semester,
-		semesterName: getSchoolSpecificInfo(state.school.school).semesters[state.semester],
+		semester: allSemesters[state.semesterIndex],
 		liveTimetableCourses: activeTimetable.courses.filter(c => !c.fake), // don't want to consider courses that are shown on timetable only because of a 'HOVER_COURSE' action (i.e. fake courses)
 		savedTimetables: state.userInfo.data.timetables,
 		courseToColourIndex: state.ui.courseToColourIndex,
