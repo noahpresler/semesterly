@@ -1,9 +1,12 @@
 import { connect } from 'react-redux';
 import TopBar from '../top_bar.jsx';
+import { getSchoolSpecificInfo } from '../../constants.jsx';
+
 
 const mapStateToProps = (state) => {
   return {
     userInfo: state.userInfo.data,
+    currentSemester: allSemesters[state.semesterIndex]
   }
 }
 

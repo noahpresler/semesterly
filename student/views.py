@@ -9,8 +9,9 @@ from django.conf import settings
 from django.template import RequestContext
 from hashids import Hashids
 from pytz import timezone
-import copy, functools, itertools, json, logging, os, httplib2
-import datetime
+from datetime import datetime
+import json
+import httplib2
 from timetable.models import *
 from student.models import *
 from analytics.models import *
@@ -84,13 +85,15 @@ def get_user_dict(school, student, semester):
 @login_required
 @validate_subdomain
 @csrf_exempt
-def get_student_tts_wrapper(request, school, sem):
+def get_student_tts_wrapper(request, school, sem_name, year):
+    sem, _ = Semester.objects.get_or_create(name=sem_name, year=year)
     student = Student.objects.get(user=request.user)
     response = get_student_tts(student, school, sem)
     return HttpResponse(json.dumps(response), content_type='application/json')
 
 def get_student_tts(student, school, semester):
-    tts = student.personaltimetable_set.filter(school=school, semester=semester).order_by('-last_updated')
+    tts = student.personaltimetable_set.filter(
+        school=school, semester=semester).order_by('-last_updated')
     # create a list containing all PersonalTimetables for this semester in their dictionary representation
     tts_list = [convert_tt_to_dict(tt) for tt in tts] # aka titty dick
     return tts_list
@@ -138,7 +141,7 @@ def save_timetable(request):
     courses = params['timetable']['courses']
     has_conflict = params['timetable']['has_conflict']
     name = params['name']
-    semester = params['semester']
+    semester, _ = Semester.objects.get_or_create(**params['semester'])
     student = Student.objects.get(user=request.user)
     error = {'error': 'Timetable with name already exists'}
     # if params['id'] is not provided (or params['id'] == 0) then this is a request to create a new timetable,
@@ -151,7 +154,11 @@ def save_timetable(request):
     # 2. the user is editing the name of an existing timetable, in which
     # case tempId is the ID of that timetable, as passed from the frontend.
     # we check if a timetable with a different id has that name
-    if PersonalTimetable.objects.filter(~Q(id=tempId), student=student, name=params['name'], semester=semester, school=school).exists():
+    if PersonalTimetable.objects.filter(~Q(id=tempId), 
+                                        student=student, 
+                                        name=params['name'], 
+                                        semester=semester,
+                                        school=school).exists():
         return HttpResponse(json.dumps(error), content_type='application/json')
 
     if params['id']:
@@ -170,8 +177,8 @@ def save_timetable(request):
         personal_timetable.courses.add(course_obj)
         enrolled_sections = course['enrolled_sections']
         for section in enrolled_sections:
-            personal_timetable.sections.add(course_obj.section_set.get(meeting_section=section,
-                                                                    semester__in=[semester, "Y"]))
+            personal_timetable.sections.add(
+                course_obj.section_set.get(meeting_section=section, semester=semester))
     personal_timetable.has_conflict = has_conflict
     personal_timetable.save()
     timetables = get_student_tts(student, school, semester)
@@ -188,7 +195,7 @@ def delete_timetable(request):
     school = request.subdomain
     params = json.loads(request.body)
     name = params['name']
-    semester = params['semester']
+    semester = Semester.objects.get(id=params['semester'])
     student = Student.objects.get(user=request.user)
 
     PersonalTimetable.objects.filter(
@@ -206,7 +213,7 @@ def duplicate_timetable(request):
     params = json.loads(request.body)
     tt = params['timetable']
     name = tt['name']
-    semester = tt['semester']
+    semester = Semester.objects.get(id=tt['semester'])
     student = Student.objects.get(user=request.user)
     new_name = params['name']
 
@@ -247,7 +254,7 @@ def get_classmates(request):
     student = Student.objects.get(user=request.user)
     course_ids = json.loads(request.body)['course_ids']
     try:
-        semester = json.loads(request.body)['semester']
+        semester, _ = Semester.objects.get_or_create(**json.loads(request.body)['semester'])
     except:
         semester = None 
     # user opted in to sharing courses
@@ -267,7 +274,7 @@ def find_friends(request):
         student = Student.objects.get(user=request.user)
         if not student.social_all:
             return HttpResponse("Must have social_all enabled")
-        semester = json.loads(request.body)['semester']
+        semester, _ = Semester.objects.get_or_create(**json.loads(request.body)['semester'])
         student_tt = student.personaltimetable_set.filter(school=school,semester=semester).order_by('last_updated').last()
         c = student_tt.courses.all()
         friends = []
@@ -433,12 +440,12 @@ def add_tt_to_gcal(request):
     semester = get_semester_from_tt(tt)
     if semester == 'F':
         #ignore year, year is set to current year
-        sem_start = datetime.datetime(2017,8,30,17,0,0)
-        sem_end = datetime.datetime(2017,12,20,17,0,0)
+        sem_start = datetime(2017,8,30,17,0,0)
+        sem_end = datetime(2017,12,20,17,0,0)
     else:
         #ignore year, year is set to current year
-        sem_start = datetime.datetime(2017,1,30,17,0,0)
-        sem_end = datetime.datetime(2017,5,5,17,0,0)
+        sem_start = datetime(2017,1,30,17,0,0)
+        sem_end = datetime(2017,5,5,17,0,0)
 
     #add events
     for course in tt['courses']:
