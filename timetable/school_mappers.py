@@ -7,6 +7,7 @@ from timetable.models import *
 from student.models import *
 import sys
 
+
 # the smallest block size (in minutes) needed to describe start/end times
 # e.g. uoft classes only start on the hour or half hour, so granularity is 30min
 school_to_granularity = {
@@ -76,6 +77,20 @@ school_to_course_regex = {
   'salisbury': '([A-Z]{3,4} \\d{2,3})',
 }
 
+school_to_semesters = {
+  'jhu': ['Fall', 'Spring'],
+  'uoft': ['Fall', 'Winter'],
+  'umd': ['Fall', 'Spring'],
+  'rutgers': ['Fall', 'Spring'],
+  'uo': ['Fall', 'Spring'],
+  'queens': ['Fall', 'Winter'],
+  'vandy': ['Fall', 'Spring'],
+  'gw': ['Fall', 'Spring'],
+  'umich': ['Fall', 'Winter'],
+  'umich2': ['Fall', 'Winter'],
+  'chapman': ['Fall', 'Spring'],
+}
+
 # do the imports: assumes all parser follow the same naming conventions: 
 # schoolname_parsertype where parsertype can be courses, evals, or textbooks
 types = ['courses', 'evals', 'textbooks']
@@ -83,8 +98,9 @@ for school in VALID_SCHOOLS:
   for p_type in types:
     exec "from scripts.{0}.{0}_{1} import *".format(school, p_type)
 
+# use lambdas to call constructor in a lazy fashion
 course_parsers = {
-  'jhu': lambda: HopkinsParser("Spring 2017").start(), # avoid calling constructor lazily
+  'jhu': lambda: HopkinsParser("Spring 2017").start(),
   'uoft': lambda: UofTParser().start(),
   'umd': parse_umd,
   # 'rutgers': parse_rutgers,
@@ -100,6 +116,7 @@ eval_parsers = {
   'uo': lambda: None,
   'queens': lambda: None
 }
+
 textbook_parsers = {
   'jhu': lambda: HopkinsTextbookFinder().parse_classes(),
   'uoft': parse_uoft_textbooks,
@@ -108,6 +125,7 @@ textbook_parsers = {
   'uo': lambda: None,
   'queens': parse_queens_textbooks
 }
+
 sitemappers = {
   'jhu': lambda: HopkinsTextbookFinder().parse_classes(),
   'uoft': parse_uoft_textbooks,
