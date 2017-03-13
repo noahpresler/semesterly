@@ -1,4 +1,8 @@
-import { getRequestShareTimetableLinkEndpoint, getAddTTtoGCalEndpoint, getLogiCalEndpoint, getLogFinalExamViewEndpoint } from '../constants.jsx';
+import { getRequestShareTimetableLinkEndpoint, 
+				getAddTTtoGCalEndpoint, 
+				getLogiCalEndpoint, 
+        getLogFinalExamViewEndpoint,
+				getSchoolSpecificInfo } from '../constants.jsx';
 import { getActiveTimetable } from './user_actions.jsx';
 import { store } from '../init.jsx';
 import ical from 'ical-generator';
@@ -40,7 +44,7 @@ export function logFinalExamView() {
 export function fetchShareTimetableLink() {
 	return (dispatch) => {
 		let state = store.getState();
-		let semester = state.semester;
+		let semester = allSemesters[state.semesterIndex];
 		let timetableState = state.timetables;
 		let { shareLink, shareLinkValid } = state.calendar;
 		dispatch({
@@ -102,14 +106,15 @@ export function createiCalfromTimetable(active) {
 			//TODO - MUST BE REFACTORED AFTER CODED IN TO CONFIG
 			let sem_start = new Date()
 			let sem_end = new Date()
-			if (state.semester == 'fall') {
+			let semester = allSemesters[state.semesterIndex]
+			if (semester.name == 'fall') {
 				//ignore year, year is set to current year
-				sem_start = new Date('August 30 2017 00:00:00');
-				sem_end = new Date('December 20 2017 00:00:00');
+				sem_start = new Date('August 30 ' + semester.year + ' 00:00:00');
+				sem_end = new Date('December 20 ' + semester.year + ' 00:00:00');
 			} else {
 				//ignore year, year is set to current year
-				sem_start = new Date('January 30 2017 00:00:00');
-				sem_end = new Date('May 20 2017 00:00:00');
+				sem_start = new Date('January 30 ' + semester.year + ' 00:00:00');
+				sem_end = new Date('May 20 ' + semester.year + ' 00:00:00');
 			}
 			sem_start.setYear(new Date().getFullYear());
 			sem_end.setYear(new Date().getFullYear());
