@@ -2,6 +2,7 @@ from django.db import models
 from timetable.models import *
 from student.models import Student
 
+
 class SharedTimetable(models.Model):
     """
     A timetable for which a user generated a share link.
@@ -11,12 +12,14 @@ class SharedTimetable(models.Model):
     """
     courses = models.ManyToManyField(Course)
     sections = models.ManyToManyField(Section)
-    semester = models.CharField(max_length=2)
+    _semester = models.CharField(max_length=2) # deprecated
+    semester = models.ForeignKey('timetable.Semester')
     school = models.CharField(max_length=50)
     name = models.CharField(max_length=100, null=True)
     has_conflict = models.BooleanField(blank=True, default=False)
     time_created = models.DateTimeField(auto_now_add=True)
     student = models.ForeignKey(Student, null=True, default=None)
+
 
 class AnalyticsTimetable(models.Model):
     """
@@ -25,11 +28,13 @@ class AnalyticsTimetable(models.Model):
     when they are not saved.
     """
     courses = models.ManyToManyField(Course)
-    semester = models.CharField(max_length=2)
+    _semester = models.CharField(max_length=2) # deprecated
+    semester = models.ForeignKey('timetable.Semester')
     school = models.CharField(max_length=50)
     has_conflict = models.BooleanField(blank=True, default=False)
     time_created = models.DateTimeField(auto_now_add=True)
     student = models.ForeignKey(Student, null=True, default=None)
+
 
 class AnalyticsCourseSearch(models.Model):
     """
@@ -39,7 +44,8 @@ class AnalyticsCourseSearch(models.Model):
     query = models.CharField(max_length=200)
     courses = models.ManyToManyField(Course)
     is_advanced = models.BooleanField(blank=True, default=False)
-    semester = models.CharField(max_length=2)
+    _semester = models.CharField(max_length=2) # deprecated
+    semester = models.ForeignKey('timetable.Semester')
     school = models.CharField(max_length=50)
     student = models.ForeignKey(Student, null=True, default=None)
 
@@ -48,6 +54,7 @@ class AnalyticsCourseSearch(models.Model):
     # department = models.CharField(max_length=250, default='', null=True)
     # level = models.CharField(max_length=30, default='', null=True)
 
+
 class DeviceCookie(models.Model):
     """
     A cookie which is dropped on each device tracking last login. 
@@ -55,6 +62,7 @@ class DeviceCookie(models.Model):
     """
     student = models.ForeignKey(Student, null=True, default=None)
     last_online = models.DateTimeField(auto_now_add=True)
+
 
 class CalendarExport(models.Model):
     """
@@ -65,6 +73,7 @@ class CalendarExport(models.Model):
     school = models.CharField(max_length=50)
     is_google_calendar = models.BooleanField(blank=True, default=False)
 
+
 class FinalExamModalView(models.Model):
     """
     Logs that a final exam schedule has been viewed
@@ -72,4 +81,3 @@ class FinalExamModalView(models.Model):
     student = models.ForeignKey(Student, null=True, default=None)
     time_created = models.DateTimeField(auto_now_add=True)
     school = models.CharField(max_length=50)
-
