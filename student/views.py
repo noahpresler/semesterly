@@ -429,7 +429,7 @@ def add_tt_to_gcal(request):
     school = request.subdomain
 
     tt_name = tt.get('name')
-    if  not tt_name or "Untitled Schedule" in tt_name > -1 or len(tt_name) == 0:
+    if not tt_name or "Untitled Schedule" in tt_name or len(tt_name) == 0:
         tt_name = "Semester.ly Schedule"
     else:
         tt_name += " - Semester.ly"
