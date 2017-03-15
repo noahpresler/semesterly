@@ -3,6 +3,8 @@
 # @author Michael N. Miller
 # @date	  2/01/2017
 
+from __future__ import print_function, division, absolute_import # NOTE: slowly move toward Python3
+
 import re, os, progressbar, argparse
 
 from abc import ABCMeta, abstractmethod
@@ -12,7 +14,6 @@ from scripts.parser_library.Ingestor import Ingestor
 from scripts.parser_library.Extractor import Extractor
 from scripts.parser_library.Updater import ProgressBar
 from scripts.parser_library.internal_exceptions import CourseParseError
-
 from scripts.parser_library.words import conjunctions_and_prepositions
 
 class BaseParser:
@@ -27,12 +28,10 @@ class BaseParser:
 		break_on_warning=False,
 		skip_shallow_duplicates=True,
 		hide_progress_bar=True):
+
 		self.school = school
 		self.requester = Requester()
 		self.extractor = Extractor()
-		self.hide_progress_bar = hide_progress_bar
-		if not self.hide_progress_bar:
-			self.progressbar = ProgressBar(school)
 
 		self.ingestor = Ingestor(school,
 			validate=validate,
@@ -41,18 +40,15 @@ class BaseParser:
 			output_error_filepath=output_error_filepath,
 			break_on_error=break_on_error,
 			break_on_warning=break_on_warning,
-			update_progress=(lambda *args, **kwargs: None) if hide_progress_bar else self.progressbar.update,
-			skip_shallow_duplicates=skip_shallow_duplicates)
+			skip_shallow_duplicates=skip_shallow_duplicates,
+			hide_progress_bar=hide_progress_bar)
 
 	@abstractmethod
 	def start(self, **kwargs):
 		'''Start the parse.'''
 
-	def get_stats(self):
-		if not self.hide_progress_bar:
-			return self.progressbar.stats
-		else:
-			return 'stats not logged'
+	def wrap_up(self):
+		self.ingestor.wrap_up()
 
 class CourseParser(BaseParser):
 	__metaclass__ = ABCMeta
@@ -106,8 +102,6 @@ class CourseParser(BaseParser):
 
 		return departments
 
-	# with open('scripts/parser_library/conjunctions.txt', 'r') as f, open('scripts/parser_library/prepositions.txt', 'r') as g:
-		# LOWERCASE = set(f.read().splitlines()) | set(g.read().splitlines())
 	ROMAN_NUMERAL = re.compile(r'^[iv]+$')
 
 	@staticmethod

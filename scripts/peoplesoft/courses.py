@@ -126,8 +126,6 @@ class PeoplesoftParser(CourseParser):
 						for course_soup in course_soups:
 							self.parse_course_description(course_soup)
 
-		self.ingestor.wrap_up()
-
 	def get_years_and_terms(self, soup, cmd_years=None, cmd_terms=None):
 		term_datas = soup.find('select', id='CLASS_SRCH_WRK2_STRM$35$').find_all('option')
 		years_terms_values = {}

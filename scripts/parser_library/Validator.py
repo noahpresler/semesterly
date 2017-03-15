@@ -5,35 +5,39 @@
 
 from __future__ import print_function # NOTE: slowly move toward Python3
 
-import os, sys, re, jsonschema, argparse, httplib
-import simplejson as json
+import os, sys, re, jsonschema, argparse, httplib, simplejson as json
 from scripts.parser_library.Logger import Logger
 from scripts.parser_library.internal_utils import *
 from scripts.parser_library.internal_exceptions import JsonValidationError, JsonValidationWarning, JsonDuplicationWarning
-from scripts.parser_library.Updater import ProgressBar, Counter
+# from scripts.parser_library.Updater import ProgressBar, Counter
+from scripts.parser_library.Tracker import *
 
 class Validator:
-	def __init__(self, config=None):
+	def __init__(self, config, tracker=None):
 
-		# Load/Cache schema definitions into memory
+		# Cache schema definitions into memory.
 		schema_directory ='scripts/parser_library/schemas/'
 		schema_directory = Validator.load_schema_directory(schema_directory)
-		self.schema = Validator.initiate_schemas(schema_directory)
+		self.schemas = Validator.initiate_schemas(schema_directory)
 
 		self.config = self.validate_config(config)
 		self.course_code_regex = re.compile(self.config.course_code_regex)
 
 		# Running tracker of validated course and section codes
 		self.seen = {}
+		# TODO - move to tracker
+
+		if tracker is not None:
+			self.tracker = tracker
+		else:
+			self.tracker = Tracker(self.config.school.code) # Used during self-contained validation.
+			self.tracker.set_mode('validating')
 
 		# Track stats throughout validation
-		self.count24 = 0.0
-		self.granularity = 60
+		# self.count24 = 0.0
+		# self.granularity = 60
 		# TODO - report these values
-
-	def report(self):
-		pass
-		# TODO
+		# self.tracker = Tracker()
 
 	@staticmethod
 	def load_schema_directory(directory):
@@ -90,7 +94,6 @@ class Validator:
 		}[kind]
 
 	def validate(self, data):
-
 		# Convert to dotdict for `easy-on-the-eyes` element access
 		data = [ dotdict(d) for d in make_list(data) ]
 		for obj in data:
@@ -102,17 +105,19 @@ class Validator:
 		output_error=None,
 		hide_progress_bar=False):
 
+		# Add functionality to tracker.
+		self.tracker.add_viewer(LogFormatted())
 		if not hide_progress_bar:
-			self.progressbar = ProgressBar(self.config.school.code)
-		
-		self.counters = Counter()
+			formatter = lambda stats: '{}/{}'.format(stats['valid'], stats['total'])
+			self.tracker.add_viewer(ProgressBar(self.config.school.code, formatter))
+		self.tracker.start()
 
 		self.logger = Logger(errorfile=output_error)
 
 		try:
 			# self.validate_directory(directory)
 			data = Validator.filepath_to_json(datafile)
-			Validator.validate_schema(data, *self.schema.datalist)
+			Validator.validate_schema(data, *self.schemas.datalist)
 		except (JsonValidationError, json.scanner.JSONDecodeError) as e:
 			self.logger.log(e)
 			raise e	# fatal error, cannot continue
@@ -123,7 +128,7 @@ class Validator:
 		for obj in data:
 			try:
 				self.kind_to_validation_function(obj.kind)(obj, schema=False)
-				self.counters.increment(obj.kind, 'valid')
+				self.tracker.track_count(obj.kind, 'valid')
 			except JsonValidationError as e:
 				self.logger.log(e)
 				if break_on_error:
@@ -132,15 +137,10 @@ class Validator:
 				self.logger.log(e)
 				if break_on_warning:
 					raise e
-			self.counters.increment(obj.kind, 'total')
-			formatter = lambda stats: '{}/{}'.format(stats['valid'], stats['total'])
-			if not hide_progress_bar:
-				self.progressbar.update('validate', self.counters.dict(), formatter)
+			self.tracker.track_count(obj.kind, 'total')
+			# TODO - delay tracker update to progress bar
 
-		if not hide_progress_bar:
-			return self.progressbar.stats
-		else:
-			return ''
+		self.tracker.finish()
 
 	def validate_config(self, config):
 		if not isinstance(config, dict):
@@ -150,14 +150,14 @@ class Validator:
 				e.message += '\nconfig.json not defined'
 				raise e
 		return dotdict(config) # FIXME - dotdict should work here
-		# Validator.validate_schema(config, *self.schema.config)
+		# Validator.validate_schema(config, *self.schemas.config)
 
 	def validate_course(self, course, schema=True, relative=True):
 		if not isinstance(course, dotdict):
 			course = dotdict(course)
 
 		if schema:
-			Validator.validate_schema(course, *self.schema.course)
+			Validator.validate_schema(course, *self.schemas.course)
 
 		if 'kind' in course and course.kind != 'course':
 			raise JsonValidationError('course object must be of kind course', course)
@@ -193,7 +193,7 @@ class Validator:
 			section = dotdict(section)
 
 		if schema:
-			Validator.validate_schema(section, *self.schema.section)
+			Validator.validate_schema(section, *self.schemas.section)
 
 		if 'course' not in section:
 			raise JsonValidationError('section does not define a parent course', section)
@@ -257,7 +257,7 @@ class Validator:
 		if not isinstance(meeting, dotdict):
 			meeting = dotdict(meeting)
 		if schema:
-			Validator.validate_schema(meeting, *self.schema.meeting)
+			Validator.validate_schema(meeting, *self.schemas.meeting)
 		if 'kind' in meeting and meeting.kind != 'meeting':
 			raise JsonValidationError('meeting object must be of kind "instructor"', meeting)
 		if 'course' in meeting and self.course_code_regex.match(meeting.course.code) is None:
@@ -365,10 +365,11 @@ class Validator:
 			hour, minute = int(rtime.group(1)), int(rtime.group(2))
 			if hour > 23 or minute > 59:
 				raise JsonValidationError('"%s" is not a valid time' %(time))
-			self.update_time_granularity(hour, minute)
-			if hour < 8 or hour > 20:
-				# NOTE: allows midnight times (00:00) to fly under the radar, unintended but useful hack
-				raise JsonValidationWarning('time range will not land on timetable', time_range)
+			self.tracker.track_time(hour, minute)
+			# self.update_time_granularity(hour, minute)
+			# if hour < 8 or hour > 20:
+			# 	# NOTE: allows midnight times (00:00) to fly under the radar, unintended but useful hack
+			# 	raise JsonValidationWarning('time range will not land on timetable', time_range)
 
 		# Check interaction between times
 		rstart = extract(start)
@@ -378,35 +379,43 @@ class Validator:
 		for i in [start_hour, start_minute, end_hour, end_minute]:
 			i = int(i)
 
-		if start_hour > end_hour or (start_hour == end_hour and start_minute > end_minute):
+		# NOTE: edge case if class going till midnight
+		if (end_hour != 0 and start_hour > end_hour) or (start_hour == end_hour and start_minute > end_minute):
 			raise JsonValidationError('start time is greater than end time', time_range)
 
-		# Count valid 24 hour times
-		if start_hour > 12 or end_hour > 12:
-			self.count24 += 1 # NOTE: should be changed to percentage
+		# NOTE: do this check after the others to give Errors higher priorities than Warnings 
+		for time in [start, end]:
+			hour, minute = int(rtime.group(1)), int(rtime.group(2))
+			if hour < 8 or hour > 20:
+				raise JsonValidationWarning('time range will not land on timetable', time_range)
 
-	def update_time_granularity(self, hour, minute):
-		grain = 1
-		if minute % 60 == 0:
-			grain = 60
-		elif minute % 30 == 0:
-			grain = 30
-		elif minute % 20 == 0:
-			grain = 20
-		elif minute % 15 == 0:
-			grain = 15
-		elif minute % 10 == 0:
-			grain = 10
-		elif minute % 5 == 0:
-			grain = 5
-		elif minute % 3 == 0:
-			grain = 3
-		elif minute % 2 == 0:
-			grain = 2
-		else:
-			grain = 1
-		if grain < self.granularity:
-			self.granularity = grain
+
+		# # Count valid 24 hour times
+		# if start_hour > 12 or end_hour > 12:
+		# 	self.count24 += 1 # NOTE: should be changed to percentage
+
+	# def update_time_granularity(self, hour, minute):
+	# 	grain = 1
+	# 	if minute % 60 == 0:
+	# 		grain = 60
+	# 	elif minute % 30 == 0:
+	# 		grain = 30
+	# 	elif minute % 20 == 0:
+	# 		grain = 20
+	# 	elif minute % 15 == 0:
+	# 		grain = 15
+	# 	elif minute % 10 == 0:
+	# 		grain = 10
+	# 	elif minute % 5 == 0:
+	# 		grain = 5
+	# 	elif minute % 3 == 0:
+	# 		grain = 3
+	# 	elif minute % 2 == 0:
+	# 		grain = 2
+	# 	else:
+	# 		grain = 1
+	# 	if grain < self.granularity:
+	# 		self.granularity = grain
 
 	def validate_directory(self, directory):
 		if directory is None:
@@ -420,7 +429,7 @@ class Validator:
 			except IOError as e:
 				print('ERROR: invalid directory path\n' + str(e), file=sys.stderr)
 				raise e
-		Validator.validate_schema(directory, *self.schema.directory)
+		Validator.validate_schema(directory, *self.schemas.directory)
 
 	@staticmethod
 	def dir_to_dict(path):
@@ -447,8 +456,3 @@ class Validator:
 	def json_is_equal(a, b):
 		a, b = json.dumps(a, sort_keys=True), json.dumps(b, sort_keys=True)
 		return a == b
-
-def main():
-	raise NotImplementedError('usage: python manage.py validate --help')
-if __name__ == '__main__':
-	main()
