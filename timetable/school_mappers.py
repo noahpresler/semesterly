@@ -78,17 +78,17 @@ school_to_course_regex = {
 }
 
 school_to_semesters = {
-  'jhu': ['Spring', 'Fall'],
-  'uoft': ['Winter', 'Fall'],
-  'umd': ['Spring', 'Fall'],
-  'rutgers': ['Spring', 'Fall'],
-  'uo': ['Spring', 'Fall'],
-  'queens': ['Winter', 'Fall'],
-  'vandy': ['Spring', 'Fall'],
-  'gw': ['Spring', 'Fall'],
-  'umich': ['Winter', 'Fall'],
-  'umich2': ['Winter', 'Fall'],
-  'chapman': ['Spring', 'Fall'],
+  'jhu': [{'name': 'Spring', 'year': '2017'}, {'name': 'Fall', 'year': '2016'}],
+  'uoft': [{'name': 'Winter', 'year': '2017'}, {'name': 'Fall', 'year': '2016'}],
+  'umd': [{'name': 'Spring', 'year': '2017'}, {'name': 'Fall', 'year': '2016'}],
+  'rutgers': [{'name': 'Spring', 'year': '2017'}, {'name': 'Fall', 'year': '2016'}],
+  'uo': [{'name': 'Spring', 'year': '2017'}, {'name': 'Fall', 'year': '2016'}],
+  'queens': [{'name': 'Winter', 'year': '2017'}, {'name': 'Fall', 'year': '2016'}],
+  'vandy': [{'name': 'Spring', 'year': '2017'}, {'name': 'Fall', 'year': '2016'}],
+  'gw': [{'name': 'Spring', 'year': '2017'}, {'name': 'Fall', 'year': '2016'}],
+  'umich': [{'name': 'Winter', 'year': '2017'}, {'name': 'Fall', 'year': '2016'}],
+  'umich2': [{'name': 'Winter', 'year': '2017'}, {'name': 'Fall', 'year': '2016'}],
+  'chapman': [{'name': 'Spring', 'year': '2017'}, {'name': 'Fall', 'year': '2016'}],
 }
 
 # do the imports: assumes all parser follow the same naming conventions: 
