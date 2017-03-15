@@ -78,17 +78,17 @@ school_to_course_regex = {
 }
 
 school_to_semesters = {
-  'jhu': ['Fall', 'Spring'],
-  'uoft': ['Fall', 'Winter'],
-  'umd': ['Fall', 'Spring'],
-  'rutgers': ['Fall', 'Spring'],
-  'uo': ['Fall', 'Spring'],
-  'queens': ['Fall', 'Winter'],
-  'vandy': ['Fall', 'Spring'],
-  'gw': ['Fall', 'Spring'],
-  'umich': ['Fall', 'Winter'],
-  'umich2': ['Fall', 'Winter'],
-  'chapman': ['Fall', 'Spring'],
+  'jhu': [{'name': 'Spring', 'year': '2017'}, {'name': 'Fall', 'year': '2017'}, {'name': 'Fall', 'year': '2016'}],
+  'uoft': [{'name': 'Winter', 'year': '2017'}, {'name': 'Fall', 'year': '2016'}],
+  'umd': [{'name': 'Spring', 'year': '2017'}, {'name': 'Fall', 'year': '2016'}],
+  'rutgers': [{'name': 'Spring', 'year': '2017'}, {'name': 'Fall', 'year': '2016'}],
+  'uo': [{'name': 'Spring', 'year': '2017'}, {'name': 'Fall', 'year': '2016'}],
+  'queens': [{'name': 'Winter', 'year': '2017'}, {'name': 'Fall', 'year': '2016'}],
+  'vandy': [{'name': 'Spring', 'year': '2017'}, {'name': 'Fall', 'year': '2016'}],
+  'gw': [{'name': 'Spring', 'year': '2017'}, {'name': 'Fall', 'year': '2016'}],
+  'umich': [{'name': 'Winter', 'year': '2017'}, {'name': 'Fall', 'year': '2016'}],
+  'umich2': [{'name': 'Winter', 'year': '2017'}, {'name': 'Fall', 'year': '2016'}],
+  'chapman': [{'name': 'Spring', 'year': '2017'}, {'name': 'Fall', 'year': '2016'}],
 }
 
 # do the imports: assumes all parser follow the same naming conventions: 
@@ -100,7 +100,7 @@ for school in VALID_SCHOOLS:
 
 # use lambdas to call constructor in a lazy fashion
 course_parsers = {
-  'jhu': lambda: HopkinsParser("Spring 2017").start(),
+  'jhu': lambda: HopkinsParser("Fall 2017").start(),
   'uoft': lambda: UofTParser().start(),
   'umd': parse_umd,
   # 'rutgers': parse_rutgers,
