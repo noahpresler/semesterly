@@ -19,8 +19,7 @@ from pytz import timezone
 from analytics.models import *
 from analytics.views import *
 from timetable.models import *
-from timetable.school_mappers import school_to_granularity, VALID_SCHOOLS,\
-  school_code_to_name, AM_PM_SCHOOLS, school_to_course_regex, school_to_semesters
+from timetable.school_mappers import school_to_granularity, VALID_SCHOOLS, school_code_to_name, AM_PM_SCHOOLS, school_to_course_regex, school_to_semesters
 from timetable.utils import *
 from timetable.scoring import *
 from timetable.jhu_final_exam_scheduler import *
@@ -820,26 +819,12 @@ def profile(request):
   else:
     return signup(request)
 
-@timed_cache(7)
 def get_current_semesters(school):
   """
   For a given school, get the possible semesters and the most recent year for each
   semester that has course data, and return a list of (semester name, year) pairs.
   """
-  semester_names = school_to_semesters[school]
-  semesters = [(name, get_latest_year(school, name)) for name in semester_names]
-  semesters = sorted(semesters, key=lambda (name, year): (year, semester_names.index(name)))
-  return [{'name': name, 'year': year} for (name, year) in semesters]
-
-def get_latest_year(school, semester_name):
-  """ Return the latest year for which a given school and semester has courses """
-  current_year = datetime.now().year
-  years_to_try = map(str, [current_year - 1, current_year, current_year + 1])
-  for year in years_to_try:
-    semester = Semester.objects.get_or_create(name=semester_name, year=year)[0]
-    if Course.objects.filter(school=school, section__semester=semester.id).count():
-      return year
-  return current_year
+  return school_to_semesters[school]
 
 @csrf_exempt
 def final_exam_scheduler(request):
