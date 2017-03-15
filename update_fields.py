@@ -20,7 +20,7 @@ def update_sem_fields(table, get_school):
   """ Add values to table.sem_name and table.year based on table.semester """
   num_updated = 0
   bad_semesters = Counter()
-  for row in table.objects.all():
+  for row in table.objects.all().iterator():
     semester_code = row.semester
     if semester_code not in valid_semesters:
       bad_semesters[semester_code] += 1
