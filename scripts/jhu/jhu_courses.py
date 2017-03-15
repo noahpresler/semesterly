@@ -136,9 +136,9 @@ class HopkinsParser(CourseParser):
 
         # Defualt to hardcoded current year.
         if not years:
-            years = ['2017']
+            years = ['2017', '2016']
         if not terms:
-            terms = ['Spring']
+            terms = ['Spring', 'Fall']
 
         # Run parser for all semesters specified.
         for year in years:
@@ -146,7 +146,6 @@ class HopkinsParser(CourseParser):
                 self.semester = '{} {}'.format(term, str(year))
                 self.get_schools()
                 self.parse_schools()
-                self.ingestor.wrap_up()
 
 if __name__ == "__main__":
     raise NotImplementedError('run parsers with manage.py')
