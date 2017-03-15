@@ -5,6 +5,7 @@ os.environ.setdefault("DJANGO_SETTINGS_MODULE", "semesterly.settings")
 django.setup()
 from operator import attrgetter
 from pprint import pprint
+import progressbar
 
 from timetable.models import Section
 from analytics.models import *
@@ -20,7 +21,8 @@ def update_sem_fields(table, get_school):
   """ Add values to table.sem_name and table.year based on table.semester """
   num_updated = 0
   bad_semesters = Counter()
-  for row in table.objects.all():
+  bar = progressbar.ProgressBar(max_value=table.objects.count())
+  for i, row in enumerate(table.objects.all().iterator()):
     semester_code = row.semester
     if semester_code not in valid_semesters:
       bad_semesters[semester_code] += 1
@@ -29,6 +31,7 @@ def update_sem_fields(table, get_school):
       row.year = '2017' if semester_code == 'S' else '2016'
       row.save()
       num_updated += 1
+    bar.update(i)
 
   print "Updated {0}/{1} rows from table {2}".format(num_updated, len(table.objects.all()), str(table))
   print "Ignored the following invalid semester codes:"
