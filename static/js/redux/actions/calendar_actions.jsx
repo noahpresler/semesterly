@@ -107,7 +107,7 @@ export function createiCalfromTimetable(active) {
 			let sem_start = new Date()
 			let sem_end = new Date()
 			let semester = allSemesters[state.semesterIndex]
-			if (semester.name == 'fall') {
+			if (semester.name == 'Fall') {
 				//ignore year, year is set to current year
 				sem_start = new Date('August 30 ' + semester.year + ' 00:00:00');
 				sem_end = new Date('December 20 ' + semester.year + ' 00:00:00');
