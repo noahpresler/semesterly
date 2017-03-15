@@ -330,9 +330,6 @@ class Ingestor(dict):
 		else:
 			self.logger.log(obj)
 		self.tracker.track_count(obj['kind'], 'total')
-		# self.counter.increment(obj['kind'], 'total')
-		# formatter = lambda stats: '{}/{}'.format(stats['valid'], stats['total'])
-		# self.tracker.track_counter(self.counter.dict(), formatter)
 
 	def run_validator(self, data):
 		is_valid, full_skip = False, False
@@ -362,5 +359,6 @@ class Ingestor(dict):
 		return is_valid, full_skip
 
 	def wrap_up(self):
+		self.tracker.report()
 		self.logger.close()
 		self.clear()
