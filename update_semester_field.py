@@ -1,5 +1,6 @@
 from collections import Counter
 from pprint import pprint
+import progressbar
 
 
 # schools whose second semester is called the winter semester (instead of spring)
@@ -27,7 +28,8 @@ def update_sem_fields(table, get_school, sem_table):
   num_updated = 0
   name_year_to_semester = {}
   bad_inputs = Counter()
-  for row in table.objects.all():
+  bar = progressbar.ProgressBar(max_value=table.objects.count())
+  for i, row in enumerate(table.objects.all().iterator()):
     semester_code = row._semester
     name = code_to_name(semester_code, get_school(row))
     year = '2017' if semester_code == 'S' else '2016'
@@ -43,6 +45,7 @@ def update_sem_fields(table, get_school, sem_table):
 
     row.semester = semester
     row.save()
+    bar.update(i)
     num_updated += 1
 
   print "Updated {0}/{1} rows from table {2}".format(num_updated, len(table.objects.all()), str(table))
