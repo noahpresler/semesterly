@@ -191,7 +191,6 @@ class UMDParser(CourseParser):
     else:
       departments = self.get_departments()
       self.get_courses(departments)      
-    self.ingestor.wrap_up()
 
 if __name__ == '__main__':
   raise NotImplementedError('run with manage.py')

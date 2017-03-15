@@ -47,11 +47,8 @@ class BaseParser:
 	def start(self, **kwargs):
 		'''Start the parse.'''
 
-	# def get_stats(self):
-	# 	if not self.hide_progress_bar:
-	# 		return self.progressbar.stats
-	# 	else:
-	# 		return 'stats not logged'
+	def wrap_up(self):
+		self.ingestor.wrap_up()
 
 class CourseParser(BaseParser):
 	__metaclass__ = ABCMeta
