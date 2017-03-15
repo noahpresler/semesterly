@@ -78,7 +78,7 @@ school_to_course_regex = {
 }
 
 school_to_semesters = {
-  'jhu': [{'name': 'Spring', 'year': '2017'}, {'name': 'Fall', 'year': '2016'}],
+  'jhu': [{'name': 'Spring', 'year': '2017'}, {'name': 'Fall', 'year': '2017'}, {'name': 'Fall', 'year': '2016'}],
   'uoft': [{'name': 'Winter', 'year': '2017'}, {'name': 'Fall', 'year': '2016'}],
   'umd': [{'name': 'Spring', 'year': '2017'}, {'name': 'Fall', 'year': '2016'}],
   'rutgers': [{'name': 'Spring', 'year': '2017'}, {'name': 'Fall', 'year': '2016'}],
