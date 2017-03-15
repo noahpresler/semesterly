@@ -12,6 +12,7 @@ export class SearchBar extends React.Component {
         this.state = { focused: false, showDropdown: false };
         this.toggleDropdown = this.toggleDropdown.bind(this);
         this.fetchSearchResults = this.fetchSearchResults.bind(this);
+        this.getAbbreviatedSemesterName = this.getAbbreviatedSemesterName.bind(this);
         this.changeTimer = false;
     }
     componentWillMount() {
@@ -48,11 +49,11 @@ export class SearchBar extends React.Component {
         this.setState({ showDropdown: false });
         this.props.maybeSetSemester(semester);
     }
+    getAbbreviatedSemesterName(semester) {
+        return this.abbreviateSemesterName(semester.name) + " " + this.abbreviateYear(semester.year)
+    }
     getSemesterName(semester) {
         return semester.name + " " + semester.year
-    }
-    getAbbreviatedSemesterName(semester) {
-        return abbreviateSemesterName(semester.name) + " " + abbreviateYear(semester.year)
     }
     abbreviateSemesterName(semesterName) {
         return semesterName[0];
