@@ -8,7 +8,6 @@ from django.db import migrations
 def create_new_semesters(apps, schema_editor):
   Semester = apps.get_model('timetable', 'Semester')
   new_rows = [
-    Semester.objects.get_or_create(name='Full Year', year='2016'),
     Semester.objects.get_or_create(name='Fall', year='2016'),
     Semester.objects.get_or_create(name='Spring', year='2017'),
     Semester.objects.get_or_create(name='Winter', year='2017'),
