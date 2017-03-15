@@ -1,4 +1,4 @@
-import { VALID_SEMESTERS, SET_SEMESTER } from '../constants.jsx';
+import { SET_SEMESTER } from '../constants.jsx';
 
 export const semesterIndex = (state = 0, action) => {
 	switch (action.type) {
