@@ -176,6 +176,12 @@ export function fetchStateTimetables(activeIndex=0) {
 	let requestBody = getBaseReqBody(store.getState());
 	store.dispatch(fetchTimetables(requestBody, false, activeIndex));
 }
+export function addLastAddedCourse() {
+	let state = store.getState();
+	if (state.timetables.lastCourseAdded != null) {
+		addOrRemoveCourse(state.timetables.lastCourseAdded)	
+	}
+}
 /*
 Attempts to add the course represented by newCourseId
 to the user's roster. If a section is provided, that section is 
@@ -196,7 +202,7 @@ export function addOrRemoveCourse(newCourseId, lockingSection = '') {
 	  	});
 	  reqBody = getBaseReqBody(store.getState());
 	}
-	state = store.getState()
+	state = store.getState();
 	if (removing) {
 		let updatedCourseSections = Object.assign({}, state.courseSections.objects);
 		delete updatedCourseSections[newCourseId]; // remove it from courseSections.objects
@@ -208,6 +214,12 @@ export function addOrRemoveCourse(newCourseId, lockingSection = '') {
 		})
 	}
 	else { // adding a course
+		let dispatch = store.dispatch;
+		dispatch({
+			type: "UPDATE_LAST_COURSE_ADDED",
+			course: newCourseId,
+		});
+		state = store.getState();
 		Object.assign(reqBody, {
 			updated_courses: [{
 				'course_id': newCourseId,
