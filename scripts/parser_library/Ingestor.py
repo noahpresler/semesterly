@@ -5,6 +5,8 @@
 
 from __future__ import print_function, division, absolute_import # NOTE: slowly move toward Python3
 
+import sys
+
 import simplejson as json, jsonschema
 from pygments import highlight, lexers, formatters, filters
 from scripts.parser_library.internal_utils import *
@@ -114,7 +116,7 @@ class Ingestor(dict):
 		self.tracker.add_viewer(LogFormatted())
 		if not hide_progress_bar:
 			formatter = lambda stats: '{}/{}'.format(stats['valid'], stats['total'])
-			self.tracker.add_viewer(ProgressBar(self.school))
+			self.tracker.add_viewer(ProgressBar(self.school, formatter))
 		self.tracker.start()
 
 		self.validator = Validator(config, tracker=self.tracker)
