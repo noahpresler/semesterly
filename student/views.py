@@ -407,14 +407,15 @@ def delete_registration_token(request):
     }
     return HttpResponse(json.dumps(json_data), content_type="application/json")
 
-def get_semester_from_tt(tt):
+def get_semester_name_from_tt(tt):
     try:
-        tt['semester']
+        return Semester.objects.get(id=tt['semester']).name
     except KeyError:
-        semester = 'F'
+        semester = 'Fall'
         for course in tt['courses']:
             for slot in course['slots']:
-                return slot['semester']
+                semester_id = slot['semester']
+                return Semester.objects.get(id=semester_id).name
         return semester
 
 @csrf_exempt
@@ -428,17 +429,17 @@ def add_tt_to_gcal(request):
     school = request.subdomain
 
     tt_name = tt.get('name')
-    if  not tt_name or "Untitled Schedule" in tt_name > -1 or len(tt_name) == 0:
+    if not tt_name or "Untitled Schedule" in tt_name or len(tt_name) == 0:
         tt_name = "Semester.ly Schedule"
     else:
-        tt_name + " - Semester.ly"
+        tt_name += " - Semester.ly"
 
     #create calendar
     calendar = {'summary': tt_name, 'timeZone': 'America/New_York'}
     created_calendar = service.calendars().insert(body=calendar).execute()
 
-    semester = get_semester_from_tt(tt)
-    if semester == 'F':
+    semester_name = get_semester_name_from_tt(tt)
+    if semester_name == 'Fall':
         #ignore year, year is set to current year
         sem_start = datetime(2017,8,30,17,0,0)
         sem_end = datetime(2017,12,20,17,0,0)
