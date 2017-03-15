@@ -77,22 +77,16 @@ class Command(BaseCommand):
 					skip_shallow_duplicates=options['skip_shallow_duplicates']
 				)
 
-				start_time = timer()
 				p.start(
 					verbosity=options['verbosity'],
-					# year=options['term_and_year'][1] if options.get('term_and_year') else None,
-					# term=options['term_and_year'][0] if options.get('term_and_year') else None,
 					years=options.get('years'),
 					terms=options.get('terms'),
 					departments=options.get('departments'),
 					textbooks=options['textbooks']
 				)
-				end_time = timer()
 
-				if hasattr(p, 'get_stats') and callable(p.get_stats):
-					stat_log.append('({}) [Elapsed Time: {:.2f}s] {}'.format(school, end_time - start_time, p.get_stats()))
-				else:
-					stat_log.append('({}) [Elapsed Time: {:.2f}s] ==INGESTING=='.format(school, end_time - start_time))
+				# Close up json and files and report.
+				p.wrap_up()
 
 			except CourseParseError as e:
 				error = "Error while parsing %s:\n\n%s\n" % (school, str(e))
