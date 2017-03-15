@@ -100,7 +100,7 @@ for school in VALID_SCHOOLS:
 
 # use lambdas to call constructor in a lazy fashion
 course_parsers = {
-  'jhu': lambda: HopkinsParser("Spring 2017").start(),
+  'jhu': lambda: HopkinsParser("Fall 2017").start(),
   'uoft': lambda: UofTParser().start(),
   'umd': parse_umd,
   # 'rutgers': parse_rutgers,
