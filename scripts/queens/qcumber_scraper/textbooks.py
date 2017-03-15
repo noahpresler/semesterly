@@ -5,7 +5,6 @@ import logging
 from writer import write_textbook
 from bs4 import BeautifulSoup
 
-
 class TextbookScraper(object):
 
     def __init__(self, config):
