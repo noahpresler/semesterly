@@ -260,8 +260,9 @@ def get_classmates(request):
     # user opted in to sharing courses
     if student.social_courses:
         courses = []
+        friends = student.friends.filter(social_courses=True)
         for course_id in course_ids:
-            courses.append(get_classmates_from_course_id(school, student, course_id, semester))
+            courses.append(get_classmates_from_course_id(school, student, course_id, semester, friends=friends))
         return HttpResponse(json.dumps(courses), content_type='application/json')
     else:
         return HttpResponse("Must have social_courses enabled")
@@ -303,9 +304,10 @@ def find_friends(request):
         print e
         return HttpResponse(json.dumps([]))
 
-def get_classmates_from_course_id(school, student, course_id, semester):
+def get_classmates_from_course_id(school, student, course_id, semester, friends=None):
     # All friends with social courses/sharing enabled
-    friends = student.friends.filter(social_courses=True)
+    if not friends: 
+        friends = student.friends.filter(social_courses=True)
     course = { 'course_id': course_id, 'classmates': [], 'past_classmates': []}
     for friend in friends:
         classmate = model_to_dict(friend, exclude=['user','id','fbook_uid', 'friends'])
