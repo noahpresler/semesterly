@@ -57,6 +57,7 @@ def view_analytics_dashboard(request):
                 "signups_per_hour": number_timetables_per_hour(
                     Timetable=Student,start_delta_days=7, interval_delta_hours=24),
                 "total_timetables_by_school": json.dumps(total_timetables_by_school),
+                "total_timetables_by_semester": json.dumps(number_timetables_per_semester()),
                 "total_timetables": number_timetables(),
                 "total_shared_timetables": number_timetables(Timetable=SharedTimetable),
                 "total_personal_timetables": number_timetables(Timetable=PersonalTimetable),
@@ -143,6 +144,12 @@ def number_timetables_per_hour(Timetable=AnalyticsTimetable, school=None,
             time_end=time_start + time_delta)
         )
         time_start += time_delta
+    return num_timetables
+
+def number_timetables_per_semester():
+    num_timetables = {}
+    for semester in Semester.objects.distinct():
+        num_timetables[str(semester)] = number_timetables(semester=semester)
     return num_timetables
 
 def number_of_reactions(max_only=False):
