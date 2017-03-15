@@ -11,7 +11,7 @@ from django.db import migrations
 
 
 def move_y_courses(apps, schema_editor):
-  """ Add values to table.sem_name and table.year based on table.semester """
+  """ Replace every Y course with one F course and one Y course """
   Semester = apps.get_model('timetable', 'Semester')
   Section = apps.get_model('timetable', 'Section')
 
