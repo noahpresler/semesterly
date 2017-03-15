@@ -78,17 +78,17 @@ school_to_course_regex = {
 }
 
 school_to_semesters = {
-  'jhu': ['Fall', 'Spring'],
-  'uoft': ['Fall', 'Winter'],
-  'umd': ['Fall', 'Spring'],
-  'rutgers': ['Fall', 'Spring'],
-  'uo': ['Fall', 'Spring'],
-  'queens': ['Fall', 'Winter'],
-  'vandy': ['Fall', 'Spring'],
-  'gw': ['Fall', 'Spring'],
-  'umich': ['Fall', 'Winter'],
-  'umich2': ['Fall', 'Winter'],
-  'chapman': ['Fall', 'Spring'],
+  'jhu': ['Spring', 'Fall'],
+  'uoft': ['Winter', 'Fall'],
+  'umd': ['Spring', 'Fall'],
+  'rutgers': ['Spring', 'Fall'],
+  'uo': ['Spring', 'Fall'],
+  'queens': ['Winter', 'Fall'],
+  'vandy': ['Spring', 'Fall'],
+  'gw': ['Spring', 'Fall'],
+  'umich': ['Winter', 'Fall'],
+  'umich2': ['Winter', 'Fall'],
+  'chapman': ['Spring', 'Fall'],
 }
 
 # do the imports: assumes all parser follow the same naming conventions: 
