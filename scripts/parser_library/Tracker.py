@@ -68,9 +68,6 @@ class Counters(dict):
 		stats = ['valid', 'created', 'new', 'updated', 'total']
 		super(Counters, self).__init__({subject: {stat: 0 for stat in stats} for subject in subjects})
 
-	def __dict__(self):
-		return self
-
 	def increment(self, subject, stat):
 		self[subject][stat] += 1
 
@@ -128,9 +125,19 @@ class ProgressBar(Viewer):
 		pass
 
 class LogFormatted(Viewer):
+	def __init__(self, filepath):
+		self.filepath = filepath
+
 	def broadcast_update(self, tracker):
-		pass
+		pass # do nothing.
 
 	def report(self, tracker):
-		print(tracker.counters)
-		# TODO
+		with open(filepath, 'a') as f:
+			print('='*40, file=f)
+			for subject, stats in track.counters.items():
+				print('{}'.format(subject))
+				for name, value in stats.items():
+					if value == 0:
+						continue
+					print('\t{}: {}'.format(name, value), file=f)
+			print(tracker.counters, file=sys.stderr)
