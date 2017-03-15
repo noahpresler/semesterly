@@ -1,6 +1,6 @@
 from __future__ import print_function, division, absolute_import # NOTE: slowly move toward Python3
 
-import progressbar, sys, datetime, simplejson as json
+import progressbar, sys, datetime, simplejson as json, sys
 from timeit import default_timer as timer
 from abc import ABCMeta, abstractmethod
 
@@ -29,8 +29,7 @@ class Tracker:
 
 	def track_count(self, subject, stat):
 		self.counters.increment(subject, stat)
-		print(subject, stat)
-		# self.update()
+		self.broadcast_update()
 
 	def track_time(self, hour, minute):
 		'''Update time granularity and 24hr time distribution to support time spread.
@@ -54,26 +53,26 @@ class Tracker:
 		'''Track distrbution of instructor names.'''
 		# TODO
 
-	def update(self):
+	def broadcast_update(self):
 		for viewer in self.viewers:
-			viewer.update(self)
+			viewer.broadcast_update(self)
 
 	def report(self):
 		for viewer in self.viewers:
 			viewer.report(self)
 
-class Counters:
+class Counters(dict):
 	'''Dictionary counter for various stats; to be passed with dict to update method in ProgressBar.'''
 	def __init__(self):
 		subjects = ['course', 'section', 'meeting', 'textbook', 'evaluation', 'offering', 'textbook_link']
 		stats = ['valid', 'created', 'new', 'updated', 'total']
-		self.counters = {subject: {stat: 0 for stat in stats} for subject in subjects}
+		super(Counters, self).__init__({subject: {stat: 0 for stat in stats} for subject in subjects})
 
-	def dict(self):
-		return self.counters
+	def __dict__(self):
+		return self
 
 	def increment(self, subject, stat):
-		self.counters[subject][stat] += 1
+		self[subject][stat] += 1
 
 	def clear(self):
 		for subject in self.counters:
@@ -85,7 +84,7 @@ class Viewer:
 	__metaclass__ = ABCMeta
 
 	@abstractmethod
-	def update(self, tracker):
+	def broadcast_update(self, tracker):
 		'''Incremental updates of tracking info.'''
 
 	@abstractmethod
@@ -93,10 +92,12 @@ class Viewer:
 		'''Final report of tracking info.'''
 
 class ProgressBar(Viewer):
+	terminal_width_switch_size = 100
+
 	def __init__(self, school, formatter=(lambda x: x)):
 		# Set progress bar to long or short dependent on terminal width
 		terminal_width = progressbar.utils.get_terminal_size()[0]
-		if terminal_width < 100:
+		if terminal_width < ProgressBar.terminal_width_switch_size:
 			self.bar = progressbar.ProgressBar(
 				redirect_stdout=True,
 				max_value=progressbar.UnknownLength,
@@ -114,12 +115,10 @@ class ProgressBar(Viewer):
 					progressbar.FormatLabel('%(value)s')
 				])
 		self.formatter = formatter
-		super(Viewer, self).__init__()
 
-	def update(self, tracker):
+	def broadcast_update(self, tracker):
 		counters = tracker.counters
-		mode = tracker.mode
-		mode = '=={}=='.format(mode.upper())
+		mode = '=={}=='.format(tracker.mode.upper())
 		label_string = ' | '.join(('{}: {}'.format(k[:3].title(), self.formatter(counters[k])) for k in counters if counters[k]['total'] > 0))
 		formatted_string = '{} | {}'.format(mode, label_string)
 		self.bar.update(formatted_string)
@@ -129,7 +128,7 @@ class ProgressBar(Viewer):
 		pass
 
 class LogFormatted(Viewer):
-	def update(self, tracker):
+	def broadcast_update(self, tracker):
 		pass
 
 	def report(self, tracker):
