@@ -65,17 +65,29 @@ def view_timetable(request, code=None, sem_name=None, year=None, shared_timetabl
   school = request.subdomain
   student = get_student(request)
   course_json = None
-  # temporarily hard code default semester
-  sem, _ = Semester.objects.get_or_create(name='Fall', year='2016')
+
+  # get default semester info
+  sem_dicts = get_current_semesters(school) # corresponds to allSemesters on frontend
+  semester_index = 0 # corresponds to state.semesterIndex on frontend
+  sem = Semester.objects.get(**sem_dicts[semester_index])
+
+  if sem_name and year: # loading a share course link OR timetable share link
+    sem, _ = Semester.objects.get_or_create(name=sem_name, year=year)
+    sem_pair = {'name': sem.name, 'year': sem.year}
+    if sem_pair not in sem_dicts:
+      sem_dicts.append(sem_pair)
+      semester_index = len(sem_dicts) - 1
+    else:
+      semester_index = sem_dicts.index(sem_pair)
 
   if code: # user is loading a share course link, since code was included
-    sem, _ = Semester.objects.get_or_create(name=sem_name, year=year)
     code = code.upper()
     try:
       course = Course.objects.get(school=school, code=code)
       course_json = get_detailed_course_json(school, course, sem, student)
     except:
       raise Http404
+
   integrations = {'integrations': []}
   if student and student.user.is_authenticated():
     student.school = school
@@ -86,8 +98,8 @@ def view_timetable(request, code=None, sem_name=None, year=None, shared_timetabl
     'school': school,
     'student': json.dumps(get_user_dict(school, student, sem)),
     'course': json.dumps(course_json),
-    'semester': '0',
-    'all_semesters': json.dumps(get_current_semesters(school)),
+    'semester': str(semester_index),
+    'all_semesters': json.dumps(sem_dicts),
     'shared_timetable': json.dumps(shared_timetable),
     'find_friends': find_friends,
     'enable_notifs': enable_notifs,
@@ -811,7 +823,7 @@ def profile(request):
 @timed_cache(7)
 def get_current_semesters(school):
   """
-  For a given school, get the possible semesters and the latest year for each
+  For a given school, get the possible semesters and the most recent year for each
   semester that has course data, and return a list of (semester name, year) pairs.
   """
   semester_names = school_to_semesters[school]
