@@ -269,14 +269,14 @@ class DigestionAdapter:
 		if 'final_exam' in section:
 			pass # TODO - add to database
 
-		# Grab semester
-		print(Semester.objects.filter(name='Winter', year=section.year), file=sys.stderr)
-		exit(1)
-
+		# Grab semester.
+		semester, _ = Semester.objects.update_or_create(name=section.term, year=section.year)
+		if semester is None:
+			raise DigestionError('Semester {} {} not in DB'.format(sectin.term, section.year))
 
 		return {
 			'course': course_model,
-			'semester': section.term[0], # TODO - add full term to django model
+			'semester': semester,
 			'meeting_section': section.code,
 			'defaults': adapted
 		}
@@ -455,16 +455,18 @@ class Vommit(DigestionStrategy):
 			# Transform django object to dictionary
 			dbmodel = dbmodel.__dict__
 
+		context = {'section', 'course', 'semester'}
+
 		whats = {}
 		for k, v in inmodel.iteritems():
-			if k in {'section', 'course'}:
+			if k in context:
 				try:
 					whats[k] = str(v)
 				except django.utils.encoding.DjangoUnicodeDecodeError as e:
 					whats[k] = '<{}: [Bad Unicode data]'.format(k)
 
 		# Remove db specific content from model
-		blacklist = {'_state', 'id', 'section_id', 'course_id', '_course_cache', 'section', 'course'}
+		blacklist = {'_state', 'id', 'section_id', 'course_id', '_course_cache'} | context
 		prune = lambda d: {k: v for k, v in d.iteritems() if k not in blacklist}
 		dbmodel = prune(dbmodel)
 		inmodel = prune(inmodel)

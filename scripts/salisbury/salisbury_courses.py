@@ -22,7 +22,7 @@ class SalisburyParser(PeoplesoftParser):
 
 		# Hotfix to narrow parsing range.
 		if years is None:
-			years = ['2016', '2017', '2018']
+			years = ['2016', '2017']
 
 		self.parse(
 			cmd_years=years,
