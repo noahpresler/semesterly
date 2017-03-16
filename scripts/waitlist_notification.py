@@ -9,12 +9,12 @@ if len(sys.argv) < 3:
     print("Please specify a school (e.g. jhu) and a semester (F or S).")
     exit(0)
 school = sys.argv[1]
-semester = sys.argv[2]
+semester = Semester.objects.filter(name=sys.argv[2])
 
 client = Mailer()
 d = {}
 
-sections = Section.objects.all()
+sections = Section.objects.filter(course__school="jhu")
 for section in sections:
     if not section.was_full and (section.size <= section.enrolment):
         section.was_full = True
