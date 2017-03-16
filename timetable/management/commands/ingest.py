@@ -129,24 +129,3 @@ class Command(BaseCommand):
 		except Exception as e:
 			self.stderr.write(traceback.format_exc())
 			stat_log.append(school + '\n' + traceback.format_exc())
-
-	# @staticmethod
-	# def log_stats(filepath, options='', stats=None, timestamp='', elapsed=None):
-
-	# 	with open(filepath, 'a') as log:
-	# 		log.write('='*40 + '\n')
-
-	# 	'''Append run stat to master log.'''
-	# 	formatted_string = ''
-
-	# 	if timestamp:
-	# 		formatted_string += 'TIMESTAMP: ' + timestamp + '\n'
-	# 	if elapsed:
-	# 		formatted_string += 'ELAPSED: ' + str(elapsed) + '\n'
-	# 	if stats:
-	# 		formatted_string += '\n'.join(stat for stat in stats) + '\n'
-	# 	if options:
-	# 		formatted_string += 'OPTIONS:\n' + json.dumps(options, sort_keys=True, indent=2, separators=(',', ': ')) + '\n'
-
-	# 	with open(filepath, 'a') as log:
-	# 		log.write(formatted_string)
