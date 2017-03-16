@@ -142,7 +142,7 @@ class PeoplesoftParser(CourseParser):
 			if year not in years_terms_values:
 				years_terms_values[year] = {}
 			years_terms_values[year][term] = term_data['value']
-		return self.filter_term_and_year(years_terms_values, cmd_years, cmd_terms)
+		return self.extractor.filter_term_and_year(years_terms_values, cmd_years, cmd_terms)
 
 	def parse_term_and_years(term_and_years):
 			years = { term_and_year.split()[1]: {term_and_year.split()[0]: code} for term_and_year, code in term_and_years.items() }
@@ -185,7 +185,7 @@ class PeoplesoftParser(CourseParser):
 	def get_departments(self, soup, cmd_departments=None):
 		extract_dept_name = lambda d: self.department_name_regex.match(d).group(1)
 		departments = { dept['value']: extract_dept_name(dept.text) for dept in self.find_all['depts'](soup) }
-		return self.filter_departments(departments, cmd_departments), None
+		return self.extractor.filter_departments(departments, cmd_departments), None
 
 	def get_course_list_as_soup(self, courses, soup):
 		# fill payload for course description page request
@@ -227,7 +227,7 @@ class PeoplesoftParser(CourseParser):
 
 		# Place course info into course model
 		self.ingestor['course_code']  = rtitle.group(1)
-		self.ingestor['course_name']  = CourseParser.titlize(rtitle.group(3))
+		self.ingestor['course_name']  = self.extractor.titlize(rtitle.group(3))
 		self.ingestor['section_code'] = rtitle.group(2)
 		self.ingestor['credits']      = float(re.match(r'(\d*).*', units).group(1))
 		self.ingestor['prereqs']      = [req.text] if req else None
@@ -372,7 +372,7 @@ class QPeoplesoftParser(PeoplesoftParser):
 	def get_departments(self, soup, cmd_departments=None):
 		if self.get_selected_term(soup) == self.intially_selected_term:
 			sys.stderr.write('GET DEPARTMENTS')
-			return self.filter_departments(self.saved_departments, cmd_departments), None
+			return self.extractor.filter_departments(self.saved_departments, cmd_departments), None
 		return super(QPeoplesoftParser, self).get_departments(soup, cmd_departments)
 
 	def get_dept_param_key(self, soup):
@@ -394,7 +394,7 @@ class UPeoplesoftParser(PeoplesoftParser):
 		department_names = soup.find_all('span', id=re.compile(r'M_SR_SS_SUBJECT_DESCR\$\d'))
 		depts = { dept.text: dept_name.text for dept, dept_name in zip(departments, department_names) }
 		dept_ids = { dept.text: dept['id'] for dept in departments }
-		return self.filter_departments(depts, cmd_departments), dept_ids
+		return self.extractor.filter_departments(depts, cmd_departments), dept_ids
 
 	def get_dept_param_key(self, soup):
 		return 'ICAction'
