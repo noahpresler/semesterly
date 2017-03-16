@@ -6,6 +6,7 @@
 from __future__ import print_function, division, absolute_import # NOTE: slowly move toward Python3
 
 import sys
+
 import simplejson as json, jsonschema
 from pygments import highlight, lexers, formatters, filters
 from scripts.parser_library.internal_utils import *
