@@ -4,13 +4,13 @@ import progressbar, sys, datetime, simplejson as json, sys
 from timeit import default_timer as timer
 from abc import ABCMeta, abstractmethod
 
-class Tracker:
+class Tracker(object):
 	def __init__(self, school):
 		self.school = school
-		self.granularity = 60
 		self.time_distribution = dict(_12=0, _24=0)
 		self.counters = Counters()
 		self.viewers = []
+		self.saw_error = False
 		# self.seen = {} # Track seen courses and sections. # TODO
 
 	def add_viewer(self, viewer):
@@ -23,12 +23,16 @@ class Tracker:
 		self.cmd_options = cmd_options
 
 	def start(self):
-		self.timestamp = datetime.datetime.now().strftime("%Y/%m/%d-%H:%M:%S")
+		self.timestamp = datetime.datetime.utcnow().strftime("%Y/%m/%d-%H:%M:%S")
 		self.start_time = timer()
 
 	def finish(self):
 		self.end_time = timer()
 		self.report()
+
+	def see_error(self, msg):
+		self.saw_error = True
+		self.error = msg
 
 	def track_count(self, subject, stat):
 		self.counters.increment(subject, stat)
@@ -40,6 +44,9 @@ class Tracker:
 			hour: a valid (24hr) hour
 			minute: a valid minute
 		'''
+		if not hasattr(self, 'granularity'):
+			self.granularity = 60
+
 		if hour > 13:
 			self.time_distribution['_24'] += 1
 		else:
@@ -63,6 +70,16 @@ class Tracker:
 	def report(self):
 		for viewer in self.viewers:
 			viewer.report(self)
+
+class NullTracker(Tracker):
+	def __init__(self, *args, **kwargs):
+		super(NullTracker, self).__init__('null', *args, **kwargs)
+
+	def broadcast_update(self):
+		pass # do nothing.
+
+	def report(self):
+		pass # do nothing.
 
 class Counters(dict):
 	'''Dictionary counter for various stats; to be passed with dict to update method in ProgressBar.'''
@@ -122,30 +139,30 @@ class ProgressBar(Viewer):
 		label_string = ' | '.join(('{}: {}'.format(k[:3].title(), self.formatter(counters[k])) for k in counters if counters[k]['total'] > 0))
 		formatted_string = '{} | {}'.format(mode, label_string)
 		self.bar.update(formatted_string)
-		# self.stats = formatted_string # grab run stats
 
 	def report(self, tracker):
-		pass
+		pass # do nothing
 
 class LogFormatted(Viewer):
-	def __init__(self, filepath):
-		self.filepath = filepath
+	def __init__(self, logpath):
+		self.logpath = logpath
 
 	def broadcast_update(self, tracker):
 		pass # do nothing.
 
 	def report(self, tracker):
-		with open(self.filepath, 'a') as file:
-			print('='*40, file=file)
-			print('{}'.format(tracker.school.upper()), file=file)
-			print('TIMESTAMP: {}'.format(tracker.timestamp), file=file)
-			print('ELAPSED: {}'.format(str(datetime.timedelta(seconds=tracker.end_time - tracker.start_time))), file=file)
-			print('COMMAND OPTIONS\n{}'.format(tracker.cmd_options))
-			print('=={}=='.format(tracker.mode.upper()), file=file)
-			for subject, stats in tracker.counters.items():
-				print('{}'.format(subject), file=file)
-				for name, value in stats.items():
-					if value == 0:
-						continue
-					print(' '*4 + '{}: {}'.format(name, value), file=file)
-			# print(tracker.counters, file=sys.stderr)
+		json_str = lambda j: json.dumps(j, sort_keys=True, indent=2, separators=(',', ': '))
+		with open(self.logpath, 'a') as log:
+			print('='*40, file=log)
+			print('{}'.format(tracker.school.upper()), file=log)
+			print('=={}=='.format(tracker.mode.upper()), file=log)
+			if tracker.saw_error:
+				print('FAILED:\n\n{}'.format(tracker.error), file=log)
+			print('TIMESTAMP (UTC): {}'.format(tracker.timestamp), file=log)
+			print('ELAPSED: {}'.format(str(datetime.timedelta(seconds=int(tracker.end_time - tracker.start_time)))), file=log)
+			if hasattr(tracker, 'cmd_options'):
+				print('COMMAND OPTIONS:\n{}'.format(json_str(tracker.cmd_options)), file=log)
+			statistics = { subject: {stat: value for stat, value in stats.items() if value != 0} for subject, stats in tracker.counters.items() if len(stats) > 0 }
+			print('STATS:\n{}'.format(json_str(statistics)), file=log)
+			if hasattr(tracker, 'granularity'):
+				print('calculated granularity: {}'.format(tracker.granularity), file=log)
