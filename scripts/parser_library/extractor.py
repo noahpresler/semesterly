@@ -3,7 +3,7 @@
 # @author   Michael N. Miller
 # @date     11/22/16
 
-import re, sys
+import re, sys, unicodedata
 import dateutil.parser as dparser
 from scripts.parser_library.words import conjunctions_and_prepositions
 
