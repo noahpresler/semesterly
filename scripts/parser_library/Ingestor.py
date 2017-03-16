@@ -360,6 +360,7 @@ class Ingestor(dict):
 		return is_valid, full_skip
 
 	def wrap_up(self):
+		self.tracker.finish()
 		self.tracker.report()
 		self.logger.close()
 		self.clear()
