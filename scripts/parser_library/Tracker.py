@@ -132,12 +132,16 @@ class LogFormatted(Viewer):
 		pass # do nothing.
 
 	def report(self, tracker):
-		with open(filepath, 'a') as f:
-			print('='*40, file=f)
-			for subject, stats in track.counters.items():
-				print('{}'.format(subject))
+		with open(self.filepath, 'a') as file:
+			print('='*40, file=file)
+			print('{}'.format(tracker.school.upper()), file=file)
+			print('TIMESTAMP: {}'.format(tracker.timestamp), file=file)
+			print('ELAPSED: {}'.format(str(datetime.timedelta(seconds=tracker.end_time - tracker.start_time))), file=file)
+			print('=={}=='.format(tracker.mode.upper()), file=file)
+			for subject, stats in tracker.counters.items():
+				print('{}'.format(subject), file=file)
 				for name, value in stats.items():
 					if value == 0:
 						continue
-					print('\t{}: {}'.format(name, value), file=f)
-			print(tracker.counters, file=sys.stderr)
+					print(' '*4 + '{}: {}'.format(name, value), file=file)
+			# print(tracker.counters, file=sys.stderr)
