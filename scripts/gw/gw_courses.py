@@ -90,7 +90,18 @@ class GWParser:
 
 		if self.requester.post(self.url + '/PRODCartridge/twbkwbis.P_ValLogin', form=credentials, parse=False).status_code != 200:
 			sys.stderr.write('Unexpected error: login unsuccessful - ' + str(sys.exc_info()[0]) + '\n')
-			exit(1)
+			raise Exception('GW Parser, failed login')
+		
+		# Deal with security question page.
+		credentials2 = {
+			'RET_CODE': '',
+			'answer': 'Katie',
+			'SID': self.username,
+			'QSTN_NUM': 1,
+			'answer': 'Katie',
+		}
+
+		self.requester.post('{}/PRODCartridge/twbkwbis.P_ProcSecurityAnswer'.format(self.url), data=credentials2, parse=False)
 
 	def direct_to_search_page(self):
 		genurl = self.url + '/PRODCartridge/twbkwbis.P_GenMenu'
@@ -106,7 +117,7 @@ class GWParser:
 
 			print '> Parsing courses for term', term_name
 
-			self.course['term'] = term_name[0]
+			self.course['term'], self.course['year'] = term_name.split()
 
 			query1 = {
 				'p_calling_proc' : 'P_CrseSearch',
