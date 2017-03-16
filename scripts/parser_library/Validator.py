@@ -106,7 +106,8 @@ class Validator:
 		hide_progress_bar=False):
 
 		# Add functionality to tracker.
-		self.tracker.add_viewer(LogFormatted())
+		# FIXME -- hardcoded master log file
+		self.tracker.add_viewer(LogFormatted('scripts/logs/master.log'))
 		if not hide_progress_bar:
 			formatter = lambda stats: '{}/{}'.format(stats['valid'], stats['total'])
 			self.tracker.add_viewer(ProgressBar(self.config.school.code, formatter))
