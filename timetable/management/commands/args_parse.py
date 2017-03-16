@@ -44,7 +44,7 @@ def progressbar_argparser(parser):
 	parser.add_argument('--hide-progress-bar', dest='hide_progress_bar', action='store_true', default=False,
 		help='flag to hide progress bar (default is visible)')
 
-def scraper_argparser(parser):
+def ingestor_argparser(parser):
 	# parser.add_argument('--term-and-year', nargs=2, type=str,
 		# help='parse for term and year - two args')
 	parser.add_argument('--term', nargs='+', type=str, dest='terms',
