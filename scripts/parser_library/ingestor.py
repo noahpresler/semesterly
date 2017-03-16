@@ -16,7 +16,7 @@ from scripts.parser_library.validator import Validator
 from scripts.parser_library.internal_exceptions import JsonValidationError, JsonValidationWarning, JsonDuplicationWarning
 from scripts.parser_library.Logger import Logger, JsonListLogger
 from scripts.parser_library.Updater import Counter
-from scripts.parser_library.Tracker import * # TODO - change to more specific when ready
+from scripts.parser_library.tracker import * # TODO - change to more specific when ready
 
 class Ingestor(dict):
 	ALL_KEYS = {
