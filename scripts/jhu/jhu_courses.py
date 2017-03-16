@@ -40,12 +40,12 @@ class HopkinsParser(CourseParser):
         return self.requester.get(url)
 
     def parse_schools(self):
-        for school in self.schools[:1]:
+        for school in self.schools:
             self.parse_school(school)
 
     def parse_school(self,school):
         courses = self.get_courses(school)
-        for course in courses[:5]:
+        for course in courses:
             section = self.get_section(course)
             self.load_ingestor(course,section)
 
