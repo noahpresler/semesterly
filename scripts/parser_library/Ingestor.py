@@ -87,7 +87,8 @@ class Ingestor(dict):
 		break_on_error=True, 
 		break_on_warning=False,
 		skip_shallow_duplicates=True,
-		hide_progress_bar=False):
+		hide_progress_bar=False,
+		log_stats=None):
 
 		self.school = school
 		self.validate = validate
@@ -113,7 +114,7 @@ class Ingestor(dict):
 		# Setup tracker.
 		self.tracker = Tracker(school)
 		self.tracker.set_mode('ingesting')
-		self.tracker.add_viewer(LogFormatted())
+		self.tracker.add_viewer(LogFormatted(log_stats))
 		if not hide_progress_bar:
 			formatter = lambda stats: '{}/{}'.format(stats['valid'], stats['total'])
 			self.tracker.add_viewer(ProgressBar(self.school, formatter))

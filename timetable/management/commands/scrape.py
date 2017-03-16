@@ -74,7 +74,8 @@ class Command(BaseCommand):
 					break_on_error=options['break_on_error'],
 					break_on_warning=options['break_on_warning'],
 					hide_progress_bar=options['hide_progress_bar'],
-					skip_shallow_duplicates=options['skip_shallow_duplicates']
+					skip_shallow_duplicates=options['skip_shallow_duplicates'],
+					log_stats=options['log_stats']
 				)
 
 				p.start(
