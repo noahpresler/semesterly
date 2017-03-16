@@ -21,13 +21,6 @@
     </div>
     <ul>
       <li><h4>Total number of Timetables: {{total_timetables}}</h4></li>
-      <ul>
-        <li>
-          <h4>Fall semester Timetables: {{total_timetables_fall}}</h4></li>
-          <li>
-            <h4>Spring semester Timetables: {{total_timetables_spring}}</h4>
-         </li>
-      </ul>
       <li><h4>Total number of Shared timetables: {{total_shared_timetables}}</h4></li>
       <li><h4>Total number of Personal timetables: {{total_personal_timetables}}</h4></li>
 
@@ -43,6 +36,8 @@
       <li><h4>Number of Google calendar exports: {{google_calendar_exports}}</h4></li>
       <li><h4>Number of ics calendar exports: {{ics_calendar_exports}}</h4></li>
       <li><h4>Number of calendar exports by unique users: {{unique_users_calendar_exports}}</h4></li>
+      <li><h4>Number of final exam views: {{total_final_exam_views}}</h4></li>
+      <li><h4>Number of final exam views by unique users: {{unique_users_final_exam_views}}</h4></li>
     </ul>
 
     
@@ -96,6 +91,7 @@
       var num_users_by_class_year = JSON.parse("{{num_users_by_class_year|escapejs}}");
       var num_users_by_school = JSON.parse("{{num_users_by_school|escapejs}}");
       var total_timetables_by_school = JSON.parse("{{total_timetables_by_school|escapejs}}");
+      var total_timetables_by_semester = JSON.parse("{{total_timetables_by_semester|escapejs}}");
       var number_of_reactions = JSON.parse("{{number_of_reactions|escapejs}}");
       var calendar_exports_by_type = JSON.parse("{{calendar_exports_by_type|escapejs}}");
       // var timetables_per_hour = JSON.parse("{{timetables_per_hour|escapejs}}");
@@ -111,6 +107,9 @@
 
     <h4>Number of timetables by school:</h4>
     <canvas id="timetables_by_schools"></canvas>
+
+    <h4>Number of timetables by semester:</h4>
+    <canvas id="timetables_by_semester"></canvas>
 
     <h4>Number of calendar exports by type:</h4>
     <canvas id="calendar_exports_by_type"></canvas>
@@ -259,6 +258,15 @@
           hoverBackgroundColor: secondary_colors
         }]
     };
+    var timetables_by_semester_data = {
+      labels: Object.keys(total_timetables_by_semester),
+      datasets: [
+        {
+          data: Object.keys(total_timetables_by_semester).map(function(key){return total_timetables_by_semester[key]}),
+          backgroundColor: primary_colors,
+          hoverBackgroundColor: secondary_colors
+        }]
+    };
     var calendar_exports_by_type_data = {
       labels: Object.keys(calendar_exports_by_type),
       datasets: [
@@ -310,6 +318,12 @@
       type: 'pie',
       data: timetables_by_schools_data,
     });
+
+    var stx = document.getElementById("timetables_by_semester");
+    var TimetablesBySemesterPieChart = new Chart(stx, {
+      type: 'pie',
+      data: timetables_by_semester_data,
+    });    
 
     var ctx = document.getElementById("calendar_exports_by_type");
     var CalendarExportsPieChart = new Chart(ctx, {
