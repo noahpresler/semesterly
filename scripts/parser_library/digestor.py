@@ -218,7 +218,7 @@ class DigestionAdapter:
 		elif 'corequisites' in adapted:
 			adapted['prerequisites'] = 'Prereq: ' + adapted['prerequisites'] + ' Co: ' + adapted['corequisites']
 	
-	return {
+		return {
 			'code': course.code,
 			'school': self.school,
 			'defaults': adapted
