@@ -11,7 +11,7 @@ from pygments import highlight, lexers, formatters, filters
 from scripts.parser_library.internal_utils import *
 
 from scripts.parser_library.internal_exceptions import IngestorWarning
-from scripts.parser_library.Validator import Validator
+from scripts.parser_library.validator import Validator
 from scripts.parser_library.internal_exceptions import JsonValidationError, JsonValidationWarning, JsonDuplicationWarning
 from scripts.parser_library.Logger import Logger, JsonListLogger
 from scripts.parser_library.Updater import Counter
