@@ -13,7 +13,7 @@ from abc import ABCMeta, abstractmethod
 from scripts.parser_library.Requester import Requester
 from scripts.parser_library.Extractor import *
 from scripts.parser_library.Model import Model
-from scripts.parser_library.Ingestor import Ingestor
+from scripts.parser_library.ingestor import Ingestor
 from scripts.parser_library.BaseParser import CourseParser
 from scripts.parser_library.internal_exceptions import CourseParseError
 
@@ -78,8 +78,6 @@ class PeoplesoftParser(CourseParser):
 		soup, params = self.goto_search_page(self.url_params)
 		if years_and_terms is None:
 			years_and_terms = self.get_years_and_terms(soup, cmd_years, cmd_terms)
-		print(years_and_terms, file=sys.stderr)
-		exit(1)
 		for year, terms in years_and_terms.items():
 			self.ingestor['year'] = year
 
