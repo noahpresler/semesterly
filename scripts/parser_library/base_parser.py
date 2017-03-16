@@ -9,7 +9,7 @@ import re, os, progressbar, argparse
 
 from abc import ABCMeta, abstractmethod
 
-from scripts.parser_library.Requester import Requester
+from scripts.parser_library.requester import Requester
 from scripts.parser_library.ingestor import Ingestor
 from scripts.parser_library.extractor import Extractor
 from scripts.parser_library.Updater import ProgressBar
