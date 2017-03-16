@@ -1,5 +1,4 @@
 import { getSchool, getSemester } from './init.jsx';
-export const VALID_SEMESTERS = ["F", "S"];
 export const SET_SCHOOL = "SET_SCHOOL";
 export const SET_SEMESTER = "SET_SEMESTER";
 export const REQUEST_TIMETABLES = "REQUEST_TIMETABLES";
@@ -26,6 +25,9 @@ export const getAddTTtoGCalEndpoint = (timetable) => {
 };
 export const getLogiCalEndpoint = () => { 
   return "/user/log_ical/"
+};
+export const getLogFinalExamViewEndpoint = () => { 
+  return "/user/log_final_exam/"
 };
 export const getCourseInfoEndpoint = (course_id) => {
 	return "/courses/" + getSchool() + "/" + getSemester() + "/id/" + course_id + "/";
@@ -67,7 +69,7 @@ export const getReactToCourseEndpoint = () => {
   return "/react/";
 }
 export const getLoadSavedTimetablesEndpoint = (semester) => {
-  return "/user/get_saved_timetables/" + getSchool() + "/" + semester + "/";
+  return "/user/get_saved_timetables/" + getSchool() + "/" + semester.name + "/" + semester.year + "/";
 }
 export const getRequestShareTimetableLinkEndpoint = () => {
   return "/share/link/";
@@ -87,6 +89,9 @@ export const getIntegrationDelEndpoint = (integration_id, course_id) => {
 export const getIntegrationAddEndpoint = (integration_id, course_id) => {
   return "/integration/add/" + integration_id + "/course/" + course_id + "/";
 }
+export const getFinalExamSchedulerEndpoint = () => {
+  return "/get_final_exams/";
+}
 
 export const getSchoolSpecificInfo = (school) => {
 	switch(school) {
@@ -98,10 +103,6 @@ export const getSchoolSpecificInfo = (school) => {
         levelsName: "Levels",
         timesName: "Times",
         courseRegex: "([A-Z]{3}[A-Z0-9]\\d{2}[HY]\\d)",
-        semesters: {
-          F: "Fall 2016",
-          S: "Winter 2017"
-        },
         campuses: {
           1: "UTSG",
           3: "UTSC",
@@ -116,10 +117,6 @@ export const getSchoolSpecificInfo = (school) => {
         levelsName: "Levels",
         timesName: "Times",
         courseRegex: "([A-Z]{2}\\.\\d{3}\\.\\d{3})",
-        semesters: {
-          F: "Fall 2016",
-          S: "Spring 2017"
-        },
         campuses: {
           1: ""
         }
@@ -131,10 +128,6 @@ export const getSchoolSpecificInfo = (school) => {
         departmentsName: "Departments",
         levelsName: "Levels",
         timesName: "Times",
-        semesters: {
-          F: "Fall 2016",
-          S: "Winter 2017"
-        },
         campuses: {
           1: ""
         }
@@ -146,10 +139,6 @@ export const getSchoolSpecificInfo = (school) => {
         departmentsName: "Departments",
         levelsName: "Levels",
         timesName: "Times",
-        semesters: {
-          F: "Fall 2016",
-          S: "Spring 2017"
-        },
         campuses: {
           1: ""
         }
@@ -162,10 +151,6 @@ export const getSchoolSpecificInfo = (school) => {
         levelsName: "Levels",
         timesName: "Times",
         courseRegex: "([A-Z]{2,4}\\s\\d{3})",
-        semesters: {
-          F: "Fall 2016",
-          S: "Spring 2017"
-        },
         campuses: {
           1: ""
         }
@@ -179,10 +164,6 @@ export const getSchoolSpecificInfo = (school) => {
         timesName: "Times",
         // course codes have dashes, in desciprtions dashes are spaces
         // courseRegex: "([A-Z-&]{2,7}\\s\\d{4}[W]?)",
-        semesters: {
-          F: "Fall 2016",
-          S: "Spring 2017"
-        },
         campuses: {
           1: ""
         }
@@ -196,10 +177,6 @@ export const getSchoolSpecificInfo = (school) => {
         timesName: "Times",
         // course codes in descriptions have lowercase department names, but I don't want to change the regex to include lowercase
         courseRegex: "([A-Z]{2,5}\\s\\d{4}[W]?)",
-        semesters: {
-          F: "Fall 2016",
-          S: "Spring 2017"
-        },
         campuses: {
           1: ""
         }
@@ -213,10 +190,6 @@ export const getSchoolSpecificInfo = (school) => {
         timesName: "Times",
         // some classes are just numbers, not included in this regex, cuz some descrpitions have years
         courseRegex: "([A-Z]{2,8}\\s\\d{3})",
-        semesters: {
-          F: "Fall 2016",
-          S: "Winter 2017"
-        },
         campuses: {
           1: ""
         }
@@ -245,10 +218,6 @@ export const getSchoolSpecificInfo = (school) => {
         departmentsName: "Departments",
         levelsName: "Levels",
         timesName: "Times",
-        semesters: {
-          F: "Fall 2016",
-          S: "Spring 2017"
-        },
         campuses: {
           1: ""
         }

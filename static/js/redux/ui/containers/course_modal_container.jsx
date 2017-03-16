@@ -16,6 +16,7 @@ const mapStateToProps = (state) => {
 	let courseSections = state.courseSections.objects;
 	let activeTimetable = state.timetables.items[state.timetables.active];
 	return {
+		schoolSpecificInfo: getSchoolSpecificInfo(state.school.school),
 		isFetching: state.courseInfo.isFetching,
 		data: state.courseInfo.data,
 		id: state.courseInfo.id,
@@ -28,7 +29,6 @@ const mapStateToProps = (state) => {
 		popularityPercent: state.courseInfo.data.popularity_percent * 100,
 		inRoster: courseSections[state.courseInfo.id] !== undefined,
 		isLoggedIn: state.userInfo.data.isLoggedIn,
-		schoolSpecificInfo: getSchoolSpecificInfo(state.school.school),
 		isSectionLocked: (courseId, section) => {
 			if (courseSections[courseId] === undefined) {
 				return false;
