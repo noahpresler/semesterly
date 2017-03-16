@@ -3,6 +3,8 @@
 # @author   Michael N. Miller
 # @date     1/22/17
 
+from __future__ import print_function, division, absolute_import # NOTE: slowly move toward Python3
+
 import datetime, os, sys, copy, jsondiff, simplejson as json, collections
 from abc import ABCMeta, abstractmethod
 
@@ -237,7 +239,7 @@ class DigestionAdapter:
 				course_model = Course.objects.filter(school=self.school, code=section.course.code).first()
 				if course_model is None:
 					# TODO - run tests with different database
-					print 'course %s section not already in database'.format(section.course.code)
+					print('course %s section not already in database'.format(section.course.code), file=sys.stderr)
 					# print self.cached.course
 					# raise DigestionError('course does not exist for section', section)
 
@@ -267,6 +269,11 @@ class DigestionAdapter:
 		if 'final_exam' in section:
 			pass # TODO - add to database
 
+		# Grab semester
+		print(Semester.objects.filter(name=section.term, year=section.year), file=sys.stderr)
+		exit(1)
+
+
 		return {
 			'course': course_model,
 			'semester': section.term[0], # TODO - add full term to django model
@@ -292,14 +299,14 @@ class DigestionAdapter:
 			else:
 				course_model = Course.objects.filter(school=self.school, code=meeting.course.code).first()
 				if course_model is None:
-					print 'no course object for {}'.format(meeting.course.code)
+					print('no course object for {}'.format(meeting.course.code), file=sys.stderr)
 					# raise DigestionError('no course object for meeting')
 			if self.cached.course and course_model.code == self.cached.course.code and meeting.section.code == self.cached.section.meeting_section:
 					section_model = self.cached.section
 			else:
 				section_model = Section.objects.filter(course=course_model, meeting_section=meeting.section.code).first()
 				if section_model is None:
-					print 'no section {} {} for meeting'.format(meeting.course.code, meeting.section.code)
+					print('no section {} {} for meeting'.format(meeting.course.code, meeting.section.code), file=sys.stderr)
 					# raise DigestionError('no section object for meeting', meeting)
 				self.cached_course = course_model
 				self.cached_section = section_model
