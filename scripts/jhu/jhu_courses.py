@@ -3,7 +3,7 @@
 # @author   Noah Presler
 # @date     1/24/17
 
-from __future__ import print_function # NOTE: slowly move toward Python3
+from __future__ import print_function, division, absolute_import # NOTE: slowly move toward Python3
 
 import re
 from scripts.parser_library.BaseParser import CourseParser
@@ -40,12 +40,12 @@ class HopkinsParser(CourseParser):
         return self.requester.get(url)
 
     def parse_schools(self):
-        for school in self.schools:
+        for school in self.schools[:1]:
             self.parse_school(school)
 
     def parse_school(self,school):
         courses = self.get_courses(school)
-        for course in courses:
+        for course in courses[:5]:
             section = self.get_section(course)
             self.load_ingestor(course,section)
 
@@ -143,6 +143,7 @@ class HopkinsParser(CourseParser):
         # Run parser for all semesters specified.
         for year in years:
             for term in terms:
+                print('{} {}'.format(term, year))
                 self.semester = '{} {}'.format(term, str(year))
                 self.get_schools()
                 self.parse_schools()
