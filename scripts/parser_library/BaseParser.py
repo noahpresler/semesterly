@@ -27,7 +27,8 @@ class BaseParser:
 		break_on_error=True,
 		break_on_warning=False,
 		skip_shallow_duplicates=True,
-		hide_progress_bar=True):
+		hide_progress_bar=True,
+		log_stats=None):
 
 		self.school = school
 		self.requester = Requester()
@@ -41,7 +42,8 @@ class BaseParser:
 			break_on_error=break_on_error,
 			break_on_warning=break_on_warning,
 			skip_shallow_duplicates=skip_shallow_duplicates,
-			hide_progress_bar=hide_progress_bar)
+			hide_progress_bar=hide_progress_bar,
+			log_stats=log_stats)
 
 	@abstractmethod
 	def start(self, **kwargs):
