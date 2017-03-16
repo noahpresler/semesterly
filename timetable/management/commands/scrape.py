@@ -8,6 +8,7 @@ from timetable.models import Updates
 from timetable.school_mappers import course_parsers, new_course_parsers, new_textbook_parsers
 from timetable.management.commands.args_parse import schoollist_argparser, scraper_argparser, validator_argparser
 from scripts.parser_library.internal_exceptions import *
+from scripts.parser_library.Tracker import Tracker, LogFormatted
 
 class Command(BaseCommand):
 	help = "Initiates specified parsers for specified schools. If no school is provided, starts parsers for all schools."
@@ -67,6 +68,10 @@ class Command(BaseCommand):
 			if not options.get('master_log'):
 				options['log_stats'] = 'scripts/logs/master.log'
 
+			tracker = Tracker(school)
+			tracker.set_cmd_options(options)
+			tracker.add_viewer(LogFormatted(options['log_stats']))
+
 			p = parser(school,
 				validate=options['validate'],
 				config=options['config_file'],
@@ -76,8 +81,10 @@ class Command(BaseCommand):
 				break_on_warning=options['break_on_warning'],
 				hide_progress_bar=options['hide_progress_bar'],
 				skip_shallow_duplicates=options['skip_shallow_duplicates'],
-				log_stats=options['log_stats']
+				tracker=tracker
 			)
+
+			tracker.start()
 
 			try:
 				p.start(
@@ -88,27 +95,31 @@ class Command(BaseCommand):
 					textbooks=options['textbooks']
 				)
 
+				# Close up json files.
+				p.wrap_up()
+
 			except CourseParseError as e:
-				error = "Error while parsing %s:\n\n%s\n" % (school, str(e))
 				logging.exception(e)
-				self.stderr.write(self.style.ERROR(str(error)))
+				error = "Error while parsing %s:\n\n%s\n" % (school, str(e))
+				self.stderr.write(self.style.ERROR(error))
+				tracker.see_error(error)
 			except (JsonValidationError, JsonValidationWarning, IngestorWarning) as e:
-				error = "Error while parsing %s:\n\n%s\n" % (school, str(e))
 				logging.exception(e)
-				self.stderr.write(self.style.ERROR(str(error)))
+				error = "Error while parsing %s:\n\n%s\n" % (school, str(e))
+				self.stderr.write(self.style.ERROR(error))
+				tracker.see_error(error)
 			except Exception as e:
 				logging.exception(e)
 				self.stderr.write(self.style.ERROR(traceback.format_exc()))
-				stat_log.append(school + '\n' + traceback.format_exc())
+				tracker.see_error(traceback.format_exc())
 
-			# Close up json and files and report.
-			p.wrap_up()
+			tracker.finish()
 
 			# Reset some options for parse of next school.
 			Command.reset_options_for_new_school(options)
 
 		self.stdout.write(self.style.SUCCESS("Parsing Finished!"))
-		Command.log_stats(options['log_stats'], stats=stat_log, options=options, timestamp=timestamp)
+		# Command.log_stats(options['log_stats'], stats=stat_log, options=options, timestamp=timestamp)
 
 	def old_parser(self, do_parse, school, stat_log):
 		message = 'Starting {} parser for {}.\n'.format('courses', school)
@@ -119,23 +130,23 @@ class Command(BaseCommand):
 			self.stderr.write(traceback.format_exc())
 			stat_log.append(school + '\n' + traceback.format_exc())
 
-	@staticmethod
-	def log_stats(filepath, options='', stats=None, timestamp='', elapsed=None):
+	# @staticmethod
+	# def log_stats(filepath, options='', stats=None, timestamp='', elapsed=None):
 
-		with open(filepath, 'a') as log:
-			log.write('='*40 + '\n')
+	# 	with open(filepath, 'a') as log:
+	# 		log.write('='*40 + '\n')
 
-		'''Append run stat to master log.'''
-		formatted_string = ''
+	# 	'''Append run stat to master log.'''
+	# 	formatted_string = ''
 
-		if timestamp:
-			formatted_string += 'TIMESTAMP: ' + timestamp + '\n'
-		if elapsed:
-			formatted_string += 'ELAPSED: ' + str(elapsed) + '\n'
-		if stats:
-			formatted_string += '\n'.join(stat for stat in stats) + '\n'
-		if options:
-			formatted_string += 'OPTIONS:\n' + json.dumps(options, sort_keys=True, indent=2, separators=(',', ': ')) + '\n'
+	# 	if timestamp:
+	# 		formatted_string += 'TIMESTAMP: ' + timestamp + '\n'
+	# 	if elapsed:
+	# 		formatted_string += 'ELAPSED: ' + str(elapsed) + '\n'
+	# 	if stats:
+	# 		formatted_string += '\n'.join(stat for stat in stats) + '\n'
+	# 	if options:
+	# 		formatted_string += 'OPTIONS:\n' + json.dumps(options, sort_keys=True, indent=2, separators=(',', ': ')) + '\n'
 
-		with open(filepath, 'a') as log:
-			log.write(formatted_string)
+	# 	with open(filepath, 'a') as log:
+	# 		log.write(formatted_string)
