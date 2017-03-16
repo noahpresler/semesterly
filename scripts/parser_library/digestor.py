@@ -20,7 +20,7 @@ from scripts.parser_library.internal_utils import *
 from scripts.parser_library.Logger import Logger, JsonListLogger
 from scripts.parser_library.internal_exceptions import DigestionError
 from scripts.parser_library.Updater import ProgressBar, Counter
-from scripts.parser_library.Tracker import ProgressBar, NullTracker
+from scripts.parser_library.tracker import ProgressBar, NullTracker
 
 # TODO - DigestionError should be removed with failure,
 # user should not be able to produce direct DigestionError
