@@ -49,9 +49,15 @@ class Extractor():
                 r'[Pp]r(?:-?)e[rR]eq(?:uisite)?(?:s?)[:,\s]\s*(.*?)(?:\.|$)\s*',
                 r'T[Aa][Kk][Ee] (.*)\.?$'
             ],
-            'coreqs'  : [r'[Cc]o(?:-?)[rR]eq(?:uisite)?(?:s?)[:,\s]\s*(.*?)(?:\.|$)\s*'],
-            'geneds'  : [r'GE (.*)'],
-            'fees'    : [r'(?:Lab )?Fees?:?\s{1,2}?\$?\s?(\d+(?:\.\d{1,2})?)']
+            'coreqs'  : [
+                r'[Cc]o(?:-?)[rR]eq(?:uisite)?(?:s?)[:,\s]\s*(.*?)(?:\.|$)\s*'
+            ],
+            'geneds'  : [
+                r'GE (.*)'
+            ],
+            'fees'    : [
+                r'(?:Lab )?Fees?:?\s{1,2}?\$?\s?(\d+(?:\.\d{1,2})?)'
+            ]
         }
 
         for key, extraction_list in extractions.items():
@@ -65,15 +71,51 @@ class Extractor():
                         continue # NOTE: edge case if multiple fees present
                     course[key] += [extracted.group(1)] # okay b/c of course_cleanup
                     # FIXME -- this library does not enforce this, unsafe!
+                if isinstance(text, str):
+                    text = text.decode('utf-8')
+                    text = unicodedata.normalize('NFKD', text)
                 text = rex.sub('', text).strip()
 
         # Convert fees to float
-        # NOTE: edge case, if mutliple fees have been extracted will take the first one
+        # NOTE: edge case, if mutliple fees have been extracted will take the first one only
         if course.get('fees') and isinstance(course['fees'], list):
             try:
                 course['fees'] = float(course['fees'][0])
             except ValueError:
                 course['fees'] = None
+
+        # TEMPORARY: combine pre and co reqs
+        requisites = []
+        corequisites = []
+        if hasattr(course.get('prereqs'), '__iter__'):
+            try:
+                for req in course['prereqs']:
+                    req = req.strip()
+                    if len(req) == 0:
+                        continue
+                    requisites += [req]
+                    # requisites += 'Prerequisite: ' + ','.join(course.get('prereqs'))
+            except UnicodeDecodeError:
+                pass
+        if hasattr(course.get('coreqs'), '__iter__'):
+            try:
+                for req in course['coreqs']:
+                    req = req.strip()
+                    if len(req) == 0:
+                        continue
+                    corequisites += [req]
+                # requisites += ' Corequisite: ' + ','.join(course.get('coreqs'))
+            except UnicodeDecodeError:
+                pass
+
+        if len(requisites) > 0:
+            if 'prereqs' in course:
+                course['prereqs'] += requisites
+                course['prereqs'] = list(set(course['prereqs'])) # uniqueify
+            if 'coreqs' in course:
+                course['coreqs'] += corequisites
+                course['coreqs'] = list(set(course['coreqs']))
+
         return text
 
     '''REGEX Analysis: (regex101.com)
