@@ -212,6 +212,12 @@ class DigestionAdapter:
 		if 'level' in course:
 			adapted['level'] = course.level
 
+		# Combine pre and co requisites into one field
+		if 'corequisites' in adapted and 'prerequisites' not in adapted:
+			adapted['prerequisites'] = 'Coreq: ' + adapted['corequisites']
+		elif 'corequisites' in adapted:
+			adapted['prerequisites'] = 'Prereq: ' + adapted['prerequisites'] + ' Co: ' + adapted['corequisites']
+
 		return {
 			'code': course.code,
 			'school': self.school,
