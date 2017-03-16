@@ -7,15 +7,14 @@ from timetable.management.commands.args_parse import *
 from scripts.parser_library.Validator import Validator
 from scripts.parser_library.Digestor import Digestor
 from scripts.parser_library.internal_exceptions import JsonException, DigestionError
+from scripts.parser_library.Tracker import Tracker, LogFormatted
 
 # FIXME -- horrible design should make upper base class
 from timetable.management.commands.parse import Command as PCommand
 
 class Command(BaseCommand):
 	def add_arguments(self, parser):
-		# Provide list of schools to parse; none implies all
 		schoollist_argparser(parser)
-
 		digestor_argparser(parser)
 		validate_switch_argparser(parser)
 		validator_argparser(parser)
@@ -26,6 +25,7 @@ class Command(BaseCommand):
 		timestamp = datetime.datetime.now().strftime("%Y/%m/%d-%H:%M:%S")
 		stats = []
 
+		# FIXME -- hack to handle different types of parses
 		type_ = 'courses'
 
 		for school in options['schools']:
@@ -69,32 +69,34 @@ class Command(BaseCommand):
 					options['output_error'] = None
 					continue
 
-				stats.append('({}) [Elapsed Time: {:.2f}s] {}'.format(school, end_time - start_time, vstat))
-
 			if not options.get('output_diff'):
 				options['output_diff'] = '{}/logs/digest_{}_diff.log.json'.format(directory, type_)
 
+			tracker = Tracker(school)
+			tracker.add_viewer(LogFormatted(options['log_stats']))
+			tracker.set_cmd_options(options)
+			tracker.start()
+
 			try:
-				d = Digestor(school,
+				Digestor(school,
 					data=options['data'],
 					output=options['output_diff'],
 					diff=options['diff'],
-					load=options['load']
-				)
-
-				start_time = timer()
-				d.digest()
-				end_time = timer()
-				stats.append('({}) [Elapsed Time: {:.2f}s] {}'.format(school, end_time - start_time, d.get_stats()))
+					load=options['load'],
+					tracker=tracker
+				).digest()
 
 			except DigestionError as e:
 				self.stderr.write(self.style.ERROR('FAILED: digestion'))
 				self.stderr.write(str(e))
 
-			# Reset data file to reload from next school.
-			options['data'] = None
-			options['config_file'] = None
-			options['output_error'] = None
+			tracker.finish()
+			Command.reset_for_next_school(options)
 
 		self.stdout.write(self.style.SUCCESS("Digestion Finished!"))
-		PCommand.log_stats(options['log_stats'], stats=stats, options=options, timestamp=timestamp)
+
+	@staticmethod
+	def reset_for_next_school(options):
+		options['data'] = None
+		options['config_file'] = None
+		options['output_error'] = None

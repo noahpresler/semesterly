@@ -20,6 +20,7 @@ from scripts.parser_library.internal_utils import *
 from scripts.parser_library.Logger import Logger, JsonListLogger
 from scripts.parser_library.internal_exceptions import DigestionError
 from scripts.parser_library.Updater import ProgressBar, Counter
+from scripts.parser_library.Tracker import ProgressBar, NullTracker
 
 # TODO - DigestionError should be removed with failure,
 # user should not be able to produce direct DigestionError
@@ -30,7 +31,8 @@ class Digestor:
 		output=None,
 		diff=True, 
 		load=True,
-		hide_progress_bar=False):
+		hide_progress_bar=False,
+		tracker=NullTracker()):
 
 		# TODO - extrapolate datafile/dict/string resolution to another manager
 		if data:
@@ -41,10 +43,6 @@ class Digestor:
 					data = json.load(f)
 		else:
 			data = json.load(sys.stdin)
-
-		self.hide_progress_bar = hide_progress_bar
-		if not hide_progress_bar:
-			self.progressbar = ProgressBar(school)
 
 		self.data = [ dotdict(obj) for obj in data ]
 
@@ -58,11 +56,13 @@ class Digestor:
 		self.strategy = self.set_strategy(diff, load, output)
 		self.counter = Counter()
 
-	def get_stats(self):
-		if not self.hide_progress_bar:
-			return self.progressbar.stats
-		else:
-			return 'stats not logged'
+		# Setup tracker for digestion and progress bar.
+		self.tracker = tracker
+		self.tracker.set_mode('digesting')
+		if not hide_progress_bar:
+			formatter = lambda stats: '{}'.format(stats['total'])
+			self.tracker.add_viewer(ProgressBar(school, formatter))
+
 
 	def set_strategy(self, diff, load, output=None):
 		if diff and load:
@@ -93,12 +93,9 @@ class Digestor:
 		self.wrap_up()
 
 	def update_progress(self, key, exists):
-		# FIXME -- exists does not count new courses in diff strategy
 		if exists:
-			self.counter.increment(key, 'total')
-		if not self.hide_progress_bar:
-			formatter = lambda stats: '{}'.format(stats['total'])
-			self.progressbar.update('digesting ({})'.format(self.strategy.__class__.__name__.lower()), self.counter.dict(), formatter)
+			self.tracker.track_count(key, 'total')
+		# TODO - add more stats including newly created and the like
 
 	def digest_course(self, course):
 		''' Create course in database from info in json model.
