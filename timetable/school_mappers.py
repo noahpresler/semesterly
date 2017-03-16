@@ -81,7 +81,6 @@ school_to_semesters = {
   'vandy': [{'name': 'Spring', 'year': '2017'}, {'name': 'Fall', 'year': '2016'}],
   'gw': [{'name': 'Spring', 'year': '2017'}, {'name': 'Fall', 'year': '2016'}],
   'umich': [{'name': 'Winter', 'year': '2017'}, {'name': 'Fall', 'year': '2016'}],
-  'umich2': [{'name': 'Winter', 'year': '2017'}, {'name': 'Fall', 'year': '2016'}],
   'chapman': [{'name': 'Spring', 'year': '2017'}, {'name': 'Fall', 'year': '2016'}],
 }
 
