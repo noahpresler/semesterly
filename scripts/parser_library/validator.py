@@ -10,7 +10,7 @@ from scripts.parser_library.Logger import Logger
 from scripts.parser_library.internal_utils import *
 from scripts.parser_library.internal_exceptions import JsonValidationError, JsonValidationWarning, JsonDuplicationWarning
 # from scripts.parser_library.Updater import ProgressBar, Counter
-from scripts.parser_library.Tracker import *
+from scripts.parser_library.tracker import *
 
 class Validator:
 	def __init__(self, config, tracker=None):
