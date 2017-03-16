@@ -46,7 +46,7 @@
 		}
 		.mbl { max-height:0px; font-size:0; display:none; }
 		td[id="main-width"] { padding-right:10px; padding-left:10px; padding-bottom: 20px; padding-top:20px;}
-		@media only screen and (max-width:480px) {
+		@media only screen and (max-width:600px) {
 			/*** below is style for body */
 			body { width:auto !important; }
 			/*** below is style for full width table */
@@ -70,6 +70,7 @@
 			th[class="icon"] {padding-left: 18px !important; padding-right: 18px !important;}
 			td[class="horiz-row"] {padding-left: 18px !important; padding-right: 18px !important;}
 			td[class="course-name"] {padding-left: 18px !important; padding-right: 18px !important;}
+			td[class="body_text"] {font-size: 14px !important; padding-left: 20px !important; padding-right: 20px !important;}
 			td[class="outer_cell_1"] {padding: 0 !important; }
 			td[class="mbl_text_style_1"] { padding:10px 50px 15px 50px !important; line-height:1.2em !important; font-weight: normal !important; }
 			td[class="mbl_text_style_2"] { font-size:20px !important; line-height:26px !important; font-weight: normal !important; padding:10px 40px 20px 40px !important; }
@@ -84,7 +85,8 @@
 			td[class="footer"] { font-weight:normal !important; }
 		}
 		@media only screen and (max-width:320px) {
-			td[class="mbl_text_style_2"] { padding:10px 30px 20px 30px !important; }		
+			td[class="mbl_text_style_2"] { padding:10px 30px 20px 30px !important; }
+			td[class="body_text"] {font-size: 12px !important; padding-left: 10px !important; padding-right: 10px !important;}
 		}
 	</style>
 </head>
@@ -109,37 +111,39 @@
 			</td>
 		</tr>
 		<tr>
-			<td class="mbl_text_style_2" valign="top" align="center" style="font-family:Avenir, 'Helvetica Neue', Helvetica, Arial, sans-serif; text-align:center; color:#6a6a6a; font-size:16px; line-height:30px; font-weight:700; padding-left:20px; padding-right:20px; padding-top:20px; padding-bottom:0px;">
+			<td class="body_text" valign="top" align="center" style="font-family:Avenir, 'Helvetica Neue', Helvetica, Arial, sans-serif; text-align:left; color:#6a6a6a; font-size:16px; line-height:30px; font-weight:400; padding-left:30px; padding-right:30px; padding-top:20px; padding-bottom:0px;">
 				Hi {{ user.user.first_name }},
+			</td>
+		</tr>
+		<tr>
+			<td class="body_text" valign="top" align="center" style="font-family:Avenir, 'Helvetica Neue', Helvetica, Arial, sans-serif; text-align:left; color:#6a6a6a; font-size:16px; line-height:20px; font-weight:400; padding-left:30px; padding-right:30px; padding-top:5px; padding-bottom:20px;">
+				It looks like some of the classes you have on your timetable have been completely filled.  The following classes are currently <span style="font-weight:700;color:#d8b44f;">waitlist only</span>
 			</td>
 		</tr>
 	</table>
 	<!-- END OF HEADER-->
 
 	<table class="table-600" width="600" border="0" cellspacing="0" cellpadding="0" bgcolor="#FFFFFF" align="center" style="background:#ffffff; text-align:center;">
-	{% for section in sections %}
+		{% for section in sections %}
+			<tr><td class="horiz-row" style="padding-left:30px; padding-right:30px; padding-top:10px; padding-bottom:10px; text-align:left;font-family:Avenir, 'Helvetica Neue', Helvetica, Arial, sans-serif; text-align:center;">
+				{{ section.course.name }} {{ section.meeting_section }}
+			</td></tr>
+		{% endfor %}
 		<tr>
-			<td class="horiz-row" style="padding-left:50px; padding-right:50px; padding-top:10px; padding-bottom:10px; text-align:left;">
-				<table class="textbook_info_wrapper" border="0" cellspacing="0" cellpadding="0" style="width:100%; height:140px; margin: 0;border-collapse:collapse; mso-table-lspace:0pt; mso-table-rspace:0pt;">
-							<tr><td align="left" class="textbook_info" style="padding-left:0px; padding-top:10px; padding-bottom:0px; font-family:Avenir, 'Helvetica Neue', Helvetica, Arial, sans-serif; text-align:center;">
-									<span style="display:block; color:#6a6a6a; font-size:14px; line-height:18px; font-weight:200; margin-top: 0px; margin-bottom: 20px;">
-										{{ section.course.name }} {{ section.meeting_section }}
-
-									</span>
-							</td></tr>
-						</table>
+			<td class="horiz-row" style="padding-left:50px; padding-right:50px; padding-top:20px; padding-bottom:10px; text-align:left;font-family:Avenir, 'Helvetica Neue', Helvetica, Arial, sans-serif; text-align:center;">
+				<a href="https://jhu.semester.ly/" style="background-color:#36debb; padding: 7px 15px; border-radius: 5px; margin-top:25px; text-decoration: none;">
+					<span style="display:inline-block; vertical-align:middle; color:#fff; font-weight:700; font-size:14px; line-height: 20px; text-decoration: none;">Launch Semester.ly</span>
+				</a>
 			</td>
 		</tr>
-	{% endfor %}
 		<tr>
-			<td class="horiz-row" style="padding-left:50px; padding-right:50px; padding-top:10px; padding-bottom:10px; text-align:left;">
-				<table class="textbook_info_wrapper" border="0" cellspacing="0" cellpadding="0" style="width:100%; height:140px; margin: 0;border-collapse:collapse; mso-table-lspace:0pt; mso-table-rspace:0pt;">
-							<tr><td align="left" class="textbook_info" style="padding-left:0px; padding-top:10px; padding-bottom:0px; font-family:Avenir, 'Helvetica Neue', Helvetica, Arial, sans-serif; text-align:center;">
-									<a href="https://jhu.semester.ly/" style="background-color:#36debb; padding: 7px 15px; border-radius: 5px; margin-top:25px; text-decoration: none;">
-										<span style="display:inline-block; vertical-align:middle; color:#fff; font-weight:700; font-size:14px; line-height: 20px; text-decoration: none;">Launch Semester.ly</span>
-									</a>
-							</td></tr>
-				</table>
+			<td class="body_text" valign="top" align="center" style="font-family:Avenir, 'Helvetica Neue', Helvetica, Arial, sans-serif; text-align:left; color:#6a6a6a; font-size:16px; line-height:20px; font-weight:400; padding-left:30px; padding-right:30px; padding-top:20px; padding-bottom:0px;">
+				Find some backup classes now with Semester.ly and find a good schedule
+			</td>
+		</tr>
+		<tr>
+			<td class="body_text" valign="top" align="center" style="font-family:Avenir, 'Helvetica Neue', Helvetica, Arial, sans-serif; text-align:left; color:#6a6a6a; font-size:16px; line-height:20px; font-weight:400; padding-left:30px; padding-right:30px; padding-top:10px; padding-bottom:20px;">
+				Good Luck!
 			</td>
 		</tr>
 	</table>
