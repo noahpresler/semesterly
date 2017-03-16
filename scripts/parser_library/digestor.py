@@ -217,8 +217,8 @@ class DigestionAdapter:
 			adapted['prerequisites'] = 'Coreq: ' + adapted['corequisites']
 		elif 'corequisites' in adapted:
 			adapted['prerequisites'] = 'Prereq: ' + adapted['prerequisites'] + ' Co: ' + adapted['corequisites']
-
-		return {
+	
+	return {
 			'code': course.code,
 			'school': self.school,
 			'defaults': adapted
@@ -260,7 +260,7 @@ class DigestionAdapter:
 			# FIXME -- possible logic conflict with other data
 			adapted['remaining_seats'] = section.remaining_seats
 		if 'type' in section:
-			adapted['section_type'] = section.type[0]
+			adapted['section_type'] = 'P' if section.type == 'Laboratory' else 'L'
 		if 'fees' in section:
 			pass # TODO - add fees to database
 		if 'instructors' in section:
