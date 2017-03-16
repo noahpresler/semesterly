@@ -76,7 +76,7 @@ class VandyParser(CourseParser):
 			}
 		}
 
-		years_and_terms = VandyParser.filter_term_and_year(years_and_terms, year, term)
+		years_and_terms = self.extractor.filter_term_and_year(years_and_terms, year, term)
 
 		for year, semesters in years_and_terms.items():
 			if self.verbosity >= 1:
@@ -95,7 +95,7 @@ class VandyParser(CourseParser):
 
 				# Get a list of all the department codes
 				department_codes = self.extract_department_codes()
-				department_codes = VandyParser.filter_departments(department_codes, department)
+				department_codes = self.extractor.filter_departments(department_codes, department)
 
 				# Create payload to request course list from server
 				payload = {
