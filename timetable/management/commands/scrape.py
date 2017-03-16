@@ -1,3 +1,5 @@
+from __future__ import print_function, division, absolute_import # NOTE: slowly move toward Python3
+
 import os, django, datetime, logging, sys, argparse, simplejson as json, logging, traceback
 from timeit import default_timer as timer
 
@@ -65,19 +67,19 @@ class Command(BaseCommand):
 			if not options.get('master_log'):
 				options['log_stats'] = 'scripts/logs/master.log'
 
-			try:
-				p = parser(school,
-					validate=options['validate'],
-					config=options['config_file'],
-					output_filepath=options['output'],
-					output_error_filepath=options['output_error'],
-					break_on_error=options['break_on_error'],
-					break_on_warning=options['break_on_warning'],
-					hide_progress_bar=options['hide_progress_bar'],
-					skip_shallow_duplicates=options['skip_shallow_duplicates'],
-					log_stats=options['log_stats']
-				)
+			p = parser(school,
+				validate=options['validate'],
+				config=options['config_file'],
+				output_filepath=options['output'],
+				output_error_filepath=options['output_error'],
+				break_on_error=options['break_on_error'],
+				break_on_warning=options['break_on_warning'],
+				hide_progress_bar=options['hide_progress_bar'],
+				skip_shallow_duplicates=options['skip_shallow_duplicates'],
+				log_stats=options['log_stats']
+			)
 
+			try:
 				p.start(
 					verbosity=options['verbosity'],
 					years=options.get('years'),
@@ -85,9 +87,6 @@ class Command(BaseCommand):
 					departments=options.get('departments'),
 					textbooks=options['textbooks']
 				)
-
-				# Close up json and files and report.
-				p.wrap_up()
 
 			except CourseParseError as e:
 				error = "Error while parsing %s:\n\n%s\n" % (school, str(e))
@@ -102,6 +101,10 @@ class Command(BaseCommand):
 				self.stderr.write(self.style.ERROR(traceback.format_exc()))
 				stat_log.append(school + '\n' + traceback.format_exc())
 
+			# Close up json and files and report.
+			p.wrap_up()
+
+			# Reset some options for parse of next school.
 			Command.reset_options_for_new_school(options)
 
 		self.stdout.write(self.style.SUCCESS("Parsing Finished!"))
@@ -118,6 +121,10 @@ class Command(BaseCommand):
 
 	@staticmethod
 	def log_stats(filepath, options='', stats=None, timestamp='', elapsed=None):
+
+		with open(filepath, 'a') as log:
+			log.write('='*40 + '\n')
+
 		'''Append run stat to master log.'''
 		formatted_string = ''
 
@@ -132,4 +139,3 @@ class Command(BaseCommand):
 
 		with open(filepath, 'a') as log:
 			log.write(formatted_string)
-			log.write('='*40 + '\n')
