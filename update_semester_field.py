@@ -20,7 +20,7 @@ def get_update_operation(app_name, table_names, get_school):
   return update_operation
 
 def update_sem_fields(table, get_school, sem_table):
-  """ 
+  """
   Take a Django table object, a function which takes an instance of that object
   and returns the associated school, and the corresponding Semester object and
   update the semester field of each row of the input table.
@@ -28,8 +28,8 @@ def update_sem_fields(table, get_school, sem_table):
   num_updated = 0
   name_year_to_semester = {}
   bad_inputs = Counter()
-  bar = progressbar.ProgressBar(max_value=table.objects.count())
-  for i, row in enumerate(table.objects.all().iterator()):
+  bar = progressbar.ProgressBar(max_value=table.objects.filter(semester__id=1).count())
+  for i, row in enumerate(table.objects.filter(semester__id=1).iterator()):
     semester_code = row._semester
     name = code_to_name(semester_code, get_school(row))
     year = '2017' if semester_code == 'S' else '2016'
@@ -48,7 +48,7 @@ def update_sem_fields(table, get_school, sem_table):
     bar.update(i)
     num_updated += 1
 
-  print "Updated {0}/{1} rows from table {2}".format(num_updated, len(table.objects.all()), str(table))
+  print "Updated {0}/{1} rows from table {2}".format(num_updated, table.objects.count(), str(table))
   print "Ignored the following unknown semester codes:"
   pprint(bad_inputs)
   print
