@@ -18,6 +18,7 @@ class SalisburyParser(PeoplesoftParser):
 		departments=None,
 		textbooks=True,
 		verbosity=3,
+		skip_shallow_duplicates=False,
 		**kwargs):
 
 		# Hotfix to narrow parsing range.
