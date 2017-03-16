@@ -270,7 +270,7 @@ class DigestionAdapter:
 			pass # TODO - add to database
 
 		# Grab semester
-		print(Semester.objects.filter(name=section.term, year=section.year), file=sys.stderr)
+		print(Semester.objects.filter(name='Winter', year=section.year), file=sys.stderr)
 		exit(1)
 
 
