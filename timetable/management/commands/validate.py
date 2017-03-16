@@ -1,5 +1,5 @@
 from django.core.management.base import BaseCommand, CommandParser, CommandError
-from scripts.parser_library.Validator import Validator
+from scripts.parser_library.validator import Validator
 from timetable.management.commands.args_parse import *
 from scripts.parser_library.internal_exceptions import *
 

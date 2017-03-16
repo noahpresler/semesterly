@@ -4,10 +4,10 @@ from simplejson.scanner import JSONDecodeError
 
 from django.core.management.base import BaseCommand, CommandParser, CommandError
 from timetable.management.commands.args_parse import *
-from scripts.parser_library.Validator import Validator
+from scripts.parser_library.validator import Validator
 from scripts.parser_library.digestor import Digestor
 from scripts.parser_library.internal_exceptions import JsonException, DigestionError
-from scripts.parser_library.Tracker import Tracker, LogFormatted
+from scripts.parser_library.tracker import Tracker, LogFormatted
 
 # FIXME -- horrible design should make upper base class
 from timetable.management.commands.parse import Command as PCommand
