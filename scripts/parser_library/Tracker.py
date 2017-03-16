@@ -19,6 +19,9 @@ class Tracker:
 	def set_mode(self, mode):
 		self.mode = mode
 
+	def set_cmd_options(self, cmd_options):
+		self.cmd_options = cmd_options
+
 	def start(self):
 		self.timestamp = datetime.datetime.now().strftime("%Y/%m/%d-%H:%M:%S")
 		self.start_time = timer()
@@ -137,6 +140,7 @@ class LogFormatted(Viewer):
 			print('{}'.format(tracker.school.upper()), file=file)
 			print('TIMESTAMP: {}'.format(tracker.timestamp), file=file)
 			print('ELAPSED: {}'.format(str(datetime.timedelta(seconds=tracker.end_time - tracker.start_time))), file=file)
+			print('COMMAND OPTIONS\n{}'.format(tracker.cmd_options))
 			print('=={}=='.format(tracker.mode.upper()), file=file)
 			for subject, stats in tracker.counters.items():
 				print('{}'.format(subject), file=file)

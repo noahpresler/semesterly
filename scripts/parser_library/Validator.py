@@ -3,7 +3,7 @@
 # @author   Michael N. Miller
 # @date     1/12/17
 
-from __future__ import print_function # NOTE: slowly move toward Python3
+from __future__ import print_function, division, absolute_import # NOTE: slowly move toward Python3
 
 import os, sys, re, jsonschema, argparse, httplib, simplejson as json
 from scripts.parser_library.Logger import Logger
