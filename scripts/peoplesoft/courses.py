@@ -3,7 +3,7 @@
 # @author	Michael N. Miller
 # @date	11/22/16
 
-from __future__ import print_function # NOTE: slowly move toward Python3
+from __future__ import print_function, division, absolute_import # NOTE: slowly move toward Python3
 
 import re, sys, itertools
 from abc import ABCMeta, abstractmethod
@@ -78,6 +78,8 @@ class PeoplesoftParser(CourseParser):
 		soup, params = self.goto_search_page(self.url_params)
 		if years_and_terms is None:
 			years_and_terms = self.get_years_and_terms(soup, cmd_years, cmd_terms)
+		print(years_and_terms, file=sys.stderr)
+		exit(1)
 		for year, terms in years_and_terms.items():
 			self.ingestor['year'] = year
 
