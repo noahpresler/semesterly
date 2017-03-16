@@ -6,7 +6,7 @@
 from __future__ import print_function # NOTE: slowly move toward Python3
 
 import sys, re
-from scripts.parser_library.BaseParser import CourseParser
+from scripts.parser_library.base_parser import CourseParser
 from scripts.parser_library.internal_exceptions import CourseParseError
 
 class VandyParser(CourseParser):

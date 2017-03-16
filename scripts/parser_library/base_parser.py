@@ -11,7 +11,7 @@ from abc import ABCMeta, abstractmethod
 
 from scripts.parser_library.Requester import Requester
 from scripts.parser_library.ingestor import Ingestor
-from scripts.parser_library.Extractor import Extractor
+from scripts.parser_library.extractor import Extractor
 from scripts.parser_library.Updater import ProgressBar
 from scripts.parser_library.internal_exceptions import CourseParseError
 from scripts.parser_library.words import conjunctions_and_prepositions
