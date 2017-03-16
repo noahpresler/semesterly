@@ -6,7 +6,7 @@
 from __future__ import print_function, division, absolute_import # NOTE: slowly move toward Python3
 
 import re
-from scripts.parser_library.BaseParser import CourseParser
+from scripts.parser_library.base_parser import CourseParser
 
 class HopkinsParser(CourseParser):
 
