@@ -57,6 +57,11 @@ export function loadCachedTimetable(dispatch) {
 	// no preferences stored locally; save the defaults
 	let localPreferences = JSON.parse(localStorage.getItem('preferences'));
 	let localSemester = localStorage.getItem('semester');
+	if (localSemester == "S") {
+		localSemester = allSemesters.findIndex(s => (s.name == "Spring" || s.name == "Winter") && s.year == "2017")
+	} else if (localSemester == "F") {
+		localSemester = allSemesters.findIndex(s => s.name == "Fall" && s.year == "2016")
+	} 
 	let localActive = parseInt(localStorage.getItem('active'));
 	if (Object.keys(localCourseSections).length === 0 || Object.keys(localPreferences).length === 0) { return; }
 	store.dispatch({ type: 'SET_ALL_PREFERENCES', preferences: localPreferences });
