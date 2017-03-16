@@ -10,7 +10,7 @@ from random import randint
 from fake_useragent import UserAgent
 from time import sleep
 
-from scripts.parser_library.BaseParser import BaseParser
+from scripts.parser_library.base_parser import BaseParser
 from amazon import amazon_textbook_fields
 
 from scripts.parser_library.internal_exceptions import CourseParseError
