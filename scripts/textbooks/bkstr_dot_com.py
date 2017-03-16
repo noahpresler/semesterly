@@ -7,7 +7,7 @@ from __future__ import print_function # NOTE: slowly move toward Python3
 
 import re, simplejson as json
 
-from scripts.parser_library.BaseParser import BaseParser
+from scripts.parser_library.base_parser import BaseParser
 from scripts.textbooks.amazon import amazon_textbook_fields
 
 class BkstrDotComParser(BaseParser):

@@ -8,7 +8,7 @@ from timetable.models import Updates
 from timetable.school_mappers import course_parsers, new_course_parsers, new_textbook_parsers
 from timetable.management.commands.args_parse import schoollist_argparser, ingestor_argparser, validator_argparser
 from scripts.parser_library.internal_exceptions import *
-from scripts.parser_library.Tracker import Tracker, LogFormatted
+from scripts.parser_library.tracker import Tracker, LogFormatted
 
 class Command(BaseCommand):
 	help = "Initiates specified parsers for specified schools. If no school is provided, starts parsers for all schools."
