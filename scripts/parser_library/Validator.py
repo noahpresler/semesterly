@@ -30,7 +30,8 @@ class Validator:
 		if tracker is not None:
 			self.tracker = tracker
 		else:
-			self.tracker = Tracker(self.config.school.code) # Used during self-contained validation.
+			# Used during self-contained validation.
+			self.tracker = Tracker(self.config.school.code)
 			self.tracker.set_mode('validating')
 
 		# Track stats throughout validation

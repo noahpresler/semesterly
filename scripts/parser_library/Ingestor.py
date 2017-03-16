@@ -88,7 +88,7 @@ class Ingestor(dict):
 		break_on_warning=False,
 		skip_shallow_duplicates=True,
 		hide_progress_bar=False,
-		log_stats=None):
+		tracker=NullTracker()):
 
 		self.school = school
 		self.validate = validate
@@ -111,14 +111,12 @@ class Ingestor(dict):
 		# TODO - needs to default write to logs in school directory
 		self.logger.open() # writes '[' at top of file
 
-		# Setup tracker.
-		self.tracker = Tracker(school)
+		# Setup tracker for digestion and progress bar.
+		self.tracker = tracker
 		self.tracker.set_mode('ingesting')
-		self.tracker.add_viewer(LogFormatted(log_stats))
 		if not hide_progress_bar:
 			formatter = lambda stats: '{}/{}'.format(stats['valid'], stats['total'])
 			self.tracker.add_viewer(ProgressBar(self.school, formatter))
-		self.tracker.start()
 
 		self.validator = Validator(config, tracker=self.tracker)
 
@@ -360,7 +358,5 @@ class Ingestor(dict):
 		return is_valid, full_skip
 
 	def wrap_up(self):
-		self.tracker.finish()
-		self.tracker.report()
 		self.logger.close()
 		self.clear()
