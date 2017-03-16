@@ -13,7 +13,7 @@
 
 # new imports
 from abc import ABCMeta, abstractmethod
-from scripts.parser_library.BaseParser import *
+from scripts.parser_library.base_parser import *
 
 class VandyParser(CourseParser):
 	__metaclass__ = ABCMeta

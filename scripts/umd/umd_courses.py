@@ -1,6 +1,6 @@
 from __future__ import print_function # NOTE: slowly move toward Python3
 import sys, re
-from scripts.parser_library.BaseParser import CourseParser
+from scripts.parser_library.base_parser import CourseParser
 
 def get_valid_time(time):
   """Take convert time to 24hr format and remove trailing am/pm."""
