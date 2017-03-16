@@ -54,6 +54,7 @@ class PeoplesoftParser(CourseParser):
 			'isbns':	lambda soup: zip(soup.find_all('span', id=re.compile(r'DERIVED_SSR_TXB_SSR_TXBDTL_ISBN\$\d*')), soup.find_all('span', id=re.compile(r'DERIVED_SSR_TXB_SSR_TXB_STATDESCR\$\d*'))),
 		}
 
+		# del kwargs['school_shallow_duplicates'] # school_shallow_duplicates=False
 		super(PeoplesoftParser, self).__init__(school, **kwargs)
 
 	@abstractmethod
@@ -73,6 +74,7 @@ class PeoplesoftParser(CourseParser):
 
 		self.verbosity = verbosity
 		self.textbooks = cmd_textbooks
+		self.cleanup() # NOTE: initialize fields to establish empty list invariant
 
 		# NOTE: umich child will do nothing and return an empty dict
 		soup, params = self.goto_search_page(self.url_params)
@@ -207,6 +209,7 @@ class PeoplesoftParser(CourseParser):
 		notes 		= soup.find('span', {'id' : 'DERIVED_CLSRCH_SSR_CLASSNOTE_LONG'})
 		req 		= soup.find('span', {'id' : 'SSR_CLS_DTL_WRK_SSR_REQUISITE_LONG'})
 		areas		= soup.find('span', {'id' : 'SSR_CLS_DTL_WRK_SSR_CRSE_ATTR_LONG'})
+		components  = soup.find('div', id=re.compile(r'win\ddivSSR_CLS_DTL_WRK_SSR_COMPONENT_LONG')).text.strip()
 
 		# parse table of times
 		scheds  = soup.find_all('span', id=re.compile(r'MTG_SCHED\$\d*'))
@@ -230,7 +233,7 @@ class PeoplesoftParser(CourseParser):
 		self.ingestor['course_name']  = self.extractor.titlize(rtitle.group(3))
 		self.ingestor['section_code'] = rtitle.group(2)
 		self.ingestor['credits']      = float(re.match(r'(\d*).*', units).group(1))
-		self.ingestor['prereqs']      = [req.text] if req else None
+		self.ingestor['prereqs']      += [self.extractor.extract_info(self.ingestor, req.text)] if req else []
 		self.ingestor['description']  = [
 			self.extractor.extract_info(self.ingestor, descr.text) if descr else '',
 			self.extractor.extract_info(self.ingestor, notes.text) if notes else ''
@@ -249,8 +252,20 @@ class PeoplesoftParser(CourseParser):
 		# 	self.ingestor['areas'] = list(itertools.chain(self.ingestor['areas'], self.ingestor['geneds']))
 			# self.ingestor['areas'] += self.ingestor['geneds']
 
-		course = self.ingestor.ingest_course()
+		# Condition such that a laboratory (or another type) section with 0 units does not overwrite a main lecture section
+		# TODO - integrate this nicer
+		create_course = True
+		components = {component.replace('Required', '').strip() for component in components.split(',')}
+		if len(components) > 1 and self.ingestor['credits'] == 0 and 'Lecture' in components and 'Lecture' != self.ingestor['section_type'] and self.ingestor['course_code'] in self.ingestor.validator.seen:
+			create_course = False
+			course = {'code': self.ingestor['course_code']}
+
+		if create_course:
+			course = self.ingestor.ingest_course()
 		section = self.ingestor.ingest_section(course)
+
+		# course = self.ingestor.ingest_course()
+		# section = self.ingestor.ingest_section(course)
 
 		# # NOTE: section is no longer a django object
 		# # TODO - change query to handle class code
