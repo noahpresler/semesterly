@@ -38,6 +38,10 @@ class Tracker(object):
 			self.error += '\n'
 		self.error += msg
 
+	def track_year_and_term(self, year, term):
+		self.year = year
+		self.term = term
+
 	def track_count(self, subject, stat):
 		self.counters.increment(subject, stat)
 		self.broadcast_update()
@@ -117,7 +121,7 @@ class ProgressBar(Viewer):
 
 	def __init__(self, school, formatter=(lambda x: x)):
 		# Set progress bar to long or short dependent on terminal width
-		terminal_width = progressbar.utils.get_terminal_size()[0]
+		terminal_width = ProgressBar.get_terminal_size()
 		if terminal_width < ProgressBar.terminal_width_switch_size:
 			self.bar = progressbar.ProgressBar(
 				redirect_stdout=True,
@@ -137,11 +141,18 @@ class ProgressBar(Viewer):
 				])
 		self.formatter = formatter
 
+	@staticmethod
+	def get_terminal_size():
+		return progressbar.utils.get_terminal_size()[0]
+
 	def broadcast_update(self, tracker):
 		counters = tracker.counters
 		mode = '=={}=='.format(tracker.mode.upper())
 		label_string = ' | '.join(('{}: {}'.format(k[:3].title(), self.formatter(counters[k])) for k in counters if counters[k]['total'] > 0))
-		formatted_string = '{} | {}'.format(mode, label_string)
+		if ProgressBar.get_terminal_size() > ProgressBar.terminal_width_switch_size and hasattr(tracker, 'year') and hasattr(tracker, 'term'):
+			formatted_string = '{} | {} {} | {}'.format(mode, tracker.term, tracker.year, label_string)
+		else:
+			formatted_string = '{} | {}'.format(mode, label_string)
 		self.bar.update(formatted_string)
 
 	def report(self, tracker):
