@@ -5,7 +5,7 @@
 
 from __future__ import print_function, division, absolute_import # NOTE: slowly move toward Python3
 
-import re
+import re, sys
 from scripts.parser_library.base_parser import CourseParser
 
 class HopkinsParser(CourseParser):
@@ -37,10 +37,13 @@ class HopkinsParser(CourseParser):
 
     def get_section(self,course):
         url = HopkinsParser.API_URL + '/' + course['OfferingName'].replace(".", "") + course['SectionName'] +'/' + self.semester + '?key=' + HopkinsParser.KEY
+        print(url, file=sys.stderr)
+        with open('scripts/jhu/logs/errors2.log', 'w') as f:
+            print(url, file=f)
         return self.requester.get(url)
 
     def parse_schools(self):
-        for school in self.schools:
+        for school in self.schools[:1]:
             self.parse_school(school)
 
     def parse_school(self,school):
