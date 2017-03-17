@@ -42,7 +42,7 @@ class HopkinsParser(CourseParser):
         return HopkinsParser.API_URL + '/' + course['OfferingName'].replace(".", "") + course['SectionName'] +'/' + self.semester + '?key=' + HopkinsParser.KEY
 
     def parse_schools(self):
-        for school in self.schools[:1]:
+        for school in self.schools:
             self.parse_school(school)
 
     def parse_school(self,school):
