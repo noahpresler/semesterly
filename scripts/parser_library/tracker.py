@@ -32,7 +32,11 @@ class Tracker(object):
 
 	def see_error(self, msg):
 		self.saw_error = True
-		self.error = msg
+		if not hasattr(self, 'error'):
+			self.error = ''
+		else:
+			self.error += '\n'
+		self.error += msg
 
 	def track_count(self, subject, stat):
 		self.counters.increment(subject, stat)
