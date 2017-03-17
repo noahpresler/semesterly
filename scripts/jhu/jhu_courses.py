@@ -36,7 +36,7 @@ class HopkinsParser(CourseParser):
         return self.requester.get(url)
 
     def get_section(self,course):
-        return self.requester.get(get_section_url(course))
+        return self.requester.get(self.get_section_url(course))
 
     def get_section_url(self, course):
         return HopkinsParser.API_URL + '/' + course['OfferingName'].replace(".", "") + course['SectionName'] +'/' + self.semester + '?key=' + HopkinsParser.KEY
@@ -51,7 +51,7 @@ class HopkinsParser(CourseParser):
             section = self.get_section(course)
             if len(section) == 0:
                 with open('scripts/jhu/logs/section_url_tracking.txt', 'w') as f:
-                    print(get_section_url, file=f)
+                    print(self.get_section_url(), file=f)
                 continue
             self.load_ingestor(course,section)
 
