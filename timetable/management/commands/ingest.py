@@ -101,17 +101,20 @@ class Command(BaseCommand):
 			except CourseParseError as e:
 				logging.exception(e)
 				error = "Error while parsing %s:\n\n%s\n" % (school, str(e))
-				self.stderr.write(self.style.ERROR(error))
+				print(self.style.ERROR(error), file=self.stderr)
 				tracker.see_error(error)
 			except (JsonValidationError, JsonValidationWarning, IngestorWarning) as e:
 				logging.exception(e)
 				error = "Error while parsing %s:\n\n%s\n" % (school, str(e))
-				self.stderr.write(self.style.ERROR(error))
+				print(self.style.ERROR(error), file=self.stderr)
 				tracker.see_error(error)
 			except Exception as e:
 				logging.exception(e)
-				self.stderr.write(self.style.ERROR(traceback.format_exc()))
+				dict_pp = lambda j: json.dumps(j, sort_keys=True, indent=2, separators=(',', ': '))
+				print(self.style.ERROR(traceback.format_exc()), file=self.stderr)
+				print(self.style.ERROR(dict_pp(p.ingestor)), file=self.stderr)
 				tracker.see_error(traceback.format_exc())
+				tracker.see_error(dict_pp(p.ingestor))
 
 			tracker.finish()
 
