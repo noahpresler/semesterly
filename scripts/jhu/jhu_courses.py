@@ -36,10 +36,10 @@ class HopkinsParser(CourseParser):
         return self.requester.get(url)
 
     def get_section(self,course):
-        url = HopkinsParser.API_URL + '/' + course['OfferingName'].replace(".", "") + course['SectionName'] +'/' + self.semester + '?key=' + HopkinsParser.KEY
-        with open('scripts/jhu/logs/errors2.log', 'w') as f:
-            print(url, file=f)
-        return self.requester.get(url)
+        return self.requester.get(get_section_url(course))
+
+    def get_section_url(self, course):
+        return HopkinsParser.API_URL + '/' + course['OfferingName'].replace(".", "") + course['SectionName'] +'/' + self.semester + '?key=' + HopkinsParser.KEY
 
     def parse_schools(self):
         for school in self.schools[:1]:
@@ -49,6 +49,10 @@ class HopkinsParser(CourseParser):
         courses = self.get_courses(school)
         for course in courses:
             section = self.get_section(course)
+            if len(section) == 0:
+                with open('scripts/jhu/logs/section_url_tracking.txt', 'w') as f:
+                    print(get_section_url, file=f)
+                continue
             self.load_ingestor(course,section)
 
     def compute_size_enrollment(self,course):
