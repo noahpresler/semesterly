@@ -122,11 +122,8 @@ class Ingestor(dict):
 
 		super(Ingestor, self).__init__() # Adds dictionary functionality.
 
-	def __str__(self):
-		return '\n'.join('{}:{}'.format(l, v) for l, v in self.iteritems())
-
 	def getchain(self, *keys):
-		'''Match the first key found in self.mouth dictionary.'''
+		'''Match the first key found in self dictionary.'''
 		for key in keys:
 			if key in self:
 				return self[key]
