@@ -37,7 +37,6 @@ class HopkinsParser(CourseParser):
 
     def get_section(self,course):
         url = HopkinsParser.API_URL + '/' + course['OfferingName'].replace(".", "") + course['SectionName'] +'/' + self.semester + '?key=' + HopkinsParser.KEY
-        print(url, file=sys.stderr)
         with open('scripts/jhu/logs/errors2.log', 'w') as f:
             print(url, file=f)
         return self.requester.get(url)
