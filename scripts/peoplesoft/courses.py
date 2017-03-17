@@ -12,7 +12,6 @@ from abc import ABCMeta, abstractmethod
 # from scripts.textbooks.amazon import make_textbook
 from scripts.parser_library.requester import Requester
 from scripts.parser_library.extractor import *
-from scripts.parser_library.Model import Model
 from scripts.parser_library.ingestor import Ingestor
 from scripts.parser_library.base_parser import CourseParser
 from scripts.parser_library.internal_exceptions import CourseParseError
@@ -209,7 +208,9 @@ class PeoplesoftParser(CourseParser):
 		notes 		= soup.find('span', {'id' : 'DERIVED_CLSRCH_SSR_CLASSNOTE_LONG'})
 		req 		= soup.find('span', {'id' : 'SSR_CLS_DTL_WRK_SSR_REQUISITE_LONG'})
 		areas		= soup.find('span', {'id' : 'SSR_CLS_DTL_WRK_SSR_CRSE_ATTR_LONG'})
-		components  = soup.find('div', id=re.compile(r'win\ddivSSR_CLS_DTL_WRK_SSR_COMPONENT_LONG')).text.strip()
+		components  = soup.find('div', id=re.compile(r'win\ddivSSR_CLS_DTL_WRK_SSR_COMPONENT_LONG'))
+		if components:
+			components = components.text.strip()
 
 		# parse table of times
 		scheds  = soup.find_all('span', id=re.compile(r'MTG_SCHED\$\d*'))
@@ -256,7 +257,7 @@ class PeoplesoftParser(CourseParser):
 		# TODO - integrate this nicer
 		create_course = True
 		components = {component.replace('Required', '').strip() for component in components.split(',')}
-		if len(components) > 1 and self.ingestor['credits'] == 0 and 'Lecture' in components and 'Lecture' != self.ingestor['section_type'] and self.ingestor['course_code'] in self.ingestor.validator.seen:
+		if components is None or (len(components) > 1 and self.ingestor['credits'] == 0 and 'Lecture' in components and 'Lecture' != self.ingestor['section_type'] and self.ingestor['course_code'] in self.ingestor.validator.seen):
 			create_course = False
 			course = {'code': self.ingestor['course_code']}
 
