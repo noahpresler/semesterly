@@ -258,9 +258,9 @@ class PeoplesoftParser(CourseParser):
 		create_course = True
 		if components is not None:
 			components = {component.replace('Required', '').strip() for component in components.split(',')}
-		if components is None or (len(components) > 1 and self.ingestor['credits'] == 0 and 'Lecture' in components and 'Lecture' != self.ingestor['section_type'] and self.ingestor['course_code'] in self.ingestor.validator.seen):
-			create_course = False
-			course = {'code': self.ingestor['course_code']}
+			if (len(components) > 1 and self.ingestor['credits'] == 0 and 'Lecture' in components and 'Lecture' != self.ingestor['section_type'] and self.ingestor['course_code'] in self.ingestor.validator.seen):
+				create_course = False
+				course = {'code': self.ingestor['course_code']}
 
 		if create_course:
 			course = self.ingestor.ingest_course()
