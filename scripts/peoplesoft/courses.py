@@ -209,8 +209,6 @@ class PeoplesoftParser(CourseParser):
 		req 		= soup.find('span', {'id' : 'SSR_CLS_DTL_WRK_SSR_REQUISITE_LONG'})
 		areas		= soup.find('span', {'id' : 'SSR_CLS_DTL_WRK_SSR_CRSE_ATTR_LONG'})
 		components  = soup.find('div', id=re.compile(r'win\ddivSSR_CLS_DTL_WRK_SSR_COMPONENT_LONG'))
-		if components:
-			components = components.text.strip()
 
 		# parse table of times
 		scheds  = soup.find_all('span', id=re.compile(r'MTG_SCHED\$\d*'))
@@ -257,6 +255,7 @@ class PeoplesoftParser(CourseParser):
 		# TODO - integrate this nicer
 		create_course = True
 		if components is not None:
+			components = components.text.strip()
 			components = {component.replace('Required', '').strip() for component in components.split(',')}
 			if (len(components) > 1 and self.ingestor['credits'] == 0 and 'Lecture' in components and 'Lecture' != self.ingestor['section_type'] and self.ingestor['course_code'] in self.ingestor.validator.seen):
 				create_course = False
