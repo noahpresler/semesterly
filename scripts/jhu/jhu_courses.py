@@ -51,7 +51,7 @@ class HopkinsParser(CourseParser):
             section = self.get_section(course)
             if len(section) == 0:
                 with open('scripts/jhu/logs/section_url_tracking.txt', 'w') as f:
-                    print(self.get_section_url(), file=f)
+                    print(self.get_section_url(course), file=f)
                 continue
             self.load_ingestor(course,section)
 
