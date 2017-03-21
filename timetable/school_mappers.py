@@ -77,19 +77,25 @@ school_to_course_regex = {
   'salisbury': '([A-Z]{3,4} \\d{2,3})',
 }
 
+_sem = lambda term, year: {'name': term, 'year': year}
 school_to_semesters = {
-  'jhu': [{'name': 'Spring', 'year': '2017'}, {'name': 'Fall', 'year': '2017'}, {'name': 'Fall', 'year': '2016'}],
-  'uoft': [{'name': 'Winter', 'year': '2017'}, {'name': 'Fall', 'year': '2016'}],
-  'umd': [{'name': 'Spring', 'year': '2017'}, {'name': 'Fall', 'year': '2016'}],
-  'rutgers': [{'name': 'Spring', 'year': '2017'}, {'name': 'Fall', 'year': '2016'}],
-  'uo': [{'name': 'Spring', 'year': '2017'}, {'name': 'Fall', 'year': '2016'}],
-  'queens': [{'name': 'Winter', 'year': '2017'}, {'name': 'Fall', 'year': '2016'}],
-  'vandy': [{'name': 'Spring', 'year': '2017'}, {'name': 'Fall', 'year': '2016'}],
-  'gw': [{'name': 'Spring', 'year': '2017'}, {'name': 'Fall', 'year': '2016'}],
-  'umich': [{'name': 'Winter', 'year': '2017'}, {'name': 'Fall', 'year': '2016'}],
-  'umich2': [{'name': 'Winter', 'year': '2017'}, {'name': 'Fall', 'year': '2016'}],
-  'chapman': [{'name': 'Spring', 'year': '2017'}, {'name': 'Fall', 'year': '2016'}],
+  'jhu': [_sem('Fall', '2017'), _sem('Spring', '2017'), _sem('Fall', '2016')],
+  'uoft': [_sem('Winter', '2017'), _sem('Fall', '2016')],
+  'umd': [_sem('Spring', '2017'), _sem('Fall', '2016')],
+  'rutgers': [_sem('Spring', '2017'), _sem('Fall', '2016')],
+  'uo': [_sem('Spring', '2017'), _sem('Fall', '2016')],
+  'queens': [_sem('Winter', '2017'), _sem('Fall', '2016')],
+  'vandy': [_sem('Spring', '2017'), _sem('Fall', '2016')],
+  'gw': [_sem('Spring', '2017'), _sem('Fall', '2016')],
+  'umich': [_sem('Winter', '2017'), _sem('Fall', '2016')],
+  'chapman': [_sem('Spring', '2017'), _sem('Fall', '2016')],
+  'salisbury': [_sem('Spring', '2017'), _sem('Winter', '2017'), _sem('Fall', '2016'), _sem('Fall', '2017'), _sem('Summer', '2017'), _sem('Interterm', '2017')],
 }
+
+# Ensure DB has all semesters.
+for school, semesters in school_to_semesters.items():
+  for semester in semesters:
+    Semester.objects.update_or_create(**semester)
 
 # do the imports: assumes all parser follow the same naming conventions: 
 # schoolname_parsertype where parsertype can be courses, evals, or textbooks
