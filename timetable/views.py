@@ -216,7 +216,11 @@ def get_timetables(request):
     return HttpResponse(json.dumps({'timetables': [], 'new_c_to_s': {}}), 
                         content_type='application/json')
   else:
-    params['semester'] = Semester.objects.get_or_create(**params['semester'])[0]
+    try:
+      params['semester'] = Semester.objects.get_or_create(**params['semester'])[0]
+    except TypeError: 
+      params['semester'] = Semester.objects.get(name="Fall",year="2016") if params['semester'] == "F" else Semester.objects.get(name="Spring",year="2017")
+
 
   SCHOOL = request.subdomain
 
@@ -393,9 +397,13 @@ class TimetableGenerator:
       for section_type, sections in grouped:
         if str(c.id) in self.locked_sections and self.locked_sections[str(c.id)].get(section_type, False):
           locked_section_code = self.locked_sections[str(c.id)][section_type]
-          locked_section = next(s for s in sections if s.meeting_section == locked_section_code)
-          pinned = [c.id, locked_section, locked_section.offering_set.all()]
-          all_sections.append([pinned])
+          try:
+            locked_section = next(s for s in sections if s.meeting_section == locked_section_code)
+          except StopIteration:
+            all_sections.append([[c.id, section, section.offering_set.all()] for section in sections])
+          else:
+            pinned = [c.id, locked_section, locked_section.offering_set.all()]
+            all_sections.append([pinned])
         else:
           all_sections.append([[c.id, section, section.offering_set.all()] for section in sections])
     return all_sections
