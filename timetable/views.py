@@ -216,7 +216,11 @@ def get_timetables(request):
     return HttpResponse(json.dumps({'timetables': [], 'new_c_to_s': {}}), 
                         content_type='application/json')
   else:
-    params['semester'] = Semester.objects.get_or_create(**params['semester'])[0]
+    try:
+      params['semester'] = Semester.objects.get_or_create(**params['semester'])[0]
+    except TypeError: 
+      params['semester'] = Semester.objects.get(name="Fall",year="2016") if params['semester'] == "F" else Semester.objects.get(name="Spring",year="2017")
+
 
   SCHOOL = request.subdomain
 
