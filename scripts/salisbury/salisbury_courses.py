@@ -69,8 +69,8 @@ def go():
 		start_time = timer()
 		p.start(
 			verbosity=0,
-			years=['2017'],
-			terms=['Spring'],
+			years=['2017', '2016'],
+			terms=['Spring', 'Fall'],
 			departments=None,
 			textbooks=True
 		)
