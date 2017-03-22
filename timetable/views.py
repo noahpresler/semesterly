@@ -71,6 +71,7 @@ def view_timetable(request, code=None, sem_name=None, year=None, shared_timetabl
   sem = Semester.objects.get(**sem_dicts[semester_index])
 
   if sem_name and year: # loading a share course link OR timetable share link
+    print year
     sem, _ = Semester.objects.get_or_create(name=sem_name, year=year)
     sem_pair = {'name': sem.name, 'year': sem.year}
     if sem_pair not in sem_dicts:
