@@ -123,7 +123,8 @@ INSTALLED_APPS = (
     'timetable',
     'analytics',
     'scripts',
-    'student'
+    'student',
+    'silk'
 )
 
 MIDDLEWARE_CLASSES = (
@@ -134,7 +135,8 @@ MIDDLEWARE_CLASSES = (
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'semesterly.middleware.subdomain_middleware.SubdomainMiddleware',
-     'social.apps.django_app.middleware.SocialAuthExceptionMiddleware',
+    'social.apps.django_app.middleware.SocialAuthExceptionMiddleware',
+    'silk.middleware.SilkyMiddleware',
 )
 
 TEMPLATE_CONTEXT_PROCESSORS = (
