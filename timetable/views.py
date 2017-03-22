@@ -806,9 +806,12 @@ def profile(request):
     if student.user.social_auth.filter(provider='google-oauth2').exists():
       social_user = student.user.social_auth.filter(provider='google-oauth2').first()
       img_url = student.img_url.replace('sz=50','sz=700')
+      hasGoogle = True
     else:
       social_user = student.user.social_auth.filter(provider='facebook').first()
       img_url = 'https://graph.facebook.com/' + student.fbook_uid + '/picture?width=700&height=700'
+      hasGoogle = False
+    hasNotificationsEnabled = RegistrationToken.objects.filter(student=student).exists()
     context = {
       'name': student.user,
       'major': student.major,
@@ -816,6 +819,8 @@ def profile(request):
       'student': student,
       'total': 0,
       'img_url': img_url,
+      'hasGoogle': hasGoogle,
+      'notifications': hasNotificationsEnabled
     }
     for r in reactions:
         context[r['title']] = r['count']
