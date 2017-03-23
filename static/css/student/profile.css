@@ -190,10 +190,17 @@ desktop-nav {
 	width: 180px;
 	height: 180px;
 	border-radius: 100%;
+	background-color: #ddd;
 	background-size: cover;
 	background-position: center;
 	background-repeat: no-repeat;
+	background-image: url(/static/img/blank.jpg);
 	transform: translate(-50%, 40%);
+	overflow: hidden;
+}
+#profile-image-social {
+	width: 100%;
+	height: 100%;
 }
 #profile-body {
 	padding: 100px 0 20px;
@@ -271,6 +278,12 @@ desktop-nav {
 .reaction:hover .reaction-dropdown {
 	opacity: 1;
 	visibility: visible;
+}
+#linked-accounts {
+	margin-top: 60px;
+}
+#notifications {
+	margin-top: 60px;
 }
 #join-date {
 	margin-top: 60px;
