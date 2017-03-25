@@ -16,6 +16,7 @@ const mapStateToProps = (state) => {
 		mostFriendsClass: active_tt.courses.filter((c) => c.id == state.alerts.mostFriendsClassId)[0],
 		mostFriendsCount: state.alerts.mostFriendsCount,
 		mostFriendsKey: state.ui.courseToColourIndex[state.alerts.mostFriendsClassId],
+		totalFriendsCount: state.alerts.totalFriendsCount,
 		userInfo: state.userInfo.data,
 	}
 }

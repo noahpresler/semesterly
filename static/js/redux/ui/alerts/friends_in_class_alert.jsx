@@ -68,7 +68,7 @@ class FriendsInClassAlert extends React.Component {
 	                fetchCourseInfo={() => this.fetchCourseInfo(this.props.mostFriendsClass.id)}
 	                />
 				<small className="alert-extra">
-					Plus 89 more in other classes. Enable the friend feature to find out who!
+					Plus {this.props.totalFriendsCount} more in other classes. Enable the friend feature to find out who!
 				</small>
 				<button 
 					onClick={() => {this.allowFacebook();}}

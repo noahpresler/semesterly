@@ -6,7 +6,8 @@ export const alerts = (state = {alertConflict: false,
 								alertFacebookFriends: false,
 								facebookAlertIsOn: false,
 								mostFriendsClassId: null,
-								mostFriendsCount: 0,}, action) => {
+								mostFriendsCount: 0,
+								totalFriendsCount: 0}, action) => {
 	switch (action.type) {
 		// dispatched when there's a conflict
 		case "ALERT_CONFLICT":
@@ -37,7 +38,7 @@ export const alerts = (state = {alertConflict: false,
 			return Object.assign({}, state, {alertEnableNotifications: false});
 		// dispatched when the most friended class is returned
 		case "CHANGE_MOST_FRIENDS_CLASS":
-			return Object.assign({}, state, {mostFriendsCount: action.count, mostFriendsClassId: action.classId});
+			return Object.assign({}, state, {mostFriendsCount: action.count, mostFriendsClassId: action.classId, totalFriendsCount: action.total});
 		case "ALERT_FACEBOOK_FRIENDS":
 			return Object.assign({}, state, {alertFacebookFriends: true});
 		case "SHOW_FACEBOOK_ALERT":
