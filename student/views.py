@@ -339,14 +339,6 @@ def get_most_classmate_count(request):
         total_count += temp_count
     course = {"id" : most_friend_course_id, "count" : count, "total_count" : total_count}
     return HttpResponse(json.dumps(course))
-    #TODO will go through each course id
-        #call get_friend count
-        #maintain the course id to the count in a dictioanry
-        # return the top one
-        # done :D 
-    #TODO: WILL RETURN THE COURSE WITH MOST FRIENDS
-    #{5688: 1} Where the first is the top course's id as json using json.dumps like below
-    # return HttpResponse(json.dumps(course), content_type='application/json') 
 
 def get_friend_count_from_course_id(school, student, course_id, semester):
     count = 0 
