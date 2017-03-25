@@ -524,7 +524,8 @@ export function fetchMostClassmatesCount(courses) {
       	dispatch({
 			type: "CHANGE_MOST_FRIENDS_CLASS",
 			classId: json.id,
-			count: json.count
+			count: json.count,
+			total: json.total_count
 		});
 		// dispatch({
 		// 	type: "ALERT_FACEBOOK_FRIENDS",
