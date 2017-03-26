@@ -31,10 +31,13 @@ const Row = (props) => {
 class Calendar extends React.Component {
 	constructor(props) {
 		super(props);
-		this.state = {shareLinkShown: false};
 		this.fetchShareTimetableLink = this.fetchShareTimetableLink.bind(this);
 		this.hideShareLink = this.hideShareLink.bind(this);
 		this.getTimelineStyle = this.getTimelineStyle.bind(this);
+		this.state = {
+			shareLinkShown: false,
+			timelineStyle: this.getTimelineStyle()
+		};
 	}
 	componentWillReceiveProps(nextProps) {
 		if (this.props.isFetchingShareLink && !nextProps.isFetchingShareLink) {
@@ -42,9 +45,15 @@ class Calendar extends React.Component {
 		}
 	}
 
-	getTimelineStyle() { 
-		if ((new Date()).getHours() > this.props.endHour || (new Date()).getHours() < 8) {
-			return {display: 'none'}
+	getTimelineStyle() {
+		let now = new Date();
+		if (
+			now.getHours() > this.props.endHour ||  // if the current time is before
+			now.getHours() < 8                  ||  // 8am or after the schedule end
+			now.getDay()   == 0                 ||  // time or if the current day is
+			now.getDay()   == 6 										// Saturday or Sunday, then
+		) {																				// display no line
+			return { display: 'none' }
 		}
 		let diff = Math.abs(new Date() - new Date().setHours(8,0,0));
 		let mins = Math.ceil((diff/1000)/60);
@@ -146,6 +155,7 @@ class Calendar extends React.Component {
 				</ReactTooltip>
 			</div>
 	    );
+		console.log("render");
 		return (
 	      <div id="calendar" className="fc fc-ltr fc-unthemed week-calendar">
 	        <div className="fc-toolbar no-print">
@@ -215,7 +225,7 @@ class Calendar extends React.Component {
 	                            </tbody>
 	                          </table>
 	                        </div>
-	                        <div className="fc-timeline" style={this.getTimelineStyle()}/>
+	                        <div className="fc-timeline" style={ this.state.timelineStyle }/>
 	                        <div className="fc-content-skeleton">
 	                          <SlotManagerContainer days={DAYS} />
 	                        </div>
@@ -234,6 +244,12 @@ class Calendar extends React.Component {
   	}
 
   	componentDidMount() {
+			// Here, we set an interval so that the timeline position is updated once
+			// every minute. (Note: 60 * 1000 milliseconds = 1 minute.)
+			setInterval(() => {
+				this.setState({timelineStyle: this.getTimelineStyle()});
+			}, 60000);
+
 	    // let days = {1: 'mon', 2: 'tue', 3: 'wed', 4: 'thu', 5: 'fri'};
 	    // let d = new Date("October 13, 2014 11:13:00");
 	    // let selector = ".fc-" + days[d.getDay()];
