@@ -1,0 +1,81 @@
+{
+	"$schema": "http://json-schema.org/draft-04/schema#",
+	"title": "config.json",
+	"description": "Semesterly school config.json definition",
+	"type": "object",
+	"properties": {
+		"school": {
+			"allOf": [
+				{
+					"$ref": "definitions.json#/school"
+				}
+			],
+			"properties": {
+				"code": {},
+				"name": {}
+			},
+			"additionalProperties": false,
+			"required": [ "code",	"name" ]
+		},
+		"course_code_regex": {
+			"type": "string"
+		},
+		"terms": {
+			"type": "array",
+			"items": {
+				"type": "string"
+			}
+		},
+		"time_granularity": {
+			"type": "integer",
+			"minimum": 0,
+			"exclusiveMinimum": true
+		},
+		"registration_groupings": {
+			"type": "array",
+			"items": {
+				"type": "array",
+				"items": {
+					"type": "string"
+				}
+			}
+		},
+		"campuses": {
+			"type": "array",
+			"items": {
+				"type": "string"
+			}
+		},
+		"buildings": {
+			"type": "array",
+			"items": {
+				"type": "string"
+			}
+		},
+		"time_zone": {
+			"enum": [ "EST", "PST", "MST", "CST" ]
+		},
+		"departments": {
+			"type": "array",
+			"items": {
+				"allOf": [
+					{
+						"$ref": "definitions.json#/department"
+					}
+				],
+				"properties": {
+					"code": {},
+					"name": {}
+				},
+				"additionalProperties": false,
+				"required": [ "code" ]
+			}
+		}
+	},
+	"additionalProperties": false,
+	"required": [
+		"school",
+		"course_code_regex",
+		"terms"
+	]
+}

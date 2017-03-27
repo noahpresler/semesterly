@@ -2,6 +2,7 @@ from django.db import models
 from django.contrib.auth.models import User
 from timetable.models import *
 
+
 class Student(models.Model):
     FRESHMAN = 'FR'
     SOPHOMORE = 'SO'
@@ -22,6 +23,7 @@ class Student(models.Model):
     time_created = models.DateTimeField(auto_now_add=True)
     school = models.CharField(max_length=100, null=True)
 
+
 class Reaction(models.Model):
   REACTION_CHOICES = (
     ('FIRE', 'FIRE'),
@@ -38,16 +40,19 @@ class Reaction(models.Model):
   title = models.CharField(max_length=50, choices=REACTION_CHOICES)
   time_created = models.DateTimeField(auto_now_add=True)
 
+
 class PersonalTimetable(models.Model):
     courses = models.ManyToManyField(Course)
     school = models.CharField(max_length=50)
     name = models.CharField(max_length=100)
-    semester = models.CharField(max_length=2)
+    _semester = models.CharField(max_length=2) # deprecated
+    semester = models.ForeignKey('timetable.Semester')
     time_updated = models.DateTimeField(auto_now_add=True)
     student = models.ForeignKey(Student)
     last_updated = models.DateTimeField(auto_now=True)
     sections = models.ManyToManyField(Section)
     has_conflict = models.BooleanField(blank=True, default=False)
+
 
 class RegistrationToken(models.Model):
     auth = models.TextField(default='')
