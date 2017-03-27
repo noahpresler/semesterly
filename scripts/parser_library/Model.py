@@ -89,9 +89,14 @@ class Model:
         Returns:
             django section model object
         '''
+        # Grab semester.
+        semester, _ = Semester.objects.update_or_create(name=self.map['term'], year=self.map['year'])
+        if semester is None:
+            raise DigestionError('Semester {} {} not in DB'.format(sectin.term, section.year))
+
         section, section_was_created = Section.objects.update_or_create(
             course = course_model,
-            semester = self.map['term'],
+            semester = semester,
             meeting_section = self.map['section'],
             defaults = {
                 'instructors': self.map.get('instrs'),
