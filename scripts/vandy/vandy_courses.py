@@ -72,7 +72,9 @@ class VandyParser(CourseParser):
 				'Fall': '0875'
 			},
 			'2017': {
-				'Spring': '0880'
+				'Spring': '0880',
+				'Fall': '0895',
+				'Summer': '0885',
 			}
 		}
 
