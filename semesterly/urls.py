@@ -4,8 +4,8 @@ from django.conf import settings
 from django.contrib import admin
 
 # from haystack.views import SearchView
-
 # from haystack.query import SearchQuerySet
+
 
 admin.autodiscover()
 
@@ -19,6 +19,7 @@ handler500 = 'timetable.views.custom_500'
 
 urlpatterns = patterns('',
     # url(r'^admin/', include(admin.site.urls)),
+
     #finding frandsssss
     url(r'^find_friends/$', 'timetable.views.find_friends'),
     url('', include('social.apps.django_app.urls', namespace='social')),
@@ -29,7 +30,7 @@ urlpatterns = patterns('',
     url(r'^$', 'timetable.views.view_timetable'),
 
     # sharing course
-    url(r'course/(?P<code>.+?)/(?P<sem>[fFsS]{1}?)/*$', 'timetable.views.view_timetable'),
+    url(r'course/(?P<code>.+?)/(?P<sem_name>.+?)/(?P<year>.+?)/*$', 'timetable.views.view_timetable'),
 
     # request sharing timetable link
     url(r'share/link/*$', 'timetable.views.create_share_link'),
@@ -61,15 +62,17 @@ urlpatterns = patterns('',
     url(r'^textbooks*$', 'timetable.views.view_textbooks'),
     url(r'^export_calendar/*$', 'timetable.views.export_calendar'),
     url(r'^notifyme/*$', 'timetable.views.enable_notifs'),
-    url(r'^user/get_saved_timetables/(?P<school>.+)/(?P<sem>[fFsS]{1})', 'student.views.get_student_tts_wrapper'),
+    url(r'^user/get_saved_timetables/(?P<school>.+)/(?P<sem_name>.+)/(?P<year>[0-9]{4})', 'student.views.get_student_tts_wrapper'),
     url(r'^user/add_to_gcal/*$', 'student.views.add_tt_to_gcal'),
     url(r'^user/log_ical/*$', 'student.views.log_ical_export'),
+    url(r'^user/log_final_exam/*$', 'timetable.views.log_final_exam_view'),
+
     
-    url(r'^courses/(?P<school>.+?)/(?P<sem>[fFsS]{1}?)/code/(?P<course_id>.+)/*$', 'timetable.views.get_course_id'),
+    url(r'^courses/(?P<school>.+?)/code/(?P<course_id>.+)/*$', 'timetable.views.get_course_id'),
+    url(r'^courses/(?P<school>.+?)/(?P<sem_name>.+)/(?P<year>[0-9]{4})/id/(?P<id>[0-9]+)/*$', 'timetable.views.get_course'),
     url(r'^jhu/countdown/*$', 'timetable.views.jhu_timer'),
-    url(r'^courses/(?P<school>.+?)/(?P<sem>[fFsS]{1}?)/id/(?P<id>[0-9]+)/*$', 'timetable.views.get_course'),
     url(r'^get_timetables/$', 'timetable.views.get_timetables'),
-    url(r'^search/(?P<school>.+?)/(?P<sem>.+?)/(?P<query>.+?)/', 'timetable.views.course_search'),
+    url(r'^search/(?P<school>.+?)/(?P<sem_name>.+?)/(?P<year>[0-9]{4})/(?P<query>.+?)/', 'timetable.views.course_search'),
     url(r'^advanced_search/', 'timetable.views.advanced_course_search'),
     url(r'^school_info/(?P<school>.+?)/', 'timetable.views.school_info'),
     url(r'react/*', 'student.views.react_to_course'),
@@ -103,7 +106,11 @@ urlpatterns = patterns('',
 
     # for testing 404, so i don't have to turn off debug
 	url(r'^404testing/', 'timetable.views.custom_404'),
-    url(r'^500testing/', 'timetable.views.custom_500')
+    url(r'^500testing/', 'timetable.views.custom_500'),
+
+    # final exam scheduler
+    (r'^get_final_exams/*$', 'timetable.views.final_exam_scheduler'),
+    url(r'^final_exams/*$', 'timetable.views.view_final_exams')
 )
 
 if getattr(settings, 'STAGING', False):

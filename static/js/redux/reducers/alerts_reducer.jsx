@@ -1,13 +1,18 @@
-export const alerts = (state = {alertConflict: false, 
-								alertTimetableExists: false, 
-								alertChangeSemester: false,
-								alertNewTimetable: false,
-								alertEnableNotifications: false,
-								alertFacebookFriends: false,
-								facebookAlertIsOn: false,
-								mostFriendsClassId: null,
-								mostFriendsCount: 0,
-								totalFriendsCount: 0}, action) => {
+let defaultState = {
+	alertConflict: false, 
+	alertTimetableExists: false, 
+	alertChangeSemester: false,
+	alertNewTimetable: false,
+	alertEnableNotifications: false,
+  alertFacebookFriends: false,
+  facebookAlertIsOn: false,
+  mostFriendsClassId: null,
+  mostFriendsCount: 0,
+  totalFriendsCount: 0,
+	desiredSemester: 0
+}
+
+export const alerts = (state = defaultState, action) => {
 	switch (action.type) {
 		// dispatched when there's a conflict
 		case "ALERT_CONFLICT":
@@ -23,7 +28,8 @@ export const alerts = (state = {alertConflict: false,
 		// while having an unsaved timetable (if logged in), or
 		// if they're logged out, since while logged out their timetable is cleared
 		case "ALERT_CHANGE_SEMESTER":
-			return Object.assign({}, state, {alertChangeSemester: true});
+			return Object.assign({}, state, {alertChangeSemester: true, 
+																				desiredSemester: action.semester});
 		case "DISMISS_ALERT_CHANGE_SEMESTER":
 			return Object.assign({}, state, {alertChangeSemester: false});
 		// dispatched when the user tries to create a new timetable but the current one is unsaved
