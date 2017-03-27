@@ -81,3 +81,19 @@ class FinalExamModalView(models.Model):
     student = models.ForeignKey(Student, null=True, default=None)
     time_created = models.DateTimeField(auto_now_add=True)
     school = models.CharField(max_length=50)
+
+class FacebookAlertView(models.Model):
+    """
+    Logs that a continue with Facebook alert has been viewed
+    """
+    student = models.ForeignKey(Student, null=True, default=None)
+    time_created = models.DateTimeField(auto_now_add=True)
+    school = models.CharField(max_length=50)
+
+class FacebookAlertClick(models.Model):
+    """
+    Logs that a continue with Facebook alert has been viewed
+    """
+    student = models.ForeignKey(Student, null=True, default=None)
+    time_created = models.DateTimeField(auto_now_add=True)
+    school = models.CharField(max_length=50)
