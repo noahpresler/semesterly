@@ -3,6 +3,8 @@
 # @author   Michael N. Miller
 # @date     2/13/17
 
+from __future__ import print_function, division, absolute_import # NOTE: slowly move toward Python3
+
 from scripts.peoplesoft.courses import UPeoplesoftParser
 
 class UmichParser(UPeoplesoftParser):
@@ -16,9 +18,7 @@ class UmichParser(UPeoplesoftParser):
 	def start(self,
 		years=None,
 		terms=None,
-		year=None, # deprecated
-		term=None, # deprecated
-		department=None,
+		departments=None,
 		textbooks=True,
 		verbosity=3,
 		**kwargs):
@@ -42,7 +42,7 @@ class UmichParser(UPeoplesoftParser):
 			years_and_terms=years_and_terms,
 			cmd_years=years,
 			cmd_terms=terms,
-			cmd_departments=department,
+			cmd_departments=departments,
 			cmd_textbooks=textbooks,
 			verbosity=verbosity)
 
