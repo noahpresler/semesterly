@@ -10,12 +10,11 @@ export const VALID_SCHOOLS = [
   "jhu", 
   "umd", 
   "uo", 
-  "rutgers", 
+  // "rutgers", 
   "queens", 
   "vandy",
   "gw",
   "umich",
-  "umich2",
   "chapman",
   "salisbury",
 ];
@@ -195,17 +194,6 @@ export const getSchoolSpecificInfo = (school) => {
           1: ""
         }
       }
-    case "umich2":
-      return {
-        primaryDisplay: "name",
-        areasName: "Areas",
-        departmentsName: "Departments",
-        levelsName: "Levels",
-        timesName: "Times",
-        campuses: {
-          1: ""
-        }
-      }
     case "salisbury":
       return {
         primaryDisplay: "name",
@@ -213,6 +201,8 @@ export const getSchoolSpecificInfo = (school) => {
         departmentsName: "Departments",
         levelsName: "Levels",
         timesName: "Times",
+        // some classes are just numbers, not included in this regex, cuz some descrpitions have years
+        courseRegex: "([A-Z]{3,4} \\d{2,3})",
         semesters: {
           F: "Fall 2016",
           S: "Spring 2017"

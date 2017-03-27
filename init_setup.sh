@@ -19,6 +19,8 @@ echo -e "\nSTATUS: starting basic development environment setup :-)"
 
 ######################################
 
+export SEMESTERLY_HOME=$(pwd)
+
 sudo apt update && sudo apt upgrade
 
 sudo apt install -y \
