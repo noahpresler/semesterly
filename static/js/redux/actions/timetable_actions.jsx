@@ -2,7 +2,7 @@ import fetch from 'isomorphic-fetch';
 import { getTimetablesEndpoint } from '../constants.jsx';
 import { randomString, browserSupportsLocalStorage } from '../util.jsx';
 import { store } from '../init.jsx';
-import { getClassmatesEndpoint } from '../constants.jsx'
+import { getSchoolSpecificInfo } from '../constants.jsx'
 import { lockActiveSections, fetchClassmates, autoSave } from './user_actions.jsx';
 import { saveLocalSemester, saveLocalPreferences, saveLocalCourseSections, saveLocalActiveIndex } from '../util.jsx';
 
@@ -46,19 +46,29 @@ export function nullifyTimetable(dispatch) {
 }
 
 // loads timetable from localStorage. assumes that the browser supports localStorage
-export function loadCachedTimetable() {
+export function loadCachedTimetable(dispatch) {
+	dispatch({type: "LOADING_CACHED_TT"});
 	let localCourseSections = JSON.parse(localStorage.getItem('courseSections'));
 	// no coursesections stored locally; user is new (or hasn't added timetables yet)
-	if (!localCourseSections) { return; }
+	if (!localCourseSections) {
+		dispatch({type: "CACHED_TT_LOADED"});
+		return; 
+	}
 	// no preferences stored locally; save the defaults
 	let localPreferences = JSON.parse(localStorage.getItem('preferences'));
 	let localSemester = localStorage.getItem('semester');
+	if (localSemester == "S") {
+		localSemester = allSemesters.findIndex(s => (s.name == "Spring" || s.name == "Winter") && s.year == "2017")
+	} else if (localSemester == "F") {
+		localSemester = allSemesters.findIndex(s => s.name == "Fall" && s.year == "2016")
+	} 
 	let localActive = parseInt(localStorage.getItem('active'));
 	if (Object.keys(localCourseSections).length === 0 || Object.keys(localPreferences).length === 0) { return; }
 	store.dispatch({ type: 'SET_ALL_PREFERENCES', preferences: localPreferences });
 	store.dispatch({ type: 'SET_SEMESTER', semester: localSemester });
 	store.dispatch({ type: 'RECEIVE_COURSE_SECTIONS', courseSections: localCourseSections });
 	fetchStateTimetables(localActive);
+	dispatch({type: "CACHED_TT_LOADED"});
 }
 
 
@@ -144,7 +154,7 @@ Returns the body of the request used to get new timetables
 function getBaseReqBody(state){
 	return {
 		school: state.school.school,
-		semester: state.semester,
+		semester: allSemesters[state.semesterIndex],
 		courseSections: state.courseSections.objects,
 		preferences: state.preferences,
 		sid: SID
@@ -171,6 +181,12 @@ export function fetchStateTimetables(activeIndex=0) {
 	let requestBody = getBaseReqBody(store.getState());
 	store.dispatch(fetchTimetables(requestBody, false, activeIndex));
 }
+export function addLastAddedCourse() {
+	let state = store.getState();
+	if (state.timetables.lastCourseAdded != null) {
+		addOrRemoveCourse(state.timetables.lastCourseAdded)	
+	}
+}
 /*
 Attempts to add the course represented by newCourseId
 to the user's roster. If a section is provided, that section is 
@@ -191,7 +207,7 @@ export function addOrRemoveCourse(newCourseId, lockingSection = '') {
 	  	});
 	  reqBody = getBaseReqBody(store.getState());
 	}
-	state = store.getState()
+	state = store.getState();
 	if (removing) {
 		let updatedCourseSections = Object.assign({}, state.courseSections.objects);
 		delete updatedCourseSections[newCourseId]; // remove it from courseSections.objects
@@ -203,6 +219,12 @@ export function addOrRemoveCourse(newCourseId, lockingSection = '') {
 		})
 	}
 	else { // adding a course
+		let dispatch = store.dispatch;
+		dispatch({
+			type: "UPDATE_LAST_COURSE_ADDED",
+			course: newCourseId,
+		});
+		state = store.getState();
 		Object.assign(reqBody, {
 			updated_courses: [{
 				'course_id': newCourseId,
@@ -277,8 +299,8 @@ function fetchTimetables(requestBody, removing, newActive=0) {
 		// are always "up-to-date" (correspond to last loaded timetable).
 		// same for the semester
 		saveLocalPreferences(requestBody.preferences);
-		if (localStorage.semester !== state.semester) {
-			saveLocalSemester(state.semester);
+		if (localStorage.semester !== state.semesterIndex) {
+			saveLocalSemester(state.semesterIndex);
 		}		
 	}
 }
