@@ -259,8 +259,13 @@ class DigestionAdapter:
 		if 'remaining_seats' in section:
 			# FIXME -- possible logic conflict with other data
 			adapted['remaining_seats'] = section.remaining_seats
+		section_type_map = {
+			'Lecture': 'L',
+			'Laboratory': 'P',
+			'Discussion': 'T',
+		}
 		if 'type' in section:
-			adapted['section_type'] = 'P' if section.type == 'Laboratory' else 'L'
+			adapted['section_type'] = section_type_map.get(section.type, 'L')
 		if 'fees' in section:
 			pass # TODO - add fees to database
 		if 'instructors' in section:
