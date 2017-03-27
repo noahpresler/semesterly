@@ -79,6 +79,7 @@ class PeoplesoftParser(CourseParser):
 		soup, params = self.goto_search_page(self.url_params)
 		if years_and_terms is None:
 			years_and_terms = self.get_years_and_terms(soup, cmd_years, cmd_terms)
+		years_and_terms = self.extractor.filter_term_and_year(years_and_terms, cmd_years, cmd_terms)
 		for year, terms in years_and_terms.items():
 			self.ingestor['year'] = year
 
@@ -127,7 +128,7 @@ class PeoplesoftParser(CourseParser):
 						for course_soup in course_soups:
 							self.parse_course_description(course_soup)
 
-	def get_years_and_terms(self, soup, cmd_years=None, cmd_terms=None):
+	def get_years_and_terms(self, soup):
 		term_datas = soup.find('select', id='CLASS_SRCH_WRK2_STRM$35$').find_all('option')
 		years_terms_values = {}
 		for term_data in term_datas[1:]:
@@ -143,7 +144,7 @@ class PeoplesoftParser(CourseParser):
 			if year not in years_terms_values:
 				years_terms_values[year] = {}
 			years_terms_values[year][term] = term_data['value']
-		return self.extractor.filter_term_and_year(years_terms_values, cmd_years, cmd_terms)
+		return years_terms_values
 
 	def parse_term_and_years(term_and_years):
 			years = { term_and_year.split()[1]: {term_and_year.split()[0]: code} for term_and_year, code in term_and_years.items() }
@@ -410,7 +411,7 @@ class UPeoplesoftParser(PeoplesoftParser):
 		department_names = soup.find_all('span', id=re.compile(r'M_SR_SS_SUBJECT_DESCR\$\d'))
 		depts = { dept.text: dept_name.text for dept, dept_name in zip(departments, department_names) }
 		dept_ids = { dept.text: dept['id'] for dept in departments }
-		return self.extractor.filter_departments(depts, cmd_departments), dept_ids
+		return self.extractor.filter_departments(depts, cmd_departments, grouped=True), dept_ids
 
 	def get_dept_param_key(self, soup):
 		return 'ICAction'
