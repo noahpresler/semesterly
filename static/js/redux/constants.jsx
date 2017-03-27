@@ -307,3 +307,10 @@ export const DRAGTYPES = {
   EXTEND: 'extend', // extend the length of a custom slot
   CREATE: 'create' // create a new custom slot
 }
+
+// dictionary representing the order in which semesters occur
+export const SEMESTER_RANKS = {
+  'Winter' : 0,
+  'Spring' : 1,
+  'Fall'   : 2
+}
