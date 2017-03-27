@@ -155,7 +155,6 @@ class Calendar extends React.Component {
 				</ReactTooltip>
 			</div>
 	    );
-		console.log("render");
 		return (
 	      <div id="calendar" className="fc fc-ltr fc-unthemed week-calendar">
 	        <div className="fc-toolbar no-print">
