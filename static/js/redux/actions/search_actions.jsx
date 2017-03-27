@@ -1,5 +1,7 @@
 import fetch from 'isomorphic-fetch';
-import { getCourseSearchEndpoint, getAdvancedSearchEndpoint } from '../constants.jsx';
+import { getCourseSearchEndpoint, 
+				getAdvancedSearchEndpoint,
+				getSchoolSpecificInfo } from '../constants.jsx';
 import { store } from '../init.jsx';
 import { getUserSavedTimetables, saveTimetable } from './user_actions.jsx';
 import { nullifyTimetable } from './timetable_actions.jsx';
@@ -20,8 +22,9 @@ export function receiveCourses(json) {
 export function setSemester(semester) {
 	let state = store.getState();
 	let dispatch = store.dispatch;
+
 	if (state.userInfo.data.isLoggedIn) {
-		dispatch(getUserSavedTimetables(semester));
+		dispatch(getUserSavedTimetables(allSemesters[semester]));
 	}
 	else {
 		nullifyTimetable(dispatch);
@@ -37,10 +40,17 @@ export function setSemester(semester) {
 	});
 }
 
-export function setSemesterWrapper(semester) {
+/*
+ * Check whether the user is logged in and whether their timetable is up to date
+ * and set semester if appropriate. Otherwise show an alert modal and save the
+ * semester they were trying to switch to in the modal state.
+ */
+export function maybeSetSemester(semester) {
 	let state = store.getState();
 	let dispatch = store.dispatch;
-	if (semester === state.semester) { return; }
+
+	if (semester === state.semesterIndex) { return; }
+
 	if (state.timetables.items[state.timetables.active].courses.length > 0) {
 		if (state.userInfo.data.isLoggedIn && !state.savingTimetable.upToDate) {
 			dispatch(saveTimetable(false, () => setSemester(semester)));
@@ -54,22 +64,9 @@ export function setSemesterWrapper(semester) {
 				semester,
 			});
 		}
-
-	}
-	else {
+	} else {
 		setSemester(semester);
-	}
-			
-}
-
-export function handleChangeSemester() {
-	let state = store.getState();
-	let dispatch = store.dispatch;
-	let changingToSemester = state.semester === "F" ? "S" : "F";
-	// TODO(Rohan): Load user's saved timetables for the new semester?
-	let userInfo = state.userInfo.data;
-	setSemester(changingToSemester);
-	
+	}		
 }
 
 export function fetchSearchResults(query) {
@@ -109,13 +106,14 @@ export function fetchAdvancedSearchResults(query, filters) {
 			type: "REQUEST_ADVANCED_SEARCH_RESULTS",
 		});
 		// send a request (via fetch) to the appropriate endpoint to get courses
+		let state = store.getState()
 		fetch(getAdvancedSearchEndpoint(), {
 			credentials: 'include',
 			method: 'POST',
 			body: JSON.stringify({
 				query,
 				filters,
-				semester: store.getState().semester
+				semester: allSemesters[state.semesterIndex]
 			})
 		})
 		.then(response => response.json()) // TODO(rohan): error-check the response
