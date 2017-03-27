@@ -3,6 +3,8 @@
 # @author   Michael N. Miller
 # @date     11/22/16
 
+from __future__ import print_function, division, absolute_import # NOTE: slowly move toward Python3
+
 import re, sys, unicodedata
 import dateutil.parser as dparser
 from scripts.parser_library.words import conjunctions_and_prepositions
@@ -149,12 +151,13 @@ class Extractor():
             return {year: {term: years_and_terms[year][term] for term in terms} for year in years}
 
     @staticmethod
-    def filter_departments(departments, cmd_departments=None):
+    def filter_departments(departments, cmd_departments=None, grouped=False):
         '''Filter department dictionary to only include those departments listed in cmd_departments, if given
         Args:
             department: dictionary of item <dept_code, dept_name>
         KwArgs:
             cmd_departments: department code list
+            grouped: if grouped is set will not throw CoureParseError
         Return: filtered list of departments.
         '''
 
@@ -164,12 +167,12 @@ class Extractor():
 
         # department list specified as cmd line arg
         for cmd_dept_code in cmd_departments:
-            if cmd_dept_code not in departments:
+            if cmd_dept_code not in departments and not grouped:
                 raise CourseParseError('invalid department code {}'.format(cmd_dept_code))
 
         # Return dictionary of {code: name} or set {code}
         if isinstance(departments, dict):
-            departments = {cmd_dept_code: departments[cmd_dept_code] for cmd_dept_code in cmd_departments}
+            departments = {cmd_dept_code: departments[cmd_dept_code] for cmd_dept_code in cmd_departments if cmd_dept_code in departments}
         else:
             departments = {dept for dept in departments if dept in cmd_departments}
 
