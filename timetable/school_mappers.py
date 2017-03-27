@@ -82,8 +82,8 @@ school_to_semesters = {
   'vandy': [_sem('Fall', '2017'), _sem('Spring', '2017'), _sem('Fall', '2016')],
   'gw': [_sem('Spring', '2017'), _sem('Fall', '2016')],
   'umich': [_sem('Winter', '2017'), _sem('Fall', '2016')],
-  'chapman': [_sem('Spring', '2017'), _sem('Fall', '2016')],
-  'salisbury': [_sem('Spring', '2017'), _sem('Winter', '2017'), _sem('Fall', '2016'), _sem('Fall', '2017'), _sem('Summer', '2017'), _sem('Interterm', '2017')],
+  'chapman': [_sem('Fall', '2017'), _sem('Spring', '2017'), _sem('Fall', '2016')],
+  'salisbury': [_sem('Fall', '2017'), _sem('Spring', '2017'), _sem('Winter', '2017'), _sem('Fall', '2016'), _sem('Summer', '2017'), _sem('Interterm', '2017')],
 }
 
 # Ensure DB has all semesters.
