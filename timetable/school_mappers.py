@@ -7,6 +7,7 @@ from timetable.models import *
 from student.models import *
 import sys
 
+
 # the smallest block size (in minutes) needed to describe start/end times
 # e.g. uoft classes only start on the hour or half hour, so granularity is 30min
 school_to_granularity = {
@@ -20,7 +21,8 @@ school_to_granularity = {
     'gw':5,
     'umich': 5,
     'umich2': 5,
-    'chapman': 5
+    'chapman': 5,
+    'salisbury': 5,
 }
 
 VALID_SCHOOLS = [
@@ -34,7 +36,8 @@ VALID_SCHOOLS = [
   "gw",
   "umich",
   "umich2",
-  "chapman"
+  "chapman",
+  "salisbury",
 ]
 
 AM_PM_SCHOOLS = [
@@ -45,7 +48,8 @@ AM_PM_SCHOOLS = [
   "gw",
   "umich",
   "umich2",
-  "chapman"
+  "chapman",
+  "salisbury",
 ]
 
 school_code_to_name = {
@@ -59,7 +63,8 @@ school_code_to_name = {
   'gw':'George Washington University',
   'umich': 'University of Michigan',
   'umich2': 'University of Michigan 2!',
-  'chapman': 'Chapman University'
+  'chapman': 'Chapman University',
+  'salisbury': 'Salisbury University',
 }
 
 school_to_course_regex = {
@@ -68,8 +73,29 @@ school_to_course_regex = {
   'vandy': '([A-Z-&]{2,7}\s\d{4}[W]?)',
   'gw': '([A-Z]{2,5}\s\d{4}[W]?)',
   'umich': '([A-Z]{2,8}\s\d{3})',
-  'chapman': '([A-Z]{2,4}\s\d{3})'
+  'chapman': '([A-Z]{2,4}\s\d{3})',
+  'salisbury': '([A-Z]{3,4} \\d{2,3})',
 }
+
+_sem = lambda term, year: {'name': term, 'year': year}
+school_to_semesters = {
+  'jhu': [_sem('Fall', '2017'), _sem('Spring', '2017'), _sem('Fall', '2016')],
+  'uoft': [_sem('Winter', '2017'), _sem('Fall', '2016')],
+  'umd': [_sem('Spring', '2017'), _sem('Fall', '2016')],
+  'rutgers': [_sem('Spring', '2017'), _sem('Fall', '2016')],
+  'uo': [_sem('Spring', '2017'), _sem('Fall', '2016')],
+  'queens': [_sem('Winter', '2017'), _sem('Fall', '2016')],
+  'vandy': [_sem('Spring', '2017'), _sem('Fall', '2016')],
+  'gw': [_sem('Spring', '2017'), _sem('Fall', '2016')],
+  'umich': [_sem('Winter', '2017'), _sem('Fall', '2016')],
+  'chapman': [_sem('Spring', '2017'), _sem('Fall', '2016')],
+  'salisbury': [_sem('Spring', '2017'), _sem('Winter', '2017'), _sem('Fall', '2016'), _sem('Fall', '2017'), _sem('Summer', '2017'), _sem('Interterm', '2017')],
+}
+
+# Ensure DB has all semesters.
+for school, semesters in school_to_semesters.items():
+  for semester in semesters:
+    Semester.objects.update_or_create(**semester)
 
 # do the imports: assumes all parser follow the same naming conventions: 
 # schoolname_parsertype where parsertype can be courses, evals, or textbooks
@@ -78,8 +104,9 @@ for school in VALID_SCHOOLS:
   for p_type in types:
     exec "from scripts.{0}.{0}_{1} import *".format(school, p_type)
 
+# use lambdas to call constructor in a lazy fashion
 course_parsers = {
-  'jhu': lambda: HopkinsParser("Spring 2017").start(), # avoid calling constructor lazily
+  'jhu': lambda: HopkinsParser("Fall 2017").start(),
   'uoft': lambda: UofTParser().start(),
   'umd': parse_umd,
   # 'rutgers': parse_rutgers,
@@ -95,6 +122,7 @@ eval_parsers = {
   'uo': lambda: None,
   'queens': lambda: None
 }
+
 textbook_parsers = {
   'jhu': lambda: HopkinsTextbookFinder().parse_classes(),
   'uoft': parse_uoft_textbooks,
@@ -103,6 +131,7 @@ textbook_parsers = {
   'uo': lambda: None,
   'queens': parse_queens_textbooks
 }
+
 sitemappers = {
   'jhu': lambda: HopkinsTextbookFinder().parse_classes(),
   'uoft': parse_uoft_textbooks,
