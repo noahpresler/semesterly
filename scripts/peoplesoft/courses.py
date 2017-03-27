@@ -301,10 +301,11 @@ class PeoplesoftParser(CourseParser):
 	@staticmethod
 	def parse_textbooks(soup):
 		isbns = zip(soup.find_all('span', id=re.compile(r'DERIVED_SSR_TXB_SSR_TXBDTL_ISBN\$\d*')), soup.find_all('span', id=re.compile(r'DERIVED_SSR_TXB_SSR_TXB_STATDESCR\$\d*')))
+
+		# Remove extra characters from isbn and tranform Required into boolean.
 		for i in range(len(isbns)):
 			isbns[i] = (filter(lambda x: x.isdigit(), isbns[i][0].text), isbns[i][1].text[0].upper() == 'R')
 		return isbns
-		# return map(lambda i: (filter(lambda x: x.isdigit(), isbns[i][0].text), isbns[i][1].text[0].upper() == 'R'), range(len(isbns)))
 
 	def cleanup(self):
 		self.ingestor['prereqs'] = []
