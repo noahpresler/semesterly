@@ -30,6 +30,12 @@ export const getLogiCalEndpoint = () => {
 export const getLogFinalExamViewEndpoint = () => { 
   return "/user/log_final_exam/"
 };
+export const getLogFacebookAlertViewEndpoint = () => { 
+  return "/user/log_fb_alert_view/"
+};
+export const getLogFacebookAlertClickEndpoint = () => { 
+  return "/user/log_fb_alert_click/"
+};
 export const getCourseInfoEndpoint = (course_id) => {
 	return "/courses/" + getSchool() + "/" + getSemester() + "/id/" + course_id + "/";
 };

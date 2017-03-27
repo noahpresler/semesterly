@@ -14,6 +14,8 @@ import { getUserInfoEndpoint,
 	getIntegrationAddEndpoint,
 	getSchoolSpecificInfo,
   getFinalExamSchedulerEndpoint,
+  getLogFacebookAlertViewEndpoint,
+  getLogFacebookAlertClickEndpoint,
   getMostClassmatesCountEndpoint} from '../constants.jsx';
 import { store } from '../init.jsx';
 import { loadTimetable, nullifyTimetable, getNumberedName } from './timetable_actions.jsx';
@@ -557,4 +559,18 @@ export function fetchMostClassmatesCount(courses) {
 		// });
       });
   }
+}
+
+export function logFacebookAlertView() {
+	fetch(getLogFacebookAlertViewEndpoint(), {
+		method: 'POST',
+		credentials: 'include',
+	})
+}
+
+export function LogFacebookAlertClick() {
+	fetch(getLogFacebookAlertClickEndpoint(), {
+		method: 'POST',
+		credentials: 'include',
+	})
 }
