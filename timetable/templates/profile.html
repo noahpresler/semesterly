@@ -226,13 +226,13 @@
 					<h3>Linked Accounts</h3>
 					{% if hasGoogle %}
 						<div class="list-item">
-							<p>Google</p>
 							<img class="google-logo" src="https://a0.muscache.com/airbnb/static/signinup/google_icon_2x-745c2280e5004d4c90e3ca4e60e3f677.png">
+							<p>Google</p>
 						</div>
 					{% endif %}
 					{% if not hasGoogle %}
 						<div class="list-item">
-							<p>Facebook</p>
+							<i class="fa fa-facebook-official" aria-hidden="true" style="color:#3b5998;"></i><p>Facebook</p>
 						</div>
 					{% endif %}
 				</div>
@@ -242,11 +242,11 @@
 					<h3>Notifications</h3>
 					{% if notifications %}
 						<div class="list-item">
-							<p>Chrome Notifications enabled</p>
+							<i class="fa fa-check" aria-hidden="true" style="color:green;"></i><p>Chrome Notifications enabled</p>
 						</div>
 					{% else %}
 						<div class="list-item">
-							<p>Notifications are not enabled</p>
+							<i class="fa fa-times" aria-hidden="true" style="color:#c70f0f;"></i><p>Notifications are not enabled</p>
 						</div>
 					{% endif %}
 				</div>
