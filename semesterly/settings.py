@@ -134,7 +134,8 @@ MIDDLEWARE_CLASSES = (
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'semesterly.middleware.subdomain_middleware.SubdomainMiddleware',
-     'social.apps.django_app.middleware.SocialAuthExceptionMiddleware',
+    'social.apps.django_app.middleware.SocialAuthExceptionMiddleware',
+    'rollbar.contrib.django.middleware.RollbarNotifierMiddleware',
 )
 
 TEMPLATE_CONTEXT_PROCESSORS = (
@@ -225,11 +226,12 @@ LOGGING = {
 ADMINS = [
     ('Rohan Das', 'rohan@semester.ly'), 
     ('Felix Zhu', 'felix@semester.ly'),
-    ('Noah Presler', 'noah@semester.ly'),
+    # ('Noah Presler', 'noah@semester.ly'),
     ('Eric Calder', 'eric@semester.ly'),
 
 ]
 
+# STAGING_NOTIFIED_ADMINS = ['rohan@semester.ly', 'noah@semester.ly']
 STAGING_NOTIFIED_ADMINS = ['rohan@semester.ly', 'noah@semester.ly']
 
 EMAIL_USE_TLS = True
@@ -284,3 +286,12 @@ try:
     from sensitive import *
 except:
     pass
+
+if not DEBUG:
+    ROLLBAR = {
+        'access_token': '23c5a378cd1943cfb40d5217dfb7f766',
+        'environment': 'development' if DEBUG else 'production',
+        'root': BASE_DIR,
+    }
+    import rollbar
+    rollbar.init(**ROLLBAR)
