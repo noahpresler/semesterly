@@ -127,7 +127,7 @@ class Calendar extends React.Component {
 		    	<button onClick={() => this.props.toggleSaveCalendarModal()}
 		    			className="save-timetable"
 		    			data-tip data-for='saveToCal-btn-tooltip'>
-		    		<img src="static/img/addtocalendar.png"/>
+		    		<img src="/static/img/addtocalendar.png"/>
 		    	</button>
 		    	<ReactTooltip id='saveToCal-btn-tooltip' class='tooltip' type='dark' place='bottom' effect='solid'>
 					<span>Save to Calendar</span>
