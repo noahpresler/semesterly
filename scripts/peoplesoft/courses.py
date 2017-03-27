@@ -78,7 +78,7 @@ class PeoplesoftParser(CourseParser):
 		# NOTE: umich child will do nothing and return an empty dict
 		soup, params = self.goto_search_page(self.url_params)
 		if years_and_terms is None:
-			years_and_terms = self.get_years_and_terms(soup, cmd_years, cmd_terms)
+			years_and_terms = self.get_years_and_terms(soup)
 		years_and_terms = self.extractor.filter_term_and_year(years_and_terms, cmd_years, cmd_terms)
 		for year, terms in years_and_terms.items():
 			self.ingestor['year'] = year
