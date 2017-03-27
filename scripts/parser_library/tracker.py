@@ -165,6 +165,7 @@ class LogFormatted(Viewer):
 	def broadcast_update(self, tracker):
 		pass # do nothing.
 
+	# TODO - report in valid json format
 	def report(self, tracker):
 		json_str = lambda j: json.dumps(j, sort_keys=True, indent=2, separators=(',', ': '))
 		with open(self.logpath, 'a') as log:
