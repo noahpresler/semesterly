@@ -819,6 +819,10 @@ def profile(request):
       social_user = student.user.social_auth.filter(provider='facebook').first()
       img_url = 'https://graph.facebook.com/' + student.fbook_uid + '/picture?width=700&height=700'
       hasGoogle = False
+    if student.user.social_auth.filter(provider='facebook').exists():
+      hasFacebook = True
+    else:
+      hasFacebook = False
     hasNotificationsEnabled = RegistrationToken.objects.filter(student=student).exists()
     context = {
       'name': student.user,
@@ -828,6 +832,7 @@ def profile(request):
       'total': 0,
       'img_url': img_url,
       'hasGoogle': hasGoogle,
+      'hasFacebook': hasFacebook,
       'notifications': hasNotificationsEnabled
     }
     for r in reactions:
