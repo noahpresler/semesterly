@@ -13,7 +13,7 @@ def eval_field(field):
     try:
         return str(eval(field))
     except:
-        return ''
+        return '' # TODO - change to 'Cannot be found'
 
 def amazon_textbook_fields(isbn):
     response = None
