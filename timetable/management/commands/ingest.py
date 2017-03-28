@@ -41,7 +41,7 @@ class Command(BaseCommand):
 		for school in options['schools']:
 
 			# Use old parser framework if no new parser available
-			if school not in new_course_parsers or (options['textbooks'] and school not in new_textbook_parsers):
+			if school not in new_course_parsers and (options['textbooks'] and school not in new_textbook_parsers):
 				do_parse = course_parsers[school]
 				self.old_parser(do_parse, school, stat_log)
 				continue
