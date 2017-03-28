@@ -121,9 +121,10 @@ new_course_parsers = {
 
 new_textbook_parsers = {
   'chapman': lambda *args, **kwargs: ChapmanParser(**kwargs),
-  'gw': lambda *args, **kwargs: GWTextbookParser(**kwargs),
-  'jhu': lambda *args, **kwargs: JHUTextbookParser(**kwargs),
-  'umd': lambda *args, **kwargs: UMDTextbookParser(**kwargs)
+  'gw':      lambda *args, **kwargs: GWTextbookParser(**kwargs),
+  'jhu':     lambda *args, **kwargs: JHUTextbookParser(**kwargs),
+  'umd':     lambda *args, **kwargs: UMDTextbookParser(**kwargs),
+  'umich':   lambda *args, **kwargs: UmichTextbookParser(**kwargs),
 }
 
 eval_parsers = {
@@ -132,7 +133,7 @@ eval_parsers = {
   'umd': lambda: umdReview().parse_reviews,
   'rutgers': lambda: None,
   'uo': lambda: None,
-  'queens': lambda: None
+  'queens': lambda: None,
 }
 
 textbook_parsers = {
@@ -141,7 +142,7 @@ textbook_parsers = {
   'umd': lambda: None,
   'rutgers': lambda: None,
   'uo': lambda: None,
-  'queens': parse_queens_textbooks
+  'queens': parse_queens_textbooks,
 }
 
 sitemappers = {
