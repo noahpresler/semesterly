@@ -151,7 +151,7 @@ class Digestor:
 
 		# NOTE: ignoring dates for now
 		offering_models = []
-		for offering in self.adapter.adapt_meeting(meeting):
+		for offering in self.adapter.adapt_meeting(meeting, section_model=section_model):
 			offering_model = self.strategy.digest_offering(offering)
 			offering_models.append(offering_model)
 			self.update_progress('offering', bool(offering_model))
@@ -298,7 +298,7 @@ class DigestionAdapter:
 		'''
 
 		if meeting is None:
-			raise DigestionError('none meeting')
+			raise DigestionError('none meeting in adapt_meeting')
 
 		if section_model is None:
 			course_model = None
@@ -312,7 +312,7 @@ class DigestionAdapter:
 			if self.cached.course and course_model.code == self.cached.course.code and meeting.section.code == self.cached.section.meeting_section:
 					section_model = self.cached.section
 			else:
-				section_model = Section.objects.filter(course=course_model, meeting_section=meeting.section.code).first()
+				section_model = Section.objects.filter(course=course_model, meeting_section=meeting.section.code, semester__name=meeting.section.term, semester__year=meeting.section.year).first()
 				if section_model is None:
 					print('no section {} {} for meeting'.format(meeting.course.code, meeting.section.code), file=sys.stderr)
 					# raise DigestionError('no section object for meeting', meeting)
@@ -474,7 +474,7 @@ class Vommit(DigestionStrategy):
 					whats[k] = '<{}: [Bad Unicode data]'.format(k)
 
 		# Remove db specific content from model
-		blacklist = {'_state', 'id', 'section_id', 'course_id', '_course_cache'} | context
+		blacklist = {'_state', 'id', 'section_id', 'course_id', '_course_cache', 'semester_id', '_semester'} | context
 		prune = lambda d: {k: v for k, v in d.iteritems() if k not in blacklist}
 		dbmodel = prune(dbmodel)
 		inmodel = prune(inmodel)
@@ -554,7 +554,7 @@ class Absorb(DigestionStrategy):
 	def digest_section(self, model_args):
 		model, created = Section.objects.update_or_create(**model_args)
 		if model and self.clean:
-				Absorb.remove_offerings(model)
+			Absorb.remove_offerings(model)
 		return model
 
 	def digest_offering(self, model_args):

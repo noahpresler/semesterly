@@ -3,6 +3,7 @@
 # @author  Michael N. Miller
 # @date	   2/13/17
 
+from __future__ import print_function, division, absolute_import # NOTE: slowly move toward Python3
 from scripts.peoplesoft.courses import PeoplesoftParser
 
 class ChapmanParser(PeoplesoftParser):
@@ -15,7 +16,7 @@ class ChapmanParser(PeoplesoftParser):
 	def start(self,
 		years=None,
 		terms=None,
-		department=None,
+		departments=None,
 		textbooks=True,
 		verbosity=3,
 		**kwargs):
@@ -23,7 +24,7 @@ class ChapmanParser(PeoplesoftParser):
 		self.parse(
 			cmd_years=years,
 			cmd_terms=terms,
-			cmd_departments=department,
+			cmd_departments=departments,
 			cmd_textbooks=textbooks,
 			verbosity=verbosity)
 
