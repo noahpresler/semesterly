@@ -8,8 +8,9 @@ from __future__ import print_function, division, absolute_import # NOTE: slowly 
 import re, sys, itertools
 from abc import ABCMeta, abstractmethod
 
+from scripts.textbooks.amazon import amazon_textbook_fields
+
 # parser library
-# from scripts.textbooks.amazon import make_textbook
 from scripts.parser_library.requester import Requester
 from scripts.parser_library.extractor import *
 from scripts.parser_library.ingestor import Ingestor
@@ -66,7 +67,7 @@ class PeoplesoftParser(CourseParser):
 		cmd_terms=None,
 		cmd_departments=None,
 		cmd_course=None, # NOTE: not implemented
-		cmd_textbooks=False,
+		cmd_textbooks=True,
 		verbosity=3,
 		department_name_regex=None,
 		**kwargs):
@@ -218,7 +219,7 @@ class PeoplesoftParser(CourseParser):
 		dates   = soup.find_all('span', id=re.compile(r'MTG_DATE\$\d*'))
 
 		# parse textbooks
-		isbns 	= PeoplesoftParser.parse_textbooks(soup)
+		textbooks 	= PeoplesoftParser.parse_textbooks(soup)
 
 		# Extract info from title
 		if self.verbosity >= 2:
@@ -269,13 +270,19 @@ class PeoplesoftParser(CourseParser):
 		# course = self.ingestor.ingest_course()
 		# section = self.ingestor.ingest_section(course)
 
-		# # NOTE: section is no longer a django object
-		# # TODO - change query to handle class code
-		# # create textbooks
-		# if self.textbooks:
-		# 	for isbn in isbns:
-		# 		print(isbn[1], isbn[0], section)
-		# 	map(lambda isbn: make_textbook(isbn[1], isbn[0], section['code']), isbns)
+		# Create textbooks.
+		if self.textbooks:
+			for textbook in textbooks:
+				textbook.update(amazon_textbook_fields(textbook['isbn']))
+				# self.ingestor.update(textbook)
+				# self.ingestor.ingest_textbook()
+				if 'textbooks' not in self.ingestor:
+					self.ingestor['textbooks'] = []
+				self.ingestor['textbooks'].append({
+					'kind':'textbook_link',
+					'isbn': textbook['isbn'],
+					'required': textbook['required'],
+				})
 
 		# offering details
 		for sched, loc, date in zip(scheds, locs, dates):
@@ -300,11 +307,16 @@ class PeoplesoftParser(CourseParser):
 
 	@staticmethod
 	def parse_textbooks(soup):
+		# FIXME -- potential bug with matching textbook with status b/c not sure about gaurantee offered with regex order
 		isbns = zip(soup.find_all('span', id=re.compile(r'DERIVED_SSR_TXB_SSR_TXBDTL_ISBN\$\d*')), soup.find_all('span', id=re.compile(r'DERIVED_SSR_TXB_SSR_TXB_STATDESCR\$\d*')))
+
+		# Remove extra characters from isbn and tranform Required into boolean.
 		for i in range(len(isbns)):
-			isbns[i] = (filter(lambda x: x.isdigit(), isbns[i][0].text), isbns[i][1].text[0].upper() == 'R')
+			isbns[i] = {
+				'isbn': filter(lambda x: x.isdigit(), isbns[i][0].text), 
+				'required': isbns[i][1].text[0].upper() == 'R',
+			}
 		return isbns
-		# return map(lambda i: (filter(lambda x: x.isdigit(), isbns[i][0].text), isbns[i][1].text[0].upper() == 'R'), range(len(isbns)))
 
 	def cleanup(self):
 		self.ingestor['prereqs'] = []
