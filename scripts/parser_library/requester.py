@@ -22,7 +22,7 @@ class Requester:
     def overwrite_header(self, new_headers):
         self.headers = new_headers
 
-    def http_request(self, do_http_request, type,  parse=True, quiet=True, timeout=30, throttle=(lambda: None)):
+    def http_request(self, do_http_request, type,  parse=True, quiet=True, timeout=60, throttle=(lambda: None)):
         ''' Perform HTTP Request.
         Args:
             do_http_request: function that returns request object
