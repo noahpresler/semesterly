@@ -13,7 +13,7 @@ from time import sleep
 from scripts.parser_library.base_parser import BaseParser
 from amazon import amazon_textbook_fields
 
-from scripts.parser_library.internal_exceptions import CourseParseError
+from scripts.parser_library.internal_exceptions import ParseError
 
 from timetable.models import Course, Section, Textbook, TextbookLink
 
@@ -314,6 +314,8 @@ class BNParser(BaseParser):
         return textbooks
 
 class TextbookPayload:
+    '''Builds up 100 textbook request to request from bn.'''
+
     def __init__(self, store_id):
         self.counter = 0
         self.max = 100
