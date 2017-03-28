@@ -219,7 +219,7 @@ class PeoplesoftParser(CourseParser):
 		dates   = soup.find_all('span', id=re.compile(r'MTG_DATE\$\d*'))
 
 		# parse textbooks
-		textbooks 	= PeoplesoftParser.parse_textbooks(soup)
+		self.parse_textbooks(soup)
 
 		# Extract info from title
 		if self.verbosity >= 2:
@@ -270,20 +270,6 @@ class PeoplesoftParser(CourseParser):
 		# course = self.ingestor.ingest_course()
 		# section = self.ingestor.ingest_section(course)
 
-		# Create textbooks.
-		if self.textbooks:
-			for textbook in textbooks:
-				textbook.update(amazon_textbook_fields(textbook['isbn']))
-				# self.ingestor.update(textbook)
-				# self.ingestor.ingest_textbook()
-				if 'textbooks' not in self.ingestor:
-					self.ingestor['textbooks'] = []
-				self.ingestor['textbooks'].append({
-					'kind':'textbook_link',
-					'isbn': textbook['isbn'],
-					'required': textbook['required'],
-				})
-
 		# offering details
 		for sched, loc, date in zip(scheds, locs, dates):
 
@@ -305,24 +291,37 @@ class PeoplesoftParser(CourseParser):
 
 		self.cleanup()
 
-	@staticmethod
-	def parse_textbooks(soup):
+	def parse_textbooks(self, soup):
 		# FIXME -- potential bug with matching textbook with status b/c not sure about gaurantee offered with regex order
-		isbns = zip(soup.find_all('span', id=re.compile(r'DERIVED_SSR_TXB_SSR_TXBDTL_ISBN\$\d*')), soup.find_all('span', id=re.compile(r'DERIVED_SSR_TXB_SSR_TXB_STATDESCR\$\d*')))
+		textbooks = zip(soup.find_all('span', id=re.compile(r'DERIVED_SSR_TXB_SSR_TXBDTL_ISBN\$\d*')), soup.find_all('span', id=re.compile(r'DERIVED_SSR_TXB_SSR_TXB_STATDESCR\$\d*')))
 
 		# Remove extra characters from isbn and tranform Required into boolean.
-		for i in range(len(isbns)):
-			isbns[i] = {
-				'isbn': filter(lambda x: x.isdigit(), isbns[i][0].text), 
-				'required': isbns[i][1].text[0].upper() == 'R',
+		for i in range(len(textbooks)):
+			textbooks[i] = {
+				'isbn': filter(lambda x: x.isdigit(), textbooks[i][0].text), 
+				'required': textbooks[i][1].text[0].upper() == 'R',
 			}
-		return isbns
+
+		# Create textbooks.
+		if self.textbooks:
+			for textbook in textbooks:
+				textbook.update(amazon_textbook_fields(textbook['isbn']))
+				self.ingestor.update(textbook)
+				self.ingestor.ingest_textbook()
+				if 'textbooks' not in self.ingestor:
+					self.ingestor['textbooks'] = []
+				self.ingestor['textbooks'].append({
+					'kind':'textbook_link',
+					'isbn': textbook['isbn'],
+					'required': textbook['required'],
+				})
 
 	def cleanup(self):
 		self.ingestor['prereqs'] = []
 		self.ingestor['coreqs'] = []
 		self.ingestor['geneds'] = []
 		self.ingestor['fees'] = [] # NOTE: caused issue with extractor
+		self.ingestor['textbooks'] = []
 
 	@staticmethod
 	def hidden_params(soup, params=None, ajax=False):

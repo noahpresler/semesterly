@@ -70,13 +70,8 @@ class Ingestor(dict):
 		'time',
 		'credits', 'num_credits',
 		'campus', # NOTE: not really
-		'textbooks',
-		'isbn',
-		'detail_url',
-		'image_url',
-		'author',
-		'title',
-		'required',
+		'textbooks', 'isbn', 'required',
+		'detail_url', 'image_url', 'author', 'title',
 	}
 
 	def __init__(self, school,
@@ -270,7 +265,7 @@ class Ingestor(dict):
 		textbook_link = {
 			'kind': 'textbook_link',
 			'school': {
-				'code': self.get('school_code')
+				'code': self.getchain('school', 'school_code')
 			},
 			'course': {
 				'code': self.get('course_code')
