@@ -1,4 +1,5 @@
-class CourseParseError(Exception):
+class ParseError(Exception): pass
+class CourseParseError(ParseError):
 	'''Raise during runtime login error in course parsers.'''
 	# TODO - add stats here like department, course, current request, etc.
 	# TODO - move, doesn't belong in this module
