@@ -39,7 +39,7 @@
 			"properties": {
 				"code": {},
 				"year": {},
-				"term": {},
+				"term": {}
 			},
 			"additionalProperties": false,
 			"required": [
