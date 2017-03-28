@@ -41,7 +41,7 @@ class Command(BaseCommand):
 		for school in options['schools']:
 
 			# Use old parser framework if no new parser available
-			if school not in new_course_parsers or (options['textbooks'] and school not in new_textbook_parsers):
+			if school not in new_course_parsers and (options['textbooks'] and school not in new_textbook_parsers):
 				do_parse = course_parsers[school]
 				self.old_parser(do_parse, school, stat_log)
 				continue
@@ -114,7 +114,7 @@ class Command(BaseCommand):
 				print(self.style.ERROR(traceback.format_exc()), file=self.stderr)
 				print(self.style.ERROR(dict_pp(p.ingestor)), file=self.stderr)
 				tracker.see_error(traceback.format_exc())
-				tracker.see_error(dict_pp(p.ingestor))
+				tracker.see_error('INGESTOR DUMP\n' + dict_pp(p.ingestor))
 
 			tracker.finish()
 
