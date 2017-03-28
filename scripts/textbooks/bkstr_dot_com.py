@@ -49,7 +49,6 @@ class BkstrDotComParser(BaseParser):
 			terms_and_years = self.extract_json(query)
 			years = self.parse_terms_and_years(terms_and_years)
 			years_and_terms = self.extractor.filter_term_and_year(years, cmd_years, cmd_terms)
-			print(years_and_terms, file=sys.stderr)
 			for year, terms in years_and_terms.items():
 				print('>\tParsing textbooks in year', year)
 				self.ingestor['year'] = year
@@ -59,7 +58,6 @@ class BkstrDotComParser(BaseParser):
 					query['termId'] = term_code
 					query['requestType'] = 'DEPARTMENTS'
 					depts = self.extractor.filter_departments(self.extract_json(query), cmd_departments)
-					print(depts, file=sys.stderr)
 					for dept, dept_code in depts.items():
 						print('>>>\tParsing textbooks for {} {} {}'.format(term, year, dept))
 						query['departmentName'] = dept_code
