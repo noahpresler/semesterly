@@ -100,13 +100,9 @@ for school in VALID_SCHOOLS:
 
 # use lambdas to call constructor in a lazy fashion
 course_parsers = {
-  # 'jhu': lambda: HopkinsParser("Spring 2017").start(), # avoid calling constructor lazily
   'uoft': lambda: UofTParser().start(),
-  # 'umd': parse_umd,
   # 'rutgers': parse_rutgers,
   'uo': parse_ottawa,
-  'gw': lambda: GWParser().parse()
-  # 'queens': lambda: QueensParser().parse_courses()
 }
 
 new_course_parsers = {
@@ -137,19 +133,8 @@ eval_parsers = {
 }
 
 textbook_parsers = {
-  'jhu': lambda: HopkinsTextbookFinder().parse_classes(),
   'uoft': parse_uoft_textbooks,
-  'umd': lambda: None,
   'rutgers': lambda: None,
   'uo': lambda: None,
   'queens': parse_queens_textbooks,
-}
-
-sitemappers = {
-  'jhu': lambda: HopkinsTextbookFinder().parse_classes(),
-  'uoft': parse_uoft_textbooks,
-  'umd': lambda: None,
-  'rutgers': lambda: None,
-  'uo': lambda: None,
-  'queens': parse_queens_textbooks
 }
