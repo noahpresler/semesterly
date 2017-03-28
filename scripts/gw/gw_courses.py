@@ -151,7 +151,7 @@ class GWParser:
 				rows = self.requester.post(self.url + '/PRODCartridge/bwskfcls.P_GetCrse', params=query2)
 
 				# NOTE: can throw CourseParseError
-				GWParser.check_errorpage(rows):
+				GWParser.check_errorpage(rows)
 
 				try:
 					rows = rows.find('table', {'class':'datadisplaytable'}).find_all('tr')[2:]
