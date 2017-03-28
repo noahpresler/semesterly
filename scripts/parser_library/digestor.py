@@ -333,7 +333,7 @@ class DigestionAdapter:
 			yield offering
 
 	def adapt_textbook(self, textbook):
-		return {
+		textbook = {
 			'isbn': textbook.isbn,
 			'defaults': {
 				'detail_url': textbook.detail_url,
@@ -342,8 +342,12 @@ class DigestionAdapter:
 				'title': textbook.title
 			}
 		}
+		for key in textbook['defaults']:
+			if textbook['defaults'][key] is None:
+				textbook['defaults'][key] = 'Cannot be found'
+		return textbook
 
-	def adapt_textbook_link(self, textbook_link, textbook):
+	def adapt_textbook_link(self, textbook_link, textbook_model):
 		if 'required' not in textbook_link:
 			textbook_link.required = True
 		if 'section' not in textbook_link:
@@ -352,7 +356,7 @@ class DigestionAdapter:
 				yield {
 					'section': section,
 					'is_required': textbook_link.required,
-					'textbook': textbook
+					'textbook': textbook_model
 				}
 		else:
 			section = Section.objects.filter(
@@ -362,7 +366,7 @@ class DigestionAdapter:
 			yield {
 				'section': section,
 				'is_required': textbook_link.required,
-				'textbook': textbook
+				'textbook': textbook_model
 			}
 
 class DigestionStrategy:
@@ -561,7 +565,7 @@ class Absorb(DigestionStrategy):
 		model, created = Offering.objects.update_or_create(**model_args)
 		return model
 
-	def digest_textbook(self, models_args):
+	def digest_textbook(self, model_args):
 		model, created = Textbook.objects.update_or_create(**model_args)
 		return model
 
@@ -605,7 +609,7 @@ class Burp(DigestionStrategy):
 	def digest_offering(self, model_args):
 		self.vommit.digest_offering(model_args)
 		return self.absorb.digest_offering(model_args)
-	def digest_textbook(self, models_args):
+	def digest_textbook(self, model_args):
 		self.vommit.digest_textbook(model_args)
 		return self.absorb.digest_textbook(model_args)
 	def digest_textbook_link(self, model_args):
