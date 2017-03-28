@@ -7,12 +7,14 @@ import re, sys
 from bs4 import BeautifulSoup, NavigableString, Tag
 from django.utils.encoding import smart_str, smart_unicode
 
+from scripts.textbooks.amazon import amazon_textbook_fields
+
 # parser library
-# from scripts.textbooks.amazon import make_textbook
 from scripts.parser_library.requester import Requester
 from scripts.parser_library.extractor import *
 from scripts.parser_library.Model import Model
 from scripts.parser_library.internal_utils import safe_cast
+from scripts.parser_library.internal_exceptions import CourseParseError
 
 import re, sys
 
@@ -148,8 +150,8 @@ class GWParser:
 
 				rows = self.requester.post(self.url + '/PRODCartridge/bwskfcls.P_GetCrse', params=query2)
 
-				if GWParser.iserrorpage(rows):
-					exit(1)
+				# NOTE: can throw CourseParseError
+				GWParser.check_errorpage(rows):
 
 				try:
 					rows = rows.find('table', {'class':'datadisplaytable'}).find_all('tr')[2:]
@@ -333,14 +335,10 @@ class GWParser:
 			return list()
 
 	@staticmethod
-	def iserrorpage(soup):
+	def check_errorpage(soup):
 		error = soup.find('span',{'class':'errortext'})
 		if error:
-			sys.stderr.write('Error on page request, message: ' + error.text + '\n')
-			sys.stderr.write('^ would assume someone else logged in\n')
-			return True
-		else:
-			return False
+			raise CourseParseError('Error on page request, message: ' + error.text + '\n')
 
 def main():
 	gp = GWParser()
