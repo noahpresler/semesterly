@@ -13,7 +13,7 @@ from time import sleep
 from scripts.parser_library.base_parser import BaseParser
 from amazon import amazon_textbook_fields
 
-from scripts.parser_library.internal_exceptions import CourseParseError
+from scripts.parser_library.internal_exceptions import ParseError
 
 from timetable.models import Course, Section, Textbook, TextbookLink
 
@@ -56,6 +56,8 @@ class TextbookSemester:
         return 'Semester -- term: {}, year: {}, id: {}'.format(self.term, self.year, self.id)
 
 class BNParser(BaseParser):
+
+    # TODO - make this constructor more readable
     def __init__(self, store_id, store_link, school, delimeter, term=None, year=None, **kwargs):
         self.year = year
         self.term = term
@@ -86,6 +88,8 @@ class BNParser(BaseParser):
         textbooks=True,
         verbosity=3,
         **kwargs):
+
+        # TODO - remove hardcoding of year and term and use filtering
         if years is None:
             years = [self.year]
         if terms is None:
@@ -314,6 +318,8 @@ class BNParser(BaseParser):
         return textbooks
 
 class TextbookPayload:
+    '''Builds up 100 textbook request to request from bn.'''
+
     def __init__(self, store_id):
         self.counter = 0
         self.max = 100
