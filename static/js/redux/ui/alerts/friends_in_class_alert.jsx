@@ -13,6 +13,13 @@ class FriendsInClassAlert extends React.Component {
 		this.props.showNotification();
 	}
 
+	componentDidUpdate(nextProps) {
+		console.log("UPDATED");
+		if (nextProps.showFacebookAlert) {
+			this.props.showNotification();
+		}
+	}
+
 	componentWillUnmount() {
 		if (!(localStorage.getItem("declinedNotifications") === "true" || localStorage.getItem("declinedNotifications") === "false")) {
 			let date = new Date;
