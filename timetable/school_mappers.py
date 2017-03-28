@@ -120,7 +120,7 @@ new_course_parsers = {
 }
 
 new_textbook_parsers = {
-  'chapman': lambda *args, **kwargs: ChapmanParser(*args, **kwargs),
+  'chapman': lambda *args, **kwargs: ChapmanParser(**kwargs),
   'gw': lambda *args, **kwargs: GWTextbookParser(**kwargs),
   'jhu': lambda *args, **kwargs: JHUTextbookParser(**kwargs),
   'umd': lambda *args, **kwargs: UMDTextbookParser(**kwargs)
