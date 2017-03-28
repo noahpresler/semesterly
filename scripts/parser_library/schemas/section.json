@@ -128,11 +128,13 @@
 					"kind": {},
 					"isbn": {},
 					"title": {},
-					"author": {}
+					"author": {},
+					"required": {}
 				},
 				"additionalProperties": false,
 				"required": [
-					"kind"
+					"kind",
+					"isbn"
 				]
 			}
 		},
