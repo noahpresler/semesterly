@@ -236,21 +236,64 @@ class BNParser(BaseParser):
                     self.make_textbook(is_required, isbn_number, course_code, section)
 
     def make_textbook(self, is_required, isbn_number, course_code, section_code):
-
+        # Commented out ingestor for now.
         # Update/Create textbook.
-        self.ingestor['isbn'] = isbn_number
-        self.ingestor.update(amazon_textbook_fields(str(isbn_number)))
-        self.ingestor.ingest_textbook()
+        # self.ingestor['isbn'] = isbn_number
+        # self.ingestor.update(amazon_textbook_fields(str(isbn_number)))
+        # self.ingestor.ingest_textbook()
 
-        # Link to all course offerings.
-        self.ingestor['school'] = self.school
-        self.ingestor['course_code'] = course_code
-        self.ingestor['section_code'] = section_code
-        self.ingestor['term'] = self.term
-        self.ingestor['year'] = self.year
-        self.ingestor['isbn'] = isbn_number
-        self.ingestor['required'] = is_required
-        self.ingestor.ingest_textbook_link()
+        # # Link to all course offerings.
+        # self.ingestor['school'] = self.school
+        # self.ingestor['course_code'] = course_code
+        # self.ingestor['section_code'] = section_code
+        # self.ingestor['term'] = self.term
+        # self.ingestor['year'] = self.year
+        # self.ingestor['isbn'] = isbn_number
+        # self.ingestor['required'] = is_required
+        # self.ingestor.ingest_textbook_link()
+
+        # Before DB schema update, use old code:
+        
+        try:
+            course = Course.objects.filter(code__contains = course_code, school = self.school)[0]
+            print(course)
+        except IndexError:
+            print("index error (course does not exist): " + course_code)
+            return
+        sections = Section.objects.filter(course = course, meeting_section = section_code)
+        info = self.get_amazon_fields(isbn_number)
+
+        # update/create textbook
+        textbook_data = {
+            'detail_url': info['DetailPageURL'],
+            'image_url': info["ImageURL"],
+            'author': info["Author"],
+            'title': info["Title"]
+        }
+        textbook, created = Textbook.objects.update_or_create(isbn=isbn_number,
+                                                        defaults=textbook_data)
+        self.create_count += int(created)
+
+        # link to all course offerings
+        for section in sections:
+            section, created = self.textbook_link.objects.update_or_create(
+                is_required = is_required,
+                section = section,
+                textbook = textbook
+            )
+
+        # print results
+        if created:
+            try:
+                print "Textbook created: " + str(textbook.title)
+            except UnicodeEncodeError:
+                pass
+        else:
+            self.identified_count += 1
+            try:
+                print "Textbook found, not created: " + str(textbook.title)
+            except UnicodeEncodeError:
+                pass
 
     def check_required(self,html):
         if html.find("REQUIRED") != -1:
