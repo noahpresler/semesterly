@@ -236,6 +236,10 @@ class Validator:
 			meeting.section = { 'code': section.code }
 			self.validate_meeting(meeting, schema=False)
 
+		if 'textbooks' in section:
+			for textbook in section.textbooks:
+				self.validate_textbook_link(textbook)
+
 		if relative:
 			if section.course.code not in self.seen:
 				raise JsonValidationError('course code "%s" is not defined' % (section.course.code), section)
