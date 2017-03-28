@@ -239,7 +239,6 @@ class Validator:
 		if 'textbooks' in section:
 			for textbook in section.textbooks:
 				self.validate_textbook_link(textbook)
-				print(textbook, file=sys.stderr)
 
 		if relative:
 			if section.course.code not in self.seen:
