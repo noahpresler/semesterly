@@ -47,12 +47,16 @@ function setup(dispatch) {
   uses12HrTime = uses12HrTime === "True";
   studentIntegrations = JSON.parse(studentIntegrations);
   signup = signup === "True";
+  userAcq = userAcq === "True";
   gcalCallback = gcalCallback === "True";
   exportCalendar = exportCalendar === "True";
   viewTextbooks = viewTextbooks === "True";
   finalExams = finalExams === "True";
   if (signup) {
     dispatch({type: 'TRIGGER_SIGNUP_MODAL'});
+  }
+  if (userAcq) {
+    dispatch({type: 'TRIGGER_ACQUISITION_MODAL'});
   }
   if (gcalCallback) {
     dispatch({type: 'TRIGGER_SAVE_CALENDAR_MODAL'});
