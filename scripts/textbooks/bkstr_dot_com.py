@@ -3,12 +3,12 @@
 # @author   Michael N. Miller
 # @date     2/10/17
 
-from __future__ import print_function # NOTE: slowly move toward Python3
+from __future__ import print_function, division, absolute_import # NOTE: slowly move toward Python3
 
-import re, simplejson as json
+import re, sys, simplejson as json
 
-from scripts.parser_library.base_parser import BaseParser
 from scripts.textbooks.amazon import amazon_textbook_fields
+from scripts.parser_library.base_parser import BaseParser
 
 class BkstrDotComParser(BaseParser):
 	def __init__(self, school, store_id, **kwargs):
@@ -19,14 +19,18 @@ class BkstrDotComParser(BaseParser):
 
 	def start(self, 
 		verbosity=3,
-		year=None,
-		term=None,
-		department=None,
+		years=None,
+		terms=None,
+		departments=None,
 		**kwargs):
+
+		cmd_years = years
+		cmd_terms = terms
+		cmd_departments = departments
 
 		print('Parsing bkstr.com for {}'.format(self.school))
 
-		# Retrieve cookies
+		# Retrieve cookies from home website.
 		self.requester.get('http://www.bkstr.com')
 
 		query = {
@@ -36,13 +40,16 @@ class BkstrDotComParser(BaseParser):
 			'_': ''
 		}
 
+		# TODO - fix requester issues by refreshing cookies on timeout
+
 		programs = self.extract_json(query)
 		for program, program_code in programs.items():
 			query['programId'] = programs[program]
 			query['requestType'] = 'TERMS'
-			term_and_years = self.extract_json(query)
-			years = BkstrDotComParser.parse_term_and_years(term_and_years)
-			for year, terms in years.items():
+			terms_and_years = self.extract_json(query)
+			years = self.parse_terms_and_years(terms_and_years)
+			years_and_terms = self.extractor.filter_term_and_year(years, cmd_years, cmd_terms)
+			for year, terms in years_and_terms.items():
 				print('>\tParsing textbooks in year', year)
 				self.ingestor['year'] = year
 				for term, term_code in terms.items():
@@ -50,10 +57,9 @@ class BkstrDotComParser(BaseParser):
 					self.ingestor['term'] = term
 					query['termId'] = term_code
 					query['requestType'] = 'DEPARTMENTS'
-					depts = self.extract_json(query)
+					depts = self.extractor.filter_departments(self.extract_json(query), cmd_departments)
 					for dept, dept_code in depts.items():
 						print('>>>\tParsing textbooks for {} {} {}'.format(term, year, dept))
-
 						query['departmentName'] = dept_code
 						query['requestType'] = 'COURSES'
 						courses = self.extract_json(query)
@@ -96,14 +102,14 @@ class BkstrDotComParser(BaseParser):
 										self.ingestor.ingest_textbook()
 										self.ingestor.ingest_textbook_link()
 
-		self.ingestor.wrap_up()
-
 	def extract_json(self, query):
+		'''Bkstr.com return response as json but labels it as html.'''
 		return json.loads(re.search(r'\'(.*)\'', self.requester.get('{}/LocateCourseMaterialsServlet'.format(self.url), query, parse=False).text).group(1))['data'][0]
 
 	@staticmethod
-	def parse_term_and_years(term_and_years):
-			years = { term_and_year.split()[1]: {term_and_year.split()[0]: code} for term_and_year, code in term_and_years.items() }
+	def parse_terms_and_years(term_and_years):
+			years = { term_and_year.split()[1]: {} for term_and_year, code in term_and_years.items() }
+			# Create nesting based on year.
 			for year in years:
 				years[year].update({term_and_year.split()[0].title(): code for term_and_year, code in term_and_years.items() if term_and_year.split()[1] == year})
 			return years

@@ -8,6 +8,7 @@ from __future__ import print_function, division, absolute_import # NOTE: slowly 
 import re, sys, unicodedata
 import dateutil.parser as dparser
 from scripts.parser_library.words import conjunctions_and_prepositions
+from scripts.parser_library.internal_exceptions import CourseParseError
 
 class Extractor():
 

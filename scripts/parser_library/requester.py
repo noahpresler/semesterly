@@ -22,7 +22,7 @@ class Requester:
     def overwrite_header(self, new_headers):
         self.headers = new_headers
 
-    def http_request(self, do_http_request, type,  parse=True, quiet=True, timeout=30, throttle=(lambda: None)):
+    def http_request(self, do_http_request, type,  parse=True, quiet=True, timeout=60, throttle=(lambda: None)):
         ''' Perform HTTP Request.
         Args:
             do_http_request: function that returns request object
@@ -41,16 +41,17 @@ class Requester:
                     response = do_http_request()
             except (requests.exceptions.Timeout, requests.exceptions.ConnectionError):
                 if i > 1:
-                    sys.stderr.write('THROTTLING REQUESTER') # TODO - should not be stderr, maybe warning?
+                    sys.stderr.write('THROTTLING REQUESTER\n') # TODO - should not be stderr, maybe warning?
                     throttle()
                 sys.stderr.write("Requester error: " + str(sys.exc_info()[0]) + '\n')
+                self.new_user_agent()
                 continue
 
             if response is not None:
                 break
 
             if i > 1:
-                sys.stderr.write('THROTTLING REQUESTER') # TODO - should not be stderr, maybe warning?
+                sys.stderr.write('THROTTLING REQUESTER\n') # TODO - should not be stderr, maybe warning?
                 throttle()
 
         if not quiet:
