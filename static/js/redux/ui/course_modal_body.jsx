@@ -89,11 +89,15 @@ export class CourseModalBody extends React.Component {
 
     render() {
         if (this.props.isFetching) {
-            return <div id="modal-body">
-                <div className="cf">
-
+            return (
+                <div id="modal-body">
+                    <div className="cf">
+                        <span className="img-icon">
+                            <div className="loader"/>
+                        </span>
+                    </div>
                 </div>
-            </div>
+            )
         }
         let lecs = this.mapSectionsToSlots(this.props.lectureSections);
         let tuts = this.mapSectionsToSlots(this.props.tutorialSections);
@@ -261,7 +265,7 @@ export class CourseModalBody extends React.Component {
             </div>
         );
         return (
-        <div id="modal-body">
+            <div id="modal-body">
                 <div className="cf">
                     <div className="col-3-16">
                         <div className="credits">
