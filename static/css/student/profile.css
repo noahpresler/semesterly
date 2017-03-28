@@ -291,12 +291,29 @@ desktop-nav {
 .list-item {
 	font-size: 0;
 }
-.list-item p {
+.list-item.link {
+	background-color: #e6e6e6;
+	color: white;
+	padding: 5px 15px;
+	border: 1px solid #dedede;
+	margin: 10px 0;
+	border-radius: 5px;
+	display: inline-block;
+	cursor: pointer;
+	transition: background-color .3s;
+}
+.list-item.link:hover {
+	background-color: #e0e0e0;
+}
+.list-item p,
+.list-item a {
 	text-align: left;
 	vertical-align: middle;
 	display: inline-block;
-	margin: 5px 3px;
+	margin: 5px 7px;
 	font-size: 16px;
+	color: #222;
+	text-decoration: none;
 }
 #linked-accounts .list-item p {
 	/*width: 70px;*/
