@@ -114,7 +114,7 @@ class Command(BaseCommand):
 				print(self.style.ERROR(traceback.format_exc()), file=self.stderr)
 				print(self.style.ERROR(dict_pp(p.ingestor)), file=self.stderr)
 				tracker.see_error(traceback.format_exc())
-				tracker.see_error(dict_pp(p.ingestor))
+				tracker.see_error('INGESTOR DUMP\n' + dict_pp(p.ingestor))
 
 			tracker.finish()
 
