@@ -1,11 +1,12 @@
-from scripts.base_bn_textbook_parser import *
+from scripts.textbooks.bn_textbook_parser import BNParser
 
-if __name__ == "__main__":
-	textbook_parser = TextbookParser(
-	    "28052", # storeid
-	    "umichigan.bncollege.com",
-	    "umich2",
-	    "-"
-	)
-
-	textbook_parser.parse()
+class UmichTextbookParser(BNParser):
+    def __init__(self, term="Fall", year=2017,**kwargs):
+        super(UmichTextbookParser, self).__init__(
+            "28052", # storeid
+            "umichigan.bncollege.com",
+            "umich",
+            "-",
+            term,
+            year,
+            **kwargs)
