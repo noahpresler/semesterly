@@ -9,6 +9,12 @@ from amazonproduct import API
 import sys
 api = API(locale='us')
 
+def eval_field(field):
+    try:
+        return str(eval(field))
+    except:
+        return ''
+
 def amazon_textbook_fields(isbn):
     response = None
     try:
@@ -24,8 +30,8 @@ def amazon_textbook_fields(isbn):
         return {}
 
     return {
-        'detail_url': str(response.Items.Item.DetailPageURL),
-        'image_url' : str(response.Items.Item.MediumImage.URL),
-        'author':     str(response.Items.Item.ItemAttributes.Author),
-        'title':      str(response.Items.Item.ItemAttributes.Title)
+        'detail_url': eval_field("response.Items.Item.DetailPageURL"),
+        'image_url' : eval_field("response.Items.Item.MediumImage.URL"),
+        'author':     eval_field("response.Items.Item.ItemAttributes.Author"),
+        'title':      eval_field("response.Items.Item.ItemAttributes.Title")
     }
