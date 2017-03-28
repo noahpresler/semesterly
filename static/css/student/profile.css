@@ -190,10 +190,20 @@ desktop-nav {
 	width: 180px;
 	height: 180px;
 	border-radius: 100%;
+	background-color: #ddd;
 	background-size: cover;
 	background-position: center;
 	background-repeat: no-repeat;
+	background-image: url(/static/img/blank.jpg);
 	transform: translate(-50%, 40%);
+	overflow: hidden;
+}
+#profile-image-social {
+	width: 100%;
+	height: 100%;
+	background-size: cover;
+	background-position: center;
+	background-repeat: no-repeat;
 }
 #profile-body {
 	padding: 100px 0 20px;
@@ -271,6 +281,34 @@ desktop-nav {
 .reaction:hover .reaction-dropdown {
 	opacity: 1;
 	visibility: visible;
+}
+#linked-accounts {
+	margin-top: 60px;
+}
+#notifications {
+	margin-top: 60px;
+}
+.list-item {
+	font-size: 0;
+}
+.list-item p {
+	text-align: left;
+	vertical-align: middle;
+	display: inline-block;
+	margin: 5px 3px;
+	font-size: 16px;
+}
+#linked-accounts .list-item p {
+	/*width: 70px;*/
+}
+.list-item i, 
+.list-item img {
+	font-size: 16px;
+	width: 16px;
+	height: 16px;
+	text-align: center;
+	display: inline-block;
+	vertical-align: middle;
 }
 #join-date {
 	margin-top: 60px;
