@@ -9,9 +9,6 @@ from scripts.parser_library.digestor import Digestor
 from scripts.parser_library.internal_exceptions import JsonException, DigestionError
 from scripts.parser_library.tracker import Tracker, LogFormatted
 
-# FIXME -- horrible design should make upper base class
-from timetable.management.commands.parse import Command as PCommand
-
 class Command(BaseCommand):
 	def add_arguments(self, parser):
 		schoollist_argparser(parser)
@@ -20,13 +17,14 @@ class Command(BaseCommand):
 		validator_argparser(parser)
 		progressbar_argparser(parser)
 		masterlog_argparser(parser)
+		textbooks_argparser(parser)
 
 	def handle(self, *args, **options):
 		timestamp = datetime.datetime.now().strftime("%Y/%m/%d-%H:%M:%S")
 		stats = []
 
-		# FIXME -- hack to handle different types of parses
-		type_ = 'courses'
+		# TODO - design better file path scheme.
+		type_ = 'courses' if not options['textbooks'] else 'textbooks'
 
 		for school in options['schools']:
 			message = "Starting digestion for {}.\n".format(school)

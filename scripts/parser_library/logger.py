@@ -1,3 +1,5 @@
+from __future__ import print_function, division, absolute_import # NOTE: slowly move toward Python3
+
 import sys, pipes, simplejson as json
 from datetime import datetime
 from pygments import highlight, lexers, formatters, filters
