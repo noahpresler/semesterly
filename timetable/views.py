@@ -58,7 +58,7 @@ def custom_500(request):
 
 @validate_subdomain
 def view_timetable(request, code=None, sem_name=None, year=None, shared_timetable=None, 
-                  find_friends=False, enable_notifs=False, signup=False,
+                  find_friends=False, enable_notifs=False, signup=False, user_acq=False,
                   gcal_callback=False, export_calendar=False, view_textbooks=False,
                   final_exams=False):
   school = request.subdomain
@@ -105,6 +105,7 @@ def view_timetable(request, code=None, sem_name=None, year=None, shared_timetabl
     'uses_12hr_time': school in AM_PM_SCHOOLS,
     'student_integrations': json.dumps(integrations),
     'signup': signup,
+    'user_acq': user_acq,
     'gcal_callback': gcal_callback,
     'export_calendar': export_calendar,
     'view_textbooks': view_textbooks,
@@ -144,6 +145,13 @@ def export_calendar(request):
 def signup(request):
   try:
     return view_timetable(request, signup=True)
+  except Exception as e:
+    raise Http404
+
+@validate_subdomain
+def launch_user_acq_modal(request):
+  try:
+    return view_timetable(request, user_acq=True)
   except Exception as e:
     raise Http404
 
@@ -811,6 +819,10 @@ def profile(request):
       social_user = student.user.social_auth.filter(provider='facebook').first()
       img_url = 'https://graph.facebook.com/' + student.fbook_uid + '/picture?width=700&height=700'
       hasGoogle = False
+    if student.user.social_auth.filter(provider='facebook').exists():
+      hasFacebook = True
+    else:
+      hasFacebook = False
     hasNotificationsEnabled = RegistrationToken.objects.filter(student=student).exists()
     context = {
       'name': student.user,
@@ -820,6 +832,7 @@ def profile(request):
       'total': 0,
       'img_url': img_url,
       'hasGoogle': hasGoogle,
+      'hasFacebook': hasFacebook,
       'notifications': hasNotificationsEnabled
     }
     for r in reactions:
