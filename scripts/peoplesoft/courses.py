@@ -342,6 +342,9 @@ class PeoplesoftParser(CourseParser):
 
 	def is_valid_search_page(self, soup):
 		# check for valid search/page
+		if soup is None:
+			# TODO - write to error.log with set handle
+			raise CourseParseError('is valid search page, soup is None')
 		errmsg = soup.find('div', {'id' : 'win1divDERIVED_CLSMSG_ERROR_TEXT'})
 		if soup.find('td', {'id' : 'PTBADPAGE_' }) or errmsg:
 			if errmsg:
