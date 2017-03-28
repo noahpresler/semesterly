@@ -56,6 +56,8 @@ class TextbookSemester:
         return 'Semester -- term: {}, year: {}, id: {}'.format(self.term, self.year, self.id)
 
 class BNParser(BaseParser):
+
+    # TODO - make this constructor more readable
     def __init__(self, store_id, store_link, school, delimeter, term=None, year=None, **kwargs):
         self.year = year
         self.term = term
@@ -86,6 +88,8 @@ class BNParser(BaseParser):
         textbooks=True,
         verbosity=3,
         **kwargs):
+
+        # TODO - remove hardcoding of year and term and use filtering
         if years is None:
             years = [self.year]
         if terms is None:
