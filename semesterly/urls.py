@@ -49,6 +49,7 @@ urlpatterns = patterns('',
     url(r'^robots.txt*$', 'analytics.views.view_analytics_dashboard'),
 
     #User,Auth,User Info
+    url(r'^signup/*', 'timetable.views.launch_user_acq_modal'),
     url(r'^user/logout/$', 'django.contrib.auth.views.logout', {'next_page': '/'}),
     url(r'^user/save_timetable/$', 'student.views.save_timetable'),
     url(r'^user/duplicate_timetable/$', 'student.views.duplicate_timetable'),
