@@ -18,6 +18,11 @@ const mapStateToProps = (state) => {
 		mostFriendsKey: state.ui.courseToColourIndex[state.alerts.mostFriendsClassId],
 		totalFriendsCount: state.alerts.totalFriendsCount,
 		userInfo: state.userInfo.data,
+		alertFacebookFriends: state.alerts.alertFacebookFriends 
+    	&& state.userInfo.data.FacebookSignedUp 
+    	&& (!state.userInfo.data.social_courses || state.alerts.facebookAlertIsOn)
+    	&& !state.userInfo.overrideShow 
+    	&& state.alerts.mostFriendsCount >= 1
 	}
 }
 const mapDispatchToProps = (dispatch) => {
