@@ -15,6 +15,8 @@ from amazon import amazon_textbook_fields
 
 from scripts.parser_library.internal_exceptions import CourseParseError
 
+from timetable.models import Course, Section, Textbook, TextbookLink
+
 class TextbookSection:
     def __init__(self, section_id, name):
         self.id = section_id
@@ -253,7 +255,7 @@ class BNParser(BaseParser):
         # self.ingestor.ingest_textbook_link()
 
         # Before DB schema update, use old code:
-        
+
         try:
             course = Course.objects.filter(code__contains = course_code, school = self.school)[0]
             print(course)
@@ -261,22 +263,17 @@ class BNParser(BaseParser):
             print("index error (course does not exist): " + course_code)
             return
         sections = Section.objects.filter(course = course, meeting_section = section_code)
-        info = self.get_amazon_fields(isbn_number)
-
+        textbook_data = amazon_textbook_fields(str(isbn_number))
+        if not len(textbook_data):
+            print ("No such textbook on Amazon")
+            return
         # update/create textbook
-        textbook_data = {
-            'detail_url': info['DetailPageURL'],
-            'image_url': info["ImageURL"],
-            'author': info["Author"],
-            'title': info["Title"]
-        }
-        textbook, created = Textbook.objects.update_or_create(isbn=isbn_number,
-                                                        defaults=textbook_data)
+        textbook, created = Textbook.objects.update_or_create(isbn=isbn_number, defaults=textbook_data)
         self.create_count += int(created)
 
         # link to all course offerings
         for section in sections:
-            section, created = self.textbook_link.objects.update_or_create(
+            section, created = TextbookLink.objects.update_or_create(
                 is_required = is_required,
                 section = section,
                 textbook = textbook
@@ -285,13 +282,13 @@ class BNParser(BaseParser):
         # print results
         if created:
             try:
-                print "Textbook created: " + str(textbook.title)
+                print("Textbook created: " + str(textbook.title))
             except UnicodeEncodeError:
                 pass
         else:
             self.identified_count += 1
             try:
-                print "Textbook found, not created: " + str(textbook.title)
+                print("Textbook found, not created: " + str(textbook.title))
             except UnicodeEncodeError:
                 pass
 
