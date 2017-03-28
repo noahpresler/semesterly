@@ -57,15 +57,18 @@ def ingestor_argparser(parser):
 		help='parse specific course code (note: unstable if invalid course code)')
 	parser.add_argument('-o', '--output', action=writable_file_action,
 		help='(default:  scripts/[school]/data/courses.json)')
-	textbooks = parser.add_mutually_exclusive_group()
-	textbooks.add_argument('--textbooks', dest='textbooks', action='store_true',
-		help='parse textbooks')
-	textbooks.add_argument('--no-textbooks', dest='textbooks', action='store_false',
-		help='don\'t parse textbooks')
-	textbooks.set_defaults(textbooks=False)
-
+	textbooks_argparser(parser)
 	validate_switch_argparser(parser)
 	progressbar_argparser(parser)
+
+def textbooks_argparser(parser):
+	textbooks = parser.add_mutually_exclusive_group()
+	textbooks.add_argument('--textbooks', dest='textbooks', action='store_true',
+		help='parse textbooks (may call different parser)')
+	textbooks.add_argument('--no-textbooks', dest='textbooks', action='store_false',
+		help="don't parse textbooks")
+	textbooks.set_defaults(textbooks=False)
+
 
 def validate_argparser(parser):
 	parser.add_argument('school', type=str)
