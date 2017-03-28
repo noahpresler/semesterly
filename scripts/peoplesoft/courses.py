@@ -365,7 +365,8 @@ class PeoplesoftParser(CourseParser):
 			query['SSR_CLSRCH_WRK_' + day + '$5'] = 'Y'
 			query['SSR_CLSRCH_WRK_' + day + '$chk$5'] = 'Y'
 		query['SSR_CLSRCH_WRK_INCLUDE_CLASS_DAYS$5'] = 'J'
-		query[soup.find('select', id=re.compile(r'SSR_CLSRCH_WRK_INSTRUCTION_MODE\$\d'))['id']] = 'P'
+		# query[soup.find('select', id=re.compile(r'SSR_CLSRCH_WRK_INSTRUCTION_MODE\$\d'))['id']] = 'P'
+		# NOTE: above was removed to handle missed courses, not sure how this will effect all parsers (tested: salisbury, chapman, umich, queens)
 		return query
 
 	def handle_special_case_on_search(self, soup):
