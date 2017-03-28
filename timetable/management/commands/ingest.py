@@ -5,7 +5,7 @@ from timeit import default_timer as timer
 
 from django.core.management.base import BaseCommand, CommandParser, CommandError
 from timetable.models import Updates
-from timetable.school_mappers import course_parsers, new_course_parsers, new_textbook_parsers
+from timetable.school_mappers import course_parsers, textbook_parsers, new_course_parsers, new_textbook_parsers
 from timetable.management.commands.args_parse import schoollist_argparser, ingestor_argparser, validator_argparser
 from scripts.parser_library.internal_exceptions import *
 from scripts.parser_library.tracker import Tracker, LogFormatted
@@ -41,7 +41,11 @@ class Command(BaseCommand):
 		for school in options['schools']:
 
 			# Use old parser framework if no new parser available
-			if school not in new_course_parsers and (options['textbooks'] and school not in new_textbook_parsers):
+			if options['textbooks'] and school not in new_textbook_parsers:
+				do_parse = textbook_parsers[school]
+				self.old_parser(do_parse, school, stat_log)
+				continue
+			elif not options['textbooks'] and school not in new_course_parsers:
 				do_parse = course_parsers[school]
 				self.old_parser(do_parse, school, stat_log)
 				continue
