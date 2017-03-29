@@ -1,6 +1,6 @@
 import { connect } from 'react-redux';
 import { setDeclinedNotifications, getDeclinedNotifications } from '../../util.jsx';
-import { fetchClassmates, saveSettings } from '../../actions/user_actions.jsx'
+import { fetchClassmates, saveSettings, logFacebookAlertView } from '../../actions/user_actions.jsx'
 import FriendsInClassAlert from './friends_in_class_alert.jsx';
 
 const mapStateToProps = (state) => {
@@ -31,6 +31,7 @@ const mapDispatchToProps = (dispatch) => {
     		dispatch({type: "DISMISS_FACEBOOK_FRIENDS"});
     	},
     	showNotification: () => {
+    		logFacebookAlertView();
     		dispatch({type: "SHOW_FACEBOOK_ALERT"});
     	},
     	declineNotifications: () => setDeclinedNotifications(true),
