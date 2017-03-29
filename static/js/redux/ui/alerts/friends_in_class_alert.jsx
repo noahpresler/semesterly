@@ -1,5 +1,5 @@
 import React from 'react';
-import { setARegistrationToken } from '../../actions/user_actions.jsx';
+import { setARegistrationToken, LogFacebookAlertClick } from '../../actions/user_actions.jsx';
 import MasterSlot from '../master_slot.jsx';
 import { COLOUR_DATA, getSchoolSpecificInfo } from '../../constants.jsx';
 import { setDeclinedNotifications, getDeclinedNotifications } from '../../util.jsx';
@@ -30,6 +30,8 @@ class FriendsInClassAlert extends React.Component {
 
 	allowFacebook() {
 		// console.log(this.props.userInfo);
+		LogFacebookAlertClick();
+
         let newUserSettings = {
             social_courses: true,
             social_offerings: true,
