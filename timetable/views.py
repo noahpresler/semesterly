@@ -812,16 +812,16 @@ def profile(request):
     # googpic = this.props.userInfo.img_url.replace('sz=50','sz=100') if this.props.userInfo.isLoggedIn else ''
     # propic = 'url(https://graph.facebook.com/' + JSON.parse(currentUser).fbook_uid + '/picture?type=normal)' if this.props.userInfo.FacebookSignedUp else 'url(' + googpic + ')'
     if student.user.social_auth.filter(provider='google-oauth2').exists():
-      social_user = student.user.social_auth.filter(provider='google-oauth2').first()
-      img_url = student.img_url.replace('sz=50','sz=700')
       hasGoogle = True
     else:
-      social_user = student.user.social_auth.filter(provider='facebook').first()
-      img_url = 'https://graph.facebook.com/' + student.fbook_uid + '/picture?width=700&height=700'
       hasGoogle = False
     if student.user.social_auth.filter(provider='facebook').exists():
+      social_user = student.user.social_auth.filter(provider='facebook').first()
+      img_url = 'https://graph.facebook.com/' + student.fbook_uid + '/picture?width=700&height=700'
       hasFacebook = True
     else:
+      social_user = student.user.social_auth.filter(provider='google-oauth2').first()
+      img_url = student.img_url.replace('sz=50','sz=700')
       hasFacebook = False
     hasNotificationsEnabled = RegistrationToken.objects.filter(student=student).exists()
     context = {
