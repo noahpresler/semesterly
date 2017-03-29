@@ -6,9 +6,8 @@ import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
 import ConflictAlertContainer from './alerts/conflict_alert_container.jsx';
 import TimetableExistsAlertContainer from './alerts/timetable_exists_alert_container.jsx';
 import ChangeSemesterAlertContainer from './alerts/change_semester_alert_container.jsx';
-import NewTimetableAlertContainer from './alerts/new_timetable_alert_container.jsx';
-import EnableNotificationsAlertContainer from './alerts/enable_notifications_alert_container.jsx';
-import FriendsInClassAlertContainer from './alerts/friends_in_class_alert_container.jsx';
+import NewTimetableAlertContainer from './alerts/new_timetable_alert_container.jsx'
+import EnableNotificationsAlertContainer from './alerts/enable_notifications_alert_container.jsx'
 import TopBarContainer from './containers/top_bar_container.jsx';
 import SideBarContainer from './containers/side_bar_container.jsx';
 import UserSettingsModalContainer from './containers/user_settings_modal_container.jsx';
@@ -96,14 +95,6 @@ class Semesterly extends React.Component {
 			}
 			else if (nextProps.alertEnableNotifications && !this.props.alertEnableNotifications) {
 				this.showAlert(<EnableNotificationsAlertContainer />, 'info', 12000);
-			}
-			else if (nextProps.alertFacebookFriends && !this.props.alertFacebookFriends) {
-				this.msg.show(<FriendsInClassAlertContainer />,  {
-					type: 'info',
-					time: 20000,
-					additionalClass: 'friends-in-class-alert-container',
-					icon: <div className="friends-in-class-alert-icon"></div>
-				});
 			}
 			else {
 				this.msg.removeAll();
