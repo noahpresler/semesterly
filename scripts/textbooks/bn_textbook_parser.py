@@ -149,7 +149,8 @@ class BNParser(BaseParser):
         for li in semester_list.find_all("li"):
             sem_id = li["data-optionvalue"]
             name = li.contents[0]
-            term, year = name.split()
+            names = name.split(" ")
+            term, year = names[:len(names) - 1], names[len(names) - 1:]
             semesters.append(TextbookSemester(sem_id, name, term, year))
         return semesters
 
