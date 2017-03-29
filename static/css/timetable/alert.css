@@ -179,6 +179,106 @@
   opacity: .77;
   transition: opacity .3s;
 }
+
+.react-alerts .friends-in-class-alert-container {
+  width: 320px;
+  padding-left: 20px;
+}
+
+.friends-in-class-alert-container .icon {
+  display: none;
+}
+
 .enable-notification-alert a.decline-notifications:hover {
   opacity: 1;
+}
+
+.friends-in-class-alert {
+  width: 230px;
+  margin: 0px 10px;
+}
+
+.friends-in-class-hide {
+  display: none;
+}
+
+.friends-in-class-show {
+  display: block;
+}
+
+.friends-in-class-done {
+  display: block;
+  font-size: 50px;
+  color: #42A770;
+}
+
+.react-alerts .friends-in-class-alert-container .close {
+  /* The way the close button is setup for alert is that it takes the initial heigh of the container
+      So !important is the only way to override it now.
+      TODO: create a generalized alert completion alert to display */
+  height: 120px !important;
+}
+
+.friends-in-class-alert .conflict-alert-btn {
+  margin-top: 25px;
+  padding-top: 0px;
+  margin-right: 2px;
+  font-size: 13px;
+  height: 38px;
+  background-color: #3B5998;
+  border-bottom: 2px solid #2b406e;
+  box-shadow: inset -3px -2px #2b406e;
+}
+
+.friends-in-class-alert .conflict-alert-btn:hover {
+  margin-top: 26px;
+  padding-top: 1px;
+  margin-right: 0px;
+  background-color: #3B5998;
+  border-bottom: 2px solid #3B5998;
+  box-shadow: none;
+}
+
+.friends-in-class-alert .master-slot {
+  margin-top: 15px;
+  margin-bottom: 5px;
+}
+
+.friends-in-class-alert .master-slot-content {
+  text-align: left;
+  text-transform: none;
+  width: 190px;
+}
+
+.friends-in-class-alert .master-slot-actions {
+  display: none;
+}
+
+.friends-in-class-fb {
+  margin-top: 20px;
+}
+
+.friends-in-class-fb .abnb-btn {
+  width: 100%;
+  background: white;
+  color: #484848;
+  border-radius: 4px;
+  border: 1px solid;
+  border-color: #c4c4c4;
+  padding-top: 10px !important;
+  padding-bottom: 10px !important;
+  padding-left: 13px !important;
+  padding-right: 40px !important;
+}
+
+.friends-in-class-fb .img-icon {
+  padding-right: 20px;
+}
+
+.friends-in-class-fb .img-icon > i {
+  font-size: 19px;
+}
+
+.friends-in-class-fb .facebook-text {
+  font-size: 13px;
 }
