@@ -39,3 +39,4 @@ scripts/**/data/*.json
 scripts/*/data/*.json
 scripts/*/logs/*.json
 *.swp
+.idea/
