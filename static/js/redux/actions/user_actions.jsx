@@ -361,7 +361,6 @@ export function fetchClassmates(courses) {
 		let state = store.getState();
 		let semesterIndex = state.semesterIndex !== undefined ? state.semesterIndex : currentSemester;
 
-		console.log("calling fetch most");
     	setTimeout(() => {
 	        dispatch(fetchMostClassmatesCount(getActiveTimetable(state.timetables).courses.map(c => c['id'])));
 	      }, 500);
@@ -542,7 +541,6 @@ export function requestMostClassmates() {
 }
 
 export function fetchMostClassmatesCount(courses) {
-	console.log(courses);
   return (dispatch) => 
 {   let state = store.getState();
     let semesterIndex = state.semesterIndex !== undefined ? state.semesterIndex : currentSemester;
