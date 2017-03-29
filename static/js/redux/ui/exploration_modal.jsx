@@ -37,6 +37,14 @@ export class ExplorationModal extends React.Component {
         this.showShareLink = this.showShareLink.bind(this);
         this.hideShareLink = this.hideShareLink.bind(this);
 	}
+	// componentDidMount() {
+	// 	$('#exp-search-results').scroll(function() {
+	// 		let scrollPercent = 100 * $('#exp-search-results').scrollTop() / ($(document).height() - $('#exp-search-results').height());
+	// 		if (scrollPercent > 70) {
+	// 			this.props.advancedSearchResults
+	// 		}
+	// 	}
+	// }
 	componentWillReceiveProps(nextProps) {
 		if (this.props.isVisible && !nextProps.isVisible) {
 			this.refs.modal.hide()
