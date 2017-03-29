@@ -330,39 +330,6 @@ def get_classmates_from_course_id(school, student, course_id, semester, friends=
     return course
 
 @csrf_exempt
-@login_required
-def get_most_classmate_count(request):
-    school = request.subdomain
-    student = Student.objects.get(user=request.user)
-    course_ids = json.loads(request.body)['course_ids']
-    semester, _ = Semester.objects.get_or_create(**json.loads(request.body)['semester'])
-    print "ASDFASDFASDFASDF",semester
-    course = []
-    total_count = 0
-    count = 0
-    most_friend_course_id = -1
-    for course_id in course_ids:
-        temp_count = get_friend_count_from_course_id(school, student, course_id, semester)
-        print temp_count
-        if temp_count > count:
-            count = temp_count
-            most_friend_course_id = course_id
-        total_count += temp_count
-    course = {"id" : most_friend_course_id, "count" : count, "total_count" : total_count}
-    return HttpResponse(json.dumps(course))
-
-def get_friend_count_from_course_id(school, student, course_id, semester):
-    count = 0 
-    # print "ID:", course_id, "Semester", semester
-    for friend in student.friends.all():
-        # print "Friend:", friend
-        for tt in PersonalTimetable.objects.filter(student=friend):
-            print tt.name, tt.courses.all()
-        if PersonalTimetable.objects.filter(student=friend, courses__id__exact=course_id, semester=semester.id).exists():
-            count += 1
-    return count
-
-@csrf_exempt
 @validate_subdomain
 def react_to_course(request):
   json_data = {}

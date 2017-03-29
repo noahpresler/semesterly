@@ -206,28 +206,3 @@ def number_students_by_school():
 
 def number_user_chrome_notifs():
     return RegistrationToken.objects.values_list("student", flat=True).distinct().count()
-
-@csrf_exempt
-def log_facebook_alert_view(request):
-  try:
-      student = Student.objects.get(user=request.user)
-  except:
-      student = None
-  FacebookAlertView.objects.create(
-    student=student,
-    school=request.subdomain
-  ).save()
-  return HttpResponse(json.dumps({}), content_type="application/json")
-
-@csrf_exempt
-def log_facebook_alert_click(request):
-  try:
-      student = Student.objects.get(user=request.user)
-  except:
-      student = None
-  FacebookAlertClick.objects.create(
-    student=student,
-    school=request.subdomain
-  ).save()
-  return HttpResponse(json.dumps({}), content_type="application/json")
-
