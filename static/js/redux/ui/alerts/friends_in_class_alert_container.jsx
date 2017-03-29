@@ -11,8 +11,6 @@ const mapStateToProps = (state) => {
 	return {
 		msg,
 		active_tt,
-		//TOASKNOAH: If you delete a course in the timetable, error will pop up in console because that course is passed in
-		//Maybe pass in a new course?
 		mostFriendsClass: active_tt.courses.filter((c) => c.id == state.alerts.mostFriendsClassId)[0],
 		mostFriendsCount: state.alerts.mostFriendsCount,
 		mostFriendsKey: state.ui.courseToColourIndex[state.alerts.mostFriendsClassId],
