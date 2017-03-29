@@ -14,7 +14,7 @@ class FriendsInClassAlert extends React.Component {
 	}
 
 	componentDidUpdate(nextProps) {
-		console.log("UPDATED");
+		// console.log("UPDATED");
 		if (nextProps.showFacebookAlert) {
 			this.props.showNotification();
 		}
