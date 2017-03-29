@@ -56,7 +56,6 @@ urlpatterns = patterns('',
     url(r'^user/delete_timetable/$', 'student.views.delete_timetable'),
     url(r'^user/save_settings/$', 'student.views.save_settings'),
     url(r'^user/get_classmates/$', 'student.views.get_classmates'),
-    #TODO WILL CREATE A GET CLASSMATES_COUNT ENDPOINT
     url(r'^user/get_most_classmates_count/$', 'student.views.get_most_classmate_count'),
     url(r'^user/find_friends/*$', 'student.views.find_friends'),
     url(r'^callback/google_calendar/*$', 'timetable.views.google_calendar_callback'),
