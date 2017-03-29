@@ -73,7 +73,8 @@ class GWParser:
 		self.course = Model(self.school)
 		self.requester = Requester()
 		self.terms = {
-			'Fall 2016':'201603', 
+			'Fall 2017': '201703',
+			# 'Fall 2016':'201603', 
 			'Spring 2017':'201701'
 		}
 
