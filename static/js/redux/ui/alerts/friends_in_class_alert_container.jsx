@@ -22,7 +22,7 @@ const mapStateToProps = (state) => {
     	&& state.userInfo.data.FacebookSignedUp 
     	&& (!state.userInfo.data.social_courses || state.alerts.facebookAlertIsOn)
     	&& !state.userInfo.overrideShow 
-    	&& state.alerts.mostFriendsCount >= 1
+    	&& state.alerts.mostFriendsCount >= 2
 	}
 }
 const mapDispatchToProps = (dispatch) => {
