@@ -545,8 +545,6 @@ export function fetchMostClassmatesCount(courses) {
 {   let state = store.getState();
     let semesterIndex = state.semesterIndex !== undefined ? state.semesterIndex : currentSemester;
     let semester = allSemesters[semesterIndex];
-    // console.log("semester is: " + semester);
-    // console.log("number of classmate is: " + state.classmates.courseToClassmates[1].classmates.length)
     dispatch(requestMostClassmates());
     fetch(getMostClassmatesCountEndpoint(), {
       credentials: 'include',
