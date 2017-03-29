@@ -11,9 +11,8 @@ Contents:
 .. toctree::
    :maxdepth: 2
 
-   onboarding.rst
-   locking.rst
-   parsing.rst
+   pipeline
+   locking
 
 
 Indices and tables
