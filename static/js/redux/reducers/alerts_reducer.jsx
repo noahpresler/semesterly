@@ -1,10 +1,14 @@
-
 let defaultState = {
 	alertConflict: false, 
 	alertTimetableExists: false, 
 	alertChangeSemester: false,
 	alertNewTimetable: false,
 	alertEnableNotifications: false,
+  alertFacebookFriends: false,
+  facebookAlertIsOn: false,
+  mostFriendsClassId: null,
+  mostFriendsCount: 0,
+  totalFriendsCount: 0,
 	desiredSemester: 0
 }
 
@@ -38,6 +42,15 @@ export const alerts = (state = defaultState, action) => {
 			return Object.assign({}, state, {alertEnableNotifications: true});
 		case "DISMISS_ENABLE_NOTIFICATIONS":
 			return Object.assign({}, state, {alertEnableNotifications: false});
+		// dispatched when the most friended class is returned
+		case "CHANGE_MOST_FRIENDS_CLASS":
+			return Object.assign({}, state, {mostFriendsCount: action.count, mostFriendsClassId: action.classId, totalFriendsCount: action.total});
+		case "ALERT_FACEBOOK_FRIENDS":
+			return Object.assign({}, state, {alertFacebookFriends: true});
+		case "SHOW_FACEBOOK_ALERT":
+			return Object.assign({}, state, {facebookAlertIsOn: true});
+		case "DISMISS_FACEBOOK_FRIENDS":
+			return Object.assign({}, state, {alertFacebookFriends: false, facebookAlertIsOn: false});
 		default:
 			return state;
 	}
