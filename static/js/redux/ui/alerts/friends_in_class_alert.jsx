@@ -14,7 +14,6 @@ class FriendsInClassAlert extends React.Component {
 	}
 
 	componentDidUpdate(nextProps) {
-		// console.log("UPDATED");
 		if (nextProps.showFacebookAlert) {
 			this.props.showNotification();
 		}
@@ -29,7 +28,6 @@ class FriendsInClassAlert extends React.Component {
 	}
 
 	allowFacebook() {
-		// console.log(this.props.userInfo);
 		LogFacebookAlertClick();
 
         let newUserSettings = {
@@ -44,7 +42,6 @@ class FriendsInClassAlert extends React.Component {
 		setTimeout(() => {
 			this.props.dismissSelf();
 		}, 5000);
-        // this.props.dismissSelf();
 	}
 
 	render() {
