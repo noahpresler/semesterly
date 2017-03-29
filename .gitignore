@@ -40,3 +40,4 @@ scripts/*/data/*.json
 scripts/*/logs/*.json
 *.swp
 .idea/
+.coverage
