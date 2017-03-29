@@ -5,7 +5,8 @@ export const explorationModal = (state = {
 	advancedSearchResults: [], 
 	isFetching: false, 
 	active: 0, 
-	schoolInfoLoaded: false 
+	schoolInfoLoaded: false ,
+	page: 1
 }, action) => {
 	switch (action.type) {
 		case 'SHOW_EXPLORATION_MODAL':
@@ -31,6 +32,8 @@ export const explorationModal = (state = {
 			return Object.assign({}, state, { schoolInfoLoaded: true });
 		case 'RECEIVE_SCHOOL_INFO':
 			return Object.assign({}, state, { schoolInfoLoaded: false });
+		case 'PAGINATE_ADVANCED_SEARCH_RESULTS':
+			return Object.assign({}, state, { page: action });
 		default:
 			return state;
 	}
