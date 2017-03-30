@@ -312,12 +312,12 @@ def get_classmates_from_course_id(school, student, course_id, semester, friends=
         friends = student.friends.filter(social_courses=True)
     course = {'course_id': course_id}
     curr_ptts = PersonalTimetable.objects.filter(student__in=friends, courses__id__exact=course_id)\
-        .filter(Q(semester=semester)).order_by('last_updated').distinct('student')
+        .filter(Q(semester=semester)).order_by('student','last_updated').distinct('student')
     past_ptts = PersonalTimetable.objects.filter(student__in=friends, courses__id__exact=course_id)\
-        .filter(~Q(semester=semester)).order_by('last_updated').distinct('student')
+        .filter(~Q(semester=semester)).order_by('student','last_updated').distinct('student')
 
-    course['current_timetables'] = get_classmates_from_tts(student, course_id, curr_ptts)
-    course['past timetables'] = get_classmates_from_tts(student, past_ptts)
+    course['classmates'] = get_classmates_from_tts(student, course_id, curr_ptts)
+    course['past_classmates'] = get_classmates_from_tts(student, course_id, past_ptts)
     return course
 
 
