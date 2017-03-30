@@ -122,6 +122,7 @@ new_textbook_parsers = {
   'jhu':     lambda *args, **kwargs: JHUTextbookParser(**kwargs),
   'umd':     lambda *args, **kwargs: UMDTextbookParser(**kwargs),
   'umich':   lambda *args, **kwargs: UmichTextbookParser(**kwargs),
+  'vandy':   lambda *args, **kwargs: VandyTextbookParser(**kwargs),
 }
 
 eval_parsers = {
