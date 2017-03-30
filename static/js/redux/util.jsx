@@ -32,6 +32,10 @@ export const setFirstVisit = (time) => {
 	if (!browserSupportsLocalStorage()) { return; }
 	localStorage.setItem("firstVisit", time);
 }
+export const setFriendsCookie = (time) => {
+	if (!browserSupportsLocalStorage()) { return; }
+	localStorage.setItem("friendsCookie", time);
+}
 export const setDeclinedNotifications = (declined) => {
 	if (!browserSupportsLocalStorage()) { return; }
 	// console.log("settings decline", declined);
