@@ -509,8 +509,7 @@ def get_detailed_course_json(school, course, sem, student=None):
   return json_data
 
 def get_classmates_in_course(request, school, sem_name, year, id):
-  global SCHOOL
-  SCHOOL = school.lower()
+  school = school.lower()
   sem, _ = Semester.objects.get_or_create(name=sem_name, year=year)
   json_data = {}
   try:
@@ -523,8 +522,6 @@ def get_classmates_in_course(request, school, sem_name, year, id):
       json_data = get_classmates_from_course_id(school, student, course.id,sem)
 
   except:
-    import traceback
-    traceback.print_exc()
     json_data = {}
 
   return HttpResponse(json.dumps(json_data), content_type="application/json")
