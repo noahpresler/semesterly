@@ -1,0 +1,171 @@
+{
+	"$schema": "http://json-schema.org/draft-04/schema#",
+	"title": "Section",
+	"description": "Semesterly Section JSON definition",
+	"type": "object",
+	"properties": {
+		"kind": {
+			"enum": ["section"]
+		},
+		"school": {
+			"allOf": [
+				{
+					"$ref": "definitions.json#/school"
+				}
+			],
+			"properties": {
+				"code": {}
+			},
+			"additionalProperties": false,
+			"required": [ "code" ]
+		},
+		"course": {
+			"allOf": [
+				{
+					"$ref": "course.json#/"
+				}
+			],
+			"properties": {
+				"code": {}
+			},
+			"additionalProperties": false,
+			"required": [ "code" ]
+		},
+		"code": {
+			"type": "string",
+			"maxLength": 50
+		},
+		"name": {
+			"type": "string",
+			"maxLength": 250
+		},
+		"term": {
+			"type": "string"
+		},
+		"year": {
+			"allOf": [
+				{
+					"$ref": "definitions.json#/year"
+				}
+			]
+		},
+		"capacity": {
+			"type": "integer"
+		},
+		"enrollment": {
+			"type": "integer"
+		},
+		"waitlist": {
+			"type": "integer"
+		},
+		"waitlist_size": {
+			"type": "integer"
+		},
+		"remaining_seats": {
+			"type": "integer"
+		},
+		"type": {
+			"type": "string",
+			"minLength": 1,
+			"maxLength": 50
+		},
+		"fees": {
+			"oneOf": [
+				{
+					"type": "string",
+					"pattern": "\\d+(?:.\\d{1,2})?"
+				},
+				{
+					"type": "number",
+					"minimum": 0
+				}
+			]
+		},
+		"instructors": {
+			"type": "array",
+			"items": {
+				"oneOf": [
+					{
+						"type": "string"
+					},
+					{
+						"allOf": [
+							{
+								"$ref": "instructor.json#/"
+							}
+						],
+						"properties": {
+							"name": {},
+							"email": {},
+							"homepage": {},
+							"title": {}
+						},
+						"additionalProperties": false
+					}
+				]
+			}
+		},
+		"final_exam": {
+			"allOf": [
+				{
+					"$ref": "final_exam.json#/"
+				}	
+			],
+			"properties": {
+				"meeting": {}
+			},
+			"additionalProperties": false
+		},
+		"textbooks": {
+			"type": "array",
+			"items": {
+				"allOf": [
+					{
+						"$ref": "textbook.json#/"
+					}
+				],
+				"properties": {
+					"kind": {},
+					"isbn": {},
+					"title": {},
+					"author": {},
+					"required": {}
+				},
+				"additionalProperties": false,
+				"required": [
+					"kind",
+					"isbn"
+				]
+			}
+		},
+		"meetings": {
+			"type": "array",
+			"items": {
+				"allOf": [
+					{
+						"$ref": "meeting.json#/"
+					}
+				],
+				"properties": {
+					"kind": {},
+					"dates": {},
+					"days": {},
+					"time": {},
+					"location": {},
+					"course": {},
+					"section": {}
+				},
+				"additionalProperties": false,
+				"required": [ 
+					"kind",
+					"time",
+					"course",
+					"section"
+				]
+			}
+		}
+	},
+	"required": [
+		"code"
+	]
+}
