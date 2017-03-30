@@ -1,7 +1,7 @@
 from scripts.textbooks.bn_textbook_parser import *
 
 class UMDTextbookParser(BNParser):
-    def __init__(self, term="Spring", year=2017,**kwargs):
+    def __init__(self, term="Fall", year=2017,**kwargs):
         super(UMDTextbookParser, self).__init__(
             "15551",
             "umcp.bncollege.com",
