@@ -145,11 +145,15 @@ class BNParser(BaseParser):
             throttle=lambda:sleep(randint(300, 500))
         ).find(class_="bncbSelectBox termHeader")
 
+        if is_retry:
+            return
+
         semesters = []
         for li in semester_list.find_all("li"):
             sem_id = li["data-optionvalue"]
             name = li.contents[0]
-            term, year = name.split()
+            names = name.split(" ")
+            term, year = names[:len(names) - 1], names[len(names) - 1:]
             semesters.append(TextbookSemester(sem_id, name, term, year))
         return semesters
 

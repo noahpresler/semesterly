@@ -56,6 +56,7 @@ urlpatterns = patterns('',
     url(r'^user/delete_timetable/$', 'student.views.delete_timetable'),
     url(r'^user/save_settings/$', 'student.views.save_settings'),
     url(r'^user/get_classmates/$', 'student.views.get_classmates'),
+    url(r'^user/get_most_classmates_count/$', 'student.views.get_most_classmate_count'),
     url(r'^user/find_friends/*$', 'student.views.find_friends'),
     url(r'^callback/google_calendar/*$', 'timetable.views.google_calendar_callback'),
     url(r'^textbooks*$', 'timetable.views.view_textbooks'),
@@ -65,6 +66,8 @@ urlpatterns = patterns('',
     url(r'^user/add_to_gcal/*$', 'student.views.add_tt_to_gcal'),
     url(r'^user/log_ical/*$', 'student.views.log_ical_export'),
     url(r'^user/log_final_exam/*$', 'timetable.views.log_final_exam_view'),
+    url(r'^user/log_fb_alert_click/*$', 'analytics.views.log_facebook_alert_click'),
+    url(r'^user/log_fb_alert_view/*$', 'analytics.views.log_facebook_alert_view'),
 
     
     url(r'^courses/(?P<school>.+?)/code/(?P<course_id>.+)/*$', 'timetable.views.get_course_id'),
@@ -109,7 +112,7 @@ urlpatterns = patterns('',
 
     # final exam scheduler
     (r'^get_final_exams/*$', 'timetable.views.final_exam_scheduler'),
-    url(r'^final_exams/*$', 'timetable.views.view_final_exams')
+    url(r'^final_exams/*$', 'timetable.views.view_final_exams'),
 )
 
 if getattr(settings, 'STAGING', False):
