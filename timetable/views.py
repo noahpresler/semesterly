@@ -505,10 +505,21 @@ def get_detailed_course_json(school, course, sem, student=None):
   json_data['textbooks'] = course.get_textbooks(sem)
   json_data['integrations'] = list(course.get_course_integrations())
   json_data['regexed_courses'] = get_regexed_courses(school, json_data)
-  if student and student.user.is_authenticated() and student.social_courses:
-    json_data['classmates'] = get_classmates_from_course_id(school, student, course.id,sem)
   json_data['popularity_percent'] = get_popularity_percent_from_course(course, sem)
   return json_data
+
+def get_classmates_in_course(request, school, sem_name, year, id):
+  school = school.lower()
+  sem, _ = Semester.objects.get_or_create(name=sem_name, year=year)
+  json_data = {}
+  course = Course.objects.get(school=school, id=id)
+  student = None
+  logged = request.user.is_authenticated()
+  if logged and Student.objects.filter(user=request.user).exists():
+    student = Student.objects.get(user=request.user)
+  if student and student.user.is_authenticated() and student.social_courses:
+    json_data = get_classmates_from_course_id(school, student, course.id,sem)
+  return HttpResponse(json.dumps(json_data), content_type="application/json")
 
 def eval_add_unique_term_year_flag(course, evals):
   """
