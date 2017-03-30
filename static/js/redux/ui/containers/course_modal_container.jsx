@@ -18,7 +18,9 @@ const mapStateToProps = (state) => {
 	return {
 		schoolSpecificInfo: getSchoolSpecificInfo(state.school.school),
 		isFetching: state.courseInfo.isFetching,
+		isFetchingClassmates: state.courseInfo.isFetching,
 		data: state.courseInfo.data,
+		classmates: state.courseInfo.classmates,
 		id: state.courseInfo.id,
 		lectureSections: lectureSections,
 		tutorialSections: tutorialSections,
