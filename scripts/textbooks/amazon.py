@@ -4,14 +4,14 @@
 # @date     2/22/17
 
 from __future__ import print_function, division, absolute_import # NOTE: slowly move toward Python3
+from django.utils.encoding import smart_str
 
 from amazonproduct import API
-import sys
 api = API(locale='us')
 
-def eval_field(field):
+def eval_field(response, field):
     try:
-        return str(eval(field))
+        return smart_str(eval(field))
     except:
         return '' # TODO - change to 'Cannot be found'
 
@@ -24,14 +24,12 @@ def amazon_textbook_fields(isbn):
             response = api.item_lookup(isbn, IdType='EAN', SearchIndex='All', ResponseGroup='Large')
     except Exception as e:
         pass
-        # FIXME -- something is wrong with the Amazon API (Eric)
 
     if response is None:
         return {}
-
     return {
-        'detail_url': eval_field("response.Items.Item.DetailPageURL"),
-        'image_url' : eval_field("response.Items.Item.MediumImage.URL"),
-        'author':     eval_field("response.Items.Item.ItemAttributes.Author"),
-        'title':      eval_field("response.Items.Item.ItemAttributes.Title")
+        'detail_url': eval_field(response, "response.Items.Item.DetailPageURL"),
+        'image_url' : eval_field(response, "response.Items.Item.MediumImage.URL"),
+        'author':     eval_field(response, "response.Items.Item.ItemAttributes.Author"),
+        'title':      eval_field(response, "response.Items.Item.ItemAttributes.Title")
     }
