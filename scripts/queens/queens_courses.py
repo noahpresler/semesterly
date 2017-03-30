@@ -66,7 +66,6 @@ class QueensParser(QPeoplesoftParser):
 		# Close Selenium/PhantomJS process.
 		# REF: http://stackoverflow.com/questions/25110624/how-to-properly-stop-phantomjs-execution
 		self.driver.service.process.send_signal(signal.SIGTERM)
-		self.driver.close()
 		self.driver.quit()
 
 		headers = {
