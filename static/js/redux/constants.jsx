@@ -69,7 +69,7 @@ export const getClassmatesInCourseEndpoint = (course_id) => {
   return "/course_classmates/" + getSchool() + "/" + getSemester() + "/id/" + course_id + "/";
 }
 export const getMostClassmatesCountEndpoint = () => {
-  return "user/get_most_classmates_count/"
+  return "/user/get_most_classmates_count/"
 }
 export const getFriendsEndpoint = () => {
   return "/user/find_friends/"
