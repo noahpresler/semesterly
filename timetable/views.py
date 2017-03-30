@@ -58,7 +58,7 @@ def custom_500(request):
 
 @validate_subdomain
 def view_timetable(request, code=None, sem_name=None, year=None, shared_timetable=None, 
-                  find_friends=False, enable_notifs=False, signup=False,
+                  find_friends=False, enable_notifs=False, signup=False, user_acq=False,
                   gcal_callback=False, export_calendar=False, view_textbooks=False,
                   final_exams=False):
   school = request.subdomain
@@ -105,6 +105,7 @@ def view_timetable(request, code=None, sem_name=None, year=None, shared_timetabl
     'uses_12hr_time': school in AM_PM_SCHOOLS,
     'student_integrations': json.dumps(integrations),
     'signup': signup,
+    'user_acq': user_acq,
     'gcal_callback': gcal_callback,
     'export_calendar': export_calendar,
     'view_textbooks': view_textbooks,
@@ -144,6 +145,13 @@ def export_calendar(request):
 def signup(request):
   try:
     return view_timetable(request, signup=True)
+  except Exception as e:
+    raise Http404
+
+@validate_subdomain
+def launch_user_acq_modal(request):
+  try:
+    return view_timetable(request, user_acq=True)
   except Exception as e:
     raise Http404
 
@@ -497,10 +505,21 @@ def get_detailed_course_json(school, course, sem, student=None):
   json_data['textbooks'] = course.get_textbooks(sem)
   json_data['integrations'] = list(course.get_course_integrations())
   json_data['regexed_courses'] = get_regexed_courses(school, json_data)
-  if student and student.user.is_authenticated() and student.social_courses:
-    json_data['classmates'] = get_classmates_from_course_id(school, student, course.id,sem)
   json_data['popularity_percent'] = get_popularity_percent_from_course(course, sem)
   return json_data
+
+def get_classmates_in_course(request, school, sem_name, year, id):
+  school = school.lower()
+  sem, _ = Semester.objects.get_or_create(name=sem_name, year=year)
+  json_data = {}
+  course = Course.objects.get(school=school, id=id)
+  student = None
+  logged = request.user.is_authenticated()
+  if logged and Student.objects.filter(user=request.user).exists():
+    student = Student.objects.get(user=request.user)
+  if student and student.user.is_authenticated() and student.social_courses:
+    json_data = get_classmates_from_course_id(school, student, course.id,sem)
+  return HttpResponse(json.dumps(json_data), content_type="application/json")
 
 def eval_add_unique_term_year_flag(course, evals):
   """
@@ -804,11 +823,18 @@ def profile(request):
     # googpic = this.props.userInfo.img_url.replace('sz=50','sz=100') if this.props.userInfo.isLoggedIn else ''
     # propic = 'url(https://graph.facebook.com/' + JSON.parse(currentUser).fbook_uid + '/picture?type=normal)' if this.props.userInfo.FacebookSignedUp else 'url(' + googpic + ')'
     if student.user.social_auth.filter(provider='google-oauth2').exists():
-      social_user = student.user.social_auth.filter(provider='google-oauth2').first()
-      img_url = student.img_url.replace('sz=50','sz=700')
+      hasGoogle = True
     else:
+      hasGoogle = False
+    if student.user.social_auth.filter(provider='facebook').exists():
       social_user = student.user.social_auth.filter(provider='facebook').first()
       img_url = 'https://graph.facebook.com/' + student.fbook_uid + '/picture?width=700&height=700'
+      hasFacebook = True
+    else:
+      social_user = student.user.social_auth.filter(provider='google-oauth2').first()
+      img_url = student.img_url.replace('sz=50','sz=700')
+      hasFacebook = False
+    hasNotificationsEnabled = RegistrationToken.objects.filter(student=student).exists()
     context = {
       'name': student.user,
       'major': student.major,
@@ -816,6 +842,9 @@ def profile(request):
       'student': student,
       'total': 0,
       'img_url': img_url,
+      'hasGoogle': hasGoogle,
+      'hasFacebook': hasFacebook,
+      'notifications': hasNotificationsEnabled
     }
     for r in reactions:
         context[r['title']] = r['count']
