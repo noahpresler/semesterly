@@ -21,7 +21,7 @@ export class ExplorationModal extends React.Component {
 			times: [], // will contain 5 objects, containing keys "min" and "max" (times), for each day of the week
 			addedDays: [],
 			shareLinkShown: false,
-			
+			hasUpdatedCourses: false
 		};
 		this.dayMap = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"],
 		this.toggle = this.toggle.bind(this);
@@ -37,23 +37,38 @@ export class ExplorationModal extends React.Component {
         this.showShareLink = this.showShareLink.bind(this);
         this.hideShareLink = this.hideShareLink.bind(this);
 	}
-	// componentDidMount() {
-	// 	$('#exp-search-results').scroll(function() {
-	// 		let scrollPercent = 100 * $('#exp-search-results').scrollTop() / ($(document).height() - $('#exp-search-results').height());
-	// 		if (scrollPercent > 70) {
-	// 			this.props.advancedSearchResults
-	// 		}
-	// 	}
-	// }
 	componentWillReceiveProps(nextProps) {
 		if (this.props.isVisible && !nextProps.isVisible) {
-			this.refs.modal.hide()
+			this.refs.modal.hide();
+		}
+		if (nextProps.advancedSearchResults != this.props.advancedSearchResults) {
+			this.setState({hasUpdatedCourses: true});
 		}
 	}
-	componentDidUpdate(nextProps) {
+	componentDidUpdate(prevProps, prevState) {
 		if (this.props.isVisible) {
 			this.refs.modal.show();
 		}
+		let { areas, departments, times, levels} = this.state;
+		let filters = { areas, departments, times, levels};
+		areas, departments, times, levels = prevState.areas, prevState.departments, prevState.times, prevState.levels;
+		let prevFilters = { areas, departments, times, levels};
+		if (!_.isEqual(filters,prevFilters) && this.props.page != 1) {
+			console.log("CLEARING PAGINATION => 1");
+			console.log(filters)
+			console.log(prevFilters)
+			console.log("prev",prevState)
+			this.props.clearPagination();
+		}
+		$('#exp-search-results').scroll(function() {
+			let scrollPercent = 100 * $('#exp-search-results').scrollTop() / ($(document).height() - $('#exp-search-results').height());
+			if (scrollPercent > 40 && !prevState.hasUpdatedCourses && this.state.hasUpdatedCourses) {
+				this.setState({hasUpdatedCourses: false});
+				this.props.paginate();
+				console.log("PAGINATE!");
+				this.fetchAdvancedSearchResultsWrapper();
+			}
+		}.bind(this));
 	}
     showShareLink() {
         this.setState({shareLinkShown: true});
@@ -291,7 +306,11 @@ export class ExplorationModal extends React.Component {
 						<input 
 							ref="input" 
 							placeholder={"Searching " + this.props.semesterName}
-							onInput={this.fetchAdvancedSearchResultsWrapper}/>
+							onInput={ () => {
+									this.props.clearPagination();
+									this.fetchAdvancedSearchResultsWrapper();
+								}
+							}/>
 						{explorationLoader}
 					</div>
 	                <div id="exploration-close"
