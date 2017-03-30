@@ -249,28 +249,8 @@ def save_settings(request):
 
 @csrf_exempt
 @login_required
-def get_classmates(request):
-    school = request.subdomain
-    student = Student.objects.get(user=request.user)
-    course_ids = json.loads(request.body)['course_ids']
-    try:
-        semester, _ = Semester.objects.get_or_create(**json.loads(request.body)['semester'])
-    except:
-        semester = None 
-    # user opted in to sharing courses
-    if student.social_courses:
-        courses = []
-        friends = student.friends.filter(social_courses=True)
-        for course_id in course_ids:
-            courses.append(get_classmates_from_course_id(school, student, course_id, semester, friends=friends))
-        return HttpResponse(json.dumps(courses), content_type='application/json')
-    else:
-        return HttpResponse("Must have social_courses enabled")
-
-@csrf_exempt
-@login_required
 def find_friends(request):
-    try: 
+    try:
         school = request.subdomain
         student = Student.objects.get(user=request.user)
         if not student.social_all:
@@ -304,32 +284,57 @@ def find_friends(request):
         print e
         return HttpResponse(json.dumps([]))
 
+
+@csrf_exempt
+@login_required
+def get_classmates(request):
+    school = request.subdomain
+    student = Student.objects.get(user=request.user)
+    course_ids = json.loads(request.body)['course_ids']
+    try:
+        semester, _ = Semester.objects.get_or_create(**json.loads(request.body)['semester'])
+    except:
+        semester = None 
+    # user opted in to sharing courses
+    if student.social_courses:
+        courses = []
+        friends = student.friends.filter(social_courses=True)
+        for course_id in course_ids:
+            courses.append(get_classmates_from_course_id(school, student, course_id, semester, friends=friends))
+        return HttpResponse(json.dumps(courses), content_type='application/json')
+    else:
+        return HttpResponse("Must have social_courses enabled")
+
+
 def get_classmates_from_course_id(school, student, course_id, semester, friends=None):
     if not friends: 
         # All friends with social courses/sharing enabled
         friends = student.friends.filter(social_courses=True)
-    course = { 'course_id': course_id, 'classmates': [], 'past_classmates': []}
-    ptts = PersonalTimetable.objects.filter(student__in=friends, courses__id__exact=course_id).order_by('last_updated').distinct('student')
-    
-    past_tts = ptts.filter(~Q(semester=semester))
-    curr_ptts = ptts.filter(semester=semester)
+    course = {'course_id': course_id}
+    curr_ptts = PersonalTimetable.objects.filter(student__in=friends, courses__id__exact=course_id)\
+        .filter(Q(semester=semester)).order_by('last_updated').distinct('student')
+    past_ptts = PersonalTimetable.objects.filter(student__in=friends, courses__id__exact=course_id)\
+        .filter(~Q(semester=semester)).order_by('last_updated').distinct('student')
 
-    curr_classmate_set = set()
-    past_classmate_set = set()
+    course['current_timetables'] = get_classmates_from_tts(student, course_id, curr_ptts)
+    course['past timetables'] = get_classmates_from_tts(student, past_ptts)
+    return course
 
-    for tt in curr_ptts:
+
+def get_classmates_from_tts(student, course_id, tts):
+    classmates = []
+    for tt in tts:
         friend = tt.student
-        classmate = model_to_dict(friend, exclude=['user','id','fbook_uid', 'friends'])
+        classmate = model_to_dict(friend, exclude=['user', 'id', 'fbook_uid', 'friends'])
         classmate['first_name'] = friend.user.first_name
         classmate['last_name'] = friend.user.last_name
         if student.social_offerings and friend.social_offerings:
-            friend_sections = tt.sections.all().filter(course__id=course_id)
+            friend_sections = tt.sections.filter(course__id=course_id)
             sections = list(friend_sections.values_list('meeting_section', flat=True).distinct())
             classmate['sections'] = sections
-            curr_classmate_set.add(classmate)
-    # course['classmates'].append(classmate)
-    # course['past_classmates'].append(classmate)
-    return course
+            classmates.append(classmate)
+    return classmates
+
 
 @csrf_exempt
 @login_required
