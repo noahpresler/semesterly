@@ -5,7 +5,7 @@
 
 from __future__ import print_function # NOTE: slowly move toward Python3
 
-import socket
+import socket, signal
 from selenium import webdriver
 from selenium.webdriver.support.ui import Select
 
@@ -63,6 +63,13 @@ class QueensParser(QPeoplesoftParser):
 		    c = {cookie['name']: cookie['value']}
 		    self.requester.session.cookies.update(c)
 
+		# Close Selenium/PhantomJS process.
+		# REF: http://stackoverflow.com/questions/25110624/how-to-properly-stop-phantomjs-execution
+		# NOTE: update selenium version after fix merged (https://github.com/hydroshare/hydroshare/commit/f7ef2a867250aac86b3fd12821cabf5524c2cb17)
+		self.driver.close()
+		self.driver.service.process.send_signal(signal.SIGTERM)
+		self.driver.quit()
+
 		headers = {
 		    'Pragma': 'no-cache',
 		    'Accept-Encoding': 'gzip, deflate, sdch, br',
@@ -79,8 +86,6 @@ class QueensParser(QPeoplesoftParser):
 
 		# NOTE: get request will update CookieJar
 		self.requester.get('https://saself.ps.queensu.ca/psc/saself/EMPLOYEE/HRMS/c/SA_LEARNER_SERVICES.CLASS_SEARCH.GBL?Page=SSR_CLSRCH_ENTRY&Action=U&ExactKeys=Y&TargetFrameName=None')
-
-		self.driver.close()
 
 	def start(self,
 		years=None,
