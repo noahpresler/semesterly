@@ -310,6 +310,8 @@ class PeoplesoftParser(CourseParser):
 				self.ingestor.ingest_textbook()
 				if 'textbooks' not in self.ingestor:
 					self.ingestor['textbooks'] = []
+				if not textbook['isbn'] or len(textbook['isbn']) != 9 or len(textbook['isbn']) != 13:
+					continue
 				self.ingestor['textbooks'].append({
 					'kind':'textbook_link',
 					'isbn': textbook['isbn'],

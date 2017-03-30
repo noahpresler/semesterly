@@ -42,10 +42,20 @@ class MasterSlot extends React.Component {
     }
 
 	render() {
-        let friendCircles = this.props.classmates && this.props.classmates.classmates ? this.props.classmates.classmates.map(c => {
-            return <div className="ms-friend" key={c.img_url} style={{backgroundImage: 'url(' + c.img_url + ')'}}></div>;
-        }) : null;
-        if (this.props.classmates && this.props.classmates.classmates && friendCircles.length > 4) {
+        let friendCircles = null;
+        if (this.props.fakeFriends) {
+            friendCircles = new Array(this.props.fakeFriends);
+            for (let i = 0; i < this.props.fakeFriends; i++) {
+                friendCircles[i] = <div className="ms-friend" key={i} style={{backgroundImage: 'url(/static/img/blank.jpg)'}}></div>
+            }
+        } else {
+            friendCircles = this.props.classmates && this.props.classmates.classmates ? this.props.classmates.classmates.map(c => {
+                return <div className="ms-friend" key={c.img_url} style={{backgroundImage: 'url(' + c.img_url + ')'}}></div>;
+            }) : null;
+        }
+        
+        if ((this.props.classmates && this.props.classmates.classmates && friendCircles.length > 4) 
+            ||(this.props.fakeFriends && this.props.fakeFriends > 4)) {
             let plusMore = friendCircles.length - 3 + '+';
             friendCircles = [<div className="ms-friend" key={4}>{plusMore}</div>].concat(friendCircles.slice(0,3))
         }
