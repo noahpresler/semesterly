@@ -10,12 +10,11 @@ export const VALID_SCHOOLS = [
   "jhu", 
   "umd", 
   "uo", 
-  "rutgers", 
+  // "rutgers", 
   "queens", 
   "vandy",
   "gw",
   "umich",
-  "umich2",
   "chapman",
   "salisbury",
 ];
@@ -29,6 +28,12 @@ export const getLogiCalEndpoint = () => {
 };
 export const getLogFinalExamViewEndpoint = () => { 
   return "/user/log_final_exam/"
+};
+export const getLogFacebookAlertViewEndpoint = () => { 
+  return "/user/log_fb_alert_view/"
+};
+export const getLogFacebookAlertClickEndpoint = () => { 
+  return "/user/log_fb_alert_click/"
 };
 export const getCourseInfoEndpoint = (course_id) => {
 	return "/courses/" + getSchool() + "/" + getSemester() + "/id/" + course_id + "/";
@@ -58,7 +63,13 @@ export const getSaveSettingsEndpoint = () => {
 	return "/user/save_settings/"
 }
 export const getClassmatesEndpoint = () => {
-	return "/user/get_classmates/"
+  return "/user/get_classmates/"
+}
+export const getClassmatesInCourseEndpoint = (course_id) => {
+  return "/course_classmates/" + getSchool() + "/" + getSemester() + "/id/" + course_id + "/";
+}
+export const getMostClassmatesCountEndpoint = () => {
+  return "/user/get_most_classmates_count/"
 }
 export const getFriendsEndpoint = () => {
   return "/user/find_friends/"
@@ -195,17 +206,6 @@ export const getSchoolSpecificInfo = (school) => {
           1: ""
         }
       }
-    case "umich2":
-      return {
-        primaryDisplay: "name",
-        areasName: "Areas",
-        departmentsName: "Departments",
-        levelsName: "Levels",
-        timesName: "Times",
-        campuses: {
-          1: ""
-        }
-      }
     case "salisbury":
       return {
         primaryDisplay: "name",
@@ -213,6 +213,8 @@ export const getSchoolSpecificInfo = (school) => {
         departmentsName: "Departments",
         levelsName: "Levels",
         timesName: "Times",
+        // some classes are just numbers, not included in this regex, cuz some descrpitions have years
+        courseRegex: "([A-Z]{3,4} \\d{2,3})",
         semesters: {
           F: "Fall 2016",
           S: "Spring 2017"
@@ -316,4 +318,11 @@ export const DRAGTYPES = {
   DRAG: 'drag', // drag a custom slot to a new location
   EXTEND: 'extend', // extend the length of a custom slot
   CREATE: 'create' // create a new custom slot
+}
+
+// dictionary representing the order in which semesters occur
+export const SEMESTER_RANKS = {
+  'Winter' : 0,
+  'Spring' : 1,
+  'Fall'   : 2
 }

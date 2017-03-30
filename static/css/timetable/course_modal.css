@@ -64,6 +64,18 @@
     border-bottom-left-radius: 5px;
 }
 
+.course-modal .img-icon {
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%, -50%);
+}
+
+.course-modal #modal-content .loader {
+	width: 90px;
+	height: 90px;
+}
+
 .friend {
     height: 30px;
     overflow: hidden;
@@ -232,6 +244,7 @@
 #modal-body [class^="col-"] {
 	padding: 30px 15px;
 }
+
 h3.modal-module-header {
 	font-size: 14px;
 	padding: 10px 5px;
