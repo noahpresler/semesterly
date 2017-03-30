@@ -1,0 +1,14 @@
+{
+	"school": {
+		"code": "umich",
+		"name": "University of Michigan in Ann Arbor"
+	},
+	"course_code_regex": "([A-Z]* \\d{3}[A-Z]?)$",
+	"terms": [
+		"Fall",
+		"Winter",
+		"Spring",
+		"Spring/Summer",
+		"Summer"
+	]
+}
