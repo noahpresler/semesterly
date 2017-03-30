@@ -309,7 +309,7 @@ def get_classmates_from_course_id(school, student, course_id, semester, friends=
         # All friends with social courses/sharing enabled
         friends = student.friends.filter(social_courses=True)
     course = { 'course_id': course_id, 'classmates': [], 'past_classmates': []}
-    ptts = PersonalTimetable.objects.filter(student__in=friends, courses__id__exact=course_id)
+    ptts = PersonalTimetable.objects.filter(student__in=friends, courses__id__exact=course_id).order_by('last_updated').distinct('student')
     
     past_tts = ptts.filter(~Q(semester=semester))
     curr_ptts = ptts.filter(semester=semester)
