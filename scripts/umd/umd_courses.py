@@ -175,22 +175,22 @@ class UMDParser(CourseParser):
   def start(self,
         years=None,
         terms=None,
-        department=None,
+        departments=None,
         textbooks=True,
         verbosity=3,
         **kwargs):
-    if department:
-      print("Error: Departments inputs are not supported.", file=sys.stderr)
-    if years and terms:
-      for year, term in years:
-        self.year = year
-        for term in terms:
-          self.term = term
-          departments = self.get_departments()
-          self.get_courses(departments)
-    else:
-      departments = self.get_departments()
-      self.get_courses(departments)      
+    if departments:
+      print("Error: Departments inputs is not supported.", file=sys.stderr)
+    if years is None:
+      years = [self.year]
+    if terms is None:
+      terms = [self.term]
+    for year in years:
+      self.year = year
+      for term in terms:
+        self.term = term
+        departments = self.get_departments()
+        self.get_courses(departments)
 
 if __name__ == '__main__':
   raise NotImplementedError('run with manage.py')

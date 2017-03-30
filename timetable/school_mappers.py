@@ -80,7 +80,7 @@ school_to_semesters = {
   'uo': [_sem('Spring', '2017'), _sem('Fall', '2016')],
   'queens': [_sem('Winter', '2017'), _sem('Fall', '2016')],
   'vandy': [_sem('Fall', '2017'), _sem('Spring', '2017'), _sem('Fall', '2016')],
-  'gw': [_sem('Spring', '2017'), _sem('Fall', '2016')],
+  'gw': [_sem('Fall', '2017'), _sem('Spring', '2017')],
   'umich': [_sem('Fall', '2017'), _sem('Winter', '2017'), _sem('Fall', '2016')],
   'chapman': [_sem('Fall', '2017'), _sem('Spring', '2017'), _sem('Fall', '2016')],
   'salisbury': [_sem('Fall', '2017'), _sem('Spring', '2017'), _sem('Winter', '2017'), _sem('Fall', '2016'), _sem('Summer', '2017'), _sem('Interterm', '2017')],
@@ -122,6 +122,7 @@ new_textbook_parsers = {
   'jhu':     lambda *args, **kwargs: JHUTextbookParser(**kwargs),
   'umd':     lambda *args, **kwargs: UMDTextbookParser(**kwargs),
   'umich':   lambda *args, **kwargs: UmichTextbookParser(**kwargs),
+  'vandy':   lambda *args, **kwargs: VandyTextbookParser(**kwargs),
 }
 
 eval_parsers = {
