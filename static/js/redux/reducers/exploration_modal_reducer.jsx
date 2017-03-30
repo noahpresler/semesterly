@@ -17,8 +17,17 @@ export const explorationModal = (state = {
 			return Object.assign({}, state, { isFetching: true });
 		case 'RECEIVE_ADVANCED_SEARCH_RESULTS':
 			let { advancedSearchResults } = action;
-			return Object.assign({}, state, { advancedSearchResults, isFetching: false,
-				active:0 });
+			if (state.page > 1) {
+				advancedSearchResults = advancedSearchResults.concat(...state.advancedSearchResults);
+				return Object.assign({}, state, { 
+					advancedSearchResults,
+					isFetching: false,
+					active:0
+				});
+			} else {
+				return Object.assign({}, state, { advancedSearchResults, isFetching: false,
+					active:0 });
+			}
 		case 'SET_ACTIVE_RESULT':
 			return Object.assign({}, state, { active: action.active });
 		case 'SET_COURSE_REACTIONS':
@@ -33,7 +42,9 @@ export const explorationModal = (state = {
 		case 'RECEIVE_SCHOOL_INFO':
 			return Object.assign({}, state, { schoolInfoLoaded: false });
 		case 'PAGINATE_ADVANCED_SEARCH_RESULTS':
-			return Object.assign({}, state, { page: action });
+			return Object.assign({}, state, { page: state.page + 1 });
+		case 'CLEAR_ADVANCED_SEARCH_PAGINATION':
+			return Object.assign({}, state, { page: 1});
 		default:
 			return state;
 	}
