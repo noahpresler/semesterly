@@ -1,11 +1,9 @@
-from scripts.base_bn_textbook_parser import *
+from scripts.textbooks.bn_textbook_parser import BNParser
 
-if __name__ == "__main__":
-	textbook_parser = TextbookParser(
-	    "65163",
-	    "vanderbilt.bncollege.com",
-	    "vandy",
-	    "-"
-	)
-
-	textbook_parser.parse()
+class VandyTextbookParser(BNParser):
+    def __init__(self, term="Fall", year=2017,**kwargs):
+        super(JHUTextbookParser, self).__init__(
+			"65163",
+			"vanderbilt.bncollege.com",
+			"vandy",
+            **kwargs)
