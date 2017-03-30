@@ -9,7 +9,7 @@ import SemesterlyContainer from './ui/containers/semesterly_container.jsx';
 import { getUserInfo, setARegistrationToken, isRegistered } from './actions/user_actions.jsx';
 import { loadTimetable, lockTimetable, loadCachedTimetable } from './actions/timetable_actions.jsx'
 import { fetchSchoolInfo } from './actions/school_actions.jsx';
-import { setCourseInfo } from './actions/modal_actions.jsx';
+import { setCourseInfo, fetchCourseClassmates } from './actions/modal_actions.jsx';
 import { browserSupportsLocalStorage, setFirstVisit, timeLapsedGreaterThan } from './util.jsx';
 import { addTTtoGCal } from './actions/calendar_actions.jsx';
 import { getSchoolSpecificInfo } from './constants.jsx';
@@ -124,6 +124,7 @@ function setup(dispatch) {
     lockTimetable(dispatch, sharedTimetable, true, user.isLoggedIn);
   } else if (sharedCourse) {
     dispatch(setCourseInfo(sharedCourse));
+    dispatch(fetchCourseClassmates(sharedCourse.id));
   } else if (findFriends) {
     dispatch({type: "TOGGLE_PEER_MODAL"});
   }
