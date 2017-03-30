@@ -1,15 +1,22 @@
-export const courseInfo = (state = {isFetching: true, data: {}, id: null}, action) => {
+export const courseInfo = (state = {isFetching: true, isFetchingClassmates: true, data: {}, id: null, classmates: {}}, action) => {
 	switch (action.type) {
 		case "COURSE_INFO_RECEIVED":
-			return {
+			return Object.assign({}, state, {
 				isFetching: false,
 				data: action.data,
 				id: action.data.id
-			};
+			});
+		case "COURSE_CLASSMATES_RECEIVED":
+			return Object.assign({}, state, {
+				isFetchingClassmates: false,
+				classmates: action.data
+			})
 		case "REQUEST_COURSE_INFO":
 			return {
 				isFetching: true,
+				isFetchingClassmates: true,
 				data: {},
+				classmates: {},
 				id: action.id
 			};
 		case "SET_COURSE_REACTIONS":
