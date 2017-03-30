@@ -39,6 +39,12 @@ export function fetchCourseInfo(courseId) {
         .then(json => {
             dispatch(setCourseInfo(json))
         });
+        dispatch(fetchCourseClassmates(courseId));
+    }
+}
+
+export function fetchCourseClassmates(courseId) {
+    return (dispatch) => {
         fetch(getClassmatesInCourseEndpoint(courseId), {
             'credentials': 'include'
         })
