@@ -177,6 +177,10 @@ DATABASES = {
     }
 }
 
+# Silk auth
+SILKY_AUTHENTICATION = True  # User must login
+SILKY_AUTHORISATION = True  # User must have permissions
+
 # Logging
 
 LOGFILE = PROJECT_DIRECTORY + '/logfile.txt'
