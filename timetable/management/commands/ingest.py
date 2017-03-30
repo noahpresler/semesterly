@@ -34,7 +34,6 @@ class Command(BaseCommand):
 
 	def handle(self, *args, **options):
 		logging.basicConfig(level=logging.ERROR, filename='parse_errors.log')
-		stat_log = []
 
 		timestamp = datetime.datetime.now().strftime("%Y/%m/%d-%H:%M:%S")
 
@@ -43,11 +42,11 @@ class Command(BaseCommand):
 			# Use old parser framework if no new parser available
 			if options['textbooks'] and school not in new_textbook_parsers:
 				do_parse = textbook_parsers[school]
-				self.old_parser(do_parse, school, stat_log)
+				self.old_parser(do_parse, school)
 				continue
 			elif not options['textbooks'] and school not in new_course_parsers:
 				do_parse = course_parsers[school]
-				self.old_parser(do_parse, school, stat_log)
+				self.old_parser(do_parse, school)
 				continue
 
 			parser, parser_type = None, ''
@@ -126,13 +125,11 @@ class Command(BaseCommand):
 			Command.reset_options_for_new_school(options)
 
 		self.stdout.write(self.style.SUCCESS("Parsing Finished!"))
-		# Command.log_stats(options['log_stats'], stats=stat_log, options=options, timestamp=timestamp)
 
-	def old_parser(self, do_parse, school, stat_log):
+	def old_parser(self, do_parse, school):
 		message = 'Starting {} parser for {}.\n'.format('courses', school)
 		self.stdout.write(self.style.SUCCESS(message))
 		try:
 			do_parse()
 		except Exception as e:
 			self.stderr.write(traceback.format_exc())
-			stat_log.append(school + '\n' + traceback.format_exc())
