@@ -6,7 +6,7 @@ import { getSchoolSpecificInfo } from '../../constants.jsx';
 import { react } from '../../actions/modal_actions.jsx';
 
 const mapStateToProps = (state) => {
-	let { isVisible, advancedSearchResults, isFetching, active } = state.explorationModal;
+	let { isVisible, advancedSearchResults, isFetching, active, page} = state.explorationModal;
 	let courseSections = state.courseSections.objects;
 	let course = advancedSearchResults[active];
 	let inRoster = course && (courseSections[course.id] !== undefined);
@@ -23,6 +23,7 @@ const mapStateToProps = (state) => {
 		areas,
 		departments,
 		levels,
+		page,
 		semesterName: semester.name + " " + semester.year,
 		schoolSpecificInfo: getSchoolSpecificInfo(state.school.school),
 		isLoggedIn: state.userInfo.data.isLoggedIn,
@@ -46,6 +47,8 @@ const mapDispatchToProps = (dispatch) => {
 		hideModal: () => dispatch({ type: "HIDE_EXPLORATION_MODAL" }),
 		openSignupModal: () => dispatch({ type: "TOGGLE_SIGNUP_MODAL" }),
   	fetchAdvancedSearchResults: (query, filters) => dispatch(fetchAdvancedSearchResults(query, filters)),
+  	paginate: () => dispatch({type: 'PAGINATE_ADVANCED_SEARCH_RESULTS'}),
+  	clearPagination: () => dispatch({type: 'CLEAR_ADVANCED_SEARCH_PAGINATION'}),
   	setAdvancedSearchResultIndex: (i) => dispatch({ type: "SET_ACTIVE_RESULT", active: i }),
   	addOrRemoveOptionalCourse: (course) => dispatch(addOrRemoveOptionalCourse(course)),
 		hoverSection: hoverSection(dispatch),
