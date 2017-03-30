@@ -1,0 +1,77 @@
+{
+	"$schema": "http://json-schema.org/draft-04/schema#",
+	"title": "Textboook",
+	"description": "Semesterly Textbook JSON schema",
+	"type": "object",
+	"properties": {
+		"kind": {
+			"enum": ["textbook", "textbook_link"]
+		},
+		"school": {
+			"allOf": [
+				{
+					"$ref": "definitions.json#/school"
+				}
+			],
+			"properties": {
+				"code": {}
+			},
+			"additionalProperties": false,
+			"required": [ "code" ]
+		},
+		"course": {
+			"allOf": [
+				{
+					"$ref": "course.json#/"
+				}
+			],
+			"properties": {
+				"code": {}
+			},
+			"additionalProperties": false
+		},
+		"section": {
+			"allOf": [
+				{
+					"$ref": "section.json#/"
+				}
+			],
+			"properties": {
+				"code": {},
+				"year": {},
+				"term": {}
+			},
+			"additionalProperties": false,
+			"required": [
+				"code", "year", "term"
+			]
+		},
+		"isbn": {
+			"type": "string",
+			"pattern": "^\\d{10}(?:\\d{3})?$"
+		},
+		"detail_url": {
+			"allOf": [
+				{
+					"$ref": "definitions.json#/url"
+				}
+			]
+		},
+		"image_url": {
+			"allOf": [
+				{
+					"$ref": "definitions.json#/url"
+				}
+			]
+		},
+		"author": {
+			"type": "string"
+		},
+		"title": {
+			"type": "string"
+		},
+		"required": {
+			"type": "boolean"
+		}
+	}
+}
