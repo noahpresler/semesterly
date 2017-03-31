@@ -2,6 +2,7 @@ import { connect } from 'react-redux';
 import { CourseModal } from '../course_modal.jsx';
 import { hoverSection, unhoverSection, addOrRemoveCourse, addOrRemoveOptionalCourse } from '../../actions/timetable_actions.jsx';
 import { setCourseId, react, fetchCourseInfo } from '../../actions/modal_actions.jsx';
+import { fetchClassmates, saveSettings } from '../../actions/user_actions.jsx'
 import { getSchoolSpecificInfo } from '../../constants.jsx';
 
 const mapStateToProps = (state) => {
@@ -31,6 +32,8 @@ const mapStateToProps = (state) => {
 		popularityPercent: state.courseInfo.data.popularity_percent * 100,
 		inRoster: courseSections[state.courseInfo.id] !== undefined,
 		isLoggedIn: state.userInfo.data.isLoggedIn,
+		hasSocial: state.userInfo.data.social_courses && state.userInfo.data.social_offerings,
+		userInfo: state.userInfo.data,
 		isSectionLocked: (courseId, section) => {
 			if (courseSections[courseId] === undefined) {
 				return false;
@@ -55,6 +58,11 @@ const mapDispatchToProps = (dispatch) => {
 		addOrRemoveOptionalCourse: (course) => dispatch(addOrRemoveOptionalCourse(course)),
 		addOrRemoveCourse,
 		react,
+		saveSettings: () => dispatch(saveSettings()),
+		changeUserInfo: (info) => dispatch({
+			type: "CHANGE_USER_INFO",
+			data: info,
+		}),
 	}
 }
 
