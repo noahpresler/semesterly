@@ -33,7 +33,7 @@ class FriendsInClassAlert extends React.Component {
         let newUserSettings = {
             social_courses: true,
             social_offerings: true,
-            social_all: true
+            social_all: false
         }
         let userSettings = Object.assign({}, this.props.userInfo, newUserSettings);
         this.props.changeUserInfo(userSettings);
