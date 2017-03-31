@@ -544,6 +544,9 @@ h3.modal-module-header small {
 	#modal-header h2 {
 		font-size: 14px;
 	}
+	#friends-inner .conversion p {
+		text-align: center;
+	}
 }
 
 @media (max-width: 500px) {
