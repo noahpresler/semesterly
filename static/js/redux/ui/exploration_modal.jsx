@@ -21,7 +21,7 @@ export class ExplorationModal extends React.Component {
 			times: [], // will contain 5 objects, containing keys "min" and "max" (times), for each day of the week
 			addedDays: [],
 			shareLinkShown: false,
-			
+			hasUpdatedCourses: false
 		};
 		this.dayMap = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"],
 		this.toggle = this.toggle.bind(this);
@@ -39,13 +39,34 @@ export class ExplorationModal extends React.Component {
 	}
 	componentWillReceiveProps(nextProps) {
 		if (this.props.isVisible && !nextProps.isVisible) {
-			this.refs.modal.hide()
+			this.refs.modal.hide();
+		}
+		if (nextProps.advancedSearchResults != this.props.advancedSearchResults) {
+			this.setState({hasUpdatedCourses: true});
+		}
+		if (nextProps.advancedSearchResults.length > 0 && this.props.advancedSearchResults == 0) {
+			this.props.fetchCourseClassmates(nextProps.advancedSearchResults[0].id);
 		}
 	}
-	componentDidUpdate(nextProps) {
+	componentDidUpdate(prevProps, prevState) {
 		if (this.props.isVisible) {
 			this.refs.modal.show();
 		}
+		let { areas, departments, times, levels} = this.state;
+		let filters = { areas, departments, times, levels};
+		areas, departments, times, levels = prevState.areas, prevState.departments, prevState.times, prevState.levels;
+		let prevFilters = { areas, departments, times, levels};
+		if (!_.isEqual(filters,prevFilters) && this.props.page > 1) {
+			this.props.clearPagination();
+		}
+		$('#exp-search-results').scroll(function() {
+			let scrollPercent = 100 * $('#exp-search-results').scrollTop() / ($(document).height() - $('#exp-search-results').height());
+			if (scrollPercent > 40 && !prevState.hasUpdatedCourses && this.state.hasUpdatedCourses) {
+				this.setState({hasUpdatedCourses: false});
+				this.props.paginate();
+				this.fetchAdvancedSearchResultsWrapper();
+			}
+		}.bind(this));
 	}
     showShareLink() {
         this.setState({shareLinkShown: true});
@@ -183,7 +204,7 @@ export class ExplorationModal extends React.Component {
 		let searchResults = advancedSearchResults.map( (c, i) => {
 			return <ExplorationSearchResult
 					key={i} code={c.code} name={c.name}
-					onClick={() => this.props.setAdvancedSearchResultIndex(i)}/>
+					onClick={() => this.props.setAdvancedSearchResultIndex(i, c.id)}/>
 		});
 		let courseModal = null;
 		if (course) {
@@ -219,12 +240,15 @@ export class ExplorationModal extends React.Component {
 					</div>
 				</div>
 				<CourseModalBody {...course}
-					{...this.props}
 					lectureSections={lectureSections}
 					tutorialSections={tutorialSections}
 					practicalSections={practicalSections}
 					data={course}
+					classmates={this.props.classmates}
 					addOrRemoveCourse={this.addOrRemoveCourse}
+					isSectionLocked={this.props.isSectionLocked}
+				  isSectionOnActiveTimetable={this.props.isSectionOnActiveTimetable}
+				  schoolSpecificInfo={this.props.schoolSpecificInfo}
 				/>
 			</div>
 		}
@@ -235,7 +259,7 @@ export class ExplorationModal extends React.Component {
 					key={filterType} filterType={filterType}
 				   	add={this.addFilter} show={this.state["show_" + filterType]}
 				   	isFiltered={this.isFiltered}
-				   	onClickOut={this.hideAll} 
+				   	onClickOut={this.hideAll}
 				   	schoolSpecificInfo={this.props.schoolSpecificInfo}/>
 		));
 		let selectedFilterSections = filterTypes.map(filterType => {
@@ -283,8 +307,11 @@ export class ExplorationModal extends React.Component {
 						<input 
 							ref="input" 
 							placeholder={"Searching " + this.props.semesterName}
-							onInput={this.fetchAdvancedSearchResultsWrapper}/>
-						{explorationLoader}
+							onInput={ () => {
+									this.props.clearPagination();
+									this.fetchAdvancedSearchResultsWrapper();
+								}
+							}/>
 					</div>
 	                <div id="exploration-close"
 	                	onMouseDown={() => this.refs.modal.hide()}>
@@ -302,6 +329,7 @@ export class ExplorationModal extends React.Component {
                         <div id="exp-search-list">
                     		{ numSearchResults }
 							{ searchResults }
+							{explorationLoader}
                         </div>
                     </div>
                     { filters }
@@ -313,7 +341,7 @@ export class ExplorationModal extends React.Component {
 				   	schoolSpecificInfo={this.props.schoolSpecificInfo}
 				   	/>
 				   	{
-				   		this.props.isFetching ? null : 
+				   		this.props.isFetching && this.props.page == 1 ? null : 
 	                    <div id="exp-modal" className="col-7-16">
 	                        { courseModal }
 	                    </div>
@@ -332,7 +360,6 @@ export class ExplorationModal extends React.Component {
         );
     }
 }
-//lol
 const ExplorationSearchResult = ({name, code, onClick}) => (
 	<div className="exp-s-result" onClick={onClick}>
 		<h4>{ name }</h4>

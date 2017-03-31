@@ -22,7 +22,7 @@ def shorten_name(prof):
   return prof[12:] if prof.startswith('Instructor: ') else prof
 
 class UMDParser(CourseParser):
-  def __init__(self, sem="Spring", year="2017", **kwargs):
+  def __init__(self, sem="Fall", year="2017", **kwargs):
     # CourseParser.__init__(self, school)
     self.semester = sem
     self.year = year
@@ -184,11 +184,11 @@ class UMDParser(CourseParser):
     if years is None:
       years = [self.year]
     if terms is None:
-      terms = [self.term]
+      terms = [self.semester]
     for year in years:
       self.year = year
       for term in terms:
-        self.term = term
+        self.semester = term
         departments = self.get_departments()
         self.get_courses(departments)
 
