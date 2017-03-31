@@ -18,12 +18,15 @@ export const explorationModal = (state = {
 		case 'RECEIVE_ADVANCED_SEARCH_RESULTS':
 			let { advancedSearchResults } = action;
 			if (state.page > 1) {
-				advancedSearchResults = advancedSearchResults.concat(...state.advancedSearchResults);
-				return Object.assign({}, state, { 
-					advancedSearchResults,
-					isFetching: false,
-					active:0
-				});
+				if(advancedSearchResults) {
+					advancedSearchResults = [...state.advancedSearchResults].concat(advancedSearchResults);
+					return Object.assign({}, state, { 
+						advancedSearchResults,
+						isFetching: false
+					});
+				} else {
+					return Object.assign({}, state, {isFetching: false });
+				}
 			} else {
 				return Object.assign({}, state, { advancedSearchResults, isFetching: false,
 					active:0 });
