@@ -3,7 +3,7 @@ import { ExplorationModal } from '../exploration_modal.jsx';
 import { fetchAdvancedSearchResults } from '../../actions/search_actions.jsx';
 import { hoverSection, unhoverSection, addOrRemoveCourse, addOrRemoveOptionalCourse } from '../../actions/timetable_actions.jsx';
 import { getSchoolSpecificInfo } from '../../constants.jsx';
-import { react } from '../../actions/modal_actions.jsx';
+import { react, fetchCourseClassmates } from '../../actions/modal_actions.jsx';
 
 const mapStateToProps = (state) => {
 	let { isVisible, advancedSearchResults, isFetching, active, page} = state.explorationModal;
@@ -28,6 +28,7 @@ const mapStateToProps = (state) => {
 		schoolSpecificInfo: getSchoolSpecificInfo(state.school.school),
 		isLoggedIn: state.userInfo.data.isLoggedIn,
 		hasHoveredResult: activeTimetable.courses.some(course => course.fake),
+		classmates: state.courseInfo.classmates,
 		isSectionLocked: (courseId, section) => {
 			if (courseSections[courseId] === undefined) {
 				return false;
@@ -49,7 +50,11 @@ const mapDispatchToProps = (dispatch) => {
   	fetchAdvancedSearchResults: (query, filters) => dispatch(fetchAdvancedSearchResults(query, filters)),
   	paginate: () => dispatch({type: 'PAGINATE_ADVANCED_SEARCH_RESULTS'}),
   	clearPagination: () => dispatch({type: 'CLEAR_ADVANCED_SEARCH_PAGINATION'}),
-  	setAdvancedSearchResultIndex: (i) => dispatch({ type: "SET_ACTIVE_RESULT", active: i }),
+  	setAdvancedSearchResultIndex: (idx, course_id) =>  {
+  		dispatch({ type: "SET_ACTIVE_RESULT", active: idx });
+  		dispatch(fetchCourseClassmates(course_id));
+  	},
+  	fetchCourseClassmates: (cid) => dispatch(fetchCourseClassmates(cid)),
   	addOrRemoveOptionalCourse: (course) => dispatch(addOrRemoveOptionalCourse(course)),
 		hoverSection: hoverSection(dispatch),
 		unhoverSection: unhoverSection(dispatch),
