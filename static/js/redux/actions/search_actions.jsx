@@ -113,7 +113,8 @@ export function fetchAdvancedSearchResults(query, filters) {
 			body: JSON.stringify({
 				query,
 				filters,
-				semester: allSemesters[state.semesterIndex]
+				semester: allSemesters[state.semesterIndex],
+				page: state.explorationModal.page
 			})
 		})
 		.then(response => response.json()) // TODO(rohan): error-check the response
