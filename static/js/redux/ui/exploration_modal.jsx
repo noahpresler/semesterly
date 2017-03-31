@@ -44,6 +44,9 @@ export class ExplorationModal extends React.Component {
 		if (nextProps.advancedSearchResults != this.props.advancedSearchResults) {
 			this.setState({hasUpdatedCourses: true});
 		}
+		if (nextProps.advancedSearchResults.length > 0 && this.props.advancedSearchResults == 0) {
+			this.props.fetchCourseClassmates(nextProps.advancedSearchResults[0].id);
+		}
 	}
 	componentDidUpdate(prevProps, prevState) {
 		if (this.props.isVisible) {
@@ -201,7 +204,7 @@ export class ExplorationModal extends React.Component {
 		let searchResults = advancedSearchResults.map( (c, i) => {
 			return <ExplorationSearchResult
 					key={i} code={c.code} name={c.name}
-					onClick={() => this.props.setAdvancedSearchResultIndex(i)}/>
+					onClick={() => this.props.setAdvancedSearchResultIndex(i, c.id)}/>
 		});
 		let courseModal = null;
 		if (course) {
@@ -241,6 +244,7 @@ export class ExplorationModal extends React.Component {
 					tutorialSections={tutorialSections}
 					practicalSections={practicalSections}
 					data={course}
+					classmates={this.props.classmates}
 					addOrRemoveCourse={this.addOrRemoveCourse}
 					isSectionLocked={this.props.isSectionLocked}
 				  isSectionOnActiveTimetable={this.props.isSectionOnActiveTimetable}
