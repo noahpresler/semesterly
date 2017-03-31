@@ -242,7 +242,6 @@ export class ExplorationModal extends React.Component {
 					</div>
 				</div>
 				<CourseModalBody {...course}
-					{...this.props}
 					lectureSections={lectureSections}
 					tutorialSections={tutorialSections}
 					practicalSections={practicalSections}
