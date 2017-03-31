@@ -124,7 +124,7 @@ INSTALLED_APPS = (
     'analytics',
     'scripts',
     'student',
-    'cachalot'
+    'cachalot',
     'silk'
 )
 
