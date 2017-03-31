@@ -247,6 +247,8 @@ export class ExplorationModal extends React.Component {
 					practicalSections={practicalSections}
 					data={course}
 					addOrRemoveCourse={this.addOrRemoveCourse}
+					isSectionLocked={this.props.isSectionLocked}
+				  isSectionOnActiveTimetable={this.props.isSectionOnActiveTimetable}
 				/>
 			</div>
 		}
@@ -257,7 +259,7 @@ export class ExplorationModal extends React.Component {
 					key={filterType} filterType={filterType}
 				   	add={this.addFilter} show={this.state["show_" + filterType]}
 				   	isFiltered={this.isFiltered}
-				   	onClickOut={this.hideAll} 
+				   	onClickOut={this.hideAll}
 				   	schoolSpecificInfo={this.props.schoolSpecificInfo}/>
 		));
 		let selectedFilterSections = filterTypes.map(filterType => {
