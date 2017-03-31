@@ -3,10 +3,10 @@ import { ExplorationModal } from '../exploration_modal.jsx';
 import { fetchAdvancedSearchResults } from '../../actions/search_actions.jsx';
 import { hoverSection, unhoverSection, addOrRemoveCourse, addOrRemoveOptionalCourse } from '../../actions/timetable_actions.jsx';
 import { getSchoolSpecificInfo } from '../../constants.jsx';
-import { react } from '../../actions/modal_actions.jsx';
+import { react, fetchCourseClassmates } from '../../actions/modal_actions.jsx';
 
 const mapStateToProps = (state) => {
-	let { isVisible, advancedSearchResults, isFetching, active } = state.explorationModal;
+	let { isVisible, advancedSearchResults, isFetching, active, page} = state.explorationModal;
 	let courseSections = state.courseSections.objects;
 	let course = advancedSearchResults[active];
 	let inRoster = course && (courseSections[course.id] !== undefined);
@@ -23,10 +23,12 @@ const mapStateToProps = (state) => {
 		areas,
 		departments,
 		levels,
+		page,
 		semesterName: semester.name + " " + semester.year,
 		schoolSpecificInfo: getSchoolSpecificInfo(state.school.school),
 		isLoggedIn: state.userInfo.data.isLoggedIn,
 		hasHoveredResult: activeTimetable.courses.some(course => course.fake),
+		classmates: state.courseInfo.classmates,
 		isSectionLocked: (courseId, section) => {
 			if (courseSections[courseId] === undefined) {
 				return false;
@@ -46,7 +48,13 @@ const mapDispatchToProps = (dispatch) => {
 		hideModal: () => dispatch({ type: "HIDE_EXPLORATION_MODAL" }),
 		openSignupModal: () => dispatch({ type: "TOGGLE_SIGNUP_MODAL" }),
   	fetchAdvancedSearchResults: (query, filters) => dispatch(fetchAdvancedSearchResults(query, filters)),
-  	setAdvancedSearchResultIndex: (i) => dispatch({ type: "SET_ACTIVE_RESULT", active: i }),
+  	paginate: () => dispatch({type: 'PAGINATE_ADVANCED_SEARCH_RESULTS'}),
+  	clearPagination: () => dispatch({type: 'CLEAR_ADVANCED_SEARCH_PAGINATION'}),
+  	setAdvancedSearchResultIndex: (idx, course_id) =>  {
+  		dispatch({ type: "SET_ACTIVE_RESULT", active: idx });
+  		dispatch(fetchCourseClassmates(course_id));
+  	},
+  	fetchCourseClassmates: (cid) => dispatch(fetchCourseClassmates(cid)),
   	addOrRemoveOptionalCourse: (course) => dispatch(addOrRemoveOptionalCourse(course)),
 		hoverSection: hoverSection(dispatch),
 		unhoverSection: unhoverSection(dispatch),
