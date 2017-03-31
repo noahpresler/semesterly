@@ -54,3 +54,4 @@ coverage==4.3.4
 django-silk==0.7.3
 rollbar==0.13.11
 django-cachalot==1.4.1
+python-memcached==1.58
