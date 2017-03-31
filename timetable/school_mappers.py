@@ -72,6 +72,7 @@ school_to_course_regex = {
 }
 
 _sem = lambda term, year: {'name': term, 'year': year}
+
 school_to_semesters = {
   'jhu': [_sem('Fall', '2017'), _sem('Spring', '2017'), _sem('Fall', '2016')],
   'uoft': [_sem('Winter', '2017'), _sem('Fall', '2016')],
@@ -138,4 +139,8 @@ textbook_parsers = {
   'rutgers': lambda: None,
   'uo': lambda: None,
   'queens': parse_queens_textbooks,
+}
+
+final_exams_available = {
+  'jhu': [_sem('Spring', '2017')]
 }
