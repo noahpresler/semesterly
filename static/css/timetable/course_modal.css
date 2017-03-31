@@ -451,6 +451,60 @@ h3.modal-module-header small {
 
 #friends-inner {
 	margin: 0 auto;
+	position: relative;
+}
+#modal-content #friends-inner .img-icon {
+	position: static;
+	transform: none;
+	float: left;
+	margin: 5px;
+}
+#modal-content #friends-inner .loader {
+	border-width: 5px;
+	width: 20px;
+	height: 20px;
+}
+#modal-content #friends-inner .loading p {
+	float: left;
+	margin: 5px;
+	font-size: 11px;
+	line-height: 20px;
+	padding: 0;
+}
+#friends-inner p.null {
+	font-size: 11px;
+	color: #aaa;
+	margin: 0 3px;
+}
+#friends-inner .conversion {
+	text-align: center;
+}
+#friends-inner .conversion p {
+	font-size: 12px;
+	color: #999;
+	text-align: left;
+	line-height: 16px;
+	margin: 0 0 10px 0;
+}
+.conversion-image {
+	width: 100%;
+	height: 45px;
+	background-size: contain;
+	background-position: center;
+	background-repeat: no-repeat;
+	background-image: url(/static/img/get_facebook.png);
+	margin: 10px 0;
+}
+#modal-content .conversion a {
+	padding: 4px 7px;
+	font-size: 11px;
+	margin: 10px 0 5px 0;
+	cursor: pointer;
+	color: #fff;
+	background-color: #3b5998;
+}
+#modal-content .conversion a i {
+	margin-right: 4px;
 }
 
 .academic-support li {
@@ -489,6 +543,9 @@ h3.modal-module-header small {
 	}
 	#modal-header h2 {
 		font-size: 14px;
+	}
+	#friends-inner .conversion p {
+		text-align: center;
 	}
 }
 
