@@ -392,7 +392,7 @@ class Validator:
 		# NOTE: do this check after the others to give Errors higher priorities than Warnings 
 		for time in [start, end]:
 			hour, minute = int(rtime.group(1)), int(rtime.group(2))
-			if hour < 8 or hour > 20:
+			if hour < 8 or hour > 21:
 				raise JsonValidationWarning('time range will not land on timetable', time_range)
 
 
