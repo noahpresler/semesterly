@@ -116,6 +116,9 @@ urlpatterns = patterns('',
     url(r'^final_exams/*$', 'timetable.views.view_final_exams'),
 )
 
+#profiling
+urlpatterns += [url(r'^silk/', include('silk.urls', namespace='silk'))]
+
 if getattr(settings, 'STAGING', False):
     urlpatterns += patterns('', url(r'^robots.txt$', lambda r: HttpResponse("User-agent: *\nDisallow: /", content_type="text/plain")) )
 else:
