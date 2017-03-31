@@ -14,6 +14,7 @@ export class CourseModalBody extends React.Component {
         super(props);
         this.sendReact = this.sendReact.bind(this);
         this.launchSignupModal = this.launchSignupModal.bind(this);
+        this.enableSocial = this.enableSocial.bind(this);
         this.fetchCourseInfo = this.fetchCourseInfo.bind(this);
         this.mobile_width = 767; // NOTE: should be static const (...ES7)
         this.state = {
@@ -43,6 +44,16 @@ export class CourseModalBody extends React.Component {
     launchSignupModal() {
         this.props.hideModal();
         this.props.openSignupModal();
+    }
+
+    enableSocial() {
+        let newUserSettings = {
+            social_courses: true,
+            social_offerings: true
+        }
+        let userSettings = Object.assign({}, this.props.userInfo, newUserSettings);
+        this.props.changeUserInfo(userSettings);
+        this.props.saveSettings();
     }
 
     mapSectionsToSlots(sections) {
