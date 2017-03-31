@@ -662,7 +662,7 @@ def advanced_course_search(request):
     course_match_objs = paginator.page(page)
   except EmptyPage:
     print course_match_objs
-    return HttpResponse(json.dumps(["adf"]), content_type="application/json")
+    return HttpResponse(json.dumps(None), content_type="application/json")
 
 
   # valid_section_ids = Section.objects.filter(
