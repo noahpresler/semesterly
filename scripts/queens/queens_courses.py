@@ -65,7 +65,7 @@ class QueensParser(QPeoplesoftParser):
 
 		# Close Selenium/PhantomJS process.
 		# REF: http://stackoverflow.com/questions/25110624/how-to-properly-stop-phantomjs-execution
-		# NOTE: update selenium version after fix merged (https://github.com/hydroshare/hydroshare/commit/f7ef2a867250aac86b3fd12821cabf5524c2cb17)
+		# NOTE: update selenium version after fix released (https://github.com/hydroshare/hydroshare/commit/f7ef2a867250aac86b3fd12821cabf5524c2cb17)
 		self.driver.close()
 		self.driver.service.process.send_signal(signal.SIGTERM)
 		self.driver.quit()
