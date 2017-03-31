@@ -13,6 +13,7 @@ export class CourseModalBody extends React.Component {
     constructor(props) {
         super(props);
         this.sendReact = this.sendReact.bind(this);
+        this.launchSignupModal = this.launchSignupModal.bind(this);
         this.fetchCourseInfo = this.fetchCourseInfo.bind(this);
         this.mobile_width = 767; // NOTE: should be static const (...ES7)
         this.state = {
@@ -35,9 +36,13 @@ export class CourseModalBody extends React.Component {
             this.props.react(cid, title);
         }
         else {
-            this.props.hideModal();
-            this.props.openSignupModal();
+            this.launchSignupModal()
         }
+    }
+
+    launchSignupModal() {
+        this.props.hideModal();
+        this.props.openSignupModal();
     }
 
     mapSectionsToSlots(sections) {
@@ -229,6 +234,21 @@ export class CourseModalBody extends React.Component {
                     </div>
                 </div>
             </div>;
+        if (!this.props.isLoggedIn) {
+            hasTakenDisplay = null
+            friendDisplay = <div className="modal-module friends">
+                <h3 className="modal-module-header">Friends In This Course or Who Have Taken This Course</h3>
+                <div id="friends-wrapper">
+                    <div id="friends-inner">
+                        <div className="conversion">
+                            <div className="conversion-image" />
+                            <p>Create an account with Facebook and see which of your Facebook friends are taking or have already taken this class!</p>
+                            <a onClick={this.launchSignupModal}><i className="fa fa-facebook" aria-hidden="true"></i>Link Facebook</a>
+                        </div>
+                    </div>
+                </div>
+            </div>;
+        }
         let textbooksDisplay = !textbooks || textbooks.length === 0 ? null :
         <div className="modal-module">
             <h3 className="modal-module-header">Textbooks</h3>
