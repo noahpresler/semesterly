@@ -49,7 +49,8 @@ export class CourseModalBody extends React.Component {
     enableSocial() {
         let newUserSettings = {
             social_courses: true,
-            social_offerings: true
+            social_offerings: true,
+            social_all: false
         }
         let userSettings = Object.assign({}, this.props.userInfo, newUserSettings);
         this.props.changeUserInfo(userSettings);
@@ -245,7 +246,13 @@ export class CourseModalBody extends React.Component {
                     </div>
                 </div>
             </div>;
-        if (!this.props.isLoggedIn) {
+        if (!this.props.isLoggedIn || !this.props.hasSocial) {
+            let conversionText = !this.props.isLoggedIn ? 
+                "Create an account with Facebook and see which of your Facebook friends are taking or have already taken this class!" :
+                "Enable the friend feature to find out who which of your Facebook friends are taking or have already taken this class!"
+            let conversionLink = !this.props.isLoggedIn ? 
+                <a onClick={this.launchSignupModal}><i className="fa fa-facebook" aria-hidden="true"></i>Link Facebook</a> :
+                <a onClick={this.enableSocial}><i className="fa fa-facebook" aria-hidden="true"></i>Enable Facebook</a>
             hasTakenDisplay = null
             friendDisplay = <div className="modal-module friends">
                 <h3 className="modal-module-header">Friends In This Course or Who Have Taken This Course</h3>
@@ -253,8 +260,8 @@ export class CourseModalBody extends React.Component {
                     <div id="friends-inner">
                         <div className="conversion">
                             <div className="conversion-image" />
-                            <p>Create an account with Facebook and see which of your Facebook friends are taking or have already taken this class!</p>
-                            <a onClick={this.launchSignupModal}><i className="fa fa-facebook" aria-hidden="true"></i>Link Facebook</a>
+                            <p>{ conversionText }</p>
+                            { conversionLink }
                         </div>
                     </div>
                 </div>
