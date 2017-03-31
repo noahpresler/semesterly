@@ -123,7 +123,8 @@ INSTALLED_APPS = (
     'timetable',
     'analytics',
     'scripts',
-    'student'
+    'student',
+    'cachalot'
 )
 
 MIDDLEWARE_CLASSES = (
@@ -280,6 +281,17 @@ TEMPLATE_LOADERS = (
 TEMPLATE_DIRS = (
     os.path.join(PROJECT_DIRECTORY,'templates/'),
 )
+
+# Caching
+CACHES = {
+    'default': {
+        'BACKEND':'django.core.cache.backends.memcached.MemcachedCache',
+        'LOCATION':'127.0.0.1:11211',
+    }
+}
+CACHALOT_ENABLED = True
+
+
 
 try:
     from local_settings import *
