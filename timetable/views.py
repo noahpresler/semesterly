@@ -26,6 +26,7 @@ from timetable.jhu_final_exam_scheduler import *
 from timetable.jhu_final_exam_test import *
 from student.models import Student
 from student.views import get_student, get_user_dict, convert_tt_to_dict, get_classmates_from_course_id
+from django.core.paginator import Paginator, EmptyPage
 
 
 
@@ -641,6 +642,7 @@ def course_search(request, school, sem_name, year, query):
 def advanced_course_search(request):
   school = request.subdomain
   params = json.loads(request.body)
+  page = int(params['page'])
   sem, _ = Semester.objects.get_or_create(**params['semester'])
   query = params['query']
   filters = params['filters']
@@ -659,17 +661,23 @@ def advanced_course_search(request):
   if filters['times']:
     day_map = {"Monday": "M", "Tuesday": "T", "Wednesday": "W", "Thursday": "R", "Friday": "F"}
     course_match_objs = course_match_objs.filter(reduce(operator.or_,
-      (Q(section__offering__time_start__gte="{0:0=2d}:00".format(min_max['min']),
+      (
+        Q(section__offering__time_start__gte="{0:0=2d}:00".format(min_max['min']),
         section__offering__time_end__lte="{0:0=2d}:00".format(min_max['max']),
         section__offering__day=day_map[min_max['day']],
         section__semester=sem,
         section__section_type="L", # we only want to show classes that have LECTURE sections within the given boundaries
-        )
-      for min_max in filters['times'])))
+      ) for min_max in filters['times'])))
+  try:
+    paginator = Paginator(course_match_objs.distinct(), 20)
+    course_match_objs = paginator.page(page)
+  except EmptyPage:
+    return HttpResponse(json.dumps(None), content_type="application/json")
 
-  valid_section_ids = Section.objects.filter(
-    course__in=course_match_objs, semester=sem).values('course_id')
-  course_match_objs = course_match_objs.filter(id__in=valid_section_ids).distinct('code')[:50] # limit to 50 search results
+
+  # valid_section_ids = Section.objects.filter(
+  #   course__in=course_match_objs, semester=sem).values('course_id')
+  # course_match_objs = course_match_objs.filter(id__in=valid_section_ids).distinct('code')
   save_analytics_course_search(query[:200], course_match_objs[:2], sem, school, get_student(request), advanced=True)
   student = None
   logged = request.user.is_authenticated()
