@@ -661,7 +661,6 @@ def advanced_course_search(request):
     paginator = Paginator(course_match_objs.distinct(), 20)
     course_match_objs = paginator.page(page)
   except EmptyPage:
-    print course_match_objs
     return HttpResponse(json.dumps(None), content_type="application/json")
 
 
