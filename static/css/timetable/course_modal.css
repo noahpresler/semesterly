@@ -451,6 +451,30 @@ h3.modal-module-header small {
 
 #friends-inner {
 	margin: 0 auto;
+	position: relative;
+}
+#modal-content #friends-inner .img-icon {
+	position: static;
+	transform: none;
+	float: left;
+	margin: 5px;
+}
+#modal-content #friends-inner .loader {
+	border-width: 5px;
+	width: 20px;
+	height: 20px;
+}
+#modal-content #friends-inner .loading p {
+	float: left;
+	margin: 5px;
+	font-size: 11px;
+	line-height: 20px;
+	padding: 0;
+}
+#friends-inner p.null {
+	font-size: 11px;
+	color: #aaa;
+	margin: 0 3px;
 }
 
 .academic-support li {
