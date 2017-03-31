@@ -249,7 +249,7 @@ export class ExplorationModal extends React.Component {
 					addOrRemoveCourse={this.addOrRemoveCourse}
 					isSectionLocked={this.props.isSectionLocked}
 				  isSectionOnActiveTimetable={this.props.isSectionOnActiveTimetable}
-				  schoolSpecificInfo={this.schoolSpecificInfo}
+				  schoolSpecificInfo={this.props.schoolSpecificInfo}
 				/>
 			</div>
 		}
