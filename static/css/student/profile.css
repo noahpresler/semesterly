@@ -161,6 +161,7 @@ desktop-nav {
 	margin: 0;
 }
 #profile-page h2 {
+	font-size: 24px;
 	margin: 0;
 }
 #profile-banner {
@@ -389,5 +390,13 @@ footer h6 {
 	}
 	.mobile-nav {
 		display: block;
+	}
+}
+@media(max-width: 500px) {
+	#profile-page h1 {
+		font-size: 30px;
+	}
+	#profile-page h2 {
+		font-size: 18px;
 	}
 }
