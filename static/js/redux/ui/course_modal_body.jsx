@@ -13,6 +13,7 @@ export class CourseModalBody extends React.Component {
     constructor(props) {
         super(props);
         this.sendReact = this.sendReact.bind(this);
+        this.launchSignupModal = this.launchSignupModal.bind(this);
         this.fetchCourseInfo = this.fetchCourseInfo.bind(this);
         this.mobile_width = 767; // NOTE: should be static const (...ES7)
         this.state = {
@@ -35,9 +36,13 @@ export class CourseModalBody extends React.Component {
             this.props.react(cid, title);
         }
         else {
-            this.props.hideModal();
-            this.props.openSignupModal();
+            this.launchSignupModal()
         }
+    }
+
+    launchSignupModal() {
+        this.props.hideModal();
+        this.props.openSignupModal();
     }
 
     mapSectionsToSlots(sections) {
@@ -199,37 +204,50 @@ export class CourseModalBody extends React.Component {
                     <p>In the PILOT program, students are organized into study teams consisting of 6-10 members who meet weekly to work problems together.</p>
                 </li>
             </div> : null;
-        let friendDisplay = null;
-        let hasTakenDisplay = null;
+        let friendCircles = <div className="loading"><span className="img-icon"><div className="loader"/></span><p>loading...</p></div>;
+        let hasTakenCircles = <div className="loading"><span className="img-icon"><div className="loader"/></span><p>loading...</p></div>;
         if (!this.props.isFetchingClassmates && this.props.classmates.classmates !== undefined) {
-            let friendCircles = this.props.classmates && this.props.classmates.classmates.length > 0 ? this.props.classmates.classmates.map( c =>
+            friendCircles = this.props.classmates && this.props.classmates.classmates.length > 0 ? this.props.classmates.classmates.map( c =>
                     <div className="friend" key={c.img_url}>
                         <div className="ms-friend" style={{backgroundImage: 'url(' + c.img_url + ')'}}/>
                         <p title={ c.first_name + " " + c.last_name }>{ c.first_name + " " + c.last_name }</p>
-                    </div>) : null;
-            friendDisplay = this.props.classmates && this.props.classmates.classmates.length > 0 ?
-                <div className="modal-module friends">
-                    <h3 className="modal-module-header">Friends In This Course</h3>
-                    <div id="friends-wrapper">
-                        <div id="friends-inner">
-                            { friendCircles }
-                        </div>
-                    </div>
-                </div> : null;
-            let hasTakenCircles = this.props.classmates && this.props.classmates.past_classmates.length > 0 ? this.props.classmates.past_classmates.map( c =>
+                    </div>) : <p className="null">No Classmates Found</p>;
+            hasTakenCircles = this.props.classmates && this.props.classmates.past_classmates.length > 0 ? this.props.classmates.past_classmates.map( c =>
                     <div className="friend" key={c.img_url}>
                         <div className="ms-friend" style={{backgroundImage: 'url(' + c.img_url + ')'}}/>
                         <p title={ c.first_name + " " + c.last_name }>{ c.first_name + " " + c.last_name }</p>
-                    </div>) : null;
-            hasTakenDisplay = this.props.classmates && this.props.classmates.past_classmates.length > 0 ?
-                <div className="modal-module friends">
-                    <h3 className="modal-module-header">Friends Who Have Taken This Course</h3>
-                    <div id="friends-wrapper">
-                        <div id="friends-inner">
-                            { hasTakenCircles }
+                    </div>) : <p className="null">No Classmates Found</p>;
+        }
+        let friendDisplay = <div className="modal-module friends">
+                <h3 className="modal-module-header">Friends In This Course</h3>
+                <div id="friends-wrapper">
+                    <div id="friends-inner">
+                        { friendCircles }
+                    </div>
+                </div>
+            </div>;
+        let hasTakenDisplay = <div className="modal-module friends">
+                <h3 className="modal-module-header">Friends Who Have Taken This Course</h3>
+                <div id="friends-wrapper">
+                    <div id="friends-inner">
+                        { hasTakenCircles }
+                    </div>
+                </div>
+            </div>;
+        if (!this.props.isLoggedIn) {
+            hasTakenDisplay = null
+            friendDisplay = <div className="modal-module friends">
+                <h3 className="modal-module-header">Friends In This Course or Who Have Taken This Course</h3>
+                <div id="friends-wrapper">
+                    <div id="friends-inner">
+                        <div className="conversion">
+                            <div className="conversion-image" />
+                            <p>Create an account with Facebook and see which of your Facebook friends are taking or have already taken this class!</p>
+                            <a onClick={this.launchSignupModal}><i className="fa fa-facebook" aria-hidden="true"></i>Link Facebook</a>
                         </div>
                     </div>
-                </div> : null;
+                </div>
+            </div>;
         }
         let textbooksDisplay = !textbooks || textbooks.length === 0 ? null :
         <div className="modal-module">
