@@ -250,39 +250,45 @@ def save_settings(request):
 @csrf_exempt
 @login_required
 def find_friends(request):
-    try:
-        school = request.subdomain
-        student = Student.objects.get(user=request.user)
-        if not student.social_all:
-            return HttpResponse("Must have social_all enabled")
-        semester, _ = Semester.objects.get_or_create(**json.loads(request.body)['semester'])
-        student_tt = student.personaltimetable_set.filter(school=school,semester=semester).order_by('last_updated').last()
-        c = student_tt.courses.all()
-        friends = []
-        students = Student.objects.filter(social_all=True,personaltimetable__courses__id__in=c).exclude(id=student.id).distinct()
-        peers = filter(lambda s: s.personaltimetable_set.filter(school=school, semester=semester).order_by('last_updated').last() and (s.personaltimetable_set.filter(school=school, semester=semester).order_by('last_updated').last().courses.all() & c), students)
-        for peer in peers:
-            peer_tt = peer.personaltimetable_set.filter(school=school,semester=semester).order_by('last_updated').last()
-            shared_courses = map(
-                    lambda x: {
-                        'course': model_to_dict(x,exclude=['unstopped_description','description','credits']),
-                        'in_section': peer_tt.sections.filter(id=student_tt.sections.get(course__id=x.id).id).exists()
-                    },
-                    c & peer_tt.courses.all(),
-                )
-            friends.append({
-                'peer': model_to_dict(peer,exclude=['user','id','fbook_uid', 'friends']),
-                'is_friend': student.friends.filter(id=peer.id).exists(),
-                'shared_courses': shared_courses,
-                'profile_url': 'https://www.facebook.com/' + peer.fbook_uid,
-                'name': peer.user.first_name + ' ' + peer.user.last_name,
-                'large_img': 'https://graph.facebook.com/' + peer.fbook_uid + '/picture?width=700&height=700'
+    school = request.subdomain
+    student = Student.objects.get(user=request.user)
+    if not student.social_all:
+        return HttpResponse("Must have social_all enabled")
+    semester, _ = Semester.objects.get_or_create(**json.loads(request.body)['semester'])
+    current_tt = student.personaltimetable_set.filter(school=school, semester=semester).order_by('last_updated').last()
+    current_tt_courses = current_tt.courses.all()
+
+    # The most recent TT per student with social enabled that has courses in common with input student
+    matching_tts = PersonalTimetable.objects.filter(student__social_all=True, courses__id__in=current_tt_courses) \
+        .exclude(student=student) \
+        .order_by('student', 'last_updated') \
+        .distinct('student')
+
+    friends = []
+    for matching_tt in matching_tts:
+        friend = matching_tt.student
+        sections_in_common = matching_tt.sections.all() & current_tt.sections.all()
+        courses_in_common = matching_tt.courses.all() & current_tt_courses
+
+        shared_courses = []
+        for course in courses_in_common:
+            shared_courses.append({
+                'course': model_to_dict(course, exclude=['unstopped_description', 'description', 'credits']),
+                # is there a section for this course that is in both timetables?
+                'in_section': (sections_in_common & course.section_set.all()).exists()
             })
-        friends.sort(key=lambda l: len(l['shared_courses']), reverse=True)
-        return HttpResponse(json.dumps(friends))
-    except Exception as e:
-        print e
-        return HttpResponse(json.dumps([]))
+
+        friends.append({
+            'peer': model_to_dict(friend, exclude=['user','id','fbook_uid', 'friends']),
+            'is_friend': student.friends.filter(id=friend.id).exists(),
+            'shared_courses': shared_courses,
+            'profile_url': 'https://www.facebook.com/' + friend.fbook_uid,
+            'name': friend.user.first_name + ' ' + friend.user.last_name,
+            'large_img': 'https://graph.facebook.com/' + friend.fbook_uid + '/picture?width=700&height=700'
+        })
+
+    friends.sort(key=lambda friend: len(friend['shared_courses']), reverse=True)
+    return HttpResponse(json.dumps(friends))
 
 
 @csrf_exempt
