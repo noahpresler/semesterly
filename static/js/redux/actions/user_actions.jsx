@@ -17,6 +17,7 @@ import { getUserInfoEndpoint,
   getLogFacebookAlertViewEndpoint,
   getLogFacebookAlertClickEndpoint,
   getMostClassmatesCountEndpoint} from '../constants.jsx';
+import { fetchCourseClassmates } from './modal_actions.jsx'
 import { store } from '../init.jsx';
 import { loadTimetable, nullifyTimetable, getNumberedName } from './timetable_actions.jsx';
 import { browserSupportsLocalStorage, setDeclinedNotifications } from '../util.jsx';
@@ -301,6 +302,9 @@ export function saveSettings(callback) {
 
 			if (state.userInfo.data.social_courses) {
 				dispatch(fetchClassmates(active_tt.courses.map( c => c['id'])));
+				if (state.courseInfo.id) {
+					dispatch(fetchCourseClassmates(state.courseInfo.id));
+				}
 			}
 			dispatch({
 				type: "RECEIVE_USER_INFO_SAVED"

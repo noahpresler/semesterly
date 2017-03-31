@@ -473,8 +473,9 @@ h3.modal-module-header small {
 }
 #friends-inner p.null {
 	font-size: 11px;
+	line-height: 16px;
 	color: #aaa;
-	margin: 0 3px;
+	margin: 2px 3px;
 }
 #friends-inner .conversion {
 	text-align: center;
