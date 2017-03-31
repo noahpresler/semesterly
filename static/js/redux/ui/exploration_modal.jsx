@@ -53,11 +53,7 @@ export class ExplorationModal extends React.Component {
 		let filters = { areas, departments, times, levels};
 		areas, departments, times, levels = prevState.areas, prevState.departments, prevState.times, prevState.levels;
 		let prevFilters = { areas, departments, times, levels};
-		if (!_.isEqual(filters,prevFilters) && this.props.page != 1) {
-			console.log("CLEARING PAGINATION => 1");
-			console.log(filters)
-			console.log(prevFilters)
-			console.log("prev",prevState)
+		if (!_.isEqual(filters,prevFilters) && this.props.page > 1) {
 			this.props.clearPagination();
 		}
 		$('#exp-search-results').scroll(function() {
@@ -65,7 +61,6 @@ export class ExplorationModal extends React.Component {
 			if (scrollPercent > 40 && !prevState.hasUpdatedCourses && this.state.hasUpdatedCourses) {
 				this.setState({hasUpdatedCourses: false});
 				this.props.paginate();
-				console.log("PAGINATE!");
 				this.fetchAdvancedSearchResultsWrapper();
 			}
 		}.bind(this));
@@ -313,7 +308,6 @@ export class ExplorationModal extends React.Component {
 									this.fetchAdvancedSearchResultsWrapper();
 								}
 							}/>
-						{explorationLoader}
 					</div>
 	                <div id="exploration-close"
 	                	onMouseDown={() => this.refs.modal.hide()}>
@@ -331,6 +325,7 @@ export class ExplorationModal extends React.Component {
                         <div id="exp-search-list">
                     		{ numSearchResults }
 							{ searchResults }
+							{explorationLoader}
                         </div>
                     </div>
                     { filters }
@@ -342,7 +337,7 @@ export class ExplorationModal extends React.Component {
 				   	schoolSpecificInfo={this.props.schoolSpecificInfo}
 				   	/>
 				   	{
-				   		this.props.isFetching ? null : 
+				   		this.props.isFetching && this.props.page == 1 ? null : 
 	                    <div id="exp-modal" className="col-7-16">
 	                        { courseModal }
 	                    </div>
@@ -361,7 +356,6 @@ export class ExplorationModal extends React.Component {
         );
     }
 }
-//lol
 const ExplorationSearchResult = ({name, code, onClick}) => (
 	<div className="exp-s-result" onClick={onClick}>
 		<h4>{ name }</h4>
