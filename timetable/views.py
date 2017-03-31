@@ -19,7 +19,7 @@ from pytz import timezone
 from analytics.models import *
 from analytics.views import *
 from timetable.models import *
-from timetable.school_mappers import school_to_granularity, VALID_SCHOOLS, school_code_to_name, AM_PM_SCHOOLS, school_to_course_regex, school_to_semesters
+from timetable.school_mappers import school_to_granularity, VALID_SCHOOLS, school_code_to_name, AM_PM_SCHOOLS, school_to_course_regex, school_to_semesters, final_exams_available
 from timetable.utils import *
 from timetable.scoring import *
 from timetable.jhu_final_exam_scheduler import *
@@ -109,6 +109,7 @@ def view_timetable(request, code=None, sem_name=None, year=None, shared_timetabl
     'gcal_callback': gcal_callback,
     'export_calendar': export_calendar,
     'view_textbooks': view_textbooks,
+    'final_exams_supported_semesters': map(lambda s: sem_dicts.index(s) ,final_exams_available.get(school, [])),
     'final_exams': final_exams
   },
   context_instance=RequestContext(request))
