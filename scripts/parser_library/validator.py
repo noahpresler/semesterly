@@ -213,7 +213,7 @@ class Validator:
 
 		db_instructor_textfield_size = 500
 		if len(', '.join(instructor['name'] for instructor in section.instructors)) > db_instructor_textfield_size:
-			raise JsonValidationError('db field too small for comma-joined instructor names')
+			raise JsonValidationError('db field too small for comma-joined instructor names', section)
 
 		for instructor in section.get('instructors', []):
 			self.validate_instructor(instructor)
