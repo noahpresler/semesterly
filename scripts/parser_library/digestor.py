@@ -22,9 +22,6 @@ from scripts.parser_library.internal_exceptions import DigestionError
 from scripts.parser_library.Updater import ProgressBar, Counter
 from scripts.parser_library.tracker import ProgressBar, NullTracker
 
-# TODO - DigestionError should be removed with failure,
-# user should not be able to produce direct DigestionError
-
 class Digestor:
 	def __init__(self, school, 
 		data=None, 
@@ -68,7 +65,7 @@ class Digestor:
 		if diff and load:
 			return Burp(self.school, output) # diff only
 		elif not diff and load:
-			return Absorb(self.school) # load db only + clean
+			return Absorb(self.school) # load db only
 		elif diff and not load:
 			return Vommit(output) # load db and log diff
 		else: # nothing to do...
@@ -270,8 +267,8 @@ class DigestionAdapter:
 			pass # TODO - add fees to database
 		if 'instructors' in section:
 			# FIXME -- might break with instructor as object
-			if isinstance(section.instructor, str):
-				adapted['instructors'] = ', '.join(section.instructors)
+			if isinstance(section.instructors, basestring):
+				adapted['instructors'] = section.instructors
 			else:
 				adapted['instructors'] = ', '.join(i['name'] for i in section.instructors)
 		if 'final_exam' in section:
@@ -408,9 +405,9 @@ class DigestionStrategy:
 		'''Digest Textbook Link.'''
 
 	def digest_instructor(self, instructor):
-		pass # TODO
+		raise NotImplementedError # TODO
 	def digest_final_exam(self, final_exam):
-		pass # TODO
+		raise NotImplementedError # TODO
 
 	@abstractmethod
 	def wrap_up(self):
@@ -464,7 +461,7 @@ class Vommit(DigestionStrategy):
 		if dbmodel is None:
 			dbmodel = {}
 		else:
-			# Transform django object to dictionary
+			# Transform django object to dictionary.
 			dbmodel = dbmodel.__dict__
 
 		context = {'section', 'course', 'semester'}
@@ -477,7 +474,7 @@ class Vommit(DigestionStrategy):
 				except django.utils.encoding.DjangoUnicodeDecodeError as e:
 					whats[k] = '<{}: [Bad Unicode data]'.format(k)
 
-		# Remove db specific content from model
+		# Remove db specific content from model.
 		blacklist = {'_state', 'id', 'section_id', 'course_id', '_course_cache', 'semester_id', '_semester'} | context
 		prune = lambda d: {k: v for k, v in d.iteritems() if k not in blacklist}
 		dbmodel = prune(dbmodel)
@@ -486,10 +483,10 @@ class Vommit(DigestionStrategy):
 		if 'course' in dbmodel:
 			dbmodel['course'] = str(dbmodel['course'])
 
-		# Remove null values from dictionaries
+		# Remove null values from dictionaries.
 		dbmodel = {k: v for k, v in dbmodel.iteritems() if v is not None}
 
-		# move contents of default dictionary to first-level of dictionary
+		# Move contents of default dictionary to first-level of dictionary.
 		if 'defaults' in inmodel:
 			defaults = inmodel['defaults']
 			del inmodel['defaults']
@@ -498,13 +495,13 @@ class Vommit(DigestionStrategy):
 		# Diff the in-model and db-model
 		diffed = json.loads(jsondiff.diff(dbmodel, inmodel, syntax='symmetric', dump=True))
 
-		# Remove db defaulted values from diff output
+		# Remove db defaulted values from diff output.
 		if hide_defaults and '$delete' in diffed:
 			self.remove_defaulted_keys(kind, diffed['$delete'])
 			if len(diffed['$delete']) == 0:
 				del diffed['$delete']
 
-		# Add `what` and `context` tag to diff output
+		# Add `what` and `context` tag to diff output.
 		if len(diffed) > 0:
 			if isinstance(diffed, list) and len(diffed[0]) == 0:
 				diffed = { '$new': diffed[1] }
@@ -546,34 +543,47 @@ class Vommit(DigestionStrategy):
 class Absorb(DigestionStrategy):
 	'''Load valid data into Django db.'''
 
-	def __init__(self, school, clean=True):
+	def __init__(self, school):
 		self.school = school
-		self.clean = clean
 		super(Absorb, self).__init__()
 
-	def digest_course(self, model_args):
-		model, created = Course.objects.update_or_create(**model_args)
+	@staticmethod
+	def digest_course(model_args):
+		model, created = Absorb._update_or_create(Course, model_args)
 		return model
 
-	def digest_section(self, model_args):
-		model, created = Section.objects.update_or_create(**model_args)
-		if model and self.clean:
+	@staticmethod
+	def digest_section(model_args, clean=True):
+		model, created = Absorb._update_or_create(Section, model_args)
+		if model and clean:
 			Absorb.remove_offerings(model)
 		return model
 
-	def digest_offering(self, model_args):
-		model, created = Offering.objects.update_or_create(**model_args)
+	@staticmethod
+	def digest_offering(model_args):
+		model, created = Absorb._update_or_create(Offering, model_args)
 		return model
 
-	def digest_textbook(self, model_args):
-		model, created = Textbook.objects.update_or_create(**model_args)
+	@staticmethod
+	def digest_textbook(model_args):
+		model, created = Absorb._update_or_create(Textbook, model_args)
 		return model
 
-	def digest_textbook_link(self, model_args):
-		model, created = TextbookLink.objects.update_or_create(**model_args)
+	@staticmethod
+	def digest_textbook_link(model_args):
+		model, created = Absorb._update_or_create(TextbookLink, model_args)
 		return model
 
-	def remove_section(self, section, course_model):
+	@staticmethod
+	def _update_or_create(model_type, model_args):
+		try:
+			return model_type.objects.update_or_create(**model_args)
+		except django.db.utils.DataError as e:
+			json_model_args = {k: str(v) for k, v in model_args.items()}
+			raise DigestionError(str(e), json=json_model_args)
+
+	@staticmethod
+	def remove_section(section, course_model):
 		''' Remove section specified from django database. '''
 		if Section.objects.filter(course=course_model, meeting_section=section).exists():
 			s = Section.objects.get(course=course_model, meeting_section=section)
