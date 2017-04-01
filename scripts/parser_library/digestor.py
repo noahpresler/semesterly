@@ -405,9 +405,9 @@ class DigestionStrategy:
 		'''Digest Textbook Link.'''
 
 	def digest_instructor(self, instructor):
-		pass # TODO
+		raise NotImplementedError # TODO
 	def digest_final_exam(self, final_exam):
-		pass # TODO
+		raise NotImplementedError # TODO
 
 	@abstractmethod
 	def wrap_up(self):
