@@ -9,8 +9,9 @@ import os, sys, re, jsonschema, argparse, httplib, simplejson as json
 from scripts.parser_library.logger import Logger
 from scripts.parser_library.internal_utils import *
 from scripts.parser_library.internal_exceptions import JsonValidationError, JsonValidationWarning, JsonDuplicationWarning
-# from scripts.parser_library.Updater import ProgressBar, Counter
 from scripts.parser_library.tracker import *
+
+# TODO - consider something to load db field sizes
 
 class Validator:
 	def __init__(self, config, tracker=None):

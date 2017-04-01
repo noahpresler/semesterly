@@ -12,7 +12,10 @@ class JsonException(Exception):
 		super(JsonException, self).__init__(message, json, *args)
 
 	def __str__(self):
-		return self.message + '\n' + pretty_json(self.json)
+		message = self.message
+		if json is not None:
+			message += '\n' + pretty_json(self.json)
+		return message
 
 class JsonValidationError(JsonException, ValueError):
 	'''Raise when fatal failure of validation condition.'''
