@@ -267,8 +267,8 @@ class DigestionAdapter:
 			pass # TODO - add fees to database
 		if 'instructors' in section:
 			# FIXME -- might break with instructor as object
-			if isinstance(section.instructor, str):
-				adapted['instructors'] = ', '.join(section.instructors)
+			if isinstance(section.instructors, basestring):
+				adapted['instructors'] = section.instructors
 			else:
 				adapted['instructors'] = ', '.join(i['name'] for i in section.instructors)
 		if 'final_exam' in section:
