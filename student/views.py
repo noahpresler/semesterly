@@ -253,9 +253,11 @@ def find_friends(request):
     school = request.subdomain
     student = Student.objects.get(user=request.user)
     if not student.social_all:
-        return HttpResponse("Must have social_all enabled")
+        return HttpResponse(json.dumps([]))
     semester, _ = Semester.objects.get_or_create(**json.loads(request.body)['semester'])
     current_tt = student.personaltimetable_set.filter(school=school, semester=semester).order_by('last_updated').last()
+    if current_tt is None:
+        return HttpResponse(json.dumps([]))
     current_tt_courses = current_tt.courses.all()
 
     # The most recent TT per student with social enabled that has courses in common with input student
