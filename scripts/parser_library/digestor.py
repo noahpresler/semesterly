@@ -579,7 +579,8 @@ class Absorb(DigestionStrategy):
 		try:
 			return model_type.objects.update_or_create(**model_args)
 		except django.db.utils.DataError as e:
-			raise DigestionError(str(e), json=model_args)
+			json_model_args = {k: str(v) for k, v in model_args}
+			raise DigestionError(str(e), json=json_model_args)
 
 	@staticmethod
 	def remove_section(section, course_model):
