@@ -293,6 +293,10 @@ class Validator:
 		if 'kind' in instructor and instructor.kind != 'instructor':
 			raise JsonValidationError('instructor object must be of kind instructor', instructor)
 
+		db_instructor_textfield_size = 500
+		if len(', '.join(i['name'] for i in section.instructors)) > db_instructor_textfield_size:
+			raise JsonValidationError('db field too small for comma-joined instructor names')
+
 		for _class in instructor.get('classes', []):
 			if 'course' in _class and self.course_code_regex.match(_class.course.code) is None:
 				raise JsonValidationError('course code "%s" does not match given regex "%s"'
