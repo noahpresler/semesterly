@@ -13,7 +13,8 @@ class Command(BaseCommand):
 		message = "Starting validation for {}.\n".format(options['school'])
 		self.stdout.write(self.style.SUCCESS(message))
 
-		directory = 'scripts/' + options['school']
+		school = options['school']
+		directory = 'scripts/' + school
 		if not options.get('data'):
 			options['data'] = '{}/data/courses.json'.format(directory)
 		if not options.get('config_file'):
@@ -28,8 +29,13 @@ class Command(BaseCommand):
 				output_error=options.get('output_error'),
 				hide_progress_bar=options['hide_progress_bar'])
 		except JsonException as e:
-			self.stdout.write(self.style.ERROR('FAILED.'))
+			self.stdout.write(self.style.ERROR('FAILED VALIDATION.'))
 			self.stderr.write(str(e))
-
+			tracker.see_error('FAILED VALIDATION for {}\n'.format(school) + str(e))			
+		except Exception as e:
+			self.stdout.write(self.style.ERROR('FAILED VALIDATION.'))
+			self.stderr.write(str(e))
+			tracker.see_error('FAILED VALIDATION for {}\n'.format(school) + str(e))
+		
 		self.stdout.write(self.style.SUCCESS("Validation Finished!"))
-		# TODO - add to master logger
+		# TODO - add success to master logger using tracker
