@@ -26,6 +26,7 @@ from timetable.jhu_final_exam_scheduler import *
 from timetable.jhu_final_exam_test import *
 from student.models import Student
 from student.views import get_student, get_user_dict, convert_tt_to_dict, get_classmates_from_course_id
+from django.core.paginator import Paginator, EmptyPage
 
 
 
@@ -58,7 +59,7 @@ def custom_500(request):
 
 @validate_subdomain
 def view_timetable(request, code=None, sem_name=None, year=None, shared_timetable=None, 
-                  find_friends=False, enable_notifs=False, signup=False,
+                  find_friends=False, enable_notifs=False, signup=False, user_acq=False,
                   gcal_callback=False, export_calendar=False, view_textbooks=False,
                   final_exams=False):
   school = request.subdomain
@@ -105,6 +106,7 @@ def view_timetable(request, code=None, sem_name=None, year=None, shared_timetabl
     'uses_12hr_time': school in AM_PM_SCHOOLS,
     'student_integrations': json.dumps(integrations),
     'signup': signup,
+    'user_acq': user_acq,
     'gcal_callback': gcal_callback,
     'export_calendar': export_calendar,
     'view_textbooks': view_textbooks,
@@ -144,6 +146,13 @@ def export_calendar(request):
 def signup(request):
   try:
     return view_timetable(request, signup=True)
+  except Exception as e:
+    raise Http404
+
+@validate_subdomain
+def launch_user_acq_modal(request):
+  try:
+    return view_timetable(request, user_acq=True)
   except Exception as e:
     raise Http404
 
@@ -497,10 +506,21 @@ def get_detailed_course_json(school, course, sem, student=None):
   json_data['textbooks'] = course.get_textbooks(sem)
   json_data['integrations'] = list(course.get_course_integrations())
   json_data['regexed_courses'] = get_regexed_courses(school, json_data)
-  if student and student.user.is_authenticated() and student.social_courses:
-    json_data['classmates'] = get_classmates_from_course_id(school, student, course.id,sem)
   json_data['popularity_percent'] = get_popularity_percent_from_course(course, sem)
   return json_data
+
+def get_classmates_in_course(request, school, sem_name, year, id):
+  school = school.lower()
+  sem, _ = Semester.objects.get_or_create(name=sem_name, year=year)
+  json_data = {}
+  course = Course.objects.get(school=school, id=id)
+  student = None
+  logged = request.user.is_authenticated()
+  if logged and Student.objects.filter(user=request.user).exists():
+    student = Student.objects.get(user=request.user)
+  if student and student.user.is_authenticated() and student.social_courses:
+    json_data = get_classmates_from_course_id(school, student, course.id,sem)
+  return HttpResponse(json.dumps(json_data), content_type="application/json")
 
 def eval_add_unique_term_year_flag(course, evals):
   """
@@ -622,6 +642,7 @@ def course_search(request, school, sem_name, year, query):
 def advanced_course_search(request):
   school = request.subdomain
   params = json.loads(request.body)
+  page = int(params['page'])
   sem, _ = Semester.objects.get_or_create(**params['semester'])
   query = params['query']
   filters = params['filters']
@@ -640,17 +661,23 @@ def advanced_course_search(request):
   if filters['times']:
     day_map = {"Monday": "M", "Tuesday": "T", "Wednesday": "W", "Thursday": "R", "Friday": "F"}
     course_match_objs = course_match_objs.filter(reduce(operator.or_,
-      (Q(section__offering__time_start__gte="{0:0=2d}:00".format(min_max['min']),
+      (
+        Q(section__offering__time_start__gte="{0:0=2d}:00".format(min_max['min']),
         section__offering__time_end__lte="{0:0=2d}:00".format(min_max['max']),
         section__offering__day=day_map[min_max['day']],
         section__semester=sem,
         section__section_type="L", # we only want to show classes that have LECTURE sections within the given boundaries
-        )
-      for min_max in filters['times'])))
+      ) for min_max in filters['times'])))
+  try:
+    paginator = Paginator(course_match_objs.distinct(), 20)
+    course_match_objs = paginator.page(page)
+  except EmptyPage:
+    return HttpResponse(json.dumps(None), content_type="application/json")
 
-  valid_section_ids = Section.objects.filter(
-    course__in=course_match_objs, semester=sem).values('course_id')
-  course_match_objs = course_match_objs.filter(id__in=valid_section_ids).distinct('code')[:50] # limit to 50 search results
+
+  # valid_section_ids = Section.objects.filter(
+  #   course__in=course_match_objs, semester=sem).values('course_id')
+  # course_match_objs = course_match_objs.filter(id__in=valid_section_ids).distinct('code')
   save_analytics_course_search(query[:200], course_match_objs[:2], sem, school, get_student(request), advanced=True)
   student = None
   logged = request.user.is_authenticated()
@@ -804,13 +831,17 @@ def profile(request):
     # googpic = this.props.userInfo.img_url.replace('sz=50','sz=100') if this.props.userInfo.isLoggedIn else ''
     # propic = 'url(https://graph.facebook.com/' + JSON.parse(currentUser).fbook_uid + '/picture?type=normal)' if this.props.userInfo.FacebookSignedUp else 'url(' + googpic + ')'
     if student.user.social_auth.filter(provider='google-oauth2').exists():
-      social_user = student.user.social_auth.filter(provider='google-oauth2').first()
-      img_url = student.img_url.replace('sz=50','sz=700')
       hasGoogle = True
     else:
+      hasGoogle = False
+    if student.user.social_auth.filter(provider='facebook').exists():
       social_user = student.user.social_auth.filter(provider='facebook').first()
       img_url = 'https://graph.facebook.com/' + student.fbook_uid + '/picture?width=700&height=700'
-      hasGoogle = False
+      hasFacebook = True
+    else:
+      social_user = student.user.social_auth.filter(provider='google-oauth2').first()
+      img_url = student.img_url.replace('sz=50','sz=700')
+      hasFacebook = False
     hasNotificationsEnabled = RegistrationToken.objects.filter(student=student).exists()
     context = {
       'name': student.user,
@@ -820,6 +851,7 @@ def profile(request):
       'total': 0,
       'img_url': img_url,
       'hasGoogle': hasGoogle,
+      'hasFacebook': hasFacebook,
       'notifications': hasNotificationsEnabled
     }
     for r in reactions:
