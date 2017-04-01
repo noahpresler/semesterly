@@ -53,6 +53,11 @@ def view_analytics_dashboard(request):
         total_final_exam_views = number_timetables(Timetable=FinalExamModalView)
         unique_users_final_exam_views = number_timetables(Timetable=FinalExamModalView, distinct="student")
 
+        fb_alert_views = number_timetables(Timetable=FacebookAlertView)
+        unique_users_fb_alert_views = number_timetables(Timetable=FacebookAlertView, distinct="student")
+        fb_alert_clicks = number_timetables(Timetable=FacebookAlertClick)
+        unique_users_fb_alert_clicks = number_timetables(Timetable=FacebookAlertClick, distinct="student")
+
         return render_to_response('analytics_dashboard.html', {
                 "signups_per_hour": number_timetables_per_hour(
                     Timetable=Student,start_delta_days=7, interval_delta_hours=24),
@@ -73,6 +78,10 @@ def view_analytics_dashboard(request):
                 "unique_users_calendar_exports": unique_users_calendar_exports,
                 "total_final_exam_views": total_final_exam_views,
                 "unique_users_final_exam_views": unique_users_final_exam_views,
+                "fb_alert_views": fb_alert_views,
+                "unique_users_fb_alert_views": unique_users_fb_alert_views,
+                "fb_alert_clicks": fb_alert_clicks,
+                "unique_users_fb_alert_clicks": unique_users_fb_alert_clicks,
                 "calendar_exports_by_type": json.dumps({"ics": ics_calendar_exports, "google": google_calendar_exports}),
                 "jhu_most_popular_courses": [], # needs to be refactored; was causing timeout on server because too slow
                 "uoft_most_popular_courses": [], # needs to be refactored; was causing timeout on server because too slow
@@ -206,3 +215,28 @@ def number_students_by_school():
 
 def number_user_chrome_notifs():
     return RegistrationToken.objects.values_list("student", flat=True).distinct().count()
+
+@csrf_exempt
+def log_facebook_alert_view(request):
+  try:
+      student = Student.objects.get(user=request.user)
+  except:
+      student = None
+  FacebookAlertView.objects.create(
+    student=student,
+    school=request.subdomain
+  ).save()
+  return HttpResponse(json.dumps({}), content_type="application/json")
+
+@csrf_exempt
+def log_facebook_alert_click(request):
+  try:
+      student = Student.objects.get(user=request.user)
+  except:
+      student = None
+  FacebookAlertClick.objects.create(
+    student=student,
+    school=request.subdomain
+  ).save()
+  return HttpResponse(json.dumps({}), content_type="application/json")
+

@@ -49,12 +49,14 @@ urlpatterns = patterns('',
     url(r'^robots.txt*$', 'analytics.views.view_analytics_dashboard'),
 
     #User,Auth,User Info
+    url(r'^signup/*', 'timetable.views.launch_user_acq_modal'),
     url(r'^user/logout/$', 'django.contrib.auth.views.logout', {'next_page': '/'}),
     url(r'^user/save_timetable/$', 'student.views.save_timetable'),
     url(r'^user/duplicate_timetable/$', 'student.views.duplicate_timetable'),
     url(r'^user/delete_timetable/$', 'student.views.delete_timetable'),
     url(r'^user/save_settings/$', 'student.views.save_settings'),
     url(r'^user/get_classmates/$', 'student.views.get_classmates'),
+    url(r'^user/get_most_classmates_count/$', 'student.views.get_most_classmate_count'),
     url(r'^user/find_friends/*$', 'student.views.find_friends'),
     url(r'^callback/google_calendar/*$', 'timetable.views.google_calendar_callback'),
     url(r'^textbooks*$', 'timetable.views.view_textbooks'),
@@ -64,10 +66,13 @@ urlpatterns = patterns('',
     url(r'^user/add_to_gcal/*$', 'student.views.add_tt_to_gcal'),
     url(r'^user/log_ical/*$', 'student.views.log_ical_export'),
     url(r'^user/log_final_exam/*$', 'timetable.views.log_final_exam_view'),
+    url(r'^user/log_fb_alert_click/*$', 'analytics.views.log_facebook_alert_click'),
+    url(r'^user/log_fb_alert_view/*$', 'analytics.views.log_facebook_alert_view'),
 
     
     url(r'^courses/(?P<school>.+?)/code/(?P<course_id>.+)/*$', 'timetable.views.get_course_id'),
     url(r'^courses/(?P<school>.+?)/(?P<sem_name>.+)/(?P<year>[0-9]{4})/id/(?P<id>[0-9]+)/*$', 'timetable.views.get_course'),
+    url(r'^course_classmates/(?P<school>.+?)/(?P<sem_name>.+)/(?P<year>[0-9]{4})/id/(?P<id>[0-9]+)/*$', 'timetable.views.get_classmates_in_course'),
     url(r'^jhu/countdown/*$', 'timetable.views.jhu_timer'),
     url(r'^get_timetables/$', 'timetable.views.get_timetables'),
     url(r'^search/(?P<school>.+?)/(?P<sem_name>.+?)/(?P<year>[0-9]{4})/(?P<query>.+?)/', 'timetable.views.course_search'),
@@ -108,8 +113,11 @@ urlpatterns = patterns('',
 
     # final exam scheduler
     (r'^get_final_exams/*$', 'timetable.views.final_exam_scheduler'),
-    url(r'^final_exams/*$', 'timetable.views.view_final_exams')
+    url(r'^final_exams/*$', 'timetable.views.view_final_exams'),
 )
+
+#profiling
+urlpatterns += [url(r'^silk/', include('silk.urls', namespace='silk'))]
 
 if getattr(settings, 'STAGING', False):
     urlpatterns += patterns('', url(r'^robots.txt$', lambda r: HttpResponse("User-agent: *\nDisallow: /", content_type="text/plain")) )
