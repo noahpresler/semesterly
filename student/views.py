@@ -249,28 +249,8 @@ def save_settings(request):
 
 @csrf_exempt
 @login_required
-def get_classmates(request):
-    school = request.subdomain
-    student = Student.objects.get(user=request.user)
-    course_ids = json.loads(request.body)['course_ids']
-    try:
-        semester, _ = Semester.objects.get_or_create(**json.loads(request.body)['semester'])
-    except:
-        semester = None 
-    # user opted in to sharing courses
-    if student.social_courses:
-        courses = []
-        friends = student.friends.filter(social_courses=True)
-        for course_id in course_ids:
-            courses.append(get_classmates_from_course_id(school, student, course_id, semester, friends=friends))
-        return HttpResponse(json.dumps(courses), content_type='application/json')
-    else:
-        return HttpResponse("Must have social_courses enabled")
-
-@csrf_exempt
-@login_required
 def find_friends(request):
-    try: 
+    try:
         school = request.subdomain
         student = Student.objects.get(user=request.user)
         if not student.social_all:
@@ -304,30 +284,84 @@ def find_friends(request):
         print e
         return HttpResponse(json.dumps([]))
 
-def get_classmates_from_course_id(school, student, course_id, semester, friends=None):
-    # All friends with social courses/sharing enabled
-    if not friends: 
+
+@csrf_exempt
+@login_required
+def get_classmates(request):
+    school = request.subdomain
+    student = Student.objects.get(user=request.user)
+    course_ids = json.loads(request.body)['course_ids']
+    try:
+        semester, _ = Semester.objects.get_or_create(**json.loads(request.body)['semester'])
+    except:
+        semester = None 
+    # user opted in to sharing courses
+    if student.social_courses:
+        courses = []
         friends = student.friends.filter(social_courses=True)
-    course = { 'course_id': course_id, 'classmates': [], 'past_classmates': []}
-    for friend in friends:
-        classmate = model_to_dict(friend, exclude=['user','id','fbook_uid', 'friends'])
+        for course_id in course_ids:
+            courses.append(get_classmates_from_course_id(school, student, course_id, semester, friends=friends))
+        return HttpResponse(json.dumps(courses), content_type='application/json')
+    else:
+        return HttpResponse("Must have social_courses enabled")
+
+
+def get_classmates_from_course_id(school, student, course_id, semester, friends=None):
+    if not friends: 
+        # All friends with social courses/sharing enabled
+        friends = student.friends.filter(social_courses=True)
+    course = {'course_id': course_id}
+    curr_ptts = PersonalTimetable.objects.filter(student__in=friends, courses__id__exact=course_id)\
+        .filter(Q(semester=semester)).order_by('student','last_updated').distinct('student')
+    past_ptts = PersonalTimetable.objects.filter(student__in=friends, courses__id__exact=course_id)\
+        .filter(~Q(semester=semester)).order_by('student','last_updated').distinct('student')
+
+    course['classmates'] = get_classmates_from_tts(student, course_id, curr_ptts)
+    course['past_classmates'] = get_classmates_from_tts(student, course_id, past_ptts)
+    return course
+
+
+def get_classmates_from_tts(student, course_id, tts):
+    classmates = []
+    for tt in tts:
+        friend = tt.student
+        classmate = model_to_dict(friend, exclude=['user', 'id', 'fbook_uid', 'friends'])
         classmate['first_name'] = friend.user.first_name
         classmate['last_name'] = friend.user.last_name
-        past_tts = []
-        ptts = PersonalTimetable.objects.filter(student=friend, courses__id__exact=course_id)
-        if semester:
-            past_tts = ptts.filter(~Q(semester=semester))
-            ptts = ptts.filter(semester=semester)
-        for tt in ptts:
-            if student.social_offerings and friend.social_offerings:
-                friend_sections = tt.sections.all().filter(course__id=course_id)
-                sections = list(friend_sections.values_list('meeting_section', flat=True).distinct())
-                classmate['sections'] = sections
-        if len(ptts) > 0:
-            course['classmates'].append(classmate)
-        if len(past_tts) > 0:
-            course['past_classmates'].append(classmate)
-    return course
+        if student.social_offerings and friend.social_offerings:
+            friend_sections = tt.sections.filter(course__id=course_id)
+            sections = list(friend_sections.values_list('meeting_section', flat=True).distinct())
+            classmate['sections'] = sections
+            classmates.append(classmate)
+    return classmates
+
+
+@csrf_exempt
+@login_required
+def get_most_classmate_count(request):
+    school = request.subdomain
+    student = Student.objects.get(user=request.user)
+    course_ids = json.loads(request.body)['course_ids']
+    semester, _ = Semester.objects.get_or_create(**json.loads(request.body)['semester'])
+    course = []
+    total_count = 0
+    count = 0
+    most_friend_course_id = -1
+    for course_id in course_ids:
+        temp_count = get_friend_count_from_course_id(school, student, course_id, semester)
+        if temp_count > count:
+            count = temp_count
+            most_friend_course_id = course_id
+        total_count += temp_count
+    course = {"id" : most_friend_course_id, "count" : count, "total_count" : total_count}
+    return HttpResponse(json.dumps(course))
+
+def get_friend_count_from_course_id(school, student, course_id, semester):
+    count = 0 
+    for friend in student.friends.all():
+        if PersonalTimetable.objects.filter(student=friend, courses__id__exact=course_id, semester=semester.id).exists():
+            count += 1
+    return count
 
 @csrf_exempt
 @validate_subdomain
