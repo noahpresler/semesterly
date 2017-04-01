@@ -166,8 +166,8 @@ class Validator:
 			raise JsonValidationError('course object must be of kind course', course)
 
 		if self.course_code_regex.match(course.code) is None:
-			raise JsonValidationError('course code "%s" does not match regex \'%s\''
-			 %(course.code, self.config.course_code_regex), course)
+			raise JsonValidationError("course code {} does not match r'{}'".format(
+				course.code, self.config.course_code_regex), course)
 
 		if 'department' in course and 'code' in course.department and 'departments' in self.config:
 			if course.department.code not in {d.code for d in self.config.departments}:
