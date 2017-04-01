@@ -210,6 +210,10 @@ class Validator:
 		if 'term' in section and section.term not in self.config.terms:
 			raise JsonValidationError('term "%s" not in config.json term list' % (section.term), section)
 
+		db_instructor_textfield_size = 500
+		if len(', '.join(instructor['name'] for instructor in section.instructors)) > db_instructor_textfield_size:
+			raise JsonValidationError('db field too small for comma-joined instructor names')
+
 		for instructor in section.get('instructors', []):
 			self.validate_instructor(instructor)
 
@@ -292,10 +296,6 @@ class Validator:
 			instructor = dotdict(instructor)
 		if 'kind' in instructor and instructor.kind != 'instructor':
 			raise JsonValidationError('instructor object must be of kind instructor', instructor)
-
-		db_instructor_textfield_size = 500
-		if len(', '.join(i['name'] for i in section.instructors)) > db_instructor_textfield_size:
-			raise JsonValidationError('db field too small for comma-joined instructor names')
 
 		for _class in instructor.get('classes', []):
 			if 'course' in _class and self.course_code_regex.match(_class.course.code) is None:
