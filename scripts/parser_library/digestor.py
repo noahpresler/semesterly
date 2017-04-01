@@ -546,34 +546,46 @@ class Vommit(DigestionStrategy):
 class Absorb(DigestionStrategy):
 	'''Load valid data into Django db.'''
 
-	def __init__(self, school, clean=True):
+	def __init__(self, school):
 		self.school = school
-		self.clean = clean
 		super(Absorb, self).__init__()
 
-	def digest_course(self, model_args):
-		model, created = Course.objects.update_or_create(**model_args)
+	@staticmethod
+	def digest_course(model_args):
+		model, created = _update_or_create(Course)
 		return model
 
-	def digest_section(self, model_args):
-		model, created = Section.objects.update_or_create(**model_args)
-		if model and self.clean:
+	@staticmethod
+	def digest_section(model_args, clean=True):
+		model, created = _update_or_create(Section)
+		if model and clean:
 			Absorb.remove_offerings(model)
 		return model
 
-	def digest_offering(self, model_args):
-		model, created = Offering.objects.update_or_create(**model_args)
+	@staticmethod
+	def digest_offering(model_args):
+		model, created = _update_or_create(Offering)
 		return model
 
-	def digest_textbook(self, model_args):
-		model, created = Textbook.objects.update_or_create(**model_args)
+	@staticmethod
+	def digest_textbook(model_args):
+		model, created = _update_or_create(Textbook)
 		return model
 
-	def digest_textbook_link(self, model_args):
-		model, created = TextbookLink.objects.update_or_create(**model_args)
+	@staticmethod
+	def digest_textbook_link(model_args):
+		model, created = _update_or_create(TextbookLink)
 		return model
 
-	def remove_section(self, section, course_model):
+	@staticmethod
+	def _update_or_create(model_type, model_args):
+		try:
+			return model_type.objects.update_or_create(**model_args)
+		except django.db.utils.DataError as e:
+			raise DigestionError(str(e) + '\n' + model_args)
+
+	@staticmethod
+	def remove_section(section, course_model):
 		''' Remove section specified from django database. '''
 		if Section.objects.filter(course=course_model, meeting_section=section).exists():
 			s = Section.objects.get(course=course_model, meeting_section=section)
