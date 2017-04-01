@@ -552,29 +552,29 @@ class Absorb(DigestionStrategy):
 
 	@staticmethod
 	def digest_course(model_args):
-		model, created = _update_or_create(Course)
+		model, created = Absorb._update_or_create(Course)
 		return model
 
 	@staticmethod
 	def digest_section(model_args, clean=True):
-		model, created = _update_or_create(Section)
+		model, created = Absorb._update_or_create(Section)
 		if model and clean:
 			Absorb.remove_offerings(model)
 		return model
 
 	@staticmethod
 	def digest_offering(model_args):
-		model, created = _update_or_create(Offering)
+		model, created = Absorb._update_or_create(Offering)
 		return model
 
 	@staticmethod
 	def digest_textbook(model_args):
-		model, created = _update_or_create(Textbook)
+		model, created = Absorb._update_or_create(Textbook)
 		return model
 
 	@staticmethod
 	def digest_textbook_link(model_args):
-		model, created = _update_or_create(TextbookLink)
+		model, created = Absorb._update_or_create(TextbookLink)
 		return model
 
 	@staticmethod
