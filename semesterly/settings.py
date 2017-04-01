@@ -123,7 +123,9 @@ INSTALLED_APPS = (
     'timetable',
     'analytics',
     'scripts',
-    'student'
+    'student',
+    'cachalot',
+    'silk'
 )
 
 MIDDLEWARE_CLASSES = (
@@ -135,6 +137,7 @@ MIDDLEWARE_CLASSES = (
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'semesterly.middleware.subdomain_middleware.SubdomainMiddleware',
     'social.apps.django_app.middleware.SocialAuthExceptionMiddleware',
+    'silk.middleware.SilkyMiddleware',
     'rollbar.contrib.django.middleware.RollbarNotifierMiddleware',
 )
 
@@ -175,6 +178,10 @@ DATABASES = {
         'PORT': '5432',
     }
 }
+
+# Silk auth
+SILKY_AUTHENTICATION = True  # User must login
+SILKY_AUTHORISATION = True  # User must have permissions
 
 # Logging
 
@@ -280,6 +287,17 @@ TEMPLATE_LOADERS = (
 TEMPLATE_DIRS = (
     os.path.join(PROJECT_DIRECTORY,'templates/'),
 )
+
+# Caching
+CACHES = {
+    'default': {
+        'BACKEND':'django.core.cache.backends.memcached.MemcachedCache',
+        'LOCATION':'127.0.0.1:11211',
+    }
+}
+CACHALOT_ENABLED = True
+
+
 
 try:
     from local_settings import *
