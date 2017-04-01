@@ -20,26 +20,27 @@ class Command(BaseCommand):
 		textbooks_argparser(parser)
 
 	def handle(self, *args, **options):
-		timestamp = datetime.datetime.now().strftime("%Y/%m/%d-%H:%M:%S")
-		stats = []
-
 		# TODO - design better file path scheme.
 		type_ = 'courses' if not options['textbooks'] else 'textbooks'
 
 		for school in options['schools']:
 			message = "Starting digestion for {}.\n".format(school)
 			self.stdout.write(self.style.SUCCESS(message))
-			directory = 'scripts/' + school
+			directory = 'scripts/{}'.format(school)
 
-			# default data
+			# Default data directories.
 			if not options.get('data'):
 				options['data'] = '{}/data/{}.json'.format(directory, type_)
 			if not options.get('log_stats'):
 				options['log_stats'] = 'scripts/logs/master.log'
 
 			if not os.path.isfile(options['data']):
-				options['data'] = None
+				Command.reset_for_next_school(options)
 				continue
+
+			tracker = Tracker(school)
+			tracker.add_viewer(LogFormatted(options['log_stats']))
+			tracker.set_cmd_options(options)
 
 			# Perform pre-digestion validation
 			if options['validate']:
@@ -60,19 +61,14 @@ class Command(BaseCommand):
 					self.stdout.write('\n')
 				except (JsonException, JSONDecodeError) as e:
 					self.stderr.write(self.style.ERROR('FAILED: validation.'))
-					self.stderr.write(str(e) + '\n')
-					stats.append('FAILED: validation. ' + school + '\n' + traceback.format_exc())
-					options['data'] = None
-					options['config_file'] = None
-					options['output_error'] = None
-					continue
+					self.stderr.write(str(e) + '\n' + school + '\n')
+					tracker.see_error(traceback.format_exc())
+					Command.reset_for_next_school(options)
+					continue # Skip digestion for this school.
 
 			if not options.get('output_diff'):
 				options['output_diff'] = '{}/logs/digest_{}_diff.log.json'.format(directory, type_)
 
-			tracker = Tracker(school)
-			tracker.add_viewer(LogFormatted(options['log_stats']))
-			tracker.set_cmd_options(options)
 			tracker.start()
 
 			try:
@@ -87,6 +83,7 @@ class Command(BaseCommand):
 			except DigestionError as e:
 				self.stderr.write(self.style.ERROR('FAILED: digestion'))
 				self.stderr.write(str(e))
+				tracker.see_error('FAILED: digestion\n' + str(e))
 
 			tracker.finish()
 			Command.reset_for_next_school(options)
