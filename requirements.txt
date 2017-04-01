@@ -50,3 +50,8 @@ jsonschema==2.5.1
 jsondiff==1.1.0
 interruptingcow==0.6
 rollbar==0.13.11
+coverage==4.3.4
+django-silk==0.7.3
+rollbar==0.13.11
+django-cachalot==1.4.1
+python-memcached==1.58

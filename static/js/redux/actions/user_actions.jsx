@@ -13,7 +13,11 @@ import { getUserInfoEndpoint,
 	getIntegrationDelEndpoint,
 	getIntegrationAddEndpoint,
 	getSchoolSpecificInfo,
-  getFinalExamSchedulerEndpoint} from '../constants.jsx';
+  getFinalExamSchedulerEndpoint,
+  getLogFacebookAlertViewEndpoint,
+  getLogFacebookAlertClickEndpoint,
+  getMostClassmatesCountEndpoint} from '../constants.jsx';
+import { fetchCourseClassmates } from './modal_actions.jsx'
 import { store } from '../init.jsx';
 import { loadTimetable, nullifyTimetable, getNumberedName } from './timetable_actions.jsx';
 import { browserSupportsLocalStorage, setDeclinedNotifications } from '../util.jsx';
@@ -291,6 +295,17 @@ export function saveSettings(callback) {
 			credentials: 'include',
 		})
 		.then(response => {
+			let state = store.getState();
+			let timetables = state.timetables.items;
+			let active = state.timetables.active;
+			let active_tt = timetables[active];
+
+			if (state.userInfo.data.social_courses) {
+				dispatch(fetchClassmates(active_tt.courses.map( c => c['id'])));
+				if (state.courseInfo.id) {
+					dispatch(fetchCourseClassmates(state.courseInfo.id));
+				}
+			}
 			dispatch({
 				type: "RECEIVE_USER_INFO_SAVED"
 			})
@@ -349,6 +364,10 @@ export function fetchClassmates(courses) {
 	return (dispatch) => {		
 		let state = store.getState();
 		let semesterIndex = state.semesterIndex !== undefined ? state.semesterIndex : currentSemester;
+
+    	setTimeout(() => {
+	        dispatch(fetchMostClassmatesCount(getActiveTimetable(state.timetables).courses.map(c => c['id'])));
+	      }, 500);
 		dispatch(requestClassmates());
 		fetch(getClassmatesEndpoint(), {
 			credentials: 'include',
@@ -517,4 +536,50 @@ export function addIntegration(integrationID, courseID, json) {
 
 export function createiCal(timetable) {
 	console.log(timetable)
+}
+
+export function requestMostClassmates() {
+  return {
+    type: "REQUEST_MOST_CLASSMATES",
+  }
+}
+
+export function fetchMostClassmatesCount(courses) {
+  return (dispatch) => 
+{   let state = store.getState();
+    let semesterIndex = state.semesterIndex !== undefined ? state.semesterIndex : currentSemester;
+    let semester = allSemesters[semesterIndex];
+    dispatch(requestMostClassmates());
+    fetch(getMostClassmatesCountEndpoint(), {
+      credentials: 'include',
+      method: 'POST',
+      body: JSON.stringify({ course_ids: courses, semester: semester })
+    })
+      .then(response => response.json())
+      .then(json => {
+      	dispatch({
+			type: "CHANGE_MOST_FRIENDS_CLASS",
+			classId: json.id,
+			count: json.count,
+			total: json.total_count
+		});
+		// dispatch({
+		// 	type: "ALERT_FACEBOOK_FRIENDS",
+		// });
+      });
+  }
+}
+
+export function logFacebookAlertView() {
+	fetch(getLogFacebookAlertViewEndpoint(), {
+		method: 'POST',
+		credentials: 'include',
+	})
+}
+
+export function LogFacebookAlertClick() {
+	fetch(getLogFacebookAlertClickEndpoint(), {
+		method: 'POST',
+		credentials: 'include',
+	})
 }

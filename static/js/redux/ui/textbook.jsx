@@ -24,7 +24,7 @@ const Textbook = ({tb}) => {
             </div>
             <div className="required">Required</div>
             <h4>
-                {exists(tb.title) ? tb.title : "isbn: " + tb.isbn}
+                {exists(tb.title) ? tb.title : "Textbook ISBN: " + tb.isbn}
             </h4>
             { exists(tb.detail_url) && 
                 <div className="amazon-buy">
