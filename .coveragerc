@@ -1,0 +1,8 @@
+[run]
+source =
+    ./timetable
+    ./analytics
+    ./student
+
+include =
+    */views.py
