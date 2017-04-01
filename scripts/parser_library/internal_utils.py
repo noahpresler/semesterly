@@ -13,7 +13,7 @@ def make_list(l):
 # FIXME -- 
 # NOTE: mutates text, unicode whitspace removal should be part of extractor
 def deep_clean(dirt):
-	if not dirt:
+	if dirt is None:
 		return None
 	whitespace = re.compile(r'(?:\u00a0)|(?:\xc2\xa0)', re.IGNORECASE)
 	if isinstance(dirt, basestring):
