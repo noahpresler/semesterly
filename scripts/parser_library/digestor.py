@@ -22,9 +22,6 @@ from scripts.parser_library.internal_exceptions import DigestionError
 from scripts.parser_library.Updater import ProgressBar, Counter
 from scripts.parser_library.tracker import ProgressBar, NullTracker
 
-# TODO - DigestionError should be removed with failure,
-# user should not be able to produce direct DigestionError
-
 class Digestor:
 	def __init__(self, school, 
 		data=None, 
@@ -68,7 +65,7 @@ class Digestor:
 		if diff and load:
 			return Burp(self.school, output) # diff only
 		elif not diff and load:
-			return Absorb(self.school) # load db only + clean
+			return Absorb(self.school) # load db only
 		elif diff and not load:
 			return Vommit(output) # load db and log diff
 		else: # nothing to do...
@@ -464,7 +461,7 @@ class Vommit(DigestionStrategy):
 		if dbmodel is None:
 			dbmodel = {}
 		else:
-			# Transform django object to dictionary
+			# Transform django object to dictionary.
 			dbmodel = dbmodel.__dict__
 
 		context = {'section', 'course', 'semester'}
@@ -477,7 +474,7 @@ class Vommit(DigestionStrategy):
 				except django.utils.encoding.DjangoUnicodeDecodeError as e:
 					whats[k] = '<{}: [Bad Unicode data]'.format(k)
 
-		# Remove db specific content from model
+		# Remove db specific content from model.
 		blacklist = {'_state', 'id', 'section_id', 'course_id', '_course_cache', 'semester_id', '_semester'} | context
 		prune = lambda d: {k: v for k, v in d.iteritems() if k not in blacklist}
 		dbmodel = prune(dbmodel)
@@ -486,10 +483,10 @@ class Vommit(DigestionStrategy):
 		if 'course' in dbmodel:
 			dbmodel['course'] = str(dbmodel['course'])
 
-		# Remove null values from dictionaries
+		# Remove null values from dictionaries.
 		dbmodel = {k: v for k, v in dbmodel.iteritems() if v is not None}
 
-		# move contents of default dictionary to first-level of dictionary
+		# Move contents of default dictionary to first-level of dictionary.
 		if 'defaults' in inmodel:
 			defaults = inmodel['defaults']
 			del inmodel['defaults']
@@ -498,13 +495,13 @@ class Vommit(DigestionStrategy):
 		# Diff the in-model and db-model
 		diffed = json.loads(jsondiff.diff(dbmodel, inmodel, syntax='symmetric', dump=True))
 
-		# Remove db defaulted values from diff output
+		# Remove db defaulted values from diff output.
 		if hide_defaults and '$delete' in diffed:
 			self.remove_defaulted_keys(kind, diffed['$delete'])
 			if len(diffed['$delete']) == 0:
 				del diffed['$delete']
 
-		# Add `what` and `context` tag to diff output
+		# Add `what` and `context` tag to diff output.
 		if len(diffed) > 0:
 			if isinstance(diffed, list) and len(diffed[0]) == 0:
 				diffed = { '$new': diffed[1] }
