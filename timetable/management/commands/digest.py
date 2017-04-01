@@ -84,6 +84,10 @@ class Command(BaseCommand):
 				self.stderr.write(self.style.ERROR('FAILED: digestion'))
 				self.stderr.write(str(e))
 				tracker.see_error('FAILED: digestion\n' + str(e))
+			except Exception as e:
+				self.stderr.write(self.style.ERROR('FAILED: digestion'))
+				self.stderr.write(str(e))
+				tracker.see_error('FAILED: digestion\n' + str(e))
 
 			tracker.finish()
 			Command.reset_for_next_school(options)
