@@ -13,7 +13,7 @@ class JsonException(Exception):
 
 	def __str__(self):
 		message = self.message
-		if json is not None:
+		if self.json is not None:
 			message += '\n' + pretty_json(self.json)
 		return message
 
