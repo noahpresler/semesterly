@@ -29,6 +29,12 @@ export const getLogiCalEndpoint = () => {
 export const getLogFinalExamViewEndpoint = () => { 
   return "/user/log_final_exam/"
 };
+export const getLogFacebookAlertViewEndpoint = () => { 
+  return "/user/log_fb_alert_view/"
+};
+export const getLogFacebookAlertClickEndpoint = () => { 
+  return "/user/log_fb_alert_click/"
+};
 export const getCourseInfoEndpoint = (course_id) => {
 	return "/courses/" + getSchool() + "/" + getSemester() + "/id/" + course_id + "/";
 };
@@ -57,7 +63,13 @@ export const getSaveSettingsEndpoint = () => {
 	return "/user/save_settings/"
 }
 export const getClassmatesEndpoint = () => {
-	return "/user/get_classmates/"
+  return "/user/get_classmates/"
+}
+export const getClassmatesInCourseEndpoint = (course_id) => {
+  return "/course_classmates/" + getSchool() + "/" + getSemester() + "/id/" + course_id + "/";
+}
+export const getMostClassmatesCountEndpoint = () => {
+  return "/user/get_most_classmates_count/"
 }
 export const getFriendsEndpoint = () => {
   return "/user/find_friends/"
