@@ -1,4 +1,4 @@
-import { getSchoolInfoEndpoint } from '../constants.jsx';
+import { getSchoolInfoEndpoint } from '../constants/constants.jsx';
 
 export function fetchSchoolInfo() {
 	return (dispatch) => {

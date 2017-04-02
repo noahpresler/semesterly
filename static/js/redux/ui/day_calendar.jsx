@@ -3,7 +3,7 @@ import classnames from 'classnames';
 import PaginationContainer  from './containers/pagination_container.jsx';
 import SlotManagerContainer from './containers/slot_manager_container.jsx';
 import CellContainer from './containers/cell_container.jsx'
-import { DRAGTYPES, DAYS } from '../constants.jsx';
+import { DRAGTYPES, DAYS } from '../constants/constants.jsx';
 import { DropTarget } from 'react-dnd';
 import { ShareLink } from './master_slot.jsx';
 import Swipeable from 'react-swipeable'
