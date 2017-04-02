@@ -1,5 +1,5 @@
 import fetch from 'isomorphic-fetch';
-import { getCourseInfoEndpoint, getReactToCourseEndpoint, getClassmatesInCourseEndpoint } from '../constants.jsx';
+import { getCourseInfoEndpoint, getReactToCourseEndpoint, getClassmatesInCourseEndpoint } from '../constants/constants.jsx';
 import { store } from '../init.jsx';
 export function setCourseInfo(json) {
     return {
