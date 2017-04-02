@@ -5,7 +5,13 @@ from django.forms.models import model_to_dict
 from django.db import models
 
 
-#----------- Global Models  ----------------
+class Semester(models.Model):
+  name = models.CharField(max_length=50)
+  year = models.CharField(max_length=4)
+
+  def __unicode__(self):
+    return "%s %s" % (self.name, self.year)
+
 class Textbook(models.Model):
   isbn = models.BigIntegerField(primary_key=True)
   detail_url = models.URLField(max_length=1000)
@@ -16,11 +22,13 @@ class Textbook(models.Model):
   def get_info(self):
     return model_to_dict(self)
 
+
 class Updates(models.Model):
   school = models.CharField(max_length=100)
   update_field = models.CharField(max_length=100) #e.g. 'textbook', 'course'
   last_updated = models.DateTimeField(auto_now=True)
   reason = models.CharField(max_length=200, default='Scheduled Update')
+
 
 class Course(models.Model):
   school = models.CharField(db_index=True, max_length=100)
@@ -58,7 +66,7 @@ class Course(models.Model):
     info = []
     related = self.related_courses.all()
     if semester:
-      related = related.filter(section__semester__in=[semester, 'Y']).distinct()
+      related = related.filter(section__semester=semester).distinct()
     if limit and limit > 0:
       related = related[:limit]
     for c in related:
@@ -77,7 +85,7 @@ class Course(models.Model):
   def get_textbooks(self, semester):
     textbooks = []
     isbns = set()
-    for section in self.section_set.filter(semester__in=[semester, 'Y']):
+    for section in self.section_set.filter(semester=semester):
       for textbook in section.textbooks.all():
         if textbook.isbn not in isbns:
           textbooks.append(textbook.get_info())
@@ -89,6 +97,7 @@ class Course(models.Model):
     ids = CourseIntegration.objects.filter(course__id=self.id).values_list("integration", flat=True)
     return Integration.objects.filter(id__in = ids).values_list("name", flat=True)
 
+
 class Section(models.Model):
   course = models.ForeignKey(Course)
   meeting_section = models.CharField(max_length=50)
@@ -98,14 +107,15 @@ class Section(models.Model):
   waitlist_size = models.IntegerField(default=-1)
   section_type = models.CharField(max_length=50, default='L')
   instructors = models.CharField(max_length=500, default='TBA')
-  semester = models.CharField(max_length=2)
+  _semester = models.CharField(max_length=2) # deprecated
+  semester = models.ForeignKey(Semester)
   textbooks = models.ManyToManyField(Textbook, through='TextbookLink')
 
   def get_textbooks(self):
     return [tb.get_info() for tb in self.textbooks.all()]
 
   def __unicode__(self):
-    return "Course: %s; Section: %s; Semester: %s" % (str(self.course), self.meeting_section, self.semester)
+    return "Course: %s; Section: %s; Semester: %s" % (str(self.course), self.meeting_section, str(self.semester))
 
 
 class Offering(models.Model):
@@ -137,6 +147,7 @@ class TextbookLink(models.Model):
 
 class Integration(models.Model):
   name = models.CharField(max_length=250)
+
 
 class CourseIntegration(models.Model):
   course = models.ForeignKey(Course)

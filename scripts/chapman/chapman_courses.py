@@ -1,29 +1,34 @@
-# @what	Chapman Course Parser
-# @org	Semeseter.ly
-# @author	Michael N. Miller
-# @date	10/19/16
+# @what    Chapman Course Parser
+# @org     Semester.ly
+# @author  Michael N. Miller
+# @date	   2/13/17
 
-import django, os
-os.environ.setdefault("DJANGO_SETTINGS_MODULE", "semesterly.settings")
-django.setup()
+from __future__ import print_function, division, absolute_import # NOTE: slowly move toward Python3
+from scripts.peoplesoft.courses import PeoplesoftParser
 
-from scripts.peoplesoft.courses import PeopleSoftParser
+class ChapmanParser(PeoplesoftParser):
 
-class ChapmanParser(PeopleSoftParser):
-
-	def __init__(self):
+	def __init__(self, **kwargs):
 		school = 'chapman'
 		url = 'https://cs90prod.chapman.edu/psc/CS90PROD_1/EMPLOYEE/SA/c/COMMUNITY_ACCESS.CLASS_SEARCH.GBL'
-		PeopleSoftParser.__init__(self, school, url)
+		super(ChapmanParser, self).__init__(school, url, **kwargs)
 
-	def parse(self):
-		# NOTE: hardcoded semesters Fall, Interim, Spring 2016-2017
-		terms = {'F':'2168', 'I':'2172', 'S':'2174'}
-		PeopleSoftParser.parse(self, terms)
+	def start(self,
+		years=None,
+		terms=None,
+		departments=None,
+		textbooks=True,
+		verbosity=3,
+		**kwargs):
+
+		self.parse(
+			cmd_years=years,
+			cmd_terms=terms,
+			cmd_departments=departments,
+			cmd_textbooks=textbooks,
+			verbosity=verbosity)
 
 def main():
-	p = ChapmanParser()
-	p.parse()
-
+	raise NotImplementedError('run with manage.py')
 if __name__ == "__main__":
 	main()
