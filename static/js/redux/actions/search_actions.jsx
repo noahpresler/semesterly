@@ -1,7 +1,7 @@
 import fetch from 'isomorphic-fetch';
 import { getCourseSearchEndpoint, 
 				getAdvancedSearchEndpoint,
-				getSchoolSpecificInfo } from '../constants.jsx';
+				getSchoolSpecificInfo } from '../constants/constants.jsx';
 import { store } from '../init.jsx';
 import { getUserSavedTimetables, saveTimetable } from './user_actions.jsx';
 import { nullifyTimetable } from './timetable_actions.jsx';
