@@ -429,6 +429,10 @@ footer h6 {
 	.reaction-dropdown {
 		top: 42px;
 	}
+	.emoji-count {
+		bottom: 3px;
+		right: -3px;
+	}
 
 	#linked-accounts,
 	#notifications {
