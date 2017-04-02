@@ -2,7 +2,7 @@ import { connect } from 'react-redux';
 import { ExplorationModal } from '../exploration_modal.jsx';
 import { fetchAdvancedSearchResults } from '../../actions/search_actions.jsx';
 import { hoverSection, unhoverSection, addOrRemoveCourse, addOrRemoveOptionalCourse } from '../../actions/timetable_actions.jsx';
-import { getSchoolSpecificInfo } from '../../constants.jsx';
+import { getSchoolSpecificInfo } from '../../constants/constants.jsx';
 import { react, fetchCourseClassmates } from '../../actions/modal_actions.jsx';
 
 const mapStateToProps = (state) => {

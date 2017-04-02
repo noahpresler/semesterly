@@ -1,16 +1,18 @@
+import * as ActionTypes from '../constants/actionTypes.jsx'
+
 export const saveCalendarModal = (state = { isVisible: false, hasDownloaded: false, hasUploaded: true, isDownloading: false, isUploading: true}, action) => {
 	switch (action.type) {
-		case 'TOGGLE_SAVE_CALENDAR_MODAL':
+		case ActionTypes.TOGGLE_SAVE_CALENDAR_MODAL:
 			return {isVisible: !state.isVisible};
-		case 'TRIGGER_SAVE_CALENDAR_MODAL':
+		case ActionTypes.TRIGGER_SAVE_CALENDAR_MODAL:
 			return {isVisible: true, hasUploaded: false, hasDownloaded: false, isDownloading: false, isUploading: false};
-		case 'DOWNLOAD_CALENDAR':
+		case ActionTypes.DOWNLOAD_CALENDAR:
 			return Object.assign({}, state, {isDownloading: true});
-		case 'UPLOAD_CALENDAR':
+		case ActionTypes.UPLOAD_CALENDAR:
 			return Object.assign({}, state, {isUploading: true});
-		case 'CALENDAR_DOWNLOADED':
+		case ActionTypes.CALENDAR_DOWNLOADED:
 			return Object.assign({}, state, {hasDownloaded: true});
-		case 'CALENDAR_UPLOADED':
+		case ActionTypes.CALENDAR_UPLOADED:
 			return Object.assign({}, state, {hasUploaded: true});
 		default:
 			return state;
