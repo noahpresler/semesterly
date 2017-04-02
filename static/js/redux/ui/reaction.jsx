@@ -1,6 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { REACTION_MAP } from '../constants.jsx';
+import { REACTION_MAP } from '../constants/constants.jsx';
 import classNames from 'classnames';
 
 class Reaction extends React.Component {
