@@ -291,7 +291,8 @@ function fetchTimetables(requestBody, removing, newActive=0) {
 		})
 		.then(json => {
 			if (state.userInfo.data.isLoggedIn && json.timetables[0]) {
-				dispatch(fetchClassmates(json.timetables[0].courses.map( c => c['id'])))
+				if (state.userInfo.data.social_courses != null)
+					dispatch(fetchClassmates(json.timetables[0].courses.map( c => c['id'])))
 			}
 		});
 
