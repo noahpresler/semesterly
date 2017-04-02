@@ -365,11 +365,8 @@ def get_most_classmate_count(request):
     return HttpResponse(json.dumps(course))
 
 def get_friend_count_from_course_id(school, student, course_id, semester):
-    count = 0 
-    for friend in student.friends.all():
-        if PersonalTimetable.objects.filter(student=friend, courses__id__exact=course_id, semester=semester.id).exists():
-            count += 1
-    return count
+    return PersonalTimetable.objects.filter(student__in=student.friends.all(), courses__id__exact=course_id)\
+        .filter(Q(semester=semester)).distinct('student').count()
 
 @csrf_exempt
 @validate_subdomain
