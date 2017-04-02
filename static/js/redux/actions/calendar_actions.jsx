@@ -2,7 +2,7 @@ import { getRequestShareTimetableLinkEndpoint,
 				getAddTTtoGCalEndpoint, 
 				getLogiCalEndpoint, 
         getLogFinalExamViewEndpoint,
-				getSchoolSpecificInfo } from '../constants.jsx';
+				getSchoolSpecificInfo } from '../constants/constants.jsx';
 import { getActiveTimetable } from './user_actions.jsx';
 import { store } from '../init.jsx';
 import ical from 'ical-generator';

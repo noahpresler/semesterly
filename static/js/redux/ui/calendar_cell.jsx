@@ -1,5 +1,5 @@
 import React from 'react';
-import { DAYS, DRAGTYPES } from '../constants.jsx';
+import { DAYS, DRAGTYPES } from '../constants/constants.jsx';
 import { DropTarget, DragSource } from 'react-dnd';
 
 function convertToHalfHours(str) {
