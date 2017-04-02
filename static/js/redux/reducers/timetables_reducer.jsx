@@ -1,5 +1,6 @@
 import update from 'react/lib/update';
 import { saveLocalActiveIndex } from '../util.jsx';
+import * as ActionTypes from '../constants/actionTypes.jsx'
 
 let initialState = { isFetching: false, items: [{courses: [], has_conflict: false}], active: 0, loadingCachedTT: true, lastCourseAdded: null};
 
@@ -7,16 +8,16 @@ export const timetables = (state = initialState, action) => {
 
 	switch(action.type) {
 
-		case 'LOADING_CACHED_TT':
+		case ActionTypes.LOADING_CACHED_TT:
 			return Object.assign({}, state, {loadingCachedTT: true});
 
-		case 'CACHED_TT_LOADED':
+		case ActionTypes.CACHED_TT_LOADED:
 			return Object.assign({}, state, {loadingCachedTT: false});
 		
-		case 'REQUEST_TIMETABLES':
+		case ActionTypes.REQUEST_TIMETABLES:
 			return Object.assign({}, state, {isFetching: true});
 
-		case 'RECEIVE_TIMETABLES':
+		case ActionTypes.RECEIVE_TIMETABLES:
 			let timetables = action.timetables.length > 0 ? action.timetables : [{courses: [], has_conflict: false}];
 			return {
 				isFetching: false, 
@@ -24,7 +25,7 @@ export const timetables = (state = initialState, action) => {
 				active: 0
 			};
 
-		case 'HOVER_COURSE':
+		case ActionTypes.HOVER_COURSE:
 			// add the course to the current timetable, but mark it as "fake", so we can
 			// identify it to remove upon unhover
 			let newCourse = Object.assign({}, action.course, { fake: true });
@@ -77,7 +78,7 @@ export const timetables = (state = initialState, action) => {
 				}
 			});
 			
-		case 'UNHOVER_COURSE':
+		case ActionTypes.UNHOVER_COURSE:
 
 			// find fake course index; delete it
 			let curCourses = state.items[state.active].courses;
@@ -112,14 +113,14 @@ export const timetables = (state = initialState, action) => {
 				});
 			}
 
-		case 'CHANGE_ACTIVE_TIMETABLE':
+		case ActionTypes.CHANGE_ACTIVE_TIMETABLE:
 			saveLocalActiveIndex(action.newActive);
 			return Object.assign({}, state, { active: action.newActive });
 
-		case 'ALERT_CONFLICT':
+		case ActionTypes.ALERT_CONFLICT:
 			return Object.assign({}, state, { isFetching: false });
 
-		case 'UPDATE_LAST_COURSE_ADDED':
+		case ActionTypes.UPDATE_LAST_COURSE_ADDED:
 			return Object.assign({}, state, {lastCourseAdded: action.course});
 
 		default:
