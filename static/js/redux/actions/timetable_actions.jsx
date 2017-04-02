@@ -1,8 +1,8 @@
 import fetch from 'isomorphic-fetch';
-import { getTimetablesEndpoint } from '../constants.jsx';
+import { getTimetablesEndpoint } from '../constants/constants.jsx';
 import { randomString, browserSupportsLocalStorage } from '../util.jsx';
 import { store } from '../init.jsx';
-import { getSchoolSpecificInfo } from '../constants.jsx'
+import { getSchoolSpecificInfo } from '../constants/constants.jsx'
 import { lockActiveSections, fetchClassmates, autoSave } from './user_actions.jsx';
 import { saveLocalSemester, saveLocalPreferences, saveLocalCourseSections, saveLocalActiveIndex } from '../util.jsx';
 
