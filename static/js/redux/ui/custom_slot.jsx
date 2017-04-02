@@ -1,6 +1,6 @@
 import React, { PropTypes } from 'react';
 import { DragSource, DropTarget } from 'react-dnd'
-import { HALF_HOUR_HEIGHT, DRAGTYPES } from '../constants.jsx';
+import { HALF_HOUR_HEIGHT, DRAGTYPES } from '../constants/constants.jsx';
 
 
 function convertToHalfHours(str) {

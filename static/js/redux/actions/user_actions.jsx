@@ -16,7 +16,7 @@ import { getUserInfoEndpoint,
   getFinalExamSchedulerEndpoint,
   getLogFacebookAlertViewEndpoint,
   getLogFacebookAlertClickEndpoint,
-  getMostClassmatesCountEndpoint} from '../constants.jsx';
+  getMostClassmatesCountEndpoint} from '../constants/constants.jsx';
 import { fetchCourseClassmates } from './modal_actions.jsx'
 import { store } from '../init.jsx';
 import { loadTimetable, nullifyTimetable, getNumberedName } from './timetable_actions.jsx';
