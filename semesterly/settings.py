@@ -123,7 +123,9 @@ INSTALLED_APPS = (
     'timetable',
     'analytics',
     'scripts',
-    'student'
+    'student',
+    'cachalot',
+    'silk'
 )
 
 MIDDLEWARE_CLASSES = (
@@ -134,7 +136,9 @@ MIDDLEWARE_CLASSES = (
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'semesterly.middleware.subdomain_middleware.SubdomainMiddleware',
-     'social.apps.django_app.middleware.SocialAuthExceptionMiddleware',
+    'social.apps.django_app.middleware.SocialAuthExceptionMiddleware',
+    'silk.middleware.SilkyMiddleware',
+    'rollbar.contrib.django.middleware.RollbarNotifierMiddleware',
 )
 
 TEMPLATE_CONTEXT_PROCESSORS = (
@@ -174,6 +178,10 @@ DATABASES = {
         'PORT': '5432',
     }
 }
+
+# Silk auth
+SILKY_AUTHENTICATION = True  # User must login
+SILKY_AUTHORISATION = True  # User must have permissions
 
 # Logging
 
@@ -225,11 +233,12 @@ LOGGING = {
 ADMINS = [
     ('Rohan Das', 'rohan@semester.ly'), 
     ('Felix Zhu', 'felix@semester.ly'),
-    ('Noah Presler', 'noah@semester.ly'),
+    # ('Noah Presler', 'noah@semester.ly'),
     ('Eric Calder', 'eric@semester.ly'),
 
 ]
 
+# STAGING_NOTIFIED_ADMINS = ['rohan@semester.ly', 'noah@semester.ly']
 STAGING_NOTIFIED_ADMINS = ['rohan@semester.ly', 'noah@semester.ly']
 
 EMAIL_USE_TLS = True
@@ -279,8 +288,28 @@ TEMPLATE_DIRS = (
     os.path.join(PROJECT_DIRECTORY,'templates/'),
 )
 
+# Caching
+CACHES = {
+    'default': {
+        'BACKEND':'django.core.cache.backends.memcached.MemcachedCache',
+        'LOCATION':'127.0.0.1:11211',
+    }
+}
+CACHALOT_ENABLED = True
+
+
+
 try:
     from local_settings import *
     from sensitive import *
 except:
     pass
+
+if not DEBUG:
+    ROLLBAR = {
+        'access_token': '23c5a378cd1943cfb40d5217dfb7f766',
+        'environment': 'development' if DEBUG else 'production',
+        'root': BASE_DIR,
+    }
+    import rollbar
+    rollbar.init(**ROLLBAR)
