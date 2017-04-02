@@ -84,25 +84,18 @@
 		"instructors": {
 			"type": "array",
 			"items": {
-				"oneOf": [
+				"allOf": [
 					{
-						"type": "string"
-					},
-					{
-						"allOf": [
-							{
-								"$ref": "instructor.json#/"
-							}
-						],
-						"properties": {
-							"name": {},
-							"email": {},
-							"homepage": {},
-							"title": {}
-						},
-						"additionalProperties": false
+						"$ref": "instructor.json#/"
 					}
-				]
+				],
+				"properties": {
+					"name": {},
+					"email": {},
+					"homepage": {},
+					"title": {}
+				},
+				"additionalProperties": false
 			}
 		},
 		"final_exam": {
