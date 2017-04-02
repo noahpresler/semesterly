@@ -1,6 +1,6 @@
 import { connect } from 'react-redux';
 import TimetableNameInput from '../timetable_name_input.jsx';
-import { MAX_TIMETABLE_NAME_LENGTH } from '../../constants.jsx';
+import { MAX_TIMETABLE_NAME_LENGTH } from '../../constants/constants.jsx';
 import { saveTimetable } from '../../actions/user_actions.jsx';
 
 

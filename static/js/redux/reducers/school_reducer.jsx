@@ -1,4 +1,4 @@
-import { VALID_SCHOOLS, SET_SCHOOL } from '../constants.jsx';
+import { VALID_SCHOOLS, SET_SCHOOL } from '../constants/constants.jsx';
 
 export const school = (state = {school: "", areas: [], departments: [], levels: [], dataLastUpdated: ""}, action) => {
 	switch (action.type) {
