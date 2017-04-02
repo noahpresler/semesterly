@@ -244,6 +244,11 @@ class PeoplesoftParser(CourseParser):
 		instructors = []
 		for instr in instrs:
 			instructors += instr.text.split(', \r')
+		# NOTE: truncate instructor list to 5 instructors
+		# FIXME -- when db is changed to handle instructor objects, change this to all instructors (frontend should handle this)
+		if len(instructors) > 5:
+			instructors = instructors[:5]
+			instructors.append("..., ...")
 		self.ingestor['instrs']    = list(set(instructors)) # uniqueify list of instructors
 
 		self.ingestor['areas'] = [self.extractor.extract_info(self.ingestor, areas.text)] if areas else None
