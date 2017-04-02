@@ -40,6 +40,10 @@ export class SocialProfile extends React.Component {
 							<i className="fa fa-cog"></i>
 							<span>Account</span>
 						</a>
+						<a href="/me">
+							<i className="fa fa-bar-chart"></i>
+							<span>Stats</span>
+						</a>
 						<a href="/static/privacypolicy.htm">
 							<i className="fa fa-user-secret"></i>
 							<span>Privacy</span>

@@ -1,0 +1,222 @@
+{
+	"$schema": "http://json-schema.org/draft-04/schema#",
+	"title": "DataList",
+	"description": "schema for list of all data types",
+	"type": "array",
+	"items": {
+		"anyOf": [
+			{
+				"allOf": [
+					{
+						"$ref": "course.json#/"
+					}
+				],
+				"properties": {
+					"kind": {},
+					"school": {},
+					"code": {},
+					"name": {},
+					"credits": {},
+					"department": {},
+					"description": {},
+					"prerequisites": {},
+					"corequisites": {},
+					"exclusions": {},
+					"areas": {},
+					"level": {},
+					"cores": {},
+					"geneds": {},
+					"homepage": {},
+					"related": {},
+					"sections": {}
+				},
+				"additionalProperties": false,
+				"required": [
+					"kind",
+					"code",
+					"name"
+				]
+			},
+			{
+				"allOf": [
+					{
+						"$ref": "section.json#/"
+					}
+				],
+				"properties": {
+					"kind": {},
+					"school": {},
+					"course": {},
+					"code": {},
+					"name": {},
+					"term": {},
+					"year": {},
+					"capacity": {},
+					"enrollment": {},
+					"waitlist": {},
+					"waitlist_size": {},
+					"remaining_seats": {},
+					"type": {},
+					"fees": {},
+					"instructors": {},
+					"final_exam": {},
+					"textbooks": {},
+					"meetings": {}
+				},
+				"additionalProperties": false,
+				"required": [
+					"kind",
+					"code",
+					"term",
+					"year",
+					"course"
+				]
+			},
+			{
+				"allOf": [
+					{
+						"$ref": "meeting.json#/"
+					}
+				],
+				"properties": {
+					"kind": {},
+					"school": {},
+					"course": {},
+					"section": {},
+					"dates": {},
+					"days": {},
+					"time": {},
+					"location": {}
+				},
+				"additionalProperties": false,
+				"required": [
+					"kind",
+					"course",
+					"section",
+					"time"
+				],
+				"_comment": "'days' or 'dates' requirement nested into structure"
+			},
+			{
+				"allOf": [
+					{
+						"$ref": "textbook.json#/"
+					}
+				],
+				"properties": {
+					"kind": {
+						"enum": ["textbook_link"]
+					},
+					"school": {},
+					"course": {},
+					"section": {},
+					"isbn": {},
+					"required": {}
+				},
+				"additionalProperties": false,
+				"required": [
+					"kind",
+					"course",
+					"isbn"
+				]
+			},
+			{
+				"allOf": [
+					{
+						"$ref": "textbook.json#/"
+					}
+				],
+				"properties": {
+					"kind": {
+						"enum": ["textbook"]
+					},
+					"isbn": {},
+					"detail_url": {},
+					"image_url": {},
+					"author": {},
+					"title": {}
+				},
+				"additionalProperties": false,
+				"required": [
+					"kind",
+					"isbn"
+				]
+			},
+			{
+				"allOf": [
+					{
+						"$ref": "instructor.json#/"
+					}
+				],
+				"properties": {
+					"kind": {},
+					"school": {},
+					"classes": {},
+					"name": {},
+					"title": {},
+					"department": {},
+					"email": {},
+					"homepage": {},
+					"office": {}
+				},
+				"additionalProperties": false,
+				"required": [
+					"kind",
+					"name",
+					"classes"
+				]
+			},
+			{
+				"allOf": [
+					{
+						"$ref": "eval.json#/"
+					}
+				],
+				"properties": {
+					"kind": {},
+					"course": {},
+					"score": {},
+					"summary": {},
+					"instructors": {},
+					"term": {},
+					"year": {}
+				},
+				"additionalProperties": false,
+				"allOf": [
+					{
+						"required": ["kind"]
+					},
+					{
+						"anyOf": [
+							{
+								"required": ["score"]
+							},
+							{
+								"required": ["summary"]
+							}
+						]
+					}
+				]
+			},
+			{
+				"allOf": [
+					{
+						"$ref": "final_exam.json#/"
+					}
+				],
+				"properties": {
+					"kind": {},
+					"course": {},
+					"section": {},
+					"meeting": {}
+				},
+				"additionalProperties": false,
+				"required": [
+					"kind",
+					"course",
+					"meeting"
+				]
+			}
+		]
+	}
+}

@@ -1,5 +1,4 @@
 import { getSchool, getSemester } from './init.jsx';
-export const VALID_SEMESTERS = ["F", "S"];
 export const SET_SCHOOL = "SET_SCHOOL";
 export const SET_SEMESTER = "SET_SEMESTER";
 export const REQUEST_TIMETABLES = "REQUEST_TIMETABLES";
@@ -13,13 +12,13 @@ export const VALID_SCHOOLS = [
   "jhu", 
   "umd", 
   "uo", 
-  "rutgers", 
+  // "rutgers", 
   "queens", 
   "vandy",
   "gw",
   "umich",
-  "umich2",
-  "chapman"
+  "chapman",
+  "salisbury",
 ];
 
 /* server endpoints */
@@ -28,6 +27,15 @@ export const getAddTTtoGCalEndpoint = (timetable) => {
 };
 export const getLogiCalEndpoint = () => { 
   return "/user/log_ical/"
+};
+export const getLogFinalExamViewEndpoint = () => { 
+  return "/user/log_final_exam/"
+};
+export const getLogFacebookAlertViewEndpoint = () => { 
+  return "/user/log_fb_alert_view/"
+};
+export const getLogFacebookAlertClickEndpoint = () => { 
+  return "/user/log_fb_alert_click/"
 };
 export const getCourseInfoEndpoint = (course_id) => {
 	return "/courses/" + getSchool() + "/" + getSemester() + "/id/" + course_id + "/";
@@ -57,7 +65,13 @@ export const getSaveSettingsEndpoint = () => {
 	return "/user/save_settings/"
 }
 export const getClassmatesEndpoint = () => {
-	return "/user/get_classmates/"
+  return "/user/get_classmates/"
+}
+export const getClassmatesInCourseEndpoint = (course_id) => {
+  return "/course_classmates/" + getSchool() + "/" + getSemester() + "/id/" + course_id + "/";
+}
+export const getMostClassmatesCountEndpoint = () => {
+  return "/user/get_most_classmates_count/"
 }
 export const getFriendsEndpoint = () => {
   return "/user/find_friends/"
@@ -69,7 +83,7 @@ export const getReactToCourseEndpoint = () => {
   return "/react/";
 }
 export const getLoadSavedTimetablesEndpoint = (semester) => {
-  return "/user/get_saved_timetables/" + getSchool() + "/" + semester + "/";
+  return "/user/get_saved_timetables/" + getSchool() + "/" + semester.name + "/" + semester.year + "/";
 }
 export const getRequestShareTimetableLinkEndpoint = () => {
   return "/share/link/";
@@ -101,6 +115,9 @@ export const getCreateAvailabilityShareEndpoint = () => {
 export const getFindMutuallyFreeEndpoint = () => {
   return "/dtm/mutually_free/";
 }
+export const getFinalExamSchedulerEndpoint = () => {
+  return "/get_final_exams/";
+}
 
 export const getSchoolSpecificInfo = (school) => {
 	switch(school) {
@@ -112,10 +129,6 @@ export const getSchoolSpecificInfo = (school) => {
         levelsName: "Levels",
         timesName: "Times",
         courseRegex: "([A-Z]{3}[A-Z0-9]\\d{2}[HY]\\d)",
-        semesters: {
-          F: "Fall 2016",
-          S: "Winter 2017"
-        },
         campuses: {
           1: "UTSG",
           3: "UTSC",
@@ -130,10 +143,6 @@ export const getSchoolSpecificInfo = (school) => {
         levelsName: "Levels",
         timesName: "Times",
         courseRegex: "([A-Z]{2}\\.\\d{3}\\.\\d{3})",
-        semesters: {
-          F: "Fall 2016",
-          S: "Spring 2017"
-        },
         campuses: {
           1: ""
         }
@@ -145,10 +154,6 @@ export const getSchoolSpecificInfo = (school) => {
         departmentsName: "Departments",
         levelsName: "Levels",
         timesName: "Times",
-        semesters: {
-          F: "Fall 2016",
-          S: "Winter 2017"
-        },
         campuses: {
           1: ""
         }
@@ -160,10 +165,6 @@ export const getSchoolSpecificInfo = (school) => {
         departmentsName: "Departments",
         levelsName: "Levels",
         timesName: "Times",
-        semesters: {
-          F: "Fall 2016",
-          S: "Spring 2017"
-        },
         campuses: {
           1: ""
         }
@@ -176,10 +177,6 @@ export const getSchoolSpecificInfo = (school) => {
         levelsName: "Levels",
         timesName: "Times",
         courseRegex: "([A-Z]{2,4}\\s\\d{3})",
-        semesters: {
-          F: "Fall 2016",
-          S: "Spring 2017"
-        },
         campuses: {
           1: ""
         }
@@ -193,10 +190,6 @@ export const getSchoolSpecificInfo = (school) => {
         timesName: "Times",
         // course codes have dashes, in desciprtions dashes are spaces
         // courseRegex: "([A-Z-&]{2,7}\\s\\d{4}[W]?)",
-        semesters: {
-          F: "Fall 2016",
-          S: "Spring 2017"
-        },
         campuses: {
           1: ""
         }
@@ -210,10 +203,6 @@ export const getSchoolSpecificInfo = (school) => {
         timesName: "Times",
         // course codes in descriptions have lowercase department names, but I don't want to change the regex to include lowercase
         courseRegex: "([A-Z]{2,5}\\s\\d{4}[W]?)",
-        semesters: {
-          F: "Fall 2016",
-          S: "Spring 2017"
-        },
         campuses: {
           1: ""
         }
@@ -227,24 +216,22 @@ export const getSchoolSpecificInfo = (school) => {
         timesName: "Times",
         // some classes are just numbers, not included in this regex, cuz some descrpitions have years
         courseRegex: "([A-Z]{2,8}\\s\\d{3})",
-        semesters: {
-          F: "Fall 2016",
-          S: "Winter 2017"
-        },
         campuses: {
           1: ""
         }
       }
-    case "umich2":
+    case "salisbury":
       return {
         primaryDisplay: "name",
         areasName: "Areas",
         departmentsName: "Departments",
         levelsName: "Levels",
         timesName: "Times",
+        // some classes are just numbers, not included in this regex, cuz some descrpitions have years
+        courseRegex: "([A-Z]{3,4} \\d{2,3})",
         semesters: {
           F: "Fall 2016",
-          S: "Winter 2017"
+          S: "Spring 2017"
         },
         campuses: {
           1: ""
@@ -257,10 +244,6 @@ export const getSchoolSpecificInfo = (school) => {
         departmentsName: "Departments",
         levelsName: "Levels",
         timesName: "Times",
-        semesters: {
-          F: "Fall 2016",
-          S: "Spring 2017"
-        },
         campuses: {
           1: ""
         }
@@ -352,4 +335,11 @@ export const DRAGTYPES = {
   DRAG: 'drag', // drag a custom slot to a new location
   EXTEND: 'extend', // extend the length of a custom slot
   CREATE: 'create' // create a new custom slot
+}
+
+// dictionary representing the order in which semesters occur
+export const SEMESTER_RANKS = {
+  'Winter' : 0,
+  'Spring' : 1,
+  'Fall'   : 2
 }

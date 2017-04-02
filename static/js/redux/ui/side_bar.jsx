@@ -75,9 +75,16 @@ class SideBar extends React.Component {
                     <h3>Load this list with courses you aren't 100% sure you want to take - we'll fit as many as possible, automatically</h3>
                 </div>);
         }
+        let finalScheduleLink = (masterSlots.length > 0 && finalExamsSupportedSemesters.indexOf(this.props.semesterIndex) >= 0) ? 
+            <div className="final-schedule-link"
+                onClick = {this.props.launchFinalExamsModal}>
+                <i className="fa fa-calendar" aria-hidden="true"></i>
+                See Finals Schedule
+            </div>
+            : null
         return (
             <div id="side-bar" className="no-print">
-                <SemesterOverview />
+                <SemesterOverview {...this.props} />
                 <CreditTickerContainer {...this.props} />
                 <div id="sb-rating" className="col-2-3">
                     <h3>Average Course Rating</h3>
@@ -93,6 +100,7 @@ class SideBar extends React.Component {
                 <h4 className="sb-tip"><b>ProTip:</b> use <i className="fa fa-lock"/> to lock a section in place.</h4>
                 <div id="sb-master-slots">
                     { masterSlots }
+                    { finalScheduleLink }
                 </div>
                 <h4 className="sb-header">Optional Courses</h4>
                     { optionalSlots }
@@ -181,7 +189,7 @@ export class SemesterOverview extends React.Component {
                         >
                         <div className="tip-border"></div>
                         <div className="tip"></div>
-                        <h4>{ this.props.semesterName }</h4>
+                        <h4>{ this.props.semester.name + " " + this.props.semester.year }</h4>
                         { savedTimetables }
                     </div>
                 </ClickOutHandler>

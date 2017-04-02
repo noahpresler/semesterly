@@ -1,14 +1,12 @@
 * {
 	box-sizing: border-box;
 }
-
 html, body{
 	margin: 0;
 	height: 100%;
 	background-color: #F3F3F3;
 	font-family: "Roboto",Arial,sans-serif;
 }
-
 h1, h2, h5 {
 	font-family: "Palanquin",Arial,sans-serif;
 	font-weight: 500;
@@ -47,7 +45,6 @@ header nav {
 	line-height: 30px;
 	height: 30px;
 }
-
 header nav a,
 header nav a:link,
 header nav a:active,
@@ -57,7 +54,6 @@ header nav a:visited {
 	text-decoration: none;
 	transition: color .2s;
 }
-
 header nav a:hover {
 	color: #3498DB;
 }
@@ -145,6 +141,7 @@ desktop-nav {
 	color: #222;
 	background-color: #ececec;
 }
+/* End Header */
 
 /* Page Content */
 #page {
@@ -152,7 +149,6 @@ desktop-nav {
 	padding-top: 50px;
 	background-color: #F3F3F3;
 }
-
 #profile-page {
 	text-align: center;
 }
@@ -161,6 +157,7 @@ desktop-nav {
 	margin: 0;
 }
 #profile-page h2 {
+	font-size: 24px;
 	margin: 0;
 }
 #profile-banner {
@@ -190,10 +187,20 @@ desktop-nav {
 	width: 180px;
 	height: 180px;
 	border-radius: 100%;
+	background-color: #ddd;
 	background-size: cover;
 	background-position: center;
 	background-repeat: no-repeat;
+	background-image: url(/static/img/blank.jpg);
 	transform: translate(-50%, 40%);
+	overflow: hidden;
+}
+#profile-image-social {
+	width: 100%;
+	height: 100%;
+	background-size: cover;
+	background-position: center;
+	background-repeat: no-repeat;
 }
 #profile-body {
 	padding: 100px 0 20px;
@@ -206,11 +213,13 @@ desktop-nav {
 	width: 250px;
 	background-color: #999;
 }
+
+/* Reactions */
 #reaction-counter {
 	text-align: center;
 }
-#reaction-counter h3 {
-	font-size: 22px;
+#profile-page h3 {
+	font-size: 20px;
 }
 #reaction-counter h3 span {
 	margin-right: 5px;
@@ -231,8 +240,10 @@ desktop-nav {
     width: 40px;
     margin: 0 2px;
 }
+.reaction-mobile-split {
+	display: inline-block;
+}
 .reaction .emoji {
-	width: 35px;
 	width: 35px;
 	position: absolute;
     top: 50%;
@@ -258,19 +269,76 @@ desktop-nav {
     top: 56px;
     font-size: 10px;
     width: 60px;
-    left: -15%;
+    left: 50%;
     border-radius: 8px;
     background-color: #a1a1a1;
     color: #fff;
     padding-top: 1px;
     padding-bottom: 1px;
+    z-index: 1;
     opacity: 0;
     visibility: hidden;
     transition: visibility .3s, opacity .3s;
+    transform: translate(-50%);
 }
 .reaction:hover .reaction-dropdown {
 	opacity: 1;
 	visibility: visible;
+}
+.reaction-dropdown .tip-border {
+    border-bottom-color: rgba(0,0,0,.2);
+}
+.reaction-dropdown .tip, 
+.reaction-dropdown .tip-border {
+    top: -7px;
+    left: 20px;
+    border-color: transparent transparent #a1a1a1;
+}
+/* End Reactions */
+
+/* Other Stats */
+#linked-accounts,
+#notifications {
+	margin-top: 60px;
+}
+.list-item {
+	font-size: 0;
+}
+.list-item.link {
+	background-color: #e6e6e6;
+	color: white;
+	padding: 5px 15px;
+	border: 1px solid #dedede;
+	margin: 10px 0;
+	border-radius: 5px;
+	display: inline-block;
+	cursor: pointer;
+	transition: background-color .3s;
+}
+.list-item.link:hover {
+	background-color: #e0e0e0;
+}
+.list-item p,
+.list-item a {
+	text-align: left;
+	vertical-align: middle;
+	display: inline-block;
+	margin: 5px 7px;
+	font-size: 16px;
+	color: #222;
+	text-decoration: none;
+}
+#linked-accounts .list-item p {
+	/*width: 70px;*/
+}
+.list-item i, 
+.list-item img {
+	font-size: 16px;
+	width: 16px;
+	height: 16px;
+	text-align: center;
+	display: inline-block;
+	vertical-align: middle;
 }
 #join-date {
 	margin-top: 60px;
@@ -279,6 +347,7 @@ desktop-nav {
 	font-style: italics;
 	font-size: 12px;
 }
+/* End Other Stats */
 
 /* Footer */
 footer {
@@ -325,6 +394,8 @@ footer h6 {
 	color: #777;
 	margin: 0;
 }
+/* End Footer */
+
 @media(max-width: 640px) {
 	header h1 {
 		display: none;
@@ -334,5 +405,51 @@ footer h6 {
 	}
 	.mobile-nav {
 		display: block;
+	}
+}
+@media(max-width: 500px) {
+	#profile-page h1 {
+		font-size: 30px;
+	}
+	#profile-page h2 {
+		font-size: 18px;
+	}
+	#profile-page h3 {
+		font-size: 16px;
+	}
+
+	.reaction {
+	    height: 42px;
+	    width: 30px;
+	    margin: 0 2px;
+	}
+	.reaction .emoji {
+		width: 25px;
+	}
+	.reaction-dropdown {
+		top: 42px;
+	}
+	.emoji-count {
+		bottom: 3px;
+		right: -3px;
+	}
+
+	#linked-accounts,
+	#notifications {
+		margin-top: 40px;
+	}
+	.list-item p,
+	.list-item a {
+		font-size: 12px;
+	}
+	.list-item i, 
+	.list-item img {
+		font-size: 12px;
+	}
+}
+@media(max-width: 340px) {
+	#reactions {
+		width: 195px;
+		border-radius: 30px;
 	}
 }

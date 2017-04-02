@@ -9,8 +9,9 @@ from django.conf import settings
 from django.template import RequestContext
 from hashids import Hashids
 from pytz import timezone
-import copy, functools, itertools, json, logging, os, httplib2
-import datetime
+from datetime import datetime
+import json
+import httplib2
 from timetable.models import *
 from student.models import *
 from analytics.models import *
@@ -84,13 +85,15 @@ def get_user_dict(school, student, semester):
 @login_required
 @validate_subdomain
 @csrf_exempt
-def get_student_tts_wrapper(request, school, sem):
+def get_student_tts_wrapper(request, school, sem_name, year):
+    sem, _ = Semester.objects.get_or_create(name=sem_name, year=year)
     student = Student.objects.get(user=request.user)
     response = get_student_tts(student, school, sem)
     return HttpResponse(json.dumps(response), content_type='application/json')
 
 def get_student_tts(student, school, semester):
-    tts = student.personaltimetable_set.filter(school=school, semester=semester).order_by('-last_updated')
+    tts = student.personaltimetable_set.filter(
+        school=school, semester=semester).order_by('-last_updated')
     # create a list containing all PersonalTimetables for this semester in their dictionary representation
     tts_list = [convert_tt_to_dict(tt) for tt in tts] # aka titty dick
     return tts_list
@@ -138,7 +141,7 @@ def save_timetable(request):
     courses = params['timetable']['courses']
     has_conflict = params['timetable']['has_conflict']
     name = params['name']
-    semester = params['semester']
+    semester, _ = Semester.objects.get_or_create(**params['semester'])
     student = Student.objects.get(user=request.user)
     error = {'error': 'Timetable with name already exists'}
     # if params['id'] is not provided (or params['id'] == 0) then this is a request to create a new timetable,
@@ -151,7 +154,11 @@ def save_timetable(request):
     # 2. the user is editing the name of an existing timetable, in which
     # case tempId is the ID of that timetable, as passed from the frontend.
     # we check if a timetable with a different id has that name
-    if PersonalTimetable.objects.filter(~Q(id=tempId), student=student, name=params['name'], semester=semester, school=school).exists():
+    if PersonalTimetable.objects.filter(~Q(id=tempId), 
+                                        student=student, 
+                                        name=params['name'], 
+                                        semester=semester,
+                                        school=school).exists():
         return HttpResponse(json.dumps(error), content_type='application/json')
 
     if params['id']:
@@ -170,8 +177,8 @@ def save_timetable(request):
         personal_timetable.courses.add(course_obj)
         enrolled_sections = course['enrolled_sections']
         for section in enrolled_sections:
-            personal_timetable.sections.add(course_obj.section_set.get(meeting_section=section,
-                                                                    semester__in=[semester, "Y"]))
+            personal_timetable.sections.add(
+                course_obj.section_set.get(meeting_section=section, semester=semester))
     personal_timetable.has_conflict = has_conflict
     personal_timetable.save()
     timetables = get_student_tts(student, school, semester)
@@ -188,7 +195,7 @@ def delete_timetable(request):
     school = request.subdomain
     params = json.loads(request.body)
     name = params['name']
-    semester = params['semester']
+    semester = Semester.objects.get(id=params['semester'])
     student = Student.objects.get(user=request.user)
 
     PersonalTimetable.objects.filter(
@@ -206,7 +213,7 @@ def duplicate_timetable(request):
     params = json.loads(request.body)
     tt = params['timetable']
     name = tt['name']
-    semester = tt['semester']
+    semester = Semester.objects.get(id=tt['semester'])
     student = Student.objects.get(user=request.user)
     new_name = params['name']
 
@@ -242,83 +249,124 @@ def save_settings(request):
 
 @csrf_exempt
 @login_required
+def find_friends(request):
+    school = request.subdomain
+    student = Student.objects.get(user=request.user)
+    if not student.social_all:
+        return HttpResponse(json.dumps([]))
+    semester, _ = Semester.objects.get_or_create(**json.loads(request.body)['semester'])
+    current_tt = student.personaltimetable_set.filter(school=school, semester=semester).order_by('last_updated').last()
+    if current_tt is None:
+        return HttpResponse(json.dumps([]))
+    current_tt_courses = current_tt.courses.all()
+
+    # The most recent TT per student with social enabled that has courses in common with input student
+    matching_tts = PersonalTimetable.objects.filter(student__social_all=True, courses__id__in=current_tt_courses) \
+        .exclude(student=student) \
+        .order_by('student', 'last_updated') \
+        .distinct('student')
+
+    friends = []
+    for matching_tt in matching_tts:
+        friend = matching_tt.student
+        sections_in_common = matching_tt.sections.all() & current_tt.sections.all()
+        courses_in_common = matching_tt.courses.all() & current_tt_courses
+
+        shared_courses = []
+        for course in courses_in_common:
+            shared_courses.append({
+                'course': model_to_dict(course, exclude=['unstopped_description', 'description', 'credits']),
+                # is there a section for this course that is in both timetables?
+                'in_section': (sections_in_common & course.section_set.all()).exists()
+            })
+
+        friends.append({
+            'peer': model_to_dict(friend, exclude=['user','id','fbook_uid', 'friends']),
+            'is_friend': student.friends.filter(id=friend.id).exists(),
+            'shared_courses': shared_courses,
+            'profile_url': 'https://www.facebook.com/' + friend.fbook_uid,
+            'name': friend.user.first_name + ' ' + friend.user.last_name,
+            'large_img': 'https://graph.facebook.com/' + friend.fbook_uid + '/picture?width=700&height=700'
+        })
+
+    friends.sort(key=lambda friend: len(friend['shared_courses']), reverse=True)
+    return HttpResponse(json.dumps(friends))
+
+
+@csrf_exempt
+@login_required
 def get_classmates(request):
     school = request.subdomain
     student = Student.objects.get(user=request.user)
     course_ids = json.loads(request.body)['course_ids']
     try:
-        semester = json.loads(request.body)['semester']
+        semester, _ = Semester.objects.get_or_create(**json.loads(request.body)['semester'])
     except:
         semester = None 
     # user opted in to sharing courses
     if student.social_courses:
         courses = []
+        friends = student.friends.filter(social_courses=True)
         for course_id in course_ids:
-            courses.append(get_classmates_from_course_id(school, student, course_id, semester))
+            courses.append(get_classmates_from_course_id(school, student, course_id, semester, friends=friends))
         return HttpResponse(json.dumps(courses), content_type='application/json')
     else:
         return HttpResponse("Must have social_courses enabled")
 
-@csrf_exempt
-@login_required
-def find_friends(request):
-    try: 
-        school = request.subdomain
-        student = Student.objects.get(user=request.user)
-        if not student.social_all:
-            return HttpResponse("Must have social_all enabled")
-        semester = json.loads(request.body)['semester']
-        student_tt = student.personaltimetable_set.filter(school=school,semester=semester).order_by('last_updated').last()
-        c = student_tt.courses.all()
-        friends = []
-        students = Student.objects.filter(social_all=True,personaltimetable__courses__id__in=c).exclude(id=student.id).distinct()
-        peers = filter(lambda s: s.personaltimetable_set.filter(school=school, semester=semester).order_by('last_updated').last() and (s.personaltimetable_set.filter(school=school, semester=semester).order_by('last_updated').last().courses.all() & c), students)
-        for peer in peers:
-            peer_tt = peer.personaltimetable_set.filter(school=school,semester=semester).order_by('last_updated').last()
-            shared_courses = map(
-                    lambda x: {
-                        'course': model_to_dict(x,exclude=['unstopped_description','description','credits']),
-                        'in_section': peer_tt.sections.filter(id=student_tt.sections.get(course__id=x.id).id).exists()
-                    },
-                    c & peer_tt.courses.all(),
-                )
-            friends.append({
-                'peer': model_to_dict(peer,exclude=['user','id','fbook_uid', 'friends']),
-                'is_friend': student.friends.filter(id=peer.id).exists(),
-                'shared_courses': shared_courses,
-                'profile_url': 'https://www.facebook.com/' + peer.fbook_uid,
-                'name': peer.user.first_name + ' ' + peer.user.last_name,
-                'large_img': 'https://graph.facebook.com/' + peer.fbook_uid + '/picture?width=700&height=700'
-            })
-        friends.sort(key=lambda l: len(l['shared_courses']), reverse=True)
-        return HttpResponse(json.dumps(friends))
-    except Exception as e:
-        print e
-        return HttpResponse(json.dumps([]))
 
-def get_classmates_from_course_id(school, student, course_id, semester):
-    # All friends with social courses/sharing enabled
-    friends = student.friends.filter(social_courses=True)
-    course = { 'course_id': course_id, 'classmates': [], 'past_classmates': []}
-    for friend in friends:
-        classmate = model_to_dict(friend, exclude=['user','id','fbook_uid', 'friends'])
+def get_classmates_from_course_id(school, student, course_id, semester, friends=None):
+    if not friends: 
+        # All friends with social courses/sharing enabled
+        friends = student.friends.filter(social_courses=True)
+    course = {'course_id': course_id}
+    curr_ptts = PersonalTimetable.objects.filter(student__in=friends, courses__id__exact=course_id)\
+        .filter(Q(semester=semester)).order_by('student','last_updated').distinct('student')
+    past_ptts = PersonalTimetable.objects.filter(student__in=friends, courses__id__exact=course_id)\
+        .filter(~Q(semester=semester)).order_by('student','last_updated').distinct('student')
+
+    course['classmates'] = get_classmates_from_tts(student, course_id, curr_ptts)
+    course['past_classmates'] = get_classmates_from_tts(student, course_id, past_ptts)
+    return course
+
+
+def get_classmates_from_tts(student, course_id, tts):
+    classmates = []
+    for tt in tts:
+        friend = tt.student
+        classmate = model_to_dict(friend, exclude=['user', 'id', 'fbook_uid', 'friends'])
         classmate['first_name'] = friend.user.first_name
         classmate['last_name'] = friend.user.last_name
-        past_tts = []
-        ptts = PersonalTimetable.objects.filter(student=friend, courses__id__exact=course_id)
-        if semester:
-            past_tts = ptts.filter(~Q(semester=semester))
-            ptts = ptts.filter(semester=semester)
-        for tt in ptts:
-            if student.social_offerings and friend.social_offerings:
-                friend_sections = tt.sections.all().filter(course__id=course_id)
-                sections = list(friend_sections.values_list('meeting_section', flat=True).distinct())
-                classmate['sections'] = sections
-        if len(ptts) > 0:
-            course['classmates'].append(classmate)
-        if len(past_tts) > 0:
-            course['past_classmates'].append(classmate)
-    return course
+        if student.social_offerings and friend.social_offerings:
+            friend_sections = tt.sections.filter(course__id=course_id)
+            sections = list(friend_sections.values_list('meeting_section', flat=True).distinct())
+            classmate['sections'] = sections
+            classmates.append(classmate)
+    return classmates
+
+
+@csrf_exempt
+@login_required
+def get_most_classmate_count(request):
+    school = request.subdomain
+    student = Student.objects.get(user=request.user)
+    course_ids = json.loads(request.body)['course_ids']
+    semester, _ = Semester.objects.get_or_create(**json.loads(request.body)['semester'])
+    course = []
+    total_count = 0
+    count = 0
+    most_friend_course_id = -1
+    for course_id in course_ids:
+        temp_count = get_friend_count_from_course_id(school, student, course_id, semester)
+        if temp_count > count:
+            count = temp_count
+            most_friend_course_id = course_id
+        total_count += temp_count
+    course = {"id" : most_friend_course_id, "count" : count, "total_count" : total_count}
+    return HttpResponse(json.dumps(course))
+
+def get_friend_count_from_course_id(school, student, course_id, semester):
+    return PersonalTimetable.objects.filter(student__in=student.friends.all(), courses__id__exact=course_id)\
+        .filter(Q(semester=semester)).distinct('student').count()
 
 @csrf_exempt
 @validate_subdomain
@@ -400,14 +448,15 @@ def delete_registration_token(request):
     }
     return HttpResponse(json.dumps(json_data), content_type="application/json")
 
-def get_semester_from_tt(tt):
+def get_semester_name_from_tt(tt):
     try:
-        tt['semester']
+        return Semester.objects.get(id=tt['semester']).name
     except KeyError:
-        semester = 'F'
+        semester = 'Fall'
         for course in tt['courses']:
             for slot in course['slots']:
-                return slot['semester']
+                semester_id = slot['semester']
+                return Semester.objects.get(id=semester_id).name
         return semester
 
 @csrf_exempt
@@ -421,24 +470,24 @@ def add_tt_to_gcal(request):
     school = request.subdomain
 
     tt_name = tt.get('name')
-    if  not tt_name or "Untitled Schedule" in tt_name > -1 or len(tt_name) == 0:
+    if not tt_name or "Untitled Schedule" in tt_name or len(tt_name) == 0:
         tt_name = "Semester.ly Schedule"
     else:
-        tt_name + " - Semester.ly"
+        tt_name += " - Semester.ly"
 
     #create calendar
     calendar = {'summary': tt_name, 'timeZone': 'America/New_York'}
     created_calendar = service.calendars().insert(body=calendar).execute()
 
-    semester = get_semester_from_tt(tt)
-    if semester == 'F':
+    semester_name = get_semester_name_from_tt(tt)
+    if semester_name == 'Fall':
         #ignore year, year is set to current year
-        sem_start = datetime.datetime(2017,8,30,17,0,0)
-        sem_end = datetime.datetime(2017,12,20,17,0,0)
+        sem_start = datetime(2017,8,30,17,0,0)
+        sem_end = datetime(2017,12,20,17,0,0)
     else:
         #ignore year, year is set to current year
-        sem_start = datetime.datetime(2017,1,30,17,0,0)
-        sem_end = datetime.datetime(2017,5,5,17,0,0)
+        sem_start = datetime(2017,1,30,17,0,0)
+        sem_end = datetime(2017,5,5,17,0,0)
 
     #add events
     for course in tt['courses']:

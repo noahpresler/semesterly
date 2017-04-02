@@ -11,7 +11,13 @@ import { getUserInfoEndpoint,
 	getFriendsEndpoint,
 	getIntegrationGetEndpoint,
 	getIntegrationDelEndpoint,
-	getIntegrationAddEndpoint } from '../constants.jsx';
+	getIntegrationAddEndpoint,
+	getSchoolSpecificInfo,
+  getFinalExamSchedulerEndpoint,
+  getLogFacebookAlertViewEndpoint,
+  getLogFacebookAlertClickEndpoint,
+  getMostClassmatesCountEndpoint} from '../constants.jsx';
+import { fetchCourseClassmates } from './modal_actions.jsx'
 import { store } from '../init.jsx';
 import { loadTimetable, nullifyTimetable, getNumberedName } from './timetable_actions.jsx';
 import { browserSupportsLocalStorage, setDeclinedNotifications } from '../util.jsx';
@@ -60,12 +66,11 @@ export function requestFriends() {
 function getSaveTimetablesRequestBody() {
 	let state = store.getState();
 	let timetableState = state.timetables;
-	let semester = state.semester;
 	let name = state.savingTimetable.activeTimetable.name;
 	let id = state.savingTimetable.activeTimetable.id || 0;
 	return {
 		timetable: getActiveTimetable(timetableState),
-		semester,
+		semester: allSemesters[state.semesterIndex],
 		name,
 		id,
 	}
@@ -290,6 +295,17 @@ export function saveSettings(callback) {
 			credentials: 'include',
 		})
 		.then(response => {
+			let state = store.getState();
+			let timetables = state.timetables.items;
+			let active = state.timetables.active;
+			let active_tt = timetables[active];
+
+			if (state.userInfo.data.social_courses) {
+				dispatch(fetchClassmates(active_tt.courses.map( c => c['id'])));
+				if (state.courseInfo.id) {
+					dispatch(fetchCourseClassmates(state.courseInfo.id));
+				}
+			}
 			dispatch({
 				type: "RECEIVE_USER_INFO_SAVED"
 			})
@@ -326,15 +342,37 @@ export function getUserSavedTimetables(semester) {
 	}
 }
 
-export function fetchClassmates(courses) {
+export function fetchFinalExamSchedule() {
 	return (dispatch) => 
-{		let state = store.getState();
-		let semester = state.semester !== undefined ? state.semester : currentSemester;
+	{		
+		let state = store.getState();
+		let timetable = getActiveTimetable(state.timetables);
+		dispatch({type: 'FETCH_FINAL_EXAMS'})
+		fetch(getFinalExamSchedulerEndpoint(),{
+			credentials: 'include',
+			method: 'POST',
+			body: JSON.stringify(timetable)
+		})
+		.then(response => response.json())
+	    .then(json => {
+	    	dispatch({type: 'RECIEVE_FINAL_EXAMS', json: json})
+	    });
+	}
+}
+
+export function fetchClassmates(courses) {
+	return (dispatch) => {		
+		let state = store.getState();
+		let semesterIndex = state.semesterIndex !== undefined ? state.semesterIndex : currentSemester;
+
+    	setTimeout(() => {
+	        dispatch(fetchMostClassmatesCount(getActiveTimetable(state.timetables).courses.map(c => c['id'])));
+	      }, 500);
 		dispatch(requestClassmates());
 		fetch(getClassmatesEndpoint(), {
 			credentials: 'include',
 			method: 'POST',
-			body: JSON.stringify({ course_ids: courses, semester: semester })
+			body: JSON.stringify({ course_ids: courses, semester: allSemesters[semesterIndex] })
 		})
 	    .then(response => response.json())
 	    .then(json => {
@@ -345,17 +383,23 @@ export function fetchClassmates(courses) {
 
 export function fetchFriends() {
 	let state = store.getState();
-	let semester = state.semester !== undefined ? state.semester : currentSemester;
+	let semesterIndex = state.semesterIndex !== undefined ? state.semesterIndex : currentSemester;
 	return (dispatch) => {
 		dispatch(requestFriends());
+		dispatch({
+			type: "PEER_MODAL_LOADING"
+		});
 		fetch(getFriendsEndpoint(), {
 			credentials: 'include',
 			method: 'POST',
-			body: JSON.stringify({ semester: semester })
+			body: JSON.stringify({ semester: allSemesters[semesterIndex] })
 		})
 	    .then(response => response.json())
 	    .then(json => {
 	    	dispatch(getFriends(json))
+	    	dispatch({
+				type: "PEER_MODAL_LOADED"
+			});
 	    });
 	}
 }
@@ -492,4 +536,50 @@ export function addIntegration(integrationID, courseID, json) {
 
 export function createiCal(timetable) {
 	console.log(timetable)
+}
+
+export function requestMostClassmates() {
+  return {
+    type: "REQUEST_MOST_CLASSMATES",
+  }
+}
+
+export function fetchMostClassmatesCount(courses) {
+  return (dispatch) => 
+{   let state = store.getState();
+    let semesterIndex = state.semesterIndex !== undefined ? state.semesterIndex : currentSemester;
+    let semester = allSemesters[semesterIndex];
+    dispatch(requestMostClassmates());
+    fetch(getMostClassmatesCountEndpoint(), {
+      credentials: 'include',
+      method: 'POST',
+      body: JSON.stringify({ course_ids: courses, semester: semester })
+    })
+      .then(response => response.json())
+      .then(json => {
+      	dispatch({
+			type: "CHANGE_MOST_FRIENDS_CLASS",
+			classId: json.id,
+			count: json.count,
+			total: json.total_count
+		});
+		// dispatch({
+		// 	type: "ALERT_FACEBOOK_FRIENDS",
+		// });
+      });
+  }
+}
+
+export function logFacebookAlertView() {
+	fetch(getLogFacebookAlertViewEndpoint(), {
+		method: 'POST',
+		credentials: 'include',
+	})
+}
+
+export function LogFacebookAlertClick() {
+	fetch(getLogFacebookAlertClickEndpoint(), {
+		method: 'POST',
+		credentials: 'include',
+	})
 }
