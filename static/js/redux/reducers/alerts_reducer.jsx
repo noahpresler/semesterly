@@ -1,8 +1,18 @@
-export const alerts = (state = {alertConflict: false, 
-								alertTimetableExists: false, 
-								alertChangeSemester: false,
-								alertNewTimetable: false,
-								alertEnableNotifications: false}, action) => {
+let defaultState = {
+	alertConflict: false, 
+	alertTimetableExists: false, 
+	alertChangeSemester: false,
+	alertNewTimetable: false,
+	alertEnableNotifications: false,
+  alertFacebookFriends: false,
+  facebookAlertIsOn: false,
+  mostFriendsClassId: null,
+  mostFriendsCount: 0,
+  totalFriendsCount: 0,
+	desiredSemester: 0
+}
+
+export const alerts = (state = defaultState, action) => {
 	switch (action.type) {
 		// dispatched when there's a conflict
 		case "ALERT_CONFLICT":
@@ -18,7 +28,8 @@ export const alerts = (state = {alertConflict: false,
 		// while having an unsaved timetable (if logged in), or
 		// if they're logged out, since while logged out their timetable is cleared
 		case "ALERT_CHANGE_SEMESTER":
-			return Object.assign({}, state, {alertChangeSemester: true});
+			return Object.assign({}, state, {alertChangeSemester: true, 
+																				desiredSemester: action.semester});
 		case "DISMISS_ALERT_CHANGE_SEMESTER":
 			return Object.assign({}, state, {alertChangeSemester: false});
 		// dispatched when the user tries to create a new timetable but the current one is unsaved
@@ -31,6 +42,15 @@ export const alerts = (state = {alertConflict: false,
 			return Object.assign({}, state, {alertEnableNotifications: true});
 		case "DISMISS_ENABLE_NOTIFICATIONS":
 			return Object.assign({}, state, {alertEnableNotifications: false});
+		// dispatched when the most friended class is returned
+		case "CHANGE_MOST_FRIENDS_CLASS":
+			return Object.assign({}, state, {mostFriendsCount: action.count, mostFriendsClassId: action.classId, totalFriendsCount: action.total});
+		case "ALERT_FACEBOOK_FRIENDS":
+			return Object.assign({}, state, {alertFacebookFriends: true});
+		case "SHOW_FACEBOOK_ALERT":
+			return Object.assign({}, state, {facebookAlertIsOn: true});
+		case "DISMISS_FACEBOOK_FRIENDS":
+			return Object.assign({}, state, {alertFacebookFriends: false, facebookAlertIsOn: false});
 		default:
 			return state;
 	}
