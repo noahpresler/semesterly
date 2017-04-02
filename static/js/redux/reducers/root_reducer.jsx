@@ -1,6 +1,6 @@
 import { combineReducers } from 'redux';
 import { school } from './school_reducer.jsx';
-import { semester } from './semester_reducer.jsx';
+import { semesterIndex } from './semester_reducer.jsx';
 import { calendar } from './calendar_reducer.jsx';
 import { courseSections } from './course_sections_reducer.jsx';
 import { timetables } from './timetables_reducer.jsx';
@@ -28,7 +28,7 @@ import { finalExamsModal } from './final_exams_modal_reducer.jsx'
 
 export const rootReducer = combineReducers({
   school,
-  semester,
+  semesterIndex,
   searchResults,
   timetables,
   calendar,

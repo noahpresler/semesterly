@@ -12,6 +12,7 @@ export class SearchBar extends React.Component {
         this.state = { focused: false, showDropdown: false };
         this.toggleDropdown = this.toggleDropdown.bind(this);
         this.fetchSearchResults = this.fetchSearchResults.bind(this);
+        this.getAbbreviatedSemesterName = this.getAbbreviatedSemesterName.bind(this);
         this.changeTimer = false;
     }
     componentWillMount() {
@@ -44,9 +45,21 @@ export class SearchBar extends React.Component {
     onClickOut(e) {
         this.setState({ showDropdown: false });
     }
-    setSemester(semester) {
+    maybeSetSemester(semester) {
         this.setState({ showDropdown: false });
-        this.props.setSemester(semester);
+        this.props.maybeSetSemester(semester);
+    }
+    getAbbreviatedSemesterName(semester) {
+        return this.abbreviateSemesterName(semester.name) + " " + this.abbreviateYear(semester.year)
+    }
+    getSemesterName(semester) {
+        return semester.name + " " + semester.year
+    }
+    abbreviateSemesterName(semesterName) {
+        return semesterName[0];
+    }
+    abbreviateYear(year) {
+        return year.replace('20', "'")
     }
     render() {
         let resClass = classNames({'search-results' : true, 'trans50' : this.props.hasHoveredResult})
@@ -71,23 +84,21 @@ export class SearchBar extends React.Component {
                 <SearchSideBarContainer />
             </ul>
         );
-        let availableSemesters = this.props.availableSemesters.map(s => {
-            let name = this.props.getSemesterName[s];
-            if ( $(window).width() < 767) {
-                name = name.replace('Fall', 'F');
-                name = name.replace('Spring', 'S');
-                name = name.replace('Winter', 'W');
-                name = name.replace('20', "'");
-            }
-            return <div key={s} className="semester-option" onMouseDown={ () => this.setSemester(s) }> { name } </div>
+        let availableSemesters = allSemesters.map((semester, index) => {
+            let name = ($(window).width() < 767) ? 
+                this.getAbbreviatedSemesterName(semester) :
+                this.getSemesterName(semester)
+            return (
+                <div key={ name }
+                    className="semester-option" 
+                    onMouseDown={ () => this.maybeSetSemester(index) }> 
+                    { name } 
+                </div>
+            )
         });
-        let currSem = this.props.semesterName;
-        if ( $(window).width() < 767) {
-            currSem = currSem.replace('Fall', 'F');
-            currSem = currSem.replace('Spring', 'S');
-            currSem = currSem.replace('Winter', 'W');
-            currSem = currSem.replace('20', "'");
-        }
+        let currSem = ($(window).width() < 767) ? 
+                        this.getAbbreviatedSemesterName(this.props.semester) :
+                        this.getSemesterName(this.props.semester)
     	return (
         	<div id="search-bar" className="no-print">
                 <div id="search-bar-wrapper">
