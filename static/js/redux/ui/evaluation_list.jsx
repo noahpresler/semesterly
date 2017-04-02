@@ -1,7 +1,7 @@
 import React from 'react';
 import Evaluation from './evaluation.jsx';
 import SideScroller from './side_scroller.jsx';
-import { SEMESTER_RANKS } from '../constants.jsx';
+import { SEMESTER_RANKS } from '../constants/constants.jsx';
 
 class EvaluationList extends React.Component {
 	render() {

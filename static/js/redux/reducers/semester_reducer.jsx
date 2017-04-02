@@ -1,4 +1,4 @@
-import { SET_SEMESTER } from '../constants.jsx';
+import { SET_SEMESTER } from '../constants/constants.jsx';
 
 export const semesterIndex = (state = 0, action) => {
 	switch (action.type) {
