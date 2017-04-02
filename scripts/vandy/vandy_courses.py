@@ -1,99 +1,41 @@
-# @what	Vanderbilt Course Parser
-# @org	Semeseter.ly
-# @author	Michael N. Miller
-# @date	9/3/16
+# @what	    Vanderbilt Course Parser
+# @org      Semeseter.ly
+# @author   Michael N. Miller and Maxwell Yeo
+# @date	    2/5/17
 
-import django, os, datetime
-os.environ.setdefault("DJANGO_SETTINGS_MODULE", "semesterly.settings")
-django.setup()
-from timetable.models import *
-from fake_useragent import UserAgent
-from bs4 import BeautifulSoup
-import requests, cookielib, re, sys
+from __future__ import print_function # NOTE: slowly move toward Python3
 
-class VandyParser:
+import sys, re
+from scripts.parser_library.base_parser import CourseParser
+from scripts.parser_library.internal_exceptions import CourseParseError
 
-	def __init__(self):
-		self.session = requests.Session()
-		self.headers = {'User-Agent' : 'My User Agent 1.0'}
-		self.cookies = cookielib.CookieJar()
+class VandyParser(CourseParser):
+
+	API_URL = 'https://webapp.mis.vanderbilt.edu/more'
+
+	def __init__(self, **kwargs):
 		self.school = 'vandy'
-		self.semester = ''
 		self.departments = {}
 		self.username = '***REMOVED***'
 		self.password = '***REMOVED***'
-		self.url = 'https://webapp.mis.vanderbilt.edu/more'
 		self.course = {
 			'description' : '',
 			'cancelled' : False
 		}
-
-	def get_html(self, url, payload=''):
-		html = None
-		while html is None:
-			try:
-				r = self.session.get(
-					url,
-					params = payload,
-					cookies = self.cookies,
-					headers = self.headers,
-					verify = True
-				)
-
-				if r.status_code == 200:
-					html = r.text
-
-			except (requests.exceptions.Timeout,
-				requests.exceptions.ConnectionError):
-				sys.stderr.write("Unexpected error: " + str(sys.exc_info()[0]))
-				continue
-
-		return html.encode('utf-8')
-
-	def post_http(self, url, form, payload=''):
-
-		try:
-			post = self.session.post(
-				url,
-				data = form,
-				params = payload,
-				cookies = self.cookies,
-				headers = self.headers,
-				verify = True,
-				# allow_redirects=False
-			)
-
-			return post
-			# if r.status_code == 200:
-				# post = r.text
-
-			# print "POST: " + r.url
-
-		except (requests.exceptions.Timeout,
-			requests.exceptions.ConnectionError):
-			sys.stderr.write("Unexpected error: " + sys.exc_info()[0])
-
-		return None
+		super(VandyParser, self).__init__('vandy',**kwargs)
 
 	def login(self):
-
-		print "Logging in..."
-
+		if self.verbosity > 2:
+			print("Logging in...")
 		login_url = 'https://login.mis.vanderbilt.edu'
-		
 		get_login_url = login_url + '/login'
 		params = {
-			'service' : self.url + '/j_spring_cas_security_check'
+			'service' : VandyParser.API_URL + '/j_spring_cas_security_check'
 		}
-
-		soup = BeautifulSoup(self.get_html(get_login_url, params), 'html.parser')
-
+		soup = self.requester.get(get_login_url, params)
 		post_suffix_url = soup.find('form', {'name' : 'loginForm'})['action']
-
 		post_login_url = login_url + post_suffix_url
-
 		sec_block = soup.find('input', {'name' : 'lt'})['value']
-
 		login_info = {
 			'username': '***REMOVED***',
 			'password': 'Gainz!23',
@@ -101,83 +43,99 @@ class VandyParser:
 			'_eventId': 'submit',
 			'submit': 'LOGIN'
 		}
-
-		self.post_http(login_url + post_suffix_url, login_info, params)
-
+		self.requester.post(login_url + post_suffix_url, login_info, params, parse=False)
 		# TODO - not sure if this is necessary but it works
-		self.get_html(self.url + '/Entry.action')
+		self.requester.get(VandyParser.API_URL + '/Entry.action', parse=False)
 
-	def parse(self):
+	def start(self,
+		year=None,
+		term=None,
+		department=None,
+		textbooks=True,
+		verbosity=3,
+		**kwargs):
+		self.verbosity = verbosity
+		self.parse(year=year, term=term, department=department, textbooks=textbooks, verbosity=verbosity)
 
-		# Login to vandy course search site
+	def parse(self,
+		year=None,
+		term=None,
+		department=None,
+		textbooks=True,
+		verbosity=3):
+
 		self.login()
 
 		# FIXME - hack to deal with Fall 2016 & Spring 2017
-		semester_codes = {'F' : '0875', 'S' : '0880'}
-
-		for semester in semester_codes:
-
-			print 'Parsing semester ' + semester
-
-			# Load environment for targeted semester
-			self.semester = semester
-			self.get_html(self.url + '/SelectTerm!selectTerm.action', {'selectedTermCode' : semester_codes[semester]})
-			self.get_html(self.url + '/SelectTerm!updateSessions.action')
-
-			# Get a list of all the department codes
-			department_codes = self.extract_department_codes()
-
-			# Create payload to request course list from server
-			payload = {
-				'searchCriteria.classStatusCodes': ['O', 'W', 'C'],
-				'__checkbox_searchCriteria.classStatusCodes':['O','W', 'C']
+		years_and_terms = {
+			'2016': {
+				'Fall': '0875'
+			},
+			'2017': {
+				'Spring': '0880',
+				'Fall': '0895',
+				'Summer': '0885',
 			}
+		}
 
-			for department_code in department_codes:
+		years_and_terms = self.extractor.filter_term_and_year(years_and_terms, year, term)
 
-				print 'Parsing courses in \"' + self.departments[department_code] + '\"'
+		for year, semesters in years_and_terms.items():
+			if self.verbosity >= 1:
+				print('>   Parsing year ' + year)
+			self.ingestor['year'] = year
 
-				# Construct payload with department code
-				payload.update({'searchCriteria.subjectAreaCodes': department_code})
+			for semester_name, semester_code in semesters.items():
 
-				# GET html for department course listings
-				html = self.get_html(self.url + '/SearchClassesExecute!search.action', payload)
+				if self.verbosity >= 1:
+					print('>>  Parsing semester ' + semester_name)
+				self.ingestor['semester'] = semester_name
 
-				# Parse courses in department
-				self.parse_courses_in_department(html)
+				# Load environment for targeted semester
+				self.requester.get(VandyParser.API_URL + '/SelectTerm!selectTerm.action', {'selectedTermCode' : semester_code}, parse=False)
+				self.requester.get(VandyParser.API_URL + '/SelectTerm!updateSessions.action', parse=False)
 
-			# return to search page for next iteration
-			self.get_html(self.url + '/Entry.action')
+				# Get a list of all the department codes
+				department_codes = self.extract_department_codes()
+				department_codes = self.extractor.filter_departments(department_codes, department)
 
-		# Final updates
-		self.wrap_up()
+				# Create payload to request course list from server
+				payload = {
+					'searchCriteria.classStatusCodes': ['O', 'W', 'C'],
+					'__checkbox_searchCriteria.classStatusCodes':['O','W', 'C']
+				}
 
-	def wrap_up(self):
-			update_object, created = Updates.objects.update_or_create(
-					school=self.school,
-					update_field="Course",
-					defaults={'last_updated': datetime.datetime.now()}
-			)
-			update_object.save()
+				for department_code in department_codes:
+
+					if self.verbosity >= 1:
+						print('>>> Parsing courses in \"' + self.departments[department_code] + '\"')
+
+					# Construct payload with department code
+					payload.update({'searchCriteria.subjectAreaCodes': department_code})
+
+					# GET html for department course listings
+					html = self.requester.get(VandyParser.API_URL + '/SearchClassesExecute!search.action', payload)
+
+					# Parse courses in department
+					self.parse_courses_in_department(html)
+
+				# return to search page for next iteration
+				self.requester.get(VandyParser.API_URL + '/Entry.action', parse=False)
 
 	def create_course(self):
+		self.ingestor['school'] = 'vandy'
+		self.ingestor['campus'] = 1
+		self.ingestor['code'] = self.course.get('code')
+		self.ingestor['name'] = self.course.get('name')
+		self.ingestor['description'] = self.course.get('description') if self.course.get('description') else ''
+		self.ingestor['num_credits'] = float(self.course.get('Hours')) if VandyParser.is_float(self.course.get('Hours')) else 0.0
+		self.ingestor['areas'] = filter(lambda a: a != None, self.course.get('Attributes').split(',')) if self.course.get('Attributes') != None else None
+		self.ingestor['prerequisites'] = self.course.get('Requirement(s)')
+		self.ingestor['department_name'] = self.departments.get(self.course.get('department'))
+		self.ingestor['level'] = '0'
 
-		course_model, course_was_created = Course.objects.update_or_create(
-			code = self.course.get('code'),
-			school = 'vandy',
-			campus = 1,
-			defaults = {
-				'name': self.course.get('name'),
-				'description': self.course.get('description') if self.course.get('description') else '',
-				'areas': self.course.get('Attributes'),
-				'prerequisites': self.course.get('Requirement(s)'),
-				'num_credits': float(self.course.get('Hours')) if VandyParser.is_float(self.course.get('Hours')) else 0.0,
-				'level': '0',
-				'department': self.departments.get(self.course.get('department'))
-			}
-		)
-
-		return course_model
+		created_course = self.ingestor.ingest_course()
+		return created_course
 
 	@staticmethod
 	def is_float(f):
@@ -187,73 +145,51 @@ class VandyParser:
 		except TypeError:
 			return False
 
-	def create_section(self, course_model):
-
+	def create_section(self, created_course):
 		if self.course.get('cancelled'):
-
-			if Section.objects.filter(course = course_model, meeting_section = self.course.get('section')).exists():
-				s = Section.objects.get(course = course_model, meeting_section = self.course.get('section'))
-				Offering.objects.filter(section = s).delete()
-				s.delete()
-
 			self.course['cancelled'] = False
-
 			return None
 
 		else:
-			section, section_was_created = Section.objects.update_or_create(
-				course = course_model,
-				semester = self.semester,
-				meeting_section = self.course.get('section'),
-				defaults = {
-					'instructors': self.course.get('Instructor(s)') or '',
-					'size': int(self.course.get('Class Capacity')),
-					'enrolment': int(self.course.get('Total Enrolled'))
-				}
-			)
+			self.ingestor['section'] = self.course.get('section')
+			self.ingestor['instructors'] = self.course.get('Instructor(s)') or ''
+			self.ingestor['size'] = int(self.course.get('Class Capacity'))
+			self.ingestor['enrolment'] = int(self.course.get('Total Enrolled'))
 
-			return section
+			created_section = self.ingestor.ingest_section(created_course)
+			return created_section
 
-	def create_offerings(self, section_model):
-
+	def create_offerings(self, created_section):
 		if self.course.get('days'):
 			for day in list(self.course.get('days')):
-				offering_model, offering_was_created = Offering.objects.update_or_create(
-					section = section_model,
-					day = day,
-					time_start = self.course.get('time_start'),
-					time_end = self.course.get('time_end'),
-					defaults = {
-						'location': self.course.get('Location')
-					}
-				)
+				self.ingestor['day'] = day
+				self.ingestor['time_start'] = self.course.get('time_start')
+				self.ingestor['time_end'] = self.course.get('time_end')
+				self.ingestor['location'] = self.course.get('Location')
 
+				created_meeting = self.ingestor.ingest_offerings(created_section)
 				# yield offering_model
 
 	def print_course(self):
-
 		for label in self.course:
 			try:
-				print label + "::" + self.course[label] + '::'
+				print(label + "::" + self.course[label] + '::')
 			except:
 				sys.stderr.write("error: UNICODE ERROR\n")
-				print sys.exc_info()[0]
+				print(sys.exc_info()[0])
 
 	def update_current_course(self, label, value):
 		try:
 			# self.course[label.encode('utf-8')] = value.encode('utf-8').strip()
 			self.course[label] = value.strip()
 		except:
-			print 'label:', label, sys.exc_info()[0]
+			print('label:', label, sys.exc_info()[0])
 			sys.stderr.write("UNICODE ERROR\n")
 
 	def extract_department_codes(self):
 
 		# Query Vandy class search website
-		html = self.get_html(self.url + '/SearchClasses!input.action')
-		soup = BeautifulSoup(html, 'html.parser')
-		# print soup.prettify().encode('utf-8')
-		# exit(1)
+		soup = self.requester.get(VandyParser.API_URL + '/SearchClasses!input.action', parse=True)
 
 		# Retrieve all deparments from dropdown in advanced search
 		department_entries = soup.find_all(id=re.compile("subjAreaMultiSelectOption[0-9]"))
@@ -269,7 +205,7 @@ class VandyParser:
 	def parse_courses_in_department(self, html):
 
 		# Check number of results isn't over max
-		numHitsSearch = re.search("totalRecords: ([0-9]*),", html)
+		numHitsSearch = re.search("totalRecords: ([0-9]*),", str(html))
 
 		numHits = 0
 		if numHitsSearch is not None:
@@ -277,7 +213,8 @@ class VandyParser:
 
 		# perform more targeted searches if needed
 		if numHits == 300:
-			self.parseByDay(self.url + '/SearchClassesExecute!search.action', payload)
+			raise CourseParseError('vandy numHits greater than 300')
+			# self.parseByDay(VandyParser.API_URL + '/SearchClassesExecute!search.action', payload)
 		else:
 			self.parse_set_of_courses(html)
 
@@ -296,8 +233,8 @@ class VandyParser:
 			# Condition met when reached last page
 			if last_class_number != prev_course_number:
 				page_count = page_count + 1
-				nextPageURL = self.url + '/SearchClassesExecute!switchPage.action?pageNum=' + str(page_count)
-				html = self.get_html(nextPageURL)
+				nextPageURL = VandyParser.API_URL + '/SearchClassesExecute!switchPage.action?pageNum=' + str(page_count)
+				html = self.requester.get(nextPageURL)
 				prev_course_number = last_class_number
 
 			else:
@@ -306,8 +243,7 @@ class VandyParser:
 	def parse_page_of_courses(self, html):
 
 		# initial parse with Beautiful Soup
-		soup = BeautifulSoup(html, 'html.parser')
-		courses = soup.find_all('tr', {'class' : 'classRow'})
+		courses = html.find_all('tr', {'class' : 'classRow'})
 
 		last_class_number = 0
 		for course in courses:
@@ -331,7 +267,7 @@ class VandyParser:
 		course_number, term_code = search.group(1), search.group(2)
 
 		# Base URL to retrieve detailed course info
-		course_details_url = self.url + '/GetClassSectionDetail.action'
+		course_details_url = VandyParser.API_URL + '/GetClassSectionDetail.action'
 
 		# Create payload to request course from server
 		payload = {
@@ -340,13 +276,12 @@ class VandyParser:
 		}
 		
 		try:
-			self.parse_course_details(self.get_html(course_details_url, payload))
-			# self.print_course()
+			self.parse_course_details(self.requester.get(course_details_url, payload))
 
 			# Create models
-			section_model = self.create_section(self.create_course())
-			if section_model:
-				self.create_offerings(section_model)
+			created_section = self.create_section(self.create_course())
+			if created_section:
+				self.create_offerings(created_section)
 
 			# Clear course map for next pass
 			self.course.clear()
@@ -354,18 +289,17 @@ class VandyParser:
 			# Return course number to track end of course pages
 
 		except ParseException:
-			print 'invalid course, parse exception'
+			print('invalid course, parse exception')
 
 		return course_number
 
 	def parse_course_details(self, html):
 
 		# Soupify course details html
-		soup = BeautifulSoup(html, 'html.parser')
-		courseNameAndAbbreviation = soup.find(id='classSectionDetailDialog').find('h1').text
+		courseNameAndAbbreviation = html.find(id='classSectionDetailDialog').find('h1').text
 
 		# Extract course name and abbreviation details
-		search = re.search("(.*):.*\n(.*)", soup.find(id='classSectionDetailDialog').find('h1').text)
+		search = re.search("(.*):.*\n(.*)", html.find(id='classSectionDetailDialog').find('h1').text)
 		courseName, abbr = search.group(2), search.group(1)
 
 		# Extract department code, catalog ID, and section number from abbreviation
@@ -375,7 +309,8 @@ class VandyParser:
 			raise ParseException()
 
 		departmentCode, catalogID, sectionNumber = title.group(1), title.group(2), title.group(3)
-		print '\t-', departmentCode, catalogID, sectionNumber.strip(), '-'
+		if self.verbosity > 2:
+			print('\t-', departmentCode, catalogID, sectionNumber.strip(), '-')
 
 		self.update_current_course("name", courseName)
 		self.update_current_course("code", departmentCode + '-' + catalogID)
@@ -387,8 +322,8 @@ class VandyParser:
 		self.update_current_course('description', '')
 
 		# Deal with course details as subgroups seen on details page
-		detail_headers = soup.find_all('div', {'class' : 'detailHeader'})
-		detail_panels = soup.find_all('div', {'class' : 'detailPanel'})
+		detail_headers = html.find_all('div', {'class' : 'detailHeader'})
+		detail_panels = html.find_all('div', {'class' : 'detailPanel'})
 
 		# NOTE: there should be the same number of detail headers and detail panels
 		assert(len(detail_headers) == len(detail_panels))
@@ -494,9 +429,7 @@ class VandyParser:
 				else:
 					self.update_current_course(label, value)
 
-
 	def parse_days(self, unformatted_days):
-
 		if unformatted_days == "TBA" or unformatted_days == "":
 			self.update_current_course("days", "")
 		else:
@@ -515,24 +448,10 @@ class VandyParser:
 
 			search = re.match("(.*) \- (.*)", unformatted_time_range)
 			if search is not None:
-				self.update_current_course('time_start', self.time_12_to_24(search.group(1)))
-				self.update_current_course('time_end', self.time_12_to_24(search.group(2)))
+				self.update_current_course('time_start', self.extractor.time_12to24(search.group(1)))
+				self.update_current_course('time_end', self.extractor.time_12to24(search.group(2)))
 			else:
 				sys.stderr.write('ERROR: invalid time format')
-
-	def time_12_to_24(self, time12):
-
-		# Regex extract
-		match = re.match("(\d*):(\d*)(.)", time12)
-
-		# Transform to 24 hours
-		minutes = match.group(2)
-		hours = int(match.group(1))
-		if match.group(3) == 'p':
-			hours = (hours%12)+12
-
-		# Return as string
-		return str(hours) + ":" + str(minutes)
 
 	def extract_instructors(self, string):
 
@@ -556,10 +475,3 @@ class VandyParser:
 
 class ParseException(Exception):
 	pass
-
-def main():
-	vp = VandyParser()
-	vp.parse()
-
-if __name__ == "__main__":
-	main()
