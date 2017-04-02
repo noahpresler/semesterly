@@ -85,6 +85,10 @@ def view_timetable(request, code=None, sem_name=None, year=None, shared_timetabl
     try:
       course = Course.objects.get(school=school, code=code)
       course_json = get_detailed_course_json(school, course, sem, student)
+      SharedCourseView.objects.create(
+        student = student,
+        shared_course = course,
+      ).save()
     except:
       raise Http404
 
@@ -173,14 +177,14 @@ def enable_notifs(request):
 
 @validate_subdomain
 def share_timetable(request, ref):
+  student = get_student(request)
   try:
     timetable_id = hashids.decrypt(ref)[0]
-    shared_timetable_obj = SharedTimetable.objects.get(
-                                    school=request.subdomain, id=timetable_id)                
+    shared_timetable_obj = SharedTimetable.objects.get(school=request.subdomain, id=timetable_id)
     shared_timetable = convert_tt_to_dict(shared_timetable_obj, include_last_updated=False)
-    semester = shared_timetable_obj.semester
-    return view_timetable(request, sem_name=semester.name, year=semester.year,
-                                  shared_timetable=shared_timetable)
+    view_shared_timetable = SharedTimetableView.objects.create(shared_timetable=shared_timetable_obj, student=student)
+    semester = shared_timetable['semester']
+    return view_timetable(request, sem=semester, shared_timetable=shared_timetable)
   except Exception as e:
     raise Http404
 
@@ -887,3 +891,4 @@ def log_final_exam_view(request):
     school=request.subdomain
   ).save()
   return HttpResponse(json.dumps({}), content_type="application/json")
+  
