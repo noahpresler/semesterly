@@ -256,9 +256,6 @@ class GWParser:
 
 	def scrape_description(self, soup):
 		try:
-			# for s in soup.find_all('tr', recursive=False):
-			# 	print(s.prettify())
-			# print(soup.find_all('tr'))#.prettify())
 			_soup = soup
 			try:
 				soup = soup.find_all('tr', recursive=False)[1].find('td')
