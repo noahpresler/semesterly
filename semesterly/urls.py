@@ -23,10 +23,11 @@ urlpatterns = patterns('',
     url(r'^textbooks*$', 'timetable.views.view_textbooks'),
     url(r'^export_calendar/*$', 'timetable.views.export_calendar'),
     url(r'^notifyme/*$', 'timetable.views.enable_notifs'),
-    url(r'^user/log_final_exam/*$', 'timetable.views.log_final_exam_view'),
     url(r'^find_friends/$', 'timetable.views.find_friends'),
-    url(r'^jhu/countdown/*$', 'timetable.views.jhu_timer'),
     url(r'react/*', 'student.views.react_to_course'),
+    url(r'^jhu/countdown/*$', 'timetable.views.jhu_timer'),
+        # unused
+    url(r'^user/log_final_exam/*$', 'timetable.views.log_final_exam_view'),
 
     # timetable
         # redirects

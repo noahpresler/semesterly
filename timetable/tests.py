@@ -1,14 +1,17 @@
 import json
+import random
 
-from django.test import TestCase
+from django.test import TestCase, SimpleTestCase
+from django.core.urlresolvers import resolve
 
 from timetable.test_utils import get_default_tt_request
+from school_mappers import VALID_SCHOOLS
 
 
 class RegressionTests(TestCase):
     fixtures = ['uoft_fall_sample.json']
     request_headers = {
-        'HTTP_HOST': 'uoft.sem.ly:800'
+        'HTTP_HOST': 'uoft.sem.ly:8000'
     }
 
     def test_course_search(self):
@@ -39,3 +42,30 @@ class RegressionTests(TestCase):
 
     def test_course_info(self):
         pass
+
+
+class EndPointSmokeTests(TestCase):
+    """ Test that all defined endpoints return 200. """
+    host = 'sem.ly:8000'
+
+    def test_marketing_urls(self):
+        marketing_urls = [
+            '/signup/',
+            '/textbooks',
+            '/export_calendar/',
+            '/notifyme/',
+            '/find_friends/',
+            '/react/',
+            '/jhu/countdown/'
+        ]
+        for url in marketing_urls:
+            response = self.client.get(url)
+            self.assertEqual(response.status_code, 200)
+
+            # if it requires a subdomain, test that too
+            view_handler = resolve(url)
+            if view_handler.func.func_dict.get('requires_subdomain', False):
+                subdomain = random.choice(VALID_SCHOOLS)
+                response = self.client.get(url, HTTP_HOST='{}.{}'.format(subdomain, self.host))
+                self.assertEqual(response.status_code, 200)
+
