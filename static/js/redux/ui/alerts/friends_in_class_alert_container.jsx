@@ -2,6 +2,7 @@ import { connect } from 'react-redux';
 import { setDeclinedNotifications, getDeclinedNotifications } from '../../util.jsx';
 import { fetchClassmates, saveSettings, logFacebookAlertView } from '../../actions/user_actions.jsx'
 import FriendsInClassAlert from './friends_in_class_alert.jsx';
+import * as ActionTypes from '../../constants/actionTypes.jsx'
 
 const mapStateToProps = (state) => {
 	let timetables = state.timetables.items;
@@ -26,17 +27,17 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch) => {
 	return {
     	dismissSelf: () => {
-    		dispatch({type: "DISMISS_FACEBOOK_FRIENDS"});
+    		dispatch({type: ActionTypes.DISMISS_FACEBOOK_FRIENDS});
     	},
     	showNotification: () => {
     		logFacebookAlertView();
-    		dispatch({type: "SHOW_FACEBOOK_ALERT"});
+    		dispatch({type: ActionTypes.SHOW_FACEBOOK_ALERT});
     	},
     	declineNotifications: () => setDeclinedNotifications(true),
     	enableNotifications:() => setDeclinedNotifications(false),
     	saveSettings: () => dispatch(saveSettings()),
 		changeUserInfo: (info) => dispatch({
-			type: "CHANGE_USER_INFO",
+			type: ActionTypes.CHANGE_USER_INFO,
 			data: info,
 		}),
 		fetchClassmates: (c) => dispatch(fetchClassmates(c)),

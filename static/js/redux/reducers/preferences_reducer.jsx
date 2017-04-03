@@ -1,3 +1,5 @@
+import * as ActionTypes from '../constants/actionTypes.jsx'
+
 const initPreferences = {
     try_with_conflicts: false,
     sort_metrics: [
@@ -11,13 +13,13 @@ const initPreferences = {
 
 export const preferences = (state=initPreferences, action) => {
     switch (action.type) {
-        case 'TOGGLE_CONFLICTS':
+        case ActionTypes.TOGGLE_CONFLICTS:
             return Object.assign({}, state, {try_with_conflicts: !state.try_with_conflicts})
-        case 'TURN_CONFLICTS_ON':
+        case ActionTypes.TURN_CONFLICTS_ON:
             return Object.assign({}, state, {try_with_conflicts: true})
-        case 'SET_ALL_PREFERENCES':
+        case ActionTypes.SET_ALL_PREFERENCES:
             return action.preferences;
-        case 'ADD_METRIC':
+        case ActionTypes.ADD_METRIC:
             let addIndex = state.sort_metrics.findIndex(m => m.metric == action.metric)
             if (addIndex == -1) 
                 return state
@@ -28,7 +30,7 @@ export const preferences = (state=initPreferences, action) => {
                 added
             ]
             return Object.assign({}, state, {sort_metrics: addedMetrics})
-        case 'REMOVE_METRIC':
+        case ActionTypes.REMOVE_METRIC:
             let delIndex = state.sort_metrics.findIndex(m => m.metric == action.metric)
             if (delIndex == -1)
                 return state
@@ -39,7 +41,7 @@ export const preferences = (state=initPreferences, action) => {
                 ...state.sort_metrics.slice(delIndex + 1)
             ]
             return Object.assign({}, state, {sort_metrics: removedMetrics})
-        case 'SWITCH_METRIC': // needs its own action (instead of del + add) to keep metric order
+        case ActionTypes.SWITCH_METRIC: // needs its own action (instead of del + add) to keep metric order
             let del = state.sort_metrics.findIndex(m => m.metric == action.del)
             let add = state.sort_metrics.findIndex(m => m.metric == action.add)
             if (add == -1 || del == -1)
@@ -50,7 +52,7 @@ export const preferences = (state=initPreferences, action) => {
             switched[del] = addObj
             switched[add] = delObj
             return Object.assign({}, state, {sort_metrics: switched})
-        case 'TOGGLE_METRIC_ORDER':
+        case ActionTypes.TOGGLE_METRIC_ORDER:
             let orderIndex = state.sort_metrics.findIndex(m => m.metric == action.metric)
             if (orderIndex == -1)
                 return state

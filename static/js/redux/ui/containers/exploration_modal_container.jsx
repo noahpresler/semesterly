@@ -2,8 +2,9 @@ import { connect } from 'react-redux';
 import { ExplorationModal } from '../exploration_modal.jsx';
 import { fetchAdvancedSearchResults } from '../../actions/search_actions.jsx';
 import { hoverSection, unhoverSection, addOrRemoveCourse, addOrRemoveOptionalCourse } from '../../actions/timetable_actions.jsx';
-import { getSchoolSpecificInfo } from '../../constants.jsx';
+import { getSchoolSpecificInfo } from '../../constants/constants.jsx';
 import { react, fetchCourseClassmates } from '../../actions/modal_actions.jsx';
+import * as ActionTypes from '../../constants/actionTypes.jsx'
 
 const mapStateToProps = (state) => {
 	let { isVisible, advancedSearchResults, isFetching, active, page} = state.explorationModal;
@@ -45,13 +46,13 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
 	return {
-		hideModal: () => dispatch({ type: "HIDE_EXPLORATION_MODAL" }),
-		openSignupModal: () => dispatch({ type: "TOGGLE_SIGNUP_MODAL" }),
+		hideModal: () => dispatch({ type: ActionTypes.HIDE_EXPLORATION_MODAL }),
+		openSignupModal: () => dispatch({ type: ActionTypes.TOGGLE_SIGNUP_MODAL }),
   	fetchAdvancedSearchResults: (query, filters) => dispatch(fetchAdvancedSearchResults(query, filters)),
-  	paginate: () => dispatch({type: 'PAGINATE_ADVANCED_SEARCH_RESULTS'}),
-  	clearPagination: () => dispatch({type: 'CLEAR_ADVANCED_SEARCH_PAGINATION'}),
+  	paginate: () => dispatch({type: ActionTypes.PAGINATE_ADVANCED_SEARCH_RESULTS}),
+  	clearPagination: () => dispatch({type: ActionTypes.CLEAR_ADVANCED_SEARCH_PAGINATION}),
   	setAdvancedSearchResultIndex: (idx, course_id) =>  {
-  		dispatch({ type: "SET_ACTIVE_RESULT", active: idx });
+  		dispatch({ type: ActionTypes.SET_ACTIVE_RESULT, active: idx });
   		dispatch(fetchCourseClassmates(course_id));
   	},
   	fetchCourseClassmates: (cid) => dispatch(fetchCourseClassmates(cid)),
