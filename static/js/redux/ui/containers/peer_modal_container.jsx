@@ -1,6 +1,7 @@
 import { connect } from 'react-redux';
 import { fetchFriends, saveSettings } from '../../actions/user_actions.jsx';
 import { PeerModal } from '../peer_modal.jsx';
+import * as ActionTypes from '../../constants/actionTypes.jsx'
 
 const mapStateToProps = (state) => {
 	let activeTimetable = state.timetables.items[state.timetables.active];
@@ -22,8 +23,8 @@ const mapDispatchToProps = (dispatch) => {
 			type: "CHANGE_USER_INFO",
 			data: info,
 		}),
-		togglePeerModal: () => dispatch({type:'TOGGLE_PEER_MODAL'}),
-		openSignupModal: () => dispatch({type: 'TOGGLE_SIGNUP_MODAL'})
+		togglePeerModal: () => dispatch({type: ActionTypes.TOGGLE_PEER_MODAL}),
+		openSignupModal: () => dispatch({type: ActionTypes.TOGGLE_SIGNUP_MODAL})
 	}
 }
 

@@ -1,6 +1,7 @@
 import { connect } from 'react-redux';
 import { setDeclinedNotifications, getDeclinedNotifications } from '../../util.jsx';
 import EnableNotificationsAlert from './enable_notifications_alert.jsx';
+import * as ActionTypes from '../../constants/actionTypes.jsx'
 
 const mapStateToProps = (state) => {
 	let msg = "Get Alerts!";
@@ -11,7 +12,7 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch) => {
 	return {
     	dismissSelf: () => {
-    		dispatch({type: "DISMISS_ENABLE_NOTIFICATIONS"});
+    		dispatch({type: ActionTypes.DISMISS_ENABLE_NOTIFICATIONS});
     	},
     	declineNotifications: () => setDeclinedNotifications(true),
     	enableNotifications:() => setDeclinedNotifications(false),
