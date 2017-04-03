@@ -5,16 +5,17 @@ import { getCourseSearchEndpoint,
 import { store } from '../init.jsx';
 import { getUserSavedTimetables, saveTimetable } from './user_actions.jsx';
 import { nullifyTimetable } from './timetable_actions.jsx';
+import * as ActionTypes from '../constants/actionTypes.jsx'
 
 export function requestCourses() {
   return {
-    type: "REQUEST_COURSES",
+    type: ActionTypes.REQUEST_COURSES,
   }
 }
 
 export function receiveCourses(json) {
   return {
-    type: "RECEIVE_COURSES",
+    type: ActionTypes.RECEIVE_COURSES,
     courses: json.results,
   }
 }
@@ -31,11 +32,11 @@ export function setSemester(semester) {
 	}
 
 	dispatch({
-		type: "SET_SEMESTER",
+		type: ActionTypes.SET_SEMESTER,
 		semester
 	});
 	dispatch({
-		type: "RECEIVE_COURSES",
+		type: ActionTypes.RECEIVE_COURSES,
 		courses: []
 	});
 }
@@ -60,7 +61,7 @@ export function maybeSetSemester(semester) {
 		}
 		else {
 			dispatch({
-				type: "ALERT_CHANGE_SEMESTER",
+				type: ActionTypes.ALERT_CHANGE_SEMESTER,
 				semester,
 			});
 		}
@@ -96,14 +97,14 @@ export function fetchAdvancedSearchResults(query, filters) {
 		// we'll allow small query strings if some filters (departments, or breadths, or levels) are chosen.
 		if (query.length <= 1 && [].concat(...Object.values(filters)).length === 0) {
 			dispatch({  
-				type: "RECEIVE_ADVANCED_SEARCH_RESULTS",
+				type: ActionTypes.RECEIVE_ADVANCED_SEARCH_RESULTS,
 				advancedSearchResults: []
 			});
 			return;
 		}
 		// indicate that we are now requesting courses
 		dispatch({  
-			type: "REQUEST_ADVANCED_SEARCH_RESULTS",
+			type: ActionTypes.REQUEST_ADVANCED_SEARCH_RESULTS,
 		});
 		// send a request (via fetch) to the appropriate endpoint to get courses
 		let state = store.getState()
@@ -121,7 +122,7 @@ export function fetchAdvancedSearchResults(query, filters) {
 		.then(json => {
 			// indicate that courses have been received
 			dispatch({  
-				type: "RECEIVE_ADVANCED_SEARCH_RESULTS",
+				type: ActionTypes.RECEIVE_ADVANCED_SEARCH_RESULTS,
 				advancedSearchResults: json
 			});
 		});
