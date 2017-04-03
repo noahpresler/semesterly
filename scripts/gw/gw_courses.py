@@ -75,7 +75,7 @@ class GWParser:
 		self.terms = {
 			'Fall 2017': '201703',
 			# 'Fall 2016':'201603', 
-			'Spring 2017':'201701'
+			# 'Spring 2017':'201701'
 		}
 
 	def login(self):

@@ -1,17 +1,19 @@
+import * as ActionTypes from '../constants/actionTypes.jsx'
+
 export const courseInfo = (state = {isFetching: true, isFetchingClassmates: true, data: {}, id: null, classmates: {}}, action) => {
 	switch (action.type) {
-		case "COURSE_INFO_RECEIVED":
+		case ActionTypes.COURSE_INFO_RECEIVED:
 			return Object.assign({}, state, {
 				isFetching: false,
 				data: action.data,
 				id: action.data.id
 			});
-		case "COURSE_CLASSMATES_RECEIVED":
+		case ActionTypes.COURSE_CLASSMATES_RECEIVED:
 			return Object.assign({}, state, {
 				isFetchingClassmates: false,
 				classmates: action.data
 			})
-		case "REQUEST_COURSE_INFO":
+		case ActionTypes.REQUEST_COURSE_INFO:
 			return {
 				isFetching: true,
 				isFetchingClassmates: true,
@@ -19,7 +21,7 @@ export const courseInfo = (state = {isFetching: true, isFetchingClassmates: true
 				classmates: {},
 				id: action.id
 			};
-		case "SET_COURSE_REACTIONS":
+		case ActionTypes.SET_COURSE_REACTIONS:
 			if (state.id === null) {
 				return state;
 			}
@@ -29,7 +31,7 @@ export const courseInfo = (state = {isFetching: true, isFetchingClassmates: true
 					reactions: action.reactions
 				})
 			});
-		case "SET_COURSE_ID":
+		case ActionTypes.SET_COURSE_ID:
 			return Object.assign({}, state, {id: action.id})
 		default: 
 			return state;
