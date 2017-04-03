@@ -74,7 +74,7 @@ school_to_course_regex = {
 _sem = lambda term, year: {'name': term, 'year': year}
 
 school_to_semesters = {
-  'jhu': [_sem('Fall', '2017'), _sem('Spring', '2017'), _sem('Fall', '2016')],
+  'jhu': [_sem('Fall', '2017'), _sem('Summer', '2017'), _sem('Spring', '2017'), _sem('Fall', '2016')],
   'uoft': [_sem('Winter', '2017'), _sem('Fall', '2016')],
   'umd': [_sem('Spring', '2017'), _sem('Fall', '2016')],
   'rutgers': [_sem('Spring', '2017'), _sem('Fall', '2016')],
