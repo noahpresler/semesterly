@@ -3,6 +3,8 @@ import DayCalendar from '../day_calendar.jsx';
 import { saveTimetable } from '../../actions/user_actions.jsx';
 import { handleCreateNewTimetable } from '../../actions/timetable_actions.jsx';
 import { fetchShareTimetableLink, createiCalfromTimetable, addTTtoGCal} from '../../actions/calendar_actions.jsx';
+import * as ActionTypes from '../../constants/actionTypes.jsx'
+
 
 const getMaxHourBasedOnWindowHeight = () => {
   let calRow = $(".cal-row");
@@ -60,9 +62,9 @@ const mapDispatchToProps = (dispatch) => {
   return {
     saveTimetable: () => dispatch(saveTimetable()),
     fetchShareTimetableLink: () => dispatch(fetchShareTimetableLink()),
-    togglePreferenceModal: () => dispatch({ type: 'TOGGLE_PREFERENCE_MODAL' }),
+    togglePreferenceModal: () => dispatch({ type: ActionTypes.TOGGLE_PREFERENCE_MODAL }),
     addTTtoGCal: () => dispatch(addTTtoGCal()),
-    toggleSaveCalendarModal: () => {dispatch({type: "TRIGGER_SAVE_CALENDAR_MODAL"})},
+    toggleSaveCalendarModal: () => {dispatch({type: ActionTypes.TRIGGER_SAVE_CALENDAR_MODAL})},
     createiCalfromTimetable,
     handleCreateNewTimetable,    
   }

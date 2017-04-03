@@ -1,5 +1,6 @@
 import { connect } from 'react-redux';
 import { TextbookModal } from '../textbook_modal.jsx';
+import * as ActionTypes from '../../constants/actionTypes.jsx'
 
 const mapStateToProps = (state) => {
 	let activeTimetable = state.timetables.items[state.timetables.active];
@@ -12,7 +13,7 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
 	return {
-		toggleTextbookModal: () => {dispatch({type: "TOGGLE_TEXTBOOK_MODAL"})},
+		toggleTextbookModal: () => {dispatch({type: ActionTypes.TOGGLE_TEXTBOOK_MODAL})},
 	}
 }
 
