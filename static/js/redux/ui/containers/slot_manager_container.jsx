@@ -5,6 +5,7 @@ import { getSchoolSpecificInfo } from '../../constants/constants.jsx';
 import { removeCustomSlot, updateCustomSlot, addCustomSlot } from '../../actions/timetable_actions.jsx';
 import SlotManager from '../slot_manager.jsx';
 
+
 const mapStateToProps = (state,ownProps) => {
 	let activeTimetable = state.timetables.items[state.timetables.active];
 	return {

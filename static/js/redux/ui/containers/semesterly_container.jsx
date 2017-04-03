@@ -3,6 +3,7 @@ import Semesterly from '../semesterly.jsx';
 import HTML5Backend from 'react-dnd-html5-backend';
 import { DragDropContext } from 'react-dnd';
 import { autoSave, saveTimetable } from '../../actions/user_actions.jsx';
+import * as ActionTypes from '../../constants/actionTypes.jsx'
 
 const mapStateToProps = (state) => {
 	let timetables = state.timetables.items;
@@ -30,7 +31,7 @@ const mapDispatchToProps = (dispatch) => {
 	return {
 		saveTimetable: () => dispatch(saveTimetable()),
 		setPgActive: (newActive) => {
-			dispatch( {type: "CHANGE_ACTIVE_TIMETABLE", newActive} );
+			dispatch( {type: ActionTypes.CHANGE_ACTIVE_TIMETABLE, newActive} );
 			autoSave();
 		},
 	}
