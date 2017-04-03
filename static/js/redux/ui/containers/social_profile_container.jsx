@@ -1,5 +1,6 @@
 import { connect } from 'react-redux';
 import { SocialProfile } from '../social_profile.jsx';
+import * as ActionTypes from '../../constants/actionTypes.jsx';
 
 const mapStateToProps = (state) => {
 	return {
@@ -10,11 +11,11 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch) => {
 	return {
 		showUserSettings: () => dispatch({
-			type: "OVERRIDE_SETTINGS_SHOW",
+			type: ActionTypes.OVERRIDE_SETTINGS_SHOW,
 			data: true,
 		}),
 		triggerAcquisitionModal: () => dispatch({
-			type: "TRIGGER_ACQUISITION_MODAL"
+			type: ActionTypes.TRIGGER_ACQUISITION_MODAL
 		})
 	}
 }
