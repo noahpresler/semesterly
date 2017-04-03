@@ -1,8 +1,9 @@
 import update from 'react/lib/update';
+import * as ActionTypes from '../constants/actionTypes.jsx'
 
 export const optionalCourses = (state = { courses: [], numRequired: 0}, action) => {
 	switch(action.type) {
-		case 'ADD_REMOVE_OPTIONAL_COURSE':
+		case ActionTypes.ADD_REMOVE_OPTIONAL_COURSE:
 			let idx = state.courses.findIndex(c => c.id === action.newCourse.id)
 			if ( idx != -1) { // removing
 				let newCourses = [
@@ -18,7 +19,7 @@ export const optionalCourses = (state = { courses: [], numRequired: 0}, action) 
 				});
 				return Object.assign({}, newState, { numRequired: newState.courses.length });
 			}
-		case 'REMOVE_OPTIONAL_COURSE_BY_ID':
+		case ActionTypes.REMOVE_OPTIONAL_COURSE_BY_ID:
 			let index = state.courses.findIndex(c => c.id === action.courseId)
 			if ( index != -1) {
 				let newCourses = [
@@ -28,7 +29,7 @@ export const optionalCourses = (state = { courses: [], numRequired: 0}, action) 
 				return Object.assign({}, state, {courses: newCourses, numRequired: newCourses.length});
 			}
 			return state;
-		case 'CLEAR_OPTIONAL_COURSES':
+		case ActionTypes.CLEAR_OPTIONAL_COURSES:
 			return { courses: [], numRequired: 0 }
 		default:
 			return state;
