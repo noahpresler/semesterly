@@ -1,5 +1,6 @@
 import { connect } from 'react-redux';
 import { SortMenu } from '../sort_menu.jsx';
+import * as ActionTypes from '../../constants/actionTypes.jsx'
 
 const mapStateToProps = (state) => {
   return {
@@ -9,10 +10,10 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    addMetric: (metric) => dispatch({type: "ADD_METRIC", metric: metric}),
-    removeMetric: (metric) => dispatch({type: "REMOVE_METRIC", metric: metric}),
-    changeMetric: (add, del) => dispatch({type: "SWITCH_METRIC", add: add, del: del}),
-    toggleMetricOrder: (metric) => dispatch({type: "TOGGLE_METRIC_ORDER", metric: metric})
+    addMetric: (metric) => dispatch({type: ActionTypes.ADD_METRIC, metric: metric}),
+    removeMetric: (metric) => dispatch({type: ActionTypes.REMOVE_METRIC, metric: metric}),
+    changeMetric: (add, del) => dispatch({type: ActionTypes.SWITCH_METRIC, add: add, del: del}),
+    toggleMetricOrder: (metric) => dispatch({type: ActionTypes.TOGGLE_METRIC_ORDER, metric: metric})
   }
 }
 
