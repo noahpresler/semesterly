@@ -144,7 +144,7 @@ class HopkinsParser(CourseParser):
         if not years:
             years = ['2017', '2016']
         if not terms:
-            terms = ['Spring', 'Fall']
+            terms = ['Spring', 'Fall', 'Summer']
 
         # Run parser for all semesters specified.
         for year in years:
