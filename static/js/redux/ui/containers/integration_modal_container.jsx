@@ -11,7 +11,7 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
 	return {
-		toggleIntegrationModal: () => {dispatch({type: "TOGGLE_INTEGRATION_MODAL"})}	
+		toggleIntegrationModal: () => {dispatch({type: ActionTypes.TOGGLE_INTEGRATION_MODAL})}	
 	}
 }
 

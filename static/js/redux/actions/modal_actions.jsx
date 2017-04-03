@@ -1,30 +1,32 @@
 import fetch from 'isomorphic-fetch';
 import { getCourseInfoEndpoint, getReactToCourseEndpoint, getClassmatesInCourseEndpoint } from '../constants/constants.jsx';
 import { store } from '../init.jsx';
+import * as ActionTypes from '../constants/actionTypes.jsx'
+
 export function setCourseInfo(json) {
     return {
-        type: "COURSE_INFO_RECEIVED",
+        type: ActionTypes.COURSE_INFO_RECEIVED,
         data: json,
     };
 }
 
 export function setCourseClassmates(json) {
     return {
-        type: "COURSE_CLASSMATES_RECEIVED",
+        type: ActionTypes.COURSE_CLASSMATES_RECEIVED,
         data: json,
     };
 }
 
 export function requestCourseInfo(id) {
   return {
-    type: "REQUEST_COURSE_INFO",
+    type: ActionTypes.REQUEST_COURSE_INFO,
     id: id,
   }
 }
 
 export function setCourseId(id) {
     return {
-        type: "SET_COURSE_ID",
+        type: ActionTypes.SET_COURSE_ID,
         id: id
     }
 }
@@ -68,7 +70,7 @@ export function react(cid, title) {
         .then(json => {
             if (!json.error) {
                 store.dispatch({
-                    type: "SET_COURSE_REACTIONS",
+                    type: ActionTypes.SET_COURSE_REACTIONS,
                     reactions: json.reactions
                 });
             }
