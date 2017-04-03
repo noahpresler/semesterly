@@ -77,7 +77,7 @@ school_to_semesters = {
   'uoft': [_sem('Winter', '2017'), _sem('Fall', '2016')],
   'umd': [_sem('Spring', '2017'), _sem('Fall', '2016')],
   'rutgers': [_sem('Spring', '2017'), _sem('Fall', '2016')],
-  'uo': [_sem('Spring', '2017'), _sem('Fall', '2016')],
+  # 'uo': [_sem('Spring', '2017'), _sem('Fall', '2016')],
   'queens': [_sem('Winter', '2017'), _sem('Fall', '2016')],
   'vandy': [_sem('Fall', '2017'), _sem('Spring', '2017'), _sem('Fall', '2016')],
   'gw': [_sem('Fall', '2017'), _sem('Spring', '2017')],
@@ -102,7 +102,7 @@ for school in VALID_SCHOOLS:
 course_parsers = {
   'uoft': lambda: UofTParser().start(),
   # 'rutgers': parse_rutgers,
-  'uo': parse_ottawa,
+  # 'uo': parse_ottawa,
   'gw': lambda: GWParser().parse(),
 }
 
