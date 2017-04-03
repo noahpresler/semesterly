@@ -52,6 +52,8 @@ def view_analytics_dashboard(request):
 
         total_final_exam_views = number_timetables(Timetable=FinalExamModalView)
         unique_users_final_exam_views = number_timetables(Timetable=FinalExamModalView, distinct="student")
+        total_shared_timetable_views = number_timetables(Timetable=SharedTimetableView)
+        total_shared_course_views = number_timetables(Timetable=SharedCourseView)
 
         fb_alert_views = number_timetables(Timetable=FacebookAlertView)
         unique_users_fb_alert_views = number_timetables(Timetable=FacebookAlertView, distinct="student")
@@ -82,6 +84,8 @@ def view_analytics_dashboard(request):
                 "unique_users_fb_alert_views": unique_users_fb_alert_views,
                 "fb_alert_clicks": fb_alert_clicks,
                 "unique_users_fb_alert_clicks": unique_users_fb_alert_clicks,
+                "total_shared_timetable_views":total_shared_timetable_views,
+                "total_shared_course_views":total_shared_course_views,
                 "calendar_exports_by_type": json.dumps({"ics": ics_calendar_exports, "google": google_calendar_exports}),
                 "jhu_most_popular_courses": [], # needs to be refactored; was causing timeout on server because too slow
                 "uoft_most_popular_courses": [], # needs to be refactored; was causing timeout on server because too slow

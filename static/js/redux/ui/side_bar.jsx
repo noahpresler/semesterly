@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom';
 import classnames from 'classnames';
 import MasterSlot from './master_slot.jsx';
 import classNames from 'classnames';
-import { COLOUR_DATA } from '../constants.jsx';
+import { COLOUR_DATA } from '../constants/constants.jsx';
 import ClickOutHandler from 'react-onclickout';
 import TimetableNameInputContainer from './containers/timetable_name_input_container.jsx';
 import CreditTickerContainer from './containers/credit_ticker_container.jsx';
@@ -107,7 +107,7 @@ class SideBar extends React.Component {
                     <h3>Load this list with courses you aren't 100% sure you want to take - we'll fit as many as possible, automatically</h3>
                 </div>);
         }
-        let finalScheduleLink = (masterSlots.length > 0 && school == 'jhu') ? 
+        let finalScheduleLink = (masterSlots.length > 0 && finalExamsSupportedSemesters.indexOf(this.props.semesterIndex) >= 0) ? 
             <div className="final-schedule-link"
                 onClick = {this.props.launchFinalExamsModal}>
                 <i className="fa fa-calendar" aria-hidden="true"></i>
