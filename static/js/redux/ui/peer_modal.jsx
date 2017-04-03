@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom';
 import classNames from 'classnames';
 import fetch from 'isomorphic-fetch';
 import Modal from 'boron/WaveModal';
-import { COLOUR_DATA } from '../constants.jsx';
+import { COLOUR_DATA } from '../constants/constants.jsx';
 
 
 export class PeerModal extends React.Component {
