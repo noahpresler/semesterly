@@ -26,7 +26,7 @@ VALID_SCHOOLS = [
   "uoft", 
   "jhu", 
   "umd", 
-  "uo", 
+  # "uo", 
   # "rutgers", 
   "queens",
   "vandy",
