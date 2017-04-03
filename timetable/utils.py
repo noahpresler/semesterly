@@ -1,4 +1,3 @@
-from collections import namedtuple
 from datetime import datetime
 from functools import wraps
 
@@ -30,11 +29,14 @@ def timed_cache(timeout):
   return cache_decorator
 
 def validate_subdomain(view_func):
+  @wraps(view_func)
   def wrapper(request, *args, **kwargs):
     if request.subdomain not in VALID_SCHOOLS:
       return render(request, 'index.html')
     else:
       return view_func(request, *args, **kwargs)
+  # mark function for testing
+  wrapper.func_dict['requires_subdomain'] = True
   return wrapper
 
 def merge_dicts(d1, d2):
