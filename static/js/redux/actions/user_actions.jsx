@@ -21,45 +21,46 @@ import { fetchCourseClassmates } from './modal_actions.jsx'
 import { store } from '../init.jsx';
 import { loadTimetable, nullifyTimetable, getNumberedName } from './timetable_actions.jsx';
 import { browserSupportsLocalStorage, setDeclinedNotifications } from '../util.jsx';
+import * as ActionTypes from '../constants/actionTypes.jsx';
 
 let autoSaveTimer;
 
 export function getUserInfo(json) {
 	return {
-		type: "USER_INFO_RECEIVED",
+		type: ActionTypes.USER_INFO_RECEIVED,
 		data: json
 	};
 }
 
 export function requestUserInfo(id) {
   return {
-	type: "REQUEST_USER_INFO",
+	type: ActionTypes.REQUEST_USER_INFO,
   }
 }
 
 export function getClassmates(json) {
 	return {
-		type: "CLASSMATES_RECEIVED",
+		type: ActionTypes.CLASSMATES_RECEIVED,
 		courses: json
 	};
 }
 
 export function getFriends(json) {
 	return {
-		type: "FRIENDS_RECEIVED",
+		type: ActionTypes.FRIENDS_RECEIVED,
 		peers: json
 	};
 }
 
 export function requestClassmates() {
   return {
-    type: "REQUEST_CLASSMATES",
+    type: ActionTypes.REQUEST_CLASSMATES,
   }
 }
 
 export function requestFriends() {
   return {
-    type: "REQUEST_FRIENDS",
+    type: ActionTypes.REQUEST_FRIENDS,
   }
 }
 
@@ -99,7 +100,7 @@ export function saveTimetable(isAutoSave=false, callback=null) {
 	return (dispatch) => {
 		let state = store.getState();
 		if (!state.userInfo.data.isLoggedIn) {
-			return dispatch({type: 'TOGGLE_SIGNUP_MODAL'})
+			return dispatch({type: ActionTypes.TOGGLE_SIGNUP_MODAL})
 		}
 		let activeTimetable = getActiveTimetable(state.timetables);
 		// if current timetable is empty or we're already in saved state, don't save this timetable
@@ -108,7 +109,7 @@ export function saveTimetable(isAutoSave=false, callback=null) {
 		}
 		// mark that we're now trying to save this timetable
 		dispatch({
-			type: "REQUEST_SAVE_TIMETABLE"
+			type: ActionTypes.REQUEST_SAVE_TIMETABLE
 		});
 		fetch(getSaveTimetableEndpoint(), {
 			method: 'POST',
@@ -119,7 +120,7 @@ export function saveTimetable(isAutoSave=false, callback=null) {
 		.then(json => {
 			if (json.error) {
 				dispatch({
-					type: "ALERT_TIMETABLE_EXISTS"
+					type: ActionTypes.ALERT_TIMETABLE_EXISTS
 				});
 			}
 			else {
@@ -129,27 +130,27 @@ export function saveTimetable(isAutoSave=false, callback=null) {
 				if (!isAutoSave) {
 					// mark that the current timetable is now the only available one (since all sections are locked)
 					dispatch({
-						type: "RECEIVE_TIMETABLES",
+						type: ActionTypes.RECEIVE_TIMETABLES,
 						timetables: [activeTimetable],
 						preset: true,
 						saving: true
 					});
 					dispatch({
-						type: "RECEIVE_COURSE_SECTIONS",
+						type: ActionTypes.RECEIVE_COURSE_SECTIONS,
 						courseSections: lockActiveSections(activeTimetable)
 					});
 				}
 				dispatch({
-					type: "CHANGE_ACTIVE_SAVED_TIMETABLE",
+					type: ActionTypes.CHANGE_ACTIVE_SAVED_TIMETABLE,
 					timetable: json.saved_timetable
 				});
 				dispatch({
-					type: "RECEIVE_SAVED_TIMETABLES",
+					type: ActionTypes.RECEIVE_SAVED_TIMETABLES,
 					timetables: json.timetables
 				});
 			}
 			dispatch({
-				type: "RECEIVE_TIMETABLE_SAVED",
+				type: ActionTypes.RECEIVE_TIMETABLE_SAVED,
 				upToDate: !json.error
 			});
 
@@ -171,11 +172,11 @@ export function duplicateTimetable(timetable) {
 	return (dispatch) => {
 		let state = store.getState();
 		if (!state.userInfo.data.isLoggedIn) {
-			return dispatch({type: 'TOGGLE_SIGNUP_MODAL'})
+			return dispatch({type: ActionTypes.TOGGLE_SIGNUP_MODAL})
 		}
 		// mark that we're now trying to save this timetable
 		dispatch({
-			type: "REQUEST_SAVE_TIMETABLE"
+			type: ActionTypes.REQUEST_SAVE_TIMETABLE
 		});
 		fetch(getCloneTimetableEndpoint(), {
 			method: 'POST',
@@ -188,25 +189,25 @@ export function duplicateTimetable(timetable) {
 		.then(response => response.json())
 		.then(json => {
 			dispatch({
-				type: "RECEIVE_TIMETABLES",
+				type: ActionTypes.RECEIVE_TIMETABLES,
 				timetables: [json.saved_timetable],
 				preset: true,
 				saving: true
 			});
 			dispatch({
-				type: "RECEIVE_COURSE_SECTIONS",
+				type: ActionTypes.RECEIVE_COURSE_SECTIONS,
 				courseSections: lockActiveSections(json.saved_timetable)
 			});
 			dispatch({
-				type: "CHANGE_ACTIVE_SAVED_TIMETABLE",
+				type: ActionTypes.CHANGE_ACTIVE_SAVED_TIMETABLE,
 				timetable: json.saved_timetable
 			});
 			dispatch({
-				type: "RECEIVE_SAVED_TIMETABLES",
+				type: ActionTypes.RECEIVE_SAVED_TIMETABLES,
 				timetables: json.timetables
 			});
 			dispatch({
-				type: "RECEIVE_TIMETABLE_SAVED",
+				type: ActionTypes.RECEIVE_TIMETABLE_SAVED,
 				upToDate: true
 			});
 
@@ -225,11 +226,11 @@ export function deleteTimetable(timetable) {
 	return (dispatch) => {
 		let state = store.getState();
 		if (!state.userInfo.data.isLoggedIn) {
-			return dispatch({type: 'TOGGLE_SIGNUP_MODAL'})
+			return dispatch({type: ActionTypes.TOGGLE_SIGNUP_MODAL})
 		}
 		// mark that we're now trying to save this timetable
 		dispatch({
-			type: "REQUEST_SAVE_TIMETABLE"
+			type: ActionTypes.REQUEST_SAVE_TIMETABLE
 		});
 		fetch(getDeleteTimetableEndpoint(), {
 			method: 'POST',
@@ -239,30 +240,30 @@ export function deleteTimetable(timetable) {
 		.then(response => response.json())
 		.then(json => {
 			dispatch({
-				type: "RECEIVE_SAVED_TIMETABLES",
+				type: ActionTypes.RECEIVE_SAVED_TIMETABLES,
 				timetables: json.timetables
 			});
 			if (json.timetables.length > 0) {
 				dispatch({
-					type: "RECEIVE_TIMETABLES",
+					type: ActionTypes.RECEIVE_TIMETABLES,
 					timetables: [json.timetables[0]],
 					preset: true,
 					saving: true
 				});
 				dispatch({
-					type: "RECEIVE_COURSE_SECTIONS",
+					type: ActionTypes.RECEIVE_COURSE_SECTIONS,
 					courseSections: lockActiveSections(json.timetables[0])
 				});
 				dispatch({
-					type: "CHANGE_ACTIVE_SAVED_TIMETABLE",
+					type: ActionTypes.CHANGE_ACTIVE_SAVED_TIMETABLE,
 					timetable: json.timetables[0]
 				});
 				dispatch({
-					type: "RECEIVE_SAVED_TIMETABLES",
+					type: ActionTypes.RECEIVE_SAVED_TIMETABLES,
 					timetables: json.timetables
 				});
 				dispatch({
-					type: "RECEIVE_TIMETABLE_SAVED",
+					type: ActionTypes.RECEIVE_TIMETABLE_SAVED,
 					upToDate: true
 				});
 			} else { 
@@ -287,7 +288,7 @@ function getSaveSettingsRequestBody() {
 export function saveSettings(callback) {
 	return (dispatch) => {
 		dispatch({
-			type: "REQUEST_SAVE_USER_INFO"
+			type: ActionTypes.REQUEST_SAVE_USER_INFO
 		});
 		fetch(getSaveSettingsEndpoint(), {
 			method: 'POST',
@@ -307,7 +308,7 @@ export function saveSettings(callback) {
 				}
 			}
 			dispatch({
-				type: "RECEIVE_USER_INFO_SAVED"
+				type: ActionTypes.RECEIVE_USER_INFO_SAVED
 			})
 			return response;
 		})
@@ -320,7 +321,7 @@ export function saveSettings(callback) {
 export function getUserSavedTimetables(semester) {
 	return (dispatch) => {
 		dispatch({
-			type: "REQUEST_SAVE_USER_INFO"
+			type: ActionTypes.REQUEST_SAVE_USER_INFO
 		});
 		fetch(getLoadSavedTimetablesEndpoint(semester), {
 			credentials: 'include',
@@ -328,7 +329,7 @@ export function getUserSavedTimetables(semester) {
 		.then(response => response.json())
 		.then(timetables => {
 				dispatch({
-				type: "RECEIVE_SAVED_TIMETABLES",
+				type: ActionTypes.RECEIVE_SAVED_TIMETABLES,
 				timetables,
 			});
 			if (timetables[0]) {
@@ -347,7 +348,7 @@ export function fetchFinalExamSchedule() {
 	{		
 		let state = store.getState();
 		let timetable = getActiveTimetable(state.timetables);
-		dispatch({type: 'FETCH_FINAL_EXAMS'})
+		dispatch({type: ActionTypes.FETCH_FINAL_EXAMS})
 		fetch(getFinalExamSchedulerEndpoint(),{
 			credentials: 'include',
 			method: 'POST',
@@ -355,7 +356,7 @@ export function fetchFinalExamSchedule() {
 		})
 		.then(response => response.json())
 	    .then(json => {
-	    	dispatch({type: 'RECIEVE_FINAL_EXAMS', json: json})
+	    	dispatch({type: ActionTypes.RECIEVE_FINAL_EXAMS, json: json})
 	    });
 	}
 }
@@ -387,7 +388,7 @@ export function fetchFriends() {
 	return (dispatch) => {
 		dispatch(requestFriends());
 		dispatch({
-			type: "PEER_MODAL_LOADING"
+			type: ActionTypes.PEER_MODAL_LOADING
 		});
 		fetch(getFriendsEndpoint(), {
 			credentials: 'include',
@@ -398,7 +399,7 @@ export function fetchFriends() {
 	    .then(json => {
 	    	dispatch(getFriends(json))
 	    	dispatch({
-				type: "PEER_MODAL_LOADED"
+				type: ActionTypes.PEER_MODAL_LOADED
 			});
 	    });
 	}
@@ -436,7 +437,7 @@ export function isRegistered() {
 					return;
 				} else {
 					store.dispatch({
-			        	type: "TOKEN_REGISTERED"
+			        	type: ActionTypes.TOKEN_REGISTERED
 		        	});
 					return true;
 				}
@@ -459,7 +460,7 @@ export function sendRegistrationToken(token) {
     .then(json => {
     	if (!json.error) {
 	      	store.dispatch({
-	        	type: "TOKEN_REGISTERED"
+	        	type: ActionTypes.TOKEN_REGISTERED
         	});
     	}
 	});
@@ -493,7 +494,7 @@ export function sendRegistrationTokenForDeletion(token) {
         if (!json.error) {
             // console.log("token deleted: " + token);
             store.dispatch({
-                type: "UNREGISTER_TOKEN"
+                type: ActionTypes.UNREGISTER_TOKEN
             });
         } else {
             // console.log("token not deleted: " + token);
@@ -509,7 +510,7 @@ export function openIntegrationModal(integrationID, courseID) {
 		.then(response => response.json())
 		.then(json => {
 			store.dispatch({
-				type: 'OPEN_INTEGRATION_MODAL',
+				type: ActionTypes.OPEN_INTEGRATION_MODAL,
 				enabled: json['integration_enabled'],
 				id: courseID,
 				integration_id: integrationID
@@ -540,34 +541,35 @@ export function createiCal(timetable) {
 
 export function requestMostClassmates() {
   return {
-    type: "REQUEST_MOST_CLASSMATES",
+    type: ActionTypes.REQUEST_MOST_CLASSMATES,
   }
 }
 
 export function fetchMostClassmatesCount(courses) {
   return (dispatch) => 
-{   let state = store.getState();
-    let semesterIndex = state.semesterIndex !== undefined ? state.semesterIndex : currentSemester;
-    let semester = allSemesters[semesterIndex];
-    dispatch(requestMostClassmates());
-    fetch(getMostClassmatesCountEndpoint(), {
-      credentials: 'include',
-      method: 'POST',
-      body: JSON.stringify({ course_ids: courses, semester: semester })
-    })
-      .then(response => response.json())
-      .then(json => {
-      	dispatch({
-			type: "CHANGE_MOST_FRIENDS_CLASS",
-			classId: json.id,
-			count: json.count,
-			total: json.total_count
-		});
-		// dispatch({
-		// 	type: "ALERT_FACEBOOK_FRIENDS",
-		// });
-      });
-  }
+	{   
+		let state = store.getState();
+	    let semesterIndex = state.semesterIndex !== undefined ? state.semesterIndex : currentSemester;
+	    let semester = allSemesters[semesterIndex];
+	    dispatch(requestMostClassmates());
+	    fetch(getMostClassmatesCountEndpoint(), {
+	      credentials: 'include',
+	      method: 'POST',
+	      body: JSON.stringify({ course_ids: courses, semester: semester })
+	    })
+	      .then(response => response.json())
+	      .then(json => {
+	      	dispatch({
+				type: ActionTypes.CHANGE_MOST_FRIENDS_CLASS,
+				classId: json.id,
+				count: json.count,
+				total: json.total_count
+			});
+			// dispatch({
+			// 	type: ActionTypes.ALERT_FACEBOOK_FRIENDS,
+			// });
+	      });
+	  }
 }
 
 export function logFacebookAlertView() {
