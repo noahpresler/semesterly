@@ -2,12 +2,13 @@ import { getRequestShareTimetableLinkEndpoint,
 				getAddTTtoGCalEndpoint, 
 				getLogiCalEndpoint, 
         getLogFinalExamViewEndpoint,
-				getSchoolSpecificInfo } from '../constants.jsx';
+				getSchoolSpecificInfo } from '../constants/constants.jsx';
 import { getActiveTimetable } from './user_actions.jsx';
 import { store } from '../init.jsx';
 import ical from 'ical-generator';
 import { getCourseShareLink} from '../helpers/timetable_helpers.jsx';
 import FileSaver from 'browser-filesaver';
+import * as ActionTypes from '../constants/actionTypes.jsx'
 
 let DAY_MAP = {
 		'M' : 'mo',
@@ -29,7 +30,7 @@ function getNextDayOfWeek(date, dayOfWeek) {
 
 function receiveShareLink(dispatch, shareLink) {
 	dispatch({
-		type: "RECEIVE_SHARE_TIMETABLE_LINK",
+		type: ActionTypes.RECEIVE_SHARE_TIMETABLE_LINK,
 		shareLink,
 	});
 }
@@ -48,7 +49,7 @@ export function fetchShareTimetableLink() {
 		let timetableState = state.timetables;
 		let { shareLink, shareLinkValid } = state.calendar;
 		dispatch({
-			type: "REQUEST_SHARE_TIMETABLE_LINK"
+			type: ActionTypes.REQUEST_SHARE_TIMETABLE_LINK
 		});
 		if (shareLinkValid) { 
 			receiveShareLink(store.dispatch, shareLink); 
@@ -65,7 +66,7 @@ export function fetchShareTimetableLink() {
 		.then(response => response.json())
 		.then(ref => {
 			receiveShareLink(store.dispatch, 
-				window.location.hostname + "/share/" + ref.link);
+				window.location.href.split("/")[2] + "/share/" + ref.link);
 		})
 
 	}
@@ -79,7 +80,7 @@ export function addTTtoGCal() {
 		// Wait for timetable to load
 		if (gcalCallback) { while (state.timetables.items.length <= 0) {} }
 		if (!state.saveCalendarModal.isUploading && !state.saveCalendarModal.hasUploaded) {
-			dispatch({type: "UPLOAD_CALENDAR"});
+			dispatch({type: ActionTypes.UPLOAD_CALENDAR});
 			fetch(getAddTTtoGCalEndpoint(), {
 				method: 'POST',
 				body: JSON.stringify({
@@ -89,7 +90,7 @@ export function addTTtoGCal() {
 			})
 			.then(response => response.json())
 			.then(json => {
-				dispatch({type: "CALENDAR_UPLOADED"});
+				dispatch({type: ActionTypes.CALENDAR_UPLOADED});
 			})
 		}
 	}
@@ -99,7 +100,7 @@ export function createiCalfromTimetable(active) {
 	return (dispatch) => {
 		let state = store.getState();
 		if (!state.saveCalendarModal.isDownloading && !state.saveCalendarModal.hasDownloaded) {
-			dispatch({type: "DOWNLOAD_CALENDAR"});
+			dispatch({type: ActionTypes.DOWNLOAD_CALENDAR});
 			let cal = ical({domain: 'https://semester.ly', name: 'My Semester Schedule'});
 			let tt = getActiveTimetable(state.timetables);
 
@@ -158,7 +159,7 @@ export function createiCalfromTimetable(active) {
 				method: 'POST',
 				credentials: 'include',
 			})
-			dispatch({type: "CALENDAR_DOWNLOADED"});
+			dispatch({type: ActionTypes.CALENDAR_DOWNLOADED});
 		}
 	}
 }

@@ -3,7 +3,7 @@ import { renderCourseModal } from './course_modal.jsx';
 import Slot from './slot.jsx'
 import CustomSlot from './custom_slot.jsx'
 import { index as IntervalTree, matches01 as getIntersections } from 'static-interval-tree'
-import { HALF_HOUR_HEIGHT, COLOUR_DATA } from '../constants.jsx';
+import { HALF_HOUR_HEIGHT, COLOUR_DATA } from '../constants/constants.jsx';
 
 class SlotManager extends React.Component {
 
