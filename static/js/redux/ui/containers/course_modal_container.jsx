@@ -4,6 +4,7 @@ import { hoverSection, unhoverSection, addOrRemoveCourse, addOrRemoveOptionalCou
 import { setCourseId, react, fetchCourseInfo } from '../../actions/modal_actions.jsx';
 import { fetchClassmates, saveSettings } from '../../actions/user_actions.jsx'
 import { getSchoolSpecificInfo } from '../../constants/constants.jsx';
+import * as ActionTypes from '../../constants/actionTypes.jsx'
 
 const mapStateToProps = (state) => {
 	let lectureSections = [];
@@ -51,7 +52,7 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch) => {
 	return {
 		hideModal: () => dispatch(setCourseId(null)),
-		openSignupModal: () => dispatch({type: 'TOGGLE_SIGNUP_MODAL'}),
+		openSignupModal: () => dispatch({type: ActionTypes.TOGGLE_SIGNUP_MODAL}),
 		fetchCourseInfo: (courseId) => dispatch(fetchCourseInfo(courseId)),
 		hoverSection: hoverSection(dispatch),
 		unhoverSection: unhoverSection(dispatch),
@@ -60,7 +61,7 @@ const mapDispatchToProps = (dispatch) => {
 		react,
 		saveSettings: () => dispatch(saveSettings()),
 		changeUserInfo: (info) => dispatch({
-			type: "CHANGE_USER_INFO",
+			type: ActionTypes.CHANGE_USER_INFO,
 			data: info,
 		}),
 	}
