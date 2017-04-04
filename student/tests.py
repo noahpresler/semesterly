@@ -1,8 +1,8 @@
-from django.test import SimpleTestCase
+from django.test import TestCase, SimpleTestCase
 from django.core.urlresolvers import resolve
 
 
-class UrlTestCase(SimpleTestCase):
+class UrlTestCase(TestCase): # TODO: remove DB queries from school_mappers and change to SimpleTestCase
     """ Test student/urls.py """
 
     def test_urls_call_correct_views(self):
