@@ -1,7 +1,8 @@
 import React from 'react';
 import { setARegistrationToken, LogFacebookAlertClick } from '../../actions/user_actions.jsx';
 import MasterSlot from '../master_slot.jsx';
-import { COLOUR_DATA, getSchoolSpecificInfo } from '../../constants/constants.jsx';
+import { COLOUR_DATA } from '../../constants/colours.jsx';
+import { getSchoolSpecificInfo } from '../../constants/schools.jsx'; 
 import { setDeclinedNotifications, getDeclinedNotifications } from '../../util.jsx';
 
 class FriendsInClassAlert extends React.Component {
