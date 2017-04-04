@@ -125,7 +125,8 @@ INSTALLED_APPS = (
     'scripts',
     'student',
     'cachalot',
-    'silk'
+    'silk',
+    'dashing'
 )
 
 MIDDLEWARE_CLASSES = (
@@ -296,6 +297,13 @@ CACHES = {
     }
 }
 CACHALOT_ENABLED = True
+
+DASHING = {
+    'INSTALLED_WIDGETS': ('number', 'list', 'graph', 'clock', 'knob', 'map',),
+    'PERMISSION_CLASSES':  (
+        ('dashing.permissions.AllowAny',)
+    )
+}
 
 
 

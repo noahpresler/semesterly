@@ -2,6 +2,16 @@ from django.conf.urls import patterns, include, url
 from django.http import HttpResponse
 from django.conf import settings
 from django.contrib import admin
+from dashing.utils import router
+
+from analytics.widgets import NumberTimetablesWidget
+from analytics.widgets import NumberCalendarExportsWidget
+
+# Note: for some reason, we cannot register long names for our dashing router.
+#       For example, 'nt_widget' works, for 'number_timetables_widget' does
+#       not. In the future, perhaps we can look into this.
+router.register(NumberTimetablesWidget, 'nt_widget')
+router.register(NumberCalendarExportsWidget, 'nce_widget')
 
 # from haystack.views import SearchView
 # from haystack.query import SearchQuerySet
@@ -114,6 +124,9 @@ urlpatterns = patterns('',
     # final exam scheduler
     (r'^get_final_exams/*$', 'timetable.views.final_exam_scheduler'),
     url(r'^final_exams/*$', 'timetable.views.view_final_exams'),
+
+    # dashboard
+    url(r'^dashboard/', include(router.urls), name='dashboard'),
 )
 
 #profiling
