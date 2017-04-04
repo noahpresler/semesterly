@@ -1,7 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import fetch from 'isomorphic-fetch';
-import { getCourseSearchEndpoint } from '../constants/constants.jsx';
+import { getCourseSearchEndpoint } from '../constants/endpoints.jsx';
 import classNames from 'classnames';
 import SearchSideBarContainer from './containers/search_side_bar_container.jsx'
 import ClickOutHandler from 'react-onclickout';
