@@ -3,7 +3,7 @@ import { fetchSearchResults, maybeSetSemester } from '../../actions/search_actio
 import { addOrRemoveCourse, addOrRemoveOptionalCourse } from '../../actions/timetable_actions.jsx';
 import { SearchBar } from '../search_bar.jsx';
 import { fetchCourseInfo } from '../../actions/modal_actions.jsx';
-import { getSchoolSpecificInfo } from '../../constants/constants.jsx';
+import { getSchoolSpecificInfo } from '../../constants/schools.jsx';
 import { openIntegrationModal } from '../../actions/user_actions.jsx';
 import * as ActionTypes from '../../constants/actionTypes.jsx'
 
