@@ -46,7 +46,7 @@ urlpatterns = patterns('',
     url(r'^user/logout/$', 'django.contrib.auth.views.logout', {'next_page': '/'}),
     url(r'^unsubscribe/(?P<id>[\w.@+-]+)/(?P<token>[\w.:\-_=]+)/$', student.views.unsubscribe),
     url(r'^user/save_settings/$', student.views.save_settings),
-    url(r'me/*', timetable.views.profile),
+    url(r'^me/*', timetable.views.profile),
         # timetable management
     url(r'^user/save_timetable/$', student.views.save_timetable),
     url(r'^user/duplicate_timetable/$', student.views.duplicate_timetable),
