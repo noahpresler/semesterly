@@ -1,4 +1,4 @@
-import { COLOUR_DATA } from '../constants/constants.jsx';
+import { COLOUR_DATA } from '../constants/colours.jsx';
 import * as ActionTypes from '../constants/actionTypes.jsx'
 
 export const ui = (state = { searchHover: 0, courseToColourIndex: {} }, action) => {

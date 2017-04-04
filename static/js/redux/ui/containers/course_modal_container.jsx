@@ -3,7 +3,7 @@ import { CourseModal } from '../course_modal.jsx';
 import { hoverSection, unhoverSection, addOrRemoveCourse, addOrRemoveOptionalCourse } from '../../actions/timetable_actions.jsx';
 import { setCourseId, react, fetchCourseInfo } from '../../actions/modal_actions.jsx';
 import { fetchClassmates, saveSettings } from '../../actions/user_actions.jsx'
-import { getSchoolSpecificInfo } from '../../constants/constants.jsx';
+import { getSchoolSpecificInfo } from '../../constants/schools.jsx';
 import * as ActionTypes from '../../constants/actionTypes.jsx'
 
 const mapStateToProps = (state) => {
