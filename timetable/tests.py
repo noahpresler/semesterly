@@ -43,7 +43,7 @@ class RegressionTests(TestCase):
 
 
 class UrlTestCase(SimpleTestCase):
-    """ Test urls.py """
+    """ Test timetable/urls.py """
 
     def test_urls_call_correct_views(self):
         # marketing urls
