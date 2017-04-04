@@ -1,11 +1,9 @@
 import json
-import random
 
 from django.test import TestCase, SimpleTestCase
 from django.core.urlresolvers import resolve
 
 from timetable.test_utils import get_default_tt_request
-from school_mappers import VALID_SCHOOLS
 
 
 class RegressionTests(TestCase):
@@ -45,7 +43,7 @@ class RegressionTests(TestCase):
 
 
 class UrlTestCase(SimpleTestCase):
-    """ Test urls.py """
+    """ Test timetable/urls.py """
 
     def test_urls_call_correct_views(self):
         # marketing urls
