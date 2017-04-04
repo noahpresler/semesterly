@@ -183,9 +183,8 @@ def share_timetable(request, ref):
     timetable_id = hashids.decrypt(ref)[0]
     shared_timetable_obj = SharedTimetable.objects.get(school=request.subdomain, id=timetable_id)
     shared_timetable = convert_tt_to_dict(shared_timetable_obj, include_last_updated=False)
-    view_shared_timetable = SharedTimetableView.objects.create(shared_timetable=shared_timetable_obj, student=student)
-    semester = shared_timetable['semester']
-    return view_timetable(request, sem=semester, shared_timetable=shared_timetable)
+     # get default semester info
+    return view_timetable(request, year=shared_timetable_obj.semester.year, sem_name=shared_timetable_obj.semester.name, shared_timetable=shared_timetable)
   except Exception as e:
     raise Http404
 
