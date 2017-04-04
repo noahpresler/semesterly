@@ -1,6 +1,6 @@
 import { connect } from 'react-redux';
 import TopBar from '../top_bar.jsx';
-import { getSchoolSpecificInfo } from '../../constants.jsx';
+import { getSchoolSpecificInfo } from '../../constants/schools.jsx';
 
 
 const mapStateToProps = (state) => {

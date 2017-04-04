@@ -1,14 +1,17 @@
 import json
+import random
 
-from django.test import TestCase
+from django.test import TestCase, SimpleTestCase
+from django.core.urlresolvers import resolve
 
 from timetable.test_utils import get_default_tt_request
+from school_mappers import VALID_SCHOOLS
 
 
 class RegressionTests(TestCase):
     fixtures = ['uoft_fall_sample.json']
     request_headers = {
-        'HTTP_HOST': 'uoft.sem.ly:800'
+        'HTTP_HOST': 'uoft.sem.ly:8000'
     }
 
     def test_course_search(self):
@@ -39,3 +42,47 @@ class RegressionTests(TestCase):
 
     def test_course_info(self):
         pass
+
+
+class UrlTestCase(SimpleTestCase):
+    """ Test urls.py """
+
+    def test_urls_call_correct_views(self):
+        # marketing urls
+        self.assertEqual('timetable.views.launch_user_acq_modal', resolve('/signup/').view_name)
+        self.assertEqual('timetable.views.view_textbooks', resolve('/textbooks/').view_name)
+        self.assertEqual('timetable.views.export_calendar', resolve('/export_calendar/').view_name)
+        self.assertEqual('timetable.views.enable_notifs', resolve('/notifyme/').view_name),
+        self.assertEqual('timetable.views.find_friends', resolve('/find_friends/').view_name),
+        self.assertEqual('student.views.react_to_course', resolve('/react/').view_name),
+
+        # redirects
+        self.assertEqual('timetable.views.redirect_to_home', resolve('/timetable/random_stuff').view_name)
+        self.assertEqual('timetable.views.redirect_to_home', resolve('/timetable/').view_name)
+
+        # course pages
+        self.assertEqual('timetable.views.get_course_id', resolve('/courses/uoft/code/cs1234').view_name)
+        self.assertEqual('timetable.views.get_course', resolve('/courses/uoft/Fall/2020/id/38510').view_name)
+        self.assertEqual('timetable.views.get_classmates_in_course', resolve('/course_classmates/jhu/Spring/2018/id/9932').view_name)
+        self.assertEqual('timetable.views.course_page', resolve('/c/somecode0350!').view_name)
+        self.assertEqual('timetable.views.view_timetable', resolve('/course/music101/Summer/2021').view_name)
+        self.assertEqual('timetable.views.all_courses', resolve('/courses').view_name)
+        self.assertEqual('timetable.views.school_info', resolve('/school_info/semuni').view_name)
+
+        # timetables
+        self.assertEqual('timetable.views.get_timetables', resolve('/get_timetables/').view_name)
+
+        # search
+        self.assertEqual('timetable.views.course_search', resolve('/search/jhu/Intermission/2019/opencv/').view_name)
+        self.assertEqual('timetable.views.advanced_course_search', resolve('/advanced_search/').view_name)
+
+        # timetable sharing
+        self.assertEqual('timetable.views.create_share_link', resolve('/share/link').view_name)
+        self.assertEqual('timetable.views.share_timetable', resolve('/share/dIcMED').view_name)
+
+        # integration
+        self.assertEqual('timetable.views.get_integration', resolve('/integration/get/3DCe3/course/csc148/').view_name)
+        self.assertEqual('timetable.views.delete_integration', resolve('/integration/del/39Ced/course/SD3910/').view_name)
+        self.assertEqual('timetable.views.add_integration', resolve('/integration/add/139051/course/eng101/').view_name)
+
+

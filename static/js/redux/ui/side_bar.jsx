@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom';
 import classnames from 'classnames';
 import MasterSlot from './master_slot.jsx';
 import classNames from 'classnames';
-import { COLOUR_DATA } from '../constants.jsx';
+import { COLOUR_DATA } from '../constants/colours.jsx';
 import ClickOutHandler from 'react-onclickout';
 import TimetableNameInputContainer from './containers/timetable_name_input_container.jsx';
 import CreditTickerContainer from './containers/credit_ticker_container.jsx';

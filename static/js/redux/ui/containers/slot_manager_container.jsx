@@ -1,9 +1,10 @@
 import { connect } from 'react-redux';
 import { fetchCourseInfo } from '../../actions/modal_actions.jsx'
 import { addOrRemoveCourse, addOrRemoveOptionalCourse } from '../../actions/timetable_actions.jsx'
-import { getSchoolSpecificInfo } from '../../constants.jsx';
+import { getSchoolSpecificInfo } from '../../constants/schools.jsx';
 import { removeCustomSlot, updateCustomSlot, addCustomSlot } from '../../actions/timetable_actions.jsx';
 import SlotManager from '../slot_manager.jsx';
+
 
 const mapStateToProps = (state,ownProps) => {
 	let activeTimetable = state.timetables.items[state.timetables.active];

@@ -13,7 +13,8 @@ import { setCourseInfo, fetchCourseClassmates } from './actions/modal_actions.js
 import { browserSupportsLocalStorage, setFirstVisit, timeLapsedGreaterThan, setFriendsCookie } from './util.jsx';
 import { addTTtoGCal } from './actions/calendar_actions.jsx';
 import { fetchMostClassmatesCount } from './actions/user_actions.jsx';
-import { getSchoolSpecificInfo } from './constants.jsx';
+import { getSchoolSpecificInfo } from './constants/schools.jsx';
+import * as ActionTypes from './constants/actionTypes.jsx'
 
 export const store = createStore(rootReducer, window.devToolsExtension && window.devToolsExtension(), applyMiddleware(thunkMiddleware));
 
@@ -32,12 +33,12 @@ export const getSemester = () => {
 function setup(dispatch) {
 
   dispatch({
-    type: "SET_SCHOOL",
+    type: ActionTypes.SET_SCHOOL,
     school // comes from timetable.html
   });
 
   dispatch({
-    type: "SET_SEMESTER",
+    type: ActionTypes.SET_SEMESTER,
     semester: parseInt(currentSemester), // currentSemester comes from timetable.html (rendered by the server). if the user is loading a share course link, we need to set the appropriate semester, so we can't default it to any particular value
   });
   allSemesters = JSON.parse(allSemesters);
@@ -55,17 +56,17 @@ function setup(dispatch) {
   viewTextbooks = viewTextbooks === "True";
   finalExams = finalExams === "True";
   if (signup) {
-    dispatch({type: 'TRIGGER_SIGNUP_MODAL'});
+    dispatch({type: ActionTypes.TRIGGER_SIGNUP_MODAL});
   }
   if (userAcq) {
-    dispatch({type: 'TRIGGER_ACQUISITION_MODAL'});
+    dispatch({type: ActionTypes.TRIGGER_ACQUISITION_MODAL});
   }
   if (gcalCallback) {
-    dispatch({type: 'TRIGGER_SAVE_CALENDAR_MODAL'});
+    dispatch({type: ActionTypes.TRIGGER_SAVE_CALENDAR_MODAL});
     dispatch(addTTtoGCal());
   }
   if (exportCalendar) {
-    dispatch({type: 'TRIGGER_SAVE_CALENDAR_MODAL'});
+    dispatch({type: ActionTypes.TRIGGER_SAVE_CALENDAR_MODAL});
   }
   /* first setup the user's state */
   let user = JSON.parse(currentUser); // currentUser comes from timetable.html
@@ -74,30 +75,30 @@ function setup(dispatch) {
     if (user.isLoggedIn && user.timetables.length > 0) { // user is logged in and has saved timetables
       // load one of the user's saved timetables (after initial page load). also fetches classmates
       loadTimetable(user.timetables[0]);
-      dispatch({ type: "RECEIVE_TIMETABLE_SAVED", upToDate: true });
+      dispatch({ type: ActionTypes.RECEIVE_TIMETABLE_SAVED, upToDate: true });
       setTimeout(() => {
         dispatch(fetchMostClassmatesCount(user.timetables[0].courses.map(c => c['id'])));
       }, 500);
-      dispatch({type: "CACHED_TT_LOADED"});
+      dispatch({type: ActionTypes.CACHED_TT_LOADED});
     }
     else { // user isn't logged in (or has no saved timetables); load last browser-cached timetable, under certain conditions.
     // we only load the browser-cached timetable if the shared course's semester is the same as the browser-cached timetable's semester OR the user is not trying to load a shared course at all. This results in problematic edge cases, such as showing the course modal of an S course in the F semester, being completely avoided.
       if (browserSupportsLocalStorage() && (localStorage.semester === currentSemester || !sharedCourse)) {
         loadCachedTimetable(dispatch);
       } else {
-        dispatch({type: "CACHED_TT_LOADED"});
+        dispatch({type: ActionTypes.CACHED_TT_LOADED});
       }
     }
   } else {
-    dispatch({type: "CACHED_TT_LOADED"});
+    dispatch({type: ActionTypes.CACHED_TT_LOADED});
   }
 
   if (gcalCallback) {
-    dispatch({type: 'TRIGGER_SAVE_CALENDAR_MODAL'});
+    dispatch({type: ActionTypes.TRIGGER_SAVE_CALENDAR_MODAL});
     dispatch(addTTtoGCal());
   }
   if (viewTextbooks) {
-    dispatch({type: 'TRIGGER_TEXTBOOK_MODAL'})
+    dispatch({type: ActionTypes.TRIGGER_TEXTBOOK_MODAL})
   }
   // check if registered for chrome notifications
   isRegistered();
@@ -110,14 +111,14 @@ function setup(dispatch) {
       if (localStorage.getItem("declinedNotifications") === null) { // if second visit
         if (timeLapsedGreaterThan(localStorage.getItem("firstVisit"), 1) === true) { // if second visit is one day after first visit
           // deploy upsell pop for chrome notifications
-          dispatch({type: "ALERT_ENABLE_NOTIFICATIONS"});
+          dispatch({type: ActionTypes.ALERT_ENABLE_NOTIFICATIONS});
         }
       } else { // if after second visit
         if (localStorage.getItem("declinedNotifications") === true || localStorage.getItem("declinedNotifications") === false) {
           // do nothing : either accpeted or declined notigications
         } else if (timeLapsedGreaterThan(localStorage.getItem("declinedNotifications"), 3) === true) {
           // deploy upsell pop for chrome notifications
-          dispatch({type: "ALERT_ENABLE_NOTIFICATIONS"});
+          dispatch({type: ActionTypes.ALERT_ENABLE_NOTIFICATIONS});
         } else {
           // console.log(localStorage.getItem("declinedNotifications"), timeLapsedGreaterThan(localStorage.getItem("declinedNotifications"), .0001157));
         }
@@ -130,12 +131,12 @@ function setup(dispatch) {
     if (localStorage.getItem("friendsCookie") === null) {
       let time = new Date();
       setFriendsCookie(time.getTime());
-      dispatch({type: "ALERT_FACEBOOK_FRIENDS"});
+      dispatch({type: ActionTypes.ALERT_FACEBOOK_FRIENDS});
     } else {
       if (timeLapsedGreaterThan(localStorage.getItem("friendsCookie"), 3) === true) { // if visit is more than 3 days of last friend alert
         let time = new Date();
         setFriendsCookie(time.getTime());
-        dispatch({type: "ALERT_FACEBOOK_FRIENDS"});
+        dispatch({type: ActionTypes.ALERT_FACEBOOK_FRIENDS});
       }
     }
   }
@@ -147,20 +148,20 @@ function setup(dispatch) {
     dispatch(setCourseInfo(sharedCourse));
     dispatch(fetchCourseClassmates(sharedCourse.id));
   } else if (findFriends) {
-    dispatch({type: "TOGGLE_PEER_MODAL"});
+    dispatch({type: ActionTypes.TOGGLE_PEER_MODAL});
   }
   if (enableNotifs) {
     if (!user.isLoggedIn) {
-      dispatch({type: 'TRIGGER_SIGNUP_MODAL'})
+      dispatch({type: ActionTypes.TRIGGER_SIGNUP_MODAL})
     } else {
       dispatch({
-        type: "OVERRIDE_SETTINGS_SHOW",
+        type: ActionTypes.OVERRIDE_SETTINGS_SHOW,
         data: true,
       })
     }
   }
   if (finalExams) {
-    dispatch({type: 'SHOW_FINAL_EXAMS_MODAL'});
+    dispatch({type: ActionTypes.SHOW_FINAL_EXAMS_MODAL});
   }
 }
 

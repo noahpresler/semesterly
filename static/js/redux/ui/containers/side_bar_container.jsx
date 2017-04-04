@@ -3,7 +3,8 @@ import SideBar from '../side_bar.jsx';
 import { fetchCourseInfo } from '../../actions/modal_actions.jsx'
 import { addOrRemoveCourse, loadTimetable, addOrRemoveOptionalCourse } from '../../actions/timetable_actions.jsx';
 import { duplicateTimetable, deleteTimetable } from '../../actions/user_actions.jsx'
-import { getSchoolSpecificInfo } from '../../constants.jsx'
+import { getSchoolSpecificInfo } from '../../constants/schools.jsx'
+import * as ActionTypes from '../../constants/actionTypes.jsx'
 
 const mapStateToProps = (state) => {
 	let courseSections = state.courseSections.objects;
@@ -32,11 +33,11 @@ const mapDispatchToProps = (dispatch) => {
 		fetchCourseInfo: (courseId) => dispatch(fetchCourseInfo(courseId)),
 	    removeCourse: (courseId) => addOrRemoveCourse(courseId),
 	    removeOptionalCourse: (course) => dispatch(addOrRemoveOptionalCourse(course)),
-	    launchPeerModal: () => dispatch({type:'TOGGLE_PEER_MODAL'}),
-	    launchTextbookModal: () => dispatch({type:'TRIGGER_TEXTBOOK_MODAL'}),
+	    launchPeerModal: () => dispatch({type: ActionTypes.TOGGLE_PEER_MODAL}),
+	    launchTextbookModal: () => dispatch({type: ActionTypes.TRIGGER_TEXTBOOK_MODAL}),
 		duplicateTimetable: (tt) => dispatch(duplicateTimetable(tt)),
 		deleteTimetable: (tt) => dispatch(deleteTimetable(tt)),
-		launchFinalExamsModal: () => dispatch({type: 'SHOW_FINAL_EXAMS_MODAL'}),
+		launchFinalExamsModal: () => dispatch({type: ActionTypes.SHOW_FINAL_EXAMS_MODAL}),
 		loadTimetable
 	}
 }

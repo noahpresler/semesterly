@@ -1,57 +1,58 @@
 import fetch from 'isomorphic-fetch';
-import { getTimetablesEndpoint } from '../constants.jsx';
+import { getTimetablesEndpoint } from '../constants/endpoints.jsx';
 import { randomString, browserSupportsLocalStorage } from '../util.jsx';
 import { store } from '../init.jsx';
-import { getSchoolSpecificInfo } from '../constants.jsx'
+import { getSchoolSpecificInfo } from '../constants/schools.jsx'
 import { lockActiveSections, fetchClassmates, autoSave } from './user_actions.jsx';
 import { saveLocalSemester, saveLocalPreferences, saveLocalCourseSections, saveLocalActiveIndex } from '../util.jsx';
+import * as ActionTypes from '../constants/actionTypes.jsx'
 
 export const SID = randomString(30);
 
 export function requestTimetables() {
   return {
-    type: "REQUEST_TIMETABLES",
+    type: ActionTypes.REQUEST_TIMETABLES,
   }
 }
 
 export function receiveTimetables(timetables) {
   return {
-    type: "RECEIVE_TIMETABLES",
+    type: ActionTypes.RECEIVE_TIMETABLES,
     timetables: timetables,
   }
 }
 
 export function alertConflict(){
 	return {
-		type: "ALERT_CONFLICT"
+		type: ActionTypes.ALERT_CONFLICT
 	}
 }
 
 export function nullifyTimetable(dispatch) {
 	dispatch({
-		type: "RECEIVE_TIMETABLES",
+		type: ActionTypes.RECEIVE_TIMETABLES,
 		timetables: [{courses: [], has_conflict: false}],
 	});
 	dispatch({
-		type: "RECEIVE_COURSE_SECTIONS",
+		type: ActionTypes.RECEIVE_COURSE_SECTIONS,
 		courseSections: {}
 	});
 	dispatch({
-		type: "CHANGE_ACTIVE_SAVED_TIMETABLE",
+		type: ActionTypes.CHANGE_ACTIVE_SAVED_TIMETABLE,
 		timetable: {name: "Untitled Schedule", courses: [], has_conflict: false}
 	})
 	dispatch({
-		type: "CLEAR_OPTIONAL_COURSES"
+		type: ActionTypes.CLEAR_OPTIONAL_COURSES
 	})
 }
 
 // loads timetable from localStorage. assumes that the browser supports localStorage
 export function loadCachedTimetable(dispatch) {
-	dispatch({type: "LOADING_CACHED_TT"});
+	dispatch({type: ActionTypes.LOADING_CACHED_TT});
 	let localCourseSections = JSON.parse(localStorage.getItem('courseSections'));
 	// no coursesections stored locally; user is new (or hasn't added timetables yet)
 	if (!localCourseSections) {
-		dispatch({type: "CACHED_TT_LOADED"});
+		dispatch({type: ActionTypes.CACHED_TT_LOADED});
 		return; 
 	}
 	// no preferences stored locally; save the defaults
@@ -64,11 +65,11 @@ export function loadCachedTimetable(dispatch) {
 	} 
 	let localActive = parseInt(localStorage.getItem('active'));
 	if (Object.keys(localCourseSections).length === 0 || Object.keys(localPreferences).length === 0) { return; }
-	store.dispatch({ type: 'SET_ALL_PREFERENCES', preferences: localPreferences });
-	store.dispatch({ type: 'SET_SEMESTER', semester: localSemester });
-	store.dispatch({ type: 'RECEIVE_COURSE_SECTIONS', courseSections: localCourseSections });
+	store.dispatch({ type: ActionTypes.SET_ALL_PREFERENCES, preferences: localPreferences });
+	store.dispatch({ type: ActionTypes.SET_SEMESTER, semester: localSemester });
+	store.dispatch({ type: ActionTypes.RECEIVE_COURSE_SECTIONS, courseSections: localCourseSections });
 	fetchStateTimetables(localActive);
-	dispatch({type: "CACHED_TT_LOADED"});
+	dispatch({type: ActionTypes.CACHED_TT_LOADED});
 }
 
 
@@ -79,11 +80,11 @@ export function loadTimetable(timetable, created=false) {
 	let state = store.getState();
 	let isLoggedIn = state.userInfo.data.isLoggedIn;
 	if (!isLoggedIn) {
-		return dispatch({type: 'TOGGLE_SIGNUP_MODAL'});
+		return dispatch({type: ActionTypes.TOGGLE_SIGNUP_MODAL});
 	}
 	// store the 'saved timetable' (handled by the saving_timetable reducer)
 	dispatch({
-		type: "CHANGE_ACTIVE_SAVED_TIMETABLE",
+		type: ActionTypes.CHANGE_ACTIVE_SAVED_TIMETABLE,
 		timetable,
 		created
 	});
@@ -93,14 +94,14 @@ export function loadTimetable(timetable, created=false) {
 
 export function lockTimetable(dispatch, timetable, created, isLoggedIn) {
 	if (timetable.has_conflict) { // turn conflicts on if necessary
-		dispatch({ type: "TURN_CONFLICTS_ON" });
+		dispatch({ type: ActionTypes.TURN_CONFLICTS_ON });
 	}
 	dispatch({
-		type: "RECEIVE_COURSE_SECTIONS",
+		type: ActionTypes.RECEIVE_COURSE_SECTIONS,
 		courseSections: lockActiveSections(timetable)
 	});
 	dispatch({
-		type: "RECEIVE_TIMETABLES",
+		type: ActionTypes.RECEIVE_TIMETABLES,
 		timetables: [timetable],
 		preset: created === false
 	});
@@ -114,12 +115,12 @@ export function handleCreateNewTimetable() {
 	let state = store.getState();
 	let isLoggedIn = state.userInfo.data.isLoggedIn;
 	if (!isLoggedIn) {
-		return dispatch({type: 'TOGGLE_SIGNUP_MODAL'});
+		return dispatch({type: ActionTypes.TOGGLE_SIGNUP_MODAL});
 	}
 	let { timetables:timetablesState } = state;
 	if (timetablesState.items[timetablesState.active].courses.length > 0 && !state.savingTimetable.upToDate) {
 		return dispatch({
-			type: "ALERT_NEW_TIMETABLE",
+			type: ActionTypes.ALERT_NEW_TIMETABLE,
 		});
 	}
 	else {
@@ -165,7 +166,7 @@ export function hoverSection (dispatch) {
 		let availableSections = Object.assign({}, course.sections['L'], course.sections['T'], course.sections['P']);
 		course.section = section;
 		dispatch({
-			type: "HOVER_COURSE",
+			type: ActionTypes.HOVER_COURSE,
 			course: Object.assign({}, course, { slots: availableSections[section] })
 		});
 	}
@@ -173,7 +174,7 @@ export function hoverSection (dispatch) {
 export function unhoverSection (dispatch) {
 	return () => {
 		dispatch({
-			type: "UNHOVER_COURSE",
+			type: ActionTypes.UNHOVER_COURSE,
 		});
 	}
 }
@@ -202,7 +203,7 @@ export function addOrRemoveCourse(newCourseId, lockingSection = '') {
 	if (state.optionalCourses.courses.some(c => c.id === newCourseId)) {
 		let dispatch = store.dispatch;
 		dispatch({
-	  		type: "REMOVE_OPTIONAL_COURSE_BY_ID",
+	  		type: ActionTypes.REMOVE_OPTIONAL_COURSE_BY_ID,
 	  		courseId: newCourseId
 	  	});
 	  reqBody = getBaseReqBody(store.getState());
@@ -221,7 +222,7 @@ export function addOrRemoveCourse(newCourseId, lockingSection = '') {
 	else { // adding a course
 		let dispatch = store.dispatch;
 		dispatch({
-			type: "UPDATE_LAST_COURSE_ADDED",
+			type: ActionTypes.UPDATE_LAST_COURSE_ADDED,
 			course: newCourseId,
 		});
 		state = store.getState();
@@ -269,12 +270,12 @@ function fetchTimetables(requestBody, removing, newActive=0) {
 				// mark that timetables and a new courseSections have been received
 				dispatch(receiveTimetables(json.timetables));
 				dispatch({
-   					type: "RECEIVE_COURSE_SECTIONS",
+   					type: ActionTypes.RECEIVE_COURSE_SECTIONS,
     				courseSections: json.new_c_to_s,
   				});
   				if (newActive > 0){
 	  				dispatch({
-	  					type: "CHANGE_ACTIVE_TIMETABLE",
+	  					type: ActionTypes.CHANGE_ACTIVE_TIMETABLE,
 	  					newActive,
 	  				})
   				}
@@ -309,7 +310,7 @@ function fetchTimetables(requestBody, removing, newActive=0) {
 export function addCustomSlot(timeStart, timeEnd, day, preview, id) {
 	let dispatch = store.dispatch;
 	dispatch({
-		type: "ADD_CUSTOM_SLOT",
+		type: ActionTypes.ADD_CUSTOM_SLOT,
 		newCustomSlot: {
 			time_start: timeStart, // match backend slot attribute names
 			time_end: timeEnd,
@@ -324,7 +325,7 @@ export function addCustomSlot(timeStart, timeEnd, day, preview, id) {
 export function updateCustomSlot(newValues, id) {
 	let dispatch = store.dispatch;
 	dispatch({
-		type: "UPDATE_CUSTOM_SLOT",
+		type: ActionTypes.UPDATE_CUSTOM_SLOT,
 		newValues,
 		id,
 	})
@@ -333,7 +334,7 @@ export function updateCustomSlot(newValues, id) {
 export function removeCustomSlot(id) {
 	let dispatch = store.dispatch;
 	dispatch({
-		type: "REMOVE_CUSTOM_SLOT",
+		type: ActionTypes.REMOVE_CUSTOM_SLOT,
 		id,
 	})
 }
@@ -345,7 +346,7 @@ export function addOrRemoveOptionalCourse(course) {
 			return;
 		}
 		dispatch({
-	  		type: "ADD_REMOVE_OPTIONAL_COURSE",
+	  		type: ActionTypes.ADD_REMOVE_OPTIONAL_COURSE,
 	  		newCourse: course
 	  	});
 	  	let state = store.getState(); // the above dispatched action changes the state

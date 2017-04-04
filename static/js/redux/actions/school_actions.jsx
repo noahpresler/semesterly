@@ -1,13 +1,14 @@
-import { getSchoolInfoEndpoint } from '../constants.jsx';
+import { getSchoolInfoEndpoint } from '../constants/endpoints.jsx';
+import * as ActionTypes from '../constants/actionTypes.jsx'
 
 export function fetchSchoolInfo() {
 	return (dispatch) => {
-		dispatch({ type: "REQUEST_SCHOOL_INFO" });
+		dispatch({ type: ActionTypes.REQUEST_SCHOOL_INFO });
 		fetch(getSchoolInfoEndpoint())
 	    .then(response => response.json())
 	    .then(json => {
 	    	dispatch({
-	    		type: "RECEIVE_SCHOOL_INFO", 
+	    		type: ActionTypes.RECEIVE_SCHOOL_INFO, 
 	    		schoolInfo: json
 	    	});
 	    });

@@ -2,7 +2,7 @@ import React from 'react';
 import Slot from './slot.jsx'
 import Modal from 'boron/WaveModal';
 import classNames from 'classnames';
-import { COLOUR_DATA } from '../constants.jsx';
+import { COLOUR_DATA } from '../constants/colours.jsx';
 
 const InSlot = (props) => {
     let displayTime = (props.time) ? <h3 className="time">{ props.time }</h3> : null;
