@@ -3,7 +3,7 @@ import SideBar from '../side_bar.jsx';
 import { fetchCourseInfo } from '../../actions/modal_actions.jsx'
 import { addOrRemoveCourse, loadTimetable, addOrRemoveOptionalCourse } from '../../actions/timetable_actions.jsx';
 import { duplicateTimetable, deleteTimetable } from '../../actions/user_actions.jsx'
-import { getSchoolSpecificInfo } from '../../constants/constants.jsx'
+import { getSchoolSpecificInfo } from '../../constants/schools.jsx'
 import * as ActionTypes from '../../constants/actionTypes.jsx'
 
 const mapStateToProps = (state) => {
