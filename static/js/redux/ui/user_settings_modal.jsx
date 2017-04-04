@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom';
 import fetch from 'isomorphic-fetch';
 import { getSchool } from '../init.jsx';
 import Modal from 'boron/WaveModal';
-import majors from '../majors.jsx';
+import majors from '../constants/majors.jsx';
 import Select from 'react-select';
 import classnames from 'classnames';
 import { setARegistrationToken, unregisterAToken } from '../actions/user_actions.jsx';
