@@ -1,5 +1,5 @@
 import React from 'react';
-import { COLOUR_DATA } from '../constants/constants.jsx';
+import { COLOUR_DATA } from '../constants/colours.jsx';
 import classNames from 'classnames';
 import { getCourseShareLink } from '../helpers/timetable_helpers.jsx';
 import ClickOutHandler from 'react-onclickout';
