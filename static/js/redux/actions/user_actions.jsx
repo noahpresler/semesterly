@@ -12,11 +12,11 @@ import { getUserInfoEndpoint,
 	getIntegrationGetEndpoint,
 	getIntegrationDelEndpoint,
 	getIntegrationAddEndpoint,
-	getSchoolSpecificInfo,
   getFinalExamSchedulerEndpoint,
   getLogFacebookAlertViewEndpoint,
   getLogFacebookAlertClickEndpoint,
-  getMostClassmatesCountEndpoint} from '../constants/constants.jsx';
+  getMostClassmatesCountEndpoint} from '../constants/endpoints.jsx';
+import { getSchoolSpecificInfo } from '../constants/schools.jsx';
 import { fetchCourseClassmates } from './modal_actions.jsx'
 import { store } from '../init.jsx';
 import { loadTimetable, nullifyTimetable, getNumberedName } from './timetable_actions.jsx';
