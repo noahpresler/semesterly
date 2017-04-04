@@ -13,7 +13,7 @@ import { setCourseInfo, fetchCourseClassmates } from './actions/modal_actions.js
 import { browserSupportsLocalStorage, setFirstVisit, timeLapsedGreaterThan, setFriendsCookie } from './util.jsx';
 import { addTTtoGCal } from './actions/calendar_actions.jsx';
 import { fetchMostClassmatesCount } from './actions/user_actions.jsx';
-import { getSchoolSpecificInfo } from './constants/constants.jsx';
+import { getSchoolSpecificInfo } from './constants/schools.jsx';
 import * as ActionTypes from './constants/actionTypes.jsx'
 
 export const store = createStore(rootReducer, window.devToolsExtension && window.devToolsExtension(), applyMiddleware(thunkMiddleware));
