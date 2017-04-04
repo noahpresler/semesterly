@@ -1,4 +1,4 @@
-import { VALID_SCHOOLS } from '../constants/constants.jsx';
+import { VALID_SCHOOLS } from '../constants/schools.jsx';
 import * as ActionTypes from '../constants/actionTypes.jsx'
 
 export const school = (state = {school: "", areas: [], departments: [], levels: [], dataLastUpdated: ""}, action) => {
