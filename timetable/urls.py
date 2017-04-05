@@ -52,4 +52,7 @@ urlpatterns = patterns('',
         timetable.views.delete_integration),
     url(r'^integration/add/(?P<integration_id>.+?)/course/(?P<course_id>.+?)/',
         timetable.views.add_integration),
+        # final exam scheduler
+    url(r'^get_final_exams/*$', timetable.views.final_exam_scheduler),
+    url(r'^final_exams/*$', timetable.views.view_final_exams),
 )
