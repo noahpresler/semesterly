@@ -2,8 +2,8 @@ import json
 
 from django.test import TestCase
 
-from test.utils import get_default_tt_request
-from test.test_cases import UrlTestCase
+from test_utils.utils import get_default_tt_request
+from test_utils.test_cases import UrlTestCase
 
 
 class RegressionTests(TestCase):
