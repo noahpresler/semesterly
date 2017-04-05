@@ -874,7 +874,11 @@ def get_current_semesters(school):
   For a given school, get the possible semesters and the most recent year for each
   semester that has course data, and return a list of (semester name, year) pairs.
   """
-  return school_to_semesters[school]
+  semesters = school_to_semesters[school]
+  # Ensure DB has all semesters.
+  for semester in semesters:
+    Semester.objects.update_or_create(**semester)
+  return semesters
 
 @csrf_exempt
 def final_exam_scheduler(request):
