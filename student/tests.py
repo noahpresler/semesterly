@@ -1,29 +1,28 @@
-from django.test import TestCase, SimpleTestCase
-from django.core.urlresolvers import resolve
+from test.test_cases import UrlTestCase
 
 
-class UrlTestCase(TestCase): # TODO: remove DB queries from school_mappers and change to SimpleTestCase
+class UrlsTest(UrlTestCase):
     """ Test student/urls.py """
 
     def test_urls_call_correct_views(self):
         # registration
-        self.assertEqual('student.views.set_registration_token', resolve('/setRegistrationToken/').view_name)
-        self.assertEqual('student.views.delete_registration_token', resolve('/deleteRegistrationToken/').view_name)
+        self.assertUrlResolvesToView('/setRegistrationToken/', 'student.views.set_registration_token')
+        self.assertUrlResolvesToView('/deleteRegistrationToken/', 'student.views.delete_registration_token')
 
         # profile management
-        self.assertEqual('student.views.unsubscribe', resolve('/unsubscribe/akdC@+-EI/alc:_=/').view_name)
-        self.assertEqual('student.views.save_settings', resolve('/user/save_settings/').view_name)
-        self.assertEqual('timetable.views.profile', resolve('/me/').view_name)
+        self.assertUrlResolvesToView('/unsubscribe/akdC@+-EI/alc:_=/', 'student.views.unsubscribe')
+        self.assertUrlResolvesToView('/user/save_settings/', 'student.views.save_settings')
+        self.assertUrlResolvesToView('/me/', 'timetable.views.profile')
 
         # timetable management
-        self.assertEqual('student.views.save_timetable', resolve('/user/save_timetable/').view_name)
-        self.assertEqual('student.views.duplicate_timetable', resolve('/user/duplicate_timetable/').view_name)
-        self.assertEqual('student.views.delete_timetable', resolve('/user/delete_timetable/').view_name)
-        self.assertEqual('student.views.get_student_tts_wrapper', resolve('/user/get_saved_timetables/jhu/Summer/2018').view_name)
+        self.assertUrlResolvesToView('/user/save_timetable/', 'student.views.save_timetable')
+        self.assertUrlResolvesToView('/user/duplicate_timetable/', 'student.views.duplicate_timetable')
+        self.assertUrlResolvesToView('/user/delete_timetable/', 'student.views.delete_timetable')
+        self.assertUrlResolvesToView('/user/get_saved_timetables/jhu/Summer/2018', 'student.views.get_student_tts_wrapper')
 
         # social
-        self.assertEqual('student.views.get_classmates', resolve('/user/get_classmates/').view_name)
-        self.assertEqual('student.views.get_most_classmate_count', resolve('/user/get_most_classmates_count/').view_name)
-        self.assertEqual('student.views.find_friends', resolve('/user/find_friends/').view_name)
-        self.assertEqual('student.views.add_tt_to_gcal', resolve('/user/add_to_gcal/').view_name)
+        self.assertUrlResolvesToView('/user/get_classmates/', 'student.views.get_classmates')
+        self.assertUrlResolvesToView('/user/get_most_classmates_count/', 'student.views.get_most_classmate_count')
+        self.assertUrlResolvesToView('/user/find_friends/', 'student.views.find_friends')
+        self.assertUrlResolvesToView('/user/add_to_gcal/', 'student.views.add_tt_to_gcal')
 
