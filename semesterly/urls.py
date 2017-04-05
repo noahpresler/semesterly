@@ -22,6 +22,10 @@ urlpatterns = patterns('',
 
     # app urls
     url('', include('timetable.urls')),
+    url('', include('courses.urls')),
+    url('', include('integrations.urls')),
+    url('', include('exams.urls')),
+    url('', include('coursesearch.urls')),
     url('', include('student.urls')),
     url('', include('analytics.urls')),
 
