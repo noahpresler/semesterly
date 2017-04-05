@@ -57,7 +57,8 @@ def get_popularity_percent_from_course(course, sem):
         return 0
 
 
-def get_basic_course_json(course, sem, extra_model_fields=[]):
+def get_basic_course_json(course, sem, extra_model_fields=None):
+    extra_model_fields = extra_model_fields or []
     basic_fields = ['code', 'name', 'id', 'description', 'department', 'num_credits', 'areas', 'campus']
     course_json = model_to_dict(course, basic_fields + extra_model_fields)
     course_json['evals'] = course.get_eval_info()
@@ -69,26 +70,23 @@ def get_basic_course_json(course, sem, extra_model_fields=[]):
 
     for section_type, sections in itertools.groupby(course_section_list, lambda s: s.section_type):
         course_json['sections'][section_type] = {
-        section.meeting_section: [merge_dicts(model_to_dict(co), model_to_dict(section)) \
-                                  for co in section.offering_set.all()] \
-        for section in sections}
+            section.meeting_section: [
+                merge_dicts(model_to_dict(co), model_to_dict(section)) for co in section.offering_set.all()
+            ] for section in sections
+        }
 
     return course_json
 
 
-def get_course(request, school, sem_name, year, id):
-    global SCHOOL
-    SCHOOL = school.lower()
-
+def get_course(request, school, sem_name, year, course_id):
     sem, _ = Semester.objects.get_or_create(name=sem_name, year=year)
     try:
-        course = Course.objects.get(school=school, id=id)
+        course = Course.objects.get(school=school, id=course_id)
         student = None
         logged = request.user.is_authenticated()
         if logged and Student.objects.filter(user=request.user).exists():
             student = Student.objects.get(user=request.user)
         json_data = get_detailed_course_json(school, course, sem, student)
-
     except:
         import traceback
         traceback.print_exc()
