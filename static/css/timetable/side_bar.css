@@ -19,21 +19,21 @@
     width: 100%;
     font-family: "Palanquin",Arial,sans-serif;
 }
-#share-course-link-wrapper input {
+.share-course-link-wrapper input {
     border: 1px solid #fff;
     transition: border .3s;
 }
 #side-bar input:focus,
 #side-bar input:focus:hover,
-#share-course-link-wrapper input:focus,
-#share-course-link-wrapper input:focus:hover {
+.share-course-link-wrapper input:focus,
+.share-course-link-wrapper input:focus:hover {
 	border: 1px solid #0095FF;
 }
 #side-bar input:hover,
-#share-course-link-wrapper input:hover {
+.share-course-link-wrapper input:hover {
 	border: 1px solid #ddd;
 }
-#share-course-link-wrapper #share-course-link {
+.share-course-link-wrapper .share-course-link {
     cursor:text;
 }
 
@@ -197,7 +197,7 @@ h4.sb-header:after {
     left: 0;
     top: 0;
 }
-.master-slot #share-course-link-wrapper {
+.master-slot .share-course-link-wrapper {
     position:absolute;
     top:20px;
     right:5px;
@@ -207,26 +207,26 @@ h4.sb-header:after {
     background-color:#F8F6F7;
     border-radius:2px;
 }
-.master-slot #share-course-link-wrapper .tip {
+.master-slot .share-course-link-wrapper .tip {
     top:-7px;
     right:12px;
 }
-.master-slot #share-course-link-wrapper .tip-border {
+.master-slot .share-course-link-wrapper .tip-border {
     top:-7px;
     right:12px;
 }
 .modal-module .master-slot-actions .fa-share-alt {
     margin-right:4px;
 }
-.modal-module .master-slot #share-course-link-wrapper .tip {
+.modal-module .master-slot .share-course-link-wrapper .tip {
     top:-7px;
     right:0px;
 }
-.modal-module .master-slot #share-course-link-wrapper .tip-border {
+.modal-module .master-slot .share-course-link-wrapper .tip-border {
     top:-7px;
     right:0px;
 }
-.master-slot #share-course-link-wrapper #share-course-link {
+#side-bar .master-slot .share-course-link-wrapper .share-course-link {
     color: #222;
     font-size:14px;
     font-weight:400;
