@@ -1,4 +1,4 @@
-from test.test_cases import UrlTestCase
+from test_utils.test_cases import UrlTestCase
 
 
 class UrlsTest(UrlTestCase):
