@@ -23,6 +23,7 @@ urlpatterns = patterns('',
     # app urls
     url('', include('timetable.urls')),
     url('', include('student.urls')),
+    url('', include('analytics.urls')),
 
     #finding friends
     url('', include('social.apps.django_app.urls', namespace='social')),
@@ -30,14 +31,6 @@ urlpatterns = patterns('',
 
     # home
     url(r'^$', 'timetable.views.view_timetable'),
-
-    # analytics
-    url(r'^analytics/*$', analytics.views.view_analytics_dashboard),
-        # Robots.txt
-    url(r'^robots.txt*$', analytics.views.view_analytics_dashboard),
-    url(r'^user/log_fb_alert_click/*$', analytics.views.log_facebook_alert_click),
-    url(r'^user/log_fb_alert_view/*$', analytics.views.log_facebook_alert_view),
-    url(r'^user/log_ical/*$', student.views.log_ical_export),
 
     # about page
     url(r'about/*', 'timetable.views.about'),
@@ -56,7 +49,7 @@ urlpatterns = patterns('',
     url(r'^500testing/', 'timetable.views.custom_500'),
 
     # final exam scheduler
-    (r'^get_final_exams/*$', 'timetable.views.final_exam_scheduler'),
+    url(r'^get_final_exams/*$', 'timetable.views.final_exam_scheduler'),
     url(r'^final_exams/*$', 'timetable.views.view_final_exams'),
 )
 
