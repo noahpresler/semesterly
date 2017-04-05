@@ -87,12 +87,8 @@ school_to_semesters = {
   'salisbury': [_sem('Fall', '2017'), _sem('Spring', '2017'), _sem('Winter', '2017'), _sem('Fall', '2016'), _sem('Summer', '2017'), _sem('Interterm', '2017')],
 }
 
-# Ensure DB has all semesters.
-for school, semesters in school_to_semesters.items():
-  for semester in semesters:
-    Semester.objects.update_or_create(**semester)
 
-# do the imports: assumes all parser follow the same naming conventions: 
+# do the imports: assumes all parser follow the same naming conventions:
 # schoolname_parsertype where parsertype can be courses, evals, or textbooks
 types = ['courses', 'evals', 'textbooks']
 for school in VALID_SCHOOLS:
