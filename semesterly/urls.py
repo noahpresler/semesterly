@@ -3,9 +3,6 @@ from django.http import HttpResponse
 from django.conf import settings
 from django.contrib import admin
 
-import analytics.views
-import student.views
-import timetable.views
 
 admin.autodiscover()
 
