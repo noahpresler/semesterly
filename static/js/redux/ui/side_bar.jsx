@@ -8,6 +8,7 @@ import ClickOutHandler from 'react-onclickout';
 import TimetableNameInputContainer from './containers/timetable_name_input_container.jsx';
 import CreditTickerContainer from './containers/credit_ticker_container.jsx';
 import Textbook from './textbook.jsx';
+import Clipboard from 'clipboard';
 
 class SideBar extends React.Component {
     constructor(props) {
