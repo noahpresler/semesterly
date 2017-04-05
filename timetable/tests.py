@@ -83,4 +83,6 @@ class UrlsTest(UrlTestCase):
         self.assertUrlResolvesToView('/integration/del/39Ced/course/SD3910/', 'timetable.views.delete_integration')
         self.assertUrlResolvesToView('/integration/add/139051/course/eng101/', 'timetable.views.add_integration')
 
-
+        # final exams
+        self.assertUrlResolvesToView('/get_final_exams/', 'timetable.views.final_exam_scheduler')
+        self.assertUrlResolvesToView('/final_exams/', 'timetable.views.view_final_exams')
