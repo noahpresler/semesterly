@@ -32,11 +32,11 @@ urlpatterns = patterns('',
     url(r'^$', 'timetable.views.view_timetable'),
 
     # analytics
-    url(r'^analytics/*$', 'analytics.views.view_analytics_dashboard'),
+    url(r'^analytics/*$', analytics.views.view_analytics_dashboard),
         # Robots.txt
-    url(r'^robots.txt*$', 'analytics.views.view_analytics_dashboard'),
-    url(r'^user/log_fb_alert_click/*$', 'analytics.views.log_facebook_alert_click'),
-    url(r'^user/log_fb_alert_view/*$', 'analytics.views.log_facebook_alert_view'),
+    url(r'^robots.txt*$', analytics.views.view_analytics_dashboard),
+    url(r'^user/log_fb_alert_click/*$', analytics.views.log_facebook_alert_click),
+    url(r'^user/log_fb_alert_view/*$', analytics.views.log_facebook_alert_view),
     url(r'^user/log_ical/*$', student.views.log_ical_export),
 
     # about page
