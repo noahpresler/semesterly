@@ -125,7 +125,8 @@ INSTALLED_APPS = (
     'scripts',
     'student',
     'cachalot',
-    'silk'
+    'silk',
+    'rest_framework'
 )
 
 MIDDLEWARE_CLASSES = (
