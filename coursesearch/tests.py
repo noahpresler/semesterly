@@ -5,5 +5,5 @@ class UrlsTest(UrlTestCase):
     """ Test search/urls.py """
 
     def test_urls_call_correct_views(self):
-        self.assertUrlResolvesToView('/search/jhu/Intermission/2019/opencv/', 'timetable.views.course_search')
-        self.assertUrlResolvesToView('/advanced_search/', 'timetable.views.advanced_course_search')
+        self.assertUrlResolvesToView('/search/jhu/Intermission/2019/opencv/', 'coursesearch.views.course_search')
+        self.assertUrlResolvesToView('/advanced_search/', 'coursesearch.views.advanced_course_search')
