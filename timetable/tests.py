@@ -42,7 +42,7 @@ class RegressionTests(TestCase):
         pass
 
 
-class UrlTestCase(SimpleTestCase):
+class UrlTestCase(TestCase): # TODO: set to SimpleTestCase after fixing school_mappers
     """ Test timetable/urls.py """
 
     def test_urls_call_correct_views(self):
