@@ -35,7 +35,7 @@ def advanced_course_search(request):
     sem, _ = Semester.objects.get_or_create(**params['semester'])
     query = params['query']
     filters = params['filters']
-    times = filters['times']
+    # times = filters['times']
 
     # filtering first by user's search query
     course_match_objs = get_course_matches(school, query, sem)
@@ -49,18 +49,14 @@ def advanced_course_search(request):
         course_match_objs = course_match_objs.filter(level__in=filters['levels'])
     if filters['times']:
         day_map = {"Monday": "M", "Tuesday": "T", "Wednesday": "W", "Thursday": "R", "Friday": "F"}
-        course_match_objs = course_match_objs.filter(reduce(operator.or_,
-                                                            (
-                                                                Q(
-                                                                    section__offering__time_start__gte="{0:0=2d}:00".format(
-                                                                        min_max['min']),
-                                                                    section__offering__time_end__lte="{0:0=2d}:00".format(
-                                                                        min_max['max']),
-                                                                    section__offering__day=day_map[min_max['day']],
-                                                                    section__semester=sem,
-                                                                    section__section_type="L",
-                                                                    # we only want to show classes that have LECTURE sections within the given boundaries
-                                                                    ) for min_max in filters['times'])))
+        course_match_objs = course_match_objs.filter(
+            reduce(operator.or_, (Q(section__offering__time_start__gte="{0:0=2d}:00".format(min_max['min']),
+                                    section__offering__time_end__lte="{0:0=2d}:00".format(min_max['max']),
+                                    section__offering__day=day_map[min_max['day']],
+                                    section__semester=sem,
+                                    section__section_type="L") for min_max in filters['times'])
+                   )
+        )
     try:
         paginator = Paginator(course_match_objs.distinct(), 20)
         course_match_objs = paginator.page(page)
@@ -88,13 +84,13 @@ def get_course_matches(school, query, semester):
     course_name_contains_query = reduce(
         operator.and_, map(course_name_contains_token, query_tokens))
     return Course.objects.filter(
-        Q(school=school) & \
-        course_name_contains_query & \
+        Q(school=school) &
+        course_name_contains_query &
         Q(section__semester=semester)
     )
 
 
 def course_name_contains_token(token):
-    return (Q(code__icontains=token) | \
-            Q(name__icontains=token.replace("&", "and")) | \
+    return (Q(code__icontains=token) |
+            Q(name__icontains=token.replace("&", "and")) |
             Q(name__icontains=token.replace("and", "&")))
