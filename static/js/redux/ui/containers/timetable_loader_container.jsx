@@ -1,13 +1,13 @@
-import { connect } from 'react-redux';
-import TimetableLoader from '../timetable_loader.jsx';
+import {connect} from "react-redux";
+import TimetableLoader from "../timetable_loader.jsx";
 
 const mapStateToProps = (state) => {
-	return {
-    	loading: state.timetables.isFetching
-	}
+    return {
+        loading: state.timetables.isFetching
+    }
 }
 const TimetableLoaderContainer = connect(
-	mapStateToProps
+    mapStateToProps
 )(TimetableLoader);
 
 export default TimetableLoaderContainer;
