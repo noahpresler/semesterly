@@ -2,8 +2,8 @@ import json
 
 from django.test import TestCase
 
-from test.utils import get_default_tt_request
-from test.test_cases import UrlTestCase
+from test_utils.utils import get_default_tt_request
+from test_utils.test_cases import UrlTestCase
 
 
 class RegressionTests(TestCase):
@@ -58,31 +58,9 @@ class UrlsTest(UrlTestCase):
         self.assertUrlResolvesToView('/timetable/random_stuff', 'timetable.views.redirect_to_home')
         self.assertUrlResolvesToView('/timetable/', 'timetable.views.redirect_to_home')
 
-        # course pages
-        self.assertUrlResolvesToView('/courses/uoft/code/cs1234', 'timetable.views.get_course_id')
-        self.assertUrlResolvesToView('/courses/uoft/Fall/2020/id/38510', 'timetable.views.get_course')
-        self.assertUrlResolvesToView('/course_classmates/jhu/Spring/2018/id/9932', 'timetable.views.get_classmates_in_course')
-        self.assertUrlResolvesToView('/c/somecode0350!', 'timetable.views.course_page')
-        self.assertUrlResolvesToView('/course/music101/Summer/2021', 'timetable.views.view_timetable')
-        self.assertUrlResolvesToView('/courses', 'timetable.views.all_courses')
-        self.assertUrlResolvesToView('/school_info/semuni', 'timetable.views.school_info')
-
         # timetables
         self.assertUrlResolvesToView('/get_timetables/', 'timetable.views.get_timetables')
-
-        # search
-        self.assertUrlResolvesToView('/search/jhu/Intermission/2019/opencv/', 'timetable.views.course_search')
-        self.assertUrlResolvesToView('/advanced_search/', 'timetable.views.advanced_course_search')
 
         # timetable sharing
         self.assertUrlResolvesToView('/share/link', 'timetable.views.create_share_link')
         self.assertUrlResolvesToView('/share/dIcMED', 'timetable.views.share_timetable')
-
-        # integration
-        self.assertUrlResolvesToView('/integration/get/3DCe3/course/csc148/', 'timetable.views.get_integration')
-        self.assertUrlResolvesToView('/integration/del/39Ced/course/SD3910/', 'timetable.views.delete_integration')
-        self.assertUrlResolvesToView('/integration/add/139051/course/eng101/', 'timetable.views.add_integration')
-
-        # final exams
-        self.assertUrlResolvesToView('/get_final_exams/', 'timetable.views.final_exam_scheduler')
-        self.assertUrlResolvesToView('/final_exams/', 'timetable.views.view_final_exams')
