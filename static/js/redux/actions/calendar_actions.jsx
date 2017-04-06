@@ -2,7 +2,7 @@ import { getRequestShareTimetableLinkEndpoint,
 				getAddTTtoGCalEndpoint, 
 				getLogiCalEndpoint, 
         getLogFinalExamViewEndpoint } from '../constants/endpoints.jsx';
-import { getSchoolSpecificInfo } from '../constants/schools.jsx';
+import { FULL_WEEK_LIST } from '../constants/constants.jsx'
 import { getActiveTimetable } from './user_actions.jsx';
 import { store } from '../init.jsx';
 import ical from 'ical-generator';
@@ -19,11 +19,10 @@ let DAY_MAP = {
 		'S' : 'sa',
 		'U' : 'su'
 	};
-let DAY_LIST = ['U','M','T','W','R','F','S'];
 
 function getNextDayOfWeek(date, dayOfWeek) {
-	dayOfWeek = DAY_LIST.indexOf(dayOfWeek);
-    var resultDate = new Date(date.getTime());
+	dayOfWeek = FULL_WEEK_LIST.indexOf(dayOfWeek);
+    let resultDate = new Date(date.getTime());
     resultDate.setDate(date.getDate() + (7 + dayOfWeek - date.getDay()) % 7);
     return resultDate;
 }
