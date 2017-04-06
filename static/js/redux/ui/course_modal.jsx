@@ -1,12 +1,9 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
-import classNames from 'classnames';
-import fetch from 'isomorphic-fetch';
-import { getSchool } from '../init.jsx';
-import Modal from 'boron/WaveModal';
-import { CourseModalBody } from './course_modal_body.jsx'
-import { getCourseShareLink, getCourseShareLinkFromModal } from '../helpers/timetable_helpers.jsx';
-import { ShareLink } from './master_slot.jsx';
+import React from "react";
+import classNames from "classnames";
+import Modal from "boron/WaveModal";
+import {CourseModalBody} from "./course_modal_body.jsx";
+import {getCourseShareLink, getCourseShareLinkFromModal} from "../helpers/timetable_helpers.jsx";
+import {ShareLink} from "./master_slot.jsx";
 
 export class CourseModal extends React.Component {
     constructor(props) {
@@ -21,27 +18,33 @@ export class CourseModal extends React.Component {
         this.showShareLink = this.showShareLink.bind(this);
         this.hideShareLink = this.hideShareLink.bind(this);
     }
+
     componentWillReceiveProps(nextProps) {
         if (nextProps.id != null) {
-            let { data, inRoster } = nextProps;
-            history.replaceState( {} , 'Semester.ly', getCourseShareLinkFromModal(data.code));
+            let {data, inRoster} = nextProps;
+            history.replaceState({}, 'Semester.ly', getCourseShareLinkFromModal(data.code));
             this.refs.modal.show();
         }
     }
-    addOrRemoveCourse(id, section='') {
+
+    addOrRemoveCourse(id, section = '') {
         this.props.addOrRemoveCourse(id, section);
         this.hide();
     }
+
     addOrRemoveOptionalCourse(course) {
         this.props.addOrRemoveOptionalCourse(course);
         this.hide();
     }
+
     showShareLink() {
         this.setState({shareLinkShown: true});
     }
+
     hideShareLink() {
         this.setState({shareLinkShown: false});
     }
+
     // sizeItUp() {
     //     // let h = $("#modal-header").outerHeight();
     //     // $("#modal-body").css("top", h);
@@ -54,7 +57,7 @@ export class CourseModal extends React.Component {
     //     this.sizeItUp();
     // }
     hide() {
-        history.replaceState( {} , 'Semester.ly', '/');
+        history.replaceState({}, 'Semester.ly', '/');
         this.props.unhoverSection();
         this.props.hideModal();
         this.refs.modal.hide();
@@ -65,62 +68,66 @@ export class CourseModal extends React.Component {
             width: '100%',
             backgroundColor: 'transparent'
         };
-        let { data, inRoster } = this.props;
+        let {data, inRoster} = this.props;
         let courseAndDept = data.code;
         courseAndDept = data.department && data.department != "" ?
-        courseAndDept + ", " + data.department : courseAndDept;
+            courseAndDept + ", " + data.department : courseAndDept;
         let shareLink = this.state.shareLinkShown ?
-        <ShareLink
-            link={getCourseShareLink(data.code)}
-            onClickOut={this.hideShareLink} /> :
-        null;
+            <ShareLink
+                link={getCourseShareLink(data.code)}
+                onClickOut={this.hideShareLink}/> :
+            null;
         let addOptional = this.props.inRoster ? null :
-         <div id="modal-save" onClick={() => this.addOrRemoveOptionalCourse(data)}>
-                    <i className="fa fa-bookmark"></i>
-         </div>;
+            <div id="modal-save" onClick={() => this.addOrRemoveOptionalCourse(data)}>
+                <i className="fa fa-bookmark"></i>
+            </div>;
         let add = data.sections !== undefined && Object.keys(data.sections).length > 0 ? <div id="modal-add"
-                    className={classNames('search-course-add', {
-                        'in-roster': inRoster,
-                    })}
-                    onClick={() => {
-                        this.setState({addBtnIsHover:false})
-                        this.addOrRemoveCourse(this.props.id)
-                    }}
-                    onMouseEnter={
-                        () => {this.setState({addBtnIsHover:true})}
-                    }
-                    onMouseLeave={
-                        () => {this.setState({addBtnIsHover:false})}
-                    }>
-                    <i className={classNames('fa', {
-                        'fa-plus': !inRoster,
-                        'fa-check': inRoster && !this.state.addBtnIsHover,
-                        'fa-trash-o': inRoster && this.state.addBtnIsHover,
-                    })}></i>
-                </div> : null;
+                                                                                              className={classNames('search-course-add', {
+                                                                                                  'in-roster': inRoster,
+                                                                                              })}
+                                                                                              onClick={() => {
+                                                                                                  this.setState({addBtnIsHover: false})
+                                                                                                  this.addOrRemoveCourse(this.props.id)
+                                                                                              }}
+                                                                                              onMouseEnter={
+                                                                                                  () => {
+                                                                                                      this.setState({addBtnIsHover: true})
+                                                                                                  }
+                                                                                              }
+                                                                                              onMouseLeave={
+                                                                                                  () => {
+                                                                                                      this.setState({addBtnIsHover: false})
+                                                                                                  }
+                                                                                              }>
+            <i className={classNames('fa', {
+                'fa-plus': !inRoster,
+                'fa-check': inRoster && !this.state.addBtnIsHover,
+                'fa-trash-o': inRoster && this.state.addBtnIsHover,
+            })}></i>
+        </div> : null;
         let content =
-        (<div id="modal-content">
-            <div id="modal-header">
-                <h1>{data.name}</h1>
-                <h2>{courseAndDept}</h2>
-                <div id="modal-close" onClick={() => this.refs.modal.hide()}>
-                    <i className="fa fa-times"></i>
+            (<div id="modal-content">
+                <div id="modal-header">
+                    <h1>{data.name}</h1>
+                    <h2>{courseAndDept}</h2>
+                    <div id="modal-close" onClick={() => this.refs.modal.hide()}>
+                        <i className="fa fa-times"></i>
+                    </div>
+                    <div id="modal-share">
+                        <i className="fa fa-share-alt" onClick={this.showShareLink}></i>
+                    </div>
+                    { shareLink }
+                    { addOptional }
+                    { add }
                 </div>
-                <div id="modal-share">
-                    <i className="fa fa-share-alt" onClick={this.showShareLink}></i>
-                </div>
-                { shareLink }
-                { addOptional }
-                { add }
-            </div>
-            <CourseModalBody {...this.props} hideModal={this.hide} addOrRemoveCourse={this.addOrRemoveCourse}/>
-        </div>);
+                <CourseModalBody {...this.props} hideModal={this.hide} addOrRemoveCourse={this.addOrRemoveCourse}/>
+            </div>);
         return (
             <Modal ref="modal"
-                className={classNames('course-modal max-modal', {'trans' : this.props.hasHoveredResult})}
-                modalStyle={modalStyle}
-                onHide={this.hide}
-                >
+                   className={classNames('course-modal max-modal', {'trans': this.props.hasHoveredResult})}
+                   modalStyle={modalStyle}
+                   onHide={this.hide}
+            >
                 {content}
             </Modal>
         );
