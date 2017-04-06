@@ -16,13 +16,10 @@ const mapStateToProps = (state) => {
         numCredits,
     }
 }
-const mapDispatchToProps = (dispatch) => {
-    return {}
-}
 
 const CreditTickerContainer = connect(
     mapStateToProps,
-    mapDispatchToProps
+    {}
 )(CreditTicker);
 
 export default CreditTickerContainer;
