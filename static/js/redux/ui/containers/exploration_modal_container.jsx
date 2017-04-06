@@ -1,6 +1,10 @@
 import {connect} from "react-redux";
 import {ExplorationModal} from "../exploration_modal.jsx";
-import {fetchAdvancedSearchResults} from "../../actions/search_actions.jsx";
+import {
+    fetchAdvancedSearchResults,
+    paginateAdvancedSearchResults,
+    clearAdvancedSearchPagination,
+    setAdvancedSearchResultIndex} from "../../actions/search_actions.jsx";
 import {
     addOrRemoveCourse,
     addOrRemoveOptionalCourse,
@@ -8,7 +12,7 @@ import {
     unHoverSection
 } from "../../actions/timetable_actions.jsx";
 import {getSchoolSpecificInfo} from "../../constants/schools.jsx";
-import {fetchCourseClassmates, react} from "../../actions/modal_actions.jsx";
+import {fetchCourseClassmates, react, hideExplorationModal, openSignUpModal} from "../../actions/modal_actions.jsx";
 import * as ActionTypes from "../../constants/actionTypes.jsx";
 
 const mapStateToProps = (state) => {
@@ -44,34 +48,30 @@ const mapStateToProps = (state) => {
             )
         },
         isSectionOnActiveTimetable: (courseId, section) => {
-            return activeTimetable.courses.some(course => course.id === courseId && course.enrolled_sections.some(sec => sec == section));
+            return activeTimetable.courses.some(
+                course => course.id === courseId &&
+                course.enrolled_sections.some(sec => sec == section)
+            );
         },
-    }
-}
-
-const mapDispatchToProps = (dispatch) => {
-    return {
-        hideModal: () => dispatch({type: ActionTypes.HIDE_EXPLORATION_MODAL}),
-        openSignupModal: () => dispatch({type: ActionTypes.TOGGLE_SIGNUP_MODAL}),
-        fetchAdvancedSearchResults: (query, filters) => dispatch(fetchAdvancedSearchResults(query, filters)),
-        paginate: () => dispatch({type: ActionTypes.PAGINATE_ADVANCED_SEARCH_RESULTS}),
-        clearPagination: () => dispatch({type: ActionTypes.CLEAR_ADVANCED_SEARCH_PAGINATION}),
-        setAdvancedSearchResultIndex: (idx, course_id) => {
-            dispatch({type: ActionTypes.SET_ACTIVE_RESULT, active: idx});
-            dispatch(fetchCourseClassmates(course_id));
-        },
-        fetchCourseClassmates: (cid) => dispatch(fetchCourseClassmates(cid)),
-        addOrRemoveOptionalCourse: (course) => dispatch(addOrRemoveOptionalCourse(course)),
-        hoverSection,
-        unhoverSection: unHoverSection(dispatch),
-        addOrRemoveCourse,
-        react,
     }
 }
 
 const ExplorationModalContainer = connect(
     mapStateToProps,
-    mapDispatchToProps
+    {
+        hideExplorationModal,
+        openSignUpModal,
+        fetchAdvancedSearchResults,
+        fetchCourseClassmates,
+        addOrRemoveOptionalCourse,
+        hoverSection,
+        unHoverSection,
+        addOrRemoveCourse,
+        react,
+        paginate: paginateAdvancedSearchResults,
+        clearPagination: clearAdvancedSearchPagination,
+        setAdvancedSearchResultIndex
+    }
 )(ExplorationModal);
 
 export default ExplorationModalContainer;
