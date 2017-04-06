@@ -1,7 +1,11 @@
-import fetch from 'isomorphic-fetch';
-import { getCourseInfoEndpoint, getReactToCourseEndpoint, getClassmatesInCourseEndpoint } from '../constants/endpoints.jsx';
-import { store } from '../init.jsx';
-import * as ActionTypes from '../constants/actionTypes.jsx'
+import fetch from "isomorphic-fetch";
+import {
+    getClassmatesInCourseEndpoint,
+    getCourseInfoEndpoint,
+    getReactToCourseEndpoint
+} from "../constants/endpoints.jsx";
+import {store} from "../init.jsx";
+import * as ActionTypes from "../constants/actionTypes.jsx";
 
 export function setCourseInfo(json) {
     return {
@@ -18,10 +22,10 @@ export function setCourseClassmates(json) {
 }
 
 export function requestCourseInfo(id) {
-  return {
-    type: ActionTypes.REQUEST_COURSE_INFO,
-    id: id,
-  }
+    return {
+        type: ActionTypes.REQUEST_COURSE_INFO,
+        id: id,
+    }
 }
 
 export function setCourseId(id) {
@@ -37,10 +41,10 @@ export function fetchCourseInfo(courseId) {
         fetch(getCourseInfoEndpoint(courseId), {
             'credentials': 'include'
         })
-        .then(response => response.json()) // TODO(rohan): error-check the response
-        .then(json => {
-            dispatch(setCourseInfo(json))
-        });
+            .then(response => response.json()) // TODO(rohan): error-check the response
+            .then(json => {
+                dispatch(setCourseInfo(json))
+            });
         dispatch(fetchCourseClassmates(courseId));
     }
 }
@@ -50,22 +54,22 @@ export function fetchCourseClassmates(courseId) {
         fetch(getClassmatesInCourseEndpoint(courseId), {
             'credentials': 'include'
         })
-        .then(response => response.json()) // TODO(rohan): error-check the response
-        .then(json => {
-            dispatch(setCourseClassmates(json))
-        });
+            .then(response => response.json()) // TODO(rohan): error-check the response
+            .then(json => {
+                dispatch(setCourseClassmates(json))
+            });
     }
 }
 
 export function react(cid, title) {
     fetch(getReactToCourseEndpoint(), {
-            method: 'POST',
-            body: JSON.stringify({
-                cid,
-                title
-            }),
-            credentials: 'include',
-        })
+        method: 'POST',
+        body: JSON.stringify({
+            cid,
+            title
+        }),
+        credentials: 'include',
+    })
         .then(response => response.json()) // TODO(rohan): error-check the response
         .then(json => {
             if (!json.error) {
@@ -74,5 +78,5 @@ export function react(cid, title) {
                     reactions: json.reactions
                 });
             }
-    });
+        });
 }
