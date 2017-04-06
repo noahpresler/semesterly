@@ -33,16 +33,12 @@ const mapStateToProps = (state) => {
     }
 }
 
-const mapDispatchToProps = (dispatch) => {
-    return {
-        addCustomSlot: addCustomSlot,
-        updateCustomSlot: updateCustomSlot
-    }
-}
-
 const CellContainer = connect(
     mapStateToProps,
-    mapDispatchToProps
+    {
+        addCustomSlot,
+        updateCustomSlot
+    }
 )(Cell);
 
 export default CellContainer;
