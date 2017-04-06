@@ -4,12 +4,11 @@ import {
     addOrRemoveCourse,
     addOrRemoveOptionalCourse,
     hoverSection,
-    unhoverSection
+    unHoverSection,
 } from "../../actions/timetable_actions.jsx";
-import {fetchCourseInfo, react, setCourseId} from "../../actions/modal_actions.jsx";
+import {fetchCourseInfo, react, setCourseId, openSignUpModal, changeUserInfo} from "../../actions/modal_actions.jsx";
 import {saveSettings} from "../../actions/user_actions.jsx";
 import {getSchoolSpecificInfo} from "../../constants/schools.jsx";
-import * as ActionTypes from "../../constants/actionTypes.jsx";
 
 const mapStateToProps = (state) => {
     let lectureSections = [];
@@ -54,27 +53,20 @@ const mapStateToProps = (state) => {
     }
 }
 
-const mapDispatchToProps = (dispatch) => {
-    return {
-        hideModal: () => dispatch(setCourseId(null)),
-        openSignupModal: () => dispatch({type: ActionTypes.TOGGLE_SIGNUP_MODAL}),
-        fetchCourseInfo: (courseId) => dispatch(fetchCourseInfo(courseId)),
-        hoverSection: hoverSection(dispatch),
-        unhoverSection: unhoverSection(dispatch),
-        addOrRemoveOptionalCourse: (course) => dispatch(addOrRemoveOptionalCourse(course)),
-        addOrRemoveCourse,
-        react,
-        saveSettings: () => dispatch(saveSettings()),
-        changeUserInfo: (info) => dispatch({
-            type: ActionTypes.CHANGE_USER_INFO,
-            data: info,
-        }),
-    }
-}
-
 const CourseModalContainer = connect(
     mapStateToProps,
-    mapDispatchToProps
+    {
+        hideModal: () => setCourseId(null),
+        openSignUpModal,
+        fetchCourseInfo,
+        hoverSection,
+        unHoverSection,
+        addOrRemoveOptionalCourse,
+        addOrRemoveCourse,
+        react,
+        saveSettings,
+        changeUserInfo
+    }
 )(CourseModal);
 
 export default CourseModalContainer;
