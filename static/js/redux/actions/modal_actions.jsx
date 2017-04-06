@@ -99,3 +99,7 @@ export function changeUserInfo(info) {
         data: info,
     }
 }
+
+export function hideExplorationModal() {
+    return {type: ActionTypes.HIDE_EXPLORATION_MODAL};
+}
