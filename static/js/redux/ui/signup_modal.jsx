@@ -1,18 +1,19 @@
-import React from 'react';
-import Modal from 'boron/WaveModal';
-import classNames from 'classnames';
+import React from "react";
+import Modal from "boron/WaveModal";
 
 export class SignupModal extends React.Component {
     componentDidMount() {
         if (this.props.isVisible)
             this.refs.modal.show();
     }
-	componentDidUpdate(nextProps) {
-		if (this.props.isVisible) {
-			this.refs.modal.show();
-		}
-	}
-	render() {
+
+    componentDidUpdate(nextProps) {
+        if (this.props.isVisible) {
+            this.refs.modal.show();
+        }
+    }
+
+    render() {
         let modalHeader =
             <div id="modal-content">
                 <div id="modal-header">
@@ -25,10 +26,10 @@ export class SignupModal extends React.Component {
         };
         return (
             <Modal ref="modal"
-                className="signup-modal max-modal"
-                modalStyle={modalStyle}
-                onHide={this.props.toggleSignupModal}
-                >
+                   className="signup-modal max-modal"
+                   modalStyle={modalStyle}
+                   onHide={this.props.toggleSignupModal}
+            >
                 {modalHeader}
                 <div id="features">
                     <div id="feature-highlight">
@@ -51,7 +52,8 @@ export class SignupModal extends React.Component {
                                 <img className="sample-slot" src="/static/img/sample_custom_slot_grey.png"/>
                             </div>
                             <div className="col-1-2">
-                                <div className="emoji" dangerouslySetInnerHTML={{__html: twemoji.parse('\uD83D\uDD25')}}/>
+                                <div className="emoji"
+                                     dangerouslySetInnerHTML={{__html: twemoji.parse('\uD83D\uDD25')}}/>
                                 It's all free
                                 <h1>More Burritos!</h1>
                             </div>
@@ -59,10 +61,11 @@ export class SignupModal extends React.Component {
                     </div>
                     <div id="call-to-action">
                         <div className="disclaimer">
-                            Semester.ly will NEVER post to your timeline. Your course selections will not be shared with any other user without your permission.
+                            Semester.ly will NEVER post to your timeline. Your course selections will not be shared with
+                            any other user without your permission.
                         </div>
                         <a href="/login/facebook/">
-                            <div  className="signup-button">
+                            <div className="signup-button">
                                 Signup!
                             </div>
                         </a>
