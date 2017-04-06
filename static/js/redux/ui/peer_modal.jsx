@@ -51,7 +51,7 @@ export class PeerModal extends React.Component {
 
     optInSignUp() {
         this.hide();
-        this.props.openSignupModal();
+        this.props.openSignUpModal();
     }
 
     render() {

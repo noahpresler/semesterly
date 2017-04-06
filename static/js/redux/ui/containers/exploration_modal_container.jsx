@@ -5,7 +5,7 @@ import {
     addOrRemoveCourse,
     addOrRemoveOptionalCourse,
     hoverSection,
-    unhoverSection
+    unHoverSection
 } from "../../actions/timetable_actions.jsx";
 import {getSchoolSpecificInfo} from "../../constants/schools.jsx";
 import {fetchCourseClassmates, react} from "../../actions/modal_actions.jsx";
@@ -62,8 +62,8 @@ const mapDispatchToProps = (dispatch) => {
         },
         fetchCourseClassmates: (cid) => dispatch(fetchCourseClassmates(cid)),
         addOrRemoveOptionalCourse: (course) => dispatch(addOrRemoveOptionalCourse(course)),
-        hoverSection: hoverSection(dispatch),
-        unhoverSection: unhoverSection(dispatch),
+        hoverSection,
+        unhoverSection: unHoverSection(dispatch),
         addOrRemoveCourse,
         react,
     }
