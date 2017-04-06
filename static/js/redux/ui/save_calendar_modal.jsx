@@ -74,7 +74,7 @@ export class SaveCalendarModal extends React.Component {
                         <hr />
                     </div>
                     <button className="btn abnb-btn secondary" onClick={() => {
-                        this.props.createiCalfromTimetable();
+                        this.props.createICalFromTimetable();
                     }}>
                         <span className="img-icon">
                             { DownloadIcon }
