@@ -15,40 +15,40 @@ handler500 = 'timetable.views.custom_500'
     # sqs = SearchQuerySet().order_by('code')
 
 urlpatterns = patterns('',
-    # url(r'^admin/', include(admin.site.urls)),
+                       # url(r'^admin/', include(admin.site.urls)),
 
     # app urls
     url('', include('timetable.urls')),
-    url('', include('courses.urls')),
-    url('', include('integrations.urls')),
-    url('', include('exams.urls')),
-    url('', include('coursesearch.urls')),
-    url('', include('student.urls')),
-    url('', include('analytics.urls')),
+                       url('', include('courses.urls')),
+                       url('', include('integrations.urls')),
+                       url('', include('exams.urls')),
+                       url('', include('searches.urls')),
+                       url('', include('student.urls')),
+                       url('', include('analytics.urls')),
 
-    #finding friends
+                       #finding friends
     url('', include('social.apps.django_app.urls', namespace='social')),
-    url('', include('django.contrib.auth.urls', namespace='auth')),
+                       url('', include('django.contrib.auth.urls', namespace='auth')),
 
-    # home
+                       # home
     url(r'^$', 'timetable.views.view_timetable'),
 
-    # about page
+                       # about page
     url(r'about/*', 'timetable.views.about'),
 
-    # press page
+                       # press page
     url(r'press/*', 'timetable.views.press'),
 
-    # Automatic deployment endpoint
+                       # Automatic deployment endpoint
     url(r'deploy_staging/', 'semesterly.views.deploy_staging'),
 
-    url(r'^sw(.*.js)$', 'timetable.views.sw_js', name='sw_js'),
-    url(r'^manifest(.*.json)$', 'timetable.views.manifest_json', name='manifest_json'),
+                       url(r'^sw(.*.js)$', 'timetable.views.sw_js', name='sw_js'),
+                       url(r'^manifest(.*.json)$', 'timetable.views.manifest_json', name='manifest_json'),
 
-    # for testing 404, so i don't have to turn off debug
+                       # for testing 404, so i don't have to turn off debug
 	url(r'^404testing/', 'timetable.views.custom_404'),
-    url(r'^500testing/', 'timetable.views.custom_500'),
-)
+                       url(r'^500testing/', 'timetable.views.custom_500'),
+                       )
 
 #profiling
 urlpatterns += [url(r'^silk/', include('silk.urls', namespace='silk'))]
