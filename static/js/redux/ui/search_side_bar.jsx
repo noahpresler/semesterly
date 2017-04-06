@@ -22,7 +22,7 @@ export class SearchSideBar extends React.Component {
                                  locked={this.props.isSectionLocked(this.props.hovered.id, sec)}
                                  isOnActiveTimetable={this.props.isSectionOnActiveTimetable(this.props.hovered.id, sec)}
                                  hoverSection={() => this.props.hoverSection(this.props.hovered, sec)}
-                                 unhoverSection={this.props.unhoverSection}
+                                 unhoverSection={this.props.unHoverSection}
                                  onMouseDown={(event) => this.lockSectionWrapper(sec, event)}
             />
         );

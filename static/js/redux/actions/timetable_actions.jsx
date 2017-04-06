@@ -168,22 +168,16 @@ function getBaseReqBody(state) {
         sid: SID
     }
 }
-export function hoverSection(dispatch) {
-    return (course, section) => {
-        let availableSections = Object.assign({}, course.sections['L'], course.sections['T'], course.sections['P']);
-        course.section = section;
-        dispatch({
-            type: ActionTypes.HOVER_COURSE,
-            course: Object.assign({}, course, {slots: availableSections[section]})
-        });
-    }
+export function hoverSection(course, section) {
+    let availableSections = Object.assign({}, course.sections['L'], course.sections['T'], course.sections['P']);
+    course.section = section;
+    return {
+        type: ActionTypes.HOVER_COURSE,
+        course: Object.assign({}, course, {slots: availableSections[section]})
+    };
 }
-export function unhoverSection(dispatch) {
-    return () => {
-        dispatch({
-            type: ActionTypes.UNHOVER_COURSE,
-        });
-    }
+export function unHoverSection() {
+    return { type: ActionTypes.UNHOVER_COURSE };
 }
 export function fetchStateTimetables(activeIndex = 0) {
     let requestBody = getBaseReqBody(store.getState());
