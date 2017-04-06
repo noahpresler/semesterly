@@ -91,7 +91,7 @@ export class ExplorationModal extends React.Component {
 
     hide() {
         this.props.unHoverSection();
-        this.props.hideModal();
+        this.props.hideExplorationModal();
         this.refs.modal.hide();
     }
 
@@ -379,7 +379,7 @@ export class ExplorationModal extends React.Component {
             <Modal ref="modal"
                    className={classNames("exploration-modal max-modal", {"trans": this.props.hasHoveredResult})}
                    modalStyle={modalStyle}
-                   onHide={this.props.hideModal}
+                   onHide={this.props.hideExplorationModal}
             >
                 {content}
             </Modal>

@@ -4,6 +4,7 @@ import {store} from "../init.jsx";
 import {getUserSavedTimetables, saveTimetable} from "./user_actions.jsx";
 import {nullifyTimetable} from "./timetable_actions.jsx";
 import * as ActionTypes from "../constants/actionTypes.jsx";
+import {fetchCourseClassmates} from "./modal_actions.jsx";
 
 export function requestCourses() {
     return {
@@ -90,41 +91,55 @@ export function fetchSearchResults(query) {
     }
 }
 
-export function fetchAdvancedSearchResults(query, filters) {
-    return (dispatch) => {
-
-        // if too small a query AND no filters; don't make request.
-        // we'll allow small query strings if some filters (departments, or breadths, or levels) are chosen.
-        if (query.length <= 1 && [].concat(...Object.values(filters)).length === 0) {
+export const fetchAdvancedSearchResults = (query, filters) => (dispatch) => {
+    // if too small a query AND no filters; don't make request.
+    // we'll allow small query strings if some filters (departments, or breadths, or levels) are chosen.
+    if (query.length <= 1 && [].concat(...Object.values(filters)).length === 0) {
+        dispatch({
+            type: ActionTypes.RECEIVE_ADVANCED_SEARCH_RESULTS,
+            advancedSearchResults: []
+        });
+        return;
+    }
+    // indicate that we are now requesting courses
+    dispatch({
+        type: ActionTypes.REQUEST_ADVANCED_SEARCH_RESULTS,
+    });
+    // send a request (via fetch) to the appropriate endpoint to get courses
+    let state = store.getState()
+    fetch(getAdvancedSearchEndpoint(), {
+        credentials: 'include',
+        method: 'POST',
+        body: JSON.stringify({
+            query,
+            filters,
+            semester: allSemesters[state.semesterIndex],
+            page: state.explorationModal.page
+        })
+    })
+        .then(response => response.json()) // TODO(rohan): error-check the response
+        .then(json => {
+            // indicate that courses have been received
             dispatch({
                 type: ActionTypes.RECEIVE_ADVANCED_SEARCH_RESULTS,
-                advancedSearchResults: []
+                advancedSearchResults: json
             });
-            return;
-        }
-        // indicate that we are now requesting courses
-        dispatch({
-            type: ActionTypes.REQUEST_ADVANCED_SEARCH_RESULTS,
         });
-        // send a request (via fetch) to the appropriate endpoint to get courses
-        let state = store.getState()
-        fetch(getAdvancedSearchEndpoint(), {
-            credentials: 'include',
-            method: 'POST',
-            body: JSON.stringify({
-                query,
-                filters,
-                semester: allSemesters[state.semesterIndex],
-                page: state.explorationModal.page
-            })
-        })
-            .then(response => response.json()) // TODO(rohan): error-check the response
-            .then(json => {
-                // indicate that courses have been received
-                dispatch({
-                    type: ActionTypes.RECEIVE_ADVANCED_SEARCH_RESULTS,
-                    advancedSearchResults: json
-                });
-            });
-    }
+}
+
+export function paginateAdvancedSearchResults() {
+    return {type: ActionTypes.PAGINATE_ADVANCED_SEARCH_RESULTS};
+}
+
+export function clearAdvancedSearchPagination() {
+    return {type: ActionTypes.CLEAR_ADVANCED_SEARCH_PAGINATION};
+}
+
+export function setActiveAdvancedSearchResult(idx) {
+    return {type: ActionTypes.SET_ACTIVE_ADV_SEARCH_RESULT, active: idx};
+}
+
+export const setAdvancedSearchResultIndex = (idx, course_id) => (dispatch) => {
+    dispatch(setActiveAdvancedSearchResult(idx));
+    dispatch(fetchCourseClassmates(course_id));
 }
