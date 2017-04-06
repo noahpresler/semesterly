@@ -88,3 +88,14 @@ export function togglePreferenceModal() {
 export function triggerSaveCalendarModal() {
     return {type: ActionTypes.TRIGGER_SAVE_CALENDAR_MODAL};
 }
+
+export function openSignUpModal() {
+    return {type: ActionTypes.TOGGLE_SIGNUP_MODAL};
+}
+
+export function changeUserInfo(info) {
+    return {
+        type: ActionTypes.CHANGE_USER_INFO,
+        data: info,
+    }
+}
