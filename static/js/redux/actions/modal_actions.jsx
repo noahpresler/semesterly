@@ -80,3 +80,11 @@ export function react(cid, title) {
             }
         });
 }
+
+export function togglePreferenceModal() {
+    return {type: ActionTypes.TOGGLE_PREFERENCE_MODAL};
+}
+
+export function triggerSaveCalendarModal() {
+    return {type: ActionTypes.TRIGGER_SAVE_CALENDAR_MODAL};
+}
