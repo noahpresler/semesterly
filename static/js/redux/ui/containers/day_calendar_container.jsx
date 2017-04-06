@@ -2,7 +2,7 @@ import {connect} from "react-redux";
 import DayCalendar from "../day_calendar.jsx";
 import {saveTimetable} from "../../actions/user_actions.jsx";
 import {handleCreateNewTimetable} from "../../actions/timetable_actions.jsx";
-import {addTTtoGCal, createiCalfromTimetable, fetchShareTimetableLink} from "../../actions/calendar_actions.jsx";
+import {addTTtoGCal, createICalFromTimetable, fetchShareTimetableLink} from "../../actions/calendar_actions.jsx";
 import * as ActionTypes from "../../constants/actionTypes.jsx";
 
 
@@ -67,7 +67,7 @@ const mapDispatchToProps = (dispatch) => {
         toggleSaveCalendarModal: () => {
             dispatch({type: ActionTypes.TRIGGER_SAVE_CALENDAR_MODAL})
         },
-        createiCalfromTimetable,
+        createICalFromTimetable,
         handleCreateNewTimetable,
     }
 }

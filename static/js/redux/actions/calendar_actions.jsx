@@ -100,7 +100,7 @@ export function addTTtoGCal() {
     }
 }
 
-export function createiCalfromTimetable(active) {
+export function createICalFromTimetable(active) {
     return (dispatch) => {
         let state = store.getState();
         if (!state.saveCalendarModal.isDownloading && !state.saveCalendarModal.hasDownloaded) {
