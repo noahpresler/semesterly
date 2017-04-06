@@ -2,7 +2,7 @@ import {connect} from "react-redux";
 import Calendar from "../calendar.jsx";
 import {saveTimetable} from "../../actions/user_actions.jsx";
 import {handleCreateNewTimetable} from "../../actions/timetable_actions.jsx";
-import {addTTtoGCal, createiCalfromTimetable, fetchShareTimetableLink} from "../../actions/calendar_actions.jsx";
+import {addTTtoGCal, createICalFromTimetable, fetchShareTimetableLink} from "../../actions/calendar_actions.jsx";
 import {togglePreferenceModal, triggerSaveCalendarModal} from "../../actions/modal_actions.jsx";
 
 const getMaxHourBasedOnWindowHeight = () => {
@@ -66,7 +66,7 @@ const CalendarContainer = connect(
         togglePreferenceModal,
         triggerSaveCalendarModal,
         addTTtoGCal,
-        createiCalfromTimetable,
+        createICalFromTimetable,
         handleCreateNewTimetable,
     }
 )(Calendar);
