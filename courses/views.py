@@ -78,10 +78,10 @@ def get_basic_course_json(course, sem, extra_model_fields=None):
     return course_json
 
 
-def get_course(request, school, sem_name, year, course_id):
+def get_course(request, school, sem_name, year, id):
     sem, _ = Semester.objects.get_or_create(name=sem_name, year=year)
     try:
-        course = Course.objects.get(school=school, id=course_id)
+        course = Course.objects.get(school=school, id=id)
         student = None
         logged = request.user.is_authenticated()
         if logged and Student.objects.filter(user=request.user).exists():
