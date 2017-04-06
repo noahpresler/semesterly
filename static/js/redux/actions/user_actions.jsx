@@ -157,6 +157,7 @@ export function saveTimetable(isAutoSave = false, callback = null) {
             })
             .then(json => {
                 if (callback) {
+                    console.log(callback);
                     callback();
                     return;
                 }
