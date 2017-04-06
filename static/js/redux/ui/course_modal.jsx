@@ -58,7 +58,7 @@ export class CourseModal extends React.Component {
     // }
     hide() {
         history.replaceState({}, 'Semester.ly', '/');
-        this.props.unhoverSection();
+        this.props.unHoverSection();
         this.props.hideModal();
         this.refs.modal.hide();
     }
