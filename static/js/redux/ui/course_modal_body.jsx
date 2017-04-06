@@ -43,7 +43,7 @@ export class CourseModalBody extends React.Component {
 
     launchSignupModal() {
         this.props.hideModal();
-        this.props.openSignupModal();
+        this.props.openSignUpModal();
     }
 
     enableSocial() {
@@ -93,7 +93,7 @@ export class CourseModalBody extends React.Component {
                 isOnActiveTimetable={this.props.isSectionOnActiveTimetable(this.props.data.id, sec)}
                 lockOrUnlock={() => this.props.addOrRemoveCourse(this.props.data.id, sec)}
                 hoverSection={() => this.props.hoverSection(this.props.data, sec)}
-                unhoverSection={this.props.unhoverSection}
+                unhoverSection={this.props.unHoverSection}
                 inRoster={this.props.inRoster}
             />
         });

@@ -90,7 +90,7 @@ export class ExplorationModal extends React.Component {
     }
 
     hide() {
-        this.props.unhoverSection();
+        this.props.unHoverSection();
         this.props.hideModal();
         this.refs.modal.hide();
     }
