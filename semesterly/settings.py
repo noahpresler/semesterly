@@ -123,7 +123,7 @@ INSTALLED_APPS = (
     'timetable',
     'exams',
     'integrations',
-    'coursesearch',
+    'searches',
     'courses',
     'analytics',
     'scripts',
