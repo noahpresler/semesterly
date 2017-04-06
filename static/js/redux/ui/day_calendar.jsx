@@ -156,7 +156,7 @@ class DayCalendar extends React.Component {
             </div>
         });
         let saveToCalendarButton = (
-            <button onClick={() => this.props.toggleSaveCalendarModal()}
+            <button onClick={() => this.props.triggerSaveCalendarModal()}
                     className="save-timetable">
                 <img src="static/img/addtocalendar.png"/>
             </button>
