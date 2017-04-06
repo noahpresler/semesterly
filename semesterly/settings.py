@@ -121,6 +121,10 @@ INSTALLED_APPS = (
     'social.apps.django_app.default',
     'django_extensions',
     'timetable',
+    'exams',
+    'integrations',
+    'searches',
+    'courses',
     'analytics',
     'scripts',
     'student',
@@ -264,7 +268,7 @@ USE_TZ = True
 
 APPEND_SLASH = True
 
-TEST_RUNNER = 'test.test_runners.FastTestRunner'
+TEST_RUNNER = 'test_utils.test_runners.FastTestRunner'
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.6/howto/static-files/
