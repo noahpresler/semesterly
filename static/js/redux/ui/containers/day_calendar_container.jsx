@@ -3,7 +3,7 @@ import DayCalendar from "../day_calendar.jsx";
 import {saveTimetable} from "../../actions/user_actions.jsx";
 import {handleCreateNewTimetable} from "../../actions/timetable_actions.jsx";
 import {addTTtoGCal, createICalFromTimetable, fetchShareTimetableLink} from "../../actions/calendar_actions.jsx";
-import * as ActionTypes from "../../constants/actionTypes.jsx";
+import {triggerSaveCalendarModal, togglePreferenceModal} from "../../actions/modal_actions.jsx"
 
 
 const getMaxHourBasedOnWindowHeight = () => {
@@ -58,23 +58,18 @@ const mapStateToProps = (state) => {
         active,
     }
 }
-const mapDispatchToProps = (dispatch) => {
-    return {
-        saveTimetable: () => dispatch(saveTimetable()),
-        fetchShareTimetableLink: () => dispatch(fetchShareTimetableLink()),
-        togglePreferenceModal: () => dispatch({type: ActionTypes.TOGGLE_PREFERENCE_MODAL}),
-        addTTtoGCal: () => dispatch(addTTtoGCal()),
-        toggleSaveCalendarModal: () => {
-            dispatch({type: ActionTypes.TRIGGER_SAVE_CALENDAR_MODAL})
-        },
-        createICalFromTimetable,
-        handleCreateNewTimetable,
-    }
-}
 
 const DayCalendarContainer = connect(
     mapStateToProps,
-    mapDispatchToProps
+    {
+        saveTimetable: () => saveTimetable(), //NOTE: uses this syntax to avoid onClick accidentally passing a callback
+        fetchShareTimetableLink,
+        togglePreferenceModal,
+        addTTtoGCal,
+        triggerSaveCalendarModal,
+        createICalFromTimetable,
+        handleCreateNewTimetable
+    }
 )(DayCalendar);
 
 export default DayCalendarContainer;
