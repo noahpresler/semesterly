@@ -23,7 +23,7 @@ class TextbookSection:
 
     def __str__(self):
         return (
-            "Section id: " + self.id + ", name: " + self.name + "\n"
+            "Section id: " + self.id + ", name: " + self.name
         )
 
 class TextbookCourse:
@@ -34,7 +34,7 @@ class TextbookCourse:
 
     def __str__(self):
         return (
-            "Course id: " + self.id + ", name: " + self.name + "\n"
+            "Course id: " + self.id + ", name: " + self.name
         )
 
 class TextbookDepartment:
@@ -45,7 +45,7 @@ class TextbookDepartment:
 
     def __str__(self):
         return (
-            "Department id: " + self.id + ", name: " + self.name + "\n"
+            "Department id: " + self.id + ", name: " + self.name
         )
 
 class TextbookSemester:
@@ -56,7 +56,7 @@ class TextbookSemester:
 
     def __str__(self):
         return (
-            "Semester id: " + self.id + ", name: " + self.name + "\n"
+            "Semester id: " + self.id + ", name: " + self.name
         )
 
 class TextbookParser:
@@ -84,9 +84,10 @@ class TextbookParser:
         while True:
             try:
                 response = self.make_request(request_type, url, params, headers, payload)
-                return eval(response.text)
+                return eval(response)
                 break
             except:
+                print(response.text)
                 self.retry_request(headers)
 
     def make_request(self, request_type, url, params, headers, payload):
@@ -103,8 +104,11 @@ class TextbookParser:
         self.parse_semesters(True)
 
     def parse(self):
+        print("Parsing semester.")
         self.semesters = self.parse_semesters(False)
+        print("Finished parsing semester.\nParsing departments.")
         self.parse_departments()
+        print("Finished parsing departments\nParsing textbooks.")
         self.get_textbooks()
 
     def parse_semesters(self, is_retry):
@@ -142,7 +146,7 @@ class TextbookParser:
         return semesters
 
     def parse_departments(self):
-        for semester in self.semesters:
+        for semester in self.semesters[:1]:
             url = "http://" + self.store_link + "/webapp/wcs/stores/servlet/TextBookProcessDropdownsCmd"
 
             params = {"campusId":"14704480","termId":semester.id,"deptId":"","courseId":"","sectionId":"","storeId": self.store_id,"catalogId":"10001","langId":"-1","dropdown":"term"}
@@ -160,11 +164,12 @@ class TextbookParser:
 
             departments = self.eval_response("POST", url, params, headers, payload)
 
-            for dep in departments:
+            for dep in departments[:1]:
                 dep_id = dep["categoryId"]
                 dep_name = dep["categoryName"]
                 department = TextbookDepartment(dep_id, dep_name)
                 semester.departments.append(department)
+                print("Parsing department " + str(department))
                 self.parse_courses(semester, department)
 
     def parse_courses(self, semester, department):
@@ -253,17 +258,20 @@ class TextbookParser:
             raw_code = tbsec.findAll('h1')[0]
             code_list = raw_code.get_text().split()[:-2]
             course_code = self.delimeter.join(code_list[:-1])
-            section = "(" + code_list[2] + ")"
+            if len(code_list[2]) == 1:
+                section = "(0" + code_list[2] + ")"
+            else:
+                section = "(" + code_list[2] + ")"
             for tb in tbsec.findAll('div',class_="book_details"):
                 match = re.findall(self.isbn_pattern,"".join(tb.get_text()))
                 if len(match) > 0:
                     isbn_number = match[0]
                     is_required = self.check_required(tb.find('span', class_="recommendBookType").get_text())
-                    self.make_textbook(is_required, isbn_number, course_code, section)
-        try:
-            print "\n"
-        except UnicodeEncodeError:
-            pass
+                    # self.make_textbook(is_required, isbn_number, course_code, section)
+        # try:
+        #     print "\n"
+        # except UnicodeEncodeError:
+        #     pass
 
     def make_textbook(self, is_required, isbn_number, course_code, section):
         try:

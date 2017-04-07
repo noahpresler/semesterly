@@ -1,0 +1,38 @@
+{
+	"$schema": "http://json-schema.org/draft-04/schema#",
+	"title": "Individual Section",
+	"description": "Semesterly Section JSON schema - individual",
+	"allOf": [
+		{
+			"$ref": "section.json#/"
+		}
+	],
+	"properties": {
+		"kind": {},
+		"school": {},
+		"course": {},
+		"code": {},
+		"name": {},
+		"term": {},
+		"year": {},
+		"capacity": {},
+		"enrollment": {},
+		"waitlist": {},
+		"waitlist_size": {},
+		"remaining_seats": {},
+		"type": {},
+		"fees": {},
+		"instructors": {},
+		"final_exam": {},
+		"textbooks": {},
+		"meetings": {}
+	},
+	"additionalProperties": false,
+	"required": [
+		"kind",
+		"code",
+		"term",
+		"year",
+		"course"
+	]
+}
