@@ -10,7 +10,7 @@ admin.autodiscover()
 urlpatterns = patterns('',
                        # course info
                        url(r'^courses/(?P<school>.+?)/code/(?P<course_id>.+)/*$', courses.views.get_course_id),  # ?
-                       url(r'^courses/(?P<school>.+?)/(?P<sem_name>.+)/(?P<year>[0-9]{4})/id/(?P<id>[0-9]+)/*$',
+                       url(r'^courses/(?P<school>.+?)/(?P<sem_name>.+)/(?P<year>[0-9]{4})/id/(?P<course_id>[0-9]+)/*$',
                            courses.views.get_course),
                        url(r'c/(?P<code>.+?)$', courses.views.course_page),  # ?
                        url(r'course/(?P<code>.+?)/(?P<sem_name>.+?)/(?P<year>.+?)/*$', timetable.views.view_timetable),
@@ -18,7 +18,7 @@ urlpatterns = patterns('',
                        # school info
                        url(r'^school_info/(?P<school>.+?)', courses.views.school_info),
                        # classmates
-                       url(r'^course_classmates/(?P<school>.+?)/(?P<sem_name>.+)/(?P<year>[0-9]{4})/id/(?P<id>[0-9]+)/*$',
+                       url(r'^course_classmates/(?P<school>.+?)/(?P<sem_name>.+)/(?P<year>[0-9]{4})/id/(?P<course_id>[0-9]+)/*$',
                            courses.views.get_classmates_in_course),
 
                        # course info
