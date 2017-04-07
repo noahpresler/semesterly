@@ -1,6 +1,7 @@
 .signup-modal {
 	max-width: 500px;
-	height: 550px;
+	height: 588px;
+	overflow: auto;
 }
 .signup-modal > div {
 	outline:none;
@@ -108,7 +109,6 @@
 	
 	.signup-modal {
        max-width: 500px;
-       height: 550px;
 	   max-width: 1200px;
 	   height: 85%;
 	   max-height: 900px;
@@ -116,6 +116,10 @@
 
 	.pro-pic {
        display: none;
+	}
+
+	.welcome-modal #modal-body {
+		padding: 22px 0 20px;
 	}
 
  	.signup-modal #features{

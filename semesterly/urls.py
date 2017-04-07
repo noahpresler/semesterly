@@ -3,10 +3,6 @@ from django.http import HttpResponse
 from django.conf import settings
 from django.contrib import admin
 
-# from haystack.views import SearchView
-
-# from haystack.query import SearchQuerySet
-
 admin.autodiscover()
 
 # custom 404 page
@@ -14,74 +10,51 @@ handler404 = 'timetable.views.custom_404'
 # custom 500 page
 handler500 = 'timetable.views.custom_500'
 
-    # for sorting search results by course code
-    # sqs = SearchQuerySet().order_by('code')
+# for sorting search results by course code
+# sqs = SearchQuerySet().order_by('code')
 
 urlpatterns = patterns('',
-    # url(r'^admin/', include(admin.site.urls)),
-    #finding frandsssss
-    url(r'^find_friends/$', 'timetable.views.find_friends'),
-    url('', include('social.apps.django_app.urls', namespace='social')),
-    url('', include('django.contrib.auth.urls', namespace='auth')),
-    url(r'^complete/facebook/.*$', 'timetable.views.view_timetable'),
+                       # url(r'^admin/', include(admin.site.urls)),
 
-    # home
-    url(r'^$', 'timetable.views.view_timetable'),
+                       # app urls
+                       url('', include('timetable.urls')),
+                       url('', include('courses.urls')),
+                       url('', include('integrations.urls')),
+                       url('', include('exams.urls')),
+                       url('', include('searches.urls')),
+                       url('', include('student.urls')),
+                       url('', include('analytics.urls')),
 
-    # sharing course
-    url(r'course/(?P<code>.+?)/(?P<sem>[fFsS]{1}?)/*$', 'timetable.views.view_timetable'),
+                       # finding friends
+                       url('', include('social.apps.django_app.urls', namespace='social')),
+                       url('', include('django.contrib.auth.urls', namespace='auth')),
 
-    # request sharing timetable link
-    url(r'share/link/*$', 'timetable.views.create_share_link'),
+                       # home
+                       url(r'^$', 'timetable.views.view_timetable'),
 
-    # view shared timetable
-    url(r'share/(?P<ref>.+)/*$', 'timetable.views.share_timetable'),
+                       # about page
+                       url(r'about/*', 'timetable.views.about'),
 
-    # index
-    url(r'^timetable/*$', 'timetable.views.redirect_to_home'),
-    url(r'^timetable/.+$', 'timetable.views.redirect_to_home'),
+                       # press page
+                       url(r'press/*', 'timetable.views.press'),
 
-    # analytics
-    url(r'^analytics/*$', 'analytics.views.view_analytics_dashboard'),
+                       # Automatic deployment endpoint
+                       url(r'deploy_staging/', 'semesterly.views.deploy_staging'),
 
-    # Robots.txt
-    url(r'^robots.txt*$', 'analytics.views.view_analytics_dashboard'),
+                       url(r'^sw(.*.js)$', 'timetable.views.sw_js', name='sw_js'),
+                       url(r'^manifest(.*.json)$', 'timetable.views.manifest_json', name='manifest_json'),
 
-    #User,Auth,User Info
-    url(r'^user/logout/$', 'django.contrib.auth.views.logout', {'next_page': '/'}),
-    url(r'^user/save_timetable/$', 'student.views.save_timetable'),
-    url(r'^user/save_settings/$', 'student.views.save_settings'),
-    url(r'^user/get_classmates/$', 'student.views.get_classmates'),
-    url(r'^user/find_friends/$', 'student.views.find_friends'),
-    url(r'^user/get_saved_timetables/(?P<school>.+)/(?P<sem>[fFsS]{1})', 'student.views.get_student_tts_wrapper'),
-    
-    url(r'^courses/(?P<school>.+?)/(?P<sem>[fFsS]{1}?)/code/(?P<course_id>.+)/*$', 'timetable.views.get_course_id'),
-    url(r'^jhu/countdown/*$', 'timetable.views.jhu_timer'),
-    url(r'^courses/(?P<school>.+?)/(?P<sem>[fFsS]{1}?)/id/(?P<id>[0-9]+)/*$', 'timetable.views.get_course'),
-    url(r'^get_timetables/$', 'timetable.views.get_timetables'),
-    url(r'^search/(?P<school>.+?)/(?P<sem>.+?)/(?P<query>.+?)/', 'timetable.views.course_search'),
-    url(r'^advanced_search/', 'timetable.views.advanced_course_search'),
-    url(r'^school_info/(?P<school>.+?)/', 'timetable.views.school_info'),
-    url(r'react/', 'student.views.react_to_course'),
-    
-    # course pages and course listings
-    url(r'c/(?P<code>.+?)$', 'timetable.views.course_page'),
-    url(r'courses/', 'timetable.views.all_courses'),
+                       # for testing 404, so i don't have to turn off debug
+                       url(r'^404testing/', 'timetable.views.custom_404'),
+                       url(r'^500testing/', 'timetable.views.custom_500'),
+                       )
 
-    # about page
-    url(r'about/', 'timetable.views.about'),
-
-    # Automatic deployment endpoint
-    url(r'deploy_staging/', 'semesterly.views.deploy_staging'),
-    
-    url(r'^unsubscribe/(?P<id>[\w.@+-]+)/(?P<token>[\w.:\-_=]+)/$', 'student.views.unsubscribe'),
-
-    # for testing error pages, so i don't have to turn off debug
-	url(r'^404testing/', 'timetable.views.custom_404'),
-    url(r'^500testing/', 'timetable.views.custom_500')
-)
+# profiling
+urlpatterns += [url(r'^silk/', include('silk.urls', namespace='silk'))]
 
 if getattr(settings, 'STAGING', False):
-    urlpatterns += patterns('', url(r'^robots.txt$', lambda r: HttpResponse("User-agent: *\nDisallow: /", content_type="text/plain")) )
+    urlpatterns += patterns('', url(r'^robots.txt$',
+                                    lambda r: HttpResponse("User-agent: *\nDisallow: /", content_type="text/plain")))
 else:
-    urlpatterns += patterns('', url(r'^robots.txt$', lambda r: HttpResponse("User-agent: *\nDisallow:", content_type="text/plain")) )
+    urlpatterns += patterns('', url(r'^robots.txt$',
+                                    lambda r: HttpResponse("User-agent: *\nDisallow:", content_type="text/plain")))

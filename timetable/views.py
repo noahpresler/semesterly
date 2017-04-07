@@ -1,28 +1,18 @@
-import collections
-import copy
-import functools
 import itertools
-import json
 import logging
-import operator
-import os
-from pprint import pprint
-from django.shortcuts import render_to_response, render
-from django.http import HttpResponse, HttpResponseRedirect, Http404
-from django.views.decorators.csrf import csrf_exempt
-from django.forms.models import model_to_dict
-from django.db.models import Q
-from hashids import Hashids
-from pytz import timezone
 
-from analytics.models import *
+from django.db.models import Count
+from hashids import Hashids
+
 from analytics.views import *
-from timetable.models import *
-from timetable.school_mappers import school_to_granularity, VALID_SCHOOLS, school_code_to_name, AM_PM_SCHOOLS
-from timetable.utils import *
-from timetable.scoring import *
+from courses.views import get_detailed_course_json
 from student.models import Student
-from student.views import get_student, get_user_dict, convert_tt_to_dict, get_classmates_from_course_id
+from student.views import get_student, get_user_dict, convert_tt_to_dict
+from timetable.jhu_final_exam_test import *
+from timetable.school_mappers import school_to_granularity, AM_PM_SCHOOLS, school_to_semesters, \
+  final_exams_available
+from timetable.scoring import *
+from timetable.utils import *
 
 MAX_RETURN = 60 # Max number of timetables we want to consider
 
@@ -30,6 +20,7 @@ SCHOOL = ""
 
 hashids = Hashids(salt="x98as7dhg&h*askdj^has!kj?xz<!9")
 logger = logging.getLogger(__name__)
+
 
 def redirect_to_home(request):
   return HttpResponseRedirect("/")
@@ -51,31 +42,103 @@ def custom_500(request):
 # ******************************************************************************
 
 @validate_subdomain
-def view_timetable(request, code=None, sem=None, shared_timetable=None, find_friends=False):
+def view_timetable(request, code=None, sem_name=None, year=None, shared_timetable=None, 
+                  find_friends=False, enable_notifs=False, signup=False, user_acq=False,
+                  gcal_callback=False, export_calendar=False, view_textbooks=False,
+                  final_exams=False):
   school = request.subdomain
   student = get_student(request)
   course_json = None
 
-  if not sem: # not loading a share course link
-    sem = 'F'
+  # get default semester info
+  sem_dicts = get_current_semesters(school) # corresponds to allSemesters on frontend
+  semester_index = 0 # corresponds to state.semesterIndex on frontend
+  sem = Semester.objects.get(**sem_dicts[semester_index])
+
+  if sem_name and year: # loading a share course link OR timetable share link
+    sem, _ = Semester.objects.get_or_create(name=sem_name, year=year)
+    sem_pair = {'name': sem.name, 'year': sem.year}
+    if sem_pair not in sem_dicts:
+      sem_dicts.append(sem_pair)
+      semester_index = len(sem_dicts) - 1
+    else:
+      semester_index = sem_dicts.index(sem_pair)
+
   if code: # user is loading a share course link, since code was included
-    sem = sem.upper()
     code = code.upper()
     try:
       course = Course.objects.get(school=school, code=code)
       course_json = get_detailed_course_json(school, course, sem, student)
+      SharedCourseView.objects.create(
+        student = student,
+        shared_course = course,
+      ).save()
     except:
       raise Http404
+
+  integrations = {'integrations': []}
+  if student and student.user.is_authenticated():
+    student.school = school
+    student.save()
+    for i in student.integrations.all():
+      integrations['integrations'].append(i.name)
   return render_to_response("timetable.html", {
     'school': school,
     'student': json.dumps(get_user_dict(school, student, sem)),
     'course': json.dumps(course_json),
-    'semester': sem,
+    'semester': str(semester_index),
+    'all_semesters': json.dumps(sem_dicts),
     'shared_timetable': json.dumps(shared_timetable),
     'find_friends': find_friends,
-    'uses_12hr_time': school in AM_PM_SCHOOLS
+    'enable_notifs': enable_notifs,
+    'uses_12hr_time': school in AM_PM_SCHOOLS,
+    'student_integrations': json.dumps(integrations),
+    'signup': signup,
+    'user_acq': user_acq,
+    'gcal_callback': gcal_callback,
+    'export_calendar': export_calendar,
+    'view_textbooks': view_textbooks,
+    'final_exams_supported_semesters': map(lambda s: sem_dicts.index(s) ,final_exams_available.get(school, [])),
+    'final_exams': final_exams
   },
   context_instance=RequestContext(request))
+
+@validate_subdomain
+def google_calendar_callback(request):
+  try:
+    return view_timetable(request, gcal_callback=True)
+  except Exception as e:
+    raise Http404
+
+
+@validate_subdomain
+def view_textbooks(request):
+  try:
+    return view_timetable(request, view_textbooks=True)
+  except Exception as e:
+    raise Http404
+
+@validate_subdomain
+def export_calendar(request):
+  try:
+    return view_timetable(request, export_calendar=True)
+  except Exception as e:
+    raise Http404
+
+@validate_subdomain
+def signup(request):
+  try:
+    return view_timetable(request, signup=True)
+  except Exception as e:
+    raise Http404
+
+@validate_subdomain
+def launch_user_acq_modal(request):
+  try:
+    return view_timetable(request, user_acq=True)
+  except Exception as e:
+    raise Http404
+
 
 @validate_subdomain
 def find_friends(request):
@@ -85,13 +148,21 @@ def find_friends(request):
     raise Http404
 
 @validate_subdomain
+def enable_notifs(request):
+  try:
+    return view_timetable(request, enable_notifs=True)
+  except Exception as e:
+    raise Http404
+
+@validate_subdomain
 def share_timetable(request, ref):
+  student = get_student(request)
   try:
     timetable_id = hashids.decrypt(ref)[0]
-    shared_timetable = convert_tt_to_dict(SharedTimetable.objects.get(school=request.subdomain, id=timetable_id),
-                                          include_last_updated=False)
-    semester = shared_timetable['semester']
-    return view_timetable(request, sem=semester, shared_timetable=shared_timetable)
+    shared_timetable_obj = SharedTimetable.objects.get(school=request.subdomain, id=timetable_id)
+    shared_timetable = convert_tt_to_dict(shared_timetable_obj, include_last_updated=False)
+     # get default semester info
+    return view_timetable(request, year=shared_timetable_obj.semester.year, sem_name=shared_timetable_obj.semester.name, shared_timetable=shared_timetable)
   except Exception as e:
     raise Http404
 
@@ -105,7 +176,7 @@ def create_share_link(request):
     has_conflict = params['timetable']['has_conflict']
   except:
     has_conflict = False
-  semester = params['semester']
+  semester, _ = Semester.objects.get_or_create(**params['semester'])
   student = get_student(request)
   shared_timetable = SharedTimetable.objects.create(
     student=student, school=school, semester=semester,
@@ -117,7 +188,9 @@ def create_share_link(request):
     shared_timetable.courses.add(course_obj)
     enrolled_sections = course['enrolled_sections']
     for section in enrolled_sections:
-      shared_timetable.sections.add(course_obj.section_set.get(meeting_section=section, semester__in=[semester, "Y"]))
+      section_obj = course_obj.section_set.get(meeting_section=section, 
+                                              semester=semester)
+      shared_timetable.sections.add(section_obj)
   shared_timetable.save()
 
   response = {'link': hashids.encrypt(shared_timetable.id)}
@@ -133,14 +206,22 @@ def get_timetables(request):
   except ValueError: # someone is trying to manually send requests
     return HttpResponse(json.dumps({'timetables': [], 'new_c_to_s': {}}), 
                         content_type='application/json')
-  sid = params['sid']
+  else:
+    try:
+      params['semester'] = Semester.objects.get_or_create(**params['semester'])[0]
+    except TypeError: 
+      params['semester'] = Semester.objects.get(name="Fall",year="2016") if params['semester'] == "F" else Semester.objects.get(name="Spring",year="2017")
+
 
   SCHOOL = request.subdomain
 
+  sid = params['sid']
   course_ids = params['courseSections'].keys()
   courses = [Course.objects.get(id=cid) for cid in course_ids]
-  save_analytics_timetable(courses, params['semester'], SCHOOL, get_student(request))
   locked_sections = params['courseSections']
+
+  save_analytics_timetable(courses, params['semester'], SCHOOL, get_student(request))
+
   for updated_course in params.get('updated_courses', []):
     cid = str(updated_course['course_id'])
     locked_sections[cid] = locked_sections.get(cid, {})
@@ -166,6 +247,7 @@ def get_timetables(request):
                   opt_course_ids)
   result = [timetable for opt_courses in optional_course_subsets \
       for timetable in generator.courses_to_timetables(courses + list(opt_courses))]
+
 
   # updated roster object
   response = {'timetables': result, 'new_c_to_s': locked_sections}
@@ -300,15 +382,19 @@ class TimetableGenerator:
     """
     all_sections = []
     for c in courses:
-      sections = sorted(c.section_set.filter(Q(semester__in=[self.semester, 'Y'])),
-                        key=lambda s: s.section_type)
+      sections = c.section_set.filter(semester=self.semester)
+      sections = sorted(sections, key=lambda s: s.section_type)
       grouped = itertools.groupby(sections, lambda s: s.section_type)
       for section_type, sections in grouped:
         if str(c.id) in self.locked_sections and self.locked_sections[str(c.id)].get(section_type, False):
           locked_section_code = self.locked_sections[str(c.id)][section_type]
-          locked_section = next(s for s in sections if s.meeting_section == locked_section_code)
-          pinned = [c.id, locked_section, locked_section.offering_set.all()]
-          all_sections.append([pinned])
+          try:
+            locked_section = next(s for s in sections if s.meeting_section == locked_section_code)
+          except StopIteration:
+            all_sections.append([[c.id, section, section.offering_set.all()] for section in sections])
+          else:
+            pinned = [c.id, locked_section, locked_section.offering_set.all()]
+            all_sections.append([pinned])
         else:
           all_sections.append([[c.id, section, section.offering_set.all()] for section in sections])
     return all_sections
@@ -344,10 +430,11 @@ def add_meeting_and_check_conflict(day_to_usage, new_meeting):
   new_conflicts = 0
   for offering in course_offerings:
     day = offering.day
-    for slot in find_slots_to_fill(offering.time_start, offering.time_end):
-      previous_len = max(1, len(day_to_usage[day][slot]))
-      day_to_usage[day][slot].add(offering)
-      new_conflicts += len(day_to_usage[day][slot]) - previous_len
+    if day != 'U':
+      for slot in find_slots_to_fill(offering.time_start, offering.time_end):
+        previous_len = max(1, len(day_to_usage[day][slot]))
+        day_to_usage[day][slot].add(offering)
+        new_conflicts += len(day_to_usage[day][slot]) - previous_len
   return new_conflicts
 
 def find_slots_to_fill(start, end):
@@ -388,197 +475,9 @@ def get_minute_from_string_time(time_string):
   return int(time_string[time_string.index(':') + 1:] if ':' in time_string \
                             else 0)
 
-
-# -----------------------------------------------------------------------------
-# --------------------TODO: move to separate file------------------------------
-# -----------------------------------------------------------------------------
-def get_detailed_course_json(school, course, sem, student=None):
-  json_data = get_basic_course_json(course, sem, ['prerequisites', 'exclusions', 'areas'])
-  # json_data['textbook_info'] = course.get_all_textbook_info()
-  json_data['eval_info'] = course.get_eval_info()
-  json_data['related_courses'] = course.get_related_course_info(sem, limit=5)
-  json_data['reactions'] = course.get_reactions(student)
-  json_data['textbooks'] = course.get_textbooks(sem)
-  if student and student.user.is_authenticated() and student.social_courses:
-    json_data['classmates'] = get_classmates_from_course_id(school, student, course.id)
-  return json_data
-
-def get_basic_course_json(course, sem, extra_model_fields=[]):
-  basic_fields = ['code','name', 'id', 'description', 'department', 'num_credits', 'areas', 'campus']
-  course_json = model_to_dict(course, basic_fields + extra_model_fields)
-  course_json['evals'] = course.get_eval_info()
-  course_json['sections'] = {}
-
-  course_section_list = sorted(course.section_set.filter(semester__in=[sem, "Y"]),
-                              key=lambda section: section.section_type)
-
-  for section_type, sections in itertools.groupby(course_section_list, lambda s: s.section_type):
-    course_json['sections'][section_type] = {section.meeting_section: [merge_dicts(model_to_dict(co), model_to_dict(section)) \
-                                                                        for co in section.offering_set.all()]\
-                                              for section in sections}
-
-  return course_json
-
-def get_course(request, school, sem, id):
-  global SCHOOL
-  SCHOOL = school.lower()
-
-  try:
-    course = Course.objects.get(school=school, id=id)
-    student = None
-    logged = request.user.is_authenticated()
-    if logged and Student.objects.filter(user=request.user).exists():
-      student = Student.objects.get(user=request.user)
-    json_data = get_detailed_course_json(school, course, sem, student)
-
-  except:
-    import traceback
-    traceback.print_exc()
-    json_data = {}
-
-  return HttpResponse(json.dumps(json_data), content_type="application/json")
-
-@csrf_exempt
-def get_course_id(request, school, sem, code):
-  school = school.lower()
-  try:
-    course = Course.objects.filter(school=school, code__icontains=code)[0]
-    json_data = {"id": course.id}
-  except:
-    import traceback
-    traceback.print_exc()
-    json_data = {}
-
-  return HttpResponse(json.dumps(json_data), content_type="application/json")
-
-### COURSE SEARCH ###
-
-def get_course_matches(school, query, semester):
-  param_values = query.split()
-
-  if query == "":
-    return Course.objects.filter(school=school)
-
-  return Course.objects.filter(school=school).filter(reduce(operator.and_, (Q(code__icontains=param) | Q(name__icontains=param.replace("&", "and")) | Q(name__icontains=param.replace("and", "&")) for param in param_values))).filter((Q(section__semester__in=[semester, 'Y'])))
-
-@csrf_exempt
-@validate_subdomain
-def course_search(request, school, sem, query):
-  course_match_objs = get_course_matches(school, query, sem)
-  course_match_objs = course_match_objs.distinct('code')[:4]
-  save_analytics_course_search(query[:200], course_match_objs[:2], sem, school, get_student(request))
-  course_matches = [get_basic_course_json(course, sem) for course in course_match_objs]
-  json_data = {'results': course_matches}
-  return HttpResponse(json.dumps(json_data), content_type="application/json")
-
-# ADVANCED SEARCH
-@csrf_exempt
-@validate_subdomain
-def advanced_course_search(request):
-  school = request.subdomain
-  params = json.loads(request.body)
-  sem = params['semester']
-  query = params['query']
-  filters = params['filters']
-  times = filters['times']
-
-  # filtering first by user's search query
-  course_match_objs = get_course_matches(school, query, sem)
-
-  # filtering now by departments, areas, or levels if provided
-  if filters['areas']:
-    course_match_objs = course_match_objs.filter(areas__in=filters['areas'])
-    '''
-      TODO(rohan)
-
-      Use:
-      course_match_objs.objects.filter(reduce(operator.or_, (Q(areas__contains=x) for x in filters['areas'])))
-    '''
-  if filters['departments']:
-    course_match_objs = course_match_objs.filter(department__in=filters['departments'])
-  if filters['levels']:
-    course_match_objs = course_match_objs.filter(level__in=filters['levels'])
-  if filters['times']:
-    day_map = {"Monday": "M", "Tuesday": "T", "Wednesday": "W", "Thursday": "R", "Friday": "F"}
-    course_match_objs = course_match_objs.filter(reduce(operator.or_,
-      (Q(section__offering__time_start__gte="{0:0=2d}:00".format(min_max['min']),
-        section__offering__time_end__lte="{0:0=2d}:00".format(min_max['max']),
-        section__offering__day=day_map[min_max['day']],
-        section__semester=sem,
-        section__section_type="L", # we only want to show classes that have LECTURE sections within the given boundaries
-        )
-      for day_index, min_max in enumerate(filters['times']))))
-
-  course_match_objs = course_match_objs.distinct('code')[:50] # limit to 50 search results
-  save_analytics_course_search(query[:200], course_match_objs[:2], sem, school, get_student(request), advanced=True)
-  student = None
-  logged = request.user.is_authenticated()
-  if logged and Student.objects.filter(user=request.user).exists():
-      student = Student.objects.get(user=request.user)
-  json_data = [get_detailed_course_json(request.subdomain, course, sem, student) for course in course_match_objs]
-
-  return HttpResponse(json.dumps(json_data), content_type="application/json")
-
-
 def jhu_timer(request):
   return render(request, "jhu_timer.html")
 
-@validate_subdomain
-def course_page(request, code):
-  school = request.subdomain
-  try:
-    school_name = school_code_to_name[school]
-    course_obj = Course.objects.filter(code__iexact=code)[0]
-    course_dict = get_basic_course_json(course_obj, "F")
-    # TODO: section types should never be hardcoded
-    l = course_dict['sections'].get('L', {}).values()
-    t = course_dict['sections'].get('T', {}).values()
-    p = course_dict['sections'].get('P', {}).values()
-    avg = round(course_obj.get_avg_rating(), 2)
-    evals = course_dict['evals']
-    clean_evals = evals
-    for i, v in enumerate(evals):
-      for k, e in v.items():
-        if isinstance(evals[i][k], basestring):
-          clean_evals[i][k] = evals[i][k].replace(u'\xa0', u' ')
-        if k == "year":
-          clean_evals[i][k] = evals[i][k].replace(":", " ")
-    if school == "jhu":
-      course_url = "/course/" + course_dict['code'] + "/F"
-    else:
-      course_url = "/course/" + course_dict['code'] + "/F"
-    return render_to_response("course_page.html",
-      {'school': school,
-       'school_name': school_name,
-       'course': course_dict,
-       'lectures': l if l else None,
-       'tutorials': t if t else None,
-       'practicals': p if p else None,
-       'url': course_url,
-       'evals': clean_evals,
-       'avg': avg
-       },
-    context_instance=RequestContext(request))
-  except Exception as e:
-    return HttpResponse(str(e))
-
-@validate_subdomain
-def all_courses(request):
-  school = request.subdomain
-  school_name = school_code_to_name[school]
-  try:
-    course_map = collections.OrderedDict()
-    departments = Course.objects.filter(school=school).order_by('department').values_list('department', flat=True).distinct()
-    for department in departments:
-      course_map[department] = Course.objects.filter(school=school, department=department).all()
-    return render_to_response("all_courses.html",
-      {'course_map': course_map,
-       'school': school,
-       'school_name': school_name
-       },
-    context_instance=RequestContext(request))
-  except Exception as e:
-    return HttpResponse(str(e))
 
 def about(request):
   try:
@@ -588,18 +487,90 @@ def about(request):
   except Exception as e:
     return HttpResponse(str(e))
 
-@validate_subdomain
-def school_info(request, school):
-  school = request.subdomain
-  last_updated = None
-  if Updates.objects.filter(school=school, update_field="Course").exists():
-    update_time_obj = Updates.objects.get(school=school, update_field="Course").last_updated.astimezone(timezone('US/Eastern'))
-    last_updated = update_time_obj.strftime('%Y-%m-%d %H:%M') + " " + update_time_obj.tzname()
-  json_data = { # TODO(rohan): Get all relevant fields (areas, departments, levels) properly
-    'areas': sorted(list(Course.objects.filter(school=school).exclude(areas__exact='').values_list('areas', flat=True).distinct())),
-    'departments': sorted(list(Course.objects.filter(school=school).exclude(department__exact='').values_list('department', flat=True).distinct())),
-    'levels': sorted(list(Course.objects.filter(school=school).exclude(level__exact='').values_list('level', flat=True).distinct())),
-    'last_updated': last_updated
-  }
-  return HttpResponse(json.dumps(json_data), content_type="application/json")
+def press(request):
+  try:
+    return render_to_response("press.html",
+      {},
+    context_instance=RequestContext(request))
+  except Exception as e:
+    return HttpResponse(str(e))
+
+
+from django.views.decorators.cache import never_cache
+from django.template.loader import get_template
+@never_cache
+def sw_js(request, js):
+    template = get_template('sw.js')
+    html = template.render()
+    return HttpResponse(html, content_type="application/x-javascript")
+
+def manifest_json(request, js):
+    template = get_template('manifest.json')
+    html = template.render()
+    return HttpResponse(html, content_type="application/json")
+
+def profile(request):
+  logged = request.user.is_authenticated()
+  if logged and Student.objects.filter(user=request.user).exists():
+    student = Student.objects.get(user=request.user)
+    reactions = Reaction.objects.filter(student=student).values('title').annotate(count=Count('title'))
+    # googpic = this.props.userInfo.img_url.replace('sz=50','sz=100') if this.props.userInfo.isLoggedIn else ''
+    # propic = 'url(https://graph.facebook.com/' + JSON.parse(currentUser).fbook_uid + '/picture?type=normal)' if this.props.userInfo.FacebookSignedUp else 'url(' + googpic + ')'
+    if student.user.social_auth.filter(provider='google-oauth2').exists():
+      hasGoogle = True
+    else:
+      hasGoogle = False
+    if student.user.social_auth.filter(provider='facebook').exists():
+      social_user = student.user.social_auth.filter(provider='facebook').first()
+      img_url = 'https://graph.facebook.com/' + student.fbook_uid + '/picture?width=700&height=700'
+      hasFacebook = True
+    else:
+      social_user = student.user.social_auth.filter(provider='google-oauth2').first()
+      img_url = student.img_url.replace('sz=50','sz=700')
+      hasFacebook = False
+    hasNotificationsEnabled = RegistrationToken.objects.filter(student=student).exists()
+    context = {
+      'name': student.user,
+      'major': student.major,
+      'class': student.class_year,
+      'student': student,
+      'total': 0,
+      'img_url': img_url,
+      'hasGoogle': hasGoogle,
+      'hasFacebook': hasFacebook,
+      'notifications': hasNotificationsEnabled
+    }
+    for r in reactions:
+        context[r['title']] = r['count']
+    for r in Reaction.REACTION_CHOICES:
+        if r[0] not in context:
+            context[r[0]] = 0
+        context['total'] += context[r[0]]
+    return render_to_response("profile.html", context, context_instance=RequestContext(request))
+  else:
+    return signup(request)
+
+def get_current_semesters(school):
+  """
+  For a given school, get the possible semesters and the most recent year for each
+  semester that has course data, and return a list of (semester name, year) pairs.
+  """
+  semesters = school_to_semesters[school]
+  # Ensure DB has all semesters.
+  for semester in semesters:
+    Semester.objects.update_or_create(**semester)
+  return semesters
+
+
+@csrf_exempt
+def log_final_exam_view(request):
+  try:
+      student = Student.objects.get(user=request.user)
+  except:
+      student = None
+  FinalExamModalView.objects.create(
+    student=student,
+    school=request.subdomain
+  ).save()
+  return HttpResponse(json.dumps({}), content_type="application/json")
   

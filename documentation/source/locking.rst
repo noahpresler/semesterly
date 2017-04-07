@@ -1,9 +1,9 @@
 .. _locking:
 
 
-***************
+**********************
 Locking Implementation
-***************
+**********************
 
 
 Data Representation

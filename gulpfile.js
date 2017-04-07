@@ -96,15 +96,16 @@ gulp.task('js', function() {
       .pipe(gulpif(isDev, sourcemaps.init({ loadMaps: true })))
       .pipe(gulpif(isProd, streamify(uglify())))
       .pipe(gulpif(isDev, sourcemaps.write('./')))
+      .pipe(livereload())
       .pipe(gulp.dest(COMPILED_LOCATION));
   gutil.log(gutil.colors.green('Compilation complete!'));
   return;
 });
 gulp.task('css', function(){
     return gulp.src(CSS_FILES)
-        .pipe(minifyCSS())
+        .pipe(gulpif(isProd,minifyCSS()))
         .pipe(concat('style.min.css'))
-        .pipe(autoprefixer())
+        .pipe(gulpif(isProd,autoprefixer()))
         .pipe(gulp.dest('static/css/gulp'))
         .pipe(livereload());
 });

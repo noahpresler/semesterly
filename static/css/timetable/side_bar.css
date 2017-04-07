@@ -202,6 +202,7 @@ h4.sb-header:after {
     top:20px;
     right:5px;
     height:38px;
+    max-width: 250px;
     padding:0px 5px;
     background-color:#F8F6F7;
     border-radius:2px;
@@ -232,6 +233,7 @@ h4.sb-header:after {
     margin-top:7px;
     width:auto;
     height:25px;
+    max-width: 240px;
 }
 
 .master-slot-content h3 {
@@ -300,7 +302,20 @@ h3.master-slot-credits {
     background-color: rgba(0,0,0,.5);
 }
 
+.final-schedule-link {
+    font-size: 14px;
+    padding: 10px 5px;
+    margin: 0;
+    color: #777;
+    font-weight: 200;
+    clear: both;
+    position: relative;
+    text-align: center;
+}
 
+.final-schedule-link i {
+    margin-right: 3px;
+}
 /* EMPTY STATES */
 
 #side-bar .empty-state {
