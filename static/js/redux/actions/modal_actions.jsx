@@ -116,7 +116,7 @@ export function hideFinalExamsModal() {
     return {type: ActionTypes.HIDE_FINAL_EXAMS_MODAL};
 }
 
-export function triggerAcquisitonModal() {
+export function triggerAcquisitionModal() {
     return {type: ActionTypes.TRIGGER_ACQUISITION_MODAL};
 }
 
@@ -133,5 +133,12 @@ export const triggerTextbookModal = () => {
 }
 
 export const showFinalExamsModal = () => {
-    return {type: ActionTypes.SHOW_FINAL_EXAMS_MODAL}
+    return {type: ActionTypes.SHOW_FINAL_EXAMS_MODAL};
+}
+
+export const overrideSettingsShow = (data) => {
+    return {
+        type: ActionTypes.OVERRIDE_SETTINGS_SHOW,
+        data
+    };
 }
