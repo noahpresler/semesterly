@@ -62,7 +62,9 @@ If you're looking for an issue to work on, check for issues with the "Help Wante
 
 # Coding style:
 Here are the style conventions we follow:
-* Python - PEP8 https://www.python.org/dev/peps/pep-0008/
+* Python
+    * Unless specified otherwise, follow [PEP8](https://www.python.org/dev/peps/pep-0008/)
+    * **Docstrings**: we use [Google style docstrings](https://google.github.io/styleguide/pyguide.html?showone=Comments#Comments) since they are both human readable and interpretable by [Sphinx](http://www.sphinx-doc.org/en/stable/)
 * Javascript - https://github.com/airbnb/javascript
 * React/Redux- https://github.com/airbnb/javascript/tree/master/react
 * CSS - None yet???

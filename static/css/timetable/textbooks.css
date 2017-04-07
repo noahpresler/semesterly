@@ -1,18 +1,16 @@
+.tb-image-wrapper {
+    width: 95px;
+    height: 140px;
+    position: relative;
+    overflow: hidden;
+}
+
 .textbook {
 	padding: 5px;
 	width: 95px;
-	float: left;
+	display: inline-block;
+    float: none;
 	text-align: center;
-}
-
-.textbook-ctn:nth-child(3n+1) {
-    clear: left;
-    display: block;
-}
-@media (max-width: 999px) {
-    .textbook-ctn:nth-child(3n+1) {
-        clear: none;
-    }
 }
 
 .textbook h4 {
@@ -38,6 +36,9 @@
 .textbook img {
 	width: 90px;
 	padding: 4px 4px;
+    position: relative;
+    top: 50%;
+    transform: translateY(-50%)
 }
 
 .textbook .required {
@@ -74,4 +75,8 @@ a .textbook h4 {
 
 a .textbook h4:hover {
     color: #1abc9c;
+}
+
+.textbook-ctn {
+    display: inline-block
 }

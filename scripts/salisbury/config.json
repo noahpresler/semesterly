@@ -1,0 +1,13 @@
+{
+	"school": {
+		"code": "salisbury", 
+		"name": "Salisbury University"
+	},
+	"course_code_regex": "([A-Z]{3,4} \\d{2,3})$",
+	"terms": [
+		"Fall",
+		"Winter",
+		"Spring",
+		"Summer"
+	]
+}

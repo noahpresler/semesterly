@@ -1,0 +1,11 @@
+{
+	"school": {
+		"code": "umd",
+		"name": "University of Maryland"
+	},
+	"course_code_regex": "([A-Z]{4}\\d{3}[A-Z]?)$",
+	"terms": [
+		"Fall",
+		"Spring"
+	]
+}

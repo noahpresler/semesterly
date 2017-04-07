@@ -1,0 +1,47 @@
+{
+	"$schema": "http://json-schema.org/draft-04/schema#",
+	"type": "object",
+	"properties": {
+		"name": {
+			"type": "string"
+		},
+		"time": {
+			"allOf": [
+				{
+					"$ref": "definitions.json#/time"
+				}
+			],
+			"properties": {
+				"days": {},
+				"start": {},
+				"end": {}
+			},
+			"additionalProperties": false
+		},
+		"homepage": {
+			"allOf": [
+				{
+					"$ref": "definitions.json#/url"
+				}
+			]
+		},
+		"location": {
+			"allOf": [
+				{
+					"$ref": "definitions.json#/location"
+				}
+			],
+			"properties": {
+				"school": {},
+				"campus": {},
+				"building": {},
+				"room": {},
+				"building_room": {}
+			},
+			"additionalProperties": false,
+			"required": [ ]
+		}
+	},
+	"additionalProperties": false,
+	"required": [ "name" ]
+}

@@ -1,10 +1,10 @@
-import { VALID_SEMESTERS, SET_SEMESTER } from '../constants.jsx';
+import * as ActionTypes from "../constants/actionTypes.jsx";
 
-export const semester = (state = "", action) => {
-	switch (action.type) {
-		case SET_SEMESTER:
-			return action.semester;
-		default:
-			return state;
-	}
+export const semesterIndex = (state = 0, action) => {
+    switch (action.type) {
+        case ActionTypes.SET_SEMESTER:
+            return action.semester;
+        default:
+            return state;
+    }
 }
