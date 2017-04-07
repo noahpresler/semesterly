@@ -2,6 +2,7 @@ import {connect} from "react-redux";
 import {Pagination} from "../pagination.jsx";
 import {autoSave} from "../../actions/user_actions.jsx";
 import * as ActionTypes from "../../constants/actionTypes.jsx";
+import {setActiveTimetable} from "../../actions/timetable_actions.jsx";
 
 const mapStateToProps = (state) => {
     return {
@@ -10,18 +11,11 @@ const mapStateToProps = (state) => {
     }
 }
 
-const mapDispatchToProps = (dispatch) => {
-    return {
-        setActive: (newActive) => {
-            dispatch({type: ActionTypes.CHANGE_ACTIVE_TIMETABLE, newActive});
-            autoSave();
-        },
-    }
-}
-
 const PaginationContainer = connect(
     mapStateToProps,
-    mapDispatchToProps
+    {
+        setActive: setActiveTimetable
+    }
 )(Pagination);
 
 export default PaginationContainer;
