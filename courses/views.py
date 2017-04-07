@@ -171,11 +171,11 @@ def school_info(request, school):
     return HttpResponse(json.dumps(json_data), content_type="application/json")
 
 
-def get_classmates_in_course(request, school, sem_name, year, id):
+def get_classmates_in_course(request, school, sem_name, year, course_id):
   school = school.lower()
   sem, _ = Semester.objects.get_or_create(name=sem_name, year=year)
   json_data = {}
-  course = Course.objects.get(school=school, id=id)
+  course = Course.objects.get(school=school, id=course_id)
   student = None
   logged = request.user.is_authenticated()
   if logged and Student.objects.filter(user=request.user).exists():
