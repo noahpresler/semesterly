@@ -1,30 +1,33 @@
-import React from 'react';
-import classnames from 'classnames';
+import React from "react";
+import classnames from "classnames";
 
 export class SearchSideBar extends React.Component {
-    constructor(props){
+    constructor(props) {
         super(props);
         this.lockSectionWrapper = this.lockSectionWrapper.bind(this);
     }
+
     lockSectionWrapper(section, event) {
         event.preventDefault();
         event.stopPropagation();
         this.props.addCourse(this.props.hovered.id, section);
     }
+
     mapSectionsToSlots(sections) {
         if (sections === undefined) {
             return [];
         }
-        return Object.keys(sections).sort().map(sec => 
-            <SearchResultSection key={this.props.hovered.id + sec} course={this.props.hovered} section={sec} 
-                locked={this.props.isSectionLocked(this.props.hovered.id, sec)}
-                isOnActiveTimetable={this.props.isSectionOnActiveTimetable(this.props.hovered.id, sec)}
-                hoverSection={() => this.props.hoverSection(this.props.hovered, sec)}
-                unhoverSection={this.props.unhoverSection} 
-                onMouseDown={(event) => this.lockSectionWrapper(sec, event)}
+        return Object.keys(sections).sort().map(sec =>
+            <SearchResultSection key={this.props.hovered.id + sec} course={this.props.hovered} section={sec}
+                                 locked={this.props.isSectionLocked(this.props.hovered.id, sec)}
+                                 isOnActiveTimetable={this.props.isSectionOnActiveTimetable(this.props.hovered.id, sec)}
+                                 hoverSection={() => this.props.hoverSection(this.props.hovered, sec)}
+                                 unhoverSection={this.props.unhoverSection}
+                                 onMouseDown={(event) => this.lockSectionWrapper(sec, event)}
             />
         );
     }
+
     render() {
         let lecs = this.mapSectionsToSlots(this.props.lectureSections);
         let tuts = this.mapSectionsToSlots(this.props.tutorialSections);
@@ -44,7 +47,7 @@ export class SearchSideBar extends React.Component {
         return (
             <div id="search-bar-side">
                 <div id="search-bar-side-sections">
-                <h3>{this.props.hovered.name}</h3>
+                    <h3>{this.props.hovered.name}</h3>
                     <p>Hover over a section below for a preview on your timetable! </p>
                     {lectureSections}
                     {tutorialSections}
@@ -54,25 +57,25 @@ export class SearchSideBar extends React.Component {
         );
     }
 }
-const SearchResultSection = ({ section, locked, hoverSection, unhoverSection, onMouseDown, isOnActiveTimetable }) => {
+const SearchResultSection = ({section, locked, hoverSection, unhoverSection, onMouseDown, isOnActiveTimetable}) => {
     let rosterIndicator = null;
     if (isOnActiveTimetable) {
-        rosterIndicator = <i title="Lock this section" className="fa fa-calendar-check-o" />
+        rosterIndicator = <i title="Lock this section" className="fa fa-calendar-check-o"/>
     }
     if (locked) {
-        rosterIndicator = <i title="Unlock this section" className="fa fa-lock" />
+        rosterIndicator = <i title="Unlock this section" className="fa fa-lock"/>
     }
 
     return (
-    <h5
-        className={classnames("sb-side-sections", {'on-active-timetable': isOnActiveTimetable})}
+        <h5
+            className={classnames("sb-side-sections", {'on-active-timetable': isOnActiveTimetable})}
 
-        onMouseDown={onMouseDown}
-        onMouseEnter={hoverSection}
-        onMouseLeave={unhoverSection}
-        title={locked ? "Unlock this section" : "Lock this section"}
-    >
-        {section + " "}
-        {rosterIndicator}
-    </h5>);
+            onMouseDown={onMouseDown}
+            onMouseEnter={hoverSection}
+            onMouseLeave={unhoverSection}
+            title={locked ? "Unlock this section" : "Lock this section"}
+        >
+            {section + " "}
+            {rosterIndicator}
+        </h5>);
 };

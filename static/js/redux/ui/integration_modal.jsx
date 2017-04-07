@@ -1,14 +1,12 @@
-import React from 'react';
-import Modal from 'boron/WaveModal';
-import classNames from 'classnames';
-import IntegrationSlotContainer from './containers/integration_slot_container.jsx'
-import { getIntegration, delIntegration, addIntegration } from '../actions/user_actions.jsx'
+import React from "react";
+import Modal from "boron/WaveModal";
+import {addIntegration, delIntegration, getIntegration} from "../actions/user_actions.jsx";
 
 export class IntegrationModal extends React.Component {
     constructor(props) {
         super(props);
         this.changeForm = this.changeForm.bind(this);
-        this.state = { 
+        this.state = {
             enabled: this.props.enabled
         };
         // this.appendSession = this.appendSession.bind(this);
@@ -17,14 +15,16 @@ export class IntegrationModal extends React.Component {
         // this.json = "test";
         // this.index = 0;
     }
+
     componentDidUpdate(nextProps) {
         if (this.props.isVisible) {
             this.refs.modal.show();
-        } 
-        if (this.props.isVisible != nextProps.isVisible && this.state.enabled != this.props.enabled){
+        }
+        if (this.props.isVisible != nextProps.isVisible && this.state.enabled != this.props.enabled) {
             this.setState({enabled: this.props.enabled});
         }
     }
+
     changeForm() {
         this.setState({enabled: !this.state.enabled});
         // getIntegration(1, this.props.course_id)
@@ -51,15 +51,16 @@ export class IntegrationModal extends React.Component {
         };
         return (
             <Modal ref="modal"
-                className="integration-modal narrow-modal"
-                modalStyle={modalStyle}
-                onHide={this.props.toggleIntegrationModal}
-                >
+                   className="integration-modal narrow-modal"
+                   modalStyle={modalStyle}
+                   onHide={this.props.toggleIntegrationModal}
+            >
                 <div id="integration-modal">
                     <div id="integration-logo" style={integrationLogo}></div>
                     <div className="preference cf">
                         <label className="switch switch-slide">
-                            <input ref="enable_pilot" className="switch-input" type="checkbox" checked={this.state.enabled} onChange={this.changeForm}/>
+                            <input ref="enable_pilot" className="switch-input" type="checkbox"
+                                   checked={this.state.enabled} onChange={this.changeForm}/>
                             <span className="switch-label" data-on="Yes" data-off="No"></span>
                             <span className="switch-handle"></span>
                         </label>
@@ -75,7 +76,8 @@ export class IntegrationModal extends React.Component {
                                 addIntegration(1, this.props.course_id, "");
                             }
                             this.refs.modal.hide();
-                        }}>Save</button>
+                        }}>Save
+                        </button>
                     </div>
                 </div>
             </Modal>
