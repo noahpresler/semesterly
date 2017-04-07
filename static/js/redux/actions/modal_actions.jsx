@@ -103,3 +103,11 @@ export function changeUserInfo(info) {
 export function hideExplorationModal() {
     return {type: ActionTypes.HIDE_EXPLORATION_MODAL};
 }
+
+export function hideFinalExamsModal() {
+    return {type: ActionTypes.HIDE_FINAL_EXAMS_MODAL};
+}
+
+export function triggerAcquisitonModal() {
+    return {type: ActionTypes.TRIGGER_ACQUISITION_MODAL};
+}
