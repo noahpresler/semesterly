@@ -1,7 +1,7 @@
 import {connect} from "react-redux";
 import {SaveCalendarModal} from "../save_calendar_modal.jsx";
 import {addTTtoGCal, createICalFromTimetable} from "../../actions/calendar_actions.jsx";
-import * as ActionTypes from "../../constants/actionTypes.jsx";
+import {toggleSaveCalendarModal} from "../../actions/modal_actions.jsx";
 
 const mapStateToProps = (state) => {
     return {
@@ -14,19 +14,13 @@ const mapStateToProps = (state) => {
     }
 }
 
-const mapDispatchToProps = (dispatch) => {
-    return {
-        toggleSaveCalendarModal: () => {
-            dispatch({type: ActionTypes.TOGGLE_SAVE_CALENDAR_MODAL})
-        },
-        addTTtoGCal: () => dispatch(addTTtoGCal()),
-        createiCalfromTimetable: () => dispatch(createICalFromTimetable()),
-    }
-}
-
 const SaveCalendarModalContainer = connect(
     mapStateToProps,
-    mapDispatchToProps
+    {
+        toggleSaveCalendarModal,
+        addTTtoGCal,
+        createICalFromTimetable,
+    }
 )(SaveCalendarModal);
 
 export default SaveCalendarModalContainer;

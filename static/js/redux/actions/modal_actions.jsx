@@ -89,6 +89,10 @@ export function triggerSaveCalendarModal() {
     return {type: ActionTypes.TRIGGER_SAVE_CALENDAR_MODAL};
 }
 
+export function toggleSaveCalendarModal() {
+    return {type: ActionTypes.TRIGGER_SAVE_CALENDAR_MODAL};
+}
+
 export function openSignUpModal() {
     return {type: ActionTypes.TOGGLE_SIGNUP_MODAL};
 }
