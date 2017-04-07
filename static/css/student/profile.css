@@ -1,0 +1,455 @@
+* {
+	box-sizing: border-box;
+}
+html, body{
+	margin: 0;
+	height: 100%;
+	background-color: #F3F3F3;
+	font-family: "Roboto",Arial,sans-serif;
+}
+h1, h2, h5 {
+	font-family: "Palanquin",Arial,sans-serif;
+	font-weight: 500;
+}
+
+/* Header */
+header {
+	position: fixed;
+	z-index: 100;
+	width: 100%;
+	height: 50px;
+	padding: 10px;
+	color: #253340;
+	background-color: rgba(252, 252, 252, .95);
+	border-bottom: 1px solid #DDD;
+	transition: background-color .3s, border .3s;
+}
+header.down {
+	background-color: rgba(252, 252, 252, 1);
+	border-bottom: 1px solid transparent;
+}
+header h1 {
+	float: left;
+	font-size: 26px;
+	line-height: 30px;
+	margin: 0 10px 0;
+}
+#semesterly-logo {
+	height: 32px;
+	float: left;
+}
+header nav {
+	float: right;
+	font-weight: 600;
+	font-size: 16px;
+	line-height: 30px;
+	height: 30px;
+}
+header nav a,
+header nav a:link,
+header nav a:active,
+header nav a:visited {
+	margin-right: 10px;
+	color: rgb(37, 51, 64);
+	text-decoration: none;
+	transition: color .2s;
+}
+header nav a:hover {
+	color: #3498DB;
+}
+desktop-nav {
+	display: block;
+}
+.mobile-nav {
+	display: none;
+	position: relative;
+	cursor: pointer;
+}
+.mobile-nav .mobile-nav-label {
+	-webkit-touch-callout: none;
+	-webkit-user-select: none;
+	-khtml-user-select: none;
+	-moz-user-select: none;
+	-ms-user-select: none;
+	user-select: none;
+}
+.mobile-nav .mobile-nav-label span {
+	display: inline-block;
+}
+.mobile-nav .nav-dropdown {
+	position: absolute;
+	right: 0;
+	top: 39px;
+	background-color: #fff;
+	border: 1px solid #E8E8E8;
+	box-shadow: 0 2px 10px rgba(0,0,0,.2);
+	z-index: 100;
+	display: none;
+}
+.mobile-nav.open .nav-dropdown {
+	display: block;
+}
+.tip-down {
+    border-color: #34495e transparent transparent;
+    border-style: solid dashed dashed;
+    border-width: 6.5px 6.5px 0;
+    margin-left: 5px;
+    z-index: 1;
+    height: 0;
+    width: 0;
+	transform: rotate(0deg);	
+}
+.open .tip-down {
+    transform: rotate(180deg);
+}
+#schools-dropdown .tip {
+	top: -7px;
+    right: 10px;
+}
+#schools-dropdown .tip-border {
+	top: -8px;
+    right: 10px;
+}
+.tip, .tip-border {
+    border-style: dashed dashed solid;
+    border-width: 0 8.5px 8.5px;
+    z-index: 1;
+    height: 0;
+    width: 0;
+    position: absolute;
+}
+.tip {
+    border-color: transparent transparent #fff;
+}
+.tip-border {
+    border-color: transparent transparent #ccc;
+    border-bottom-color: rgba(0,0,0,.2);
+}
+#schools-dropdown .nav-dropdown-list a,
+#schools-dropdown .nav-dropdown-list a:link,
+#schools-dropdown .nav-dropdown-list a:active,
+#schools-dropdown .nav-dropdown-list a:visited {
+	display: block;
+	margin: 0;
+	padding: 6px 25px;
+	font-size: 14px;
+	color: #222;
+	background-color: #fff;
+	transition: background-color .3s;
+}
+#schools-dropdown .nav-dropdown-list a:hover {
+	color: #222;
+	background-color: #ececec;
+}
+/* End Header */
+
+/* Page Content */
+#page {
+	width: 100%;
+	padding-top: 50px;
+	background-color: #F3F3F3;
+}
+#profile-page {
+	text-align: center;
+}
+#profile-page h1 {
+	font-size: 42px;
+	margin: 0;
+}
+#profile-page h2 {
+	font-size: 24px;
+	margin: 0;
+}
+#profile-banner {
+	color: #fff;
+	position: relative;
+	padding: 100px 0 140px;
+	background-color: pink;
+	background-size: cover;
+	background-position: center;
+	background-repeat: no-repeat;
+}
+#filter {
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	background-color: rgba(0,0,0,.8);
+}
+#profile-banner-content {
+	position: relative;
+}
+#profile-image {
+	position: absolute;
+	bottom: 0;
+	left: 50%;
+	width: 180px;
+	height: 180px;
+	border-radius: 100%;
+	background-color: #ddd;
+	background-size: cover;
+	background-position: center;
+	background-repeat: no-repeat;
+	background-image: url(/static/img/blank.jpg);
+	transform: translate(-50%, 40%);
+	overflow: hidden;
+}
+#profile-image-social {
+	width: 100%;
+	height: 100%;
+	background-size: cover;
+	background-position: center;
+	background-repeat: no-repeat;
+}
+#profile-body {
+	padding: 100px 0 20px;
+}
+.profile-bio:after {
+	content: "";
+	display: block;
+	margin: 40px auto 0;
+	height: 2px;
+	width: 250px;
+	background-color: #999;
+}
+
+/* Reactions */
+#reaction-counter {
+	text-align: center;
+}
+#profile-page h3 {
+	font-size: 20px;
+}
+#reaction-counter h3 span {
+	margin-right: 5px;
+}
+#reactions {
+	display: inline-block;
+	background-color: #f3f3f3;
+    border-radius: 60px;
+    padding: 0 10px;
+    border: 1px solid #dedede;
+}
+.reaction {
+	text-align: center;
+    position: relative;
+    display: inline-block;
+    vertical-align: middle;
+    height: 62px;
+    width: 40px;
+    margin: 0 2px;
+}
+.reaction-mobile-split {
+	display: inline-block;
+}
+.reaction .emoji {
+	width: 35px;
+	position: absolute;
+    top: 50%;
+    left: 50%;
+    max-height: 50px;
+    max-width: 50px;
+    transform: translate(-50%,-50%);
+}
+.emoji-count {
+	position: absolute;
+    bottom: 10px;
+    right: 0;
+    height: 16px;
+    padding: 0 2px;
+    border-radius: 30%;
+    font-size: 14px;
+    font-weight: 700;
+    color: #fff;
+    background-color: #a1a1a1;
+}
+.reaction-dropdown {
+	position: absolute;
+    top: 56px;
+    font-size: 10px;
+    width: 60px;
+    left: 50%;
+    border-radius: 8px;
+    background-color: #a1a1a1;
+    color: #fff;
+    padding-top: 1px;
+    padding-bottom: 1px;
+    z-index: 1;
+    opacity: 0;
+    visibility: hidden;
+    transition: visibility .3s, opacity .3s;
+    transform: translate(-50%);
+}
+.reaction:hover .reaction-dropdown {
+	opacity: 1;
+	visibility: visible;
+}
+.reaction-dropdown .tip-border {
+    border-bottom-color: rgba(0,0,0,.2);
+}
+.reaction-dropdown .tip, 
+.reaction-dropdown .tip-border {
+    top: -7px;
+    left: 20px;
+    border-color: transparent transparent #a1a1a1;
+}
+/* End Reactions */
+
+/* Other Stats */
+#linked-accounts,
+#notifications {
+	margin-top: 60px;
+}
+.list-item {
+	font-size: 0;
+}
+.list-item.link {
+	background-color: #e6e6e6;
+	color: white;
+	padding: 5px 15px;
+	border: 1px solid #dedede;
+	margin: 10px 0;
+	border-radius: 5px;
+	display: inline-block;
+	cursor: pointer;
+	transition: background-color .3s;
+}
+.list-item.link:hover {
+	background-color: #e0e0e0;
+}
+.list-item p,
+.list-item a {
+	text-align: left;
+	vertical-align: middle;
+	display: inline-block;
+	margin: 5px 7px;
+	font-size: 16px;
+	color: #222;
+	text-decoration: none;
+}
+#linked-accounts .list-item p {
+	/*width: 70px;*/
+}
+.list-item i, 
+.list-item img {
+	font-size: 16px;
+	width: 16px;
+	height: 16px;
+	text-align: center;
+	display: inline-block;
+	vertical-align: middle;
+}
+#join-date {
+	margin-top: 60px;
+}
+#join-date p {
+	font-style: italics;
+	font-size: 12px;
+}
+/* End Other Stats */
+
+/* Footer */
+footer {
+	background-color: #253340;
+	padding: 40px 0 10px;
+}
+footer ul {
+	list-style-type: none;
+	padding: 0 0 40px 0;
+	margin: 0;
+}
+footer ul li {
+	margin: 10px 0;
+}
+footer ul li a, 
+footer ul li a:link, 
+footer ul li a:active, 
+footer ul li a:visited {
+	color: #ddd;
+	font-size: 14px;
+	text-decoration: none;
+}
+footer ul li a:hover {
+	text-decoration: underline;
+}
+footer ul li a i {
+	width: 24px;
+	height: 24px;
+	text-align: center;
+	border-radius: 100%;
+	margin-right: 5px;
+}
+footer ul li a i.fa-facebook {
+	line-height: 24px;
+	background-color: #3b5998;
+}
+footer ul li a i.fa-at {
+	line-height: 24px;
+	background-color: #409036;
+}
+footer h6 {
+	text-align: center;
+	font-size: 10px;
+	color: #777;
+	margin: 0;
+}
+/* End Footer */
+
+@media(max-width: 640px) {
+	header h1 {
+		display: none;
+	}
+	.desktop-nav {
+		display: none;
+	}
+	.mobile-nav {
+		display: block;
+	}
+}
+@media(max-width: 500px) {
+	#profile-page h1 {
+		font-size: 30px;
+	}
+	#profile-page h2 {
+		font-size: 18px;
+	}
+	#profile-page h3 {
+		font-size: 16px;
+	}
+
+	.reaction {
+	    height: 42px;
+	    width: 30px;
+	    margin: 0 2px;
+	}
+	.reaction .emoji {
+		width: 25px;
+	}
+	.reaction-dropdown {
+		top: 42px;
+	}
+	.emoji-count {
+		bottom: 3px;
+		right: -3px;
+	}
+
+	#linked-accounts,
+	#notifications {
+		margin-top: 40px;
+	}
+	.list-item p,
+	.list-item a {
+		font-size: 12px;
+	}
+	.list-item i, 
+	.list-item img {
+		font-size: 12px;
+	}
+}
+@media(max-width: 340px) {
+	#reactions {
+		width: 195px;
+		border-radius: 30px;
+	}
+}

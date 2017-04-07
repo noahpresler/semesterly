@@ -1,0 +1,35 @@
+{
+	"$schema": "http://json-schema.org/draft-04/schema#",
+	"title": "Individual Course",
+	"description": "Semesterly Course JSON schema - individual",
+	"allOf": [
+		{
+			"$ref": "course.json#/"
+		}
+	],
+	"properties": {
+		"kind": {},
+		"school": {},
+		"code": {},
+		"name": {},
+		"credits": {},
+		"department": {},
+		"description": {},
+		"prerequisites": {},
+		"corequisites": {},
+		"exclusions": {},
+		"areas": {},
+		"level": {},
+		"cores": {},
+		"geneds": {},
+		"homepage": {},
+		"related": {},
+		"sections": {}
+	},
+	"additionalProperties": false,
+	"required": [
+		"kind",
+		"code",
+		"name"
+	]
+}

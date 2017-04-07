@@ -174,8 +174,8 @@
 }
 .search-course .label {
 	float: left;
-    padding-top: 3px;
     line-height: 11px;
+    padding-top: 3px;
     padding-bottom: 3px;
 }
 .search-course .label.bubble {
@@ -319,6 +319,27 @@
 .results-loading-gif {
  	background: url('/static/img/search-results-loader.gif') no-repeat;
  	background-position: right 5px center;
+}
+
+/* If a course has an integration turned on */
+.search-result-integration {
+	float: left;
+	padding: 1px 0px;
+	height: 17px;
+	margin: 5px 0;
+}
+.has-pilot {
+	float: left;
+	width: 50px;
+    height: 15px;
+    margin-right: 5px;
+	background-size: contain;
+	background-position: center;
+	background-repeat: no-repeat;
+}
+.search-result-integration a {
+	float: left;
+	line-height: 15px;
 }
 
 /* Side Bar in Search Results */

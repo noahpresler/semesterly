@@ -35,12 +35,31 @@ SOCIAL_AUTH_FACEBOOK_SCOPE = [
 SOCIAL_AUTH_FACEBOOK_PROFILE_EXTRA_PARAMS = {
     'fields': 'id,name,email,gender'
 }
+
+SOCIAL_AUTH_GOOGLE_OAUTH2_KEY = '***REMOVED***'
+SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = '***REMOVED***'
+SOCIAL_AUTH_GOOGLE_OAUTH2_SCOPE = [
+    'https://www.googleapis.com/auth/plus.login',
+    'https://www.googleapis.com/auth/plus.me',
+    'https://www.googleapis.com/auth/userinfo.profile',
+    'https://www.googleapis.com/auth/calendar'
+]
+GOOGLE_API_KEY = '***REMOVED***'
+SOCIAL_AUTH_GOOGLE_OAUTH2_AUTH_EXTRA_ARGUMENTS = {
+    'access_type': 'offline',  # Enables the refreshing grant
+    'approval_promt': 'force'  # Enables refresh_token
+}
+
+
 SOCIAL_AUTH_LOGIN_REDIRECT_URL = '/'
 SOCIAL_AUTH_LOGIN_ERROR_URL = '/'
 
 SOCIAL_AUTH_AUTHENTICATION_BACKENDS = (
     'social.backends.facebook.FacebookOAuth2',
+    'social.backends.google.GooglePlusAuth',
+    'social.backends.google.GoogleOAuth2',
 )
+FIELDS_STORED_IN_SESSION = ['student_token','login_hash']
 
 SOCIAL_AUTH_PIPELINE = (
     # Get the information we can about the user and return it in a simple
@@ -72,6 +91,7 @@ SOCIAL_AUTH_PIPELINE = (
     # Associates the current social details with another user account with
     # a similar email address. Disabled by default.
     # 'social.pipeline.social_auth.associate_by_email',
+    'student.utils.associate_students',
 
     # Create a user account if we haven't found one yet.
     'social.pipeline.user.create_user',
@@ -101,9 +121,15 @@ INSTALLED_APPS = (
     'social.apps.django_app.default',
     'django_extensions',
     'timetable',
+    'exams',
+    'integrations',
+    'searches',
+    'courses',
     'analytics',
     'scripts',
-    'student'
+    'student',
+    'cachalot',
+    'silk'
 )
 
 MIDDLEWARE_CLASSES = (
@@ -114,7 +140,9 @@ MIDDLEWARE_CLASSES = (
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'semesterly.middleware.subdomain_middleware.SubdomainMiddleware',
-     'social.apps.django_app.middleware.SocialAuthExceptionMiddleware',
+    'social.apps.django_app.middleware.SocialAuthExceptionMiddleware',
+    'silk.middleware.SilkyMiddleware',
+    'rollbar.contrib.django.middleware.RollbarNotifierMiddleware',
 )
 
 TEMPLATE_CONTEXT_PROCESSORS = (
@@ -154,6 +182,10 @@ DATABASES = {
         'PORT': '5432',
     }
 }
+
+# Silk auth
+SILKY_AUTHENTICATION = True  # User must login
+SILKY_AUTHORISATION = True  # User must have permissions
 
 # Logging
 
@@ -205,11 +237,12 @@ LOGGING = {
 ADMINS = [
     ('Rohan Das', 'rohan@semester.ly'), 
     ('Felix Zhu', 'felix@semester.ly'),
-    ('Noah Presler', 'noah@semester.ly'),
+    # ('Noah Presler', 'noah@semester.ly'),
     ('Eric Calder', 'eric@semester.ly'),
 
 ]
 
+# STAGING_NOTIFIED_ADMINS = ['rohan@semester.ly', 'noah@semester.ly']
 STAGING_NOTIFIED_ADMINS = ['rohan@semester.ly', 'noah@semester.ly']
 
 EMAIL_USE_TLS = True
@@ -233,6 +266,8 @@ USE_L10N = True
 USE_TZ = True
 
 APPEND_SLASH = True
+
+TEST_RUNNER = 'test_utils.test_runners.FastTestRunner'
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.6/howto/static-files/
@@ -259,8 +294,28 @@ TEMPLATE_DIRS = (
     os.path.join(PROJECT_DIRECTORY,'templates/'),
 )
 
+# Caching
+CACHES = {
+    'default': {
+        'BACKEND':'django.core.cache.backends.memcached.MemcachedCache',
+        'LOCATION':'127.0.0.1:11211',
+    }
+}
+CACHALOT_ENABLED = True
+
+
+
 try:
     from local_settings import *
     from sensitive import *
 except:
     pass
+
+if not DEBUG:
+    ROLLBAR = {
+        'access_token': '23c5a378cd1943cfb40d5217dfb7f766',
+        'environment': 'development' if DEBUG else 'production',
+        'root': BASE_DIR,
+    }
+    import rollbar
+    rollbar.init(**ROLLBAR)
