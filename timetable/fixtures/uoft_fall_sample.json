@@ -1,0 +1,7185 @@
+[
+{
+    "model": "timetable.semester",
+    "pk": 3,
+    "fields": {
+        "name": "Winter",
+        "year": "2017"
+    }
+},
+{
+    "model": "timetable.semester",
+    "pk": 1,
+    "fields": {
+        "name": "Fall",
+        "year": "2016"
+    }
+},
+{
+    "model": "timetable.offering",
+    "pk": 45218,
+    "fields": {
+        "section": 29129,
+        "day": "R",
+        "time_start": "14:00",
+        "time_end": "16:00",
+        "location": "90W-UJS"
+    }
+},
+{
+    "model": "timetable.offering",
+    "pk": 40829,
+    "fields": {
+        "section": 25805,
+        "day": "R",
+        "time_start": "14:00",
+        "time_end": "16:00",
+        "location": "90W-UJS"
+    }
+},
+{
+    "model": "timetable.offering",
+    "pk": 45217,
+    "fields": {
+        "section": 29128,
+        "day": "R",
+        "time_start": "14:00",
+        "time_end": "16:00",
+        "location": "90W-UJS"
+    }
+},
+{
+    "model": "timetable.offering",
+    "pk": 33703,
+    "fields": {
+        "section": 20380,
+        "day": "R",
+        "time_start": "14:00",
+        "time_end": "16:00",
+        "location": "90W-UJS"
+    }
+},
+{
+    "model": "timetable.offering",
+    "pk": 45216,
+    "fields": {
+        "section": 29127,
+        "day": "R",
+        "time_start": "14:00",
+        "time_end": "16:00",
+        "location": "90W-UJS"
+    }
+},
+{
+    "model": "timetable.offering",
+    "pk": 40828,
+    "fields": {
+        "section": 25804,
+        "day": "R",
+        "time_start": "14:00",
+        "time_end": "16:00",
+        "location": "90W-UJS"
+    }
+},
+{
+    "model": "timetable.offering",
+    "pk": 45215,
+    "fields": {
+        "section": 29126,
+        "day": "R",
+        "time_start": "14:00",
+        "time_end": "16:00",
+        "location": "90W-UJS"
+    }
+},
+{
+    "model": "timetable.offering",
+    "pk": 30110,
+    "fields": {
+        "section": 17645,
+        "day": "R",
+        "time_start": "14:00",
+        "time_end": "16:00",
+        "location": "90W-UJS"
+    }
+},
+{
+    "model": "timetable.offering",
+    "pk": 45214,
+    "fields": {
+        "section": 29125,
+        "day": "R",
+        "time_start": "14:00",
+        "time_end": "16:00",
+        "location": "90W-UJS"
+    }
+},
+{
+    "model": "timetable.offering",
+    "pk": 40827,
+    "fields": {
+        "section": 25803,
+        "day": "R",
+        "time_start": "14:00",
+        "time_end": "16:00",
+        "location": "90W-UJS"
+    }
+},
+{
+    "model": "timetable.offering",
+    "pk": 45213,
+    "fields": {
+        "section": 29124,
+        "day": "R",
+        "time_start": "14:00",
+        "time_end": "16:00",
+        "location": "90W-UJS"
+    }
+},
+{
+    "model": "timetable.offering",
+    "pk": 33702,
+    "fields": {
+        "section": 20379,
+        "day": "R",
+        "time_start": "14:00",
+        "time_end": "16:00",
+        "location": "90W-UJS"
+    }
+},
+{
+    "model": "timetable.offering",
+    "pk": 45212,
+    "fields": {
+        "section": 29123,
+        "day": "R",
+        "time_start": "14:00",
+        "time_end": "16:00",
+        "location": "90W-UJS"
+    }
+},
+{
+    "model": "timetable.offering",
+    "pk": 40826,
+    "fields": {
+        "section": 25802,
+        "day": "R",
+        "time_start": "14:00",
+        "time_end": "16:00",
+        "location": "90W-UJS"
+    }
+},
+{
+    "model": "timetable.offering",
+    "pk": 45211,
+    "fields": {
+        "section": 29122,
+        "day": "R",
+        "time_start": "14:00",
+        "time_end": "16:00",
+        "location": "90W-UJS"
+    }
+},
+{
+    "model": "timetable.offering",
+    "pk": 27905,
+    "fields": {
+        "section": 15807,
+        "day": "R",
+        "time_start": "14:00",
+        "time_end": "16:00",
+        "location": "90W-UJS"
+    }
+},
+{
+    "model": "timetable.offering",
+    "pk": 43074,
+    "fields": {
+        "section": 27521,
+        "day": "W",
+        "time_start": "14:00",
+        "time_end": "16:00",
+        "location": "90W-UJS"
+    }
+},
+{
+    "model": "timetable.offering",
+    "pk": 39757,
+    "fields": {
+        "section": 25001,
+        "day": "W",
+        "time_start": "14:00",
+        "time_end": "16:00",
+        "location": "90W-UJS"
+    }
+},
+{
+    "model": "timetable.offering",
+    "pk": 43073,
+    "fields": {
+        "section": 27520,
+        "day": "W",
+        "time_start": "14:00",
+        "time_end": "16:00",
+        "location": "90W-UJS"
+    }
+},
+{
+    "model": "timetable.offering",
+    "pk": 33167,
+    "fields": {
+        "section": 19978,
+        "day": "W",
+        "time_start": "14:00",
+        "time_end": "16:00",
+        "location": "90W-UJS"
+    }
+},
+{
+    "model": "timetable.offering",
+    "pk": 43072,
+    "fields": {
+        "section": 27519,
+        "day": "W",
+        "time_start": "14:00",
+        "time_end": "16:00",
+        "location": "90W-UJS"
+    }
+},
+{
+    "model": "timetable.offering",
+    "pk": 39756,
+    "fields": {
+        "section": 25000,
+        "day": "W",
+        "time_start": "14:00",
+        "time_end": "16:00",
+        "location": "90W-UJS"
+    }
+},
+{
+    "model": "timetable.offering",
+    "pk": 43071,
+    "fields": {
+        "section": 27518,
+        "day": "W",
+        "time_start": "14:00",
+        "time_end": "16:00",
+        "location": "90W-UJS"
+    }
+},
+{
+    "model": "timetable.offering",
+    "pk": 29576,
+    "fields": {
+        "section": 17245,
+        "day": "W",
+        "time_start": "14:00",
+        "time_end": "16:00",
+        "location": "90W-UJS"
+    }
+},
+{
+    "model": "timetable.offering",
+    "pk": 43070,
+    "fields": {
+        "section": 27517,
+        "day": "W",
+        "time_start": "14:00",
+        "time_end": "16:00",
+        "location": "90W-UJS"
+    }
+},
+{
+    "model": "timetable.offering",
+    "pk": 39755,
+    "fields": {
+        "section": 24999,
+        "day": "W",
+        "time_start": "14:00",
+        "time_end": "16:00",
+        "location": "90W-UJS"
+    }
+},
+{
+    "model": "timetable.offering",
+    "pk": 43069,
+    "fields": {
+        "section": 27516,
+        "day": "W",
+        "time_start": "14:00",
+        "time_end": "16:00",
+        "location": "90W-UJS"
+    }
+},
+{
+    "model": "timetable.offering",
+    "pk": 33166,
+    "fields": {
+        "section": 19977,
+        "day": "W",
+        "time_start": "14:00",
+        "time_end": "16:00",
+        "location": "90W-UJS"
+    }
+},
+{
+    "model": "timetable.offering",
+    "pk": 43068,
+    "fields": {
+        "section": 27515,
+        "day": "W",
+        "time_start": "14:00",
+        "time_end": "16:00",
+        "location": "90W-UJS"
+    }
+},
+{
+    "model": "timetable.offering",
+    "pk": 39754,
+    "fields": {
+        "section": 24998,
+        "day": "W",
+        "time_start": "14:00",
+        "time_end": "16:00",
+        "location": "90W-UJS"
+    }
+},
+{
+    "model": "timetable.offering",
+    "pk": 43067,
+    "fields": {
+        "section": 27514,
+        "day": "W",
+        "time_start": "14:00",
+        "time_end": "16:00",
+        "location": "90W-UJS"
+    }
+},
+{
+    "model": "timetable.offering",
+    "pk": 27906,
+    "fields": {
+        "section": 16150,
+        "day": "W",
+        "time_start": "14:00",
+        "time_end": "16:00",
+        "location": "90W-UJS"
+    }
+},
+{
+    "model": "timetable.offering",
+    "pk": 26541,
+    "fields": {
+        "section": 15808,
+        "day": "W",
+        "time_start": "14:00",
+        "time_end": "16:00",
+        "location": "90W-UJS"
+    }
+},
+{
+    "model": "timetable.offering",
+    "pk": 27839,
+    "fields": {
+        "section": 16141,
+        "day": "W",
+        "time_start": "11:00",
+        "time_end": "12:00",
+        "location": "116"
+    }
+},
+{
+    "model": "timetable.offering",
+    "pk": 27840,
+    "fields": {
+        "section": 15753,
+        "day": "W",
+        "time_start": "10:00",
+        "time_end": "11:00",
+        "location": "116"
+    }
+},
+{
+    "model": "timetable.offering",
+    "pk": 27838,
+    "fields": {
+        "section": 15751,
+        "day": "W",
+        "time_start": "10:00",
+        "time_end": "11:00",
+        "location": "116"
+    }
+},
+{
+    "model": "timetable.offering",
+    "pk": 26702,
+    "fields": {
+        "section": 15752,
+        "day": "W",
+        "time_start": "11:00",
+        "time_end": "12:00",
+        "location": "116"
+    }
+},
+{
+    "model": "timetable.offering",
+    "pk": 43689,
+    "fields": {
+        "section": 27961,
+        "day": "T",
+        "time_start": "19:00",
+        "time_end": "9:00",
+        "location": "90W-UJS"
+    }
+},
+{
+    "model": "timetable.offering",
+    "pk": 43690,
+    "fields": {
+        "section": 27961,
+        "day": "R",
+        "time_start": "19:00",
+        "time_end": "9:00",
+        "location": "90W-UJS"
+    }
+},
+{
+    "model": "timetable.offering",
+    "pk": 40064,
+    "fields": {
+        "section": 25221,
+        "day": "R",
+        "time_start": "19:00",
+        "time_end": "9:00",
+        "location": "90W-UJS"
+    }
+},
+{
+    "model": "timetable.offering",
+    "pk": 40065,
+    "fields": {
+        "section": 25221,
+        "day": "T",
+        "time_start": "19:00",
+        "time_end": "9:00",
+        "location": "90W-UJS"
+    }
+},
+{
+    "model": "timetable.offering",
+    "pk": 43687,
+    "fields": {
+        "section": 27960,
+        "day": "R",
+        "time_start": "19:00",
+        "time_end": "9:00",
+        "location": "90W-UJS"
+    }
+},
+{
+    "model": "timetable.offering",
+    "pk": 43688,
+    "fields": {
+        "section": 27960,
+        "day": "T",
+        "time_start": "19:00",
+        "time_end": "9:00",
+        "location": "90W-UJS"
+    }
+},
+{
+    "model": "timetable.offering",
+    "pk": 33320,
+    "fields": {
+        "section": 20088,
+        "day": "T",
+        "time_start": "19:00",
+        "time_end": "9:00",
+        "location": "90W-UJS"
+    }
+},
+{
+    "model": "timetable.offering",
+    "pk": 33321,
+    "fields": {
+        "section": 20088,
+        "day": "R",
+        "time_start": "19:00",
+        "time_end": "9:00",
+        "location": "90W-UJS"
+    }
+},
+{
+    "model": "timetable.offering",
+    "pk": 43685,
+    "fields": {
+        "section": 27959,
+        "day": "R",
+        "time_start": "19:00",
+        "time_end": "9:00",
+        "location": "90W-UJS"
+    }
+},
+{
+    "model": "timetable.offering",
+    "pk": 43686,
+    "fields": {
+        "section": 27959,
+        "day": "T",
+        "time_start": "19:00",
+        "time_end": "9:00",
+        "location": "90W-UJS"
+    }
+},
+{
+    "model": "timetable.offering",
+    "pk": 40062,
+    "fields": {
+        "section": 25220,
+        "day": "T",
+        "time_start": "19:00",
+        "time_end": "9:00",
+        "location": "90W-UJS"
+    }
+},
+{
+    "model": "timetable.offering",
+    "pk": 40063,
+    "fields": {
+        "section": 25220,
+        "day": "R",
+        "time_start": "19:00",
+        "time_end": "9:00",
+        "location": "90W-UJS"
+    }
+},
+{
+    "model": "timetable.offering",
+    "pk": 43683,
+    "fields": {
+        "section": 27958,
+        "day": "T",
+        "time_start": "19:00",
+        "time_end": "9:00",
+        "location": "90W-UJS"
+    }
+},
+{
+    "model": "timetable.offering",
+    "pk": 43684,
+    "fields": {
+        "section": 27958,
+        "day": "R",
+        "time_start": "19:00",
+        "time_end": "9:00",
+        "location": "90W-UJS"
+    }
+},
+{
+    "model": "timetable.offering",
+    "pk": 29729,
+    "fields": {
+        "section": 17355,
+        "day": "R",
+        "time_start": "19:00",
+        "time_end": "9:00",
+        "location": "90W-UJS"
+    }
+},
+{
+    "model": "timetable.offering",
+    "pk": 29730,
+    "fields": {
+        "section": 17355,
+        "day": "T",
+        "time_start": "19:00",
+        "time_end": "9:00",
+        "location": "90W-UJS"
+    }
+},
+{
+    "model": "timetable.offering",
+    "pk": 43680,
+    "fields": {
+        "section": 27957,
+        "day": "T",
+        "time_start": "10:00",
+        "time_end": "11:00",
+        "location": "90W-UJS"
+    }
+},
+{
+    "model": "timetable.offering",
+    "pk": 43681,
+    "fields": {
+        "section": 27957,
+        "day": "F",
+        "time_start": "17:00",
+        "time_end": "18:00",
+        "location": "90W-UJS"
+    }
+},
+{
+    "model": "timetable.offering",
+    "pk": 43682,
+    "fields": {
+        "section": 27957,
+        "day": "R",
+        "time_start": "10:00",
+        "time_end": "11:00",
+        "location": "90W-UJS"
+    }
+},
+{
+    "model": "timetable.offering",
+    "pk": 40059,
+    "fields": {
+        "section": 25219,
+        "day": "R",
+        "time_start": "10:00",
+        "time_end": "11:00",
+        "location": "90W-UJS"
+    }
+},
+{
+    "model": "timetable.offering",
+    "pk": 40060,
+    "fields": {
+        "section": 25219,
+        "day": "F",
+        "time_start": "17:00",
+        "time_end": "18:00",
+        "location": "90W-UJS"
+    }
+},
+{
+    "model": "timetable.offering",
+    "pk": 40061,
+    "fields": {
+        "section": 25219,
+        "day": "T",
+        "time_start": "10:00",
+        "time_end": "11:00",
+        "location": "90W-UJS"
+    }
+},
+{
+    "model": "timetable.offering",
+    "pk": 43677,
+    "fields": {
+        "section": 27956,
+        "day": "R",
+        "time_start": "10:00",
+        "time_end": "11:00",
+        "location": "90W-UJS"
+    }
+},
+{
+    "model": "timetable.offering",
+    "pk": 43678,
+    "fields": {
+        "section": 27956,
+        "day": "F",
+        "time_start": "17:00",
+        "time_end": "18:00",
+        "location": "90W-UJS"
+    }
+},
+{
+    "model": "timetable.offering",
+    "pk": 43679,
+    "fields": {
+        "section": 27956,
+        "day": "T",
+        "time_start": "10:00",
+        "time_end": "11:00",
+        "location": "90W-UJS"
+    }
+},
+{
+    "model": "timetable.offering",
+    "pk": 33317,
+    "fields": {
+        "section": 20087,
+        "day": "T",
+        "time_start": "10:00",
+        "time_end": "11:00",
+        "location": "90W-UJS"
+    }
+},
+{
+    "model": "timetable.offering",
+    "pk": 33318,
+    "fields": {
+        "section": 20087,
+        "day": "F",
+        "time_start": "17:00",
+        "time_end": "18:00",
+        "location": "90W-UJS"
+    }
+},
+{
+    "model": "timetable.offering",
+    "pk": 33319,
+    "fields": {
+        "section": 20087,
+        "day": "R",
+        "time_start": "10:00",
+        "time_end": "11:00",
+        "location": "90W-UJS"
+    }
+},
+{
+    "model": "timetable.offering",
+    "pk": 43674,
+    "fields": {
+        "section": 27955,
+        "day": "R",
+        "time_start": "10:00",
+        "time_end": "11:00",
+        "location": "90W-UJS"
+    }
+},
+{
+    "model": "timetable.offering",
+    "pk": 43675,
+    "fields": {
+        "section": 27955,
+        "day": "F",
+        "time_start": "17:00",
+        "time_end": "18:00",
+        "location": "90W-UJS"
+    }
+},
+{
+    "model": "timetable.offering",
+    "pk": 43676,
+    "fields": {
+        "section": 27955,
+        "day": "T",
+        "time_start": "10:00",
+        "time_end": "11:00",
+        "location": "90W-UJS"
+    }
+},
+{
+    "model": "timetable.offering",
+    "pk": 40056,
+    "fields": {
+        "section": 25218,
+        "day": "T",
+        "time_start": "10:00",
+        "time_end": "11:00",
+        "location": "90W-UJS"
+    }
+},
+{
+    "model": "timetable.offering",
+    "pk": 40057,
+    "fields": {
+        "section": 25218,
+        "day": "F",
+        "time_start": "17:00",
+        "time_end": "18:00",
+        "location": "90W-UJS"
+    }
+},
+{
+    "model": "timetable.offering",
+    "pk": 40058,
+    "fields": {
+        "section": 25218,
+        "day": "R",
+        "time_start": "10:00",
+        "time_end": "11:00",
+        "location": "90W-UJS"
+    }
+},
+{
+    "model": "timetable.offering",
+    "pk": 43671,
+    "fields": {
+        "section": 27954,
+        "day": "T",
+        "time_start": "10:00",
+        "time_end": "11:00",
+        "location": "90W-UJS"
+    }
+},
+{
+    "model": "timetable.offering",
+    "pk": 43672,
+    "fields": {
+        "section": 27954,
+        "day": "F",
+        "time_start": "17:00",
+        "time_end": "18:00",
+        "location": "90W-UJS"
+    }
+},
+{
+    "model": "timetable.offering",
+    "pk": 43673,
+    "fields": {
+        "section": 27954,
+        "day": "R",
+        "time_start": "10:00",
+        "time_end": "11:00",
+        "location": "90W-UJS"
+    }
+},
+{
+    "model": "timetable.offering",
+    "pk": 29726,
+    "fields": {
+        "section": 17354,
+        "day": "R",
+        "time_start": "10:00",
+        "time_end": "11:00",
+        "location": "90W-UJS"
+    }
+},
+{
+    "model": "timetable.offering",
+    "pk": 29727,
+    "fields": {
+        "section": 17354,
+        "day": "F",
+        "time_start": "17:00",
+        "time_end": "18:00",
+        "location": "90W-UJS"
+    }
+},
+{
+    "model": "timetable.offering",
+    "pk": 29728,
+    "fields": {
+        "section": 17354,
+        "day": "T",
+        "time_start": "10:00",
+        "time_end": "11:00",
+        "location": "90W-UJS"
+    }
+},
+{
+    "model": "timetable.offering",
+    "pk": 43669,
+    "fields": {
+        "section": 27953,
+        "day": "M",
+        "time_start": "11:00",
+        "time_end": "13:00",
+        "location": "90W-380"
+    }
+},
+{
+    "model": "timetable.offering",
+    "pk": 43670,
+    "fields": {
+        "section": 27953,
+        "day": "W",
+        "time_start": "11:00",
+        "time_end": "13:00",
+        "location": "90W-380"
+    }
+},
+{
+    "model": "timetable.offering",
+    "pk": 40054,
+    "fields": {
+        "section": 25217,
+        "day": "W",
+        "time_start": "11:00",
+        "time_end": "13:00",
+        "location": "90W-380"
+    }
+},
+{
+    "model": "timetable.offering",
+    "pk": 40055,
+    "fields": {
+        "section": 25217,
+        "day": "M",
+        "time_start": "11:00",
+        "time_end": "13:00",
+        "location": "90W-380"
+    }
+},
+{
+    "model": "timetable.offering",
+    "pk": 43667,
+    "fields": {
+        "section": 27952,
+        "day": "W",
+        "time_start": "11:00",
+        "time_end": "13:00",
+        "location": "90W-380"
+    }
+},
+{
+    "model": "timetable.offering",
+    "pk": 43668,
+    "fields": {
+        "section": 27952,
+        "day": "M",
+        "time_start": "11:00",
+        "time_end": "13:00",
+        "location": "90W-380"
+    }
+},
+{
+    "model": "timetable.offering",
+    "pk": 33315,
+    "fields": {
+        "section": 20086,
+        "day": "M",
+        "time_start": "11:00",
+        "time_end": "13:00",
+        "location": "90W-380"
+    }
+},
+{
+    "model": "timetable.offering",
+    "pk": 33316,
+    "fields": {
+        "section": 20086,
+        "day": "W",
+        "time_start": "11:00",
+        "time_end": "13:00",
+        "location": "90W-380"
+    }
+},
+{
+    "model": "timetable.offering",
+    "pk": 43665,
+    "fields": {
+        "section": 27951,
+        "day": "W",
+        "time_start": "11:00",
+        "time_end": "13:00",
+        "location": "90W-380"
+    }
+},
+{
+    "model": "timetable.offering",
+    "pk": 43666,
+    "fields": {
+        "section": 27951,
+        "day": "M",
+        "time_start": "11:00",
+        "time_end": "13:00",
+        "location": "90W-380"
+    }
+},
+{
+    "model": "timetable.offering",
+    "pk": 40052,
+    "fields": {
+        "section": 25216,
+        "day": "M",
+        "time_start": "11:00",
+        "time_end": "13:00",
+        "location": "90W-380"
+    }
+},
+{
+    "model": "timetable.offering",
+    "pk": 40053,
+    "fields": {
+        "section": 25216,
+        "day": "W",
+        "time_start": "11:00",
+        "time_end": "13:00",
+        "location": "90W-380"
+    }
+},
+{
+    "model": "timetable.offering",
+    "pk": 43663,
+    "fields": {
+        "section": 27950,
+        "day": "M",
+        "time_start": "11:00",
+        "time_end": "13:00",
+        "location": "90W-380"
+    }
+},
+{
+    "model": "timetable.offering",
+    "pk": 43664,
+    "fields": {
+        "section": 27950,
+        "day": "W",
+        "time_start": "11:00",
+        "time_end": "13:00",
+        "location": "90W-380"
+    }
+},
+{
+    "model": "timetable.offering",
+    "pk": 29724,
+    "fields": {
+        "section": 17353,
+        "day": "W",
+        "time_start": "11:00",
+        "time_end": "13:00",
+        "location": "90W-380"
+    }
+},
+{
+    "model": "timetable.offering",
+    "pk": 29725,
+    "fields": {
+        "section": 17353,
+        "day": "M",
+        "time_start": "11:00",
+        "time_end": "13:00",
+        "location": "90W-380"
+    }
+},
+{
+    "model": "timetable.offering",
+    "pk": 43117,
+    "fields": {
+        "section": 27561,
+        "day": "M",
+        "time_start": "11:00",
+        "time_end": "13:00",
+        "location": "90W-UJS"
+    }
+},
+{
+    "model": "timetable.offering",
+    "pk": 43118,
+    "fields": {
+        "section": 27561,
+        "day": "W",
+        "time_start": "11:00",
+        "time_end": "13:00",
+        "location": "90W-UJS"
+    }
+},
+{
+    "model": "timetable.offering",
+    "pk": 39778,
+    "fields": {
+        "section": 25021,
+        "day": "W",
+        "time_start": "11:00",
+        "time_end": "13:00",
+        "location": "90W-UJS"
+    }
+},
+{
+    "model": "timetable.offering",
+    "pk": 39779,
+    "fields": {
+        "section": 25021,
+        "day": "M",
+        "time_start": "11:00",
+        "time_end": "13:00",
+        "location": "90W-UJS"
+    }
+},
+{
+    "model": "timetable.offering",
+    "pk": 43115,
+    "fields": {
+        "section": 27560,
+        "day": "W",
+        "time_start": "11:00",
+        "time_end": "13:00",
+        "location": "90W-UJS"
+    }
+},
+{
+    "model": "timetable.offering",
+    "pk": 43116,
+    "fields": {
+        "section": 27560,
+        "day": "M",
+        "time_start": "11:00",
+        "time_end": "13:00",
+        "location": "90W-UJS"
+    }
+},
+{
+    "model": "timetable.offering",
+    "pk": 33177,
+    "fields": {
+        "section": 19988,
+        "day": "M",
+        "time_start": "11:00",
+        "time_end": "13:00",
+        "location": "90W-UJS"
+    }
+},
+{
+    "model": "timetable.offering",
+    "pk": 33178,
+    "fields": {
+        "section": 19988,
+        "day": "W",
+        "time_start": "11:00",
+        "time_end": "13:00",
+        "location": "90W-UJS"
+    }
+},
+{
+    "model": "timetable.offering",
+    "pk": 43113,
+    "fields": {
+        "section": 27559,
+        "day": "W",
+        "time_start": "11:00",
+        "time_end": "13:00",
+        "location": "90W-UJS"
+    }
+},
+{
+    "model": "timetable.offering",
+    "pk": 43114,
+    "fields": {
+        "section": 27559,
+        "day": "M",
+        "time_start": "11:00",
+        "time_end": "13:00",
+        "location": "90W-UJS"
+    }
+},
+{
+    "model": "timetable.offering",
+    "pk": 39776,
+    "fields": {
+        "section": 25020,
+        "day": "M",
+        "time_start": "11:00",
+        "time_end": "13:00",
+        "location": "90W-UJS"
+    }
+},
+{
+    "model": "timetable.offering",
+    "pk": 39777,
+    "fields": {
+        "section": 25020,
+        "day": "W",
+        "time_start": "11:00",
+        "time_end": "13:00",
+        "location": "90W-UJS"
+    }
+},
+{
+    "model": "timetable.offering",
+    "pk": 43111,
+    "fields": {
+        "section": 27558,
+        "day": "M",
+        "time_start": "11:00",
+        "time_end": "13:00",
+        "location": "90W-UJS"
+    }
+},
+{
+    "model": "timetable.offering",
+    "pk": 43112,
+    "fields": {
+        "section": 27558,
+        "day": "W",
+        "time_start": "11:00",
+        "time_end": "13:00",
+        "location": "90W-UJS"
+    }
+},
+{
+    "model": "timetable.offering",
+    "pk": 29586,
+    "fields": {
+        "section": 17255,
+        "day": "W",
+        "time_start": "11:00",
+        "time_end": "13:00",
+        "location": "90W-UJS"
+    }
+},
+{
+    "model": "timetable.offering",
+    "pk": 29587,
+    "fields": {
+        "section": 17255,
+        "day": "M",
+        "time_start": "11:00",
+        "time_end": "13:00",
+        "location": "90W-UJS"
+    }
+},
+{
+    "model": "timetable.offering",
+    "pk": 54452,
+    "fields": {
+        "section": 36185,
+        "day": "R",
+        "time_start": "19:00",
+        "time_end": "9:00",
+        "location": "90W-UJS"
+    }
+},
+{
+    "model": "timetable.offering",
+    "pk": 54453,
+    "fields": {
+        "section": 36185,
+        "day": "T",
+        "time_start": "19:00",
+        "time_end": "9:00",
+        "location": "90W-UJS"
+    }
+},
+{
+    "model": "timetable.offering",
+    "pk": 38259,
+    "fields": {
+        "section": 23862,
+        "day": "T",
+        "time_start": "19:00",
+        "time_end": "9:00",
+        "location": "90W-UJS"
+    }
+},
+{
+    "model": "timetable.offering",
+    "pk": 38260,
+    "fields": {
+        "section": 23862,
+        "day": "R",
+        "time_start": "19:00",
+        "time_end": "9:00",
+        "location": "90W-UJS"
+    }
+},
+{
+    "model": "timetable.offering",
+    "pk": 54450,
+    "fields": {
+        "section": 36184,
+        "day": "T",
+        "time_start": "19:00",
+        "time_end": "9:00",
+        "location": "90W-UJS"
+    }
+},
+{
+    "model": "timetable.offering",
+    "pk": 54451,
+    "fields": {
+        "section": 36184,
+        "day": "R",
+        "time_start": "19:00",
+        "time_end": "9:00",
+        "location": "90W-UJS"
+    }
+},
+{
+    "model": "timetable.offering",
+    "pk": 32416,
+    "fields": {
+        "section": 19407,
+        "day": "R",
+        "time_start": "19:00",
+        "time_end": "9:00",
+        "location": "90W-UJS"
+    }
+},
+{
+    "model": "timetable.offering",
+    "pk": 32417,
+    "fields": {
+        "section": 19407,
+        "day": "T",
+        "time_start": "19:00",
+        "time_end": "9:00",
+        "location": "90W-UJS"
+    }
+},
+{
+    "model": "timetable.offering",
+    "pk": 54448,
+    "fields": {
+        "section": 36183,
+        "day": "T",
+        "time_start": "19:00",
+        "time_end": "9:00",
+        "location": "90W-UJS"
+    }
+},
+{
+    "model": "timetable.offering",
+    "pk": 54449,
+    "fields": {
+        "section": 36183,
+        "day": "R",
+        "time_start": "19:00",
+        "time_end": "9:00",
+        "location": "90W-UJS"
+    }
+},
+{
+    "model": "timetable.offering",
+    "pk": 38257,
+    "fields": {
+        "section": 23861,
+        "day": "R",
+        "time_start": "19:00",
+        "time_end": "9:00",
+        "location": "90W-UJS"
+    }
+},
+{
+    "model": "timetable.offering",
+    "pk": 38258,
+    "fields": {
+        "section": 23861,
+        "day": "T",
+        "time_start": "19:00",
+        "time_end": "9:00",
+        "location": "90W-UJS"
+    }
+},
+{
+    "model": "timetable.offering",
+    "pk": 54446,
+    "fields": {
+        "section": 36182,
+        "day": "R",
+        "time_start": "19:00",
+        "time_end": "9:00",
+        "location": "90W-UJS"
+    }
+},
+{
+    "model": "timetable.offering",
+    "pk": 54447,
+    "fields": {
+        "section": 36182,
+        "day": "T",
+        "time_start": "19:00",
+        "time_end": "9:00",
+        "location": "90W-UJS"
+    }
+},
+{
+    "model": "timetable.offering",
+    "pk": 27903,
+    "fields": {
+        "section": 16149,
+        "day": "T",
+        "time_start": "19:00",
+        "time_end": "9:00",
+        "location": "90W-UJS"
+    }
+},
+{
+    "model": "timetable.offering",
+    "pk": 27904,
+    "fields": {
+        "section": 16149,
+        "day": "R",
+        "time_start": "19:00",
+        "time_end": "9:00",
+        "location": "90W-UJS"
+    }
+},
+{
+    "model": "timetable.offering",
+    "pk": 54443,
+    "fields": {
+        "section": 36181,
+        "day": "R",
+        "time_start": "10:00",
+        "time_end": "11:00",
+        "location": "90W-UJS"
+    }
+},
+{
+    "model": "timetable.offering",
+    "pk": 54444,
+    "fields": {
+        "section": 36181,
+        "day": "F",
+        "time_start": "17:00",
+        "time_end": "18:00",
+        "location": "90W-UJS"
+    }
+},
+{
+    "model": "timetable.offering",
+    "pk": 54445,
+    "fields": {
+        "section": 36181,
+        "day": "T",
+        "time_start": "10:00",
+        "time_end": "11:00",
+        "location": "90W-UJS"
+    }
+},
+{
+    "model": "timetable.offering",
+    "pk": 38254,
+    "fields": {
+        "section": 23860,
+        "day": "T",
+        "time_start": "10:00",
+        "time_end": "11:00",
+        "location": "90W-UJS"
+    }
+},
+{
+    "model": "timetable.offering",
+    "pk": 38255,
+    "fields": {
+        "section": 23860,
+        "day": "F",
+        "time_start": "17:00",
+        "time_end": "18:00",
+        "location": "90W-UJS"
+    }
+},
+{
+    "model": "timetable.offering",
+    "pk": 38256,
+    "fields": {
+        "section": 23860,
+        "day": "R",
+        "time_start": "10:00",
+        "time_end": "11:00",
+        "location": "90W-UJS"
+    }
+},
+{
+    "model": "timetable.offering",
+    "pk": 54440,
+    "fields": {
+        "section": 36180,
+        "day": "T",
+        "time_start": "10:00",
+        "time_end": "11:00",
+        "location": "90W-UJS"
+    }
+},
+{
+    "model": "timetable.offering",
+    "pk": 54441,
+    "fields": {
+        "section": 36180,
+        "day": "F",
+        "time_start": "17:00",
+        "time_end": "18:00",
+        "location": "90W-UJS"
+    }
+},
+{
+    "model": "timetable.offering",
+    "pk": 54442,
+    "fields": {
+        "section": 36180,
+        "day": "R",
+        "time_start": "10:00",
+        "time_end": "11:00",
+        "location": "90W-UJS"
+    }
+},
+{
+    "model": "timetable.offering",
+    "pk": 32413,
+    "fields": {
+        "section": 19406,
+        "day": "R",
+        "time_start": "10:00",
+        "time_end": "11:00",
+        "location": "90W-UJS"
+    }
+},
+{
+    "model": "timetable.offering",
+    "pk": 32414,
+    "fields": {
+        "section": 19406,
+        "day": "F",
+        "time_start": "17:00",
+        "time_end": "18:00",
+        "location": "90W-UJS"
+    }
+},
+{
+    "model": "timetable.offering",
+    "pk": 32415,
+    "fields": {
+        "section": 19406,
+        "day": "T",
+        "time_start": "10:00",
+        "time_end": "11:00",
+        "location": "90W-UJS"
+    }
+},
+{
+    "model": "timetable.offering",
+    "pk": 54437,
+    "fields": {
+        "section": 36179,
+        "day": "T",
+        "time_start": "10:00",
+        "time_end": "11:00",
+        "location": "90W-UJS"
+    }
+},
+{
+    "model": "timetable.offering",
+    "pk": 54438,
+    "fields": {
+        "section": 36179,
+        "day": "F",
+        "time_start": "17:00",
+        "time_end": "18:00",
+        "location": "90W-UJS"
+    }
+},
+{
+    "model": "timetable.offering",
+    "pk": 54439,
+    "fields": {
+        "section": 36179,
+        "day": "R",
+        "time_start": "10:00",
+        "time_end": "11:00",
+        "location": "90W-UJS"
+    }
+},
+{
+    "model": "timetable.offering",
+    "pk": 38251,
+    "fields": {
+        "section": 23859,
+        "day": "R",
+        "time_start": "10:00",
+        "time_end": "11:00",
+        "location": "90W-UJS"
+    }
+},
+{
+    "model": "timetable.offering",
+    "pk": 38252,
+    "fields": {
+        "section": 23859,
+        "day": "F",
+        "time_start": "17:00",
+        "time_end": "18:00",
+        "location": "90W-UJS"
+    }
+},
+{
+    "model": "timetable.offering",
+    "pk": 38253,
+    "fields": {
+        "section": 23859,
+        "day": "T",
+        "time_start": "10:00",
+        "time_end": "11:00",
+        "location": "90W-UJS"
+    }
+},
+{
+    "model": "timetable.offering",
+    "pk": 54434,
+    "fields": {
+        "section": 36178,
+        "day": "R",
+        "time_start": "10:00",
+        "time_end": "11:00",
+        "location": "90W-UJS"
+    }
+},
+{
+    "model": "timetable.offering",
+    "pk": 54435,
+    "fields": {
+        "section": 36178,
+        "day": "F",
+        "time_start": "17:00",
+        "time_end": "18:00",
+        "location": "90W-UJS"
+    }
+},
+{
+    "model": "timetable.offering",
+    "pk": 54436,
+    "fields": {
+        "section": 36178,
+        "day": "T",
+        "time_start": "10:00",
+        "time_end": "11:00",
+        "location": "90W-UJS"
+    }
+},
+{
+    "model": "timetable.offering",
+    "pk": 27900,
+    "fields": {
+        "section": 16148,
+        "day": "T",
+        "time_start": "10:00",
+        "time_end": "11:00",
+        "location": "90W-UJS"
+    }
+},
+{
+    "model": "timetable.offering",
+    "pk": 27901,
+    "fields": {
+        "section": 16148,
+        "day": "F",
+        "time_start": "17:00",
+        "time_end": "18:00",
+        "location": "90W-UJS"
+    }
+},
+{
+    "model": "timetable.offering",
+    "pk": 27902,
+    "fields": {
+        "section": 16148,
+        "day": "R",
+        "time_start": "10:00",
+        "time_end": "11:00",
+        "location": "90W-UJS"
+    }
+},
+{
+    "model": "timetable.offering",
+    "pk": 54432,
+    "fields": {
+        "section": 36177,
+        "day": "W",
+        "time_start": "11:00",
+        "time_end": "13:00",
+        "location": "90W-380"
+    }
+},
+{
+    "model": "timetable.offering",
+    "pk": 54433,
+    "fields": {
+        "section": 36177,
+        "day": "M",
+        "time_start": "11:00",
+        "time_end": "13:00",
+        "location": "90W-380"
+    }
+},
+{
+    "model": "timetable.offering",
+    "pk": 38249,
+    "fields": {
+        "section": 23858,
+        "day": "M",
+        "time_start": "11:00",
+        "time_end": "13:00",
+        "location": "90W-380"
+    }
+},
+{
+    "model": "timetable.offering",
+    "pk": 38250,
+    "fields": {
+        "section": 23858,
+        "day": "W",
+        "time_start": "11:00",
+        "time_end": "13:00",
+        "location": "90W-380"
+    }
+},
+{
+    "model": "timetable.offering",
+    "pk": 54430,
+    "fields": {
+        "section": 36176,
+        "day": "M",
+        "time_start": "11:00",
+        "time_end": "13:00",
+        "location": "90W-380"
+    }
+},
+{
+    "model": "timetable.offering",
+    "pk": 54431,
+    "fields": {
+        "section": 36176,
+        "day": "W",
+        "time_start": "11:00",
+        "time_end": "13:00",
+        "location": "90W-380"
+    }
+},
+{
+    "model": "timetable.offering",
+    "pk": 32411,
+    "fields": {
+        "section": 19405,
+        "day": "W",
+        "time_start": "11:00",
+        "time_end": "13:00",
+        "location": "90W-380"
+    }
+},
+{
+    "model": "timetable.offering",
+    "pk": 32412,
+    "fields": {
+        "section": 19405,
+        "day": "M",
+        "time_start": "11:00",
+        "time_end": "13:00",
+        "location": "90W-380"
+    }
+},
+{
+    "model": "timetable.offering",
+    "pk": 54428,
+    "fields": {
+        "section": 36175,
+        "day": "M",
+        "time_start": "11:00",
+        "time_end": "13:00",
+        "location": "90W-380"
+    }
+},
+{
+    "model": "timetable.offering",
+    "pk": 54429,
+    "fields": {
+        "section": 36175,
+        "day": "W",
+        "time_start": "11:00",
+        "time_end": "13:00",
+        "location": "90W-380"
+    }
+},
+{
+    "model": "timetable.offering",
+    "pk": 38247,
+    "fields": {
+        "section": 23857,
+        "day": "W",
+        "time_start": "11:00",
+        "time_end": "13:00",
+        "location": "90W-380"
+    }
+},
+{
+    "model": "timetable.offering",
+    "pk": 38248,
+    "fields": {
+        "section": 23857,
+        "day": "M",
+        "time_start": "11:00",
+        "time_end": "13:00",
+        "location": "90W-380"
+    }
+},
+{
+    "model": "timetable.offering",
+    "pk": 54426,
+    "fields": {
+        "section": 36174,
+        "day": "W",
+        "time_start": "11:00",
+        "time_end": "13:00",
+        "location": "90W-380"
+    }
+},
+{
+    "model": "timetable.offering",
+    "pk": 54427,
+    "fields": {
+        "section": 36174,
+        "day": "M",
+        "time_start": "11:00",
+        "time_end": "13:00",
+        "location": "90W-380"
+    }
+},
+{
+    "model": "timetable.offering",
+    "pk": 27898,
+    "fields": {
+        "section": 16147,
+        "day": "M",
+        "time_start": "11:00",
+        "time_end": "13:00",
+        "location": "90W-380"
+    }
+},
+{
+    "model": "timetable.offering",
+    "pk": 27899,
+    "fields": {
+        "section": 16147,
+        "day": "W",
+        "time_start": "11:00",
+        "time_end": "13:00",
+        "location": "90W-380"
+    }
+},
+{
+    "model": "timetable.offering",
+    "pk": 53880,
+    "fields": {
+        "section": 35789,
+        "day": "W",
+        "time_start": "11:00",
+        "time_end": "13:00",
+        "location": "90W-UJS"
+    }
+},
+{
+    "model": "timetable.offering",
+    "pk": 53881,
+    "fields": {
+        "section": 35789,
+        "day": "M",
+        "time_start": "11:00",
+        "time_end": "13:00",
+        "location": "90W-UJS"
+    }
+},
+{
+    "model": "timetable.offering",
+    "pk": 37973,
+    "fields": {
+        "section": 23664,
+        "day": "M",
+        "time_start": "11:00",
+        "time_end": "13:00",
+        "location": "90W-UJS"
+    }
+},
+{
+    "model": "timetable.offering",
+    "pk": 37974,
+    "fields": {
+        "section": 23664,
+        "day": "W",
+        "time_start": "11:00",
+        "time_end": "13:00",
+        "location": "90W-UJS"
+    }
+},
+{
+    "model": "timetable.offering",
+    "pk": 53878,
+    "fields": {
+        "section": 35788,
+        "day": "M",
+        "time_start": "11:00",
+        "time_end": "13:00",
+        "location": "90W-UJS"
+    }
+},
+{
+    "model": "timetable.offering",
+    "pk": 53879,
+    "fields": {
+        "section": 35788,
+        "day": "W",
+        "time_start": "11:00",
+        "time_end": "13:00",
+        "location": "90W-UJS"
+    }
+},
+{
+    "model": "timetable.offering",
+    "pk": 32273,
+    "fields": {
+        "section": 19308,
+        "day": "W",
+        "time_start": "11:00",
+        "time_end": "13:00",
+        "location": "90W-UJS"
+    }
+},
+{
+    "model": "timetable.offering",
+    "pk": 32274,
+    "fields": {
+        "section": 19308,
+        "day": "M",
+        "time_start": "11:00",
+        "time_end": "13:00",
+        "location": "90W-UJS"
+    }
+},
+{
+    "model": "timetable.offering",
+    "pk": 53876,
+    "fields": {
+        "section": 35787,
+        "day": "M",
+        "time_start": "11:00",
+        "time_end": "13:00",
+        "location": "90W-UJS"
+    }
+},
+{
+    "model": "timetable.offering",
+    "pk": 53877,
+    "fields": {
+        "section": 35787,
+        "day": "W",
+        "time_start": "11:00",
+        "time_end": "13:00",
+        "location": "90W-UJS"
+    }
+},
+{
+    "model": "timetable.offering",
+    "pk": 37971,
+    "fields": {
+        "section": 23663,
+        "day": "W",
+        "time_start": "11:00",
+        "time_end": "13:00",
+        "location": "90W-UJS"
+    }
+},
+{
+    "model": "timetable.offering",
+    "pk": 37972,
+    "fields": {
+        "section": 23663,
+        "day": "M",
+        "time_start": "11:00",
+        "time_end": "13:00",
+        "location": "90W-UJS"
+    }
+},
+{
+    "model": "timetable.offering",
+    "pk": 53874,
+    "fields": {
+        "section": 35786,
+        "day": "W",
+        "time_start": "11:00",
+        "time_end": "13:00",
+        "location": "90W-UJS"
+    }
+},
+{
+    "model": "timetable.offering",
+    "pk": 53875,
+    "fields": {
+        "section": 35786,
+        "day": "M",
+        "time_start": "11:00",
+        "time_end": "13:00",
+        "location": "90W-UJS"
+    }
+},
+{
+    "model": "timetable.offering",
+    "pk": 27896,
+    "fields": {
+        "section": 15803,
+        "day": "M",
+        "time_start": "11:00",
+        "time_end": "13:00",
+        "location": "90W-UJS"
+    }
+},
+{
+    "model": "timetable.offering",
+    "pk": 27897,
+    "fields": {
+        "section": 15803,
+        "day": "W",
+        "time_start": "11:00",
+        "time_end": "13:00",
+        "location": "90W-UJS"
+    }
+},
+{
+    "model": "timetable.offering",
+    "pk": 26538,
+    "fields": {
+        "section": 15806,
+        "day": "T",
+        "time_start": "19:00",
+        "time_end": "9:00",
+        "location": "90W-UJS"
+    }
+},
+{
+    "model": "timetable.offering",
+    "pk": 26539,
+    "fields": {
+        "section": 15806,
+        "day": "R",
+        "time_start": "19:00",
+        "time_end": "9:00",
+        "location": "90W-UJS"
+    }
+},
+{
+    "model": "timetable.offering",
+    "pk": 26535,
+    "fields": {
+        "section": 15805,
+        "day": "T",
+        "time_start": "10:00",
+        "time_end": "11:00",
+        "location": "90W-UJS"
+    }
+},
+{
+    "model": "timetable.offering",
+    "pk": 26536,
+    "fields": {
+        "section": 15805,
+        "day": "F",
+        "time_start": "17:00",
+        "time_end": "18:00",
+        "location": "90W-UJS"
+    }
+},
+{
+    "model": "timetable.offering",
+    "pk": 26537,
+    "fields": {
+        "section": 15805,
+        "day": "R",
+        "time_start": "10:00",
+        "time_end": "11:00",
+        "location": "90W-UJS"
+    }
+},
+{
+    "model": "timetable.offering",
+    "pk": 26533,
+    "fields": {
+        "section": 15804,
+        "day": "M",
+        "time_start": "11:00",
+        "time_end": "13:00",
+        "location": "90W-380"
+    }
+},
+{
+    "model": "timetable.offering",
+    "pk": 26534,
+    "fields": {
+        "section": 15804,
+        "day": "W",
+        "time_start": "11:00",
+        "time_end": "13:00",
+        "location": "90W-380"
+    }
+},
+{
+    "model": "timetable.offering",
+    "pk": 44922,
+    "fields": {
+        "section": 28901,
+        "day": "R",
+        "time_start": "13:00",
+        "time_end": "14:00",
+        "location": "320"
+    }
+},
+{
+    "model": "timetable.offering",
+    "pk": 40681,
+    "fields": {
+        "section": 25691,
+        "day": "R",
+        "time_start": "13:00",
+        "time_end": "14:00",
+        "location": "320"
+    }
+},
+{
+    "model": "timetable.offering",
+    "pk": 44921,
+    "fields": {
+        "section": 28900,
+        "day": "R",
+        "time_start": "13:00",
+        "time_end": "14:00",
+        "location": "320"
+    }
+},
+{
+    "model": "timetable.offering",
+    "pk": 33629,
+    "fields": {
+        "section": 20323,
+        "day": "R",
+        "time_start": "13:00",
+        "time_end": "14:00",
+        "location": "320"
+    }
+},
+{
+    "model": "timetable.offering",
+    "pk": 44920,
+    "fields": {
+        "section": 28899,
+        "day": "R",
+        "time_start": "13:00",
+        "time_end": "14:00",
+        "location": "320"
+    }
+},
+{
+    "model": "timetable.offering",
+    "pk": 40680,
+    "fields": {
+        "section": 25690,
+        "day": "R",
+        "time_start": "13:00",
+        "time_end": "14:00",
+        "location": "320"
+    }
+},
+{
+    "model": "timetable.offering",
+    "pk": 44919,
+    "fields": {
+        "section": 28898,
+        "day": "R",
+        "time_start": "13:00",
+        "time_end": "14:00",
+        "location": "320"
+    }
+},
+{
+    "model": "timetable.offering",
+    "pk": 30038,
+    "fields": {
+        "section": 17590,
+        "day": "R",
+        "time_start": "13:00",
+        "time_end": "14:00",
+        "location": "320"
+    }
+},
+{
+    "model": "timetable.offering",
+    "pk": 43662,
+    "fields": {
+        "section": 27949,
+        "day": "T",
+        "time_start": "14:00",
+        "time_end": "15:00",
+        "location": "320"
+    }
+},
+{
+    "model": "timetable.offering",
+    "pk": 40051,
+    "fields": {
+        "section": 25215,
+        "day": "T",
+        "time_start": "14:00",
+        "time_end": "15:00",
+        "location": "320"
+    }
+},
+{
+    "model": "timetable.offering",
+    "pk": 43661,
+    "fields": {
+        "section": 27948,
+        "day": "T",
+        "time_start": "14:00",
+        "time_end": "15:00",
+        "location": "320"
+    }
+},
+{
+    "model": "timetable.offering",
+    "pk": 33314,
+    "fields": {
+        "section": 20085,
+        "day": "T",
+        "time_start": "14:00",
+        "time_end": "15:00",
+        "location": "320"
+    }
+},
+{
+    "model": "timetable.offering",
+    "pk": 43660,
+    "fields": {
+        "section": 27947,
+        "day": "T",
+        "time_start": "14:00",
+        "time_end": "15:00",
+        "location": "320"
+    }
+},
+{
+    "model": "timetable.offering",
+    "pk": 40050,
+    "fields": {
+        "section": 25214,
+        "day": "T",
+        "time_start": "14:00",
+        "time_end": "15:00",
+        "location": "320"
+    }
+},
+{
+    "model": "timetable.offering",
+    "pk": 43659,
+    "fields": {
+        "section": 27946,
+        "day": "T",
+        "time_start": "14:00",
+        "time_end": "15:00",
+        "location": "320"
+    }
+},
+{
+    "model": "timetable.offering",
+    "pk": 29723,
+    "fields": {
+        "section": 17352,
+        "day": "T",
+        "time_start": "14:00",
+        "time_end": "15:00",
+        "location": "320"
+    }
+},
+{
+    "model": "timetable.offering",
+    "pk": 43110,
+    "fields": {
+        "section": 27553,
+        "day": "T",
+        "time_start": "13:00",
+        "time_end": "14:00",
+        "location": "320"
+    }
+},
+{
+    "model": "timetable.offering",
+    "pk": 39775,
+    "fields": {
+        "section": 25017,
+        "day": "T",
+        "time_start": "13:00",
+        "time_end": "14:00",
+        "location": "320"
+    }
+},
+{
+    "model": "timetable.offering",
+    "pk": 43109,
+    "fields": {
+        "section": 27552,
+        "day": "T",
+        "time_start": "13:00",
+        "time_end": "14:00",
+        "location": "320"
+    }
+},
+{
+    "model": "timetable.offering",
+    "pk": 33176,
+    "fields": {
+        "section": 19986,
+        "day": "T",
+        "time_start": "13:00",
+        "time_end": "14:00",
+        "location": "320"
+    }
+},
+{
+    "model": "timetable.offering",
+    "pk": 43108,
+    "fields": {
+        "section": 27551,
+        "day": "T",
+        "time_start": "13:00",
+        "time_end": "14:00",
+        "location": "320"
+    }
+},
+{
+    "model": "timetable.offering",
+    "pk": 39774,
+    "fields": {
+        "section": 25016,
+        "day": "T",
+        "time_start": "13:00",
+        "time_end": "14:00",
+        "location": "320"
+    }
+},
+{
+    "model": "timetable.offering",
+    "pk": 43107,
+    "fields": {
+        "section": 27550,
+        "day": "T",
+        "time_start": "13:00",
+        "time_end": "14:00",
+        "location": "320"
+    }
+},
+{
+    "model": "timetable.offering",
+    "pk": 29585,
+    "fields": {
+        "section": 17253,
+        "day": "T",
+        "time_start": "13:00",
+        "time_end": "14:00",
+        "location": "320"
+    }
+},
+{
+    "model": "timetable.offering",
+    "pk": 41310,
+    "fields": {
+        "section": 26185,
+        "day": "R",
+        "time_start": "13:00",
+        "time_end": "14:00",
+        "location": "320"
+    }
+},
+{
+    "model": "timetable.offering",
+    "pk": 38875,
+    "fields": {
+        "section": 24333,
+        "day": "R",
+        "time_start": "13:00",
+        "time_end": "14:00",
+        "location": "320"
+    }
+},
+{
+    "model": "timetable.offering",
+    "pk": 41309,
+    "fields": {
+        "section": 26184,
+        "day": "R",
+        "time_start": "13:00",
+        "time_end": "14:00",
+        "location": "320"
+    }
+},
+{
+    "model": "timetable.offering",
+    "pk": 32725,
+    "fields": {
+        "section": 19643,
+        "day": "R",
+        "time_start": "13:00",
+        "time_end": "14:00",
+        "location": "320"
+    }
+},
+{
+    "model": "timetable.offering",
+    "pk": 41308,
+    "fields": {
+        "section": 26183,
+        "day": "R",
+        "time_start": "13:00",
+        "time_end": "14:00",
+        "location": "320"
+    }
+},
+{
+    "model": "timetable.offering",
+    "pk": 38874,
+    "fields": {
+        "section": 24332,
+        "day": "R",
+        "time_start": "13:00",
+        "time_end": "14:00",
+        "location": "320"
+    }
+},
+{
+    "model": "timetable.offering",
+    "pk": 41307,
+    "fields": {
+        "section": 26182,
+        "day": "R",
+        "time_start": "13:00",
+        "time_end": "14:00",
+        "location": "320"
+    }
+},
+{
+    "model": "timetable.offering",
+    "pk": 27895,
+    "fields": {
+        "section": 16146,
+        "day": "R",
+        "time_start": "13:00",
+        "time_end": "14:00",
+        "location": "320"
+    }
+},
+{
+    "model": "timetable.offering",
+    "pk": 54425,
+    "fields": {
+        "section": 36173,
+        "day": "T",
+        "time_start": "14:00",
+        "time_end": "15:00",
+        "location": "320"
+    }
+},
+{
+    "model": "timetable.offering",
+    "pk": 38246,
+    "fields": {
+        "section": 23856,
+        "day": "T",
+        "time_start": "14:00",
+        "time_end": "15:00",
+        "location": "320"
+    }
+},
+{
+    "model": "timetable.offering",
+    "pk": 54424,
+    "fields": {
+        "section": 36172,
+        "day": "T",
+        "time_start": "14:00",
+        "time_end": "15:00",
+        "location": "320"
+    }
+},
+{
+    "model": "timetable.offering",
+    "pk": 32410,
+    "fields": {
+        "section": 19404,
+        "day": "T",
+        "time_start": "14:00",
+        "time_end": "15:00",
+        "location": "320"
+    }
+},
+{
+    "model": "timetable.offering",
+    "pk": 54423,
+    "fields": {
+        "section": 36171,
+        "day": "T",
+        "time_start": "14:00",
+        "time_end": "15:00",
+        "location": "320"
+    }
+},
+{
+    "model": "timetable.offering",
+    "pk": 38245,
+    "fields": {
+        "section": 23855,
+        "day": "T",
+        "time_start": "14:00",
+        "time_end": "15:00",
+        "location": "320"
+    }
+},
+{
+    "model": "timetable.offering",
+    "pk": 54422,
+    "fields": {
+        "section": 36170,
+        "day": "T",
+        "time_start": "14:00",
+        "time_end": "15:00",
+        "location": "320"
+    }
+},
+{
+    "model": "timetable.offering",
+    "pk": 27894,
+    "fields": {
+        "section": 16145,
+        "day": "T",
+        "time_start": "14:00",
+        "time_end": "15:00",
+        "location": "320"
+    }
+},
+{
+    "model": "timetable.offering",
+    "pk": 53941,
+    "fields": {
+        "section": 35841,
+        "day": "T",
+        "time_start": "13:00",
+        "time_end": "14:00",
+        "location": "320"
+    }
+},
+{
+    "model": "timetable.offering",
+    "pk": 38004,
+    "fields": {
+        "section": 23690,
+        "day": "T",
+        "time_start": "13:00",
+        "time_end": "14:00",
+        "location": "320"
+    }
+},
+{
+    "model": "timetable.offering",
+    "pk": 53940,
+    "fields": {
+        "section": 35840,
+        "day": "T",
+        "time_start": "13:00",
+        "time_end": "14:00",
+        "location": "320"
+    }
+},
+{
+    "model": "timetable.offering",
+    "pk": 32289,
+    "fields": {
+        "section": 19321,
+        "day": "T",
+        "time_start": "13:00",
+        "time_end": "14:00",
+        "location": "320"
+    }
+},
+{
+    "model": "timetable.offering",
+    "pk": 53939,
+    "fields": {
+        "section": 35839,
+        "day": "T",
+        "time_start": "13:00",
+        "time_end": "14:00",
+        "location": "320"
+    }
+},
+{
+    "model": "timetable.offering",
+    "pk": 38003,
+    "fields": {
+        "section": 23689,
+        "day": "T",
+        "time_start": "13:00",
+        "time_end": "14:00",
+        "location": "320"
+    }
+},
+{
+    "model": "timetable.offering",
+    "pk": 53938,
+    "fields": {
+        "section": 35838,
+        "day": "T",
+        "time_start": "13:00",
+        "time_end": "14:00",
+        "location": "320"
+    }
+},
+{
+    "model": "timetable.offering",
+    "pk": 27893,
+    "fields": {
+        "section": 15799,
+        "day": "T",
+        "time_start": "13:00",
+        "time_end": "14:00",
+        "location": "320"
+    }
+},
+{
+    "model": "timetable.offering",
+    "pk": 26530,
+    "fields": {
+        "section": 15801,
+        "day": "R",
+        "time_start": "13:00",
+        "time_end": "14:00",
+        "location": "320"
+    }
+},
+{
+    "model": "timetable.offering",
+    "pk": 26529,
+    "fields": {
+        "section": 15800,
+        "day": "T",
+        "time_start": "14:00",
+        "time_end": "15:00",
+        "location": "320"
+    }
+},
+{
+    "model": "timetable.offering",
+    "pk": 45222,
+    "fields": {
+        "section": 29133,
+        "day": "M",
+        "time_start": "14:00",
+        "time_end": "16:00",
+        "location": "90W-UJS/LJS"
+    }
+},
+{
+    "model": "timetable.offering",
+    "pk": 40831,
+    "fields": {
+        "section": 25807,
+        "day": "M",
+        "time_start": "14:00",
+        "time_end": "16:00",
+        "location": "90W-UJS/LJS"
+    }
+},
+{
+    "model": "timetable.offering",
+    "pk": 45221,
+    "fields": {
+        "section": 29132,
+        "day": "M",
+        "time_start": "14:00",
+        "time_end": "16:00",
+        "location": "90W-UJS/LJS"
+    }
+},
+{
+    "model": "timetable.offering",
+    "pk": 33704,
+    "fields": {
+        "section": 20381,
+        "day": "M",
+        "time_start": "14:00",
+        "time_end": "16:00",
+        "location": "90W-UJS/LJS"
+    }
+},
+{
+    "model": "timetable.offering",
+    "pk": 45220,
+    "fields": {
+        "section": 29131,
+        "day": "M",
+        "time_start": "14:00",
+        "time_end": "16:00",
+        "location": "90W-UJS/LJS"
+    }
+},
+{
+    "model": "timetable.offering",
+    "pk": 40830,
+    "fields": {
+        "section": 25806,
+        "day": "M",
+        "time_start": "14:00",
+        "time_end": "16:00",
+        "location": "90W-UJS/LJS"
+    }
+},
+{
+    "model": "timetable.offering",
+    "pk": 45219,
+    "fields": {
+        "section": 29130,
+        "day": "M",
+        "time_start": "14:00",
+        "time_end": "16:00",
+        "location": "90W-UJS/LJS"
+    }
+},
+{
+    "model": "timetable.offering",
+    "pk": 30111,
+    "fields": {
+        "section": 17646,
+        "day": "M",
+        "time_start": "14:00",
+        "time_end": "16:00",
+        "location": "90W-UJS/LJS"
+    }
+},
+{
+    "model": "timetable.offering",
+    "pk": 43658,
+    "fields": {
+        "section": 27945,
+        "day": "R",
+        "time_start": "13:00",
+        "time_end": "14:00",
+        "location": "90W-UJS"
+    }
+},
+{
+    "model": "timetable.offering",
+    "pk": 40049,
+    "fields": {
+        "section": 25213,
+        "day": "R",
+        "time_start": "13:00",
+        "time_end": "14:00",
+        "location": "90W-UJS"
+    }
+},
+{
+    "model": "timetable.offering",
+    "pk": 43657,
+    "fields": {
+        "section": 27944,
+        "day": "R",
+        "time_start": "13:00",
+        "time_end": "14:00",
+        "location": "90W-UJS"
+    }
+},
+{
+    "model": "timetable.offering",
+    "pk": 33313,
+    "fields": {
+        "section": 20084,
+        "day": "R",
+        "time_start": "13:00",
+        "time_end": "14:00",
+        "location": "90W-UJS"
+    }
+},
+{
+    "model": "timetable.offering",
+    "pk": 43656,
+    "fields": {
+        "section": 27943,
+        "day": "R",
+        "time_start": "13:00",
+        "time_end": "14:00",
+        "location": "90W-UJS"
+    }
+},
+{
+    "model": "timetable.offering",
+    "pk": 40048,
+    "fields": {
+        "section": 25212,
+        "day": "R",
+        "time_start": "13:00",
+        "time_end": "14:00",
+        "location": "90W-UJS"
+    }
+},
+{
+    "model": "timetable.offering",
+    "pk": 43655,
+    "fields": {
+        "section": 27942,
+        "day": "R",
+        "time_start": "13:00",
+        "time_end": "14:00",
+        "location": "90W-UJS"
+    }
+},
+{
+    "model": "timetable.offering",
+    "pk": 29722,
+    "fields": {
+        "section": 17351,
+        "day": "R",
+        "time_start": "13:00",
+        "time_end": "14:00",
+        "location": "90W-UJS"
+    }
+},
+{
+    "model": "timetable.offering",
+    "pk": 41616,
+    "fields": {
+        "section": 26423,
+        "day": "M",
+        "time_start": "14:00",
+        "time_end": "16:00",
+        "location": "90W-UJS/LJS"
+    }
+},
+{
+    "model": "timetable.offering",
+    "pk": 39028,
+    "fields": {
+        "section": 24452,
+        "day": "M",
+        "time_start": "14:00",
+        "time_end": "16:00",
+        "location": "90W-UJS/LJS"
+    }
+},
+{
+    "model": "timetable.offering",
+    "pk": 41615,
+    "fields": {
+        "section": 26422,
+        "day": "M",
+        "time_start": "14:00",
+        "time_end": "16:00",
+        "location": "90W-UJS/LJS"
+    }
+},
+{
+    "model": "timetable.offering",
+    "pk": 32802,
+    "fields": {
+        "section": 19703,
+        "day": "M",
+        "time_start": "14:00",
+        "time_end": "16:00",
+        "location": "90W-UJS/LJS"
+    }
+},
+{
+    "model": "timetable.offering",
+    "pk": 41614,
+    "fields": {
+        "section": 26421,
+        "day": "M",
+        "time_start": "14:00",
+        "time_end": "16:00",
+        "location": "90W-UJS/LJS"
+    }
+},
+{
+    "model": "timetable.offering",
+    "pk": 39027,
+    "fields": {
+        "section": 24451,
+        "day": "M",
+        "time_start": "14:00",
+        "time_end": "16:00",
+        "location": "90W-UJS/LJS"
+    }
+},
+{
+    "model": "timetable.offering",
+    "pk": 41613,
+    "fields": {
+        "section": 26420,
+        "day": "M",
+        "time_start": "14:00",
+        "time_end": "16:00",
+        "location": "90W-UJS/LJS"
+    }
+},
+{
+    "model": "timetable.offering",
+    "pk": 27891,
+    "fields": {
+        "section": 15797,
+        "day": "M",
+        "time_start": "14:00",
+        "time_end": "16:00",
+        "location": "90W-UJS/LJS"
+    }
+},
+{
+    "model": "timetable.offering",
+    "pk": 54421,
+    "fields": {
+        "section": 36169,
+        "day": "R",
+        "time_start": "13:00",
+        "time_end": "14:00",
+        "location": "90W-UJS"
+    }
+},
+{
+    "model": "timetable.offering",
+    "pk": 38244,
+    "fields": {
+        "section": 23854,
+        "day": "R",
+        "time_start": "13:00",
+        "time_end": "14:00",
+        "location": "90W-UJS"
+    }
+},
+{
+    "model": "timetable.offering",
+    "pk": 54420,
+    "fields": {
+        "section": 36168,
+        "day": "R",
+        "time_start": "13:00",
+        "time_end": "14:00",
+        "location": "90W-UJS"
+    }
+},
+{
+    "model": "timetable.offering",
+    "pk": 32409,
+    "fields": {
+        "section": 19403,
+        "day": "R",
+        "time_start": "13:00",
+        "time_end": "14:00",
+        "location": "90W-UJS"
+    }
+},
+{
+    "model": "timetable.offering",
+    "pk": 54419,
+    "fields": {
+        "section": 36167,
+        "day": "R",
+        "time_start": "13:00",
+        "time_end": "14:00",
+        "location": "90W-UJS"
+    }
+},
+{
+    "model": "timetable.offering",
+    "pk": 38243,
+    "fields": {
+        "section": 23853,
+        "day": "R",
+        "time_start": "13:00",
+        "time_end": "14:00",
+        "location": "90W-UJS"
+    }
+},
+{
+    "model": "timetable.offering",
+    "pk": 54418,
+    "fields": {
+        "section": 36166,
+        "day": "R",
+        "time_start": "13:00",
+        "time_end": "14:00",
+        "location": "90W-UJS"
+    }
+},
+{
+    "model": "timetable.offering",
+    "pk": 27892,
+    "fields": {
+        "section": 16144,
+        "day": "R",
+        "time_start": "13:00",
+        "time_end": "14:00",
+        "location": "90W-UJS"
+    }
+},
+{
+    "model": "timetable.offering",
+    "pk": 26527,
+    "fields": {
+        "section": 15798,
+        "day": "R",
+        "time_start": "13:00",
+        "time_end": "14:00",
+        "location": "90W-UJS"
+    }
+},
+{
+    "model": "timetable.offering",
+    "pk": 43854,
+    "fields": {
+        "section": 28081,
+        "day": "R",
+        "time_start": "9:00",
+        "time_end": "10:00",
+        "location": "320"
+    }
+},
+{
+    "model": "timetable.offering",
+    "pk": 40147,
+    "fields": {
+        "section": 25281,
+        "day": "R",
+        "time_start": "9:00",
+        "time_end": "10:00",
+        "location": "320"
+    }
+},
+{
+    "model": "timetable.offering",
+    "pk": 43853,
+    "fields": {
+        "section": 28080,
+        "day": "R",
+        "time_start": "9:00",
+        "time_end": "10:00",
+        "location": "320"
+    }
+},
+{
+    "model": "timetable.offering",
+    "pk": 33362,
+    "fields": {
+        "section": 20118,
+        "day": "R",
+        "time_start": "9:00",
+        "time_end": "10:00",
+        "location": "320"
+    }
+},
+{
+    "model": "timetable.offering",
+    "pk": 43852,
+    "fields": {
+        "section": 28079,
+        "day": "R",
+        "time_start": "9:00",
+        "time_end": "10:00",
+        "location": "320"
+    }
+},
+{
+    "model": "timetable.offering",
+    "pk": 40146,
+    "fields": {
+        "section": 25280,
+        "day": "R",
+        "time_start": "9:00",
+        "time_end": "10:00",
+        "location": "320"
+    }
+},
+{
+    "model": "timetable.offering",
+    "pk": 43851,
+    "fields": {
+        "section": 28078,
+        "day": "R",
+        "time_start": "9:00",
+        "time_end": "10:00",
+        "location": "320"
+    }
+},
+{
+    "model": "timetable.offering",
+    "pk": 29771,
+    "fields": {
+        "section": 17385,
+        "day": "R",
+        "time_start": "9:00",
+        "time_end": "10:00",
+        "location": "320"
+    }
+},
+{
+    "model": "timetable.offering",
+    "pk": 43150,
+    "fields": {
+        "section": 27585,
+        "day": "R",
+        "time_start": "10:00",
+        "time_end": "11:00",
+        "location": "320"
+    }
+},
+{
+    "model": "timetable.offering",
+    "pk": 39795,
+    "fields": {
+        "section": 25033,
+        "day": "R",
+        "time_start": "10:00",
+        "time_end": "11:00",
+        "location": "320"
+    }
+},
+{
+    "model": "timetable.offering",
+    "pk": 43149,
+    "fields": {
+        "section": 27584,
+        "day": "R",
+        "time_start": "10:00",
+        "time_end": "11:00",
+        "location": "320"
+    }
+},
+{
+    "model": "timetable.offering",
+    "pk": 33186,
+    "fields": {
+        "section": 19994,
+        "day": "R",
+        "time_start": "10:00",
+        "time_end": "11:00",
+        "location": "320"
+    }
+},
+{
+    "model": "timetable.offering",
+    "pk": 43148,
+    "fields": {
+        "section": 27583,
+        "day": "R",
+        "time_start": "10:00",
+        "time_end": "11:00",
+        "location": "320"
+    }
+},
+{
+    "model": "timetable.offering",
+    "pk": 39794,
+    "fields": {
+        "section": 25032,
+        "day": "R",
+        "time_start": "10:00",
+        "time_end": "11:00",
+        "location": "320"
+    }
+},
+{
+    "model": "timetable.offering",
+    "pk": 43147,
+    "fields": {
+        "section": 27582,
+        "day": "R",
+        "time_start": "10:00",
+        "time_end": "11:00",
+        "location": "320"
+    }
+},
+{
+    "model": "timetable.offering",
+    "pk": 29595,
+    "fields": {
+        "section": 17261,
+        "day": "R",
+        "time_start": "10:00",
+        "time_end": "11:00",
+        "location": "320"
+    }
+},
+{
+    "model": "timetable.offering",
+    "pk": 54617,
+    "fields": {
+        "section": 36309,
+        "day": "R",
+        "time_start": "9:00",
+        "time_end": "10:00",
+        "location": "320"
+    }
+},
+{
+    "model": "timetable.offering",
+    "pk": 38342,
+    "fields": {
+        "section": 23924,
+        "day": "R",
+        "time_start": "9:00",
+        "time_end": "10:00",
+        "location": "320"
+    }
+},
+{
+    "model": "timetable.offering",
+    "pk": 54616,
+    "fields": {
+        "section": 36308,
+        "day": "R",
+        "time_start": "9:00",
+        "time_end": "10:00",
+        "location": "320"
+    }
+},
+{
+    "model": "timetable.offering",
+    "pk": 32458,
+    "fields": {
+        "section": 19438,
+        "day": "R",
+        "time_start": "9:00",
+        "time_end": "10:00",
+        "location": "320"
+    }
+},
+{
+    "model": "timetable.offering",
+    "pk": 54615,
+    "fields": {
+        "section": 36307,
+        "day": "R",
+        "time_start": "9:00",
+        "time_end": "10:00",
+        "location": "320"
+    }
+},
+{
+    "model": "timetable.offering",
+    "pk": 38341,
+    "fields": {
+        "section": 23923,
+        "day": "R",
+        "time_start": "9:00",
+        "time_end": "10:00",
+        "location": "320"
+    }
+},
+{
+    "model": "timetable.offering",
+    "pk": 54614,
+    "fields": {
+        "section": 36306,
+        "day": "R",
+        "time_start": "9:00",
+        "time_end": "10:00",
+        "location": "320"
+    }
+},
+{
+    "model": "timetable.offering",
+    "pk": 27823,
+    "fields": {
+        "section": 16139,
+        "day": "R",
+        "time_start": "9:00",
+        "time_end": "10:00",
+        "location": "320"
+    }
+},
+{
+    "model": "timetable.offering",
+    "pk": 53913,
+    "fields": {
+        "section": 35813,
+        "day": "R",
+        "time_start": "10:00",
+        "time_end": "11:00",
+        "location": "320"
+    }
+},
+{
+    "model": "timetable.offering",
+    "pk": 37990,
+    "fields": {
+        "section": 23676,
+        "day": "R",
+        "time_start": "10:00",
+        "time_end": "11:00",
+        "location": "320"
+    }
+},
+{
+    "model": "timetable.offering",
+    "pk": 53912,
+    "fields": {
+        "section": 35812,
+        "day": "R",
+        "time_start": "10:00",
+        "time_end": "11:00",
+        "location": "320"
+    }
+},
+{
+    "model": "timetable.offering",
+    "pk": 32282,
+    "fields": {
+        "section": 19314,
+        "day": "R",
+        "time_start": "10:00",
+        "time_end": "11:00",
+        "location": "320"
+    }
+},
+{
+    "model": "timetable.offering",
+    "pk": 53911,
+    "fields": {
+        "section": 35811,
+        "day": "R",
+        "time_start": "10:00",
+        "time_end": "11:00",
+        "location": "320"
+    }
+},
+{
+    "model": "timetable.offering",
+    "pk": 37989,
+    "fields": {
+        "section": 23675,
+        "day": "R",
+        "time_start": "10:00",
+        "time_end": "11:00",
+        "location": "320"
+    }
+},
+{
+    "model": "timetable.offering",
+    "pk": 53910,
+    "fields": {
+        "section": 35810,
+        "day": "R",
+        "time_start": "10:00",
+        "time_end": "11:00",
+        "location": "320"
+    }
+},
+{
+    "model": "timetable.offering",
+    "pk": 27822,
+    "fields": {
+        "section": 15736,
+        "day": "R",
+        "time_start": "10:00",
+        "time_end": "11:00",
+        "location": "320"
+    }
+},
+{
+    "model": "timetable.offering",
+    "pk": 26686,
+    "fields": {
+        "section": 15737,
+        "day": "R",
+        "time_start": "9:00",
+        "time_end": "10:00",
+        "location": "320"
+    }
+},
+{
+    "model": "timetable.offering",
+    "pk": 27808,
+    "fields": {
+        "section": 15725,
+        "day": "W",
+        "time_start": "9:00",
+        "time_end": "10:00",
+        "location": "120"
+    }
+},
+{
+    "model": "timetable.offering",
+    "pk": 27811,
+    "fields": {
+        "section": 16134,
+        "day": "W",
+        "time_start": "10:00",
+        "time_end": "11:00",
+        "location": "120"
+    }
+},
+{
+    "model": "timetable.offering",
+    "pk": 27809,
+    "fields": {
+        "section": 16133,
+        "day": "W",
+        "time_start": "10:00",
+        "time_end": "11:00",
+        "location": "120"
+    }
+},
+{
+    "model": "timetable.offering",
+    "pk": 27810,
+    "fields": {
+        "section": 15727,
+        "day": "W",
+        "time_start": "9:00",
+        "time_end": "10:00",
+        "location": "120"
+    }
+},
+{
+    "model": "timetable.offering",
+    "pk": 26674,
+    "fields": {
+        "section": 15726,
+        "day": "W",
+        "time_start": "10:00",
+        "time_end": "11:00",
+        "location": "120"
+    }
+},
+{
+    "model": "timetable.section",
+    "pk": 29129,
+    "fields": {
+        "course": 6131,
+        "meeting_section": "P0101",
+        "size": -1,
+        "enrolment": -1,
+        "waitlist": -1,
+        "waitlist_size": -1,
+        "section_type": "P",
+        "instructors": "Sanborn",
+        "_semester": "Y",
+        "semester": 3
+    }
+},
+{
+    "model": "timetable.section",
+    "pk": 25805,
+    "fields": {
+        "course": 6131,
+        "meeting_section": "P0101",
+        "size": -1,
+        "enrolment": -1,
+        "waitlist": -1,
+        "waitlist_size": -1,
+        "section_type": "P",
+        "instructors": "Sanborn",
+        "_semester": "Y",
+        "semester": 1
+    }
+},
+{
+    "model": "timetable.section",
+    "pk": 29128,
+    "fields": {
+        "course": 6131,
+        "meeting_section": "P0101",
+        "size": -1,
+        "enrolment": -1,
+        "waitlist": -1,
+        "waitlist_size": -1,
+        "section_type": "P",
+        "instructors": "Sanborn",
+        "_semester": "Y",
+        "semester": 3
+    }
+},
+{
+    "model": "timetable.section",
+    "pk": 20380,
+    "fields": {
+        "course": 6131,
+        "meeting_section": "P0101",
+        "size": -1,
+        "enrolment": -1,
+        "waitlist": -1,
+        "waitlist_size": -1,
+        "section_type": "P",
+        "instructors": "Sanborn",
+        "_semester": "Y",
+        "semester": 1
+    }
+},
+{
+    "model": "timetable.section",
+    "pk": 29127,
+    "fields": {
+        "course": 6131,
+        "meeting_section": "P0101",
+        "size": -1,
+        "enrolment": -1,
+        "waitlist": -1,
+        "waitlist_size": -1,
+        "section_type": "P",
+        "instructors": "Sanborn",
+        "_semester": "Y",
+        "semester": 3
+    }
+},
+{
+    "model": "timetable.section",
+    "pk": 25804,
+    "fields": {
+        "course": 6131,
+        "meeting_section": "P0101",
+        "size": -1,
+        "enrolment": -1,
+        "waitlist": -1,
+        "waitlist_size": -1,
+        "section_type": "P",
+        "instructors": "Sanborn",
+        "_semester": "Y",
+        "semester": 1
+    }
+},
+{
+    "model": "timetable.section",
+    "pk": 29126,
+    "fields": {
+        "course": 6131,
+        "meeting_section": "P0101",
+        "size": -1,
+        "enrolment": -1,
+        "waitlist": -1,
+        "waitlist_size": -1,
+        "section_type": "P",
+        "instructors": "Sanborn",
+        "_semester": "Y",
+        "semester": 3
+    }
+},
+{
+    "model": "timetable.section",
+    "pk": 17645,
+    "fields": {
+        "course": 6131,
+        "meeting_section": "P0101",
+        "size": -1,
+        "enrolment": -1,
+        "waitlist": -1,
+        "waitlist_size": -1,
+        "section_type": "P",
+        "instructors": "Sanborn",
+        "_semester": "Y",
+        "semester": 1
+    }
+},
+{
+    "model": "timetable.section",
+    "pk": 29125,
+    "fields": {
+        "course": 6131,
+        "meeting_section": "P0101",
+        "size": -1,
+        "enrolment": -1,
+        "waitlist": -1,
+        "waitlist_size": -1,
+        "section_type": "P",
+        "instructors": "Sanborn",
+        "_semester": "Y",
+        "semester": 3
+    }
+},
+{
+    "model": "timetable.section",
+    "pk": 25803,
+    "fields": {
+        "course": 6131,
+        "meeting_section": "P0101",
+        "size": -1,
+        "enrolment": -1,
+        "waitlist": -1,
+        "waitlist_size": -1,
+        "section_type": "P",
+        "instructors": "Sanborn",
+        "_semester": "Y",
+        "semester": 1
+    }
+},
+{
+    "model": "timetable.section",
+    "pk": 29124,
+    "fields": {
+        "course": 6131,
+        "meeting_section": "P0101",
+        "size": -1,
+        "enrolment": -1,
+        "waitlist": -1,
+        "waitlist_size": -1,
+        "section_type": "P",
+        "instructors": "Sanborn",
+        "_semester": "Y",
+        "semester": 3
+    }
+},
+{
+    "model": "timetable.section",
+    "pk": 20379,
+    "fields": {
+        "course": 6131,
+        "meeting_section": "P0101",
+        "size": -1,
+        "enrolment": -1,
+        "waitlist": -1,
+        "waitlist_size": -1,
+        "section_type": "P",
+        "instructors": "Sanborn",
+        "_semester": "Y",
+        "semester": 1
+    }
+},
+{
+    "model": "timetable.section",
+    "pk": 29123,
+    "fields": {
+        "course": 6131,
+        "meeting_section": "P0101",
+        "size": -1,
+        "enrolment": -1,
+        "waitlist": -1,
+        "waitlist_size": -1,
+        "section_type": "P",
+        "instructors": "Sanborn",
+        "_semester": "Y",
+        "semester": 3
+    }
+},
+{
+    "model": "timetable.section",
+    "pk": 25802,
+    "fields": {
+        "course": 6131,
+        "meeting_section": "P0101",
+        "size": -1,
+        "enrolment": -1,
+        "waitlist": -1,
+        "waitlist_size": -1,
+        "section_type": "P",
+        "instructors": "Sanborn",
+        "_semester": "Y",
+        "semester": 1
+    }
+},
+{
+    "model": "timetable.section",
+    "pk": 29122,
+    "fields": {
+        "course": 6131,
+        "meeting_section": "P0101",
+        "size": -1,
+        "enrolment": -1,
+        "waitlist": -1,
+        "waitlist_size": -1,
+        "section_type": "P",
+        "instructors": "Sanborn",
+        "_semester": "Y",
+        "semester": 3
+    }
+},
+{
+    "model": "timetable.section",
+    "pk": 15807,
+    "fields": {
+        "course": 6131,
+        "meeting_section": "P0101",
+        "size": -1,
+        "enrolment": -1,
+        "waitlist": -1,
+        "waitlist_size": -1,
+        "section_type": "P",
+        "instructors": "Sanborn",
+        "_semester": "Y",
+        "semester": 1
+    }
+},
+{
+    "model": "timetable.section",
+    "pk": 27521,
+    "fields": {
+        "course": 6131,
+        "meeting_section": "P0201",
+        "size": -1,
+        "enrolment": -1,
+        "waitlist": -1,
+        "waitlist_size": -1,
+        "section_type": "P",
+        "instructors": "Sanborn",
+        "_semester": "Y",
+        "semester": 3
+    }
+},
+{
+    "model": "timetable.section",
+    "pk": 25001,
+    "fields": {
+        "course": 6131,
+        "meeting_section": "P0201",
+        "size": -1,
+        "enrolment": -1,
+        "waitlist": -1,
+        "waitlist_size": -1,
+        "section_type": "P",
+        "instructors": "Sanborn",
+        "_semester": "Y",
+        "semester": 1
+    }
+},
+{
+    "model": "timetable.section",
+    "pk": 27520,
+    "fields": {
+        "course": 6131,
+        "meeting_section": "P0201",
+        "size": -1,
+        "enrolment": -1,
+        "waitlist": -1,
+        "waitlist_size": -1,
+        "section_type": "P",
+        "instructors": "Sanborn",
+        "_semester": "Y",
+        "semester": 3
+    }
+},
+{
+    "model": "timetable.section",
+    "pk": 19978,
+    "fields": {
+        "course": 6131,
+        "meeting_section": "P0201",
+        "size": -1,
+        "enrolment": -1,
+        "waitlist": -1,
+        "waitlist_size": -1,
+        "section_type": "P",
+        "instructors": "Sanborn",
+        "_semester": "Y",
+        "semester": 1
+    }
+},
+{
+    "model": "timetable.section",
+    "pk": 27519,
+    "fields": {
+        "course": 6131,
+        "meeting_section": "P0201",
+        "size": -1,
+        "enrolment": -1,
+        "waitlist": -1,
+        "waitlist_size": -1,
+        "section_type": "P",
+        "instructors": "Sanborn",
+        "_semester": "Y",
+        "semester": 3
+    }
+},
+{
+    "model": "timetable.section",
+    "pk": 25000,
+    "fields": {
+        "course": 6131,
+        "meeting_section": "P0201",
+        "size": -1,
+        "enrolment": -1,
+        "waitlist": -1,
+        "waitlist_size": -1,
+        "section_type": "P",
+        "instructors": "Sanborn",
+        "_semester": "Y",
+        "semester": 1
+    }
+},
+{
+    "model": "timetable.section",
+    "pk": 27518,
+    "fields": {
+        "course": 6131,
+        "meeting_section": "P0201",
+        "size": -1,
+        "enrolment": -1,
+        "waitlist": -1,
+        "waitlist_size": -1,
+        "section_type": "P",
+        "instructors": "Sanborn",
+        "_semester": "Y",
+        "semester": 3
+    }
+},
+{
+    "model": "timetable.section",
+    "pk": 17245,
+    "fields": {
+        "course": 6131,
+        "meeting_section": "P0201",
+        "size": -1,
+        "enrolment": -1,
+        "waitlist": -1,
+        "waitlist_size": -1,
+        "section_type": "P",
+        "instructors": "Sanborn",
+        "_semester": "Y",
+        "semester": 1
+    }
+},
+{
+    "model": "timetable.section",
+    "pk": 27517,
+    "fields": {
+        "course": 6131,
+        "meeting_section": "P0201",
+        "size": -1,
+        "enrolment": -1,
+        "waitlist": -1,
+        "waitlist_size": -1,
+        "section_type": "P",
+        "instructors": "Sanborn",
+        "_semester": "Y",
+        "semester": 3
+    }
+},
+{
+    "model": "timetable.section",
+    "pk": 24999,
+    "fields": {
+        "course": 6131,
+        "meeting_section": "P0201",
+        "size": -1,
+        "enrolment": -1,
+        "waitlist": -1,
+        "waitlist_size": -1,
+        "section_type": "P",
+        "instructors": "Sanborn",
+        "_semester": "Y",
+        "semester": 1
+    }
+},
+{
+    "model": "timetable.section",
+    "pk": 27516,
+    "fields": {
+        "course": 6131,
+        "meeting_section": "P0201",
+        "size": -1,
+        "enrolment": -1,
+        "waitlist": -1,
+        "waitlist_size": -1,
+        "section_type": "P",
+        "instructors": "Sanborn",
+        "_semester": "Y",
+        "semester": 3
+    }
+},
+{
+    "model": "timetable.section",
+    "pk": 19977,
+    "fields": {
+        "course": 6131,
+        "meeting_section": "P0201",
+        "size": -1,
+        "enrolment": -1,
+        "waitlist": -1,
+        "waitlist_size": -1,
+        "section_type": "P",
+        "instructors": "Sanborn",
+        "_semester": "Y",
+        "semester": 1
+    }
+},
+{
+    "model": "timetable.section",
+    "pk": 27515,
+    "fields": {
+        "course": 6131,
+        "meeting_section": "P0201",
+        "size": -1,
+        "enrolment": -1,
+        "waitlist": -1,
+        "waitlist_size": -1,
+        "section_type": "P",
+        "instructors": "Sanborn",
+        "_semester": "Y",
+        "semester": 3
+    }
+},
+{
+    "model": "timetable.section",
+    "pk": 24998,
+    "fields": {
+        "course": 6131,
+        "meeting_section": "P0201",
+        "size": -1,
+        "enrolment": -1,
+        "waitlist": -1,
+        "waitlist_size": -1,
+        "section_type": "P",
+        "instructors": "Sanborn",
+        "_semester": "Y",
+        "semester": 1
+    }
+},
+{
+    "model": "timetable.section",
+    "pk": 27514,
+    "fields": {
+        "course": 6131,
+        "meeting_section": "P0201",
+        "size": -1,
+        "enrolment": -1,
+        "waitlist": -1,
+        "waitlist_size": -1,
+        "section_type": "P",
+        "instructors": "Sanborn",
+        "_semester": "Y",
+        "semester": 3
+    }
+},
+{
+    "model": "timetable.section",
+    "pk": 16150,
+    "fields": {
+        "course": 6131,
+        "meeting_section": "P0201",
+        "size": -1,
+        "enrolment": -1,
+        "waitlist": -1,
+        "waitlist_size": -1,
+        "section_type": "P",
+        "instructors": "Sanborn",
+        "_semester": "Y",
+        "semester": 1
+    }
+},
+{
+    "model": "timetable.section",
+    "pk": 15808,
+    "fields": {
+        "course": 6131,
+        "meeting_section": "P0201",
+        "size": -1,
+        "enrolment": -1,
+        "waitlist": -1,
+        "waitlist_size": -1,
+        "section_type": "P",
+        "instructors": "Sanborn",
+        "_semester": "",
+        "semester": 1
+    }
+},
+{
+    "model": "timetable.section",
+    "pk": 16141,
+    "fields": {
+        "course": 6090,
+        "meeting_section": "P0201",
+        "size": -1,
+        "enrolment": -1,
+        "waitlist": -1,
+        "waitlist_size": -1,
+        "section_type": "P",
+        "instructors": "Finch",
+        "_semester": "F",
+        "semester": 1
+    }
+},
+{
+    "model": "timetable.section",
+    "pk": 15753,
+    "fields": {
+        "course": 6090,
+        "meeting_section": "P0101",
+        "size": -1,
+        "enrolment": -1,
+        "waitlist": -1,
+        "waitlist_size": -1,
+        "section_type": "P",
+        "instructors": "Finch",
+        "_semester": "S",
+        "semester": 3
+    }
+},
+{
+    "model": "timetable.section",
+    "pk": 15751,
+    "fields": {
+        "course": 6090,
+        "meeting_section": "P0101",
+        "size": -1,
+        "enrolment": -1,
+        "waitlist": -1,
+        "waitlist_size": -1,
+        "section_type": "P",
+        "instructors": "Finch",
+        "_semester": "F",
+        "semester": 1
+    }
+},
+{
+    "model": "timetable.section",
+    "pk": 15752,
+    "fields": {
+        "course": 6090,
+        "meeting_section": "P0201",
+        "size": -1,
+        "enrolment": -1,
+        "waitlist": -1,
+        "waitlist_size": -1,
+        "section_type": "P",
+        "instructors": "Finch",
+        "_semester": "",
+        "semester": 1
+    }
+},
+{
+    "model": "timetable.section",
+    "pk": 27961,
+    "fields": {
+        "course": 6130,
+        "meeting_section": "P0401",
+        "size": -1,
+        "enrolment": -1,
+        "waitlist": -1,
+        "waitlist_size": -1,
+        "section_type": "P",
+        "instructors": "Foote",
+        "_semester": "Y",
+        "semester": 3
+    }
+},
+{
+    "model": "timetable.section",
+    "pk": 25221,
+    "fields": {
+        "course": 6130,
+        "meeting_section": "P0401",
+        "size": -1,
+        "enrolment": -1,
+        "waitlist": -1,
+        "waitlist_size": -1,
+        "section_type": "P",
+        "instructors": "Foote",
+        "_semester": "Y",
+        "semester": 1
+    }
+},
+{
+    "model": "timetable.section",
+    "pk": 27960,
+    "fields": {
+        "course": 6130,
+        "meeting_section": "P0401",
+        "size": -1,
+        "enrolment": -1,
+        "waitlist": -1,
+        "waitlist_size": -1,
+        "section_type": "P",
+        "instructors": "Foote",
+        "_semester": "Y",
+        "semester": 3
+    }
+},
+{
+    "model": "timetable.section",
+    "pk": 20088,
+    "fields": {
+        "course": 6130,
+        "meeting_section": "P0401",
+        "size": -1,
+        "enrolment": -1,
+        "waitlist": -1,
+        "waitlist_size": -1,
+        "section_type": "P",
+        "instructors": "Foote",
+        "_semester": "Y",
+        "semester": 1
+    }
+},
+{
+    "model": "timetable.section",
+    "pk": 27959,
+    "fields": {
+        "course": 6130,
+        "meeting_section": "P0401",
+        "size": -1,
+        "enrolment": -1,
+        "waitlist": -1,
+        "waitlist_size": -1,
+        "section_type": "P",
+        "instructors": "Foote",
+        "_semester": "Y",
+        "semester": 3
+    }
+},
+{
+    "model": "timetable.section",
+    "pk": 25220,
+    "fields": {
+        "course": 6130,
+        "meeting_section": "P0401",
+        "size": -1,
+        "enrolment": -1,
+        "waitlist": -1,
+        "waitlist_size": -1,
+        "section_type": "P",
+        "instructors": "Foote",
+        "_semester": "Y",
+        "semester": 1
+    }
+},
+{
+    "model": "timetable.section",
+    "pk": 27958,
+    "fields": {
+        "course": 6130,
+        "meeting_section": "P0401",
+        "size": -1,
+        "enrolment": -1,
+        "waitlist": -1,
+        "waitlist_size": -1,
+        "section_type": "P",
+        "instructors": "Foote",
+        "_semester": "Y",
+        "semester": 3
+    }
+},
+{
+    "model": "timetable.section",
+    "pk": 17355,
+    "fields": {
+        "course": 6130,
+        "meeting_section": "P0401",
+        "size": -1,
+        "enrolment": -1,
+        "waitlist": -1,
+        "waitlist_size": -1,
+        "section_type": "P",
+        "instructors": "Foote",
+        "_semester": "Y",
+        "semester": 1
+    }
+},
+{
+    "model": "timetable.section",
+    "pk": 27957,
+    "fields": {
+        "course": 6130,
+        "meeting_section": "P0301",
+        "size": -1,
+        "enrolment": -1,
+        "waitlist": -1,
+        "waitlist_size": -1,
+        "section_type": "P",
+        "instructors": "Foote",
+        "_semester": "Y",
+        "semester": 3
+    }
+},
+{
+    "model": "timetable.section",
+    "pk": 25219,
+    "fields": {
+        "course": 6130,
+        "meeting_section": "P0301",
+        "size": -1,
+        "enrolment": -1,
+        "waitlist": -1,
+        "waitlist_size": -1,
+        "section_type": "P",
+        "instructors": "Foote",
+        "_semester": "Y",
+        "semester": 1
+    }
+},
+{
+    "model": "timetable.section",
+    "pk": 27956,
+    "fields": {
+        "course": 6130,
+        "meeting_section": "P0301",
+        "size": -1,
+        "enrolment": -1,
+        "waitlist": -1,
+        "waitlist_size": -1,
+        "section_type": "P",
+        "instructors": "Foote",
+        "_semester": "Y",
+        "semester": 3
+    }
+},
+{
+    "model": "timetable.section",
+    "pk": 20087,
+    "fields": {
+        "course": 6130,
+        "meeting_section": "P0301",
+        "size": -1,
+        "enrolment": -1,
+        "waitlist": -1,
+        "waitlist_size": -1,
+        "section_type": "P",
+        "instructors": "Foote",
+        "_semester": "Y",
+        "semester": 1
+    }
+},
+{
+    "model": "timetable.section",
+    "pk": 27955,
+    "fields": {
+        "course": 6130,
+        "meeting_section": "P0301",
+        "size": -1,
+        "enrolment": -1,
+        "waitlist": -1,
+        "waitlist_size": -1,
+        "section_type": "P",
+        "instructors": "Foote",
+        "_semester": "Y",
+        "semester": 3
+    }
+},
+{
+    "model": "timetable.section",
+    "pk": 25218,
+    "fields": {
+        "course": 6130,
+        "meeting_section": "P0301",
+        "size": -1,
+        "enrolment": -1,
+        "waitlist": -1,
+        "waitlist_size": -1,
+        "section_type": "P",
+        "instructors": "Foote",
+        "_semester": "Y",
+        "semester": 1
+    }
+},
+{
+    "model": "timetable.section",
+    "pk": 27954,
+    "fields": {
+        "course": 6130,
+        "meeting_section": "P0301",
+        "size": -1,
+        "enrolment": -1,
+        "waitlist": -1,
+        "waitlist_size": -1,
+        "section_type": "P",
+        "instructors": "Foote",
+        "_semester": "Y",
+        "semester": 3
+    }
+},
+{
+    "model": "timetable.section",
+    "pk": 17354,
+    "fields": {
+        "course": 6130,
+        "meeting_section": "P0301",
+        "size": -1,
+        "enrolment": -1,
+        "waitlist": -1,
+        "waitlist_size": -1,
+        "section_type": "P",
+        "instructors": "Foote",
+        "_semester": "Y",
+        "semester": 1
+    }
+},
+{
+    "model": "timetable.section",
+    "pk": 27953,
+    "fields": {
+        "course": 6130,
+        "meeting_section": "P0201",
+        "size": -1,
+        "enrolment": -1,
+        "waitlist": -1,
+        "waitlist_size": -1,
+        "section_type": "P",
+        "instructors": "Lewis",
+        "_semester": "Y",
+        "semester": 3
+    }
+},
+{
+    "model": "timetable.section",
+    "pk": 25217,
+    "fields": {
+        "course": 6130,
+        "meeting_section": "P0201",
+        "size": -1,
+        "enrolment": -1,
+        "waitlist": -1,
+        "waitlist_size": -1,
+        "section_type": "P",
+        "instructors": "Lewis",
+        "_semester": "Y",
+        "semester": 1
+    }
+},
+{
+    "model": "timetable.section",
+    "pk": 27952,
+    "fields": {
+        "course": 6130,
+        "meeting_section": "P0201",
+        "size": -1,
+        "enrolment": -1,
+        "waitlist": -1,
+        "waitlist_size": -1,
+        "section_type": "P",
+        "instructors": "Lewis",
+        "_semester": "Y",
+        "semester": 3
+    }
+},
+{
+    "model": "timetable.section",
+    "pk": 20086,
+    "fields": {
+        "course": 6130,
+        "meeting_section": "P0201",
+        "size": -1,
+        "enrolment": -1,
+        "waitlist": -1,
+        "waitlist_size": -1,
+        "section_type": "P",
+        "instructors": "Lewis",
+        "_semester": "Y",
+        "semester": 1
+    }
+},
+{
+    "model": "timetable.section",
+    "pk": 27951,
+    "fields": {
+        "course": 6130,
+        "meeting_section": "P0201",
+        "size": -1,
+        "enrolment": -1,
+        "waitlist": -1,
+        "waitlist_size": -1,
+        "section_type": "P",
+        "instructors": "Lewis",
+        "_semester": "Y",
+        "semester": 3
+    }
+},
+{
+    "model": "timetable.section",
+    "pk": 25216,
+    "fields": {
+        "course": 6130,
+        "meeting_section": "P0201",
+        "size": -1,
+        "enrolment": -1,
+        "waitlist": -1,
+        "waitlist_size": -1,
+        "section_type": "P",
+        "instructors": "Lewis",
+        "_semester": "Y",
+        "semester": 1
+    }
+},
+{
+    "model": "timetable.section",
+    "pk": 27950,
+    "fields": {
+        "course": 6130,
+        "meeting_section": "P0201",
+        "size": -1,
+        "enrolment": -1,
+        "waitlist": -1,
+        "waitlist_size": -1,
+        "section_type": "P",
+        "instructors": "Lewis",
+        "_semester": "Y",
+        "semester": 3
+    }
+},
+{
+    "model": "timetable.section",
+    "pk": 17353,
+    "fields": {
+        "course": 6130,
+        "meeting_section": "P0201",
+        "size": -1,
+        "enrolment": -1,
+        "waitlist": -1,
+        "waitlist_size": -1,
+        "section_type": "P",
+        "instructors": "Lewis",
+        "_semester": "Y",
+        "semester": 1
+    }
+},
+{
+    "model": "timetable.section",
+    "pk": 27561,
+    "fields": {
+        "course": 6130,
+        "meeting_section": "P0101",
+        "size": -1,
+        "enrolment": -1,
+        "waitlist": -1,
+        "waitlist_size": -1,
+        "section_type": "P",
+        "instructors": "tbd",
+        "_semester": "Y",
+        "semester": 3
+    }
+},
+{
+    "model": "timetable.section",
+    "pk": 25021,
+    "fields": {
+        "course": 6130,
+        "meeting_section": "P0101",
+        "size": -1,
+        "enrolment": -1,
+        "waitlist": -1,
+        "waitlist_size": -1,
+        "section_type": "P",
+        "instructors": "tbd",
+        "_semester": "Y",
+        "semester": 1
+    }
+},
+{
+    "model": "timetable.section",
+    "pk": 27560,
+    "fields": {
+        "course": 6130,
+        "meeting_section": "P0101",
+        "size": -1,
+        "enrolment": -1,
+        "waitlist": -1,
+        "waitlist_size": -1,
+        "section_type": "P",
+        "instructors": "tbd",
+        "_semester": "Y",
+        "semester": 3
+    }
+},
+{
+    "model": "timetable.section",
+    "pk": 19988,
+    "fields": {
+        "course": 6130,
+        "meeting_section": "P0101",
+        "size": -1,
+        "enrolment": -1,
+        "waitlist": -1,
+        "waitlist_size": -1,
+        "section_type": "P",
+        "instructors": "tbd",
+        "_semester": "Y",
+        "semester": 1
+    }
+},
+{
+    "model": "timetable.section",
+    "pk": 27559,
+    "fields": {
+        "course": 6130,
+        "meeting_section": "P0101",
+        "size": -1,
+        "enrolment": -1,
+        "waitlist": -1,
+        "waitlist_size": -1,
+        "section_type": "P",
+        "instructors": "tbd",
+        "_semester": "Y",
+        "semester": 3
+    }
+},
+{
+    "model": "timetable.section",
+    "pk": 25020,
+    "fields": {
+        "course": 6130,
+        "meeting_section": "P0101",
+        "size": -1,
+        "enrolment": -1,
+        "waitlist": -1,
+        "waitlist_size": -1,
+        "section_type": "P",
+        "instructors": "tbd",
+        "_semester": "Y",
+        "semester": 1
+    }
+},
+{
+    "model": "timetable.section",
+    "pk": 27558,
+    "fields": {
+        "course": 6130,
+        "meeting_section": "P0101",
+        "size": -1,
+        "enrolment": -1,
+        "waitlist": -1,
+        "waitlist_size": -1,
+        "section_type": "P",
+        "instructors": "tbd",
+        "_semester": "Y",
+        "semester": 3
+    }
+},
+{
+    "model": "timetable.section",
+    "pk": 17255,
+    "fields": {
+        "course": 6130,
+        "meeting_section": "P0101",
+        "size": -1,
+        "enrolment": -1,
+        "waitlist": -1,
+        "waitlist_size": -1,
+        "section_type": "P",
+        "instructors": "tbd",
+        "_semester": "Y",
+        "semester": 1
+    }
+},
+{
+    "model": "timetable.section",
+    "pk": 36185,
+    "fields": {
+        "course": 6130,
+        "meeting_section": "P0401",
+        "size": -1,
+        "enrolment": -1,
+        "waitlist": -1,
+        "waitlist_size": -1,
+        "section_type": "P",
+        "instructors": "Foote",
+        "_semester": "Y",
+        "semester": 3
+    }
+},
+{
+    "model": "timetable.section",
+    "pk": 23862,
+    "fields": {
+        "course": 6130,
+        "meeting_section": "P0401",
+        "size": -1,
+        "enrolment": -1,
+        "waitlist": -1,
+        "waitlist_size": -1,
+        "section_type": "P",
+        "instructors": "Foote",
+        "_semester": "Y",
+        "semester": 1
+    }
+},
+{
+    "model": "timetable.section",
+    "pk": 36184,
+    "fields": {
+        "course": 6130,
+        "meeting_section": "P0401",
+        "size": -1,
+        "enrolment": -1,
+        "waitlist": -1,
+        "waitlist_size": -1,
+        "section_type": "P",
+        "instructors": "Foote",
+        "_semester": "Y",
+        "semester": 3
+    }
+},
+{
+    "model": "timetable.section",
+    "pk": 19407,
+    "fields": {
+        "course": 6130,
+        "meeting_section": "P0401",
+        "size": -1,
+        "enrolment": -1,
+        "waitlist": -1,
+        "waitlist_size": -1,
+        "section_type": "P",
+        "instructors": "Foote",
+        "_semester": "Y",
+        "semester": 1
+    }
+},
+{
+    "model": "timetable.section",
+    "pk": 36183,
+    "fields": {
+        "course": 6130,
+        "meeting_section": "P0401",
+        "size": -1,
+        "enrolment": -1,
+        "waitlist": -1,
+        "waitlist_size": -1,
+        "section_type": "P",
+        "instructors": "Foote",
+        "_semester": "Y",
+        "semester": 3
+    }
+},
+{
+    "model": "timetable.section",
+    "pk": 23861,
+    "fields": {
+        "course": 6130,
+        "meeting_section": "P0401",
+        "size": -1,
+        "enrolment": -1,
+        "waitlist": -1,
+        "waitlist_size": -1,
+        "section_type": "P",
+        "instructors": "Foote",
+        "_semester": "Y",
+        "semester": 1
+    }
+},
+{
+    "model": "timetable.section",
+    "pk": 36182,
+    "fields": {
+        "course": 6130,
+        "meeting_section": "P0401",
+        "size": -1,
+        "enrolment": -1,
+        "waitlist": -1,
+        "waitlist_size": -1,
+        "section_type": "P",
+        "instructors": "Foote",
+        "_semester": "Y",
+        "semester": 3
+    }
+},
+{
+    "model": "timetable.section",
+    "pk": 16149,
+    "fields": {
+        "course": 6130,
+        "meeting_section": "P0401",
+        "size": -1,
+        "enrolment": -1,
+        "waitlist": -1,
+        "waitlist_size": -1,
+        "section_type": "P",
+        "instructors": "Foote",
+        "_semester": "Y",
+        "semester": 1
+    }
+},
+{
+    "model": "timetable.section",
+    "pk": 36181,
+    "fields": {
+        "course": 6130,
+        "meeting_section": "P0301",
+        "size": -1,
+        "enrolment": -1,
+        "waitlist": -1,
+        "waitlist_size": -1,
+        "section_type": "P",
+        "instructors": "Foote",
+        "_semester": "Y",
+        "semester": 3
+    }
+},
+{
+    "model": "timetable.section",
+    "pk": 23860,
+    "fields": {
+        "course": 6130,
+        "meeting_section": "P0301",
+        "size": -1,
+        "enrolment": -1,
+        "waitlist": -1,
+        "waitlist_size": -1,
+        "section_type": "P",
+        "instructors": "Foote",
+        "_semester": "Y",
+        "semester": 1
+    }
+},
+{
+    "model": "timetable.section",
+    "pk": 36180,
+    "fields": {
+        "course": 6130,
+        "meeting_section": "P0301",
+        "size": -1,
+        "enrolment": -1,
+        "waitlist": -1,
+        "waitlist_size": -1,
+        "section_type": "P",
+        "instructors": "Foote",
+        "_semester": "Y",
+        "semester": 3
+    }
+},
+{
+    "model": "timetable.section",
+    "pk": 19406,
+    "fields": {
+        "course": 6130,
+        "meeting_section": "P0301",
+        "size": -1,
+        "enrolment": -1,
+        "waitlist": -1,
+        "waitlist_size": -1,
+        "section_type": "P",
+        "instructors": "Foote",
+        "_semester": "Y",
+        "semester": 1
+    }
+},
+{
+    "model": "timetable.section",
+    "pk": 36179,
+    "fields": {
+        "course": 6130,
+        "meeting_section": "P0301",
+        "size": -1,
+        "enrolment": -1,
+        "waitlist": -1,
+        "waitlist_size": -1,
+        "section_type": "P",
+        "instructors": "Foote",
+        "_semester": "Y",
+        "semester": 3
+    }
+},
+{
+    "model": "timetable.section",
+    "pk": 23859,
+    "fields": {
+        "course": 6130,
+        "meeting_section": "P0301",
+        "size": -1,
+        "enrolment": -1,
+        "waitlist": -1,
+        "waitlist_size": -1,
+        "section_type": "P",
+        "instructors": "Foote",
+        "_semester": "Y",
+        "semester": 1
+    }
+},
+{
+    "model": "timetable.section",
+    "pk": 36178,
+    "fields": {
+        "course": 6130,
+        "meeting_section": "P0301",
+        "size": -1,
+        "enrolment": -1,
+        "waitlist": -1,
+        "waitlist_size": -1,
+        "section_type": "P",
+        "instructors": "Foote",
+        "_semester": "Y",
+        "semester": 3
+    }
+},
+{
+    "model": "timetable.section",
+    "pk": 16148,
+    "fields": {
+        "course": 6130,
+        "meeting_section": "P0301",
+        "size": -1,
+        "enrolment": -1,
+        "waitlist": -1,
+        "waitlist_size": -1,
+        "section_type": "P",
+        "instructors": "Foote",
+        "_semester": "Y",
+        "semester": 1
+    }
+},
+{
+    "model": "timetable.section",
+    "pk": 36177,
+    "fields": {
+        "course": 6130,
+        "meeting_section": "P0201",
+        "size": -1,
+        "enrolment": -1,
+        "waitlist": -1,
+        "waitlist_size": -1,
+        "section_type": "P",
+        "instructors": "Lewis",
+        "_semester": "Y",
+        "semester": 3
+    }
+},
+{
+    "model": "timetable.section",
+    "pk": 23858,
+    "fields": {
+        "course": 6130,
+        "meeting_section": "P0201",
+        "size": -1,
+        "enrolment": -1,
+        "waitlist": -1,
+        "waitlist_size": -1,
+        "section_type": "P",
+        "instructors": "Lewis",
+        "_semester": "Y",
+        "semester": 1
+    }
+},
+{
+    "model": "timetable.section",
+    "pk": 36176,
+    "fields": {
+        "course": 6130,
+        "meeting_section": "P0201",
+        "size": -1,
+        "enrolment": -1,
+        "waitlist": -1,
+        "waitlist_size": -1,
+        "section_type": "P",
+        "instructors": "Lewis",
+        "_semester": "Y",
+        "semester": 3
+    }
+},
+{
+    "model": "timetable.section",
+    "pk": 19405,
+    "fields": {
+        "course": 6130,
+        "meeting_section": "P0201",
+        "size": -1,
+        "enrolment": -1,
+        "waitlist": -1,
+        "waitlist_size": -1,
+        "section_type": "P",
+        "instructors": "Lewis",
+        "_semester": "Y",
+        "semester": 1
+    }
+},
+{
+    "model": "timetable.section",
+    "pk": 36175,
+    "fields": {
+        "course": 6130,
+        "meeting_section": "P0201",
+        "size": -1,
+        "enrolment": -1,
+        "waitlist": -1,
+        "waitlist_size": -1,
+        "section_type": "P",
+        "instructors": "Lewis",
+        "_semester": "Y",
+        "semester": 3
+    }
+},
+{
+    "model": "timetable.section",
+    "pk": 23857,
+    "fields": {
+        "course": 6130,
+        "meeting_section": "P0201",
+        "size": -1,
+        "enrolment": -1,
+        "waitlist": -1,
+        "waitlist_size": -1,
+        "section_type": "P",
+        "instructors": "Lewis",
+        "_semester": "Y",
+        "semester": 1
+    }
+},
+{
+    "model": "timetable.section",
+    "pk": 36174,
+    "fields": {
+        "course": 6130,
+        "meeting_section": "P0201",
+        "size": -1,
+        "enrolment": -1,
+        "waitlist": -1,
+        "waitlist_size": -1,
+        "section_type": "P",
+        "instructors": "Lewis",
+        "_semester": "Y",
+        "semester": 3
+    }
+},
+{
+    "model": "timetable.section",
+    "pk": 16147,
+    "fields": {
+        "course": 6130,
+        "meeting_section": "P0201",
+        "size": -1,
+        "enrolment": -1,
+        "waitlist": -1,
+        "waitlist_size": -1,
+        "section_type": "P",
+        "instructors": "Lewis",
+        "_semester": "Y",
+        "semester": 1
+    }
+},
+{
+    "model": "timetable.section",
+    "pk": 35789,
+    "fields": {
+        "course": 6130,
+        "meeting_section": "P0101",
+        "size": -1,
+        "enrolment": -1,
+        "waitlist": -1,
+        "waitlist_size": -1,
+        "section_type": "P",
+        "instructors": "tbd",
+        "_semester": "Y",
+        "semester": 3
+    }
+},
+{
+    "model": "timetable.section",
+    "pk": 23664,
+    "fields": {
+        "course": 6130,
+        "meeting_section": "P0101",
+        "size": -1,
+        "enrolment": -1,
+        "waitlist": -1,
+        "waitlist_size": -1,
+        "section_type": "P",
+        "instructors": "tbd",
+        "_semester": "Y",
+        "semester": 1
+    }
+},
+{
+    "model": "timetable.section",
+    "pk": 35788,
+    "fields": {
+        "course": 6130,
+        "meeting_section": "P0101",
+        "size": -1,
+        "enrolment": -1,
+        "waitlist": -1,
+        "waitlist_size": -1,
+        "section_type": "P",
+        "instructors": "tbd",
+        "_semester": "Y",
+        "semester": 3
+    }
+},
+{
+    "model": "timetable.section",
+    "pk": 19308,
+    "fields": {
+        "course": 6130,
+        "meeting_section": "P0101",
+        "size": -1,
+        "enrolment": -1,
+        "waitlist": -1,
+        "waitlist_size": -1,
+        "section_type": "P",
+        "instructors": "tbd",
+        "_semester": "Y",
+        "semester": 1
+    }
+},
+{
+    "model": "timetable.section",
+    "pk": 35787,
+    "fields": {
+        "course": 6130,
+        "meeting_section": "P0101",
+        "size": -1,
+        "enrolment": -1,
+        "waitlist": -1,
+        "waitlist_size": -1,
+        "section_type": "P",
+        "instructors": "tbd",
+        "_semester": "Y",
+        "semester": 3
+    }
+},
+{
+    "model": "timetable.section",
+    "pk": 23663,
+    "fields": {
+        "course": 6130,
+        "meeting_section": "P0101",
+        "size": -1,
+        "enrolment": -1,
+        "waitlist": -1,
+        "waitlist_size": -1,
+        "section_type": "P",
+        "instructors": "tbd",
+        "_semester": "Y",
+        "semester": 1
+    }
+},
+{
+    "model": "timetable.section",
+    "pk": 35786,
+    "fields": {
+        "course": 6130,
+        "meeting_section": "P0101",
+        "size": -1,
+        "enrolment": -1,
+        "waitlist": -1,
+        "waitlist_size": -1,
+        "section_type": "P",
+        "instructors": "tbd",
+        "_semester": "Y",
+        "semester": 3
+    }
+},
+{
+    "model": "timetable.section",
+    "pk": 15803,
+    "fields": {
+        "course": 6130,
+        "meeting_section": "P0101",
+        "size": -1,
+        "enrolment": -1,
+        "waitlist": -1,
+        "waitlist_size": -1,
+        "section_type": "P",
+        "instructors": "tbd",
+        "_semester": "Y",
+        "semester": 1
+    }
+},
+{
+    "model": "timetable.section",
+    "pk": 15806,
+    "fields": {
+        "course": 6130,
+        "meeting_section": "P0401",
+        "size": -1,
+        "enrolment": -1,
+        "waitlist": -1,
+        "waitlist_size": -1,
+        "section_type": "P",
+        "instructors": "Foote",
+        "_semester": "",
+        "semester": 1
+    }
+},
+{
+    "model": "timetable.section",
+    "pk": 15805,
+    "fields": {
+        "course": 6130,
+        "meeting_section": "P0301",
+        "size": -1,
+        "enrolment": -1,
+        "waitlist": -1,
+        "waitlist_size": -1,
+        "section_type": "P",
+        "instructors": "Foote",
+        "_semester": "",
+        "semester": 1
+    }
+},
+{
+    "model": "timetable.section",
+    "pk": 15804,
+    "fields": {
+        "course": 6130,
+        "meeting_section": "P0201",
+        "size": -1,
+        "enrolment": -1,
+        "waitlist": -1,
+        "waitlist_size": -1,
+        "section_type": "P",
+        "instructors": "Lewis",
+        "_semester": "",
+        "semester": 1
+    }
+},
+{
+    "model": "timetable.section",
+    "pk": 28901,
+    "fields": {
+        "course": 6128,
+        "meeting_section": "P0301",
+        "size": -1,
+        "enrolment": -1,
+        "waitlist": -1,
+        "waitlist_size": -1,
+        "section_type": "P",
+        "instructors": "tba",
+        "_semester": "Y",
+        "semester": 3
+    }
+},
+{
+    "model": "timetable.section",
+    "pk": 25691,
+    "fields": {
+        "course": 6128,
+        "meeting_section": "P0301",
+        "size": -1,
+        "enrolment": -1,
+        "waitlist": -1,
+        "waitlist_size": -1,
+        "section_type": "P",
+        "instructors": "tba",
+        "_semester": "Y",
+        "semester": 1
+    }
+},
+{
+    "model": "timetable.section",
+    "pk": 28900,
+    "fields": {
+        "course": 6128,
+        "meeting_section": "P0301",
+        "size": -1,
+        "enrolment": -1,
+        "waitlist": -1,
+        "waitlist_size": -1,
+        "section_type": "P",
+        "instructors": "tba",
+        "_semester": "Y",
+        "semester": 3
+    }
+},
+{
+    "model": "timetable.section",
+    "pk": 20323,
+    "fields": {
+        "course": 6128,
+        "meeting_section": "P0301",
+        "size": -1,
+        "enrolment": -1,
+        "waitlist": -1,
+        "waitlist_size": -1,
+        "section_type": "P",
+        "instructors": "tba",
+        "_semester": "Y",
+        "semester": 1
+    }
+},
+{
+    "model": "timetable.section",
+    "pk": 28899,
+    "fields": {
+        "course": 6128,
+        "meeting_section": "P0301",
+        "size": -1,
+        "enrolment": -1,
+        "waitlist": -1,
+        "waitlist_size": -1,
+        "section_type": "P",
+        "instructors": "tba",
+        "_semester": "Y",
+        "semester": 3
+    }
+},
+{
+    "model": "timetable.section",
+    "pk": 25690,
+    "fields": {
+        "course": 6128,
+        "meeting_section": "P0301",
+        "size": -1,
+        "enrolment": -1,
+        "waitlist": -1,
+        "waitlist_size": -1,
+        "section_type": "P",
+        "instructors": "tba",
+        "_semester": "Y",
+        "semester": 1
+    }
+},
+{
+    "model": "timetable.section",
+    "pk": 28898,
+    "fields": {
+        "course": 6128,
+        "meeting_section": "P0301",
+        "size": -1,
+        "enrolment": -1,
+        "waitlist": -1,
+        "waitlist_size": -1,
+        "section_type": "P",
+        "instructors": "tba",
+        "_semester": "Y",
+        "semester": 3
+    }
+},
+{
+    "model": "timetable.section",
+    "pk": 17590,
+    "fields": {
+        "course": 6128,
+        "meeting_section": "P0301",
+        "size": -1,
+        "enrolment": -1,
+        "waitlist": -1,
+        "waitlist_size": -1,
+        "section_type": "P",
+        "instructors": "tba",
+        "_semester": "Y",
+        "semester": 1
+    }
+},
+{
+    "model": "timetable.section",
+    "pk": 27949,
+    "fields": {
+        "course": 6128,
+        "meeting_section": "P0201",
+        "size": -1,
+        "enrolment": -1,
+        "waitlist": -1,
+        "waitlist_size": -1,
+        "section_type": "P",
+        "instructors": "tba",
+        "_semester": "Y",
+        "semester": 3
+    }
+},
+{
+    "model": "timetable.section",
+    "pk": 25215,
+    "fields": {
+        "course": 6128,
+        "meeting_section": "P0201",
+        "size": -1,
+        "enrolment": -1,
+        "waitlist": -1,
+        "waitlist_size": -1,
+        "section_type": "P",
+        "instructors": "tba",
+        "_semester": "Y",
+        "semester": 1
+    }
+},
+{
+    "model": "timetable.section",
+    "pk": 27948,
+    "fields": {
+        "course": 6128,
+        "meeting_section": "P0201",
+        "size": -1,
+        "enrolment": -1,
+        "waitlist": -1,
+        "waitlist_size": -1,
+        "section_type": "P",
+        "instructors": "tba",
+        "_semester": "Y",
+        "semester": 3
+    }
+},
+{
+    "model": "timetable.section",
+    "pk": 20085,
+    "fields": {
+        "course": 6128,
+        "meeting_section": "P0201",
+        "size": -1,
+        "enrolment": -1,
+        "waitlist": -1,
+        "waitlist_size": -1,
+        "section_type": "P",
+        "instructors": "tba",
+        "_semester": "Y",
+        "semester": 1
+    }
+},
+{
+    "model": "timetable.section",
+    "pk": 27947,
+    "fields": {
+        "course": 6128,
+        "meeting_section": "P0201",
+        "size": -1,
+        "enrolment": -1,
+        "waitlist": -1,
+        "waitlist_size": -1,
+        "section_type": "P",
+        "instructors": "tba",
+        "_semester": "Y",
+        "semester": 3
+    }
+},
+{
+    "model": "timetable.section",
+    "pk": 25214,
+    "fields": {
+        "course": 6128,
+        "meeting_section": "P0201",
+        "size": -1,
+        "enrolment": -1,
+        "waitlist": -1,
+        "waitlist_size": -1,
+        "section_type": "P",
+        "instructors": "tba",
+        "_semester": "Y",
+        "semester": 1
+    }
+},
+{
+    "model": "timetable.section",
+    "pk": 27946,
+    "fields": {
+        "course": 6128,
+        "meeting_section": "P0201",
+        "size": -1,
+        "enrolment": -1,
+        "waitlist": -1,
+        "waitlist_size": -1,
+        "section_type": "P",
+        "instructors": "tba",
+        "_semester": "Y",
+        "semester": 3
+    }
+},
+{
+    "model": "timetable.section",
+    "pk": 17352,
+    "fields": {
+        "course": 6128,
+        "meeting_section": "P0201",
+        "size": -1,
+        "enrolment": -1,
+        "waitlist": -1,
+        "waitlist_size": -1,
+        "section_type": "P",
+        "instructors": "tba",
+        "_semester": "Y",
+        "semester": 1
+    }
+},
+{
+    "model": "timetable.section",
+    "pk": 27553,
+    "fields": {
+        "course": 6128,
+        "meeting_section": "P0101",
+        "size": -1,
+        "enrolment": -1,
+        "waitlist": -1,
+        "waitlist_size": -1,
+        "section_type": "P",
+        "instructors": "Williamson",
+        "_semester": "Y",
+        "semester": 3
+    }
+},
+{
+    "model": "timetable.section",
+    "pk": 25017,
+    "fields": {
+        "course": 6128,
+        "meeting_section": "P0101",
+        "size": -1,
+        "enrolment": -1,
+        "waitlist": -1,
+        "waitlist_size": -1,
+        "section_type": "P",
+        "instructors": "Williamson",
+        "_semester": "Y",
+        "semester": 1
+    }
+},
+{
+    "model": "timetable.section",
+    "pk": 27552,
+    "fields": {
+        "course": 6128,
+        "meeting_section": "P0101",
+        "size": -1,
+        "enrolment": -1,
+        "waitlist": -1,
+        "waitlist_size": -1,
+        "section_type": "P",
+        "instructors": "Williamson",
+        "_semester": "Y",
+        "semester": 3
+    }
+},
+{
+    "model": "timetable.section",
+    "pk": 19986,
+    "fields": {
+        "course": 6128,
+        "meeting_section": "P0101",
+        "size": -1,
+        "enrolment": -1,
+        "waitlist": -1,
+        "waitlist_size": -1,
+        "section_type": "P",
+        "instructors": "Williamson",
+        "_semester": "Y",
+        "semester": 1
+    }
+},
+{
+    "model": "timetable.section",
+    "pk": 27551,
+    "fields": {
+        "course": 6128,
+        "meeting_section": "P0101",
+        "size": -1,
+        "enrolment": -1,
+        "waitlist": -1,
+        "waitlist_size": -1,
+        "section_type": "P",
+        "instructors": "Williamson",
+        "_semester": "Y",
+        "semester": 3
+    }
+},
+{
+    "model": "timetable.section",
+    "pk": 25016,
+    "fields": {
+        "course": 6128,
+        "meeting_section": "P0101",
+        "size": -1,
+        "enrolment": -1,
+        "waitlist": -1,
+        "waitlist_size": -1,
+        "section_type": "P",
+        "instructors": "Williamson",
+        "_semester": "Y",
+        "semester": 1
+    }
+},
+{
+    "model": "timetable.section",
+    "pk": 27550,
+    "fields": {
+        "course": 6128,
+        "meeting_section": "P0101",
+        "size": -1,
+        "enrolment": -1,
+        "waitlist": -1,
+        "waitlist_size": -1,
+        "section_type": "P",
+        "instructors": "Williamson",
+        "_semester": "Y",
+        "semester": 3
+    }
+},
+{
+    "model": "timetable.section",
+    "pk": 17253,
+    "fields": {
+        "course": 6128,
+        "meeting_section": "P0101",
+        "size": -1,
+        "enrolment": -1,
+        "waitlist": -1,
+        "waitlist_size": -1,
+        "section_type": "P",
+        "instructors": "Williamson",
+        "_semester": "Y",
+        "semester": 1
+    }
+},
+{
+    "model": "timetable.section",
+    "pk": 26185,
+    "fields": {
+        "course": 6128,
+        "meeting_section": "P0301",
+        "size": -1,
+        "enrolment": -1,
+        "waitlist": -1,
+        "waitlist_size": -1,
+        "section_type": "P",
+        "instructors": "tba",
+        "_semester": "Y",
+        "semester": 3
+    }
+},
+{
+    "model": "timetable.section",
+    "pk": 24333,
+    "fields": {
+        "course": 6128,
+        "meeting_section": "P0301",
+        "size": -1,
+        "enrolment": -1,
+        "waitlist": -1,
+        "waitlist_size": -1,
+        "section_type": "P",
+        "instructors": "tba",
+        "_semester": "Y",
+        "semester": 1
+    }
+},
+{
+    "model": "timetable.section",
+    "pk": 26184,
+    "fields": {
+        "course": 6128,
+        "meeting_section": "P0301",
+        "size": -1,
+        "enrolment": -1,
+        "waitlist": -1,
+        "waitlist_size": -1,
+        "section_type": "P",
+        "instructors": "tba",
+        "_semester": "Y",
+        "semester": 3
+    }
+},
+{
+    "model": "timetable.section",
+    "pk": 19643,
+    "fields": {
+        "course": 6128,
+        "meeting_section": "P0301",
+        "size": -1,
+        "enrolment": -1,
+        "waitlist": -1,
+        "waitlist_size": -1,
+        "section_type": "P",
+        "instructors": "tba",
+        "_semester": "Y",
+        "semester": 1
+    }
+},
+{
+    "model": "timetable.section",
+    "pk": 26183,
+    "fields": {
+        "course": 6128,
+        "meeting_section": "P0301",
+        "size": -1,
+        "enrolment": -1,
+        "waitlist": -1,
+        "waitlist_size": -1,
+        "section_type": "P",
+        "instructors": "tba",
+        "_semester": "Y",
+        "semester": 3
+    }
+},
+{
+    "model": "timetable.section",
+    "pk": 24332,
+    "fields": {
+        "course": 6128,
+        "meeting_section": "P0301",
+        "size": -1,
+        "enrolment": -1,
+        "waitlist": -1,
+        "waitlist_size": -1,
+        "section_type": "P",
+        "instructors": "tba",
+        "_semester": "Y",
+        "semester": 1
+    }
+},
+{
+    "model": "timetable.section",
+    "pk": 26182,
+    "fields": {
+        "course": 6128,
+        "meeting_section": "P0301",
+        "size": -1,
+        "enrolment": -1,
+        "waitlist": -1,
+        "waitlist_size": -1,
+        "section_type": "P",
+        "instructors": "tba",
+        "_semester": "Y",
+        "semester": 3
+    }
+},
+{
+    "model": "timetable.section",
+    "pk": 16146,
+    "fields": {
+        "course": 6128,
+        "meeting_section": "P0301",
+        "size": -1,
+        "enrolment": -1,
+        "waitlist": -1,
+        "waitlist_size": -1,
+        "section_type": "P",
+        "instructors": "tba",
+        "_semester": "Y",
+        "semester": 1
+    }
+},
+{
+    "model": "timetable.section",
+    "pk": 36173,
+    "fields": {
+        "course": 6128,
+        "meeting_section": "P0201",
+        "size": -1,
+        "enrolment": -1,
+        "waitlist": -1,
+        "waitlist_size": -1,
+        "section_type": "P",
+        "instructors": "tba",
+        "_semester": "Y",
+        "semester": 3
+    }
+},
+{
+    "model": "timetable.section",
+    "pk": 23856,
+    "fields": {
+        "course": 6128,
+        "meeting_section": "P0201",
+        "size": -1,
+        "enrolment": -1,
+        "waitlist": -1,
+        "waitlist_size": -1,
+        "section_type": "P",
+        "instructors": "tba",
+        "_semester": "Y",
+        "semester": 1
+    }
+},
+{
+    "model": "timetable.section",
+    "pk": 36172,
+    "fields": {
+        "course": 6128,
+        "meeting_section": "P0201",
+        "size": -1,
+        "enrolment": -1,
+        "waitlist": -1,
+        "waitlist_size": -1,
+        "section_type": "P",
+        "instructors": "tba",
+        "_semester": "Y",
+        "semester": 3
+    }
+},
+{
+    "model": "timetable.section",
+    "pk": 19404,
+    "fields": {
+        "course": 6128,
+        "meeting_section": "P0201",
+        "size": -1,
+        "enrolment": -1,
+        "waitlist": -1,
+        "waitlist_size": -1,
+        "section_type": "P",
+        "instructors": "tba",
+        "_semester": "Y",
+        "semester": 1
+    }
+},
+{
+    "model": "timetable.section",
+    "pk": 36171,
+    "fields": {
+        "course": 6128,
+        "meeting_section": "P0201",
+        "size": -1,
+        "enrolment": -1,
+        "waitlist": -1,
+        "waitlist_size": -1,
+        "section_type": "P",
+        "instructors": "tba",
+        "_semester": "Y",
+        "semester": 3
+    }
+},
+{
+    "model": "timetable.section",
+    "pk": 23855,
+    "fields": {
+        "course": 6128,
+        "meeting_section": "P0201",
+        "size": -1,
+        "enrolment": -1,
+        "waitlist": -1,
+        "waitlist_size": -1,
+        "section_type": "P",
+        "instructors": "tba",
+        "_semester": "Y",
+        "semester": 1
+    }
+},
+{
+    "model": "timetable.section",
+    "pk": 36170,
+    "fields": {
+        "course": 6128,
+        "meeting_section": "P0201",
+        "size": -1,
+        "enrolment": -1,
+        "waitlist": -1,
+        "waitlist_size": -1,
+        "section_type": "P",
+        "instructors": "tba",
+        "_semester": "Y",
+        "semester": 3
+    }
+},
+{
+    "model": "timetable.section",
+    "pk": 16145,
+    "fields": {
+        "course": 6128,
+        "meeting_section": "P0201",
+        "size": -1,
+        "enrolment": -1,
+        "waitlist": -1,
+        "waitlist_size": -1,
+        "section_type": "P",
+        "instructors": "tba",
+        "_semester": "Y",
+        "semester": 1
+    }
+},
+{
+    "model": "timetable.section",
+    "pk": 35841,
+    "fields": {
+        "course": 6128,
+        "meeting_section": "P0101",
+        "size": -1,
+        "enrolment": -1,
+        "waitlist": -1,
+        "waitlist_size": -1,
+        "section_type": "P",
+        "instructors": "Williamson",
+        "_semester": "Y",
+        "semester": 3
+    }
+},
+{
+    "model": "timetable.section",
+    "pk": 23690,
+    "fields": {
+        "course": 6128,
+        "meeting_section": "P0101",
+        "size": -1,
+        "enrolment": -1,
+        "waitlist": -1,
+        "waitlist_size": -1,
+        "section_type": "P",
+        "instructors": "Williamson",
+        "_semester": "Y",
+        "semester": 1
+    }
+},
+{
+    "model": "timetable.section",
+    "pk": 35840,
+    "fields": {
+        "course": 6128,
+        "meeting_section": "P0101",
+        "size": -1,
+        "enrolment": -1,
+        "waitlist": -1,
+        "waitlist_size": -1,
+        "section_type": "P",
+        "instructors": "Williamson",
+        "_semester": "Y",
+        "semester": 3
+    }
+},
+{
+    "model": "timetable.section",
+    "pk": 19321,
+    "fields": {
+        "course": 6128,
+        "meeting_section": "P0101",
+        "size": -1,
+        "enrolment": -1,
+        "waitlist": -1,
+        "waitlist_size": -1,
+        "section_type": "P",
+        "instructors": "Williamson",
+        "_semester": "Y",
+        "semester": 1
+    }
+},
+{
+    "model": "timetable.section",
+    "pk": 35839,
+    "fields": {
+        "course": 6128,
+        "meeting_section": "P0101",
+        "size": -1,
+        "enrolment": -1,
+        "waitlist": -1,
+        "waitlist_size": -1,
+        "section_type": "P",
+        "instructors": "Williamson",
+        "_semester": "Y",
+        "semester": 3
+    }
+},
+{
+    "model": "timetable.section",
+    "pk": 23689,
+    "fields": {
+        "course": 6128,
+        "meeting_section": "P0101",
+        "size": -1,
+        "enrolment": -1,
+        "waitlist": -1,
+        "waitlist_size": -1,
+        "section_type": "P",
+        "instructors": "Williamson",
+        "_semester": "Y",
+        "semester": 1
+    }
+},
+{
+    "model": "timetable.section",
+    "pk": 35838,
+    "fields": {
+        "course": 6128,
+        "meeting_section": "P0101",
+        "size": -1,
+        "enrolment": -1,
+        "waitlist": -1,
+        "waitlist_size": -1,
+        "section_type": "P",
+        "instructors": "Williamson",
+        "_semester": "Y",
+        "semester": 3
+    }
+},
+{
+    "model": "timetable.section",
+    "pk": 15799,
+    "fields": {
+        "course": 6128,
+        "meeting_section": "P0101",
+        "size": -1,
+        "enrolment": -1,
+        "waitlist": -1,
+        "waitlist_size": -1,
+        "section_type": "P",
+        "instructors": "Williamson",
+        "_semester": "Y",
+        "semester": 1
+    }
+},
+{
+    "model": "timetable.section",
+    "pk": 15801,
+    "fields": {
+        "course": 6128,
+        "meeting_section": "P0301",
+        "size": -1,
+        "enrolment": -1,
+        "waitlist": -1,
+        "waitlist_size": -1,
+        "section_type": "P",
+        "instructors": "tba",
+        "_semester": "",
+        "semester": 1
+    }
+},
+{
+    "model": "timetable.section",
+    "pk": 15800,
+    "fields": {
+        "course": 6128,
+        "meeting_section": "P0201",
+        "size": -1,
+        "enrolment": -1,
+        "waitlist": -1,
+        "waitlist_size": -1,
+        "section_type": "P",
+        "instructors": "tba",
+        "_semester": "",
+        "semester": 1
+    }
+},
+{
+    "model": "timetable.section",
+    "pk": 29133,
+    "fields": {
+        "course": 6127,
+        "meeting_section": "P0101",
+        "size": -1,
+        "enrolment": -1,
+        "waitlist": -1,
+        "waitlist_size": -1,
+        "section_type": "P",
+        "instructors": "Neill",
+        "_semester": "Y",
+        "semester": 3
+    }
+},
+{
+    "model": "timetable.section",
+    "pk": 25807,
+    "fields": {
+        "course": 6127,
+        "meeting_section": "P0101",
+        "size": -1,
+        "enrolment": -1,
+        "waitlist": -1,
+        "waitlist_size": -1,
+        "section_type": "P",
+        "instructors": "Neill",
+        "_semester": "Y",
+        "semester": 1
+    }
+},
+{
+    "model": "timetable.section",
+    "pk": 29132,
+    "fields": {
+        "course": 6127,
+        "meeting_section": "P0101",
+        "size": -1,
+        "enrolment": -1,
+        "waitlist": -1,
+        "waitlist_size": -1,
+        "section_type": "P",
+        "instructors": "Neill",
+        "_semester": "Y",
+        "semester": 3
+    }
+},
+{
+    "model": "timetable.section",
+    "pk": 20381,
+    "fields": {
+        "course": 6127,
+        "meeting_section": "P0101",
+        "size": -1,
+        "enrolment": -1,
+        "waitlist": -1,
+        "waitlist_size": -1,
+        "section_type": "P",
+        "instructors": "Neill",
+        "_semester": "Y",
+        "semester": 1
+    }
+},
+{
+    "model": "timetable.section",
+    "pk": 29131,
+    "fields": {
+        "course": 6127,
+        "meeting_section": "P0101",
+        "size": -1,
+        "enrolment": -1,
+        "waitlist": -1,
+        "waitlist_size": -1,
+        "section_type": "P",
+        "instructors": "Neill",
+        "_semester": "Y",
+        "semester": 3
+    }
+},
+{
+    "model": "timetable.section",
+    "pk": 25806,
+    "fields": {
+        "course": 6127,
+        "meeting_section": "P0101",
+        "size": -1,
+        "enrolment": -1,
+        "waitlist": -1,
+        "waitlist_size": -1,
+        "section_type": "P",
+        "instructors": "Neill",
+        "_semester": "Y",
+        "semester": 1
+    }
+},
+{
+    "model": "timetable.section",
+    "pk": 29130,
+    "fields": {
+        "course": 6127,
+        "meeting_section": "P0101",
+        "size": -1,
+        "enrolment": -1,
+        "waitlist": -1,
+        "waitlist_size": -1,
+        "section_type": "P",
+        "instructors": "Neill",
+        "_semester": "Y",
+        "semester": 3
+    }
+},
+{
+    "model": "timetable.section",
+    "pk": 17646,
+    "fields": {
+        "course": 6127,
+        "meeting_section": "P0101",
+        "size": -1,
+        "enrolment": -1,
+        "waitlist": -1,
+        "waitlist_size": -1,
+        "section_type": "P",
+        "instructors": "Neill",
+        "_semester": "Y",
+        "semester": 1
+    }
+},
+{
+    "model": "timetable.section",
+    "pk": 27945,
+    "fields": {
+        "course": 6127,
+        "meeting_section": "T0101",
+        "size": -1,
+        "enrolment": -1,
+        "waitlist": -1,
+        "waitlist_size": -1,
+        "section_type": "T",
+        "instructors": "fall only",
+        "_semester": "Y",
+        "semester": 3
+    }
+},
+{
+    "model": "timetable.section",
+    "pk": 25213,
+    "fields": {
+        "course": 6127,
+        "meeting_section": "T0101",
+        "size": -1,
+        "enrolment": -1,
+        "waitlist": -1,
+        "waitlist_size": -1,
+        "section_type": "T",
+        "instructors": "fall only",
+        "_semester": "Y",
+        "semester": 1
+    }
+},
+{
+    "model": "timetable.section",
+    "pk": 27944,
+    "fields": {
+        "course": 6127,
+        "meeting_section": "T0101",
+        "size": -1,
+        "enrolment": -1,
+        "waitlist": -1,
+        "waitlist_size": -1,
+        "section_type": "T",
+        "instructors": "fall only",
+        "_semester": "Y",
+        "semester": 3
+    }
+},
+{
+    "model": "timetable.section",
+    "pk": 20084,
+    "fields": {
+        "course": 6127,
+        "meeting_section": "T0101",
+        "size": -1,
+        "enrolment": -1,
+        "waitlist": -1,
+        "waitlist_size": -1,
+        "section_type": "T",
+        "instructors": "fall only",
+        "_semester": "Y",
+        "semester": 1
+    }
+},
+{
+    "model": "timetable.section",
+    "pk": 27943,
+    "fields": {
+        "course": 6127,
+        "meeting_section": "T0101",
+        "size": -1,
+        "enrolment": -1,
+        "waitlist": -1,
+        "waitlist_size": -1,
+        "section_type": "T",
+        "instructors": "fall only",
+        "_semester": "Y",
+        "semester": 3
+    }
+},
+{
+    "model": "timetable.section",
+    "pk": 25212,
+    "fields": {
+        "course": 6127,
+        "meeting_section": "T0101",
+        "size": -1,
+        "enrolment": -1,
+        "waitlist": -1,
+        "waitlist_size": -1,
+        "section_type": "T",
+        "instructors": "fall only",
+        "_semester": "Y",
+        "semester": 1
+    }
+},
+{
+    "model": "timetable.section",
+    "pk": 27942,
+    "fields": {
+        "course": 6127,
+        "meeting_section": "T0101",
+        "size": -1,
+        "enrolment": -1,
+        "waitlist": -1,
+        "waitlist_size": -1,
+        "section_type": "T",
+        "instructors": "fall only",
+        "_semester": "Y",
+        "semester": 3
+    }
+},
+{
+    "model": "timetable.section",
+    "pk": 17351,
+    "fields": {
+        "course": 6127,
+        "meeting_section": "T0101",
+        "size": -1,
+        "enrolment": -1,
+        "waitlist": -1,
+        "waitlist_size": -1,
+        "section_type": "T",
+        "instructors": "fall only",
+        "_semester": "Y",
+        "semester": 1
+    }
+},
+{
+    "model": "timetable.section",
+    "pk": 26423,
+    "fields": {
+        "course": 6127,
+        "meeting_section": "P0101",
+        "size": -1,
+        "enrolment": -1,
+        "waitlist": -1,
+        "waitlist_size": -1,
+        "section_type": "P",
+        "instructors": "Neill",
+        "_semester": "Y",
+        "semester": 3
+    }
+},
+{
+    "model": "timetable.section",
+    "pk": 24452,
+    "fields": {
+        "course": 6127,
+        "meeting_section": "P0101",
+        "size": -1,
+        "enrolment": -1,
+        "waitlist": -1,
+        "waitlist_size": -1,
+        "section_type": "P",
+        "instructors": "Neill",
+        "_semester": "Y",
+        "semester": 1
+    }
+},
+{
+    "model": "timetable.section",
+    "pk": 26422,
+    "fields": {
+        "course": 6127,
+        "meeting_section": "P0101",
+        "size": -1,
+        "enrolment": -1,
+        "waitlist": -1,
+        "waitlist_size": -1,
+        "section_type": "P",
+        "instructors": "Neill",
+        "_semester": "Y",
+        "semester": 3
+    }
+},
+{
+    "model": "timetable.section",
+    "pk": 19703,
+    "fields": {
+        "course": 6127,
+        "meeting_section": "P0101",
+        "size": -1,
+        "enrolment": -1,
+        "waitlist": -1,
+        "waitlist_size": -1,
+        "section_type": "P",
+        "instructors": "Neill",
+        "_semester": "Y",
+        "semester": 1
+    }
+},
+{
+    "model": "timetable.section",
+    "pk": 26421,
+    "fields": {
+        "course": 6127,
+        "meeting_section": "P0101",
+        "size": -1,
+        "enrolment": -1,
+        "waitlist": -1,
+        "waitlist_size": -1,
+        "section_type": "P",
+        "instructors": "Neill",
+        "_semester": "Y",
+        "semester": 3
+    }
+},
+{
+    "model": "timetable.section",
+    "pk": 24451,
+    "fields": {
+        "course": 6127,
+        "meeting_section": "P0101",
+        "size": -1,
+        "enrolment": -1,
+        "waitlist": -1,
+        "waitlist_size": -1,
+        "section_type": "P",
+        "instructors": "Neill",
+        "_semester": "Y",
+        "semester": 1
+    }
+},
+{
+    "model": "timetable.section",
+    "pk": 26420,
+    "fields": {
+        "course": 6127,
+        "meeting_section": "P0101",
+        "size": -1,
+        "enrolment": -1,
+        "waitlist": -1,
+        "waitlist_size": -1,
+        "section_type": "P",
+        "instructors": "Neill",
+        "_semester": "Y",
+        "semester": 3
+    }
+},
+{
+    "model": "timetable.section",
+    "pk": 15797,
+    "fields": {
+        "course": 6127,
+        "meeting_section": "P0101",
+        "size": -1,
+        "enrolment": -1,
+        "waitlist": -1,
+        "waitlist_size": -1,
+        "section_type": "P",
+        "instructors": "Neill",
+        "_semester": "Y",
+        "semester": 1
+    }
+},
+{
+    "model": "timetable.section",
+    "pk": 36169,
+    "fields": {
+        "course": 6127,
+        "meeting_section": "T0101",
+        "size": -1,
+        "enrolment": -1,
+        "waitlist": -1,
+        "waitlist_size": -1,
+        "section_type": "T",
+        "instructors": "fall only",
+        "_semester": "Y",
+        "semester": 3
+    }
+},
+{
+    "model": "timetable.section",
+    "pk": 23854,
+    "fields": {
+        "course": 6127,
+        "meeting_section": "T0101",
+        "size": -1,
+        "enrolment": -1,
+        "waitlist": -1,
+        "waitlist_size": -1,
+        "section_type": "T",
+        "instructors": "fall only",
+        "_semester": "Y",
+        "semester": 1
+    }
+},
+{
+    "model": "timetable.section",
+    "pk": 36168,
+    "fields": {
+        "course": 6127,
+        "meeting_section": "T0101",
+        "size": -1,
+        "enrolment": -1,
+        "waitlist": -1,
+        "waitlist_size": -1,
+        "section_type": "T",
+        "instructors": "fall only",
+        "_semester": "Y",
+        "semester": 3
+    }
+},
+{
+    "model": "timetable.section",
+    "pk": 19403,
+    "fields": {
+        "course": 6127,
+        "meeting_section": "T0101",
+        "size": -1,
+        "enrolment": -1,
+        "waitlist": -1,
+        "waitlist_size": -1,
+        "section_type": "T",
+        "instructors": "fall only",
+        "_semester": "Y",
+        "semester": 1
+    }
+},
+{
+    "model": "timetable.section",
+    "pk": 36167,
+    "fields": {
+        "course": 6127,
+        "meeting_section": "T0101",
+        "size": -1,
+        "enrolment": -1,
+        "waitlist": -1,
+        "waitlist_size": -1,
+        "section_type": "T",
+        "instructors": "fall only",
+        "_semester": "Y",
+        "semester": 3
+    }
+},
+{
+    "model": "timetable.section",
+    "pk": 23853,
+    "fields": {
+        "course": 6127,
+        "meeting_section": "T0101",
+        "size": -1,
+        "enrolment": -1,
+        "waitlist": -1,
+        "waitlist_size": -1,
+        "section_type": "T",
+        "instructors": "fall only",
+        "_semester": "Y",
+        "semester": 1
+    }
+},
+{
+    "model": "timetable.section",
+    "pk": 36166,
+    "fields": {
+        "course": 6127,
+        "meeting_section": "T0101",
+        "size": -1,
+        "enrolment": -1,
+        "waitlist": -1,
+        "waitlist_size": -1,
+        "section_type": "T",
+        "instructors": "fall only",
+        "_semester": "Y",
+        "semester": 3
+    }
+},
+{
+    "model": "timetable.section",
+    "pk": 16144,
+    "fields": {
+        "course": 6127,
+        "meeting_section": "T0101",
+        "size": -1,
+        "enrolment": -1,
+        "waitlist": -1,
+        "waitlist_size": -1,
+        "section_type": "T",
+        "instructors": "fall only",
+        "_semester": "Y",
+        "semester": 1
+    }
+},
+{
+    "model": "timetable.section",
+    "pk": 15798,
+    "fields": {
+        "course": 6127,
+        "meeting_section": "T0101",
+        "size": -1,
+        "enrolment": -1,
+        "waitlist": -1,
+        "waitlist_size": -1,
+        "section_type": "T",
+        "instructors": "fall only",
+        "_semester": "",
+        "semester": 1
+    }
+},
+{
+    "model": "timetable.section",
+    "pk": 28081,
+    "fields": {
+        "course": 6080,
+        "meeting_section": "P0201",
+        "size": -1,
+        "enrolment": -1,
+        "waitlist": -1,
+        "waitlist_size": -1,
+        "section_type": "P",
+        "instructors": "John",
+        "_semester": "Y",
+        "semester": 3
+    }
+},
+{
+    "model": "timetable.section",
+    "pk": 25281,
+    "fields": {
+        "course": 6080,
+        "meeting_section": "P0201",
+        "size": -1,
+        "enrolment": -1,
+        "waitlist": -1,
+        "waitlist_size": -1,
+        "section_type": "P",
+        "instructors": "John",
+        "_semester": "Y",
+        "semester": 1
+    }
+},
+{
+    "model": "timetable.section",
+    "pk": 28080,
+    "fields": {
+        "course": 6080,
+        "meeting_section": "P0201",
+        "size": -1,
+        "enrolment": -1,
+        "waitlist": -1,
+        "waitlist_size": -1,
+        "section_type": "P",
+        "instructors": "John",
+        "_semester": "Y",
+        "semester": 3
+    }
+},
+{
+    "model": "timetable.section",
+    "pk": 20118,
+    "fields": {
+        "course": 6080,
+        "meeting_section": "P0201",
+        "size": -1,
+        "enrolment": -1,
+        "waitlist": -1,
+        "waitlist_size": -1,
+        "section_type": "P",
+        "instructors": "John",
+        "_semester": "Y",
+        "semester": 1
+    }
+},
+{
+    "model": "timetable.section",
+    "pk": 28079,
+    "fields": {
+        "course": 6080,
+        "meeting_section": "P0201",
+        "size": -1,
+        "enrolment": -1,
+        "waitlist": -1,
+        "waitlist_size": -1,
+        "section_type": "P",
+        "instructors": "John",
+        "_semester": "Y",
+        "semester": 3
+    }
+},
+{
+    "model": "timetable.section",
+    "pk": 25280,
+    "fields": {
+        "course": 6080,
+        "meeting_section": "P0201",
+        "size": -1,
+        "enrolment": -1,
+        "waitlist": -1,
+        "waitlist_size": -1,
+        "section_type": "P",
+        "instructors": "John",
+        "_semester": "Y",
+        "semester": 1
+    }
+},
+{
+    "model": "timetable.section",
+    "pk": 28078,
+    "fields": {
+        "course": 6080,
+        "meeting_section": "P0201",
+        "size": -1,
+        "enrolment": -1,
+        "waitlist": -1,
+        "waitlist_size": -1,
+        "section_type": "P",
+        "instructors": "John",
+        "_semester": "Y",
+        "semester": 3
+    }
+},
+{
+    "model": "timetable.section",
+    "pk": 17385,
+    "fields": {
+        "course": 6080,
+        "meeting_section": "P0201",
+        "size": -1,
+        "enrolment": -1,
+        "waitlist": -1,
+        "waitlist_size": -1,
+        "section_type": "P",
+        "instructors": "John",
+        "_semester": "Y",
+        "semester": 1
+    }
+},
+{
+    "model": "timetable.section",
+    "pk": 27585,
+    "fields": {
+        "course": 6080,
+        "meeting_section": "P0101",
+        "size": -1,
+        "enrolment": -1,
+        "waitlist": -1,
+        "waitlist_size": -1,
+        "section_type": "P",
+        "instructors": "John",
+        "_semester": "Y",
+        "semester": 3
+    }
+},
+{
+    "model": "timetable.section",
+    "pk": 25033,
+    "fields": {
+        "course": 6080,
+        "meeting_section": "P0101",
+        "size": -1,
+        "enrolment": -1,
+        "waitlist": -1,
+        "waitlist_size": -1,
+        "section_type": "P",
+        "instructors": "John",
+        "_semester": "Y",
+        "semester": 1
+    }
+},
+{
+    "model": "timetable.section",
+    "pk": 27584,
+    "fields": {
+        "course": 6080,
+        "meeting_section": "P0101",
+        "size": -1,
+        "enrolment": -1,
+        "waitlist": -1,
+        "waitlist_size": -1,
+        "section_type": "P",
+        "instructors": "John",
+        "_semester": "Y",
+        "semester": 3
+    }
+},
+{
+    "model": "timetable.section",
+    "pk": 19994,
+    "fields": {
+        "course": 6080,
+        "meeting_section": "P0101",
+        "size": -1,
+        "enrolment": -1,
+        "waitlist": -1,
+        "waitlist_size": -1,
+        "section_type": "P",
+        "instructors": "John",
+        "_semester": "Y",
+        "semester": 1
+    }
+},
+{
+    "model": "timetable.section",
+    "pk": 27583,
+    "fields": {
+        "course": 6080,
+        "meeting_section": "P0101",
+        "size": -1,
+        "enrolment": -1,
+        "waitlist": -1,
+        "waitlist_size": -1,
+        "section_type": "P",
+        "instructors": "John",
+        "_semester": "Y",
+        "semester": 3
+    }
+},
+{
+    "model": "timetable.section",
+    "pk": 25032,
+    "fields": {
+        "course": 6080,
+        "meeting_section": "P0101",
+        "size": -1,
+        "enrolment": -1,
+        "waitlist": -1,
+        "waitlist_size": -1,
+        "section_type": "P",
+        "instructors": "John",
+        "_semester": "Y",
+        "semester": 1
+    }
+},
+{
+    "model": "timetable.section",
+    "pk": 27582,
+    "fields": {
+        "course": 6080,
+        "meeting_section": "P0101",
+        "size": -1,
+        "enrolment": -1,
+        "waitlist": -1,
+        "waitlist_size": -1,
+        "section_type": "P",
+        "instructors": "John",
+        "_semester": "Y",
+        "semester": 3
+    }
+},
+{
+    "model": "timetable.section",
+    "pk": 17261,
+    "fields": {
+        "course": 6080,
+        "meeting_section": "P0101",
+        "size": -1,
+        "enrolment": -1,
+        "waitlist": -1,
+        "waitlist_size": -1,
+        "section_type": "P",
+        "instructors": "John",
+        "_semester": "Y",
+        "semester": 1
+    }
+},
+{
+    "model": "timetable.section",
+    "pk": 36309,
+    "fields": {
+        "course": 6080,
+        "meeting_section": "P0201",
+        "size": -1,
+        "enrolment": -1,
+        "waitlist": -1,
+        "waitlist_size": -1,
+        "section_type": "P",
+        "instructors": "John",
+        "_semester": "Y",
+        "semester": 3
+    }
+},
+{
+    "model": "timetable.section",
+    "pk": 23924,
+    "fields": {
+        "course": 6080,
+        "meeting_section": "P0201",
+        "size": -1,
+        "enrolment": -1,
+        "waitlist": -1,
+        "waitlist_size": -1,
+        "section_type": "P",
+        "instructors": "John",
+        "_semester": "Y",
+        "semester": 1
+    }
+},
+{
+    "model": "timetable.section",
+    "pk": 36308,
+    "fields": {
+        "course": 6080,
+        "meeting_section": "P0201",
+        "size": -1,
+        "enrolment": -1,
+        "waitlist": -1,
+        "waitlist_size": -1,
+        "section_type": "P",
+        "instructors": "John",
+        "_semester": "Y",
+        "semester": 3
+    }
+},
+{
+    "model": "timetable.section",
+    "pk": 19438,
+    "fields": {
+        "course": 6080,
+        "meeting_section": "P0201",
+        "size": -1,
+        "enrolment": -1,
+        "waitlist": -1,
+        "waitlist_size": -1,
+        "section_type": "P",
+        "instructors": "John",
+        "_semester": "Y",
+        "semester": 1
+    }
+},
+{
+    "model": "timetable.section",
+    "pk": 36307,
+    "fields": {
+        "course": 6080,
+        "meeting_section": "P0201",
+        "size": -1,
+        "enrolment": -1,
+        "waitlist": -1,
+        "waitlist_size": -1,
+        "section_type": "P",
+        "instructors": "John",
+        "_semester": "Y",
+        "semester": 3
+    }
+},
+{
+    "model": "timetable.section",
+    "pk": 23923,
+    "fields": {
+        "course": 6080,
+        "meeting_section": "P0201",
+        "size": -1,
+        "enrolment": -1,
+        "waitlist": -1,
+        "waitlist_size": -1,
+        "section_type": "P",
+        "instructors": "John",
+        "_semester": "Y",
+        "semester": 1
+    }
+},
+{
+    "model": "timetable.section",
+    "pk": 36306,
+    "fields": {
+        "course": 6080,
+        "meeting_section": "P0201",
+        "size": -1,
+        "enrolment": -1,
+        "waitlist": -1,
+        "waitlist_size": -1,
+        "section_type": "P",
+        "instructors": "John",
+        "_semester": "Y",
+        "semester": 3
+    }
+},
+{
+    "model": "timetable.section",
+    "pk": 16139,
+    "fields": {
+        "course": 6080,
+        "meeting_section": "P0201",
+        "size": -1,
+        "enrolment": -1,
+        "waitlist": -1,
+        "waitlist_size": -1,
+        "section_type": "P",
+        "instructors": "John",
+        "_semester": "Y",
+        "semester": 1
+    }
+},
+{
+    "model": "timetable.section",
+    "pk": 35813,
+    "fields": {
+        "course": 6080,
+        "meeting_section": "P0101",
+        "size": -1,
+        "enrolment": -1,
+        "waitlist": -1,
+        "waitlist_size": -1,
+        "section_type": "P",
+        "instructors": "John",
+        "_semester": "Y",
+        "semester": 3
+    }
+},
+{
+    "model": "timetable.section",
+    "pk": 23676,
+    "fields": {
+        "course": 6080,
+        "meeting_section": "P0101",
+        "size": -1,
+        "enrolment": -1,
+        "waitlist": -1,
+        "waitlist_size": -1,
+        "section_type": "P",
+        "instructors": "John",
+        "_semester": "Y",
+        "semester": 1
+    }
+},
+{
+    "model": "timetable.section",
+    "pk": 35812,
+    "fields": {
+        "course": 6080,
+        "meeting_section": "P0101",
+        "size": -1,
+        "enrolment": -1,
+        "waitlist": -1,
+        "waitlist_size": -1,
+        "section_type": "P",
+        "instructors": "John",
+        "_semester": "Y",
+        "semester": 3
+    }
+},
+{
+    "model": "timetable.section",
+    "pk": 19314,
+    "fields": {
+        "course": 6080,
+        "meeting_section": "P0101",
+        "size": -1,
+        "enrolment": -1,
+        "waitlist": -1,
+        "waitlist_size": -1,
+        "section_type": "P",
+        "instructors": "John",
+        "_semester": "Y",
+        "semester": 1
+    }
+},
+{
+    "model": "timetable.section",
+    "pk": 35811,
+    "fields": {
+        "course": 6080,
+        "meeting_section": "P0101",
+        "size": -1,
+        "enrolment": -1,
+        "waitlist": -1,
+        "waitlist_size": -1,
+        "section_type": "P",
+        "instructors": "John",
+        "_semester": "Y",
+        "semester": 3
+    }
+},
+{
+    "model": "timetable.section",
+    "pk": 23675,
+    "fields": {
+        "course": 6080,
+        "meeting_section": "P0101",
+        "size": -1,
+        "enrolment": -1,
+        "waitlist": -1,
+        "waitlist_size": -1,
+        "section_type": "P",
+        "instructors": "John",
+        "_semester": "Y",
+        "semester": 1
+    }
+},
+{
+    "model": "timetable.section",
+    "pk": 35810,
+    "fields": {
+        "course": 6080,
+        "meeting_section": "P0101",
+        "size": -1,
+        "enrolment": -1,
+        "waitlist": -1,
+        "waitlist_size": -1,
+        "section_type": "P",
+        "instructors": "John",
+        "_semester": "Y",
+        "semester": 3
+    }
+},
+{
+    "model": "timetable.section",
+    "pk": 15736,
+    "fields": {
+        "course": 6080,
+        "meeting_section": "P0101",
+        "size": -1,
+        "enrolment": -1,
+        "waitlist": -1,
+        "waitlist_size": -1,
+        "section_type": "P",
+        "instructors": "John",
+        "_semester": "Y",
+        "semester": 1
+    }
+},
+{
+    "model": "timetable.section",
+    "pk": 15737,
+    "fields": {
+        "course": 6080,
+        "meeting_section": "P0201",
+        "size": -1,
+        "enrolment": -1,
+        "waitlist": -1,
+        "waitlist_size": -1,
+        "section_type": "P",
+        "instructors": "John",
+        "_semester": "",
+        "semester": 1
+    }
+},
+{
+    "model": "timetable.section",
+    "pk": 15725,
+    "fields": {
+        "course": 6076,
+        "meeting_section": "P0101",
+        "size": -1,
+        "enrolment": -1,
+        "waitlist": -1,
+        "waitlist_size": -1,
+        "section_type": "P",
+        "instructors": "Rapoport",
+        "_semester": "F",
+        "semester": 1
+    }
+},
+{
+    "model": "timetable.section",
+    "pk": 16134,
+    "fields": {
+        "course": 6076,
+        "meeting_section": "P0201",
+        "size": -1,
+        "enrolment": -1,
+        "waitlist": -1,
+        "waitlist_size": -1,
+        "section_type": "P",
+        "instructors": "Rapoport",
+        "_semester": "S",
+        "semester": 3
+    }
+},
+{
+    "model": "timetable.section",
+    "pk": 16133,
+    "fields": {
+        "course": 6076,
+        "meeting_section": "P0201",
+        "size": -1,
+        "enrolment": -1,
+        "waitlist": -1,
+        "waitlist_size": -1,
+        "section_type": "P",
+        "instructors": "Rapoport",
+        "_semester": "F",
+        "semester": 1
+    }
+},
+{
+    "model": "timetable.section",
+    "pk": 15727,
+    "fields": {
+        "course": 6076,
+        "meeting_section": "P0101",
+        "size": -1,
+        "enrolment": -1,
+        "waitlist": -1,
+        "waitlist_size": -1,
+        "section_type": "P",
+        "instructors": "Rapoport",
+        "_semester": "S",
+        "semester": 3
+    }
+},
+{
+    "model": "timetable.section",
+    "pk": 15726,
+    "fields": {
+        "course": 6076,
+        "meeting_section": "P0201",
+        "size": -1,
+        "enrolment": -1,
+        "waitlist": -1,
+        "waitlist_size": -1,
+        "section_type": "P",
+        "instructors": "Rapoport",
+        "_semester": " ",
+        "semester": 1
+    }
+},
+{
+    "model": "timetable.course",
+    "pk": 6131,
+    "fields": {
+        "school": "uoft",
+        "code": "JMU191Y1",
+        "name": "Jazz Improvisation",
+        "description": "",
+        "notes": "",
+        "info": "",
+        "unstopped_description": "",
+        "campus": "1",
+        "prerequisites": "",
+        "corequisites": "",
+        "exclusions": "",
+        "num_credits": 0.5,
+        "areas": "(1)",
+        "department": "MUS",
+        "level": "100",
+        "cores": null,
+        "geneds": null,
+        "related_courses": []
+    }
+},
+{
+    "model": "timetable.course",
+    "pk": 6090,
+    "fields": {
+        "school": "uoft",
+        "code": "EMU350H1",
+        "name": "Instrumental- Cello I",
+        "description": "",
+        "notes": "",
+        "info": "",
+        "unstopped_description": "",
+        "campus": "1",
+        "prerequisites": "",
+        "corequisites": "",
+        "exclusions": "",
+        "num_credits": 0.17,
+        "areas": "(1)",
+        "department": "MUS",
+        "level": "300",
+        "cores": null,
+        "geneds": null,
+        "related_courses": []
+    }
+},
+{
+    "model": "timetable.course",
+    "pk": 6130,
+    "fields": {
+        "school": "uoft",
+        "code": "JMU189Y1",
+        "name": "Jazz Orchestra   Jazz Orchestra Univ of Toronto Jazz Orchestra",
+        "description": "",
+        "notes": "",
+        "info": "",
+        "unstopped_description": "",
+        "campus": "1",
+        "prerequisites": "",
+        "corequisites": "",
+        "exclusions": "",
+        "num_credits": 1.0,
+        "areas": "(1)",
+        "department": "MUS",
+        "level": "100",
+        "cores": null,
+        "geneds": null,
+        "related_courses": []
+    }
+},
+{
+    "model": "timetable.course",
+    "pk": 6128,
+    "fields": {
+        "school": "uoft",
+        "code": "JMU104Y1",
+        "name": "Jazz Keyboard Skills",
+        "description": "",
+        "notes": "",
+        "info": "",
+        "unstopped_description": "",
+        "campus": "1",
+        "prerequisites": "",
+        "corequisites": "",
+        "exclusions": "",
+        "num_credits": 0.33,
+        "areas": "(1)",
+        "department": "MUS",
+        "level": "100",
+        "cores": null,
+        "geneds": null,
+        "related_courses": []
+    }
+},
+{
+    "model": "timetable.course",
+    "pk": 6127,
+    "fields": {
+        "school": "uoft",
+        "code": "JMU101Y1",
+        "name": "Jazz & Trad. Ear Training",
+        "description": "",
+        "notes": "",
+        "info": "",
+        "unstopped_description": "",
+        "campus": "1",
+        "prerequisites": "",
+        "corequisites": "",
+        "exclusions": "",
+        "num_credits": 0.67,
+        "areas": "(1)",
+        "department": "MUS",
+        "level": "100",
+        "cores": null,
+        "geneds": null,
+        "related_courses": []
+    }
+},
+{
+    "model": "timetable.course",
+    "pk": 6080,
+    "fields": {
+        "school": "uoft",
+        "code": "EMU207Y1",
+        "name": "Keyboard Skills",
+        "description": "",
+        "notes": "",
+        "info": "",
+        "unstopped_description": "",
+        "campus": "1",
+        "prerequisites": "",
+        "corequisites": "",
+        "exclusions": "",
+        "num_credits": 0.33,
+        "areas": "(1)",
+        "department": "MUS",
+        "level": "200",
+        "cores": null,
+        "geneds": null,
+        "related_courses": []
+    }
+},
+{
+    "model": "timetable.course",
+    "pk": 6076,
+    "fields": {
+        "school": "uoft",
+        "code": "EMU150H1",
+        "name": "Instrumental-Violin & Viola",
+        "description": "",
+        "notes": "",
+        "info": "",
+        "unstopped_description": "",
+        "campus": "1",
+        "prerequisites": "",
+        "corequisites": "",
+        "exclusions": "",
+        "num_credits": 0.17,
+        "areas": "(1)",
+        "department": "MUS",
+        "level": "100",
+        "cores": null,
+        "geneds": null,
+        "related_courses": []
+    }
+}
+]

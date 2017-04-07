@@ -17,6 +17,10 @@ body {
     font-family: "Palanquin",Arial,sans-serif;
 }
 
+.cal-btn-wrapper {
+    font-size: 0;
+}
+
 button.save-timetable {
     border: none;
     outline: none;
@@ -45,7 +49,17 @@ button.save-timetable:active {
 button.save-timetable.add-button {
     margin-right: 2px;
 }
-
+button.row-button {
+    margin-right: 2px;
+    float: right;
+    background-color: transparent;
+    border: none;
+    border-radius: 4px;
+    transition: all .3s;
+}
+button.row-button:hover {
+    background-color: #ddd;
+}
 .cal-row {
 	width: 49px;
 	font-size: 14px;
@@ -53,6 +67,9 @@ button.save-timetable.add-button {
 /* Half hour height within calendar (HALF_HOUR_HEIGHT) */
 .fc-time-grid .fc-slats td {
 	height:25px;
+}
+.fc-time-grid .fc-slats, .fc-time-grid>hr {
+    z-index: 1;
 }
 .slot-bar {
     width: 5px !important;
@@ -64,7 +81,16 @@ button.save-timetable.add-button {
 	margin-left: 8px;
 	margin-top: 2px;
 }
-
+.fc-time {
+    white-space: nowrap;
+}
+.fc-time-name-overflow {
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+    float: left;
+    width: calc(100% - 20px);
+}
 .fc-toolbar {
     border-bottom: 0px;
     padding: 5px;
@@ -115,4 +141,16 @@ button.save-timetable.add-button {
         font-size: 9px;
         margin: 5px 5px 0;
     }
+}
+
+.save-timetable img {
+    display: inline-block;
+    position: absolute;
+    width: 100%;
+    top: 4px;
+    left: 7px;
+    line-height: 30px;
+    font-size: 18px;
+    height: 18px;
+    width: 18px;
 }

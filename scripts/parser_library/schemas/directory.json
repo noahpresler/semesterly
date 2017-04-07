@@ -1,0 +1,112 @@
+{
+	"$schema": "http://json-schema.org/draft-04/schema#",
+	"title": "Directory",
+	"description": "Semesterly School Directory JSON schema",
+	"type": "object",
+	"properties": {
+		"children": {
+			"type": "array",
+			"items": {
+				"oneOf": [
+					{
+						"type": "object",
+						"properties": {
+							"children": {
+								"type": "array",
+								"items": {
+									"type": "object",
+									"properties": {
+										"kind": {
+											"enum": ["file"]
+										},
+										"name": {
+											"type": "string",
+											"pattern": "\\s*.json"
+										}
+									}
+								}
+							},
+							"name": {
+								"enum": ["data"]
+							},
+							"kind": {
+								"enum": ["directory"]
+							}
+						},
+						"additionalProperties": false,
+						"required": [ "name", "kind" ]
+					},
+					{
+						"type": "object",
+						"properties": {
+							"name": {
+								"enum": ["config.json"]
+							},
+							"kind": {
+								"enum": ["file"]
+							}
+						},
+						"additionalProperties": false,
+						"required": [ "name", "kind" ]
+					},
+					{
+						"type": "object",
+						"properties": {
+							"name": {
+								"enum": ["__init__.py"]
+							},
+							"kind": {
+								"enum": ["file"]
+							}
+						},
+						"additionalProperties": false,
+						"required": [ "name", "kind" ]
+					},
+					{
+						"type": "object",
+						"properties": {
+							"name": {
+								"enum": ["logs"]
+							},
+							"kind": {
+								"enum": ["directory"]
+							},
+							"children": {
+								"type": "array"
+							}
+						},
+						"additionalProperties": false,
+						"required": [ "name", "kind" ]
+					},
+					{
+						"type": "object",
+						"properties": {
+							"name": {
+								"enum": ["misc"]
+							},
+							"kind": {
+								"enum": ["directory"]
+							},
+							"children": {
+								"type": "array"
+							}
+						},
+						"additionalProperties": false,
+						"required": [ "name", "kind" ]
+					}
+				]
+			},
+			"additionalItems": true,
+			"minItems": 5,
+			"maxItems": 5,
+			"uniqueItems": true
+		},
+		"kind": {
+			"enum": ["directory"]
+		},
+		"name": {
+			"type": "string"
+		}
+	},
+	"required": [ "children", "name", "kind" ]
+}

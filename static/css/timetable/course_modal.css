@@ -36,6 +36,7 @@
 .course-modal.trans #modal-header h1,
 .course-modal.trans #modal-header h2,
 .course-modal.trans #modal-body p,
+.course-modal.trans #modal-body p a,
 .course-modal.trans #modal-body .credits h4,
 .course-modal.trans #modal-body .rating-module h4,
 .course-modal.trans #modal-body .modal-module {
@@ -54,9 +55,25 @@
 	opacity: 0;
 	visibility: hidden;
 }
+.trans .capacity-tracker-wrapper {
+	opacity: 0;
+	visibility: hidden;
+}
 .course-modal .master-slot .slot-bar {
     border-top-left-radius: 5px;
     border-bottom-left-radius: 5px;
+}
+
+.course-modal .img-icon {
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%, -50%);
+}
+
+.course-modal #modal-content .loader {
+	width: 90px;
+	height: 90px;
 }
 
 .friend {
@@ -88,6 +105,7 @@
 	flex-direction: column;
 }
 #modal-header {
+	z-index: 11;
 	position: relative;
 	padding: 20px 10px 10px;
 	background-color: #f3f3f3;
@@ -226,6 +244,7 @@
 #modal-body [class^="col-"] {
 	padding: 30px 15px;
 }
+
 h3.modal-module-header {
 	font-size: 14px;
 	padding: 10px 5px;
@@ -292,6 +311,48 @@ h3.modal-module-header small {
 	font-weight: 400;
 	margin: 0 auto 5px;
 	transition: color .2s;
+}
+#modal-body .textItem {
+	line-height: 20px;
+}
+#modal-body a.course-link,
+#modal-body a.course-link:link,
+#modal-body a.course-link:visited {
+	color: #555;
+	text-decoration: underline;
+	cursor: pointer;
+	position: relative;
+	transition: color .3s;
+}
+#modal-body a.course-link:active,
+#modal-body a.course-link:hover {
+	color: #3473c8;
+}
+#modal-body a.course-link .course-link-tip {
+	opacity: 0;
+	visibility: hidden;
+	transition: opacity .3s, visibility .3s;
+	white-space: nowrap;
+	position: absolute;
+	top: -10px;
+	left: -10px;
+	height: 60px;
+	background-color: #FD7473;
+	color: #222;
+	border-radius: 5px;
+	line-height: 20px;
+	z-index: 1;
+	overflow: hidden;
+}
+#modal-body a.course-link .course-link-content {
+	padding: 10px;
+}
+#modal-body a.course-link .course-link-tip span {
+	display: block;
+}
+#modal-body a.course-link:hover .course-link-tip {
+	opacity: 1;
+	visibility: visible;
 }
 
 /* Course Modal Sections */
@@ -393,6 +454,91 @@ h3.modal-module-header small {
 
 #friends-inner {
 	margin: 0 auto;
+	position: relative;
+}
+#modal-content #friends-inner .img-icon {
+	position: static;
+	transform: none;
+	float: left;
+	margin: 5px;
+}
+#modal-content #friends-inner .loader {
+	border-width: 5px;
+	width: 20px;
+	height: 20px;
+}
+#modal-content #friends-inner .loading p {
+	float: left;
+	margin: 5px;
+	font-size: 11px;
+	line-height: 20px;
+	padding: 0;
+}
+#friends-inner p.null {
+	font-size: 11px;
+	line-height: 16px;
+	color: #aaa;
+	margin: 2px 3px;
+}
+#friends-inner .conversion {
+	text-align: center;
+}
+#friends-inner .conversion p {
+	font-size: 12px;
+	color: #999;
+	text-align: left;
+	line-height: 16px;
+	margin: 0 0 10px 0;
+}
+.conversion-image {
+	width: 100%;
+	height: 45px;
+	background-size: contain;
+	background-position: center;
+	background-repeat: no-repeat;
+	background-image: url(/static/img/get_facebook.png);
+	margin: 10px 0;
+}
+#modal-content .conversion a {
+	padding: 4px 7px;
+	font-size: 11px;
+	margin: 10px 0 5px 0;
+	cursor: pointer;
+	color: #fff;
+	background-color: #3b5998;
+}
+#modal-content .conversion a i {
+	margin-right: 4px;
+}
+
+.academic-support li {
+	list-style-type: none;
+	padding-top: 5px;
+}
+.academic-support .integration-image {
+	width: 22px;
+	height: 22px;
+	float: left;
+	background-size: contain;
+	background-position: center;
+	background-repeat: no-repeat;
+	margin-right: 5px;
+}
+.academic-support h4 {
+	margin: 0;
+	font-size: 14px;
+	float: left;
+	line-height: 22px;
+}
+#modal-body .academic-support a {
+	float: right;
+	font-size: 12px;
+}
+#modal-body .academic-support p {
+	clear: both;
+	font-size: 12px;
+	line-height: 14px;
+	padding: 5px 0 0;
 }
 
 @media (max-width: 766px) {
@@ -401,6 +547,9 @@ h3.modal-module-header small {
 	}
 	#modal-header h2 {
 		font-size: 14px;
+	}
+	#friends-inner .conversion p {
+		text-align: center;
 	}
 }
 
@@ -464,4 +613,93 @@ h3.modal-module-header small {
 	#modal-save:hover {
 		background-color: #5BCE84;
 	}
+}
+
+.capacity-tracker-wrapper {
+	text-align: center;
+}
+
+#capacity-attention-wrapper {
+	line-height: 25px;
+	height: 25px;
+	font-size: 16px;
+	display: inline-block;
+	margin-bottom: 10px;
+}
+
+#capacity-attention-wrapper > div#attention-tag {
+	float:left;
+	background-color: rgb(177, 81, 80);
+	color: rgb(255, 255, 255);
+	border-radius: 5px;
+	padding-right: 10px; 
+}
+
+#capacity-attention-wrapper > div#attention-tag div.slot-bar {
+	float:left;
+	position: relative;
+	background-color: rgb(253, 116, 115);
+	border-bottom-left-radius: 5px;
+	border-top-left-radius: 5px;
+	height: 25px;
+}
+
+#capacity-attention-wrapper > div#attention-tag div#clock-icon {
+	display: inline-block;
+	padding-right: 10px;
+	padding-left: 10px;
+}
+
+#capacity-attention-wrapper > div#attention-tag span {
+	display: inline-block;
+}
+
+
+#capacity-attention-wrapper #attention-text {
+	float: left;
+	margin-left: 5px;
+	color: #555;
+}
+
+#capacity-attention-wrapper #attention-text .highlight {
+	color: rgb(177, 81, 80);
+}
+
+/* NOTE: 1088px is fluid up to XXXX% */
+@media (max-width: 1088px) {
+	#capacity-attention-wrapper > div#attention-tag {
+		float: none;
+	}
+
+	#capacity-attention-wrapper #attention-text {
+		float: none;
+		margin: 5px 0 0 0;
+	}
+	#capacity-attention-wrapper {
+		font-size: 16px;
+		margin-top: 15px;
+	}
+}
+
+@media (max-width: 801px) {
+	#capacity-attention-wrapper {
+		font-size: 14px;
+	}
+}
+
+@media (max-width: 670px) {
+	#capacity-attention-wrapper {
+		font-size: 13px;
+	}
+}
+
+#capacity-tracker-text {
+	color: #777;
+	font-size: 12px;
+	margin-top: 30px;
+	margin-bottom: 5px;
+}
+
+#capacity-tracker-text span {
+	font-weight: 300;
 }
