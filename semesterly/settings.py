@@ -133,6 +133,10 @@ INSTALLED_APPS = (
     'rest_framework'
 )
 
+REST_FRAMEWORK ={
+    'UNICODE_JSON': False
+}
+
 MIDDLEWARE_CLASSES = (
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
