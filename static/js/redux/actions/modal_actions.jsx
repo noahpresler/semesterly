@@ -115,3 +115,7 @@ export function triggerAcquisitonModal() {
 export const toggleIntegrationModal = () => {
     return {type: ActionTypes.TOGGLE_INTEGRATION_MODAL};
 }
+
+export const togglePeerModal = () => {
+    return {type: ActionTypes.TOGGLE_PEER_MODAL};
+}
