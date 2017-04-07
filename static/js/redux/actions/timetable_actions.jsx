@@ -372,3 +372,7 @@ export const setActiveTimetable = (newActive) => (dispatch) => {
     dispatch(changeActiveTimetable(newActive));
     autoSave();
 }
+
+export const toggleConflicts = () => {
+    return {type: ActionTypes.TOGGLE_CONFLICTS}
+}
