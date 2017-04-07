@@ -1,52 +1,52 @@
-import { connect } from 'react-redux';
-import { fetchSearchResults, maybeSetSemester } from '../../actions/search_actions.jsx';
-import { addOrRemoveCourse, addOrRemoveOptionalCourse } from '../../actions/timetable_actions.jsx';
-import { SearchBar } from '../search_bar.jsx';
-import { fetchCourseInfo } from '../../actions/modal_actions.jsx';
-import { getSchoolSpecificInfo } from '../../constants/schools.jsx';
-import { openIntegrationModal } from '../../actions/user_actions.jsx';
-import * as ActionTypes from '../../constants/actionTypes.jsx'
+import {connect} from "react-redux";
+import {fetchSearchResults, maybeSetSemester} from "../../actions/search_actions.jsx";
+import {addOrRemoveCourse, addOrRemoveOptionalCourse} from "../../actions/timetable_actions.jsx";
+import {SearchBar} from "../search_bar.jsx";
+import {fetchCourseInfo} from "../../actions/modal_actions.jsx";
+import {getSchoolSpecificInfo} from "../../constants/schools.jsx";
+import {openIntegrationModal} from "../../actions/user_actions.jsx";
+import * as ActionTypes from "../../constants/actionTypes.jsx";
 
 const mapStateToProps = (state) => {
-	let { isVisible } = state.explorationModal;
-	let courseSections = state.courseSections.objects;
-	let schoolSpecificInfo = getSchoolSpecificInfo(state.school.school);
-	let schoolSpecificCampuses = schoolSpecificInfo.campuses;
-	return {
-		semester: allSemesters[state.semesterIndex],
-		campuses: schoolSpecificCampuses,
-  	searchResults: state.searchResults.items,
-  	isFetching: state.searchResults.isFetching,
-  	isCourseInRoster: (course_id) => courseSections[course_id] !== undefined,
-  	isCourseOptional: (course_id) => state.optionalCourses.courses.some(c => c.id === course_id),
-		hasHoveredResult: state.timetables.items[state.timetables.active].courses.some(course => course.fake),
-		isHovered: (position) => state.ui.searchHover === position,
-		hoveredPosition: state.ui.searchHover,
-		explorationModalIsVisible: isVisible
-	}
+    let {isVisible} = state.explorationModal;
+    let courseSections = state.courseSections.objects;
+    let schoolSpecificInfo = getSchoolSpecificInfo(state.school.school);
+    let schoolSpecificCampuses = schoolSpecificInfo.campuses;
+    return {
+        semester: allSemesters[state.semesterIndex],
+        campuses: schoolSpecificCampuses,
+        searchResults: state.searchResults.items,
+        isFetching: state.searchResults.isFetching,
+        isCourseInRoster: (course_id) => courseSections[course_id] !== undefined,
+        isCourseOptional: (course_id) => state.optionalCourses.courses.some(c => c.id === course_id),
+        hasHoveredResult: state.timetables.items[state.timetables.active].courses.some(course => course.fake),
+        isHovered: (position) => state.ui.searchHover === position,
+        hoveredPosition: state.ui.searchHover,
+        explorationModalIsVisible: isVisible
+    }
 }
 
 const mapDispatchToProps = (dispatch) => {
-	return {
-  	fetchCourses: (query) => dispatch(fetchSearchResults(query)),
-  	addCourse: addOrRemoveCourse,
-  	addRemoveOptionalCourse: (course) => dispatch(addOrRemoveOptionalCourse(course)),
-		fetchCourseInfo: (id) => dispatch(fetchCourseInfo(id)), 
-		showExplorationModal: () => dispatch({type: ActionTypes.SHOW_EXPLORATION_MODAL}),
-		showIntegrationModal: (id, integrationID) => openIntegrationModal(integrationID, id),
-		hoverSearchResult: (position) => {
-			dispatch({
-				type: ActionTypes.HOVER_SEARCH_RESULT,
-				position
-			});
-		},
-		maybeSetSemester
-	}
+    return {
+        fetchCourses: (query) => dispatch(fetchSearchResults(query)),
+        addCourse: addOrRemoveCourse,
+        addRemoveOptionalCourse: (course) => dispatch(addOrRemoveOptionalCourse(course)),
+        fetchCourseInfo: (id) => dispatch(fetchCourseInfo(id)),
+        showExplorationModal: () => dispatch({type: ActionTypes.SHOW_EXPLORATION_MODAL}),
+        showIntegrationModal: (id, integrationID) => openIntegrationModal(integrationID, id),
+        hoverSearchResult: (position) => {
+            dispatch({
+                type: ActionTypes.HOVER_SEARCH_RESULT,
+                position
+            });
+        },
+        maybeSetSemester
+    }
 }
 
 const SearchBarContainer = connect(
-	mapStateToProps,
-	mapDispatchToProps
+    mapStateToProps,
+    mapDispatchToProps
 )(SearchBar);
 
 export default SearchBarContainer;
