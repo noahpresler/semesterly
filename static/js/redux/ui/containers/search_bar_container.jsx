@@ -6,6 +6,8 @@ import {fetchCourseInfo} from "../../actions/modal_actions.jsx";
 import {getSchoolSpecificInfo} from "../../constants/schools.jsx";
 import {openIntegrationModal} from "../../actions/user_actions.jsx";
 import * as ActionTypes from "../../constants/actionTypes.jsx";
+import {showExplorationModal} from "../../actions/modal_actions.jsx";
+import {hoverSearchResult} from "../../actions/search_actions.jsx";
 
 const mapStateToProps = (state) => {
     let {isVisible} = state.explorationModal;
@@ -26,27 +28,18 @@ const mapStateToProps = (state) => {
     }
 }
 
-const mapDispatchToProps = (dispatch) => {
-    return {
-        fetchCourses: (query) => dispatch(fetchSearchResults(query)),
-        addCourse: addOrRemoveCourse,
-        addRemoveOptionalCourse: (course) => dispatch(addOrRemoveOptionalCourse(course)),
-        fetchCourseInfo: (id) => dispatch(fetchCourseInfo(id)),
-        showExplorationModal: () => dispatch({type: ActionTypes.SHOW_EXPLORATION_MODAL}),
-        showIntegrationModal: (id, integrationID) => openIntegrationModal(integrationID, id),
-        hoverSearchResult: (position) => {
-            dispatch({
-                type: ActionTypes.HOVER_SEARCH_RESULT,
-                position
-            });
-        },
-        maybeSetSemester
-    }
-}
-
 const SearchBarContainer = connect(
     mapStateToProps,
-    mapDispatchToProps
+    {
+        fetchCourses,
+        addCourse: addOrRemoveCourse,
+        addOrRemoveOptionalCourse,
+        fetchCourseInfo,
+        showExplorationModal,
+        showIntegrationModal: openIntegrationModal,
+        hoverSearchResult,
+        maybeSetSemester
+    }
 )(SearchBar);
 
 export default SearchBarContainer;
