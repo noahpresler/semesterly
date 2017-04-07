@@ -194,7 +194,7 @@ export function addLastAddedCourse() {
  to the user's roster. If a section is provided, that section is
  locked. Otherwise, no section is locked.
  */
-export function addOrRemoveCourse(newCourseId, lockingSection = '') {
+export const addOrRemoveCourse = (newCourseId, lockingSection = '') => (dispatch) => {
     let state = store.getState();
     if (state.timetables.isFetching) {
         return;
@@ -340,7 +340,7 @@ export function removeCustomSlot(id) {
     })
 }
 
-export function addOrRemoveOptionalCourse(course) {
+export const addOrRemoveOptionalCourse = (course) => (dispatch) => {
     return (dispatch) => {
         let removing = store.getState().optionalCourses.courses.some(c => c.id === course.id);
         if (store.getState().timetables.isFetching) {
