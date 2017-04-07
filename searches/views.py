@@ -10,7 +10,6 @@ from rest_framework.response import Response
 from rest_framework import status, generics
 
 from analytics.views import save_analytics_course_search
-from courses.serializers import CourseSerializer
 from student.models import Student
 from student.views import get_student
 from timetable.models import Semester, Course
