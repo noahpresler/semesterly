@@ -111,3 +111,7 @@ export function hideFinalExamsModal() {
 export function triggerAcquisitonModal() {
     return {type: ActionTypes.TRIGGER_ACQUISITION_MODAL};
 }
+
+export const toggleIntegrationModal = () => {
+    return {type: ActionTypes.TOGGLE_INTEGRATION_MODAL};
+}
