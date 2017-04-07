@@ -127,6 +127,13 @@ export const fetchAdvancedSearchResults = (query, filters) => (dispatch) => {
         });
 }
 
+export const hoverSearchResult = (position) => {
+   return {
+        type: ActionTypes.HOVER_SEARCH_RESULT,
+        position
+    };
+}
+
 export function paginateAdvancedSearchResults() {
     return {type: ActionTypes.PAGINATE_ADVANCED_SEARCH_RESULTS};
 }
