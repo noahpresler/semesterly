@@ -1,6 +1,8 @@
 import {connect} from "react-redux";
 import {PreferenceModal} from "../preference_modal.jsx";
 import * as ActionTypes from "../../constants/actionTypes.jsx";
+import {togglePreferenceModal} from "../../actions/modal_actions.jsx";
+import {toggleConflicts} from "../../actions/timetable_actions.jsx";
 
 
 const mapStateToProps = (state) => {
@@ -10,20 +12,14 @@ const mapStateToProps = (state) => {
     }
 }
 
-const mapDispatchToProps = (dispatch) => {
-    return {
-        togglePreferenceModal: () => dispatch({type: ActionTypes.TOGGLE_PREFERENCE_MODAL}),
-        toggleConflicts: () => dispatch({type: ActionTypes.TOGGLE_CONFLICTS}),
-        applyPreferences: () => {
-            dispatch({type: ActionTypes.TOGGLE_PREFERENCE_MODAL})
-            // fetchStateTimetables()
-        }
-    }
-}
 
 const PreferenceModalContainer = connect(
     mapStateToProps,
-    mapDispatchToProps
+    {
+        togglePreferenceModal,
+        toggleConflicts,
+        applyPreferences: togglePreferenceModal
+    }
 )(PreferenceModal);
 
 export default PreferenceModalContainer;
