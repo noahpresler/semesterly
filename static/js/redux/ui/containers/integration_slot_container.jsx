@@ -7,13 +7,9 @@ const mapStateToProps = (state) => {
     }
 }
 
-const mapDispatchToProps = (dispatch) => {
-    return {}
-}
-
 const IntegrationSlotContainer = connect(
     mapStateToProps,
-    mapDispatchToProps
+    {}
 )(IntegrationSlot);
 
 export default IntegrationSlotContainer;
