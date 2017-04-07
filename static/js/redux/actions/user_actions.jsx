@@ -583,3 +583,10 @@ export function LogFacebookAlertClick() {
         credentials: 'include',
     })
 }
+
+export const changeUserInfo = (info) => {
+    return {
+        type: ActionTypes.CHANGE_USER_INFO,
+        data: info,
+    }
+}
