@@ -1,5 +1,6 @@
 .react-alerts {
   position: fixed;
+  top: 14px;
   right: 0;
   bottom: 0;
   margin: 14px;
@@ -8,14 +9,14 @@
 .react-alerts .alert {
   width: 300px;
   min-height: 50px;
-  margin: 10px 0 0 0;
+  margin: 0;
   display: flex;
   align-items: center;
   justify-content: space-between;
   border-radius: 2px;
   background-color: #333;
   font-size: 11px;
-  box-shadow: 0 8px 12px 0 rgba(0,0,0,0.3);
+  box-shadow: 0 3px 12px 0 rgba(0,0,0,0.3);
   color: #fff;
 }
 .react-alerts .alert .content {
@@ -148,4 +149,133 @@
   position:relative;
   top:12px;
   text-transform: none;
+}
+
+.enable-notification-alert h2 {
+  font-size: 16px;
+  margin: 0;
+}
+.enable-notification-alert .alert-extra {
+  font-size: 12px;
+  line-height: 12px;
+}
+.enable-notifications-alert-icon {
+  width: 20px;
+  height: 20px;
+  vertical-align: middle;
+  background-size: contain;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-image: url(/static/img/alert/bell.png);
+}
+.enable-notification-alert a.decline-notifications,
+.enable-notification-alert a.decline-notifications:link,
+.enable-notification-alert a.decline-notifications:active,
+.enable-notification-alert a.decline-notifications:visited {
+  display: block;
+  margin-top: 25px;
+  cursor: pointer;
+  color: #999;
+  opacity: .77;
+  transition: opacity .3s;
+}
+
+.react-alerts .friends-in-class-alert-container {
+  width: 320px;
+  padding-left: 20px;
+}
+
+.friends-in-class-alert-container .icon {
+  display: none;
+}
+
+.enable-notification-alert a.decline-notifications:hover {
+  opacity: 1;
+}
+
+.friends-in-class-alert {
+  width: 230px;
+  margin: 0px 10px;
+}
+
+.friends-in-class-hide {
+  display: none;
+}
+
+.friends-in-class-show {
+  display: block;
+}
+
+.friends-in-class-done {
+  display: block;
+  font-size: 50px;
+  color: #42A770;
+}
+
+.react-alerts .friends-in-class-alert-container .close {
+  height: 120px !important;
+}
+
+.friends-in-class-alert .conflict-alert-btn {
+  margin-top: 25px;
+  padding-top: 0px;
+  margin-right: 2px;
+  font-size: 13px;
+  height: 38px;
+  background-color: #3B5998;
+  border-bottom: 2px solid #2b406e;
+  box-shadow: inset -3px -2px #2b406e;
+}
+
+.friends-in-class-alert .conflict-alert-btn:hover {
+  margin-top: 26px;
+  padding-top: 1px;
+  margin-right: 0px;
+  background-color: #3B5998;
+  border-bottom: 2px solid #3B5998;
+  box-shadow: none;
+}
+
+.friends-in-class-alert .master-slot {
+  margin-top: 15px;
+  margin-bottom: 5px;
+}
+
+.friends-in-class-alert .master-slot-content {
+  text-align: left;
+  text-transform: none;
+  width: 190px;
+}
+
+.friends-in-class-alert .master-slot-actions {
+  display: none;
+}
+
+.friends-in-class-fb {
+  margin-top: 20px;
+}
+
+.friends-in-class-fb .abnb-btn {
+  width: 100%;
+  background: white;
+  color: #484848;
+  border-radius: 4px;
+  border: 1px solid;
+  border-color: #c4c4c4;
+  padding-top: 10px !important;
+  padding-bottom: 10px !important;
+  padding-left: 13px !important;
+  padding-right: 40px !important;
+}
+
+.friends-in-class-fb .img-icon {
+  padding-right: 20px;
+}
+
+.friends-in-class-fb .img-icon > i {
+  font-size: 19px;
+}
+
+.friends-in-class-fb .facebook-text {
+  font-size: 13px;
 }
