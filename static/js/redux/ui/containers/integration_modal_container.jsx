@@ -1,5 +1,6 @@
 import {connect} from "react-redux";
 import {IntegrationModal} from "../integration_modal.jsx";
+import {toggleIntegrationModal} from "../../actions/modal_actions.jsx";
 
 const mapStateToProps = (state) => {
     return {
@@ -9,17 +10,11 @@ const mapStateToProps = (state) => {
     }
 }
 
-const mapDispatchToProps = (dispatch) => {
-    return {
-        toggleIntegrationModal: () => {
-            dispatch({type: ActionTypes.TOGGLE_INTEGRATION_MODAL})
-        }
-    }
-}
-
 const IntegrationModalContainer = connect(
     mapStateToProps,
-    mapDispatchToProps
+    {
+        toggleIntegrationModal
+    }
 )(IntegrationModal);
 
 export default IntegrationModalContainer;
