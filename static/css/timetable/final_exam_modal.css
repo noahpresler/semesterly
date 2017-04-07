@@ -1,0 +1,239 @@
+/* link in sidebar */
+.final-schedule-link {
+	cursor: pointer;
+}
+
+/* Overriding Default Modal Styles */
+.final-exam-modal {
+	max-width: 1200px;
+	/*height: 85%;*/
+	max-height: 900px;
+}
+.final-exam-modal > div {
+	outline: none;
+	width: 100%;
+	height: 100%;
+}
+.final-exam-modal #modal-header {
+	padding: 10px 10px 3px;
+}
+/* Style the loader */
+#modal-content .img-icon {
+	position: absolute;
+ 	top: 50%;
+ 	left: 50%;
+ 	transform: translate(-50%, -50%);
+}
+#modal-content .loader {
+	width: 90px;
+  	height: 90px;
+}
+#final-exam-loader-wrapper {
+	height: 350px;
+}
+
+/* Final Exams Modal */
+#final-exam-calendar-ctn {
+	width: 100%;
+	padding: 30px;
+}
+#final-exam-main {
+    width: 80%;
+    float: left;
+}
+#final-exam-main.main-full {
+	width: 100%;
+}
+#final-exam-sidebar {
+	float: left;
+    width: 20%;
+    padding: 0 0 0 20px;
+}
+#final-exam-sidebar h3 {
+	padding-top: 0;
+}
+#final-exam-calendar-ctn.mobile {
+	padding: 0 10px 20px;
+}
+.final-exam-modal.is-mobile {
+	height: 75%;
+}
+@media (max-width: 766px) {
+	.final-exam-modal #modal-header {
+		padding: 10px 10px 3px;
+	}
+	#final-exam-calendar-ctn {
+		padding: 30px 10px;
+	}
+	#final-exam-main {
+		float: none;
+		width: 100%;
+	}
+	#final-exam-sidebar {
+		width: 100%;
+		padding: 20px 0 0;
+	}
+}
+/* For Each Week */
+.final-exam-days-ctn {
+	display: flex;
+}
+.final-exam-day {
+	width: 14.27%;
+	min-height: 100px;
+	border-right: 1px solid #ddd;
+	border-bottom: 1px solid #ddd;
+}
+.final-exam-day:first-child {
+	border-left: 1px solid #ddd;
+}
+/*  For the Slots in the Modal */
+.final-exam-modal .master-slot {
+	cursor: default;
+}
+.final-exam-modal .master-slot.conflict {
+	float: left;
+	clear: none;
+}
+.mobile .final-exam-day { /* mobile styles */
+	width: 100%;
+	min-height: 0px;
+	border: none;
+}
+.final-exam-modal .mobile .master-slot-content h3 {
+	font-size: 14px;
+}
+@media (max-width: 766px) {
+	.final-exam-modal .master-slot-content h3 {
+		font-size: 12px;
+	}
+}
+/*.final-exam-modal .master-slot-content h3 {
+	height: auto;
+	max-height: 30px;
+	white-space: normal;
+	text-overflow: initial;
+}*/
+#final-exam-calender-days h3 {
+	float: left;
+	font-weight: normal;
+	width: 14.27%;
+	border-right: 1px solid #ddd;
+	border-top: 1px solid #ddd;
+	border-bottom: 3px solid #ddd;
+	font-size: 15px;
+	margin: 0;
+	text-align: center;
+	line-height: 25px;
+}
+#final-exam-calender-days h3:first-child {
+	border-left: 1px solid #ddd;
+}
+#final-exam-calender-days h3 .day {
+	display: inline-block;
+	color: #999;
+}
+#final-exam-calender-days h3 .date {
+	display: inline-block;
+	margin-left: 5px;
+}
+@media (max-width: 766px) {
+	#final-exam-calender-days h3 {
+		line-height: 15px;
+		padding: 3px 0;
+	}
+	#final-exam-calender-days h3 .day {
+		display: block;
+	}
+	#final-exam-calender-days h3 .date {
+		display: block;
+		margin-left: 0;
+	}
+}
+/* Links in Modal */
+#modal-body p.final-exam-disclaimer {
+	clear: both;
+	padding: 5px 0 0;
+	color: #AFAFAF;
+	font-size: 12px;
+	line-height: 18px;
+}
+#modal-body p.final-exam-disclaimer i {
+	margin-right: 3px;
+}
+#modal-body p.final-exam-disclaimer a {
+	display: block;
+	text-decoration: underline;	
+	color: #3895db;
+}
+#modal-body .mobile p.final-exam-disclaimer {
+	padding: 0;
+	margin-top: -10px;
+}
+
+/* Upsell, no courses */
+
+.final-exam-modal .peer-card {
+	padding: 0px;
+}
+
+.final-exam-modal .peer-card-wrapper {
+    border: hidden;
+    box-shadow: none;
+}
+
+.final-exam-modal .upsell h4 {
+	float: none;
+	font-weight: 400;
+	text-align: center;
+}
+
+.final-exam-modal .upsell .disclaimer {
+	float: left;
+
+}
+
+.final-exam-modal .upsell p {
+    font-size: 16px;
+    line-height: 22px;
+    color: #555;
+    padding: 0 5px;
+    margin: 7px 0;
+    -webkit-transition: color .2s;
+    transition: color .2s;
+    word-wrap: break-word;
+    margin-bottom: 20px;
+}
+
+.final-exam-modal .abnb-btn {
+	margin-top: 30px;
+}
+
+.final-exam-modal .abnb-btn ~ .abnb-btn {
+    margin-top: 0px;
+}
+
+.final-exam-modal .abnb-btn {
+	color: white;
+    border-color: #3B5998;
+    background-color: #3B5998;
+    color: #fff;
+    max-width: 300px;
+}
+
+.final-exam-modal .add-courses-button {
+	background-color: #BBB;
+	border-color: #BBB;
+	margin-bottom: 40px;
+}
+
+.abnb-btn.secondary > span{
+	font-weight: 300;
+	color: white;
+}
+
+.or-separator {
+    margin: 0 auto;
+    margin-bottom: 22px;
+    max-width: 500px;
+}

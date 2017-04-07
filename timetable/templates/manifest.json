@@ -1,0 +1,14 @@
+{  
+    "name": "Semester.ly",  
+    "icons": [{  
+        "310": "static/img/logo2.0-310x310.png"
+    }],  
+    "start_url": "/index.html",  
+    "display": "standalone",  
+    "permissions": [
+        "gcm",
+        "storage",
+        "notifications"
+    ],
+    "gcm_sender_id": "801736825762"
+}
