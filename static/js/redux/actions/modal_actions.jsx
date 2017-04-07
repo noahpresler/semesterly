@@ -108,6 +108,10 @@ export function hideExplorationModal() {
     return {type: ActionTypes.HIDE_EXPLORATION_MODAL};
 }
 
+export function showExplorationModal() {
+    return {type: ActionTypes.SHOW_EXPLORATION_MODAL};
+}
+
 export function hideFinalExamsModal() {
     return {type: ActionTypes.HIDE_FINAL_EXAMS_MODAL};
 }
