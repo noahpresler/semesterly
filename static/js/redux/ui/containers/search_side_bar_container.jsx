@@ -33,17 +33,13 @@ const mapStateToProps = (state) => {
     }
 }
 
-const mapDispatchToProps = (dispatch) => {
-    return {
-        addCourse: addOrRemoveCourse,
-        hoverSection,
-        unhoverSection: unHoverSection(dispatch)
-    }
-}
-
 const SearchSideBarContainer = connect(
     mapStateToProps,
-    mapDispatchToProps
+    {
+        addCourse: addOrRemoveCourse,
+        hoverSection,
+        unHoverSection
+    }
 )(SearchSideBar);
 
 export default SearchSideBarContainer;
