@@ -363,3 +363,12 @@ export function addOrRemoveOptionalCourse(course) {
         store.dispatch(fetchTimetables(reqBody, removing));
     }
 }
+
+export const changeActiveTimetable = (newActive) => {
+    return {type: ActionTypes.CHANGE_ACTIVE_TIMETABLE, newActive};
+}
+
+export const setActiveTimetable = (newActive) => (dispatch) => {
+    dispatch(changeActiveTimetable(newActive));
+    autoSave();
+}
