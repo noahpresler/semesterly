@@ -50,3 +50,7 @@ class UrlsTest(UrlTestCase):
     def test_urls_call_correct_views(self):
         self.assertUrlResolvesToView('/search/jhu/Intermission/2019/opencv/', 'searches.views.course_search')
         self.assertUrlResolvesToView('/advanced_search/', 'searches.views.advanced_course_search')
+
+        self.assertUrlResolvesToView('/api/search/jhu/Intermission/2019/opencv/', 'searches.views.CourseSearchList')
+        self.assertUrlResolvesToView('/api/advanced_search/jhu/summer/1999/germany/',
+                                     'searches.views.AdvancedCourseSearchList')
