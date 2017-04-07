@@ -127,3 +127,11 @@ export const toggleIntegrationModal = () => {
 export const togglePeerModal = () => {
     return {type: ActionTypes.TOGGLE_PEER_MODAL};
 }
+
+export const triggerTextbookModal = () => {
+    return {type: ActionTypes.TRIGGER_TEXTBOOK_MODAL};
+}
+
+export const showFinalExamsModal = () => {
+    return {type: ActionTypes.SHOW_FINAL_EXAMS_MODAL}
+}
