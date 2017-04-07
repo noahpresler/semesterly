@@ -1,6 +1,6 @@
 import {connect} from "react-redux";
 import {SignupModal} from "../signup_modal.jsx";
-import * as ActionTypes from "../../constants/actionTypes.jsx";
+import {openSignUpModal} from "../../actions/modal_actions.jsx";
 
 
 const mapStateToProps = (state) => {
@@ -9,17 +9,11 @@ const mapStateToProps = (state) => {
     }
 }
 
-const mapDispatchToProps = (dispatch) => {
-    return {
-        toggleSignupModal: () => {
-            dispatch({type: ActionTypes.TOGGLE_SIGNUP_MODAL})
-        }
-    }
-}
-
 const SignupModalContainer = connect(
     mapStateToProps,
-    mapDispatchToProps
+    {
+        toggleSignupModal: openSignUpModal
+    }
 )(SignupModal);
 
 export default SignupModalContainer;
