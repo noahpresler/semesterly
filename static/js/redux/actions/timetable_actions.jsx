@@ -82,8 +82,7 @@ export function loadCachedTimetable(dispatch) {
 
 // loads @timetable into the state.
 // @created is true if the user is creating a new timetable
-export function loadTimetable(timetable, created = false) {
-    let dispatch = store.dispatch;
+export const loadTimetable = (timetable, created = false) => (dispatch) => {
     let state = store.getState();
     let isLoggedIn = state.userInfo.data.isLoggedIn;
     if (!isLoggedIn) {
@@ -96,10 +95,10 @@ export function loadTimetable(timetable, created = false) {
         created
     });
     // lock sections for this timetable; and mark it as the only available one
-    lockTimetable(dispatch, timetable, created, isLoggedIn);
+    dispatch(lockTimetable(timetable, created, isLoggedIn));
 }
 
-export function lockTimetable(dispatch, timetable, created, isLoggedIn) {
+export const lockTimetable = (timetable, created, isLoggedIn) => (dispatch) => {
     if (timetable.has_conflict) { // turn conflicts on if necessary
         dispatch({type: ActionTypes.TURN_CONFLICTS_ON});
     }
@@ -341,27 +340,25 @@ export function removeCustomSlot(id) {
 }
 
 export const addOrRemoveOptionalCourse = (course) => (dispatch) => {
-    return (dispatch) => {
-        let removing = store.getState().optionalCourses.courses.some(c => c.id === course.id);
-        if (store.getState().timetables.isFetching) {
-            return;
-        }
-        dispatch({
-            type: ActionTypes.ADD_REMOVE_OPTIONAL_COURSE,
-            newCourse: course
-        });
-        let state = store.getState(); // the above dispatched action changes the state
-        let reqBody = getBaseReqBody(state);
-        let {optionalCourses} = state;
-
-        let optionCourses = optionalCourses.courses.map(c => c.id);
-
-        Object.assign(reqBody, {
-            optionCourses,
-            numOptionCourses: state.optionalCourses.numRequired
-        });
-        store.dispatch(fetchTimetables(reqBody, removing));
+    let removing = store.getState().optionalCourses.courses.some(c => c.id === course.id);
+    if (store.getState().timetables.isFetching) {
+        return;
     }
+    dispatch({
+        type: ActionTypes.ADD_REMOVE_OPTIONAL_COURSE,
+        newCourse: course
+    });
+    let state = store.getState(); // the above dispatched action changes the state
+    let reqBody = getBaseReqBody(state);
+    let {optionalCourses} = state;
+
+    let optionCourses = optionalCourses.courses.map(c => c.id);
+
+    Object.assign(reqBody, {
+        optionCourses,
+        numOptionCourses: state.optionalCourses.numRequired
+    });
+    store.dispatch(fetchTimetables(reqBody, removing));
 }
 
 export const changeActiveTimetable = (newActive) => {
