@@ -1,7 +1,8 @@
 import {connect} from "react-redux";
-import {fetchFriends, saveSettings} from "../../actions/user_actions.jsx";
+import {fetchFriends, saveSettings, changeUserInfo} from "../../actions/user_actions.jsx";
 import {PeerModal} from "../peer_modal.jsx";
 import * as ActionTypes from "../../constants/actionTypes.jsx";
+import {openSignUpModal, togglePeerModal} from "../../actions/modal_actions.jsx";
 
 const mapStateToProps = (state) => {
     let activeTimetable = state.timetables.items[state.timetables.active];
@@ -15,22 +16,16 @@ const mapStateToProps = (state) => {
     }
 }
 
-const mapDispatchToProps = (dispatch) => {
-    return {
-        fetchFriends: () => dispatch(fetchFriends()),
-        saveSettings: (callback) => dispatch(saveSettings(callback)),
-        changeUserInfo: (info) => dispatch({
-            type: "CHANGE_USER_INFO",
-            data: info,
-        }),
-        togglePeerModal: () => dispatch({type: ActionTypes.TOGGLE_PEER_MODAL}),
-        openSignupModal: () => dispatch({type: ActionTypes.TOGGLE_SIGNUP_MODAL})
-    }
-}
 
 const PeerModalContainer = connect(
     mapStateToProps,
-    mapDispatchToProps
+    {
+        fetchFriends,
+        saveSettings,
+        changeUserInfo,
+        togglePeerModal,
+        openSignUpModal,
+    }
 )(PeerModal);
 
 export default PeerModalContainer;
