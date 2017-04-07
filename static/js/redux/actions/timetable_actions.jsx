@@ -116,21 +116,18 @@ export const lockTimetable = (timetable, created, isLoggedIn) => (dispatch) => {
     }
 }
 
-export function handleCreateNewTimetable() {
-    let dispatch = store.dispatch;
+export const handleCreateNewTimetable = () => (dispatch) => {
     let state = store.getState();
     let isLoggedIn = state.userInfo.data.isLoggedIn;
     if (!isLoggedIn) {
-        return dispatch({type: ActionTypes.TOGGLE_SIGNUP_MODAL});
+        return {type: ActionTypes.TOGGLE_SIGNUP_MODAL};
     }
     let {timetables: timetablesState} = state;
     if (timetablesState.items[timetablesState.active].courses.length > 0 && !state.savingTimetable.upToDate) {
-        return dispatch({
-            type: ActionTypes.ALERT_NEW_TIMETABLE,
-        });
+        return {type: ActionTypes.ALERT_NEW_TIMETABLE};
     }
     else {
-        createNewTimetable(getNumberedName("Untitled Schedule"));
+        dispatch(createNewTimetable(getNumberedName("Untitled Schedule")));
     }
 }
 
@@ -151,8 +148,8 @@ export function getNumberedName(name) {
     return nameBase + numberSuffix;
 }
 
-export function createNewTimetable(ttName = "Untitled Schedule") {
-    loadTimetable({name: ttName, courses: [], has_conflict: false}, true);
+export const createNewTimetable = (ttName = "Untitled Schedule") => (dispatch) =>  {
+    dispatch(loadTimetable({name: ttName, courses: [], has_conflict: false}, true));
 }
 
 /* 
@@ -308,8 +305,7 @@ function fetchTimetables(requestBody, removing, newActive = 0) {
 }
 
 export function addCustomSlot(timeStart, timeEnd, day, preview, id) {
-    let dispatch = store.dispatch;
-    dispatch({
+    return {
         type: ActionTypes.ADD_CUSTOM_SLOT,
         newCustomSlot: {
             time_start: timeStart, // match backend slot attribute names
@@ -319,16 +315,15 @@ export function addCustomSlot(timeStart, timeEnd, day, preview, id) {
             id,
             preview,
         }
-    })
+    };
 }
 
 export function updateCustomSlot(newValues, id) {
-    let dispatch = store.dispatch;
-    dispatch({
+    return {
         type: ActionTypes.UPDATE_CUSTOM_SLOT,
         newValues,
         id,
-    })
+    };
 }
 
 export function removeCustomSlot(id) {
