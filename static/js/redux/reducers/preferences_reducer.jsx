@@ -1,4 +1,4 @@
-import * as ActionTypes from '../constants/actionTypes.jsx'
+import * as ActionTypes from "../constants/actionTypes.jsx";
 
 const initPreferences = {
     try_with_conflicts: false,
@@ -11,7 +11,7 @@ const initPreferences = {
     ]
 }
 
-export const preferences = (state=initPreferences, action) => {
+export const preferences = (state = initPreferences, action) => {
     switch (action.type) {
         case ActionTypes.TOGGLE_CONFLICTS:
             return Object.assign({}, state, {try_with_conflicts: !state.try_with_conflicts})
@@ -21,11 +21,11 @@ export const preferences = (state=initPreferences, action) => {
             return action.preferences;
         case ActionTypes.ADD_METRIC:
             let addIndex = state.sort_metrics.findIndex(m => m.metric == action.metric)
-            if (addIndex == -1) 
+            if (addIndex == -1)
                 return state
             let added = Object.assign({}, state.sort_metrics[addIndex], {selected: true})
             let addedMetrics = [
-                ...state.sort_metrics.slice(0, addIndex), 
+                ...state.sort_metrics.slice(0, addIndex),
                 ...state.sort_metrics.slice(addIndex + 1),
                 added
             ]
@@ -36,8 +36,8 @@ export const preferences = (state=initPreferences, action) => {
                 return state
             let removed = Object.assign({}, state.sort_metrics[delIndex], {selected: false})
             let removedMetrics = [
-                removed, 
-                ...state.sort_metrics.slice(0, delIndex), 
+                removed,
+                ...state.sort_metrics.slice(0, delIndex),
                 ...state.sort_metrics.slice(delIndex + 1)
             ]
             return Object.assign({}, state, {sort_metrics: removedMetrics})
@@ -59,8 +59,8 @@ export const preferences = (state=initPreferences, action) => {
             let next_order = state.sort_metrics[orderIndex].order == 'least' ? 'most' : 'least'
             let reversed = Object.assign({}, state.sort_metrics[orderIndex], {order: next_order})
             let toggledMetrics = [
-                ...state.sort_metrics.slice(0, orderIndex), 
-                reversed, 
+                ...state.sort_metrics.slice(0, orderIndex),
+                reversed,
                 ...state.sort_metrics.slice(orderIndex + 1)
             ]
             return Object.assign({}, state, {sort_metrics: toggledMetrics})
