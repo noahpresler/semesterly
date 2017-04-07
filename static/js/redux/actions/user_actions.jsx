@@ -168,39 +168,92 @@ export function saveTimetable(isAutoSave = false, callback = null) {
     }
 }
 
-export function duplicateTimetable(timetable) {
-    return (dispatch) => {
-        let state = store.getState();
-        if (!state.userInfo.data.isLoggedIn) {
-            return dispatch({type: ActionTypes.TOGGLE_SIGNUP_MODAL})
-        }
-        // mark that we're now trying to save this timetable
-        dispatch({
-            type: ActionTypes.REQUEST_SAVE_TIMETABLE
-        });
-        fetch(getCloneTimetableEndpoint(), {
-            method: 'POST',
-            body: JSON.stringify({
-                timetable: timetable,
-                name: getNumberedName(timetable.name)
-            }),
-            credentials: 'include',
+export const duplicateTimetable = (timetable) => (dispatch) => {
+    let state = store.getState();
+    if (!state.userInfo.data.isLoggedIn) {
+        return dispatch({type: ActionTypes.TOGGLE_SIGNUP_MODAL})
+    }
+    // mark that we're now trying to save this timetable
+    dispatch({
+        type: ActionTypes.REQUEST_SAVE_TIMETABLE
+    });
+    fetch(getCloneTimetableEndpoint(), {
+        method: 'POST',
+        body: JSON.stringify({
+            timetable: timetable,
+            name: getNumberedName(timetable.name)
+        }),
+        credentials: 'include',
+    })
+        .then(response => response.json())
+        .then(json => {
+            dispatch({
+                type: ActionTypes.RECEIVE_TIMETABLES,
+                timetables: [json.saved_timetable],
+                preset: true,
+                saving: true
+            });
+            dispatch({
+                type: ActionTypes.RECEIVE_COURSE_SECTIONS,
+                courseSections: lockActiveSections(json.saved_timetable)
+            });
+            dispatch({
+                type: ActionTypes.CHANGE_ACTIVE_SAVED_TIMETABLE,
+                timetable: json.saved_timetable
+            });
+            dispatch({
+                type: ActionTypes.RECEIVE_SAVED_TIMETABLES,
+                timetables: json.timetables
+            });
+            dispatch({
+                type: ActionTypes.RECEIVE_TIMETABLE_SAVED,
+                upToDate: true
+            });
+
+            return json;
         })
-            .then(response => response.json())
-            .then(json => {
+        .then(json => {
+            if (state.userInfo.data.isLoggedIn && json.timetables[0]) {
+                dispatch(fetchClassmates(json.timetables[0].courses.map(c => c['id'])))
+            }
+        });
+}
+
+
+export const deleteTimetable = (timetable) => (dispatch) => {
+    let state = store.getState();
+    if (!state.userInfo.data.isLoggedIn) {
+        return dispatch({type: ActionTypes.TOGGLE_SIGNUP_MODAL})
+    }
+    // mark that we're now trying to save this timetable
+    dispatch({
+        type: ActionTypes.REQUEST_SAVE_TIMETABLE
+    });
+    fetch(getDeleteTimetableEndpoint(), {
+        method: 'POST',
+        body: JSON.stringify(timetable),
+        credentials: 'include',
+    })
+        .then(response => response.json())
+        .then(json => {
+            dispatch({
+                type: ActionTypes.RECEIVE_SAVED_TIMETABLES,
+                timetables: json.timetables
+            });
+            if (json.timetables.length > 0) {
                 dispatch({
                     type: ActionTypes.RECEIVE_TIMETABLES,
-                    timetables: [json.saved_timetable],
+                    timetables: [json.timetables[0]],
                     preset: true,
                     saving: true
                 });
                 dispatch({
                     type: ActionTypes.RECEIVE_COURSE_SECTIONS,
-                    courseSections: lockActiveSections(json.saved_timetable)
+                    courseSections: lockActiveSections(json.timetables[0])
                 });
                 dispatch({
                     type: ActionTypes.CHANGE_ACTIVE_SAVED_TIMETABLE,
-                    timetable: json.saved_timetable
+                    timetable: json.timetables[0]
                 });
                 dispatch({
                     type: ActionTypes.RECEIVE_SAVED_TIMETABLES,
@@ -210,73 +263,16 @@ export function duplicateTimetable(timetable) {
                     type: ActionTypes.RECEIVE_TIMETABLE_SAVED,
                     upToDate: true
                 });
-
-                return json;
-            })
-            .then(json => {
-                if (state.userInfo.data.isLoggedIn && json.timetables[0]) {
-                    dispatch(fetchClassmates(json.timetables[0].courses.map(c => c['id'])))
-                }
-            });
-    }
-}
-
-
-export function deleteTimetable(timetable) {
-    return (dispatch) => {
-        let state = store.getState();
-        if (!state.userInfo.data.isLoggedIn) {
-            return dispatch({type: ActionTypes.TOGGLE_SIGNUP_MODAL})
-        }
-        // mark that we're now trying to save this timetable
-        dispatch({
-            type: ActionTypes.REQUEST_SAVE_TIMETABLE
-        });
-        fetch(getDeleteTimetableEndpoint(), {
-            method: 'POST',
-            body: JSON.stringify(timetable),
-            credentials: 'include',
+            } else {
+                nullifyTimetable(dispatch);
+            }
+            return json;
         })
-            .then(response => response.json())
-            .then(json => {
-                dispatch({
-                    type: ActionTypes.RECEIVE_SAVED_TIMETABLES,
-                    timetables: json.timetables
-                });
-                if (json.timetables.length > 0) {
-                    dispatch({
-                        type: ActionTypes.RECEIVE_TIMETABLES,
-                        timetables: [json.timetables[0]],
-                        preset: true,
-                        saving: true
-                    });
-                    dispatch({
-                        type: ActionTypes.RECEIVE_COURSE_SECTIONS,
-                        courseSections: lockActiveSections(json.timetables[0])
-                    });
-                    dispatch({
-                        type: ActionTypes.CHANGE_ACTIVE_SAVED_TIMETABLE,
-                        timetable: json.timetables[0]
-                    });
-                    dispatch({
-                        type: ActionTypes.RECEIVE_SAVED_TIMETABLES,
-                        timetables: json.timetables
-                    });
-                    dispatch({
-                        type: ActionTypes.RECEIVE_TIMETABLE_SAVED,
-                        upToDate: true
-                    });
-                } else {
-                    nullifyTimetable(dispatch);
-                }
-                return json;
-            })
-            .then(json => {
-                if (state.userInfo.data.isLoggedIn && json.timetables[0]) {
-                    dispatch(fetchClassmates(json.timetables[0].courses.map(c => c['id'])))
-                }
-            });
-    }
+        .then(json => {
+            if (state.userInfo.data.isLoggedIn && json.timetables[0]) {
+                dispatch(fetchClassmates(json.timetables[0].courses.map(c => c['id'])))
+            }
+        });
 }
 
 function getSaveSettingsRequestBody() {

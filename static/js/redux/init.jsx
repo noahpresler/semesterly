@@ -141,7 +141,7 @@ function setup(dispatch) {
 
     /* now setup sharing state */
     if (sharedTimetable) {
-        lockTimetable(dispatch, sharedTimetable, true, user.isLoggedIn);
+        dispatch(lockTimetable(sharedTimetable, true, user.isLoggedIn));
     } else if (sharedCourse) {
         dispatch(setCourseInfo(sharedCourse));
         dispatch(fetchCourseClassmates(sharedCourse.id));
