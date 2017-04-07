@@ -111,32 +111,29 @@ class CourseSearchList(APIView):
 
 class AdvancedCourseSearchList(APIView):
 
-    def get(self, request):
+    def get(self, request, query, sem_name, year):
         school = request.subdomain
-        params = json.loads(request.body)
-        page = int(params['page'])
-        sem, _ = Semester.objects.get_or_create(**params['semester'])
-        query = params['query']
-        filters = params['filters']
+        page = int(request.query_params.get('page', 1))
+        sem, _ = Semester.objects.get_or_create(name=sem_name, year=year)
 
         # filtering first by user's search query
         course_match_objs = get_course_matches(school, query, sem)
 
         # filtering now by departments, areas, or levels if provided
-        if filters['areas']:
-            course_match_objs = course_match_objs.filter(areas__in=filters['areas'])
-        if filters['departments']:
-            course_match_objs = course_match_objs.filter(department__in=filters['departments'])
-        if filters['levels']:
-            course_match_objs = course_match_objs.filter(level__in=filters['levels'])
-        if filters['times']:
+        if request.query_params.get('areas'):
+            course_match_objs = course_match_objs.filter(areas__in=request.query_params.get('areas'))
+        if request.query_params.get('departments'):
+            course_match_objs = course_match_objs.filter(department__in=request.query_params.get('departments'))
+        if request.query_params.get('levels'):
+            course_match_objs = course_match_objs.filter(level__in=request.query_params.get('levels'))
+        if request.query_params.get('times'):
             day_map = {"Monday": "M", "Tuesday": "T", "Wednesday": "W", "Thursday": "R", "Friday": "F"}
             course_match_objs = course_match_objs.filter(
                 reduce(operator.or_, (Q(section__offering__time_start__gte="{0:0=2d}:00".format(min_max['min']),
                                         section__offering__time_end__lte="{0:0=2d}:00".format(min_max['max']),
                                         section__offering__day=day_map[min_max['day']],
                                         section__semester=sem,
-                                        section__section_type="L") for min_max in filters['times'])
+                                        section__section_type="L") for min_max in request.query_params.get('times'))
                        )
             )
         try:
