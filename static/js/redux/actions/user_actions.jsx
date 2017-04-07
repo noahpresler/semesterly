@@ -345,21 +345,19 @@ export function getUserSavedTimetables(semester) {
     }
 }
 
-export function fetchFinalExamSchedule() {
-    return (dispatch) => {
-        let state = store.getState();
-        let timetable = getActiveTimetable(state.timetables);
-        dispatch({type: ActionTypes.FETCH_FINAL_EXAMS})
-        fetch(getFinalExamSchedulerEndpoint(), {
-            credentials: 'include',
-            method: 'POST',
-            body: JSON.stringify(timetable)
-        })
-            .then(response => response.json())
-            .then(json => {
-                dispatch({type: ActionTypes.RECIEVE_FINAL_EXAMS, json: json})
-            });
-    }
+export const fetchFinalExamSchedule = () => (dispatch) => {
+    let state = store.getState();
+    let timetable = getActiveTimetable(state.timetables);
+    dispatch({type: ActionTypes.FETCH_FINAL_EXAMS});
+    fetch(getFinalExamSchedulerEndpoint(), {
+        credentials: 'include',
+        method: 'POST',
+        body: JSON.stringify(timetable)
+    })
+        .then(response => response.json())
+        .then(json => {
+            dispatch({type: ActionTypes.RECIEVE_FINAL_EXAMS, json: json});
+        });
 }
 
 export function fetchClassmates(courses) {
