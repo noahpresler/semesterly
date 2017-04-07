@@ -48,7 +48,7 @@ class DTMSideBar extends React.Component {
         return (
             <div id="side-bar" className="no-print">
 
-                <SemesterOverview />
+                <SemesterOverview {...this.props} />
 
                 <GCalListContainer />
 

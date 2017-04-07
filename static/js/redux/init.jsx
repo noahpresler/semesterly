@@ -42,6 +42,7 @@ function setup(dispatch) {
     });
 
     uses12HrTime = uses12HrTime === "True";
+    allSemesters = JSON.parse(allSemesters);
     if (isPoll) {
         let sharedTimetable, sharedCourse, findFriends, enableNotifs, studentIntegrations, signup, gcalCallback, exportCalendar, viewTextbooks;
         calendarList = calendarList ? JSON.parse(calendarList) : null;
@@ -68,7 +69,6 @@ function setup(dispatch) {
         }
         dispatch(fetchAvailability());
     } else {
-        allSemesters = JSON.parse(allSemesters);
         sharedTimetable = JSON.parse(sharedTimetable);
         sharedCourse = JSON.parse(sharedCourse);
         finalExamsSupportedSemesters = JSON.parse(finalExamsSupportedSemesters);
