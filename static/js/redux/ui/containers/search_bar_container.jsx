@@ -5,7 +5,6 @@ import {SearchBar} from "../search_bar.jsx";
 import {fetchCourseInfo} from "../../actions/modal_actions.jsx";
 import {getSchoolSpecificInfo} from "../../constants/schools.jsx";
 import {openIntegrationModal} from "../../actions/user_actions.jsx";
-import * as ActionTypes from "../../constants/actionTypes.jsx";
 import {showExplorationModal} from "../../actions/modal_actions.jsx";
 import {hoverSearchResult} from "../../actions/search_actions.jsx";
 
@@ -31,9 +30,9 @@ const mapStateToProps = (state) => {
 const SearchBarContainer = connect(
     mapStateToProps,
     {
-        fetchCourses,
+        fetchCourses: fetchSearchResults,
         addCourse: addOrRemoveCourse,
-        addOrRemoveOptionalCourse,
+        addRemoveOptionalCourse: addOrRemoveOptionalCourse,
         fetchCourseInfo,
         showExplorationModal,
         showIntegrationModal: openIntegrationModal,
