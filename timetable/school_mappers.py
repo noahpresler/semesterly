@@ -26,7 +26,7 @@ VALID_SCHOOLS = [
   "uoft", 
   "jhu", 
   "umd", 
-  "uo", 
+  # "uo", 
   # "rutgers", 
   "queens",
   "vandy",
@@ -74,11 +74,11 @@ school_to_course_regex = {
 _sem = lambda term, year: {'name': term, 'year': year}
 
 school_to_semesters = {
-  'jhu': [_sem('Fall', '2017'), _sem('Spring', '2017'), _sem('Fall', '2016')],
+  'jhu': [_sem('Fall', '2017'), _sem('Summer', '2017'), _sem('Spring', '2017'), _sem('Fall', '2016')],
   'uoft': [_sem('Winter', '2017'), _sem('Fall', '2016')],
   'umd': [_sem('Spring', '2017'), _sem('Fall', '2016')],
   'rutgers': [_sem('Spring', '2017'), _sem('Fall', '2016')],
-  'uo': [_sem('Spring', '2017'), _sem('Fall', '2016')],
+  # 'uo': [_sem('Spring', '2017'), _sem('Fall', '2016')],
   'queens': [_sem('Winter', '2017'), _sem('Fall', '2016')],
   'vandy': [_sem('Fall', '2017'), _sem('Spring', '2017'), _sem('Fall', '2016')],
   'gw': [_sem('Fall', '2017'), _sem('Spring', '2017')],
@@ -87,12 +87,8 @@ school_to_semesters = {
   'salisbury': [_sem('Fall', '2017'), _sem('Spring', '2017'), _sem('Winter', '2017'), _sem('Fall', '2016'), _sem('Summer', '2017'), _sem('Interterm', '2017')],
 }
 
-# Ensure DB has all semesters.
-for school, semesters in school_to_semesters.items():
-  for semester in semesters:
-    Semester.objects.update_or_create(**semester)
 
-# do the imports: assumes all parser follow the same naming conventions: 
+# do the imports: assumes all parser follow the same naming conventions:
 # schoolname_parsertype where parsertype can be courses, evals, or textbooks
 types = ['courses', 'evals', 'textbooks']
 for school in VALID_SCHOOLS:
@@ -103,7 +99,7 @@ for school in VALID_SCHOOLS:
 course_parsers = {
   'uoft': lambda: UofTParser().start(),
   # 'rutgers': parse_rutgers,
-  'uo': parse_ottawa,
+  # 'uo': parse_ottawa,
   'gw': lambda: GWParser().parse(),
 }
 

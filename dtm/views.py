@@ -7,6 +7,7 @@ from django.template import RequestContext
 from timetable.models import *
 from timetable.school_mappers import school_to_granularity, VALID_SCHOOLS, school_code_to_name, AM_PM_SCHOOLS, school_to_course_regex
 from timetable.utils import *
+from timetable.views import get_current_semesters
 from student.utils import *
 from dtm.models import *
 from student.models import Student
@@ -25,16 +26,16 @@ def view_dtm_root(request, code=None, sem=None, share_availability=None, is_my_s
   school = request.subdomain
   student = get_student(request)
 
-  if not sem: # not loading a share course link
-    if school in AM_PM_SCHOOLS:
-	sem = 'S'
-    else:
-	sem = 'F'
+  sem_dicts = get_current_semesters(school) # corresponds to allSemesters on frontend
+  semester_index = 0 # corresponds to state.semesterIndex on frontend
+  sem = Semester.objects.get(**sem_dicts[semester_index])
+
   return render_to_response("dtm_root.html", {
     'school': school,
     'student': json.dumps(get_user_dict(school, student, sem)),
     'course': json.dumps(None),
-    'semester': sem,
+    'semester': str(semester_index),
+    'all_semesters': json.dumps(sem_dicts),
     'uses_12hr_time': school in AM_PM_SCHOOLS,
     'calendar_list': get_calendar_list(student),
     'share_availability': json.dumps(share_availability, cls=DjangoJSONEncoder),

@@ -110,7 +110,7 @@ class GWParser:
 		genurl = self.url + '/PRODCartridge/twbkwbis.P_GenMenu'
 		actions = ['bmenu.P_MainMnu', 'bmenu.P_StuMainMnu', 'bmenu.P_RegMnu']
 		map(lambda n: self.requester.get(genurl, params={'name':n}), actions)
-		return self.requester.get(self.url + '/PRODCartridge/bwskfcls.P_CrseSearch', params={'term_in':''}, parse=False)
+		self.requester.get(self.url + '/PRODCartridge/bwskfcls.P_CrseSearch', params={'term_in':''}, parse=False)
 
 	def parse(self):
 		self.login()
@@ -256,7 +256,13 @@ class GWParser:
 
 	def scrape_description(self, soup):
 		try:
-			soup = soup.find_all('tr', recursive=False)[1].find('td')
+			_soup = soup
+			try:
+				soup = soup.find_all('tr', recursive=False)[1].find('td')
+			except Exception as e:
+				print(e)
+				print(soup.prettify())
+				print(_soup.prettify())
 			descr = re.match(r'<td .*?>\n([^<]+)<[^$]*</td>', soup.prettify())
 			if descr:
 				return ' '.join(descr.group(1).strip().splitlines())
