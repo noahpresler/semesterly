@@ -32,6 +32,7 @@ class Student(models.Model):
                                           blank=True)
     time_created = models.DateTimeField(auto_now_add=True)
     school = models.CharField(max_length=100, null=True)
+    time_accepted_tos = models.DateTimeField(null=True)
 
 
 class Reaction(models.Model):
