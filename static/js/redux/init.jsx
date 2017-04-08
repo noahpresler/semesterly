@@ -43,6 +43,7 @@ function setup(dispatch) {
   allSemesters = JSON.parse(allSemesters);
   sharedTimetable = JSON.parse(sharedTimetable);
   sharedCourse = JSON.parse(sharedCourse);
+  finalExamsSupportedSemesters = JSON.parse(finalExamsSupportedSemesters);
   findFriends = findFriends === "True";
   enableNotifs = enableNotifs === "True";
   uses12HrTime = uses12HrTime === "True";
