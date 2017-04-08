@@ -36,13 +36,13 @@ export class SocialProfile extends React.Component {
 						>
 						<div className="tip-border"></div>
 						<div className="tip"></div>
-						<a href="/me">
-							<i className="fa fa-user"></i>
-							<span>Profile</span>
-						</a>
 						<a onClick={this.props.showUserSettings}>
 							<i className="fa fa-cog"></i>
 							<span>Account</span>
+						</a>
+						<a href="/me">
+							<i className="fa fa-bar-chart"></i>
+							<span>Stats</span>
 						</a>
 						<a href="/static/privacypolicy.htm">
 							<i className="fa fa-user-secret"></i>
