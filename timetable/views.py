@@ -1,5 +1,6 @@
 import itertools
 import logging
+from datetime import datetime
 
 from django.db.models import Count
 from hashids import Hashids
@@ -77,11 +78,14 @@ def view_timetable(request, code=None, sem_name=None, year=None, shared_timetabl
       raise Http404
 
   integrations = {'integrations': []}
+  tos_last_updated = TermOfService.objects.order_by("-last_updated")[0].last_updated
+  print(tos_last_updated)
   if student and student.user.is_authenticated():
     student.school = school
     student.save()
     for i in student.integrations.all():
       integrations['integrations'].append(i.name)
+  print(get_user_dict(school, student, sem))
   return render_to_response("timetable.html", {
     'school': school,
     'student': json.dumps(get_user_dict(school, student, sem)),
@@ -99,7 +103,8 @@ def view_timetable(request, code=None, sem_name=None, year=None, shared_timetabl
     'export_calendar': export_calendar,
     'view_textbooks': view_textbooks,
     'final_exams_supported_semesters': map(lambda s: sem_dicts.index(s) ,final_exams_available.get(school, [])),
-    'final_exams': final_exams
+    'final_exams': final_exams,
+    "tos_last_updated": tos_last_updated
   },
   context_instance=RequestContext(request))
 
@@ -573,4 +578,10 @@ def log_final_exam_view(request):
     school=request.subdomain
   ).save()
   return HttpResponse(json.dumps({}), content_type="application/json")
-  
+
+@csrf_exempt
+def accept_tos(request):
+  student = Student.objects.get(user=request.user)
+  student.time_accepted_tos = datetime.today()
+  student.save()
+  return HttpResponse("success")
