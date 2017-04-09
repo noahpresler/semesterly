@@ -142,3 +142,7 @@ export const overrideSettingsShow = (data) => {
         data
     };
 }
+
+export const toggleTextbookModal = () => {
+    return {type: ActionTypes.TOGGLE_TEXTBOOK_MODAL};
+}
