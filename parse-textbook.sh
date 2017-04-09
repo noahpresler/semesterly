@@ -18,8 +18,8 @@ declare -a schools=("jhu" "umd" "queens" "vandy" "gw" "umich" "chapman" "salisbu
 
 for school in "${schools[@]}"
 do
-	python ${sem_home}/manage.py ingest ${school}
-	report_on_bad_exit $? ${school} "ingest"
-	python ${sem_home}/manage.py digest ${school}
-	report_on_bad_exit $? ${school} "digest"
+	python ${sem_home}/manage.py ingest --textbooks ${school}
+	report_on_bad_exit $? ${school} "ingest textbooks"
+	python ${sem_home}/manage.py digest --textbooks ${school}
+	report_on_bad_exit $? ${school} "digest textbooks"
 done
