@@ -3,15 +3,19 @@ import sys
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "semesterly.settings")
 django.setup()
 from student.models import *
+from timetable.models import Semester
 from mailer import Mailer
 
-if len(sys.argv) < 3:
-    print("Please specify a school and a semester (F or S).")
+if len(sys.argv) < 4:
+    print("Please specify a school, a term (e.g. Fall), and a year (e.g. 2017).")
     exit(0)
 school = sys.argv[1]
-semester = sys.argv[2]
+term = sys.argv[2]
+year = int(sys.argv[3])
 
-students = PersonalTimetable.objects.filter(school=school).values_list("student", flat=True).distinct()
+semester = Semester.objects.filter(name=term, year=year)
+
+students = PersonalTimetable.objects.filter(school=school, semester=semester).values_list("student", flat=True).distinct()
 client = Mailer()
 
 for student_id in students:
