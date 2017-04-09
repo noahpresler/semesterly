@@ -275,9 +275,7 @@ def share_availability(request, ref):
   if student == share.student:
     return view_dtm_root(request, share_availability=merge_free_busy(get_free_busy_from_cals(cal_ids, student, week_offset=week_offset)), is_my_share=True)
   else: 
-    r = merge_free_busy(get_free_busy_from_cals(cal_ids, share.student, week_offset=week_offset))
-    print r
-    return view_dtm_root(request, share_availability=r)
+    return view_dtm_root(request, share_availability=merge_free_busy(get_free_busy_from_cals(cal_ids, share.student, week_offset=week_offset)))
   # except Exception as e:
   #   raise Http404
 
