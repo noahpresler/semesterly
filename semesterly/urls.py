@@ -16,6 +16,8 @@ handler500 = 'timetable.views.custom_500'
 
 urlpatterns = patterns('',
                        # url(r'^admin/', include(admin.site.urls)),
+   #DTM
+    url(r'^dtm/', include('dtm.urls')),
 
     # app urls
     url('', include('timetable.urls')),
@@ -29,9 +31,6 @@ urlpatterns = patterns('',
                        #finding friends
     url('', include('social.apps.django_app.urls', namespace='social')),
                        url('', include('django.contrib.auth.urls', namespace='auth')),
-
-    #DTM
-    url(r'^dtm/', include('dtm.urls')),
 
                        # home
     url(r'^$', 'timetable.views.view_timetable'),
