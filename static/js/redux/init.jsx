@@ -55,6 +55,7 @@ function setup(dispatch) {
   enableNotifs = enableNotifs === 'True';
   uses12HrTime = uses12HrTime === 'True';
   studentIntegrations = JSON.parse(studentIntegrations);
+  tosLastUpdated = tosLastUpdated === "True";
   signup = signup === 'True';
   userAcq = userAcq === 'True';
   gcalCallback = gcalCallback === 'True';

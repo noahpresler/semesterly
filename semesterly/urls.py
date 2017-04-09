@@ -47,6 +47,9 @@ urlpatterns = patterns('',
                        # for testing 404, so i don't have to turn off debug
                        url(r'^404testing/', 'timetable.views.custom_404'),
                        url(r'^500testing/', 'timetable.views.custom_500'),
+
+                       # for accepting TOS.
+                       url(r'^tos/accept/', 'timetable.views.accept_tos'),
                        )
 
 # profiling
