@@ -21,9 +21,9 @@ client = Mailer()
 for student_id in students:
     student = Student.objects.get(id=student_id)
 
-    if not student.emails_enabled or not student.user.email:
+    if not student.emails_enabled or not student.user.email or student.class_year < 2018:
         continue
 
-    client.send_mail(student, "Spring 2017 Classes on Semester.ly", "email_classes_released.html", {'freshman': student.class_year == 2020,
-            'senior': student.class_year == 2017})
+    client.send_mail(student, "Registration Starts Tomorrow", "email_registration_deadline.html", {'freshman': student.class_year == 2020, 
+    'sophomore': student.class_year == 2019, 'junior': student.class_year == 2018})
 client.cleanup()
