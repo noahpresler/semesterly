@@ -42,15 +42,17 @@ class MasterSlot extends React.Component {
         this.setState({shareLinkShown: false});
     }
     componentWillMount(){
-        let clipboard = new Clipboard('.slot-share-icon span');
-        console.log('this is greater ' + '.slot-' + this.props.course.id + ' .slot-share-icon');
+        let idEventTarget = "#ms-share-icon-" + this.props.course.id
+        let idCourse = "#" + this.props.course.id
+        let clipboard = new Clipboard(idEventTarget);
         clipboard.on('success', function(e) {
-            console.log('success');
-            $('.share-course-link').select();
-            $('.slot-clipboard-success').addClass('show');
+        $('.share-course-link').select();
+            setTimeout(function() {
+                $(idCourse).addClass('show');
+            }, 1000);
             setTimeout(function() {
                 $('.slot-clipboard-success').removeClass('show');
-            }, 3000);
+            }, 4500);
             e.clearSelection();
         });
         clipboard.on('error', function(e) {
@@ -86,11 +88,13 @@ class MasterSlot extends React.Component {
         creditsDisplay = numCredits + creditsDisplay;
         let prof_disp = this.props.professors == null ? null : <h3>{ prof }</h3>;
 
+        let shareLinkText = getCourseShareLink(this.props.course.code)
         let shareLink = this.state.shareLinkShown ? 
         <ShareLink 
-            link={getCourseShareLink(this.props.course.code)}
+            link={shareLinkText}
             onClickOut={this.hideShareLink} /> : 
         null;
+
 
 		return <div className={masterSlotClass}
 					onMouseEnter={ this.onMasterSlotHover }
@@ -98,7 +102,6 @@ class MasterSlot extends React.Component {
                     style={ { backgroundColor: COLOUR_DATA[this.props.colourIndex].background }}
                     onClick={this.props.fetchCourseInfo}
                >
-                    
 		        <div className="slot-bar"
 		        	style={ { backgroundColor: COLOUR_DATA[this.props.colourIndex].border } }
 		        ></div>
@@ -110,13 +113,17 @@ class MasterSlot extends React.Component {
 		        </div>
 		        <div className="master-slot-actions">
 
-		            <i className= "fa fa-share-alt slot-share-icon" id= {"ms-" + this.props.course.id} onClick={(event) => this.stopPropagation(this.showShareLink, event)}></i>
+		            <i className="fa fa-share-alt slot-share-icon" data-clipboard-text={shareLinkText} id={"ms-share-icon-" + this.props.course.id} onClick={(event) => this.stopPropagation(this.showShareLink, event)}></i>
                     {shareLink}
                     {
                         !this.props.hideCloseButton ? 
 		            <i className="fa fa-times" 
                         onClick={(event) => this.stopPropagation(this.props.removeCourse, event)}></i> : null
                     }
+                    <div className="slot-clipboard-success" id={this.props.course.id}> 
+                        <i className="fa fa-clipboard" aria-hidden="true"></i>
+                        <p>Copied to clipboard </p>
+                    </div>
 		        </div>
 		        <div className="master-slot-friends">
                     {friendCircles}
@@ -130,7 +137,7 @@ export const ShareLink = ({link, onClickOut}) => (
         <div className="share-course-link-wrapper">
             <div className="tip-border"></div>
             <div className="tip"></div>
-            <input className="share-course-link" size={link.length} value={link} data-clipboard-text={link} onClick={(e) => e.stopPropagation()} readOnly />
+            <input className="share-course-link" size={link.length} value={link} onClick={(e) => e.stopPropagation()} readOnly />
         </div>
     </ClickOutHandler>
 )

@@ -36,7 +36,29 @@
 .share-course-link-wrapper .share-course-link {
     cursor:text;
 }
-
+.slot-clipboard-success {
+    position: absolute;
+    top: 0px;
+    left: -215px;
+    background-color: #F8F6F7;
+    padding: 0 5px;
+    color: #555;
+    display: none;
+}
+.master-slot-actions .slot-clipboard-success i {
+    display: inline-block;
+    vertical-align: middle;
+    font-size: 12px;
+    margin-right: 5px;
+    opacity: 1;
+}
+.slot-clipboard-success p {
+    display: inline-block;
+    vertical-align: middle;
+    font-size: 12px;
+    margin-bottom: 1px;
+    margin-right: 5px;
+}
 #side-bar .unsaved { 
     font-style: italic;
 }
