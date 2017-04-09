@@ -51,7 +51,6 @@ Creates all GoogleCalendar models that DNE
 def make_unmade_calendars(calendar_list, student):
   for cal in calendar_list['items']:
     GoogleCalendar.objects.get_or_create(
-      student=student,
       calendar_id=cal['id'],
       defaults={'name': cal['summary']}
     )
@@ -115,6 +114,7 @@ def get_mutually_free(request):
   freeBusyA, freeBusyB = body['A'], body['B']
   return HttpResponse(json.dumps(find_mutually_free(freeBusyA, freeBusyB),cls=DjangoJSONEncoder), content_type='application/json')
 
+
 def find_mutually_free(freeBusyA, freeBusyB, week_offset=0):
   rotated_days = [6,0,1,2,3,4,5]
 
@@ -126,8 +126,6 @@ def find_mutually_free(freeBusyA, freeBusyB, week_offset=0):
 
   for day in range(7):
     busy_by_day[day] = []
-
-  print busy
 
   #intialize busy_by_day to be the times busy seperated by day
   for interval in busy:
@@ -246,7 +244,6 @@ def create_availability_share(cal_ids, student, week_offset):
   for cid in cal_ids:
     share.google_calendars.add(
       GoogleCalendar.objects.get(
-        student=student,
         calendar_id=cid
       )
     )
@@ -278,7 +275,9 @@ def share_availability(request, ref):
   if student == share.student:
     return view_dtm_root(request, share_availability=merge_free_busy(get_free_busy_from_cals(cal_ids, student, week_offset=week_offset)), is_my_share=True)
   else: 
-    return view_dtm_root(request, share_availability=merge_free_busy(get_free_busy_from_cals(cal_ids, student, week_offset=week_offset)))
+    r = merge_free_busy(get_free_busy_from_cals(cal_ids, share.student, week_offset=week_offset))
+    print r
+    return view_dtm_root(request, share_availability=r)
   # except Exception as e:
   #   raise Http404
 
