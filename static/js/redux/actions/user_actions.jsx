@@ -586,3 +586,15 @@ export const changeUserInfo = (info) => {
         data: info,
     }
 }
+
+export const changeTimetableName = (name) => (dispatch) => {
+    if (name.length === 0 || name.length > MAX_TIMETABLE_NAME_LENGTH) {
+        return;
+    } else {
+        return {
+            type: ActionTypes.CHANGE_ACTIVE_SAVED_TIMETABLE_NAME,
+            name,
+        }
+    }
+    dispatch(saveTimetable());
+}
