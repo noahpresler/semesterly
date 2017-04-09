@@ -16,13 +16,13 @@ import {
     getSaveSettingsEndpoint,
     getSaveTimetableEndpoint,
     getSetRegistrationTokenEndpoint,
+    acceptTOSEndpoint
 } from '../constants/endpoints';
 import { fetchCourseClassmates } from './modal_actions';
 import { store } from '../init';
 import { getNumberedName, loadTimetable, nullifyTimetable } from './timetable_actions';
 import { MAX_TIMETABLE_NAME_LENGTH } from '../constants/constants';
 import * as ActionTypes from '../constants/actionTypes';
-
 let autoSaveTimer;
 
 export const getUserInfo = json => ({
@@ -555,3 +555,11 @@ export const changeTimetableName = name => (dispatch) => {
   });
   dispatch(saveTimetable());
 };
+
+export function acceptTOS() {
+    return fetch(acceptTOSEndpoint(), {
+        credentials: 'include',
+        method: 'POST',
+        body: ''
+    })
+}

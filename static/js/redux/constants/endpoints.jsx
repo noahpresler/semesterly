@@ -28,3 +28,4 @@ export const getIntegrationGetEndpoint = (integrationId, courseId) => `/integrat
 export const getIntegrationDelEndpoint = (integrationId, courseId) => `/integration/del/${integrationId}/course/${courseId}/`;
 export const getIntegrationAddEndpoint = (integrationId, courseId) => `/integration/add/${integrationId}/course/${courseId}/`;
 export const getFinalExamSchedulerEndpoint = () => '/get_final_exams/';
+export const acceptTOSEndpoint = () => '/tos/accept/';
