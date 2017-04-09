@@ -1,8 +1,7 @@
 import {connect} from "react-redux";
 import TimetableNameInput from "../timetable_name_input.jsx";
-import {MAX_TIMETABLE_NAME_LENGTH} from "../../constants/constants.jsx";
-import {saveTimetable} from "../../actions/user_actions.jsx";
-import * as ActionTypes from "../../constants/actionTypes.jsx";
+import {openSignUpModal} from "../../actions/modal_actions.jsx";
+import {changeTimetableName} from "../../actions/user_actions.jsx";
 
 
 const mapStateToProps = (state) => {
@@ -14,26 +13,12 @@ const mapStateToProps = (state) => {
         isLoggedIn: state.userInfo.data.isLoggedIn
     }
 }
-
-const mapDispatchToProps = (dispatch) => {
-    return {
-        changeTimetableName: (name) => {
-            if (name.length === 0 || name.length > MAX_TIMETABLE_NAME_LENGTH) {
-                return;
-            }
-            dispatch({
-                type: ActionTypes.CHANGE_ACTIVE_SAVED_TIMETABLE_NAME,
-                name,
-            })
-            dispatch(saveTimetable());
-        },
-        openSignupModal: () => dispatch({type: ActionTypes.TOGGLE_SIGNUP_MODAL})
-    }
-}
-
 const TimetableNameInputContainer = connect(
     mapStateToProps,
-    mapDispatchToProps
+    {
+        openSignUpModal,
+        changeTimetableName
+    }
 )(TimetableNameInput);
 
 export default TimetableNameInputContainer;
