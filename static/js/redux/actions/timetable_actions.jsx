@@ -134,7 +134,6 @@ export const lockTimetable = (timetable, created, isLoggedIn) => (dispatch) => {
   }
 };
 
-
 // loads @timetable into the state.
 // @created is true if the user is creating a new timetable
 export const loadTimetable = (timetable, created = false) => (dispatch) => {
@@ -159,7 +158,13 @@ export const createNewTimetable = (ttName = 'Untitled Schedule') => (dispatch) =
   dispatch(loadTimetable({ name: ttName, courses: [], has_conflict: false }, true));
 };
 
-export const nullifyTimetable = () => (dispatch) => {
+export function triggerTosModal() {
+    return {
+        type: ActionTypes.TRIGGER_TOS_MODAL
+    }
+}
+
+export function nullifyTimetable(dispatch) {
   dispatch({
     type: ActionTypes.RECEIVE_TIMETABLES,
     timetables: [{ courses: [], has_conflict: false }],
@@ -305,6 +310,72 @@ export const addOrRemoveCourse = (newCourseId, lockingSection = '') => (dispatch
   dispatch(fetchTimetables(reqBody, removing));
   dispatch(autoSave());
 };
+
+function fetchTimetables(requestBody, removing, newActive = 0) {
+  return (dispatch) => {
+    const state = store.getState();
+        // mark that we are now asynchronously requesting timetables
+    dispatch(requestTimetables());
+        // send a request (via fetch) to the appropriate endpoint with
+        // relevant data as contained in @state (including courses, preferences, etc)
+    fetch(getTimetablesEndpoint(), {
+      method: 'POST',
+      body: JSON.stringify(requestBody),
+      credentials: 'include',
+    })
+            .then((response) => {
+              if (response.status === 200) {
+                return response.json();
+              } else if (browserSupportsLocalStorage()) {
+                localStorage.clear();
+              }
+            }) // TODO(rohan): maybe log somewhere if errors?
+            .then((json) => {
+              if (removing || json.timetables.length > 0) {
+                    // mark that timetables and a new courseSections have been received
+                dispatch(receiveTimetables(json.timetables));
+                dispatch({
+                  type: ActionTypes.RECEIVE_COURSE_SECTIONS,
+                  courseSections: json.new_c_to_s,
+                });
+                if (newActive > 0) {
+                  dispatch({
+                    type: ActionTypes.CHANGE_ACTIVE_TIMETABLE,
+                    newActive,
+                  });
+                }
+                    // save new courseSections and timetable active index to cache
+                saveLocalCourseSections(json.new_c_to_s);
+                saveLocalActiveIndex(newActive);
+              } else { // user wasn't removing (i.e. was adding a course/section), but we got no timetables back
+                    // course added by the user resulted in a conflict, so no timetables
+                    // were received
+                dispatch(alertConflict());
+              }
+              return json;
+            })
+            .then((json) => {
+              if (state.userInfo.data.isLoggedIn && json.timetables[0]) {
+                if (state.userInfo.data.social_courses != null) {
+                  dispatch(fetchClassmates(json.timetables[0].courses.map(c => c.id)));
+                }
+              }
+            })
+            .then(json => {
+                if (state.userInfo.data.isLoggedIn && (state.userInfo.data.time_accepted_tos == null || Date.parse(state.userInfo.data.time_accepted_tos) < Date.parse(tosLastUpdated))) {
+                    dispatch(triggerTosModal());
+                }
+            });
+
+        // save preferences when timetables are loaded, so that we know cached preferences
+        // are always "up-to-date" (correspond to last loaded timetable).
+        // same for the semester
+    saveLocalPreferences(requestBody.preferences);
+    if (localStorage.semester !== state.semesterIndex) {
+      saveLocalSemester(state.semesterIndex);
+    }
+  };
+}
 
 export const addLastAddedCourse = () => (dispatch) => {
   const state = store.getState();

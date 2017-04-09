@@ -77,7 +77,8 @@ def get_user_dict(school, student, semester):
         if google_user_exists:
             credentials = get_google_credentials(student)
             user_dict["GoogleLoggedIn"] = not(credentials is None or credentials.invalid)
-    
+        
+        user_dict["time_accepted_tos"] = str(student.time_accepted_tos) if student.time_accepted_tos else None
     user_dict["isLoggedIn"] = student is not None
 
     return user_dict
