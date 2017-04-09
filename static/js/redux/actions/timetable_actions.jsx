@@ -366,5 +366,21 @@ export const setActiveTimetable = (newActive) => (dispatch) => {
 }
 
 export const toggleConflicts = () => {
-    return {type: ActionTypes.TOGGLE_CONFLICTS}
+    return {type: ActionTypes.TOGGLE_CONFLICTS};
+}
+
+export const addMetric = (metric) => {
+    return {type: ActionTypes.ADD_METRIC, metric: metric};
+}
+
+export const removeMetric = (metric) => {
+    return {type: ActionTypes.REMOVE_METRIC, metric: metric};
+}
+
+export const changeMetric = (metric) => {
+    return {type: ActionTypes.SWITCH_METRIC, add: add, del: del};
+}
+
+export const toggleMetricOrder = (metric) => {
+    return {type: ActionTypes.TOGGLE_METRIC_ORDER, metric: metric};
 }
