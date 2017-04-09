@@ -8,15 +8,17 @@ from django.db.models import Q
 from django.forms.models import model_to_dict
 from mailer import Mailer
 
-if len(sys.argv) < 3:
-    print("Please specify a school and a semester (F or S).")
+if len(sys.argv) < 4:
+    print("Please specify a school, a term (e.g. Fall), and a year (e.g. 2017).")
     exit(0)
 school = sys.argv[1]
-semester = sys.argv[2]
+term = sys.argv[2]
+year = int(sys.argv[3])
 
+semester = Semester.objects.filter(name=term, year=year)
 client = Mailer()
 
-students = PersonalTimetable.objects.filter(school=school, semester='S').values_list("student", flat=True).distinct()
+students = PersonalTimetable.objects.filter(school=school, semester=semester).values_list("student", flat=True).distinct()
 
 for student_id in students:
     student = Student.objects.get(id=student_id)
