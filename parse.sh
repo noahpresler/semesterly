@@ -7,7 +7,7 @@ report_on_bad_exit() {
 	if [ ${exit_status} = 0 ]; then
 		return
 	fi
-	echo -e "\nEXIT FAILURE ${exit_status} from ${school} ${cmd}\n" >> ${SEMESTERLY_HOME}/script/logs/master.log
+	echo -e "\nEXIT FAILURE ${exit_status} from ${school} ${cmd}\n" >> ${SEMESTERLY_HOME}/scripts/logs/master.log
 }
 
 sem_home="${SEMESTERLY_HOME:-/home/django}"
@@ -19,6 +19,6 @@ for school in "${schools[@]}"
 do
 	python ${sem_home}/manage.py ingest ${school}
 	report_on_bad_exit $? ${school} "ingest"
-	python ${sem_home}/digest.py digest ${school}
+	python ${sem_home}/manage.py digest ${school}
 	report_on_bad_exit $? ${school} "digest"
 done
