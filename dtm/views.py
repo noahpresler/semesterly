@@ -132,7 +132,8 @@ def find_mutually_free(freeBusyA, freeBusyB, week_offset=0):
     new_interval = copy.copy(interval)
     weekday = rotated_days.index(interval['start'].weekday())
     new_interval['start'] = new_interval['start'].time()
-    new_interval['end'] = new_interval['end'].time()
+    if new_interval['end'].time() == datetime.time(0,00):
+    new_interval['end'] = datetime.time(23,59) if new_interval['end'].time() == datetime.time(0,00) else new_interval['end'].time()
     busy_by_day[weekday].append(new_interval)
 
   #initialize each day of the week to be completely free

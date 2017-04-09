@@ -60,17 +60,17 @@ export function fetchMutuallyFree() {
 		  	}
 		  }
 		}
-		// fetch(getFindMutuallyFreeEndpoint(), {
-		// 	method: 'POST',
-		// 	headers: {
-		// 		'X-CSRFToken': getCookie('csrftoken')
-		// 	},
-		// 	body: JSON.stringify({
-		// 		A: myAvailability,
-		// 		B: state.dtmCalendars.sharedAvailability
-		// 	}),
-		// 	credentials: 'same-origin',
-		// })
+		fetch(getFindMutuallyFreeEndpoint(), {
+			method: 'POST',
+			headers: {
+				'X-CSRFToken': getCookie('csrftoken')
+			},
+			body: JSON.stringify({
+				A: myAvailability,
+				B: state.dtmCalendars.sharedAvailability
+			}),
+			credentials: 'same-origin',
+		})
 	}
 }
 
