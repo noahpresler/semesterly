@@ -1,6 +1,5 @@
 import {connect} from "react-redux";
 import {PreferenceModal} from "../preference_modal.jsx";
-import * as ActionTypes from "../../constants/actionTypes.jsx";
 import {togglePreferenceModal} from "../../actions/modal_actions.jsx";
 import {toggleConflicts} from "../../actions/timetable_actions.jsx";
 

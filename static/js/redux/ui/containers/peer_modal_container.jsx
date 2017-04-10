@@ -1,7 +1,6 @@
 import {connect} from "react-redux";
-import {fetchFriends, saveSettings, changeUserInfo} from "../../actions/user_actions.jsx";
+import {changeUserInfo, fetchFriends, saveSettings} from "../../actions/user_actions.jsx";
 import {PeerModal} from "../peer_modal.jsx";
-import * as ActionTypes from "../../constants/actionTypes.jsx";
 import {openSignUpModal, togglePeerModal} from "../../actions/modal_actions.jsx";
 
 const mapStateToProps = (state) => {
