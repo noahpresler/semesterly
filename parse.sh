@@ -7,7 +7,8 @@ report_on_bad_exit() {
 	if [ ${exit_status} = 0 ]; then
 		return
 	fi
-	message="\nEXIT FAILURE ${exit_status} from ${school} ${cmd}\n"
+	timestamp=$(date)
+	message="\nEXIT FAILURE ${exit_status} ${timestamp} from ${school} ${cmd}\n"
 	echo -e "${message}" >> "${SEMESTERLY_HOME}/scripts/logs/master.log"
 }
 
