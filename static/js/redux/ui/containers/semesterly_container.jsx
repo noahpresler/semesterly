@@ -2,7 +2,7 @@ import {connect} from "react-redux";
 import Semesterly from "../semesterly.jsx";
 import HTML5Backend from "react-dnd-html5-backend";
 import {DragDropContext} from "react-dnd";
-import {autoSave, saveTimetable} from "../../actions/user_actions.jsx";
+import {saveTimetable} from "../../actions/user_actions.jsx";
 import {setActiveTimetable} from "../../actions/timetable_actions.jsx";
 
 const mapStateToProps = (state) => {
