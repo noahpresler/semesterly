@@ -1,10 +1,11 @@
 import {connect} from "react-redux";
 import {ExplorationModal} from "../exploration_modal.jsx";
 import {
+    clearAdvancedSearchPagination,
     fetchAdvancedSearchResults,
     paginateAdvancedSearchResults,
-    clearAdvancedSearchPagination,
-    setAdvancedSearchResultIndex} from "../../actions/search_actions.jsx";
+    setAdvancedSearchResultIndex
+} from "../../actions/search_actions.jsx";
 import {
     addOrRemoveCourse,
     addOrRemoveOptionalCourse,
@@ -12,8 +13,7 @@ import {
     unHoverSection
 } from "../../actions/timetable_actions.jsx";
 import {getSchoolSpecificInfo} from "../../constants/schools.jsx";
-import {fetchCourseClassmates, react, hideExplorationModal, openSignUpModal} from "../../actions/modal_actions.jsx";
-import * as ActionTypes from "../../constants/actionTypes.jsx";
+import {fetchCourseClassmates, hideExplorationModal, openSignUpModal, react} from "../../actions/modal_actions.jsx";
 
 const mapStateToProps = (state) => {
     let {isVisible, advancedSearchResults, isFetching, active, page} = state.explorationModal;
