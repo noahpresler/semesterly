@@ -7,7 +7,8 @@ report_on_bad_exit() {
 	if [ ${exit_status} = 0 ]; then
 		return
 	fi
-	message="\nEXIT FAILURE ${exit_status} from ${school} ${cmd}\n"
+	timestamp=$(date)
+	message="\nEXIT FAILURE ${exit_status} ${timestamp} from ${school} ${cmd}\n"
 	echo -e "${message}" >> "${SEMESTERLY_HOME}/scripts/logs/master.log"
 }
 
@@ -18,7 +19,7 @@ declare -a schools=("jhu" "umd" "queens" "vandy" "gw" "umich" "chapman" "salisbu
 
 for school in "${schools[@]}"
 do
-	python ${sem_home}/manage.py ingest --textbooks ${school}
+	python ${sem_home}/manage.py ingest --textbooks ${school} --term Fall --year 2017
 	report_on_bad_exit $? ${school} "ingest textbooks"
 	python ${sem_home}/manage.py digest --textbooks ${school}
 	report_on_bad_exit $? ${school} "digest textbooks"
