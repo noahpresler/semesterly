@@ -1,12 +1,10 @@
 import {connect} from "react-redux";
-import {fetchSearchResults, maybeSetSemester} from "../../actions/search_actions.jsx";
+import {fetchSearchResults, hoverSearchResult, maybeSetSemester} from "../../actions/search_actions.jsx";
 import {addOrRemoveCourse, addOrRemoveOptionalCourse} from "../../actions/timetable_actions.jsx";
 import {SearchBar} from "../search_bar.jsx";
-import {fetchCourseInfo} from "../../actions/modal_actions.jsx";
+import {fetchCourseInfo, showExplorationModal} from "../../actions/modal_actions.jsx";
 import {getSchoolSpecificInfo} from "../../constants/schools.jsx";
 import {openIntegrationModal} from "../../actions/user_actions.jsx";
-import {showExplorationModal} from "../../actions/modal_actions.jsx";
-import {hoverSearchResult} from "../../actions/search_actions.jsx";
 
 const mapStateToProps = (state) => {
     let {isVisible} = state.explorationModal;
