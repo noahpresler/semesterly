@@ -1,6 +1,6 @@
 import {connect} from "react-redux";
 import {SearchSideBar} from "../search_side_bar.jsx";
-import {addOrRemoveCourse, hoverSection, unhoverSection} from "../../actions/timetable_actions.jsx";
+import {addOrRemoveCourse, hoverSection, unHoverSection} from "../../actions/timetable_actions.jsx";
 
 const mapStateToProps = (state) => {
     let courseSections = state.courseSections.objects;
@@ -33,17 +33,13 @@ const mapStateToProps = (state) => {
     }
 }
 
-const mapDispatchToProps = (dispatch) => {
-    return {
-        addCourse: addOrRemoveCourse,
-        hoverSection: hoverSection(dispatch),
-        unhoverSection: unhoverSection(dispatch)
-    }
-}
-
 const SearchSideBarContainer = connect(
     mapStateToProps,
-    mapDispatchToProps
+    {
+        addCourse: addOrRemoveCourse,
+        hoverSection,
+        unHoverSection
+    }
 )(SearchSideBar);
 
 export default SearchSideBarContainer;

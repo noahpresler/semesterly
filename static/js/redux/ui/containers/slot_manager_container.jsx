@@ -43,20 +43,16 @@ const mapStateToProps = (state, ownProps) => {
     }
 }
 
-const mapDispatchToProps = (dispatch) => {
-    return {
-        fetchCourseInfo: (courseId) => dispatch(fetchCourseInfo(courseId)),
-        addOrRemoveOptionalCourse: (course) => dispatch(addOrRemoveOptionalCourse(course)),
-        addOrRemoveCourse: addOrRemoveCourse,
-        removeCustomSlot: removeCustomSlot,
-        updateCustomSlot: updateCustomSlot,
-        addCustomSlot: addCustomSlot
-    }
-}
-
 const SlotManagerContainer = connect(
     mapStateToProps,
-    mapDispatchToProps
+    {
+        fetchCourseInfo,
+        addOrRemoveOptionalCourse,
+        addOrRemoveCourse,
+        removeCustomSlot,
+        updateCustomSlot,
+        addCustomSlot
+    }
 )(SlotManager);
 
 export default SlotManagerContainer;
