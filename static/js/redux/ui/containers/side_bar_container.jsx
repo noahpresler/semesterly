@@ -1,9 +1,13 @@
 import {connect} from "react-redux";
 import SideBar from "../side_bar.jsx";
-import {fetchCourseInfo} from "../../actions/modal_actions.jsx";
+import {
+    fetchCourseInfo,
+    showFinalExamsModal,
+    togglePeerModal,
+    triggerTextbookModal
+} from "../../actions/modal_actions.jsx";
 import {addOrRemoveCourse, addOrRemoveOptionalCourse, loadTimetable} from "../../actions/timetable_actions.jsx";
 import {deleteTimetable, duplicateTimetable} from "../../actions/user_actions.jsx";
-import * as ActionTypes from "../../constants/actionTypes.jsx";
 
 const mapStateToProps = (state) => {
     let courseSections = state.courseSections.objects;
@@ -27,23 +31,19 @@ const mapStateToProps = (state) => {
     }
 }
 
-const mapDispatchToProps = (dispatch) => {
-    return {
-        fetchCourseInfo: (courseId) => dispatch(fetchCourseInfo(courseId)),
-        removeCourse: (courseId) => addOrRemoveCourse(courseId),
-        removeOptionalCourse: (course) => dispatch(addOrRemoveOptionalCourse(course)),
-        launchPeerModal: () => dispatch({type: ActionTypes.TOGGLE_PEER_MODAL}),
-        launchTextbookModal: () => dispatch({type: ActionTypes.TRIGGER_TEXTBOOK_MODAL}),
-        duplicateTimetable: (tt) => dispatch(duplicateTimetable(tt)),
-        deleteTimetable: (tt) => dispatch(deleteTimetable(tt)),
-        launchFinalExamsModal: () => dispatch({type: ActionTypes.SHOW_FINAL_EXAMS_MODAL}),
-        loadTimetable
-    }
-}
-
 const SideBarContainer = connect(
     mapStateToProps,
-    mapDispatchToProps
+    {
+        fetchCourseInfo,
+        removeCourse: addOrRemoveCourse,
+        removeOptionalCourse: addOrRemoveOptionalCourse,
+        launchPeerModal: togglePeerModal,
+        launchTextbookModal: triggerTextbookModal,
+        duplicateTimetable,
+        deleteTimetable,
+        launchFinalExamsModal: showFinalExamsModal,
+        loadTimetable
+    }
 )(SideBar);
 
 export default SideBarContainer;
