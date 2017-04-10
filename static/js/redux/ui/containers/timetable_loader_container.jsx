@@ -5,7 +5,7 @@ const mapStateToProps = (state) => {
     return {
         loading: state.timetables.isFetching
     }
-}w
+}
 const TimetableLoaderContainer = connect(
     mapStateToProps
 )(TimetableLoader);
