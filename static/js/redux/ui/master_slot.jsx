@@ -40,23 +40,21 @@ class MasterSlot extends React.Component {
     }
     hideShareLink() {
         this.setState({shareLinkShown: false});
+        $('.slot-clipboard-success').removeClass('show');
     }
     componentWillMount(){
         let idEventTarget = "#ms-share-icon-" + this.props.course.id
+        // let inputFieldId = '#share-course-link-id-' + this.props.course.id
         let idCourse = "#" + this.props.course.id
         let clipboard = new Clipboard(idEventTarget);
         clipboard.on('success', function(e) {
-        $('.share-course-link').select();
-            setTimeout(function() {
-                $(idCourse).addClass('show');
-            }, 1000);
-            setTimeout(function() {
-                $('.slot-clipboard-success').removeClass('show');
-            }, 4500);
+            // $(inputFieldId).select();
+            // console.log(inputFieldId)
+            $(idCourse).addClass('show');
             e.clearSelection();
         });
         clipboard.on('error', function(e) {
-            $('.share-course-link').select();
+            // $(inputFieldId).select();
             console.error('Action:', e.action);
             console.error('Trigger:', e.trigger);
         });   
@@ -90,7 +88,8 @@ class MasterSlot extends React.Component {
 
         let shareLinkText = getCourseShareLink(this.props.course.code)
         let shareLink = this.state.shareLinkShown ? 
-        <ShareLink 
+        <ShareLink
+            courseId={this.props.course.id}
             link={shareLinkText}
             onClickOut={this.hideShareLink} /> : 
         null;
@@ -132,12 +131,12 @@ class MasterSlot extends React.Component {
     }
 }
 
-export const ShareLink = ({link, onClickOut}) => (
+export const ShareLink = ({courseId, link, onClickOut}) => (
     <ClickOutHandler onClickOut={onClickOut}>
         <div className="share-course-link-wrapper">
             <div className="tip-border"></div>
             <div className="tip"></div>
-            <input className="share-course-link" size={link.length} value={link} onClick={(e) => e.stopPropagation()} readOnly />
+            <input className="share-course-link" id={"share-course-link-id-" + courseId} size={link.length} value={link} onClick={(e) => {e.stopPropagation(); console.log(e); select()}} readOnly />
         </div>
     </ClickOutHandler>
 )
