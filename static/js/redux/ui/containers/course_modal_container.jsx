@@ -4,9 +4,9 @@ import {
     addOrRemoveCourse,
     addOrRemoveOptionalCourse,
     hoverSection,
-    unHoverSection,
+    unHoverSection
 } from "../../actions/timetable_actions.jsx";
-import {fetchCourseInfo, react, setCourseId, openSignUpModal, changeUserInfo} from "../../actions/modal_actions.jsx";
+import {changeUserInfo, fetchCourseInfo, openSignUpModal, react, setCourseId} from "../../actions/modal_actions.jsx";
 import {saveSettings} from "../../actions/user_actions.jsx";
 import {getSchoolSpecificInfo} from "../../constants/schools.jsx";
 
