@@ -3,7 +3,6 @@ from django.http import HttpResponse
 from django.conf import settings
 from django.contrib import admin
 
-
 admin.autodiscover()
 
 # custom 404 page
@@ -11,8 +10,8 @@ handler404 = 'timetable.views.custom_404'
 # custom 500 page
 handler500 = 'timetable.views.custom_500'
 
-    # for sorting search results by course code
-    # sqs = SearchQuerySet().order_by('code')
+# for sorting search results by course code
+# sqs = SearchQuerySet().order_by('code')
 
 urlpatterns = patterns('',
                        # url(r'^admin/', include(admin.site.urls)),
@@ -31,29 +30,31 @@ urlpatterns = patterns('',
                        url('', include('analytics.urls')),
 
                        # home
-    url(r'^$', 'timetable.views.view_timetable'),
+                       url(r'^$', 'timetable.views.view_timetable'),
 
                        # about page
-    url(r'about/*', 'timetable.views.about'),
+                       url(r'about/*', 'timetable.views.about'),
 
                        # press page
-    url(r'press/*', 'timetable.views.press'),
+                       url(r'press/*', 'timetable.views.press'),
 
                        # Automatic deployment endpoint
-    url(r'deploy_staging/', 'semesterly.views.deploy_staging'),
+                       url(r'deploy_staging/', 'semesterly.views.deploy_staging'),
 
                        url(r'^sw(.*.js)$', 'timetable.views.sw_js', name='sw_js'),
                        url(r'^manifest(.*.json)$', 'timetable.views.manifest_json', name='manifest_json'),
 
                        # for testing 404, so i don't have to turn off debug
-	url(r'^404testing/', 'timetable.views.custom_404'),
+                       url(r'^404testing/', 'timetable.views.custom_404'),
                        url(r'^500testing/', 'timetable.views.custom_500'),
                        )
 
-#profiling
+# profiling
 urlpatterns += [url(r'^silk/', include('silk.urls', namespace='silk'))]
 
 if getattr(settings, 'STAGING', False):
-    urlpatterns += patterns('', url(r'^robots.txt$', lambda r: HttpResponse("User-agent: *\nDisallow: /", content_type="text/plain")) )
+    urlpatterns += patterns('', url(r'^robots.txt$',
+                                    lambda r: HttpResponse("User-agent: *\nDisallow: /", content_type="text/plain")))
 else:
-    urlpatterns += patterns('', url(r'^robots.txt$', lambda r: HttpResponse("User-agent: *\nDisallow:", content_type="text/plain")) )
+    urlpatterns += patterns('', url(r'^robots.txt$',
+                                    lambda r: HttpResponse("User-agent: *\nDisallow:", content_type="text/plain")))
