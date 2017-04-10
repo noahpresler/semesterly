@@ -34,7 +34,7 @@ export const explorationModal = (state = {
                     active: 0
                 });
             }
-        case ActionTypes.SET_ACTIVE_RESULT:
+        case ActionTypes.SET_ACTIVE_ADV_SEARCH_RESULT:
             return Object.assign({}, state, {active: action.active});
         case ActionTypes.SET_COURSE_REACTIONS:
             if (state.isVisible) {
