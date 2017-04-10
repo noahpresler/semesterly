@@ -10,8 +10,7 @@ const mapStateToProps = (state) => {
 }
 
 const TopBarContainer = connect(
-    mapStateToProps,
-    null
+    mapStateToProps
 )(TopBar);
 
 export default TopBarContainer;
