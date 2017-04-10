@@ -1,7 +1,7 @@
 import {connect} from "react-redux";
 import {UserSettingsModal} from "../user_settings_modal.jsx";
 import {saveSettings} from "../../actions/user_actions.jsx";
-import * as ActionTypes from "../../constants/actionTypes.jsx";
+import {changeUserInfo, overrideSettingsShow} from "../../actions/modal_actions.jsx";
 
 const mapStateToProps = (state) => {
     return {
@@ -11,23 +11,13 @@ const mapStateToProps = (state) => {
     }
 }
 
-const mapDispatchToProps = (dispatch) => {
-    return {
-        saveSettings: () => dispatch(saveSettings()),
-        changeUserInfo: (info) => dispatch({
-            type: ActionTypes.CHANGE_USER_INFO,
-            data: info,
-        }),
-        closeUserSettings: () => dispatch({
-            type: ActionTypes.OVERRIDE_SETTINGS_SHOW,
-            data: false,
-        })
-    }
-}
-
 const UserSettingsModalContainer = connect(
     mapStateToProps,
-    mapDispatchToProps
+    {
+        saveSettings,
+        closeUserSettings: () => overrideSettingsShow(false),
+        changeUserInfo
+    }
 )(UserSettingsModal);
 
 export default UserSettingsModalContainer;

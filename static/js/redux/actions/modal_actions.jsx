@@ -88,3 +88,61 @@ export function togglePreferenceModal() {
 export function triggerSaveCalendarModal() {
     return {type: ActionTypes.TRIGGER_SAVE_CALENDAR_MODAL};
 }
+
+export function toggleSaveCalendarModal() {
+    return {type: ActionTypes.TRIGGER_SAVE_CALENDAR_MODAL};
+}
+
+export function openSignUpModal() {
+    return {type: ActionTypes.TOGGLE_SIGNUP_MODAL};
+}
+
+export function changeUserInfo(info) {
+    return {
+        type: ActionTypes.CHANGE_USER_INFO,
+        data: info,
+    }
+}
+
+export function hideExplorationModal() {
+    return {type: ActionTypes.HIDE_EXPLORATION_MODAL};
+}
+
+export function showExplorationModal() {
+    return {type: ActionTypes.SHOW_EXPLORATION_MODAL};
+}
+
+export function hideFinalExamsModal() {
+    return {type: ActionTypes.HIDE_FINAL_EXAMS_MODAL};
+}
+
+export function triggerAcquisitionModal() {
+    return {type: ActionTypes.TRIGGER_ACQUISITION_MODAL};
+}
+
+export const toggleIntegrationModal = () => {
+    return {type: ActionTypes.TOGGLE_INTEGRATION_MODAL};
+}
+
+export const togglePeerModal = () => {
+    return {type: ActionTypes.TOGGLE_PEER_MODAL};
+}
+
+export const triggerTextbookModal = () => {
+    return {type: ActionTypes.TRIGGER_TEXTBOOK_MODAL};
+}
+
+export const showFinalExamsModal = () => {
+    return {type: ActionTypes.SHOW_FINAL_EXAMS_MODAL};
+}
+
+export const overrideSettingsShow = (data) => {
+    return {
+        type: ActionTypes.OVERRIDE_SETTINGS_SHOW,
+        data
+    };
+}
+
+export const toggleTextbookModal = () => {
+    return {type: ActionTypes.TOGGLE_TEXTBOOK_MODAL};
+}
