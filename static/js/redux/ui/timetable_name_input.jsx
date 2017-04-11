@@ -20,7 +20,7 @@ class TimetableNameInput extends React.Component {
 
     showSignupModal() {
         if (!this.props.isLoggedIn) {
-            return this.props.openSignupModal();
+            return this.props.openSignUpModal();
         }
     }
 
