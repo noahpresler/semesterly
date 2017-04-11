@@ -315,7 +315,7 @@ function fetchTimetables(requestBody, removing, newActive = 0) {
   return (dispatch) => {
     const state = store.getState();
         // mark that we are now asynchronously requesting timetables
-    dispatch(requestTimetables());
+        dispatch(requestTimetables());
         // send a request (via fetch) to the appropriate endpoint with
         // relevant data as contained in @state (including courses, preferences, etc)
     fetch(getTimetablesEndpoint(), {
