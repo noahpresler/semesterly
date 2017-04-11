@@ -1,6 +1,6 @@
 import {connect} from "react-redux";
 import {UserAcquisitionModal} from "../user_acquisition_modal.jsx";
-import * as ActionTypes from "../../constants/actionTypes.jsx";
+import {triggerAcquisitionModal} from "../../actions/modal_actions.jsx";
 
 const mapStateToProps = (state) => {
     return {
@@ -9,17 +9,11 @@ const mapStateToProps = (state) => {
     }
 }
 
-const mapDispatchToProps = (dispatch) => {
-    return {
-        toggleUserAcquisitionModal: () => {
-            dispatch({type: ActionTypes.TOGGLE_ACQUISITION_MODAL})
-        },
-    }
-}
-
 const UserAcquisitionModalContainer = connect(
     mapStateToProps,
-    mapDispatchToProps
+    {
+        toggleUserAcquisitionModal: triggerAcquisitionModal
+    }
 )(UserAcquisitionModal);
 
 export default UserAcquisitionModalContainer;

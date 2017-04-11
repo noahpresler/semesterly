@@ -72,7 +72,7 @@ function setup(dispatch) {
     if (!sharedTimetable) { // we load user's timetable (or cached timetable) only if they're _not_ trying to load a shared timetable
         if (user.isLoggedIn && user.timetables.length > 0) { // user is logged in and has saved timetables
             // load one of the user's saved timetables (after initial page load). also fetches classmates
-            loadTimetable(user.timetables[0]);
+            dispatch(loadTimetable(user.timetables[0]));
             dispatch({type: ActionTypes.RECEIVE_TIMETABLE_SAVED, upToDate: true});
             setTimeout(() => {
                 dispatch(fetchMostClassmatesCount(user.timetables[0].courses.map(c => c['id'])));
@@ -141,7 +141,7 @@ function setup(dispatch) {
 
     /* now setup sharing state */
     if (sharedTimetable) {
-        lockTimetable(dispatch, sharedTimetable, true, user.isLoggedIn);
+        dispatch(lockTimetable(sharedTimetable, true, user.isLoggedIn));
     } else if (sharedCourse) {
         dispatch(setCourseInfo(sharedCourse));
         dispatch(fetchCourseClassmates(sharedCourse.id));
