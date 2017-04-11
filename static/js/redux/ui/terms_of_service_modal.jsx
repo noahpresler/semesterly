@@ -18,7 +18,7 @@ export class TermsOfServiceModal extends React.Component {
         let modalHeader =
             <div id="modal-content">
                 <div id="modal-header">
-                    <h1>Terms of Service</h1>
+                    <h1>Terms of Service and Privacy Policy</h1>
                 </div>
             </div>
         let modalStyle = {
@@ -28,7 +28,7 @@ export class TermsOfServiceModal extends React.Component {
         console.log(this.props);
         return (
             <Modal ref="modal"
-                   className="terms-of-service-modal abnb-modal max-modal"
+                   className="terms-of-service-modal max-modal"
                    modalStyle={modalStyle}
                    onHide={() => {
                        this.props.toggleTermsOfServiceModal();
@@ -37,14 +37,22 @@ export class TermsOfServiceModal extends React.Component {
 
                 {modalHeader}
 
-                <div id="save-calendar-container">
-                    <h3>Our Terms of Service has been updated. Please review them here</h3>
-                    <button className="btn abnb-btn fb-btn" onClick={() => {
+                <div id="tos-container">
+                    <h3>Our Terms of Service and Privacy Policy have been updated. Please review them here:</h3>
+                    <div>
+                        <a href="/static/termsofservice.html">
+                            <span className="legal-links">Terms of Service</span>
+                        </a>
+                        <a href="/static/privacypolicy.htm">
+                            <span>Privacy Policy</span>
+                        </a>
+                    </div>
+                    <button className="accept-tos-btn" onClick={() => {
                         acceptTOS();
                         this.props.toggleTermsOfServiceModal();
                     }}>
                         <span className="img-icon">
-                           <i className="fa fa-facebook"/>
+                           <i className="fa fa-check"/>
                         </span>
                         <span>I accept the Terms of Service</span>
                     </button>
