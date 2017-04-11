@@ -16,21 +16,18 @@ handler500 = 'timetable.views.custom_500'
 urlpatterns = patterns('',
                        # url(r'^admin/', include(admin.site.urls)),
 
-                           #finding friends
-    url('', include('social.apps.django_app.urls', namespace='social')),
-                       url('', include('django.contrib.auth.urls', namespace='auth')),
+                       # finding friends
+                       url('^', include('social.apps.django_app.urls', namespace='social')),
+                       url('^', include('django.contrib.auth.urls', namespace='auth')),
 
-    # app urls
-    url('', include('timetable.urls')),
-                       url('', include('courses.urls')),
-                       url('', include('integrations.urls')),
-                       url('', include('exams.urls')),
-                       url('', include('searches.urls')),
-                       url('', include('student.urls')),
-                       url('', include('analytics.urls')),
-
-                       # home
-                       url(r'^$', 'timetable.views.view_timetable'),
+                       # app urls
+                       url('^', include('timetable.urls')),
+                       url('^', include('courses.urls')),
+                       url('^', include('integrations.urls')),
+                       url('^', include('exams.urls')),
+                       url('^', include('searches.urls')),
+                       url('^', include('student.urls')),
+                       url('^', include('analytics.urls')),
 
                        # about page
                        url(r'about/*', 'timetable.views.about'),
@@ -47,6 +44,9 @@ urlpatterns = patterns('',
                        # for testing 404, so i don't have to turn off debug
                        url(r'^404testing/', 'timetable.views.custom_404'),
                        url(r'^500testing/', 'timetable.views.custom_500'),
+
+                       # home
+                       url(r'^$', 'timetable.views.view_timetable'),
                        )
 
 # profiling
