@@ -15,12 +15,6 @@ export class TermsOfServiceModal extends React.Component {
     }
 
     render() {
-        let modalHeader =
-            <div id="modal-content">
-                <div id="modal-header">
-                    <h1>Terms of Service and Privacy Policy</h1>
-                </div>
-            </div>
         let modalStyle = {
             width: '100%'
         };
@@ -34,26 +28,18 @@ export class TermsOfServiceModal extends React.Component {
                        this.props.toggleTermsOfServiceModal();
                    }}
             >
-
-                {modalHeader}
-
                 <div id="tos-container">
+                    <h1>Terms of Service and Privacy Policy</h1>
                     <h3>Our Terms of Service and Privacy Policy have been updated. Please review them here:</h3>
                     <div>
-                        <a href="/static/termsofservice.html">
-                            <span className="legal-links">Terms of Service</span>
-                        </a>
-                        <a href="/static/privacypolicy.htm">
-                            <span>Privacy Policy</span>
-                        </a>
+                        <a href="/static/termsofservice.html" target='_blank' className="legal-links">Terms of Service<i className='fa fa-external-link'></i></a>
+                        <a href="/static/privacypolicy.html" target='_blank' className="legal-links">Privacy Policy<i className='fa fa-external-link'></i></a>
                     </div>
                     <button className="accept-tos-btn" onClick={() => {
-                        acceptTOS();
-                        this.props.toggleTermsOfServiceModal();
-                    }}>
-                        <span className="img-icon">
-                           <i className="fa fa-check"/>
-                        </span>
+                            acceptTOS();
+                            this.props.toggleTermsOfServiceModal();
+                        }}>
+                        <i className="fa fa-check"/>
                         <span>I accept the Terms of Service</span>
                     </button>
                     <p className="method-details">You must accept the new Terms of Service to continue using Semester.ly.</p>
