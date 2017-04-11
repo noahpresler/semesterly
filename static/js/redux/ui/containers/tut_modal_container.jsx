@@ -11,13 +11,8 @@ const mapStateToProps = (state) => {
     }
 }
 
-const mapDispatchToProps = (dispatch) => {
-    return {}
-}
-
 const TutModalContainer = connect(
-    mapStateToProps,
-    mapDispatchToProps
+    mapStateToProps
 )(TutModal);
 
 export default TutModalContainer;
