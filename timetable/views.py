@@ -79,13 +79,14 @@ def view_timetable(request, code=None, sem_name=None, year=None, shared_timetabl
 
   integrations = {'integrations': []}
   tos_last_updated = TermOfService.objects.order_by("-last_updated")[0].last_updated
-  print(tos_last_updated)
+  show_tos = False
   if student and student.user.is_authenticated():
     student.school = school
     student.save()
+    if student.time_accepted_tos == None or student.time_accepted_tos < tos_last_updated:
+      show_tos = True
     for i in student.integrations.all():
       integrations['integrations'].append(i.name)
-  print(get_user_dict(school, student, sem))
   return render_to_response("timetable.html", {
     'school': school,
     'student': json.dumps(get_user_dict(school, student, sem)),
@@ -104,7 +105,7 @@ def view_timetable(request, code=None, sem_name=None, year=None, shared_timetabl
     'view_textbooks': view_textbooks,
     'final_exams_supported_semesters': map(lambda s: sem_dicts.index(s) ,final_exams_available.get(school, [])),
     'final_exams': final_exams,
-    "tos_last_updated": tos_last_updated
+    'showTOS': show_tos
   },
   context_instance=RequestContext(request))
 

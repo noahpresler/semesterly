@@ -7,7 +7,7 @@ import { Provider } from 'react-redux';
 import rootReducer from './reducers/root_reducer';
 import SemesterlyContainer from './ui/containers/semesterly_container';
 import { fetchMostClassmatesCount, getUserInfo, isRegistered } from './actions/user_actions';
-import { loadCachedTimetable, loadTimetable, lockTimetable } from './actions/timetable_actions';
+import { loadCachedTimetable, loadTimetable, lockTimetable, triggerTosModal } from './actions/timetable_actions';
 import { fetchSchoolInfo } from './actions/school_actions';
 import { fetchCourseClassmates, setCourseInfo } from './actions/modal_actions';
 import {
@@ -147,6 +147,10 @@ function setup(dispatch) {
       setFriendsCookie(time.getTime());
       dispatch({ type: ActionTypes.ALERT_FACEBOOK_FRIENDS });
     }
+  }
+    /* Show TOS if needed */
+  if (showTOS) {
+      dispatch(triggerTosModal());
   }
 
     /* now setup sharing state */
