@@ -15,12 +15,18 @@ report_on_bad_exit() {
 sem_home="${SEMESTERLY_HOME:-/home/django}"
 export SEMESTERLY_HOME=${sem_home}
 
+master_log="${sem_home}/scripts/logs/master.log"
+
 declare -a schools=("jhu" "umd" "queens" "vandy" "gw" "umich" "chapman" "salisbury")
+
+timestamp=$(echo $(date) | sed 's/[^0-9]//g')
+echo "STARTING COURSE PARSERS ${timestamp}" >> ${master_log} 
 
 for school in "${schools[@]}"
 do
-	python ${sem_home}/manage.py ingest ${school} --term Fall --year 2017
+	python ${sem_home}/manage.py ingest ${school} --term Fall --year 2017 --hide-progress-bar 2> "scripts/${school}/logs/stderr_${timestamp}.log" 1> "scripts/${school}/logs/stdout_${timestamp}.log"
 	report_on_bad_exit $? ${school} "ingest"
-	python ${sem_home}/manage.py digest ${school}
+	python ${sem_home}/manage.py digest ${school} --hide-progress-bar 2> "$scripts/{school}/logs/stderr_${timestamp}.log" 1> "scripts/${school}/logs/stdout_${timestamp}.log"
+
 	report_on_bad_exit $? ${school} "digest"
 done
