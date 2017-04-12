@@ -14,6 +14,7 @@ report_on_bad_exit() {
 
 sem_home="${SEMESTERLY_HOME:-/home/django}"
 export SEMESTERLY_HOME=${sem_home}
+echo $SEMESTERLY_HOME
 
 master_log="${sem_home}/scripts/logs/master.log"
 
@@ -26,7 +27,7 @@ for school in "${schools[@]}"
 do
 	python ${sem_home}/manage.py ingest ${school} --term Fall --year 2017 --hide-progress-bar 2> "scripts/${school}/logs/stderr_${timestamp}.log" 1> "scripts/${school}/logs/stdout_${timestamp}.log"
 	report_on_bad_exit $? ${school} "ingest"
-	python ${sem_home}/manage.py digest ${school} --hide-progress-bar 2> "$scripts/{school}/logs/stderr_${timestamp}.log" 1> "scripts/${school}/logs/stdout_${timestamp}.log"
+	python ${sem_home}/manage.py digest ${school} --hide-progress-bar 2> "scripts/${school}/logs/stderr_${timestamp}.log" 1> "scripts/${school}/logs/stdout_${timestamp}.log"
 
 	report_on_bad_exit $? ${school} "digest"
 done
