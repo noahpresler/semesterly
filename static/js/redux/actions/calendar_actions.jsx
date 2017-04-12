@@ -100,11 +100,38 @@ export function addTTtoGCal() {
     }
 }
 
-export function createICalFromTimetable(active) {
+export const createICalFromEventsList = (events, icalTitle) => {
+	if (!state.saveCalendarModal.isDownloading && !state.saveCalendarModal.hasDownloaded) {
+        dispatch({type: ActionTypes.DOWNLOAD_CALENDAR});
+		// for each event in events:
+			// repeating = event.repeating
+			// remove the key repeating from event
+			//cal.createEvent(event)
+			//if repeating is nut null set event.repeating() to the repeating field from event
+		for (let i = 0; i < events.length; i++){
+			let repeating = events[i].repeating;
+			delete(events[i].repeating);
+			cal.createEvent(events[i]);
+			if (repeating != null) {
+				events[i].repeat(repeating);
+			}
+		}
+		let cal = ical({domain: 'https://semester.ly', name: icalTitle});
+		let file = new Blob([cal.toString()], {type: "data:text/calendar;charset=utf8,"});
+        FileSaver.saveAs(file, "my_semester.ics");
+        fetch(getLogiCalEndpoint(), {
+            method: 'POST',
+            credentials: 'include',
+        })
+        dispatch({type: ActionTypes.CALENDAR_DOWNLOADED});
+	}
+}
+
+
+export const createICalFromTimetable = (active) => {
     return (dispatch) => {
         let state = store.getState();
         if (!state.saveCalendarModal.isDownloading && !state.saveCalendarModal.hasDownloaded) {
-            dispatch({type: ActionTypes.DOWNLOAD_CALENDAR});
             let cal = ical({domain: 'https://semester.ly', name: 'My Semester Schedule'});
             let tt = getActiveTimetable(state.timetables);
 
@@ -124,6 +151,7 @@ export function createICalFromTimetable(active) {
             sem_start.setYear(new Date().getFullYear());
             sem_end.setYear(new Date().getFullYear());
 
+            let event_list = {};
             for (let c_idx = 0; c_idx < tt.courses.length; c_idx++) {
                 for (let slot_idx = 0; slot_idx < tt.courses[c_idx].slots.length; slot_idx++) {
 
@@ -140,30 +168,23 @@ export function createICalFromTimetable(active) {
                     end.setHours(parseInt(times[0]), parseInt(times[1]));
                     let description = course.description ? course.description : '';
 
-                    let event = cal.createEvent({
+                    let repeating = {
+                    	freq: 'WEEKLY',
+                        byDay: DAY_MAP[slot.day],
+                        until: until,
+                    }
+
+                    let event = {
                         start: start,
                         end: end,
                         summary: slot.name + " " + slot.code + slot.meeting_section,
                         description: slot.code + slot.meeting_section + '\n' + instructors + description,
                         location: slot.location,
                         url: getCourseShareLink(slot.code)
-                    });
-
-                    event.repeating({
-                        freq: 'WEEKLY',
-                        byDay: DAY_MAP[slot.day],
-                        until: until,
-                    });
-
+                    };
                 }
             }
-            let file = new Blob([cal.toString()], {type: "data:text/calendar;charset=utf8,"});
-            FileSaver.saveAs(file, "my_semester.ics");
-            fetch(getLogiCalEndpoint(), {
-                method: 'POST',
-                credentials: 'include',
-            })
-            dispatch({type: ActionTypes.CALENDAR_DOWNLOADED});
+            event_list.push(event);
         }
     }
 }
