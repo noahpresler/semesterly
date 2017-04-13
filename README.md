@@ -21,16 +21,36 @@ $ python manage.py runserver
 Your local version of Semesterly will be available at [127.0.0.1:8000](http://127.0.0.1:8000/).
 
 ### Gulp
-[Gulp](http://gulpjs.com/) will combine all our JSX files into one JavaScript file (`application.js`). Keep a terminal
+[Gulp](http://gulpjs.com/) will combine all our CSS files into one CSS file. Keep a terminal
 tab or window open and run 
 ```sh
 $ gulp
 ```
-Gulp will wait for changes in the JSX files, and update `application.js` accordingly. If you find that
+Gulp will wait for changes in the JSX files, and update the CSS accordingly. If you find that
 it has stopped transforming, restart the process.
 
-### Further Instructions
-Coming soon!!
+### Webpack
+#### Build
+Building will compile your javascript. Do this via: 
+```
+$ npm run build
+```
+
+### Watch
+Watching will track any changes you make to JSX files and instantly recompile them (quickly)
+````
+$ npm run watch
+```
+
+### Lint
+Linting will check your code style
+```
+$ npm run lint
+```
+will lint the whole repo. To lint one file: 
+```
+$ ./node_modules/.bin/eslint path/to/file
+```
 
 
 ## Contributing:
