@@ -1,5 +1,5 @@
 import React from "react";
-import {REACTION_MAP} from "../constants/reactions.jsx";
+import {REACTION_MAP} from "../constants/reactions";
 import classNames from "classnames";
 
 class Reaction extends React.Component {

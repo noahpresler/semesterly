@@ -1,4 +1,4 @@
-import * as ActionTypes from "../constants/actionTypes.jsx";
+import * as ActionTypes from "../constants/actionTypes";
 
 export const notificationToken = (state = {hasToken: false}, action) => {
     switch (action.type) {

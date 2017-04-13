@@ -1,14 +1,14 @@
 import {connect} from "react-redux";
-import {CourseModal} from "../course_modal.jsx";
+import {CourseModal} from "../course_modal";
 import {
     addOrRemoveCourse,
     addOrRemoveOptionalCourse,
     hoverSection,
     unHoverSection
-} from "../../actions/timetable_actions.jsx";
-import {changeUserInfo, fetchCourseInfo, openSignUpModal, react, setCourseId} from "../../actions/modal_actions.jsx";
-import {saveSettings} from "../../actions/user_actions.jsx";
-import {getSchoolSpecificInfo} from "../../constants/schools.jsx";
+} from "../../actions/timetable_actions";
+import {changeUserInfo, fetchCourseInfo, openSignUpModal, react, setCourseId} from "../../actions/modal_actions";
+import {saveSettings} from "../../actions/user_actions";
+import {getSchoolSpecificInfo} from "../../constants/schools";
 
 const mapStateToProps = (state) => {
     let lectureSections = [];

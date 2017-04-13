@@ -1,6 +1,6 @@
 import React from "react";
 import classNames from "classnames";
-import SearchSideBarContainer from "./containers/search_side_bar_container.jsx";
+import SearchSideBarContainer from "./containers/search_side_bar_container";
 import ClickOutHandler from "react-onclickout";
 
 export class SearchBar extends React.Component {

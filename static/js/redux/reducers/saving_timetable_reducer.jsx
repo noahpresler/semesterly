@@ -1,4 +1,4 @@
-import * as ActionTypes from "../constants/actionTypes.jsx";
+import * as ActionTypes from "../constants/actionTypes";
 
 let init_state = {
     activeTimetable: {name: String("Untitled Schedule")},

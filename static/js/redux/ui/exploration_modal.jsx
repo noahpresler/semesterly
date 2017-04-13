@@ -1,11 +1,11 @@
 import React from "react";
 import Modal from "boron/DropModal";
 import classNames from "classnames";
-import {CourseModalBody} from "./course_modal_body.jsx";
+import {CourseModalBody} from "./course_modal_body";
 import ClickOutHandler from "react-onclickout";
-import {getCourseShareLink} from "../helpers/timetable_helpers.jsx";
-import {ShareLink} from "./master_slot.jsx";
-import InputRange from "./react_input_range.jsx";
+import {getCourseShareLink} from "../helpers/timetable_helpers";
+import {ShareLink} from "./master_slot";
+import InputRange from "./react_input_range";
 
 export class ExplorationModal extends React.Component {
     constructor(props) {

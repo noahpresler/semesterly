@@ -16,11 +16,11 @@ import {
     getSaveSettingsEndpoint,
     getSaveTimetableEndpoint,
     getSetRegistrationTokenEndpoint
-} from "../constants/endpoints.jsx";
-import {fetchCourseClassmates} from "./modal_actions.jsx";
-import {store} from "../init.jsx";
-import {getNumberedName, loadTimetable, nullifyTimetable} from "./timetable_actions.jsx";
-import * as ActionTypes from "../constants/actionTypes.jsx";
+} from "../constants/endpoints";
+import {fetchCourseClassmates} from "./modal_actions";
+import {store} from "../init";
+import {getNumberedName, loadTimetable, nullifyTimetable} from "./timetable_actions";
+import * as ActionTypes from "../constants/actionTypes";
 
 let autoSaveTimer;
 

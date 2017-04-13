@@ -1,4 +1,4 @@
-import Carousel from "../../modules/nuka-carousel/carousel.jsx";
+import Carousel from "../../modules/nuka-carousel/carousel";
 import React from "react";
 
 const SideScroller = React.createClass({

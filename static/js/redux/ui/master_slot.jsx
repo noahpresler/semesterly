@@ -1,6 +1,6 @@
 import React from "react";
-import {COLOUR_DATA} from "../constants/colours.jsx";
-import {getCourseShareLink} from "../helpers/timetable_helpers.jsx";
+import {COLOUR_DATA} from "../constants/colours";
+import {getCourseShareLink} from "../helpers/timetable_helpers";
 import ClickOutHandler from "react-onclickout";
 
 class MasterSlot extends React.Component {

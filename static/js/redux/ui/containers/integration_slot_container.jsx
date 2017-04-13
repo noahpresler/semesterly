@@ -1,5 +1,5 @@
 import {connect} from "react-redux";
-import {IntegrationSlot} from "../integration_slot.jsx";
+import {IntegrationSlot} from "../integration_slot";
 
 const mapStateToProps = (state) => {
     return {

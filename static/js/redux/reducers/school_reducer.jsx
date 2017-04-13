@@ -1,5 +1,5 @@
-import {VALID_SCHOOLS} from "../constants/schools.jsx";
-import * as ActionTypes from "../constants/actionTypes.jsx";
+import {VALID_SCHOOLS} from "../constants/schools";
+import * as ActionTypes from "../constants/actionTypes";
 
 export const school = (state = {school: "", areas: [], departments: [], levels: [], dataLastUpdated: ""}, action) => {
     switch (action.type) {
