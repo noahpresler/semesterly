@@ -1,6 +1,6 @@
 import {connect} from "react-redux";
-import {SearchSideBar} from "../search_side_bar.jsx";
-import {addOrRemoveCourse, hoverSection, unHoverSection} from "../../actions/timetable_actions.jsx";
+import {SearchSideBar} from "../search_side_bar";
+import {addOrRemoveCourse, hoverSection, unHoverSection} from "../../actions/timetable_actions";
 
 const mapStateToProps = (state) => {
     let courseSections = state.courseSections.objects;
@@ -9,36 +9,42 @@ const mapStateToProps = (state) => {
         hovered = state.searchResults.items[0];
     }
     let sectionTypeToSections = hovered.sections;
-    let lectureSections = sectionTypeToSections['L'];
-    let tutorialSections = sectionTypeToSections['T'];
-    let practicalSections = sectionTypeToSections['P'];
+    let lectureSections = sectionTypeToSections.L;
+    let tutorialSections = sectionTypeToSections.T;
+    let practicalSections = sectionTypeToSections.P;
     let activeTimetable = state.timetables.items[state.timetables.active];
 
     return {
-        hovered,
-        lectureSections,
-        tutorialSections,
-        practicalSections,
-        isSectionLocked: (course_id, section) => {
-            if (courseSections[course_id] === undefined) {
+        hovered: hovered,
+        lectureSections: lectureSections,
+        tutorialSections: tutorialSections,
+        practicalSections: practicalSections,
+        isSectionLocked: (courseId, section) => {
+            if (courseSections[courseId] === undefined) {
                 return false;
             }
-            return Object.keys(courseSections[course_id]).some(
-                (type) => courseSections[course_id][type] == section
-            )
+            return Object.keys(courseSections[courseId]).some(
+                (type) => {
+                    return courseSections[courseId][type] === section;
+                }
+            );
         },
         isSectionOnActiveTimetable: (courseId, section) => {
-            return activeTimetable.courses.some(course => course.id === courseId && course.enrolled_sections.some(sec => sec == section));
+            return activeTimetable.courses.some((course) => {
+                return course.id === courseId && course.enrolled_sections.some((sec) => {
+                        return sec === section;
+                    });
+            });
         }
-    }
-}
+    };
+};
 
 const SearchSideBarContainer = connect(
     mapStateToProps,
     {
         addCourse: addOrRemoveCourse,
-        hoverSection,
-        unHoverSection
+        hoverSection: hoverSection,
+        unHoverSection: unHoverSection
     }
 )(SearchSideBar);
 
