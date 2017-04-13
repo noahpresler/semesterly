@@ -1,6 +1,6 @@
 import {connect} from "react-redux";
-import TimetableExistsAlert from "./timetable_exists_alert.jsx";
-import * as ActionTypes from "../../constants/actionTypes.jsx";
+import TimetableExistsAlert from "./timetable_exists_alert";
+import * as ActionTypes from "../../constants/actionTypes";
 
 
 const mapStateToProps = (state) => {

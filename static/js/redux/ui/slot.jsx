@@ -1,7 +1,7 @@
 import React from "react";
 import {DropTarget} from "react-dnd";
-import {COLOUR_DATA} from "../constants/colours.jsx";
-import {DRAGTYPES, HALF_HOUR_HEIGHT} from "../constants/constants.jsx";
+import {COLOUR_DATA} from "../constants/colours";
+import {DRAGTYPES, HALF_HOUR_HEIGHT} from "../constants/constants";
 import Radium, {StyleRoot} from "radium";
 
 function convertToHalfHours(str) {

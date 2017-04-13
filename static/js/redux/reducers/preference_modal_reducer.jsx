@@ -1,4 +1,4 @@
-import * as ActionTypes from "../constants/actionTypes.jsx";
+import * as ActionTypes from "../constants/actionTypes";
 
 export const preferenceModal = (state = {isVisible: false}, action) => {
     switch (action.type) {

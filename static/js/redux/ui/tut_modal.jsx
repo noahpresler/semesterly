@@ -1,6 +1,6 @@
 import React from "react";
 import Modal from "boron/WaveModal";
-import {browserSupportsLocalStorage} from "../util.jsx";
+import {browserSupportsLocalStorage} from "../util";
 
 export class TutModal extends React.Component {
     constructor(props) {
