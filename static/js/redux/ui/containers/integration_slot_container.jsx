@@ -1,20 +1,15 @@
-import { connect } from 'react-redux';
-import { IntegrationSlot } from '../integration_slot.jsx';
+import {connect} from "react-redux";
+import {IntegrationSlot} from "../integration_slot.jsx";
 
 const mapStateToProps = (state) => {
-  return {
-    metrics: state.preferences.sort_metrics,
-  }
-}
-
-const mapDispatchToProps = (dispatch) => {
-  return {
-  }
+    return {
+        metrics: state.preferences.sort_metrics,
+    }
 }
 
 const IntegrationSlotContainer = connect(
-  mapStateToProps,
-  mapDispatchToProps
+    mapStateToProps,
+    {}
 )(IntegrationSlot);
 
 export default IntegrationSlotContainer;
