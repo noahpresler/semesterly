@@ -32,23 +32,23 @@ it has stopped transforming, restart the process.
 ### Webpack
 #### Build
 Building will compile your javascript. Do this via: 
-```
+```sh
 $ npm run build
 ```
 
 ### Watch
 Watching will track any changes you make to JSX files and instantly recompile them (quickly)
-````
+```sh
 $ npm run watch
 ```
 
 ### Lint
 Linting will check your code style
-```
+```sh
 $ npm run lint
 ```
 will lint the whole repo. To lint one file: 
-```
+```sh
 $ ./node_modules/.bin/eslint path/to/file
 ```
 
