@@ -1,6 +1,6 @@
 import {connect} from "react-redux";
-import {SortMenu} from "../sort_menu.jsx";
-import {addMetric, changeMetric, removeMetric, toggleMetricOrder} from "../../actions/timetable_actions.jsx";
+import {SortMenu} from "../sort_menu";
+import {addMetric, changeMetric, removeMetric, toggleMetricOrder} from "../../actions/timetable_actions";
 
 const mapStateToProps = (state) => {
     return {

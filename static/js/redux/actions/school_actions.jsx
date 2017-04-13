@@ -1,5 +1,5 @@
-import {getSchoolInfoEndpoint} from "../constants/endpoints.jsx";
-import * as ActionTypes from "../constants/actionTypes.jsx";
+import {getSchoolInfoEndpoint} from "../constants/endpoints";
+import * as ActionTypes from "../constants/actionTypes";
 
 export function fetchSchoolInfo() {
     return (dispatch) => {

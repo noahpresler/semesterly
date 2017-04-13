@@ -1,9 +1,9 @@
 import React from "react";
-import {renderCourseModal} from "./course_modal.jsx";
-import Slot from "./slot.jsx";
-import CustomSlot from "./custom_slot.jsx";
+import {renderCourseModal} from "./course_modal";
+import Slot from "./slot";
+import CustomSlot from "./custom_slot";
 import {index as IntervalTree, matches01 as getIntersections} from "static-interval-tree";
-import {COLOUR_DATA, HALF_HOUR_HEIGHT} from "../constants/colours.jsx";
+import {COLOUR_DATA, HALF_HOUR_HEIGHT} from "../constants/colours";
 
 class SlotManager extends React.Component {
 

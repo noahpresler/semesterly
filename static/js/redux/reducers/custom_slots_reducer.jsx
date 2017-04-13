@@ -1,5 +1,5 @@
 import update from "react/lib/update";
-import * as ActionTypes from "../constants/actionTypes.jsx";
+import * as ActionTypes from "../constants/actionTypes";
 
 // slot fields:
 //   time_start: 'HH:MM',

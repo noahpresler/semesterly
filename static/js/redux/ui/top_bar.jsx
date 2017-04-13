@@ -1,8 +1,8 @@
 import React from "react";
-import SearchBarContainer from "./containers/search_bar_container.jsx";
-import CourseModalContainer from "./containers/course_modal_container.jsx";
-import TimetableLoaderContainer from "./containers/timetable_loader_container.jsx";
-import SocialProfileContainer from "./containers/social_profile_container.jsx";
+import SearchBarContainer from "./containers/search_bar_container";
+import CourseModalContainer from "./containers/course_modal_container";
+import TimetableLoaderContainer from "./containers/timetable_loader_container";
+import SocialProfileContainer from "./containers/social_profile_container";
 
 export const expandSideBar = () => {
     $('#main-bar, #side-bar').removeClass('full-cal').addClass('less-cal');

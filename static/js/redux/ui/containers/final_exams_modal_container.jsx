@@ -1,8 +1,8 @@
 import {connect} from "react-redux";
-import {FinalExamsModal} from "../final_exams_modal.jsx";
-import {fetchFinalExamSchedule} from "../../actions/user_actions.jsx";
-import {logFinalExamView} from "../../actions/calendar_actions.jsx";
-import {hideFinalExamsModal, triggerAcquisitionModal} from "../../actions/modal_actions.jsx";
+import {FinalExamsModal} from "../final_exams_modal";
+import {fetchFinalExamSchedule} from "../../actions/user_actions";
+import {logFinalExamView} from "../../actions/calendar_actions";
+import {hideFinalExamsModal, triggerAcquisitionModal} from "../../actions/modal_actions";
 
 const remapCourseDetails = (courses) => {
     let remap = {}
