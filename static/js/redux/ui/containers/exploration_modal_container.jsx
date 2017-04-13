@@ -13,7 +13,12 @@ import {
     unHoverSection
 } from "../../actions/timetable_actions";
 import {getSchoolSpecificInfo} from "../../constants/schools";
-import {fetchCourseClassmates, hideExplorationModal, openSignUpModal, react} from "../../actions/modal_actions";
+import {
+    fetchCourseClassmates,
+    hideExplorationModal,
+    openSignUpModal,
+    react
+} from "../../actions/modal_actions";
 
 const mapStateToProps = (state) => {
     let {isVisible, advancedSearchResults, isFetching, active, page} = state.explorationModal;
