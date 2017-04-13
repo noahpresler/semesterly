@@ -60,7 +60,8 @@ class FriendsInClassAlert extends React.Component {
                     className={(this.state.isComplete ? "friends-in-class-show" : "friends-in-class-hide") + " enable-notification-alert friends-in-class-alert"}>
                     <i className="friends-in-class-done fa fa-check"/>
                     <small className={"alert-extra"}>
-                        You can now see your friends in classes! To revert these changes, head to Account Settings.
+                        You can now see your friends in classes! To revert these changes, head to
+                        Account Settings.
                     </small>
                 </div>
                 <div
@@ -77,7 +78,8 @@ class FriendsInClassAlert extends React.Component {
                         fetchCourseInfo={() => this.fetchCourseInfo(this.props.mostFriendsClass.id)}
                     />
                     <small className="alert-extra">
-                        Plus {this.props.totalFriendsCount} more in other classes. Enable the friend feature to find out
+                        Plus {this.props.totalFriendsCount} more in other classes. Enable the friend
+                        feature to find out
                         who!
                     </small>
                     <button

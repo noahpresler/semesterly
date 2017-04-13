@@ -2,7 +2,11 @@ import {connect} from "react-redux";
 import DayCalendar from "../day_calendar";
 import {saveTimetable} from "../../actions/user_actions";
 import {handleCreateNewTimetable} from "../../actions/timetable_actions";
-import {addTTtoGCal, createICalFromTimetable, fetchShareTimetableLink} from "../../actions/calendar_actions";
+import {
+    addTTtoGCal,
+    createICalFromTimetable,
+    fetchShareTimetableLink
+} from "../../actions/calendar_actions";
 import {togglePreferenceModal, triggerSaveCalendarModal} from "../../actions/modal_actions";
 
 
