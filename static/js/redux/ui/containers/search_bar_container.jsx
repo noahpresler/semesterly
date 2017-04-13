@@ -1,5 +1,9 @@
 import {connect} from "react-redux";
-import {fetchSearchResults, hoverSearchResult, maybeSetSemester} from "../../actions/search_actions";
+import {
+    fetchSearchResults,
+    hoverSearchResult,
+    maybeSetSemester
+} from "../../actions/search_actions";
 import {addOrRemoveCourse, addOrRemoveOptionalCourse} from "../../actions/timetable_actions";
 import {SearchBar} from "../search_bar";
 import {fetchCourseInfo, showExplorationModal} from "../../actions/modal_actions";
