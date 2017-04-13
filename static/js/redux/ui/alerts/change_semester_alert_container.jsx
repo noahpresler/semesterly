@@ -1,7 +1,7 @@
 import {connect} from "react-redux";
-import {setSemester} from "../../actions/search_actions.jsx";
-import ChangeSemesterAlert from "./change_semester_alert.jsx";
-import * as ActionTypes from "../../constants/actionTypes.jsx";
+import {setSemester} from "../../actions/search_actions";
+import ChangeSemesterAlert from "./change_semester_alert";
+import * as ActionTypes from "../../constants/actionTypes";
 
 
 const mapStateToProps = (state) => {
