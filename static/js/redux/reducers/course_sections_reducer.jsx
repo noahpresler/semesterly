@@ -1,4 +1,4 @@
-import * as ActionTypes from "../constants/actionTypes.jsx";
+import * as ActionTypes from "../constants/actionTypes";
 
 // we need "active" (the active timetable's index) to properly save timetables.
 // so, the courseSections variable we care about is instead found in

@@ -1,13 +1,13 @@
 import React from "react";
 import classnames from "classnames";
-import Reaction from "./reaction.jsx";
-import {REACTION_MAP} from "../constants/reactions.jsx";
-import MasterSlot from "./master_slot.jsx";
-import Textbook from "./textbook.jsx";
-import {COLOUR_DATA} from "../constants/colours.jsx";
-import {getSchoolSpecificInfo} from "../constants/schools.jsx";
-import EvaluationList from "./evaluation_list.jsx";
-import {getCourseShareLinkFromModal} from "../helpers/timetable_helpers.jsx";
+import Reaction from "./reaction";
+import {REACTION_MAP} from "../constants/reactions";
+import MasterSlot from "./master_slot";
+import Textbook from "./textbook";
+import {COLOUR_DATA} from "../constants/colours";
+import {getSchoolSpecificInfo} from "../constants/schools";
+import EvaluationList from "./evaluation_list";
+import {getCourseShareLinkFromModal} from "../helpers/timetable_helpers";
 
 export class CourseModalBody extends React.Component {
     constructor(props) {

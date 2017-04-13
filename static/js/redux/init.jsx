@@ -4,15 +4,15 @@ import {render} from "react-dom";
 import {applyMiddleware, createStore} from "redux";
 import thunkMiddleware from "redux-thunk";
 import {Provider} from "react-redux";
-import {rootReducer} from "./reducers/root_reducer.jsx";
-import SemesterlyContainer from "./ui/containers/semesterly_container.jsx";
-import {fetchMostClassmatesCount, getUserInfo, isRegistered} from "./actions/user_actions.jsx";
-import {loadCachedTimetable, loadTimetable, lockTimetable} from "./actions/timetable_actions.jsx";
-import {fetchSchoolInfo} from "./actions/school_actions.jsx";
-import {fetchCourseClassmates, setCourseInfo} from "./actions/modal_actions.jsx";
-import {browserSupportsLocalStorage, setFirstVisit, setFriendsCookie, timeLapsedGreaterThan} from "./util.jsx";
-import {addTTtoGCal} from "./actions/calendar_actions.jsx";
-import * as ActionTypes from "./constants/actionTypes.jsx";
+import {rootReducer} from "./reducers/root_reducer";
+import SemesterlyContainer from "./ui/containers/semesterly_container";
+import {fetchMostClassmatesCount, getUserInfo, isRegistered} from "./actions/user_actions";
+import {loadCachedTimetable, loadTimetable, lockTimetable} from "./actions/timetable_actions";
+import {fetchSchoolInfo} from "./actions/school_actions";
+import {fetchCourseClassmates, setCourseInfo} from "./actions/modal_actions";
+import {browserSupportsLocalStorage, setFirstVisit, setFriendsCookie, timeLapsedGreaterThan} from "./util";
+import {addTTtoGCal} from "./actions/calendar_actions";
+import * as ActionTypes from "./constants/actionTypes";
 
 export const store = createStore(rootReducer, window.devToolsExtension && window.devToolsExtension(), applyMiddleware(thunkMiddleware));
 

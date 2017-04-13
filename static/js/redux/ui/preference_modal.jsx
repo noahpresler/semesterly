@@ -1,6 +1,6 @@
 import React from "react";
 import Modal from "boron/FadeModal";
-import SortMenuContainer from "./containers/sort_menu_container.jsx";
+import SortMenuContainer from "./containers/sort_menu_container";
 
 export class PreferenceModal extends React.Component {
     componentDidUpdate(nextProps) {

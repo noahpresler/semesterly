@@ -1,11 +1,11 @@
 import React from "react";
 import classNames from "classnames";
-import MasterSlot from "./master_slot.jsx";
-import {COLOUR_DATA} from "../constants/colours.jsx";
+import MasterSlot from "./master_slot";
+import {COLOUR_DATA} from "../constants/colours";
 import ClickOutHandler from "react-onclickout";
-import TimetableNameInputContainer from "./containers/timetable_name_input_container.jsx";
-import CreditTickerContainer from "./containers/credit_ticker_container.jsx";
-import Textbook from "./textbook.jsx";
+import TimetableNameInputContainer from "./containers/timetable_name_input_container";
+import CreditTickerContainer from "./containers/credit_ticker_container";
+import Textbook from "./textbook";
 
 class SideBar extends React.Component {
     constructor(props) {

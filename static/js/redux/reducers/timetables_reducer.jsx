@@ -1,6 +1,6 @@
 import update from "react/lib/update";
-import {saveLocalActiveIndex} from "../util.jsx";
-import * as ActionTypes from "../constants/actionTypes.jsx";
+import {saveLocalActiveIndex} from "../util";
+import * as ActionTypes from "../constants/actionTypes";
 
 let initialState = {
     isFetching: false,

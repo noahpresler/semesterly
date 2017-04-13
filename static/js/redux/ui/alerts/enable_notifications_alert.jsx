@@ -1,6 +1,6 @@
 import React from "react";
-import {setARegistrationToken} from "../../actions/user_actions.jsx";
-import {setDeclinedNotifications} from "../../util.jsx";
+import {setARegistrationToken} from "../../actions/user_actions";
+import {setDeclinedNotifications} from "../../util";
 
 class EnableNotificationsAlert extends React.Component {
     constructor(props) {

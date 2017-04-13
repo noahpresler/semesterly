@@ -1,7 +1,7 @@
 import {connect} from "react-redux";
-import ConflictAlert from "./conflict_alert.jsx";
-import {addLastAddedCourse} from "../../actions/timetable_actions.jsx";
-import * as ActionTypes from "../../constants/actionTypes.jsx";
+import ConflictAlert from "./conflict_alert";
+import {addLastAddedCourse} from "../../actions/timetable_actions";
+import * as ActionTypes from "../../constants/actionTypes";
 
 
 const mapStateToProps = (state) => {

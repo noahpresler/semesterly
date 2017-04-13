@@ -1,4 +1,4 @@
-import * as ActionTypes from "../constants/actionTypes.jsx";
+import * as ActionTypes from "../constants/actionTypes";
 
 export const peerModal = (state = {isVisible: false, isLoading: false}, action) => {
     switch (action.type) {

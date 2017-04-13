@@ -1,4 +1,4 @@
-import * as ActionTypes from "../constants/actionTypes.jsx";
+import * as ActionTypes from "../constants/actionTypes";
 
 export const friends = (state = {peers: [], isFetching: false}, action) => {
     switch (action.type) {

@@ -1,10 +1,10 @@
 import React from "react";
 import classnames from "classnames";
-import PaginationContainer from "./containers/pagination_container.jsx";
-import SlotManagerContainer from "./containers/slot_manager_container.jsx";
-import CellContainer from "./containers/cell_container.jsx";
-import {DAYS} from "../constants/constants.jsx";
-import {ShareLink} from "./master_slot.jsx";
+import PaginationContainer from "./containers/pagination_container";
+import SlotManagerContainer from "./containers/slot_manager_container";
+import CellContainer from "./containers/cell_container";
+import {DAYS} from "../constants/constants";
+import {ShareLink} from "./master_slot";
 import Swipeable from "react-swipeable";
 
 const Row = (props) => {
