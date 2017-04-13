@@ -1,7 +1,7 @@
 import {connect} from "react-redux";
-import {SaveCalendarModal} from "../save_calendar_modal.jsx";
-import {addTTtoGCal, createICalFromTimetable} from "../../actions/calendar_actions.jsx";
-import {toggleSaveCalendarModal} from "../../actions/modal_actions.jsx";
+import {SaveCalendarModal} from "../save_calendar_modal";
+import {addTTtoGCal, createICalFromTimetable} from "../../actions/calendar_actions";
+import {toggleSaveCalendarModal} from "../../actions/modal_actions";
 
 const mapStateToProps = (state) => {
     return {
