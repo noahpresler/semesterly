@@ -1,4 +1,4 @@
-import * as ActionTypes from "../constants/actionTypes.jsx";
+import * as ActionTypes from "../constants/actionTypes";
 
 export const calendar = (state = {shareLink: null, isFetchingShareLink: false, shareLinkValid: false}, action) => {
     switch (action.type) {

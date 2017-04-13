@@ -1,5 +1,5 @@
 import fetch from "isomorphic-fetch";
-import {getTimetablesEndpoint} from "../constants/endpoints.jsx";
+import {getTimetablesEndpoint} from "../constants/endpoints";
 import {
     browserSupportsLocalStorage,
     randomString,
@@ -7,10 +7,10 @@ import {
     saveLocalCourseSections,
     saveLocalPreferences,
     saveLocalSemester
-} from "../util.jsx";
-import {store} from "../init.jsx";
-import {autoSave, fetchClassmates, lockActiveSections} from "./user_actions.jsx";
-import * as ActionTypes from "../constants/actionTypes.jsx";
+} from "../util";
+import {store} from "../init";
+import {autoSave, fetchClassmates, lockActiveSections} from "./user_actions";
+import * as ActionTypes from "../constants/actionTypes";
 
 export const SID = randomString(30);
 

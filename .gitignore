@@ -43,3 +43,4 @@ scripts/*/logs/*.json
 .coverage
 assets/*
 static/bundles/*
+webpack-stats.json

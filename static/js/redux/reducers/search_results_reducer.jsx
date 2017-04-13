@@ -1,4 +1,4 @@
-import * as ActionTypes from "../constants/actionTypes.jsx";
+import * as ActionTypes from "../constants/actionTypes";
 
 export const searchResults = (state = {isFetching: false, items: []}, action) => {
     switch (action.type) {

@@ -1,8 +1,8 @@
 import React from "react";
-import {LogFacebookAlertClick} from "../../actions/user_actions.jsx";
-import MasterSlot from "../master_slot.jsx";
-import {COLOUR_DATA} from "../../constants/colours.jsx";
-import {setDeclinedNotifications} from "../../util.jsx";
+import {LogFacebookAlertClick} from "../../actions/user_actions";
+import MasterSlot from "../master_slot";
+import {COLOUR_DATA} from "../../constants/colours";
+import {setDeclinedNotifications} from "../../util";
 
 class FriendsInClassAlert extends React.Component {
     constructor(props) {

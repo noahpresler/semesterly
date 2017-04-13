@@ -1,7 +1,7 @@
 import React from "react";
 import EventEmitter from "events";
 import ReactCSSTransitionGroup from "react-addons-css-transition-group";
-import Alert from "./alert.jsx";
+import Alert from "./alert";
 
 class AlertBox extends React.Component {
     constructor(props) {
