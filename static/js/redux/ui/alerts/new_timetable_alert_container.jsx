@@ -1,7 +1,7 @@
 import {connect} from "react-redux";
-import {createNewTimetable} from "../../actions/timetable_actions.jsx";
-import NewTimetableAlert from "./new_timetable_alert.jsx";
-import * as ActionTypes from "../../constants/actionTypes.jsx";
+import {createNewTimetable} from "../../actions/timetable_actions";
+import NewTimetableAlert from "./new_timetable_alert";
+import * as ActionTypes from "../../constants/actionTypes";
 
 
 const mapStateToProps = (state) => {
