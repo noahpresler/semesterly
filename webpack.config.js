@@ -6,7 +6,7 @@ var BundleTracker = require('webpack-bundle-tracker')
 const isProd = process.env.NODE_ENV === "production";
 const isDev = process.env.NODE_ENV === "development";
 
-console.log(" nning Webpack for " + process.env.NODE_ENV);
+console.log("Running Webpack for " + process.env.NODE_ENV);
 
 var config = {
     //the base directory (absolute path) for resolving the entry option
