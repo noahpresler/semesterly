@@ -1,8 +1,8 @@
 import {connect} from "react-redux";
-import {setDeclinedNotifications} from "../../util.jsx";
-import {fetchClassmates, logFacebookAlertView, saveSettings} from "../../actions/user_actions.jsx";
-import FriendsInClassAlert from "./friends_in_class_alert.jsx";
-import * as ActionTypes from "../../constants/actionTypes.jsx";
+import {setDeclinedNotifications} from "../../util";
+import {fetchClassmates, logFacebookAlertView, saveSettings} from "../../actions/user_actions";
+import FriendsInClassAlert from "./friends_in_class_alert";
+import * as ActionTypes from "../../constants/actionTypes";
 
 const mapStateToProps = (state) => {
     let timetables = state.timetables.items;
