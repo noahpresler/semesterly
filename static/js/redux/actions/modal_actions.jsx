@@ -3,9 +3,9 @@ import {
     getClassmatesInCourseEndpoint,
     getCourseInfoEndpoint,
     getReactToCourseEndpoint
-} from "../constants/endpoints.jsx";
-import {store} from "../init.jsx";
-import * as ActionTypes from "../constants/actionTypes.jsx";
+} from "../constants/endpoints";
+import {store} from "../init";
+import * as ActionTypes from "../constants/actionTypes";
 
 export function setCourseInfo(json) {
     return {

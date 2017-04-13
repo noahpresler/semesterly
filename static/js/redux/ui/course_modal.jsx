@@ -1,9 +1,9 @@
 import React from "react";
 import classNames from "classnames";
 import Modal from "boron/WaveModal";
-import {CourseModalBody} from "./course_modal_body.jsx";
-import {getCourseShareLink, getCourseShareLinkFromModal} from "../helpers/timetable_helpers.jsx";
-import {ShareLink} from "./master_slot.jsx";
+import {CourseModalBody} from "./course_modal_body";
+import {getCourseShareLink, getCourseShareLinkFromModal} from "../helpers/timetable_helpers";
+import {ShareLink} from "./master_slot";
 
 export class CourseModal extends React.Component {
     constructor(props) {

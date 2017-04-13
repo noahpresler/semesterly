@@ -1,10 +1,10 @@
 import fetch from "isomorphic-fetch";
-import {getAdvancedSearchEndpoint, getCourseSearchEndpoint} from "../constants/endpoints.jsx";
-import {store} from "../init.jsx";
-import {getUserSavedTimetables, saveTimetable} from "./user_actions.jsx";
-import {nullifyTimetable} from "./timetable_actions.jsx";
-import * as ActionTypes from "../constants/actionTypes.jsx";
-import {fetchCourseClassmates} from "./modal_actions.jsx";
+import {getAdvancedSearchEndpoint, getCourseSearchEndpoint} from "../constants/endpoints";
+import {store} from "../init";
+import {getUserSavedTimetables, saveTimetable} from "./user_actions";
+import {nullifyTimetable} from "./timetable_actions";
+import * as ActionTypes from "../constants/actionTypes";
+import {fetchCourseClassmates} from "./modal_actions";
 
 export function requestCourses() {
     return {

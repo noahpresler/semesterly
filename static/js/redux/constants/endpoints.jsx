@@ -1,4 +1,4 @@
-import {getSchool, getSemester} from "../init.jsx";
+import {getSchool, getSemester} from "../init";
 
 /* server endpoints */
 export const getAddTTtoGCalEndpoint = (timetable) => {
