@@ -6,7 +6,13 @@ import {
     hoverSection,
     unHoverSection
 } from "../../actions/timetable_actions";
-import {changeUserInfo, fetchCourseInfo, openSignUpModal, react, setCourseId} from "../../actions/modal_actions";
+import {
+    changeUserInfo,
+    fetchCourseInfo,
+    openSignUpModal,
+    react,
+    setCourseId
+} from "../../actions/modal_actions";
 import {saveSettings} from "../../actions/user_actions";
 import {getSchoolSpecificInfo} from "../../constants/schools";
 

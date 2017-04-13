@@ -67,6 +67,12 @@
     "babel-plugin-react-transform": "^2.0.2",
     "babel-preset-es2015": "^6.24.1",
     "babel-preset-react": "^6.24.1",
+    "eslint": "^3.19.0",
+    "eslint-config-airbnb": "^14.1.0",
+    "eslint-loader": "^1.7.1",
+    "eslint-plugin-import": "^2.2.0",
+    "eslint-plugin-jsx-a11y": "^4.0.0",
+    "eslint-plugin-react": "^6.10.3",
     "extract-text-webpack-plugin": "^2.1.0",
     "gulp": "^3.9.1",
     "react": "^15.5.3",
@@ -78,7 +84,8 @@
   },
   "scripts": {
     "build": "webpack --config webpack.config.js --progress --colors",
-    "watch": "node server.js"
+    "watch": "node server.js",
+    "lint": "./node_modules/.bin/eslint static/js/redux/*/*"
   },
   "repository": {
     "type": "git",
