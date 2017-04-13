@@ -3,14 +3,14 @@ import {
     getLogFinalExamViewEndpoint,
     getLogiCalEndpoint,
     getRequestShareTimetableLinkEndpoint
-} from "../constants/endpoints.jsx";
-import {FULL_WEEK_LIST} from "../constants/constants.jsx";
-import {getActiveTimetable} from "./user_actions.jsx";
-import {store} from "../init.jsx";
+} from "../constants/endpoints";
+import {FULL_WEEK_LIST} from "../constants/constants";
+import {getActiveTimetable} from "./user_actions";
+import {store} from "../init";
 import ical from "ical-generator";
-import {getCourseShareLink} from "../helpers/timetable_helpers.jsx";
+import {getCourseShareLink} from "../helpers/timetable_helpers";
 import FileSaver from "browser-filesaver";
-import * as ActionTypes from "../constants/actionTypes.jsx";
+import * as ActionTypes from "../constants/actionTypes";
 
 let DAY_MAP = {
     'M': 'mo',

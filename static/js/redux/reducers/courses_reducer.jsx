@@ -1,4 +1,4 @@
-import * as ActionTypes from "../constants/actionTypes.jsx";
+import * as ActionTypes from "../constants/actionTypes";
 
 let initialState = {isFetching: false, items: [], lastUpdated: ""};
 export const courses = (state = initialState, action) => {

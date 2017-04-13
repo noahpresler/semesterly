@@ -1,9 +1,9 @@
 import React from "react";
 import Modal from "boron/WaveModal";
-import majors from "../constants/majors.jsx";
+import majors from "../constants/majors";
 import Select from "react-select";
 import classnames from "classnames";
-import {setARegistrationToken, unregisterAToken} from "../actions/user_actions.jsx";
+import {setARegistrationToken, unregisterAToken} from "../actions/user_actions";
 
 export class UserSettingsModal extends React.Component {
     constructor(props) {

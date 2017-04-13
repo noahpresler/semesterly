@@ -1,4 +1,4 @@
-import {getSemester, store} from "../init.jsx";
+import {getSemester, store} from "../init";
 
 export function getTimetableShareLink() {
     let state = store.getState();

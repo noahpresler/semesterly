@@ -1,6 +1,6 @@
 import React from "react";
 import Modal from "boron/WaveModal";
-import Textbook from "./textbook.jsx";
+import Textbook from "./textbook";
 
 export class TextbookModal extends React.Component {
     componentDidMount() {

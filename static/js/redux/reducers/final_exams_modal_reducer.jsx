@@ -1,4 +1,4 @@
-import * as ActionTypes from "../constants/actionTypes.jsx";
+import * as ActionTypes from "../constants/actionTypes";
 
 export const finalExamsModal = (state = {isVisible: false, isLoading: true, finalExams: null}, action) => {
     switch (action.type) {

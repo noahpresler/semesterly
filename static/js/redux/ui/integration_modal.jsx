@@ -1,6 +1,6 @@
 import React from "react";
 import Modal from "boron/WaveModal";
-import {addIntegration, delIntegration, getIntegration} from "../actions/user_actions.jsx";
+import {addIntegration, delIntegration, getIntegration} from "../actions/user_actions";
 
 export class IntegrationModal extends React.Component {
     constructor(props) {
