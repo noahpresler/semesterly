@@ -1,31 +1,11 @@
 approvals:
   # at least 1 reviewer
   minimum: 1
+  pattern: "^(:\\+1:|👍|lgtm)" # must start with thumbs up or lgtm
   from:
     users:
       - noahpresler
-      - felixzhuologist
-  # no self approvals
-  groups:
-    # check will fail if there is not at least 1 approval
-    # from backend persons
-    pattern: "^(:\\+1:|👍|lgtm)" # must start with thumbs up or lgtm
-    
-
-    # backend:
-    #   minimum: 1
-    #   from:
-    #     users:
-    #       - felixzhuologist
-    #       - noahpresler
-    # # check will fail if there is not at least 1 approval
-    # # from frontend persons
-    # frontend:
-    #   minimum: 1
-    #   from:
-    #     users:
-    #       - noahpresler
-
+      - felixzhuologist 
 specification:
   # title requirements AND body AND template requirements have to match
   title:
