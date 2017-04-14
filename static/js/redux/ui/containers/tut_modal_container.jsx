@@ -1,5 +1,5 @@
 import {connect} from "react-redux";
-import {TutModal} from "../tut_modal.jsx";
+import {TutModal} from "../tut_modal";
 
 const mapStateToProps = (state) => {
     return {
