@@ -1,7 +1,7 @@
 import {connect} from "react-redux";
-import {PreferenceModal} from "../preference_modal.jsx";
-import {togglePreferenceModal} from "../../actions/modal_actions.jsx";
-import {toggleConflicts} from "../../actions/timetable_actions.jsx";
+import {PreferenceModal} from "../preference_modal";
+import {togglePreferenceModal} from "../../actions/modal_actions";
+import {toggleConflicts} from "../../actions/timetable_actions";
 
 
 const mapStateToProps = (state) => {

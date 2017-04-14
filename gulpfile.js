@@ -32,75 +32,6 @@ const CSS_FILES = STATIC_DIR + 'css/timetable/**/*.css';
 const isProd = process.env.NODE_ENV === "production";
 const isDev = process.env.NODE_ENV === "development";
 
-function compile(watch) {
-    bundler = watchify(
-        browserify({
-            entries: [APP_LOCATION],
-            debug: true,
-            // Allow importing from the following extensions
-            extensions: ['js', 'jsx'],
-            plugin: isProd ? [] : [],
-            transform: [
-              [babel, {presets: ["es2015", "react"]} ],
-              [envify, {global: true, NODE_ENV: process.env.NODE_ENV}]
-            ]
-        })
-    );
-  function rebundle() {
-    bundler.bundle()
-      .on('error', function(err) { console.error(err); this.emit('end'); })
-      .pipe(source(COMPILED_NAME))
-      .pipe(buffer())
-      .pipe(gulpif(isDev, sourcemaps.init({ loadMaps: true })))
-      .pipe(gulpif(isProd, streamify(uglify())))
-      .pipe(gulpif(isDev, sourcemaps.write('./')))
-      .pipe(gulp.dest(COMPILED_LOCATION));
-  }
-
-  if (watch) {
-    bundler.on('update', function() {
-      gutil.log(gutil.colors.magenta('Recompiling Javascript...'));
-      rebundle();
-      gutil.log(gutil.colors.green('Compilation complete!'));
-    });
-  }
-
-  rebundle();
-}
-
-function watch() {
-  return compile(true);
-};
-
-gulp.task('jswatch', function() {
-  return watch();
-});
-
-gulp.task('js', function() {
-  gutil.log(gutil.colors.magenta('Recompiling Javascript...'));
-  var bundler = browserify({
-      entries: [APP_LOCATION],
-      debug: true,
-      // Allow importing from the following extensions
-      extensions: ['js', 'jsx'],
-      plugin: isProd ? [] : [],
-      transform: [
-        [babel, {presets: ["es2015", "react"]} ],
-        [envify, {global: true, NODE_ENV: process.env.NODE_ENV}]
-      ]
-  });
-  bundler.bundle()
-      .on('error', function(err) { console.error(err); this.emit('end'); })
-      .pipe(source(COMPILED_NAME))
-      .pipe(buffer())
-      .pipe(gulpif(isDev, sourcemaps.init({ loadMaps: true })))
-      .pipe(gulpif(isProd, streamify(uglify())))
-      .pipe(gulpif(isDev, sourcemaps.write('./')))
-      .pipe(livereload())
-      .pipe(gulp.dest(COMPILED_LOCATION));
-  gutil.log(gutil.colors.green('Compilation complete!'));
-  return;
-});
 gulp.task('css', function(){
     return gulp.src(CSS_FILES)
         .pipe(gulpif(isProd,minifyCSS()))
@@ -116,23 +47,9 @@ gulp.task('csswatch', function () {
 });
 
 
-gulp.task('watch', ['watchify', 'csswatch']);
+gulp.task('watch', ['csswatch']);
 gulp.task('default', ['watch']);
 
-gulp.task('timer', function () {
-return gulp.src('./static/js/misc/jhu_timer.jsx')
-    .pipe(concat('timer.js'))
-    .pipe(react())
-    .pipe(gulp.dest('static/js/misc'));
-});
-
-// gulp.task('analytics', function () {
-// return gulp.src('./static/js/analytics/**')
-//     .pipe(concat('analytics_application.js'))
-//     .pipe(react())
-//     .pipe(gulp.dest('static/js/gulp'));
-// });
-
 gulp.task('build', function() { return compile(); });
-gulp.task('default', ['jswatch', 'csswatch']);
+gulp.task('default', ['csswatch']);
 
