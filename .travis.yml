@@ -5,7 +5,7 @@ env:
   - NODE_ENV=production
 install:
   - npm install
-  - pip install --user-r requirements.txt
+  - pip install --user -r requirements.txt
 script: 
   - gulp css
   - npm run build
