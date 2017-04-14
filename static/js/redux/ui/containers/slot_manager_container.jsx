@@ -1,14 +1,14 @@
 import {connect} from "react-redux";
-import {fetchCourseInfo} from "../../actions/modal_actions.jsx";
+import {fetchCourseInfo} from "../../actions/modal_actions";
 import {
     addCustomSlot,
     addOrRemoveCourse,
     addOrRemoveOptionalCourse,
     removeCustomSlot,
     updateCustomSlot
-} from "../../actions/timetable_actions.jsx";
-import {getSchoolSpecificInfo} from "../../constants/schools.jsx";
-import SlotManager from "../slot_manager.jsx";
+} from "../../actions/timetable_actions";
+import {getSchoolSpecificInfo} from "../../constants/schools";
+import SlotManager from "../slot_manager";
 
 
 const mapStateToProps = (state, ownProps) => {
