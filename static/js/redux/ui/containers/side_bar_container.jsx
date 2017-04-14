@@ -1,17 +1,19 @@
 import {connect} from "react-redux";
-import SideBar from "../side_bar.jsx";
+import SideBar from "../side_bar";
 import {
     fetchCourseInfo,
     showFinalExamsModal,
     togglePeerModal,
     triggerTextbookModal
-} from "../../actions/modal_actions.jsx";
-import {addOrRemoveCourse, addOrRemoveOptionalCourse, loadTimetable} from "../../actions/timetable_actions.jsx";
-import {deleteTimetable, duplicateTimetable} from "../../actions/user_actions.jsx";
+} from "../../actions/modal_actions";
+import {
+    addOrRemoveCourse,
+    addOrRemoveOptionalCourse,
+    loadTimetable
+} from "../../actions/timetable_actions";
+import {deleteTimetable, duplicateTimetable} from "../../actions/user_actions";
 
 const mapStateToProps = (state) => {
-    let courseSections = state.courseSections.objects;
-    let savingTimetable = state.savingTimetable;
 
     let activeTimetable = state.timetables.items[state.timetables.active];
     let mandatoryCourses = activeTimetable.courses.filter(c => !c.is_optional && !c.fake);
