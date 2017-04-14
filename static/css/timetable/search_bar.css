@@ -172,11 +172,15 @@
 	min-height: 12px;
 	transition: all .1s linear;
 }
+.search-course .search-result-labels {
+	padding-left: 5px;
+	margin-top: 5px;
+}
 .search-course .label {
 	float: left;
-    line-height: 11px;
-    padding-top: 3px;
-    padding-bottom: 3px;
+    line-height: 15px;
+	padding: 0;
+	margin: 3px 0 0;
 }
 .search-course .label.bubble {
 	background-color: #DEDEDE;
@@ -186,6 +190,26 @@
 	padding-left: 0;
 	color: #D21616;
 }
+/* If a course has an integration turned on */
+.has-pilot {
+	float: left;
+	width: 50px;
+	height: 15px;
+	margin-right: 5px;
+	background-size: contain;
+	background-position: center;
+	background-repeat: no-repeat;
+	visibility: visible;
+	opacity: 1;
+	transition: visibility .3s, opacity .3s;
+}
+.search-course .label.integration a {
+	float: left;
+	line-height: 15px;
+	font-size: 12px;
+	padding-right: 5px;
+}
+
 .search-course .search-course-add,
 .search-course .search-course-save {
 	position: absolute;
@@ -319,32 +343,14 @@
 .trans50 #search-bar-side-sections {
 	background-color: rgba(255, 255, 255,.9);
 }
+.trans50 .has-pilot {
+	visibility: hidden;
+	opacity: 0;
+}
 
 .results-loading-gif {
  	background: url('/static/img/search-results-loader.gif') no-repeat;
  	background-position: right 5px center;
-}
-
-/* If a course has an integration turned on */
-.search-result-integration {
-	float: left;
-	padding: 1px 5px 1px 0px;
-	height: 17px;
-	margin: 5px 0;
-}
-.has-pilot {
-	float: left;
-	width: 50px;
-    height: 15px;
-    margin-right: 5px;
-	background-size: contain;
-	background-position: center;
-	background-repeat: no-repeat;
-}
-.search-result-integration a {
-	float: left;
-	line-height: 15px;
-	font-style: 12px;
 }
 
 /* Side Bar in Search Results */
