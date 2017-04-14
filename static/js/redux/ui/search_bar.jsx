@@ -253,13 +253,13 @@ export class SearchResult extends React.Component {
         let integrationLogoImageUrl = {
             backgroundImage: "url(/static/img/integrations/pilotLogo.png)"
         }
-        let integrationLogo = course.integrations.indexOf('Pilot') > -1 ?
-            <div className="search-result-integration">
+        let integrationLogo = course.integrations.indexOf('Pilot') == -1 ?
+            <div className="label integration">
                 <span className="has-pilot" style={integrationLogoImageUrl}></span>
             </div> : null;
-        let pilotIntegration = studentIntegrations['integrations'].indexOf('Pilot') == -1 ?
-            <div className="search-result-integration">
-                <a style={{fontSize: '10px'}} onMouseDown={(event) => {
+        let pilotIntegration = studentIntegrations['integrations'].indexOf('Pilot') > -1 ?
+            <div className="label integration">
+                <a onMouseDown={(event) => {
                     event.stopPropagation();
                     this.props.showIntegrationModal(course.id, 1)
                 }}>Add as Pilot
@@ -275,11 +275,13 @@ export class SearchResult extends React.Component {
                 <h3>{course.name || course.code} </h3>
                 { addOptionalCourseButton}
                 { addRemoveButton }
-                <h4 className="label" style={style}>{info}</h4><h4
-                className={classNames('label', 'bubble')}>{this.props.campuses[course.campus]}</h4>
-                { integrationLogo }
-                { pilotIntegration }
-                { waitlistOnlyFlag }
+                <div className="search-result-labels">
+                    <h4 className="label" style={style}>{info}</h4><h4
+                    className={classNames('label', 'bubble')}>{this.props.campuses[course.campus]}</h4>
+                    { integrationLogo }
+                    { pilotIntegration }
+                    { waitlistOnlyFlag }
+                </div>
             </li>);
     }
 }
