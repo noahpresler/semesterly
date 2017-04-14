@@ -4,8 +4,8 @@ node_js:
 env: 
   - NODE_ENV=production
 install:
-  - sudo npm install
-  - sudo pip install -r requirements.txt
+  - npm install
+  - pip install --user-r requirements.txt
 script: 
   - gulp css
   - npm run build
