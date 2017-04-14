@@ -1,6 +1,6 @@
 import {connect} from "react-redux";
-import {SocialProfile} from "../social_profile.jsx";
-import {overrideSettingsShow, triggerAcquisitionModal} from "../../actions/modal_actions.jsx";
+import {SocialProfile} from "../social_profile";
+import {overrideSettingsShow, triggerAcquisitionModal} from "../../actions/modal_actions";
 
 const mapStateToProps = (state) => {
     return {

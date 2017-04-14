@@ -1,5 +1,5 @@
 import {connect} from "react-redux";
-import TopBar from "../top_bar.jsx";
+import TopBar from "../top_bar";
 
 
 const mapStateToProps = (state) => {
