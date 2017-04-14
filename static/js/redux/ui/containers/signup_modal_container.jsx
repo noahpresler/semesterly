@@ -1,21 +1,19 @@
-import { connect } from 'react-redux';
-import { SignupModal } from '../signup_modal.jsx';
+import {connect} from "react-redux";
+import {SignupModal} from "../signup_modal";
+import {openSignUpModal} from "../../actions/modal_actions";
+
 
 const mapStateToProps = (state) => {
-	return {
-		isVisible: state.signupModal.isVisible,
-	}
-}
-
-const mapDispatchToProps = (dispatch) => {
-	return {
-		toggleSignupModal: () => {dispatch({type: "TOGGLE_SIGNUP_MODAL"})}
-	}
+    return {
+        isVisible: state.signupModal.isVisible,
+    }
 }
 
 const SignupModalContainer = connect(
-	mapStateToProps,
-	mapDispatchToProps
+    mapStateToProps,
+    {
+        toggleSignupModal: openSignUpModal
+    }
 )(SignupModal);
 
 export default SignupModalContainer;

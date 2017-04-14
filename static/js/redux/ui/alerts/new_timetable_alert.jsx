@@ -1,29 +1,33 @@
-import React from 'react';
+import React from "react";
 
 class NewTimetableAlert extends React.Component {
-	constructor(props) {
-		super(props);
-	}
-	componentWillUnmount() {
-		this.props.dismissSelf();
-	}
-	handleClick() {
-		this.props.createNewTimetable();	
-		this.props.dismissSelf();
-	}
-	render() {
-		return (
-		<div className="conflict-alert change-semester-alert">
-			{ this.props.msg }
+    constructor(props) {
+        super(props);
+    }
 
-			<button 
-				onClick={() => this.handleClick()}
-				className="conflict-alert-btn change-semester-btn">
-				Create Anyway
-			</button>
+    componentWillUnmount() {
+        this.props.dismissSelf();
+    }
 
-	 	</div>);
- 	}
-};
+    handleClick() {
+        this.props.createNewTimetable();
+        this.props.dismissSelf();
+    }
+
+    render() {
+        return (
+            <div className="conflict-alert change-semester-alert">
+                { this.props.msg }
+
+                <button
+                    onClick={() => this.handleClick()}
+                    className="conflict-alert-btn change-semester-btn">
+                    Create Anyway
+                </button>
+
+            </div>);
+    }
+}
+;
 
 export default NewTimetableAlert;
