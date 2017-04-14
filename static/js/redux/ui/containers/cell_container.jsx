@@ -1,6 +1,6 @@
 import {connect} from "react-redux";
-import Cell from "../calendar_cell.jsx";
-import {addCustomSlot, updateCustomSlot} from "../../actions/timetable_actions.jsx";
+import Cell from "../calendar_cell";
+import {addCustomSlot, updateCustomSlot} from "../../actions/timetable_actions";
 
 
 /*

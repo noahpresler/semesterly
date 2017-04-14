@@ -1,7 +1,7 @@
 import {connect} from "react-redux";
-import TimetableNameInput from "../timetable_name_input.jsx";
-import {openSignUpModal} from "../../actions/modal_actions.jsx";
-import {changeTimetableName} from "../../actions/user_actions.jsx";
+import TimetableNameInput from "../timetable_name_input";
+import {openSignUpModal} from "../../actions/modal_actions";
+import {changeTimetableName} from "../../actions/user_actions";
 
 
 const mapStateToProps = (state) => {

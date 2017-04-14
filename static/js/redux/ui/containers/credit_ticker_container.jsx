@@ -1,5 +1,5 @@
 import {connect} from "react-redux";
-import CreditTicker from "../credit_ticker.jsx";
+import CreditTicker from "../credit_ticker";
 
 const mapStateToProps = (state) => {
     let activeTimetable = state.timetables.items[state.timetables.active];
