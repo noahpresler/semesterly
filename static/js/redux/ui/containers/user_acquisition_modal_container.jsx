@@ -1,22 +1,19 @@
-import { connect } from 'react-redux';
-import { UserAcquisitionModal } from '../user_acquisition_modal.jsx';
+import {connect} from "react-redux";
+import {UserAcquisitionModal} from "../user_acquisition_modal";
+import {triggerAcquisitionModal} from "../../actions/modal_actions";
 
 const mapStateToProps = (state) => {
-	return {
-		isVisible: state.userAcquisitionModal.isVisible,
-		userInfo: state.userInfo.data,
-	}
-}
-
-const mapDispatchToProps = (dispatch) => {
-	return {
-		toggleUserAcquisitionModal: () => {dispatch({type: "TOGGLE_ACQUISITION_MODAL"})},
-	}
+    return {
+        isVisible: state.userAcquisitionModal.isVisible,
+        userInfo: state.userInfo.data,
+    }
 }
 
 const UserAcquisitionModalContainer = connect(
-	mapStateToProps,
-	mapDispatchToProps
+    mapStateToProps,
+    {
+        toggleUserAcquisitionModal: triggerAcquisitionModal
+    }
 )(UserAcquisitionModal);
 
 export default UserAcquisitionModalContainer;
