@@ -1,0 +1,11 @@
+language: node_js
+node_js:
+  - "7.1.0"
+env: 
+  - NODE_ENV=production
+install:
+  - npm install
+  - pip install -r requirements.txt
+script: 
+  - gulp css
+  - npm run build
