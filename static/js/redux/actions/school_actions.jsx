@@ -1,7 +1,7 @@
 import { getSchoolInfoEndpoint } from '../constants/endpoints';
 import * as ActionTypes from '../constants/actionTypes';
 
-export function fetchSchoolInfo() {
+export default function fetchSchoolInfo() {
   return (dispatch) => {
     dispatch({ type: ActionTypes.REQUEST_SCHOOL_INFO });
     fetch(getSchoolInfoEndpoint())
