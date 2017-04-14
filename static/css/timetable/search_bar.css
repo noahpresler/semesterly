@@ -182,6 +182,10 @@
 	background-color: #DEDEDE;
 	font-size: 10px;
 }
+.search-course .label.flag {
+	padding-left: 0;
+	color: #D21616;
+}
 .search-course .search-course-add,
 .search-course .search-course-save {
 	position: absolute;
@@ -324,7 +328,7 @@
 /* If a course has an integration turned on */
 .search-result-integration {
 	float: left;
-	padding: 1px 0px;
+	padding: 1px 5px 1px 0px;
 	height: 17px;
 	margin: 5px 0;
 }
@@ -340,6 +344,7 @@
 .search-result-integration a {
 	float: left;
 	line-height: 15px;
+	font-style: 12px;
 }
 
 /* Side Bar in Search Results */
