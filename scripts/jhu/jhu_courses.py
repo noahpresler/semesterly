@@ -67,8 +67,8 @@ class HopkinsParser(CourseParser):
         except:
             section_enrolment = 0
         try:
-            waitlist = int(course['Waitlisted'])
-        except:
+            waitlist = int(course.get('Waitlisted', -1))
+        except ValueError:
             waitlist = -1
         return (section_size,section_enrolment, waitlist)
 
