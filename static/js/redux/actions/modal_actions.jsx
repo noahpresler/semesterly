@@ -35,6 +35,18 @@ export function setCourseId(id) {
   };
 }
 
+export function fetchCourseClassmates(courseId) {
+  return (dispatch) => {
+    fetch(getClassmatesInCourseEndpoint(courseId), {
+      credentials: 'include',
+    })
+      .then(response => response.json()) // TODO(rohan): error-check the response
+      .then((json) => {
+        dispatch(setCourseClassmates(json));
+      });
+  };
+}
+
 export function fetchCourseInfo(courseId) {
   return (dispatch) => {
     dispatch(requestCourseInfo(courseId));
@@ -46,18 +58,6 @@ export function fetchCourseInfo(courseId) {
               dispatch(setCourseInfo(json));
             });
     dispatch(fetchCourseClassmates(courseId));
-  };
-}
-
-export function fetchCourseClassmates(courseId) {
-  return (dispatch) => {
-    fetch(getClassmatesInCourseEndpoint(courseId), {
-      credentials: 'include',
-    })
-            .then(response => response.json()) // TODO(rohan): error-check the response
-            .then((json) => {
-              dispatch(setCourseClassmates(json));
-            });
   };
 }
 
