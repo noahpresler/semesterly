@@ -2,11 +2,10 @@ approvals:
   # at least 1 reviewer
   minimum: 1
   # no self approvals
-  ignore: pr_opener
   groups:
     # check will fail if there is not at least 1 approval
     # from backend persons
-    pattern: "^(:\\+1:|👍)" # must start with thumbs up
+    pattern: "^(:\\+1:|👍|lgtm)" # must start with thumbs up or lgtm
     backend:
       minimum: 1
       from:
