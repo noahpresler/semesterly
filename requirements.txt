@@ -56,3 +56,4 @@ rollbar==0.13.11
 django-cachalot==1.4.1
 python-memcached==1.58
 djangorestframework==3.6.2
+django-webpack-loader==0.4.1
