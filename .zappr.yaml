@@ -39,6 +39,6 @@ specification:
     minimum-length:
       enabled: true
       length: 8
- template:
-     # is different from pull request body
-     differs-from-body: true
+    template:
+      # is different from pull request body
+      differs-from-body: true
