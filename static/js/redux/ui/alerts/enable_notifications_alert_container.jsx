@@ -1,7 +1,7 @@
 import {connect} from "react-redux";
-import {setDeclinedNotifications} from "../../util.jsx";
-import EnableNotificationsAlert from "./enable_notifications_alert.jsx";
-import * as ActionTypes from "../../constants/actionTypes.jsx";
+import {setDeclinedNotifications} from "../../util";
+import EnableNotificationsAlert from "./enable_notifications_alert";
+import * as ActionTypes from "../../constants/actionTypes";
 
 const mapStateToProps = (state) => {
     let msg = "Get Alerts!";
