@@ -90,7 +90,7 @@ export class SearchBar extends React.Component {
                                   position={i}
             />)
         });
-        let result_container = /*!this.state.focused || */results.length == 0 ? null : (
+        let result_container = !this.state.focused || results.length == 0 ? null : (
             <ul className={resClass}>
                 {results}
                 <div id="see-more" style={{height: 240 - 60 * results.length}}>
@@ -199,14 +199,12 @@ export class SearchResult extends React.Component {
     }
 
     hasOnlyWaitlistedSections() {
-        console.log(this.props.searchResults[this.props.position].code, this.props.searchResults[this.props.position].name);
         let sections = this.props.searchResults[this.props.position].sections;
         for (let sectionType in sections) {
             let sectionTypeHasOpenSections = false;
             for (let section in sections[sectionType]) {
                 if (sections[sectionType][section].length > 0) {
                     if (sections[sectionType][section][0].enrolment < sections[sectionType][section][0].size) {
-                        console.log(section[0].enrolment, section[0].size, section[0].enrolment < section[0].size);
                         sectionTypeHasOpenSections = true;
                         break;
                     }
@@ -214,7 +212,6 @@ export class SearchResult extends React.Component {
                     return false;
                 }
             }
-            console.log(sectionTypeHasOpenSections);
             if (!sectionTypeHasOpenSections) { // lecture, practical, or tutorial doesn't have open seats
                 return true;
             }
@@ -253,7 +250,7 @@ export class SearchResult extends React.Component {
         let integrationLogoImageUrl = {
             backgroundImage: "url(/static/img/integrations/pilotLogo.png)"
         }
-        let integrationLogo = course.integrations.indexOf('Pilot') == -1 ?
+        let integrationLogo = course.integrations.indexOf('Pilot') > -1 ?
             <div className="label integration">
                 <span className="has-pilot" style={integrationLogoImageUrl}></span>
             </div> : null;
