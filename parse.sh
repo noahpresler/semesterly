@@ -25,9 +25,9 @@ echo "STARTING COURSE PARSERS ${timestamp}" >> ${master_log}
 
 for school in "${schools[@]}"
 do
-	python ${sem_home}/manage.py ingest ${school} --term Fall --year 2017 --hide-progress-bar 2> "scripts/${school}/logs/stderr_${timestamp}.log" 1> "scripts/${school}/logs/stdout_${timestamp}.log"
+	python ${sem_home}/manage.py ingest ${school} --term Fall --year 2017 --hide-progress-bar 2> "${sem_home}/scripts/${school}/logs/stderr_${timestamp}.log" 1> "${sem_home}/scripts/${school}/logs/stdout_${timestamp}.log"
 	report_on_bad_exit $? ${school} "ingest"
-	python ${sem_home}/manage.py digest ${school} --hide-progress-bar 2> "scripts/${school}/logs/stderr_${timestamp}.log" 1> "scripts/${school}/logs/stdout_${timestamp}.log"
+	python ${sem_home}/manage.py digest ${school} --hide-progress-bar 2> "${sem_home}/scripts/${school}/logs/stderr_${timestamp}.log" 1> "${sem_home}/scripts/${school}/logs/stdout_${timestamp}.log"
 
 	report_on_bad_exit $? ${school} "digest"
 done
