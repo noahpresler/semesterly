@@ -1,7 +1,7 @@
 import {connect} from "react-redux";
-import {UserSettingsModal} from "../user_settings_modal.jsx";
-import {saveSettings} from "../../actions/user_actions.jsx";
-import {changeUserInfo, overrideSettingsShow} from "../../actions/modal_actions.jsx";
+import {UserSettingsModal} from "../user_settings_modal";
+import {saveSettings} from "../../actions/user_actions";
+import {changeUserInfo, overrideSettingsShow} from "../../actions/modal_actions";
 
 const mapStateToProps = (state) => {
     return {
