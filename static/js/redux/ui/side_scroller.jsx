@@ -1,12 +1,12 @@
-import Carousel from "../../modules/nuka-carousel/carousel.jsx";
-import React from "react";
+import Carousel from '../../modules/nuka-carousel/carousel';
+import React from 'react';
 
 const SideScroller = React.createClass({
-    mixins: [Carousel.ControllerMixin],
+  mixins: [Carousel.ControllerMixin],
 
-    getInitialState: function () {
-        return {slidesShownCount: 1};
-    },
+  getInitialState() {
+    return { slidesShownCount: 1 };
+  },
     // updateNumItems: function() {
     //   if (!this.props.slidesToShow || $(".slider").length == 0 || !this.isMounted()) {
     //     return;
@@ -29,46 +29,50 @@ const SideScroller = React.createClass({
     // },
 
 
-    render: function () {
-        if (this.props.content.length <= 2) {
-            return <div style={{marginBottom: "-30px !important"}}>{this.props.content}</div>;
-        }
-        let navItems = null;
-        if (this.props.navItems && this.state.carousels.carousel) {
-            let navs = [];
+  render() {
+    if (this.props.content.length <= 2) {
+      return <div style={{ marginBottom: '-30px !important' }}>{this.props.content}</div>;
+    }
+    let navItems = null;
+    if (this.props.navItems && this.state.carousels.carousel) {
+      const navs = [];
 
-            for (let i = 0; i < this.props.navItems.length; i++) {
-                let cls = this.state.carousels.carousel.state.currentSlide == i ? " nav-item-active" : "";
-                navs.push(
-                    <span key={i} className={"nav-item" + cls}
-                          onClick={this.changeSlide(i)}>{this.props.navItems[i]}</span>
+      for (let i = 0; i < this.props.navItems.length; i++) {
+        const cls = this.state.carousels.carousel.state.currentSlide == i ? ' nav-item-active' : '';
+        navs.push(
+          <span
+            key={i} className={`nav-item${cls}`}
+            onClick={this.changeSlide(i)}
+          >{this.props.navItems[i]}</span>,
                 );
-            }
-            navItems = <div className="scroll-nav">{navs}</div>;
-        }
-        let slideIndex = this.props.slideIndex ? this.props.slideIndex : 0;
-        return (
-            <div>
-                {navItems}
-                <Carousel ref="carousel" data={this.setCarouselData.bind(this, 'carousel')}
-                          slidesToShow={this.state.slidesShownCount}
-                          slideIndex={slideIndex}
-                          dragging={true}
-                          cellSpacing={30}
-                          id={this.props.id}>
-                    {this.props.content}
-                </Carousel>
-            </div>
-        )
-    },
+      }
+      navItems = <div className="scroll-nav">{navs}</div>;
+    }
+    const slideIndex = this.props.slideIndex ? this.props.slideIndex : 0;
+    return (
+      <div>
+        {navItems}
+        <Carousel
+          ref="carousel" data={this.setCarouselData.bind(this, 'carousel')}
+          slidesToShow={this.state.slidesShownCount}
+          slideIndex={slideIndex}
+          dragging
+          cellSpacing={30}
+          id={this.props.id}
+        >
+          {this.props.content}
+        </Carousel>
+      </div>
+    );
+  },
     // changes the currently selected slide to slide i (indexed starting at 0)
-    changeSlide: function (i) {
-        return function () {
-            this.state.carousels.carousel.goToSlide(i);
-        }.bind(this);
-    },
+  changeSlide(i) {
+    return function () {
+      this.state.carousels.carousel.goToSlide(i);
+    }.bind(this);
+  },
 
-    componentDidMount: function () {
+  componentDidMount() {
         // let length = this.props.content.length;
         // if (length > 1) {
         //   this.updateNumItems();
@@ -78,7 +82,7 @@ const SideScroller = React.createClass({
         //   if (length <= 1) {return;}
         //   this.updateNumItems();
         // }.bind(this));
-    },
+  },
 
 });
 
