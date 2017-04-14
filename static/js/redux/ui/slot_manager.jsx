@@ -119,20 +119,34 @@ class SlotManager extends React.Component {
             // bit map to store if slot has already been processed
       const seen = day_slots.map(() => false);
 
+            // bit map to store if slot has already been added to queue
+            let added = day_slots.map(() => false)
+
             // get num_conflicts + shift_index
-      for (let i = 0; i < info_intervals.length; i++) {
-        if (!seen[i]) { // if not seen, perform dfs search on conflicts
-          const direct_conflicts = [];
-          const frontier = [info_intervals[i]];
-          while (frontier.length > 0) {
-            const next = frontier.pop();
-            seen[next.id] = true;
-            direct_conflicts.push(next);
-            const neighbors = getIntersections(info_slots, next);
-            for (let k = 0; k < neighbors.length; k++) {
-              if (!seen[neighbors[k].id]) {
-                frontier.push(neighbors[k]);
-              }
+            for (let i = 0; i < info_intervals.length; i++) {
+                if (!seen[i]) { // if not seen, perform dfs search on conflicts
+                    let direct_conflicts = [];
+                    let frontier = [info_intervals[i]];
+                    while (frontier.length > 0) {
+                        let next = frontier.pop()
+                        seen[next.id] = true
+                        added[next.id] = true
+                        direct_conflicts.push(next)
+                        let neighbors = getIntersections(info_slots, next)
+                        for (let k = 0; k < neighbors.length; k++) {
+                            if (!seen[neighbors[k].id] && !added[neighbors[k].id]) {
+                                frontier.push(neighbors[k])
+                                added[neighbors[k].id] = true
+                            }
+                        }
+                    }
+                    direct_conflicts.sort((a, b) => (intervals[b.id].end - intervals[b.id].start) - (intervals[a.id].end - intervals[a.id].start))
+                    for (let j = 0; j < direct_conflicts.length; j++) {
+                        let slotId = direct_conflicts[j].id
+                        day_slots[slotId]['num_conflicts'] = direct_conflicts.length
+                        day_slots[slotId]['shift_index'] = j
+                    }
+                }
             }
           }
           direct_conflicts.sort((a, b) => (intervals[b.id].end - intervals[b.id].start) - (intervals[a.id].end - intervals[a.id].start));
