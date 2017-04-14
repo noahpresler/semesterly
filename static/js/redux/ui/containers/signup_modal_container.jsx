@@ -1,6 +1,6 @@
 import {connect} from "react-redux";
-import {SignupModal} from "../signup_modal.jsx";
-import {openSignUpModal} from "../../actions/modal_actions.jsx";
+import {SignupModal} from "../signup_modal";
+import {openSignUpModal} from "../../actions/modal_actions";
 
 
 const mapStateToProps = (state) => {
