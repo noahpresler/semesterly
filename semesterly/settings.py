@@ -108,6 +108,15 @@ SOCIAL_AUTH_PIPELINE = (
     'student.utils.create_student',
 )
 
+# Webpack
+
+WEBPACK_LOADER = {
+    'DEFAULT': {
+        'BUNDLE_DIR_NAME': 'bundles/',
+        'STATS_FILE': os.path.join(BASE_DIR, 'webpack-stats.json'),
+    }
+}
+
 # Application definition
 
 INSTALLED_APPS = (
@@ -129,7 +138,8 @@ INSTALLED_APPS = (
     'scripts',
     'student',
     'cachalot',
-    'silk'
+    'silk',
+    'webpack_loader'
 )
 
 MIDDLEWARE_CLASSES = (
