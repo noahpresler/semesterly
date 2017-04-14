@@ -90,7 +90,7 @@ export class SearchBar extends React.Component {
                                   position={i}
             />)
         });
-        let result_container = !this.state.focused || results.length == 0 ? null : (
+        let result_container = /*!this.state.focused || */results.length == 0 ? null : (
             <ul className={resClass}>
                 {results}
                 <div id="see-more" style={{height: 240 - 60 * results.length}}>
@@ -161,6 +161,7 @@ export class SearchResult extends React.Component {
         this.addCourseWrapper = this.addCourseWrapper.bind(this);
         this.actionOver = this.actionOver.bind(this);
         this.actionOut = this.actionOut.bind(this);
+        this.hasOnlyWaitlistedSections = this.hasOnlyWaitlistedSections.bind(this);
     }
 
     addCourseWrapper(course, sec, event) {
@@ -195,6 +196,30 @@ export class SearchResult extends React.Component {
                 this.setState({hoverSave: false});
                 break;
         }
+    }
+
+    hasOnlyWaitlistedSections() {
+        console.log(this.props.searchResults[this.props.position].code, this.props.searchResults[this.props.position].name);
+        let sections = this.props.searchResults[this.props.position].sections;
+        for (let sectionType in sections) {
+            let sectionTypeHasOpenSections = false;
+            for (let section in sections[sectionType]) {
+                if (sections[sectionType][section].length > 0) {
+                    if (sections[sectionType][section][0].enrolment < sections[sectionType][section][0].size) {
+                        console.log(section[0].enrolment, section[0].size, section[0].enrolment < section[0].size);
+                        sectionTypeHasOpenSections = true;
+                        break;
+                    }
+                } else {
+                    return false;
+                }
+            }
+            console.log(sectionTypeHasOpenSections);
+            if (!sectionTypeHasOpenSections) { // lecture, practical, or tutorial doesn't have open seats
+                return true;
+            }
+        }
+        return false;
     }
 
     render() {
@@ -232,7 +257,7 @@ export class SearchResult extends React.Component {
             <div className="search-result-integration">
                 <span className="has-pilot" style={integrationLogoImageUrl}></span>
             </div> : null;
-        let pilotIntegration = studentIntegrations['integrations'].indexOf('Pilot') > -1 ?
+        let pilotIntegration = studentIntegrations['integrations'].indexOf('Pilot') == -1 ?
             <div className="search-result-integration">
                 <a style={{fontSize: '10px'}} onMouseDown={(event) => {
                     event.stopPropagation();
@@ -240,6 +265,7 @@ export class SearchResult extends React.Component {
                 }}>Add as Pilot
                 </a>
             </div> : null;
+        let waitlistOnlyFlag =  this.hasOnlyWaitlistedSections() ? <h4 className="label flag">Waitlist Only</h4> : null;
         return (
             <li key={course.id}
                 className={classNames('search-course', {'hovered': this.props.isHovered(this.props.position)})}
@@ -253,6 +279,7 @@ export class SearchResult extends React.Component {
                 className={classNames('label', 'bubble')}>{this.props.campuses[course.campus]}</h4>
                 { integrationLogo }
                 { pilotIntegration }
+                { waitlistOnlyFlag }
             </li>);
     }
 }
