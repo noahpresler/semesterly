@@ -24,9 +24,7 @@ export class TermsOfServiceModal extends React.Component {
             <Modal ref="modal"
                    className="terms-of-service-modal max-modal"
                    modalStyle={modalStyle}
-                   onHide={() => {
-                       this.props.toggleTermsOfServiceModal();
-                   }}
+                   closeOnClick={false}
             >
                 <div id="tos-container">
                     <h1>Terms of Service and Privacy Policy</h1>
@@ -37,7 +35,7 @@ export class TermsOfServiceModal extends React.Component {
                     </div>
                     <button className="accept-tos-btn" onClick={() => {
                             acceptTOS();
-                            this.props.toggleTermsOfServiceModal();
+                            this.refs.modal.hide()
                         }}>
                         <i className="fa fa-check"/>
                         <span>I accept the Terms of Service</span>
