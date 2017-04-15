@@ -217,9 +217,7 @@ export class SearchResult extends React.Component {
           return false;
         }
       }
-      if (!sectionTypeHasOpenSections) { // lecture, practical, or tutorial doesn't have open seats
-        return true;
-      }
+      return !sectionTypeHasOpenSections; // lecture, practical, or tutorial doesn't have open seats
     }
     return false;
   }
