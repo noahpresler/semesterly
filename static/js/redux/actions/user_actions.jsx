@@ -531,7 +531,7 @@ export function unregisterAToken() {
   }
 }
 
-export function openIntegrationModal(integrationID, courseID) {
+export function openIntegsrationModal(integrationID, courseID) {
   return fetch(getIntegrationGetEndpoint(integrationID, courseID), {
     credentials: 'include',
     method: 'GET',
