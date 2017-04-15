@@ -11,9 +11,6 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
     return {
-        toggleTermsOfServiceModal: () => {
-            dispatch({type: ActionTypes.TOGGLE_TOS_MODAL})
-        }, 
         triggerTermsOfServiceModal: () => {
             dispatch({type: ActionTypes.TRIGGER_TOS_MODAL})
         }, 
