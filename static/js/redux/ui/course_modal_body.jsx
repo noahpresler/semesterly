@@ -1,7 +1,7 @@
 import React from 'react';
 import classnames from 'classnames';
 import Reaction from './reaction';
-import { REACTION_MAP } from '../constants/reactions';
+import REACTION_MAP from '../constants/reactions';
 import MasterSlot from './master_slot';
 import Textbook from './textbook';
 import COLOUR_DATA from '../constants/colours';
