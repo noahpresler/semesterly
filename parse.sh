@@ -14,6 +14,9 @@ report_on_bad_exit() {
 
 sem_home="${SEMESTERLY_HOME:-/home/django}"
 export SEMESTERLY_HOME=${sem_home}
+echo $SEMESTERLY_HOME
+
+master_log="${sem_home}/scripts/logs/master.log"
 
 master_log="${sem_home}/scripts/logs/master.log"
 
