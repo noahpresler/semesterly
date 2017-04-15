@@ -1,6 +1,6 @@
 import React from 'react';
 import { DropTarget } from 'react-dnd';
-import { COLOUR_DATA } from '../constants/colours';
+import COLOUR_DATA from '../constants/colours';
 import { DRAGTYPES, HALF_HOUR_HEIGHT } from '../constants/constants';
 import Radium, { StyleRoot } from 'radium';
 
