@@ -531,7 +531,7 @@ export function unregisterAToken() {
   }
 }
 
-export function openIntegsrationModal(integrationID, courseID) {
+export function openIntegrationModal(integrationID, courseID) {
   return fetch(getIntegrationGetEndpoint(integrationID, courseID), {
     credentials: 'include',
     method: 'GET',
@@ -561,7 +561,7 @@ export function addIntegration(integrationID, courseID, json) {
     method: 'POST',
     body: JSON.stringify({ json }),
   })
-        .then(response => response.json());g
+        .then(response => response.json());
 }
 
 export function logFacebookAlertView() {
