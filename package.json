@@ -58,9 +58,7 @@
     "streamify": "^0.2.5",
     "vinyl-buffer": "^1.0.0",
     "vinyl-source-stream": "^1.1.0",
-    "watchify": "^3.6.1"
-  },
-  "devDependencies": {
+    "watchify": "^3.6.1",
     "babel": "^6.23.0",
     "babel-core": "^6.24.1",
     "babel-loader": "^6.4.1",
@@ -83,7 +81,7 @@
     "webpack-dev-server": "^2.4.2"
   },
   "scripts": {
-    "build": "webpack --config webpack.config.js --progress --colors",
+    "build": "./node_modules/.bin/webpack --config webpack.config.js --progress --colors",
     "watch": "node server.js",
     "lint": "./node_modules/.bin/eslint static/js/redux/*/*"
   },
