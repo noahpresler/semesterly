@@ -254,7 +254,7 @@ export class SearchResult extends React.Component {
               <a
                 style={{ fontSize: '10px' }} onMouseDown={(event) => {
                   event.stopPropagation();
-                  this.props.showIntegrationModal(course.id, 1);
+                  this.props.showIntegrationModal(1, course.id);
                 }}
               >Add as Pilot
                 </a>
