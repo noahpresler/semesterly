@@ -4,7 +4,7 @@ import Reaction from './reaction';
 import { REACTION_MAP } from '../constants/reactions';
 import MasterSlot from './master_slot';
 import Textbook from './textbook';
-import { COLOUR_DATA } from '../constants/colours';
+import COLOUR_DATA from '../constants/colours';
 import { getSchoolSpecificInfo } from '../constants/schools';
 import EvaluationList from './evaluation_list';
 import { getCourseShareLinkFromModal } from '../helpers/timetable_helpers';
