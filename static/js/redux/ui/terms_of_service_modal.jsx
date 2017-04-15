@@ -18,8 +18,6 @@ export class TermsOfServiceModal extends React.Component {
         let modalStyle = {
             width: '100%'
         };
-        console.log(this.props.userInfo);
-        console.log(this.props);
         return (
             <Modal ref="modal"
                    className="terms-of-service-modal max-modal"
