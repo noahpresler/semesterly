@@ -2,6 +2,7 @@ approvals:
   # at least 1 reviewer
   minimum: 1
   pattern: "^(:\\+1:|👍|lgtm)" # must start with thumbs up or lgtm
+  ignore: pr_opener # do not count approval from PR opener
   from:
     users:
       - noahpresler
