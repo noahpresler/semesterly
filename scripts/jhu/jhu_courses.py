@@ -75,7 +75,7 @@ class HopkinsParser(CourseParser):
     def load_ingestor(self,course,section):
         SectionDetails = section[0]['SectionDetails']
         try:
-            num_credits=int(float(course['Credits']))
+            num_credits=float(course['Credits'])
         except:
             num_credits=0
 
