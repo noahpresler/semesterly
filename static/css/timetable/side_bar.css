@@ -247,6 +247,18 @@ h4.sb-header:after {
     font-weight: 400;
     color: #222;
 }
+.master-slot-content h3 span {
+    float: left;
+    line-height: 14px;
+}
+.master-slot-content h3 span.ms-flag {
+    margin-left: 5px;
+    font-size: 9px;
+    line-height: 10px;
+    padding: 2px 3px;
+    color: rgba(255, 255, 255, 0.90);
+    border-radius: 3px;
+}
 h3.master-slot-credits {
     margin: 0;
     font-size: 12px;
