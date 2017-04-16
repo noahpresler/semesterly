@@ -166,6 +166,7 @@ export class SearchResult extends React.Component {
     this.addCourseWrapper = this.addCourseWrapper.bind(this);
     this.actionOver = this.actionOver.bind(this);
     this.actionOut = this.actionOut.bind(this);
+    this.hasOnlyWaitlistedSections = this.hasOnlyWaitlistedSections.bind(this);
   }
 
   addCourseWrapper(course, sec, event) {
@@ -202,6 +203,34 @@ export class SearchResult extends React.Component {
     }
   }
 
+  /**
+   * Checks if a course is Waitlist Only
+   * Loops through each section type first (Lecture, Tutorial, Practical)
+   * if any of the section types doesn't have open seats, the course is waitlist only
+   * Within each section type, loops through each section
+   * if section doesn't have meeting times, doesn't have enrolment cap
+   * if section has open seats, don't check rest of sections in section type, move onto
+   * next section type.
+   * @returns {boolean}
+   */
+  hasOnlyWaitlistedSections() {
+    let sections = this.props.searchResults[this.props.position].sections;
+    for (let sectionType in sections) {
+      let sectionTypeHasOpenSections = false;
+      for (let section in sections[sectionType]) {
+        if (sections[sectionType][section].length > 0) {
+          if (sections[sectionType][section][0].enrolment < sections[sectionType][section][0].size) {
+            sectionTypeHasOpenSections = true;
+            break;
+          }
+        } else {
+          return false;
+        }
+      }
+      return !sectionTypeHasOpenSections; // lecture, practical, or tutorial doesn't have open seats
+    }
+    return false;
+  }
   render() {
     const { course, inRoster, inOptionRoster } = this.props;
     const addRemoveButton =
@@ -235,30 +264,24 @@ export class SearchResult extends React.Component {
     } else if (this.state.hoverAdd) {
       info = !inRoster ? 'Add this course to your timetable' : 'Remove this course from your timetable';
     }
-    let style = {};
-    if (this.state.hoverAdd) {
-      style = { color: '#52B7D9' };
-    }
-    if (this.state.hoverSave) {
-      style = { color: '#27ae60' };
-    }
     const integrationLogoImageUrl = {
       backgroundImage: 'url(/static/img/integrations/pilotLogo.png)',
     };
     const integrationLogo = course.integrations.indexOf('Pilot') > -1 ?
-            (<div className="search-result-integration">
+            (<div className="label integration">
               <span className="has-pilot" style={integrationLogoImageUrl} />
             </div>) : null;
     const pilotIntegration = studentIntegrations.integrations.indexOf('Pilot') > -1 ?
-            (<div className="search-result-integration">
+            (<div className="label integration">
               <a
-                style={{ fontSize: '10px' }} onMouseDown={(event) => {
+                onMouseDown={(event) => {
                   event.stopPropagation();
-                  this.props.showIntegrationModal(course.id, 1);
+                  this.props.showIntegrationModal(1, course.id);
                 }}
               >Add as Pilot
                 </a>
             </div>) : null;
+    const waitlistOnlyFlag = this.hasOnlyWaitlistedSections() ? <h4 className="label flag">Waitlist Only</h4> : null;
     return (
       <li
         key={course.id}
@@ -269,11 +292,17 @@ export class SearchResult extends React.Component {
         <h3>{course.name || course.code} </h3>
         { addOptionalCourseButton}
         { addRemoveButton }
-        <h4 className="label" style={style}>{info}</h4><h4
-          className={classNames('label', 'bubble')}
-        >{this.props.campuses[course.campus]}</h4>
-        { integrationLogo }
-        { pilotIntegration }
+        <div className="search-result-labels">
+          <h4 className={classNames('label', { 'hoverAdd': this.state.hoverAdd, 'hoverSave':this.state.hoverSave })}>
+            {info}
+          </h4>
+          <h4
+            className={classNames('label', 'bubble')}
+          >{this.props.campuses[course.campus]}</h4>
+          { integrationLogo }
+          { pilotIntegration }
+          { waitlistOnlyFlag }
+        </div>
       </li>);
   }
 }
