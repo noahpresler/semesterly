@@ -264,13 +264,6 @@ export class SearchResult extends React.Component {
     } else if (this.state.hoverAdd) {
       info = !inRoster ? 'Add this course to your timetable' : 'Remove this course from your timetable';
     }
-    let labelStyleClass = " ";
-    if (this.state.hoverAdd) {
-      labelStyleClass += "hoverAdd";
-    }
-    if (this.state.hoverSave) {
-      labelStyleClass += "hoverSave";
-    }
     const integrationLogoImageUrl = {
       backgroundImage: 'url(/static/img/integrations/pilotLogo.png)',
     };
@@ -300,7 +293,10 @@ export class SearchResult extends React.Component {
         { addOptionalCourseButton}
         { addRemoveButton }
         <div className="search-result-labels">
-          <h4 className={"label" + labelStyleClass}>{info}</h4><h4
+          <h4 className={classNames('label', { 'hoverAdd': this.state.hoverAdd, 'hoverSave':this.state.hoverSave })}>
+            {info}
+          </h4>
+          <h4
             className={classNames('label', 'bubble')}
           >{this.props.campuses[course.campus]}</h4>
           { integrationLogo }
