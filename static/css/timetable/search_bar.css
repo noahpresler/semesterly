@@ -182,6 +182,12 @@
 	padding: 0;
 	margin: 3px 5px 0 0;
 }
+.search-course .label.hoverAdd {
+	color: #52B7D9;
+}
+.search-course .label.hoverSave {
+	color: #27ae60;
+}
 .search-course .label.bubble {
 	background-color: #DEDEDE;
 	font-size: 10px;
