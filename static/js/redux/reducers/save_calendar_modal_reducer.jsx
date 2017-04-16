@@ -1,6 +1,6 @@
 import * as ActionTypes from '../constants/actionTypes';
 
-export const saveCalendarModal = (state = {
+const saveCalendarModal = (state = {
   isVisible: false,
   hasDownloaded: false,
   hasUploaded: true,
@@ -30,3 +30,5 @@ export const saveCalendarModal = (state = {
       return state;
   }
 };
+
+export default saveCalendarModal;
