@@ -89,7 +89,14 @@ class MasterSlot extends React.Component {
               onClickOut={this.hideShareLink}
             />) :
             null;
-
+    let waitlistFlag = null;
+    if (this.props.course.slots.length > 0) {
+      waitlistFlag = this.props.course.slots[0].enrolment >= this.props.course.slots[0].size ?
+        <span
+          className="ms-flag"
+          style={{backgroundColor: COLOUR_DATA[this.props.colourIndex].border}}
+        >Waitlist Only</span> : null;
+    }
     return (<div
       className={masterSlotClass}
       onMouseEnter={this.onMasterSlotHover}
@@ -103,7 +110,10 @@ class MasterSlot extends React.Component {
         style={{ backgroundColor: COLOUR_DATA[this.props.colourIndex].border }}
       />
       <div className="master-slot-content">
-        <h3>{ this.props.course.code }</h3>
+        <h3>
+          <span>{ this.props.course.code }</span>
+          {waitlistFlag}
+        </h3>
         <h3>{ this.props.course.name }</h3>
         { prof_disp }
         <h3>{ creditsDisplay }</h3>
