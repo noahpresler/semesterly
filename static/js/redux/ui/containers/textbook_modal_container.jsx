@@ -1,6 +1,6 @@
 import {connect} from "react-redux";
-import {TextbookModal} from "../textbook_modal.jsx";
-import {toggleTextbookModal} from "../../actions/modal_actions.jsx";
+import {TextbookModal} from "../textbook_modal";
+import {toggleTextbookModal} from "../../actions/modal_actions";
 
 const mapStateToProps = (state) => {
     let activeTimetable = state.timetables.items[state.timetables.active];
