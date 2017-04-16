@@ -203,6 +203,16 @@ export class SearchResult extends React.Component {
     }
   }
 
+  /**
+   * Checks if a course is Waitlist Only
+   * Loops through each section type first (Lecture, Tutorial, Practical)
+   * if any of the section types doesn't have open seats, the course is waitlist only
+   * Within each section type, loops through each section
+   * if section doesn't have meeting times, doesn't have enrolment cap
+   * if section has open seats, don't check rest of sections in section type, move onto
+   * next section type.
+   * @returns {boolean}
+   */
   hasOnlyWaitlistedSections() {
     let sections = this.props.searchResults[this.props.position].sections;
     for (let sectionType in sections) {
@@ -254,13 +264,6 @@ export class SearchResult extends React.Component {
     } else if (this.state.hoverAdd) {
       info = !inRoster ? 'Add this course to your timetable' : 'Remove this course from your timetable';
     }
-    let style = {};
-    if (this.state.hoverAdd) {
-      style = { color: '#52B7D9' };
-    }
-    if (this.state.hoverSave) {
-      style = { color: '#27ae60' };
-    }
     const integrationLogoImageUrl = {
       backgroundImage: 'url(/static/img/integrations/pilotLogo.png)',
     };
@@ -290,7 +293,10 @@ export class SearchResult extends React.Component {
         { addOptionalCourseButton}
         { addRemoveButton }
         <div className="search-result-labels">
-          <h4 className="label" style={style}>{info}</h4><h4
+          <h4 className={classNames('label', { 'hoverAdd': this.state.hoverAdd, 'hoverSave':this.state.hoverSave })}>
+            {info}
+          </h4>
+          <h4
             className={classNames('label', 'bubble')}
           >{this.props.campuses[course.campus]}</h4>
           { integrationLogo }
