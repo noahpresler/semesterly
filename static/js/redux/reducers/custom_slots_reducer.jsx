@@ -9,30 +9,37 @@ import * as ActionTypes from '../constants/actionTypes';
 //   id
 //   preview: whether the slot is just a preview or has been added
 
-export const customSlots = (state = [], action) => {
+const customSlots = (state = [], action) => {
   switch (action.type) {
     case ActionTypes.ADD_CUSTOM_SLOT:
       return update(state, {
         $push: [action.newCustomSlot],
       });
 
-    case ActionTypes.UPDATE_CUSTOM_SLOT: // update any of the fields of the slot
-      const tslotindex = state.findIndex(s => s.id == action.id);
-      if (tslotindex == -1) {
+    case ActionTypes.UPDATE_CUSTOM_SLOT: { // update any of the fields of the slot
+      const tSlotIndex = state.findIndex(s => s.id === action.id);
+      if (tSlotIndex === -1) {
         return state; // invalid id
       }
-      const newSlot = Object.assign({}, state[tslotindex], action.newValues);
-      const temp = [...state.slice(0, tslotindex), newSlot, ...state.slice(tslotindex + 1, state.length)];
-      return temp;
+      const newSlot = Object.assign({}, state[tSlotIndex], action.newValues);
+      return [...state.slice(0,
+        tSlotIndex),
+        newSlot,
+        ...state.slice(tSlotIndex + 1, state.length),
+      ];
+    }
 
-    case ActionTypes.REMOVE_CUSTOM_SLOT:
-      const dslotIndex = state.findIndex(s => s.id == action.id);
-      if (dslotIndex == -1) {
+    case ActionTypes.REMOVE_CUSTOM_SLOT: {
+      const dSlotIndex = state.findIndex(s => s.id === action.id);
+      if (dSlotIndex === -1) {
         return state;
       }
-      return [...state.slice(0, dslotIndex), ...state.slice(dslotIndex + 1, state.length)];
+      return [...state.slice(0, dSlotIndex), ...state.slice(dSlotIndex + 1, state.length)];
+    }
 
     default:
       return state;
   }
 };
+
+export default customSlots;
