@@ -1,25 +1,25 @@
-.widget-number {
+.widget-timetables {
     background-color: #a5bf10;
 }
 
-.widget-number h1 { 
+.widget-timetables h1 { 
     color: rgba(255, 255, 255, 0.7);
 }
 
-.widget-number h2 {
+.widget-timetables h2 {
     color: #fff;
 }
 
-.widget-number .detail {
+.widget-timetables .detail {
     font-weight: 500;
     font-size: 30px;
     color: #fff;
 }
 
-.widget-number .more-info {
+.widget-timetables .more-info {
     color: rgba(255, 255, 255, 0.7);
 }
 
-.widget-number .updated-at {
+.widget-timetables .updated-at {
     color: rgba(0, 0, 0, 0.3);
 }
