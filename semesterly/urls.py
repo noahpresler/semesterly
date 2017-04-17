@@ -7,11 +7,8 @@ from django.contrib import admin
 admin.autodiscover()
 
 urlpatterns = patterns('',
-                       # finding friends
-                       url('', include('social.apps.django_app.urls', namespace='social')),
-                       url('', include('django.contrib.auth.urls', namespace='auth')),
-
                        # app urls
+                       url('', include('authpipe.urls')),
                        url('', include('timetable.urls')),
                        url('', include('courses.urls')),
                        url('', include('integrations.urls')),
