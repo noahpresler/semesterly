@@ -161,6 +161,12 @@ export const createICalFromTimetable = (active) => {
           const end = getNextDayOfWeek(sem_start, slot.day);
           const until = getNextDayOfWeek(sem_end, slot.day);
           const description = course.description ? course.description : '';
+          let times = slot.time_start.split(':');
+          start.setHours(parseInt(times[0], 10), parseInt(times[1], 10));
+          times = slot.time_end.split(':');
+          end.setHours(parseInt(times[0], 10), parseInt(times[1], 10));
+      
+
           let repeating = {
             freq: 'WEEKLY',
             byDay: DAY_MAP[slot.day],
