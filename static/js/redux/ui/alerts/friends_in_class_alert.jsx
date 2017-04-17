@@ -1,4 +1,5 @@
 import React from 'react';
+import classnames from 'classnames';
 import { LogFacebookAlertClick } from '../../actions/user_actions';
 import MasterSlot from '../master_slot';
 import COLOUR_DATA from '../../constants/colours';
@@ -68,7 +69,11 @@ class FriendsInClassAlert extends React.Component {
                     </small>
         </div>
         <div
-          className={`${this.state.isComplete ? 'friends-in-class-hide' : ''} enable-notification-alert friends-in-class-alert`}
+          className={classnames({
+            'friends-in-class-hide': this.state.isComplete,
+            'enable-notification-alert': true,
+            'friends-in-class-alert': true,
+          })}
         >
           <h2>{ this.props.msg }</h2>
           <MasterSlot
@@ -102,6 +107,8 @@ class FriendsInClassAlert extends React.Component {
 FriendsInClassAlert.propTypes = {
   dismissSelf: React.PropTypes.func.isRequired,
   showNotification: React.PropTypes.func.isRequired,
+  changeUserInfo: React.PropTypes.func.isRequired,
+  saveSettings: React.PropTypes.func.isRequired,
   msg: React.PropTypes.string.isRequired,
   mostFriendsKey: React.PropTypes.number.isRequired,
   mostFriendsCount: React.PropTypes.number.isRequired,
