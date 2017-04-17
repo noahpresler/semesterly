@@ -118,7 +118,6 @@ export const createICalFromEventsList = (events, icalTitle) => (dispatch) => {
       }
     }
     const file = new Blob([cal.toString()], {type: "data:text/calendar;charset=utf8,"});
-    console.log(file);
     FileSaver.saveAs(file, "my_semester.ics");
     fetch(getLogiCalEndpoint(), {
       method: 'POST',
@@ -175,12 +174,11 @@ export const createICalFromTimetable = (active) => {
             location: slot.location,
             url: getCourseShareLink(slot.code)
           };
+          event_list.push(event);
         }
       }
-      event_list.push(event);
     }
-    console.log("finished create from event list");
-    createICalFromEventsList(event_list, "myical");
+    dispatch(createICalFromEventsList(event_list, "myical"));
     /*const file = new Blob([cal.toString()], { type: 'data:text/calendar;charset=utf8,' });
      FileSaver.saveAs(file, 'my_semester.ics');
      fetch(getLogiCalEndpoint(), {
@@ -188,6 +186,5 @@ export const createICalFromTimetable = (active) => {
      credentials: 'include',
      });
      dispatch({ type: ActionTypes.CALENDAR_DOWNLOADED });*/
-    console.log("launched download");
   }
 }
