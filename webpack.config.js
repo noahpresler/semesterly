@@ -64,7 +64,7 @@ var config = {
         //tells webpack where to look for modules
         modules: ['node_modules'],
         //extensions that should be used to resolve modules
-        extensipons: ['.jsx', '.js'],
+        extensions: ['.jsx', '.js'],
     }
 }
 
