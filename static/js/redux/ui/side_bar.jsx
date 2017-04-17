@@ -1,7 +1,7 @@
 import React from 'react';
 import classNames from 'classnames';
 import MasterSlot from './master_slot';
-import { COLOUR_DATA } from '../constants/colours';
+import COLOUR_DATA from '../constants/colours';
 import ClickOutHandler from 'react-onclickout';
 import TimetableNameInputContainer from './containers/timetable_name_input_container';
 import CreditTickerContainer from './containers/credit_ticker_container';

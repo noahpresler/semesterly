@@ -3,7 +3,6 @@ import Select from 'react-select';
 import classnames from 'classnames';
 import Modal from 'boron/WaveModal';
 import majors from '../constants/majors';
-import { setARegistrationToken, unregisterAToken } from '../actions/user_actions';
 
 export class UserSettingsModal extends React.Component {
   constructor(props) {
@@ -75,21 +74,13 @@ export class UserSettingsModal extends React.Component {
     return prop === undefined || prop === '';
   }
 
-  subscribeToNotifications() {
-    setARegistrationToken();
-  }
-
-  unsubscribeToNotifications() {
-    unregisterAToken();
-  }
-
   render() {
     const modalStyle = {
       width: '100%',
     };
     const notifications_button = this.props.tokenRegistered
-            ? (<a onClick={this.unsubscribeToNotifications}><h3>Turn Off Notifications</h3></a>)
-            : (<a onClick={this.subscribeToNotifications}><h3>Turn On Notifications</h3></a>);
+            ? (<a onClick={this.props.unsubscribeToNotifications}><h3>Turn Off Notifications</h3></a>)
+            : (<a onClick={this.props.subscribeToNotifications}><h3>Turn On Notifications</h3></a>);
     const notifications = this.state.sw_capable ? (
       <div
         className={classnames('preference notifications cf', { 'preference-attn': enableNotifs })}
