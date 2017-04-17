@@ -3,9 +3,6 @@ import { setARegistrationToken } from '../../actions/user_actions';
 import { setDeclinedNotifications } from '../../util';
 
 class EnableNotificationsAlert extends React.Component {
-  constructor(props) {
-    super(props);
-  }
 
   componentWillUnmount() {
     if (!(localStorage.getItem('declinedNotifications') === 'true' || localStorage.getItem('declinedNotifications') === 'false')) {
@@ -42,11 +39,17 @@ class EnableNotificationsAlert extends React.Component {
                     Enable notifications for a heads up when classes are released and course changes
                     occur!
                 </small>
-        <a className="decline-notifications" onClick={() => this.clickDecline()}>Don't ask
+        <a className="decline-notifications" onClick={() => this.clickDecline()}>Don&apos;t ask
                     me again.</a>
       </div>);
   }
 }
 
+EnableNotificationsAlert.propTypes = {
+  dismissSelf: React.PropTypes.func.isRequired,
+  msg: React.PropTypes.string.isRequired,
+  enableNotifications: React.PropTypes.string.isRequired,
+  declineNotifications: React.PropTypes.string.isRequired,
+};
 
 export default EnableNotificationsAlert;
