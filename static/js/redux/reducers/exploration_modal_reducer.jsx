@@ -1,7 +1,6 @@
 import * as ActionTypes from '../constants/actionTypes';
 
-
-export const explorationModal = (state = {
+const explorationModal = (state = {
   isVisible: false,
   advancedSearchResults: [],
   isFetching: false,
@@ -16,7 +15,7 @@ export const explorationModal = (state = {
       return Object.assign({}, state, { isVisible: false });
     case ActionTypes.REQUEST_ADVANCED_SEARCH_RESULTS:
       return Object.assign({}, state, { isFetching: true });
-    case ActionTypes.RECEIVE_ADVANCED_SEARCH_RESULTS:
+    case ActionTypes.RECEIVE_ADVANCED_SEARCH_RESULTS: {
       let { advancedSearchResults } = action;
       if (state.page > 1) {
         if (advancedSearchResults) {
@@ -33,14 +32,14 @@ export const explorationModal = (state = {
         isFetching: false,
         active: 0,
       });
-
+    }
     case ActionTypes.SET_ACTIVE_ADV_SEARCH_RESULT:
       return Object.assign({}, state, { active: action.active });
     case ActionTypes.SET_COURSE_REACTIONS:
       if (state.isVisible) {
-        const advancedSearchResults = [...state.advancedSearchResults];
-        advancedSearchResults[state.active].reactions = action.reactions;
-        return Object.assign({}, state, { advancedSearchResults });
+        const searchResults = [...state.advancedSearchResults];
+        searchResults[state.active].reactions = action.reactions;
+        return Object.assign({}, state, { advancedSearchResults: searchResults });
       }
       return state;
     case ActionTypes.REQUEST_SCHOOL_INFO:
@@ -55,3 +54,5 @@ export const explorationModal = (state = {
       return state;
   }
 };
+
+export default explorationModal;

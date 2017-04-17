@@ -1,6 +1,6 @@
 import * as ActionTypes from '../constants/actionTypes';
 
-export const semesterIndex = (state = 0, action) => {
+const semesterIndex = (state = 0, action) => {
   switch (action.type) {
     case ActionTypes.SET_SEMESTER:
       return action.semester;
@@ -8,3 +8,5 @@ export const semesterIndex = (state = 0, action) => {
       return state;
   }
 };
+
+export default semesterIndex;
