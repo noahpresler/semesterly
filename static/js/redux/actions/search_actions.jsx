@@ -19,14 +19,13 @@ export function receiveCourses(json) {
   };
 }
 
-export function setSemester(semester) {
+export const setSemester = semester => (dispatch) => {
   const state = store.getState();
-  const dispatch = store.dispatch;
 
   if (state.userInfo.data.isLoggedIn) {
     dispatch(getUserSavedTimetables(allSemesters[semester]));
   } else {
-    nullifyTimetable(dispatch);
+    dispatch(nullifyTimetable(dispatch));
   }
 
   dispatch({
@@ -44,9 +43,8 @@ export function setSemester(semester) {
  * and set semester if appropriate. Otherwise show an alert modal and save the
  * semester they were trying to switch to in the modal state.
  */
-export function maybeSetSemester(semester) {
+export const maybeSetSemester = semester => (dispatch) => {
   const state = store.getState();
-  const dispatch = store.dispatch;
 
   if (semester === state.semesterIndex) {
     return;
@@ -56,7 +54,7 @@ export function maybeSetSemester(semester) {
     if (state.userInfo.data.isLoggedIn && !state.savingTimetable.upToDate) {
       dispatch(saveTimetable(false, () => setSemester(semester)));
     } else if (state.userInfo.data.isLoggedIn) {
-      setSemester(semester);
+      dispatch(setSemester(semester));
     } else {
       dispatch({
         type: ActionTypes.ALERT_CHANGE_SEMESTER,
@@ -64,7 +62,7 @@ export function maybeSetSemester(semester) {
       });
     }
   } else {
-    setSemester(semester);
+    dispatch(setSemester(semester));
   }
 }
 
