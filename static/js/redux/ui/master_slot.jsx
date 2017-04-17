@@ -12,6 +12,7 @@ class MasterSlot extends React.Component {
     this.updateColours = this.updateColours.bind(this);
     this.showShareLink = this.showShareLink.bind(this);
     this.hideShareLink = this.hideShareLink.bind(this);
+    this.hasOnlyWaitlistedSections = this.hasOnlyWaitlistedSections.bind(this);
     this.state = { shareLinkShown: false };
   }
 
@@ -46,6 +47,16 @@ class MasterSlot extends React.Component {
 
   hideShareLink() {
     this.setState({ shareLinkShown: false });
+  }
+
+  hasOnlyWaitlistedSections() {
+    if (this.props.course.slots.length > 0) {
+      const slots = this.props.course.slots;
+      for (let slot in slots) {
+        
+      }
+    }
+    return false;
   }
 
   render() {
@@ -89,14 +100,11 @@ class MasterSlot extends React.Component {
               onClickOut={this.hideShareLink}
             />) :
             null;
-    let waitlistFlag = null;
-    if (this.props.course.slots.length > 0) {
-      waitlistFlag = this.props.course.slots[0].enrolment >= this.props.course.slots[0].size ?
-        <span
-          className="ms-flag"
-          style={{backgroundColor: COLOUR_DATA[this.props.colourIndex].border}}
-        >Waitlist Only</span> : null;
-    }
+    const waitlistOnlyFlag = this.hasOnlyWaitlistedSections() ?
+      <span
+        className="ms-flag"
+        style={{backgroundColor: COLOUR_DATA[this.props.colourIndex].border}}
+      >Waitlist Only</span> : null;
     return (<div
       className={masterSlotClass}
       onMouseEnter={this.onMasterSlotHover}
@@ -112,7 +120,7 @@ class MasterSlot extends React.Component {
       <div className="master-slot-content">
         <h3>
           <span>{ this.props.course.code }</span>
-          {waitlistFlag}
+          {waitlistOnlyFlag}
         </h3>
         <h3>{ this.props.course.name }</h3>
         { prof_disp }
