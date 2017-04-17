@@ -390,9 +390,9 @@ export function getUserSavedTimetables(semester) {
                 timetables,
               });
               if (timetables[0]) {
-                loadTimetable(timetables[0]);
+                dispatch(loadTimetable(timetables[0]));
               } else {
-                nullifyTimetable(dispatch);
+                dispatch(nullifyTimetable(dispatch));
               }
             });
   };
