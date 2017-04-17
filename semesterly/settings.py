@@ -108,6 +108,15 @@ SOCIAL_AUTH_PIPELINE = (
     'student.utils.create_student',
 )
 
+# Webpack
+
+WEBPACK_LOADER = {
+    'DEFAULT': {
+        'BUNDLE_DIR_NAME': 'bundles/',
+        'STATS_FILE': os.path.join(BASE_DIR, 'webpack-stats.json'),
+    }
+}
+
 # Application definition
 
 INSTALLED_APPS = (
@@ -121,12 +130,17 @@ INSTALLED_APPS = (
     'social.apps.django_app.default',
     'django_extensions',
     'timetable',
+    'exams',
+    'integrations',
+    'searches',
+    'courses',
     'analytics',
     'scripts',
     'student',
     'cachalot',
     'silk',
     'dashing'
+    'webpack_loader'
 )
 
 MIDDLEWARE_CLASSES = (
@@ -263,6 +277,8 @@ USE_L10N = True
 USE_TZ = True
 
 APPEND_SLASH = True
+
+TEST_RUNNER = 'test_utils.test_runners.FastTestRunner'
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.6/howto/static-files/

@@ -1,93 +1,98 @@
 import React from 'react';
-import { renderCourseModal } from './course_modal.jsx';
-import Slot from './slot.jsx'
-import CustomSlot from './custom_slot.jsx'
-import { index as IntervalTree, matches01 as getIntersections } from 'static-interval-tree'
-import { HALF_HOUR_HEIGHT, COLOUR_DATA } from '../constants/colours.jsx';
+import { renderCourseModal } from './course_modal';
+import Slot from './slot';
+import CustomSlot from './custom_slot';
+import { index as IntervalTree, matches01 as getIntersections } from 'static-interval-tree';
+import { COLOUR_DATA, HALF_HOUR_HEIGHT } from '../constants/colours';
 
 class SlotManager extends React.Component {
 
-	render() {
-        let slots_by_day = this.getSlotsByDay();
-        let all_slots = this.props.days.map((day, i) => {
-            let day_slots = slots_by_day[day].map((slot, j) => {
-                let courseId = slot.course;
-                let locked = this.props.isLocked(courseId, slot.meeting_section);
-                let isOptional = this.props.isCourseOptional(courseId);
-                let optionalCourse = isOptional ? this.props.getOptionalCourseById(courseId) : null;
-                return slot.custom ?
-                <CustomSlot {...slot}
-                    key={ i.toString() + j.toString() + " custom" }
-                    removeCustomSlot={ () => this.props.removeCustomSlot(slot.id) }
-                    updateCustomSlot={ this.props.updateCustomSlot } 
-                    addCustomSlot={ this.props.addCustomSlot } />
-                :
-                <Slot {...slot}
-                    fetchCourseInfo={ () => this.props.fetchCourseInfo(courseId) }
-                    key={ slot.fake ? -slot.id : slot.id + i.toString() + j.toString()}
-                    locked={ locked }
-                    classmates={this.props.socialSections ? this.props.classmates(courseId, slot.meeting_section) : []}
-                    lockOrUnlockSection={ () => this.props.addOrRemoveCourse(courseId, slot.meeting_section) }
-                    removeCourse={ () =>  !isOptional ? (this.props.addOrRemoveCourse(courseId)) : (this.props.addOrRemoveOptionalCourse(optionalCourse)) }
-                    primaryDisplayAttribute={this.props.primaryDisplayAttribute}
-                    updateCustomSlot={ this.props.updateCustomSlot } 
-                    addCustomSlot={ this.props.addCustomSlot } />
-            });
-            return (
-                    <td key={day}>
-                        <div className="fc-content-col">
-                            {day_slots}
-                        </div>
-                    </td>
-            );
-        });
-        return (
-            <table>
-			    <tbody>
-			        <tr>
-			            <td className="fc-axis" style={{width: 49}} />
-			            {all_slots}
-			        </tr>
-			    </tbody>
-			</table>
+  render() {
+    const slots_by_day = this.getSlotsByDay();
+    const all_slots = this.props.days.map((day, i) => {
+      const day_slots = slots_by_day[day].map((slot, j) => {
+        const courseId = slot.course;
+        const locked = this.props.isLocked(courseId, slot.meeting_section);
+        const isOptional = this.props.isCourseOptional(courseId);
+        const optionalCourse = isOptional ? this.props.getOptionalCourseById(courseId) : null;
+        return slot.custom ?
+          <CustomSlot
+            {...slot}
+            key={`${i.toString() + j.toString()} custom`}
+            removeCustomSlot={() => this.props.removeCustomSlot(slot.id)}
+            updateCustomSlot={this.props.updateCustomSlot}
+            addCustomSlot={this.props.addCustomSlot}
+          />
+                    :
+          <Slot
+            {...slot}
+            fetchCourseInfo={() => this.props.fetchCourseInfo(courseId)}
+            key={slot.fake ? -slot.id : slot.id + i.toString() + j.toString()}
+            locked={locked}
+            classmates={this.props.socialSections ? this.props.classmates(courseId, slot.meeting_section) : []}
+            lockOrUnlockSection={() => this.props.addOrRemoveCourse(courseId, slot.meeting_section)}
+            removeCourse={() => !isOptional ? (this.props.addOrRemoveCourse(courseId)) : (this.props.addOrRemoveOptionalCourse(optionalCourse))}
+            primaryDisplayAttribute={this.props.primaryDisplayAttribute}
+            updateCustomSlot={this.props.updateCustomSlot}
+            addCustomSlot={this.props.addCustomSlot}
+          />;
+      });
+      return (
+        <td key={day}>
+          <div className="fc-content-col">
+            {day_slots}
+          </div>
+        </td>
+      );
+    });
+    return (
+      <table>
+        <tbody>
+          <tr>
+            <td className="fc-axis" style={{ width: 49 }} />
+            {all_slots}
+          </tr>
+        </tbody>
+      </table>
 
-        );
-    }
+    );
+  }
 
-    getSlotsByDay() {
-    	let slots_by_day = {
-            'M': [], 'T': [], 'W': [], 'R': [], 'F': []
-        };
-        let courses = this.props.timetable.courses;
+  getSlotsByDay() {
+    const slots_by_day = {
+      M: [], T: [], W: [], R: [], F: [],
+    };
+    const courses = this.props.timetable.courses;
 
         // course slots
-        for (let i in courses) {
-            let crs = courses[i];
-            for (let slotId in crs.slots) {
-                let slotObj = crs.slots[slotId];
+    for (const i in courses) {
+      const crs = courses[i];
+      for (const slotId in crs.slots) {
+        const slotObj = crs.slots[slotId];
                 // first assume this course already has a colour (was added previously)
-                let colourIndex = _.range(COLOUR_DATA.length).find((i) =>
-                            !Object.values(this.props.courseToColourIndex).some( x => x === i)
-                    );
-                let colourId = this.props.courseToColourIndex[slotObj.course] === undefined ? colourIndex : this.props.courseToColourIndex[slotObj.course];
-                let slot = Object.assign(slotObj, {
-                            'colourId': colourId, 'code': crs.code, 'name': crs.name});
-                if (slots_by_day[slot.day]) {
-                    slot['custom'] = false;
-                    slots_by_day[slot.day].push(slot);
-                }
-            }
+        const colourIndex = _.range(COLOUR_DATA.length).find(i =>
+                    !Object.values(this.props.courseToColourIndex).some(x => x === i),
+                );
+        const colourId = this.props.courseToColourIndex[slotObj.course] === undefined ? colourIndex : this.props.courseToColourIndex[slotObj.course];
+        const slot = Object.assign(slotObj, {
+          colourId, code: crs.code, name: crs.name,
+        });
+        if (slots_by_day[slot.day]) {
+          slot.custom = false;
+          slots_by_day[slot.day].push(slot);
         }
+      }
+    }
 
         // custom slots
-        for (let i in this.props.custom) {
-            let custom_slot = this.props.custom[i];
-            custom_slot['custom'] = true;
-            custom_slot['key'] = custom_slot.id;
-            slots_by_day[custom_slot.day].push(custom_slot)
-        }
-        return this.getConflictStyles(slots_by_day)
+    for (const i in this.props.custom) {
+      const custom_slot = this.props.custom[i];
+      custom_slot.custom = true;
+      custom_slot.key = custom_slot.id;
+      slots_by_day[custom_slot.day].push(custom_slot);
     }
+    return this.getConflictStyles(slots_by_day);
+  }
 
     getConflictStyles(slots_by_day) {
         for (let day in slots_by_day) {
@@ -118,6 +123,9 @@ class SlotManager extends React.Component {
             // bit map to store if slot has already been processed
             let seen = day_slots.map(() => false)
 
+            // bit map to store if slot has already been added to queue
+            let added = day_slots.map(() => false)
+
             // get num_conflicts + shift_index
             for (let i = 0; i < info_intervals.length; i++) {
                 if (!seen[i]) { // if not seen, perform dfs search on conflicts
@@ -126,11 +134,13 @@ class SlotManager extends React.Component {
                     while (frontier.length > 0) {
                         let next = frontier.pop()
                         seen[next.id] = true
+                        added[next.id] = true
                         direct_conflicts.push(next)
                         let neighbors = getIntersections(info_slots, next)
                         for (let k = 0; k < neighbors.length; k++) {
-                            if (!seen[neighbors[k].id]) {
+                            if (!seen[neighbors[k].id] && !added[neighbors[k].id]) {
                                 frontier.push(neighbors[k])
+                                added[neighbors[k].id] = true
                             }
                         }
                     }
@@ -162,10 +172,11 @@ class SlotManager extends React.Component {
         }
         return slots_by_day
     }
-    getMinutes(time_string) {
-        let l = time_string.split(':')
-        return (+l[0]) * 60 + (+l[1])
-    }
+
+  getMinutes(time_string) {
+    const l = time_string.split(':');
+    return (+l[0]) * 60 + (+l[1]);
+  }
 }
 
 export default SlotManager;
