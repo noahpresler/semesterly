@@ -1,6 +1,6 @@
 import {connect} from "react-redux";
 import {UserSettingsModal} from "../user_settings_modal";
-import {saveSettings} from "../../actions/user_actions";
+import {saveSettings, setARegistrationToken, unRegisterAToken} from "../../actions/user_actions";
 import {changeUserInfo, overrideSettingsShow} from "../../actions/modal_actions";
 
 const mapStateToProps = (state) => {
@@ -16,7 +16,9 @@ const UserSettingsModalContainer = connect(
     {
         saveSettings,
         closeUserSettings: () => overrideSettingsShow(false),
-        changeUserInfo
+        changeUserInfo,
+        subscribeToNotifications: setARegistrationToken,
+        unsubscribeToNotifications: unRegisterAToken,
     }
 )(UserSettingsModal);
 
