@@ -10,5 +10,5 @@ class UrlsTest(UrlTestCase):
         self.assertUrlResolvesToView('/complete/facebook/', 'social:complete', kwargs={'backend': 'facebook'})
 
         # registration
-        self.assertUrlResolvesToView('/setRegistrationToken/', 'student.views.set_registration_token')
-        self.assertUrlResolvesToView('/deleteRegistrationToken/', 'student.views.delete_registration_token')
+        self.assertUrlResolvesToView('/setRegistrationToken/', 'authpipe.views.set_registration_token')
+        self.assertUrlResolvesToView('/deleteRegistrationToken/', 'authpipe.views.delete_registration_token')
