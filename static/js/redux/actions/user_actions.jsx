@@ -25,51 +25,37 @@ import * as ActionTypes from '../constants/actionTypes';
 
 let autoSaveTimer;
 
-export function getUserInfo(json) {
-  return {
-    type: ActionTypes.USER_INFO_RECEIVED,
-    data: json,
-  };
-}
+export const getUserInfo = json => ({
+  type: ActionTypes.USER_INFO_RECEIVED,
+  data: json,
+});
 
-export function requestUserInfo() {
-  return {
-    type: ActionTypes.REQUEST_USER_INFO,
-  };
-}
+export const requestUserInfo = () => ({
+  type: ActionTypes.REQUEST_USER_INFO,
+});
 
-export function getClassmates(json) {
-  return {
-    type: ActionTypes.CLASSMATES_RECEIVED,
-    courses: json,
-  };
-}
+export const getClassmates = json => ({
+  type: ActionTypes.CLASSMATES_RECEIVED,
+  courses: json,
+});
 
-export function getFriends(json) {
-  return {
-    type: ActionTypes.FRIENDS_RECEIVED,
-    peers: json,
-  };
-}
+export const getFriends = json => ({
+  type: ActionTypes.FRIENDS_RECEIVED,
+  peers: json,
+});
 
-export function requestClassmates() {
-  return {
-    type: ActionTypes.REQUEST_CLASSMATES,
-  };
-}
+export const requestClassmates = () => ({
+  type: ActionTypes.REQUEST_CLASSMATES,
+});
 
-export function requestFriends() {
-  return {
-    type: ActionTypes.REQUEST_FRIENDS,
-  };
-}
+export const requestFriends = () => ({
+  type: ActionTypes.REQUEST_FRIENDS,
+});
 
 /* Returns the currently active timetable */
-export function getActiveTimetable(timetableState) {
-  return timetableState.items[timetableState.active];
-}
+export const getActiveTimetable = timetableState => timetableState.items[timetableState.active];
 
-function getSaveTimetablesRequestBody() {
+const getSaveTimetablesRequestBody = () => {
   const state = store.getState();
   const timetableState = state.timetables;
   const name = state.savingTimetable.activeTimetable.name;
@@ -80,10 +66,10 @@ function getSaveTimetablesRequestBody() {
     name,
     id,
   };
-}
+};
 
 /* Returns the updated courseSections, after locking all sections */
-export function lockActiveSections(activeTimetable) {
+export const lockActiveSections = (activeTimetable) => {
   const courseSections = {};
   const courses = activeTimetable.courses;
   for (let i = 0; i < courses.length; i++) {
@@ -96,25 +82,22 @@ export function lockActiveSections(activeTimetable) {
     }
   }
   return courseSections;
-}
+};
 
-export function requestMostClassmates() {
-  return {
-    type: ActionTypes.REQUEST_MOST_CLASSMATES,
-  };
-}
+export const requestMostClassmates = () => ({
+  type: ActionTypes.REQUEST_MOST_CLASSMATES,
+});
 
-export function fetchMostClassmatesCount(courses) {
-  return (dispatch) => {
-    const state = store.getState();
-    const semesterIndex = state.semesterIndex !== undefined ? state.semesterIndex : currentSemester;
-    const semester = allSemesters[semesterIndex];
-    dispatch(requestMostClassmates());
-    fetch(getMostClassmatesCountEndpoint(), {
-      credentials: 'include',
-      method: 'POST',
-      body: JSON.stringify({ course_ids: courses, semester }),
-    })
+export const fetchMostClassmatesCount = courses => (dispatch) => {
+  const state = store.getState();
+  const semesterIndex = state.semesterIndex !== undefined ? state.semesterIndex : currentSemester;
+  const semester = allSemesters[semesterIndex];
+  dispatch(requestMostClassmates());
+  fetch(getMostClassmatesCountEndpoint(), {
+    credentials: 'include',
+    method: 'POST',
+    body: JSON.stringify({ course_ids: courses, semester }),
+  })
       .then(response => response.json())
       .then((json) => {
         dispatch({
@@ -123,34 +106,28 @@ export function fetchMostClassmatesCount(courses) {
           count: json.count,
           total: json.total_count,
         });
-        // dispatch({
-        // type: ActionTypes.ALERT_FACEBOOK_FRIENDS,
-        // });
       });
-  };
-}
+};
 
-export function fetchClassmates(courses) {
-  return (dispatch) => {
-    const state = store.getState();
-    const semesterIndex = state.semesterIndex !== undefined ? state.semesterIndex : currentSemester;
+export const fetchClassmates = courses => (dispatch) => {
+  const state = store.getState();
+  const semesterIndex = state.semesterIndex !== undefined ? state.semesterIndex : currentSemester;
 
-    setTimeout(() => {
-      dispatch(fetchMostClassmatesCount(getActiveTimetable(state.timetables)
-        .courses.map(c => c.id)));
-    }, 500);
-    dispatch(requestClassmates());
-    fetch(getClassmatesEndpoint(), {
-      credentials: 'include',
-      method: 'POST',
-      body: JSON.stringify({ course_ids: courses, semester: allSemesters[semesterIndex] }),
-    })
-      .then(response => response.json())
-      .then((json) => {
-        dispatch(getClassmates(json));
-      });
-  };
-}
+  setTimeout(() => {
+    dispatch(fetchMostClassmatesCount(getActiveTimetable(state.timetables)
+      .courses.map(c => c.id)));
+  }, 500);
+  dispatch(requestClassmates());
+  fetch(getClassmatesEndpoint(), {
+    credentials: 'include',
+    method: 'POST',
+    body: JSON.stringify({ course_ids: courses, semester: allSemesters[semesterIndex] }),
+  })
+    .then(response => response.json())
+    .then((json) => {
+      dispatch(getClassmates(json));
+    });
+};
 
 export const saveTimetable = (isAutoSave = false, callback = null) => (dispatch) => {
   const state = store.getState();
@@ -334,69 +311,63 @@ export const deleteTimetable = timetable => (dispatch) => {
         });
 };
 
-function getSaveSettingsRequestBody() {
-  return {
-    userInfo: store.getState().userInfo.data,
-  };
-}
+export const getSaveSettingsRequestBody = () => ({
+  userInfo: store.getState().userInfo.data,
+});
 
-export function saveSettings(callback) {
-  return (dispatch) => {
-    dispatch({
-      type: ActionTypes.REQUEST_SAVE_USER_INFO,
-    });
-    fetch(getSaveSettingsEndpoint(), {
-      method: 'POST',
-      body: JSON.stringify(getSaveSettingsRequestBody()),
-      credentials: 'include',
+export const saveSettings = callback => (dispatch) => {
+  dispatch({
+    type: ActionTypes.REQUEST_SAVE_USER_INFO,
+  });
+  fetch(getSaveSettingsEndpoint(), {
+    method: 'POST',
+    body: JSON.stringify(getSaveSettingsRequestBody()),
+    credentials: 'include',
+  })
+    .then((response) => {
+      const state = store.getState();
+      const timetables = state.timetables.items;
+      const active = state.timetables.active;
+      const activeTT = timetables[active];
+
+      if (state.userInfo.data.social_courses) {
+        dispatch(fetchClassmates(activeTT.courses.map(c => c.id)));
+        if (state.courseInfo.id) {
+          dispatch(fetchCourseClassmates(state.courseInfo.id));
+        }
+      }
+      dispatch({
+        type: ActionTypes.RECEIVE_USER_INFO_SAVED,
+      });
+      return response;
     })
-            .then((response) => {
-              const state = store.getState();
-              const timetables = state.timetables.items;
-              const active = state.timetables.active;
-              const activeTT = timetables[active];
-
-              if (state.userInfo.data.social_courses) {
-                dispatch(fetchClassmates(activeTT.courses.map(c => c.id)));
-                if (state.courseInfo.id) {
-                  dispatch(fetchCourseClassmates(state.courseInfo.id));
-                }
-              }
-              dispatch({
-                type: ActionTypes.RECEIVE_USER_INFO_SAVED,
-              });
-              return response;
-            })
-            .then(() => {
-              if (callback) {
-                callback();
-              }
-            });
-  };
-}
-
-export function getUserSavedTimetables(semester) {
-  return (dispatch) => {
-    dispatch({
-      type: ActionTypes.REQUEST_SAVE_USER_INFO,
+    .then(() => {
+      if (callback) {
+        callback();
+      }
     });
-    fetch(getLoadSavedTimetablesEndpoint(semester), {
-      credentials: 'include',
-    })
-            .then(response => response.json())
-            .then((timetables) => {
-              dispatch({
-                type: ActionTypes.RECEIVE_SAVED_TIMETABLES,
-                timetables,
-              });
-              if (timetables[0]) {
-                dispatch(loadTimetable(timetables[0]));
-              } else {
-                dispatch(nullifyTimetable(dispatch));
-              }
-            });
-  };
-}
+};
+
+export const getUserSavedTimetables = semester => (dispatch) => {
+  dispatch({
+    type: ActionTypes.REQUEST_SAVE_USER_INFO,
+  });
+  fetch(getLoadSavedTimetablesEndpoint(semester), {
+    credentials: 'include',
+  })
+    .then(response => response.json())
+    .then((timetables) => {
+      dispatch({
+        type: ActionTypes.RECEIVE_SAVED_TIMETABLES,
+        timetables,
+      });
+      if (timetables[0]) {
+        dispatch(loadTimetable(timetables[0]));
+      } else {
+        dispatch(nullifyTimetable(dispatch));
+      }
+    });
+};
 
 export const fetchFinalExamSchedule = () => (dispatch) => {
   const state = store.getState();
@@ -407,85 +378,81 @@ export const fetchFinalExamSchedule = () => (dispatch) => {
     method: 'POST',
     body: JSON.stringify(timetable),
   })
-        .then(response => response.json())
-        .then((json) => {
-          dispatch({ type: ActionTypes.RECIEVE_FINAL_EXAMS, json });
-        });
+    .then(response => response.json())
+    .then((json) => {
+      dispatch({ type: ActionTypes.RECIEVE_FINAL_EXAMS, json });
+    });
 };
 
-export function fetchFriends() {
+export const fetchFriends = () => (dispatch) => {
   const state = store.getState();
   const semesterIndex = state.semesterIndex !== undefined ? state.semesterIndex : currentSemester;
-  return (dispatch) => {
-    dispatch(requestFriends());
-    dispatch({
-      type: ActionTypes.PEER_MODAL_LOADING,
+  dispatch(requestFriends());
+  dispatch({
+    type: ActionTypes.PEER_MODAL_LOADING,
+  });
+  fetch(getFriendsEndpoint(), {
+    credentials: 'include',
+    method: 'POST',
+    body: JSON.stringify({ semester: allSemesters[semesterIndex] }),
+  })
+    .then(response => response.json())
+    .then((json) => {
+      dispatch(getFriends(json));
+      dispatch({
+        type: ActionTypes.PEER_MODAL_LOADED,
+      });
     });
-    fetch(getFriendsEndpoint(), {
-      credentials: 'include',
-      method: 'POST',
-      body: JSON.stringify({ semester: allSemesters[semesterIndex] }),
-    })
-            .then(response => response.json())
-            .then((json) => {
-              dispatch(getFriends(json));
-              dispatch({
-                type: ActionTypes.PEER_MODAL_LOADED,
-              });
-            });
-  };
-}
+};
 
-export function autoSave(delay = 4000) {
+export const autoSave = (delay = 2000) => (dispatch) => {
   const state = store.getState();
   clearTimeout(autoSaveTimer);
   autoSaveTimer = setTimeout(() => {
     if (state.userInfo.data.isLoggedIn
       && state.timetables.items[state.timetables.active].courses.length > 0) {
-      store.dispatch(saveTimetable(true));
+      dispatch(saveTimetable(true));
     }
   }, delay);
-}
+};
 
-export function sendRegistrationToken(token) {
-  return fetch(getSetRegistrationTokenEndpoint(), {
+export const sendRegistrationToken = token => (dispatch) => {
+  fetch(getSetRegistrationTokenEndpoint(), {
     method: 'POST',
     body: JSON.stringify({
       token,
     }),
     credentials: 'include',
   })
-    .then(response => response.json()) // TODO(rohan): error-check the response
+    .then(response => response.json())
     .then((json) => {
       if (!json.error) {
-        store.dispatch({
+        dispatch({
           type: ActionTypes.TOKEN_REGISTERED,
         });
       }
     });
-}
+};
 
-export function setARegistrationToken() {
+export const setARegistrationToken = () => (dispatch) => {
   if ('serviceWorker' in navigator) {
     navigator.serviceWorker.register('/sw.js').then((reg) => {
       reg.pushManager.subscribe({
         userVisibleOnly: true,
       }).then((sub) => {
-                // console.log(sub);
-        sendRegistrationToken(sub.toJSON());
+        dispatch(sendRegistrationToken(sub.toJSON()));
       });
     }).catch(() => {
-            // console.log(':^(', error);
     });
   }
-}
+};
 
-export function isRegistered() {
+export const isRegistered = () => (dispatch) => {
   if ('serviceWorker' in navigator) {
     navigator.serviceWorker.register('/sw.js')
       .then(reg => reg.pushManager.getSubscription().then((sub) => {
         if (sub) {
-          store.dispatch({
+          dispatch({
             type: ActionTypes.TOKEN_REGISTERED,
           });
           return true;
@@ -493,90 +460,85 @@ export function isRegistered() {
         return null;
       })).catch(() => null);
   }
-}
+};
 
-export function sendRegistrationTokenForDeletion(token) {
-  return fetch(deleteRegistrationTokenEndpoint(), {
-    method: 'POST',
-    body: JSON.stringify({
-      token,
-    }),
-    credentials: 'include',
-  })
-    .then(response => response.json()) // TODO(rohan): error-check the response
-    .then((json) => {
-      if (!json.error) {
-        // console.log("token deleted: " + token);
-        store.dispatch({
-          type: ActionTypes.UNREGISTER_TOKEN,
-        });
-      } else {
-        // console.log("token not deleted: " + token);
-      }
+export const sendRegistrationTokenForDeletion = token => dispatch =>
+fetch(deleteRegistrationTokenEndpoint(), {
+  method: 'POST',
+  body: JSON.stringify({
+    token,
+  }),
+  credentials: 'include',
+})
+.then(response => response.json()) // TODO(rohan): error-check the response
+.then((json) => {
+  if (!json.error) {
+    // console.log("token deleted: " + token);
+    dispatch({
+      type: ActionTypes.UNREGISTER_TOKEN,
     });
-}
+  } else {
+    // console.log("token not deleted: " + token);
+  }
+});
 
-export function unregisterAToken() {
+export const unRegisterAToken = () => (dispatch) => {
   if ('serviceWorker' in navigator) {
     navigator.serviceWorker.register('/sw.js').then((reg) => {
       reg.pushManager.subscribe({
         userVisibleOnly: true,
       }).then((sub) => {
-                // TODO: unregister token on client side
-        sendRegistrationTokenForDeletion(sub.toJSON());
+        dispatch(sendRegistrationTokenForDeletion(sub.toJSON()));
       });
     }).catch(() => {
-            // console.log(':^(', error);
     });
   }
-}
+};
 
-export function openIntegrationModal(integrationID, courseID) {
-  return fetch(getIntegrationGetEndpoint(integrationID, courseID), {
+export const openIntegrationModal = (integrationID, courseID) => (dispatch) => {
+  fetch(getIntegrationGetEndpoint(integrationID, courseID), {
     credentials: 'include',
     method: 'GET',
   })
-        .then(response => response.json())
-        .then((json) => {
-          store.dispatch({
-            type: ActionTypes.OPEN_INTEGRATION_MODAL,
-            enabled: json.integration_enabled,
-            id: courseID,
-            integration_id: integrationID,
-          });
-        });
-}
+    .then(response => response.json())
+    .then((json) => {
+      dispatch({
+        type: ActionTypes.OPEN_INTEGRATION_MODAL,
+        enabled: json.integration_enabled,
+        id: courseID,
+        integration_id: integrationID,
+      });
+    });
+};
 
-export function delIntegration(integrationID, courseID) {
-  return fetch(getIntegrationDelEndpoint(integrationID, courseID), {
+export const delIntegration = (integrationID, courseID) => {
+  fetch(getIntegrationDelEndpoint(integrationID, courseID), {
     credentials: 'include',
     method: 'GET',
-  })
-        .then(response => response.json());
-}
+  });
+};
 
-export function addIntegration(integrationID, courseID, json) {
-  return fetch(getIntegrationAddEndpoint(integrationID, courseID), {
+export const addIntegration = (integrationID, courseID, json) => {
+  fetch(getIntegrationAddEndpoint(integrationID, courseID), {
     credentials: 'include',
     method: 'POST',
     body: JSON.stringify({ json }),
-  })
-        .then(response => response.json());
-}
+  });
+};
 
-export function logFacebookAlertView() {
+export const logFacebookAlertView = () => {
   fetch(getLogFacebookAlertViewEndpoint(), {
     method: 'POST',
     credentials: 'include',
   });
-}
+};
 
-export function LogFacebookAlertClick() {
+export const LogFacebookAlertClick = () => {
   fetch(getLogFacebookAlertClickEndpoint(), {
     method: 'POST',
     credentials: 'include',
   });
-}
+};
 
 export const changeUserInfo = info => ({
   type: ActionTypes.CHANGE_USER_INFO,
