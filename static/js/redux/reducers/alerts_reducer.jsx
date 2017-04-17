@@ -14,7 +14,7 @@ const defaultState = {
   desiredSemester: 0,
 };
 
-export const alerts = (state = defaultState, action) => {
+const alerts = (state = defaultState, action) => {
   switch (action.type) {
         // dispatched when there's a conflict
     case ActionTypes.ALERT_CONFLICT:
@@ -66,3 +66,5 @@ export const alerts = (state = defaultState, action) => {
       return state;
   }
 };
+
+export default alerts;

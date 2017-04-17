@@ -1,6 +1,6 @@
 import * as ActionTypes from '../constants/actionTypes';
 
-export const finalExamsModal = (state = {
+const finalExamsModal = (state = {
   isVisible: false,
   isLoading: true,
   finalExams: null,
@@ -20,3 +20,5 @@ export const finalExamsModal = (state = {
       return state;
   }
 };
+
+export default finalExamsModal;
