@@ -3,12 +3,9 @@ import { setDeclinedNotifications } from '../../util';
 import EnableNotificationsAlert from './enable_notifications_alert';
 import * as ActionTypes from '../../constants/actionTypes';
 
-const mapStateToProps = (state) => {
-  const msg = 'Get Alerts!';
-  return {
-    msg,
-  };
-};
+const mapStateToProps = () => ({
+  msg: 'Get Alerts!',
+});
 const mapDispatchToProps = dispatch => ({
   dismissSelf: () => {
     dispatch({ type: ActionTypes.DISMISS_ENABLE_NOTIFICATIONS });
