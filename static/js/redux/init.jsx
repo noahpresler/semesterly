@@ -4,7 +4,7 @@ import {render} from "react-dom";
 import {applyMiddleware, createStore} from "redux";
 import thunkMiddleware from "redux-thunk";
 import {Provider} from "react-redux";
-import {rootReducer} from "./reducers/root_reducer";
+import rootReducer from "./reducers/root_reducer";
 import SemesterlyContainer from "./ui/containers/semesterly_container";
 import {fetchMostClassmatesCount, getUserInfo, isRegistered} from "./actions/user_actions";
 import {loadCachedTimetable, loadTimetable, lockTimetable} from "./actions/timetable_actions";
@@ -110,7 +110,7 @@ function setup(dispatch) {
         dispatch({type: ActionTypes.TRIGGER_TEXTBOOK_MODAL});
     }
     // check if registered for chrome notifications
-    isRegistered();
+    dispatch(isRegistered());
     // check if first visit
     if (browserSupportsLocalStorage() && 'serviceWorker' in navigator) {
         if (localStorage.getItem('firstVisit') === null) {

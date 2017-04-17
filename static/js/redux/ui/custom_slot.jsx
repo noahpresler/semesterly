@@ -1,6 +1,6 @@
 import React, { PropTypes } from 'react';
 import { DragSource, DropTarget } from 'react-dnd';
-import { DRAGTYPES, HALF_HOUR_HEIGHT } from '../constants/constants';
+import { DRAG_TYPES, HALF_HOUR_HEIGHT } from '../constants/constants';
 
 
 function convertToHalfHours(str) {
@@ -241,9 +241,9 @@ CustomSlot.propTypes = {
   id: PropTypes.number.isRequired,
 };
 
-export default DropTarget(DRAGTYPES.DRAG, dragSlotTarget, collectDragDrop)(
-    DropTarget(DRAGTYPES.CREATE, createSlotTarget, collectCreateDrop)(
-        DragSource(DRAGTYPES.DRAG, dragSlotSource, collectDragSource)(CustomSlot),
+export default DropTarget(DRAG_TYPES.DRAG, dragSlotTarget, collectDragDrop)(
+    DropTarget(DRAG_TYPES.CREATE, createSlotTarget, collectCreateDrop)(
+        DragSource(DRAG_TYPES.DRAG, dragSlotSource, collectDragSource)(CustomSlot),
     ),
 );
 // export default CustomSlot

@@ -1,6 +1,6 @@
 import * as ActionTypes from '../constants/actionTypes';
 
-export const searchResults = (state = { isFetching: false, items: [] }, action) => {
+const searchResults = (state = { isFetching: false, items: [] }, action) => {
   switch (action.type) {
     case ActionTypes.RECEIVE_COURSES:
       return {
@@ -16,3 +16,5 @@ export const searchResults = (state = { isFetching: false, items: [] }, action) 
       return state;
   }
 };
+
+export default searchResults;

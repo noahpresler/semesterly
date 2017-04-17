@@ -1,4 +1,4 @@
-export const REACTION_MAP = {
+const REACTION_MAP = {
   FIRE: {
     unicode: '\uD83D\uDD25',
     name: 'Must Take',
@@ -32,3 +32,5 @@ export const REACTION_MAP = {
     name: 'Interesting',
   },
 };
+
+export default REACTION_MAP;

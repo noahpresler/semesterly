@@ -1,7 +1,7 @@
 import { VALID_SCHOOLS } from '../constants/schools';
 import * as ActionTypes from '../constants/actionTypes';
 
-export const school = (state = {
+const school = (state = {
   school: '',
   areas: [],
   departments: [],
@@ -14,10 +14,13 @@ export const school = (state = {
         return Object.assign({}, state, { school: action.school });
       }
       return state;
-    case ActionTypes.RECEIVE_SCHOOL_INFO:
+    case ActionTypes.RECEIVE_SCHOOL_INFO: {
       const { areas, departments, levels, last_updated: dataLastUpdated } = action.schoolInfo;
       return Object.assign({}, state, { areas, departments, levels, dataLastUpdated });
+    }
     default:
       return state;
   }
 };
+
+export default school;

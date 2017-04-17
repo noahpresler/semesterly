@@ -1,6 +1,6 @@
 import * as ActionTypes from '../constants/actionTypes';
 
-export const integrationModal = (state = {
+const integrationModal = (state = {
   isVisible: false,
   id: null,
   enabled: false,
@@ -20,3 +20,5 @@ export const integrationModal = (state = {
       return state;
   }
 };
+
+export default integrationModal;

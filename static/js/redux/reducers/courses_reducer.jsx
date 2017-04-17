@@ -1,7 +1,8 @@
 import * as ActionTypes from '../constants/actionTypes';
 
 const initialState = { isFetching: false, items: [], lastUpdated: '' };
-export const courses = (state = initialState, action) => {
+
+const courses = (state = initialState, action) => {
   switch (action.type) {
     case ActionTypes.RECEIVE_COURSES:
       return {
@@ -18,3 +19,5 @@ export const courses = (state = initialState, action) => {
       return state;
   }
 };
+
+export default courses;
