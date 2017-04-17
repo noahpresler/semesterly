@@ -11,7 +11,7 @@ urlpatterns = patterns('',
                        url('', include('social.apps.django_app.urls', namespace='social')),
                        url('', include('django.contrib.auth.urls', namespace='auth')),
 
-                       # registration
+                       # device token registration
                        url(r'^setRegistrationToken/', authpipe.views.set_registration_token),
                        url(r'^deleteRegistrationToken/', authpipe.views.delete_registration_token),
                        )
