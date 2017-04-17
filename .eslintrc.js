@@ -25,7 +25,8 @@ module.exports = {
 	  "currentUser": true
 	},
 	rules: {
-		"no-plusplus": 0
+		"no-plusplus": 0,
+    "jsx-a11y/no-static-element-interactions": 0
 	},
 	extends: "airbnb",
 };
