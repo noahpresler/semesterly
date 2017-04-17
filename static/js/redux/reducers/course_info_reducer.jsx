@@ -1,6 +1,6 @@
 import * as ActionTypes from '../constants/actionTypes';
 
-export const courseInfo = (state = {
+const courseInfo = (state = {
   isFetching: true,
   isFetchingClassmates: true,
   data: {},
@@ -43,3 +43,5 @@ export const courseInfo = (state = {
       return state;
   }
 };
+
+export default courseInfo;
