@@ -112,9 +112,10 @@ export const createICalFromEventsList = (events, icalTitle) => (dispatch) => {
     for (let i = 0; i < events.length; i++){
       let repeating = events[i].repeating;
       delete(events[i].repeating);
-      cal.createEvent(events[i]);
+      let currentEvent = cal.createEvent(events[i]);
       if (repeating != null) {
-        events[i].repeat(repeating);
+        console.log(repeating);
+        currentEvent.repeating(repeating);
       }
     }
     const file = new Blob([cal.toString()], {type: "data:text/calendar;charset=utf8,"});
@@ -172,7 +173,8 @@ export const createICalFromTimetable = (active) => {
             summary: slot.name + " " + slot.code + slot.meeting_section,
             description: slot.code + slot.meeting_section + '\n' + instructors + description,
             location: slot.location,
-            url: getCourseShareLink(slot.code)
+            url: getCourseShareLink(slot.code),
+            repeating: repeating,
           };
           event_list.push(event);
         }
