@@ -6,18 +6,12 @@ import { nullifyTimetable } from './timetable_actions';
 import * as ActionTypes from '../constants/actionTypes';
 import { fetchCourseClassmates } from './modal_actions';
 
-export function requestCourses() {
-  return {
-    type: ActionTypes.REQUEST_COURSES,
-  };
-}
+export const requestCourses = () => ({ type: ActionTypes.REQUEST_COURSES });
 
-export function receiveCourses(json) {
-  return {
-    type: ActionTypes.RECEIVE_COURSES,
-    courses: json.results,
-  };
-}
+export const receiveCourses = json => ({
+  type: ActionTypes.RECEIVE_COURSES,
+  courses: json.results,
+});
 
 export const setSemester = semester => (dispatch) => {
   const state = store.getState();
@@ -36,7 +30,7 @@ export const setSemester = semester => (dispatch) => {
     type: ActionTypes.RECEIVE_COURSES,
     courses: [],
   });
-}
+};
 
 /*
  * Check whether the user is logged in and whether their timetable is up to date
@@ -64,28 +58,26 @@ export const maybeSetSemester = semester => (dispatch) => {
   } else {
     dispatch(setSemester(semester));
   }
-}
+};
 
-export function fetchSearchResults(query) {
-  return (dispatch) => {
-    if (query.length <= 1) {
-      dispatch(receiveCourses({ results: [] }));
-      return;
-    }
+export const fetchSearchResults = query => (dispatch) => {
+  if (query.length <= 1) {
+    dispatch(receiveCourses({ results: [] }));
+    return;
+  }
 
-    // indicate that we are now requesting courses
-    dispatch(requestCourses());
-    // send a request (via fetch) to the appropriate endpoint to get courses
-    fetch(getCourseSearchEndpoint(query), {
-      credentials: 'include',
-    })
-    .then(response => response.json()) // TODO(rohan): error-check the response
-    .then((json) => {
-      // indicate that courses have been received
-      dispatch(receiveCourses(json));
-    });
-  };
-}
+  // indicate that we are now requesting courses
+  dispatch(requestCourses());
+  // send a request (via fetch) to the appropriate endpoint to get courses
+  fetch(getCourseSearchEndpoint(query), {
+    credentials: 'include',
+  })
+  .then(response => response.json()) // TODO(rohan): error-check the response
+  .then((json) => {
+    // indicate that courses have been received
+    dispatch(receiveCourses(json));
+  });
+};
 
 export const fetchAdvancedSearchResults = (query, filters) => (dispatch) => {
   // if too small a query AND no filters; don't make request.
@@ -130,17 +122,17 @@ export const hoverSearchResult = position => ({
   position,
 });
 
-export function paginateAdvancedSearchResults() {
-  return { type: ActionTypes.PAGINATE_ADVANCED_SEARCH_RESULTS };
-}
+export const paginateAdvancedSearchResults = () => (
+  { type: ActionTypes.PAGINATE_ADVANCED_SEARCH_RESULTS }
+);
 
-export function clearAdvancedSearchPagination() {
-  return { type: ActionTypes.CLEAR_ADVANCED_SEARCH_PAGINATION };
-}
+export const clearAdvancedSearchPagination = () => (
+  { type: ActionTypes.CLEAR_ADVANCED_SEARCH_PAGINATION }
+);
 
-export function setActiveAdvancedSearchResult(idx) {
-  return { type: ActionTypes.SET_ACTIVE_ADV_SEARCH_RESULT, active: idx };
-}
+export const setActiveAdvancedSearchResult = idx => (
+  { type: ActionTypes.SET_ACTIVE_ADV_SEARCH_RESULT, active: idx }
+);
 
 export const setAdvancedSearchResultIndex = (idx, courseId) => (dispatch) => {
   dispatch(setActiveAdvancedSearchResult(idx));

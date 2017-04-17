@@ -22,151 +22,143 @@ const DAY_MAP = {
   U: 'su',
 };
 
-function getNextDayOfWeek(date, dayOfWeek) {
+export const getNextDayOfWeek = (date, dayOfWeek) => {
   const dayIndex = FULL_WEEK_LIST.indexOf(dayOfWeek);
   const resultDate = new Date(date.getTime());
   resultDate.setDate(date.getDate() + ((7 + (dayIndex - date.getDay())) % 7));
   return resultDate;
-}
+};
 
-function receiveShareLink(dispatch, shareLink) {
+export const receiveShareLink = shareLink => (dispatch) => {
   dispatch({
     type: ActionTypes.RECEIVE_SHARE_TIMETABLE_LINK,
     shareLink,
   });
-}
+};
 
-export const logFinalExamView = () => () => {
+export const logFinalExamView = () => {
   fetch(getLogFinalExamViewEndpoint(), {
     method: 'POST',
     credentials: 'include',
   });
 };
 
-export function fetchShareTimetableLink() {
-  return (dispatch) => {
-    const state = store.getState();
-    const semester = allSemesters[state.semesterIndex];
-    const timetableState = state.timetables;
-    const { shareLink, shareLinkValid } = state.calendar;
-    dispatch({
-      type: ActionTypes.REQUEST_SHARE_TIMETABLE_LINK,
-    });
-    if (shareLinkValid) {
-      receiveShareLink(store.dispatch, shareLink);
-      return;
-    }
-    fetch(getRequestShareTimetableLinkEndpoint(), {
+export const fetchShareTimetableLink = () => (dispatch) => {
+  const state = store.getState();
+  const semester = allSemesters[state.semesterIndex];
+  const timetableState = state.timetables;
+  const { shareLink, shareLinkValid } = state.calendar;
+  dispatch({
+    type: ActionTypes.REQUEST_SHARE_TIMETABLE_LINK,
+  });
+  if (shareLinkValid) {
+    receiveShareLink(shareLink);
+    return;
+  }
+  fetch(getRequestShareTimetableLinkEndpoint(), {
+    method: 'POST',
+    body: JSON.stringify({
+      timetable: getActiveTimetable(timetableState),
+      semester,
+    }),
+    credentials: 'include',
+  })
+          .then(response => response.json())
+          .then((ref) => {
+            dispatch(receiveShareLink(`${window.location.href.split('/')[2]}/share/${ref.link}`));
+          });
+};
+
+export const addTTtoGCal = () => (dispatch) => {
+  gcalCallback = false;
+  let state = store.getState();
+  const timetableState = state.timetables;
+
+  // Wait for timetable to load
+  if (gcalCallback) {
+    do {
+      state = store.getState();
+    } while (state.timetables.items.length <= 0);
+  }
+
+  if (!state.saveCalendarModal.isUploading && !state.saveCalendarModal.hasUploaded) {
+    dispatch({ type: ActionTypes.UPLOAD_CALENDAR });
+    fetch(getAddTTtoGCalEndpoint(), {
       method: 'POST',
       body: JSON.stringify({
         timetable: getActiveTimetable(timetableState),
-        semester,
       }),
       credentials: 'include',
     })
-            .then(response => response.json())
-            .then((ref) => {
-              receiveShareLink(store.dispatch,
-                    `${window.location.href.split('/')[2]}/share/${ref.link}`);
-            });
-  };
-}
-
-export function addTTtoGCal() {
-  return (dispatch) => {
-    gcalCallback = false;
-    let state = store.getState();
-    const timetableState = state.timetables;
-
-
-    // Wait for timetable to load
-    if (gcalCallback) {
-      do {
-        state = store.getState();
-      } while (state.timetables.items.length <= 0);
-    }
-
-    if (!state.saveCalendarModal.isUploading && !state.saveCalendarModal.hasUploaded) {
-      dispatch({ type: ActionTypes.UPLOAD_CALENDAR });
-      fetch(getAddTTtoGCalEndpoint(), {
-        method: 'POST',
-        body: JSON.stringify({
-          timetable: getActiveTimetable(timetableState),
-        }),
-        credentials: 'include',
-      })
-                .then(response => response.json())
-                .then(() => {
-                  dispatch({ type: ActionTypes.CALENDAR_UPLOADED });
-                });
-    }
-  };
-}
-
-export function createICalFromTimetable() {
-  return (dispatch) => {
-    const state = store.getState();
-    if (!state.saveCalendarModal.isDownloading && !state.saveCalendarModal.hasDownloaded) {
-      dispatch({ type: ActionTypes.DOWNLOAD_CALENDAR });
-      const cal = ical({ domain: 'https://semester.ly', name: 'My Semester Schedule' });
-      const tt = getActiveTimetable(state.timetables);
-
-      // TODO - MUST BE REFACTORED AFTER CODED IN TO CONFIG
-      let semStart = new Date();
-      let semEnd = new Date();
-      const semester = allSemesters[state.semesterIndex];
-
-      if (semester.name === 'Fall') {
-        // ignore year, year is set to current year
-        semStart = new Date(`August 30 ${semester.year} 00:00:00`);
-        semEnd = new Date(`December 20 ${semester.year} 00:00:00`);
-      } else {
-        // ignore year, year is set to current year
-        semStart = new Date(`January 30 ${semester.year} 00:00:00`);
-        semEnd = new Date(`May 20 ${semester.year} 00:00:00`);
-      }
-
-      semStart.setYear(new Date().getFullYear());
-      semEnd.setYear(new Date().getFullYear());
-
-      for (let cIdx = 0; cIdx < tt.courses.length; cIdx++) {
-        for (let slotIdx = 0; slotIdx < tt.courses[cIdx].slots.length; slotIdx++) {
-          const course = tt.courses[cIdx];
-          const slot = course.slots[slotIdx];
-          const instructors = slot.instructors && slot.instructors.length > 0 ? `Taught by: ${slot.instructors}\n` : '';
-          const start = getNextDayOfWeek(semStart, slot.day);
-          const end = getNextDayOfWeek(semStart, slot.day);
-          const until = getNextDayOfWeek(semEnd, slot.day);
-
-          let times = slot.time_start.split(':');
-          start.setHours(parseInt(times[0], 10), parseInt(times[1], 10));
-          times = slot.time_end.split(':');
-          end.setHours(parseInt(times[0], 10), parseInt(times[1], 10));
-          const description = course.description ? course.description : '';
-
-          const event = cal.createEvent({
-            start,
-            end,
-            summary: `${slot.name} ${slot.code}${slot.meeting_section}`,
-            description: `${slot.code + slot.meeting_section}\n${instructors}${description}`,
-            location: slot.location,
-            url: getCourseShareLink(slot.code),
-          });
-
-          event.repeating({
-            freq: 'WEEKLY',
-            byDay: DAY_MAP[slot.day],
-            until,
-          });
-        }
-      }
-      const file = new Blob([cal.toString()], { type: 'data:text/calendar;charset=utf8,' });
-      FileSaver.saveAs(file, 'my_semester.ics');
-      fetch(getLogiCalEndpoint(), {
-        method: 'POST',
-        credentials: 'include',
+      .then(response => response.json())
+      .then(() => {
+        dispatch({ type: ActionTypes.CALENDAR_UPLOADED });
       });
-      dispatch({ type: ActionTypes.CALENDAR_DOWNLOADED });
+  }
+};
+
+export const createICalFromTimetable = () => (dispatch) => {
+  const state = store.getState();
+  if (!state.saveCalendarModal.isDownloading && !state.saveCalendarModal.hasDownloaded) {
+    dispatch({ type: ActionTypes.DOWNLOAD_CALENDAR });
+    const cal = ical({ domain: 'https://semester.ly', name: 'My Semester Schedule' });
+    const tt = getActiveTimetable(state.timetables);
+
+    // TODO - MUST BE REFACTORED AFTER CODED IN TO CONFIG
+    let semStart = new Date();
+    let semEnd = new Date();
+    const semester = allSemesters[state.semesterIndex];
+
+    if (semester.name === 'Fall') {
+      // ignore year, year is set to current year
+      semStart = new Date(`August 30 ${semester.year} 00:00:00`);
+      semEnd = new Date(`December 20 ${semester.year} 00:00:00`);
+    } else {
+      // ignore year, year is set to current year
+      semStart = new Date(`January 30 ${semester.year} 00:00:00`);
+      semEnd = new Date(`May 20 ${semester.year} 00:00:00`);
     }
-  };
-}
+
+    semStart.setYear(new Date().getFullYear());
+    semEnd.setYear(new Date().getFullYear());
+
+    for (let cIdx = 0; cIdx < tt.courses.length; cIdx++) {
+      for (let slotIdx = 0; slotIdx < tt.courses[cIdx].slots.length; slotIdx++) {
+        const course = tt.courses[cIdx];
+        const slot = course.slots[slotIdx];
+        const instructors = slot.instructors && slot.instructors.length > 0 ? `Taught by: ${slot.instructors}\n` : '';
+        const start = getNextDayOfWeek(semStart, slot.day);
+        const end = getNextDayOfWeek(semStart, slot.day);
+        const until = getNextDayOfWeek(semEnd, slot.day);
+
+        let times = slot.time_start.split(':');
+        start.setHours(parseInt(times[0], 10), parseInt(times[1], 10));
+        times = slot.time_end.split(':');
+        end.setHours(parseInt(times[0], 10), parseInt(times[1], 10));
+        const description = course.description ? course.description : '';
+
+        const event = cal.createEvent({
+          start,
+          end,
+          summary: `${slot.name} ${slot.code}${slot.meeting_section}`,
+          description: `${slot.code + slot.meeting_section}\n${instructors}${description}`,
+          location: slot.location,
+          url: getCourseShareLink(slot.code),
+        });
+
+        event.repeating({
+          freq: 'WEEKLY',
+          byDay: DAY_MAP[slot.day],
+          until,
+        });
+      }
+    }
+    const file = new Blob([cal.toString()], { type: 'data:text/calendar;charset=utf8,' });
+    FileSaver.saveAs(file, 'my_semester.ics');
+    fetch(getLogiCalEndpoint(), {
+      method: 'POST',
+      credentials: 'include',
+    });
+    dispatch({ type: ActionTypes.CALENDAR_DOWNLOADED });
+  }
+};
