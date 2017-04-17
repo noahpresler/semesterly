@@ -139,8 +139,8 @@ INSTALLED_APPS = (
     'student',
     'cachalot',
     'silk',
-    'dashing'
-    'webpack_loader'
+    'dashing',
+    'webpack_loader',
 )
 
 MIDDLEWARE_CLASSES = (

@@ -1,5 +1,7 @@
-from dashing.widgets import ListWidget
 from dashing.widgets import GraphWidget
+from dashing.widgets import ListWidget
+from dashing.widgets import NumberWidget
+from dashing.widgets import TimetablesWidget
 
 from student.views import get_student
 from student.models import *
@@ -31,27 +33,24 @@ def number_timetables(**parameters):
     return timetables.count()
 
 
-class NumberTimetablesWidget(ListWidget):
+class NumberTimetablesWidget(TimetablesWidget):
 
     title = 'Number of Timetables'
 
-    def get_updated_at(self):
-        return u''
+    def get_total(self):
+        return number_timetables()
 
-    def get_data(self):
+    def get_shared(self):
+        return (
+            "%d shared" % 
+            number_timetables(Timetable=SharedTimetable)
+        )
 
-        labels = [
-            'Total',
-            'Shared',
-            'Personal'
-        ]
-        values = [
-            number_timetables(),
-            number_timetables(Timetable=SharedTimetable),
-            number_timetables(Timetable=PersonalTimetable),
-        ]
-
-        return [ { 'label' : l, 'value': v } for l, v in zip(labels, values) ]
+    def get_personal(self):
+        return (
+            "%d personal" % 
+            number_timetables(Timetable=PersonalTimetable)
+        )
 
 
 class NumberCalendarExportsWidget(ListWidget):
@@ -82,3 +81,87 @@ class NumberCalendarExportsWidget(ListWidget):
         ]
 
         return [ { 'label' : l, 'value': v } for l, v in zip(labels, values) ]
+
+
+class NumberFinalExamViewsWidget(NumberWidget):
+
+    title = 'Final Exam Views'
+
+    def get_value(self):
+        return number_timetables(Timetable=FinalExamModalView)
+
+    def get_detail(self):
+        return (
+            "%d unique" % 
+            number_timetables(Timetable=FinalExamModalView, distinct="student")
+        )
+
+    def get_more_info(self):
+        return ""
+
+class NumberSignupsWidget(NumberWidget):
+
+    title = 'Total Signups'
+
+    def get_total_signups(self):
+        self.total_signups = number_timetables(Timetable=Student)
+        return self.total_signups
+
+    def get_value(self):
+        return self.get_total_signups()
+
+    def get_detail(self):
+        return ""
+
+    def get_more_info(self):
+        detail_string = ""
+
+        permissions = ["social_courses", "social_offerings", "social_all"]
+        for permission in permissions:
+            # TODO: hacky way of passing in permission as an identifier for parameter. 
+            # Also have to use tuple for template to easily access %.
+            args = { 
+                "Timetable" : Student, 
+                permission  : True
+            }
+            num_users     = number_timetables(**args)
+            percent_users = format(float(num_users) / self.get_total_signups() * 100, '.2f')
+
+            detail_string += permission + (": %d (%s%%)\n" % (num_users, percent_users))
+        
+        return detail_string
+
+
+class NumberFacebookAlertsViewsWidget(NumberWidget):
+
+    title = 'Facebook Alert Views'
+
+    def get_value(self):
+        return number_timetables(Timetable=FacebookAlertView)
+
+    def get_detail(self):
+        return (
+            "%d unique" % 
+            number_timetables(Timetable=FacebookAlertView, distinct="student")
+        )
+
+    def get_more_info(self):
+        return ""
+
+
+class NumberFacebookAlertsClicksWidget(NumberWidget):
+
+    title = 'Facebook Alert Clicks'
+
+    def get_value(self):
+        return number_timetables(Timetable=FacebookAlertClick)
+
+    def get_detail(self):
+        return (
+            "%d unique" % 
+            number_timetables(Timetable=FacebookAlertClick, distinct="student")
+        )
+
+    def get_more_info(self):
+        return ""
+
