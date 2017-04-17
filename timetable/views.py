@@ -48,6 +48,7 @@ def view_timetable(request, code=None, sem_name=None, year=None, shared_timetabl
                   final_exams=False):
   school = request.subdomain
   student = get_student(request)
+  print student
   course_json = None
 
   # get default semester info
