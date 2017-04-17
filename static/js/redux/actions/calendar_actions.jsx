@@ -165,7 +165,6 @@ export const createICalFromTimetable = (active) => {
           start.setHours(parseInt(times[0], 10), parseInt(times[1], 10));
           times = slot.time_end.split(':');
           end.setHours(parseInt(times[0], 10), parseInt(times[1], 10));
-      
 
           let repeating = {
             freq: 'WEEKLY',
@@ -187,12 +186,5 @@ export const createICalFromTimetable = (active) => {
       }
     }
     dispatch(createICalFromEventsList(event_list, "myical"));
-    /*const file = new Blob([cal.toString()], { type: 'data:text/calendar;charset=utf8,' });
-     FileSaver.saveAs(file, 'my_semester.ics');
-     fetch(getLogiCalEndpoint(), {
-     method: 'POST',
-     credentials: 'include',
-     });
-     dispatch({ type: ActionTypes.CALENDAR_DOWNLOADED });*/
   }
 }
