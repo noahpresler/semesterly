@@ -34,6 +34,8 @@ var config = {
         }),
     ],
 
+    devtool: 'eval-source-map',
+
     module: {
         loaders: [
             //a regexp that tells webpack use the following loaders on all
@@ -68,7 +70,7 @@ var config = {
 
 if (isDev) {
 	// Tell django to use this URL to load packages and not use STATIC_URL + bundle_name
-	config.output.publicPath = 'http://localhost:3000/assets/bundles/'; 
+	config.output.publicPath = 'http://localhost:3000/assets/bundles/';
     config.plugins = config.plugins.concat(new webpack.HotModuleReplacementPlugin());
     config.plugins = config.plugins.concat(new webpack.NoEmitOnErrorsPlugin()); // don't reload if there is an error
     // config.module.loaders = [{
