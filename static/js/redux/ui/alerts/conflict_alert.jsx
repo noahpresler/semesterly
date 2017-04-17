@@ -1,31 +1,32 @@
-import React from "react";
+import React from 'react';
 
 class ConflictAlert extends React.Component {
-    constructor(props) {
-        super(props);
-    }
+  constructor(props) {
+    super(props);
+  }
 
-    componentWillUnmount() {
-        this.props.dismissSelf();
-    }
+  componentWillUnmount() {
+    this.props.dismissSelf();
+  }
 
-    handleClick() {
-        this.props.turnConflictsOn();
-        this.props.dismissSelf();
-    }
+  handleClick() {
+    this.props.turnConflictsOn();
+    this.props.dismissSelf();
+  }
 
-    render() {
-        return (
-            <div className="conflict-alert">
+  render() {
+    return (
+      <div className="conflict-alert">
                 Adding that course causes a conflict!
                 <button
-                    onClick={() => this.handleClick()}
-                    className="conflict-alert-btn">
+                  onClick={() => this.handleClick()}
+                  className="conflict-alert-btn"
+                >
                     Allow Conflicts!
                 </button>
-            </div>);
-    }
+      </div>);
+  }
 }
-;
+
 
 export default ConflictAlert;

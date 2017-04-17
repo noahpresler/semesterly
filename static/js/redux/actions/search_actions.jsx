@@ -6,27 +6,20 @@ import { nullifyTimetable } from './timetable_actions';
 import * as ActionTypes from '../constants/actionTypes';
 import { fetchCourseClassmates } from './modal_actions';
 
-export function requestCourses() {
-  return {
-    type: ActionTypes.REQUEST_COURSES,
-  };
-}
+export const requestCourses = () => ({ type: ActionTypes.REQUEST_COURSES });
 
-export function receiveCourses(json) {
-  return {
-    type: ActionTypes.RECEIVE_COURSES,
-    courses: json.results,
-  };
-}
+export const receiveCourses = json => ({
+  type: ActionTypes.RECEIVE_COURSES,
+  courses: json.results,
+});
 
-export function setSemester(semester) {
+export const setSemester = semester => (dispatch) => {
   const state = store.getState();
-  const dispatch = store.dispatch;
 
   if (state.userInfo.data.isLoggedIn) {
     dispatch(getUserSavedTimetables(allSemesters[semester]));
   } else {
-    nullifyTimetable(dispatch);
+    dispatch(nullifyTimetable(dispatch));
   }
 
   dispatch({
@@ -37,16 +30,15 @@ export function setSemester(semester) {
     type: ActionTypes.RECEIVE_COURSES,
     courses: [],
   });
-}
+};
 
 /*
  * Check whether the user is logged in and whether their timetable is up to date
  * and set semester if appropriate. Otherwise show an alert modal and save the
  * semester they were trying to switch to in the modal state.
  */
-export function maybeSetSemester(semester) {
+export const maybeSetSemester = semester => (dispatch) => {
   const state = store.getState();
-  const dispatch = store.dispatch;
 
   if (semester === state.semesterIndex) {
     return;
@@ -56,7 +48,7 @@ export function maybeSetSemester(semester) {
     if (state.userInfo.data.isLoggedIn && !state.savingTimetable.upToDate) {
       dispatch(saveTimetable(false, () => setSemester(semester)));
     } else if (state.userInfo.data.isLoggedIn) {
-      setSemester(semester);
+      dispatch(setSemester(semester));
     } else {
       dispatch({
         type: ActionTypes.ALERT_CHANGE_SEMESTER,
@@ -64,33 +56,33 @@ export function maybeSetSemester(semester) {
       });
     }
   } else {
-    setSemester(semester);
+    dispatch(setSemester(semester));
   }
-}
+};
 
-export function fetchSearchResults(query) {
-  return (dispatch) => {
-    if (query.length <= 1) {
-      dispatch(receiveCourses({ results: [] }));
-      return;
-    }
-        // indicate that we are now requesting courses
-    dispatch(requestCourses());
-        // send a request (via fetch) to the appropriate endpoint to get courses
-    fetch(getCourseSearchEndpoint(query), {
-      credentials: 'include',
-    })
-            .then(response => response.json()) // TODO(rohan): error-check the response
-            .then((json) => {
-                // indicate that courses have been received
-              dispatch(receiveCourses(json));
-            });
-  };
-}
+export const fetchSearchResults = query => (dispatch) => {
+  if (query.length <= 1) {
+    dispatch(receiveCourses({ results: [] }));
+    return;
+  }
+
+  // indicate that we are now requesting courses
+  dispatch(requestCourses());
+  // send a request (via fetch) to the appropriate endpoint to get courses
+  fetch(getCourseSearchEndpoint(query), {
+    credentials: 'include',
+  })
+  .then(response => response.json()) // TODO(rohan): error-check the response
+  .then((json) => {
+    // indicate that courses have been received
+    dispatch(receiveCourses(json));
+  });
+};
 
 export const fetchAdvancedSearchResults = (query, filters) => (dispatch) => {
-    // if too small a query AND no filters; don't make request.
-    // we'll allow small query strings if some filters (departments, or breadths, or levels) are chosen.
+  // if too small a query AND no filters; don't make request.
+  // we'll allow small query strings if some filters
+  // (departments, or breadths, or levels) are chosen.
   if (query.length <= 1 && [].concat(...Object.values(filters)).length === 0) {
     dispatch({
       type: ActionTypes.RECEIVE_ADVANCED_SEARCH_RESULTS,
@@ -98,11 +90,12 @@ export const fetchAdvancedSearchResults = (query, filters) => (dispatch) => {
     });
     return;
   }
-    // indicate that we are now requesting courses
+
+  // indicate that we are now requesting courses
   dispatch({
     type: ActionTypes.REQUEST_ADVANCED_SEARCH_RESULTS,
   });
-    // send a request (via fetch) to the appropriate endpoint to get courses
+  // send a request (via fetch) to the appropriate endpoint to get courses
   const state = store.getState();
   fetch(getAdvancedSearchEndpoint(), {
     credentials: 'include',
@@ -114,14 +107,14 @@ export const fetchAdvancedSearchResults = (query, filters) => (dispatch) => {
       page: state.explorationModal.page,
     }),
   })
-        .then(response => response.json()) // TODO(rohan): error-check the response
-        .then((json) => {
-            // indicate that courses have been received
-          dispatch({
-            type: ActionTypes.RECEIVE_ADVANCED_SEARCH_RESULTS,
-            advancedSearchResults: json,
-          });
-        });
+  .then(response => response.json()) // TODO(rohan): error-check the response
+  .then((json) => {
+    // indicate that courses have been received
+    dispatch({
+      type: ActionTypes.RECEIVE_ADVANCED_SEARCH_RESULTS,
+      advancedSearchResults: json,
+    });
+  });
 };
 
 export const hoverSearchResult = position => ({
@@ -129,19 +122,19 @@ export const hoverSearchResult = position => ({
   position,
 });
 
-export function paginateAdvancedSearchResults() {
-  return { type: ActionTypes.PAGINATE_ADVANCED_SEARCH_RESULTS };
-}
+export const paginateAdvancedSearchResults = () => (
+  { type: ActionTypes.PAGINATE_ADVANCED_SEARCH_RESULTS }
+);
 
-export function clearAdvancedSearchPagination() {
-  return { type: ActionTypes.CLEAR_ADVANCED_SEARCH_PAGINATION };
-}
+export const clearAdvancedSearchPagination = () => (
+  { type: ActionTypes.CLEAR_ADVANCED_SEARCH_PAGINATION }
+);
 
-export function setActiveAdvancedSearchResult(idx) {
-  return { type: ActionTypes.SET_ACTIVE_ADV_SEARCH_RESULT, active: idx };
-}
+export const setActiveAdvancedSearchResult = idx => (
+  { type: ActionTypes.SET_ACTIVE_ADV_SEARCH_RESULT, active: idx }
+);
 
-export const setAdvancedSearchResultIndex = (idx, course_id) => (dispatch) => {
+export const setAdvancedSearchResultIndex = (idx, courseId) => (dispatch) => {
   dispatch(setActiveAdvancedSearchResult(idx));
-  dispatch(fetchCourseClassmates(course_id));
+  dispatch(fetchCourseClassmates(courseId));
 };
