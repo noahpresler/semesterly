@@ -1,10 +1,6 @@
 import React from 'react';
 
 class ConflictAlert extends React.Component {
-  constructor(props) {
-    super(props);
-  }
-
   componentWillUnmount() {
     this.props.dismissSelf();
   }
@@ -28,5 +24,9 @@ class ConflictAlert extends React.Component {
   }
 }
 
+ConflictAlert.propTypes = {
+  dismissSelf: React.PropTypes.func.isRequired,
+  turnConflictsOn: React.PropTypes.func.isRequired,
+};
 
 export default ConflictAlert;
