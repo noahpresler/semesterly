@@ -110,7 +110,7 @@ function setup(dispatch) {
         dispatch({type: ActionTypes.TRIGGER_TEXTBOOK_MODAL});
     }
     // check if registered for chrome notifications
-    isRegistered();
+    dispatch(isRegistered());
     // check if first visit
     if (browserSupportsLocalStorage() && 'serviceWorker' in navigator) {
         if (localStorage.getItem('firstVisit') === null) {
