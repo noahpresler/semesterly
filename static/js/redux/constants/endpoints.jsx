@@ -1,22 +1,21 @@
 import { getSchool, getSemester } from '../init';
 
 /* server endpoints */
-export const getAddTTtoGCalEndpoint = timetable => '/user/add_to_gcal/';
+export const getAddTTtoGCalEndpoint = () => '/user/add_to_gcal/';
 export const getLogiCalEndpoint = () => '/user/log_ical/';
 export const getLogFinalExamViewEndpoint = () => '/user/log_final_exam/';
 export const getLogFacebookAlertViewEndpoint = () => '/user/log_fb_alert_view/';
 export const getLogFacebookAlertClickEndpoint = () => '/user/log_fb_alert_click/';
-export const getCourseInfoEndpoint = course_id => `/courses/${getSchool()}/${getSemester()}/id/${course_id}/`;
+export const getCourseInfoEndpoint = courseId => `/courses/${getSchool()}/${getSemester()}/id/${courseId}/`;
 export const getCourseSearchEndpoint = query => `/search/${getSchool()}/${getSemester()}/${query}/`;
-export const getAdvancedSearchEndpoint = query => '/advanced_search/';
+export const getAdvancedSearchEndpoint = () => '/advanced_search/';
 export const getTimetablesEndpoint = () => '/get_timetables/';
-export const getUserInfoEndpoint = () => '/user/info/';
 export const getSaveTimetableEndpoint = () => '/user/save_timetable/';
 export const getCloneTimetableEndpoint = () => '/user/duplicate_timetable/';
 export const getDeleteTimetableEndpoint = () => '/user/delete_timetable/';
 export const getSaveSettingsEndpoint = () => '/user/save_settings/';
 export const getClassmatesEndpoint = () => '/user/get_classmates/';
-export const getClassmatesInCourseEndpoint = course_id => `/course_classmates/${getSchool()}/${getSemester()}/id/${course_id}/`;
+export const getClassmatesInCourseEndpoint = courseId => `/course_classmates/${getSchool()}/${getSemester()}/id/${courseId}/`;
 export const getMostClassmatesCountEndpoint = () => '/user/get_most_classmates_count/';
 export const getFriendsEndpoint = () => '/user/find_friends/';
 export const getSchoolInfoEndpoint = () => `/school_info/${getSchool()}/`;
@@ -25,7 +24,7 @@ export const getLoadSavedTimetablesEndpoint = semester => `/user/get_saved_timet
 export const getRequestShareTimetableLinkEndpoint = () => '/share/link/';
 export const getSetRegistrationTokenEndpoint = () => '/setRegistrationToken/';
 export const deleteRegistrationTokenEndpoint = () => '/deleteRegistrationToken/';
-export const getIntegrationGetEndpoint = (integration_id, course_id) => `/integration/get/${integration_id}/course/${course_id}/`;
-export const getIntegrationDelEndpoint = (integration_id, course_id) => `/integration/del/${integration_id}/course/${course_id}/`;
-export const getIntegrationAddEndpoint = (integration_id, course_id) => `/integration/add/${integration_id}/course/${course_id}/`;
+export const getIntegrationGetEndpoint = (integrationId, courseId) => `/integration/get/${integrationId}/course/${courseId}/`;
+export const getIntegrationDelEndpoint = (integrationId, courseId) => `/integration/del/${integrationId}/course/${courseId}/`;
+export const getIntegrationAddEndpoint = (integrationId, courseId) => `/integration/add/${integrationId}/course/${courseId}/`;
 export const getFinalExamSchedulerEndpoint = () => '/get_final_exams/';
