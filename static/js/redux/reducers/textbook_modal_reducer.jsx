@@ -1,6 +1,6 @@
 import * as ActionTypes from '../constants/actionTypes';
 
-export const textbookModal = (state = { isVisible: false }, action) => {
+const textbookModal = (state = { isVisible: false }, action) => {
   switch (action.type) {
     case ActionTypes.TOGGLE_TEXTBOOK_MODAL:
       return { isVisible: !state.isVisible };
@@ -10,3 +10,5 @@ export const textbookModal = (state = { isVisible: false }, action) => {
       return state;
   }
 };
+
+export default textbookModal;

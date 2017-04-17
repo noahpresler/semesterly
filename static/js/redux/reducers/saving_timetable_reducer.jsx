@@ -1,22 +1,24 @@
 import * as ActionTypes from '../constants/actionTypes';
 
-const init_state = {
+const initState = {
   activeTimetable: { name: String('Untitled Schedule') },
   saving: false,
   upToDate: false,
 };
 
-export const savingTimetable = (state = init_state, action) => {
+const savingTimetable = (state = initState, action) => {
   switch (action.type) {
-    case ActionTypes.REQUEST_SAVE_TIMETABLE:
+    case ActionTypes.REQUEST_SAVE_TIMETABLE: {
       const saving = !state.upToDate;
       return Object.assign({}, state, { saving });
+    }
 
-    case ActionTypes.RECEIVE_TIMETABLE_SAVED:
-            // action.upToDate will be false if the user tried saving
-            // a timetable with a name that already exists
+    case ActionTypes.RECEIVE_TIMETABLE_SAVED: {
+      // action.upToDate will be false if the user tried saving
+      // a timetable with a name that already exists
       const { upToDate } = action;
       return Object.assign({}, state, { saving: false, upToDate });
+    }
 
     case ActionTypes.RECEIVE_TIMETABLES:
       return Object.assign({}, state, { upToDate: action.preset === true });
@@ -37,3 +39,5 @@ export const savingTimetable = (state = init_state, action) => {
       return state;
   }
 };
+
+export default savingTimetable;
