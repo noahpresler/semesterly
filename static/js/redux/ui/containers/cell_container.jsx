@@ -1,44 +1,44 @@
-import {connect} from "react-redux";
-import Cell from "../calendar_cell";
-import {addCustomSlot, updateCustomSlot} from "../../actions/timetable_actions";
+import { connect } from 'react-redux';
+import Cell from '../calendar_cell';
+import { addCustomSlot, updateCustomSlot } from '../../actions/timetable_actions';
 
 
 /*
  gets the end hour of the current timetable, based on the class that ends latest
  */
 const getMaxEndHour = (timetable, hasCourses) => {
-    let max_end_hour = 17;
-    if (!hasCourses) {
-        return max_end_hour;
-    }
+  let maxEndHour = 17;
+  if (!hasCourses) {
+    return maxEndHour;
+  }
 
-    let courses = timetable.courses;
-    for (let course_index in courses) {
-        let course = courses[course_index];
-        for (let slot_index in course.slots) {
-            let slot = course.slots[slot_index];
-            let end_hour = parseInt(slot.time_end.split(":")[0]);
-            max_end_hour = Math.max(max_end_hour, end_hour);
-        }
-    }
-    return max_end_hour;
-}
+  const courses = timetable.courses;
+  Object.keys(courses).forEach((courseIndex) => {
+    const course = courses[courseIndex];
+    Object.keys(course.slots).forEach((slotIndex) => {
+      const slot = course.slots[slotIndex];
+      const endHour = parseInt(slot.time_end.split(':')[0], 10);
+      maxEndHour = Math.max(maxEndHour, endHour);
+    });
+  });
+  return maxEndHour;
+};
 
 const mapStateToProps = (state) => {
-    let timetables = state.timetables.items;
-    let active = state.timetables.active;
-    let hasTimetables = timetables[active].courses.length > 0
-    return {
-        endHour: getMaxEndHour(timetables[active], hasTimetables),
-    }
-}
+  const timetables = state.timetables.items;
+  const active = state.timetables.active;
+  const hasTimetables = timetables[active].courses.length > 0;
+  return {
+    endHour: getMaxEndHour(timetables[active], hasTimetables),
+  };
+};
 
 const CellContainer = connect(
     mapStateToProps,
-    {
-        addCustomSlot,
-        updateCustomSlot
-    }
+  {
+    addCustomSlot,
+    updateCustomSlot,
+  },
 )(Cell);
 
 export default CellContainer;
