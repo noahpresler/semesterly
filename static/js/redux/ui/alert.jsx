@@ -93,9 +93,9 @@ Alert.propTypes = {
     alert: React.PropTypes.style,
     closeButton: React.PropTypes.style,
   }),
-  message: React.PropTypes.oneOfType(React.PropTypes.string, React.PropTypes.element),
+  message: React.PropTypes.oneOfType([React.PropTypes.string, React.PropTypes.element]),
   time: React.PropTypes.number.isRequired,
-  icon: React.PropTypes.string.isRequired,
+  icon:React.PropTypes.oneOfType([React.PropTypes.string, React.PropTypes.element]),
 };
 
 export default Alert;
