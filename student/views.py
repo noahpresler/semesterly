@@ -11,7 +11,9 @@ from hashids import Hashids
 from pytz import timezone
 from datetime import datetime
 import json
+from hashids import Hashids
 import httplib2
+import itertools
 from timetable.models import *
 from student.models import *
 from analytics.models import *
@@ -26,8 +28,10 @@ from oauth2client import client
 from oauth2client import tools
 from oauth2client.file import Storage
 
-from student.utils import *
+from student.utils import next_weekday
 from timetable.utils import *
+from authpipe.utils import get_google_credentials, check_student_token
+
 
 DAY_MAP = {
         'M' : 'mo',
@@ -37,7 +41,9 @@ DAY_MAP = {
         'F' : 'fr',
         'S' : 'sa',
         'U' : 'su'
-    };
+    }
+
+hashids = Hashids(salt="***REMOVED***")
 
 def get_student(request):
   logged = request.user.is_authenticated()
@@ -98,6 +104,13 @@ def get_student_tts(student, school, semester):
     tts_list = [convert_tt_to_dict(tt) for tt in tts] # aka titty dick
     return tts_list
 
+def sections_are_filled(sections):
+    return all(section.enrolment >= section.size for section in sections)
+
+def get_section_dict(section):
+    section_data = model_to_dict(section)
+    section_data['is_section_filled'] = section.enrolment >= section.size
+    return section_data
 
 def convert_tt_to_dict(timetable, include_last_updated=True):
     """
@@ -123,10 +136,17 @@ def convert_tt_to_dict(timetable, include_last_updated=True):
             courses[-1]['textbooks'] = {}
 
         index = course_ids.index(c.id)
-        courses[index]['slots'].extend([merge_dicts(model_to_dict(section_obj), model_to_dict(co)) for co in section_obj.offering_set.all()])
+        courses[index]['slots'].extend([merge_dicts(get_section_dict(section_obj), model_to_dict(co)) for co in section_obj.offering_set.all()])
         courses[index]['textbooks'][section_obj.meeting_section] = section_obj.get_textbooks()
 
         courses[index]['enrolled_sections'].append(section_obj.meeting_section)
+
+    for course_obj in timetable.courses.all():
+        course_section_list = sorted(course_obj.section_set.filter(semester=timetable.semester),
+                                     key=lambda s: s.section_type)
+        section_type_to_sections = itertools.groupby(course_section_list, lambda s: s.section_type)
+        index = course_ids.index(course_obj.id)
+        courses[index]['is_waitlist_only'] = any(sections_are_filled(sections) for _, sections in section_type_to_sections)
 
     tt_dict['courses'] = courses
     tt_dict['avg_rating'] = get_avg_rating(course_ids)
@@ -420,33 +440,8 @@ def unsubscribe(request, id, token):
     return render(request, 'unsubscribe.html')
 
   # Link is invalid. Redirect to homepage.
-  return HttpResponseRedirect("/") 
+  return HttpResponseRedirect("/")
 
-@csrf_exempt
-@validate_subdomain
-def set_registration_token(request):
-    token = json.loads(request.body)['token']
-    school = request.subdomain
-    student = get_student(request)
-    rt, rt_was_created = RegistrationToken.objects.update_or_create(auth=token['keys']['auth'], p256dh=token['keys']['p256dh'], endpoint=token['endpoint'])
-    if student:
-        rt.student = student
-        rt.save()
-        student.school = school
-        student.save()
-    json_data = {
-        'token': 'yes'
-    }
-    return HttpResponse(json.dumps(json_data), content_type="application/json")
-
-@csrf_exempt
-def delete_registration_token(request):
-    token = json.loads(request.body)['token']
-    RegistrationToken.objects.filter(endpoint=token['endpoint']).delete()
-    json_data = {
-        'token': 'deleted'
-    }
-    return HttpResponse(json.dumps(json_data), content_type="application/json")
 
 def get_semester_name_from_tt(tt):
     try:
