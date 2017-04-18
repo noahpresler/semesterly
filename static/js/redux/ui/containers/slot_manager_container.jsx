@@ -16,17 +16,11 @@ const mapStateToProps = (state, ownProps) => {
   return {
     timetable: activeTimetable || [],
     isLocked: (courseId, section) => {
-            // check the courseSections state variable, which tells us
-            // precisely which courses have which sections locked, if any
+      // check the courseSections state variable, which tells us
+      // precisely which courses have which sections locked, if any
       const typeToLocked = state.courseSections.objects[courseId];
-      for (let i = 0; i < typeToLocked.length; i++) {
-        const sectionType = typeToLocked[i];
-        if (section === typeToLocked[sectionType]) {
-          return true;
-        }
-      }
-            // couldn't find a match, so the course isn't locked for this section
-      return false;
+      return typeToLocked && Object.keys(typeToLocked)
+          .some(sectionType => section === typeToLocked[sectionType]);
     },
     isLoggedIn: state.userInfo.data.isLoggedIn,
     socialSections: state.userInfo.data.social_offerings,
