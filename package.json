@@ -97,7 +97,8 @@
   ],
   "devDependencies": {
     "lint-staged": "^3.4.0",
-    "precommit-hook": "^3.0.0"
+    "precommit-hook": "^3.0.0",
+    "react-test-utils": "0.0.1"
   },
   "lint-staged": {
     "*.{js,jsx}": "eslint"
