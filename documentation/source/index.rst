@@ -14,6 +14,7 @@ Contents:
    pipeline
    locking
    backend
+   contributing
 
 
 Indices and tables
