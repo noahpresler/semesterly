@@ -4,7 +4,7 @@ import { addLastAddedCourse } from '../../actions/timetable_actions';
 import * as ActionTypes from '../../constants/actionTypes';
 
 
-const mapStateToProps = state => ({});
+const mapStateToProps = () => ({});
 const mapDispatchToProps = dispatch => ({
   dismissSelf: () => {
     dispatch({ type: ActionTypes.DISMISS_ALERT_CONFLICT });
