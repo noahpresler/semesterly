@@ -586,3 +586,12 @@ def accept_tos(request):
   student.time_accepted_tos = datetime.today()
   student.save()
   return HttpResponse("success")
+
+
+@validate_subdomain
+def termsofservice(request):
+  return render_to_response("termsofservice.html", {}, context_instance=RequestContext(request))
+
+@validate_subdomain
+def privacypolicy(request):
+  return render_to_response("privacypolicy.html", {}, context_instance=RequestContext(request))
