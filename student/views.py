@@ -13,6 +13,7 @@ from datetime import datetime
 import json
 from hashids import Hashids
 import httplib2
+import itertools
 from timetable.models import *
 from student.models import *
 from analytics.models import *
@@ -103,6 +104,13 @@ def get_student_tts(student, school, semester):
     tts_list = [convert_tt_to_dict(tt) for tt in tts] # aka titty dick
     return tts_list
 
+def sections_are_filled(sections):
+    return all(section.enrolment >= section.size for section in sections)
+
+def get_section_dict(section):
+    section_data = model_to_dict(section)
+    section_data['is_section_filled'] = section.enrolment >= section.size
+    return section_data
 
 def convert_tt_to_dict(timetable, include_last_updated=True):
     """
@@ -128,10 +136,17 @@ def convert_tt_to_dict(timetable, include_last_updated=True):
             courses[-1]['textbooks'] = {}
 
         index = course_ids.index(c.id)
-        courses[index]['slots'].extend([merge_dicts(model_to_dict(section_obj), model_to_dict(co)) for co in section_obj.offering_set.all()])
+        courses[index]['slots'].extend([merge_dicts(get_section_dict(section_obj), model_to_dict(co)) for co in section_obj.offering_set.all()])
         courses[index]['textbooks'][section_obj.meeting_section] = section_obj.get_textbooks()
 
         courses[index]['enrolled_sections'].append(section_obj.meeting_section)
+
+    for course_obj in timetable.courses.all():
+        course_section_list = sorted(course_obj.section_set.filter(semester=timetable.semester),
+                                     key=lambda s: s.section_type)
+        section_type_to_sections = itertools.groupby(course_section_list, lambda s: s.section_type)
+        index = course_ids.index(course_obj.id)
+        courses[index]['is_waitlist_only'] = any(sections_are_filled(sections) for _, sections in section_type_to_sections)
 
     tt_dict['courses'] = courses
     tt_dict['avg_rating'] = get_avg_rating(course_ids)
