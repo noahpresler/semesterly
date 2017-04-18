@@ -15,7 +15,9 @@ def set_registration_token(request):
     token = json.loads(request.body)['token']
     school = request.subdomain
     student = get_student(request)
-    rt, rt_was_created = RegistrationToken.objects.update_or_create(auth=token['keys']['auth'], p256dh=token['keys']['p256dh'], endpoint=token['endpoint'])
+    rt, rt_was_created = RegistrationToken.objects.update_or_create(auth=token['keys']['auth'],
+                                                                    p256dh=token['keys']['p256dh'],
+                                                                    endpoint=token['endpoint'])
     if student:
         rt.student = student
         rt.save()
