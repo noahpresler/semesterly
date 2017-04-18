@@ -95,7 +95,7 @@ Alert.propTypes = {
   }),
   message: React.PropTypes.oneOfType([React.PropTypes.string, React.PropTypes.element]),
   time: React.PropTypes.number.isRequired,
-  icon:React.PropTypes.oneOfType([React.PropTypes.string, React.PropTypes.element]),
+  icon: React.PropTypes.oneOfType([React.PropTypes.string, React.PropTypes.element]),
 };
 
 export default Alert;

@@ -29,6 +29,16 @@ const Row = (props) => {
   );
 };
 
+Row.defaultProps = {
+  displayTime: '',
+};
+
+Row.propTypes = {
+  displayTime: React.PropTypes.string,
+  isLoggedIn: React.PropTypes.bool.isRequired,
+  time: React.PropTypes.string.isRequired,
+};
+
 class Calendar extends React.Component {
   constructor(props) {
     super(props);
@@ -41,6 +51,19 @@ class Calendar extends React.Component {
     };
   }
 
+  componentDidMount() {
+    // Here, we set an interval so that the timeline position is updated once
+    // every minute. (Note: 60 * 1000 milliseconds = 1 minute.)
+    setInterval(() => {
+      this.setState({ timelineStyle: this.getTimelineStyle() });
+    }, 60000);
+
+    // let days = {1: 'mon', 2: 'tue', 3: 'wed', 4: 'thu', 5: 'fri'};
+    // let d = new Date("October 13, 2014 11:13:00");
+    // let selector = ".fc-" + days[d.getDay()];
+    // $(selector).addClass("fc-today");
+  }
+
   componentWillReceiveProps(nextProps) {
     if (this.props.isFetchingShareLink && !nextProps.isFetchingShareLink) {
       this.setState({ shareLinkShown: true });
@@ -49,17 +72,16 @@ class Calendar extends React.Component {
 
   getTimelineStyle() {
     const now = new Date();
-    if (
-            now.getHours() > this.props.endHour ||  // if the current time is before
-            now.getHours() < 8 ||  // 8am or after the schedule end
-            now.getDay() == 0 ||  // time or if the current day is
-            now.getDay() == 6 										// Saturday or Sunday, then
-        ) {																				// display no line
+    if (now.getHours() > this.props.endHour ||  // if the current time is before
+        now.getHours() < 8 ||// 8am or after the schedule end
+        now.getDay() === 0 || // time or if the current day is
+        now.getDay() === 6    // Saturday or Sunday, then
+        ) { // display no line
       return { display: 'none' };
     }
     const diff = Math.abs(new Date() - new Date().setHours(8, 0, 0));
     const mins = Math.ceil((diff / 1000) / 60);
-    const top = mins / 15.0 * 13;
+    const top = (mins / 15.0) * 13;
     return { top, zIndex: 1 };
   }
 
@@ -162,7 +184,7 @@ class Calendar extends React.Component {
           className="save-timetable"
           data-tip data-for="saveToCal-btn-tooltip"
         >
-          <img src="/static/img/addtocalendar.png" />
+          <img src="/static/img/addtocalendar.png" alt="Add to Calendar" />
         </button>
         <ReactTooltip
           id="saveToCal-btn-tooltip" class="tooltip" type="dark" place="bottom"
@@ -299,19 +321,25 @@ class Calendar extends React.Component {
     );
   }
 
-  componentDidMount() {
-        // Here, we set an interval so that the timeline position is updated once
-        // every minute. (Note: 60 * 1000 milliseconds = 1 minute.)
-    setInterval(() => {
-      this.setState({ timelineStyle: this.getTimelineStyle() });
-    }, 60000);
-
-        // let days = {1: 'mon', 2: 'tue', 3: 'wed', 4: 'thu', 5: 'fri'};
-        // let d = new Date("October 13, 2014 11:13:00");
-        // let selector = ".fc-" + days[d.getDay()];
-        // $(selector).addClass("fc-today");
-  }
-
 }
+
+Calendar.defaultProps = {
+  shareLink: '',
+};
+
+Calendar.propTypes = {
+  dataLastUpdated: React.PropTypes.string.isRequired,
+  togglePreferenceModal: React.PropTypes.func.isRequired,
+  triggerSaveCalendarModal: React.PropTypes.func.isRequired,
+  isFetchingShareLink: React.PropTypes.bool.isRequired,
+  endHour: React.PropTypes.number.isRequired,
+  handleCreateNewTimetable: React.PropTypes.func.isRequired,
+  shareLinkValid: React.PropTypes.bool.isRequired,
+  fetchShareTimetableLink: React.PropTypes.func.isRequired,
+  saveTimetable: React.PropTypes.func.isRequired,
+  isLoggedIn: React.PropTypes.bool.isRequired,
+  saving: React.PropTypes.bool.isRequired,
+  shareLink: React.PropTypes.string,
+};
 
 export default Calendar;
