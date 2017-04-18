@@ -1,11 +1,27 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml">
+{% load staticfiles %}
+<!DOCTYPE html>
+
+<html lang="en">
 <head>
-  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-  <meta http-equiv="Content-Style-Type" content="text/css" />
-  <meta name="generator" content="pandoc" />
-  <title></title>
-  <style type="text/css">code{white-space: pre;}</style>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+
+  <!-- Facebook thumbnail info -->
+  <meta property="og:title" content="{{ course.code }} {{ course.name }} | Semester.ly" />
+  <meta property="og:type" content="website" />
+  <meta property="og:site_name" content="Semesterly" />
+  <meta property="og:url" content="http://semester.ly" />
+  <meta property="og:image" content="http://i.imgur.com/Eem4KTj.png" />
+  <meta property="og:description" content="{{ course.description }}" />
+  <meta property="fb:admins" content="535129063" />
+  <title>Semester.ly Privacy Policy</title>
+  <link rel="shortcut icon" type="image/x-icon" href="{% static 'img/logo2.0-310x310.png' %}" />
+  <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet" integrity="sha256-7s5uDGW3AHqw6xtJmNNtr+OBRJUlgkNJEo78P4b0yRw= sha512-nNo+yCHEyn0smMxSswnf/OnX6/KwJuZTlNZBjauKhTK0c+zT+q5JOCx0UFhXQ6rJR9jg6Es8gPuD2uZcYDLqSw==" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css">
+  <link href="https://fonts.googleapis.com/css?family=Palanquin:500|Roboto:100,300,400" rel="stylesheet" type='text/css'>
+  
+  <!-- <img class="timer-logo" height=75 src="{% static 'img/logo2.0.png' %}"/> -->
+  <link rel="stylesheet" href="{% static 'css/course-page.css' %}">
 </head>
 <body>
 <div id="TOC">
@@ -26,7 +42,7 @@
 </div>
 <p><strong>SEMESTER.LY PRIVACY POLICY</strong></p>
 <p>March 30, 2017</p>
-<p>Layer 1</p>
+
 <h1 id="purpose-scope-consent"><strong><em>Purpose | Scope | Consent</em></strong></h1>
 <p><strong>Semester.ly is a social and collaborative course scheduling platform for University students across North America. Since its inception, our platform has</strong> <strong>evolved to offer students a one stop shop for course discovery, schedule creation and social planning - reducing student stress infinitely.</strong></p>
 <p><strong>The all-inclusive scheduler includes features such as advanced search settings based on major requirements, department and</strong> <strong>time. Additionally, students can view the university’s official course ratings, as well as their peer’s course-granular emoji ratings.</strong></p>
@@ -76,25 +92,25 @@
 <p>Google connected users provide Semester.ly with access to their Google Calendars via the Google Calendar API. When opted for, Semester.ly can and may create new calendars and events for the user representing information the user has entered via the Semester.ly application.</p>
 <p>If the user opts in, Semester.ly can and may use the previously stated Google Calendar API to access information about the user’s daily free/busy intervals. No event names are ever shared with other users. Free/busy information alone will be shared only with the user’s explicit permission to other users who the calendar owner has explicitly indicated, chosen, or shared the link with.</p>
 <p>Semester.ly may use the user’s google calendar information for internal analytics but no information will be shared with any other user or third party without explicit permission</p>
-<p>Layer 1</p>
+
 <h1 id="how-we-use-information-we-collect-about-you"><strong><em>How We Use Information We Collect About You</em></strong></h1>
 <p>The information collected from our website will be used for standard, non‑invasive, non‑personally‑identifiable visitor trend analytics, simply to help us measure how users interact with our website content.</p>
 <p>With regard to the Semester.ly app/SaaS, the Service’s end‑to‑end encryption prevents us from accessing user‑specific content.</p>
 <p><strong>Layer 2</strong></p>
 <p>As noted above, we capture user IP addresses to prevent misuse of our system and to enforce sender‑specified message restrictions, and user and device information for, among other things, authentication and system integrity.</p>
-<p>Layer 1</p>
+
 <h1 id="sharing-information-collected-about-you"><strong><em>Sharing Information Collected About You</em></strong></h1>
 <p>Website opt‑in e‑mail capture is the only type of information that could be shared with third parties for internal marketing purposes. Platform service links will only be used (outside of the Service operation) to inform of service failures, emergencies, verification of account changes (such as new devices or password changes), or similar purposes.</p>
 <p><strong>Layer 2</strong></p>
 <p>Semester.ly is deeply committed to protecting your personal information. To the extent we disclose personal information to a third party, they may have their own privacy policies which describe how they use and disclose personal information. Those policies will govern use, handling and disclosure of your personal information once we have shared it with those third parties as described in this Privacy Policy.</p>
 <p>We do not sell, trade, or otherwise transfer to outside parties your personally identifiable information unless we provide users with advance notice. This does not include website hosting partners and other parties who assist us in operating our website, conducting our business, or serving our users, so long as those parties agree to keep this information confidential. We may also release information when it’s release is appropriate to comply with the law, enforce our site policies, or protect ours or others’ rights, property or safety.</p>
 <p>We may also disclose your information in response to a subpoena or similar investigative demand, a court order, or a request for cooperation from law enforcement or other government agency; to establish or exercise our legal rights; to defend against legal claims; or as otherwise required by law. Any information shared in such a case would be shared in the format in which Semester.ly maintains it (<em>e.g.</em>, end‑to‑end encrypted content, which would require an end user’s device to decrypt). However, only content is encrypted, whereas metadata, which might also need to be disclosed, is not. In such cases, we may raise or waive any legal objection or right available to us, in our sole discretion. We may also disclose your information when we believe it is appropriate in connection with efforts to investigate, prevent, report or take other action regarding illegal activity, suspected fraud or other wrongdoing; to protect and defend the rights, property or safety of you, Semester.ly, our employees, or the public; to comply with applicable law or cooperate with law enforcement; or to enforce our terms and conditions or other agreements or policies. Likewise, we may disclose your information in connection with a substantial corporate transaction, such as a merger, consolidation, or asset sale, or in the unlikely event of bankruptcy.</p>
-<p>Layer 1</p>
+
 <h1 id="thirdparty-websites-and-integrations"><strong><em>Third‑Party Websites and Integrations</em></strong></h1>
 <p>All third‑party integrations (including, but not limited to, social media) are subject to privacy and security vulnerabilities. Content sent through such services (<em>i.e.</em>, “out of band” from the Semester.ly service) is frequently insecure.</p>
 <p><strong>Layer 2</strong></p>
 <p>There may be places on the Service where you may click on a link to access other websites or services that do not operate under this Privacy Policy. In addition, you may be logged into a third party website, such as a payment processing site or social media site, while using the Service. These third‑party websites may independently solicit and collect information, including personal information, from you and, in some instances, provide us with information about your activities on those websites. We recommend that you consult the privacy statements of all third‑party websites you visit by clicking on the “privacy” link typically located at the bottom of the webpage you are visiting.</p>
-<p>Layer 1</p>
+
 <h1 id="choices-you-have-about-collection-and-use-of-your-information"><strong><em>Choices You Have About Collection And Use Of Your Information</em></strong></h1>
 <p>You can choose not to provide us with certain information, but that may result in you being unable to use certain features of the Service because such information may be required in order to validate your identity, utilize the Service, or to contact us for information. Further you can choose certain levels of permission, as discussed above.</p>
 <p><strong>Layer 2</strong></p>
@@ -107,16 +123,16 @@
 <p><strong>Layer 2</strong></p>
 <p>We want you to feel confident using the Service; however, no system can guarantee absolute security. Therefore, it is important for you to protect against unauthorized access to your password and to your computer or other internet access device. In addition, it is recommended that you do not send personal health or other sensitive information to Semester.ly or anyone else using unsecured means. Should you choose to supply confidential information in this manner, you do so at your own risk.</p>
 <p>Although we take steps to secure your information, we do not guarantee the security of your information, and you should not expect that your personal information, searches, or other communications will always remain secure. Please refer to the Federal Trade Commission’s website at http://www.consumer.ftc.gov for information about how to protect yourself against identity theft.</p>
-<p>Layer 1</p>
+
 <h1 id="no-collection-of-information-from-children"><strong><em>No Collection of Information from Children</em></strong></h1>
 <p>The Service is intended for use by adults only. Semester.ly does not solicit or knowingly collect any information from visitors under 18 years of age. Please do not use the Service if you are not yet 18.</p>
-<p>Layer 1</p>
+
 <h1 id="use-of-the-service-while-traveling"><strong><em>Use of the Service While Traveling</em></strong></h1>
 <p>This Privacy Policy is intended to cover collection of information via the Service from residents of the United States and Canada (collectively, the “Intended Countries”). If you are using the Service from outside the Intended Countries, please be aware that your information may be transferred to, stored, and processed in the United States where our servers are located and our central database is operated. By using the Service, you understand that your information may be transferred to our facilities and those third parties with whom we share it as described in this privacy policy.</p>
-<p>Layer 1</p>
+
 <h1 id="no-rights-of-third-parties"><strong><em>No Rights of Third Parties</em></strong></h1>
 <p>This Privacy Policy does not create rights enforceable by third parties or require disclosure of any personal information relating to users.</p>
-<p>Layer 1</p>
+
 <h1 id="changes-to-this-privacy-policy"><strong><em>Changes to This Privacy Policy</em></strong></h1>
 <p>We will occasionally update this Privacy Policy to reflect changes in our practices and services. When we post changes to this Privacy Policy, we will revise the date at the top of this Privacy Policy.</p>
 <p><strong>Layer 2</strong></p>
