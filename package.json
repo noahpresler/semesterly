@@ -79,7 +79,8 @@
   "scripts": {
     "build": "./node_modules/.bin/webpack --config webpack.config.js --progress --colors",
     "watch": "node server.js",
-    "lint": "./node_modules/.bin/eslint static/js/redux/* static/js/redux/alerts/* static/js/redux/actions/* static/js/redux/constants/* static/js/redux/reducers/*"
+    "lint": "./node_modules/.bin/eslint static/js/redux/* static/js/redux/alerts/* static/js/redux/actions/* static/js/redux/constants/* static/js/redux/reducers/*",
+    "lint-staged": "lint-staged"
   },
   "repository": {
     "type": "git",
@@ -92,9 +93,13 @@
   },
   "homepage": "https://github.com/rohandas/semesterly#readme",
   "pre-commit": [
-    "lint"
+    "lint-staged"
   ],
   "devDependencies": {
+    "lint-staged": "^3.4.0",
     "precommit-hook": "^3.0.0"
+  },
+  "lint-staged": {
+    "*.{js,jsx}": "eslint"
   }
 }
