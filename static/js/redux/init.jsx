@@ -55,13 +55,13 @@ function setup(dispatch) {
   enableNotifs = enableNotifs === 'True';
   uses12HrTime = uses12HrTime === 'True';
   studentIntegrations = JSON.parse(studentIntegrations);
-  tosLastUpdated = tosLastUpdated === "True";
   signup = signup === 'True';
   userAcq = userAcq === 'True';
   gcalCallback = gcalCallback === 'True';
   exportCalendar = exportCalendar === 'True';
   viewTextbooks = viewTextbooks === 'True';
   finalExams = finalExams === 'True';
+  showTOS = showTOS === 'True';
   if (signup) {
     dispatch({ type: ActionTypes.TRIGGER_SIGNUP_MODAL });
   }
@@ -150,7 +150,7 @@ function setup(dispatch) {
   }
     /* Show TOS if needed */
   if (showTOS) {
-      dispatch(triggerTosModal());
+    dispatch(triggerTosModal());
   }
 
     /* now setup sharing state */

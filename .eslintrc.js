@@ -22,7 +22,8 @@ module.exports = {
 	  "finalExams": true,
 	  "school": true,
 	  "currentSemester": true,
-	  "currentUser": true
+	  "currentUser": true,
+	  "showTOS": true
 	},
 	rules: {
 		"no-plusplus": 0,
