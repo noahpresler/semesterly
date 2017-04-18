@@ -1,7 +1,7 @@
 import React from 'react';
 import { DropTarget } from 'react-dnd';
-import { COLOUR_DATA } from '../constants/colours';
-import { DRAGTYPES, HALF_HOUR_HEIGHT } from '../constants/constants';
+import COLOUR_DATA from '../constants/colours';
+import { DRAG_TYPES, HALF_HOUR_HEIGHT } from '../constants/constants';
 import Radium, { StyleRoot } from 'radium';
 
 function convertToHalfHours(str) {
@@ -254,6 +254,6 @@ class Slot extends React.Component {
 
 Slot = Radium(Slot);
 
-export default DropTarget(DRAGTYPES.CREATE, createSlotTarget, collectCreateDrop)(
-    DropTarget(DRAGTYPES.DRAG, dragSlotTarget, collectDragDrop)(Slot),
+export default DropTarget(DRAG_TYPES.CREATE, createSlotTarget, collectCreateDrop)(
+    DropTarget(DRAG_TYPES.DRAG, dragSlotTarget, collectDragDrop)(Slot),
 );
