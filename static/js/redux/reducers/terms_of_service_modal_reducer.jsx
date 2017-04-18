@@ -1,10 +1,12 @@
-import * as ActionTypes from "../constants/actionTypes.jsx";
+import * as ActionTypes from '../constants/actionTypes';
 
-export const termsOfServiceModal = (state = {isVisible: false}, action) => {
-    switch (action.type) {
-        case ActionTypes.TRIGGER_TOS_MODAL:
-            return {isVisible: true};
-        default:
-            return state;
-    }
-}
+const termsOfServiceModal = (state = { isVisible: false }, action) => {
+  switch (action.type) {
+    case ActionTypes.TRIGGER_TOS_MODAL:
+      return { isVisible: true };
+    default:
+      return state;
+  }
+};
+
+export default termsOfServiceModal;
