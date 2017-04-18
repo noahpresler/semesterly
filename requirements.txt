@@ -56,3 +56,4 @@ django-cachalot==1.4.1
 python-memcached==1.58
 djangorestframework==3.6.2
 django-webpack-loader==0.4.1
+mock==2.0.0

@@ -1,51 +1,55 @@
-import React from "react";
-import {setARegistrationToken} from "../../actions/user_actions";
-import {setDeclinedNotifications} from "../../util";
+import React from 'react';
+import { setARegistrationToken } from '../../actions/user_actions';
+import { setDeclinedNotifications } from '../../util';
 
 class EnableNotificationsAlert extends React.Component {
-    constructor(props) {
-        super(props);
-    }
 
-    componentWillUnmount() {
-        if (!(localStorage.getItem("declinedNotifications") === "true" || localStorage.getItem("declinedNotifications") === "false")) {
-            let date = new Date;
-            setDeclinedNotifications(date.getTime());
-        }
-        this.props.dismissSelf();
+  componentWillUnmount() {
+    if (!(localStorage.getItem('declinedNotifications') === 'true' || localStorage.getItem('declinedNotifications') === 'false')) {
+      const date = new Date();
+      setDeclinedNotifications(date.getTime());
     }
+    this.props.dismissSelf();
+  }
 
-    clickEnable() {
-        setARegistrationToken();
-        setDeclinedNotifications(false);
-        this.props.enableNotifications();
-        this.props.dismissSelf();
-    }
+  clickEnable() {
+    setARegistrationToken();
+    setDeclinedNotifications(false);
+    this.props.enableNotifications();
+    this.props.dismissSelf();
+  }
 
-    clickDecline() {
-        setDeclinedNotifications(true);
-        this.props.declineNotifications();
-        this.props.dismissSelf();
-    }
+  clickDecline() {
+    setDeclinedNotifications(true);
+    this.props.declineNotifications();
+    this.props.dismissSelf();
+  }
 
-    render() {
-        return (
-            <div className="enable-notification-alert change-semester-alert">
-                <h2>{ this.props.msg }</h2>
-                <button
-                    onClick={() => this.clickEnable()}
-                    className="conflict-alert-btn change-semester-btn">
+  render() {
+    return (
+      <div className="enable-notification-alert change-semester-alert">
+        <h2>{ this.props.msg }</h2>
+        <button
+          onClick={() => this.clickEnable()}
+          className="conflict-alert-btn change-semester-btn"
+        >
                     Enable Notifications
                 </button>
-                <small className="alert-extra">
+        <small className="alert-extra">
                     Enable notifications for a heads up when classes are released and course changes
                     occur!
                 </small>
-                <a className="decline-notifications" onClick={() => this.clickDecline()}>Don't ask
+        <a className="decline-notifications" onClick={() => this.clickDecline()}>Don&apos;t ask
                     me again.</a>
-            </div>);
-    }
+      </div>);
+  }
 }
-;
+
+EnableNotificationsAlert.propTypes = {
+  dismissSelf: React.PropTypes.func.isRequired,
+  msg: React.PropTypes.string.isRequired,
+  enableNotifications: React.PropTypes.string.isRequired,
+  declineNotifications: React.PropTypes.string.isRequired,
+};
 
 export default EnableNotificationsAlert;

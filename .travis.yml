@@ -14,3 +14,5 @@ install:
 script: 
   - gulp css
   - npm run build
+  - npm run lint
+  - python manage.py test
