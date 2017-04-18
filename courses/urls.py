@@ -17,6 +17,4 @@ urlpatterns = patterns('',
                        url(r'course/(?P<code>.+?)/(?P<sem_name>.+?)/(?P<year>.+?)/*$', timetable.views.view_timetable),
                        url(r'^school_info/(?P<school>.+?)', courses.views.school_info),
                        url(r'courses/*', courses.views.all_courses),
-                       url(r'termsofservice/*$', timetable.views.termsofservice),
-                       url(r'privacypolicy/*$', timetable.views.privacypolicy),
                        )
