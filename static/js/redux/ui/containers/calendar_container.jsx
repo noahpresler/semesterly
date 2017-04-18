@@ -34,14 +34,14 @@ const getMaxEndHour = (timetable, hasCourses) => {
   }
   getMaxHourBasedOnWindowHeight();
   const courses = timetable.courses;
-  Object.keys(courses).forEach((courseIndex) => {
+  for (let courseIndex = 0; courseIndex < courses.length; courseIndex++) {
     const course = courses[courseIndex];
-    Object.keys(course.slots).forEeach((slotIndex) => {
+    for (let slotIndex = 0; slotIndex < course.slots.length; slotIndex++) {
       const slot = course.slots[slotIndex];
       const endHour = parseInt(slot.time_end.split(':')[0], 10);
       maxEndHour = Math.max(maxEndHour, endHour);
-    });
-  });
+    }
+  }
   return Math.max(maxEndHour, getMaxHourBasedOnWindowHeight());
 };
 const mapStateToProps = (state) => {
