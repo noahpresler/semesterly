@@ -303,17 +303,31 @@ class TimetableGenerator:
     course_dict = model_to_dict(model, fields=['code', 'name', 'id', 'num_credits', 'department'])
     if section[0] in self.optional_course_ids: # mark optional courses
       course_dict['is_optional'] = True
+
+    course_section_list = sorted(model.section_set.filter(semester=self.semester),
+                                 key=lambda s: s.section_type)
+    section_type_to_sections = itertools.groupby(course_section_list, lambda s: s.section_type)
+    course_dict['is_waitlist_only'] = any(self.sections_are_filled(sections) for _, sections in section_type_to_sections)
+
     return course_dict
+
+  def sections_are_filled(self, sections):
+    return all(section.enrolment >= section.size for section in sections)
 
   def augment_course_dict(self, course_dict, sections):
     sections = list(sections)
-    slot_objects = [merge_dicts(model_to_dict(section), model_to_dict(co))\
+    slot_objects = [merge_dicts(self.get_section_dict(section), model_to_dict(co))\
                            for _, section, course_offerings in sections
                            for co in course_offerings]
     course_dict['enrolled_sections'] = [section.meeting_section for _, section, _ in sections]
     course_dict['textbooks'] = {section.meeting_section: section.get_textbooks() for _, section, _ in sections}
     course_dict['slots'] = slot_objects
     return course_dict
+
+  def get_section_dict(self, section):
+    section_data = model_to_dict(section)
+    section_data['is_section_filled'] = section.enrolment >= section.size
+    return section_data
 
   def create_timetable_from_offerings(self, offerings):
     timetables = []
