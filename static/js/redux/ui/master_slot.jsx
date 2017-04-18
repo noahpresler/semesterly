@@ -4,9 +4,12 @@ import COLOUR_DATA from '../constants/colours';
 import { getCourseShareLink } from '../helpers/timetable_helpers';
 
 class MasterSlot extends React.Component {
+  static stopPropagationCustom(callback, event) {
+    event.stopPropagation();
+    callback();
+  }
   constructor(props) {
     super(props);
-    this.stopPropagationCustom = this.stopPropagationCustom.bind(this);
     this.onMasterSlotHover = this.onMasterSlotHover.bind(this);
     this.onMasterSlotUnhover = this.onMasterSlotUnhover.bind(this);
     this.updateColours = this.updateColours.bind(this);
@@ -21,10 +24,6 @@ class MasterSlot extends React.Component {
   onMasterSlotUnhover() {
     this.setState({ hovered: false });
     this.updateColours(COLOUR_DATA[this.props.colourIndex].background);
-  }
-  stopPropagationCustom(callback, event) {
-    event.stopPropagation();
-    callback();
   }
   updateColours(colour) {
         // no updating when hovering over a masterslot in the course modal (i.e. related course)
@@ -158,7 +157,7 @@ MasterSlot.propTypes = {
   hideCloseButton: React.PropTypes.func.isRequired,
   onTimetable: React.PropTypes.func.isRequired,
   fetchCourseInfo: React.PropTypes.func.isRequired,
-  removeCourse: React.PropTypes.func.isRequired
+  removeCourse: React.PropTypes.func.isRequired,
 };
 
 export const ShareLink = ({ link, onClickOut }) => (
