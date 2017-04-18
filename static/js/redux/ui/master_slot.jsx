@@ -12,6 +12,7 @@ class MasterSlot extends React.Component {
     this.updateColours = this.updateColours.bind(this);
     this.showShareLink = this.showShareLink.bind(this);
     this.hideShareLink = this.hideShareLink.bind(this);
+    this.hasOnlyWaitlistedSections = this.hasOnlyWaitlistedSections.bind(this);
     this.state = { shareLinkShown: false };
   }
 
@@ -46,6 +47,16 @@ class MasterSlot extends React.Component {
 
   hideShareLink() {
     this.setState({ shareLinkShown: false });
+  }
+
+  hasOnlyWaitlistedSections() {
+    if (this.props.course.slots.length > 0) {
+      const slots = this.props.course.slots;
+      for (let slot in slots) {
+        
+      }
+    }
+    return false;
   }
 
   render() {
@@ -91,7 +102,6 @@ class MasterSlot extends React.Component {
             null;
     let waitlistOnlyFlag = null;
     if (this.props.course.slots.length > 0) {
-      console.log(this.props.course.slots[0].is_section_filled, this.props.course.slots[0].is_section_filled == true);
       if (this.props.course.slots[0].is_section_filled == true) {
         let flagValue = "";
         if (this.props.course.is_waitlist_only == true) {
