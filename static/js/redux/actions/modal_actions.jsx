@@ -4,7 +4,6 @@ import {
     getCourseInfoEndpoint,
     getReactToCourseEndpoint,
 } from '../constants/endpoints';
-import { store } from '../init';
 import * as ActionTypes from '../constants/actionTypes';
 
 export const setCourseInfo = json => ({
