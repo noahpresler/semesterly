@@ -1,16 +1,14 @@
-import {connect} from "react-redux";
-import TopBar from "../top_bar";
+import { connect } from 'react-redux';
+import TopBar from '../top_bar';
 
 
-const mapStateToProps = (state) => {
-    return {
-        userInfo: state.userInfo.data,
-        currentSemester: allSemesters[state.semesterIndex]
-    }
-}
+const mapStateToProps = state => ({
+  userInfo: state.userInfo.data,
+  currentSemester: allSemesters[state.semesterIndex],
+});
 
 const TopBarContainer = connect(
-    mapStateToProps
+    mapStateToProps,
 )(TopBar);
 
 export default TopBarContainer;

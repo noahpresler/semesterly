@@ -1,5 +1,5 @@
 import React from 'react';
-import { DRAGTYPES } from '../constants/constants';
+import { DRAG_TYPES } from '../constants/constants';
 import { DragSource, DropTarget } from 'react-dnd';
 
 function convertToHalfHours(str) {
@@ -115,9 +115,9 @@ const Cell = props => props.connectDragTarget(
     ),
 );
 
-export default DragSource(DRAGTYPES.CREATE, createSource, collectCreateBegin)(
-    DropTarget(DRAGTYPES.CREATE, createTarget, collectCreateDrop)(
-        DropTarget(DRAGTYPES.DRAG, dragTarget, collectDragDrop)(Cell),
+export default DragSource(DRAG_TYPES.CREATE, createSource, collectCreateBegin)(
+    DropTarget(DRAG_TYPES.CREATE, createTarget, collectCreateDrop)(
+        DropTarget(DRAG_TYPES.DRAG, dragTarget, collectDragDrop)(Cell),
     ),
 );
 
