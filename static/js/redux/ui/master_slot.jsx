@@ -23,7 +23,7 @@ class MasterSlot extends React.Component {
   }
   stopPropagation(callback, event) {
     event.stopPropagation();
-    this.onMasterSlotHover();
+    this.onMasterSlotUnhover();
     callback();
   }
   updateColours(colour) {
