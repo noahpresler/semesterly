@@ -8,9 +8,6 @@ import timetable.views
 admin.autodiscover()
 
 urlpatterns = patterns('',
-    # registration
-    url(r'^setRegistrationToken/', student.views.set_registration_token),
-    url(r'^deleteRegistrationToken/', student.views.delete_registration_token),
     # profile management
     url(r'^user/logout/$', 'django.contrib.auth.views.logout', {'next_page': '/'}),
     url(r'^unsubscribe/(?P<id>[\w.@+-]+)/(?P<token>[\w.:\-_=]+)/$', student.views.unsubscribe),
