@@ -1,12 +1,15 @@
 import React from 'react';
+import ClickOutHandler from 'react-onclickout';
 import COLOUR_DATA from '../constants/colours';
 import { getCourseShareLink } from '../helpers/timetable_helpers';
-import ClickOutHandler from 'react-onclickout';
 
 class MasterSlot extends React.Component {
+  static stopPropagationCustom(callback, event) {
+    event.stopPropagation();
+    callback();
+  }
   constructor(props) {
     super(props);
-    this.stopPropagation = this.stopPropagation.bind(this);
     this.onMasterSlotHover = this.onMasterSlotHover.bind(this);
     this.onMasterSlotUnhover = this.onMasterSlotUnhover.bind(this);
     this.updateColours = this.updateColours.bind(this);
@@ -14,22 +17,14 @@ class MasterSlot extends React.Component {
     this.hideShareLink = this.hideShareLink.bind(this);
     this.state = { shareLinkShown: false };
   }
-
-  stopPropagation(callback, event) {
-    event.stopPropagation();
-    callback();
-  }
-
   onMasterSlotHover() {
     this.setState({ hovered: true });
     this.updateColours(COLOUR_DATA[this.props.colourIndex].highlight);
   }
-
   onMasterSlotUnhover() {
     this.setState({ hovered: false });
     this.updateColours(COLOUR_DATA[this.props.colourIndex].background);
   }
-
   updateColours(colour) {
         // no updating when hovering over a masterslot in the course modal (i.e. related course)
     if (this.props.inModal) {
@@ -39,15 +34,12 @@ class MasterSlot extends React.Component {
     $(`.slot-${this.props.course.id}`)
             .css('background-color', colour);
   }
-
   showShareLink() {
     this.setState({ shareLinkShown: true });
   }
-
   hideShareLink() {
     this.setState({ shareLinkShown: false });
   }
-
   render() {
     let friendCircles = null;
     if (this.props.fakeFriends) {
@@ -60,11 +52,12 @@ class MasterSlot extends React.Component {
           />);
       }
     } else {
-      friendCircles = this.props.classmates && this.props.classmates.classmates ? this.props.classmates.classmates.map(c =>
-        <div
-          className="ms-friend" key={c.img_url}
-          style={{ backgroundImage: `url(${c.img_url})` }}
-        />) : null;
+      friendCircles = this.props.classmates && this.props.classmates.classmates ?
+        this.props.classmates.classmates.map(c =>
+          <div
+            className="ms-friend" key={c.img_url}
+            style={{ backgroundImage: `url(${c.img_url})` }}
+          />) : null;
     }
 
     if ((this.props.classmates && this.props.classmates.classmates && friendCircles.length > 4)
@@ -82,14 +75,28 @@ class MasterSlot extends React.Component {
     const numCredits = this.props.course.num_credits;
     let creditsDisplay = numCredits === 1 ? ' credit' : ' credits';
     creditsDisplay = numCredits + creditsDisplay;
-    const prof_disp = this.props.professors == null ? null : <h3>{ prof }</h3>;
+    const profDisp = this.props.professors == null ? null : <h3>{ prof }</h3>;
     const shareLink = this.state.shareLinkShown ?
             (<ShareLink
               link={getCourseShareLink(this.props.course.code)}
               onClickOut={this.hideShareLink}
             />) :
             null;
-
+    let waitlistOnlyFlag = null;
+    if (this.props.course.slots.length > 0) {
+      if (this.props.course.slots[0].is_section_filled === true) {
+        let flagValue = '';
+        if (this.props.course.is_waitlist_only === true) {
+          flagValue = 'Waitlist Only';
+        } else {
+          flagValue = 'Section Filled';
+        }
+        waitlistOnlyFlag = (<span
+          className="ms-flag"
+          style={{ backgroundColor: COLOUR_DATA[this.props.colourIndex].border }}
+        >{flagValue}</span>);
+      }
+    }
     return (<div
       className={masterSlotClass}
       onMouseEnter={this.onMasterSlotHover}
@@ -97,31 +104,32 @@ class MasterSlot extends React.Component {
       style={{ backgroundColor: COLOUR_DATA[this.props.colourIndex].background }}
       onClick={this.props.fetchCourseInfo}
     >
-
       <div
         className="slot-bar"
         style={{ backgroundColor: COLOUR_DATA[this.props.colourIndex].border }}
       />
       <div className="master-slot-content">
-        <h3>{ this.props.course.code }</h3>
+        <h3>
+          <span>{ this.props.course.code }</span>
+          {waitlistOnlyFlag}
+        </h3>
         <h3>{ this.props.course.name }</h3>
-        { prof_disp }
+        { profDisp }
         <h3>{ creditsDisplay }</h3>
       </div>
       <div className="master-slot-actions">
-
         <i
           className="fa fa-share-alt"
-          onClick={event => this.stopPropagation(this.showShareLink, event)}
+          onClick={event => this.stopPropagationCustom(this.showShareLink, event)}
         />
         {shareLink}
         {
-                    !this.props.hideCloseButton ?
-                      <i
-                        className="fa fa-times"
-                        onClick={event => this.stopPropagation(this.props.removeCourse, event)}
-                      /> : null
-                }
+          !this.props.hideCloseButton ?
+            <i
+              className="fa fa-times"
+              onClick={event => this.stopPropagationCustom(this.props.removeCourse, event)}
+            /> : null
+        }
       </div>
       <div className="master-slot-friends">
         {friendCircles}
@@ -129,6 +137,28 @@ class MasterSlot extends React.Component {
     </div>);
   }
 }
+
+MasterSlot.propTypes = {
+  colourIndex: React.PropTypes.number.isRequired,
+  inModal: React.PropTypes.bool.isRequired,
+  fakeFriends: React.PropTypes.number.isRequired,
+  course: React.PropTypes.shape({
+    id: React.PropTypes.string.isRequired,
+    num_credits: React.PropTypes.number.isRequired,
+    code: React.PropTypes.string.isRequired,
+    name: React.PropTypes.string.isRequired,
+    is_waitlist_only: React.PropTypes.bool.isRequired,
+    slots: React.PropTypes.shape({
+      length: React.PropTypes.number.isRequired,
+    }).isRequired,
+  }).isRequired,
+  professors: React.PropTypes.arrayOf(React.PropTypes.string).isRequired,
+  classmates: React.PropTypes.arrayOf(React.PropTypes.string).isRequired,
+  hideCloseButton: React.PropTypes.func.isRequired,
+  onTimetable: React.PropTypes.func.isRequired,
+  fetchCourseInfo: React.PropTypes.func.isRequired,
+  removeCourse: React.PropTypes.func.isRequired,
+};
 
 export const ShareLink = ({ link, onClickOut }) => (
   <ClickOutHandler onClickOut={onClickOut}>
@@ -143,5 +173,10 @@ export const ShareLink = ({ link, onClickOut }) => (
     </div>
   </ClickOutHandler>
 );
+
+ShareLink.propTypes = {
+  link: React.PropTypes.string.isRequired,
+  onClickOut: React.PropTypes.func.isRequired,
+};
 
 export default MasterSlot;
