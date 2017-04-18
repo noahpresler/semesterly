@@ -79,7 +79,7 @@
   "scripts": {
     "build": "./node_modules/.bin/webpack --config webpack.config.js --progress --colors",
     "watch": "node server.js",
-    "lint-staged": "lint-staged"
+    "lint-staged": "lint-staged",
     "lint": "./node_modules/.bin/eslint static/js/redux/* static/js/redux/alerts/* static/js/redux/actions/* static/js/redux/constants/* static/js/redux/reducers/* static/js/redux/ui/containers/*"
   },
   "repository": {
