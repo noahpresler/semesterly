@@ -4,10 +4,6 @@ import COLOUR_DATA from '../constants/colours';
 import { getCourseShareLink } from '../helpers/timetable_helpers';
 
 class MasterSlot extends React.Component {
-  static stopPropagationCustom(callback, event) {
-    event.stopPropagation();
-    callback();
-  }
   constructor(props) {
     super(props);
     this.onMasterSlotHover = this.onMasterSlotHover.bind(this);
@@ -24,6 +20,11 @@ class MasterSlot extends React.Component {
   onMasterSlotUnhover() {
     this.setState({ hovered: false });
     this.updateColours(COLOUR_DATA[this.props.colourIndex].background);
+  }
+  stopPropagation(callback, event) {
+    event.stopPropagation();
+    this.onMasterSlotHover();
+    callback();
   }
   updateColours(colour) {
         // no updating when hovering over a masterslot in the course modal (i.e. related course)
@@ -83,18 +84,20 @@ class MasterSlot extends React.Component {
             />) :
             null;
     let waitlistOnlyFlag = null;
-    if (this.props.course.slots.length > 0) {
-      if (this.props.course.slots[0].is_section_filled === true) {
-        let flagValue = '';
-        if (this.props.course.is_waitlist_only === true) {
-          flagValue = 'Waitlist Only';
-        } else {
-          flagValue = 'Section Filled';
+    if (this.props.course.slots !== undefined) {
+      if (this.props.course.slots.length > 0) {
+        if (this.props.course.slots[0].is_section_filled === true) {
+          let flagValue = '';
+          if (this.props.course.is_waitlist_only === true) {
+            flagValue = 'Waitlist Only';
+          } else {
+            flagValue = 'Section Filled';
+          }
+          waitlistOnlyFlag = (<span
+            className="ms-flag"
+            style={{ backgroundColor: COLOUR_DATA[this.props.colourIndex].border }}
+          >{flagValue}</span>);
         }
-        waitlistOnlyFlag = (<span
-          className="ms-flag"
-          style={{ backgroundColor: COLOUR_DATA[this.props.colourIndex].border }}
-        >{flagValue}</span>);
       }
     }
     return (<div
@@ -120,14 +123,14 @@ class MasterSlot extends React.Component {
       <div className="master-slot-actions">
         <i
           className="fa fa-share-alt"
-          onClick={event => this.stopPropagationCustom(this.showShareLink, event)}
+          onClick={event => this.stopPropagation(this.showShareLink, event)}
         />
         {shareLink}
         {
           !this.props.hideCloseButton ?
             <i
               className="fa fa-times"
-              onClick={event => this.stopPropagationCustom(this.props.removeCourse, event)}
+              onClick={event => this.stopPropagation(this.props.removeCourse, event)}
             /> : null
         }
       </div>
@@ -138,26 +141,43 @@ class MasterSlot extends React.Component {
   }
 }
 
+MasterSlot.defaultProps = {
+  inModal: false,
+  fakeFriends: 0,
+  hideCloseButton: false,
+  course: React.PropTypes.shape({
+    is_waitlist_only: false,
+  }),
+  classmates: null,
+  professors: null,
+  slots: null,
+  removeCourse: null,
+};
+
 MasterSlot.propTypes = {
   colourIndex: React.PropTypes.number.isRequired,
-  inModal: React.PropTypes.bool.isRequired,
-  fakeFriends: React.PropTypes.number.isRequired,
+  inModal: React.PropTypes.bool,
+  fakeFriends: React.PropTypes.number,
   course: React.PropTypes.shape({
-    id: React.PropTypes.string.isRequired,
+    id: React.PropTypes.number.isRequired,
     num_credits: React.PropTypes.number.isRequired,
     code: React.PropTypes.string.isRequired,
     name: React.PropTypes.string.isRequired,
-    is_waitlist_only: React.PropTypes.bool.isRequired,
-    slots: React.PropTypes.shape({
-      length: React.PropTypes.number.isRequired,
-    }).isRequired,
+    is_waitlist_only: React.PropTypes.bool,
+    slots: React.PropTypes.arrayOf(React.PropTypes.shape({
+      is_section_filled: React.PropTypes.bool.isRequired,
+    })),
   }).isRequired,
-  professors: React.PropTypes.arrayOf(React.PropTypes.string).isRequired,
-  classmates: React.PropTypes.arrayOf(React.PropTypes.string).isRequired,
-  hideCloseButton: React.PropTypes.func.isRequired,
-  onTimetable: React.PropTypes.func.isRequired,
+  professors: React.PropTypes.arrayOf(React.PropTypes.string),
+  classmates: React.PropTypes.shape({
+    classmates: React.PropTypes.arrayOf(React.PropTypes.shape({
+      img_url: React.PropTypes.string,
+    })),
+  }),
+  hideCloseButton: React.PropTypes.bool,
+  onTimetable: React.PropTypes.bool.isRequired,
   fetchCourseInfo: React.PropTypes.func.isRequired,
-  removeCourse: React.PropTypes.func.isRequired,
+  removeCourse: React.PropTypes.func,
 };
 
 export const ShareLink = ({ link, onClickOut }) => (
