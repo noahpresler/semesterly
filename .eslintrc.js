@@ -5,6 +5,7 @@ module.exports = {
 		"jasmine": true
 	},
 	"globals": {
+	  "$": true,
 		"_": true,
 	  "allSemesters": true,
 	  "sharedTimetable": true,
