@@ -14,4 +14,8 @@ urlpatterns = patterns('',
                        # device token registration
                        url(r'^setRegistrationToken/', authpipe.views.set_registration_token),
                        url(r'^deleteRegistrationToken/', authpipe.views.delete_registration_token),
+
+                       # device token registration api
+                       url(r'^registration-token/$', authpipe.views.RegistrationTokenView.as_view()),
+                       url(r'^registration-token/(?P<endpoint>.+?)/', authpipe.views.RegistrationTokenView.as_view())
                        )
