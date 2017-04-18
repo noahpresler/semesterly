@@ -11,6 +11,7 @@ from hashids import Hashids
 from pytz import timezone
 from datetime import datetime
 import json
+from hashids import Hashids
 import httplib2
 import itertools
 from timetable.models import *
@@ -27,8 +28,10 @@ from oauth2client import client
 from oauth2client import tools
 from oauth2client.file import Storage
 
-from student.utils import *
+from student.utils import next_weekday
 from timetable.utils import *
+from authpipe.utils import get_google_credentials, check_student_token
+
 
 DAY_MAP = {
         'M' : 'mo',
@@ -38,7 +41,9 @@ DAY_MAP = {
         'F' : 'fr',
         'S' : 'sa',
         'U' : 'su'
-    };
+    }
+
+hashids = Hashids(salt="x98as7dhg&h*askdj^has!kj?xz<!9")
 
 def get_student(request):
   logged = request.user.is_authenticated()
@@ -435,33 +440,8 @@ def unsubscribe(request, id, token):
     return render(request, 'unsubscribe.html')
 
   # Link is invalid. Redirect to homepage.
-  return HttpResponseRedirect("/") 
+  return HttpResponseRedirect("/")
 
-@csrf_exempt
-@validate_subdomain
-def set_registration_token(request):
-    token = json.loads(request.body)['token']
-    school = request.subdomain
-    student = get_student(request)
-    rt, rt_was_created = RegistrationToken.objects.update_or_create(auth=token['keys']['auth'], p256dh=token['keys']['p256dh'], endpoint=token['endpoint'])
-    if student:
-        rt.student = student
-        rt.save()
-        student.school = school
-        student.save()
-    json_data = {
-        'token': 'yes'
-    }
-    return HttpResponse(json.dumps(json_data), content_type="application/json")
-
-@csrf_exempt
-def delete_registration_token(request):
-    token = json.loads(request.body)['token']
-    RegistrationToken.objects.filter(endpoint=token['endpoint']).delete()
-    json_data = {
-        'token': 'deleted'
-    }
-    return HttpResponse(json.dumps(json_data), content_type="application/json")
 
 def get_semester_name_from_tt(tt):
     try:
