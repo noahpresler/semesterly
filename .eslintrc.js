@@ -23,7 +23,8 @@ module.exports = {
 	  "finalExams": true,
 	  "school": true,
 	  "currentSemester": true,
-	  "currentUser": true
+	  "currentUser": true,
+		"reactAlertEvents": true,
 	},
 	rules: {
 		"no-plusplus": 0,
