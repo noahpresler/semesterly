@@ -1,6 +1,6 @@
 import * as ActionTypes from '../constants/actionTypes';
 
-export const friends = (state = { peers: [], isFetching: false }, action) => {
+const friends = (state = { peers: [], isFetching: false }, action) => {
   switch (action.type) {
     case ActionTypes.FRIENDS_RECEIVED:
       return Object.assign({}, state, { peers: action.peers, isFetching: false });
@@ -10,3 +10,5 @@ export const friends = (state = { peers: [], isFetching: false }, action) => {
       return state;
   }
 };
+
+export default friends;
