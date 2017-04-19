@@ -74,7 +74,7 @@ class UserTimetableViewTest(APITestCase):
         self.student = Student.objects.create(user=self.user)
 
         sem = Semester.objects.create(name='Winter', year='1995')
-        course = Course.objects.create(school='uoft', code='SEM101', name='Intro')
+        course = Course.objects.create(id=1, school='uoft', code='SEM101', name='Intro')
         section = Section.objects.create(course=course, semester=sem, meeting_section='L1')
         Offering.objects.create(section=section, day='M', time_start='8:00', time_end='10:00')
         tt = PersonalTimetable.objects.create(name='tt', school='uoft', semester=sem, student=self.student)
@@ -94,6 +94,25 @@ class UserTimetableViewTest(APITestCase):
         self.assertEqual(len(response.data), 1)
 
     def test_create_timetable(self):
+        data = {
+            'sem_name': 'Winter',
+            'year': '1995',
+            'courses': [{
+                'id': 1,
+                'enrolled_sections': ['L1']
+            }],
+            'name': 'new tt',
+            'has_conflict': False
+        }
+        request = self.factory.post('/user/timetables/', data, format='json')
+        force_authenticate(request, user=self.user)
+        request.subdomain = 'uoft'
+        view = resolve('/user/timetables/').func
+        response = view(request)
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+        PersonalTimetable.objects.get(name='new tt')
+
+    def test_create_timetable_exists(self):
         pass
 
     def test_duplicate_timetable(self):
@@ -101,7 +120,7 @@ class UserTimetableViewTest(APITestCase):
             'source': 'tt',
             'sem_name': 'Winter',
             'year': '1995',
-            'name': 'dupe tt'
+            'name': 'dupe tt',
         }
         request = self.factory.post('/user/timetables/', data, format='json')
         force_authenticate(request, user=self.user)
@@ -110,6 +129,9 @@ class UserTimetableViewTest(APITestCase):
         response = view(request)
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
         PersonalTimetable.objects.get(name='dupe tt')
+
+    def test_rename_timetable(self):
+        pass
 
     def test_delete_timetable(self):
         pass
