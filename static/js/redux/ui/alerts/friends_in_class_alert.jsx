@@ -104,6 +104,10 @@ class FriendsInClassAlert extends React.Component {
   }
 }
 
+FriendsInClassAlert.defaultProps = {
+  userInfo: {},
+};
+
 FriendsInClassAlert.propTypes = {
   dismissSelf: React.PropTypes.func.isRequired,
   showNotification: React.PropTypes.func.isRequired,
@@ -114,16 +118,16 @@ FriendsInClassAlert.propTypes = {
   mostFriendsCount: React.PropTypes.number.isRequired,
   totalFriendsCount: React.PropTypes.number.isRequired,
   mostFriendsClass: React.PropTypes.shape({
-    id: React.PropTypes.number.isRequired,
-    slots: React.PropTypes.any.isRequired,
-    oldSlots: React.PropTypes.any.isRequired,
+    id: React.PropTypes.number,
+    slots: React.PropTypes.any,
+    oldSlots: React.PropTypes.any,
   }).isRequired,
   userInfo: React.PropTypes.shape({
     data: React.PropTypes.shape({
-      social_offerings: React.PropTypes.bool.isRequired,
-      social_courses: React.PropTypes.bool.isRequired,
-      social_all: React.PropTypes.bool.isRequired,
-    }).isRequired,
+      social_offerings: React.PropTypes.bool,
+      social_courses: React.PropTypes.bool,
+      social_all: React.PropTypes.bool,
+    }),
   }).isRequired,
 };
 
