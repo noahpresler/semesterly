@@ -574,12 +574,10 @@ class UserTimetableView(APIView):
     def post(self, request):
         if 'source' in request.data:  # duplicate existing timetable
             school = request.subdomain
-            params = json.loads(request.body)
-            tt = params['timetable']
-            name = tt['name']
-            semester = Semester.objects.get(id=tt['semester'])
+            name = request.data['source']
+            semester = Semester.objects.get(name=request.data['sem_name'], year=request.data['year'])
             student = Student.objects.get(user=request.user)
-            new_name = params['name']
+            new_name = request.data['name']
 
             original = PersonalTimetable.objects.get(
                 student=student, name=name, school=school, semester=semester)
@@ -590,12 +588,9 @@ class UserTimetableView(APIView):
                 duplicate.courses.add(course)
             for section in original.sections.all():
                 duplicate.sections.add(section)
+            duplicate.save()
 
-            timetables = get_student_tts(student, school, semester)
-            saved_timetable = (x for x in timetables if x['id'] == duplicate.id).next()
-            response = {'timetables': timetables,
-                        'saved_timetable': saved_timetable}
-            return HttpResponse(json.dumps(response), content_type='application/json')
+            return Response(duplicate, status=status.HTTP_201_CREATED)
         else:
             school = request.subdomain
             params = json.loads(request.body)
