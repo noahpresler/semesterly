@@ -310,15 +310,22 @@ class PeoplesoftParser(CourseParser):
 		# Create textbooks.
 		if self.textbooks:
 			for textbook in textbooks:
-				textbook.update(amazon_textbook_fields(textbook['isbn']))
+				if not textbook['isbn'] or (len(textbook['isbn']) != 10 and len(textbook['isbn']) != 13):
+					continue  # NOTE: might skip some malformed-isbn values
+				amazon_fields = amazon_textbook_fields(textbook['isbn'])
+				if amazon_fields is not None:
+					textbook.update(amazon_fields)
+				else:  # Make sure to clear ingestor from prev (temp fix)
+					textbook.update({
+						'detail_url': None,
+						'image_url': None,
+						'author': None,
+						'title': None,
+					})
 				self.ingestor.update(textbook)
 				self.ingestor.ingest_textbook()
-				if 'textbooks' not in self.ingestor:
-					self.ingestor['textbooks'] = []
-				if not textbook['isbn'] or len(textbook['isbn']) != 9 or len(textbook['isbn']) != 13:
-					continue
-				self.ingestor['textbooks'].append({
-					'kind':'textbook_link',
+				self.ingestor.setdefault('textbooks', []).append({
+					'kind': 'textbook_link',
 					'isbn': textbook['isbn'],
 					'required': textbook['required'],
 				})
