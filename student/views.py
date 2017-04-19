@@ -555,15 +555,13 @@ def log_ical_export(request):
 class UserView(APIView):
     def patch(self, request):
         student = Student.objects.get(user=request.user)
-        params = json.loads(request.body)['userInfo']
-        student.social_offerings = params['social_offerings']
-        student.social_courses = params['social_courses']
-        student.social_all = params['social_all']
-        student.major = params['major']
-        student.class_year = params['class_year']
-        student.emails_enabled = params['emails_enabled']
+        settings = 'social_offerings social_courses social_all major class_year emails_enabled'.split()
+        for setting in settings:
+            default_val = getattr(student, setting)
+            new_val = request.data.get(setting, default_val)
+            setattr(student, setting, new_val)
         student.save()
-        return HttpResponse("success")
+        return Response(status=status.HTTP_204_NO_CONTENT)
 
 
 class UserTimetableView(APIView):
