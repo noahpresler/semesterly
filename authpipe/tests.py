@@ -1,6 +1,4 @@
-import json
-
-from django.test.testcases import TestCase
+from rest_framework.test import APITestCase
 from rest_framework import status
 
 from test_utils.test_cases import UrlTestCase
@@ -24,7 +22,7 @@ class UrlsTest(UrlTestCase):
                                      kwargs={'endpoint': 'google'})
 
 
-class TestToken(TestCase):
+class TestToken(APITestCase):
     """ Test setting and deleting tokens """
     school = 'uoft'
     request_headers = {
@@ -33,16 +31,15 @@ class TestToken(TestCase):
 
     def test_create_token(self):
         """ Test creating a new token. """
-        my_token = json.dumps({
+        my_token = {
             'auth': 'someauth',
             'p256dh': 'something',
             'endpoint': 'some endpoint'
-        })
+        }
 
-        response = self.client.put('/registration-token/', data=my_token, content_type='application/json',
-                                   **self.request_headers)
+        response = self.client.put('/registration-token/', data=my_token, format='json', **self.request_headers)
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
-        self.assertDictContainsSubset(json.loads(my_token), json.loads(response.content))
+        self.assertDictContainsSubset(my_token, response.json())
         self.assertIsNotNone(RegistrationToken.objects.get(endpoint='some endpoint'))
 
     def test_create_token_student(self):
