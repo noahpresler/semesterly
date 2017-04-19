@@ -24,38 +24,40 @@ from timetable.models import *
 from timetable.utils import *
 from authpipe.utils import get_google_credentials, check_student_token
 
-
 DAY_MAP = {
-        'M' : 'mo',
-        'T' : 'tu',
-        'W' : 'we',
-        'R' : 'th',
-        'F' : 'fr',
-        'S' : 'sa',
-        'U' : 'su'
-    }
+    'M': 'mo',
+    'T': 'tu',
+    'W': 'we',
+    'R': 'th',
+    'F': 'fr',
+    'S': 'sa',
+    'U': 'su'
+}
 
 hashids = Hashids(salt="***REMOVED***")
 
+
 def get_student(request):
-  logged = request.user.is_authenticated()
-  if logged and Student.objects.filter(user=request.user).exists():
-    return Student.objects.get(user=request.user)
-  else:
-    return None
+    logged = request.user.is_authenticated()
+    if logged and Student.objects.filter(user=request.user).exists():
+        return Student.objects.get(user=request.user)
+    else:
+        return None
+
 
 def get_avg_rating(course_ids):
-  avgs = [Course.objects.get(id=cid).get_avg_rating() \
-          for cid in set([cid for cid in course_ids])]
-  try:
-     return min(5, sum(avgs)/sum([ 0 if a == 0 else 1 for a in avgs]) if avgs else 0)
-  except:
-     return 0
+    avgs = [Course.objects.get(id=cid).get_avg_rating() \
+            for cid in set([cid for cid in course_ids])]
+    try:
+        return min(5, sum(avgs) / sum([0 if a == 0 else 1 for a in avgs]) if avgs else 0)
+    except:
+        return 0
+
 
 def get_user_dict(school, student, semester):
     user_dict = {}
     if student:
-        user_dict = model_to_dict(student, exclude=["user","id","friends"])
+        user_dict = model_to_dict(student, exclude=["user", "id", "friends"])
         user_dict["timetables"] = get_student_tts(student, school, semester)
         user_dict["userFirstName"] = student.user.first_name
         user_dict["userLastName"] = student.user.last_name
@@ -74,11 +76,12 @@ def get_user_dict(school, student, semester):
         user_dict['LoginHash'] = hashids.encrypt(student.id)
         if google_user_exists:
             credentials = get_google_credentials(student)
-            user_dict["GoogleLoggedIn"] = not(credentials is None or credentials.invalid)
-    
+            user_dict["GoogleLoggedIn"] = not (credentials is None or credentials.invalid)
+
     user_dict["isLoggedIn"] = student is not None
 
     return user_dict
+
 
 @login_required
 @validate_subdomain
@@ -89,20 +92,24 @@ def get_student_tts_wrapper(request, school, sem_name, year):
     response = get_student_tts(student, school, sem)
     return HttpResponse(json.dumps(response), content_type='application/json')
 
+
 def get_student_tts(student, school, semester):
     tts = student.personaltimetable_set.filter(
         school=school, semester=semester).order_by('-last_updated')
     # create a list containing all PersonalTimetables for this semester in their dictionary representation
-    tts_list = [convert_tt_to_dict(tt) for tt in tts] # aka titty dick
+    tts_list = [convert_tt_to_dict(tt) for tt in tts]  # aka titty dick
     return tts_list
+
 
 def sections_are_filled(sections):
     return all(section.enrolment >= section.size for section in sections)
+
 
 def get_section_dict(section):
     section_data = model_to_dict(section)
     section_data['is_section_filled'] = section.enrolment >= section.size
     return section_data
+
 
 def convert_tt_to_dict(timetable, include_last_updated=True):
     """
@@ -112,14 +119,14 @@ def convert_tt_to_dict(timetable, include_last_updated=True):
     courses = []
     course_ids = []
     tt_dict = model_to_dict(timetable)
-    if include_last_updated: # include the 'last_updated' property by default; won't be included for SharedTimetables (since they don't have the property)
+    if include_last_updated:  # include the 'last_updated' property by default; won't be included for SharedTimetables (since they don't have the property)
         tt_dict['last_updated'] = str(timetable.last_updated)
 
     for section_obj in timetable.sections.all():
-        c = section_obj.course # get the section's course
+        c = section_obj.course  # get the section's course
         c_dict = model_to_dict(c)
 
-        if c.id not in course_ids: #if not in courses, add to course dictionary with co
+        if c.id not in course_ids:  # if not in courses, add to course dictionary with co
             c_dict = model_to_dict(c)
             courses.append(c_dict)
             course_ids.append(c.id)
@@ -128,7 +135,8 @@ def convert_tt_to_dict(timetable, include_last_updated=True):
             courses[-1]['textbooks'] = {}
 
         index = course_ids.index(c.id)
-        courses[index]['slots'].extend([merge_dicts(get_section_dict(section_obj), model_to_dict(co)) for co in section_obj.offering_set.all()])
+        courses[index]['slots'].extend(
+            [merge_dicts(get_section_dict(section_obj), model_to_dict(co)) for co in section_obj.offering_set.all()])
         courses[index]['textbooks'][section_obj.meeting_section] = section_obj.get_textbooks()
 
         courses[index]['enrolled_sections'].append(section_obj.meeting_section)
@@ -138,11 +146,13 @@ def convert_tt_to_dict(timetable, include_last_updated=True):
                                      key=lambda s: s.section_type)
         section_type_to_sections = itertools.groupby(course_section_list, lambda s: s.section_type)
         index = course_ids.index(course_obj.id)
-        courses[index]['is_waitlist_only'] = any(sections_are_filled(sections) for _, sections in section_type_to_sections)
+        courses[index]['is_waitlist_only'] = any(
+            sections_are_filled(sections) for _, sections in section_type_to_sections)
 
     tt_dict['courses'] = courses
     tt_dict['avg_rating'] = get_avg_rating(course_ids)
     return tt_dict
+
 
 @csrf_exempt
 @login_required
@@ -166,9 +176,9 @@ def save_timetable(request):
     # 2. the user is editing the name of an existing timetable, in which
     # case tempId is the ID of that timetable, as passed from the frontend.
     # we check if a timetable with a different id has that name
-    if PersonalTimetable.objects.filter(~Q(id=tempId), 
-                                        student=student, 
-                                        name=params['name'], 
+    if PersonalTimetable.objects.filter(~Q(id=tempId),
+                                        student=student,
+                                        name=params['name'],
                                         semester=semester,
                                         school=school).exists():
         return HttpResponse(json.dumps(error), content_type='application/json')
@@ -217,6 +227,7 @@ def delete_timetable(request):
     response = {'timetables': timetables}
     return HttpResponse(json.dumps(response), content_type='application/json')
 
+
 @csrf_exempt
 @login_required
 @validate_subdomain
@@ -244,6 +255,7 @@ def duplicate_timetable(request):
     response = {'timetables': timetables,
                 'saved_timetable': saved_timetable}
     return HttpResponse(json.dumps(response), content_type='application/json')
+
 
 @csrf_exempt
 @login_required
@@ -293,7 +305,7 @@ def find_friends(request):
             })
 
         friends.append({
-            'peer': model_to_dict(friend, exclude=['user','id','fbook_uid', 'friends']),
+            'peer': model_to_dict(friend, exclude=['user', 'id', 'fbook_uid', 'friends']),
             'is_friend': student.friends.filter(id=friend.id).exists(),
             'shared_courses': shared_courses,
             'profile_url': 'https://www.facebook.com/' + friend.fbook_uid,
@@ -314,8 +326,8 @@ def get_classmates(request):
     try:
         semester, _ = Semester.objects.get_or_create(**json.loads(request.body)['semester'])
     except:
-        semester = None 
-    # user opted in to sharing courses
+        semester = None
+        # user opted in to sharing courses
     if student.social_courses:
         courses = []
         friends = student.friends.filter(social_courses=True)
@@ -327,14 +339,14 @@ def get_classmates(request):
 
 
 def get_classmates_from_course_id(school, student, course_id, semester, friends=None):
-    if not friends: 
+    if not friends:
         # All friends with social courses/sharing enabled
         friends = student.friends.filter(social_courses=True)
     course = {'course_id': course_id}
-    curr_ptts = PersonalTimetable.objects.filter(student__in=friends, courses__id__exact=course_id)\
-        .filter(Q(semester=semester)).order_by('student','last_updated').distinct('student')
-    past_ptts = PersonalTimetable.objects.filter(student__in=friends, courses__id__exact=course_id)\
-        .filter(~Q(semester=semester)).order_by('student','last_updated').distinct('student')
+    curr_ptts = PersonalTimetable.objects.filter(student__in=friends, courses__id__exact=course_id) \
+        .filter(Q(semester=semester)).order_by('student', 'last_updated').distinct('student')
+    past_ptts = PersonalTimetable.objects.filter(student__in=friends, courses__id__exact=course_id) \
+        .filter(~Q(semester=semester)).order_by('student', 'last_updated').distinct('student')
 
     course['classmates'] = get_classmates_from_tts(student, course_id, curr_ptts)
     course['past_classmates'] = get_classmates_from_tts(student, course_id, past_ptts)
@@ -373,66 +385,70 @@ def get_most_classmate_count(request):
             count = temp_count
             most_friend_course_id = course_id
         total_count += temp_count
-    course = {"id" : most_friend_course_id, "count" : count, "total_count" : total_count}
+    course = {"id": most_friend_course_id, "count": count, "total_count": total_count}
     return HttpResponse(json.dumps(course))
 
+
 def get_friend_count_from_course_id(school, student, course_id, semester):
-    return PersonalTimetable.objects.filter(student__in=student.friends.all(), courses__id__exact=course_id)\
+    return PersonalTimetable.objects.filter(student__in=student.friends.all(), courses__id__exact=course_id) \
         .filter(Q(semester=semester)).distinct('student').count()
+
 
 @csrf_exempt
 @validate_subdomain
 def react_to_course(request):
-  json_data = {}
-  school = request.subdomain
+    json_data = {}
+    school = request.subdomain
 
-  try:
-    logged = request.user.is_authenticated()
-    params = json.loads(request.body)
-    cid = params['cid']
-    title = params['title']
-    if logged and Student.objects.filter(user=request.user).exists():
-      s = Student.objects.get(user=request.user)
-      c = Course.objects.get(id=cid)
-      if c.reaction_set.filter(title=title, student=s).exists():
-        r = c.reaction_set.get(title=title, student=s)
-        c.reaction_set.remove(r)
-      else:
-        r = Reaction(student=s, title=title)
-        r.save()
-        c.reaction_set.add(r)
-      c.save()
-      json_data['reactions'] = c.get_reactions(student=s)
+    try:
+        logged = request.user.is_authenticated()
+        params = json.loads(request.body)
+        cid = params['cid']
+        title = params['title']
+        if logged and Student.objects.filter(user=request.user).exists():
+            s = Student.objects.get(user=request.user)
+            c = Course.objects.get(id=cid)
+            if c.reaction_set.filter(title=title, student=s).exists():
+                r = c.reaction_set.get(title=title, student=s)
+                c.reaction_set.remove(r)
+            else:
+                r = Reaction(student=s, title=title)
+                r.save()
+                c.reaction_set.add(r)
+            c.save()
+            json_data['reactions'] = c.get_reactions(student=s)
 
-    else:
-      json_data['error'] = 'Must be logged in to rate'
+        else:
+            json_data['error'] = 'Must be logged in to rate'
 
-  except Exception as e:
-    print e
-    json_data['error'] = 'Unknowssn error'
+    except Exception as e:
+        print e
+        json_data['error'] = 'Unknowssn error'
 
-  
-  return HttpResponse(json.dumps(json_data), content_type="application/json")
+    return HttpResponse(json.dumps(json_data), content_type="application/json")
+
 
 def create_unsubscribe_link(student):
-  id, token = make_token(student).split(":", 1)
-  return reverse('student.views.unsubscribe', kwargs={'id': id, 'token': token,})
+    id, token = make_token(student).split(":", 1)
+    return reverse('student.views.unsubscribe', kwargs={'id': id, 'token': token, })
+
 
 def make_token(student):
-  return TimestampSigner().sign(student.id)
+    return TimestampSigner().sign(student.id)
+
 
 def unsubscribe(request, id, token):
-  student = Student.objects.get(id = id)
+    student = Student.objects.get(id=id)
 
-  if student and check_student_token(student, token):
-    # Link is valid
-    student.emails_enabled = False
-    student.save()
+    if student and check_student_token(student, token):
+        # Link is valid
+        student.emails_enabled = False
+        student.save()
 
-    return render(request, 'unsubscribe.html')
+        return render(request, 'unsubscribe.html')
 
-  # Link is invalid. Redirect to homepage.
-  return HttpResponseRedirect("/")
+    # Link is invalid. Redirect to homepage.
+    return HttpResponseRedirect("/")
 
 
 def get_semester_name_from_tt(tt):
@@ -445,6 +461,7 @@ def get_semester_name_from_tt(tt):
                 semester_id = slot['semester']
                 return Semester.objects.get(id=semester_id).name
         return semester
+
 
 @csrf_exempt
 @validate_subdomain
@@ -462,58 +479,61 @@ def add_tt_to_gcal(request):
     else:
         tt_name += " - Semester.ly"
 
-    #create calendar
+    # create calendar
     calendar = {'summary': tt_name, 'timeZone': 'America/New_York'}
     created_calendar = service.calendars().insert(body=calendar).execute()
 
     semester_name = get_semester_name_from_tt(tt)
     if semester_name == 'Fall':
-        #ignore year, year is set to current year
-        sem_start = datetime(2017,8,30,17,0,0)
-        sem_end = datetime(2017,12,20,17,0,0)
+        # ignore year, year is set to current year
+        sem_start = datetime(2017, 8, 30, 17, 0, 0)
+        sem_end = datetime(2017, 12, 20, 17, 0, 0)
     else:
-        #ignore year, year is set to current year
-        sem_start = datetime(2017,1,30,17,0,0)
-        sem_end = datetime(2017,5,5,17,0,0)
+        # ignore year, year is set to current year
+        sem_start = datetime(2017, 1, 30, 17, 0, 0)
+        sem_end = datetime(2017, 5, 5, 17, 0, 0)
 
-    #add events
+    # add events
     for course in tt['courses']:
         for slot in course['slots']:
             start = next_weekday(sem_start, slot['day'])
-            start = start.replace(hour=int(slot['time_start'].split(':')[0]), minute=int(slot['time_start'].split(':')[1]))
+            start = start.replace(hour=int(slot['time_start'].split(':')[0]),
+                                  minute=int(slot['time_start'].split(':')[1]))
             end = next_weekday(sem_start, slot['day'])
             end = end.replace(hour=int(slot['time_end'].split(':')[0]), minute=int(slot['time_end'].split(':')[1]))
             until = next_weekday(sem_end, slot['day'])
 
-            description = course.get('description','')
-            instructors = 'Taught by: ' + slot['instructors'] + '\n' if len(slot.get('instructors','')) > 0 else ''
+            description = course.get('description', '')
+            instructors = 'Taught by: ' + slot['instructors'] + '\n' if len(slot.get('instructors', '')) > 0 else ''
 
             res = {
-              'summary': course['name'] + " " + course['code'] + slot['meeting_section'],
-              'location': slot['location'],
-              'description': course['code'] + slot['meeting_section'] + '\n' + instructors + description + '\n\n' + 'Created by Semester.ly',
-              'start': {
-                'dateTime': start.strftime("%Y-%m-%dT%H:%M:%S"),
-                'timeZone': 'America/New_York',
-              },
-              'end': {
-                'dateTime': end.strftime("%Y-%m-%dT%H:%M:%S"),
-                'timeZone': 'America/New_York',
-              },
-              'recurrence': [
-                'RRULE:FREQ=WEEKLY;UNTIL=' + until.strftime("%Y%m%dT%H%M%SZ") + ';BYDAY=' + DAY_MAP[slot['day']]
-              ],
+                'summary': course['name'] + " " + course['code'] + slot['meeting_section'],
+                'location': slot['location'],
+                'description': course['code'] + slot[
+                    'meeting_section'] + '\n' + instructors + description + '\n\n' + 'Created by Semester.ly',
+                'start': {
+                    'dateTime': start.strftime("%Y-%m-%dT%H:%M:%S"),
+                    'timeZone': 'America/New_York',
+                },
+                'end': {
+                    'dateTime': end.strftime("%Y-%m-%dT%H:%M:%S"),
+                    'timeZone': 'America/New_York',
+                },
+                'recurrence': [
+                    'RRULE:FREQ=WEEKLY;UNTIL=' + until.strftime("%Y%m%dT%H%M%SZ") + ';BYDAY=' + DAY_MAP[slot['day']]
+                ],
             }
             event = service.events().insert(calendarId=created_calendar['id'], body=res).execute()
 
     analytic = CalendarExport.objects.create(
-        student = student,
-        school = school,
-        is_google_calendar = True
+        student=student,
+        school=school,
+        is_google_calendar=True
     )
     analytic.save()
 
     return HttpResponse(json.dumps({}), content_type="application/json")
+
 
 @csrf_exempt
 @validate_subdomain
@@ -524,16 +544,15 @@ def log_ical_export(request):
         student = None
     school = request.subdomain
     analytic = CalendarExport.objects.create(
-        student = student,
-        school = school,
-        is_google_calendar = False
+        student=student,
+        school=school,
+        is_google_calendar=False
     )
     analytic.save()
     return HttpResponse(json.dumps({}), content_type="application/json")
 
 
 class UserView(APIView):
-
     def patch(self, request):
         student = Student.objects.get(user=request.user)
         params = json.loads(request.body)['userInfo']
@@ -548,7 +567,6 @@ class UserView(APIView):
 
 
 class UserTimetableView(APIView):
-
     def get(self, request, sem_name, year):
         sem, _ = Semester.objects.get_or_create(name=sem_name, year=year)
         student = Student.objects.get(user=request.user)
@@ -556,7 +574,7 @@ class UserTimetableView(APIView):
         return HttpResponse(json.dumps(response), content_type='application/json')
 
     def post(self, request):
-        if 'source' in request.data: # duplicate existing timetable
+        if 'source' in request.data:  # duplicate existing timetable
             school = request.subdomain
             params = json.loads(request.body)
             tt = params['timetable']
@@ -648,7 +666,6 @@ class UserTimetableView(APIView):
 
 
 class ClassmateView(APIView):
-
     def get(self, request, sem_name, year):
         if request.query_params.get('counts'):
             school = request.subdomain
@@ -727,7 +744,6 @@ class ClassmateView(APIView):
 
 
 class GCalView(APIView):
-
     def post(self, request):
         student = Student.objects.get(user=request.user)
         tt = json.loads(request.body)['timetable']
