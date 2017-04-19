@@ -5,8 +5,8 @@ from rest_framework.test import APITestCase, APIRequestFactory, force_authentica
 from rest_framework import status
 
 from test_utils.test_cases import UrlTestCase
-from student.models import Student
-
+from student.models import Student, PersonalTimetable
+from timetable.models import Semester, Course, Section, Offering
 
 class UrlsTest(UrlTestCase):
     """ Test student/urls.py """
@@ -64,3 +64,61 @@ class UserViewTest(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
         self.student = Student.objects.get(user=self.user)
         self.assertDictContainsSubset(new_settings, model_to_dict(self.student))
+
+
+class UserTimetableViewTest(APITestCase):
+    school = 'uoft'
+    request_headers = {
+        'HTTP_HOST': '{}.sem.ly:8000'.format(school)
+    }
+
+    def setUp(self):
+        """ Create a user and personal timetable. """
+        self.user = User.objects.create_user(username='jacob', password='top_secret')
+        self.student = Student.objects.create(user=self.user)
+
+        sem = Semester.objects.create(name='Winter', year='1995')
+        course = Course.objects.create(school=self.school, code='SEM101', name='Intro')
+        section = Section.objects.create(course=course, semester=sem, meeting_section='L1')
+        Offering.objects.create(section=section, day='M', time_start='8:00', time_end='10:00')
+        tt = PersonalTimetable.objects.create(name='tt', school=self.school, semester=sem, student=self.student)
+        tt.courses.add(course)
+        tt.sections.add(section)
+        tt.save()
+
+        self.factory = APIRequestFactory()
+
+    def test_get_timetables(self):
+        request = self.factory.get('/user/timetables/Winter/1995/', format='json')
+        force_authenticate(request, user=self.user)
+        request.subdomain = 'uoft'
+        view = resolve('/user/timetables/Winter/1995/').func
+        response = view(request, 'Winter', '1995')
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(len(response.data), 1)
+
+    def test_create_timetable(self):
+        pass
+
+    def test_duplicate_timetable(self):
+        pass
+
+    def test_delete_timetable(self):
+        pass
+
+
+class ClassmateViewTest(APITestCase):
+
+    def setUp(self):
+        self.user = User.objects.create_user(username='jacob', password='top_secret')
+        self.student = Student.objects.create(user=self.user)
+        self.factory = APIRequestFactory()
+
+    def test_get_classmate_counts(self):
+        pass
+
+    def test_get_classmates(self):
+        pass
+
+    def test_no_social_courses(self):
+        pass
