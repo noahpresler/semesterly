@@ -27,7 +27,7 @@ urlpatterns = patterns('',
                        # api:
                        url(r'^user/settings/$', student.views.UserView.as_view()),  # patch
                        url(r'^user/timetables/$', student.views.UserTimetableView.as_view()), # post (create, and duplicate)
-                       url(r'^user/timetables/(?P<sem_name>.+)/(?P<year>[0-9]{4})/$',
+                       url(r'^user/timetables/(?P<sem_name>.+?)/(?P<year>[0-9]{4})/$',
                            student.views.UserTimetableView.as_view()),  # get all
                        url(r'^user/timetables/(?P<sem_name>.+)/(?P<year>[0-9]{4})/(?P<tt_name>.+)/$',
                            student.views.UserTimetableView.as_view()), # delete
