@@ -8,7 +8,7 @@ from django.core.signing import TimestampSigner
 from django.db.models import Q
 from django.forms.models import model_to_dict
 from django.http import HttpResponse, HttpResponseRedirect
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404
 from django.views.decorators.csrf import csrf_exempt
 from hashids import Hashids
 import httplib2
@@ -625,6 +625,18 @@ class UserTimetableView(APIView):
             response = {'timetables': timetables, 'saved_timetable': saved_timetable}
 
             return Response(response, status=status.HTTP_201_CREATED)
+
+    def patch(self, request):
+        """ Rename a timetable. """
+        school = request.subdomain
+        semester = Semester.objects.get(name=request.data['sem_name'], year=request.data['year'])
+        old_name = request.data['old_name']
+        new_name = request.data['new_name']
+        tt = get_object_or_404(PersonalTimetable, semester=semester, name=old_name, school=school)
+        tt.name = new_name
+        tt.save()
+
+        return Response(status=status.HTTP_204_NO_CONTENT)
 
     def delete(self, request, sem_name, year, tt_name):
         school = request.subdomain
