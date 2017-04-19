@@ -640,17 +640,14 @@ class UserTimetableView(APIView):
 
     def delete(self, request, sem_name, year, tt_name):
         school = request.subdomain
-        params = json.loads(request.body)
-        name = params['name']
-        semester = Semester.objects.get(id=params['semester'])
+        name = tt_name
+        semester = Semester.objects.get(name=sem_name, year=year)
         student = Student.objects.get(user=request.user)
 
         PersonalTimetable.objects.filter(
             student=student, name=name, school=school, semester=semester).delete()
 
-        timetables = get_student_tts(student, school, semester)
-        response = {'timetables': timetables}
-        return HttpResponse(json.dumps(response), content_type='application/json')
+        return Response(status=status.HTTP_204_NO_CONTENT)
 
 
 class ClassmateView(APIView):
@@ -671,7 +668,7 @@ class ClassmateView(APIView):
                 total_count += temp_count
             course = {"id": most_friend_course_id, "count": count, "total_count": total_count}
             return HttpResponse(json.dumps(course))
-        elif request.query_params.get('course_ids'):
+        elif request.query_params.getlist('course_ids'):
             school = request.subdomain
             student = Student.objects.get(user=request.user)
             course_ids = request.query_params.getlist('course_ids')
