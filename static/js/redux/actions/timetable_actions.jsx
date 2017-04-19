@@ -178,7 +178,7 @@ export const nullifyTimetable = () => (dispatch) => {
 };
 
 // loads timetable from localStorage. assumes that the browser supports localStorage
-export const loadCachedTimetable = (dispatch) => {
+export const loadCachedTimetable = () => (dispatch) => {
   dispatch({ type: ActionTypes.LOADING_CACHED_TT });
   const localCourseSections = JSON.parse(localStorage.getItem('courseSections'));
 
@@ -205,13 +205,13 @@ export const loadCachedTimetable = (dispatch) => {
   }
 
   dispatch({ type: ActionTypes.SET_ALL_PREFERENCES, preferences: localPreferences });
-  dispatch({ type: ActionTypes.SET_SEMESTER, semester: localSemester });
+  dispatch({ type: ActionTypes.SET_SEMESTER, semester: parseInt(localSemester, 10) });
   dispatch({
     type: ActionTypes.RECEIVE_COURSE_SECTIONS,
     courseSections: localCourseSections,
   });
 
-  fetchStateTimetables(localActive);
+  dispatch(fetchStateTimetables(localActive));
   dispatch({ type: ActionTypes.CACHED_TT_LOADED });
 };
 
