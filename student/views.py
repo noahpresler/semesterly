@@ -331,7 +331,7 @@ def get_classmates(request):
             courses.append(get_classmates_from_course_id(school, student, course_id, semester, friends=friends))
         return HttpResponse(json.dumps(courses), content_type='application/json')
     else:
-        return HttpResponse("Must have social_courses enabled")
+         return HttpResponse("Must have social_courses enabled")
 
 
 def get_classmates_from_course_id(school, student, course_id, semester, friends=None):
@@ -360,7 +360,7 @@ def get_classmates_from_tts(student, course_id, tts):
             friend_sections = tt.sections.filter(course__id=course_id)
             sections = list(friend_sections.values_list('meeting_section', flat=True).distinct())
             classmate['sections'] = sections
-            classmates.append(classmate)
+        classmates.append(classmate)
     return classmates
 
 
