@@ -113,7 +113,22 @@ class UserTimetableViewTest(APITestCase):
         PersonalTimetable.objects.get(name='new tt')
 
     def test_create_timetable_exists(self):
-        pass
+        data = {
+            'sem_name': 'Winter',
+            'year': '1995',
+            'courses': [{
+                'id': 1,
+                'enrolled_sections': ['L1']
+            }],
+            'name': 'tt',
+            'has_conflict': False
+        }
+        request = self.factory.post('/user/timetables/', data, format='json')
+        force_authenticate(request, user=self.user)
+        request.subdomain = 'uoft'
+        view = resolve('/user/timetables/').func
+        response = view(request)
+        self.assertEqual(response.status_code, status.HTTP_409_CONFLICT)
 
     def test_duplicate_timetable(self):
         data = {
