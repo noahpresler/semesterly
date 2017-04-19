@@ -190,7 +190,7 @@ SideBar.defaultProps = {
   classmates: null,
   optionalCourses: null,
   savedTimetables: null,
-  avgRating: 0
+  avgRating: 0,
 };
 
 SideBar.propTypes = {
