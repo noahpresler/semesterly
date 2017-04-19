@@ -2,6 +2,8 @@ from django.conf.urls import patterns, include, url
 from django.http import HttpResponse
 from django.conf import settings
 from django.contrib import admin
+from rest_framework_swagger.views import get_swagger_view
+from rest_framework.schemas import get_schema_view
 
 
 admin.autodiscover()
@@ -38,6 +40,10 @@ urlpatterns = patterns('',
 
                        # home
                        url(r'^$', 'timetable.views.view_timetable'),
+
+                       # api view
+                       url(r'^swagger/$', get_swagger_view(title='semesterly')),
+                       url(r'^schema/$', get_schema_view(title='semesterly'))
                        )
 
 # profiling
