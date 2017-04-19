@@ -189,12 +189,14 @@ class SideBar extends React.Component {
 SideBar.defaultProps = {
   classmates: null,
   optionalCourses: null,
+  savedTimetables: null,
+  avgRating: 0,
 };
 
 SideBar.propTypes = {
   savedTimetables: React.PropTypes.arrayOf(React.PropTypes.shape({
     name: React.PropTypes.string,
-  })).isRequired,
+  })),
   mandatoryCourses: React.PropTypes.arrayOf(React.PropTypes.shape({
     id: React.PropTypes.number,
     slots: React.PropTypes.arrayOf(React.PropTypes.shape({
@@ -243,7 +245,7 @@ SideBar.propTypes = {
     year: React.PropTypes.numberisRequired,
   }).isRequired,
   semesterIndex: React.PropTypes.number.isRequired,
-  avgRating: React.PropTypes.number.isRequired,
+  avgRating: React.PropTypes.number,
 };
 
 export default SideBar;
