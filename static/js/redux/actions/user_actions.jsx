@@ -114,10 +114,10 @@ export const fetchMostClassmatesCount = courses => (dispatch) => {
 export const fetchClassmates = courses => (dispatch) => {
   const state = store.getState();
   const semesterIndex = state.semesterIndex !== undefined ? state.semesterIndex : currentSemester;
-  // setTimeout(() => {
-  //   dispatch(fetchMostClassmatesCount(getActiveTimetable(state.timetables)
-  //     .courses.map(c => c.id)));
-  // }, 500);
+  setTimeout(() => {
+    dispatch(fetchMostClassmatesCount(getActiveTimetable(state.timetables)
+      .courses.map(c => c.id)));
+  }, 500);
   dispatch(requestClassmates());
   fetch(getClassmatesEndpoint(), {
     credentials: 'include',
@@ -473,12 +473,9 @@ fetch(deleteRegistrationTokenEndpoint(), {
 .then(response => response.json()) // TODO(rohan): error-check the response
 .then((json) => {
   if (!json.error) {
-    // console.log("token deleted: " + token);
     dispatch({
       type: ActionTypes.UNREGISTER_TOKEN,
     });
-  } else {
-    // console.log("token not deleted: " + token);
   }
 });
 
