@@ -593,37 +593,20 @@ class UserTimetableView(APIView):
             return Response(duplicate, status=status.HTTP_201_CREATED)
         else:
             school = request.subdomain
-            params = json.loads(request.body)
-            courses = params['timetable']['courses']
-            has_conflict = params['timetable']['has_conflict']
-            name = params['name']
-            semester, _ = Semester.objects.get_or_create(**params['semester'])
+            courses = request.data['courses']
+            has_conflict = request.data['has_conflict']
+            name = request.data['name']
+            semester, _ = Semester.objects.get_or_create(name=request.data['sem_name'], year=request.data['year'])
             student = Student.objects.get(user=request.user)
-            error = {'error': 'Timetable with name already exists'}
-            # if params['id'] is not provided (or params['id'] == 0) then this is a request to create a new timetable,
-            # since an ID has not been created for this timetable yet
-            tempId = params['id'] if params['id'] else -1
-            # don't allow people to save timetables with the same name
-            # two cases:
-            # 1. the user is creating a new timetable with the given name,
-            # in which case tempId will be -1 from above
-            # 2. the user is editing the name of an existing timetable, in which
-            # case tempId is the ID of that timetable, as passed from the frontend.
-            # we check if a timetable with a different id has that name
-            if PersonalTimetable.objects.filter(~Q(id=tempId),
-                                                student=student,
-                                                name=params['name'],
+
+            if PersonalTimetable.objects.filter(student=student,
+                                                name=request.data['name'],
                                                 semester=semester,
                                                 school=school).exists():
-                return HttpResponse(json.dumps(error), content_type='application/json')
+                return Response(status=status.HTTP_409_CONFLICT)
 
-            if params['id']:
-                personal_timetable = PersonalTimetable.objects.get(
-                    student=student, id=params['id'], school=school)
-                personal_timetable.name = name
-            else:
-                personal_timetable = PersonalTimetable.objects.create(
-                    student=student, name=name, school=school, semester=semester)
+            personal_timetable = PersonalTimetable.objects.create(student=student, name=name, school=school,
+                                                                  semester=semester)
             # delete currently existing courses and course offerings for this timetable
             personal_timetable.courses.clear()
             personal_timetable.sections.clear()
@@ -641,7 +624,7 @@ class UserTimetableView(APIView):
             saved_timetable = (x for x in timetables if x['id'] == personal_timetable.id).next()
             response = {'timetables': timetables, 'saved_timetable': saved_timetable}
 
-            return HttpResponse(json.dumps(response), content_type='application/json')
+            return Response(response, status=status.HTTP_201_CREATED)
 
     def delete(self, request, sem_name, year, tt_name):
         school = request.subdomain
