@@ -1,34 +1,23 @@
-from collections import OrderedDict
-from django.shortcuts import render_to_response, render
-from django.http import HttpResponse, HttpResponseRedirect, Http404
-from django.views.decorators.csrf import csrf_exempt
-from django.forms.models import model_to_dict
-from django.db.models import Q
-from django.core.urlresolvers import reverse
-from django.conf import settings
-from django.template import RequestContext
-from hashids import Hashids
-from pytz import timezone
-from datetime import datetime
 import json
+import itertools
+from datetime import datetime
+
+from django.contrib.auth.decorators import login_required
+from django.core.urlresolvers import reverse
+from django.core.signing import TimestampSigner
+from django.db.models import Q
+from django.forms.models import model_to_dict
+from django.http import HttpResponse, HttpResponseRedirect
+from django.shortcuts import render
+from django.views.decorators.csrf import csrf_exempt
 from hashids import Hashids
 import httplib2
-import itertools
-from timetable.models import *
-from student.models import *
-from analytics.models import *
-from django.forms.models import model_to_dict
-from django.contrib.auth.decorators import login_required
-from django.core.signing import TimestampSigner, BadSignature, SignatureExpired
-from django.db.models import Count
-from googleapiclient.discovery import build
-
 from googleapiclient import discovery
-from oauth2client import client
-from oauth2client import tools
-from oauth2client.file import Storage
 
+from analytics.models import *
+from student.models import *
 from student.utils import next_weekday
+from timetable.models import *
 from timetable.utils import *
 from authpipe.utils import get_google_credentials, check_student_token
 
