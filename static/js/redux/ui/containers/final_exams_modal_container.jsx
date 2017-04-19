@@ -1,7 +1,7 @@
 import { connect } from 'react-redux';
 import { FinalExamsModal } from '../final_exams_modal';
 import { fetchFinalExamSchedule } from '../../actions/user_actions';
-import { logFinalExamView } from '../../actions/calendar_actions';
+import { logFinalExamView } from '../../util';
 import { hideFinalExamsModal, triggerAcquisitionModal } from '../../actions/modal_actions';
 
 const remapCourseDetails = (courses) => {
@@ -20,6 +20,7 @@ const mapStateToProps = (state) => {
   const active = state.timetables.active;
   const timetables = state.timetables.items;
   return {
+    logFinalExamView,
     isVisible: state.finalExamsModal.isVisible,
     finalExamSchedule: state.finalExamsModal.finalExams,
     hasRecievedSchedule: Boolean(state.finalExamsModal.finalExams),
@@ -40,7 +41,6 @@ const FinalExamsModalContainer = connect(
     hideFinalExamsModal,
     fetchFinalExamSchedule,
     launchUserAcquisitionModal: triggerAcquisitionModal,
-    logFinalExamView,
   },
 )(FinalExamsModal);
 
