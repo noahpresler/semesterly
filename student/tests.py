@@ -1,4 +1,11 @@
+from django.contrib.auth.models import User
+from django.forms.models import model_to_dict
+from django.core.urlresolvers import resolve
+from rest_framework.test import APITestCase, APIRequestFactory, force_authenticate
+from rest_framework import status
+
 from test_utils.test_cases import UrlTestCase
+from student.models import Student
 
 
 class UrlsTest(UrlTestCase):
@@ -35,3 +42,25 @@ class UrlsTest(UrlTestCase):
                                      'student.views.ClassmateView',
                                      kwargs={'sem_name': 'Fall', 'year': '2016'})
         self.assertUrlResolvesToView('/user/gcal/', 'student.views.GCalView')
+
+
+class UserViewTest(APITestCase):
+
+    def setUp(self):
+        self.user = User.objects.create_user(username='jacob', password='top_secret')
+        self.student = Student.objects.create(user=self.user)
+        self.factory = APIRequestFactory()
+
+    def test_update_settings(self):
+        new_settings = {
+            'emails_enabled': True,
+            'social_courses': True,
+            'major': 'CS'
+        }
+        request = self.factory.patch('/user/settings/', new_settings, format='json')
+        force_authenticate(request, user=self.user)
+        view = resolve('/user/settings/').func
+        response = view(request)
+        self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
+        self.student = Student.objects.get(user=self.user)
+        self.assertDictContainsSubset(new_settings, model_to_dict(self.student))
