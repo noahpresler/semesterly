@@ -4,14 +4,17 @@ import { fetchFinalExamSchedule } from '../../actions/user_actions';
 import { logFinalExamView } from '../../actions/calendar_actions';
 import { hideFinalExamsModal, triggerAcquisitionModal } from '../../actions/modal_actions';
 
-const remapCourseDetails = courses =>
-  /* eslint-disable no-param-reassign */
-   Object.keys(courses).map((newCourses, course) => Object.assign({}, newCourses, {
-     [courses[course].id]: {
-       name: courses[course].name,
-       code: courses[course].code,
-     },
-   }), {});
+const remapCourseDetails = (courses) => {
+  const remap = {};
+  for (let i = 0; i < courses.length; i++) {
+    const course = courses[i];
+    remap[course.id] = {
+      name: course.name,
+      code: course.code,
+    };
+  }
+  return remap;
+};
 
 const mapStateToProps = (state) => {
   const active = state.timetables.active;
