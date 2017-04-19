@@ -96,8 +96,7 @@ def get_student_tts_wrapper(request, school, sem_name, year):
 def get_student_tts(student, school, semester):
     tts = student.personaltimetable_set.filter(
         school=school, semester=semester).order_by('-last_updated')
-    # create a list containing all PersonalTimetables for this semester in their dictionary representation
-    tts_list = [convert_tt_to_dict(tt) for tt in tts]  # aka titty dick
+    tts_list = [convert_tt_to_dict(tt) for tt in tts]
     return tts_list
 
 
@@ -565,11 +564,12 @@ class UserView(APIView):
 
 
 class UserTimetableView(APIView):
+
     def get(self, request, sem_name, year):
         sem, _ = Semester.objects.get_or_create(name=sem_name, year=year)
         student = Student.objects.get(user=request.user)
         response = get_student_tts(student, request.subdomain, sem)
-        return HttpResponse(json.dumps(response), content_type='application/json')
+        return Response(response, status=status.HTTP_200_OK)
 
     def post(self, request):
         if 'source' in request.data:  # duplicate existing timetable
