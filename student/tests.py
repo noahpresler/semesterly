@@ -67,10 +67,6 @@ class UserViewTest(APITestCase):
 
 
 class UserTimetableViewTest(APITestCase):
-    school = 'uoft'
-    request_headers = {
-        'HTTP_HOST': '{}.sem.ly:8000'.format(school)
-    }
 
     def setUp(self):
         """ Create a user and personal timetable. """
@@ -78,10 +74,10 @@ class UserTimetableViewTest(APITestCase):
         self.student = Student.objects.create(user=self.user)
 
         sem = Semester.objects.create(name='Winter', year='1995')
-        course = Course.objects.create(school=self.school, code='SEM101', name='Intro')
+        course = Course.objects.create(school='uoft', code='SEM101', name='Intro')
         section = Section.objects.create(course=course, semester=sem, meeting_section='L1')
         Offering.objects.create(section=section, day='M', time_start='8:00', time_end='10:00')
-        tt = PersonalTimetable.objects.create(name='tt', school=self.school, semester=sem, student=self.student)
+        tt = PersonalTimetable.objects.create(name='tt', school='uoft', semester=sem, student=self.student)
         tt.courses.add(course)
         tt.sections.add(section)
         tt.save()
@@ -101,7 +97,19 @@ class UserTimetableViewTest(APITestCase):
         pass
 
     def test_duplicate_timetable(self):
-        pass
+        data = {
+            'source': 'tt',
+            'sem_name': 'Winter',
+            'year': '1995',
+            'name': 'dupe tt'
+        }
+        request = self.factory.post('/user/timetables/', data, format='json')
+        force_authenticate(request, user=self.user)
+        request.subdomain = 'uoft'
+        view = resolve('/user/timetables/').func
+        response = view(request)
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+        PersonalTimetable.objects.get(name='dupe tt')
 
     def test_delete_timetable(self):
         pass
