@@ -36,7 +36,7 @@ export const receiveShareLink = shareLink => (dispatch) => {
   });
 };
 
-export const logFinalExamView = () => (dispatch) => {
+export const logFinalExamView = () => {
   fetch(getLogFinalExamViewEndpoint(), {
     method: 'POST',
     credentials: 'include',
