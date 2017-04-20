@@ -6,13 +6,8 @@ import searches.views
 
 admin.autodiscover()
 
-search_params = '(?P<sem_name>.+?)/(?P<year>[0-9]{4})/(?P<query>.+?)/'
 
 urlpatterns = patterns('',
-                       url(r'^search/(?P<school>.+?)/' + search_params,
-                           searches.views.course_search),
-                       url(r'^advanced_search/', searches.views.advanced_course_search),
-
-                       url(r'^api/search/' + search_params,
+                       url(r'^search/(?P<sem_name>.+?)/(?P<year>[0-9]{4})/(?P<query>.+?)/?$',
                            searches.views.CourseSearchList.as_view()),
                        )
