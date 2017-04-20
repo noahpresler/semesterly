@@ -1,4 +1,5 @@
 import ical from 'ical-generator';
+import Cookie from 'js-cookie';
 import FileSaver from 'browser-filesaver';
 import {
     getAddTTtoGCalEndpoint,
@@ -48,6 +49,11 @@ export const fetchShareTimetableLink = () => (dispatch) => {
     return;
   }
   fetch(getRequestShareTimetableLinkEndpoint(), {
+    headers: {
+      'X-CSRFToken': Cookie.get('csrftoken'),
+      Accept: 'application/json',
+      'Content-Type': 'application/json',
+    },
     method: 'POST',
     body: JSON.stringify({
       timetable: getActiveTimetable(timetableState),
@@ -55,10 +61,10 @@ export const fetchShareTimetableLink = () => (dispatch) => {
     }),
     credentials: 'include',
   })
-          .then(response => response.json())
-          .then((ref) => {
-            dispatch(receiveShareLink(`${window.location.href.split('/')[2]}/share/${ref.link}`));
-          });
+        .then(response => response.json())
+        .then((ref) => {
+          dispatch(receiveShareLink(`${window.location.href.split('/')[2]}/timetables/links/${ref.slug}`));
+        });
 };
 
 export const addTTtoGCal = () => (dispatch) => {
