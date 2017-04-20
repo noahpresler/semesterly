@@ -132,15 +132,20 @@ class CourseModal extends React.Component {
   }
 }
 
+CourseModal.defaultProps = {
+  id: null,
+  data: {},
+};
+
 CourseModal.propTypes = {
-  id: React.PropTypes.number.isRequired,
+  id: React.PropTypes.number,
   data: React.PropTypes.shape({
-    code: React.PropTypes.string.isRequired,
-    department: React.PropTypes.string.isRequired,
-    description: React.PropTypes.string.isRequired,
-    prerequisites: React.PropTypes.string.isRequired,
-    areas: React.PropTypes.string.isRequired,
-  }).isRequired,
+    code: React.PropTypes.string,
+    department: React.PropTypes.string,
+    description: React.PropTypes.string,
+    prerequisites: React.PropTypes.string,
+    areas: React.PropTypes.string,
+  }),
   inRoster: React.PropTypes.bool.isRequired,
   hasHoveredResult: React.PropTypes.bool.isRequired,
   addOrRemoveOptionalCourse: React.PropTypes.func.isRequired,
