@@ -107,6 +107,7 @@ class CourseSearchList(APIView):
         course_matches = [get_basic_course_json(course, sem) for course in course_match_objs]
         return Response(course_matches)
 
+    @csrf_exempt
     def post(self, request, query, sem_name, year):
         school = request.subdomain
         page = int(request.query_params.get('page', 1))
