@@ -53,19 +53,12 @@ var config = {
                 }
             },
             {
-                test: /\.scss$/,
-                use: [{
-                    loader: "style-loader" // creates style nodes from JS strings
-                }, {
-                    loader: "css-loader" // translates CSS into CommonJS
-                }, {
-                    loader: "resolve-url-loader" // file paths
-                }, {
-                    loader: "sass-loader", // compiles Sass to CSS
-                    options: {
-                        sourceMap: true
-                    }
-                }]
+                test   : /\.scss$/,
+                loaders: ['style-loader', 'css-loader', 'sass-loader?sourceMap']
+            },
+            {
+                test: /\.(png|jpg|gif|svg|eot|ttf|woff|woff2)$/,
+                loader: 'url-loader'
             }
         ]
     },
