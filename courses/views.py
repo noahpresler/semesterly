@@ -246,8 +246,7 @@ class CourseDetail(APIView):
 
 class SchoolList(APIView):
 
-    def get(self, request):
-        school = request.subdomain
+    def get(self, request, school):
         last_updated = None
         if Updates.objects.filter(school=school, update_field="Course").exists():
             update_time_obj = Updates.objects.get(school=school, update_field="Course") \
