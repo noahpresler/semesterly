@@ -15,6 +15,4 @@ urlpatterns = patterns('',
 
                        url(r'^api/search/' + search_params,
                            searches.views.CourseSearchList.as_view()),
-                       url(r'^api/advanced_search/' + search_params,
-                           searches.views.AdvancedCourseSearchList.as_view())
                        )

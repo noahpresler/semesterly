@@ -1,12 +1,35 @@
-from django.test import TestCase
+from rest_framework.test import APITestCase
+from rest_framework import status
 
 from timetable.models import Course, Section, Offering, Semester
 from test_utils.test_cases import UrlTestCase
 
 
-class BasicSearchTest(TestCase):
+class BasicSearchTest(APITestCase):
     school = 'uoft'
-    search_endpoint = 'search'
+    request_headers = {
+        'HTTP_HOST': '{}.sem.ly:8000'.format(school)
+    }
+
+    def setUp(self):
+        sem = Semester.objects.create(name='Winter', year='1995')
+        course = Course.objects.create(school=self.school, code='SEA101', name='Intro')
+        section = Section.objects.create(course=course, semester=sem, meeting_section='L1', section_type='L')
+        Offering.objects.create(section=section, day='M', time_start='8:00', time_end='10:00')
+
+    def test_course_exists(self):
+        response =  self.client.get('/api/search/Winter/1995/sea/', **self.request_headers)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertNotEqual(len(response.data),  0)
+
+    def test_no_course_exists(self):
+        response = self.client.get('/api/search/Fall/2016/sea/', **self.request_headers)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(len(response.data), 0)
+
+
+class AdvancedSearchTest(APITestCase):
+    school = 'uoft'
     request_headers = {
         'HTTP_HOST': '{}.sem.ly:8000'.format(school)
     }
@@ -17,28 +40,30 @@ class BasicSearchTest(TestCase):
         section = Section.objects.create(course=course, semester=sem, meeting_section='L1')
         Offering.objects.create(section=section, day='M', time_start='8:00', time_end='10:00')
 
-    def test_course_exists(self):
-        response =  self.client.get('/api/{}/Winter/1995/sea/'.format(self.search_endpoint), **self.request_headers)
-        self.assertEqual(response.status_code, 200)
-        self.assertNotEqual(len(response.json()),  0)
-
-    def test_no_course_exists(self):
-        response = self.client.get('/api/{}/Fall/2016/sea/'.format(self.search_endpoint), **self.request_headers)
-        self.assertEqual(response.status_code, 200)
-        self.assertEqual(len(response.json()), 0)
-
-
-class AdvancedSearchTest(BasicSearchTest):
-    search_endpoint = 'advanced_search'
-
-    def setUp(self):
-        super(AdvancedSearchTest, self).setUp()
+    def test_no_filter(self):
+        response =  self.client.get('/api/search/Winter/1995/sea/', **self.request_headers)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertNotEqual(len(response.data),  0)
 
     def test_filter_times(self):
-        pass
+        filters = {
+            'times': [{
+                'min': 12,
+                'max': 20,
+                'day': 'Tuesday'
+            }]
+        }
+        response =  self.client.post('/api/search/Winter/1995/sea/', filters, format='json', **self.request_headers)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(len(response.data),  0)
 
     def test_filter_levels(self):
-        pass
+        filters = {
+            'levels': [100]
+        }
+        response =  self.client.post('/api/search/Winter/1995/sea/', filters, format='json', **self.request_headers)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(len(response.data),  0)
 
     def test_pagination(self):
         pass
@@ -51,6 +76,5 @@ class UrlsTest(UrlTestCase):
         self.assertUrlResolvesToView('/search/jhu/Intermission/2019/opencv/', 'searches.views.course_search')
         self.assertUrlResolvesToView('/advanced_search/', 'searches.views.advanced_course_search')
 
-        self.assertUrlResolvesToView('/api/search/jhu/Intermission/2019/opencv/', 'searches.views.CourseSearchList')
-        self.assertUrlResolvesToView('/api/advanced_search/jhu/summer/1999/germany/',
-                                     'searches.views.AdvancedCourseSearchList')
+        self.assertUrlResolvesToView('/api/search/Intermission/2019/opencv/', 'searches.views.CourseSearchList',
+                                     kwargs={'sem_name': 'Intermission', 'year': '2019', 'query': 'opencv'})
