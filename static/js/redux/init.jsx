@@ -19,6 +19,37 @@ import {
 import { addTTtoGCal } from './actions/calendar_actions';
 import * as ActionTypes from './constants/actionTypes';
 
+require('../../css/timetable/alert.scss');
+require('../../css/timetable/course_modal.scss');
+require('../../css/timetable/day_calendar.scss');
+require('../../css/timetable/evaluation.scss');
+require('../../css/timetable/exploration_modal.scss');
+require('../../css/timetable/final_exam_modal.scss');
+require('../../css/timetable/global.scss');
+require('../../css/timetable/integration-modal.scss');
+require('../../css/timetable/load.scss');
+require('../../css/timetable/page_layout.scss');
+require('../../css/timetable/pagination.scss');
+require('../../css/timetable/peer_modal.scss');
+require('../../css/timetable/preference-modal.scss');
+require('../../css/timetable/print_layout.scss');
+require('../../css/timetable/react-select.css.scss');
+require('../../css/timetable/react_input_range.scss');
+require('../../css/timetable/save_calendar_modal.scss');
+require('../../css/timetable/search_bar.scss');
+require('../../css/timetable/side_scroller.scss');
+require('../../css/timetable/signup-modal.scss');
+require('../../css/timetable/slot.scss');
+require('../../css/timetable/social.scss');
+require('../../css/timetable/textbook_modal.scss');
+require('../../css/timetable/textbooks.scss');
+require('../../css/timetable/tgl.scss');
+require('../../css/timetable/timetable.scss');
+require('../../css/timetable/tooltip.scss');
+require('../../css/timetable/tut-modal.scss');
+require('../../css/timetable/user_acquisition_modal.scss');
+require('../../css/timetable/user_settings_modal.scss');
+
 export const store = createStore(rootReducer,
     window.devToolsExtension && window.devToolsExtension(),
     applyMiddleware(thunkMiddleware),
