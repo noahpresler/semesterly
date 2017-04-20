@@ -1,5 +1,5 @@
 import { connect } from 'react-redux';
-import { CourseModal } from '../course_modal';
+import CourseModal from '../course_modal';
 import {
     addOrRemoveCourse,
     addOrRemoveOptionalCourse,
