@@ -13,25 +13,13 @@ router.register(NumberSignupsWidget, 'number_signups_widget')
 router.register(NumberFacebookAlertsViewsWidget, 'number_facebook_alerts_views_widget')
 router.register(NumberFacebookAlertsClicksWidget, 'number_facebook_alerts_clicks_widget')
 
+
 admin.autodiscover()
 
-# custom 404 page
-handler404 = 'timetable.views.custom_404'
-# custom 500 page
-handler500 = 'timetable.views.custom_500'
-
-# for sorting search results by course code
-# sqs = SearchQuerySet().order_by('code')
-
 urlpatterns = patterns('',
-                       # url(r'^admin/', include(admin.site.urls)),
-
-                           #finding friends
-    url('', include('social.apps.django_app.urls', namespace='social')),
-                       url('', include('django.contrib.auth.urls', namespace='auth')),
-
     # app urls
     url('', include('timetable.urls')),
+    url('', include('authpipe.urls')),
     url('', include('courses.urls')),
     url('', include('integrations.urls')),
     url('', include('exams.urls')),
