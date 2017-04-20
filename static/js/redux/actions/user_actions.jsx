@@ -34,10 +34,12 @@ export const requestUserInfo = () => ({
   type: ActionTypes.REQUEST_USER_INFO,
 });
 
-export const getClassmates = json => ({
-  type: ActionTypes.CLASSMATES_RECEIVED,
-  courses: json,
-});
+export const getClassmates = json => dispatch => (
+  dispatch({
+    type: ActionTypes.CLASSMATES_RECEIVED,
+    courses: json,
+  })
+);
 
 export const getFriends = json => ({
   type: ActionTypes.FRIENDS_RECEIVED,
@@ -112,7 +114,6 @@ export const fetchMostClassmatesCount = courses => (dispatch) => {
 export const fetchClassmates = courses => (dispatch) => {
   const state = store.getState();
   const semesterIndex = state.semesterIndex !== undefined ? state.semesterIndex : currentSemester;
-
   setTimeout(() => {
     dispatch(fetchMostClassmatesCount(getActiveTimetable(state.timetables)
       .courses.map(c => c.id)));
@@ -329,7 +330,6 @@ export const saveSettings = callback => (dispatch) => {
       const timetables = state.timetables.items;
       const active = state.timetables.active;
       const activeTT = timetables[active];
-
       if (state.userInfo.data.social_courses) {
         dispatch(fetchClassmates(activeTT.courses.map(c => c.id)));
         if (state.courseInfo.id) {
@@ -473,12 +473,9 @@ fetch(deleteRegistrationTokenEndpoint(), {
 .then(response => response.json()) // TODO(rohan): error-check the response
 .then((json) => {
   if (!json.error) {
-    // console.log("token deleted: " + token);
     dispatch({
       type: ActionTypes.UNREGISTER_TOKEN,
     });
-  } else {
-    // console.log("token not deleted: " + token);
   }
 });
 
