@@ -141,12 +141,12 @@ CourseModal.propTypes = {
     prerequisites: React.PropTypes.string.isRequired,
     areas: React.PropTypes.string.isRequired,
   }).isRequired,
-  inRoster: React.PropTypes.boolean.isRequired,
-  hasHoveredResult: React.PropTypes.boolean.isRequired,
-  addOrRemoveOptionalCourse: React.PropTypes.fcn.isRequired,
-  addOrRemoveCourse: React.PropTypes.fcn.isRequired,
-  hideModal: React.PropTypes.fcn.isRequired,
-  unHoverSection: React.PropTypes.boolean.isRequired,
+  inRoster: React.PropTypes.bool.isRequired,
+  hasHoveredResult: React.PropTypes.bool.isRequired,
+  addOrRemoveOptionalCourse: React.PropTypes.func.isRequired,
+  addOrRemoveCourse: React.PropTypes.func.isRequired,
+  hideModal: React.PropTypes.func.isRequired,
+  unHoverSection: React.PropTypes.func.isRequired,
 };
 
 export default CourseModal;
