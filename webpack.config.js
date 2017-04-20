@@ -52,6 +52,21 @@ var config = {
                     presets: ['react']
                 }
             },
+            {
+                test: /\.scss$/,
+                use: [{
+                    loader: "style-loader" // creates style nodes from JS strings
+                }, {
+                    loader: "css-loader" // translates CSS into CommonJS
+                }, {
+                    loader: "resolve-url-loader" // file paths
+                }, {
+                    loader: "sass-loader", // compiles Sass to CSS
+                    options: {
+                        sourceMap: true
+                    }
+                }]
+            }
         ]
     },
 
@@ -64,7 +79,7 @@ var config = {
         //tells webpack where to look for modules
         modules: ['node_modules'],
         //extensions that should be used to resolve modules
-        extensions: ['.jsx', '.js'],
+        extensions: ['.jsx', '.js', '.scss', '.css'],
     }
 }
 
