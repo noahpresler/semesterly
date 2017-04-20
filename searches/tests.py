@@ -18,12 +18,12 @@ class BasicSearchTest(APITestCase):
         Offering.objects.create(section=section, day='M', time_start='8:00', time_end='10:00')
 
     def test_course_exists(self):
-        response =  self.client.get('/api/search/Winter/1995/sea/', **self.request_headers)
+        response =  self.client.get('/search/Winter/1995/sea/', **self.request_headers)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertNotEqual(len(response.data),  0)
 
     def test_no_course_exists(self):
-        response = self.client.get('/api/search/Fall/2016/sea/', **self.request_headers)
+        response = self.client.get('/search/Fall/2016/sea/', **self.request_headers)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(len(response.data), 0)
 
@@ -41,7 +41,7 @@ class AdvancedSearchTest(APITestCase):
         Offering.objects.create(section=section, day='M', time_start='8:00', time_end='10:00')
 
     def test_no_filter(self):
-        response =  self.client.get('/api/search/Winter/1995/sea/', **self.request_headers)
+        response =  self.client.get('/search/Winter/1995/sea/', **self.request_headers)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertNotEqual(len(response.data),  0)
 
@@ -53,7 +53,7 @@ class AdvancedSearchTest(APITestCase):
                 'day': 'Tuesday'
             }]
         }
-        response =  self.client.post('/api/search/Winter/1995/sea/', filters, format='json', **self.request_headers)
+        response =  self.client.post('/search/Winter/1995/sea/', filters, format='json', **self.request_headers)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(len(response.data),  0)
 
@@ -61,7 +61,7 @@ class AdvancedSearchTest(APITestCase):
         filters = {
             'levels': [100]
         }
-        response =  self.client.post('/api/search/Winter/1995/sea/', filters, format='json', **self.request_headers)
+        response =  self.client.post('/search/Winter/1995/sea/', filters, format='json', **self.request_headers)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(len(response.data),  0)
 
@@ -73,8 +73,5 @@ class UrlsTest(UrlTestCase):
     """ Test search/urls.py """
 
     def test_urls_call_correct_views(self):
-        self.assertUrlResolvesToView('/search/jhu/Intermission/2019/opencv/', 'searches.views.course_search')
-        self.assertUrlResolvesToView('/advanced_search/', 'searches.views.advanced_course_search')
-
-        self.assertUrlResolvesToView('/api/search/Intermission/2019/opencv/', 'searches.views.CourseSearchList',
+        self.assertUrlResolvesToView('/search/Intermission/2019/opencv/', 'searches.views.CourseSearchList',
                                      kwargs={'sem_name': 'Intermission', 'year': '2019', 'query': 'opencv'})
