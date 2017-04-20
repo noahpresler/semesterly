@@ -29,4 +29,8 @@ urlpatterns = patterns('',
                        # timetable sharing
                        url(r'share/link/*$', timetable.views.create_share_link),
                        url(r'share/(?P<ref>.+)/*$', timetable.views.share_timetable),
+
+                       url(r'^timetables/$', timetable.views.TimetableView.as_view()),
+                       url(r'^timetables/links/$', timetable.views.TimetableLinkView.as_view()),
+                       url(r'^timetables/links/(?P<slug>.+)/$', timetable.views.TimetableLinkView.as_view())
                        )
