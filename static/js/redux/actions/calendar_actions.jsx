@@ -2,7 +2,6 @@ import ical from 'ical-generator';
 import FileSaver from 'browser-filesaver';
 import {
     getAddTTtoGCalEndpoint,
-    getLogFinalExamViewEndpoint,
     getLogiCalEndpoint,
     getRequestShareTimetableLinkEndpoint,
 } from '../constants/endpoints';
@@ -33,13 +32,6 @@ export const receiveShareLink = shareLink => (dispatch) => {
   dispatch({
     type: ActionTypes.RECEIVE_SHARE_TIMETABLE_LINK,
     shareLink,
-  });
-};
-
-export const logFinalExamView = () => {
-  fetch(getLogFinalExamViewEndpoint(), {
-    method: 'POST',
-    credentials: 'include',
   });
 };
 
