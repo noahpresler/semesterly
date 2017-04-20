@@ -5,7 +5,6 @@ from django.contrib import admin
 from rest_framework_swagger.views import get_swagger_view
 from rest_framework.schemas import get_schema_view
 
-
 admin.autodiscover()
 
 urlpatterns = patterns('',
@@ -41,13 +40,9 @@ urlpatterns = patterns('',
                        # home
                        url(r'^$', 'timetable.views.view_timetable'),
 
-                       # api view
-                       url(r'^swagger/$', get_swagger_view(title='semesterly')),
-                       url(r'^schema/$', get_schema_view(title='semesterly'))
+                       # profiling
+                       url(r'^silk/', include('silk.urls', namespace='silk'))
                        )
-
-# profiling
-urlpatterns += [url(r'^silk/', include('silk.urls', namespace='silk'))]
 
 if getattr(settings, 'STAGING', False):
     urlpatterns += patterns('', url(r'^robots.txt$',
@@ -55,3 +50,10 @@ if getattr(settings, 'STAGING', False):
 else:
     urlpatterns += patterns('', url(r'^robots.txt$',
                                     lambda r: HttpResponse("User-agent: *\nDisallow:", content_type="text/plain")))
+
+# api views
+if getattr(settings, 'DEBUG', True):
+    urlpatterns += [
+        url(r'^swagger/$', get_swagger_view(title='semesterly')),
+        url(r'^schema/$', get_schema_view(title='semesterly')),
+    ]
