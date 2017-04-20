@@ -24,13 +24,9 @@ urlpatterns = patterns('',
                        url(r'^complete/facebook/.*$', timetable.views.view_timetable),
 
                        # timetables
-                       url(r'^get_timetables/$', timetable.views.get_timetables),
+                       url(r'^timetables/?$', timetable.views.TimetableView.as_view()),
 
-                       # timetable sharing
-                       url(r'share/link/*$', timetable.views.create_share_link),
-                       url(r'share/(?P<ref>.+)/*$', timetable.views.share_timetable),
-
-                       url(r'^timetables/$', timetable.views.TimetableView.as_view()),
+                       # sharing
                        url(r'^timetables/links/$', timetable.views.TimetableLinkView.as_view()),
                        url(r'^timetables/links/(?P<slug>.+)/$', timetable.views.TimetableLinkView.as_view())
                        )

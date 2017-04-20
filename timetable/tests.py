@@ -24,13 +24,9 @@ class UrlsTest(UrlTestCase):
         self.assertUrlResolvesToView('/timetable/', 'timetable.views.redirect_to_home')
 
         # timetables
-        self.assertUrlResolvesToView('/get_timetables/', 'timetable.views.get_timetables')
+        self.assertUrlResolvesToView('/timetables/', 'timetable.views.TimetableView')
 
         # timetable sharing
-        self.assertUrlResolvesToView('/share/link', 'timetable.views.create_share_link')
-        self.assertUrlResolvesToView('/share/dIcMED', 'timetable.views.share_timetable')
-
-        self.assertUrlResolvesToView('/timetables/', 'timetable.views.TimetableView')
         self.assertUrlResolvesToView('/timetables/links/', 'timetable.views.TimetableLinkView')
         self.assertUrlResolvesToView('/timetables/links/SecAV/', 'timetable.views.TimetableLinkView')
 
