@@ -7,7 +7,7 @@ from dashing.utils import router
 from analytics.widgets import *
 
 router.register(NumberTimetablesWidget, 'number_timetables_widget')
-router.register(NumberCalendarExportsWidget, 'nce_widget')
+router.register(NumberCalendarExportsWidget, 'number_calendar_exports_widget')
 router.register(NumberFinalExamViewsWidget, 'number_final_exam_views_widget')
 router.register(NumberSignupsWidget, 'number_signups_widget')
 router.register(NumberFacebookAlertsViewsWidget, 'number_facebook_alerts_views_widget')

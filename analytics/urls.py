@@ -13,4 +13,6 @@ urlpatterns = patterns('',
     url(r'^user/log_fb_alert_click/*$', analytics.views.log_facebook_alert_click),
     url(r'^user/log_fb_alert_view/*$', analytics.views.log_facebook_alert_view),
     url(r'^user/log_ical/*$', student.views.log_ical_export),
+
+    url(r'^dashboard/custom_widgets/(?P<widget_name>.*)', analytics.views.get_widget)
 )

@@ -19,6 +19,14 @@ from timetable.school_mappers import VALID_SCHOOLS
 
 to_zone = tz.gettz('America/New_York')
 
+
+def get_widget(request, widget_name):
+    return render_to_response(
+        'widgets/' + widget_name, 
+        context_instance=RequestContext(request)
+    )
+    
+
 def view_analytics_dashboard(request):
     student = get_student(request)
     if student and student.user.is_staff:

@@ -1,7 +1,8 @@
+from dashing.widgets import Widget
 from dashing.widgets import GraphWidget
 from dashing.widgets import ListWidget
 from dashing.widgets import NumberWidget
-from dashing.widgets import TimetablesWidget
+# from dashing.widgets import TimetablesWidget
 
 from student.views import get_student
 from student.models import *
@@ -33,9 +34,23 @@ def number_timetables(**parameters):
     return timetables.count()
 
 
-class NumberTimetablesWidget(TimetablesWidget):
+class NumberTimetablesWidget(Widget):
 
     title = 'Number of Timetables'
+    more_info = ''
+    updated_at = ''
+    total = ''
+    shared = ''
+    personal = ''
+
+    def get_title(self):
+        return self.title
+
+    def get_more_info(self):
+        return self.more_info
+
+    def get_updated_at(self):
+        return self.updated_at
 
     def get_total(self):
         return number_timetables()
@@ -51,6 +66,16 @@ class NumberTimetablesWidget(TimetablesWidget):
             "%d personal" % 
             number_timetables(Timetable=PersonalTimetable)
         )
+
+    def get_context(self):
+        return {
+            'title'     : self.get_title(),
+            'moreInfo'  : self.get_more_info(),
+            'updatedAt' : self.get_updated_at(),
+            'total'     : self.get_total(),
+            'shared'    : self.get_shared(),
+            'personal'  : self.get_personal(),
+        }
 
 
 class NumberCalendarExportsWidget(ListWidget):

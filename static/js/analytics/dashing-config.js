@@ -16,7 +16,7 @@ dashboard.addWidget('numberTimetablesWidget', 'Timetables', {
 dashboard.addWidget('numberCalendarExportsWidget', 'List', {
     getData: function () {
         var self = this;
-        Dashing.utils.get('nce_widget', function(data) {
+        Dashing.utils.get('number_calendar_exports_widget', function(data) {
             console.log(data)
             $.extend(self.scope, data);
         });

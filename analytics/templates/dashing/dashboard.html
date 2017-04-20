@@ -1,0 +1,18 @@
+{% extends 'dashing/base.html' %}
+{% load staticfiles %}
+
+{% block stylesheets %}
+<link rel="stylesheet" href="{% static 'css/analytics/widgets/timetables.css' %}">
+{% endblock %}
+
+{% block templates %}
+<link rel="resource" type="text/html" href="custom_widgets/timetables.html" data-widget="timetables"> 
+{% endblock %}
+
+{% block scripts %}
+<script type="text/javascript" src="{% static 'js/analytics/widgets/timetables.js' %}"></script>
+{% endblock %}
+
+{% block config_file %}
+<script type="text/javascript" src="{% static 'js/analytics/dashing-config.js' %}"></script>
+{% endblock %}
