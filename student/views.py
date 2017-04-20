@@ -655,7 +655,7 @@ class ClassmateView(APIView):
         if request.query_params.get('counts'):
             school = request.subdomain
             student = Student.objects.get(user=request.user)
-            course_ids = request.query_params.getlist('course_ids')
+            course_ids = map(int, request.query_params.getlist('course_ids'))
             semester, _ = Semester.objects.get_or_create(name=sem_name, year=year)
             total_count = 0
             count = 0
@@ -666,8 +666,8 @@ class ClassmateView(APIView):
                     count = temp_count
                     most_friend_course_id = course_id
                 total_count += temp_count
-            course = {"id": most_friend_course_id, "count": count, "total_count": total_count}
-            return HttpResponse(json.dumps(course))
+            data = {"id": most_friend_course_id, "count": count, "total_count": total_count}
+            return Response(data, status=status.HTTP_200_OK)
         elif request.query_params.getlist('course_ids'):
             school = request.subdomain
             student = Student.objects.get(user=request.user)
@@ -679,19 +679,20 @@ class ClassmateView(APIView):
                 friends = student.friends.filter(social_courses=True)
                 for course_id in course_ids:
                     courses.append(get_classmates_from_course_id(school, student, course_id, semester, friends=friends))
-                return HttpResponse(json.dumps(courses), content_type='application/json')
+                return Response(courses, status=status.HTTP_200_OK)
             else:
+                # TODO: should be handled on the frontend before sending a request
                 return HttpResponse("Must have social_courses enabled")
         else:
             school = request.subdomain
             student = Student.objects.get(user=request.user)
-            if not student.social_all:
-                return HttpResponse(json.dumps([]))
+            if not student.social_all: # TODO: should be checked on frontend
+                return Response([], status=status.HTTP_200_OK)
             semester, _ = Semester.objects.get_or_create(name=sem_name, year=year)
             current_tt = student.personaltimetable_set.filter(school=school, semester=semester).order_by(
                 'last_updated').last()
             if current_tt is None:
-                return HttpResponse(json.dumps([]))
+                return Response([], status=status.HTTP_200_OK)
             current_tt_courses = current_tt.courses.all()
 
             # The most recent TT per student with social enabled that has courses in common with input student
@@ -725,7 +726,7 @@ class ClassmateView(APIView):
                 })
 
             friends.sort(key=lambda friend: len(friend['shared_courses']), reverse=True)
-            return HttpResponse(json.dumps(friends))
+            return Response(friends, status=status.HTTP_200_OK)
 
 
 class GCalView(APIView):

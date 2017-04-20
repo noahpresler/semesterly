@@ -155,15 +155,88 @@ class UserTimetableViewTest(APITestCase):
 class ClassmateViewTest(APITestCase):
 
     def setUp(self):
-        self.user = User.objects.create_user(username='jacob', password='top_secret')
-        self.student = Student.objects.create(user=self.user)
+        # set up friends
+        self.user1 = User.objects.create_user(first_name='jacob', last_name='D', username='jacob', password='secret')
+        self.student1 = Student.objects.create(id=1, user=self.user1, social_courses=True, social_all=True)
+
+        self.user2 = User.objects.create_user(first_name='tim', last_name='F', username='tim', password='secret')
+        self.student2 = Student.objects.create(id=2, user=self.user2, social_courses=True, social_all=True)
+
+        self.user3 = User.objects.create_user(first_name='matt', last_name='A', username='matt', password='secret')
+        self.student3 = Student.objects.create(id=3, user=self.user3, social_courses=True, social_all=True)
+
+        # 1 and 2 are friends
+        self.student2.friends.add(self.student1)
+        self.student2.save()
+        self.student1.friends.add(self.student2)
+        self.student2.save()
+
+        # set up course with two sections
+        sem = Semester.objects.create(name='Fall', year='2000')
+        course = Course.objects.create(id=1, school='uoft', code='SEM101', name='Intro')
+        section1 = Section.objects.create(course=course, semester=sem, meeting_section='L1')
+        Offering.objects.create(section=section1, day='M', time_start='8:00', time_end='10:00')
+
+        section2 = Section.objects.create(course=course, semester=sem, meeting_section='L2')
+        Offering.objects.create(section=section2, day='W', time_start='8:00', time_end='10:00')
+
+        # students have a timetable in common
+        tt1 = PersonalTimetable.objects.create(name='tt', school='uoft', semester=sem, student=self.student1)
+        tt1.courses.add(course)
+        tt1.sections.add(section1)
+        tt1.save()
+
+        tt2 = PersonalTimetable.objects.create(name='tt', school='uoft', semester=sem, student=self.student2)
+        tt2.courses.add(course)
+        tt2.sections.add(section1)
+        tt2.save()
+
+        tt3 = PersonalTimetable.objects.create(name='tt', school='uoft', semester=sem, student=self.student3)
+        tt3.courses.add(course)
+        tt3.sections.add(section1)
+        tt3.save()
+
+        # student2 has another timetable
+        tt4 = PersonalTimetable.objects.create(name='tt', school='uoft', semester=sem, student=self.student2)
+        tt4.courses.add(course)
+        tt4.sections.add(section2)
+        tt4.save()
+
         self.factory = APIRequestFactory()
 
     def test_get_classmate_counts(self):
-        pass
+        request = self.factory.get('/user/classmates/Fall/2000/', {'counts': True, 'course_ids': [1]})
+        force_authenticate(request, user=self.user2)
+        request.subdomain = 'uoft'
+        view = resolve('/user/classmates/Fall/2016/').func
+        response = view(request, 'Fall', '2000')
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertDictEqual(response.data, {
+            'id': 1,
+            'count': 1,
+            'total_count': 1
+        })
 
     def test_get_classmates(self):
-        pass
+        request = self.factory.get('/user/classmates/Fall/2000/', {'course_ids': [1]})
+        force_authenticate(request, user=self.user2)
+        request.subdomain = 'uoft'
+        view = resolve('/user/classmates/Fall/2016/').func
+        response = view(request, 'Fall', '2000')
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
 
-    def test_no_social_courses(self):
-        pass
+        self.assertEqual(len(response.data), 1)
+        classmates = response.data[0]['classmates']
+        self.assertEqual(len(classmates), 1)
+        self.assertEqual(classmates[0]['first_name'], self.user1.first_name)
+        self.assertEqual(classmates[0]['last_name'], self.user1.last_name)
+        self.assertEqual(len(response.data[0]['past_classmates']), 0)
+
+    def test_find_friends(self):
+        request = self.factory.get('/user/classmates/Fall/2000/')
+        force_authenticate(request, user=self.user3)
+        request.subdomain = 'uoft'
+        view = resolve('/user/classmates/Fall/2016/').func
+        response = view(request, 'Fall', '2000')
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(len(response.data), 2)
