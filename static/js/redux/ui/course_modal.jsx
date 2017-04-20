@@ -5,7 +5,7 @@ import { CourseModalBody } from './course_modal_body';
 import { getCourseShareLink, getCourseShareLinkFromModal } from '../helpers/timetable_helpers';
 import { ShareLink } from './master_slot';
 
-export class CourseModal extends React.Component {
+class CourseModal extends React.Component {
   constructor(props) {
     super(props);
     this.addOrRemoveCourse = this.addOrRemoveCourse.bind(this);
@@ -20,10 +20,10 @@ export class CourseModal extends React.Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    if (nextProps.id != null) {
-      const { data, inRoster } = nextProps;
+    if (nextProps.id !== null) {
+      const { data } = nextProps;
       history.replaceState({}, 'Semester.ly', getCourseShareLinkFromModal(data.code));
-      this.refs.modal.show();
+      this.modal.show();
     }
   }
 
@@ -45,22 +45,11 @@ export class CourseModal extends React.Component {
     this.setState({ shareLinkShown: false });
   }
 
-    // sizeItUp() {
-    //     // let h = $("#modal-header").outerHeight();
-    //     // $("#modal-body").css("top", h);
-    //     $(".course-modal:parent").css("display", "block");
-    // }
-    // componentDidMount() {
-    //     $(window).resize(this.sizeItUp);
-    // }
-    // componentDidUpdate() {
-    //     this.sizeItUp();
-    // }
   hide() {
     history.replaceState({}, 'Semester.ly', '/');
     this.props.unHoverSection();
     this.props.hideModal();
-    this.refs.modal.hide();
+    this.modal.hide();
   }
 
   render() {
@@ -70,7 +59,7 @@ export class CourseModal extends React.Component {
     };
     const { data, inRoster } = this.props;
     let courseAndDept = data.code;
-    courseAndDept = data.department && data.department != '' ?
+    courseAndDept = data.department && data.department !== '' ?
             `${courseAndDept}, ${data.department}` : courseAndDept;
     const shareLink = this.state.shareLinkShown ?
             (<ShareLink
@@ -115,7 +104,7 @@ export class CourseModal extends React.Component {
               <div id="modal-header">
                 <h1>{data.name}</h1>
                 <h2>{courseAndDept}</h2>
-                <div id="modal-close" onClick={() => this.refs.modal.hide()}>
+                <div id="modal-close" onClick={() => this.modal.hide()}>
                   <i className="fa fa-times" />
                 </div>
                 <div id="modal-share">
@@ -132,7 +121,7 @@ export class CourseModal extends React.Component {
             </div>);
     return (
       <Modal
-        ref="modal"
+        ref={(c) => { this.modal = c; }}
         className={classNames('course-modal max-modal', { trans: this.props.hasHoveredResult })}
         modalStyle={modalStyle}
         onHide={this.hide}
@@ -142,3 +131,22 @@ export class CourseModal extends React.Component {
     );
   }
 }
+
+CourseModal.propTypes = {
+  id: React.PropTypes.number.isRequired,
+  data: React.PropTypes.shape({
+    code: React.PropTypes.string.isRequired,
+    department: React.PropTypes.string.isRequired,
+    description: React.PropTypes.string.isRequired,
+    prerequisites: React.PropTypes.string.isRequired,
+    areas: React.PropTypes.string.isRequired,
+  }).isRequired,
+  inRoster: React.PropTypes.boolean.isRequired,
+  hasHoveredResult: React.PropTypes.boolean.isRequired,
+  addOrRemoveOptionalCourse: React.PropTypes.fcn.isRequired,
+  addOrRemoveCourse: React.PropTypes.fcn.isRequired,
+  hideModal: React.PropTypes.fcn.isRequired,
+  unHoverSection: React.PropTypes.boolean.isRequired,
+};
+
+export default CourseModal;
