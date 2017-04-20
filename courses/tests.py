@@ -1,11 +1,12 @@
 from datetime import datetime
-from django.test import TestCase
+from rest_framework.test import APITestCase
+from rest_framework import status
 
 from test_utils.test_cases import UrlTestCase
 from timetable.models import Semester, Course, Section, Offering, Updates
 
 
-class CourseDetail(TestCase):
+class CourseDetail(APITestCase):
     school = 'uoft'
     search_endpoint = 'search'
     request_headers = {
@@ -26,7 +27,7 @@ class CourseDetail(TestCase):
     def test_course_exists(self):
         response =  self.client.get('/api/courses/{}/{}/id/{}'.format(self.sem_name, self.year, self.cid),
                                     **self.request_headers)
-        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
 
         course_info = response.json()
         self.assertEqual(course_info['name'], self.name)
@@ -35,10 +36,10 @@ class CourseDetail(TestCase):
     def test_no_course_exists(self):
         response = self.client.get('/api/courses/{}/{}/id/{}'.format(self.sem_name, self.year, self.cid + 1),
                                    **self.request_headers)
-        self.assertEqual(response.status_code, 404)
+        self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
 
 
-class SchoolListTest(TestCase):
+class SchoolListTest(APITestCase):
     school = 'uoft'
     search_endpoint = 'search'
     request_headers = {
@@ -56,9 +57,9 @@ class SchoolListTest(TestCase):
 
     def test_school_exists(self):
         response =  self.client.get('/api/school_info/', **self.request_headers)
-        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
 
-        school_info = response.json()
+        school_info = response.data
         self.assertNotEqual(len(school_info['areas']), 0)
         self.assertNotEqual(len(school_info['departments']), 0)
         self.assertNotEqual(len(school_info['levels']), 0)
@@ -66,9 +67,9 @@ class SchoolListTest(TestCase):
 
     def test_school_does_not_exist(self):
         response = self.client.get('/api/school_info/', HTTP_HOST='jhu.sem.ly:8000')
-        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
 
-        school_info = response.json()
+        school_info = response.data
         self.assertEqual(len(school_info['areas']), 0)
         self.assertEqual(len(school_info['departments']), 0)
         self.assertEqual(len(school_info['levels']), 0)
