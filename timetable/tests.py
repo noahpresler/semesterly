@@ -4,7 +4,6 @@ from rest_framework import status
 from test_utils.utils import get_default_tt_request
 from test_utils.test_cases import UrlTestCase
 
-from analytics.models import SharedTimetable
 from timetable.models import Semester, Course, Section, Offering
 
 
@@ -84,5 +83,6 @@ class TimetableLinkViewTest(APITestCase):
 
         slug = response.data['slug']
 
+        # assumes that the response will be a 404 if post did not actually create a shared timetable
         response = self.client.get('/timetables/links/{}/'.format(slug), **self.request_headers)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
