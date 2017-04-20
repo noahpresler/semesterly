@@ -1,6 +1,6 @@
-require('../../../../scss/timetable/alert.scss');
-
 import React from 'react';
+
+require('../../../../css/timetable/alert.scss');
 
 class ChangeSemesterAlert extends React.Component {
   componentWillUnmount() {
