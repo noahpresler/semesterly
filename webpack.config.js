@@ -34,7 +34,7 @@ const config = {
       'window.jQuery': 'jquery',
     }),
     new ExtractTextPlugin({
-      filename: 'style.css',
+      filename: 'style-[hash].css',
       allChunks: true,
     }),
   ],
