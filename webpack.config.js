@@ -65,9 +65,13 @@ const config = {
             loader: 'css-loader',
             options: {
               minimize: isProd,
+              sourceMap: isDev,
             },
           }, {
             loader: 'sass-loader',
+            options: {
+              sourceMap: isDev,
+            },
           }],
         }),
       },
