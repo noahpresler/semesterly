@@ -59,11 +59,16 @@ const config = {
       },
       {
         test: /\.scss$/,
-        // loaders: ['style-loader', 'css-loader', 'sass-loader?sourceMap'],
         use: ExtractTextPlugin.extract({
           fallback: 'style-loader',
-          // resolve-url-loader may be chained before sass-loader if necessary
-          use: ['css-loader', 'sass-loader'],
+          use: [{
+            loader: 'css-loader',
+            options: {
+              minimize: isProd,
+            },
+          }, {
+            loader: 'sass-loader',
+          }],
         }),
       },
       {
