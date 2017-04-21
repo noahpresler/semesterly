@@ -17,7 +17,7 @@ class ChangeSemesterAlert extends React.Component {
 
         <button
           onClick={() => this.handleClick()}
-          className="conflict-alert-btn change-semester-btn"
+          className="conflict-alert__btn change-semester__btn"
         >
         Change Semester Anyway
       </button>
