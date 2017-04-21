@@ -1,7 +1,5 @@
 import React from 'react';
 
-require('../../../../css/timetable/alert.scss');
-
 class ChangeSemesterAlert extends React.Component {
   componentWillUnmount() {
     this.props.dismissSelf();
