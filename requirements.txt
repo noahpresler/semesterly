@@ -60,3 +60,7 @@ mock==2.0.0
 coreapi==2.3.0
 django-rest-swagger==2.1.2
 django-braces>=1.11.0
+celery==3.1.25
+django-celery==3.1.17
+django-celery-beat==1.0.1
+redis==2.10.5
