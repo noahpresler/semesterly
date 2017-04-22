@@ -1,9 +1,10 @@
 import React from 'react';
 import classNames from 'classnames';
 import Modal from 'boron/WaveModal';
-import { CourseModalBody } from './course_modal_body';
+import CourseModalBody from './course_modal_body';
 import { getCourseShareLink, getCourseShareLinkFromModal } from '../helpers/timetable_helpers';
 import { ShareLink } from './master_slot';
+import { fullCourseDetails } from '../constants/propTypes';
 
 class CourseModal extends React.Component {
   constructor(props) {
@@ -139,13 +140,7 @@ CourseModal.defaultProps = {
 
 CourseModal.propTypes = {
   id: React.PropTypes.number,
-  data: React.PropTypes.shape({
-    code: React.PropTypes.string,
-    department: React.PropTypes.string,
-    description: React.PropTypes.string,
-    prerequisites: React.PropTypes.string,
-    areas: React.PropTypes.string,
-  }),
+  data: fullCourseDetails,
   inRoster: React.PropTypes.bool.isRequired,
   hasHoveredResult: React.PropTypes.bool.isRequired,
   addOrRemoveOptionalCourse: React.PropTypes.func.isRequired,
