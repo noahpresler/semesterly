@@ -17,9 +17,9 @@ import { saveSettings } from '../../actions/user_actions';
 import { getSchoolSpecificInfo } from '../../constants/schools';
 
 const mapStateToProps = (state) => {
-  let lectureSections = [];
-  let tutorialSections = [];
-  let practicalSections = [];
+  let lectureSections = {};
+  let tutorialSections = {};
+  let practicalSections = {};
   if (state.courseInfo.data.sections) {
     lectureSections = state.courseInfo.data.sections.L;
     tutorialSections = state.courseInfo.data.sections.T;
