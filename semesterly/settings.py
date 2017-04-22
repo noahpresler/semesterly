@@ -143,6 +143,7 @@ INSTALLED_APPS = (
     'rest_framework',
     'rest_framework_swagger',
     'webpack_loader'
+    'djcelery',
 )
 
 REST_FRAMEWORK ={
@@ -336,3 +337,52 @@ if not DEBUG:
     }
     import rollbar
     rollbar.init(**ROLLBAR)
+
+
+# Begin Celery stuff.
+import djcelery
+
+# from celery.schedules import crontab
+
+# djcelery.setup_loader()
+
+BROKER_URL = 'redis://localhost:6379/0'
+CELERY_ACCEPT_CONTENT = ['json']
+CELERY_TASK_SERIALIZER = 'json'
+CELERY_RESULT_SERIALIZER = 'json'
+CELERY_RESULT_BACKEND = 'djcelery.backends.database:DatabaseBackend'
+CELERYBEAT_SCHEDULER = 'djcelery.schedulers.DatabaseScheduler'
+CELERY_TIMEZONE = 'America/New_York'
+
+# App instance to use
+CELERY_APP="semesterly"
+
+# Where to chdir at start.
+CELERYBEAT_CHDIR=BASE_DIR
+CELERYD_CHDIR=BASE_DIR
+
+# CELERYBEAT_SCHEDULE = {}
+
+# Absolute or relative path to the 'celery' command:
+#CELERY_BIN="/virtualenvs/def/bin/celery"
+
+# comment out this line if you don't use an app
+# or fully qualified:
+#CELERY_APP="proj.tasks:app"
+
+# Where to chdir at start.
+# CELERYBEAT_CHDIR=BASE_DIR
+# CELERYD_CHDIR=BASE_DIR
+
+# Extra arguments to celerybeat
+# CELERYBEAT_OPTS="--schedule=/var/run/celery/celerybeat-schedule"
+
+# CELERY_BROKER_URL = 'amqp://guest:guest@localhost//'
+
+# #: Only add pickle to this list if your broker is secured
+# #: from unwanted access (see userguide/security.html)
+# CELERY_ACCEPT_CONTENT = ['json']
+# CELERY_RESULT_BACKEND = 'db+sqlite:///results.sqlite'
+# CELERY_TASK_SERIALIZER = 'json'
+
+# End Celery stuff.
