@@ -341,10 +341,7 @@ if not DEBUG:
 
 # Begin Celery stuff.
 import djcelery
-
-# from celery.schedules import crontab
-
-# djcelery.setup_loader()
+djcelery.setup_loader()
 
 BROKER_URL = 'redis://localhost:6379/0'
 CELERY_ACCEPT_CONTENT = ['json']
@@ -361,6 +358,8 @@ CELERY_APP="semesterly"
 CELERYBEAT_CHDIR=BASE_DIR
 CELERYD_CHDIR=BASE_DIR
 
+# # Can set up cron like scheduling here.
+# from celery.schedules import crontab
 # CELERYBEAT_SCHEDULE = {}
 
 # Absolute or relative path to the 'celery' command:
