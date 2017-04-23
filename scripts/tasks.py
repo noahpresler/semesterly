@@ -39,8 +39,8 @@ def task_parse_textbooks(schools=None):
 def task_parse_school(school, textbooks=False):
     """Celery parse task."""
     management.call_command('ingest', school,
-                            term=TERM, year=YEAR,
+                            term=TERM, year=YEAR, textbooks=textbooks,
                             hide_progress_bar=True, verbosity=0)
-    management.call_command('digest', school,
+    management.call_command('digest', school, textbooks=textbooks,
                             hide_progress_bar=True, verbosity=0)
     print('Parsed {}'.format(school))
