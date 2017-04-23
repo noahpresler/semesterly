@@ -21,11 +21,15 @@ YEAR = ['2017']
 def task_parse(schools=None):
     """Celery parse task."""
     for school in VALID_SCHOOLS:
-    	task_parse_school.delay(school)
+        task_parse_school.delay(school)
+
 
 @task()
 def task_parse_school(school):
     """Celery parse task."""
-    management.call_command('ingest', school, term=TERM, year=YEAR, hide_progress_bar=True)
-    management.call_command('digest', school, hide_progress_bar=True)
+    management.call_command('ingest', school,
+                            term=TERM, year=YEAR,
+                            hide_progress_bar=True, verbosity=0)
+    management.call_command('digest', school,
+                            hide_progress_bar=True, verbosity=0)
     print('Parsed {}'.format(school))
