@@ -14,7 +14,7 @@ YEAR = ['2017']
 
 
 @periodic_task(
-    run_every=(crontab(hour=1, minute=29)),
+    run_every=(crontab(hour=00, minute=00)),
     name="task_parse",
     ignore_result=True
 )
@@ -24,8 +24,19 @@ def task_parse(schools=None):
         task_parse_school.delay(school)
 
 
+@periodic_task(
+    run_every=(crontab(day_of_week='sun', hour=12, minute=00)),
+    name="task_parse_textbooks",
+    ignore_result=True
+)
+def task_parse_textbooks(schools=None):
+    """Celery parse task."""
+    for school in VALID_SCHOOLS:
+        task_parse_school.delay(school, textbooks=True)
+
+
 @task()
-def task_parse_school(school):
+def task_parse_school(school, textbooks=False):
     """Celery parse task."""
     management.call_command('ingest', school,
                             term=TERM, year=YEAR,
