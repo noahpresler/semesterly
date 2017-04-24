@@ -132,7 +132,8 @@ class Digestor:
 			self.cached.section = section_model
 			for meeting in section.get('meetings', []):
 				self.digest_meeting(meeting, section_model)
-
+			for textbook_link in section.get('textbooks', []):
+				self.digest_textbook_link(dotdict(textbook_link), section_model=section_model)
 		self.update_progress('section', bool(section_model))
 
 		return section_model
@@ -158,9 +159,10 @@ class Digestor:
 		textbook_model = self.strategy.digest_textbook(self.adapter.adapt_textbook(textbook))
 		self.update_progress('textbook', bool(textbook_model))
 
-	def digest_textbook_link(self, textbook_link, textbook):
-		textbook_link_model = self.strategy.digest_textbook_link(self.adapter.adapt_textbook_link(textbook_link, textbook))
-		self.update_progress('textbook_link', bool(textbook_link))
+	def digest_textbook_link(self, textbook_link, textbook_model=None, section_model=None):
+		# NOTE: currently only support per section digestion.
+		textbook_link_model = self.strategy.digest_textbook_link(list(self.adapter.adapt_textbook_link(textbook_link, textbook_model=textbook_model, section_model=section_model))[0])
+		self.update_progress('textbook_link', bool(textbook_link_model))
 
 	def wrap_up(self):
 		self.strategy.wrap_up()
@@ -344,27 +346,30 @@ class DigestionAdapter:
 				textbook['defaults'][key] = 'Cannot be found'
 		return textbook
 
-	def adapt_textbook_link(self, textbook_link, textbook_model):
-		if 'required' not in textbook_link:
-			textbook_link.required = True
-		if 'section' not in textbook_link:
+	def adapt_textbook_link(self, textbook_link, textbook_model=None, section_model=None):
+		sections = [section_model]
+		if section_model is None:
+			if 'section' not in textbook_link:
+				sections = Section.objects.filter(
+					course=textbook_link.course.code,
+				)
+			else:
+				sections = Section.objects.filter(
+					course=textbook_link.course.code,
+					meeting_section=textbook_link.section.code
+				)
 			sections = Section.objects.filter(course=textbook_link.course.code)
-			for section in sections:
-				yield {
-					'section': section,
-					'is_required': textbook_link.required,
-					'textbook': textbook_model
-				}
-		else:
-			section = Section.objects.filter(
-				course=textbook_link.course.code, 
-				meeting_section=textbook_link.section.code
-			)[0]
+		if textbook_model is None:
+			textbook_model = Textbook.objects.filter(isbn=textbook_link.isbn).first()
+		if 'required' not in textbook_link:
+			textbook_link.required = True  # TODO - optional required field in db and frontend
+		for section in sections:
 			yield {
 				'section': section,
 				'is_required': textbook_link.required,
 				'textbook': textbook_model
 			}
+		# NOTE: no current usage of course linked textbooks (listified yield will always be length 1)
 
 class DigestionStrategy:
 	__metaclass__ = ABCMeta
@@ -464,7 +469,7 @@ class Vommit(DigestionStrategy):
 			# Transform django object to dictionary.
 			dbmodel = dbmodel.__dict__
 
-		context = {'section', 'course', 'semester'}
+		context = {'section', 'course', 'semester', 'textbook'}
 
 		whats = {}
 		for k, v in inmodel.iteritems():
