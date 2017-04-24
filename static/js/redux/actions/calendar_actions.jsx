@@ -104,11 +104,6 @@ export const createICalFromEventsList = (events, icalTitle) => (dispatch) => {
   if (!state.saveCalendarModal.isDownloading && !state.saveCalendarModal.hasDownloaded) {
   let cal = ical({domain: 'https://semester.ly', name: icalTitle});
   dispatch({type: ActionTypes.DOWNLOAD_CALENDAR});
-    // for each event in events:
-    // repeating = event.repeating
-    // remove the key repeating from event
-    //cal.createEvent(event)
-    //if repeating is nut null set event.repeating() to the repeating field from event
     for (let i = 0; i < events.length; i++){
       let repeating = events[i].repeating;
       delete(events[i].repeating);
@@ -129,62 +124,60 @@ export const createICalFromEventsList = (events, icalTitle) => (dispatch) => {
 }
 
 
-export const createICalFromTimetable = (active) => {
-  return (dispatch) => {
-    let state = store.getState();
-    let event_list = [];  
-    if (!state.saveCalendarModal.isDownloading && !state.saveCalendarModal.hasDownloaded) {
-      let cal = ical({domain: 'https://semester.ly', name: 'My Semester Schedule'});
-      let tt = getActiveTimetable(state.timetables);
+export const createICalFromTimetable = (active) => (dispatch) => {
+  let state = store.getState();
+  let event_list = [];  
+  if (!state.saveCalendarModal.isDownloading && !state.saveCalendarModal.hasDownloaded) {
+    let cal = ical({domain: 'https://semester.ly', name: 'My Semester Schedule'});
+    let tt = getActiveTimetable(state.timetables);
 
-      //TODO - MUST BE REFACTORED AFTER CODED IN TO CONFIG
-      let sem_start = new Date()
-      let sem_end = new Date()
-      let semester = allSemesters[state.semesterIndex]
-      if (semester.name == 'Fall') {
-        //ignore year, year is set to current year
-        sem_start = new Date('August 30 ' + semester.year + ' 00:00:00');
-        sem_end = new Date('December 20 ' + semester.year + ' 00:00:00');
-      } else {
-        //ignore year, year is set to current year
-        sem_start = new Date('January 30 ' + semester.year + ' 00:00:00');
-        sem_end = new Date('May 20 ' + semester.year + ' 00:00:00');
-      }
-      sem_start.setYear(new Date().getFullYear());
-      sem_end.setYear(new Date().getFullYear());
-      for (let c_idx = 0; c_idx < tt.courses.length; c_idx++) {
-        for (let slot_idx = 0; slot_idx < tt.courses[c_idx].slots.length; slot_idx++) {
-          const course = tt.courses[c_idx];
-          const slot = course.slots[slot_idx];
-          const instructors = slot.instructors && slot.instructors.length > 0 ? `Taught by: ${slot.instructors}\n` : '';
-          const start = getNextDayOfWeek(sem_start, slot.day);
-          const end = getNextDayOfWeek(sem_start, slot.day);
-          const until = getNextDayOfWeek(sem_end, slot.day);
-          const description = course.description ? course.description : '';
-          let times = slot.time_start.split(':');
-          start.setHours(parseInt(times[0], 10), parseInt(times[1], 10));
-          times = slot.time_end.split(':');
-          end.setHours(parseInt(times[0], 10), parseInt(times[1], 10));
+    //TODO - MUST BE REFACTORED AFTER CODED IN TO CONFIG
+    let sem_start = new Date()
+    let sem_end = new Date()
+    let semester = allSemesters[state.semesterIndex]
+    if (semester.name == 'Fall') {
+      //ignore year, year is set to current year
+      sem_start = new Date('August 30 ' + semester.year + ' 00:00:00');
+      sem_end = new Date('December 20 ' + semester.year + ' 00:00:00');
+    } else {
+      //ignore year, year is set to current year
+      sem_start = new Date('January 30 ' + semester.year + ' 00:00:00');
+      sem_end = new Date('May 20 ' + semester.year + ' 00:00:00');
+    }
+    sem_start.setYear(new Date().getFullYear());
+    sem_end.setYear(new Date().getFullYear());
+    for (let c_idx = 0; c_idx < tt.courses.length; c_idx++) {
+      for (let slot_idx = 0; slot_idx < tt.courses[c_idx].slots.length; slot_idx++) {
+        const course = tt.courses[c_idx];
+        const slot = course.slots[slot_idx];
+        const instructors = slot.instructors && slot.instructors.length > 0 ? `Taught by: ${slot.instructors}\n` : '';
+        const start = getNextDayOfWeek(sem_start, slot.day);
+        const end = getNextDayOfWeek(sem_start, slot.day);
+        const until = getNextDayOfWeek(sem_end, slot.day);
+        const description = course.description ? course.description : '';
+        let times = slot.time_start.split(':');
+        start.setHours(parseInt(times[0], 10), parseInt(times[1], 10));
+        times = slot.time_end.split(':');
+        end.setHours(parseInt(times[0], 10), parseInt(times[1], 10));
 
-          let repeating = {
-            freq: 'WEEKLY',
-            byDay: DAY_MAP[slot.day],
-            until: until,
-          }
-
-          let event = {
-            start: start,
-            end: end,
-            summary: slot.name + " " + slot.code + slot.meeting_section,
-            description: slot.code + slot.meeting_section + '\n' + instructors + description,
-            location: slot.location,
-            url: getCourseShareLink(slot.code),
-            repeating: repeating,
-          };
-          event_list.push(event);
+        let repeating = {
+          freq: 'WEEKLY',
+          byDay: DAY_MAP[slot.day],
+          until: until,
         }
+
+        let event = {
+          start: start,
+          end: end,
+          summary: slot.name + " " + slot.code + slot.meeting_section,
+          description: slot.code + slot.meeting_section + '\n' + instructors + description,
+          location: slot.location,
+          url: getCourseShareLink(slot.code),
+          repeating: repeating,
+        };
+        event_list.push(event);
       }
     }
-    dispatch(createICalFromEventsList(event_list, "myical"));
   }
+  dispatch(createICalFromEventsList(event_list, "myical"));
 }

@@ -246,7 +246,6 @@ export class FinalExamsModal extends React.Component {
       finalsWeeks.push(<div key={day}>{ this.renderWeek(day, days) }</div>);
       day = new Date(day.getTime() + (7 * 24 * 60 * 60 * 1000));
     }
-
     const disclaimer = (<p className="final-exam-disclaimer">
             Some courses do not have finals, check with your syllabus or instructor to confirm.
             <a
@@ -283,6 +282,15 @@ export class FinalExamsModal extends React.Component {
             (<div id="modal-header">
               <h1>Final Exam Schedule</h1>
               <h2>{ this.props.activeLoadedTimetableName }</h2>
+              <div id="final-exam-export">
+                <button
+                  className="btn abnb-btn secondary" onClick={() => {
+                    this.props.createICalFromTimetable();
+                  }}
+                  >
+                  <span>Download Calendar</span>
+                </button>
+              </div>
               <div id="modal-close" onClick={() => this.hide()}>
                 <i className="fa fa-times" />
               </div>

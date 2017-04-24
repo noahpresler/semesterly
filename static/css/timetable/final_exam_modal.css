@@ -170,6 +170,13 @@
 	padding: 0;
 	margin-top: -10px;
 }
+#final-exam-export {
+	position: absolute;
+	top: 11px;
+	right: 10px;
+	max-width: 155px;
+	max-height: 35px;
+}
 
 /* Upsell, no courses */
 

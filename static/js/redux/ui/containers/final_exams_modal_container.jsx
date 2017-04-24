@@ -2,6 +2,7 @@ import {connect} from "react-redux";
 import {FinalExamsModal} from "../final_exams_modal";
 import {fetchFinalExamSchedule} from "../../actions/user_actions";
 import {logFinalExamView} from "../../actions/calendar_actions";
+import {createICalFromTimetable} from "../../actions/calendar_actions";
 import {hideFinalExamsModal, triggerAcquisitionModal} from "../../actions/modal_actions";
 
 const remapCourseDetails = (courses) => {
@@ -39,6 +40,7 @@ const FinalExamsModalContainer = connect(
         hideFinalExamsModal,
         fetchFinalExamSchedule,
         launchUserAcquisitionModal: triggerAcquisitionModal,
+        createICalFromTimetable,
         logFinalExamView
     }
 )(FinalExamsModal);
