@@ -106,8 +106,10 @@ class UserTimetableViewTest(APITestCase):
 
     def test_create_timetable(self):
         data = {
-            'sem_name': 'Winter',
-            'year': '1995',
+            'semester': {
+                'name': 'Winter',
+                'year': '1995'
+            },
             'courses': [{
                 'id': 1,
                 'enrolled_sections': ['L1']
@@ -125,8 +127,10 @@ class UserTimetableViewTest(APITestCase):
 
     def test_create_timetable_exists(self):
         data = {
-            'sem_name': 'Winter',
-            'year': '1995',
+            'semester': {
+                'name': 'Winter',
+                'year': '1995'
+            },
             'courses': [{
                 'id': 1,
                 'enrolled_sections': ['L1']
@@ -144,8 +148,10 @@ class UserTimetableViewTest(APITestCase):
     def test_duplicate_timetable(self):
         data = {
             'source': 'tt',
-            'sem_name': 'Winter',
-            'year': '1995',
+            'semester': {
+                'name': 'Winter',
+                'year': '1995'
+            },
             'name': 'dupe tt',
         }
         request = self.factory.post('/user/timetables/', data, format='json')

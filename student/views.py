@@ -442,7 +442,7 @@ class UserTimetableView(APIView):
         if 'source' in request.data:  # duplicate existing timetable
             school = request.subdomain
             name = request.data['source']
-            semester = Semester.objects.get(name=request.data['sem_name'], year=request.data['year'])
+            semester = Semester.objects.get(**request.data['semester'])
             student = Student.objects.get(user=request.user)
             new_name = request.data['name']
 
@@ -463,7 +463,7 @@ class UserTimetableView(APIView):
             courses = request.data['courses']
             has_conflict = request.data['has_conflict']
             name = request.data['name']
-            semester, _ = Semester.objects.get_or_create(name=request.data['sem_name'], year=request.data['year'])
+            semester, _ = Semester.objects.get_or_create(**request.data['semester'])
             student = Student.objects.get(user=request.user)
 
             if PersonalTimetable.objects.filter(student=student,
@@ -496,7 +496,7 @@ class UserTimetableView(APIView):
     def patch(self, request):
         """ Rename a timetable. """
         school = request.subdomain
-        semester = Semester.objects.get(name=request.data['sem_name'], year=request.data['year'])
+        semester = Semester.objects.get(**request.data['semester'])
         old_name = request.data['old_name']
         new_name = request.data['new_name']
         tt = get_object_or_404(PersonalTimetable, semester=semester, name=old_name, school=school)
