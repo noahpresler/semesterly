@@ -8,7 +8,7 @@ from rest_framework.response import Response
 from rest_framework import status
 
 from student.models import RegistrationToken
-from student.views import get_student
+from student.utils import get_student
 from timetable.utils import validate_subdomain
 
 

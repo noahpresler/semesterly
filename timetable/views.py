@@ -1,21 +1,21 @@
 import itertools
 import logging
 
-from django.db.models import Count
-from rest_framework.views import APIView
-from rest_framework.response import Response
-from rest_framework import status
 from hashids import Hashids
+from rest_framework import status
+from rest_framework.response import Response
+from rest_framework.views import APIView
 
 from analytics.views import *
 from courses.views import get_detailed_course_json
 from student.models import Student
-from student.views import get_student, get_user_dict, convert_tt_to_dict
+from student.utils import get_student, get_user_dict, convert_tt_to_dict
 from timetable.jhu_final_exam_test import *
 from timetable.school_mappers import school_to_granularity, AM_PM_SCHOOLS, school_to_semesters, \
   final_exams_available
 from timetable.scoring import *
 from timetable.utils import *
+from timetable.utils import validate_subdomain
 
 MAX_RETURN = 60 # Max number of timetables we want to consider
 
@@ -88,14 +88,15 @@ def view_timetable(request, code=None, sem_name=None, year=None, shared_timetabl
   return render_to_response("timetable.html", {
     'school': school,
     'student': json.dumps(get_user_dict(school, student, sem)),
-    'course': json.dumps(course_json),
     'semester': str(semester_index),
     'all_semesters': json.dumps(sem_dicts),
+    'uses_12hr_time': school in AM_PM_SCHOOLS,
+    'student_integrations': json.dumps(integrations),
+
+    'course': json.dumps(course_json),
     'shared_timetable': json.dumps(shared_timetable),
     'find_friends': find_friends,
     'enable_notifs': enable_notifs,
-    'uses_12hr_time': school in AM_PM_SCHOOLS,
-    'student_integrations': json.dumps(integrations),
     'signup': signup,
     'user_acq': user_acq,
     'gcal_callback': gcal_callback,
@@ -128,12 +129,6 @@ def export_calendar(request):
   except Exception as e:
     raise Http404
 
-@validate_subdomain
-def signup(request):
-  try:
-    return view_timetable(request, signup=True)
-  except Exception as e:
-    raise Http404
 
 @validate_subdomain
 def launch_user_acq_modal(request):
@@ -526,46 +521,6 @@ def manifest_json(request, js):
     html = template.render()
     return HttpResponse(html, content_type="application/json")
 
-def profile(request):
-  logged = request.user.is_authenticated()
-  if logged and Student.objects.filter(user=request.user).exists():
-    student = Student.objects.get(user=request.user)
-    reactions = Reaction.objects.filter(student=student).values('title').annotate(count=Count('title'))
-    # googpic = this.props.userInfo.img_url.replace('sz=50','sz=100') if this.props.userInfo.isLoggedIn else ''
-    # propic = 'url(https://graph.facebook.com/' + JSON.parse(currentUser).fbook_uid + '/picture?type=normal)' if this.props.userInfo.FacebookSignedUp else 'url(' + googpic + ')'
-    if student.user.social_auth.filter(provider='google-oauth2').exists():
-      hasGoogle = True
-    else:
-      hasGoogle = False
-    if student.user.social_auth.filter(provider='facebook').exists():
-      social_user = student.user.social_auth.filter(provider='facebook').first()
-      img_url = 'https://graph.facebook.com/' + student.fbook_uid + '/picture?width=700&height=700'
-      hasFacebook = True
-    else:
-      social_user = student.user.social_auth.filter(provider='google-oauth2').first()
-      img_url = student.img_url.replace('sz=50','sz=700')
-      hasFacebook = False
-    hasNotificationsEnabled = RegistrationToken.objects.filter(student=student).exists()
-    context = {
-      'name': student.user,
-      'major': student.major,
-      'class': student.class_year,
-      'student': student,
-      'total': 0,
-      'img_url': img_url,
-      'hasGoogle': hasGoogle,
-      'hasFacebook': hasFacebook,
-      'notifications': hasNotificationsEnabled
-    }
-    for r in reactions:
-        context[r['title']] = r['count']
-    for r in Reaction.REACTION_CHOICES:
-        if r[0] not in context:
-            context[r[0]] = 0
-        context['total'] += context[r[0]]
-    return render_to_response("profile.html", context, context_instance=RequestContext(request))
-  else:
-    return signup(request)
 
 def get_current_semesters(school):
   """
