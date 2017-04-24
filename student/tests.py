@@ -12,10 +12,12 @@ class UrlsTest(UrlTestCase):
     """ Test student/urls.py """
 
     def test_urls_call_correct_views(self):
+        # view_timetable redirects
+        self.assertUrlResolvesToView('/react/', 'student.views.react_to_course'),
+
         # profile management
         self.assertUrlResolvesToView('/unsubscribe/akdC@+-EI/alc:_=/', 'student.views.unsubscribe')
-        self.assertUrlResolvesToView('/user/save_settings/', 'student.views.save_settings')
-        self.assertUrlResolvesToView('/me/', 'timetable.views.profile')
+        self.assertUrlResolvesToView('/user/settings/', 'student.views.UserView')
 
         # timetable management
         self.assertUrlResolvesToView('/user/save_timetable/', 'student.views.save_timetable')
@@ -31,7 +33,6 @@ class UrlsTest(UrlTestCase):
         self.assertUrlResolvesToView('/user/add_to_gcal/', 'student.views.add_tt_to_gcal')
 
         # api
-        self.assertUrlResolvesToView('/user/settings/', 'student.views.UserView')
         self.assertUrlResolvesToView('/user/timetables/', 'student.views.UserTimetableView')
         self.assertUrlResolvesToView('/user/timetables/Fall/2016/', 'student.views.UserTimetableView',
                                      kwargs={'sem_name': 'Fall', 'year': '2016'})
@@ -50,6 +51,16 @@ class UserViewTest(APITestCase):
         self.user = User.objects.create_user(username='jacob', password='top_secret')
         self.student = Student.objects.create(user=self.user)
         self.factory = APIRequestFactory()
+
+    def test_profile_page(self):
+        self.client.force_login(self.user)
+        response = self.client.get('/me/')
+        self.assertTemplateUsed(response, 'profile.html')
+
+    def test_profile_page_not_signed_in(self):
+        self.client.logout()
+        response = self.client.get('/me/')
+        self.assertTemplateUsed(response, 'index.html')
 
     def test_update_settings(self):
         new_settings = {

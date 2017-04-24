@@ -16,7 +16,7 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 
 from student.models import PersonalTimetable, Student
-from student.views import get_classmates_from_course_id
+from student.utils import get_classmates_from_course_id
 from timetable.models import Evaluation, Section, Semester, Course, Updates
 from timetable.school_mappers import school_to_course_regex, school_code_to_name
 from timetable.utils import merge_dicts, validate_subdomain
