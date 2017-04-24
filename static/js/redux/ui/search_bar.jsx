@@ -214,10 +214,10 @@ export class SearchResult extends React.Component {
    * @returns {boolean}
    */
   hasOnlyWaitlistedSections() {
-    let sections = this.props.searchResults[this.props.position].sections;
-    for (let sectionType in sections) {
+    const sections = this.props.searchResults[this.props.position].sections;
+    for (const sectionType in sections) {
       let sectionTypeHasOpenSections = false;
-      for (let section in sections[sectionType]) {
+      for (const section in sections[sectionType]) {
         if (sections[sectionType][section].length > 0) {
           if (sections[sectionType][section][0].enrolment < sections[sectionType][section][0].size) {
             sectionTypeHasOpenSections = true;
@@ -295,7 +295,7 @@ export class SearchResult extends React.Component {
         { addOptionalCourseButton}
         { addRemoveButton }
         <div className="search-result-labels">
-          <h4 className={classNames('label', { 'hoverAdd': this.state.hoverAdd, 'hoverSave':this.state.hoverSave })}>
+          <h4 className={classNames('label', { hoverAdd: this.state.hoverAdd, hoverSave: this.state.hoverSave })}>
             {info}
           </h4>
           <h4
