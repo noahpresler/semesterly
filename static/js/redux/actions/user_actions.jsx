@@ -1,4 +1,5 @@
 import fetch from 'isomorphic-fetch';
+import Cookie from 'js-cookie';
 import {
     deleteRegistrationTokenEndpoint,
     getClassmatesEndpoint,
@@ -312,16 +313,19 @@ export const deleteTimetable = timetable => (dispatch) => {
         });
 };
 
-export const getSaveSettingsRequestBody = () => ({
-  userInfo: store.getState().userInfo.data,
-});
+export const getSaveSettingsRequestBody = () => store.getState().userInfo.data;
 
 export const saveSettings = callback => (dispatch) => {
   dispatch({
     type: ActionTypes.REQUEST_SAVE_USER_INFO,
   });
   fetch(getSaveSettingsEndpoint(), {
-    method: 'POST',
+    headers: {
+      'X-CSRFToken': Cookie.get('csrftoken'),
+      Accept: 'application/json',
+      'Content-Type': 'application/json',
+    },
+    method: 'PATCH',
     body: JSON.stringify(getSaveSettingsRequestBody()),
     credentials: 'include',
   })

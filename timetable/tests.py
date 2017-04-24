@@ -17,7 +17,6 @@ class UrlsTest(UrlTestCase):
         self.assertUrlResolvesToView('/export_calendar/', 'timetable.views.export_calendar')
         self.assertUrlResolvesToView('/notifyme/', 'timetable.views.enable_notifs'),
         self.assertUrlResolvesToView('/find_friends/', 'timetable.views.find_friends'),
-        self.assertUrlResolvesToView('/react/', 'student.views.react_to_course'),
 
         # redirects
         self.assertUrlResolvesToView('/timetable/random_stuff', 'timetable.views.redirect_to_home')
