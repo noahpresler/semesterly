@@ -94,84 +94,78 @@ class SlotManager extends React.Component {
     return this.getConflictStyles(slots_by_day);
   }
 
-    getConflictStyles(slots_by_day) {
-        for (let day in slots_by_day) {
-            let day_slots = slots_by_day[day]
+  getConflictStyles(slots_by_day) {
+    for (const day in slots_by_day) {
+      const day_slots = slots_by_day[day];
             // sort by start time
-            day_slots.sort((a, b) => this.getMinutes(a.time_start) - this.getMinutes(b.time_start))
+      day_slots.sort((a, b) => this.getMinutes(a.time_start) - this.getMinutes(b.time_start));
 
             // build interval tree corresponding to entire slot
-            let intervals = day_slots.map((slot, index) => {
-                return {
-                    start: this.getMinutes(slot.time_start),
-                    end: this.getMinutes(slot.time_end),
-                    id: index // use day_slot index to map back to the slot object
-                }
-            })
-            let tree = IntervalTree(intervals)
+      const intervals = day_slots.map((slot, index) => ({
+        start: this.getMinutes(slot.time_start),
+        end: this.getMinutes(slot.time_end),
+        id: index, // use day_slot index to map back to the slot object
+      }));
+      const tree = IntervalTree(intervals);
 
             // build interval tree with part of slot that should not be overlayed (first hour)
-            let info_intervals = intervals.map((s) => {
-                return {
-                    start: s.start,
-                    end: Math.min(s.start + 60, s.end),
-                    id: s.id
-                }
-            })
-            let info_slots = IntervalTree(info_intervals)
+      const info_intervals = intervals.map(s => ({
+        start: s.start,
+        end: Math.min(s.start + 60, s.end),
+        id: s.id,
+      }));
+      const info_slots = IntervalTree(info_intervals);
 
             // bit map to store if slot has already been processed
-            let seen = day_slots.map(() => false)
+      const seen = day_slots.map(() => false);
 
             // bit map to store if slot has already been added to queue
-            let added = day_slots.map(() => false)
+      const added = day_slots.map(() => false);
 
             // get num_conflicts + shift_index
-            for (let i = 0; i < info_intervals.length; i++) {
-                if (!seen[i]) { // if not seen, perform dfs search on conflicts
-                    let direct_conflicts = [];
-                    let frontier = [info_intervals[i]];
-                    while (frontier.length > 0) {
-                        let next = frontier.pop()
-                        seen[next.id] = true
-                        added[next.id] = true
-                        direct_conflicts.push(next)
-                        let neighbors = getIntersections(info_slots, next)
-                        for (let k = 0; k < neighbors.length; k++) {
-                            if (!seen[neighbors[k].id] && !added[neighbors[k].id]) {
-                                frontier.push(neighbors[k])
-                                added[neighbors[k].id] = true
-                            }
-                        }
-                    }
-                    direct_conflicts.sort((a, b) => (intervals[b.id].end - intervals[b.id].start) - (intervals[a.id].end - intervals[a.id].start))
-                    for (let j = 0; j < direct_conflicts.length; j++) {
-                        let slotId = direct_conflicts[j].id
-                        day_slots[slotId]['num_conflicts'] = direct_conflicts.length
-                        day_slots[slotId]['shift_index'] = j
-                    }
-                }
+      for (let i = 0; i < info_intervals.length; i++) {
+        if (!seen[i]) { // if not seen, perform dfs search on conflicts
+          const direct_conflicts = [];
+          const frontier = [info_intervals[i]];
+          while (frontier.length > 0) {
+            const next = frontier.pop();
+            seen[next.id] = true;
+            added[next.id] = true;
+            direct_conflicts.push(next);
+            const neighbors = getIntersections(info_slots, next);
+            for (let k = 0; k < neighbors.length; k++) {
+              if (!seen[neighbors[k].id] && !added[neighbors[k].id]) {
+                frontier.push(neighbors[k]);
+                added[neighbors[k].id] = true;
+              }
             }
+          }
+          direct_conflicts.sort((a, b) => (intervals[b.id].end - intervals[b.id].start) - (intervals[a.id].end - intervals[a.id].start));
+          for (let j = 0; j < direct_conflicts.length; j++) {
+            const slotId = direct_conflicts[j].id;
+            day_slots[slotId].num_conflicts = direct_conflicts.length;
+            day_slots[slotId].shift_index = j;
+          }
+        }
+      }
 
             // build interval tree with part of slot that should not be overlayed
-            let over_slots = IntervalTree(intervals.filter((s) => s.end - s.start > 60).map((s) => {
-                return {
-                    start: s.start + 60,
-                    end: s.end,
-                    id: s.id
-                }
-            }))
+      const over_slots = IntervalTree(intervals.filter(s => s.end - s.start > 60).map(s => ({
+        start: s.start + 60,
+        end: s.end,
+        id: s.id,
+      })));
 
             // get depth_level
-            for (let i = 0; i < info_intervals.length; i++) {
-                let conflicts = getIntersections(over_slots, info_intervals[i])
-                conflicts.sort((a, b) => (b.start - a.start))
-                day_slots[i]['depth_level'] = conflicts.length > 0 ? day_slots[conflicts[0].id].depth_level + 1 : 0
-            }
-            slots_by_day[day] = day_slots
-        }
-        return slots_by_day
+      for (let i = 0; i < info_intervals.length; i++) {
+        const conflicts = getIntersections(over_slots, info_intervals[i]);
+        conflicts.sort((a, b) => (b.start - a.start));
+        day_slots[i].depth_level = conflicts.length > 0 ? day_slots[conflicts[0].id].depth_level + 1 : 0;
+      }
+      slots_by_day[day] = day_slots;
     }
+    return slots_by_day;
+  }
 
   getMinutes(time_string) {
     const l = time_string.split(':');
