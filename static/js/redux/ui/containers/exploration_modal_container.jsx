@@ -1,5 +1,5 @@
 import { connect } from 'react-redux';
-import { ExplorationModal } from '../exploration_modal';
+import ExplorationModal from '../exploration_modal';
 import {
     clearAdvancedSearchPagination,
     fetchAdvancedSearchResults,
@@ -12,12 +12,15 @@ import {
     hoverSection,
     unHoverSection,
 } from '../../actions/timetable_actions';
+import { saveSettings } from '../../actions/user_actions';
 import { getSchoolSpecificInfo } from '../../constants/schools';
 import {
     fetchCourseClassmates,
     hideExplorationModal,
     openSignUpModal,
     react,
+    changeUserInfo,
+    fetchCourseInfo,
 } from '../../actions/modal_actions';
 
 const mapStateToProps = (state) => {
@@ -41,9 +44,11 @@ const mapStateToProps = (state) => {
     page,
     semesterName: `${semester.name} ${semester.year}`,
     schoolSpecificInfo: getSchoolSpecificInfo(state.school.school),
+    userInfo: state.userInfo.data,
     isLoggedIn: state.userInfo.data.isLoggedIn,
     hasHoveredResult: activeTimetable.courses.some(c => c.fake),
     classmates: state.courseInfo.classmates,
+    isFetchingClassmates: state.courseInfo.isFetching,
     isSectionLocked: (courseId, section) => {
       if (courseSections[courseId] === undefined) {
         return false;
@@ -74,6 +79,9 @@ const ExplorationModalContainer = connect(
     paginate: paginateAdvancedSearchResults,
     clearPagination: clearAdvancedSearchPagination,
     setAdvancedSearchResultIndex,
+    changeUserInfo,
+    saveSettings,
+    fetchCourseInfo,
   },
 )(ExplorationModal);
 

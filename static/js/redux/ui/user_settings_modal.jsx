@@ -3,6 +3,7 @@ import Select from 'react-select';
 import classnames from 'classnames';
 import Modal from 'boron/WaveModal';
 import majors from '../constants/majors';
+import * as PropTypes from '../constants/propTypes';
 
 export class UserSettingsModal extends React.Component {
   constructor(props) {
@@ -20,9 +21,9 @@ export class UserSettingsModal extends React.Component {
   changeForm() {
     if (this.props.userInfo.FacebookSignedUp) {
       const newUserSettings = {
-        social_courses: this.refs.share_all.checked || this.refs.share_courses.checked,
-        social_offerings: this.refs.share_all.checked || this.refs.share_sections.checked,
-        social_all: this.refs.share_all.checked,
+        social_courses: this.shareAll.checked || this.shareCourses.checked,
+        social_offerings: this.shareAll.checked || this.shareSections.checked,
+        social_all: this.shareAll.checked,
       };
       const userSettings = Object.assign({}, this.props.userInfo, newUserSettings);
       this.props.changeUserInfo(userSettings);
@@ -32,7 +33,7 @@ export class UserSettingsModal extends React.Component {
 
   componentDidMount() {
     if (this.shouldShow(this.props)) {
-      this.refs.modal.show();
+      this.modal.show();
     }
     if (this.isIncomplete(this.props.userInfo.social_courses)) {
       const newUserSettings = {
@@ -47,7 +48,7 @@ export class UserSettingsModal extends React.Component {
 
   componentWillReceiveProps(props) {
     if (this.shouldShow(props)) {
-      this.refs.modal.show();
+      this.modal.show();
     }
   }
 
@@ -100,7 +101,7 @@ export class UserSettingsModal extends React.Component {
         <div className="preference cf">
           <label className="switch switch-slide">
             <input
-              ref="share_courses" className="switch-input" type="checkbox"
+              ref={(c) => { this.shareCourses = c; }} className="switch-input" type="checkbox"
               checked={this.props.userInfo.social_courses} onChange={this.changeForm}
               defaultChecked
             />
@@ -117,7 +118,7 @@ export class UserSettingsModal extends React.Component {
         <div className="preference cf">
           <label className="switch switch-slide">
             <input
-              ref="share_sections" className="switch-input" type="checkbox"
+              ref={(c) => { this.shareSections = c; }} className="switch-input" type="checkbox"
               checked={this.props.userInfo.social_offerings === true}
               onChange={this.changeForm}
             />
@@ -134,7 +135,7 @@ export class UserSettingsModal extends React.Component {
         <div className="preference cf">
           <label className="switch switch-slide">
             <input
-              ref="share_all" className="switch-input" type="checkbox"
+              ref={(c) => { this.shareAll = c; }} className="switch-input" type="checkbox"
               checked={this.props.userInfo.social_all === true}
               onChange={this.changeForm}
             />
@@ -177,7 +178,7 @@ export class UserSettingsModal extends React.Component {
       </div>) : null;
     return (
       <Modal
-        ref="modal"
+        ref={(c) => { this.modal = c; }}
         className="welcome-modal max-modal"
         closeOnClick={false}
         keyboard={false}
@@ -227,10 +228,12 @@ export class UserSettingsModal extends React.Component {
                 className="signup-button" onClick={() => {
                   this.changeForm();
                   this.props.closeUserSettings();
-                  if (!this.shouldShow(Object.assign({}, this.props, { showOverrided: false }))) { this.refs.modal.hide(); }
+                  if (!this.shouldShow(Object.assign({}, this.props, { showOverrided: false }))) {
+                    this.modal.hide();
+                  }
                 }}
               >Save
-                            </button>
+              </button>
             </div>
           </div>
         </div>
@@ -238,3 +241,8 @@ export class UserSettingsModal extends React.Component {
     );
   }
 }
+
+UserSettingsModal.propTypes = {
+  userInfo: PropTypes.userInfo.isRequired,
+  closeUserSettings: React.PropTypes.func.isRequired,
+};
