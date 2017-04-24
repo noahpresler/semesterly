@@ -63,7 +63,7 @@ export const maybeSetSemester = semester => (dispatch) => {
 
 export const fetchSearchResults = query => (dispatch) => {
   if (query.length <= 1) {
-    dispatch(receiveCourses({ results: [] }));
+    dispatch(receiveCourses([]));
     return;
   }
 
