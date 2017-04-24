@@ -2,16 +2,17 @@ from django.conf.urls import patterns, url
 from django.contrib import admin
 
 import student.views
-import timetable.views
 
 admin.autodiscover()
 
 urlpatterns = patterns('',
+                       url(r'^react/*', student.views.react_to_course),
+
                        # profile management
                        url(r'^user/logout/$', 'django.contrib.auth.views.logout', {'next_page': '/'}),
                        url(r'^unsubscribe/(?P<id>[\w.@+-]+)/(?P<token>[\w.:\-_=]+)/$', student.views.unsubscribe),
-                       url(r'^user/save_settings/$', student.views.save_settings),
-                       url(r'^me/*', timetable.views.profile),
+                       url(r'^user/settings/$', student.views.UserView.as_view()),
+
                        # timetable management
                        url(r'^user/save_timetable/$', student.views.save_timetable),
                        url(r'^user/duplicate_timetable/$', student.views.duplicate_timetable),
@@ -25,15 +26,15 @@ urlpatterns = patterns('',
                        url(r'^user/add_to_gcal/*$', student.views.add_tt_to_gcal),
 
                        # api:
-                       url(r'^user/settings/$', student.views.UserView.as_view()),  # patch
-                       url(r'^user/timetables/$', student.views.UserTimetableView.as_view()), # post (create, and duplicate)
+                       url(r'^user/timetables/$', student.views.UserTimetableView.as_view()),
+                       # post (create, and duplicate)
                        url(r'^user/timetables/(?P<sem_name>.+?)/(?P<year>[0-9]{4})/$',
                            student.views.UserTimetableView.as_view()),  # get all
                        url(r'^user/timetables/(?P<sem_name>.+)/(?P<year>[0-9]{4})/(?P<tt_name>.+)/$',
-                           student.views.UserTimetableView.as_view()), # delete
+                           student.views.UserTimetableView.as_view()),  # delete
 
                        # # social
                        url(r'^user/classmates/(?P<sem_name>.+)/(?P<year>[0-9]{4})',
                            student.views.ClassmateView.as_view()),
-                       url(r'^user/gcal/$', student.views.GCalView.as_view()), # post
+                       url(r'^user/gcal/$', student.views.GCalView.as_view()),  # post
                        )

@@ -2,7 +2,7 @@ from django.conf.urls import include, patterns, url
 from django.contrib import admin
 
 import authpipe.views
-import student.views
+
 
 admin.autodiscover()
 

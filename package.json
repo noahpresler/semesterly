@@ -94,7 +94,7 @@
   },
   "homepage": "https://github.com/rohandas/semesterly#readme",
   "pre-commit": [
-    "lint-staged"
+    "lint"
   ],
   "devDependencies": {
     "lint-staged": "^3.4.0",

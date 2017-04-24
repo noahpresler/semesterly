@@ -12,7 +12,7 @@ export const getTimetablesEndpoint = () => '/timetables/';
 export const getSaveTimetableEndpoint = () => '/user/save_timetable/';
 export const getCloneTimetableEndpoint = () => '/user/duplicate_timetable/';
 export const getDeleteTimetableEndpoint = () => '/user/delete_timetable/';
-export const getSaveSettingsEndpoint = () => '/user/save_settings/';
+export const getSaveSettingsEndpoint = () => '/user/settings/';
 export const getClassmatesEndpoint = () => '/user/get_classmates/';
 export const getClassmatesInCourseEndpoint = courseId => `/course_classmates/${getSchool()}/${getSemester()}/id/${courseId}/`;
 export const getMostClassmatesCountEndpoint = () => '/user/get_most_classmates_count/';

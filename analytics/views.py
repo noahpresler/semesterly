@@ -10,7 +10,7 @@ from django.views.decorators.csrf import csrf_exempt
 from django.db.models import Q
 from django.http import Http404
 
-from student.views import get_student
+from student.utils import get_student
 from student.models import *
 from analytics.models import *
 from timetable.models import Semester

@@ -11,7 +11,7 @@ from rest_framework import status, generics
 
 from analytics.views import save_analytics_course_search
 from student.models import Student
-from student.views import get_student
+from student.utils import get_student
 from timetable.models import Semester, Course
 from timetable.utils import validate_subdomain
 from courses.views import get_detailed_course_json, get_basic_course_json
