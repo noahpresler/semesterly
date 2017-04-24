@@ -73,17 +73,6 @@ class PersonalTimetable(models.Model):
     sections = models.ManyToManyField(timetable_models.Section)
     has_conflict = models.BooleanField(blank=True, default=False)
 
-class FinalExamShare(models.Model):
-    """ Database object representing a shared final exam schedule.
-
-       A final exam schedule belongs to a Student and contains the list of
-       classes which the user needs to check finals for
-    """
-    school = models.CharField(max_length=50)
-    student = models.ForeignKey(Student)
-    exam_json = models.TextField(default='')
-    last_updated = models.DateTimeField(auto_now=True)
-
 class RegistrationToken(models.Model):
     """ Database object used during signup. """
     auth = models.TextField(default='')

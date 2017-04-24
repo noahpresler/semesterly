@@ -1,6 +1,8 @@
 import React from 'react';
 import Modal from 'boron/WaveModal';
 import COLOUR_DATA from '../constants/colours';
+import { ShareLink } from "./master_slot";
+import { getExamShareLink } from '../helpers/exam_helpers';
 
 const InSlot = (props) => {
   let displayTime = (props.time) ? <h3 className="time">{ props.time }</h3> : null;
@@ -45,8 +47,14 @@ export class FinalExamsModal extends React.Component {
     const mql = window.matchMedia('(orientation: portrait)');
     this.state = {
       orientation: !mql.matches ? 'landscape' : 'portrait',
+      shareLinkShown: false,
     };
     this.updateOrientation = this.updateOrientation.bind(this);
+    this.toggleShareLink = this.toggleShareLink.bind(this);
+  }
+
+  toggleShareLink() {
+    this.setState({ shareLinkShown: !this.state.shareLinkShown });
   }
 
   hide() {
@@ -279,10 +287,25 @@ export class FinalExamsModal extends React.Component {
 
   render() {
     const mobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+    const shareLink = this.state.shareLinkShown && this.props.shareLink ?
+            (<ShareLink
+              link={getExamShareLink(this.props.shareLink)}
+              onClickOut={this.toggleShareLink}
+            />) :
+            null;
     const modalHeader =
             (<div id="modal-header">
               <h1>Final Exam Schedule</h1>
               <h2>{ this.props.activeLoadedTimetableName }</h2>
+              <div id="modal-share">
+                <i className="fa fa-share-alt" onClick={() => {
+                  if (!this.state.shareLinkShown && !this.props.shareLink) {
+                    this.props.getFinalExamShareLink();
+                  }
+                  this.toggleShareLink();
+                }} />
+              </div>
+              { shareLink }
               <div id="modal-close" onClick={() => this.hide()}>
                 <i className="fa fa-times" />
               </div>

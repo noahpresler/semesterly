@@ -1,0 +1,107 @@
+Searching 33080 files for "WEB_MODULE"
+
+/Users/kristinyim/Sites/semesterly/.idea/semesterly.iml:
+    1  <?xml version="1.0" encoding="UTF-8"?>
+    2: <module type="WEB_MODULE" version="4">
+    3    <component name="NewModuleRootManager">
+    4      <content url="file://$MODULE_DIR$">
+
+/Users/kristinyim/Sites/semesterly/node_modules/bowser/.idea/bowser.iml:
+    1  <?xml version="1.0" encoding="UTF-8"?>
+    2: <module type="WEB_MODULE" version="4">
+    3    <component name="NewModuleRootManager">
+    4      <content url="file://$MODULE_DIR$" />
+
+/Users/kristinyim/Sites/semesterly/node_modules/hoist-non-react-statics/.idea/hoist-non-react-statics.iml:
+    1  <?xml version="1.0" encoding="UTF-8"?>
+    2: <module type="WEB_MODULE" version="4">
+    3    <component name="NewModuleRootManager">
+    4      <content url="file://$MODULE_DIR$" />
+
+/Users/kristinyim/Sites/semesterly/node_modules/loader-runner/package.json:
+   77      "bin/",
+   78      "hot/",
+   79:     "web_modules/",
+   80      "schemas/"
+   81    ],
+
+/Users/kristinyim/Sites/semesterly/node_modules/react-notify-resize/.idea/react-notify-resize.iml:
+    1  <?xml version="1.0" encoding="UTF-8"?>
+    2: <module type="WEB_MODULE" version="4">
+    3    <component name="NewModuleRootManager">
+    4      <content url="file://$MODULE_DIR$" />
+
+/Users/kristinyim/Sites/semesterly/node_modules/webpack/package.json:
+  154      "buildin/",
+  155      "hot/",
+  156:     "web_modules/",
+  157      "schemas/"
+  158    ],
+
+6 matches across 6 files
+
+
+p`Searching 33080 files for "FinalExamShare"
+
+/Users/kristinyim/Sites/semesterly/logfile.txt:
+ 2907      return view_func(*args, **kwargs)
+ 2908    File "/Users/kristinyim/Sites/semesterly/exams/views.py", line 27, in share_final_exam_schedule
+ 2909:     share = FinalExamShare.objects.create(
+ 2910: NameError: global name 'FinalExamShare' is not defined
+ 2911  
+
+/Users/kristinyim/Sites/semesterly/exams/views.py:
+   25  def share_final_exam_schedule(request):
+   26      exam_json = json.loads(request.body)
+   27:     share = FinalExamShare.objects.create(
+   28          school=request.subdomain,
+   29          exam_json=exam_json,
+   ..
+   36  def view_final_exam_share(request, ref):
+   37      try:
+   38:         exam_json = FinalExamShare.objects.get(id=hashids.decrypt(ref)[0]).exam_json
+   39          final_exam_schedule = JHUFinalExamScheduler().make_schedule(json.loads(exam_json))    
+   40          return view_timetable(request, final_exam_share=final_exam_schedule)
+
+/Users/kristinyim/Sites/semesterly/static/js/redux/actions/exam_actions.jsx:
+   23  };
+   24  
+   25: export const getFinalExamShareLink = () => () => {
+   26    const state = store.getState();
+   27    const timetable = getActiveTimetable(state.timetables);
+
+/Users/kristinyim/Sites/semesterly/static/js/redux/ui/final_exams_modal.jsx:
+  285                <h2>{ this.props.activeLoadedTimetableName }</h2>
+  286                <div id="modal-share">
+  287:                 <i className="fa fa-share-alt" onClick={this.props.getFinalExamShareLink} />
+  288                </div>
+  289                <div id="modal-close" onClick={() => this.hide()}>
+
+/Users/kristinyim/Sites/semesterly/static/js/redux/ui/containers/final_exams_modal_container.jsx:
+    1  import { connect } from 'react-redux';
+    2  import { FinalExamsModal } from '../final_exams_modal';
+    3: import { fetchFinalExamSchedule, getFinalExamShareLink } from '../../actions/exam_actions';
+    4  import { logFinalExamView } from '../../util';
+    5  import { hideFinalExamsModal, triggerAcquisitionModal } from '../../actions/modal_actions';
+    .
+   41      hideFinalExamsModal,
+   42      fetchFinalExamSchedule,
+   43:     getFinalExamShareLink,
+   44      launchUserAcquisitionModal: triggerAcquisitionModal,
+   45    },
+
+/Users/kristinyim/Sites/semesterly/student/models.py:
+   74      has_conflict = models.BooleanField(blank=True, default=False)
+   75  
+   76: class FinalExamShare(models.Model):
+   77      """ Database object representing a shared final exam schedule.
+   78  
+
+/Users/kristinyim/Sites/semesterly/student/migrations/0019_finalexamshare.py:
+   15      operations = [
+   16          migrations.CreateModel(
+   17:             name='FinalExamShare',
+   18              fields=[
+   19                  ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
+
+10 matches across 7 files
