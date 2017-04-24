@@ -54,12 +54,12 @@ class UserViewTest(APITestCase):
 
     def test_profile_page(self):
         self.client.force_login(self.user)
-        response = self.client.get('/me/')
+        response = self.client.get('/user/settings/')
         self.assertTemplateUsed(response, 'profile.html')
 
     def test_profile_page_not_signed_in(self):
         self.client.logout()
-        response = self.client.get('/me/')
+        response = self.client.get('/user/settings/')
         self.assertTemplateUsed(response, 'index.html')
 
     def test_update_settings(self):
