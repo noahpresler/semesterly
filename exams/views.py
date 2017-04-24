@@ -6,7 +6,11 @@ from django.views.decorators.csrf import csrf_exempt
 from timetable.jhu_final_exam_scheduler import JHUFinalExamScheduler
 from timetable.utils import validate_subdomain
 from timetable.views import view_timetable
+from student.views import get_student
+from exams.models import *
+from hashids import Hashids
 
+hashids = Hashids(salt="x98as7dhg&h*askdj^has!kj?xz<!9")
 
 @validate_subdomain
 def view_final_exams(request):
@@ -26,10 +30,11 @@ def share_final_exam_schedule(request):
     exam_json = json.loads(request.body)
     share = FinalExamShare.objects.create(
         school=request.subdomain,
+        student=get_student(request),
         exam_json=exam_json,
     )
     share.save()
-    response = {'link': hashids.encrypt(shared_timetable.id)}
+    response = {'link': hashids.encrypt(share.id)}
     return HttpResponse(json.dumps(response), content_type='application/json')
     
 @validate_subdomain
