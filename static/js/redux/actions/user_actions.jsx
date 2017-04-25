@@ -61,13 +61,13 @@ export const getActiveTimetable = timetableState => timetableState.items[timetab
 const getSaveTimetablesRequestBody = () => {
   const state = store.getState();
   const timetableState = state.timetables;
-  const name = state.savingTimetable.activeTimetable.name;
-  const id = state.savingTimetable.activeTimetable.id || 0;
+  const tt = getActiveTimetable(timetableState);
   return {
-    timetable: getActiveTimetable(timetableState),
+    courses: tt.courses,
+    has_conflict: tt.has_conflict,
     semester: allSemesters[state.semesterIndex],
-    name,
-    id,
+    name: state.savingTimetable.activeTimetable.name,
+    id: state.savingTimetable.activeTimetable.id,
   };
 };
 
@@ -148,58 +148,63 @@ export const saveTimetable = (isAutoSave = false, callback = null) => (dispatch)
     type: ActionTypes.REQUEST_SAVE_TIMETABLE,
   });
 
+  const body = getSaveTimetablesRequestBody();
   fetch(getSaveTimetableEndpoint(), {
+    headers: {
+      'X-CSRFToken': Cookie.get('csrftoken'),
+      Accept: 'application/json',
+      'Content-Type': 'application/json',
+    },
     method: 'POST',
-    body: JSON.stringify(getSaveTimetablesRequestBody()),
+    body: JSON.stringify(body),
     credentials: 'include',
   })
-  .then(response => response.json())
-  .then((json) => {
-    if (json.error) {
+  .then((response) => {
+    if (response.status === 409) {
       dispatch({
         type: ActionTypes.ALERT_TIMETABLE_EXISTS,
       });
       return null;
     }
-    // edit the state's courseSections, so that future requests to add/remove/unlock
-    // courses are handled correctly. in the new courseSections, every currently
-    // active section will be locked
-    if (!isAutoSave) {
-      // mark that the current timetable is now the only available one (since all
-      // sections are locked)
+
+    return response.json().then((json) => {
+        // edit the state's courseSections, so that future requests to add/remove/unlock
+        // courses are handled correctly. in the new courseSections, every currently
+        // active section will be locked
+      if (!isAutoSave) {
+            // mark that the current timetable is now the only available one (since all
+            // sections are locked)
+        dispatch({
+          type: ActionTypes.RECEIVE_TIMETABLES,
+          timetables: [activeTimetable],
+          preset: true,
+          saving: true,
+        });
+        dispatch({
+          type: ActionTypes.RECEIVE_COURSE_SECTIONS,
+          courseSections: lockActiveSections(activeTimetable),
+        });
+      }
       dispatch({
-        type: ActionTypes.RECEIVE_TIMETABLES,
-        timetables: [activeTimetable],
-        preset: true,
-        saving: true,
+        type: ActionTypes.CHANGE_ACTIVE_SAVED_TIMETABLE,
+        timetable: json.saved_timetable,
       });
       dispatch({
-        type: ActionTypes.RECEIVE_COURSE_SECTIONS,
-        courseSections: lockActiveSections(activeTimetable),
+        type: ActionTypes.RECEIVE_SAVED_TIMETABLES,
+        timetables: json.timetables,
       });
-    }
-    dispatch({
-      type: ActionTypes.CHANGE_ACTIVE_SAVED_TIMETABLE,
-      timetable: json.saved_timetable,
+      dispatch({
+        type: ActionTypes.RECEIVE_TIMETABLE_SAVED,
+        upToDate: !json.error,
+      });
+      if (callback) {
+        callback();
+      }
+      if (!json.error && state.userInfo.data.isLoggedIn && json.timetables[0]) {
+        return dispatch(fetchClassmates(json.timetables[0].courses.map(c => c.id)));
+      }
+      return null;
     });
-    dispatch({
-      type: ActionTypes.RECEIVE_SAVED_TIMETABLES,
-      timetables: json.timetables,
-    });
-    dispatch({
-      type: ActionTypes.RECEIVE_TIMETABLE_SAVED,
-      upToDate: !json.error,
-    });
-    return json;
-  })
-  .then((json) => {
-    if (callback) {
-      callback();
-    }
-    if (!json.error && state.userInfo.data.isLoggedIn && json.timetables[0]) {
-      return dispatch(fetchClassmates(json.timetables[0].courses.map(c => c.id)));
-    }
-    return null;
   });
   return null;
 };

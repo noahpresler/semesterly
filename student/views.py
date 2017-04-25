@@ -463,7 +463,7 @@ class UserTimetableView(APIView):
             courses = request.data['courses']
             tt_id = request.data.get('id') # id is None if this is a new timetable
 
-            if tt_id is None and PersonalTimetable.objects.filter(**params).exists():
+            if PersonalTimetable.objects.filter(~Q(id=tt_id), **params):
                 return Response(status=status.HTTP_409_CONFLICT)
 
             personal_timetable = PersonalTimetable.objects.create(**params) if tt_id is None else \
