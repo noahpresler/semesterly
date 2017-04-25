@@ -8,7 +8,7 @@ from datetime import datetime
 from django.db.models import Count
 from django.forms import model_to_dict
 from django.http import HttpResponse
-from django.shortcuts import render_to_response
+from django.shortcuts import render_to_response, get_object_or_404
 from django.template import RequestContext
 from django.views.decorators.csrf import csrf_exempt
 from rest_framework import status
@@ -80,23 +80,6 @@ def get_basic_course_json(course, sem, extra_model_fields=None):
     return course_json
 
 
-def get_course(request, school, sem_name, year, id):
-    sem, _ = Semester.objects.get_or_create(name=sem_name, year=year)
-    try:
-        course = Course.objects.get(school=school, id=id)
-        student = None
-        logged = request.user.is_authenticated()
-        if logged and Student.objects.filter(user=request.user).exists():
-            student = Student.objects.get(user=request.user)
-        json_data = get_detailed_course_json(school, course, sem, student)
-    except:
-        import traceback
-        traceback.print_exc()
-        json_data = {}
-
-    return HttpResponse(json.dumps(json_data), content_type="application/json")
-
-
 @csrf_exempt
 def get_course_id(request, school, code):
     school = school.lower()
@@ -143,32 +126,6 @@ def all_courses(request):
                                   context_instance=RequestContext(request))
     except Exception as e:
         return HttpResponse(str(e))
-
-
-@validate_subdomain
-def school_info(request, school):
-    school = request.subdomain
-    last_updated = None
-    if Updates.objects.filter(school=school, update_field="Course").exists():
-        update_time_obj = Updates.objects.get(school=school, update_field="Course") \
-            .last_updated.astimezone(timezone('US/Eastern'))
-        last_updated = update_time_obj.strftime('%Y-%m-%d %H:%M') + " " + update_time_obj.tzname()
-    json_data = {
-        'areas': sorted(list(Course.objects.filter(school=school) \
-                             .exclude(areas__exact='') \
-                             .values_list('areas', flat=True) \
-                             .distinct())),
-        'departments': sorted(list(Course.objects.filter(school=school) \
-                                   .exclude(department__exact='') \
-                                   .values_list('department', flat=True) \
-                                   .distinct())),
-        'levels': sorted(list(Course.objects.filter(school=school) \
-                              .exclude(level__exact='') \
-                              .values_list('level', flat=True) \
-                              .distinct())),
-        'last_updated': last_updated
-    }
-    return HttpResponse(json.dumps(json_data), content_type="application/json")
 
 
 def get_classmates_in_course(request, school, sem_name, year, course_id):
@@ -231,17 +188,13 @@ class CourseDetail(APIView):
     def get(self, request, sem_name, year, course_id):
         school = request.subdomain
         sem, _ = Semester.objects.get_or_create(name=sem_name, year=year)
-        try:
-            course = Course.objects.get(school=school, id=course_id)
-        except Course.DoesNotExist:
-            return Response(status=status.HTTP_404_NOT_FOUND)
-        else:
-            student = None
-            is_logged_in = request.user.is_authenticated()
-            if is_logged_in and Student.objects.filter(user=request.user).exists():
-                student = Student.objects.get(user=request.user)
-            json_data = get_detailed_course_json(school, course, sem, student)
-            return Response(json_data)
+        course = get_object_or_404(Course, school=school, id=course_id)
+        student = None
+        is_logged_in = request.user.is_authenticated()
+        if is_logged_in and Student.objects.filter(user=request.user).exists():
+            student = Student.objects.get(user=request.user)
+        json_data = get_detailed_course_json(school, course, sem, student)
+        return Response(json_data, status=status.HTTP_200_OK)
 
 
 class SchoolList(APIView):
@@ -267,4 +220,4 @@ class SchoolList(APIView):
                                   .distinct())),
             'last_updated': last_updated
         }
-        return Response(json_data)
+        return Response(json_data, status=status.HTTP_200_OK)
