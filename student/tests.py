@@ -177,12 +177,12 @@ class UserTimetableViewTest(APITestCase):
             'has_conflict': False
         }
         PersonalTimetable.objects.create(id=10, name='oldtt', school='uoft', semester=self.sem, student=self.student)
-        request = self.factory.put('/user/timetables/', data, format='json')
+        request = self.factory.post('/user/timetables/', data, format='json')
         force_authenticate(request, user=self.user)
         request.subdomain = 'uoft'
         view = resolve('/user/timetables/').func
         response = view(request)
-        self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(PersonalTimetable.objects.get(id=10).name, 'renamed')
 
     def test_delete_timetable(self):
