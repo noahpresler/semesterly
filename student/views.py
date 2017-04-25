@@ -446,15 +446,9 @@ class UserTimetableView(APIView):
             student = Student.objects.get(user=request.user)
             new_name = request.data['name']
 
-            original = PersonalTimetable.objects.get(
-                student=student, name=name, school=school, semester=semester)
-            duplicate = PersonalTimetable.objects.create(
-                student=student, name=new_name, school=school, semester=semester,
-                has_conflict=original.has_conflict)
-            for course in original.courses.all():
-                duplicate.courses.add(course)
-            for section in original.sections.all():
-                duplicate.sections.add(section)
+            duplicate = get_object_or_404(PersonalTimetable, student=student, name=name, school=school, semester=semester)
+            duplicate.pk = None # creates duplicate of object
+            duplicate.name = new_name
             duplicate.save()
 
             return Response(duplicate, status=status.HTTP_201_CREATED)
