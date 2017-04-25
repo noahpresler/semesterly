@@ -9,9 +9,9 @@ export const getLogFacebookAlertClickEndpoint = () => '/user/log_fb_alert_click/
 export const getCourseInfoEndpoint = courseId => `/courses/${getSemester()}/id/${courseId}/`;
 export const getCourseSearchEndpoint = query => `/search/${getSemester()}/${query}/`;
 export const getTimetablesEndpoint = () => '/timetables/';
+export const getLoadSavedTimetablesEndpoint = semester => `/user/timetables/${semester.name}/${semester.year}/`;
 export const getSaveTimetableEndpoint = () => '/user/timetables/';
-export const getCloneTimetableEndpoint = () => '/user/duplicate_timetable/';
-export const getDeleteTimetableEndpoint = () => '/user/delete_timetable/';
+export const getDeleteTimetableEndpoint = (semester, name) => `/user/timetables/${semester.name}/${semester.year}/${name}/`;
 export const getSaveSettingsEndpoint = () => '/user/settings/';
 export const getClassmatesEndpoint = () => '/user/get_classmates/';
 export const getClassmatesInCourseEndpoint = courseId => `/course_classmates/${getSchool()}/${getSemester()}/id/${courseId}/`;
@@ -19,7 +19,6 @@ export const getMostClassmatesCountEndpoint = () => '/user/get_most_classmates_c
 export const getFriendsEndpoint = () => '/user/find_friends/';
 export const getSchoolInfoEndpoint = () => `/school/${getSchool()}/`;
 export const getReactToCourseEndpoint = () => '/react/';
-export const getLoadSavedTimetablesEndpoint = semester => `/user/get_saved_timetables/${getSchool()}/${semester.name}/${semester.year}/`;
 export const getRequestShareTimetableLinkEndpoint = () => '/timetables/links/';
 export const getSetRegistrationTokenEndpoint = () => '/setRegistrationToken/';
 export const deleteRegistrationTokenEndpoint = () => '/deleteRegistrationToken/';

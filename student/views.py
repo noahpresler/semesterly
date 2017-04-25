@@ -447,11 +447,20 @@ class UserTimetableView(APIView):
             new_name = request.data['name']
 
             duplicate = get_object_or_404(PersonalTimetable, student=student, name=name, school=school, semester=semester)
+            courses, sections = duplicate.courses.all(), duplicate.sections.all()
+
             duplicate.pk = None # creates duplicate of object
             duplicate.name = new_name
             duplicate.save()
+            duplicate.courses = courses
+            duplicate.sections = sections
 
-            return Response(duplicate, status=status.HTTP_201_CREATED)
+            timetables = get_student_tts(student, school, semester)
+            saved_timetable = (x for x in timetables if x['id'] == duplicate.id).next()
+            response = {'timetables': timetables, 'saved_timetable': saved_timetable}
+
+            # TODO: should respond only with created object
+            return Response(response, status=status.HTTP_201_CREATED)
         else:
             school = request.subdomain
             has_conflict = request.data['has_conflict']
@@ -474,6 +483,7 @@ class UserTimetableView(APIView):
             saved_timetable = (x for x in timetables if x['id'] == personal_timetable.id).next()
             response = {'timetables': timetables, 'saved_timetable': saved_timetable}
 
+            # TODO: should respond only with created object
             return Response(response, status=status.HTTP_201_CREATED if tt_id is None else status.HTTP_200_OK)
 
     def delete(self, request, sem_name, year, tt_name):
@@ -485,7 +495,11 @@ class UserTimetableView(APIView):
         PersonalTimetable.objects.filter(
             student=student, name=name, school=school, semester=semester).delete()
 
-        return Response(status=status.HTTP_204_NO_CONTENT)
+        timetables = get_student_tts(student, school, semester)
+        response = {'timetables': timetables}
+
+        # TODO: should respond with deleted object
+        return Response(response, status=status.HTTP_200_OK)
 
     def update_tt(self, tt, new_name, new_has_conflict, new_courses, semester):
         tt.name = new_name
