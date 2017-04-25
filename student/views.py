@@ -460,41 +460,27 @@ class UserTimetableView(APIView):
             return Response(duplicate, status=status.HTTP_201_CREATED)
         else:
             school = request.subdomain
-            courses = request.data['courses']
             has_conflict = request.data['has_conflict']
             name = request.data['name']
             semester, _ = Semester.objects.get_or_create(**request.data['semester'])
             student = Student.objects.get(user=request.user)
+            params = {'school': school, 'name': name, 'semester': semester, 'student': student}
 
-            if PersonalTimetable.objects.filter(student=student,
-                                                name=request.data['name'],
-                                                semester=semester,
-                                                school=school).exists():
+            courses = request.data['courses']
+            tt_id = request.data.get('id') # id is None if this is a new timetable
+
+            if tt_id is None and PersonalTimetable.objects.filter(**params).exists():
                 return Response(status=status.HTTP_409_CONFLICT)
 
-            personal_timetable = PersonalTimetable.objects.create(student=student, name=name, school=school,
-                                                                  semester=semester)
+            personal_timetable = PersonalTimetable.objects.create(**params) if tt_id is None else \
+                PersonalTimetable.objects.get(id=tt_id)
             self.update_tt(personal_timetable, name, has_conflict, courses, semester)
+
             timetables = get_student_tts(student, school, semester)
             saved_timetable = (x for x in timetables if x['id'] == personal_timetable.id).next()
             response = {'timetables': timetables, 'saved_timetable': saved_timetable}
 
-            return Response(response, status=status.HTTP_201_CREATED)
-
-    def put(self, request):
-        """ Rename a timetable. """
-        school = request.subdomain
-        courses = request.data['courses']
-        has_conflict = request.data['has_conflict']
-        name = request.data['name']
-        semester, _ = Semester.objects.get_or_create(**request.data['semester'])
-        student = Student.objects.get(user=request.user)
-
-        personal_timetable = PersonalTimetable.objects.get(
-            student=student, id=request.data['id'], school=school)
-
-        self.update_tt(personal_timetable, name, has_conflict, courses, semester)
-        return Response(status=status.HTTP_204_NO_CONTENT)
+            return Response(response, status=status.HTTP_201_CREATED if tt_id is None else status.HTTP_200_OK)
 
     def delete(self, request, sem_name, year, tt_name):
         school = request.subdomain
