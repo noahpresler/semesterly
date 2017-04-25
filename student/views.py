@@ -481,7 +481,7 @@ class UserTimetableView(APIView):
 
             return Response(response, status=status.HTTP_201_CREATED)
 
-    def patch(self, request):
+    def put(self, request):
         """ Rename a timetable. """
         school = request.subdomain
         courses = request.data['courses']
@@ -494,6 +494,17 @@ class UserTimetableView(APIView):
             student=student, id=request.data['id'], school=school)
 
         self.update_tt(personal_timetable, name, has_conflict, courses, semester)
+        return Response(status=status.HTTP_204_NO_CONTENT)
+
+    def delete(self, request, sem_name, year, tt_name):
+        school = request.subdomain
+        name = tt_name
+        semester = Semester.objects.get(name=sem_name, year=year)
+        student = Student.objects.get(user=request.user)
+
+        PersonalTimetable.objects.filter(
+            student=student, name=name, school=school, semester=semester).delete()
+
         return Response(status=status.HTTP_204_NO_CONTENT)
 
     def update_tt(self, tt, new_name, new_has_conflict, new_courses, semester):
@@ -510,17 +521,6 @@ class UserTimetableView(APIView):
                 tt.sections.add(
                     course_obj.section_set.get(meeting_section=section, semester=semester))
         tt.save()
-
-    def delete(self, request, sem_name, year, tt_name):
-        school = request.subdomain
-        name = tt_name
-        semester = Semester.objects.get(name=sem_name, year=year)
-        student = Student.objects.get(user=request.user)
-
-        PersonalTimetable.objects.filter(
-            student=student, name=name, school=school, semester=semester).delete()
-
-        return Response(status=status.HTTP_204_NO_CONTENT)
 
 
 class ClassmateView(APIView):
