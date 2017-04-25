@@ -192,7 +192,7 @@ class UserTimetableViewTest(APITestCase):
         request.subdomain = 'uoft'
         view = resolve('/user/timetables/').func
         response = view(request, 'Winter', '1995', 'todelete')
-        self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertFalse(PersonalTimetable.objects.filter(id=20).exists())
 
 
