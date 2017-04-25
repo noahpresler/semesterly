@@ -11,8 +11,7 @@ install:
   - npm -g install webpack
   - npm install
   - pip install --user -r requirements.txt
-script: 
-  - gulp css
+script:
   - npm run build
   - npm run lint
   - python manage.py test
