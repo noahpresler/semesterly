@@ -83,12 +83,12 @@ class UserTimetableViewTest(APITestCase):
         """ Create a user and personal timetable. """
         self.user = User.objects.create_user(username='jacob', password='top_secret')
         self.student = Student.objects.create(user=self.user)
+        self.sem = Semester.objects.create(name='Winter', year='1995')
 
-        sem = Semester.objects.create(name='Winter', year='1995')
         course = Course.objects.create(id=1, school='uoft', code='SEM101', name='Intro')
-        section = Section.objects.create(course=course, semester=sem, meeting_section='L1')
+        section = Section.objects.create(course=course, semester=self.sem, meeting_section='L1')
         Offering.objects.create(section=section, day='M', time_start='8:00', time_end='10:00')
-        tt = PersonalTimetable.objects.create(name='tt', school='uoft', semester=sem, student=self.student)
+        tt = PersonalTimetable.objects.create(name='tt', school='uoft', semester=self.sem, student=self.student)
         tt.courses.add(course)
         tt.sections.add(section)
         tt.save()
@@ -163,10 +163,37 @@ class UserTimetableViewTest(APITestCase):
         PersonalTimetable.objects.get(name='dupe tt')
 
     def test_rename_timetable(self):
-        pass
+        data = {
+            'id': 10,
+            'semester': {
+                'name': 'Winter',
+                'year': '1995'
+            },
+            'courses': [{
+                'id': 1,
+                'enrolled_sections': ['L1']
+            }],
+            'name': 'renamed',
+            'has_conflict': False
+        }
+        PersonalTimetable.objects.create(id=10, name='oldtt', school='uoft', semester=self.sem, student=self.student)
+        request = self.factory.patch('/user/timetables/', data, format='json')
+        force_authenticate(request, user=self.user)
+        request.subdomain = 'uoft'
+        view = resolve('/user/timetables/').func
+        response = view(request)
+        self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
+        self.assertEqual(PersonalTimetable.objects.get(id=10).name, 'renamed')
 
     def test_delete_timetable(self):
-        pass
+        PersonalTimetable.objects.create(id=20, name='todelete', school='uoft', semester=self.sem, student=self.student)
+        request = self.factory.delete('/user/timetables/Winter/1995/todelete')
+        force_authenticate(request, user=self.user)
+        request.subdomain = 'uoft'
+        view = resolve('/user/timetables/').func
+        response = view(request, 'Winter', '1995', 'todelete')
+        self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
+        self.assertFalse(PersonalTimetable.objects.filter(id=20).exists())
 
 
 class ClassmateViewTest(APITestCase):
