@@ -177,7 +177,7 @@ class UserTimetableViewTest(APITestCase):
             'has_conflict': False
         }
         PersonalTimetable.objects.create(id=10, name='oldtt', school='uoft', semester=self.sem, student=self.student)
-        request = self.factory.patch('/user/timetables/', data, format='json')
+        request = self.factory.put('/user/timetables/', data, format='json')
         force_authenticate(request, user=self.user)
         request.subdomain = 'uoft'
         view = resolve('/user/timetables/').func
