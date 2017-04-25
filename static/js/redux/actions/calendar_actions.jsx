@@ -82,6 +82,11 @@ export const addTTtoGCal = () => (dispatch) => {
   if (!state.saveCalendarModal.isUploading && !state.saveCalendarModal.hasUploaded) {
     dispatch({ type: ActionTypes.UPLOAD_CALENDAR });
     fetch(getAddTTtoGCalEndpoint(), {
+      headers: {
+        'X-CSRFToken': Cookie.get('csrftoken'),
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+      },
       method: 'POST',
       body: JSON.stringify({
         timetable: getActiveTimetable(timetableState),
