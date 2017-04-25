@@ -92,13 +92,15 @@ export const requestMostClassmates = () => ({
 
 export const fetchMostClassmatesCount = courses => (dispatch) => {
   const state = store.getState();
+  if (!state.userInfo.data.social_courses) {
+    return;
+  }
   const semesterIndex = state.semesterIndex !== undefined ? state.semesterIndex : currentSemester;
   const semester = allSemesters[semesterIndex];
   dispatch(requestMostClassmates());
-  fetch(getMostClassmatesCountEndpoint(), {
+  fetch(getMostClassmatesCountEndpoint(semester, courses), {
     credentials: 'include',
-    method: 'POST',
-    body: JSON.stringify({ course_ids: courses, semester }),
+    method: 'GET',
   })
       .then(response => response.json())
       .then((json) => {
@@ -113,16 +115,18 @@ export const fetchMostClassmatesCount = courses => (dispatch) => {
 
 export const fetchClassmates = courses => (dispatch) => {
   const state = store.getState();
+  if (!state.userInfo.data.social_courses) {
+    return;
+  }
   const semesterIndex = state.semesterIndex !== undefined ? state.semesterIndex : currentSemester;
   setTimeout(() => {
     dispatch(fetchMostClassmatesCount(getActiveTimetable(state.timetables)
       .courses.map(c => c.id)));
   }, 500);
   dispatch(requestClassmates());
-  fetch(getClassmatesEndpoint(), {
+  fetch(getClassmatesEndpoint(allSemesters[semesterIndex], courses), {
     credentials: 'include',
-    method: 'POST',
-    body: JSON.stringify({ course_ids: courses, semester: allSemesters[semesterIndex] }),
+    method: 'GET',
   })
     .then(response => response.json())
     .then((json) => {
@@ -404,15 +408,17 @@ export const fetchFinalExamSchedule = () => (dispatch) => {
 
 export const fetchFriends = () => (dispatch) => {
   const state = store.getState();
+  if (!state.userInfo.data.social_courses) {
+    return;
+  }
   const semesterIndex = state.semesterIndex !== undefined ? state.semesterIndex : currentSemester;
   dispatch(requestFriends());
   dispatch({
     type: ActionTypes.PEER_MODAL_LOADING,
   });
-  fetch(getFriendsEndpoint(), {
+  fetch(getFriendsEndpoint(allSemesters[semesterIndex]), {
     credentials: 'include',
-    method: 'POST',
-    body: JSON.stringify({ semester: allSemesters[semesterIndex] }),
+    method: 'GET',
   })
     .then(response => response.json())
     .then((json) => {
