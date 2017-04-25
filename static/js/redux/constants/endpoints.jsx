@@ -9,7 +9,7 @@ export const getLogFacebookAlertClickEndpoint = () => '/user/log_fb_alert_click/
 export const getCourseInfoEndpoint = courseId => `/courses/${getSemester()}/id/${courseId}/`;
 export const getCourseSearchEndpoint = query => `/search/${getSemester()}/${query}/`;
 export const getTimetablesEndpoint = () => '/timetables/';
-export const getSaveTimetableEndpoint = () => '/user/save_timetable/';
+export const getSaveTimetableEndpoint = () => '/user/timetables/';
 export const getCloneTimetableEndpoint = () => '/user/duplicate_timetable/';
 export const getDeleteTimetableEndpoint = () => '/user/delete_timetable/';
 export const getSaveSettingsEndpoint = () => '/user/settings/';
