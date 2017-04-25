@@ -474,19 +474,7 @@ class UserTimetableView(APIView):
 
             personal_timetable = PersonalTimetable.objects.create(student=student, name=name, school=school,
                                                                   semester=semester)
-            # delete currently existing courses and course offerings for this timetable
-            personal_timetable.courses.clear()
-            personal_timetable.sections.clear()
-            personal_timetable.save()
-            for course in courses:
-                course_obj = Course.objects.get(id=course['id'])
-                personal_timetable.courses.add(course_obj)
-                enrolled_sections = course['enrolled_sections']
-                for section in enrolled_sections:
-                    personal_timetable.sections.add(
-                        course_obj.section_set.get(meeting_section=section, semester=semester))
-            personal_timetable.has_conflict = has_conflict
-            personal_timetable.save()
+            self.update_tt(personal_timetable, name, has_conflict, courses, semester)
             timetables = get_student_tts(student, school, semester)
             saved_timetable = (x for x in timetables if x['id'] == personal_timetable.id).next()
             response = {'timetables': timetables, 'saved_timetable': saved_timetable}
@@ -496,14 +484,32 @@ class UserTimetableView(APIView):
     def patch(self, request):
         """ Rename a timetable. """
         school = request.subdomain
-        semester = Semester.objects.get(**request.data['semester'])
-        old_name = request.data['old_name']
-        new_name = request.data['new_name']
-        tt = get_object_or_404(PersonalTimetable, semester=semester, name=old_name, school=school)
-        tt.name = new_name
-        tt.save()
+        courses = request.data['courses']
+        has_conflict = request.data['has_conflict']
+        name = request.data['name']
+        semester, _ = Semester.objects.get_or_create(**request.data['semester'])
+        student = Student.objects.get(user=request.user)
 
+        personal_timetable = PersonalTimetable.objects.get(
+            student=student, id=request.data['id'], school=school)
+
+        self.update_tt(personal_timetable, name, has_conflict, courses, semester)
         return Response(status=status.HTTP_204_NO_CONTENT)
+
+    def update_tt(self, tt, new_name, new_has_conflict, new_courses, semester):
+        tt.name = new_name
+        tt.has_conflict = new_has_conflict
+
+        tt.courses.clear()
+        tt.sections.clear()
+        for course in new_courses:
+            course_obj = Course.objects.get(id=course['id'])
+            tt.courses.add(course_obj)
+            enrolled_sections = course['enrolled_sections']
+            for section in enrolled_sections:
+                tt.sections.add(
+                    course_obj.section_set.get(meeting_section=section, semester=semester))
+        tt.save()
 
     def delete(self, request, sem_name, year, tt_name):
         school = request.subdomain
