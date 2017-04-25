@@ -3,7 +3,6 @@ import Cookie from 'js-cookie';
 import {
     deleteRegistrationTokenEndpoint,
     getClassmatesEndpoint,
-    getCloneTimetableEndpoint,
     getDeleteTimetableEndpoint,
     getFinalExamSchedulerEndpoint,
     getFriendsEndpoint,
@@ -219,10 +218,16 @@ export const duplicateTimetable = timetable => (dispatch) => {
     type: ActionTypes.REQUEST_SAVE_TIMETABLE,
   });
 
-  fetch(getCloneTimetableEndpoint(), {
+  fetch(getSaveTimetableEndpoint(), {
+    headers: {
+      'X-CSRFToken': Cookie.get('csrftoken'),
+      Accept: 'application/json',
+      'Content-Type': 'application/json',
+    },
     method: 'POST',
     body: JSON.stringify({
-      timetable,
+      semester: allSemesters[state.semesterIndex],
+      source: timetable.name,
       name: getNumberedName(timetable.name),
     }),
     credentials: 'include',
@@ -272,9 +277,13 @@ export const deleteTimetable = timetable => (dispatch) => {
   dispatch({
     type: ActionTypes.REQUEST_SAVE_TIMETABLE,
   });
-  fetch(getDeleteTimetableEndpoint(), {
-    method: 'POST',
-    body: JSON.stringify(timetable),
+  fetch(getDeleteTimetableEndpoint(allSemesters[state.semesterIndex], timetable.name), {
+    headers: {
+      'X-CSRFToken': Cookie.get('csrftoken'),
+      Accept: 'application/json',
+      'Content-Type': 'application/json',
+    },
+    method: 'DELETE',
     credentials: 'include',
   })
         .then(response => response.json())
