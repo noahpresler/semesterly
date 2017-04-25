@@ -547,14 +547,9 @@ class ClassmateView(APIView):
                 for course_id in course_ids:
                     courses.append(get_classmates_from_course_id(school, student, course_id, semester, friends=friends))
                 return Response(courses, status=status.HTTP_200_OK)
-            else:
-                # TODO: should be handled on the frontend before sending a request
-                return HttpResponse("Must have social_courses enabled")
         else:
             school = request.subdomain
             student = Student.objects.get(user=request.user)
-            if not student.social_all: # TODO: should be checked on frontend
-                return Response([], status=status.HTTP_200_OK)
             semester, _ = Semester.objects.get_or_create(name=sem_name, year=year)
             current_tt = student.personaltimetable_set.filter(school=school, semester=semester).order_by(
                 'last_updated').last()
