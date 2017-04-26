@@ -142,3 +142,8 @@ export const schoolSpecificInfo = React.PropTypes.shape({
   primaryDisplay: React.PropTypes.string.isRequired,
   timesName: React.PropTypes.string.isRequired,
 });
+
+export const semester = React.PropTypes.shape({
+  name: React.PropTypes.string.isRequired,
+  year: React.PropTypes.oneOfType([React.PropTypes.string, React.PropTypes.number]),
+});
