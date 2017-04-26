@@ -310,15 +310,22 @@ class PeoplesoftParser(CourseParser):
 		# Create textbooks.
 		if self.textbooks:
 			for textbook in textbooks:
-				textbook.update(amazon_textbook_fields(textbook['isbn']))
+				if not textbook['isbn'] or (len(textbook['isbn']) != 10 and len(textbook['isbn']) != 13):
+					continue  # NOTE: might skip some malformed-isbn values
+				amazon_fields = amazon_textbook_fields(textbook['isbn'])
+				if amazon_fields is not None:
+					textbook.update(amazon_fields)
+				else:  # Make sure to clear ingestor from prev (temp fix)
+					textbook.update({
+						'detail_url': None,
+						'image_url': None,
+						'author': None,
+						'title': None,
+					})
 				self.ingestor.update(textbook)
 				self.ingestor.ingest_textbook()
-				if 'textbooks' not in self.ingestor:
-					self.ingestor['textbooks'] = []
-				if not textbook['isbn'] or len(textbook['isbn']) != 9 or len(textbook['isbn']) != 13:
-					continue
-				self.ingestor['textbooks'].append({
-					'kind':'textbook_link',
+				self.ingestor.setdefault('textbooks', []).append({
+					'kind': 'textbook_link',
 					'isbn': textbook['isbn'],
 					'required': textbook['required'],
 				})
@@ -371,10 +378,14 @@ class PeoplesoftParser(CourseParser):
 		''' Virtually refined search (to get around min search param requirement). '''
 		query = {}
 		query['SSR_CLSRCH_WRK_SSR_OPEN_ONLY$chk$4'] = 'N'
+		query['SSR_CLSRCH_WRK_SSR_OPEN_ONLY$chk$5'] = 'N'
 		for day in ['MON', 'TUES', 'WED', 'THURS', 'FRI', 'SAT', 'SUN']:
 			query['SSR_CLSRCH_WRK_' + day + '$5'] = 'Y'
 			query['SSR_CLSRCH_WRK_' + day + '$chk$5'] = 'Y'
+			query['SSR_CLSRCH_WRK_' + day + '$6'] = 'Y'
+			query['SSR_CLSRCH_WRK_' + day + '$chk$6'] = 'Y'
 		query['SSR_CLSRCH_WRK_INCLUDE_CLASS_DAYS$5'] = 'J'
+		query['SSR_CLSRCH_WRK_INCLUDE_CLASS_DAYS$6'] = 'J'
 		# query[soup.find('select', id=re.compile(r'SSR_CLSRCH_WRK_INSTRUCTION_MODE\$\d'))['id']] = 'P'
 		# NOTE: above was removed to handle missed courses, not sure how this will effect all parsers (tested: salisbury, chapman, umich, queens)
 		return query
