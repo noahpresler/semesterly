@@ -118,10 +118,10 @@ class TutModal extends React.Component {
 }
 
 TutModal.propTypes = {
-  textbookModalVisible: React.PropTypes.func.isRequired,
-  signUpModalVisible: React.PropTypes.func.isRequired,
-  courseModalVisible: React.PropTypes.func.isRequired,
-  finalExamModalVisible: React.PropTypes.func.isRequired,
+  textbookModalVisible: React.PropTypes.bool.isRequired,
+  signUpModalVisible: React.PropTypes.bool.isRequired,
+  courseModalVisible: React.PropTypes.bool.isRequired,
+  finalExamModalVisible: React.PropTypes.bool.isRequired,
 };
 
 export default TutModal;
