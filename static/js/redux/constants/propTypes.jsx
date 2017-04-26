@@ -116,21 +116,21 @@ export const timetable = React.PropTypes.shape({
 });
 
 export const userInfo = React.PropTypes.shape({
-  FacebookSignedUp: React.PropTypes.bool.isRequired,
-  GoogleLoggedIn: React.PropTypes.bool.isRequired,
-  LoginHash: React.PropTypes.string.isRequired,
-  LoginToken: React.PropTypes.string.isRequired,
-  class_year: React.PropTypes.number.isRequired,
-  emails_enabled: React.PropTypes.bool.isRequired,
-  gender: React.PropTypes.string.isRequired,
+  FacebookSignedUp: React.PropTypes.bool,
+  GoogleLoggedIn: React.PropTypes.bool,
+  LoginHash: React.PropTypes.string,
+  LoginToken: React.PropTypes.string,
+  class_year: React.PropTypes.number,
+  emails_enabled: React.PropTypes.bool,
+  gender: React.PropTypes.string,
   integrations: React.PropTypes.arrayOf(React.PropTypes.shape({})),
   isLoggedIn: React.PropTypes.bool.isRequired,
-  major: React.PropTypes.string.isRequired,
-  social_all: React.PropTypes.bool.isRequired,
-  social_courses: React.PropTypes.bool.isRequired,
-  social_offerings: React.PropTypes.bool.isRequired,
-  userFirstName: React.PropTypes.string.isRequired,
-  userLastName: React.PropTypes.string.isRequired,
+  major: React.PropTypes.string,
+  social_all: React.PropTypes.bool,
+  social_courses: React.PropTypes.bool,
+  social_offerings: React.PropTypes.bool,
+  userFirstName: React.PropTypes.string,
+  userLastName: React.PropTypes.string,
 });
 
 export const schoolSpecificInfo = React.PropTypes.shape({
