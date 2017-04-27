@@ -2,16 +2,6 @@ from django.conf.urls import patterns, include, url
 from django.http import HttpResponse
 from django.conf import settings
 from django.contrib import admin
-from dashing.utils import router
-
-from analytics.widgets import *
-
-router.register(NumberTimetablesWidget, 'number_timetables_widget')
-router.register(NumberCalendarExportsWidget, 'number_calendar_exports_widget')
-router.register(NumberFinalExamViewsWidget, 'number_final_exam_views_widget')
-router.register(NumberSignupsWidget, 'number_signups_widget')
-router.register(NumberFacebookAlertsViewsWidget, 'number_facebook_alerts_views_widget')
-router.register(NumberFacebookAlertsClicksWidget, 'number_facebook_alerts_clicks_widget')
 
 
 admin.autodiscover()
@@ -45,9 +35,6 @@ urlpatterns = patterns('',
     # for testing 404, so i don't have to turn off debug
     url(r'^404testing/', 'timetable.views.custom_404'),
     url(r'^500testing/', 'timetable.views.custom_500'),
-
-    # dashboard
-    url(r'^dashboard/', include(router.urls), name='dashboard'),
 )
 
 # profiling
