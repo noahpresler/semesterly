@@ -274,7 +274,7 @@ h3.modal-module-header small {
 #modal-body p {
 	font-size: 16px;
 	line-height: 22px;
-	color: #555;
+	color: $grey-dark;
 	padding: 0 5px;
 	margin: 7px 0;
 	transition: color .2s;
@@ -318,7 +318,7 @@ h3.modal-module-header small {
 #modal-body a.course-link,
 #modal-body a.course-link:link,
 #modal-body a.course-link:visited {
-	color: #555;
+	color: $grey-dark;
 	text-decoration: underline;
 	cursor: pointer;
 	position: relative;
@@ -658,7 +658,7 @@ h3.modal-module-header small {
 #capacity-attention-wrapper #attention-text {
 	float: left;
 	margin-left: 5px;
-	color: #555;
+	color: $grey-dark;
 }
 
 #capacity-attention-wrapper #attention-text .highlight {
