@@ -23,6 +23,7 @@ import notificationToken from './notification_token_reducer';
 import integrationModal from './integration_modal_reducer';
 import saveCalendarModal from './save_calendar_modal_reducer';
 import termsOfServiceModal from './terms_of_service_modal_reducer';
+import termsOfServiceBannerModal from './terms_of_service_banner_modal_reducer';
 import userAcquisitionModal from './user_acquisition_modal_reducer';
 import textbookModal from './textbook_modal_reducer';
 import finalExamsModal from './final_exams_modal_reducer';
@@ -53,6 +54,7 @@ const rootReducer = combineReducers({
   saveCalendarModal,
   userAcquisitionModal,
   termsOfServiceModal,
+  termsOfServiceBannerModal,
   textbookModal,
   finalExamsModal,
 });

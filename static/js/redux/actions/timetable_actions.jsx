@@ -18,6 +18,8 @@ export const alertConflict = () => ({ type: ActionTypes.ALERT_CONFLICT });
 
 export const triggerTosModal = () => ({ type: ActionTypes.TRIGGER_TOS_MODAL });
 
+export const triggerTosBannerModal = () => ({ type: ActionTypes.TRIGGER_TOS_BANNER_MODAL });
+
 export const receiveTimetables = timetables => ({
   type: ActionTypes.RECEIVE_TIMETABLES,
   timetables,
