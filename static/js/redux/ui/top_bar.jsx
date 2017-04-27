@@ -3,6 +3,7 @@ import SearchBarContainer from './containers/search_bar_container';
 import CourseModalContainer from './containers/course_modal_container';
 import TimetableLoaderContainer from './containers/timetable_loader_container';
 import SocialProfileContainer from './containers/social_profile_container';
+import * as PropTypes from '../constants/propTypes';
 
 export const expandSideBar = () => {
   $('#main-bar, #side-bar').removeClass('full-cal').addClass('less-cal');
@@ -21,7 +22,7 @@ class TopBar extends React.Component {
   }
 
   toggleSideBar() {
-    if (this.sidebar_collapsed == 'neutral') {
+    if (this.sidebar_collapsed === 'neutral') {
       const bodyw = $(window).width();
       if (bodyw > 999) {
         collapseSideBar();
@@ -31,7 +32,7 @@ class TopBar extends React.Component {
         this.sidebar_collapsed = 'closed';
       }
     }
-    if (this.sidebar_collapsed == 'closed') {
+    if (this.sidebar_collapsed === 'closed') {
       expandSideBar();
       this.sidebar_collapsed = 'open';
     } else {
@@ -45,6 +46,7 @@ class TopBar extends React.Component {
     return (
       <div className="print">
         <img
+          alt="Profile"
           className="usr-pic print"
           src={`https://graph.facebook.com/${JSON.parse(currentUser).fbook_uid}/picture?type=normal`}
         />
@@ -66,13 +68,18 @@ class TopBar extends React.Component {
   render() {
     return (
       <div id="top-bar">
-        <img id="semesterly-logo" className="no-print" src="/static/img/logo2.0-32x32.png" />
+        <img
+          alt="logo" id="semesterly-logo" className="no-print"
+          src="/static/img/logo2.0-32x32.png"
+        />
         <div id="semesterly-name" className="no-print">Semester.ly</div>
         <div id="print-content" className="print">
-          {this.props.userInfo.isLoggedIn && this.props.userInfo.userFirstName ? this.renderUserForPrint() : null}
+          {this.props.userInfo.isLoggedIn && this.props.userInfo.userFirstName ?
+            this.renderUserForPrint() : null}
           <div id="name-logo" className="print">
             <div id="semesterly-name-print" className="print">Semester.ly</div>
             <img
+              alt="print logo"
               id="semesterly-logo-print" className="print"
               src="/static/img/logo2.0-32x32.png"
             />
@@ -90,5 +97,11 @@ class TopBar extends React.Component {
       </div>);
   }
 }
+
+TopBar.propTypes = {
+  userInfo: PropTypes.userInfo.isRequired,
+  currentSemester: PropTypes.semester.isRequired,
+};
+
 
 export default TopBar;
