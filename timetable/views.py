@@ -1,6 +1,7 @@
 import itertools
 import logging
 from datetime import datetime
+from pytz import timezone
 
 from django.db.models import Count
 from hashids import Hashids
@@ -21,7 +22,7 @@ SCHOOL = ""
 
 hashids = Hashids(salt="***REMOVED***")
 logger = logging.getLogger(__name__)
-
+utc = timezone('utc')
 
 def redirect_to_home(request):
   return HttpResponseRedirect("/")
@@ -80,6 +81,7 @@ def view_timetable(request, code=None, sem_name=None, year=None, shared_timetabl
   integrations = {'integrations': []}
   tos_last_updated = TermOfService.objects.order_by("-last_updated")[0].last_updated
   show_tos = False
+  show_tos_banner = False
   if student and student.user.is_authenticated():
     student.school = school
     student.save()
@@ -87,6 +89,11 @@ def view_timetable(request, code=None, sem_name=None, year=None, shared_timetabl
       show_tos = True
     for i in student.integrations.all():
       integrations['integrations'].append(i.name)
+  else:
+    # TOS banner is shown if user is not logged in and have not viewed the latest version of TOS.
+    if "last_shown_tos" not in request.session or utc.localize(datetime.strptime(request.session["last_shown_tos"], "%Y-%m-%d")) < tos_last_updated:
+      request.session["last_shown_tos"] = datetime.strftime(datetime.utcnow(), "%Y-%m-%d")
+      show_tos_banner = True
   return render_to_response("timetable.html", {
     'school': school,
     'student': json.dumps(get_user_dict(school, student, sem)),
@@ -105,7 +112,8 @@ def view_timetable(request, code=None, sem_name=None, year=None, shared_timetabl
     'view_textbooks': view_textbooks,
     'final_exams_supported_semesters': map(lambda s: sem_dicts.index(s) ,final_exams_available.get(school, [])),
     'final_exams': final_exams,
-    'showTOS': show_tos
+    'showTOS': show_tos,
+    'showTOSBanner': show_tos_banner
   },
   context_instance=RequestContext(request))
 
