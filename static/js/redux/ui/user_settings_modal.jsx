@@ -5,7 +5,12 @@ import Modal from 'boron/WaveModal';
 import majors from '../constants/majors';
 import * as PropTypes from '../constants/propTypes';
 
-export class UserSettingsModal extends React.Component {
+class UserSettingsModal extends React.Component {
+
+  static isIncomplete(prop) {
+    return prop === undefined || prop === '';
+  }
+
   constructor(props) {
     super(props);
     this.state = {
@@ -15,27 +20,13 @@ export class UserSettingsModal extends React.Component {
     this.changeMajor = this.changeMajor.bind(this);
     this.changeClassYear = this.changeClassYear.bind(this);
     this.shouldShow = this.shouldShow.bind(this);
-    this.isIncomplete = this.isIncomplete.bind(this);
-  }
-
-  changeForm() {
-    if (this.props.userInfo.FacebookSignedUp) {
-      const newUserSettings = {
-        social_courses: this.shareAll.checked || this.shareCourses.checked,
-        social_offerings: this.shareAll.checked || this.shareSections.checked,
-        social_all: this.shareAll.checked,
-      };
-      const userSettings = Object.assign({}, this.props.userInfo, newUserSettings);
-      this.props.changeUserInfo(userSettings);
-      this.props.saveSettings();
-    }
   }
 
   componentDidMount() {
     if (this.shouldShow(this.props)) {
       this.modal.show();
     }
-    if (this.isIncomplete(this.props.userInfo.social_courses)) {
+    if (UserSettingsModal.isIncomplete(this.props.userInfo.social_courses)) {
       const newUserSettings = {
         social_courses: true,
         social_offerings: false,
@@ -49,6 +40,19 @@ export class UserSettingsModal extends React.Component {
   componentWillReceiveProps(props) {
     if (this.shouldShow(props)) {
       this.modal.show();
+    }
+  }
+
+  changeForm() {
+    if (this.props.userInfo.FacebookSignedUp) {
+      const newUserSettings = {
+        social_courses: this.shareAll.checked || this.shareCourses.checked,
+        social_offerings: this.shareAll.checked || this.shareSections.checked,
+        social_all: this.shareAll.checked,
+      };
+      const userSettings = Object.assign({}, this.props.userInfo, newUserSettings);
+      this.props.changeUserInfo(userSettings);
+      this.props.saveSettings();
     }
   }
 
@@ -66,32 +70,38 @@ export class UserSettingsModal extends React.Component {
 
   shouldShow(props) {
     if (!this.props.userInfo.FacebookSignedUp) {
-      return !gcalCallback && props.userInfo.isLoggedIn && (props.showOverrided || this.isIncomplete(props.userInfo.major) || this.isIncomplete(props.userInfo.class_year));
+      return !gcalCallback && props.userInfo.isLoggedIn &&
+        (props.showOverrided ||
+        UserSettingsModal.isIncomplete(props.userInfo.major) ||
+        UserSettingsModal.isIncomplete(props.userInfo.class_year));
     }
-    return !gcalCallback && props.userInfo.isLoggedIn && (props.showOverrided || this.isIncomplete(props.userInfo.social_offerings) || this.isIncomplete(props.userInfo.social_courses) || this.isIncomplete(props.userInfo.major) || this.isIncomplete(props.userInfo.class_year));
-  }
-
-  isIncomplete(prop) {
-    return prop === undefined || prop === '';
+    return !gcalCallback && props.userInfo.isLoggedIn &&
+      (props.showOverrided || UserSettingsModal.isIncomplete(props.userInfo.social_offerings) ||
+        UserSettingsModal.isIncomplete(props.userInfo.social_courses) ||
+        UserSettingsModal.isIncomplete(props.userInfo.major) ||
+        UserSettingsModal.isIncomplete(props.userInfo.class_year)
+      );
   }
 
   render() {
     const modalStyle = {
       width: '100%',
     };
-    const notifications_button = this.props.tokenRegistered
-            ? (<a onClick={this.props.unsubscribeToNotifications}><h3>Turn Off Notifications</h3></a>)
-            : (<a onClick={this.props.subscribeToNotifications}><h3>Turn On Notifications</h3></a>);
+    const notificationsButton = this.props.tokenRegistered
+        ? (<a onClick={this.props.unsubscribeToNotifications}><h3>Turn Off Notifications</h3></a>)
+        : (<a onClick={this.props.subscribeToNotifications}><h3>Turn On Notifications</h3></a>);
     const notifications = this.state.sw_capable ? (
       <div
         className={classnames('preference notifications cf', { 'preference-attn': enableNotifs })}
       >
         <h4>Notifications</h4>
-        {notifications_button}
+        {notificationsButton}
       </div>
             ) :
                 (<div
-                  className={classnames('preference notifications cf', { 'preference-attn-yellow': enableNotifs })}
+                  className={classnames('preference notifications cf', {
+                    'preference-attn-yellow': enableNotifs,
+                  })}
                 >
                   <h3>Use Another Browser To Enable Device Notifications</h3>
                 </div>)
@@ -99,9 +109,10 @@ export class UserSettingsModal extends React.Component {
     const preferences = !this.props.userInfo.FacebookSignedUp ? null : (
       <div>
         <div className="preference cf">
-          <label className="switch switch-slide">
+          <label className="switch switch-slide" htmlFor="social-courses-input">
             <input
-              ref={(c) => { this.shareCourses = c; }} className="switch-input" type="checkbox"
+              ref={(c) => { this.shareCourses = c; }} id="social-courses-input"
+              className="switch-input" type="checkbox"
               checked={this.props.userInfo.social_courses} onChange={this.changeForm}
               defaultChecked
             />
@@ -116,9 +127,10 @@ export class UserSettingsModal extends React.Component {
           </div>
         </div>
         <div className="preference cf">
-          <label className="switch switch-slide">
+          <label className="switch switch-slide" htmlFor="share-sections-input">
             <input
-              ref={(c) => { this.shareSections = c; }} className="switch-input" type="checkbox"
+              ref={(c) => { this.shareSections = c; }} id="share-sections-input"
+              className="switch-input" type="checkbox"
               checked={this.props.userInfo.social_offerings === true}
               onChange={this.changeForm}
             />
@@ -133,9 +145,10 @@ export class UserSettingsModal extends React.Component {
           </div>
         </div>
         <div className="preference cf">
-          <label className="switch switch-slide">
+          <label className="switch switch-slide" htmlFor="social-all-input">
             <input
-              ref={(c) => { this.shareAll = c; }} className="switch-input" type="checkbox"
+              ref={(c) => { this.shareAll = c; }} id="social-all-input"
+              className="switch-input" type="checkbox"
               checked={this.props.userInfo.social_all === true}
               onChange={this.changeForm}
             />
@@ -151,31 +164,35 @@ export class UserSettingsModal extends React.Component {
         </div>
       </div>
         );
-    const googpic = this.props.userInfo.isLoggedIn ? this.props.userInfo.img_url.replace('sz=50', 'sz=100') : '';
-    const propic = this.props.userInfo.FacebookSignedUp ? `url(https://graph.facebook.com/${JSON.parse(currentUser).fbook_uid}/picture?type=normal)` : `url(${googpic})`;
-    const fb_upsell = this.props.userInfo.isLoggedIn && !this.props.userInfo.FacebookSignedUp ? (
-      <div
-        className={classnames('preference notifications second cf', { 'preference-attn': enableNotifs })}
-      >
-        <button
-          className="btn abnb-btn fb-btn" onClick={() => {
-            const link = document.createElement('a');
-            link.href = `/login/facebook?student_token=${this.props.userInfo.LoginToken}&login_hash=${this.props.userInfo.LoginHash}`;
-            document.body.appendChild(link);
-            link.click();
-          }}
+    const googpic = this.props.userInfo.isLoggedIn ?
+      this.props.userInfo.img_url.replace('sz=50', 'sz=100') : '';
+    const propic = this.props.userInfo.FacebookSignedUp ?
+      `url(https://graph.facebook.com/${JSON.parse(currentUser).fbook_uid}/picture?type=normal)` :
+      `url(${googpic})`;
+    const fbUpsell = this.props.userInfo.isLoggedIn
+      && !this.props.userInfo.FacebookSignedUp ? (
+        <div
+          className={classnames('preference notifications second cf', { 'preference-attn': enableNotifs })}
         >
-          <span className="img-icon">
-            <i className="fa fa-facebook" />
-          </span>
-          <span>Continue with Facebook</span>
-        </button>
-        <p className="disclaimer ctr">Connecting your Facebook allows you to see which of
+          <button
+            className="btn abnb-btn fb-btn" onClick={() => {
+              const link = document.createElement('a');
+              link.href = `/login/facebook?student_token=${this.props.userInfo.LoginToken}&login_hash=${this.props.userInfo.LoginHash}`;
+              document.body.appendChild(link);
+              link.click();
+            }}
+          >
+            <span className="img-icon">
+              <i className="fa fa-facebook" />
+            </span>
+            <span>Continue with Facebook</span>
+          </button>
+          <p className="disclaimer ctr">Connecting your Facebook allows you to see which of
                     your Facebook friends
                     are in your classes! Only friends in your course will see your name – your
                     information is never
                     shared with any other party.</p>
-      </div>) : null;
+        </div>) : null;
     return (
       <Modal
         ref={(c) => { this.modal = c; }}
@@ -191,22 +208,20 @@ export class UserSettingsModal extends React.Component {
           </div>
           <div id="modal-body">
             <div className="preference cf">
-              <h3>What's your major?</h3>
+              <h3>What&#39;s your major?</h3>
               <Select
                 name="form-field-name"
                 value={this.props.userInfo.major}
-                ref="major"
                 options={majors}
                 searchable
                 onChange={this.changeMajor}
               />
             </div>
             <div className="preference cf">
-              <h3>What's your graduating class year?</h3>
+              <h3>What&#39;s your graduating class year?</h3>
               <Select
                 name="form-field-name"
                 value={this.props.userInfo.class_year}
-                ref="class_year"
                 options={[
                                     { value: 2017, label: 2017 },
                                     { value: 2018, label: 2018 },
@@ -222,7 +237,7 @@ export class UserSettingsModal extends React.Component {
             </div>
             { preferences }
             { notifications }
-            { fb_upsell }
+            { fbUpsell }
             <div className="button-wrapper">
               <button
                 className="signup-button" onClick={() => {
@@ -245,4 +260,11 @@ export class UserSettingsModal extends React.Component {
 UserSettingsModal.propTypes = {
   userInfo: PropTypes.userInfo.isRequired,
   closeUserSettings: React.PropTypes.func.isRequired,
+  saveSettings: React.PropTypes.func.isRequired,
+  changeUserInfo: React.PropTypes.func.isRequired,
+  tokenRegistered: React.PropTypes.bool.isRequired,
+  unsubscribeToNotifications: React.PropTypes.func.isRequired,
+  subscribeToNotifications: React.PropTypes.func.isRequired,
 };
+
+export default UserSettingsModal;
