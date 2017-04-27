@@ -1,4 +1,4 @@
-/* global Dashing, Dashboard */
+/* global Dashboard */
 
 // const REAL_TIME_INTERVAL = 3000;
 // const MINUTE_INTERVAL = 60000;
@@ -73,7 +73,40 @@ dashboard.addWidget('numberFacebookAlertsClicksWidget', 'Number', {
   interval: HOUR_INTERVAL,
 });
 
-dashboard.addWidget('signupsPerDayWidget', 'SignupsPerDay', {
+// dashboard.addWidget('signupsPerDayWidget', 'SignupsPerDay', {
+//   getData() {
+//     const self = this;
+//     Dashing.utils.get('signups_per_day_widget', (data) => {
+//       // console.log(data);
+//       $.extend(self.scope, data);
+//     });
+//   },
+//   interval: DAY_INTERVAL,
+// });
+
+dashboard.addWidget('signupsPerDayWidget', 'CustomGraph', {
+  color: 'steelblue',
+  scope: {
+    xFormat(n) {
+      if (Number.isInteger(n)) {
+        const today = new Date();
+        const date = new Date(today);
+        date.setDate(today.getDate() + n);
+        return date.toISOString().slice(5, 10);
+      }
+      return '';
+    },
+    yFormat(n) {
+      return n.toString();
+    },
+  },
+  properties: {
+    renderer: 'line',
+    padding: {
+      top: 0.1,
+      right: 0.1,
+    },
+  },
   getData() {
     const self = this;
     Dashing.utils.get('signups_per_day_widget', (data) => {
@@ -82,4 +115,40 @@ dashboard.addWidget('signupsPerDayWidget', 'SignupsPerDay', {
     });
   },
   interval: DAY_INTERVAL,
+});
+
+dashboard.addWidget('reactionsWidget', 'CustomGraph', {
+  color: 'pink',
+  scope: {
+    xFormat(n) {
+      switch (n) {
+        case 0: return 'CRAP';
+        case 1: return 'FIRE';
+        case 2: return 'BORING';
+        case 3: return 'HARD';
+        case 4: return 'OKAY';
+        case 5: return 'EASY';
+        case 6: return 'INTERESTING';
+        case 7: return 'LOVE';
+        default:
+          console.log('error');
+          return '';
+      }
+    },
+    properties: {
+      renderer: 'bar',
+      padding: {
+        top: 0.1,
+        right: 0.1,
+      },
+    },
+  },
+  getData() {
+    const self = this;
+    Dashing.utils.get('reactions_widget', (data) => {
+      // console.log(data);
+      $.extend(self.scope, data);
+    });
+  },
+  interval: 60000,
 });

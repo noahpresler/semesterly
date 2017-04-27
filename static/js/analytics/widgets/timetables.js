@@ -1,4 +1,3 @@
-/* global Dashing */
 /* eslint no-underscore-dangle: ["error", { "allow": ["__init__", "__widget__"] }] */
 
 Dashing.widgets.Timetables = function (dashboard) {

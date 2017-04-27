@@ -15,6 +15,7 @@ router.register(NumberSignupsWidget, 'number_signups_widget')
 router.register(NumberFacebookAlertsViewsWidget, 'number_facebook_alerts_views_widget')
 router.register(NumberFacebookAlertsClicksWidget, 'number_facebook_alerts_clicks_widget')
 router.register(SignupsPerDayWidget, 'signups_per_day_widget')
+router.register(ReactionsWidget, 'reactions_widget')
 
 admin.autodiscover()
 

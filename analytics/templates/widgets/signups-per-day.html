@@ -1,6 +1,7 @@
 <div>
     <h1>{ title }</h1>
-    <canvas id="signups_chart"></canvas>
+    <p class="detail" id="value">[{ value }]</p>
+    <canvas class="chart" id="signups_chart"></canvas>
     <p class="more-info" rv-show="moreInfo">{ moreInfo }</p>
     <p class="updated-at" rv-show="updatedAt">{ updatedAt }</p>
 </div>
@@ -8,18 +9,36 @@
 
 <script>
 
-    var primary_colors = [
+    const primary_colors = [
         "#FD7473", "#5CCCF2", "#36DEBB", "#FFD462", "#C585DE", "#53e997", 
         "#D4DBC8", "#E7F76D", "#A3F5F2", "#7499A2", "#C8F7C5", "#4c7fd8"
     ];
-    var secondary_colors = [
+    const secondary_colors = [
         "#e36867", "#52b7d9", "#30c7a8", "#e5be58", "#b177c7", "#4ad187", 
         "#B5BFA3", "#C9E20A", "#7CD2CF", "#668B94","#C4D44D",  "#6598f1"
     ];
     Chart.defaults.global.responsive = true;
 
+    function getDateString(date, offset) {
+      var newDate = new Date(date);
+      newDate.setDate(date.getDate() + offset);
+      return newDate.toISOString().slice(5, 10);
+    };
+
+    const today     = new Date();
+
+    var data = "{ value | escapejs}";
+
     var signups_per_day_data = {
-      labels: ["-6", "-5", "-4", "-3", "-2", "-1", "Now"],
+      labels: [
+        getDateString(today, -6),
+        getDateString(today, -5),
+        getDateString(today, -4),
+        getDateString(today, -3),
+        getDateString(today, -2),
+        getDateString(today, -1),
+        "Today"
+      ],
       datasets:     [
         {
           label: "# Signups",
@@ -38,7 +57,9 @@
           pointHoverBorderWidth: 2,
           pointRadius: 1,
           pointHitRadius: 10,
-          data: [1,1,1,1,1,1,1]
+          data: JSON.parse(data)
+          // data: [0,0,0,0,0,0,0]
+          // data: "{ value | escapejs }"
         }
       ]
     }

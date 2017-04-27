@@ -57,6 +57,23 @@ def number_timetables_per_hour(Timetable=AnalyticsTimetable, school=None,
         time_start += time_delta
     return num_timetables
 
+def number_of_reactions(max_only=False):
+    """
+    Get the the number of uses for each reaction. 
+    If max_only is true, return only the reaction with the most uses.
+    """
+    # TODO: Could be modified for max AND number of each reaction.
+    num_reactions = {}
+    reaction_list = Reaction.REACTION_CHOICES
+    for title, text in reaction_list:
+        reaction = None
+        reactions = Reaction.objects.filter(title=title)
+        num_reactions[title] = len(reactions)
+    if max_only:
+        return max(num_reactions.iterkeys(), key=num_reactions.get)
+    else:
+        return num_reactions
+
 
 class NumberTimetablesWidget(Widget):
 
@@ -215,7 +232,7 @@ class NumberFacebookAlertsClicksWidget(NumberWidget):
         return ""
 
 
-class SignupsPerDayWidget(Widget):
+class SignupsPerDayWidget(GraphWidget):
 
     title = 'Signups Per Day'
     value = ''
@@ -232,16 +249,70 @@ class SignupsPerDayWidget(Widget):
         return self.updated_at
 
     def get_value(self):
-        return number_timetables_per_hour(
+        return ""
+    
+    def get_data(self):
+        x_vals = [ i for i in range(-6, 1) ]  # -6, -5, ..., 0
+        y_vals = number_timetables_per_hour(
             Timetable=Student,
             start_delta_days=7, 
             interval_delta_hours=24
         )
+        return [ { 'x' : x, 'y': y } for x, y in zip(x_vals, y_vals) ]
 
-    def get_context(self):
-        return {
-            'title'     : self.get_title(),
-            'moreInfo'  : self.get_more_info(),
-            'updatedAt' : self.get_updated_at(),
-            'value'     : self.get_value()
-        }
+class ReactionsWidget(GraphWidget):
+
+    title = 'Reactions Used'
+    value = ''
+    more_info = ''
+    updated_at = ''
+
+    def get_title(self):
+        return self.title
+
+    def get_more_info(self):
+        return self.more_info
+
+    def get_updated_at(self):
+        return self.updated_at
+
+    def get_value(self):
+        return ""
+    
+    def get_data(self):
+        reactions_data = number_of_reactions()
+        x_vals = [ i for i in range(8) ]
+        # x_vals = list(reactions_data.keys())
+        y_vals = list(reactions_data.values())
+        return [ { 'x' : x, 'y': y } for x, y in zip(x_vals, y_vals) ]
+
+# class SignupsPerDayWidget(Widget):
+
+#     title = 'Signups Per Day'
+#     value = ''
+#     more_info = ''
+#     updated_at = ''
+
+#     def get_title(self):
+#         return self.title
+
+#     def get_more_info(self):
+#         return self.more_info
+
+#     def get_updated_at(self):
+#         return self.updated_at
+
+#     def get_value(self):
+#         return number_timetables_per_hour(
+#             Timetable=Student,
+#             start_delta_days=7, 
+#             interval_delta_hours=24
+#         )
+
+#     def get_context(self):
+#         return {
+#             'title'     : self.get_title(),
+#             'moreInfo'  : self.get_more_info(),
+#             'updatedAt' : self.get_updated_at(),
+#             'value'     : self.get_value()
+#         }

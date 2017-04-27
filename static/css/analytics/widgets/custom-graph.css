@@ -1,0 +1,58 @@
+.widget-custom-graph { 
+    background-color: #ff9618;;
+    position: relative;
+}
+
+.widget-custom-graph svg {
+    position: absolute;
+    opacity: 0.4;
+    fill-opacity: 0.4;
+    left: 0px;
+    top: 0px;
+}
+
+.widget-custom-graph h1, h2 {
+    position: relative;
+    z-index: 99;
+}
+
+.widget-custom-graph h1 { 
+    color: rgba(255, 255, 255, 0.7);
+}
+
+.widget-custom-graph .more-info {
+    color: rgba(255, 255, 255, 0.3);
+    font-weight: 600;
+    font-size: 20px;
+    margin-top: 0;
+}
+
+.widget-custom-graph .x_tick {
+    position: absolute;
+    bottom: 0;
+}
+
+.widget-custom-graph .x_tick .title {
+    font-size: 20px;
+    color: rgba(0, 0, 0, 0.4);
+    opacity: 0.5;
+    padding-bottom: 3px;
+}
+
+.widget-custom-graph .y_ticks {
+    font-size: 20px;
+    fill: rgba(0, 0, 0, 0.4);
+    fill-opacity: 1;
+}
+
+.widget-custom-graph .domain {
+    display: none;
+}
+
+.widget-custom-graph .x_tick {
+    border: none;
+}
+
+.widget-custom-graph .tick {
+    stroke: transparent !important;
+}

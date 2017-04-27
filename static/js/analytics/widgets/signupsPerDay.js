@@ -1,4 +1,3 @@
-/* global Dashing */
 /* eslint no-underscore-dangle: ["error", { "allow": ["__init__", "__widget__"] }] */
 
 Dashing.widgets.SignupsPerDay = function (dashboard) {
@@ -6,7 +5,7 @@ Dashing.widgets.SignupsPerDay = function (dashboard) {
   self.__init__ = Dashing.utils.widgetInit(dashboard, 'signups-per-day');
   self.row = 2;
   self.col = 3;
-  self.color = 'white';
+  self.color = 'black';
   self.scope = {};
   self.getWidget = function () {
     return this.__widget__;
