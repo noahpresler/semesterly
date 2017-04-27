@@ -10,4 +10,9 @@ const TimetableLoader = ({ loading }) => {
 
   return null;
 };
+
+TimetableLoader.propTypes = {
+  loading: React.PropTypes.bool.isRequired,
+};
+
 export default TimetableLoader;
