@@ -7,7 +7,7 @@ import { Provider } from 'react-redux';
 import rootReducer from './reducers/root_reducer';
 import SemesterlyContainer from './ui/containers/semesterly_container';
 import { fetchMostClassmatesCount, getUserInfo, isRegistered } from './actions/user_actions';
-import { loadCachedTimetable, loadTimetable, lockTimetable, triggerTosModal } from './actions/timetable_actions';
+import { loadCachedTimetable, loadTimetable, lockTimetable, triggerTosModal, triggerTosBannerModal } from './actions/timetable_actions';
 import { fetchSchoolInfo } from './actions/school_actions';
 import { fetchCourseClassmates, setCourseInfo } from './actions/modal_actions';
 import {
@@ -62,6 +62,7 @@ function setup(dispatch) {
   viewTextbooks = viewTextbooks === 'True';
   finalExams = finalExams === 'True';
   showTOS = showTOS === 'True';
+  showTOSBanner = showTOSBanner === 'True';
   if (signup) {
     dispatch({ type: ActionTypes.TRIGGER_SIGNUP_MODAL });
   }
@@ -151,6 +152,11 @@ function setup(dispatch) {
     /* Show TOS if needed */
   if (showTOS) {
     dispatch(triggerTosModal());
+  }
+
+  if (showTOSBanner) {
+    dispatch(triggerTosBannerModal());
+    // console.log("SHOW TOS BANNER")
   }
 
     /* now setup sharing state */

@@ -21,6 +21,7 @@ import SaveCalendarModalContainer from "./containers/save_calendar_modal_contain
 import FinalExamsModalContainer from "./containers/final_exams_modal_container.jsx";
 import UserAcquisitionModalContainer from "./containers/user_acquisition_modal_container.jsx";
 import TermsOfServiceModalContainer from "./containers/terms_of_service_modal_container.jsx";
+import TermsOfServiceBannerModalContainer from "./containers/terms_of_service_banner_modal_container.jsx";
 import TextbookModalContainer from "./containers/textbook_modal_container.jsx";
 
 class Semesterly extends React.Component {
@@ -140,6 +141,7 @@ class Semesterly extends React.Component {
         <FinalExamsModalContainer />
         <UserAcquisitionModalContainer />
         <TermsOfServiceModalContainer />
+        <TermsOfServiceBannerModalContainer />
         <TextbookModalContainer />
         <AlertBox ref={a => this.msg = a} {...this.alertOptions} />
         <div id="all-cols">
