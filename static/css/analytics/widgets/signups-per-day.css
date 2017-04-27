@@ -1,0 +1,25 @@
+.widget-signups-per-day {
+    background-color: #a5bf10;
+}
+
+.widget-signups-per-day h1 { 
+    color: rgba(255, 255, 255, 0.7);
+}
+
+.widget-signups-per-day h2 {
+    color: #fff;
+}
+
+.widget-signups-per-day .detail {
+    font-weight: 500;
+    font-size: 30px;
+    color: #fff;
+}
+
+.widget-signups-per-day .more-info {
+    color: rgba(255, 255, 255, 0.7);
+}
+
+.widget-signups-per-day .updated-at {
+    color: rgba(0, 0, 0, 0.3);
+}

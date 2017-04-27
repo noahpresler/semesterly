@@ -34,6 +34,30 @@ def number_timetables(**parameters):
     return timetables.count()
 
 
+def number_timetables_per_hour(Timetable=AnalyticsTimetable, school=None, 
+                               start_delta_days=1, interval_delta_hours=1):
+    """
+    Get the number of time tables created each hour. 
+    Can be used for analytics or shared time tables.
+    """
+    # TODO: Change start and end time. Currently set for past 24 hours.
+    time_end = datetime.now()
+    length = timedelta(days = start_delta_days)
+    time_start = time_end - length
+
+    time_delta = timedelta(hours=interval_delta_hours)
+    num_timetables = []
+    while time_start < time_end:
+        num_timetables.append(number_timetables(
+            Timetable=Timetable,
+            school=school,
+            time_start=time_start,
+            time_end=time_start + time_delta)
+        )
+        time_start += time_delta
+    return num_timetables
+
+
 class NumberTimetablesWidget(Widget):
 
     title = 'Number of Timetables'
@@ -190,3 +214,34 @@ class NumberFacebookAlertsClicksWidget(NumberWidget):
     def get_more_info(self):
         return ""
 
+
+class SignupsPerDayWidget(Widget):
+
+    title = 'Signups Per Day'
+    value = ''
+    more_info = ''
+    updated_at = ''
+
+    def get_title(self):
+        return self.title
+
+    def get_more_info(self):
+        return self.more_info
+
+    def get_updated_at(self):
+        return self.updated_at
+
+    def get_value(self):
+        return number_timetables_per_hour(
+            Timetable=Student,
+            start_delta_days=7, 
+            interval_delta_hours=24
+        )
+
+    def get_context(self):
+        return {
+            'title'     : self.get_title(),
+            'moreInfo'  : self.get_more_info(),
+            'updatedAt' : self.get_updated_at(),
+            'value'     : self.get_value()
+        }

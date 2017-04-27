@@ -1,0 +1,51 @@
+<div>
+    <h1>{ title }</h1>
+    <canvas id="signups_chart"></canvas>
+    <p class="more-info" rv-show="moreInfo">{ moreInfo }</p>
+    <p class="updated-at" rv-show="updatedAt">{ updatedAt }</p>
+</div>
+<i rv-class="icon" rv-show="icon"></i>
+
+<script>
+
+    var primary_colors = [
+        "#FD7473", "#5CCCF2", "#36DEBB", "#FFD462", "#C585DE", "#53e997", 
+        "#D4DBC8", "#E7F76D", "#A3F5F2", "#7499A2", "#C8F7C5", "#4c7fd8"
+    ];
+    var secondary_colors = [
+        "#e36867", "#52b7d9", "#30c7a8", "#e5be58", "#b177c7", "#4ad187", 
+        "#B5BFA3", "#C9E20A", "#7CD2CF", "#668B94","#C4D44D",  "#6598f1"
+    ];
+    Chart.defaults.global.responsive = true;
+
+    var signups_per_day_data = {
+      labels: ["-6", "-5", "-4", "-3", "-2", "-1", "Now"],
+      datasets:     [
+        {
+          label: "# Signups",
+          fill: false,
+          lineTension: 0.1,
+          backgroundColor: primary_colors[0],
+          borderColor: secondary_colors[0],
+          borderCapStyle: 'butt',
+          borderDash: [],
+          borderDashOffset: 0.0,
+          borderJoinStyle: 'miter',
+          pointBackgroundColor: "#fff",
+          pointBorderWidth: 1,
+          pointHoverRadius: 5,
+          pointHoverBorderColor: "rgba(220,220,220,1)",
+          pointHoverBorderWidth: 2,
+          pointRadius: 1,
+          pointHitRadius: 10,
+          data: [1,1,1,1,1,1,1]
+        }
+      ]
+    }
+
+    var utx = document.getElementById("signups_chart");
+    var SignupsPieChart = new Chart(utx, {
+      type: 'line',
+      data: signups_per_day_data,
+    });
+</script>

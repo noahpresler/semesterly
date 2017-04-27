@@ -2,15 +2,24 @@
 {% load staticfiles %}
 
 {% block stylesheets %}
+<!-- Custom Widget CSS Files -->
 <link rel="stylesheet" href="{% static 'css/analytics/widgets/timetables.css' %}">
+<link rel="stylesheet" href="{% static 'css/analytics/widgets/signups-per-day.css' %}">
 {% endblock %}
 
 {% block templates %}
-<link rel="resource" type="text/html" href="custom_widgets/timetables.html" data-widget="timetables"> 
+<!-- Custom Widget Template Files -->
+<link rel="resource" type="text/html" href="custom_widgets/timetables.html" data-widget="timetables">
+<link rel="resource" type="text/html" href="custom_widgets/signups-per-day.html" data-widget="signups-per-day"> 
 {% endblock %}
 
 {% block scripts %}
+<!-- Chart.js -->
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.1.3/Chart.min.js"></script>
+
+<!-- Custom Widget JS Files -->
 <script type="text/javascript" src="{% static 'js/analytics/widgets/timetables.js' %}"></script>
+<script type="text/javascript" src="{% static 'js/analytics/widgets/signupsPerDay.js' %}"></script>
 {% endblock %}
 
 {% block config_file %}

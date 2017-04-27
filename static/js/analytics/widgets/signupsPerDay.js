@@ -1,12 +1,12 @@
 /* global Dashing */
 /* eslint no-underscore-dangle: ["error", { "allow": ["__init__", "__widget__"] }] */
 
-Dashing.widgets.Timetables = function (dashboard) {
+Dashing.widgets.SignupsPerDay = function (dashboard) {
   const self = this;
-  self.__init__ = Dashing.utils.widgetInit(dashboard, 'timetables');
-  self.row = 1;
-  self.col = 1;
-  self.color = 'orange';
+  self.__init__ = Dashing.utils.widgetInit(dashboard, 'signups-per-day');
+  self.row = 2;
+  self.col = 3;
+  self.color = 'white';
   self.scope = {};
   self.getWidget = function () {
     return this.__widget__;
