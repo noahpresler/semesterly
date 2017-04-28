@@ -6,9 +6,7 @@ import {
     getDeleteTimetableEndpoint,
     getFinalExamSchedulerEndpoint,
     getFriendsEndpoint,
-    getIntegrationAddEndpoint,
-    getIntegrationDelEndpoint,
-    getIntegrationGetEndpoint,
+    getIntegrationEndpoint,
     getLoadSavedTimetablesEndpoint,
     getLogFacebookAlertClickEndpoint,
     getLogFacebookAlertViewEndpoint,
@@ -396,6 +394,11 @@ export const fetchFinalExamSchedule = () => (dispatch) => {
   const timetable = getActiveTimetable(state.timetables);
   dispatch({ type: ActionTypes.FETCH_FINAL_EXAMS });
   fetch(getFinalExamSchedulerEndpoint(), {
+    headers: {
+      'X-CSRFToken': Cookie.get('csrftoken'),
+      Accept: 'application/json',
+      'Content-Type': 'application/json',
+    },
     credentials: 'include',
     method: 'POST',
     body: JSON.stringify(timetable),
@@ -442,15 +445,19 @@ export const autoSave = (delay = 2000) => (dispatch) => {
 
 export const sendRegistrationToken = token => (dispatch) => {
   fetch(getSetRegistrationTokenEndpoint(), {
+    headers: {
+      'X-CSRFToken': Cookie.get('csrftoken'),
+      Accept: 'application/json',
+      'Content-Type': 'application/json',
+    },
     method: 'POST',
     body: JSON.stringify({
       token,
     }),
     credentials: 'include',
   })
-    .then(response => response.json())
-    .then((json) => {
-      if (!json.error) {
+    .then((response) => {
+      if (response.status === 201) {
         dispatch({
           type: ActionTypes.TOKEN_REGISTERED,
         });
@@ -486,22 +493,24 @@ export const isRegistered = () => (dispatch) => {
   }
 };
 
-export const sendRegistrationTokenForDeletion = token => dispatch =>
-fetch(deleteRegistrationTokenEndpoint(), {
-  method: 'POST',
-  body: JSON.stringify({
-    token,
-  }),
-  credentials: 'include',
-})
-.then(response => response.json()) // TODO(rohan): error-check the response
-.then((json) => {
-  if (!json.error) {
-    dispatch({
-      type: ActionTypes.UNREGISTER_TOKEN,
+export const sendRegistrationTokenForDeletion = token => (dispatch) => {
+  fetch(deleteRegistrationTokenEndpoint(token.endpoint), {
+    headers: {
+      'X-CSRFToken': Cookie.get('csrftoken'),
+      Accept: 'application/json',
+      'Content-Type': 'application/json',
+    },
+    method: 'DELETE',
+    credentials: 'include',
+  })
+    .then((response) => {
+      if (response.status === 204) {
+        dispatch({
+          type: ActionTypes.UNREGISTER_TOKEN,
+        });
+      }
     });
-  }
-});
+};
 
 export const unRegisterAToken = () => (dispatch) => {
   if ('serviceWorker' in navigator) {
@@ -517,15 +526,14 @@ export const unRegisterAToken = () => (dispatch) => {
 };
 
 export const openIntegrationModal = (integrationID, courseID) => (dispatch) => {
-  fetch(getIntegrationGetEndpoint(integrationID, courseID), {
+  fetch(getIntegrationEndpoint(integrationID, courseID), {
     credentials: 'include',
     method: 'GET',
   })
-    .then(response => response.json())
-    .then((json) => {
+    .then((response) => {
       dispatch({
         type: ActionTypes.OPEN_INTEGRATION_MODAL,
-        enabled: json.integration_enabled,
+        enabled: response.status === 200,
         id: courseID,
         integration_id: integrationID,
       });
@@ -533,14 +541,24 @@ export const openIntegrationModal = (integrationID, courseID) => (dispatch) => {
 };
 
 export const delIntegration = (integrationID, courseID) => {
-  fetch(getIntegrationDelEndpoint(integrationID, courseID), {
+  fetch(getIntegrationEndpoint(integrationID, courseID), {
+    headers: {
+      'X-CSRFToken': Cookie.get('csrftoken'),
+      Accept: 'application/json',
+      'Content-Type': 'application/json',
+    },
     credentials: 'include',
-    method: 'GET',
+    method: 'DELETE',
   });
 };
 
 export const addIntegration = (integrationID, courseID, json) => {
-  fetch(getIntegrationAddEndpoint(integrationID, courseID), {
+  fetch(getIntegrationEndpoint(integrationID, courseID), {
+    headers: {
+      'X-CSRFToken': Cookie.get('csrftoken'),
+      Accept: 'application/json',
+      'Content-Type': 'application/json',
+    },
     credentials: 'include',
     method: 'POST',
     body: JSON.stringify({ json }),
