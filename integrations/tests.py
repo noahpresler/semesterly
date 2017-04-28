@@ -9,13 +9,8 @@ class UrlsTest(UrlTestCase):
     """ Test integrations/urls.py """
 
     def test_urls_call_correct_views(self):
-        self.assertUrlResolvesToView('/integration/get/3DCe3/course/csc148/', 'integrations.views.get_integration')
-        self.assertUrlResolvesToView('/integration/del/39Ced/course/SD3910/', 'integrations.views.delete_integration')
-        self.assertUrlResolvesToView('/integration/add/139051/course/eng101/', 'integrations.views.add_integration')
-
         self.assertUrlResolvesToView('/integrations/1234/course/5678/', 'integrations.views.IntegrationsView',
                                      kwargs={'integration_id': '1234', 'course_id': '5678'})
-        self.assertUrlResolvesToView('/integrations/', 'integrations.views.IntegrationsView')
 
 
 class IntegrationsGetAddTest(APITestCase):
@@ -39,7 +34,7 @@ class IntegrationsGetAddTest(APITestCase):
             'integration_id': 1,
             'json': 'newstuff'
         }
-        response = self.client.post('/integrations/', data, format='json')
+        response = self.client.post('/integrations/1/course/1/', data, format='json')
         self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
         CourseIntegration.objects.get(**data)
 
