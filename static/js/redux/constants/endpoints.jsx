@@ -20,9 +20,7 @@ export const getFriendsEndpoint = semester => `/user/classmates/${semester.name}
 export const getSchoolInfoEndpoint = () => `/school/${getSchool()}/`;
 export const getReactToCourseEndpoint = () => '/react/';
 export const getRequestShareTimetableLinkEndpoint = () => '/timetables/links/';
-export const getSetRegistrationTokenEndpoint = () => '/setRegistrationToken/';
-export const deleteRegistrationTokenEndpoint = () => '/deleteRegistrationToken/';
-export const getIntegrationGetEndpoint = (integrationId, courseId) => `/integration/get/${integrationId}/course/${courseId}/`;
-export const getIntegrationDelEndpoint = (integrationId, courseId) => `/integration/del/${integrationId}/course/${courseId}/`;
-export const getIntegrationAddEndpoint = (integrationId, courseId) => `/integration/add/${integrationId}/course/${courseId}/`;
-export const getFinalExamSchedulerEndpoint = () => '/get_final_exams/';
+export const getSetRegistrationTokenEndpoint = () => '/registration-token/';
+export const deleteRegistrationTokenEndpoint = endpoint => `/registration-token/${endpoint}/`;
+export const getIntegrationEndpoint = (integrationId, courseId) => `/integrations/${integrationId}/course/${courseId}/`;
+export const getFinalExamSchedulerEndpoint = () => '/final-exams/';
