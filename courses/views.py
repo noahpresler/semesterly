@@ -19,7 +19,7 @@ from student.models import PersonalTimetable, Student
 from student.utils import get_classmates_from_course_id
 from timetable.models import Evaluation, Section, Semester, Course, Updates
 from timetable.school_mappers import school_to_course_regex, school_code_to_name
-from timetable.utils import merge_dicts, validate_subdomain
+from timetable.utils import validate_subdomain
 
 
 def get_detailed_course_json(school, course, sem, student=None):
@@ -73,7 +73,7 @@ def get_basic_course_json(course, sem, extra_model_fields=None):
     for section_type, sections in itertools.groupby(course_section_list, lambda s: s.section_type):
         course_json['sections'][section_type] = {
             section.meeting_section: [
-                merge_dicts(model_to_dict(co), model_to_dict(section)) for co in section.offering_set.all()
+                dict(model_to_dict(co), **model_to_dict(section)) for co in section.offering_set.all()
             ] for section in sections
         }
 

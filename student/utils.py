@@ -10,7 +10,7 @@ from django.db.models import Q
 from authpipe.utils import get_google_credentials
 from student.models import Student, PersonalTimetable
 from timetable.models import Course
-from timetable.utils import merge_dicts
+
 
 DAY_LIST = ['M', 'T', 'W', 'R', 'F', 'S', 'U']
 
@@ -110,7 +110,7 @@ def convert_tt_to_dict(timetable, include_last_updated=True):
 
         index = course_ids.index(c.id)
         courses[index]['slots'].extend(
-            [merge_dicts(get_section_dict(section_obj), model_to_dict(co)) for co in section_obj.offering_set.all()])
+            [dict(get_section_dict(section_obj), **model_to_dict(co)) for co in section_obj.offering_set.all()])
         courses[index]['textbooks'][section_obj.meeting_section] = section_obj.get_textbooks()
 
         courses[index]['enrolled_sections'].append(section_obj.meeting_section)
