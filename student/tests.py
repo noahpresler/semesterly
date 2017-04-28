@@ -20,19 +20,6 @@ class UrlsTest(UrlTestCase):
         self.assertUrlResolvesToView('/user/settings/', 'student.views.UserView')
 
         # timetable management
-        self.assertUrlResolvesToView('/user/save_timetable/', 'student.views.save_timetable')
-        self.assertUrlResolvesToView('/user/duplicate_timetable/', 'student.views.duplicate_timetable')
-        self.assertUrlResolvesToView('/user/delete_timetable/', 'student.views.delete_timetable')
-        self.assertUrlResolvesToView('/user/get_saved_timetables/jhu/Summer/2018',
-                                     'student.views.get_student_tts_wrapper')
-
-        # social
-        self.assertUrlResolvesToView('/user/get_classmates/', 'student.views.get_classmates')
-        self.assertUrlResolvesToView('/user/get_most_classmates_count/', 'student.views.get_most_classmate_count')
-        self.assertUrlResolvesToView('/user/find_friends/', 'student.views.find_friends')
-        self.assertUrlResolvesToView('/user/add_to_gcal/', 'student.views.add_tt_to_gcal')
-
-        # api
         self.assertUrlResolvesToView('/user/timetables/', 'student.views.UserTimetableView')
         self.assertUrlResolvesToView('/user/timetables/Fall/2016/', 'student.views.UserTimetableView',
                                      kwargs={'sem_name': 'Fall', 'year': '2016'})
