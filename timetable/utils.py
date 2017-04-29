@@ -12,7 +12,7 @@ from timetable.school_mappers import school_to_granularity
 from timetable.scoring import get_tt_cost, get_num_days, get_avg_day_length, get_num_friends, get_avg_rating
 
 
-MAX_RETURN = 60 # Max number of timetables we want to consider
+MAX_RETURN = 60  # Max number of timetables we want to consider
 
 
 def timed_cache(timeout):
