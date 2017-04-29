@@ -1,7 +1,6 @@
 import json
 
 import httplib2
-from django.contrib.auth.decorators import login_required
 from django.core.urlresolvers import reverse
 from django.db.models import Q, Count
 from django.http import HttpResponse, HttpResponseRedirect, Http404
@@ -13,6 +12,7 @@ from hashids import Hashids
 from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.views import APIView
+from rest_framework.permissions import IsAuthenticated
 
 from analytics.models import *
 from authpipe.utils import get_google_credentials, check_student_token
@@ -20,9 +20,8 @@ from student.models import *
 from student.models import Student, Reaction, RegistrationToken
 from student.utils import next_weekday, get_classmates_from_course_id, make_token, get_student_tts
 from timetable.models import *
-from timetable.models import Course
 from timetable.utils import *
-from timetable.utils import validate_subdomain
+from timetable.utils import validate_subdomain, ValidateSubdomainMixin
 from timetable.views import view_timetable
 
 DAY_MAP = {
@@ -143,7 +142,8 @@ class UserView(APIView):
         return Response(status=status.HTTP_204_NO_CONTENT)
 
 
-class UserTimetableView(APIView):
+class UserTimetableView(ValidateSubdomainMixin, APIView):
+    permission_classes = (IsAuthenticated,)
 
     def get(self, request, sem_name, year):
         sem, _ = Semester.objects.get_or_create(name=sem_name, year=year)
@@ -230,7 +230,9 @@ class UserTimetableView(APIView):
         tt.save()
 
 
-class ClassmateView(APIView):
+class ClassmateView(ValidateSubdomainMixin, APIView):
+    permission_classes = (IsAuthenticated,)
+
     def get(self, request, sem_name, year):
         if request.query_params.get('counts'):
             school = request.subdomain
@@ -305,6 +307,8 @@ class ClassmateView(APIView):
 
 
 class GCalView(APIView):
+    permission_classes = (IsAuthenticated,)
+
     def post(self, request):
         student = Student.objects.get(user=request.user)
         tt = json.loads(request.body)['timetable']

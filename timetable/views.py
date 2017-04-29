@@ -1,7 +1,7 @@
 import logging
 
+from braces.views import CsrfExemptMixin
 from django.template.loader import get_template
-from django.utils.decorators import method_decorator
 from django.views.decorators.cache import never_cache
 from hashids import Hashids
 from rest_framework import status
@@ -17,7 +17,7 @@ from timetable.school_mappers import AM_PM_SCHOOLS, school_to_semesters, \
   final_exams_available
 from timetable.scoring import *
 from timetable.utils import *
-from timetable.utils import validate_subdomain, update_locked_sections, TimetableGenerator
+from timetable.utils import validate_subdomain, update_locked_sections, TimetableGenerator, ValidateSubdomainMixin
 
 SCHOOL = ""
 
@@ -210,9 +210,8 @@ def log_final_exam_view(request):
   return HttpResponse(json.dumps({}), content_type="application/json")
 
 
-class TimetableView(APIView):
+class TimetableView(CsrfExemptMixin, ValidateSubdomainMixin, APIView):
 
-  @method_decorator(validate_subdomain)
   def post(self, request):
     """Generate best timetables given the user's selected courses"""
     global SCHOOL
@@ -269,9 +268,8 @@ class TimetableView(APIView):
     return Response(response, status=status.HTTP_200_OK)
 
 
-class TimetableLinkView(APIView):
+class TimetableLinkView(ValidateSubdomainMixin, APIView):
 
-  @method_decorator(validate_subdomain)
   def get(self, request, slug):
     student = get_student(request)
     try:
@@ -284,7 +282,6 @@ class TimetableLinkView(APIView):
     except Exception as e:
       raise Http404
 
-  @method_decorator(validate_subdomain)
   def post(self, request):
     school = request.subdomain
     courses = request.data['timetable']['courses']
