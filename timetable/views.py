@@ -3,7 +3,6 @@ import logging
 from braces.views import CsrfExemptMixin
 from django.template.loader import get_template
 from django.views.decorators.cache import never_cache
-from django.views.generic.base import TemplateView
 from hashids import Hashids
 from rest_framework import status
 from rest_framework.response import Response
@@ -12,13 +11,12 @@ from rest_framework.views import APIView
 from analytics.views import *
 from courses.views import get_detailed_course_json
 from student.models import Student
-from student.utils import get_student, get_user_dict, convert_tt_to_dict
+from student.utils import convert_tt_to_dict
 from timetable.jhu_final_exam_test import *
-from timetable.school_mappers import AM_PM_SCHOOLS, school_to_semesters, \
-  final_exams_available
-from timetable.scoring import *
+from timetable.school_mappers import final_exams_available
 from timetable.utils import *
-from timetable.utils import validate_subdomain, update_locked_sections, TimetableGenerator, ValidateSubdomainMixin
+from timetable.utils import validate_subdomain, update_locked_sections, TimetableGenerator, \
+  ValidateSubdomainMixin, get_current_semesters
 
 SCHOOL = ""
 
@@ -41,50 +39,6 @@ def custom_500(request):
     # TODO, maybe add this next line back in when im done testing
     # response.status_code = 500
     return response
-
-
-class HomeView(ValidateSubdomainMixin, TemplateView):
-
-  def get(self, request, feature_flow=None):
-    school = request.subdomain
-    student = get_student(request)
-
-    all_semesters = get_current_semesters(school)  # corresponds to allSemesters on frontend
-    curr_sem_index = 0  # corresponds to state.semesterIndex on frontend
-    sem = Semester.objects.get(**all_semesters[curr_sem_index])
-
-    integrations = {'integrations': []}
-    if student and student.user.is_authenticated():
-      student.school = school
-      student.save()
-      for i in student.integrations.all():
-        integrations['integrations'].append(i.name)
-
-    # TODO: pass init_data as one context value
-    init_data = {
-      'school': school,
-      'currentUser': get_user_dict(school, student, sem),
-      'currentSemester': curr_sem_index,
-      'allSemesters': all_semesters,
-      'uses12HrTime': school in AM_PM_SCHOOLS,
-      'studentIntegrations': integrations,
-
-      'featureFlow': feature_flow or {}
-    }
-
-    serialized = {key: json.dumps(val) for key, val in init_data.iteritems()}
-    return render(request, 'timetable.html', serialized)
-
-
-class FeatureFlowMixin(object):
-
-  def get_feature_data(self, request, *args, **kwargs):
-    return {}
-
-  def get(self, request, *args, **kwargs):
-    feature_data = self.get_feature_data(request, *args, **kwargs)
-    feature_data['name'] = self.feature_name
-    return HomeView.as_view()(request, feature_data)
 
 
 @validate_subdomain
@@ -226,18 +180,6 @@ def manifest_json(request, js):
     template = get_template('manifest.json')
     html = template.render()
     return HttpResponse(html, content_type="application/json")
-
-
-def get_current_semesters(school):
-  """
-  For a given school, get the possible semesters and the most recent year for each
-  semester that has course data, and return a list of (semester name, year) pairs.
-  """
-  semesters = school_to_semesters[school]
-  # Ensure DB has all semesters.
-  for semester in semesters:
-    Semester.objects.update_or_create(**semester)
-  return semesters
 
 
 @csrf_exempt

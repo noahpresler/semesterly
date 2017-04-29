@@ -6,6 +6,7 @@ from rest_framework_swagger.views import get_swagger_view
 from rest_framework.schemas import get_schema_view
 
 import timetable.views
+import timetable.utils
 
 
 admin.autodiscover()
@@ -22,7 +23,7 @@ urlpatterns = patterns('',
                        url('', include('analytics.urls')),
 
                        # home
-                       url(r'^$', timetable.views.HomeView.as_view()),
+                       url(r'^$', timetable.utils.FeatureFlowView.as_view()),
 
                        # about page
                        url(r'about/*', timetable.views.about),
