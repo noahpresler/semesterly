@@ -1,15 +1,17 @@
 import itertools
+import json
 from datetime import datetime
 from functools import wraps
 
 from django.forms import model_to_dict
-
-from school_mappers import VALID_SCHOOLS
 from django.shortcuts import render
+from django.views.generic.base import TemplateView
 
-from timetable.models import Section, Course
-from timetable.school_mappers import school_to_granularity
+from timetable.models import Section, Course, Semester
+from timetable.school_mappers import school_to_granularity, school_to_semesters, \
+    VALID_SCHOOLS, AM_PM_SCHOOLS
 from timetable.scoring import get_tt_cost, get_num_days, get_avg_day_length, get_num_friends, get_avg_rating
+from student.utils import get_student, get_user_dict
 
 
 MAX_RETURN = 60  # Max number of timetables we want to consider
@@ -308,3 +310,61 @@ class TimetableGenerator:
                 else:
                     all_sections.append([[c.id, section, section.offering_set.all()] for section in sections])
         return all_sections
+
+
+class FeatureFlowView(ValidateSubdomainMixin, TemplateView):
+    """ 
+    Template that by default only renders the homepage, but feature_name or get_feature_flow() can 
+    be overridden to add a feature flow to the home page.
+    """
+    feature_name = None
+
+    def get_feature_flow(self):
+        """ 
+        Return data needed for the feature flow for this HomeView.
+        The feature name does not needed to be added to the return dict since it is added in .get()
+        """
+        return {}
+
+    def get(self, request):
+        school = request.subdomain
+        student = get_student(request)
+
+        all_semesters = get_current_semesters(school)  # corresponds to allSemesters on frontend
+        curr_sem_index = 0  # corresponds to state.semesterIndex on frontend
+        sem = Semester.objects.get(**all_semesters[curr_sem_index])
+
+        integrations = {'integrations': []}
+        if student and student.user.is_authenticated():
+            student.school = school
+            student.save()
+            for i in student.integrations.all():
+                integrations['integrations'].append(i.name)
+
+        # TODO: pass init_data as one context value
+        init_data = {
+            'school': school,
+            'currentUser': get_user_dict(school, student, sem),
+            'currentSemester': curr_sem_index,
+            'allSemesters': all_semesters,
+            'uses12HrTime': school in AM_PM_SCHOOLS,
+            'studentIntegrations': integrations,
+
+            'featureFlow': dict(self.get_feature_flow(),
+                                name=self.feature_name)
+        }
+
+        serialized = {key: json.dumps(val) for key, val in init_data.iteritems()}
+        return render(request, 'timetable.html', serialized)
+
+
+def get_current_semesters(school):
+  """
+  For a given school, get the possible semesters and the most recent year for each
+  semester that has course data, and return a list of (semester name, year) pairs.
+  """
+  semesters = school_to_semesters[school]
+  # Ensure DB has all semesters.
+  for semester in semesters:
+    Semester.objects.update_or_create(**semester)
+  return semesters
