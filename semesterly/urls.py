@@ -5,6 +5,9 @@ from django.contrib import admin
 from rest_framework_swagger.views import get_swagger_view
 from rest_framework.schemas import get_schema_view
 
+import timetable.views
+
+
 admin.autodiscover()
 
 urlpatterns = patterns('',
@@ -19,23 +22,23 @@ urlpatterns = patterns('',
                        url('', include('analytics.urls')),
 
                        # home
-                       url(r'^$', 'timetable.views.view_timetable'),
+                       url(r'^$', timetable.views.view_timetable),
 
                        # about page
-                       url(r'about/*', 'timetable.views.about'),
+                       url(r'about/*', timetable.views.about),
 
                        # press page
-                       url(r'press/*', 'timetable.views.press'),
+                       url(r'press/*', timetable.views.press),
 
                        # Automatic deployment endpoint
                        url(r'deploy_staging/', 'semesterly.views.deploy_staging'),
 
-                       url(r'^sw(.*.js)$', 'timetable.views.sw_js', name='sw_js'),
-                       url(r'^manifest(.*.json)$', 'timetable.views.manifest_json', name='manifest_json'),
+                       url(r'^sw(.*.js)$', timetable.views.sw_js, name='sw_js'),
+                       url(r'^manifest(.*.json)$', timetable.views.manifest_json, name='manifest_json'),
 
                        # for testing 404, so i don't have to turn off debug
-                       url(r'^404testing/', 'timetable.views.custom_404'),
-                       url(r'^500testing/', 'timetable.views.custom_500'),
+                       url(r'^404testing/', timetable.views.custom_404),
+                       url(r'^500testing/', timetable.views.custom_500),
 
                        # profiling
                        url(r'^silk/', include('silk.urls', namespace='silk'))
