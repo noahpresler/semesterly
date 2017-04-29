@@ -55,6 +55,14 @@ def validate_subdomain(view_func):
     return wrapper
 
 
+class ValidateSubdomainMixin(object):
+
+    def dispatch(self, request, *args, **kwargs):
+        if request.subdomain not in VALID_SCHOOLS:
+            return render(request, 'index.html')
+        return super(ValidateSubdomainMixin, self).dispatch(request, *args, **kwargs)
+
+
 def update_locked_sections(locked_sections, cid, locked_section):
     """
     Take cid of new course, and locked section for that course
