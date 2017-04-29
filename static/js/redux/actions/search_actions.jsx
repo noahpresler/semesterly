@@ -1,5 +1,4 @@
 import fetch from 'isomorphic-fetch';
-import Cookie from 'js-cookie';
 import { getCourseSearchEndpoint } from '../constants/endpoints';
 import { store } from '../init';
 import { getUserSavedTimetables, saveTimetable } from './user_actions';
@@ -100,7 +99,6 @@ export const fetchAdvancedSearchResults = (query, filters) => (dispatch) => {
   const state = store.getState();
   fetch(getCourseSearchEndpoint(query), {
     headers: {
-      'X-CSRFToken': Cookie.get('csrftoken'),
       Accept: 'application/json',
       'Content-Type': 'application/json',
     },
