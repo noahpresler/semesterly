@@ -1,5 +1,5 @@
 import { connect } from 'react-redux';
-import { TutModal } from '../tut_modal';
+import TutModal from '../tut_modal';
 
 const mapStateToProps = state => ({
   signUpModalVisible: state.signupModal.isVisible,
