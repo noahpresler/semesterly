@@ -22,7 +22,7 @@ urlpatterns = patterns('',
                        url('', include('analytics.urls')),
 
                        # home
-                       url(r'^$', timetable.views.view_timetable),
+                       url(r'^$', timetable.views.HomeView.as_view()),
 
                        # about page
                        url(r'about/*', timetable.views.about),
