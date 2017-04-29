@@ -37,9 +37,6 @@ urlpatterns = patterns('',
                        url(r'^404testing/', 'timetable.views.custom_404'),
                        url(r'^500testing/', 'timetable.views.custom_500'),
 
-                       # home
-                       url(r'^$', 'timetable.views.view_timetable'),
-
                        # profiling
                        url(r'^silk/', include('silk.urls', namespace='silk'))
                        )
