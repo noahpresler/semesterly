@@ -6,8 +6,6 @@ import student.views
 admin.autodiscover()
 
 urlpatterns = patterns('',
-                       url(r'^react/*', student.views.react_to_course),
-
                        # profile management
                        url(r'^user/logout/$', 'django.contrib.auth.views.logout', {'next_page': '/'}),
                        url(r'^unsubscribe/(?P<id>[\w.@+-]+)/(?P<token>[\w.:\-_=]+)/$', student.views.unsubscribe),
@@ -22,5 +20,6 @@ urlpatterns = patterns('',
                        # social
                        url(r'^user/classmates/(?P<sem_name>.+)/(?P<year>[0-9]{4})',
                            student.views.ClassmateView.as_view()),
-                       url(r'^user/gcal/$', student.views.GCalView.as_view()),
+                       url(r'^user/gcal/?$', student.views.GCalView.as_view()),
+                       url(r'^user/reactions/?$', student.views.ReactionView.as_view())
                        )
