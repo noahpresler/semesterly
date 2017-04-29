@@ -19,7 +19,7 @@ from student.models import PersonalTimetable, Student
 from student.utils import get_classmates_from_course_id
 from timetable.models import Evaluation, Section, Semester, Course, Updates
 from timetable.school_mappers import school_to_course_regex, school_code_to_name
-from timetable.utils import validate_subdomain
+from timetable.utils import validate_subdomain, ValidateSubdomainMixin
 
 
 def get_detailed_course_json(school, course, sem, student=None):
@@ -183,7 +183,7 @@ def course_page(request, code):
     return HttpResponse(str(e))
 
 
-class CourseDetail(APIView):
+class CourseDetail(ValidateSubdomainMixin, APIView):
 
     def get(self, request, sem_name, year, course_id):
         school = request.subdomain

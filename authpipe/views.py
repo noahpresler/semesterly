@@ -5,10 +5,10 @@ from rest_framework import status
 
 from student.models import RegistrationToken
 from student.utils import get_student
-from timetable.utils import validate_subdomain
+from timetable.utils import ValidateSubdomainMixin
 
 
-class RegistrationTokenView(APIView):
+class RegistrationTokenView(ValidateSubdomainMixin, APIView):
 
     def put(self, request):
         token = request.data

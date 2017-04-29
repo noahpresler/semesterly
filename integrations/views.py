@@ -4,11 +4,11 @@ from rest_framework.response import Response
 from rest_framework import status
 
 from timetable.models import CourseIntegration
-from timetable.utils import validate_subdomain
+from timetable.utils import ValidateSubdomainMixin
 from integrations.serializers import CourseIntegrationSerializer
 
 
-class IntegrationsView(APIView):
+class IntegrationsView(ValidateSubdomainMixin, APIView):
 
     def get(self, request, integration_id, course_id):
         integration = get_object_or_404(CourseIntegration, integration_id=integration_id, course_id=course_id)
