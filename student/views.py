@@ -38,7 +38,8 @@ hashids = Hashids(salt="x98as7dhg&h*askdj^has!kj?xz<!9")
 
 
 def get_friend_count_from_course_id(school, student, course_id, semester):
-    return PersonalTimetable.objects.filter(student__in=student.friends.all(), courses__id__exact=course_id) \
+    return PersonalTimetable.objects.filter(student__in=student.friends.all(),
+                                            courses__id__exact=course_id) \
         .filter(Q(semester=semester)).distinct('student').count()
 
 
@@ -91,12 +92,12 @@ def log_ical_export(request):
 
 
 class UserView(APIView):
-
     def get(self, request):
         logged = request.user.is_authenticated()
         if logged and Student.objects.filter(user=request.user).exists():
             student = Student.objects.get(user=request.user)
-            reactions = Reaction.objects.filter(student=student).values('title').annotate(count=Count('title'))
+            reactions = Reaction.objects.filter(student=student).values('title').annotate(
+                count=Count('title'))
             if student.user.social_auth.filter(provider='google-oauth2').exists():
                 hasGoogle = True
             else:
@@ -127,7 +128,8 @@ class UserView(APIView):
                 if r[0] not in context:
                     context[r[0]] = 0
                 context['total'] += context[r[0]]
-            return render_to_response("profile.html", context, context_instance=RequestContext(request))
+            return render_to_response("profile.html", context,
+                                      context_instance=RequestContext(request))
         else:
             return signup(request)
 
@@ -159,10 +161,11 @@ class UserTimetableView(ValidateSubdomainMixin, APIView):
             student = Student.objects.get(user=request.user)
             new_name = request.data['name']
 
-            duplicate = get_object_or_404(PersonalTimetable, student=student, name=name, school=school, semester=semester)
+            duplicate = get_object_or_404(PersonalTimetable, student=student, name=name,
+                                          school=school, semester=semester)
             courses, sections = duplicate.courses.all(), duplicate.sections.all()
 
-            duplicate.pk = None # creates duplicate of object
+            duplicate.pk = None  # creates duplicate of object
             duplicate.name = new_name
             duplicate.save()
             duplicate.courses = courses
@@ -183,7 +186,7 @@ class UserTimetableView(ValidateSubdomainMixin, APIView):
             params = {'school': school, 'name': name, 'semester': semester, 'student': student}
 
             courses = request.data['courses']
-            tt_id = request.data.get('id') # id is None if this is a new timetable
+            tt_id = request.data.get('id')  # id is None if this is a new timetable
 
             if PersonalTimetable.objects.filter(~Q(id=tt_id), **params):
                 return Response(status=status.HTTP_409_CONFLICT)
@@ -197,7 +200,8 @@ class UserTimetableView(ValidateSubdomainMixin, APIView):
             response = {'timetables': timetables, 'saved_timetable': saved_timetable}
 
             # TODO: should respond only with created object
-            return Response(response, status=status.HTTP_201_CREATED if tt_id is None else status.HTTP_200_OK)
+            return Response(response,
+                            status=status.HTTP_201_CREATED if tt_id is None else status.HTTP_200_OK)
 
     def delete(self, request, sem_name, year, tt_name):
         school = request.subdomain
@@ -260,13 +264,16 @@ class ClassmateView(ValidateSubdomainMixin, APIView):
                 courses = []
                 friends = student.friends.filter(social_courses=True)
                 for course_id in course_ids:
-                    courses.append(get_classmates_from_course_id(school, student, course_id, semester, friends=friends))
+                    courses.append(
+                        get_classmates_from_course_id(school, student, course_id, semester,
+                                                      friends=friends))
                 return Response(courses, status=status.HTTP_200_OK)
         else:
             school = request.subdomain
             student = Student.objects.get(user=request.user)
             semester, _ = Semester.objects.get_or_create(name=sem_name, year=year)
-            current_tt = student.personaltimetable_set.filter(school=school, semester=semester).order_by(
+            current_tt = student.personaltimetable_set.filter(school=school,
+                                                              semester=semester).order_by(
                 'last_updated').last()
             if current_tt is None:
                 return Response([], status=status.HTTP_200_OK)
@@ -288,7 +295,9 @@ class ClassmateView(ValidateSubdomainMixin, APIView):
                 shared_courses = []
                 for course in courses_in_common:
                     shared_courses.append({
-                        'course': model_to_dict(course, exclude=['unstopped_description', 'description', 'credits']),
+                        'course': model_to_dict(course,
+                                                exclude=['unstopped_description', 'description',
+                                                         'credits']),
                         # is there a section for this course that is in both timetables?
                         'in_section': (sections_in_common & course.section_set.all()).exists()
                     })
@@ -344,11 +353,13 @@ class GCalView(APIView):
                 start = start.replace(hour=int(slot['time_start'].split(':')[0]),
                                       minute=int(slot['time_start'].split(':')[1]))
                 end = next_weekday(sem_start, slot['day'])
-                end = end.replace(hour=int(slot['time_end'].split(':')[0]), minute=int(slot['time_end'].split(':')[1]))
+                end = end.replace(hour=int(slot['time_end'].split(':')[0]),
+                                  minute=int(slot['time_end'].split(':')[1]))
                 until = next_weekday(sem_end, slot['day'])
 
                 description = course.get('description', '')
-                instructors = 'Taught by: ' + slot['instructors'] + '\n' if len(slot.get('instructors', '')) > 0 else ''
+                instructors = 'Taught by: ' + slot['instructors'] + '\n' if len(
+                    slot.get('instructors', '')) > 0 else ''
 
                 res = {
                     'summary': course['name'] + " " + course['code'] + slot['meeting_section'],
@@ -364,10 +375,12 @@ class GCalView(APIView):
                         'timeZone': 'America/New_York',
                     },
                     'recurrence': [
-                        'RRULE:FREQ=WEEKLY;UNTIL=' + until.strftime("%Y%m%dT%H%M%SZ") + ';BYDAY=' + DAY_MAP[slot['day']]
+                        'RRULE:FREQ=WEEKLY;UNTIL=' + until.strftime("%Y%m%dT%H%M%SZ") + ';BYDAY=' +
+                        DAY_MAP[slot['day']]
                     ],
                 }
-                event = service.events().insert(calendarId=created_calendar['id'], body=res).execute()
+                event = service.events().insert(calendarId=created_calendar['id'],
+                                                body=res).execute()
 
         analytic = CalendarExport.objects.create(
             student=student,
@@ -381,41 +394,29 @@ class GCalView(APIView):
 
 @validate_subdomain
 def signup(request):
-  try:
-    return view_timetable(request, signup=True)
-  except Exception as e:
-    raise Http404
-
-
-@csrf_exempt
-@validate_subdomain
-def react_to_course(request):
-    json_data = {}
-    school = request.subdomain
-
     try:
-        logged = request.user.is_authenticated()
-        params = json.loads(request.body)
-        cid = params['cid']
-        title = params['title']
-        if logged and Student.objects.filter(user=request.user).exists():
-            s = Student.objects.get(user=request.user)
-            c = Course.objects.get(id=cid)
-            if c.reaction_set.filter(title=title, student=s).exists():
-                r = c.reaction_set.get(title=title, student=s)
-                c.reaction_set.remove(r)
-            else:
-                r = Reaction(student=s, title=title)
-                r.save()
-                c.reaction_set.add(r)
-            c.save()
-            json_data['reactions'] = c.get_reactions(student=s)
-
-        else:
-            json_data['error'] = 'Must be logged in to rate'
-
+        return view_timetable(request, signup=True)
     except Exception as e:
-        print e
-        json_data['error'] = 'Unknowssn error'
+        raise Http404
 
-    return HttpResponse(json.dumps(json_data), content_type="application/json")
+
+class ReactionView(ValidateSubdomainMixin, APIView):
+    permission_classes = (IsAuthenticated,)
+
+    def post(self, request):
+        cid = request.data['cid']
+        title = request.data['title']
+        student = get_object_or_404(Student, user=request.user)
+        course = Course.objects.get(id=cid)
+        if course.reaction_set.filter(title=title, student=student).exists():
+            reaction = course.reaction_set.get(title=title, student=student)
+            course.reaction_set.remove(reaction)
+            reaction.delete()
+        else:
+            reaction = Reaction(student=student, title=title)
+            reaction.save()
+            course.reaction_set.add(reaction)
+        course.save()
+
+        response = {'reactions': course.get_reactions(student=student)}
+        return Response(response, status=status.HTTP_200_OK)
