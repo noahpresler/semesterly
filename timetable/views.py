@@ -3,6 +3,7 @@ import logging
 from braces.views import CsrfExemptMixin
 from django.template.loader import get_template
 from django.views.decorators.cache import never_cache
+from django.views.generic.base import TemplateView
 from hashids import Hashids
 from rest_framework import status
 from rest_framework.response import Response
@@ -40,9 +41,51 @@ def custom_500(request):
     # TODO, maybe add this next line back in when im done testing
     # response.status_code = 500
     return response
-# ******************************************************************************
-# ******************************** GENERATE TTs ********************************
-# ******************************************************************************
+
+
+class HomeView(ValidateSubdomainMixin, TemplateView):
+
+  def get(self, request, feature_flow=None):
+    school = request.subdomain
+    student = get_student(request)
+
+    all_semesters = get_current_semesters(school)  # corresponds to allSemesters on frontend
+    curr_sem_index = 0  # corresponds to state.semesterIndex on frontend
+    sem = Semester.objects.get(**all_semesters[curr_sem_index])
+
+    integrations = {'integrations': []}
+    if student and student.user.is_authenticated():
+      student.school = school
+      student.save()
+      for i in student.integrations.all():
+        integrations['integrations'].append(i.name)
+
+    # TODO: pass init_data as one context value
+    init_data = {
+      'school': school,
+      'currentUser': get_user_dict(school, student, sem),
+      'currentSemester': curr_sem_index,
+      'allSemesters': all_semesters,
+      'uses12HrTime': school in AM_PM_SCHOOLS,
+      'studentIntegrations': integrations,
+
+      'featureFlow': feature_flow or {}
+    }
+
+    serialized = {key: json.dumps(val) for key, val in init_data.iteritems()}
+    return render(request, 'timetable.html', serialized)
+
+
+class FeatureFlowMixin(object):
+
+  def get_feature_data(self, request, *args, **kwargs):
+    return {}
+
+  def get(self, request, *args, **kwargs):
+    feature_data = self.get_feature_data(request, *args, **kwargs)
+    feature_data['name'] = self.feature_name
+    return HomeView.as_view()(request, feature_data)
+
 
 @validate_subdomain
 def view_timetable(request, code=None, sem_name=None, year=None, shared_timetable=None, 
