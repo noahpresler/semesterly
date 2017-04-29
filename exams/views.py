@@ -1,7 +1,7 @@
 import json
 
+from braces.views import CsrfExemptMixin
 from django.http import Http404, HttpResponse
-from django.views.decorators.csrf import csrf_exempt
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
@@ -19,7 +19,7 @@ def view_final_exams(request):
         raise Http404
 
 
-class ExamView(APIView):
+class ExamView(CsrfExemptMixin, APIView):
 
     def post(self, request):
         final_exam_schedule = JHUFinalExamScheduler().make_schedule(request.data)
