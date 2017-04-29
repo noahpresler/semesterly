@@ -18,7 +18,7 @@ export const getClassmatesInCourseEndpoint = courseId => `/course_classmates/${g
 export const getMostClassmatesCountEndpoint = (semester, courses) => `/user/classmates/${semester.name}/${semester.year}/${$.param({ course_ids: courses, count: true })}`;
 export const getFriendsEndpoint = semester => `/user/classmates/${semester.name}/${semester.year}/`;
 export const getSchoolInfoEndpoint = () => `/school/${getSchool()}/`;
-export const getReactToCourseEndpoint = () => '/react/';
+export const getReactToCourseEndpoint = () => '/user/reactions/';
 export const getRequestShareTimetableLinkEndpoint = () => '/timetables/links/';
 export const getSetRegistrationTokenEndpoint = () => '/registration-token/';
 export const deleteRegistrationTokenEndpoint = endpoint => `/registration-token/${endpoint}/`;

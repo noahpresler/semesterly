@@ -5,16 +5,13 @@ from rest_framework.test import APITestCase, APIRequestFactory, force_authentica
 from rest_framework import status
 
 from test_utils.test_cases import UrlTestCase
-from student.models import Student, PersonalTimetable
+from student.models import Student, PersonalTimetable, Reaction
 from timetable.models import Semester, Course, Section, Offering
 
 class UrlsTest(UrlTestCase):
     """ Test student/urls.py """
 
     def test_urls_call_correct_views(self):
-        # view_timetable redirects
-        self.assertUrlResolvesToView('/react/', 'student.views.react_to_course'),
-
         # profile management
         self.assertUrlResolvesToView('/unsubscribe/akdC@+-EI/alc:_=/', 'student.views.unsubscribe')
         self.assertUrlResolvesToView('/user/settings/', 'student.views.UserView')
@@ -30,6 +27,7 @@ class UrlsTest(UrlTestCase):
                                      'student.views.ClassmateView',
                                      kwargs={'sem_name': 'Fall', 'year': '2016'})
         self.assertUrlResolvesToView('/user/gcal/', 'student.views.GCalView')
+        self.assertUrlResolvesToView('/user/reactions/', 'student.views.ReactionView')
 
 
 class UserViewTest(APITestCase):
@@ -271,3 +269,32 @@ class ClassmateViewTest(APITestCase):
         response = view(request, 'Fall', '2000')
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(len(response.data), 2)
+
+
+class ReactionTest(APITestCase):
+
+    def setUp(self):
+        """ Create a user and course. """
+        self.user = User.objects.create_user(username='jacob', password='top_secret')
+        self.student = Student.objects.create(user=self.user)
+
+        self.course = Course.objects.create(id=1, school='uoft', code='SEM101', name='Intro')
+        self.title = Reaction.REACTION_CHOICES[0][0]
+
+        self.factory = APIRequestFactory()
+
+    def test_add_reaction(self):
+        data = {
+            'cid': 1,
+            'title': self.title
+        }
+        request = self.factory.post('/user/reactions/', data, format='json')
+        request.subdomain = 'uoft'
+        force_authenticate(request, user=self.user)
+        view = resolve('/user/reactions/').func
+        response = view(request)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+        self.assertTrue('reactions' in response.data)
+        Reaction.objects.get(student=self.student, title=self.title)
+        self.assertGreater(Course.objects.get(id=1).reaction_set.count(), 0)
