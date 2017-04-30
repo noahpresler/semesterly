@@ -10,6 +10,7 @@ import { FULL_WEEK_LIST } from '../constants/constants';
 import { getActiveTimetable } from './user_actions';
 import { store } from '../init';
 import { getCourseShareLink } from '../helpers/timetable_helpers';
+import { currSem } from '../reducers/semester_reducer';
 import * as ActionTypes from '../constants/actionTypes';
 
 const DAY_MAP = {
@@ -38,7 +39,7 @@ export const receiveShareLink = shareLink => (dispatch) => {
 
 export const fetchShareTimetableLink = () => (dispatch) => {
   const state = store.getState();
-  const semester = allSemesters[state.semesterIndex];
+  const semester = currSem(state.semester);
   const timetableState = state.timetables;
   const { shareLink, shareLinkValid } = state.calendar;
   dispatch({
@@ -110,7 +111,7 @@ export const createICalFromTimetable = () => (dispatch) => {
     // TODO - MUST BE REFACTORED AFTER CODED IN TO CONFIG
     let semStart = new Date();
     let semEnd = new Date();
-    const semester = allSemesters[state.semesterIndex];
+    const semester = currSem(state.semester);
 
     if (semester.name === 'Fall') {
       // ignore year, year is set to current year
