@@ -62,6 +62,10 @@ function setup(dispatch) {
     availSemesters: allSemesters,
   });
 
+  dispatch({
+    type: ActionTypes.SET_USES12HRTIME,
+    uses12HrTime,
+  });
 
   // we load currentUser's timetable (or cached timetable) only if
   // they're _not_ trying to load a shared timetable
