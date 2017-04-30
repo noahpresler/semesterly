@@ -54,5 +54,9 @@ coverage==4.3.4
 django-silk==0.7.3
 django-cachalot==1.4.1
 python-memcached==1.58
+djangorestframework==3.6.2
 django-webpack-loader==0.4.1
 mock==2.0.0
+coreapi==2.3.0
+django-rest-swagger==2.1.2
+django-braces>=1.11.0
