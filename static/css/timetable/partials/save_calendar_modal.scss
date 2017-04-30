@@ -11,7 +11,7 @@
 	background-color: #eee;
 	padding: 25px 25px;
 	position: relative;
-	border-bottom: 1px solid #ddd;
+	border-bottom: 1px solid $grey-light;
 }
 
 #save-calendar-container {
@@ -48,7 +48,7 @@
 
 .img-icon > .loader {
     float: left;
-    border: 10px solid #f3f3f3; /* Light grey */
+    border: 10px solid $white-screen; /* Light grey */
     border-radius: 50%;
     border-top: 10px solid #3498db; /* Blue */
     width: 10px;
@@ -93,7 +93,7 @@
 }
 
 .or-separator--text {
-    background-color: #fff;
+    background-color: $white;
     display: inline-block;
     padding: 8px 8px 0px 8px;
     font-size: 14px;
