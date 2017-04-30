@@ -173,8 +173,8 @@ class Slot extends React.Component {
         <i className="fa fa-user" />
         <span>{this.props.location && this.props.location !== '' ? ' , ' : null}</span>
       </div>) : null;
-    const converted_start = uses12HrTime && parseInt(this.props.time_start.split(':')[0]) > 12 ? `${parseInt(this.props.time_start.split(':')[0]) - 12}:${this.props.time_start.split(':')[1]}` : this.props.time_start;
-    const converted_end = uses12HrTime && parseInt(this.props.time_end.split(':')[0]) > 12 ? `${parseInt(this.props.time_end.split(':')[0]) - 12}:${this.props.time_end.split(':')[1]}` : this.props.time_end;
+    const converted_start = this.propsuses12HrTime && parseInt(this.props.time_start.split(':')[0]) > 12 ? `${parseInt(this.props.time_start.split(':')[0]) - 12}:${this.props.time_start.split(':')[1]}` : this.props.time_start;
+    const converted_end = this.propsuses12HrTime && parseInt(this.props.time_end.split(':')[0]) > 12 ? `${parseInt(this.props.time_end.split(':')[0]) - 12}:${this.props.time_end.split(':')[1]}` : this.props.time_end;
 
     return this.props.connectCreateTarget(this.props.connectDragTarget(
       <div>
