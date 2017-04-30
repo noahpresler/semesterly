@@ -1,5 +1,5 @@
 import { connect } from 'react-redux';
-import { FinalExamsModal } from '../final_exams_modal';
+import FinalExamsModal from '../final_exams_modal';
 import { fetchFinalExamSchedule, getFinalExamShareLink } from '../../actions/exam_actions';
 import { logFinalExamView } from '../../util';
 import { hideFinalExamsModal, triggerAcquisitionModal } from '../../actions/modal_actions';
