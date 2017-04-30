@@ -152,7 +152,7 @@
 	height: 60px;
 }
 .search-course.hovered {
-	background-color: #f3f3f3;
+	background-color: $white-screen;
 }
 .search-course h3 {
 	font-size: 14px;
@@ -183,10 +183,10 @@
 	margin: 3px 5px 0 0;
 }
 .search-course .label.hoverAdd {
-	color: #52B7D9;
+	color: $blue-light;
 }
 .search-course .label.hoverSave {
-	color: #27ae60;
+	color: $green-light;
 }
 .search-course .label.bubble {
 	background-color: #DEDEDE;
@@ -194,7 +194,7 @@
 }
 .search-course .label.flag {
 	padding-left: 0;
-	color: #D21616;
+	color: $red;
 }
 /* If a course has an integration turned on */
 .has-pilot {
@@ -367,7 +367,7 @@
 	position: absolute;
 	right: 0;
 	top: 0;
-	background-color: #F3F3F3;
+	background-color: $white-screen;
 	overflow-y: auto;
 	padding: 5px;
 }
