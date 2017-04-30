@@ -334,12 +334,12 @@ class FeatureFlowView(ValidateSubdomainMixin, TemplateView):
         curr_sem_index = 0  # corresponds to state.semesterIndex on frontend
         sem = Semester.objects.get(**all_semesters[curr_sem_index])
 
-        integrations = {'integrations': []}
+        integrations = []
         if self.student and self.student.user.is_authenticated():
             self.student.school = self.school
             self.student.save()
             for i in self.student.integrations.all():
-                integrations['integrations'].append(i.name)
+                integrations.append(i.name)
 
         # TODO: pass init_data as one context value
         init_data = {
