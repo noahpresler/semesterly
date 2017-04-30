@@ -5,6 +5,7 @@ import { getUserSavedTimetables, saveTimetable } from './user_actions';
 import { nullifyTimetable } from './timetable_actions';
 import * as ActionTypes from '../constants/actionTypes';
 import { fetchCourseClassmates } from './modal_actions';
+import { currSem } from '../reducers/semester_reducer';
 
 export const requestCourses = () => ({ type: ActionTypes.REQUEST_COURSES });
 
@@ -17,7 +18,7 @@ export const setSemester = semester => (dispatch) => {
   const state = store.getState();
 
   if (state.userInfo.data.isLoggedIn) {
-    dispatch(getUserSavedTimetables(allSemesters[semester]));
+    dispatch(getUserSavedTimetables(state.semester.all[semester]));
   } else {
     dispatch(nullifyTimetable(dispatch));
   }
@@ -40,7 +41,7 @@ export const setSemester = semester => (dispatch) => {
 export const maybeSetSemester = semester => (dispatch) => {
   const state = store.getState();
 
-  if (semester === state.semesterIndex) {
+  if (semester === state.semester.current) {
     return;
   }
 
@@ -106,7 +107,7 @@ export const fetchAdvancedSearchResults = (query, filters) => (dispatch) => {
     method: 'POST',
     body: JSON.stringify({
       filters,
-      semester: allSemesters[state.semesterIndex],
+      semester: currSem(state.semester),
       page: state.explorationModal.page,
     }),
   })
