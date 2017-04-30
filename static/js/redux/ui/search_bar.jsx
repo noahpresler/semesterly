@@ -273,7 +273,7 @@ export class SearchResult extends React.Component {
             (<div className="label integration">
               <span className="has-pilot" style={integrationLogoImageUrl} />
             </div>) : null;
-    const pilotIntegration = studentIntegrations.integrations.indexOf('Pilot') > -1 ?
+    const pilotIntegration = this.props.studentIntegrations.indexOf('Pilot') > -1 ?
             (<div className="label integration">
               <a
                 onMouseDown={(event) => {
