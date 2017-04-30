@@ -140,8 +140,14 @@ INSTALLED_APPS = (
     'student',
     'cachalot',
     'silk',
+    'rest_framework',
+    'rest_framework_swagger',
     'webpack_loader'
 )
+
+REST_FRAMEWORK ={
+    'UNICODE_JSON': False
+}
 
 MIDDLEWARE_CLASSES = (
     'django.contrib.sessions.middleware.SessionMiddleware',
