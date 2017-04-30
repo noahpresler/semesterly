@@ -9,6 +9,7 @@ import SemesterlyContainer from './ui/containers/semesterly_container';
 import { fetchMostClassmatesCount } from './actions/user_actions';
 import { loadCachedTimetable, loadTimetable } from './actions/timetable_actions';
 import { fetchSchoolInfo } from './actions/school_actions';
+import { currSem } from './reducers/semester_reducer';
 import {
     browserSupportsLocalStorage,
     setFriendsCookie,
@@ -25,7 +26,7 @@ export const store = createStore(rootReducer,
 export const getSchool = () => store.getState().school.school;
 export const getSemester = () => {
   const state = store.getState();
-  const currSemester = allSemesters[state.semesterIndex];
+  const currSemester = currSem(state.semester);
   return `${currSemester.name}/${currSemester.year}`;
 };
 
@@ -45,18 +46,22 @@ function setup(dispatch) {
   enableNotifs = enableNotifs === 'True';
   gcalCallback = gcalCallback === 'True';
 
+  // setup initial redux state
   dispatch({
     type: ActionTypes.SET_SCHOOL,
     school, // comes from timetable.html
   });
 
-  // currentSemester comes from timetable.html (rendered by the server).
-  // if the currentUser is loading a share course link, we need to set the appropriate semester,
-  // so we can't default it to any particular value
   dispatch({
     type: ActionTypes.SET_SEMESTER,
     semester: parseInt(currentSemester, 10),
   });
+
+  dispatch({
+    type: ActionTypes.SET_AVAIL_SEMESTERS,
+    availSemesters: allSemesters,
+  });
+
 
   // we load currentUser's timetable (or cached timetable) only if
   // they're _not_ trying to load a shared timetable
@@ -78,7 +83,7 @@ function setup(dispatch) {
     // the same as the browser-cached timetable's semester OR the user is not trying to load a
     // shared course at all. This results in problematic edge cases, such as showing the course
     // modal of an S course in the F semester, being completely avoided.
-      dispatch(loadCachedTimetable());
+      dispatch(loadCachedTimetable(allSemesters));
     }
   }
 
