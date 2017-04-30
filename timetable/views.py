@@ -12,7 +12,6 @@ from analytics.views import *
 from courses.views import get_detailed_course_json
 from student.models import Student
 from student.utils import convert_tt_to_dict
-from timetable.jhu_final_exam_test import *
 from timetable.school_mappers import final_exams_available
 from timetable.utils import *
 from timetable.utils import validate_subdomain, update_locked_sections, TimetableGenerator, \
