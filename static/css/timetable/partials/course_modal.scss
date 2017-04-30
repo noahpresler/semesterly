@@ -108,7 +108,7 @@
 	z-index: 11;
 	position: relative;
 	padding: 20px 10px 10px;
-	background-color: #f3f3f3;
+	background-color: $white-screen;
 	border-bottom: 1px solid #ddd;
 	transition: background-color .2s, color .2s;
 }
@@ -404,13 +404,13 @@ h3.modal-module-header small {
 	color: #777;
 }
 .modal-section h6 .green {
-	color: #0AA98A;
+	color: $green;
 }
 .modal-section h6 .yellow {
-	color: #D29842;
+	color: $yellow;
 }
 .modal-section h6 .red {
-	color: #D21616;
+	color: $red;
 }
 .hidden-modal{
 	color: rgba(52, 73, 94, 0);
