@@ -15,11 +15,12 @@ from rest_framework import status
 from rest_framework.views import APIView
 from rest_framework.response import Response
 
+from analytics.models import SharedCourseView
 from student.models import PersonalTimetable, Student
-from student.utils import get_classmates_from_course_id
+from student.utils import get_classmates_from_course_id, get_student
 from timetable.models import Evaluation, Section, Semester, Course, Updates
 from timetable.school_mappers import school_to_course_regex, school_code_to_name
-from timetable.utils import validate_subdomain, ValidateSubdomainMixin
+from timetable.utils import validate_subdomain, ValidateSubdomainMixin, FeatureFlowView
 
 
 def get_detailed_course_json(school, course, sem, student=None):
@@ -221,3 +222,21 @@ class SchoolList(APIView):
             'last_updated': last_updated
         }
         return Response(json_data, status=status.HTTP_200_OK)
+
+
+class CourseModal(FeatureFlowView):
+    feature_name = "COURSE_MODAL"
+
+    def get_feature_flow(self, request, code, sem_name, year):
+        semester, _ = Semester.objects.get_or_create(name=sem_name, year=year)
+        code = code.upper()
+        course = get_object_or_404(Course, school=self.school, code=code)
+        course_json = get_detailed_course_json(self.school, course, semester, self.student)
+
+        # analytics
+        SharedCourseView.objects.create(
+            student=self.student,
+            shared_course=course,
+        ).save()
+
+        return course_json
