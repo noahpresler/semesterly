@@ -105,18 +105,18 @@ function setup(dispatch) {
     }
   }
 
-  // sharedTimetable = JSON.parse(sharedTimetable);
-  // sharedCourse = JSON.parse(sharedCourse);
-  // finalExamsSupportedSemesters = JSON.parse(finalExamsSupportedSemesters);
-  // findFriends = findFriends === 'True';
-  // enableNotifs = enableNotifs === 'True';
-  // studentIntegrations = JSON.parse(studentIntegrations);
-  // signup = signup === 'True';
-  // userAcq = userAcq === 'True';
-  // gcalCallback = gcalCallback === 'True';
-  // exportCalendar = exportCalendar === 'True';
-  // viewTextbooks = viewTextbooks === 'True';
-  // finalExams = finalExams === 'True';
+  sharedTimetable = JSON.parse(sharedTimetable);
+  sharedCourse = JSON.parse(sharedCourse);
+  finalExamsSupportedSemesters = JSON.parse(finalExamsSupportedSemesters); // sidebar (display)
+  findFriends = findFriends === 'True';
+  enableNotifs = enableNotifs === 'True'; // user settings modal (classname)
+  studentIntegrations = JSON.parse(studentIntegrations); // search bar (display)
+  signup = signup === 'True';
+  userAcq = userAcq === 'True';
+  gcalCallback = gcalCallback === 'True'; // used for feature but also user settings modal
+  exportCalendar = exportCalendar === 'True';
+  viewTextbooks = viewTextbooks === 'True';
+  finalExams = finalExams === 'True';
   //
   // const user = JSON.parse(currentUser); // currentUser comes from timetable.html
   // dispatch(getUserInfo(user));
