@@ -319,38 +319,38 @@ class FeatureFlowView(ValidateSubdomainMixin, TemplateView):
     """
     feature_name = None
 
-    def get_feature_flow(self):
+    def get_feature_flow(self, request, *args, **kwargs):
         """ 
         Return data needed for the feature flow for this HomeView.
         The feature name does not needed to be added to the return dict since it is added in .get()
         """
         return {}
 
-    def get(self, request):
-        school = request.subdomain
-        student = get_student(request)
+    def get(self, request, *args, **kwargs):
+        self.school = request.subdomain
+        self.student = get_student(request)
 
-        all_semesters = get_current_semesters(school)  # corresponds to allSemesters on frontend
+        all_semesters = get_current_semesters(self.school)  # corresponds to allSemesters on frontend
         curr_sem_index = 0  # corresponds to state.semesterIndex on frontend
         sem = Semester.objects.get(**all_semesters[curr_sem_index])
 
         integrations = {'integrations': []}
-        if student and student.user.is_authenticated():
-            student.school = school
-            student.save()
-            for i in student.integrations.all():
+        if self.student and self.student.user.is_authenticated():
+            self.student.school = self.school
+            self.student.save()
+            for i in self.student.integrations.all():
                 integrations['integrations'].append(i.name)
 
         # TODO: pass init_data as one context value
         init_data = {
-            'school': school,
-            'currentUser': get_user_dict(school, student, sem),
+            'school': self.school,
+            'currentUser': get_user_dict(self.school, self.student, sem),
             'currentSemester': curr_sem_index,
             'allSemesters': all_semesters,
-            'uses12HrTime': school in AM_PM_SCHOOLS,
+            'uses12HrTime': self.school in AM_PM_SCHOOLS,
             'studentIntegrations': integrations,
 
-            'featureFlow': dict(self.get_feature_flow(),
+            'featureFlow': dict(self.get_feature_flow(request, *args, **kwargs),
                                 name=self.feature_name)
         }
 
