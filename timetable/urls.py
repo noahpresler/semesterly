@@ -32,7 +32,7 @@ urlpatterns = patterns('',
                        # redirects
                        url(r'^timetable/*$', timetable.views.redirect_to_home),
                        url(r'^timetable/.+$', timetable.views.redirect_to_home),
-                       url(r'^complete/facebook/.*$', timetable.views.view_timetable),
+                       url(r'^complete/facebook/.*$', FeatureFlowView.as_view()),
 
                        # timetables
                        url(r'^timetables/?$', timetable.views.TimetableView.as_view()),
