@@ -3,12 +3,12 @@ html {
 }
 
 h1, h2 {
-	font-family: "Palanquin",Arial,sans-serif;
+	font-family: $font-primary;
 	font-weight: 500;
 }
 
 h3, h4, h5, h6, p, a, span, input, textarea {
-	font-family: "Roboto",Arial,sans-serif;
+	font-family: $font-body;
 	font-weight: 400;
 }
 
@@ -102,7 +102,7 @@ h3, h4, h5, h6, p, a, span, input, textarea {
 }
 #show-exploration span {
 	display: inline-block;
-	font-family: "Roboto",Arial,sans-serif;
+	font-family: $font-body;
 	margin-left: 4px;
 	font-size: 12px;
 	padding: 3px 0;
@@ -191,7 +191,7 @@ h3, h4, h5, h6, p, a, span, input, textarea {
 /* Logo & name */
 
 #semesterly-name {
-	font-family: "Palanquin", sans-serif;
+	font-family: $font-primary;
 	font-weight: 500;
 	display: inline-block;
 	float: left;
@@ -257,7 +257,7 @@ h3, h4, h5, h6, p, a, span, input, textarea {
 	display: block;
 	position: absolute;
 	right: 0;
-	background-color:#34495E;
+	background-color: $primary-navy;
 	-webkit-transform: translateY(-50%);
 	-moz-transform: translateY(-50%);
 	-ms-transform: translateY(-50%);
