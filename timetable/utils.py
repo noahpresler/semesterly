@@ -6,6 +6,7 @@ from functools import wraps
 from django.forms import model_to_dict
 from django.shortcuts import render
 from django.views.generic.base import TemplateView
+from rest_framework.views import APIView
 
 from timetable.models import Section, Course, Semester
 from timetable.school_mappers import school_to_granularity, school_to_semesters, \
@@ -312,7 +313,7 @@ class TimetableGenerator:
         return all_sections
 
 
-class FeatureFlowView(ValidateSubdomainMixin, TemplateView):
+class FeatureFlowView(ValidateSubdomainMixin, APIView):
     """ 
     Template that handles GET requests by rendering the homepage. Feature_name or get_feature_flow() 
     can be overridden to launch a feature or action on homepage load.
