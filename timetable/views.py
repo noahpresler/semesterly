@@ -218,7 +218,7 @@ class TimetableLinkView(FeatureFlowView):
                                              school=request.subdomain)
     shared_timetable = convert_tt_to_dict(shared_timetable_obj, include_last_updated=False)
 
-    return {'semester': shared_timetable.semester, 'sharedTimetable': shared_timetable}
+    return {'semester': shared_timetable_obj.semester, 'sharedTimetable': shared_timetable}
 
   def post(self, request):
     school = request.subdomain
