@@ -5,6 +5,7 @@ import requests
 from django.conf import settings
 from django.contrib.auth.models import User
 from django.core.signing import TimestampSigner, BadSignature, SignatureExpired
+from django.contrib.auth.mixins import LoginRequiredMixin
 from hashids import Hashids
 from oauth2client.client import GoogleCredentials
 
@@ -131,3 +132,8 @@ def create_student(strategy, details, response, user, *args, **kwargs):
                         friend_student.save()
 
     return kwargs
+
+
+class RedirectToSignupMixin(LoginRequiredMixin):
+    login_url = '/signup/'
+    redirect_field_name = None
