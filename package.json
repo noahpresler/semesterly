@@ -102,5 +102,6 @@
   },
   "lint-staged": {
     "*.jsx": "eslint"
-  }
+  },
+  "sasslintConfig": "sass-lint"
 }
