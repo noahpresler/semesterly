@@ -6,7 +6,6 @@ import COLOUR_DATA from '../constants/colours';
 import TimetableNameInputContainer from './containers/timetable_name_input_container';
 import CreditTickerContainer from './containers/credit_ticker_container';
 import Textbook from './textbook';
-import * as PropTypes from '../constants/propTypes';
 
 class SideBar extends React.Component {
   constructor(props) {
@@ -210,7 +209,9 @@ SideBar.propTypes = {
   courseToColourIndex: React.PropTypes.shape({
     id: React.PropTypes.string,
   }).isRequired,
-  classmates: PropTypes.classmates.isRequired,
+  classmates: React.PropTypes.arrayOf(React.PropTypes.shape({
+    img_url: React.PropTypes.string,
+  })),
   optionalCourses: React.PropTypes.arrayOf(React.PropTypes.shape({
     id: React.PropTypes.number,
     slots: React.PropTypes.arrayOf(React.PropTypes.shape({
