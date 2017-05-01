@@ -11,14 +11,6 @@ from timetable.utils import validate_subdomain
 from timetable.views import view_timetable
 
 
-@validate_subdomain
-def view_final_exams(request):
-    try:
-        return view_timetable(request, final_exams=True)
-    except Exception:
-        raise Http404
-
-
 class ExamView(CsrfExemptMixin, APIView):
 
     def post(self, request):

@@ -2,19 +2,29 @@ from django.conf.urls import patterns, url
 from django.contrib import admin
 
 import timetable.views
+from timetable.utils import FeatureFlowView
 
 admin.autodiscover()
 
 urlpatterns = patterns('',
-                       # marketing urls
-                       url(r'^signup/*', timetable.views.launch_user_acq_modal),
-                       url(r'^textbooks/*$', timetable.views.view_textbooks),
-                       url(r'^export_calendar/*$', timetable.views.export_calendar),
-                       url(r'^notifyme/*$', timetable.views.enable_notifs),
-                       url(r'^find_friends/$', timetable.views.find_friends),
+                       # TODO: ???
                        url(r'^jhu/countdown/*$', timetable.views.jhu_timer),
+
+                       # feature flows
+                       url(r'^signup/*',
+                           FeatureFlowView.as_view(feature_name='SIGNUP')),
+                       url(r'^textbooks/*$',
+                           FeatureFlowView.as_view(feature_name='VIEW_TEXTBOOKS')),
+                       url(r'^export_calendar/*$',
+                           FeatureFlowView.as_view(feature_name='EXPORT_CALENDAR')),
+                       url(r'^notifyme/*$',
+                           FeatureFlowView.as_view(feature_name='ENABLE_NOTIFS')),
+                       url(r'^find_friends/$',
+                           FeatureFlowView.as_view(feature_name='FIND_FRIENDS')),
                        url(r'^callback/google_calendar/*$',
-                           timetable.views.google_calendar_callback),
+                           FeatureFlowView.as_view(feature_name='GCAL_CALLBACK')),
+
+                       # TODO: ???
                        url(r'^user/log_final_exam/*$', timetable.views.log_final_exam_view),
 
                        # redirects
