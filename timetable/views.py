@@ -103,48 +103,11 @@ def view_timetable(request, code=None, sem_name=None, year=None, shared_timetabl
   },
   context_instance=RequestContext(request))
 
-@validate_subdomain
-def google_calendar_callback(request):
-  try:
-    return view_timetable(request, gcal_callback=True)
-  except Exception as e:
-    raise Http404
-
-
-@validate_subdomain
-def view_textbooks(request):
-  try:
-    return view_timetable(request, view_textbooks=True)
-  except Exception as e:
-    raise Http404
-
-@validate_subdomain
-def export_calendar(request):
-  try:
-    return view_timetable(request, export_calendar=True)
-  except Exception as e:
-    raise Http404
-
 
 @validate_subdomain
 def launch_user_acq_modal(request):
   try:
     return view_timetable(request, user_acq=True)
-  except Exception as e:
-    raise Http404
-
-
-@validate_subdomain
-def find_friends(request):
-  try:
-    return view_timetable(request, find_friends=True)
-  except Exception as e:
-    raise Http404
-
-@validate_subdomain
-def enable_notifs(request):
-  try:
-    return view_timetable(request, enable_notifs=True)
   except Exception as e:
     raise Http404
 
