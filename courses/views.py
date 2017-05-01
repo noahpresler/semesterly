@@ -239,4 +239,4 @@ class CourseModal(FeatureFlowView):
             shared_course=course,
         ).save()
 
-        return {'sharedCourse': course_json}
+        return {'sharedCourse': course_json, 'semester': semester}
