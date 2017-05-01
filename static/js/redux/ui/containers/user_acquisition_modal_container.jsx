@@ -1,5 +1,5 @@
 import { connect } from 'react-redux';
-import { UserAcquisitionModal } from '../user_acquisition_modal';
+import UserAcquisitionModal from '../user_acquisition_modal';
 import { triggerAcquisitionModal } from '../../actions/modal_actions';
 
 const mapStateToProps = state => ({
