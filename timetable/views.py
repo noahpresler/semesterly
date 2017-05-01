@@ -10,13 +10,10 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 
 from analytics.views import *
-from courses.views import get_detailed_course_json
 from student.models import Student
 from student.utils import convert_tt_to_dict
-from timetable.school_mappers import final_exams_available
 from timetable.utils import *
-from timetable.utils import validate_subdomain, update_locked_sections, TimetableGenerator, \
-  ValidateSubdomainMixin, get_current_semesters
+from timetable.utils import update_locked_sections, TimetableGenerator, ValidateSubdomainMixin
 
 SCHOOL = ""
 
@@ -39,70 +36,6 @@ def custom_500(request):
     # TODO, maybe add this next line back in when im done testing
     # response.status_code = 500
     return response
-
-
-@validate_subdomain
-def view_timetable(request, code=None, sem_name=None, year=None, shared_timetable=None, 
-                  find_friends=False, enable_notifs=False, signup=False, user_acq=False,
-                  gcal_callback=False, export_calendar=False, view_textbooks=False,
-                  final_exams=False):
-  school = request.subdomain
-  student = get_student(request)
-  course_json = None
-
-  # get default semester info
-  sem_dicts = get_current_semesters(school) # corresponds to allSemesters on frontend
-  semester_index = 0 # corresponds to state.semesterIndex on frontend
-  sem = Semester.objects.get(**sem_dicts[semester_index])
-
-  if sem_name and year: # loading a share course link OR timetable share link
-    sem, _ = Semester.objects.get_or_create(name=sem_name, year=year)
-    sem_pair = {'name': sem.name, 'year': sem.year}
-    if sem_pair not in sem_dicts:
-      sem_dicts.append(sem_pair)
-      semester_index = len(sem_dicts) - 1
-    else:
-      semester_index = sem_dicts.index(sem_pair)
-
-  if code: # user is loading a share course link, since code was included
-    code = code.upper()
-    try:
-      course = Course.objects.get(school=school, code=code)
-      course_json = get_detailed_course_json(school, course, sem, student)
-      SharedCourseView.objects.create(
-        student = student,
-        shared_course = course,
-      ).save()
-    except:
-      raise Http404
-
-  integrations = {'integrations': []}
-  if student and student.user.is_authenticated():
-    student.school = school
-    student.save()
-    for i in student.integrations.all():
-      integrations['integrations'].append(i.name)
-  return render_to_response("timetable.html", {
-    'school': school,
-    'student': json.dumps(get_user_dict(school, student, sem)),
-    'semester': str(semester_index),
-    'all_semesters': json.dumps(sem_dicts),
-    'uses_12hr_time': school in AM_PM_SCHOOLS,
-    'student_integrations': json.dumps(integrations),
-
-    'course': json.dumps(course_json),
-    'shared_timetable': json.dumps(shared_timetable),
-    'find_friends': find_friends,
-    'enable_notifs': enable_notifs,
-    'signup': signup,
-    'user_acq': user_acq,
-    'gcal_callback': gcal_callback,
-    'export_calendar': export_calendar,
-    'view_textbooks': view_textbooks,
-    'final_exams_supported_semesters': map(lambda s: sem_dicts.index(s) ,final_exams_available.get(school, [])),
-    'final_exams': final_exams
-  },
-  context_instance=RequestContext(request))
 
 
 def jhu_timer(request):
