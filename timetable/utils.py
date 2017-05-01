@@ -322,7 +322,9 @@ class FeatureFlowView(ValidateSubdomainMixin, TemplateView):
     def get_feature_flow(self, request, *args, **kwargs):
         """ 
         Return data needed for the feature flow for this HomeView.
-        The feature name does not needed to be added to the return dict since it is added in .get()
+        A name value is automatically added in .get() using the feature_name class variable.
+        A semester value can also be provided, which will change the initial semester state of
+        the home page.
         """
         return {}
 
