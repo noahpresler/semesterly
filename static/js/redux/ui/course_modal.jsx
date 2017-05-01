@@ -1,12 +1,11 @@
 import React from 'react';
 import classNames from 'classnames';
 import Modal from 'boron/WaveModal';
-import CourseModalBody from './course_modal_body';
+import { CourseModalBody } from './course_modal_body';
 import { getCourseShareLink, getCourseShareLinkFromModal } from '../helpers/timetable_helpers';
 import { ShareLink } from './master_slot';
-import { fullCourseDetails } from '../constants/propTypes';
 
-class CourseModal extends React.Component {
+export class CourseModal extends React.Component {
   constructor(props) {
     super(props);
     this.addOrRemoveCourse = this.addOrRemoveCourse.bind(this);
@@ -21,10 +20,10 @@ class CourseModal extends React.Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    if (nextProps.id !== null) {
-      const { data } = nextProps;
+    if (nextProps.id != null) {
+      const { data, inRoster } = nextProps;
       history.replaceState({}, 'Semester.ly', getCourseShareLinkFromModal(data.code));
-      this.modal.show();
+      this.refs.modal.show();
     }
   }
 
@@ -46,11 +45,22 @@ class CourseModal extends React.Component {
     this.setState({ shareLinkShown: false });
   }
 
+    // sizeItUp() {
+    //     // let h = $("#modal-header").outerHeight();
+    //     // $("#modal-body").css("top", h);
+    //     $(".course-modal:parent").css("display", "block");
+    // }
+    // componentDidMount() {
+    //     $(window).resize(this.sizeItUp);
+    // }
+    // componentDidUpdate() {
+    //     this.sizeItUp();
+    // }
   hide() {
     history.replaceState({}, 'Semester.ly', '/');
     this.props.unHoverSection();
     this.props.hideModal();
-    this.modal.hide();
+    this.refs.modal.hide();
   }
 
   render() {
@@ -60,7 +70,7 @@ class CourseModal extends React.Component {
     };
     const { data, inRoster } = this.props;
     let courseAndDept = data.code;
-    courseAndDept = data.department && data.department !== '' ?
+    courseAndDept = data.department && data.department != '' ?
             `${courseAndDept}, ${data.department}` : courseAndDept;
     const shareLink = this.state.shareLinkShown ?
             (<ShareLink
@@ -105,7 +115,7 @@ class CourseModal extends React.Component {
               <div id="modal-header">
                 <h1>{data.name}</h1>
                 <h2>{courseAndDept}</h2>
-                <div id="modal-close" onClick={() => this.modal.hide()}>
+                <div id="modal-close" onClick={() => this.refs.modal.hide()}>
                   <i className="fa fa-times" />
                 </div>
                 <div id="modal-share">
@@ -122,7 +132,7 @@ class CourseModal extends React.Component {
             </div>);
     return (
       <Modal
-        ref={(c) => { this.modal = c; }}
+        ref="modal"
         className={classNames('course-modal max-modal', { trans: this.props.hasHoveredResult })}
         modalStyle={modalStyle}
         onHide={this.hide}
@@ -132,21 +142,3 @@ class CourseModal extends React.Component {
     );
   }
 }
-
-CourseModal.defaultProps = {
-  id: null,
-  data: {},
-};
-
-CourseModal.propTypes = {
-  id: React.PropTypes.number,
-  data: fullCourseDetails,
-  inRoster: React.PropTypes.bool.isRequired,
-  hasHoveredResult: React.PropTypes.bool.isRequired,
-  addOrRemoveOptionalCourse: React.PropTypes.func.isRequired,
-  addOrRemoveCourse: React.PropTypes.func.isRequired,
-  hideModal: React.PropTypes.func.isRequired,
-  unHoverSection: React.PropTypes.func.isRequired,
-};
-
-export default CourseModal;

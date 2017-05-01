@@ -77,8 +77,7 @@ class Command(BaseCommand):
 					output=options['output_diff'],
 					diff=options['diff'],
 					load=options['load'],
-					hide_progress_bar=options['hide_progress_bar'],
-					tracker=tracker,
+					tracker=tracker
 				).digest()
 
 			except DigestionError as e:
