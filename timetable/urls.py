@@ -7,7 +7,7 @@ from timetable.utils import FeatureFlowView
 admin.autodiscover()
 
 urlpatterns = patterns('',
-                       # TODO: ???
+                       # TODO: remove unused endpoint or use TemplateView instead
                        url(r'^jhu/countdown/*$', timetable.views.jhu_timer),
 
                        # feature flows
@@ -26,7 +26,7 @@ urlpatterns = patterns('',
                        url(r'^callback/google_calendar/*$',
                            FeatureFlowView.as_view(feature_name='GCAL_CALLBACK')),
 
-                       # TODO: ???
+                       # TODO: move to analytics
                        url(r'^user/log_final_exam/*$', timetable.views.log_final_exam_view),
 
                        # redirects
