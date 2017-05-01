@@ -25,6 +25,7 @@ export const store = createStore(rootReducer,
     applyMiddleware(thunkMiddleware),
 );
 
+// TODO: move to endpoints?
 // get functions used to get backend endpoints
 export const getSchool = () => store.getState().school.school;
 export const getSemester = () => {
@@ -120,7 +121,7 @@ function setup(dispatch) {
     case 'SIGNUP':
       dispatch({ type: ActionTypes.TRIGGER_SIGNUP_MODAL });
       break;
-    case 'USER_ACQ':
+    case 'USER_ACQ': // TODO: unused?
       dispatch({ type: ActionTypes.TRIGGER_ACQUISITION_MODAL });
       break;
     case 'GCAL_CALLBACK':
