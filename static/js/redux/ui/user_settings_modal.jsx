@@ -70,12 +70,12 @@ class UserSettingsModal extends React.Component {
 
   shouldShow(props) {
     if (!this.props.userInfo.FacebookSignedUp) {
-      return !gcalCallback && props.userInfo.isLoggedIn &&
+      return !props.hideOverrided && props.userInfo.isLoggedIn &&
         (props.showOverrided ||
         UserSettingsModal.isIncomplete(props.userInfo.major) ||
         UserSettingsModal.isIncomplete(props.userInfo.class_year));
     }
-    return !gcalCallback && props.userInfo.isLoggedIn &&
+    return !props.hideOverrided && props.userInfo.isLoggedIn &&
       (props.showOverrided || UserSettingsModal.isIncomplete(props.userInfo.social_offerings) ||
         UserSettingsModal.isIncomplete(props.userInfo.social_courses) ||
         UserSettingsModal.isIncomplete(props.userInfo.major) ||
@@ -167,7 +167,7 @@ class UserSettingsModal extends React.Component {
     const googpic = this.props.userInfo.isLoggedIn ?
       this.props.userInfo.img_url.replace('sz=50', 'sz=100') : '';
     const propic = this.props.userInfo.FacebookSignedUp ?
-      `url(https://graph.facebook.com/${JSON.parse(currentUser).fbook_uid}/picture?type=normal)` :
+      `url(https://graph.facebook.com/${this.props.userInfo.fbook_uid}/picture?type=normal)` :
       `url(${googpic})`;
     const fbUpsell = this.props.userInfo.isLoggedIn
       && !this.props.userInfo.FacebookSignedUp ? (

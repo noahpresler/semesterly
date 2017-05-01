@@ -349,15 +349,14 @@ class FeatureFlowView(ValidateSubdomainMixin, TemplateView):
             'allSemesters': all_semesters,
             'uses12HrTime': self.school in AM_PM_SCHOOLS,
             'studentIntegrations': integrations,
-            'final_exams_supported_semesters': map(all_semesters.index,
-                                                   final_exams_available.get(self.school, [])),
+            'examSupportedSemesters': map(all_semesters.index,
+                                          final_exams_available.get(self.school, [])),
 
             'featureFlow': dict(self.get_feature_flow(request, *args, **kwargs),
                                 name=self.feature_name)
         }
 
-        serialized = {key: json.dumps(val) for key, val in init_data.iteritems()}
-        return render(request, 'timetable.html', serialized)
+        return render(request, 'timetable.html', {'init_data': json.dumps(init_data)})
 
 
 def get_current_semesters(school):

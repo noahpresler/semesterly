@@ -37,59 +37,42 @@ export const getSemester = () => {
 // also handles sharing courses and sharing timetables
 function setup(dispatch) {
   // TODO: pass as initData, use as state instead of globals
-  school = JSON.parse(school);
-  currentUser = JSON.parse(currentUser);
-  currentSemester = JSON.parse(currentSemester);
-  allSemesters = JSON.parse(allSemesters);
-  uses12HrTime = JSON.parse(uses12HrTime);
-  studentIntegrations = JSON.parse(studentIntegrations);
-  finalExamsSupportedSemesters = JSON.parse(finalExamsSupportedSemesters); // sidebar (display)
-  featureFlow = JSON.parse(featureFlow);
+  initData = JSON.parse(initData);
 
   // setup initial redux state
+  dispatch({ type: ActionTypes.SET_SCHOOL, school: initData.school });
+  dispatch({ type: ActionTypes.SET_SEMESTER, semester: parseInt(initData.currentSemester, 10) });
+  dispatch({ type: ActionTypes.SET_AVAIL_SEMESTERS, availSemesters: initData.allSemesters });
+  dispatch({ type: ActionTypes.SET_USES12HRTIME, uses12HrTime: initData.uses12HrTime });
   dispatch({
-    type: ActionTypes.SET_SCHOOL,
-    school, // comes from timetable.html
+    type: ActionTypes.SET_INTEGRATIONS,
+    studentIntegrations: initData.studentIntegrations,
   });
-
-  dispatch({
-    type: ActionTypes.SET_SEMESTER,
-    semester: parseInt(currentSemester, 10),
-  });
-
-  dispatch({
-    type: ActionTypes.SET_AVAIL_SEMESTERS,
-    availSemesters: allSemesters,
-  });
-
-  dispatch({
-    type: ActionTypes.SET_USES12HRTIME,
-    uses12HrTime,
-  });
-
-  dispatch(getUserInfo(currentUser));
+  dispatch({ type: ActionTypes.SET_EXAM_SEMESTERS, exams: initData.examSupportedSemesters });
+  dispatch(getUserInfo(initData.currentUser));
 
   // we load currentUser's timetable (or cached timetable) only if
   // they're _not_ trying to load a shared timetable
-  if ($.isEmptyObject(featureFlow) || featureFlow.name !== 'SHARED_TIMETABLE') {
+  if ($.isEmptyObject(initData.featureFlow) || initData.featureFlow.name !== 'SHARED_TIMETABLE') {
     // currentUser is logged in and has saved timetables load one of the currentUser's saved
     // timetables (after initial page load). also fetches classmates
-    if (currentUser.isLoggedIn && currentUser.timetables.length > 0) {
-      dispatch(loadTimetable(currentUser.timetables[0]));
+    if (initData.currentUser.isLoggedIn && initData.currentUser.timetables.length > 0) {
+      dispatch(loadTimetable(initData.currentUser.timetables[0]));
       dispatch({ type: ActionTypes.RECEIVE_TIMETABLE_SAVED, upToDate: true });
       setTimeout(() => {
-        dispatch(fetchMostClassmatesCount(currentUser.timetables[0].courses.map(c => c.id)));
+        dispatch(fetchMostClassmatesCount(
+          initData.currentUser.timetables[0].courses.map(c => c.id)));
       }, 500);
       dispatch({ type: ActionTypes.CACHED_TT_LOADED });
     } else if (browserSupportsLocalStorage()
-            && (localStorage.semester === currentSemester ||
-      ($.isEmptyObject(featureFlow) || featureFlow.name !== 'SHARED COURSE'))) {
+            && (localStorage.semester === initData.currentSemester ||
+      ($.isEmptyObject(initData.featureFlow) || initData.featureFlow.name !== 'SHARED COURSE'))) {
     // currentUser isn't logged in (or has no saved timetables)
     // we only load the browser-cached timetable if the shared course's semester is
     // the same as the browser-cached timetable's semester OR the user is not trying to load a
     // shared course at all. This results in problematic edge cases, such as showing the course
     // modal of an S course in the F semester, being completely avoided.
-      dispatch(loadCachedTimetable(allSemesters));
+      dispatch(loadCachedTimetable(initData.allSemesters));
     }
   }
 
@@ -132,7 +115,7 @@ function setup(dispatch) {
     }
   }
 
-  switch (featureFlow.name) {
+  switch (initData.featureFlow.name) {
     case 'SIGNUP':
       dispatch({ type: ActionTypes.TRIGGER_SIGNUP_MODAL });
       break;
@@ -151,21 +134,22 @@ function setup(dispatch) {
       break;
     case 'SHARE_TIMETABLE':
       dispatch({ type: ActionTypes.CACHED_TT_LOADED });
-      dispatch(lockTimetable(featureFlow.sharedTimetable, true, currentUser.isLoggedIn));
+      dispatch(lockTimetable(initData.featureFlow.sharedTimetable,
+        true, initData.currentUser.isLoggedIn));
       break;
     case 'VIEW_TEXTBOOKS':
       dispatch({ type: ActionTypes.TRIGGER_TEXTBOOK_MODAL });
       break;
     case 'SHARE_COURSE':
-      dispatch(setCourseInfo(featureFlow.sharedCourse));
-      dispatch(fetchCourseClassmates(featureFlow.sharedCourse.id));
+      dispatch(setCourseInfo(initData.featureFlow.sharedCourse));
+      dispatch(fetchCourseClassmates(initData.featureFlow.sharedCourse.id));
       break;
     case 'FIND_FRIENDS':
       dispatch({ type: ActionTypes.TOGGLE_PEER_MODAL });
       break;
     case 'ENABLE_NOTFIS':
       dispatch({ type: ActionTypes.SET_HIGHLIGHT_NOTIFS, highlightNotifs: true });
-      if (!currentUser.isLoggedIn) {
+      if (!initData.currentUser.isLoggedIn) {
         dispatch({ type: ActionTypes.TRIGGER_SIGNUP_MODAL });
       } else {
         dispatch({
@@ -176,7 +160,6 @@ function setup(dispatch) {
       break;
     case 'FINAL_EXAMS':
       dispatch({ type: ActionTypes.SHOW_FINAL_EXAMS_MODAL });
-      dispatch({ type: ActionTypes.SET_EXAM_SEMESTERS, exams: featureFlow.exams });
       break;
     default:
       // unexpected feature name
