@@ -39,6 +39,7 @@ function setup(dispatch) {
   // TODO: pass as initData, use as state instead of globals
   initData = JSON.parse(initData);
 
+  console.log(initData.featureFlow);
   // setup initial redux state
   dispatch({ type: ActionTypes.SET_SCHOOL, school: initData.school });
   dispatch({ type: ActionTypes.SET_SEMESTER, semester: parseInt(initData.currentSemester, 10) });
@@ -53,7 +54,7 @@ function setup(dispatch) {
 
   // we load currentUser's timetable (or cached timetable) only if
   // they're _not_ trying to load a shared timetable
-  if ($.isEmptyObject(initData.featureFlow) || initData.featureFlow.name !== 'SHARED_TIMETABLE') {
+  if ($.isEmptyObject(initData.featureFlow) || initData.featureFlow.name !== 'SHARE_TIMETABLE') {
     // currentUser is logged in and has saved timetables load one of the currentUser's saved
     // timetables (after initial page load). also fetches classmates
     if (initData.currentUser.isLoggedIn && initData.currentUser.timetables.length > 0) {
@@ -66,7 +67,7 @@ function setup(dispatch) {
       dispatch({ type: ActionTypes.CACHED_TT_LOADED });
     } else if (browserSupportsLocalStorage()
             && (localStorage.semester === initData.currentSemester ||
-      ($.isEmptyObject(initData.featureFlow) || initData.featureFlow.name !== 'SHARED COURSE'))) {
+      ($.isEmptyObject(initData.featureFlow) || initData.featureFlow.name !== 'SHARE_COURSE'))) {
     // currentUser isn't logged in (or has no saved timetables)
     // we only load the browser-cached timetable if the shared course's semester is
     // the same as the browser-cached timetable's semester OR the user is not trying to load a
@@ -83,33 +84,33 @@ function setup(dispatch) {
       setFriendsCookie(time.getTime());
       dispatch({ type: ActionTypes.ALERT_FACEBOOK_FRIENDS });
     } else if (timeLapsedGreaterThan(localStorage.getItem('friendsCookie'), 3) === true) {
-            // if visit is more than 3 days of last friend alert
+      // if visit is more than 3 days of last friend alert
       const time = new Date();
       setFriendsCookie(time.getTime());
       dispatch({ type: ActionTypes.ALERT_FACEBOOK_FRIENDS });
     }
   }
 
-      // check if registered for chrome notifications
+  // check if registered for chrome notifications
   dispatch(isRegistered());
-    // check if first visit
+  // check if first visit
   if (browserSupportsLocalStorage() && 'serviceWorker' in navigator) {
     if (localStorage.getItem('firstVisit') === null) {
       const time = new Date();
       setFirstVisit(time.getTime());
     } else if (localStorage.getItem('declinedNotifications') === null) { // if second visit
       if (timeLapsedGreaterThan(localStorage.getItem('firstVisit'), 1) === true) {
-                // if second visit is one day after first visit
-                // deploy up-sell pop for chrome notifications
+        // if second visit is one day after first visit
+        // deploy up-sell pop for chrome notifications
         dispatch({ type: ActionTypes.ALERT_ENABLE_NOTIFICATIONS });
       }
     } else { // if after second visit
       if (localStorage.getItem('declinedNotifications') === true
                 || localStorage.getItem('declinedNotifications') === false) {
-                // do nothing : either accpeted or declined notigications
+        // do nothing : either accpeted or declined notigications
       }
       if (timeLapsedGreaterThan(localStorage.getItem('declinedNotifications'), 3) === true) {
-                // deploy up-sell pop for chrome notifications
+        // deploy up-sell pop for chrome notifications
         dispatch({ type: ActionTypes.ALERT_ENABLE_NOTIFICATIONS });
       }
     }
