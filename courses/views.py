@@ -225,7 +225,7 @@ class SchoolList(APIView):
 
 
 class CourseModal(FeatureFlowView):
-    feature_name = "COURSE_MODAL"
+    feature_name = "SHARE_COURSE"
 
     def get_feature_flow(self, request, code, sem_name, year):
         semester, _ = Semester.objects.get_or_create(name=sem_name, year=year)
@@ -239,4 +239,4 @@ class CourseModal(FeatureFlowView):
             shared_course=course,
         ).save()
 
-        return course_json
+        return {'sharedCourse': course_json}
