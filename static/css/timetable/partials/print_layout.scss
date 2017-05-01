@@ -41,7 +41,7 @@
     	margin-top: 20px;
     }
     #semesterly-name-print {
-        font-family: Palanquin,Arial,sans-serif;
+        font-family: $font-primary;
         color: #34495e;
         display: inline-block;
         -webkit-print-color-adjust: exact;
@@ -96,14 +96,14 @@
         margin-top: 25px;
     }*/
     #print-name {
-        font-family: Palanquin,Arial,sans-serif;
+        font-family: $font-primary;
         font-weight: 500;
         font-size: 45px;
         color: #5C5C5C !important;
     }
 
     #print-major {
-        font-family: Roboto,Arial,sans-serif;
+        font-family: $font-body;
         color: #777 !important;
     }
     #name-logo {
