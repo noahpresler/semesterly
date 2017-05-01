@@ -28,6 +28,8 @@ class UrlsTest(UrlTestCase):
         # timetable sharing
         self.assertUrlResolvesToView('/timetables/links/', 'timetable.views.TimetableLinkView')
         self.assertUrlResolvesToView('/timetables/links/SecAV/', 'timetable.views.TimetableLinkView')
+        # old timetable sharing format
+        self.assertUrlResolvesToView('/share/dIcMED', 'timetable.views.TimetableLinkView')
 
 
 class TimetableViewTest(APITestCase):
