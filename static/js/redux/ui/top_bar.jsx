@@ -48,7 +48,7 @@ class TopBar extends React.Component {
         <img
           alt="Profile"
           className="usr-pic print"
-          src={`https://graph.facebook.com/${JSON.parse(currentUser).fbook_uid}/picture?type=normal`}
+          src={`https://graph.facebook.com/${this.props.userInfo.fbook_uid}/picture?type=normal`}
         />
         <div id="print-name-major" className="print">
           <span
