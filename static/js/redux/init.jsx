@@ -37,10 +37,8 @@ export const getSemester = () => {
 // setup the state. loads the currentUser's timetables if logged in; cached timetable if not.
 // also handles sharing courses and sharing timetables
 function setup(dispatch) {
-  // TODO: pass as initData, use as state instead of globals
   initData = JSON.parse(initData);
 
-  console.log(initData.featureFlow);
   // setup initial redux state
   dispatch({ type: ActionTypes.SET_SCHOOL, school: initData.school });
   dispatch({ type: ActionTypes.SET_SEMESTER, semester: parseInt(initData.currentSemester, 10) });
