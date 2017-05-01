@@ -36,7 +36,6 @@ DAY_MAP = {
 
 hashids = Hashids(salt="x98as7dhg&h*askdj^has!kj?xz<!9")
 
-
 def get_friend_count_from_course_id(school, student, course_id, semester):
     return PersonalTimetable.objects.filter(student__in=student.friends.all(),
                                             courses__id__exact=course_id) \
