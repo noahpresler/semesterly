@@ -11,7 +11,9 @@ urlpatterns = patterns('',
                        url(r'^jhu/countdown/*$', timetable.views.jhu_timer),
 
                        # feature flows
-                       url(r'^signup/*',
+                       url(r'^signin/*$',
+                           FeatureFlowView.as_view(feature_name='USER_ACQ')),
+                       url(r'^signup/*$',
                            FeatureFlowView.as_view(feature_name='SIGNUP')),
                        url(r'^textbooks/*$',
                            FeatureFlowView.as_view(feature_name='VIEW_TEXTBOOKS')),
