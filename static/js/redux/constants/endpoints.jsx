@@ -23,4 +23,4 @@ export const getRequestShareTimetableLinkEndpoint = () => '/timetables/links/';
 export const getSetRegistrationTokenEndpoint = () => '/registration-token/';
 export const deleteRegistrationTokenEndpoint = endpoint => `/registration-token/${endpoint}/`;
 export const getIntegrationEndpoint = (integrationId, courseId) => `/integrations/${integrationId}/course/${courseId}/`;
-export const getFinalExamSchedulerEndpoint = () => '/final-exams/';
+export const getFinalExamSchedulerEndpoint = () => '/exams/';
