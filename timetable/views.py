@@ -104,14 +104,6 @@ def view_timetable(request, code=None, sem_name=None, year=None, shared_timetabl
   context_instance=RequestContext(request))
 
 
-@validate_subdomain
-def launch_user_acq_modal(request):
-  try:
-    return view_timetable(request, user_acq=True)
-  except Exception as e:
-    raise Http404
-
-
 def jhu_timer(request):
   return render(request, "jhu_timer.html")
 
