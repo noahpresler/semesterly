@@ -1,10 +1,7 @@
 import json
 
-from braces.views import CsrfExemptMixin
 from django.http import Http404, HttpResponse
-from rest_framework.views import APIView
-from rest_framework.response import Response
-from rest_framework import status
+from django.views.decorators.csrf import csrf_exempt
 
 from timetable.jhu_final_exam_scheduler import JHUFinalExamScheduler
 from timetable.utils import validate_subdomain
@@ -19,8 +16,7 @@ def view_final_exams(request):
         raise Http404
 
 
-class ExamView(CsrfExemptMixin, APIView):
-
-    def post(self, request):
-        final_exam_schedule = JHUFinalExamScheduler().make_schedule(request.data)
-        return Response(final_exam_schedule, status=status.HTTP_200_OK)
+@csrf_exempt
+def final_exam_scheduler(request):
+    final_exam_schedule = JHUFinalExamScheduler().make_schedule(json.loads(request.body))
+    return HttpResponse(json.dumps(final_exam_schedule), content_type="application/json")

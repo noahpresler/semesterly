@@ -1,5 +1,5 @@
 import fetch from 'isomorphic-fetch';
-import { getCourseSearchEndpoint } from '../constants/endpoints';
+import { getAdvancedSearchEndpoint, getCourseSearchEndpoint } from '../constants/endpoints';
 import { store } from '../init';
 import { getUserSavedTimetables, saveTimetable } from './user_actions';
 import { nullifyTimetable } from './timetable_actions';
@@ -10,7 +10,7 @@ export const requestCourses = () => ({ type: ActionTypes.REQUEST_COURSES });
 
 export const receiveCourses = json => ({
   type: ActionTypes.RECEIVE_COURSES,
-  courses: json,
+  courses: json.results,
 });
 
 export const setSemester = semester => (dispatch) => {
@@ -62,7 +62,7 @@ export const maybeSetSemester = semester => (dispatch) => {
 
 export const fetchSearchResults = query => (dispatch) => {
   if (query.length <= 1) {
-    dispatch(receiveCourses([]));
+    dispatch(receiveCourses({ results: [] }));
     return;
   }
 
@@ -97,14 +97,11 @@ export const fetchAdvancedSearchResults = (query, filters) => (dispatch) => {
   });
   // send a request (via fetch) to the appropriate endpoint to get courses
   const state = store.getState();
-  fetch(getCourseSearchEndpoint(query), {
-    headers: {
-      Accept: 'application/json',
-      'Content-Type': 'application/json',
-    },
+  fetch(getAdvancedSearchEndpoint(), {
     credentials: 'include',
     method: 'POST',
     body: JSON.stringify({
+      query,
       filters,
       semester: allSemesters[state.semesterIndex],
       page: state.explorationModal.page,

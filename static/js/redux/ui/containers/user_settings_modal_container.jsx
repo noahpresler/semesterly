@@ -1,5 +1,5 @@
 import { connect } from 'react-redux';
-import UserSettingsModal from '../user_settings_modal';
+import { UserSettingsModal } from '../user_settings_modal';
 import { saveSettings, setARegistrationToken, unRegisterAToken } from '../../actions/user_actions';
 import { changeUserInfo, overrideSettingsShow } from '../../actions/modal_actions';
 

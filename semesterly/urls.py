@@ -2,8 +2,7 @@ from django.conf.urls import patterns, include, url
 from django.http import HttpResponse
 from django.conf import settings
 from django.contrib import admin
-from rest_framework_swagger.views import get_swagger_view
-from rest_framework.schemas import get_schema_view
+
 
 admin.autodiscover()
 
@@ -36,13 +35,10 @@ urlpatterns = patterns('',
                        # for testing 404, so i don't have to turn off debug
                        url(r'^404testing/', 'timetable.views.custom_404'),
                        url(r'^500testing/', 'timetable.views.custom_500'),
-
-                       # home
-                       url(r'^$', 'timetable.views.view_timetable'),
-
-                       # profiling
-                       url(r'^silk/', include('silk.urls', namespace='silk'))
                        )
+
+# profiling
+urlpatterns += [url(r'^silk/', include('silk.urls', namespace='silk'))]
 
 if getattr(settings, 'STAGING', False):
     urlpatterns += patterns('', url(r'^robots.txt$',
@@ -50,10 +46,3 @@ if getattr(settings, 'STAGING', False):
 else:
     urlpatterns += patterns('', url(r'^robots.txt$',
                                     lambda r: HttpResponse("User-agent: *\nDisallow:", content_type="text/plain")))
-
-# api views
-if getattr(settings, 'DEBUG', True):
-    urlpatterns += [
-        url(r'^swagger/$', get_swagger_view(title='semesterly')),
-        url(r'^schema/$', get_schema_view(title='semesterly')),
-    ]
