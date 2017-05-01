@@ -314,8 +314,8 @@ class TimetableGenerator:
 
 class FeatureFlowView(ValidateSubdomainMixin, TemplateView):
     """ 
-    Template that by default only renders the homepage, but feature_name or get_feature_flow() can 
-    be overridden to add a feature flow to the home page.
+    Template that handles GET requests by rendering the homepage. Feature_name or get_feature_flow() 
+    can be overridden to launch a feature or action on homepage load.
     """
     feature_name = None
 
@@ -330,9 +330,17 @@ class FeatureFlowView(ValidateSubdomainMixin, TemplateView):
         self.school = request.subdomain
         self.student = get_student(request)
 
-        all_semesters = get_current_semesters(self.school)  # corresponds to allSemesters on frontend
-        curr_sem_index = 0  # corresponds to state.semesterIndex on frontend
-        sem = Semester.objects.get(**all_semesters[curr_sem_index])
+        feature_flow = self.get_feature_flow(request, *args, **kwargs)
+
+        # take semester provided by feature flow if available, otherwise the first available sem
+        all_semesters = get_current_semesters(self.school)
+        if 'semester' in feature_flow:
+            sem = feature_flow.pop('semester')
+            # TODO: throw error if semester not in dropdown?
+            curr_sem_index = all_semesters.index({'name': sem.name, 'year': sem.year})
+        else:
+            curr_sem_index = 0
+            sem = Semester.objects.get(**all_semesters[curr_sem_index])
 
         integrations = []
         if self.student and self.student.user.is_authenticated():
@@ -352,8 +360,7 @@ class FeatureFlowView(ValidateSubdomainMixin, TemplateView):
             'examSupportedSemesters': map(all_semesters.index,
                                           final_exams_available.get(self.school, [])),
 
-            'featureFlow': dict(self.get_feature_flow(request, *args, **kwargs),
-                                name=self.feature_name)
+            'featureFlow': dict(feature_flow, name=self.feature_name)
         }
 
         return render(request, 'timetable.html', {'init_data': json.dumps(init_data)})
