@@ -1,14 +1,9 @@
-import json
-
 from braces.views import CsrfExemptMixin
-from django.http import Http404, HttpResponse
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
 
 from timetable.jhu_final_exam_scheduler import JHUFinalExamScheduler
-from timetable.utils import validate_subdomain
-from timetable.views import view_timetable
 
 
 class ExamView(CsrfExemptMixin, APIView):
