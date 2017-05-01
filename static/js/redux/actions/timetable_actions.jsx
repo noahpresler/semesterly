@@ -1,4 +1,6 @@
 import fetch from 'isomorphic-fetch';
+import Cookie from 'js-cookie';
+
 import { getTimetablesEndpoint } from '../constants/endpoints';
 import {
     browserSupportsLocalStorage,
@@ -32,6 +34,11 @@ export const fetchTimetables = (requestBody, removing, newActive = 0) => (dispat
   // send a request (via fetch) to the appropriate endpoint with
   // relevant data as contained in @state (including courses, preferences, etc)
   fetch(getTimetablesEndpoint(), {
+    headers: {
+      'X-CSRFToken': Cookie.get('csrftoken'),
+      Accept: 'application/json',
+      'Content-Type': 'application/json',
+    },
     method: 'POST',
     body: JSON.stringify(requestBody),
     credentials: 'include',
