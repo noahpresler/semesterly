@@ -144,7 +144,7 @@ INSTALLED_APPS = (
     'silk',
     'rest_framework',
     'rest_framework_swagger',
-    'webpack_loader'
+    'webpack_loader',
     'djcelery',
 )
 
