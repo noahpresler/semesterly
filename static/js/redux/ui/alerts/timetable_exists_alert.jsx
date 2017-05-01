@@ -7,7 +7,6 @@ class TimetableExistsAlert extends React.Component {
   }
 
   handleClick() {
-    this.props.turnConflictsOn();
     this.props.dismissSelf();
   }
 
@@ -21,7 +20,6 @@ class TimetableExistsAlert extends React.Component {
 
 TimetableExistsAlert.propTypes = {
   dismissSelf: React.PropTypes.func.isRequired,
-  turnConflictsOn: React.PropTypes.func.isRequired,
 };
 
 export default TimetableExistsAlert;
