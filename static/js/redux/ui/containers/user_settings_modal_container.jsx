@@ -7,6 +7,7 @@ const mapStateToProps = state => ({
   userInfo: state.userInfo.data,
   showOverrided: state.userInfo.overrideShow,
   tokenRegistered: state.notificationToken.hasToken,
+  highlightNotifs: state.ui.highlightNotifs,
 });
 
 const UserSettingsModalContainer = connect(
