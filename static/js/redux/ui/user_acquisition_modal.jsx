@@ -1,17 +1,16 @@
 import React from 'react';
 import Modal from 'boron/WaveModal';
-import * as PropTypes from '../constants/propTypes';
 
-class UserAcquisitionModal extends React.Component {
+export class UserAcquisitionModal extends React.Component {
   componentDidMount() {
     if (this.props.isVisible) {
-      this.modal.show();
+      this.refs.modal.show();
     }
   }
 
-  componentDidUpdate() {
+  componentDidUpdate(nextProps) {
     if (this.props.isVisible) {
-      this.modal.show();
+      this.refs.modal.show();
     }
   }
 
@@ -28,7 +27,7 @@ class UserAcquisitionModal extends React.Component {
 
     return (
       <Modal
-        ref={(c) => { this.modal = c; }}
+        ref="modal"
         className="user-acquisition-modal abnb-modal max-modal"
         modalStyle={modalStyle}
         onHide={() => {
@@ -45,8 +44,7 @@ class UserAcquisitionModal extends React.Component {
           <button
             className="btn abnb-btn fb-btn" onClick={() => {
               const link = document.createElement('a');
-              link.href = `/login/facebook/?student_token=${this.props.userInfo.LoginToken}` +
-                `&login_hash=${this.props.userInfo.LoginHash}`;
+              link.href = `/login/facebook/?student_token=${this.props.userInfo.LoginToken}&login_hash=${this.props.userInfo.LoginHash}`;
               document.body.appendChild(link);
               link.click();
             }}
@@ -75,7 +73,6 @@ class UserAcquisitionModal extends React.Component {
           >
             <span className="img-icon">
               <img
-                alt="Google"
                 className="google-logo"
                 src="https://a0.muscache.com/airbnb/static/signinup/google_icon_2x-745c2280e5004d4c90e3ca4e60e3f677.png"
               />
@@ -99,11 +96,3 @@ class UserAcquisitionModal extends React.Component {
     );
   }
 }
-
-UserAcquisitionModal.propTypes = {
-  isVisible: React.PropTypes.bool.isRequired,
-  toggleUserAcquisitionModal: React.PropTypes.func.isRequired,
-  userInfo: PropTypes.userInfo.isRequired,
-};
-
-export default UserAcquisitionModal;

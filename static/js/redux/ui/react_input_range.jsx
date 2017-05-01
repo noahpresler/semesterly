@@ -1,4 +1,3 @@
-/* eslint-disable */
 import React from 'react';
 
 !(function (e) {
@@ -327,61 +326,61 @@ import React from 'react';
           }, {
             key: 'handleMouseUp',
             value(e) {
-              const t = p(this);
-              this.handleInteractionEnd(e), t.removeEventListener('mouseup', this.handleMouseUp);
-            },
+                const t = p(this);
+                this.handleInteractionEnd(e), t.removeEventListener('mouseup', this.handleMouseUp);
+              },
           }, {
-            key: 'handleTouchStart',
-            value(e) {
-              const t = p(this);
-              this.handleInteractionStart(e), t.addEventListener('touchend', this.handleTouchEnd);
-            },
-          }, {
-            key: 'handleTouchEnd',
-            value(e) {
-              const t = p(this);
-              this.handleInteractionEnd(e), t.removeEventListener('touchend', this.handleTouchEnd);
-            },
-          }, {
-            key: 'render',
-            value() {
-              let e = this.props.classNames,
-                t = f(this),
-                n = j.default.valuesFromProps(this),
-                a = j.default.percentagesFromValues(this, n);
-              return React.createElement('div', {
-                'aria-disabled': this.props.disabled,
-                ref: 'inputRange',
-                className: t,
-                onKeyDown: this.handleKeyDown,
-                onKeyUp: this.handleKeyUp,
-                onMouseDown: this.handleMouseDown,
-                onTouchStart: this.handleTouchStart,
-              }, React.createElement(x.default, {
-                className: e.labelMin,
-                containerClassName: e.labelContainer,
-              }, this.props.minValue), React.createElement(P.default, {
-                classNames: e,
-                ref: 'track',
-                percentages: a,
-                onTrackMouseDown: this.handleTrackMouseDown,
-              }, v(this)), React.createElement(x.default, {
-                className: e.labelMax,
-                containerClassName: e.labelContainer,
-              }, this.props.maxValue), m(this));
-            },
-          }, {
-            key: 'trackClientRect',
-            get() {
-              const e = this.refs.track;
-              return e ? e.clientRect : { height: 0, left: 0, top: 0, width: 0 };
-            },
-          }, {
-            key: 'isMultiValue',
-            get() {
-              return (0, _.isObject)(this.props.value) || (0, _.isObject)(this.props.defaultValue);
-            },
-          }]), t;
+              key: 'handleTouchStart',
+              value(e) {
+                  const t = p(this);
+                  this.handleInteractionStart(e), t.addEventListener('touchend', this.handleTouchEnd);
+                },
+            }, {
+                key: 'handleTouchEnd',
+                value(e) {
+                    const t = p(this);
+                    this.handleInteractionEnd(e), t.removeEventListener('touchend', this.handleTouchEnd);
+                  },
+              }, {
+                  key: 'render',
+                  value() {
+                      let e = this.props.classNames,
+                          t = f(this),
+                          n = j.default.valuesFromProps(this),
+                          a = j.default.percentagesFromValues(this, n);
+                      return React.createElement('div', {
+                          'aria-disabled': this.props.disabled,
+                          ref: 'inputRange',
+                          className: t,
+                          onKeyDown: this.handleKeyDown,
+                          onKeyUp: this.handleKeyUp,
+                          onMouseDown: this.handleMouseDown,
+                          onTouchStart: this.handleTouchStart,
+                        }, React.createElement(x.default, {
+                          className: e.labelMin,
+                          containerClassName: e.labelContainer,
+                        }, this.props.minValue), React.createElement(P.default, {
+                          classNames: e,
+                          ref: 'track',
+                          percentages: a,
+                          onTrackMouseDown: this.handleTrackMouseDown,
+                        }, v(this)), React.createElement(x.default, {
+                          className: e.labelMax,
+                          containerClassName: e.labelContainer,
+                        }, this.props.maxValue), m(this));
+                    },
+                }, {
+                    key: 'trackClientRect',
+                    get() {
+                        const e = this.refs.track;
+                        return e ? e.clientRect : { height: 0, left: 0, top: 0, width: 0 };
+                      },
+                  }, {
+                      key: 'isMultiValue',
+                      get() {
+                        return (0, _.isObject)(this.props.value) || (0, _.isObject)(this.props.defaultValue);
+                      },
+                    }]), t;
         }(React.Component));
       n.default = S, S.propTypes = {
         ariaLabelledby: React.PropTypes.string,
@@ -973,4 +972,3 @@ import React from 'react';
     n.default = o.default, t.exports = n.default;
   }, { './InputRange': 1 }],
 }, {}, [9]))(9)));
-/* eslint-enable */
