@@ -22,6 +22,7 @@ const mapStateToProps = (state) => {
   return {
     semester: currSem(state.semester),
     semesterIndex: state.semester.current,
+    examSupportedSemesters: state.semester.exams,
     // don't want to consider courses that are shown on timetable only
     // because of a 'HOVER_COURSE' action (i.e. fake courses)
     liveTimetableCourses: activeTimetable.courses.filter(c => !c.fake),

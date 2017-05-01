@@ -6,15 +6,18 @@ import thunkMiddleware from 'redux-thunk';
 import { Provider } from 'react-redux';
 import rootReducer from './reducers/root_reducer';
 import SemesterlyContainer from './ui/containers/semesterly_container';
-import { fetchMostClassmatesCount } from './actions/user_actions';
-import { loadCachedTimetable, loadTimetable } from './actions/timetable_actions';
+import { fetchMostClassmatesCount, getUserInfo, isRegistered } from './actions/user_actions';
+import { loadCachedTimetable, loadTimetable, lockTimetable } from './actions/timetable_actions';
 import { fetchSchoolInfo } from './actions/school_actions';
 import { currSem } from './reducers/semester_reducer';
+import { fetchCourseClassmates, setCourseInfo } from './actions/modal_actions';
 import {
     browserSupportsLocalStorage,
+    setFirstVisit,
     setFriendsCookie,
     timeLapsedGreaterThan,
 } from './util';
+import { addTTtoGCal } from './actions/calendar_actions';
 import * as ActionTypes from './constants/actionTypes';
 
 export const store = createStore(rootReducer,
@@ -40,11 +43,8 @@ function setup(dispatch) {
   allSemesters = JSON.parse(allSemesters);
   uses12HrTime = JSON.parse(uses12HrTime);
   studentIntegrations = JSON.parse(studentIntegrations);
+  finalExamsSupportedSemesters = JSON.parse(finalExamsSupportedSemesters); // sidebar (display)
   featureFlow = JSON.parse(featureFlow);
-
-  // TODO: use as state in feature flow reducer
-  enableNotifs = enableNotifs === 'True';
-  gcalCallback = gcalCallback === 'True';
 
   // setup initial redux state
   dispatch({
@@ -66,6 +66,8 @@ function setup(dispatch) {
     type: ActionTypes.SET_USES12HRTIME,
     uses12HrTime,
   });
+
+  dispatch(getUserInfo(currentUser));
 
   // we load currentUser's timetable (or cached timetable) only if
   // they're _not_ trying to load a shared timetable
@@ -105,97 +107,81 @@ function setup(dispatch) {
     }
   }
 
-  sharedTimetable = JSON.parse(sharedTimetable);
-  sharedCourse = JSON.parse(sharedCourse);
-  finalExamsSupportedSemesters = JSON.parse(finalExamsSupportedSemesters); // sidebar (display)
-  findFriends = findFriends === 'True';
-  enableNotifs = enableNotifs === 'True'; // user settings modal (classname)
-  studentIntegrations = JSON.parse(studentIntegrations); // search bar (display)
-  signup = signup === 'True';
-  userAcq = userAcq === 'True';
-  gcalCallback = gcalCallback === 'True'; // used for feature but also user settings modal
-  exportCalendar = exportCalendar === 'True';
-  viewTextbooks = viewTextbooks === 'True';
-  finalExams = finalExams === 'True';
-  //
-  // const user = JSON.parse(currentUser); // currentUser comes from timetable.html
-  // dispatch(getUserInfo(user));
-  //
-  // if (signup) {
-  //   dispatch({ type: ActionTypes.TRIGGER_SIGNUP_MODAL });
-  // }
-  // if (userAcq) {
-  //   dispatch({ type: ActionTypes.TRIGGER_ACQUISITION_MODAL });
-  // }
-  // if (gcalCallback) {
-  //   dispatch({ type: ActionTypes.TRIGGER_SAVE_CALENDAR_MODAL });
-  //   dispatch(addTTtoGCal());
-  // }
-  // if (exportCalendar) {
-  //   dispatch({ type: ActionTypes.TRIGGER_SAVE_CALENDAR_MODAL });
-  // }
-  //   /* first setup the user's state */
-  //
-  // if (!sharedTimetable) {
-  //
-  // } else {
-  //   dispatch({ type: ActionTypes.CACHED_TT_LOADED });
-  // }
-  //
-  // if (gcalCallback) {
-  //   dispatch({ type: ActionTypes.TRIGGER_SAVE_CALENDAR_MODAL });
-  //   dispatch(addTTtoGCal());
-  // }
-  // if (viewTextbooks) {
-  //   dispatch({ type: ActionTypes.TRIGGER_TEXTBOOK_MODAL });
-  // }
-  //   // check if registered for chrome notifications
-  // dispatch(isRegistered());
-  //   // check if first visit
-  // if (browserSupportsLocalStorage() && 'serviceWorker' in navigator) {
-  //   if (localStorage.getItem('firstVisit') === null) {
-  //     const time = new Date();
-  //     setFirstVisit(time.getTime());
-  //   } else if (localStorage.getItem('declinedNotifications') === null) { // if second visit
-  //     if (timeLapsedGreaterThan(localStorage.getItem('firstVisit'), 1) === true) {
-  //               // if second visit is one day after first visit
-  //               // deploy up-sell pop for chrome notifications
-  //       dispatch({ type: ActionTypes.ALERT_ENABLE_NOTIFICATIONS });
-  //     }
-  //   } else { // if after second visit
-  //     if (localStorage.getItem('declinedNotifications') === true
-  //               || localStorage.getItem('declinedNotifications') === false) {
-  //               // do nothing : either accpeted or declined notigications
-  //     }
-  //     if (timeLapsedGreaterThan(localStorage.getItem('declinedNotifications'), 3) === true) {
-  //               // deploy up-sell pop for chrome notifications
-  //       dispatch({ type: ActionTypes.ALERT_ENABLE_NOTIFICATIONS });
-  //     }
-  //   }
-  // }
-  //
-  //   /* now setup sharing state */
-  // if (sharedTimetable) {
-  //   dispatch(lockTimetable(sharedTimetable, true, user.isLoggedIn));
-  // } else if (sharedCourse) {
-  //   dispatch(setCourseInfo(sharedCourse));
-  //   dispatch(fetchCourseClassmates(sharedCourse.id));
-  // } else if (findFriends) {
-  //   dispatch({ type: ActionTypes.TOGGLE_PEER_MODAL });
-  // }
-  // if (enableNotifs) {
-  //   if (!user.isLoggedIn) {
-  //     dispatch({ type: ActionTypes.TRIGGER_SIGNUP_MODAL });
-  //   } else {
-  //     dispatch({
-  //       type: ActionTypes.OVERRIDE_SETTINGS_SHOW,
-  //       data: true,
-  //     });
-  //   }
-  // }
-  // if (finalExams) {
-  //   dispatch({ type: ActionTypes.SHOW_FINAL_EXAMS_MODAL });
-  // }
+      // check if registered for chrome notifications
+  dispatch(isRegistered());
+    // check if first visit
+  if (browserSupportsLocalStorage() && 'serviceWorker' in navigator) {
+    if (localStorage.getItem('firstVisit') === null) {
+      const time = new Date();
+      setFirstVisit(time.getTime());
+    } else if (localStorage.getItem('declinedNotifications') === null) { // if second visit
+      if (timeLapsedGreaterThan(localStorage.getItem('firstVisit'), 1) === true) {
+                // if second visit is one day after first visit
+                // deploy up-sell pop for chrome notifications
+        dispatch({ type: ActionTypes.ALERT_ENABLE_NOTIFICATIONS });
+      }
+    } else { // if after second visit
+      if (localStorage.getItem('declinedNotifications') === true
+                || localStorage.getItem('declinedNotifications') === false) {
+                // do nothing : either accpeted or declined notigications
+      }
+      if (timeLapsedGreaterThan(localStorage.getItem('declinedNotifications'), 3) === true) {
+                // deploy up-sell pop for chrome notifications
+        dispatch({ type: ActionTypes.ALERT_ENABLE_NOTIFICATIONS });
+      }
+    }
+  }
+
+  switch (featureFlow.name) {
+    case 'SIGNUP':
+      dispatch({ type: ActionTypes.TRIGGER_SIGNUP_MODAL });
+      break;
+    case 'USER_ACQ':
+      dispatch({ type: ActionTypes.TRIGGER_ACQUISITION_MODAL });
+      break;
+    case 'GCAL_CALLBACK':
+      // hide settings info modal until user is finished adding to gcal
+      dispatch({ type: ActionTypes.OVERRIDE_SETTINGS_HIDE, data: true });
+      dispatch({ type: ActionTypes.TRIGGER_SAVE_CALENDAR_MODAL });
+      dispatch({ type: ActionTypes.OVERRIDE_SETTINGS_HIDE, data: false });
+      dispatch(addTTtoGCal());
+      break;
+    case 'EXPORT_CALENDAR':
+      dispatch({ type: ActionTypes.TRIGGER_SAVE_CALENDAR_MODAL });
+      break;
+    case 'SHARE_TIMETABLE':
+      dispatch({ type: ActionTypes.CACHED_TT_LOADED });
+      dispatch(lockTimetable(featureFlow.sharedTimetable, true, currentUser.isLoggedIn));
+      break;
+    case 'VIEW_TEXTBOOKS':
+      dispatch({ type: ActionTypes.TRIGGER_TEXTBOOK_MODAL });
+      break;
+    case 'SHARE_COURSE':
+      dispatch(setCourseInfo(featureFlow.sharedCourse));
+      dispatch(fetchCourseClassmates(featureFlow.sharedCourse.id));
+      break;
+    case 'FIND_FRIENDS':
+      dispatch({ type: ActionTypes.TOGGLE_PEER_MODAL });
+      break;
+    case 'ENABLE_NOTFIS':
+      dispatch({ type: ActionTypes.SET_HIGHLIGHT_NOTIFS, highlightNotifs: true });
+      if (!currentUser.isLoggedIn) {
+        dispatch({ type: ActionTypes.TRIGGER_SIGNUP_MODAL });
+      } else {
+        dispatch({
+          type: ActionTypes.OVERRIDE_SETTINGS_SHOW,
+          data: true,
+        });
+      }
+      break;
+    case 'FINAL_EXAMS':
+      dispatch({ type: ActionTypes.SHOW_FINAL_EXAMS_MODAL });
+      dispatch({ type: ActionTypes.SET_EXAM_SEMESTERS, exams: featureFlow.exams });
+      break;
+    default:
+      // unexpected feature name
+      break;
+  }
 }
 
 setup(store.dispatch);

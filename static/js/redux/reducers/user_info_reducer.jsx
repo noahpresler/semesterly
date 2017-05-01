@@ -2,13 +2,16 @@ import * as ActionTypes from '../constants/actionTypes';
 
 const userInfo = (state = {
   data: { isLoggedIn: false },
-  overrideShow: false,
+  overrideHide: false, // hide the user settings modal if true. Overrides overrideShow
+  overrideShow: false, // show the user settings modal if true
   saving: false,
   isFetching: false,
 }, action) => {
   switch (action.type) {
     case ActionTypes.OVERRIDE_SETTINGS_SHOW:
       return Object.assign({}, state, { overrideShow: action.data });
+    case ActionTypes.OVERRIDE_SETTINGS_HIDE:
+      return Object.assign({}, state, { overrideHide: action.data });
     case ActionTypes.REQUEST_SAVE_USER_INFO:
       return Object.assign({}, state, { saving: true });
     case ActionTypes.CHANGE_USER_INFO: {
