@@ -121,7 +121,7 @@ function setup(dispatch) {
     case 'SIGNUP':
       dispatch({ type: ActionTypes.TRIGGER_SIGNUP_MODAL });
       break;
-    case 'USER_ACQ': // TODO: unused?
+    case 'USER_ACQ':
       dispatch({ type: ActionTypes.TRIGGER_ACQUISITION_MODAL });
       break;
     case 'GCAL_CALLBACK':
