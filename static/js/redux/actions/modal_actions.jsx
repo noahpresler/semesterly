@@ -1,4 +1,5 @@
 import fetch from 'isomorphic-fetch';
+import Cookie from 'js-cookie';
 import {
     getClassmatesInCourseEndpoint,
     getCourseInfoEndpoint,
@@ -50,6 +51,11 @@ export const fetchCourseInfo = courseId => (dispatch) => {
 
 export const react = (cid, title) => (dispatch) => {
   fetch(getReactToCourseEndpoint(), {
+    headers: {
+      'X-CSRFToken': Cookie.get('csrftoken'),
+      Accept: 'application/json',
+      'Content-Type': 'application/json',
+    },
     method: 'POST',
     body: JSON.stringify({
       cid,
