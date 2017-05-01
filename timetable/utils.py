@@ -9,7 +9,7 @@ from django.views.generic.base import TemplateView
 
 from timetable.models import Section, Course, Semester
 from timetable.school_mappers import school_to_granularity, school_to_semesters, \
-    VALID_SCHOOLS, AM_PM_SCHOOLS
+    VALID_SCHOOLS, AM_PM_SCHOOLS, final_exams_available
 from timetable.scoring import get_tt_cost, get_num_days, get_avg_day_length, get_num_friends, get_avg_rating
 from student.utils import get_student, get_user_dict
 
@@ -349,6 +349,8 @@ class FeatureFlowView(ValidateSubdomainMixin, TemplateView):
             'allSemesters': all_semesters,
             'uses12HrTime': self.school in AM_PM_SCHOOLS,
             'studentIntegrations': integrations,
+            'final_exams_supported_semesters': map(all_semesters.index,
+                                                   final_exams_available.get(self.school, [])),
 
             'featureFlow': dict(self.get_feature_flow(request, *args, **kwargs),
                                 name=self.feature_name)
