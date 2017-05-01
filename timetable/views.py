@@ -3,6 +3,7 @@ import logging
 from braces.views import CsrfExemptMixin
 from django.template.loader import get_template
 from django.views.decorators.cache import never_cache
+from django.shortcuts import get_object_or_404
 from hashids import Hashids
 from rest_framework import status
 from rest_framework.response import Response
@@ -207,19 +208,17 @@ class TimetableView(CsrfExemptMixin, ValidateSubdomainMixin, APIView):
     return Response(response, status=status.HTTP_200_OK)
 
 
-class TimetableLinkView(ValidateSubdomainMixin, APIView):
+class TimetableLinkView(FeatureFlowView):
+  feature_name = 'SHARE_TIMETABLE'
 
-  def get(self, request, slug):
-    student = get_student(request)
-    try:
-      timetable_id = hashids.decrypt(slug)[0]
-      shared_timetable_obj = SharedTimetable.objects.get(school=request.subdomain, id=timetable_id)
-      shared_timetable = convert_tt_to_dict(shared_timetable_obj, include_last_updated=False)
-      # get default semester info
-      return view_timetable(request, year=shared_timetable_obj.semester.year,
-                            sem_name=shared_timetable_obj.semester.name, shared_timetable=shared_timetable)
-    except Exception as e:
-      raise Http404
+  def get_feature_flow(self, request, slug):
+    timetable_id = hashids.decrypt(slug)[0]
+    shared_timetable_obj = get_object_or_404(SharedTimetable,
+                                             id=timetable_id,
+                                             school=request.subdomain)
+    shared_timetable = convert_tt_to_dict(shared_timetable_obj, include_last_updated=False)
+
+    return {'semester': shared_timetable.semester, 'sharedTimetable': shared_timetable}
 
   def post(self, request):
     school = request.subdomain
