@@ -106,7 +106,7 @@
 	z-index: 100;
 	overflow: hidden;
 	border: 1px solid #E8E8E8;
-    border-top-color: #d9d9d9;
+    border-top-color: $gd9d9d9;
     box-shadow: 0 2px 4px rgba(0,0,0,0.2);
 }
 
@@ -152,7 +152,7 @@
 	height: 60px;
 }
 .search-course.hovered {
-	background-color: $white-screen;
+	background-color: $gf3f3f3;
 }
 .search-course h3 {
 	font-size: 14px;
@@ -367,7 +367,7 @@
 	position: absolute;
 	right: 0;
 	top: 0;
-	background-color: $white-screen;
+	background-color: $gf3f3f3;
 	overflow-y: auto;
 	padding: 5px;
 }
