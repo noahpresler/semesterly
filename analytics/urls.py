@@ -17,6 +17,9 @@ router.register(FacebookAlertsClicksWidget, 'facebook_alerts_clicks_widget')
 router.register(SignupsPerDayWidget, 'signups_per_day_widget')
 router.register(ReactionsWidget, 'reactions_widget')
 router.register(UsersBySchoolWidget, 'users_by_school_widget')
+router.register(UsersByClassYearWidget, 'users_by_class_year_widget')
+router.register(TimetablesBySchoolWidget, 'timetables_by_school_widget')
+router.register(TimetablesBySemesterWidget, 'timetables_by_semester_widget')
 
 admin.autodiscover()
 

@@ -1,8 +1,8 @@
 /* eslint no-underscore-dangle: ["error", { "allow": ["__init__", "__widget__"] }] */
 
-Dashing.widgets.UsersBySchool = function (dashboard) {
+Dashing.widgets.UsersByClassYear = function (dashboard) {
   const self = this;
-  self.__init__ = Dashing.utils.widgetInit(dashboard, 'users-by-school');
+  self.__init__ = Dashing.utils.widgetInit(dashboard, 'users-by-class-year');
   self.row = 2;
   self.col = 2;
   self.scope = {};

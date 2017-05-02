@@ -13,6 +13,7 @@ from timetable.school_mappers import VALID_SCHOOLS
 from datetime import *
 from collections import Counter
 
+
 def number_students_by_school():
     """
     Get the number of students filtered by each school.
@@ -28,6 +29,19 @@ def number_students_by_school():
         num_students[school] = students.count()
         
     return num_students
+
+
+def number_students_by_class_year():
+    """
+    Get the number of students by class year.
+    """
+    valid_class_years = Student.objects.values("class_year").distinct()
+    count_class_years = {}
+    for class_year in valid_class_years:
+        count_class_years[class_year["class_year"]] =                   \
+            Student.objects.filter(class_year=class_year["class_year"]) \
+                           .count()
+    return count_class_years
 
 
 def number_timetables(**parameters):
@@ -72,6 +86,13 @@ def number_timetables_per_hour(Timetable=AnalyticsTimetable, school=None,
             time_end=time_start + time_delta)
         )
         time_start += time_delta
+    return num_timetables
+
+
+def number_timetables_per_semester():
+    num_timetables = {}
+    for semester in Semester.objects.distinct():
+        num_timetables[str(semester)] = number_timetables(semester=semester)
     return num_timetables
 
 
@@ -290,14 +311,55 @@ class UsersBySchoolWidget(GraphWidget):
             'labels' : labels,
             'values' : values
         }
-    
-    def get_context(self):
-        return {
-            'title': self.get_title(),
-            'moreInfo': self.get_more_info(),
-            'value': self.get_value(),
-            'data': self.get_data(),
-            'properties': self.get_properties(),
+
+
+class UsersByClassYearWidget(GraphWidget):
+
+    title = 'Users By Class Year'
+    more_info = ''
+    updated_at = ''
+
+    def get_data(self):
+        num_students_by_class_year = number_students_by_class_year()
+        labels = [ label for label in num_students_by_class_year.keys() ]
+        values = [ value for value in num_students_by_class_year.values() ]
+        return { 
+            'labels' : labels,
+            'values' : values
+        }
+
+
+class TimetablesBySchoolWidget(GraphWidget):
+
+    title = 'Timetables By School'
+    more_info = ''
+    updated_at = ''
+
+    def get_data(self):
+        num_timetables_by_school = {}
+        for school in VALID_SCHOOLS:
+            num_timetables_by_school[school] = number_timetables(school=school)
+        labels = [ label for label in num_timetables_by_school.keys() ]
+        values = [ value for value in num_timetables_by_school.values() ]
+        return { 
+            'labels' : labels,
+            'values' : values
+        }
+
+
+class TimetablesBySemesterWidget(GraphWidget):
+
+    title = 'Timetables By Semester'
+    more_info = ''
+    updated_at = ''
+
+    def get_data(self):
+        num_timetables_by_semester = number_timetables_per_semester()
+        labels = [ label for label in num_timetables_by_semester.keys() ]
+        values = [ value for value in num_timetables_by_semester.values() ]
+        return { 
+            'labels' : labels,
+            'values' : values
         }
 
 

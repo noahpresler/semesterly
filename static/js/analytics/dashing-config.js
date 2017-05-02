@@ -16,6 +16,7 @@ const secondaryColors = [
 ];
 
 Chart.defaults.global.responsive = true;
+Chart.defaults.global.legend.position = 'bottom';
 
 const dashboard = new Dashboard();
 
@@ -146,7 +147,7 @@ dashboard.addWidget('reactionsWidget', 'CustomGraph', {
 });
 
 dashboard.addWidget('usersBySchoolWidget', 'UsersBySchool', {
-  color: 'steelblue',
+  color: 'lightgray',
   getData() {
     const self = this;
     Dashing.utils.get('users_by_school_widget', (data) => {
@@ -172,3 +173,83 @@ dashboard.addWidget('usersBySchoolWidget', 'UsersBySchool', {
   interval: DAY_INTERVAL,
 });
 
+dashboard.addWidget('usersByClassYearWidget', 'UsersByClassYear', {
+  color: 'lightgray',
+  getData() {
+    const self = this;
+    Dashing.utils.get('users_by_class_year_widget', (data) => {
+      $.extend(self.scope, data);
+      $(document).ready(() => {
+        const ctx = document.getElementById('chart-users-by-class-year');
+        const chart = new Chart(ctx, {
+          type: 'pie',                                  // Here, we render a
+          data: {                                       // chart on the element
+            labels: data.data.labels,                   // that has the
+            datasets: [                                 // corresponding ID.
+              {
+                data: data.data.values,                 // The data labels and
+                backgroundColor: primaryColors,         // values are passed in
+                hoverBackgroundColor: secondaryColors,  // through our call to
+              },                                        // the Python widget.
+            ],
+          },
+        });
+      });
+    });
+  },
+  interval: DAY_INTERVAL,
+});
+
+dashboard.addWidget('timetablesBySchoolWidget', 'TimetablesBySchool', {
+  color: 'lightgray',
+  getData() {
+    const self = this;
+    Dashing.utils.get('timetables_by_school_widget', (data) => {
+      $.extend(self.scope, data);
+      $(document).ready(() => {
+        const ctx = document.getElementById('chart-timetables-by-school');
+        const chart = new Chart(ctx, {
+          type: 'pie',                                  // Here, we render a
+          data: {                                       // chart on the element
+            labels: data.data.labels,                   // that has the
+            datasets: [                                 // corresponding ID.
+              {
+                data: data.data.values,                 // The data labels and
+                backgroundColor: primaryColors,         // values are passed in
+                hoverBackgroundColor: secondaryColors,  // through our call to
+              },                                        // the Python widget.
+            ],
+          },
+        });
+      });
+    });
+  },
+  interval: DAY_INTERVAL,
+});
+
+dashboard.addWidget('timetablesBySemesterWidget', 'TimetablesBySemester', {
+  color: 'lightgray',
+  getData() {
+    const self = this;
+    Dashing.utils.get('timetables_by_semester_widget', (data) => {
+      $.extend(self.scope, data);
+      $(document).ready(() => {
+        const ctx = document.getElementById('chart-timetables-by-semester');
+        const chart = new Chart(ctx, {
+          type: 'pie',                                  // Here, we render a
+          data: {                                       // chart on the element
+            labels: data.data.labels,                   // that has the
+            datasets: [                                 // corresponding ID.
+              {
+                data: data.data.values,                 // The data labels and
+                backgroundColor: primaryColors,         // values are passed in
+                hoverBackgroundColor: secondaryColors,  // through our call to
+              },                                        // the Python widget.
+            ],
+          },
+        });
+      });
+    });
+  },
+  interval: DAY_INTERVAL,
+});

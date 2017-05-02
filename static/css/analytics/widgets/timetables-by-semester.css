@@ -1,0 +1,33 @@
+.widget-timetables-by-semester { 
+    background-color: #ff9618;;
+    position: relative;
+}
+
+.widget-timetables-by-semester svg {
+    position: absolute;
+    opacity: 0.4;
+    fill-opacity: 0.4;
+    left: 0px;
+    top: 0px;
+}
+
+.widget-timetables-by-semester h1, h2 {
+    position: relative;
+    z-index: 99;
+}
+
+.widget-timetables-by-semester h1 { 
+    color: rgba(255, 255, 255, 0.7);
+}
+
+.widget-timetables-by-semester .more-info {
+    color: rgba(255, 255, 255, 0.3);
+    font-weight: 600;
+    font-size: 20px;
+    margin-top: 0;
+}
+
+.widget-timetables-by-semester .domain {
+    display: none;
+}
+
