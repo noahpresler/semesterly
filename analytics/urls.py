@@ -9,13 +9,14 @@ from analytics.widgets import *
 
 
 router.register(NumberTimetablesWidget, 'number_timetables_widget')
-router.register(NumberCalendarExportsWidget, 'number_calendar_exports_widget')
-router.register(NumberFinalExamViewsWidget, 'number_final_exam_views_widget')
-router.register(NumberSignupsWidget, 'number_signups_widget')
-router.register(NumberFacebookAlertsViewsWidget, 'number_facebook_alerts_views_widget')
-router.register(NumberFacebookAlertsClicksWidget, 'number_facebook_alerts_clicks_widget')
+router.register(CalendarExportsWidget, 'calendar_exports_widget')
+router.register(FinalExamViewsWidget, 'final_exam_views_widget')
+router.register(TotalSignupsWidget, 'total_signups_widget')
+router.register(FacebookAlertsViewsWidget, 'facebook_alerts_views_widget')
+router.register(FacebookAlertsClicksWidget, 'facebook_alerts_clicks_widget')
 router.register(SignupsPerDayWidget, 'signups_per_day_widget')
 router.register(ReactionsWidget, 'reactions_widget')
+router.register(UsersBySchoolWidget, 'users_by_school_widget')
 
 admin.autodiscover()
 

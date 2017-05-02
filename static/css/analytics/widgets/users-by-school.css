@@ -1,0 +1,33 @@
+.widget-users-by-school { 
+    background-color: #ff9618;;
+    position: relative;
+}
+
+.widget-users-by-school svg {
+    position: absolute;
+    opacity: 0.4;
+    fill-opacity: 0.4;
+    left: 0px;
+    top: 0px;
+}
+
+.widget-users-by-school h1, h2 {
+    position: relative;
+    z-index: 99;
+}
+
+.widget-users-by-school h1 { 
+    color: rgba(255, 255, 255, 0.7);
+}
+
+.widget-users-by-school .more-info {
+    color: rgba(255, 255, 255, 0.3);
+    font-weight: 600;
+    font-size: 20px;
+    margin-top: 0;
+}
+
+.widget-users-by-school .domain {
+    display: none;
+}
+

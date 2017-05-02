@@ -5,6 +5,7 @@
 <!-- Custom Widget CSS Files -->
 <link rel="stylesheet" href="{% static 'css/analytics/widgets/timetables.css' %}">
 <link rel="stylesheet" href="{% static 'css/analytics/widgets/custom-graph.css' %}">
+<link rel="stylesheet" href="{% static 'css/analytics/widgets/users-by-school.css' %}">
 <!--<link rel="stylesheet" href="{% static 'css/analytics/widgets/signups-per-day.css' %}">-->
 {% endblock %}
 
@@ -12,23 +13,21 @@
 <!-- Custom Widget Template Files -->
 <link rel="resource" type="text/html" href="custom_widgets/timetables.html" data-widget="timetables">
 <link rel="resource" type="text/html" href="custom_widgets/custom-graph.html" data-widget="custom-graph">
+<link rel="resource" type="text/html" href="custom_widgets/users-by-school.html" data-widget="users-by-school">
 <!--<link rel="resource" type="text/html" href="custom_widgets/signups-per-day.html" data-widget="signups-per-day"> -->
 {% endblock %}
 
 {% block scripts %}
 <!-- Chart.js -->
-<!--<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.1.3/Chart.min.js"></script>-->
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.1.3/Chart.min.js"></script>
 
 <!-- Custom Widget JS Files -->
 <script type="text/javascript" src="{% static 'js/analytics/widgets/timetables.js' %}"></script>
 <script type="text/javascript" src="{% static 'js/analytics/widgets/custom-graph.js' %}"></script>
+<script type="text/javascript" src="{% static 'js/analytics/widgets/users-by-school.js' %}"></script>
 <!--<script type="text/javascript" src="{% static 'js/analytics/widgets/signupsPerDay.js' %}"></script>-->
 {% endblock %}
 
 {% block config_file %}
 <script type="text/javascript" src="{% static 'js/analytics/dashing-config.js' %}"></script>
 {% endblock %}
-
-<!--<script>
-    var data = 
-</script>-->

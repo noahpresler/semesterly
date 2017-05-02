@@ -13,6 +13,23 @@ from timetable.school_mappers import VALID_SCHOOLS
 from datetime import *
 from collections import Counter
 
+def number_students_by_school():
+    """
+    Get the number of students filtered by each school.
+    """
+    num_students = {}
+    for school in VALID_SCHOOLS:
+        ids = PersonalTimetable.objects              \
+                  .filter(school=school)             \
+                  .values_list("student", flat=True) \
+                  .distinct() 
+
+        students = Student.objects.filter(id__in=ids) | Student.objects.filter(school=school)
+        num_students[school] = students.count()
+        
+    return num_students
+
+
 def number_timetables(**parameters):
     """
     Get the number of timetables filtered by any parameters. 
@@ -56,6 +73,7 @@ def number_timetables_per_hour(Timetable=AnalyticsTimetable, school=None,
         )
         time_start += time_delta
     return num_timetables
+
 
 def number_of_reactions(max_only=False):
     """
@@ -119,9 +137,9 @@ class NumberTimetablesWidget(Widget):
         }
 
 
-class NumberCalendarExportsWidget(ListWidget):
+class CalendarExportsWidget(ListWidget):
 
-    title = 'Number of Calendar Exports'
+    title = 'Calendar Exports'
 
     def get_updated_at(self):
         return u''
@@ -149,9 +167,10 @@ class NumberCalendarExportsWidget(ListWidget):
         return [ { 'label' : l, 'value': v } for l, v in zip(labels, values) ]
 
 
-class NumberFinalExamViewsWidget(NumberWidget):
+class FinalExamViewsWidget(NumberWidget):
 
     title = 'Final Exam Views'
+    more_info = ''
 
     def get_value(self):
         return number_timetables(Timetable=FinalExamModalView)
@@ -161,11 +180,9 @@ class NumberFinalExamViewsWidget(NumberWidget):
             "%d unique" % 
             number_timetables(Timetable=FinalExamModalView, distinct="student")
         )
+        
 
-    def get_more_info(self):
-        return ""
-
-class NumberSignupsWidget(NumberWidget):
+class TotalSignupsWidget(NumberWidget):
 
     title = 'Total Signups'
 
@@ -198,9 +215,10 @@ class NumberSignupsWidget(NumberWidget):
         return detail_string
 
 
-class NumberFacebookAlertsViewsWidget(NumberWidget):
+class FacebookAlertsViewsWidget(NumberWidget):
 
     title = 'Facebook Alert Views'
+    more_info = ''
 
     def get_value(self):
         return number_timetables(Timetable=FacebookAlertView)
@@ -211,13 +229,11 @@ class NumberFacebookAlertsViewsWidget(NumberWidget):
             number_timetables(Timetable=FacebookAlertView, distinct="student")
         )
 
-    def get_more_info(self):
-        return ""
 
-
-class NumberFacebookAlertsClicksWidget(NumberWidget):
+class FacebookAlertsClicksWidget(NumberWidget):
 
     title = 'Facebook Alert Clicks'
+    more_info = ''
 
     def get_value(self):
         return number_timetables(Timetable=FacebookAlertClick)
@@ -228,9 +244,6 @@ class NumberFacebookAlertsClicksWidget(NumberWidget):
             number_timetables(Timetable=FacebookAlertClick, distinct="student")
         )
 
-    def get_more_info(self):
-        return ""
-
 
 class SignupsPerDayWidget(GraphWidget):
 
@@ -238,18 +251,6 @@ class SignupsPerDayWidget(GraphWidget):
     value = ''
     more_info = ''
     updated_at = ''
-
-    def get_title(self):
-        return self.title
-
-    def get_more_info(self):
-        return self.more_info
-
-    def get_updated_at(self):
-        return self.updated_at
-
-    def get_value(self):
-        return ""
     
     def get_data(self):
         x_vals = [ i for i in range(-6, 1) ]  # -6, -5, ..., 0
@@ -260,31 +261,45 @@ class SignupsPerDayWidget(GraphWidget):
         )
         return [ { 'x' : x, 'y': y } for x, y in zip(x_vals, y_vals) ]
 
+
 class ReactionsWidget(GraphWidget):
 
     title = 'Reactions Used'
     value = ''
     more_info = ''
     updated_at = ''
-
-    def get_title(self):
-        return self.title
-
-    def get_more_info(self):
-        return self.more_info
-
-    def get_updated_at(self):
-        return self.updated_at
-
-    def get_value(self):
-        return ""
     
     def get_data(self):
         reactions_data = number_of_reactions()
         x_vals = [ i for i in range(8) ]
-        # x_vals = list(reactions_data.keys())
         y_vals = list(reactions_data.values())
         return [ { 'x' : x, 'y': y } for x, y in zip(x_vals, y_vals) ]
+
+
+class UsersBySchoolWidget(GraphWidget):
+
+    title = 'Users By School'
+    more_info = ''
+    updated_at = ''
+
+    def get_data(self):
+        num_students_by_school = number_students_by_school()
+        labels = [ label for label in num_students_by_school.keys() ]
+        values = [ value for value in num_students_by_school.values() ]
+        return { 
+            'labels' : labels,
+            'values' : values
+        }
+    
+    def get_context(self):
+        return {
+            'title': self.get_title(),
+            'moreInfo': self.get_more_info(),
+            'value': self.get_value(),
+            'data': self.get_data(),
+            'properties': self.get_properties(),
+        }
+
 
 # class SignupsPerDayWidget(Widget):
 
