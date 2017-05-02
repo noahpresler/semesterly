@@ -8,15 +8,15 @@
 	height: 100%;
 }
 .welcome-modal #modal-header {
-	background-color: #eee;
+	background-color: $geee;
 	padding: 25px 25px;
 	position: relative;
-	border-bottom: 1px solid #ddd;
+	border-bottom: 1px solid $gddd;
 	text-align: left;
 }
 
 .welcome-modal .pro-pic {
-	border: 2px solid #ddd;
+	border: 2px solid $gddd;
 	box-shadow: 0px 2px 2px rgba(188, 188, 188, 0.4);
 	z-index: 1;
 }
@@ -29,7 +29,7 @@
 }
 
 .welcome-modal #modal-body p {
-	color: #aaa;
+	color: $gaaa;
 	margin-bottom: 15px;
 	font-size: 16px;
 }
@@ -86,13 +86,13 @@
 
 .welcome-modal #modal-body .notifications {
 	padding-top: 15px;
-	border-top: 1px solid #eee;
-	border-bottom: 1px solid #eee;
+	border-top: 1px solid $geee;
+	border-bottom: 1px solid $geee;
 }
 .welcome-modal #modal-body .notifications h4 {
 	float: left;
 	font-size: 16px;
-	color: #aaa;
+	color: $gaaa;
 	margin: 0;
 	line-height: 20px;
 }

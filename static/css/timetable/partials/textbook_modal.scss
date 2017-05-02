@@ -27,7 +27,7 @@
     font-size: 14px;
     padding: 10px 5px;
     margin: 0;
-    color: #777;
+    color: $g777;
     font-weight: 300;
     clear: both;
     position: relative;
@@ -65,15 +65,15 @@
     z-index: 11;
     height: 66px;
     width: 100%;
-    border: 1px solid #ddd;
+    border: 1px solid $gddd;
     position: absolute;
     bottom: 0px;
-    background-color: #eee;
+    background-color: $geee;
 }
 
 .textbook-modal .modal-footer p {
     font-size: 12px;
-    color: #777;
+    color: $g777;
     text-align: left;
     font-weight: 300;
     padding-right: 162px;
