@@ -1,25 +1,17 @@
-import {connect} from "react-redux";
-import {TermsOfServiceModal} from "../terms_of_service_modal.jsx";
-import * as ActionTypes from "../../constants/actionTypes.jsx";
+import { connect } from 'react-redux';
+import { TermsOfServiceModal } from '../terms_of_service_modal';
+import { triggerTermsOfServiceModal } from '../../constants/actionTypes';
 
-const mapStateToProps = (state) => {
-    return {
-        isVisible: state.termsOfServiceModal.isVisible,
-        userInfo: state.userInfo.data,
-    }
-}
-
-const mapDispatchToProps = (dispatch) => {
-    return {
-        triggerTermsOfServiceModal: () => {
-            dispatch({type: ActionTypes.TRIGGER_TOS_MODAL})
-        }, 
-    }
-}
+const mapStateToProps = state => ({
+  isVisible: state.termsOfServiceModal.isVisible,
+  userInfo: state.userInfo.data,
+});
 
 const TermsOfServiceModalContainer = connect(
     mapStateToProps,
-    mapDispatchToProps
+  {
+    triggerTermsOfServiceModal,
+  },
 )(TermsOfServiceModal);
 
 export default TermsOfServiceModalContainer;
