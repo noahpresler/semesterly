@@ -1,4 +1,0 @@
-files:
-  include: 'static/'
-  ignore:
-    - 'node_modules/*'
