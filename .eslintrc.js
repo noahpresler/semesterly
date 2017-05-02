@@ -5,6 +5,7 @@ module.exports = {
 		"jasmine": true
 	},
 	"globals": {
+	  "$": true,
 		"_": true,
 	  "allSemesters": true,
 	  "sharedTimetable": true,
@@ -23,7 +24,9 @@ module.exports = {
 	  "school": true,
 	  "currentSemester": true,
 	  "currentUser": true,
-	  "showTOS": true
+	  "showTOS": true,
+		"showTOSBanner": true,
+		"reactAlertEvents": true,
 	},
 	rules: {
 		"no-plusplus": 0,
