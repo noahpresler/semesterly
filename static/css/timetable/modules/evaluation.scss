@@ -1,5 +1,5 @@
 .modal-entry .eval-item {
-  background-color: #FFF;
+  background-color: $gfff;
   border: 1px solid #D4D4D4;
   display: inline-block;
   margin-bottom: 10px;
@@ -68,7 +68,7 @@
 
 .eval-item.mini {
   height:45px;
-  background-color: #fff;
+  background-color: $gfff;
   font-size:12px;
   padding-top:2px;
   width: 31.9%;

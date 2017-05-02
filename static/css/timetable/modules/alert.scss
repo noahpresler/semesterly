@@ -17,7 +17,7 @@
   background-color: #333;
   font-size: 11px;
   box-shadow: 0 3px 12px 0 rgba(0,0,0,0.3);
-  color: #fff;
+  color: $gfff;
 }
 .react-alerts .alert .content {
   flex: 1;
@@ -175,7 +175,7 @@
   display: block;
   margin-top: 25px;
   cursor: pointer;
-  color: #999;
+  color: $g999;
   opacity: .77;
   transition: opacity .3s;
 }

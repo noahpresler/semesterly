@@ -1,7 +1,7 @@
 .inputrange-slider {
   appearance: none;
-  background: #375b80;
-  border: 1px solid #375b80;
+  background: $navy-light;
+  border: 1px solid $navy-light;
   border-radius: 100%;
   cursor: pointer;
   display: block;
@@ -19,16 +19,30 @@
   }
 
   :focus {
-    box-shadow: 0 0 0 5px rgba(63, 81, 181, .2);
+    box-shadow: 0 0 0 5px $navy-transparent-20;
   }
 }
 
-.inputrange.is-disabled {
-  .inputrange-slider {
-    background: #cccccc;
-    border: 1px solid #cccccc;
-    box-shadow: none;
-    transform: none;
+.inputrange {
+  cursor: pointer;
+  display: inline-block;
+  height: 1rem;
+  margin-left: 5%;
+  margin-top: 30px;
+  position: relative;
+  width: 75%;
+
+  &.is-disabled {
+    .inputrange-slider {
+      background: $gccc;
+      border: 1px solid $gccc;
+      box-shadow: none;
+      transform: none;
+    }
+
+    .inputrange-track {
+      background: $geee;
+    }
   }
 }
 
@@ -37,7 +51,7 @@
 }
 
 .inputrange-label {
-  color: #aaaaaa;
+  color: $gaaa;
   font-family: $font-primary;
   font-size: .8rem;
 }
@@ -56,6 +70,10 @@
 .inputrange-label--max {
   display: none;
   right: 0;
+
+  .inputrange-labelcontainer {
+    left: 50%;
+  }
 }
 
 .inputrange-label--value {
@@ -77,23 +95,13 @@
   }
 }
 
-.inputrange-label--max {
-  .inputrange-labelcontainer {
-    left: 50%;
-  }
-}
-
 .inputrange-track {
-  background: #eee;
+  background: $geee;
   border-radius: .3rem;
   display: block;
   height: .3rem;
   position: relative;
   transition: left .3s ease-out, width .3s ease-out;
-}
-
-.inputrange.is-disabled .inputrange-track {
-  background: #eeeeee;
 }
 
 .inputrange-track--container {
@@ -105,17 +113,7 @@
 }
 
 .inputrange-track--active {
-  background: #375b80;
-}
-
-.inputrange {
-  cursor: pointer;
-  display: inline-block;
-  height: 1rem;
-  margin-left: 5%;
-  margin-top: 30px;
-  position: relative;
-  width: 75%;
+  background: $navy-light;
 }
 
 .time-selector {
