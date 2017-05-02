@@ -8,10 +8,10 @@
 }
 
 .signup-modal #modal-header {
-	background-color: #eee;
+	background-color: $geee;
 	padding: 25px 25px;
 	position: relative;
-	border-bottom: 1px solid #ddd;
+	border-bottom: 1px solid $gddd;
 }
 
 .pro-pic {
@@ -24,7 +24,7 @@
 	position: absolute;
 	right: 10%;
 	bottom: -30px;
-	border: 1px solid #ddd;
+	border: 1px solid $gddd;
 }
 
 .signup-modal #features{
@@ -69,7 +69,7 @@
 }
 
 #feature-highlight h1 {
-	color: #ddd;
+	color: $gddd;
 	font-size: 30px;
 	text-align: center;
 }
@@ -79,14 +79,14 @@
 }
 
 .disclaimer {
-	color: #777;
+	color: $g777;
 	font-size: 12px;
 }
 
 .signup-button {
 	padding: 8px 20px 8px 20px;
 	display: inline-block;
-    color: #fff;
+    color: $gfff;
     text-align: center;
     text-shadow: 0 1px 2px rgba(0,0,0,.25);
     background-color: #1abc9c;
