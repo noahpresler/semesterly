@@ -36,10 +36,10 @@
 	font-size: 12px;
 	border-radius: 50%;
 	color: transparent;
-	background-color:#aaa;
+	background-color:$gaaa;
 	width: 20px;
 	height: 20px;
-	border: 5px solid #fff;
+	border: 5px solid $gfff;
 	text-align: center;
 	transition: all .3s;
 	line-height: 10px;
@@ -48,12 +48,12 @@
 
 }
 .sem-page > a{
-	color: #fff;
+	color: $gfff;
 }
 .sem-page:hover,
 .sem-page:active,
 .sem-page.active {
-	color: #fff;
+	color: $gfff;
 	background-color: #143B63;
 	border:5px solid #143B63;
 }
@@ -89,7 +89,7 @@
 }
 
 .sem-pagination-icon {
-	color: #777;
+	color: $g777;
 }
 
 .sem-pagination-icon:hover {
