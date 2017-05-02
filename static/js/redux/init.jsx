@@ -98,7 +98,7 @@ function setup(dispatch) {
     // the same as the browser-cached timetable's semester OR the user is not trying to load a
     // shared course at all. This results in problematic edge cases, such as showing the course
     // modal of an S course in the F semester, being completely avoided.
-      loadCachedTimetable(dispatch);
+      dispatch(loadCachedTimetable());
     }
   } else {
     dispatch({ type: ActionTypes.CACHED_TT_LOADED });
