@@ -13,7 +13,7 @@
 #social-pro-pic {
     height: 30px;
     width: 30px;
-    background-color: #ddd;
+    background-color: $gddd;
     border-radius: 100%;
     display: inline-block;
     vertical-align: middle;
@@ -53,7 +53,7 @@
     right: 10px;
     width: 100%;
     min-width: 105px;
-    background-color: #fff;
+    background-color: $gfff;
     border: 1px solid #E8E8E8;
     box-shadow: 0 2px 10px rgba(0,0,0,.2);
     z-index: 100;
@@ -84,7 +84,7 @@
     margin-right: 5px;
 }
 #social-dropdown a i {
-    color: #777;
+    color: $g777;
 }
 
 a#social-login,
@@ -133,13 +133,13 @@ a#social-login:hover:before {
     z-index: 1;
     height: 0;
     width: 0;
-    border-bottom-color: #ccc;
+    border-bottom-color: $gccc;
     border-bottom-color: rgba(0,0,0,.2);
     position: absolute;
 }
 .tip {
     border-color: transparent;
-    border-bottom-color: #fff; 
+    border-bottom-color: $gfff;
     border-style: dashed dashed solid;
     border-width: 0 8.5px 8.5px;
     z-index: 1;

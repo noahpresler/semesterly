@@ -8,7 +8,7 @@
 }
 
 .abnb-modal #modal-header {
-	background-color: #eee;
+	background-color: $geee;
 	padding: 25px 25px;
 	position: relative;
 	border-bottom: 1px solid $grey-light;
@@ -80,7 +80,7 @@
 }
 
 .abnb-btn:hover, .abnb-btn:focus {
-    border-color: #aaa;
+    border-color: $gaaa;
     color: #484848;
 }
 
@@ -126,7 +126,7 @@
     border-radius: 4px;
     margin-bottom: 10px;
     text-align: center;
-    color: #aaa;
+    color: $gaaa;
     font-weight: 300;
 }
 
