@@ -1,6 +1,4 @@
-.InputRange-slider {
-  -webkit-appearance: none;
-   -moz-appearance: none;
+.inputrange-slider {
   appearance: none;
   background: #375b80;
   border: 1px solid #375b80;
@@ -8,87 +6,109 @@
   cursor: pointer;
   display: block;
   height: 1rem;
-  margin-left: -0.5rem;
-  margin-top: -0.65rem;
+  margin-left: -.5rem;
+  margin-top: -.65rem;
   outline: none;
   position: absolute;
   top: 50%;
-  transition: -webkit-transform .3s ease-out, box-shadow .3s ease-out;
   transition: transform .3s ease-out, box-shadow .3s ease-out;
   width: 1rem;
+
+  :active {
+    transform: scale(1.3);
+  }
+
+  :focus {
+    box-shadow: 0 0 0 5px rgba(63, 81, 181, .2);
+  }
 }
-.InputRange-slider:active {
-  -webkit-transform: scale(1.3);
-  transform: scale(1.3);
+
+.inputrange.is-disabled {
+  .inputrange-slider {
+    background: #cccccc;
+    border: 1px solid #cccccc;
+    box-shadow: none;
+    transform: none;
+  }
 }
-.InputRange-slider:focus {
-  box-shadow: 0 0 0 5px rgba(63, 81, 181, 0.2);
-}
-.InputRange.is-disabled .InputRange-slider {
-  background: #cccccc;
-  border: 1px solid #cccccc;
-  box-shadow: none;
-  -webkit-transform: none;
-  transform: none;
-}
-.InputRange-sliderContainer {
+
+.inputrange-slidercontainer {
   transition: left .3s ease-out;
 }
-.InputRange-label {
+
+.inputrange-label {
   color: #aaaaaa;
   font-family: $font-primary;
   font-size: .8rem;
 }
-.InputRange-label--min,
-.InputRange-label--max {
+
+.inputrange-label--min,
+.inputrange-label--max {
   bottom: -1.4rem;
   position: absolute;
 }
-.InputRange-label--min {
+
+.inputrange-label--min {
   display: none;
   left: 0;
 }
-.InputRange-label--max {
+
+.inputrange-label--max {
   display: none;
   right: 0;
 }
-.InputRange-label--value {
+
+.inputrange-label--value {
   font-size: 11px;
   position: absolute;
   top: -2.3rem;
 }
-.InputRange-labelMaxTime {
+
+.inputrange-labelmaxtime {
   top: 2.7em;
 }
-.InputRange-labelContainer {
+
+.inputrange-labelcontainer {
   left: -50%;
   position: relative;
+
+  ::after {
+    content: ':00';
+  }
 }
-.InputRange-label--max .InputRange-labelContainer {
-  left: 50%;
+
+.inputrange-label--max {
+  .inputrange-labelcontainer {
+    left: 50%;
+  }
 }
-.InputRange-track {
-  background: #eeeeee;
+
+.inputrange-track {
+  background: #eee;
   border-radius: .3rem;
   display: block;
   height: .3rem;
   position: relative;
   transition: left .3s ease-out, width .3s ease-out;
 }
-.InputRange.is-disabled .InputRange-track {
+
+.inputrange.is-disabled .inputrange-track {
   background: #eeeeee;
 }
-.InputRange-track--container {
+
+.inputrange-track--container {
   left: 0;
   margin-top: -.15rem;
   position: absolute;
   right: 0;
   top: 50%;
 }
-.InputRange-track--active {
-  background: #375B80;
+
+.inputrange-track--active {
+  background: #375b80;
 }
-.InputRange {
+
+.inputrange {
   cursor: pointer;
   display: inline-block;
   height: 1rem;
@@ -97,14 +117,15 @@
   position: relative;
   width: 75%;
 }
-.InputRange-labelContainer::after {
-  content: ':00';
-}
-.time-selector > .time-selector-day {
-  display: inline-block;
-  font-size: 14px;
-  width: 30px;
-}
-.time-selector:first-of-type {
-  margin-top: -10px !important;
+
+.time-selector {
+  > .time-selector-day {
+    display: inline-block;
+    font-size: 14px;
+    width: 30px;
+  }
+
+  :first-of-type {
+    margin-top: -10px;
+  }
 }
