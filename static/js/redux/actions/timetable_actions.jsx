@@ -1,4 +1,6 @@
 import fetch from 'isomorphic-fetch';
+import Cookie from 'js-cookie';
+
 import { getTimetablesEndpoint } from '../constants/endpoints';
 import {
     browserSupportsLocalStorage,
@@ -36,6 +38,11 @@ export const fetchTimetables = (requestBody, removing, newActive = 0) => (dispat
   // send a request (via fetch) to the appropriate endpoint with
   // relevant data as contained in @state (including courses, preferences, etc)
   fetch(getTimetablesEndpoint(), {
+    headers: {
+      'X-CSRFToken': Cookie.get('csrftoken'),
+      Accept: 'application/json',
+      'Content-Type': 'application/json',
+    },
     method: 'POST',
     body: JSON.stringify(requestBody),
     credentials: 'include',
@@ -182,7 +189,7 @@ export const nullifyTimetable = () => (dispatch) => {
 };
 
 // loads timetable from localStorage. assumes that the browser supports localStorage
-export const loadCachedTimetable = (dispatch) => {
+export const loadCachedTimetable = () => (dispatch) => {
   dispatch({ type: ActionTypes.LOADING_CACHED_TT });
   const localCourseSections = JSON.parse(localStorage.getItem('courseSections'));
 
@@ -209,13 +216,13 @@ export const loadCachedTimetable = (dispatch) => {
   }
 
   dispatch({ type: ActionTypes.SET_ALL_PREFERENCES, preferences: localPreferences });
-  dispatch({ type: ActionTypes.SET_SEMESTER, semester: localSemester });
+  dispatch({ type: ActionTypes.SET_SEMESTER, semester: parseInt(localSemester, 10) });
   dispatch({
     type: ActionTypes.RECEIVE_COURSE_SECTIONS,
     courseSections: localCourseSections,
   });
 
-  fetchStateTimetables(localActive);
+  dispatch(fetchStateTimetables(localActive));
   dispatch({ type: ActionTypes.CACHED_TT_LOADED });
 };
 
