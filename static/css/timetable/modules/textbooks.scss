@@ -45,7 +45,7 @@
     width: 60px;
     position: relative;
     z-index: 10;
-    color: #fff;
+    color: $gfff;
     top: -12px;
     font-size: 12px;
     background-color: #1abc9c;
@@ -69,7 +69,7 @@
 }
 
 a .textbook h4 {
-    color: $grey-dark;
+    color: $g555;
     transition: color 0.3s ease;
 }
 

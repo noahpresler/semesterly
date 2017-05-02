@@ -26,7 +26,7 @@
 	position: absolute;
 	width: 200px;
 	height: 100%;
-	border-right: 1px solid #ddd;
+	border-right: 1px solid $gddd;
 }
 
 #pm-header {
@@ -78,7 +78,7 @@
     background-position: center;
     background-repeat: no-repeat;
     position: relative;
-    border: 1px solid #ddd;
+    border: 1px solid $gddd;
 }
 
 .peer-pic {
@@ -89,7 +89,7 @@
     background-position: center;
     background-repeat: no-repeat;
     position: relative;
-    border: 1px solid #ddd;
+    border: 1px solid $gddd;
     float: left;
 }
 
@@ -170,7 +170,7 @@
 	font-weight: 300;
     font-size: 16px;
     line-height: 16px;
-    color: $grey-dark;
+    color: $g555;
     padding: 0 5px;
     margin: 7px 0;
 	margin-left: 20px;
@@ -185,7 +185,7 @@
 .ghost-course-title {
 	width: 220px;
 	height: 16px;
-	background-color: $grey-dark;
+	background-color: $g555;
     line-height: 16px;
     padding: 0 5px;
     margin: 7px 0;
@@ -231,7 +231,7 @@
 	width: 100%;
     font-size: 16px;
     line-height: 16px;
-    color: $grey-dark;
+    color: $g555;
     text-align: center;
     margin-bottom: 30px;
 }
@@ -261,7 +261,7 @@
 #main-modal-wrapper .upsell p {
     font-size: 16px;
     line-height: 22px;
-    color: $grey-dark;
+    color: $g555;
     padding: 0 5px;
     margin: 7px 0;
     -webkit-transition: color .2s;

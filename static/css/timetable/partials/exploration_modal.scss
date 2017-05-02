@@ -13,7 +13,7 @@
 	width: 100%;
 	height: 100%;
 	position: relative;
-	background: #fff;
+	background: $gfff;
 }
 
 .exploration-modal + div {
@@ -75,12 +75,12 @@
 
 /* Exploration Header */
 #exploration-header {
-	background-color: #eee;
+	background-color: $geee;
 	padding: 15px;
 	width: 100%;
 	position: absolute;
 	z-index: 1;
-	border-bottom: 1px solid #ddd;
+	border-bottom: 1px solid $gddd;
 }
 #exp-title i {
 	font-size: 22px;
@@ -92,7 +92,7 @@
 #exp-title h1 {
 	font-size: 18px;
 	margin: 0;
-	color: #777;
+	color: $g777;
 	line-height: 30px;
 	display: inline-block;
 	vertical-align: middle;
@@ -132,7 +132,7 @@
 	width: 20px;
 	height: 20px;
 	cursor: pointer;
-	color: #777;
+	color: $g777;
 	transition: color .3s, transform .3s;
 }
 #exploration-close:hover {
@@ -180,7 +180,7 @@ h3.exp-header:after {
 	left: 0;
 	width: 100%;
 	height: 1px;
-	background-color: #ddd;
+	background-color: $gddd;
 }
 #exploration-body p {
 	color: #777;
@@ -214,7 +214,7 @@ h3.exp-header i:hover {
 	margin: 0 0px 3px;
 	border-radius: 3px;
 	font-weight: 400;
-	/*background-color: #eee;*/
+	/*background-color: $geee;*/
 }
 #exp-filters h6 i,
 #exp-filters .time-selector i {
@@ -241,7 +241,7 @@ h3.exp-header i:hover {
 	top: 10px;
 	width: 200px;
 	left: 25%;
-	background-color: #fff;
+	background-color: $gfff;
 	border: 1px solid #E8E8E8;
     box-shadow: 0 2px 10px rgba(0,0,0,.2);
     z-index: 1;
@@ -272,11 +272,11 @@ h3.exp-header i:hover {
 	padding: 0 5px 0 45px;
 	list-style-type: none;
 	cursor: pointer;
-	background-color: #fff;
+	background-color: $gfff;
 	transition: background-color .3s
 }
 .fpo-list li:hover {
-	background-color: #eee;
+	background-color: $geee;
 }
 .fpo-list i {
 	display: inline-block;
@@ -307,13 +307,13 @@ h3.exp-header i:hover {
 }
 .exp-s-result {
 	padding: 10px;
-	background-color: #fff;
+	background-color: $gfff;
 	transition: background-color .3s;
 	cursor: pointer;
 	position: relative;
 }
 .exp-s-result:hover {
-	background-color: #eee;
+	background-color: $geee;
 }
 .exp-s-result h4 {
 	font-size: 14px;
@@ -335,7 +335,7 @@ h3.exp-header i:hover {
 	flex-direction: column;
 }
 #exp-modal #modal-header {
-	background-color: #fff;
+	background-color: $gfff;
 	padding: 20px 10px 30px 10px;
 }
 #exp-modal h1 {
@@ -374,7 +374,7 @@ h3.exp-header i:hover {
 	text-align: center;
 	width: 100%;
 	line-height: 60px;
-	color: #fff;
+	color: $gfff;
 	font-size: 24px;
 }
 #exp-modal #modal-share {
