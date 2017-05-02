@@ -13,7 +13,7 @@
         float: left;
         font-size: 12px;
         line-height: 20px;
-        color: #777;
+        color: $g777;
     }
 
     #day-pills {
@@ -87,7 +87,7 @@
     width: 100%;
     z-index: 100;
     top: 20px;
-    border-bottom: 2px solid #ddd;
+    border-bottom: 2px solid $gddd;
 }
 
 #calendar.up {

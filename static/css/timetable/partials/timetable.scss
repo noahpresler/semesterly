@@ -1,5 +1,5 @@
 body {
-	background-color:#ffffff;
+	background-color:$gfff;
 	line-height:1.4;
 	overflow-x: hidden;
 }
@@ -28,7 +28,7 @@ button.save-timetable {
     height: 30px;
     width: 30px;
     line-height: 30px;
-    color: #777;
+    color: $g777;
     position: relative;
     transition: background-color .3s;
 }
@@ -58,7 +58,7 @@ button.row-button {
     transition: all .3s;
 }
 button.row-button:hover {
-    background-color: #ddd;
+    background-color: $gddd;
 }
 .cal-row {
 	width: 49px;
@@ -112,7 +112,7 @@ button.row-button:hover {
     margin-left:-140px !important;
     height:38px;
     padding:0px 5px;
-    background-color:#eee;
+    background-color:$geee;
     border-radius:2px; 
     z-index: 1000;
 }

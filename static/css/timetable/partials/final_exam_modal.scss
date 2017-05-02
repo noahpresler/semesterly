@@ -81,11 +81,11 @@
 .final-exam-day {
 	width: 14.27%;
 	min-height: 100px;
-	border-right: 1px solid #ddd;
-	border-bottom: 1px solid #ddd;
+	border-right: 1px solid $gccc;
+	border-bottom: 1px solid $gccc;
 }
 .final-exam-day:first-child {
-	border-left: 1px solid #ddd;
+	border-left: 1px solid $gddd;
 }
 /*  For the Slots in the Modal */
 .final-exam-modal .master-slot {
@@ -118,20 +118,20 @@
 	float: left;
 	font-weight: normal;
 	width: 14.27%;
-	border-right: 1px solid #ddd;
-	border-top: 1px solid #ddd;
-	border-bottom: 3px solid #ddd;
+	border-right: 1px solid $gddd;
+	border-top: 1px solid $gddd;
+	border-bottom: 3px solid $gddd;
 	font-size: 15px;
 	margin: 0;
 	text-align: center;
 	line-height: 25px;
 }
 #final-exam-calender-days h3:first-child {
-	border-left: 1px solid #ddd;
+	border-left: 1px solid $gddd;
 }
 #final-exam-calender-days h3 .day {
 	display: inline-block;
-	color: #999;
+	color: $g999;
 }
 #final-exam-calender-days h3 .date {
 	display: inline-block;
@@ -217,7 +217,7 @@
 	color: white;
     border-color: #3B5998;
     background-color: #3B5998;
-    color: #fff;
+    color: $gfff;
     max-width: 300px;
 }
 
