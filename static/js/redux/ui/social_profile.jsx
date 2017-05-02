@@ -43,7 +43,7 @@ export class SocialProfile extends React.Component {
               <i className="fa fa-cog" />
               <span>Account</span>
             </a>
-            <a href="/me">
+            <a href="/user/settings/">
               <i className="fa fa-bar-chart" />
               <span>Stats</span>
             </a>
