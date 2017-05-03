@@ -246,26 +246,26 @@ textarea {
     transform: translateY(-50%);
     transition: width .3s;
 
-    :nth-child(1) {
+    &:nth-child(1) {
       top: 25%;
       width: 15px;
     }
 
-    :nth-child(2) {
+    &:nth-child(2) {
       top: 50%;
       width: 20px;
     }
 
-    :nth-child(3) {
+    &:nth-child(3) {
       top: 75%;
       width: 15px;
     }
   }
 
-  :hover {
+  &:hover {
     span {
-      :nth-child(1),
-      :nth-child(3) {
+      &:nth-child(1),
+      &:nth-child(3) {
         width: 20px;
       }
     }
@@ -277,7 +277,7 @@ textarea {
 .footer-button {
   line-height: 22px;
 
-  :nth-child(4) {
+  &:nth-child(4) {
     margin-right: 0;
   }
 
@@ -309,7 +309,7 @@ footer {
       font-size: 12px;
       font-weight: 400;
 
-      :hover {
+      &:hover {
         color: $gaaa;
         text-decoration: underline;
       }
