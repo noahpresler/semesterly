@@ -1,17 +1,18 @@
 import React from 'react';
 import Modal from 'boron/WaveModal';
 import Textbook from './textbook';
+import * as PropTypes from '../constants/propTypes';
 
-export class TextbookModal extends React.Component {
+class TextbookModal extends React.Component {
   componentDidMount() {
     if (this.props.isVisible) {
-      this.refs.modal.show();
+      this.modal.show();
     }
   }
 
-  componentDidUpdate(nextProps) {
+  componentDidUpdate() {
     if (this.props.isVisible) {
-      this.refs.modal.show();
+      this.modal.show();
     }
   }
 
@@ -19,7 +20,7 @@ export class TextbookModal extends React.Component {
     const modalHeader =
             (<div id="modal-header">
               <h1>Your Textbooks</h1>
-              <div id="modal-close" onClick={() => this.refs.modal.hide()}>
+              <div id="modal-close" onClick={() => this.modal.hide()}>
                 <i className="fa fa-times" />
               </div>
             </div>);
@@ -28,35 +29,41 @@ export class TextbookModal extends React.Component {
     };
 
     const tbs = {};
-    let all_tbs = [];
+    let allTbs = [];
     for (let i = 0; i < this.props.liveTimetableCourses.length; i++) {
       tbs[this.props.liveTimetableCourses[i].name] = [];
-      if (this.props.liveTimetableCourses[i].textbooks !== undefined && Object.keys(this.props.liveTimetableCourses[i].textbooks).length > 0) {
+      if (this.props.liveTimetableCourses[i].textbooks !== undefined &&
+        Object.keys(this.props.liveTimetableCourses[i].textbooks).length > 0) {
         for (let j = 0; j < this.props.liveTimetableCourses[i].enrolled_sections.length; j++) {
-          tbs[this.props.liveTimetableCourses[i].name] = tbs[this.props.liveTimetableCourses[i].name].concat(this.props.liveTimetableCourses[i].textbooks[this.props.liveTimetableCourses[i].enrolled_sections[j]]);
-          all_tbs = all_tbs.concat(this.props.liveTimetableCourses[i].textbooks[this.props.liveTimetableCourses[i].enrolled_sections[j]]);
+          tbs[this.props.liveTimetableCourses[i].name] =
+            tbs[this.props.liveTimetableCourses[i].name]
+              .concat(this.props.liveTimetableCourses[i]
+                .textbooks[this.props.liveTimetableCourses[i].enrolled_sections[j]],
+              );
+          allTbs = allTbs.concat(this.props.liveTimetableCourses[i]
+            .textbooks[this.props.liveTimetableCourses[i].enrolled_sections[j]]);
         }
       }
     }
 
     const keys = Object.keys(tbs).sort((a, b) => tbs[b].length - tbs[a].length);
-    const textbookList = keys.map(course_name =>
-      <div key={course_name} className="tb-list-entry">
-        <h3 className="modal-module-header">{course_name}</h3>
+    const textbookList = keys.map(courseName =>
+      <div key={courseName} className="tb-list-entry">
+        <h3 className="modal-module-header">{courseName}</h3>
         {
-                    tbs[course_name].length > 0 ? _.uniq(tbs[course_name], 'isbn').map(tb =>
+                    tbs[courseName].length > 0 ? _.uniq(tbs[courseName], 'isbn').map(tb =>
                       <Textbook tb={tb} key={tb.isbn} />) :
                     <p className="no-tbs">No textbooks found for this course.</p>
                 }
       </div>,
         );
 
-    const exists = x => x && x.length > 0 && x != 'Cannot be found';
+    const exists = x => x && x.length > 0 && x !== 'Cannot be found';
 
     const footer = (
       <div className="modal-footer">
         {
-                    all_tbs.length > 0 ? (
+                    allTbs.length > 0 ? (
                       <div>
                         <p>Click any textbook to view purchasing options on Amazon, or add to
                                 your Amazon cart for a
@@ -89,8 +96,8 @@ export class TextbookModal extends React.Component {
         <div id="tb-list-container">
           {textbookList}
           {
-                        _.range(all_tbs.length).map((idx) => {
-                          const tb = all_tbs[idx];
+                        _.range(allTbs.length).map((idx) => {
+                          const tb = allTbs[idx];
                           if (!exists(tb.detail_url)) {
                             return null;
                           }
@@ -141,7 +148,7 @@ export class TextbookModal extends React.Component {
     let modalContent = null;
     if (this.props.isLoading) {
       modalContent = loader;
-    } else if (all_tbs.length == 0) {
+    } else if (allTbs.length === 0) {
       modalContent = emptyState;
     } else {
       modalContent = textbookForm;
@@ -149,7 +156,7 @@ export class TextbookModal extends React.Component {
 
     return (
       <Modal
-        ref="modal"
+        ref={(c) => { this.modal = c; }}
         className="textbook-modal abnb-modal max-modal"
         modalStyle={modalStyle}
         onHide={() => {
@@ -169,3 +176,12 @@ export class TextbookModal extends React.Component {
     );
   }
 }
+
+TextbookModal.propTypes = {
+  isVisible: React.PropTypes.bool.isRequired,
+  isLoading: React.PropTypes.bool.isRequired,
+  toggleTextbookModal: React.PropTypes.func.isRequired,
+  liveTimetableCourses: React.PropTypes.arrayOf(PropTypes.course).isRequired,
+};
+
+export default TextbookModal;
