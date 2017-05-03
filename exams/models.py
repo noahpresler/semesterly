@@ -2,6 +2,7 @@ from __future__ import unicode_literals
 
 from django.db import models
 from student import models as student_models
+from jsonfield import JSONField
 
 class FinalExamShare(models.Model):
     """ Database object representing a shared final exam schedule.
@@ -11,5 +12,5 @@ class FinalExamShare(models.Model):
     """
     school = models.CharField(max_length=50)
     student = models.ForeignKey(student_models.Student)
-    exam_json = models.TextField(default='')
+    exam_json = JSONField()
     last_updated = models.DateTimeField(auto_now=True)

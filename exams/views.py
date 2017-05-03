@@ -39,9 +39,10 @@ def share_final_exam_schedule(request):
     
 @validate_subdomain
 def view_final_exam_share(request, ref):
+    import ast
     try:
         exam_json = FinalExamShare.objects.get(id=hashids.decrypt(ref)[0]).exam_json
-        final_exam_schedule = JHUFinalExamScheduler().make_schedule(json.loads(exam_json))    
+        final_exam_schedule = JHUFinalExamScheduler().make_schedule(exam_json)    
         return view_timetable(request, final_exam_share=final_exam_schedule)
     except Exception:
         raise Http404

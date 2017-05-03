@@ -56,3 +56,4 @@ django-cachalot==1.4.1
 python-memcached==1.58
 django-webpack-loader==0.4.1
 mock==2.0.0
+jsonfield==2.0.1

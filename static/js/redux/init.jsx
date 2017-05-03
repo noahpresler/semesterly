@@ -61,6 +61,7 @@ function setup(dispatch) {
   exportCalendar = exportCalendar === 'True';
   viewTextbooks = viewTextbooks === 'True';
   finalExams = finalExams === 'True';
+  finalExamShare = JSON.parse(finalExamShare);
   if (signup) {
     dispatch({ type: ActionTypes.TRIGGER_SIGNUP_MODAL });
   }
@@ -168,6 +169,13 @@ function setup(dispatch) {
     }
   }
   if (finalExams) {
+    dispatch({ type: ActionTypes.SHOW_FINAL_EXAMS_MODAL });
+  }
+  if (finalExamShare) { 
+    dispatch({ 
+      type: ActionTypes.RECIEVE_FINAL_EXAMS,
+      json: finalExamShare,
+    }); 
     dispatch({ type: ActionTypes.SHOW_FINAL_EXAMS_MODAL });
   }
 }

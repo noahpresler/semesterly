@@ -100,7 +100,7 @@ def view_timetable(request, code=None, sem_name=None, year=None, shared_timetabl
     'view_textbooks': view_textbooks,
     'final_exams_supported_semesters': map(lambda s: sem_dicts.index(s) ,final_exams_available.get(school, [])),
     'final_exams': final_exams,
-    'final_exam_share': final_exam_share
+    'final_exam_share': json.dumps(final_exam_share),
   },
   context_instance=RequestContext(request))
 

@@ -4,17 +4,25 @@ import { fetchFinalExamSchedule, getFinalExamShareLink } from '../../actions/exa
 import { logFinalExamView } from '../../util';
 import { hideFinalExamsModal, triggerAcquisitionModal } from '../../actions/modal_actions';
 
-const remapCourseDetails = (courses) => {
+const remapCourseDetails = (finalExams) => {
   const remap = {};
-  for (let i = 0; i < courses.length; i++) {
-    const course = courses[i];
-    remap[course.id] = {
-      name: course.name,
-      code: course.code,
+  Object.keys(finalExams).forEach((cid) => {
+    const final = finalExams[cid];
+    remap[cid] = {
+      name: final.name,
+      code: final.code,
     };
-  }
+  });
   return remap;
 };
+
+const createSchedule = (finalExams) => {
+  const schedule = {}
+  Object.keys(finalExams).forEach((cid) => {
+    const final = finalExams[cid];
+    schedule[cid] = final.time;
+  });
+}
 
 const mapStateToProps = (state) => {
   const active = state.timetables.active;
@@ -22,11 +30,13 @@ const mapStateToProps = (state) => {
   return {
     logFinalExamView,
     isVisible: state.finalExamsModal.isVisible,
-    finalExamSchedule: state.finalExamsModal.finalExams,
+    finalExamSchedule: state.finalExamsModal.finalExams ? 
+      createSchedule(state.finalExamsModal.finalExams) : null,
     hasRecievedSchedule: Boolean(state.finalExamsModal.finalExams),
     loading: state.finalExamsModal.isLoading,
     courseToColourIndex: state.ui.courseToColourIndex,
-    courseDetails: remapCourseDetails(timetables[active].courses),
+    courseDetails:  state.finalExamsModal.finalExams ? 
+      remapCourseDetails(state.finalExamsModal.finalExams) : null,
     activeLoadedTimetableName: state.savingTimetable.activeTimetable.name,
     hasNoCourses: timetables[active].courses.length === 0,
     courses: timetables[active].courses,
