@@ -122,6 +122,7 @@ export const fetchClassmates = courses => (dispatch) => {
       .courses.map(c => c.id)));
   }, 500);
   dispatch(requestClassmates());
+  console.log("COURSES", courses);
   fetch(getClassmatesEndpoint(allSemesters[semesterIndex], courses), {
     credentials: 'include',
     method: 'GET',
