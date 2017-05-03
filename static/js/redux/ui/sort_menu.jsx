@@ -1,6 +1,7 @@
 import React from 'react';
 
 // tip: metrics are friends, conflicts, days off, time on/off campus, rating
+/* eslint-disable react/prop-types */
 const SortRow = props => (
   <div className="sort-row metric-row">
     <div className="sort-text">
@@ -11,7 +12,7 @@ const SortRow = props => (
         name="order"
         className="form-control select select-primary select-block"
         value={props.chosenMetric.order}
-        onChange={e => props.toggleMetricOrder(props.chosenMetric.metric)}
+        onChange={() => props.toggleMetricOrder(props.chosenMetric.metric)}
       >
         <option value="most">most</option>
         <option value="least">least</option>
@@ -25,8 +26,8 @@ const SortRow = props => (
         onChange={e => props.changeMetric(e.target.value, props.chosenMetric.metric)}
       >
         <option value={props.chosenMetric.metric}>{props.chosenMetric.metric}</option>
-        {props.availMetrics.slice(1).map((m, i) => (
-          <option value={m.metric} key={i}>{m.metric}</option>
+        {props.availMetrics.slice(1).map(m => (
+          <option value={m.metric} key={m.metric}>{m.metric}</option>
                 ))}
       </select>
     </div>
@@ -39,6 +40,17 @@ const SortRow = props => (
   </div>
 );
 
+SortRow.defaultProps = {
+  actionText: React.PropTypes.string.isRequired,
+  chosenMetric: React.PropTypes.shape({
+    metric: React.PropTypes.string.isRequired,
+    order: React.PropTypes.string.isRequired,
+    selected: React.PropTypes.bool.isRequired,
+  }),
+  addMetric: React.PropTypes.func.isRequired,
+  removeMetric: React.PropTypes.func.isRequired,
+};
+
 const FooterRow = ({ addNextMetric }) => (
   <div
     className="sort-row footer-row"
@@ -48,38 +60,40 @@ const FooterRow = ({ addNextMetric }) => (
   </div>
 );
 
-export class SortMenu extends React.Component {
-  render() {
-    const { metrics } = this.props;
-    const selectedMetrics = metrics.filter(m => m.selected);
-    const availMetrics = metrics.filter(m => !m.selected);
-    const headerRow = selectedMetrics.length > 0 ?
-            (<SortRow
-              {...this.props}
-              actionText="Sort by"
-              chosenMetric={selectedMetrics[0]}
-              availMetrics={availMetrics}
-            />)
-            : null;
-    const middleRows = selectedMetrics.slice(1).map((m, i) => (
-      <SortRow
-        {...this.props}
-        actionText="then by"
-        chosenMetric={m}
-        availMetrics={availMetrics}
-        key={i}
-      />
-        ));
-    const footer = availMetrics.length > 0 ?
-      <FooterRow addNextMetric={() => this.props.addMetric(availMetrics[0].metric)} />
-            : null;
+const SortMenu = ({ metrics, addMetric, removeMetric }) => {
+  const selectedMetrics = metrics.filter(m => m.selected);
+  const availMetrics = metrics.filter(m => !m.selected);
+  const headerRow = selectedMetrics.length > 0 ?
+          (<SortRow
+            addMetric={addMetric}
+            removeMetric={removeMetric}
+            actionText="Sort by"
+            chosenMetric={selectedMetrics[0]}
+            availMetrics={availMetrics}
+          />)
+          : null;
+  const middleRows = selectedMetrics.slice(1).map(m => (
+    <SortRow
+      addMetric={addMetric}
+      removeMetric={removeMetric}
+      actionText="then by"
+      chosenMetric={m}
+      availMetrics={availMetrics}
+      key={m}
+    />
+      ));
+  const footer = availMetrics.length > 0 ?
+    <FooterRow addNextMetric={() => addMetric(availMetrics[0].metric)} />
+          : null;
 
-    return (
-      <div className="sort-menu">
-        {headerRow}
-        {middleRows}
-        {footer}
-      </div>
-    );
-  }
-}
+  return (
+    <div className="sort-menu">
+      {headerRow}
+      {middleRows}
+      {footer}
+    </div>
+  );
+};
+
+export default SortMenu;
+/* eslint-enable react/prop-types */
