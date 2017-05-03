@@ -1,5 +1,5 @@
 import { connect } from 'react-redux';
-import { SortMenu } from '../sort_menu';
+import SortMenu from '../sort_menu';
 import {
     addMetric,
     changeMetric,
