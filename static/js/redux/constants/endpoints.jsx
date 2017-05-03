@@ -13,9 +13,9 @@ export const getLoadSavedTimetablesEndpoint = semester => `/user/timetables/${se
 export const getSaveTimetableEndpoint = () => '/user/timetables/';
 export const getDeleteTimetableEndpoint = (semester, name) => `/user/timetables/${semester.name}/${semester.year}/${name}/`;
 export const getSaveSettingsEndpoint = () => '/user/settings/';
-export const getClassmatesEndpoint = (semester, courses) => `/user/classmates/${semester.name}/${semester.year}/${$.param({ course_ids: courses })}`;
+export const getClassmatesEndpoint = (semester, courses) => `/user/classmates/${semester.name}/${semester.year}?${$.param({ course_ids: courses })}`;
 export const getClassmatesInCourseEndpoint = courseId => `/course_classmates/${getSchool()}/${getSemester()}/id/${courseId}/`;
-export const getMostClassmatesCountEndpoint = (semester, courses) => `/user/classmates/${semester.name}/${semester.year}/${$.param({ course_ids: courses, count: true })}`;
+export const getMostClassmatesCountEndpoint = (semester, courses) => `/user/classmates/${semester.name}/${semester.year}?${$.param({ course_ids: courses, count: true })}`;
 export const getFriendsEndpoint = semester => `/user/classmates/${semester.name}/${semester.year}/`;
 export const getSchoolInfoEndpoint = () => `/school/${getSchool()}/`;
 export const getReactToCourseEndpoint = () => '/user/reactions/';
