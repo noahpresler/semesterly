@@ -53,6 +53,18 @@ export const section = React.PropTypes.shape({
   was_full: React.PropTypes.bool.isRequired,
 });
 
+export const customSlot = React.PropTypes.shape({
+  custom: React.PropTypes.bool.isRequired,
+  day: React.PropTypes.string.isRequired,
+  key: React.PropTypes.number.isRequired,
+  name: React.PropTypes.string.isRequired,
+  num_conflicts: React.PropTypes.number.isRequired,
+  preview: React.PropTypes.bool.isRequired,
+  shift_index: React.PropTypes.number.isRequired,
+  time_end: React.PropTypes.string.isRequired,
+  time_start: React.PropTypes.string.isRequired,
+});
+
 export const slot = React.PropTypes.shape({
   code: React.PropTypes.string.isRequired,
   colourId: React.PropTypes.number.isRequired,
@@ -109,10 +121,9 @@ course.related_courses = React.PropTypes.arrayOf(course);
 export const timetable = React.PropTypes.shape({
   avg_rating: React.PropTypes.number.isRequired,
   has_conflict: React.PropTypes.bool.isRequired,
-  id: React.PropTypes.number.isRequired,
   courses: React.PropTypes.arrayOf(course).isRequired,
-  sections: React.PropTypes.arrayOf(React.PropTypes.number).isRequired,
-  semester: React.PropTypes.number.isRequired,
+  sections: React.PropTypes.arrayOf(React.PropTypes.number),
+  semester: React.PropTypes.number,
 });
 
 export const userInfo = React.PropTypes.shape({
