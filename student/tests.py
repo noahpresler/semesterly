@@ -234,7 +234,7 @@ class ClassmateViewTest(APITestCase):
         self.factory = APIRequestFactory()
 
     def test_get_classmate_counts(self):
-        request = self.factory.get('/user/classmates/Fall/2000/', {'counts': True, 'course_ids': [1]})
+        request = self.factory.get('/user/classmates/Fall/2000/', {'count': True, 'course_ids[]': [1]})
         force_authenticate(request, user=self.user2)
         request.subdomain = 'uoft'
         view = resolve('/user/classmates/Fall/2016/').func
@@ -247,7 +247,7 @@ class ClassmateViewTest(APITestCase):
         })
 
     def test_get_classmates(self):
-        request = self.factory.get('/user/classmates/Fall/2000/', {'course_ids': [1]})
+        request = self.factory.get('/user/classmates/Fall/2000/', {'course_ids[]': [1]})
         force_authenticate(request, user=self.user2)
         request.subdomain = 'uoft'
         view = resolve('/user/classmates/Fall/2016/').func
