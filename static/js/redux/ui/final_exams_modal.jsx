@@ -110,7 +110,9 @@ export default class FinalExamsModal extends React.Component {
   componentDidMount() {
     if (this.props.isVisible) {
       this.props.logFinalExamView();
-      this.props.fetchFinalExamSchedule();
+      if (!this.props.isShare) {
+        this.props.fetchFinalExamSchedule();
+      }
       this.noTimeFinals = [];
       this.finalsToRender = {};
       this.modal.show();
@@ -127,11 +129,13 @@ export default class FinalExamsModal extends React.Component {
     if (this.props.isVisible && !nextProps.isVisible) {
       this.hide();
     }
-    if (this.props.courses !== nextProps.courses && this.props.isVisible) {
+    if (this.props.courses !== nextProps.courses && this.props.isVisible && !this.props.isShare) {
       this.props.fetchFinalExamSchedule();
     }
     if (this.props.isVisible && !nextProps.isVisible) {
-      this.props.fetchFinalExamSchedule();
+      if (!this.props.isShare) {
+        this.props.fetchFinalExamSchedule();
+      }
       this.props.logFinalExamView();
       this.noTimeFinals = [];
       this.finalsToRender = {};
@@ -430,4 +434,5 @@ FinalExamsModal.propTypes = {
   fetchFinalExamSchedule: React.PropTypes.func.isRequired,
   getFinalExamShareLink: React.PropTypes.func.isRequired,
   launchUserAcquisitionModal: React.PropTypes.func.isRequired,
+  isShare: React.PropTypes.bool.isRequired,
 };

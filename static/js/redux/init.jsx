@@ -171,11 +171,12 @@ function setup(dispatch) {
   if (finalExams) {
     dispatch({ type: ActionTypes.SHOW_FINAL_EXAMS_MODAL });
   }
-  if (finalExamShare) { 
-    dispatch({ 
+  if (finalExamShare) {
+    dispatch({ type: ActionTypes.SET_FINAL_EXAMS_SHARED });
+    dispatch({
       type: ActionTypes.RECIEVE_FINAL_EXAMS,
       json: finalExamShare,
-    }); 
+    });
     dispatch({ type: ActionTypes.SHOW_FINAL_EXAMS_MODAL });
   }
 }
