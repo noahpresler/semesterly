@@ -237,7 +237,7 @@ class ClassmateView(ValidateSubdomainMixin, APIView):
     permission_classes = (IsAuthenticated,)
 
     def get(self, request, sem_name, year):
-        if request.query_params.get('counts'):
+        if request.query_params.get('count'):
             school = request.subdomain
             student = Student.objects.get(user=request.user)
             course_ids = map(int, request.query_params.getlist('course_ids[]'))
