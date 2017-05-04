@@ -12,11 +12,20 @@ class UrlsTest(UrlTestCase):
 
     def test_urls_call_correct_views(self):
         # marketing urls
-        self.assertUrlResolvesToView('/signup/', 'timetable.views.launch_user_acq_modal')
-        self.assertUrlResolvesToView('/textbooks/', 'timetable.views.view_textbooks')
-        self.assertUrlResolvesToView('/export_calendar/', 'timetable.views.export_calendar')
-        self.assertUrlResolvesToView('/notifyme/', 'timetable.views.enable_notifs'),
-        self.assertUrlResolvesToView('/find_friends/', 'timetable.views.find_friends'),
+        self.assertUrlResolvesToView('/signin/',
+         'timetable.utils.FeatureFlowView')
+        self.assertUrlResolvesToView('/signup/',
+         'timetable.utils.FeatureFlowView')
+        self.assertUrlResolvesToView('/textbooks/',
+         'timetable.utils.FeatureFlowView')
+        self.assertUrlResolvesToView('/export_calendar/',
+         'timetable.utils.FeatureFlowView')
+        self.assertUrlResolvesToView('/notifyme/',
+         'timetable.utils.FeatureFlowView')
+        self.assertUrlResolvesToView('/find_friends/',
+         'timetable.utils.FeatureFlowView')
+        self.assertUrlResolvesToView('/callback/google_calendar/',
+         'timetable.utils.FeatureFlowView')
 
         # redirects
         self.assertUrlResolvesToView('/timetable/random_stuff', 'timetable.views.redirect_to_home')
