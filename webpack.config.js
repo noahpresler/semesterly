@@ -69,6 +69,8 @@ const config = {
               sourceMap: isDev,
             },
           }, {
+            loader: 'postcss-loader',
+          }, {
             loader: 'sass-loader',
             options: {
               sourceMap: isDev,
