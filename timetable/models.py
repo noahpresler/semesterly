@@ -6,6 +6,7 @@ from operator import itemgetter
 from django.forms.models import model_to_dict
 from django.db import models
 from django.db.models import Count
+from picklefield.fields import PickledObjectField
 
 
 class Semester(models.Model):
@@ -54,6 +55,7 @@ class Course(models.Model):
     geneds = models.CharField(max_length=300, null=True, blank=True)
     related_courses = models.ManyToManyField("self", blank=True)
     same_as = models.ForeignKey('self', null=True)
+    vector = PickledObjectField(default=None, null=True)
 
     def __unicode__(self):
         return self.code + ": " + self.name
