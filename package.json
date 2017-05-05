@@ -54,6 +54,7 @@
     "react-onclickout": "^2.0.4",
     "react-proxy": "^1.1.8",
     "react-redux": "^5.0.2",
+    "react-render-html": "^0.1.6",
     "react-select": "^1.0.0-beta13",
     "react-swipeable": "^3.6.0",
     "react-tooltip": "^3.2.6",
