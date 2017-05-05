@@ -88,7 +88,7 @@ class Requester:
                 params = params if params else '',
                 cookies = self.cookies,
                 headers = self.headers,
-                verify = False,
+                verify = True,
             )
 
         return self.http_request(request, 'GET', **kwargs)
@@ -111,7 +111,7 @@ class Requester:
                 params = params if params else '',
                 cookies = self.cookies,
                 headers = self.headers,
-                verify = False,
+                verify = True,
             )
         return self.http_request(request, 'POST', **kwargs)
 
