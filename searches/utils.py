@@ -42,7 +42,6 @@ def vocabularize(corpus):
     return set([word for doc in corpus for word in tokenizer(doc)])
 
 def tokenizer(doc):
-    # Using default pattern from CountVectorizer
     token_pattern = re.compile('(?u)\\b\\w\\w+\\b')
     return [t for t in token_pattern.findall(doc)]
 
@@ -75,28 +74,9 @@ def picklify(course_object, course_vector):
 
 
 def vectorize_query(query):
-    if not query:
-        return None
     CV = vectorize()
     query_vector = CV.transform([query])
     return query_vector
-
-def compute_qry2course_relevancy(query, course):
-    if not query:
-        return None
-    query_vector = vectorize_query(query.lower())
-    return compute_cosine_sim(query_vector, course.vect)
-
-def compute_all_qry2course_relevancy(query):
-    if not query:
-        return None
-    query_tokens = query.lower().split(' ')
-    query_vector = vectorize_query(query.lower())
-    scores = []
-    for course in Course.objects.all():
-        scores.append((course.name, compute_cosine_sim(query_vector, course.vector) + match_title(query_tokens, course.name)))
-    scores.sort(key=lambda tup:-tup[1])
-    return scores[:10]
 
 def compute_cosine_sim(sparse_vec1, sparse_vec2):
     cross_product = np.sum(sparse_vec1.multiply(sparse_vec2))
@@ -111,3 +91,28 @@ def match_title(query_tokens, course_name):
     if count == len(query_tokens):
         return 1
     return 0
+
+def compute_qry2course_relevancy(query, course):
+    query_vector = vectorize_query(query.lower())
+    return compute_cosine_sim(query_vector, course.vect)
+
+def compute_all_qry2course_relevancy(query):
+    return get_relevant_courses(get_relevant_courses, Course.objects.all())
+
+def get_relevant_courses(query, course_filtered):
+    query_tokens = query.lower().split(' ')
+    query_vector = vectorize_query(query.lower())
+    scores = []
+    for course in course_filtered:
+        score = compute_cosine_sim(query_vector, course.vector) + match_title(query_tokens, course.name)
+        if score > 0.01:
+            scores.append((course, score))
+    scores.sort(key=lambda tup:-tup[1])
+    results = []
+    for i in range(5):
+        try:
+            results.append(scores.pop(0)[0])
+        except:
+            continue
+    return results
+
