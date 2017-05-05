@@ -56,7 +56,7 @@ const mapStateToProps = (state) => {
     courseDetails: hasFinalExams ?
       remapCourseDetails(state.finalExamsModal.finalExams) : {},
     activeLoadedTimetableName: state.finalExamsModal.fromShare ?
-      "Shared Final Exam Schedule" : state.savingTimetable.activeTimetable.name,
+      'Shared Final Exam Schedule' : state.savingTimetable.activeTimetable.name,
     hasNoCourses: !hasFinalExams &&
       timetables[active].courses.length === 0,
     courses: timetables[active].courses,
