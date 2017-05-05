@@ -133,7 +133,7 @@ class SideBar extends React.Component {
             </div>)
             : null;
     return (
-      <div id="side-bar" className="no-print">
+      <div className="side-bar no-print">
         <div id="sb-name">
           <TimetableNameInputContainer />
           <ClickOutHandler onClickOut={this.hideDropdown}>

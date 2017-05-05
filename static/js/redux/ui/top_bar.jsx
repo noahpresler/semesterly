@@ -6,11 +6,11 @@ import SocialProfileContainer from './containers/social_profile_container';
 import * as PropTypes from '../constants/propTypes';
 
 export const expandSideBar = () => {
-  $('#main-bar, #side-bar').removeClass('full-cal').addClass('less-cal');
+  $('.main-bar, .side-bar').removeClass('full-cal').addClass('less-cal');
 };
 
 export const collapseSideBar = () => {
-  $('#main-bar, #side-bar').removeClass('less-cal').addClass('full-cal');
+  $('.main-bar, .side-bar').removeClass('less-cal').addClass('full-cal');
 };
 
 class TopBar extends React.Component {
@@ -67,12 +67,12 @@ class TopBar extends React.Component {
 
   render() {
     return (
-      <div id="top-bar">
+      <div className="top-bar">
         <img
-          alt="logo" id="semesterly-logo" className="no-print"
+          alt="logo" className="semesterly-logo no-print"
           src="/static/img/logo2.0-32x32.png"
         />
-        <div id="semesterly-name" className="no-print">Semester.ly</div>
+        <div className="semesterly-name no-print">Semester.ly</div>
         <div id="print-content" className="print">
           {this.props.userInfo.isLoggedIn && this.props.userInfo.userFirstName ?
             this.renderUserForPrint() : null}
@@ -89,7 +89,7 @@ class TopBar extends React.Component {
         <CourseModalContainer />
         <SocialProfileContainer />
         <TimetableLoaderContainer />
-        <div id="navicon" onClick={this.toggleSideBar}>
+        <div className="navicon" onClick={this.toggleSideBar}>
           <span />
           <span />
           <span />
