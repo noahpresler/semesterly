@@ -1,20 +1,19 @@
 import { getSchool, getSemester } from '../init';
 
 /* server endpoints */
-export const getAddTTtoGCalEndpoint = () => '/user/add_to_gcal/';
+export const getAddTTtoGCalEndpoint = () => '/user/gcal/';
 export const getLogiCalEndpoint = () => '/user/log_ical/';
 export const getLogFinalExamViewEndpoint = () => '/user/log_final_exam/';
 export const getLogFacebookAlertViewEndpoint = () => '/user/log_fb_alert_view/';
 export const getLogFacebookAlertClickEndpoint = () => '/user/log_fb_alert_click/';
-export const getCourseInfoEndpoint = courseId => `/courses/${getSchool()}/${getSemester()}/id/${courseId}/`;
-export const getCourseSearchEndpoint = query => `/search/${getSchool()}/${getSemester()}/${query}/`;
-export const getAdvancedSearchEndpoint = () => '/advanced_search/';
-export const getTimetablesEndpoint = () => '/get_timetables/';
-export const getSaveTimetableEndpoint = () => '/user/save_timetable/';
-export const getCloneTimetableEndpoint = () => '/user/duplicate_timetable/';
-export const getDeleteTimetableEndpoint = () => '/user/delete_timetable/';
-export const getSaveSettingsEndpoint = () => '/user/save_settings/';
-export const getClassmatesEndpoint = () => '/user/get_classmates/';
+export const getCourseInfoEndpoint = courseId => `/courses/${getSemester()}/id/${courseId}/`;
+export const getCourseSearchEndpoint = query => `/search/${getSemester()}/${query}/`;
+export const getTimetablesEndpoint = () => '/timetables/';
+export const getLoadSavedTimetablesEndpoint = semester => `/user/timetables/${semester.name}/${semester.year}/`;
+export const getSaveTimetableEndpoint = () => '/user/timetables/';
+export const getDeleteTimetableEndpoint = (semester, name) => `/user/timetables/${semester.name}/${semester.year}/${name}/`;
+export const getSaveSettingsEndpoint = () => '/user/settings/';
+export const getClassmatesEndpoint = (semester, courses) => `/user/classmates/${semester.name}/${semester.year}?${$.param({ course_ids: courses })}`;
 export const getClassmatesInCourseEndpoint = courseId => `/course_classmates/${getSchool()}/${getSemester()}/id/${courseId}/`;
 export const getMostClassmatesCountEndpoint = () => '/user/get_most_classmates_count/';
 export const getFriendsEndpoint = () => '/user/find_friends/';
