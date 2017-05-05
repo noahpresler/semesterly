@@ -9,6 +9,7 @@ $green-light: #27ae60;
 $blue-light: #52b7d9;
 
 // greys
+$g222: #222;
 $g333: #333;
 $g555: #555;
 $g777: #777;
@@ -33,6 +34,8 @@ $gf5faff: #f5faff;
 
 $black-very-transparent: rgba(0, 0, 0, .06);
 $black-very-transparent-off: rgba(0, 0, 0, .075);
+$black-transparent-1: rgba(0, 0, 0, .1);
+$black-transparent-15: rgba(0, 0, 0, .15);
 
 // colors only used in react-select // todo: get rid of react-select
 $react-select-red: #d0021b;
