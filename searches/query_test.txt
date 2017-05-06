@@ -1,0 +1,5 @@
+q1* python jupyter notebook data visualization
+a1* data mining, beautiful data, 
+
+q2* mobile app creating team project android
+a1* user interface mobile application, object oriented programming
