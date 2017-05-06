@@ -1,6 +1,7 @@
 import pickle
 import re
 import numpy as np
+import time
 from operator import or_
 from scipy.sparse import linalg
 from sklearn.feature_extraction.text import CountVectorizer
@@ -8,42 +9,46 @@ from sklearn.feature_extraction.text import TfidfTransformer
 from picklefield.fields import PickledObjectField
 from django.db import models
 from timetable.models import Semester, Course
+from nltk.stem.porter import *
+
+TITLE_WEIGHT = 3
+stemmer = PorterStemmer()
 
 def vectorize():
     # get names (titles) and descriptions for creating vocabulary
-    names = []
-    descp = []
+    raw_word_counts = []
     for course in Course.objects.all():
-        names.append(course.name)
-        descp.append(course.description)
+        raw_word_counts.append(stem_course(course.name, course.description, TITLE_WEIGHT))
 
     # vectorize course objects
-    vocabulary = reduce(or_, [vocabularize(names), vocabularize(descp)])
-    CV = CountVectorizer(ngram_range=(1,2), vocabulary=vocabulary, stop_words='english')    
-    descp_counts = CV.transform(descp) * 3
-    names_counts = CV.transform(names) * 10
-    course_counts = descp_counts + names_counts
-    TFIDF_TF = TfidfTransformer(use_idf=False).fit(descp_counts)
-    course_vectors = TFIDF_TF.transform(course_counts)
+    CV = CountVectorizer(ngram_range=(1,2), stop_words='english')
+    processed_word_counts = CV.fit_transform(raw_word_counts)
+    TFIDF_TF = TfidfTransformer(use_idf=False).fit(processed_word_counts)
+    course_vectors = TFIDF_TF.transform(processed_word_counts)
 
-    # calculate norms (if not using TFIDF)
-    #course_vectors_norms = []
-    #for i in range(course_vectors.shape[0]):
-    #    course_vectors_norms.append(linalg.norm(course_vectors[i,:]))
-
+    # save course vector
     i = 0
     for course in Course.objects.all():
         #picklify(course, course_vectors[i])
         i+=1
 
+    # store CountVectorizer in the memory
     return CV
 
-def vocabularize(corpus):
-    return set([word for doc in corpus for word in tokenizer(doc)])
+def stem_course(name, description, W):
+    stemmed_doc = ""
+    if name:
+        name_doc = name.encode('ascii', 'ignore')
+        stemmed_name_doc = ' '.join([stemmer.stem(w.lower()) for w in name_doc.split(' ')])
+        for i in range(W):
+            stemmed_doc += " " + stemmed_name_doc
+        stemmed_doc += " "
+    if description:
+        desc_doc = description.encode('ascii', 'ignore')
+        stemmed_desc_doc = ' '.join([stemmer.stem(w.lower()) for w in desc_doc.split(' ')])
+        stemmed_doc += stemmed_desc_doc
+    return stemmed_doc
 
-def tokenizer(doc):
-    token_pattern = re.compile('(?u)\\b\\w\\w+\\b')
-    return [t for t in token_pattern.findall(doc)]
 
 def wordify(CV, course_vector):
     print(CV.inverse_transform(course_vector))
@@ -76,15 +81,17 @@ def compute_qry2course_relevancy(query, course):
     return compute_cosine_sim(query_vector, course.vect)
 
 def compute_all_qry2course_relevancy(query):
-    return get_relevant_courses(get_relevant_courses, Course.objects.all())
+    return get_relevant_courses(query, Course.objects.all())
 
 def get_relevant_courses(query, course_filtered):
+    start_time = time.time()
+
     query_tokens = query.lower().split(' ')
     query_vector = vectorize_query(query.lower())
     scores = []
     for course in course_filtered:
-        score = compute_cosine_sim(query_vector, course.vector) + match_title(query_tokens, course.name)
-        if score > 0.01:
+        score = compute_cosine_sim(query_vector, course.vector)# + match_title(query_tokens, course.name)
+        if score > 0.10:
             scores.append((course, score))
     scores.sort(key=lambda tup:-tup[1])
     results = []
@@ -93,5 +100,6 @@ def get_relevant_courses(query, course_filtered):
             results.append(scores.pop(0)[0])
         except:
             continue
+    elapsed_time = time.time() - start_time
+    print("serach done in %f (seconds)" %elapsed_time)
     return results
-
