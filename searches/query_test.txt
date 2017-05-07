@@ -1,9 +1,2 @@
-q1* python jupyter notebook data visualization
-a1* data mining, beautiful data, 
-
-q2* mobile app creating team project android
-a2* user interface mobile application, object oriented programming
-
-q3* psycology social love humans
-a3* AS.200.133, AS.230.213, AS.100.749, ED.811.626
-
+python jupyter notebook data visualization->EN.553.436, AS.171.205, AS.191.383, EN.625.740, EN.553.636
+psychology social love humans->AS.200.133, AS.230.213, AS.100.749, ED.811.626
