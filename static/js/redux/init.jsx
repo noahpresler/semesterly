@@ -7,7 +7,7 @@ import { Provider } from 'react-redux';
 import rootReducer from './reducers/root_reducer';
 import SemesterlyContainer from './ui/containers/semesterly_container';
 import { fetchMostClassmatesCount, getUserInfo, isRegistered } from './actions/user_actions';
-import { loadCachedTimetable, loadTimetable, lockTimetable, triggerTosModal, triggerTosBannerModal } from './actions/timetable_actions';
+import { loadCachedTimetable, loadTimetable, lockTimetable, triggerTosModal, triggerTosBanner } from './actions/timetable_actions';
 import { fetchSchoolInfo } from './actions/school_actions';
 import { fetchCourseClassmates, setCourseInfo } from './actions/modal_actions';
 import {
@@ -155,8 +155,8 @@ function setup(dispatch) {
   }
 
   if (showTOSBanner) {
-    dispatch(triggerTosBannerModal());
-    // console.log("SHOW TOS BANNER")
+    dispatch(triggerTosBanner());
+    // console.log('SHOW TOS BANNER');
   }
 
     /* now setup sharing state */

@@ -110,8 +110,8 @@ export const overrideSettingsShow = data => ({
 
 export const toggleTextbookModal = () => ({ type: ActionTypes.TOGGLE_TEXTBOOK_MODAL });
 
-export const triggerTermsOfServiceBannerModal = () => ({
-  type: ActionTypes.TRIGGER_TOS_BANNER_MODAL,
+export const triggerTermsOfServiceBanner = () => ({
+  type: ActionTypes.TRIGGER_TOS_BANNER,
 });
 
 export const triggerTermsOfServiceModal = () => ({
