@@ -1,28 +1,28 @@
-import React from "react";
-import DayCalendarContainer from "./containers/day_calendar_container.jsx";
-import CalendarContainer from "./containers/calendar_container.jsx";
-import AlertBox from "./alert_box.jsx";
-import ConflictAlertContainer from "./alerts/conflict_alert_container.jsx";
-import TimetableExistsAlertContainer from "./alerts/timetable_exists_alert_container.jsx";
-import ChangeSemesterAlertContainer from "./alerts/change_semester_alert_container.jsx";
-import NewTimetableAlertContainer from "./alerts/new_timetable_alert_container.jsx";
-import EnableNotificationsAlertContainer from "./alerts/enable_notifications_alert_container.jsx";
-import FriendsInClassAlertContainer from "./alerts/friends_in_class_alert_container.jsx";
-import TopBarContainer from "./containers/top_bar_container.jsx";
-import SideBarContainer from "./containers/side_bar_container.jsx";
-import UserSettingsModalContainer from "./containers/user_settings_modal_container.jsx";
-import ExplorationModalContainer from "./containers/exploration_modal_container.jsx";
-import SignupModalContainer from "./containers/signup_modal_container.jsx";
-import PreferenceModalContainer from "./containers/preference_modal_container.jsx";
-import TutModalContainer from "./containers/tut_modal_container.jsx";
-import PeerModalContainer from "./containers/peer_modal_container.jsx";
-import IntegrationModalContainer from "./containers/integration_modal_container.jsx";
-import SaveCalendarModalContainer from "./containers/save_calendar_modal_container.jsx";
-import FinalExamsModalContainer from "./containers/final_exams_modal_container.jsx";
-import UserAcquisitionModalContainer from "./containers/user_acquisition_modal_container.jsx";
-import TermsOfServiceModalContainer from "./containers/terms_of_service_modal_container.jsx";
-import TermsOfServiceBannerModalContainer from "./containers/terms_of_service_banner_modal_container.jsx";
-import TextbookModalContainer from "./containers/textbook_modal_container.jsx";
+import React from 'react';
+import DayCalendarContainer from './containers/day_calendar_container';
+import CalendarContainer from './containers/calendar_container';
+import AlertBox from './alert_box';
+import ConflictAlertContainer from './alerts/conflict_alert_container';
+import TimetableExistsAlertContainer from './alerts/timetable_exists_alert_container';
+import ChangeSemesterAlertContainer from './alerts/change_semester_alert_container';
+import NewTimetableAlertContainer from './alerts/new_timetable_alert_container';
+import EnableNotificationsAlertContainer from './alerts/enable_notifications_alert_container';
+import FriendsInClassAlertContainer from './alerts/friends_in_class_alert_container';
+import TopBarContainer from './containers/top_bar_container';
+import SideBarContainer from './containers/side_bar_container';
+import UserSettingsModalContainer from './containers/user_settings_modal_container';
+import ExplorationModalContainer from './containers/exploration_modal_container';
+import SignupModalContainer from './containers/signup_modal_container';
+import PreferenceModalContainer from './containers/preference_modal_container';
+import TutModalContainer from './containers/tut_modal_container';
+import PeerModalContainer from './containers/peer_modal_container';
+import IntegrationModalContainer from './containers/integration_modal_container';
+import SaveCalendarModalContainer from './containers/save_calendar_modal_container';
+import FinalExamsModalContainer from './containers/final_exams_modal_container';
+import UserAcquisitionModalContainer from './containers/user_acquisition_modal_container';
+import TermsOfServiceModalContainer from './containers/terms_of_service_modal_container';
+import TermsOfServiceBannerContainer from './containers/terms_of_service_banner_container';
+import TextbookModalContainer from './containers/textbook_modal_container';
 
 class Semesterly extends React.Component {
   constructor(props) {
@@ -143,7 +143,7 @@ class Semesterly extends React.Component {
         <FinalExamsModalContainer />
         <UserAcquisitionModalContainer />
         <TermsOfServiceModalContainer />
-        <TermsOfServiceBannerModalContainer />
+        <TermsOfServiceBannerContainer />
         <TextbookModalContainer />
         <AlertBox ref={(a) => { this.msg = a; }} {...this.alertOptions} />
         <div id="all-cols">
