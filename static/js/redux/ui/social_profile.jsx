@@ -1,13 +1,15 @@
 import React from 'react';
 import classNames from 'classnames';
 import ClickOutHandler from 'react-onclickout';
+import * as PropTypes from '../constants/propTypes';
 
-export class SocialProfile extends React.Component {
+class SocialProfile extends React.Component {
   constructor(props) {
     super(props);
     this.state = { showDropdown: false };
     this.toggleDropdown = this.toggleDropdown.bind(this);
     this.hideDropDown = this.hideDropDown.bind(this);
+    this.toggleDropdown = this.toggleDropdown.bind(this);
   }
 
   toggleDropdown() {
@@ -22,13 +24,10 @@ export class SocialProfile extends React.Component {
     const profileImage = {
       backgroundImage: `url(${this.props.userInfo.img_url})`,
     };
-    const blankImage = {
-      backgroundImage: 'url(/static/img/blank.jpg)',
-    };
     const loggedIn = (
       <ClickOutHandler onClickOut={this.hideDropDown}>
         <div>
-          <div onMouseDown={this.toggleDropdown.bind(this)}>
+          <div onMouseDown={this.toggleDropdown}>
             <div id="social-pro-pic" style={profileImage} />
             <h2>{this.props.userInfo.userFirstNam}</h2>
             <span className={classNames('tip-down', { down: this.state.showDropdown })} />
@@ -83,3 +82,11 @@ export class SocialProfile extends React.Component {
     );
   }
 }
+
+SocialProfile.propTypes = {
+  userInfo: PropTypes.userInfo.isRequired,
+  showUserSettings: React.PropTypes.func.isRequired,
+  triggerAcquisitionModal: React.PropTypes.func.isRequired,
+};
+
+export default SocialProfile;
