@@ -1,6 +1,10 @@
 $primary-navy: #34495e;
 $navy-light: #375b80;
 $navy-transparent-20: rgba(63, 81, 181, .2);
+$confirm-green: #1abc9c;
+$confirm-green-hover: #16ad8f;
+$confirm-green-darker: #12ab8d;
+$confirm-green-alt: #42A770;
 
 $red: #d21616;
 $yellow: #d29842;
@@ -8,9 +12,14 @@ $green: #0aa98a;
 $green-light: #27ae60;
 $blue-light: #52b7d9;
 
+// facebook
+$facebook: #3b5998;
+$facebook-dark: #2b406e;
+
 // greys
 $g222: #222;
 $g333: #333;
+$g444: #444;
 $g555: #555;
 $g777: #777;
 $g999: #999;
@@ -20,8 +29,10 @@ $gddd: #ddd;
 $geee: #eee;
 $gfff: #fff;
 
+$g484848: #484848;
 $g808080: #808080;
 $gb3b3b3: #b3b3b3;
+$gc4c4c4: #c4c4c4;
 $gd9d9d9: #d9d9d9;
 $ge3e3e3: #e3e3e3;
 $ge6e6e6: #e6e6e6;
@@ -36,6 +47,8 @@ $black-very-transparent: rgba(0, 0, 0, .06);
 $black-very-transparent-off: rgba(0, 0, 0, .075);
 $black-transparent-1: rgba(0, 0, 0, .1);
 $black-transparent-15: rgba(0, 0, 0, .15);
+$black-transparent-25: rgba(0, 0, 0, .25);
+$black-transparent-3: rgba(0, 0, 0, .3);
 
 // colors only used in react-select // todo: get rid of react-select
 $react-select-red: #d0021b;
