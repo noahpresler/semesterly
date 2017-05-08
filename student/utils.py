@@ -76,12 +76,12 @@ def get_user_dict(school, student, semester):
         user_dict["GoogleLoggedIn"] = False
         user_dict['LoginToken'] = make_token(student).split(":", 1)[1]
         user_dict['LoginHash'] = hashids.encrypt(student.id)
+        user_dict["time_accepted_tos"] = str(student.time_accepted_tos) if student.time_accepted_tos else None
         if google_user_exists:
             credentials = get_google_credentials(student)
             user_dict["GoogleLoggedIn"] = not (credentials is None or credentials.invalid)
 
     user_dict["isLoggedIn"] = student is not None
-    user_dict["time_accepted_tos"] = str(student.time_accepted_tos) if student.time_accepted_tos else None
 
     return user_dict
 
