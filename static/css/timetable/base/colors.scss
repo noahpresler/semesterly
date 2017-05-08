@@ -4,7 +4,7 @@ $navy-transparent-20: rgba(63, 81, 181, .2);
 $confirm-green: #1abc9c;
 $confirm-green-hover: #16ad8f;
 $confirm-green-darker: #12ab8d;
-$confirm-green-alt: #42A770;
+$confirm-green-alt: #42a770;
 
 $red: #d21616;
 $yellow: #d29842;
@@ -60,3 +60,8 @@ $react-select-navy-transparent: rgba(0, 126, 255, .1);
 $react-select-navy-semi-transparent: rgba(0, 126, 255, .24);
 $react-single-sky-blue: #c2e0ff;
 $react-single-sky-blue-hover: #d8eafd;
+
+// colors only used in loader
+$spinner-blue: #114357;
+$spinner-purple: #826c75;
+$spinner-pink: #f29492;
