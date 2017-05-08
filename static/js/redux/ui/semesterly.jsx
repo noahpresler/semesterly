@@ -36,11 +36,11 @@ class Semesterly extends React.Component {
 
   componentWillMount() {
     $(document.body).on('keydown', (e) => {
-      if (parseInt(e.keyCode) === 39) {
+      if (parseInt(e.keyCode, 10) === 39) {
         if (this.props.PgActive + 1 < this.props.PgCount) {
           this.props.setPgActive(this.props.PgActive + 1);
         }
-      } else if (parseInt(e.keyCode) === 37) {
+      } else if (parseInt(e.keyCode, 10) === 37) {
         if (this.props.PgActive > 0) {
           this.props.setPgActive(this.props.PgActive - 1);
         }
@@ -53,30 +53,19 @@ class Semesterly extends React.Component {
             e.preventDefault();
             this.props.saveTimetable();
             break;
+          default:
+            break;
         }
       }
     });
-    window.addEventListener('orientationchange', (e) => {
+    window.addEventListener('orientationchange', () => {
       this.updateOrientation();
     });
-    window.addEventListener('resize', (e) => {
+    window.addEventListener('resize', () => {
       if (!$('#search-bar-input-wrapper input').is(':focus')) {
         this.updateOrientation();
       }
     });
-  }
-
-  updateOrientation() {
-    let orientation = 'portrait';
-    if (window.matchMedia('(orientation: portrait)').matches) {
-      orientation = 'portrait';
-    }
-    if (window.matchMedia('(orientation: landscape)').matches) {
-      orientation = 'landscape';
-    }
-    if (orientation != this.state.orientation) {
-      this.setState({ orientation });
-    }
   }
 
   componentDidMount() {
@@ -91,7 +80,7 @@ class Semesterly extends React.Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    if (nextProps != this.props) {
+    if (nextProps !== this.props) {
       if (nextProps.alertConflict && !this.props.alertConflict) {
         this.showAlert(<ConflictAlertContainer />, 'info', 10000);
       } else if (nextProps.alertTimetableExists && !this.props.alertTimetableExists) {
@@ -115,6 +104,19 @@ class Semesterly extends React.Component {
     }
   }
 
+  updateOrientation() {
+    let orientation = 'portrait';
+    if (window.matchMedia('(orientation: portrait)').matches) {
+      orientation = 'portrait';
+    }
+    if (window.matchMedia('(orientation: landscape)').matches) {
+      orientation = 'landscape';
+    }
+    if (orientation !== this.state.orientation) {
+      this.setState({ orientation });
+    }
+  }
+
   showAlert(alert, type, delay = 5000) {
     this.msg.show(alert, {
       type,
@@ -124,7 +126,7 @@ class Semesterly extends React.Component {
 
   render() {
     const mobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
-    const cal = mobile && $(window).width() < 767 && this.state.orientation == 'portrait' ?
+    const cal = mobile && $(window).width() < 767 && this.state.orientation === 'portrait' ?
       <DayCalendarContainer /> :
       <CalendarContainer />;
     return (
@@ -143,7 +145,7 @@ class Semesterly extends React.Component {
         <TermsOfServiceModalContainer />
         <TermsOfServiceBannerModalContainer />
         <TextbookModalContainer />
-        <AlertBox ref={a => this.msg = a} {...this.alertOptions} />
+        <AlertBox ref={(a) => { this.msg = a; }} {...this.alertOptions} />
         <div id="all-cols">
           <div id="main-bar">
             {cal}
@@ -153,12 +155,12 @@ class Semesterly extends React.Component {
                   href="mailto:contact@semester.ly?Subject=Semesterly"
                 >Contact us</a></li>
                 <li className="footer-button" role="presentation"><a
-                  target="_blank"
+                  target="_blank" rel="noopener noreferrer"
                   href="http://goo.gl/forms/YSltU2YI54PC9sXw1"
                 >Feedback</a>
                 </li>
                 <li className="footer-button" role="presentation"><a
-                  target="_blank"
+                  target="_blank" rel="noopener noreferrer"
                   href="https://www.facebook.com/semesterly/"
                 >Facebook</a>
                 </li>
@@ -180,10 +182,17 @@ class Semesterly extends React.Component {
   }
 }
 
+Semesterly.propTypes = {
+  PgActive: React.PropTypes.number.isRequired,
+  PgCount: React.PropTypes.number.isRequired,
+  alertChangeSemester: React.PropTypes.bool.isRequired,
+  alertConflict: React.PropTypes.bool.isRequired,
+  alertEnableNotifications: React.PropTypes.bool.isRequired,
+  alertFacebookFriends: React.PropTypes.bool.isRequired,
+  alertNewTimetable: React.PropTypes.bool.isRequired,
+  alertTimetableExists: React.PropTypes.bool.isRequired,
+  saveTimetable: React.PropTypes.func.isRequired,
+  setPgActive: React.PropTypes.func.isRequired,
+};
+
 export default Semesterly;
-
-
-/*
- <li className="fb-like" data-href="https://www.facebook.com/semesterly/" data-layout="standard" data-action="like" data-show-faces="true" >
- </li>
- */
