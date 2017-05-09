@@ -20,11 +20,11 @@ class TermsOfServiceBanner extends React.Component {
       >
         <p>
           By using Semester.ly you agree to our
-          <a href="/static/termsofservice.html" target="_blank" rel="noopener noreferrer">
+          <a href="/termsofservice" target="_blank" rel="noopener noreferrer">
             Terms of Service
           </a>
           and
-          <a href="/static/privacypolicy.html" target="_blank" rel="noopener noreferrer">
+          <a href="/privacypolicy" target="_blank" rel="noopener noreferrer">
             Privacy Policy
           </a>
         </p>
