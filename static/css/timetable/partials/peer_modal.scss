@@ -17,7 +17,7 @@
   }
 
   #modal-content {
-    background-color: #f7f7f7;
+    background-color: $gf3f3f3;
     height: 100%;
     position: relative;
 
@@ -33,6 +33,16 @@
   height: 100%;
   position: absolute;
   width: 200px;
+
+  p {
+    color: $g555;
+    font-size: 16px;
+    font-weight: 200;
+    line-height: 16px;
+    margin-bottom: 30px;
+    text-align: center;
+    width: 100%;
+  }
 }
 
 #pm-header {
@@ -42,22 +52,13 @@
 }
 
 #main-modal-wrapper {
-  background-color: #f7f7f7;
+  background-color: $gf3f3f3;
   height: 100%;
   left: 200px;
   padding: 20px 10px 20px 20px;
   position: absolute;
   right: 0;
-}
 
-#split-modal-wrapper {
-  background-color: #f7f7f7;
-  height: 100%;
-  overflow: auto;
-  position: relative;
-}
-
-#main-modal-wrapper {
   h4 {
     float: left;
     font-weight: 200;
@@ -66,6 +67,46 @@
     margin-left: 5px;
     text-align: left;
   }
+
+  .upsell {
+    h4 {
+      float: none;
+      font-weight: 400;
+      text-align: center;
+    }
+
+    .disclaimer {
+      float: left;
+    }
+
+    p {
+      color: $g555;
+      font-size: 16px;
+      line-height: 22px;
+      margin: 7px 0 20px;
+      padding: 0 5px;
+      transition: color .2s;
+      word-wrap: break-word;
+    }
+
+    .lure-accept {
+      background: $green-bright;
+      border: 1px solid $green-bright;
+      border-radius: 3px;
+      color: $gfff;
+      font-size: 14px;
+      font-weight: 900;
+      padding: 5px 10px;
+      width: 100px;
+    }
+  }
+}
+
+#split-modal-wrapper {
+  background-color: $gf3f3f3;
+  height: 100%;
+  overflow: auto;
+  position: relative;
 }
 
 .circle-pic {
@@ -127,17 +168,59 @@
   .shared-courses {
     padding: 0 20px 20px;
   }
+
+  .shared-course {
+    p {
+      color: $g555;
+      font-size: 16px;
+      font-weight: 300;
+      line-height: 16px;
+      margin: 7px 0 7px 20px;
+      overflow: hidden;
+      padding: 0 5px;
+      text-overflow: ellipsis;
+      transition: color .2s;
+      white-space: nowrap;
+      word-wrap: break-word;
+    }
+  }
+
+  .class-only-indicator {
+    color: $friend;
+    float: left;
+    font-size: 18px;
+    line-height: 18px;;
+    margin-left: 2px;
+    margin-top: -1px;
+  }
+
+  &.upsell {
+    text-align: center;
+    width: 100%;
+  }
+
+  .fa-facebook-square {
+    float: left;
+    margin-left: 5px;
+    margin-top: 2px;
+  }
 }
 
 .peer-card-wrapper {
   background-color: $gfff;
   border: 1px solid $gd4d4d4;
   box-shadow: 0 -1px 0 $ge6e6e6, 0 0 2px $black-transparent-1, 0 2px 4px $black-transparent-1;
+
+  &.upsell {
+    padding: 35px 20px;
+    text-align: center;
+    width: 100%;
+  }
 }
 
 .view-profile-btn {
-  background: #4080ff;
-  border: 1px solid #4080ff;
+  background: $facebook-view;
+  border: 1px solid $facebook-view;
   border-radius: 3px;
   color: $gfff;
   display: block;
@@ -149,216 +232,141 @@
 }
 
 .friend-status {
+  color: $green-light;
   font-size: 13px;
   margin: 0 0 0 110px;
   padding: 0;
 }
 
 .course-color-circle {
-  background-color: #FD7473;
+  background-color: $pink;
   border-radius: 16px;
   float: left;
   height: 16px;
   text-align: center;
   width: 16px;
-}
 
-.peer-card .shared-course p {
-  font-weight: 300;
-  font-size: 16px;
-  line-height: 16px;
-  color: $g555;
-  padding: 0 5px;
-  margin: 7px 0;
-  margin-left: 20px;
-  -webkit-transition: color .2s;
-  transition: color .2s;
-  word-wrap: break-word;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-  overflow: hidden;
+  .fa-check {
+    color: $gfff;
+    display: block;
+    font-size: 12px;
+    height: 16px;
+    line-height: 16px;
+    width: 16px;
+  }
 }
 
 .ghost-course-title {
-	width: 220px;
-	height: 16px;
-	background-color: $g555;
-    line-height: 16px;
-    padding: 0 5px;
-    margin: 7px 0;
-	margin-left: 25px;
-	opacity: 0.07;
+  background-color: $g555;
+  height: 16px;
+  line-height: 16px;
+  margin: 7px 0 7px 25px;
+  opacity: .07;
+  padding: 0 5px;
+  width: 220px;
 }
 
-.peer-card .class-only-indicator {
-	float: left;
-	margin-top: -1px;
-	margin-left: 2px;
-	font-size: 18px;
-	line-height: 18px;;
-	color: rgb(83, 233, 151);
-}
+.ghost {
+  button {
+    opacity: .4;
+  }
 
-.ghost button {
-	opacity: .4;
-}
-
-.ghost .course-color-circle {
-	opacity: .5;
+  .course-color-circle {
+    opacity: .5;
+  }
 }
 
 .pm-side-bar-slot {
-	margin: 8px;
-	padding: 5px 5px 5px 10px;
-	border-radius: 5px;
-	background-color: #FD7473;
-	overflow: hidden;
-    margin-bottom: 5px;
-    cursor: pointer;
-    position: relative;
-}
+  background-color: $pink;
+  border-radius: 5px;
+  cursor: pointer;
+  margin: 8px 8px 5px;
+  overflow: hidden;
+  padding: 5px 5px 5px 10px;
+  position: relative;
 
-.pm-side-bar-slot .slot-bar {
-	left: 0;
-	top: 0;
-}
-
-#pm-side-bar p {
-	font-weight: 200;
-	width: 100%;
-    font-size: 16px;
-    line-height: 16px;
-    color: $g555;
-    text-align: center;
-    margin-bottom: 30px;
-}
-
-.peer-card.upsell {
-	width: 100%;
-	text-align: center;
-}
-
-.peer-card-wrapper.upsell {
-	width: 100%;
-	padding: 35px 20px;
-	text-align: center;
-}
-
-#main-modal-wrapper .upsell h4 {
-	float: none;
-	font-weight: 400;
-	text-align: center;
-}
-
-#main-modal-wrapper .upsell .disclaimer {
-	float: left;
-
-}
-
-#main-modal-wrapper .upsell p {
-    font-size: 16px;
-    line-height: 22px;
-    color: $g555;
-    padding: 0 5px;
-    margin: 7px 0;
-    -webkit-transition: color .2s;
-    transition: color .2s;
-    word-wrap: break-word;
-    margin-bottom: 20px;
-}
-
-.peer-card .fa-facebook-square {
-	float: left;
-	margin-left: 5px;
-	margin-top: 2px;
-}
-
-#main-modal-wrapper .upsell .lure-accept {
-	background: #4AD187;
-	border: 1px solid #4AD187;
-	border-radius: 3px;
-	font-size: 14px;
-	font-weight: 900;
-	padding: 5px 10px 5px 10px;
-	color: white;
-	width: 100px;
-}
-
-.course-color-circle .fa-check {
-	font-size: 12px;
-	color: white;
-	display: block;
-	height: 16px;
-	width: 16px;
-	line-height: 16px;
+  .slot-bar {
+    left: 0;
+    top: 0;
+  }
 }
 
 .key {
-	float: right;
+  float: right;
 }
 
 .key-entry {
-	margin-bottom: 3px;
-}
+  margin-bottom: 3px;
 
-.key-entry p {
-	font-weight: 300;
-	margin: 0px;
-	margin-left: 20px;
-	font-size: 14px;
-	height: 16px;
-	line-height: 16px;
+  p {
+    font-size: 14px;
+    font-weight: 300;
+    height: 16px;
+    line-height: 16px;
+    margin: 0;
+    margin-left: 20px;
+  }
 }
-
-.friend-status {
-	color: rgb(58, 163, 105);
-}
-
 
 @media (max-width: 850px) {
-	.peer-card {
-		width: 100%;
+  .peer-card {
+    width: 100%;
 	}
-	#main-modal-wrapper h4 {
-		font-size: 22px;
-	}
-	.key {
-		margin-bottom: 15px;
+
+  #main-modal-wrapper {
+    h4 {
+      font-size: 22px;
+    }
+  }
+
+  .key {
+    margin-bottom: 15px;
 	}
 }
 
 @media (max-width: 600px) {
-	.pm-side-bar {
-		display: none;
-	}
-	#main-modal-wrapper {
-		position: absolute;
-	    left: 0px
-	}
-	.peer-card-wrapper.upsell {
-		padding: 18px 10px;
+  .pm-side-bar {
+    display: none;
 	}
 
-	#main-modal-wrapper .upsell p {
-		font-size: 12px;
-		line-height: 16px;
+  #main-modal-wrapper {
+    left: 0;
+    position: absolute;
+
+    .upsell {
+      p {
+        font-size: 12px;
+        line-height: 16px;
+      }
+
+      h4 {
+        font-size: 22px;
+      }
+    }
+
+    h4 {
+      font-size: 25px;
+      margin-top: 3px;
+    }
 	}
 
-	#main-modal-wrapper h4 {
-		margin-top: 3px;
-		font-size: 25px;
-	}
-
-	#main-modal-wrapper .upsell h4 {
-		font-size: 22px;
-	}
+  .peer-card-wrapper {
+    &.upsell {
+      padding: 18px 10px;
+    }
+  }
 }
 
 @media (max-width: 410px) {
-	#main-modal-wrapper h4 {
-		font-size: 18px;
-	}
-	.key-entry p {
-		font-size: 10px;
-	}
+  #main-modal-wrapper {
+    h4 {
+      font-size: 18px;
+    }
+  }
+
+  .key-entry {
+    p {
+      font-size: 10px;
+    }
+  }
 }
