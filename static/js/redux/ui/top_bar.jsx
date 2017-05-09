@@ -50,12 +50,11 @@ class TopBar extends React.Component {
           className="usr-pic print"
           src={`https://graph.facebook.com/${JSON.parse(currentUser).fbook_uid}/picture?type=normal`}
         />
-        <div id="print-name-major" className="print">
+        <div className="print-name-major print">
           <span
-            id="print-name"
-            className="print"
+            className="print-name print"
           >{`${userInfo.userFirstName} ${userInfo.userLastName}`}</span>
-          <span id="print-major" className="print">
+          <span className="print-major print">
             {userInfo.major}
             {userInfo.class_year ? `| Class of ${userInfo.class_year}` : null} |
                         {`${this.props.currentSemester.name} ${this.props.currentSemester.year}`}
@@ -73,14 +72,14 @@ class TopBar extends React.Component {
           src="/static/img/logo2.0-32x32.png"
         />
         <div className="semesterly-name no-print">Semester.ly</div>
-        <div id="print-content" className="print">
+        <div className="print-content print">
           {this.props.userInfo.isLoggedIn && this.props.userInfo.userFirstName ?
             this.renderUserForPrint() : null}
-          <div id="name-logo" className="print">
-            <div id="semesterly-name-print" className="print">Semester.ly</div>
+          <div className="name-logo print">
+            <div className="semesterly-name-print print">Semester.ly</div>
             <img
               alt="print logo"
-              id="semesterly-logo-print" className="print"
+              className="semesterly-logo-print print"
               src="/static/img/logo2.0-32x32.png"
             />
           </div>
