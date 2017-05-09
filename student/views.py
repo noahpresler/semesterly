@@ -92,43 +92,41 @@ def log_ical_export(request):
 class UserView(RedirectToSignupMixin, APIView):
 
     def get(self, request):
-        logged = request.user.is_authenticated()
-        if logged and Student.objects.filter(user=request.user).exists():
-            student = Student.objects.get(user=request.user)
-            reactions = Reaction.objects.filter(student=student).values('title').annotate(
-                count=Count('title'))
-            if student.user.social_auth.filter(provider='google-oauth2').exists():
-                hasGoogle = True
-            else:
-                hasGoogle = False
-            if student.user.social_auth.filter(provider='facebook').exists():
-                social_user = student.user.social_auth.filter(provider='facebook').first()
-                img_url = 'https://graph.facebook.com/' + student.fbook_uid + '/picture?width=700&height=700'
-                hasFacebook = True
-            else:
-                social_user = student.user.social_auth.filter(provider='google-oauth2').first()
-                img_url = student.img_url.replace('sz=50', 'sz=700')
-                hasFacebook = False
-            hasNotificationsEnabled = RegistrationToken.objects.filter(student=student).exists()
-            context = {
-                'name': student.user,
-                'major': student.major,
-                'class': student.class_year,
-                'student': student,
-                'total': 0,
-                'img_url': img_url,
-                'hasGoogle': hasGoogle,
-                'hasFacebook': hasFacebook,
-                'notifications': hasNotificationsEnabled
-            }
-            for r in reactions:
-                context[r['title']] = r['count']
-            for r in Reaction.REACTION_CHOICES:
-                if r[0] not in context:
-                    context[r[0]] = 0
-                context['total'] += context[r[0]]
-            return render_to_response("profile.html", context,
-                                      context_instance=RequestContext(request))
+        student = Student.objects.get(user=request.user)
+        reactions = Reaction.objects.filter(student=student).values('title').annotate(
+            count=Count('title'))
+        if student.user.social_auth.filter(provider='google-oauth2').exists():
+            hasGoogle = True
+        else:
+            hasGoogle = False
+        if student.user.social_auth.filter(provider='facebook').exists():
+            social_user = student.user.social_auth.filter(provider='facebook').first()
+            img_url = 'https://graph.facebook.com/' + student.fbook_uid + '/picture?width=700&height=700'
+            hasFacebook = True
+        else:
+            social_user = student.user.social_auth.filter(provider='google-oauth2').first()
+            img_url = student.img_url.replace('sz=50', 'sz=700')
+            hasFacebook = False
+        hasNotificationsEnabled = RegistrationToken.objects.filter(student=student).exists()
+        context = {
+            'name': student.user,
+            'major': student.major,
+            'class': student.class_year,
+            'student': student,
+            'total': 0,
+            'img_url': img_url,
+            'hasGoogle': hasGoogle,
+            'hasFacebook': hasFacebook,
+            'notifications': hasNotificationsEnabled
+        }
+        for r in reactions:
+            context[r['title']] = r['count']
+        for r in Reaction.REACTION_CHOICES:
+            if r[0] not in context:
+                context[r[0]] = 0
+            context['total'] += context[r[0]]
+        return render_to_response("profile.html", context,
+                                  context_instance=RequestContext(request))
 
     def patch(self, request):
         student = get_object_or_404(Student, user=request.user)
