@@ -35,7 +35,6 @@ DAY_MAP = {
 
 hashids = Hashids(salt="x98as7dhg&h*askdj^has!kj?xz<!9")
 
-
 def get_friend_count_from_course_id(school, student, course_id, semester):
     return PersonalTimetable.objects.filter(student__in=student.friends.all(),
                                             courses__id__exact=course_id) \
@@ -234,10 +233,10 @@ class UserTimetableView(ValidateSubdomainMixin, RedirectToSignupMixin, APIView):
 class ClassmateView(ValidateSubdomainMixin, RedirectToSignupMixin, APIView):
 
     def get(self, request, sem_name, year):
-        if request.query_params.get('counts'):
+        if request.query_params.get('count'):
             school = request.subdomain
             student = Student.objects.get(user=request.user)
-            course_ids = map(int, request.query_params.getlist('course_ids'))
+            course_ids = map(int, request.query_params.getlist('course_ids[]'))
             semester, _ = Semester.objects.get_or_create(name=sem_name, year=year)
             total_count = 0
             count = 0
@@ -250,10 +249,10 @@ class ClassmateView(ValidateSubdomainMixin, RedirectToSignupMixin, APIView):
                 total_count += temp_count
             data = {"id": most_friend_course_id, "count": count, "total_count": total_count}
             return Response(data, status=status.HTTP_200_OK)
-        elif request.query_params.getlist('course_ids'):
+        elif request.query_params.getlist('course_ids[]'):
             school = request.subdomain
             student = Student.objects.get(user=request.user)
-            course_ids = request.query_params.getlist('course_ids')
+            course_ids = map(int, request.query_params.getlist('course_ids[]'))
             semester, _ = Semester.objects.get_or_create(name=sem_name, year=year)
             # user opted in to sharing courses
             if student.social_courses:
