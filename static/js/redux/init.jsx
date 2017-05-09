@@ -156,7 +156,7 @@ function setup(dispatch) {
 
   if (showTOSBanner) {
     dispatch(triggerTosBanner());
-    console.log('SHOW TOS BANNER');
+    // console.log('SHOW TOS BANNER');
   }
 
     /* now setup sharing state */
