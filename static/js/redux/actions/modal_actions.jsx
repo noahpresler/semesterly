@@ -114,6 +114,10 @@ export const triggerTermsOfServiceBanner = () => ({
   type: ActionTypes.TRIGGER_TOS_BANNER,
 });
 
+export const dismissTermsOfServiceBanner = () => ({
+  type: ActionTypes.DISMISS_TOS_BANNER,
+});
+
 export const triggerTermsOfServiceModal = () => ({
   type: ActionTypes.TRIGGER_TOS_MODAL,
 });
