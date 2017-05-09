@@ -5,22 +5,17 @@ class TermsOfServiceBanner extends React.Component {
   constructor(props) {
     super(props);
     this.state = { isVisible: this.props.isVisible };
-    this.dismissBanner = this.dismissBanner.bind(this);
   }
 
-  componentDidUpdate() {
+  componentWillUpdate() {
     this.setState = { isVisible: this.props.isVisible };
-  }
-
-  dismissBanner() {
-    this.setState = { isVisible: false };
   }
 
   render() {
     return (
       <div
         className={classnames('tos-banner', {
-          show: this.state.isVisible,
+          show: this.props.isVisible,
         })}
       >
         <p>
@@ -33,7 +28,7 @@ class TermsOfServiceBanner extends React.Component {
             Privacy Policy
           </a>
         </p>
-        <div className="tos-banner__close" onClick={this.dismissSelf}>
+        <div className="tos-banner__close" onClick={this.props.dismissTermsOfServiceBanner}>
           <i className="fa fa-times" />
         </div>
       </div>
@@ -43,6 +38,7 @@ class TermsOfServiceBanner extends React.Component {
 
 TermsOfServiceBanner.propTypes = {
   isVisible: React.PropTypes.bool.isRequired,
+  dismissTermsOfServiceBanner: React.PropTypes.func.isRequired,
 };
 
 export default TermsOfServiceBanner;
