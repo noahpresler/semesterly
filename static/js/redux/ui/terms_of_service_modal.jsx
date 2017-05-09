@@ -26,7 +26,7 @@ class TermsOfServiceModal extends React.Component {
         modalStyle={modalStyle}
         closeOnClick={false}
       >
-        <div id="tos-container">
+        <div className="tos-modal-container">
           <h1>Terms of Service and Privacy Policy</h1>
           <h3>
               Our Terms of Service and Privacy Policy have been updated. Please review them here:
