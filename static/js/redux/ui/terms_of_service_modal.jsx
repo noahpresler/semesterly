@@ -33,13 +33,13 @@ class TermsOfServiceModal extends React.Component {
           </h3>
           <div>
             <a
-              href="/static/termsofservice.html" target="_blank"
+              href="/termsofservice" target="_blank"
               rel="noopener noreferrer" className="legal-links"
             >
               Terms of Service
             <i className="fa fa-external-link" /></a>
             <a
-              href="/static/privacypolicy.html" target="_blank"
+              href="/privacypolicy" target="_blank"
               rel="noopener noreferrer" className="legal-links"
             >
               Privacy Policy
