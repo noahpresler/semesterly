@@ -1,5 +1,5 @@
 import { connect } from 'react-redux';
-import { TermsOfServiceBanner } from '../terms_of_service_banner';
+import TermsOfServiceBanner from '../terms_of_service_banner';
 import { triggerTermsOfServiceBanner } from '../../actions/modal_actions';
 
 const mapStateToProps = state => ({
