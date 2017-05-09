@@ -45,7 +45,7 @@ class UserViewTest(APITestCase):
     def test_profile_page_not_signed_in(self):
         self.client.logout()
         response = self.client.get('/user/settings/')
-        self.assertTemplateUsed(response, 'index.html')
+        self.assertRedirects(response, '/signup/')
 
     def test_update_settings(self):
         new_settings = {
