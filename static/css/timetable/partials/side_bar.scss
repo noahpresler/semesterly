@@ -1,9 +1,10 @@
-.side-bar-section:last-child {
-  padding-bottom: 20px;
+.side-bar-section {
+  &:last-child {
+    padding-bottom: 20px;
+  }
 }
 
-// Timetable Title
-#sb-name {
+.sb-name {
   margin-bottom: 10px;
   padding-right: 35px;
   position: relative;
@@ -22,7 +23,7 @@
     width: 100%;
 
     &:focus {
-      border: 1px solid #0095FF;
+      border: 1px solid $blue-alt;
     }
 
     &:hover {
@@ -44,14 +45,14 @@
     }
 
     h3 {
-      color: #ADADAD;
+      color: $ga1a1a1;
       font-size: 12px;
       font-weight: 400;
       margin-top: 8px;
     }
 
     h4 {
-      color: #AFAFAF;
+      color: $gbbb;
       font-size: 14px;
       margin-bottom: 0;
       margin-top: 5px;
@@ -59,78 +60,78 @@
   }
 }
 
-#share-course-link-wrapper {
+.share-course-link-wrapper {
   input {
     border: 1px solid $gfff;
     transition: border .3s;
 
     &:focus {
-      border: 1px solid #0095FF;
+      border: 1px solid $blue-alt;
     }
 
     &:hover {
       border: 1px solid $gddd;
     }
   }
+
+  .share-course-link {
+    cursor: text;
+  }
 }
 
-#share-course-link-wrapper #share-course-link {
-  cursor: text;
-}
 
-#timetable-drop-it-down {
+.timetable-drop-it-down {
   cursor: pointer;
   height: 37px;
   position: absolute;
   right: 0;
   top: 0;
   width: 37px;
+
+  .tip-down {
+    left: 50%;
+    margin: 0;
+    position: absolute;
+    top: 50%;
+    transform: translate(-50%, -50%);
+
+    &.down {
+      transform: translate(-50%, -50%) rotate(180deg);
+    }
+  }
 }
 
-#timetable-drop-it-down .tip-down {
-  left: 50%;
-  margin: 0;
-  position: absolute;
-  top: 50%;
-  transform: translate(-50%, -50%);
-}
-
-#timetable-drop-it-down .tip-down.down {
-  transform: translate(-50%, -50%) rotate(180deg);
-}
-
-// Timetable Name Dropdowns
-#timetable-names-dropdown {
+.timetable-names-dropdown {
   background-color: $gfff;
-  border: 1px solid #E8E8E8;
-  box-shadow: 0 2px 10px rgba(0,0,0,.2);
+  border: 1px solid $ge6e6e6;
+  box-shadow: 0 2px 10px $black-transparent-2;
   display: none;
   left: 0;
   position: absolute;
   top: 35px;
   width: 100%;
   z-index: 100;
-}
 
-#timetable-names-dropdown.down {
-  display: block;
-}
+  &.down {
+    display: block;
+  }
 
-#timetable-names-dropdown .tip-border {
-  right: 9px;
-  top: -8px;
-}
+  .tip {
+    right: 9px;
+    top: -7px;
+  }
 
-#timetable-names-dropdown .tip {
-  right: 9px;
-  top: -7px;
-}
+  .tip-border {
+    right: 9px;
+    top: -8px;
+  }
 
-#timetable-names-dropdown h4 {
-  color: $g777;
-  font-size: 12px;
-  margin: 0;
-  padding: 10px 5px 5px 10px;
+  h4 {
+    color: $g777;
+    font-size: 12px;
+    margin: 0;
+    padding: 10px 5px 5px 10px;
+  }
 }
 
 .tt-name {
@@ -145,18 +146,7 @@
   }
 }
 
-// Side Bar Section Name Headers
-#find-friends {
-  float: right;
-}
-
-#find-friends:hover {
-  color: rgb(52,73,94);
-  cursor: pointer;
-  transition: all .3s;
-}
-
-h4.sb-header {
+.sb-header {
   clear: both;
   color: $g777;
   font-size: 14px;
@@ -164,9 +154,30 @@ h4.sb-header {
   margin: 0;
   padding: 10px 5px;
   position: relative;
+
+  &::after {
+    background-color: $gddd;
+    bottom: 5px;
+    content: '';
+    display: block;
+    height: 1px;
+    left: 0;
+    position: absolute;
+    width: 100%;
+  }
 }
 
-h4.sb-tip {
+.sb-header-link {
+  float: right;
+  transition: color .3s;
+
+  &:hover {
+    color: $primary-navy;
+    cursor: pointer;
+  }
+}
+
+.sb-tip {
   clear: both;
   color: $g777;
   font-size: 14px;
@@ -175,65 +186,57 @@ h4.sb-tip {
   padding: 10px 5px;
   position: relative;
   text-align: center;
+
+  i {
+    color: $g777;
+    margin-left: 2px;
+    margin-right: 2px;
+  }
 }
 
-.sb-tip i {
-  color: $g777;
-  margin-left: 2px;
-  margin-right: 2px;
+.sb-rating {
+  h3 {
+    color: $g777;
+    font-size: 12px;
+    font-weight: 200;
+    margin: 0;
+    text-align: center;
+  }
+
+  .sub-rating-wrapper {
+    margin-left: 50%;
+    transform: translateX(-50%);
+  }
 }
 
-h4.sb-header:after {
-  background-color: $gddd;
-  bottom: 5px;
-  content: '';
-  display: block;
-  height: 1px;
-  left: 0;
-  position: absolute;
-  width: 100%;
-}
-
-// Rating
-#sb-rating h3 {
-  color: $g777;
-  font-size: 12px;
-  font-weight: 200;
-  margin: 0;
-  text-align: center;
-}
-
-
-// credits
 #sb-credits {
   margin-bottom: 10px;
   text-align: center;
+
+  h3 {
+    color: $primary-navy;
+    font-size: 30px;
+    font-weight: 300;
+    line-height: 36px;
+    margin: 0;
+  }
+
+  h4 {
+    color: $g999;
+    font-size: 14px;
+    font-weight: 300;
+    line-height: 14px;
+    margin: 0;
+  }
 }
 
-#sb-credits h3 {
-  color: $primary-navy;
-  font-size: 30px;
-  font-weight: 300;
-  line-height: 36px;
-  margin: 0;
-}
-
-#sb-credits h4 {
-  color: $g999;
-  font-size: 14px;
-  font-weight: 300;
-  line-height: 14px;
-  margin: 0;
-}
-
-// Master Slots
-#sb-master-slots {
+.sb-master-slots {
   clear: both;
   padding: 5px;
 }
 
 .master-slot {
-  background-color: #FD7473;
+  background-color: $pink;
   border-radius: 5px;
   color: $gfff;
   cursor: pointer;
@@ -241,91 +244,99 @@ h4.sb-header:after {
   overflow: hidden;
   padding: 5px 5px 5px 10px;
   position: relative;
-  transition: all .3s;
+  transition: color .3s, background-color .3s;
+
+  &.optional {
+    opacity: .5;
+  }
+
+  .slot-bar {
+    background-color: $red-dark;
+    left: 0;
+    top: 0;
+  }
+
+  .share-course-link-wrapper {
+    background-color: $gf9f9f9;
+    border-radius: 2px;
+    height: 38px;
+    max-width: 250px;
+    padding: 0 5px;
+    position: absolute;
+    right: 5px;
+    top: 20px;
+
+    .tip {
+      right: 12px;
+      top: -7px;
+    }
+
+    .tip-border {
+      right: 12px;
+      top: -7px;
+    }
+
+    .share-course-link {
+      color: $g222;
+      font-size: 14px;
+      font-weight: 400;
+      height: 25px;
+      margin-top: 7px;
+      max-width: 240px;
+      width: auto;
+    }
+  }
 }
 
-.master-slot.optional {
-  opacity: .5;
+.modal-module {
+  .master-slot-actions {
+    .fa-share-alt {
+      margin-right: 4px;
+    }
+  }
+
+  .master-slot {
+    .tip {
+      right: 0;
+      top: -7px;
+    }
+
+    .tip-border {
+      right: 0;
+      top: -7px;
+    }
+  }
 }
 
-.master-slot .slot-bar {
-  background-color: rgb(150, 56, 56);
-  left: 0;
-  top: 0;
+.master-slot-content {
+  h3 {
+    color: $g222;
+    font-size: 14px;
+    font-weight: 400;
+    height: 14px;
+    margin: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    width: 100%;
+
+    span {
+      float: left;
+      line-height: 14px;
+    }
+  }
+
+  .ms-flag {
+    border-radius: 3px;
+    color: $white-transparent-9;
+    font-size: 9px;
+    line-height: 10px;
+    margin-left: 5px;
+    padding: 2px 3px;
+  }
 }
 
-.master-slot #share-course-link-wrapper {
-  background-color: #F8F6F7;
-  border-radius: 2px;
-  height: 38px;
-  max-width: 250px;
-  padding: 0 5px;
-  position: absolute;
-  right: 5px;
-  top: 20px;
-}
-
-.master-slot #share-course-link-wrapper .tip {
-  right: 12px;
-  top: -7px;
-}
-
-.master-slot #share-course-link-wrapper .tip-border {
-  right: 12px;
-  top: -7px;
-}
-
-.modal-module .master-slot-actions .fa-share-alt {
-  margin-right: 4px;
-}
-
-.modal-module .master-slot #share-course-link-wrapper .tip {
-  right: 0;
-  top: -7px;
-}
-
-.modal-module .master-slot #share-course-link-wrapper .tip-border {
-  right: 0;
-  top: -7px;
-}
-
-.master-slot #share-course-link-wrapper #share-course-link {
-  color: $g222;
-  font-size: 14px;
-  font-weight: 400;
-  height: 25px;
-  margin-top: 7px;
-  max-width: 240px;
-  width: auto;
-}
-
-.master-slot-content h3 {
-  color: $g222;
-  font-size: 14px;
-  font-weight: 400;
-  height: 14px;
-  margin: 0;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-  width: 100%;
-}
-
-.master-slot-content h3 span {
-  float: left;
-  line-height: 14px;
-}
-
-.master-slot-content h3 span.ms-flag {
-  border-radius: 3px;
-  color: rgba(255, 255, 255, 0.90);
-  font-size: 9px;
-  line-height: 10px;
-  margin-left: 5px;
-  padding: 2px 3px;
-}
-
-h3.master-slot-credits {
+.master-slot-credits {
   font-size: 12px;
   line-height: 15px;
   margin: 0;
@@ -362,7 +373,7 @@ h3.master-slot-credits {
 }
 
 .ms-friend {
-  background-color: rgba(0,0,0,.3);
+  background-color: $black-transparent-3;
   background-position: center;
   background-repeat: no-repeat;
   background-size: cover;
@@ -382,7 +393,7 @@ h3.master-slot-credits {
     transition: background-color .3s;
 
     &:hover {
-      background-color: rgba(0,0,0,.5);
+      background-color: $black-transparent-5;
     }
   }
 }
@@ -400,9 +411,4 @@ h3.master-slot-credits {
   i {
     margin-right: 3px;
   }
-}
-
-#sb-rating .sub-rating-wrapper {
-  margin-left: 50%;
-  transform: translateX(-50%);
 }
