@@ -1,37 +1,46 @@
 .terms-of-service-modal {
-    max-width: 450px;
-    text-align: center;
-}
-#tos-container {
-    padding: 30px 20px;
-}
-.terms-of-service-modal h1 {
+  max-width: 450px;
+  text-align: center;
+
+  h1 {
     font-size: 25px;
     margin: 8px auto 33px;
-}
-.terms-of-service-modal h3 {
-    margin: 20px 10px;
+  }
+
+  h3 {
+    color: $g555;
     font-size: 14px;
-    color: #555;
-}
-.terms-of-service-modal a.legal-links {
-    color: #337ab7;
-    margin: 3 20px;
+    margin: 20px 10px;
+  }
+
+  .legal-links {
+    color: $blue;
     display: block;
     font-size: 15px;
+    margin: 3px 20px;
+
+    i {
+      font-size: 13px;
+      margin-left: 3px;
+    }
+  }
+
 }
-.terms-of-service-modal a.legal-links i {
-    margin-left: 3px;
-    font-size: 13px;
+
+.tos-modal-container {
+  padding: 30px 20px;
 }
+
+
 .accept-tos-btn {
-    margin: 20px auto;
-    padding: 10px 20px;
-    background-color: #16a085;
-    color: #fff;
-    border: none;
-    border-radius: 3px;
-}
-.accept-tos-btn i {
+  background-color: $green;
+  border: 0;
+  border-radius: 3px;
+  color: $gfff;
+  margin: 20px auto;
+  padding: 10px 20px;
+
+  i {
     margin-right: 10px;
+  }
 }
