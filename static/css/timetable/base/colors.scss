@@ -7,6 +7,7 @@ $confirm-green-darker: #12ab8d;
 $confirm-green-darkest: #0e8870;
 $confirm-green-alt: #42a770;
 
+$red-dark: #963838;
 $red: #d21616;
 $pink: #fd7473;
 $yellow: #d29842;
@@ -14,6 +15,7 @@ $green: #0aa98a;
 $green-light: #27ae60;
 $green-bright: #4ad187;
 $blue: #3895db;
+$blue-alt: #0095FF;
 $blue-light: #52b7d9;
 
 $mint: #c8f7c5;
@@ -63,7 +65,10 @@ $black-transparent-15: rgba(0, 0, 0, .15);
 $black-transparent-2: rgba(0, 0, 0, .2);
 $black-transparent-25: rgba(0, 0, 0, .25);
 $black-transparent-3: rgba(0, 0, 0, .3);
+$black-transparent-5: rgba(0, 0, 0, .5);
 $black-transparent-8: rgba(0, 0, 0, .8);
+
+$white-transparent-9: rgba(255, 255, 255, .9);
 
 // colors only used in react-select // todo: get rid of react-select
 $react-select-red: #d0021b;
