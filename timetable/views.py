@@ -95,7 +95,7 @@ def view_timetable(request, code=None, sem_name=None, year=None, shared_timetabl
   else:
     # TOS banner is shown if user is not logged in and have not viewed the latest version of TOS.
     if "last_shown_tos" not in request.session or utc.localize(datetime.strptime(request.session["last_shown_tos"], "%Y-%m-%d")) < tos_last_updated:
-      request.session["last_shown_tos"] = datetime.strftime(datetime.utcnow(), "%Y-%m-%d")
+      # request.session["last_shown_tos"] = datetime.strftime(datetime.utcnow(), "%Y-%m-%d")
       show_tos_banner = True
   return render_to_response("timetable.html", {
     'school': school,
