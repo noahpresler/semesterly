@@ -1,6 +1,6 @@
 import { connect } from 'react-redux';
 import TermsOfServiceBanner from '../terms_of_service_banner';
-import { triggerTermsOfServiceBanner } from '../../actions/modal_actions';
+import { triggerTermsOfServiceBanner, dismissTermsOfServiceBanner } from '../../actions/modal_actions';
 
 const mapStateToProps = state => ({
   isVisible: state.termsOfServiceBanner.isVisible,
@@ -11,6 +11,7 @@ const TermsOfServiceBannerContainer = connect(
     mapStateToProps,
   {
     triggerTermsOfServiceBanner,
+    dismissTermsOfServiceBanner,
   },
 )(TermsOfServiceBanner);
 
