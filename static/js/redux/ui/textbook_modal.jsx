@@ -69,7 +69,7 @@ class TextbookModal extends React.Component {
                                 your Amazon cart for a
                                 quick checkout</p>
                         <button
-                          id="add-to-cart" type="submit" form="aws-cart-form"
+                          className="add-to-cart" type="submit" form="aws-cart-form"
                           value="Submit"
                         >
                           <div className="button-label">
@@ -93,7 +93,7 @@ class TextbookModal extends React.Component {
       >
         <input type="hidden" name="AWSAccessKeyId" value="AKIAJGUOXN3COOYBPTHQ" />
         <input type="hidden" name="AssociateTag" value="semesterly-20" />
-        <div id="tb-list-container">
+        <div className="tb-list-container">
           {textbookList}
           {
                         _.range(allTbs.length).map((idx) => {
@@ -119,7 +119,7 @@ class TextbookModal extends React.Component {
 
     const loader = (
       <div>
-        <div id="tb-list-container">
+        <div className="tb-list-container">
           <div className="loader-container">
             <div className="spinner-container">
               <div className="loader" />
@@ -133,7 +133,7 @@ class TextbookModal extends React.Component {
 
     const emptyState = (
       <div>
-        <div id="tb-list-container">
+        <div className="tb-list-container">
           <div className="loader-container">
             <div className="spinner-container">
               <i className="done fa fa-check" />
