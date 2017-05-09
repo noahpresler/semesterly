@@ -1,38 +1,42 @@
 import React from 'react';
-import Modal from 'boron/WaveModal';
-// import { acceptTOS } from '../actions/user_actions';
+import classnames from 'classnames';
 
 class TermsOfServiceBanner extends React.Component {
-  componentDidMount() {
-    if (this.props.isVisible) {
-      // this.refs.modal.show();
-    }
+  constructor(props) {
+    super(props);
+    this.state = { isVisible: this.props.isVisible };
+    this.dismissBanner = this.dismissBanner.bind(this);
   }
 
   componentDidUpdate() {
-    if (this.props.isVisible) {
-      // this.refs.modal.show();
-    }
+    this.setState = { isVisible: this.props.isVisible };
+  }
+
+  dismissBanner() {
+    this.setState = { isVisible: false };
   }
 
   render() {
-    const modalStyle = {
-      width: '100%',
-    };
     return (
-      <Modal
-        // ref="modal"
-        className="terms-of-service-banner-modal max-modal"
-        modalStyle={modalStyle}
-        closeOnClick={false}
+      <div
+        className={classnames('tos-banner', {
+          show: this.state.isVisible,
+        })}
       >
-        <div id="tos-banner-container">
-          <h1>Terms of Service and Privacy Policy</h1>
-          <p className="method-details">
-              You must accept the new Terms of Service to continue using Semester.ly.
-          </p>
+        <p>
+          By using Semester.ly you agree to our
+          <a href="/static/termsofservice.html" target="_blank" rel="noopener noreferrer">
+            Terms of Service
+          </a>
+          and
+          <a href="/static/privacypolicy.html" target="_blank" rel="noopener noreferrer">
+            Privacy Policy
+          </a>
+        </p>
+        <div className="tos-banner__close" onClick={this.dismissSelf}>
+          <i className="fa fa-times" />
         </div>
-      </Modal>
+      </div>
     );
   }
 }
