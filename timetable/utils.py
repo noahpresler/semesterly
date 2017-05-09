@@ -339,11 +339,10 @@ class FeatureFlowView(ValidateSubdomainMixin, APIView):
         all_semesters = get_current_semesters(self.school)
         if 'semester' in feature_flow:
             sem = feature_flow.pop('semester')
-            try:
-                curr_sem_index = all_semesters.index({'name': sem.name, 'year': sem.year})
-            except ValueError: # semester is not from this year
-                all_semesters = [{'name': sem.name, 'year': sem.year}]
-                curr_sem_index = 0
+            sem_dict = {'name': sem.name, 'year': sem.year}
+            if sem_dict not in all_semesters:
+                all_semesters.append(sem_dict)
+            curr_sem_index = all_semesters.index(sem_dict)
         else:
             curr_sem_index = 0
             sem = Semester.objects.get(**all_semesters[curr_sem_index])
