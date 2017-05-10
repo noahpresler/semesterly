@@ -8,6 +8,7 @@ from operator import or_
 from scipy.sparse import linalg
 from sklearn.feature_extraction.text import CountVectorizer
 from sklearn.feature_extraction.text import TfidfTransformer
+from sklearn.decomposition import LatentDirichletAllocation
 from picklefield.fields import PickledObjectField
 from django.db import models
 from django.db.models import Q
@@ -238,3 +239,46 @@ class Evaluator():
                    %(len(queries), total_scores[0], total_scores[1], total_scores[2], total_scores[3], total_scores[4], total_scores[5], total_scores[6], total_scores[7])
         print(averaged_results)
 
+
+# Experiment
+class Experiment():
+    def __init__(self):
+        self._ = None
+
+    def run_LDA(self):
+        X = []
+        for course in Course.objects.all():
+            X.append(course.name + " " + course.description)
+        n_features = 1000
+        n_topics = 50
+        n_top_words = 10
+        n_samples = len(X)
+        X_trans, topics, topic_components= self.fit_lda(X, n_features, n_topics, n_top_words, n_samples)
+
+    def fit_lda(self, X, n_features, n_topics, n_top_words, n_samples):
+        print("Fitting LDA models with tf features, n_samples=%d and n_features=%d..." % (n_samples, n_features))
+        tf_vectorizer = CountVectorizer(max_df=0.95, min_df=2,
+                                    max_features=n_features,
+                                    ngram_range=(1,1),
+                                    stop_words='english')
+        tf = tf_vectorizer.fit_transform(X)
+        lda = LatentDirichletAllocation(n_topics=n_topics, max_iter=5,
+                                    learning_method='online',
+                                    learning_offset=50.,
+                                    random_state=0)
+        X = lda.fit_transform(tf)
+        print("\nTopics in LDA model:")
+        tf_feature_names = tf_vectorizer.get_feature_names()
+        topics = self.print_top_words(lda, tf_feature_names, n_top_words)
+        return X, topics, lda.components_
+
+    def print_top_words(self, model, feature_names, n_top_words):
+        topics = []
+        for topic_idx, topic in enumerate(model.components_):
+            print("Course Topic #%d:" % topic_idx)
+            new_topic = " ".join([feature_names[i]
+                            for i in topic.argsort()[:-n_top_words - 1:-1]])
+            print(new_topic)
+            topics.append(new_topic)
+        print()
+        return(topics)
