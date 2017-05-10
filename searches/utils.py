@@ -4,6 +4,8 @@ import re
 import numpy as np
 import time
 import math
+import operator
+import pdb
 from operator import or_
 from scipy.sparse import linalg
 from sklearn.feature_extraction.text import CountVectorizer
@@ -67,6 +69,7 @@ class Searcher():
     def __init__(self):
         self.count_vectorizer = self.load_count_vectorizer()
         self.vectorizer = Vectorizer()
+        self.MAX_CAPACITY = 200
         #self.queries = []
 
     def load_count_vectorizer(self):
@@ -93,17 +96,10 @@ class Searcher():
 
     def match_title(self, query, course_name):
         query_tokens = query.lower().split(' ')
-        # matching acronym
+        course_name = course_name.lower()
         if len(query_tokens) is 1 and self.get_acronym(course_name) == query:
             return 1
-        # matching title
-        count = 0
-        for q in query_tokens:
-            if q in course_name.lower():
-                count+=1
-        if count == len(query_tokens):
-            return 1
-        return 0
+        return 1 if all(map(lambda q: q in course_name, query_tokens)) else 0
 
     def get_course(self, code):
         for course in Course.objects.all():
@@ -119,34 +115,49 @@ class Searcher():
         query_vector = self.vectorize_query(query.lower())
         return self.get_cosine_sim(query_vector, course.vector)
 
-    def get_all_relevant_courses(self, query):
-        return self.get_relevant_courses(query, Course.objects.all())
+    def baseline_search(self, query):
+        start_time = time.time()
+        query_tokens = query.split()
+        course_name_contains_query = reduce(operator.and_, map(self.course_name_contains_token, query_tokens))
+        courses_objs = Course.objects.filter(course_name_contains_query).all()[:self.MAX_CAPACITY]
+        elapsed_time = time.time() - start_time
+        for course in courses_objs[:10]:
+            print(course.name)
+        print("\nBaseline Model Completed Searches in %f (seconds)" %elapsed_time)
+
+    def advanced_search(self, query):
+        start_time = time.time()
+        query_tokens = query.split()
+        course_contains_query = reduce(operator.and_, map(self.course_name_contains_token, query_tokens))
+        title_matching_courses = Course.objects.filter(course_contains_query)
+        descp_contains_query = []
+        if title_matching_courses.count() < self.MAX_CAPACITY:
+            descp_contains_query = reduce(operator.or_, map(self.course_desc_contains_token, query.replace("and", "").split()))
+            descp_matching_courses = Course.objects.filter(descp_contains_query)
+        courses_objs = list(title_matching_courses.all()[:self.MAX_CAPACITY]) + \
+                       list(descp_matching_courses.all()[:self.MAX_CAPACITY - title_matching_courses.count()])
+
+        self.get_relevant_courses(query, courses_objs)
+        elapsed_time = time.time() - start_time
+        print("\nAdvanced Model Completed Searches in %f (seconds)" %elapsed_time)
+
+    def course_desc_contains_token(self, token):
+        return Q(description__icontains=token)#.replace("and", "")))
+
+    def course_name_contains_token(self, token):
+        return (Q(code__icontains=token) |
+                Q(name__icontains=token.replace("&", "and")) |
+                Q(name__icontains=token.replace("and", "&")))
 
     def get_relevant_courses(self, query, course_filtered):
-        start_time = time.time()
         query_vector = self.vectorize_query(query.lower())
-        #course_score = defaultdict(int)
-        #retrieved_courses = {}
         scores = []
         for course in course_filtered:
-            score = self.get_cosine_sim(query_vector, course.vector) + self.match_title(query, course.name)
-            scores.append((course, score))
-            # handling duplicates
-            #if score >= course_score[course.name]:
-                #course_score[course.name] = score
-                #retrieved_courses[course.name] = course
-        #scores = [(k, v) for k,v in course_score.items()]
+            scores.append((course, self.get_cosine_sim(query_vector, course.vector) + \
+                                   self.match_title(query, course.name)))
         scores.sort(key=lambda tup:-tup[1])
-        elapsed_time = time.time() - start_time
-        if len(scores) < 10:
-            for i in range(len(scores)):
-                print(str(scores[i][0]) + ": " + str(scores[i][1]))
-        else:
-            for i in range(10):
-                print(str(scores[i][0]) + ": " + str(scores[i][1]))    
-        print("\nSearched in %f (seconds)" %elapsed_time)
-        #return ([course[0] for course in scores])[:10]
-        #return [retrieved_courses[name] for (name, val) in scores]
+        for (course, score) in scores[:10]:
+            print("%s : %f" %(course.name, score))
 
     def wordify(self, course_vector):
         print(self.count_vectorizer.inverse_transform(course_vector))
