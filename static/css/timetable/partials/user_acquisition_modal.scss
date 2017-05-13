@@ -1,19 +1,21 @@
-.abnb-modal.user-acquisition-modal {
-	max-width: 450px;
-	height:495px;
-	overflow: auto;
+.user-acquisition-modal {
+  height: 495px;
+  max-width: 450px;
+  overflow: auto;
+
+  #save-calendar-container {
+    padding: 30px;
+  }
 }
 
-.abnb-btn.fb-btn {
-	color: white;
-    border-color: #3B5998;
-    background-color: #3B5998;
+.abnb-btn {
+  &.fb-btn {
+    background-color: $facebook;
+    border-color: $facebook;
     color: $gfff;
+  }
 }
 
-.user-acquisition-modal #save-calendar-container {
-	padding: 30px 30px 30px 30px;
-}
 
 .btn.six-px-top {
 	margin-top: 6px;
