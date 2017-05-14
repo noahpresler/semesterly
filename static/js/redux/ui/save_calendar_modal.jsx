@@ -1,16 +1,17 @@
 import React from 'react';
 import Modal from 'boron/WaveModal';
+import * as PropTypes from '../constants/propTypes';
 
-export class SaveCalendarModal extends React.Component {
+class SaveCalendarModal extends React.Component {
   componentDidMount() {
     if (this.props.isVisible) {
-      this.refs.modal.show();
+      this.modal.show();
     }
   }
 
-  componentDidUpdate(nextProps) {
+  componentDidUpdate() {
     if (this.props.isVisible) {
-      this.refs.modal.show();
+      this.modal.show();
     }
   }
 
@@ -23,7 +24,7 @@ export class SaveCalendarModal extends React.Component {
                   style={{ backgroundImage: 'url(/static/img/addtocalendarfeature.png)' }}
                 />
                 <h1>Export calendar</h1>
-                <div id="modal-close" onClick={() => this.refs.modal.hide()}>
+                <div id="modal-close" onClick={() => this.modal.hide()}>
                   <i className="fa fa-times" />
                 </div>
               </div>
@@ -36,8 +37,10 @@ export class SaveCalendarModal extends React.Component {
     DownloadIcon = this.props.isDownloading ? <div className="loader" /> : DownloadIcon;
     DownloadIcon = this.props.hasDownloaded ? <i className="done fa fa-check" /> : DownloadIcon;
     let UploadIcon = (<img
+      alt="google-login"
       className="google-logo"
-      src="https://a0.muscache.com/airbnb/static/signinup/google_icon_2x-745c2280e5004d4c90e3ca4e60e3f677.png"
+      src={'https://a0.muscache.com/airbnb/static/signinup/'
+      + 'google_icon_2x-745c2280e5004d4c90e3ca4e60e3f677.png'}
     />);
     UploadIcon = this.props.isUploading ? <div className="loader" /> : UploadIcon;
     UploadIcon = this.props.hasUploaded ? <i className="done fa fa-check" /> : UploadIcon;
@@ -48,7 +51,7 @@ export class SaveCalendarModal extends React.Component {
 
     return (
       <Modal
-        ref="modal"
+        ref={(c) => { this.modal = c; }}
         className="save-calendar-modal abnb-modal max-modal"
         modalStyle={modalStyle}
         onHide={() => {
@@ -60,9 +63,12 @@ export class SaveCalendarModal extends React.Component {
         <div id="save-calendar-container">
           <button
             className="btn abnb-btn" onClick={() => {
-              if (!this.props.userInfo.isLoggedIn || !this.props.userInfo.GoogleSignedUp || !this.props.userInfo.GoogleLoggedIn) {
+              if (!this.props.userInfo.isLoggedIn || !this.props.userInfo.GoogleSignedUp ||
+                !this.props.userInfo.GoogleLoggedIn) {
                 const link = document.createElement('a');
-                link.href = `/login/google-oauth2/?next=${location.protocol}//${location.host}/callback/google_calendar` + `&student_token=${this.props.userInfo.LoginToken}&login_hash=${this.props.userInfo.LoginHash}`;
+                link.href = `/login/google-oauth2/?next=${location.protocol}//${location.host}
+                /callback/google_calendar&student_token=${this.props.userInfo.LoginToken}
+                &login_hash=${this.props.userInfo.LoginHash}`;
                 document.body.appendChild(link);
                 link.click();
               } else {
@@ -100,3 +106,17 @@ export class SaveCalendarModal extends React.Component {
     );
   }
 }
+
+SaveCalendarModal.propTypes = {
+  createICalFromTimetable: React.PropTypes.func.isRequired,
+  addTTtoGCal: React.PropTypes.func.isRequired,
+  toggleSaveCalendarModal: React.PropTypes.func.isRequired,
+  isDownloading: React.PropTypes.bool.isRequired,
+  hasDownloaded: React.PropTypes.bool.isRequired,
+  isUploading: React.PropTypes.bool.isRequired,
+  hasUploaded: React.PropTypes.bool.isRequired,
+  userInfo: PropTypes.userInfo.isRequired,
+  isVisible: React.PropTypes.bool.isRequired,
+};
+
+export default SaveCalendarModal;
