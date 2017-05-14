@@ -1,6 +1,6 @@
 import { combineReducers } from 'redux';
 import school from './school_reducer';
-import semesterIndex from './semester_reducer';
+import semester from './semester_reducer';
 import calendar from './calendar_reducer';
 import courseSections from './course_sections_reducer';
 import timetables from './timetables_reducer';
@@ -21,6 +21,7 @@ import preferenceModal from './preference_modal_reducer';
 import friends from './friends_reducer';
 import notificationToken from './notification_token_reducer';
 import integrationModal from './integration_modal_reducer';
+import integrations from './integrations_reducer';
 import saveCalendarModal from './save_calendar_modal_reducer';
 import userAcquisitionModal from './user_acquisition_modal_reducer';
 import textbookModal from './textbook_modal_reducer';
@@ -28,7 +29,7 @@ import finalExamsModal from './final_exams_modal_reducer';
 
 const rootReducer = combineReducers({
   school,
-  semesterIndex,
+  semester,
   searchResults,
   timetables,
   calendar,
@@ -49,6 +50,7 @@ const rootReducer = combineReducers({
   peerModal,
   notificationToken,
   integrationModal,
+  integrations,
   saveCalendarModal,
   userAcquisitionModal,
   textbookModal,

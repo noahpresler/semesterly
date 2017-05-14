@@ -139,6 +139,7 @@ class SlotManager extends React.Component {
             removeCustomSlot={() => this.props.removeCustomSlot(slot.id)}
             updateCustomSlot={this.props.updateCustomSlot}
             addCustomSlot={this.props.addCustomSlot}
+            uses12HrTime={this.props.uses12HrTime}
           />
           :
           <Slot
@@ -158,6 +159,7 @@ class SlotManager extends React.Component {
             primaryDisplayAttribute={this.props.primaryDisplayAttribute}
             updateCustomSlot={this.props.updateCustomSlot}
             addCustomSlot={this.props.addCustomSlot}
+            uses12HrTime={this.props.uses12HrTime}
           />;
       });
       return (

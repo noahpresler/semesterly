@@ -142,8 +142,8 @@ class CustomSlot extends React.Component {
               onClick={event => this.stopPropagation(this.props.removeCustomSlot, event)}
             />) : null;
 
-    const converted_start = uses12HrTime && parseInt(this.props.time_start.split(':')[0]) > 12 ? `${parseInt(this.props.time_start.split(':')[0]) - 12}:${this.props.time_start.split(':')[1]}` : this.props.time_start;
-    const converted_end = uses12HrTime && parseInt(this.props.time_end.split(':')[0]) > 12 ? `${parseInt(this.props.time_end.split(':')[0]) - 12}:${this.props.time_end.split(':')[1]}` : this.props.time_end;
+    const converted_start = this.props.uses12HrTime && parseInt(this.props.time_start.split(':')[0]) > 12 ? `${parseInt(this.props.time_start.split(':')[0]) - 12}:${this.props.time_start.split(':')[1]}` : this.props.time_start;
+    const converted_end = this.props.uses12HrTime && parseInt(this.props.time_end.split(':')[0]) > 12 ? `${parseInt(this.props.time_end.split(':')[0]) - 12}:${this.props.time_end.split(':')[1]}` : this.props.time_end;
     return this.props.connectCreateTarget(this.props.connectDragTarget(this.props.connectDragSource(
       <div className="fc-event-container">
         <div
@@ -239,6 +239,7 @@ CustomSlot.propTypes = {
   shift_index: PropTypes.number.isRequired,
   name: PropTypes.string.isRequired,
   id: PropTypes.number.isRequired,
+  uses12HrTime: PropTypes.bool.isRequired
 };
 
 export default DropTarget(DRAG_TYPES.DRAG, dragSlotTarget, collectDragDrop)(
