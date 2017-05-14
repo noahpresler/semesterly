@@ -92,7 +92,7 @@ Reaction.propTypes = {
   total: React.PropTypes.number.isRequired,
   count: React.PropTypes.number.isRequired,
   react: React.PropTypes.func.isRequired,
-  selected: React.PropTypes.bool
+  selected: React.PropTypes.bool,
 };
 
 export default Reaction;
