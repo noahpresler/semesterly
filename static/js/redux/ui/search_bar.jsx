@@ -108,7 +108,7 @@ class SearchBar extends React.Component {
         <SearchSideBarContainer />
       </ul>
         );
-    const availableSemesters = allSemesters.map((semester, index) => {
+    const availableSemesters = this.props.allSemesters.map((semester, index) => {
       const name = ($(window).width() < 767) ?
                 SearchBar.getAbbreviatedSemesterName(semester) :
                 SearchBar.getSemesterName(semester);
