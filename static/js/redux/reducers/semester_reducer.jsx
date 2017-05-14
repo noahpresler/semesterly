@@ -13,7 +13,7 @@ const semester = (state = defaultState, action) => {
     case ActionTypes.SET_AVAIL_SEMESTERS:
       return Object.assign({}, state, { all: action.availSemesters });
     case ActionTypes.SET_EXAM_SEMESTERS:
-      return Object.assign({}, state, { finals: action.exams });
+      return Object.assign({}, state, { exams: action.exams });
     default:
       return state;
   }
