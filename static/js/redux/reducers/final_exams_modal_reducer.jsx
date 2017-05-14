@@ -17,7 +17,7 @@ const finalExamsModal = (state = {
     case ActionTypes.RECEIVE_FINAL_EXAMS:
       return Object.assign({}, state, { isLoading: false, finalExams: action.json });
     case ActionTypes.RECEIVE_TIMETABLES:
-      return Object.assign({}, state, { finalExams: null });
+      return state
     case ActionTypes.RECEIVE_EXAMS_SHARE_LINK:
       return Object.assign({}, state, { link: action.link });
     case ActionTypes.SET_FINAL_EXAMS_SHARED:
