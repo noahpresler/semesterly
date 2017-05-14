@@ -188,3 +188,24 @@ export const semester = React.PropTypes.shape({
   name: React.PropTypes.string.isRequired,
   year: React.PropTypes.oneOfType([React.PropTypes.string, React.PropTypes.number]),
 });
+
+export const foreignUser = React.PropTypes.shape({
+  major: React.PropTypes.string,
+  social_all: React.PropTypes.bool,
+  social_courses: React.PropTypes.bool,
+  social_offerings: React.PropTypes.bool,
+  userFirstName: React.PropTypes.string,
+  userLastName: React.PropTypes.string,
+  img_url: React.PropTypes.string.isRequired,
+  gender: React.PropTypes.string,
+  class_year: React.PropTypes.number,
+});
+
+export const peer = React.PropTypes.shape({
+  is_friend: React.PropTypes.bool.isRequired,
+  large_img: React.PropTypes.string.isRequired,
+  name: React.PropTypes.string.isRequired,
+  peer: foreignUser.isRequired,
+  profile_url: React.PropTypes.string.isRequired,
+  shared_courses: React.PropTypes.arrayOf(course).isRequired,
+});
