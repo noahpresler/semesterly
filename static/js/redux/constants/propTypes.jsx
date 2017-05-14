@@ -119,11 +119,41 @@ export const course = React.PropTypes.oneOfType([
 course.related_courses = React.PropTypes.arrayOf(course);
 
 export const timetable = React.PropTypes.shape({
-  avg_rating: React.PropTypes.number.isRequired,
+  avg_rating: React.PropTypes.number,
   has_conflict: React.PropTypes.bool.isRequired,
   courses: React.PropTypes.arrayOf(course).isRequired,
   sections: React.PropTypes.arrayOf(React.PropTypes.number),
   semester: React.PropTypes.number,
+});
+
+export const evaluation = React.PropTypes.shape({
+  course: React.PropTypes.number.isRequired,
+  course_code: React.PropTypes.string.isRequired,
+  id: React.PropTypes.number.isRequired,
+  profesor: React.PropTypes.string,
+  summary: React.PropTypes.string.isRequired,
+  score: React.PropTypes.number.isRequired,
+  year: React.PropTypes.string.isRequired,
+});
+
+export const integration = React.PropTypes.string.isRequired;
+
+export const searchResult = React.PropTypes.shape({
+  areas: React.PropTypes.string.isRequired,
+  campus: React.PropTypes.string.isRequired,
+  code: React.PropTypes.string.isRequired,
+  department: React.PropTypes.string.isRequired,
+  description: React.PropTypes.string.isRequired,
+  evals: React.PropTypes.arrayOf(evaluation).isRequired,
+  id: React.PropTypes.number.isRequired,
+  integrations: React.PropTypes.arrayOf(integration),
+  name: React.PropTypes.string.isRequired,
+  num_credits: React.PropTypes.number.isRequired,
+  sections: React.PropTypes.shape({
+    '*': React.PropTypes.shape({
+      '*': React.PropTypes.arrayOf(section),
+    }),
+  }),
 });
 
 export const userInfo = React.PropTypes.shape({
