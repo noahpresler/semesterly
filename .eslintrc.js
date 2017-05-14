@@ -9,6 +9,7 @@ module.exports = {
 		"_": true,
 		"initData": true, // homepage context data passed from backend
 		"reactAlertEvents": true,
+		"twemoji": true,
 	},
 	rules: {
 		"no-plusplus": 0,
