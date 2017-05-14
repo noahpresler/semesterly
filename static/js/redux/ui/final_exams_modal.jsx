@@ -2,7 +2,7 @@ import React from 'react';
 import Modal from 'boron/WaveModal';
 import COLOUR_DATA from '../constants/colours';
 import { ShareLink } from './master_slot';
-import { getExamShareLink } from '../helpers/exam_helpers';
+import getExamShareLink from '../helpers/exam_helpers';
 import * as PropTypes from '../constants/propTypes';
 
 const InSlot = (props) => {
@@ -189,7 +189,7 @@ export default class FinalExamsModal extends React.Component {
   finalListHTML() {
     const days = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
     const finalExamDays = [];
-    const finalStack = jQuery.extend(true, {}, this.finalsToRender);
+    const finalStack = $.extend(true, {}, this.finalsToRender);
     while (Object.keys(finalStack).length > 0) {
       const day = this.findNextFinalToRender(finalStack);
       const html = [];
@@ -198,7 +198,7 @@ export default class FinalExamsModal extends React.Component {
         if (finalStack[final].includes(`${day.getMonth() + 1}/${day.getDate()}`)) {
           conflictTime[finalStack[final].split(' ')[1]] =
             (conflictTime[finalStack[final].split(' ')[1]] === undefined) ? [final] :
-              jQuery.merge(conflictTime[finalStack[final].split(' ')[1]], [final]);
+              $.merge(conflictTime[finalStack[final].split(' ')[1]], [final]);
         }
       });
       Object.keys(conflictTime).forEach((timeFrame) => {
@@ -223,7 +223,7 @@ export default class FinalExamsModal extends React.Component {
 
   loadFinalsToDivs(mobile) {
     const days = ['N', 'M', 'T', 'W', 'R', 'F', 'S'];
-    this.finalsToRender = jQuery.extend(true, {}, this.props.finalExamSchedule);
+    this.finalsToRender = $.extend(true, {}, this.props.finalExamSchedule);
     let day = this.findNextFinalToRender();
 
     const unscheduledFinalCtn = this.noTimeFinals.length > 0 ?
@@ -285,7 +285,7 @@ export default class FinalExamsModal extends React.Component {
         if (this.finalsToRender[final].includes(daysOfWeek[d])) {
           conflictTime[this.finalsToRender[final].split(' ')[1]] =
             (conflictTime[this.finalsToRender[final].split(' ')[1]] === undefined) ? [final] :
-              jQuery.merge(conflictTime[this.finalsToRender[final].split(' ')[1]], [final]);
+              $.merge(conflictTime[this.finalsToRender[final].split(' ')[1]], [final]);
         }
       });
       Object.keys(conflictTime).forEach((timeFrame) => {
