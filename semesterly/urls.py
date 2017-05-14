@@ -37,9 +37,6 @@ urlpatterns = patterns('',
                        url(r'^404testing/', 'timetable.views.custom_404'),
                        url(r'^500testing/', 'timetable.views.custom_500'),
 
-                       # for accepting TOS.
-                       url(r'^tos/accept/', 'timetable.views.accept_tos'),
-
                        # home
                        url(r'^$', 'timetable.views.view_timetable'),
 
