@@ -123,7 +123,7 @@ class SideBar extends React.Component {
         </div>);
     }
     const finalScheduleLink = (masterSlots.length > 0 &&
-      finalExamsSupportedSemesters.indexOf(this.props.semesterIndex) >= 0) ?
+      this.props.examSupportedSemesters.indexOf(this.props.semesterIndex) >= 0) ?
             (<div
               className="final-schedule-link"
               onClick={this.props.launchFinalExamsModal}
