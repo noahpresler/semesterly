@@ -37,3 +37,6 @@ case inside of the setup function based on ``featureFlow.name``.
 Any data from ``initData`` that is used outside of init should be
 a part of the redux state instead of invoked directly as a global
 variable.
+
+see https://github.com/noahpresler/semesterly/pull/838 for the 
+original pull request implementing flows this way
