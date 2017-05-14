@@ -41,6 +41,7 @@ urlpatterns = patterns('',
                        url(r'^timetables/links/$', timetable.views.TimetableLinkView.as_view()),
                        url(r'^timetables/links/(?P<slug>.+)/$',
                            timetable.views.TimetableLinkView.as_view()),
-                       # maintain backwards compatibility
+
+                       # maintain backwards compatibility TODO: change to redirect
                        url(r'share/(?P<slug>.+)/*$', timetable.views.TimetableLinkView.as_view())
                        )
