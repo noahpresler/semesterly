@@ -127,7 +127,7 @@ class SearchResult extends React.Component {
       (<div className="label integration">
         <span className="has-pilot" style={integrationLogoImageUrl} />
       </div>) : null;
-    const pilotIntegration = studentIntegrations.integrations.indexOf('Pilot') > -1 ?
+    const pilotIntegration = this.props.studentIntegrations.indexOf('Pilot') > -1 ?
       (<div className="label integration">
         <a
           onMouseDown={(event) => {
@@ -186,6 +186,7 @@ SearchResult.propTypes = {
   addCourse: React.PropTypes.func.isRequired,
   isHovered: React.PropTypes.func.isRequired,
   addRemoveOptionalCourse: React.PropTypes.func.isRequired,
+  studentIntegrations: React.PropTypes.arrayOf(PropTypes.integration).isRequired,
 };
 
 export default SearchResult;
