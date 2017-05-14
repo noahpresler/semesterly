@@ -1,7 +1,7 @@
 import logging
 from datetime import datetime
-from pytz import timezone
 
+from pytz import timezone
 from braces.views import CsrfExemptMixin
 from django.template.loader import get_template
 from django.views.decorators.cache import never_cache
@@ -223,21 +223,13 @@ def log_final_exam_view(request):
   ).save()
   return HttpResponse(json.dumps({}), content_type="application/json")
 
-@csrf_exempt
-def accept_tos(request):
-  student = Student.objects.get(user=request.user)
-  student.time_accepted_tos = datetime.today()
-  student.save()
-  return HttpResponse("success")
-
-
 @validate_subdomain
 def termsofservice(request):
-  return render_to_response("termsofservice.html", {}, context_instance=RequestContext(request))
+  return render("termsofservice.html", {}, context_instance=RequestContext(request))
 
 @validate_subdomain
 def privacypolicy(request):
-  return render_to_response("privacypolicy.html", {}, context_instance=RequestContext(request))
+  return render("privacypolicy.html", {}, context_instance=RequestContext(request))
 
 class TimetableView(CsrfExemptMixin, ValidateSubdomainMixin, APIView):
 
