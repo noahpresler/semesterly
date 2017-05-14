@@ -211,10 +211,10 @@ class Slot extends React.Component {
         <i className="fa fa-user" />
         <span>{this.props.location && this.props.location !== '' ? ' , ' : null}</span>
       </div>) : null;
-    const convertedStart = uses12HrTime && parseInt(this.props.time_start.split(':')[0], 10) > 12 ?
+    const convertedStart = this.props.uses12HrTime && parseInt(this.props.time_start.split(':')[0], 10) > 12 ?
       `${parseInt(this.props.time_start.split(':')[0], 10) - 12} : 
       ${this.props.time_start.split(':')[1]}` : this.props.time_start;
-    const convertedEnd = uses12HrTime && parseInt(this.props.time_end.split(':')[0], 10) > 12 ?
+    const convertedEnd = this.props.uses12HrTime && parseInt(this.props.time_end.split(':')[0], 10) > 12 ?
       `${parseInt(this.props.time_end.split(':')[0], 10) - 12}:${this.props.time_end.split(':')[1]}`
       : this.props.time_end;
 
@@ -285,6 +285,7 @@ Slot.propTypes = {
   lockOrUnlockSection: React.PropTypes.func.isRequired,
   connectCreateTarget: React.PropTypes.func.isRequired,
   connectDragTarget: React.PropTypes.func.isRequired,
+  uses12HrTime: React.PropTypes.bool.isRequired,
 };
 
 export default DropTarget(DRAG_TYPES.CREATE, createSlotTarget, collectCreateDrop)(
