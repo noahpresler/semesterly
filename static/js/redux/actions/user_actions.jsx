@@ -404,7 +404,7 @@ export const fetchFinalExamSchedule = () => (dispatch) => {
   })
     .then(response => response.json())
     .then((json) => {
-      dispatch({ type: ActionTypes.RECIEVE_FINAL_EXAMS, json });
+      dispatch({ type: ActionTypes.RECEIVE_FINAL_EXAMS, json });
     });
 };
 

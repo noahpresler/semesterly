@@ -26,7 +26,9 @@ class ExamLink(FeatureFlowView):
 
     def get_feature_flow(self, request, slug):
         exam_id = hashids.decrypt(slug)[0]
+        print exam_id
         exam_json = get_object_or_404(FinalExamShare, id=exam_id).exam_json
+        print '???'
         exam_schedule = JHUFinalExamScheduler().make_schedule(exam_json)
         return {'exam': exam_schedule}
 
