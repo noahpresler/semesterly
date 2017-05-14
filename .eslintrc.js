@@ -25,6 +25,8 @@ module.exports = {
 	  "currentSemester": true,
 	  "currentUser": true,
 		"reactAlertEvents": true,
+		"finalExamShare": true,
+		"jQuery": true,
 	},
 	rules: {
 		"no-plusplus": 0,

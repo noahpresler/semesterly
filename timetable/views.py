@@ -48,7 +48,7 @@ def custom_500(request):
 def view_timetable(request, code=None, sem_name=None, year=None, shared_timetable=None, 
                   find_friends=False, enable_notifs=False, signup=False, user_acq=False,
                   gcal_callback=False, export_calendar=False, view_textbooks=False,
-                  final_exams=False):
+                  final_exams=False, final_exam_share=None):
   school = request.subdomain
   student = get_student(request)
   course_json = None
@@ -103,7 +103,8 @@ def view_timetable(request, code=None, sem_name=None, year=None, shared_timetabl
     'export_calendar': export_calendar,
     'view_textbooks': view_textbooks,
     'final_exams_supported_semesters': map(lambda s: sem_dicts.index(s) ,final_exams_available.get(school, [])),
-    'final_exams': final_exams
+    'final_exams': final_exams,
+    'final_exam_share': json.dumps(final_exam_share),
   },
   context_instance=RequestContext(request))
 

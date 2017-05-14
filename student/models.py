@@ -73,7 +73,6 @@ class PersonalTimetable(models.Model):
     sections = models.ManyToManyField(timetable_models.Section)
     has_conflict = models.BooleanField(blank=True, default=False)
 
-
 class RegistrationToken(models.Model):
     """ Database object used during signup. """
     auth = models.TextField(default='')

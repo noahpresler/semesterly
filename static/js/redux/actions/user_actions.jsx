@@ -1,10 +1,9 @@
 import fetch from 'isomorphic-fetch';
-import Cookie from 'js-cookie';
+import { store } from '../init';
 import {
     deleteRegistrationTokenEndpoint,
     getClassmatesEndpoint,
     getDeleteTimetableEndpoint,
-    getFinalExamSchedulerEndpoint,
     getFriendsEndpoint,
     getIntegrationEndpoint,
     getLoadSavedTimetablesEndpoint,
@@ -16,7 +15,6 @@ import {
     getSetRegistrationTokenEndpoint,
 } from '../constants/endpoints';
 import { fetchCourseClassmates } from './modal_actions';
-import { store } from '../init';
 import { getNumberedName, loadTimetable, nullifyTimetable } from './timetable_actions';
 import { MAX_TIMETABLE_NAME_LENGTH } from '../constants/constants';
 import * as ActionTypes from '../constants/actionTypes';
@@ -386,26 +384,6 @@ export const getUserSavedTimetables = semester => (dispatch) => {
       } else {
         dispatch(nullifyTimetable(dispatch));
       }
-    });
-};
-
-export const fetchFinalExamSchedule = () => (dispatch) => {
-  const state = store.getState();
-  const timetable = getActiveTimetable(state.timetables);
-  dispatch({ type: ActionTypes.FETCH_FINAL_EXAMS });
-  fetch(getFinalExamSchedulerEndpoint(), {
-    headers: {
-      'X-CSRFToken': Cookie.get('csrftoken'),
-      Accept: 'application/json',
-      'Content-Type': 'application/json',
-    },
-    credentials: 'include',
-    method: 'POST',
-    body: JSON.stringify(timetable),
-  })
-    .then(response => response.json())
-    .then((json) => {
-      dispatch({ type: ActionTypes.RECIEVE_FINAL_EXAMS, json });
     });
 };
 
