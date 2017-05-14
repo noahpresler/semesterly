@@ -1,5 +1,6 @@
 $primary-navy: #34495e;
 $navy-light: #375b80;
+$navy-transparent-14: rgba(90, 200, 251, .14);
 $navy-transparent-20: rgba(63, 81, 181, .2);
 $confirm-green: #1abc9c;
 $confirm-green-hover: #16ad8f;
@@ -60,6 +61,7 @@ $gfcfcfc: #fcfcfc;
 $gf9f9f9: #f9f9f9;
 
 $gbdc3c7: #bdc3c7;
+$gdee2ff: #dee2ff;
 $gebf5ff: #ebf5ff;
 $gf5faff: #f5faff;
 
@@ -74,6 +76,10 @@ $black-transparent-5: rgba(0, 0, 0, .5);
 $black-transparent-8: rgba(0, 0, 0, .8);
 
 $white-transparent-9: rgba(255, 255, 255, .9);
+
+$g188-transparent-4: rgba(188, 188, 188, .4);
+
+$switch-blue: #5ac8fb;
 
 // colors only used in react-select // todo: get rid of react-select
 $react-select-red: #d0021b;

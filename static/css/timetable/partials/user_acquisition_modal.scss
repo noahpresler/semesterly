@@ -16,24 +16,25 @@
   }
 }
 
-
-.btn.six-px-top {
-	margin-top: 6px;
+.btn {
+  &.eight-px-top {
+    margin-top: 8px;
+  }
 }
 
-.btn.eight-px-top {
-	margin-top: 8px;
-}
-
-.abnb-modal h3 {
-    width: 100%;
-    text-align: center;
-    margin-top: 0px;
-    font-weight: 300;
+.abnb-modal {
+  h3 {
+    color: $g484848;
     font-size: 17px;
-    color: #484848;
+    font-weight: 300;
+    margin-top: 0;
+    text-align: center;
+    width: 100%;
+  }
 }
 
-.abnb-btn.disabled, .abnb-btn[disabled], fieldset[disabled] .abnb-btn{
-    opacity: .25;
+.abnb-btn.disabled,
+.abnb-btn[disabled],
+fieldset[disabled] .abnb-btn{
+  opacity: .25;
 }
