@@ -1,4 +1,5 @@
 import json
+import datetime
 
 import httplib2
 from django.core.urlresolvers import reverse
@@ -89,6 +90,12 @@ def log_ical_export(request):
     analytic.save()
     return HttpResponse(json.dumps({}), content_type="application/json")
 
+@csrf_exempt
+def accept_tos(request):
+    student = Student.objects.get(user=request.user)
+    student.time_accepted_tos = datetime.today()
+    student.save()
+    return HttpResponse(status=204)
 
 class UserView(APIView):
     def get(self, request):
