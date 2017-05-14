@@ -16,7 +16,8 @@ class IntegrationsView(ValidateSubdomainMixin, APIView):
 
     def post(self, request, integration_id, course_id):
         CourseIntegration.objects.update_or_create(course_id=course_id,
-                                                   integration_id=integration_id)
+                                                   integration_id=integration_id,
+                                                   defaults={'json': request.data['json']})
         return Response(status=status.HTTP_204_NO_CONTENT)
 
     def delete(self, request, integration_id, course_id):
