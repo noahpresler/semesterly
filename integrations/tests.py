@@ -34,8 +34,7 @@ class IntegrationsGetAddTest(APITestCase):
     def test_add_integration(self):
         data = {
             'course_id': 1,
-            'integration_id': 1,
-            'json': 'newstuff'
+            'integration_id': 1        
         }
         response = self.client.post('/integrations/1/course/1/', data, format='json', **self.request_headers)
         self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
