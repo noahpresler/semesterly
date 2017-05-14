@@ -25,6 +25,7 @@ module.exports = {
 	  "currentSemester": true,
 	  "currentUser": true,
 		"reactAlertEvents": true,
+		"twemoji": true,
 	},
 	rules: {
 		"no-plusplus": 0,
