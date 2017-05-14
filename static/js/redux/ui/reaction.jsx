@@ -78,6 +78,7 @@ class Reaction extends React.Component {
 
 Reaction.defaultProps = {
   emoji: '',
+  selected: false,
 };
 
 Reaction.propTypes = {
@@ -91,7 +92,7 @@ Reaction.propTypes = {
   total: React.PropTypes.number.isRequired,
   count: React.PropTypes.number.isRequired,
   react: React.PropTypes.func.isRequired,
-  selected: React.PropTypes.bool.isRequired,
+  selected: React.PropTypes.bool
 };
 
 export default Reaction;
