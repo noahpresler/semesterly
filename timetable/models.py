@@ -1,9 +1,11 @@
+import re
 import os
 os.environ['DJANGO_SETTINGS_MODULE'] = 'semesterly.settings'
 from operator import itemgetter
 
 from django.forms.models import model_to_dict
 from django.db import models
+from django.db.models import Count
 
 
 class Semester(models.Model):
@@ -56,10 +58,17 @@ class Course(models.Model):
         return self.code + ": " + self.name
 
     def get_reactions(self, student=None):
+        """ 
+        Return a list of dicts for each type of reaction (by title) for this course. Each dict has:
+        title: the title of the reaction
+        count: number of reactions with this title that this course has received
+        reacted: True if the student provided has given a reaction with this title
+        """
         result = list(self.reaction_set.values('title') \
                       .annotate(count=models.Count('title')).distinct().all())
         if not student:
             return result
+        # TODO: rewrite as a single DB query
         for i, reaction in enumerate(result):
             result[i]['reacted'] = self.reaction_set.filter(student=student,
                                                             title=reaction['title']).exists()
@@ -99,6 +108,55 @@ class Course(models.Model):
         ids = CourseIntegration.objects.filter(course__id=self.id).values_list("integration",
                                                                                flat=True)
         return Integration.objects.filter(id__in=ids).values_list("name", flat=True)
+
+    def eval_add_unique_term_year_flag(self):
+        """
+        Flag all eval instances s.t. there exists repeated term+year values.
+        Return:
+          List of modified evaluation dictionaries (added flag 'unique_term_year')
+        """
+        evals = self.get_eval_info()
+        years = Evaluation.objects.filter(course=self).values('year').annotate(Count('id'))\
+            .filter(id__count__gt=1).values_list('year')
+        years = {e[0] for e in years}
+        for course_eval in evals:
+            course_eval['unique_term_year'] = not course_eval['year'] in years
+        return evals
+
+    def get_percentage_enrolled(self, sem):
+        """ Return percentage of course capacity that is filled. """
+        tts_with_course = self.personaltimetable_set.filter(semester=sem)
+        num_students_in_course = tts_with_course.values('student').distinct().count()
+        sections = self.section_set.filter(semester=sem)
+        course_capacity = sum(sections.values_list('size', flat=True)) if sections else 0
+        return num_students_in_course / float(course_capacity) if course_capacity else 0
+
+    def get_regexed_courses(self, school):
+        """
+        Given course data, search for all occurrences of a course code in the course description and
+        prereq info and return a map from course code to course name for each course code.
+        """
+        school_to_course_regex = {
+            'jhu': r'([A-Z]{2}\.\d{3}\.\d{3})',
+            'uoft': r'([A-Z]{3}[A-Z0-9]\d{2}[HY]\d)',
+            'vandy': r'([A-Z-&]{2,7}\s\d{4}[W]?)',
+            'gw': r'([A-Z]{2,5}\s\d{4}[W]?)',
+            'umich': r'([A-Z]{2,8}\s\d{3})',
+            'chapman': r'([A-Z]{2,4}\s\d{3})',
+            'salisbury': r'([A-Z]{3,4} \d{2,3})',
+        }
+        course_code_to_name = {}
+        if school in school_to_course_regex:
+            course_code_matches = re.findall(school_to_course_regex[school],
+                                             self.description + self.prerequisites)
+            # TODO: get all course objects in one db access
+            for course_code in course_code_matches:
+                try:
+                    course = Course.objects.get(school=school, code__icontains=course_code)
+                    course_code_to_name[course_code] = course.name
+                except (Course.DoesNotExist, Course.MultipleObjectsReturned):
+                    pass
+        return course_code_to_name
 
 
 class Section(models.Model):
