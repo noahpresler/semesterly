@@ -15,49 +15,23 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 
 from analytics.models import SharedCourseView
-from student.models import PersonalTimetable, Student
+from student.models import Student
 from student.utils import get_classmates_from_course_id
-from timetable.models import Evaluation, Section, Semester, Course, Updates
-from timetable.school_mappers import school_to_course_regex, school_code_to_name
+from timetable.models import Semester, Course, Updates
+from timetable.school_mappers import school_code_to_name
 from timetable.utils import validate_subdomain, ValidateSubdomainMixin, FeatureFlowView
 
 
 def get_detailed_course_json(school, course, sem, student=None):
     json_data = get_basic_course_json(course, sem, ['prerequisites', 'exclusions', 'areas'])
-    json_data['eval_info'] = eval_add_unique_term_year_flag(course, course.get_eval_info())
+    json_data['eval_info'] = course.eval_add_unique_term_year_flag()
     json_data['related_courses'] = course.get_related_course_info(sem, limit=5)
     json_data['reactions'] = course.get_reactions(student)
     json_data['textbooks'] = course.get_textbooks(sem)
     json_data['integrations'] = list(course.get_course_integrations())
-    json_data['regexed_courses'] = get_regexed_courses(school, json_data)
-    json_data['popularity_percent'] = get_percentage_enrolled(course, sem)
+    json_data['regexed_courses'] = course.get_regexed_courses(school)
+    json_data['popularity_percent'] = course.get_percentage_enrolled(sem)
     return json_data
-
-
-def eval_add_unique_term_year_flag(course, evals):
-    """
-    Flag all eval instances s.t. there exists repeated term+year values.
-    Return:
-      List of modified evaluation dictionaries (added flag 'unique_term_year')
-    """
-    years = Evaluation.objects.filter(course=course).values('year').annotate(Count('id')).filter(
-        id__count__gt=1).values_list('year')
-    years = {e[0] for e in years}
-    for course_eval in evals:
-        course_eval['unique_term_year'] = not course_eval['year'] in years
-    return evals
-
-
-def get_percentage_enrolled(course, sem):
-    """ Return percentage of course capacity that is filled. """
-    num_students_in_course = PersonalTimetable.objects.filter(courses__in=[course], semester=sem) \
-        .values('student').distinct().count()
-    course_capacity = sum(Section.objects.filter(course=course, semester=sem)
-                          .values_list('size', flat=True))
-    try:
-        return num_students_in_course / float(course_capacity)
-    except ZeroDivisionError:
-        return 0
 
 
 def get_basic_course_json(course, sem, extra_model_fields=None):
@@ -83,25 +57,6 @@ def get_basic_course_json(course, sem, extra_model_fields=None):
 def get_section_offerings(section):
     """ Return a list of model dicts of each offering of a section. """
     return [dict(model_to_dict(co), **model_to_dict(section)) for co in section.offering_set.all()]
-
-
-def get_regexed_courses(school, course_data):
-    """
-    Given course data, search for all occurrences of a course code in the course description and
-    prereq info and return a map from course code to course name for each course code.
-    """
-    course_code_to_name = {}
-    if school in school_to_course_regex:
-        course_code_matches = re.findall(school_to_course_regex[school],
-                                         course_data['description'] + course_data['prerequisites'])
-        # TODO: get all course objects in one db access
-        for course_code in course_code_matches:
-            try:
-                course_code_to_name[course_code] = Course.objects.get(school=school,
-                                                                      code__icontains=course_code)
-            except (Course.DoesNotExist, Course.MultipleObjectsReturned):
-                pass
-    return course_code_to_name
 
 
 # TODO: use CBV
