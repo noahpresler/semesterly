@@ -1,9 +1,10 @@
 """This file contains all dicts which map a school to its associated object"""
-import os, sys, django
+import os
+
+import django
+
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "semesterly.settings")
 django.setup()
-from timetable.models import *
-from student.models import *
 
 
 # the smallest block size (in minutes) needed to describe start/end times
@@ -59,16 +60,6 @@ school_code_to_name = {
   'umich':     'University of Michigan',
   'chapman':   'Chapman University',
   'salisbury': 'Salisbury University',
-}
-
-school_to_course_regex = {
-  'jhu':       r'([A-Z]{2}\.\d{3}\.\d{3})',
-  'uoft':      r'([A-Z]{3}[A-Z0-9]\d{2}[HY]\d)',
-  'vandy':     r'([A-Z-&]{2,7}\s\d{4}[W]?)',
-  'gw':        r'([A-Z]{2,5}\s\d{4}[W]?)',
-  'umich':     r'([A-Z]{2,8}\s\d{3})',
-  'chapman':   r'([A-Z]{2,4}\s\d{3})',
-  'salisbury': r'([A-Z]{3,4} \d{2,3})',
 }
 
 _sem = lambda term, year: {'name': term, 'year': year}
