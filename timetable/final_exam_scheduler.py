@@ -26,7 +26,11 @@ class FinalExamScheduler:
 				# print "rule getting applied"
 
 				if result != None:
-					self.schedule[int(course['id'])] = result
+					self.schedule[int(course['id'])] = {
+						'time': result,
+						'name': course['name'],
+						'code': course['code'],
+					}
 					break
 			if result is None:
 				self.schedule[int(course['id'])] = 'Exam time not found'
@@ -62,4 +66,3 @@ class Rule:
 
 	def printOut(self):
 		print 'Days:', self.list_of_days, 'Start time:', self.start_time, 'End time:', self.end_time, "Result:", self.result
-

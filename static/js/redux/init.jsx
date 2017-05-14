@@ -137,6 +137,14 @@ function setup(dispatch) {
       dispatch(lockTimetable(initData.featureFlow.sharedTimetable,
         true, initData.currentUser.isLoggedIn));
       break;
+    case 'SHARE_EXAM':
+      dispatch({ type: ActionTypes.SET_FINAL_EXAMS_SHARED });
+      dispatch({
+        type: ActionTypes.RECEIVE_FINAL_EXAMS,
+        json: initData.featureFlow.exam,
+      });
+      dispatch({ type: ActionTypes.SHOW_FINAL_EXAMS_MODAL });
+      break;
     case 'VIEW_TEXTBOOKS':
       dispatch({ type: ActionTypes.TRIGGER_TEXTBOOK_MODAL });
       break;
