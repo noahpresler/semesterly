@@ -2,8 +2,8 @@ import React from 'react';
 import Select from 'react-select';
 import classnames from 'classnames';
 import Modal from 'boron/WaveModal';
-import majors from '../constants/majors';
-import * as PropTypes from '../constants/propTypes';
+import majors from '../../constants/majors';
+import * as PropTypes from '../../constants/propTypes';
 
 class UserSettingsModal extends React.Component {
 

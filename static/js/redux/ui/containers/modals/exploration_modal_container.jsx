@@ -1,19 +1,19 @@
 import { connect } from 'react-redux';
-import ExplorationModal from '../exploration_modal';
+import ExplorationModal from '../../modals/exploration_modal';
 import {
     clearAdvancedSearchPagination,
     fetchAdvancedSearchResults,
     paginateAdvancedSearchResults,
     setAdvancedSearchResultIndex,
-} from '../../actions/search_actions';
+} from '../../../actions/search_actions';
 import {
     addOrRemoveCourse,
     addOrRemoveOptionalCourse,
     hoverSection,
     unHoverSection,
-} from '../../actions/timetable_actions';
-import { saveSettings } from '../../actions/user_actions';
-import { getSchoolSpecificInfo } from '../../constants/schools';
+} from '../../../actions/timetable_actions';
+import { saveSettings } from '../../../actions/user_actions';
+import { getSchoolSpecificInfo } from '../../../constants/schools';
 import {
     fetchCourseClassmates,
     hideExplorationModal,
@@ -21,8 +21,8 @@ import {
     react,
     changeUserInfo,
     fetchCourseInfo,
-} from '../../actions/modal_actions';
-import { currSem } from '../../reducers/semester_reducer';
+} from '../../../actions/modal_actions';
+import { currSem } from '../../../reducers/semester_reducer';
 
 
 const mapStateToProps = (state) => {

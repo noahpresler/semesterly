@@ -1,7 +1,7 @@
 import React from 'react';
 import Modal from 'boron/WaveModal';
-import COLOUR_DATA from '../constants/colours';
-import * as PropTypes from '../constants/propTypes';
+import COLOUR_DATA from '../../constants/colours';
+import * as PropTypes from '../../constants/propTypes';
 
 
 class PeerModal extends React.Component {
