@@ -24,11 +24,6 @@ import { currSem } from '../reducers/semester_reducer';
 
 let autoSaveTimer;
 
-export const getUserInfo = json => ({
-  type: ActionTypes.USER_INFO_RECEIVED,
-  data: json,
-});
-
 export const requestUserInfo = () => ({
   type: ActionTypes.REQUEST_USER_INFO,
 });
@@ -404,7 +399,7 @@ export const fetchFinalExamSchedule = () => (dispatch) => {
   })
     .then(response => response.json())
     .then((json) => {
-      dispatch({ type: ActionTypes.RECIEVE_FINAL_EXAMS, json });
+      dispatch({ type: ActionTypes.RECEIVE_FINAL_EXAMS, json });
     });
 };
 
