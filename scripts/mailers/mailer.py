@@ -1,12 +1,16 @@
-import django, os, json, traceback, sys, smtplib
-os.environ.setdefault("DJANGO_SETTINGS_MODULE", "semesterly.settings")
-django.setup()
+import sys
+import os
+
+import json
+import traceback
+import smtplib
+
 from email.mime.text import MIMEText
 from django.template.loader import render_to_string
 from student.models import *
 from student.views import create_unsubscribe_link
 
-class Mailer():
+class Mailer(object):
     def __init__(self):
         # Create server object with SSL option
         self.server = smtplib.SMTP_SSL('email-smtp.us-east-1.amazonaws.com')
@@ -18,7 +22,7 @@ class Mailer():
     def cleanup(self):
         self.server.quit()
 
-    def send_mail(self, student, subject, template, params={}):
+    def send(self, student, subject, template, params={}):
         '''
         Sends email to a student
         Parameters:
@@ -53,7 +57,8 @@ class Mailer():
         try:
             # Perform operations via server
             # TODO: Ping their email address to make sure it's fine
-            self.server.sendmail(self.sender, [recipient], msg.as_string())
+            # self.server.sendmail(self.sender, [recipient], msg.as_string())
+            print("SEND: CHANGE BACK!")
         except:
             e = sys.exc_info()[0]
             print("skipped " + str(student.user.email))
