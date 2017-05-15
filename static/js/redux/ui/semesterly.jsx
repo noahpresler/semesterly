@@ -10,17 +10,17 @@ import EnableNotificationsAlertContainer from './alerts/enable_notifications_ale
 import FriendsInClassAlertContainer from './alerts/friends_in_class_alert_container';
 import TopBarContainer from './containers/top_bar_container';
 import SideBarContainer from './containers/side_bar_container';
-import UserSettingsModalContainer from './containers/user_settings_modal_container';
-import ExplorationModalContainer from './containers/exploration_modal_container';
-import SignupModalContainer from './containers/signup_modal_container';
-import PreferenceModalContainer from './containers/preference_modal_container';
-import TutModalContainer from './containers/tut_modal_container';
-import PeerModalContainer from './containers/peer_modal_container';
-import IntegrationModalContainer from './containers/integration_modal_container';
-import SaveCalendarModalContainer from './containers/save_calendar_modal_container';
-import FinalExamsModalContainer from './containers/final_exams_modal_container';
-import UserAcquisitionModalContainer from './containers/user_acquisition_modal_container';
-import TextbookModalContainer from './containers/textbook_modal_container';
+import UserSettingsModalContainer from './containers/modals/user_settings_modal_container';
+import ExplorationModalContainer from './containers/modals/exploration_modal_container';
+import SignupModalContainer from './containers/modals/signup_modal_container';
+import PreferenceModalContainer from './containers/modals/preference_modal_container';
+import TutModalContainer from './containers/modals/tut_modal_container';
+import PeerModalContainer from './containers/modals/peer_modal_container';
+import IntegrationModalContainer from './containers/modals/integration_modal_container';
+import SaveCalendarModalContainer from './containers/modals/save_calendar_modal_container';
+import FinalExamsModalContainer from './containers/modals/final_exams_modal_container';
+import UserAcquisitionModalContainer from './containers/modals/user_acquisition_modal_container';
+import TextbookModalContainer from './containers/modals/textbook_modal_container';
 
 class Semesterly extends React.Component {
   constructor(props) {
