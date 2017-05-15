@@ -265,6 +265,7 @@ UserSettingsModal.propTypes = {
   tokenRegistered: React.PropTypes.bool.isRequired,
   unsubscribeToNotifications: React.PropTypes.func.isRequired,
   subscribeToNotifications: React.PropTypes.func.isRequired,
+  highlightNotifs: React.PropTypes.bool.isRequired,
 };
 
 export default UserSettingsModal;
