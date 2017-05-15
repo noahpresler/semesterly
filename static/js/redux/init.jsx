@@ -6,7 +6,7 @@ import thunkMiddleware from 'redux-thunk';
 import { Provider } from 'react-redux';
 import rootReducer from './reducers/root_reducer';
 import SemesterlyContainer from './ui/containers/semesterly_container';
-import { fetchMostClassmatesCount, getUserInfo, isRegistered } from './actions/user_actions';
+import { fetchMostClassmatesCount, isRegistered } from './actions/user_actions';
 import { loadCachedTimetable, loadTimetable, lockTimetable } from './actions/timetable_actions';
 import { fetchSchoolInfo } from './actions/school_actions';
 import { currSem } from './reducers/semester_reducer';
@@ -40,16 +40,7 @@ function setup(dispatch) {
   initData = JSON.parse(initData);
 
   // setup initial redux state
-  dispatch({ type: ActionTypes.SET_SCHOOL, school: initData.school });
-  dispatch({ type: ActionTypes.SET_SEMESTER, semester: parseInt(initData.currentSemester, 10) });
-  dispatch({ type: ActionTypes.SET_AVAIL_SEMESTERS, availSemesters: initData.allSemesters });
-  dispatch({ type: ActionTypes.SET_USES12HRTIME, uses12HrTime: initData.uses12HrTime });
-  dispatch({
-    type: ActionTypes.SET_INTEGRATIONS,
-    studentIntegrations: initData.studentIntegrations,
-  });
-  dispatch({ type: ActionTypes.SET_EXAM_SEMESTERS, exams: initData.examSupportedSemesters });
-  dispatch(getUserInfo(initData.currentUser));
+  dispatch({ type: ActionTypes.INIT_STATE, data: initData });
 
   // we load currentUser's timetable (or cached timetable) only if
   // they're _not_ trying to load a shared timetable
