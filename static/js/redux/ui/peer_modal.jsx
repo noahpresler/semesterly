@@ -79,7 +79,7 @@ class PeerModal extends React.Component {
           </div>
         </div>);
     });
-    const proPicStyle = !this.props.userInfo.isLoggedIn ? { backgroundImage: 'url("/static/img/blank.jpg")' } : { backgroundImage: `url(http://graph.facebook.com/${JSON.parse(currentUser).fbook_uid}/picture?width=700&height=700)` };
+    const proPicStyle = !this.props.userInfo.isLoggedIn ? { backgroundImage: 'url("/static/img/blank.jpg")' } : { backgroundImage: `url(http://graph.facebook.com/${this.props.userInfo.fbook_uid}/picture?width=700&height=700)` };
     const sideBar =
             (<div id="pm-side-bar">
               <div className="circle-pic" style={proPicStyle} />

@@ -1,7 +1,14 @@
 import COLOUR_DATA from '../constants/colours';
 import * as ActionTypes from '../constants/actionTypes';
 
-const ui = (state = { searchHover: 0, courseToColourIndex: {} }, action) => {
+const initialState = {
+  searchHover: 0,
+  courseToColourIndex: {},
+  uses12HrTime: false,
+  highlightNotifs: false, // add yellow styling to notifications
+};
+
+const ui = (state = initialState, action) => {
   switch (action.type) {
     case ActionTypes.HOVER_SEARCH_RESULT:
       return Object.assign({}, state, { searchHover: action.position });
@@ -29,6 +36,10 @@ const ui = (state = { searchHover: 0, courseToColourIndex: {} }, action) => {
       }
       return Object.assign({}, state, { courseToColourIndex });
     }
+    case ActionTypes.SET_USES12HRTIME:
+      return Object.assign({}, state, { uses12HrTime: action.uses12HrTime });
+    case ActionTypes.SET_HIGHLIGHT_NOTIFS:
+      return Object.assign({}, state, { highlightNotifs: action.highlightNotifs });
     default:
       return state;
   }
