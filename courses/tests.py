@@ -77,7 +77,7 @@ class UrlsTest(UrlTestCase):
 
     def test_urls_call_correct_views(self):
         self.assertUrlResolvesToView('/c/somecode0350!', 'courses.views.course_page')
-        self.assertUrlResolvesToView('/course/music101/Summer/2021', 'timetable.views.view_timetable')
+        self.assertUrlResolvesToView('/course/music101/Summer/2021', 'courses.views.CourseModal')
         self.assertUrlResolvesToView('/courses', 'courses.views.all_courses')
 
         self.assertUrlResolvesToView('/courses/Fall/2019/id/82', 'courses.views.CourseDetail')

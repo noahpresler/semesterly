@@ -36,6 +36,7 @@ const mapStateToProps = (state, ownProps) => {
         friend.sections.find(s => s === sec) !== undefined) : [];
     },
     days: ownProps.days,
+    uses12HrTime: state.ui.uses12HrTime,
   };
 };
 
