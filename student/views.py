@@ -15,14 +15,13 @@ from rest_framework.views import APIView
 from rest_framework.permissions import IsAuthenticated
 
 from analytics.models import *
-from authpipe.utils import get_google_credentials, check_student_token
+from authpipe.utils import get_google_credentials, check_student_token, RedirectToSignupMixin
 from student.models import *
 from student.models import Student, Reaction, RegistrationToken
 from student.utils import next_weekday, get_classmates_from_course_id, make_token, get_student_tts
 from timetable.models import *
 from timetable.utils import *
 from timetable.utils import validate_subdomain, ValidateSubdomainMixin
-from timetable.views import view_timetable
 
 DAY_MAP = {
     'M': 'mo',
@@ -90,50 +89,47 @@ def log_ical_export(request):
     return HttpResponse(json.dumps({}), content_type="application/json")
 
 
-class UserView(APIView):
+class UserView(RedirectToSignupMixin, APIView):
+
     def get(self, request):
-        logged = request.user.is_authenticated()
-        if logged and Student.objects.filter(user=request.user).exists():
-            student = Student.objects.get(user=request.user)
-            reactions = Reaction.objects.filter(student=student).values('title').annotate(
-                count=Count('title'))
-            if student.user.social_auth.filter(provider='google-oauth2').exists():
-                hasGoogle = True
-            else:
-                hasGoogle = False
-            if student.user.social_auth.filter(provider='facebook').exists():
-                social_user = student.user.social_auth.filter(provider='facebook').first()
-                img_url = 'https://graph.facebook.com/' + student.fbook_uid + '/picture?width=700&height=700'
-                hasFacebook = True
-            else:
-                social_user = student.user.social_auth.filter(provider='google-oauth2').first()
-                img_url = student.img_url.replace('sz=50', 'sz=700')
-                hasFacebook = False
-            hasNotificationsEnabled = RegistrationToken.objects.filter(student=student).exists()
-            context = {
-                'name': student.user,
-                'major': student.major,
-                'class': student.class_year,
-                'student': student,
-                'total': 0,
-                'img_url': img_url,
-                'hasGoogle': hasGoogle,
-                'hasFacebook': hasFacebook,
-                'notifications': hasNotificationsEnabled
-            }
-            for r in reactions:
-                context[r['title']] = r['count']
-            for r in Reaction.REACTION_CHOICES:
-                if r[0] not in context:
-                    context[r[0]] = 0
-                context['total'] += context[r[0]]
-            return render_to_response("profile.html", context,
-                                      context_instance=RequestContext(request))
+        student = Student.objects.get(user=request.user)
+        reactions = Reaction.objects.filter(student=student).values('title').annotate(
+            count=Count('title'))
+        if student.user.social_auth.filter(provider='google-oauth2').exists():
+            hasGoogle = True
         else:
-            return signup(request)
+            hasGoogle = False
+        if student.user.social_auth.filter(provider='facebook').exists():
+            social_user = student.user.social_auth.filter(provider='facebook').first()
+            img_url = 'https://graph.facebook.com/' + student.fbook_uid + '/picture?width=700&height=700'
+            hasFacebook = True
+        else:
+            social_user = student.user.social_auth.filter(provider='google-oauth2').first()
+            img_url = student.img_url.replace('sz=50', 'sz=700')
+            hasFacebook = False
+        hasNotificationsEnabled = RegistrationToken.objects.filter(student=student).exists()
+        context = {
+            'name': student.user,
+            'major': student.major,
+            'class': student.class_year,
+            'student': student,
+            'total': 0,
+            'img_url': img_url,
+            'hasGoogle': hasGoogle,
+            'hasFacebook': hasFacebook,
+            'notifications': hasNotificationsEnabled
+        }
+        for r in reactions:
+            context[r['title']] = r['count']
+        for r in Reaction.REACTION_CHOICES:
+            if r[0] not in context:
+                context[r[0]] = 0
+            context['total'] += context[r[0]]
+        return render_to_response("profile.html", context,
+                                  context_instance=RequestContext(request))
 
     def patch(self, request):
-        student = Student.objects.get(user=request.user)
+        student = get_object_or_404(Student, user=request.user)
         settings = 'social_offerings social_courses social_all major class_year emails_enabled'.split()
         for setting in settings:
             default_val = getattr(student, setting)
@@ -143,8 +139,7 @@ class UserView(APIView):
         return Response(status=status.HTTP_204_NO_CONTENT)
 
 
-class UserTimetableView(ValidateSubdomainMixin, APIView):
-    permission_classes = (IsAuthenticated,)
+class UserTimetableView(ValidateSubdomainMixin, RedirectToSignupMixin, APIView):
 
     def get(self, request, sem_name, year):
         sem, _ = Semester.objects.get_or_create(name=sem_name, year=year)
@@ -233,8 +228,7 @@ class UserTimetableView(ValidateSubdomainMixin, APIView):
         tt.save()
 
 
-class ClassmateView(ValidateSubdomainMixin, APIView):
-    permission_classes = (IsAuthenticated,)
+class ClassmateView(ValidateSubdomainMixin, RedirectToSignupMixin, APIView):
 
     def get(self, request, sem_name, year):
         if request.query_params.get('count'):
@@ -314,8 +308,7 @@ class ClassmateView(ValidateSubdomainMixin, APIView):
             return Response(friends, status=status.HTTP_200_OK)
 
 
-class GCalView(APIView):
-    permission_classes = (IsAuthenticated,)
+class GCalView(RedirectToSignupMixin, APIView):
 
     def post(self, request):
         student = Student.objects.get(user=request.user)
@@ -391,16 +384,7 @@ class GCalView(APIView):
         return HttpResponse(json.dumps({}), content_type="application/json")
 
 
-@validate_subdomain
-def signup(request):
-    try:
-        return view_timetable(request, signup=True)
-    except Exception as e:
-        raise Http404
-
-
-class ReactionView(ValidateSubdomainMixin, APIView):
-    permission_classes = (IsAuthenticated,)
+class ReactionView(ValidateSubdomainMixin, RedirectToSignupMixin, APIView):
 
     def post(self, request):
         cid = request.data['cid']

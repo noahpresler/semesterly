@@ -55,6 +55,7 @@ const mapStateToProps = (state) => {
     saving: state.savingTimetable.saving,
     dataLastUpdated: state.school.dataLastUpdated,
     isLoggedIn: state.userInfo.data.isLoggedIn,
+    uses12HrTime: state.ui.uses12HrTime,
     hasTimetables,
     isFetchingShareLink,
     shareLink,
