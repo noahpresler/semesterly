@@ -245,6 +245,7 @@ SideBar.propTypes = {
   }).isRequired,
   semesterIndex: React.PropTypes.number.isRequired,
   avgRating: React.PropTypes.number,
+  examSupportedSemesters: React.PropTypes.arrayOf(React.PropTypes.number).isRequired,
 };
 
 export default SideBar;

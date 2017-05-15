@@ -208,6 +208,7 @@ SlotManager.propTypes = {
     React.PropTypes.shape({})])).isRequired,
   primaryDisplayAttribute: React.PropTypes.string.isRequired,
   socialSections: React.PropTypes.bool,
+  uses12HrTime: React.PropTypes.bool.isRequired,
 };
 
 export default SlotManager;
