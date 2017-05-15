@@ -57,12 +57,6 @@ export const setDeclinedNotifications = (declined) => {
     // console.log("settings decline", declined);
   localStorage.setItem('declinedNotifications', declined);
 };
-export const getDeclinedNotifications = () => {
-  if (!browserSupportsLocalStorage()) {
-    return;
-  }
-  localStorage.getItem('declinedNotifications');
-};
 export const timeLapsedGreaterThan = (time, days) => {
   if (!browserSupportsLocalStorage()) {
     return null;
@@ -72,6 +66,8 @@ export const timeLapsedGreaterThan = (time, days) => {
     // console.log(timeNow.getTime(), Number(time), windowInMilli);
   return ((timeNow.getTime() - Number(time)) > windowInMilli);
 };
+export const timeLapsedInDays = time =>
+  ((new Date()).getTime() - Number(time)) / (1000 * 60 * 60 * 24);
 export const getLocalTimetable = () => {
   if (!browserSupportsLocalStorage()) {
     return {};
