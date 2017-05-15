@@ -14,11 +14,6 @@
     padding: 0 10px;
     width: 100%;
 
-    #search-bar-input-wrapper {
-      overflow: hidden;
-      width: auto;
-    }
-
     &::-webkit-input-placeholder {
       font-size: 14px;
       line-height: 30px;
@@ -43,6 +38,11 @@
       border: 1px solid #0095FF;
     }
   }
+}
+
+#search-bar-input-wrapper {
+  overflow: hidden;
+  width: auto;
 }
 
 #search-bar-wrapper {
