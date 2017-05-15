@@ -2,10 +2,10 @@ import React from 'react';
 import Modal from 'boron/FadeModal';
 import SortMenuContainer from './containers/sort_menu_container';
 
-export class PreferenceModal extends React.Component {
-  componentDidUpdate(nextProps) {
+class PreferenceModal extends React.Component {
+  componentDidUpdate() {
     if (this.props.isVisible) {
-      this.refs.modal.show();
+      this.modal.show();
     }
   }
 
@@ -21,7 +21,7 @@ export class PreferenceModal extends React.Component {
     };
     return (
       <Modal
-        ref="modal"
+        ref={(c) => { this.modal = c; }}
         className="pref-modal max-modal"
         modalStyle={modalStyle}
         onHide={this.props.togglePreferenceModal}
@@ -33,9 +33,9 @@ export class PreferenceModal extends React.Component {
               <p style={{ margin: 0 }}>Conflicts: </p>
             </div>
             <div style={{ marginLeft: 'auto', marginRight: '10%' }}>
-              <label className="switch switch-slide">
+              <label className="switch switch-slide" htmlFor="with-conflicts">
                 <input
-                  ref="share_sections"
+                  id="with-conflicts"
                   className="switch-input"
                   type="checkbox"
                   checked={this.props.withConflicts}
@@ -55,7 +55,7 @@ export class PreferenceModal extends React.Component {
             <button
               className="btn btn-primary"
               style={{ marginLeft: 'auto', marginRight: '10%' }}
-              onClick={() => this.refs.modal.hide()}
+              onClick={() => this.modal.hide()}
             >
                             Save and Close
                         </button>
@@ -65,3 +65,12 @@ export class PreferenceModal extends React.Component {
     );
   }
 }
+
+PreferenceModal.propTypes = {
+  toggleConflicts: React.PropTypes.func.isRequired,
+  withConflicts: React.PropTypes.bool.isRequired,
+  togglePreferenceModal: React.PropTypes.func.isRequired,
+  isVisible: React.PropTypes.bool.isRequired,
+};
+
+export default PreferenceModal;
