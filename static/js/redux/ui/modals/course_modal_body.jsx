@@ -1,13 +1,13 @@
 import React from 'react';
-import Reaction from './reaction';
-import REACTION_MAP from '../constants/reactions';
-import MasterSlot from './master_slot';
-import Textbook from './textbook';
-import COLOUR_DATA from '../constants/colours';
-import EvaluationList from './evaluation_list';
-import CourseModalSection from './course_modal_section';
-import SlotHoverTip from './slot_hover_tip';
-import * as PropTypes from '../constants/propTypes';
+import Reaction from '../reaction';
+import REACTION_MAP from '../../constants/reactions';
+import MasterSlot from '../master_slot';
+import Textbook from '../textbook';
+import COLOUR_DATA from '../../constants/colours';
+import EvaluationList from '../evaluation_list';
+import CourseModalSection from '../course_modal_section';
+import SlotHoverTip from '../slot_hover_tip';
+import * as PropTypes from '../../constants/propTypes';
 
 class CourseModalBody extends React.Component {
   constructor(props) {
