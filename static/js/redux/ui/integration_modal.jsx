@@ -11,12 +11,15 @@ class IntegrationModal extends React.Component {
     };
   }
 
-  componentDidUpdate(nextProps) {
-    if (this.props.isVisible) {
-      this.modal.show();
-    }
+  componentWillReceiveProps(nextProps) {
     if (this.props.isVisible !== nextProps.isVisible && this.state.enabled !== this.props.enabled) {
       this.setState({ enabled: this.props.enabled });
+    }
+  }
+
+  componentDidUpdate() {
+    if (this.props.isVisible) {
+      this.modal.show();
     }
   }
 
