@@ -1,7 +1,5 @@
 import os
 
-import json
-
 import django
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "semesterly.settings")
 django.setup()

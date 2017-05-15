@@ -6,7 +6,7 @@ import traceback
 import smtplib
 
 from email.mime.text import MIMEText
-from django.template.loader import render_to_string
+from django.template import loader, Context
 from student.models import *
 from student.views import create_unsubscribe_link
 
@@ -38,12 +38,8 @@ class Mailer(object):
         student.user.first_name = student.user.first_name.encode('utf-8')
         student.user.last_name = student.user.last_name.encode('utf-8')
 
-        params.update({
-            'user': student,
-            'unsub_link': unsub_link,
-        })
-
-        msg_html = render_to_string(template, params)
+        params.update({'template_file': template, 'unsub_link': unsub_link, 'user': student})
+        msg_html = loader.render_to_string("email_wrapper.html", params)
 
         # Create message
         recipient = student.user.email
@@ -57,8 +53,8 @@ class Mailer(object):
         try:
             # Perform operations via server
             # TODO: Ping their email address to make sure it's fine
-            # self.server.sendmail(self.sender, [recipient], msg.as_string())
-            print("SEND: CHANGE BACK!")
+            self.server.sendmail(self.sender, [recipient], msg.as_string())
+            # print("SENT: DEBUG MODE!")
         except:
             e = sys.exc_info()[0]
             print("skipped " + str(student.user.email))
