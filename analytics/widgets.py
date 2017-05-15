@@ -2,7 +2,6 @@ from dashing.widgets import Widget
 from dashing.widgets import GraphWidget
 from dashing.widgets import ListWidget
 from dashing.widgets import NumberWidget
-# from dashing.widgets import TimetablesWidget
 
 from student.views import get_student
 from student.models import *
@@ -269,32 +268,43 @@ class FacebookAlertsClicksWidget(NumberWidget):
 class SignupsPerDayWidget(GraphWidget):
 
     title = 'Signups Per Day'
-    value = ''
     more_info = ''
     updated_at = ''
     
     def get_data(self):
-        x_vals = [ i for i in range(-6, 1) ]  # -6, -5, ..., 0
-        y_vals = number_timetables_per_hour(
+
+        today = datetime.now()                           # First, get today's 
+        dates = [                                        # date. For all dates
+            (today - timedelta(days=i)).date()           # starting from 6 days
+            for i in range(6, -1, -1)                    # ago until today.
+        ]                                                # Convert to string
+        labels = [ d.strftime('%m/%d') for d in dates ]  # format for labels.
+
+        values = number_timetables_per_hour(
             Timetable=Student,
             start_delta_days=7, 
             interval_delta_hours=24
         )
-        return [ { 'x' : x, 'y': y } for x, y in zip(x_vals, y_vals) ]
+        return {
+            'labels' : labels,
+            'values' : values
+        }
 
 
 class ReactionsWidget(GraphWidget):
 
     title = 'Reactions Used'
-    value = ''
     more_info = ''
     updated_at = ''
     
     def get_data(self):
         reactions_data = number_of_reactions()
-        x_vals = [ i for i in range(8) ]
-        y_vals = list(reactions_data.values())
-        return [ { 'x' : x, 'y': y } for x, y in zip(x_vals, y_vals) ]
+        labels = [ label for label in reactions_data.keys() ]
+        values = [ value for value in reactions_data.values() ]
+        return {
+            'labels' : labels,
+            'values' : values
+        }
 
 
 class UsersBySchoolWidget(GraphWidget):
@@ -361,35 +371,3 @@ class TimetablesBySemesterWidget(GraphWidget):
             'labels' : labels,
             'values' : values
         }
-
-
-# class SignupsPerDayWidget(Widget):
-
-#     title = 'Signups Per Day'
-#     value = ''
-#     more_info = ''
-#     updated_at = ''
-
-#     def get_title(self):
-#         return self.title
-
-#     def get_more_info(self):
-#         return self.more_info
-
-#     def get_updated_at(self):
-#         return self.updated_at
-
-#     def get_value(self):
-#         return number_timetables_per_hour(
-#             Timetable=Student,
-#             start_delta_days=7, 
-#             interval_delta_hours=24
-#         )
-
-#     def get_context(self):
-#         return {
-#             'title'     : self.get_title(),
-#             'moreInfo'  : self.get_more_info(),
-#             'updatedAt' : self.get_updated_at(),
-#             'value'     : self.get_value()
-#         }

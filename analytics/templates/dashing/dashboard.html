@@ -5,6 +5,8 @@
 <!-- Custom Widget CSS Files -->
 <link rel="stylesheet" href="{% static 'css/analytics/widgets/timetables.css' %}">
 <link rel="stylesheet" href="{% static 'css/analytics/widgets/custom-graph.css' %}">
+<link rel="stylesheet" href="{% static 'css/analytics/widgets/reactions.css' %}">
+<link rel="stylesheet" href="{% static 'css/analytics/widgets/signups-per-day.css' %}">
 <link rel="stylesheet" href="{% static 'css/analytics/widgets/users-by-school.css' %}">
 <link rel="stylesheet" href="{% static 'css/analytics/widgets/users-by-class-year.css' %}">
 <link rel="stylesheet" href="{% static 'css/analytics/widgets/timetables-by-school.css' %}">
@@ -16,6 +18,8 @@
 <!-- Custom Widget Template Files -->
 <link rel="resource" type="text/html" href="custom_widgets/timetables.html" data-widget="timetables">
 <link rel="resource" type="text/html" href="custom_widgets/custom-graph.html" data-widget="custom-graph">
+<link rel="resource" type="text/html" href="custom_widgets/reactions.html" data-widget="reactions">
+<link rel="resource" type="text/html" href="custom_widgets/signups-per-day.html" data-widget="signups-per-day">
 <link rel="resource" type="text/html" href="custom_widgets/users-by-school.html" data-widget="users-by-school">
 <link rel="resource" type="text/html" href="custom_widgets/users-by-class-year.html" data-widget="users-by-class-year">
 <link rel="resource" type="text/html" href="custom_widgets/timetables-by-school.html" data-widget="timetables-by-school">
@@ -30,11 +34,12 @@
 <!-- Custom Widget JS Files -->
 <script type="text/javascript" src="{% static 'js/analytics/widgets/timetables.js' %}"></script>
 <script type="text/javascript" src="{% static 'js/analytics/widgets/custom-graph.js' %}"></script>
+<script type="text/javascript" src="{% static 'js/analytics/widgets/reactions.js' %}"></script>
+<script type="text/javascript" src="{% static 'js/analytics/widgets/signups-per-day.js' %}"></script>
 <script type="text/javascript" src="{% static 'js/analytics/widgets/users-by-school.js' %}"></script>
 <script type="text/javascript" src="{% static 'js/analytics/widgets/users-by-class-year.js' %}"></script>
 <script type="text/javascript" src="{% static 'js/analytics/widgets/timetables-by-school.js' %}"></script>
 <script type="text/javascript" src="{% static 'js/analytics/widgets/timetables-by-semester.js' %}"></script>
-<!--<script type="text/javascript" src="{% static 'js/analytics/widgets/signupsPerDay.js' %}"></script>-->
 {% endblock %}
 
 {% block config_file %}

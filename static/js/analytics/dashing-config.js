@@ -1,5 +1,5 @@
 /* global Chart, Dashboard */
-/* eslint no-unused-vars: ["error", { "varsIgnorePattern": "chart" }]*/
+/* eslint no-unused-vars: ['error', { 'varsIgnorePattern': 'chart' }]*/
 
 // const REAL_TIME_INTERVAL = 3000;
 // const MINUTE_INTERVAL = 60000;
@@ -80,70 +80,76 @@ dashboard.addWidget('facebookAlertsClicksWidget', 'Number', {
   interval: HOUR_INTERVAL,
 });
 
-dashboard.addWidget('signupsPerDayWidget', 'CustomGraph', {
-  color: 'steelblue',
-  scope: {
-    xFormat(n) {
-      if (Number.isInteger(n)) {
-        const today = new Date();
-        const date = new Date(today);
-        date.setDate(today.getDate() + n);
-        return date.toISOString().slice(5, 10);
-      }
-      return '';
-    },
-    yFormat(n) {
-      return n.toString();
-    },
-  },
-  properties: {
-    renderer: 'line',
-    padding: {
-      top: 0.1,
-      right: 0.1,
-    },
-  },
+dashboard.addWidget('signupsPerDayWidget', 'SignupsPerDay', {
+  color: 'lightgray',
   getData() {
     const self = this;
     Dashing.utils.get('signups_per_day_widget', (data) => {
       $.extend(self.scope, data);
+      $(document).ready(() => {
+        const ctx = document.getElementById('chart-signups-per-day');
+        const chart = new Chart(ctx, {
+          type: 'line',                                 // Here, we render a
+          data: {                                       // chart on the element
+            labels: data.data.labels,                   // that has the
+            datasets: [                                 // corresponding ID.
+              {
+                label: 'Number of Signups',
+                fill: false,
+                lineTension: 0.1,
+                backgroundColor: primaryColors[0],
+                borderColor: secondaryColors[0],
+                borderCapStyle: 'butt',
+                borderDash: [],
+                borderDashOffset: 0.0,
+                borderJoinStyle: 'miter',
+                pointBackgroundColor: '#fff',
+                pointBorderWidth: 1,
+                pointHoverRadius: 5,
+                pointHoverBorderColor: 'rgba(220,220,220,1)',
+                pointHoverBorderWidth: 2,
+                pointRadius: 1,
+                pointHitRadius: 10,
+                data: data.data.values,
+              },
+            ],
+          },
+        });
+      });
     });
   },
   interval: DAY_INTERVAL,
 });
 
-dashboard.addWidget('reactionsWidget', 'CustomGraph', {
-  color: 'pink',
-  scope: {
-    properties: {
-      renderer: 'bar',
-      padding: {
-        top: 0.1,
-        right: 0.1,
-      },
-    },
-    xFormat(n) {
-      switch (n) {
-        case 0: { return 'CRAP'; }
-        case 1: { return 'FIRE'; }
-        case 2: { return 'BORING'; }
-        case 3: { return 'HARD'; }
-        case 4: { return 'OKAY'; }
-        case 5: { return 'EASY'; }
-        case 6: { return 'INTERESTING'; }
-        case 7: { return 'LOVE'; }
-        default: { return ''; }
-      }
-    },
-  },
+dashboard.addWidget('reactionsWidget', 'Reactions', {
+  color: 'lightgray',
   getData() {
     const self = this;
     Dashing.utils.get('reactions_widget', (data) => {
-      // console.log(data);
       $.extend(self.scope, data);
+      $(document).ready(() => {
+        const ctx = document.getElementById('chart-reactions');
+        const chart = new Chart(ctx, {
+          type: 'bar',                                  // Here, we render a
+          data: {                                       // chart on the element
+            labels: data.data.labels,                   // that has the
+            datasets: [                                 // corresponding ID.
+              {
+                label: 'Number of Users',
+                backgroundColor: 'rgba(255,23,68,0.2)',
+                borderColor: 'rgba(255,23,68,1)',
+                borderWidth: 1,
+                hoverBackgroundColor: 'rgba(255,23,68,0.4)',
+                hoverBorderColor: 'rgba(255,23,68,1)',
+                data: data.data.values,
+              },
+            ],
+          },
+        });
+      });
     });
   },
-  interval: 60000,
+  interval: DAY_INTERVAL,
 });
 
 dashboard.addWidget('usersBySchoolWidget', 'UsersBySchool', {

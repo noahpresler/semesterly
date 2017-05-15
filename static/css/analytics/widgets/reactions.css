@@ -1,9 +1,9 @@
-.widget-signups-per-day { 
+.widget-reactions { 
     background-color: #ff9618;;
     position: relative;
 }
 
-.widget-signups-per-day svg {
+.widget-reactions svg {
     position: absolute;
     opacity: 0.4;
     fill-opacity: 0.4;
@@ -11,23 +11,23 @@
     top: 0px;
 }
 
-.widget-signups-per-day h1, h2 {
+.widget-reactions h1, h2 {
     position: relative;
     z-index: 99;
 }
 
-.widget-signups-per-day h1 { 
+.widget-reactions h1 { 
     color: rgba(255, 255, 255, 0.7);
 }
 
-.widget-signups-per-day .more-info {
+.widget-reactions .more-info {
     color: rgba(255, 255, 255, 0.3);
     font-weight: 600;
     font-size: 20px;
     margin-top: 0;
 }
 
-.widget-signups-per-day .domain {
+.widget-reactions .domain {
     display: none;
 }
 
