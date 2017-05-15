@@ -85,9 +85,11 @@
 }
 
 #calendar {
-  .up {
+  &.up {
     margin-top: 65px;
+  }
 
+  .up {
     &.fc-toolbar {
       border-bottom: 2px solid $gddd;
       position: fixed;
