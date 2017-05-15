@@ -27,7 +27,7 @@
   }
 
   .day-circle.selected {
-    background-color: rgb(253, 116, 115);
+    background-color: $pink;
     border-radius: 20px;
     color: $gfff;
     height: 20px;
@@ -43,12 +43,14 @@
     display: none;
   }
 
-  #calendar .fc-toolbar {
-    background-color: #F7F7F7;
-    border-bottom: 0;
-    border-color: transparent;
-    margin-top: 0;
-    padding: 5px;
+  #calendar {
+    .fc-toolbar {
+      background-color: $gf9f9f9;
+      border-bottom: 0;
+      border-color: transparent;
+      margin-top: 0;
+      padding: 5px;
+    }
   }
 
   .fc-right button.save-to-ical .fc-right button.save-timetable {
@@ -60,27 +62,32 @@
     margin-left: 8px;
   }
 
-  .sem-pages, .sem-pagination-nav {
+  .sem-pages,
+  .sem-pagination-nav {
     background-color: transparent;
   }
 
-  .sem-pagination .sem-pages {
-    background-color: transparent;
-    border: 1px solid transparent;
-    margin-right: 0;
-    padding: 0 0 0 5px;
-    white-space: nowrap;
+  .sem-pagination {
+    .sem-pages {
+      background-color: transparent;
+      border: 1px solid transparent;
+      margin-right: 0;
+      padding: 0 0 0 5px;
+      white-space: nowrap;
+    }
+
+    .sem-pagination-nav {
+      background-color: transparent;
+      border: 0;
+      margin-left: 3px;
+      width: 5px;
+    }
   }
 
-  .sem-pages .sem-page {
-    border: 5px solid #F7F7F7;
-  }
-
-  .sem-pagination .sem-pagination-nav {
-    background-color: transparent;
-    border: 0;
-    margin-left: 3px;
-    width: 5px;
+  .sem-pages {
+    .sem-page {
+      border: 5px solid $gf9f9f9;
+    }
   }
 }
 
@@ -100,7 +107,7 @@
   }
 
   .fc-timeline {
-    background-color: rgb(253, 116, 115);
+    background-color: $pink;
     height: 1px;
     position: absolute;
     top: 300px;
@@ -108,7 +115,7 @@
     z-index: 3;
 
     &::before {
-      background-color: rgb(253, 116, 115);
+      background-color: $pink;
       border-radius: 10px;
       bottom: -4px;
       content: '';
