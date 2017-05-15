@@ -340,6 +340,7 @@ Calendar.propTypes = {
   isLoggedIn: React.PropTypes.bool.isRequired,
   saving: React.PropTypes.bool.isRequired,
   shareLink: React.PropTypes.string,
+  uses12HrTime: React.PropTypes.bool.isRequired,
 };
 
 export default Calendar;
