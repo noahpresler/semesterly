@@ -1,7 +1,7 @@
 import React from 'react';
 import Modal from 'boron/WaveModal';
-import Textbook from './textbook';
-import * as PropTypes from '../constants/propTypes';
+import Textbook from '../textbook';
+import * as PropTypes from '../../constants/propTypes';
 
 class TextbookModal extends React.Component {
   componentDidMount() {
