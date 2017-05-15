@@ -107,6 +107,7 @@ def convert_tt_to_dict(timetable, include_last_updated=True):
             courses[-1]['slots'] = []
             courses[-1]['enrolled_sections'] = []
             courses[-1]['textbooks'] = {}
+            courses[-1]['is_waitlist_only'] = False
 
         index = course_ids.index(c.id)
         courses[index]['slots'].extend(
@@ -119,9 +120,10 @@ def convert_tt_to_dict(timetable, include_last_updated=True):
         course_section_list = sorted(course_obj.section_set.filter(semester=timetable.semester),
                                      key=lambda s: s.section_type)
         section_type_to_sections = itertools.groupby(course_section_list, lambda s: s.section_type)
-        index = course_ids.index(course_obj.id)
-        courses[index]['is_waitlist_only'] = any(
-            sections_are_filled(sections) for _, sections in section_type_to_sections)
+        if course_obj.id in course_ids:
+            index = course_ids.index(course_obj.id)
+            courses[index]['is_waitlist_only'] = any(
+                sections_are_filled(sections) for _, sections in section_type_to_sections)
 
     tt_dict['courses'] = courses
     tt_dict['avg_rating'] = get_avg_rating(course_ids)
