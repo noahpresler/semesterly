@@ -153,8 +153,8 @@ const setup = () => (dispatch) => {
 
   if (browserSupportsLocalStorage() && 'serviceWorker' in navigator) {
     dispatch(setupChromeNotifs());
-    dispatch(showFriendAlert());
   }
+  dispatch(showFriendAlert());
 
   dispatch(handleFlows(initData.featureFlow));
   dispatch(fetchSchoolInfo());
