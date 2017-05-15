@@ -57,7 +57,7 @@ def get_avg_rating(course_ids):
 
 
 def get_user_dict(school, student, semester):
-    user_dict = {}
+    user_dict = {'timetables': []}
     if student:
         user_dict = model_to_dict(student, exclude=["user", "id", "friends"])
         user_dict["timetables"] = get_student_tts(student, school, semester)
