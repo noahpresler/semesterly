@@ -186,4 +186,4 @@ store.dispatch(
 render(
   <Provider store={store}>
     <SemesterlyContainer />
-  </Provider>, document.getElementById('page'));
+  </Provider>, document.getElementsByClassName('page')[0]);
