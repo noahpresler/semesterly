@@ -4,7 +4,6 @@ import REACTION_MAP from '../constants/reactions';
 import MasterSlot from './master_slot';
 import Textbook from './textbook';
 import COLOUR_DATA from '../constants/colours';
-import { getSchoolSpecificInfo } from '../constants/schools';
 import EvaluationList from './evaluation_list';
 import CourseModalSection from './course_modal_section';
 import SlotHoverTip from './slot_hover_tip';
@@ -452,6 +451,7 @@ CourseModalBody.propTypes = {
   tutorialSections: React.PropTypes.shape({
     '*': React.PropTypes.arrayOf(PropTypes.section),
   }),
+  schoolSpecificInfo: PropTypes.schoolSpecificInfo.isRequired,
 };
 
 export default CourseModalBody;

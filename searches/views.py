@@ -27,7 +27,7 @@ def get_course_matches(school, query, semester):
         Q(school=school) &
         course_name_contains_query &
         Q(section__semester=semester)
-    )
+    ).distinct()
 
 
 def course_name_contains_token(token):
