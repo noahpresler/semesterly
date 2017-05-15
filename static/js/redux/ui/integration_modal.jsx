@@ -9,11 +9,6 @@ export class IntegrationModal extends React.Component {
     this.state = {
       enabled: this.props.enabled,
     };
-        // this.appendSession = this.appendSession.bind(this);
-        // this.removeSession = this.removeSession.bind(this);
-        // this.handleChange = this.handleChange.bind(this);
-        // this.json = "test";
-        // this.index = 0;
   }
 
   componentDidUpdate(nextProps) {
@@ -27,20 +22,8 @@ export class IntegrationModal extends React.Component {
 
   changeForm() {
     this.setState({ enabled: !this.state.enabled });
-        // getIntegration(1, this.props.course_id)
-        // delIntegration(1, this.props.course_id)
-        // addIntegration(1, this.props.course_id, "SHEEEIT")
   }
 
-    // appendSession() {
-    //     this.setState({sessions: this.state.sessions.push(this.json)});
-    // }
-    // removeSession() {
-    //     this.setState({sessions: this.state.sessions.splice(this.index, 1)});
-    // }
-    // handleChange(event) {
-    //     this.setState({value: event.target.value});
-    // }
   render() {
     const modalStyle = {
       width: '100%',
