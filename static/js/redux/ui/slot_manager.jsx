@@ -184,6 +184,10 @@ class SlotManager extends React.Component {
   }
 }
 
+SlotManager.defaultProps = {
+  socialSections: false,
+};
+
 SlotManager.propTypes = {
   isLocked: React.PropTypes.func.isRequired,
   isCourseOptional: React.PropTypes.func.isRequired,
@@ -203,7 +207,8 @@ SlotManager.propTypes = {
   custom: React.PropTypes.arrayOf(React.PropTypes.oneOfType([PropTypes.customSlot,
     React.PropTypes.shape({})])).isRequired,
   primaryDisplayAttribute: React.PropTypes.string.isRequired,
-  socialSections: React.PropTypes.bool.isRequired,
+  socialSections: React.PropTypes.bool,
+  uses12HrTime: React.PropTypes.bool.isRequired,
 };
 
 export default SlotManager;

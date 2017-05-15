@@ -54,6 +54,7 @@
     "react-onclickout": "^2.0.4",
     "react-proxy": "^1.1.8",
     "react-redux": "^5.0.2",
+    "react-render-html": "^0.1.6",
     "react-select": "^1.0.0-beta13",
     "react-swipeable": "^3.6.0",
     "react-tooltip": "^3.2.6",
@@ -78,7 +79,7 @@
     "watch": "node server.js",
     "lint-staged": "lint-staged",
     "lint-fix": "./node_modules/.bin/eslint --fix static/js/redux/* static/js/redux/alerts/* static/js/redux/actions/* static/js/redux/constants/* static/js/redux/reducers/* static/js/redux/ui/containers/* static/js/redux/ui/alerts/*",
-    "lint": "./node_modules/.bin/eslint static/js/redux/* static/js/redux/alerts/* static/js/redux/actions/* static/js/redux/constants/* static/js/redux/reducers/* static/js/redux/ui/containers/* static/js/redux/ui/alerts/*; ./node_modules/.bin/sass-lint -c .scss-lint.yml 'static/css/timetable/*.scss, static/css/timetable/base/*.scss, static/css/timetable/vendor/*.scss' -v -q"
+    "lint": "./node_modules/.bin/eslint static/js/redux/*/*; ./node_modules/.bin/sass-lint -c .scss-lint.yml 'static/css/timetable/*.scss, static/css/timetable/base/*.scss, static/css/timetable/vendor/*.scss' -v -q"
   },
   "repository": {
     "type": "git",
