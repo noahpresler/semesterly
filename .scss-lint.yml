@@ -20,6 +20,7 @@ linters:
 
   NameFormat:
     enabled: true
+    convention: hyphenated_lowercase # or 'BEM', or a regex pattern
 
   PrivateNamingConvention:
     enabled: true
@@ -44,3 +45,9 @@ linters:
   StringQuotes:
     enabled: true
     style: double_quotes
+
+rules:
+  class-name-format:
+      - 1
+      -
+        convention: hyphenatedbem
