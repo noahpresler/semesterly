@@ -1,11 +1,11 @@
 import React from 'react';
 import classnames from 'classnames';
+import Swipeable from 'react-swipeable';
 import PaginationContainer from './containers/pagination_container';
 import SlotManagerContainer from './containers/slot_manager_container';
 import CellContainer from './containers/cell_container';
 import { DAYS } from '../constants/constants';
 import { ShareLink } from './master_slot';
-import Swipeable from 'react-swipeable';
 
 const Row = (props) => {
   const timeText = props.displayTime ? <span>{props.displayTime}</span> : null;
@@ -29,6 +29,17 @@ const Row = (props) => {
   );
 };
 
+Row.defaultProps = {
+  displayTime: '',
+};
+
+Row.propTypes = {
+  displayTime: React.PropTypes.string,
+  isLoggedIn: React.PropTypes.bool.isRequired,
+  time: React.PropTypes.string.isRequired,
+  days: React.PropTypes.arrayOf(React.PropTypes.string).isRequired,
+};
+
 class DayCalendar extends React.Component {
   constructor(props) {
     super(props);
@@ -45,22 +56,6 @@ class DayCalendar extends React.Component {
     this.getTimelineStyle = this.getTimelineStyle.bind(this);
   }
 
-  componentWillReceiveProps(nextProps) {
-    if (this.props.isFetchingShareLink && !nextProps.isFetchingShareLink) {
-      this.setState({ shareLinkShown: true });
-    }
-  }
-
-  getTimelineStyle() {
-    if ((new Date()).getHours() > this.props.endHour || (new Date()).getHours() < 8) {
-      return { display: 'none' };
-    }
-    const diff = Math.abs(new Date() - new Date().setHours(8, 0, 0));
-    const mins = Math.ceil((diff / 1000) / 60);
-    const top = mins / 15.0 * 13 + 65;
-    return { top };
-  }
-
   componentDidMount() {
     $('#all-cols').scroll(() => {
       const pos = $('#all-cols').scrollTop();
@@ -74,20 +69,20 @@ class DayCalendar extends React.Component {
     });
   }
 
-  swipedLeft() {
-    let d = this.state.day + 1;
-    if (d === -1 || d === 5) { // Sunday or Saturday, respectively
-      d = 0; // Show Monday
+  componentWillReceiveProps(nextProps) {
+    if (this.props.isFetchingShareLink && !nextProps.isFetchingShareLink) {
+      this.setState({ shareLinkShown: true });
     }
-    this.setState({ day: d });
   }
 
-  swipedRight() {
-    let d = this.state.day - 1;
-    if (d === -1 || d === 5) { // Sunday or Saturday, respectively
-      d = 4; // Show Friday
+  getTimelineStyle() {
+    if ((new Date()).getHours() > this.props.endHour || (new Date()).getHours() < 8) {
+      return { display: 'none' };
     }
-    this.setState({ day: d });
+    const diff = Math.abs(new Date() - new Date().setHours(8, 0, 0));
+    const mins = Math.ceil((diff / 1000) / 60);
+    const top = ((mins / 15.0) * 13) + 65;
+    return { top };
   }
 
   getCalendarRows() {
@@ -107,6 +102,23 @@ class DayCalendar extends React.Component {
 
     return rows;
   }
+
+  swipedLeft() {
+    let d = this.state.day + 1;
+    if (d === -1 || d === 5) { // Sunday or Saturday, respectively
+      d = 0; // Show Monday
+    }
+    this.setState({ day: d });
+  }
+
+  swipedRight() {
+    let d = this.state.day - 1;
+    if (d === -1 || d === 5) { // Sunday or Saturday, respectively
+      d = 4; // Show Friday
+    }
+    this.setState({ day: d });
+  }
+
 
   fetchShareTimetableLink() {
     if (this.props.shareLinkValid) {
@@ -165,7 +177,7 @@ class DayCalendar extends React.Component {
       </button>
         );
     const dayPills = DAYS.map((day, i) => <div
-      key={i} className="day-pill"
+      key={day} className="day-pill"
       onClick={() => this.setState({ day: i })}
     >
       <div className={classnames('day-circle', { selected: i === this.state.day })}>
@@ -177,7 +189,7 @@ class DayCalendar extends React.Component {
         onClick={() => this.props.triggerSaveCalendarModal()}
         className="save-timetable"
       >
-        <img src="static/img/addtocalendar.png" />
+        <img alt="add" src="static/img/addtocalendar.png" />
       </button>
         );
     return (
@@ -260,8 +272,26 @@ class DayCalendar extends React.Component {
       </div>
     );
   }
-
-
 }
+
+DayCalendar.defaultProps = {
+  shareLink: '',
+};
+
+DayCalendar.propTypes = {
+  dataLastUpdated: React.PropTypes.string.isRequired,
+  togglePreferenceModal: React.PropTypes.func.isRequired,
+  triggerSaveCalendarModal: React.PropTypes.func.isRequired,
+  isFetchingShareLink: React.PropTypes.bool.isRequired,
+  endHour: React.PropTypes.number.isRequired,
+  handleCreateNewTimetable: React.PropTypes.func.isRequired,
+  shareLinkValid: React.PropTypes.bool.isRequired,
+  fetchShareTimetableLink: React.PropTypes.func.isRequired,
+  saveTimetable: React.PropTypes.func.isRequired,
+  isLoggedIn: React.PropTypes.bool.isRequired,
+  saving: React.PropTypes.bool.isRequired,
+  shareLink: React.PropTypes.string,
+  uses12HrTime: React.PropTypes.bool.isRequired,
+};
 
 export default DayCalendar;
