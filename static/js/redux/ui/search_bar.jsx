@@ -181,6 +181,7 @@ SearchBar.propTypes = {
   searchResults: React.PropTypes.arrayOf(PropTypes.searchResult).isRequired,
   semester: PropTypes.semester.isRequired,
   showExplorationModal: React.PropTypes.func.isRequired,
+  allSemesters: React.PropTypes.arrayOf(PropTypes.semester).isRequired,
 };
 
 export default SearchBar;
