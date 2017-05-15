@@ -1,5 +1,7 @@
 $primary-navy: #34495e;
 $navy-light: #375b80;
+$navy-transparent-0: rgba(52, 73, 94, 0);
+$navy-transparent-100: rgba(52, 73, 94, 1);
 $navy-transparent-14: rgba(90, 200, 251, .14);
 $navy-transparent-20: rgba(63, 81, 181, .2);
 $confirm-green: #1abc9c;
@@ -16,9 +18,9 @@ $green: #0aa98a;
 $green-light: #27ae60;
 $green-bright: #4ad187;
 $blue: #3895db;
-$blue-alt: #0095FF;
+$blue-alt: #0095ff;
 $blue-light: #52b7d9;
-$blue-dark: #143B63;
+$blue-dark: #143b63;
 
 $mint: #c8f7c5;
 $textbook: #1abc9c;
@@ -31,7 +33,7 @@ $facebook-view: #4080ff;
 $facebook-5: rgba(59, 89, 152, .5);
 
 // amazon
-$amazon: #ff9900;
+$amazon: #f90;
 
 // greys
 $g222: #222;
@@ -75,6 +77,7 @@ $black-transparent-3: rgba(0, 0, 0, .3);
 $black-transparent-5: rgba(0, 0, 0, .5);
 $black-transparent-8: rgba(0, 0, 0, .8);
 
+$white-transparent-0: rgba(255, 255, 255, 0);
 $white-transparent-9: rgba(255, 255, 255, .9);
 
 $g188-transparent-4: rgba(188, 188, 188, .4);
