@@ -93,7 +93,7 @@ class DayCalendar extends React.Component {
   getCalendarRows() {
     const rows = [];
     for (let i = 8; i <= this.props.endHour; i++) { // one row for each hour, starting from 8am
-      const hour = uses12HrTime && i > 12 ? i - 12 : i;
+      const hour = this.props.uses12HrTime && i > 12 ? i - 12 : i;
       rows.push(<Row
         displayTime={`${hour}:00`} time={`${i}:00`} isLoggedIn={this.props.isLoggedIn}
         key={i}
