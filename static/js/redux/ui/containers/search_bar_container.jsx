@@ -5,7 +5,7 @@ import {
     maybeSetSemester,
 } from '../../actions/search_actions';
 import { addOrRemoveCourse, addOrRemoveOptionalCourse } from '../../actions/timetable_actions';
-import { SearchBar } from '../search_bar';
+import SearchBar from '../search_bar';
 import { fetchCourseInfo, showExplorationModal } from '../../actions/modal_actions';
 import { getSchoolSpecificInfo } from '../../constants/schools';
 import { openIntegrationModal } from '../../actions/user_actions';
