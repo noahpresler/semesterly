@@ -1,9 +1,9 @@
 import React from 'react';
 import Modal from 'boron/WaveModal';
-import COLOUR_DATA from '../constants/colours';
-import { ShareLink } from './master_slot';
-import getExamShareLink from '../helpers/exam_helpers';
-import * as PropTypes from '../constants/propTypes';
+import COLOUR_DATA from '../../constants/colours';
+import { ShareLink } from '../master_slot';
+import getExamShareLink from '../../helpers/exam_helpers';
+import * as PropTypes from '../../constants/propTypes';
 
 const InSlot = (props) => {
   let displayTime = (props.time) ? <h3 className="time">{ props.time }</h3> : null;
