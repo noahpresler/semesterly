@@ -8,12 +8,14 @@ const defaultState = {
 
 const semester = (state = defaultState, action) => {
   switch (action.type) {
+    case ActionTypes.INIT_STATE:
+      return Object.assign({}, state, {
+        current: parseInt(action.data.currentSemester, 10),
+        all: action.data.allSemesters,
+        exams: action.data.examSupportedSemesters,
+      });
     case ActionTypes.SET_SEMESTER:
       return Object.assign({}, state, { current: action.semester });
-    case ActionTypes.SET_AVAIL_SEMESTERS:
-      return Object.assign({}, state, { all: action.availSemesters });
-    case ActionTypes.SET_EXAM_SEMESTERS:
-      return Object.assign({}, state, { exams: action.exams });
     default:
       return state;
   }
