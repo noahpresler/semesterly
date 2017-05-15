@@ -5,10 +5,11 @@ import {
     maybeSetSemester,
 } from '../../actions/search_actions';
 import { addOrRemoveCourse, addOrRemoveOptionalCourse } from '../../actions/timetable_actions';
-import { SearchBar } from '../search_bar';
+import SearchBar from '../search_bar';
 import { fetchCourseInfo, showExplorationModal } from '../../actions/modal_actions';
 import { getSchoolSpecificInfo } from '../../constants/schools';
 import { openIntegrationModal } from '../../actions/user_actions';
+import { currSem } from '../../reducers/semester_reducer';
 
 const mapStateToProps = (state) => {
   const { isVisible } = state.explorationModal;
@@ -16,7 +17,8 @@ const mapStateToProps = (state) => {
   const schoolSpecificInfo = getSchoolSpecificInfo(state.school.school);
   const schoolSpecificCampuses = schoolSpecificInfo.campuses;
   return {
-    semester: allSemesters[state.semesterIndex],
+    semester: currSem(state.semester),
+    allSemesters: state.semester.all,
     campuses: schoolSpecificCampuses,
     searchResults: state.searchResults.items,
     isFetching: state.searchResults.isFetching,
@@ -27,6 +29,7 @@ const mapStateToProps = (state) => {
     isHovered: position => state.ui.searchHover === position,
     hoveredPosition: state.ui.searchHover,
     explorationModalIsVisible: isVisible,
+    studentIntegrations: state.integrations,
   };
 };
 
