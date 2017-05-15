@@ -1,46 +1,29 @@
 import React from 'react';
 import Modal from 'boron/WaveModal';
-import { addIntegration, delIntegration, getIntegration } from '../actions/user_actions';
+import { addIntegration, delIntegration } from '../actions/user_actions';
 
-export class IntegrationModal extends React.Component {
+class IntegrationModal extends React.Component {
   constructor(props) {
     super(props);
     this.changeForm = this.changeForm.bind(this);
     this.state = {
       enabled: this.props.enabled,
     };
-        // this.appendSession = this.appendSession.bind(this);
-        // this.removeSession = this.removeSession.bind(this);
-        // this.handleChange = this.handleChange.bind(this);
-        // this.json = "test";
-        // this.index = 0;
   }
 
   componentDidUpdate(nextProps) {
     if (this.props.isVisible) {
-      this.refs.modal.show();
+      this.modal.show();
     }
-    if (this.props.isVisible != nextProps.isVisible && this.state.enabled != this.props.enabled) {
+    if (this.props.isVisible !== nextProps.isVisible && this.state.enabled !== this.props.enabled) {
       this.setState({ enabled: this.props.enabled });
     }
   }
 
   changeForm() {
     this.setState({ enabled: !this.state.enabled });
-        // getIntegration(1, this.props.course_id)
-        // delIntegration(1, this.props.course_id)
-        // addIntegration(1, this.props.course_id, "SHEEEIT")
   }
 
-    // appendSession() {
-    //     this.setState({sessions: this.state.sessions.push(this.json)});
-    // }
-    // removeSession() {
-    //     this.setState({sessions: this.state.sessions.splice(this.index, 1)});
-    // }
-    // handleChange(event) {
-    //     this.setState({value: event.target.value});
-    // }
   render() {
     const modalStyle = {
       width: '100%',
@@ -51,7 +34,7 @@ export class IntegrationModal extends React.Component {
     };
     return (
       <Modal
-        ref="modal"
+        ref={(c) => { this.modal = c; }}
         className="integration-modal narrow-modal"
         modalStyle={modalStyle}
         onHide={this.props.toggleIntegrationModal}
@@ -59,9 +42,9 @@ export class IntegrationModal extends React.Component {
         <div id="integration-modal">
           <div id="integration-logo" style={integrationLogo} />
           <div className="preference cf">
-            <label className="switch switch-slide">
+            <label className="switch switch-slide" htmlFor="enable-integration">
               <input
-                ref="enable_pilot" className="switch-input" type="checkbox"
+                className="switch-input" type="checkbox" id="enable-integration"
                 checked={this.state.enabled} onChange={this.changeForm}
               />
               <span className="switch-label" data-on="Yes" data-off="No" />
@@ -79,13 +62,22 @@ export class IntegrationModal extends React.Component {
                 } else {
                   addIntegration(1, this.props.course_id, '');
                 }
-                this.refs.modal.hide();
+                this.modal.hide();
               }}
             >Save
-                        </button>
+            </button>
           </div>
         </div>
       </Modal>
     );
   }
 }
+
+IntegrationModal.propTypes = {
+  course_id: React.PropTypes.number.isRequired,
+  toggleIntegrationModal: React.PropTypes.func.isRequired,
+  enabled: React.PropTypes.bool.isRequired,
+  isVisible: React.PropTypes.bool.isRequired,
+};
+
+export default IntegrationModal;
