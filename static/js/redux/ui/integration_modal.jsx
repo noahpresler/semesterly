@@ -76,8 +76,12 @@ class IntegrationModal extends React.Component {
   }
 }
 
+IntegrationModal.defaultProps = {
+  course_id: null,
+};
+
 IntegrationModal.propTypes = {
-  course_id: React.PropTypes.number.isRequired,
+  course_id: React.PropTypes.number,
   toggleIntegrationModal: React.PropTypes.func.isRequired,
   enabled: React.PropTypes.bool.isRequired,
   isVisible: React.PropTypes.bool.isRequired,
