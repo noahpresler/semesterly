@@ -208,6 +208,18 @@
   }
 
   .decline-notifications {
+    &,
+    &:link,
+    &:active,
+    &:visited {
+      color: $g999;
+      cursor: pointer;
+      display: block;
+      margin-top: 25px;
+      opacity: .77;
+      transition: opacity .3s;
+    }
+
     &:hover {
       opacity: 1;
     }
@@ -220,19 +232,6 @@
   height: 20px;
   vertical-align: middle;
   width: 20px;
-
-  .decline-notifications {
-    &:link,
-    &:active,
-    &:visited {
-      color: $g999;
-      cursor: pointer;
-      display: block;
-      margin-top: 25px;
-      opacity: .77;
-      transition: opacity .3s;
-    }
-  }
 }
 
 .friends-in-class-alert {
