@@ -25,10 +25,12 @@ class Vectorizer():
         self.stemmer = PorterStemmer()
 
     def vectorize(self):
+        start_time = time.time()        
         # get names (titles) and descriptions for creating vocabulary
         raw_word_counts = []
         for course in Course.objects.all():
-            raw_word_counts.append(self.get_stem_course(course.name, course.description, self.TITLE_WEIGHT))
+            raw_word_counts.append(self.get_stem_course(
+                course.name, course.description, course.areas, self.TITLE_WEIGHT))
         # vectorize course objects
         count_vectorizer = CountVectorizer(ngram_range=(1,2), stop_words='english')
         processed_word_counts = count_vectorizer.fit_transform(raw_word_counts)
@@ -43,7 +45,10 @@ class Vectorizer():
         with open('count_vectorizer.pickle', 'wb') as handle:
             pickle.dump(count_vectorizer, handle, protocol=pickle.HIGHEST_PROTOCOL)
 
-    def get_stem_course(self, name, description, W):
+        elapsed_time = time.time() - start_time
+        print("\nPreprocessing course corpus to matrix took %f (seconds)" %elapsed_time)
+
+    def get_stem_course(self, name, description, area, W):
         stemmed_doc = ""
         if name:
             name_doc = name.encode('ascii', 'ignore')
@@ -55,6 +60,10 @@ class Vectorizer():
             desc_doc = description.encode('ascii', 'ignore')
             stemmed_desc_doc = self.get_stem_doc(desc_doc)
             stemmed_doc += stemmed_desc_doc
+        if area:
+            area_doc = area.encode('ascii', 'ignore')
+            stemmed_area_doc = self.get_stem_doc(area_doc)
+            stemmed_doc += stemmed_area_doc
         return stemmed_doc
 
     def get_stem_doc(self, doc):
@@ -67,6 +76,7 @@ class Vectorizer():
 # Searcher (file reader / query performance)
 class Searcher():    
     def __init__(self):
+        print("Creating Searcher Object")
         self.count_vectorizer = self.load_count_vectorizer()
         self.vectorizer = Vectorizer()
         self.MAX_CAPACITY = 200
@@ -120,6 +130,9 @@ class Searcher():
         query_tokens = query.split()
         course_name_contains_query = reduce(operator.and_, map(self.course_name_contains_token, query_tokens))
         courses_objs = Course.objects.filter(course_name_contains_query).all()[:self.MAX_CAPACITY]
+        return courses_objs
+        
+        # test
         elapsed_time = time.time() - start_time
         for course in courses_objs[:10]:
             print(course.name)
@@ -136,9 +149,12 @@ class Searcher():
             descp_matching_courses = Course.objects.filter(descp_contains_query)
         courses_objs = list(title_matching_courses.all()[:self.MAX_CAPACITY]) + \
                        list(descp_matching_courses.all()[:self.MAX_CAPACITY - title_matching_courses.count()])
-
-        self.get_relevant_courses(query, courses_objs)
+        return self.get_relevant_courses(query, courses_objs)
+        
+        # test
         elapsed_time = time.time() - start_time
+        for course in courses_objs[:10]:
+            print(course.name)
         print("\nAdvanced Model Completed Searches in %f (seconds)" %elapsed_time)
 
     def course_desc_contains_token(self, token):
@@ -156,6 +172,9 @@ class Searcher():
             scores.append((course, self.get_cosine_sim(query_vector, course.vector) + \
                                    self.match_title(query, course.name)))
         scores.sort(key=lambda tup:-tup[1])
+        return map(operator.itemgetter(0), scores)
+        
+        # print
         for (course, score) in scores[:10]:
             print("%s : %f" %(course.name, score))
 
@@ -293,3 +312,5 @@ class Experiment():
             topics.append(new_topic)
         print()
         return(topics)
+
+SEARCHER = Searcher()
