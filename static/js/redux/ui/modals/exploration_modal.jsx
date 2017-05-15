@@ -2,14 +2,14 @@ import React from 'react';
 import Modal from 'boron/DropModal';
 import classNames from 'classnames';
 import CourseModalBody from './course_modal_body';
-import { getCourseShareLink } from '../helpers/timetable_helpers';
-import { ShareLink } from './master_slot';
+import { getCourseShareLink } from '../../helpers/timetable_helpers';
+import { ShareLink } from '../master_slot';
 import {
   Filter, SelectedFilter, SelectedFilterSection,
-} from './advanced_search_filters';
-import * as PropTypes from '../constants/propTypes';
-import { VERBOSE_DAYS } from '../constants/constants';
-import TimeSelector from './time_selector';
+} from '../advanced_search_filters';
+import * as PropTypes from '../../constants/propTypes';
+import { VERBOSE_DAYS } from '../../constants/constants';
+import TimeSelector from '../time_selector';
 
 class ExplorationModal extends React.Component {
   constructor(props) {
