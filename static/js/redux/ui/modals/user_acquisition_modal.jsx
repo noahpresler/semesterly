@@ -1,6 +1,6 @@
 import React from 'react';
 import Modal from 'boron/WaveModal';
-import * as PropTypes from '../constants/propTypes';
+import * as PropTypes from '../../constants/propTypes';
 
 class UserAcquisitionModal extends React.Component {
   componentDidMount() {

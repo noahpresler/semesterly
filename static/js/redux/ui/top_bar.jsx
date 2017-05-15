@@ -1,6 +1,6 @@
 import React from 'react';
 import SearchBarContainer from './containers/search_bar_container';
-import CourseModalContainer from './containers/course_modal_container';
+import CourseModalContainer from './containers/modals/course_modal_container';
 import TimetableLoaderContainer from './containers/timetable_loader_container';
 import SocialProfileContainer from './containers/social_profile_container';
 import * as PropTypes from '../constants/propTypes';
