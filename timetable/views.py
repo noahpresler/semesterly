@@ -225,11 +225,11 @@ def log_final_exam_view(request):
 
 @validate_subdomain
 def termsofservice(request):
-  return render("termsofservice.html", {}, context_instance=RequestContext(request))
+  return render(request, "termsofservice.html", context_instance=RequestContext(request))
 
 @validate_subdomain
 def privacypolicy(request):
-  return render("privacypolicy.html", {}, context_instance=RequestContext(request))
+  return render(request, "privacypolicy.html", context_instance=RequestContext(request))
 
 class TimetableView(CsrfExemptMixin, ValidateSubdomainMixin, APIView):
 
