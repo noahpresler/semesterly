@@ -2,9 +2,9 @@ import React from 'react';
 import classNames from 'classnames';
 import Modal from 'boron/WaveModal';
 import CourseModalBody from './course_modal_body';
-import { getCourseShareLink, getCourseShareLinkFromModal } from '../helpers/timetable_helpers';
-import { ShareLink } from './master_slot';
-import { fullCourseDetails } from '../constants/propTypes';
+import { getCourseShareLink, getCourseShareLinkFromModal } from '../../helpers/timetable_helpers';
+import { ShareLink } from '../master_slot';
+import { fullCourseDetails } from '../../constants/propTypes';
 
 class CourseModal extends React.Component {
   constructor(props) {
