@@ -1,6 +1,6 @@
 import fetch from 'isomorphic-fetch';
 import { getCourseSearchEndpoint } from '../constants/endpoints';
-import { store } from '../init';
+import store from '../init';
 import { getUserSavedTimetables, saveTimetable } from './user_actions';
 import { nullifyTimetable } from './timetable_actions';
 import * as ActionTypes from '../constants/actionTypes';
