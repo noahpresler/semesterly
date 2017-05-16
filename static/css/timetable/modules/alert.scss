@@ -115,15 +115,15 @@
     }
 
     .info-icon {
-      background-image: url('../../img/alert/info.png');
+      background-image: url("../../img/alert/info.png");
     }
 
     .error-icon {
-      background-image: url('../../img/alert/error.png');
+      background-image: url("../../img/alert/error.png");
     }
 
     .success-icon {
-      background-image: url('../../img/alert/success.png');
+      background-image: url("../../img/alert/success.png");
     }
   }
 
@@ -133,7 +133,7 @@
     }
 
     .close-light {
-      background-image: url('../../img/alert/close-light.png');
+      background-image: url("../../img/alert/close-light.png");
       background-position: 50%;
       background-repeat: no-repeat;
       height: 100%;
@@ -141,7 +141,7 @@
     }
 
     .close-dark {
-      background-image: url('../../img/alert/close-dark.png');
+      background-image: url("../../img/alert/close-dark.png");
       background-position: 50%;
       background-repeat: no-repeat;
       height: 100%;
@@ -229,7 +229,7 @@
 }
 
 .enable-notifications-alert-icon {
-  background: url('/static/img/alert/bell.png') center no-repeat;
+  background: url("/static/img/alert/bell.png") center no-repeat;
   background-size: contain;
   height: 20px;
   vertical-align: middle;
