@@ -28,13 +28,12 @@ class SocialProfile extends React.Component {
       <ClickOutHandler onClickOut={this.hideDropDown}>
         <div>
           <div onMouseDown={this.toggleDropdown}>
-            <div id="social-pro-pic" style={profileImage} />
+            <div className="social-pro-pic" style={profileImage} />
             <h2>{this.props.userInfo.userFirstNam}</h2>
             <span className={classNames('tip-down', { down: this.state.showDropdown })} />
           </div>
           <div
-            id="social-dropdown"
-            className={classNames({ down: this.state.showDropdown })}
+            className={classNames('social-dropdown', { down: this.state.showDropdown })}
           >
             <div className="tip-border" />
             <div className="tip" />
@@ -60,7 +59,7 @@ class SocialProfile extends React.Component {
 
         );
     const loggedOut = (
-      <a id="social-login" onClick={() => this.props.triggerAcquisitionModal()}>
+      <a className="social-login" onClick={() => this.props.triggerAcquisitionModal()}>
         <h2>
           <span>Signup/Login</span>
           <span className="mobile">Signup Login</span>
@@ -70,8 +69,7 @@ class SocialProfile extends React.Component {
     const social = this.props.userInfo.isLoggedIn ? loggedIn : loggedOut;
     return (
       <div
-        id="social"
-        className={classNames({ 'logged-in': this.props.userInfo.isLoggedIn }, 'no-print')}
+        className={classNames('social', { 'logged-in': this.props.userInfo.isLoggedIn }, 'no-print')}
       >
         {social}
       </div>

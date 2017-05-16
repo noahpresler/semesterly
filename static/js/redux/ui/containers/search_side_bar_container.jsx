@@ -1,5 +1,5 @@
 import { connect } from 'react-redux';
-import { SearchSideBar } from '../search_side_bar';
+import SearchSideBar from '../search_side_bar';
 import { addOrRemoveCourse, hoverSection, unHoverSection } from '../../actions/timetable_actions';
 
 const mapStateToProps = (state) => {

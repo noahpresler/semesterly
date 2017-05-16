@@ -4,7 +4,6 @@ import REACTION_MAP from '../constants/reactions';
 import MasterSlot from './master_slot';
 import Textbook from './textbook';
 import COLOUR_DATA from '../constants/colours';
-import { getSchoolSpecificInfo } from '../constants/schools';
 import EvaluationList from './evaluation_list';
 import CourseModalSection from './course_modal_section';
 import SlotHoverTip from './slot_hover_tip';
@@ -175,7 +174,7 @@ class CourseModalBody extends React.Component {
                 fetchCourseInfo={() => this.fetchCourseInfo(rc.id)}
               />)}
             </div>);
-    const courseRegex = new RegExp(getSchoolSpecificInfo(school).courseRegex, 'g');
+    const courseRegex = new RegExp(this.props.schoolSpecificInfo.courseRegex, 'g');
     const matchedCoursesDescription = this.props.data.description.match(courseRegex);
     const description = this.props.data.description === '' ? 'No description available' :
       this.props.data.description.split(courseRegex).map((t, i) => {
@@ -214,7 +213,7 @@ class CourseModalBody extends React.Component {
             </div>);
     const areasDisplay =
             (<div className="modal-module areas">
-              <h3 className="modal-module-header">{getSchoolSpecificInfo(school).areasName}</h3>
+              <h3 className="modal-module-header">{this.props.schoolSpecificInfo.areasName}</h3>
               <p>{ this.props.data.areas || 'None' }</p>
             </div>);
     const integrationDivStyle = {
@@ -452,6 +451,7 @@ CourseModalBody.propTypes = {
   tutorialSections: React.PropTypes.shape({
     '*': React.PropTypes.arrayOf(PropTypes.section),
   }),
+  schoolSpecificInfo: PropTypes.schoolSpecificInfo.isRequired,
 };
 
 export default CourseModalBody;
