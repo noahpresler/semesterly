@@ -139,6 +139,7 @@ class SlotManager extends React.Component {
             removeCustomSlot={() => this.props.removeCustomSlot(slot.id)}
             updateCustomSlot={this.props.updateCustomSlot}
             addCustomSlot={this.props.addCustomSlot}
+            uses12HrTime={this.props.uses12HrTime}
           />
           :
           <Slot
@@ -158,6 +159,7 @@ class SlotManager extends React.Component {
             primaryDisplayAttribute={this.props.primaryDisplayAttribute}
             updateCustomSlot={this.props.updateCustomSlot}
             addCustomSlot={this.props.addCustomSlot}
+            uses12HrTime={this.props.uses12HrTime}
           />;
       });
       return (
@@ -182,6 +184,10 @@ class SlotManager extends React.Component {
   }
 }
 
+SlotManager.defaultProps = {
+  socialSections: false,
+};
+
 SlotManager.propTypes = {
   isLocked: React.PropTypes.func.isRequired,
   isCourseOptional: React.PropTypes.func.isRequired,
@@ -201,7 +207,8 @@ SlotManager.propTypes = {
   custom: React.PropTypes.arrayOf(React.PropTypes.oneOfType([PropTypes.customSlot,
     React.PropTypes.shape({})])).isRequired,
   primaryDisplayAttribute: React.PropTypes.string.isRequired,
-  socialSections: React.PropTypes.bool.isRequired,
+  socialSections: React.PropTypes.bool,
+  uses12HrTime: React.PropTypes.bool.isRequired,
 };
 
 export default SlotManager;
