@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import React from 'react';
 import ClickOutHandler from 'react-onclickout';
 import classNames from 'classnames';
@@ -168,20 +169,21 @@ class SearchBar extends React.Component {
 }
 
 SearchBar.propTypes = {
-  addCourse: React.PropTypes.func.isRequired,
-  explorationModalIsVisible: React.PropTypes.bool.isRequired,
-  fetchCourses: React.PropTypes.func.isRequired,
-  hasHoveredResult: React.PropTypes.bool.isRequired,
-  hoverSearchResult: React.PropTypes.func.isRequired,
-  hoveredPosition: React.PropTypes.number.isRequired,
-  isCourseInRoster: React.PropTypes.func.isRequired,
-  isCourseOptional: React.PropTypes.func.isRequired,
-  isFetching: React.PropTypes.bool.isRequired,
-  maybeSetSemester: React.PropTypes.func.isRequired,
-  searchResults: React.PropTypes.arrayOf(SemesterlyPropTypes.searchResult).isRequired,
+  addCourse: PropTypes.func.isRequired,
+  explorationModalIsVisible: PropTypes.bool.isRequired,
+  fetchCourses: PropTypes.func.isRequired,
+  hasHoveredResult: PropTypes.bool.isRequired,
+  hoverSearchResult: PropTypes.func.isRequired,
+  hoveredPosition: PropTypes.number.isRequired,
+  isCourseInRoster: PropTypes.func.isRequired,
+  isCourseOptional: PropTypes.func.isRequired,
+  isFetching: PropTypes.bool.isRequired,
+  maybeSetSemester: PropTypes.func.isRequired,
+  searchResults: PropTypes.arrayOf(SemesterlyPropTypes.searchResult).isRequired,
   semester: SemesterlyPropTypes.semester.isRequired,
-  showExplorationModal: React.PropTypes.func.isRequired,
-  allSemesters: React.PropTypes.arrayOf(SemesterlyPropTypes.semester).isRequired,
+  showExplorationModal: PropTypes.func.isRequired,
+  allSemesters: PropTypes.arrayOf(SemesterlyPropTypes.semester).isRequired,
 };
 
 export default SearchBar;
+
