@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import React from 'react';
 import Modal from 'boron/WaveModal';
 import COLOUR_DATA from '../../constants/colours';
@@ -47,13 +48,13 @@ InSlot.defaultProps = {
 };
 
 InSlot.propTypes = {
-  code: React.PropTypes.oneOfType([React.PropTypes.number,
-    React.PropTypes.string]),
-  time: React.PropTypes.string.isRequired,
-  name: React.PropTypes.string.isRequired,
-  color: React.PropTypes.oneOfType([React.PropTypes.number,
-    React.PropTypes.string]),
-  numberOfFinalsAtThisTime: React.PropTypes.number,
+  code: PropTypes.oneOfType([PropTypes.number,
+    PropTypes.string]),
+  time: PropTypes.string.isRequired,
+  name: PropTypes.string.isRequired,
+  color: PropTypes.oneOfType([PropTypes.number,
+    PropTypes.string]),
+  numberOfFinalsAtThisTime: PropTypes.number,
 };
 
 export default class FinalExamsModal extends React.Component {
@@ -61,11 +62,11 @@ export default class FinalExamsModal extends React.Component {
   static generateWeekHeaders(dates) {
     const days = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
     const mobileDays = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];// ['S', 'M', 'T', 'W', 'T', 'F', 'S']
-    const html = dates.map((date, index) => <h3 key={date}><span
+    const html = dates.map((date, index) => (<h3 key={date}><span
       className="day"
     >{($(window).width() > 766) ? days[index] : mobileDays[index]}</span><span
       className="date"
-    >{date}</span></h3>);
+    >{date}</span></h3>));
     return (<div id="final-exam-calender-days" className="cf">
       { html }
     </div>);
@@ -229,12 +230,12 @@ export default class FinalExamsModal extends React.Component {
     const unscheduledFinalCtn = this.noTimeFinals.length > 0 ?
       (<div id="final-exam-sidebar">
         <h3 className="modal-module-header">Schedule Unavailable</h3>
-        {this.noTimeFinals.map(final => <InSlot
+        {this.noTimeFinals.map(final => (<InSlot
           code={this.props.courseDetails[final].code}
           name={this.props.courseDetails[final].name}
           color={this.props.courseToColourIndex[final]}
           key={`final${this.props.courseDetails[final].code}`}
-        />)}
+        />))}
       </div>) : null;
 
     const finalsWeeks = [];
@@ -408,31 +409,32 @@ FinalExamsModal.defaultProps = {
 };
 
 FinalExamsModal.propTypes = {
-  isVisible: React.PropTypes.bool.isRequired,
-  finalExamSchedule: React.PropTypes.shape({
-    '*': React.PropTypes.string,
+  isVisible: PropTypes.bool.isRequired,
+  finalExamSchedule: PropTypes.shape({
+    '*': PropTypes.string,
   }),
-  hasRecievedSchedule: React.PropTypes.bool.isRequired,
-  loading: React.PropTypes.bool.isRequired,
-  courseToColourIndex: React.PropTypes.shape({
-    id: React.PropTypes.string,
+  hasRecievedSchedule: PropTypes.bool.isRequired,
+  loading: PropTypes.bool.isRequired,
+  courseToColourIndex: PropTypes.shape({
+    id: PropTypes.string,
   }).isRequired,
-  courseDetails: React.PropTypes.shape({
-    '*': React.PropTypes.shape({
-      name: React.PropTypes.string.isRequired,
-      code: React.PropTypes.string.isRequired,
+  courseDetails: PropTypes.shape({
+    '*': PropTypes.shape({
+      name: PropTypes.string.isRequired,
+      code: PropTypes.string.isRequired,
     }),
   }).isRequired,
-  activeLoadedTimetableName: React.PropTypes.string.isRequired,
-  hasNoCourses: React.PropTypes.bool.isRequired,
-  courses: React.PropTypes.arrayOf(SemesterlyPropTypes.course).isRequired,
-  loadingCachedTT: React.PropTypes.bool.isRequired,
+  activeLoadedTimetableName: PropTypes.string.isRequired,
+  hasNoCourses: PropTypes.bool.isRequired,
+  courses: PropTypes.arrayOf(SemesterlyPropTypes.course).isRequired,
+  loadingCachedTT: PropTypes.bool.isRequired,
   userInfo: SemesterlyPropTypes.userInfo.isRequired,
-  shareLink: React.PropTypes.string,
-  hideFinalExamsModal: React.PropTypes.func.isRequired,
-  logFinalExamView: React.PropTypes.func.isRequired,
-  fetchFinalExamSchedule: React.PropTypes.func.isRequired,
-  getFinalExamShareLink: React.PropTypes.func.isRequired,
-  launchUserAcquisitionModal: React.PropTypes.func.isRequired,
-  isShare: React.PropTypes.bool.isRequired,
+  shareLink: PropTypes.string,
+  hideFinalExamsModal: PropTypes.func.isRequired,
+  logFinalExamView: PropTypes.func.isRequired,
+  fetchFinalExamSchedule: PropTypes.func.isRequired,
+  getFinalExamShareLink: PropTypes.func.isRequired,
+  launchUserAcquisitionModal: PropTypes.func.isRequired,
+  isShare: PropTypes.bool.isRequired,
 };
+

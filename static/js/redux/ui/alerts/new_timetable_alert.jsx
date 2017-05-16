@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import React from 'react';
 
 class NewTimetableAlert extends React.Component {
@@ -28,9 +29,10 @@ class NewTimetableAlert extends React.Component {
 }
 
 NewTimetableAlert.propTypes = {
-  dismissSelf: React.PropTypes.func.isRequired,
-  createNewTimetable: React.PropTypes.func.isRequired,
-  msg: React.PropTypes.string.isRequired,
+  dismissSelf: PropTypes.func.isRequired,
+  createNewTimetable: PropTypes.func.isRequired,
+  msg: PropTypes.string.isRequired,
 };
 
 export default NewTimetableAlert;
+
