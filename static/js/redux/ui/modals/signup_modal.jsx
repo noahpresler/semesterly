@@ -1,4 +1,6 @@
+import PropTypes from 'prop-types';
 import React from 'react';
+import twemoji from 'twemoji';
 import Modal from 'boron/WaveModal';
 import renderHTML from 'react-render-html';
 
@@ -99,8 +101,9 @@ class SignupModal extends React.Component {
 }
 
 SignupModal.propTypes = {
-  isVisible: React.PropTypes.bool.isRequired,
-  toggleSignupModal: React.PropTypes.func.isRequired,
+  isVisible: PropTypes.bool.isRequired,
+  toggleSignupModal: PropTypes.func.isRequired,
 };
 
 export default SignupModal;
+
