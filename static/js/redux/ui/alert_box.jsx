@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import React from 'react';
 import EventEmitter from 'events';
 import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
@@ -212,9 +213,10 @@ class AlertBox extends React.Component {
           transitionEnterTimeout={250}
           transitionLeaveTimeout={250}
         >
-          {this.state.alerts.map(alert => <Alert
-            key={alert.uniqueKey} {...alert}
-          />)}
+          {this.state.alerts.map(alert => (<Alert
+            key={alert.uniqueKey}
+            {...alert}
+          />))}
         </ReactCSSTransitionGroup>
       </div>
     );
@@ -230,16 +232,17 @@ AlertBox.defaultProps = {
 };
 
 AlertBox.propTypes = {
-  offset: React.PropTypes.number,
-  position: React.PropTypes.oneOf([
+  offset: PropTypes.number,
+  position: PropTypes.oneOf([
     'bottom left',
     'bottom right',
     'top right',
     'top left',
   ]),
-  theme: React.PropTypes.oneOf(['dark', 'light']),
-  time: React.PropTypes.number,
-  transition: React.PropTypes.oneOf(['scale', 'fade']),
+  theme: PropTypes.oneOf(['dark', 'light']),
+  time: PropTypes.number,
+  transition: PropTypes.oneOf(['scale', 'fade']),
 };
 
 export default AlertBox;
+

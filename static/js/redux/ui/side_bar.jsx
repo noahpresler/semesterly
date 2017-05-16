@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import React from 'react';
 import classNames from 'classnames';
 import ClickOutHandler from 'react-onclickout';
@@ -163,10 +164,14 @@ class SideBar extends React.Component {
             </div>
           </div>
         </div>
-        <h4 onClick={this.props.launchPeerModal} className="sb-header">
-          Current Courses
-          <div className="sb-header-link"><i className="fa fa-users" />&nbsp;Find new friends</div>
-        </h4>
+        <a onClick={this.props.launchPeerModal}>
+          <h4 className="sb-header">
+            Current Courses
+            <div className="sb-header-link">
+              <i className="fa fa-users" />&nbsp;Find new friends
+            </div>
+          </h4>
+        </a>
         <h4 className="sb-tip">
           <b>ProTip:</b> use <i className="fa fa-lock" />
           to lock a section in place.
@@ -178,9 +183,11 @@ class SideBar extends React.Component {
         <h4 className="sb-header">Optional Courses</h4>
         { optionalSlots }
         <div id="sb-optional-slots" />
-        <h4 className="sb-header" onClick={this.props.launchTextbookModal}> Textbooks
-          <div className="sb-header-link"><i className="fa fa-external-link" />&nbsp;See all</div>
-        </h4>
+        <a onClick={this.props.launchTextbookModal}>
+          <h4 className="sb-header"> Textbooks
+            <div className="sb-header-link"><i className="fa fa-external-link" />&nbsp;See all</div>
+          </h4>
+        </a>
         <div className="side-bar-section">
           <TextbookList courses={this.props.liveTimetableCourses} />
         </div>
@@ -197,59 +204,59 @@ SideBar.defaultProps = {
 };
 
 SideBar.propTypes = {
-  savedTimetables: React.PropTypes.arrayOf(React.PropTypes.shape({
-    name: React.PropTypes.string,
+  savedTimetables: PropTypes.arrayOf(PropTypes.shape({
+    name: PropTypes.string,
   })),
-  mandatoryCourses: React.PropTypes.arrayOf(React.PropTypes.shape({
-    id: React.PropTypes.number,
-    slots: React.PropTypes.arrayOf(React.PropTypes.shape({
-      instructors: React.PropTypes.string,
+  mandatoryCourses: PropTypes.arrayOf(PropTypes.shape({
+    id: PropTypes.number,
+    slots: PropTypes.arrayOf(PropTypes.shape({
+      instructors: PropTypes.string,
     })),
-    oldSlots: React.PropTypes.arrayOf(React.PropTypes.shape({
-      instructors: React.PropTypes.string,
+    oldSlots: PropTypes.arrayOf(PropTypes.shape({
+      instructors: PropTypes.string,
     })),
   })).isRequired,
-  courseToColourIndex: React.PropTypes.shape({
-    id: React.PropTypes.string,
+  courseToColourIndex: PropTypes.shape({
+    id: PropTypes.string,
   }).isRequired,
   classmates: SemesterlyPropTypes.classmates.isRequired,
-  optionalCourses: React.PropTypes.arrayOf(React.PropTypes.shape({
-    id: React.PropTypes.number,
-    slots: React.PropTypes.arrayOf(React.PropTypes.shape({
-      instructors: React.PropTypes.string,
+  optionalCourses: PropTypes.arrayOf(PropTypes.shape({
+    id: PropTypes.number,
+    slots: PropTypes.arrayOf(PropTypes.shape({
+      instructors: PropTypes.string,
     })),
-    oldSlots: React.PropTypes.arrayOf(React.PropTypes.shape({
-      instructors: React.PropTypes.string,
+    oldSlots: PropTypes.arrayOf(PropTypes.shape({
+      instructors: PropTypes.string,
     })),
   })),
-  loadTimetable: React.PropTypes.func.isRequired,
-  deleteTimetable: React.PropTypes.func.isRequired,
-  isCourseInRoster: React.PropTypes.func.isRequired,
-  duplicateTimetable: React.PropTypes.func.isRequired,
-  fetchCourseInfo: React.PropTypes.func.isRequired,
-  removeCourse: React.PropTypes.func.isRequired,
-  removeOptionalCourse: React.PropTypes.func.isRequired,
-  launchFinalExamsModal: React.PropTypes.func.isRequired,
-  launchPeerModal: React.PropTypes.func.isRequired,
-  launchTextbookModal: React.PropTypes.func.isRequired,
-  liveTimetableCourses: React.PropTypes.arrayOf(React.PropTypes.shape({
-    id: React.PropTypes.number,
-    slots: React.PropTypes.arrayOf(React.PropTypes.shape({
-      instructors: React.PropTypes.string,
+  loadTimetable: PropTypes.func.isRequired,
+  deleteTimetable: PropTypes.func.isRequired,
+  isCourseInRoster: PropTypes.func.isRequired,
+  duplicateTimetable: PropTypes.func.isRequired,
+  fetchCourseInfo: PropTypes.func.isRequired,
+  removeCourse: PropTypes.func.isRequired,
+  removeOptionalCourse: PropTypes.func.isRequired,
+  launchFinalExamsModal: PropTypes.func.isRequired,
+  launchPeerModal: PropTypes.func.isRequired,
+  launchTextbookModal: PropTypes.func.isRequired,
+  liveTimetableCourses: PropTypes.arrayOf(PropTypes.shape({
+    id: PropTypes.number,
+    slots: PropTypes.arrayOf(PropTypes.shape({
+      instructors: PropTypes.string,
     })),
-    oldSlots: React.PropTypes.arrayOf(React.PropTypes.shape({
-      instructors: React.PropTypes.string,
+    oldSlots: PropTypes.arrayOf(PropTypes.shape({
+      instructors: PropTypes.string,
     })),
   })).isRequired,
-  semester: React.PropTypes.shape({
-    name: React.PropTypes.string.isRequired,
-    year: React.PropTypes.numberisRequired,
+  semester: PropTypes.shape({
+    name: PropTypes.string.isRequired,
+    year: PropTypes.numberisRequired,
   }).isRequired,
-  semesterIndex: React.PropTypes.number.isRequired,
-  avgRating: React.PropTypes.number,
-  examSupportedSemesters: React.PropTypes.arrayOf(React.PropTypes.number).isRequired,
-  hasLoaded: React.PropTypes.bool.isRequired,
-  getShareLink: React.PropTypes.func.isRequired,
+  semesterIndex: PropTypes.number.isRequired,
+  avgRating: PropTypes.number,
+  examSupportedSemesters: PropTypes.arrayOf(PropTypes.number).isRequired,
+  hasLoaded: PropTypes.bool.isRequired,
+  getShareLink: PropTypes.func.isRequired,
 };
 
 export default SideBar;
@@ -286,9 +293,10 @@ TextbookList.defaultProps = {
 };
 
 TextbookList.propTypes = {
-  courses: React.PropTypes.arrayOf(React.PropTypes.shape({
-    textbooks: React.PropTypes.shape({
-      isbn: React.PropTypes.string,
+  courses: PropTypes.arrayOf(PropTypes.shape({
+    textbooks: PropTypes.shape({
+      isbn: PropTypes.string,
     }),
   })),
 };
+

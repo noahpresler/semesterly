@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import React from 'react';
 import Select from 'react-select';
 import classnames from 'classnames';
@@ -261,13 +262,14 @@ class UserSettingsModal extends React.Component {
 
 UserSettingsModal.propTypes = {
   userInfo: SemesterlyPropTypes.userInfo.isRequired,
-  closeUserSettings: React.PropTypes.func.isRequired,
-  saveSettings: React.PropTypes.func.isRequired,
-  changeUserInfo: React.PropTypes.func.isRequired,
-  tokenRegistered: React.PropTypes.bool.isRequired,
-  unsubscribeToNotifications: React.PropTypes.func.isRequired,
-  subscribeToNotifications: React.PropTypes.func.isRequired,
-  highlightNotifs: React.PropTypes.bool.isRequired,
+  closeUserSettings: PropTypes.func.isRequired,
+  saveSettings: PropTypes.func.isRequired,
+  changeUserInfo: PropTypes.func.isRequired,
+  tokenRegistered: PropTypes.bool.isRequired,
+  unsubscribeToNotifications: PropTypes.func.isRequired,
+  subscribeToNotifications: PropTypes.func.isRequired,
+  highlightNotifs: PropTypes.bool.isRequired,
 };
 
 export default UserSettingsModal;
+

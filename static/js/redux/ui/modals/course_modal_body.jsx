@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import React from 'react';
 import Reaction from '../reaction';
 import REACTION_MAP from '../../constants/reactions';
@@ -164,7 +165,7 @@ class CourseModalBody extends React.Component {
     const similarCourses = relatedCourses.length === 0 ? null :
             (<div className="modal-module">
               <h3 className="modal-module-header">Students Also Take</h3>
-              {relatedCourses.map((rc, i) => <MasterSlot
+              {relatedCourses.map((rc, i) => (<MasterSlot
                 key={rc.id} course={rc}
                 professors={null}
                 colourIndex={Math.min(i, maxColourIndex)}
@@ -173,7 +174,7 @@ class CourseModalBody extends React.Component {
                 inModal
                 fetchCourseInfo={() => this.fetchCourseInfo(rc.id)}
                 getShareLink={this.props.getShareLink}
-              />)}
+              />))}
             </div>);
     const courseRegex = new RegExp(this.props.schoolSpecificInfo.courseRegex, 'g');
     const matchedCoursesDescription = this.props.data.description.match(courseRegex);
@@ -247,17 +248,17 @@ class CourseModalBody extends React.Component {
     if (!this.props.isFetchingClassmates && this.props.classmates.classmates !== undefined) {
       friendCircles = this.props.classmates && this.props.classmates.classmates.length > 0 ?
         this.props.classmates.classmates.map(c =>
-          <div className="friend" key={c.img_url}>
+          (<div className="friend" key={c.img_url}>
             <div className="ms-friend" style={{ backgroundImage: `url(${c.img_url})` }} />
             <p title={`${c.first_name} ${c.last_name}`}>{ `${c.first_name} ${c.last_name}` }</p>
-          </div>) : <p className="null">No Classmates Found</p>;
+          </div>)) : <p className="null">No Classmates Found</p>;
 
       hasTakenCircles = this.props.classmates && this.props.classmates.past_classmates.length > 0 ?
         this.props.classmates.past_classmates.map(c =>
-          <div className="friend" key={c.img_url}>
+          (<div className="friend" key={c.img_url}>
             <div className="ms-friend" style={{ backgroundImage: `url(${c.img_url})` }} />
             <p title={`${c.first_name} ${c.last_name}`}>{ `${c.first_name} ${c.last_name}` }</p>
-          </div>) : <p className="null">No Classmates Found</p>;
+          </div>)) : <p className="null">No Classmates Found</p>;
     }
     let friendDisplay = (<div className="modal-module friends">
       <h3 className="modal-module-header">Friends In This Course</h3>
@@ -425,38 +426,39 @@ CourseModalBody.defaultProps = {
 };
 
 CourseModalBody.propTypes = {
-  inRoster: React.PropTypes.bool.isRequired,
-  popularityPercent: React.PropTypes.number,
-  isLoggedIn: React.PropTypes.bool,
-  hasSocial: React.PropTypes.bool,
+  inRoster: PropTypes.bool.isRequired,
+  popularityPercent: PropTypes.number,
+  isLoggedIn: PropTypes.bool,
+  hasSocial: PropTypes.bool,
   data: SemesterlyPropTypes.fullCourseDetails,
-  addOrRemoveCourse: React.PropTypes.func.isRequired,
-  react: React.PropTypes.func.isRequired,
+  addOrRemoveCourse: PropTypes.func.isRequired,
+  react: PropTypes.func.isRequired,
   classmates: SemesterlyPropTypes.classmates.isRequired,
-  hideModal: React.PropTypes.func.isRequired,
-  openSignUpModal: React.PropTypes.func.isRequired,
-  changeUserInfo: React.PropTypes.func.isRequired,
-  saveSettings: React.PropTypes.func.isRequired,
-  isFetchingClassmates: React.PropTypes.bool.isRequired,
-  isFetching: React.PropTypes.bool.isRequired,
-  hoverSection: React.PropTypes.func.isRequired,
-  unHoverSection: React.PropTypes.func.isRequired,
-  fetchCourseInfo: React.PropTypes.func.isRequired,
-  isSectionLocked: React.PropTypes.func.isRequired,
+  hideModal: PropTypes.func.isRequired,
+  openSignUpModal: PropTypes.func.isRequired,
+  changeUserInfo: PropTypes.func.isRequired,
+  saveSettings: PropTypes.func.isRequired,
+  isFetchingClassmates: PropTypes.bool.isRequired,
+  isFetching: PropTypes.bool.isRequired,
+  hoverSection: PropTypes.func.isRequired,
+  unHoverSection: PropTypes.func.isRequired,
+  fetchCourseInfo: PropTypes.func.isRequired,
+  isSectionLocked: PropTypes.func.isRequired,
   userInfo: SemesterlyPropTypes.userInfo.isRequired,
-  isSectionOnActiveTimetable: React.PropTypes.func.isRequired,
-  lectureSections: React.PropTypes.shape({
-    '*': React.PropTypes.arrayOf(SemesterlyPropTypes.section),
+  isSectionOnActiveTimetable: PropTypes.func.isRequired,
+  lectureSections: PropTypes.shape({
+    '*': PropTypes.arrayOf(SemesterlyPropTypes.section),
   }).isRequired,
-  practicalSections: React.PropTypes.shape({
-    '*': React.PropTypes.arrayOf(SemesterlyPropTypes.section),
+  practicalSections: PropTypes.shape({
+    '*': PropTypes.arrayOf(SemesterlyPropTypes.section),
   }),
-  tutorialSections: React.PropTypes.shape({
-    '*': React.PropTypes.arrayOf(SemesterlyPropTypes.section),
+  tutorialSections: PropTypes.shape({
+    '*': PropTypes.arrayOf(SemesterlyPropTypes.section),
   }),
   schoolSpecificInfo: SemesterlyPropTypes.schoolSpecificInfo.isRequired,
-  getShareLink: React.PropTypes.func.isRequired,
-  getShareLinkFromModal: React.PropTypes.func.isRequired,
+  getShareLink: PropTypes.func.isRequired,
+  getShareLinkFromModal: PropTypes.func.isRequired,
 };
 
 export default CourseModalBody;
+

@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import React from 'react';
 import classNames from 'classnames';
 import ClickOutHandler from 'react-onclickout';
@@ -79,8 +80,9 @@ class SocialProfile extends React.Component {
 
 SocialProfile.propTypes = {
   userInfo: SemesterlyPropTypes.userInfo.isRequired,
-  showUserSettings: React.PropTypes.func.isRequired,
-  triggerAcquisitionModal: React.PropTypes.func.isRequired,
+  showUserSettings: PropTypes.func.isRequired,
+  triggerAcquisitionModal: PropTypes.func.isRequired,
 };
 
 export default SocialProfile;
+
