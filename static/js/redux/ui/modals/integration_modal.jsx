@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import React from 'react';
 import Modal from 'boron/WaveModal';
 import { addIntegration, delIntegration } from '../../actions/user_actions';
@@ -81,10 +82,11 @@ IntegrationModal.defaultProps = {
 };
 
 IntegrationModal.propTypes = {
-  course_id: React.PropTypes.number,
-  toggleIntegrationModal: React.PropTypes.func.isRequired,
-  enabled: React.PropTypes.bool.isRequired,
-  isVisible: React.PropTypes.bool.isRequired,
+  course_id: PropTypes.number,
+  toggleIntegrationModal: PropTypes.func.isRequired,
+  enabled: PropTypes.bool.isRequired,
+  isVisible: PropTypes.bool.isRequired,
 };
 
 export default IntegrationModal;
+

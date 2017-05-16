@@ -1,29 +1,29 @@
-import React from 'react';
+import PropTypes from 'prop-types';
 
-export const fullCourseDetails = React.PropTypes.shape({
-  code: React.PropTypes.string,
-  department: React.PropTypes.string,
-  description: React.PropTypes.string,
-  prerequisites: React.PropTypes.string,
-  areas: React.PropTypes.string,
+export const fullCourseDetails = PropTypes.shape({
+  code: PropTypes.string,
+  department: PropTypes.string,
+  description: PropTypes.string,
+  prerequisites: PropTypes.string,
+  areas: PropTypes.string,
 });
 
-export const classmates = React.PropTypes.oneOfType([
-  React.PropTypes.arrayOf(
-    React.PropTypes.shape({
-      img_url: React.PropTypes.string,
-      first_name: React.PropTypes.string,
-      last_name: React.PropTypes.string,
+export const classmates = PropTypes.oneOfType([
+  PropTypes.arrayOf(
+    PropTypes.shape({
+      img_url: PropTypes.string,
+      first_name: PropTypes.string,
+      last_name: PropTypes.string,
     }),
   ),
-  React.PropTypes.shape({}),
+  PropTypes.shape({}),
 ]);
 
-export const textbook = React.PropTypes.shape({
-  author: React.PropTypes.string.isRequired,
-  image_url: React.PropTypes.string.isRequired,
-  isbn: React.PropTypes.number.isRequired,
-  title: React.PropTypes.string.isRequired,
+export const textbook = PropTypes.shape({
+  author: PropTypes.string.isRequired,
+  image_url: PropTypes.string.isRequired,
+  isbn: PropTypes.number.isRequired,
+  title: PropTypes.string.isRequired,
 });
 
 export const sectionToTextbookMap = (props, propName, componentName) => {
@@ -34,178 +34,179 @@ export const sectionToTextbookMap = (props, propName, componentName) => {
   return true;
 };
 
-export const section = React.PropTypes.shape({
-  course: React.PropTypes.number.isRequired,
-  day: React.PropTypes.string.isRequired,
-  enrolment: React.PropTypes.number.isRequired,
-  instructors: React.PropTypes.string.isRequired,
-  location: React.PropTypes.string.isRequired,
-  meeting_section: React.PropTypes.string.isRequired,
-  section: React.PropTypes.number.isRequired,
-  section_type: React.PropTypes.string.isRequired,
-  semester: React.PropTypes.number.isRequired,
-  size: React.PropTypes.number.isRequired,
-  textbooks: React.PropTypes.arrayOf(textbook).isRequired,
-  time_end: React.PropTypes.string.isRequired,
-  time_start: React.PropTypes.string.isRequired,
-  waitlist: React.PropTypes.number.isRequired,
-  waitlist_size: React.PropTypes.number.isRequired,
-  was_full: React.PropTypes.bool.isRequired,
+export const section = PropTypes.shape({
+  course: PropTypes.number.isRequired,
+  day: PropTypes.string.isRequired,
+  enrolment: PropTypes.number.isRequired,
+  instructors: PropTypes.string.isRequired,
+  location: PropTypes.string.isRequired,
+  meeting_section: PropTypes.string.isRequired,
+  section: PropTypes.number.isRequired,
+  section_type: PropTypes.string.isRequired,
+  semester: PropTypes.number.isRequired,
+  size: PropTypes.number.isRequired,
+  textbooks: PropTypes.arrayOf(textbook).isRequired,
+  time_end: PropTypes.string.isRequired,
+  time_start: PropTypes.string.isRequired,
+  waitlist: PropTypes.number.isRequired,
+  waitlist_size: PropTypes.number.isRequired,
+  was_full: PropTypes.bool.isRequired,
 });
 
-export const customSlot = React.PropTypes.shape({
-  custom: React.PropTypes.bool.isRequired,
-  day: React.PropTypes.string.isRequired,
-  key: React.PropTypes.number.isRequired,
-  name: React.PropTypes.string.isRequired,
-  num_conflicts: React.PropTypes.number.isRequired,
-  preview: React.PropTypes.bool.isRequired,
-  shift_index: React.PropTypes.number.isRequired,
-  time_end: React.PropTypes.string.isRequired,
-  time_start: React.PropTypes.string.isRequired,
+export const customSlot = PropTypes.shape({
+  custom: PropTypes.bool.isRequired,
+  day: PropTypes.string.isRequired,
+  key: PropTypes.number.isRequired,
+  name: PropTypes.string.isRequired,
+  num_conflicts: PropTypes.number.isRequired,
+  preview: PropTypes.bool.isRequired,
+  shift_index: PropTypes.number.isRequired,
+  time_end: PropTypes.string.isRequired,
+  time_start: PropTypes.string.isRequired,
 });
 
-export const slot = React.PropTypes.shape({
-  code: React.PropTypes.string.isRequired,
-  colourId: React.PropTypes.number.isRequired,
-  course: React.PropTypes.number.isRequired,
-  day: React.PropTypes.string.isRequired,
-  depth_level: React.PropTypes.number.isRequired,
-  enrolment: React.PropTypes.number.isRequired,
-  id: React.PropTypes.number.isRequired,
-  instructors: React.PropTypes.string.isRequired,
-  is_section_filled: React.PropTypes.bool.isRequired,
-  location: React.PropTypes.string.isRequired,
-  meeting_section: React.PropTypes.string.isRequired,
-  name: React.PropTypes.string.isRequired,
-  num_conflicts: React.PropTypes.number.isRequired,
-  section: React.PropTypes.number.isRequired,
-  section_type: React.PropTypes.string.isRequired,
-  semester: React.PropTypes.number.isRequired,
-  shift_index: React.PropTypes.number.isRequired,
-  size: React.PropTypes.number.isRequired,
-  textbooks: React.PropTypes.arrayOf(React.PropTypes.number).isRequired,
-  time_end: React.PropTypes.string.isRequired,
-  time_start: React.PropTypes.string.isRequired,
-  waitlist: React.PropTypes.number.isRequired,
-  waitlist_size: React.PropTypes.number.isRequired,
-  was_full: React.PropTypes.bool.isRequired,
+export const slot = PropTypes.shape({
+  code: PropTypes.string.isRequired,
+  colourId: PropTypes.number.isRequired,
+  course: PropTypes.number.isRequired,
+  day: PropTypes.string.isRequired,
+  depth_level: PropTypes.number.isRequired,
+  enrolment: PropTypes.number.isRequired,
+  id: PropTypes.number.isRequired,
+  instructors: PropTypes.string.isRequired,
+  is_section_filled: PropTypes.bool.isRequired,
+  location: PropTypes.string.isRequired,
+  meeting_section: PropTypes.string.isRequired,
+  name: PropTypes.string.isRequired,
+  num_conflicts: PropTypes.number.isRequired,
+  section: PropTypes.number.isRequired,
+  section_type: PropTypes.string.isRequired,
+  semester: PropTypes.number.isRequired,
+  shift_index: PropTypes.number.isRequired,
+  size: PropTypes.number.isRequired,
+  textbooks: PropTypes.arrayOf(PropTypes.number).isRequired,
+  time_end: PropTypes.string.isRequired,
+  time_start: PropTypes.string.isRequired,
+  waitlist: PropTypes.number.isRequired,
+  waitlist_size: PropTypes.number.isRequired,
+  was_full: PropTypes.bool.isRequired,
 });
 
-export const course = React.PropTypes.oneOfType([
-  React.PropTypes.shape({
-    areas: React.PropTypes.string.isRequired,
-    campus: React.PropTypes.string.isRequired,
-    code: React.PropTypes.string.isRequired,
-    corequisites: React.PropTypes.string.isRequired,
-    department: React.PropTypes.string.isRequired,
-    description: React.PropTypes.string.isRequired,
-    enrolled_sections: React.PropTypes.arrayOf(React.PropTypes.string).isRequired,
-    exclusions: React.PropTypes.string.isRequired,
-    id: React.PropTypes.number.isRequired,
-    info: React.PropTypes.string.isRequired,
-    is_waitlist_only: React.PropTypes.bool.isRequired,
-    level: React.PropTypes.string.isRequired,
-    name: React.PropTypes.string.isRequired,
-    notes: React.PropTypes.string.isRequired,
-    num_credits: React.PropTypes.number.isRequired,
-    prerequisites: React.PropTypes.string.isRequired,
-    school: React.PropTypes.string.isRequired,
-    slots: React.PropTypes.arrayOf(slot),
+export const course = PropTypes.oneOfType([
+  PropTypes.shape({
+    areas: PropTypes.string.isRequired,
+    campus: PropTypes.string.isRequired,
+    code: PropTypes.string.isRequired,
+    corequisites: PropTypes.string.isRequired,
+    department: PropTypes.string.isRequired,
+    description: PropTypes.string.isRequired,
+    enrolled_sections: PropTypes.arrayOf(PropTypes.string).isRequired,
+    exclusions: PropTypes.string.isRequired,
+    id: PropTypes.number.isRequired,
+    info: PropTypes.string.isRequired,
+    is_waitlist_only: PropTypes.bool.isRequired,
+    level: PropTypes.string.isRequired,
+    name: PropTypes.string.isRequired,
+    notes: PropTypes.string.isRequired,
+    num_credits: PropTypes.number.isRequired,
+    prerequisites: PropTypes.string.isRequired,
+    school: PropTypes.string.isRequired,
+    slots: PropTypes.arrayOf(slot),
     textbooks: sectionToTextbookMap,
   }),
-  React.PropTypes.shape({}),
+  PropTypes.shape({}),
 ]);
-course.related_courses = React.PropTypes.arrayOf(course);
+course.related_courses = PropTypes.arrayOf(course);
 
-export const timetable = React.PropTypes.shape({
-  avg_rating: React.PropTypes.number,
-  has_conflict: React.PropTypes.bool.isRequired,
-  courses: React.PropTypes.arrayOf(course).isRequired,
-  sections: React.PropTypes.arrayOf(React.PropTypes.number),
-  semester: React.PropTypes.number,
+export const timetable = PropTypes.shape({
+  avg_rating: PropTypes.number,
+  has_conflict: PropTypes.bool.isRequired,
+  courses: PropTypes.arrayOf(course).isRequired,
+  sections: PropTypes.arrayOf(PropTypes.number),
+  semester: PropTypes.number,
 });
 
-export const evaluation = React.PropTypes.shape({
-  course: React.PropTypes.number.isRequired,
-  course_code: React.PropTypes.string.isRequired,
-  id: React.PropTypes.number.isRequired,
-  profesor: React.PropTypes.string,
-  summary: React.PropTypes.string.isRequired,
-  score: React.PropTypes.number.isRequired,
-  year: React.PropTypes.string.isRequired,
+export const evaluation = PropTypes.shape({
+  course: PropTypes.number.isRequired,
+  course_code: PropTypes.string.isRequired,
+  id: PropTypes.number.isRequired,
+  profesor: PropTypes.string,
+  summary: PropTypes.string.isRequired,
+  score: PropTypes.number.isRequired,
+  year: PropTypes.string.isRequired,
 });
 
-export const integration = React.PropTypes.string.isRequired;
+export const integration = PropTypes.string.isRequired;
 
-export const searchResult = React.PropTypes.shape({
-  areas: React.PropTypes.string.isRequired,
-  campus: React.PropTypes.string.isRequired,
-  code: React.PropTypes.string.isRequired,
-  department: React.PropTypes.string.isRequired,
-  description: React.PropTypes.string.isRequired,
-  evals: React.PropTypes.arrayOf(evaluation).isRequired,
-  id: React.PropTypes.number.isRequired,
-  integrations: React.PropTypes.arrayOf(integration),
-  name: React.PropTypes.string.isRequired,
-  num_credits: React.PropTypes.number.isRequired,
-  sections: React.PropTypes.shape({
-    '*': React.PropTypes.shape({
-      '*': React.PropTypes.arrayOf(section),
+export const searchResult = PropTypes.shape({
+  areas: PropTypes.string.isRequired,
+  campus: PropTypes.string.isRequired,
+  code: PropTypes.string.isRequired,
+  department: PropTypes.string.isRequired,
+  description: PropTypes.string.isRequired,
+  evals: PropTypes.arrayOf(evaluation).isRequired,
+  id: PropTypes.number.isRequired,
+  integrations: PropTypes.arrayOf(integration),
+  name: PropTypes.string.isRequired,
+  num_credits: PropTypes.number.isRequired,
+  sections: PropTypes.shape({
+    '*': PropTypes.shape({
+      '*': PropTypes.arrayOf(section),
     }),
   }),
 });
 
-export const userInfo = React.PropTypes.shape({
-  FacebookSignedUp: React.PropTypes.bool,
-  GoogleLoggedIn: React.PropTypes.bool,
-  LoginHash: React.PropTypes.string,
-  LoginToken: React.PropTypes.string,
-  class_year: React.PropTypes.number,
-  emails_enabled: React.PropTypes.bool,
-  gender: React.PropTypes.string,
-  integrations: React.PropTypes.arrayOf(React.PropTypes.shape({})),
-  isLoggedIn: React.PropTypes.bool.isRequired,
-  major: React.PropTypes.string,
-  social_all: React.PropTypes.bool,
-  social_courses: React.PropTypes.bool,
-  social_offerings: React.PropTypes.bool,
-  userFirstName: React.PropTypes.string,
-  userLastName: React.PropTypes.string,
+export const userInfo = PropTypes.shape({
+  FacebookSignedUp: PropTypes.bool,
+  GoogleLoggedIn: PropTypes.bool,
+  LoginHash: PropTypes.string,
+  LoginToken: PropTypes.string,
+  class_year: PropTypes.number,
+  emails_enabled: PropTypes.bool,
+  gender: PropTypes.string,
+  integrations: PropTypes.arrayOf(PropTypes.shape({})),
+  isLoggedIn: PropTypes.bool.isRequired,
+  major: PropTypes.string,
+  social_all: PropTypes.bool,
+  social_courses: PropTypes.bool,
+  social_offerings: PropTypes.bool,
+  userFirstName: PropTypes.string,
+  userLastName: PropTypes.string,
 });
 
-export const schoolSpecificInfo = React.PropTypes.shape({
-  areasName: React.PropTypes.string.isRequired,
-  campuses: React.PropTypes.shape({}),
-  courseRegex: React.PropTypes.string.isRequired,
-  departmentsName: React.PropTypes.string.isRequired,
-  levelsName: React.PropTypes.string.isRequired,
-  primaryDisplay: React.PropTypes.string.isRequired,
-  timesName: React.PropTypes.string.isRequired,
+export const schoolSpecificInfo = PropTypes.shape({
+  areasName: PropTypes.string.isRequired,
+  campuses: PropTypes.shape({}),
+  courseRegex: PropTypes.string.isRequired,
+  departmentsName: PropTypes.string.isRequired,
+  levelsName: PropTypes.string.isRequired,
+  primaryDisplay: PropTypes.string.isRequired,
+  timesName: PropTypes.string.isRequired,
 });
 
-export const semester = React.PropTypes.shape({
-  name: React.PropTypes.string.isRequired,
-  year: React.PropTypes.oneOfType([React.PropTypes.string, React.PropTypes.number]),
+export const semester = PropTypes.shape({
+  name: PropTypes.string.isRequired,
+  year: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
 });
 
-export const foreignUser = React.PropTypes.shape({
-  major: React.PropTypes.string,
-  social_all: React.PropTypes.bool,
-  social_courses: React.PropTypes.bool,
-  social_offerings: React.PropTypes.bool,
-  userFirstName: React.PropTypes.string,
-  userLastName: React.PropTypes.string,
-  img_url: React.PropTypes.string.isRequired,
-  gender: React.PropTypes.string,
-  class_year: React.PropTypes.number,
+export const foreignUser = PropTypes.shape({
+  major: PropTypes.string,
+  social_all: PropTypes.bool,
+  social_courses: PropTypes.bool,
+  social_offerings: PropTypes.bool,
+  userFirstName: PropTypes.string,
+  userLastName: PropTypes.string,
+  img_url: PropTypes.string.isRequired,
+  gender: PropTypes.string,
+  class_year: PropTypes.number,
 });
 
-export const peer = React.PropTypes.shape({
-  is_friend: React.PropTypes.bool.isRequired,
-  large_img: React.PropTypes.string.isRequired,
-  name: React.PropTypes.string.isRequired,
+export const peer = PropTypes.shape({
+  is_friend: PropTypes.bool.isRequired,
+  large_img: PropTypes.string.isRequired,
+  name: PropTypes.string.isRequired,
   peer: foreignUser.isRequired,
-  profile_url: React.PropTypes.string.isRequired,
-  shared_courses: React.PropTypes.arrayOf(course).isRequired,
+  profile_url: PropTypes.string.isRequired,
+  shared_courses: PropTypes.arrayOf(course).isRequired,
 });
+

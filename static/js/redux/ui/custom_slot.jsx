@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import React from 'react';
 import { DragSource, DropTarget } from 'react-dnd';
 import { DRAG_TYPES, HALF_HOUR_HEIGHT } from '../constants/constants';
@@ -235,21 +236,21 @@ class CustomSlot extends React.Component {
 }
 
 CustomSlot.propTypes = {
-  connectDragSource: React.PropTypes.func.isRequired,
-  connectDragTarget: React.PropTypes.func.isRequired,
-  isDragging: React.PropTypes.bool.isRequired,
-  time_start: React.PropTypes.string.isRequired,
-  time_end: React.PropTypes.string.isRequired,
-  depth_level: React.PropTypes.number.isRequired,
-  num_conflicts: React.PropTypes.number.isRequired,
-  shift_index: React.PropTypes.number.isRequired,
-  name: React.PropTypes.string.isRequired,
-  id: React.PropTypes.number.isRequired,
-  uses12HrTime: React.PropTypes.bool.isRequired,
-  preview: React.PropTypes.bool.isRequired,
-  updateCustomSlot: React.PropTypes.func.isRequired,
-  removeCustomSlot: React.PropTypes.func.isRequired,
-  connectCreateTarget: React.PropTypes.func.isRequired,
+  connectDragSource: PropTypes.func.isRequired,
+  connectDragTarget: PropTypes.func.isRequired,
+  isDragging: PropTypes.bool.isRequired,
+  time_start: PropTypes.string.isRequired,
+  time_end: PropTypes.string.isRequired,
+  depth_level: PropTypes.number.isRequired,
+  num_conflicts: PropTypes.number.isRequired,
+  shift_index: PropTypes.number.isRequired,
+  name: PropTypes.string.isRequired,
+  id: PropTypes.number.isRequired,
+  uses12HrTime: PropTypes.bool.isRequired,
+  preview: PropTypes.bool.isRequired,
+  updateCustomSlot: PropTypes.func.isRequired,
+  removeCustomSlot: PropTypes.func.isRequired,
+  connectCreateTarget: PropTypes.func.isRequired,
 };
 
 export default DropTarget(DRAG_TYPES.DRAG, dragSlotTarget, collectDragDrop)(
@@ -257,3 +258,4 @@ export default DropTarget(DRAG_TYPES.DRAG, dragSlotTarget, collectDragDrop)(
         DragSource(DRAG_TYPES.DRAG, dragSlotSource, collectDragSource)(CustomSlot),
     ),
 );
+

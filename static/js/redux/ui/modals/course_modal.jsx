@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import React from 'react';
 import classNames from 'classnames';
 import Modal from 'boron/WaveModal';
@@ -139,14 +140,15 @@ CourseModal.defaultProps = {
 };
 
 CourseModal.propTypes = {
-  id: React.PropTypes.number,
+  id: PropTypes.number,
   data: fullCourseDetails,
-  inRoster: React.PropTypes.bool.isRequired,
-  hasHoveredResult: React.PropTypes.bool.isRequired,
-  addOrRemoveOptionalCourse: React.PropTypes.func.isRequired,
-  addOrRemoveCourse: React.PropTypes.func.isRequired,
-  hideModal: React.PropTypes.func.isRequired,
-  unHoverSection: React.PropTypes.func.isRequired,
+  inRoster: PropTypes.bool.isRequired,
+  hasHoveredResult: PropTypes.bool.isRequired,
+  addOrRemoveOptionalCourse: PropTypes.func.isRequired,
+  addOrRemoveCourse: PropTypes.func.isRequired,
+  hideModal: PropTypes.func.isRequired,
+  unHoverSection: PropTypes.func.isRequired,
 };
 
 export default CourseModal;
+
