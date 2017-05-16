@@ -9,9 +9,9 @@ const school = (state = {
   dataLastUpdated: '',
 }, action) => {
   switch (action.type) {
-    case ActionTypes.SET_SCHOOL:
-      if (VALID_SCHOOLS.indexOf(action.school) >= 0) {
-        return Object.assign({}, state, { school: action.school });
+    case ActionTypes.INIT_STATE:
+      if (VALID_SCHOOLS.indexOf(action.data.school) >= 0) {
+        return Object.assign({}, state, { school: action.data.school });
       }
       return state;
     case ActionTypes.RECEIVE_SCHOOL_INFO: {
