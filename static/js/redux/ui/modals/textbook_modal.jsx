@@ -1,7 +1,7 @@
 import React from 'react';
 import Modal from 'boron/WaveModal';
 import Textbook from '../textbook';
-import * as PropTypes from '../../constants/propTypes';
+import * as SemesterlyPropTypes from '../../constants/semesterlyPropTypes';
 
 class TextbookModal extends React.Component {
   componentDidMount() {
@@ -181,7 +181,7 @@ TextbookModal.propTypes = {
   isVisible: React.PropTypes.bool.isRequired,
   isLoading: React.PropTypes.bool.isRequired,
   toggleTextbookModal: React.PropTypes.func.isRequired,
-  liveTimetableCourses: React.PropTypes.arrayOf(PropTypes.course).isRequired,
+  liveTimetableCourses: React.PropTypes.arrayOf(SemesterlyPropTypes.course).isRequired,
 };
 
 export default TextbookModal;

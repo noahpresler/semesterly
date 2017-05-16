@@ -15,6 +15,7 @@ import {
 } from '../../../actions/modal_actions';
 import { saveSettings } from '../../../actions/user_actions';
 import { getSchoolSpecificInfo } from '../../../constants/schools';
+import { getCourseShareLink, getCourseShareLinkFromModal } from '../../../helpers/timetable_helpers';
 
 const mapStateToProps = (state) => {
   let lectureSections = {};
@@ -45,6 +46,8 @@ const mapStateToProps = (state) => {
     isLoggedIn: state.userInfo.data.isLoggedIn,
     hasSocial: state.userInfo.data.social_courses && state.userInfo.data.social_offerings,
     userInfo: state.userInfo.data,
+    getShareLink: getCourseShareLink,
+    getShareLinkFromModal: getCourseShareLinkFromModal,
     isSectionLocked: (courseId, section) => {
       if (courseSections[courseId] === undefined) {
         return false;
