@@ -1,5 +1,5 @@
 /* eslint-disable */
-const $ = require('jquery');
+import $ from 'jquery';
 
 window.$ = global.$ = global.jQuery = $;
 
