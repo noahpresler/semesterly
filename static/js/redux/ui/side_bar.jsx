@@ -123,7 +123,8 @@ class SideBar extends React.Component {
         </div>);
     }
     const finalScheduleLink = (masterSlots.length > 0 &&
-      this.props.examSupportedSemesters.indexOf(this.props.semesterIndex) >= 0) ?
+      this.props.examSupportedSemesters.indexOf(this.props.semesterIndex) >= 0
+      && this.props.hasLoaded) ?
             (<div
               className="final-schedule-link"
               onClick={this.props.launchFinalExamsModal}
@@ -246,6 +247,7 @@ SideBar.propTypes = {
   semesterIndex: React.PropTypes.number.isRequired,
   avgRating: React.PropTypes.number,
   examSupportedSemesters: React.PropTypes.arrayOf(React.PropTypes.number).isRequired,
+  hasLoaded: React.PropTypes.bool.isRequired,
 };
 
 export default SideBar;
