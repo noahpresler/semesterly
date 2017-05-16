@@ -22,6 +22,9 @@ const timetables = (state = initialState, action) => {
     case ActionTypes.REQUEST_TIMETABLES:
       return Object.assign({}, state, { isFetching: true });
 
+    case ActionTypes.SET_SEMESTER:
+      return Object.assign({}, state, { isFetching: true });
+
     case ActionTypes.RECEIVE_TIMETABLES: {
       const actionTimetables = action.timetables.length > 0 ? action.timetables : [{
         courses: [],
