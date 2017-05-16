@@ -92,14 +92,15 @@ class UserSettingsModal extends React.Component {
         : (<a onClick={this.props.subscribeToNotifications}><h3>Turn On Notifications</h3></a>);
     const notifications = this.state.sw_capable ? (
       <div
-        className={classnames('preference notifications cf', { 'preference-attn': this.props.highlightNotifs })}
+        className={classnames('preference welcome-modal__notifications cf',
+          { 'preference-attn': this.props.highlightNotifs })}
       >
         <h4>Notifications</h4>
         {notificationsButton}
       </div>
             ) :
                 (<div
-                  className={classnames('preference notifications cf', {
+                  className={classnames('preference welcome-modal__notifications cf', {
                     'preference-attn-yellow': this.props.highlightNotifs,
                   })}
                 >
@@ -172,7 +173,8 @@ class UserSettingsModal extends React.Component {
     const fbUpsell = this.props.userInfo.isLoggedIn
       && !this.props.userInfo.FacebookSignedUp ? (
         <div
-          className={classnames('preference notifications second cf', { 'preference-attn': this.props.highlightNotifs })}
+          className={classnames('preference welcome-modal__notifications second cf',
+            { 'preference-attn': this.props.highlightNotifs })}
         >
           <button
             className="btn abnb-btn fb-btn" onClick={() => {
