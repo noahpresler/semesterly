@@ -1,32 +1,26 @@
-import Carousel from '../../modules/nuka-carousel/carousel';
 import React from 'react';
+import Carousel from '../../modules/nuka-carousel/carousel';
 
+// eslint-disable-next-line
 const SideScroller = React.createClass({
+
+  propTypes: {
+    content: React.PropTypes.arrayOf(React.PropTypes.element).isRequired,
+    id: React.PropTypes.string.isRequired,
+    navItems: React.PropTypes.arrayOf(React.PropTypes.element).isRequired,
+    slideIndex: React.PropTypes.number,
+  },
+
   mixins: [Carousel.ControllerMixin],
+
+  getDefaultProps() {
+    return { slideIndex: 0 };
+  },
+
 
   getInitialState() {
     return { slidesShownCount: 1 };
   },
-    // updateNumItems: function() {
-    //   if (!this.props.slidesToShow || $(".slider").length == 0 || !this.isMounted()) {
-    //     return;
-    //   }
-    //   let width = $(".slider").width();
-    //   let section_width = $(".section-wrapper").width() + 15;
-    //   let count = Math.max(2, parseInt(width/section_width));
-    //   this.setState({slidesShownCount: count});
-
-    //   // move slider list left (so that first item is centered).
-    //   // currently only done for sections: (".sec-0").parent().parent()
-    //   // so any other items using a slider element are ignored
-    //   let slider_list_left = "35";
-    //   if ($(window).width() < 540) {
-    //     slider_list_left = "20";
-    //   }
-    //   $(".sec-0").parent().parent()
-    //             .css("margin-left", slider_list_left + "%");
-    //   return count;
-    // },
 
 
   render() {
@@ -38,11 +32,12 @@ const SideScroller = React.createClass({
       const navs = [];
 
       for (let i = 0; i < this.props.navItems.length; i++) {
-        const cls = this.state.carousels.carousel.state.currentSlide == i ? ' nav-item-active' : '';
+        const cls = this.state.carousels.carousel.state.currentSlide === i ?
+          ' nav-item-active' : '';
         navs.push(
           <span
             key={i} className={`nav-item${cls}`}
-            onClick={this.changeSlide(i)}
+            onClick={() => this.state.carousels.carousel.goToSlide(i)}
           >{this.props.navItems[i]}</span>,
                 );
       }
@@ -53,6 +48,7 @@ const SideScroller = React.createClass({
       <div>
         {navItems}
         <Carousel
+          // eslint-disable-next-line
           ref="carousel" data={this.setCarouselData.bind(this, 'carousel')}
           slidesToShow={this.state.slidesShownCount}
           slideIndex={slideIndex}
@@ -64,24 +60,6 @@ const SideScroller = React.createClass({
         </Carousel>
       </div>
     );
-  },
-    // changes the currently selected slide to slide i (indexed starting at 0)
-  changeSlide(i) {
-    return function () {
-      this.state.carousels.carousel.goToSlide(i);
-    }.bind(this);
-  },
-
-  componentDidMount() {
-        // let length = this.props.content.length;
-        // if (length > 1) {
-        //   this.updateNumItems();
-        // }
-
-        // $(window).resize(function() {
-        //   if (length <= 1) {return;}
-        //   this.updateNumItems();
-        // }.bind(this));
   },
 
 });

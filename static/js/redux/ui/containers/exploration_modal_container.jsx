@@ -22,6 +22,8 @@ import {
     changeUserInfo,
     fetchCourseInfo,
 } from '../../actions/modal_actions';
+import { currSem } from '../../reducers/semester_reducer';
+
 
 const mapStateToProps = (state) => {
   const { isVisible, advancedSearchResults, isFetching, active, page } = state.explorationModal;
@@ -30,7 +32,7 @@ const mapStateToProps = (state) => {
   const inRoster = course && (courseSections[course.id] !== undefined);
   const activeTimetable = state.timetables.items[state.timetables.active];
   const { areas, departments, levels } = state.school;
-  const semester = allSemesters[state.semesterIndex];
+  const semester = currSem(state.semester);
   return {
     isVisible,
     isFetching,

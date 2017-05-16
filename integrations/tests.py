@@ -32,14 +32,10 @@ class IntegrationsGetAddTest(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
 
     def test_add_integration(self):
-        data = {
-            'course_id': 1,
-            'integration_id': 1,
-            'json': 'newstuff'
-        }
+        data = {'json': 'newstuff'}
         response = self.client.post('/integrations/1/course/1/', data, format='json', **self.request_headers)
         self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
-        CourseIntegration.objects.get(**data)
+        CourseIntegration.objects.get(course_id=1, integration_id=1, **data)
 
 
 class IntegrationsDeleteTest(APITestCase):
