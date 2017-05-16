@@ -3,6 +3,11 @@ import Modal from 'boron/WaveModal';
 import renderHTML from 'react-render-html';
 
 class SignupModal extends React.Component {
+  constructor(props) {
+    super(props);
+    this.hide = this.hide.bind(this);
+  }
+
   componentDidMount() {
     if (this.props.isVisible) {
       this.modal.show();
@@ -13,6 +18,11 @@ class SignupModal extends React.Component {
     if (this.props.isVisible) {
       this.modal.show();
     }
+  }
+
+  hide() {
+    history.replaceState({}, 'Semester.ly', '/');
+    this.props.toggleSignupModal();
   }
 
   render() {
@@ -34,7 +44,7 @@ class SignupModal extends React.Component {
         ref={(c) => { this.modal = c; }}
         className="signup-modal max-modal"
         modalStyle={modalStyle}
-        onHide={this.props.toggleSignupModal}
+        onHide={this.hide}
       >
         {modalHeader}
         <div id="features">
