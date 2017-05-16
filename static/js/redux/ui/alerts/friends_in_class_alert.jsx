@@ -85,6 +85,7 @@ class FriendsInClassAlert extends React.Component {
             inModal
             fakeFriends={this.props.mostFriendsCount}
             fetchCourseInfo={() => this.fetchCourseInfo(this.props.mostFriendsClass.id)}
+            getShareLink={() => null}
           />
           <small className="alert-extra">
                         Plus {this.props.totalFriendsCount} more in other classes. Enable the friend

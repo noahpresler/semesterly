@@ -7,7 +7,7 @@ import COLOUR_DATA from '../../constants/colours';
 import EvaluationList from '../evaluation_list';
 import CourseModalSection from '../course_modal_section';
 import SlotHoverTip from '../slot_hover_tip';
-import * as PropTypes from '../../constants/propTypes';
+import * as SemesterlyPropTypes from '../../constants/semesterlyPropTypes';
 
 class CourseModalBody extends React.Component {
   constructor(props) {
@@ -172,6 +172,7 @@ class CourseModalBody extends React.Component {
                 hideCloseButton
                 inModal
                 fetchCourseInfo={() => this.fetchCourseInfo(rc.id)}
+                getShareLink={this.props.getShareLink}
               />)}
             </div>);
     const courseRegex = new RegExp(this.props.schoolSpecificInfo.courseRegex, 'g');
@@ -186,6 +187,7 @@ class CourseModalBody extends React.Component {
           return (<SlotHoverTip
             key={t} num={i} code={t}
             name={this.props.data.regexed_courses[t]}
+            getShareLinkFromModal={this.props.getShareLinkFromModal}
           />);
         }
         return <span className="textItem" key={`textItem${t}`}>{t}</span>;
@@ -202,6 +204,7 @@ class CourseModalBody extends React.Component {
           return (<SlotHoverTip
             key={t} num={i} code={t}
             name={this.props.data.regexed_courses[t]}
+            getShareLinkFromModal={this.props.getShareLinkFromModal}
           />);
         }
         return <span className="textItem" key={t}>{t}</span>;
@@ -426,10 +429,10 @@ CourseModalBody.propTypes = {
   popularityPercent: React.PropTypes.number,
   isLoggedIn: React.PropTypes.bool,
   hasSocial: React.PropTypes.bool,
-  data: PropTypes.fullCourseDetails,
+  data: SemesterlyPropTypes.fullCourseDetails,
   addOrRemoveCourse: React.PropTypes.func.isRequired,
   react: React.PropTypes.func.isRequired,
-  classmates: PropTypes.classmates.isRequired,
+  classmates: SemesterlyPropTypes.classmates.isRequired,
   hideModal: React.PropTypes.func.isRequired,
   openSignUpModal: React.PropTypes.func.isRequired,
   changeUserInfo: React.PropTypes.func.isRequired,
@@ -440,18 +443,20 @@ CourseModalBody.propTypes = {
   unHoverSection: React.PropTypes.func.isRequired,
   fetchCourseInfo: React.PropTypes.func.isRequired,
   isSectionLocked: React.PropTypes.func.isRequired,
-  userInfo: PropTypes.userInfo.isRequired,
+  userInfo: SemesterlyPropTypes.userInfo.isRequired,
   isSectionOnActiveTimetable: React.PropTypes.func.isRequired,
   lectureSections: React.PropTypes.shape({
-    '*': React.PropTypes.arrayOf(PropTypes.section),
+    '*': React.PropTypes.arrayOf(SemesterlyPropTypes.section),
   }).isRequired,
   practicalSections: React.PropTypes.shape({
-    '*': React.PropTypes.arrayOf(PropTypes.section),
+    '*': React.PropTypes.arrayOf(SemesterlyPropTypes.section),
   }),
   tutorialSections: React.PropTypes.shape({
-    '*': React.PropTypes.arrayOf(PropTypes.section),
+    '*': React.PropTypes.arrayOf(SemesterlyPropTypes.section),
   }),
-  schoolSpecificInfo: PropTypes.schoolSpecificInfo.isRequired,
+  schoolSpecificInfo: SemesterlyPropTypes.schoolSpecificInfo.isRequired,
+  getShareLink: React.PropTypes.func.isRequired,
+  getShareLinkFromModal: React.PropTypes.func.isRequired,
 };
 
 export default CourseModalBody;

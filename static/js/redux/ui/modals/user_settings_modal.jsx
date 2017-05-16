@@ -3,7 +3,7 @@ import Select from 'react-select';
 import classnames from 'classnames';
 import Modal from 'boron/WaveModal';
 import majors from '../../constants/majors';
-import * as PropTypes from '../../constants/propTypes';
+import * as SemesterlyPropTypes from '../../constants/semesterlyPropTypes';
 
 class UserSettingsModal extends React.Component {
 
@@ -260,7 +260,7 @@ class UserSettingsModal extends React.Component {
 }
 
 UserSettingsModal.propTypes = {
-  userInfo: PropTypes.userInfo.isRequired,
+  userInfo: SemesterlyPropTypes.userInfo.isRequired,
   closeUserSettings: React.PropTypes.func.isRequired,
   saveSettings: React.PropTypes.func.isRequired,
   changeUserInfo: React.PropTypes.func.isRequired,

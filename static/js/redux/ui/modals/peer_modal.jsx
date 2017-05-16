@@ -1,7 +1,7 @@
 import React from 'react';
 import Modal from 'boron/WaveModal';
 import COLOUR_DATA from '../../constants/colours';
-import * as PropTypes from '../../constants/propTypes';
+import * as SemesterlyPropTypes from '../../constants/semesterlyPropTypes';
 
 
 class PeerModal extends React.Component {
@@ -236,9 +236,9 @@ class PeerModal extends React.Component {
 }
 
 PeerModal.propTypes = {
-  userInfo: PropTypes.userInfo.isRequired,
-  peers: React.PropTypes.arrayOf(PropTypes.peer).isRequired,
-  liveTimetableCourses: React.PropTypes.arrayOf(PropTypes.course).isRequired,
+  userInfo: SemesterlyPropTypes.userInfo.isRequired,
+  peers: React.PropTypes.arrayOf(SemesterlyPropTypes.peer).isRequired,
+  liveTimetableCourses: React.PropTypes.arrayOf(SemesterlyPropTypes.course).isRequired,
   courseToColourIndex: React.PropTypes.shape({
     '*': React.PropTypes.number,
   }).isRequired,
