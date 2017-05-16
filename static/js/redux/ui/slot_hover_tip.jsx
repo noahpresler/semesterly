@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import React from 'react';
 import COLOUR_DATA from '../constants/colours';
 
@@ -22,10 +23,11 @@ const SlotHoverTip = ({ num, code, name, getShareLinkFromModal }) => {
 };
 
 SlotHoverTip.propTypes = {
-  num: React.PropTypes.number.isRequired,
-  code: React.PropTypes.string.isRequired,
-  name: React.PropTypes.string.isRequired,
-  getShareLinkFromModal: React.PropTypes.func.isRequired,
+  num: PropTypes.number.isRequired,
+  code: PropTypes.string.isRequired,
+  name: PropTypes.string.isRequired,
+  getShareLinkFromModal: PropTypes.func.isRequired,
 };
 
 export default SlotHoverTip;
+
