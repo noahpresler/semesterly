@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import React from 'react';
 import Modal from 'boron/WaveModal';
 import COLOUR_DATA from '../../constants/colours';
@@ -237,18 +238,19 @@ class PeerModal extends React.Component {
 
 PeerModal.propTypes = {
   userInfo: SemesterlyPropTypes.userInfo.isRequired,
-  peers: React.PropTypes.arrayOf(SemesterlyPropTypes.peer).isRequired,
-  liveTimetableCourses: React.PropTypes.arrayOf(SemesterlyPropTypes.course).isRequired,
-  courseToColourIndex: React.PropTypes.shape({
-    '*': React.PropTypes.number,
+  peers: PropTypes.arrayOf(SemesterlyPropTypes.peer).isRequired,
+  liveTimetableCourses: PropTypes.arrayOf(SemesterlyPropTypes.course).isRequired,
+  courseToColourIndex: PropTypes.shape({
+    '*': PropTypes.number,
   }).isRequired,
-  isVisible: React.PropTypes.bool.isRequired,
-  isLoading: React.PropTypes.bool.isRequired,
-  fetchFriends: React.PropTypes.func.isRequired,
-  saveSettings: React.PropTypes.func.isRequired,
-  changeUserInfo: React.PropTypes.func.isRequired,
-  togglePeerModal: React.PropTypes.func.isRequired,
-  openSignUpModal: React.PropTypes.func.isRequired,
+  isVisible: PropTypes.bool.isRequired,
+  isLoading: PropTypes.bool.isRequired,
+  fetchFriends: PropTypes.func.isRequired,
+  saveSettings: PropTypes.func.isRequired,
+  changeUserInfo: PropTypes.func.isRequired,
+  togglePeerModal: PropTypes.func.isRequired,
+  openSignUpModal: PropTypes.func.isRequired,
 };
 
 export default PeerModal;
+
