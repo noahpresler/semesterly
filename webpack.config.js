@@ -104,7 +104,7 @@ if (isDev) {
   // don't reload if there is an error
   config.plugins = config.plugins.concat(new webpack.NoEmitOnErrorsPlugin());
     // config.module.loaders = [{
-    //             test: /\.jsx$/,
+    //             __tests__: /\.jsx$/,
     //             exclude: /node_modules/,
     //             loader: "eslint-loader",
     //         }].concat(config.module.loaders);

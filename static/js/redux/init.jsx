@@ -9,7 +9,6 @@ import SemesterlyContainer from './ui/containers/semesterly_container';
 import { fetchMostClassmatesCount, isRegistered } from './actions/user_actions';
 import { loadCachedTimetable, loadTimetable, lockTimetable } from './actions/timetable_actions';
 import { fetchSchoolInfo } from './actions/school_actions';
-import { currSem } from './reducers/semester_reducer';
 import { fetchCourseClassmates, setCourseInfo } from './actions/modal_actions';
 import {
     browserSupportsLocalStorage,
@@ -21,20 +20,12 @@ import {
 import { addTTtoGCal } from './actions/calendar_actions';
 import * as ActionTypes from './constants/actionTypes';
 
-export const store = createStore(rootReducer,
+const store = createStore(rootReducer,
     window.devToolsExtension && window.devToolsExtension(),
     applyMiddleware(thunkMiddleware),
 );
 
-// TODO: move to endpoints?
-// get functions used to get backend endpoints
-export const getSchool = () => store.getState().school.school;
-
-export const getSemester = () => {
-  const state = store.getState();
-  const currSemester = currSem(state.semester);
-  return `${currSemester.name}/${currSemester.year}`;
-};
+export default store;
 
 // load initial timetable from user data if logged in or local storage
 const setupTimetables = (userTimetables, allSemesters) => (dispatch) => {
