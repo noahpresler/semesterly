@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import React from 'react';
 import Modal from 'boron/DropModal';
 import classNames from 'classnames';
@@ -239,10 +240,10 @@ class ExplorationModal extends React.Component {
 
     const numSearchResults = advancedSearchResults.length > 0 ?
       <p>returned { advancedSearchResults.length } Search Results</p> : null;
-    const searchResults = advancedSearchResults.map((c, i) => <ExplorationSearchResult
+    const searchResults = advancedSearchResults.map((c, i) => (<ExplorationSearchResult
       key={c.id} code={c.code} name={c.name}
       onClick={() => this.props.setAdvancedSearchResultIndex(i, c.id)}
-    />);
+    />));
     let courseModal = null;
     if (course) {
       let lectureSections = {};
@@ -453,9 +454,9 @@ const ExplorationSearchResult = ({ name, code, onClick }) => (
 );
 
 ExplorationSearchResult.propTypes = {
-  name: React.PropTypes.string.isRequired,
-  code: React.PropTypes.string.isRequired,
-  onClick: React.PropTypes.func.isRequired,
+  name: PropTypes.string.isRequired,
+  code: PropTypes.string.isRequired,
+  onClick: PropTypes.func.isRequired,
 };
 
 ExplorationModal.defaultProps = {
@@ -465,55 +466,56 @@ ExplorationModal.defaultProps = {
 };
 
 ExplorationModal.propTypes = {
-  inRoster: React.PropTypes.bool,
-  addOrRemoveCourse: React.PropTypes.func.isRequired,
-  addOrRemoveOptionalCourse: React.PropTypes.func.isRequired,
-  advancedSearchResults: React.PropTypes.arrayOf(
-    React.PropTypes.shape({
-      areas: React.PropTypes.string.isRequired,
-      campus: React.PropTypes.string.isRequired,
-      code: React.PropTypes.string.isRequired,
-      department: React.PropTypes.string.isRequired,
-      description: React.PropTypes.string.isRequired,
-      evals: React.PropTypes.arrayOf(
-        React.PropTypes.shape({
-          score: React.PropTypes.number.isRequired,
-          summary: React.PropTypes.string.isRequired,
-          year: React.PropTypes.string.isRequired,
+  inRoster: PropTypes.bool,
+  addOrRemoveCourse: PropTypes.func.isRequired,
+  addOrRemoveOptionalCourse: PropTypes.func.isRequired,
+  advancedSearchResults: PropTypes.arrayOf(
+    PropTypes.shape({
+      areas: PropTypes.string.isRequired,
+      campus: PropTypes.string.isRequired,
+      code: PropTypes.string.isRequired,
+      department: PropTypes.string.isRequired,
+      description: PropTypes.string.isRequired,
+      evals: PropTypes.arrayOf(
+        PropTypes.shape({
+          score: PropTypes.number.isRequired,
+          summary: PropTypes.string.isRequired,
+          year: PropTypes.string.isRequired,
         }),
       ).isRequired,
-      exclusions: React.PropTypes.string.isRequired,
-      id: React.PropTypes.number.isRequired,
-      name: React.PropTypes.string.isRequired,
-      num_credits: React.PropTypes.number.isRequired,
-      prerequisites: React.PropTypes.string.isRequired,
+      exclusions: PropTypes.string.isRequired,
+      id: PropTypes.number.isRequired,
+      name: PropTypes.string.isRequired,
+      num_credits: PropTypes.number.isRequired,
+      prerequisites: PropTypes.string.isRequired,
     }),
   ).isRequired,
-  changeUserInfo: React.PropTypes.func.isRequired,
+  changeUserInfo: PropTypes.func.isRequired,
   classmates: SemesterlyPropTypes.classmates,
-  clearPagination: React.PropTypes.func.isRequired,
+  clearPagination: PropTypes.func.isRequired,
   course: SemesterlyPropTypes.course,
-  fetchAdvancedSearchResults: React.PropTypes.func.isRequired,
-  fetchCourseInfo: React.PropTypes.func.isRequired,
-  fetchCourseClassmates: React.PropTypes.func.isRequired,
-  hasHoveredResult: React.PropTypes.bool.isRequired,
-  paginate: React.PropTypes.func.isRequired,
-  isVisible: React.PropTypes.bool.isRequired,
-  isFetching: React.PropTypes.bool.isRequired,
-  page: React.PropTypes.number.isRequired,
-  hideExplorationModal: React.PropTypes.func.isRequired,
+  fetchAdvancedSearchResults: PropTypes.func.isRequired,
+  fetchCourseInfo: PropTypes.func.isRequired,
+  fetchCourseClassmates: PropTypes.func.isRequired,
+  hasHoveredResult: PropTypes.bool.isRequired,
+  paginate: PropTypes.func.isRequired,
+  isVisible: PropTypes.bool.isRequired,
+  isFetching: PropTypes.bool.isRequired,
+  page: PropTypes.number.isRequired,
+  hideExplorationModal: PropTypes.func.isRequired,
   schoolSpecificInfo: SemesterlyPropTypes.schoolSpecificInfo.isRequired,
-  unHoverSection: React.PropTypes.func.isRequired,
-  hoverSection: React.PropTypes.func.isRequired,
-  setAdvancedSearchResultIndex: React.PropTypes.func.isRequired,
-  isSectionLocked: React.PropTypes.func.isRequired,
-  isSectionOnActiveTimetable: React.PropTypes.func.isRequired,
-  react: React.PropTypes.func.isRequired,
-  openSignUpModal: React.PropTypes.func.isRequired,
-  saveSettings: React.PropTypes.func.isRequired,
-  isFetchingClassmates: React.PropTypes.bool.isRequired,
+  unHoverSection: PropTypes.func.isRequired,
+  hoverSection: PropTypes.func.isRequired,
+  setAdvancedSearchResultIndex: PropTypes.func.isRequired,
+  isSectionLocked: PropTypes.func.isRequired,
+  isSectionOnActiveTimetable: PropTypes.func.isRequired,
+  react: PropTypes.func.isRequired,
+  openSignUpModal: PropTypes.func.isRequired,
+  saveSettings: PropTypes.func.isRequired,
+  isFetchingClassmates: PropTypes.bool.isRequired,
   userInfo: SemesterlyPropTypes.userInfo.isRequired,
-  semesterName: React.PropTypes.string.isRequired,
+  semesterName: PropTypes.string.isRequired,
 };
 
 export default ExplorationModal;
+
