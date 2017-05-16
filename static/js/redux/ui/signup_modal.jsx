@@ -1,17 +1,28 @@
 import React from 'react';
 import Modal from 'boron/WaveModal';
+import renderHTML from 'react-render-html';
 
-export class SignupModal extends React.Component {
+class SignupModal extends React.Component {
+  constructor(props) {
+    super(props);
+    this.hide = this.hide.bind(this);
+  }
+
   componentDidMount() {
     if (this.props.isVisible) {
-      this.refs.modal.show();
+      this.modal.show();
     }
   }
 
-  componentDidUpdate(nextProps) {
+  componentDidUpdate() {
     if (this.props.isVisible) {
-      this.refs.modal.show();
+      this.modal.show();
     }
+  }
+
+  hide() {
+    history.replaceState({}, 'Semester.ly', '/');
+    this.props.toggleSignupModal();
   }
 
   render() {
@@ -30,10 +41,10 @@ export class SignupModal extends React.Component {
     };
     return (
       <Modal
-        ref="modal"
+        ref={(c) => { this.modal = c; }}
         className="signup-modal max-modal"
         modalStyle={modalStyle}
-        onHide={this.props.toggleSignupModal}
+        onHide={this.hide}
       >
         {modalHeader}
         <div id="features">
@@ -41,13 +52,13 @@ export class SignupModal extends React.Component {
             <div className="row">
               <div className="col-1-2">
                 <div className="emoji"><i className="fa fa-check" /></div>
-                                Find classes with friends
-                                <img className="sample-slot" src="/static/img/sample_slot.png" />
+                  Find classes with friends
+                  <img className="sample-slot" alt="" src="/static/img/sample_slot.png" />
               </div>
               <div className="col-1-2">
                 <div className="emoji"><i className="fa fa-check" /></div>
-                                Save & name multiple timetables
-                                <img className="sample-slot" src="/static/img/multi_tt_sample.png" />
+                Save & name multiple timetables
+                <img className="sample-slot" alt="" src="/static/img/multi_tt_sample.png" />
               </div>
             </div>
             <div className="row">
@@ -55,16 +66,16 @@ export class SignupModal extends React.Component {
                 <div className="emoji"><i className="fa fa-check" /></div>
                                 Create custom events
                                 <img
+                                  alt=""
                                   className="sample-slot"
                                   src="/static/img/sample_custom_slot_grey.png"
                                 />
               </div>
               <div className="col-1-2">
-                <div
-                  className="emoji"
-                  dangerouslySetInnerHTML={{ __html: twemoji.parse('\uD83D\uDD25') }}
-                />
-                                It's all free
+                <div className="emoji">
+                  {renderHTML(twemoji.parse('\uD83D\uDD25'))}
+                </div>
+                                It&#39;s all free
                                 <h1>More Burritos!</h1>
               </div>
             </div>
@@ -86,3 +97,10 @@ export class SignupModal extends React.Component {
     );
   }
 }
+
+SignupModal.propTypes = {
+  isVisible: React.PropTypes.bool.isRequired,
+  toggleSignupModal: React.PropTypes.func.isRequired,
+};
+
+export default SignupModal;

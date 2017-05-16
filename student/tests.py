@@ -45,7 +45,7 @@ class UserViewTest(APITestCase):
     def test_profile_page_not_signed_in(self):
         self.client.logout()
         response = self.client.get('/user/settings/')
-        self.assertTemplateUsed(response, 'index.html')
+        self.assertRedirects(response, '/signup/')
 
     def test_update_settings(self):
         new_settings = {
@@ -55,6 +55,7 @@ class UserViewTest(APITestCase):
         }
         request = self.factory.patch('/user/settings/', new_settings, format='json')
         force_authenticate(request, user=self.user)
+        request.user = self.user
         view = resolve('/user/settings/').func
         response = view(request)
         self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
@@ -83,6 +84,7 @@ class UserTimetableViewTest(APITestCase):
     def test_get_timetables(self):
         request = self.factory.get('/user/timetables/Winter/1995/', format='json')
         force_authenticate(request, user=self.user)
+        request.user = self.user
         request.subdomain = 'uoft'
         view = resolve('/user/timetables/Winter/1995/').func
         response = view(request, 'Winter', '1995')
@@ -104,6 +106,7 @@ class UserTimetableViewTest(APITestCase):
         }
         request = self.factory.post('/user/timetables/', data, format='json')
         force_authenticate(request, user=self.user)
+        request.user = self.user
         request.subdomain = 'uoft'
         view = resolve('/user/timetables/').func
         response = view(request)
@@ -125,6 +128,7 @@ class UserTimetableViewTest(APITestCase):
         }
         request = self.factory.post('/user/timetables/', data, format='json')
         force_authenticate(request, user=self.user)
+        request.user = self.user
         request.subdomain = 'uoft'
         view = resolve('/user/timetables/').func
         response = view(request)
@@ -141,6 +145,7 @@ class UserTimetableViewTest(APITestCase):
         }
         request = self.factory.post('/user/timetables/', data, format='json')
         force_authenticate(request, user=self.user)
+        request.user = self.user
         request.subdomain = 'uoft'
         view = resolve('/user/timetables/').func
         response = view(request)
@@ -164,6 +169,7 @@ class UserTimetableViewTest(APITestCase):
         PersonalTimetable.objects.create(id=10, name='oldtt', school='uoft', semester=self.sem, student=self.student)
         request = self.factory.post('/user/timetables/', data, format='json')
         force_authenticate(request, user=self.user)
+        request.user = self.user
         request.subdomain = 'uoft'
         view = resolve('/user/timetables/').func
         response = view(request)
@@ -174,6 +180,7 @@ class UserTimetableViewTest(APITestCase):
         PersonalTimetable.objects.create(id=20, name='todelete', school='uoft', semester=self.sem, student=self.student)
         request = self.factory.delete('/user/timetables/Winter/1995/todelete')
         force_authenticate(request, user=self.user)
+        request.user = self.user
         request.subdomain = 'uoft'
         view = resolve('/user/timetables/').func
         response = view(request, 'Winter', '1995', 'todelete')
@@ -236,6 +243,7 @@ class ClassmateViewTest(APITestCase):
     def test_get_classmate_counts(self):
         request = self.factory.get('/user/classmates/Fall/2000/', {'count': True, 'course_ids[]': [1]})
         force_authenticate(request, user=self.user2)
+        request.user = self.user2
         request.subdomain = 'uoft'
         view = resolve('/user/classmates/Fall/2016/').func
         response = view(request, 'Fall', '2000')
@@ -249,6 +257,7 @@ class ClassmateViewTest(APITestCase):
     def test_get_classmates(self):
         request = self.factory.get('/user/classmates/Fall/2000/', {'course_ids[]': [1]})
         force_authenticate(request, user=self.user2)
+        request.user = self.user2
         request.subdomain = 'uoft'
         view = resolve('/user/classmates/Fall/2016/').func
         response = view(request, 'Fall', '2000')
@@ -264,6 +273,7 @@ class ClassmateViewTest(APITestCase):
     def test_find_friends(self):
         request = self.factory.get('/user/classmates/Fall/2000/')
         force_authenticate(request, user=self.user3)
+        request.user = self.user3
         request.subdomain = 'uoft'
         view = resolve('/user/classmates/Fall/2016/').func
         response = view(request, 'Fall', '2000')
@@ -291,6 +301,7 @@ class ReactionTest(APITestCase):
         request = self.factory.post('/user/reactions/', data, format='json')
         request.subdomain = 'uoft'
         force_authenticate(request, user=self.user)
+        request.user = self.user
         view = resolve('/user/reactions/').func
         response = view(request)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
