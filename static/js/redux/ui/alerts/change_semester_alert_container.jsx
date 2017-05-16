@@ -13,7 +13,7 @@ const mapStateToProps = (state) => {
 };
 const mapDispatchToProps = dispatch => ({
   dismissSelf: () => dispatch({ type: ActionTypes.DISMISS_ALERT_CHANGE_SEMESTER }),
-  setSemester,
+  setSemester: semester => dispatch(setSemester(semester)),
 });
 
 const ChangeSemesterAlertContainer = connect(
