@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import React from 'react';
 import Modal from 'boron/WaveModal';
 import * as SemesterlyPropTypes from '../../constants/semesterlyPropTypes';
@@ -101,9 +102,10 @@ class UserAcquisitionModal extends React.Component {
 }
 
 UserAcquisitionModal.propTypes = {
-  isVisible: React.PropTypes.bool.isRequired,
-  toggleUserAcquisitionModal: React.PropTypes.func.isRequired,
+  isVisible: PropTypes.bool.isRequired,
+  toggleUserAcquisitionModal: PropTypes.func.isRequired,
   userInfo: SemesterlyPropTypes.userInfo.isRequired,
 };
 
 export default UserAcquisitionModal;
+

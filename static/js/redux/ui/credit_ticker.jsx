@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import React from 'react';
 
 class CreditTicker extends React.Component {
@@ -52,7 +53,8 @@ class CreditTicker extends React.Component {
 }
 
 CreditTicker.propTypes = {
-  numCredits: React.PropTypes.number.isRequired,
+  numCredits: PropTypes.number.isRequired,
 };
 
 export default CreditTicker;
+

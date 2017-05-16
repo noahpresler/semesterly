@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import React from 'react';
 
 class ChangeSemesterAlert extends React.Component {
@@ -30,10 +31,11 @@ class ChangeSemesterAlert extends React.Component {
 }
 
 ChangeSemesterAlert.propTypes = {
-  dismissSelf: React.PropTypes.func.isRequired,
-  setSemester: React.PropTypes.func.isRequired,
-  desiredSemester: React.PropTypes.number.isRequired,
-  msg: React.PropTypes.string.isRequired,
+  dismissSelf: PropTypes.func.isRequired,
+  setSemester: PropTypes.func.isRequired,
+  desiredSemester: PropTypes.number.isRequired,
+  msg: PropTypes.string.isRequired,
 };
 
 export default ChangeSemesterAlert;
+
