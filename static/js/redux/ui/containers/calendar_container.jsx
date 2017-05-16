@@ -59,6 +59,7 @@ const mapStateToProps = (state) => {
     shareLink,
     shareLinkValid,
     active,
+    uses12HrTime: state.ui.uses12HrTime,
   };
 };
 
