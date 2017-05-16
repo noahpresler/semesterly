@@ -153,8 +153,8 @@ const setup = () => (dispatch) => {
 
   if (browserSupportsLocalStorage() && 'serviceWorker' in navigator) {
     dispatch(setupChromeNotifs());
-    dispatch(showFriendAlert());
   }
+  dispatch(showFriendAlert());
 
   dispatch(handleFlows(initData.featureFlow));
   dispatch(fetchSchoolInfo());
@@ -167,4 +167,4 @@ store.dispatch(
 render(
   <Provider store={store}>
     <SemesterlyContainer />
-  </Provider>, document.getElementById('page'));
+  </Provider>, document.getElementsByClassName('page')[0]);

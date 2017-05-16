@@ -154,7 +154,7 @@ class SearchBar extends React.Component {
             />
           </div>
           <div
-            id="show-exploration"
+            className="show-exploration"
             onMouseDown={this.props.showExplorationModal}
           >
             <i className="fa fa-compass" />
