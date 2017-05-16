@@ -8,7 +8,7 @@ import {
 } from '../constants/endpoints';
 import { FULL_WEEK_LIST } from '../constants/constants';
 import { getActiveTimetable } from './user_actions';
-import { store } from '../init';
+import store from '../init';
 import { getCourseShareLink } from '../helpers/timetable_helpers';
 import { currSem } from '../reducers/semester_reducer';
 import * as ActionTypes from '../constants/actionTypes';
