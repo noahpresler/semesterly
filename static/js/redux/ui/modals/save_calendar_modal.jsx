@@ -1,6 +1,6 @@
 import React from 'react';
 import Modal from 'boron/WaveModal';
-import * as PropTypes from '../../constants/propTypes';
+import * as SemesterlyPropTypes from '../../constants/semesterlyPropTypes';
 
 class SaveCalendarModal extends React.Component {
   componentDidMount() {
@@ -115,7 +115,7 @@ SaveCalendarModal.propTypes = {
   hasDownloaded: React.PropTypes.bool.isRequired,
   isUploading: React.PropTypes.bool.isRequired,
   hasUploaded: React.PropTypes.bool.isRequired,
-  userInfo: PropTypes.userInfo.isRequired,
+  userInfo: SemesterlyPropTypes.userInfo.isRequired,
   isVisible: React.PropTypes.bool.isRequired,
 };
 

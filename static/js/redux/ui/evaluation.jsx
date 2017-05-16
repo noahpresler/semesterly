@@ -1,7 +1,7 @@
 import React from 'react';
 import classnames from 'classnames';
 import renderHTML from 'react-render-html';
-import * as PropTypes from '../constants/propTypes';
+import * as SemesterlyPropTypes from '../constants/semesterlyPropTypes';
 
 class Evaluation extends React.Component {
   render() {
@@ -81,7 +81,7 @@ Evaluation.defaultProps = {
 
 Evaluation.propTypes = {
   mini: React.PropTypes.bool,
-  evalData: PropTypes.evaluation.isRequired,
+  evalData: SemesterlyPropTypes.evaluation.isRequired,
 };
 
 export default Evaluation;

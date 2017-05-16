@@ -14,4 +14,4 @@ install:
 script:
   - npm run build
   - npm run lint
-  - python manage.py test
+  - python manage.py __tests__
