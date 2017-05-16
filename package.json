@@ -78,7 +78,10 @@
     "webpack-dev-server": "^2.4.2"
   },
   "jest": {
-    "setupTestFrameworkScriptFile": "./test_env.js"
+    "setupTestFrameworkScriptFile": "./test_env.jsx",
+    "transform": {
+  	"^.+\\.jsx?$": "babel-jest"
+    }
   },
   "scripts": {
     "test": "jest --notify",
@@ -101,11 +104,13 @@
     "lint-staged"
   ],
   "devDependencies": {
+    "babel-jest": "^20.0.1",
     "jest": "^20.0.1",
     "lint-staged": "^3.4.0",
     "node-sass": "^4.5.2",
     "precommit-hook": "^3.0.0",
     "react-test-utils": "0.0.1",
+    "regenerator-runtime": "^0.10.5",
     "sass-loader": "^6.0.3",
     "webpack": "^2.4.1"
   },
