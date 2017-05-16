@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import React from 'react';
 import Modal from 'boron/WaveModal';
 import Textbook from '../textbook';
@@ -48,14 +49,14 @@ class TextbookModal extends React.Component {
 
     const keys = Object.keys(tbs).sort((a, b) => tbs[b].length - tbs[a].length);
     const textbookList = keys.map(courseName =>
-      <div key={courseName} className="tb-list-entry">
+      (<div key={courseName} className="tb-list-entry">
         <h3 className="modal-module-header">{courseName}</h3>
         {
                     tbs[courseName].length > 0 ? _.uniq(tbs[courseName], 'isbn').map(tb =>
                       <Textbook tb={tb} key={tb.isbn} />) :
                     <p className="no-tbs">No textbooks found for this course.</p>
                 }
-      </div>,
+      </div>),
         );
 
     const exists = x => x && x.length > 0 && x !== 'Cannot be found';
@@ -178,10 +179,11 @@ class TextbookModal extends React.Component {
 }
 
 TextbookModal.propTypes = {
-  isVisible: React.PropTypes.bool.isRequired,
-  isLoading: React.PropTypes.bool.isRequired,
-  toggleTextbookModal: React.PropTypes.func.isRequired,
-  liveTimetableCourses: React.PropTypes.arrayOf(SemesterlyPropTypes.course).isRequired,
+  isVisible: PropTypes.bool.isRequired,
+  isLoading: PropTypes.bool.isRequired,
+  toggleTextbookModal: PropTypes.func.isRequired,
+  liveTimetableCourses: PropTypes.arrayOf(SemesterlyPropTypes.course).isRequired,
 };
 
 export default TextbookModal;
+
