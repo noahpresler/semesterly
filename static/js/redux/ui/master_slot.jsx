@@ -1,7 +1,6 @@
 import React from 'react';
 import ClickOutHandler from 'react-onclickout';
 import COLOUR_DATA from '../constants/colours';
-import { getCourseShareLink } from '../helpers/timetable_helpers';
 
 class MasterSlot extends React.Component {
   constructor(props) {
@@ -79,7 +78,7 @@ class MasterSlot extends React.Component {
     const profDisp = this.props.professors == null ? null : <h3>{ prof }</h3>;
     const shareLink = this.state.shareLinkShown ?
             (<ShareLink
-              link={getCourseShareLink(this.props.course.code)}
+              link={this.props.getShareLink(this.props.course.code)}
               onClickOut={this.hideShareLink}
             />) :
             null;
@@ -178,6 +177,7 @@ MasterSlot.propTypes = {
   onTimetable: React.PropTypes.bool.isRequired,
   fetchCourseInfo: React.PropTypes.func.isRequired,
   removeCourse: React.PropTypes.func,
+  getShareLink: React.PropTypes.func.isRequired,
 };
 
 export const ShareLink = ({ link, onClickOut }) => (
