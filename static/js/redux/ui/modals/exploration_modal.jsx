@@ -7,7 +7,7 @@ import { ShareLink } from '../master_slot';
 import {
   Filter, SelectedFilter, SelectedFilterSection,
 } from '../advanced_search_filters';
-import * as PropTypes from '../../constants/propTypes';
+import * as SemesterlyPropTypes from '../../constants/semesterlyPropTypes';
 import { VERBOSE_DAYS } from '../../constants/constants';
 import TimeSelector from '../time_selector';
 
@@ -490,9 +490,9 @@ ExplorationModal.propTypes = {
     }),
   ).isRequired,
   changeUserInfo: React.PropTypes.func.isRequired,
-  classmates: PropTypes.classmates,
+  classmates: SemesterlyPropTypes.classmates,
   clearPagination: React.PropTypes.func.isRequired,
-  course: PropTypes.course,
+  course: SemesterlyPropTypes.course,
   fetchAdvancedSearchResults: React.PropTypes.func.isRequired,
   fetchCourseInfo: React.PropTypes.func.isRequired,
   fetchCourseClassmates: React.PropTypes.func.isRequired,
@@ -502,7 +502,7 @@ ExplorationModal.propTypes = {
   isFetching: React.PropTypes.bool.isRequired,
   page: React.PropTypes.number.isRequired,
   hideExplorationModal: React.PropTypes.func.isRequired,
-  schoolSpecificInfo: PropTypes.schoolSpecificInfo.isRequired,
+  schoolSpecificInfo: SemesterlyPropTypes.schoolSpecificInfo.isRequired,
   unHoverSection: React.PropTypes.func.isRequired,
   hoverSection: React.PropTypes.func.isRequired,
   setAdvancedSearchResultIndex: React.PropTypes.func.isRequired,
@@ -512,7 +512,7 @@ ExplorationModal.propTypes = {
   openSignUpModal: React.PropTypes.func.isRequired,
   saveSettings: React.PropTypes.func.isRequired,
   isFetchingClassmates: React.PropTypes.bool.isRequired,
-  userInfo: PropTypes.userInfo.isRequired,
+  userInfo: SemesterlyPropTypes.userInfo.isRequired,
   semesterName: React.PropTypes.string.isRequired,
 };
 

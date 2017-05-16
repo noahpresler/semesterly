@@ -1,5 +1,5 @@
 import React from 'react';
-import * as PropTypes from '../constants/propTypes';
+import * as SemesterlyPropTypes from '../constants/semesterlyPropTypes';
 
 const Textbook = ({ tb }) => {
   const exists = x => x && x.length > 0 && x !== 'Cannot be found';
@@ -44,7 +44,7 @@ const Textbook = ({ tb }) => {
 };
 
 Textbook.propTypes = {
-  tb: PropTypes.textbook.isRequired,
+  tb: SemesterlyPropTypes.textbook.isRequired,
 };
 
 export default Textbook;
