@@ -33,6 +33,7 @@ const mapStateToProps = (state) => {
     isCourseInRoster: courseId => activeTimetable.courses.some(c => c.id === courseId),
     mandatoryCourses,
     optionalCourses,
+    hasLoaded: !state.timetables.isFetching,
   };
 };
 
