@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import React from 'react';
 import Modal from 'boron/WaveModal';
 import { browserSupportsLocalStorage } from '../../util';
@@ -118,10 +119,11 @@ class TutModal extends React.Component {
 }
 
 TutModal.propTypes = {
-  textbookModalVisible: React.PropTypes.bool.isRequired,
-  signUpModalVisible: React.PropTypes.bool.isRequired,
-  courseModalVisible: React.PropTypes.bool.isRequired,
-  finalExamModalVisible: React.PropTypes.bool.isRequired,
+  textbookModalVisible: PropTypes.bool.isRequired,
+  signUpModalVisible: PropTypes.bool.isRequired,
+  courseModalVisible: PropTypes.bool.isRequired,
+  finalExamModalVisible: PropTypes.bool.isRequired,
 };
 
 export default TutModal;
+
