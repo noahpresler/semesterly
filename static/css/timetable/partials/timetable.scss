@@ -125,7 +125,7 @@ button {
 }
 
 .fc-right {
-  #share-course-link-wrapper {
+  .share-course-link-wrapper {
     background-color: $geee;
     border-radius: 2px;
     height: 38px;
@@ -135,7 +135,7 @@ button {
     position: absolute;
     z-index: 1000;
 
-    #share-course-link {
+    .share-course-link {
       color: $g222;
       font-size: 14px;
       font-weight: 400;
