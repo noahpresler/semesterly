@@ -1,6 +1,6 @@
 import React from 'react';
 import classnames from 'classnames';
-import * as PropTypes from '../constants/propTypes';
+import * as SemesterlyPropTypes from '../constants/semesterlyPropTypes';
 
 class SearchSideBar extends React.Component {
   constructor(props) {
@@ -67,15 +67,15 @@ SearchSideBar.defaultProps = {
 };
 
 SearchSideBar.propTypes = {
-  hovered: PropTypes.searchResult,
+  hovered: SemesterlyPropTypes.searchResult,
   lectureSections: React.PropTypes.shape({
-    '*': PropTypes.section,
+    '*': SemesterlyPropTypes.section,
   }).isRequired,
   tutorialSections: React.PropTypes.shape({
-    '*': PropTypes.section,
+    '*': SemesterlyPropTypes.section,
   }),
   practicalSections: React.PropTypes.shape({
-    '*': PropTypes.section,
+    '*': SemesterlyPropTypes.section,
   }),
   addCourse: React.PropTypes.func.isRequired,
   isSectionLocked: React.PropTypes.func.isRequired,

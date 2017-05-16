@@ -2,7 +2,7 @@ import React from 'react';
 import ClickOutHandler from 'react-onclickout';
 import classNames from 'classnames';
 import SearchSideBarContainer from './containers/search_side_bar_container';
-import * as PropTypes from '../constants/propTypes';
+import * as SemesterlyPropTypes from '../constants/semesterlyPropTypes';
 import SearchResult from './search_result';
 
 class SearchBar extends React.Component {
@@ -178,10 +178,10 @@ SearchBar.propTypes = {
   isCourseOptional: React.PropTypes.func.isRequired,
   isFetching: React.PropTypes.bool.isRequired,
   maybeSetSemester: React.PropTypes.func.isRequired,
-  searchResults: React.PropTypes.arrayOf(PropTypes.searchResult).isRequired,
-  semester: PropTypes.semester.isRequired,
+  searchResults: React.PropTypes.arrayOf(SemesterlyPropTypes.searchResult).isRequired,
+  semester: SemesterlyPropTypes.semester.isRequired,
   showExplorationModal: React.PropTypes.func.isRequired,
-  allSemesters: React.PropTypes.arrayOf(PropTypes.semester).isRequired,
+  allSemesters: React.PropTypes.arrayOf(SemesterlyPropTypes.semester).isRequired,
 };
 
 export default SearchBar;
