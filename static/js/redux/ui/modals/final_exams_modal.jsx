@@ -3,7 +3,7 @@ import Modal from 'boron/WaveModal';
 import COLOUR_DATA from '../../constants/colours';
 import { ShareLink } from '../master_slot';
 import getExamShareLink from '../../helpers/exam_helpers';
-import * as PropTypes from '../../constants/propTypes';
+import * as SemesterlyPropTypes from '../../constants/semesterlyPropTypes';
 
 const InSlot = (props) => {
   let displayTime = (props.time) ? <h3 className="time">{ props.time }</h3> : null;
@@ -425,9 +425,9 @@ FinalExamsModal.propTypes = {
   }).isRequired,
   activeLoadedTimetableName: React.PropTypes.string.isRequired,
   hasNoCourses: React.PropTypes.bool.isRequired,
-  courses: React.PropTypes.arrayOf(PropTypes.course).isRequired,
+  courses: React.PropTypes.arrayOf(SemesterlyPropTypes.course).isRequired,
   loadingCachedTT: React.PropTypes.bool.isRequired,
-  userInfo: PropTypes.userInfo.isRequired,
+  userInfo: SemesterlyPropTypes.userInfo.isRequired,
   shareLink: React.PropTypes.string,
   hideFinalExamsModal: React.PropTypes.func.isRequired,
   logFinalExamView: React.PropTypes.func.isRequired,

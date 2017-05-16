@@ -1,7 +1,7 @@
 import React from 'react';
 import ClickOutHandler from 'react-onclickout';
 import classnames from 'classnames';
-import * as PropTypes from '../constants/propTypes';
+import * as SemesterlyPropTypes from '../constants/semesterlyPropTypes';
 
 export class Filter extends React.Component {
   constructor(props) {
@@ -69,7 +69,7 @@ Filter.propTypes = {
   results: React.PropTypes.arrayOf(React.PropTypes.string).isRequired,
   show: React.PropTypes.bool.isRequired,
   filterType: React.PropTypes.string.isRequired,
-  schoolSpecificInfo: PropTypes.schoolSpecificInfo.isRequired,
+  schoolSpecificInfo: SemesterlyPropTypes.schoolSpecificInfo.isRequired,
   add: React.PropTypes.func.isRequired,
   isFiltered: React.PropTypes.func.isRequired,
   onClickOut: React.PropTypes.func.isRequired,

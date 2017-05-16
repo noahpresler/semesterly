@@ -3,7 +3,7 @@ import Radium, { StyleRoot } from 'radium';
 import { DropTarget } from 'react-dnd';
 import COLOUR_DATA from '../constants/colours';
 import { DRAG_TYPES, HALF_HOUR_HEIGHT } from '../constants/constants';
-import * as PropTypes from '../constants/propTypes';
+import * as SemesterlyPropTypes from '../constants/semesterlyPropTypes';
 
 function convertToHalfHours(str) {
   const start = parseInt(str.split(':')[0], 10);
@@ -267,7 +267,7 @@ class Slot extends React.Component {
 Slot = Radium(Slot);
 
 Slot.propTypes = {
-  classmates: React.PropTypes.arrayOf(PropTypes.classmates).isRequired,
+  classmates: React.PropTypes.arrayOf(SemesterlyPropTypes.classmates).isRequired,
   colourId: React.PropTypes.number.isRequired,
   course: React.PropTypes.number.isRequired,
   depth_level: React.PropTypes.number.isRequired,
