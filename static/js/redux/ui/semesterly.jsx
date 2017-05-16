@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import React from 'react';
 import DayCalendarContainer from './containers/day_calendar_container';
 import CalendarContainer from './containers/calendar_container';
@@ -151,20 +152,27 @@ class Semesterly extends React.Component {
                   href="mailto:contact@semester.ly?Subject=Semesterly"
                 >Contact us</a></li>
                 <li className="footer-button" role="presentation"><a
-                  target="_blank" rel="noopener noreferrer"
+                  target="_blank"
+                  rel="noopener noreferrer"
                   href="http://goo.gl/forms/YSltU2YI54PC9sXw1"
                 >Feedback</a>
                 </li>
-                <li className="footer-button" role="presentation"><a
-                  target="_blank" rel="noopener noreferrer"
-                  href="https://www.facebook.com/semesterly/"
-                >Facebook</a>
+                <li
+                  className="footer-button"
+                  role="presentation"
+                >
+                  <a
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    href="https://www.facebook.com/semesterly/"
+                  >Facebook</a>
                 </li>
                 <li className="footer-button">
                   <div
                     className="fb-like"
                     data-href="https://www.facebook.com/semesterly/"
-                    data-layout="button_count" data-action="like"
+                    data-layout="button_count"
+                    data-action="like"
                     data-show-faces="true"
                     data-share="false"
                   />
@@ -179,16 +187,17 @@ class Semesterly extends React.Component {
 }
 
 Semesterly.propTypes = {
-  PgActive: React.PropTypes.number.isRequired,
-  PgCount: React.PropTypes.number.isRequired,
-  alertChangeSemester: React.PropTypes.bool.isRequired,
-  alertConflict: React.PropTypes.bool.isRequired,
-  alertEnableNotifications: React.PropTypes.bool.isRequired,
-  alertFacebookFriends: React.PropTypes.bool.isRequired,
-  alertNewTimetable: React.PropTypes.bool.isRequired,
-  alertTimetableExists: React.PropTypes.bool.isRequired,
-  saveTimetable: React.PropTypes.func.isRequired,
-  setPgActive: React.PropTypes.func.isRequired,
+  PgActive: PropTypes.number.isRequired,
+  PgCount: PropTypes.number.isRequired,
+  alertChangeSemester: PropTypes.bool.isRequired,
+  alertConflict: PropTypes.bool.isRequired,
+  alertEnableNotifications: PropTypes.bool.isRequired,
+  alertFacebookFriends: PropTypes.bool.isRequired,
+  alertNewTimetable: PropTypes.bool.isRequired,
+  alertTimetableExists: PropTypes.bool.isRequired,
+  saveTimetable: PropTypes.func.isRequired,
+  setPgActive: PropTypes.func.isRequired,
 };
 
 export default Semesterly;
+

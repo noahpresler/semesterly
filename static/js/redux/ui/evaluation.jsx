@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import React from 'react';
 import classnames from 'classnames';
 import renderHTML from 'react-render-html';
@@ -80,7 +81,7 @@ Evaluation.defaultProps = {
 };
 
 Evaluation.propTypes = {
-  mini: React.PropTypes.bool,
+  mini: PropTypes.bool,
   evalData: SemesterlyPropTypes.evaluation.isRequired,
 };
 

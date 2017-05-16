@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import React from 'react';
 
 class TimetableExistsAlert extends React.Component {
@@ -19,7 +20,8 @@ class TimetableExistsAlert extends React.Component {
 }
 
 TimetableExistsAlert.propTypes = {
-  dismissSelf: React.PropTypes.func.isRequired,
+  dismissSelf: PropTypes.func.isRequired,
 };
 
 export default TimetableExistsAlert;
+
