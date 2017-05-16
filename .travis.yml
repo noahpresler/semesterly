@@ -10,6 +10,7 @@ env:
 install:
   - npm -g install webpack
   - npm install
+  - npm -g install jest
   - pip install --user -r requirements.txt
 script:
   - npm run build
