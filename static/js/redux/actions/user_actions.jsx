@@ -24,11 +24,6 @@ import { currSem } from '../reducers/semester_reducer';
 
 let autoSaveTimer;
 
-export const getUserInfo = json => ({
-  type: ActionTypes.USER_INFO_RECEIVED,
-  data: json,
-});
-
 export const requestUserInfo = () => ({
   type: ActionTypes.REQUEST_USER_INFO,
 });
