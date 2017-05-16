@@ -6,7 +6,7 @@ import COLOUR_DATA from '../constants/colours';
 import TimetableNameInputContainer from './containers/timetable_name_input_container';
 import CreditTickerContainer from './containers/credit_ticker_container';
 import Textbook from './textbook';
-import * as PropTypes from '../constants/propTypes';
+import * as SemesterlyPropTypes from '../constants/semesterlyPropTypes';
 
 class SideBar extends React.Component {
   constructor(props) {
@@ -69,6 +69,7 @@ class SideBar extends React.Component {
                 course={c}
                 fetchCourseInfo={() => this.props.fetchCourseInfo(c.id)}
                 removeCourse={() => this.props.removeCourse(c.id)}
+                getShareLink={this.props.getShareLink}
               />);
             }) : null;
     const usedColourIndices = Object.values(this.props.courseToColourIndex);
@@ -92,6 +93,7 @@ class SideBar extends React.Component {
         course={c}
         fetchCourseInfo={() => this.props.fetchCourseInfo(c.id)}
         removeCourse={() => this.props.removeOptionalCourse(c)}
+        getShareLink={this.props.getShareLink}
       />);
     }) : null;
     const dropItDown = savedTimetables && savedTimetables.length !== 0 ?
@@ -210,7 +212,7 @@ SideBar.propTypes = {
   courseToColourIndex: React.PropTypes.shape({
     id: React.PropTypes.string,
   }).isRequired,
-  classmates: PropTypes.classmates.isRequired,
+  classmates: SemesterlyPropTypes.classmates.isRequired,
   optionalCourses: React.PropTypes.arrayOf(React.PropTypes.shape({
     id: React.PropTypes.number,
     slots: React.PropTypes.arrayOf(React.PropTypes.shape({
@@ -247,6 +249,7 @@ SideBar.propTypes = {
   avgRating: React.PropTypes.number,
   examSupportedSemesters: React.PropTypes.arrayOf(React.PropTypes.number).isRequired,
   hasLoaded: React.PropTypes.bool.isRequired,
+  getShareLink: React.PropTypes.func.isRequired,
 };
 
 export default SideBar;

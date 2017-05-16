@@ -3,7 +3,7 @@ import { index as IntervalTree, matches01 as getIntersections } from 'static-int
 import Slot from './slot';
 import CustomSlot from './custom_slot';
 import COLOUR_DATA from '../constants/colours';
-import * as PropTypes from '../constants/propTypes';
+import * as SemesterlyPropTypes from '../constants/semesterlyPropTypes';
 
 class SlotManager extends React.Component {
 
@@ -199,12 +199,12 @@ SlotManager.propTypes = {
   addCustomSlot: React.PropTypes.func.isRequired,
   fetchCourseInfo: React.PropTypes.func.isRequired,
   days: React.PropTypes.arrayOf(React.PropTypes.string).isRequired,
-  timetable: PropTypes.timetable.isRequired,
+  timetable: SemesterlyPropTypes.timetable.isRequired,
   courseToColourIndex: React.PropTypes.shape({
     '*': React.PropTypes.number,
   }).isRequired,
   classmates: React.PropTypes.func.isRequired,
-  custom: React.PropTypes.arrayOf(React.PropTypes.oneOfType([PropTypes.customSlot,
+  custom: React.PropTypes.arrayOf(React.PropTypes.oneOfType([SemesterlyPropTypes.customSlot,
     React.PropTypes.shape({})])).isRequired,
   primaryDisplayAttribute: React.PropTypes.string.isRequired,
   socialSections: React.PropTypes.bool,
