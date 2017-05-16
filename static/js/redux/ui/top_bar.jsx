@@ -68,7 +68,8 @@ class TopBar extends React.Component {
     return (
       <div className="top-bar">
         <img
-          alt="logo" className="semesterly-logo no-print"
+          alt="logo"
+          className="semesterly-logo no-print"
           src="/static/img/logo2.0-32x32.png"
         />
         <div className="semesterly-name no-print">Semester.ly</div>

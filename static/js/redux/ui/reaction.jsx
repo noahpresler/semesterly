@@ -1,4 +1,6 @@
+import PropTypes from 'prop-types';
 import React from 'react';
+import twemoji from 'twemoji';
 import renderHTML from 'react-render-html';
 import classNames from 'classnames';
 import REACTION_MAP from '../constants/reactions';
@@ -47,7 +49,8 @@ class Reaction extends React.Component {
         onClick={this.toggleSelected}
       >
         <div
-          className="emoji" style={emojiStyle}
+          className="emoji"
+          style={emojiStyle}
         >
           {renderHTML(twemoji.parse(REACTION_MAP[this.props.emoji].unicode))}
         </div>
@@ -89,10 +92,11 @@ Reaction.propTypes = {
     }
     return new Error(`Invalid emoji in ${componentName}`);
   },
-  total: React.PropTypes.number.isRequired,
-  count: React.PropTypes.number.isRequired,
-  react: React.PropTypes.func.isRequired,
-  selected: React.PropTypes.bool,
+  total: PropTypes.number.isRequired,
+  count: PropTypes.number.isRequired,
+  react: PropTypes.func.isRequired,
+  selected: PropTypes.bool,
 };
 
 export default Reaction;
+

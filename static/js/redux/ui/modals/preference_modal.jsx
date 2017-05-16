@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import React from 'react';
 import Modal from 'boron/FadeModal';
 import SortMenuContainer from '../containers/sort_menu_container';
@@ -67,10 +68,11 @@ class PreferenceModal extends React.Component {
 }
 
 PreferenceModal.propTypes = {
-  toggleConflicts: React.PropTypes.func.isRequired,
-  withConflicts: React.PropTypes.bool.isRequired,
-  togglePreferenceModal: React.PropTypes.func.isRequired,
-  isVisible: React.PropTypes.bool.isRequired,
+  toggleConflicts: PropTypes.func.isRequired,
+  withConflicts: PropTypes.bool.isRequired,
+  togglePreferenceModal: PropTypes.func.isRequired,
+  isVisible: PropTypes.bool.isRequired,
 };
 
 export default PreferenceModal;
+
