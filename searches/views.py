@@ -13,7 +13,7 @@ from student.models import Student
 from student.utils import get_student
 from timetable.models import Semester, Course
 from timetable.utils import ValidateSubdomainMixin
-from courses.views import get_detailed_course_json, get_basic_course_json
+from courses.serializers import get_detailed_course_json, get_basic_course_json
 
 
 def get_course_matches(school, query, semester):
