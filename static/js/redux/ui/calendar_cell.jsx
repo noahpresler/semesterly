@@ -30,10 +30,10 @@ const dragTarget = {
     };
     props.updateCustomSlot(newValues, id);
   },
-    // TODO:
-    // canDrop(props, monitor) {
-    //   return Math.floor(convertToHalfHours(monitor.getItem().timeEnd)/2) < props.endHour
-    // }
+  canDrop(props, monitor) {
+    // console.log(Math.floor(convertToHalfHours(monitor.getItem().timeEnd)/2));
+    return Math.floor(convertToHalfHours(monitor.getItem().timeEnd) / 2) < props.endHour;
+  },
 };
 
 function collectDragDrop(connect) { // inject props as drop target
@@ -77,16 +77,12 @@ const createTarget = {
   drop(props, monitor) {
     let { timeStart } = monitor.getItem();
     const { id } = monitor.getItem();
+
     let timeEnd = props.time;
     if (timeStart > timeEnd) {
       [timeStart, timeEnd] = [timeEnd, timeStart];
     }
-        // props.addCustomSlot(timeStart, timeEnd, props.day, false, new Date().getTime())
     props.updateCustomSlot({ preview: false }, id);
-  },
-  canDrop(props, monitor) { // new custom slot must start and end on the same day
-    const { day } = monitor.getItem();
-    return day === props.day;
   },
   hover(props, monitor) {
     if (props.time === lastPreview) {
