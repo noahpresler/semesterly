@@ -1,62 +1,22 @@
 import collections
-import itertools
 import json
-import re
-from pytz import timezone
 from datetime import datetime
 
-from django.db.models import Count
-from django.forms import model_to_dict
 from django.http import HttpResponse
 from django.shortcuts import render_to_response, get_object_or_404
 from django.template import RequestContext
+from pytz import timezone
 from rest_framework import status
-from rest_framework.views import APIView
 from rest_framework.response import Response
+from rest_framework.views import APIView
 
 from analytics.models import SharedCourseView
+from courses.serializers import get_detailed_course_json, get_basic_course_json
 from student.models import Student
 from student.utils import get_classmates_from_course_id
 from timetable.models import Semester, Course, Updates
 from timetable.school_mappers import school_code_to_name
 from timetable.utils import validate_subdomain, ValidateSubdomainMixin, FeatureFlowView
-
-
-def get_detailed_course_json(school, course, sem, student=None):
-    json_data = get_basic_course_json(course, sem, ['prerequisites', 'exclusions', 'areas'])
-    json_data['eval_info'] = course.eval_add_unique_term_year_flag()
-    json_data['related_courses'] = course.get_related_course_info(sem, limit=5)
-    json_data['reactions'] = course.get_reactions(student)
-    json_data['textbooks'] = course.get_textbooks(sem)
-    json_data['integrations'] = list(course.get_course_integrations())
-    json_data['regexed_courses'] = course.get_regexed_courses(school)
-    json_data['popularity_percent'] = course.get_percentage_enrolled(sem)
-    return json_data
-
-
-def get_basic_course_json(course, sem, extra_model_fields=None):
-    extra_model_fields = extra_model_fields or []
-    basic_fields = 'code name id description department num_credits areas campus'.split()
-    course_json = model_to_dict(course, basic_fields + extra_model_fields)
-    course_json['evals'] = course.get_eval_info()
-    course_json['integrations'] = list(course.get_course_integrations())
-    course_json['sections'] = {}
-
-    course_section_list = sorted(course.section_set.filter(semester=sem),
-                                 key=lambda section: section.section_type)
-
-    # TODO: flatten dictionary with one key
-    for section_type, sections in itertools.groupby(course_section_list, lambda s: s.section_type):
-        course_json['sections'][section_type] = {
-            section.meeting_section: get_section_offerings(section) for section in sections
-        }
-
-    return course_json
-
-
-def get_section_offerings(section):
-    """ Return a list of model dicts of each offering of a section. """
-    return [dict(model_to_dict(co), **model_to_dict(section)) for co in section.offering_set.all()]
 
 
 # TODO: use CBV
