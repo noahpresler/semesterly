@@ -1,4 +1,5 @@
 import logging
+import itertools
 
 from braces.views import CsrfExemptMixin
 from django.template.loader import get_template
@@ -12,9 +13,7 @@ from rest_framework.views import APIView
 from analytics.views import *
 from student.models import Student
 from student.utils import convert_tt_to_dict
-from timetable.utils import *
-from timetable.utils import update_locked_sections, TimetableGenerator, ValidateSubdomainMixin
-
+from timetable.utils import update_locked_sections, TimetableGenerator, ValidateSubdomainMixin, FeatureFlowView
 
 hashids = Hashids(salt="x98as7dhg&h*askdj^has!kj?xz<!9")
 logger = logging.getLogger(__name__)
@@ -76,10 +75,7 @@ def manifest_json(request, js):
 
 @csrf_exempt
 def log_final_exam_view(request):
-    try:
-        student = Student.objects.get(user=request.user)
-    except:
-        student = None
+    student = get_object_or_404(Student, user=request.user)
     FinalExamModalView.objects.create(
         student=student,
         school=request.subdomain
@@ -105,7 +101,6 @@ class TimetableView(CsrfExemptMixin, ValidateSubdomainMixin, APIView):
                     if params['semester'] == "F" \
                     else Semester.objects.get(name="Spring", year="2017")
 
-        sid = params['sid']
         course_ids = params['courseSections'].keys()
         courses = [Course.objects.get(id=cid) for cid in course_ids]
         locked_sections = params['courseSections']
@@ -125,7 +120,7 @@ class TimetableView(CsrfExemptMixin, ValidateSubdomainMixin, APIView):
         opt_course_ids = params.get('optionCourses', [])
         max_optional = params.get('numOptionCourses', len(opt_course_ids))
         optional_courses = [Course.objects.get(id=cid) for cid in opt_course_ids]
-        optional_course_subsets = [subset for k in range(max_optional, -1, -1) \
+        optional_course_subsets = [subset for k in range(max_optional, -1, -1)
                                    for subset in itertools.combinations(optional_courses, k)]
 
         custom_events = params.get('customSlots', [])
@@ -135,7 +130,7 @@ class TimetableView(CsrfExemptMixin, ValidateSubdomainMixin, APIView):
                                        custom_events,
                                        params['preferences'],
                                        opt_course_ids)
-        result = [timetable for opt_courses in optional_course_subsets \
+        result = [timetable for opt_courses in optional_course_subsets
                   for timetable in generator.courses_to_timetables(courses + list(opt_courses))]
 
         # updated roster object
