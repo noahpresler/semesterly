@@ -37,6 +37,9 @@ const customSlots = (state = [], action) => {
       return [...state.slice(0, dSlotIndex), ...state.slice(dSlotIndex + 1, state.length)];
     }
 
+    case ActionTypes.CLEAR_CUSTOM_SLOTS:
+      return [];
+
     default:
       return state;
   }
