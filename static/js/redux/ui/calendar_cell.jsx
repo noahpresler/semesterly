@@ -31,8 +31,12 @@ const dragTarget = {
     props.updateCustomSlot(newValues, id);
   },
   canDrop(props, monitor) {
-    // console.log(Math.floor(convertToHalfHours(monitor.getItem().timeEnd)/2));
-    return Math.floor(convertToHalfHours(monitor.getItem().timeEnd) / 2) < props.endHour;
+    const { timeStart, timeEnd } = monitor.getItem();
+    const duration = convertToHalfHours(timeEnd) - convertToHalfHours(timeStart);
+    const desiredStart = convertToHalfHours(props.time);
+    const desiredEnd = desiredStart + duration;
+
+    return (Math.floor(desiredEnd) / 2) < props.endHour + 1;
   },
 };
 
