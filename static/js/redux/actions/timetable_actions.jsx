@@ -183,6 +183,9 @@ export const nullifyTimetable = () => (dispatch) => {
   dispatch({
     type: ActionTypes.CLEAR_OPTIONAL_COURSES,
   });
+  dispatch({
+    type: ActionTypes.CLEAR_CUSTOM_SLOTS,
+  });
 };
 
 // loads timetable from localStorage. assumes that the browser supports localStorage
