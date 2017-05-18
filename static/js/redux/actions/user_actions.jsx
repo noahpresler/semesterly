@@ -21,6 +21,7 @@ import { store } from '../init';
 import { getNumberedName, loadTimetable, nullifyTimetable } from './timetable_actions';
 import { MAX_TIMETABLE_NAME_LENGTH } from '../constants/constants';
 import * as ActionTypes from '../constants/actionTypes';
+import { currSem } from '../reducers/semester_reducer';
 
 let autoSaveTimer;
 
@@ -63,7 +64,7 @@ const getSaveTimetablesRequestBody = () => {
   return {
     courses: tt.courses,
     has_conflict: tt.has_conflict,
-    semester: allSemesters[state.semesterIndex],
+    semester: currSem(state.semester),
     name: state.savingTimetable.activeTimetable.name,
     id: state.savingTimetable.activeTimetable.id,
   };
@@ -94,8 +95,7 @@ export const fetchMostClassmatesCount = courses => (dispatch) => {
   if (!state.userInfo.data.social_courses) {
     return;
   }
-  const semesterIndex = state.semesterIndex !== undefined ? state.semesterIndex : currentSemester;
-  const semester = allSemesters[semesterIndex];
+  const semester = currSem(state.semester);
   dispatch(requestMostClassmates());
   fetch(getMostClassmatesCountEndpoint(semester, courses), {
     credentials: 'include',
@@ -117,13 +117,12 @@ export const fetchClassmates = courses => (dispatch) => {
   if (!state.userInfo.data.social_courses) {
     return;
   }
-  const semesterIndex = state.semesterIndex !== undefined ? state.semesterIndex : currentSemester;
   setTimeout(() => {
     dispatch(fetchMostClassmatesCount(getActiveTimetable(state.timetables)
       .courses.map(c => c.id)));
   }, 500);
   dispatch(requestClassmates());
-  fetch(getClassmatesEndpoint(allSemesters[semesterIndex], courses), {
+  fetch(getClassmatesEndpoint(currSem(state.semester), courses), {
     credentials: 'include',
     method: 'GET',
   })
@@ -229,7 +228,7 @@ export const duplicateTimetable = timetable => (dispatch) => {
     },
     method: 'POST',
     body: JSON.stringify({
-      semester: allSemesters[state.semesterIndex],
+      semester: currSem(state.semester),
       source: timetable.name,
       name: getNumberedName(timetable.name),
     }),
@@ -280,7 +279,7 @@ export const deleteTimetable = timetable => (dispatch) => {
   dispatch({
     type: ActionTypes.REQUEST_SAVE_TIMETABLE,
   });
-  fetch(getDeleteTimetableEndpoint(allSemesters[state.semesterIndex], timetable.name), {
+  fetch(getDeleteTimetableEndpoint(currSem(state.semester), timetable.name), {
     headers: {
       'X-CSRFToken': Cookie.get('csrftoken'),
       Accept: 'application/json',
@@ -406,7 +405,7 @@ export const fetchFinalExamSchedule = () => (dispatch) => {
   })
     .then(response => response.json())
     .then((json) => {
-      dispatch({ type: ActionTypes.RECIEVE_FINAL_EXAMS, json });
+      dispatch({ type: ActionTypes.RECEIVE_FINAL_EXAMS, json });
     });
 };
 
@@ -415,12 +414,11 @@ export const fetchFriends = () => (dispatch) => {
   if (!state.userInfo.data.social_courses) {
     return;
   }
-  const semesterIndex = state.semesterIndex !== undefined ? state.semesterIndex : currentSemester;
   dispatch(requestFriends());
   dispatch({
     type: ActionTypes.PEER_MODAL_LOADING,
   });
-  fetch(getFriendsEndpoint(allSemesters[semesterIndex]), {
+  fetch(getFriendsEndpoint(currSem(state.semester)), {
     credentials: 'include',
     method: 'GET',
   })
