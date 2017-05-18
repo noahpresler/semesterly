@@ -127,7 +127,8 @@ def convert_tt_to_dict(timetable, include_last_updated=True):
 
     tt_dict['courses'] = courses
     tt_dict['avg_rating'] = get_avg_rating(course_ids)
-    tt_dict['events'] = [dict(model_to_dict(event), preview=False) for event in timetable.events.all()]
+    if isinstance(timetable, PersonalTimetable):
+        tt_dict['events'] = [dict(model_to_dict(event), preview=False) for event in timetable.events.all()]
     return tt_dict
 
 
