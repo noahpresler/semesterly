@@ -15,7 +15,7 @@ class WaitlistMailer(Mailer):
         self.test_students = test_students
 
     def send_emails(self):
-        if len(self.test_students):
+        if self.test_students:
             print("Currently not supported.")
 
         d = {}
