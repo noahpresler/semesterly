@@ -6,7 +6,9 @@ import { changeUserInfo, overrideSettingsShow } from '../../actions/modal_action
 const mapStateToProps = state => ({
   userInfo: state.userInfo.data,
   showOverrided: state.userInfo.overrideShow,
+  hideOverrided: state.userInfo.overrideHide,
   tokenRegistered: state.notificationToken.hasToken,
+  highlightNotifs: state.ui.highlightNotifs,
 });
 
 const UserSettingsModalContainer = connect(

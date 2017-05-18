@@ -13,6 +13,7 @@ import {
 import { store } from '../init';
 import { autoSave, fetchClassmates, lockActiveSections } from './user_actions';
 import * as ActionTypes from '../constants/actionTypes';
+import { currSem } from '../reducers/semester_reducer';
 
 export const SID = randomString(30);
 
@@ -92,8 +93,8 @@ export const fetchTimetables = (requestBody, removing, newActive = 0) => (dispat
   // are always "up-to-date" (correspond to last loaded timetable).
   // same for the semester
   saveLocalPreferences(requestBody.preferences);
-  if (localStorage.semester !== state.semesterIndex) {
-    saveLocalSemester(state.semesterIndex);
+  if (localStorage.semester !== state.semester.current) {
+    saveLocalSemester(state.semester.current);
   }
 };
 
@@ -102,7 +103,7 @@ export const fetchTimetables = (requestBody, removing, newActive = 0) => (dispat
  */
 export const getBaseReqBody = state => ({
   school: state.school.school,
-  semester: allSemesters[state.semesterIndex],
+  semester: currSem(state.semester),
   courseSections: state.courseSections.objects,
   preferences: state.preferences,
   sid: SID,
@@ -189,7 +190,7 @@ export const nullifyTimetable = () => (dispatch) => {
 };
 
 // loads timetable from localStorage. assumes that the browser supports localStorage
-export const loadCachedTimetable = () => (dispatch) => {
+export const loadCachedTimetable = allSemesters => (dispatch) => {
   dispatch({ type: ActionTypes.LOADING_CACHED_TT });
   const localCourseSections = JSON.parse(localStorage.getItem('courseSections'));
 

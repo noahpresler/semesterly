@@ -1,9 +1,10 @@
 import React from 'react';
 import Modal from 'boron/WaveModal';
 import COLOUR_DATA from '../constants/colours';
+import * as PropTypes from '../constants/propTypes';
 
 
-export class PeerModal extends React.Component {
+class PeerModal extends React.Component {
   constructor(props) {
     super(props);
     this.hide = this.hide.bind(this);
@@ -11,16 +12,9 @@ export class PeerModal extends React.Component {
     this.optInSignUp = this.optInSignUp.bind(this);
   }
 
-  hide() {
-    this.refs.modal.hide();
-    if (this.props.isVisible) {
-      this.props.togglePeerModal();
-    }
-  }
-
   componentDidMount() {
     if (this.props.isVisible) {
-      this.refs.modal.show();
+      this.modal.show();
       if (this.props.userInfo.social_all) {
         this.props.fetchFriends();
       }
@@ -29,10 +23,17 @@ export class PeerModal extends React.Component {
 
   componentWillReceiveProps(nextProps) {
     if (!this.props.isVisible && nextProps.isVisible) {
-      this.refs.modal.show();
+      this.modal.show();
       if (this.props.userInfo.social_all) {
         this.props.fetchFriends();
       }
+    }
+  }
+
+  hide() {
+    this.modal.hide();
+    if (this.props.isVisible) {
+      this.props.togglePeerModal();
     }
   }
 
@@ -74,11 +75,11 @@ export class PeerModal extends React.Component {
           <div className="master-slot-content">
             <h3>{ c.code }</h3>
             <h3>{ c.name }</h3>
-            <h3>{professors.length == 0 ? 'No Professor Listed' : professors}</h3>
+            <h3>{professors.length === 0 ? 'No Professor Listed' : professors}</h3>
           </div>
         </div>);
     });
-    const proPicStyle = !this.props.userInfo.isLoggedIn ? { backgroundImage: 'url("/static/img/blank.jpg")' } : { backgroundImage: `url(http://graph.facebook.com/${JSON.parse(currentUser).fbook_uid}/picture?width=700&height=700)` };
+    const proPicStyle = !this.props.userInfo.isLoggedIn ? { backgroundImage: 'url("/static/img/blank.jpg")' } : { backgroundImage: `url(http://graph.facebook.com/${this.props.userInfo.fbook_uid}/picture?width=700&height=700)` };
     const sideBar =
             (<div id="pm-side-bar">
               <div className="circle-pic" style={proPicStyle} />
@@ -107,10 +108,11 @@ export class PeerModal extends React.Component {
                             permission, any Semester.ly students in your courses will be able to
                             view your name and
                             public Facebook profile.</i></p>
-                <button className="lure-accept" onClick={optInClick}>Yes, I'm In</button>
+                <button className="lure-accept" onClick={optInClick}>Yes, I&#39;m In</button>
               </div>
             </div>);
-    const height = this.props.peers[0] && this.props.peers[0].shared_courses ? this.props.peers[0].shared_courses.length * 30 + 95 : 0;
+    const height = this.props.peers[0] && this.props.peers[0].shared_courses ?
+      (this.props.peers[0].shared_courses.length * 30) + 95 : 0;
     const peerCards = this.props.peers.map((p) => {
       const isFriend = p.is_friend ?
         <p className="friend-status"><i className="fa fa-check" /> Friends</p> : null;
@@ -131,7 +133,7 @@ export class PeerModal extends React.Component {
             <div className="peer-pic" style={{ backgroundImage: `url(${p.large_img})` }} />
             <div className="user-info">
               <h3>{p.name}</h3>
-              <a href={p.profile_url} target="_blank">
+              <a href={p.profile_url} target="_blank" rel="noopener noreferrer">
                 <button className="view-profile-btn"><i
                   className="fa fa-facebook-square"
                 />View
@@ -182,7 +184,7 @@ export class PeerModal extends React.Component {
                 </div>
               </div>
             </div>);
-    const ghostCards = !this.props.userInfo.social_all || peerCards.length == 0 ?
+    const ghostCards = !this.props.userInfo.social_all || peerCards.length === 0 ?
       <div>{ghostCard}{ghostCard}{ghostCard}{ghostCard}</div> : null;
     const display = (!this.props.isLoading) ?
             (<div id="main-modal-wrapper">
@@ -203,7 +205,7 @@ export class PeerModal extends React.Component {
                 </div>
               </div>
               {!this.props.userInfo.social_all ? upsell : null}
-              {peerCards.length == 0 && this.props.userInfo.social_all ? emptyState : null}
+              {peerCards.length === 0 && this.props.userInfo.social_all ? emptyState : null}
               {this.props.userInfo.social_all ? peerCards : null}
               {ghostCards}
             </div>) :
@@ -217,7 +219,7 @@ export class PeerModal extends React.Component {
             </div>);
     return (
       <Modal
-        ref="modal"
+        ref={(c) => { this.modal = c; }}
         className="peer-modal"
         onHide={this.hide}
         modalStyle={modalStyle}
@@ -232,3 +234,21 @@ export class PeerModal extends React.Component {
     );
   }
 }
+
+PeerModal.propTypes = {
+  userInfo: PropTypes.userInfo.isRequired,
+  peers: React.PropTypes.arrayOf(PropTypes.peer).isRequired,
+  liveTimetableCourses: React.PropTypes.arrayOf(PropTypes.course).isRequired,
+  courseToColourIndex: React.PropTypes.shape({
+    '*': React.PropTypes.number,
+  }).isRequired,
+  isVisible: React.PropTypes.bool.isRequired,
+  isLoading: React.PropTypes.bool.isRequired,
+  fetchFriends: React.PropTypes.func.isRequired,
+  saveSettings: React.PropTypes.func.isRequired,
+  changeUserInfo: React.PropTypes.func.isRequired,
+  togglePeerModal: React.PropTypes.func.isRequired,
+  openSignUpModal: React.PropTypes.func.isRequired,
+};
+
+export default PeerModal;
