@@ -3,11 +3,10 @@ import urllib2
 import heapq
 from dateutil import tz
 from datetime import timedelta, datetime
-from django.shortcuts import render_to_response, render
-from django.http import HttpResponse, HttpResponseRedirect, Http404
+from django.shortcuts import render_to_response
+from django.http import HttpResponse
 from django.template import RequestContext
 from django.views.decorators.csrf import csrf_exempt
-from django.db.models import Q
 from django.http import Http404
 
 from student.utils import get_student
