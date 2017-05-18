@@ -21,9 +21,8 @@ class ChromeNotification(object):
         self.semester = semester
 
     def send_message(self, message, title, test_students):
-        # students = Student.objects.filter(personaltimetable__courses__school=args.school).distinct() | Student.objects.filter(school=args.school).distinct()
         students = []
-        if len(test_students):
+        if test_students:
             students = Student.object.filter(pk__in=test_students)
         else:
             students = Student.object.filter(pk__in=all_students_with_timetables(self.school, self.semester))

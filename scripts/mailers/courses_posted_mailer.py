@@ -16,7 +16,7 @@ class CoursesPostedMailer(Mailer):
 
     def send_emails(self):
         recipents = []
-        if len(self.test_students):
+        if self.test_students:
             recipents = self.test_students
         else:
             recipents = all_students_with_timetables(self.school, self.semester)
