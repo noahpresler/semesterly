@@ -152,12 +152,15 @@ class Recommender():
 
     #given a timetable (in the form of course_ids), recommends the top courses 
     # that a user might add to their timetable by aggregating similarities from model
-    def recommend(self, course_ids):
-        similarities = pickle.load(open(self.school + ".recommended.model", "rb"))
+    def recommend(self, course_ids, similarities = None):
+        if similarities == None:
+            similarities = pickle.load(open(self.school + ".recommended.model", "rb"))
         bar = progressbar.ProgressBar()
         recs = {}
         for cid in bar(course_ids): 
             #for each course, get the related courses by top similarity score
+            if cid not in similarities:
+                continue
             related = filter(lambda x: x[0] != cid,sorted(similarities[cid],key=lambda x: x[1], reverse=True)[:15])
             for r in related: 
                 if r[0] not in recs:
