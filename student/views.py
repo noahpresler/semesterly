@@ -160,6 +160,9 @@ class UserTimetableView(ValidateSubdomainMixin, RedirectToSignupMixin, APIView):
             # save manytomany relationships before copying
             courses, sections = duplicate.courses.all(), duplicate.sections.all()
             events = duplicate.events.all()
+            for event in events: # create duplicates of each event to allow for safe delete
+                event.pk = None
+                event.save()
 
             duplicate.pk = None  # creates duplicate of object
             duplicate.name = new_name
@@ -207,8 +210,11 @@ class UserTimetableView(ValidateSubdomainMixin, RedirectToSignupMixin, APIView):
         semester = Semester.objects.get(name=sem_name, year=year)
         student = Student.objects.get(user=request.user)
 
-        PersonalTimetable.objects.filter(
-            student=student, name=name, school=school, semester=semester).delete()
+        to_delete = PersonalTimetable.objects.filter(
+            student=student, name=name, school=school, semester=semester)
+        for tt in to_delete:
+            tt.events.all().delete()
+        to_delete.delete()
 
         timetables = get_student_tts(student, school, semester)
         response = {'timetables': timetables}
@@ -232,10 +238,14 @@ class UserTimetableView(ValidateSubdomainMixin, RedirectToSignupMixin, APIView):
         tt.save()
 
     def update_events(self, tt, events):
+        to_delete = tt.events.all()
         tt.events.clear()
+        to_delete.delete()
         for event in events:
-            event_obj = PersonalEvent.objects.create(
-                name=event['name'], time_start=event['time_start'], time_end=event['time_end'], day=event['day'])
+            event_obj = PersonalEvent.objects.create(name=event['name'],
+                                                     time_start=event['time_start'],
+                                                     time_end=event['time_end'],
+                                                     day=event['day'])
             tt.events.add(event_obj)
         tt.save()
 
