@@ -56,6 +56,13 @@ class Reaction(models.Model):
     time_created = models.DateTimeField(auto_now_add=True)
 
 
+class PersonalEvent(models.Model):
+    name = models.CharField(max_length=50)
+    day = models.CharField(max_length=1)
+    time_start = models.CharField(max_length=15)
+    time_end = models.CharField(max_length=15)
+
+
 class PersonalTimetable(models.Model):
     """ Database object representing a timetable created (and saved) by a user.
 
@@ -71,6 +78,7 @@ class PersonalTimetable(models.Model):
     student = models.ForeignKey(Student)
     last_updated = models.DateTimeField(auto_now=True)
     sections = models.ManyToManyField(timetable_models.Section)
+    events = models.ManyToManyField(PersonalEvent)
     has_conflict = models.BooleanField(blank=True, default=False)
 
 
