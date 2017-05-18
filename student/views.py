@@ -157,13 +157,16 @@ class UserTimetableView(ValidateSubdomainMixin, RedirectToSignupMixin, APIView):
 
             duplicate = get_object_or_404(PersonalTimetable, student=student, name=name,
                                           school=school, semester=semester)
+            # save manytomany relationships before copying
             courses, sections = duplicate.courses.all(), duplicate.sections.all()
+            events = duplicate.events.all()
 
             duplicate.pk = None  # creates duplicate of object
             duplicate.name = new_name
             duplicate.save()
             duplicate.courses = courses
             duplicate.sections = sections
+            duplicate.events = events
 
             timetables = get_student_tts(student, school, semester)
             saved_timetable = (x for x in timetables if x['id'] == duplicate.id).next()
