@@ -40,6 +40,8 @@ const customSlots = (state = [], action) => {
     case ActionTypes.CLEAR_CUSTOM_SLOTS:
       return [];
 
+    case ActionTypes.CHANGE_ACTIVE_SAVED_TIMETABLE:
+      return action.timetable.events;
     default:
       return state;
   }

@@ -164,7 +164,7 @@ export const loadTimetable = (timetable, created = false) => (dispatch) => {
 };
 
 export const createNewTimetable = (ttName = 'Untitled Schedule') => (dispatch) => {
-  dispatch(loadTimetable({ name: ttName, courses: [], has_conflict: false }, true));
+  dispatch(loadTimetable({ name: ttName, courses: [], events: [], has_conflict: false }, true));
 };
 
 export const nullifyTimetable = () => (dispatch) => {
@@ -178,7 +178,7 @@ export const nullifyTimetable = () => (dispatch) => {
   });
   dispatch({
     type: ActionTypes.CHANGE_ACTIVE_SAVED_TIMETABLE,
-    timetable: { name: 'Untitled Schedule', courses: [], has_conflict: false },
+    timetable: { name: 'Untitled Schedule', courses: [], events: [], has_conflict: false },
   });
   dispatch({
     type: ActionTypes.CLEAR_OPTIONAL_COURSES,
