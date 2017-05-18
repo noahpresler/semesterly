@@ -57,6 +57,7 @@ const getSaveTimetablesRequestBody = () => {
   const tt = getActiveTimetable(timetableState);
   return {
     courses: tt.courses,
+    events: state.customSlots,
     has_conflict: tt.has_conflict,
     semester: currSem(state.semester),
     name: state.savingTimetable.activeTimetable.name,
