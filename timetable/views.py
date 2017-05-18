@@ -1,18 +1,24 @@
-import logging
+import json
 import itertools
+import logging
 
 from braces.views import CsrfExemptMixin
+from django.template import RequestContext
 from django.template.loader import get_template
 from django.views.decorators.cache import never_cache
-from django.shortcuts import get_object_or_404
+from django.views.decorators.csrf import csrf_exempt
+from django.shortcuts import get_object_or_404, render, render_to_response
+from django.http import HttpResponse, HttpResponseRedirect
 from hashids import Hashids
 from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
-from analytics.views import *
+from analytics.views import save_analytics_timetable
+from analytics.models import FinalExamModalView, SharedTimetable
 from student.models import Student
-from student.utils import convert_tt_to_dict
+from timetable.models import Semester, Course
+from student.utils import convert_tt_to_dict, get_student
 from timetable.utils import update_locked_sections, TimetableGenerator, ValidateSubdomainMixin, FeatureFlowView
 
 hashids = Hashids(salt="***REMOVED***")
@@ -96,7 +102,7 @@ class TimetableView(CsrfExemptMixin, ValidateSubdomainMixin, APIView):
         else:
             try:
                 params['semester'] = Semester.objects.get_or_create(**params['semester'])[0]
-            except TypeError:
+            except TypeError: # handle deprecated cached semesters from frontend
                 params['semester'] = Semester.objects.get(name="Fall", year="2016") \
                     if params['semester'] == "F" \
                     else Semester.objects.get(name="Spring", year="2017")
