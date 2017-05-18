@@ -324,29 +324,36 @@ export const addLastAddedCourse = () => (dispatch) => {
   }
 };
 
-export const addCustomSlot = (timeStart, timeEnd, day, preview, id) => ({
-  type: ActionTypes.ADD_CUSTOM_SLOT,
-  newCustomSlot: {
-    time_start: timeStart, // match backend slot attribute names
-    time_end: timeEnd,
-    name: 'New Custom Event', // default name for custom slot
-    day,
-    id,
-    preview,
-  },
-});
+export const addCustomSlot = (timeStart, timeEnd, day, preview, id) => (dispatch) => {
+  dispatch({
+    type: ActionTypes.ADD_CUSTOM_SLOT,
+    newCustomSlot: {
+      time_start: timeStart, // match backend slot attribute names
+      time_end: timeEnd,
+      name: 'New Custom Event', // default name for custom slot
+      day,
+      id,
+      preview,
+    },
+  });
+  dispatch(autoSave());
+};
 
-export const updateCustomSlot = (newValues, id) => ({
-  type: ActionTypes.UPDATE_CUSTOM_SLOT,
-  newValues,
-  id,
-});
+export const updateCustomSlot = (newValues, id) => (dispatch) => {
+  dispatch({
+    type: ActionTypes.UPDATE_CUSTOM_SLOT,
+    newValues,
+    id,
+  });
+  dispatch(autoSave());
+};
 
 export const removeCustomSlot = id => (dispatch) => {
   dispatch({
     type: ActionTypes.REMOVE_CUSTOM_SLOT,
     id,
   });
+  dispatch(autoSave());
 };
 
 export const addOrRemoveOptionalCourse = course => (dispatch) => {
