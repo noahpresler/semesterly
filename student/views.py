@@ -234,7 +234,6 @@ class UserTimetableView(ValidateSubdomainMixin, RedirectToSignupMixin, APIView):
             event_obj = PersonalEvent.objects.create(
                 name=event['name'], time_start=event['time_start'], time_end=event['time_end'], day=event['day'])
             tt.events.add(event_obj)
-        print tt.events.all()
         tt.save()
 
 
