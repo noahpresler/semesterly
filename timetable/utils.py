@@ -5,7 +5,7 @@ from functools import wraps
 
 from django.forms import model_to_dict
 from django.shortcuts import render
-from django.views.generic.base import TemplateView
+from rest_framework.authentication import SessionAuthentication, BasicAuthentication
 from rest_framework.views import APIView
 
 from timetable.models import Section, Course, Semester
@@ -369,6 +369,16 @@ class FeatureFlowView(ValidateSubdomainMixin, APIView):
         }
 
         return render(request, 'timetable.html', {'init_data': json.dumps(init_data)})
+
+
+class CsrfExemptSessionAuthentication(SessionAuthentication):
+
+    def enforce_csrf(self, request):
+        return
+
+
+class CsrfExemptMixin:
+    authentication_classes = (CsrfExemptSessionAuthentication, BasicAuthentication)
 
 
 def get_current_semesters(school):
