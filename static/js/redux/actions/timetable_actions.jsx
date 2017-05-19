@@ -71,13 +71,15 @@ export const fetchTimetables = (requestBody, removing, newActive = 0) => (dispat
         // save new courseSections and timetable active index to cache
         saveLocalCourseSections(json.new_c_to_s);
         saveLocalActiveIndex(newActive);
-      } else {
-        // user wasn't removing (i.e. was adding a course/section), but we got no timetables back
+      } else if (state.customSlots.length === 0) {
+        // user wasn't removing or refetching for custom events
+        // (i.e. was adding a course/section), but we got no timetables back.
         // course added by the user resulted in a conflict, so no timetables
         // were received
-        dispatch({ type: ActionTypes.CLEAR_CUSTOM_SLOTS });
+        dispatch({ type: ActionTypes.CLEAR_CONFLICTING_EVENTS });
         dispatch(alertConflict());
       }
+      dispatch({ type: ActionTypes.RECEIVE_FETCH_TT_RESPONSE });
       return json;
     })
     .then((json) => {
