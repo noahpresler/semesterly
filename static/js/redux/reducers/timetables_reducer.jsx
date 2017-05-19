@@ -7,7 +7,7 @@ const initialState = {
   items: [{ courses: [], has_conflict: false }],
   active: 0,
   loadingCachedTT: true,
-  lastSlotAdded: null, // either string (course id), object (custom slots state), or null
+  lastSlotAdded: null, // either int (course id), object (custom slots state), or null
 };
 
 const timetables = (state = initialState, action) => {

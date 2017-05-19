@@ -29,7 +29,7 @@ class SlotManager extends React.Component {
       // build interval tree with part of slot that should not be overlayed (first hour)
       const infoIntervals = intervals.map(s => ({
         start: s.start,
-        end: Math.min(s.start + 60, s.end),
+        end: Math.min(s.start + 59, s.end),
         id: s.id,
       }));
       const infoSlots = IntervalTree(infoIntervals);
@@ -40,7 +40,7 @@ class SlotManager extends React.Component {
       // bit map to store if slot has already been added to queue
       const added = daySlots.map(() => false);
 
-      // get num_conflicts + shift_index
+      // get num_conflicts
       for (let i = 0; i < infoIntervals.length; i++) {
         if (!seen[i]) { // if not seen, perform dfs search on conflicts
           const directConflicts = [];
@@ -68,13 +68,13 @@ class SlotManager extends React.Component {
         }
       }
 
+      // get shift index
       // build interval tree with part of slot that should not be overlayed
       const overSlots = IntervalTree(intervals.filter(s => s.end - s.start > 60).map(s => ({
         start: s.start + 60,
         end: s.end,
         id: s.id,
       })));
-
       // get depth_level
       for (let i = 0; i < infoIntervals.length; i++) {
         const conflicts = getIntersections(overSlots, infoIntervals[i]);
@@ -82,6 +82,13 @@ class SlotManager extends React.Component {
         daySlots[i].depth_level = conflicts.length > 0 ?
           daySlots[conflicts[0].id].depth_level + 1 : 0;
       }
+
+      // get exists_conflict
+      const completeSlots = IntervalTree(intervals);
+      for (let i = 0; i < intervals.length; i++) {
+        daySlots[i].exists_conflict = getIntersections(completeSlots, intervals[i]).length > 1;
+      }
+
       styledSlotsByDay[day] = daySlots;
     });
     return styledSlotsByDay;
