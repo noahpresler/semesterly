@@ -140,7 +140,7 @@ const timetables = (state = initialState, action) => {
       saveLocalActiveIndex(action.newActive);
       return Object.assign({}, state, { active: action.newActive });
 
-    case ActionTypes.ALERT_CONFLICT:
+    case ActionTypes.RECEIVE_FETCH_TT_RESPONSE:
       return Object.assign({}, state, { isFetching: false });
 
     case ActionTypes.UPDATE_LAST_COURSE_ADDED:
