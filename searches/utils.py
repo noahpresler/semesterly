@@ -10,7 +10,10 @@ from operator import or_
 from scipy.sparse import linalg
 from sklearn.feature_extraction.text import CountVectorizer
 from sklearn.feature_extraction.text import TfidfTransformer
+from sklearn import mixture
+from sklearn import decomposition
 from sklearn.decomposition import LatentDirichletAllocation
+import matplotlib.pyplot as plt
 from picklefield.fields import PickledObjectField
 from django.db import models
 from django.db.models import Q
@@ -25,22 +28,24 @@ class Vectorizer():
         self.stemmer = PorterStemmer()
 
     def vectorize(self):
-        start_time = time.time()        
+        start_time = time.time()
         # get names (titles) and descriptions for creating vocabulary
         raw_word_counts = []
         for course in Course.objects.all():
-            raw_word_counts.append(self.get_stem_course(
-                course.name, course.description, course.areas, self.TITLE_WEIGHT))
+            raw_word_counts.append(self.get_stem_course(course.name, course.description, course.areas, self.TITLE_WEIGHT))
+
         # vectorize course objects
         count_vectorizer = CountVectorizer(ngram_range=(1,2), stop_words='english')
         processed_word_counts = count_vectorizer.fit_transform(raw_word_counts)
-        TFIDF_TF = TfidfTransformer(use_idf=False).fit(processed_word_counts)
+        TFIDF_TF = TfidfTransformer(use_idf=True).fit(processed_word_counts)
         course_vectors = TFIDF_TF.transform(processed_word_counts)
+
         # save course vector
         i = 0
         for course in Course.objects.all():
             self.picklify(course, course_vectors[i])
             i+=1
+
         # store CountVectorizer in the memory
         with open('count_vectorizer.pickle', 'wb') as handle:
             pickle.dump(count_vectorizer, handle, protocol=pickle.HIGHEST_PROTOCOL)
@@ -74,12 +79,13 @@ class Vectorizer():
         course_object.save()
 
 # Searcher (file reader / query performance)
-class Searcher():    
+class Searcher():
     def __init__(self):
         print("Creating Searcher Object")
         self.count_vectorizer = self.load_count_vectorizer()
         self.vectorizer = Vectorizer()
-        self.MAX_CAPACITY = 200
+        self.MAX_CAPACITY = 300
+        self.start_time = 0
         #self.queries = []
 
     def load_count_vectorizer(self):
@@ -107,8 +113,8 @@ class Searcher():
     def match_title(self, query, course_name):
         query_tokens = query.lower().split(' ')
         course_name = course_name.lower()
-        if len(query_tokens) is 1 and self.get_acronym(course_name) == query:
-            return 1
+        #if len(query_tokens) is 1 and self.get_acronym(course_name) == query:
+        #    return 1
         return 1 if all(map(lambda q: q in course_name, query_tokens)) else 0
 
     def get_course(self, code):
@@ -125,37 +131,47 @@ class Searcher():
         query_vector = self.vectorize_query(query.lower())
         return self.get_cosine_sim(query_vector, course.vector)
 
-    def baseline_search(self, query):
-        start_time = time.time()
+    def baseline_search(self, school, query, semester):
+        if query == "":
+            return Course.objects.filter(school=school)
         query_tokens = query.split()
-        course_name_contains_query = reduce(operator.and_, map(self.course_name_contains_token, query_tokens))
-        courses_objs = Course.objects.filter(course_name_contains_query).all()[:self.MAX_CAPACITY]
-        return courses_objs
-        
+        course_name_contains_query = reduce(
+            operator.and_, map(self.course_name_contains_token, query_tokens))
+        return Course.objects.filter(
+                            Q(school=school) &
+                            course_name_contains_query &
+                            Q(section__semester=semester)
+                            )
         # test
-        elapsed_time = time.time() - start_time
-        for course in courses_objs[:10]:
-            print(course.name)
-        print("\nBaseline Model Completed Searches in %f (seconds)" %elapsed_time)
+        #self.start_time = time.time()
+        #elapsed_time = time.time() - self.start_time
+        #for course in courses_objs[:10]:
+        #    print(course.name)
+        #print("\nBaseline Model Completed Searches in %f (seconds)" %elapsed_time)
 
-    def advanced_search(self, query):
-        start_time = time.time()
+    def vectorized_search(self, school, query, semester):
+        if query == "":
+            return Course.objects.filter(school=school)
         query_tokens = query.split()
-        course_contains_query = reduce(operator.and_, map(self.course_name_contains_token, query_tokens))
-        title_matching_courses = Course.objects.filter(course_contains_query)
+        course_name_contains_query = reduce(
+            operator.and_, map(self.course_name_contains_token, query_tokens))
+        title_matching_courses = Course.objects.filter(
+                                                Q(school=school) & 
+                                                course_name_contains_query &
+                                                Q(section__semester=semester)
+                                                )
         descp_contains_query = []
         if title_matching_courses.count() < self.MAX_CAPACITY:
-            descp_contains_query = reduce(operator.or_, map(self.course_desc_contains_token, query.replace("and", "").split()))
-            descp_matching_courses = Course.objects.filter(descp_contains_query)
+            descp_contains_query = reduce(operator.or_, 
+                map(self.course_desc_contains_token, query.replace("and", "").split()))
+            descp_matching_courses = Course.objects.filter(
+                                                Q(school=school) & 
+                                                descp_contains_query &
+                                                Q(section__semester=semester)
+                                                )
         courses_objs = list(title_matching_courses.all()[:self.MAX_CAPACITY]) + \
                        list(descp_matching_courses.all()[:self.MAX_CAPACITY - title_matching_courses.count()])
         return self.get_relevant_courses(query, courses_objs)
-        
-        # test
-        elapsed_time = time.time() - start_time
-        for course in courses_objs[:10]:
-            print(course.name)
-        print("\nAdvanced Model Completed Searches in %f (seconds)" %elapsed_time)
 
     def course_desc_contains_token(self, token):
         return Q(description__icontains=token)#.replace("and", "")))
@@ -165,18 +181,38 @@ class Searcher():
                 Q(name__icontains=token.replace("&", "and")) |
                 Q(name__icontains=token.replace("and", "&")))
 
+
     def get_relevant_courses(self, query, course_filtered):
         query_vector = self.vectorize_query(query.lower())
         scores = []
         for course in course_filtered:
-            scores.append((course, self.get_cosine_sim(query_vector, course.vector) + \
-                                   self.match_title(query, course.name)))
+            score = self.get_cosine_sim(query_vector, course.vector)# + self.match_title(query, course.name)
+            scores.append((course, score))
         scores.sort(key=lambda tup:-tup[1])
-        return map(operator.itemgetter(0), scores)
+        #return map(operator.itemgetter(0), scores)
         
-        # print
-        for (course, score) in scores[:10]:
+        # duplicate handling
+        course_titles = set()
+        course_object = []
+        course_codes = {}
+        num_courses = 0
+        while scores:
+            (course, score) = scores.pop(0)
+            if course.name not in course_titles:
+                course_titles.add(course.name)
+                course_object.append(course)
+                course_codes[course.name] = (course.code, num_courses)
+                num_courses+=1
+            elif course.name in course_titles and course_codes[course.name][0] > course.code:
+                course_object[course_codes[course.name][1]] = course
             print("%s : %f" %(course.name, score))
+        
+        #elapsed_time = time.time() - self.start_time
+        #print("\nAdvanced Model Completed Searches in %f (seconds)" %elapsed_time)
+        return course_object
+
+    def get_all_relevant_courses(self,query):
+        return self.get_relevant_courses(query, Course.objects.all())
 
     def wordify(self, course_vector):
         print(self.count_vectorizer.inverse_transform(course_vector))
@@ -186,9 +222,11 @@ class Searcher():
 class Evaluator():    
     def __init__(self):
         self._ = None
+        self.searcher = Searcher()
 
     def evaluate(self, query, relevant_courses):
-        retrieved_courses = [i.code for i in get_all_relevant_courses(query)]
+        #retrieved_courses = [i.code for i in self.searcher.baseline_search(query)] + [i.code for i in Course.objects.all()]
+        retrieved_courses = [i.code for i in self.searcher.get_all_relevant_courses(query)]
         num_relevant_courses = len(relevant_courses)
         num_retrieve_courses = len(retrieved_courses)
         prec_25, prec_50, prec_75 = 0.0, 0.0, 0.0
@@ -204,6 +242,7 @@ class Evaluator():
             #print(course_code)
             if course_code in relevant_courses:
                 num_retrieved+=1.0
+                print(query + ": " + str(num_retrieved))
             precision_array.append(float(num_retrieved / i))
             i+=1
         prec_25 = precision_array[prec_25_idx]
@@ -249,7 +288,7 @@ class Evaluator():
                 relevant_courses.append(codes.split(', '))
 
         for i in range(len(queries)):
-            result = evaluate(queries[i], relevant_courses[i])
+            result = self.evaluate(queries[i], relevant_courses[i])
             show = "   %2d  %.2f   %.2f   %.2f   %.2f    %.4f    %.4f    %.3f   %.3f   \n"\
                    %(i, result[0], result[1], result[2], result[3], result[4], result[5], result[6], result[7])
             #print(show)
@@ -284,12 +323,13 @@ class Experiment():
         n_top_words = 10
         n_samples = len(X)
         X_trans, topics, topic_components= self.fit_lda(X, n_features, n_topics, n_top_words, n_samples)
+        self.gmm_clustering(X_trans)
 
     def fit_lda(self, X, n_features, n_topics, n_top_words, n_samples):
         print("Fitting LDA models with tf features, n_samples=%d and n_features=%d..." % (n_samples, n_features))
         tf_vectorizer = CountVectorizer(max_df=0.95, min_df=2,
                                     max_features=n_features,
-                                    ngram_range=(1,1),
+                                    ngram_range=(1,2),
                                     stop_words='english')
         tf = tf_vectorizer.fit_transform(X)
         lda = LatentDirichletAllocation(n_topics=n_topics, max_iter=5,
@@ -312,5 +352,20 @@ class Experiment():
             topics.append(new_topic)
         print()
         return(topics)
+
+    def gmm_clustering(self, X):
+        scores = []
+        klist = []
+        for k in range(1,30):
+            gmm = mixture.GMM(n_components=k, covariance_type='full')
+            gmm.fit(X)
+            klist.append(k)
+            scores.append(np.mean(gmm.score(X)))
+        plt.figure();
+        plt.plot(klist,scores,'o-');
+        plt.title("GMM clustering log-likelihood graph")
+        plt.ylabel("Log Likelihood")
+        plt.xlabel("K (number of clusters)")
+        plt.show()
 
 SEARCHER = Searcher()
