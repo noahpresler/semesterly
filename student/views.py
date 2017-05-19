@@ -296,7 +296,8 @@ class ClassmateView(ValidateSubdomainMixin, RedirectToSignupMixin, APIView):
 
             # The most recent TT per student with social enabled that has courses in common with input student
             matching_tts = PersonalTimetable.objects.filter(student__social_all=True,
-                                                            courses__id__in=current_tt_courses) \
+                                                            courses__id__in=current_tt_courses,
+                                                            semester=semester) \
                 .exclude(student=student) \
                 .order_by('student', 'last_updated') \
                 .distinct('student')
