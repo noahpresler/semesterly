@@ -1,9 +1,7 @@
 import operator
 
-from braces.views import CsrfExemptMixin
 from django.core.paginator import Paginator, EmptyPage
 from django.db.models import Q
-from django.views.decorators.csrf import csrf_exempt
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
@@ -12,7 +10,7 @@ from analytics.views import save_analytics_course_search
 from student.models import Student
 from student.utils import get_student
 from timetable.models import Semester, Course
-from timetable.utils import ValidateSubdomainMixin
+from timetable.utils import ValidateSubdomainMixin, CsrfExemptMixin
 from courses.views import get_detailed_course_json, get_basic_course_json
 
 
@@ -36,7 +34,7 @@ def course_name_contains_token(token):
             Q(name__icontains=token.replace("and", "&")))
 
 
-class CourseSearchList(CsrfExemptMixin, ValidateSubdomainMixin, APIView):
+class CourseSearchList(CsrfExemptMixin, APIView):
 
     def get(self, request, query, sem_name, year):
         sem = Semester.objects.get_or_create(name=sem_name, year=year)[0]
