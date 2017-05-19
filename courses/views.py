@@ -67,6 +67,8 @@ def get_basic_course_json(course, sem, extra_model_fields=None):
     course_json['evals'] = course.get_eval_info()
     course_json['integrations'] = list(course.get_course_integrations())
     course_json['sections'] = {}
+    if course.same_as:
+        course_json['evals'] += course.same_as.get_eval_info()
 
     course_section_list = sorted(course.section_set.filter(semester=sem),
                                  key=lambda section: section.section_type)
