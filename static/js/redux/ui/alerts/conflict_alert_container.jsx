@@ -4,7 +4,7 @@ import { addLastAddedCourse } from '../../actions/timetable_actions';
 import * as ActionTypes from '../../constants/actionTypes';
 
 const mapStateToProps = state => ({
-  message: (typeof state.timetables.lastCourseAdded === 'string') ? 'course' : 'event',
+  message: (typeof state.timetables.lastSlotAdded === 'string') ? 'course' : 'event',
 });
 
 const mapDispatchToProps = dispatch => ({

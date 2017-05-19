@@ -9,7 +9,6 @@ import {
     saveLocalCourseSections,
     saveLocalPreferences,
     saveLocalSemester,
-    allSectionsLocked,
 } from '../util';
 import { store } from '../init';
 import { autoSave, fetchClassmates, lockActiveSections } from './user_actions';
@@ -339,30 +338,28 @@ const refetchTimetables = () => (dispatch) => {
 export const addLastAddedCourse = () => (dispatch) => {
   const state = store.getState();
   // last timetable change was a custom event edit, not adding a course
-  if (state.timetables.lastCourseAdded === null) {
+  if (state.timetables.lastSlotAdded === null) {
     return;
   }
-  if (typeof state.timetables.lastCourseAdded === 'object') {
+  if (typeof state.timetables.lastSlotAdded === 'object') {
     dispatch({
       type: ActionTypes.RECEIVE_CUSTOM_SLOTS,
-      events: state.timetables.lastCourseAdded,
+      events: state.timetables.lastSlotAdded,
     });
     dispatch(refetchTimetables());
-  } else if (typeof state.timetables.lastCourseAdded === 'string') {
-    dispatch(addOrRemoveCourse(state.timetables.lastCourseAdded));
+  } else if (typeof state.timetables.lastSlotAdded === 'string') {
+    dispatch(addOrRemoveCourse(state.timetables.lastSlotAdded));
   }
 };
 
 const autoFetch = () => (dispatch) => {
   clearTimeout(customEventUpdateTimer);
   customEventUpdateTimer = setTimeout(() => {
-    if (!allSectionsLocked(store.getState().courseSections)) {
-      dispatch({
-        type: ActionTypes.UPDATE_LAST_COURSE_ADDED,
-        course: store.getState().customSlots,
-      });
-      dispatch(refetchTimetables());
-    }
+    dispatch({
+      type: ActionTypes.UPDATE_LAST_COURSE_ADDED,
+      course: store.getState().customSlots,
+    });
+    dispatch(refetchTimetables());
   }, 1000);
 };
 
