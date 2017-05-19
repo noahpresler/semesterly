@@ -85,7 +85,7 @@ class Course(models.Model):
     n_same_as_ratings = 0 
     if self.same_as:
       same_as_ratings = Evaluation.objects.only('course', 'score').filter(course=self.same_as)
-      ratings_sum += sum([rating.score for rating in sam_as_ratings]) if same_as_ratings else 0
+      ratings_sum += sum([rating.score for rating in same_as_ratings]) if same_as_ratings else 0
       n_same_as_ratings = len(same_as_ratings)
     return ratings_sum / (len(ratings) + n_same_as_ratings) if (len(ratings) + n_same_as_ratings) else 0
 
