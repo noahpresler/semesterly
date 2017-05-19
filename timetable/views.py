@@ -1,6 +1,5 @@
 import logging
 
-from braces.views import CsrfExemptMixin
 from django.template.loader import get_template
 from django.views.decorators.cache import never_cache
 from django.shortcuts import get_object_or_404
@@ -13,7 +12,7 @@ from analytics.views import *
 from student.models import Student
 from student.utils import convert_tt_to_dict
 from timetable.utils import *
-from timetable.utils import update_locked_sections, TimetableGenerator, ValidateSubdomainMixin
+from timetable.utils import update_locked_sections, TimetableGenerator, ValidateSubdomainMixin, CsrfExemptMixin
 
 
 hashids = Hashids(salt="x98as7dhg&h*askdj^has!kj?xz<!9")
