@@ -7,7 +7,6 @@ import { getUserSavedTimetables, saveTimetable } from './user_actions';
 import { nullifyTimetable } from './timetable_actions';
 import * as ActionTypes from '../constants/actionTypes';
 import { fetchCourseClassmates } from './modal_actions';
-import { currSem } from '../reducers/semester_reducer';
 
 export const requestCourses = () => ({ type: ActionTypes.REQUEST_COURSES });
 
@@ -107,11 +106,7 @@ export const fetchAdvancedSearchResults = (query, filters) => (dispatch) => {
     },
     credentials: 'include',
     method: 'POST',
-    body: JSON.stringify({
-      filters,
-      semester: currSem(state.semester),
-      page: state.explorationModal.page,
-    }),
+    body: JSON.stringify(filters),
   })
   .then(response => response.json()) // TODO(rohan): error-check the response
   .then((json) => {
