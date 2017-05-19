@@ -7,6 +7,7 @@ class ConflictAlert extends React.Component {
 
   handleClick() {
     this.props.turnConflictsOn();
+    this.props.addLastAddedCourse();
     this.props.dismissSelf();
   }
 
@@ -27,6 +28,7 @@ class ConflictAlert extends React.Component {
 ConflictAlert.propTypes = {
   dismissSelf: React.PropTypes.func.isRequired,
   turnConflictsOn: React.PropTypes.func.isRequired,
+  addLastAddedCourse: React.PropTypes.func.isRequired,
 };
 
 export default ConflictAlert;
