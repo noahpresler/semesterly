@@ -1,5 +1,7 @@
 import fetch from 'isomorphic-fetch';
-import { getCourseSearchEndpoint } from '../constants/endpoints';
+import {
+  getCourseSearchEndpoint,
+  getAdvancedCourseSearchEndpoint } from '../constants/endpoints';
 import { store } from '../init';
 import { getUserSavedTimetables, saveTimetable } from './user_actions';
 import { nullifyTimetable } from './timetable_actions';
@@ -98,7 +100,7 @@ export const fetchAdvancedSearchResults = (query, filters) => (dispatch) => {
   });
   // send a request (via fetch) to the appropriate endpoint to get courses
   const state = store.getState();
-  fetch(getCourseSearchEndpoint(query), {
+  fetch(getAdvancedCourseSearchEndpoint(query, state.explorationModal.page), {
     headers: {
       Accept: 'application/json',
       'Content-Type': 'application/json',
