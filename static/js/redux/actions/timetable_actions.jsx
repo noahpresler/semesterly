@@ -14,7 +14,6 @@ import {
 import { store } from '../init';
 import { autoSave, fetchClassmates, lockActiveSections } from './user_actions';
 import * as ActionTypes from '../constants/actionTypes';
-import { CUSTOM_EVENT_FLAG } from '../constants/constants';
 import { currSem } from '../reducers/semester_reducer';
 
 let customEventUpdateTimer; // keep track of user's custom event actions for autofetch
@@ -77,6 +76,7 @@ export const fetchTimetables = (requestBody, removing, newActive = 0) => (dispat
         // user wasn't removing (i.e. was adding a course/section), but we got no timetables back
         // course added by the user resulted in a conflict, so no timetables
         // were received
+        dispatch({ type: ActionTypes.CLEAR_CUSTOM_SLOTS });
         dispatch(alertConflict());
       }
       return json;
@@ -339,10 +339,16 @@ const refetchTimetables = () => (dispatch) => {
 export const addLastAddedCourse = () => (dispatch) => {
   const state = store.getState();
   // last timetable change was a custom event edit, not adding a course
-  if (state.timetables.lastCourseAdded === CUSTOM_EVENT_FLAG) {
-    dispatch(refetchTimetables());
+  if (state.timetables.lastCourseAdded === null) {
+    return;
   }
-  if (state.timetables.lastCourseAdded !== null) {
+  if (typeof state.timetables.lastCourseAdded === 'object') {
+    dispatch({
+      type: ActionTypes.RECEIVE_CUSTOM_SLOTS,
+      events: state.timetables.lastCourseAdded,
+    });
+    dispatch(refetchTimetables());
+  } else if (typeof state.timetables.lastCourseAdded === 'string') {
     dispatch(addOrRemoveCourse(state.timetables.lastCourseAdded));
   }
 };
@@ -353,7 +359,7 @@ const autoFetch = () => (dispatch) => {
     if (!allSectionsLocked(store.getState().courseSections)) {
       dispatch({
         type: ActionTypes.UPDATE_LAST_COURSE_ADDED,
-        course: CUSTOM_EVENT_FLAG,
+        course: store.getState().customSlots,
       });
       dispatch(refetchTimetables());
     }
