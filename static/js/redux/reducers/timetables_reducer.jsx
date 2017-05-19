@@ -7,7 +7,7 @@ const initialState = {
   items: [{ courses: [], has_conflict: false }],
   active: 0,
   loadingCachedTT: true,
-  lastSlotAdded: null, // either string (course id), object (custom slots state), or null
+  lastSlotAdded: null, // either int (course id), object (custom slots state), or null
 };
 
 const timetables = (state = initialState, action) => {
@@ -140,7 +140,7 @@ const timetables = (state = initialState, action) => {
       saveLocalActiveIndex(action.newActive);
       return Object.assign({}, state, { active: action.newActive });
 
-    case ActionTypes.RECEIVE_FETCH_TT_RESPONSE:
+    case ActionTypes.ALERT_CONFLICT:
       return Object.assign({}, state, { isFetching: false });
 
     case ActionTypes.UPDATE_LAST_COURSE_ADDED:

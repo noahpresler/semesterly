@@ -71,7 +71,7 @@ export const fetchTimetables = (requestBody, removing, newActive = 0) => (dispat
         // save new courseSections and timetable active index to cache
         saveLocalCourseSections(json.new_c_to_s);
         saveLocalActiveIndex(newActive);
-      } else if (state.customSlots.length === 0) {
+      } else {
         // user wasn't removing or refetching for custom events
         // (i.e. was adding a course/section), but we got no timetables back.
         // course added by the user resulted in a conflict, so no timetables
@@ -79,7 +79,6 @@ export const fetchTimetables = (requestBody, removing, newActive = 0) => (dispat
         dispatch({ type: ActionTypes.CLEAR_CONFLICTING_EVENTS });
         dispatch(alertConflict());
       }
-      dispatch({ type: ActionTypes.RECEIVE_FETCH_TT_RESPONSE });
       return json;
     })
     .then((json) => {
@@ -349,19 +348,22 @@ export const addLastAddedCourse = () => (dispatch) => {
       events: state.timetables.lastSlotAdded,
     });
     dispatch(refetchTimetables());
-  } else if (typeof state.timetables.lastSlotAdded === 'string') {
+  } else if (typeof state.timetables.lastSlotAdded === 'number') {
     dispatch(addOrRemoveCourse(state.timetables.lastSlotAdded));
   }
 };
 
 const autoFetch = () => (dispatch) => {
+  const state = store.getState();
   clearTimeout(customEventUpdateTimer);
   customEventUpdateTimer = setTimeout(() => {
-    dispatch({
-      type: ActionTypes.UPDATE_LAST_COURSE_ADDED,
-      course: store.getState().customSlots,
-    });
-    dispatch(refetchTimetables());
+    if (state.timetables.items[state.timetables.active].courses.length > 0) {
+      dispatch({
+        type: ActionTypes.UPDATE_LAST_COURSE_ADDED,
+        course: state.customSlots,
+      });
+      dispatch(refetchTimetables());
+    }
   }, 250);
 };
 
