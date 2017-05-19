@@ -6,11 +6,9 @@ import * as ActionTypes from '../../constants/actionTypes';
 
 const mapStateToProps = () => ({});
 const mapDispatchToProps = dispatch => ({
-  dismissSelf: () => {
-    dispatch({ type: ActionTypes.DISMISS_ALERT_CONFLICT });
-    dispatch(addLastAddedCourse());
-  },
+  dismissSelf: () => dispatch({ type: ActionTypes.DISMISS_ALERT_CONFLICT }),
   turnConflictsOn: () => dispatch({ type: ActionTypes.TOGGLE_CONFLICTS }),
+  addLastAddedCourse: () => dispatch(addLastAddedCourse()),
 });
 
 const ConflictAlertContainer = connect(
