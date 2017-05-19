@@ -164,7 +164,7 @@ export const loadTimetable = (timetable, created = false) => (dispatch) => {
 };
 
 export const createNewTimetable = (ttName = 'Untitled Schedule') => (dispatch) => {
-  dispatch(loadTimetable({ name: ttName, courses: [], has_conflict: false }, true));
+  dispatch(loadTimetable({ name: ttName, courses: [], events: [], has_conflict: false }, true));
 };
 
 export const nullifyTimetable = () => (dispatch) => {
@@ -178,10 +178,13 @@ export const nullifyTimetable = () => (dispatch) => {
   });
   dispatch({
     type: ActionTypes.CHANGE_ACTIVE_SAVED_TIMETABLE,
-    timetable: { name: 'Untitled Schedule', courses: [], has_conflict: false },
+    timetable: { name: 'Untitled Schedule', courses: [], events: [], has_conflict: false },
   });
   dispatch({
     type: ActionTypes.CLEAR_OPTIONAL_COURSES,
+  });
+  dispatch({
+    type: ActionTypes.CLEAR_CUSTOM_SLOTS,
   });
 };
 
@@ -321,29 +324,36 @@ export const addLastAddedCourse = () => (dispatch) => {
   }
 };
 
-export const addCustomSlot = (timeStart, timeEnd, day, preview, id) => ({
-  type: ActionTypes.ADD_CUSTOM_SLOT,
-  newCustomSlot: {
-    time_start: timeStart, // match backend slot attribute names
-    time_end: timeEnd,
-    name: 'New Custom Event', // default name for custom slot
-    day,
-    id,
-    preview,
-  },
-});
+export const addCustomSlot = (timeStart, timeEnd, day, preview, id) => (dispatch) => {
+  dispatch({
+    type: ActionTypes.ADD_CUSTOM_SLOT,
+    newCustomSlot: {
+      time_start: timeStart, // match backend slot attribute names
+      time_end: timeEnd,
+      name: 'New Custom Event', // default name for custom slot
+      day,
+      id,
+      preview,
+    },
+  });
+  dispatch(autoSave());
+};
 
-export const updateCustomSlot = (newValues, id) => ({
-  type: ActionTypes.UPDATE_CUSTOM_SLOT,
-  newValues,
-  id,
-});
+export const updateCustomSlot = (newValues, id) => (dispatch) => {
+  dispatch({
+    type: ActionTypes.UPDATE_CUSTOM_SLOT,
+    newValues,
+    id,
+  });
+  dispatch(autoSave());
+};
 
 export const removeCustomSlot = id => (dispatch) => {
   dispatch({
     type: ActionTypes.REMOVE_CUSTOM_SLOT,
     id,
   });
+  dispatch(autoSave());
 };
 
 export const addOrRemoveOptionalCourse = course => (dispatch) => {
