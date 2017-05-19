@@ -384,7 +384,11 @@ export const updateCustomSlot = (newValues, id) => (dispatch) => {
     newValues,
     id,
   });
-  dispatch(autoFetch());
+  const changedProps = Object.keys(newValues);
+  const onlyChangingName = changedProps.length === 1 && changedProps[0] === 'name';
+  if (!onlyChangingName) { // only refetch if we are changing the slot time
+    dispatch(autoFetch());
+  }
 };
 
 export const removeCustomSlot = id => (dispatch) => {
