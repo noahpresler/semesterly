@@ -29,7 +29,7 @@ class SlotManager extends React.Component {
       // build interval tree with part of slot that should not be overlayed (first hour)
       const infoIntervals = intervals.map(s => ({
         start: s.start,
-        end: Math.min(s.start + 60, s.end),
+        end: Math.min(s.start + 59, s.end),
         id: s.id,
       }));
       const infoSlots = IntervalTree(infoIntervals);
