@@ -45,7 +45,8 @@ def get_classmates_from_course_id(school, student, course_id, semester, friends=
     curr_ptts = PersonalTimetable.objects.filter(student__in=friends, courses__id__exact=course_id) \
         .filter(Q(semester=semester)).order_by('student', 'last_updated').distinct('student')
     past_ptts = PersonalTimetable.objects.filter(student__in=friends, courses__id__in=past_ids) \
-        .filter(~Q(semester=semester)).order_by('student', 'last_updated').distinct('student')
+        .exclude(student__in=curr_ptts.values_list('student', flat=True)).filter(~Q(semester=semester)) \
+        .order_by('student', 'last_updated').distinct('student')
 
     course['classmates'] = get_classmates_from_tts(student, course_id, curr_ptts)
     course['past_classmates'] = get_classmates_from_tts(student, course_id, past_ptts)
