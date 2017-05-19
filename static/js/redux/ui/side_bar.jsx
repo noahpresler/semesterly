@@ -110,9 +110,16 @@ class SideBar extends React.Component {
                         in the class</h3>
         </div>);
     }
-    if (optionalSlots.length === 0) {
-      const img = (!isNaN(parseInt(masterSlots, 0)) && (masterSlots.length >= 4)) ? null :
-      <img src="/static/img/emptystates/optionalslots.png" alt="No optional courses added." />;
+    const optionalSlotsHeader = (optionalSlots.length === 0 && masterSlots.length > 3) ? null :
+    <h4 className="sb-header">Optional Courses</h4>;
+    if (optionalSlots.length === 0 && masterSlots.length > 3) {
+      optionalSlots = null;
+    } else if (optionalSlots.length === 0) {
+      const img = (
+        <img
+          src="/static/img/emptystates/optionalslots.png"
+          alt="No optional courses added."
+        />);
       optionalSlots = (
         <div className="empty-state">
           { img }
@@ -173,7 +180,7 @@ class SideBar extends React.Component {
           { masterSlots }
           { finalScheduleLink }
         </div>
-        <h4 className="sb-header">Optional Courses</h4>
+        { optionalSlotsHeader }
         { optionalSlots }
         <div id="sb-optional-slots" />
         <h4 className="sb-header" onClick={this.props.launchTextbookModal}> Textbooks
