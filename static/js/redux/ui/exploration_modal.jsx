@@ -175,12 +175,12 @@ class ExplorationModal extends React.Component {
     this.hide();
   }
 
-  handleTimesChange(component, values) {
+  handleTimesChange(values, component) {
     if (this.props.isFetching) {
       return;
     }
     const times = [...this.state.times];
-    const i = times.findIndex(t => t.day === component.props.day);
+    const i = times.findIndex(t => t.day === component);
     times[i] = Object.assign({}, times[i], values);
     this.setState({
       times,
@@ -358,7 +358,7 @@ class ExplorationModal extends React.Component {
         key={timeState.day}
         day={timeState.day}
         value={value}
-        onChange={this.handleTimesChange}
+        onChange={(x, y = timeState.day) => this.handleTimesChange(x, y)}
         onChangeComplete={() => this.fetchAdvancedSearchResults(this.state)}
         remove={this.removeTimeFilter}
       />);
