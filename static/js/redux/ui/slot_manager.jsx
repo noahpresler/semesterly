@@ -86,7 +86,6 @@ class SlotManager extends React.Component {
       // get exists_conflict
       const completeSlots = IntervalTree(intervals);
       for (let i = 0; i < intervals.length; i++) {
-        console.log(daySlots[i], getIntersections(completeSlots, intervals[i]));
         daySlots[i].exists_conflict = getIntersections(completeSlots, intervals[i]).length > 1;
       }
 
