@@ -122,3 +122,14 @@ export const getMaxEndHour = (timetable, hasCourses) => {
   }
   return Math.max(maxEndHour, getMaxHourBasedOnWindowHeight());
 };
+// Return true if all sections in input timetable are locked
+export const allSectionsLocked = (courseSections) => {
+  const courses = Object.keys(courseSections);
+  for (let i = 0; i < courses.length; i++) {
+    const sectionToLocked = courseSections[courses[i]];
+    if (Object.keys(sectionToLocked).some(section => sectionToLocked[section] !== '')) {
+      return false;
+    }
+  }
+  return true;
+};
