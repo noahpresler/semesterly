@@ -360,7 +360,7 @@ const autoFetch = () => (dispatch) => {
       course: store.getState().customSlots,
     });
     dispatch(refetchTimetables());
-  }, 1000);
+  }, 250);
 };
 
 export const addCustomSlot = (timeStart, timeEnd, day, preview, id) => (dispatch) => {
@@ -386,7 +386,9 @@ export const updateCustomSlot = (newValues, id) => (dispatch) => {
   });
   const changedProps = Object.keys(newValues);
   const onlyChangingName = changedProps.length === 1 && changedProps[0] === 'name';
-  if (!onlyChangingName) { // only refetch if we are changing the slot time
+  if (onlyChangingName) {
+    dispatch(autoSave());
+  } else { // only refetch if we are changing the slot time
     dispatch(autoFetch());
   }
 };
