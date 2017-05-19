@@ -1,4 +1,3 @@
-from braces.views import CsrfExemptMixin
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
@@ -6,7 +5,7 @@ from django.shortcuts import get_object_or_404
 from hashids import Hashids
 
 from timetable.jhu_final_exam_scheduler import JHUFinalExamScheduler
-from timetable.utils import FeatureFlowView
+from timetable.utils import FeatureFlowView, CsrfExemptMixin
 from exams.models import FinalExamShare
 from student.utils import get_student
 
