@@ -19,5 +19,3 @@ export const SEMESTER_RANKS = {
   Spring: 1,
   Fall: 2,
 };
-
-export const CUSTOM_EVENT_FLAG = 'event';
