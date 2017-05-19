@@ -50,7 +50,7 @@ class CourseSearchList(CsrfExemptMixin, APIView):
         # Filter first by the user's search query.
         course_match_objs = get_course_matches(school, query, sem)
         # Filter now by departments, areas, levels, or times if provided.
-        filters = request.data.get('filters')
+        filters = request.data
         if filters.get('areas'):
             course_match_objs = course_match_objs.filter(areas__in=filters.get('areas'))
         if filters.get('departments'):
