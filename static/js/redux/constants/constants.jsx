@@ -7,7 +7,6 @@ export const FULL_WEEK_LIST = ['U', 'M', 'T', 'W', 'R', 'F', 'S'];
 
 export const VERBOSE_DAYS = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'];
 
-
 export const DRAG_TYPES = {
   DRAG: 'drag', // drag a custom slot to a new location
   EXTEND: 'extend', // extend the length of a custom slot
@@ -20,3 +19,5 @@ export const SEMESTER_RANKS = {
   Spring: 1,
   Fall: 2,
 };
+
+export const CUSTOM_EVENT_FLAG = 'event';
