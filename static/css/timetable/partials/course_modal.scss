@@ -171,31 +171,33 @@
   }
 }
 
-#modal-header #share-course-link-wrapper {
-  background-color: $gd4d4d4;
-  border-radius: 2px;
-  height: 33px;
-  padding: 0 5px;
-  position: absolute;
-  right: 5px;
-  top: 35px;
-}
+#modal-header {
+  .share-course-link-wrapper {
+    background-color: $gd4d4d4;
+    border-radius: 2px;
+    height: 33px;
+    padding: 0 5px;
+    position: absolute;
+    right: 5px;
+    top: 35px;
 
-#modal-header #share-course-link {
-  font-size: 14px;
-  height: 25px;
-  margin-top: 4px;
-}
+    .tip {
+      border: 1px solid $gccc;
+      right: 28px;
+      top: -7px;
+    }
 
-#modal-header #share-course-link-wrapper .tip {
-  border: 1px solid $gccc;
-  right: 28px;
-  top: -7px;
-}
+    .tip-border {
+      right: 28px;
+      top: -7px;
+    }
+  }
 
-#modal-header #share-course-link-wrapper .tip-border {
-  right: 28px;
-  top: -7px;
+  .share-course-link {
+    font-size: 14px;
+    height: 25px;
+    margin-top: 4px;
+  }
 }
 
 #modal-save {

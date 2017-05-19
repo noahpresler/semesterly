@@ -101,6 +101,7 @@ class UserTimetableViewTest(APITestCase):
                 'id': 1,
                 'enrolled_sections': ['L1']
             }],
+            'events': [],
             'name': 'new tt',
             'has_conflict': False
         }
@@ -123,6 +124,7 @@ class UserTimetableViewTest(APITestCase):
                 'id': 1,
                 'enrolled_sections': ['L1']
             }],
+            'events': [],
             'name': 'tt',
             'has_conflict': False
         }
@@ -163,6 +165,7 @@ class UserTimetableViewTest(APITestCase):
                 'id': 1,
                 'enrolled_sections': ['L1']
             }],
+            'events': [],
             'name': 'renamed',
             'has_conflict': False
         }
