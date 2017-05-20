@@ -169,6 +169,12 @@ function setup(dispatch) {
     case 'FINAL_EXAMS':
       dispatch({ type: ActionTypes.SHOW_FINAL_EXAMS_MODAL });
       break;
+    case 'SHOW_AGREEMENT_MODAL':
+      dispatch({ type: ActionTypes.TRIGGER_TOS_MODAL });
+      break;
+    case 'SHOW_AGREEMENT_BANNER':
+      dispatch({ type: ActionTypes.TRIGGER_TOS_BANNER });
+      break;
     default:
       // unexpected feature name
       break;
