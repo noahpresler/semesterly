@@ -2,7 +2,6 @@ import json
 import itertools
 import logging
 
-from braces.views import CsrfExemptMixin
 from django.template import RequestContext
 from django.template.loader import get_template
 from django.views.decorators.cache import never_cache
@@ -19,7 +18,9 @@ from analytics.models import FinalExamModalView, SharedTimetable
 from student.models import Student
 from timetable.models import Semester, Course
 from student.utils import convert_tt_to_dict, get_student
-from timetable.utils import update_locked_sections, TimetableGenerator, ValidateSubdomainMixin, FeatureFlowView
+from timetable.utils import update_locked_sections, TimetableGenerator, ValidateSubdomainMixin, \
+    FeatureFlowView, CsrfExemptMixin
+
 
 hashids = Hashids(salt="x98as7dhg&h*askdj^has!kj?xz<!9")
 logger = logging.getLogger(__name__)
