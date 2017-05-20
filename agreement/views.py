@@ -8,7 +8,7 @@ from student.utils import get_student
 
 UTC = timezone('utc')
 
-class TosLink(FeatureFlowView):
+class AgreementLink(FeatureFlowView):
     feature_name = ''
 
     def show_agreement(self, request):
@@ -26,6 +26,8 @@ class TosLink(FeatureFlowView):
                 request.session["last_shown_tos"] = datetime.strftime(datetime.utcnow(), "%Y-%m-%d")
                 # Show Agreement Banner
                 self.feature_name = 'SHOW_AGREEMENT_BANNER'
+        print("****************************HHIHIHIHIHIH")
+        print(self.feature_name)
 
     def get_feature_flow(self, request, slug):
         self.show_agreement(request)

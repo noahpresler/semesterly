@@ -25,11 +25,6 @@ import { currSem } from '../reducers/semester_reducer';
 
 let autoSaveTimer;
 
-export const getUserInfo = json => ({
-  type: ActionTypes.USER_INFO_RECEIVED,
-  data: json,
-});
-
 export const requestUserInfo = () => ({
   type: ActionTypes.REQUEST_USER_INFO,
 });
@@ -63,6 +58,7 @@ const getSaveTimetablesRequestBody = () => {
   const tt = getActiveTimetable(timetableState);
   return {
     courses: tt.courses,
+    events: state.customSlots,
     has_conflict: tt.has_conflict,
     semester: currSem(state.semester),
     name: state.savingTimetable.activeTimetable.name,
@@ -140,7 +136,8 @@ export const saveTimetable = (isAutoSave = false, callback = null) => (dispatch)
   const activeTimetable = getActiveTimetable(state.timetables);
 
   // if current timetable is empty or we're already in saved state, don't save this timetable
-  if (activeTimetable.courses.length === 0 || state.savingTimetable.upToDate) {
+  const numSlots = activeTimetable.courses.length + state.customSlots.length;
+  if (numSlots === 0 || state.savingTimetable.upToDate) {
     return null;
   }
 
@@ -198,7 +195,7 @@ export const saveTimetable = (isAutoSave = false, callback = null) => (dispatch)
         type: ActionTypes.RECEIVE_TIMETABLE_SAVED,
         upToDate: !json.error,
       });
-      if (callback) {
+      if (callback !== null) {
         callback();
       }
       if (!json.error && state.userInfo.data.isLoggedIn && json.timetables[0]) {
@@ -434,9 +431,10 @@ export const fetchFriends = () => (dispatch) => {
 export const autoSave = (delay = 2000) => (dispatch) => {
   const state = store.getState();
   clearTimeout(autoSaveTimer);
+  const numTimetables = state.timetables.items[state.timetables.active].courses.length;
+  const numEvents = state.customSlots.length;
   autoSaveTimer = setTimeout(() => {
-    if (state.userInfo.data.isLoggedIn
-      && state.timetables.items[state.timetables.active].courses.length > 0) {
+    if (state.userInfo.data.isLoggedIn && numTimetables + numEvents > 0) {
       dispatch(saveTimetable(true));
     }
   }, delay);
