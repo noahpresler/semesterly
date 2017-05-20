@@ -7,7 +7,7 @@ const initialState = {
   items: [{ courses: [], has_conflict: false }],
   active: 0,
   loadingCachedTT: true,
-  lastCourseAdded: null,
+  lastSlotAdded: null, // either int (course id), object (custom slots state), or null
 };
 
 const timetables = (state = initialState, action) => {
@@ -20,6 +20,9 @@ const timetables = (state = initialState, action) => {
       return Object.assign({}, state, { loadingCachedTT: false });
 
     case ActionTypes.REQUEST_TIMETABLES:
+      return Object.assign({}, state, { isFetching: true });
+
+    case ActionTypes.SET_SEMESTER:
       return Object.assign({}, state, { isFetching: true });
 
     case ActionTypes.RECEIVE_TIMETABLES: {
@@ -141,7 +144,7 @@ const timetables = (state = initialState, action) => {
       return Object.assign({}, state, { isFetching: false });
 
     case ActionTypes.UPDATE_LAST_COURSE_ADDED:
-      return Object.assign({}, state, { lastCourseAdded: action.course });
+      return Object.assign({}, state, { lastSlotAdded: action.course });
 
     default:
       return state;

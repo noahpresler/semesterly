@@ -48,8 +48,8 @@ class EnableNotificationsAlert extends React.Component {
 EnableNotificationsAlert.propTypes = {
   dismissSelf: React.PropTypes.func.isRequired,
   msg: React.PropTypes.string.isRequired,
-  enableNotifications: React.PropTypes.string.isRequired,
-  declineNotifications: React.PropTypes.string.isRequired,
+  enableNotifications: React.PropTypes.func.isRequired,
+  declineNotifications: React.PropTypes.func.isRequired,
 };
 
 export default EnableNotificationsAlert;
