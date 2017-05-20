@@ -1,93 +1,23 @@
-import json
 import itertools
+import json
 import logging
 
-from django.template import RequestContext
-from django.template.loader import get_template
-from django.views.decorators.cache import never_cache
-from django.views.decorators.csrf import csrf_exempt
-from django.shortcuts import get_object_or_404, render, render_to_response
 from django.http import HttpResponse, HttpResponseRedirect
+from django.shortcuts import get_object_or_404
 from hashids import Hashids
 from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
+from analytics.models import SharedTimetable
 from analytics.views import save_analytics_timetable
-from analytics.models import FinalExamModalView, SharedTimetable
-from student.models import Student
-from timetable.models import Semester, Course
 from student.utils import convert_tt_to_dict, get_student
+from timetable.models import Semester, Course
 from timetable.utils import update_locked_sections, TimetableGenerator, ValidateSubdomainMixin, \
     FeatureFlowView, CsrfExemptMixin
 
-
 hashids = Hashids(salt="***REMOVED***")
 logger = logging.getLogger(__name__)
-
-
-def redirect_to_home(request):
-    return HttpResponseRedirect("/")
-
-
-def custom_404(request):
-    # return HttpResponse("404", status=404)
-    response = render(request, "404.html")
-    # TODO, maybe add this next line back in when im done testing
-    # response.status_code = 404
-    return response
-
-
-def custom_500(request):
-    response = render_to_response('500.html')
-    # TODO, maybe add this next line back in when im done testing
-    # response.status_code = 500
-    return response
-
-
-def jhu_timer(request):
-    return render(request, "jhu_timer.html")
-
-
-def about(request):
-    try:
-        return render_to_response("about.html",
-                                  {},
-                                  context_instance=RequestContext(request))
-    except Exception as e:
-        return HttpResponse(str(e))
-
-
-def press(request):
-    try:
-        return render_to_response("press.html",
-                                  {},
-                                  context_instance=RequestContext(request))
-    except Exception as e:
-        return HttpResponse(str(e))
-
-
-@never_cache
-def sw_js(request, js):
-    template = get_template('sw.js')
-    html = template.render()
-    return HttpResponse(html, content_type="application/x-javascript")
-
-
-def manifest_json(request, js):
-    template = get_template('manifest.json')
-    html = template.render()
-    return HttpResponse(html, content_type="application/json")
-
-
-@csrf_exempt
-def log_final_exam_view(request):
-    student = get_object_or_404(Student, user=request.user)
-    FinalExamModalView.objects.create(
-        student=student,
-        school=request.subdomain
-    ).save()
-    return HttpResponse(json.dumps({}), content_type="application/json")
 
 
 class TimetableView(CsrfExemptMixin, ValidateSubdomainMixin, APIView):
