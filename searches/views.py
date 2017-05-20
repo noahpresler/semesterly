@@ -1,9 +1,7 @@
 import operator
 
-from braces.views import CsrfExemptMixin
 from django.core.paginator import Paginator, EmptyPage
 from django.db.models import Q
-from django.views.decorators.csrf import csrf_exempt
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
@@ -12,7 +10,7 @@ from analytics.views import save_analytics_course_search
 from student.models import Student
 from student.utils import get_student
 from timetable.models import Semester, Course
-from timetable.utils import ValidateSubdomainMixin
+from timetable.utils import ValidateSubdomainMixin, CsrfExemptMixin
 from courses.views import get_detailed_course_json, get_basic_course_json
 
 
@@ -36,7 +34,7 @@ def course_name_contains_token(token):
             Q(name__icontains=token.replace("and", "&")))
 
 
-class CourseSearchList(CsrfExemptMixin, ValidateSubdomainMixin, APIView):
+class CourseSearchList(CsrfExemptMixin, APIView):
 
     def get(self, request, query, sem_name, year):
         sem = Semester.objects.get_or_create(name=sem_name, year=year)[0]
@@ -49,25 +47,24 @@ class CourseSearchList(CsrfExemptMixin, ValidateSubdomainMixin, APIView):
         school = request.subdomain
         page = int(request.query_params.get('page', 1))
         sem, _ = Semester.objects.get_or_create(name=sem_name, year=year)
-
-        # filtering first by user's search query
+        # Filter first by the user's search query.
         course_match_objs = get_course_matches(school, query, sem)
-
-        # filtering now by departments, areas, or levels if provided
-        if request.data.get('areas'):
-            course_match_objs = course_match_objs.filter(areas__in=request.data.get('areas'))
-        if request.data.get('departments'):
-            course_match_objs = course_match_objs.filter(department__in=request.data.get('departments'))
-        if request.data.get('levels'):
-            course_match_objs = course_match_objs.filter(level__in=request.data.get('levels'))
-        if request.data.get('times'):
+        # Filter now by departments, areas, levels, or times if provided.
+        filters = request.data.get('filters')
+        if filters.get('areas'):
+            course_match_objs = course_match_objs.filter(areas__in=filters.get('areas'))
+        if filters.get('departments'):
+            course_match_objs = course_match_objs.filter(department__in=filters.get('departments'))
+        if filters.get('levels'):
+            course_match_objs = course_match_objs.filter(level__in=filters.get('levels'))
+        if filters.get('times'):
             day_map = {"Monday": "M", "Tuesday": "T", "Wednesday": "W", "Thursday": "R", "Friday": "F"}
             course_match_objs = course_match_objs.filter(
                 reduce(operator.or_, (Q(section__offering__time_start__gte="{0:0=2d}:00".format(min_max['min']),
                                         section__offering__time_end__lte="{0:0=2d}:00".format(min_max['max']),
                                         section__offering__day=day_map[min_max['day']],
                                         section__semester=sem,
-                                        section__section_type="L") for min_max in request.data.get('times'))
+                                        section__section_type="L") for min_max in filters.get('times'))
                        )
             )
         try:

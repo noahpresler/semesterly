@@ -21,55 +21,72 @@ textarea {
   font-weight: 400;
 }
 
-#dad-bod {
-  height: 100%;
-}
-
 .print {
   display: none;
 }
 
-#page {
+.page {
   height: 100%;
 }
 
-#page-wrapper {
+.page-wrapper {
   height: 100%;
 }
 
-#side-bar {
+.side-bar {
   background-color: $gfff;
   bottom: auto;
+  height: 100%;
   left: calc(100% - 300px);
-  padding: 20px 10px 10px 0;
+  overflow-y: auto;
+  padding: 20px 10px 70px 0;
   position: absolute;
   top: 0;
   transform: translateX(0);
   transition: transform .3s;
   width: 300px;
   z-index: 99;
+
+  &.full-cal {
+    transform: translateX(100%);
+  }
+
+  &.less-cal {
+    transform: translateX(0%);
+  }
 }
 
-#main-bar {
+.main-bar {
   float: left;
+  height: 100%;
   opacity: 1;
+  overflow-y: auto;
   padding: 0 20px;
   transition: width .3s, opacity .3s, visibility .3s;
   visibility: visible;
   width: calc(100% - 300px);
+
+  &.full-cal {
+    width: 100%;
+  }
+
+  &.less-cal {
+    width: calc(100% - 300px);
+  }
 }
 
-#all-cols {
+.all-cols {
   bottom: 0;
   overflow-x: hidden;
+  overflow-y: auto;
   position: absolute;
   top: 50px;
   width: 100%;
 }
 
-#top-bar {
+.top-bar {
   background-color: $gfff;
-  box-shadow: 0 0 12px rgba(0, 0, 0, .1), 0 0 1px rgba(0, 0, 0, .15);
+  box-shadow: 0 0 12px $black-transparent-1, 0 0 1px $black-transparent-15;
   min-height: 50px;
   position: relative;
   z-index: 1000;
@@ -80,7 +97,7 @@ textarea {
   margin-right: 0;
 }
 
-#show-exploration {
+.show-exploration {
   cursor: pointer;
   height: 30px;
   position: absolute;
@@ -89,104 +106,86 @@ textarea {
   transition: transform .3s;
   user-select: none;
   width: 85px;
-}
 
-#show-exploration i {
-  display: inline-block;
-  font-size: 22px;
-  line-height: 30px;
-  vertical-align:	middle;
-}
-
-#show-exploration span {
-  display: inline-block;
-  font-family: $font-body;
-  font-size: 12px;
-  line-height: 12px;
-  margin-left: 4px;
-  padding: 3px 0;
-  text-align: left;
-  vertical-align:	middle;
-  width: 60px;
-}
-
-#main-bar.full-cal {
-  width: 100%;
-}
-
-#side-bar.full-cal {
-  transform: translateX(100%);
-}
-
-#main-bar.less-cal {
-  width: calc(100% - 300px);
-}
-
-#side-bar.less-cal {
-  transform: translateX(0%);
-}
-
-
-@media (max-width: 999px) {
-  #main-bar{
-    width: 100%;
+  i {
+    display: inline-block;
+    font-size: 22px;
+    line-height: 30px;
+    vertical-align:	middle;
   }
 
-  #side-bar {
+  span {
+    display: inline-block;
+    font-family: $font-body;
+    font-size: 12px;
+    line-height: 12px;
+    margin-left: 4px;
+    padding: 3px 0;
+    text-align: left;
+    vertical-align:	middle;
+    width: 60px;
+  }
+}
+
+@media (max-width: 999px) {
+  .main-bar {
+    width: 100%;
+
+    &.full-cal {
+      width: 100%;
+    }
+
+    &.less-cal {
+      opacity: 0;
+      visibility: visible;
+      width: 0%;
+    }
+  }
+
+  .side-bar {
     bottom: 0;
     left: 100%;
     overflow-y: auto;
-    padding: 10px;
+    padding: 10px 10px 100px;
     position: fixed;
     top: 50px;
     transform: translateX(0%);
     width: 100%;
-  }
 
-  #main-bar.full-cal {
-    width: 100%;
-  }
+    &.full-cal {
+      transform: translateX(0%);
+    }
 
-  #side-bar.full-cal {
-    transform: translateX(0%);
-  }
-
-  #main-bar.less-cal {
-    opacity: 0;
-    visibility: visible;
-    width: 0%;
-  }
-
-  #side-bar.less-cal {
-    transform: translateX(-100%);
-    width: 100%;
+    &.less-cal {
+      transform: translateX(-100%);
+      width: 100%;
+    }
   }
 }
 
 
 @media (max-width: 766px) {
-  #main-bar {
+  .main-bar {
     padding: 10px;
   }
 
-  #show-exploration {
+  .show-exploration {
     display: none;
   }
 }
 
 @media (max-width: 500px) {
-  #main-bar {
+  .main-bar {
     padding: 0;
   }
 }
 
-/* Logo & name */
-
-#semesterly-name {
+// Logo & name
+.semesterly-name {
   display: inline-block;
   float: left;
   font-family: $font-primary;
-  font-size: 32px !important;
+  font-size: 32px;
   font-weight: 500;
   height: 50px;
   line-height: 50px;
@@ -194,7 +193,7 @@ textarea {
   user-select: none;
 }
 
-#semesterly-logo {
+.semesterly-logo {
   display: inline-block;
   float: left;
   height: 32px;
@@ -204,31 +203,31 @@ textarea {
 }
 
 @media (max-width: 1000px) {
-  .fc-ltr .fc-time-grid .fc-event-container {
-    margin-left: .5%;
+  .fc-ltr {
+    .fc-time-grid {
+      .fc-event-container {
+        margin-left: .5%;
+      }
+    }
   }
 
-  #search-input {
-    font-size: 15px;
-  }
-
-  #semesterly-name {
+  .semesterly-name {
     display: none;
   }
 
-  #navicon {
+  .navicon {
     right: 9px;
   }
 }
 @media (max-width: 766px) {
-  #semesterly-logo {
+  .semesterly-logo {
     margin-left: 10px;
   }
 }
-/* end Logo & name */
+// end Logo & name
 
 // Navicon
-#navicon {
+.navicon {
   cursor: pointer;
   height: 30px;
   position: absolute;
@@ -274,19 +273,21 @@ textarea {
 // End Navicon
 
 
-.footer-button {
-  line-height: 22px;
+.nav > li {
+  &.footer-button {
+    line-height: 22px;
 
-  &:nth-child(4) {
-    margin-right: 0;
-  }
+    &:nth-child(4) {
+      margin-right: 0;
+    }
 
-  a {
-    padding: 0 15px !important;
-  }
+    a {
+      padding: 0 15px;
+    }
 
-  div {
-    line-height:  20px;
+    div {
+      line-height: 20px;
+    }
   }
 }
 

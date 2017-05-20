@@ -130,7 +130,7 @@ class Semesterly extends React.Component {
       <DayCalendarContainer /> :
       <CalendarContainer />;
     return (
-      <div id="page-wrapper">
+      <div className="page-wrapper">
         <TopBarContainer />
         <UserSettingsModalContainer />
         <ExplorationModalContainer />
@@ -146,8 +146,8 @@ class Semesterly extends React.Component {
         <TermsOfServiceBannerContainer />
         <TextbookModalContainer />
         <AlertBox ref={(a) => { this.msg = a; }} {...this.alertOptions} />
-        <div id="all-cols">
-          <div id="main-bar">
+        <div className="all-cols">
+          <div className="main-bar">
             {cal}
             <footer className="footer navbar no-print">
               <ul className="nav nav-pills no-print">

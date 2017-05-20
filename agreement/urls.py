@@ -1,7 +1,6 @@
 from django.conf.urls import patterns, url
 from django.contrib import admin
-
-from timetable.utils import TemplateView
+from django.views.generic import TemplateView
 
 admin.autodiscover()
 
