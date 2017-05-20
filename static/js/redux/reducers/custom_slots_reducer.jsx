@@ -40,8 +40,16 @@ const customSlots = (state = [], action) => {
     case ActionTypes.CLEAR_CUSTOM_SLOTS:
       return [];
 
+    case ActionTypes.CLEAR_CONFLICTING_EVENTS:
+      return state.filter(
+        slot => slot.exists_conflict === undefined || slot.exists_conflict === false);
+
     case ActionTypes.CHANGE_ACTIVE_SAVED_TIMETABLE:
       return action.timetable.events;
+
+    case ActionTypes.RECEIVE_CUSTOM_SLOTS:
+      return action.events;
+
     default:
       return state;
   }
