@@ -24,7 +24,7 @@ urlpatterns = patterns('',
                        url(r'^callback/google_calendar/*$',
                            FeatureFlowView.as_view(feature_name='GCAL_CALLBACK')),
 
-                       url(r'^timetable/*$', RedirectView.as_view(url="/")),
+                       url(r'^timetable/.*$', RedirectView.as_view(url="/")),
 
                        url(r'^complete/facebook/.*$', FeatureFlowView.as_view()),
 
