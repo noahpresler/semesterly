@@ -2,8 +2,8 @@ import * as ActionTypes from '../constants/actionTypes';
 
 const integrations = (state = [], action) => {
   switch (action.type) {
-    case ActionTypes.SET_INTEGRATIONS:
-      return action.studentIntegrations;
+    case ActionTypes.INIT_STATE:
+      return action.data.studentIntegrations;
     default:
       return state;
   }
