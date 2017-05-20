@@ -3,7 +3,7 @@ from datetime import datetime
 from pytz import timezone
 
 from timetable.utils import FeatureFlowView
-from agreement.models import TermOfService
+from agreement.models import Agreement
 from student.utils import get_student
 
 UTC = timezone('utc')
@@ -13,7 +13,7 @@ class AgreementLink(FeatureFlowView):
 
     def show_agreement(self, request):
         student = get_student(request)
-        tos_last_updated = TermOfService.objects.order_by("-last_updated")[0].last_update
+        tos_last_updated = Agreement.objects.order_by("-last_updated")[0].last_update
         if student and student.user.is_authenticated():
             if student.time_accepted_tos is None or student.time_accepted_tos < tos_last_updated:
                 # Show Agreement Modal
