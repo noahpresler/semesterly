@@ -5,7 +5,7 @@ from __future__ import unicode_literals
 from django.db import migrations
 
 def load_tos(apps, schema_editor):
-    Tos = apps.get_model('timetable', 'TermOfService')
+    Tos = apps.get_model('agreement', 'Agreement')
     tos = Tos(id=1)
     tos.save()
 
