@@ -154,6 +154,3 @@ class CourseIntegration(models.Model):
   course = models.ForeignKey(Course)
   integration = models.ForeignKey(Integration)
   json = models.TextField()
-
-class TermOfService(models.Model):
-  last_updated = models.DateTimeField(auto_now_add=True)
