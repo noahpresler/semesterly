@@ -37,6 +37,19 @@ const customSlots = (state = [], action) => {
       return [...state.slice(0, dSlotIndex), ...state.slice(dSlotIndex + 1, state.length)];
     }
 
+    case ActionTypes.CLEAR_CUSTOM_SLOTS:
+      return [];
+
+    case ActionTypes.CLEAR_CONFLICTING_EVENTS:
+      return state.filter(
+        slot => slot.exists_conflict === undefined || slot.exists_conflict === false);
+
+    case ActionTypes.CHANGE_ACTIVE_SAVED_TIMETABLE:
+      return action.timetable.events;
+
+    case ActionTypes.RECEIVE_CUSTOM_SLOTS:
+      return action.events;
+
     default:
       return state;
   }

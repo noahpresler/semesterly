@@ -21,6 +21,7 @@ urlpatterns = patterns('',
                        url('', include('searches.urls')),
                        url('', include('student.urls')),
                        url('', include('analytics.urls')),
+                       url('', include('agreement.urls')),
 
                        # home
                        url(r'^$', timetable.utils.FeatureFlowView.as_view()),

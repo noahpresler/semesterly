@@ -94,17 +94,20 @@ class SearchBar extends React.Component {
       inOptionRoster={this.props.isCourseOptional(c.id)}
       position={i}
     />));
+    const seeMore = results.length > 0 && results.length < 3 ? (
+      <div id="see-more" style={{ height: 240 - (60 * results.length) }}>
+        <div id="see-more-inner">
+          <h4>Don&#39;t see what you&#39;re looking for?</h4>
+          <p>Try switching semesters or click <i className="fa fa-compass" /> above to
+                          filter by areas,
+                          departments, times and more!</p>
+        </div>
+      </div>
+    ) : null;
     const resultContainer = !this.state.focused || results.length === 0 ? null : (
       <ul className={resClass}>
         {results}
-        <div id="see-more" style={{ height: 240 - (60 * results.length) }}>
-          <div id="see-more-inner">
-            <h4>Don&#39;t see what you&#39;re looking for?</h4>
-            <p>Try switching semesters or click <i className="fa fa-compass" /> above to
-                            filter by areas,
-                            departments, times and more!</p>
-          </div>
-        </div>
+        {seeMore}
         <SearchSideBarContainer />
       </ul>
         );
@@ -154,7 +157,7 @@ class SearchBar extends React.Component {
             />
           </div>
           <div
-            id="show-exploration"
+            className="show-exploration"
             onMouseDown={this.props.showExplorationModal}
           >
             <i className="fa fa-compass" />

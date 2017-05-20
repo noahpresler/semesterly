@@ -182,11 +182,11 @@ MasterSlot.propTypes = {
 
 export const ShareLink = ({ link, onClickOut }) => (
   <ClickOutHandler onClickOut={onClickOut}>
-    <div id="share-course-link-wrapper">
+    <div className="share-course-link-wrapper">
       <div className="tip-border" />
       <div className="tip" />
       <input
-        id="share-course-link" size={link.length} value={link}
+        className="share-course-link" size={link.length} value={link}
         onClick={e => e.stopPropagation()}
         readOnly
       />
