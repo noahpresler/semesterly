@@ -17,7 +17,7 @@ from rest_framework.permissions import IsAuthenticated
 from analytics.models import *
 from authpipe.utils import get_google_credentials, check_student_token, RedirectToSignupMixin
 from student.models import *
-from student.models import Student, Reaction, RegistrationToken
+from student.models import Student, Reaction, RegistrationToken, PersonalEvent
 from student.utils import next_weekday, get_classmates_from_course_id, make_token, get_student_tts
 from timetable.models import *
 from timetable.utils import *
@@ -157,13 +157,19 @@ class UserTimetableView(ValidateSubdomainMixin, RedirectToSignupMixin, APIView):
 
             duplicate = get_object_or_404(PersonalTimetable, student=student, name=name,
                                           school=school, semester=semester)
+            # save manytomany relationships before copying
             courses, sections = duplicate.courses.all(), duplicate.sections.all()
+            events = duplicate.events.all()
+            for event in events: # create duplicates of each event to allow for safe delete
+                event.pk = None
+                event.save()
 
             duplicate.pk = None  # creates duplicate of object
             duplicate.name = new_name
             duplicate.save()
             duplicate.courses = courses
             duplicate.sections = sections
+            duplicate.events = events
 
             timetables = get_student_tts(student, school, semester)
             saved_timetable = (x for x in timetables if x['id'] == duplicate.id).next()
@@ -188,6 +194,7 @@ class UserTimetableView(ValidateSubdomainMixin, RedirectToSignupMixin, APIView):
             personal_timetable = PersonalTimetable.objects.create(**params) if tt_id is None else \
                 PersonalTimetable.objects.get(id=tt_id)
             self.update_tt(personal_timetable, name, has_conflict, courses, semester)
+            self.update_events(personal_timetable, request.data['events'])
 
             timetables = get_student_tts(student, school, semester)
             saved_timetable = (x for x in timetables if x['id'] == personal_timetable.id).next()
@@ -203,8 +210,11 @@ class UserTimetableView(ValidateSubdomainMixin, RedirectToSignupMixin, APIView):
         semester = Semester.objects.get(name=sem_name, year=year)
         student = Student.objects.get(user=request.user)
 
-        PersonalTimetable.objects.filter(
-            student=student, name=name, school=school, semester=semester).delete()
+        to_delete = PersonalTimetable.objects.filter(
+            student=student, name=name, school=school, semester=semester)
+        for tt in to_delete:
+            tt.events.all().delete()
+        to_delete.delete()
 
         timetables = get_student_tts(student, school, semester)
         response = {'timetables': timetables}
@@ -225,6 +235,18 @@ class UserTimetableView(ValidateSubdomainMixin, RedirectToSignupMixin, APIView):
             for section in enrolled_sections:
                 tt.sections.add(
                     course_obj.section_set.get(meeting_section=section, semester=semester))
+        tt.save()
+
+    def update_events(self, tt, events):
+        to_delete = tt.events.all()
+        tt.events.clear()
+        to_delete.delete()
+        for event in events:
+            event_obj = PersonalEvent.objects.create(name=event['name'],
+                                                     time_start=event['time_start'],
+                                                     time_end=event['time_end'],
+                                                     day=event['day'])
+            tt.events.add(event_obj)
         tt.save()
 
 
@@ -274,7 +296,8 @@ class ClassmateView(ValidateSubdomainMixin, RedirectToSignupMixin, APIView):
 
             # The most recent TT per student with social enabled that has courses in common with input student
             matching_tts = PersonalTimetable.objects.filter(student__social_all=True,
-                                                            courses__id__in=current_tt_courses) \
+                                                            courses__id__in=current_tt_courses,
+                                                            semester=semester) \
                 .exclude(student=student) \
                 .order_by('student', 'last_updated') \
                 .distinct('student')

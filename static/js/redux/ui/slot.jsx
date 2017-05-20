@@ -49,7 +49,7 @@ const createSlotTarget = {
     let { timeStart } = monitor.getItem();
     const { id } = monitor.getItem();
 
-        // get the time that the mouse dropped on
+    // get the time that the mouse dropped on
     const slotTop = $(`#${props.id}`).offset().top;
     const n = Math.floor((monitor.getClientOffset().y - slotTop) / HALF_HOUR_HEIGHT);
     let timeEnd = convertToStr(convertToHalfHours(props.time_start) + n);
@@ -57,18 +57,13 @@ const createSlotTarget = {
     if (timeStart > timeEnd) {
       [timeStart, timeEnd] = [timeEnd, timeStart];
     }
-        // props.addCustomSlot(timeStart, timeEnd, props.day, false, new Date().getTime());
     props.updateCustomSlot({ preview: false }, id);
-  },
-  canDrop(props, monitor) { // new custom slot must start and end on the same day
-    const { day } = monitor.getItem();
-    return day === props.day;
   },
   hover(props, monitor) {
     let { timeStart } = monitor.getItem();
     const { id } = monitor.getItem();
 
-        // get the time that the mouse dropped on
+    // get the time that the mouse dropped on
     const slotTop = $(`#${props.id}`).offset().top;
     const n = Math.floor((monitor.getClientOffset().y - slotTop) / HALF_HOUR_HEIGHT);
     if (n === lastPreview) {
