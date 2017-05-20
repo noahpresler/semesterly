@@ -28,8 +28,9 @@ class UrlsTest(UrlTestCase):
          'timetable.utils.FeatureFlowView')
 
         # redirects
-        self.assertUrlResolvesToView('/timetable/random_stuff', 'timetable.views.redirect_to_home')
-        self.assertUrlResolvesToView('/timetable/', 'timetable.views.redirect_to_home')
+        self.assertUrlResolvesToView('/timetable/random_stuff',
+                                     'django.views.generic.base.RedirectView')
+        self.assertUrlResolvesToView('/timetable/', 'django.views.generic.base.RedirectView')
 
         # timetables
         self.assertUrlResolvesToView('/timetables/', 'timetable.views.TimetableView')
@@ -37,8 +38,6 @@ class UrlsTest(UrlTestCase):
         # timetable sharing
         self.assertUrlResolvesToView('/timetables/links/', 'timetable.views.TimetableLinkView')
         self.assertUrlResolvesToView('/timetables/links/SecAV/', 'timetable.views.TimetableLinkView')
-        # old timetable sharing format
-        self.assertUrlResolvesToView('/share/dIcMED', 'timetable.views.TimetableLinkView')
 
 
 class TimetableViewTest(APITestCase):
