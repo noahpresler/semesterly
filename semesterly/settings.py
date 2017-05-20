@@ -146,6 +146,7 @@ INSTALLED_APPS = (
     'rest_framework_swagger',
     'webpack_loader',
     'djcelery',
+    'agreement'
 )
 
 REST_FRAMEWORK ={

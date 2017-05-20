@@ -51,6 +51,7 @@
     "react-dom": "^15.1.0",
     "react-hot-loader": "^1.3.1",
     "react-input-autosize": "^1.1.0",
+    "react-input-range": "^1.1.3",
     "react-onclickout": "^2.0.4",
     "react-proxy": "^1.1.8",
     "react-redux": "^5.0.2",
@@ -79,7 +80,7 @@
     "watch": "node server.js",
     "lint-staged": "lint-staged",
     "lint-fix": "./node_modules/.bin/eslint --fix static/js/redux/* static/js/redux/alerts/* static/js/redux/actions/* static/js/redux/constants/* static/js/redux/reducers/* static/js/redux/ui/containers/* static/js/redux/ui/alerts/*",
-    "lint": "./node_modules/.bin/eslint static/js/redux/*/*; ./node_modules/.bin/sass-lint -c .scss-lint.yml 'static/css/timetable/*.scss, static/css/timetable/base/*.scss, static/css/timetable/vendor/*.scss' -v -q"
+    "lint": "./node_modules/.bin/eslint static/js/redux/*/*; ./node_modules/.bin/sass-lint -c .scss-lint.yml 'static/css/timetable/*.scss, static/css/timetable/base/*.scss' -v -q"
   },
   "repository": {
     "type": "git",
