@@ -25,3 +25,4 @@ export const deleteRegistrationTokenEndpoint = endpoint => `/registration-token/
 export const getIntegrationEndpoint = (integrationId, courseId) => `/integrations/${integrationId}/course/${courseId}/`;
 export const getFinalExamSchedulerEndpoint = () => '/exams/';
 export const getRequestShareExamLinkEndpoint = () => '/exams/links/';
+export const acceptTOSEndpoint = () => '/tos/accept/';
