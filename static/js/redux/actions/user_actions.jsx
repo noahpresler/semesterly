@@ -592,10 +592,10 @@ export const changeTimetableName = name => (dispatch) => {
   dispatch(saveTimetable());
 };
 
-export function acceptTOS() {
-  return fetch(acceptTOSEndpoint(), {
+export const acceptTOS = () => {
+  fetch(acceptTOSEndpoint(), {
     credentials: 'include',
     method: 'POST',
     body: '',
   });
-}
+};
