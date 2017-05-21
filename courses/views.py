@@ -33,6 +33,8 @@ def get_detailed_course_json(school, course, sem, student=None):
     json_data['integrations'] = list(course.get_course_integrations())
     json_data['regexed_courses'] = get_regexed_courses(school, json_data)
     json_data['popularity_percent'] = get_popularity_percent_from_course(course, sem)
+    if course.same_as:
+        json_data['eval_info'] += eval_add_unique_term_year_flag(course.same_as, course.same_as.get_eval_info())
     return json_data
 
 
@@ -139,7 +141,7 @@ def get_classmates_in_course(request, school, sem_name, year, course_id):
   if logged and Student.objects.filter(user=request.user).exists():
     student = Student.objects.get(user=request.user)
   if student and student.user.is_authenticated() and student.social_courses:
-    json_data = get_classmates_from_course_id(school, student, course.id,sem)
+    json_data = get_classmates_from_course_id(school, student, course.id,sem, include_same_as=True)
   return HttpResponse(json.dumps(json_data), content_type="application/json")
 
 
