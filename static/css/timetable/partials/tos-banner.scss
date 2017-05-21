@@ -1,5 +1,6 @@
 .tos-banner {
-  background-color: $geee;
+  background-color: $gfff;
+  border: 1px solid $gddd;
   bottom: 0;
   left: 50%;
   max-width: 470px;
@@ -30,7 +31,7 @@
 }
 
 .tos-banner__close {
-  background-color: $gddd;
+  background-color: $geee;
   bottom: 6px;
   cursor: pointer;
   padding: 0 5px;
