@@ -5,4 +5,4 @@ from django.db import models
 class Agreement(models.Model):
     """ Database object representing when terms of service is last updated.
     """
-    last_updated = models.DateTimeField(auto_now_add=True)
+    last_updated = models.DateTimeField()

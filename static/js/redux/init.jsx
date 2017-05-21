@@ -138,6 +138,14 @@ const handleFlows = featureFlow => (dispatch) => {
     case 'FINAL_EXAMS':
       dispatch({ type: ActionTypes.SHOW_FINAL_EXAMS_MODAL });
       break;
+    default:
+      // unexpected feature name
+      break;
+  }
+};
+
+const handleAgreement = showAgreement => (dispatch) => {
+  switch (showAgreement) {
     case 'SHOW_AGREEMENT_MODAL':
       dispatch({ type: ActionTypes.TRIGGER_TOS_MODAL });
       break;
@@ -162,6 +170,7 @@ const setup = () => (dispatch) => {
   }
   dispatch(showFriendAlert());
 
+  dispatch(handleAgreement(initData.showAgreement));
   dispatch(handleFlows(initData.featureFlow));
   dispatch(fetchSchoolInfo());
 };
