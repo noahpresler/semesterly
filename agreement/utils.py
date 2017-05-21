@@ -21,3 +21,4 @@ def show_agreement(request):
             request.session["last_shown_agreement"] = \
             datetime.strftime(datetime.utcnow(), "%Y-%m-%d %H:%M:%S")
             return 'SHOW_AGREEMENT_BANNER'
+    return None
