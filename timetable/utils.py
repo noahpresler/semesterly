@@ -13,6 +13,7 @@ from timetable.school_mappers import school_to_granularity, school_to_semesters,
     VALID_SCHOOLS, AM_PM_SCHOOLS, final_exams_available
 from timetable.scoring import get_tt_cost, get_num_days, get_avg_day_length, get_num_friends, get_avg_rating
 from student.utils import get_student, get_user_dict
+from agreement.utils import show_agreement
 
 
 MAX_RETURN = 60  # Max number of timetables we want to consider
@@ -364,7 +365,7 @@ class FeatureFlowView(ValidateSubdomainMixin, APIView):
             'studentIntegrations': integrations,
             'examSupportedSemesters': map(all_semesters.index,
                                           final_exams_available.get(self.school, [])),
-
+            'showAgreement': show_agreement(request),
             'featureFlow': dict(feature_flow, name=self.feature_name)
         }
 
