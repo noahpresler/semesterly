@@ -21,6 +21,7 @@ from timetable.models import Semester, Course
 from nltk.stem.porter import *
 from collections import defaultdict
 
+
 # Vectorizer (file writer)
 class Vectorizer():
     def __init__(self):
@@ -28,14 +29,16 @@ class Vectorizer():
         self.stemmer = PorterStemmer()
 
     def vectorize(self):
-        start_time = time.time()
         # get names (titles) and descriptions for creating vocabulary
         raw_word_counts = []
         for course in Course.objects.all():
-            raw_word_counts.append(self.get_stem_course(course.name, course.description, course.areas, self.TITLE_WEIGHT))
-
+            raw_word_counts.append(self.get_stem_course(course.name,
+                                                        course.description,
+                                                        course.areas,
+                                                        self.TITLE_WEIGHT))
         # vectorize course objects
-        count_vectorizer = CountVectorizer(ngram_range=(1,2), stop_words='english')
+        count_vectorizer = CountVectorizer(ngram_range=(1, 2),
+                                           stop_words='english')
         processed_word_counts = count_vectorizer.fit_transform(raw_word_counts)
         TFIDF_TF = TfidfTransformer(use_idf=True).fit(processed_word_counts)
         course_vectors = TFIDF_TF.transform(processed_word_counts)
@@ -44,14 +47,12 @@ class Vectorizer():
         i = 0
         for course in Course.objects.all():
             self.picklify(course, course_vectors[i])
-            i+=1
+            i += 1
 
         # store CountVectorizer in the memory
         with open('count_vectorizer.pickle', 'wb') as handle:
-            pickle.dump(count_vectorizer, handle, protocol=pickle.HIGHEST_PROTOCOL)
-
-        elapsed_time = time.time() - start_time
-        print("\nPreprocessing course corpus to matrix took %f (seconds)" %elapsed_time)
+            pickle.dump(count_vectorizer, handle,
+                        protocol=pickle.HIGHEST_PROTOCOL)
 
     def get_stem_course(self, name, description, area, W):
         stemmed_doc = ""
@@ -78,6 +79,7 @@ class Vectorizer():
         course_object.vector = course_vector
         course_object.save()
 
+
 # Searcher (file reader / query performance)
 class Searcher():
     def __init__(self):
@@ -86,7 +88,7 @@ class Searcher():
         self.vectorizer = Vectorizer()
         self.MAX_CAPACITY = 300
         self.start_time = 0
-        #self.queries = []
+        # self.queries = []
 
     def load_count_vectorizer(self):
         with open('count_vectorizer.pickle', 'r') as handle:
@@ -97,7 +99,7 @@ class Searcher():
         query_vector = self.count_vectorizer.transform([stemmed_qry])
         return query_vector
 
-        #build user-relevant query
+        # build user-relevant query
         '''
         self.queries.insert(0, query_vector)
         relevant_query = query_vector
@@ -113,7 +115,7 @@ class Searcher():
     def match_title(self, query, course_name):
         query_tokens = query.lower().split(' ')
         course_name = course_name.lower()
-        #if len(query_tokens) is 1 and self.get_acronym(course_name) == query:
+        # if len(query_tokens) is 1 and self.get_acronym(course_name) == query:
         #    return 1
         return 1 if all(map(lambda q: q in course_name, query_tokens)) else 0
 
@@ -143,11 +145,14 @@ class Searcher():
                             Q(section__semester=semester)
                             )
         # test
-        #self.start_time = time.time()
-        #elapsed_time = time.time() - self.start_time
-        #for course in courses_objs[:10]:
-        #    print(course.name)
-        #print("\nBaseline Model Completed Searches in %f (seconds)" %elapsed_time)
+        '''
+        self.start_time = time.time()
+        elapsed_time = time.time() - self.start_time
+        for course in courses_objs[:10]:
+            print(course.name)
+        print("\nBaseline Model Completed Searches in %f (seconds)" (
+              %elapsed_time)
+        '''
 
     def vectorized_search(self, school, query, semester):
         if query == "":
@@ -156,41 +161,41 @@ class Searcher():
         course_name_contains_query = reduce(
             operator.and_, map(self.course_name_contains_token, query_tokens))
         title_matching_courses = Course.objects.filter(
-                                                Q(school=school) & 
+                                                Q(school=school) &
                                                 course_name_contains_query &
                                                 Q(section__semester=semester)
                                                 )
         descp_contains_query = []
         if title_matching_courses.count() < self.MAX_CAPACITY:
-            descp_contains_query = reduce(operator.or_, 
-                map(self.course_desc_contains_token, query.replace("and", "").split()))
+            descp_contains_query = reduce(operator.or_,
+                                          map(self.course_desc_contains_token,
+                                              query.replace("and", "").split())
+                                          )
             descp_matching_courses = Course.objects.filter(
-                                                Q(school=school) & 
+                                                Q(school=school) &
                                                 descp_contains_query &
                                                 Q(section__semester=semester)
                                                 )
-        courses_objs = list(title_matching_courses.all()[:self.MAX_CAPACITY]) + \
-                       list(descp_matching_courses.all()[:self.MAX_CAPACITY - title_matching_courses.count()])
+        courses_objs = list(title_matching_courses.all()[:self.MAX_CAPACITY]) +
+        list(descp_matching_courses.all()[:self.MAX_CAPACITY -
+                                          title_matching_courses.count()])
         return self.get_relevant_courses(query, courses_objs)
 
     def course_desc_contains_token(self, token):
-        return Q(description__icontains=token)#.replace("and", "")))
+        return Q(description__icontains=token)
 
     def course_name_contains_token(self, token):
         return (Q(code__icontains=token) |
                 Q(name__icontains=token.replace("&", "and")) |
                 Q(name__icontains=token.replace("and", "&")))
 
-
     def get_relevant_courses(self, query, course_filtered):
         query_vector = self.vectorize_query(query.lower())
         scores = []
         for course in course_filtered:
-            score = self.get_cosine_sim(query_vector, course.vector)# + self.match_title(query, course.name)
+            score = self.get_cosine_sim(query_vector, course.vector)
             scores.append((course, score))
-        scores.sort(key=lambda tup:-tup[1])
-        #return map(operator.itemgetter(0), scores)
-        
+        scores.sort(key=lambda tup: -tup[1])
         # duplicate handling
         course_titles = set()
         course_object = []
@@ -202,16 +207,13 @@ class Searcher():
                 course_titles.add(course.name)
                 course_object.append(course)
                 course_codes[course.name] = (course.code, num_courses)
-                num_courses+=1
-            elif course.name in course_titles and course_codes[course.name][0] > course.code:
+                num_courses += 1
+            elif course.name in course_titles and
+            course_codes[course.name][0] > course.code:
                 course_object[course_codes[course.name][1]] = course
-            print("%s : %f" %(course.name, score))
-        
-        #elapsed_time = time.time() - self.start_time
-        #print("\nAdvanced Model Completed Searches in %f (seconds)" %elapsed_time)
         return course_object
 
-    def get_all_relevant_courses(self,query):
+    def get_all_relevant_courses(self, query):
         return self.get_relevant_courses(query, Course.objects.all())
 
     def wordify(self, course_vector):
@@ -219,14 +221,14 @@ class Searcher():
 
 
 # Model performance evaluator
-class Evaluator():    
+class Evaluator():
     def __init__(self):
         self._ = None
         self.searcher = Searcher()
 
     def evaluate(self, query, relevant_courses):
-        #retrieved_courses = [i.code for i in self.searcher.baseline_search(query)] + [i.code for i in Course.objects.all()]
-        retrieved_courses = [i.code for i in self.searcher.get_all_relevant_courses(query)]
+        retrieved_courses = [i.code for i in
+                             self.searcher.get_all_relevant_courses(query)]
         num_relevant_courses = len(relevant_courses)
         num_retrieve_courses = len(retrieved_courses)
         prec_25, prec_50, prec_75 = 0.0, 0.0, 0.0
@@ -239,20 +241,18 @@ class Evaluator():
         i = 1
         while num_retrieved < num_relevant_courses:
             course_code = retrieved_courses[i-1]
-            #print(course_code)
             if course_code in relevant_courses:
                 num_retrieved+=1.0
                 print(query + ": " + str(num_retrieved))
             precision_array.append(float(num_retrieved / i))
-            i+=1
+            i += 1
         prec_25 = precision_array[prec_25_idx]
         prec_50 = precision_array[prec_50_idx]
         prec_75 = precision_array[prec_75_idx]
         prec_100 = precision_array[-1]
-
         prec_mean_1 = (prec_25 + prec_50 + prec_75) / 3.0
-
-        by_10 = np.arange(0.0, num_relevant_courses, (num_relevant_courses+0.0)/10.0)
+        by_10 = np.arange(0.0, num_relevant_courses,
+                          (num_relevant_courses+0.0) / 10.0)
         by_10 = [int(idx) for idx in by_10]
         prec_mean_2 = 0.0
         for i in by_10:
@@ -267,15 +267,20 @@ class Evaluator():
             if retrieved_courses[i] in relevant_courses:
                 rank_sum += (i+1) - (k_i)
                 rank_log_sum += math.log(i+1) - math.log(k_i)
-                k_i+=1
+                k_i += 1
 
-        recall_norm = 1.0 - ( rank_sum / (num_relevant_courses * (num_retrieve_courses - num_relevant_courses)) )
+        recall_norm = 1.0 - (rank_sum / (num_relevant_courses *
+                             (num_retrieve_courses - num_relevant_courses)))
 
-        prec_norm = 1.0 - (rank_log_sum / 
-            ( num_retrieve_courses * math.log(num_retrieve_courses) - (num_retrieve_courses - num_relevant_courses) * math.log(num_retrieve_courses - num_relevant_courses) - (num_relevant_courses) * math.log(num_relevant_courses) ))
+        prec_norm = 1.0 - (rank_log_sum / (num_retrieve_courses *
+                                           math.log(num_retrieve_courses) -
+                           (num_retrieve_courses - num_relevant_courses) *
+                           math.log(num_retrieve_courses - num_relevant_courses) -
+                           (num_relevant_courses) *
+                           math.log(num_relevant_courses)))
 
-        return (prec_25, prec_50, prec_75, prec_100, prec_mean_1, prec_mean_2, prec_norm, recall_norm)
-
+        return (prec_25, prec_50, prec_75, prec_100, prec_mean_1, prec_mean_2,
+                prec_norm, recall_norm)
 
     def evaluate_full(self):
         total_scores = [0.0] * 8
@@ -291,7 +296,6 @@ class Evaluator():
             result = self.evaluate(queries[i], relevant_courses[i])
             show = "   %2d  %.2f   %.2f   %.2f   %.2f    %.4f    %.4f    %.3f   %.3f   \n"\
                    %(i, result[0], result[1], result[2], result[3], result[4], result[5], result[6], result[7])
-            #print(show)
             for i in range(8):
                 total_scores[i] += result[i]
 
@@ -322,20 +326,22 @@ class Experiment():
         n_topics = 50
         n_top_words = 10
         n_samples = len(X)
-        X_trans, topics, topic_components= self.fit_lda(X, n_features, n_topics, n_top_words, n_samples)
+        X_trans, topics, topic_components = self.fit_lda(X, n_features,
+                                                         n_topics, n_top_words,
+                                                         n_samples)
         self.gmm_clustering(X_trans)
 
     def fit_lda(self, X, n_features, n_topics, n_top_words, n_samples):
         print("Fitting LDA models with tf features, n_samples=%d and n_features=%d..." % (n_samples, n_features))
         tf_vectorizer = CountVectorizer(max_df=0.95, min_df=2,
-                                    max_features=n_features,
-                                    ngram_range=(1,2),
-                                    stop_words='english')
+                                        max_features=n_features,
+                                        ngram_range=(1, 2),
+                                        stop_words='english')
         tf = tf_vectorizer.fit_transform(X)
         lda = LatentDirichletAllocation(n_topics=n_topics, max_iter=5,
-                                    learning_method='online',
-                                    learning_offset=50.,
-                                    random_state=0)
+                                        learning_method='online',
+                                        learning_offset=50.,
+                                        random_state=0)
         X = lda.fit_transform(tf)
         print("\nTopics in LDA model:")
         tf_feature_names = tf_vectorizer.get_feature_names()
@@ -347,7 +353,8 @@ class Experiment():
         for topic_idx, topic in enumerate(model.components_):
             print("Course Topic #%d:" % topic_idx)
             new_topic = " ".join([feature_names[i]
-                            for i in topic.argsort()[:-n_top_words - 1:-1]])
+                                  for i in topic.argsort()
+                                  [:-n_top_words - 1:-1]])
             print(new_topic)
             topics.append(new_topic)
         print()
@@ -356,13 +363,13 @@ class Experiment():
     def gmm_clustering(self, X):
         scores = []
         klist = []
-        for k in range(1,30):
+        for k in range(1, 30):
             gmm = mixture.GMM(n_components=k, covariance_type='full')
             gmm.fit(X)
             klist.append(k)
             scores.append(np.mean(gmm.score(X)))
-        plt.figure();
-        plt.plot(klist,scores,'o-');
+        plt.figure()
+        plt.plot(klist, scores, 'o-')
         plt.title("GMM clustering log-likelihood graph")
         plt.ylabel("Log Likelihood")
         plt.xlabel("K (number of clusters)")
