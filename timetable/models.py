@@ -49,6 +49,7 @@ class Course(models.Model):
   cores = models.CharField(max_length=50, null=True, blank=True)
   geneds = models.CharField(max_length=300, null=True, blank=True)
   related_courses = models.ManyToManyField("self", blank=True)
+  same_as = models.ForeignKey('self', null=True)
 
   def __unicode__(self):
     return self.code + ": " + self.name
@@ -80,7 +81,13 @@ class Course(models.Model):
 
   def get_avg_rating(self):
     ratings = Evaluation.objects.only('course', 'score').filter(course=self)
-    return sum([rating.score for rating in ratings])/len(ratings) if ratings else 0
+    ratings_sum = sum([rating.score for rating in ratings]) if ratings else 0
+    n_same_as_ratings = 0 
+    if self.same_as:
+      same_as_ratings = Evaluation.objects.only('course', 'score').filter(course=self.same_as)
+      ratings_sum += sum([rating.score for rating in same_as_ratings]) if same_as_ratings else 0
+      n_same_as_ratings = len(same_as_ratings)
+    return ratings_sum / (len(ratings) + n_same_as_ratings) if (len(ratings) + n_same_as_ratings) else 0
 
   def get_textbooks(self, semester):
     textbooks = []
