@@ -8,8 +8,7 @@ from django.db import migrations
 
 def load_agreement(apps, schema_editor):
     agreement_model = apps.get_model('agreement', 'Agreement')
-    agreement = agreement_model(id=1, last_updated=datetime.now())
-    agreement.save()
+    agreement_model.objects.create(last_updated=datetime.now())
 
 class Migration(migrations.Migration):
 
