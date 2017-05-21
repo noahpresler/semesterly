@@ -152,6 +152,12 @@ class Semesterly extends React.Component {
             <footer className="footer navbar no-print">
               <ul className="nav nav-pills no-print">
                 <li className="footer-button" role="presentation"><a
+                  href="/termsofservice"
+                >Terms</a></li>
+                <li className="footer-button" role="presentation"><a
+                  href="/termsofservice"
+                >Privacy</a></li>
+                <li className="footer-button" role="presentation"><a
                   href="mailto:contact@semester.ly?Subject=Semesterly"
                 >Contact us</a></li>
                 <li className="footer-button" role="presentation"><a
