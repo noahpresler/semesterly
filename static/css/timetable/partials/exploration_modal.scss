@@ -55,17 +55,17 @@
 .trans h3.exp-header:after,
 .trans h3.exp-header i,
 .trans #exploration-body p,
-.trans #exp-modal .modal-header,
-.trans #exp-modal .modal-header h1,
-.trans #exp-modal .modal-header h2,
-.trans #exp-modal .modal-content,
+.trans .exp-modal .modal-header,
+.trans .exp-modal .modal-header h1,
+.trans .exp-modal .modal-header h2,
+.trans .exp-modal .modal-content,
 .trans .modal-body .credits h4,
-.trans #exp-modal .modal-share,
-.trans #exp-modal .modal-share i,
-.trans #exp-modal .modal-add,
-.trans #exp-modal .modal-add i,
-.trans #exp-modal .modal-save,
-.trans #exp-modal .modal-save i,
+.trans .exp-modal .modal-share,
+.trans .exp-modal .modal-share i,
+.trans .exp-modal .modal-add,
+.trans .exp-modal .modal-add i,
+.trans .exp-modal .modal-save,
+.trans .exp-modal .modal-save i,
 .trans .modal-module,
 .trans h3.modal-module-header,
 .trans h3.modal-module-header:after {
@@ -166,7 +166,7 @@
 }
 
 // Share Button
-#exp-modal {
+.exp-modal {
   .share-course-link-wrapper {
     margin-right: 158px;
     margin-top: 118px;
@@ -385,7 +385,7 @@
 }
 
 // Exploration Course Content
-#exp-modal {
+.exp-modal {
   height: 100%;
 
   .modal-content {
