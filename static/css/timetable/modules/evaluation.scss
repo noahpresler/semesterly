@@ -14,7 +14,7 @@
     text-align: left;
   }
 
-  #details {
+  .eval-item__details {
     font-size: 15px;
     margin: 5px;
   }
@@ -66,7 +66,7 @@
     text-align: right;
   }
 
-  #prof {
+  .eval-item__prof {
     font-size: 15px;
   }
 
@@ -86,7 +86,7 @@
 .eval-wrapper {
   margin-bottom: 10px;
 
-  #prof {
+  .eval-item__prof {
     display: inline-block;
     margin: 0 auto;
     margin-top: 10px;
@@ -143,7 +143,7 @@
 }
 
 .trans {
-  #course-evaluations {
+  .course-evaluations {
     display: none;
   }
 }
