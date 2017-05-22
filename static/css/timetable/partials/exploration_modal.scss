@@ -58,7 +58,7 @@
 .trans #exp-modal .modal-header,
 .trans #exp-modal .modal-header h1,
 .trans #exp-modal .modal-header h2,
-.trans #exp-modal #modal-content,
+.trans #exp-modal .modal-content,
 .trans .modal-body .credits h4,
 .trans #exp-modal #modal-share,
 .trans #exp-modal #modal-share i,
@@ -388,7 +388,7 @@
 #exp-modal {
   height: 100%;
 
-  #modal-content {
+  .modal-content {
     display: flex;
     flex-direction: column;
   }
