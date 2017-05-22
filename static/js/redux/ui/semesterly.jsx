@@ -150,6 +150,8 @@ class Semesterly extends React.Component {
           <div className="main-bar">
             {cal}
             <footer className="footer navbar no-print">
+              <p className="data-last-updated no-print">Data last
+                updated: { this.props.dataLastUpdated && this.props.dataLastUpdated.length && this.props.dataLastUpdated !== 'null' ? this.props.dataLastUpdated : null }</p>
               <ul className="nav nav-pills no-print">
                 <li className="footer-button" role="presentation"><a
                   href="/termsofservice"
@@ -189,6 +191,7 @@ class Semesterly extends React.Component {
 }
 
 Semesterly.propTypes = {
+  dataLastUpdated: React.PropTypes.string.isRequired,
   PgActive: React.PropTypes.number.isRequired,
   PgCount: React.PropTypes.number.isRequired,
   alertChangeSemester: React.PropTypes.bool.isRequired,
