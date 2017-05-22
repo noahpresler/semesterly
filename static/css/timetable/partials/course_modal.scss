@@ -276,7 +276,7 @@
   overflow-y: auto;
   width: 100%;
 
-  [class^='col-'] {
+  [class^="col-"] {
     padding: 30px 15px;
   }
 
@@ -397,7 +397,7 @@
   &::after {
     background-color: $gddd;
     bottom: 5px;
-    content: '';
+    content: "";
     display: block;
     height: 1px;
     left: 0;
