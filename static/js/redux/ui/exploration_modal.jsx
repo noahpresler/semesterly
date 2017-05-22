@@ -271,7 +271,7 @@ class ExplorationModal extends React.Component {
           {
                         inRoster ? null :
                         <div
-                          id="modal-save"
+                          className="modal-save"
                           onClick={() => this.addOrRemoveOptionalCourse(course)}
                         >
                           <i className="fa fa-bookmark" />
