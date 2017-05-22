@@ -261,7 +261,7 @@ class ExplorationModal extends React.Component {
                 />) :
                 null;
       courseModal = (<div id="modal-content">
-        <div id="modal-header">
+        <div className="modal-header">
           <h1>{ course.name }</h1>
           <h2>{ course.code }</h2>
           <div id="modal-share" onClick={this.showShareLink}>
