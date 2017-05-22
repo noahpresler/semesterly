@@ -73,8 +73,7 @@ class CourseModal extends React.Component {
               <i className="fa fa-bookmark" />
             </div>);
     const add = data.sections !== undefined && Object.keys(data.sections).length > 0 ? (<div
-      id="modal-add"
-      className={classNames('search-course-add', {
+      className={classNames('modal-add search-course-add', {
         'in-roster': inRoster,
       })}
       onClick={() => {
