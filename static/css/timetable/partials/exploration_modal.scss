@@ -55,9 +55,9 @@
 .trans h3.exp-header:after,
 .trans h3.exp-header i,
 .trans #exploration-body p,
-.trans #exp-modal #modal-header,
-.trans #exp-modal #modal-header h1,
-.trans #exp-modal #modal-header h2,
+.trans #exp-modal .modal-header,
+.trans #exp-modal .modal-header h1,
+.trans #exp-modal .modal-header h2,
 .trans #exp-modal #modal-content,
 .trans #modal-body .credits h4,
 .trans #exp-modal #modal-share,
@@ -393,7 +393,7 @@
     flex-direction: column;
   }
 
-  #modal-header {
+  .modal-header {
     background-color: $gfff;
     padding: 20px 10px 30px;
   }

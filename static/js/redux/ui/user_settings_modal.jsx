@@ -204,7 +204,7 @@ class UserSettingsModal extends React.Component {
         modalStyle={modalStyle}
       >
         <div id="modal-content">
-          <div id="modal-header">
+          <div className="modal-header">
             <div className="pro-pic" style={{ backgroundImage: propic }} />
             <h1>Welcome!</h1>
           </div>
