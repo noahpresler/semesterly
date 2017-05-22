@@ -426,7 +426,7 @@ class ExplorationModal extends React.Component {
           />
           {
                         this.props.isFetching && this.props.page === 1 ? null :
-                        <div id="exp-modal" className="col-7-16">
+                        <div className="col-7-16 exp-modal">
                           { courseModal }
                         </div>
                     }
