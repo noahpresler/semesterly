@@ -317,7 +317,7 @@ export default class FinalExamsModal extends React.Component {
       />) :
       null;
     const modalHeader =
-      (<div id="modal-header">
+      (<div className="modal-header">
         <h1>Final Exam Schedule</h1>
         <h2>{ this.props.activeLoadedTimetableName }</h2>
         <div id="modal-share">

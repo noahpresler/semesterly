@@ -30,9 +30,9 @@
 }
 
 .course-modal.trans #modal-content,
-.course-modal.trans #modal-header,
-.course-modal.trans #modal-header h1,
-.course-modal.trans #modal-header h2,
+.course-modal.trans .modal-header,
+.course-modal.trans .modal-header h1,
+.course-modal.trans .modal-header h2,
 .course-modal.trans #modal-body p,
 .course-modal.trans #modal-body p a,
 .course-modal.trans #modal-body .credits h4,
@@ -105,7 +105,7 @@
   width: 100%;
 }
 
-#modal-header {
+.modal-header {
   background-color: $gf3f3f3;
   border-bottom: 1px solid $gddd;
   padding: 20px 10px 10px;
@@ -171,7 +171,7 @@
   }
 }
 
-#modal-header {
+.modal-header {
   .share-course-link-wrapper {
     background-color: $gd4d4d4;
     border-radius: 2px;
@@ -631,7 +631,7 @@
 }
 
 @media (max-width: 766px) {
-  #modal-header {
+  .modal-header {
     h1 {
       font-size: 32px;
     }
@@ -655,7 +655,7 @@
     position: static;
   }
 
-  #modal-header {
+  .modal-header {
     padding-bottom: 30px;
 
     h1 {
