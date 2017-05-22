@@ -28,7 +28,7 @@ class SignupModal extends React.Component {
   render() {
     const modalHeader =
             (<div id="modal-content">
-              <div id="modal-header">
+              <div className="modal-header">
                 <div
                   className="pro-pic"
                   style={{ backgroundImage: 'url(/static/img/blank.jpg)' }}
