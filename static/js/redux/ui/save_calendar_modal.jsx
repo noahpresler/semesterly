@@ -17,7 +17,7 @@ class SaveCalendarModal extends React.Component {
 
   render() {
     const modalHeader =
-            (<div id="modal-content">
+            (<div className="modal-content">
               <div className="modal-header">
                 <div
                   className="header-pic"

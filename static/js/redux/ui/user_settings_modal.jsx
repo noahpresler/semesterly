@@ -203,7 +203,7 @@ class UserSettingsModal extends React.Component {
         keyboard={false}
         modalStyle={modalStyle}
       >
-        <div id="modal-content">
+        <div className="modal-content">
           <div className="modal-header">
             <div className="pro-pic" style={{ backgroundImage: propic }} />
             <h1>Welcome!</h1>
