@@ -60,7 +60,7 @@ class SaveCalendarModal extends React.Component {
         }}
       >
         {modalHeader}
-        <div id="save-calendar-container">
+        <div className="save-calendar-modal__container">
           <button
             className="btn abnb-btn" onClick={() => {
               if (!this.props.userInfo.isLoggedIn || !this.props.userInfo.GoogleSignedUp ||
