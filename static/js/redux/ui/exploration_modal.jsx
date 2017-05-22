@@ -175,6 +175,7 @@ class ExplorationModal extends React.Component {
     this.hide();
   }
 
+
   handleTimesChange(values, component) {
     if (this.props.isFetching) {
       return;
