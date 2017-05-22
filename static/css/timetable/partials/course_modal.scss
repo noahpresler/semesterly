@@ -33,11 +33,11 @@
 .course-modal.trans .modal-header,
 .course-modal.trans .modal-header h1,
 .course-modal.trans .modal-header h2,
-.course-modal.trans #modal-body p,
-.course-modal.trans #modal-body p a,
-.course-modal.trans #modal-body .credits h4,
-.course-modal.trans #modal-body .rating-module h4,
-.course-modal.trans #modal-body .modal-module {
+.course-modal.trans .modal-body p,
+.course-modal.trans .modal-body p a,
+.course-modal.trans .modal-body .credits h4,
+.course-modal.trans .modal-body .rating-module h4,
+.course-modal.trans .modal-body .modal-module {
   background-color: transparent;
   border-color: transparent;
   color: transparent;
@@ -47,9 +47,9 @@
 .course-modal.trans #modal-share,
 .course-modal.trans #modal-save,
 .course-modal.trans #modal-add,
-.course-modal.trans #modal-body .rating-module,
-.course-modal.trans #modal-body .modal-module,
-.course-modal.trans #modal-body .modal-module-header,
+.course-modal.trans .modal-body .rating-module,
+.course-modal.trans .modal-body .modal-module,
+.course-modal.trans .modal-body .modal-module-header,
 .trans #reactions-wrapper {
   opacity: 0;
   visibility: hidden;
@@ -271,7 +271,7 @@
 
 
 // Course Modal Body
-#modal-body {
+.modal-body {
   flex: 1;
   overflow-y: auto;
   width: 100%;
@@ -510,7 +510,7 @@
   visibility: visible;
 }
 
-#modal-body .friend p {
+.modal-body .friend p {
   font-size: 11px;
   left: 35px;
   line-height: 30px;
@@ -667,7 +667,7 @@
     }
 	}
 
-  #modal-body {
+  .modal-body {
     padding-top: 20px;
 	}
 
