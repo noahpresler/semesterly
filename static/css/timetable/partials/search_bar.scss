@@ -1,4 +1,4 @@
-#search-bar {
+.search-bar {
   left: 260px;
   max-width: 600px;
   position: absolute;
@@ -40,17 +40,17 @@
   }
 }
 
-#search-bar-input-wrapper {
+.search-bar__input-wrapper {
   overflow: hidden;
   width: auto;
 }
 
-#search-bar-wrapper {
+.search-bar__wrapper {
   background-color: $gfff;
   width: 100%;
 }
 
-#search-bar-semester {
+.search-bar__semester {
   background-color: $gfff;
   border: 1px solid $ge6e6e6;
   border-right: 0;
@@ -69,7 +69,7 @@
   }
 }
 
-#semester-picker {
+.semester-picker {
   background-color: $gfff;
   border: 1px solid $ge6e6e6;
   box-shadow: 0 2px 10px $black-transparent-2;
@@ -125,7 +125,7 @@
 
 
 
-#see-more {
+.see-more {
   color: #C3B9B1;
   font-size: 15px;
   height: 180px;
@@ -144,7 +144,7 @@
   }
 }
 
-#see-more-inner {
+.see-more__inner {
   border: 2px dashed $ge6e6e6;
   border-radius: 10px;
   margin: 0 auto;
@@ -371,17 +371,17 @@
   .search-course,
   .search-course-add,
   .search-course-save,
-  #search-bar-side,
+  .search-bar__side,
   .search-course .label {
     background-color: transparent;
   }
 
-  #see-more-inner {
+  .see-more__inner {
     border: 1px solid $white-transparent-0;
     color: transparent;
   }
 
-  #search-bar-side-sections {
+  .search-bar__side-sections {
     background-color: $white-transparent-9;
   }
 
@@ -397,7 +397,7 @@
 }
 
 // Side Bar in Search Results
-#search-bar-side {
+.search-bar__side {
   background-color: $gf3f3f3;
   height: 100%;
   min-height: 232px;
@@ -409,7 +409,7 @@
   width: 33.33%;
 }
 
-#search-bar-side-sections {
+.search-bar__side-sections {
   font-size: 0;
 
   h3 {
@@ -450,14 +450,14 @@
 }
 
 @media (max-width: 1000px) {
-	#search-bar {
+	.search-bar {
     left: 82px;
     width: 55%;
 	}
 }
 
 @media (max-width: 766px) {
-  #search-bar {
+  .search-bar {
     left: 57px;
     right: 107px;
     width: auto;
@@ -471,22 +471,22 @@
     width: 100%;
   }
 
-  #search-bar-side {
+  .search-bar__side {
     display: none;
   }
 
-  #see-more {
+  .see-more {
     display: none;
   }
 }
 
 @media (max-width: 500px) {
-	#search-bar {
+	.search-bar {
     left: 0;
     width: 100%;
 	}
 
-	#search-bar-wrapper {
+	.search-bar__wrapper {
     left: 57px;
     position: absolute;
     right: 107px;
@@ -497,7 +497,7 @@
     top: 39px;
 	}
 
-	#search-bar-wrapper {
+	.search-bar__wrapper {
     left: 50px;
     right: 85px;
 	}
@@ -508,7 +508,7 @@
     height: 240px;
   }
 
-  #search-bar-wrapper {
+  .search-bar__wrapper {
     left: 50px;
     right: 85px;
   }
