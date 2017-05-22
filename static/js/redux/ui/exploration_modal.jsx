@@ -367,14 +367,12 @@ class ExplorationModal extends React.Component {
     const explorationLoader = this.props.isFetching ?
       <i className="fa fa-spin fa-refresh" /> : null;
     const content = (
-      <div id="exploration-content">
+      <div className="exploration-content">
         <div
-          id="exploration-header"
-          className="cf"
+          className="exploration-header cf"
         >
           <div
-            id="exp-title"
-            className="col-4-16"
+            className="col-4-16 exp-title"
           >
             <i className="fa fa-compass" />
             <h1>Advanced Search</h1>
@@ -391,14 +389,14 @@ class ExplorationModal extends React.Component {
             />
           </div>
           <div
-            id="exploration-close"
+            className="exploration-close"
             onMouseDown={() => this.modal.hide()}
           >
             <i className="fa fa-times" />
           </div>
         </div>
-        <div id="exploration-body">
-          <div id="exp-filters" className="col-4-16">
+        <div className="exploration-body">
+          <div className="col-4-16 exp-filters">
             { selectedFilterSections }
             <SelectedFilterSection
               key={'times'} name={'Day/Times'}
