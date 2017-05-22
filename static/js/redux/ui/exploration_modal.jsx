@@ -277,7 +277,7 @@ class ExplorationModal extends React.Component {
                           <i className="fa fa-bookmark" />
                         </div>
                     }
-          <div id="modal-add" onClick={() => this.addOrRemoveCourse(course.id)}>
+          <div className="modal-add" onClick={() => this.addOrRemoveCourse(course.id)}>
             <i
               className={classNames('fa', {
                 'fa-plus': !inRoster,
