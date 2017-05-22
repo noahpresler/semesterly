@@ -101,7 +101,7 @@ class CourseModalBody extends React.Component {
   render() {
     if (this.props.isFetching) {
       return (
-        <div id="modal-body">
+        <div className="modal-body">
           <div className="cf">
             <span className="img-icon">
               <div className="loader" />
@@ -343,7 +343,7 @@ class CourseModalBody extends React.Component {
       </div>
         );
     return (
-      <div id="modal-body">
+      <div className="modal-body">
         <div className="cf">
           <div className="col-3-16">
             <div className="credits">
