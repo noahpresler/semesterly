@@ -165,7 +165,7 @@ class TextbookModal extends React.Component {
         }}
       >
 
-        <div id="modal-content">
+        <div className="modal-content">
           { modalHeader }
 
           { modalContent }
