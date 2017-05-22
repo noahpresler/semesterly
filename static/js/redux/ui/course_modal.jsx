@@ -69,7 +69,7 @@ class CourseModal extends React.Component {
             />) :
             null;
     const addOptional = this.props.inRoster ? null :
-            (<div id="modal-save" onClick={() => this.addOrRemoveOptionalCourse(data)}>
+            (<div className="modal-save" onClick={() => this.addOrRemoveOptionalCourse(data)}>
               <i className="fa fa-bookmark" />
             </div>);
     const add = data.sections !== undefined && Object.keys(data.sections).length > 0 ? (<div
