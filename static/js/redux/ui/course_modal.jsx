@@ -102,7 +102,7 @@ class CourseModal extends React.Component {
     </div>) : null;
     const content =
             (<div id="modal-content">
-              <div id="modal-header">
+              <div className="modal-header">
                 <h1>{data.name}</h1>
                 <h2>{courseAndDept}</h2>
                 <div id="modal-close" onClick={() => this.modal.hide()}>
