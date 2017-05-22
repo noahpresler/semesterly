@@ -59,7 +59,7 @@
 .trans #exp-modal .modal-header h1,
 .trans #exp-modal .modal-header h2,
 .trans #exp-modal #modal-content,
-.trans #modal-body .credits h4,
+.trans .modal-body .credits h4,
 .trans #exp-modal #modal-share,
 .trans #exp-modal #modal-share i,
 .trans #exp-modal #modal-add,
@@ -77,8 +77,8 @@
 .trans #exp-search-results,
 .trans .modal-module,
 .trans .time-selector,
-.trans #modal-body .rating-module,
-.trans #modal-body .modal-module-header {
+.trans .modal-body .rating-module,
+.trans .modal-body .modal-module-header {
 	opacity: 0;
 	visibility: hidden;
 }
@@ -408,7 +408,7 @@
     padding: 0 20% 0 0;
   }
 
-  #modal-body {
+  .modal-body {
     padding-top: 20px;
   }
 

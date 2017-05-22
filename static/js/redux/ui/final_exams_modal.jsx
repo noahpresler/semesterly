@@ -392,7 +392,7 @@ export default class FinalExamsModal extends React.Component {
       >
         <div id="modal-content">
           { modalHeader }
-          <div id="modal-body">
+          <div className="modal-body">
             { display }
           </div>
         </div>
