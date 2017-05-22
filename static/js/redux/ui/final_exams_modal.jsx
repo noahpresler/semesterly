@@ -320,7 +320,7 @@ export default class FinalExamsModal extends React.Component {
       (<div className="modal-header">
         <h1>Final Exam Schedule</h1>
         <h2>{ this.props.activeLoadedTimetableName }</h2>
-        <div id="modal-share">
+        <div className="modal-share">
           <i
             className="fa fa-share-alt" onClick={() => {
               if (!this.state.shareLinkShown && !this.props.shareLink) {
