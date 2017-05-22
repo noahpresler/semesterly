@@ -31,7 +31,7 @@
   }
 }
 
-#exploration-content {
+.exploration-content {
   background: $gfff;
   height: 100%;
   position: relative;
@@ -46,15 +46,15 @@
 }
 
 .exploration-modal.trans,
-.trans #exploration-content,
-.trans #exploration-header,
-.trans #exp-title h1,
-.trans #exploration-header input,
-.trans #exploration-close,
+.trans .exploration-content,
+.trans .exploration-header,
+.trans .exp-title h1,
+.trans .exploration-header input,
+.trans .exploration-close,
 .trans h3.exp-header,
 .trans h3.exp-header:after,
 .trans h3.exp-header i,
-.trans #exploration-body p,
+.trans .exploration-body p,
 .trans .exp-modal .modal-header,
 .trans .exp-modal .modal-header h1,
 .trans .exp-modal .modal-header h2,
@@ -84,7 +84,7 @@
 }
 
 // Exploration Header
-#exploration-header {
+.exploration-header {
   background-color: $geee;
   border-bottom: 1px solid $gddd;
   padding: 15px;
@@ -124,7 +124,7 @@
   }
 }
 
-#exp-title {
+.exp-title {
   i {
     display: inline-block;
     font-size: 22px;
@@ -144,7 +144,7 @@
 }
 
 /* Close Exploration Button */
-#exploration-close {
+.exploration-close {
   color: $g777;
   cursor: pointer;
   height: 20px;
@@ -182,7 +182,7 @@
 }
 
 // Exploration Body
-#exploration-body {
+.exploration-body {
   height: 100%;
   left: 0;
   padding: 61px 0 0;
@@ -229,7 +229,7 @@
 }
 
 // Exploration Filters
-#exp-filters {
+.exp-filters {
   height: 100%;
   overflow-y: auto;
   padding: 15px;
