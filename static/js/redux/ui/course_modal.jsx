@@ -105,7 +105,7 @@ class CourseModal extends React.Component {
               <div className="modal-header">
                 <h1>{data.name}</h1>
                 <h2>{courseAndDept}</h2>
-                <div id="modal-close" onClick={() => this.modal.hide()}>
+                <div className="modal-close" onClick={() => this.modal.hide()}>
                   <i className="fa fa-times" />
                 </div>
                 <div className="modal-share">
