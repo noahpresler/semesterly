@@ -18,7 +18,7 @@ class SaveCalendarModal extends React.Component {
   render() {
     const modalHeader =
             (<div id="modal-content">
-              <div id="modal-header">
+              <div className="modal-header">
                 <div
                   className="header-pic"
                   style={{ backgroundImage: 'url(/static/img/addtocalendarfeature.png)' }}
