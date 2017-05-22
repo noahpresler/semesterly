@@ -45,7 +45,7 @@
 
 .course-modal.trans .modal-close,
 .course-modal.trans .modal-share,
-.course-modal.trans #modal-save,
+.course-modal.trans .modal-save,
 .course-modal.trans #modal-add,
 .course-modal.trans .modal-body .rating-module,
 .course-modal.trans .modal-body .modal-module,
@@ -136,7 +136,7 @@
 // Course Modal Corner Actions
 .modal-close,
 .modal-share,
-#modal-save {
+.modal-save {
   color: $g777;
   cursor: pointer;
   height: 20px;
@@ -200,7 +200,7 @@
   }
 }
 
-#modal-save {
+.modal-save {
   right: 55px;
 
   &:hover {
@@ -673,7 +673,7 @@
 
   #modal-add,
   .modal-share,
-  #modal-save {
+  .modal-save {
     background-color: $primary-navy;
     border-radius: 100%;
     bottom: -34px;
@@ -707,7 +707,7 @@
     }
 	}
 
-  #modal-save {
+  .modal-save {
     left: 50%;
 
     &:hover {

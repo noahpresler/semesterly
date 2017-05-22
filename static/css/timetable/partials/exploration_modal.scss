@@ -64,8 +64,8 @@
 .trans #exp-modal .modal-share i,
 .trans #exp-modal #modal-add,
 .trans #exp-modal #modal-add i,
-.trans #exp-modal #modal-save,
-.trans #exp-modal #modal-save i,
+.trans #exp-modal .modal-save,
+.trans #exp-modal .modal-save i,
 .trans .modal-module,
 .trans h3.modal-module-header,
 .trans h3.modal-module-header:after {
@@ -419,7 +419,7 @@
 
   .modal-share,
   #modal-add,
-  #modal-save {
+  .modal-save {
     background-color: $primary-navy;
     border-radius: 100%;
     bottom: -34px;
@@ -453,7 +453,7 @@
     }
   }
 
-  #modal-save {
+  .modal-save {
     left: 50%;
 
     &:hover {
