@@ -18,7 +18,6 @@ const mapStateToProps = (state) => {
   return {
     endHour: getMaxEndHour(timetables[active], hasTimetables),
     saving: state.savingTimetable.saving,
-    dataLastUpdated: state.school.dataLastUpdated,
     isLoggedIn: state.userInfo.data.isLoggedIn,
     uses12HrTime: state.ui.uses12HrTime,
     hasTimetables,

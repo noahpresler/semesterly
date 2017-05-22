@@ -314,8 +314,6 @@ class Calendar extends React.Component {
               </tbody>
             </table>
           </div>
-          <p className="data-last-updated no-print">Data last
-                        updated: { this.props.dataLastUpdated && this.props.dataLastUpdated.length && this.props.dataLastUpdated !== 'null' ? this.props.dataLastUpdated : null }</p>
         </div>
       </div>
     );
@@ -328,7 +326,6 @@ Calendar.defaultProps = {
 };
 
 Calendar.propTypes = {
-  dataLastUpdated: React.PropTypes.string.isRequired,
   togglePreferenceModal: React.PropTypes.func.isRequired,
   triggerSaveCalendarModal: React.PropTypes.func.isRequired,
   isFetchingShareLink: React.PropTypes.bool.isRequired,
