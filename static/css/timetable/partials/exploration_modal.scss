@@ -60,8 +60,8 @@
 .trans #exp-modal .modal-header h2,
 .trans #exp-modal .modal-content,
 .trans .modal-body .credits h4,
-.trans #exp-modal #modal-share,
-.trans #exp-modal #modal-share i,
+.trans #exp-modal .modal-share,
+.trans #exp-modal .modal-share i,
 .trans #exp-modal #modal-add,
 .trans #exp-modal #modal-add i,
 .trans #exp-modal #modal-save,
@@ -417,7 +417,7 @@
     padding: 20px 15px 0;
   }
 
-  #modal-share,
+  .modal-share,
   #modal-add,
   #modal-save {
     background-color: $primary-navy;
@@ -445,7 +445,7 @@
     }
   }
 
-  #modal-share {
+  .modal-share {
     left: 25%;
 
     &:hover {

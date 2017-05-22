@@ -264,7 +264,7 @@ class ExplorationModal extends React.Component {
         <div className="modal-header">
           <h1>{ course.name }</h1>
           <h2>{ course.code }</h2>
-          <div id="modal-share" onClick={this.showShareLink}>
+          <div className="modal-share" onClick={this.showShareLink}>
             <i className="fa fa-share-alt" />
           </div>
           { shareLink }
