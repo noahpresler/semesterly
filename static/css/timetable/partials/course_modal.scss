@@ -29,7 +29,7 @@
   }
 }
 
-.course-modal.trans #modal-content,
+.course-modal.trans .modal-content,
 .course-modal.trans .modal-header,
 .course-modal.trans .modal-header h1,
 .course-modal.trans .modal-header h2,
@@ -72,7 +72,7 @@
   transform: translate(-50%, -50%);
 }
 
-.course-modal #modal-content .loader {
+.course-modal .modal-content .loader {
   height: 90px;
   width: 90px;
 }
@@ -96,7 +96,7 @@
 }
 
 // Course Modal Content Styles
-#modal-content {
+.modal-content {
   background-color: $gfff;
   display: flex;
   flex-direction: column;
@@ -581,7 +581,7 @@
   width: 100%;
 }
 
-#modal-content .conversion a {
+.modal-content .conversion a {
   background-color: $facebook;
   color: $gfff;
   cursor: pointer;
@@ -590,7 +590,7 @@
   padding: 4px 7px;
 }
 
-#modal-content .conversion a i {
+.modal-content .conversion a i {
   margin-right: 4px;
 }
 
