@@ -46,7 +46,7 @@
 .course-modal.trans .modal-close,
 .course-modal.trans .modal-share,
 .course-modal.trans .modal-save,
-.course-modal.trans #modal-add,
+.course-modal.trans .modal-add,
 .course-modal.trans .modal-body .rating-module,
 .course-modal.trans .modal-body .modal-module,
 .course-modal.trans .modal-body .modal-module-header,
@@ -210,7 +210,7 @@
 }
 
 // Course Modal Add
-#modal-add {
+.modal-add {
   background-color: $primary-navy;
   border-radius: 100%;
   bottom: -34px;
@@ -671,7 +671,7 @@
     padding-top: 20px;
 	}
 
-  #modal-add,
+  .modal-add,
   .modal-share,
   .modal-save {
     background-color: $primary-navy;
@@ -715,7 +715,7 @@
     }
 	}
 
-  #modal-add {
+  .modal-add {
     left: 75%;
 	}
 
