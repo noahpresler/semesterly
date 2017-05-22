@@ -40,7 +40,7 @@ class UserAcquisitionModal extends React.Component {
         {modalHeader}
 
 
-        <div id="save-calendar-container">
+        <div className="user-acquisition-modal__container">
           <h3>Recommended:</h3>
           <button
             className="btn abnb-btn fb-btn" onClick={() => {
