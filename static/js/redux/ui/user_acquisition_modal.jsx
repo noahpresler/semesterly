@@ -17,7 +17,7 @@ class UserAcquisitionModal extends React.Component {
 
   render() {
     const modalHeader =
-            (<div id="modal-content">
+            (<div className="modal-content">
               <div className="modal-header">
                 <h1>Login/Signup</h1>
               </div>

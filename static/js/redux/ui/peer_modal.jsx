@@ -224,7 +224,7 @@ class PeerModal extends React.Component {
         onHide={this.hide}
         modalStyle={modalStyle}
       >
-        <div id="modal-content">
+        <div className="modal-content">
           <div id="split-modal-wrapper">
             {sideBar}
             {display}

@@ -390,7 +390,7 @@ export default class FinalExamsModal extends React.Component {
         modalStyle={modalStyle}
         onHide={this.hide}
       >
-        <div id="modal-content">
+        <div className="modal-content">
           { modalHeader }
           <div className="modal-body">
             { display }

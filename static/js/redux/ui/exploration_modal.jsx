@@ -260,7 +260,7 @@ class ExplorationModal extends React.Component {
                   onClickOut={this.hideShareLink}
                 />) :
                 null;
-      courseModal = (<div id="modal-content">
+      courseModal = (<div className="modal-content">
         <div className="modal-header">
           <h1>{ course.name }</h1>
           <h2>{ course.code }</h2>
