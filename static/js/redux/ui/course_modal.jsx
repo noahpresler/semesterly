@@ -108,7 +108,7 @@ class CourseModal extends React.Component {
                 <div id="modal-close" onClick={() => this.modal.hide()}>
                   <i className="fa fa-times" />
                 </div>
-                <div id="modal-share">
+                <div className="modal-share">
                   <i className="fa fa-share-alt" onClick={this.showShareLink} />
                 </div>
                 { shareLink }
