@@ -380,8 +380,8 @@ class CourseModalBody extends React.Component {
             <h3 className="modal-module-header">Reactions</h3>
             <p>Check out your classmate&apos;s reactions – click an emoji to add your own
                             opinion!</p>
-            <div id="reactions-wrapper">
-              <div id="reactions">
+            <div className="reactions-wrapper">
+              <div className="reactions">
                 {reactionsDisplay}
               </div>
             </div>
