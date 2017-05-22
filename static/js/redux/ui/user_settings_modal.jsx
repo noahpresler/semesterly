@@ -208,7 +208,7 @@ class UserSettingsModal extends React.Component {
             <div className="pro-pic" style={{ backgroundImage: propic }} />
             <h1>Welcome!</h1>
           </div>
-          <div id="modal-body">
+          <div className="modal-body">
             <div className="preference cf">
               <h3>What&#39;s your major?</h3>
               <Select
