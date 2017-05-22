@@ -55,7 +55,7 @@
   visibility: hidden;
 }
 
-.trans .capacity-tracker-wrapper {
+.trans .capacity {
   opacity: 0;
   visibility: hidden;
 }
@@ -527,7 +527,7 @@
   white-space: nowrap;
 }
 
-#friends-inner {
+.friends-inner {
   margin: 0 auto;
   position: relative;
 
@@ -577,7 +577,7 @@
 }
 
 .conversion-image {
-  background: url('/static/img/get_facebook.png') center no-repeat;
+  background: url("/static/img/get_facebook.png") center no-repeat;
   background-size: contain;
   height: 45px;
   margin: 10px 0;
@@ -644,7 +644,7 @@
     }
   }
 
-  #friends-inner {
+  .friends-inner {
     .conversion {
       p {
         text-align: center;
@@ -725,18 +725,18 @@
 
 }
 
-.capacity-tracker-wrapper {
+.capacity {
   text-align: center;
 }
 
-#capacity-attention-wrapper {
+.capacity__attention {
   display: inline-block;
   font-size: 16px;
   height: 25px;
   line-height: 25px;
   margin-bottom: 10px;
 
-  > #attention-tag {
+  > .attention__tag {
     background-color: rgb(177, 81, 80);
     border-radius: 5px;
     color: $gfff;
@@ -752,7 +752,7 @@
       position: relative;
     }
 
-    #clock-icon {
+    .attention__clock-icon {
       display: inline-block;
       padding-left: 10px;
       padding-right: 10px;
@@ -763,7 +763,7 @@
     }
   }
 
-  #attention-text {
+  .attention__text {
     color: $g555;
     float: left;
     margin-left: 5px;
@@ -776,15 +776,15 @@
 
 // NOTE: 1088px is fluid up to XXXX%
 @media (max-width: 1088px) {
-  #capacity-attention-wrapper {
+  .capacity__attention {
     font-size: 16px;
     margin-top: 15px;
 
-    > #attention-tag {
+    .attention__tag {
       float: none;
     }
 
-    #attention-text {
+    .attention__text {
       float: none;
       margin: 5px 0 0;
     }
@@ -793,18 +793,18 @@
 }
 
 @media (max-width: 801px) {
-  #capacity-attention-wrapper {
+  .capacity__attention {
     font-size: 14px;
 	}
 }
 
 @media (max-width: 670px) {
-  #capacity-attention-wrapper {
+  .capacity__attention {
     font-size: 13px;
 	}
 }
 
-#capacity-tracker-text {
+.capacity__tracker-text {
   color: $g777;
   font-size: 12px;
   margin-bottom: 5px;

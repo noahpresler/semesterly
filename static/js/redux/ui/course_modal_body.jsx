@@ -259,7 +259,7 @@ class CourseModalBody extends React.Component {
     let friendDisplay = (<div className="modal-module friends">
       <h3 className="modal-module-header">Friends In This Course</h3>
       <div id="friends-wrapper">
-        <div id="friends-inner">
+        <div className="friends__inner">
           { friendCircles }
         </div>
       </div>
@@ -267,7 +267,7 @@ class CourseModalBody extends React.Component {
     let hasTakenDisplay = (<div className="modal-module friends">
       <h3 className="modal-module-header">Friends Who Have Taken This Course</h3>
       <div id="friends-wrapper">
-        <div id="friends-inner">
+        <div className="friends__inner">
           { hasTakenCircles }
         </div>
       </div>
@@ -294,7 +294,7 @@ class CourseModalBody extends React.Component {
         <h3 className="modal-module-header">Friends In This Course or Who Have Taken This
                     Course</h3>
         <div id="friends-wrapper">
-          <div id="friends-inner">
+          <div className="friends__inner">
             <div className="conversion">
               <div className="conversion-image" />
               <p>{ conversionText }</p>
@@ -318,15 +318,15 @@ class CourseModalBody extends React.Component {
     const avgRating = evalInfo.reduce((sum, e) => sum + parseFloat(e.score), 0) / evalInfo.length;
     const showCapacityAttention = this.props.popularityPercent > 60;
     const attentioncapacityTracker = (
-      <div className="capacity-tracker-wrapper">
-        <div id="capacity-attention-wrapper">
-          <div id="attention-tag">
-            <div id="clock-icon">
+      <div className="capacity">
+        <div className="capacity__attention">
+          <div className="attention__tag">
+            <div className="attention__clock-icon">
               <i className="fa fa-clock-o" />
             </div>
             <span>Waitlist Likely</span>
           </div>
-          <div id="attention-text">
+          <div className="attention__text">
             <span>
               Over <span className="highlight">{parseInt(this.props.popularityPercent, 10)}%</span>
               of seats added by students on Semesterly!
@@ -336,8 +336,8 @@ class CourseModalBody extends React.Component {
       </div>
         );
     const capacityTracker = (
-      <div className="capacity-tracker-wrapper">
-        <div id="capacity-tracker-text">
+      <div className="capacity">
+        <div className="capacity__tracker-text">
           <span>{parseInt(this.props.popularityPercent, 10)}% of Seats Added on Semesterly</span>
         </div>
       </div>
