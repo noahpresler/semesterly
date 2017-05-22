@@ -331,7 +331,7 @@ export default class FinalExamsModal extends React.Component {
           />
         </div>
         { shareLink }
-        <div id="modal-close" onClick={() => this.hide()}>
+        <div className="modal-close" onClick={() => this.hide()}>
           <i className="fa fa-times" />
         </div>
       </div>);

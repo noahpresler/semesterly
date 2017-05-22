@@ -24,7 +24,7 @@ class SaveCalendarModal extends React.Component {
                   style={{ backgroundImage: 'url(/static/img/addtocalendarfeature.png)' }}
                 />
                 <h1>Export calendar</h1>
-                <div id="modal-close" onClick={() => this.modal.hide()}>
+                <div className="modal-close" onClick={() => this.modal.hide()}>
                   <i className="fa fa-times" />
                 </div>
               </div>
