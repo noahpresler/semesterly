@@ -2,7 +2,7 @@ import React from 'react';
 import Modal from 'boron/WaveModal';
 import { browserSupportsLocalStorage } from '../util';
 
-export class TutModal extends React.Component {
+class TutModal extends React.Component {
   constructor(props) {
     super(props);
     this.state = { tutPosition: 1 };
@@ -11,10 +11,12 @@ export class TutModal extends React.Component {
     this.hide = this.hide.bind(this);
   }
 
-  componentDidMount(nextProps) {
+  componentDidMount() {
     const tutorial = JSON.parse(localStorage.getItem('tutorial'));
-    if ((!tutorial || !tutorial.modalTutShown) && !(this.props.textbookModalVisible || this.props.signUpModalVisible || this.props.courseModalVisible || this.props.courseModalVisible || this.props.finalExamModalVisible)) {
-      this.refs.modal.show();
+    if ((!tutorial || !tutorial.modalTutShown) && !(this.props.textbookModalVisible ||
+      this.props.signUpModalVisible || this.props.courseModalVisible ||
+      this.props.settingModalVisible || this.props.finalExamModalVisible)) {
+      this.modal.show();
     }
     $(document.body).on('keydown', (e) => {
       e.stopPropagation();
@@ -30,7 +32,7 @@ export class TutModal extends React.Component {
   }
 
   hide() {
-    this.refs.modal.hide();
+    this.modal.hide();
     if (browserSupportsLocalStorage()) {
       localStorage.setItem('tutorial', JSON.stringify({ modalTutShown: true }));
     }
@@ -45,9 +47,8 @@ export class TutModal extends React.Component {
       <i className="action fa fa-chevron-left" onClick={this.prev} /> : null;
     let right = this.state.tutPosition < 4 ?
       <i className="action fa fa-chevron-right" onClick={this.next} /> : null;
-    right = this.state.tutPosition == 4 ?
+    right = this.state.tutPosition === 4 ?
       <h4 className="action" onClick={this.hide}>Done</h4> : right;
-    let backgroundColor;
     switch (this.state.tutPosition) {
       case 1:
         contentStyle.backgroundColor = '#FC7372';
@@ -61,10 +62,12 @@ export class TutModal extends React.Component {
       case 4:
         contentStyle.backgroundColor = '#FED361';
         break;
+      default:
+        contentStyle.backgroundColor = '#FC7372';
     }
     return (
       <Modal
-        ref="modal"
+        ref={(c) => { this.modal = c; }}
         className="tut-modal max-modal"
         closeOnClick={false}
         keyboard={false}
@@ -77,34 +80,34 @@ export class TutModal extends React.Component {
             { right }
           </div>
           <img
-            className="tut-img" src={'/static/img/tutorial/step1.png'}
+            className="tut-img" alt="Step 1!" src={'/static/img/tutorial/step1.png'}
             style={{
-              display: this.state.tutPosition == 1 ? 'inline' : 'none',
-              opacity: this.state.tutPosition == 1 ? '1' : '0',
+              display: this.state.tutPosition === 1 ? 'inline' : 'none',
+              opacity: this.state.tutPosition === 1 ? '1' : '0',
             }}
             width="100%"
           />
           <img
-            className="tut-img" src={'/static/img/tutorial/step2.png'}
+            className="tut-img" alt="Step 2!" src={'/static/img/tutorial/step2.png'}
             style={{
-              display: this.state.tutPosition == 2 ? 'inline' : 'none',
-              opacity: this.state.tutPosition == 2 ? '1' : '0',
+              display: this.state.tutPosition === 2 ? 'inline' : 'none',
+              opacity: this.state.tutPosition === 2 ? '1' : '0',
             }}
             width="100%"
           />
           <img
-            className="tut-img" src={'/static/img/tutorial/step3.png'}
+            className="tut-img" alt="Step 3!" src={'/static/img/tutorial/step3.png'}
             style={{
-              display: this.state.tutPosition == 3 ? 'inline' : 'none',
-              opacity: this.state.tutPosition == 3 ? '1' : '0',
+              display: this.state.tutPosition === 3 ? 'inline' : 'none',
+              opacity: this.state.tutPosition === 3 ? '1' : '0',
             }}
             width="100%"
           />
           <img
-            className="tut-img" src={'/static/img/tutorial/step4.png'}
+            className="tut-img" alt="Step 4!" src={'/static/img/tutorial/step4.png'}
             style={{
-              display: this.state.tutPosition == 4 ? 'inline' : 'none',
-              opacity: this.state.tutPosition == 4 ? '1' : '0',
+              display: this.state.tutPosition === 4 ? 'inline' : 'none',
+              opacity: this.state.tutPosition === 4 ? '1' : '0',
             }}
             width="100%"
           />
@@ -113,3 +116,13 @@ export class TutModal extends React.Component {
     );
   }
 }
+
+TutModal.propTypes = {
+  textbookModalVisible: React.PropTypes.bool.isRequired,
+  signUpModalVisible: React.PropTypes.bool.isRequired,
+  courseModalVisible: React.PropTypes.bool.isRequired,
+  settingModalVisible: React.PropTypes.bool.isRequired,
+  finalExamModalVisible: React.PropTypes.bool.isRequired,
+};
+
+export default TutModal;

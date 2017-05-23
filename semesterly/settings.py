@@ -8,10 +8,12 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/1.6/ref/settings/
 """
 
+import djcelery
+
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 import os
 BASE_DIR = os.path.dirname(os.path.dirname(__file__))
-PROJECT_DIRECTORY = os.getcwd() 
+PROJECT_DIRECTORY = os.getcwd()
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/1.6/howto/deployment/checklist/
@@ -141,8 +143,15 @@ INSTALLED_APPS = (
     'cachalot',
     'silk',
     'dashing',
+    'rest_framework',
+    'rest_framework_swagger',
     'webpack_loader',
+    'djcelery',
 )
+
+REST_FRAMEWORK ={
+    'UNICODE_JSON': False
+}
 
 MIDDLEWARE_CLASSES = (
     'django.contrib.sessions.middleware.SessionMiddleware',
@@ -338,3 +347,28 @@ if not DEBUG:
     }
     import rollbar
     rollbar.init(**ROLLBAR)
+
+
+# Begin Celery stuff.
+djcelery.setup_loader()
+
+BROKER_URL = 'redis://localhost:6379/0'
+CELERY_ACCEPT_CONTENT = ['json']
+CELERY_TASK_SERIALIZER = 'json'
+CELERY_RESULT_SERIALIZER = 'json'
+CELERY_RESULT_BACKEND = 'djcelery.backends.database:DatabaseBackend'
+CELERYBEAT_SCHEDULER = 'djcelery.schedulers.DatabaseScheduler'
+CELERY_TIMEZONE = 'America/New_York'
+
+# App instance to use
+CELERY_APP = "semesterly"
+
+# Where to chdir at start.
+CELERYBEAT_CHDIR = BASE_DIR
+CELERYD_CHDIR = BASE_DIR
+
+# # Can set up cron like scheduling here.
+# from celery.schedules import crontab
+# CELERYBEAT_SCHEDULE = {}
+
+# End Celery stuff.

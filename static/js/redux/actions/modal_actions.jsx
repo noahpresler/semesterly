@@ -1,4 +1,5 @@
 import fetch from 'isomorphic-fetch';
+import Cookie from 'js-cookie';
 import {
     getClassmatesInCourseEndpoint,
     getCourseInfoEndpoint,
@@ -50,6 +51,11 @@ export const fetchCourseInfo = courseId => (dispatch) => {
 
 export const react = (cid, title) => (dispatch) => {
   fetch(getReactToCourseEndpoint(), {
+    headers: {
+      'X-CSRFToken': Cookie.get('csrftoken'),
+      Accept: 'application/json',
+      'Content-Type': 'application/json',
+    },
     method: 'POST',
     body: JSON.stringify({
       cid,
@@ -88,6 +94,8 @@ export const showExplorationModal = () => ({ type: ActionTypes.SHOW_EXPLORATION_
 export const hideFinalExamsModal = () => ({ type: ActionTypes.HIDE_FINAL_EXAMS_MODAL });
 
 export const triggerAcquisitionModal = () => ({ type: ActionTypes.TRIGGER_ACQUISITION_MODAL });
+
+export const toggleAcquisitionModal = () => ({ type: ActionTypes.TOGGLE_ACQUISITION_MODAL });
 
 export const toggleIntegrationModal = () => ({ type: ActionTypes.TOGGLE_INTEGRATION_MODAL });
 

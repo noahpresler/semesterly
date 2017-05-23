@@ -12,6 +12,7 @@ import {
     loadTimetable,
 } from '../../actions/timetable_actions';
 import { deleteTimetable, duplicateTimetable } from '../../actions/user_actions';
+import { currSem } from '../../reducers/semester_reducer';
 
 const mapStateToProps = (state) => {
   const activeTimetable = state.timetables.items[state.timetables.active];
@@ -19,8 +20,9 @@ const mapStateToProps = (state) => {
   const optionalCourses = state.optionalCourses.courses;
 
   return {
-    semester: allSemesters[state.semesterIndex],
-    semesterIndex: state.semesterIndex,
+    semester: currSem(state.semester),
+    semesterIndex: state.semester.current,
+    examSupportedSemesters: state.semester.exams,
     // don't want to consider courses that are shown on timetable only
     // because of a 'HOVER_COURSE' action (i.e. fake courses)
     liveTimetableCourses: activeTimetable.courses.filter(c => !c.fake),
@@ -31,6 +33,7 @@ const mapStateToProps = (state) => {
     isCourseInRoster: courseId => activeTimetable.courses.some(c => c.id === courseId),
     mandatoryCourses,
     optionalCourses,
+    hasLoaded: !state.timetables.isFetching,
   };
 };
 

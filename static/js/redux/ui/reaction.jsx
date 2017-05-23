@@ -1,6 +1,7 @@
 import React from 'react';
-import REACTION_MAP from '../constants/reactions';
+import renderHTML from 'react-render-html';
 import classNames from 'classnames';
+import REACTION_MAP from '../constants/reactions';
 
 class Reaction extends React.Component {
   constructor(props) {
@@ -8,6 +9,20 @@ class Reaction extends React.Component {
     this.state = { didSelect: this.props.selected === true, animating: true };
     this.toggleSelected = this.toggleSelected.bind(this);
     this.animate = this.animate.bind(this);
+  }
+
+  componentDidMount() {
+    this.animate();
+  }
+
+  componentWillReceiveProps(nextProps) {
+    this.setState({ didSelect: nextProps.selected === true });
+  }
+
+  animate() {
+    setTimeout(() => {
+      this.setState({ animating: false });
+    }, 300);
   }
 
   toggleSelected() {
@@ -19,23 +34,8 @@ class Reaction extends React.Component {
     });
   }
 
-  componentDidMount() {
-    this.animate();
-  }
-
-  animate() {
-    setTimeout(() => {
-      this.setState({ animating: false });
-    }, 300);
-  }
-
-  componentWillReceiveProps(nextProps) {
-    this.setState({ didSelect: nextProps.selected === true });
-  }
-
   render() {
-    const size = 20 + this.props.count / this.props.total * 45;
-    const actionSize = 15 + 45 * (this.props.count / this.props.total);
+    const size = 20 + ((this.props.count / this.props.total) * 45);
     const emojiStyle = { height: size, width: size };
     return (
       <div
@@ -48,8 +48,9 @@ class Reaction extends React.Component {
       >
         <div
           className="emoji" style={emojiStyle}
-          dangerouslySetInnerHTML={{ __html: twemoji.parse(REACTION_MAP[this.props.emoji].unicode) }}
-        />
+        >
+          {renderHTML(twemoji.parse(REACTION_MAP[this.props.emoji].unicode))}
+        </div>
         <div
           className={classNames({
             'action-container': true,
@@ -74,5 +75,24 @@ class Reaction extends React.Component {
       </div>);
   }
 }
+
+Reaction.defaultProps = {
+  emoji: '',
+  selected: false,
+};
+
+Reaction.propTypes = {
+  emoji: (props, propName, componentName) => {
+    const emoji = props[propName];
+    if (Object.prototype.hasOwnProperty.call(REACTION_MAP, emoji)) {
+      return null;
+    }
+    return new Error(`Invalid emoji in ${componentName}`);
+  },
+  total: React.PropTypes.number.isRequired,
+  count: React.PropTypes.number.isRequired,
+  react: React.PropTypes.func.isRequired,
+  selected: React.PropTypes.bool,
+};
 
 export default Reaction;

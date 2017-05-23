@@ -1,0 +1,129 @@
+@media screen and (max-device-width: 767px) {
+  #calendar {
+    .fc-toolbar {
+      border-bottom: 0;
+      border-color: transparent;
+      margin-top: 0;
+      padding: 5px;
+    }
+  }
+}
+
+@media screen and (max-device-width: 767px) and (max-aspect-ratio: 14 / 9) {
+  .day-pill {
+    color: $g777;
+    float: left;
+    font-size: 12px;
+    line-height: 20px;
+    width: 20%;
+  }
+
+  #day-pills {
+    font-size: 0;
+    margin-top: 3px;
+    padding: 0 5px;
+    text-align: center;
+    width: 100%;
+  }
+
+  .day-circle.selected {
+    background-color: $pink;
+    border-radius: 20px;
+    color: $gfff;
+    height: 20px;
+    margin: 0 auto;
+    width: 20px;
+  }
+
+  #day-pills-wrapper {
+    width: 100%;
+  }
+
+  #nudgespotInappContainer {
+    display: none;
+  }
+
+  #calendar {
+    .fc-toolbar {
+      background-color: $gf9f9f9;
+      border-bottom: 0;
+      border-color: transparent;
+      margin-top: 0;
+      padding: 5px;
+    }
+  }
+
+  .fc-right button.save-to-ical .fc-right button.save-timetable {
+    background-color: transparent;
+    border: 0;
+  }
+
+  .fc .fc-toolbar>*>:first-child {
+    margin-left: 8px;
+  }
+
+  .sem-pages,
+  .sem-pagination-nav {
+    background-color: transparent;
+  }
+
+  .sem-pagination {
+    .sem-pages {
+      background-color: transparent;
+      border: 1px solid transparent;
+      margin-right: 0;
+      padding: 0 0 0 5px;
+      white-space: nowrap;
+    }
+
+    .sem-pagination-nav {
+      background-color: transparent;
+      border: 0;
+      margin-left: 3px;
+      width: 5px;
+    }
+  }
+
+  .sem-pages {
+    .sem-page {
+      border: 5px solid $gf9f9f9;
+    }
+  }
+}
+
+#calendar {
+  &.up {
+    margin-top: 65px;
+  }
+
+  .up {
+    &.fc-toolbar {
+      border-bottom: 2px solid $gddd;
+      position: fixed;
+      top: 20px;
+      width: 100%;
+      z-index: 100;
+    }
+  }
+
+  .fc-timeline {
+    background-color: $pink;
+    height: 1px;
+    position: absolute;
+    top: 300px;
+    width: 100%;
+    z-index: 3;
+
+    &::before {
+      background-color: $pink;
+      border-radius: 10px;
+      bottom: -4px;
+      content: '';
+      display: block;
+      height: 10px;
+      position: absolute;
+      width: 10px;
+      z-index: 1000;
+    }
+  }
+}

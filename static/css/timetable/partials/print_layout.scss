@@ -1,0 +1,146 @@
+.pro-pic,
+.semesterly-logo-print,
+.semesterly-name-print {
+  &.print {
+    display: none;
+  }
+}
+
+@media print {
+  html,
+  body {
+    height: 80% !important;
+  }
+  @page {
+    margin: 1mm 2mm 5mm 1mm;
+    size: landscape;
+  }
+
+  #calendar {
+    -webkit-transform-origin-x: 0;
+    display: block;
+    margin: 0 auto;
+    min-width: 139.5% !important;
+    position: fixed;
+    top: 60px;
+    transform: scale(.7);
+    z-index: 100;
+  }
+
+  .no-print {
+    display: none;
+
+    * {
+      display: none;
+    }
+  }
+
+  .print {
+    display: inline-block;
+  }
+
+  .top-bar {
+    border-bottom: 0;
+    margin-top: 20px;
+  }
+
+  .semesterly-name-print {
+    -webkit-print-color-adjust: exact;
+    color: $primary-navy;
+    display: inline-block;
+    font-family: $font-primary;
+  }
+
+  .print-content{
+    clear: both;
+    display: block;
+    margin-top: 26px;
+  }
+
+  .print-name,
+  .print-major {
+    color: $g222;
+    display: block;
+    margin-left: 20px;
+  }
+
+  .semesterly-logo,
+  .semesterly-name {
+    display: none;
+
+    &.print {
+      display: block;
+      float: right;
+    }
+  }
+
+  .semesterly-logo-print {
+    display: inline-block;
+    height: 32px;
+    margin-left: 35px;
+    margin-top: 9px;
+
+    &.print {
+      display: block;
+      float: right;
+    }
+  }
+
+  .semesterly-name-print {
+    display: inline-block;
+    color: #5C5C5C !important;
+    font-size: 32px !important;
+    height: 50px;
+    line-height: 50px;
+    margin-left: 10px;
+    margin-right: 30px;
+
+    &.print {
+      display: block;
+      float: right;
+    }
+  }
+
+  .usr-pic {
+    &.print {
+      background-position: center;
+      background-repeat: no-repeat;
+      background-size: cover;
+      border: 2px solid $gddd;
+      border-radius: 100%;
+      float: left;
+      height: 100px;
+      margin-left: 30px;
+      width: 100px;
+    }
+  }
+
+  .print-name {
+    color: #5C5C5C !important;
+    font-family: $font-primary;
+    font-size: 45px;
+    font-weight: 500;
+  }
+
+  .print-major {
+    color: $g777 !important;
+    font-family: $font-body;
+  }
+
+  .name-logo {
+    display: block;
+    float: right;
+    margin-top: 25px;
+  }
+
+  body {
+    -webkit-print-color-adjust: exact;
+    height: 100% !important;
+    margin: 0 auto;
+    width: 100% !important;
+  }
+
+  .fc-time-grid-event {
+    -webkit-print-color-adjust: exact;
+  }
+}

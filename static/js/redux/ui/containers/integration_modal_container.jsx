@@ -1,5 +1,5 @@
 import { connect } from 'react-redux';
-import { IntegrationModal } from '../integration_modal';
+import IntegrationModal from '../integration_modal';
 import { toggleIntegrationModal } from '../../actions/modal_actions';
 
 const mapStateToProps = state => ({

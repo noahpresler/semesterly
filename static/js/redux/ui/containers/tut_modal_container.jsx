@@ -1,9 +1,10 @@
 import { connect } from 'react-redux';
-import { TutModal } from '../tut_modal';
+import TutModal from '../tut_modal';
 
 const mapStateToProps = state => ({
   signUpModalVisible: state.signupModal.isVisible,
-  courseModalVisible: state.userInfo.overrideShow,
+  settingModalVisible: state.userInfo.overrideShow,
+  courseModalVisible: state.courseInfo.id != null,
   textbookModalVisible: state.textbookModal.isVisible,
   finalExamModalVisible: state.finalExamsModal.isVisible,
 });

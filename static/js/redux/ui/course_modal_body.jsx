@@ -1,15 +1,15 @@
 import React from 'react';
-import classnames from 'classnames';
 import Reaction from './reaction';
 import REACTION_MAP from '../constants/reactions';
 import MasterSlot from './master_slot';
 import Textbook from './textbook';
 import COLOUR_DATA from '../constants/colours';
-import { getSchoolSpecificInfo } from '../constants/schools';
 import EvaluationList from './evaluation_list';
-import { getCourseShareLinkFromModal } from '../helpers/timetable_helpers';
+import CourseModalSection from './course_modal_section';
+import SlotHoverTip from './slot_hover_tip';
+import * as PropTypes from '../constants/propTypes';
 
-export class CourseModalBody extends React.Component {
+class CourseModalBody extends React.Component {
   constructor(props) {
     super(props);
     this.sendReact = this.sendReact.bind(this);
@@ -23,8 +23,8 @@ export class CourseModalBody extends React.Component {
   }
 
   componentWillMount() {
-    window.addEventListener('resize', (e) => {
-      if (this.state.mobile != $(window).width() < this.mobile_width) {
+    window.addEventListener('resize', () => {
+      if (this.state.mobile !== ($(window).width() < this.mobile_width)) {
         this.setState({
           mobile: $(window).width() < this.mobile_width,
         });
@@ -60,29 +60,21 @@ export class CourseModalBody extends React.Component {
     if (sections === undefined) {
       return [];
     }
-        /* Begin code that seems patchworky, since db i serving up null sections?? */
-    const temp = new Object();
-    for (const [key, value] of Object.entries(sections)) {
-      if (value.length > 0) {
-        temp[key] = value;
-      }
-    }
-    sections = temp;
-        /* end patchworky code */
+
     return Object.keys(sections).sort().map((sec) => {
       const slots = sections[sec];
       const instructors = new Set();
-      for (const s of slots) {
+      Array.prototype.forEach.call(slots, (s) => {
         if (!instructors.has(s.instructors)) {
           instructors.add(s.instructors);
         }
-      }
+      });
       const instructString = Array.from(instructors).join(', ');
       let enrolled = 0;
       if (slots.length > 0) {
         enrolled = slots[0] ? slots[0].enrolment || 0 : 0;
       }
-      return (<SearchResultSection
+      return (<CourseModalSection
         key={sec}
         section={slots}
         secName={sec}
@@ -94,7 +86,7 @@ export class CourseModalBody extends React.Component {
         isOnActiveTimetable={this.props.isSectionOnActiveTimetable(this.props.data.id, sec)}
         lockOrUnlock={() => this.props.addOrRemoveCourse(this.props.data.id, sec)}
         hoverSection={() => this.props.hoverSection(this.props.data, sec)}
-        unhoverSection={this.props.unHoverSection}
+        unHoverSection={this.props.unHoverSection}
         inRoster={this.props.inRoster}
       />);
     });
@@ -167,18 +159,13 @@ export class CourseModalBody extends React.Component {
     const evalInfo = this.props.data.eval_info;
     const relatedCourses = this.props.data.related_courses;
     const { prerequisites, textbooks } = this.props.data;
-    const evals = evalInfo.length === 0 ? null :
-            (<div className="modal-module">
-              <h3 className="modal-module-header">Course Evaluations</h3>
-              {evalInfo.map((e, i) => <div key={i}>{ e }</div>)}
-            </div>);
     const maxColourIndex = COLOUR_DATA.length - 1;
 
     const similarCourses = relatedCourses.length === 0 ? null :
             (<div className="modal-module">
               <h3 className="modal-module-header">Students Also Take</h3>
               {relatedCourses.map((rc, i) => <MasterSlot
-                key={i} course={rc}
+                key={rc.id} course={rc}
                 professors={null}
                 colourIndex={Math.min(i, maxColourIndex)}
                 onTimetable
@@ -187,33 +174,38 @@ export class CourseModalBody extends React.Component {
                 fetchCourseInfo={() => this.fetchCourseInfo(rc.id)}
               />)}
             </div>);
-    const courseRegex = new RegExp(getSchoolSpecificInfo(school).courseRegex, 'g');
+    const courseRegex = new RegExp(this.props.schoolSpecificInfo.courseRegex, 'g');
     const matchedCoursesDescription = this.props.data.description.match(courseRegex);
-    const description = this.props.data.description == '' ? 'No description available' : this.props.data.description.split(courseRegex).map((t, i) => {
-      if (matchedCoursesDescription == null) {
-        return t;
-      }
-      if (matchedCoursesDescription.indexOf(t) != -1 && Object.keys(this.props.data.regexed_courses).indexOf(t) != -1) {
-        return (<FakeSlot
-          key={i} num={i} code={t}
-          name={this.props.data.regexed_courses[t]}
-        />);
-      }
-      return <span className="textItem" key={i}>{t}</span>;
-    });
-    let matchedCoursesPrerequisites = prerequisites == null ? matchedCoursesPrerequisites = null : prerequisites.match(courseRegex);
-    const newPrerequisites = (prerequisites == '' || prerequisites == null) ? 'None' : prerequisites.split(courseRegex).map((t, i) => {
-      if (matchedCoursesPrerequisites == null) {
-        return t;
-      }
-      if (matchedCoursesPrerequisites.indexOf(t) != -1 && Object.keys(this.props.data.regexed_courses).indexOf(t) != -1) {
-        return (<FakeSlot
-          key={i} num={i} code={t}
-          name={this.props.data.regexed_courses[t]}
-        />);
-      }
-      return <span className="textItem" key={i}>{t}</span>;
-    });
+    const description = this.props.data.description === '' ? 'No description available' :
+      this.props.data.description.split(courseRegex).map((t, i) => {
+        if (matchedCoursesDescription === null) {
+          return t;
+        }
+        if (matchedCoursesDescription.indexOf(t) !== -1 &&
+        Object.keys(this.props.data.regexed_courses).indexOf(t) !== -1) {
+          return (<SlotHoverTip
+            key={t} num={i} code={t}
+            name={this.props.data.regexed_courses[t]}
+          />);
+        }
+        return <span className="textItem" key={`textItem${t}`}>{t}</span>;
+      });
+    const matchedCoursesPrerequisites = prerequisites === null
+      ? null : prerequisites.match(courseRegex);
+    const newPrerequisites = (prerequisites === '' || prerequisites === null) ? 'None' :
+      prerequisites.split(courseRegex).map((t, i) => {
+        if (matchedCoursesPrerequisites === null) {
+          return t;
+        }
+        if (matchedCoursesPrerequisites.indexOf(t) !== -1 &&
+          Object.keys(this.props.data.regexed_courses).indexOf(t) !== -1) {
+          return (<SlotHoverTip
+            key={t} num={i} code={t}
+            name={this.props.data.regexed_courses[t]}
+          />);
+        }
+        return <span className="textItem" key={t}>{t}</span>;
+      });
     const prerequisitesDisplay =
             (<div className="modal-module prerequisites">
               <h3 className="modal-module-header">Prerequisites</h3>
@@ -233,8 +225,9 @@ export class CourseModalBody extends React.Component {
               <li className="cf">
                 <span className="integration-image" style={integrationDivStyle} />
                 <h4>Pilot</h4>
-                <a href="http://academicsupport.jhu.edu/pilot-learning/" target="_blank">Learn
-                        More</a>
+                <a href="http://academicsupport.jhu.edu/pilot-learning/" target="_blank" rel="noopener noreferrer">
+                  Learn More
+                </a>
                 <p>In the PILOT program, students are organized into study teams consisting of
                         6-10 members who meet
                         weekly to work problems together.</p>
@@ -249,16 +242,19 @@ export class CourseModalBody extends React.Component {
     /></span><p>
             loading...</p></div>);
     if (!this.props.isFetchingClassmates && this.props.classmates.classmates !== undefined) {
-      friendCircles = this.props.classmates && this.props.classmates.classmates.length > 0 ? this.props.classmates.classmates.map(c =>
-        <div className="friend" key={c.img_url}>
-          <div className="ms-friend" style={{ backgroundImage: `url(${c.img_url})` }} />
-          <p title={`${c.first_name} ${c.last_name}`}>{ `${c.first_name} ${c.last_name}` }</p>
-        </div>) : <p className="null">No Classmates Found</p>;
-      hasTakenCircles = this.props.classmates && this.props.classmates.past_classmates.length > 0 ? this.props.classmates.past_classmates.map(c =>
-        <div className="friend" key={c.img_url}>
-          <div className="ms-friend" style={{ backgroundImage: `url(${c.img_url})` }} />
-          <p title={`${c.first_name} ${c.last_name}`}>{ `${c.first_name} ${c.last_name}` }</p>
-        </div>) : <p className="null">No Classmates Found</p>;
+      friendCircles = this.props.classmates && this.props.classmates.classmates.length > 0 ?
+        this.props.classmates.classmates.map(c =>
+          <div className="friend" key={c.img_url}>
+            <div className="ms-friend" style={{ backgroundImage: `url(${c.img_url})` }} />
+            <p title={`${c.first_name} ${c.last_name}`}>{ `${c.first_name} ${c.last_name}` }</p>
+          </div>) : <p className="null">No Classmates Found</p>;
+
+      hasTakenCircles = this.props.classmates && this.props.classmates.past_classmates.length > 0 ?
+        this.props.classmates.past_classmates.map(c =>
+          <div className="friend" key={c.img_url}>
+            <div className="ms-friend" style={{ backgroundImage: `url(${c.img_url})` }} />
+            <p title={`${c.first_name} ${c.last_name}`}>{ `${c.first_name} ${c.last_name}` }</p>
+          </div>) : <p className="null">No Classmates Found</p>;
     }
     let friendDisplay = (<div className="modal-module friends">
       <h3 className="modal-module-header">Friends In This Course</h3>
@@ -278,16 +274,21 @@ export class CourseModalBody extends React.Component {
     </div>);
     if (!this.props.isLoggedIn || !this.props.hasSocial) {
       const conversionText = !this.props.isLoggedIn ?
-                'Create an account with Facebook and see which of your Facebook friends are taking or have already taken this class!' :
-                'Enable the friend feature to find out who which of your Facebook friends are taking or have already taken this class!';
-      const conversionLink = !this.props.isLoggedIn ?
-                (<a onClick={this.launchSignupModal}><i
-                  className="fa fa-facebook"
-                  aria-hidden="true"
-                />Link
-                    Facebook</a>) :
-                (<a onClick={this.enableSocial}><i className="fa fa-facebook" aria-hidden="true" />Enable
-                    Facebook</a>);
+        'Create an account with Facebook and see which of your Facebook friends are taking or ' +
+        'have already taken this class!' :
+        'Enable the friend feature to find out who which of your Facebook friends are taking or ' +
+        'have already taken this class!';
+      const conversionLink = !this.props.isLoggedIn ? (
+        <a onClick={this.launchSignupModal}><i
+          className="fa fa-facebook"
+          aria-hidden="true"
+        />Link
+              Facebook</a>) :
+          (<a onClick={this.enableSocial}><i
+            className="fa fa-facebook" aria-hidden="true"
+          />Enable Facebook
+          </a>
+      );
       hasTakenDisplay = null;
       friendDisplay = (<div className="modal-module friends">
         <h3 className="modal-module-header">Friends In This Course or Who Have Taken This
@@ -308,14 +309,14 @@ export class CourseModalBody extends React.Component {
               <h3 className="modal-module-header">Textbooks</h3>
               <div className="modal-textbook-list">
                 {
-                        textbooks.map((t, i) => <Textbook key={i} tb={t} />)
-                    }
+                    textbooks.map(t => <Textbook key={t.isbn} tb={t} />)
+                }
               </div>
             </div>);
 
     const creditsSuffix = numCredits === 1 ? ' credit' : ' credits';
     const avgRating = evalInfo.reduce((sum, e) => sum + parseFloat(e.score), 0) / evalInfo.length;
-    const show_capacity_attention = this.props.popularityPercent > 60;
+    const showCapacityAttention = this.props.popularityPercent > 60;
     const attentioncapacityTracker = (
       <div className="capacity-tracker-wrapper">
         <div id="capacity-attention-wrapper">
@@ -327,10 +328,9 @@ export class CourseModalBody extends React.Component {
           </div>
           <div id="attention-text">
             <span>
-                            Over <span
-                              className="highlight"
-                            >{parseInt(this.props.popularityPercent)}%</span> of seats added by students on Semesterly!
-                        </span>
+              Over <span className="highlight">{parseInt(this.props.popularityPercent, 10)}%</span>
+              of seats added by students on Semesterly!
+            </span>
           </div>
         </div>
       </div>
@@ -338,7 +338,7 @@ export class CourseModalBody extends React.Component {
     const capacityTracker = (
       <div className="capacity-tracker-wrapper">
         <div id="capacity-tracker-text">
-          <span>{parseInt(this.props.popularityPercent)}% of Seats Added on Semesterly</span>
+          <span>{parseInt(this.props.popularityPercent, 10)}% of Seats Added on Semesterly</span>
         </div>
       </div>
         );
@@ -355,16 +355,16 @@ export class CourseModalBody extends React.Component {
               <div className="sub-rating-wrapper">
                 <div className="star-ratings-sprite">
                   <span
-                    style={{ width: `${100 * avgRating / 5}%` }}
+                    style={{ width: `${(100 * avgRating) / 5}%` }}
                     className="rating"
                   />
                 </div>
               </div>
             </div>
-            { !show_capacity_attention &&
+            { !showCapacityAttention &&
                         capacityTracker
                         }
-            { show_capacity_attention && this.state.mobile &&
+            { showCapacityAttention && this.state.mobile &&
                         attentioncapacityTracker
                         }
             { prerequisitesDisplay }
@@ -374,11 +374,11 @@ export class CourseModalBody extends React.Component {
             { hasTakenDisplay }
           </div>
           <div className="col-8-16">
-            { show_capacity_attention && !this.state.mobile &&
+            { showCapacityAttention && !this.state.mobile &&
                         attentioncapacityTracker
                         }
             <h3 className="modal-module-header">Reactions</h3>
-            <p>Check out your classmate's reactions – click an emoji to add your own
+            <p>Check out your classmate&apos;s reactions – click an emoji to add your own
                             opinion!</p>
             <div id="reactions-wrapper">
               <div id="reactions">
@@ -411,64 +411,47 @@ export class CourseModalBody extends React.Component {
   }
 }
 
-const FakeSlot = ({ num, code, name }) => {
-  const maxColourIndex = COLOUR_DATA.length - 1;
-  return (<a href={getCourseShareLinkFromModal(code)} className="course-link" key={num}>
-    <span>{code}</span>
-    <span
-      className="course-link-tip"
-      style={{ backgroundColor: COLOUR_DATA[Math.min(num - 1, maxColourIndex)].background }}
-    >
-      <span
-        className="slot-bar"
-        style={{ backgroundColor: COLOUR_DATA[Math.min(num - 1, maxColourIndex)].border }}
-      />
-      <span className="course-link-content">
-        <span>{code}</span>
-        <span>{name}</span>
-      </span>
-    </span>
-  </a>);
+CourseModalBody.defaultProps = {
+  data: {},
+  hasSocial: false,
+  practicalSections: {},
+  tutorialSections: {},
+  popularityPercent: 0,
+  inRoster: false,
+  isLoggedIn: false,
 };
 
-const SearchResultSection = ({ section, secName, instr, enrolled, waitlist, size, hoverSection, unhoverSection, locked, inRoster, lockOrUnlock, isOnActiveTimetable }) => {
-  const seats = size - enrolled;
-  let seatStatus = waitlist > 0 ? (`${waitlist} waitlist`) : (`${seats} open`);
-  if (seats === -1 || size === -1) {
-    seatStatus = 'Unknown';
-  }
-  if (size === -1) {
-    size = 'Unknown';
-  }
-  let benchmark = 'green';
-  if (waitlist > 0) {
-    benchmark = 'red';
-  } else if (seats === 0 && size != 'Unknown') {
-    benchmark = 'red';
-  } else if (seats < size / 10) {
-    benchmark = 'yellow';
-  }
-  return (
-    <div
-      className={classnames('modal-section', {
-        locked,
-        'on-active-timetable': isOnActiveTimetable,
-      })}
-      onMouseDown={lockOrUnlock}
-      onMouseEnter={hoverSection}
-      onMouseLeave={unhoverSection}
-    >
-      <h4>
-        <span>{secName}</span>
-        <i className="fa fa-calendar-check-o" />
-      </h4>
-      <h5>{instr}</h5>
-      <h6>
-        <span className={benchmark}>{seatStatus}</span>
-        <span> / </span>
-        <span className="total-seats">{size} seats</span>
-      </h6>
-      <i className="fa fa-lock" />
-    </div>
-  );
+CourseModalBody.propTypes = {
+  inRoster: React.PropTypes.bool.isRequired,
+  popularityPercent: React.PropTypes.number,
+  isLoggedIn: React.PropTypes.bool,
+  hasSocial: React.PropTypes.bool,
+  data: PropTypes.fullCourseDetails,
+  addOrRemoveCourse: React.PropTypes.func.isRequired,
+  react: React.PropTypes.func.isRequired,
+  classmates: PropTypes.classmates.isRequired,
+  hideModal: React.PropTypes.func.isRequired,
+  openSignUpModal: React.PropTypes.func.isRequired,
+  changeUserInfo: React.PropTypes.func.isRequired,
+  saveSettings: React.PropTypes.func.isRequired,
+  isFetchingClassmates: React.PropTypes.bool.isRequired,
+  isFetching: React.PropTypes.bool.isRequired,
+  hoverSection: React.PropTypes.func.isRequired,
+  unHoverSection: React.PropTypes.func.isRequired,
+  fetchCourseInfo: React.PropTypes.func.isRequired,
+  isSectionLocked: React.PropTypes.func.isRequired,
+  userInfo: PropTypes.userInfo.isRequired,
+  isSectionOnActiveTimetable: React.PropTypes.func.isRequired,
+  lectureSections: React.PropTypes.shape({
+    '*': React.PropTypes.arrayOf(PropTypes.section),
+  }).isRequired,
+  practicalSections: React.PropTypes.shape({
+    '*': React.PropTypes.arrayOf(PropTypes.section),
+  }),
+  tutorialSections: React.PropTypes.shape({
+    '*': React.PropTypes.arrayOf(PropTypes.section),
+  }),
+  schoolSpecificInfo: PropTypes.schoolSpecificInfo.isRequired,
 };
+
+export default CourseModalBody;

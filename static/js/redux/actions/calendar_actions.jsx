@@ -1,4 +1,5 @@
 import ical from 'ical-generator';
+import Cookie from 'js-cookie';
 import FileSaver from 'browser-filesaver';
 import {
     getAddTTtoGCalEndpoint,
@@ -9,6 +10,7 @@ import { FULL_WEEK_LIST } from '../constants/constants';
 import { getActiveTimetable } from './user_actions';
 import { store } from '../init';
 import { getCourseShareLink } from '../helpers/timetable_helpers';
+import { currSem } from '../reducers/semester_reducer';
 import * as ActionTypes from '../constants/actionTypes';
 
 const DAY_MAP = {
@@ -37,7 +39,7 @@ export const receiveShareLink = shareLink => (dispatch) => {
 
 export const fetchShareTimetableLink = () => (dispatch) => {
   const state = store.getState();
-  const semester = allSemesters[state.semesterIndex];
+  const semester = currSem(state.semester);
   const timetableState = state.timetables;
   const { shareLink, shareLinkValid } = state.calendar;
   dispatch({
@@ -48,6 +50,11 @@ export const fetchShareTimetableLink = () => (dispatch) => {
     return;
   }
   fetch(getRequestShareTimetableLinkEndpoint(), {
+    headers: {
+      'X-CSRFToken': Cookie.get('csrftoken'),
+      Accept: 'application/json',
+      'Content-Type': 'application/json',
+    },
     method: 'POST',
     body: JSON.stringify({
       timetable: getActiveTimetable(timetableState),
@@ -55,27 +62,24 @@ export const fetchShareTimetableLink = () => (dispatch) => {
     }),
     credentials: 'include',
   })
-          .then(response => response.json())
-          .then((ref) => {
-            dispatch(receiveShareLink(`${window.location.href.split('/')[2]}/share/${ref.link}`));
-          });
+        .then(response => response.json())
+        .then((ref) => {
+          dispatch(receiveShareLink(`${window.location.href.split('/')[2]}/timetables/links/${ref.slug}`));
+        });
 };
 
 export const addTTtoGCal = () => (dispatch) => {
-  gcalCallback = false;
-  let state = store.getState();
+  const state = store.getState();
   const timetableState = state.timetables;
-
-  // Wait for timetable to load
-  if (gcalCallback) {
-    do {
-      state = store.getState();
-    } while (state.timetables.items.length <= 0);
-  }
 
   if (!state.saveCalendarModal.isUploading && !state.saveCalendarModal.hasUploaded) {
     dispatch({ type: ActionTypes.UPLOAD_CALENDAR });
     fetch(getAddTTtoGCalEndpoint(), {
+      headers: {
+        'X-CSRFToken': Cookie.get('csrftoken'),
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+      },
       method: 'POST',
       body: JSON.stringify({
         timetable: getActiveTimetable(timetableState),
@@ -99,7 +103,7 @@ export const createICalFromTimetable = () => (dispatch) => {
     // TODO - MUST BE REFACTORED AFTER CODED IN TO CONFIG
     let semStart = new Date();
     let semEnd = new Date();
-    const semester = allSemesters[state.semesterIndex];
+    const semester = currSem(state.semester);
 
     if (semester.name === 'Fall') {
       // ignore year, year is set to current year

@@ -1,0 +1,68 @@
+.modal-loader {
+  animation: loader 3s ease-in infinite, spin 1s linear infinite;
+  border: 40px solid transparent;
+  border-radius: 5px;
+  filter: saturate(3);
+  height: .1px;
+  margin: 10% auto 50px;
+  width: 50%;
+
+  &::before {
+    animation: loader 2s ease-in infinite reverse, spin .8s linear infinite reverse;
+    border: 40px solid transparent;
+    border-radius: 5px;
+    content: '';
+    display: block;
+    filter: saturate(.3);
+    height: .1;
+    margin-left: -40px;
+    margin-top: -40px;
+    position: absolute;
+    width: .1;
+    z-index: -1;
+  }
+
+  ::after {
+    background-color: $gfff;
+    border-radius: 20px;
+    content: '';
+    display: block;
+    height: 20px;
+    margin-left: -10px;
+    margin-top: -10px;
+    position: absolute;
+    width: 20px;
+    z-index: 2;
+  }
+}
+
+@keyframes loader {
+  0% {
+    border-bottom-color: transparent;
+    border-top-color: $spinner-blue;
+  }
+
+  25% {
+    border-left-color: transparent;
+    border-right-color: $spinner-purple;
+  }
+
+  50% {
+    border-bottom-color: $spinner-pink;
+    border-top-color: transparent;
+  }
+
+  75% {
+    border-left-color: $spinner-purple;
+    border-right-color: transparent;
+  }
+
+  100% {
+    border-bottom-color: transparent;
+    border-top-color: $spinner-blue;
+  }
+}
+@keyframes spin {
+  0% {transform: rotate(0deg)}
+  100% {transform: rotate(-360deg)}
+}

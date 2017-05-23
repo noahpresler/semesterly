@@ -1,0 +1,515 @@
+#search-bar {
+  left: 260px;
+  max-width: 600px;
+  position: absolute;
+  top: 10px;
+  width: 49%;
+
+  input {
+    border: 1px solid $ge6e6e6;
+    font-size: 16px;
+    height: 30px;
+    line-height: 30px;
+    outline: 0;
+    padding: 0 10px;
+    width: 100%;
+
+    &::-webkit-input-placeholder {
+      font-size: 14px;
+      line-height: 30px;
+    }
+
+    &::-moz-placeholder {
+      font-size: 14px;
+      line-height: 30px;
+    }
+
+    &:-ms-input-placeholder { // IE 10+
+      font-size: 14px;
+      line-height: 30px;
+    }
+
+    &:-moz-placeholder { // Firefox 18-
+      font-size: 14px;
+      line-height: 30px;
+    }
+
+    &:focus {
+      border: 1px solid #0095FF;
+    }
+  }
+}
+
+#search-bar-input-wrapper {
+  overflow: hidden;
+  width: auto;
+}
+
+#search-bar-wrapper {
+  background-color: $gfff;
+  width: 100%;
+}
+
+#search-bar-semester {
+  background-color: $gfff;
+  border: 1px solid $ge6e6e6;
+  border-right: 0;
+  color: $g777;
+  cursor: pointer;
+  float: left;
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 18px;
+  padding: 5px 7px 5px 20px;
+
+  > .tip-down {
+    left: 1px;
+    position: absolute;
+    top: 12px;
+  }
+}
+
+#semester-picker {
+  background-color: $gfff;
+  border: 1px solid $ge6e6e6;
+  box-shadow: 0 2px 10px $black-transparent-2;
+  color: $g777;
+  cursor: pointer;
+  display: none;
+  font-size: 14px;
+  max-width: 100px;
+  padding-bottom: 7px;
+  padding-top: 7px;
+  position: absolute;
+  top: 37px;
+  z-index: 100;
+
+  &.down {
+    display: block;
+  }
+
+  .tip-border {
+    left: 0;
+    top: -8px;
+  }
+
+  .tip {
+    left: 0;
+    top: -7px;
+  }
+}
+
+
+.semester-option {
+  padding-left: 7px;
+  padding-right: 7px;
+
+  &:hover{
+    background-color: #F1EEEE;
+  }
+}
+
+.search-results {
+  background-color: $gfff;
+  border: 1px solid $ge6e6e6;
+  border-top-color: $gd9d9d9;
+  box-shadow: 0 2px 4px $black-transparent-2;
+  margin: 0;
+  overflow: hidden;
+  padding: 0;
+  position: absolute;
+  top: 29px;
+  width: 150%;
+  z-index: 100;
+}
+
+
+
+#see-more {
+  color: #C3B9B1;
+  font-size: 15px;
+  height: 180px;
+  overflow: hidden;
+  text-align: center;
+  width: 66.667%;
+
+  p {
+    font-size: 14px;
+    margin: 0;
+  }
+
+  h4 {
+    font-size: 16px;
+    margin: 0;
+  }
+}
+
+#see-more-inner {
+  border: 2px dashed $ge6e6e6;
+  border-radius: 10px;
+  margin: 0 auto;
+  padding: 4px;
+  position: relative;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 75%;
+}
+
+// Each Course that is listed in the Search Results
+.search-course {
+  cursor: pointer;
+  height: 60px;
+  list-style-type: none;
+  max-width: 600px;
+  padding: 10px 110px 10px 5px;
+  position: relative;
+  transition: background-color .2s, color .2s;
+  width: 66.66%;
+
+  &.hovered {
+    background-color: $gf3f3f3;
+  }
+
+  h3 {
+    font-size: 14px;
+    height: 14px;
+    margin: 0;
+    overflow: hidden;
+    padding-left: 5px;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  h4 {
+    color: $g777;
+    font-size: 12px;
+    font-weight: 400;
+    margin: 5px 0;
+    min-height: 12px;
+    padding-left: 5px;
+    transition: all .1s linear;
+  }
+
+  .search-result-labels {
+    margin-top: 5px;
+    padding-left: 5px;
+  }
+
+  .label {
+    float: left;
+    line-height: 15px;
+    margin: 3px 5px 0 0;
+    padding: 0;
+
+    &.hoverAdd {
+      color: $blue-light;
+    }
+
+    &.hoverSave {
+      color: $green-light;
+    }
+
+    &.bubble {
+      background-color: $gddd;
+      font-size: 10px;
+    }
+
+    &.flag {
+      color: $red;
+      padding-left: 0;
+    }
+  }
+
+  .integration {
+    a {
+      float: left;
+      font-size: 12px;
+      line-height: 15px;
+      padding-right: 5px;
+    }
+  }
+
+  .search-course-add,
+  .search-course-save {
+    background-color: #d7d7d7;
+    border-radius: 100%;
+    height: 40px;
+    line-height: 40px;
+    position: absolute;
+    right: 10px;
+    text-align: center;
+    top: 50%;
+    transform: translateY(-50%);
+    transition: background-color .2s;
+    width: 40px;
+  }
+
+  .search-course-save {
+    right: 55px;
+
+    &:hover {
+      background-color: #7BE68D;
+    }
+  }
+
+  .search-course-add {
+    h6 {
+      color: #00A1FF;
+      font-size: 12px;
+      left: 50%;
+      margin: 0;
+      opacity: 0;
+      position: absolute;
+      text-align: center;
+      top: 50%;
+      transform: translate(-50%, -75%);
+      transition: transform .3s, opacity .3s, visibility .3s;
+      visibility: hidden;
+      width: 56px;
+    }
+
+    &:hover {
+      background-color: #A6DEFF;
+    }
+  }
+
+  h6 {
+    color: $g777;
+    font-size: 12px;
+    margin: 0;
+    opacity: 0;
+    padding: 5px;
+    position: absolute;
+    transition: opacity .3s, visibility .3s;
+    visibility: hidden;
+  }
+}
+
+.search-course-add {
+  &.in-roster {
+    background-color: #2DD6B5;
+
+    &:hover {
+      background-color: #56ECCF;
+    }
+  }
+}
+
+.search-course-save {
+  &.in-roster {
+    background-color: #97B0EA;
+
+    &:hover {
+      background-color: #AEC1EF;
+    }
+  }
+}
+
+// If a course has an integration turned on
+.has-pilot {
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: contain;
+  float: left;
+  height: 15px;
+  margin-right: 5px;
+  opacity: 1;
+  transition: visibility .3s, opacity .3s;
+  visibility: visible;
+  width: 43px;
+}
+
+// Section Listings per Course
+.search-sections {
+  opacity: 1;
+  transition: opacity .3s, visibility .3s;
+  visibility: visible;
+}
+
+.search-section {
+  color: $g777;
+  cursor: pointer;
+  font-size: 12px;
+  padding: 2px 5px;
+  vertical-align: middle;
+
+  &:hover {
+    background-color: #FFDBBE;
+    color: $navy-transparent-100;
+  }
+}
+
+.search-course .search-course-add:hover + h6 {
+  opacity: 1;
+  visibility: visible;
+}
+.search-course .search-course-add:hover + h6 + .search-sections {
+  opacity: 0;
+  visibility: hidden;
+}
+
+.trans50 {
+  // This makes it semi transparent
+  background-color: $white-transparent-0;
+  border: 1px solid $white-transparent-0;
+  border-top-color: transparent;
+  box-shadow: none;
+
+  li,
+  .search-section,
+  .search-course h4,
+  .search-course .label {
+    // This makes it semi transparent
+    color: $navy-transparent-0;
+  }
+
+  .search-section:hover {
+    background-color: #FFDBBE;
+    color: $navy-transparent-100;
+  }
+
+  .search-course,
+  .search-course-add,
+  .search-course-save,
+  #search-bar-side,
+  .search-course .label {
+    background-color: transparent;
+  }
+
+  #see-more-inner {
+    border: 1px solid $white-transparent-0;
+    color: transparent;
+  }
+
+  #search-bar-side-sections {
+    background-color: $white-transparent-9;
+  }
+
+  .has-pilot {
+    opacity: 0;
+    visibility: hidden;
+  }
+}
+
+.results-loading-gif {
+  background: url('/static/img/search-results-loader.gif') no-repeat;
+  background-position: right 5px center;
+}
+
+// Side Bar in Search Results
+#search-bar-side {
+  background-color: $gf3f3f3;
+  height: 100%;
+  min-height: 232px;
+  overflow-y: auto;
+  padding: 5px;
+  position: absolute;
+  right: 0;
+  top: 0;
+  width: 33.33%;
+}
+
+#search-bar-side-sections {
+  font-size: 0;
+
+  h3 {
+    font-size: 16px;
+    margin: 0 5px 10px 0;
+  }
+
+  h4 {
+    font-size: 14px;
+    margin: 5px 0;
+  }
+
+  p {
+    color: $g777;
+    font-size: 11px;
+    line-height: 11px;
+    margin: 0 0 5px;
+  }
+}
+
+.sb-side-sections {
+  border: 1px solid $g777;
+  border-radius: 3px;
+  color: $g777;
+  cursor: pointer;
+  display: inline-block;
+  font-size: 12px;
+  font-weight: 400;
+  margin: 1px 5px auto auto;
+  padding: 5px;
+  text-align: center;
+  transition: background-color .1s;
+  width: auto;
+
+  &:hover {
+    background-color: #A5D5FF;
+  }
+}
+
+@media (max-width: 1000px) {
+	#search-bar {
+    left: 82px;
+    width: 55%;
+	}
+}
+
+@media (max-width: 766px) {
+  #search-bar {
+    left: 57px;
+    right: 107px;
+    width: auto;
+  }
+
+  .search-results {
+    width: 100%;
+  }
+
+  .search-course {
+    width: 100%;
+  }
+
+  #search-bar-side {
+    display: none;
+  }
+
+  #see-more {
+    display: none;
+  }
+}
+
+@media (max-width: 500px) {
+	#search-bar {
+    left: 0;
+    width: 100%;
+	}
+
+	#search-bar-wrapper {
+    left: 57px;
+    position: absolute;
+    right: 107px;
+    width: auto;
+	}
+
+  .search-results {
+    top: 39px;
+	}
+
+	#search-bar-wrapper {
+    left: 50px;
+    right: 85px;
+	}
+}
+
+@media (min-width: 767px) {
+  .search-results {
+    height: 240px;
+  }
+
+  #search-bar-wrapper {
+    left: 50px;
+    right: 85px;
+  }
+}

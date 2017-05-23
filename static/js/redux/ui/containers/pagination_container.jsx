@@ -1,5 +1,5 @@
 import { connect } from 'react-redux';
-import { Pagination } from '../pagination';
+import Pagination from '../pagination';
 import { setActiveTimetable } from '../../actions/timetable_actions';
 
 const mapStateToProps = state => ({

@@ -1,6 +1,6 @@
 import { connect } from 'react-redux';
-import { UserAcquisitionModal } from '../user_acquisition_modal';
-import { triggerAcquisitionModal } from '../../actions/modal_actions';
+import UserAcquisitionModal from '../user_acquisition_modal';
+import { toggleAcquisitionModal } from '../../actions/modal_actions';
 
 const mapStateToProps = state => ({
   isVisible: state.userAcquisitionModal.isVisible,
@@ -10,7 +10,7 @@ const mapStateToProps = state => ({
 const UserAcquisitionModalContainer = connect(
     mapStateToProps,
   {
-    toggleUserAcquisitionModal: triggerAcquisitionModal,
+    toggleUserAcquisitionModal: toggleAcquisitionModal,
   },
 )(UserAcquisitionModal);
 

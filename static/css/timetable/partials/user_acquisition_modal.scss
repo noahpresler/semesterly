@@ -1,0 +1,40 @@
+.user-acquisition-modal {
+  height: 495px;
+  max-width: 450px;
+  overflow: auto;
+
+  #save-calendar-container {
+    padding: 30px;
+  }
+}
+
+.abnb-btn {
+  &.fb-btn {
+    background-color: $facebook;
+    border-color: $facebook;
+    color: $gfff;
+  }
+}
+
+.btn {
+  &.eight-px-top {
+    margin-top: 8px;
+  }
+}
+
+.abnb-modal {
+  h3 {
+    color: $g484848;
+    font-size: 17px;
+    font-weight: 300;
+    margin-top: 0;
+    text-align: center;
+    width: 100%;
+  }
+}
+
+.abnb-btn.disabled,
+.abnb-btn[disabled],
+fieldset[disabled] .abnb-btn{
+  opacity: .25;
+}

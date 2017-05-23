@@ -6,6 +6,7 @@ import COLOUR_DATA from '../constants/colours';
 import TimetableNameInputContainer from './containers/timetable_name_input_container';
 import CreditTickerContainer from './containers/credit_ticker_container';
 import Textbook from './textbook';
+import * as PropTypes from '../constants/propTypes';
 
 class SideBar extends React.Component {
   constructor(props) {
@@ -95,7 +96,7 @@ class SideBar extends React.Component {
     }) : null;
     const dropItDown = savedTimetables && savedTimetables.length !== 0 ?
             (<div
-              id="timetable-drop-it-down"
+              className="timetable-drop-it-down"
               onMouseDown={this.toggleDropdown}
             >
               <span className={classNames('tip-down', { down: this.state.showDropdown })} />
@@ -109,9 +110,16 @@ class SideBar extends React.Component {
                         in the class</h3>
         </div>);
     }
-    if (optionalSlots.length === 0) {
-      const img = (!isNaN(parseInt(masterSlots, 0)) && (masterSlots.length >= 4)) ? null :
-      <img src="/static/img/emptystates/optionalslots.png" alt="No optional courses added." />;
+    const optionalSlotsHeader = (optionalSlots.length === 0 && masterSlots.length > 3) ? null :
+    <h4 className="sb-header">Optional Courses</h4>;
+    if (optionalSlots.length === 0 && masterSlots.length > 3) {
+      optionalSlots = null;
+    } else if (optionalSlots.length === 0) {
+      const img = (
+        <img
+          src="/static/img/emptystates/optionalslots.png"
+          alt="No optional courses added."
+        />);
       optionalSlots = (
         <div className="empty-state">
           { img }
@@ -122,7 +130,8 @@ class SideBar extends React.Component {
         </div>);
     }
     const finalScheduleLink = (masterSlots.length > 0 &&
-      finalExamsSupportedSemesters.indexOf(this.props.semesterIndex) >= 0) ?
+      this.props.examSupportedSemesters.indexOf(this.props.semesterIndex) >= 0
+      && this.props.hasLoaded) ?
             (<div
               className="final-schedule-link"
               onClick={this.props.launchFinalExamsModal}
@@ -132,14 +141,13 @@ class SideBar extends React.Component {
             </div>)
             : null;
     return (
-      <div id="side-bar" className="no-print">
-        <div id="sb-name">
+      <div className="side-bar no-print">
+        <div className="sb-name">
           <TimetableNameInputContainer />
           <ClickOutHandler onClickOut={this.hideDropdown}>
             {dropItDown}
             <div
-              id="timetable-names-dropdown"
-              className={classNames({ down: this.state.showDropdown })}
+              className={classNames('timetable-names-dropdown', { down: this.state.showDropdown })}
             >
               <div className="tip-border" />
               <div className="tip" />
@@ -149,7 +157,7 @@ class SideBar extends React.Component {
           </ClickOutHandler>
         </div>
         <CreditTickerContainer />
-        <div id="sb-rating" className="col-2-3">
+        <div className="col-2-3 sb-rating">
           <h3>Average Course Rating</h3>
           <div className="sub-rating-wrapper">
             <div className="star-ratings-sprite">
@@ -162,21 +170,21 @@ class SideBar extends React.Component {
         </div>
         <h4 onClick={this.props.launchPeerModal} className="sb-header">
           Current Courses
-          <div id="find-friends"><i className="fa fa-users" />&nbsp;Find new friends</div>
+          <div className="sb-header-link"><i className="fa fa-users" />&nbsp;Find new friends</div>
         </h4>
         <h4 className="sb-tip">
           <b>ProTip:</b> use <i className="fa fa-lock" />
           to lock a section in place.
         </h4>
-        <div id="sb-master-slots">
+        <div className="sb-master-slots">
           { masterSlots }
           { finalScheduleLink }
         </div>
-        <h4 className="sb-header">Optional Courses</h4>
+        { optionalSlotsHeader }
         { optionalSlots }
         <div id="sb-optional-slots" />
         <h4 className="sb-header" onClick={this.props.launchTextbookModal}> Textbooks
-                    <div id="find-friends"><i className="fa fa-external-link" />&nbsp;See all</div>
+          <div className="sb-header-link"><i className="fa fa-external-link" />&nbsp;See all</div>
         </h4>
         <div className="side-bar-section">
           <TextbookList courses={this.props.liveTimetableCourses} />
@@ -209,9 +217,7 @@ SideBar.propTypes = {
   courseToColourIndex: React.PropTypes.shape({
     id: React.PropTypes.string,
   }).isRequired,
-  classmates: React.PropTypes.arrayOf(React.PropTypes.shape({
-    img_url: React.PropTypes.string,
-  })),
+  classmates: PropTypes.classmates.isRequired,
   optionalCourses: React.PropTypes.arrayOf(React.PropTypes.shape({
     id: React.PropTypes.number,
     slots: React.PropTypes.arrayOf(React.PropTypes.shape({
@@ -246,6 +252,8 @@ SideBar.propTypes = {
   }).isRequired,
   semesterIndex: React.PropTypes.number.isRequired,
   avgRating: React.PropTypes.number,
+  examSupportedSemesters: React.PropTypes.arrayOf(React.PropTypes.number).isRequired,
+  hasLoaded: React.PropTypes.bool.isRequired,
 };
 
 export default SideBar;

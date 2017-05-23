@@ -1,5 +1,5 @@
 import { connect } from 'react-redux';
-import { TextbookModal } from '../textbook_modal';
+import TextbookModal from '../textbook_modal';
 import { toggleTextbookModal } from '../../actions/modal_actions';
 
 const mapStateToProps = (state) => {

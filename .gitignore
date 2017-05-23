@@ -44,3 +44,4 @@ scripts/*/logs/*.json
 assets/*
 static/bundles/*
 webpack-stats.json
+*.pid

@@ -1,14 +1,12 @@
 import fetch from 'isomorphic-fetch';
+import Cookie from 'js-cookie';
 import {
     deleteRegistrationTokenEndpoint,
     getClassmatesEndpoint,
-    getCloneTimetableEndpoint,
     getDeleteTimetableEndpoint,
     getFinalExamSchedulerEndpoint,
     getFriendsEndpoint,
-    getIntegrationAddEndpoint,
-    getIntegrationDelEndpoint,
-    getIntegrationGetEndpoint,
+    getIntegrationEndpoint,
     getLoadSavedTimetablesEndpoint,
     getLogFacebookAlertClickEndpoint,
     getLogFacebookAlertViewEndpoint,
@@ -22,13 +20,9 @@ import { store } from '../init';
 import { getNumberedName, loadTimetable, nullifyTimetable } from './timetable_actions';
 import { MAX_TIMETABLE_NAME_LENGTH } from '../constants/constants';
 import * as ActionTypes from '../constants/actionTypes';
+import { currSem } from '../reducers/semester_reducer';
 
 let autoSaveTimer;
-
-export const getUserInfo = json => ({
-  type: ActionTypes.USER_INFO_RECEIVED,
-  data: json,
-});
 
 export const requestUserInfo = () => ({
   type: ActionTypes.REQUEST_USER_INFO,
@@ -60,13 +54,14 @@ export const getActiveTimetable = timetableState => timetableState.items[timetab
 const getSaveTimetablesRequestBody = () => {
   const state = store.getState();
   const timetableState = state.timetables;
-  const name = state.savingTimetable.activeTimetable.name;
-  const id = state.savingTimetable.activeTimetable.id || 0;
+  const tt = getActiveTimetable(timetableState);
   return {
-    timetable: getActiveTimetable(timetableState),
-    semester: allSemesters[state.semesterIndex],
-    name,
-    id,
+    courses: tt.courses,
+    events: state.customSlots,
+    has_conflict: tt.has_conflict,
+    semester: currSem(state.semester),
+    name: state.savingTimetable.activeTimetable.name,
+    id: state.savingTimetable.activeTimetable.id,
   };
 };
 
@@ -92,13 +87,14 @@ export const requestMostClassmates = () => ({
 
 export const fetchMostClassmatesCount = courses => (dispatch) => {
   const state = store.getState();
-  const semesterIndex = state.semesterIndex !== undefined ? state.semesterIndex : currentSemester;
-  const semester = allSemesters[semesterIndex];
+  if (!state.userInfo.data.social_courses) {
+    return;
+  }
+  const semester = currSem(state.semester);
   dispatch(requestMostClassmates());
-  fetch(getMostClassmatesCountEndpoint(), {
+  fetch(getMostClassmatesCountEndpoint(semester, courses), {
     credentials: 'include',
-    method: 'POST',
-    body: JSON.stringify({ course_ids: courses, semester }),
+    method: 'GET',
   })
       .then(response => response.json())
       .then((json) => {
@@ -113,16 +109,17 @@ export const fetchMostClassmatesCount = courses => (dispatch) => {
 
 export const fetchClassmates = courses => (dispatch) => {
   const state = store.getState();
-  const semesterIndex = state.semesterIndex !== undefined ? state.semesterIndex : currentSemester;
+  if (!state.userInfo.data.social_courses) {
+    return;
+  }
   setTimeout(() => {
     dispatch(fetchMostClassmatesCount(getActiveTimetable(state.timetables)
       .courses.map(c => c.id)));
   }, 500);
   dispatch(requestClassmates());
-  fetch(getClassmatesEndpoint(), {
+  fetch(getClassmatesEndpoint(currSem(state.semester), courses), {
     credentials: 'include',
-    method: 'POST',
-    body: JSON.stringify({ course_ids: courses, semester: allSemesters[semesterIndex] }),
+    method: 'GET',
   })
     .then(response => response.json())
     .then((json) => {
@@ -138,7 +135,8 @@ export const saveTimetable = (isAutoSave = false, callback = null) => (dispatch)
   const activeTimetable = getActiveTimetable(state.timetables);
 
   // if current timetable is empty or we're already in saved state, don't save this timetable
-  if (activeTimetable.courses.length === 0 || state.savingTimetable.upToDate) {
+  const numSlots = activeTimetable.courses.length + state.customSlots.length;
+  if (numSlots === 0 || state.savingTimetable.upToDate) {
     return null;
   }
 
@@ -147,58 +145,63 @@ export const saveTimetable = (isAutoSave = false, callback = null) => (dispatch)
     type: ActionTypes.REQUEST_SAVE_TIMETABLE,
   });
 
+  const body = getSaveTimetablesRequestBody();
   fetch(getSaveTimetableEndpoint(), {
+    headers: {
+      'X-CSRFToken': Cookie.get('csrftoken'),
+      Accept: 'application/json',
+      'Content-Type': 'application/json',
+    },
     method: 'POST',
-    body: JSON.stringify(getSaveTimetablesRequestBody()),
+    body: JSON.stringify(body),
     credentials: 'include',
   })
-  .then(response => response.json())
-  .then((json) => {
-    if (json.error) {
+  .then((response) => {
+    if (response.status === 409) {
       dispatch({
         type: ActionTypes.ALERT_TIMETABLE_EXISTS,
       });
       return null;
     }
-    // edit the state's courseSections, so that future requests to add/remove/unlock
-    // courses are handled correctly. in the new courseSections, every currently
-    // active section will be locked
-    if (!isAutoSave) {
-      // mark that the current timetable is now the only available one (since all
-      // sections are locked)
+
+    return response.json().then((json) => {
+        // edit the state's courseSections, so that future requests to add/remove/unlock
+        // courses are handled correctly. in the new courseSections, every currently
+        // active section will be locked
+      if (!isAutoSave) {
+            // mark that the current timetable is now the only available one (since all
+            // sections are locked)
+        dispatch({
+          type: ActionTypes.RECEIVE_TIMETABLES,
+          timetables: [activeTimetable],
+          preset: true,
+          saving: true,
+        });
+        dispatch({
+          type: ActionTypes.RECEIVE_COURSE_SECTIONS,
+          courseSections: lockActiveSections(activeTimetable),
+        });
+      }
       dispatch({
-        type: ActionTypes.RECEIVE_TIMETABLES,
-        timetables: [activeTimetable],
-        preset: true,
-        saving: true,
+        type: ActionTypes.CHANGE_ACTIVE_SAVED_TIMETABLE,
+        timetable: json.saved_timetable,
       });
       dispatch({
-        type: ActionTypes.RECEIVE_COURSE_SECTIONS,
-        courseSections: lockActiveSections(activeTimetable),
+        type: ActionTypes.RECEIVE_SAVED_TIMETABLES,
+        timetables: json.timetables,
       });
-    }
-    dispatch({
-      type: ActionTypes.CHANGE_ACTIVE_SAVED_TIMETABLE,
-      timetable: json.saved_timetable,
+      dispatch({
+        type: ActionTypes.RECEIVE_TIMETABLE_SAVED,
+        upToDate: !json.error,
+      });
+      if (callback !== null) {
+        callback();
+      }
+      if (!json.error && state.userInfo.data.isLoggedIn && json.timetables[0]) {
+        return dispatch(fetchClassmates(json.timetables[0].courses.map(c => c.id)));
+      }
+      return null;
     });
-    dispatch({
-      type: ActionTypes.RECEIVE_SAVED_TIMETABLES,
-      timetables: json.timetables,
-    });
-    dispatch({
-      type: ActionTypes.RECEIVE_TIMETABLE_SAVED,
-      upToDate: !json.error,
-    });
-    return json;
-  })
-  .then((json) => {
-    if (callback) {
-      callback();
-    }
-    if (!json.error && state.userInfo.data.isLoggedIn && json.timetables[0]) {
-      return dispatch(fetchClassmates(json.timetables[0].courses.map(c => c.id)));
-    }
-    return null;
   });
   return null;
 };
@@ -213,10 +216,16 @@ export const duplicateTimetable = timetable => (dispatch) => {
     type: ActionTypes.REQUEST_SAVE_TIMETABLE,
   });
 
-  fetch(getCloneTimetableEndpoint(), {
+  fetch(getSaveTimetableEndpoint(), {
+    headers: {
+      'X-CSRFToken': Cookie.get('csrftoken'),
+      Accept: 'application/json',
+      'Content-Type': 'application/json',
+    },
     method: 'POST',
     body: JSON.stringify({
-      timetable,
+      semester: currSem(state.semester),
+      source: timetable.name,
       name: getNumberedName(timetable.name),
     }),
     credentials: 'include',
@@ -266,9 +275,13 @@ export const deleteTimetable = timetable => (dispatch) => {
   dispatch({
     type: ActionTypes.REQUEST_SAVE_TIMETABLE,
   });
-  fetch(getDeleteTimetableEndpoint(), {
-    method: 'POST',
-    body: JSON.stringify(timetable),
+  fetch(getDeleteTimetableEndpoint(currSem(state.semester), timetable.name), {
+    headers: {
+      'X-CSRFToken': Cookie.get('csrftoken'),
+      Accept: 'application/json',
+      'Content-Type': 'application/json',
+    },
+    method: 'DELETE',
     credentials: 'include',
   })
         .then(response => response.json())
@@ -312,16 +325,19 @@ export const deleteTimetable = timetable => (dispatch) => {
         });
 };
 
-export const getSaveSettingsRequestBody = () => ({
-  userInfo: store.getState().userInfo.data,
-});
+export const getSaveSettingsRequestBody = () => store.getState().userInfo.data;
 
 export const saveSettings = callback => (dispatch) => {
   dispatch({
     type: ActionTypes.REQUEST_SAVE_USER_INFO,
   });
   fetch(getSaveSettingsEndpoint(), {
-    method: 'POST',
+    headers: {
+      'X-CSRFToken': Cookie.get('csrftoken'),
+      Accept: 'application/json',
+      'Content-Type': 'application/json',
+    },
+    method: 'PATCH',
     body: JSON.stringify(getSaveSettingsRequestBody()),
     credentials: 'include',
   })
@@ -374,27 +390,33 @@ export const fetchFinalExamSchedule = () => (dispatch) => {
   const timetable = getActiveTimetable(state.timetables);
   dispatch({ type: ActionTypes.FETCH_FINAL_EXAMS });
   fetch(getFinalExamSchedulerEndpoint(), {
+    headers: {
+      'X-CSRFToken': Cookie.get('csrftoken'),
+      Accept: 'application/json',
+      'Content-Type': 'application/json',
+    },
     credentials: 'include',
     method: 'POST',
     body: JSON.stringify(timetable),
   })
     .then(response => response.json())
     .then((json) => {
-      dispatch({ type: ActionTypes.RECIEVE_FINAL_EXAMS, json });
+      dispatch({ type: ActionTypes.RECEIVE_FINAL_EXAMS, json });
     });
 };
 
 export const fetchFriends = () => (dispatch) => {
   const state = store.getState();
-  const semesterIndex = state.semesterIndex !== undefined ? state.semesterIndex : currentSemester;
+  if (!state.userInfo.data.social_courses) {
+    return;
+  }
   dispatch(requestFriends());
   dispatch({
     type: ActionTypes.PEER_MODAL_LOADING,
   });
-  fetch(getFriendsEndpoint(), {
+  fetch(getFriendsEndpoint(currSem(state.semester)), {
     credentials: 'include',
-    method: 'POST',
-    body: JSON.stringify({ semester: allSemesters[semesterIndex] }),
+    method: 'GET',
   })
     .then(response => response.json())
     .then((json) => {
@@ -408,9 +430,10 @@ export const fetchFriends = () => (dispatch) => {
 export const autoSave = (delay = 2000) => (dispatch) => {
   const state = store.getState();
   clearTimeout(autoSaveTimer);
+  const numTimetables = state.timetables.items[state.timetables.active].courses.length;
+  const numEvents = state.customSlots.length;
   autoSaveTimer = setTimeout(() => {
-    if (state.userInfo.data.isLoggedIn
-      && state.timetables.items[state.timetables.active].courses.length > 0) {
+    if (state.userInfo.data.isLoggedIn && numTimetables + numEvents > 0) {
       dispatch(saveTimetable(true));
     }
   }, delay);
@@ -418,15 +441,19 @@ export const autoSave = (delay = 2000) => (dispatch) => {
 
 export const sendRegistrationToken = token => (dispatch) => {
   fetch(getSetRegistrationTokenEndpoint(), {
+    headers: {
+      'X-CSRFToken': Cookie.get('csrftoken'),
+      Accept: 'application/json',
+      'Content-Type': 'application/json',
+    },
     method: 'POST',
     body: JSON.stringify({
       token,
     }),
     credentials: 'include',
   })
-    .then(response => response.json())
-    .then((json) => {
-      if (!json.error) {
+    .then((response) => {
+      if (response.status === 201) {
         dispatch({
           type: ActionTypes.TOKEN_REGISTERED,
         });
@@ -462,22 +489,24 @@ export const isRegistered = () => (dispatch) => {
   }
 };
 
-export const sendRegistrationTokenForDeletion = token => dispatch =>
-fetch(deleteRegistrationTokenEndpoint(), {
-  method: 'POST',
-  body: JSON.stringify({
-    token,
-  }),
-  credentials: 'include',
-})
-.then(response => response.json()) // TODO(rohan): error-check the response
-.then((json) => {
-  if (!json.error) {
-    dispatch({
-      type: ActionTypes.UNREGISTER_TOKEN,
+export const sendRegistrationTokenForDeletion = token => (dispatch) => {
+  fetch(deleteRegistrationTokenEndpoint(token.endpoint), {
+    headers: {
+      'X-CSRFToken': Cookie.get('csrftoken'),
+      Accept: 'application/json',
+      'Content-Type': 'application/json',
+    },
+    method: 'DELETE',
+    credentials: 'include',
+  })
+    .then((response) => {
+      if (response.status === 204) {
+        dispatch({
+          type: ActionTypes.UNREGISTER_TOKEN,
+        });
+      }
     });
-  }
-});
+};
 
 export const unRegisterAToken = () => (dispatch) => {
   if ('serviceWorker' in navigator) {
@@ -493,15 +522,14 @@ export const unRegisterAToken = () => (dispatch) => {
 };
 
 export const openIntegrationModal = (integrationID, courseID) => (dispatch) => {
-  fetch(getIntegrationGetEndpoint(integrationID, courseID), {
+  fetch(getIntegrationEndpoint(integrationID, courseID), {
     credentials: 'include',
     method: 'GET',
   })
-    .then(response => response.json())
-    .then((json) => {
+    .then((response) => {
       dispatch({
         type: ActionTypes.OPEN_INTEGRATION_MODAL,
-        enabled: json.integration_enabled,
+        enabled: response.status === 200,
         id: courseID,
         integration_id: integrationID,
       });
@@ -509,14 +537,24 @@ export const openIntegrationModal = (integrationID, courseID) => (dispatch) => {
 };
 
 export const delIntegration = (integrationID, courseID) => {
-  fetch(getIntegrationDelEndpoint(integrationID, courseID), {
+  fetch(getIntegrationEndpoint(integrationID, courseID), {
+    headers: {
+      'X-CSRFToken': Cookie.get('csrftoken'),
+      Accept: 'application/json',
+      'Content-Type': 'application/json',
+    },
     credentials: 'include',
-    method: 'GET',
+    method: 'DELETE',
   });
 };
 
 export const addIntegration = (integrationID, courseID, json) => {
-  fetch(getIntegrationAddEndpoint(integrationID, courseID), {
+  fetch(getIntegrationEndpoint(integrationID, courseID), {
+    headers: {
+      'X-CSRFToken': Cookie.get('csrftoken'),
+      Accept: 'application/json',
+      'Content-Type': 'application/json',
+    },
     credentials: 'include',
     method: 'POST',
     body: JSON.stringify({ json }),

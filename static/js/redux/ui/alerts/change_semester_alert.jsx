@@ -12,12 +12,12 @@ class ChangeSemesterAlert extends React.Component {
 
   render() {
     return (
-      <div className="conflict-alert change-semester-alert">
+      <div className="change-semester-alert">
         { this.props.msg }
 
         <button
           onClick={() => this.handleClick()}
-          className="conflict-alert-btn change-semester-btn"
+          className="conflict-alert-btn"
         >
         Change Semester Anyway
       </button>

@@ -1,15 +1,38 @@
 import React from 'react';
+import ClickOutHandler from 'react-onclickout';
 import classNames from 'classnames';
 import SearchSideBarContainer from './containers/search_side_bar_container';
-import ClickOutHandler from 'react-onclickout';
+import * as PropTypes from '../constants/propTypes';
+import SearchResult from './search_result';
 
-export class SearchBar extends React.Component {
+class SearchBar extends React.Component {
+
+  static getSemesterName(semester) {
+    return `${semester.name} ${semester.year}`;
+  }
+
+  static abbreviateSemesterName(semesterName) {
+    return semesterName[0];
+  }
+
+  static abbreviateYear(year) {
+    return year.replace('20', "'");
+  }
+
+  static getAbbreviatedSemesterName(semester) {
+    return `${SearchBar.abbreviateSemesterName(semester.name)}` +
+      `${SearchBar.abbreviateYear(semester.year)}`;
+  }
+
+
   constructor(props) {
     super(props);
     this.state = { focused: false, showDropdown: false };
     this.toggleDropdown = this.toggleDropdown.bind(this);
     this.fetchSearchResults = this.fetchSearchResults.bind(this);
-    this.getAbbreviatedSemesterName = this.getAbbreviatedSemesterName.bind(this);
+    SearchBar.getAbbreviatedSemesterName = SearchBar.getAbbreviatedSemesterName.bind(this);
+    this.onClickOut = this.onClickOut.bind(this);
+    this.toggleDropdown = this.toggleDropdown.bind(this);
     this.changeTimer = false;
   }
 
@@ -26,9 +49,9 @@ export class SearchBar extends React.Component {
       } else if ($('input:focus').length !== 0) {
         if (e.key === 'Enter' && this.props.searchResults.length > 0) {
           this.props.addCourse(this.props.searchResults[this.props.hoveredPosition].id);
-        } else if (e.key === 'ArrowDown' && parseInt(this.props.hoveredPosition) < 3) {
+        } else if (e.key === 'ArrowDown' && parseInt(this.props.hoveredPosition, 10) < 3) {
           this.props.hoverSearchResult(this.props.hoveredPosition + 1);
-        } else if (e.key === 'ArrowUp' && parseInt(this.props.hoveredPosition) > 0) {
+        } else if (e.key === 'ArrowUp' && parseInt(this.props.hoveredPosition, 10) > 0) {
           this.props.hoverSearchResult(this.props.hoveredPosition - 1);
         } else if (e.key === 'Escape') {
           this.setState({ focused: false });
@@ -38,20 +61,7 @@ export class SearchBar extends React.Component {
     });
   }
 
-  toggleDropdown() {
-    this.setState({ showDropdown: !this.state.showDropdown });
-  }
-
-  fetchSearchResults() {
-    if (this.changeTimer) clearTimeout(this.changeTimer);
-    const query = this.refs.input.value;
-    this.changeTimer = setTimeout(() => {
-      this.props.fetchCourses(query);
-      this.changeTimer = false;
-    }, 200);
-  }
-
-  onClickOut(e) {
+  onClickOut() {
     this.setState({ showDropdown: false });
   }
 
@@ -60,50 +70,51 @@ export class SearchBar extends React.Component {
     this.props.maybeSetSemester(semester);
   }
 
-  getAbbreviatedSemesterName(semester) {
-    return `${this.abbreviateSemesterName(semester.name)} ${this.abbreviateYear(semester.year)}`;
+  fetchSearchResults() {
+    if (this.changeTimer) clearTimeout(this.changeTimer);
+    const query = this.input.value;
+    this.changeTimer = setTimeout(() => {
+      this.props.fetchCourses(query);
+      this.changeTimer = false;
+    }, 200);
   }
 
-  getSemesterName(semester) {
-    return `${semester.name} ${semester.year}`;
+  toggleDropdown() {
+    this.setState({ showDropdown: !this.state.showDropdown });
   }
 
-  abbreviateSemesterName(semesterName) {
-    return semesterName[0];
-  }
-
-  abbreviateYear(year) {
-    return year.replace('20', "'");
-  }
 
   render() {
     const resClass = classNames({ 'search-results': true, trans50: this.props.hasHoveredResult });
     const results = this.props.searchResults.map((c, i) => (<SearchResult
       {...this.props}
       course={c}
-      key={c.code}
+      key={c.id}
       inRoster={this.props.isCourseInRoster(c.id)}
       inOptionRoster={this.props.isCourseOptional(c.id)}
       position={i}
     />));
-    const result_container = !this.state.focused || results.length == 0 ? null : (
+    const seeMore = results.length > 0 && results.length < 3 ? (
+      <div id="see-more" style={{ height: 240 - (60 * results.length) }}>
+        <div id="see-more-inner">
+          <h4>Don&#39;t see what you&#39;re looking for?</h4>
+          <p>Try switching semesters or click <i className="fa fa-compass" /> above to
+                          filter by areas,
+                          departments, times and more!</p>
+        </div>
+      </div>
+    ) : null;
+    const resultContainer = !this.state.focused || results.length === 0 ? null : (
       <ul className={resClass}>
         {results}
-        <div id="see-more" style={{ height: 240 - 60 * results.length }}>
-          <div id="see-more-inner">
-            <h4>Don't see what you're looking for?</h4>
-            <p>Try switching semesters or click <i className="fa fa-compass" /> above to
-                            filter by areas,
-                            departments, times and more!</p>
-          </div>
-        </div>
+        {seeMore}
         <SearchSideBarContainer />
       </ul>
         );
-    const availableSemesters = allSemesters.map((semester, index) => {
+    const availableSemesters = this.props.allSemesters.map((semester, index) => {
       const name = ($(window).width() < 767) ?
-                this.getAbbreviatedSemesterName(semester) :
-                this.getSemesterName(semester);
+                SearchBar.getAbbreviatedSemesterName(semester) :
+                SearchBar.getSemesterName(semester);
       return (
         <div
           key={name}
@@ -115,13 +126,13 @@ export class SearchBar extends React.Component {
       );
     });
     const currSem = ($(window).width() < 767) ?
-            this.getAbbreviatedSemesterName(this.props.semester) :
-            this.getSemesterName(this.props.semester);
+            SearchBar.getAbbreviatedSemesterName(this.props.semester) :
+            SearchBar.getSemesterName(this.props.semester);
     return (
       <div id="search-bar" className="no-print">
         <div id="search-bar-wrapper">
-          <ClickOutHandler onClickOut={this.onClickOut.bind(this)}>
-            <div id="search-bar-semester" onMouseDown={this.toggleDropdown.bind(this)}>
+          <ClickOutHandler onClickOut={this.onClickOut}>
+            <div id="search-bar-semester" onMouseDown={this.toggleDropdown}>
               <span
                 className={classNames('tip-down', { down: this.state.showDropdown })}
               />
@@ -137,7 +148,7 @@ export class SearchBar extends React.Component {
           </ClickOutHandler>
           <div id="search-bar-input-wrapper">
             <input
-              ref="input"
+              ref={(c) => { this.input = c; }}
               placeholder={`Searching ${currSem}`}
               className={this.props.isFetching ? 'results-loading-gif' : ''}
               onInput={this.fetchSearchResults}
@@ -146,165 +157,34 @@ export class SearchBar extends React.Component {
             />
           </div>
           <div
-            id="show-exploration"
+            className="show-exploration"
             onMouseDown={this.props.showExplorationModal}
           >
             <i className="fa fa-compass" />
             <span>Advanced Search</span>
           </div>
         </div>
-        {result_container}
+        {resultContainer}
       </div>
     );
   }
 }
 
-export class SearchResult extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = { hoverAdd: false, hoverSave: false };
-    this.addCourseWrapper = this.addCourseWrapper.bind(this);
-    this.actionOver = this.actionOver.bind(this);
-    this.actionOut = this.actionOut.bind(this);
-    this.hasOnlyWaitlistedSections = this.hasOnlyWaitlistedSections.bind(this);
-  }
+SearchBar.propTypes = {
+  addCourse: React.PropTypes.func.isRequired,
+  explorationModalIsVisible: React.PropTypes.bool.isRequired,
+  fetchCourses: React.PropTypes.func.isRequired,
+  hasHoveredResult: React.PropTypes.bool.isRequired,
+  hoverSearchResult: React.PropTypes.func.isRequired,
+  hoveredPosition: React.PropTypes.number.isRequired,
+  isCourseInRoster: React.PropTypes.func.isRequired,
+  isCourseOptional: React.PropTypes.func.isRequired,
+  isFetching: React.PropTypes.bool.isRequired,
+  maybeSetSemester: React.PropTypes.func.isRequired,
+  searchResults: React.PropTypes.arrayOf(PropTypes.searchResult).isRequired,
+  semester: PropTypes.semester.isRequired,
+  showExplorationModal: React.PropTypes.func.isRequired,
+  allSemesters: React.PropTypes.arrayOf(PropTypes.semester).isRequired,
+};
 
-  addCourseWrapper(course, sec, event) {
-    event.stopPropagation(); // stops modal from popping up
-    event.preventDefault(); // stops search bar from blurring (losing focus)
-    this.props.addCourse(course.id, sec);
-  }
-
-  addOptionalCourseWrapper(course, event) {
-    event.stopPropagation(); // stops modal from popping up
-    event.preventDefault(); // stops search bar from blurring (losing focus)
-    this.props.addRemoveOptionalCourse(course);
-  }
-
-  actionOver(action) {
-    switch (action) {
-      case 'ADD':
-        this.setState({ hoverAdd: true });
-        break;
-      case 'SAVE':
-        this.setState({ hoverSave: true });
-        break;
-    }
-  }
-
-  actionOut(action) {
-    switch (action) {
-      case 'ADD':
-        this.setState({ hoverAdd: false });
-        break;
-      case 'SAVE':
-        this.setState({ hoverSave: false });
-        break;
-    }
-  }
-
-  /**
-   * Checks if a course is Waitlist Only
-   * Loops through each section type first (Lecture, Tutorial, Practical)
-   * if any of the section types doesn't have open seats, the course is waitlist only
-   * Within each section type, loops through each section
-   * if section doesn't have meeting times, doesn't have enrolment cap
-   * if section has open seats, don't check rest of sections in section type, move onto
-   * next section type.
-   * @returns {boolean}
-   */
-  hasOnlyWaitlistedSections() {
-    let sections = this.props.searchResults[this.props.position].sections;
-    for (let sectionType in sections) {
-      let sectionTypeHasOpenSections = false;
-      for (let section in sections[sectionType]) {
-        if (sections[sectionType][section].length > 0) {
-          if (sections[sectionType][section][0].enrolment < sections[sectionType][section][0].size) {
-            sectionTypeHasOpenSections = true;
-            break;
-          }
-        } else {
-          return false;
-        }
-      }
-      if (!sectionTypeHasOpenSections) {
-        return true; // lecture, practical, or tutorial doesn't have open seats
-      }
-    }
-    return false;
-  }
-  render() {
-    const { course, inRoster, inOptionRoster } = this.props;
-    const addRemoveButton =
-            (<span
-              title="Add this course"
-              className={classNames('search-course-add', { 'in-roster': inRoster })}
-              onMouseDown={event => this.addCourseWrapper(course, '', event)}
-              onMouseOver={() => this.actionOver('ADD')}
-              onMouseOut={() => this.actionOut('ADD')}
-            >
-              <i className={classNames('fa', { 'fa-plus': !inRoster, 'fa-check': inRoster })} />
-            </span>);
-    const addOptionalCourseButton = this.props.inRoster ? null :
-            (<span
-              title="Add this course as optional"
-              className={classNames('search-course-save', { 'in-roster': inOptionRoster })}
-              onMouseDown={event => this.addOptionalCourseWrapper(course, event)}
-              onMouseOver={() => this.actionOver('SAVE')}
-              onMouseOut={() => this.actionOut('SAVE')}
-            >
-              <i
-                className={classNames('fa', {
-                  'fa-bookmark': !inOptionRoster,
-                  'fa-check': inOptionRoster,
-                })}
-              />
-            </span>);
-    let info = course.name ? course.code : '';
-    if (this.state.hoverSave) {
-      info = !inOptionRoster ? 'Add this as an optional course' : 'Remove this optional course';
-    } else if (this.state.hoverAdd) {
-      info = !inRoster ? 'Add this course to your timetable' : 'Remove this course from your timetable';
-    }
-    const integrationLogoImageUrl = {
-      backgroundImage: 'url(/static/img/integrations/pilotLogo.png)',
-    };
-    const integrationLogo = course.integrations.indexOf('Pilot') > -1 ?
-            (<div className="label integration">
-              <span className="has-pilot" style={integrationLogoImageUrl} />
-            </div>) : null;
-    const pilotIntegration = studentIntegrations.integrations.indexOf('Pilot') > -1 ?
-            (<div className="label integration">
-              <a
-                onMouseDown={(event) => {
-                  event.stopPropagation();
-                  this.props.showIntegrationModal(1, course.id);
-                }}
-              >Add as Pilot
-                </a>
-            </div>) : null;
-    const waitlistOnlyFlag = this.hasOnlyWaitlistedSections() ? <h4 className="label flag">Waitlist Only</h4> : null;
-    return (
-      <li
-        key={course.id}
-        className={classNames('search-course', { hovered: this.props.isHovered(this.props.position) })}
-        onMouseDown={event => this.props.fetchCourseInfo(course.id)}
-        onMouseOver={() => this.props.hoverSearchResult(this.props.position)}
-      >
-        <h3>{course.name || course.code} </h3>
-        { addOptionalCourseButton}
-        { addRemoveButton }
-        <div className="search-result-labels">
-          <h4 className={classNames('label', { 'hoverAdd': this.state.hoverAdd, 'hoverSave':this.state.hoverSave })}>
-            {info}
-          </h4>
-          <h4
-            className={classNames('label', 'bubble')}
-          >{this.props.campuses[course.campus]}</h4>
-          { integrationLogo }
-          { pilotIntegration }
-          { waitlistOnlyFlag }
-        </div>
-      </li>);
-  }
-}
+export default SearchBar;

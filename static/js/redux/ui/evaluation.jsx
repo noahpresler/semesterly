@@ -1,5 +1,7 @@
 import React from 'react';
 import classnames from 'classnames';
+import renderHTML from 'react-render-html';
+import * as PropTypes from '../constants/propTypes';
 
 class Evaluation extends React.Component {
   render() {
@@ -11,7 +13,9 @@ class Evaluation extends React.Component {
             // (i.e. full evaluation, not nav item for full evaluations)
       const s = `<p>${evalData.summary.replace(/\u00a0/g, ' ').replace(/\n/g, '<br />')}</p>`;
       details = (
-        <div id="details" dangerouslySetInnerHTML={{ __html: s }} />
+        <div id="details">
+          {renderHTML(s)}
+        </div>
             );
       prof = (
         <div id="prof"><b>Professor: {evalData.professor}</b></div>
@@ -26,9 +30,9 @@ class Evaluation extends React.Component {
 
       const wrapParen = s => ` (${s})`;
 
-      const words = name.split(/\s+/).filter(n => n != '');
+      const words = name.split(/\s+/).filter(n => n !== '');
 
-      if (words.length == 0) {
+      if (words.length === 0) {
         return '';
       } else if (words.length >= 2) {
         return wrapParen(words[1]);
@@ -59,7 +63,7 @@ class Evaluation extends React.Component {
           <div className="rating-wrapper">
             <div className="star-ratings-sprite eval-stars">
               <span
-                style={{ width: `${100 * evalData.score / 5}%` }}
+                style={{ width: `${(100 * evalData.score) / 5}%` }}
                 className="rating"
               />
             </div>
@@ -70,6 +74,15 @@ class Evaluation extends React.Component {
       </div>);
   }
 }
+
+Evaluation.defaultProps = {
+  mini: false,
+};
+
+Evaluation.propTypes = {
+  mini: React.PropTypes.bool,
+  evalData: PropTypes.evaluation.isRequired,
+};
 
 export default Evaluation;
 

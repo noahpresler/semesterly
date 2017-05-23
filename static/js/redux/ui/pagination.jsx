@@ -8,18 +8,37 @@ const Bubble = ({ index, active, setActive }) =>
     <span>{index + 1}</span>
   </li>;
 
-export class Pagination extends React.Component {
+Bubble.propTypes = {
+  index: React.PropTypes.number.isRequired,
+  active: React.PropTypes.number.isRequired,
+  setActive: React.PropTypes.func.isRequired,
+};
+
+class Pagination extends React.Component {
+
+  static getNumBubbles() {
+    const bubbles = $(window).width() > 700 ? 10 : 4;
+    return bubbles;
+  }
+
   constructor(props) {
     super(props);
-    this.state = { numBubbles: this.getNumBubbles() };
+    this.state = { numBubbles: Pagination.getNumBubbles() };
     this.prev = this.prev.bind(this);
     this.next = this.next.bind(this);
     this.resetBubbles = this.resetBubbles.bind(this);
   }
 
-  getNumBubbles() {
-    const bubbles = $(window).width() > 700 ? 10 : 4;
-    return bubbles;
+  componentDidMount() {
+    window.addEventListener('resize', this.resetBubbles);
+  }
+
+  componentWillUnmount() {
+    window.removeEventListener('resize', this.resetBubbles);
+  }
+
+  resetBubbles() {
+    this.setState({ numBubbles: Pagination.getNumBubbles() });
   }
 
   prev() {
@@ -35,20 +54,21 @@ export class Pagination extends React.Component {
   }
 
   render() {
-    let options = [],
-      count = this.props.count,
-      current = this.props.active;
+    const options = [];
+    const count = this.props.count;
+    const current = this.props.active;
 
     if (count <= 1) {
       return null;
     } // don't display if there aren't enough schedules
-    const first = current - (current % this.state.numBubbles); // round down to nearest multiple of this.props.numBubbles
+    // round down to nearest multiple of this.props.numBubbles
+    const first = current - (current % this.state.numBubbles);
     const limit = Math.min(first + this.state.numBubbles, count);
     for (let i = first; i < limit; i++) {
       options.push(
         <Bubble
           key={i} index={i}
-          active={this.props.active == i} setActive={this.props.setActive}
+          active={this.props.active === i} setActive={this.props.setActive}
         />,
             );
     }
@@ -67,16 +87,12 @@ export class Pagination extends React.Component {
       </div>
     );
   }
-
-  resetBubbles() {
-    this.setState({ numBubbles: this.getNumBubbles() });
-  }
-
-  componentWillUnmount() {
-    window.removeEventListener('resize', this.resetBubbles);
-  }
-
-  componentDidMount() {
-    window.addEventListener('resize', this.resetBubbles);
-  }
 }
+
+Pagination.propTypes = {
+  active: React.PropTypes.number.isRequired,
+  count: React.PropTypes.number.isRequired,
+  setActive: React.PropTypes.func.isRequired,
+};
+
+export default Pagination;

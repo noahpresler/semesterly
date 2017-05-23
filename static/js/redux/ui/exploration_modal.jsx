@@ -1,13 +1,17 @@
 import React from 'react';
 import Modal from 'boron/DropModal';
 import classNames from 'classnames';
-import { CourseModalBody } from './course_modal_body';
-import ClickOutHandler from 'react-onclickout';
+import CourseModalBody from './course_modal_body';
 import { getCourseShareLink } from '../helpers/timetable_helpers';
 import { ShareLink } from './master_slot';
-import InputRange from './react_input_range';
+import {
+  Filter, SelectedFilter, SelectedFilterSection,
+} from './advanced_search_filters';
+import * as PropTypes from '../constants/propTypes';
+import { VERBOSE_DAYS } from '../constants/constants';
+import TimeSelector from './time_selector';
 
-export class ExplorationModal extends React.Component {
+class ExplorationModal extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -18,13 +22,12 @@ export class ExplorationModal extends React.Component {
       areas: [],
       departments: [],
       levels: [],
-      times: [], // will contain 5 objects, containing keys "min" and "max" (times), for each day of the week
+      times: [], // will contain 5 objects, containing keys "min" and "max" (times), for each day
       addedDays: [],
       shareLinkShown: false,
       hasUpdatedCourses: false,
     };
-    this.dayMap = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'],
-            this.toggle = this.toggle.bind(this);
+    this.toggle = this.toggle.bind(this);
     this.fetchAdvancedSearchResults = this.fetchAdvancedSearchResults.bind(this);
     this.fetchAdvancedSearchResultsWrapper = this.fetchAdvancedSearchResultsWrapper.bind(this);
     this.addOrRemoveCourse = this.addOrRemoveCourse.bind(this);
@@ -36,33 +39,42 @@ export class ExplorationModal extends React.Component {
     this.hideAll = this.hideAll.bind(this);
     this.showShareLink = this.showShareLink.bind(this);
     this.hideShareLink = this.hideShareLink.bind(this);
+    this.handleTimesChange = this.handleTimesChange.bind(this);
+    this.removeTimeFilter = this.removeTimeFilter.bind(this);
+    this.addDayForTimesFilter = this.addDayForTimesFilter.bind(this);
   }
 
   componentWillReceiveProps(nextProps) {
     if (this.props.isVisible && !nextProps.isVisible) {
-      this.refs.modal.hide();
+      this.modal.hide();
     }
-    if (nextProps.advancedSearchResults != this.props.advancedSearchResults) {
+    if (nextProps.advancedSearchResults !== this.props.advancedSearchResults) {
       this.setState({ hasUpdatedCourses: true });
     }
-    if (nextProps.advancedSearchResults.length > 0 && this.props.advancedSearchResults == 0) {
+    if (nextProps.advancedSearchResults.length > 0 && this.props.advancedSearchResults === 0) {
       this.props.fetchCourseClassmates(nextProps.advancedSearchResults[0].id);
     }
   }
 
   componentDidUpdate(prevProps, prevState) {
     if (this.props.isVisible) {
-      this.refs.modal.show();
+      this.modal.show();
     }
-    let { areas, departments, times, levels } = this.state;
+    const { areas, departments, times, levels } = this.state;
     const filters = { areas, departments, times, levels };
-    areas, departments, times, levels = prevState.areas, prevState.departments, prevState.times, prevState.levels;
-    const prevFilters = { areas, departments, times, levels };
+    const prevFilters = {
+      areas: prevState.areas,
+      departments: prevState.departments,
+      times: prevState.times,
+      levels: prevState.levels,
+    };
     if (!_.isEqual(filters, prevFilters) && this.props.page > 1) {
       this.props.clearPagination();
     }
     $('#exp-search-results').scroll(() => {
-      const scrollPercent = 100 * $('#exp-search-results').scrollTop() / ($(document).height() - $('#exp-search-results').height());
+      const expSearchResultsDiv = $('#exp-search-results');
+      const scrollPercent = ((100 * expSearchResultsDiv.scrollTop()) / ($(document).height()))
+        - expSearchResultsDiv.height();
       if (scrollPercent > 40 && !prevState.hasUpdatedCourses && this.state.hasUpdatedCourses) {
         this.setState({ hasUpdatedCourses: false });
         this.props.paginate();
@@ -92,14 +104,14 @@ export class ExplorationModal extends React.Component {
   hide() {
     this.props.unHoverSection();
     this.props.hideExplorationModal();
-    this.refs.modal.hide();
+    this.modal.hide();
   }
 
   fetchAdvancedSearchResults(filters) {
     if (this.props.isFetching) {
       return;
     }
-    const query = this.refs.input.value;
+    const query = this.input.value;
     const { areas, departments, times, levels } = filters;
     this.props.fetchAdvancedSearchResults(query, {
       areas,
@@ -139,7 +151,7 @@ export class ExplorationModal extends React.Component {
     if (this.props.isFetching) {
       return;
     }
-    const updatedFilter = this.state[filterType].filter(f => f != filter);
+    const updatedFilter = this.state[filterType].filter(f => f !== filter);
     this.fetchAdvancedSearchResults(Object.assign({}, this.state, { [filterType]: updatedFilter }));
     this.setState({ [filterType]: updatedFilter });
   }
@@ -163,12 +175,12 @@ export class ExplorationModal extends React.Component {
     this.hide();
   }
 
-  handleTimesChange(component, values) {
+  handleTimesChange(values, component) {
     if (this.props.isFetching) {
       return;
     }
     const times = [...this.state.times];
-    const i = times.findIndex(t => t.day === component.props.day);
+    const i = times.findIndex(t => t.day === component);
     times[i] = Object.assign({}, times[i], values);
     this.setState({
       times,
@@ -179,7 +191,7 @@ export class ExplorationModal extends React.Component {
     if (this.state.addedDays.indexOf(day) > -1) {
       return;
     }
-    const availableDays = this.dayMap;
+    const availableDays = VERBOSE_DAYS;
     const addedDays = [...this.state.addedDays, day];
     addedDays.sort((a, b) => (
             availableDays.indexOf(a) - availableDays.indexOf(b)
@@ -228,14 +240,14 @@ export class ExplorationModal extends React.Component {
     const numSearchResults = advancedSearchResults.length > 0 ?
       <p>returned { advancedSearchResults.length } Search Results</p> : null;
     const searchResults = advancedSearchResults.map((c, i) => <ExplorationSearchResult
-      key={i} code={c.code} name={c.name}
+      key={c.id} code={c.code} name={c.name}
       onClick={() => this.props.setAdvancedSearchResultIndex(i, c.id)}
     />);
     let courseModal = null;
     if (course) {
-      let lectureSections = [];
-      let tutorialSections = [];
-      let practicalSections = [];
+      let lectureSections = {};
+      let tutorialSections = {};
+      let practicalSections = {};
       if (course.sections) {
         lectureSections = course.sections.L;
         tutorialSections = course.sections.T;
@@ -284,6 +296,17 @@ export class ExplorationModal extends React.Component {
           isSectionLocked={this.props.isSectionLocked}
           isSectionOnActiveTimetable={this.props.isSectionOnActiveTimetable}
           schoolSpecificInfo={this.props.schoolSpecificInfo}
+          hoverSection={this.props.hoverSection}
+          unHoverSection={this.props.unHoverSection}
+          react={this.props.react}
+          openSignUpModal={this.props.openSignUpModal}
+          hideModal={this.props.hideExplorationModal}
+          changeUserInfo={this.props.changeUserInfo}
+          saveSettings={this.props.saveSettings}
+          isFetching={false}
+          isFetchingClassmates={this.props.isFetchingClassmates}
+          fetchCourseInfo={this.props.fetchCourseInfo}
+          userInfo={this.props.userInfo}
         />
       </div>);
     }
@@ -308,31 +331,36 @@ export class ExplorationModal extends React.Component {
       const sortedFilters = this.state[filterType].concat().sort((a, b) => (
                 availableFilters.indexOf(a) - availableFilters.indexOf(b)
             ));
-      const selectedItems = sortedFilters.map((name, i) => (
+      const selectedItems = sortedFilters.map(name => (
         <SelectedFilter
-          key={i} name={name}
+          key={name} name={name}
           remove={() => this.removeFilter(filterType, name)}
         />
             ));
       const name = this.props.schoolSpecificInfo[`${filterType}Name`];
 
-      return (<SelectedFilterSection
-        key={filterType} name={name}
-        toggle={this.toggle(filterType)}
-        children={selectedItems}
-      />);
+      return (
+        <SelectedFilterSection
+          key={filterType} name={name}
+          toggle={this.toggle(filterType)}
+        >
+
+          {selectedItems}
+
+        </SelectedFilterSection>
+      );
     });
 
-    const timeFilters = this.state.addedDays.map((d, i) => {
+    const timeFilters = this.state.addedDays.map((d) => {
       const timeState = this.state.times.find(t => t.day === d);
       const value = { min: timeState.min, max: timeState.max };
       return (<TimeSelector
         key={timeState.day}
         day={timeState.day}
         value={value}
-        onChange={this.handleTimesChange.bind(this)}
+        onChange={(x, y = timeState.day) => this.handleTimesChange(x, y)}
         onChangeComplete={() => this.fetchAdvancedSearchResults(this.state)}
-        remove={this.removeTimeFilter.bind(this)}
+        remove={this.removeTimeFilter}
       />);
     });
     const explorationLoader = this.props.isFetching ?
@@ -352,7 +380,7 @@ export class ExplorationModal extends React.Component {
           </div>
           <div className="col-5-16">
             <input
-              ref="input"
+              ref={(c) => { this.input = c; }}
               placeholder={`Searching ${this.props.semesterName}`}
               onInput={() => {
                 this.props.clearPagination();
@@ -363,7 +391,7 @@ export class ExplorationModal extends React.Component {
           </div>
           <div
             id="exploration-close"
-            onMouseDown={() => this.refs.modal.hide()}
+            onMouseDown={() => this.modal.hide()}
           >
             <i className="fa fa-times" />
           </div>
@@ -374,8 +402,10 @@ export class ExplorationModal extends React.Component {
             <SelectedFilterSection
               key={'times'} name={'Day/Times'}
               toggle={this.toggle('times')}
-              children={timeFilters}
-            />
+            >
+              {timeFilters}
+
+            </SelectedFilterSection>
           </div>
           <div id="exp-search-results" className="col-5-16">
             <div id="exp-search-list">
@@ -388,13 +418,13 @@ export class ExplorationModal extends React.Component {
           <Filter
             results={['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday']}
             filterType={'times'}
-            add={this.addDayForTimesFilter.bind(this)} show={this.state.show_times}
+            add={this.addDayForTimesFilter} show={this.state.show_times}
             isFiltered={this.isFiltered}
             onClickOut={this.hideAll}
             schoolSpecificInfo={this.props.schoolSpecificInfo}
           />
           {
-                        this.props.isFetching && this.props.page == 1 ? null :
+                        this.props.isFetching && this.props.page === 1 ? null :
                         <div id="exp-modal" className="col-7-16">
                           { courseModal }
                         </div>
@@ -404,7 +434,7 @@ export class ExplorationModal extends React.Component {
         );
     return (
       <Modal
-        ref="modal"
+        ref={(c) => { this.modal = c; }}
         className={classNames('exploration-modal max-modal', { trans: this.props.hasHoveredResult })}
         modalStyle={modalStyle}
         onHide={this.props.hideExplorationModal}
@@ -414,6 +444,7 @@ export class ExplorationModal extends React.Component {
     );
   }
 }
+
 const ExplorationSearchResult = ({ name, code, onClick }) => (
   <div className="exp-s-result" onClick={onClick}>
     <h4>{ name }</h4>
@@ -421,111 +452,68 @@ const ExplorationSearchResult = ({ name, code, onClick }) => (
   </div>
 );
 
-class Filter extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = { results: this.props.results };
-    this.filterResults = this.filterResults.bind(this);
-  }
+ExplorationSearchResult.propTypes = {
+  name: React.PropTypes.string.isRequired,
+  code: React.PropTypes.string.isRequired,
+  onClick: React.PropTypes.func.isRequired,
+};
 
-  filterResults(event) {
-    const query = event.target.value.toLowerCase();
-    if (query === '') {
-      this.setState({ results: this.props.results });
-    } else {
-      const results = this.props.results;
-      this.setState({
-        results: results.filter(r => r.toLowerCase().includes(query)),
-      });
-    }
-  }
+ExplorationModal.defaultProps = {
+  course: null,
+  classmates: null,
+  inRoster: false,
+};
 
-  render() {
-    if (!this.props.show) {
-      return null;
-    }
-    const { filterType, schoolSpecificInfo } = this.props;
-    const placeholder = schoolSpecificInfo[`${filterType}Name`];
-    const results = this.state.results.map((r, i) => <li
-      key={i}
-      onClick={() => this.props.add(filterType, r)}
-    >
-      <i
-        className={classNames({
-          fa: true,
-          'fa-check': this.props.isFiltered(filterType, r),
-        })}
-      />
-      <h6>{r}</h6>
-    </li>);
-    return (
-      <ClickOutHandler onClickOut={this.props.onClickOut}>
-        <div className="filter-pop-out open">
-          <input
-            ref={ref => this.filterInput = ref} placeholder={placeholder}
-            onInput={this.filterResults}
-          />
-          <div className="fpo-list">
-            <ul>
-              { results }
-            </ul>
-          </div>
-        </div>
-      </ClickOutHandler>
+ExplorationModal.propTypes = {
+  inRoster: React.PropTypes.bool,
+  addOrRemoveCourse: React.PropTypes.func.isRequired,
+  addOrRemoveOptionalCourse: React.PropTypes.func.isRequired,
+  advancedSearchResults: React.PropTypes.arrayOf(
+    React.PropTypes.shape({
+      areas: React.PropTypes.string.isRequired,
+      campus: React.PropTypes.string.isRequired,
+      code: React.PropTypes.string.isRequired,
+      department: React.PropTypes.string.isRequired,
+      description: React.PropTypes.string.isRequired,
+      evals: React.PropTypes.arrayOf(
+        React.PropTypes.shape({
+          score: React.PropTypes.number.isRequired,
+          summary: React.PropTypes.string.isRequired,
+          year: React.PropTypes.string.isRequired,
+        }),
+      ).isRequired,
+      exclusions: React.PropTypes.string.isRequired,
+      id: React.PropTypes.number.isRequired,
+      name: React.PropTypes.string.isRequired,
+      num_credits: React.PropTypes.number.isRequired,
+      prerequisites: React.PropTypes.string.isRequired,
+    }),
+  ).isRequired,
+  changeUserInfo: React.PropTypes.func.isRequired,
+  classmates: PropTypes.classmates,
+  clearPagination: React.PropTypes.func.isRequired,
+  course: PropTypes.course,
+  fetchAdvancedSearchResults: React.PropTypes.func.isRequired,
+  fetchCourseInfo: React.PropTypes.func.isRequired,
+  fetchCourseClassmates: React.PropTypes.func.isRequired,
+  hasHoveredResult: React.PropTypes.bool.isRequired,
+  paginate: React.PropTypes.func.isRequired,
+  isVisible: React.PropTypes.bool.isRequired,
+  isFetching: React.PropTypes.bool.isRequired,
+  page: React.PropTypes.number.isRequired,
+  hideExplorationModal: React.PropTypes.func.isRequired,
+  schoolSpecificInfo: PropTypes.schoolSpecificInfo.isRequired,
+  unHoverSection: React.PropTypes.func.isRequired,
+  hoverSection: React.PropTypes.func.isRequired,
+  setAdvancedSearchResultIndex: React.PropTypes.func.isRequired,
+  isSectionLocked: React.PropTypes.func.isRequired,
+  isSectionOnActiveTimetable: React.PropTypes.func.isRequired,
+  react: React.PropTypes.func.isRequired,
+  openSignUpModal: React.PropTypes.func.isRequired,
+  saveSettings: React.PropTypes.func.isRequired,
+  isFetchingClassmates: React.PropTypes.bool.isRequired,
+  userInfo: PropTypes.userInfo.isRequired,
+  semesterName: React.PropTypes.string.isRequired,
+};
 
-    );
-  }
-
-  componentDidUpdate(prevProps, prevState) {
-    if (!prevProps.show && this.props.show) {
-      this.filterInput.focus();
-    }
-  }
-
-}
-
-const SelectedFilter = ({ name, remove }) => (
-  <h6>
-    <i className="fa fa-times" onClick={() => remove()} />
-    <span>{ name }</span>
-  </h6>
-);
-
-const SelectedFilterSection = ({ name, toggle, children }) => (
-  <div className="exp-filter-section open">
-    <h3 className="exp-header">
-      <span>{ name.substring(0, name.length - 1) } Filter</span>
-      <i
-        className="fa fa-plus"
-        onClick={toggle}
-      />
-    </h3>
-    { children.length > 0 ? children : <h6 className="none-selected">None Selected</h6> }
-  </div>
-);
-
-class TimeSelector extends React.Component {
-
-  render() {
-    const { day, value, onChange, onChangeComplete, remove } = this.props;
-    return (<div className="time-selector">
-      <span className="time-selector-day"> <i
-        className="fa fa-times"
-        onClick={() => remove(day)}
-      />{ day.slice(0, 3) } </span>
-      <InputRange
-        day={day}
-        maxValue={24}
-        minValue={8}
-        value={value}
-        onChange={onChange}
-        onChangeComplete={onChangeComplete}
-      />
-    </div>);
-  }
-
-  componentDidMount() {
-    $('.InputRange-labelContainer').filter((i, c) => i % 2 === 0)
-            .addClass('InputRange-labelMaxTime');
-  }
-}
+export default ExplorationModal;

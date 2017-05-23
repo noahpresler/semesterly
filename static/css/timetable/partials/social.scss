@@ -1,0 +1,225 @@
+.social {
+  float: right;
+  margin-right: 35px;
+  padding: 10px;
+  position: relative;
+  user-select: none;
+
+  h2 {
+    cursor: pointer;
+    display: inline-block;
+    font-size: 14px;
+    line-height: 30px;
+    margin: 0;
+    margin-left: 10px;
+    vertical-align: middle;
+  }
+}
+
+.social-pro-pic {
+  background-color: $gddd;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  border-radius: 100%;
+  cursor: pointer;
+  display: inline-block;
+  height: 30px;
+  vertical-align: middle;
+  width: 30px;
+}
+
+.tip-down {
+  border-color: transparent;
+  border-style: solid dashed dashed;
+  border-top-color: $primary-navy;
+  border-width: 6.5px 6.5px 0;
+  cursor: pointer;
+  display: inline-block;
+  height: 0;
+  margin-left: 5px;
+  width: 0;
+  z-index: 1;
+
+  &.down {
+    transform: rotate(180deg);
+  }
+}
+
+.social-dropdown {
+  background-color: $gfff;
+  border: 1px solid $ge6e6e6;
+  box-shadow: 0 2px 10px $black-transparent-2;
+  display: none;
+  min-width: 105px;
+  position: absolute;
+  right: 10px;
+  top: 49px;
+  width: 100%;
+  z-index: 100;
+
+  &.down {
+    display: block;
+  }
+
+  a {
+    &,
+    &:link,
+    &:active,
+    &:visited {
+      color: $g222;
+      cursor: pointer;
+      display: block;
+      margin: 0;
+      padding: 10px 12px;
+    }
+
+    &:hover {
+      background-color: $geee;
+    }
+
+    i,
+    span {
+      display: inline-block;
+      font-size: 14px;
+      line-height: 18px;
+      margin-right: 5px;
+      vertical-align: middle;
+    }
+
+    i {
+      color: $g777;
+    }
+  }
+
+  .tip-border {
+    right: 10px;
+    top: -8px;
+  }
+
+  .tip {
+    right: 10px;
+    top: -7px;
+  }
+}
+
+
+.social-login {
+  &,
+  &:link,
+  &:active,
+  &:visited {
+    color: $facebook;
+    padding: 3px 5px;
+    position: relative;
+    transition: color .3s;
+  }
+
+  &:hover {
+    color: $facebook;
+
+    &::before {
+      width: 100%;
+    }
+  }
+
+  &::before {
+    background-color: $facebook-5;
+    bottom: 0;
+    content: '';
+    display: block;
+    height: 1px;
+    left: 50%;
+    position: absolute;
+    transform: translateX(-50%);
+    transition: width .3s;
+    width: 0;
+  }
+
+  h2 {
+    font-size: 15px;
+    font-weight: 500;
+
+    .mobile {
+      display: none;
+    }
+  }
+
+  i {
+    font-size: 17px;
+    margin-left: 3px;
+  }
+}
+
+.tip-border {
+  border-color: transparent transparent $gccc;
+  border-style: dashed dashed solid;
+  border-width: 0 8.5px 8.5px;
+  height: 0;
+  position: absolute;
+  width: 0;
+  z-index: 1;
+}
+
+.tip {
+  border-color: transparent transparent $gfff;
+  border-style: dashed dashed solid;
+  border-width: 0 8.5px 8.5px;
+  height: 0;
+  position: absolute;
+  width: 0;
+  z-index: 1;
+}
+
+@media (max-width: 766px) {
+  .social-pro-pic {
+    margin-right: 0;
+  }
+
+  .social-login {
+    &:hover {
+      &::before {
+        width: 0;
+      }
+    }
+
+    h2 {
+      span {
+        display: none;
+      }
+
+      .mobile {
+        display: inline-block;
+        font-size: 10px;
+        line-height: 12px;
+        text-align: center;
+        vertical-align: middle;
+        width: 36px;
+      }
+    }
+  }
+
+  .social {
+    margin-right: 25px;
+
+    &.logged-in {
+      h2 {
+        display: none;
+      }
+    }
+
+    .tip-down {
+      display: none;
+    }
+  }
+
+  #search-bar {
+    input {
+      padding: 0 0 0 10px;
+    }
+  }
+
+  .fa-facebook-square {
+    display: none;
+  }
+}

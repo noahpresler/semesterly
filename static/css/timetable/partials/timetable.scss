@@ -1,0 +1,178 @@
+body {
+  background-color: $gfff;
+  height: 100%;
+  line-height: 1.4;
+  overflow-x: hidden;
+}
+
+#calendar {
+  user-select: none;
+  width: 100%;
+
+  th {
+    font-family: $font-primary;
+  }
+}
+
+.cal-btn-wrapper {
+  font-size: 0;
+}
+
+button {
+  &.save-timetable {
+    background-color: transparent;
+    border: 0;
+    color: $g777;
+    height: 30px;
+    line-height: 30px;
+    outline: none;
+    position: relative;
+    transition: background-color .3s;
+    width: 30px;
+
+    &:hover,
+    &:active {
+      color: $blue-dark;
+    }
+
+    &.add-button {
+      margin-right: 2px;
+    }
+
+    i {
+      font-size: 18px;
+      left: 0;
+      line-height: 30px;
+      position: absolute;
+      top: 0;
+      width: 100%;
+    }
+  }
+
+  &.row-button {
+    background-color: transparent;
+    border: 0;
+    border-radius: 4px;
+    float: right;
+    margin-right: 2px;
+    transition: color .3s;
+
+    &:hover {
+      background-color: $gddd;
+    }
+  }
+
+}
+
+.cal-row {
+  font-size: 14px;
+  width: 49px;
+}
+
+// Half hour height within calendar (HALF_HOUR_HEIGHT)
+.fc-time-grid {
+  .fc-slats {
+    z-index: 1;
+
+    td {
+      height: 25px;
+    }
+  }
+
+  > hr {
+    z-index: 1;
+  }
+}
+
+.slot-bar {
+  height: 100%;
+  position: absolute;
+  width: 5px !important;
+  z-index: 0;
+}
+
+.fc-content {
+  margin-left: 8px;
+  margin-top: 2px;
+}
+
+.fc-time {
+  white-space: nowrap;
+}
+
+.fc-time-name-overflow {
+  float: left;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  width: calc(100% - 20px);
+}
+
+.fc-toolbar {
+  border-bottom: 0;
+  margin-top: 20px;
+  padding: 5px;
+}
+
+.cal-cell {
+  flex-grow: 1;
+}
+
+.week-col {
+  display: flex;
+  height: 100%;
+  width: 100%;
+}
+
+.fc-right {
+  .share-course-link-wrapper {
+    background-color: $geee;
+    border-radius: 2px;
+    height: 38px;
+    margin-left: -140px !important;
+    margin-top: 36px;
+    padding: 0 5px;
+    position: absolute;
+    z-index: 1000;
+
+    .share-course-link {
+      color: $g222;
+      font-size: 14px;
+      font-weight: 400;
+      height: 25px;
+      margin-top: 7px;
+      width: auto;
+    }
+
+    .tip,
+    .tip-border {
+      display: none;
+    }
+  }
+}
+
+.data-last-updated {
+  font-size: 12px;
+  line-height: 22px;
+  margin: 5px 0 0;
+}
+
+@media(max-width: 514px) {
+  .data-last-updated {
+    font-size: 9px;
+    margin: 5px 5px 0;
+  }
+}
+
+.save-timetable {
+  img {
+    display: inline-block;
+    font-size: 18px;
+    height: 18px;
+    left: 7px;
+    line-height: 30px;
+    position: absolute;
+    top: 4px;
+    width: 18px;
+  }
+}

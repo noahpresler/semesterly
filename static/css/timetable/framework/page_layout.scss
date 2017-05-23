@@ -1,0 +1,326 @@
+html {
+  height: 100%;
+}
+
+h1,
+h2 {
+  font-family: $font-primary;
+  font-weight: 500;
+}
+
+h3,
+h4,
+h5,
+h6,
+p,
+a,
+span,
+input,
+textarea {
+  font-family: $font-body;
+  font-weight: 400;
+}
+
+.print {
+  display: none;
+}
+
+.page {
+  height: 100%;
+}
+
+.page-wrapper {
+  height: 100%;
+}
+
+.side-bar {
+  background-color: $gfff;
+  bottom: auto;
+  height: 100%;
+  left: calc(100% - 300px);
+  overflow-y: auto;
+  padding: 20px 10px 70px 0;
+  position: absolute;
+  top: 0;
+  transform: translateX(0);
+  transition: transform .3s;
+  width: 300px;
+  z-index: 99;
+
+  &.full-cal {
+    transform: translateX(100%);
+  }
+
+  &.less-cal {
+    transform: translateX(0%);
+  }
+}
+
+.main-bar {
+  float: left;
+  height: 100%;
+  opacity: 1;
+  overflow-y: auto;
+  padding: 0 20px;
+  transition: width .3s, opacity .3s, visibility .3s;
+  visibility: visible;
+  width: calc(100% - 300px);
+
+  &.full-cal {
+    width: 100%;
+  }
+
+  &.less-cal {
+    width: calc(100% - 300px);
+  }
+}
+
+.all-cols {
+  bottom: 0;
+  overflow-x: hidden;
+  overflow-y: auto;
+  position: absolute;
+  top: 50px;
+  width: 100%;
+}
+
+.top-bar {
+  background-color: $gfff;
+  box-shadow: 0 0 12px $black-transparent-1, 0 0 1px $black-transparent-15;
+  min-height: 50px;
+  position: relative;
+  z-index: 1000;
+}
+
+.la-ball-clip-rotate-multiple {
+  float: right;
+  margin-right: 0;
+}
+
+.show-exploration {
+  cursor: pointer;
+  height: 30px;
+  position: absolute;
+  right: -95px;
+  top: 0;
+  transition: transform .3s;
+  user-select: none;
+  width: 85px;
+
+  i {
+    display: inline-block;
+    font-size: 22px;
+    line-height: 30px;
+    vertical-align:	middle;
+  }
+
+  span {
+    display: inline-block;
+    font-family: $font-body;
+    font-size: 12px;
+    line-height: 12px;
+    margin-left: 4px;
+    padding: 3px 0;
+    text-align: left;
+    vertical-align:	middle;
+    width: 60px;
+  }
+}
+
+@media (max-width: 999px) {
+  .main-bar {
+    width: 100%;
+
+    &.full-cal {
+      width: 100%;
+    }
+
+    &.less-cal {
+      opacity: 0;
+      visibility: visible;
+      width: 0%;
+    }
+  }
+
+  .side-bar {
+    bottom: 0;
+    left: 100%;
+    overflow-y: auto;
+    padding: 10px 10px 100px;
+    position: fixed;
+    top: 50px;
+    transform: translateX(0%);
+    width: 100%;
+
+    &.full-cal {
+      transform: translateX(0%);
+    }
+
+    &.less-cal {
+      transform: translateX(-100%);
+      width: 100%;
+    }
+  }
+}
+
+
+@media (max-width: 766px) {
+  .main-bar {
+    padding: 10px;
+  }
+
+  .show-exploration {
+    display: none;
+  }
+}
+
+@media (max-width: 500px) {
+  .main-bar {
+    padding: 0;
+  }
+}
+
+// Logo & name
+.semesterly-name {
+  display: inline-block;
+  float: left;
+  font-family: $font-primary;
+  font-size: 32px;
+  font-weight: 500;
+  height: 50px;
+  line-height: 50px;
+  margin-left: 10px;
+  user-select: none;
+}
+
+.semesterly-logo {
+  display: inline-block;
+  float: left;
+  height: 32px;
+  margin-left: 35px;
+  margin-top: 9px;
+  user-select: none;
+}
+
+@media (max-width: 1000px) {
+  .fc-ltr {
+    .fc-time-grid {
+      .fc-event-container {
+        margin-left: .5%;
+      }
+    }
+  }
+
+  .semesterly-name {
+    display: none;
+  }
+
+  .navicon {
+    right: 9px;
+  }
+}
+@media (max-width: 766px) {
+  .semesterly-logo {
+    margin-left: 10px;
+  }
+}
+// end Logo & name
+
+// Navicon
+.navicon {
+  cursor: pointer;
+  height: 30px;
+  position: absolute;
+  right: 10px;
+  top: 10px;
+  width: 20px;
+  z-index: 3;
+
+  span {
+    background-color: $primary-navy;
+    display: block;
+    height: 3px;
+    position: absolute;
+    right: 0;
+    transform: translateY(-50%);
+    transition: width .3s;
+
+    &:nth-child(1) {
+      top: 25%;
+      width: 15px;
+    }
+
+    &:nth-child(2) {
+      top: 50%;
+      width: 20px;
+    }
+
+    &:nth-child(3) {
+      top: 75%;
+      width: 15px;
+    }
+  }
+
+  &:hover {
+    span {
+      &:nth-child(1),
+      &:nth-child(3) {
+        width: 20px;
+      }
+    }
+  }
+}
+// End Navicon
+
+
+.nav > li {
+  &.footer-button {
+    line-height: 22px;
+
+    &:nth-child(4) {
+      margin-right: 0;
+    }
+
+    a {
+      padding: 0 15px;
+    }
+
+    div {
+      line-height: 20px;
+    }
+  }
+}
+
+footer {
+  background-color: transparent;
+  margin-top: -22px;
+
+  ul {
+    float: right;
+    list-style-type: none;
+    padding: 0;
+  }
+
+  li {
+    display: inline-block;
+    margin: 0 5px;
+
+    a {
+      color: $gaaa;
+      font-size: 12px;
+      font-weight: 400;
+
+      &:hover {
+        color: $gaaa;
+        text-decoration: underline;
+      }
+    }
+  }
+}
+
+@media (max-width: 450px) {
+  footer {
+    float: left;
+    margin-top: 5px;
+  }
+}
