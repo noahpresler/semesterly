@@ -5,7 +5,6 @@ Dashing.widgets.SignupsPerDay = function (dashboard) {
   self.__init__ = Dashing.utils.widgetInit(dashboard, 'signups-per-day');
   self.row = 2;
   self.col = 3;
-  self.color = 'black';
   self.scope = {};
   self.getWidget = function () {
     return this.__widget__;

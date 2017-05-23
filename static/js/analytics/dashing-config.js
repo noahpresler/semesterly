@@ -81,7 +81,6 @@ dashboard.addWidget('facebookAlertsClicksWidget', 'Number', {
 });
 
 dashboard.addWidget('signupsPerDayWidget', 'SignupsPerDay', {
-  color: 'lightgray',
   getData() {
     const self = this;
     Dashing.utils.get('signups_per_day_widget', (data) => {
@@ -122,7 +121,6 @@ dashboard.addWidget('signupsPerDayWidget', 'SignupsPerDay', {
 });
 
 dashboard.addWidget('reactionsWidget', 'Reactions', {
-  color: 'lightgray',
   getData() {
     const self = this;
     Dashing.utils.get('reactions_widget', (data) => {
@@ -153,7 +151,6 @@ dashboard.addWidget('reactionsWidget', 'Reactions', {
 });
 
 dashboard.addWidget('usersBySchoolWidget', 'UsersBySchool', {
-  color: 'lightgray',
   getData() {
     const self = this;
     Dashing.utils.get('users_by_school_widget', (data) => {
@@ -180,7 +177,6 @@ dashboard.addWidget('usersBySchoolWidget', 'UsersBySchool', {
 });
 
 dashboard.addWidget('usersByClassYearWidget', 'UsersByClassYear', {
-  color: 'lightgray',
   getData() {
     const self = this;
     Dashing.utils.get('users_by_class_year_widget', (data) => {
@@ -207,7 +203,6 @@ dashboard.addWidget('usersByClassYearWidget', 'UsersByClassYear', {
 });
 
 dashboard.addWidget('timetablesBySchoolWidget', 'TimetablesBySchool', {
-  color: 'lightgray',
   getData() {
     const self = this;
     Dashing.utils.get('timetables_by_school_widget', (data) => {
@@ -234,7 +229,6 @@ dashboard.addWidget('timetablesBySchoolWidget', 'TimetablesBySchool', {
 });
 
 dashboard.addWidget('timetablesBySemesterWidget', 'TimetablesBySemester', {
-  color: 'lightgray',
   getData() {
     const self = this;
     Dashing.utils.get('timetables_by_semester_widget', (data) => {
