@@ -28,7 +28,7 @@
   }
 }
 
-#pm-side-bar {
+.pm-side-bar {
   border-right: 1px solid $gddd;
   height: 100%;
   position: absolute;
@@ -45,13 +45,13 @@
   }
 }
 
-#pm-header {
+.pm-header {
   clear: both;
   height: 50px;
   width: 100%;
 }
 
-#main-modal-wrapper {
+.main-modal-wrapper {
   background-color: $gf3f3f3;
   height: 100%;
   left: 200px;
@@ -102,7 +102,7 @@
   }
 }
 
-#split-modal-wrapper {
+.split-modal-wrapper {
   background-color: $gf3f3f3;
   height: 100%;
   overflow: auto;
@@ -313,7 +313,7 @@
     width: 100%;
 	}
 
-  #main-modal-wrapper {
+  .main-modal-wrapper {
     h4 {
       font-size: 22px;
     }
@@ -329,7 +329,7 @@
     display: none;
 	}
 
-  #main-modal-wrapper {
+  .main-modal-wrapper {
     left: 0;
     position: absolute;
 
@@ -358,7 +358,7 @@
 }
 
 @media (max-width: 410px) {
-  #main-modal-wrapper {
+  .main-modal-wrapper {
     h4 {
       font-size: 18px;
     }
