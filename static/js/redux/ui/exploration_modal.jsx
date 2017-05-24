@@ -71,8 +71,8 @@ class ExplorationModal extends React.Component {
     if (!_.isEqual(filters, prevFilters) && this.props.page > 1) {
       this.props.clearPagination();
     }
-    $('#exp-search-results').scroll(() => {
-      const expSearchResultsDiv = $('#exp-search-results');
+    $('.exp-search-results').scroll(() => {
+      const expSearchResultsDiv = $('.exp-search-results');
       const scrollPercent = ((100 * expSearchResultsDiv.scrollTop()) / ($(document).height()))
         - expSearchResultsDiv.height();
       if (scrollPercent > 40 && !prevState.hasUpdatedCourses && this.state.hasUpdatedCourses) {
@@ -406,7 +406,7 @@ class ExplorationModal extends React.Component {
 
             </SelectedFilterSection>
           </div>
-          <div id="exp-search-results" className="col-5-16">
+          <div className="col-5-16 exp-search-results">
             <div id="exp-search-list">
               { numSearchResults }
               { searchResults }
