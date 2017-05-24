@@ -74,7 +74,7 @@
 	border-color: transparent;
 }
 
-.trans #exp-search-results,
+.trans .exp-search-results,
 .trans .modal-module,
 .trans .time-selector,
 .trans .modal-body .rating-module,
@@ -348,7 +348,7 @@
 
 
 // Exploration Search Results
-#exp-search-results {
+.exp-search-results {
   height: 100%;
   opacity: 1;
   overflow-y: auto;
