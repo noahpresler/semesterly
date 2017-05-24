@@ -1,5 +1,6 @@
 import React from 'react';
 import Modal from 'boron/WaveModal';
+import classNames from 'classnames';
 import COLOUR_DATA from '../constants/colours';
 import { ShareLink } from './master_slot';
 import getExamShareLink from '../helpers/exam_helpers';
@@ -66,7 +67,7 @@ export default class FinalExamsModal extends React.Component {
     >{($(window).width() > 766) ? days[index] : mobileDays[index]}</span><span
       className="date"
     >{date}</span></h3>);
-    return (<div id="final-exam-calender-days" className="cf">
+    return (<div className="final-exam-calender-days cf">
       { html }
     </div>);
   }
@@ -227,7 +228,7 @@ export default class FinalExamsModal extends React.Component {
     let day = this.findNextFinalToRender();
 
     const unscheduledFinalCtn = this.noTimeFinals.length > 0 ?
-      (<div id="final-exam-sidebar">
+      (<div className="final-exam-sidebar">
         <h3 className="modal-module-header">Schedule Unavailable</h3>
         {this.noTimeFinals.map(final => <InSlot
           code={this.props.courseDetails[final].code}
@@ -255,18 +256,15 @@ export default class FinalExamsModal extends React.Component {
       </a>
     </p>);
     return (mobile) ?
-      <div id="final-exam-calendar-ctn" className="mobile">
+      <div className="final-exam-calendar-ctn mobile">
         { disclaimer }
-        <div id="final-exam-main">
+        <div className="final-exam-main">
           { finalList }
         </div>
         { unscheduledFinalCtn }
       </div> :
-      <div id="final-exam-calendar-ctn">
-        <div
-          id="final-exam-main"
-          className={(unscheduledFinalCtn === null) ? 'main-full' : ''}
-        >
+      <div className="final-exam-calendar-ctn">
+        <div className={classNames('final-exam-main', { 'main-full': unscheduledFinalCtn === null })}>
           { finalsWeeks }
         </div>
         { unscheduledFinalCtn }
@@ -339,7 +337,7 @@ export default class FinalExamsModal extends React.Component {
       width: '100%',
     };
     let display =
-      (<div id="final-exam-loader-wrapper">
+      (<div className="final-exam__loader-wrapper">
         <span className="img-icon">
           <div className="loader" />
         </span>
