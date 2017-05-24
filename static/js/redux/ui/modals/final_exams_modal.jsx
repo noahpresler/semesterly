@@ -241,10 +241,16 @@ export default class FinalExamsModal extends React.Component {
 
     const finalsWeeks = [];
     const finalList = this.finalListHTML();
-    while (Object.keys(this.finalsToRender).length > 0) {
-      finalsWeeks.push(<div key={day}>{ this.renderWeek(day, days) }</div>);
-      day = new Date(day.getTime() + (7 * 24 * 60 * 60 * 1000));
+    if(Object.keys(this.finalsToRender).length == 0){
+      finalsWeeks.push( this.renderEmpty() );
     }
+    else {
+      while (Object.keys(this.finalsToRender).length > 0) {
+        finalsWeeks.push(<div key={day}>{ this.renderWeek(day, days) }</div>);
+        day = new Date(day.getTime() + (7 * 24 * 60 * 60 * 1000));
+      }
+    }
+    
 
     const disclaimer = (<p className="final-exam-disclaimer">
       Some courses do not have finals, check with your syllabus or instructor to confirm.
@@ -273,7 +279,45 @@ export default class FinalExamsModal extends React.Component {
       </div>;
   }
 
-  renderWeek(day, days) {
+  renderEmpty() {
+    const weekHeadersHtml = (
+      <div id="final-exam-calender-days" className="cf">
+        <h3><span className="day">Sun</span></h3>
+        <h3><span className="day">Mon</span></h3>
+        <h3><span className="day">Tue</span></h3>
+        <h3><span className="day">Wed</span></h3>
+        <h3><span className="day">Thu</span></h3>
+        <h3><span className="day">Fri</span></h3>
+        <h3><span className="day">Sat</span></h3>
+      </div>
+      );
+    const weekDaysHtml = (
+      <div className="final-exam-days-ctn">
+        <div className="final-exam-day" id="final-exam-day-empty"></div>
+        <div className="final-exam-day" id="final-exam-day-empty"></div>
+        <div className="final-exam-day" id="final-exam-day-empty"></div>
+        <div className="final-exam-day" id="final-exam-day-empty"></div>
+        <div className="final-exam-day" id="final-exam-day-empty"></div>
+        <div className="final-exam-day" id="final-exam-day-empty"></div>
+        <div className="final-exam-day" id="final-exam-day-empty"></div>
+      </div>
+      )
+    return (
+      <div>
+        <div className="final-exam-week">
+          { weekHeadersHtml }
+          { weekDaysHtml }
+        </div>
+        <div className="final-exam-week">
+          <div id="final-exam-calender-days" className="cf">
+            { weekHeadersHtml }
+            { weekDaysHtml }
+          </div>
+        </div>
+      </div>);
+  }
+
+renderWeek(day, days) {
     const finalExamDays = [];
     const daysOfWeek = FinalExamsModal.findDaysOfWeek(day, days);
     const weekHeadersHtml = FinalExamsModal.generateWeekHeaders(daysOfWeek);
@@ -301,6 +345,7 @@ export default class FinalExamsModal extends React.Component {
       });
       finalExamDays.push(<div key={d} className="final-exam-day">{ html }</div>);
     });
+
     return (<div className="final-exam-week">
       { weekHeadersHtml }
       <div className="final-exam-days-ctn">{ finalExamDays }</div>
@@ -379,6 +424,7 @@ export default class FinalExamsModal extends React.Component {
         </div>);
     } else if (this.props.hasRecievedSchedule && !this.props.loadingCachedTT) {
       display = mobile && $(window).width() < 767 && this.state.orientation === 'portrait' ? this.loadFinalsToDivs(true) : this.loadFinalsToDivs(false);
+      console.log("10");
     }
     return (
       <Modal
