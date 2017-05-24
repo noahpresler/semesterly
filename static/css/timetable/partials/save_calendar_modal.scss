@@ -123,7 +123,7 @@
   text-align: center;
 }
 
-#cal-name {
+.cal-name {
   border: 1px solid $ge6e6e6;
   border-radius: 4px;
   color: $gaaa;
@@ -152,13 +152,5 @@
     position: absolute;
     right: 7%;
     width: 50px;
-  }
-
-  .signup-modal {
-    #features {
-      font-size: 17px;
-      padding: 0 10px 10px;
-      width: 100%;
-    }
   }
 }
