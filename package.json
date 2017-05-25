@@ -81,7 +81,7 @@
     "lint-staged": "lint-staged",
     "lint-fix": "./node_modules/.bin/eslint --fix static/js/redux/* static/js/redux/alerts/* static/js/redux/actions/* static/js/redux/constants/* static/js/redux/reducers/* static/js/redux/ui/containers/* static/js/redux/ui/alerts/*",
     "lint": "./node_modules/.bin/eslint static/js/redux/*/*; ./node_modules/.bin/sass-lint -c .sass-lint.yml 'static/css/timetable/*.scss, static/css/timetable/**/*.scss' -v -q",
-    "lint-scss-staged": "./node_modules/.bin/sass-lint -c .sass-lint.yml -v -q"
+    "lint-scss-staged": "./node_modules/.bin/sass-lint -c .sass-lint-precommit.yml -v -q"
   },
   "repository": {
     "type": "git",
