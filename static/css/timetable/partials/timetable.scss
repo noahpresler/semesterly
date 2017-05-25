@@ -5,7 +5,7 @@ body {
   overflow-x: hidden;
 }
 
-#calendar {
+.calendar {
   user-select: none;
   width: 100%;
 
@@ -14,7 +14,7 @@ body {
   }
 }
 
-#cal-btn-wrapper {
+.cal-btn-wrapper {
   font-size: 0;
 }
 
