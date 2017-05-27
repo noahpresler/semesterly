@@ -1,0 +1,154 @@
+import PropTypes from 'prop-types';
+import React from 'react';
+import classNames from 'classnames';
+import Modal from 'boron/WaveModal';
+import CourseModalBody from './course_modal_body';
+import { getCourseShareLink, getCourseShareLinkFromModal } from '../../helpers/timetable_helpers';
+import { ShareLink } from '../master_slot';
+import { fullCourseDetails } from '../../constants/semesterlyPropTypes';
+
+class CourseModal extends React.Component {
+  constructor(props) {
+    super(props);
+    this.addOrRemoveCourse = this.addOrRemoveCourse.bind(this);
+    this.addOrRemoveOptionalCourse = this.addOrRemoveOptionalCourse.bind(this);
+    this.hide = this.hide.bind(this);
+    this.state = {
+      shareLinkShown: false,
+      addBtnIsHover: false,
+    };
+    this.showShareLink = this.showShareLink.bind(this);
+    this.hideShareLink = this.hideShareLink.bind(this);
+  }
+
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.id !== null) {
+      const { data } = nextProps;
+      history.replaceState({}, 'Semester.ly', getCourseShareLinkFromModal(data.code));
+      this.modal.show();
+    }
+  }
+
+  addOrRemoveCourse(id, section = '') {
+    this.props.addOrRemoveCourse(id, section);
+    this.hide();
+  }
+
+  addOrRemoveOptionalCourse(course) {
+    this.props.addOrRemoveOptionalCourse(course);
+    this.hide();
+  }
+
+  showShareLink() {
+    this.setState({ shareLinkShown: true });
+  }
+
+  hideShareLink() {
+    this.setState({ shareLinkShown: false });
+  }
+
+  hide() {
+    history.replaceState({}, 'Semester.ly', '/');
+    this.props.unHoverSection();
+    this.props.hideModal();
+    this.modal.hide();
+  }
+
+  render() {
+    const modalStyle = {
+      width: '100%',
+      backgroundColor: 'transparent',
+    };
+    const { data, inRoster } = this.props;
+    let courseAndDept = data.code;
+    courseAndDept = data.department && data.department !== '' ?
+            `${courseAndDept}, ${data.department}` : courseAndDept;
+    const shareLink = this.state.shareLinkShown ?
+            (<ShareLink
+              link={getCourseShareLink(data.code)}
+              onClickOut={this.hideShareLink}
+            />) :
+            null;
+    const addOptional = this.props.inRoster ? null :
+            (<div id="modal-save" onClick={() => this.addOrRemoveOptionalCourse(data)}>
+              <i className="fa fa-bookmark" />
+            </div>);
+    const add = data.sections !== undefined && Object.keys(data.sections).length > 0 ? (<div
+      id="modal-add"
+      className={classNames('search-course-add', {
+        'in-roster': inRoster,
+      })}
+      onClick={() => {
+        this.setState({ addBtnIsHover: false });
+        this.addOrRemoveCourse(this.props.id);
+      }}
+      onMouseEnter={
+                () => {
+                  this.setState({ addBtnIsHover: true });
+                }
+            }
+      onMouseLeave={
+                () => {
+                  this.setState({ addBtnIsHover: false });
+                }
+            }
+    >
+      <i
+        className={classNames('fa', {
+          'fa-plus': !inRoster,
+          'fa-check': inRoster && !this.state.addBtnIsHover,
+          'fa-trash-o': inRoster && this.state.addBtnIsHover,
+        })}
+      />
+    </div>) : null;
+    const content =
+            (<div id="modal-content">
+              <div id="modal-header">
+                <h1>{data.name}</h1>
+                <h2>{courseAndDept}</h2>
+                <div id="modal-close" onClick={() => this.modal.hide()}>
+                  <i className="fa fa-times" />
+                </div>
+                <div id="modal-share">
+                  <i className="fa fa-share-alt" onClick={this.showShareLink} />
+                </div>
+                { shareLink }
+                { addOptional }
+                { add }
+              </div>
+              <CourseModalBody
+                {...this.props} hideModal={this.hide}
+                addOrRemoveCourse={this.addOrRemoveCourse}
+              />
+            </div>);
+    return (
+      <Modal
+        ref={(c) => { this.modal = c; }}
+        className={classNames('course-modal max-modal', { trans: this.props.hasHoveredResult })}
+        modalStyle={modalStyle}
+        onHide={this.hide}
+      >
+        {content}
+      </Modal>
+    );
+  }
+}
+
+CourseModal.defaultProps = {
+  id: null,
+  data: {},
+};
+
+CourseModal.propTypes = {
+  id: PropTypes.number,
+  data: fullCourseDetails,
+  inRoster: PropTypes.bool.isRequired,
+  hasHoveredResult: PropTypes.bool.isRequired,
+  addOrRemoveOptionalCourse: PropTypes.func.isRequired,
+  addOrRemoveCourse: PropTypes.func.isRequired,
+  hideModal: PropTypes.func.isRequired,
+  unHoverSection: PropTypes.func.isRequired,
+};
+
+export default CourseModal;
+

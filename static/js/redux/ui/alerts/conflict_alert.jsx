@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import React from 'react';
 
 class ConflictAlert extends React.Component {
@@ -26,9 +27,10 @@ class ConflictAlert extends React.Component {
 }
 
 ConflictAlert.propTypes = {
-  dismissSelf: React.PropTypes.func.isRequired,
-  turnConflictsOn: React.PropTypes.func.isRequired,
-  addLastAddedCourse: React.PropTypes.func.isRequired,
+  addLastAddedCourse: PropTypes.func.isRequired,
+  dismissSelf: PropTypes.func.isRequired,
+  turnConflictsOn: PropTypes.func.isRequired,
 };
 
 export default ConflictAlert;
+
