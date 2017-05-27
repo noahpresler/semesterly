@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import React from 'react';
 
 const TimetableLoader = ({ loading }) => {
@@ -12,7 +13,8 @@ const TimetableLoader = ({ loading }) => {
 };
 
 TimetableLoader.propTypes = {
-  loading: React.PropTypes.bool.isRequired,
+  loading: PropTypes.bool.isRequired,
 };
 
 export default TimetableLoader;
+
