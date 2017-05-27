@@ -1,6 +1,7 @@
-import * as React from 'react';
+import PropTypes from 'prop-types';
+import React from 'react';
 import classNames from 'classnames';
-import * as PropTypes from '../constants/propTypes';
+import * as SemesterlyPropTypes from '../constants/semesterlyPropTypes';
 
 
 class SearchResult extends React.Component {
@@ -172,21 +173,22 @@ class SearchResult extends React.Component {
 }
 
 SearchResult.propTypes = {
-  course: PropTypes.course.isRequired,
-  inRoster: React.PropTypes.bool.isRequired,
-  inOptionRoster: React.PropTypes.bool.isRequired,
-  position: React.PropTypes.number.isRequired,
-  hoverSearchResult: React.PropTypes.func.isRequired,
-  fetchCourseInfo: React.PropTypes.func.isRequired,
-  showIntegrationModal: React.PropTypes.func.isRequired,
-  searchResults: React.PropTypes.arrayOf(PropTypes.searchResult).isRequired,
-  campuses: React.PropTypes.shape({
-    '*': React.PropTypes.string,
+  course: SemesterlyPropTypes.course.isRequired,
+  inRoster: PropTypes.bool.isRequired,
+  inOptionRoster: PropTypes.bool.isRequired,
+  position: PropTypes.number.isRequired,
+  hoverSearchResult: PropTypes.func.isRequired,
+  fetchCourseInfo: PropTypes.func.isRequired,
+  showIntegrationModal: PropTypes.func.isRequired,
+  searchResults: PropTypes.arrayOf(SemesterlyPropTypes.searchResult).isRequired,
+  campuses: PropTypes.shape({
+    '*': PropTypes.string,
   }).isRequired,
-  addCourse: React.PropTypes.func.isRequired,
-  isHovered: React.PropTypes.func.isRequired,
-  addRemoveOptionalCourse: React.PropTypes.func.isRequired,
-  studentIntegrations: React.PropTypes.arrayOf(PropTypes.integration).isRequired,
+  addCourse: PropTypes.func.isRequired,
+  isHovered: PropTypes.func.isRequired,
+  addRemoveOptionalCourse: PropTypes.func.isRequired,
+  studentIntegrations: PropTypes.arrayOf(SemesterlyPropTypes.integration).isRequired,
 };
 
 export default SearchResult;
+

@@ -1,2 +1,3 @@
 node_modules/
 static/js/modules/
+static/js/redux/__tests__/*/__snapshots__/
