@@ -73,8 +73,8 @@ class TutModal extends React.Component {
         keyboard={false}
         contentStyle={contentStyle}
       >
-        <div id="tut-wrapper">
-          <div id="tut-nav">
+        <div className="tut-modal__wrapper">
+          <div className="tut-modal__nav">
             { left }
             <p>Welcome to Semester.ly</p>
             { right }
