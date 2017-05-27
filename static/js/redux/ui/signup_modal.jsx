@@ -27,8 +27,8 @@ class SignupModal extends React.Component {
 
   render() {
     const modalHeader =
-            (<div id="modal-content">
-              <div id="modal-header">
+            (<div className="modal-content">
+              <div className="modal-header">
                 <div
                   className="pro-pic"
                   style={{ backgroundImage: 'url(/static/img/blank.jpg)' }}
@@ -47,8 +47,8 @@ class SignupModal extends React.Component {
         onHide={this.hide}
       >
         {modalHeader}
-        <div id="features">
-          <div id="feature-highlight">
+        <div className="features">
+          <div className="feature-highlight">
             <div className="row">
               <div className="col-1-2">
                 <div className="emoji"><i className="fa fa-check" /></div>
@@ -80,7 +80,7 @@ class SignupModal extends React.Component {
               </div>
             </div>
           </div>
-          <div id="call-to-action">
+          <div className="call-to-action">
             <div className="disclaimer">
                             Semester.ly will NEVER post to your timeline. Your course selections
                             will not be shared with
