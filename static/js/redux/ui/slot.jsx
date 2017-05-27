@@ -1,9 +1,10 @@
+import PropTypes from 'prop-types';
 import React from 'react';
 import Radium, { StyleRoot } from 'radium';
 import { DropTarget } from 'react-dnd';
 import COLOUR_DATA from '../constants/colours';
 import { DRAG_TYPES, HALF_HOUR_HEIGHT } from '../constants/constants';
-import * as PropTypes from '../constants/propTypes';
+import * as SemesterlyPropTypes from '../constants/semesterlyPropTypes';
 
 function convertToHalfHours(str) {
   const start = parseInt(str.split(':')[0], 10);
@@ -190,13 +191,15 @@ class Slot extends React.Component {
     let lockButton = null;
     if (this.props.locked) {
       lockButton = (<i
-        title="Unlock this section" className="fa fa-lock"
+        title="Unlock this section"
+        className="fa fa-lock"
         onClick={event => Slot.stopPropagation(this.props.lockOrUnlockSection, event)}
       />);
     } else if (this.state.hovered) { // not a locked section
      // show unlock icon on hover
       lockButton = (<i
-        title="Lock this section" className="fa fa-unlock"
+        title="Lock this section"
+        className="fa fa-unlock"
         onClick={event => Slot.stopPropagation(this.props.lockOrUnlockSection, event)}
       />);
     }
@@ -262,27 +265,28 @@ class Slot extends React.Component {
 Slot = Radium(Slot);
 
 Slot.propTypes = {
-  classmates: React.PropTypes.arrayOf(PropTypes.classmates).isRequired,
-  colourId: React.PropTypes.number.isRequired,
-  course: React.PropTypes.number.isRequired,
-  depth_level: React.PropTypes.number.isRequired,
-  fetchCourseInfo: React.PropTypes.func.isRequired,
-  id: React.PropTypes.number.isRequired,
-  location: React.PropTypes.string.isRequired,
-  locked: React.PropTypes.bool.isRequired,
-  meeting_section: React.PropTypes.string.isRequired,
-  num_conflicts: React.PropTypes.number.isRequired,
-  primaryDisplayAttribute: React.PropTypes.string.isRequired,
-  removeCourse: React.PropTypes.func.isRequired,
-  shift_index: React.PropTypes.number.isRequired,
-  time_end: React.PropTypes.string.isRequired,
-  time_start: React.PropTypes.string.isRequired,
-  lockOrUnlockSection: React.PropTypes.func.isRequired,
-  connectCreateTarget: React.PropTypes.func.isRequired,
-  connectDragTarget: React.PropTypes.func.isRequired,
-  uses12HrTime: React.PropTypes.bool.isRequired,
+  classmates: PropTypes.arrayOf(SemesterlyPropTypes.classmates).isRequired,
+  colourId: PropTypes.number.isRequired,
+  course: PropTypes.number.isRequired,
+  depth_level: PropTypes.number.isRequired,
+  fetchCourseInfo: PropTypes.func.isRequired,
+  id: PropTypes.number.isRequired,
+  location: PropTypes.string.isRequired,
+  locked: PropTypes.bool.isRequired,
+  meeting_section: PropTypes.string.isRequired,
+  num_conflicts: PropTypes.number.isRequired,
+  primaryDisplayAttribute: PropTypes.string.isRequired,
+  removeCourse: PropTypes.func.isRequired,
+  shift_index: PropTypes.number.isRequired,
+  time_end: PropTypes.string.isRequired,
+  time_start: PropTypes.string.isRequired,
+  lockOrUnlockSection: PropTypes.func.isRequired,
+  connectCreateTarget: PropTypes.func.isRequired,
+  connectDragTarget: PropTypes.func.isRequired,
+  uses12HrTime: PropTypes.bool.isRequired,
 };
 
 export default DropTarget(DRAG_TYPES.CREATE, createSlotTarget, collectCreateDrop)(
     DropTarget(DRAG_TYPES.DRAG, dragSlotTarget, collectDragDrop)(Slot),
 );
+
