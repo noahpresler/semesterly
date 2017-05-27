@@ -1,67 +1,51 @@
+import PropTypes from 'prop-types';
 import React from 'react';
-import Carousel from '../../modules/nuka-carousel/carousel';
 
-// eslint-disable-next-line
-const SideScroller = React.createClass({
+class SideScroller extends React.Component {
 
-  propTypes: {
-    content: React.PropTypes.arrayOf(React.PropTypes.element).isRequired,
-    id: React.PropTypes.string.isRequired,
-    navItems: React.PropTypes.arrayOf(React.PropTypes.element).isRequired,
-    slideIndex: React.PropTypes.number,
-  },
-
-  mixins: [Carousel.ControllerMixin],
-
-  getDefaultProps() {
-    return { slideIndex: 0 };
-  },
-
-
-  getInitialState() {
-    return { slidesShownCount: 1 };
-  },
-
+  constructor(props) {
+    super(props);
+    this.state = {
+      activeSlide: 0,
+    };
+  }
 
   render() {
     if (this.props.content.length <= 2) {
       return <div style={{ marginBottom: '-30px !important' }}>{this.props.content}</div>;
     }
     let navItems = null;
-    if (this.props.navItems && this.state.carousels.carousel) {
+    if (this.props.navItems) {
       const navs = [];
 
       for (let i = 0; i < this.props.navItems.length; i++) {
-        const cls = this.state.carousels.carousel.state.currentSlide === i ?
+        const cls = this.state.activeSlide === i ?
           ' nav-item-active' : '';
         navs.push(
           <span
-            key={i} className={`nav-item${cls}`}
-            onClick={() => this.state.carousels.carousel.goToSlide(i)}
+            key={i}
+            className={`nav-item${cls}`}
+            onClick={() => this.setState({ activeSlide: i })}
           >{this.props.navItems[i]}</span>,
                 );
       }
       navItems = <div className="scroll-nav">{navs}</div>;
     }
-    const slideIndex = this.props.slideIndex ? this.props.slideIndex : 0;
     return (
       <div>
         {navItems}
-        <Carousel
-          // eslint-disable-next-line
-          ref="carousel" data={this.setCarouselData.bind(this, 'carousel')}
-          slidesToShow={this.state.slidesShownCount}
-          slideIndex={slideIndex}
-          dragging
-          cellSpacing={30}
-          id={this.props.id}
-        >
-          {this.props.content}
-        </Carousel>
+        {this.props.content[this.state.activeSlide]}
       </div>
     );
-  },
+  }
+}
 
-});
+
+SideScroller.propTypes = {
+  content: PropTypes.arrayOf(PropTypes.element).isRequired,
+  navItems: PropTypes.arrayOf(PropTypes.element).isRequired,
+};
+
 
 export default SideScroller;
+
