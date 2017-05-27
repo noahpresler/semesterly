@@ -73,8 +73,8 @@ class ExplorationModal extends React.Component {
     }
     $('#exp-search-results').scroll(() => {
       const expSearchResultsDiv = $('#exp-search-results');
-      const scrollPercent = ((100 * expSearchResultsDiv.scrollTop()) / ($(document).height()))
-        - expSearchResultsDiv.height();
+      const scrollPercent = (100 * expSearchResultsDiv.scrollTop()) / (($(document).height())
+        - expSearchResultsDiv.height());
       if (scrollPercent > 40 && !prevState.hasUpdatedCourses && this.state.hasUpdatedCourses) {
         this.setState({ hasUpdatedCourses: false });
         this.props.paginate();
