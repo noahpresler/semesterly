@@ -1,4 +1,4 @@
-#tut-wrapper {
+.tut-modal__wrapper {
   height: 100%;
   width: 100%;
 
@@ -49,7 +49,7 @@
   }
 }
 
-#tut-nav {
+.tut-modal__nav {
   border-bottom: 1px solid $gfff;
   height: 50px;
   padding: 20px 20px 40px;
@@ -70,7 +70,7 @@
     width: 100% !important;
   }
 
-  #tut-wrapper p {
+  .tut-modal__wrapper p {
     font-size: 14px;
   }
 }
