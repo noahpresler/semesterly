@@ -2,7 +2,7 @@
 
 exports[`CourseModalBody correctly renders 1`] = `
 <div
-  id="modal-body"
+  className="modal-body"
 >
   <div
     className="cf"
@@ -44,10 +44,10 @@ exports[`CourseModalBody correctly renders 1`] = `
         </div>
       </div>
       <div
-        className="capacity-tracker-wrapper"
+        className="capacity"
       >
         <div
-          id="capacity-tracker-text"
+          className="capacity__tracker-text"
         >
           <span>
             1
@@ -91,7 +91,7 @@ exports[`CourseModalBody correctly renders 1`] = `
           id="friends-wrapper"
         >
           <div
-            id="friends-inner"
+            className="friends__inner"
           >
             <div
               className="friend"
@@ -142,7 +142,7 @@ exports[`CourseModalBody correctly renders 1`] = `
           id="friends-wrapper"
         >
           <div
-            id="friends-inner"
+            className="friends__inner"
           >
             <div
               className="friend"
@@ -177,10 +177,10 @@ exports[`CourseModalBody correctly renders 1`] = `
         Check out your classmate's reactions – click an emoji to add your own opinion!
       </p>
       <div
-        id="reactions-wrapper"
+        className="reactions-wrapper"
       >
         <div
-          id="reactions"
+          className="reactions"
         >
           <div
             className="swing reaction"
@@ -228,7 +228,7 @@ exports[`CourseModalBody correctly renders 1`] = `
               </div>
             </div>
             <div
-              id="reaction-dropdown"
+              className="reaction-dropdown"
             >
               <div
                 className="tip-border"
@@ -287,7 +287,7 @@ exports[`CourseModalBody correctly renders 1`] = `
               </div>
             </div>
             <div
-              id="reaction-dropdown"
+              className="reaction-dropdown"
             >
               <div
                 className="tip-border"
@@ -346,7 +346,7 @@ exports[`CourseModalBody correctly renders 1`] = `
               </div>
             </div>
             <div
-              id="reaction-dropdown"
+              className="reaction-dropdown"
             >
               <div
                 className="tip-border"
@@ -405,7 +405,7 @@ exports[`CourseModalBody correctly renders 1`] = `
               </div>
             </div>
             <div
-              id="reaction-dropdown"
+              className="reaction-dropdown"
             >
               <div
                 className="tip-border"
@@ -464,7 +464,7 @@ exports[`CourseModalBody correctly renders 1`] = `
               </div>
             </div>
             <div
-              id="reaction-dropdown"
+              className="reaction-dropdown"
             >
               <div
                 className="tip-border"
@@ -523,7 +523,7 @@ exports[`CourseModalBody correctly renders 1`] = `
               </div>
             </div>
             <div
-              id="reaction-dropdown"
+              className="reaction-dropdown"
             >
               <div
                 className="tip-border"
@@ -582,7 +582,7 @@ exports[`CourseModalBody correctly renders 1`] = `
               </div>
             </div>
             <div
-              id="reaction-dropdown"
+              className="reaction-dropdown"
             >
               <div
                 className="tip-border"
@@ -641,7 +641,7 @@ exports[`CourseModalBody correctly renders 1`] = `
               </div>
             </div>
             <div
-              id="reaction-dropdown"
+              className="reaction-dropdown"
             >
               <div
                 className="tip-border"
@@ -678,8 +678,7 @@ exports[`CourseModalBody correctly renders 1`] = `
           Course Evaluations
         </h3>
         <div
-          className="modal-entry spacious-entry"
-          id="course-evaluations"
+          className="modal-entry course-evaluations spacious-entry"
         >
           <div>
             <div
@@ -958,7 +957,7 @@ exports[`CourseModalBody correctly renders 1`] = `
                   </b>
                 </div>
                 <div
-                  id="prof"
+                  className="eval-item__prof"
                 >
                   <b>
                     Professor: 
@@ -990,7 +989,7 @@ exports[`CourseModalBody correctly renders 1`] = `
                 </div>
               </div>
               <div
-                id="details"
+                className="eval-item__details"
               >
                 <p>
                   The best aspects of this class were the structured lectures and relatively smal  class size.  Many students agreed that the professor was very approachable and helpful, and that he made an effort to ensure that students understood the material.  Some students found that the class moved too quickly through material and that there were occasional disconnects between lecture topics and TA sections.  This class could be improved by better matching the difficulty of homework to exams.  Prospective students should have a strong background in trigonometry. 

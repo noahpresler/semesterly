@@ -5,6 +5,7 @@
   "dependencies": {
     "babel": "^6.23.0",
     "babel-core": "^6.24.1",
+    "babel-jest": "^20.0.3",
     "babel-loader": "^7.0.0",
     "babel-plugin-react-transform": "^2.0.2",
     "babel-polyfill": "^6.7.4",
@@ -81,7 +82,7 @@
   "jest": {
     "setupTestFrameworkScriptFile": "./test_env.jsx",
     "transform": {
-  	"^.+\\.jsx?$": "babel-jest"
+      "^.+\\.jsx?$": "babel-jest"
     }
   },
   "scripts": {
