@@ -71,8 +71,8 @@ class ExplorationModal extends React.Component {
     if (!_.isEqual(filters, prevFilters) && this.props.page > 1) {
       this.props.clearPagination();
     }
-    $('#exp-search-results').scroll(() => {
-      const expSearchResultsDiv = $('#exp-search-results');
+    $('.exp-search-results').scroll(() => {
+      const expSearchResultsDiv = $('.exp-search-results');
       const scrollPercent = ((100 * expSearchResultsDiv.scrollTop()) / ($(document).height()))
         - expSearchResultsDiv.height();
       if (scrollPercent > 40 && !prevState.hasUpdatedCourses && this.state.hasUpdatedCourses) {
@@ -175,6 +175,7 @@ class ExplorationModal extends React.Component {
     this.hide();
   }
 
+
   handleTimesChange(values, component) {
     if (this.props.isFetching) {
       return;
@@ -259,24 +260,24 @@ class ExplorationModal extends React.Component {
                   onClickOut={this.hideShareLink}
                 />) :
                 null;
-      courseModal = (<div id="modal-content">
-        <div id="modal-header">
+      courseModal = (<div className="modal-content">
+        <div className="modal-header">
           <h1>{ course.name }</h1>
           <h2>{ course.code }</h2>
-          <div id="modal-share" onClick={this.showShareLink}>
+          <div className="modal-share" onClick={this.showShareLink}>
             <i className="fa fa-share-alt" />
           </div>
           { shareLink }
           {
                         inRoster ? null :
                         <div
-                          id="modal-save"
+                          className="modal-save"
                           onClick={() => this.addOrRemoveOptionalCourse(course)}
                         >
                           <i className="fa fa-bookmark" />
                         </div>
                     }
-          <div id="modal-add" onClick={() => this.addOrRemoveCourse(course.id)}>
+          <div className="modal-add" onClick={() => this.addOrRemoveCourse(course.id)}>
             <i
               className={classNames('fa', {
                 'fa-plus': !inRoster,
@@ -366,14 +367,12 @@ class ExplorationModal extends React.Component {
     const explorationLoader = this.props.isFetching ?
       <i className="fa fa-spin fa-refresh" /> : null;
     const content = (
-      <div id="exploration-content">
+      <div className="exploration-content">
         <div
-          id="exploration-header"
-          className="cf"
+          className="exploration-header cf"
         >
           <div
-            id="exp-title"
-            className="col-4-16"
+            className="col-4-16 exp-title"
           >
             <i className="fa fa-compass" />
             <h1>Advanced Search</h1>
@@ -390,14 +389,14 @@ class ExplorationModal extends React.Component {
             />
           </div>
           <div
-            id="exploration-close"
+            className="exploration-close"
             onMouseDown={() => this.modal.hide()}
           >
             <i className="fa fa-times" />
           </div>
         </div>
-        <div id="exploration-body">
-          <div id="exp-filters" className="col-4-16">
+        <div className="exploration-body">
+          <div className="col-4-16 exp-filters">
             { selectedFilterSections }
             <SelectedFilterSection
               key={'times'} name={'Day/Times'}
@@ -407,7 +406,7 @@ class ExplorationModal extends React.Component {
 
             </SelectedFilterSection>
           </div>
-          <div id="exp-search-results" className="col-5-16">
+          <div className="col-5-16 exp-search-results">
             <div id="exp-search-list">
               { numSearchResults }
               { searchResults }
@@ -425,7 +424,7 @@ class ExplorationModal extends React.Component {
           />
           {
                         this.props.isFetching && this.props.page === 1 ? null :
-                        <div id="exp-modal" className="col-7-16">
+                        <div className="col-7-16 exp-modal">
                           { courseModal }
                         </div>
                     }

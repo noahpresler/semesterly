@@ -42,8 +42,8 @@ class IntegrationModal extends React.Component {
         modalStyle={modalStyle}
         onHide={this.props.toggleIntegrationModal}
       >
-        <div id="integration-modal">
-          <div id="integration-logo" style={integrationLogo} />
+        <div className="integration-modal__wrapper">
+          <div className="integration-logo" style={integrationLogo} />
           <div className="preference cf">
             <label className="switch switch-slide" htmlFor="enable-integration">
               <input

@@ -7,14 +7,14 @@
     outline: none;
   }
 
-  #modal-header {
+  .modal-header {
     background-color: $geee;
     border-bottom: 1px solid $gddd;
     padding: 25px;
     position: relative;
   }
 
-  #features{
+  .features{
     font-size: 17px;
     padding: 40px 20px 20px;
     width: 100%;
@@ -24,7 +24,7 @@
     font-style: italic;
   }
 
-  [class^='col-'] {
+  [class^="col-"] {
     float: left;
     width: 50%;
   }
@@ -43,7 +43,7 @@
   width: 80px;
 }
 
-#feature-highlight {
+.feature-highlight {
   font-size: 14px;
   margin-top: 25px;
 
@@ -75,7 +75,7 @@
   padding: 5px 10px 10px 20px;
 }
 
-#call-to-action {
+.call-to-action {
   text-align: center;
 }
 
@@ -110,7 +110,7 @@
     max-height: 900px;
     max-width: 1200px;
 
-    #features {
+    .features {
       font-size: 17px;
       padding: 0 10px 10px;
       width: 100%;
@@ -122,12 +122,12 @@
   }
 
   .welcome-modal {
-    #modal-body {
+    .modal-body {
       padding: 22px 0 20px;
     }
   }
 
-  #feature-highlight {
+  .feature-highlight {
     h1 {
       font-size: 21px;
     }

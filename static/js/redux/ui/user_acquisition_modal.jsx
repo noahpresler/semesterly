@@ -17,8 +17,8 @@ class UserAcquisitionModal extends React.Component {
 
   render() {
     const modalHeader =
-            (<div id="modal-content">
-              <div id="modal-header">
+            (<div className="modal-content">
+              <div className="modal-header">
                 <h1>Login/Signup</h1>
               </div>
             </div>);
@@ -40,7 +40,7 @@ class UserAcquisitionModal extends React.Component {
         {modalHeader}
 
 
-        <div id="save-calendar-container">
+        <div className="user-acquisition-modal__container">
           <h3>Recommended:</h3>
           <button
             className="btn abnb-btn fb-btn" onClick={() => {
