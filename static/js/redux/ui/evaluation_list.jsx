@@ -64,7 +64,7 @@ class EvaluationList extends React.Component {
         // console.log(evaluationScroller)
 
     return (
-      <div className={`modal-entry ${customClass}`} id="course-evaluations">
+      <div className={`modal-entry course-evaluations ${customClass}`}>
         {evaluationScroller}
       </div>);
   }
