@@ -70,7 +70,7 @@ class Reaction extends React.Component {
             <i className="fa fa-check" />
           </div>
         </div>
-        <div id="reaction-dropdown">
+        <div className="reaction-dropdown">
           <div className="tip-border" />
           <div className="tip" />
           <span>{REACTION_MAP[this.props.emoji].name}</span>

@@ -82,7 +82,7 @@ class PeerModal extends React.Component {
     });
     const proPicStyle = !this.props.userInfo.isLoggedIn ? { backgroundImage: 'url("/static/img/blank.jpg")' } : { backgroundImage: `url(http://graph.facebook.com/${this.props.userInfo.fbook_uid}/picture?width=700&height=700)` };
     const sideBar =
-            (<div id="pm-side-bar">
+            (<div className="pm-side-bar">
               <div className="circle-pic" style={proPicStyle} />
               <p>Your Courses</p>
               {sideSlots}
@@ -188,8 +188,8 @@ class PeerModal extends React.Component {
     const ghostCards = !this.props.userInfo.social_all || peerCards.length === 0 ?
       <div>{ghostCard}{ghostCard}{ghostCard}{ghostCard}</div> : null;
     const display = (!this.props.isLoading) ?
-            (<div id="main-modal-wrapper">
-              <div id="pm-header">
+            (<div className="main-modal-wrapper">
+              <div className="pm-header">
                 <h4>Your Classmates</h4>
                 <div className="key">
                   <div className="key-entry">
@@ -210,11 +210,11 @@ class PeerModal extends React.Component {
               {this.props.userInfo.social_all ? peerCards : null}
               {ghostCards}
             </div>) :
-            (<div id="main-modal-wrapper">
+            (<div className="main-modal-wrapper">
               <span className="img-icon">
                 <div className="loader" />
               </span>
-              <div id="pm-header">
+              <div className="pm-header">
                 <h4>Your Classmates</h4>
               </div>
             </div>);
@@ -225,8 +225,8 @@ class PeerModal extends React.Component {
         onHide={this.hide}
         modalStyle={modalStyle}
       >
-        <div id="modal-content">
-          <div id="split-modal-wrapper">
+        <div className="modal-content">
+          <div className="split-modal-wrapper">
             {sideBar}
             {display}
           </div>
