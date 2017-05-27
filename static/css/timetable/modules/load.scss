@@ -11,7 +11,7 @@
     animation: loader 2s ease-in infinite reverse, spin .8s linear infinite reverse;
     border: 40px solid transparent;
     border-radius: 5px;
-    content: '';
+    content: "";
     display: block;
     filter: saturate(.3);
     height: .1;
@@ -25,7 +25,7 @@
   ::after {
     background-color: $gfff;
     border-radius: 20px;
-    content: '';
+    content: "";
     display: block;
     height: 20px;
     margin-left: -10px;
@@ -63,6 +63,11 @@
   }
 }
 @keyframes spin {
-  0% {transform: rotate(0deg)}
-  100% {transform: rotate(-360deg)}
+  0% {
+    transform: rotate(0deg)
+  }
+
+  100% {
+    transform: rotate(-360deg)
+  }
 }

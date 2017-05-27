@@ -18,14 +18,14 @@ class SaveCalendarModal extends React.Component {
 
   render() {
     const modalHeader =
-            (<div id="modal-content">
-              <div id="modal-header">
+            (<div className="modal-content">
+              <div className="modal-header">
                 <div
                   className="header-pic"
                   style={{ backgroundImage: 'url(/static/img/addtocalendarfeature.png)' }}
                 />
                 <h1>Export calendar</h1>
-                <div id="modal-close" onClick={() => this.modal.hide()}>
+                <div className="modal-close" onClick={() => this.modal.hide()}>
                   <i className="fa fa-times" />
                 </div>
               </div>
@@ -61,7 +61,7 @@ class SaveCalendarModal extends React.Component {
         }}
       >
         {modalHeader}
-        <div id="save-calendar-container">
+        <div className="save-calendar-modal__container">
           <button
             className="btn abnb-btn" onClick={() => {
               if (!this.props.userInfo.isLoggedIn || !this.props.userInfo.GoogleSignedUp ||

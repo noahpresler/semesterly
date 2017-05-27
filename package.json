@@ -52,6 +52,7 @@
     "react-dom": "^15.1.0",
     "react-hot-loader": "^1.3.1",
     "react-input-autosize": "^1.1.0",
+    "react-input-range": "^1.1.3",
     "react-onclickout": "^2.0.4",
     "react-proxy": "^1.1.8",
     "react-redux": "^5.0.2",
@@ -88,7 +89,9 @@
     "build": "./node_modules/.bin/webpack --config webpack.config.js --progress --colors",
     "watch": "node server.js",
     "lint-staged": "lint-staged",
-    "lint": "./node_modules/.bin/eslint \"static/js/redux/**\"; ./node_modules/.bin/sass-lint -c .scss-lint.yml 'static/css/timetable/*.scss, static/css/timetable/base/*.scss' -v -q"
+    "lint": "./node_modules/.bin/eslint \"static/js/redux/**\"; ./node_modules/.bin/sass-lint -c .scss-lint.yml 'static/css/timetable/*.scss, static/css/timetable/base/*.scss' -v -q",
+    "lint-fix": "./node_modules/.bin/eslint --fix \"static/js/redux/**\" ",
+    "lint-scss-staged": "./node_modules/.bin/sass-lint -c .sass-lint-precommit.yml -v -q"
   },
   "repository": {
     "type": "git",
@@ -115,7 +118,8 @@
     "webpack": "^2.4.1"
   },
   "lint-staged": {
-    "*.jsx": "eslint"
+    "*.jsx": "eslint",
+    "*.scss": "lint-scss-staged"
   },
   "sasslintConfig": "sass-lint"
 }
