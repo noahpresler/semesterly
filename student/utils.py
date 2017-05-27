@@ -32,18 +32,25 @@ def get_student(request):
         return None
 
 
-def get_classmates_from_course_id(school, student, course_id, semester, friends=None):
+def get_classmates_from_course_id(school, student, course_id, semester, friends=None, include_same_as=False):
     if not friends:
         # All friends with social courses/sharing enabled
         friends = student.friends.filter(social_courses=True)
     course = {'course_id': course_id}
+    past_ids = [course_id]
+    if include_same_as:
+        c = Course.objects.get(id=course_id)
+        if c.same_as:
+            past_ids.append(c.same_as.id)
     curr_ptts = PersonalTimetable.objects.filter(student__in=friends, courses__id__exact=course_id) \
         .filter(Q(semester=semester)).order_by('student', 'last_updated').distinct('student')
-    past_ptts = PersonalTimetable.objects.filter(student__in=friends, courses__id__exact=course_id) \
-        .filter(~Q(semester=semester)).order_by('student', 'last_updated').distinct('student')
+    past_ptts = PersonalTimetable.objects.filter(student__in=friends, courses__id__in=past_ids) \
+        .exclude(student__in=curr_ptts.values_list('student', flat=True)).filter(~Q(semester=semester)) \
+        .order_by('student', 'last_updated').distinct('student')
 
     course['classmates'] = get_classmates_from_tts(student, course_id, curr_ptts)
     course['past_classmates'] = get_classmates_from_tts(student, course_id, past_ptts)
+
     return course
 
 
