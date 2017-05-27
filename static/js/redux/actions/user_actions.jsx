@@ -16,7 +16,7 @@ import {
     getSetRegistrationTokenEndpoint,
 } from '../constants/endpoints';
 import { fetchCourseClassmates } from './modal_actions';
-import { store } from '../init';
+import store from '../init';
 import { getNumberedName, loadTimetable, nullifyTimetable } from './timetable_actions';
 import { MAX_TIMETABLE_NAME_LENGTH } from '../constants/constants';
 import * as ActionTypes from '../constants/actionTypes';

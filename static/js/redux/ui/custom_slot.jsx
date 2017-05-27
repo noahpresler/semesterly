@@ -1,4 +1,5 @@
-import React, { PropTypes } from 'react';
+import PropTypes from 'prop-types';
+import React from 'react';
 import { DragSource, DropTarget } from 'react-dnd';
 import { DRAG_TYPES, HALF_HOUR_HEIGHT } from '../constants/constants';
 
@@ -246,10 +247,10 @@ CustomSlot.propTypes = {
   name: PropTypes.string.isRequired,
   id: PropTypes.number.isRequired,
   uses12HrTime: PropTypes.bool.isRequired,
-  preview: React.PropTypes.bool.isRequired,
-  updateCustomSlot: React.PropTypes.func.isRequired,
-  removeCustomSlot: React.PropTypes.func.isRequired,
-  connectCreateTarget: React.PropTypes.func.isRequired,
+  preview: PropTypes.bool.isRequired,
+  updateCustomSlot: PropTypes.func.isRequired,
+  removeCustomSlot: PropTypes.func.isRequired,
+  connectCreateTarget: PropTypes.func.isRequired,
 };
 
 export default DropTarget(DRAG_TYPES.DRAG, dragSlotTarget, collectDragDrop)(
@@ -257,3 +258,4 @@ export default DropTarget(DRAG_TYPES.DRAG, dragSlotTarget, collectDragDrop)(
         DragSource(DRAG_TYPES.DRAG, dragSlotSource, collectDragSource)(CustomSlot),
     ),
 );
+
