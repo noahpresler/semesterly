@@ -15,7 +15,7 @@ class ConflictAlert extends React.Component {
   render() {
     return (
       <div className="conflict-alert">
-                Adding that course causes a conflict!
+                Adding that {this.props.message} causes a conflict!
                 <button
                   onClick={() => this.handleClick()}
                   className="conflict-alert-btn"
@@ -30,6 +30,7 @@ ConflictAlert.propTypes = {
   addLastAddedCourse: PropTypes.func.isRequired,
   dismissSelf: PropTypes.func.isRequired,
   turnConflictsOn: PropTypes.func.isRequired,
+  message: PropTypes.string.isRequired,
 };
 
 export default ConflictAlert;

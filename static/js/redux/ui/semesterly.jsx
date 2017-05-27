@@ -61,7 +61,7 @@ class Semesterly extends React.Component {
       this.updateOrientation();
     });
     window.addEventListener('resize', () => {
-      if (!$('#search-bar-input-wrapper input').is(':focus')) {
+      if (!$('.search-bar__input-wrapper input').is(':focus')) {
         this.updateOrientation();
       }
     });
