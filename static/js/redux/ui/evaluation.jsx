@@ -14,12 +14,12 @@ class Evaluation extends React.Component {
             // (i.e. full evaluation, not nav item for full evaluations)
       const s = `<p>${evalData.summary.replace(/\u00a0/g, ' ').replace(/\n/g, '<br />')}</p>`;
       details = (
-        <div id="details">
+        <div className="eval-item__details">
           {renderHTML(s)}
         </div>
             );
       prof = (
-        <div id="prof"><b>Professor: {evalData.professor}</b></div>
+        <div className="eval-item__prof"><b>Professor: {evalData.professor}</b></div>
             );
     }
 

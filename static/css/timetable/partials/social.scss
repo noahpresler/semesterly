@@ -126,7 +126,7 @@
   &::before {
     background-color: $facebook-5;
     bottom: 0;
-    content: '';
+    content: "";
     display: block;
     height: 1px;
     left: 50%;
@@ -213,7 +213,7 @@
     }
   }
 
-  #search-bar {
+  .search-bar {
     input {
       padding: 0 0 0 10px;
     }
