@@ -18,7 +18,7 @@
     width: 100%;
   }
 
-  #modal-header {
+  .modal-header {
     padding: 10px 10px 3px;
   }
 
@@ -92,7 +92,7 @@
 
 
 // Style the loader
-#modal-content {
+.modal-content {
   .img-icon {
     left: 50%;
     position: absolute;
@@ -106,12 +106,12 @@
   }
 }
 
-#final-exam-loader-wrapper {
+.final-exam__loader-wrapper {
   height: 350px;
 }
 
 // Final Exams Modal
-#final-exam-calendar-ctn {
+.final-exam-calendar-ctn {
   padding: 30px;
   width: 100%;
 
@@ -120,7 +120,7 @@
   }
 }
 
-#final-exam-main {
+.final-exam-main {
   float: left;
   width: 80%;
 
@@ -129,7 +129,7 @@
   }
 }
 
-#final-exam-sidebar {
+.final-exam-sidebar {
   float: left;
   padding: 0 0 0 20px;
   width: 20%;
@@ -141,7 +141,7 @@
 
 @media (max-width: 766px) {
   .final-exam-modal {
-    #modal-header {
+    .modal-header {
       padding: 10px 10px 3px;
     }
 
@@ -152,16 +152,16 @@
     }
   }
 
-  #final-exam-calendar-ctn {
+  .final-exam-calendar-ctn {
     padding: 30px 10px;
 	}
 
-  #final-exam-main {
+  .final-exam-main {
     float: none;
     width: 100%;
 	}
 
-  #final-exam-sidebar {
+  .final-exam-sidebar {
     padding: 20px 0 0;
     width: 100%;
 	}
@@ -193,7 +193,7 @@
   font-size: 14px;
 }
 
-#final-exam-calender-days {
+.final-exam-calender-days {
   h3 {
     border-bottom: 3px solid $gddd;
     border-right: 1px solid $gddd;
@@ -223,7 +223,7 @@
 }
 
 @media (max-width: 766px) {
-  #final-exam-calender-days {
+  .final-exam-calender-days {
     h3 {
       line-height: 15px;
       padding: 3px 0;
@@ -241,7 +241,7 @@
 }
 
 // Links in Modal
-#modal-body {
+.modal-body {
   .final-exam-disclaimer {
     clear: both;
     color: $gaaa;

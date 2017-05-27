@@ -354,7 +354,6 @@ class FeatureFlowView(ValidateSubdomainMixin, APIView):
             for i in self.student.integrations.all():
                 integrations.append(i.name)
 
-        # TODO: pass init_data as one context value
         init_data = {
             'school': self.school,
             'currentUser': get_user_dict(self.school, self.student, sem),

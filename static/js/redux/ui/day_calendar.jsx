@@ -199,7 +199,7 @@ class DayCalendar extends React.Component {
       </button>
         );
     return (
-      <div id="calendar" className="fc fc-ltr fc-unthemed day-calendar">
+      <div className="calendar fc fc-ltr fc-unthemed day-calendar">
         <div className="fc-toolbar no-print">
           <div className="fc-left">
             <PaginationContainer />
@@ -214,8 +214,8 @@ class DayCalendar extends React.Component {
           </div>
           <div className="fc-center" />
           <div className="fc-clear cf">
-            <div id="day-pills-wrapper">
-              <div id="day-pills">
+            <div className="day-pills">
+              <div className="day-pills__wrapper">
                 {dayPills}
               </div>
             </div>

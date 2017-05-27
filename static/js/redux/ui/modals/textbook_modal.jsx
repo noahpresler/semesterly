@@ -19,9 +19,9 @@ class TextbookModal extends React.Component {
 
   render() {
     const modalHeader =
-            (<div id="modal-header">
+            (<div className="modal-header">
               <h1>Your Textbooks</h1>
-              <div id="modal-close" onClick={() => this.modal.hide()}>
+              <div className="modal-close" onClick={() => this.modal.hide()}>
                 <i className="fa fa-times" />
               </div>
             </div>);
@@ -166,7 +166,7 @@ class TextbookModal extends React.Component {
         }}
       >
 
-        <div id="modal-content">
+        <div className="modal-content">
           { modalHeader }
 
           { modalContent }
