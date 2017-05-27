@@ -69,12 +69,11 @@ class CourseModal extends React.Component {
             />) :
             null;
     const addOptional = this.props.inRoster ? null :
-            (<div id="modal-save" onClick={() => this.addOrRemoveOptionalCourse(data)}>
+            (<div className="modal-save" onClick={() => this.addOrRemoveOptionalCourse(data)}>
               <i className="fa fa-bookmark" />
             </div>);
     const add = data.sections !== undefined && Object.keys(data.sections).length > 0 ? (<div
-      id="modal-add"
-      className={classNames('search-course-add', {
+      className={classNames('modal-add search-course-add', {
         'in-roster': inRoster,
       })}
       onClick={() => {
@@ -101,14 +100,14 @@ class CourseModal extends React.Component {
       />
     </div>) : null;
     const content =
-            (<div id="modal-content">
-              <div id="modal-header">
+            (<div className="modal-content">
+              <div className="modal-header">
                 <h1>{data.name}</h1>
                 <h2>{courseAndDept}</h2>
-                <div id="modal-close" onClick={() => this.modal.hide()}>
+                <div className="modal-close" onClick={() => this.modal.hide()}>
                   <i className="fa fa-times" />
                 </div>
-                <div id="modal-share">
+                <div className="modal-share">
                   <i className="fa fa-share-alt" onClick={this.showShareLink} />
                 </div>
                 { shareLink }
