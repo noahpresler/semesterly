@@ -7,7 +7,7 @@
     outline: none;
   }
 
-  #modal-header {
+  .modal-header {
     background-color: $geee;
     border-bottom: 1px solid $gddd;
     padding: 25px;
@@ -15,7 +15,7 @@
   }
 }
 
-#save-calendar-container {
+.save-calendar-modal__container {
   padding: 50px 30px 30px;
 }
 
@@ -60,8 +60,13 @@
 }
 
 @keyframes spin {
-  0% { transform: rotate(0deg); }
-  100% { transform: rotate(360deg); }
+  0% {
+    transform: rotate(0deg);
+  }
+
+  100% {
+    transform: rotate(360deg);
+  }
 }
 
 .abnb-btn {
@@ -118,7 +123,7 @@
   text-align: center;
 }
 
-#cal-name {
+.cal-name {
   border: 1px solid $ge6e6e6;
   border-radius: 4px;
   color: $gaaa;
@@ -147,13 +152,5 @@
     position: absolute;
     right: 7%;
     width: 50px;
-  }
-
-  .signup-modal {
-    #features {
-      font-size: 17px;
-      padding: 0 10px 10px;
-      width: 100%;
-    }
   }
 }
