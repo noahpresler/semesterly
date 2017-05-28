@@ -10,7 +10,7 @@ import {
     saveLocalPreferences,
     saveLocalSemester,
 } from '../util';
-import { store } from '../init';
+import store from '../init';
 import { autoSave, fetchClassmates, lockActiveSections } from './user_actions';
 import * as ActionTypes from '../constants/actionTypes';
 import { currSem } from '../reducers/semester_reducer';

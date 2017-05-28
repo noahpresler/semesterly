@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import React from 'react';
 import classnames from 'classnames';
 
@@ -62,7 +63,8 @@ class Alert extends React.Component {
           {this.props.message}
         </div>
         <div
-          onClick={this.handleCloseClick} style={{
+          onClick={this.handleCloseClick}
+          style={{
             backgroundColor: this.props.style.closeButton.bg,
           }}
           className="content close"
@@ -86,16 +88,17 @@ Alert.defaultProps = {
 };
 
 Alert.propTypes = {
-  type: React.PropTypes.oneOf(['info', 'success', 'error']),
-  closeIconClass: React.PropTypes.string.isRequired,
-  additionalClass: React.PropTypes.string.isRequired,
-  style: React.PropTypes.shape({
-    alert: React.PropTypes.style,
-    closeButton: React.PropTypes.style,
+  type: PropTypes.oneOf(['info', 'success', 'error']),
+  closeIconClass: PropTypes.string.isRequired,
+  additionalClass: PropTypes.string.isRequired,
+  style: PropTypes.shape({
+    alert: PropTypes.style,
+    closeButton: PropTypes.style,
   }),
-  message: React.PropTypes.oneOfType([React.PropTypes.string, React.PropTypes.element]),
-  time: React.PropTypes.number.isRequired,
-  icon: React.PropTypes.oneOfType([React.PropTypes.string, React.PropTypes.element]),
+  message: PropTypes.oneOfType([PropTypes.string, PropTypes.element]),
+  time: PropTypes.number.isRequired,
+  icon: PropTypes.oneOfType([PropTypes.string, PropTypes.element]),
 };
 
 export default Alert;
+

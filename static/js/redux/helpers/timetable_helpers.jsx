@@ -1,4 +1,4 @@
-import { getSemester } from '../init';
+import { getSemester } from '../actions/school_actions';
 
 export function getCourseShareLink(code) {
   return `${window.location.href.split('/')[2]}/course/${encodeURIComponent(code)}/${getSemester()}`;
