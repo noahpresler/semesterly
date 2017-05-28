@@ -1,7 +1,7 @@
+import PropTypes from 'prop-types';
 import React from 'react';
 import ClickOutHandler from 'react-onclickout';
 import COLOUR_DATA from '../constants/colours';
-import { getCourseShareLink } from '../helpers/timetable_helpers';
 
 class MasterSlot extends React.Component {
   constructor(props) {
@@ -48,17 +48,19 @@ class MasterSlot extends React.Component {
       for (let i = 0; i < this.props.fakeFriends; i++) {
         friendCircles[i] =
           (<div
-            className="ms-friend" key={i}
+            className="ms-friend"
+            key={i}
             style={{ backgroundImage: 'url(/static/img/blank.jpg)' }}
           />);
       }
     } else {
       friendCircles = this.props.classmates && this.props.classmates.classmates ?
         this.props.classmates.classmates.map(c =>
-          <div
-            className="ms-friend" key={c.img_url}
+          (<div
+            className="ms-friend"
+            key={c.img_url}
             style={{ backgroundImage: `url(${c.img_url})` }}
-          />) : null;
+          />)) : null;
     }
 
     if ((this.props.classmates && this.props.classmates.classmates && friendCircles.length > 4)
@@ -79,7 +81,7 @@ class MasterSlot extends React.Component {
     const profDisp = this.props.professors == null ? null : <h3>{ prof }</h3>;
     const shareLink = this.state.shareLinkShown ?
             (<ShareLink
-              link={getCourseShareLink(this.props.course.code)}
+              link={this.props.getShareLink(this.props.course.code)}
               onClickOut={this.hideShareLink}
             />) :
             null;
@@ -145,7 +147,7 @@ MasterSlot.defaultProps = {
   inModal: false,
   fakeFriends: 0,
   hideCloseButton: false,
-  course: React.PropTypes.shape({
+  course: PropTypes.shape({
     is_waitlist_only: false,
   }),
   classmates: null,
@@ -155,29 +157,30 @@ MasterSlot.defaultProps = {
 };
 
 MasterSlot.propTypes = {
-  colourIndex: React.PropTypes.number.isRequired,
-  inModal: React.PropTypes.bool,
-  fakeFriends: React.PropTypes.number,
-  course: React.PropTypes.shape({
-    id: React.PropTypes.number.isRequired,
-    num_credits: React.PropTypes.number.isRequired,
-    code: React.PropTypes.string.isRequired,
-    name: React.PropTypes.string.isRequired,
-    is_waitlist_only: React.PropTypes.bool,
-    slots: React.PropTypes.arrayOf(React.PropTypes.shape({
-      is_section_filled: React.PropTypes.bool.isRequired,
+  colourIndex: PropTypes.number.isRequired,
+  inModal: PropTypes.bool,
+  fakeFriends: PropTypes.number,
+  course: PropTypes.shape({
+    id: PropTypes.number.isRequired,
+    num_credits: PropTypes.number.isRequired,
+    code: PropTypes.string.isRequired,
+    name: PropTypes.string.isRequired,
+    is_waitlist_only: PropTypes.bool,
+    slots: PropTypes.arrayOf(PropTypes.shape({
+      is_section_filled: PropTypes.bool.isRequired,
     })),
   }).isRequired,
-  professors: React.PropTypes.arrayOf(React.PropTypes.string),
-  classmates: React.PropTypes.shape({
-    classmates: React.PropTypes.arrayOf(React.PropTypes.shape({
-      img_url: React.PropTypes.string,
+  professors: PropTypes.arrayOf(PropTypes.string),
+  classmates: PropTypes.shape({
+    classmates: PropTypes.arrayOf(PropTypes.shape({
+      img_url: PropTypes.string,
     })),
   }),
-  hideCloseButton: React.PropTypes.bool,
-  onTimetable: React.PropTypes.bool.isRequired,
-  fetchCourseInfo: React.PropTypes.func.isRequired,
-  removeCourse: React.PropTypes.func,
+  hideCloseButton: PropTypes.bool,
+  onTimetable: PropTypes.bool.isRequired,
+  fetchCourseInfo: PropTypes.func.isRequired,
+  removeCourse: PropTypes.func,
+  getShareLink: PropTypes.func.isRequired,
 };
 
 export const ShareLink = ({ link, onClickOut }) => (
@@ -186,7 +189,9 @@ export const ShareLink = ({ link, onClickOut }) => (
       <div className="tip-border" />
       <div className="tip" />
       <input
-        className="share-course-link" size={link.length} value={link}
+        className="share-course-link"
+        size={link.length}
+        value={link}
         onClick={e => e.stopPropagation()}
         readOnly
       />
@@ -195,8 +200,9 @@ export const ShareLink = ({ link, onClickOut }) => (
 );
 
 ShareLink.propTypes = {
-  link: React.PropTypes.string.isRequired,
-  onClickOut: React.PropTypes.func.isRequired,
+  link: PropTypes.string.isRequired,
+  onClickOut: PropTypes.func.isRequired,
 };
 
 export default MasterSlot;
+
