@@ -1,7 +1,8 @@
+import PropTypes from 'prop-types';
 import React from 'react';
 import classnames from 'classnames';
 import renderHTML from 'react-render-html';
-import * as PropTypes from '../constants/propTypes';
+import * as SemesterlyPropTypes from '../constants/semesterlyPropTypes';
 
 class Evaluation extends React.Component {
   render() {
@@ -13,12 +14,12 @@ class Evaluation extends React.Component {
             // (i.e. full evaluation, not nav item for full evaluations)
       const s = `<p>${evalData.summary.replace(/\u00a0/g, ' ').replace(/\n/g, '<br />')}</p>`;
       details = (
-        <div id="details">
+        <div className="eval-item__details">
           {renderHTML(s)}
         </div>
             );
       prof = (
-        <div id="prof"><b>Professor: {evalData.professor}</b></div>
+        <div className="eval-item__prof"><b>Professor: {evalData.professor}</b></div>
             );
     }
 
@@ -80,8 +81,8 @@ Evaluation.defaultProps = {
 };
 
 Evaluation.propTypes = {
-  mini: React.PropTypes.bool,
-  evalData: PropTypes.evaluation.isRequired,
+  mini: PropTypes.bool,
+  evalData: SemesterlyPropTypes.evaluation.isRequired,
 };
 
 export default Evaluation;
