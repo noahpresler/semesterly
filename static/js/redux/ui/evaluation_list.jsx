@@ -1,8 +1,9 @@
+import PropTypes from 'prop-types';
 import React from 'react';
 import Evaluation from './evaluation';
 import SideScroller from './side_scroller';
 import { SEMESTER_RANKS } from '../constants/constants';
-import * as PropTypes from '../constants/propTypes';
+import * as SemesterlyPropTypes from '../constants/semesterlyPropTypes';
 
 
 class EvaluationList extends React.Component {
@@ -64,14 +65,15 @@ class EvaluationList extends React.Component {
         // console.log(evaluationScroller)
 
     return (
-      <div className={`modal-entry ${customClass}`} id="course-evaluations">
+      <div className={`modal-entry course-evaluations ${customClass}`}>
         {evaluationScroller}
       </div>);
   }
 }
 
 EvaluationList.propTypes = {
-  evalInfo: React.PropTypes.arrayOf(PropTypes.evaluation).isRequired,
+  evalInfo: PropTypes.arrayOf(SemesterlyPropTypes.evaluation).isRequired,
 };
 
 export default EvaluationList;
+

@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import React from 'react';
 import classnames from 'classnames';
 import { LogFacebookAlertClick } from '../../actions/user_actions';
@@ -85,6 +86,7 @@ class FriendsInClassAlert extends React.Component {
             inModal
             fakeFriends={this.props.mostFriendsCount}
             fetchCourseInfo={() => this.fetchCourseInfo(this.props.mostFriendsClass.id)}
+            getShareLink={() => null}
           />
           <small className="alert-extra">
                         Plus {this.props.totalFriendsCount} more in other classes. Enable the friend
@@ -109,26 +111,27 @@ FriendsInClassAlert.defaultProps = {
 };
 
 FriendsInClassAlert.propTypes = {
-  dismissSelf: React.PropTypes.func.isRequired,
-  showNotification: React.PropTypes.func.isRequired,
-  changeUserInfo: React.PropTypes.func.isRequired,
-  saveSettings: React.PropTypes.func.isRequired,
-  msg: React.PropTypes.string.isRequired,
-  mostFriendsKey: React.PropTypes.number.isRequired,
-  mostFriendsCount: React.PropTypes.number.isRequired,
-  totalFriendsCount: React.PropTypes.number.isRequired,
-  mostFriendsClass: React.PropTypes.shape({
-    id: React.PropTypes.number,
-    slots: React.PropTypes.any,
-    oldSlots: React.PropTypes.any,
+  dismissSelf: PropTypes.func.isRequired,
+  showNotification: PropTypes.func.isRequired,
+  changeUserInfo: PropTypes.func.isRequired,
+  saveSettings: PropTypes.func.isRequired,
+  msg: PropTypes.string.isRequired,
+  mostFriendsKey: PropTypes.number.isRequired,
+  mostFriendsCount: PropTypes.number.isRequired,
+  totalFriendsCount: PropTypes.number.isRequired,
+  mostFriendsClass: PropTypes.shape({
+    id: PropTypes.number,
+    slots: PropTypes.any,
+    oldSlots: PropTypes.any,
   }).isRequired,
-  userInfo: React.PropTypes.shape({
-    data: React.PropTypes.shape({
-      social_offerings: React.PropTypes.bool,
-      social_courses: React.PropTypes.bool,
-      social_all: React.PropTypes.bool,
+  userInfo: PropTypes.shape({
+    data: PropTypes.shape({
+      social_offerings: PropTypes.bool,
+      social_courses: PropTypes.bool,
+      social_all: PropTypes.bool,
     }),
   }).isRequired,
 };
 
 export default FriendsInClassAlert;
+

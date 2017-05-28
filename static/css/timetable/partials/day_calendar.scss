@@ -1,5 +1,5 @@
 @media screen and (max-device-width: 767px) {
-  #calendar {
+  .calendar {
     .fc-toolbar {
       border-bottom: 0;
       border-color: transparent;
@@ -18,7 +18,7 @@
     width: 20%;
   }
 
-  #day-pills {
+  .day-pills__wrapper {
     font-size: 0;
     margin-top: 3px;
     padding: 0 5px;
@@ -35,15 +35,15 @@
     width: 20px;
   }
 
-  #day-pills-wrapper {
+  .day-pills {
     width: 100%;
   }
 
-  #nudgespotInappContainer {
+  #nudgespotInappContainer { // sass-lint:disable-line id-name-format
     display: none;
   }
 
-  #calendar {
+  .calendar {
     .fc-toolbar {
       background-color: $gf9f9f9;
       border-bottom: 0;
@@ -91,7 +91,7 @@
   }
 }
 
-#calendar {
+.calendar {
   &.up {
     margin-top: 65px;
   }
@@ -118,7 +118,7 @@
       background-color: $pink;
       border-radius: 10px;
       bottom: -4px;
-      content: '';
+      content: "";
       display: block;
       height: 10px;
       position: absolute;
