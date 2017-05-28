@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import React from 'react';
 
 // tip: metrics are friends, conflicts, days off, time on/off campus, rating
@@ -41,14 +42,14 @@ const SortRow = props => (
 );
 
 SortRow.defaultProps = {
-  actionText: React.PropTypes.string.isRequired,
-  chosenMetric: React.PropTypes.shape({
-    metric: React.PropTypes.string.isRequired,
-    order: React.PropTypes.string.isRequired,
-    selected: React.PropTypes.bool.isRequired,
+  actionText: PropTypes.string.isRequired,
+  chosenMetric: PropTypes.shape({
+    metric: PropTypes.string.isRequired,
+    order: PropTypes.string.isRequired,
+    selected: PropTypes.bool.isRequired,
   }),
-  addMetric: React.PropTypes.func.isRequired,
-  removeMetric: React.PropTypes.func.isRequired,
+  addMetric: PropTypes.func.isRequired,
+  removeMetric: PropTypes.func.isRequired,
 };
 
 const FooterRow = ({ addNextMetric }) => (
@@ -97,3 +98,4 @@ const SortMenu = ({ metrics, addMetric, removeMetric }) => {
 
 export default SortMenu;
 /* eslint-enable react/prop-types */
+

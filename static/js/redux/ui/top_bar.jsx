@@ -1,9 +1,9 @@
 import React from 'react';
 import SearchBarContainer from './containers/search_bar_container';
-import CourseModalContainer from './containers/course_modal_container';
+import CourseModalContainer from './containers/modals/course_modal_container';
 import TimetableLoaderContainer from './containers/timetable_loader_container';
 import SocialProfileContainer from './containers/social_profile_container';
-import * as PropTypes from '../constants/propTypes';
+import * as SemesterlyPropTypes from '../constants/semesterlyPropTypes';
 
 export const expandSideBar = () => {
   $('.main-bar, .side-bar').removeClass('full-cal').addClass('less-cal');
@@ -68,7 +68,8 @@ class TopBar extends React.Component {
     return (
       <div className="top-bar">
         <img
-          alt="logo" className="semesterly-logo no-print"
+          alt="logo"
+          className="semesterly-logo no-print"
           src="/static/img/logo2.0-32x32.png"
         />
         <div className="semesterly-name no-print">Semester.ly</div>
@@ -98,8 +99,8 @@ class TopBar extends React.Component {
 }
 
 TopBar.propTypes = {
-  userInfo: PropTypes.userInfo.isRequired,
-  currentSemester: PropTypes.semester.isRequired,
+  userInfo: SemesterlyPropTypes.userInfo.isRequired,
+  currentSemester: SemesterlyPropTypes.semester.isRequired,
 };
 
 

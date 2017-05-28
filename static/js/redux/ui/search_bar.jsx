@@ -1,8 +1,9 @@
+import PropTypes from 'prop-types';
 import React from 'react';
 import ClickOutHandler from 'react-onclickout';
 import classNames from 'classnames';
 import SearchSideBarContainer from './containers/search_side_bar_container';
-import * as PropTypes from '../constants/propTypes';
+import * as SemesterlyPropTypes from '../constants/semesterlyPropTypes';
 import SearchResult from './search_result';
 
 class SearchBar extends React.Component {
@@ -43,7 +44,7 @@ class SearchBar extends React.Component {
       } // don't "search" if Nudgespot textarea is focused
       if ($('input:focus').length === 0 && !this.props.explorationModalIsVisible && !e.ctrlKey) {
         if ((e.keyCode >= 48 && e.keyCode <= 57) || (e.keyCode >= 65 && e.keyCode <= 90)) {
-          $('#search-bar input').focus();
+          $('.search-bar input').focus();
           this.setState({ focused: true });
         }
       } else if ($('input:focus').length !== 0) {
@@ -55,7 +56,7 @@ class SearchBar extends React.Component {
           this.props.hoverSearchResult(this.props.hoveredPosition - 1);
         } else if (e.key === 'Escape') {
           this.setState({ focused: false });
-          $('#search-bar input').blur();
+          $('.search-bar input').blur();
         }
       }
     });
@@ -95,8 +96,8 @@ class SearchBar extends React.Component {
       position={i}
     />));
     const seeMore = results.length > 0 && results.length < 3 ? (
-      <div id="see-more" style={{ height: 240 - (60 * results.length) }}>
-        <div id="see-more-inner">
+      <div className="see-more" style={{ height: 240 - (60 * results.length) }}>
+        <div className="see-more__inner">
           <h4>Don&#39;t see what you&#39;re looking for?</h4>
           <p>Try switching semesters or click <i className="fa fa-compass" /> above to
                           filter by areas,
@@ -129,24 +130,23 @@ class SearchBar extends React.Component {
             SearchBar.getAbbreviatedSemesterName(this.props.semester) :
             SearchBar.getSemesterName(this.props.semester);
     return (
-      <div id="search-bar" className="no-print">
-        <div id="search-bar-wrapper">
+      <div className="search-bar no-print">
+        <div className="search-bar__wrapper">
           <ClickOutHandler onClickOut={this.onClickOut}>
-            <div id="search-bar-semester" onMouseDown={this.toggleDropdown}>
+            <div className="search-bar__semester" onMouseDown={this.toggleDropdown}>
               <span
                 className={classNames('tip-down', { down: this.state.showDropdown })}
               />
               {currSem}</div>
             <div
-              id="semester-picker"
-              className={classNames({ down: this.state.showDropdown })}
+              className={classNames('semester-picker', { down: this.state.showDropdown })}
             >
               <div className="tip-border" />
               <div className="tip" />
               { availableSemesters }
             </div>
           </ClickOutHandler>
-          <div id="search-bar-input-wrapper">
+          <div className="search-bar__input-wrapper">
             <input
               ref={(c) => { this.input = c; }}
               placeholder={`Searching ${currSem}`}
@@ -171,20 +171,21 @@ class SearchBar extends React.Component {
 }
 
 SearchBar.propTypes = {
-  addCourse: React.PropTypes.func.isRequired,
-  explorationModalIsVisible: React.PropTypes.bool.isRequired,
-  fetchCourses: React.PropTypes.func.isRequired,
-  hasHoveredResult: React.PropTypes.bool.isRequired,
-  hoverSearchResult: React.PropTypes.func.isRequired,
-  hoveredPosition: React.PropTypes.number.isRequired,
-  isCourseInRoster: React.PropTypes.func.isRequired,
-  isCourseOptional: React.PropTypes.func.isRequired,
-  isFetching: React.PropTypes.bool.isRequired,
-  maybeSetSemester: React.PropTypes.func.isRequired,
-  searchResults: React.PropTypes.arrayOf(PropTypes.searchResult).isRequired,
-  semester: PropTypes.semester.isRequired,
-  showExplorationModal: React.PropTypes.func.isRequired,
-  allSemesters: React.PropTypes.arrayOf(PropTypes.semester).isRequired,
+  addCourse: PropTypes.func.isRequired,
+  explorationModalIsVisible: PropTypes.bool.isRequired,
+  fetchCourses: PropTypes.func.isRequired,
+  hasHoveredResult: PropTypes.bool.isRequired,
+  hoverSearchResult: PropTypes.func.isRequired,
+  hoveredPosition: PropTypes.number.isRequired,
+  isCourseInRoster: PropTypes.func.isRequired,
+  isCourseOptional: PropTypes.func.isRequired,
+  isFetching: PropTypes.bool.isRequired,
+  maybeSetSemester: PropTypes.func.isRequired,
+  searchResults: PropTypes.arrayOf(SemesterlyPropTypes.searchResult).isRequired,
+  semester: SemesterlyPropTypes.semester.isRequired,
+  showExplorationModal: PropTypes.func.isRequired,
+  allSemesters: PropTypes.arrayOf(SemesterlyPropTypes.semester).isRequired,
 };
 
 export default SearchBar;
+
