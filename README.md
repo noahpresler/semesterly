@@ -78,7 +78,9 @@ Here are the style conventions we follow:
     * **Docstrings**: we use [Google style docstrings](https://google.github.io/styleguide/pyguide.html?showone=Comments#Comments) since they are both human readable and interpretable by [Sphinx](http://www.sphinx-doc.org/en/stable/)
 * Javascript - https://github.com/airbnb/javascript
 * React/Redux- https://github.com/airbnb/javascript/tree/master/react
-* CSS - None yet???
+* CSS - https://github.com/airbnb/css
+    * `npm run lint` will not allow warnings
+    * precommits will allow warnings
 
 Unless there's an explicit reason not to, you should write tests for code you commit.
 * Python/Django - doctests, or unittests. For tests touching our db, django has their own module based on unites.
