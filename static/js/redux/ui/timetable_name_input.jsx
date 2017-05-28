@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import React from 'react';
 import classnames from 'classnames';
 
@@ -45,12 +46,13 @@ class TimetableNameInput extends React.Component {
 }
 
 TimetableNameInput.propTypes = {
-  activeLoadedTimetableName: React.PropTypes.string.isRequired,
-  openSignUpModal: React.PropTypes.func.isRequired,
-  upToDate: React.PropTypes.bool.isRequired,
-  isLoggedIn: React.PropTypes.bool.isRequired,
-  changeTimetableName: React.PropTypes.func.isRequired,
+  activeLoadedTimetableName: PropTypes.string.isRequired,
+  openSignUpModal: PropTypes.func.isRequired,
+  upToDate: PropTypes.bool.isRequired,
+  isLoggedIn: PropTypes.bool.isRequired,
+  changeTimetableName: PropTypes.func.isRequired,
 };
 
 
 export default TimetableNameInput;
+
