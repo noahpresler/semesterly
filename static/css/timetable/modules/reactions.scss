@@ -1,14 +1,43 @@
-#reactions .reaction {
-  cursor: pointer;
+.reactions {
+  background-color: $gf3f3f3;
+  border: 1px solid $gd9d9d9;
+  border-radius: 60px;
   display: inline-block;
-  height: 62px;
-  margin: 0 2px;
-  position: relative;
-  text-align: center;
-  transition: all .5s cubic-bezier(.36,-0.64,.34,1.76);
-  transition: transform .3s ease-out;
-  vertical-align: middle;
-  width: 40px;
+  padding: 0 10px;
+
+  .reaction {
+    cursor: pointer;
+    display: inline-block;
+    height: 62px;
+    margin: 0 2px;
+    position: relative;
+    text-align: center;
+    transition: all .5s cubic-bezier(.36, -0.64, .34, 1.76);
+    transition: transform .3s ease-out;
+    vertical-align: middle;
+    width: 40px;
+
+    &:hover.animate {
+      transform: scale(1.2);
+      transition: transform .3s ease-out;
+    }
+
+    &:hover.no-animate {
+      transform: scale(1.1);
+      transition: transform .3s ease-out;
+    }
+
+    .emoji {
+      height: 100%;
+      left: 50%;
+      max-height: 50px;
+      max-width: 50px;
+      position: absolute;
+      top: 50%;
+      transform: translate(-50%, -50%);
+      width: 100%;
+    }
+  }
 }
 
 .swing {
@@ -24,36 +53,8 @@
   transition: transform .3s ease-out;
 }
 
-#reactions .reaction:hover.animate {
-  transform: scale(1.2);
-  transition: transform .3s ease-out;
-}
 
-#reactions .reaction:hover.no-animate {
-  transform: scale(1.1);
-  transition: transform .3s ease-out;
-}
-
-.reaction .emoji {
-  height: 100%;
-  left: 50%;
-  max-height: 50px;
-  max-width: 50px;
-  position: absolute;
-  top: 50%;
-  transform: translate(-50%, -50%);
-  width: 100%;
-}
-
-#reactions {
-  background-color: $gf3f3f3;
-  border: 1px solid $gd9d9d9;
-  border-radius: 60px;
-  display: inline-block;
-  padding: 0 10px;
-}
-
-#reactions-wrapper {
+.reactions-wrapper {
   text-align: center;
   width: 100%;
 }
@@ -128,7 +129,7 @@
   visibility: hidden;
 }
 
-#reaction-dropdown {
+.reaction-dropdown {
   background-color: $ga1a1a1;
   border-radius: 8px;
   color: $gfff;
@@ -142,35 +143,35 @@
   transition: visibility 0s linear 300ms, opacity 300ms;
   visibility: hidden;
   width: 60px;
+
+  .tip-border {
+    border-color: transparent transparent $black-transparent-2;
+    left: 20px;
+    top: -7px;
+  }
+
+  .tip {
+    border-color: transparent transparent $ga1a1a1;
+    left: 20px;
+    top: -7px;
+  }
 }
 
-#reaction-dropdown .tip-border {
-  border-color: transparent transparent $black-transparent-2;
-  left: 20px;
-  top: -7px;
-}
-
-#reaction-dropdown .tip {
-  border-color: transparent transparent $ga1a1a1;
-  left: 20px;
-  top: -7px;
-}
-
-.reaction:hover #reaction-dropdown {
+.reaction:hover .reaction-dropdown {
   opacity: .8;
   transition: visibility 0s linear 0ms, opacity 300ms;
   visibility: visible;
 }
 
 @media (max-width: 810px) {
-	#reactions {
+	.reactions {
     .reaction {
       width: 34px;
     }
   }
 }
 @media (max-width: 355px) {
-	#reactions {
+	.reactions {
     .reaction {
       width: 29px;
     }

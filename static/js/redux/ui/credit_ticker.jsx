@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import React from 'react';
 
 class CreditTicker extends React.Component {
@@ -43,7 +44,7 @@ class CreditTicker extends React.Component {
 
   render() {
     return (
-      <div id="sb-credits" className="col-1-3">
+      <div className="col-1-3 sb-credits">
         <h3>{Math.abs(this.state.displayedCredits).toFixed(2)}</h3>
         <h4>credits</h4>
       </div>
@@ -52,7 +53,8 @@ class CreditTicker extends React.Component {
 }
 
 CreditTicker.propTypes = {
-  numCredits: React.PropTypes.number.isRequired,
+  numCredits: PropTypes.number.isRequired,
 };
 
 export default CreditTicker;
+
