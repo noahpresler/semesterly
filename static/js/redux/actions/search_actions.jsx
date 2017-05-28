@@ -1,12 +1,11 @@
 import fetch from 'isomorphic-fetch';
-import {
-  getCourseSearchEndpoint,
-  getAdvancedCourseSearchEndpoint } from '../constants/endpoints';
-import { store } from '../init';
+import { getCourseSearchEndpoint } from '../constants/endpoints';
+import store from '../init';
 import { getUserSavedTimetables, saveTimetable } from './user_actions';
 import { nullifyTimetable } from './timetable_actions';
 import * as ActionTypes from '../constants/actionTypes';
 import { fetchCourseClassmates } from './modal_actions';
+import { currSem } from '../reducers/semester_reducer';
 
 export const requestCourses = () => ({ type: ActionTypes.REQUEST_COURSES });
 
@@ -99,14 +98,18 @@ export const fetchAdvancedSearchResults = (query, filters) => (dispatch) => {
   });
   // send a request (via fetch) to the appropriate endpoint to get courses
   const state = store.getState();
-  fetch(getAdvancedCourseSearchEndpoint(query, state.explorationModal.page), {
+  fetch(getCourseSearchEndpoint(query), {
     headers: {
       Accept: 'application/json',
       'Content-Type': 'application/json',
     },
     credentials: 'include',
     method: 'POST',
-    body: JSON.stringify(filters),
+    body: JSON.stringify({
+      filters,
+      semester: currSem(state.semester),
+      page: state.explorationModal.page,
+    }),
   })
   .then(response => response.json()) // TODO(rohan): error-check the response
   .then((json) => {
