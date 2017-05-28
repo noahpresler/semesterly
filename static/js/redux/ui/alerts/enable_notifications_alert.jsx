@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import React from 'react';
 import { setARegistrationToken } from '../../actions/user_actions';
 import { setDeclinedNotifications } from '../../util';
@@ -46,10 +47,11 @@ class EnableNotificationsAlert extends React.Component {
 }
 
 EnableNotificationsAlert.propTypes = {
-  dismissSelf: React.PropTypes.func.isRequired,
-  msg: React.PropTypes.string.isRequired,
-  enableNotifications: React.PropTypes.string.isRequired,
-  declineNotifications: React.PropTypes.string.isRequired,
+  dismissSelf: PropTypes.func.isRequired,
+  msg: PropTypes.string.isRequired,
+  enableNotifications: PropTypes.func.isRequired,
+  declineNotifications: PropTypes.func.isRequired,
 };
 
 export default EnableNotificationsAlert;
+

@@ -8,6 +8,8 @@ const userInfo = (state = {
   isFetching: false,
 }, action) => {
   switch (action.type) {
+    case ActionTypes.INIT_STATE:
+      return Object.assign({}, state, { data: action.data.currentUser, isFetching: false });
     case ActionTypes.OVERRIDE_SETTINGS_SHOW:
       return Object.assign({}, state, { overrideShow: action.data });
     case ActionTypes.OVERRIDE_SETTINGS_HIDE:
@@ -21,8 +23,6 @@ const userInfo = (state = {
     }
     case ActionTypes.RECEIVE_USER_INFO_SAVED:
       return Object.assign({}, state, { saving: false });
-    case ActionTypes.USER_INFO_RECEIVED:
-      return Object.assign({}, state, { data: action.data, isFetching: false });
     case ActionTypes.REQUEST_USER_INFO:
       return Object.assign({}, state, { isFetching: true });
     case ActionTypes.RECEIVE_SAVED_TIMETABLES: {

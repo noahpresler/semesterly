@@ -10,6 +10,8 @@ const initialState = {
 
 const ui = (state = initialState, action) => {
   switch (action.type) {
+    case ActionTypes.INIT_STATE:
+      return Object.assign({}, state, { uses12HrTime: action.data.uses12HrTime });
     case ActionTypes.HOVER_SEARCH_RESULT:
       return Object.assign({}, state, { searchHover: action.position });
     case ActionTypes.RECEIVE_TIMETABLES: {
@@ -36,8 +38,6 @@ const ui = (state = initialState, action) => {
       }
       return Object.assign({}, state, { courseToColourIndex });
     }
-    case ActionTypes.SET_USES12HRTIME:
-      return Object.assign({}, state, { uses12HrTime: action.uses12HrTime });
     case ActionTypes.SET_HIGHLIGHT_NOTIFS:
       return Object.assign({}, state, { highlightNotifs: action.highlightNotifs });
     default:

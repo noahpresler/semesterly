@@ -1,705 +1,816 @@
-/* Course Modal Styles */
+// Course Modal Styles
 .course-modal {
-	max-width: 1200px;
-	height: 85%;
-	max-height: 900px;
+  height: 85%;
+  max-height: 900px;
+  max-width: 1200px;
+
+  > div {
+    // using important to override boron default style
+    // can't declare in javascript either, cuz need hover
+    background-color: rgba(0,0,0,.8) !important;
+    height: 100%;
+    outline: none;
+    transition: background-color .2s;
+    width: 100%;
+  }
+
+  + div {
+    // using important to override boron default style
+    // can't declare in javascript either, cuz need hover
+    background-color: rgba(0,0,0,.8) !important;
+    transition: background-color .2s;
+  }
+
+  &.trans + div,
+  &.trans > div {
+    // using important to override boron default style
+    // can't declare in javascript either, cuz need hover
+    background-color: transparent !important;
+  }
 }
-.course-modal > div {
-	outline: none;
-	width: 100%;
-	height: 100%;
+
+.course-modal.trans .modal-content,
+.course-modal.trans .modal-header,
+.course-modal.trans .modal-header h1,
+.course-modal.trans .modal-header h2,
+.course-modal.trans .modal-body p,
+.course-modal.trans .modal-body p a,
+.course-modal.trans .modal-body .credits h4,
+.course-modal.trans .modal-body .rating-module h4,
+.course-modal.trans .modal-body .modal-module {
+  background-color: transparent;
+  border-color: transparent;
+  color: transparent;
 }
-.course-modal + div {
-	/* using important to override boron default style */
-	/* can't declare in javascript either, cuz need hover */
-	background-color: rgba(0,0,0,.8) !important;
-	transition: background-color .2s;
+
+.course-modal.trans .modal-close,
+.course-modal.trans .modal-share,
+.course-modal.trans .modal-save,
+.course-modal.trans .modal-add,
+.course-modal.trans .modal-body .rating-module,
+.course-modal.trans .modal-body .modal-module,
+.course-modal.trans .modal-body .modal-module-header,
+.trans .reactions-wrapper {
+  opacity: 0;
+  visibility: hidden;
 }
-.course-modal.trans + div {
-	/* using important to override boron default style */
-	/* can't declare in javascript either, cuz need hover */
-	background-color: transparent !important;
+
+.trans .capacity {
+  opacity: 0;
+  visibility: hidden;
 }
-.course-modal>div {
-	/* using important to override boron default style */
-	/* can't declare in javascript either, cuz need hover */
-	background-color: rgba(0,0,0,.8) !important;
-	transition: background-color .2s;
-}
-.course-modal.trans>div {
-	/* using important to override boron default style */
-	/* can't declare in javascript either, cuz need hover */
-	background-color: transparent !important;
-}
-.course-modal.trans #modal-content,
-.course-modal.trans #modal-header,
-.course-modal.trans #modal-header h1,
-.course-modal.trans #modal-header h2,
-.course-modal.trans #modal-body p,
-.course-modal.trans #modal-body p a,
-.course-modal.trans #modal-body .credits h4,
-.course-modal.trans #modal-body .rating-module h4,
-.course-modal.trans #modal-body .modal-module {
-	background-color: transparent;
-	color: transparent;
-	border-color: transparent;
-}
-.course-modal.trans #modal-close,
-.course-modal.trans #modal-share,
-.course-modal.trans #modal-save,
-.course-modal.trans #modal-add,
-.course-modal.trans #modal-body .rating-module,
-.course-modal.trans #modal-body .modal-module,
-.course-modal.trans #modal-body .modal-module-header,
-.trans #reactions-wrapper {
-	opacity: 0;
-	visibility: hidden;
-}
-.trans .capacity-tracker-wrapper {
-	opacity: 0;
-	visibility: hidden;
-}
+
 .course-modal .master-slot .slot-bar {
-    border-top-left-radius: 5px;
-    border-bottom-left-radius: 5px;
+  border-bottom-left-radius: 5px;
+  border-top-left-radius: 5px;
 }
 
 .course-modal .img-icon {
-	position: absolute;
-	top: 50%;
-	left: 50%;
-	transform: translate(-50%, -50%);
+  left: 50%;
+  position: absolute;
+  top: 50%;
+  transform: translate(-50%, -50%);
 }
 
-.course-modal #modal-content .loader {
-	width: 90px;
-	height: 90px;
+.course-modal .modal-content .loader {
+  height: 90px;
+  width: 90px;
 }
 
 .friend {
-    height: 30px;
-    overflow: hidden;
-    margin-bottom: 3px;
-    float: left;
-    position: relative;
-    width: 100%;
+  float: left;
+  height: 30px;
+  margin-bottom: 3px;
+  overflow: hidden;
+  position: relative;
+  width: 100%;
 }
 
 .course-modal .ms-friend {
-    float: left;
-    margin-left: 0px;
-    padding: 0;
-    height: 30px;
-    width: 30px;
-    margin-right: 4.5px;
+  float: left;
+  height: 30px;
+  margin-left: 0;
+  margin-right: 4.5px;
+  padding: 0;
+  width: 30px;
+}
+
+// Course Modal Content Styles
+.modal-content {
+  background-color: $gfff;
+  border: 0;
+  border-radius: 0;
+  box-shadow: none;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  transition: background-color .2s, color .2s;
+  width: 100%;
+}
+
+.modal-header {
+  background-color: $gf3f3f3;
+  border-bottom: 1px solid $gddd;
+  padding: 20px 10px 10px;
+  position: relative;
+  transition: background-color .2s, color .2s;
+  z-index: 11;
+
+  h1 {
+    color: $primary-navy;
+    font-size: 36px;
+    margin: 0;
+    padding-right: 85px;
+    transition: color .2s;
+  }
+
+  h2 {
+    color: $g777;
+    font-family: $font-body;
+    font-size: 16px;
+    font-weight: 400;
+    margin: 10px 0;
+    padding-right: 15%;
+    transition: color .2s;
+  }
 }
 
 
-/* Course Modal Content Styles */
-#modal-content {
-	width: 100%;
-	height: 100%;
-	background-color: $gfff;
-	transition: background-color .2s, color .2s;
-	display: flex;
-	flex-direction: column;
-}
-#modal-header {
-	z-index: 11;
-	position: relative;
-	padding: 20px 10px 10px;
-	background-color: $gf3f3f3;
-	border-bottom: 1px solid $gddd;
-	transition: background-color .2s, color .2s;
-}
-#modal-header h1 {
-	margin: 0;
-	font-size: 36px;
-	padding-right: 85px;
-	color: #34495E;
-	transition: color .2s;
-}
-#modal-header h2 {
-	margin: 10px 0;
-	font-size: 16px;
-	color: $g777;
-	font-weight: 400;
-	padding-right: 15%;
-	transition: color .2s;
-	font-family: $font-body;
+// Course Modal Corner Actions
+.modal-close,
+.modal-share,
+.modal-save {
+  color: $g777;
+  cursor: pointer;
+  height: 20px;
+  opacity: 1;
+  position: absolute;
+  top: 5px;
+  transition: color .2s, transform .3s, opacity .2s, visibility .2s;
+  visibility: visible;
+  width: 20px;
+
+  i {
+    font-size: 20px;
+    line-height: 20px;
+  }
 }
 
-/* Course Modal Corner Actions */
-#modal-close,
-#modal-share,
-#modal-save {
-	position: absolute;
-	top: 5px;
-	width: 20px;
-	height: 20px;
-	color: $g777;
-	cursor: pointer;
-	opacity: 1;
-	visibility: visible;
-	transition: color .2s, transform .3s, opacity .2s, visibility .2s;
-}
-#modal-close i,
-#modal-share i,
-#modal-save i {
-	line-height: 20px;
-	font-size: 20px;
-}
-#modal-close {
-	right: 5px;
-}
-#modal-share {
-	right: 30px;
-}
-#modal-header #share-course-link-wrapper {
-    position:absolute;
-    top:35px;
-    right:5px;
-    height:33px;
-    padding:0px 5px;
-    background-color:#D6D6D6;
-    border-radius:2px;
-}
-#modal-header #share-course-link {
-	font-size:14px;
-    height:25px;
-    margin-top:4px;
-}
-#modal-header #share-course-link-wrapper .tip {
-    top:-7px;
-    right:28px;
-    border:1px solid #ccc;
-}
-#modal-header #share-course-link-wrapper .tip-border {
-    top:-7px;
-    right:28px;
-}
-#modal-save {
-	right: 55px;
-}
-#modal-close:hover {
-	color: #C0392B;
-	transform: scale(1.2);
-}
-#modal-share:hover {
-	color: #5B99CE;
-	transform: scale(1.2);
-}
-#modal-save:hover {
-	color: #5BCE84;
-	transform: scale(1.2);
+.modal-close {
+  right: 5px;
+
+  &:hover {
+    color: #C0392B;
+    transform: scale(1.2);
+  }
 }
 
-/* Course Modal Add */
-#modal-add {
-	position: absolute;
-	bottom: -34px;
-	right: 10%;
-	border-radius: 100%;
-	width: 60px;
-	height: 60px;
-	background-color: #34495E;
-	cursor: pointer;
-	opacity: 1;
-	visibility: visible;
-	transition: background-color .2s, opacity .2s, visibility .2s;
-	z-index: 1;
+.modal-share {
+  right: 30px;
+
+  &:hover {
+    color: #5B99CE;
+    transform: scale(1.2);
+  }
 }
-#modal-add i {
-	text-align: center;
-	width: 100%;
-	line-height: 60px;
-	color: $gfff;
-	font-size: 24px;
+
+.modal-header {
+  .share-course-link-wrapper {
+    background-color: $gd4d4d4;
+    border-radius: 2px;
+    height: 33px;
+    padding: 0 5px;
+    position: absolute;
+    right: 5px;
+    top: 35px;
+
+    .tip {
+      border: 1px solid $gccc;
+      right: 28px;
+      top: -7px;
+    }
+
+    .tip-border {
+      right: 28px;
+      top: -7px;
+    }
+  }
+
+  .share-course-link {
+    font-size: 14px;
+    height: 25px;
+    margin-top: 4px;
+  }
 }
-#modal-add:hover {
-	background-color: #1858BB;
+
+.modal-save {
+  right: 55px;
+
+  &:hover {
+    color: #5BCE84;
+    transform: scale(1.2);
+  }
 }
+
+// Course Modal Add
+.modal-add {
+  background-color: $primary-navy;
+  border-radius: 100%;
+  bottom: -34px;
+  cursor: pointer;
+  height: 60px;
+  opacity: 1;
+  position: absolute;
+  right: 10%;
+  transition: background-color .2s, opacity .2s, visibility .2s;
+  visibility: visible;
+  width: 60px;
+  z-index: 1;
+
+  i {
+    color: $gfff;
+    font-size: 24px;
+    line-height: 60px;
+    text-align: center;
+    width: 100%;
+  }
+
+  &:hover {
+    background-color: #1858BB;
+  }
+
+  &.in-roster {
+    &:hover {
+      animation: pulsate .8s ease-out infinite;
+      background-color: #C0392B;
+    }
+  }
+
+  &.on-active-timetable {
+    background-color: #2DD6B5;
+
+    &:hover {
+      background-color: #56ECCF;
+    }
+  }
+}
+
 @keyframes pulsate {
-0% { opacity: 1; transform: scale(1); }
-50% { opacity: 1; transform: scale(1.5); }
-100% { opacity: 1; transform: scale(1); }
-}
-#modal-add.in-roster:hover {
-	background-color: #C0392B;
-	animation: pulsate 0.8s ease-out infinite;
-}
-#modal-add.on-active-timetable{
-	background-color: #2DD6B5;
-}
-#modal-add.on-active-timetable:hover{
-	background-color: #56ECCF;
+  0% {
+    opacity: 1;
+    transform: scale(1);
+  }
+
+  50% {
+    opacity: 1;
+    transform: scale(1.5);
+  }
+
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
 }
 
-/* Course Modal Body */
-#modal-body {
-	overflow-y: auto;
-	flex: 1;
-	width: 100%;
-}
-#modal-body [class^="col-"] {
-	padding: 30px 15px;
+
+// Course Modal Body
+.modal-body {
+  flex: 1;
+  overflow-y: auto;
+  width: 100%;
+
+  [class^="col-"] {
+    padding: 30px 15px;
+  }
+
+  p {
+    color: $g555;
+    font-size: 16px;
+    line-height: 22px;
+    margin: 7px 0;
+    padding: 0 5px;
+    transition: color .2s;
+    word-wrap: break-word;
+  }
+
+  .prerequisites {
+    p {
+      margin-top: 2px;
+    }
+  }
+
+  .credits {
+    h3 {
+      font-size: 60px;
+      font-weight: 100;
+      line-height: 66px;
+      margin: 0;
+      text-align: center;
+    }
+
+    h4 {
+      color: $g999;
+      font-size: 30px;
+      font-weight: 200;
+      line-height: 30px;
+      margin: 0 auto 20px;
+      text-align: center;
+      transition: color .3s;
+    }
+  }
+
+  .rating-module {
+    opacity: 1;
+    transition: opacity .2s, visibility .2s;
+    visibility: visible;
+
+    h4 {
+      color: $g777;
+      font-size: 14px;
+      font-weight: 400;
+      margin: 0 auto 5px;
+      text-align: center;
+      transition: color .2s;
+    }
+  }
+
+  .textItem {
+    line-height: 20px;
+  }
+
+  .course-link {
+    &,
+    &:link,
+    &:visited {
+      color: $g555;
+      cursor: pointer;
+      position: relative;
+      text-decoration: underline;
+      transition: color .3s;
+    }
+
+    &:active,
+    &:hover {
+      color: #3473c8;
+
+      .course-link-tip {
+        opacity: 1;
+        visibility: visible;
+      }
+    }
+
+    .course-link-tip {
+      background-color: #FD7473;
+      border-radius: 5px;
+      color: $g222;
+      height: 60px;
+      left: -10px;
+      line-height: 20px;
+      opacity: 0;
+      overflow: hidden;
+      position: absolute;
+      top: -10px;
+      transition: opacity .3s, visibility .3s;
+      visibility: hidden;
+      white-space: nowrap;
+      z-index: 1;
+
+      span {
+        display: block;
+      }
+    }
+
+    .course-link-content {
+      padding: 10px;
+    }
+  }
 }
 
-h3.modal-module-header {
-	font-size: 14px;
-	padding: 10px 5px;
-	margin: 0;
-	color: $g777;
-	font-weight: 300;
-	clear: both;
-	position: relative;
-	transition: color .2s;
-}
-h3.modal-module-header:after {
-	content: "";
-	display: block;
-	position: absolute;
-	bottom: 5px;
-	left: 0;
-	width: 100%;
-	height: 1px;
-	background-color: $gddd;
-	transition: background-color .2s;
-}
-h3.modal-module-header small {
-	font-size:11px;
-	color:$g777;
+
+.modal-module-header {
+  clear: both;
+  color: $g777;
+  font-size: 14px;
+  font-weight: 300;
+  margin: 0;
+  padding: 10px 5px;
+  position: relative;
+  transition: color .2s;
+
+  &::after {
+    background-color: $gddd;
+    bottom: 5px;
+    content: "";
+    display: block;
+    height: 1px;
+    left: 0;
+    position: absolute;
+    transition: background-color .2s;
+    width: 100%;
+  }
+
+  small {
+    color: $g777;
+    font-size: 11px;
+  }
 }
 
-#modal-body p {
-	font-size: 16px;
-	line-height: 22px;
-	color: $g555;
-	padding: 0 5px;
-	margin: 7px 0;
-	transition: color .2s;
-	word-wrap:break-word;
-}
-#modal-body .prerequisites p {
-	margin-top:2px;
-}
-#modal-body .credits h3 {
-	text-align: center;
-	font-weight: 100;
-	margin: 0;
-	font-size: 60px;
-	line-height: 66px;
-}
-#modal-body .credits h4 {
-	text-align: center;
-	color: $g999;
-	margin: 0 auto 20px;
-	line-height: 30px;
-	font-size: 30px;
-	font-weight: 200;
-	transition: color .3s;
-}
-#modal-body .rating-module {
-	opacity: 1;
-	visibility: visible;
-	transition: opacity .2s, visibility .2s;
-}
-#modal-body .rating-module h4 {
-	color: $g777;
-	text-align: center;
-	font-size: 14px;
-	font-weight: 400;
-	margin: 0 auto 5px;
-	transition: color .2s;
-}
-#modal-body .textItem {
-	line-height: 20px;
-}
-#modal-body a.course-link,
-#modal-body a.course-link:link,
-#modal-body a.course-link:visited {
-	color: $g555;
-	text-decoration: underline;
-	cursor: pointer;
-	position: relative;
-	transition: color .3s;
-}
-#modal-body a.course-link:active,
-#modal-body a.course-link:hover {
-	color: #3473c8;
-}
-#modal-body a.course-link .course-link-tip {
-	opacity: 0;
-	visibility: hidden;
-	transition: opacity .3s, visibility .3s;
-	white-space: nowrap;
-	position: absolute;
-	top: -10px;
-	left: -10px;
-	height: 60px;
-	background-color: #FD7473;
-	color: #222;
-	border-radius: 5px;
-	line-height: 20px;
-	z-index: 1;
-	overflow: hidden;
-}
-#modal-body a.course-link .course-link-content {
-	padding: 10px;
-}
-#modal-body a.course-link .course-link-tip span {
-	display: block;
-}
-#modal-body a.course-link:hover .course-link-tip {
-	opacity: 1;
-	visibility: visible;
-}
-
-/* Course Modal Sections */
+// Course Modal Sections
 .modal-section {
-	padding: 7px;
-	width: 50%;
-	float: left;
-	cursor: pointer;
-	position: relative;
-	background-color: rgba(255,255,255,.8);
-	transition: background-color .2s;
+  background-color: rgba(255,255,255,.8);
+  cursor: pointer;
+  float: left;
+  padding: 7px;
+  position: relative;
+  transition: background-color .2s;
+  width: 50%;
+
+  &:hover {
+    background-color: $geee;
+  }
+
+  &:nth-child(2n+0) {
+    clear: both;
+  }
+
+  h4 {
+    color: $primary-navy;
+    font-size: 16px;
+    font-weight: 400;
+    line-height: 20px;
+    margin: 0;
+
+    span {
+      display: inline-block;
+      margin-right: 3px;
+      vertical-align: middle;
+    }
+
+    i {
+      display: inline-block;
+      font-size: 14px;
+      line-height: 20px;
+      vertical-align: middle;
+    }
+  }
+
+  h5 {
+    color: $g777;
+    font-size: 13px;
+    font-weight: 400;
+    line-height: 16px;
+    margin: 0;
+  }
+
+  h6 {
+    color: $g777;
+    font-size: 10px;
+    font-weight: 400;
+    line-height: 14px;
+    margin: 0;
+
+    .green {
+      color: $green;
+    }
+
+    .yellow {
+      color: $yellow;
+    }
+
+    .red {
+      color: $red;
+    }
+  }
+
+  .fa-lock  {
+    bottom: 7px;
+    color: $primary-navy;
+    font-size: 14px;
+    line-height: 20px;
+    opacity: 0;
+    position: absolute;
+    right: 7px;
+    text-align: center;
+    transition: opacity .3s, visibility .3s;
+    visibility: hidden;
+    width: 20px;
+  }
 }
-.modal-section:hover {
-	background-color: $geee;
+
+.hidden-modal {
+  color: rgba(52, 73, 94, 0);
 }
-.modal-section:nth-child(2n+0) {
-	clear: both;
-}
-.modal-section h4 {
-	font-size: 16px;
-	font-weight: 400;
-	line-height: 20px;
-	margin: 0;
-	color: #34495E;
-}
-.modal-section h4 span {
-	margin-right: 3px;
-	display: inline-block;
-	vertical-align: middle;
-}
-.modal-section h4 i {
-	display: inline-block;
-	vertical-align: middle;
-	font-size: 14px;
-	line-height: 20px;
-}
-.modal-section h5 {
-	font-size: 13px;
-	font-weight: 400;
-	margin: 0;
-	line-height: 16px;
-	color: $g777;
-}
-.modal-section h6 {
-	font-size: 10px;
-	font-weight: 400;
-	margin: 0;
-	line-height: 14px;
-	color: $g777;
-}
-.modal-section h6 .green {
-	color: $green;
-}
-.modal-section h6 .yellow {
-	color: $yellow;
-}
-.modal-section h6 .red {
-	color: $red;
-}
-.hidden-modal{
-	color: rgba(52, 73, 94, 0);
-}
+
 .modal-section .fa-calendar-check-o {
-	opacity: 0;
-	visibility: hidden;
-	transition: opacity .3s, visibility .3s;
+  opacity: 0;
+  transition: opacity .3s, visibility .3s;
+  visibility: hidden;
 }
+
 .modal-section.on-active-timetable .fa-calendar-check-o,
 .modal-section.locked .fa-lock {
-	opacity: 1;
-	visibility: visible;
-}
-.modal-section .fa-lock  {
-	position: absolute;
-	bottom: 7px;
-	right: 7px;
-	font-size: 14px;
-	line-height: 20px;
-	width: 20px;
-	text-align: center;
-	color: #34495E;
-	opacity: 0;
-	visibility: hidden;
-	transition: opacity .3s, visibility .3s;
-}
-#modal-body .friend p {
-    font-size: 11px;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    padding: 0;
-    margin: 0;
-    line-height: 30px;
-    position: absolute;
-    top: 0;
-    left: 35px;
-    right: 0px;
+  opacity: 1;
+  visibility: visible;
 }
 
-#friends-inner {
-	margin: 0 auto;
-	position: relative;
+.modal-body .friend p {
+  font-size: 11px;
+  left: 35px;
+  line-height: 30px;
+  margin: 0;
+  overflow: hidden;
+  padding: 0;
+  position: absolute;
+  right: 0;
+  text-overflow: ellipsis;
+  top: 0;
+  white-space: nowrap;
 }
-#modal-content #friends-inner .img-icon {
-	position: static;
-	transform: none;
-	float: left;
-	margin: 5px;
+
+.friends-inner {
+  margin: 0 auto;
+  position: relative;
+
+  .img-icon {
+    float: left;
+    margin: 5px;
+    position: static;
+    transform: none;
+  }
+
+  .loader {
+    border-width: 5px;
+    height: 20px;
+    width: 20px;
+  }
+
+  .loading {
+    p {
+      float: left;
+      font-size: 11px;
+      line-height: 20px;
+      margin: 5px;
+      padding: 0;
+    }
+  }
+
+  p {
+    &.null {
+      color: $gaaa;
+      font-size: 11px;
+      line-height: 16px;
+      margin: 2px 3px;
+    }
+  }
+
+  .conversion {
+    text-align: center;
+
+    p {
+      color: $g999;
+      font-size: 12px;
+      line-height: 16px;
+      margin: 0 0 10px;
+      text-align: left;
+    }
+  }
 }
-#modal-content #friends-inner .loader {
-	border-width: 5px;
-	width: 20px;
-	height: 20px;
-}
-#modal-content #friends-inner .loading p {
-	float: left;
-	margin: 5px;
-	font-size: 11px;
-	line-height: 20px;
-	padding: 0;
-}
-#friends-inner p.null {
-	font-size: 11px;
-	line-height: 16px;
-	color: $gaaa;
-	margin: 2px 3px;
-}
-#friends-inner .conversion {
-	text-align: center;
-}
-#friends-inner .conversion p {
-	font-size: 12px;
-	color: $g999;
-	text-align: left;
-	line-height: 16px;
-	margin: 0 0 10px 0;
-}
+
 .conversion-image {
-	width: 100%;
-	height: 45px;
-	background-size: contain;
-	background-position: center;
-	background-repeat: no-repeat;
-	background-image: url(/static/img/get_facebook.png);
-	margin: 10px 0;
-}
-#modal-content .conversion a {
-	padding: 4px 7px;
-	font-size: 11px;
-	margin: 10px 0 5px 0;
-	cursor: pointer;
-	color: $gfff;
-	background-color: #3b5998;
-}
-#modal-content .conversion a i {
-	margin-right: 4px;
+  background: url("/static/img/get_facebook.png") center no-repeat;
+  background-size: contain;
+  height: 45px;
+  margin: 10px 0;
+  width: 100%;
 }
 
-.academic-support li {
-	list-style-type: none;
-	padding-top: 5px;
+.modal-content .conversion a {
+  background-color: $facebook;
+  color: $gfff;
+  cursor: pointer;
+  font-size: 11px;
+  margin: 10px 0 5px;
+  padding: 4px 7px;
 }
-.academic-support .integration-image {
-	width: 22px;
-	height: 22px;
-	float: left;
-	background-size: contain;
-	background-position: center;
-	background-repeat: no-repeat;
-	margin-right: 5px;
+
+.modal-content .conversion a i {
+  margin-right: 4px;
 }
-.academic-support h4 {
-	margin: 0;
-	font-size: 14px;
-	float: left;
-	line-height: 22px;
-}
-#modal-body .academic-support a {
-	float: right;
-	font-size: 12px;
-}
-#modal-body .academic-support p {
-	clear: both;
-	font-size: 12px;
-	line-height: 14px;
-	padding: 5px 0 0;
+
+.academic-support {
+  li {
+    list-style-type: none;
+    padding-top: 5px;
+  }
+
+  .integration-image {
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: contain;
+    float: left;
+    height: 22px;
+    margin-right: 5px;
+    width: 22px;
+  }
+
+  h4 {
+    float: left;
+    font-size: 14px;
+    line-height: 22px;
+    margin: 0;
+  }
+
+  a {
+    float: right;
+    font-size: 12px;
+  }
+
+  p {
+    clear: both;
+    font-size: 12px;
+    line-height: 14px;
+    padding: 5px 0 0;
+  }
 }
 
 @media (max-width: 766px) {
-	#modal-header h1 {
-		font-size: 32px;
-	}
-	#modal-header h2 {
-		font-size: 14px;
-	}
-	#friends-inner .conversion p {
-		text-align: center;
-	}
+  .modal-header {
+    h1 {
+      font-size: 32px;
+    }
+
+    h2 {
+      font-size: 14px;
+    }
+  }
+
+  .friends-inner {
+    .conversion {
+      p {
+        text-align: center;
+      }
+    }
+  }
 }
 
 @media (max-width: 500px) {
-	.course-modal {
-		position: static;
+  .course-modal {
+    position: static;
+  }
+
+  .modal-header {
+    padding-bottom: 30px;
+
+    h1 {
+      font-size: 20px;
+    }
+
+    h2 {
+      font-size: 14px;
+    }
 	}
-	#modal-header {
-		padding-bottom: 30px;
+
+  .modal-body {
+    padding-top: 20px;
 	}
-	#modal-header h1 {
-		font-size: 20px;
+
+  .modal-add,
+  .modal-share,
+  .modal-save {
+    background-color: $primary-navy;
+    border-radius: 100%;
+    bottom: -34px;
+    cursor: pointer;
+    height: 60px;
+    position: absolute;
+    top: auto;
+    transform: translateX(-50%);
+    transition: background-color .3s;
+    width: 60px;
+    z-index: 1;
+
+    i {
+      color: $gfff;
+      font-size: 24px;
+      line-height: 60px;
+      text-align: center;
+      width: 100%;
+    }
+
+    &:hover {
+      transform: scale(1) translateX(-50%);
+    }
 	}
-	#modal-header h2 {
-		font-size: 14px;
+
+  .modal-share {
+    left: 25%;
+
+    &:hover {
+      background-color: #5b99ce;
+    }
 	}
-	#modal-body {
-		padding-top: 20px;
+
+  .modal-save {
+    left: 50%;
+
+    &:hover {
+      background-color: #5bce84;
+    }
 	}
-	#modal-add,
-	#modal-share,
-	#modal-save {
-		position: absolute;
-		top: auto;
-		bottom: -34px;
-		border-radius: 100%;
-		width: 60px;
-		height: 60px;
-		background-color: #34495E;
-		cursor: pointer;
-		transition: background-color .3s;
-		z-index: 1;
-		transform: translateX(-50%);
+
+  .modal-add {
+    left: 75%;
 	}
-	#modal-add i,
-	#modal-share i,
-	#modal-save i {
-		text-align: center;
-		width: 100%;
-		line-height: 60px;
-		color: $gfff;
-		font-size: 24px;
-	}
-	#modal-share {
-		left: 25%;
-	}
-	#modal-save {
-		left: 50%;
-	}
-	#modal-add {
-		left: 75%;
-	}
-	#modal-add:hover,
-	#modal-share:hover,
-	#modal-save:hover {
-		transform: scale(1) translateX(-50%);
-	}
-	#modal-share:hover {
-		background-color: #5B99CE;
-	}
-	#modal-save:hover {
-		background-color: #5BCE84;
-	}
+
+
 }
 
-.capacity-tracker-wrapper {
-	text-align: center;
+.capacity {
+  text-align: center;
 }
 
-#capacity-attention-wrapper {
-	line-height: 25px;
-	height: 25px;
-	font-size: 16px;
-	display: inline-block;
-	margin-bottom: 10px;
+.capacity__attention {
+  display: inline-block;
+  font-size: 16px;
+  height: 25px;
+  line-height: 25px;
+  margin-bottom: 10px;
+
+  > .attention__tag {
+    background-color: rgb(177, 81, 80);
+    border-radius: 5px;
+    color: $gfff;
+    float: left;
+    padding-right: 10px;
+
+    .slot-bar {
+      background-color: rgb(253, 116, 115);
+      border-bottom-left-radius: 5px;
+      border-top-left-radius: 5px;
+      float: left;
+      height: 25px;
+      position: relative;
+    }
+
+    .attention__clock-icon {
+      display: inline-block;
+      padding-left: 10px;
+      padding-right: 10px;
+    }
+
+    span {
+      display: inline-block;
+    }
+  }
+
+  .attention__text {
+    color: $g555;
+    float: left;
+    margin-left: 5px;
+
+    .highlight {
+      color: rgb(177, 81, 80);
+    }
+  }
 }
 
-#capacity-attention-wrapper > div#attention-tag {
-	float:left;
-	background-color: rgb(177, 81, 80);
-	color: rgb(255, 255, 255);
-	border-radius: 5px;
-	padding-right: 10px; 
-}
-
-#capacity-attention-wrapper > div#attention-tag div.slot-bar {
-	float:left;
-	position: relative;
-	background-color: rgb(253, 116, 115);
-	border-bottom-left-radius: 5px;
-	border-top-left-radius: 5px;
-	height: 25px;
-}
-
-#capacity-attention-wrapper > div#attention-tag div#clock-icon {
-	display: inline-block;
-	padding-right: 10px;
-	padding-left: 10px;
-}
-
-#capacity-attention-wrapper > div#attention-tag span {
-	display: inline-block;
-}
-
-
-#capacity-attention-wrapper #attention-text {
-	float: left;
-	margin-left: 5px;
-	color: $g555;
-}
-
-#capacity-attention-wrapper #attention-text .highlight {
-	color: rgb(177, 81, 80);
-}
-
-/* NOTE: 1088px is fluid up to XXXX% */
+// NOTE: 1088px is fluid up to XXXX%
 @media (max-width: 1088px) {
-	#capacity-attention-wrapper > div#attention-tag {
-		float: none;
+  .capacity__attention {
+    font-size: 16px;
+    margin-top: 15px;
+
+    .attention__tag {
+      float: none;
+    }
+
+    .attention__text {
+      float: none;
+      margin: 5px 0 0;
+    }
 	}
 
-	#capacity-attention-wrapper #attention-text {
-		float: none;
-		margin: 5px 0 0 0;
-	}
-	#capacity-attention-wrapper {
-		font-size: 16px;
-		margin-top: 15px;
-	}
 }
 
 @media (max-width: 801px) {
-	#capacity-attention-wrapper {
-		font-size: 14px;
+  .capacity__attention {
+    font-size: 14px;
 	}
 }
 
 @media (max-width: 670px) {
-	#capacity-attention-wrapper {
-		font-size: 13px;
+  .capacity__attention {
+    font-size: 13px;
 	}
 }
 
-#capacity-tracker-text {
-	color: #777;
-	font-size: 12px;
-	margin-top: 30px;
-	margin-bottom: 5px;
-}
+.capacity__tracker-text {
+  color: $g777;
+  font-size: 12px;
+  margin-bottom: 5px;
+  margin-top: 30px;
 
-#capacity-tracker-text span {
-	font-weight: 300;
+  span {
+    font-weight: 300;
+  }
 }

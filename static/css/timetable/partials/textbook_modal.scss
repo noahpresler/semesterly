@@ -1,154 +1,166 @@
-.abnb-modal.textbook-modal {
+.abnb-modal {
+  &.textbook-modal {
+    height: 85%;
     max-width: 600px;
-    height:85%;
     overflow: auto;
-}
 
-.abnb-modal.textbook-modal > div {
-    height: 100%;
-}
+    > div {
+      height: 100%;
+    }
 
-.abnb-modal.textbook-modal form {
-    height: 100%;
-    position: relative;
-}
+    form {
+      height: 100%;
+      position: relative;
+    }
+  }
 
-.textbook-modal #tb-list-container {
-    padding: 10px 30px 75px;
-    height: 100%;
-    width: 100%;
-    position: absolute;
-    top: 0;
-    bottom: 66px;
-    overflow: scroll;
-}
-
-.abnb-modal h3.modal-module-header {
-    font-size: 14px;
-    padding: 10px 5px;
-    margin: 0;
-    color: $g777;
-    font-weight: 300;
+  .modal-module-header {
     clear: both;
+    color: $g777;
+    font-size: 14px;
+    font-weight: 300;
+    margin: 0;
+    padding: 10px 5px;
     position: relative;
     transition: color .2s;
+  }
 }
 
-.textbook-modal .tb-image-wrapper {
-    height: 100px;
-}
-
-.textbook-modal .textbook img {
-    width: 75px;
-}
-
-#add-to-cart {
-    background-color: #FF9900;
+.textbook-modal {
+  .tb-list-container {
+    bottom: 66px;
+    height: 100%;
+    overflow: scroll;
+    padding: 10px 30px 75px;
     position: absolute;
-    bottom: 12px;
-    right: 25px;
-    height: 40px;
-    width: 140px;
-    border-radius: 6px;
-    color: white;
-    font-size: 15px;
-    text-align: center;
-    vertical-align: middle;
-    border: none;
-}
-
-#add-to-cart .button-label i {
-    margin-right: 5px;
-}
-
-.textbook-modal .modal-footer {
-    z-index: 11;
-    height: 66px;
+    top: 0;
     width: 100%;
-    border: 1px solid $gddd;
-    position: absolute;
-    bottom: 0px;
+  }
+
+  .tb-image-wrapper {
+    height: 100px;
+  }
+
+  .textbook {
+    img {
+      width: 75px;
+    }
+  }
+
+  .modal-footer {
     background-color: $geee;
+    border: 1px solid $gddd;
+    bottom: 0;
+    height: 66px;
+    position: absolute;
+    width: 100%;
+    z-index: 11;
+
+    p {
+      color: $g777;
+      font-size: 12px;
+      font-weight: 300;
+      line-height: 16px;
+      padding-right: 162px;
+      text-align: left;
+    }
+  }
+
+  .modal-header {
+    padding: 20px;
+
+    h1 {
+      font-size: 30px;
+    }
+  }
+
+  .loader {
+    animation: spin 2s linear infinite;
+    border: 10px solid $gf3f3f3;
+    border-radius: 50%;
+    border-top: 10px solid $blue;
+    height: 80px;
+    margin: 0 auto;
+    width: 80px;
+  }
 }
 
-.textbook-modal .modal-footer p {
-    font-size: 12px;
-    color: $g777;
-    text-align: left;
-    font-weight: 300;
-    padding-right: 162px;
-    line-height: 16px;
+.add-to-cart {
+  background-color: $amazon;
+  border: 0;
+  border-radius: 6px;
+  bottom: 12px;
+  color: $gfff;
+  font-size: 15px;
+  height: 40px;
+  position: absolute;
+  right: 25px;
+  text-align: center;
+  vertical-align: middle;
+  width: 140px;
+
+  .button-label {
+    i {
+      margin-right: 5px;
+    }
+  }
 }
 
-.textbook-modal #modal-header {
-    padding: 20px 20px;
-}
-
-.textbook-modal #modal-header h1 {
-    font-size: 30px
-}
-
-.loader-container p {
-    font-size: 15px;
-    margin-top: 15px;
-}
 
 .loader-container {
-    text-align: center;
-    top: -50%;
-    transform: translateY(50%);
-    position: relative;
+  position: relative;
+  text-align: center;
+  top: -50%;
+  transform: translateY(50%);
+
+  p {
+    font-size: 15px;
+    margin-top: 15px;
+  }
 }
 
 .spinner-container {
-    width: 100%;
-}
+  width: 100%;
 
-.spinner-container i {
+  i {
     font-size: 80px;
+  }
 }
 
-.textbook-modal .loader {
-    margin: 0 auto;
-    border: 10px solid $gf3f3f3; /* Light grey */
-    border-radius: 50%;
-    border-top: 10px solid #3498db; /* Blue */
-    width: 80px;
-    height: 80px;
-    animation: spin 2s linear infinite;
-}
-
-.tb-list-entry .no-tbs {
-    text-align: center;
+.tb-list-entry {
+  .no-tbs {
     font-weight: 300;
     margin-top: 15px;
+    text-align: center;
+  }
 }
 
 @media(max-width: 776px) {
-
-    .signup-modal #features{
-       padding: 0px 10px 10px 10px;
-       width: 100%;
-       font-size: 17px;
-    }
-
-    .textbook-modal #modal-header h1 {
+  .textbook-modal {
+    .modal-header {
+      h1 {
         font-size: 20px;
+      }
     }
 
-    .textbook-modal #tb-list-container {
-        position: absolute;
-        top: 0;
-        bottom: 66px;
+    .tb-list-container {
+      bottom: 66px;
+      position: absolute;
+      top: 0;
     }
 
-    .textbook-modal .modal-footer p {
+    .modal-footer {
+      p {
         display: none;
+      }
     }
+  }
 
-    .abnb-modal.textbook-modal {
-        max-width: 600px;
-        height:100%;
-        overflow: auto;
+  .abnb-modal {
+    &.textbook-modal {
+      height: 100%;
+      max-width: 600px;
+      overflow: auto;
     }
+  }
 }

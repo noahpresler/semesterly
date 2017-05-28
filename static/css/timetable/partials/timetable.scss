@@ -1,156 +1,178 @@
 body {
-	background-color:$gfff;
-	line-height:1.4;
-	overflow-x: hidden;
-}
-#calendar {
-	width: 100%;
-    -webkit-touch-callout: none; /* iOS Safari */
-    -webkit-user-select: none;   /* Chrome/Safari/Opera */
-    -khtml-user-select: none;    /* Konqueror */
-    -moz-user-select: none;      /* Firefox */
-    -ms-user-select: none;       /* IE/Edge */
-    user-select: none;           /* non-prefixed version, currently */
+  background-color: $gfff;
+  height: 100%;
+  line-height: 1.4;
+  overflow-x: hidden;
 }
 
-#calendar th {
+.calendar {
+  user-select: none;
+  width: 100%;
+
+  th {
     font-family: $font-primary;
+  }
 }
 
 .cal-btn-wrapper {
-    font-size: 0;
+  font-size: 0;
 }
 
-button.save-timetable {
-    border: none;
-    outline: none;
+button {
+  &.save-timetable {
     background-color: transparent;
-    height: 30px;
-    width: 30px;
-    line-height: 30px;
+    border: 0;
     color: $g777;
+    height: 30px;
+    line-height: 30px;
+    outline: none;
     position: relative;
     transition: background-color .3s;
-}
-button.save-timetable i {
-    position: absolute;
-    width: 100%;
-    top: 0;
-    left: 0;
-    line-height: 30px;
-    font-size: 18px;
-}
-button.save-timetable:hover {
-    color: #143B63;
-}
-button.save-timetable:active {
-    color: #143B63;
-}
-button.save-timetable.add-button {
-    margin-right: 2px;
-}
-button.row-button {
-    margin-right: 2px;
-    float: right;
+    width: 30px;
+
+    &:hover,
+    &:active {
+      color: $blue-dark;
+    }
+
+    &.add-button {
+      margin-right: 2px;
+    }
+
+    i {
+      font-size: 18px;
+      left: 0;
+      line-height: 30px;
+      position: absolute;
+      top: 0;
+      width: 100%;
+    }
+  }
+
+  &.row-button {
     background-color: transparent;
-    border: none;
+    border: 0;
     border-radius: 4px;
-    transition: all .3s;
+    float: right;
+    margin-right: 2px;
+    transition: color .3s;
+
+    &:hover {
+      background-color: $gddd;
+    }
+  }
+
 }
-button.row-button:hover {
-    background-color: $gddd;
-}
+
 .cal-row {
-	width: 49px;
-	font-size: 14px;
+  font-size: 14px;
+  width: 49px;
 }
-/* Half hour height within calendar (HALF_HOUR_HEIGHT) */
-.fc-time-grid .fc-slats td {
-	height:25px;
-}
-.fc-time-grid .fc-slats, .fc-time-grid>hr {
+
+// Half hour height within calendar (HALF_HOUR_HEIGHT)
+.fc-time-grid {
+  .fc-slats {
     z-index: 1;
+
+    td {
+      height: 25px;
+    }
+  }
+
+  > hr {
+    z-index: 1;
+  }
 }
+
 .slot-bar {
-    width: 5px !important;
-    height: 100%;
-    z-index: 0;
-    position:absolute;
+  height: 100%;
+  position: absolute;
+  width: 5px !important;
+  z-index: 0;
 }
+
 .fc-content {
-	margin-left: 8px;
-	margin-top: 2px;
+  margin-left: 8px;
+  margin-top: 2px;
 }
+
 .fc-time {
-    white-space: nowrap;
+  white-space: nowrap;
 }
+
 .fc-time-name-overflow {
-    text-overflow: ellipsis;
-    overflow: hidden;
-    white-space: nowrap;
-    float: left;
-    width: calc(100% - 20px);
+  float: left;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  width: calc(100% - 20px);
 }
+
 .fc-toolbar {
-    border-bottom: 0px;
-    padding: 5px;
-    margin-top: 20px;
+  border-bottom: 0;
+  margin-top: 20px;
+  padding: 5px;
 }
 
 .cal-cell {
-    flex-grow: 1;
+  flex-grow: 1;
 }
 
 .week-col {
-    display: flex;
-    width: 100%;
-    height: 100%;
+  display: flex;
+  height: 100%;
+  width: 100%;
 }
-.fc-right #share-course-link-wrapper {
-    position:absolute;
-    margin-top:36px;
-    margin-left:-140px !important;
-    height:38px;
-    padding:0px 5px;
-    background-color:$geee;
-    border-radius:2px; 
+
+.fc-right {
+  .share-course-link-wrapper {
+    background-color: $geee;
+    border-radius: 2px;
+    height: 38px;
+    margin-left: -140px !important;
+    margin-top: 36px;
+    padding: 0 5px;
+    position: absolute;
     z-index: 1000;
+
+    .share-course-link {
+      color: $g222;
+      font-size: 14px;
+      font-weight: 400;
+      height: 25px;
+      margin-top: 7px;
+      width: auto;
+    }
+
+    .tip,
+    .tip-border {
+      display: none;
+    }
+  }
 }
-.fc-right #share-course-link-wrapper #share-course-link {
-    color: #222;
-    font-size:14px;
-    font-weight:400;
-    margin-top:7px;
-    width:auto;
-    height:25px;
-}
-.fc-right #share-course-link-wrapper .tip {
-    display:none;
-}
-.fc-right #share-course-link-wrapper .tip-border {
-    display:none;
-}
+
 .data-last-updated {
-    margin: 5px 0 0;
-    font-size:12px;
-    line-height: 22px;
+  font-size: 12px;
+  line-height: 22px;
+  margin: 5px 0 0;
 }
 
 @media(max-width: 514px) {
-    .data-last-updated {
-        font-size: 9px;
-        margin: 5px 5px 0;
-    }
+  .data-last-updated {
+    font-size: 9px;
+    margin: 5px 5px 0;
+  }
 }
 
-.save-timetable img {
+.save-timetable {
+  img {
     display: inline-block;
-    position: absolute;
-    width: 100%;
-    top: 4px;
-    left: 7px;
-    line-height: 30px;
     font-size: 18px;
     height: 18px;
+    left: 7px;
+    line-height: 30px;
+    position: absolute;
+    top: 4px;
     width: 18px;
+  }
 }

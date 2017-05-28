@@ -1,174 +1,179 @@
-#reactions .reaction {
-	text-align: center;
-	position: relative;
-	display: inline-block;
-	vertical-align: middle;
-	height: 62px;
-	width: 40px;
-	margin: 0 2px;
- 	transition: all 0.5s cubic-bezier(.36,-0.64,.34,1.76);
-	transition: transform .3s ease-out;
-	cursor:pointer;
+.reactions {
+  background-color: $gf3f3f3;
+  border: 1px solid $gd9d9d9;
+  border-radius: 60px;
+  display: inline-block;
+  padding: 0 10px;
+
+  .reaction {
+    cursor: pointer;
+    display: inline-block;
+    height: 62px;
+    margin: 0 2px;
+    position: relative;
+    text-align: center;
+    transition: all .5s cubic-bezier(.36, -0.64, .34, 1.76);
+    transition: transform .3s ease-out;
+    vertical-align: middle;
+    width: 40px;
+
+    &:hover.animate {
+      transform: scale(1.2);
+      transition: transform .3s ease-out;
+    }
+
+    &:hover.no-animate {
+      transform: scale(1.1);
+      transition: transform .3s ease-out;
+    }
+
+    .emoji {
+      height: 100%;
+      left: 50%;
+      max-height: 50px;
+      max-width: 50px;
+      position: absolute;
+      top: 50%;
+      transform: translate(-50%, -50%);
+      width: 100%;
+    }
+  }
 }
+
 .swing {
-	opacity: 0;
-	perspective: 100px;
-	transform: scale(1.2);
-	transition: transform .3s ease-out;
+  opacity: 0;
+  perspective: 100px;
+  transform: scale(1.2);
+  transition: transform .3s ease-out;
 }
 
 .swing.reaction.no-animate {
-	opacity: 1;
-	transition: transform .3s ease-out;
-	transform: none;
+  opacity: 1;
+  transform: none;
+  transition: transform .3s ease-out;
 }
 
-#reactions .reaction:hover.animate {
-	transform: scale(1.2);
-	transition: transform .3s ease-out;
-}
 
-#reactions .reaction:hover.no-animate {
-	transform: scale(1.1);
-	transition: transform .3s ease-out;
-}
-
-.reaction .emoji {
-	height: 100%;
-	width: 100%;
-	position: absolute;
-	top: 50%;
-	left: 50%;
-	max-height: 50px;
-	max-width: 50px;
-	transform: translate(-50%, -50%);
-}
-
-#reactions {
-	display: inline-block;
-	background-color: $gf3f3f3;
-	border-radius: 60px;
-	padding: 0px 10px 0px 10px;
-	border: 1px solid #dedede;
-}
-
-#reactions-wrapper {
-	width: 100%;
-	text-align: center;
+.reactions-wrapper {
+  text-align: center;
+  width: 100%;
 }
 
 .emoji-count {
-	position: absolute;
-	bottom: 10px;
-	right: 0px;
-	height: 16px;
-	padding: 0px 2px 0px 2px;
-	border-radius: 30%;
-	font-size: 14px;
-	font-weight: 700;
-	color: white;
-	background-color: #a1a1a1;
-	opacity: .7;
-	visibility: visible;
-	transition: visibility 0s linear 0ms, opacity 300ms;
+  background-color: $ga1a1a1;
+  border-radius: 30%;
+  bottom: 10px;
+  color: $gfff;
+  font-size: 14px;
+  font-weight: 700;
+  height: 16px;
+  opacity: .7;
+  padding: 0 2px;
+  position: absolute;
+  right: 0;
+  transition: visibility 0s linear 0ms, opacity 300ms;
+  visibility: visible;
 }
 
 .emoji-action {
-	position: absolute;
-	bottom: 10px;
-	right: 0px;
-	height: 15px;
-	width: 15px;
-	border-radius: 50%;
-	font-size: 12px;
-	color: white;
-	background-color: #1abc9c;
-	visibility: hidden;
-	opacity: 0;
-	transition: visibility 0s linear 300ms, opacity 300ms;
+  background-color: #1abc9c;
+  border-radius: 50%;
+  bottom: 10px;
+  color: $gfff;
+  font-size: 12px;
+  height: 15px;
+  opacity: 0;
+  position: absolute;
+  right: 0;
+  transition: visibility 0s linear 300ms, opacity 300ms;
+  visibility: hidden;
+  width: 15px;
 }
 
 .reaction:hover .emoji-action {
-	opacity: 1;
-	visibility: visible;
-	transition: visibility 0s linear 0ms, opacity 300ms;
+  opacity: 1;
+  transition: visibility 0s linear 0ms, opacity 300ms;
+  visibility: visible;
 }
 
 .reaction:hover .emoji-count {
-	opacity: 0;
-	visibility: hidden;
-	transition: visibility 0s linear 300ms, opacity 300ms;
+  opacity: 0;
+  transition: visibility 0s linear 300ms, opacity 300ms;
+  visibility: hidden;
 }
 
 .emoji-check {
-	position: absolute;
-	bottom: 10px;
-	right: 0px;
-	height: 15px;
-	width: 15px;
-	border-radius: 50%;
-	font-size: 14px;
-	color: white;
-	background-color: #1abc9c;
-	visibility: hidden;
-	opacity: 0;
-	transition: visibility 0s linear 300ms, opacity 300ms;
+  background-color: #1abc9c;
+  border-radius: 50%;
+  bottom: 10px;
+  color: $gfff;
+  font-size: 14px;
+  height: 15px;
+  opacity: 0;
+  position: absolute;
+  right: 0;
+  transition: visibility 0s linear 300ms, opacity 300ms;
+  visibility: hidden;
+  width: 15px;
 }
 
 .selected .emoji-check {
-	opacity: 1;
-	visibility: visible;
-	transition: visibility 0s linear 0ms, opacity 300ms;
+  opacity: 1;
+  transition: visibility 0s linear 0ms, opacity 300ms;
+  visibility: visible;
 }
 
 .selected .emoji-count {
-	opacity: 0;
-	visibility: hidden;
-	transition: visibility 0s linear 300ms, opacity 300ms;
+  opacity: 0;
+  transition: visibility 0s linear 300ms, opacity 300ms;
+  visibility: hidden;
 }
 
-#reaction-dropdown {
-	position: absolute;
-	top: 56px;
-	font-size: 10px;
-	width: 60px;
-	left: -15%;
-	border-radius: 8px;
-	background-color: #a1a1a1;
-	opacity: 0;
-	visibility: hidden;
-	color: white;
-	transition: visibility 0s linear 300ms, opacity 300ms;
-	padding-top:1px;
-	padding-bottom:1px;
-}
+.reaction-dropdown {
+  background-color: $ga1a1a1;
+  border-radius: 8px;
+  color: $gfff;
+  font-size: 10px;
+  left: -15%;
+  opacity: 0;
+  padding-bottom: 1px;
+  padding-top: 1px;
+  position: absolute;
+  top: 56px;
+  transition: visibility 0s linear 300ms, opacity 300ms;
+  visibility: hidden;
+  width: 60px;
 
-#reaction-dropdown .tip-border {
-	top: -7px;
-	left: 20px;
-	border-color: transparent transparent #a1a1a1;
-	border-bottom-color: rgba(0,0,0,.2);
-}
-
-#reaction-dropdown .tip {
+  .tip-border {
+    border-color: transparent transparent $black-transparent-2;
+    left: 20px;
     top: -7px;
-	left: 20px;
-	border-color: transparent transparent #a1a1a1;
+  }
+
+  .tip {
+    border-color: transparent transparent $ga1a1a1;
+    left: 20px;
+    top: -7px;
+  }
 }
 
-.reaction:hover #reaction-dropdown {
-	opacity: .8;
-	visibility: visible;
-	transition: visibility 0s linear 0ms, opacity 300ms;
+.reaction:hover .reaction-dropdown {
+  opacity: .8;
+  transition: visibility 0s linear 0ms, opacity 300ms;
+  visibility: visible;
 }
 
 @media (max-width: 810px) {
-	#reactions .reaction {
-		width: 34px;
-	}
+	.reactions {
+    .reaction {
+      width: 34px;
+    }
+  }
 }
 @media (max-width: 355px) {
-	#reactions .reaction {
-		width: 29px;
-	}
+	.reactions {
+    .reaction {
+      width: 29px;
+    }
+  }
 }

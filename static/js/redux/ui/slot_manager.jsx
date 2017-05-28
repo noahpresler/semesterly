@@ -1,9 +1,10 @@
+import PropTypes from 'prop-types';
 import React from 'react';
 import { index as IntervalTree, matches01 as getIntersections } from 'static-interval-tree';
 import Slot from './slot';
 import CustomSlot from './custom_slot';
 import COLOUR_DATA from '../constants/colours';
-import * as PropTypes from '../constants/propTypes';
+import * as SemesterlyPropTypes from '../constants/semesterlyPropTypes';
 
 class SlotManager extends React.Component {
 
@@ -29,7 +30,7 @@ class SlotManager extends React.Component {
       // build interval tree with part of slot that should not be overlayed (first hour)
       const infoIntervals = intervals.map(s => ({
         start: s.start,
-        end: Math.min(s.start + 60, s.end),
+        end: Math.min(s.start + 59, s.end),
         id: s.id,
       }));
       const infoSlots = IntervalTree(infoIntervals);
@@ -40,7 +41,7 @@ class SlotManager extends React.Component {
       // bit map to store if slot has already been added to queue
       const added = daySlots.map(() => false);
 
-      // get num_conflicts + shift_index
+      // get num_conflicts
       for (let i = 0; i < infoIntervals.length; i++) {
         if (!seen[i]) { // if not seen, perform dfs search on conflicts
           const directConflicts = [];
@@ -68,13 +69,13 @@ class SlotManager extends React.Component {
         }
       }
 
+      // get shift index
       // build interval tree with part of slot that should not be overlayed
       const overSlots = IntervalTree(intervals.filter(s => s.end - s.start > 60).map(s => ({
         start: s.start + 60,
         end: s.end,
         id: s.id,
       })));
-
       // get depth_level
       for (let i = 0; i < infoIntervals.length; i++) {
         const conflicts = getIntersections(overSlots, infoIntervals[i]);
@@ -82,6 +83,13 @@ class SlotManager extends React.Component {
         daySlots[i].depth_level = conflicts.length > 0 ?
           daySlots[conflicts[0].id].depth_level + 1 : 0;
       }
+
+      // get exists_conflict
+      const completeSlots = IntervalTree(intervals);
+      for (let i = 0; i < intervals.length; i++) {
+        daySlots[i].exists_conflict = getIntersections(completeSlots, intervals[i]).length > 1;
+      }
+
       styledSlotsByDay[day] = daySlots;
     });
     return styledSlotsByDay;
@@ -189,26 +197,27 @@ SlotManager.defaultProps = {
 };
 
 SlotManager.propTypes = {
-  isLocked: React.PropTypes.func.isRequired,
-  isCourseOptional: React.PropTypes.func.isRequired,
-  getOptionalCourseById: React.PropTypes.func.isRequired,
-  removeCustomSlot: React.PropTypes.func.isRequired,
-  addOrRemoveCourse: React.PropTypes.func.isRequired,
-  addOrRemoveOptionalCourse: React.PropTypes.func.isRequired,
-  updateCustomSlot: React.PropTypes.func.isRequired,
-  addCustomSlot: React.PropTypes.func.isRequired,
-  fetchCourseInfo: React.PropTypes.func.isRequired,
-  days: React.PropTypes.arrayOf(React.PropTypes.string).isRequired,
-  timetable: PropTypes.timetable.isRequired,
-  courseToColourIndex: React.PropTypes.shape({
-    '*': React.PropTypes.number,
+  isLocked: PropTypes.func.isRequired,
+  isCourseOptional: PropTypes.func.isRequired,
+  getOptionalCourseById: PropTypes.func.isRequired,
+  removeCustomSlot: PropTypes.func.isRequired,
+  addOrRemoveCourse: PropTypes.func.isRequired,
+  addOrRemoveOptionalCourse: PropTypes.func.isRequired,
+  updateCustomSlot: PropTypes.func.isRequired,
+  addCustomSlot: PropTypes.func.isRequired,
+  fetchCourseInfo: PropTypes.func.isRequired,
+  days: PropTypes.arrayOf(PropTypes.string).isRequired,
+  timetable: SemesterlyPropTypes.timetable.isRequired,
+  courseToColourIndex: PropTypes.shape({
+    '*': PropTypes.number,
   }).isRequired,
-  classmates: React.PropTypes.func.isRequired,
-  custom: React.PropTypes.arrayOf(React.PropTypes.oneOfType([PropTypes.customSlot,
-    React.PropTypes.shape({})])).isRequired,
-  primaryDisplayAttribute: React.PropTypes.string.isRequired,
-  socialSections: React.PropTypes.bool,
-  uses12HrTime: React.PropTypes.bool.isRequired,
+  classmates: PropTypes.func.isRequired,
+  custom: PropTypes.arrayOf(PropTypes.oneOfType([SemesterlyPropTypes.customSlot,
+    PropTypes.shape({})])).isRequired,
+  primaryDisplayAttribute: PropTypes.string.isRequired,
+  socialSections: PropTypes.bool,
+  uses12HrTime: PropTypes.bool.isRequired,
 };
 
 export default SlotManager;
+

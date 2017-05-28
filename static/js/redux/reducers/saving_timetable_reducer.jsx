@@ -31,10 +31,13 @@ const savingTimetable = (state = initState, action) => {
         activeTimetable: Object.assign({}, state.activeTimetable, { name: action.name }),
         upToDate: false,
       });
+
+    case ActionTypes.ADD_CUSTOM_SLOT:
+    case ActionTypes.UPDATE_CUSTOM_SLOT:
+    case ActionTypes.REMOVE_CUSTOM_SLOT:
     case ActionTypes.CHANGE_ACTIVE_TIMETABLE:
-      return Object.assign({}, state, {
-        upToDate: false,
-      });
+      return Object.assign({}, state, { upToDate: false });
+
     default:
       return state;
   }
