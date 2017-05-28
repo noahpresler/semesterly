@@ -1,239 +1,275 @@
-/* link in sidebar */
+// link in sidebar
 .final-schedule-link {
-	cursor: pointer;
+  cursor: pointer;
 }
 
-/* Overriding Default Modal Styles */
+// Overriding Default Modal Styles
 .final-exam-modal {
-	max-width: 1200px;
-	/*height: 85%;*/
-	max-height: 900px;
-}
-.final-exam-modal > div {
-	outline: none;
-	width: 100%;
-	height: 100%;
-}
-.final-exam-modal #modal-header {
-	padding: 10px 10px 3px;
-}
-/* Style the loader */
-#modal-content .img-icon {
-	position: absolute;
- 	top: 50%;
- 	left: 50%;
- 	transform: translate(-50%, -50%);
-}
-#modal-content .loader {
-	width: 90px;
-  	height: 90px;
-}
-#final-exam-loader-wrapper {
-	height: 350px;
-}
+  max-height: 900px;
+  max-width: 1200px;
 
-/* Final Exams Modal */
-#final-exam-calendar-ctn {
-	width: 100%;
-	padding: 30px;
-}
-#final-exam-main {
-    width: 80%;
-    float: left;
-}
-#final-exam-main.main-full {
-	width: 100%;
-}
-#final-exam-sidebar {
-	float: left;
-    width: 20%;
-    padding: 0 0 0 20px;
-}
-#final-exam-sidebar h3 {
-	padding-top: 0;
-}
-#final-exam-calendar-ctn.mobile {
-	padding: 0 10px 20px;
-}
-.final-exam-modal.is-mobile {
-	height: 75%;
-}
-@media (max-width: 766px) {
-	.final-exam-modal #modal-header {
-		padding: 10px 10px 3px;
-	}
-	#final-exam-calendar-ctn {
-		padding: 30px 10px;
-	}
-	#final-exam-main {
-		float: none;
-		width: 100%;
-	}
-	#final-exam-sidebar {
-		width: 100%;
-		padding: 20px 0 0;
-	}
-}
-/* For Each Week */
-.final-exam-days-ctn {
-	display: flex;
-}
-.final-exam-day {
-	width: 14.27%;
-	min-height: 100px;
-	border-right: 1px solid $gccc;
-	border-bottom: 1px solid $gccc;
-}
-.final-exam-day:first-child {
-	border-left: 1px solid $gddd;
-}
-/*  For the Slots in the Modal */
-.final-exam-modal .master-slot {
-	cursor: default;
-}
-.final-exam-modal .master-slot.conflict {
-	float: left;
-	clear: none;
-}
-.mobile .final-exam-day { /* mobile styles */
-	width: 100%;
-	min-height: 0px;
-	border: none;
-}
-.final-exam-modal .mobile .master-slot-content h3 {
-	font-size: 14px;
-}
-@media (max-width: 766px) {
-	.final-exam-modal .master-slot-content h3 {
-		font-size: 12px;
-	}
-}
-/*.final-exam-modal .master-slot-content h3 {
-	height: auto;
-	max-height: 30px;
-	white-space: normal;
-	text-overflow: initial;
-}*/
-#final-exam-calender-days h3 {
-	float: left;
-	font-weight: normal;
-	width: 14.27%;
-	border-right: 1px solid $gddd;
-	border-top: 1px solid $gddd;
-	border-bottom: 3px solid $gddd;
-	font-size: 15px;
-	margin: 0;
-	text-align: center;
-	line-height: 25px;
-}
-#final-exam-calender-days h3:first-child {
-	border-left: 1px solid $gddd;
-}
-#final-exam-calender-days h3 .day {
-	display: inline-block;
-	color: $g999;
-}
-#final-exam-calender-days h3 .date {
-	display: inline-block;
-	margin-left: 5px;
-}
-@media (max-width: 766px) {
-	#final-exam-calender-days h3 {
-		line-height: 15px;
-		padding: 3px 0;
-	}
-	#final-exam-calender-days h3 .day {
-		display: block;
-	}
-	#final-exam-calender-days h3 .date {
-		display: block;
-		margin-left: 0;
-	}
-}
-/* Links in Modal */
-#modal-body p.final-exam-disclaimer {
-	clear: both;
-	padding: 5px 0 0;
-	color: #AFAFAF;
-	font-size: 12px;
-	line-height: 18px;
-}
-#modal-body p.final-exam-disclaimer i {
-	margin-right: 3px;
-}
-#modal-body p.final-exam-disclaimer a {
-	display: block;
-	text-decoration: underline;	
-	color: #3895db;
-}
-#modal-body .mobile p.final-exam-disclaimer {
-	padding: 0;
-	margin-top: -10px;
-}
+  &.is-mobile {
+    height: 75%;
+  }
 
-/* Upsell, no courses */
+  > div {
+    height: 100%;
+    outline: none;
+    width: 100%;
+  }
 
-.final-exam-modal .peer-card {
-	padding: 0px;
-}
+  .modal-header {
+    padding: 10px 10px 3px;
+  }
 
-.final-exam-modal .peer-card-wrapper {
+  //  For the Slots in the Modal
+  .master-slot {
+    cursor: default;
+
+    &.conflict {
+      clear: none;
+      float: left;
+    }
+  }
+
+  .peer-card {
+    padding: 0;
+  }
+
+  .peer-card-wrapper {
     border: hidden;
     box-shadow: none;
-}
+  }
 
-.final-exam-modal .upsell h4 {
-	float: none;
-	font-weight: 400;
-	text-align: center;
-}
+  .upsell {
+    h4 {
+      float: none;
+      font-weight: 400;
+      text-align: center;
+    }
 
-.final-exam-modal .upsell .disclaimer {
-	float: left;
+    .disclaimer {
+      float: left;
+    }
 
-}
+    p {
+      color: $g555;
+      font-size: 16px;
+      line-height: 22px;
+      margin: 7px 0;
+      margin-bottom: 20px;
+      padding: 0 5px;
+      transition: color .2s;
+      word-wrap: break-word;
+    }
+  }
 
-.final-exam-modal .upsell p {
-    font-size: 16px;
-    line-height: 22px;
-    color: $g555;
-    padding: 0 5px;
-    margin: 7px 0;
-    -webkit-transition: color .2s;
-    transition: color .2s;
-    word-wrap: break-word;
-    margin-bottom: 20px;
-}
-
-.final-exam-modal .abnb-btn {
-	margin-top: 30px;
-}
-
-.final-exam-modal .abnb-btn ~ .abnb-btn {
-    margin-top: 0px;
-}
-
-.final-exam-modal .abnb-btn {
-	color: white;
-    border-color: #3B5998;
-    background-color: #3B5998;
+  .abnb-btn {
+    background-color: $facebook;
+    border-color: $facebook;
     color: $gfff;
+    margin-top: 30px;
     max-width: 300px;
+
+    ~ .abnb-btn {
+      margin-top: 0;
+    }
+
+    &.secondary {
+      > span {
+        color: $gfff;
+        font-weight: 300;
+      }
+    }
+  }
+
+  .add-courses-button {
+    background-color: $gbbb;
+    border-color: $gbbb;
+    margin-bottom: 40px;
+  }
 }
 
-.final-exam-modal .add-courses-button {
-	background-color: #BBB;
-	border-color: #BBB;
-	margin-bottom: 40px;
+
+// Style the loader
+.modal-content {
+  .img-icon {
+    left: 50%;
+    position: absolute;
+    top: 50%;
+    transform: translate(-50%, -50%);
+  }
+
+  .loader {
+    height: 90px;
+    width: 90px;
+  }
 }
 
-.abnb-btn.secondary > span{
-	font-weight: 300;
-	color: white;
+.final-exam__loader-wrapper {
+  height: 350px;
+}
+
+// Final Exams Modal
+.final-exam-calendar-ctn {
+  padding: 30px;
+  width: 100%;
+
+  &.mobile {
+    padding: 0 10px 20px;
+  }
+}
+
+.final-exam-main {
+  float: left;
+  width: 80%;
+
+  &.main-full {
+    width: 100%;
+  }
+}
+
+.final-exam-sidebar {
+  float: left;
+  padding: 0 0 0 20px;
+  width: 20%;
+
+  h3 {
+    padding-top: 0;
+  }
+}
+
+@media (max-width: 766px) {
+  .final-exam-modal {
+    .modal-header {
+      padding: 10px 10px 3px;
+    }
+
+    .master-slot-content {
+      h3 {
+        font-size: 12px;
+      }
+    }
+  }
+
+  .final-exam-calendar-ctn {
+    padding: 30px 10px;
+	}
+
+  .final-exam-main {
+    float: none;
+    width: 100%;
+	}
+
+  .final-exam-sidebar {
+    padding: 20px 0 0;
+    width: 100%;
+	}
+}
+
+// For Each Week
+.final-exam-days-ctn {
+  display: flex;
+}
+
+.final-exam-day {
+  border-bottom: 1px solid $gccc;
+  border-right: 1px solid $gccc;
+  min-height: 100px;
+  width: 14.27%;
+
+  &:first-child {
+    border-left: 1px solid $gddd;
+  }
+}
+
+.mobile .final-exam-day { // mobile styles
+  border: 0;
+  min-height: 0;
+  width: 100%;
+}
+
+.final-exam-modal .mobile .master-slot-content h3 {
+  font-size: 14px;
+}
+
+.final-exam-calender-days {
+  h3 {
+    border-bottom: 3px solid $gddd;
+    border-right: 1px solid $gddd;
+    border-top: 1px solid $gddd;
+    float: left;
+    font-size: 15px;
+    font-weight: normal;
+    line-height: 25px;
+    margin: 0;
+    text-align: center;
+    width: 14.27%;
+
+    &:first-child {
+      border-left: 1px solid $gddd;
+    }
+
+    .day {
+      color: $g999;
+      display: inline-block;
+    }
+
+    .date {
+      display: inline-block;
+      margin-left: 5px;
+    }
+  }
+}
+
+@media (max-width: 766px) {
+  .final-exam-calender-days {
+    h3 {
+      line-height: 15px;
+      padding: 3px 0;
+
+      .day {
+        display: block;
+      }
+
+      .date {
+        display: block;
+        margin-left: 0;
+      }
+    }
+  }
+}
+
+// Links in Modal
+.modal-body {
+  .final-exam-disclaimer {
+    clear: both;
+    color: $gaaa;
+    font-size: 12px;
+    line-height: 18px;
+    padding: 5px 0 0;
+
+    i {
+      margin-right: 3px;
+    }
+
+    a {
+      color: $blue;
+      display: block;
+      text-decoration: underline;
+    }
+  }
+
+  .mobile {
+    .final-exam-disclaimer {
+      margin-top: -10px;
+      padding: 0;
+    }
+  }
 }
 
 .or-separator {
-    margin: 0 auto;
-    margin-bottom: 22px;
-    max-width: 500px;
+  margin: 0 auto;
+  margin-bottom: 22px;
+  max-width: 500px;
 }

@@ -1,77 +1,76 @@
-#tut-wrapper {
-	height: 100%;
-	width: 100%;
+.tut-modal__wrapper {
+  height: 100%;
+  width: 100%;
+
+  .fa-chevron-right {
+    color: $gfff;
+    float: right;
+  }
+
+  .fa-chevron-left {
+    color: $gfff;
+    float: left;
+  }
+
+  p {
+    color: $gfff;
+    display: inline-block;
+    font-weight: 600;
+    left: 50%;
+    margin: 0 auto;
+    position: absolute;
+    text-align: center;
+    transform: translateX(-50%);
+    user-select: none;
+  }
+
+  h4 {
+    color: $gfff;
+    font-size: 20px;
+    position: absolute;
+    right: 20px;
+    top: 7px;
+    user-select: none;
+  }
+
+  .tut-img {
+    transition: all .1s linear;
+    user-select: none;
+  }
+
+  .action {
+	  transition: all .1s linear;
+
+    &:hover {
+      color: $gbdc3c7;
+      cursor: pointer;
+      transform: scale(1.1);
+    }
+  }
 }
 
-#tut-nav {
-	width: 100%;
-	height: 50px;
-	padding: 20px 20px 0px 20px;
-	border-bottom: 1px solid white;
-	padding-bottom: 40px;
-}
-
-#tut-wrapper .fa-chevron-right {
-	float: right;
-	color: white;
-}
-
-#tut-wrapper .fa-chevron-left {
-	float: left;
-	color: white;
-}
-
-#tut-wrapper p {
-	display: inline-block;
-	position: absolute;
-	left: 50%;
-	transform: translateX(-50%);
-	margin:0 auto;
-	text-align: center;
-	color: white;
-	font-weight: 600;
-	user-select: none;
+.tut-modal__nav {
+  border-bottom: 1px solid $gfff;
+  height: 50px;
+  padding: 20px 20px 40px;
+  width: 100%;
 }
 
 .tut-modal {
-	max-height: 550px;
-	max-width: 500px;
-}
-
-#tut-wrapper h4 {
-	font-size: 20px;
-	color: white;
-	position: absolute;
-	right: 20px;
-	top: 7px;
-	user-select: none;
-}
-
-#tut-wrapper .tut-img {
-	user-select: none;
-	transition: all .1s linear;
-}
-
-#tut-wrapper .action:hover {
-	cursor: pointer;
-	color: #bdc3c7;
-	transform: scale(1.1);
-	transition: all .1s linear;
-}
-
-#tut-wrapper .action {
-	transition: all .1s linear;
+  max-height: 550px;
+  max-width: 500px;
 }
 
 .tut-modal > div {
-	outline: none;
+  outline: none;
 }
 
 @media(max-width: 500px) {
-	.tut-modal {
-		width: 100% !important;
-	}
-	#tut-wrapper p {
-		font-size: 14px;
-	}
+  .tut-modal {
+    width: 100% !important;
+  }
+
+  .tut-modal__wrapper p {
+    font-size: 14px;
+  }
 }

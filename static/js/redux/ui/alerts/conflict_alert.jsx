@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import React from 'react';
 
 class ConflictAlert extends React.Component {
@@ -7,13 +8,14 @@ class ConflictAlert extends React.Component {
 
   handleClick() {
     this.props.turnConflictsOn();
+    this.props.addLastAddedCourse();
     this.props.dismissSelf();
   }
 
   render() {
     return (
       <div className="conflict-alert">
-                Adding that course causes a conflict!
+                Adding that {this.props.message} causes a conflict!
                 <button
                   onClick={() => this.handleClick()}
                   className="conflict-alert-btn"
@@ -25,8 +27,11 @@ class ConflictAlert extends React.Component {
 }
 
 ConflictAlert.propTypes = {
-  dismissSelf: React.PropTypes.func.isRequired,
-  turnConflictsOn: React.PropTypes.func.isRequired,
+  addLastAddedCourse: PropTypes.func.isRequired,
+  dismissSelf: PropTypes.func.isRequired,
+  turnConflictsOn: PropTypes.func.isRequired,
+  message: PropTypes.string.isRequired,
 };
 
 export default ConflictAlert;
+

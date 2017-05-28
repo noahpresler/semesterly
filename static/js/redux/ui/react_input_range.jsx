@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 /* eslint-disable */
 import React from 'react';
 
@@ -384,17 +385,17 @@ import React from 'react';
           }]), t;
         }(React.Component));
       n.default = S, S.propTypes = {
-        ariaLabelledby: React.PropTypes.string,
-        ariaControls: React.PropTypes.string,
-        classNames: React.PropTypes.objectOf(React.PropTypes.string),
+        ariaLabelledby: PropTypes.string,
+        ariaControls: PropTypes.string,
+        classNames: PropTypes.objectOf(PropTypes.string),
         defaultValue: C.maxMinValuePropType,
-        disabled: React.PropTypes.bool,
+        disabled: PropTypes.bool,
         maxValue: C.maxMinValuePropType,
         minValue: C.maxMinValuePropType,
-        name: React.PropTypes.string,
-        onChange: React.PropTypes.func.isRequired,
-        onChangeComplete: React.PropTypes.func,
-        step: React.PropTypes.number,
+        name: PropTypes.string,
+        onChange: PropTypes.func.isRequired,
+        onChangeComplete: PropTypes.func,
+        step: PropTypes.number,
         value: C.maxMinValuePropType,
       }, S.defaultProps = {
         classNames: E.default,
@@ -486,9 +487,9 @@ import React from 'react';
           }]), t;
         }(React.Component));
       n.default = p, p.propTypes = {
-        children: React.PropTypes.node,
-        className: React.PropTypes.string,
-        containerClassName: React.PropTypes.string,
+        children: PropTypes.node,
+        className: PropTypes.string,
+        containerClassName: PropTypes.string,
       }, t.exports = n.default;
     }).call(this, typeof global !== 'undefined' ? global : typeof self !== 'undefined' ? self : typeof window !== 'undefined' ? window : {});
   }, {}],
@@ -641,16 +642,16 @@ import React from 'react';
           }]), t;
         }(React.Component));
       n.default = m, m.propTypes = {
-        ariaLabelledby: React.PropTypes.string,
-        ariaControls: React.PropTypes.string,
-        classNames: React.PropTypes.objectOf(React.PropTypes.string),
-        maxValue: React.PropTypes.number,
-        minValue: React.PropTypes.number,
-        onSliderKeyDown: React.PropTypes.func.isRequired,
-        onSliderMouseMove: React.PropTypes.func.isRequired,
-        percentage: React.PropTypes.number.isRequired,
-        type: React.PropTypes.string.isRequired,
-        value: React.PropTypes.number.isRequired,
+        ariaLabelledby: PropTypes.string,
+        ariaControls: PropTypes.string,
+        classNames: PropTypes.objectOf(PropTypes.string),
+        maxValue: PropTypes.number,
+        minValue: PropTypes.number,
+        onSliderKeyDown: PropTypes.func.isRequired,
+        onSliderMouseMove: PropTypes.func.isRequired,
+        percentage: PropTypes.number.isRequired,
+        type: PropTypes.string.isRequired,
+        value: PropTypes.number.isRequired,
       }, t.exports = n.default;
     }).call(this, typeof global !== 'undefined' ? global : typeof self !== 'undefined' ? self : typeof window !== 'undefined' ? window : {});
   }, { './Label': 2, './util': 7 }],
@@ -762,10 +763,10 @@ import React from 'react';
           }]), t;
         }(React.Component));
       n.default = d, d.propTypes = {
-        children: React.PropTypes.node,
-        classNames: React.PropTypes.objectOf(React.PropTypes.string),
-        onTrackMouseDown: React.PropTypes.func.isRequired,
-        percentages: React.PropTypes.objectOf(React.PropTypes.number).isRequired,
+        children: PropTypes.node,
+        classNames: PropTypes.objectOf(PropTypes.string),
+        onTrackMouseDown: PropTypes.func.isRequired,
+        percentages: PropTypes.objectOf(PropTypes.number).isRequired,
       }, t.exports = n.default;
     }).call(this, typeof global !== 'undefined' ? global : typeof self !== 'undefined' ? self : typeof window !== 'undefined' ? window : {});
   }, { './util': 7 }],
@@ -974,3 +975,4 @@ import React from 'react';
   }, { './InputRange': 1 }],
 }, {}, [9]))(9)));
 /* eslint-enable */
+

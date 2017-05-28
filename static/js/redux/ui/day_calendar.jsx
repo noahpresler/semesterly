@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import React from 'react';
 import classnames from 'classnames';
 import Swipeable from 'react-swipeable';
@@ -9,12 +10,12 @@ import { ShareLink } from './master_slot';
 
 const Row = (props) => {
   const timeText = props.displayTime ? <span>{props.displayTime}</span> : null;
-  const dayCells = props.days.map(day => <CellContainer
+  const dayCells = props.days.map(day => (<CellContainer
     day={day}
     time={props.time}
     key={day + props.time}
     loggedIn={props.isLoggedIn}
-  />);
+  />));
   return (
     <tr key={props.time}>
       <td className="fc-axis fc-time fc-widget-content cal-row">
@@ -34,10 +35,10 @@ Row.defaultProps = {
 };
 
 Row.propTypes = {
-  displayTime: React.PropTypes.string,
-  isLoggedIn: React.PropTypes.bool.isRequired,
-  time: React.PropTypes.string.isRequired,
-  days: React.PropTypes.arrayOf(React.PropTypes.string).isRequired,
+  displayTime: PropTypes.string,
+  isLoggedIn: PropTypes.bool.isRequired,
+  time: PropTypes.string.isRequired,
+  days: PropTypes.arrayOf(PropTypes.string).isRequired,
 };
 
 class DayCalendar extends React.Component {
@@ -57,8 +58,8 @@ class DayCalendar extends React.Component {
   }
 
   componentDidMount() {
-    $('#all-cols').scroll(() => {
-      const pos = $('#all-cols').scrollTop();
+    $('.all-cols').scroll(() => {
+      const pos = $('.all-cols').scrollTop();
       if (pos > 30) {
         $('.fc-toolbar').addClass('up');
         $('#calendar').addClass('up');
@@ -90,12 +91,16 @@ class DayCalendar extends React.Component {
     for (let i = 8; i <= this.props.endHour; i++) { // one row for each hour, starting from 8am
       const hour = this.props.uses12HrTime && i > 12 ? i - 12 : i;
       rows.push(<Row
-        displayTime={`${hour}:00`} time={`${i}:00`} isLoggedIn={this.props.isLoggedIn}
+        displayTime={`${hour}:00`}
+        time={`${i}:00`}
+        isLoggedIn={this.props.isLoggedIn}
         key={i}
         days={[DAYS[this.state.day]]}
       />);
       rows.push(<Row
-        time={`${i}:30`} isLoggedIn={this.props.isLoggedIn} key={i + 0.5}
+        time={`${i}:30`}
+        isLoggedIn={this.props.isLoggedIn}
+        key={i + 0.5}
         days={[DAYS[this.state.day]]}
       />);
     }
@@ -176,14 +181,15 @@ class DayCalendar extends React.Component {
         <i className="fa fa-cog" />
       </button>
         );
-    const dayPills = DAYS.map((day, i) => <div
-      key={day} className="day-pill"
+    const dayPills = DAYS.map((day, i) => (<div
+      key={day}
+      className="day-pill"
       onClick={() => this.setState({ day: i })}
     >
       <div className={classnames('day-circle', { selected: i === this.state.day })}>
         {day === 'R' ? 'T' : day}
       </div>
-    </div>);
+    </div>));
     const saveToCalendarButton = (
       <button
         onClick={() => this.props.triggerSaveCalendarModal()}
@@ -193,7 +199,7 @@ class DayCalendar extends React.Component {
       </button>
         );
     return (
-      <div id="calendar" className="fc fc-ltr fc-unthemed day-calendar">
+      <div className="calendar fc fc-ltr fc-unthemed day-calendar">
         <div className="fc-toolbar no-print">
           <div className="fc-left">
             <PaginationContainer />
@@ -208,8 +214,8 @@ class DayCalendar extends React.Component {
           </div>
           <div className="fc-center" />
           <div className="fc-clear cf">
-            <div id="day-pills-wrapper">
-              <div id="day-pills">
+            <div className="day-pills">
+              <div className="day-pills__wrapper">
                 {dayPills}
               </div>
             </div>
@@ -279,19 +285,20 @@ DayCalendar.defaultProps = {
 };
 
 DayCalendar.propTypes = {
-  dataLastUpdated: React.PropTypes.string.isRequired,
-  togglePreferenceModal: React.PropTypes.func.isRequired,
-  triggerSaveCalendarModal: React.PropTypes.func.isRequired,
-  isFetchingShareLink: React.PropTypes.bool.isRequired,
-  endHour: React.PropTypes.number.isRequired,
-  handleCreateNewTimetable: React.PropTypes.func.isRequired,
-  shareLinkValid: React.PropTypes.bool.isRequired,
-  fetchShareTimetableLink: React.PropTypes.func.isRequired,
-  saveTimetable: React.PropTypes.func.isRequired,
-  isLoggedIn: React.PropTypes.bool.isRequired,
-  saving: React.PropTypes.bool.isRequired,
-  shareLink: React.PropTypes.string,
-  uses12HrTime: React.PropTypes.bool.isRequired,
+  dataLastUpdated: PropTypes.string.isRequired,
+  togglePreferenceModal: PropTypes.func.isRequired,
+  triggerSaveCalendarModal: PropTypes.func.isRequired,
+  isFetchingShareLink: PropTypes.bool.isRequired,
+  endHour: PropTypes.number.isRequired,
+  handleCreateNewTimetable: PropTypes.func.isRequired,
+  shareLinkValid: PropTypes.bool.isRequired,
+  fetchShareTimetableLink: PropTypes.func.isRequired,
+  saveTimetable: PropTypes.func.isRequired,
+  isLoggedIn: PropTypes.bool.isRequired,
+  saving: PropTypes.bool.isRequired,
+  shareLink: PropTypes.string,
+  uses12HrTime: PropTypes.bool.isRequired,
 };
 
 export default DayCalendar;
+

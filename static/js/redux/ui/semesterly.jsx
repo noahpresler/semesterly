@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import React from 'react';
 import DayCalendarContainer from './containers/day_calendar_container';
 import CalendarContainer from './containers/calendar_container';
@@ -10,17 +11,17 @@ import EnableNotificationsAlertContainer from './alerts/enable_notifications_ale
 import FriendsInClassAlertContainer from './alerts/friends_in_class_alert_container';
 import TopBarContainer from './containers/top_bar_container';
 import SideBarContainer from './containers/side_bar_container';
-import UserSettingsModalContainer from './containers/user_settings_modal_container';
-import ExplorationModalContainer from './containers/exploration_modal_container';
-import SignupModalContainer from './containers/signup_modal_container';
-import PreferenceModalContainer from './containers/preference_modal_container';
-import TutModalContainer from './containers/tut_modal_container';
-import PeerModalContainer from './containers/peer_modal_container';
-import IntegrationModalContainer from './containers/integration_modal_container';
-import SaveCalendarModalContainer from './containers/save_calendar_modal_container';
-import FinalExamsModalContainer from './containers/final_exams_modal_container';
-import UserAcquisitionModalContainer from './containers/user_acquisition_modal_container';
-import TextbookModalContainer from './containers/textbook_modal_container';
+import UserSettingsModalContainer from './containers/modals/user_settings_modal_container';
+import ExplorationModalContainer from './containers/modals/exploration_modal_container';
+import SignupModalContainer from './containers/modals/signup_modal_container';
+import PreferenceModalContainer from './containers/modals/preference_modal_container';
+import TutModalContainer from './containers/modals/tut_modal_container';
+import PeerModalContainer from './containers/modals/peer_modal_container';
+import IntegrationModalContainer from './containers/modals/integration_modal_container';
+import SaveCalendarModalContainer from './containers/modals/save_calendar_modal_container';
+import FinalExamsModalContainer from './containers/modals/final_exams_modal_container';
+import UserAcquisitionModalContainer from './containers/modals/user_acquisition_modal_container';
+import TextbookModalContainer from './containers/modals/textbook_modal_container';
 
 class Semesterly extends React.Component {
   constructor(props) {
@@ -60,7 +61,7 @@ class Semesterly extends React.Component {
       this.updateOrientation();
     });
     window.addEventListener('resize', () => {
-      if (!$('#search-bar-input-wrapper input').is(':focus')) {
+      if (!$('.search-bar__input-wrapper input').is(':focus')) {
         this.updateOrientation();
       }
     });
@@ -128,7 +129,7 @@ class Semesterly extends React.Component {
       <DayCalendarContainer /> :
       <CalendarContainer />;
     return (
-      <div id="page-wrapper">
+      <div className="page-wrapper">
         <TopBarContainer />
         <UserSettingsModalContainer />
         <ExplorationModalContainer />
@@ -142,8 +143,8 @@ class Semesterly extends React.Component {
         <UserAcquisitionModalContainer />
         <TextbookModalContainer />
         <AlertBox ref={(a) => { this.msg = a; }} {...this.alertOptions} />
-        <div id="all-cols">
-          <div id="main-bar">
+        <div className="all-cols">
+          <div className="main-bar">
             {cal}
             <footer className="footer navbar no-print">
               <ul className="nav nav-pills no-print">
@@ -151,20 +152,27 @@ class Semesterly extends React.Component {
                   href="mailto:contact@semester.ly?Subject=Semesterly"
                 >Contact us</a></li>
                 <li className="footer-button" role="presentation"><a
-                  target="_blank" rel="noopener noreferrer"
+                  target="_blank"
+                  rel="noopener noreferrer"
                   href="http://goo.gl/forms/YSltU2YI54PC9sXw1"
                 >Feedback</a>
                 </li>
-                <li className="footer-button" role="presentation"><a
-                  target="_blank" rel="noopener noreferrer"
-                  href="https://www.facebook.com/semesterly/"
-                >Facebook</a>
+                <li
+                  className="footer-button"
+                  role="presentation"
+                >
+                  <a
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    href="https://www.facebook.com/semesterly/"
+                  >Facebook</a>
                 </li>
                 <li className="footer-button">
                   <div
                     className="fb-like"
                     data-href="https://www.facebook.com/semesterly/"
-                    data-layout="button_count" data-action="like"
+                    data-layout="button_count"
+                    data-action="like"
                     data-show-faces="true"
                     data-share="false"
                   />
@@ -179,16 +187,17 @@ class Semesterly extends React.Component {
 }
 
 Semesterly.propTypes = {
-  PgActive: React.PropTypes.number.isRequired,
-  PgCount: React.PropTypes.number.isRequired,
-  alertChangeSemester: React.PropTypes.bool.isRequired,
-  alertConflict: React.PropTypes.bool.isRequired,
-  alertEnableNotifications: React.PropTypes.bool.isRequired,
-  alertFacebookFriends: React.PropTypes.bool.isRequired,
-  alertNewTimetable: React.PropTypes.bool.isRequired,
-  alertTimetableExists: React.PropTypes.bool.isRequired,
-  saveTimetable: React.PropTypes.func.isRequired,
-  setPgActive: React.PropTypes.func.isRequired,
+  PgActive: PropTypes.number.isRequired,
+  PgCount: PropTypes.number.isRequired,
+  alertChangeSemester: PropTypes.bool.isRequired,
+  alertConflict: PropTypes.bool.isRequired,
+  alertEnableNotifications: PropTypes.bool.isRequired,
+  alertFacebookFriends: PropTypes.bool.isRequired,
+  alertNewTimetable: PropTypes.bool.isRequired,
+  alertTimetableExists: PropTypes.bool.isRequired,
+  saveTimetable: PropTypes.func.isRequired,
+  setPgActive: PropTypes.func.isRequired,
 };
 
 export default Semesterly;
+

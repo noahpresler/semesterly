@@ -10,10 +10,12 @@ import {
     saveLocalPreferences,
     saveLocalSemester,
 } from '../util';
-import { store } from '../init';
+import store from '../init';
 import { autoSave, fetchClassmates, lockActiveSections } from './user_actions';
 import * as ActionTypes from '../constants/actionTypes';
 import { currSem } from '../reducers/semester_reducer';
+
+let customEventUpdateTimer; // keep track of user's custom event actions for autofetch
 
 export const SID = randomString(30);
 
@@ -70,9 +72,11 @@ export const fetchTimetables = (requestBody, removing, newActive = 0) => (dispat
         saveLocalCourseSections(json.new_c_to_s);
         saveLocalActiveIndex(newActive);
       } else {
-        // user wasn't removing (i.e. was adding a course/section), but we got no timetables back
+        // user wasn't removing or refetching for custom events
+        // (i.e. was adding a course/section), but we got no timetables back.
         // course added by the user resulted in a conflict, so no timetables
         // were received
+        dispatch({ type: ActionTypes.CLEAR_CONFLICTING_EVENTS });
         dispatch(alertConflict());
       }
       return json;
@@ -164,7 +168,7 @@ export const loadTimetable = (timetable, created = false) => (dispatch) => {
 };
 
 export const createNewTimetable = (ttName = 'Untitled Schedule') => (dispatch) => {
-  dispatch(loadTimetable({ name: ttName, courses: [], has_conflict: false }, true));
+  dispatch(loadTimetable({ name: ttName, courses: [], events: [], has_conflict: false }, true));
 };
 
 export const nullifyTimetable = () => (dispatch) => {
@@ -178,10 +182,13 @@ export const nullifyTimetable = () => (dispatch) => {
   });
   dispatch({
     type: ActionTypes.CHANGE_ACTIVE_SAVED_TIMETABLE,
-    timetable: { name: 'Untitled Schedule', courses: [], has_conflict: false },
+    timetable: { name: 'Untitled Schedule', courses: [], events: [], has_conflict: false },
   });
   dispatch({
     type: ActionTypes.CLEAR_OPTIONAL_COURSES,
+  });
+  dispatch({
+    type: ActionTypes.CLEAR_CUSTOM_SLOTS,
   });
 };
 
@@ -314,36 +321,88 @@ export const addOrRemoveCourse = (newCourseId, lockingSection = '') => (dispatch
   dispatch(autoSave());
 };
 
+// fetch timetables with same courses, but updated optional courses/custom slots
+const refetchTimetables = () => (dispatch) => {
+  const state = store.getState();
+  const reqBody = getBaseReqBody(state);
+
+  Object.assign(reqBody, {
+    optionCourses: state.optionalCourses.courses.map(c => c.id),
+    numOptionCourses: state.optionalCourses.numRequired,
+    customSlots: state.customSlots,
+  });
+
+  dispatch(fetchTimetables(reqBody, false));
+  dispatch(autoSave());
+};
+
 export const addLastAddedCourse = () => (dispatch) => {
   const state = store.getState();
-  if (state.timetables.lastCourseAdded !== null) {
-    dispatch(addOrRemoveCourse(state.timetables.lastCourseAdded));
+  // last timetable change was a custom event edit, not adding a course
+  if (state.timetables.lastSlotAdded === null) {
+    return;
+  }
+  if (typeof state.timetables.lastSlotAdded === 'object') {
+    dispatch({
+      type: ActionTypes.RECEIVE_CUSTOM_SLOTS,
+      events: state.timetables.lastSlotAdded,
+    });
+    dispatch(refetchTimetables());
+  } else if (typeof state.timetables.lastSlotAdded === 'number') {
+    dispatch(addOrRemoveCourse(state.timetables.lastSlotAdded));
   }
 };
 
-export const addCustomSlot = (timeStart, timeEnd, day, preview, id) => ({
-  type: ActionTypes.ADD_CUSTOM_SLOT,
-  newCustomSlot: {
-    time_start: timeStart, // match backend slot attribute names
-    time_end: timeEnd,
-    name: 'New Custom Event', // default name for custom slot
-    day,
-    id,
-    preview,
-  },
-});
+const autoFetch = () => (dispatch) => {
+  const state = store.getState();
+  clearTimeout(customEventUpdateTimer);
+  customEventUpdateTimer = setTimeout(() => {
+    if (state.timetables.items[state.timetables.active].courses.length > 0) {
+      dispatch({
+        type: ActionTypes.UPDATE_LAST_COURSE_ADDED,
+        course: state.customSlots,
+      });
+      dispatch(refetchTimetables());
+    }
+  }, 250);
+};
 
-export const updateCustomSlot = (newValues, id) => ({
-  type: ActionTypes.UPDATE_CUSTOM_SLOT,
-  newValues,
-  id,
-});
+export const addCustomSlot = (timeStart, timeEnd, day, preview, id) => (dispatch) => {
+  dispatch({
+    type: ActionTypes.ADD_CUSTOM_SLOT,
+    newCustomSlot: {
+      time_start: timeStart, // match backend slot attribute names
+      time_end: timeEnd,
+      name: 'New Custom Event', // default name for custom slot
+      day,
+      id,
+      preview,
+    },
+  });
+  dispatch(autoFetch());
+};
+
+export const updateCustomSlot = (newValues, id) => (dispatch) => {
+  dispatch({
+    type: ActionTypes.UPDATE_CUSTOM_SLOT,
+    newValues,
+    id,
+  });
+  const changedProps = Object.keys(newValues);
+  const onlyChangingName = changedProps.length === 1 && changedProps[0] === 'name';
+  if (onlyChangingName) {
+    dispatch(autoSave());
+  } else { // only refetch if we are changing the slot time
+    dispatch(autoFetch());
+  }
+};
 
 export const removeCustomSlot = id => (dispatch) => {
   dispatch({
     type: ActionTypes.REMOVE_CUSTOM_SLOT,
     id,
   });
+  dispatch(autoFetch());
 };
 
 export const addOrRemoveOptionalCourse = course => (dispatch) => {

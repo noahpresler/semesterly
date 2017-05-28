@@ -6,116 +6,76 @@ import thunkMiddleware from 'redux-thunk';
 import { Provider } from 'react-redux';
 import rootReducer from './reducers/root_reducer';
 import SemesterlyContainer from './ui/containers/semesterly_container';
-import { fetchMostClassmatesCount, getUserInfo, isRegistered } from './actions/user_actions';
+import { fetchMostClassmatesCount, isRegistered } from './actions/user_actions';
 import { loadCachedTimetable, loadTimetable, lockTimetable } from './actions/timetable_actions';
 import { fetchSchoolInfo } from './actions/school_actions';
-import { currSem } from './reducers/semester_reducer';
 import { fetchCourseClassmates, setCourseInfo } from './actions/modal_actions';
 import {
     browserSupportsLocalStorage,
     setFirstVisit,
     setFriendsCookie,
     timeLapsedGreaterThan,
+    timeLapsedInDays,
 } from './util';
 import { addTTtoGCal } from './actions/calendar_actions';
 import * as ActionTypes from './constants/actionTypes';
 
-export const store = createStore(rootReducer,
+const store = createStore(rootReducer,
     window.devToolsExtension && window.devToolsExtension(),
     applyMiddleware(thunkMiddleware),
 );
 
-// TODO: move to endpoints?
-// get functions used to get backend endpoints
-export const getSchool = () => store.getState().school.school;
-export const getSemester = () => {
-  const state = store.getState();
-  const currSemester = currSem(state.semester);
-  return `${currSemester.name}/${currSemester.year}`;
+export default store;
+
+// load initial timetable from user data if logged in or local storage
+const setupTimetables = (userTimetables, allSemesters) => (dispatch) => {
+  if (userTimetables.length > 0) {
+    dispatch(loadTimetable(userTimetables[0]));
+    dispatch({ type: ActionTypes.RECEIVE_TIMETABLE_SAVED, upToDate: true });
+    setTimeout(() => {
+      dispatch(fetchMostClassmatesCount(userTimetables[0].courses.map(c => c.id)));
+    }, 500);
+    dispatch({ type: ActionTypes.CACHED_TT_LOADED });
+  } else if (browserSupportsLocalStorage()) {
+    dispatch(loadCachedTimetable(allSemesters));
+  }
 };
 
-// setup the state. loads the currentUser's timetables if logged in; cached timetable if not.
-// also handles sharing courses and sharing timetables
-function setup(dispatch) {
-  initData = JSON.parse(initData);
-
-  // setup initial redux state
-  dispatch({ type: ActionTypes.SET_SCHOOL, school: initData.school });
-  dispatch({ type: ActionTypes.SET_SEMESTER, semester: parseInt(initData.currentSemester, 10) });
-  dispatch({ type: ActionTypes.SET_AVAIL_SEMESTERS, availSemesters: initData.allSemesters });
-  dispatch({ type: ActionTypes.SET_USES12HRTIME, uses12HrTime: initData.uses12HrTime });
-  dispatch({
-    type: ActionTypes.SET_INTEGRATIONS,
-    studentIntegrations: initData.studentIntegrations,
-  });
-  dispatch({ type: ActionTypes.SET_EXAM_SEMESTERS, exams: initData.examSupportedSemesters });
-  dispatch(getUserInfo(initData.currentUser));
-
-  // we load currentUser's timetable (or cached timetable) only if
-  // they're _not_ trying to load a shared timetable
-  if ($.isEmptyObject(initData.featureFlow) || initData.featureFlow.name !== 'SHARE_TIMETABLE') {
-    // currentUser is logged in and has saved timetables load one of the currentUser's saved
-    // timetables (after initial page load). also fetches classmates
-    if (initData.currentUser.isLoggedIn && initData.currentUser.timetables.length > 0) {
-      dispatch(loadTimetable(initData.currentUser.timetables[0]));
-      dispatch({ type: ActionTypes.RECEIVE_TIMETABLE_SAVED, upToDate: true });
-      setTimeout(() => {
-        dispatch(fetchMostClassmatesCount(
-          initData.currentUser.timetables[0].courses.map(c => c.id)));
-      }, 500);
-      dispatch({ type: ActionTypes.CACHED_TT_LOADED });
-    } else if (browserSupportsLocalStorage()
-            && (localStorage.semester === initData.currentSemester ||
-      ($.isEmptyObject(initData.featureFlow) || initData.featureFlow.name !== 'SHARE_COURSE'))) {
-    // currentUser isn't logged in (or has no saved timetables)
-    // we only load the browser-cached timetable if the shared course's semester is
-    // the same as the browser-cached timetable's semester OR the user is not trying to load a
-    // shared course at all. This results in problematic edge cases, such as showing the course
-    // modal of an S course in the F semester, being completely avoided.
-      dispatch(loadCachedTimetable(initData.allSemesters));
-    }
-  }
-
-  // check if showed friends alert in the last 3 days
-  if (browserSupportsLocalStorage() && 'serviceWorker' in navigator) {
-    if (localStorage.getItem('friendsCookie') === null) {
-      const time = new Date();
-      setFriendsCookie(time.getTime());
-      dispatch({ type: ActionTypes.ALERT_FACEBOOK_FRIENDS });
-    } else if (timeLapsedGreaterThan(localStorage.getItem('friendsCookie'), 3) === true) {
-      // if visit is more than 3 days of last friend alert
-      const time = new Date();
-      setFriendsCookie(time.getTime());
-      dispatch({ type: ActionTypes.ALERT_FACEBOOK_FRIENDS });
-    }
-  }
-
-  // check if registered for chrome notifications
+// Possibly ask user to enable notifications based on visit pattern
+const setupChromeNotifs = () => (dispatch) => {
   dispatch(isRegistered());
-  // check if first visit
-  if (browserSupportsLocalStorage() && 'serviceWorker' in navigator) {
-    if (localStorage.getItem('firstVisit') === null) {
-      const time = new Date();
-      setFirstVisit(time.getTime());
-    } else if (localStorage.getItem('declinedNotifications') === null) { // if second visit
-      if (timeLapsedGreaterThan(localStorage.getItem('firstVisit'), 1) === true) {
-        // if second visit is one day after first visit
-        // deploy up-sell pop for chrome notifications
-        dispatch({ type: ActionTypes.ALERT_ENABLE_NOTIFICATIONS });
-      }
-    } else { // if after second visit
-      if (localStorage.getItem('declinedNotifications') === true
-                || localStorage.getItem('declinedNotifications') === false) {
-        // do nothing : either accpeted or declined notigications
-      }
-      if (timeLapsedGreaterThan(localStorage.getItem('declinedNotifications'), 3) === true) {
-        // deploy up-sell pop for chrome notifications
-        dispatch({ type: ActionTypes.ALERT_ENABLE_NOTIFICATIONS });
-      }
-    }
-  }
 
-  switch (initData.featureFlow.name) {
+  const declinedNotifications = localStorage.getItem('declinedNotifications');
+  const firstVisit = localStorage.getItem('firstVisit');
+
+  const isFirstVisit = firstVisit === null;
+  const isSecondVisit = declinedNotifications === null;
+
+  const daysSinceFirstVisit = timeLapsedInDays(firstVisit);
+  const userHasActed = declinedNotifications === 'true' || declinedNotifications === 'false';
+
+  if (isFirstVisit) {
+    const time = new Date();
+    setFirstVisit(time.getTime());
+  } else if ((isSecondVisit && daysSinceFirstVisit > 1) || (!isSecondVisit && !userHasActed)) {
+    dispatch({ type: ActionTypes.ALERT_ENABLE_NOTIFICATIONS });
+  }
+};
+
+// possible show friend alert based on visit pattern
+const showFriendAlert = () => (dispatch) => {
+  const friendsCookie = localStorage.getItem('friendsCookie');
+  const isFirstVisit = friendsCookie === null;
+
+  if (isFirstVisit || timeLapsedGreaterThan(friendsCookie, 3)) {
+    const time = new Date();
+    setFriendsCookie(time.getTime());
+    dispatch({ type: ActionTypes.ALERT_FACEBOOK_FRIENDS });
+  }
+};
+
+const handleFlows = featureFlow => (dispatch) => {
+  switch (featureFlow.name) {
     case 'SIGNUP':
       dispatch({ type: ActionTypes.TRIGGER_SIGNUP_MODAL });
       break;
@@ -134,14 +94,14 @@ function setup(dispatch) {
       break;
     case 'SHARE_TIMETABLE':
       dispatch({ type: ActionTypes.CACHED_TT_LOADED });
-      dispatch(lockTimetable(initData.featureFlow.sharedTimetable,
+      dispatch(lockTimetable(featureFlow.sharedTimetable,
         true, initData.currentUser.isLoggedIn));
       break;
     case 'SHARE_EXAM':
       dispatch({ type: ActionTypes.SET_FINAL_EXAMS_SHARED });
       dispatch({
         type: ActionTypes.RECEIVE_FINAL_EXAMS,
-        json: initData.featureFlow.exam,
+        json: featureFlow.exam,
       });
       dispatch({ type: ActionTypes.SHOW_FINAL_EXAMS_MODAL });
       break;
@@ -149,8 +109,8 @@ function setup(dispatch) {
       dispatch({ type: ActionTypes.TRIGGER_TEXTBOOK_MODAL });
       break;
     case 'SHARE_COURSE':
-      dispatch(setCourseInfo(initData.featureFlow.sharedCourse));
-      dispatch(fetchCourseClassmates(initData.featureFlow.sharedCourse.id));
+      dispatch(setCourseInfo(featureFlow.sharedCourse));
+      dispatch(fetchCourseClassmates(featureFlow.sharedCourse.id));
       break;
     case 'FIND_FRIENDS':
       dispatch({ type: ActionTypes.TOGGLE_PEER_MODAL });
@@ -173,17 +133,29 @@ function setup(dispatch) {
       // unexpected feature name
       break;
   }
-}
+};
 
-setup(store.dispatch);
+const setup = () => (dispatch) => {
+  initData = JSON.parse(initData);
 
-// asynchronously get the school's specific info, including departments,
-// areas, etc
+  dispatch({ type: ActionTypes.INIT_STATE, data: initData });
+
+  dispatch(setupTimetables(initData.currentUser.timetables, initData.allSemesters));
+
+  if (browserSupportsLocalStorage() && 'serviceWorker' in navigator) {
+    dispatch(setupChromeNotifs());
+  }
+  dispatch(showFriendAlert());
+
+  dispatch(handleFlows(initData.featureFlow));
+  dispatch(fetchSchoolInfo());
+};
+
 store.dispatch(
-    fetchSchoolInfo(),
+    setup(),
 );
 
 render(
   <Provider store={store}>
     <SemesterlyContainer />
-  </Provider>, document.getElementById('page'));
+  </Provider>, document.getElementsByClassName('page')[0]);

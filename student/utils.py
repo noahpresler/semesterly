@@ -32,18 +32,25 @@ def get_student(request):
         return None
 
 
-def get_classmates_from_course_id(school, student, course_id, semester, friends=None):
+def get_classmates_from_course_id(school, student, course_id, semester, friends=None, include_same_as=False):
     if not friends:
         # All friends with social courses/sharing enabled
         friends = student.friends.filter(social_courses=True)
     course = {'course_id': course_id}
+    past_ids = [course_id]
+    if include_same_as:
+        c = Course.objects.get(id=course_id)
+        if c.same_as:
+            past_ids.append(c.same_as.id)
     curr_ptts = PersonalTimetable.objects.filter(student__in=friends, courses__id__exact=course_id) \
         .filter(Q(semester=semester)).order_by('student', 'last_updated').distinct('student')
-    past_ptts = PersonalTimetable.objects.filter(student__in=friends, courses__id__exact=course_id) \
-        .filter(~Q(semester=semester)).order_by('student', 'last_updated').distinct('student')
+    past_ptts = PersonalTimetable.objects.filter(student__in=friends, courses__id__in=past_ids) \
+        .exclude(student__in=curr_ptts.values_list('student', flat=True)).filter(~Q(semester=semester)) \
+        .order_by('student', 'last_updated').distinct('student')
 
     course['classmates'] = get_classmates_from_tts(student, course_id, curr_ptts)
     course['past_classmates'] = get_classmates_from_tts(student, course_id, past_ptts)
+
     return course
 
 
@@ -57,7 +64,7 @@ def get_avg_rating(course_ids):
 
 
 def get_user_dict(school, student, semester):
-    user_dict = {}
+    user_dict = {'timetables': []}
     if student:
         user_dict = model_to_dict(student, exclude=["user", "id", "friends"])
         user_dict["timetables"] = get_student_tts(student, school, semester)
@@ -107,6 +114,7 @@ def convert_tt_to_dict(timetable, include_last_updated=True):
             courses[-1]['slots'] = []
             courses[-1]['enrolled_sections'] = []
             courses[-1]['textbooks'] = {}
+            courses[-1]['is_waitlist_only'] = False
 
         index = course_ids.index(c.id)
         courses[index]['slots'].extend(
@@ -119,12 +127,15 @@ def convert_tt_to_dict(timetable, include_last_updated=True):
         course_section_list = sorted(course_obj.section_set.filter(semester=timetable.semester),
                                      key=lambda s: s.section_type)
         section_type_to_sections = itertools.groupby(course_section_list, lambda s: s.section_type)
-        index = course_ids.index(course_obj.id)
-        courses[index]['is_waitlist_only'] = any(
-            sections_are_filled(sections) for _, sections in section_type_to_sections)
+        if course_obj.id in course_ids:
+            index = course_ids.index(course_obj.id)
+            courses[index]['is_waitlist_only'] = any(
+                sections_are_filled(sections) for _, sections in section_type_to_sections)
 
     tt_dict['courses'] = courses
     tt_dict['avg_rating'] = get_avg_rating(course_ids)
+    if isinstance(timetable, PersonalTimetable):
+        tt_dict['events'] = [dict(model_to_dict(event), preview=False) for event in timetable.events.all()]
     return tt_dict
 
 

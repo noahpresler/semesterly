@@ -1,16 +1,16 @@
 import React from 'react';
 import SearchBarContainer from './containers/search_bar_container';
-import CourseModalContainer from './containers/course_modal_container';
+import CourseModalContainer from './containers/modals/course_modal_container';
 import TimetableLoaderContainer from './containers/timetable_loader_container';
 import SocialProfileContainer from './containers/social_profile_container';
-import * as PropTypes from '../constants/propTypes';
+import * as SemesterlyPropTypes from '../constants/semesterlyPropTypes';
 
 export const expandSideBar = () => {
-  $('#main-bar, #side-bar').removeClass('full-cal').addClass('less-cal');
+  $('.main-bar, .side-bar').removeClass('full-cal').addClass('less-cal');
 };
 
 export const collapseSideBar = () => {
-  $('#main-bar, #side-bar').removeClass('less-cal').addClass('full-cal');
+  $('.main-bar, .side-bar').removeClass('less-cal').addClass('full-cal');
 };
 
 class TopBar extends React.Component {
@@ -50,12 +50,11 @@ class TopBar extends React.Component {
           className="usr-pic print"
           src={`https://graph.facebook.com/${this.props.userInfo.fbook_uid}/picture?type=normal`}
         />
-        <div id="print-name-major" className="print">
+        <div className="print-name-major print">
           <span
-            id="print-name"
-            className="print"
+            className="print-name print"
           >{`${userInfo.userFirstName} ${userInfo.userLastName}`}</span>
-          <span id="print-major" className="print">
+          <span className="print-major print">
             {userInfo.major}
             {userInfo.class_year ? `| Class of ${userInfo.class_year}` : null} |
                         {`${this.props.currentSemester.name} ${this.props.currentSemester.year}`}
@@ -67,20 +66,21 @@ class TopBar extends React.Component {
 
   render() {
     return (
-      <div id="top-bar">
+      <div className="top-bar">
         <img
-          alt="logo" id="semesterly-logo" className="no-print"
+          alt="logo"
+          className="semesterly-logo no-print"
           src="/static/img/logo2.0-32x32.png"
         />
-        <div id="semesterly-name" className="no-print">Semester.ly</div>
-        <div id="print-content" className="print">
+        <div className="semesterly-name no-print">Semester.ly</div>
+        <div className="print-content print">
           {this.props.userInfo.isLoggedIn && this.props.userInfo.userFirstName ?
             this.renderUserForPrint() : null}
-          <div id="name-logo" className="print">
-            <div id="semesterly-name-print" className="print">Semester.ly</div>
+          <div className="name-logo print">
+            <div className="semesterly-name-print print">Semester.ly</div>
             <img
               alt="print logo"
-              id="semesterly-logo-print" className="print"
+              className="semesterly-logo-print print"
               src="/static/img/logo2.0-32x32.png"
             />
           </div>
@@ -89,7 +89,7 @@ class TopBar extends React.Component {
         <CourseModalContainer />
         <SocialProfileContainer />
         <TimetableLoaderContainer />
-        <div id="navicon" onClick={this.toggleSideBar}>
+        <div className="navicon" onClick={this.toggleSideBar}>
           <span />
           <span />
           <span />
@@ -99,8 +99,8 @@ class TopBar extends React.Component {
 }
 
 TopBar.propTypes = {
-  userInfo: PropTypes.userInfo.isRequired,
-  currentSemester: PropTypes.semester.isRequired,
+  userInfo: SemesterlyPropTypes.userInfo.isRequired,
+  currentSemester: SemesterlyPropTypes.semester.isRequired,
 };
 
 

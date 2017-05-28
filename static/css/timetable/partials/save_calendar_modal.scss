@@ -1,156 +1,156 @@
 .abnb-modal {
-	max-width: 450px;
-	height:465px;
-	overflow: auto;
-}
-.abnb-modal > div {
-	outline:none;
+  height: 465px;
+  max-width: 450px;
+  overflow: auto;
+
+  > div {
+    outline: none;
+  }
+
+  .modal-header {
+    background-color: $geee;
+    border-bottom: 1px solid $gddd;
+    padding: 25px;
+    position: relative;
+  }
 }
 
-.abnb-modal #modal-header {
-	background-color: $geee;
-	padding: 25px 25px;
-	position: relative;
-	border-bottom: 1px solid $gddd;
-}
-
-#save-calendar-container {
-    padding: 50px 30px 30px 30px;
+.save-calendar-modal__container {
+  padding: 50px 30px 30px;
 }
 
 .header-pic {
-	height: 80px;
-	width: 80px;
-	background-size: cover;
-	background-position: center;
-	background-repeat: no-repeat;
-	position: absolute;
-	right: 10%;
-	bottom: -30px;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  bottom: -30px;
+  height: 80px;
+  position: absolute;
+  right: 10%;
+  width: 80px;
 }
 
-.img-icon > img {
-    width: 22px;
+.img-icon {
+  > img {
     float: left;
     height: 22px;
-}
+    width: 22px;
+  }
 
-.img-icon > i {
-	font-size: 22px;
+  > i {
     float: left;
-}
+    font-size: 22px;
+  }
 
-.img-icon > .done {
+  > .done {
     color: #42A770;
     transform: scale(1.1);
     transition: all .2s ease-in-out;
-}
+  }
 
-.img-icon > .loader {
-    float: left;
-    border: 10px solid $gf3f3f3; /* Light grey */
-    border-radius: 50%;
-    border-top: 10px solid #3498db; /* Blue */
-    width: 10px;
-    height: 10px;
+  > .loader {
     animation: spin 2s linear infinite;
+    border: 10px solid $gf3f3f3;
+    border-radius: 50%;
+    border-top: 10px solid #3498db;
+    float: left;
+    height: 10px;
+    width: 10px;
+  }
 }
 
 @keyframes spin {
-    0% { transform: rotate(0deg); }
-    100% { transform: rotate(360deg); }
+  0% {
+    transform: rotate(0deg);
+  }
+
+  100% {
+    transform: rotate(360deg);
+  }
 }
 
 .abnb-btn {
-    width: 100%;
-    background: white;
-    color: #484848;
-    border-radius: 4px;
-    border: 1px solid;
-    border-color: #c4c4c4;
-    padding-top: 20px !important;
-    padding-bottom: 20px !important;
-    padding-left: 27px !important;
-    padding-right: 27px !important;
-}
+  background: $gfff;
+  border: 1px solid;
+  border-color: $gc4c4c4;
+  border-radius: 4px;
+  color: $g484848;
+  padding: 20px 27px !important;
+  width: 100%;
 
-.abnb-btn.secondary > span{
-	font-weight: 300;
-	color: #484848;
-}
-
-.abnb-btn:hover, .abnb-btn:focus {
+  &:hover,
+  &:focus {
     border-color: $gaaa;
-    color: #484848;
+    color: $g484848;
+  }
+
+  &.secondary {
+    > span {
+      color: $g484848;
+      font-weight: 300;
+    }
+  }
 }
 
 .or-separator {
-    background: none;
-    height: 34px;
-    position: relative;
-    text-align: center;
-    margin-bottom: 22px;
+  background: none;
+  height: 34px;
+  margin-bottom: 22px;
+  position: relative;
+  text-align: center;
+
+  hr {
+    margin: -16px auto 10px;
+    width: 100%;
+  }
 }
 
 .or-separator--text {
-    background-color: $gfff;
-    display: inline-block;
-    padding: 8px 8px 0px 8px;
-    font-size: 14px;
-    font-weight: bold;
-    color: #767676;
-}
-
-.or-separator hr {
-    margin: -16px auto 10px;
-    width: 100%;
+  background-color: $gfff;
+  color: $g777;
+  display: inline-block;
+  font-size: 14px;
+  font-weight: bold;
+  padding: 8px 8px 0;
 }
 
 .method-details {
-    text-align: center;
-    margin-top: 4px;
-    font-weight: 200;
-    font-size: 12px;
-    margin-bottom: 2px;
-    color: #767676;
+  color: $g777;
+  font-size: 12px;
+  font-weight: 200;
+  margin-bottom: 2px;
+  margin-top: 4px;
+  text-align: center;
 }
 
-#cal-name {
-    width: 100%;
-    padding: 0 10px;
-    font-size: 16px;
-    line-height: 30px;
-    height: 30px;
-    border: 1px solid #E8E8E8;
-    outline: 0;
-    border-radius: 4px;
-    margin-bottom: 10px;
-    text-align: center;
-    color: $gaaa;
-    font-weight: 300;
+.cal-name {
+  border: 1px solid $ge6e6e6;
+  border-radius: 4px;
+  color: $gaaa;
+  font-size: 16px;
+  font-weight: 300;
+  height: 30px;
+  line-height: 30px;
+  margin-bottom: 10px;
+  outline: 0;
+  padding: 0 10px;
+  text-align: center;
+  width: 100%;
 }
 
 @media(max-width: 776px) {
-	
-	.abnb-modal {
-       max-width: 500px;
-	   max-width: 1200px;
-	}
+  .abnb-modal {
+    max-width: 1200px;
+  }
 
-	.header-pic {
-        height: 50px;
-	    width: 50px;
-	    background-size: cover;
-	    background-position: center;
-	    background-repeat: no-repeat;
-	    position: absolute;
-	    right: 7%;
-	    bottom: 10px;
-	}
-
- 	.signup-modal #features{
-       padding: 0px 10px 10px 10px;
-       width: 100%;
-       font-size: 17px;
-	}
+  .header-pic {
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    bottom: 10px;
+    height: 50px;
+    position: absolute;
+    right: 7%;
+    width: 50px;
+  }
 }

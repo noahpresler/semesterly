@@ -13,6 +13,7 @@ import {
 } from '../../actions/timetable_actions';
 import { deleteTimetable, duplicateTimetable } from '../../actions/user_actions';
 import { currSem } from '../../reducers/semester_reducer';
+import { getCourseShareLink } from '../../helpers/timetable_helpers';
 
 const mapStateToProps = (state) => {
   const activeTimetable = state.timetables.items[state.timetables.active];
@@ -33,6 +34,8 @@ const mapStateToProps = (state) => {
     isCourseInRoster: courseId => activeTimetable.courses.some(c => c.id === courseId),
     mandatoryCourses,
     optionalCourses,
+    hasLoaded: !state.timetables.isFetching,
+    getShareLink: getCourseShareLink,
   };
 };
 
