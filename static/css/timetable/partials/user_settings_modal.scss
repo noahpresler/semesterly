@@ -8,7 +8,7 @@
     outline: none;
 	}
 
-  #modal-header {
+  .modal-header {
     background-color: $geee;
     border-bottom: 1px solid $gddd;
     padding: 25px;
@@ -22,7 +22,7 @@
     z-index: 1;
   }
 
-  #modal-content {
+  .modal-content {
     text-align: center;
 
     form {
@@ -30,7 +30,7 @@
     }
   }
 
-  #modal-body {
+  .modal-body {
     padding: 42px 0 20px;
 
     p {
@@ -159,7 +159,7 @@
 
 @media (max-width: 766px) {
   .welcome-modal {
-    #modal-body {
+    .modal-body {
       padding: 22px 0 20px;
 
       p {
@@ -171,7 +171,7 @@
 
 @media (max-width: 499px) {
   .welcome-modal {
-    #modal-body {
+    .modal-body {
       p {
         font-size: 12px;
       }
