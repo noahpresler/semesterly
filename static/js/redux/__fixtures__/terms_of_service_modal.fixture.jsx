@@ -1,6 +1,6 @@
 /* eslint-disable no-useless-escape */
 
-export const unacceptedFixture = {
+const unacceptedFixture = {
   isVisible: true,
   acceptTOS: () => null,
   userInfo: {
@@ -33,6 +33,4 @@ export const unacceptedFixture = {
   },
 };
 
-export const acceptedFixture = {
-
-};
+export default unacceptedFixture;

@@ -6,7 +6,7 @@ import thunkMiddleware from 'redux-thunk';
 import { Provider } from 'react-redux';
 import rootReducer from './reducers/root_reducer';
 import SemesterlyContainer from './ui/containers/semesterly_container';
-import { fetchMostClassmatesCount, isRegistered } from './actions/user_actions';
+import { fetchMostClassmatesCount, handleAgreement, isRegistered } from './actions/user_actions';
 import { loadCachedTimetable, loadTimetable, lockTimetable } from './actions/timetable_actions';
 import { fetchSchoolInfo } from './actions/school_actions';
 import { fetchCourseClassmates, setCourseInfo } from './actions/modal_actions';
@@ -14,7 +14,6 @@ import {
     browserSupportsLocalStorage,
     setFirstVisit,
     setFriendsCookie,
-    setTimeShownBanner,
     timeLapsedGreaterThan,
     timeLapsedInDays,
 } from './util';
@@ -131,23 +130,6 @@ const handleFlows = featureFlow => (dispatch) => {
     default:
       // unexpected feature name
       break;
-  }
-};
-
-// Show the TOS and privacy policy agreement if the user has not seen the latest version.
-// The modal is used for logged in users and the banner is used for anonymous users.
-const handleAgreement = (currentUser, timeUpdatedTos) => (dispatch) => {
-  if (initData.currentUser.isLoggedIn) {
-    const timeAcceptedTos = currentUser.timeAcceptedTos;
-    if (timeAcceptedTos === null || Date.parse(timeAcceptedTos) < timeUpdatedTos) {
-      dispatch({ type: ActionTypes.TRIGGER_TOS_MODAL });
-    }
-  } else {
-    const timeShownBanner = localStorage.getItem('timeShownBanner');
-    if (timeShownBanner === null || timeShownBanner < timeUpdatedTos) {
-      setTimeShownBanner(Date.now());
-      dispatch({ type: ActionTypes.TRIGGER_TOS_BANNER });
-    }
   }
 };
 
