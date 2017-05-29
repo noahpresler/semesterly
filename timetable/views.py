@@ -72,7 +72,6 @@ def manifest_json(request, js):
     html = template.render()
     return HttpResponse(html, content_type="application/json")
 
-
 @csrf_exempt
 def log_final_exam_view(request):
     try:
