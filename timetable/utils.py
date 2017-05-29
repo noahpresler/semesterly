@@ -3,6 +3,7 @@ import itertools
 from django.forms import model_to_dict
 
 from courses.serializers import augment_course_dict
+from courses.utils import sections_are_filled
 from timetable.models import Section, Course, Semester
 from timetable.school_mappers import school_to_granularity, school_to_semesters
 from timetable.scoring import get_tt_cost, get_num_days, get_avg_day_length, get_num_friends, \
@@ -16,8 +17,10 @@ def update_locked_sections(locked_sections, cid, locked_section):
     Take cid of new course, and locked section for that course
     and toggle its locked status (ie if was locked, unlock and vice versa.
     """
-    section_type = Section.objects.filter(course=cid, meeting_section=locked_section)[0].section_type
-    if locked_sections[cid].get(section_type, '') == locked_section:  # already locked
+    section_type = Section.objects.filter(
+        course=cid, meeting_section=locked_section)[0].section_type
+    if locked_sections[cid].get(
+            section_type, '') == locked_section:  # already locked
         locked_sections[cid][section_type] = ''  # unlock that section_type
     else:  # add as locked section for that section_type
         locked_sections[cid][section_type] = locked_section
@@ -33,7 +36,8 @@ def get_xproduct_indicies(lists):
     for i in xrange(len(lists) - 1, -1, -1):
         length = len(lists[i])
         num_offerings.insert(0, length)
-        num_permutations_remaining.insert(0, length * num_permutations_remaining[0])
+        num_permutations_remaining.insert(
+            0, length * num_permutations_remaining[0])
     return num_offerings, num_permutations_remaining
 
 
@@ -48,7 +52,8 @@ def add_meeting_and_check_conflict(day_to_usage, new_meeting, school):
     for offering in course_offerings:
         day = offering.day
         if day != 'U':
-            for slot in find_slots_to_fill(offering.time_start, offering.time_end, school):
+            for slot in find_slots_to_fill(
+                    offering.time_start, offering.time_end, school):
                 previous_len = max(1, len(day_to_usage[day][slot]))
                 day_to_usage[day][slot].add(offering)
                 new_conflicts += len(day_to_usage[day][slot]) - previous_len
@@ -66,13 +71,15 @@ def find_slots_to_fill(start, end, school):
     start_hour, start_minute = get_hours_minutes(start)
     end_hour, end_minute = get_hours_minutes(end)
 
-    return range(get_time_index(start_hour, start_minute, school), get_time_index(end_hour, end_minute, school))
+    return range(get_time_index(start_hour, start_minute, school),
+                 get_time_index(end_hour, end_minute, school))
 
 
 def get_time_index(hours, minutes, school):
     """Take number of hours and minutes, and return the corresponding time slot index"""
     # earliest possible hour is 8, so we get the number of hours past 8am
-    return (hours - 8) * (60 / school_to_granularity[school]) + minutes / school_to_granularity[school]
+    return (hours - 8) * (60 /
+                          school_to_granularity[school]) + minutes / school_to_granularity[school]
 
 
 def get_hours_minutes(time_string):
@@ -87,16 +94,14 @@ def get_hours_minutes(time_string):
 
 def get_hour_from_string_time(time_string):
     """Get hour as an int from time as a string."""
-    return int(time_string[:time_string.index(':')]) if ':' in time_string else int(time_string)
+    return int(time_string[:time_string.index(':')]
+               ) if ':' in time_string else int(time_string)
 
 
 def get_minute_from_string_time(time_string):
     """Get minute as an int from time as a string."""
-    return int(time_string[time_string.index(':') + 1:] if ':' in time_string else 0)
-
-
-def sections_are_filled(sections):
-    return all(section.enrolment >= section.size for section in sections)
+    return int(time_string[time_string.index(':') + 1:]
+               if ':' in time_string else 0)
 
 
 def get_tt_stats(timetable, day_to_usage):
@@ -139,19 +144,32 @@ class TimetableGenerator:
         # get a course dict -> sections dictionary
         grouped = itertools.groupby(tt, self.get_basic_course_dict)
         # augment each course dict with its section/other info
-        tt_obj['courses'] = list(itertools.starmap(augment_course_dict, grouped))
+        tt_obj['courses'] = list(
+            itertools.starmap(
+                augment_course_dict,
+                grouped))
         return dict(tt_obj, **tt_stats)
 
     def get_basic_course_dict(self, section):
         model = Course.objects.get(id=section[0])
-        course_dict = model_to_dict(model, fields=['code', 'name', 'id', 'num_credits', 'department'])
+        course_dict = model_to_dict(
+            model,
+            fields=[
+                'code',
+                'name',
+                'id',
+                'num_credits',
+                'department'])
         if section[0] in self.optional_course_ids:  # mark optional courses
             course_dict['is_optional'] = True
 
         course_section_list = sorted(model.section_set.filter(semester=self.semester),
                                      key=lambda s: s.section_type)
-        section_type_to_sections = itertools.groupby(course_section_list, lambda s: s.section_type)
-        course_dict['is_waitlist_only'] = any(sections_are_filled(sections) for _, sections in section_type_to_sections)
+        section_type_to_sections = itertools.groupby(
+            course_section_list, lambda s: s.section_type)
+        course_dict['is_waitlist_only'] = any(
+            sections_are_filled(sections) for _,
+                                              sections in section_type_to_sections)
 
         return course_dict
 
@@ -175,14 +193,16 @@ class TimetableGenerator:
               [[27, 'L5101', [<CourseOffering>], [27, 'L1001', [<CourseOffering>]]]
         with_conflicts: True if you want to consider conflicts, False otherwise.
         """
-        num_offerings, num_permutations_remaining = get_xproduct_indicies(sections)
+        num_offerings, num_permutations_remaining = get_xproduct_indicies(
+            sections)
         total_num_permutations = num_permutations_remaining.pop(0)
         for p in xrange(total_num_permutations):  # for each possible tt
             current_tt = []
             day_to_usage = self.get_day_to_usage()
             num_conflicts = 0
             add_tt = True
-            for i in xrange(len(sections)):  # add an offering for the next section
+            for i in xrange(
+                    len(sections)):  # add an offering for the next section
                 j = (p / num_permutations_remaining[i]) % num_offerings[i]
                 num_added_conflicts = add_meeting_and_check_conflict(day_to_usage,
                                                                      sections[i][j],
@@ -209,7 +229,8 @@ class TimetableGenerator:
         }
 
         for event in self.custom_events:
-            for slot in find_slots_to_fill(event['time_start'], event['time_end'], self.school):
+            for slot in find_slots_to_fill(
+                    event['time_start'], event['time_end'], self.school):
                 day_to_usage[event['day']][slot].add('custom_slot')
 
         return day_to_usage
@@ -227,27 +248,45 @@ class TimetableGenerator:
             sections = sorted(sections, key=lambda s: s.section_type)
             grouped = itertools.groupby(sections, lambda s: s.section_type)
             for section_type, sections in grouped:
-                if str(c.id) in self.locked_sections and self.locked_sections[str(c.id)].get(section_type, False):
-                    locked_section_code = self.locked_sections[str(c.id)][section_type]
+                if str(c.id) in self.locked_sections and self.locked_sections[str(
+                        c.id)].get(section_type, False):
+                    locked_section_code = self.locked_sections[str(
+                        c.id)][section_type]
                     try:
-                        locked_section = next(s for s in sections if s.meeting_section == locked_section_code)
+                        locked_section = next(
+                            s for s in sections if s.meeting_section == locked_section_code)
                     except StopIteration:
-                        all_sections.append([[c.id, section, section.offering_set.all()] for section in sections])
+                        all_sections.append(
+                            [[c.id, section, section.offering_set.all()] for section in sections])
                     else:
-                        pinned = [c.id, locked_section, locked_section.offering_set.all()]
+                        pinned = [
+                            c.id,
+                            locked_section,
+                            locked_section.offering_set.all()]
                         all_sections.append([pinned])
                 else:
-                    all_sections.append([[c.id, section, section.offering_set.all()] for section in sections])
+                    all_sections.append(
+                        [[c.id, section, section.offering_set.all()] for section in sections])
         return all_sections
 
 
 def get_current_semesters(school):
-  """
-  For a given school, get the possible semesters and the most recent year for each
-  semester that has course data, and return a list of (semester name, year) pairs.
-  """
-  semesters = school_to_semesters[school]
-  # Ensure DB has all semesters.
-  for semester in semesters:
-    Semester.objects.update_or_create(**semester)
-  return semesters
+    """
+    For a given school, get the possible semesters and the most recent year for each
+    semester that has course data, and return a list of (semester name, year) pairs.
+    """
+    semesters = school_to_semesters[school]
+    # Ensure DB has all semesters.
+    for semester in semesters:
+        Semester.objects.update_or_create(**semester)
+    return semesters
+
+
+def get_tt_rating(course_ids):
+    avgs = [Course.objects.get(id=cid).get_avg_rating()
+            for cid in set([cid for cid in course_ids])]
+    try:
+        return min(5, sum(avgs) /
+                   sum([0 if a == 0 else 1 for a in avgs]) if avgs else 0)
+    except BaseException:
+        return 0
