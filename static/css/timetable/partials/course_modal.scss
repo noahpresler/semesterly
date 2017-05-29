@@ -29,33 +29,33 @@
   }
 }
 
-.course-modal.trans #modal-content,
-.course-modal.trans #modal-header,
-.course-modal.trans #modal-header h1,
-.course-modal.trans #modal-header h2,
-.course-modal.trans #modal-body p,
-.course-modal.trans #modal-body p a,
-.course-modal.trans #modal-body .credits h4,
-.course-modal.trans #modal-body .rating-module h4,
-.course-modal.trans #modal-body .modal-module {
+.course-modal.trans .modal-content,
+.course-modal.trans .modal-header,
+.course-modal.trans .modal-header h1,
+.course-modal.trans .modal-header h2,
+.course-modal.trans .modal-body p,
+.course-modal.trans .modal-body p a,
+.course-modal.trans .modal-body .credits h4,
+.course-modal.trans .modal-body .rating-module h4,
+.course-modal.trans .modal-body .modal-module {
   background-color: transparent;
   border-color: transparent;
   color: transparent;
 }
 
-.course-modal.trans #modal-close,
-.course-modal.trans #modal-share,
-.course-modal.trans #modal-save,
-.course-modal.trans #modal-add,
-.course-modal.trans #modal-body .rating-module,
-.course-modal.trans #modal-body .modal-module,
-.course-modal.trans #modal-body .modal-module-header,
-.trans #reactions-wrapper {
+.course-modal.trans .modal-close,
+.course-modal.trans .modal-share,
+.course-modal.trans .modal-save,
+.course-modal.trans .modal-add,
+.course-modal.trans .modal-body .rating-module,
+.course-modal.trans .modal-body .modal-module,
+.course-modal.trans .modal-body .modal-module-header,
+.trans .reactions-wrapper {
   opacity: 0;
   visibility: hidden;
 }
 
-.trans .capacity-tracker-wrapper {
+.trans .capacity {
   opacity: 0;
   visibility: hidden;
 }
@@ -72,7 +72,7 @@
   transform: translate(-50%, -50%);
 }
 
-.course-modal #modal-content .loader {
+.course-modal .modal-content .loader {
   height: 90px;
   width: 90px;
 }
@@ -96,8 +96,11 @@
 }
 
 // Course Modal Content Styles
-#modal-content {
+.modal-content {
   background-color: $gfff;
+  border: 0;
+  border-radius: 0;
+  box-shadow: none;
   display: flex;
   flex-direction: column;
   height: 100%;
@@ -105,7 +108,7 @@
   width: 100%;
 }
 
-#modal-header {
+.modal-header {
   background-color: $gf3f3f3;
   border-bottom: 1px solid $gddd;
   padding: 20px 10px 10px;
@@ -134,9 +137,9 @@
 
 
 // Course Modal Corner Actions
-#modal-close,
-#modal-share,
-#modal-save {
+.modal-close,
+.modal-share,
+.modal-save {
   color: $g777;
   cursor: pointer;
   height: 20px;
@@ -153,7 +156,7 @@
   }
 }
 
-#modal-close {
+.modal-close {
   right: 5px;
 
   &:hover {
@@ -162,7 +165,7 @@
   }
 }
 
-#modal-share {
+.modal-share {
   right: 30px;
 
   &:hover {
@@ -171,7 +174,7 @@
   }
 }
 
-#modal-header {
+.modal-header {
   .share-course-link-wrapper {
     background-color: $gd4d4d4;
     border-radius: 2px;
@@ -200,7 +203,7 @@
   }
 }
 
-#modal-save {
+.modal-save {
   right: 55px;
 
   &:hover {
@@ -210,7 +213,7 @@
 }
 
 // Course Modal Add
-#modal-add {
+.modal-add {
   background-color: $primary-navy;
   border-radius: 100%;
   bottom: -34px;
@@ -271,12 +274,12 @@
 
 
 // Course Modal Body
-#modal-body {
+.modal-body {
   flex: 1;
   overflow-y: auto;
   width: 100%;
 
-  [class^='col-'] {
+  [class^="col-"] {
     padding: 30px 15px;
   }
 
@@ -397,7 +400,7 @@
   &::after {
     background-color: $gddd;
     bottom: 5px;
-    content: '';
+    content: "";
     display: block;
     height: 1px;
     left: 0;
@@ -510,7 +513,7 @@
   visibility: visible;
 }
 
-#modal-body .friend p {
+.modal-body .friend p {
   font-size: 11px;
   left: 35px;
   line-height: 30px;
@@ -524,7 +527,7 @@
   white-space: nowrap;
 }
 
-#friends-inner {
+.friends-inner {
   margin: 0 auto;
   position: relative;
 
@@ -574,14 +577,14 @@
 }
 
 .conversion-image {
-  background: url('/static/img/get_facebook.png') center no-repeat;
+  background: url("/static/img/get_facebook.png") center no-repeat;
   background-size: contain;
   height: 45px;
   margin: 10px 0;
   width: 100%;
 }
 
-#modal-content .conversion a {
+.modal-content .conversion a {
   background-color: $facebook;
   color: $gfff;
   cursor: pointer;
@@ -590,7 +593,7 @@
   padding: 4px 7px;
 }
 
-#modal-content .conversion a i {
+.modal-content .conversion a i {
   margin-right: 4px;
 }
 
@@ -631,7 +634,7 @@
 }
 
 @media (max-width: 766px) {
-  #modal-header {
+  .modal-header {
     h1 {
       font-size: 32px;
     }
@@ -641,7 +644,7 @@
     }
   }
 
-  #friends-inner {
+  .friends-inner {
     .conversion {
       p {
         text-align: center;
@@ -655,7 +658,7 @@
     position: static;
   }
 
-  #modal-header {
+  .modal-header {
     padding-bottom: 30px;
 
     h1 {
@@ -667,13 +670,13 @@
     }
 	}
 
-  #modal-body {
+  .modal-body {
     padding-top: 20px;
 	}
 
-  #modal-add,
-  #modal-share,
-  #modal-save {
+  .modal-add,
+  .modal-share,
+  .modal-save {
     background-color: $primary-navy;
     border-radius: 100%;
     bottom: -34px;
@@ -699,7 +702,7 @@
     }
 	}
 
-  #modal-share {
+  .modal-share {
     left: 25%;
 
     &:hover {
@@ -707,7 +710,7 @@
     }
 	}
 
-  #modal-save {
+  .modal-save {
     left: 50%;
 
     &:hover {
@@ -715,25 +718,25 @@
     }
 	}
 
-  #modal-add {
+  .modal-add {
     left: 75%;
 	}
 
 
 }
 
-.capacity-tracker-wrapper {
+.capacity {
   text-align: center;
 }
 
-#capacity-attention-wrapper {
+.capacity__attention {
   display: inline-block;
   font-size: 16px;
   height: 25px;
   line-height: 25px;
   margin-bottom: 10px;
 
-  > #attention-tag {
+  > .attention__tag {
     background-color: rgb(177, 81, 80);
     border-radius: 5px;
     color: $gfff;
@@ -749,7 +752,7 @@
       position: relative;
     }
 
-    #clock-icon {
+    .attention__clock-icon {
       display: inline-block;
       padding-left: 10px;
       padding-right: 10px;
@@ -760,7 +763,7 @@
     }
   }
 
-  #attention-text {
+  .attention__text {
     color: $g555;
     float: left;
     margin-left: 5px;
@@ -773,15 +776,15 @@
 
 // NOTE: 1088px is fluid up to XXXX%
 @media (max-width: 1088px) {
-  #capacity-attention-wrapper {
+  .capacity__attention {
     font-size: 16px;
     margin-top: 15px;
 
-    > #attention-tag {
+    .attention__tag {
       float: none;
     }
 
-    #attention-text {
+    .attention__text {
       float: none;
       margin: 5px 0 0;
     }
@@ -790,18 +793,18 @@
 }
 
 @media (max-width: 801px) {
-  #capacity-attention-wrapper {
+  .capacity__attention {
     font-size: 14px;
 	}
 }
 
 @media (max-width: 670px) {
-  #capacity-attention-wrapper {
+  .capacity__attention {
     font-size: 13px;
 	}
 }
 
-#capacity-tracker-text {
+.capacity__tracker-text {
   color: $g777;
   font-size: 12px;
   margin-bottom: 5px;

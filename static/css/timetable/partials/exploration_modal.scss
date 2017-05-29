@@ -31,7 +31,7 @@
   }
 }
 
-#exploration-content {
+.exploration-content {
   background: $gfff;
   height: 100%;
   position: relative;
@@ -46,26 +46,26 @@
 }
 
 .exploration-modal.trans,
-.trans #exploration-content,
-.trans #exploration-header,
-.trans #exp-title h1,
-.trans #exploration-header input,
-.trans #exploration-close,
+.trans .exploration-content,
+.trans .exploration-header,
+.trans .exp-title h1,
+.trans .exploration-header input,
+.trans .exploration-close,
 .trans h3.exp-header,
 .trans h3.exp-header:after,
 .trans h3.exp-header i,
-.trans #exploration-body p,
-.trans #exp-modal #modal-header,
-.trans #exp-modal #modal-header h1,
-.trans #exp-modal #modal-header h2,
-.trans #exp-modal #modal-content,
-.trans #modal-body .credits h4,
-.trans #exp-modal #modal-share,
-.trans #exp-modal #modal-share i,
-.trans #exp-modal #modal-add,
-.trans #exp-modal #modal-add i,
-.trans #exp-modal #modal-save,
-.trans #exp-modal #modal-save i,
+.trans .exploration-body p,
+.trans .exp-modal .modal-header,
+.trans .exp-modal .modal-header h1,
+.trans .exp-modal .modal-header h2,
+.trans .exp-modal .modal-content,
+.trans .modal-body .credits h4,
+.trans .exp-modal .modal-share,
+.trans .exp-modal .modal-share i,
+.trans .exp-modal .modal-add,
+.trans .exp-modal .modal-add i,
+.trans .exp-modal .modal-save,
+.trans .exp-modal .modal-save i,
 .trans .modal-module,
 .trans h3.modal-module-header,
 .trans h3.modal-module-header:after {
@@ -74,17 +74,17 @@
 	border-color: transparent;
 }
 
-.trans #exp-search-results,
+.trans .exp-search-results,
 .trans .modal-module,
 .trans .time-selector,
-.trans #modal-body .rating-module,
-.trans #modal-body .modal-module-header {
+.trans .modal-body .rating-module,
+.trans .modal-body .modal-module-header {
 	opacity: 0;
 	visibility: hidden;
 }
 
 // Exploration Header
-#exploration-header {
+.exploration-header {
   background-color: $geee;
   border-bottom: 1px solid $gddd;
   padding: 15px;
@@ -124,7 +124,7 @@
   }
 }
 
-#exp-title {
+.exp-title {
   i {
     display: inline-block;
     font-size: 22px;
@@ -144,7 +144,7 @@
 }
 
 /* Close Exploration Button */
-#exploration-close {
+.exploration-close {
   color: $g777;
   cursor: pointer;
   height: 20px;
@@ -166,7 +166,7 @@
 }
 
 // Share Button
-#exp-modal {
+.exp-modal {
   .share-course-link-wrapper {
     margin-right: 158px;
     margin-top: 118px;
@@ -182,7 +182,7 @@
 }
 
 // Exploration Body
-#exploration-body {
+.exploration-body {
   height: 100%;
   left: 0;
   padding: 61px 0 0;
@@ -208,7 +208,7 @@
   &::after {
     background-color: $gddd;
     bottom: 5px;
-    content: '';
+    content: "";
     display: block;
     height: 1px;
     left: 0;
@@ -229,7 +229,7 @@
 }
 
 // Exploration Filters
-#exp-filters {
+.exp-filters {
   height: 100%;
   overflow-y: auto;
   padding: 15px;
@@ -348,7 +348,7 @@
 
 
 // Exploration Search Results
-#exp-search-results {
+.exp-search-results {
   height: 100%;
   opacity: 1;
   overflow-y: auto;
@@ -385,15 +385,15 @@
 }
 
 // Exploration Course Content
-#exp-modal {
+.exp-modal {
   height: 100%;
 
-  #modal-content {
+  .modal-content {
     display: flex;
     flex-direction: column;
   }
 
-  #modal-header {
+  .modal-header {
     background-color: $gfff;
     padding: 20px 10px 30px;
   }
@@ -408,7 +408,7 @@
     padding: 0 20% 0 0;
   }
 
-  #modal-body {
+  .modal-body {
     padding-top: 20px;
   }
 
@@ -417,9 +417,9 @@
     padding: 20px 15px 0;
   }
 
-  #modal-share,
-  #modal-add,
-  #modal-save {
+  .modal-share,
+  .modal-add,
+  .modal-save {
     background-color: $primary-navy;
     border-radius: 100%;
     bottom: -34px;
@@ -445,7 +445,7 @@
     }
   }
 
-  #modal-share {
+  .modal-share {
     left: 25%;
 
     &:hover {
@@ -453,7 +453,7 @@
     }
   }
 
-  #modal-save {
+  .modal-save {
     left: 50%;
 
     &:hover {
@@ -461,7 +461,7 @@
     }
   }
 
-  #modal-add {
+  .modal-add {
     left: 75%;
 
     &:hover {
