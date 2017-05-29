@@ -16,7 +16,8 @@ from student.models import Student
 from student.utils import get_classmates_from_course_id
 from timetable.models import Semester, Course, Updates
 from timetable.school_mappers import school_code_to_name
-from timetable.utils import validate_subdomain, ValidateSubdomainMixin, FeatureFlowView
+from helpers.mixins import ValidateSubdomainMixin, FeatureFlowView
+from helpers.decorators import validate_subdomain
 
 
 # TODO: use CBV
