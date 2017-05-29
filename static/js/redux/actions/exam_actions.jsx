@@ -1,6 +1,6 @@
 import fetch from 'isomorphic-fetch';
 import Cookie from 'js-cookie';
-import { store } from '../init';
+import store from '../init';
 import * as ActionTypes from '../constants/actionTypes';
 import { getRequestShareExamLinkEndpoint, getFinalExamSchedulerEndpoint } from '../constants/endpoints';
 import { getActiveTimetable } from './user_actions';
