@@ -136,17 +136,20 @@ const handleFlows = featureFlow => (dispatch) => {
   }
 };
 
-const handleAgreement = showAgreement => (dispatch) => {
-  switch (showAgreement) {
-    case 'SHOW_AGREEMENT_MODAL':
+// Show the TOS and privacy policy agreement if the user has not seen the latest version.
+// The modal is used for logged in users and the banner is used for anonymous users.
+const handleAgreement = (currentUser, timeUpdatedTos) => (dispatch) => {
+  if (initData.currentUser.isLoggedIn) {
+    const timeAcceptedTos = currentUser.timeAcceptedTos;
+    if (timeAcceptedTos === null || Date.parse(timeAcceptedTos) < timeUpdatedTos) {
       dispatch({ type: ActionTypes.TRIGGER_TOS_MODAL });
-      break;
-    case 'SHOW_AGREEMENT_BANNER':
+    }
+  } else {
+    const timeShownBanner = localStorage.getItem('timeShownBanner');
+    if (timeShownBanner === null || timeShownBanner < timeUpdatedTos) {
+      setTimeShownBanner(Date.now());
       dispatch({ type: ActionTypes.TRIGGER_TOS_BANNER });
-      break;
-    default:
-      // unexpected feature name
-      break;
+    }
   }
 };
 
@@ -162,26 +165,10 @@ const setup = () => (dispatch) => {
   }
   dispatch(showFriendAlert());
 
-
   if (initData.featureFlow.name === null) {
-    const timeUpdatedTos = Date.parse(initData.timeUpdatedTos);
-    if (initData.currentUser.isLoggedIn) {
-      const timeAcceptedTos = Date.parse(initData.currentUser.timeAcceptedTos);
-      console.log(timeUpdatedTos, timeAcceptedTos);
-      if (timeAcceptedTos === null || timeAcceptedTos < timeUpdatedTos) {
-        dispatch({ type: ActionTypes.TRIGGER_TOS_MODAL });
-      }
-    } else {
-      const timeShownBanner = localStorage.getItem('timeShownBanner');
-      console.log(timeShownBanner);
-      if (timeShownBanner === null || timeShownBanner < timeUpdatedTos) {
-        setTimeShownBanner(Date.now());
-        dispatch({ type: ActionTypes.TRIGGER_TOS_BANNER });
-      }
-    }
+    dispatch(handleAgreement(initData.currentUser, Date.parse(initData.timeUpdatedTos)));
   }
 
-  dispatch(handleAgreement(initData.showAgreement));
   dispatch(handleFlows(initData.featureFlow));
   dispatch(fetchSchoolInfo());
 };
