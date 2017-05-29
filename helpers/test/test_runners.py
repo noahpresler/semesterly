@@ -26,7 +26,7 @@ class NoDatabaseMixin(object):
             return super(NoDatabaseMixin, self).setup_databases(*args, **kwargs)
         if self.verbosity >= 1:
             print 'No DB tests detected. Skipping Test DB creation...'
-        self._db_patch = patch('django.db.backends.utils.CursorWrapper')
+        self._db_patch = patch('django.db.backends.helpers.CursorWrapper')
         self._db_mock = self._db_patch.start()
         self._db_mock.side_effect = RuntimeError('No testing the database!')
         return None
