@@ -14,7 +14,7 @@ class UrlsTest(UrlTestCase):
 
     def test_urls_call_correct_views(self):
         self.assertUrlResolvesToView('/final_exams/',
-                                     'timetable.utils.FeatureFlowView')
+                                     'helpers.mixins.FeatureFlowView')
 
         self.assertUrlResolvesToView('/exams/', 'exams.views.ExamView')
         self.assertUrlResolvesToView('/exams/links/', 'exams.views.ExamLink')

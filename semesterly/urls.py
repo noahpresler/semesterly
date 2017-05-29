@@ -6,6 +6,7 @@ from django.views.generic import TemplateView
 from rest_framework_swagger.views import get_swagger_view
 from rest_framework.schemas import get_schema_view
 
+import helpers.mixins
 import semesterly.views
 import timetable.utils
 
@@ -13,7 +14,7 @@ import timetable.utils
 admin.autodiscover()
 
 urlpatterns = patterns('',
-                       url(r'^$', timetable.utils.FeatureFlowView.as_view(), name='home'),
+                       url(r'^$', helpers.mixins.FeatureFlowView.as_view(), name='home'),
                        url(r'about/*', TemplateView.as_view(template_name='about.html')),
                        url(r'press/*', TemplateView.as_view(template_name='press.html')),
                        url('', include('authpipe.urls')),

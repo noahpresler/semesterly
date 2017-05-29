@@ -1,69 +1,14 @@
 import itertools
-import json
-from datetime import datetime
-from functools import wraps
 
 from django.forms import model_to_dict
-from django.shortcuts import render
-from rest_framework.authentication import SessionAuthentication, BasicAuthentication
-from rest_framework.views import APIView
 
+from courses.serializers import augment_course_dict
 from timetable.models import Section, Course, Semester
-from timetable.school_mappers import school_to_granularity, school_to_semesters, \
-    VALID_SCHOOLS, AM_PM_SCHOOLS, final_exams_available
-from timetable.scoring import get_tt_cost, get_num_days, get_avg_day_length, get_num_friends, get_avg_rating
-from student.utils import get_student, get_user_dict
-
+from timetable.school_mappers import school_to_granularity, school_to_semesters
+from timetable.scoring import get_tt_cost, get_num_days, get_avg_day_length, get_num_friends, \
+    get_avg_rating
 
 MAX_RETURN = 60  # Max number of timetables we want to consider
-
-
-def timed_cache(timeout):
-    """ 
-    Return a decorator which memoizes a function, clearing its cache every 
-    timeout days.
-    """
-    def cache_decorator(f):
-        # use dict to get around python 2 non local behaviour
-        variables = {
-            'cache': {},
-            'last_flush_time': datetime.now()
-        }
-
-        def _f(*args):
-            if (datetime.now() - variables['last_flush_time']).days > timeout:
-                variables['cache'] = {}
-                variables['last_flush_time'] = datetime.now()
-            try:
-                return variables['cache'][args]
-            except KeyError:
-                variables['cache'][args] = result = f(*args)
-                return result
-
-        return _f
-
-    return cache_decorator
-
-
-def validate_subdomain(view_func):
-    @wraps(view_func)
-    def wrapper(request, *args, **kwargs):
-        if request.subdomain not in VALID_SCHOOLS:
-            return render(request, 'index.html')
-        else:
-            return view_func(request, *args, **kwargs)
-
-    # mark function for testing
-    wrapper.func_dict['requires_subdomain'] = True
-    return wrapper
-
-
-class ValidateSubdomainMixin(object):
-
-    def dispatch(self, request, *args, **kwargs):
-        if request.subdomain not in VALID_SCHOOLS:
-            return render(request, 'index.html')
-        return super(ValidateSubdomainMixin, self).dispatch(request, *args, **kwargs)
 
 
 def update_locked_sections(locked_sections, cid, locked_section):
@@ -152,23 +97,6 @@ def get_minute_from_string_time(time_string):
 
 def sections_are_filled(sections):
     return all(section.enrolment >= section.size for section in sections)
-
-
-def get_section_dict(section):
-    section_data = model_to_dict(section)
-    section_data['is_section_filled'] = section.enrolment >= section.size
-    return section_data
-
-
-def augment_course_dict(course_dict, sections):
-    sections = list(sections)
-    slot_objects = [dict(get_section_dict(section), **model_to_dict(co))
-                    for _, section, course_offerings in sections
-                    for co in course_offerings]
-    course_dict['enrolled_sections'] = [section.meeting_section for _, section, _ in sections]
-    course_dict['textbooks'] = {section.meeting_section: section.get_textbooks() for _, section, _ in sections}
-    course_dict['slots'] = slot_objects
-    return course_dict
 
 
 def get_tt_stats(timetable, day_to_usage):
@@ -311,73 +239,6 @@ class TimetableGenerator:
                 else:
                     all_sections.append([[c.id, section, section.offering_set.all()] for section in sections])
         return all_sections
-
-
-class FeatureFlowView(ValidateSubdomainMixin, APIView):
-    """ 
-    Template that handles GET requests by rendering the homepage. Feature_name or get_feature_flow() 
-    can be overridden to launch a feature or action on homepage load.
-    """
-    feature_name = None
-
-    def get_feature_flow(self, request, *args, **kwargs):
-        """ 
-        Return data needed for the feature flow for this HomeView.
-        A name value is automatically added in .get() using the feature_name class variable.
-        A semester value can also be provided, which will change the initial semester state of
-        the home page.
-        """
-        return {}
-
-    def get(self, request, *args, **kwargs):
-        self.school = request.subdomain
-        self.student = get_student(request)
-
-        feature_flow = self.get_feature_flow(request, *args, **kwargs)
-
-        # take semester provided by feature flow if available, otherwise the first available sem
-        all_semesters = get_current_semesters(self.school)
-        if 'semester' in feature_flow:
-            sem = feature_flow.pop('semester')
-            sem_dict = {'name': sem.name, 'year': sem.year}
-            if sem_dict not in all_semesters:
-                all_semesters.append(sem_dict)
-            curr_sem_index = all_semesters.index(sem_dict)
-        else:
-            curr_sem_index = 0
-            sem = Semester.objects.get(**all_semesters[curr_sem_index])
-
-        integrations = []
-        if self.student and self.student.user.is_authenticated():
-            self.student.school = self.school
-            self.student.save()
-            for i in self.student.integrations.all():
-                integrations.append(i.name)
-
-        init_data = {
-            'school': self.school,
-            'currentUser': get_user_dict(self.school, self.student, sem),
-            'currentSemester': curr_sem_index,
-            'allSemesters': all_semesters,
-            'uses12HrTime': self.school in AM_PM_SCHOOLS,
-            'studentIntegrations': integrations,
-            'examSupportedSemesters': map(all_semesters.index,
-                                          final_exams_available.get(self.school, [])),
-
-            'featureFlow': dict(feature_flow, name=self.feature_name)
-        }
-
-        return render(request, 'timetable.html', {'init_data': json.dumps(init_data)})
-
-
-class CsrfExemptSessionAuthentication(SessionAuthentication):
-
-    def enforce_csrf(self, request):
-        return
-
-
-class CsrfExemptMixin:
-    authentication_classes = (CsrfExemptSessionAuthentication, BasicAuthentication)
 
 
 def get_current_semesters(school):
