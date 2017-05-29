@@ -1,10 +1,12 @@
 import json
 
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.shortcuts import render
 from rest_framework.authentication import SessionAuthentication, BasicAuthentication
 from rest_framework.views import APIView
 
-from student.utils import get_student, get_user_dict
+from student.utils import get_student
+from student.serializers import get_user_dict
 from timetable.models import Semester
 
 from timetable.school_mappers import VALID_SCHOOLS, AM_PM_SCHOOLS, final_exams_available
@@ -84,3 +86,8 @@ class CsrfExemptSessionAuthentication(SessionAuthentication):
 
 class CsrfExemptMixin:
     authentication_classes = (CsrfExemptSessionAuthentication, BasicAuthentication)
+
+
+class RedirectToSignupMixin(LoginRequiredMixin):
+    login_url = '/signup/'
+    redirect_field_name = None

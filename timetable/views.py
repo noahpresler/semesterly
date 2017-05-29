@@ -9,7 +9,8 @@ from rest_framework.views import APIView
 
 from analytics.models import SharedTimetable
 from analytics.views import save_analytics_timetable
-from student.utils import convert_tt_to_dict, get_student
+from student.utils import get_student
+from timetable.serializers import convert_tt_to_dict
 from timetable.models import Semester, Course
 from timetable.utils import update_locked_sections, TimetableGenerator
 from helpers.mixins import ValidateSubdomainMixin, FeatureFlowView, CsrfExemptMixin
