@@ -365,7 +365,7 @@ class FeatureFlowView(ValidateSubdomainMixin, APIView):
             'examSupportedSemesters': map(all_semesters.index,
                                           final_exams_available.get(self.school, [])),
             'timeUpdatedTos': Agreement.objects.latest().last_updated.isoformat(),
-            
+
             'featureFlow': dict(feature_flow, name=self.feature_name)
         }
 
