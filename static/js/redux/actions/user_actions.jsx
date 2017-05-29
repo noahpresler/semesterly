@@ -591,6 +591,11 @@ export const changeTimetableName = name => (dispatch) => {
 
 export const acceptTOS = () => {
   fetch(acceptTOSEndpoint(), {
+    headers: {
+      'X-CSRFToken': Cookie.get('csrftoken'),
+      Accept: 'application/json',
+      'Content-Type': 'application/json',
+    },
     credentials: 'include',
     method: 'POST',
     body: '',
