@@ -20,8 +20,8 @@ from student.models import *
 from student.models import Student, Reaction, RegistrationToken, PersonalEvent
 from student.utils import next_weekday, get_classmates_from_course_id, make_token, get_student_tts
 from timetable.models import *
-from timetable.utils import *
-from timetable.utils import validate_subdomain, ValidateSubdomainMixin
+from helpers.mixins import ValidateSubdomainMixin
+from helpers.decorators import validate_subdomain
 
 DAY_MAP = {
     'M': 'mo',

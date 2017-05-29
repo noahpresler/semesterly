@@ -4,7 +4,7 @@ from django.http import HttpResponseRedirect
 from django.views.generic.base import RedirectView
 
 import timetable.views
-from timetable.utils import FeatureFlowView
+from helpers.mixins import FeatureFlowView
 
 admin.autodiscover()
 
