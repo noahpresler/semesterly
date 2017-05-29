@@ -1,18 +1,16 @@
 import { getSchoolInfoEndpoint } from '../constants/endpoints';
 import * as ActionTypes from '../constants/actionTypes';
-import store from '../init';
 import { currSem } from '../reducers/semester_reducer';
 
-export const getSchool = () => store.getState().school.school;
-export const getSemester = () => {
-  const state = store.getState();
+export const getSchool = state => state.school.school;
+export const getSemester = (state) => {
   const currSemester = currSem(state.semester);
   return `${currSemester.name}/${currSemester.year}`;
 };
 
-export const fetchSchoolInfo = () => (dispatch) => {
+export const fetchSchoolInfo = () => (dispatch, getState) => {
   dispatch({ type: ActionTypes.REQUEST_SCHOOL_INFO });
-  fetch(getSchoolInfoEndpoint())
+  fetch(getSchoolInfoEndpoint(getSchool(getState())))
     .then(response => response.json())
     .then((json) => {
       dispatch({
@@ -21,5 +19,3 @@ export const fetchSchoolInfo = () => (dispatch) => {
       });
     });
 };
-
-export const _ = null;
