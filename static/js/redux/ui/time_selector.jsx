@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import React from 'react';
 import InputRange from 'react-input-range';
 
@@ -28,14 +29,15 @@ class TimeSelector extends React.Component {
 }
 
 TimeSelector.propTypes = {
-  day: React.PropTypes.string.isRequired,
-  onChange: React.PropTypes.func.isRequired,
-  onChangeComplete: React.PropTypes.func.isRequired,
-  remove: React.PropTypes.func.isRequired,
-  value: React.PropTypes.shape({
-    max: React.PropTypes.number.isRequired,
-    min: React.PropTypes.number.isRequired,
+  day: PropTypes.string.isRequired,
+  onChange: PropTypes.func.isRequired,
+  onChangeComplete: PropTypes.func.isRequired,
+  remove: PropTypes.func.isRequired,
+  value: PropTypes.shape({
+    max: PropTypes.number.isRequired,
+    min: PropTypes.number.isRequired,
   }).isRequired,
 };
 
 export default TimeSelector;
+

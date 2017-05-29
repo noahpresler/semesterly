@@ -53,12 +53,13 @@ class Course(models.Model):
     cores = models.CharField(max_length=50, null=True, blank=True)
     geneds = models.CharField(max_length=300, null=True, blank=True)
     related_courses = models.ManyToManyField("self", blank=True)
+    same_as = models.ForeignKey('self', null=True)
 
     def __unicode__(self):
         return self.code + ": " + self.name
 
     def get_reactions(self, student=None):
-        """ 
+        """
         Return a list of dicts for each type of reaction (by title) for this course. Each dict has:
         title: the title of the reaction
         count: number of reactions with this title that this course has received
@@ -90,8 +91,17 @@ class Course(models.Model):
         return sorted(eval_info, key=itemgetter('year'))
 
     def get_avg_rating(self):
+        ratings_sum, ratings_count = self._get_ratings_sum_count()
+        if self.same_as: # include ratings for equivalent courses in the average
+            eq_sum, eq_count = self.same_as._get_ratings_sum_count()
+            ratings_sum += eq_sum
+            ratings_count += eq_count
+        return (ratings_sum / ratings_count) if ratings_count else 0
+
+    def _get_ratings_sum_count(self):
+        """ Return the sum and count of ratings of this course not counting equivalent courses. """
         ratings = Evaluation.objects.only('course', 'score').filter(course=self)
-        return sum([rating.score for rating in ratings]) / len(ratings) if ratings else 0
+        return sum([rating.score for rating in ratings]), len(ratings)
 
     def get_textbooks(self, semester):
         textbooks = []
