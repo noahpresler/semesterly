@@ -21,6 +21,7 @@ import { getNumberedName, loadTimetable, nullifyTimetable } from './timetable_ac
 import { MAX_TIMETABLE_NAME_LENGTH } from '../constants/constants';
 import * as ActionTypes from '../constants/actionTypes';
 import { currSem } from '../reducers/semester_reducer';
+import { setTimeShownBanner } from '../util';
 
 let autoSaveTimer;
 
@@ -600,4 +601,21 @@ export const acceptTOS = () => {
     method: 'POST',
     body: '',
   });
+};
+
+// Show the TOS and privacy policy agreement if the user has not seen the latest version.
+// The modal is used for logged in users and the banner is used for anonymous users.
+export const handleAgreement = (currentUser, timeUpdatedTos) => (dispatch) => {
+  if (currentUser.isLoggedIn) {
+    const timeAcceptedTos = currentUser.timeAcceptedTos;
+    if (timeAcceptedTos === null || Date.parse(timeAcceptedTos) < timeUpdatedTos) {
+      dispatch({ type: ActionTypes.TRIGGER_TOS_MODAL });
+    }
+  } else {
+    const timeShownBanner = localStorage.getItem('timeShownBanner');
+    if (timeShownBanner === null || timeShownBanner < timeUpdatedTos) {
+      setTimeShownBanner(Date.now());
+      dispatch({ type: ActionTypes.TRIGGER_TOS_BANNER });
+    }
+  }
 };
