@@ -31,7 +31,10 @@ def all_courses(request):
     for department in departments:
         dep_to_courses[department] = Course.objects.filter(school=school,
                                                            department=department).all()
-    context = {'course_map': dep_to_courses, 'school': school, 'school_name': school_name}
+    context = {
+        'course_map': dep_to_courses,
+        'school': school,
+        'school_name': school_name}
     return render_to_response("all_courses.html",
                               context,
                               context_instance=RequestContext(request))
@@ -48,7 +51,8 @@ def get_classmates_in_course(request, school, sem_name, year, course_id):
     if logged and Student.objects.filter(user=request.user).exists():
         student = Student.objects.get(user=request.user)
     if student and student.user.is_authenticated() and student.social_courses:
-        json_data = get_classmates_from_course_id(school, student, course.id, sem)
+        json_data = get_classmates_from_course_id(
+            school, student, course.id, sem)
     return HttpResponse(json.dumps(json_data), content_type="application/json")
 
 
@@ -61,7 +65,8 @@ def course_page(request, code):
         course_obj = Course.objects.filter(code__iexact=code)[0]
         # TODO: hard coding (section type, semester)
         current_year = datetime.now().year
-        semester, _ = Semester.objects.get_or_create(name='Fall', year=current_year)
+        semester, _ = Semester.objects.get_or_create(
+            name='Fall', year=current_year)
         course_dict = get_basic_course_json(course_obj, semester)
         l = course_dict['sections'].get('L', {}).values()
         t = course_dict['sections'].get('T', {}).values()
@@ -115,23 +120,24 @@ class SchoolList(APIView):
 
     def get(self, request, school):
         last_updated = None
-        if Updates.objects.filter(school=school, update_field="Course").exists():
+        if Updates.objects.filter(
+                school=school, update_field="Course").exists():
             update_time_obj = Updates.objects.get(school=school, update_field="Course") \
                 .last_updated.astimezone(timezone('US/Eastern'))
             last_updated = update_time_obj.strftime(
                 '%Y-%m-%d %H:%M') + " " + update_time_obj.tzname()
         json_data = {
-            'areas': sorted(list(Course.objects.filter(school=school) \
-                                 .exclude(areas__exact='') \
-                                 .values_list('areas', flat=True) \
+            'areas': sorted(list(Course.objects.filter(school=school)
+                                 .exclude(areas__exact='')
+                                 .values_list('areas', flat=True)
                                  .distinct())),
-            'departments': sorted(list(Course.objects.filter(school=school) \
-                                       .exclude(department__exact='') \
-                                       .values_list('department', flat=True) \
+            'departments': sorted(list(Course.objects.filter(school=school)
+                                       .exclude(department__exact='')
+                                       .values_list('department', flat=True)
                                        .distinct())),
-            'levels': sorted(list(Course.objects.filter(school=school) \
-                                  .exclude(level__exact='') \
-                                  .values_list('level', flat=True) \
+            'levels': sorted(list(Course.objects.filter(school=school)
+                                  .exclude(level__exact='')
+                                  .values_list('level', flat=True)
                                   .distinct())),
             'last_updated': last_updated
         }
@@ -145,7 +151,8 @@ class CourseModal(FeatureFlowView):
         semester, _ = Semester.objects.get_or_create(name=sem_name, year=year)
         code = code.upper()
         course = get_object_or_404(Course, school=self.school, code=code)
-        course_json = get_detailed_course_json(self.school, course, semester, self.student)
+        course_json = get_detailed_course_json(
+            self.school, course, semester, self.student)
 
         # analytics
         SharedCourseView.objects.create(
