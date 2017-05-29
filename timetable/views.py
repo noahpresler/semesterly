@@ -72,6 +72,7 @@ def manifest_json(request, js):
     html = template.render()
     return HttpResponse(html, content_type="application/json")
 
+
 @csrf_exempt
 def log_final_exam_view(request):
     try:
@@ -84,13 +85,6 @@ def log_final_exam_view(request):
     ).save()
     return HttpResponse(json.dumps({}), content_type="application/json")
 
-@validate_subdomain
-def termsofservice(request):
-  return render(request, "termsofservice.html", context_instance=RequestContext(request))
-
-@validate_subdomain
-def privacypolicy(request):
-  return render(request, "privacypolicy.html", context_instance=RequestContext(request))
 
 class TimetableView(CsrfExemptMixin, ValidateSubdomainMixin, APIView):
     def post(self, request):
