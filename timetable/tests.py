@@ -12,19 +12,19 @@ class UrlsTest(UrlTestCase):
     def test_urls_call_correct_views(self):
         # marketing urls
         self.assertUrlResolvesToView('/signin/',
-         'timetable.utils.FeatureFlowView')
+         'helpers.mixins.FeatureFlowView')
         self.assertUrlResolvesToView('/signup/',
-         'timetable.utils.FeatureFlowView')
+         'helpers.mixins.FeatureFlowView')
         self.assertUrlResolvesToView('/textbooks/',
-         'timetable.utils.FeatureFlowView')
+         'helpers.mixins.FeatureFlowView')
         self.assertUrlResolvesToView('/export_calendar/',
-         'timetable.utils.FeatureFlowView')
+         'helpers.mixins.FeatureFlowView')
         self.assertUrlResolvesToView('/notifyme/',
-         'timetable.utils.FeatureFlowView')
+         'helpers.mixins.FeatureFlowView')
         self.assertUrlResolvesToView('/find_friends/',
-         'timetable.utils.FeatureFlowView')
+         'helpers.mixins.FeatureFlowView')
         self.assertUrlResolvesToView('/callback/google_calendar/',
-         'timetable.utils.FeatureFlowView')
+         'helpers.mixins.FeatureFlowView')
 
         # redirects
         self.assertUrlResolvesToView('/timetable/random_stuff',
