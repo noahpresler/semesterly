@@ -6,13 +6,13 @@
   width: 100%;
 }
 
-[class^='col-'] {
+[class^="col-"] {
   display: block;
   width: 100%;
 }
 
 @media ( min-width: 767px ){
-  [class^='col-'] {
+  [class^="col-"] {
     float: left;
   }
 
@@ -200,7 +200,7 @@
 
   &::before,
   &::after {
-    content: '';
+    content: "";
     display: table;
   }
 
