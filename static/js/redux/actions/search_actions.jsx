@@ -5,7 +5,7 @@ import { nullifyTimetable } from './timetable_actions';
 import * as ActionTypes from '../constants/actionTypes';
 import { fetchCourseClassmates } from './modal_actions';
 import { currSem } from '../reducers/semester_reducer';
-import {getSemester} from "./school_actions";
+import { getSemester } from './school_actions';
 
 export const requestCourses = () => ({ type: ActionTypes.REQUEST_COURSES });
 
