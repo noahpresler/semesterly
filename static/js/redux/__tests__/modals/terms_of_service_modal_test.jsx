@@ -21,9 +21,38 @@ it('TOS Modal renders as expected if visible', () => {
 
 it('TOS Modal Container renders if isVisible', () => {
   const store = mockStore({
-    termsOfService: {
+    termsOfServiceModal: {
       isVisible: true,
     },
+    userInfo: unacceptedFixture.userInfo,
+  });
+  const tree = renderer.create(
+    <Provider store={store}><TermsOfServiceModalContainer /></Provider>,
+  ).toJSON();
+  delete tree.children[0].children[0].props.style.animationName;
+  delete tree.children[1].props.style.animationName;
+  expect(tree).toMatchSnapshot();
+});
+
+it('TOS Modal Container does not render if not isVisible', () => {
+  const store = mockStore({
+    termsOfServiceModal: {
+      isVisible: false,
+    },
+    userInfo: unacceptedFixture.userInfo,
+  });
+  const tree = renderer.create(
+    <Provider store={store}><TermsOfServiceModalContainer /></Provider>,
+  ).toJSON();
+  expect(tree).toMatchSnapshot();
+});
+
+it('TOS Modal Container does not render if not isVisible', () => {
+  const store = mockStore({
+    termsOfServiceModal: {
+      isVisible: false,
+    },
+    userInfo: unacceptedFixture.userInfo,
   });
   const tree = renderer.create(
     <Provider store={store}><TermsOfServiceModalContainer /></Provider>,
