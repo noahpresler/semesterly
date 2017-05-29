@@ -1,8 +1,6 @@
 import itertools
-import json
 import logging
 
-from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import get_object_or_404
 from hashids import Hashids
 from rest_framework import status
@@ -28,8 +26,7 @@ class TimetableView(CsrfExemptMixin, ValidateSubdomainMixin, APIView):
         try:
             params = request.data
         except ValueError:  # someone is trying to manually send requests
-            return HttpResponse(json.dumps({'timetables': [], 'new_c_to_s': {}}),
-                                content_type='application/json')
+            return Response({'timetables': [], 'new_c_to_s': {}}, status=status.HTTP_200_OK)
         else:
             try:
                 params['semester'] = Semester.objects.get_or_create(**params['semester'])[0]
