@@ -1,10 +1,10 @@
+import PropTypes from 'prop-types';
 import React from 'react';
 import COLOUR_DATA from '../constants/colours';
-import { getCourseShareLinkFromModal } from '../helpers/timetable_helpers';
 
-const SlotHoverTip = ({ num, code, name }) => {
+const SlotHoverTip = ({ num, code, name, getShareLinkFromModal }) => {
   const maxColourIndex = COLOUR_DATA.length - 1;
-  return (<a href={getCourseShareLinkFromModal(code)} className="course-link" key={num}>
+  return (<a href={getShareLinkFromModal(code)} className="course-link" key={num}>
     <span>{code}</span>
     <span
       className="course-link-tip"
@@ -23,9 +23,11 @@ const SlotHoverTip = ({ num, code, name }) => {
 };
 
 SlotHoverTip.propTypes = {
-  num: React.PropTypes.number.isRequired,
-  code: React.PropTypes.string.isRequired,
-  name: React.PropTypes.string.isRequired,
+  num: PropTypes.number.isRequired,
+  code: PropTypes.string.isRequired,
+  name: PropTypes.string.isRequired,
+  getShareLinkFromModal: PropTypes.func.isRequired,
 };
 
 export default SlotHoverTip;
+
