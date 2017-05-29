@@ -97,6 +97,7 @@ def course_page(request, code):
 
 
 class CourseDetail(ValidateSubdomainMixin, APIView):
+
     def get(self, request, sem_name, year, course_id):
         school = request.subdomain
         sem, _ = Semester.objects.get_or_create(name=sem_name, year=year)
@@ -110,6 +111,7 @@ class CourseDetail(ValidateSubdomainMixin, APIView):
 
 
 class SchoolList(APIView):
+
     def get(self, request, school):
         last_updated = None
         if Updates.objects.filter(school=school, update_field="Course").exists():

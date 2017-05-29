@@ -1,4 +1,4 @@
-import { getSchool, getSemester } from '../init';
+import { getSchool, getSemester } from '../actions/school_actions';
 
 /* server endpoints */
 export const getAddTTtoGCalEndpoint = () => '/user/gcal/';
