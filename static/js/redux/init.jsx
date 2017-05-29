@@ -14,6 +14,7 @@ import {
     browserSupportsLocalStorage,
     setFirstVisit,
     setFriendsCookie,
+    setTimeShownBanner,
     timeLapsedGreaterThan,
     timeLapsedInDays,
 } from './util';
@@ -160,6 +161,25 @@ const setup = () => (dispatch) => {
     dispatch(setupChromeNotifs());
   }
   dispatch(showFriendAlert());
+
+
+  if (initData.featureFlow.name === null) {
+    const timeUpdatedTos = Date.parse(initData.timeUpdatedTos);
+    if (initData.currentUser.isLoggedIn) {
+      const timeAcceptedTos = Date.parse(initData.currentUser.timeAcceptedTos);
+      console.log(timeUpdatedTos, timeAcceptedTos);
+      if (timeAcceptedTos === null || timeAcceptedTos < timeUpdatedTos) {
+        dispatch({ type: ActionTypes.TRIGGER_TOS_MODAL });
+      }
+    } else {
+      const timeShownBanner = localStorage.getItem('timeShownBanner');
+      console.log(timeShownBanner);
+      if (timeShownBanner === null || timeShownBanner < timeUpdatedTos) {
+        setTimeShownBanner(Date.now());
+        dispatch({ type: ActionTypes.TRIGGER_TOS_BANNER });
+      }
+    }
+  }
 
   dispatch(handleAgreement(initData.showAgreement));
   dispatch(handleFlows(initData.featureFlow));
