@@ -1,6 +1,6 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import Modal from 'boron/WaveModal';
-import { acceptTOS } from '../actions/user_actions';
 
 class TermsOfServiceModal extends React.Component {
   componentDidMount() {
@@ -47,7 +47,7 @@ class TermsOfServiceModal extends React.Component {
           </div>
           <button
             className="accept-tos-btn" onClick={() => {
-              acceptTOS();
+              this.props.acceptTOS();
               this.modal.hide();
             }}
           >
@@ -64,7 +64,8 @@ class TermsOfServiceModal extends React.Component {
 }
 
 TermsOfServiceModal.propTypes = {
-  isVisible: React.PropTypes.bool.isRequired,
+  isVisible: PropTypes.bool.isRequired,
+  acceptTOS: PropTypes.func.isRequired,
 };
 
 export default TermsOfServiceModal;
