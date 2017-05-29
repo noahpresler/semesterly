@@ -64,9 +64,9 @@ def get_avg_rating(course_ids):
 
 
 def get_user_dict(school, student, semester):
-    user_dict = {'timetables': []}
+    user_dict = {'timetables': [], 'timeAcceptedTos': None}
     if student:
-        user_dict = model_to_dict(student, exclude=["user", "id", "friends"])
+        user_dict = model_to_dict(student, exclude="user id friends time_accepted_tos".split())
         user_dict["timetables"] = get_student_tts(student, school, semester)
         user_dict["userFirstName"] = student.user.first_name
         user_dict["userLastName"] = student.user.last_name
@@ -83,7 +83,8 @@ def get_user_dict(school, student, semester):
         user_dict["GoogleLoggedIn"] = False
         user_dict['LoginToken'] = make_token(student).split(":", 1)[1]
         user_dict['LoginHash'] = hashids.encrypt(student.id)
-        user_dict["time_accepted_tos"] = str(student.time_accepted_tos) if student.time_accepted_tos else None
+        user_dict["timeAcceptedTos"] = student.time_accepted_tos.isoformat() \
+            if student.time_accepted_tos else None
         if google_user_exists:
             credentials = get_google_credentials(student)
             user_dict["GoogleLoggedIn"] = not (credentials is None or credentials.invalid)
