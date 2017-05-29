@@ -159,7 +159,7 @@ class Semesterly extends React.Component {
                   href="/termsofservice"
                 >Terms</a></li>
                 <li className="footer-button" role="presentation"><a
-                  href="/termsofservice"
+                  href="/privacypolicy"
                 >Privacy</a></li>
                 <li className="footer-button" role="presentation"><a
                   href="mailto:contact@semester.ly?Subject=Semesterly"
