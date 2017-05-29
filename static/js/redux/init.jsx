@@ -26,8 +26,6 @@ const store = createStore(rootReducer,
     applyMiddleware(thunkMiddleware),
 );
 
-export default store;
-
 // load initial timetable from user data if logged in or local storage
 const setupTimetables = (userTimetables, allSemesters) => (dispatch) => {
   if (userTimetables.length > 0) {
