@@ -4,7 +4,8 @@ import json
 import httplib2
 from django.core.urlresolvers import reverse
 from django.db.models import Q, Count
-from django.http import HttpResponse, HttpResponseRedirect, Http404
+from django.forms.models import model_to_dict
+from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import get_object_or_404, render_to_response, render
 from django.template import RequestContext
 from django.views.decorators.csrf import csrf_exempt
@@ -14,12 +15,11 @@ from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
-from analytics.models import *
 from authpipe.utils import get_google_credentials, check_student_token
-from student.models import *
-from student.models import Student, Reaction, RegistrationToken, PersonalEvent
+from analytics.models import CalendarExport
+from student.models import Student, Reaction, RegistrationToken, PersonalEvent, PersonalTimetable
 from student.utils import next_weekday, get_classmates_from_course_id, make_token, get_student_tts
-from timetable.models import *
+from timetable.models import Semester, Course
 from helpers.mixins import ValidateSubdomainMixin, RedirectToSignupMixin
 from helpers.decorators import validate_subdomain
 
@@ -43,13 +43,13 @@ def get_friend_count_from_course_id(school, student, course_id, semester):
 
 
 def create_unsubscribe_link(student):
-    id, token = make_token(student).split(":", 1)
+    token_id, token = make_token(student).split(":", 1)
     return reverse('student.views.unsubscribe',
-                   kwargs={'id': id, 'token': token, })
+                   kwargs={'id': token_id, 'token': token})
 
 
-def unsubscribe(request, id, token):
-    student = Student.objects.get(id=id)
+def unsubscribe(request, student_id, token):
+    student = Student.objects.get(id=student_id)
 
     if student and check_student_token(student, token):
         # Link is valid
@@ -98,21 +98,17 @@ class UserView(RedirectToSignupMixin, APIView):
         reactions = Reaction.objects.filter(student=student).values('title').annotate(
             count=Count('title'))
         if student.user.social_auth.filter(provider='google-oauth2').exists():
-            hasGoogle = True
+            has_google = True
         else:
-            hasGoogle = False
+            has_google = False
         if student.user.social_auth.filter(provider='facebook').exists():
-            social_user = student.user.social_auth.filter(
-                provider='facebook').first()
             img_url = 'https://graph.facebook.com/' + \
                 student.fbook_uid + '/picture?width=700&height=700'
-            hasFacebook = True
+            has_facebook = True
         else:
-            social_user = student.user.social_auth.filter(
-                provider='google-oauth2').first()
             img_url = student.img_url.replace('sz=50', 'sz=700')
-            hasFacebook = False
-        hasNotificationsEnabled = RegistrationToken.objects.filter(
+            has_facebook = False
+        has_notifications_enabled = RegistrationToken.objects.filter(
             student=student).exists()
         context = {
             'name': student.user,
@@ -121,9 +117,9 @@ class UserView(RedirectToSignupMixin, APIView):
             'student': student,
             'total': 0,
             'img_url': img_url,
-            'hasGoogle': hasGoogle,
-            'hasFacebook': hasFacebook,
-            'notifications': hasNotificationsEnabled
+            'hasGoogle': has_google,
+            'hasFacebook': has_facebook,
+            'notifications': has_notifications_enabled
         }
         for r in reactions:
             context[r['title']] = r['count']
@@ -136,7 +132,8 @@ class UserView(RedirectToSignupMixin, APIView):
 
     def patch(self, request):
         student = get_object_or_404(Student, user=request.user)
-        settings = 'social_offerings social_courses social_all major class_year emails_enabled'.split()
+        settings = 'social_offerings social_courses social_all major class_year ' \
+                   'emails_enabled'.split()
         for setting in settings:
             default_val = getattr(student, setting)
             new_val = request.data.get(setting, default_val)
@@ -357,7 +354,8 @@ class ClassmateView(ValidateSubdomainMixin, RedirectToSignupMixin, APIView):
                     'shared_courses': shared_courses,
                     'profile_url': 'https://www.facebook.com/' + friend.fbook_uid,
                     'name': friend.user.first_name + ' ' + friend.user.last_name,
-                    'large_img': 'https://graph.facebook.com/' + friend.fbook_uid + '/picture?width=700&height=700'
+                    'large_img': 'https://graph.facebook.com/' + friend.fbook_uid +
+                                 '/picture?width=700&height=700'
                 })
 
             friends.sort(
@@ -415,8 +413,8 @@ class GCalView(RedirectToSignupMixin, APIView):
                 res = {
                     'summary': course['name'] + " " + course['code'] + slot['meeting_section'],
                     'location': slot['location'],
-                    'description': course['code'] + slot[
-                        'meeting_section'] + '\n' + instructors + description + '\n\n' + 'Created by Semester.ly',
+                    'description': course['code'] + slot['meeting_section'] + '\n' + instructors +
+                    description + '\n\n' + 'Created by Semester.ly',
                     'start': {
                         'dateTime': start.strftime("%Y-%m-%dT%H:%M:%S"),
                         'timeZone': 'America/New_York',
@@ -430,8 +428,9 @@ class GCalView(RedirectToSignupMixin, APIView):
                         DAY_MAP[slot['day']]
                     ],
                 }
-                event = service.events().insert(calendarId=created_calendar['id'],
-                                                body=res).execute()
+                service.events().insert(
+                    calendarId=created_calendar['id'],
+                    body=res).execute()
 
         analytic = CalendarExport.objects.create(
             student=student,
