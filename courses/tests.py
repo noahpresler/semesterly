@@ -1,9 +1,10 @@
 from datetime import datetime
-from rest_framework.test import APITestCase
-from rest_framework import status
 
-from test_utils.test_cases import UrlTestCase
+from rest_framework import status
+from rest_framework.test import APITestCase
+
 from timetable.models import Semester, Course, Section, Offering, Updates
+from helpers.test.test_cases import UrlTestCase
 
 
 class CourseDetail(APITestCase):

@@ -1,10 +1,9 @@
-from rest_framework.test import APITestCase
 from rest_framework import status
-
-from test_utils.utils import get_default_tt_request
-from test_utils.test_cases import UrlTestCase
+from rest_framework.test import APITestCase
+from helpers.test.data import get_default_tt_request
 
 from timetable.models import Semester, Course, Section, Offering
+from helpers.test.test_cases import UrlTestCase
 
 
 class UrlsTest(UrlTestCase):

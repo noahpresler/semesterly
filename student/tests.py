@@ -1,12 +1,13 @@
 from django.contrib.auth.models import User
-from django.forms.models import model_to_dict
 from django.core.urlresolvers import resolve
-from rest_framework.test import APITestCase, APIRequestFactory, force_authenticate
+from django.forms.models import model_to_dict
 from rest_framework import status
+from rest_framework.test import APITestCase, APIRequestFactory, force_authenticate
 
-from test_utils.test_cases import UrlTestCase
 from student.models import Student, PersonalTimetable, Reaction
 from timetable.models import Semester, Course, Section, Offering
+from helpers.test.test_cases import UrlTestCase
+
 
 class UrlsTest(UrlTestCase):
     """ Test student/urls.py """
