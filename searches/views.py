@@ -12,7 +12,7 @@ from searches.utils import get_course_matches
 from student.models import Student
 from student.utils import get_student
 from timetable.models import Semester
-from timetable.utils import ValidateSubdomainMixin, CsrfExemptMixin
+from helpers.mixins import ValidateSubdomainMixin, CsrfExemptMixin
 
 
 class CourseSearchList(CsrfExemptMixin, ValidateSubdomainMixin, APIView):

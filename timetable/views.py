@@ -11,8 +11,8 @@ from analytics.models import SharedTimetable
 from analytics.views import save_analytics_timetable
 from student.utils import convert_tt_to_dict, get_student
 from timetable.models import Semester, Course
-from timetable.utils import update_locked_sections, TimetableGenerator, ValidateSubdomainMixin, \
-    FeatureFlowView, CsrfExemptMixin
+from timetable.utils import update_locked_sections, TimetableGenerator
+from helpers.mixins import ValidateSubdomainMixin, FeatureFlowView, CsrfExemptMixin
 
 hashids = Hashids(salt="x98as7dhg&h*askdj^has!kj?xz<!9")
 logger = logging.getLogger(__name__)
