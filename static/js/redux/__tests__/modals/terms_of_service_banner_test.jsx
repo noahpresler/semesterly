@@ -60,7 +60,7 @@ describe('TOS Banner is correctly triggered by handleAgreement', () => {
 
     store.dispatch(handleAgreement(currentUser, Date.now()));
     const expectedActions = store.getActions();
-    expect(expectedActions[0]).toEqual({type: ActionTypes.TRIGGER_TOS_BANNER});
+    expect(expectedActions[0]).toEqual({ type: ActionTypes.TRIGGER_TOS_BANNER });
   });
 
   it('NOT if cookie is present and current', () => {
@@ -101,6 +101,6 @@ describe('TOS Banner is correctly triggered by handleAgreement', () => {
 
     store.dispatch(handleAgreement(currentUser, timeAccepted + 1));
     const expectedActions = store.getActions();
-    expect(expectedActions[0]).toEqual({type: ActionTypes.TRIGGER_TOS_BANNER});
+    expect(expectedActions[0]).toEqual({ type: ActionTypes.TRIGGER_TOS_BANNER });
   });
 });
