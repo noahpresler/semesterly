@@ -1,8 +1,8 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`TOS Banner Container does not render if not isVisible 1`] = `
+exports[`TOS Banner Renders As Expected fully if isVisible 1`] = `
 <div
-  className="tos-banner"
+  className="tos-banner show"
 >
   <p>
     By using Semester.ly you agree to our
@@ -33,9 +33,9 @@ exports[`TOS Banner Container does not render if not isVisible 1`] = `
 </div>
 `;
 
-exports[`TOS Banner Container renders if isVisible 1`] = `
+exports[`TOS Banner Renders As Expected null if not isVisible 1`] = `
 <div
-  className="tos-banner show"
+  className="tos-banner"
 >
   <p>
     By using Semester.ly you agree to our
