@@ -11,84 +11,88 @@ import * as ActionTypes from '../../constants/actionTypes';
 const middlewares = [thunk];
 const mockStore = configureMockStore(middlewares);
 
-it('TOS Modal Container renders if isVisible', () => {
-  const store = mockStore({
-    termsOfServiceModal: {
-      isVisible: true,
-    },
-    userInfo: unacceptedFixture.userInfo,
+describe('TOS Modal Renders As Expected', () => {
+  it('when isVisible', () => {
+    const store = mockStore({
+      termsOfServiceModal: {
+        isVisible: true,
+      },
+      userInfo: unacceptedFixture.userInfo,
+    });
+    const tree = renderer.create(
+      <Provider store={store}><TermsOfServiceModalContainer /></Provider>,
+    ).toJSON();
+    delete tree.children[0].children[0].props.style.animationName;
+    delete tree.children[1].props.style.animationName;
+    expect(tree).toMatchSnapshot();
   });
-  const tree = renderer.create(
-    <Provider store={store}><TermsOfServiceModalContainer /></Provider>,
-  ).toJSON();
-  delete tree.children[0].children[0].props.style.animationName;
-  delete tree.children[1].props.style.animationName;
-  expect(tree).toMatchSnapshot();
+
+  it('when not isVisible', () => {
+    const store = mockStore({
+      termsOfServiceModal: {
+        isVisible: false,
+      },
+      userInfo: unacceptedFixture.userInfo,
+    });
+    const tree = renderer.create(
+      <Provider store={store}><TermsOfServiceModalContainer /></Provider>,
+    ).toJSON();
+    expect(tree).toMatchSnapshot();
+  });
 });
 
-it('TOS Modal Container does not render if not isVisible', () => {
-  const store = mockStore({
-    termsOfServiceModal: {
-      isVisible: false,
-    },
-    userInfo: unacceptedFixture.userInfo,
-  });
-  const tree = renderer.create(
-    <Provider store={store}><TermsOfServiceModalContainer /></Provider>,
-  ).toJSON();
-  expect(tree).toMatchSnapshot();
-});
+describe('HandleAgreement correctly triggers tosMODAL', () => {
+  it('if unaccepted', () => {
+    const store = mockStore({
+      termsOfServiceModal: {
+        isVisible: true,
+      },
+      userInfo: unacceptedFixture.userInfo,
+    });
 
-it('HandleAgreement sets TOSModal to visible if unaccepted', () => {
-  const store = mockStore({
-    termsOfServiceModal: {
-      isVisible: true,
-    },
-    userInfo: unacceptedFixture.userInfo,
+    const currentUser = {
+      timeAcceptedTos: null,
+      isLoggedIn: true,
+    };
+
+    store.dispatch(handleAgreement(currentUser, Date.now()));
+    const expectedActions = store.getActions();
+    expect(expectedActions[0]).toEqual({type: ActionTypes.TRIGGER_TOS_MODAL});
   });
 
-  const currentUser = {
-    timeAcceptedTos: null,
-    isLoggedIn: true,
-  };
+  it('if accepted but outdated', () => {
+    const store = mockStore({
+      termsOfServiceModal: {
+        isVisible: true,
+      },
+      userInfo: unacceptedFixture.userInfo,
+    });
 
-  store.dispatch(handleAgreement(currentUser, Date.now()));
-  const expectedActions = store.getActions();
-  expect(expectedActions[0]).toEqual({ type: ActionTypes.TRIGGER_TOS_MODAL });
-});
+    const currentUser = {
+      timeAcceptedTos: 0,
+      isLoggedIn: true,
+    };
 
-it('HandleAgreement sets TOSModal to visible if TOS updated', () => {
-  const store = mockStore({
-    termsOfServiceModal: {
-      isVisible: true,
-    },
-    userInfo: unacceptedFixture.userInfo,
+    store.dispatch(handleAgreement(currentUser, Date.parse(1)));
+    const expectedActions = store.getActions();
+    expect(expectedActions[0]).toEqual({type: ActionTypes.TRIGGER_TOS_MODAL});
   });
 
-  const currentUser = {
-    timeAcceptedTos: 0,
-    isLoggedIn: true,
-  };
+  it('empty if logged in and accepted', () => {
+    const store = mockStore({
+      termsOfServiceModal: {
+        isVisible: true,
+      },
+      userInfo: unacceptedFixture.userInfo,
+    });
 
-  store.dispatch(handleAgreement(currentUser, Date.parse(1)));
-  const expectedActions = store.getActions();
-  expect(expectedActions[0]).toEqual({ type: ActionTypes.TRIGGER_TOS_MODAL });
-});
+    const currentUser = {
+      timeAcceptedTos: 2,
+      isLoggedIn: true,
+    };
 
-it('HandleAgreement takes no action if logged in and accepted', () => {
-  const store = mockStore({
-    termsOfServiceModal: {
-      isVisible: true,
-    },
-    userInfo: unacceptedFixture.userInfo,
+    store.dispatch(handleAgreement(currentUser, Date.parse(1)));
+    const expectedActions = store.getActions();
+    expect(expectedActions).toEqual([]);
   });
-
-  const currentUser = {
-    timeAcceptedTos: 2,
-    isLoggedIn: true,
-  };
-
-  store.dispatch(handleAgreement(currentUser, Date.parse(1)));
-  const expectedActions = store.getActions();
-  expect(expectedActions).toEqual([]);
 });
