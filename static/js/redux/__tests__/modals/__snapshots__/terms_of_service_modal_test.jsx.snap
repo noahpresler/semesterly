@@ -1,8 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`TOS Modal Container does not render if not isVisible 1`] = `null`;
-
-exports[`TOS Modal Container renders if isVisible 1`] = `
+exports[`TOS Modal Renders As Expected when isVisible 1`] = `
 <span>
   <div
     className="terms-of-service-modal max-modal"
@@ -100,3 +98,5 @@ exports[`TOS Modal Container renders if isVisible 1`] = `
   />
 </span>
 `;
+
+exports[`TOS Modal Renders As Expected when not isVisible 1`] = `null`;
