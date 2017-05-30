@@ -57,7 +57,7 @@ describe('HandleAgreement correctly triggers tosMODAL', () => {
 
     store.dispatch(handleAgreement(currentUser, Date.now()));
     const expectedActions = store.getActions();
-    expect(expectedActions[0]).toEqual({type: ActionTypes.TRIGGER_TOS_MODAL});
+    expect(expectedActions[0]).toEqual({ type: ActionTypes.TRIGGER_TOS_MODAL });
   });
 
   it('if accepted but outdated', () => {
@@ -75,7 +75,7 @@ describe('HandleAgreement correctly triggers tosMODAL', () => {
 
     store.dispatch(handleAgreement(currentUser, Date.parse(1)));
     const expectedActions = store.getActions();
-    expect(expectedActions[0]).toEqual({type: ActionTypes.TRIGGER_TOS_MODAL});
+    expect(expectedActions[0]).toEqual({ type: ActionTypes.TRIGGER_TOS_MODAL });
   });
 
   it('empty if logged in and accepted', () => {
