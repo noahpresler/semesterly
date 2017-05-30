@@ -90,7 +90,7 @@
     "build": "./node_modules/.bin/webpack --config webpack.config.js --progress --colors",
     "watch": "node server.js",
     "lint-staged": "lint-staged",
-    "lint": "./node_modules/.bin/eslint \"static/js/redux/**\"; ./node_modules/.bin/sass-lint -c .scss-lint.yml 'static/css/timetable/*.scss, static/css/timetable/base/*.scss' -v -q",
+    "lint": "./node_modules/.bin/eslint \"static/js/redux/**\"; ./node_modules/.bin/sass-lint -c .sass-lint.yml 'static/css/timetable/*.scss, static/css/timetable/**/*.scss' -v -q",
     "lint-fix": "./node_modules/.bin/eslint --fix \"static/js/redux/**\" ",
     "lint-scss-staged": "./node_modules/.bin/sass-lint -c .sass-lint-precommit.yml -v -q"
   },
