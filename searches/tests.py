@@ -47,13 +47,11 @@ class AdvancedSearchTest(APITestCase):
 
     def test_filter_times(self):
         filters = {
-            'filters' : {
-                'times': [{
-                    'min': 12,
-                    'max': 20,
-                    'day': 'Tuesday'
-                }]
-            }
+            'times': [{
+                'min': 12,
+                'max': 20,
+                'day': 'Tuesday'
+            }]
         }
         response =  self.client.post('/search/Winter/1995/sea/', filters, format='json', **self.request_headers)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
@@ -61,9 +59,7 @@ class AdvancedSearchTest(APITestCase):
 
     def test_filter_levels(self):
         filters = {
-            'filters' : {
-                'levels': [100]
-            }
+            'levels': [100]
         }
         response =  self.client.post('/search/Winter/1995/sea/', filters, format='json', **self.request_headers)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
