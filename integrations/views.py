@@ -4,7 +4,7 @@ from rest_framework.response import Response
 from rest_framework import status
 
 from timetable.models import CourseIntegration
-from timetable.utils import ValidateSubdomainMixin
+from helpers.mixins import ValidateSubdomainMixin
 from integrations.serializers import CourseIntegrationSerializer
 
 
