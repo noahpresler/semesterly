@@ -14,6 +14,8 @@ from student.utils import get_student
 from timetable.models import Semester
 from helpers.mixins import ValidateSubdomainMixin, CsrfExemptMixin
 
+SEARCHER = Searcher()
+
 
 class CourseSearchList(CsrfExemptMixin, ValidateSubdomainMixin, APIView):
 
