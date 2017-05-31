@@ -7,7 +7,6 @@ import math
 import operator
 import pdb
 from operator import or_
-from scipy.sparse import linalg
 from sklearn.feature_extraction.text import CountVectorizer
 from sklearn.feature_extraction.text import TfidfTransformer
 from sklearn import mixture
@@ -176,8 +175,8 @@ class Searcher():
                                                 descp_contains_query &
                                                 Q(section__semester=semester)
                                                 )
-        courses_objs = list(title_matching_courses.all()[:self.MAX_CAPACITY]) +
-        list(descp_matching_courses.all()[:self.MAX_CAPACITY -
+        courses_objs = list(title_matching_courses.all()[:self.MAX_CAPACITY]) + \
+                       list(descp_matching_courses.all()[:self.MAX_CAPACITY -
                                           title_matching_courses.count()])
         return self.get_relevant_courses(query, courses_objs)
 
@@ -208,8 +207,8 @@ class Searcher():
                 course_object.append(course)
                 course_codes[course.name] = (course.code, num_courses)
                 num_courses += 1
-            elif course.name in course_titles and
-            course_codes[course.name][0] > course.code:
+            elif (course.name in course_titles and
+                  course_codes[course.name][0] > course.code):
                 course_object[course_codes[course.name][1]] = course
         return course_object
 
@@ -242,7 +241,7 @@ class Evaluator():
         while num_retrieved < num_relevant_courses:
             course_code = retrieved_courses[i-1]
             if course_code in relevant_courses:
-                num_retrieved+=1.0
+                num_retrieved += 1.0
                 print(query + ": " + str(num_retrieved))
             precision_array.append(float(num_retrieved / i))
             i += 1
@@ -374,5 +373,3 @@ class Experiment():
         plt.ylabel("Log Likelihood")
         plt.xlabel("K (number of clusters)")
         plt.show()
-
-SEARCHER = Searcher()
