@@ -8,6 +8,7 @@ export const getLogFacebookAlertViewEndpoint = () => '/user/log_fb_alert_view/';
 export const getLogFacebookAlertClickEndpoint = () => '/user/log_fb_alert_click/';
 export const getCourseInfoEndpoint = courseId => `/courses/${getSemester()}/id/${courseId}/`;
 export const getCourseSearchEndpoint = query => `/search/${getSemester()}/${query}/`;
+export const getAdvancedCourseSearchEndpoint = (query, page) => `${getCourseSearchEndpoint(query)}?${$.param({ page })}`;
 export const getTimetablesEndpoint = () => '/timetables/';
 export const getLoadSavedTimetablesEndpoint = semester => `/user/timetables/${semester.name}/${semester.year}/`;
 export const getSaveTimetableEndpoint = () => '/user/timetables/';
