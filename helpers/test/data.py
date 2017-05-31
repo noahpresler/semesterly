@@ -1,6 +1,3 @@
-import json
-
-
 def get_default_tt_request():
     return {
         'courseSections': {},

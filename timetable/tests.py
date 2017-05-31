@@ -1,10 +1,9 @@
-from rest_framework.test import APITestCase
 from rest_framework import status
-
-from test_utils.utils import get_default_tt_request
-from test_utils.test_cases import UrlTestCase
+from rest_framework.test import APITestCase
+from helpers.test.data import get_default_tt_request
 
 from timetable.models import Semester, Course, Section, Offering
+from helpers.test.test_cases import UrlTestCase
 
 
 class UrlsTest(UrlTestCase):
@@ -13,32 +12,37 @@ class UrlsTest(UrlTestCase):
     def test_urls_call_correct_views(self):
         # marketing urls
         self.assertUrlResolvesToView('/signin/',
-         'timetable.utils.FeatureFlowView')
+                                     'helpers.mixins.FeatureFlowView')
         self.assertUrlResolvesToView('/signup/',
-         'timetable.utils.FeatureFlowView')
+                                     'helpers.mixins.FeatureFlowView')
         self.assertUrlResolvesToView('/textbooks/',
-         'timetable.utils.FeatureFlowView')
+                                     'helpers.mixins.FeatureFlowView')
         self.assertUrlResolvesToView('/export_calendar/',
-         'timetable.utils.FeatureFlowView')
+                                     'helpers.mixins.FeatureFlowView')
         self.assertUrlResolvesToView('/notifyme/',
-         'timetable.utils.FeatureFlowView')
+                                     'helpers.mixins.FeatureFlowView')
         self.assertUrlResolvesToView('/find_friends/',
-         'timetable.utils.FeatureFlowView')
+                                     'helpers.mixins.FeatureFlowView')
         self.assertUrlResolvesToView('/callback/google_calendar/',
-         'timetable.utils.FeatureFlowView')
+                                     'helpers.mixins.FeatureFlowView')
 
         # redirects
-        self.assertUrlResolvesToView('/timetable/random_stuff', 'timetable.views.redirect_to_home')
-        self.assertUrlResolvesToView('/timetable/', 'timetable.views.redirect_to_home')
+        self.assertUrlResolvesToView('/timetable/random_stuff',
+                                     'django.views.generic.base.RedirectView')
+        self.assertUrlResolvesToView(
+            '/timetable/', 'django.views.generic.base.RedirectView')
 
         # timetables
-        self.assertUrlResolvesToView('/timetables/', 'timetable.views.TimetableView')
+        self.assertUrlResolvesToView(
+            '/timetables/', 'timetable.views.TimetableView')
 
         # timetable sharing
-        self.assertUrlResolvesToView('/timetables/links/', 'timetable.views.TimetableLinkView')
-        self.assertUrlResolvesToView('/timetables/links/SecAV/', 'timetable.views.TimetableLinkView')
-        # old timetable sharing format
-        self.assertUrlResolvesToView('/share/dIcMED', 'timetable.views.TimetableLinkView')
+        self.assertUrlResolvesToView(
+            '/timetables/links/',
+            'timetable.views.TimetableLinkView')
+        self.assertUrlResolvesToView(
+            '/timetables/links/SecAV/',
+            'timetable.views.TimetableLinkView')
 
 
 class TimetableViewTest(APITestCase):
@@ -55,7 +59,11 @@ class TimetableViewTest(APITestCase):
                 {'course_id': 6076, 'section_codes': ['']}
             ]})
 
-        response = self.client.post('/timetables/', request_data, format='json', **self.request_headers)
+        response = self.client.post(
+            '/timetables/',
+            request_data,
+            format='json',
+            **self.request_headers)
         self.assertEqual(response.status_code, 200)
 
         self.assertEqual(len(response.data['new_c_to_s']), 2)
@@ -69,9 +77,15 @@ class TimetableLinkViewTest(APITestCase):
 
     def setUp(self):
         sem = Semester.objects.create(name='Fall', year='2000')
-        course = Course.objects.create(id=1, school='uoft', code='SEM101', name='Intro')
-        section = Section.objects.create(course=course, semester=sem, meeting_section='L1')
-        Offering.objects.create(section=section, day='M', time_start='8:00', time_end='10:00')
+        course = Course.objects.create(
+            id=1, school='uoft', code='SEM101', name='Intro')
+        section = Section.objects.create(
+            course=course, semester=sem, meeting_section='L1')
+        Offering.objects.create(
+            section=section,
+            day='M',
+            time_start='8:00',
+            time_end='10:00')
 
     def test_create_then_get_link(self):
         data = {
@@ -83,12 +97,19 @@ class TimetableLinkViewTest(APITestCase):
             },
             'semester': {'name': 'Fall', 'year': '2000'}
         }
-        response = self.client.post('/timetables/links/', data, format='json', **self.request_headers)
+        response = self.client.post(
+            '/timetables/links/',
+            data,
+            format='json',
+            **self.request_headers)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertIn('slug', response.data)
 
         slug = response.data['slug']
 
-        # assumes that the response will be a 404 if post did not actually create a shared timetable
-        response = self.client.get('/timetables/links/{}/'.format(slug), **self.request_headers)
+        # assumes that the response will be a 404 if post did not actually
+        # create a shared timetable
+        response = self.client.get(
+            '/timetables/links/{}/'.format(slug),
+            **self.request_headers)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
