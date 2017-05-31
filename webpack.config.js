@@ -70,6 +70,10 @@ const config = {
             },
           }, {
             loader: 'postcss-loader',
+            options: {
+              minimize: isProd,
+              sourceMap: isDev,
+            },
           }, {
             loader: 'sass-loader',
             options: {
