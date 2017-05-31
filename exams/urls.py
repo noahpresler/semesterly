@@ -2,7 +2,7 @@ from django.conf.urls import patterns, url
 from django.contrib import admin
 
 import exams.views
-from timetable.utils import FeatureFlowView
+from helpers.mixins import FeatureFlowView
 
 admin.autodiscover()
 
