@@ -1,16 +1,14 @@
 from django.conf.urls import patterns, url
 from django.contrib import admin
+from django.http import HttpResponseRedirect
+from django.views.generic.base import RedirectView
 
 import timetable.views
-from timetable.utils import FeatureFlowView
+from helpers.mixins import FeatureFlowView
 
 admin.autodiscover()
 
 urlpatterns = patterns('',
-                       # TODO: remove unused endpoint or use TemplateView instead
-                       url(r'^jhu/countdown/*$', timetable.views.jhu_timer),
-
-                       # feature flows
                        url(r'^signin/*$',
                            FeatureFlowView.as_view(feature_name='USER_ACQ')),
                        url(r'^signup/*$',
@@ -26,12 +24,8 @@ urlpatterns = patterns('',
                        url(r'^callback/google_calendar/*$',
                            FeatureFlowView.as_view(feature_name='GCAL_CALLBACK')),
 
-                       # TODO: move to analytics
-                       url(r'^user/log_final_exam/*$', timetable.views.log_final_exam_view),
+                       url(r'^timetable/.*$', RedirectView.as_view(url="/")),
 
-                       # redirects
-                       url(r'^timetable/*$', timetable.views.redirect_to_home),
-                       url(r'^timetable/.+$', timetable.views.redirect_to_home),
                        url(r'^complete/facebook/.*$', FeatureFlowView.as_view()),
 
                        # timetables
@@ -43,5 +37,7 @@ urlpatterns = patterns('',
                            timetable.views.TimetableLinkView.as_view()),
 
                        # maintain backwards compatibility TODO: change to redirect
-                       url(r'share/(?P<slug>.+)/*$', timetable.views.TimetableLinkView.as_view())
+                       url(r'share/(?P<slug>.+)/$',
+                           lambda request, slug:
+                           HttpResponseRedirect('/timetables/links/{0}/'.format(slug)))
                        )

@@ -1,8 +1,8 @@
-from rest_framework.test import APITestCase
 from rest_framework import status
+from rest_framework.test import APITestCase
 
-from test_utils.test_cases import UrlTestCase
 from timetable.models import Course, Integration, CourseIntegration
+from helpers.test.test_cases import UrlTestCase
 
 
 class UrlsTest(UrlTestCase):
