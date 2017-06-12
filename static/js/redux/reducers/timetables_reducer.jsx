@@ -36,6 +36,10 @@ const timetables = (state = initialState, action) => {
         active: 0,
       };
     }
+
+    case ActionTypes.RECEIVE_COURSES:
+      return Object.assign({}, state, { isFetching: false });
+
     case ActionTypes.HOVER_COURSE: {
       // add the course to the current timetable, but mark it as "fake", so we can
       // identify it to remove upon unhover
