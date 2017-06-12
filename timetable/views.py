@@ -1,89 +1,22 @@
+import itertools
 import logging
-from datetime import datetime
 
-from django.template.loader import get_template
-from django.views.decorators.cache import never_cache
 from django.shortcuts import get_object_or_404
 from hashids import Hashids
 from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
-from analytics.views import *
-from student.models import Student
-from student.utils import convert_tt_to_dict
-from timetable.utils import *
-from timetable.utils import update_locked_sections, TimetableGenerator, ValidateSubdomainMixin, CsrfExemptMixin
-
+from analytics.models import SharedTimetable
+from analytics.views import save_analytics_timetable
+from student.utils import get_student
+from timetable.serializers import convert_tt_to_dict
+from timetable.models import Semester, Course
+from timetable.utils import update_locked_sections, TimetableGenerator
+from helpers.mixins import ValidateSubdomainMixin, FeatureFlowView, CsrfExemptMixin
 
 hashids = Hashids(salt="***REMOVED***")
 logger = logging.getLogger(__name__)
-
-def redirect_to_home(request):
-    return HttpResponseRedirect("/")
-
-
-def custom_404(request):
-    # return HttpResponse("404", status=404)
-    response = render(request, "404.html")
-    # TODO, maybe add this next line back in when im done testing
-    # response.status_code = 404
-    return response
-
-
-def custom_500(request):
-    response = render_to_response('500.html')
-    # TODO, maybe add this next line back in when im done testing
-    # response.status_code = 500
-    return response
-
-
-def jhu_timer(request):
-    return render(request, "jhu_timer.html")
-
-
-def about(request):
-    try:
-        return render_to_response("about.html",
-                                  {},
-                                  context_instance=RequestContext(request))
-    except Exception as e:
-        return HttpResponse(str(e))
-
-
-def press(request):
-    try:
-        return render_to_response("press.html",
-                                  {},
-                                  context_instance=RequestContext(request))
-    except Exception as e:
-        return HttpResponse(str(e))
-
-
-@never_cache
-def sw_js(request, js):
-    template = get_template('sw.js')
-    html = template.render()
-    return HttpResponse(html, content_type="application/x-javascript")
-
-
-def manifest_json(request, js):
-    template = get_template('manifest.json')
-    html = template.render()
-    return HttpResponse(html, content_type="application/json")
-
-
-@csrf_exempt
-def log_final_exam_view(request):
-    try:
-        student = Student.objects.get(user=request.user)
-    except:
-        student = None
-    FinalExamModalView.objects.create(
-        student=student,
-        school=request.subdomain
-    ).save()
-    return HttpResponse(json.dumps({}), content_type="application/json")
 
 
 class TimetableView(CsrfExemptMixin, ValidateSubdomainMixin, APIView):
@@ -94,17 +27,15 @@ class TimetableView(CsrfExemptMixin, ValidateSubdomainMixin, APIView):
         try:
             params = request.data
         except ValueError:  # someone is trying to manually send requests
-            return HttpResponse(json.dumps({'timetables': [], 'new_c_to_s': {}}),
-                                content_type='application/json')
+            return Response({'timetables': [], 'new_c_to_s': {}}, status=status.HTTP_200_OK)
         else:
             try:
                 params['semester'] = Semester.objects.get_or_create(**params['semester'])[0]
-            except TypeError:
+            except TypeError: # handle deprecated cached semesters from frontend
                 params['semester'] = Semester.objects.get(name="Fall", year="2016") \
                     if params['semester'] == "F" \
                     else Semester.objects.get(name="Spring", year="2017")
 
-        sid = params['sid']
         course_ids = params['courseSections'].keys()
         courses = [Course.objects.get(id=cid) for cid in course_ids]
         locked_sections = params['courseSections']
@@ -124,7 +55,7 @@ class TimetableView(CsrfExemptMixin, ValidateSubdomainMixin, APIView):
         opt_course_ids = params.get('optionCourses', [])
         max_optional = params.get('numOptionCourses', len(opt_course_ids))
         optional_courses = [Course.objects.get(id=cid) for cid in opt_course_ids]
-        optional_course_subsets = [subset for k in range(max_optional, -1, -1) \
+        optional_course_subsets = [subset for k in range(max_optional, -1, -1)
                                    for subset in itertools.combinations(optional_courses, k)]
 
         custom_events = params.get('customSlots', [])
@@ -134,7 +65,7 @@ class TimetableView(CsrfExemptMixin, ValidateSubdomainMixin, APIView):
                                        custom_events,
                                        params['preferences'],
                                        opt_course_ids)
-        result = [timetable for opt_courses in optional_course_subsets \
+        result = [timetable for opt_courses in optional_course_subsets
                   for timetable in generator.courses_to_timetables(courses + list(opt_courses))]
 
         # updated roster object
