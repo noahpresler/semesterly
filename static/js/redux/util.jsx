@@ -14,6 +14,7 @@ export const browserSupportsLocalStorage = () => {
     return false;
   }
 };
+// TODO: merge set functions into generic set(key, value)
 export const saveLocalCourseSections = (courseSections) => {
   if (!browserSupportsLocalStorage()) {
     return;
@@ -49,6 +50,12 @@ export const setFriendsCookie = (time) => {
     return;
   }
   localStorage.setItem('friendsCookie', time);
+};
+export const setTimeShownBanner = (time) => {
+  if (!browserSupportsLocalStorage()) {
+    return;
+  }
+  localStorage.setItem('timeShownBanner', time);
 };
 export const setDeclinedNotifications = (declined) => {
   if (!browserSupportsLocalStorage()) {

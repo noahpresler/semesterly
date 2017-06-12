@@ -93,7 +93,7 @@ SOCIAL_AUTH_PIPELINE = (
     # Associates the current social details with another user account with
     # a similar email address. Disabled by default.
     # 'social.pipeline.social_auth.associate_by_email',
-    'authpipe.helpers.associate_students',
+    'authpipe.utils.associate_students',
 
     # Create a user account if we haven't found one yet.
     'social.pipeline.user.create_user',
@@ -107,7 +107,7 @@ SOCIAL_AUTH_PIPELINE = (
 
     # Update the user record with any changed info from the auth service.
     'social.pipeline.user.user_details',
-    'authpipe.helpers.create_student',
+    'authpipe.utils.create_student',
 )
 
 # Webpack
@@ -146,6 +146,7 @@ INSTALLED_APPS = (
     'rest_framework_swagger',
     'webpack_loader',
     'djcelery',
+    'agreement'
 )
 
 REST_FRAMEWORK ={
