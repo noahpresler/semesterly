@@ -5,7 +5,7 @@ from rest_framework import status
 
 from student.models import RegistrationToken
 from student.utils import get_student
-from timetable.utils import ValidateSubdomainMixin
+from helpers.mixins import ValidateSubdomainMixin
 
 
 class RegistrationTokenView(ValidateSubdomainMixin, APIView):
