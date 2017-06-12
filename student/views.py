@@ -1,6 +1,5 @@
 from datetime import datetime
 import json
-import datetime
 
 import httplib2
 from django.core.urlresolvers import reverse
