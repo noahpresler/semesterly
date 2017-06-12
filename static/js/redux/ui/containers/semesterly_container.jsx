@@ -9,6 +9,8 @@ const mapStateToProps = (state) => {
   const timetables = state.timetables.items;
   const active = state.timetables.active;
   const activeTTLength = timetables[active].courses.length;
+  console.log(state.userInfo.data);
+  console.log(state.alerts);
   return {
     alertConflict: state.alerts.alertConflict,
     alertEnableNotifications: state.alerts.alertEnableNotifications,
