@@ -8,7 +8,6 @@ import {
 } from '../constants/endpoints';
 import { FULL_WEEK_LIST } from '../constants/constants';
 import { getActiveTimetable } from './user_actions';
-import store from '../init';
 import { getCourseShareLink } from '../helpers/timetable_helpers';
 import { currSem } from '../reducers/semester_reducer';
 import * as ActionTypes from '../constants/actionTypes';
@@ -37,8 +36,8 @@ export const receiveShareLink = shareLink => (dispatch) => {
   });
 };
 
-export const fetchShareTimetableLink = () => (dispatch) => {
-  const state = store.getState();
+export const fetchShareTimetableLink = () => (dispatch, getState) => {
+  const state = getState();
   const semester = currSem(state.semester);
   const timetableState = state.timetables;
   const { shareLink, shareLinkValid } = state.calendar;
@@ -68,8 +67,8 @@ export const fetchShareTimetableLink = () => (dispatch) => {
         });
 };
 
-export const addTTtoGCal = () => (dispatch) => {
-  const state = store.getState();
+export const addTTtoGCal = () => (dispatch, getState) => {
+  const state = getState();
   const timetableState = state.timetables;
 
   if (!state.saveCalendarModal.isUploading && !state.saveCalendarModal.hasUploaded) {
@@ -93,8 +92,8 @@ export const addTTtoGCal = () => (dispatch) => {
   }
 };
 
-export const createICalFromTimetable = () => (dispatch) => {
-  const state = store.getState();
+export const createICalFromTimetable = () => (dispatch, getState) => {
+  const state = getState();
   if (!state.saveCalendarModal.isDownloading && !state.saveCalendarModal.hasDownloaded) {
     dispatch({ type: ActionTypes.DOWNLOAD_CALENDAR });
     const cal = ical({ domain: 'https://semester.ly', name: 'My Semester Schedule' });
