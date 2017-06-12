@@ -37,6 +37,7 @@
     "livereactload": "^3.2.0",
     "loose-envify": "^1.1.0",
     "moment": "^2.11.2",
+    "nock": "^9.0.13",
     "node-sass": "^4.5.2",
     "phantom": "^4.0.0",
     "phantomjs": "^2.1.7",
@@ -64,6 +65,7 @@
     "react-tooltip": "^3.2.6",
     "reactify": "^1.1.1",
     "redux": "^3.3.1",
+    "redux-mock-store": "^1.2.3",
     "redux-thunk": "^2.0.1",
     "sass-lint": "^1.10.2",
     "sass-loader": "^6.0.3",
@@ -81,6 +83,7 @@
   },
   "jest": {
     "setupTestFrameworkScriptFile": "./test_env.jsx",
+    "transformIgnorePatterns": [ "node_modules/(?!react)" ],
     "transform": {
       "^.+\\.jsx?$": "babel-jest"
     }

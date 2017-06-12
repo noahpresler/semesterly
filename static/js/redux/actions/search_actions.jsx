@@ -1,11 +1,11 @@
 import fetch from 'isomorphic-fetch';
 import { getCourseSearchEndpoint } from '../constants/endpoints';
-import store from '../init';
 import { getUserSavedTimetables, saveTimetable } from './user_actions';
 import { nullifyTimetable } from './timetable_actions';
 import * as ActionTypes from '../constants/actionTypes';
 import { fetchCourseClassmates } from './modal_actions';
 import { currSem } from '../reducers/semester_reducer';
+import { getSemester } from './school_actions';
 
 export const requestCourses = () => ({ type: ActionTypes.REQUEST_COURSES });
 
@@ -14,8 +14,8 @@ export const receiveCourses = json => ({
   courses: json,
 });
 
-export const setSemester = semester => (dispatch) => {
-  const state = store.getState();
+export const setSemester = semester => (dispatch, getState) => {
+  const state = getState();
 
   if (state.userInfo.data.isLoggedIn) {
     dispatch(getUserSavedTimetables(state.semester.all[semester]));
@@ -38,8 +38,8 @@ export const setSemester = semester => (dispatch) => {
  * and set semester if appropriate. Otherwise show an alert modal and save the
  * semester they were trying to switch to in the modal state.
  */
-export const maybeSetSemester = semester => (dispatch) => {
-  const state = store.getState();
+export const maybeSetSemester = semester => (dispatch, getState) => {
+  const state = getState();
 
   if (semester === state.semester.current) {
     return;
@@ -61,7 +61,7 @@ export const maybeSetSemester = semester => (dispatch) => {
   }
 };
 
-export const fetchSearchResults = query => (dispatch) => {
+export const fetchSearchResults = query => (dispatch, getState) => {
   if (query.length <= 1) {
     dispatch(receiveCourses([]));
     return;
@@ -70,7 +70,7 @@ export const fetchSearchResults = query => (dispatch) => {
   // indicate that we are now requesting courses
   dispatch(requestCourses());
   // send a request (via fetch) to the appropriate endpoint to get courses
-  fetch(getCourseSearchEndpoint(query), {
+  fetch(getCourseSearchEndpoint(query, getSemester(getState)), {
     credentials: 'include',
   })
   .then(response => response.json()) // TODO(rohan): error-check the response
@@ -80,7 +80,7 @@ export const fetchSearchResults = query => (dispatch) => {
   });
 };
 
-export const fetchAdvancedSearchResults = (query, filters) => (dispatch) => {
+export const fetchAdvancedSearchResults = (query, filters) => (dispatch, getState) => {
   // if too small a query AND no filters; don't make request.
   // we'll allow small query strings if some filters
   // (departments, or breadths, or levels) are chosen.
@@ -97,8 +97,8 @@ export const fetchAdvancedSearchResults = (query, filters) => (dispatch) => {
     type: ActionTypes.REQUEST_ADVANCED_SEARCH_RESULTS,
   });
   // send a request (via fetch) to the appropriate endpoint to get courses
-  const state = store.getState();
-  fetch(getCourseSearchEndpoint(query), {
+  const state = getState();
+  fetch(getCourseSearchEndpoint(query, getSemester(getState)), {
     headers: {
       Accept: 'application/json',
       'Content-Type': 'application/json',

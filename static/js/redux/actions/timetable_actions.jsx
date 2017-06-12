@@ -10,7 +10,6 @@ import {
     saveLocalPreferences,
     saveLocalSemester,
 } from '../util';
-import store from '../init';
 import { autoSave, fetchClassmates, lockActiveSections } from './user_actions';
 import * as ActionTypes from '../constants/actionTypes';
 import { currSem } from '../reducers/semester_reducer';
@@ -21,6 +20,10 @@ export const SID = randomString(30);
 
 export const alertConflict = () => ({ type: ActionTypes.ALERT_CONFLICT });
 
+export const triggerTosModal = () => ({ type: ActionTypes.TRIGGER_TOS_MODAL });
+
+export const triggerTosBanner = () => ({ type: ActionTypes.TRIGGER_TOS_BANNER });
+
 export const receiveTimetables = timetables => ({
   type: ActionTypes.RECEIVE_TIMETABLES,
   timetables,
@@ -28,8 +31,8 @@ export const receiveTimetables = timetables => ({
 
 export const requestTimetables = () => ({ type: ActionTypes.REQUEST_TIMETABLES });
 
-export const fetchTimetables = (requestBody, removing, newActive = 0) => (dispatch) => {
-  const state = store.getState();
+export const fetchTimetables = (requestBody, removing, newActive = 0) => (dispatch, getState) => {
+  const state = getState();
 
   // mark that we are now asynchronously requesting timetables
   dispatch(requestTimetables());
@@ -123,8 +126,8 @@ export const hoverSection = (course, section) => {
   };
 };
 
-export const fetchStateTimetables = (activeIndex = 0) => (dispatch) => {
-  const requestBody = getBaseReqBody(store.getState());
+export const fetchStateTimetables = (activeIndex = 0) => (dispatch, getState) => {
+  const requestBody = getBaseReqBody(getState());
   dispatch(fetchTimetables(requestBody, false, activeIndex));
 };
 
@@ -149,8 +152,8 @@ export const lockTimetable = (timetable, created, isLoggedIn) => (dispatch) => {
 
 // loads @timetable into the state.
 // @created is true if the user is creating a new timetable
-export const loadTimetable = (timetable, created = false) => (dispatch) => {
-  const state = store.getState();
+export const loadTimetable = (timetable, created = false) => (dispatch, getState) => {
+  const state = getState();
   const isLoggedIn = state.userInfo.data.isLoggedIn;
   if (!isLoggedIn) {
     return dispatch({ type: ActionTypes.TOGGLE_SIGNUP_MODAL });
@@ -236,19 +239,18 @@ export const loadCachedTimetable = allSemesters => (dispatch) => {
  * other timetables with "Untitled" in the title, or "Untitled" if there
  * no others.
  */
-export const getNumberedName = (name) => {
-  const state = store.getState();
+export const getNumberedName = (name, timetables) => {
   const tokens = name.split(' ');
   const nameBase = !isNaN(tokens[tokens.length - 1]) ?
     tokens.slice(0, tokens.length - 1).join(' ') : name;
-  let numberSuffix = state.userInfo.data.timetables.filter(
+  let numberSuffix = timetables.filter(
     t => t.name.indexOf(nameBase) > -1).length;
   numberSuffix = numberSuffix === 0 ? '' : ` ${numberSuffix}`;
   return nameBase + numberSuffix;
 };
 
-export const handleCreateNewTimetable = () => (dispatch) => {
-  const state = store.getState();
+export const handleCreateNewTimetable = () => (dispatch, getState) => {
+  const state = getState();
   const isLoggedIn = state.userInfo.data.isLoggedIn;
   if (!isLoggedIn) {
     return { type: ActionTypes.TOGGLE_SIGNUP_MODAL };
@@ -261,7 +263,8 @@ export const handleCreateNewTimetable = () => (dispatch) => {
     return { type: ActionTypes.ALERT_NEW_TIMETABLE };
   }
 
-  return dispatch(createNewTimetable(getNumberedName('Untitled Schedule')));
+  return dispatch(createNewTimetable(getNumberedName('Untitled Schedule',
+    state.userInfo.data.timetables)));
 };
 
 export const unHoverSection = () => ({ type: ActionTypes.UNHOVER_COURSE });
@@ -271,8 +274,8 @@ export const unHoverSection = () => ({ type: ActionTypes.UNHOVER_COURSE });
  to the user's roster. If a section is provided, that section is
  locked. Otherwise, no section is locked.
  */
-export const addOrRemoveCourse = (newCourseId, lockingSection = '') => (dispatch) => {
-  let state = store.getState();
+export const addOrRemoveCourse = (newCourseId, lockingSection = '') => (dispatch, getState) => {
+  let state = getState();
   if (state.timetables.isFetching) {
     return;
   }
@@ -284,10 +287,10 @@ export const addOrRemoveCourse = (newCourseId, lockingSection = '') => (dispatch
       type: ActionTypes.REMOVE_OPTIONAL_COURSE_BY_ID,
       courseId: newCourseId,
     });
-    reqBody = getBaseReqBody(store.getState());
+    reqBody = getBaseReqBody(state);
   }
 
-  state = store.getState();
+  state = getState();
   if (removing) {
     const updatedCourseSections = Object.assign({}, state.courseSections.objects);
     delete updatedCourseSections[newCourseId]; // remove it from courseSections.objects
@@ -302,7 +305,7 @@ export const addOrRemoveCourse = (newCourseId, lockingSection = '') => (dispatch
       type: ActionTypes.UPDATE_LAST_COURSE_ADDED,
       course: newCourseId,
     });
-    state = store.getState();
+    state = getState();
     Object.assign(reqBody, {
       updated_courses: [{
         course_id: newCourseId,
@@ -322,8 +325,8 @@ export const addOrRemoveCourse = (newCourseId, lockingSection = '') => (dispatch
 };
 
 // fetch timetables with same courses, but updated optional courses/custom slots
-const refetchTimetables = () => (dispatch) => {
-  const state = store.getState();
+const refetchTimetables = () => (dispatch, getState) => {
+  const state = getState();
   const reqBody = getBaseReqBody(state);
 
   Object.assign(reqBody, {
@@ -336,8 +339,8 @@ const refetchTimetables = () => (dispatch) => {
   dispatch(autoSave());
 };
 
-export const addLastAddedCourse = () => (dispatch) => {
-  const state = store.getState();
+export const addLastAddedCourse = () => (dispatch, getState) => {
+  const state = getState();
   // last timetable change was a custom event edit, not adding a course
   if (state.timetables.lastSlotAdded === null) {
     return;
@@ -353,8 +356,8 @@ export const addLastAddedCourse = () => (dispatch) => {
   }
 };
 
-const autoFetch = () => (dispatch) => {
-  const state = store.getState();
+const autoFetch = () => (dispatch, getState) => {
+  const state = getState();
   clearTimeout(customEventUpdateTimer);
   customEventUpdateTimer = setTimeout(() => {
     if (state.timetables.items[state.timetables.active].courses.length > 0) {
@@ -405,9 +408,9 @@ export const removeCustomSlot = id => (dispatch) => {
   dispatch(autoFetch());
 };
 
-export const addOrRemoveOptionalCourse = course => (dispatch) => {
-  const removing = store.getState().optionalCourses.courses.some(c => c.id === course.id);
-  if (store.getState().timetables.isFetching) {
+export const addOrRemoveOptionalCourse = course => (dispatch, getState) => {
+  const removing = getState().optionalCourses.courses.some(c => c.id === course.id);
+  if (getState().timetables.isFetching) {
     return;
   }
 
@@ -415,7 +418,7 @@ export const addOrRemoveOptionalCourse = course => (dispatch) => {
     type: ActionTypes.ADD_REMOVE_OPTIONAL_COURSE,
     newCourse: course,
   });
-  const state = store.getState(); // the above dispatched action changes the state
+  const state = getState(); // the above dispatched action changes the state
   const reqBody = getBaseReqBody(state);
   const { optionalCourses } = state;
 
