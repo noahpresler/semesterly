@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import classnames from 'classnames';
 
 class TermsOfServiceBanner extends React.Component {
@@ -37,8 +38,8 @@ class TermsOfServiceBanner extends React.Component {
 }
 
 TermsOfServiceBanner.propTypes = {
-  isVisible: React.PropTypes.bool.isRequired,
-  dismissTermsOfServiceBanner: React.PropTypes.func.isRequired,
+  isVisible: PropTypes.bool.isRequired,
+  dismissTermsOfServiceBanner: PropTypes.func.isRequired,
 };
 
 export default TermsOfServiceBanner;
