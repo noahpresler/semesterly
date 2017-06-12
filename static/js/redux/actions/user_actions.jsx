@@ -14,13 +14,14 @@ import {
     getSaveSettingsEndpoint,
     getSaveTimetableEndpoint,
     getSetRegistrationTokenEndpoint,
+    acceptTOSEndpoint,
 } from '../constants/endpoints';
 import { fetchCourseClassmates } from './modal_actions';
-import store from '../init';
 import { getNumberedName, loadTimetable, nullifyTimetable } from './timetable_actions';
 import { MAX_TIMETABLE_NAME_LENGTH } from '../constants/constants';
 import * as ActionTypes from '../constants/actionTypes';
 import { currSem } from '../reducers/semester_reducer';
+import { setTimeShownBanner } from '../util';
 
 let autoSaveTimer;
 
@@ -51,8 +52,8 @@ export const requestFriends = () => ({
 /* Returns the currently active timetable */
 export const getActiveTimetable = timetableState => timetableState.items[timetableState.active];
 
-const getSaveTimetablesRequestBody = () => {
-  const state = store.getState();
+const getSaveTimetablesRequestBody = () => (dispatch, getState) => {
+  const state = getState();
   const timetableState = state.timetables;
   const tt = getActiveTimetable(timetableState);
   return {
@@ -85,8 +86,8 @@ export const requestMostClassmates = () => ({
   type: ActionTypes.REQUEST_MOST_CLASSMATES,
 });
 
-export const fetchMostClassmatesCount = courses => (dispatch) => {
-  const state = store.getState();
+export const fetchMostClassmatesCount = courses => (dispatch, getState) => {
+  const state = getState();
   if (!state.userInfo.data.social_courses) {
     return;
   }
@@ -107,8 +108,8 @@ export const fetchMostClassmatesCount = courses => (dispatch) => {
       });
 };
 
-export const fetchClassmates = courses => (dispatch) => {
-  const state = store.getState();
+export const fetchClassmates = courses => (dispatch, getState) => {
+  const state = getState();
   if (!state.userInfo.data.social_courses) {
     return;
   }
@@ -127,8 +128,8 @@ export const fetchClassmates = courses => (dispatch) => {
     });
 };
 
-export const saveTimetable = (isAutoSave = false, callback = null) => (dispatch) => {
-  const state = store.getState();
+export const saveTimetable = (isAutoSave = false, callback = null) => (dispatch, getState) => {
+  const state = getState();
   if (!state.userInfo.data.isLoggedIn) {
     return dispatch({ type: ActionTypes.TOGGLE_SIGNUP_MODAL });
   }
@@ -145,7 +146,7 @@ export const saveTimetable = (isAutoSave = false, callback = null) => (dispatch)
     type: ActionTypes.REQUEST_SAVE_TIMETABLE,
   });
 
-  const body = getSaveTimetablesRequestBody();
+  const body = dispatch(getSaveTimetablesRequestBody());
   fetch(getSaveTimetableEndpoint(), {
     headers: {
       'X-CSRFToken': Cookie.get('csrftoken'),
@@ -206,8 +207,8 @@ export const saveTimetable = (isAutoSave = false, callback = null) => (dispatch)
   return null;
 };
 
-export const duplicateTimetable = timetable => (dispatch) => {
-  const state = store.getState();
+export const duplicateTimetable = timetable => (dispatch, getState) => {
+  const state = getState();
   if (!state.userInfo.data.isLoggedIn) {
     dispatch({ type: ActionTypes.TOGGLE_SIGNUP_MODAL });
   }
@@ -226,7 +227,7 @@ export const duplicateTimetable = timetable => (dispatch) => {
     body: JSON.stringify({
       semester: currSem(state.semester),
       source: timetable.name,
-      name: getNumberedName(timetable.name),
+      name: getNumberedName(timetable.name, state.userInfo.data.timetables),
     }),
     credentials: 'include',
   })
@@ -266,8 +267,8 @@ export const duplicateTimetable = timetable => (dispatch) => {
 };
 
 
-export const deleteTimetable = timetable => (dispatch) => {
-  const state = store.getState();
+export const deleteTimetable = timetable => (dispatch, getState) => {
+  const state = getState();
   if (!state.userInfo.data.isLoggedIn) {
     dispatch({ type: ActionTypes.TOGGLE_SIGNUP_MODAL });
   }
@@ -325,9 +326,7 @@ export const deleteTimetable = timetable => (dispatch) => {
         });
 };
 
-export const getSaveSettingsRequestBody = () => store.getState().userInfo.data;
-
-export const saveSettings = callback => (dispatch) => {
+export const saveSettings = callback => (dispatch, getState) => {
   dispatch({
     type: ActionTypes.REQUEST_SAVE_USER_INFO,
   });
@@ -338,11 +337,11 @@ export const saveSettings = callback => (dispatch) => {
       'Content-Type': 'application/json',
     },
     method: 'PATCH',
-    body: JSON.stringify(getSaveSettingsRequestBody()),
+    body: JSON.stringify(getState().userInfo.data),
     credentials: 'include',
   })
     .then((response) => {
-      const state = store.getState();
+      const state = getState();
       const timetables = state.timetables.items;
       const active = state.timetables.active;
       const activeTT = timetables[active];
@@ -385,8 +384,8 @@ export const getUserSavedTimetables = semester => (dispatch) => {
     });
 };
 
-export const fetchFinalExamSchedule = () => (dispatch) => {
-  const state = store.getState();
+export const fetchFinalExamSchedule = () => (dispatch, getState) => {
+  const state = getState();
   const timetable = getActiveTimetable(state.timetables);
   dispatch({ type: ActionTypes.FETCH_FINAL_EXAMS });
   fetch(getFinalExamSchedulerEndpoint(), {
@@ -405,8 +404,8 @@ export const fetchFinalExamSchedule = () => (dispatch) => {
     });
 };
 
-export const fetchFriends = () => (dispatch) => {
-  const state = store.getState();
+export const fetchFriends = () => (dispatch, getState) => {
+  const state = getState();
   if (!state.userInfo.data.social_courses) {
     return;
   }
@@ -427,8 +426,8 @@ export const fetchFriends = () => (dispatch) => {
     });
 };
 
-export const autoSave = (delay = 2000) => (dispatch) => {
-  const state = store.getState();
+export const autoSave = (delay = 2000) => (dispatch, getState) => {
+  const state = getState();
   clearTimeout(autoSaveTimer);
   const numTimetables = state.timetables.items[state.timetables.active].courses.length;
   const numEvents = state.customSlots.length;
@@ -589,4 +588,34 @@ export const changeTimetableName = name => (dispatch) => {
     name,
   });
   dispatch(saveTimetable());
+};
+
+export const acceptTOS = () => {
+  fetch(acceptTOSEndpoint(), {
+    headers: {
+      'X-CSRFToken': Cookie.get('csrftoken'),
+      Accept: 'application/json',
+      'Content-Type': 'application/json',
+    },
+    credentials: 'include',
+    method: 'POST',
+    body: '',
+  });
+};
+
+// Show the TOS and privacy policy agreement if the user has not seen the latest version.
+// The modal is used for logged in users and the banner is used for anonymous users.
+export const handleAgreement = (currentUser, timeUpdatedTos) => (dispatch) => {
+  if (currentUser.isLoggedIn) {
+    const timeAcceptedTos = currentUser.timeAcceptedTos;
+    if (timeAcceptedTos === null || Date.parse(timeAcceptedTos) < timeUpdatedTos) {
+      dispatch({ type: ActionTypes.TRIGGER_TOS_MODAL });
+    }
+  } else {
+    const timeShownBanner = localStorage.getItem('timeShownBanner');
+    if (timeShownBanner === null || timeShownBanner < timeUpdatedTos) {
+      setTimeShownBanner(Date.now());
+      dispatch({ type: ActionTypes.TRIGGER_TOS_BANNER });
+    }
+  }
 };

@@ -47,10 +47,8 @@ def get_classmates_from_course_id(
         .exclude(student__in=curr_ptts.values_list('student', flat=True)).filter(~Q(semester=semester)) \
         .order_by('student', 'last_updated').distinct('student')
 
-    course['classmates'] = get_classmates_from_tts(
-        student, course_id, curr_ptts)
-    course['past_classmates'] = get_classmates_from_tts(
-        student, course_id, past_ptts)
+    course['classmates'] = get_classmates_from_tts(student, course_id, curr_ptts)
+    course['past_classmates'] = get_classmates_from_tts(student, course_id, past_ptts)
 
     return course
 
@@ -59,21 +57,12 @@ def get_classmates_from_tts(student, course_id, tts):
     classmates = []
     for tt in tts:
         friend = tt.student
-        classmate = model_to_dict(
-            friend,
-            exclude=[
-                'user',
-                'id',
-                'fbook_uid',
-                'friends'])
+        classmate = model_to_dict(friend, exclude=['user', 'id', 'fbook_uid', 'friends'])
         classmate['first_name'] = friend.user.first_name
         classmate['last_name'] = friend.user.last_name
         if student.social_offerings and friend.social_offerings:
             friend_sections = tt.sections.filter(course__id=course_id)
-            sections = list(
-                friend_sections.values_list(
-                    'meeting_section',
-                    flat=True).distinct())
+            sections = list(friend_sections.values_list('meeting_section', flat=True).distinct())
             classmate['sections'] = sections
         classmates.append(classmate)
     return classmates
