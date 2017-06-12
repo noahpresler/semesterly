@@ -6,7 +6,7 @@ import thunkMiddleware from 'redux-thunk';
 import { Provider } from 'react-redux';
 import rootReducer from './reducers/root_reducer';
 import SemesterlyContainer from './ui/containers/semesterly_container';
-import { fetchMostClassmatesCount, isRegistered } from './actions/user_actions';
+import { fetchMostClassmatesCount, handleAgreement, isRegistered } from './actions/user_actions';
 import { loadCachedTimetable, loadTimetable, lockTimetable } from './actions/timetable_actions';
 import { fetchSchoolInfo } from './actions/school_actions';
 import { fetchCourseClassmates, setCourseInfo } from './actions/modal_actions';
@@ -24,8 +24,6 @@ const store = createStore(rootReducer,
     window.devToolsExtension && window.devToolsExtension(),
     applyMiddleware(thunkMiddleware),
 );
-
-export default store;
 
 // load initial timetable from user data if logged in or local storage
 const setupTimetables = (userTimetables, allSemesters) => (dispatch) => {
@@ -146,6 +144,10 @@ const setup = () => (dispatch) => {
     dispatch(setupChromeNotifs());
   }
   dispatch(showFriendAlert());
+
+  if (initData.featureFlow.name === null) {
+    dispatch(handleAgreement(initData.currentUser, Date.parse(initData.timeUpdatedTos)));
+  }
 
   dispatch(handleFlows(initData.featureFlow));
   dispatch(fetchSchoolInfo());

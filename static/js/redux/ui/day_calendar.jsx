@@ -271,8 +271,6 @@ class DayCalendar extends React.Component {
                 </tbody>
               </table>
             </div>
-            <p className="data-last-updated no-print">Data last
-                            updated: { this.props.dataLastUpdated && this.props.dataLastUpdated.length && this.props.dataLastUpdated !== 'null' ? this.props.dataLastUpdated : null }</p>
           </div>
         </Swipeable>
       </div>
@@ -285,7 +283,6 @@ DayCalendar.defaultProps = {
 };
 
 DayCalendar.propTypes = {
-  dataLastUpdated: PropTypes.string.isRequired,
   togglePreferenceModal: PropTypes.func.isRequired,
   triggerSaveCalendarModal: PropTypes.func.isRequired,
   isFetchingShareLink: PropTypes.bool.isRequired,

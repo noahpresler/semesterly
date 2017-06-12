@@ -22,6 +22,7 @@ const mapStateToProps = (state) => {
         && state.alerts.mostFriendsCount >= 2
         && activeTTLength >= 1,
     explorationModalIsVisible: state.explorationModal.isVisible,
+    dataLastUpdated: state.school.dataLastUpdated,
     PgCount: state.timetables.items.length,
     PgActive: state.timetables.active,
   };
