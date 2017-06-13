@@ -41,7 +41,7 @@ export const fetchCourseClassmates = courseId => (dispatch, getState) => {
 
 export const fetchCourseInfo = courseId => (dispatch, getState) => {
   dispatch(requestCourseInfo(courseId));
-  fetch(getCourseInfoEndpoint(courseId, getSemester(getState)), {
+  fetch(getCourseInfoEndpoint(courseId, getSemester(getState())), {
     credentials: 'include',
   })
   .then(response => response.json())

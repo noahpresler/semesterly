@@ -70,7 +70,7 @@ export const fetchSearchResults = query => (dispatch, getState) => {
   // indicate that we are now requesting courses
   dispatch(requestCourses());
   // send a request (via fetch) to the appropriate endpoint to get courses
-  fetch(getCourseSearchEndpoint(query, getSemester(getState)), {
+  fetch(getCourseSearchEndpoint(query, getSemester(getState())), {
     credentials: 'include',
   })
   .then(response => response.json()) // TODO(rohan): error-check the response
@@ -98,7 +98,7 @@ export const fetchAdvancedSearchResults = (query, filters) => (dispatch, getStat
   });
   // send a request (via fetch) to the appropriate endpoint to get courses
   const state = getState();
-  fetch(getCourseSearchEndpoint(query, getSemester(getState)), {
+  fetch(getCourseSearchEndpoint(query, getSemester(getState())), {
     headers: {
       Accept: 'application/json',
       'Content-Type': 'application/json',
