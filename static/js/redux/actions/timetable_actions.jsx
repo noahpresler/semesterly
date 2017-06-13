@@ -20,10 +20,6 @@ export const SID = randomString(30);
 
 export const alertConflict = () => ({ type: ActionTypes.ALERT_CONFLICT });
 
-export const triggerTosModal = () => ({ type: ActionTypes.TRIGGER_TOS_MODAL });
-
-export const triggerTosBanner = () => ({ type: ActionTypes.TRIGGER_TOS_BANNER });
-
 export const receiveTimetables = timetables => ({
   type: ActionTypes.RECEIVE_TIMETABLES,
   timetables,
