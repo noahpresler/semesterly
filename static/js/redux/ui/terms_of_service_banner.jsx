@@ -5,7 +5,6 @@ import classnames from 'classnames';
 class TermsOfServiceBanner extends React.Component {
   constructor(props) {
     super(props);
-    this.state = { isVisible: this.props.isVisible };
     this.timer = null;
   }
 
@@ -14,12 +13,6 @@ class TermsOfServiceBanner extends React.Component {
       this.props.dismissTermsOfServiceBanner();
       clearTimeout(this.timer);
     }, 4000);
-  }
-
-  componentWillUpdate() {
-    if (this.state.isVisible !== this.props.isVisible) {
-      this.setState({ isVisible: this.props.isVisible });
-    }
   }
 
   render() {
