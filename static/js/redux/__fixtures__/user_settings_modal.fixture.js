@@ -73,12 +73,12 @@ export const googleFixture = {
       LoginHash: 'xqr',
       social_courses: null,
       LoginToken: '1dNLQR:u86_GQEBDJZKh3Bi2qWmPRSlWg4',
-      img_url: 'https://lh5.googleusercontent.com/-jT-TI0NDQHQ/AAAAAAAAAAI/AAAAAAAAQQ8/BM79nJFKph8/photo.jpg?sz=50'
+      img_url: 'https://lh5.googleusercontent.com/-jT-TI0NDQHQ/AAAAAAAAAAI/AAAAAAAAQQ8/BM79nJFKph8/photo.jpg?sz=50',
     },
     overrideHide: false,
     overrideShow: false,
     isVisible: true,
     saving: false,
-    isFetching: false
+    isFetching: false,
   },
 };
