@@ -35,7 +35,7 @@ const mapStateToProps = (state) => {
     mandatoryCourses,
     optionalCourses,
     hasLoaded: !state.timetables.isFetching,
-    getShareLink: getCourseShareLink,
+    getShareLink: courseCode => getCourseShareLink(courseCode, currSem(state.semester)),
   };
 };
 
