@@ -3,7 +3,6 @@ import React from 'react';
 import classNames from 'classnames';
 import Modal from 'boron/WaveModal';
 import CourseModalBody from './course_modal_body';
-import { getCourseShareLink, getCourseShareLinkFromModal } from '../../helpers/timetable_helpers';
 import { ShareLink } from '../master_slot';
 import { fullCourseDetails } from '../../constants/semesterlyPropTypes';
 
@@ -24,7 +23,7 @@ class CourseModal extends React.Component {
   componentWillReceiveProps(nextProps) {
     if (nextProps.id !== null) {
       const { data } = nextProps;
-      history.replaceState({}, 'Semester.ly', getCourseShareLinkFromModal(data.code));
+      history.replaceState({}, 'Semester.ly', this.props.getShareLinkFromModal(data.code));
       this.modal.show();
     }
   }
@@ -65,7 +64,7 @@ class CourseModal extends React.Component {
             `${courseAndDept}, ${data.department}` : courseAndDept;
     const shareLink = this.state.shareLinkShown ?
             (<ShareLink
-              link={getCourseShareLink(data.code)}
+              link={this.props.getShareLink(data.code)}
               onClickOut={this.hideShareLink}
             />) :
             null;
@@ -147,6 +146,8 @@ CourseModal.propTypes = {
   addOrRemoveCourse: PropTypes.func.isRequired,
   hideModal: PropTypes.func.isRequired,
   unHoverSection: PropTypes.func.isRequired,
+  getShareLink: PropTypes.func.isRequired,
+  getShareLinkFromModal: PropTypes.func.isRequired,
 };
 
 export default CourseModal;
