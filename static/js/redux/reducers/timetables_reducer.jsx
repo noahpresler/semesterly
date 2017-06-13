@@ -2,7 +2,7 @@ import update from 'react/lib/update';
 import { saveLocalActiveIndex } from '../util';
 import * as ActionTypes from '../constants/actionTypes';
 
-const initialState = {
+export const initialState = {
   isFetching: false,
   items: [{ courses: [], has_conflict: false }],
   active: 0,

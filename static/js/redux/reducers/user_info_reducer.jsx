@@ -1,12 +1,14 @@
 import * as ActionTypes from '../constants/actionTypes';
 
-const userInfo = (state = {
+export const initialState = {
   data: { isLoggedIn: false },
   overrideHide: false, // hide the user settings modal if true. Overrides overrideShow
   overrideShow: false, // show the user settings modal if true
   saving: false,
   isFetching: false,
-}, action) => {
+};
+
+const userInfo = (state = initialState, action) => {
   switch (action.type) {
     case ActionTypes.INIT_STATE:
       return Object.assign({}, state, { data: action.data.currentUser, isFetching: false });
