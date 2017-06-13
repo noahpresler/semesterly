@@ -81,5 +81,4 @@ describe('User Setting Modal Renders As Expected', () => {
     delete tree.children[1].props.style.animationName;
     expect(tree).toMatchSnapshot();
   });
-
 });
