@@ -22,6 +22,7 @@ import {
     changeUserInfo,
     fetchCourseInfo,
 } from '../../../actions/modal_actions';
+import { getCourseShareLinkFromModal } from '../../../helpers/timetable_helpers';
 import { currSem } from '../../../reducers/semester_reducer';
 
 
@@ -51,6 +52,7 @@ const mapStateToProps = (state) => {
     hasHoveredResult: activeTimetable.courses.some(c => c.fake),
     classmates: state.courseInfo.classmates,
     isFetchingClassmates: state.courseInfo.isFetching,
+    getShareLink: courseCode => getCourseShareLinkFromModal(courseCode, currSem(state.semester)),
     isSectionLocked: (courseId, section) => {
       if (courseSections[courseId] === undefined) {
         return false;

@@ -3,7 +3,6 @@ import React from 'react';
 import Modal from 'boron/DropModal';
 import classNames from 'classnames';
 import CourseModalBody from './course_modal_body';
-import { getCourseShareLink } from '../../helpers/timetable_helpers';
 import { ShareLink } from '../master_slot';
 import {
   Filter, SelectedFilter, SelectedFilterSection,
@@ -257,7 +256,7 @@ class ExplorationModal extends React.Component {
       }
       const shareLink = this.state.shareLinkShown ?
                 (<ShareLink
-                  link={getCourseShareLink(course.code)}
+                  link={this.props.getShareLink(course.code)}
                   onClickOut={this.hideShareLink}
                 />) :
                 null;
@@ -514,6 +513,7 @@ ExplorationModal.propTypes = {
   isFetchingClassmates: PropTypes.bool.isRequired,
   userInfo: SemesterlyPropTypes.userInfo.isRequired,
   semesterName: PropTypes.string.isRequired,
+  getShareLink: PropTypes.func.isRequired,
 };
 
 export default ExplorationModal;

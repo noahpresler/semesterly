@@ -138,7 +138,7 @@ export const createICalFromTimetable = () => (dispatch, getState) => {
           summary: `${slot.name} ${slot.code}${slot.meeting_section}`,
           description: `${slot.code + slot.meeting_section}\n${instructors}${description}`,
           location: slot.location,
-          url: getCourseShareLink(slot.code),
+          url: getCourseShareLink(slot.code, currSem(state.semester)),
         });
 
         event.repeating({
