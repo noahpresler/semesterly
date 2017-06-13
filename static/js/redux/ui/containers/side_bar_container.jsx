@@ -13,7 +13,7 @@ import {
 } from '../../actions/timetable_actions';
 import { deleteTimetable, duplicateTimetable } from '../../actions/user_actions';
 import { currSem } from '../../reducers/semester_reducer';
-import { getCourseShareLink } from '../../helpers/timetable_helpers';
+import { getCourseShareLink } from '../../constants/endpoints';
 
 const mapStateToProps = (state) => {
   const activeTimetable = state.timetables.items[state.timetables.active];

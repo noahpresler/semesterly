@@ -15,7 +15,7 @@ import {
 } from '../../../actions/modal_actions';
 import { saveSettings } from '../../../actions/user_actions';
 import { getSchoolSpecificInfo } from '../../../constants/schools';
-import { getCourseShareLink, getCourseShareLinkFromModal } from '../../../helpers/timetable_helpers';
+import { getCourseShareLink, getCourseShareLinkFromModal } from '../../../constants/endpoints';
 import { currSem } from '../../../reducers/semester_reducer';
 
 const mapStateToProps = (state) => {
