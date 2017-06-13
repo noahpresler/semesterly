@@ -23,18 +23,14 @@ class TimetableView(CsrfExemptMixin, ValidateSubdomainMixin, APIView):
     def post(self, request):
         """Generate best timetables given the user's selected courses"""
         school = request.subdomain
-
+        params = request.data
+        
         try:
-            params = request.data
-        except ValueError:  # someone is trying to manually send requests
-            return Response({'timetables': [], 'new_c_to_s': {}}, status=status.HTTP_200_OK)
-        else:
-            try:
-                params['semester'] = Semester.objects.get_or_create(**params['semester'])[0]
-            except TypeError: # handle deprecated cached semesters from frontend
-                params['semester'] = Semester.objects.get(name="Fall", year="2016") \
-                    if params['semester'] == "F" \
-                    else Semester.objects.get(name="Spring", year="2017")
+            params['semester'] = Semester.objects.get_or_create(**params['semester'])[0]
+        except TypeError: # handle deprecated cached semesters from frontend
+            params['semester'] = Semester.objects.get(name="Fall", year="2016") \
+                if params['semester'] == "F" \
+                else Semester.objects.get(name="Spring", year="2017")
 
         course_ids = params['courseSections'].keys()
         courses = [Course.objects.get(id=cid) for cid in course_ids]
