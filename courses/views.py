@@ -124,8 +124,7 @@ class SchoolList(APIView):
                 school=school, update_field="Course").exists():
             update_time_obj = Updates.objects.get(school=school, update_field="Course") \
                 .last_updated.astimezone(timezone('US/Eastern'))
-            last_updated = update_time_obj.strftime(
-                '%Y-%m-%d %H:%M') + " " + update_time_obj.tzname()
+            last_updated = update_time_obj.strftime('%Y-%m-%d %H:%M') + " " + update_time_obj.tzname()
         json_data = {
             'areas': sorted(list(Course.objects.filter(school=school)
                                  .exclude(areas__exact='')
