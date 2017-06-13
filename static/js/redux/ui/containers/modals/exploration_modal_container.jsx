@@ -22,7 +22,7 @@ import {
     changeUserInfo,
     fetchCourseInfo,
 } from '../../../actions/modal_actions';
-import { getCourseShareLinkFromModal } from '../../../helpers/timetable_helpers';
+import { getCourseShareLinkFromModal } from '../../../constants/endpoints';
 import { currSem } from '../../../reducers/semester_reducer';
 
 
