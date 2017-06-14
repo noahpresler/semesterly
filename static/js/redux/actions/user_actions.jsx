@@ -21,7 +21,7 @@ import { getNumberedName, loadTimetable, nullifyTimetable } from './timetable_ac
 import { MAX_TIMETABLE_NAME_LENGTH } from '../constants/constants';
 import * as ActionTypes from '../constants/actionTypes';
 import { currSem } from '../reducers/semester_reducer';
-import { setTimeShownBanner } from '../util';
+import { setTimeShownBanner, checkStatus } from '../util';
 
 let autoSaveTimer;
 
@@ -156,18 +156,12 @@ export const saveTimetable = (isAutoSave = false, callback = null) => (dispatch,
     body: JSON.stringify(body),
     credentials: 'include',
   })
-  .then((response) => {
-    if (response.status === 409) {
-      dispatch({
-        type: ActionTypes.ALERT_TIMETABLE_EXISTS,
-      });
-      return null;
-    }
-
-    return response.json().then((json) => {
-        // edit the state's courseSections, so that future requests to add/remove/unlock
-        // courses are handled correctly. in the new courseSections, every currently
-        // active section will be locked
+    .then(checkStatus)
+    .then((response) => response.json())
+    .then((json) => {
+      // edit the state's courseSections, so that future requests to add/remove/unlock
+      // courses are handled correctly. in the new courseSections, every currently
+      // active section will be locked
       if (!isAutoSave) {
             // mark that the current timetable is now the only available one (since all
             // sections are locked)
@@ -200,10 +194,14 @@ export const saveTimetable = (isAutoSave = false, callback = null) => (dispatch,
       if (!json.error && state.userInfo.data.isLoggedIn && json.timetables[0]) {
         return dispatch(fetchClassmates(json.timetables[0].courses.map(c => c.id)));
       }
-      return null;
-    });
-  });
-  return null;
+    })
+    .catch((error) => {
+      if (error.response.status === 409) {
+        dispatch({
+          type: ActionTypes.ALERT_TIMETABLE_EXISTS
+        })
+      }
+    })
 };
 
 export const duplicateTimetable = timetable => (dispatch, getState) => {
