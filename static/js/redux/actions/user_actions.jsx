@@ -52,8 +52,7 @@ export const requestFriends = () => ({
 /* Returns the currently active timetable */
 export const getActiveTimetable = timetableState => timetableState.items[timetableState.active];
 
-const getSaveTimetablesRequestBody = () => (dispatch, getState) => {
-  const state = getState();
+const getSaveTimetablesRequestBody = (state) => {
   const timetableState = state.timetables;
   const tt = getActiveTimetable(timetableState);
   return {
@@ -146,7 +145,7 @@ export const saveTimetable = (isAutoSave = false, callback = null) => (dispatch,
     type: ActionTypes.REQUEST_SAVE_TIMETABLE,
   });
 
-  const body = dispatch(getSaveTimetablesRequestBody());
+  const body = getSaveTimetablesRequestBody(state);
   fetch(getSaveTimetableEndpoint(), {
     headers: {
       'X-CSRFToken': Cookie.get('csrftoken'),
