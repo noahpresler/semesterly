@@ -1,4 +1,5 @@
 import update from 'react/lib/update';
+import { createSelector } from 'reselect';
 import { saveLocalActiveIndex } from '../util';
 import * as ActionTypes from '../constants/actionTypes';
 
@@ -154,5 +155,14 @@ const timetables = (state = initialState, action) => {
       return state;
   }
 };
+
+export const getActiveTTIndex = state => state.active;
+
+export const getAllTTs = state => state.items;
+
+export const getActiveTT = createSelector(
+  [getActiveTTIndex, getAllTTs],
+  (activeIndex, allTTs) => allTTs[activeIndex],
+);
 
 export default timetables;
