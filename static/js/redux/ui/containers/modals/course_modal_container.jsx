@@ -1,5 +1,6 @@
 import { connect } from 'react-redux';
 import CourseModal from '../../modals/course_modal';
+import { getActiveTT } from '../../../reducers/root_reducer';
 import {
     addOrRemoveCourse,
     addOrRemoveOptionalCourse,
@@ -28,7 +29,7 @@ const mapStateToProps = (state) => {
     practicalSections = state.courseInfo.data.sections.P;
   }
   const courseSections = state.courseSections.objects;
-  const activeTimetable = state.timetables.items[state.timetables.active];
+  const activeTimetable = getActiveTT(state);
   return {
     schoolSpecificInfo: getSchoolSpecificInfo(state.school.school),
     isFetching: state.courseInfo.isFetching,
