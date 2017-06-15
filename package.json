@@ -126,7 +126,7 @@
     "webpack": "^2.4.1"
   },
   "lint-staged": {
-    "*.jsx": "eslint",
+    "*.jsx": ["eslint --fix", "git add"],
     "*.scss": "lint-scss-staged"
   },
   "sasslintConfig": "sass-lint"

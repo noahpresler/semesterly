@@ -4,7 +4,6 @@ import Cookie from 'js-cookie';
 import { getTimetablesEndpoint } from '../constants/endpoints';
 import {
     browserSupportsLocalStorage,
-    randomString,
     saveLocalActiveIndex,
     saveLocalCourseSections,
     saveLocalPreferences,
@@ -15,8 +14,6 @@ import * as ActionTypes from '../constants/actionTypes';
 import { currSem } from '../reducers/semester_reducer';
 
 let customEventUpdateTimer; // keep track of user's custom event actions for autofetch
-
-export const SID = randomString(30);
 
 export const alertConflict = () => ({ type: ActionTypes.ALERT_CONFLICT });
 
@@ -105,7 +102,6 @@ export const getBaseReqBody = state => ({
   semester: currSem(state.semester),
   courseSections: state.courseSections.objects,
   preferences: state.preferences,
-  sid: SID,
 });
 
 export const hoverSection = (course, section) => {
