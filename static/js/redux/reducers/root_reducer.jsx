@@ -3,7 +3,7 @@ import school from './school_reducer';
 import semester from './semester_reducer';
 import calendar from './calendar_reducer';
 import courseSections from './course_sections_reducer';
-import timetables from './timetables_reducer';
+import timetables, * as fromTimetables from './timetables_reducer';
 import searchResults from './search_results_reducer';
 import preferences from './preferences_reducer';
 import courseInfo from './course_info_reducer';
@@ -60,5 +60,7 @@ const rootReducer = combineReducers({
   textbookModal,
   finalExamsModal,
 });
+
+export const getActiveTT = state => fromTimetables.getActiveTT(state.timetables);
 
 export default rootReducer;
