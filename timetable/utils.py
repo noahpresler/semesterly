@@ -108,6 +108,7 @@ def get_tt_stats(timetable, day_to_usage):
         'avg_rating': get_avg_rating(timetable)
     }
 
+
 def courses_to_timetables(courses, locked_sections, semester, sort_metrics, school, custom_events, with_conflicts, optional_course_ids):
     all_offerings = courses_to_offerings(courses, locked_sections, semester)
     timetables = create_timetable_from_offerings(all_offerings, school, custom_events, with_conflicts)
