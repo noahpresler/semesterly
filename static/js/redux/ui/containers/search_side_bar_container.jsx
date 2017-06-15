@@ -1,4 +1,5 @@
 import { connect } from 'react-redux';
+import { getActiveTT } from '../../reducers/root_reducer';
 import SearchSideBar from '../search_side_bar';
 import { addOrRemoveCourse, hoverSection, unHoverSection } from '../../actions/timetable_actions';
 
@@ -12,7 +13,7 @@ const mapStateToProps = (state) => {
   const lectureSections = sectionTypeToSections.L;
   const tutorialSections = sectionTypeToSections.T;
   const practicalSections = sectionTypeToSections.P;
-  const activeTimetable = state.timetables.items[state.timetables.active];
+  const activeTimetable = getActiveTT(state);
 
   return {
     hovered,
