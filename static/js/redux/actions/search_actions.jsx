@@ -42,12 +42,12 @@ export const maybeSetSemester = semester => (dispatch, getState) => {
   const state = getState();
 
   if (semester === state.semester.current) {
-    return;
+    return null;
   }
 
   if (state.timetables.items[state.timetables.active].courses.length > 0) {
     if (state.userInfo.data.isLoggedIn && !state.savingTimetable.upToDate) {
-      dispatch(saveTimetable(false, () => setSemester(semester)));
+      return dispatch(saveTimetable(false, () => dispatch(setSemester(semester))));
     } else if (state.userInfo.data.isLoggedIn) {
       dispatch(setSemester(semester));
     } else {
@@ -59,6 +59,7 @@ export const maybeSetSemester = semester => (dispatch, getState) => {
   } else {
     dispatch(setSemester(semester));
   }
+  return null;
 };
 
 export const fetchSearchResults = query => (dispatch, getState) => {

@@ -8,7 +8,8 @@
             "transform": "livereactload/babel-transform",
             "imports": ["react"]
           }]
-        }]
+        }],
+        "transform-object-rest-spread"
       ]
     }
   }
