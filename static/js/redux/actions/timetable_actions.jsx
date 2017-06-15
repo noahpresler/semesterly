@@ -1,6 +1,6 @@
 import fetch from 'isomorphic-fetch';
 import Cookie from 'js-cookie';
-
+import { getActiveTT } from '../reducers/root_reducer';
 import { getTimetablesEndpoint } from '../constants/endpoints';
 import {
     browserSupportsLocalStorage,
@@ -352,7 +352,7 @@ const autoFetch = () => (dispatch, getState) => {
   const state = getState();
   clearTimeout(customEventUpdateTimer);
   customEventUpdateTimer = setTimeout(() => {
-    if (state.timetables.items[state.timetables.active].courses.length > 0) {
+    if (getActiveTT(state).courses.length > 0) {
       dispatch({
         type: ActionTypes.UPDATE_LAST_COURSE_ADDED,
         course: state.customSlots,

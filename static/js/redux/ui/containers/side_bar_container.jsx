@@ -1,5 +1,6 @@
 import { connect } from 'react-redux';
 import SideBar from '../side_bar';
+import { getActiveTT } from '../../reducers/root_reducer';
 import {
     fetchCourseInfo,
     showFinalExamsModal,
@@ -16,7 +17,7 @@ import { currSem } from '../../reducers/semester_reducer';
 import { getCourseShareLink } from '../../constants/endpoints';
 
 const mapStateToProps = (state) => {
-  const activeTimetable = state.timetables.items[state.timetables.active];
+  const activeTimetable = getActiveTT(state);
   const mandatoryCourses = activeTimetable.courses.filter(c => !c.is_optional && !c.fake);
   const optionalCourses = state.optionalCourses.courses;
 
