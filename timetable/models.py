@@ -178,7 +178,6 @@ class Section(models.Model):
     waitlist_size = models.IntegerField(default=-1)
     section_type = models.CharField(max_length=50, default='L')
     instructors = models.CharField(max_length=500, default='TBA')
-    _semester = models.CharField(max_length=2)  # deprecated
     semester = models.ForeignKey(Semester)
     textbooks = models.ManyToManyField(Textbook, through='TextbookLink')
     was_full = models.BooleanField(default=False)
@@ -225,3 +224,13 @@ class CourseIntegration(models.Model):
     course = models.ForeignKey(Course)
     integration = models.ForeignKey(Integration)
     json = models.TextField()
+
+
+class Timetable(models.Model):
+    courses = models.ManyToManyField(Course)
+    sections = models.ManyToManyField(Section)
+    semester = models.ForeignKey(Semester)
+    school = models.CharField(max_length=50)
+
+    class Meta:
+        abstract = True
