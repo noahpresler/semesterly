@@ -16,6 +16,7 @@ import {
     getSetRegistrationTokenEndpoint,
     acceptTOSEndpoint,
 } from '../constants/endpoints';
+import { getActiveTT } from '../reducers/root_reducer';
 import { fetchCourseClassmates } from './modal_actions';
 import { getNumberedName, loadTimetable, nullifyTimetable } from './timetable_actions';
 import { MAX_TIMETABLE_NAME_LENGTH } from '../constants/constants';
@@ -428,7 +429,7 @@ export const fetchFriends = () => (dispatch, getState) => {
 export const autoSave = (delay = 2000) => (dispatch, getState) => {
   const state = getState();
   clearTimeout(autoSaveTimer);
-  const numTimetables = state.timetables.items[state.timetables.active].courses.length;
+  const numTimetables = getActiveTT(state).courses.length;
   const numEvents = state.customSlots.length;
   autoSaveTimer = setTimeout(() => {
     if (state.userInfo.data.isLoggedIn && numTimetables + numEvents > 0) {
