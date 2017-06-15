@@ -12,7 +12,7 @@ from analytics.views import save_analytics_timetable
 from student.utils import get_student
 from timetable.serializers import convert_tt_to_dict
 from timetable.models import Semester, Course
-from timetable.utils import update_locked_sections, TimetableGenerator
+from timetable.utils import update_locked_sections, courses_to_timetables
 from helpers.mixins import ValidateSubdomainMixin, FeatureFlowView, CsrfExemptMixin
 
 hashids = Hashids(salt="x98as7dhg&h*askdj^has!kj?xz<!9")
@@ -55,14 +55,13 @@ class TimetableView(CsrfExemptMixin, ValidateSubdomainMixin, APIView):
                                    for subset in itertools.combinations(optional_courses, k)]
 
         custom_events = params.get('customSlots', [])
-        generator = TimetableGenerator(params['semester'],
-                                       params['school'],
-                                       locked_sections,
-                                       custom_events,
-                                       params['preferences'],
-                                       opt_course_ids)
+        preferences = params['preferences']
+        with_conflicts = preferences.get('try_with_conflicts', False)
+        sort_metrics = [(m['metric'], m['order']) for m in preferences.get('sort_metrics', [])
+                        if m['selected']]
+
         result = [timetable for opt_courses in optional_course_subsets
-                  for timetable in generator.courses_to_timetables(courses + list(opt_courses))]
+                  for timetable in courses_to_timetables(courses + list(opt_courses), locked_sections, params['semester'], sort_metrics, params['school'], custom_events, with_conflicts, opt_course_ids)]
 
         # updated roster object
         response = {'timetables': result, 'new_c_to_s': locked_sections}
