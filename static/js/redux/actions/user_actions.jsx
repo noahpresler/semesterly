@@ -146,7 +146,7 @@ export const saveTimetable = (isAutoSave = false, callback = null) => (dispatch,
   });
 
   const body = getSaveTimetablesRequestBody(state);
-  fetch(getSaveTimetableEndpoint(), {
+  return fetch(getSaveTimetableEndpoint(), {
     headers: {
       'X-CSRFToken': Cookie.get('csrftoken'),
       Accept: 'application/json',
@@ -157,7 +157,7 @@ export const saveTimetable = (isAutoSave = false, callback = null) => (dispatch,
     credentials: 'include',
   })
     .then(checkStatus)
-    .then((response) => response.json())
+    .then(response => response.json())
     .then((json) => {
       // edit the state's courseSections, so that future requests to add/remove/unlock
       // courses are handled correctly. in the new courseSections, every currently
@@ -194,14 +194,16 @@ export const saveTimetable = (isAutoSave = false, callback = null) => (dispatch,
       if (!json.error && state.userInfo.data.isLoggedIn && json.timetables[0]) {
         return dispatch(fetchClassmates(json.timetables[0].courses.map(c => c.id)));
       }
+      return null;
     })
     .catch((error) => {
-      if (error.response.status === 409) {
+      if (error.response && error.response.status === 409) {
         dispatch({
-          type: ActionTypes.ALERT_TIMETABLE_EXISTS
-        })
+          type: ActionTypes.ALERT_TIMETABLE_EXISTS,
+        });
       }
-    })
+      return null;
+    });
 };
 
 export const duplicateTimetable = timetable => (dispatch, getState) => {
