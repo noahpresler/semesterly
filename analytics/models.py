@@ -2,17 +2,13 @@ from timetable.models import *
 from student.models import Student
 
 
-class SharedTimetable(models.Model):
+class SharedTimetable(Timetable):
     """
     A timetable for which a user generated a share link.
     Not necessarily tied to a Student object, since logged out users
     can also generate links to share a timetable. But if a logged-in user
     does generate it, this information will be recorded.
     """
-    courses = models.ManyToManyField(Course)
-    sections = models.ManyToManyField(Section)
-    semester = models.ForeignKey('timetable.Semester')
-    school = models.CharField(max_length=50)
     has_conflict = models.BooleanField(blank=True, default=False)
     time_created = models.DateTimeField(auto_now_add=True)
     student = models.ForeignKey(Student, null=True, default=None)
