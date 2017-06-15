@@ -17,15 +17,18 @@ class SharedTimetable(models.Model):
     time_created = models.DateTimeField(auto_now_add=True)
     student = models.ForeignKey(Student, null=True, default=None)
 
+
 class SharedTimetableView(models.Model):
     shared_timetable = models.ForeignKey(SharedTimetable)
     time_created = models.DateTimeField(auto_now_add=True)
     student = models.ForeignKey(Student, null=True, default=None)
 
+
 class SharedCourseView(models.Model):
     shared_course = models.ForeignKey(Course)
     time_created = models.DateTimeField(auto_now_add=True)
     student = models.ForeignKey(Student, null=True, default=None)
+
 
 class AnalyticsTimetable(models.Model):
     """
@@ -86,6 +89,7 @@ class FinalExamModalView(models.Model):
     time_created = models.DateTimeField(auto_now_add=True)
     school = models.CharField(max_length=50)
 
+
 class FacebookAlertView(models.Model):
     """
     Logs that a continue with Facebook alert has been viewed
@@ -93,6 +97,7 @@ class FacebookAlertView(models.Model):
     student = models.ForeignKey(Student, null=True, default=None)
     time_created = models.DateTimeField(auto_now_add=True)
     school = models.CharField(max_length=50)
+
 
 class FacebookAlertClick(models.Model):
     """
