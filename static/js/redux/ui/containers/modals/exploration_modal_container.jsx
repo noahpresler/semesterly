@@ -1,4 +1,5 @@
 import { connect } from 'react-redux';
+import { getActiveTT } from '../../../reducers/root_reducer';
 import ExplorationModal from '../../modals/exploration_modal';
 import {
     clearAdvancedSearchPagination,
@@ -31,7 +32,7 @@ const mapStateToProps = (state) => {
   const courseSections = state.courseSections.objects;
   const course = advancedSearchResults[active];
   const inRoster = course && (courseSections[course.id] !== undefined);
-  const activeTimetable = state.timetables.items[state.timetables.active];
+  const activeTimetable = getActiveTT(state);
   const { areas, departments, levels } = state.school;
   const semester = currSem(state.semester);
   return {

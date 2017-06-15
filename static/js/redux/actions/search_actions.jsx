@@ -1,4 +1,5 @@
 import fetch from 'isomorphic-fetch';
+import { getActiveTT } from '../reducers/root_reducer';
 import { getCourseSearchEndpoint } from '../constants/endpoints';
 import { getUserSavedTimetables, saveTimetable } from './user_actions';
 import { nullifyTimetable } from './timetable_actions';
@@ -45,7 +46,7 @@ export const maybeSetSemester = semester => (dispatch, getState) => {
     return null;
   }
 
-  if (state.timetables.items[state.timetables.active].courses.length > 0) {
+  if (getActiveTT(state).courses.length > 0) {
     if (state.userInfo.data.isLoggedIn && !state.savingTimetable.upToDate) {
       return dispatch(saveTimetable(false, () => dispatch(setSemester(semester))));
     } else if (state.userInfo.data.isLoggedIn) {
