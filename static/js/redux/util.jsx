@@ -129,3 +129,16 @@ export const getMaxEndHour = (timetable, hasCourses) => {
   }
   return Math.max(maxEndHour, getMaxHourBasedOnWindowHeight());
 };
+
+/*
+ * Raise error if the response has an error status code, otherwise return response.
+ * Used to handle errors inside of the fetch() promise chain
+ */
+export const checkStatus = (response) => {
+  if (response.status >= 200 && response.status < 300) {
+    return response;
+  }
+  const error = new Error(response.statusText);
+  error.response = response;
+  throw error;
+};
