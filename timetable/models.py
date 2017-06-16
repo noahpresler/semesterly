@@ -88,6 +88,21 @@ class Course(models.Model):
 
 
 class Section(models.Model):
+    """
+    Represents a possible lecture/tutorial/etc. of a Course.
+    Attributes:
+        course: Course that this Section belongs to
+        meeting_section: an ID unique among other Sections for this Section's Course
+        size: max number of students that can be enrolled in this Section
+        enrolment: number of students currently enrolled
+        waitlist: number of students currently on the waitlist (should be 0 if size <= enrolment)
+        waitlist_size: max number of students that can be on the waitlist
+        section_type: category of this section, e.g. lecture, tutorial, practical, etc.
+        instructors: comma separated list of instructors
+        semester: Semester that this section is offered in
+        textbooks: Textbooks required for this section
+        was_full: True if this section was full at some point. Used for the mailing list
+    """
     course = models.ForeignKey(Course)
     meeting_section = models.CharField(max_length=50)
     size = models.IntegerField(default=-1)
@@ -103,7 +118,10 @@ class Section(models.Model):
     def get_textbooks(self):
         return [tb.get_info() for tb in self.textbooks.all()]
 
-    def __unicode__(self):
+    def is_full(self):
+        return self.enrolment >= 0 and self.size >= 0 and self.enrolment >= self.size
+
+    def __str__(self):
         return "Course: {0}; Section: {0}; Semester: {0}".format(self.course, self.meeting_section,
                                                                  self.semester)
 
