@@ -7,6 +7,7 @@ from django.db import models
 from rest_framework import serializers
 
 from timetable.models import Course, Evaluation, CourseIntegration, Integration
+import utils
 
 
 class EvaluationSerializer(serializers.ModelSerializer):
@@ -16,6 +17,14 @@ class EvaluationSerializer(serializers.ModelSerializer):
 
 
 class CourseSerializer(serializers.ModelSerializer):
+    """
+    Serialize a Course into a dictionary with detailed information about the course, and all
+    related entities (eg Sections). Used for search results and course modals.
+    Takes a context with parameters:
+        school: str (required)
+        semester: Semester (required)
+        student: Student (optional)
+    """
     eval_info = serializers.SerializerMethodField()
     integrations = serializers.SerializerMethodField()
     related_courses = serializers.SerializerMethodField()
@@ -24,6 +33,7 @@ class CourseSerializer(serializers.ModelSerializer):
     regexed_courses = serializers.SerializerMethodField()
     popularity_percent = serializers.SerializerMethodField()
     sections = serializers.SerializerMethodField()
+    is_waitlist_only = serializers.SerializerMethodField()
 
     def get_eval_info(self, course):
         """
@@ -97,6 +107,7 @@ class CourseSerializer(serializers.ModelSerializer):
         return num_students_in_course / float(course_capacity) if course_capacity else 0
 
     def get_sections(self, course):
+        """ Return a section type -> (section code -> [offering dict]) mapping. """
         section_type_to_sections = {}
         course_section_list = sorted(course.section_set.filter(semester=self.context['semester']),
                                      key=attrgetter('section_type'))
@@ -108,12 +119,33 @@ class CourseSerializer(serializers.ModelSerializer):
             }
         return section_type_to_sections
 
+    def get_is_waitlist_only(self, course):
+        return utils.is_waitlist_only(course, self.context['semester'])
+
     class Meta:
         model = Course
-        fields = ('code', 'name', 'id', 'description', 'department', 'num_credits', 'areas',
-                  'campus', 'eval_info', 'integrations', 'related_courses', 'reactions', 'textbooks',
-                  'regexed_courses', 'popularity_percent', 'sections', 'prerequisites',
-                  'exclusions', 'areas')
+        fields = (
+            'code',
+            'name',
+            'id',
+            'description',
+            'department',
+            'num_credits',
+            'areas',
+            'campus',
+            'eval_info',
+            'integrations',
+            'related_courses',
+            'reactions',
+            'textbooks',
+            'regexed_courses',
+            'popularity_percent',
+            'sections',
+            'prerequisites',
+            'exclusions',
+            'areas',
+            'is_waitlist_only'
+        )
 
 
 def get_section_offerings(section):

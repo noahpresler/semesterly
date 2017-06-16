@@ -1,10 +1,9 @@
 import itertools
-from operator import attrgetter
 
 from django.forms import model_to_dict
 
 from courses.serializers import augment_course_dict
-from courses.utils import sections_are_filled
+from courses.utils import is_waitlist_only, get_sections_by_section_type
 from timetable.models import Section, Course, Semester
 from timetable.school_mappers import school_to_granularity, school_to_semesters
 from timetable.scoring import get_tt_cost, get_num_days, get_avg_day_length, get_num_friends, \
@@ -124,11 +123,8 @@ def courses_to_offerings(courses, locked_sections, semester):
     """
     all_sections = []
     for c in courses:
-        sections = c.section_set.filter(semester=semester)
-        sections = sorted(sections, key=attrgetter('section_type'))
-        grouped = itertools.groupby(sections, attrgetter('section_type'))
+        grouped = get_sections_by_section_type(c, semester)
         for section_type, sections in grouped:
-            sections = list(sections)
             locked_section_code = locked_sections.get(str(c.id), {}).get(section_type)
             section_codes = [section.meeting_section for section in sections]
             if locked_section_code in section_codes:
@@ -158,12 +154,8 @@ def get_basic_course_dict(section, optional_course_ids, semester):
     if section[0] in optional_course_ids:  # mark optional courses
         course_dict['is_optional'] = True
 
-    course_section_list = sorted(course.section_set.filter(semester=semester),
-                                 key=attrgetter('section_type'))
-    section_type_to_sections = itertools.groupby(course_section_list,
-                                                 attrgetter('section_type'))
-    course_dict['is_waitlist_only'] = any(sections_are_filled(sections)
-                                          for _, sections in section_type_to_sections)
+    section_type_to_sections = get_sections_by_section_type(course, semester)
+    course_dict['is_waitlist_only'] = is_waitlist_only(course, semester)
     return course_dict
 
 
