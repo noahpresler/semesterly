@@ -32,8 +32,9 @@ class CourseSerializer(serializers.ModelSerializer):
     textbooks = serializers.SerializerMethodField()
     regexed_courses = serializers.SerializerMethodField()
     popularity_percent = serializers.SerializerMethodField()
-    sections = serializers.SerializerMethodField()
     is_waitlist_only = serializers.SerializerMethodField()
+
+    sections = serializers.SerializerMethodField()
 
     def get_eval_info(self, course):
         """
@@ -106,21 +107,18 @@ class CourseSerializer(serializers.ModelSerializer):
         course_capacity = sum(sections.values_list('size', flat=True)) if sections else 0
         return num_students_in_course / float(course_capacity) if course_capacity else 0
 
+    def get_is_waitlist_only(self, course):
+        return utils.is_waitlist_only(course, self.context['semester'])
+
     def get_sections(self, course):
         """ Return a section type -> (section code -> [offering dict]) mapping. """
         section_type_to_sections = {}
-        course_section_list = sorted(course.section_set.filter(semester=self.context['semester']),
-                                     key=attrgetter('section_type'))
-
-        for section_type, sections in itertools.groupby(course_section_list,
-                                                        attrgetter('section_type')):
+        section_type_map = utils.get_sections_by_section_type(course, self.context['semester'])
+        for section_type, sections in section_type_map.iteritems():
             section_type_to_sections[section_type] = {
                 section.meeting_section: [get_section_offerings(section) for section in sections]
             }
         return section_type_to_sections
-
-    def get_is_waitlist_only(self, course):
-        return utils.is_waitlist_only(course, self.context['semester'])
 
     class Meta:
         model = Course
@@ -155,7 +153,7 @@ def get_section_offerings(section):
 
 def get_section_dict(section):
     section_data = model_to_dict(section)
-    section_data['is_section_filled'] = section.enrolment >= section.size
+    section_data['is_section_filled'] = section.is_full()
     return section_data
 
 
