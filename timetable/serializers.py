@@ -5,8 +5,8 @@ from rest_framework import serializers
 
 from student.models import PersonalTimetable
 from timetable.utils import get_tt_rating
-from courses.utils import sections_are_filled
-from courses.serializers import get_section_dict
+from courses.utils import is_waitlist_only
+from courses.serializers import get_section_dict, CourseSerializer
 
 
 def convert_tt_to_dict(timetable, include_last_updated=True):
@@ -39,14 +39,9 @@ def convert_tt_to_dict(timetable, include_last_updated=True):
         courses[index]['enrolled_sections'].append(section_obj.meeting_section)
 
     for course_obj in timetable.courses.all():
-        course_section_list = sorted(course_obj.section_set.filter(semester=timetable.semester),
-                                     key=lambda s: s.section_type)
-        section_type_to_sections = itertools.groupby(
-            course_section_list, lambda s: s.section_type)
         if course_obj.id in course_ids:
             index = course_ids.index(course_obj.id)
-            courses[index]['is_waitlist_only'] = any(
-                sections_are_filled(sections) for _, sections in section_type_to_sections)
+            courses[index]['is_waitlist_only'] = is_waitlist_only(course_obj, timetable.semester)
 
     tt_dict['courses'] = courses
     tt_dict['avg_rating'] = get_tt_rating(course_ids)
@@ -57,6 +52,8 @@ def convert_tt_to_dict(timetable, include_last_updated=True):
 
 
 class PersonalTimetableSerializer(serializers.ModelSerializer):
+    courses = CourseSerializer(many=True)
+
     class Meta:
         model = PersonalTimetable
         fields = ('name', 'semester', 'school', 'courses', 'sections', 'events')

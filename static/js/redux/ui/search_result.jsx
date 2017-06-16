@@ -72,8 +72,9 @@ class SearchResult extends React.Component {
       for (let j = 0; j < currSections.length; j++) {
         const section = currSections[j];
         if (sections[sectionType][section].length > 0) {
-          if (sections[sectionType][section][0].enrolment <
-            sections[sectionType][section][0].size) {
+          const currSection = sections[sectionType][section][0];
+          const hasEnrolmentData = currSection.enrolment >= 0;
+          if (!hasEnrolmentData || currSection.enrolment < currSection.size) {
             sectionTypeHasOpenSections = true;
             break;
           }
