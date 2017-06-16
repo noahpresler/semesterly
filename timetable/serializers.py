@@ -1,6 +1,7 @@
 import itertools
 
 from django.forms import model_to_dict
+from rest_framework import serializers
 
 from student.models import PersonalTimetable
 from timetable.utils import get_tt_rating
@@ -16,10 +17,6 @@ def convert_tt_to_dict(timetable, include_last_updated=True):
     courses = []
     course_ids = []
     tt_dict = model_to_dict(timetable)
-    # include the 'last_updated' property by default; won't be included for
-    # SharedTimetables (since they don't have the property)
-    if include_last_updated:
-        tt_dict['last_updated'] = str(timetable.last_updated)
 
     for section_obj in timetable.sections.all():
         c = section_obj.course  # get the section's course
@@ -57,3 +54,9 @@ def convert_tt_to_dict(timetable, include_last_updated=True):
         tt_dict['events'] = [dict(model_to_dict(event), preview=False)
                              for event in timetable.events.all()]
     return tt_dict
+
+
+class PersonalTimetableSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = PersonalTimetable
+        fields = ('name', 'semester', 'school', 'courses', 'sections', 'events')
