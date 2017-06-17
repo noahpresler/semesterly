@@ -12,16 +12,16 @@ describe('course schema', () => {
         day: 'M',
       }],
     }],
-  }]
+  }];
   it('gets normalized correctly', () => {
     const normalized = normalize(unnormalized, [schemas.courseSchema]);
     expect(normalized).toEqual({
       result: ['C1'],
       entities: {
-        courses: { C1: { id: 1, code: 'C1', sections: ['C1-S1']} },
+        courses: { C1: { id: 1, code: 'C1', sections: ['C1-S1'] } },
         sections: { 'C1-S1': { meeting_section: 'S1', offering_set: [1] } },
-        offerings: { '1': { id: 1, day: 'M' } }
-      }
-    })
-  })
+        offerings: { 1: { id: 1, day: 'M' } },
+      },
+    });
+  });
 });
