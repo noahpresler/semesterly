@@ -2,7 +2,7 @@ import PropTypes from 'prop-types';
 import React from 'react';
 import Modal from 'boron/DropModal';
 import classNames from 'classnames';
-import CourseModalBody from './course_modal_body';
+import CourseModalBodyContainer from '../containers/modals/course_modal_body_container';
 import { ShareLink } from '../master_slot';
 import {
   Filter, SelectedFilter, SelectedFilterSection,
@@ -280,7 +280,7 @@ class ExplorationModal extends React.Component {
               />
             </div>
           </div>
-          <CourseModalBody
+          <CourseModalBodyContainer
             id={selectedCourse.id}
             sectionTypeToSections={getSectionTypeToSections(selectedCourse)}
             data={selectedCourse}
@@ -300,6 +300,7 @@ class ExplorationModal extends React.Component {
             isFetchingClassmates={this.props.isFetchingClassmates}
             fetchCourseInfo={this.props.fetchCourseInfo}
             userInfo={this.props.userInfo}
+            getShareLink={this.props.getShareLink}
           />
         </div>
       );
