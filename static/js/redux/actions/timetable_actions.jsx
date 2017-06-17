@@ -104,20 +104,6 @@ export const getBaseReqBody = state => ({
   preferences: state.preferences,
 });
 
-export const hoverSection = (course, section) => {
-  const courseToHover = course;
-  const availableSections = Object.assign({},
-    courseToHover.sections.L,
-    courseToHover.sections.T,
-    courseToHover.sections.P,
-  );
-  courseToHover.section = section;
-  return {
-    type: ActionTypes.HOVER_COURSE,
-    course: Object.assign({}, courseToHover, { slots: availableSections[section] }),
-  };
-};
-
 export const fetchStateTimetables = (activeIndex = 0) => (dispatch, getState) => {
   const requestBody = getBaseReqBody(getState());
   dispatch(fetchTimetables(requestBody, false, activeIndex));
@@ -260,6 +246,14 @@ export const handleCreateNewTimetable = () => (dispatch, getState) => {
 };
 
 export const unHoverSection = () => ({ type: ActionTypes.UNHOVER_COURSE });
+
+export const hoverSection = (course, sectionCode) => {
+  const section = course.sections.find(s => s.meeting_section === sectionCode);
+  return {
+    type: ActionTypes.HOVER_COURSE,
+    course: Object.assign({}, course, { slots: section.offering_set }),
+  };
+};
 
 /*
  Attempts to add the course represented by newCourseId
