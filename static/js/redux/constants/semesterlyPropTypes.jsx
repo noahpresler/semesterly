@@ -35,7 +35,6 @@ export const sectionToTextbookMap = (props, propName, componentName) => {
 };
 
 export const section = PropTypes.shape({
-  course: PropTypes.number.isRequired,
   day: PropTypes.string.isRequired,
   enrolment: PropTypes.number.isRequired,
   instructors: PropTypes.string.isRequired,
