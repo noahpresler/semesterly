@@ -151,3 +151,7 @@ export const getSectionTypeDisplayName = function getSectionTypeDisplayName(sect
       return sectionTypeCode;
   }
 };
+
+// A comparison function for sorting sections
+export const meetingSectionCmp = (first, second) =>
+  (first.meeting_section > second.meeting_section ? 1 : -1);
