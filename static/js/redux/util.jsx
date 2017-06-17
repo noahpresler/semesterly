@@ -139,7 +139,7 @@ export const checkStatus = (response) => {
 };
 
 // TODO: define map somewhere or use CHOICES in Section model
-export const getSectionDisplayName = function getSectionTypeDisplayName(sectionTypeCode) {
+export const getSectionTypeDisplayName = function getSectionTypeDisplayName(sectionTypeCode) {
   switch (sectionTypeCode) {
     case 'L':
       return 'Lecture';
