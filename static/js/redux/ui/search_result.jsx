@@ -11,7 +11,6 @@ class SearchResult extends React.Component {
     this.addCourseWrapper = this.addCourseWrapper.bind(this);
     this.actionOver = this.actionOver.bind(this);
     this.actionOut = this.actionOut.bind(this);
-    this.hasOnlyWaitlistedSections = this.hasOnlyWaitlistedSections.bind(this);
   }
 
   addCourseWrapper(course, sec, event) {
@@ -52,42 +51,6 @@ class SearchResult extends React.Component {
     }
   }
 
-  /**
-   * Checks if a course is Waitlist Only
-   * Loops through each section type first (Lecture, Tutorial, Practical)
-   * if any of the section types doesn't have open seats, the course is waitlist only
-   * Within each section type, loops through each section
-   * if section doesn't have meeting times, doesn't have enrolment cap
-   * if section has open seats, don't check rest of sections in section type, move onto
-   * next section type.
-   * @returns {boolean}
-   */
-  hasOnlyWaitlistedSections() {
-    const sections = this.props.searchResults[this.props.position].sections;
-    const sectionTypes = Object.keys(sections);
-    for (let i = 0; i < sectionTypes.length; i++) {
-      const sectionType = sectionTypes[i];
-      let sectionTypeHasOpenSections = false;
-      const currSections = Object.keys(sections[sectionType]);
-      for (let j = 0; j < currSections.length; j++) {
-        const section = currSections[j];
-        if (sections[sectionType][section].length > 0) {
-          const currSection = sections[sectionType][section][0];
-          const hasEnrolmentData = currSection.enrolment >= 0;
-          if (!hasEnrolmentData || currSection.enrolment < currSection.size) {
-            sectionTypeHasOpenSections = true;
-            break;
-          }
-        } else {
-          return false;
-        }
-      }
-      if (!sectionTypeHasOpenSections) {
-        return true; // lecture, practical, or tutorial doesn't have open seats
-      }
-    }
-    return false;
-  }
   render() {
     const { course, inRoster, inOptionRoster } = this.props;
     const addRemoveButton =
@@ -139,7 +102,7 @@ class SearchResult extends React.Component {
         >Add as Pilot
         </a>
       </div>) : null;
-    const waitlistOnlyFlag = this.hasOnlyWaitlistedSections() ?
+    const waitlistOnlyFlag = this.props.hasOnlyWaitlistedSections ?
       <h4 className="label flag">Waitlist Only</h4> : null;
     return (
       <li
@@ -181,7 +144,6 @@ SearchResult.propTypes = {
   hoverSearchResult: PropTypes.func.isRequired,
   fetchCourseInfo: PropTypes.func.isRequired,
   showIntegrationModal: PropTypes.func.isRequired,
-  searchResults: PropTypes.arrayOf(SemesterlyPropTypes.searchResult).isRequired,
   campuses: PropTypes.shape({
     '*': PropTypes.string,
   }).isRequired,
@@ -189,6 +151,7 @@ SearchResult.propTypes = {
   isHovered: PropTypes.func.isRequired,
   addRemoveOptionalCourse: PropTypes.func.isRequired,
   studentIntegrations: PropTypes.arrayOf(SemesterlyPropTypes.integration).isRequired,
+  hasOnlyWaitlistedSections: PropTypes.bool.isRequired,
 };
 
 export default SearchResult;
