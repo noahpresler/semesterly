@@ -19,6 +19,6 @@ const searchResults = (state = { isFetching: false, items: [] }, action) => {
 
 export const getSearchResult = (state, index) => state.items[index];
 
-export const getSectionTypeToSections = course => course.sections;
+export const getSectionTypeToSections = searchResult => searchResult.sections;
 
 export default searchResults;

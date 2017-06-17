@@ -6,15 +6,15 @@ import { addOrRemoveCourse, hoverSection, unHoverSection } from '../../actions/t
 
 const mapStateToProps = (state) => {
   const courseSections = state.courseSections.objects;
-  let hoveredCourse = getSearchResult(state, state.ui.searchHover);
-  if (!hoveredCourse) {
-    hoveredCourse = getSearchResult(state, 0);
+  let hoveredResult = getSearchResult(state, state.ui.searchHover);
+  if (!hoveredResult) {
+    hoveredResult = getSearchResult(state, 0);
   }
   const activeTimetable = getActiveTT(state);
 
   return {
-    hoveredCourse,
-    sectionTypeToSections: getSectionTypeToSections(hoveredCourse),
+    hoveredResult,
+    sectionTypeToSections: getSectionTypeToSections(hoveredResult),
     isSectionLocked: (courseId, section) => {
       if (courseSections[courseId] === undefined) {
         return false;
