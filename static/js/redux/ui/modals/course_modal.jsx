@@ -2,7 +2,7 @@ import PropTypes from 'prop-types';
 import React from 'react';
 import classNames from 'classnames';
 import Modal from 'boron/WaveModal';
-import CourseModalBody from './course_modal_body';
+import CourseModalBodyContainer from '../containers/modals/course_modal_body_container';
 import { ShareLink } from '../master_slot';
 import { fullCourseDetails } from '../../constants/semesterlyPropTypes';
 
@@ -114,7 +114,7 @@ class CourseModal extends React.Component {
                 { addOptional }
                 { add }
               </div>
-              <CourseModalBody
+              <CourseModalBodyContainer
                 {...this.props} hideModal={this.hide}
                 addOrRemoveCourse={this.addOrRemoveCourse}
               />
