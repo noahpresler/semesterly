@@ -124,7 +124,7 @@ def courses_to_offerings(courses, locked_sections, semester):
     all_sections = []
     for c in courses:
         grouped = get_sections_by_section_type(c, semester)
-        for section_type, sections in grouped:
+        for section_type, sections in grouped.iteritems():
             locked_section_code = locked_sections.get(str(c.id), {}).get(section_type)
             section_codes = [section.meeting_section for section in sections]
             if locked_section_code in section_codes:
@@ -154,7 +154,6 @@ def get_basic_course_dict(section, optional_course_ids, semester):
     if section[0] in optional_course_ids:  # mark optional courses
         course_dict['is_optional'] = True
 
-    section_type_to_sections = get_sections_by_section_type(course, semester)
     course_dict['is_waitlist_only'] = is_waitlist_only(course, semester)
     return course_dict
 
