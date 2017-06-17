@@ -19,6 +19,16 @@ const searchResults = (state = { isFetching: false, items: [] }, action) => {
 
 export const getSearchResult = (state, index) => state.items[index];
 
-export const getSectionTypeToSections = searchResult => searchResult.sections;
+export const getSectionTypeToSections = (searchResult) => {
+  const sectionTypeToSections = {};
+  searchResult.sections.forEach((section) => {
+    if (!(section.section_type in sectionTypeToSections)) {
+      sectionTypeToSections[section.section_type] = [];
+    }
+    sectionTypeToSections[section.section_type].push(section);
+  });
+  console.log(sectionTypeToSections);
+  return sectionTypeToSections;
+};
 
 export default searchResults;
