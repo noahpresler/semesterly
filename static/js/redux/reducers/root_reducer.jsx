@@ -28,6 +28,7 @@ import termsOfServiceBanner from './terms_of_service_banner_reducer';
 import userAcquisitionModal from './user_acquisition_modal_reducer';
 import textbookModal from './textbook_modal_reducer';
 import finalExamsModal from './final_exams_modal_reducer';
+import entities from './entities_reducer';
 
 const rootReducer = combineReducers({
   school,
@@ -59,6 +60,7 @@ const rootReducer = combineReducers({
   termsOfServiceBanner,
   textbookModal,
   finalExamsModal,
+  entities,
 });
 
 export const getActiveTT = state => fromTimetables.getActiveTT(state.timetables);
