@@ -137,3 +137,17 @@ export const checkStatus = (response) => {
   error.response = response;
   throw error;
 };
+
+// TODO: define map somewhere or use CHOICES in Section model
+export const getSectionDisplayName = function getSectionTypeDisplayName(sectionTypeCode) {
+  switch (sectionTypeCode) {
+    case 'L':
+      return 'Lecture';
+    case 'T':
+      return 'Tutorial';
+    case 'P':
+      return 'Lab/Practical';
+    default:
+      return sectionTypeCode;
+  }
+};

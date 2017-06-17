@@ -4,7 +4,7 @@ import semester from './semester_reducer';
 import calendar from './calendar_reducer';
 import courseSections from './course_sections_reducer';
 import timetables, * as fromTimetables from './timetables_reducer';
-import searchResults from './search_results_reducer';
+import searchResults, * as fromSearchResults from './search_results_reducer';
 import preferences from './preferences_reducer';
 import courseInfo from './course_info_reducer';
 import alerts from './alerts_reducer';
@@ -62,5 +62,8 @@ const rootReducer = combineReducers({
 });
 
 export const getActiveTT = state => fromTimetables.getActiveTT(state.timetables);
+
+export const getSearchResult = (state, index) =>
+  fromSearchResults.getSearchResult(state.searchResults, index);
 
 export default rootReducer;
