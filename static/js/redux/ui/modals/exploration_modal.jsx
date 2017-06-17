@@ -236,8 +236,7 @@ class ExplorationModal extends React.Component {
       width: '100%',
       backgroundColor: 'transparent',
     };
-    const { advancedSearchResults, course, inRoster } = this.props;
-
+    const { advancedSearchResults, active, inRoster } = this.props;
     const numSearchResults = advancedSearchResults.length > 0 ?
       <p>returned { advancedSearchResults.length } Search Results</p> : null;
     const searchResults = advancedSearchResults.map((c, i) => (<ExplorationSearchResult
@@ -245,71 +244,74 @@ class ExplorationModal extends React.Component {
       onClick={() => this.props.setAdvancedSearchResultIndex(i, c.id)}
     />));
     let courseModal = null;
-    if (course) {
+    if (active >= 0 && active < advancedSearchResults.length) {
+      const selectedCourse = advancedSearchResults[active];
       let lectureSections = {};
       let tutorialSections = {};
       let practicalSections = {};
-      if (course.sections) {
-        lectureSections = course.sections.L;
-        tutorialSections = course.sections.T;
-        practicalSections = course.sections.P;
+      if (selectedCourse.sections) {
+        lectureSections = selectedCourse.sections.L;
+        tutorialSections = selectedCourse.sections.T;
+        practicalSections = selectedCourse.sections.P;
       }
       const shareLink = this.state.shareLinkShown ?
                 (<ShareLink
-                  link={this.props.getShareLink(course.code)}
+                  link={this.props.getShareLink(selectedCourse.code)}
                   onClickOut={this.hideShareLink}
                 />) :
                 null;
-      courseModal = (<div className="modal-content">
-        <div className="modal-header">
-          <h1>{ course.name }</h1>
-          <h2>{ course.code }</h2>
-          <div className="modal-share" onClick={this.showShareLink}>
-            <i className="fa fa-share-alt" />
+      courseModal = (
+        <div className="modal-content">
+          <div className="modal-header">
+            <h1>{ selectedCourse.name }</h1>
+            <h2>{ selectedCourse.code }</h2>
+            <div className="modal-share" onClick={this.showShareLink}>
+              <i className="fa fa-share-alt" />
+            </div>
+            { shareLink }
+            {
+                          inRoster ? null :
+                          <div
+                            className="modal-save"
+                            onClick={() => this.addOrRemoveOptionalCourse(selectedCourse)}
+                          >
+                            <i className="fa fa-bookmark" />
+                          </div>
+                      }
+            <div className="modal-add" onClick={() => this.addOrRemoveCourse(selectedCourse.id)}>
+              <i
+                className={classNames('fa', {
+                  'fa-plus': !inRoster,
+                  'fa-check': inRoster,
+                })}
+              />
+            </div>
           </div>
-          { shareLink }
-          {
-                        inRoster ? null :
-                        <div
-                          className="modal-save"
-                          onClick={() => this.addOrRemoveOptionalCourse(course)}
-                        >
-                          <i className="fa fa-bookmark" />
-                        </div>
-                    }
-          <div className="modal-add" onClick={() => this.addOrRemoveCourse(course.id)}>
-            <i
-              className={classNames('fa', {
-                'fa-plus': !inRoster,
-                'fa-check': inRoster,
-              })}
-            />
-          </div>
+          <CourseModalBody
+            id={selectedCourse.id}
+            lectureSections={lectureSections}
+            tutorialSections={tutorialSections}
+            practicalSections={practicalSections}
+            data={selectedCourse}
+            classmates={this.props.classmates}
+            addOrRemoveCourse={this.addOrRemoveCourse}
+            isSectionLocked={this.props.isSectionLocked}
+            isSectionOnActiveTimetable={this.props.isSectionOnActiveTimetable}
+            schoolSpecificInfo={this.props.schoolSpecificInfo}
+            hoverSection={this.props.hoverSection}
+            unHoverSection={this.props.unHoverSection}
+            react={this.props.react}
+            openSignUpModal={this.props.openSignUpModal}
+            hideModal={this.props.hideExplorationModal}
+            changeUserInfo={this.props.changeUserInfo}
+            saveSettings={this.props.saveSettings}
+            isFetching={false}
+            isFetchingClassmates={this.props.isFetchingClassmates}
+            fetchCourseInfo={this.props.fetchCourseInfo}
+            userInfo={this.props.userInfo}
+          />
         </div>
-        <CourseModalBody
-          {...course}
-          lectureSections={lectureSections}
-          tutorialSections={tutorialSections}
-          practicalSections={practicalSections}
-          data={course}
-          classmates={this.props.classmates}
-          addOrRemoveCourse={this.addOrRemoveCourse}
-          isSectionLocked={this.props.isSectionLocked}
-          isSectionOnActiveTimetable={this.props.isSectionOnActiveTimetable}
-          schoolSpecificInfo={this.props.schoolSpecificInfo}
-          hoverSection={this.props.hoverSection}
-          unHoverSection={this.props.unHoverSection}
-          react={this.props.react}
-          openSignUpModal={this.props.openSignUpModal}
-          hideModal={this.props.hideExplorationModal}
-          changeUserInfo={this.props.changeUserInfo}
-          saveSettings={this.props.saveSettings}
-          isFetching={false}
-          isFetchingClassmates={this.props.isFetchingClassmates}
-          fetchCourseInfo={this.props.fetchCourseInfo}
-          userInfo={this.props.userInfo}
-        />
-      </div>);
+      );
     }
     const filterTypes = ['departments', 'areas', 'levels'];
     const filters = filterTypes.map(filterType => (
@@ -458,7 +460,6 @@ ExplorationSearchResult.propTypes = {
 };
 
 ExplorationModal.defaultProps = {
-  course: null,
   classmates: null,
   inRoster: false,
 };
@@ -467,31 +468,11 @@ ExplorationModal.propTypes = {
   inRoster: PropTypes.bool,
   addOrRemoveCourse: PropTypes.func.isRequired,
   addOrRemoveOptionalCourse: PropTypes.func.isRequired,
-  advancedSearchResults: PropTypes.arrayOf(
-    PropTypes.shape({
-      areas: PropTypes.string.isRequired,
-      campus: PropTypes.string.isRequired,
-      code: PropTypes.string.isRequired,
-      department: PropTypes.string.isRequired,
-      description: PropTypes.string.isRequired,
-      evals: PropTypes.arrayOf(
-        PropTypes.shape({
-          score: PropTypes.number.isRequired,
-          summary: PropTypes.string.isRequired,
-          year: PropTypes.string.isRequired,
-        }),
-      ).isRequired,
-      exclusions: PropTypes.string.isRequired,
-      id: PropTypes.number.isRequired,
-      name: PropTypes.string.isRequired,
-      num_credits: PropTypes.number.isRequired,
-      prerequisites: PropTypes.string.isRequired,
-    }),
-  ).isRequired,
+  advancedSearchResults: PropTypes.arrayOf(SemesterlyPropTypes.searchResult).isRequired,
   changeUserInfo: PropTypes.func.isRequired,
   classmates: SemesterlyPropTypes.classmates,
   clearPagination: PropTypes.func.isRequired,
-  course: SemesterlyPropTypes.course,
+  active: PropTypes.number.isRequired,
   fetchAdvancedSearchResults: PropTypes.func.isRequired,
   fetchCourseInfo: PropTypes.func.isRequired,
   fetchCourseClassmates: PropTypes.func.isRequired,
