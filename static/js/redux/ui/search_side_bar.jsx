@@ -1,6 +1,7 @@
 import PropTypes from 'prop-types';
 import React from 'react';
 import classnames from 'classnames';
+import { getSectionTypeDisplayName } from '../util';
 import * as SemesterlyPropTypes from '../constants/semesterlyPropTypes';
 
 class SearchSideBar extends React.Component {
@@ -12,51 +13,41 @@ class SearchSideBar extends React.Component {
   lockSectionWrapper(section, event) {
     event.preventDefault();
     event.stopPropagation();
-    this.props.addCourse(this.props.hovered.id, section);
+    this.props.addCourse(this.props.hoveredCourse.id, section);
   }
 
   mapSectionsToSlots(sections) {
-    if (sections === undefined) {
-      return [];
-    }
     return Object.keys(sections).sort().map(sec =>
       (<SearchResultSection
-        key={this.props.hovered.id + sec}
-        course={this.props.hovered}
+        key={this.props.hoveredCourse.id + sec}
         section={sec}
-        locked={this.props.isSectionLocked(this.props.hovered.id, sec)}
-        isOnActiveTimetable={this.props.isSectionOnActiveTimetable(this.props.hovered.id, sec)}
-        hoverSection={() => this.props.hoverSection(this.props.hovered, sec)}
+        locked={this.props.isSectionLocked(this.props.hoveredCourse.id, sec)}
+        isOnActiveTimetable={
+          this.props.isSectionOnActiveTimetable(this.props.hoveredCourse.id, sec)
+        }
+        hoverSection={() => this.props.hoverSection(this.props.hoveredCourse, sec)}
         unHoverSection={this.props.unHoverSection}
         onMouseDown={event => this.lockSectionWrapper(sec, event)}
       />),
-        );
+    );
   }
 
   render() {
-    const lecs = this.mapSectionsToSlots(this.props.lectureSections);
-    const tuts = this.mapSectionsToSlots(this.props.tutorialSections);
-    const pracs = this.mapSectionsToSlots(this.props.practicalSections);
-    let lectureSections = null;
-    let tutorialSections = null;
-    let practicalSections = null;
-    if (lecs.length > 0) {
-      lectureSections = <div><h4> Lecture Sections </h4>{lecs}</div>;
-    }
-    if (tuts.length > 0) {
-      tutorialSections = <div><h4> Tutorial Sections </h4>{tuts}</div>;
-    }
-    if (pracs.length > 0) {
-      practicalSections = <div><h4> Lab/Practical Sections </h4>{pracs}</div>;
-    }
+    const sectionGrid = Object.keys(this.props.sectionTypeToSections).sort().map((sectionType) => {
+      const sectionTitle = `${getSectionTypeDisplayName(sectionType)} Sections`;
+      return (
+        <div>
+          <h4> {sectionTitle} </h4>
+          {this.mapSectionsToSlots(this.props.sectionTypeToSections[sectionType])}
+        </div>
+      );
+    });
     return (
       <div className="search-bar__side">
         <div className="search-bar__side-sections">
-          <h3>{this.props.hovered.name}</h3>
+          <h3>{this.props.hoveredCourse.name}</h3>
           <p>Hover over a section below for a preview on your timetable! </p>
-          {lectureSections}
-          {tutorialSections}
-          {practicalSections}
+          {sectionGrid}
         </div>
       </div>
     );
@@ -64,22 +55,16 @@ class SearchSideBar extends React.Component {
 }
 
 SearchSideBar.defaultProps = {
-  hovered: null,
+  hoveredCourse: null,
   tutorialSections: {},
   practicalSections: {},
 };
 
 SearchSideBar.propTypes = {
-  hovered: SemesterlyPropTypes.searchResult,
-  lectureSections: PropTypes.shape({
-    '*': SemesterlyPropTypes.section,
+  hoveredCourse: SemesterlyPropTypes.searchResult,
+  sectionTypeToSections: PropTypes.shape({
+    '*': PropTypes.shape({ '*': SemesterlyPropTypes.sections }),
   }).isRequired,
-  tutorialSections: PropTypes.shape({
-    '*': SemesterlyPropTypes.section,
-  }),
-  practicalSections: PropTypes.shape({
-    '*': SemesterlyPropTypes.section,
-  }),
   addCourse: PropTypes.func.isRequired,
   isSectionLocked: PropTypes.func.isRequired,
   isSectionOnActiveTimetable: PropTypes.func.isRequired,
