@@ -23,7 +23,7 @@ class CourseSerializer(serializers.ModelSerializer):
         semester: Semester (required)
         student: Student (optional)
     """
-    eval_info = serializers.SerializerMethodField()
+    evals = serializers.SerializerMethodField()
     integrations = serializers.SerializerMethodField()
     related_courses = serializers.SerializerMethodField()
     reactions = serializers.SerializerMethodField()
@@ -34,7 +34,7 @@ class CourseSerializer(serializers.ModelSerializer):
 
     sections = serializers.SerializerMethodField()
 
-    def get_eval_info(self, course):
+    def get_evals(self, course):
         """
         Flag all eval instances s.t. there exists repeated term+year values.
         Return:
@@ -123,7 +123,7 @@ class CourseSerializer(serializers.ModelSerializer):
             'num_credits',
             'areas',
             'campus',
-            'eval_info',
+            'evals',
             'integrations',
             'related_courses',
             'reactions',
