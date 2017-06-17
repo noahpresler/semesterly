@@ -4,7 +4,7 @@ import ClickOutHandler from 'react-onclickout';
 import classNames from 'classnames';
 import SearchSideBarContainer from './containers/search_side_bar_container';
 import * as SemesterlyPropTypes from '../constants/semesterlyPropTypes';
-import SearchResultContainer from './search_result';
+import SearchResult from './search_result';
 
 class SearchBar extends React.Component {
 
@@ -86,7 +86,7 @@ class SearchBar extends React.Component {
 
   render() {
     const resClass = classNames({ 'search-results': true, trans50: this.props.hasHoveredResult });
-    const results = this.props.searchResults.map((c, i) => (<SearchResultContainer
+    const results = this.props.searchResults.map((c, i) => (<SearchResult
       {...this.props}
       course={c}
       key={c.id}
