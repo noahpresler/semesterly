@@ -134,7 +134,7 @@ class CourseModalBody extends React.Component {
     reactionsDisplay.sort((r1, r2) => r1.props.count < r2.props.count);
 
     const integrationList = this.props.data.integrations;
-    const evalInfo = this.props.data.eval_info;
+    const evalInfo = this.props.data.evals;
     const relatedCourses = this.props.data.related_courses;
     const { prerequisites, textbooks } = this.props.data;
     const maxColourIndex = COLOUR_DATA.length - 1;
