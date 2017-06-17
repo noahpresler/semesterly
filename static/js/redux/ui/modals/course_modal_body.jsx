@@ -9,6 +9,7 @@ import EvaluationList from '../evaluation_list';
 import CourseModalSection from '../course_modal_section';
 import SlotHoverTip from '../slot_hover_tip';
 import * as SemesterlyPropTypes from '../../constants/semesterlyPropTypes';
+import { getSectionTypeDisplayName, meetingSectionCmp } from '../../util';
 
 class CourseModalBody extends React.Component {
   constructor(props) {
@@ -58,39 +59,24 @@ class CourseModalBody extends React.Component {
   }
 
   mapSectionsToSlots(sections) {
-    if (sections === undefined) {
-      return [];
-    }
-
-    return Object.keys(sections).sort().map((sec) => {
-      const slots = sections[sec];
-      const instructors = new Set();
-      Array.prototype.forEach.call(slots, (s) => {
-        if (!instructors.has(s.instructors)) {
-          instructors.add(s.instructors);
-        }
-      });
-      const instructString = Array.from(instructors).join(', ');
-      let enrolled = 0;
-      if (slots.length > 0) {
-        enrolled = slots[0] ? slots[0].enrolment || 0 : 0;
-      }
-      return (<CourseModalSection
-        key={sec}
-        section={slots}
-        secName={sec}
-        instr={instructString}
-        enrolled={enrolled}
-        waitlist={slots[0].waitlist}
-        size={slots[0].size}
-        locked={this.props.isSectionLocked(this.props.data.id, sec)}
-        isOnActiveTimetable={this.props.isSectionOnActiveTimetable(this.props.data.id, sec)}
-        lockOrUnlock={() => this.props.addOrRemoveCourse(this.props.data.id, sec)}
-        hoverSection={() => this.props.hoverSection(this.props.data, sec)}
+    return sections.sort(meetingSectionCmp).map(section => (
+      <CourseModalSection
+        key={this.props.id + section.meeting_section}
+        secName={section.meeting_section}
+        instr={section.instructors}
+        enrolment={section.enrolment === -1 ? 0 : section.enrolment}
+        waitlist={section.waitlist === -1 ? 0 : section.waitlist}
+        size={section.size === -1 ? 0 : section.size}
+        locked={this.props.isSectionLocked(this.props.data.id, section.meeting_section)}
+        isOnActiveTimetable={this.props.isSectionOnActiveTimetable(this.props.data.id,
+          section.meeting_section)}
+        lockOrUnlock={() => this.props.addOrRemoveCourse(this.props.data.id,
+          section.meeting_section)}
+        hoverSection={() => this.props.hoverSection(this.props.data, section.meeting_section)}
         unHoverSection={this.props.unHoverSection}
         inRoster={this.props.inRoster}
-      />);
-    });
+      />),
+    );
   }
 
   fetchCourseInfo(courseId) {
@@ -111,29 +97,20 @@ class CourseModalBody extends React.Component {
         </div>
       );
     }
-    const lecs = this.mapSectionsToSlots(this.props.lectureSections);
-    const tuts = this.mapSectionsToSlots(this.props.tutorialSections);
-    const pracs = this.mapSectionsToSlots(this.props.practicalSections);
-    let lectureSections = null;
-    let tutorialSections = null;
-    let practicalSections = null;
-    if (lecs.length > 0) {
-      lectureSections = (<div>
-        <h3 className="modal-module-header">Lecture Sections
-                    <small>(Hover to see the section on your timetable)</small>
-        </h3>
-        {lecs}</div>);
-    }
-    if (tuts.length > 0) {
-      tutorialSections =
-        <div><h3 className="modal-module-header">Tutorial Sections</h3>{tuts}</div>;
-    }
-    if (pracs.length > 0) {
-      practicalSections =
-        <div><h3 className="modal-module-header">Lab/Practical Sections</h3>{pracs}</div>;
-    }
+
+    const sectionGrid = Object.keys(this.props.sectionTypeToSections).sort().map((sType, i) => {
+      const sectionTitle = `${getSectionTypeDisplayName(sType)} Sections`;
+      const subTitle = i === 0 ? <small>(Hover to see the section on your timetable)</small> : null;
+      return (
+        <div>
+          <h3 className="modal-module-header"> {sectionTitle} {subTitle} </h3>
+          {this.mapSectionsToSlots(this.props.sectionTypeToSections[sType])}
+        </div>
+      );
+    });
+
     const { reactions, num_credits: numCredits } = this.props.data;
-        // reactions.sort((r1, r2) => {return r1.count < r2.count});
+    // reactions.sort((r1, r2) => {return r1.count < r2.count});
 
     const cid = this.props.data.id;
     let totalReactions = reactions.map(r => r.count).reduce((x, y) => x + y, 0);
@@ -404,9 +381,7 @@ class CourseModalBody extends React.Component {
             id="modal-section-lists"
             className="col-5-16 cf"
           >
-            {lectureSections}
-            {tutorialSections}
-            {practicalSections}
+            {sectionGrid}
             {similarCourses}
           </div>
         </div>
@@ -423,9 +398,11 @@ CourseModalBody.defaultProps = {
   popularityPercent: 0,
   inRoster: false,
   isLoggedIn: false,
+  id: 0,
 };
 
 CourseModalBody.propTypes = {
+  id: PropTypes.number,
   inRoster: PropTypes.bool.isRequired,
   popularityPercent: PropTypes.number,
   isLoggedIn: PropTypes.bool,
@@ -446,15 +423,9 @@ CourseModalBody.propTypes = {
   isSectionLocked: PropTypes.func.isRequired,
   userInfo: SemesterlyPropTypes.userInfo.isRequired,
   isSectionOnActiveTimetable: PropTypes.func.isRequired,
-  lectureSections: PropTypes.shape({
+  sectionTypeToSections: PropTypes.shape({
     '*': PropTypes.arrayOf(SemesterlyPropTypes.section),
   }).isRequired,
-  practicalSections: PropTypes.shape({
-    '*': PropTypes.arrayOf(SemesterlyPropTypes.section),
-  }),
-  tutorialSections: PropTypes.shape({
-    '*': PropTypes.arrayOf(SemesterlyPropTypes.section),
-  }),
   schoolSpecificInfo: SemesterlyPropTypes.schoolSpecificInfo.isRequired,
   getShareLink: PropTypes.func.isRequired,
   getShareLinkFromModal: PropTypes.func.isRequired,
