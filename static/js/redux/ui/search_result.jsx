@@ -1,5 +1,4 @@
 import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
 import React from 'react';
 import classNames from 'classnames';
 import { getSectionTypeToSections } from '../reducers/search_results_reducer';
@@ -65,15 +64,16 @@ class SearchResult extends React.Component {
    * @returns {boolean}
    */
   hasOnlyWaitlistedSections() {
-    const sectionTypes = Object.keys(this.props.sectionTypeToSections);
+    const sectionTypeToSections = getSectionTypeToSections(this.props.course);
+    const sectionTypes = Object.keys(sectionTypeToSections);
     for (let i = 0; i < sectionTypes.length; i++) {
       const sectionType = sectionTypes[i];
       let sectionTypeHasOpenSections = false;
-      const currSections = Object.keys(this.props.sectionTypeToSections[sectionType]);
+      const currSections = Object.keys(sectionTypeToSections[sectionType]);
       for (let j = 0; j < currSections.length; j++) {
         const section = currSections[j];
-        if (this.props.sectionTypeToSections[sectionType][section].length > 0) {
-          const currSection = this.props.sectionTypeToSections[sectionType][section][0];
+        if (sectionTypeToSections[sectionType][section].length > 0) {
+          const currSection = sectionTypeToSections[sectionType][section][0];
           const hasEnrolmentData = currSection.enrolment >= 0;
           if (!hasEnrolmentData || currSection.enrolment < currSection.size) {
             sectionTypeHasOpenSections = true;
@@ -189,17 +189,7 @@ SearchResult.propTypes = {
   addCourse: PropTypes.func.isRequired,
   isHovered: PropTypes.func.isRequired,
   addRemoveOptionalCourse: PropTypes.func.isRequired,
-  sectionTypeToSections: PropTypes.shape({
-    '*': PropTypes.arrayOf(SemesterlyPropTypes.section),
-  }).isRequired,
 };
 
-const mapStateToProps = (state, ownProps) => ({
-  ...ownProps,
-  sectionTypeToSections: getSectionTypeToSections(ownProps.course),
-});
-
-const SearchResultContainer = connect(mapStateToProps, {})(SearchResult);
-
-export default SearchResultContainer;
+export default SearchResult;
 
