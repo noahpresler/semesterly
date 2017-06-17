@@ -1,6 +1,7 @@
 import PropTypes from 'prop-types';
 import React from 'react';
 import Modal from 'boron/DropModal';
+import isEqual from 'lodash/isEqual';
 import classNames from 'classnames';
 import CourseModalBodyContainer from '../containers/modals/course_modal_body_container';
 import { ShareLink } from '../master_slot';
@@ -69,7 +70,7 @@ class ExplorationModal extends React.Component {
       times: prevState.times,
       levels: prevState.levels,
     };
-    if (!_.isEqual(filters, prevFilters) && this.props.page > 1) {
+    if (!isEqual(filters, prevFilters) && this.props.page > 1) {
       this.props.clearPagination();
     }
     $('.exp-search-results').scroll(() => {
