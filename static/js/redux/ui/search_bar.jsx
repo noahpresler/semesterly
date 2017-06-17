@@ -34,6 +34,7 @@ class SearchBar extends React.Component {
     SearchBar.getAbbreviatedSemesterName = SearchBar.getAbbreviatedSemesterName.bind(this);
     this.onClickOut = this.onClickOut.bind(this);
     this.toggleDropdown = this.toggleDropdown.bind(this);
+    this.hasOnlyWaitlistedSections = this.hasOnlyWaitlistedSections.bind(this);
     this.changeTimer = false;
   }
 
@@ -84,6 +85,42 @@ class SearchBar extends React.Component {
     this.setState({ showDropdown: !this.state.showDropdown });
   }
 
+  /**
+   * Checks if a course is Waitlist Only
+   * Loops through each section type first (Lecture, Tutorial, Practical)
+   * if any of the section types doesn't have open seats, the course is waitlist only
+   * Within each section type, loops through each section
+   * if section doesn't have meeting times, doesn't have enrolment cap
+   * if section has open seats, don't check rest of sections in section type, move onto
+   * next section type.
+   * @returns {boolean}
+   */
+  hasOnlyWaitlistedSections(position) {
+    const sections = this.props.searchResults[position].sections;
+    const sectionTypes = Object.keys(sections);
+    for (let i = 0; i < sectionTypes.length; i++) {
+      const sectionType = sectionTypes[i];
+      let sectionTypeHasOpenSections = false;
+      const currSections = Object.keys(sections[sectionType]);
+      for (let j = 0; j < currSections.length; j++) {
+        const section = currSections[j];
+        if (sections[sectionType][section].length > 0) {
+          const currSection = sections[sectionType][section][0];
+          const hasEnrolmentData = currSection.enrolment >= 0;
+          if (!hasEnrolmentData || currSection.enrolment < currSection.size) {
+            sectionTypeHasOpenSections = true;
+            break;
+          }
+        } else {
+          return false;
+        }
+      }
+      if (!sectionTypeHasOpenSections) {
+        return true; // lecture, practical, or tutorial doesn't have open seats
+      }
+    }
+    return false;
+  }
 
   render() {
     const resClass = classNames({ 'search-results': true, trans50: this.props.hasHoveredResult });
@@ -94,6 +131,7 @@ class SearchBar extends React.Component {
       inRoster={this.props.isCourseInRoster(c.id)}
       inOptionRoster={this.props.isCourseOptional(c.id)}
       position={i}
+      hasOnlyWaitlistedSections={this.hasOnlyWaitlistedSections(i)}
     />));
     const seeMore = results.length > 0 && results.length < 3 ? (
       <div className="see-more" style={{ height: 240 - (60 * results.length) }}>
