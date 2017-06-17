@@ -4,7 +4,7 @@ from django.forms import model_to_dict
 from django.db import models
 from rest_framework import serializers
 
-from timetable.models import Course, Evaluation, CourseIntegration, Integration
+from timetable.models import Course, Section, Evaluation, CourseIntegration, Integration
 import utils
 
 
@@ -109,7 +109,8 @@ class CourseSerializer(serializers.ModelSerializer):
         return utils.is_waitlist_only(course, self.context['semester'])
 
     def get_sections(self, course):
-        return map(model_to_dict, course.section_set.filter(semester=self.context['semester']))
+        return [SectionSerializer(section).data
+                for section in course.section_set.filter(semester=self.context['semester'])]
 
     class Meta:
         model = Course
@@ -135,6 +136,23 @@ class CourseSerializer(serializers.ModelSerializer):
             'areas',
             'is_waitlist_only'
         )
+
+
+class SectionSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Section
+        fields = (
+            'meeting_section',
+            'size',
+            'enrolment',
+            'waitlist',
+            'waitlist_size',
+            'section_type',
+            'instructors',
+            'semester',
+            'offering_set'
+        )
+        depth = 1 # also serializer offerings
 
 
 def get_section_dict(section):
