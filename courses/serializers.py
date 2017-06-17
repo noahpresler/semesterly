@@ -111,14 +111,7 @@ class CourseSerializer(serializers.ModelSerializer):
         return utils.is_waitlist_only(course, self.context['semester'])
 
     def get_sections(self, course):
-        """ Return a section type -> (section code -> [offering dict]) mapping. """
-        section_type_to_sections = {}
-        section_type_map = utils.get_sections_by_section_type(course, self.context['semester'])
-        for section_type, sections in section_type_map.iteritems():
-            section_type_to_sections[section_type] = {
-                section.meeting_section: [get_section_offerings(section) for section in sections]
-            }
-        return section_type_to_sections
+        return map(model_to_dict, course.section_set.filter(semester=self.context['semester']))
 
     class Meta:
         model = Course
