@@ -17,17 +17,17 @@ class SearchSideBar extends React.Component {
   }
 
   mapSectionsToSlots(sections) {
-    return Object.keys(sections).sort().map(sec =>
+    return sections.map(section => section.meeting_section).sort().map(sectionCode =>
       (<SearchResultSection
-        key={this.props.hoveredResult.id + sec}
-        section={sec}
-        locked={this.props.isSectionLocked(this.props.hoveredResult.id, sec)}
+        key={this.props.hoveredResult.id + sectionCode}
+        section={sectionCode}
+        locked={this.props.isSectionLocked(this.props.hoveredResult.id, sectionCode)}
         isOnActiveTimetable={
-          this.props.isSectionOnActiveTimetable(this.props.hoveredResult.id, sec)
+          this.props.isSectionOnActiveTimetable(this.props.hoveredResult.id, sectionCode)
         }
-        hoverSection={() => this.props.hoverSection(this.props.hoveredResult, sec)}
+        hoverSection={() => this.props.hoverSection(this.props.hoveredResult, sectionCode)}
         unHoverSection={this.props.unHoverSection}
-        onMouseDown={event => this.lockSectionWrapper(sec, event)}
+        onMouseDown={event => this.lockSectionWrapper(sectionCode, event)}
       />),
     );
   }
@@ -63,7 +63,7 @@ SearchSideBar.defaultProps = {
 SearchSideBar.propTypes = {
   hoveredResult: SemesterlyPropTypes.searchResult,
   sectionTypeToSections: PropTypes.shape({
-    '*': PropTypes.shape({ '*': SemesterlyPropTypes.sections }),
+    '*': PropTypes.arrayOf(SemesterlyPropTypes.section),
   }).isRequired,
   addCourse: PropTypes.func.isRequired,
   isSectionLocked: PropTypes.func.isRequired,

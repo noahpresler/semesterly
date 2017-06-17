@@ -19,15 +19,17 @@ const searchResults = (state = { isFetching: false, items: [] }, action) => {
 
 export const getSearchResult = (state, index) => state.items[index];
 
-export const getSectionTypeToSections = (searchResult) => {
+export const getSectionTypeToSections = (course) => {
+  if (!('sections' in course)) { // empty course (only happens on inital CourseInfo state)
+    return {};
+  }
   const sectionTypeToSections = {};
-  searchResult.sections.forEach((section) => {
+  course.sections.forEach((section) => {
     if (!(section.section_type in sectionTypeToSections)) {
       sectionTypeToSections[section.section_type] = [];
     }
     sectionTypeToSections[section.section_type].push(section);
   });
-  console.log(sectionTypeToSections);
   return sectionTypeToSections;
 };
 

@@ -190,7 +190,7 @@ SearchResult.propTypes = {
   isHovered: PropTypes.func.isRequired,
   addRemoveOptionalCourse: PropTypes.func.isRequired,
   sectionTypeToSections: PropTypes.shape({
-    '*': PropTypes.shape({ '*': SemesterlyPropTypes.sections }),
+    '*': PropTypes.arrayOf(SemesterlyPropTypes.section),
   }).isRequired,
 };
 
