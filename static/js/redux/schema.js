@@ -1,15 +1,11 @@
 import { schema } from 'normalizr';
 
-const OfferingSchema = new schema.Entity('offerings');
+export const offeringSchema = new schema.Entity('offerings');
 
-const SectionSchema = new schema.Entity('sections', {
-  offerings: [ OfferingSchema ]
+export const sectionSchema = new schema.Entity('sections', { offering_set: [ offeringSchema ] }, {
+  idAttribute: (value, parent) => `${parent.code}-${value.meeting_section}`,
 });
 
-const CourseSchema = new schema.Entity('courses', {
-  sections: [ SectionSchema ]
-});
-
-const TimetableSchema = new schema.Entity('timetables', {
-  courses: [ CourseSchema ]
+export const courseSchema = new schema.Entity('courses', { sections: [ sectionSchema ] }, {
+  idAttribute: value => value.code,
 });
