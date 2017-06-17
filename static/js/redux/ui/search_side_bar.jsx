@@ -13,19 +13,19 @@ class SearchSideBar extends React.Component {
   lockSectionWrapper(section, event) {
     event.preventDefault();
     event.stopPropagation();
-    this.props.addCourse(this.props.hoveredCourse.id, section);
+    this.props.addCourse(this.props.hoveredResult.id, section);
   }
 
   mapSectionsToSlots(sections) {
     return Object.keys(sections).sort().map(sec =>
       (<SearchResultSection
-        key={this.props.hoveredCourse.id + sec}
+        key={this.props.hoveredResult.id + sec}
         section={sec}
-        locked={this.props.isSectionLocked(this.props.hoveredCourse.id, sec)}
+        locked={this.props.isSectionLocked(this.props.hoveredResult.id, sec)}
         isOnActiveTimetable={
-          this.props.isSectionOnActiveTimetable(this.props.hoveredCourse.id, sec)
+          this.props.isSectionOnActiveTimetable(this.props.hoveredResult.id, sec)
         }
-        hoverSection={() => this.props.hoverSection(this.props.hoveredCourse, sec)}
+        hoverSection={() => this.props.hoverSection(this.props.hoveredResult, sec)}
         unHoverSection={this.props.unHoverSection}
         onMouseDown={event => this.lockSectionWrapper(sec, event)}
       />),
@@ -45,7 +45,7 @@ class SearchSideBar extends React.Component {
     return (
       <div className="search-bar__side">
         <div className="search-bar__side-sections">
-          <h3>{this.props.hoveredCourse.name}</h3>
+          <h3>{this.props.hoveredResult.name}</h3>
           <p>Hover over a section below for a preview on your timetable! </p>
           {sectionGrid}
         </div>
@@ -55,13 +55,13 @@ class SearchSideBar extends React.Component {
 }
 
 SearchSideBar.defaultProps = {
-  hoveredCourse: null,
+  hoveredResult: null,
   tutorialSections: {},
   practicalSections: {},
 };
 
 SearchSideBar.propTypes = {
-  hoveredCourse: SemesterlyPropTypes.searchResult,
+  hoveredResult: SemesterlyPropTypes.searchResult,
   sectionTypeToSections: PropTypes.shape({
     '*': PropTypes.shape({ '*': SemesterlyPropTypes.sections }),
   }).isRequired,
