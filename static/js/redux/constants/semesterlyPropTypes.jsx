@@ -149,7 +149,11 @@ export const searchResult = PropTypes.shape({
   integrations: PropTypes.arrayOf(integration),
   name: PropTypes.string.isRequired,
   num_credits: PropTypes.number.isRequired,
-  sections: PropTypes.arrayOf(section).isRequired,
+  sections: PropTypes.shape({
+    '*': PropTypes.shape({
+      '*': PropTypes.arrayOf(section),
+    }),
+  }),
 });
 
 export const userInfo = PropTypes.shape({

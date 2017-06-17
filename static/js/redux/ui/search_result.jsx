@@ -1,6 +1,8 @@
 import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
 import React from 'react';
 import classNames from 'classnames';
+import { getSectionTypeToSections } from '../reducers/search_results_reducer';
 import * as SemesterlyPropTypes from '../constants/semesterlyPropTypes';
 
 
@@ -11,6 +13,7 @@ class SearchResult extends React.Component {
     this.addCourseWrapper = this.addCourseWrapper.bind(this);
     this.actionOver = this.actionOver.bind(this);
     this.actionOut = this.actionOut.bind(this);
+    this.hasOnlyWaitlistedSections = this.hasOnlyWaitlistedSections.bind(this);
   }
 
   addCourseWrapper(course, sec, event) {
@@ -49,6 +52,42 @@ class SearchResult extends React.Component {
       default:
         break;
     }
+  }
+
+  /**
+   * Checks if a course is Waitlist Only
+   * Loops through each section type first (Lecture, Tutorial, Practical)
+   * if any of the section types doesn't have open seats, the course is waitlist only
+   * Within each section type, loops through each section
+   * if section doesn't have meeting times, doesn't have enrolment cap
+   * if section has open seats, don't check rest of sections in section type, move onto
+   * next section type.
+   * @returns {boolean}
+   */
+  hasOnlyWaitlistedSections() {
+    const sectionTypes = Object.keys(this.props.sectionTypeToSections);
+    for (let i = 0; i < sectionTypes.length; i++) {
+      const sectionType = sectionTypes[i];
+      let sectionTypeHasOpenSections = false;
+      const currSections = Object.keys(this.props.sectionTypeToSections[sectionType]);
+      for (let j = 0; j < currSections.length; j++) {
+        const section = currSections[j];
+        if (this.props.sectionTypeToSections[sectionType][section].length > 0) {
+          const currSection = this.props.sectionTypeToSections[sectionType][section][0];
+          const hasEnrolmentData = currSection.enrolment >= 0;
+          if (!hasEnrolmentData || currSection.enrolment < currSection.size) {
+            sectionTypeHasOpenSections = true;
+            break;
+          }
+        } else {
+          return false;
+        }
+      }
+      if (!sectionTypeHasOpenSections) {
+        return true; // lecture, practical, or tutorial doesn't have open seats
+      }
+    }
+    return false;
   }
 
   render() {
@@ -92,7 +131,7 @@ class SearchResult extends React.Component {
       (<div className="label integration">
         <span className="has-pilot" style={integrationLogoImageUrl} />
       </div>) : null;
-    const pilotIntegration = this.props.studentIntegrations.indexOf('Pilot') > -1 ?
+    const pilotIntegration = course.integrations.indexOf('Pilot') > -1 ?
       (<div className="label integration">
         <a
           onMouseDown={(event) => {
@@ -102,7 +141,7 @@ class SearchResult extends React.Component {
         >Add as Pilot
         </a>
       </div>) : null;
-    const waitlistOnlyFlag = this.props.hasOnlyWaitlistedSections ?
+    const waitlistOnlyFlag = this.hasOnlyWaitlistedSections() ?
       <h4 className="label flag">Waitlist Only</h4> : null;
     return (
       <li
@@ -137,7 +176,7 @@ class SearchResult extends React.Component {
 }
 
 SearchResult.propTypes = {
-  course: SemesterlyPropTypes.course.isRequired,
+  course: SemesterlyPropTypes.searchResult.isRequired,
   inRoster: PropTypes.bool.isRequired,
   inOptionRoster: PropTypes.bool.isRequired,
   position: PropTypes.number.isRequired,
@@ -150,9 +189,17 @@ SearchResult.propTypes = {
   addCourse: PropTypes.func.isRequired,
   isHovered: PropTypes.func.isRequired,
   addRemoveOptionalCourse: PropTypes.func.isRequired,
-  studentIntegrations: PropTypes.arrayOf(SemesterlyPropTypes.integration).isRequired,
-  hasOnlyWaitlistedSections: PropTypes.bool.isRequired,
+  sectionTypeToSections: PropTypes.shape({
+    '*': PropTypes.shape({ '*': SemesterlyPropTypes.sections }),
+  }).isRequired,
 };
 
-export default SearchResult;
+const mapStateToProps = (state, ownProps) => ({
+  ...ownProps,
+  sectionTypeToSections: getSectionTypeToSections(ownProps.course),
+});
+
+const SearchResultContainer = connect(mapStateToProps, {})(SearchResult);
+
+export default SearchResultContainer;
 
