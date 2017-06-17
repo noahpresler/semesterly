@@ -1,6 +1,4 @@
-import itertools
 import re
-from operator import attrgetter
 
 from django.forms import model_to_dict
 from django.db import models
@@ -137,11 +135,6 @@ class CourseSerializer(serializers.ModelSerializer):
             'areas',
             'is_waitlist_only'
         )
-
-
-def get_section_offerings(section):
-    """ Return a list of model dicts of each offering of a section. """
-    return [dict(model_to_dict(co), **model_to_dict(section)) for co in section.offering_set.all()]
 
 
 def get_section_dict(section):
