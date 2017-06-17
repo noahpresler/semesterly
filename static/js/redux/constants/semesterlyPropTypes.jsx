@@ -1,5 +1,10 @@
 import PropTypes from 'prop-types';
 
+export const semester = PropTypes.shape({
+  name: PropTypes.string.isRequired,
+  year: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+});
+
 export const fullCourseDetails = PropTypes.shape({
   code: PropTypes.string,
   department: PropTypes.string,
@@ -35,21 +40,14 @@ export const sectionToTextbookMap = (props, propName, componentName) => {
 };
 
 export const section = PropTypes.shape({
-  day: PropTypes.string.isRequired,
   enrolment: PropTypes.number.isRequired,
   instructors: PropTypes.string.isRequired,
-  location: PropTypes.string.isRequired,
   meeting_section: PropTypes.string.isRequired,
-  section: PropTypes.number.isRequired,
   section_type: PropTypes.string.isRequired,
-  semester: PropTypes.number.isRequired,
+  semester: semester.isRequired,
   size: PropTypes.number.isRequired,
-  textbooks: PropTypes.arrayOf(textbook).isRequired,
-  time_end: PropTypes.string.isRequired,
-  time_start: PropTypes.string.isRequired,
   waitlist: PropTypes.number.isRequired,
   waitlist_size: PropTypes.number.isRequired,
-  was_full: PropTypes.bool.isRequired,
 });
 
 export const customSlot = PropTypes.shape({
@@ -177,11 +175,6 @@ export const schoolSpecificInfo = PropTypes.shape({
   levelsName: PropTypes.string.isRequired,
   primaryDisplay: PropTypes.string.isRequired,
   timesName: PropTypes.string.isRequired,
-});
-
-export const semester = PropTypes.shape({
-  name: PropTypes.string.isRequired,
-  year: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
 });
 
 export const foreignUser = PropTypes.shape({

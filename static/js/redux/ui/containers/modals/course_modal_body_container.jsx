@@ -1,6 +1,7 @@
 import { connect } from 'react-redux';
 import CourseModalBody from '../../modals/course_modal_body';
 import { getActiveTT } from '../../../reducers/root_reducer';
+import { currSem } from '../../../reducers/semester_reducer';
 import { getSectionTypeToSections } from '../../../reducers/search_results_reducer';
 import { hoverSection } from '../../../actions/timetable_actions';
 import {
@@ -11,6 +12,7 @@ import {
 } from '../../../actions/modal_actions';
 import { saveSettings } from '../../../actions/user_actions';
 import { getSchoolSpecificInfo } from '../../../constants/schools';
+import { getCourseShareLink, getCourseShareLinkFromModal } from '../../../constants/endpoints';
 
 const mapStateToProps = (state, ownProps) => {
   const sectionTypeToSections = getSectionTypeToSections(state.courseInfo.data);
@@ -38,6 +40,9 @@ const mapStateToProps = (state, ownProps) => {
     isSectionOnActiveTimetable: (courseId, section) => activeTimetable.courses
       .some(course => course.id === courseId
       && course.enrolled_sections.some(sec => sec === section)),
+    getShareLink: courseCode => getCourseShareLink(courseCode, currSem(state.semester)),
+    getShareLinkFromModal: courseCode =>
+      getCourseShareLinkFromModal(courseCode, currSem(state.semester)),
   };
 };
 
