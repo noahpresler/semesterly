@@ -143,11 +143,10 @@ class UofTParser:
         for year_of_study in self.years_of_study:
             level = self.level_map[year_of_study]
             print "Parsing year: {}".format(year_of_study)
-            request_url = "https://timetable.iit.artsci.utoronto.ca/api/courses?org=&code=&section=&studyyear={}&daytime=&weekday=&prof=&breadth=".format(year_of_study)
+            request_url = "https://timetable.iit.artsci.utoronto.ca/api/20179/courses?org=&code=&section=&studyyear={}&daytime=&weekday=&prof=&breadth=&online=&waitlist=&available=&title=".format(year_of_study)
             data = json.loads(self.s.get(url=request_url, cookies=self.cookies).text)
             for key in data:
                 try:
-
                     course_data = data[key]
                     course_code = course_data['code']
                     num_credits = 1 if course_code[6].upper() == 'Y' else 0.5
@@ -168,7 +167,20 @@ class UofTParser:
                     if created:
                         self.new += 1
                     meetings = course_data['meetings']
-                    semester = course_data['section']
+                    semester_code = course_data['section']
+                    year = course_data['session'][:-1]
+                    if semester_code in 'FS':
+                        semesters = ['Fall' if semester == 'F' else 'Winter']
+                    elif semester_code == 'Y':
+                        semesters = ['Fall', 'Winter']
+                    else:
+                        print 'unknown semester {0}'.format(semester_code)
+                        continue
+
+                    semester_objs = []
+                    for semester in semesters:
+                        sem, _ = Semester.objects.get_or_create(name=semester, year='2017' if semester == 'Fall' else '2018')
+                        semester_objs.append(sem)
 
                     for section_key in meetings:
                         section = section_key.split("-")[0][0] + section_key.split("-")[-1]
@@ -181,18 +193,19 @@ class UofTParser:
                         if instructors and instructors[-1] == ",": 
                             instructors = instructors[:-1]
                         size = section_data['enrollmentCapacity'] if section_data['enrollmentCapacity'] else 0
-                        S, s_created = Section.objects.update_or_create(
-                            course=C,
-                            meeting_section=section, 
-                            section_type=section[0],
-                            semester=semester,
-                            defaults={
-                                'instructors': instructors,
-                                'size': size,
-                                'enrolment': 0,
-                        })
-                        S.save()
-                        S.offering_set.all().delete()
+                        for semester in semester_objs:
+                            S, s_created = Section.objects.update_or_create(
+                                course=C,
+                                meeting_section=section,
+                                section_type=section[0],
+                                semester=semester,
+                                defaults={
+                                    'instructors': instructors,
+                                    'size': size,
+                                    'enrolment': 0,
+                            })
+                            S.save()
+                            S.offering_set.all().delete()
                         schedule = section_data['schedule']
                         
                         for offering in schedule:
@@ -544,4 +557,4 @@ class UofTParser:
 
 if __name__ == "__main__":
     parser = UofTParser()
-    parser.start_engineering()
+    parser.start()
