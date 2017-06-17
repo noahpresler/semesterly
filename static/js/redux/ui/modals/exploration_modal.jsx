@@ -10,6 +10,7 @@ import {
 import * as SemesterlyPropTypes from '../../constants/semesterlyPropTypes';
 import { VERBOSE_DAYS } from '../../constants/constants';
 import TimeSelector from '../time_selector';
+import { getSectionTypeToSections } from '../../reducers/search_results_reducer';
 
 class ExplorationModal extends React.Component {
   constructor(props) {
@@ -246,14 +247,6 @@ class ExplorationModal extends React.Component {
     let courseModal = null;
     if (active >= 0 && active < advancedSearchResults.length) {
       const selectedCourse = advancedSearchResults[active];
-      let lectureSections = {};
-      let tutorialSections = {};
-      let practicalSections = {};
-      if (selectedCourse.sections) {
-        lectureSections = selectedCourse.sections.L;
-        tutorialSections = selectedCourse.sections.T;
-        practicalSections = selectedCourse.sections.P;
-      }
       const shareLink = this.state.shareLinkShown ?
                 (<ShareLink
                   link={this.props.getShareLink(selectedCourse.code)}
@@ -289,9 +282,7 @@ class ExplorationModal extends React.Component {
           </div>
           <CourseModalBody
             id={selectedCourse.id}
-            lectureSections={lectureSections}
-            tutorialSections={tutorialSections}
-            practicalSections={practicalSections}
+            sectionTypeToSections={getSectionTypeToSections(selectedCourse)}
             data={selectedCourse}
             classmates={this.props.classmates}
             addOrRemoveCourse={this.addOrRemoveCourse}
