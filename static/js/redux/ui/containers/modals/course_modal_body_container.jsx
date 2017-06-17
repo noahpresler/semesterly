@@ -1,6 +1,7 @@
 import { connect } from 'react-redux';
 import CourseModalBody from '../../modals/course_modal_body';
 import { getActiveTT } from '../../../reducers/root_reducer';
+import { getSectionTypeToSections } from '../../../reducers/search_results_reducer';
 import { hoverSection } from '../../../actions/timetable_actions';
 import {
     changeUserInfo,
@@ -12,14 +13,7 @@ import { saveSettings } from '../../../actions/user_actions';
 import { getSchoolSpecificInfo } from '../../../constants/schools';
 
 const mapStateToProps = (state, ownProps) => {
-  let lectureSections = {};
-  let tutorialSections = {};
-  let practicalSections = {};
-  if (state.courseInfo.data.sections) {
-    lectureSections = state.courseInfo.data.sections.L;
-    tutorialSections = state.courseInfo.data.sections.T;
-    practicalSections = state.courseInfo.data.sections.P;
-  }
+  const sectionTypeToSections = getSectionTypeToSections(state.courseInfo.data);
   const courseSections = state.courseSections.objects;
   const activeTimetable = getActiveTT(state);
   return {
@@ -28,9 +22,7 @@ const mapStateToProps = (state, ownProps) => {
     isFetching: state.courseInfo.isFetching,
     isFetchingClassmates: state.courseInfo.isFetching,
     classmates: state.courseInfo.classmates,
-    lectureSections,
-    tutorialSections,
-    practicalSections,
+    sectionTypeToSections,
     popularityPercent: state.courseInfo.data.popularity_percent * 100,
     isLoggedIn: state.userInfo.data.isLoggedIn,
     hasSocial: state.userInfo.data.social_courses && state.userInfo.data.social_offerings,
