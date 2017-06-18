@@ -4,13 +4,12 @@ import {
     hoverSearchResult,
     maybeSetSemester,
 } from '../../actions/search_actions';
-import { getActiveTT } from '../../reducers/root_reducer';
+import { getActiveTT, getCurrentSemester } from '../../reducers/root_reducer';
 import { addOrRemoveCourse, addOrRemoveOptionalCourse } from '../../actions/timetable_actions';
 import SearchBar from '../search_bar';
 import { fetchCourseInfo, showExplorationModal } from '../../actions/modal_actions';
 import { getSchoolSpecificInfo } from '../../constants/schools';
 import { openIntegrationModal } from '../../actions/user_actions';
-import { currSem } from '../../reducers/semester_reducer';
 
 const mapStateToProps = (state) => {
   const { isVisible } = state.explorationModal;
@@ -18,7 +17,7 @@ const mapStateToProps = (state) => {
   const schoolSpecificInfo = getSchoolSpecificInfo(state.school.school);
   const schoolSpecificCampuses = schoolSpecificInfo.campuses;
   return {
-    semester: currSem(state.semester),
+    semester: getCurrentSemester(state),
     allSemesters: state.semester.all,
     campuses: schoolSpecificCampuses,
     searchResults: state.searchResults.items,
