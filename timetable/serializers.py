@@ -1,5 +1,3 @@
-import itertools
-
 from django.forms import model_to_dict
 from rest_framework import serializers
 
@@ -9,7 +7,7 @@ from courses.utils import is_waitlist_only
 from courses.serializers import get_section_dict, CourseSerializer
 
 
-def convert_tt_to_dict(timetable, include_last_updated=True):
+def convert_tt_to_dict(timetable):
     """
     Converts @timetable, which is expected to be an instance of PersonalTimetable or SharedTimetable, to a dictionary representation of itself.
     This dictionary representation corresponds to the JSON sent back to the frontend when timetables are generated.

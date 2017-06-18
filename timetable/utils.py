@@ -1,23 +1,23 @@
 import itertools
 from django.forms import model_to_dict
 
-from courses.serializers import augment_course_dict
-from courses.utils import is_waitlist_only, get_sections_by_section_type
+from analytics.models import SharedTimetable
+from courses.utils import get_sections_by_section_type
 from timetable.models import Section, Course, Semester
 from timetable.school_mappers import school_to_granularity, school_to_semesters
 from timetable.scoring import get_tt_cost, get_num_days, get_avg_day_length, get_num_friends, \
     get_avg_rating
 
+
 MAX_RETURN = 60  # Max number of timetables we want to consider
 
 def courses_to_timetables(courses, locked_sections, semester, sort_metrics, school, custom_events, with_conflicts, optional_course_ids):
     all_offerings = courses_to_offerings(courses, locked_sections, semester)
-    timetables = itertools.islice(
+    return sorted(itertools.islice(
         offerings_to_timetables(all_offerings, school, custom_events, with_conflicts,
                                 optional_course_ids),
         MAX_RETURN
-    )
-    return sorted(timetables, key=lambda tt: get_tt_cost(tt, sort_metrics))
+    ), key=lambda tt: get_tt_cost(tt.stats, sort_metrics))
 
 
 def courses_to_offerings(courses, locked_sections, semester):
@@ -27,22 +27,23 @@ def courses_to_offerings(courses, locked_sections, semester):
     [course_id, section_code, [CourseOffering]] triple.
     """
     all_sections = []
-    for c in courses:
-        grouped = get_sections_by_section_type(c, semester)
+    for course in courses:
+        grouped = get_sections_by_section_type(course, semester)
         for section_type, sections in grouped.iteritems():
-            locked_section_code = locked_sections.get(str(c.id), {}).get(section_type)
+            locked_section_code = locked_sections.get(str(course.id), {}).get(section_type)
             section_codes = [section.meeting_section for section in sections]
             if locked_section_code in section_codes:
                 locked_section = next(s for s in sections
                                       if s.meeting_section == locked_section_code)
-                pinned = [c.id, locked_section, locked_section.offering_set.all()]
+                pinned = [course.id, locked_section, locked_section.offering_set.all()]
                 all_sections.append([pinned])
             else:
                 all_sections.append(
-                    [[c.id, section, section.offering_set.all()] for section in sections])
+                    [[course, section, section.offering_set.all()] for section in sections])
     return all_sections
 
 
+# TODO: use namedtuple instead of tuple
 def offerings_to_timetables(sections, school, custom_events, with_conflicts, optional_course_ids):
     """
     Generate timetables in a depth-first manner based on a list of sections.
@@ -76,18 +77,21 @@ def offerings_to_timetables(sections, school, custom_events, with_conflicts, opt
             tt_stats = get_tt_stats(current_tt, day_to_usage)
             tt_stats['num_conflicts'] = num_conflicts
             tt_stats['has_conflict'] = bool(num_conflicts)
-            timetable = convert_tt_to_dict(current_tt, tt_stats, optional_course_ids)
-            yield timetable
+            yield convert_to_model(current_tt, tt_stats, optional_course_ids, school)
 
 
-def convert_tt_to_dict(timetable, tt_stats, optional_course_ids):
-    tt_obj = {}
-    # get a course dict -> sections dictionary
-    grouped = itertools.groupby(timetable,
-                                lambda section: get_basic_course_dict(section, optional_course_ids))
-    # augment each course dict with its section/other info
-    tt_obj['courses'] = list(itertools.starmap(augment_course_dict, grouped))
-    return dict(tt_obj, **tt_stats)
+def convert_to_model(timetable, tt_stats, optional_course_ids, school):
+    courses, sections = zip(*[(course, section) for course, section, _ in timetable])
+    courses = set(courses)
+
+    tt = SharedTimetable.objects.create(semester=sections[0].semester,
+                         school=school, has_conflict=tt_stats['has_conflict'])
+    for course in courses:
+        tt.courses.add(course)
+    for section in sections:
+        tt.sections.add(section)
+    tt.stats = tt_stats
+    return tt
 
 
 def update_locked_sections(locked_sections, cid, locked_section):
@@ -201,15 +205,6 @@ def get_day_to_usage(custom_events, school):
             day_to_usage[event['day']][slot].add('custom_slot')
 
     return day_to_usage
-
-
-# TODO: use a namedtuple instead of tuple
-def get_basic_course_dict(section_triple, optional_course_ids):
-    course = Course.objects.get(id=section_triple[0])
-    course_dict = model_to_dict(course, fields='code name id num_credits department'.split())
-    if section_triple[0] in optional_course_ids:  # mark optional courses
-        course_dict['is_optional'] = True
-    return course_dict
 
 
 def get_current_semesters(school):
