@@ -1,6 +1,9 @@
 import { connect } from 'react-redux';
 import CourseModalBody from '../../modals/course_modal_body';
-import { getActiveTT, getCurrentSemester } from '../../../reducers/root_reducer';
+import {
+  getActiveTT,
+  getCurrentSemester,
+} from '../../../reducers/root_reducer';
 import { getSectionTypeToSections } from '../../../reducers/entities_reducer';
 import { hoverSection } from '../../../actions/timetable_actions';
 import {
@@ -14,7 +17,8 @@ import { getSchoolSpecificInfo } from '../../../constants/schools';
 import { getCourseShareLink, getCourseShareLinkFromModal } from '../../../constants/endpoints';
 
 const mapStateToProps = (state, ownProps) => {
-  const sectionTypeToSections = getSectionTypeToSections(state.courseInfo.data);
+  const denormCourseInfo = ownProps.data;
+  const sectionTypeToSections = getSectionTypeToSections(denormCourseInfo);
   const courseSections = state.courseSections.objects;
   const activeTimetable = getActiveTT(state);
   return {
@@ -24,7 +28,7 @@ const mapStateToProps = (state, ownProps) => {
     isFetchingClassmates: state.courseInfo.isFetching,
     classmates: state.courseInfo.classmates,
     sectionTypeToSections,
-    popularityPercent: state.courseInfo.data.popularity_percent * 100,
+    popularityPercent: denormCourseInfo.popularity_percent * 100,
     isLoggedIn: state.userInfo.data.isLoggedIn,
     hasSocial: state.userInfo.data.social_courses && state.userInfo.data.social_offerings,
     userInfo: state.userInfo.data,
