@@ -1,6 +1,6 @@
 import { connect } from 'react-redux';
 import SideBar from '../side_bar';
-import { getActiveTT } from '../../reducers/root_reducer';
+import { getActiveTT, getCurrentSemester } from '../../reducers/root_reducer';
 import {
     fetchCourseInfo,
     showFinalExamsModal,
@@ -13,7 +13,6 @@ import {
     loadTimetable,
 } from '../../actions/timetable_actions';
 import { deleteTimetable, duplicateTimetable } from '../../actions/user_actions';
-import { currSem } from '../../reducers/semester_reducer';
 import { getCourseShareLink } from '../../constants/endpoints';
 
 const mapStateToProps = (state) => {
@@ -22,7 +21,7 @@ const mapStateToProps = (state) => {
   const optionalCourses = state.optionalCourses.courses;
 
   return {
-    semester: currSem(state.semester),
+    semester: getCurrentSemester(state),
     semesterIndex: state.semester.current,
     examSupportedSemesters: state.semester.exams,
     // don't want to consider courses that are shown on timetable only
@@ -36,7 +35,7 @@ const mapStateToProps = (state) => {
     mandatoryCourses,
     optionalCourses,
     hasLoaded: !state.timetables.isFetching,
-    getShareLink: courseCode => getCourseShareLink(courseCode, currSem(state.semester)),
+    getShareLink: courseCode => getCourseShareLink(courseCode, getCurrentSemester(state)),
   };
 };
 

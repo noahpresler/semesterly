@@ -16,12 +16,11 @@ import {
     getSetRegistrationTokenEndpoint,
     acceptTOSEndpoint,
 } from '../constants/endpoints';
-import { getActiveTT } from '../reducers/root_reducer';
+import { getActiveTT, getCurrentSemester } from '../reducers/root_reducer';
 import { fetchCourseClassmates } from './modal_actions';
 import { getNumberedName, loadTimetable, nullifyTimetable } from './timetable_actions';
 import { MAX_TIMETABLE_NAME_LENGTH } from '../constants/constants';
 import * as ActionTypes from '../constants/actionTypes';
-import { currSem } from '../reducers/semester_reducer';
 import { setTimeShownBanner, checkStatus } from '../util';
 
 let autoSaveTimer;
@@ -60,7 +59,7 @@ const getSaveTimetablesRequestBody = (state) => {
     courses: tt.courses,
     events: state.customSlots,
     has_conflict: tt.has_conflict,
-    semester: currSem(state.semester),
+    semester: getCurrentSemester(state),
     name: state.savingTimetable.activeTimetable.name,
     id: state.savingTimetable.activeTimetable.id,
   };
@@ -91,7 +90,7 @@ export const fetchMostClassmatesCount = courses => (dispatch, getState) => {
   if (!state.userInfo.data.social_courses) {
     return;
   }
-  const semester = currSem(state.semester);
+  const semester = getCurrentSemester(state);
   dispatch(requestMostClassmates());
   fetch(getMostClassmatesCountEndpoint(semester, courses), {
     credentials: 'include',
@@ -118,7 +117,7 @@ export const fetchClassmates = courses => (dispatch, getState) => {
       .courses.map(c => c.id)));
   }, 500);
   dispatch(requestClassmates());
-  fetch(getClassmatesEndpoint(currSem(state.semester), courses), {
+  fetch(getClassmatesEndpoint(getCurrentSemester(state), courses), {
     credentials: 'include',
     method: 'GET',
   })
@@ -225,7 +224,7 @@ export const duplicateTimetable = timetable => (dispatch, getState) => {
     },
     method: 'POST',
     body: JSON.stringify({
-      semester: currSem(state.semester),
+      semester: getCurrentSemester(state),
       source: timetable.name,
       name: getNumberedName(timetable.name, state.userInfo.data.timetables),
     }),
@@ -276,7 +275,7 @@ export const deleteTimetable = timetable => (dispatch, getState) => {
   dispatch({
     type: ActionTypes.REQUEST_SAVE_TIMETABLE,
   });
-  fetch(getDeleteTimetableEndpoint(currSem(state.semester), timetable.name), {
+  fetch(getDeleteTimetableEndpoint(getCurrentSemester(state), timetable.name), {
     headers: {
       'X-CSRFToken': Cookie.get('csrftoken'),
       Accept: 'application/json',
@@ -413,7 +412,7 @@ export const fetchFriends = () => (dispatch, getState) => {
   dispatch({
     type: ActionTypes.PEER_MODAL_LOADING,
   });
-  fetch(getFriendsEndpoint(currSem(state.semester)), {
+  fetch(getFriendsEndpoint(getCurrentSemester(state)), {
     credentials: 'include',
     method: 'GET',
   })
