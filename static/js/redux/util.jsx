@@ -37,7 +37,8 @@ export const saveLocalSemester = (semester) => {
   if (!browserSupportsLocalStorage()) {
     return;
   }
-  localStorage.setItem('semester', semester);
+  localStorage.setItem('semesterName', semester.name);
+  localStorage.setItem('year', semester.year);
 };
 export const setFirstVisit = (time) => {
   if (!browserSupportsLocalStorage()) {
