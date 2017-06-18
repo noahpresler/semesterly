@@ -9,7 +9,7 @@ import {
 } from '../constants/endpoints';
 import { FULL_WEEK_LIST } from '../constants/constants';
 import { getActiveTimetable } from './user_actions';
-import { currSem } from '../reducers/semester_reducer';
+import { getCurrentSemester } from '../reducers/root_reducer';
 import * as ActionTypes from '../constants/actionTypes';
 
 const DAY_MAP = {
@@ -38,7 +38,7 @@ export const receiveShareLink = shareLink => (dispatch) => {
 
 export const fetchShareTimetableLink = () => (dispatch, getState) => {
   const state = getState();
-  const semester = currSem(state.semester);
+  const semester = getCurrentSemester(state);
   const timetableState = state.timetables;
   const { shareLink, shareLinkValid } = state.calendar;
   dispatch({
@@ -102,7 +102,7 @@ export const createICalFromTimetable = () => (dispatch, getState) => {
     // TODO - MUST BE REFACTORED AFTER CODED IN TO CONFIG
     let semStart = new Date();
     let semEnd = new Date();
-    const semester = currSem(state.semester);
+    const semester = getCurrentSemester(state);
 
     if (semester.name === 'Fall') {
       // ignore year, year is set to current year
@@ -138,7 +138,7 @@ export const createICalFromTimetable = () => (dispatch, getState) => {
           summary: `${slot.name} ${slot.code}${slot.meeting_section}`,
           description: `${slot.code + slot.meeting_section}\n${instructors}${description}`,
           location: slot.location,
-          url: getCourseShareLink(slot.code, currSem(state.semester)),
+          url: getCourseShareLink(slot.code, getCurrentSemester(state)),
         });
 
         event.repeating({

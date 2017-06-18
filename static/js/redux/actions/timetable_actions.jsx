@@ -1,6 +1,6 @@
 import fetch from 'isomorphic-fetch';
 import Cookie from 'js-cookie';
-import { getActiveTT } from '../reducers/root_reducer';
+import { getActiveTT, getCurrentSemester } from '../reducers/root_reducer';
 import { getTimetablesEndpoint } from '../constants/endpoints';
 import {
     browserSupportsLocalStorage,
@@ -11,7 +11,6 @@ import {
 } from '../util';
 import { autoSave, fetchClassmates, lockActiveSections } from './user_actions';
 import * as ActionTypes from '../constants/actionTypes';
-import { currSem } from '../reducers/semester_reducer';
 
 let customEventUpdateTimer; // keep track of user's custom event actions for autofetch
 
@@ -89,7 +88,7 @@ export const fetchTimetables = (requestBody, removing, newActive = 0) => (dispat
   // are always "up-to-date" (correspond to last loaded timetable).
   // same for the semester
   saveLocalPreferences(requestBody.preferences);
-  const semester = currSem(state.semester);
+  const semester = getCurrentSemester(state);
   if (localStorage.semesterName === semester.name && localStorage.year === semester.year) {
     saveLocalSemester(semester);
   }
@@ -100,7 +99,7 @@ export const fetchTimetables = (requestBody, removing, newActive = 0) => (dispat
  */
 export const getBaseReqBody = state => ({
   school: state.school.school,
-  semester: currSem(state.semester),
+  semester: getCurrentSemester(state),
   courseSections: state.courseSections.objects,
   preferences: state.preferences,
 });

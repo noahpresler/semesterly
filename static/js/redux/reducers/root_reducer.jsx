@@ -1,6 +1,6 @@
 import { combineReducers } from 'redux';
 import school from './school_reducer';
-import semester from './semester_reducer';
+import semester, * as fromSemester from './semester_reducer';
 import calendar from './calendar_reducer';
 import courseSections from './course_sections_reducer';
 import timetables, * as fromTimetables from './timetables_reducer';
@@ -67,5 +67,7 @@ export const getActiveTT = state => fromTimetables.getActiveTT(state.timetables)
 
 export const getSearchResult = (state, index) =>
   fromSearchResults.getSearchResult(state.searchResults, index);
+
+export const getCurrentSemester = state => fromSemester.getCurrentSemester(state.semester);
 
 export default rootReducer;
