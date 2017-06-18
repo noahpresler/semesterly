@@ -1,11 +1,10 @@
 import fetch from 'isomorphic-fetch';
-import { getActiveTT } from '../reducers/root_reducer';
+import { getActiveTT, getCurrentSemester } from '../reducers/root_reducer';
 import { getCourseSearchEndpoint } from '../constants/endpoints';
 import { getUserSavedTimetables, saveTimetable } from './user_actions';
 import { nullifyTimetable } from './timetable_actions';
 import * as ActionTypes from '../constants/actionTypes';
 import { fetchCourseClassmates } from './modal_actions';
-import { currSem } from '../reducers/semester_reducer';
 import { getSemester } from './school_actions';
 
 export const requestCourses = () => ({ type: ActionTypes.REQUEST_COURSES });
@@ -109,7 +108,7 @@ export const fetchAdvancedSearchResults = (query, filters) => (dispatch, getStat
     method: 'POST',
     body: JSON.stringify({
       filters,
-      semester: currSem(state.semester),
+      semester: getCurrentSemester(state),
       page: state.explorationModal.page,
     }),
   })

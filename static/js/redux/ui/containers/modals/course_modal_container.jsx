@@ -1,6 +1,6 @@
 import { connect } from 'react-redux';
 import CourseModal from '../../modals/course_modal';
-import { getActiveTT } from '../../../reducers/root_reducer';
+import { getActiveTT, getCurrentSemester } from '../../../reducers/root_reducer';
 import {
     addOrRemoveCourse,
     addOrRemoveOptionalCourse,
@@ -16,7 +16,6 @@ import {
 } from '../../../actions/modal_actions';
 import { saveSettings } from '../../../actions/user_actions';
 import { getCourseShareLink, getCourseShareLinkFromModal } from '../../../constants/endpoints';
-import { currSem } from '../../../reducers/semester_reducer';
 
 const mapStateToProps = (state) => {
   const courseSections = state.courseSections.objects;
@@ -26,9 +25,9 @@ const mapStateToProps = (state) => {
     id: state.courseInfo.id,
     hasHoveredResult: activeTimetable.courses.some(course => course.fake),
     inRoster: courseSections[state.courseInfo.id] !== undefined,
-    getShareLink: courseCode => getCourseShareLink(courseCode, currSem(state.semester)),
+    getShareLink: courseCode => getCourseShareLink(courseCode, getCurrentSemester(state)),
     getShareLinkFromModal: courseCode =>
-      getCourseShareLinkFromModal(courseCode, currSem(state.semester)),
+      getCourseShareLinkFromModal(courseCode, getCurrentSemester(state)),
   };
 };
 

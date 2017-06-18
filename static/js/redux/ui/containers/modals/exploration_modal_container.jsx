@@ -1,5 +1,5 @@
 import { connect } from 'react-redux';
-import { getActiveTT } from '../../../reducers/root_reducer';
+import { getActiveTT, getCurrentSemester } from '../../../reducers/root_reducer';
 import ExplorationModal from '../../modals/exploration_modal';
 import {
     clearAdvancedSearchPagination,
@@ -24,7 +24,6 @@ import {
     fetchCourseInfo,
 } from '../../../actions/modal_actions';
 import { getCourseShareLinkFromModal } from '../../../constants/endpoints';
-import { currSem } from '../../../reducers/semester_reducer';
 
 
 const mapStateToProps = (state) => {
@@ -34,7 +33,7 @@ const mapStateToProps = (state) => {
   const inRoster = course && (courseSections[course.id] !== undefined);
   const activeTimetable = getActiveTT(state);
   const { areas, departments, levels } = state.school;
-  const semester = currSem(state.semester);
+  const semester = getCurrentSemester(state);
   return {
     isVisible,
     isFetching,
@@ -53,7 +52,7 @@ const mapStateToProps = (state) => {
     hasHoveredResult: activeTimetable.courses.some(c => c.fake),
     classmates: state.courseInfo.classmates,
     isFetchingClassmates: state.courseInfo.isFetching,
-    getShareLink: courseCode => getCourseShareLinkFromModal(courseCode, currSem(state.semester)),
+    getShareLink: courseCode => getCourseShareLinkFromModal(courseCode, getCurrentSemester(state)),
     isSectionLocked: (courseId, section) => {
       if (courseSections[courseId] === undefined) {
         return false;
