@@ -116,7 +116,7 @@ export const fetchAdvancedSearchResults = (query, filters) => (dispatch, getStat
     // indicate that courses have been received
     dispatch({
       type: ActionTypes.RECEIVE_ADVANCED_SEARCH_RESULTS,
-      advancedSearchResults: json,
+      response: normalize(json, [courseSchema]),
     });
   });
 };
