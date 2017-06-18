@@ -1,4 +1,6 @@
 import fetch from 'isomorphic-fetch';
+import { normalize } from 'normalizr';
+import { courseSchema } from '../schema';
 import { getActiveTT, getCurrentSemester } from '../reducers/root_reducer';
 import { getCourseSearchEndpoint } from '../constants/endpoints';
 import { getUserSavedTimetables, saveTimetable } from './user_actions';
@@ -9,9 +11,9 @@ import { getSemester } from './school_actions';
 
 export const requestCourses = () => ({ type: ActionTypes.REQUEST_COURSES });
 
-export const receiveCourses = json => ({
+export const receiveCourses = normalizedResponse => ({
   type: ActionTypes.RECEIVE_COURSES,
-  courses: json,
+  response: normalizedResponse,
 });
 
 export const setSemester = semester => (dispatch, getState) => {
@@ -27,10 +29,7 @@ export const setSemester = semester => (dispatch, getState) => {
     type: ActionTypes.SET_SEMESTER,
     semester,
   });
-  dispatch({
-    type: ActionTypes.RECEIVE_COURSES,
-    courses: [],
-  });
+  dispatch(receiveCourses([]));
 };
 
 /*
@@ -77,7 +76,7 @@ export const fetchSearchResults = query => (dispatch, getState) => {
   .then(response => response.json()) // TODO error-check the response
   .then((json) => {
     // indicate that courses have been received
-    dispatch(receiveCourses(json));
+    dispatch(receiveCourses(normalize(json, [courseSchema])));
   });
 };
 

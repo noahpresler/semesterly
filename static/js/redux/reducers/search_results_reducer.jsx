@@ -5,7 +5,7 @@ const searchResults = (state = { isFetching: false, items: [] }, action) => {
     case ActionTypes.RECEIVE_COURSES:
       return {
         isFetching: false,
-        items: action.courses,
+        items: action.response.result,
       };
     case ActionTypes.REQUEST_COURSES:
       return {
@@ -17,20 +17,8 @@ const searchResults = (state = { isFetching: false, items: [] }, action) => {
   }
 };
 
-export const getSearchResult = (state, index) => state.items[index];
+export const getSearchResultId = (state, index) => state.items[index];
 
-export const getSectionTypeToSections = (course) => {
-  if (!('sections' in course)) { // empty course (only happens on inital CourseInfo state)
-    return {};
-  }
-  const sectionTypeToSections = {};
-  course.sections.forEach((section) => {
-    if (!(section.section_type in sectionTypeToSections)) {
-      sectionTypeToSections[section.section_type] = [];
-    }
-    sectionTypeToSections[section.section_type].push(section);
-  });
-  return sectionTypeToSections;
-};
+export const getSearchResultIds = state => state.items;
 
 export default searchResults;

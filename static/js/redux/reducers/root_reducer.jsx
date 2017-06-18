@@ -28,7 +28,7 @@ import termsOfServiceBanner from './terms_of_service_banner_reducer';
 import userAcquisitionModal from './user_acquisition_modal_reducer';
 import textbookModal from './textbook_modal_reducer';
 import finalExamsModal from './final_exams_modal_reducer';
-import entities from './entities_reducer';
+import entities, * as fromEntities from './entities_reducer';
 
 const rootReducer = combineReducers({
   school,
@@ -65,8 +65,19 @@ const rootReducer = combineReducers({
 
 export const getActiveTT = state => fromTimetables.getActiveTT(state.timetables);
 
+const getSearchResultId = (state, index) =>
+  fromSearchResults.getSearchResultId(state.searchResults, index);
+
+const getSearchResultIds = state => fromSearchResults.getSearchResultIds(state.searchResults);
+
+const getDenormCourseById = (state, id) => fromEntities.getDenormCourseById(state.entities, id);
+
+// Take search result index and return the full, denormalized course at that index
 export const getSearchResult = (state, index) =>
-  fromSearchResults.getSearchResult(state.searchResults, index);
+  getDenormCourseById(state, getSearchResultId(state, index));
+
+export const getSearchResults = state =>
+  getSearchResultIds(state).map(resultId => getDenormCourseById(state, resultId));
 
 export const getCurrentSemester = state => fromSemester.getCurrentSemester(state.semester);
 
