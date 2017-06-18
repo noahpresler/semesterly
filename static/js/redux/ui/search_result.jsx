@@ -64,7 +64,7 @@ class SearchResult extends React.Component {
    * @returns {boolean}
    */
   hasOnlyWaitlistedSections() {
-    const sectionTypeToSections = getSectionTypeToSections(this.props.course.sections);
+    const sectionTypeToSections = getSectionTypeToSections(this.props.course);
     const sectionTypes = Object.keys(sectionTypeToSections);
     for (let i = 0; i < sectionTypes.length; i++) {
       const sectionType = sectionTypes[i];
