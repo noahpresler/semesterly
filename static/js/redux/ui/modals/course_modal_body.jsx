@@ -228,14 +228,16 @@ class CourseModalBody extends React.Component {
           (<div className="friend" key={c.img_url}>
             <div className="ms-friend" style={{ backgroundImage: `url(${c.img_url})` }} />
             <p title={`${c.first_name} ${c.last_name}`}>{ `${c.first_name} ${c.last_name}` }</p>
-          </div>)) : <p className="null">No Classmates Found</p>;
+          </div>)) :
+        <p className="null">No Classmates Found</p>;
 
       hasTakenCircles = this.props.classmates && this.props.classmates.past_classmates.length > 0 ?
         this.props.classmates.past_classmates.map(c =>
           (<div className="friend" key={c.img_url}>
             <div className="ms-friend" style={{ backgroundImage: `url(${c.img_url})` }} />
             <p title={`${c.first_name} ${c.last_name}`}>{ `${c.first_name} ${c.last_name}` }</p>
-          </div>)) : <p className="null">No Classmates Found</p>;
+          </div>)) :
+        <p className="null">No Classmates Found</p>;
     }
     let friendDisplay = (<div className="modal-module friends">
       <h3 className="modal-module-header">Friends In This Course</h3>
