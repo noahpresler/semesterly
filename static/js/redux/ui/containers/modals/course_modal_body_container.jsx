@@ -1,7 +1,7 @@
 import { connect } from 'react-redux';
 import CourseModalBody from '../../modals/course_modal_body';
 import { getActiveTT, getCurrentSemester } from '../../../reducers/root_reducer';
-import { getSectionTypeToSections } from '../../../reducers/search_results_reducer';
+import { getSectionTypeToSections } from '../../../reducers/entities_reducer';
 import { hoverSection } from '../../../actions/timetable_actions';
 import {
     changeUserInfo,

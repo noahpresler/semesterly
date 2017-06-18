@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types';
 import React from 'react';
 import classNames from 'classnames';
-import { getSectionTypeToSections } from '../reducers/search_results_reducer';
+import { getSectionTypeToSections } from '../reducers/entities_reducer';
 import * as SemesterlyPropTypes from '../constants/semesterlyPropTypes';
 
 
@@ -64,7 +64,7 @@ class SearchResult extends React.Component {
    * @returns {boolean}
    */
   hasOnlyWaitlistedSections() {
-    const sectionTypeToSections = getSectionTypeToSections(this.props.course);
+    const sectionTypeToSections = getSectionTypeToSections(this.props.course.sections);
     const sectionTypes = Object.keys(sectionTypeToSections);
     for (let i = 0; i < sectionTypes.length; i++) {
       const sectionType = sectionTypes[i];
