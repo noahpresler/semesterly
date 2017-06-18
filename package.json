@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "description": "A Timetable Generator",
   "dependencies": {
+    "autoprefixer": "^7.1.1",
     "babel": "^6.23.0",
     "babel-core": "^6.24.1",
     "babel-loader": "^6.4.1",
@@ -80,7 +81,8 @@
     "watch": "node server.js",
     "lint-staged": "lint-staged",
     "lint-fix": "./node_modules/.bin/eslint --fix static/js/redux/* static/js/redux/alerts/* static/js/redux/actions/* static/js/redux/constants/* static/js/redux/reducers/* static/js/redux/ui/containers/* static/js/redux/ui/alerts/*",
-    "lint": "./node_modules/.bin/eslint static/js/redux/*/*; ./node_modules/.bin/sass-lint -c .scss-lint.yml 'static/css/timetable/*.scss, static/css/timetable/base/*.scss' -v -q"
+    "lint": "./node_modules/.bin/eslint static/js/redux/*/*; ./node_modules/.bin/sass-lint -c .scss-lint.yml 'static/css/timetable/*.scss, static/css/timetable/base/*.scss' -v -q",
+    "validate": "npm ls"
   },
   "repository": {
     "type": "git",
