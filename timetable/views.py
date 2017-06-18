@@ -60,7 +60,8 @@ class TimetableView(CsrfExemptMixin, ValidateSubdomainMixin, APIView):
         sort_metrics = [(m['metric'], m['order']) for m in preferences.get('sort_metrics', [])
                         if m['selected']]
 
-        result = [timetable for opt_courses in optional_course_subsets
+        # TODO move sorting to view level so that result is sorted
+        result = [convert_tt_to_dict(timetable) for opt_courses in optional_course_subsets
                   for timetable in courses_to_timetables(courses + list(opt_courses), locked_sections, params['semester'], sort_metrics, params['school'], custom_events, with_conflicts, opt_course_ids)]
 
         # updated roster object
@@ -76,7 +77,7 @@ class TimetableLinkView(FeatureFlowView):
         shared_timetable_obj = get_object_or_404(SharedTimetable,
                                                  id=timetable_id,
                                                  school=request.subdomain)
-        shared_timetable = convert_tt_to_dict(shared_timetable_obj, include_last_updated=False)
+        shared_timetable = convert_tt_to_dict(shared_timetable_obj)
 
         return {'semester': shared_timetable_obj.semester, 'sharedTimetable': shared_timetable}
 

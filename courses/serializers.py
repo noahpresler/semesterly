@@ -159,15 +159,3 @@ def get_section_dict(section):
     section_data = model_to_dict(section)
     section_data['is_section_filled'] = section.is_full()
     return section_data
-
-
-def augment_course_dict(course_dict, sections):
-    sections = list(sections)
-    slot_objects = [dict(get_section_dict(section), **model_to_dict(co))
-                    for _, section, course_offerings in sections
-                    for co in course_offerings]
-    course_dict['enrolled_sections'] = [section.meeting_section for _, section, _ in sections]
-    course_dict['textbooks'] = {section.meeting_section: section.get_textbooks() for _, section, _
-                                in sections}
-    course_dict['slots'] = slot_objects
-    return course_dict
