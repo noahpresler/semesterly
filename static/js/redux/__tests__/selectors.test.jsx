@@ -1,5 +1,5 @@
 import * as selectors from '../reducers/root_reducer';
-import { getSectionTypeToSections } from '../reducers/search_results_reducer';
+import { getSectionTypeToSections } from '../reducers/entities_reducer';
 
 describe('timetable selectors', () => {
   describe('active TT selector', () => {
@@ -17,7 +17,7 @@ describe('course selectors', () => {
       const xTwo = { section_type: 'x', meeting_section: 'B' };
       const yOne = { section_type: 'y', meeting_section: 'C' };
 
-      const state = { sections: [xOne, xTwo, yOne] };
+      const state = [xOne, xTwo, yOne];
       expect(getSectionTypeToSections(state)).toEqual({
         x: [xOne, xTwo],
         y: [yOne],
