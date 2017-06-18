@@ -10,6 +10,86 @@ from timetable.scoring import get_tt_cost, get_num_days, get_avg_day_length, get
 
 MAX_RETURN = 60  # Max number of timetables we want to consider
 
+def courses_to_timetables(courses, locked_sections, semester, sort_metrics, school, custom_events, with_conflicts, optional_course_ids):
+    all_offerings = courses_to_offerings(courses, locked_sections, semester)
+    timetables = itertools.islice(
+        offerings_to_timetables(all_offerings, school, custom_events, with_conflicts,
+                                optional_course_ids),
+        MAX_RETURN
+    )
+    return sorted(timetables, key=lambda tt: get_tt_cost(tt, sort_metrics))
+
+
+def courses_to_offerings(courses, locked_sections, semester):
+    """
+    Take a list of courses and group all of the courses' offerings by section
+    type. Returns a list of lists (for each group), where each offering is represented as a
+    [course_id, section_code, [CourseOffering]] triple.
+    """
+    all_sections = []
+    for c in courses:
+        grouped = get_sections_by_section_type(c, semester)
+        for section_type, sections in grouped.iteritems():
+            locked_section_code = locked_sections.get(str(c.id), {}).get(section_type)
+            section_codes = [section.meeting_section for section in sections]
+            if locked_section_code in section_codes:
+                locked_section = next(s for s in sections
+                                      if s.meeting_section == locked_section_code)
+                pinned = [c.id, locked_section, locked_section.offering_set.all()]
+                all_sections.append([pinned])
+            else:
+                all_sections.append(
+                    [[c.id, section, section.offering_set.all()] for section in sections])
+    return all_sections
+
+
+def offerings_to_timetables(sections, school, custom_events, with_conflicts, optional_course_ids):
+    """
+    Generate timetables in a depth-first manner based on a list of sections.
+    sections: a list of sections, where each section is a list of offerings
+          corresponding to that section. Each offering consists of three
+          elements: the course id (the key in the course table), the meeting
+          section code (meeting section in the courseoffering table), and a
+          list of courseoffering objects which specify the times that the
+          offering in question meets. An example section:
+          [[27, 'L5101', [<CourseOffering>], [27, 'L1001', [<CourseOffering>]]]
+    with_conflicts: True if you want to consider conflicts, False otherwise.
+    """
+    num_offerings, num_permutations_remaining = get_xproduct_indicies(sections)
+    total_num_permutations = num_permutations_remaining.pop(0)
+    for p in xrange(total_num_permutations):  # for each possible tt
+        current_tt = []
+        day_to_usage = get_day_to_usage(custom_events, school)
+        num_conflicts = 0
+        add_tt = True
+        for i in xrange(len(sections)):  # add an offering for the next section
+            j = (p / num_permutations_remaining[i]) % num_offerings[i]
+            num_added_conflicts = add_meeting_and_check_conflict(day_to_usage,
+                                                                 sections[i][j],
+                                                                 school)
+            num_conflicts += num_added_conflicts
+            if num_conflicts and not with_conflicts:
+                add_tt = False
+                break
+            current_tt.append(sections[i][j])
+        if add_tt and len(current_tt) != 0:
+            tt_stats = get_tt_stats(current_tt, day_to_usage)
+            tt_stats['num_conflicts'] = num_conflicts
+            tt_stats['has_conflict'] = bool(num_conflicts)
+            timetable = convert_tt_to_dict(current_tt, tt_stats, optional_course_ids)
+            yield timetable
+
+
+def convert_tt_to_dict(timetable, tt_stats, optional_course_ids):
+    tt_obj = {}
+    # get a course dict -> sections dictionary
+    grouped = itertools.groupby(timetable,
+                                lambda section: get_basic_course_dict(section, optional_course_ids))
+    # augment each course dict with its section/other info
+    tt_obj['courses'] = list(itertools.starmap(augment_course_dict, grouped))
+    return dict(tt_obj, **tt_stats)
+
+
 def update_locked_sections(locked_sections, cid, locked_section):
     """
     Take cid of new course, and locked section for that course
@@ -106,95 +186,6 @@ def get_tt_stats(timetable, day_to_usage):
     }
 
 
-def courses_to_timetables(courses, locked_sections, semester, sort_metrics, school, custom_events, with_conflicts, optional_course_ids):
-    all_offerings = courses_to_offerings(courses, locked_sections, semester)
-    timetables = itertools.islice(
-        offerings_to_timetables(all_offerings, school, custom_events, with_conflicts),
-        MAX_RETURN
-    )
-    timetables = sorted(timetables, key=lambda tt: get_tt_cost(tt[1], sort_metrics))
-    return [convert_tt_to_dict(tt, optional_course_ids, semester) for tt in timetables]
-
-
-def courses_to_offerings(courses, locked_sections, semester):
-    """
-    Take a list of courses and group all of the courses' offerings by section
-    type. Returns a list of lists (for each group), where each offering is represented as a
-    [course_id, section_code, [CourseOffering]] triple.
-    """
-    all_sections = []
-    for c in courses:
-        grouped = get_sections_by_section_type(c, semester)
-        for section_type, sections in grouped.iteritems():
-            locked_section_code = locked_sections.get(str(c.id), {}).get(section_type)
-            section_codes = [section.meeting_section for section in sections]
-            if locked_section_code in section_codes:
-                locked_section = next(
-                    s for s in sections if s.meeting_section == locked_section_code)
-                pinned = [c.id, locked_section, locked_section.offering_set.all()]
-                all_sections.append([pinned])
-            else:
-                all_sections.append(
-                    [[c.id, section, section.offering_set.all()] for section in sections])
-    return all_sections
-
-
-def convert_tt_to_dict(timetable, optional_course_ids, semester):
-    tt_obj = {}
-    tt, tt_stats = timetable
-    # get a course dict -> sections dictionary
-    grouped = itertools.groupby(tt, lambda tt: get_basic_course_dict(tt, optional_course_ids, semester))
-    # augment each course dict with its section/other info
-    tt_obj['courses'] = list(itertools.starmap(augment_course_dict, grouped))
-    return dict(tt_obj, **tt_stats)
-
-
-def get_basic_course_dict(section, optional_course_ids, semester):
-    course = Course.objects.get(id=section[0])
-    course_dict = model_to_dict(course, fields='code name id num_credits department'.split())
-    if section[0] in optional_course_ids:  # mark optional courses
-        course_dict['is_optional'] = True
-
-    course_dict['is_waitlist_only'] = is_waitlist_only(course, semester)
-    return course_dict
-
-
-def offerings_to_timetables(sections, school, custom_events, with_conflicts):
-    """
-    Generate timetables in a depth-first manner based on a list of sections.
-    sections: a list of sections, where each section is a list of offerings
-          corresponding to that section. Each offering consists of three
-          elements: the course id (the key in the course table), the meeting
-          section code (meeting section in the courseoffering table), and a
-          list of courseoffering objects which specify the times that the
-          offering in question meets. An example section:
-          [[27, 'L5101', [<CourseOffering>], [27, 'L1001', [<CourseOffering>]]]
-    with_conflicts: True if you want to consider conflicts, False otherwise.
-    """
-    num_offerings, num_permutations_remaining = get_xproduct_indicies(sections)
-    total_num_permutations = num_permutations_remaining.pop(0)
-    for p in xrange(total_num_permutations):  # for each possible tt
-        current_tt = []
-        day_to_usage = get_day_to_usage(custom_events, school)
-        num_conflicts = 0
-        add_tt = True
-        for i in xrange(len(sections)):  # add an offering for the next section
-            j = (p / num_permutations_remaining[i]) % num_offerings[i]
-            num_added_conflicts = add_meeting_and_check_conflict(day_to_usage,
-                                                                 sections[i][j],
-                                                                 school)
-            num_conflicts += num_added_conflicts
-            if num_conflicts and not with_conflicts:
-                add_tt = False
-                break
-            current_tt.append(sections[i][j])
-        if add_tt and len(current_tt) != 0:
-            tt_stats = get_tt_stats(current_tt, day_to_usage)
-            tt_stats['num_conflicts'] = num_conflicts
-            tt_stats['has_conflict'] = bool(num_conflicts)
-            yield (tuple(current_tt), tt_stats)
-
-
 def get_day_to_usage(custom_events, school):
     """Initialize day_to_usage dictionary, which has custom events blocked out."""
     day_to_usage = {
@@ -210,6 +201,17 @@ def get_day_to_usage(custom_events, school):
             day_to_usage[event['day']][slot].add('custom_slot')
 
     return day_to_usage
+
+
+# TODO: use a namedtuple instead of tuple
+def get_basic_course_dict(section_triple, optional_course_ids):
+    course = Course.objects.get(id=section_triple[0])
+    course_dict = model_to_dict(course, fields='code name id num_credits department'.split())
+    if section_triple[0] in optional_course_ids:  # mark optional courses
+        course_dict['is_optional'] = True
+
+    course_dict['is_waitlist_only'] = is_waitlist_only(course, section_triple[1].semester)
+    return course_dict
 
 
 def get_current_semesters(school):
