@@ -23,8 +23,8 @@ const mapStateToProps = (state, ownProps) => {
   const activeTimetable = getActiveTT(state);
   return {
     ...ownProps,
+    id: denormCourseInfo.code,
     schoolSpecificInfo: getSchoolSpecificInfo(state.school.school),
-    isFetching: state.courseInfo.isFetching,
     isFetchingClassmates: state.courseInfo.isFetching,
     classmates: state.courseInfo.classmates,
     sectionTypeToSections,

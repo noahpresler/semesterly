@@ -11,7 +11,6 @@ import {
 import * as SemesterlyPropTypes from '../../constants/semesterlyPropTypes';
 import { VERBOSE_DAYS } from '../../constants/constants';
 import TimeSelector from '../time_selector';
-import { getSectionTypeToSections } from '../../reducers/entities_reducer';
 
 class ExplorationModal extends React.Component {
   constructor(props) {
@@ -282,8 +281,6 @@ class ExplorationModal extends React.Component {
             </div>
           </div>
           <CourseModalBodyContainer
-            id={selectedCourse.id}
-            sectionTypeToSections={getSectionTypeToSections(selectedCourse)}
             data={selectedCourse}
             classmates={this.props.classmates}
             addOrRemoveCourse={this.addOrRemoveCourse}

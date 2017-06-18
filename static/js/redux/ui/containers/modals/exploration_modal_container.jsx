@@ -1,5 +1,9 @@
 import { connect } from 'react-redux';
-import { getActiveTT, getCurrentSemester } from '../../../reducers/root_reducer';
+import {
+  getActiveTT,
+  getCurrentSemester,
+  getDenormAdvancedSearchResults,
+} from '../../../reducers/root_reducer';
 import ExplorationModal from '../../modals/exploration_modal';
 import {
     clearAdvancedSearchPagination,
@@ -27,7 +31,8 @@ import { getCourseShareLinkFromModal } from '../../../constants/endpoints';
 
 
 const mapStateToProps = (state) => {
-  const { isVisible, advancedSearchResults, isFetching, active, page } = state.explorationModal;
+  const { isVisible, isFetching, active, page } = state.explorationModal;
+  const advancedSearchResults = getDenormAdvancedSearchResults(state);
   const courseSections = state.courseSections.objects;
   const course = advancedSearchResults[active];
   const inRoster = course && (courseSections[course.id] !== undefined);
@@ -39,7 +44,6 @@ const mapStateToProps = (state) => {
     isFetching,
     advancedSearchResults,
     active,
-    course,
     inRoster,
     areas,
     departments,
