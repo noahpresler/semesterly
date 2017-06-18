@@ -17,7 +17,7 @@ describe('course selectors', () => {
       const xTwo = { section_type: 'x', meeting_section: 'B' };
       const yOne = { section_type: 'y', meeting_section: 'C' };
 
-      const state = [xOne, xTwo, yOne];
+      const state = { sections: [xOne, xTwo, yOne] };
       expect(getSectionTypeToSections(state)).toEqual({
         x: [xOne, xTwo],
         y: [yOne],
