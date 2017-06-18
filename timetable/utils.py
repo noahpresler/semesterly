@@ -209,8 +209,6 @@ def get_basic_course_dict(section_triple, optional_course_ids):
     course_dict = model_to_dict(course, fields='code name id num_credits department'.split())
     if section_triple[0] in optional_course_ids:  # mark optional courses
         course_dict['is_optional'] = True
-
-    course_dict['is_waitlist_only'] = is_waitlist_only(course, section_triple[1].semester)
     return course_dict
 
 
