@@ -11,7 +11,7 @@ import {
 import * as SemesterlyPropTypes from '../../constants/semesterlyPropTypes';
 import { VERBOSE_DAYS } from '../../constants/constants';
 import TimeSelector from '../time_selector';
-import { getSectionTypeToSections } from '../../reducers/search_results_reducer';
+import { getSectionTypeToSections } from '../../reducers/entities_reducer';
 
 class ExplorationModal extends React.Component {
   constructor(props) {

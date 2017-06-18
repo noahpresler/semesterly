@@ -1,6 +1,6 @@
 import { connect } from 'react-redux';
 import { getActiveTT, getSearchResult } from '../../reducers/root_reducer';
-import { getSectionTypeToSections } from '../../reducers/search_results_reducer';
+import { getSectionTypeToSections } from '../../reducers/entities_reducer';
 import SearchSideBar from '../search_side_bar';
 import { addOrRemoveCourse, hoverSection, unHoverSection } from '../../actions/timetable_actions';
 
