@@ -11,7 +11,6 @@ const mapStateToProps = (state) => {
     hoveredResult = getSearchResult(state, 0);
   }
   const activeTimetable = getActiveTT(state);
-
   return {
     hoveredResult,
     sectionTypeToSections: getSectionTypeToSections(hoveredResult),
