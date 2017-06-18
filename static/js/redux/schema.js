@@ -1,6 +1,6 @@
 import { schema } from 'normalizr';
 
-export const offeringSchema = new schema.Entity('offerings');
+export const offeringSchema = new schema.Entity('offering_set');
 
 export const sectionSchema = new schema.Entity('sections', { offering_set: [offeringSchema] }, {
   idAttribute: (value, parent) => `${parent.code}-${value.meeting_section}`,

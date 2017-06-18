@@ -1,4 +1,5 @@
 import { normalize } from 'normalizr';
+import { getDenormCourseById } from '../reducers/entities_reducer';
 import * as schemas from '../schema';
 
 describe('course schema', () => {
@@ -7,7 +8,7 @@ describe('course schema', () => {
       entities: {
         courses: { C1: { id: 1, code: 'C1', sections: ['C1-S1'] } },
         sections: { 'C1-S1': { meeting_section: 'S1', offering_set: [1] } },
-        offerings: { 1: { id: 1, day: 'M' } },
+        offering_set: { 1: { id: 1, day: 'M' } },
       },
     };
   const denormalized = [{
@@ -25,8 +26,11 @@ describe('course schema', () => {
     const result = normalize(denormalized, [schemas.courseSchema]);
     expect(result).toEqual(normalized);
   });
-  it('normalizes singel course correctly', () => {
+  it('normalizes single course correctly', () => {
     const result = normalize(denormalized[0], schemas.courseSchema);
     expect(result).toEqual({ ...normalized, result: 'C1' });
   });
+  it('denormalizes single course correctly', () => {
+    expect(getDenormCourseById(normalized.entities, 'C1')).toEqual(denormalized[0]);
+  })
 });
