@@ -282,22 +282,11 @@ class ExplorationModal extends React.Component {
           </div>
           <CourseModalBodyContainer
             data={selectedCourse}
-            classmates={this.props.classmates}
             addOrRemoveCourse={this.addOrRemoveCourse}
-            isSectionLocked={this.props.isSectionLocked}
-            isSectionOnActiveTimetable={this.props.isSectionOnActiveTimetable}
             schoolSpecificInfo={this.props.schoolSpecificInfo}
-            hoverSection={this.props.hoverSection}
             unHoverSection={this.props.unHoverSection}
-            react={this.props.react}
-            openSignUpModal={this.props.openSignUpModal}
             hideModal={this.props.hideExplorationModal}
-            changeUserInfo={this.props.changeUserInfo}
-            saveSettings={this.props.saveSettings}
             isFetching={false}
-            isFetchingClassmates={this.props.isFetchingClassmates}
-            fetchCourseInfo={this.props.fetchCourseInfo}
-            userInfo={this.props.userInfo}
             getShareLink={this.props.getShareLink}
           />
         </div>
@@ -459,12 +448,9 @@ ExplorationModal.propTypes = {
   addOrRemoveCourse: PropTypes.func.isRequired,
   addOrRemoveOptionalCourse: PropTypes.func.isRequired,
   advancedSearchResults: PropTypes.arrayOf(SemesterlyPropTypes.searchResult).isRequired,
-  changeUserInfo: PropTypes.func.isRequired,
-  classmates: SemesterlyPropTypes.classmates,
   clearPagination: PropTypes.func.isRequired,
   active: PropTypes.number.isRequired,
   fetchAdvancedSearchResults: PropTypes.func.isRequired,
-  fetchCourseInfo: PropTypes.func.isRequired,
   fetchCourseClassmates: PropTypes.func.isRequired,
   hasHoveredResult: PropTypes.bool.isRequired,
   paginate: PropTypes.func.isRequired,
@@ -474,15 +460,7 @@ ExplorationModal.propTypes = {
   hideExplorationModal: PropTypes.func.isRequired,
   schoolSpecificInfo: SemesterlyPropTypes.schoolSpecificInfo.isRequired,
   unHoverSection: PropTypes.func.isRequired,
-  hoverSection: PropTypes.func.isRequired,
   setAdvancedSearchResultIndex: PropTypes.func.isRequired,
-  isSectionLocked: PropTypes.func.isRequired,
-  isSectionOnActiveTimetable: PropTypes.func.isRequired,
-  react: PropTypes.func.isRequired,
-  openSignUpModal: PropTypes.func.isRequired,
-  saveSettings: PropTypes.func.isRequired,
-  isFetchingClassmates: PropTypes.bool.isRequired,
-  userInfo: SemesterlyPropTypes.userInfo.isRequired,
   semesterName: PropTypes.string.isRequired,
   getShareLink: PropTypes.func.isRequired,
 };
