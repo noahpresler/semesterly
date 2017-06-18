@@ -87,7 +87,7 @@ export const fetchAdvancedSearchResults = (query, filters) => (dispatch, getStat
   if (query.length <= 1 && [].concat(...Object.values(filters)).length === 0) {
     dispatch({
       type: ActionTypes.RECEIVE_ADVANCED_SEARCH_RESULTS,
-      advancedSearchResults: [],
+      response: { result: [] },
     });
     return;
   }
