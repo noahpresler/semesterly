@@ -6,7 +6,7 @@ import courseSections from './course_sections_reducer';
 import timetables, * as fromTimetables from './timetables_reducer';
 import searchResults, * as fromSearchResults from './search_results_reducer';
 import preferences from './preferences_reducer';
-import courseInfo from './course_info_reducer';
+import courseInfo, * as fromCourseInfo from './course_info_reducer';
 import alerts from './alerts_reducer';
 import ui from './ui_reducer';
 import userInfo from './user_info_reducer';
@@ -70,7 +70,8 @@ const getSearchResultId = (state, index) =>
 
 const getSearchResultIds = state => fromSearchResults.getSearchResultIds(state.searchResults);
 
-const getDenormCourseById = (state, id) => fromEntities.getDenormCourseById(state.entities, id);
+export const getDenormCourseById = (state, id) =>
+  fromEntities.getDenormCourseById(state.entities, id);
 
 // Take search result index and return the full, denormalized course at that index
 export const getSearchResult = (state, index) =>
@@ -80,5 +81,7 @@ export const getSearchResults = state =>
   getSearchResultIds(state).map(resultId => getDenormCourseById(state, resultId));
 
 export const getCurrentSemester = state => fromSemester.getCurrentSemester(state.semester);
+
+export const getCourseInfoId = state => fromCourseInfo.getCourseInfoId(state.courseInfo);
 
 export default rootReducer;

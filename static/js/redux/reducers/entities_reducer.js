@@ -26,6 +26,9 @@ const getDenormSectionsForCourse = (state, course) =>
 
 // TODO use denormalize from normalizr
 export const getDenormCourseById = (state, id) => {
+  if (!('courses' in state)) {
+    return {};
+  };
   let course = getCourseById(state, id);
   let sections = getDenormSectionsForCourse(state, course);
   return { ...course, sections };
