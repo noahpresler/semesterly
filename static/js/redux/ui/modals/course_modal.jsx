@@ -115,10 +115,14 @@ class CourseModal extends React.Component {
                 { add }
               </div>
               <CourseModalBodyContainer
-                {...this.props}
+                inRoster={this.props.inRoster}
+                data={this.props.data}
+                addOrRemoveCourse={this.props.addOrRemoveCourse}
+                hideModal={this.props.hideModal}
                 isFetching={this.props.isFetching}
-                hideModal={this.hide}
-                addOrRemoveCourse={this.addOrRemoveCourse}
+                unHoverSection={this.props.unHoverSection}
+                getShareLink={this.props.getShareLink}
+                getShareLinkFromModal={this.props.getShareLinkFromModal}
               />
             </div>);
     return (
