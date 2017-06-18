@@ -1,5 +1,4 @@
 import itertools
-
 from django.forms import model_to_dict
 
 from courses.serializers import augment_course_dict
@@ -10,7 +9,6 @@ from timetable.scoring import get_tt_cost, get_num_days, get_avg_day_length, get
     get_avg_rating
 
 MAX_RETURN = 60  # Max number of timetables we want to consider
-
 
 def update_locked_sections(locked_sections, cid, locked_section):
     """
@@ -110,8 +108,11 @@ def get_tt_stats(timetable, day_to_usage):
 
 def courses_to_timetables(courses, locked_sections, semester, sort_metrics, school, custom_events, with_conflicts, optional_course_ids):
     all_offerings = courses_to_offerings(courses, locked_sections, semester)
-    timetables = create_timetable_from_offerings(all_offerings, school, custom_events, with_conflicts)
-    timetables.sort(key=lambda tt: get_tt_cost(tt[1], sort_metrics))
+    timetables = itertools.islice(
+        offerings_to_timetables(all_offerings, school, custom_events, with_conflicts),
+        MAX_RETURN
+    )
+    timetables = sorted(timetables, key=lambda tt: get_tt_cost(tt[1], sort_metrics))
     return [convert_tt_to_dict(tt, optional_course_ids, semester) for tt in timetables]
 
 
@@ -156,15 +157,6 @@ def get_basic_course_dict(section, optional_course_ids, semester):
 
     course_dict['is_waitlist_only'] = is_waitlist_only(course, semester)
     return course_dict
-
-
-def create_timetable_from_offerings(offerings, school, custom_events, with_conflicts):
-    timetables = []
-    for timetable in offerings_to_timetables(offerings, school, custom_events, with_conflicts):
-        if len(timetables) >= MAX_RETURN:
-            break
-        timetables.append(timetable)
-    return timetables
 
 
 def offerings_to_timetables(sections, school, custom_events, with_conflicts):
