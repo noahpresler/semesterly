@@ -1,11 +1,12 @@
 import { connect } from 'react-redux';
 import TopBar from '../top_bar';
-import { currSem } from '../../reducers/semester_reducer';
+import { getCurrentSemester } from '../../reducers/root_reducer';
 
 
 const mapStateToProps = state => ({
   userInfo: state.userInfo.data,
-  currentSemester: currSem(state.semester),
+  currentSemester:
+    getCurrentSemester(state),
 });
 
 const TopBarContainer = connect(
