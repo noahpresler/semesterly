@@ -7,15 +7,27 @@ const entities = (state = {}, action) => {
   return state;
 };
 
-export const getSectionsForCourse = (state, course) =>
-  course.sections.map(sectionId => state.sections[sectionId]);
+const getSectionById = (state, id) => state.sections[id];
 
-export const getCourseById = (state, id) => state.courses[id];
+const getSlotsForSection = (state, section) =>
+  section.offering_set.map(slotId => state.offering_set[slotId]);
+
+// TODO use denormalize from normalizr
+const getDenormSectionById = (state, id) => {
+  let section = getSectionById(state, id);
+  let offering_set = getSlotsForSection(state, section);
+  return { ...section, offering_set }
+};
+
+const getCourseById = (state, id) => state.courses[id];
+
+const getDenormSectionsForCourse = (state, course) =>
+  course.sections.map(sectionId => getDenormSectionById(state, sectionId));
 
 // TODO use denormalize from normalizr
 export const getDenormCourseById = (state, id) => {
   let course = getCourseById(state, id);
-  let sections = getSectionsForCourse(state, course);
+  let sections = getDenormSectionsForCourse(state, course);
   return { ...course, sections };
 };
 
