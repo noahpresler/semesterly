@@ -138,7 +138,7 @@ CourseModal.defaultProps = {
 };
 
 CourseModal.propTypes = {
-  id: PropTypes.number,
+  id: PropTypes.string,
   data: fullCourseDetails,
   inRoster: PropTypes.bool.isRequired,
   hasHoveredResult: PropTypes.bool.isRequired,

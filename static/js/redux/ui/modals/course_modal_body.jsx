@@ -398,11 +398,11 @@ CourseModalBody.defaultProps = {
   popularityPercent: 0,
   inRoster: false,
   isLoggedIn: false,
-  id: 0,
+  id: null,
 };
 
 CourseModalBody.propTypes = {
-  id: PropTypes.number,
+  id: PropTypes.string,
   inRoster: PropTypes.bool.isRequired,
   popularityPercent: PropTypes.number,
   isLoggedIn: PropTypes.bool,
