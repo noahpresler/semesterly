@@ -3,7 +3,7 @@ import * as ActionTypes from '../constants/actionTypes';
 const courseInfo = (state = {
   isFetching: true,
   isFetchingClassmates: true,
-  data: {},
+  data: {}, // TODO: remove, should refer to course entities
   id: null,
   classmates: {},
 }, action) => {
@@ -11,8 +11,7 @@ const courseInfo = (state = {
     case ActionTypes.COURSE_INFO_RECEIVED:
       return Object.assign({}, state, {
         isFetching: false,
-        data: action.data,
-        id: action.data.id,
+        id: action.response.result,
       });
     case ActionTypes.COURSE_CLASSMATES_RECEIVED:
       return Object.assign({}, state, {
@@ -43,5 +42,7 @@ const courseInfo = (state = {
       return state;
   }
 };
+
+export const getCourseInfoId = state => state.id;
 
 export default courseInfo;
