@@ -13,7 +13,7 @@ import userInfo from './user_info_reducer';
 import savingTimetable from './saving_timetable_reducer';
 import classmates from './classmates_reducer';
 import optionalCourses from './optional_courses_reducer';
-import explorationModal from './exploration_modal_reducer';
+import explorationModal, * as fromExplorationModal from './exploration_modal_reducer';
 import customSlots from './custom_slots_reducer';
 import signupModal from './signup_modal_reducer';
 import peerModal from './peer_modal_reducer';
@@ -83,5 +83,9 @@ export const getSearchResults = state =>
 export const getCurrentSemester = state => fromSemester.getCurrentSemester(state.semester);
 
 export const getCourseInfoId = state => fromCourseInfo.getCourseInfoId(state.courseInfo);
+
+export const getDenormAdvancedSearchResults = state =>
+  fromExplorationModal.getAdvancedSearchResultIds(state.explorationModal).map(id =>
+    getDenormCourseById(state, id));
 
 export default rootReducer;
