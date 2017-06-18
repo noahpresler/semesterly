@@ -5,9 +5,10 @@
 // import CourseModalBody from '../../ui/modals/course_modal_body';
 // import courseModalBodyFixture from '../../__fixtures__/course_modal_body.fixture';
 //
-// it('CourseModalBody correctly renders', () => {
-//   const tree = renderer.create(
-//     <CourseModalBody {...courseModalBodyFixture} />,
-//   ).toJSON();
-//   expect(tree).toMatchSnapshot();
-// });
+it('CourseModalBody correctly renders', () => {
+  // const tree = renderer.create(
+  //   <CourseModalBody {...courseModalBodyFixture} />,
+  // ).toJSON();
+  // expect(tree).toMatchSnapshot();
+});
+
