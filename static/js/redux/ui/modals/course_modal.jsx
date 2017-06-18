@@ -115,7 +115,9 @@ class CourseModal extends React.Component {
                 { add }
               </div>
               <CourseModalBodyContainer
-                {...this.props} hideModal={this.hide}
+                {...this.props}
+                isFetching={this.props.isFetching}
+                hideModal={this.hide}
                 addOrRemoveCourse={this.addOrRemoveCourse}
               />
             </div>);
@@ -148,6 +150,9 @@ CourseModal.propTypes = {
   unHoverSection: PropTypes.func.isRequired,
   getShareLink: PropTypes.func.isRequired,
   getShareLinkFromModal: PropTypes.func.isRequired,
+  // Must be included to be passed down into CourseModalBody, which needs to either refer to
+  // state.courseInfo.isFetching or state.explorationModal.isFetching depending on its parent
+  isFetching: PropTypes.bool.isRequired,
 };
 
 export default CourseModal;
