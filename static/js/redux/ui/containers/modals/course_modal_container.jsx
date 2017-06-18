@@ -30,6 +30,7 @@ const mapStateToProps = (state) => {
   return {
     data: denormCourseInfo,
     id: state.courseInfo.id,
+    isFetching: state.courseInfo.isFetching,
     hasHoveredResult: activeTimetable.courses.some(course => course.fake),
     inRoster: courseSections[state.courseInfo.id] !== undefined,
     getShareLink: courseCode => getCourseShareLink(courseCode, getCurrentSemester(state)),
