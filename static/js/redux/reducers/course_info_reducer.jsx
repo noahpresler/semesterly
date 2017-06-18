@@ -24,7 +24,7 @@ const courseInfo = (state = {
         isFetchingClassmates: true,
         data: {},
         classmates: {},
-        id: action.id,
+        id: null, // TODO: either use db id for entities, or course code for everything else
       };
     case ActionTypes.SET_COURSE_REACTIONS:
       if (state.id === null) {
