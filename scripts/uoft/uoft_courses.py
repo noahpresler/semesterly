@@ -495,7 +495,9 @@ class UofTParser:
               tr.a.extract()
               name = tr.find('b').text.strip()[2:]
               level = code[3].upper()
-              assert level in ["A", "B", "C", "D"]
+              if level not in ["A", "B", "C", "D"]:
+                i += 1
+                continue
               print "On Course:", code, ":", name, "\n"
               course_details = self.get_course_details(code, course_link)
               C, created = Course.objects.update_or_create(code=code, school="uoft", defaults={
