@@ -102,7 +102,7 @@ class CourseModalBody extends React.Component {
       const sectionTitle = `${getSectionTypeDisplayName(sType)} Sections`;
       const subTitle = i === 0 ? <small>(Hover to see the section on your timetable)</small> : null;
       return (
-        <div>
+        <div key={sType}>
           <h3 className="modal-module-header"> {sectionTitle} {subTitle} </h3>
           {this.mapSectionsToSlots(this.props.sectionTypeToSections[sType])}
         </div>
