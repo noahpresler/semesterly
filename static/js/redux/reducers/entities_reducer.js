@@ -30,7 +30,7 @@ const getDenormSectionsForCourse = (state, course) =>
 export const getDenormCourseById = (state, id) => {
   if (!('courses' in state)) {
     return {};
-  };
+  }
   let course = getCourseById(state, id);
   let sections = getDenormSectionsForCourse(state, course);
   return { ...course, sections };
@@ -54,7 +54,7 @@ export const getTimetable = (state, id) => {
   let timetable = state.timetables[id];
   return {
     ...timetable,
-    courses: timetable.courses.map(courseCode => getDenormCourseById(state, id)),
+    courses: timetable.courses.map(courseCode => getDenormCourseById(state, courseCode)),
   };
 };
 
