@@ -36,7 +36,7 @@ const timetables = (state = initialState, action) => {
       return {
         isFetching: false,
         items: actionTimetables,
-        ids: action.response.result,
+        ids: ('response' in action) ? action.response.result : [],
         active: 0,
       };
     }
