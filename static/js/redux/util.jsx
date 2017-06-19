@@ -133,6 +133,5 @@ export const getSectionTypeDisplayName = function getSectionTypeDisplayName(sect
   }
 };
 
-// A comparison function for sorting sections
-export const meetingSectionCmp = (first, second) =>
-  (first.meeting_section > second.meeting_section ? 1 : -1);
+// A comparison function for sorting objects by string property
+export const strPropertyCmp = prop => (first, second) => (first[prop] > second[prop] ? 1 : -1);
