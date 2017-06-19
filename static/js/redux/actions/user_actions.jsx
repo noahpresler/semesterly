@@ -335,9 +335,7 @@ export const saveSettings = callback => (dispatch, getState) => {
   })
     .then((response) => {
       const state = getState();
-      const timetables = state.timetables.items;
-      const active = state.timetables.active;
-      const activeTT = timetables[active];
+      const activeTT = getActiveTT(state);
       if (state.userInfo.data.social_courses) {
         dispatch(fetchClassmates(activeTT.courses.map(c => c.id)));
         if (state.courseInfo.id) {

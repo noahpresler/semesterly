@@ -321,7 +321,7 @@ const refetchTimetables = () => (dispatch, getState) => {
 
 export const addLastAddedCourse = () => (dispatch, getState) => {
   const state = getState();
-  // last timetable change was a custom event edit, not adding a course
+  // last timetable change was a custom event edit, not add
   if (state.timetables.lastSlotAdded === null) {
     return;
   }
