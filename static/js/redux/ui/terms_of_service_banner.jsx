@@ -6,10 +6,20 @@ class TermsOfServiceBanner extends React.Component {
   constructor(props) {
     super(props);
     this.state = { isVisible: this.props.isVisible };
+    this.timer = null;
+  }
+
+  componentDidMount() {
+    this.timer = setTimeout(() => {
+      this.props.dismissTermsOfServiceBanner();
+      clearTimeout(this.timer);
+    }, 4000);
   }
 
   componentWillUpdate() {
-    this.setState = { isVisible: this.props.isVisible };
+    if (this.state.isVisible !== this.props.isVisible) {
+      this.setState({ isVisible: this.props.isVisible });
+    }
   }
 
   render() {
