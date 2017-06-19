@@ -1,13 +1,12 @@
 import { connect } from 'react-redux';
+import { getActiveTT } from '../../reducers/root_reducer';
 import { setDeclinedNotifications } from '../../util';
 import { logFacebookAlertView, saveSettings } from '../../actions/user_actions';
 import FriendsInClassAlert from './friends_in_class_alert';
 import * as ActionTypes from '../../constants/actionTypes';
 
 const mapStateToProps = (state) => {
-  const timetables = state.timetables.items;
-  const active = state.timetables.active;
-  const activeTT = timetables[active];
+  const activeTT = getActiveTT(state);
   const msg = `${state.alerts.mostFriendsCount} friends are also taking this class!`;
   return {
     msg,
