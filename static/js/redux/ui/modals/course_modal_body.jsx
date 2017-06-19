@@ -9,7 +9,7 @@ import EvaluationList from '../evaluation_list';
 import CourseModalSection from '../course_modal_section';
 import SlotHoverTip from '../slot_hover_tip';
 import * as SemesterlyPropTypes from '../../constants/semesterlyPropTypes';
-import { getSectionTypeDisplayName, meetingSectionCmp } from '../../util';
+import { getSectionTypeDisplayName, strPropertyCmp } from '../../util';
 
 class CourseModalBody extends React.Component {
   constructor(props) {
@@ -59,7 +59,7 @@ class CourseModalBody extends React.Component {
   }
 
   mapSectionsToSlots(sections) {
-    return sections.sort(meetingSectionCmp).map(section => (
+    return sections.sort(strPropertyCmp('meeting_section')).map(section => (
       <CourseModalSection
         key={this.props.id + section.meeting_section}
         secName={section.meeting_section}
