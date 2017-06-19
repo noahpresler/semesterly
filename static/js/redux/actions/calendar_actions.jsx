@@ -8,8 +8,7 @@ import {
     getCourseShareLink,
 } from '../constants/endpoints';
 import { FULL_WEEK_LIST } from '../constants/constants';
-import { getActiveTimetable } from './user_actions';
-import { getCurrentSemester } from '../reducers/root_reducer';
+import { getCurrentSemester, getActiveTT } from '../reducers/root_reducer';
 import * as ActionTypes from '../constants/actionTypes';
 
 const DAY_MAP = {
@@ -39,7 +38,6 @@ export const receiveShareLink = shareLink => (dispatch) => {
 export const fetchShareTimetableLink = () => (dispatch, getState) => {
   const state = getState();
   const semester = getCurrentSemester(state);
-  const timetableState = state.timetables;
   const { shareLink, shareLinkValid } = state.calendar;
   dispatch({
     type: ActionTypes.REQUEST_SHARE_TIMETABLE_LINK,
@@ -56,7 +54,7 @@ export const fetchShareTimetableLink = () => (dispatch, getState) => {
     },
     method: 'POST',
     body: JSON.stringify({
-      timetable: getActiveTimetable(timetableState),
+      timetable: getActiveTT(state),
       semester,
     }),
     credentials: 'include',
@@ -69,7 +67,6 @@ export const fetchShareTimetableLink = () => (dispatch, getState) => {
 
 export const addTTtoGCal = () => (dispatch, getState) => {
   const state = getState();
-  const timetableState = state.timetables;
 
   if (!state.saveCalendarModal.isUploading && !state.saveCalendarModal.hasUploaded) {
     dispatch({ type: ActionTypes.UPLOAD_CALENDAR });
@@ -81,7 +78,7 @@ export const addTTtoGCal = () => (dispatch, getState) => {
       },
       method: 'POST',
       body: JSON.stringify({
-        timetable: getActiveTimetable(timetableState),
+        timetable: getActiveTT(state),
       }),
       credentials: 'include',
     })
@@ -97,7 +94,7 @@ export const createICalFromTimetable = () => (dispatch, getState) => {
   if (!state.saveCalendarModal.isDownloading && !state.saveCalendarModal.hasDownloaded) {
     dispatch({ type: ActionTypes.DOWNLOAD_CALENDAR });
     const cal = ical({ domain: 'https://semester.ly', name: 'My Semester Schedule' });
-    const tt = getActiveTimetable(state.timetables);
+    const tt = getActiveTT(state);
 
     // TODO - MUST BE REFACTORED AFTER CODED IN TO CONFIG
     let semStart = new Date();
