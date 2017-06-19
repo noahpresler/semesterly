@@ -37,6 +37,7 @@ export const receiveShareLink = shareLink => (dispatch) => {
 
 export const fetchShareTimetableLink = () => (dispatch, getState) => {
   const state = getState();
+
   const semester = getCurrentSemester(state);
   const { shareLink, shareLinkValid } = state.calendar;
   dispatch({
