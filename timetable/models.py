@@ -48,6 +48,7 @@ class Course(models.Model):
     areas = models.CharField(max_length=600, default='', null=True)
     department = models.CharField(max_length=250, default='', null=True)
     level = models.CharField(max_length=30, default='', null=True)
+    # TODO generalize core/gened/breadth field
     cores = models.CharField(max_length=50, null=True, blank=True)
     geneds = models.CharField(max_length=300, null=True, blank=True)
     related_courses = models.ManyToManyField("self", blank=True)
@@ -79,7 +80,7 @@ class Course(models.Model):
             eq_sum, eq_count = self.same_as._get_ratings_sum_count()
             ratings_sum += eq_sum
             ratings_count += eq_count
-        return (ratings_sum / ratings_count) if ratings_count else 0
+        return (ratings_sum / ratings_count) if ratings_count else -1
 
     def _get_ratings_sum_count(self):
         """ Return the sum and count of ratings of this course not counting equivalent courses. """
