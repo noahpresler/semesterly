@@ -1,4 +1,5 @@
 import merge from 'lodash/merge';
+import pick from 'lodash/pick';
 
 // TODO: garbage collect (e.g. clear when changing semesters)
 const entities = (state = {}, action) => {
@@ -47,6 +48,32 @@ export const getSectionTypeToSections = (denormCourse) => {
     sectionTypeToSections[section.section_type].push(section);
   });
   return sectionTypeToSections;
+};
+
+export const getTimetable = (state, id) => {
+  let timetable = state.timetables[id];
+  return {
+    ...timetable,
+    courses: timetable.courses.map(courseCode => getDenormCourseById(state, id)),
+  };
+};
+
+export const getFromDenormTimetable = (timetable, fields) => {
+  if (!('courses' in timetable) || !('sections' in timetable.courses[0])) {
+    throw "Timetable must be denormalized before being passed to getFromDenormTimetable";
+  }
+  return {
+    ...pick(timetable, fields.timetables),
+    courses: timetable.courses.map(course => ({
+      ...pick(course, fields.courses),
+      sections: course.sections.map(section => ({
+          ...pick(section, fields.sections),
+          offerings: section.offering_set.map(offering => ({
+            ...pick(offering, fields.offerings),
+          })),
+      })),
+    })),
+  }
 };
 
 export default entities;
