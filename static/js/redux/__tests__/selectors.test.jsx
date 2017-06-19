@@ -1,5 +1,5 @@
 import * as selectors from '../reducers/root_reducer';
-import { getSectionTypeToSections } from '../reducers/entities_reducer';
+import { getSectionTypeToSections, getFromDenormTimetable } from '../reducers/entities_reducer';
 
 describe('timetable selectors', () => {
   describe('active TT selector', () => {
@@ -22,6 +22,46 @@ describe('course selectors', () => {
         x: [xOne, xTwo],
         y: [yOne],
       });
+    });
+  });
+});
+
+describe('timetable selectors', () => {
+  const timetable = {
+    name: 'tt_name',
+    has_conflict: false,
+    courses: [{
+      id: 'C1',
+      name: 'course',
+      sections: [{
+        id: 'S1',
+        name: 'section',
+        offering_set: [{
+          id: 'O1',
+          thing: 'thing',
+        }],
+      }],
+    }],
+  };
+  describe('getfromTimetable', () => {
+    it('returns correct shape', () => {
+      const fields = {
+        timetables: ['name'],
+        courses: ['id'],
+        sections: ['id'],
+        offerings: [],
+      };
+
+      const result = getFromDenormTimetable(timetable, fields);
+      expect('courses' in result).toBeTruthy();
+      expect('sections' in result.courses[0]).toBeTruthy();
+      expect('offerings' in result.courses[0].sections[0]).toBeTruthy();
+    });
+    it('only returns specified fields', () => {
+      const fields = { timetables: ['name'], sections: [], offerings: [] };
+      const result = getFromDenormTimetable(timetable, fields);
+      expect('name' in result).toBeTruthy();
+      expect('has_conflict' in result).toBeFalsy();
     });
   });
 });
