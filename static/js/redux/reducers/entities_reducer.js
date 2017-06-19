@@ -1,5 +1,6 @@
 import merge from 'lodash/merge';
 
+// TODO: garbage collect (e.g. clear when changing semesters)
 const entities = (state = {}, action) => {
   if (action.response && action.response.entities) {
     return merge(state, action.response.entities);
