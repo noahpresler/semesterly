@@ -4,7 +4,6 @@ import {
     deleteRegistrationTokenEndpoint,
     getClassmatesEndpoint,
     getDeleteTimetableEndpoint,
-    getFinalExamSchedulerEndpoint,
     getFriendsEndpoint,
     getIntegrationEndpoint,
     getLoadSavedTimetablesEndpoint,
@@ -375,26 +374,6 @@ export const getUserSavedTimetables = semester => (dispatch) => {
       } else {
         dispatch(nullifyTimetable(dispatch));
       }
-    });
-};
-
-export const fetchFinalExamSchedule = () => (dispatch, getState) => {
-  const state = getState();
-  const timetable = getActiveTT(state);
-  dispatch({ type: ActionTypes.FETCH_FINAL_EXAMS });
-  fetch(getFinalExamSchedulerEndpoint(), {
-    headers: {
-      'X-CSRFToken': Cookie.get('csrftoken'),
-      Accept: 'application/json',
-      'Content-Type': 'application/json',
-    },
-    credentials: 'include',
-    method: 'POST',
-    body: JSON.stringify(timetable),
-  })
-    .then(response => response.json())
-    .then((json) => {
-      dispatch({ type: ActionTypes.RECEIVE_FINAL_EXAMS, json });
     });
 };
 
