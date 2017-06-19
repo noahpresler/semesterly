@@ -1,5 +1,5 @@
 import itertools
-from django.forms import model_to_dict
+from collections import namedtuple
 
 from analytics.models import SharedTimetable
 from courses.utils import get_sections_by_section_type
@@ -13,11 +13,12 @@ MAX_RETURN = 60  # Max number of timetables we want to consider
 
 def courses_to_timetables(courses, locked_sections, semester, sort_metrics, school, custom_events, with_conflicts, optional_course_ids):
     all_offerings = courses_to_offerings(courses, locked_sections, semester)
-    return sorted(itertools.islice(
+    tts_by_score =  sorted(itertools.islice(
         offerings_to_timetables(all_offerings, school, custom_events, with_conflicts,
                                 optional_course_ids),
         MAX_RETURN
-    ), key=lambda tt: get_tt_cost(tt.stats, sort_metrics))
+    ), key=lambda tt_pair: get_tt_cost(tt_pair[0], sort_metrics))
+    return [tt for (tt, stats) in tts_by_score]
 
 
 def courses_to_offerings(courses, locked_sections, semester):
@@ -82,16 +83,10 @@ def offerings_to_timetables(sections, school, custom_events, with_conflicts, opt
 
 def convert_to_model(timetable, tt_stats, optional_course_ids, school):
     courses, sections = zip(*[(course, section) for course, section, _ in timetable])
-    courses = set(courses)
+    courses = list(set(courses))
 
-    tt = SharedTimetable.objects.create(semester=sections[0].semester,
-                         school=school, has_conflict=tt_stats['has_conflict'])
-    for course in courses:
-        tt.courses.add(course)
-    for section in sections:
-        tt.sections.add(section)
-    tt.stats = tt_stats
-    return tt
+    tt = Timetable(courses, sections, tt_stats['has_conflict'])
+    return (tt, tt_stats)
 
 
 def update_locked_sections(locked_sections, cid, locked_section):
@@ -219,6 +214,7 @@ def get_current_semesters(school):
     return semesters
 
 
+# TODO: delete after deleting convert_tt_to_dict
 def get_tt_rating(course_ids):
     avgs = [Course.objects.get(id=cid).get_avg_rating()
             for cid in set([cid for cid in course_ids])]
@@ -227,3 +223,6 @@ def get_tt_rating(course_ids):
                    sum([0 if a == 0 else 1 for a in avgs]) if avgs else 0)
     except BaseException:
         return 0
+
+
+Timetable = namedtuple('Timetable', 'courses sections has_conflict')
