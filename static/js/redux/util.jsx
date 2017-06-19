@@ -105,26 +105,6 @@ export const getMaxHourBasedOnWindowHeight = () => {
   }
   return Math.min(24, parseInt(maxHour, 10));
 };
-/*
- gets the end hour of the current timetable, based on the class that ends latest
- */
-export const getMaxEndHour = (timetable, hasCourses) => {
-  let maxEndHour = 17;
-  if (!hasCourses) {
-    return maxEndHour;
-  }
-  getMaxHourBasedOnWindowHeight();
-  const courses = timetable.courses;
-  for (let courseIndex = 0; courseIndex < courses.length; courseIndex++) {
-    const course = courses[courseIndex];
-    for (let slotIndex = 0; slotIndex < course.slots.length; slotIndex++) {
-      const slot = course.slots[slotIndex];
-      const endHour = parseInt(slot.time_end.split(':')[0], 10);
-      maxEndHour = Math.max(maxEndHour, endHour);
-    }
-  }
-  return Math.max(maxEndHour, getMaxHourBasedOnWindowHeight());
-};
 
 /*
  * Raise error if the response has an error status code, otherwise return response.
