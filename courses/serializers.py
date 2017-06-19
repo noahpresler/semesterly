@@ -26,6 +26,7 @@ class FlatCourseSerializer(serializers.ModelSerializer):
 
     slots = serializers.SerializerMethodField()
     enrolled_sections = serializers.SerializerMethodField()
+    sections = serializers.SerializerMethodField()
 
     def get_evals(self, course):
         """
@@ -109,6 +110,8 @@ class FlatCourseSerializer(serializers.ModelSerializer):
     def get_enrolled_sections(self, course):
         return [section.meeting_section for section in self.context['sections']]
 
+    def get_sections(self, course):
+        return [SectionSerializer(section).data for section in self.context['sections']]
 
     class Meta:
         model = Course
@@ -134,6 +137,7 @@ class FlatCourseSerializer(serializers.ModelSerializer):
             'is_waitlist_only',
             'slots',
             'enrolled_sections',
+            'sections',
         )
 
 
