@@ -113,7 +113,7 @@ class TimetableLinkViewTest(APITestCase):
         course = Course.objects.create(
             id=1, school='uoft', code='SEM101', name='Intro')
         section = Section.objects.create(
-            course=course, semester=sem, meeting_section='L1')
+            id=1, course=course, semester=sem, meeting_section='L1')
         Offering.objects.create(
             section=section,
             day='M',
@@ -123,9 +123,12 @@ class TimetableLinkViewTest(APITestCase):
     def test_create_then_get_link(self):
         data = {
             'timetable': {
-                'courses': [
-                    {'id': 1, 'enrolled_sections': ['L1']}
-                ],
+                'courses': [{
+                    'id': 1,
+                    'sections': [{
+                        'id': 1
+                    }]
+                }],
                 'has_conflict': False
             },
             'semester': {'name': 'Fall', 'year': '2000'}
