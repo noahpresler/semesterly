@@ -81,7 +81,7 @@ export const getMaxEndHour = createSelector([getActiveTT], (timetable) => {
   }
   getMaxHourBasedOnWindowHeight();
 
-    // TODO: rewrite using new entities
+      // TODO: rewrite using new entities
   const courses = timetable.courses;
   for (let courseIndex = 0; courseIndex < courses.length; courseIndex++) {
     const course = courses[courseIndex];
