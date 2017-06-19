@@ -83,6 +83,8 @@ class TimetableLinkView(FeatureFlowView):
 
     def post(self, request):
         school = request.subdomain
+        timetable = request.data['timetable']
+        print timetable
         courses = request.data['timetable']['courses']
         has_conflict = request.data['timetable'].get('has_conflict', False)
         semester, _ = Semester.objects.get_or_create(**request.data['semester'])
@@ -95,10 +97,8 @@ class TimetableLinkView(FeatureFlowView):
         for course in courses:
             course_obj = Course.objects.get(id=course['id'])
             shared_timetable.courses.add(course_obj)
-            enrolled_sections = course['enrolled_sections']
-            for section in enrolled_sections:
-                section_obj = course_obj.section_set.get(meeting_section=section,
-                                                         semester=semester)
+            for section in course['sections']:
+                section_obj = course_obj.section_set.get(id=section['id'])
                 shared_timetable.sections.add(section_obj)
         shared_timetable.save()
 
