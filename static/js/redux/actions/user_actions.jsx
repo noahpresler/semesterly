@@ -49,12 +49,8 @@ export const requestFriends = () => ({
   type: ActionTypes.REQUEST_FRIENDS,
 });
 
-/* Returns the currently active timetable */
-export const getActiveTimetable = timetableState => timetableState.items[timetableState.active];
-
 const getSaveTimetablesRequestBody = (state) => {
-  const timetableState = state.timetables;
-  const tt = getActiveTimetable(timetableState);
+  const tt = getActiveTT(state);
   return {
     courses: tt.courses,
     events: state.customSlots,
@@ -113,8 +109,7 @@ export const fetchClassmates = courses => (dispatch, getState) => {
     return;
   }
   setTimeout(() => {
-    dispatch(fetchMostClassmatesCount(getActiveTimetable(state.timetables)
-      .courses.map(c => c.id)));
+    dispatch(fetchMostClassmatesCount(getActiveTT(state).courses.map(c => c.id)));
   }, 500);
   dispatch(requestClassmates());
   fetch(getClassmatesEndpoint(getCurrentSemester(state), courses), {
@@ -132,7 +127,7 @@ export const saveTimetable = (isAutoSave = false, callback = null) => (dispatch,
   if (!state.userInfo.data.isLoggedIn) {
     return dispatch({ type: ActionTypes.TOGGLE_SIGNUP_MODAL });
   }
-  const activeTimetable = getActiveTimetable(state.timetables);
+  const activeTimetable = getActiveTT(state);
 
   // if current timetable is empty or we're already in saved state, don't save this timetable
   const numSlots = activeTimetable.courses.length + state.customSlots.length;
@@ -385,7 +380,7 @@ export const getUserSavedTimetables = semester => (dispatch) => {
 
 export const fetchFinalExamSchedule = () => (dispatch, getState) => {
   const state = getState();
-  const timetable = getActiveTimetable(state.timetables);
+  const timetable = getActiveTT(state);
   dispatch({ type: ActionTypes.FETCH_FINAL_EXAMS });
   fetch(getFinalExamSchedulerEndpoint(), {
     headers: {
