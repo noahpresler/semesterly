@@ -4,8 +4,6 @@ import * as ActionTypes from '../constants/actionTypes';
 import { getActiveTT } from '../reducers/root_reducer';
 import { getRequestShareExamLinkEndpoint, getFinalExamSchedulerEndpoint } from '../constants/endpoints';
 
-// TODO - move all other final exam actions to here (ie fetchFinalExamSchedule)
-
 export const fetchFinalExamSchedule = () => (dispatch, getState) => {
   const state = getState();
   const timetable = getActiveTT(state);
