@@ -269,6 +269,7 @@ class SectionSerializer(serializers.ModelSerializer):
     class Meta:
         model = Section
         fields = (
+            'id',
             'meeting_section',
             'size',
             'enrolment',
