@@ -84,10 +84,8 @@ class UserSettingsModal extends React.Component {
       width: '100%',
     };
     const tos = this.state.signingUp ? (<div
-      className="preference welcome-modal__notifications cf"
+      className="preference cf"
     >
-      <h4>Terms of Service</h4>
-      <p>You must agree to our terms of service.</p>
       <label className="switch switch-slide" htmlFor="tos-agreed-input">
         <input
           ref={(c) => { this.tosAgreed = c; }} id="tos-agreed-input"
@@ -106,6 +104,12 @@ class UserSettingsModal extends React.Component {
         <span className="switch-label" data-on="ACCEPTED" data-off="CLICK TO ACCEPT" />
         <span className="switch-handle" />
       </label>
+      <div className="preference-wrapper">
+        <h3>Accept the terms and conditions</h3>
+        <p className="disclaimer">
+          By agreeing, you accept our <a>terms and conditions</a> & <a>privacy policy</a>.
+        </p>
+      </div>
     </div>) : null;
     const notificationsButton = this.props.tokenRegistered
         ? (<a onClick={this.props.unsubscribeToNotifications}><h3>Turn Off Notifications</h3></a>)
