@@ -119,8 +119,8 @@ export const timetable = PropTypes.shape({
   avg_rating: PropTypes.number,
   has_conflict: PropTypes.bool.isRequired,
   courses: PropTypes.arrayOf(course).isRequired,
-  sections: PropTypes.arrayOf(PropTypes.number),
-  semester: PropTypes.number,
+  sections: PropTypes.arrayOf(PropTypes.string),
+  semester,
 });
 
 export const evaluation = PropTypes.shape({
