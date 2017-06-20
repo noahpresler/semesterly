@@ -590,7 +590,7 @@ export const changeTimetableName = name => (dispatch) => {
   dispatch(saveTimetable());
 };
 
-export const acceptTOS = () => {
+export const acceptTOS = () => (dispatch) => {
   fetch(acceptTOSEndpoint(), {
     headers: {
       'X-CSRFToken': Cookie.get('csrftoken'),
@@ -600,7 +600,14 @@ export const acceptTOS = () => {
     credentials: 'include',
     method: 'POST',
     body: '',
-  });
+  })
+    .then((response) => {
+      if (response.status === 204) {
+        dispatch({
+          type: ActionTypes.CLOSE_TOS_MODAL,
+        });
+      }
+    });
 };
 
 // Show the TOS and privacy policy agreement if the user has not seen the latest version.

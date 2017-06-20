@@ -57,7 +57,6 @@ class UserSettingsModal extends React.Component {
       };
       const userSettings = Object.assign({}, this.props.userInfo, newUserSettings);
       this.props.changeUserInfo(userSettings);
-      this.props.saveSettings();
     }
   }
 
@@ -73,11 +72,10 @@ class UserSettingsModal extends React.Component {
     this.props.saveSettings();
   }
 
-  shouldShow(props, requireTOS = false) {
+  shouldShow(props) {
     return props.userInfo.isLoggedIn && (!props.hideOverrided && (
         props.showOverrided ||
-        this.props.userPreferencesIncomplete ||
-        (requireTOS && isIncomplete(props.userInfo.timeAcceptedTos)))
+        this.props.userPreferencesIncomplete)
       );
   }
 
@@ -96,7 +94,14 @@ class UserSettingsModal extends React.Component {
           className="switch-input" type="checkbox"
           checked={!isIncomplete(this.props.userInfo.timeAcceptedTos)}
           disabled={!isIncomplete(this.props.userInfo.timeAcceptedTos)}
-          onChange={this.props.acceptTOS}
+          onChange={() => {
+            this.props.acceptTOS();
+            this.props.changeUserInfo(Object.assign(
+              {},
+              this.props.userInfo,
+              { timeAcceptedTos: String(new Date()) },
+            ));
+          }}
         />
         <span className="switch-label" data-on="ACCEPTED" data-off="CLICK TO ACCEPT" />
         <span className="switch-handle" />
@@ -253,18 +258,17 @@ class UserSettingsModal extends React.Component {
               />
             </div>
             { preferences }
-            { notifications }
+            { !this.state.signingUp ? notifications : null }
             { fbUpsell }
             { tos }
             <div className="button-wrapper">
               <button
                 className="signup-button" onClick={() => {
                   this.changeForm();
-                  this.props.closeUserSettings();
-                  if (!this.shouldShow(Object.assign({}, this.props, { showOverrided: false }),
-                      true)) {
+                  if (!this.props.userPreferencesIncomplete) {
                     this.modal.hide();
                     this.props.setHidden();
+                    this.props.closeUserSettings();
                   }
                 }}
               >Save
