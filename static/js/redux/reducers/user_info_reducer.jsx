@@ -41,7 +41,7 @@ const userInfo = (state = {
 };
 
 export const userPreferencesIncomplete = (state) => {
-  if (!state.FacebookSignedUp) {
+  if (!state.data.FacebookSignedUp) {
     return state.data.isLoggedIn &&
       (isIncomplete(state.data.major) ||
       isIncomplete(state.data.class_year));
