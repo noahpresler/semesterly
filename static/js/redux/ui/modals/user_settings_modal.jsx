@@ -17,6 +17,7 @@ class UserSettingsModal extends React.Component {
     super(props);
     this.state = {
       sw_capable: 'serviceWorker' in navigator,
+      signingUp: this.props.signingUp,
     };
     this.changeForm = this.changeForm.bind(this);
     this.changeMajor = this.changeMajor.bind(this);
@@ -72,7 +73,7 @@ class UserSettingsModal extends React.Component {
     this.props.saveSettings();
   }
 
-  shouldShow(props, requireTOS=false) {
+  shouldShow(props, requireTOS = false) {
     return props.userInfo.isLoggedIn && (!props.hideOverrided && (
         props.showOverrided ||
         this.props.userPreferencesIncomplete ||
@@ -84,11 +85,11 @@ class UserSettingsModal extends React.Component {
     const modalStyle = {
       width: '100%',
     };
-    const tos = this.props.signingUp ? (<div
+    const tos = this.state.signingUp ? (<div
       className="preference welcome-modal__notifications cf"
     >
       <h4>Terms of Service</h4>
-      <p>You must agree to Semester.ly's terms of service.</p>
+      <p>You must agree to our terms of service.</p>
       <label className="switch switch-slide" htmlFor="tos-agreed-input">
         <input
           ref={(c) => { this.tosAgreed = c; }} id="tos-agreed-input"
