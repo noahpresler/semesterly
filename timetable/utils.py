@@ -36,7 +36,7 @@ def courses_to_offerings(courses, locked_sections, semester):
             if locked_section_code in section_codes:
                 locked_section = next(s for s in sections
                                       if s.meeting_section == locked_section_code)
-                pinned = [course.id, locked_section, locked_section.offering_set.all()]
+                pinned = [course, locked_section, locked_section.offering_set.all()]
                 all_sections.append([pinned])
             else:
                 all_sections.append(
