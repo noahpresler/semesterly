@@ -1,9 +1,11 @@
 import * as ActionTypes from '../constants/actionTypes';
+import { isIncomplete } from '../util';
 
 const userInfo = (state = {
   data: { isLoggedIn: false },
   overrideHide: false, // hide the user settings modal if true. Overrides overrideShow
   overrideShow: false, // show the user settings modal if true
+  isVisible: false,
   saving: false,
   isFetching: false,
 }, action) => {
@@ -29,9 +31,27 @@ const userInfo = (state = {
       const newData = Object.assign({}, state.data, { timetables: action.timetables });
       return Object.assign({}, state, { data: newData });
     }
+    case ActionTypes.SET_SETTINGS_MODAL_VISIBLE:
+      return Object.assign({}, state, { isVisible: true });
+    case ActionTypes.SET_SETTINGS_MODAL_HIDDEN:
+      return Object.assign({}, state, { isVisible: false });
     default:
       return state;
   }
+};
+
+export const userPreferencesIncomplete = (state) => {
+  if (!state.FacebookSignedUp) {
+    return state.data.isLoggedIn &&
+      (isIncomplete(state.data.major) ||
+      isIncomplete(state.data.class_year));
+  }
+  return state.data.isLoggedIn &&
+    (isIncomplete(state.data.social_offerings) ||
+      isIncomplete(state.data.social_courses) ||
+      isIncomplete(state.data.major) ||
+      isIncomplete(state.data.class_year)
+    );
 };
 
 export default userInfo;

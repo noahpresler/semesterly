@@ -5,6 +5,7 @@ import classnames from 'classnames';
 import Modal from 'boron/WaveModal';
 import majors from '../../constants/majors';
 import * as SemesterlyPropTypes from '../../constants/semesterlyPropTypes';
+import { isIncomplete } from '../../util';
 
 class UserSettingsModal extends React.Component {
 
@@ -26,6 +27,7 @@ class UserSettingsModal extends React.Component {
   componentDidMount() {
     if (this.shouldShow(this.props)) {
       this.modal.show();
+      this.props.setVisible();
     }
     if (UserSettingsModal.isIncomplete(this.props.userInfo.social_courses)) {
       const newUserSettings = {
@@ -41,6 +43,7 @@ class UserSettingsModal extends React.Component {
   componentWillReceiveProps(props) {
     if (this.shouldShow(props)) {
       this.modal.show();
+      this.props.setVisible();
     }
   }
 
@@ -69,18 +72,11 @@ class UserSettingsModal extends React.Component {
     this.props.saveSettings();
   }
 
-  shouldShow(props) {
-    if (!this.props.userInfo.FacebookSignedUp) {
-      return !props.hideOverrided && props.userInfo.isLoggedIn &&
-        (props.showOverrided ||
-        UserSettingsModal.isIncomplete(props.userInfo.major) ||
-        UserSettingsModal.isIncomplete(props.userInfo.class_year));
-    }
-    return !props.hideOverrided && props.userInfo.isLoggedIn &&
-      (props.showOverrided || UserSettingsModal.isIncomplete(props.userInfo.social_offerings) ||
-        UserSettingsModal.isIncomplete(props.userInfo.social_courses) ||
-        UserSettingsModal.isIncomplete(props.userInfo.major) ||
-        UserSettingsModal.isIncomplete(props.userInfo.class_year)
+  shouldShow(props, requireTOS=false) {
+    return props.userInfo.isLoggedIn && (!props.hideOverrided && (
+        props.showOverrided ||
+        this.props.userPreferencesIncomplete ||
+        (requireTOS && isIncomplete(props.userInfo.timeAcceptedTos)))
       );
   }
 
@@ -88,6 +84,23 @@ class UserSettingsModal extends React.Component {
     const modalStyle = {
       width: '100%',
     };
+    const tos = this.props.signingUp ? (<div
+      className="preference welcome-modal__notifications cf"
+    >
+      <h4>Terms of Service</h4>
+      <p>You must agree to Semester.ly's terms of service.</p>
+      <label className="switch switch-slide" htmlFor="tos-agreed-input">
+        <input
+          ref={(c) => { this.tosAgreed = c; }} id="tos-agreed-input"
+          className="switch-input" type="checkbox"
+          checked={!isIncomplete(this.props.userInfo.timeAcceptedTos)}
+          disabled={!isIncomplete(this.props.userInfo.timeAcceptedTos)}
+          onChange={this.props.acceptTOS}
+        />
+        <span className="switch-label" data-on="ACCEPTED" data-off="CLICK TO ACCEPT" />
+        <span className="switch-handle" />
+      </label>
+    </div>) : null;
     const notificationsButton = this.props.tokenRegistered
         ? (<a onClick={this.props.unsubscribeToNotifications}><h3>Turn Off Notifications</h3></a>)
         : (<a onClick={this.props.subscribeToNotifications}><h3>Turn On Notifications</h3></a>);
@@ -241,13 +254,16 @@ class UserSettingsModal extends React.Component {
             { preferences }
             { notifications }
             { fbUpsell }
+            { tos }
             <div className="button-wrapper">
               <button
                 className="signup-button" onClick={() => {
                   this.changeForm();
                   this.props.closeUserSettings();
-                  if (!this.shouldShow(Object.assign({}, this.props, { showOverrided: false }))) {
+                  if (!this.shouldShow(Object.assign({}, this.props, { showOverrided: false }),
+                      true)) {
                     this.modal.hide();
+                    this.props.setHidden();
                   }
                 }}
               >Save
@@ -269,6 +285,11 @@ UserSettingsModal.propTypes = {
   unsubscribeToNotifications: PropTypes.func.isRequired,
   subscribeToNotifications: PropTypes.func.isRequired,
   highlightNotifs: PropTypes.bool.isRequired,
+  userPreferencesIncomplete: PropTypes.bool.isRequired,
+  signingUp: PropTypes.bool.isRequired,
+  acceptTOS: PropTypes.func.isRequired,
+  setVisible: PropTypes.func.isRequired,
+  setHidden: PropTypes.func.isRequired,
 };
 
 export default UserSettingsModal;
