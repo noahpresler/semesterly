@@ -44,6 +44,26 @@ describe('User Setting Modal Renders As Expected', () => {
     expect(tree).toMatchSnapshot();
   });
 
+  it('VISIBLE if settings filled but showOverrided', () => {
+    const userInfo = filledFixture.userInfo;
+    userInfo.overrideShow = true;
+    const store = mockStore({
+      userInfo,
+      notificationToken: {
+        hasToken: false,
+      },
+      ui: {
+        highlightNotifs: false,
+      },
+    });
+    const tree = renderer.create(
+      <Provider store={store}><UserSettingsModalContainer /></Provider>,
+    ).toJSON();
+    delete tree.children[0].children[0].props.style.animationName;
+    delete tree.children[1].props.style.animationName;
+    expect(tree).toMatchSnapshot();
+  });
+
   it('VISIBLE but reduced if signing up with Google only', () => {
     const store = mockStore({
       userInfo: googleFixture.userInfo,
@@ -57,6 +77,8 @@ describe('User Setting Modal Renders As Expected', () => {
     const tree = renderer.create(
       <Provider store={store}><UserSettingsModalContainer /></Provider>,
     ).toJSON();
+    delete tree.children[0].children[0].props.style.animationName;
+    delete tree.children[1].props.style.animationName;
     expect(tree).toMatchSnapshot();
   });
 
