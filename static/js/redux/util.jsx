@@ -129,3 +129,5 @@ export const getMaxEndHour = (timetable, hasCourses) => {
   }
   return Math.max(maxEndHour, getMaxHourBasedOnWindowHeight());
 };
+
+export const isIncomplete = prop => prop === undefined || prop === '' || prop === null;
