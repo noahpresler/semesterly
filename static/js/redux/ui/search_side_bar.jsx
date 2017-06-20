@@ -36,7 +36,7 @@ class SearchSideBar extends React.Component {
     const sectionGrid = Object.keys(this.props.sectionTypeToSections).sort().map((sectionType) => {
       const sectionTitle = `${getSectionTypeDisplayName(sectionType)} Sections`;
       return (
-        <div>
+        <div key={sectionType}>
           <h4> {sectionTitle} </h4>
           {this.mapSectionsToSlots(this.props.sectionTypeToSections[sectionType])}
         </div>
