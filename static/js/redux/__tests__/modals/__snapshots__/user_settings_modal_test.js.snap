@@ -22,7 +22,6 @@ exports[`User Setting Modal Renders As Expected VISIBLE but reduced if signing u
         Object {
           "animationDuration": "1s",
           "animationFillMode": "forwards",
-          "animationName": "anim_11497973956258",
           "animationTimingFunction": "linear",
           "backgroundColor": "white",
           "margin": 0,
@@ -72,7 +71,7 @@ exports[`User Setting Modal Renders As Expected VISIBLE but reduced if signing u
               >
                 <span
                   className="Select-multi-value-wrapper"
-                  id="react-select-4--value"
+                  id="react-select-6--value"
                 >
                   <div
                     className="Select-placeholder"
@@ -88,7 +87,7 @@ exports[`User Setting Modal Renders As Expected VISIBLE but reduced if signing u
                     }
                   >
                     <input
-                      aria-activedescendant="react-select-4--value"
+                      aria-activedescendant="react-select-6--value"
                       aria-describedby={undefined}
                       aria-expanded="false"
                       aria-haspopup="false"
@@ -160,7 +159,7 @@ exports[`User Setting Modal Renders As Expected VISIBLE but reduced if signing u
               >
                 <span
                   className="Select-multi-value-wrapper"
-                  id="react-select-5--value"
+                  id="react-select-7--value"
                 >
                   <div
                     className="Select-placeholder"
@@ -176,7 +175,7 @@ exports[`User Setting Modal Renders As Expected VISIBLE but reduced if signing u
                     }
                   >
                     <input
-                      aria-activedescendant="react-select-5--value"
+                      aria-activedescendant="react-select-7--value"
                       aria-describedby={undefined}
                       aria-expanded="false"
                       aria-haspopup="false"
@@ -316,7 +315,448 @@ exports[`User Setting Modal Renders As Expected VISIBLE but reduced if signing u
       Object {
         "animationDuration": "0.3s",
         "animationFillMode": "forwards",
-        "animationName": "anim_31497973956269",
+        "animationTimingFunction": "linear",
+        "backgroundColor": "#373A47",
+        "bottom": 0,
+        "left": 0,
+        "position": "fixed",
+        "right": 0,
+        "top": 0,
+        "zIndex": 1040,
+      }
+    }
+  />
+</span>
+`;
+
+exports[`User Setting Modal Renders As Expected VISIBLE if settings filled but showOverrided 1`] = `
+<span>
+  <div
+    className="welcome-modal max-modal"
+    style={
+      Object {
+        "left": "50%",
+        "position": "fixed",
+        "top": "50%",
+        "transform": "translate3d(-50%, -50%, 0)",
+        "width": "100%",
+        "zIndex": 1050,
+      }
+    }
+  >
+    <div
+      style={
+        Object {
+          "animationDuration": "1s",
+          "animationFillMode": "forwards",
+          "animationTimingFunction": "linear",
+          "backgroundColor": "white",
+          "margin": 0,
+        }
+      }
+      tabIndex="-1"
+    >
+      <div
+        className="modal-content"
+      >
+        <div
+          className="modal-header"
+        >
+          <div
+            className="pro-pic"
+            style={
+              Object {
+                "backgroundImage": "url(https://graph.facebook.com/undefined/picture?type=normal)",
+              }
+            }
+          />
+          <h1>
+            Welcome!
+          </h1>
+        </div>
+        <div
+          className="modal-body"
+        >
+          <div
+            className="preference cf"
+          >
+            <h3>
+              What's your major?
+            </h3>
+            <div
+              className="Select Select--single is-clearable is-searchable has-value"
+              style={undefined}
+            >
+              <input
+                disabled={false}
+                name="form-field-name"
+                type="hidden"
+                value="Computer Science"
+              />
+              <div
+                className="Select-control"
+                onKeyDown={[Function]}
+                onMouseDown={[Function]}
+                onTouchEnd={[Function]}
+                onTouchMove={[Function]}
+                onTouchStart={[Function]}
+                style={undefined}
+              >
+                <span
+                  className="Select-multi-value-wrapper"
+                  id="react-select-4--value"
+                >
+                  <div
+                    className="Select-value"
+                    style={undefined}
+                    title={undefined}
+                  >
+                    <span
+                      aria-selected="true"
+                      className="Select-value-label"
+                      id="react-select-4--value-item"
+                      role="option"
+                    >
+                      Computer Science
+                    </span>
+                  </div>
+                  <div
+                    className="Select-input"
+                    style={
+                      Object {
+                        "display": "inline-block",
+                      }
+                    }
+                  >
+                    <input
+                      aria-activedescendant="react-select-4--value"
+                      aria-describedby={undefined}
+                      aria-expanded="false"
+                      aria-haspopup="false"
+                      aria-label={undefined}
+                      aria-labelledby={undefined}
+                      aria-owns=""
+                      className={undefined}
+                      onBlur={[Function]}
+                      onChange={[Function]}
+                      onFocus={[Function]}
+                      required={false}
+                      role="combobox"
+                      style={
+                        Object {
+                          "boxSizing": "content-box",
+                          "width": "5px",
+                        }
+                      }
+                      tabIndex={undefined}
+                      value=""
+                    />
+                    <div
+                      style={
+                        Object {
+                          "height": 0,
+                          "left": 0,
+                          "overflow": "scroll",
+                          "position": "absolute",
+                          "top": 0,
+                          "visibility": "hidden",
+                          "whiteSpace": "pre",
+                        }
+                      }
+                    >
+                      
+                    </div>
+                  </div>
+                </span>
+                <span
+                  aria-label="Clear value"
+                  className="Select-clear-zone"
+                  onMouseDown={[Function]}
+                  onTouchEnd={[Function]}
+                  onTouchMove={[Function]}
+                  onTouchStart={[Function]}
+                  title="Clear value"
+                >
+                  <span
+                    className="Select-clear"
+                    dangerouslySetInnerHTML={
+                      Object {
+                        "__html": "&times;",
+                      }
+                    }
+                  />
+                </span>
+                <span
+                  className="Select-arrow-zone"
+                  onMouseDown={[Function]}
+                >
+                  <span
+                    className="Select-arrow"
+                    onMouseDown={[Function]}
+                  />
+                </span>
+              </div>
+            </div>
+          </div>
+          <div
+            className="preference cf"
+          >
+            <h3>
+              What's your graduating class year?
+            </h3>
+            <div
+              className="Select Select--single is-clearable is-searchable has-value"
+              style={undefined}
+            >
+              <input
+                disabled={false}
+                name="form-field-name"
+                type="hidden"
+                value="2017"
+              />
+              <div
+                className="Select-control"
+                onKeyDown={[Function]}
+                onMouseDown={[Function]}
+                onTouchEnd={[Function]}
+                onTouchMove={[Function]}
+                onTouchStart={[Function]}
+                style={undefined}
+              >
+                <span
+                  className="Select-multi-value-wrapper"
+                  id="react-select-5--value"
+                >
+                  <div
+                    className="Select-value"
+                    style={undefined}
+                    title={undefined}
+                  >
+                    <span
+                      aria-selected="true"
+                      className="Select-value-label"
+                      id="react-select-5--value-item"
+                      role="option"
+                    >
+                      2017
+                    </span>
+                  </div>
+                  <div
+                    className="Select-input"
+                    style={
+                      Object {
+                        "display": "inline-block",
+                      }
+                    }
+                  >
+                    <input
+                      aria-activedescendant="react-select-5--value"
+                      aria-describedby={undefined}
+                      aria-expanded="false"
+                      aria-haspopup="false"
+                      aria-label={undefined}
+                      aria-labelledby={undefined}
+                      aria-owns=""
+                      className={undefined}
+                      onBlur={[Function]}
+                      onChange={[Function]}
+                      onFocus={[Function]}
+                      required={false}
+                      role="combobox"
+                      style={
+                        Object {
+                          "boxSizing": "content-box",
+                          "width": "5px",
+                        }
+                      }
+                      tabIndex={undefined}
+                      value=""
+                    />
+                    <div
+                      style={
+                        Object {
+                          "height": 0,
+                          "left": 0,
+                          "overflow": "scroll",
+                          "position": "absolute",
+                          "top": 0,
+                          "visibility": "hidden",
+                          "whiteSpace": "pre",
+                        }
+                      }
+                    >
+                      
+                    </div>
+                  </div>
+                </span>
+                <span
+                  aria-label="Clear value"
+                  className="Select-clear-zone"
+                  onMouseDown={[Function]}
+                  onTouchEnd={[Function]}
+                  onTouchMove={[Function]}
+                  onTouchStart={[Function]}
+                  title="Clear value"
+                >
+                  <span
+                    className="Select-clear"
+                    dangerouslySetInnerHTML={
+                      Object {
+                        "__html": "&times;",
+                      }
+                    }
+                  />
+                </span>
+                <span
+                  className="Select-arrow-zone"
+                  onMouseDown={[Function]}
+                >
+                  <span
+                    className="Select-arrow"
+                    onMouseDown={[Function]}
+                  />
+                </span>
+              </div>
+            </div>
+          </div>
+          <div>
+            <div
+              className="preference cf"
+            >
+              <label
+                className="switch switch-slide"
+                htmlFor="social-courses-input"
+              >
+                <input
+                  checked={true}
+                  className="switch-input"
+                  defaultChecked={true}
+                  id="social-courses-input"
+                  onChange={[Function]}
+                  type="checkbox"
+                />
+                <span
+                  className="switch-label"
+                  data-off="No"
+                  data-on="Yes"
+                />
+                <span
+                  className="switch-handle"
+                />
+              </label>
+              <div
+                className="preference-wrapper"
+              >
+                <h3>
+                  Would you like to find classes with friends?
+                </h3>
+                <p
+                  className="disclaimer"
+                >
+                  See which Facebook friends will be your classmates! Only friends in your course will see your name.
+                </p>
+              </div>
+            </div>
+            <div
+              className="preference cf"
+            >
+              <label
+                className="switch switch-slide"
+                htmlFor="share-sections-input"
+              >
+                <input
+                  checked={true}
+                  className="switch-input"
+                  id="share-sections-input"
+                  onChange={[Function]}
+                  type="checkbox"
+                />
+                <span
+                  className="switch-label"
+                  data-off="No"
+                  data-on="Yes"
+                />
+                <span
+                  className="switch-handle"
+                />
+              </label>
+              <div
+                className="preference-wrapper"
+              >
+                <h3>
+                  Would you like to find sections with friends?
+                </h3>
+                <p
+                  className="disclaimer"
+                >
+                  See which Facebook friends will be in your section! Only friends in your section will see your name.
+                </p>
+              </div>
+            </div>
+            <div
+              className="preference cf"
+            >
+              <label
+                className="switch switch-slide"
+                htmlFor="social-all-input"
+              >
+                <input
+                  checked={true}
+                  className="switch-input"
+                  id="social-all-input"
+                  onChange={[Function]}
+                  type="checkbox"
+                />
+                <span
+                  className="switch-label"
+                  data-off="No"
+                  data-on="Yes"
+                />
+                <span
+                  className="switch-handle"
+                />
+              </label>
+              <div
+                className="preference-wrapper"
+              >
+                <h3>
+                  Find new friends in your classes!
+                </h3>
+                <p
+                  className="disclaimer"
+                >
+                  Find your peers for this semester. All students in your courses will be able to view your name and public Facebook profile.
+                </p>
+              </div>
+            </div>
+          </div>
+          <div
+            className="preference welcome-modal__notifications cf"
+          >
+            <h3>
+              Use Another Browser To Enable Device Notifications
+            </h3>
+          </div>
+          <div
+            className="button-wrapper"
+          >
+            <button
+              className="signup-button"
+              onClick={[Function]}
+            >
+              Save
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div
+    onClick={null}
+    style={
+      Object {
+        "animationDuration": "0.3s",
+        "animationFillMode": "forwards",
         "animationTimingFunction": "linear",
         "backgroundColor": "#373A47",
         "bottom": 0,
