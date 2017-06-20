@@ -24,9 +24,9 @@ const UserSettingsModalContainer = connect(
     mapStateToProps,
   {
     saveSettings,
-    acceptTOS,
     closeUserSettings: () => overrideSettingsShow(false),
     changeUserInfo,
+    acceptTOS,
     setVisible: setUserSettingsModalVisible,
     setHidden: setUserSettingsModalHidden,
     subscribeToNotifications: setARegistrationToken,
