@@ -18,8 +18,8 @@ const mapStateToProps = (state, ownProps) => ({
       // check the courseSections state variable, which tells us
       // precisely which courses have which sections locked, if any
     const typeToLocked = state.courseSections.objects[courseId];
-    return typeToLocked && Object.keys(typeToLocked)
-          .some(sectionType => section === typeToLocked[sectionType]);
+    return (typeToLocked !== undefined) && Object.keys(typeToLocked)
+          .some(sectionType => (section === typeToLocked[sectionType]));
   },
   isLoggedIn: state.userInfo.data.isLoggedIn,
   socialSections: state.userInfo.data.social_offerings,
