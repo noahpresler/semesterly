@@ -9,13 +9,14 @@ const mapStateToProps = state => ({
     !(!state.userInfo.overrideShow && userPreferencesIncomplete(state)) &&
     !state.userInfo.isVisible,
   userInfo: state.userInfo.data,
-  acceptTOS,
+  userPreferencesIncomplete: userPreferencesIncomplete(state),
 });
 
 const TermsOfServiceModalContainer = connect(
     mapStateToProps,
   {
     triggerTermsOfServiceModal,
+    acceptTOS,
   },
 )(TermsOfServiceModal);
 
