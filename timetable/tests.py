@@ -125,9 +125,9 @@ class TimetableLinkViewTest(APITestCase):
             'timetable': {
                 'courses': [{
                     'id': 1,
-                    'sections': [{
-                        'id': 1
-                    }]
+                }],
+                'sections': [{
+                    'id': 1
                 }],
                 'has_conflict': False
             },
