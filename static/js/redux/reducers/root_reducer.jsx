@@ -75,7 +75,7 @@ export const getActiveTimetable = state =>
   fromEntities.getTimetable(state.entities, fromTimetables.getActiveTimetableId(state.timetables));
 
 export const getFromActiveTimetable = (state, fields) =>
-  fromEntities.getFromDenormTimetable(getActiveTimetable(state), fields);
+  fromEntities.getFromTimetable(getActiveTimetable(state), fields);
 
 export const getActiveTT = state => fromTimetables.getActiveTT(state.timetables);
 
