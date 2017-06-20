@@ -608,12 +608,12 @@ export const acceptTOS = () => {
 export const handleAgreement = (currentUser, timeUpdatedTos) => (dispatch) => {
   if (currentUser.isLoggedIn) {
     const timeAcceptedTos = currentUser.timeAcceptedTos;
-    if (timeAcceptedTos === null || Date.parse(timeAcceptedTos) < timeUpdatedTos) {
+    if (!timeAcceptedTos || Date.parse(timeAcceptedTos) < timeUpdatedTos) {
       dispatch({ type: ActionTypes.TRIGGER_TOS_MODAL });
     }
   } else {
     const timeShownBanner = localStorage.getItem('timeShownBanner');
-    if (timeShownBanner === null || timeShownBanner < timeUpdatedTos) {
+    if (!timeShownBanner || timeShownBanner < timeUpdatedTos) {
       setTimeShownBanner(Date.now());
       dispatch({ type: ActionTypes.TRIGGER_TOS_BANNER });
     }
