@@ -120,7 +120,8 @@ export const timetable = PropTypes.shape({
   has_conflict: PropTypes.bool.isRequired,
   courses: PropTypes.arrayOf(course).isRequired,
   sections: PropTypes.arrayOf(PropTypes.string),
-  semester,
+  // TODO: serialize semester objects before sending to frontend
+  semester: PropTypes.oneOfType([semester, PropTypes.number]),
 });
 
 export const evaluation = PropTypes.shape({
