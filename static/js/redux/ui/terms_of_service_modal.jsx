@@ -12,6 +12,8 @@ class TermsOfServiceModal extends React.Component {
   componentDidUpdate() {
     if (this.props.isVisible) {
       this.modal.show();
+    } else {
+      this.modal.hide();
     }
   }
 
