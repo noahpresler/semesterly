@@ -303,9 +303,9 @@ TextbookList.defaultProps = {
 
 TextbookList.propTypes = {
   courses: PropTypes.arrayOf(PropTypes.shape({
-    textbooks: PropTypes.shape({
+    textbooks: PropTypes.arrayOf(PropTypes.shape({
       isbn: PropTypes.string,
-    }),
+    })),
   })),
 };
 
