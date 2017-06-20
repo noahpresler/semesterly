@@ -11,7 +11,7 @@ from analytics.models import SharedTimetable
 from analytics.views import save_analytics_timetable
 from student.utils import get_student
 from timetable.serializers import convert_tt_to_dict, TimetableSerializer
-from timetable.models import Semester, Course
+from timetable.models import Semester, Course, Section
 from timetable.utils import update_locked_sections, courses_to_timetables
 from helpers.mixins import ValidateSubdomainMixin, FeatureFlowView, CsrfExemptMixin
 
@@ -84,9 +84,7 @@ class TimetableLinkView(FeatureFlowView):
     def post(self, request):
         school = request.subdomain
         timetable = request.data['timetable']
-        print timetable
-        courses = request.data['timetable']['courses']
-        has_conflict = request.data['timetable'].get('has_conflict', False)
+        has_conflict = timetable.get('has_conflict', False)
         semester, _ = Semester.objects.get_or_create(**request.data['semester'])
         student = get_student(request)
         shared_timetable = SharedTimetable.objects.create(
@@ -94,12 +92,16 @@ class TimetableLinkView(FeatureFlowView):
             has_conflict=has_conflict)
         shared_timetable.save()
 
-        for course in courses:
+        added_courses = set()
+        for course in timetable['courses']:
             course_obj = Course.objects.get(id=course['id'])
             shared_timetable.courses.add(course_obj)
-            for section in course['sections']:
-                section_obj = course_obj.section_set.get(id=section['id'])
-                shared_timetable.sections.add(section_obj)
+            added_courses.add(course['id'])
+        for section in timetable['sections']:
+            section_obj = Section.objects.get(id=section['id'])
+            shared_timetable.sections.add(section_obj)
+            if section_obj.course.id not in added_courses:
+                return Response(status=status.HTTP_400_BAD_REQUEST)
         shared_timetable.save()
 
         response = {'slug': hashids.encrypt(shared_timetable.id)}
