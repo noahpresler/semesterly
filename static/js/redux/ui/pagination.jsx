@@ -11,7 +11,7 @@ const Bubble = ({ index, active, setActive }) =>
 
 Bubble.propTypes = {
   index: PropTypes.number.isRequired,
-  active: PropTypes.number.isRequired,
+  active: PropTypes.bool.isRequired,
   setActive: PropTypes.func.isRequired,
 };
 
