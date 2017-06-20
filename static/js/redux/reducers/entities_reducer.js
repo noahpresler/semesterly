@@ -54,23 +54,25 @@ export const getTimetable = (state, id) => {
   let timetable = state.timetables[id];
   return {
     ...timetable,
-    courses: timetable.courses.map(courseCode => getDenormCourseById(state, courseCode)),
+    courses: timetable.courses.map(courseCode => getCourseById(state, courseCode)),
+    sections: timetable.sections.map(sectionId => getDenormSectionById(state, sectionId)),
   };
 };
 
-export const getFromDenormTimetable = (timetable, fields) => {
-  if (!('courses' in timetable) || !('sections' in timetable.courses[0])) {
-    throw "Timetable must be denormalized before being passed to getFromDenormTimetable";
+export const getFromTimetable = (timetable, fields) => {
+  if (!('sections' in timetable) || !('offering_set' in timetable.sections[0])) {
+    throw "input timetable to getFromTimetable must be denormalized";
   }
+
   return {
     ...pick(timetable, fields.timetables),
     courses: timetable.courses.map(course => ({
       ...pick(course, fields.courses),
-      sections: course.sections.map(section => ({
-          ...pick(section, fields.sections),
-          offerings: section.offering_set.map(offering => ({
-            ...pick(offering, fields.offerings),
-          })),
+    })),
+    sections: timetable.sections.map(section => ({
+      ...pick(section, fields.sections),
+      offerings: section.offering_set.map(offering => ({
+        ...pick(offering, fields.offerings),
       })),
     })),
   }

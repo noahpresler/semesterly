@@ -1,5 +1,5 @@
 import * as selectors from '../reducers/root_reducer';
-import { getSectionTypeToSections, getFromDenormTimetable } from '../reducers/entities_reducer';
+import { getSectionTypeToSections, getFromTimetable } from '../reducers/entities_reducer';
 
 describe('timetable selectors', () => {
   describe('active TT selector', () => {
@@ -42,6 +42,7 @@ describe('timetable selectors', () => {
         }],
       }],
     }],
+    sections: ['S1'],
   };
   describe('getfromTimetable', () => {
     it('returns correct shape', () => {
@@ -52,14 +53,14 @@ describe('timetable selectors', () => {
         offerings: [],
       };
 
-      const result = getFromDenormTimetable(timetable, fields);
+      const result = getFromTimetable(timetable, fields);
       expect('courses' in result).toBeTruthy();
-      expect('sections' in result.courses[0]).toBeTruthy();
-      expect('offerings' in result.courses[0].sections[0]).toBeTruthy();
+      expect('sections' in result).toBeTruthy();
+      expect('offerings' in result.sections[0]).toBeTruthy();
     });
     it('only returns specified fields', () => {
       const fields = { timetables: ['name'], sections: [], offerings: [] };
-      const result = getFromDenormTimetable(timetable, fields);
+      const result = getFromTimetable(timetable, fields);
       expect('name' in result).toBeTruthy();
       expect('has_conflict' in result).toBeFalsy();
     });

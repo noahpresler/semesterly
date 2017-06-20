@@ -59,6 +59,7 @@ class TimetableSerializer(serializers.Serializer):
     school = serializers.SerializerMethodField()
     avg_rating = serializers.SerializerMethodField()
     events = serializers.SerializerMethodField()
+    sections = serializers.SerializerMethodField()
 
     def get_courses(self, obj):
         return FlatCourseSerializer(obj.courses, many=True, context={
@@ -83,4 +84,6 @@ class TimetableSerializer(serializers.Serializer):
     def get_events(self, obj):
         return self.context.get('events')
 
-
+    def get_sections(self, obj):
+        return ['{0}-{1}'.format(section.course.code, section.meeting_section)
+                for section in obj.sections]
