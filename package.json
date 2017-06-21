@@ -89,7 +89,7 @@
     }
   },
   "scripts": {
-    "test": "jest --notify",
+    "test": "NODE_ENV=production jest --notify",
     "build": "./node_modules/.bin/webpack --config webpack.config.js --progress --colors",
     "watch": "node server.js",
     "lint-staged": "lint-staged",
