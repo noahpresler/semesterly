@@ -73,9 +73,7 @@ class PersonalTimetable(models.Model):
     courses = models.ManyToManyField(timetable_models.Course)
     school = models.CharField(max_length=50)
     name = models.CharField(max_length=100)
-    _semester = models.CharField(max_length=2) # deprecated
     semester = models.ForeignKey('timetable.Semester')
-    time_updated = models.DateTimeField(auto_now_add=True)
     student = models.ForeignKey(Student)
     last_updated = models.DateTimeField(auto_now=True)
     sections = models.ManyToManyField(timetable_models.Section)
