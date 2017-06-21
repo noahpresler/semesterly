@@ -1,5 +1,5 @@
 import itertools
-from operator import attrgetter
+from operator import itemgetter
 
 from django.forms import model_to_dict
 
@@ -252,10 +252,11 @@ def get_current_semesters(school):
     semesters = school_to_semesters[school]
     old_semesters = school_to_semesters[school]
     # Ensure DB has all semesters.
+    all_semesters = set()
     for semester in semesters:
-        Semester.objects.update_or_create(**semester)
-    all_semesters = set(semesters) | set(old_semesters)
-    return sorted(list(all_semesters), key=attrgetter('year'))
+        all_semesters.add(Semester.objects.update_or_create(**semester)[0])
+    return sorted([{'name': s.name, 'year': s.year} for s in all_semesters],
+                  key=itemgetter('year'))
 
 
 def get_old_semesters(school):
