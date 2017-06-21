@@ -111,26 +111,32 @@ class UofTParser:
                     if created:
                         self.new += 1
                     for section in json[course]:
-                        S, created = Section.objects.update_or_create(
-                            course=C,
-                            meeting_section=section, 
-                            section_type=section[0],
-                            semester=course[-1],
-                            defaults={
-                                'instructors': json[course][section]['profs'],
-                        })
-                        S.save()
-                        S.offering_set.all().delete()
-                        S.save()
-                        for offering_dict in json[course][section]['offerings']:
-                            o, created = Offering.objects.update_or_create(section=S, 
-                                day=offering_dict['day'],
-                                time_start=offering_dict['time_start'],
-                                time_end=offering_dict['time_end'],
+                        semesters = []
+                        for code, display, year in [('F', 'Fall', '2017'), ('S', 'Winter', '2018')]:
+                            if semester == code or semester == 'Y':
+                                semesters.append(
+                                    Semester.objects.get_or_create(name=display, year=year)[0])
+                        for semester in semesters:
+                            S, created = Section.objects.update_or_create(
+                                course=C,
+                                meeting_section=section,
+                                section_type=section[0],
+                                semester=course[-1],
                                 defaults={
-                                    'location': offering_dict['location']
-                                })
-                            o.save()
+                                    'instructors': json[course][section]['profs'],
+                            })
+                            S.save()
+                            S.offering_set.all().delete()
+                            S.save()
+                            for offering_dict in json[course][section]['offerings']:
+                                o, created = Offering.objects.update_or_create(section=S,
+                                    day=offering_dict['day'],
+                                    time_start=offering_dict['time_start'],
+                                    time_end=offering_dict['time_end'],
+                                    defaults={
+                                        'location': offering_dict['location']
+                                    })
+                                o.save()
             
             print "Done Engineering, found %d new courses (collectively) so far. Now wrapping up..." % (self.new)
         except requests.ConnectionError:
@@ -143,11 +149,10 @@ class UofTParser:
         for year_of_study in self.years_of_study:
             level = self.level_map[year_of_study]
             print "Parsing year: {}".format(year_of_study)
-            request_url = "https://timetable.iit.artsci.utoronto.ca/api/courses?org=&code=&section=&studyyear={}&daytime=&weekday=&prof=&breadth=".format(year_of_study)
+            request_url = "https://timetable.iit.artsci.utoronto.ca/api/20179/courses?org=&code=&section=&studyyear={}&daytime=&weekday=&prof=&breadth=&online=&waitlist=&available=&title=".format(year_of_study)
             data = json.loads(self.s.get(url=request_url, cookies=self.cookies).text)
             for key in data:
                 try:
-
                     course_data = data[key]
                     course_code = course_data['code']
                     num_credits = 1 if course_code[6].upper() == 'Y' else 0.5
@@ -181,35 +186,42 @@ class UofTParser:
                         if instructors and instructors[-1] == ",": 
                             instructors = instructors[:-1]
                         size = section_data['enrollmentCapacity'] if section_data['enrollmentCapacity'] else 0
-                        S, s_created = Section.objects.update_or_create(
-                            course=C,
-                            meeting_section=section, 
-                            section_type=section[0],
-                            semester=semester,
-                            defaults={
-                                'instructors': instructors,
-                                'size': size,
-                                'enrolment': 0,
-                        })
-                        S.save()
-                        S.offering_set.all().delete()
-                        schedule = section_data['schedule']
-                        
-                        for offering in schedule:
-                            offering_data = schedule[offering]
-                            try:
-                                CO, co_created = Offering.objects.update_or_create(section=S,
-                                    day=self.day_map[offering_data['meetingDay']],
-                                    time_start=offering_data['meetingStartTime'],
-                                    time_end=offering_data['meetingEndTime'],
-                                    location='')
-                                           
-                                CO.save()
-                            except Exception as e:
-                                S.delete()
-                                print e
-                                self.errors += 1
-                                break
+                        semesters = []
+                        for code, display, year in [('F', 'Fall', '2017'), ('S', 'Winter', '2018')]:
+                            if semester == code or semester == 'Y':
+                                semesters.append(
+                                    Semester.objects.get_or_create(name=display, year=year)[0])
+
+                        for semester in semesters:
+                            S, s_created = Section.objects.update_or_create(
+                                course=C,
+                                meeting_section=section,
+                                section_type=section[0],
+                                semester=semester,
+                                defaults={
+                                    'instructors': instructors,
+                                    'size': size,
+                                    'enrolment': 0,
+                            })
+                            S.save()
+                            S.offering_set.all().delete()
+                            schedule = section_data['schedule']
+
+                            for offering in schedule:
+                                offering_data = schedule[offering]
+                                try:
+                                    CO, co_created = Offering.objects.update_or_create(section=S,
+                                        day=self.day_map[offering_data['meetingDay']],
+                                        time_start=offering_data['meetingStartTime'],
+                                        time_end=offering_data['meetingEndTime'],
+                                        location='')
+
+                                    CO.save()
+                                except Exception as e:
+                                    S.delete()
+                                    print e
+                                    self.errors += 1
+                                    break
                 except Exception as f:
                     import traceback
                     traceback.print_exc()
@@ -299,6 +311,12 @@ class UofTParser:
                 section_data_table = course_div.find('table')
                 tbody = section_data_table.find('tbody')
                 rows = tbody.find_all('tr')
+
+                semesters = []
+                for code, display, year in [('F', 'Fall', '2017'), ('S', 'Winter', '2018')]:
+                    if semester == code or semester == 'Y':
+                        semesters.append(Semester.objects.get_or_create(name=display, year=year)[0])
+
                 for section in rows:
                     cols = section.find_all('td')
                     cols = [ele.text.strip() for ele in cols]
@@ -321,33 +339,34 @@ class UofTParser:
                         print "Failed on:",code, "Locations:",locations, "Days:",days, "Section:",section 
                     assert len(days) == len(start_times) == len(end_times) == len(locations)
                     print "\t\tSection:", section
-                    S, s_created = Section.objects.update_or_create(
-                        course=C,
-                        meeting_section=section, 
-                        section_type=section[0],
-                        semester=semester,
-                        defaults={
-                            'instructors': instructors,
-                            'size': size,
-                            'enrolment': int(enrolment),
-                            'waitlist': int(waitlist)
-                    })
-                    S.save()
-                    S.offering_set.all().delete()
-                    for o in xrange(len(days)):
-                        day, start, end, loc = days[o], start_times[o], end_times[o], locations[o]
-                        if day not in self.day_map:
-                            print "==============ERROR: Day", day, " is not valid!=============="
-                            continue
-                        CO, co_created = Offering.objects.update_or_create(section=S,
-                                day=self.day_map[day],
-                                time_start=start,
-                                time_end=end,
-                                location=loc)
-                                           
-                        CO.save()
-                        
-                        print "\t\t\t", day, start, end, loc
+                    for semester_obj in semesters:
+                        S, s_created = Section.objects.update_or_create(
+                            course=C,
+                            meeting_section=section,
+                            section_type=section[0],
+                            semester=semester_obj,
+                            defaults={
+                                'instructors': instructors,
+                                'size': size,
+                                'enrolment': int(enrolment),
+                                'waitlist': int(waitlist)
+                        })
+                        S.save()
+                        S.offering_set.all().delete()
+                        for o in xrange(len(days)):
+                            day, start, end, loc = days[o], start_times[o], end_times[o], locations[o]
+                            if day not in self.day_map:
+                                print "==============ERROR: Day", day, " is not valid!=============="
+                                continue
+                            CO, co_created = Offering.objects.update_or_create(section=S,
+                                    day=self.day_map[day],
+                                    time_start=start,
+                                    time_end=end,
+                                    location=loc)
+
+                            CO.save()
+
+                            print "\t\t\t", day, start, end, loc
         print "Done UTM, found %d new courses (collectively) so far. Now starting UTSC." % (self.new)
         self.start_utsc()
 
@@ -476,7 +495,9 @@ class UofTParser:
               tr.a.extract()
               name = tr.find('b').text.strip()[2:]
               level = code[3].upper()
-              assert level in ["A", "B", "C", "D"]
+              if level not in ["A", "B", "C", "D"]:
+                i += 1
+                continue
               print "On Course:", code, ":", name, "\n"
               course_details = self.get_course_details(code, course_link)
               C, created = Course.objects.update_or_create(code=code, school="uoft", defaults={
@@ -505,24 +526,28 @@ class UofTParser:
                  print "\tInvalid details for course", code, section_info['meeting_section'], ". Perhaps online?\n"
                  i += 1
                  continue
-
+              semesters = []
+              for code, display, year in [('F', 'Fall', '2017'), ('S', 'Winter', '2018')]:
+                 if semester == code or semester == 'Y':
+                    semesters.append(Semester.objects.get_or_create(name=display, year=year)[0])
               instructors = section_info['instructors']
-              S, s_created = Section.objects.update_or_create(
-                    course=C,
-                    meeting_section=meeting_section, 
-                    section_type=meeting_section[0],
-                    semester=semester,
-                    defaults={
-                        'instructors': instructors,
-                        'enrolment': 0,
-              })
-              CO, co_created = Offering.objects.update_or_create(section=S,
-                                    day=self.day_map[section_info['day']],
-                                    time_start=section_info['time_start'].strip(),
-                                    time_end=section_info['time_end'].strip(),
-                                    defaults={
-                                      'location': section_info['location']
-                                    })
+              for semester in semesters:
+                  S, s_created = Section.objects.update_or_create(
+                        course=C,
+                        meeting_section=meeting_section,
+                        section_type=meeting_section[0],
+                        semester=semester,
+                        defaults={
+                            'instructors': instructors,
+                            'enrolment': 0,
+                  })
+                  CO, co_created = Offering.objects.update_or_create(section=S,
+                                        day=self.day_map[section_info['day']],
+                                        time_start=section_info['time_start'].strip(),
+                                        time_end=section_info['time_end'].strip(),
+                                        defaults={
+                                          'location': section_info['location']
+                                        })
                                            
               CO.save()
               print "\t", meeting_section, "taught by", instructors
@@ -544,4 +569,4 @@ class UofTParser:
 
 if __name__ == "__main__":
     parser = UofTParser()
-    parser.start_engineering()
+    parser.start()
