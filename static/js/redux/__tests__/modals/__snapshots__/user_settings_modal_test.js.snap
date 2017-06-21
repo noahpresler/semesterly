@@ -127,6 +127,24 @@ exports[`User Setting Modal Renders As Expected VISIBLE but reduced if signing u
                   </div>
                 </span>
                 <span
+                  aria-label="Clear value"
+                  className="Select-clear-zone"
+                  onMouseDown={[Function]}
+                  onTouchEnd={[Function]}
+                  onTouchMove={[Function]}
+                  onTouchStart={[Function]}
+                  title="Clear value"
+                >
+                  <span
+                    className="Select-clear"
+                    dangerouslySetInnerHTML={
+                      Object {
+                        "__html": "&times;",
+                      }
+                    }
+                  />
+                </span>
+                <span
                   className="Select-arrow-zone"
                   onMouseDown={[Function]}
                 >
