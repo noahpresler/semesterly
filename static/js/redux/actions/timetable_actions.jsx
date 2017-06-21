@@ -92,9 +92,7 @@ export const fetchTimetables = (requestBody, removing, newActive = 0) => (dispat
   // same for the semester
   saveLocalPreferences(requestBody.preferences);
   const semester = getCurrentSemester(state);
-  if (localStorage.semesterName === semester.name && localStorage.year === semester.year) {
-    saveLocalSemester(semester);
-  }
+  saveLocalSemester(semester);
 };
 
 /*
