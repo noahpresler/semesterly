@@ -26,7 +26,7 @@ const store = createStore(rootReducer,
 );
 
 // load initial timetable from user data if logged in or local storage
-const setupTimetables = (userTimetables, allSemesters) => (dispatch) => {
+const setupTimetables = (userTimetables, allSemesters, oldSemesters) => (dispatch) => {
   if (userTimetables.length > 0) {
     dispatch(loadTimetable(userTimetables[0]));
     dispatch({ type: ActionTypes.RECEIVE_TIMETABLE_SAVED, upToDate: true });
@@ -35,7 +35,7 @@ const setupTimetables = (userTimetables, allSemesters) => (dispatch) => {
     }, 500);
     dispatch({ type: ActionTypes.CACHED_TT_LOADED });
   } else if (browserSupportsLocalStorage()) {
-    dispatch(loadCachedTimetable(allSemesters));
+    dispatch(loadCachedTimetable(allSemesters, oldSemesters));
   }
 };
 
@@ -138,7 +138,8 @@ const setup = () => (dispatch) => {
 
   dispatch({ type: ActionTypes.INIT_STATE, data: initData });
 
-  dispatch(setupTimetables(initData.currentUser.timetables, initData.allSemesters));
+  dispatch(setupTimetables(initData.currentUser.timetables, initData.allSemesters,
+    initData.oldSemesters));
 
   if (browserSupportsLocalStorage() && 'serviceWorker' in navigator) {
     dispatch(setupChromeNotifs());
