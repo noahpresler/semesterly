@@ -92,10 +92,7 @@ export const fetchTimetables = (requestBody, removing, newActive = 0) => (dispat
   // are always "up-to-date" (correspond to last loaded timetable).
   // same for the semester
   saveLocalPreferences(requestBody.preferences);
-  const semester = currSem(state.semester);
-  if (localStorage.semesterName === semester.name && localStorage.year === semester.year) {
-    saveLocalSemester(semester);
-  }
+  saveLocalSemester(currSem(state.semester));
 };
 
 /*
@@ -192,14 +189,33 @@ export const nullifyTimetable = () => (dispatch) => {
   });
 };
 
-// loads timetable from localStorage. assumes that the browser supports localStorage
-export const loadCachedTimetable = allSemesters => (dispatch) => {
-  dispatch({ type: ActionTypes.LOADING_CACHED_TT });
-  const localCourseSections = JSON.parse(localStorage.getItem('courseSections'));
+// get semester index of cached index into allSemesters
+const getSemesterIndex = function getSemesterIndex(allSemesters, oldSemesters) {
+  let cachedSemesterIndex = localStorage.getItem('semester');
+  if (cachedSemesterIndex !== null) { // last timetable was cached using old format
+    if (cachedSemesterIndex === 'S') { // last timetable was cached using old old format
+      cachedSemesterIndex = allSemesters.findIndex(s =>
+       (s.name === 'Spring' || s.name === 'Winter')
+       && s.year === '2017');
+    } else if (cachedSemesterIndex === 'F') {
+      cachedSemesterIndex = allSemesters.findIndex(s => s.name === 'Fall' && s.year === '2016');
+    }
+    const semester = oldSemesters[cachedSemesterIndex];
+    return allSemesters.findIndex(s =>
+      s.name === semester.name && s.year === semester.year);
+  }
   const cachedSemesterName = localStorage.getItem('semesterName');
   const cachedYear = localStorage.getItem('year');
-  const matchedIndex = allSemesters.findIndex(sem =>
+  return allSemesters.findIndex(sem =>
     sem.name === cachedSemesterName && sem.year === cachedYear);
+};
+
+// loads timetable from localStorage. assumes that the browser supports localStorage
+export const loadCachedTimetable = (allSemesters, oldSemesters) => (dispatch) => {
+  dispatch({ type: ActionTypes.LOADING_CACHED_TT });
+  const localCourseSections = JSON.parse(localStorage.getItem('courseSections'));
+
+  const matchedIndex = getSemesterIndex(allSemesters, oldSemesters);
 
   // no cached timetables OR timetables were cached using old format and are therefore unretrievable
   if (!localCourseSections || matchedIndex === -1) {
