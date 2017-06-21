@@ -17,7 +17,7 @@ class UserSettingsModal extends React.Component {
     super(props);
     this.state = {
       sw_capable: 'serviceWorker' in navigator,
-      signingUp: this.props.signingUp,
+      isSigningUp: this.props.isSigningUp,
     };
     this.changeForm = this.changeForm.bind(this);
     this.changeMajor = this.changeMajor.bind(this);
@@ -48,34 +48,32 @@ class UserSettingsModal extends React.Component {
     }
   }
 
-  changeForm() {
+  changeForm(obj = {}) {
     if (this.props.userInfo.FacebookSignedUp) {
       const newUserSettings = {
         social_courses: this.shareAll.checked || this.shareCourses.checked,
         social_offerings: this.shareAll.checked || this.shareSections.checked,
         social_all: this.shareAll.checked,
       };
-      const userSettings = Object.assign({}, this.props.userInfo, newUserSettings);
+      let userSettings = Object.assign({}, this.props.userInfo, newUserSettings);
+      userSettings = Object.assign({}, userSettings, obj);
       this.props.changeUserInfo(userSettings);
     }
+    this.props.saveSettings();
   }
 
   changeMajor(val) {
-    const userSettings = Object.assign({}, this.props.userInfo, { major: val.value });
-    this.props.changeUserInfo(userSettings);
-    this.props.saveSettings();
+    this.changeForm({ major: val.value });
   }
 
   changeClassYear(val) {
-    const userSettings = Object.assign({}, this.props.userInfo, { class_year: val.value });
-    this.props.changeUserInfo(userSettings);
-    this.props.saveSettings();
+    this.changeForm({ class_year: val.value });
   }
 
   shouldShow(props) {
     return props.userInfo.isLoggedIn && (!props.hideOverrided && (
         props.showOverrided ||
-        this.props.userPreferencesIncomplete)
+        this.props.isUserInfoIncomplete)
       );
   }
 
@@ -83,7 +81,7 @@ class UserSettingsModal extends React.Component {
     const modalStyle = {
       width: '100%',
     };
-    const tos = this.state.signingUp ? (<div
+    const tos = this.state.isSigningUp ? (<div
       className="preference cf"
     >
       <label className="switch switch-slide" htmlFor="tos-agreed-input">
@@ -262,14 +260,13 @@ class UserSettingsModal extends React.Component {
               />
             </div>
             { preferences }
-            { !this.state.signingUp ? notifications : null }
+            { !this.state.isSigningUp ? notifications : null }
             { fbUpsell }
             { tos }
             <div className="button-wrapper">
               <button
                 className="signup-button" onClick={() => {
-                  this.changeForm();
-                  if (!this.props.userPreferencesIncomplete) {
+                  if (!this.props.isUserInfoIncomplete) {
                     this.modal.hide();
                     this.props.setHidden();
                     this.props.closeUserSettings();
@@ -294,8 +291,8 @@ UserSettingsModal.propTypes = {
   unsubscribeToNotifications: PropTypes.func.isRequired,
   subscribeToNotifications: PropTypes.func.isRequired,
   highlightNotifs: PropTypes.bool.isRequired,
-  userPreferencesIncomplete: PropTypes.bool.isRequired,
-  signingUp: PropTypes.bool.isRequired,
+  isUserInfoIncomplete: PropTypes.bool.isRequired,
+  isSigningUp: PropTypes.bool.isRequired,
   acceptTOS: PropTypes.func.isRequired,
   setVisible: PropTypes.func.isRequired,
   setHidden: PropTypes.func.isRequired,

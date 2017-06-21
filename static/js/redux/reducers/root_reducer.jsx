@@ -61,7 +61,7 @@ const rootReducer = combineReducers({
   finalExamsModal,
 });
 
-export const userPreferencesIncomplete = state =>
-  fromUserInfo.userPreferencesIncomplete(state.userInfo);
+export const getIsUserInfoIncomplete = state =>
+  fromUserInfo.isUserInfoIncomplete(state.userInfo);
 
 export default rootReducer;
