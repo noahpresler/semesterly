@@ -8,7 +8,7 @@ import {
   changeUserInfo, overrideSettingsShow, setUserSettingsModalHidden,
   setUserSettingsModalVisible,
 } from '../../../actions/modal_actions';
-import { userPreferencesIncomplete } from '../../../reducers/root_reducer';
+import { getIsUserInfoIncomplete } from '../../../reducers/root_reducer';
 
 const mapStateToProps = state => ({
   userInfo: state.userInfo.data,
@@ -16,8 +16,8 @@ const mapStateToProps = state => ({
   hideOverrided: state.userInfo.overrideHide,
   tokenRegistered: state.notificationToken.hasToken,
   highlightNotifs: state.ui.highlightNotifs,
-  userPreferencesIncomplete: userPreferencesIncomplete(state),
-  signingUp: !state.userInfo.overrideShow && userPreferencesIncomplete(state),
+  isUserInfoIncomplete: getIsUserInfoIncomplete(state),
+  isSigningUp: !state.userInfo.overrideShow && getIsUserInfoIncomplete(state),
 });
 
 const UserSettingsModalContainer = connect(
