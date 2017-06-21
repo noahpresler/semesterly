@@ -40,18 +40,24 @@ const userInfo = (state = {
   }
 };
 
-export const userPreferencesIncomplete = (state) => {
-  if (!state.data.FacebookSignedUp) {
-    return state.data.isLoggedIn &&
-      (isIncomplete(state.data.major) ||
-      isIncomplete(state.data.class_year));
-  }
-  return state.data.isLoggedIn &&
-    (isIncomplete(state.data.social_offerings) ||
-      isIncomplete(state.data.social_courses) ||
-      isIncomplete(state.data.major) ||
-      isIncomplete(state.data.class_year)
-    );
+export const isUserInfoIncomplete = (state) => {
+  // if (!state.data.FacebookSignedUp) {
+  //   return state.data.isLoggedIn &&
+  //     (isIncomplete(state.data.major) ||
+  //     isIncomplete(state.data.class_year));
+  // }
+  // return state.data.isLoggedIn &&
+  //   (isIncomplete(state.data.social_offerings) ||
+  //     isIncomplete(state.data.social_courses) ||
+  //     isIncomplete(state.data.major) ||
+  //     isIncomplete(state.data.class_year)
+  //   );
+  const fields = state.data.FacebookSignedUp ?
+  ['social_offerings', 'social_courses',
+    'major', 'class_year'] :
+    ['major', 'class_year'];
+  return state.data.isLoggedIn && fields.map(field => state.data[field])
+    .some(val => isIncomplete(val));
 };
 
 export default userInfo;
