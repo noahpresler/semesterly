@@ -590,7 +590,7 @@ export const changeTimetableName = name => (dispatch) => {
   dispatch(saveTimetable());
 };
 
-export const acceptTOS = () => {
+export const acceptTOS = () => (dispatch) => {
   fetch(acceptTOSEndpoint(), {
     headers: {
       'X-CSRFToken': Cookie.get('csrftoken'),
@@ -600,7 +600,14 @@ export const acceptTOS = () => {
     credentials: 'include',
     method: 'POST',
     body: '',
-  });
+  })
+    .then((response) => {
+      if (response.status === 204) {
+        dispatch({
+          type: ActionTypes.CLOSE_TOS_MODAL,
+        });
+      }
+    });
 };
 
 // Show the TOS and privacy policy agreement if the user has not seen the latest version.
@@ -608,12 +615,12 @@ export const acceptTOS = () => {
 export const handleAgreement = (currentUser, timeUpdatedTos) => (dispatch) => {
   if (currentUser.isLoggedIn) {
     const timeAcceptedTos = currentUser.timeAcceptedTos;
-    if (timeAcceptedTos === null || Date.parse(timeAcceptedTos) < timeUpdatedTos) {
+    if (!timeAcceptedTos || Date.parse(timeAcceptedTos) < timeUpdatedTos) {
       dispatch({ type: ActionTypes.TRIGGER_TOS_MODAL });
     }
   } else {
     const timeShownBanner = localStorage.getItem('timeShownBanner');
-    if (timeShownBanner === null || timeShownBanner < timeUpdatedTos) {
+    if (!timeShownBanner || timeShownBanner < timeUpdatedTos) {
       setTimeShownBanner(Date.now());
       dispatch({ type: ActionTypes.TRIGGER_TOS_BANNER });
     }

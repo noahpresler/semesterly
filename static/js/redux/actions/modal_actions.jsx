@@ -125,3 +125,11 @@ export const dismissTermsOfServiceBanner = () => ({
 export const triggerTermsOfServiceModal = () => ({
   type: ActionTypes.TRIGGER_TOS_MODAL,
 });
+
+export const setUserSettingsModalVisible = () => ({
+  type: ActionTypes.SET_SETTINGS_MODAL_VISIBLE,
+});
+
+export const setUserSettingsModalHidden = () => ({
+  type: ActionTypes.SET_SETTINGS_MODAL_HIDDEN,
+});
