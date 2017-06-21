@@ -5,6 +5,7 @@ import classnames from 'classnames';
 import Modal from 'boron/WaveModal';
 import majors from '../../constants/majors';
 import * as SemesterlyPropTypes from '../../constants/semesterlyPropTypes';
+import { isIncomplete } from '../../util';
 
 class UserSettingsModal extends React.Component {
 
@@ -16,6 +17,7 @@ class UserSettingsModal extends React.Component {
     super(props);
     this.state = {
       sw_capable: 'serviceWorker' in navigator,
+      isSigningUp: this.props.isSigningUp,
     };
     this.changeForm = this.changeForm.bind(this);
     this.changeMajor = this.changeMajor.bind(this);
@@ -26,6 +28,7 @@ class UserSettingsModal extends React.Component {
   componentDidMount() {
     if (this.shouldShow(this.props)) {
       this.modal.show();
+      this.props.setVisible();
     }
     if (UserSettingsModal.isIncomplete(this.props.userInfo.social_courses)) {
       const newUserSettings = {
@@ -41,46 +44,36 @@ class UserSettingsModal extends React.Component {
   componentWillReceiveProps(props) {
     if (this.shouldShow(props)) {
       this.modal.show();
+      this.props.setVisible();
     }
   }
 
-  changeForm() {
+  changeForm(obj = {}) {
     if (this.props.userInfo.FacebookSignedUp) {
       const newUserSettings = {
         social_courses: this.shareAll.checked || this.shareCourses.checked,
         social_offerings: this.shareAll.checked || this.shareSections.checked,
         social_all: this.shareAll.checked,
       };
-      const userSettings = Object.assign({}, this.props.userInfo, newUserSettings);
+      let userSettings = Object.assign({}, this.props.userInfo, newUserSettings);
+      userSettings = Object.assign({}, userSettings, obj);
       this.props.changeUserInfo(userSettings);
-      this.props.saveSettings();
     }
+    this.props.saveSettings();
   }
 
   changeMajor(val) {
-    const userSettings = Object.assign({}, this.props.userInfo, { major: val.value });
-    this.props.changeUserInfo(userSettings);
-    this.props.saveSettings();
+    this.changeForm({ major: val.value });
   }
 
   changeClassYear(val) {
-    const userSettings = Object.assign({}, this.props.userInfo, { class_year: val.value });
-    this.props.changeUserInfo(userSettings);
-    this.props.saveSettings();
+    this.changeForm({ class_year: val.value });
   }
 
   shouldShow(props) {
-    if (!this.props.userInfo.FacebookSignedUp) {
-      return !props.hideOverrided && props.userInfo.isLoggedIn &&
-        (props.showOverrided ||
-        UserSettingsModal.isIncomplete(props.userInfo.major) ||
-        UserSettingsModal.isIncomplete(props.userInfo.class_year));
-    }
-    return !props.hideOverrided && props.userInfo.isLoggedIn &&
-      (props.showOverrided || UserSettingsModal.isIncomplete(props.userInfo.social_offerings) ||
-        UserSettingsModal.isIncomplete(props.userInfo.social_courses) ||
-        UserSettingsModal.isIncomplete(props.userInfo.major) ||
-        UserSettingsModal.isIncomplete(props.userInfo.class_year)
+    return props.userInfo.isLoggedIn && (!props.hideOverrided && (
+        props.showOverrided ||
+        this.props.isUserInfoIncomplete)
       );
   }
 
@@ -88,6 +81,34 @@ class UserSettingsModal extends React.Component {
     const modalStyle = {
       width: '100%',
     };
+    const tos = this.state.isSigningUp ? (<div
+      className="preference cf"
+    >
+      <label className="switch switch-slide" htmlFor="tos-agreed-input">
+        <input
+          ref={(c) => { this.tosAgreed = c; }} id="tos-agreed-input"
+          className="switch-input" type="checkbox"
+          checked={!isIncomplete(this.props.userInfo.timeAcceptedTos)}
+          disabled={!isIncomplete(this.props.userInfo.timeAcceptedTos)}
+          onChange={() => {
+            this.props.acceptTOS();
+            this.props.changeUserInfo(Object.assign(
+              {},
+              this.props.userInfo,
+              { timeAcceptedTos: String(new Date()) },
+            ));
+          }}
+        />
+        <span className="switch-label" data-on="ACCEPTED" data-off="CLICK TO ACCEPT" />
+        <span className="switch-handle" />
+      </label>
+      <div className="preference-wrapper">
+        <h3>Accept the terms and conditions</h3>
+        <p className="disclaimer">
+          By agreeing, you accept our <a>terms and conditions</a> & <a>privacy policy</a>.
+        </p>
+      </div>
+    </div>) : null;
     const notificationsButton = this.props.tokenRegistered
         ? (<a onClick={this.props.unsubscribeToNotifications}><h3>Turn Off Notifications</h3></a>)
         : (<a onClick={this.props.subscribeToNotifications}><h3>Turn On Notifications</h3></a>);
@@ -239,15 +260,16 @@ class UserSettingsModal extends React.Component {
               />
             </div>
             { preferences }
-            { notifications }
+            { !this.state.isSigningUp ? notifications : null }
             { fbUpsell }
+            { tos }
             <div className="button-wrapper">
               <button
                 className="signup-button" onClick={() => {
-                  this.changeForm();
-                  this.props.closeUserSettings();
-                  if (!this.shouldShow(Object.assign({}, this.props, { showOverrided: false }))) {
+                  if (!this.props.isUserInfoIncomplete) {
                     this.modal.hide();
+                    this.props.setHidden();
+                    this.props.closeUserSettings();
                   }
                 }}
               >Save
@@ -269,6 +291,11 @@ UserSettingsModal.propTypes = {
   unsubscribeToNotifications: PropTypes.func.isRequired,
   subscribeToNotifications: PropTypes.func.isRequired,
   highlightNotifs: PropTypes.bool.isRequired,
+  isUserInfoIncomplete: PropTypes.bool.isRequired,
+  isSigningUp: PropTypes.bool.isRequired,
+  acceptTOS: PropTypes.func.isRequired,
+  setVisible: PropTypes.func.isRequired,
+  setHidden: PropTypes.func.isRequired,
 };
 
 export default UserSettingsModal;
