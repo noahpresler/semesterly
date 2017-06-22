@@ -15,7 +15,8 @@ import {
 } from '../../../actions/modal_actions';
 import { saveSettings } from '../../../actions/user_actions';
 import { getSchoolSpecificInfo } from '../../../constants/schools';
-import { getCourseShareLink, getCourseShareLinkFromModal } from '../../../helpers/timetable_helpers';
+import { getCourseShareLink, getCourseShareLinkFromModal } from '../../../constants/endpoints';
+import { currSem } from '../../../reducers/semester_reducer';
 
 const mapStateToProps = (state) => {
   let lectureSections = {};
@@ -44,10 +45,11 @@ const mapStateToProps = (state) => {
     popularityPercent: state.courseInfo.data.popularity_percent * 100,
     inRoster: courseSections[state.courseInfo.id] !== undefined,
     isLoggedIn: state.userInfo.data.isLoggedIn,
-    hasSocial: state.userInfo.data.social_courses && state.userInfo.data.social_offerings,
+    hasSocial: state.userInfo.data.social_courses,
     userInfo: state.userInfo.data,
-    getShareLink: getCourseShareLink,
-    getShareLinkFromModal: getCourseShareLinkFromModal,
+    getShareLink: courseCode => getCourseShareLink(courseCode, currSem(state.semester)),
+    getShareLinkFromModal: courseCode =>
+      getCourseShareLinkFromModal(courseCode, currSem(state.semester)),
     isSectionLocked: (courseId, section) => {
       if (courseSections[courseId] === undefined) {
         return false;
