@@ -1,7 +1,7 @@
 import fetch from 'isomorphic-fetch';
 import { normalize } from 'normalizr';
 import { courseSchema } from '../schema';
-import { getActiveTT, getCurrentSemester } from '../reducers/root_reducer';
+import { getActiveTimetableCourses, getCurrentSemester } from '../reducers/root_reducer';
 import { getCourseSearchEndpoint } from '../constants/endpoints';
 import { getUserSavedTimetables, saveTimetable } from './user_actions';
 import { nullifyTimetable } from './timetable_actions';
@@ -44,7 +44,7 @@ export const maybeSetSemester = semester => (dispatch, getState) => {
     return null;
   }
 
-  if (getActiveTT(state).courses.length > 0) {
+  if (getActiveTimetableCourses(state).length > 0) {
     if (state.userInfo.data.isLoggedIn && !state.savingTimetable.upToDate) {
       return dispatch(saveTimetable(false, () => dispatch(setSemester(semester))));
     } else if (state.userInfo.data.isLoggedIn) {
