@@ -92,9 +92,7 @@ export const fetchTimetables = (requestBody, removing, newActive = 0) => (dispat
   // are always "up-to-date" (correspond to last loaded timetable).
   // same for the semester
   saveLocalPreferences(requestBody.preferences);
-  if (localStorage.semester !== state.semester.current) {
-    saveLocalSemester(state.semester.current);
-  }
+  saveLocalSemester(currSem(state.semester));
 };
 
 /*
@@ -191,35 +189,48 @@ export const nullifyTimetable = () => (dispatch) => {
   });
 };
 
+// get semester index of cached index into allSemesters
+const getSemesterIndex = function getSemesterIndex(allSemesters, oldSemesters) {
+  let cachedSemesterIndex = localStorage.getItem('semester');
+  if (cachedSemesterIndex !== null) { // last timetable was cached using old format
+    if (cachedSemesterIndex === 'S') { // last timetable was cached using old old format
+      cachedSemesterIndex = allSemesters.findIndex(s =>
+       (s.name === 'Spring' || s.name === 'Winter')
+       && s.year === '2017');
+    } else if (cachedSemesterIndex === 'F') {
+      cachedSemesterIndex = allSemesters.findIndex(s => s.name === 'Fall' && s.year === '2016');
+    }
+    const semester = oldSemesters[Number(cachedSemesterIndex)];
+    return allSemesters.findIndex(s =>
+      s.name === semester.name && s.year === semester.year);
+  }
+  const cachedSemesterName = localStorage.getItem('semesterName');
+  const cachedYear = localStorage.getItem('year');
+  return allSemesters.findIndex(sem =>
+    sem.name === cachedSemesterName && sem.year === cachedYear);
+};
+
 // loads timetable from localStorage. assumes that the browser supports localStorage
-export const loadCachedTimetable = allSemesters => (dispatch) => {
+export const loadCachedTimetable = (allSemesters, oldSemesters) => (dispatch) => {
   dispatch({ type: ActionTypes.LOADING_CACHED_TT });
   const localCourseSections = JSON.parse(localStorage.getItem('courseSections'));
 
-  // no course sections stored locally; user is new (or hasn't added timetables yet)
-  if (!localCourseSections) {
+  const matchedIndex = getSemesterIndex(allSemesters, oldSemesters);
+
+  // no cached timetables OR timetables were cached using old format and are therefore unretrievable
+  if (!localCourseSections || matchedIndex === -1) {
     dispatch({ type: ActionTypes.CACHED_TT_LOADED });
     return;
   }
 
-  // no preferences stored locally; save the defaults
   const localPreferences = JSON.parse(localStorage.getItem('preferences'));
-  let localSemester = localStorage.getItem('semester');
-  if (localSemester === 'S') {
-    localSemester = allSemesters.findIndex(s =>
-      (s.name === 'Spring' || s.name === 'Winter')
-      && s.year === '2017');
-  } else if (localSemester === 'F') {
-    localSemester = allSemesters.findIndex(s => s.name === 'Fall' && s.year === '2016');
-  }
-
   const localActive = parseInt(localStorage.getItem('active'), 10);
   if (Object.keys(localCourseSections).length === 0 || Object.keys(localPreferences).length === 0) {
     return;
   }
 
   dispatch({ type: ActionTypes.SET_ALL_PREFERENCES, preferences: localPreferences });
-  dispatch({ type: ActionTypes.SET_SEMESTER, semester: parseInt(localSemester, 10) });
+  dispatch({ type: ActionTypes.SET_SEMESTER, semester: matchedIndex });
   dispatch({
     type: ActionTypes.RECEIVE_COURSE_SECTIONS,
     courseSections: localCourseSections,
