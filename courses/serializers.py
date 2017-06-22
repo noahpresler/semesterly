@@ -104,8 +104,10 @@ class FlatCourseSerializer(serializers.ModelSerializer):
 
     # TODO: move in to timetable
     def get_slots(self, course):
+        matching_sections = [section for section in self.context['sections']
+                             if section.course == course]
         return [dict(get_section_dict(section), **model_to_dict(co))
-                    for section in self.context['sections'] for co in section.offering_set.all()]
+                    for section in matching_sections for co in section.offering_set.all()]
 
     def get_enrolled_sections(self, course):
         return [section.meeting_section for section in self.context['sections']]
