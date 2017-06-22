@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import React from 'react';
 import classnames from 'classnames';
 import ReactTooltip from 'react-tooltip';
@@ -9,12 +10,12 @@ import { ShareLink } from './master_slot';
 
 const Row = (props) => {
   const timeText = props.displayTime ? <span>{props.displayTime}</span> : null;
-  const dayCells = DAYS.map(day => <CellContainer
+  const dayCells = DAYS.map(day => (<CellContainer
     day={day}
     time={props.time}
     key={day + props.time}
     loggedIn={props.isLoggedIn}
-  />);
+  />));
   return (
     <tr key={props.time}>
       <td className="fc-axis fc-time fc-widget-content cal-row">
@@ -34,9 +35,9 @@ Row.defaultProps = {
 };
 
 Row.propTypes = {
-  displayTime: React.PropTypes.string,
-  isLoggedIn: React.PropTypes.bool.isRequired,
-  time: React.PropTypes.string.isRequired,
+  displayTime: PropTypes.string,
+  isLoggedIn: PropTypes.bool.isRequired,
+  time: PropTypes.string.isRequired,
 };
 
 class Calendar extends React.Component {
@@ -90,8 +91,10 @@ class Calendar extends React.Component {
     for (let i = 8; i <= this.props.endHour; i++) { // one row for each hour, starting from 8am
       const hour = this.props.uses12HrTime && i > 12 ? i - 12 : i;
       rows.push(<Row
-        displayTime={`${hour}:00`} time={`${i}:00`}
-        isLoggedIn={this.props.isLoggedIn} key={i}
+        displayTime={`${hour}:00`}
+        time={`${i}:00`}
+        isLoggedIn={this.props.isLoggedIn}
+        key={i}
       />);
       rows.push(<Row time={`${i}:30`} isLoggedIn={this.props.isLoggedIn} key={i + 0.5} />);
     }
@@ -121,7 +124,8 @@ class Calendar extends React.Component {
         <button
           onClick={this.fetchShareTimetableLink}
           className="save-timetable add-button"
-          data-tip data-for="share-btn-tooltip"
+          data-tip
+          data-for="share-btn-tooltip"
         >
           <i
             className={classnames('fa',
@@ -130,7 +134,10 @@ class Calendar extends React.Component {
           />
         </button>
         <ReactTooltip
-          id="share-btn-tooltip" class="tooltip" type="dark" place="bottom"
+          id="share-btn-tooltip"
+          class="tooltip"
+          type="dark"
+          place="bottom"
           effect="solid"
         >
           <span>Share Calendar</span>
@@ -148,12 +155,16 @@ class Calendar extends React.Component {
         <button
           onClick={this.props.handleCreateNewTimetable}
           className="save-timetable add-button"
-          data-tip data-for="add-btn-tooltip"
+          data-tip
+          data-for="add-btn-tooltip"
         >
           <i className="fa fa-plus" />
         </button>
         <ReactTooltip
-          id="add-btn-tooltip" class="tooltip" type="dark" place="bottom"
+          id="add-btn-tooltip"
+          class="tooltip"
+          type="dark"
+          place="bottom"
           effect="solid"
         >
           <span>New Timetable</span>
@@ -165,12 +176,16 @@ class Calendar extends React.Component {
         <button
           className="save-timetable add-button"
           onMouseDown={this.props.saveTimetable}
-          data-tip data-for="save-btn-tooltip"
+          data-tip
+          data-for="save-btn-tooltip"
         >
           {saveIcon}
         </button>
         <ReactTooltip
-          id="save-btn-tooltip" class="tooltip" type="dark" place="bottom"
+          id="save-btn-tooltip"
+          class="tooltip"
+          type="dark"
+          place="bottom"
           effect="solid"
         >
           <span>Save Timetable</span>
@@ -182,12 +197,16 @@ class Calendar extends React.Component {
         <button
           onClick={() => this.props.triggerSaveCalendarModal()}
           className="save-timetable"
-          data-tip data-for="saveToCal-btn-tooltip"
+          data-tip
+          data-for="saveToCal-btn-tooltip"
         >
           <img src="/static/img/addtocalendar.png" alt="Add to Calendar" />
         </button>
         <ReactTooltip
-          id="saveToCal-btn-tooltip" class="tooltip" type="dark" place="bottom"
+          id="saveToCal-btn-tooltip"
+          class="tooltip"
+          type="dark"
+          place="bottom"
           effect="solid"
         >
           <span>Save to Calendar</span>
@@ -199,12 +218,16 @@ class Calendar extends React.Component {
         <button
           onClick={this.props.togglePreferenceModal}
           className="save-timetable"
-          data-tip data-for="pref-btn-tooltip"
+          data-tip
+          data-for="pref-btn-tooltip"
         >
           <i className="fa fa-cog" />
         </button>
         <ReactTooltip
-          id="pref-btn-tooltip" class="tooltip" type="dark" place="bottom"
+          id="pref-btn-tooltip"
+          class="tooltip"
+          type="dark"
+          place="bottom"
           effect="solid"
         >
           <span>Preferences</span>
@@ -212,7 +235,7 @@ class Calendar extends React.Component {
       </div>
         );
     return (
-      <div id="calendar" className="fc fc-ltr fc-unthemed week-calendar">
+      <div className="calendar fc fc-ltr fc-unthemed week-calendar">
         <div className="fc-toolbar no-print">
           <div className="fc-left">
             <PaginationContainer />
@@ -314,8 +337,6 @@ class Calendar extends React.Component {
               </tbody>
             </table>
           </div>
-          <p className="data-last-updated no-print">Data last
-                        updated: { this.props.dataLastUpdated && this.props.dataLastUpdated.length && this.props.dataLastUpdated !== 'null' ? this.props.dataLastUpdated : null }</p>
         </div>
       </div>
     );
@@ -328,19 +349,19 @@ Calendar.defaultProps = {
 };
 
 Calendar.propTypes = {
-  dataLastUpdated: React.PropTypes.string.isRequired,
-  togglePreferenceModal: React.PropTypes.func.isRequired,
-  triggerSaveCalendarModal: React.PropTypes.func.isRequired,
-  isFetchingShareLink: React.PropTypes.bool.isRequired,
-  endHour: React.PropTypes.number.isRequired,
-  handleCreateNewTimetable: React.PropTypes.func.isRequired,
-  shareLinkValid: React.PropTypes.bool.isRequired,
-  fetchShareTimetableLink: React.PropTypes.func.isRequired,
-  saveTimetable: React.PropTypes.func.isRequired,
-  isLoggedIn: React.PropTypes.bool.isRequired,
-  saving: React.PropTypes.bool.isRequired,
-  shareLink: React.PropTypes.string,
-  uses12HrTime: React.PropTypes.bool.isRequired,
+  togglePreferenceModal: PropTypes.func.isRequired,
+  triggerSaveCalendarModal: PropTypes.func.isRequired,
+  isFetchingShareLink: PropTypes.bool.isRequired,
+  endHour: PropTypes.number.isRequired,
+  handleCreateNewTimetable: PropTypes.func.isRequired,
+  shareLinkValid: PropTypes.bool.isRequired,
+  fetchShareTimetableLink: PropTypes.func.isRequired,
+  saveTimetable: PropTypes.func.isRequired,
+  isLoggedIn: PropTypes.bool.isRequired,
+  saving: PropTypes.bool.isRequired,
+  shareLink: PropTypes.string,
+  uses12HrTime: PropTypes.bool.isRequired,
 };
 
 export default Calendar;
+

@@ -1,7 +1,8 @@
+import PropTypes from 'prop-types';
 import React from 'react';
 import ClickOutHandler from 'react-onclickout';
 import classnames from 'classnames';
-import * as PropTypes from '../constants/propTypes';
+import * as SemesterlyPropTypes from '../constants/semesterlyPropTypes';
 
 export class Filter extends React.Component {
   constructor(props) {
@@ -34,7 +35,7 @@ export class Filter extends React.Component {
     }
     const { filterType, schoolSpecificInfo } = this.props;
     const placeholder = schoolSpecificInfo[`${filterType}Name`];
-    const results = this.state.results.map((r, i) => <li
+    const results = this.state.results.map((r, i) => (<li
       key={r}
       onClick={() => this.props.add(filterType, r)}
     >
@@ -45,12 +46,13 @@ export class Filter extends React.Component {
         })}
       />
       <h6>{r}</h6>
-    </li>);
+    </li>));
     return (
       <ClickOutHandler onClickOut={this.props.onClickOut}>
         <div className="filter-pop-out open">
           <input
-            ref={(ref) => { this.filterInput = ref; }} placeholder={placeholder}
+            ref={(ref) => { this.filterInput = ref; }}
+            placeholder={placeholder}
             onInput={this.filterResults}
           />
           <div className="fpo-list">
@@ -66,13 +68,13 @@ export class Filter extends React.Component {
 }
 
 Filter.propTypes = {
-  results: React.PropTypes.arrayOf(React.PropTypes.string).isRequired,
-  show: React.PropTypes.bool.isRequired,
-  filterType: React.PropTypes.string.isRequired,
-  schoolSpecificInfo: PropTypes.schoolSpecificInfo.isRequired,
-  add: React.PropTypes.func.isRequired,
-  isFiltered: React.PropTypes.func.isRequired,
-  onClickOut: React.PropTypes.func.isRequired,
+  results: PropTypes.arrayOf(PropTypes.string).isRequired,
+  show: PropTypes.bool.isRequired,
+  filterType: PropTypes.string.isRequired,
+  schoolSpecificInfo: SemesterlyPropTypes.schoolSpecificInfo.isRequired,
+  add: PropTypes.func.isRequired,
+  isFiltered: PropTypes.func.isRequired,
+  onClickOut: PropTypes.func.isRequired,
 };
 
 // eslint-disable-next-line react/prop-types
@@ -84,8 +86,8 @@ export const SelectedFilter = ({ name, remove }) => (
 );
 
 SelectedFilter.PropTypes = {
-  name: React.PropTypes.string.isRequired,
-  remove: React.PropTypes.func.isRequired,
+  name: PropTypes.string.isRequired,
+  remove: PropTypes.func.isRequired,
 };
 
 // eslint-disable-next-line react/prop-types
@@ -103,7 +105,8 @@ export const SelectedFilterSection = ({ name, toggle, children }) => (
 );
 
 SelectedFilterSection.PropTypes = {
-  name: React.PropTypes.string.isRequired,
-  toggle: React.PropTypes.func.isRequired,
-  remove: React.PropTypes.func.isRequired,
+  name: PropTypes.string.isRequired,
+  toggle: PropTypes.func.isRequired,
+  remove: PropTypes.func.isRequired,
 };
+
