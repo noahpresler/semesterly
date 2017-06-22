@@ -9,7 +9,7 @@ import preferences from './preferences_reducer';
 import courseInfo from './course_info_reducer';
 import alerts from './alerts_reducer';
 import ui from './ui_reducer';
-import userInfo from './user_info_reducer';
+import userInfo, * as fromUserInfo from './user_info_reducer';
 import savingTimetable from './saving_timetable_reducer';
 import classmates from './classmates_reducer';
 import optionalCourses from './optional_courses_reducer';
@@ -23,6 +23,8 @@ import notificationToken from './notification_token_reducer';
 import integrationModal from './integration_modal_reducer';
 import integrations from './integrations_reducer';
 import saveCalendarModal from './save_calendar_modal_reducer';
+import termsOfServiceModal from './terms_of_service_modal_reducer';
+import termsOfServiceBanner from './terms_of_service_banner_reducer';
 import userAcquisitionModal from './user_acquisition_modal_reducer';
 import textbookModal from './textbook_modal_reducer';
 import finalExamsModal from './final_exams_modal_reducer';
@@ -53,8 +55,13 @@ const rootReducer = combineReducers({
   integrations,
   saveCalendarModal,
   userAcquisitionModal,
+  termsOfServiceModal,
+  termsOfServiceBanner,
   textbookModal,
   finalExamsModal,
 });
+
+export const getIsUserInfoIncomplete = state =>
+  fromUserInfo.isUserInfoIncomplete(state.userInfo);
 
 export default rootReducer;

@@ -21,5 +21,8 @@ urlpatterns = patterns('',
                        url(r'^user/classmates/(?P<sem_name>.+)/(?P<year>[0-9]{4})',
                            student.views.ClassmateView.as_view()),
                        url(r'^user/gcal/?$', student.views.GCalView.as_view()),
-                       url(r'^user/reactions/?$', student.views.ReactionView.as_view())
+                       url(r'^user/reactions/?$', student.views.ReactionView.as_view()),
+
+                       # for accepting TOS.
+                       url(r'^tos/accept/', 'student.views.accept_tos'),
                        )
