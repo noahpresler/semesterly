@@ -101,6 +101,7 @@ class Slot extends React.Component {
     };
     this.onSlotHover = this.onSlotHover.bind(this);
     this.onSlotUnhover = this.onSlotUnhover.bind(this);
+    this.checkOverflow = this.checkOverflow.bind(this);
   }
 
   componentDidMount() {
@@ -115,7 +116,7 @@ class Slot extends React.Component {
   }
 
   componentWillUnmount() {
-    window.removeEventListener('resize', this.checkOverflow());
+    window.removeEventListener('resize', this.checkOverflow);
   }
 
   onSlotHover() {
