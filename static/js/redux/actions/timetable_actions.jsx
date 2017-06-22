@@ -200,7 +200,7 @@ const getSemesterIndex = function getSemesterIndex(allSemesters, oldSemesters) {
     } else if (cachedSemesterIndex === 'F') {
       cachedSemesterIndex = allSemesters.findIndex(s => s.name === 'Fall' && s.year === '2016');
     }
-    const semester = oldSemesters[cachedSemesterIndex];
+    const semester = oldSemesters[Number(cachedSemesterIndex)];
     return allSemesters.findIndex(s =>
       s.name === semester.name && s.year === semester.year);
   }
