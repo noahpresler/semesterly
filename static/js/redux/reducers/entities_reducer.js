@@ -59,6 +59,11 @@ export const getTimetable = (state, id) => {
   };
 };
 
+export const getTimetableCourses = (state, id) => {
+  let timetable = state.timetables[id];
+  return timetable.courses.map(courseCode => getCourseById(state, courseCode));
+};
+
 export const getFromTimetable = (timetable, fields) => {
   if (!('sections' in timetable) || !('offering_set' in timetable.sections[0])) {
     throw "input timetable to getFromTimetable must be denormalized";

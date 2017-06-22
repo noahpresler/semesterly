@@ -74,15 +74,14 @@ export const getCurrentSemester = state => fromSemester.getCurrentSemester(state
 export const getActiveTimetable = state =>
   fromEntities.getTimetable(state.entities, fromTimetables.getActiveTimetableId(state.timetables));
 
+export const getActiveTimetableCourses = state =>
+  fromEntities.getTimetableCourses(state.entities,
+    fromTimetables.getActiveTimetableId(state.timetables));
+
 export const getFromActiveTimetable = (state, fields) =>
   fromEntities.getFromTimetable(getActiveTimetable(state), fields);
 
 export const getActiveTT = state => fromTimetables.getActiveTT(state.timetables);
-
-export const getActiveTTCourses = createSelector(
-  [fromTimetables.getTimetableIds],
-  timetableIds => timetableIds.map(id => getDenormCourseById(id)),
-);
 
 export const getMaxEndHour = createSelector([getActiveTT], (timetable) => {
   let maxEndHour = 17;
