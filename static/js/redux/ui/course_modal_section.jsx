@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import React from 'react';
 import classnames from 'classnames';
 
@@ -43,17 +44,23 @@ const CourseModalSection = ({ secName, instr, enrolled, waitlist, size, hoverSec
   );
 };
 
+CourseModalSection.defaultProps = {
+  isOnActiveTimetable: false,
+  locked: false,
+};
+
 CourseModalSection.propTypes = {
-  secName: React.PropTypes.string.isRequired,
-  instr: React.PropTypes.string.isRequired,
-  enrolled: React.PropTypes.number.isRequired,
-  waitlist: React.PropTypes.number.isRequired,
-  size: React.PropTypes.number.isRequired,
-  hoverSection: React.PropTypes.func.isRequired,
-  unHoverSection: React.PropTypes.func.isRequired,
-  lockOrUnlock: React.PropTypes.func.isRequired,
-  isOnActiveTimetable: React.PropTypes.bool.isRequired,
-  locked: React.PropTypes.bool.isRequired,
+  secName: PropTypes.string.isRequired,
+  instr: PropTypes.string.isRequired,
+  enrolled: PropTypes.number.isRequired,
+  waitlist: PropTypes.number.isRequired,
+  size: PropTypes.number.isRequired,
+  hoverSection: PropTypes.func.isRequired,
+  unHoverSection: PropTypes.func.isRequired,
+  lockOrUnlock: PropTypes.func.isRequired,
+  isOnActiveTimetable: PropTypes.bool,
+  locked: PropTypes.bool,
 };
 
 export default CourseModalSection;
+

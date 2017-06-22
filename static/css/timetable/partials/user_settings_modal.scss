@@ -8,7 +8,7 @@
     outline: none;
 	}
 
-  #modal-header {
+  .modal-header {
     background-color: $geee;
     border-bottom: 1px solid $gddd;
     padding: 25px;
@@ -22,7 +22,7 @@
     z-index: 1;
   }
 
-  #modal-content {
+  .modal-content {
     text-align: center;
 
     form {
@@ -30,7 +30,7 @@
     }
   }
 
-  #modal-body {
+  .modal-body {
     padding: 42px 0 20px;
 
     p {
@@ -80,7 +80,7 @@
     border-top: 1px solid $gdee2ff;
   }
 
-  .notifications {
+  .welcome-modal__notifications {
     border-bottom: 1px solid $geee;
     border-top: 1px solid $geee;
     padding-top: 15px;
@@ -143,13 +143,6 @@
     &:active {
       color: #51a9d2;
     }
-
-    h3 {
-      font-size: 14px;
-      font-weight: bold;
-      line-height: 20px;
-      margin: 0 20px 0 0;
-    }
   }
 
   &.second {
@@ -157,9 +150,20 @@
   }
 }
 
+.modal-body {
+  .welcome-modal__notifications {
+    h3 {
+      font-size: 14px;
+      font-weight: bold;
+      line-height: 20px;
+      margin: 0 20px 0 0;
+    }
+  }
+}
+
 @media (max-width: 766px) {
   .welcome-modal {
-    #modal-body {
+    .modal-body {
       padding: 22px 0 20px;
 
       p {
@@ -171,7 +175,7 @@
 
 @media (max-width: 499px) {
   .welcome-modal {
-    #modal-body {
+    .modal-body {
       p {
         font-size: 12px;
       }

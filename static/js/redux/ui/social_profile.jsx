@@ -1,7 +1,8 @@
+import PropTypes from 'prop-types';
 import React from 'react';
 import classNames from 'classnames';
 import ClickOutHandler from 'react-onclickout';
-import * as PropTypes from '../constants/propTypes';
+import * as SemesterlyPropTypes from '../constants/semesterlyPropTypes';
 
 class SocialProfile extends React.Component {
   constructor(props) {
@@ -45,7 +46,11 @@ class SocialProfile extends React.Component {
               <i className="fa fa-bar-chart" />
               <span>Stats</span>
             </a>
-            <a href="/static/privacypolicy.htm">
+            <a href="/termsofservice" target="_blank" rel="noopener noreferrer">
+              <i className="fa fa-file-text" />
+              <span>Terms</span>
+            </a>
+            <a href="/privacypolicy" target="_blank" rel="noopener noreferrer">
               <i className="fa fa-user-secret" />
               <span>Privacy</span>
             </a>
@@ -78,9 +83,10 @@ class SocialProfile extends React.Component {
 }
 
 SocialProfile.propTypes = {
-  userInfo: PropTypes.userInfo.isRequired,
-  showUserSettings: React.PropTypes.func.isRequired,
-  triggerAcquisitionModal: React.PropTypes.func.isRequired,
+  userInfo: SemesterlyPropTypes.userInfo.isRequired,
+  showUserSettings: PropTypes.func.isRequired,
+  triggerAcquisitionModal: PropTypes.func.isRequired,
 };
 
 export default SocialProfile;
+

@@ -1,6 +1,8 @@
 from django.shortcuts import render
 from django.http import HttpResponse, HttpResponseRedirect, Http404
 from django.core.context_processors import csrf
+from django.template.loader import get_template
+from django.views.decorators.cache import never_cache
 from django.views.decorators.csrf import csrf_exempt
 from django.conf import settings
 from django.core.mail import send_mail
@@ -72,3 +74,16 @@ def deploy_staging(request):
 
     else:
         raise Http404
+
+
+@never_cache
+def sw_js(request, js):
+    template = get_template('sw.js')
+    html = template.render()
+    return HttpResponse(html, content_type="application/x-javascript")
+
+
+def manifest_json(request, js):
+    template = get_template('manifest.json')
+    html = template.render()
+    return HttpResponse(html, content_type="application/json")

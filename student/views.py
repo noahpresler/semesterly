@@ -1,10 +1,12 @@
+from datetime import datetime
 import json
 
 import httplib2
 from django.core.urlresolvers import reverse
 from django.db.models import Q, Count
-from django.http import HttpResponse, HttpResponseRedirect, Http404
-from django.shortcuts import get_object_or_404, render_to_response
+from django.forms.models import model_to_dict
+from django.http import HttpResponse, HttpResponseRedirect
+from django.shortcuts import get_object_or_404, render_to_response, render
 from django.template import RequestContext
 from django.views.decorators.csrf import csrf_exempt
 from googleapiclient import discovery
@@ -12,16 +14,14 @@ from hashids import Hashids
 from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.views import APIView
-from rest_framework.permissions import IsAuthenticated
 
-from analytics.models import *
-from authpipe.utils import get_google_credentials, check_student_token, RedirectToSignupMixin
-from student.models import *
-from student.models import Student, Reaction, RegistrationToken, PersonalEvent
+from authpipe.utils import get_google_credentials, check_student_token
+from analytics.models import CalendarExport
+from student.models import Student, Reaction, RegistrationToken, PersonalEvent, PersonalTimetable
 from student.utils import next_weekday, get_classmates_from_course_id, make_token, get_student_tts
-from timetable.models import *
-from timetable.utils import *
-from timetable.utils import validate_subdomain, ValidateSubdomainMixin
+from timetable.models import Semester, Course
+from helpers.mixins import ValidateSubdomainMixin, RedirectToSignupMixin
+from helpers.decorators import validate_subdomain
 
 DAY_MAP = {
     'M': 'mo',
@@ -35,6 +35,7 @@ DAY_MAP = {
 
 hashids = Hashids(salt="x98as7dhg&h*askdj^has!kj?xz<!9")
 
+
 def get_friend_count_from_course_id(school, student, course_id, semester):
     return PersonalTimetable.objects.filter(student__in=student.friends.all(),
                                             courses__id__exact=course_id) \
@@ -42,12 +43,13 @@ def get_friend_count_from_course_id(school, student, course_id, semester):
 
 
 def create_unsubscribe_link(student):
-    id, token = make_token(student).split(":", 1)
-    return reverse('student.views.unsubscribe', kwargs={'id': id, 'token': token, })
+    token_id, token = make_token(student).split(":", 1)
+    return reverse('student.views.unsubscribe',
+                   kwargs={'id': token_id, 'token': token})
 
 
-def unsubscribe(request, id, token):
-    student = Student.objects.get(id=id)
+def unsubscribe(request, student_id, token):
+    student = Student.objects.get(id=student_id)
 
     if student and check_student_token(student, token):
         # Link is valid
@@ -77,7 +79,7 @@ def get_semester_name_from_tt(tt):
 def log_ical_export(request):
     try:
         student = Student.objects.get(user=request.user)
-    except:
+    except BaseException:
         student = None
     school = request.subdomain
     analytic = CalendarExport.objects.create(
@@ -89,6 +91,13 @@ def log_ical_export(request):
     return HttpResponse(json.dumps({}), content_type="application/json")
 
 
+def accept_tos(request):
+    student = Student.objects.get(user=request.user)
+    student.time_accepted_tos = datetime.today()
+    student.save()
+    return HttpResponse(status=204)
+
+
 class UserView(RedirectToSignupMixin, APIView):
 
     def get(self, request):
@@ -96,18 +105,18 @@ class UserView(RedirectToSignupMixin, APIView):
         reactions = Reaction.objects.filter(student=student).values('title').annotate(
             count=Count('title'))
         if student.user.social_auth.filter(provider='google-oauth2').exists():
-            hasGoogle = True
+            has_google = True
         else:
-            hasGoogle = False
+            has_google = False
         if student.user.social_auth.filter(provider='facebook').exists():
-            social_user = student.user.social_auth.filter(provider='facebook').first()
-            img_url = 'https://graph.facebook.com/' + student.fbook_uid + '/picture?width=700&height=700'
-            hasFacebook = True
+            img_url = 'https://graph.facebook.com/' + \
+                student.fbook_uid + '/picture?width=700&height=700'
+            has_facebook = True
         else:
-            social_user = student.user.social_auth.filter(provider='google-oauth2').first()
             img_url = student.img_url.replace('sz=50', 'sz=700')
-            hasFacebook = False
-        hasNotificationsEnabled = RegistrationToken.objects.filter(student=student).exists()
+            has_facebook = False
+        has_notifications_enabled = RegistrationToken.objects.filter(
+            student=student).exists()
         context = {
             'name': student.user,
             'major': student.major,
@@ -115,9 +124,9 @@ class UserView(RedirectToSignupMixin, APIView):
             'student': student,
             'total': 0,
             'img_url': img_url,
-            'hasGoogle': hasGoogle,
-            'hasFacebook': hasFacebook,
-            'notifications': hasNotificationsEnabled
+            'hasGoogle': has_google,
+            'hasFacebook': has_facebook,
+            'notifications': has_notifications_enabled
         }
         for r in reactions:
             context[r['title']] = r['count']
@@ -130,7 +139,8 @@ class UserView(RedirectToSignupMixin, APIView):
 
     def patch(self, request):
         student = get_object_or_404(Student, user=request.user)
-        settings = 'social_offerings social_courses social_all major class_year emails_enabled'.split()
+        settings = 'social_offerings social_courses social_all major class_year ' \
+                   'emails_enabled'.split()
         for setting in settings:
             default_val = getattr(student, setting)
             new_val = request.data.get(setting, default_val)
@@ -139,7 +149,8 @@ class UserView(RedirectToSignupMixin, APIView):
         return Response(status=status.HTTP_204_NO_CONTENT)
 
 
-class UserTimetableView(ValidateSubdomainMixin, RedirectToSignupMixin, APIView):
+class UserTimetableView(ValidateSubdomainMixin,
+                        RedirectToSignupMixin, APIView):
 
     def get(self, request, sem_name, year):
         sem, _ = Semester.objects.get_or_create(name=sem_name, year=year)
@@ -160,7 +171,7 @@ class UserTimetableView(ValidateSubdomainMixin, RedirectToSignupMixin, APIView):
             # save manytomany relationships before copying
             courses, sections = duplicate.courses.all(), duplicate.sections.all()
             events = duplicate.events.all()
-            for event in events: # create duplicates of each event to allow for safe delete
+            for event in events:  # create duplicates of each event to allow for safe delete
                 event.pk = None
                 event.save()
 
@@ -172,8 +183,11 @@ class UserTimetableView(ValidateSubdomainMixin, RedirectToSignupMixin, APIView):
             duplicate.events = events
 
             timetables = get_student_tts(student, school, semester)
-            saved_timetable = (x for x in timetables if x['id'] == duplicate.id).next()
-            response = {'timetables': timetables, 'saved_timetable': saved_timetable}
+            saved_timetable = (
+                x for x in timetables if x['id'] == duplicate.id).next()
+            response = {
+                'timetables': timetables,
+                'saved_timetable': saved_timetable}
 
             # TODO: should respond only with created object
             return Response(response, status=status.HTTP_201_CREATED)
@@ -181,24 +195,38 @@ class UserTimetableView(ValidateSubdomainMixin, RedirectToSignupMixin, APIView):
             school = request.subdomain
             has_conflict = request.data['has_conflict']
             name = request.data['name']
-            semester, _ = Semester.objects.get_or_create(**request.data['semester'])
+            semester, _ = Semester.objects.get_or_create(
+                **request.data['semester'])
             student = Student.objects.get(user=request.user)
-            params = {'school': school, 'name': name, 'semester': semester, 'student': student}
+            params = {
+                'school': school,
+                'name': name,
+                'semester': semester,
+                'student': student}
 
             courses = request.data['courses']
-            tt_id = request.data.get('id')  # id is None if this is a new timetable
+            # id is None if this is a new timetable
+            tt_id = request.data.get('id')
 
             if PersonalTimetable.objects.filter(~Q(id=tt_id), **params):
                 return Response(status=status.HTTP_409_CONFLICT)
 
             personal_timetable = PersonalTimetable.objects.create(**params) if tt_id is None else \
                 PersonalTimetable.objects.get(id=tt_id)
-            self.update_tt(personal_timetable, name, has_conflict, courses, semester)
+            self.update_tt(
+                personal_timetable,
+                name,
+                has_conflict,
+                courses,
+                semester)
             self.update_events(personal_timetable, request.data['events'])
 
             timetables = get_student_tts(student, school, semester)
-            saved_timetable = (x for x in timetables if x['id'] == personal_timetable.id).next()
-            response = {'timetables': timetables, 'saved_timetable': saved_timetable}
+            saved_timetable = (
+                x for x in timetables if x['id'] == personal_timetable.id).next()
+            response = {
+                'timetables': timetables,
+                'saved_timetable': saved_timetable}
 
             # TODO: should respond only with created object
             return Response(response,
@@ -257,23 +285,29 @@ class ClassmateView(ValidateSubdomainMixin, RedirectToSignupMixin, APIView):
             school = request.subdomain
             student = Student.objects.get(user=request.user)
             course_ids = map(int, request.query_params.getlist('course_ids[]'))
-            semester, _ = Semester.objects.get_or_create(name=sem_name, year=year)
+            semester, _ = Semester.objects.get_or_create(
+                name=sem_name, year=year)
             total_count = 0
             count = 0
             most_friend_course_id = -1
             for course_id in course_ids:
-                temp_count = get_friend_count_from_course_id(school, student, course_id, semester)
+                temp_count = get_friend_count_from_course_id(
+                    school, student, course_id, semester)
                 if temp_count > count:
                     count = temp_count
                     most_friend_course_id = course_id
                 total_count += temp_count
-            data = {"id": most_friend_course_id, "count": count, "total_count": total_count}
+            data = {
+                "id": most_friend_course_id,
+                "count": count,
+                "total_count": total_count}
             return Response(data, status=status.HTTP_200_OK)
         elif request.query_params.getlist('course_ids[]'):
             school = request.subdomain
             student = Student.objects.get(user=request.user)
             course_ids = map(int, request.query_params.getlist('course_ids[]'))
-            semester, _ = Semester.objects.get_or_create(name=sem_name, year=year)
+            semester, _ = Semester.objects.get_or_create(
+                name=sem_name, year=year)
             # user opted in to sharing courses
             if student.social_courses:
                 courses = []
@@ -286,7 +320,8 @@ class ClassmateView(ValidateSubdomainMixin, RedirectToSignupMixin, APIView):
         else:
             school = request.subdomain
             student = Student.objects.get(user=request.user)
-            semester, _ = Semester.objects.get_or_create(name=sem_name, year=year)
+            semester, _ = Semester.objects.get_or_create(
+                name=sem_name, year=year)
             current_tt = student.personaltimetable_set.filter(school=school,
                                                               semester=semester).order_by(
                 'last_updated').last()
@@ -294,7 +329,8 @@ class ClassmateView(ValidateSubdomainMixin, RedirectToSignupMixin, APIView):
                 return Response([], status=status.HTTP_200_OK)
             current_tt_courses = current_tt.courses.all()
 
-            # The most recent TT per student with social enabled that has courses in common with input student
+            # The most recent TT per student with social enabled that has
+            # courses in common with input student
             matching_tts = PersonalTimetable.objects.filter(student__social_all=True,
                                                             courses__id__in=current_tt_courses,
                                                             semester=semester) \
@@ -314,7 +350,8 @@ class ClassmateView(ValidateSubdomainMixin, RedirectToSignupMixin, APIView):
                         'course': model_to_dict(course,
                                                 exclude=['unstopped_description', 'description',
                                                          'credits']),
-                        # is there a section for this course that is in both timetables?
+                        # is there a section for this course that is in both
+                        # timetables?
                         'in_section': (sections_in_common & course.section_set.all()).exists()
                     })
 
@@ -324,10 +361,14 @@ class ClassmateView(ValidateSubdomainMixin, RedirectToSignupMixin, APIView):
                     'shared_courses': shared_courses,
                     'profile_url': 'https://www.facebook.com/' + friend.fbook_uid,
                     'name': friend.user.first_name + ' ' + friend.user.last_name,
-                    'large_img': 'https://graph.facebook.com/' + friend.fbook_uid + '/picture?width=700&height=700'
+                    'large_img': 'https://graph.facebook.com/' + friend.fbook_uid +
+                                 '/picture?width=700&height=700'
                 })
 
-            friends.sort(key=lambda friend: len(friend['shared_courses']), reverse=True)
+            friends.sort(
+                key=lambda friend: len(
+                    friend['shared_courses']),
+                reverse=True)
             return Response(friends, status=status.HTTP_200_OK)
 
 
@@ -379,8 +420,8 @@ class GCalView(RedirectToSignupMixin, APIView):
                 res = {
                     'summary': course['name'] + " " + course['code'] + slot['meeting_section'],
                     'location': slot['location'],
-                    'description': course['code'] + slot[
-                        'meeting_section'] + '\n' + instructors + description + '\n\n' + 'Created by Semester.ly',
+                    'description': course['code'] + slot['meeting_section'] + '\n' + instructors +
+                    description + '\n\n' + 'Created by Semester.ly',
                     'start': {
                         'dateTime': start.strftime("%Y-%m-%dT%H:%M:%S"),
                         'timeZone': 'America/New_York',
@@ -394,8 +435,9 @@ class GCalView(RedirectToSignupMixin, APIView):
                         DAY_MAP[slot['day']]
                     ],
                 }
-                event = service.events().insert(calendarId=created_calendar['id'],
-                                                body=res).execute()
+                service.events().insert(
+                    calendarId=created_calendar['id'],
+                    body=res).execute()
 
         analytic = CalendarExport.objects.create(
             student=student,
