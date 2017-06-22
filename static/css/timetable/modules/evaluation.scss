@@ -14,7 +14,7 @@
     text-align: left;
   }
 
-  #details {
+  .eval-item__details {
     font-size: 15px;
     margin: 5px;
   }
@@ -66,7 +66,7 @@
     text-align: right;
   }
 
-  #prof {
+  .eval-item__prof {
     font-size: 15px;
   }
 
@@ -86,7 +86,7 @@
 .eval-wrapper {
   margin-bottom: 10px;
 
-  #prof {
+  .eval-item__prof {
     display: inline-block;
     margin: 0 auto;
     margin-top: 10px;
@@ -117,7 +117,7 @@
 }
 
 .star-ratings-sprite {
-  background: url('../../img/star.png') repeat-x;
+  background: url("../../img/star.png") repeat-x;
   float: left;
   font-size: 0;
   height: 18px;
@@ -136,14 +136,14 @@
 }
 
 .rating {
-  background: url('../../img/rating.png') 0 100% repeat-x;
+  background: url("../../img/rating.png") 0 100% repeat-x;
   display: block;
   float: left;
   height: 18px;
 }
 
 .trans {
-  #course-evaluations {
+  .course-evaluations {
     display: none;
   }
 }

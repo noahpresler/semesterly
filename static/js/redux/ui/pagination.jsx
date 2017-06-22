@@ -1,17 +1,18 @@
+import PropTypes from 'prop-types';
 import React from 'react';
 
 const Bubble = ({ index, active, setActive }) =>
-  <li
+  (<li
     onClick={() => setActive(index)}
     className={active ? 'sem-page active' : 'sem-page'}
   >
     <span>{index + 1}</span>
-  </li>;
+  </li>);
 
 Bubble.propTypes = {
-  index: React.PropTypes.number.isRequired,
-  active: React.PropTypes.number.isRequired,
-  setActive: React.PropTypes.func.isRequired,
+  index: PropTypes.number.isRequired,
+  active: PropTypes.bool.isRequired,
+  setActive: PropTypes.func.isRequired,
 };
 
 class Pagination extends React.Component {
@@ -67,21 +68,29 @@ class Pagination extends React.Component {
     for (let i = first; i < limit; i++) {
       options.push(
         <Bubble
-          key={i} index={i}
-          active={this.props.active === i} setActive={this.props.setActive}
+          key={i}
+          index={i}
+          active={this.props.active === i}
+          setActive={this.props.setActive}
         />,
             );
     }
 
     return (
       <div className="sem-pagination">
-        <div className="sem-pagination-nav" onClick={this.prev}>
+        <div
+          className="sem-pagination-nav"
+          onClick={this.prev}
+        >
           <i className="fa fa-angle-left sem-pagination-prev sem-pagination-icon" />
         </div>
         <ol className="sem-pages">
           {options}
         </ol>
-        <div className="sem-pagination-nav" onClick={this.next}>
+        <div
+          className="sem-pagination-nav"
+          onClick={this.next}
+        >
           <i className="fa fa-angle-right sem-pagination-next sem-pagination-icon" />
         </div>
       </div>
@@ -90,9 +99,10 @@ class Pagination extends React.Component {
 }
 
 Pagination.propTypes = {
-  active: React.PropTypes.number.isRequired,
-  count: React.PropTypes.number.isRequired,
-  setActive: React.PropTypes.func.isRequired,
+  active: PropTypes.number.isRequired,
+  count: PropTypes.number.isRequired,
+  setActive: PropTypes.func.isRequired,
 };
 
 export default Pagination;
+
