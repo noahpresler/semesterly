@@ -5,7 +5,7 @@ body {
   overflow-x: hidden;
 }
 
-#calendar {
+.calendar {
   user-select: none;
   width: 100%;
 
@@ -148,19 +148,6 @@ button {
     .tip-border {
       display: none;
     }
-  }
-}
-
-.data-last-updated {
-  font-size: 12px;
-  line-height: 22px;
-  margin: 5px 0 0;
-}
-
-@media(max-width: 514px) {
-  .data-last-updated {
-    font-size: 9px;
-    margin: 5px 5px 0;
   }
 }
 
