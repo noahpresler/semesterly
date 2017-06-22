@@ -13,6 +13,7 @@ class SharedTimetable(models.Model):
     courses = models.ManyToManyField(Course)
     sections = models.ManyToManyField(Section)
     semester = models.ForeignKey('timetable.Semester')
+    _semester = models.CharField(max_length=2)  # deprecated
     school = models.CharField(max_length=50)
     name = models.CharField(max_length=100, null=True)
     has_conflict = models.BooleanField(blank=True, default=False)
@@ -37,6 +38,7 @@ class AnalyticsTimetable(models.Model):
     """
     courses = models.ManyToManyField(Course)
     semester = models.ForeignKey('timetable.Semester')
+    _semester = models.CharField(max_length=2)  # deprecated
     school = models.CharField(max_length=50)
     has_conflict = models.BooleanField(blank=True, default=False)
     time_created = models.DateTimeField(auto_now_add=True)
@@ -52,6 +54,7 @@ class AnalyticsCourseSearch(models.Model):
     courses = models.ManyToManyField(Course)
     is_advanced = models.BooleanField(blank=True, default=False)
     semester = models.ForeignKey('timetable.Semester')
+    _semester = models.CharField(max_length=2)  # deprecated
     school = models.CharField(max_length=50)
     student = models.ForeignKey(Student, null=True, default=None)
 
