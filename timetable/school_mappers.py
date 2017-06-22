@@ -63,6 +63,7 @@ school_code_to_name = {
 
 _sem = lambda term, year: {'name': term, 'year': year}
 
+# TODO: unhardcode - use k most recent semesters with course data
 school_to_semesters = {
     'jhu': [_sem('Fall', '2017'), _sem('Summer', '2017'), _sem('Spring', '2017'),
             _sem('Fall', '2016')],
@@ -79,6 +80,7 @@ school_to_semesters = {
                   _sem('Fall', '2016'), _sem('Summer', '2017'), _sem('Interterm', '2017')],
 }
 
+# temporary backwards compatibility hack - see #916
 old_school_to_semesters = {
     'jhu': [_sem('Fall', '2017'), _sem('Summer', '2017'), _sem('Spring', '2017'),
             _sem('Fall', '2016')],
