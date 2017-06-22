@@ -5,7 +5,7 @@ from django.shortcuts import get_object_or_404
 from hashids import Hashids
 
 from timetable.jhu_final_exam_scheduler import JHUFinalExamScheduler
-from timetable.utils import FeatureFlowView, CsrfExemptMixin
+from helpers.mixins import FeatureFlowView, CsrfExemptMixin
 from exams.models import FinalExamShare
 from student.utils import get_student
 

@@ -6,10 +6,9 @@ import thunkMiddleware from 'redux-thunk';
 import { Provider } from 'react-redux';
 import rootReducer from './reducers/root_reducer';
 import SemesterlyContainer from './ui/containers/semesterly_container';
-import { fetchMostClassmatesCount, isRegistered } from './actions/user_actions';
+import { fetchMostClassmatesCount, handleAgreement, isRegistered } from './actions/user_actions';
 import { loadCachedTimetable, loadTimetable, lockTimetable } from './actions/timetable_actions';
 import { fetchSchoolInfo } from './actions/school_actions';
-import { currSem } from './reducers/semester_reducer';
 import { fetchCourseClassmates, setCourseInfo } from './actions/modal_actions';
 import {
     browserSupportsLocalStorage,
@@ -21,23 +20,13 @@ import {
 import { addTTtoGCal } from './actions/calendar_actions';
 import * as ActionTypes from './constants/actionTypes';
 
-export const store = createStore(rootReducer,
+const store = createStore(rootReducer,
     window.devToolsExtension && window.devToolsExtension(),
     applyMiddleware(thunkMiddleware),
 );
 
-// TODO: move to endpoints?
-// get functions used to get backend endpoints
-export const getSchool = () => store.getState().school.school;
-
-export const getSemester = () => {
-  const state = store.getState();
-  const currSemester = currSem(state.semester);
-  return `${currSemester.name}/${currSemester.year}`;
-};
-
 // load initial timetable from user data if logged in or local storage
-const setupTimetables = (userTimetables, allSemesters) => (dispatch) => {
+const setupTimetables = (userTimetables, allSemesters, oldSemesters) => (dispatch) => {
   if (userTimetables.length > 0) {
     dispatch(loadTimetable(userTimetables[0]));
     dispatch({ type: ActionTypes.RECEIVE_TIMETABLE_SAVED, upToDate: true });
@@ -46,7 +35,7 @@ const setupTimetables = (userTimetables, allSemesters) => (dispatch) => {
     }, 500);
     dispatch({ type: ActionTypes.CACHED_TT_LOADED });
   } else if (browserSupportsLocalStorage()) {
-    dispatch(loadCachedTimetable(allSemesters));
+    dispatch(loadCachedTimetable(allSemesters, oldSemesters));
   }
 };
 
@@ -149,12 +138,17 @@ const setup = () => (dispatch) => {
 
   dispatch({ type: ActionTypes.INIT_STATE, data: initData });
 
-  dispatch(setupTimetables(initData.currentUser.timetables, initData.allSemesters));
+  dispatch(setupTimetables(initData.currentUser.timetables, initData.allSemesters,
+    initData.oldSemesters));
 
   if (browserSupportsLocalStorage() && 'serviceWorker' in navigator) {
     dispatch(setupChromeNotifs());
   }
   dispatch(showFriendAlert());
+
+  if (initData.featureFlow.name === null) {
+    dispatch(handleAgreement(initData.currentUser, Date.parse(initData.timeUpdatedTos)));
+  }
 
   dispatch(handleFlows(initData.featureFlow));
   dispatch(fetchSchoolInfo());

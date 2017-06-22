@@ -1,0 +1,54 @@
+.tos-banner {
+  background-color: $gfff;
+  border: 1px solid $gddd;
+  bottom: 0;
+  left: 50%;
+  max-width: 470px;
+  opacity: 0;
+  padding: 12px 30px 12px 12px;
+  position: fixed;
+  text-align: center;
+  transform: translateX(-50%);
+  transition: opacity .3s, visibility .3s;
+  visibility: hidden;
+  width: 100%;
+  z-index: 3000;
+
+  p {
+    font-size: 12px;
+    line-height: 20px;
+    margin: 0;
+
+    a {
+      margin: 0 3px;
+    }
+  }
+
+  &.show {
+    opacity: 1;
+    visibility: visible;
+  }
+}
+
+.tos-banner__close {
+  background-color: $geee;
+  bottom: 6px;
+  cursor: pointer;
+  padding: 0 5px;
+  position: absolute;
+  right: 6px;
+  top: 6px;
+
+  i {
+    color: $g555;
+    font-size: 15px;
+    line-height: 32px;
+    transition: color .3s;
+  }
+
+  &:hover {
+    i {
+      color: $red;
+    }
+  }
+}
