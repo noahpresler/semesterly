@@ -179,6 +179,7 @@ class Section(models.Model):
   section_type = models.CharField(max_length=50, default='L')
   instructors = models.CharField(max_length=500, default='TBA')
   semester = models.ForeignKey(Semester)
+  _semester = models.CharField(max_length=2)  # deprecated
   textbooks = models.ManyToManyField(Textbook, through='TextbookLink')
   was_full = models.BooleanField(default=False)
 
