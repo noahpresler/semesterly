@@ -1,6 +1,5 @@
 import fetch from 'isomorphic-fetch';
 import Cookie from 'js-cookie';
-import { store } from '../init';
 import * as ActionTypes from '../constants/actionTypes';
 import { getRequestShareExamLinkEndpoint, getFinalExamSchedulerEndpoint } from '../constants/endpoints';
 import { getActiveTimetable } from './user_actions';
@@ -8,8 +7,8 @@ import { getActiveTimetable } from './user_actions';
 // TODO - move all other final exam actions to here
 // JUST  the fcn  fetchFinalExamSchedule
 
-export const fetchFinalExamSchedule = () => (dispatch) => {
-  const state = store.getState();
+export const fetchFinalExamSchedule = () => (dispatch, getState) => {
+  const state = getState();
   const timetable = getActiveTimetable(state.timetables);
   dispatch({ type: ActionTypes.FETCH_FINAL_EXAMS });
   fetch(getFinalExamSchedulerEndpoint(), {
@@ -28,8 +27,8 @@ export const fetchFinalExamSchedule = () => (dispatch) => {
     });
 };
 
-export const getFinalExamShareLink = () => (dispatch) => {
-  const state = store.getState();
+export const getFinalExamShareLink = () => (dispatch, getState) => {
+  const state = getState();
   const timetable = getActiveTimetable(state.timetables);
   fetch(getRequestShareExamLinkEndpoint(), {
     headers: {

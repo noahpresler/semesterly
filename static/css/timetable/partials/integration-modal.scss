@@ -3,7 +3,7 @@
   overflow: auto;
 }
 
-#integration-modal {
+.integration-modal__wrapper {
   padding: 20px;
 
   .switch-slide {
@@ -25,7 +25,7 @@
   }
 }
 
-#integration-logo {
+.integration-logo {
   background-position: center;
   background-repeat: no-repeat;
   background-size: contain;

@@ -14,6 +14,7 @@ export const browserSupportsLocalStorage = () => {
     return false;
   }
 };
+// TODO: merge set functions into generic set(key, value)
 export const saveLocalCourseSections = (courseSections) => {
   if (!browserSupportsLocalStorage()) {
     return;
@@ -36,7 +37,9 @@ export const saveLocalSemester = (semester) => {
   if (!browserSupportsLocalStorage()) {
     return;
   }
-  localStorage.setItem('semester', semester);
+  localStorage.setItem('semesterName', semester.name);
+  localStorage.setItem('year', semester.year);
+  localStorage.removeItem('semester'); // only use new format for semester
 };
 export const setFirstVisit = (time) => {
   if (!browserSupportsLocalStorage()) {
@@ -49,6 +52,12 @@ export const setFriendsCookie = (time) => {
     return;
   }
   localStorage.setItem('friendsCookie', time);
+};
+export const setTimeShownBanner = (time) => {
+  if (!browserSupportsLocalStorage()) {
+    return;
+  }
+  localStorage.setItem('timeShownBanner', time);
 };
 export const setDeclinedNotifications = (declined) => {
   if (!browserSupportsLocalStorage()) {
@@ -122,3 +131,5 @@ export const getMaxEndHour = (timetable, hasCourses) => {
   }
   return Math.max(maxEndHour, getMaxHourBasedOnWindowHeight());
 };
+
+export const isIncomplete = prop => prop === undefined || prop === '' || prop === null;

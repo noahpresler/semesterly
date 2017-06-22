@@ -5,6 +5,7 @@ import {
     getCourseInfoEndpoint,
     getReactToCourseEndpoint,
 } from '../constants/endpoints';
+import { getSchool, getSemester } from '../actions/school_actions';
 import * as ActionTypes from '../constants/actionTypes';
 
 export const setCourseInfo = json => ({
@@ -27,8 +28,9 @@ export const setCourseId = id => ({
   id,
 });
 
-export const fetchCourseClassmates = courseId => (dispatch) => {
-  fetch(getClassmatesInCourseEndpoint(courseId), {
+export const fetchCourseClassmates = courseId => (dispatch, getState) => {
+  const state = getState();
+  fetch(getClassmatesInCourseEndpoint(getSchool(state), getSemester(state), courseId), {
     credentials: 'include',
   })
     .then(response => response.json())
@@ -37,9 +39,9 @@ export const fetchCourseClassmates = courseId => (dispatch) => {
     });
 };
 
-export const fetchCourseInfo = courseId => (dispatch) => {
+export const fetchCourseInfo = courseId => (dispatch, getState) => {
   dispatch(requestCourseInfo(courseId));
-  fetch(getCourseInfoEndpoint(courseId), {
+  fetch(getCourseInfoEndpoint(courseId, getSemester(getState())), {
     credentials: 'include',
   })
   .then(response => response.json())
@@ -111,3 +113,23 @@ export const overrideSettingsShow = data => ({
 });
 
 export const toggleTextbookModal = () => ({ type: ActionTypes.TOGGLE_TEXTBOOK_MODAL });
+
+export const triggerTermsOfServiceBanner = () => ({
+  type: ActionTypes.TRIGGER_TOS_BANNER,
+});
+
+export const dismissTermsOfServiceBanner = () => ({
+  type: ActionTypes.DISMISS_TOS_BANNER,
+});
+
+export const triggerTermsOfServiceModal = () => ({
+  type: ActionTypes.TRIGGER_TOS_MODAL,
+});
+
+export const setUserSettingsModalVisible = () => ({
+  type: ActionTypes.SET_SETTINGS_MODAL_VISIBLE,
+});
+
+export const setUserSettingsModalHidden = () => ({
+  type: ActionTypes.SET_SETTINGS_MODAL_HIDDEN,
+});

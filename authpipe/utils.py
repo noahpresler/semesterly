@@ -5,7 +5,6 @@ import requests
 from django.conf import settings
 from django.contrib.auth.models import User
 from django.core.signing import TimestampSigner, BadSignature, SignatureExpired
-from django.contrib.auth.mixins import LoginRequiredMixin
 from hashids import Hashids
 from oauth2client.client import GoogleCredentials
 
@@ -44,7 +43,7 @@ def associate_students(strategy, details, response, user, *args, **kwargs):
     try:
         email = kwargs['details']['email']
         kwargs['user'] = User.objects.get(email=email)
-    except:
+    except BaseException:
         pass
     try:
         token = strategy.session_get('student_token')
@@ -52,7 +51,7 @@ def associate_students(strategy, details, response, user, *args, **kwargs):
         student = Student.objects.get(id=hashids.decrypt(ref)[0])
         if check_student_token(student, token):
             kwargs['user'] = student.user
-    except:
+    except BaseException:
         pass
     return kwargs
 
@@ -68,7 +67,8 @@ def create_student(strategy, details, response, user, *args, **kwargs):
         provider=backend_name,
     ).first()
 
-    if backend_name == 'google-oauth2' and not user.social_auth.filter(provider='facebook').exists():
+    if backend_name == 'google-oauth2' and not user.social_auth.filter(
+            provider='facebook').exists():
         try:
             access_token = social_user.extra_data["access_token"]
         except TypeError:
@@ -94,46 +94,43 @@ def create_student(strategy, details, response, user, *args, **kwargs):
             url = u'https://graph.facebook.com/{0}/' \
                   u'?fields=picture&type=large' \
                   u'&access_token={1}'.format(
-                social_user.uid,
-                access_token,
-            )
+                      social_user.uid,
+                      access_token,
+                  )
             request = urllib2.Request(url)
             data = json.loads(urllib2.urlopen(request).read())
             new_student.img_url = data['picture']['data']['url']
             url = u'https://graph.facebook.com/{0}/' \
                   u'?fields=gender' \
                   u'&access_token={1}'.format(
-                social_user.uid,
-                access_token,
-            )
+                      social_user.uid,
+                      access_token,
+                  )
             request = urllib2.Request(url)
             data = json.loads(urllib2.urlopen(request).read())
             try:
                 new_student.gender = data.get('gender', '')
-            except:
+            except BaseException:
                 pass
             new_student.fbook_uid = social_user.uid
             new_student.save()
             url = u'https://graph.facebook.com/{0}/' \
                   u'friends?fields=id' \
                   u'&access_token={1}'.format(
-                social_user.uid,
-                access_token,
-            )
+                      social_user.uid,
+                      access_token,
+                  )
             request = urllib2.Request(url)
             friends = json.loads(urllib2.urlopen(request).read()).get('data')
 
             for friend in friends:
                 if Student.objects.filter(fbook_uid=friend['id']).exists():
-                    friend_student = Student.objects.get(fbook_uid=friend['id'])
-                    if not new_student.friends.filter(user=friend_student.user).exists():
+                    friend_student = Student.objects.get(
+                        fbook_uid=friend['id'])
+                    if not new_student.friends.filter(
+                            user=friend_student.user).exists():
                         new_student.friends.add(friend_student)
                         new_student.save()
                         friend_student.save()
 
     return kwargs
-
-
-class RedirectToSignupMixin(LoginRequiredMixin):
-    login_url = '/signup/'
-    redirect_field_name = None

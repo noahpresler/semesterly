@@ -146,6 +146,7 @@ INSTALLED_APPS = (
     'rest_framework_swagger',
     'webpack_loader',
     'djcelery',
+    'agreement'
 )
 
 REST_FRAMEWORK ={
@@ -287,7 +288,7 @@ USE_TZ = True
 
 APPEND_SLASH = True
 
-TEST_RUNNER = 'test_utils.test_runners.FastTestRunner'
+TEST_RUNNER = 'helpers.test.test_runners.FastTestRunner'
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.6/howto/static-files/
