@@ -2,7 +2,7 @@ import fetch from 'isomorphic-fetch';
 import Cookie from 'js-cookie';
 import { normalize } from 'normalizr';
 import { timetableSchema } from '../schema';
-import { getActiveTT, getCurrentSemester } from '../reducers/root_reducer';
+import { getActiveTimetableCourses, getCurrentSemester } from '../reducers/root_reducer';
 import { getTimetablesEndpoint } from '../constants/endpoints';
 import {
     browserSupportsLocalStorage,
@@ -341,7 +341,7 @@ const autoFetch = () => (dispatch, getState) => {
   const state = getState();
   clearTimeout(customEventUpdateTimer);
   customEventUpdateTimer = setTimeout(() => {
-    if (getActiveTT(state).courses.length > 0) {
+    if (getActiveTimetableCourses(state).length > 0) {
       dispatch({
         type: ActionTypes.UPDATE_LAST_COURSE_ADDED,
         course: state.customSlots,
