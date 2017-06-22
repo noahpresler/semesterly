@@ -170,25 +170,24 @@ class Course(models.Model):
 
 
 class Section(models.Model):
-    course = models.ForeignKey(Course)
-    meeting_section = models.CharField(max_length=50)
-    size = models.IntegerField(default=-1)
-    enrolment = models.IntegerField(default=-1)
-    waitlist = models.IntegerField(default=-1)
-    waitlist_size = models.IntegerField(default=-1)
-    section_type = models.CharField(max_length=50, default='L')
-    instructors = models.CharField(max_length=500, default='TBA')
-    _semester = models.CharField(max_length=2)  # deprecated
-    semester = models.ForeignKey(Semester)
-    textbooks = models.ManyToManyField(Textbook, through='TextbookLink')
-    was_full = models.BooleanField(default=False)
+  course = models.ForeignKey(Course)
+  meeting_section = models.CharField(max_length=50)
+  size = models.IntegerField(default=-1)
+  enrolment = models.IntegerField(default=-1)
+  waitlist = models.IntegerField(default=-1)
+  waitlist_size = models.IntegerField(default=-1)
+  section_type = models.CharField(max_length=50, default='L')
+  instructors = models.CharField(max_length=500, default='TBA')
+  semester = models.ForeignKey(Semester)
+  _semester = models.CharField(max_length=2)  # deprecated
+  textbooks = models.ManyToManyField(Textbook, through='TextbookLink')
+  was_full = models.BooleanField(default=False)
 
-    def get_textbooks(self):
-        return [tb.get_info() for tb in self.textbooks.all()]
+  def get_textbooks(self):
+    return [tb.get_info() for tb in self.textbooks.all()]
 
-    def __unicode__(self):
-        return "Course: {0}; Section: {0}; Semester: {0}".format(self.course, self.meeting_section,
-                                                                 self.semester)
+  def __unicode__(self):
+    return "Course: %s; Section: %s; Semester: %s" % (str(self.course), self.meeting_section, str(self.semester))
 
 
 class Offering(models.Model):
