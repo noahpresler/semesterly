@@ -4,7 +4,7 @@ import Modal from 'boron/WaveModal';
 import classNames from 'classnames';
 import COLOUR_DATA from '../../constants/colours';
 import { ShareLink } from '../master_slot';
-import getExamShareLink from '../../helpers/exam_helpers';
+import { getExamShareLink } from '../../constants/endpoints';
 import * as SemesterlyPropTypes from '../../constants/semesterlyPropTypes';
 
 const InSlot = (props) => {
