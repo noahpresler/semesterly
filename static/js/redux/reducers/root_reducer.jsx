@@ -74,9 +74,10 @@ export const getCurrentSemester = state => fromSemester.getCurrentSemester(state
 export const getActiveTimetable = state =>
   fromEntities.getTimetable(state.entities, fromTimetables.getActiveTimetableId(state.timetables));
 
-export const getActiveTimetableCourses = state =>
-  fromEntities.getTimetableCourses(state.entities,
-    fromTimetables.getActiveTimetableId(state.timetables));
+export const getActiveTimetableCourses = (state) => {
+  const activeId = fromTimetables.getActiveTimetableId(state.timetables);
+  return activeId === undefined ? [] : fromEntities.getTimetableCourses(state.entities, activeId);
+};
 
 export const getFromActiveTimetable = (state, fields) =>
   fromEntities.getFromTimetable(getActiveTimetable(state), fields);

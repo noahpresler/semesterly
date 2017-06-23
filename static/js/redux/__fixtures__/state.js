@@ -17,6 +17,7 @@ export const loggedIn = {
 
 export const withTimetables = {
   items: [emptyTimetable],
+  ids: [],
   active: 0,
 };
 
