@@ -53,7 +53,6 @@ class ExplorationModal extends React.Component {
       this.setState({ hasUpdatedCourses: true });
     }
     if (nextProps.advancedSearchResults.length > 0 && this.props.advancedSearchResults === 0) {
-      console.log('fetching');
       this.props.fetchCourseClassmates(nextProps.advancedSearchResults[0].id);
     }
   }

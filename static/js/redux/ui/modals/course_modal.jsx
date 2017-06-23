@@ -23,7 +23,9 @@ class CourseModal extends React.Component {
   componentWillReceiveProps(nextProps) {
     if (nextProps.id !== null) {
       const { data } = nextProps;
-      history.replaceState({}, 'Semester.ly', this.props.getShareLinkFromModal(data.code));
+      if (data.code) {
+        history.replaceState({}, 'Semester.ly', this.props.getShareLinkFromModal(data.code));
+      }
       this.modal.show();
     }
   }

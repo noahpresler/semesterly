@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "description": "A Timetable Generator",
   "dependencies": {
+    "autoprefixer": "^7.1.1",
     "babel": "^6.23.0",
     "babel-core": "^6.24.1",
     "babel-jest": "^20.0.3",
@@ -94,14 +95,15 @@
     }
   },
   "scripts": {
-    "test": "jest",
+    "test": "NODE_ENV=production jest",
     "test:watch": "npm test -- --watch",
     "build": "./node_modules/.bin/webpack --config webpack.config.js --progress --colors",
     "watch": "node server.js",
     "lint-staged": "lint-staged",
     "lint": "./node_modules/.bin/eslint \"static/js/redux/**\"; ./node_modules/.bin/sass-lint -c .sass-lint.yml 'static/css/timetable/*.scss, static/css/timetable/**/*.scss' -v -q",
     "lint-fix": "./node_modules/.bin/eslint --fix \"static/js/redux/**\" ",
-    "lint-scss-staged": "./node_modules/.bin/sass-lint -c .sass-lint-precommit.yml -v -q"
+    "lint-scss-staged": "./node_modules/.bin/sass-lint -c .sass-lint-precommit.yml -v -q",
+    "validate": "npm ls"
   },
   "repository": {
     "type": "git",
