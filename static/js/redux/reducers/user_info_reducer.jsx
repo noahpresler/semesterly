@@ -43,17 +43,6 @@ const userInfo = (state = initialState, action) => {
 };
 
 export const isUserInfoIncomplete = (state) => {
-  // if (!state.data.FacebookSignedUp) {
-  //   return state.data.isLoggedIn &&
-  //     (isIncomplete(state.data.major) ||
-  //     isIncomplete(state.data.class_year));
-  // }
-  // return state.data.isLoggedIn &&
-  //   (isIncomplete(state.data.social_offerings) ||
-  //     isIncomplete(state.data.social_courses) ||
-  //     isIncomplete(state.data.major) ||
-  //     isIncomplete(state.data.class_year)
-  //   );
   const fields = state.data.FacebookSignedUp ?
   ['social_offerings', 'social_courses',
     'major', 'class_year'] :

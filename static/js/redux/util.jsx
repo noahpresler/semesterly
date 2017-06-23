@@ -136,3 +136,6 @@ export const getSectionTypeDisplayName = function getSectionTypeDisplayName(sect
 
 // A comparison function for sorting objects by string property
 export const strPropertyCmp = prop => (first, second) => (first[prop] > second[prop] ? 1 : -1);
+
+export const isIncomplete = prop => prop === undefined || prop === '' || prop === null;
+
