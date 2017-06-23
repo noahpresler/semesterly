@@ -4,7 +4,6 @@ import {
     deleteRegistrationTokenEndpoint,
     getClassmatesEndpoint,
     getDeleteTimetableEndpoint,
-    getFinalExamSchedulerEndpoint,
     getFriendsEndpoint,
     getIntegrationEndpoint,
     getLoadSavedTimetablesEndpoint,
@@ -16,12 +15,12 @@ import {
     getSetRegistrationTokenEndpoint,
     acceptTOSEndpoint,
 } from '../constants/endpoints';
+import { getActiveTT, getActiveTimetableCourses, getCurrentSemester } from '../reducers/root_reducer';
 import { fetchCourseClassmates } from './modal_actions';
 import { getNumberedName, loadTimetable, nullifyTimetable } from './timetable_actions';
 import { MAX_TIMETABLE_NAME_LENGTH } from '../constants/constants';
 import * as ActionTypes from '../constants/actionTypes';
-import { currSem } from '../reducers/semester_reducer';
-import { setTimeShownBanner } from '../util';
+import { setTimeShownBanner, checkStatus } from '../util';
 
 let autoSaveTimer;
 
@@ -49,18 +48,13 @@ export const requestFriends = () => ({
   type: ActionTypes.REQUEST_FRIENDS,
 });
 
-/* Returns the currently active timetable */
-export const getActiveTimetable = timetableState => timetableState.items[timetableState.active];
-
-const getSaveTimetablesRequestBody = () => (dispatch, getState) => {
-  const state = getState();
-  const timetableState = state.timetables;
-  const tt = getActiveTimetable(timetableState);
+const getSaveTimetablesRequestBody = (state) => {
+  const tt = getActiveTT(state);
   return {
     courses: tt.courses,
     events: state.customSlots,
     has_conflict: tt.has_conflict,
-    semester: currSem(state.semester),
+    semester: getCurrentSemester(state),
     name: state.savingTimetable.activeTimetable.name,
     id: state.savingTimetable.activeTimetable.id,
   };
@@ -91,7 +85,7 @@ export const fetchMostClassmatesCount = courses => (dispatch, getState) => {
   if (!state.userInfo.data.social_courses) {
     return;
   }
-  const semester = currSem(state.semester);
+  const semester = getCurrentSemester(state);
   dispatch(requestMostClassmates());
   fetch(getMostClassmatesCountEndpoint(semester, courses), {
     credentials: 'include',
@@ -114,11 +108,10 @@ export const fetchClassmates = courses => (dispatch, getState) => {
     return;
   }
   setTimeout(() => {
-    dispatch(fetchMostClassmatesCount(getActiveTimetable(state.timetables)
-      .courses.map(c => c.id)));
+    dispatch(fetchMostClassmatesCount(getActiveTimetableCourses(state).map(c => c.id)));
   }, 500);
   dispatch(requestClassmates());
-  fetch(getClassmatesEndpoint(currSem(state.semester), courses), {
+  fetch(getClassmatesEndpoint(getCurrentSemester(state), courses), {
     credentials: 'include',
     method: 'GET',
   })
@@ -133,7 +126,7 @@ export const saveTimetable = (isAutoSave = false, callback = null) => (dispatch,
   if (!state.userInfo.data.isLoggedIn) {
     return dispatch({ type: ActionTypes.TOGGLE_SIGNUP_MODAL });
   }
-  const activeTimetable = getActiveTimetable(state.timetables);
+  const activeTimetable = getActiveTT(state);
 
   // if current timetable is empty or we're already in saved state, don't save this timetable
   const numSlots = activeTimetable.courses.length + state.customSlots.length;
@@ -146,8 +139,8 @@ export const saveTimetable = (isAutoSave = false, callback = null) => (dispatch,
     type: ActionTypes.REQUEST_SAVE_TIMETABLE,
   });
 
-  const body = dispatch(getSaveTimetablesRequestBody());
-  fetch(getSaveTimetableEndpoint(), {
+  const body = getSaveTimetablesRequestBody(state);
+  return fetch(getSaveTimetableEndpoint(), {
     headers: {
       'X-CSRFToken': Cookie.get('csrftoken'),
       Accept: 'application/json',
@@ -157,18 +150,12 @@ export const saveTimetable = (isAutoSave = false, callback = null) => (dispatch,
     body: JSON.stringify(body),
     credentials: 'include',
   })
-  .then((response) => {
-    if (response.status === 409) {
-      dispatch({
-        type: ActionTypes.ALERT_TIMETABLE_EXISTS,
-      });
-      return null;
-    }
-
-    return response.json().then((json) => {
-        // edit the state's courseSections, so that future requests to add/remove/unlock
-        // courses are handled correctly. in the new courseSections, every currently
-        // active section will be locked
+    .then(checkStatus)
+    .then(response => response.json())
+    .then((json) => {
+      // edit the state's courseSections, so that future requests to add/remove/unlock
+      // courses are handled correctly. in the new courseSections, every currently
+      // active section will be locked
       if (!isAutoSave) {
             // mark that the current timetable is now the only available one (since all
             // sections are locked)
@@ -202,9 +189,15 @@ export const saveTimetable = (isAutoSave = false, callback = null) => (dispatch,
         return dispatch(fetchClassmates(json.timetables[0].courses.map(c => c.id)));
       }
       return null;
+    })
+    .catch((error) => {
+      if (error.response && error.response.status === 409) {
+        dispatch({
+          type: ActionTypes.ALERT_TIMETABLE_EXISTS,
+        });
+      }
+      return null;
     });
-  });
-  return null;
 };
 
 export const duplicateTimetable = timetable => (dispatch, getState) => {
@@ -225,7 +218,7 @@ export const duplicateTimetable = timetable => (dispatch, getState) => {
     },
     method: 'POST',
     body: JSON.stringify({
-      semester: currSem(state.semester),
+      semester: getCurrentSemester(state),
       source: timetable.name,
       name: getNumberedName(timetable.name, state.userInfo.data.timetables),
     }),
@@ -276,7 +269,7 @@ export const deleteTimetable = timetable => (dispatch, getState) => {
   dispatch({
     type: ActionTypes.REQUEST_SAVE_TIMETABLE,
   });
-  fetch(getDeleteTimetableEndpoint(currSem(state.semester), timetable.name), {
+  fetch(getDeleteTimetableEndpoint(getCurrentSemester(state), timetable.name), {
     headers: {
       'X-CSRFToken': Cookie.get('csrftoken'),
       Accept: 'application/json',
@@ -342,11 +335,8 @@ export const saveSettings = callback => (dispatch, getState) => {
   })
     .then((response) => {
       const state = getState();
-      const timetables = state.timetables.items;
-      const active = state.timetables.active;
-      const activeTT = timetables[active];
       if (state.userInfo.data.social_courses) {
-        dispatch(fetchClassmates(activeTT.courses.map(c => c.id)));
+        dispatch(fetchClassmates(getActiveTimetableCourses(state).map(c => c.id)));
         if (state.courseInfo.id) {
           dispatch(fetchCourseClassmates(state.courseInfo.id));
         }
@@ -384,26 +374,6 @@ export const getUserSavedTimetables = semester => (dispatch) => {
     });
 };
 
-export const fetchFinalExamSchedule = () => (dispatch, getState) => {
-  const state = getState();
-  const timetable = getActiveTimetable(state.timetables);
-  dispatch({ type: ActionTypes.FETCH_FINAL_EXAMS });
-  fetch(getFinalExamSchedulerEndpoint(), {
-    headers: {
-      'X-CSRFToken': Cookie.get('csrftoken'),
-      Accept: 'application/json',
-      'Content-Type': 'application/json',
-    },
-    credentials: 'include',
-    method: 'POST',
-    body: JSON.stringify(timetable),
-  })
-    .then(response => response.json())
-    .then((json) => {
-      dispatch({ type: ActionTypes.RECEIVE_FINAL_EXAMS, json });
-    });
-};
-
 export const fetchFriends = () => (dispatch, getState) => {
   const state = getState();
   if (!state.userInfo.data.social_courses) {
@@ -413,7 +383,7 @@ export const fetchFriends = () => (dispatch, getState) => {
   dispatch({
     type: ActionTypes.PEER_MODAL_LOADING,
   });
-  fetch(getFriendsEndpoint(currSem(state.semester)), {
+  fetch(getFriendsEndpoint(getCurrentSemester(state)), {
     credentials: 'include',
     method: 'GET',
   })
@@ -429,7 +399,7 @@ export const fetchFriends = () => (dispatch, getState) => {
 export const autoSave = (delay = 2000) => (dispatch, getState) => {
   const state = getState();
   clearTimeout(autoSaveTimer);
-  const numTimetables = state.timetables.items[state.timetables.active].courses.length;
+  const numTimetables = getActiveTimetableCourses(state).length;
   const numEvents = state.customSlots.length;
   autoSaveTimer = setTimeout(() => {
     if (state.userInfo.data.isLoggedIn && numTimetables + numEvents > 0) {
