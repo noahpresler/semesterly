@@ -84,7 +84,6 @@ class SearchBar extends React.Component {
     this.setState({ showDropdown: !this.state.showDropdown });
   }
 
-
   render() {
     const resClass = classNames({ 'search-results': true, trans50: this.props.hasHoveredResult });
     const results = this.props.searchResults.map((c, i) => (<SearchResult

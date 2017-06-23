@@ -8,23 +8,19 @@ import {
     fetchShareTimetableLink,
 } from '../../actions/calendar_actions';
 import { togglePreferenceModal, triggerSaveCalendarModal } from '../../actions/modal_actions';
-import { getMaxEndHour } from '../../util';
+import { getMaxEndHour } from '../../reducers/root_reducer';
 
 const mapStateToProps = (state) => {
-  const timetables = state.timetables.items;
-  const active = state.timetables.active;
-  const hasTimetables = timetables[active].courses.length > 0;
   const { isFetchingShareLink, shareLink, shareLinkValid } = state.calendar;
   return {
-    endHour: getMaxEndHour(timetables[active], hasTimetables),
+    endHour: getMaxEndHour(state),
     saving: state.savingTimetable.saving,
     isLoggedIn: state.userInfo.data.isLoggedIn,
     uses12HrTime: state.ui.uses12HrTime,
-    hasTimetables,
     isFetchingShareLink,
     shareLink,
     shareLinkValid,
-    active,
+    active: state.timetables.active,
   };
 };
 
