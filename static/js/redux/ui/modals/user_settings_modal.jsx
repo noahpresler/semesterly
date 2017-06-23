@@ -49,16 +49,17 @@ class UserSettingsModal extends React.Component {
   }
 
   changeForm(obj = {}) {
+    let newUserSettings = {};
     if (this.props.userInfo.FacebookSignedUp) {
-      const newUserSettings = {
+      newUserSettings = {
         social_courses: this.shareAll.checked || this.shareCourses.checked,
         social_offerings: this.shareAll.checked || this.shareSections.checked,
         social_all: this.shareAll.checked,
       };
-      let userSettings = Object.assign({}, this.props.userInfo, newUserSettings);
-      userSettings = Object.assign({}, userSettings, obj);
-      this.props.changeUserInfo(userSettings);
     }
+    let userSettings = Object.assign({}, this.props.userInfo, newUserSettings);
+    userSettings = Object.assign({}, userSettings, obj);
+    this.props.changeUserInfo(userSettings);
     this.props.saveSettings();
   }
 
