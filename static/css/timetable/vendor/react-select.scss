@@ -85,9 +85,9 @@
   }
 }
 
-.Select-placeholder,
 .Select--single {
   > .Select-control {
+    .Select-placeholder,
     .Select-value {
       bottom: 0;
       color: $gaaa;
