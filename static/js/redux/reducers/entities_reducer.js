@@ -16,9 +16,9 @@ const getSlotsForSection = (state, section) =>
 
 // TODO use denormalize from normalizr
 const getDenormSectionById = (state, id) => {
-  let section = getSectionById(state, id);
-  let offering_set = getSlotsForSection(state, section);
-  return { ...section, offering_set }
+  const section = getSectionById(state, id);
+  const offerings = getSlotsForSection(state, section);
+  return { ...section, offering_set: offerings };
 };
 
 const getCourseById = (state, id) => state.courses[id];
@@ -31,8 +31,8 @@ export const getDenormCourseById = (state, id) => {
   if (!('courses' in state)) {
     return {};
   }
-  let course = getCourseById(state, id);
-  let sections = getDenormSectionsForCourse(state, course);
+  const course = getCourseById(state, id);
+  const sections = getDenormSectionsForCourse(state, course);
   return { ...course, sections };
 };
 
@@ -51,7 +51,7 @@ export const getSectionTypeToSections = (denormCourse) => {
 };
 
 export const getTimetable = (state, id) => {
-  let timetable = state.timetables[id];
+  const timetable = state.timetables[id];
   return {
     ...timetable,
     courses: timetable.courses.map(courseCode => getCourseById(state, courseCode)),
@@ -60,13 +60,13 @@ export const getTimetable = (state, id) => {
 };
 
 export const getTimetableCourses = (state, id) => {
-  let timetable = state.timetables[id];
+  const timetable = state.timetables[id];
   return timetable.courses.map(courseCode => getCourseById(state, courseCode));
 };
 
 export const getFromTimetable = (timetable, fields) => {
   if (!('sections' in timetable) || !('offering_set' in timetable.sections[0])) {
-    throw "input timetable to getFromTimetable must be denormalized";
+    throw new Error('input timetable to getFromTimetable must be denormalized');
   }
 
   return {
@@ -80,7 +80,7 @@ export const getFromTimetable = (timetable, fields) => {
         ...pick(offering, fields.offerings),
       })),
     })),
-  }
+  };
 };
 
 export default entities;
