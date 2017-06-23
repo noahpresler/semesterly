@@ -256,7 +256,7 @@ def get_current_semesters(school):
     for semester in semesters:
         all_semesters.add(Semester.objects.update_or_create(**semester)[0])
     return sorted([{'name': s.name, 'year': s.year} for s in all_semesters],
-                  key=itemgetter('year'))
+                  key=itemgetter('year'), reverse=True)
 
 
 def get_old_semesters(school):
