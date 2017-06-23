@@ -11,7 +11,7 @@ import preferences from './preferences_reducer';
 import courseInfo, * as fromCourseInfo from './course_info_reducer';
 import alerts from './alerts_reducer';
 import ui from './ui_reducer';
-import userInfo from './user_info_reducer';
+import userInfo, * as fromUserInfo from './user_info_reducer';
 import savingTimetable from './saving_timetable_reducer';
 import classmates from './classmates_reducer';
 import optionalCourses from './optional_courses_reducer';
@@ -123,5 +123,8 @@ export const getDenormAdvancedSearchResults = state =>
 
 // modal selectors
 export const getCourseInfoId = state => fromCourseInfo.getCourseInfoId(state.courseInfo);
+
+export const getIsUserInfoIncomplete = state =>
+  fromUserInfo.isUserInfoIncomplete(state.userInfo);
 
 export default rootReducer;
