@@ -33,16 +33,15 @@ describe('timetable selectors', () => {
     courses: [{
       id: 'C1',
       name: 'course',
-      sections: [{
-        id: 'S1',
-        name: 'section',
-        offering_set: [{
-          id: 'O1',
-          thing: 'thing',
-        }],
+    }],
+    sections: [{
+      id: 'S1',
+      name: 'section',
+      offering_set: [{
+        id: 'O1',
+        thing: 'thing',
       }],
     }],
-    sections: ['S1'],
   };
   describe('getfromTimetable', () => {
     it('returns correct shape', () => {
