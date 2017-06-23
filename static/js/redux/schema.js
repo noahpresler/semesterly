@@ -13,7 +13,7 @@ export const courseSchema = new schema.Entity('courses', { sections: [sectionSch
 
 export const serializeTimetable = timetable =>
   timetable.courses.sort(strPropertyCmp('id')).map(course =>
-    `${course.id}:${course.sections.map(section => section.id).join(',')}`
+    `${course.id}:${course.sections.map(section => section.id).join(',')}`,
   ).join(';');
 
 export const timetableSchema = new schema.Entity('timetables', { courses: [courseSchema] }, {
