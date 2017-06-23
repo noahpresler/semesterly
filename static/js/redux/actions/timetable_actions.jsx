@@ -91,8 +91,10 @@ export const fetchTimetables = (requestBody, removing, newActive = 0) => (dispat
   // save preferences when timetables are loaded, so that we know cached preferences
   // are always "up-to-date" (correspond to last loaded timetable).
   // same for the semester
-  saveLocalPreferences(requestBody.preferences);
-  saveLocalSemester(currSem(state.semester));
+  if (!state.userInfo.isLoggedIn) {
+    saveLocalPreferences(requestBody.preferences);
+    saveLocalSemester(currSem(state.semester));
+  }
 };
 
 /*
