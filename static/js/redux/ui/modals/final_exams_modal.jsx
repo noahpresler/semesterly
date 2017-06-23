@@ -339,7 +339,7 @@ export default class FinalExamsModal extends React.Component {
     };
     let display =
       (<div className="final-exam__loader-wrapper">
-        <span className="img-icon">
+        <span className="final-exam__loader">
           <div className="loader" />
         </span>
       </div>);
