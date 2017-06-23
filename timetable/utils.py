@@ -1,10 +1,11 @@
 import itertools
 from collections import namedtuple
+from operator import itemgetter
 
-from analytics.models import SharedTimetable
 from courses.utils import get_sections_by_section_type
 from timetable.models import Section, Course, Semester
-from timetable.school_mappers import school_to_granularity, school_to_semesters
+from timetable.school_mappers import school_to_granularity, school_to_semesters, \
+    old_school_to_semesters
 from timetable.scoring import get_tt_cost, get_num_days, get_avg_day_length, get_num_friends, \
     get_avg_rating
 
@@ -208,6 +209,17 @@ def get_current_semesters(school):
     semester that has course data, and return a list of (semester name, year) pairs.
     """
     semesters = school_to_semesters[school]
+    old_semesters = school_to_semesters[school]
+    # Ensure DB has all semesters.
+    all_semesters = set()
+    for semester in semesters:
+        all_semesters.add(Semester.objects.update_or_create(**semester)[0])
+    return sorted([{'name': s.name, 'year': s.year} for s in all_semesters],
+                  key=itemgetter('year'), reverse=True)
+
+
+def get_old_semesters(school):
+    semesters = old_school_to_semesters[school]
     # Ensure DB has all semesters.
     for semester in semesters:
         Semester.objects.update_or_create(**semester)
