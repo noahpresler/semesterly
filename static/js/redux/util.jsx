@@ -1,10 +1,5 @@
 import { getLogFinalExamViewEndpoint } from './constants/endpoints';
 
-export const randomString = (length = 30, chars = '!?()*&^%$#@![]0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ') => {
-  let result = '';
-  for (let i = length; i > 0; --i) result += chars[Math.floor(Math.random() * chars.length)];
-  return result;
-};
 export const browserSupportsLocalStorage = () => {
   try {
     localStorage.setItem('test', 'test');
@@ -111,25 +106,36 @@ export const getMaxHourBasedOnWindowHeight = () => {
   }
   return Math.min(24, parseInt(maxHour, 10));
 };
+
 /*
- gets the end hour of the current timetable, based on the class that ends latest
+ * Raise error if the response has an error status code, otherwise return response.
+ * Used to handle errors inside of the fetch() promise chain
  */
-export const getMaxEndHour = (timetable, hasCourses) => {
-  let maxEndHour = 17;
-  if (!hasCourses) {
-    return maxEndHour;
+export const checkStatus = (response) => {
+  if (response.status >= 200 && response.status < 300) {
+    return response;
   }
-  getMaxHourBasedOnWindowHeight();
-  const courses = timetable.courses;
-  for (let courseIndex = 0; courseIndex < courses.length; courseIndex++) {
-    const course = courses[courseIndex];
-    for (let slotIndex = 0; slotIndex < course.slots.length; slotIndex++) {
-      const slot = course.slots[slotIndex];
-      const endHour = parseInt(slot.time_end.split(':')[0], 10);
-      maxEndHour = Math.max(maxEndHour, endHour);
-    }
-  }
-  return Math.max(maxEndHour, getMaxHourBasedOnWindowHeight());
+  const error = new Error(response.statusText);
+  error.response = response;
+  throw error;
 };
 
+// TODO: define map somewhere or use CHOICES in Section model
+export const getSectionTypeDisplayName = function getSectionTypeDisplayName(sectionTypeCode) {
+  switch (sectionTypeCode) {
+    case 'L':
+      return 'Lecture';
+    case 'T':
+      return 'Tutorial';
+    case 'P':
+      return 'Lab/Practical';
+    default:
+      return sectionTypeCode;
+  }
+};
+
+// A comparison function for sorting objects by string property
+export const strPropertyCmp = prop => (first, second) => (first[prop] > second[prop] ? 1 : -1);
+
 export const isIncomplete = prop => prop === undefined || prop === '' || prop === null;
+

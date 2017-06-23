@@ -1,5 +1,7 @@
 import PropTypes from 'prop-types';
 import React from 'react';
+import uniqBy from 'lodash/uniqBy';
+import range from 'lodash/range';
 import Modal from 'boron/WaveModal';
 import Textbook from '../textbook';
 import * as SemesterlyPropTypes from '../../constants/semesterlyPropTypes';
@@ -52,7 +54,7 @@ class TextbookModal extends React.Component {
       (<div key={courseName} className="tb-list-entry">
         <h3 className="modal-module-header">{courseName}</h3>
         {
-                    tbs[courseName].length > 0 ? _.uniq(tbs[courseName], 'isbn').map(tb =>
+                    tbs[courseName].length > 0 ? uniqBy(tbs[courseName], tb => tb.isbn).map(tb =>
                       <Textbook tb={tb} key={tb.isbn} />) :
                     <p className="no-tbs">No textbooks found for this course.</p>
                 }
@@ -97,7 +99,7 @@ class TextbookModal extends React.Component {
         <div className="tb-list-container">
           {textbookList}
           {
-                        _.range(allTbs.length).map((idx) => {
+                        range(allTbs.length).map((idx) => {
                           const tb = allTbs[idx];
                           if (!exists(tb.detail_url)) {
                             return null;
