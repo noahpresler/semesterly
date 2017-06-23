@@ -12,7 +12,7 @@ class TermsOfServiceBanner extends React.Component {
     this.timer = setTimeout(() => {
       this.props.dismissTermsOfServiceBanner();
       clearTimeout(this.timer);
-    }, 4000);
+    }, 6000);
   }
 
   render() {
