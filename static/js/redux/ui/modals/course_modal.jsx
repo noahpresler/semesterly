@@ -2,7 +2,7 @@ import PropTypes from 'prop-types';
 import React from 'react';
 import classNames from 'classnames';
 import Modal from 'boron/WaveModal';
-import CourseModalBody from './course_modal_body';
+import CourseModalBodyContainer from '../containers/modals/course_modal_body_container';
 import { ShareLink } from '../master_slot';
 import { fullCourseDetails } from '../../constants/semesterlyPropTypes';
 
@@ -116,9 +116,15 @@ class CourseModal extends React.Component {
                 { addOptional }
                 { add }
               </div>
-              <CourseModalBody
-                {...this.props} hideModal={this.hide}
-                addOrRemoveCourse={this.addOrRemoveCourse}
+              <CourseModalBodyContainer
+                inRoster={this.props.inRoster}
+                data={this.props.data}
+                addOrRemoveCourse={this.props.addOrRemoveCourse}
+                hideModal={this.props.hideModal}
+                isFetching={this.props.isFetching}
+                unHoverSection={this.props.unHoverSection}
+                getShareLink={this.props.getShareLink}
+                getShareLinkFromModal={this.props.getShareLinkFromModal}
               />
             </div>);
     return (
@@ -140,7 +146,7 @@ CourseModal.defaultProps = {
 };
 
 CourseModal.propTypes = {
-  id: PropTypes.number,
+  id: PropTypes.string,
   data: fullCourseDetails,
   inRoster: PropTypes.bool.isRequired,
   hasHoveredResult: PropTypes.bool.isRequired,
@@ -150,6 +156,9 @@ CourseModal.propTypes = {
   unHoverSection: PropTypes.func.isRequired,
   getShareLink: PropTypes.func.isRequired,
   getShareLinkFromModal: PropTypes.func.isRequired,
+  // Must be included to be passed down into CourseModalBody, which needs to either refer to
+  // state.courseInfo.isFetching or state.explorationModal.isFetching depending on its parent
+  isFetching: PropTypes.bool.isRequired,
 };
 
 export default CourseModal;
