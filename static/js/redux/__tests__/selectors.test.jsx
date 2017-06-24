@@ -1,5 +1,8 @@
 import * as selectors from '../reducers/root_reducer';
-import { getSectionTypeToSections, getFromTimetable } from '../reducers/entities_reducer';
+import {
+  getSectionTypeToSections,
+  getFromTimetable,
+} from '../reducers/entities_reducer';
 
 describe('timetable selectors', () => {
   describe('active TT selector', () => {
@@ -62,6 +65,16 @@ describe('timetable selectors', () => {
       const result = getFromTimetable(timetable, fields);
       expect('name' in result).toBeTruthy();
       expect('has_conflict' in result).toBeFalsy();
+    });
+  });
+  describe('getMaxEndHour', () => {
+    it('returns 17 for empty timetable', () => {
+      expect(selectors.getMaxTTEndHour({
+        timetables: {
+          items: [{ courses: [] }],
+          active: 0,
+        },
+      })).toEqual(17);
     });
   });
 });
