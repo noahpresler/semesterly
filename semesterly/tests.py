@@ -8,6 +8,9 @@ import socket, itertools
 from time import sleep
 
 class SeleniumTest(StaticLiveServerTestCase):
+
+    serialized_rollback = True
+    
     @classmethod
     def setUpClass(self):
         super(SeleniumTest, self).setUpClass()
