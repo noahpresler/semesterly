@@ -14,7 +14,7 @@ class SeleniumTest(StaticLiveServerTestCase):
     @classmethod
     def setUpClass(self):
         super(SeleniumTest, self).setUpClass()
-        self.TIMEOUT = 30
+        self.TIMEOUT = 10
         self.driver = None
         socket.setdefaulttimeout(self.TIMEOUT) 
         self.driver = webdriver.Chrome()        
