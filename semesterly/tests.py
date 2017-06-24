@@ -31,7 +31,6 @@ class SeleniumTest(StaticLiveServerTestCase):
     def tearDown(self):
         self.driver.execute_script('window.localStorage.clear();')
         self.driver.delete_all_cookies()     
-    
 
     @classmethod
     def get_test_url(self, school, path = '/'):
@@ -46,16 +45,15 @@ class SeleniumTest(StaticLiveServerTestCase):
             )
             arrow.click()
 
-    @override_settings(DEBUG=True)
     def test_can_clear_tutorial(self):
         self.clear_tutorial()
         WebDriverWait(self.driver, self.TIMEOUT).until(
             EC.invisibility_of_element_located((By.CLASS_NAME, 'tut-modal__nav'))
         )
 
-    @override_settings(DEBUG=True)
-    def test_again(self):
+    def test_search_does_execute(self):
         self.clear_tutorial()
-        WebDriverWait(self.driver, self.TIMEOUT).until(
-            EC.invisibility_of_element_located((By.CLASS_NAME, 'tut-modal__nav'))
+        search_box = WebDriverWait(self.driver, self.TIMEOUT).until(
+            EC.visibility_of_element_located((By.XPATH, '//div[@class="search-bar__input-wrapper"]/input'))
         )
+        search_box.send_keys("calc")
