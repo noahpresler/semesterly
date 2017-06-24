@@ -150,7 +150,7 @@ class SearchBar extends React.Component {
               ref={(c) => { this.input = c; }}
               placeholder={`Searching ${currSem}`}
               className={this.props.isFetching ? 'results-loading-gif' : ''}
-              onInput={this.fetchSearchResults}
+              onInput={() => null}
               onFocus={() => this.setState({ focused: true, showDropdown: false })}
               onBlur={() => this.setState({ focused: false })}
             />
