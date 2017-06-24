@@ -208,6 +208,9 @@ const getSemesterIndex = function getSemesterIndex(allSemesters, oldSemesters) {
   }
   const cachedSemesterName = localStorage.getItem('semesterName');
   const cachedYear = localStorage.getItem('year');
+  if (!(cachedYear || cachedSemesterName)) {
+    return 0;
+  }
   return allSemesters.findIndex(sem =>
     sem.name === cachedSemesterName && sem.year === cachedYear);
 };
