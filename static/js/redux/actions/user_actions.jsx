@@ -21,7 +21,7 @@ import { getNumberedName, loadTimetable, nullifyTimetable } from './timetable_ac
 import { MAX_TIMETABLE_NAME_LENGTH } from '../constants/constants';
 import * as ActionTypes from '../constants/actionTypes';
 import { currSem } from '../reducers/semester_reducer';
-import { setTimeShownBanner } from '../util';
+import { setTimeShownBanner, clearLocalTimetable } from '../util';
 
 let autoSaveTimer;
 
@@ -434,6 +434,7 @@ export const autoSave = (delay = 2000) => (dispatch, getState) => {
   autoSaveTimer = setTimeout(() => {
     if (state.userInfo.data.isLoggedIn && numTimetables + numEvents > 0) {
       dispatch(saveTimetable(true));
+      clearLocalTimetable();
     }
   }, delay);
 };
