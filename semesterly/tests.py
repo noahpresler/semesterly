@@ -5,7 +5,6 @@ from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.common.by import By
 from django.test.utils import override_settings
 import socket, itertools
-from time import sleep
 
 class SeleniumTest(StaticLiveServerTestCase):
 
