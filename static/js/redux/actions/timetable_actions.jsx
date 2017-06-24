@@ -67,9 +67,12 @@ export const fetchTimetables = (requestBody, removing, newActive = 0) => (dispat
             newActive,
           });
         }
-        // save new courseSections and timetable active index to cache
-        saveLocalCourseSections(json.new_c_to_s);
-        saveLocalActiveIndex(newActive);
+        if (!state.userInfo.data.isLoggedIn) {
+          saveLocalCourseSections(json.new_c_to_s);
+          saveLocalActiveIndex(newActive);
+          saveLocalPreferences(requestBody.preferences);
+          saveLocalSemester(currSem(state.semester));
+        }
       } else {
         // user wasn't removing or refetching for custom events
         // (i.e. was adding a course/section), but we got no timetables back.
@@ -87,14 +90,6 @@ export const fetchTimetables = (requestBody, removing, newActive = 0) => (dispat
         }
       }
     });
-
-  // save preferences when timetables are loaded, so that we know cached preferences
-  // are always "up-to-date" (correspond to last loaded timetable).
-  // same for the semester
-  if (!state.userInfo.data.isLoggedIn) {
-    saveLocalPreferences(requestBody.preferences);
-    saveLocalSemester(currSem(state.semester));
-  }
 };
 
 /*
