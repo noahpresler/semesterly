@@ -17,24 +17,26 @@ class SeleniumTest(StaticLiveServerTestCase):
         self.TIMEOUT = 30
         self.driver = None
         socket.setdefaulttimeout(self.TIMEOUT) 
+        self.driver = webdriver.Chrome()        
     
     @classmethod
-    def setup_driver(self):
-        if self.driver:
-            self.driver.quit()
-        self.driver = webdriver.Chrome()        
+    def tearDownClass(self):
+        super(SeleniumTest, self).tearDownClass()
+        self.driver.quit()
+
+    def setUp(self):
         self.driver.get(self.get_test_url('jhu'))
-        WebDriverWait(self.driver, self.TIMEOUT).until(lambda driver: driver.find_element_by_tag_name('body')) 
+        WebDriverWait(self.driver, self.TIMEOUT).until(lambda driver: driver.find_element_by_tag_name('body'))
+    
+    def tearDown(self):
+        self.driver.execute_script('window.localStorage.clear();')
+        self.driver.delete_all_cookies()     
+    
 
     @classmethod
     def get_test_url(self, school, path = '/'):
         url = '%s%s' % (self.live_server_url, '/')
         return url.replace('http://', 'http://%s.' % school)
-
-    @classmethod
-    def tearDownClass(self):
-        super(SeleniumTest, self).tearDownClass()
-        self.driver.quit()
 
     @classmethod
     def clear_tutorial(self):
@@ -46,7 +48,6 @@ class SeleniumTest(StaticLiveServerTestCase):
 
     @override_settings(DEBUG=True)
     def test_can_clear_tutorial(self):
-        self.setup_driver()
         self.clear_tutorial()
         WebDriverWait(self.driver, self.TIMEOUT).until(
             EC.invisibility_of_element_located((By.CLASS_NAME, 'tut-modal__nav'))
@@ -54,7 +55,6 @@ class SeleniumTest(StaticLiveServerTestCase):
 
     @override_settings(DEBUG=True)
     def test_again(self):
-        self.setup_driver()
         self.clear_tutorial()
         WebDriverWait(self.driver, self.TIMEOUT).until(
             EC.invisibility_of_element_located((By.CLASS_NAME, 'tut-modal__nav'))
