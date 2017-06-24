@@ -67,9 +67,12 @@ export const fetchTimetables = (requestBody, removing, newActive = 0) => (dispat
             newActive,
           });
         }
-        // save new courseSections and timetable active index to cache
-        saveLocalCourseSections(json.new_c_to_s);
-        saveLocalActiveIndex(newActive);
+        if (!state.userInfo.data.isLoggedIn) {
+          saveLocalCourseSections(json.new_c_to_s);
+          saveLocalActiveIndex(newActive);
+          saveLocalPreferences(requestBody.preferences);
+          saveLocalSemester(currSem(state.semester));
+        }
       } else {
         // user wasn't removing or refetching for custom events
         // (i.e. was adding a course/section), but we got no timetables back.
@@ -87,14 +90,6 @@ export const fetchTimetables = (requestBody, removing, newActive = 0) => (dispat
         }
       }
     });
-
-  // save preferences when timetables are loaded, so that we know cached preferences
-  // are always "up-to-date" (correspond to last loaded timetable).
-  // same for the semester
-  if (!state.userInfo.data.isLoggedIn) {
-    saveLocalPreferences(requestBody.preferences);
-    saveLocalSemester(currSem(state.semester));
-  }
 };
 
 /*
@@ -215,15 +210,13 @@ const getSemesterIndex = function getSemesterIndex(allSemesters, oldSemesters) {
 // loads timetable from localStorage. assumes that the browser supports localStorage
 export const loadCachedTimetable = (allSemesters, oldSemesters) => (dispatch, getState) => {
   dispatch({ type: ActionTypes.LOADING_CACHED_TT });
+  // load timetable information from local storage
   const localCourseSections = JSON.parse(localStorage.getItem('courseSections'));
   const localPreferences = JSON.parse(localStorage.getItem('preferences'));
-
+  const localActive = parseInt(localStorage.getItem('active'), 10);
   const matchedIndex = getSemesterIndex(allSemesters, oldSemesters);
 
-  if (getState().userInfo.data.isLoggedIn) {
-    dispatch(getUserSavedTimetables(allSemesters[matchedIndex]));
-  }
-
+  // validate local storage info
   const cachedSemesterNotFound = matchedIndex === -1;
   const cachedCourseSectionsExist = localCourseSections &&
     Object.keys(localCourseSections).length > 0;
@@ -231,21 +224,25 @@ export const loadCachedTimetable = (allSemesters, oldSemesters) => (dispatch, ge
   const isCachedTimetableDataValid = cachedCourseSectionsExist && cachedPreferencesExist &&
     !cachedSemesterNotFound;
 
-  const personalTimetablesExist = Object.keys(getState().courseSections.objects).length > 0;
-  if (!isCachedTimetableDataValid || personalTimetablesExist) {
-    dispatch({ type: ActionTypes.CACHED_TT_LOADED });
-    return;
+  if (!isCachedTimetableDataValid) { // switch back to default semester
+    dispatch(getUserSavedTimetables(allSemesters[0]));
+  } else {
+    let personalTimetablesExist = false;
+    if (getState().userInfo.data.isLoggedIn) {
+      dispatch(getUserSavedTimetables(allSemesters[matchedIndex]));
+      personalTimetablesExist = Object.keys(getState().courseSections.objects).length > 0;
+    }
+    if (!personalTimetablesExist) {
+      // if no personal TTs and local storage data is valid, load cached timetable
+      dispatch({ type: ActionTypes.SET_ALL_PREFERENCES, preferences: localPreferences });
+      dispatch({ type: ActionTypes.SET_SEMESTER, semester: matchedIndex });
+      dispatch({
+        type: ActionTypes.RECEIVE_COURSE_SECTIONS,
+        courseSections: localCourseSections,
+      });
+      dispatch(fetchStateTimetables(localActive));
+    }
   }
-
-  const localActive = parseInt(localStorage.getItem('active'), 10);
-  dispatch({ type: ActionTypes.SET_ALL_PREFERENCES, preferences: localPreferences });
-  dispatch({ type: ActionTypes.SET_SEMESTER, semester: matchedIndex });
-  dispatch({
-    type: ActionTypes.RECEIVE_COURSE_SECTIONS,
-    courseSections: localCourseSections,
-  });
-
-  dispatch(fetchStateTimetables(localActive));
   dispatch({ type: ActionTypes.CACHED_TT_LOADED });
 };
 
