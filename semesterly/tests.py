@@ -21,8 +21,8 @@ class SeleniumTest(StaticLiveServerTestCase):
     
     @classmethod
     def tearDownClass(self):
+        self.driver.quit()        
         super(SeleniumTest, self).tearDownClass()
-        self.driver.quit()
 
     def setUp(self):
         self.driver.get(self.get_test_url('jhu'))
