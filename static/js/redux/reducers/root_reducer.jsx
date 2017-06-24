@@ -1,4 +1,5 @@
 import { combineReducers } from 'redux';
+import { createSelector } from 'reselect';
 import { getMaxHourBasedOnWindowHeight } from '../util';
 import school from './school_reducer';
 import semester, * as fromSemester from './semester_reducer';
@@ -83,8 +84,26 @@ export const getFromActiveTimetable = (state, fields) =>
 
 export const getActiveTT = state => fromTimetables.getActiveTT(state.timetables);
 
+export const getMaxTTEndHour = createSelector([getActiveTT], (timetable) => {
+  let maxEndHour = 17;
+  if (!timetable.courses.length > 0) {
+    return maxEndHour;
+  }
+  const courses = timetable.courses;
+  for (let courseIndex = 0; courseIndex < courses.length; courseIndex++) {
+    const course = courses[courseIndex];
+    for (let slotIndex = 0; slotIndex < course.slots.length; slotIndex++) {
+      const slot = course.slots[slotIndex];
+      const endHour = parseInt(slot.time_end.split(':')[0], 10);
+      maxEndHour = Math.max(maxEndHour, endHour);
+    }
+  }
+  return maxEndHour;
+});
+
+// Don't use createSelector to memoize getMaxEndHour
 export const getMaxEndHour = state =>
-  Math.max(fromTimetables.getMaxEndHour(state.timetables), getMaxHourBasedOnWindowHeight());
+  Math.max(getMaxTTEndHour(state), getMaxHourBasedOnWindowHeight());
 
 // search selectors
 const getSearchResultId = (state, index) =>
