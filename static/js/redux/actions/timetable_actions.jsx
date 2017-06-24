@@ -208,9 +208,6 @@ const getSemesterIndex = function getSemesterIndex(allSemesters, oldSemesters) {
   }
   const cachedSemesterName = localStorage.getItem('semesterName');
   const cachedYear = localStorage.getItem('year');
-  if (!(cachedYear || cachedSemesterName)) {
-    return 0;
-  }
   return allSemesters.findIndex(sem =>
     sem.name === cachedSemesterName && sem.year === cachedYear);
 };
@@ -221,7 +218,10 @@ export const loadCachedTimetable = (allSemesters, oldSemesters) => (dispatch, ge
   const localCourseSections = JSON.parse(localStorage.getItem('courseSections'));
   const localPreferences = JSON.parse(localStorage.getItem('preferences'));
 
-  const matchedIndex = getSemesterIndex(allSemesters, oldSemesters);
+  let matchedIndex = getSemesterIndex(allSemesters, oldSemesters);
+  if (matchedIndex === -1) {
+    matchedIndex = 0;
+  }
 
   if (getState().userInfo.data.isLoggedIn) {
     dispatch(getUserSavedTimetables(allSemesters[matchedIndex]));
