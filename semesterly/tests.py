@@ -9,6 +9,7 @@ from time import sleep
 
 class SeleniumTest(StaticLiveServerTestCase):
 
+    fixtures = ['jhu_fall_sample.json']
     serialized_rollback = True
     
     @classmethod
@@ -57,3 +58,7 @@ class SeleniumTest(StaticLiveServerTestCase):
             EC.visibility_of_element_located((By.XPATH, '//div[@class="search-bar__input-wrapper"]/input'))
         )
         search_box.send_keys("calc")
+        search_results = WebDriverWait(self.driver, self.TIMEOUT).until(
+            EC.visibility_of_element_located((By.CLASS_NAME, 'search-results'))
+        )
+        self.assertEqual(len(search_results.find_elements_by_class_name('search-course')), 2)
