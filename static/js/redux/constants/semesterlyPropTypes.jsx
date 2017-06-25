@@ -119,7 +119,8 @@ export const timetable = PropTypes.shape({
   avg_rating: PropTypes.number,
   has_conflict: PropTypes.bool.isRequired,
   courses: PropTypes.arrayOf(course).isRequired,
-  sections: PropTypes.arrayOf(PropTypes.string),
+  // TODO: uncomment when finished normalizing timetable state
+  // sections: PropTypes.arrayOf(PropTypes.string),
   // TODO: serialize semester objects before sending to frontend
   semester: PropTypes.oneOfType([semester, PropTypes.number]),
 });
