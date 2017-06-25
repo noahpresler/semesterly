@@ -6,7 +6,7 @@ import * as ActionTypes from '../constants/actionTypes';
 export const initialState = {
   isFetching: false,
   items: [{ courses: [], has_conflict: false }],
-  ids: [],
+  ids: ['empty'],
   active: 0,
   loadingCachedTT: true,
   lastSlotAdded: null, // either int (course id), object (custom slots state), or null
@@ -30,13 +30,12 @@ const timetables = (state = initialState, action) => {
     case ActionTypes.RECEIVE_TIMETABLES: {
       const actionTimetables = action.timetables.length > 0 ? action.timetables : [{
         courses: [],
-        ids: [],
         has_conflict: false,
       }];
       return {
         isFetching: false,
         items: actionTimetables,
-        ids: ('response' in action) ? action.response.result : [],
+        ids: ('response' in action) ? action.response.result : ['empty'],
         active: 0,
       };
     }
