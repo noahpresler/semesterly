@@ -88,7 +88,7 @@ export const getMaxEndHour = function getLatestSlotEndHourFromTimetable(timetabl
   let maxEndHour = 17;
   timetable.sections.forEach((section) => {
     section.offering_set.forEach((slot) => {
-      const endHour = parseInt(slot.time_end.split(':')[0], 10);
+      const endHour = parseInt(slot.time_end.split(':')[0], 10) + 1;
       maxEndHour = Math.max(maxEndHour, endHour);
     });
   });
