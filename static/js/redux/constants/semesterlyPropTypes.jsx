@@ -200,3 +200,8 @@ export const peer = PropTypes.shape({
   shared_courses: PropTypes.arrayOf(course).isRequired,
 });
 
+export const normalizedSlot = PropTypes.shape({
+  course: PropTypes.number.isRequired,
+  section: PropTypes.number.isRequired,
+  offerings: PropTypes.arrayOf(PropTypes.number).isRequired,
+});
