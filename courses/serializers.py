@@ -14,7 +14,8 @@ class EvaluationSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 
-class FlatCourseSerializer(serializers.ModelSerializer):
+class OldCourseSerializer(serializers.ModelSerializer):
+    """ Serializes a Course in the format that the not normalized state expects. """
     evals = serializers.SerializerMethodField()
     integrations = serializers.SerializerMethodField()
     related_courses = serializers.SerializerMethodField()
