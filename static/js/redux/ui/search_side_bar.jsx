@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types';
 import React from 'react';
 import classnames from 'classnames';
-import { getSectionTypeDisplayName } from '../util';
+import { getSectionTypeDisplayName, strPropertyCmp } from '../util';
 import * as SemesterlyPropTypes from '../constants/semesterlyPropTypes';
 
 class SearchSideBar extends React.Component {
@@ -17,17 +17,18 @@ class SearchSideBar extends React.Component {
   }
 
   mapSectionsToSlots(sections) {
-    return sections.map(section => section.meeting_section).sort().map(sectionCode =>
+    return sections.sort(strPropertyCmp('meeting_section')).map(section =>
       (<SearchResultSection
-        key={this.props.hoveredResult.id + sectionCode}
-        section={sectionCode}
-        locked={this.props.isSectionLocked(this.props.hoveredResult.id, sectionCode)}
+        key={this.props.hoveredResult.id + section.meeting_section}
+        section={section.meeting_section}
+        locked={this.props.isSectionLocked(this.props.hoveredResult.id, section.meeting_section)}
         isOnActiveTimetable={
-          this.props.isSectionOnActiveTimetable(this.props.hoveredResult.id, sectionCode)
+          this.props.isSectionOnActiveTimetable(this.props.hoveredResult, section)
         }
-        hoverSection={() => this.props.hoverSection(this.props.hoveredResult, sectionCode)}
+        hoverSection={() => this.props.hoverSection(this.props.hoveredResult,
+          section.meeting_section)}
         unHoverSection={this.props.unHoverSection}
-        onMouseDown={event => this.lockSectionWrapper(sectionCode, event)}
+        onMouseDown={event => this.lockSectionWrapper(section.meeting_section, event)}
       />),
     );
   }
