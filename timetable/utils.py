@@ -1,6 +1,5 @@
 import itertools
 from collections import namedtuple
-from operator import itemgetter
 
 from courses.utils import get_sections_by_section_type
 from timetable.models import Section, Course, Semester
