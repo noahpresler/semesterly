@@ -20,7 +20,7 @@ import { fetchCourseClassmates } from './modal_actions';
 import { getNumberedName, loadTimetable, nullifyTimetable } from './timetable_actions';
 import { MAX_TIMETABLE_NAME_LENGTH } from '../constants/constants';
 import * as ActionTypes from '../constants/actionTypes';
-import { setTimeShownBanner, checkStatus } from '../util';
+import { setTimeShownBanner, checkStatus, clearLocalTimetable } from '../util';
 
 let autoSaveTimer;
 
@@ -404,6 +404,7 @@ export const autoSave = (delay = 2000) => (dispatch, getState) => {
   autoSaveTimer = setTimeout(() => {
     if (state.userInfo.data.isLoggedIn && numTimetables + numEvents > 0) {
       dispatch(saveTimetable(true));
+      clearLocalTimetable();
     }
   }, delay);
 };

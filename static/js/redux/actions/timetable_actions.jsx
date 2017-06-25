@@ -11,7 +11,7 @@ import {
     saveLocalPreferences,
     saveLocalSemester,
 } from '../util';
-import { autoSave, fetchClassmates, lockActiveSections } from './user_actions';
+import { autoSave, fetchClassmates, lockActiveSections, getUserSavedTimetables } from './user_actions';
 import * as ActionTypes from '../constants/actionTypes';
 
 let customEventUpdateTimer; // keep track of user's custom event actions for autofetch
@@ -66,9 +66,12 @@ export const fetchTimetables = (requestBody, removing, newActive = 0) => (dispat
             newActive,
           });
         }
-        // save new courseSections and timetable active index to cache
-        saveLocalCourseSections(json.new_c_to_s);
-        saveLocalActiveIndex(newActive);
+        if (!state.userInfo.data.isLoggedIn) {
+          saveLocalCourseSections(json.new_c_to_s);
+          saveLocalActiveIndex(newActive);
+          saveLocalPreferences(requestBody.preferences);
+          saveLocalSemester(getCurrentSemester(state.semester));
+        }
       } else {
         // user wasn't removing or refetching for custom events
         // (i.e. was adding a course/section), but we got no timetables back.
@@ -86,13 +89,6 @@ export const fetchTimetables = (requestBody, removing, newActive = 0) => (dispat
         }
       }
     });
-
-  // save preferences when timetables are loaded, so that we know cached preferences
-  // are always "up-to-date" (correspond to last loaded timetable).
-  // same for the semester
-  saveLocalPreferences(requestBody.preferences);
-  const semester = getCurrentSemester(state);
-  saveLocalSemester(semester);
 };
 
 /*
@@ -196,32 +192,41 @@ const getSemesterIndex = function getSemesterIndex(allSemesters, oldSemesters) {
 };
 
 // loads timetable from localStorage. assumes that the browser supports localStorage
-export const loadCachedTimetable = (allSemesters, oldSemesters) => (dispatch) => {
+export const loadCachedTimetable = (allSemesters, oldSemesters) => (dispatch, getState) => {
   dispatch({ type: ActionTypes.LOADING_CACHED_TT });
+  // load timetable information from local storage
   const localCourseSections = JSON.parse(localStorage.getItem('courseSections'));
-
-  const matchedIndex = getSemesterIndex(allSemesters, oldSemesters);
-
-  // no cached timetables OR timetables were cached using old format and are therefore unretrievable
-  if (!localCourseSections || matchedIndex === -1) {
-    dispatch({ type: ActionTypes.CACHED_TT_LOADED });
-    return;
-  }
-
   const localPreferences = JSON.parse(localStorage.getItem('preferences'));
   const localActive = parseInt(localStorage.getItem('active'), 10);
-  if (Object.keys(localCourseSections).length === 0 || Object.keys(localPreferences).length === 0) {
-    return;
+  const matchedIndex = getSemesterIndex(allSemesters, oldSemesters);
+
+  // validate local storage info
+  const cachedSemesterNotFound = matchedIndex === -1;
+  const cachedCourseSectionsExist = localCourseSections &&
+    Object.keys(localCourseSections).length > 0;
+  const cachedPreferencesExist = localPreferences && Object.keys(localPreferences).length > 0;
+  const isCachedTimetableDataValid = cachedCourseSectionsExist && cachedPreferencesExist &&
+    !cachedSemesterNotFound;
+
+  if (!isCachedTimetableDataValid) { // switch back to default semester
+    dispatch(getUserSavedTimetables(allSemesters[0]));
+  } else {
+    let personalTimetablesExist = false;
+    if (getState().userInfo.data.isLoggedIn) {
+      dispatch(getUserSavedTimetables(allSemesters[matchedIndex]));
+      personalTimetablesExist = Object.keys(getState().courseSections.objects).length > 0;
+    }
+    if (!personalTimetablesExist) {
+      // if no personal TTs and local storage data is valid, load cached timetable
+      dispatch({ type: ActionTypes.SET_ALL_PREFERENCES, preferences: localPreferences });
+      dispatch({ type: ActionTypes.SET_SEMESTER, semester: matchedIndex });
+      dispatch({
+        type: ActionTypes.RECEIVE_COURSE_SECTIONS,
+        courseSections: localCourseSections,
+      });
+      dispatch(fetchStateTimetables(localActive));
+    }
   }
-
-  dispatch({ type: ActionTypes.SET_ALL_PREFERENCES, preferences: localPreferences });
-  dispatch({ type: ActionTypes.SET_SEMESTER, semester: matchedIndex });
-  dispatch({
-    type: ActionTypes.RECEIVE_COURSE_SECTIONS,
-    courseSections: localCourseSections,
-  });
-
-  dispatch(fetchStateTimetables(localActive));
   dispatch({ type: ActionTypes.CACHED_TT_LOADED });
 };
 
