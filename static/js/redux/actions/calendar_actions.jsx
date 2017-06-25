@@ -8,7 +8,7 @@ import {
     getCourseShareLink,
 } from '../constants/endpoints';
 import { FULL_WEEK_LIST } from '../constants/constants';
-import { getCurrentSemester, getActiveTT, getFromActiveTimetable } from '../reducers/root_reducer';
+import { getCurrentSemester, getActiveTT, getActiveTimetable } from '../reducers/root_reducer';
 import * as ActionTypes from '../constants/actionTypes';
 
 const DAY_MAP = {
@@ -55,12 +55,7 @@ export const fetchShareTimetableLink = () => (dispatch, getState) => {
     },
     method: 'POST',
     body: JSON.stringify({
-      timetable: getFromActiveTimetable(state, {
-        timetable: ['has_conflict'],
-        courses: ['id'],
-        sections: ['id'],
-        offerings: [],
-      }),
+      timetable: getActiveTimetable(state),
       semester,
     }),
     credentials: 'include',
