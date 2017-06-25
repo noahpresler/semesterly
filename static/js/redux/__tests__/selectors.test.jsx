@@ -2,6 +2,7 @@ import * as selectors from '../reducers/root_reducer';
 import {
   getSectionTypeToSections,
   getFromTimetable,
+  getMaxEndHour,
 } from '../reducers/entities_reducer';
 
 describe('timetable selectors', () => {
@@ -43,6 +44,7 @@ describe('timetable selectors', () => {
       offering_set: [{
         id: 'O1',
         thing: 'thing',
+        time_end: '18:30',
       }],
     }],
   };
@@ -69,25 +71,10 @@ describe('timetable selectors', () => {
   });
   describe('getMaxEndHour', () => {
     it('returns 17 for empty timetable', () => {
-      expect(selectors.getMaxTTEndHour({
-        timetables: {
-          items: [{ courses: [], sections: [] }],
-          active: 0,
-        },
-      })).toEqual(17);
+      expect(getMaxEndHour({ courses: [], sections: [] })).toEqual(17);
     });
-
     it('returns correct end hour', () => {
-      expect(selectors.getMaxTTEndHour({
-        timetables: {
-          items: [{ courses: [{ id: 1 }],
-            sections: [{ offering_set: [
-            { time_end: '18:00' },
-            { time_end: '20:30' },
-            ] }] }],
-          active: 0,
-        },
-      })).toEqual(20);
+      expect(getMaxEndHour(timetable)).toEqual(18);
     });
   });
 });
