@@ -110,7 +110,9 @@ class FlatCourseSerializer(serializers.ModelSerializer):
                     for section in matching_sections for co in section.offering_set.all()]
 
     def get_enrolled_sections(self, course):
-        return [section.meeting_section for section in self.context['sections']]
+        matching_sections = [section for section in self.context['sections']
+                             if section.course == course]
+        return [section.meeting_section for section in matching_sections]
 
     def get_sections(self, course):
         return [SectionSerializer(section).data for section in self.context['sections']]
