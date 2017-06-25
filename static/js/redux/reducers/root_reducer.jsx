@@ -84,16 +84,7 @@ export const getFromActiveTimetable = (state, fields) =>
 
 export const getActiveTT = state => fromTimetables.getActiveTT(state.timetables);
 
-export const getMaxTTEndHour = createSelector([getActiveTimetable], (timetable) => {
-  let maxEndHour = 17;
-  timetable.sections.forEach((section) => {
-    section.offering_set.forEach((slot) => {
-      const endHour = parseInt(slot.time_end.split(':')[0], 10);
-      maxEndHour = Math.max(maxEndHour, endHour);
-    });
-  });
-  return maxEndHour;
-});
+export const getMaxTTEndHour = createSelector([getActiveTimetable], fromEntities.getMaxEndHour);
 
 // Don't use createSelector to memoize getMaxEndHour
 export const getMaxEndHour = state =>
