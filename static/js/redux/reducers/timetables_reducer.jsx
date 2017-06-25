@@ -1,10 +1,12 @@
 import update from 'react/lib/update';
+import { createSelector } from 'reselect';
 import { saveLocalActiveIndex } from '../util';
 import * as ActionTypes from '../constants/actionTypes';
 
-const initialState = {
+export const initialState = {
   isFetching: false,
   items: [{ courses: [], has_conflict: false }],
+  ids: [],
   active: 0,
   loadingCachedTT: true,
   lastSlotAdded: null, // either int (course id), object (custom slots state), or null
@@ -28,11 +30,13 @@ const timetables = (state = initialState, action) => {
     case ActionTypes.RECEIVE_TIMETABLES: {
       const actionTimetables = action.timetables.length > 0 ? action.timetables : [{
         courses: [],
+        ids: [],
         has_conflict: false,
       }];
       return {
         isFetching: false,
         items: actionTimetables,
+        ids: ('response' in action) ? action.response.result : [],
         active: 0,
       };
     }
@@ -154,5 +158,18 @@ const timetables = (state = initialState, action) => {
       return state;
   }
 };
+
+export const getActiveTTIndex = state => state.active;
+
+export const getAllTTs = state => state.items;
+
+export const getTimetableIds = state => state.ids;
+
+export const getActiveTimetableId = state => state.ids[state.active];
+
+export const getActiveTT = createSelector(
+  [getActiveTTIndex, getAllTTs],
+  (activeIndex, allTTs) => allTTs[activeIndex],
+);
 
 export default timetables;

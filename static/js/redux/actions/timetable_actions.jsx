@@ -1,10 +1,11 @@
 import fetch from 'isomorphic-fetch';
 import Cookie from 'js-cookie';
-
+import { normalize } from 'normalizr';
+import { timetableSchema } from '../schema';
+import { getActiveTimetableCourses, getCurrentSemester } from '../reducers/root_reducer';
 import { getTimetablesEndpoint } from '../constants/endpoints';
 import {
     browserSupportsLocalStorage,
-    randomString,
     saveLocalActiveIndex,
     saveLocalCourseSections,
     saveLocalPreferences,
@@ -12,17 +13,15 @@ import {
 } from '../util';
 import { autoSave, fetchClassmates, lockActiveSections, getUserSavedTimetables } from './user_actions';
 import * as ActionTypes from '../constants/actionTypes';
-import { currSem } from '../reducers/semester_reducer';
 
 let customEventUpdateTimer; // keep track of user's custom event actions for autofetch
-
-export const SID = randomString(30);
 
 export const alertConflict = () => ({ type: ActionTypes.ALERT_CONFLICT });
 
 export const receiveTimetables = timetables => ({
   type: ActionTypes.RECEIVE_TIMETABLES,
   timetables,
+  response: normalize(timetables, [timetableSchema]),
 });
 
 export const requestTimetables = () => ({ type: ActionTypes.REQUEST_TIMETABLES });
@@ -71,7 +70,7 @@ export const fetchTimetables = (requestBody, removing, newActive = 0) => (dispat
           saveLocalCourseSections(json.new_c_to_s);
           saveLocalActiveIndex(newActive);
           saveLocalPreferences(requestBody.preferences);
-          saveLocalSemester(currSem(state.semester));
+          saveLocalSemester(getCurrentSemester(state.semester));
         }
       } else {
         // user wasn't removing or refetching for custom events
@@ -97,25 +96,10 @@ export const fetchTimetables = (requestBody, removing, newActive = 0) => (dispat
  */
 export const getBaseReqBody = state => ({
   school: state.school.school,
-  semester: currSem(state.semester),
+  semester: getCurrentSemester(state),
   courseSections: state.courseSections.objects,
   preferences: state.preferences,
-  sid: SID,
 });
-
-export const hoverSection = (course, section) => {
-  const courseToHover = course;
-  const availableSections = Object.assign({},
-    courseToHover.sections.L,
-    courseToHover.sections.T,
-    courseToHover.sections.P,
-  );
-  courseToHover.section = section;
-  return {
-    type: ActionTypes.HOVER_COURSE,
-    course: Object.assign({}, courseToHover, { slots: availableSections[section] }),
-  };
-};
 
 export const fetchStateTimetables = (activeIndex = 0) => (dispatch, getState) => {
   const requestBody = getBaseReqBody(getState());
@@ -282,6 +266,14 @@ export const handleCreateNewTimetable = () => (dispatch, getState) => {
 
 export const unHoverSection = () => ({ type: ActionTypes.UNHOVER_COURSE });
 
+export const hoverSection = (denormCourse, sectionCode) => {
+  const section = denormCourse.sections.find(s => s.meeting_section === sectionCode);
+  return {
+    type: ActionTypes.HOVER_COURSE,
+    course: Object.assign({}, denormCourse, { slots: section.offering_set }),
+  };
+};
+
 /*
  Attempts to add the course represented by newCourseId
  to the user's roster. If a section is provided, that section is
@@ -354,7 +346,7 @@ const refetchTimetables = () => (dispatch, getState) => {
 
 export const addLastAddedCourse = () => (dispatch, getState) => {
   const state = getState();
-  // last timetable change was a custom event edit, not adding a course
+  // last timetable change was a custom event edit, not add
   if (state.timetables.lastSlotAdded === null) {
     return;
   }
@@ -373,7 +365,7 @@ const autoFetch = () => (dispatch, getState) => {
   const state = getState();
   clearTimeout(customEventUpdateTimer);
   customEventUpdateTimer = setTimeout(() => {
-    if (state.timetables.items[state.timetables.active].courses.length > 0) {
+    if (getActiveTimetableCourses(state).length > 0) {
       dispatch({
         type: ActionTypes.UPDATE_LAST_COURSE_ADDED,
         course: state.customSlots,
