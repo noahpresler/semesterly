@@ -71,10 +71,23 @@ describe('timetable selectors', () => {
     it('returns 17 for empty timetable', () => {
       expect(selectors.getMaxTTEndHour({
         timetables: {
-          items: [{ courses: [] }],
+          items: [{ courses: [], sections: [] }],
           active: 0,
         },
       })).toEqual(17);
+    });
+
+    it('returns correct end hour', () => {
+      expect(selectors.getMaxTTEndHour({
+        timetables: {
+          items: [{ courses: [{ id: 1 }],
+            sections: [{ offering_set: [
+            { time_end: '18:00' },
+            { time_end: '20:30' },
+            ] }] }],
+          active: 0,
+        },
+      })).toEqual(20);
     });
   });
 });

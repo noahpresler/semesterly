@@ -84,20 +84,14 @@ export const getFromActiveTimetable = (state, fields) =>
 
 export const getActiveTT = state => fromTimetables.getActiveTT(state.timetables);
 
-export const getMaxTTEndHour = createSelector([getActiveTT], (timetable) => {
+export const getMaxTTEndHour = createSelector([getActiveTimetable], (timetable) => {
   let maxEndHour = 17;
-  if (!timetable.courses.length > 0) {
-    return maxEndHour;
-  }
-  const courses = timetable.courses;
-  for (let courseIndex = 0; courseIndex < courses.length; courseIndex++) {
-    const course = courses[courseIndex];
-    for (let slotIndex = 0; slotIndex < course.slots.length; slotIndex++) {
-      const slot = course.slots[slotIndex];
+  timetable.sections.forEach((section) => {
+    section.offering_set.forEach((slot) => {
       const endHour = parseInt(slot.time_end.split(':')[0], 10);
       maxEndHour = Math.max(maxEndHour, endHour);
-    }
-  }
+    });
+  });
   return maxEndHour;
 });
 
