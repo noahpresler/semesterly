@@ -33,9 +33,9 @@ const setupTimetables = (userTimetables, allSemesters, oldSemesters) => (dispatc
     setTimeout(() => {
       dispatch(fetchMostClassmatesCount(userTimetables[0].courses.map(c => c.id)));
     }, 500);
-    dispatch({ type: ActionTypes.CACHED_TT_LOADED });
   } else if (browserSupportsLocalStorage()) {
     dispatch(loadCachedTimetable(allSemesters, oldSemesters));
+    dispatch({ type: ActionTypes.CACHED_TT_LOADED });
   }
 };
 
