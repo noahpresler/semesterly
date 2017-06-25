@@ -4,7 +4,7 @@ from rest_framework import serializers
 from courses.serializers import get_section_dict, OldCourseSerializer, SemesterSerializer
 from courses.utils import is_waitlist_only
 from student.models import PersonalTimetable
-from timetable.utils import get_tt_rating, Slot
+from timetable.utils import get_tt_rating
 
 
 def convert_tt_to_dict(timetable):
@@ -95,5 +95,5 @@ class TimetableSerializer(serializers.Serializer):
         return [{
             'course': section.course.id,
             'section': section.id,
-            'offerings': [offering.id for offering in section.offering_set]
+            'offerings': [offering.id for offering in section.offering_set.all()]
         } for section in obj.sections]
