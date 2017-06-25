@@ -93,12 +93,14 @@ class TimetableLinkView(FeatureFlowView):
         shared_timetable.save()
 
         added_courses = set()
-        for course in timetable['courses']:
-            course_obj = Course.objects.get(id=course['id'])
-            shared_timetable.courses.add(course_obj)
-            added_courses.add(course['id'])
-        for section in timetable['sections']:
-            section_obj = Section.objects.get(id=section['id'])
+        for slot in timetable['slots']:
+            course_id, section_id = slot['course']['id'], slot['section']['id']
+            if course_id not in added_courses:
+                course_obj = Course.objects.get(id=course_id)
+                shared_timetable.courses.add(course_obj)
+                added_courses.add(course_id)
+
+            section_obj = Section.objects.get(id=section_id)
             shared_timetable.sections.add(section_obj)
             if section_obj.course.id not in added_courses:
                 return Response(status=status.HTTP_400_BAD_REQUEST)
