@@ -1,9 +1,6 @@
 import { connect } from 'react-redux';
 import CourseModalBody from '../../modals/course_modal_body';
-import {
-  getActiveTT,
-  getCurrentSemester,
-} from '../../../reducers/root_reducer';
+import { getActiveTimetable, getCurrentSemester } from '../../../reducers/root_reducer';
 import { getSectionTypeToSections } from '../../../reducers/entities_reducer';
 import { hoverSection } from '../../../actions/timetable_actions';
 import {
@@ -20,7 +17,7 @@ const mapStateToProps = (state, ownProps) => {
   const denormCourseInfo = ownProps.data;
   const sectionTypeToSections = getSectionTypeToSections(denormCourseInfo);
   const courseSections = state.courseSections.objects;
-  const activeTimetable = getActiveTT(state);
+  const activeTimetable = getActiveTimetable(state);
   return {
     ...ownProps,
     id: denormCourseInfo.code,
@@ -40,9 +37,8 @@ const mapStateToProps = (state, ownProps) => {
                 type => courseSections[courseId][type] === section,
             );
     },
-    isSectionOnActiveTimetable: (courseId, section) => activeTimetable.courses
-      .some(course => course.id === courseId
-      && course.enrolled_sections.some(sec => sec === section)),
+    isSectionOnActiveTimetable: (courseId, sectionId) =>
+      activeTimetable.slots.some(slot => slot.course === courseId && slot.section === sectionId),
     getShareLink: courseCode => getCourseShareLink(courseCode, getCurrentSemester(state)),
     getShareLinkFromModal: courseCode =>
       getCourseShareLinkFromModal(courseCode, getCurrentSemester(state)),
