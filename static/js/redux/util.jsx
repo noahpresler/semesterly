@@ -36,6 +36,17 @@ export const saveLocalSemester = (semester) => {
   localStorage.setItem('year', semester.year);
   localStorage.removeItem('semester'); // only use new format for semester
 };
+export const clearLocalTimetable = function deleteTimetableDataFromLocalStorage() {
+  if (!browserSupportsLocalStorage()) {
+    return;
+  }
+  localStorage.removeItem('semester');
+  localStorage.removeItem('semesterName');
+  localStorage.removeItem('year');
+  localStorage.removeItem('courseSections');
+  localStorage.removeItem('active');
+  localStorage.removeItem('preferences');
+};
 export const setFirstVisit = (time) => {
   if (!browserSupportsLocalStorage()) {
     return;

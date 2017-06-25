@@ -208,6 +208,12 @@ def get_current_semesters(school):
     For a given school, get the possible semesters and the most recent year for each
     semester that has course data, and return a list of (semester name, year) pairs.
     """
+    terms_ordering = {
+        'Summer': 1,
+        'Winter': 2,
+        'Spring': 3,
+        'Fall': 4,
+    }
     semesters = school_to_semesters[school]
     old_semesters = school_to_semesters[school]
     # Ensure DB has all semesters.
@@ -215,7 +221,8 @@ def get_current_semesters(school):
     for semester in semesters:
         all_semesters.add(Semester.objects.update_or_create(**semester)[0])
     return sorted([{'name': s.name, 'year': s.year} for s in all_semesters],
-                  key=itemgetter('year'), reverse=True)
+                  key=lambda s: (s['year'], terms_ordering.get(s['name'],0)),
+                  reverse=True)
 
 
 def get_old_semesters(school):
