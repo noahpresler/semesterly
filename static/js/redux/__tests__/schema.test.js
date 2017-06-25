@@ -36,18 +36,6 @@ describe('course schema', () => {
   it('denormalizes single course correctly', () => {
     expect(getDenormCourseById(normalized.entities, 'C1')).toEqual(denormalized[0]);
   });
-  it('normalizes timetable correctly', () => {
-    const tt = { courses: denormalized, name: 'my_tt' };
-    const result = normalize(tt, schemas.timetableSchema);
-    const ttId = schemas.serializeTimetable(tt);
-    expect(result).toEqual({
-      result: ttId,
-      entities: {
-        ...normalized.entities,
-        timetables: { [ttId]: { name: 'my_tt', courses: ['C1'] } },
-      },
-    });
-  });
 });
 
 describe('timetable serializer', () => {

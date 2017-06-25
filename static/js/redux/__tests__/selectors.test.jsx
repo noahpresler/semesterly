@@ -1,7 +1,6 @@
 import * as selectors from '../reducers/root_reducer';
 import {
   getSectionTypeToSections,
-  getFromTimetable,
   getMaxEndHour,
 } from '../reducers/entities_reducer';
 
@@ -38,43 +37,24 @@ describe('timetable selectors', () => {
       id: 'C1',
       name: 'course',
     }],
-    sections: [{
-      id: 'S1',
-      name: 'section',
-      offering_set: [{
+    slots: [{
+      section: {
+        id: 'S1',
+        name: 'section',
+      },
+      offerings: [{
         id: 'O1',
         thing: 'thing',
         time_end: '18:30',
       }],
     }],
   };
-  describe('getfromTimetable', () => {
-    it('returns correct shape', () => {
-      const fields = {
-        timetables: ['name'],
-        courses: ['id'],
-        sections: ['id'],
-        offerings: [],
-      };
-
-      const result = getFromTimetable(timetable, fields);
-      expect('courses' in result).toBeTruthy();
-      expect('sections' in result).toBeTruthy();
-      expect('offerings' in result.sections[0]).toBeTruthy();
-    });
-    it('only returns specified fields', () => {
-      const fields = { timetables: ['name'], sections: [], offerings: [] };
-      const result = getFromTimetable(timetable, fields);
-      expect('name' in result).toBeTruthy();
-      expect('has_conflict' in result).toBeFalsy();
-    });
-  });
   describe('getMaxEndHour', () => {
     it('returns 17 for empty timetable', () => {
-      expect(getMaxEndHour({ courses: [], sections: [] })).toEqual(17);
+      expect(getMaxEndHour({ courses: [], slots: [] })).toEqual(17);
     });
     it('returns correct end hour', () => {
-      expect(getMaxEndHour(timetable)).toEqual(18);
+      expect(getMaxEndHour(timetable)).toEqual(19);
     });
   });
 });
