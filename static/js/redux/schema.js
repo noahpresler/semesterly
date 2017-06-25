@@ -1,17 +1,11 @@
 import { schema } from 'normalizr';
 import { strPropertyCmp } from './util';
 
-export const getSectionId = (section, course) => `${course.code}-${section.meeting_section}`;
-
 export const offeringSchema = new schema.Entity('offering_set');
 
-export const sectionSchema = new schema.Entity('sections', { offering_set: [offeringSchema] }, {
-  idAttribute: getSectionId,
-});
+export const sectionSchema = new schema.Entity('sections', { offering_set: [offeringSchema] });
 
-export const courseSchema = new schema.Entity('courses', { sections: [sectionSchema] }, {
-  idAttribute: value => value.code,
-});
+export const courseSchema = new schema.Entity('courses', { sections: [sectionSchema] });
 
 export const serializeTimetable = timetable =>
   timetable.courses.sort(strPropertyCmp('id')).map(course =>
