@@ -5,7 +5,7 @@ const searchResults = (state = { isFetching: false, items: [] }, action) => {
     case ActionTypes.RECEIVE_COURSES:
       return {
         isFetching: false,
-        items: action.courses,
+        items: action.response.result,
       };
     case ActionTypes.REQUEST_COURSES:
       return {
@@ -16,5 +16,9 @@ const searchResults = (state = { isFetching: false, items: [] }, action) => {
       return state;
   }
 };
+
+export const getSearchResultId = (state, index) => state.items[index];
+
+export const getSearchResultIds = state => state.items;
 
 export default searchResults;
