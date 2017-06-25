@@ -23,8 +23,7 @@ const mapStateToProps = (state) => {
             );
     },
     isSectionOnActiveTimetable: (course, section) =>
-      activeTimetable.slots.some(slot =>
-        slot.course.id === course.id && slot.section.id === section.id),
+      activeTimetable.slots.some(slot => slot.course === course.id && slot.section === section.id),
   };
 };
 
