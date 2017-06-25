@@ -1,3 +1,6 @@
+os: linux
+sudo: required
+dist: trusty
 branches:
   only:
     - master
@@ -9,9 +12,20 @@ env:
   - NODE_ENV=production
 install:
   - npm -g install webpack
+  - npm -g install chromedriver
   - npm install
   - npm -g install jest babel-jest
   - pip install --user -r requirements.txt
+addons:
+  apt:
+    sources:
+      - google-chrome
+    packages:
+      - google-chrome-stable
+before_script:
+  - "export DISPLAY=:99.0"
+  - "sh -e /etc/init.d/xvfb start"
+  - sleep 3 # give xvfb some time to start
 script:
   - npm run build
   - npm run lint
