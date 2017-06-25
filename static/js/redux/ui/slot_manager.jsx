@@ -1,5 +1,6 @@
 import PropTypes from 'prop-types';
 import React from 'react';
+import range from 'lodash/range';
 import { index as IntervalTree, matches01 as getIntersections } from 'static-interval-tree';
 import Slot from './slot';
 import CustomSlot from './custom_slot';
@@ -107,7 +108,7 @@ class SlotManager extends React.Component {
       for (let slotId = 0; slotId < crs.slots.length; slotId++) {
         const slotObj = crs.slots[slotId];
                 // first assume this course already has a colour (was added previously)
-        const colourIndex = _.range(COLOUR_DATA.length).find(idx =>
+        const colourIndex = range(COLOUR_DATA.length).find(idx =>
                     !Object.values(this.props.courseToColourIndex).some(x => x === idx),
                 );
         const colourId = this.props.courseToColourIndex[slotObj.course] === undefined ?
