@@ -3,7 +3,6 @@ import { getActiveTimetable, getSearchResult } from '../../reducers/root_reducer
 import { getSectionTypeToSections } from '../../reducers/entities_reducer';
 import SearchSideBar from '../search_side_bar';
 import { addOrRemoveCourse, hoverSection, unHoverSection } from '../../actions/timetable_actions';
-import { getSectionId } from '../../schema';
 
 const mapStateToProps = (state) => {
   const courseSections = state.courseSections.objects;
@@ -24,7 +23,8 @@ const mapStateToProps = (state) => {
             );
     },
     isSectionOnActiveTimetable: (course, section) =>
-      activeTimetable.sections.some(sectionId => sectionId === getSectionId(section, course)),
+      activeTimetable.sections.some(sectionId =>
+        sectionId === `${course.code}-${section.meeting_section}`),
   };
 };
 
