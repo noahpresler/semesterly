@@ -2,7 +2,8 @@ import merge from 'lodash/merge';
 import pick from 'lodash/pick';
 
 // TODO: garbage collect (e.g. clear when changing semesters)
-const entities = (state = {}, action) => {
+const emptyTimetable = { courses: [], sections: [] };
+const entities = (state = { timetables: { empty: emptyTimetable } }, action) => {
   if (action.response && action.response.entities) {
     return merge(state, action.response.entities);
   }
