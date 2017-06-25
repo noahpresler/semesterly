@@ -62,18 +62,6 @@ def unsubscribe(request, student_id, token):
     return HttpResponseRedirect("/")
 
 
-def get_semester_name_from_tt(tt):
-    try:
-        return Semester.objects.get(id=tt['semester']).name
-    except KeyError:
-        semester = 'Fall'
-        for course in tt['courses']:
-            for slot in course['slots']:
-                semester_id = slot['semester']
-                return Semester.objects.get(id=semester_id).name
-        return semester
-
-
 @csrf_exempt
 @validate_subdomain
 def log_ical_export(request):
@@ -392,7 +380,7 @@ class GCalView(RedirectToSignupMixin, APIView):
         calendar = {'summary': tt_name, 'timeZone': 'America/New_York'}
         created_calendar = service.calendars().insert(body=calendar).execute()
 
-        semester_name = get_semester_name_from_tt(tt)
+        semester_name = tt['semester']['name']
         if semester_name == 'Fall':
             # ignore year, year is set to current year
             sem_start = datetime(2017, 8, 30, 17, 0, 0)
