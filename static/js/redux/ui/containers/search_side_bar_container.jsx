@@ -1,8 +1,9 @@
 import { connect } from 'react-redux';
-import { getActiveTT, getSearchResult } from '../../reducers/root_reducer';
+import { getActiveTimetable, getSearchResult } from '../../reducers/root_reducer';
 import { getSectionTypeToSections } from '../../reducers/entities_reducer';
 import SearchSideBar from '../search_side_bar';
 import { addOrRemoveCourse, hoverSection, unHoverSection } from '../../actions/timetable_actions';
+import { getSectionId } from '../../schema';
 
 const mapStateToProps = (state) => {
   const courseSections = state.courseSections.objects;
@@ -10,7 +11,7 @@ const mapStateToProps = (state) => {
   if (!hoveredResult) {
     hoveredResult = getSearchResult(state, 0);
   }
-  const activeTimetable = getActiveTT(state);
+  const activeTimetable = getActiveTimetable(state);
   return {
     hoveredResult,
     sectionTypeToSections: getSectionTypeToSections(hoveredResult),
@@ -22,9 +23,8 @@ const mapStateToProps = (state) => {
                 type => courseSections[courseId][type] === section,
             );
     },
-    isSectionOnActiveTimetable: (courseId, section) => activeTimetable.courses
-      .some(course => course.id === courseId && course.enrolled_sections
-        .some(sec => sec === section)),
+    isSectionOnActiveTimetable: (course, section) =>
+      activeTimetable.sections.some(sectionId => sectionId === getSectionId(section, course)),
   };
 };
 
