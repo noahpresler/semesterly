@@ -17,7 +17,7 @@ const getOfferingById = (state, id) => state.offering_set[id];
 const getSectionById = (state, id) => state.sections[id];
 
 const getSlotsForSection = (state, section) =>
-  section.offering_set.map(getOfferingById);
+  section.offering_set.map(offering => getOfferingById(state, offering));
 
 // TODO use denormalize from normalizr
 const getDenormSectionById = (state, id) => {
@@ -61,7 +61,7 @@ export const getDenormSlot = (state, slot) => {
   return {
     course: getCourseById(state, slot.course),
     section: getSectionById(state, slot.section),
-    offerings: slot.offerings.map(getOfferingById),
+    offerings: slot.offerings.map(offering => getOfferingById(state, offering)),
   }
 };
 
