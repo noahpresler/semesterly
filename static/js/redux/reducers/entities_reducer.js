@@ -51,13 +51,17 @@ export const getSectionTypeToSections = (denormCourse) => {
   return sectionTypeToSections;
 };
 
-export const getTimetable = (state, id) => {
+export const getActiveDenormTimetable = (state, id) => {
   const timetable = state.timetables[id];
   return {
     ...timetable,
     courses: timetable.courses.map(courseCode => getCourseById(state, courseCode)),
     sections: timetable.sections.map(sectionId => getDenormSectionById(state, sectionId)),
   };
+};
+
+export const getActiveTimetable = (state, id) => {
+  return state.timetables[id];
 };
 
 export const getTimetableCourses = (state, id) => {

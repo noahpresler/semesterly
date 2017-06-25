@@ -71,8 +71,13 @@ export const getDenormCourseById = (state, id) =>
 
 export const getCurrentSemester = state => fromSemester.getCurrentSemester(state.semester);
 
+export const getActiveDenormTimetable = state =>
+  fromEntities.getActiveDenormTimetable(state.entities,
+    fromTimetables.getActiveTimetableId(state.timetables));
+
 export const getActiveTimetable = state =>
-  fromEntities.getTimetable(state.entities, fromTimetables.getActiveTimetableId(state.timetables));
+  fromEntities.getActiveTimetable(state.entities,
+    fromTimetables.getActiveTimetableId(state.timetables));
 
 export const getActiveTimetableCourses = (state) => {
   const activeId = fromTimetables.getActiveTimetableId(state.timetables);
@@ -80,11 +85,12 @@ export const getActiveTimetableCourses = (state) => {
 };
 
 export const getFromActiveTimetable = (state, fields) =>
-  fromEntities.getFromTimetable(getActiveTimetable(state), fields);
+  fromEntities.getFromTimetable(getActiveDenormTimetable(state), fields);
 
 export const getActiveTT = state => fromTimetables.getActiveTT(state.timetables);
 
-export const getMaxTTEndHour = createSelector([getActiveTimetable], fromEntities.getMaxEndHour);
+export const getMaxTTEndHour = createSelector([getActiveDenormTimetable],
+  fromEntities.getMaxEndHour);
 
 // Don't use createSelector to memoize getMaxEndHour
 export const getMaxEndHour = state =>
