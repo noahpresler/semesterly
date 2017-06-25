@@ -123,11 +123,10 @@ class TimetableLinkViewTest(APITestCase):
     def test_create_then_get_link(self):
         data = {
             'timetable': {
-                'courses': [{
-                    'id': 1,
-                }],
-                'sections': [{
-                    'id': 1
+                'slots': [{
+                    'course': {'id': 1},
+                    'section': {'id': 1},
+                    'offerings': []
                 }],
                 'has_conflict': False
             },
