@@ -81,11 +81,8 @@ export const getActiveTimetable = state =>
 
 export const getActiveTimetableCourses = (state) => {
   const activeId = fromTimetables.getActiveTimetableId(state.timetables);
-  return activeId === undefined ? [] : fromEntities.getTimetableCourses(state.entities, activeId);
+  return fromEntities.getTimetableCourses(state.entities, activeId);
 };
-
-export const getFromActiveTimetable = (state, fields) =>
-  fromEntities.getFromTimetable(getActiveDenormTimetable(state), fields);
 
 export const getActiveTT = state => fromTimetables.getActiveTT(state.timetables);
 

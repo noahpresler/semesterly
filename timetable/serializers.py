@@ -1,10 +1,10 @@
 from django.forms import model_to_dict
 from rest_framework import serializers
 
-from courses.serializers import get_section_dict, FlatCourseSerializer, SemesterSerializer
+from courses.serializers import get_section_dict, OldCourseSerializer, SemesterSerializer
 from courses.utils import is_waitlist_only
 from student.models import PersonalTimetable
-from timetable.utils import get_tt_rating
+from timetable.utils import get_tt_rating, Slot
 
 
 def convert_tt_to_dict(timetable):
@@ -53,16 +53,19 @@ def convert_tt_to_dict(timetable):
 class TimetableSerializer(serializers.Serializer):
     has_conflict = serializers.BooleanField()
 
+    # Send full courses so that correct data can be merged with entities
+    # TODO: only need to send one set of full course data with each response
     courses = serializers.SerializerMethodField()
+    # send slots for this specific timetable
+    slots = serializers.SerializerMethodField()
 
     semester = serializers.SerializerMethodField()
     school = serializers.SerializerMethodField()
     avg_rating = serializers.SerializerMethodField()
     events = serializers.SerializerMethodField()
-    sections = serializers.SerializerMethodField()
 
     def get_courses(self, obj):
-        return FlatCourseSerializer(obj.courses, many=True, context={
+        return OldCourseSerializer(obj.courses, many=True, context={
             'school': obj.courses[0].school,
             'courses': obj.courses,
             'sections': obj.sections,
@@ -87,3 +90,10 @@ class TimetableSerializer(serializers.Serializer):
     def get_sections(self, obj):
         return ['{0}-{1}'.format(section.course.code, section.meeting_section)
                 for section in obj.sections]
+
+    def get_slots(self, obj):
+        return [{
+            'course': section.course.id,
+            'section': section.id,
+            'offerings': [offering.id for offering in section.offering_set]
+        } for section in obj.sections]
