@@ -1,10 +1,12 @@
 import { schema } from 'normalizr';
 import { strPropertyCmp } from './util';
 
+export const getSectionId = (section, course) => `${course.code}-${section.meeting_section}`;
+
 export const offeringSchema = new schema.Entity('offering_set');
 
 export const sectionSchema = new schema.Entity('sections', { offering_set: [offeringSchema] }, {
-  idAttribute: (value, parent) => `${parent.code}-${value.meeting_section}`,
+  idAttribute: getSectionId,
 });
 
 export const courseSchema = new schema.Entity('courses', { sections: [sectionSchema] }, {
