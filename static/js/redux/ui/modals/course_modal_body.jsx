@@ -73,7 +73,7 @@ class CourseModalBody extends React.Component {
         }
         lockOrUnlock={() => this.props.addOrRemoveCourse(this.props.data.id,
           section.meeting_section)}
-        hoverSection={() => this.props.hoverSection(this.props.data, section.meeting_section)}
+        hoverSection={() => this.props.hoverSection(this.props.data, section)}
         unHoverSection={this.props.unHoverSection}
         inRoster={this.props.inRoster}
       />),
