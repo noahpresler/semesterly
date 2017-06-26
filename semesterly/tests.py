@@ -5,7 +5,19 @@ from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.common.by import By
 from selenium.common.exceptions import TimeoutException
 from django.test.utils import override_settings
-import socket, itertools
+from timetable.models import Semester, Course, Section, Offering
+import socket, itertools, re
+
+class url_matches_regex(object):
+    def __init__(self, pattern):
+        self.pattern = re.compile(pattern)
+
+    def __call__(self, driver):
+        res = self.pattern.search(driver.current_url)
+        if res:
+            return res
+        else:
+            return False
 
 class SeleniumTest(StaticLiveServerTestCase):
 
@@ -87,7 +99,7 @@ class SeleniumTest(StaticLiveServerTestCase):
     def add_course(self, course_idx, n_slots, n_master_slots):
         search_results = self.locate_and_get((By.CLASS_NAME, 'search-results'))
         chosen_course = search_results.find_elements_by_class_name('search-course')[course_idx]
-        add_button = self.locate_and_get((By.CLASS_NAME, 'search-course-add'), root=chosen_course)
+        add_button = self.locate_and_get((By.CLASS_NAME, 'search-course-add'), root=chosen_course, clickable=True)
         add_button.click()
         self.assert_loader_completes()
         self.assert_slot_presence(n_slots, n_master_slots)
@@ -113,8 +125,35 @@ class SeleniumTest(StaticLiveServerTestCase):
         self.assert_loader_completes()  
         self.assert_n_elements_found((By.CLASS_NAME, 'master-slot'), n_master_slots_before - 1)    
         if n_slots_expected:
-            self.assert_n_elements_found((By.CLASS_NAME, 'slot'), n_slots_expected)        
+            self.assert_n_elements_found((By.CLASS_NAME, 'slot'), n_slots_expected) 
+
+    def open_course_modal_from_search(self, course_idx):
+        search_results = self.locate_and_get((By.CLASS_NAME, 'search-results'))
+        chosen_course = search_results.find_elements_by_class_name('search-course')[course_idx]        
+        chosen_course.click()
     
+    def validate_course_modal(self):
+        url_match = WebDriverWait(self.driver, self.TIMEOUT).until(url_matches_regex(r'\/course\/(.*)\/(.*)\/(20..)'))
+        code = url_match.group(1)
+        semester_name = url_match.group(2)
+        semester_year = url_match.group(3)
+        course = Course.objects.get(code=code)
+        modal = self.locate_and_get((By.CLASS_NAME, 'course-modal'))
+        modal_body = self.locate_and_get((By.CLASS_NAME, 'modal-body'), root=modal)  
+        modal_header = self.locate_and_get((By.CLASS_NAME, 'modal-header'), root=modal)                      
+        credit_count = self.locate_and_get((By.CLASS_NAME, 'credits'), root=modal_body)
+        self.assertTrue(str(int(course.num_credits)) in credit_count.text or str(course.num_credits) in credit_count.text)
+        self.assertTrue(course.name in modal_header.text)
+        self.assertTrue(code in modal_header.text)
+        self.assertTrue(course.description in modal_body.text)
+        self.assertTrue(course.prerequisites in modal_body.text)
+        self.assertTrue(course.areas in modal_body.text)
+        n_sections = Section.objects.filter(course=course, 
+            semester__name=semester_name,
+            semester__year=semester_year
+        ).count()
+        self.assertEqual(n_sections, len(self.locate_and_get((By.CLASS_NAME, 'modal-section'), get_all=True)))
+        
     def test_logged_out_flow(self):
         self.driver.set_window_size(1440, 1080)
         self.clear_tutorial()
@@ -122,3 +161,5 @@ class SeleniumTest(StaticLiveServerTestCase):
         self.add_course(0, n_slots=4, n_master_slots=1)
         self.remove_course(0, n_slots_expected=0)
         self.search_course('calc', 2)
+        self.open_course_modal_from_search(1)
+        self.validate_course_modal()
