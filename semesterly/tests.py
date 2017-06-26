@@ -43,7 +43,7 @@ class SeleniumTest(StaticLiveServerTestCase):
                 else EC.visibility_of_element_located(locator)
             return WebDriverWait(root if root else self.driver, self.TIMEOUT).until(ec)
         except TimeoutException:
-            raise RuntimeError('Failed to locate visible element "%s" by %s' % locator)
+            raise RuntimeError('Failed to locate visible element "%s" by %s' % locator[::-1])
     
     def assert_invisibility(self, locator, root=None):
         try:        
