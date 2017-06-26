@@ -264,11 +264,11 @@ export const handleCreateNewTimetable = () => (dispatch, getState) => {
     state.userInfo.data.timetables)));
 };
 
-export const unHoverSection = () => ({ type: ActionTypes.UNHOVER_COURSE });
+export const unHoverSection = () => ({ type: ActionTypes.UNHOVER_SECTION });
 
 // TODO: export const hoverSection = (section) =>
 export const hoverSection = (denormCourse, section) => ({
-  type: ActionTypes.HOVER_COURSE,
+  type: ActionTypes.HOVER_SECTION,
   course: Object.assign({}, denormCourse, { slots: section.offering_set }),
 });
 
