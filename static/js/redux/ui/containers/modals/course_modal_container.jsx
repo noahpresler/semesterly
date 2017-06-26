@@ -9,7 +9,6 @@ import {
 import {
     addOrRemoveCourse,
     addOrRemoveOptionalCourse,
-    hoverSection,
     unHoverSection,
 } from '../../../actions/timetable_actions';
 import {
@@ -45,7 +44,6 @@ const CourseModalContainer = connect(
     hideModal: () => setCourseId(null),
     openSignUpModal,
     fetchCourseInfo,
-    hoverSection,
     unHoverSection,
     addOrRemoveOptionalCourse,
     addOrRemoveCourse,

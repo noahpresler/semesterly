@@ -266,13 +266,11 @@ export const handleCreateNewTimetable = () => (dispatch, getState) => {
 
 export const unHoverSection = () => ({ type: ActionTypes.UNHOVER_COURSE });
 
-export const hoverSection = (denormCourse, sectionCode) => {
-  const section = denormCourse.sections.find(s => s.meeting_section === sectionCode);
-  return {
-    type: ActionTypes.HOVER_COURSE,
-    course: Object.assign({}, denormCourse, { slots: section.offering_set }),
-  };
-};
+// TODO: export const hoverSection = (section) =>
+export const hoverSection = (denormCourse, section) => ({
+  type: ActionTypes.HOVER_COURSE,
+  course: Object.assign({}, denormCourse, { slots: section.offering_set }),
+});
 
 /*
  Attempts to add the course represented by newCourseId
