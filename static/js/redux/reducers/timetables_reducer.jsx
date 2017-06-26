@@ -43,7 +43,7 @@ const timetables = (state = initialState, action) => {
     case ActionTypes.RECEIVE_COURSES:
       return Object.assign({}, state, { isFetching: false });
 
-    case ActionTypes.HOVER_COURSE: {
+    case ActionTypes.HOVER_SECTION: {
       // add the course to the current timetable, but mark it as "fake", so we can
       // identify it to remove upon unhover
       const newCourse = Object.assign({}, action.course, { fake: true });
@@ -105,7 +105,7 @@ const timetables = (state = initialState, action) => {
         },
       });
     }
-    case ActionTypes.UNHOVER_COURSE: {
+    case ActionTypes.UNHOVER_SECTION: {
       // find fake course index; delete it
       const curCourses = state.items[state.active].courses;
       const fakeCourseIndex = curCourses.findIndex(c => c.fake);
