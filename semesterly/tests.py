@@ -17,7 +17,7 @@ class SeleniumTest(StaticLiveServerTestCase):
         super(SeleniumTest, self).setUpClass()
         self.TIMEOUT = 10
         self.driver = None
-        socket.setdefaulttimeout(self.TIMEOUT) 
+        socket.setdefaulttimeout(3 * self.TIMEOUT) 
         self.driver = webdriver.Chrome()        
     
     @classmethod
@@ -37,10 +37,16 @@ class SeleniumTest(StaticLiveServerTestCase):
         url = '%s%s' % (self.live_server_url, '/')
         return url.replace('http://', 'http://%s.' % school)
     
-    def locate_and_get(self, locator, get_all=False, root=None):
+    def locate_and_get(self, locator, get_all=False, root=None, clickable=False):
+        if get_all and clickable:
+            raise RuntimeError("Cannot use both get_all and clickable")
+        elif get_all:
+           ec = EC.presence_of_all_elements_located(locator)
+        elif clickable:
+            ec = EC.element_to_be_clickable(locator)
+        else:
+            ec = EC.visibility_of_element_located(locator)
         try:
-            ec = EC.presence_of_all_elements_located(locator) if get_all \
-                else EC.visibility_of_element_located(locator)
             return WebDriverWait(root if root else self.driver, self.TIMEOUT).until(ec)
         except TimeoutException:
             raise RuntimeError('Failed to locate visible element "%s" by %s' % locator[::-1])
@@ -55,16 +61,15 @@ class SeleniumTest(StaticLiveServerTestCase):
 
     def clear_tutorial(self):
         for _ in range(4):
-            arrow = WebDriverWait(self.driver, self.TIMEOUT).until(
-                EC.element_to_be_clickable((By.XPATH, '//div[@class="tut-modal__nav"]/i[@class="action fa fa-chevron-right"] | //div[@class="tut-modal__nav"]/h4'))
-            )
+            arrow = self.locate_and_get((By.XPATH, '//div[@class="tut-modal__nav"]/i[@class="action fa fa-chevron-right"] | //div[@class="tut-modal__nav"]/h4'), clickable = True)
             arrow.click()
     
     def enter_search_query(self, query):
         search_box = self.locate_and_get((By.XPATH, '//div[@class="search-bar__input-wrapper"]/input'))
+        search_box.clear()
         search_box.send_keys(query)
     
-    def wait_for_timetable_load(self):
+    def assert_loader_completes(self):
         self.locate_and_get((By.CLASS_NAME, 'la-ball-clip-rotate-multiple'))
         self.assert_invisibility((By.CLASS_NAME, 'la-ball-clip-rotate-multiple'))
 
@@ -73,17 +78,47 @@ class SeleniumTest(StaticLiveServerTestCase):
         self.assertEqual(len(slots), n_slots)
         master_slots = self.locate_and_get((By.CLASS_NAME, 'master-slot'), get_all=True)
         self.assertEqual(len(master_slots), n_master_slots)
-
-    def test_can_clear_tutorial(self):
-        self.clear_tutorial()
-        self.assert_invisibility((By.CLASS_NAME, 'tut-modal__nav'))
     
-    def test_search_add_course(self):
-        self.clear_tutorial()
-        self.enter_search_query('calc')
+    def search_course(self, query, n_results):
+        self.enter_search_query(query)
         search_results = self.locate_and_get((By.CLASS_NAME, 'search-results'))
-        chosen_course = search_results.find_elements_by_class_name('search-course')[0]
+        self.assertEqual(len(search_results.find_elements_by_class_name('search-course')), n_results)
+
+    def add_course(self, course_idx, n_slots, n_master_slots):
+        search_results = self.locate_and_get((By.CLASS_NAME, 'search-results'))
+        chosen_course = search_results.find_elements_by_class_name('search-course')[course_idx]
         add_button = self.locate_and_get((By.CLASS_NAME, 'search-course-add'), root=chosen_course)
         add_button.click()
-        self.wait_for_timetable_load()
-        self.assert_slot_presence(4,1)
+        self.assert_loader_completes()
+        self.assert_slot_presence(n_slots, n_master_slots)
+    
+    def assert_n_elements_found(self, locator, n, root=None):
+        if n == 0:
+            self.assert_invisibility(locator)
+        else:
+            n_found = len(self.locate_and_get(locator, root=root, get_all=True))
+            self.assertEqual(n_found, n)  
+
+    def remove_course(self, course_idx, from_slot=False, n_slots_expected=None):
+        n_master_slots_before = len(self.locate_and_get((By.CLASS_NAME, 'master-slot'), get_all=True))         
+        if from_slot:
+            if n_master_slots_before > 0:
+                raise RuntimeError('Cannot remove via slot button unless n_courses = 1')                
+            slot = self.locate_and_get((By.CLASS_NAME, 'slot'), get_all=True)[0]
+            del_button = self.locate_and_get((By.CLASS_NAME,'fa-times'), root=slot, clickable=True)
+        else:
+            master_slot = self.locate_and_get((By.CLASS_NAME, 'master-slot'), get_all=True)[course_idx]
+            del_button = self.locate_and_get((By.CLASS_NAME,'fa-times'), root=master_slot, clickable=True)
+        del_button.click()
+        self.assert_loader_completes()  
+        self.assert_n_elements_found((By.CLASS_NAME, 'master-slot'), n_master_slots_before - 1)    
+        if n_slots_expected:
+            self.assert_n_elements_found((By.CLASS_NAME, 'slot'), n_slots_expected)        
+    
+    def test_logged_out_flow(self):
+        self.driver.set_window_size(1440, 1080)
+        self.clear_tutorial()
+        self.search_course('calc', 2)
+        self.add_course(0, n_slots=4, n_master_slots=1)
+        self.remove_course(0, n_slots_expected=0)
+        self.search_course('calc', 2)
