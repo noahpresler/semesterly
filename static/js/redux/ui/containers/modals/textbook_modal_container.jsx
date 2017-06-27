@@ -5,7 +5,7 @@ import { toggleTextbookModal } from '../../../actions/modal_actions';
 
 const mapStateToProps = state => ({
   isVisible: state.textbookModal.isVisible,
-  liveTimetableCourses: getActiveTT(state).courses.filter(c => !c.fake),
+  courses: getActiveTT(state).courses,
   isLoading: state.timetables.isFetching,
 });
 
