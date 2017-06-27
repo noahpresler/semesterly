@@ -3,6 +3,7 @@ import React from 'react';
 import { index as IntervalTree, matches01 as getIntersections } from 'static-interval-tree';
 import Slot from './slot';
 import CustomSlot from './custom_slot';
+import { getNextAvailableColour } from '../util';
 import * as SemesterlyPropTypes from '../constants/semesterlyPropTypes';
 
 class SlotManager extends React.Component {
@@ -100,12 +101,16 @@ class SlotManager extends React.Component {
     };
     const slots = this.props.slots;
 
+    // TODO: don't render slot of the save section type and course as the hovered slot
     slots.forEach((slot) => {
       const { course, section, offerings } = slot;
       offerings.forEach((offering) => {
+        // will only be undefined for hovered slot
+        const colourId = this.props.courseToColourIndex[course.id] ||
+                         getNextAvailableColour(this.props.courseToColourIndex);
         const displayOffering = {
           ...offering,
-          colourId: this.props.courseToColourIndex[course.id],
+          colourId,
           courseId: course.id,
           code: course.code,
           name: course.name,

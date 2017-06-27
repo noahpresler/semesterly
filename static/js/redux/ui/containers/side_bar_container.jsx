@@ -17,7 +17,7 @@ import { getCourseShareLink } from '../../constants/endpoints';
 
 const mapStateToProps = (state) => {
   const activeTimetable = getActiveTT(state);
-  const mandatoryCourses = activeTimetable.courses.filter(c => !c.is_optional && !c.fake);
+  const mandatoryCourses = activeTimetable.courses.filter(c => !c.is_optional);
   const optionalCourses = state.optionalCourses.courses;
 
   return {
@@ -26,7 +26,7 @@ const mapStateToProps = (state) => {
     examSupportedSemesters: state.semester.exams,
     // don't want to consider courses that are shown on timetable only
     // because of a 'HOVER_COURSE' action (i.e. fake courses)
-    liveTimetableCourses: activeTimetable.courses.filter(c => !c.fake),
+    liveTimetableCourses: activeTimetable.courses,
     savedTimetables: state.userInfo.data.timetables,
     courseToColourIndex: state.ui.courseToColourIndex,
     classmates: state.classmates.courseToClassmates,
