@@ -82,7 +82,6 @@ class SeleniumTest(StaticLiveServerTestCase):
         search_box.send_keys(query)
     
     def assert_loader_completes(self):
-        self.locate_and_get((By.CLASS_NAME, 'la-ball-clip-rotate-multiple'))
         self.assert_invisibility((By.CLASS_NAME, 'la-ball-clip-rotate-multiple'))
 
     def assert_slot_presence(self, n_slots, n_master_slots):
@@ -225,7 +224,7 @@ class SeleniumTest(StaticLiveServerTestCase):
             (By.CLASS_NAME, 'share-course-link'),
             root=top_bar_actions
         ).get_attribute('value')    
-        follow_and_validate_url(lambda: self.validate_timeable(courses))    
+        self.follow_and_validate_url(lambda: self.validate_timeable(courses))    
         
     def test_logged_out_flow(self):
         self.driver.set_window_size(1440, 1080)
