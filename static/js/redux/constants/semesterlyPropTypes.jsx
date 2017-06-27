@@ -200,8 +200,22 @@ export const peer = PropTypes.shape({
   shared_courses: PropTypes.arrayOf(course).isRequired,
 });
 
+export const offering = PropTypes.shape({
+  day: PropTypes.string.isRequired,
+  id: PropTypes.number.isRequired,
+  location: PropTypes.string.isRequired,
+  time_end: PropTypes.string.isRequired,
+  time_start: PropTypes.string.isRequired,
+});
+
 export const normalizedSlot = PropTypes.shape({
   course: PropTypes.number.isRequired,
   section: PropTypes.number.isRequired,
   offerings: PropTypes.arrayOf(PropTypes.number).isRequired,
+});
+
+export const denormalizedSlot = PropTypes.shape({
+  course: course.isRequired,
+  section: section.isRequired,
+  offerings: PropTypes.arrayOf(offering).isRequired,
 });
