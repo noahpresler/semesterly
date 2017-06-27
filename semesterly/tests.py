@@ -66,7 +66,7 @@ class SeleniumTest(StaticLiveServerTestCase):
     def assert_invisibility(self, locator, root=None):
         try:        
             WebDriverWait(root if root else self.driver, self.TIMEOUT).until(
-                EC.invisibility_of_element_located((By.CLASS_NAME, 'la-ball-clip-rotate-multiple'))
+                EC.invisibility_of_element_located(locator)
             )
         except TimeoutException:
             raise RuntimeError('Failed to assert invisibility of element "%s" by %s' % locator[::-1])
@@ -153,6 +153,79 @@ class SeleniumTest(StaticLiveServerTestCase):
             semester__year=semester_year
         ).count()
         self.assertEqual(n_sections, len(self.locate_and_get((By.CLASS_NAME, 'modal-section'), get_all=True)))
+    
+    def open_course_modal_from_slot(self, course_idx):
+        slot = self.locate_and_get((By.CLASS_NAME, 'slot'), clickable=True)
+        slot.click()
+    
+    def close_course_modal(self):
+        modal = self.locate_and_get((By.CLASS_NAME, 'course-modal'))
+        modal_header = self.locate_and_get((By.CLASS_NAME, 'modal-header'), root=modal)                      
+        self.locate_and_get((By.CLASS_NAME, 'fa-times'), root=modal_header).click()
+        self.assert_invisibility((By.CLASS_NAME, 'course-modal'))
+    
+    def follow_and_validate_url(self, url, validate):
+        self.driver.execute_script("window.open()")
+        self.driver.switch_to_window(self.driver.window_handles[1])
+        self.driver.get(url)
+        validate()
+        self.driver.close()
+        self.driver.switch_to_window(self.driver.window_handles[0])
+
+    def follow_share_link_from_modal(self):
+        modal = self.locate_and_get((By.CLASS_NAME, 'course-modal'))
+        modal_header = self.locate_and_get((By.CLASS_NAME, 'modal-header'), root=modal)                      
+        self.locate_and_get((By.CLASS_NAME, 'fa-share-alt'), root=modal_header).click()
+        url = self.locate_and_get((By.CLASS_NAME, 'share-course-link'), root=modal_header).get_attribute('value')
+        self.follow_and_validate_url(url, self.validate_course_modal)
+    
+    def follow_share_link_from_slot(self):
+        master_slot = self.locate_and_get((By.CLASS_NAME, 'master-slot'), clickable=True)   
+        share = self.locate_and_get((By.CLASS_NAME,'fa-share-alt'), root=master_slot, clickable=True)
+        share.click()
+        url = self.locate_and_get((By.CLASS_NAME, 'share-course-link'), root=master_slot).get_attribute('value')        
+        self.follow_and_validate_url(url, self.validate_course_modal)
+    
+    def remove_course_from_course_modal(self, n_slots_expected=None):
+        n_master_slots_before = len(self.locate_and_get((By.CLASS_NAME, 'master-slot'), get_all=True))                 
+        modal = self.locate_and_get((By.CLASS_NAME, 'course-modal'))
+        modal_header = self.locate_and_get((By.CLASS_NAME, 'modal-header'), root=modal)
+        remove = self.locate_and_get((By.CLASS_NAME, 'fa-check'), root=modal_header, clickable=True)
+        remove.click()
+        self.assert_loader_completes()
+        self.assert_invisibility((By.CLASS_NAME, 'course-modal'))
+        self.assert_n_elements_found((By.CLASS_NAME, 'master-slot'), n_master_slots_before - 1)    
+        if n_slots_expected:
+            self.assert_n_elements_found((By.CLASS_NAME, 'slot'), n_slots_expected) 
+    
+    def add_course_from_course_modal(self, n_slots, n_master_slots):
+        modal = self.locate_and_get((By.CLASS_NAME, 'course-modal'))
+        modal_header = self.locate_and_get((By.CLASS_NAME, 'modal-header'), root=modal)  
+        url_match = WebDriverWait(self.driver, self.TIMEOUT).until(url_matches_regex(r'\/course\/(.*)\/(.*)\/(20..)'))
+        course = Course.objects.get(code=url_match.group(1))                    
+        self.locate_and_get((By.CLASS_NAME, 'fa-plus'), root=modal_header).click()
+        self.assert_loader_completes()
+        self.assert_invisibility((By.CLASS_NAME, 'course-modal'))                
+        self.assert_slot_presence(n_slots, n_master_slots)
+        return course
+    
+    def validate_timeable(self, courses):
+        slots = self.locate_and_get((By.CLASS_NAME, 'slot'), get_all=True)
+        for course in courses:
+            any([course.name in course.text and course.code in slot.text for slot in slots])
+
+    def share_timetable(self, courses):
+        top_bar_actions = self.locate_and_get((By.CLASS_NAME, 'fc-right'))
+        self.locate_and_get(
+            (By.CLASS_NAME, 'fa-share-alt'),
+             clickable=True,
+             root=top_bar_actions
+        ).click()
+        url = self.locate_and_get(
+            (By.CLASS_NAME, 'share-course-link'),
+            root=top_bar_actions
+        ).get_attribute('value')    
+        follow_and_validate_url(lambda: self.validate_timeable(courses))    
         
     def test_logged_out_flow(self):
         self.driver.set_window_size(1440, 1080)
@@ -163,3 +236,20 @@ class SeleniumTest(StaticLiveServerTestCase):
         self.search_course('calc', 2)
         self.open_course_modal_from_search(1)
         self.validate_course_modal()
+        self.follow_share_link_from_modal()
+        self.close_course_modal()
+        self.search_course('calc', 2)
+        self.add_course(1, n_slots=4, n_master_slots=1)   
+        self.follow_share_link_from_slot()         
+        self.open_course_modal_from_slot(0)
+        self.validate_course_modal()
+        self.close_course_modal()
+        self.open_course_modal_from_slot(0)  
+        # self.remove_course_from_course_modal(0)                     
+        # self.search_course('calc', 2)  
+        # self.open_course_modal_from_search(1)
+        # self.share_timetable(
+        #     self.add_course_from_course_modal(
+        #         n_slots=4, n_master_slots=1
+        #     )
+        # )          
