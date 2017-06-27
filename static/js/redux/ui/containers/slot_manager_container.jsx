@@ -1,5 +1,5 @@
 import { connect } from 'react-redux';
-import { getActiveTT } from '../../reducers/root_reducer';
+import { getActiveDenormTimetable } from '../../reducers/root_reducer';
 import { fetchCourseInfo } from '../../actions/modal_actions';
 import {
     addCustomSlot,
@@ -13,7 +13,7 @@ import SlotManager from '../slot_manager';
 
 
 const mapStateToProps = (state, ownProps) => ({
-  timetable: getActiveTT(state) || [],
+  slots: getActiveDenormTimetable(state).slots,
   isLocked: (courseId, section) => {
       // check the courseSections state variable, which tells us
       // precisely which courses have which sections locked, if any
