@@ -19,6 +19,14 @@ class url_matches_regex(object):
         else:
             return False
 
+class n_elements_found(object):
+    def __init__(self, finder, n):
+        self.finder = finder
+        self.n = n
+
+    def __call__(self, driver):
+        return self.n == len(self.finder())
+
 class SeleniumTest(StaticLiveServerTestCase):
 
     fixtures = ['jhu_fall_sample.json']
@@ -151,12 +159,13 @@ class SeleniumTest(StaticLiveServerTestCase):
             semester__name=semester_name,
             semester__year=semester_year
         ).count()
-        n_sections_found = len(self.locate_and_get(
+        section_finder = lambda: self.locate_and_get(
             (By.XPATH, 
             "//div[@class='modal-section' or @class='modal-section on-active-timetable' or @class='modal-section locked on-active-timetable']"
-        ), get_all=True))
-        self.assertEqual(n_sections, n_sections_found)
-
+        ), get_all=True)
+        url_match = WebDriverWait(self.driver, self.TIMEOUT) \
+            .until(n_elements_found(section_finder, n_sections))        
+        
     def open_course_modal_from_slot(self, course_idx):
         slot = self.locate_and_get((By.CLASS_NAME, 'slot'), clickable=True)
         slot.click()
@@ -243,7 +252,7 @@ class SeleniumTest(StaticLiveServerTestCase):
         self.close_course_modal()
         self.search_course('calc', 2)
         self.add_course(1, n_slots=4, n_master_slots=1)
-        self.follow_share_link_from_slot()
+        self.follow_share_link_from_slot()    
         self.open_course_modal_from_slot(0)
         self.validate_course_modal()
         self.close_course_modal()
