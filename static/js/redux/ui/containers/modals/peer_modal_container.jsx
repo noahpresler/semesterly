@@ -7,7 +7,7 @@ import { openSignUpModal, togglePeerModal } from '../../../actions/modal_actions
 const mapStateToProps = state => ({
     // don't want to consider courses that are shown on timetable only
     // because of a 'HOVER_COURSE' action (i.e. fake courses)
-  liveTimetableCourses: getActiveTT(state).courses.filter(c => !c.fake),
+  courses: getActiveTT(state).courses,
   courseToColourIndex: state.ui.courseToColourIndex,
   peers: state.friends.peers,
   userInfo: state.userInfo.data,

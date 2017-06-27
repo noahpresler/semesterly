@@ -33,18 +33,18 @@ class TextbookModal extends React.Component {
 
     const tbs = {};
     let allTbs = [];
-    for (let i = 0; i < this.props.liveTimetableCourses.length; i++) {
-      tbs[this.props.liveTimetableCourses[i].name] = [];
-      if (this.props.liveTimetableCourses[i].textbooks !== undefined &&
-        Object.keys(this.props.liveTimetableCourses[i].textbooks).length > 0) {
-        for (let j = 0; j < this.props.liveTimetableCourses[i].enrolled_sections.length; j++) {
-          tbs[this.props.liveTimetableCourses[i].name] =
-            tbs[this.props.liveTimetableCourses[i].name]
-              .concat(this.props.liveTimetableCourses[i]
-                .textbooks[this.props.liveTimetableCourses[i].enrolled_sections[j]],
+    for (let i = 0; i < this.props.courses.length; i++) {
+      tbs[this.props.courses[i].name] = [];
+      if (this.props.courses[i].textbooks !== undefined &&
+        Object.keys(this.props.courses[i].textbooks).length > 0) {
+        for (let j = 0; j < this.props.courses[i].enrolled_sections.length; j++) {
+          tbs[this.props.courses[i].name] =
+            tbs[this.props.courses[i].name]
+              .concat(this.props.courses[i]
+                .textbooks[this.props.courses[i].enrolled_sections[j]],
               );
-          allTbs = allTbs.concat(this.props.liveTimetableCourses[i]
-            .textbooks[this.props.liveTimetableCourses[i].enrolled_sections[j]]);
+          allTbs = allTbs.concat(this.props.courses[i]
+            .textbooks[this.props.courses[i].enrolled_sections[j]]);
         }
       }
     }
@@ -184,7 +184,7 @@ TextbookModal.propTypes = {
   isVisible: PropTypes.bool.isRequired,
   isLoading: PropTypes.bool.isRequired,
   toggleTextbookModal: PropTypes.func.isRequired,
-  liveTimetableCourses: PropTypes.arrayOf(SemesterlyPropTypes.course).isRequired,
+  courses: PropTypes.arrayOf(SemesterlyPropTypes.course).isRequired,
 };
 
 export default TextbookModal;

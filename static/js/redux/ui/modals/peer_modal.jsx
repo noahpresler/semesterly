@@ -60,7 +60,7 @@ class PeerModal extends React.Component {
     const modalStyle = {
       width: '100%',
     };
-    const sideSlots = this.props.liveTimetableCourses.map((c) => {
+    const sideSlots = this.props.courses.map((c) => {
       const professors = [...new Set(c.slots.map(s => s.instructors))];
       const colourIndex = this.props.courseToColourIndex[c.id] || 0;
       return (
@@ -239,7 +239,7 @@ class PeerModal extends React.Component {
 PeerModal.propTypes = {
   userInfo: SemesterlyPropTypes.userInfo.isRequired,
   peers: PropTypes.arrayOf(SemesterlyPropTypes.peer).isRequired,
-  liveTimetableCourses: PropTypes.arrayOf(SemesterlyPropTypes.course).isRequired,
+  courses: PropTypes.arrayOf(SemesterlyPropTypes.course).isRequired,
   courseToColourIndex: PropTypes.shape({
     '*': PropTypes.number,
   }).isRequired,
