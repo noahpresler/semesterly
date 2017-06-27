@@ -1,10 +1,10 @@
 import { connect } from 'react-redux';
 import CourseModal from '../../modals/course_modal';
 import {
-  getActiveTT,
   getCurrentSemester,
   getDenormCourseById,
   getCourseInfoId,
+  getHoveredSlots,
 } from '../../../reducers/root_reducer';
 import {
     addOrRemoveCourse,
@@ -23,14 +23,13 @@ import { getCourseShareLink, getCourseShareLinkFromModal } from '../../../consta
 
 const mapStateToProps = (state) => {
   const courseSections = state.courseSections.objects;
-  const activeTimetable = getActiveTT(state);
   const courseInfoId = getCourseInfoId(state);
   const denormCourseInfo = !courseInfoId ? {} : getDenormCourseById(state, courseInfoId);
   return {
     data: denormCourseInfo,
     id: state.courseInfo.id,
     isFetching: state.courseInfo.isFetching,
-    hasHoveredResult: activeTimetable.courses.some(course => course.fake),
+    hasHoveredResult: getHoveredSlots(state).length > 0,
     inRoster: courseSections[state.courseInfo.id] !== undefined,
     getShareLink: courseCode => getCourseShareLink(courseCode, getCurrentSemester(state)),
     getShareLinkFromModal: courseCode =>
