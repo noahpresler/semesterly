@@ -151,7 +151,10 @@ class SeleniumTest(StaticLiveServerTestCase):
             semester__name=semester_name,
             semester__year=semester_year
         ).count()
-        n_sections_found = len(self.locate_and_get((By.XPATH, "//div[contains(@class, 'modal-section')]"), get_all=True))
+        n_sections_found = len(self.locate_and_get(
+            (By.XPATH, 
+            "//div[@class='modal-section' or @class='modal-section on-active-timetable' or @class='modal-section locked on-active-timetable']"
+        ), get_all=True))
         self.assertEqual(n_sections, n_sections_found)
 
     def open_course_modal_from_slot(self, course_idx):
