@@ -34,7 +34,7 @@ describe('course schema', () => {
     expect(result).toEqual({ ...normalized, result: 1 });
   });
   it('denormalizes single course correctly', () => {
-    expect(getDenormCourseById(normalized.entities, 'C1')).toEqual(denormalized[0]);
+    expect(getDenormCourseById(normalized.entities, 1)).toEqual(denormalized[0]);
   });
 });
 
