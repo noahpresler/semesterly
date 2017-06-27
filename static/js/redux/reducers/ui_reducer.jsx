@@ -1,6 +1,5 @@
-import range from 'lodash/range';
-import COLOUR_DATA from '../constants/colours';
 import * as ActionTypes from '../constants/actionTypes';
+import { getNextAvailableColour } from '../util';
 
 const initialState = {
   searchHover: 0,
@@ -9,9 +8,6 @@ const initialState = {
   highlightNotifs: false, // add yellow styling to notifications
 };
 
-export const getNextAvailableColour = state =>
-  range(COLOUR_DATA.length).find(i => !Object.values(state.courseToColourIndex).some(x => x === i));
-
 const ui = (state = initialState, action) => {
   switch (action.type) {
     case ActionTypes.INIT_STATE:
@@ -19,7 +15,7 @@ const ui = (state = initialState, action) => {
     case ActionTypes.HOVER_SEARCH_RESULT:
       return Object.assign({}, state, { searchHover: action.position });
     case ActionTypes.RECEIVE_TIMETABLES: {
-      const courses = action.timetables.length > 0 ? action.timetables.courses : [];
+      const courses = action.timetables.length > 0 ? action.timetables[0].courses : [];
 
       // TODO: remove one of saving/preset, using both is redundant. rename to recalculateColours?
       let courseToColourIndex = state.courseToColourIndex;
