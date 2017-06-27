@@ -89,6 +89,8 @@ export const getActiveTT = state => fromTimetables.getActiveTT(state.timetables)
 export const getMaxTTEndHour = createSelector([getActiveDenormTimetable],
   fromEntities.getMaxEndHour);
 
+export const getHoveredSlots = state => fromTimetables.getHoveredSlots(state.timetables);
+
 // Don't use createSelector to memoize getMaxEndHour
 export const getMaxEndHour = state =>
   Math.max(getMaxTTEndHour(state), getMaxHourBasedOnWindowHeight());
