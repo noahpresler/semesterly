@@ -149,4 +149,3 @@ export const getSectionTypeDisplayName = function getSectionTypeDisplayName(sect
 export const strPropertyCmp = prop => (first, second) => (first[prop] > second[prop] ? 1 : -1);
 
 export const isIncomplete = prop => prop === undefined || prop === '' || prop === null;
-
