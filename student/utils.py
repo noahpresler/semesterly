@@ -57,7 +57,7 @@ def get_classmates_from_tts(student, course_id, tts):
     classmates = []
     for tt in tts:
         friend = tt.student
-        classmate = model_to_dict(friend, exclude=['user', 'id', 'fbook_uid', 'friends'])
+        classmate = model_to_dict(friend, exclude=['user', 'id', 'fbook_uid', 'friends', 'time_accepted_tos'])
         classmate['first_name'] = friend.user.first_name
         classmate['last_name'] = friend.user.last_name
         if student.social_offerings and friend.social_offerings:
