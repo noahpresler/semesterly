@@ -1,10 +1,8 @@
 import PropTypes from 'prop-types';
 import React from 'react';
-import range from 'lodash/range';
 import { index as IntervalTree, matches01 as getIntersections } from 'static-interval-tree';
 import Slot from './slot';
 import CustomSlot from './custom_slot';
-import COLOUR_DATA from '../constants/colours';
 import * as SemesterlyPropTypes from '../constants/semesterlyPropTypes';
 
 class SlotManager extends React.Component {
@@ -100,28 +98,25 @@ class SlotManager extends React.Component {
     const slotsByDay = {
       M: [], T: [], W: [], R: [], F: [],
     };
-    const courses = this.props.timetable.courses;
+    const slots = this.props.slots;
 
-    // course slots
-    for (let i = 0; i < courses.length; i++) {
-      const crs = courses[i];
-      for (let slotId = 0; slotId < crs.slots.length; slotId++) {
-        const slotObj = crs.slots[slotId];
-                // first assume this course already has a colour (was added previously)
-        const colourIndex = range(COLOUR_DATA.length).find(idx =>
-                    !Object.values(this.props.courseToColourIndex).some(x => x === idx),
-                );
-        const colourId = this.props.courseToColourIndex[slotObj.course] === undefined ?
-          colourIndex : this.props.courseToColourIndex[slotObj.course];
-        const slot = Object.assign(slotObj, {
-          colourId, code: crs.code, name: crs.name,
-        });
-        if (slotsByDay[slot.day]) {
-          slot.custom = false;
-          slotsByDay[slot.day].push(slot);
+    slots.forEach((slot) => {
+      const { course, section, offerings } = slot;
+      offerings.forEach((offering) => {
+        const displayOffering = {
+          ...offering,
+          colourId: this.props.courseToColourIndex[course.id],
+          courseId: course.id,
+          code: course.code,
+          name: course.name,
+          custom: false,
+          meeting_section: section.meeting_section,
+        };
+        if (displayOffering.day in slotsByDay) { // some offerings have a weekend day (sat or sun)
+          slotsByDay[displayOffering.day].push(displayOffering);
         }
-      }
-    }
+      });
+    });
 
     // custom slots
     for (let i = 0; i < this.props.custom.length; i++) {
@@ -137,7 +132,7 @@ class SlotManager extends React.Component {
     const slotsByDay = this.getSlotsByDay();
     const allSlots = this.props.days.map((day, i) => {
       const daySlots = slotsByDay[day].map((slot, j) => {
-        const courseId = slot.course;
+        const courseId = slot.courseId;
         const locked = this.props.isLocked(courseId, slot.meeting_section);
         const isOptional = this.props.isCourseOptional(courseId);
         const optionalCourse = isOptional ? this.props.getOptionalCourseById(courseId) : null;
@@ -154,7 +149,7 @@ class SlotManager extends React.Component {
           <Slot
             {...slot}
             fetchCourseInfo={() => this.props.fetchCourseInfo(courseId)}
-            key={slot.fake ? -slot.id : slot.id + i.toString() + j.toString()}
+            key={slot.id + i.toString() + j.toString()}
             locked={locked}
             classmates={this.props.socialSections ?
               this.props.classmates(courseId, slot.meeting_section) : []}
@@ -208,7 +203,7 @@ SlotManager.propTypes = {
   addCustomSlot: PropTypes.func.isRequired,
   fetchCourseInfo: PropTypes.func.isRequired,
   days: PropTypes.arrayOf(PropTypes.string).isRequired,
-  timetable: SemesterlyPropTypes.timetable.isRequired,
+  slots: PropTypes.arrayOf(SemesterlyPropTypes.denormalizedSlot).isRequired,
   courseToColourIndex: PropTypes.shape({
     '*': PropTypes.number,
   }).isRequired,
