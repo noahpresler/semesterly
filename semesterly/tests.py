@@ -151,6 +151,8 @@ class SeleniumTest(StaticLiveServerTestCase):
             semester__name=semester_name,
             semester__year=semester_year
         ).count()
+        side_bar = self.locate_and_get((By.CLASS_NAME, 'col-5-16'))
+        print side_bar.get_attribute("outerHTML")
         n_sections_found = len(self.locate_and_get(
             (By.XPATH, 
             "//div[@class='modal-section' or @class='modal-section on-active-timetable' or @class='modal-section locked on-active-timetable']"
