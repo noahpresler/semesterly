@@ -64,6 +64,7 @@ class TimetableSerializer(serializers.Serializer):
     avg_rating = serializers.SerializerMethodField()
     events = serializers.SerializerMethodField()
 
+    # TODO: send separately, once per request
     def get_courses(self, obj):
         return OldCourseSerializer(obj.courses, many=True, context={
             'school': obj.courses[0].school,
@@ -87,13 +88,40 @@ class TimetableSerializer(serializers.Serializer):
     def get_events(self, obj):
         return self.context.get('events')
 
-    def get_sections(self, obj):
-        return ['{0}-{1}'.format(section.course.code, section.meeting_section)
-                for section in obj.sections]
-
     def get_slots(self, obj):
         return [{
             'course': section.course.id,
             'section': section.id,
             'offerings': [offering.id for offering in section.offering_set.all()]
         } for section in obj.sections]
+
+#
+#
+# class SlotSerializer(serializers.Serializer):
+#     course = serializers.IntegerField()
+#     section = serializers.IntegerField()
+#     offerings = serializers.IntegerField(many=True)
+#     is_optional = serializers.BooleanField()
+#     is_locked = serializers.BooleanField()
+#
+#
+# class DisplayTimetable:
+#
+#     def __init__(self, slots, has_conflict):
+#         self.slots = slots
+#         self.has_conflict = has_conflict
+#         self.name = ''
+#
+#     @classmethod
+#     def from_personal_timetable(cls, personal_timetable):
+#         pass
+#
+#     @classmethod
+#     def from_shared_timetable(cls, shared_timetable):
+#         pass
+#
+#
+# class DisplayTimetableSerializer(serializers.Serializer):
+#     slots = SlotSerializer(many=True)
+#     has_conflict = serializers.BooleanField()
+#     name = serializers.CharField()
