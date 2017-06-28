@@ -18,11 +18,11 @@ def get_num_days(day_to_usage):
   return sum(got_class)
 
 def get_avg_rating(timetable):
-  avgs = [course.get_avg_rating() for course in set(c for c, _, _ in timetable)]
-  try:
-    return min(5, sum(avgs)/sum([ 0 if a == 0 else 1 for a in avgs]) if avgs else 0)
-  except:
-    return 0
+  courses = set(slot.course for slot in timetable)
+  # TODO: consolidate with TimetableSerializer.get_avg_rating()
+  ratings_by_course = (course.get_avg_rating() for course in courses)
+  valid_ratings = [rating for rating in ratings_by_course if 0 <= rating <= 5]
+  return float(sum(valid_ratings)) / len(valid_ratings) if valid_ratings else 0
 
 def get_avg_day_length(day_to_usage):
   lengths = [get_day_length(usage) for usage in day_to_usage.values()]
