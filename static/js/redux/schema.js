@@ -7,6 +7,5 @@ export const sectionSchema = new schema.Entity('sections', { offering_set: [offe
 
 export const courseSchema = new schema.Entity('courses', { sections: [sectionSchema] });
 
-export const timetableSchema = new schema.Entity('timetables', { courses: [courseSchema] }, {
-  idAttribute: v4(),
-});
+// TODO: no need to make timetable an entity?
+export const timetableSchema = new schema.Entity('timetables', {}, { idAttribute: v4() });
