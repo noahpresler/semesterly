@@ -37,13 +37,3 @@ describe('course schema', () => {
     expect(getDenormCourseById(normalized.entities, 1)).toEqual(denormalized[0]);
   });
 });
-
-describe('timetable serializer', () => {
-  it('serializes timetable with multiple sections and courses', () => {
-    const courses = [
-      { id: 'C1', sections: [{ id: 'S1' }, { id: 'S2' }, { id: 'S3' }] },
-      { id: 'C2', sections: [{ id: 'S4' }] },
-    ];
-    expect(schemas.serializeTimetable({ courses })).toEqual('C1:S1,S2,S3;C2:S4');
-  });
-});
