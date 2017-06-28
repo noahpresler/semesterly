@@ -5,8 +5,6 @@ from helpers.test.data import get_default_tt_request
 
 from timetable.models import Semester, Course, Section, Offering
 from helpers.test.test_cases import UrlTestCase
-from serializers import TimetableSerializer
-from timetable.utils import Timetable
 
 
 class Serializers(TestCase):
