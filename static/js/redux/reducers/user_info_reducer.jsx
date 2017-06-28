@@ -1,16 +1,14 @@
 import * as ActionTypes from '../constants/actionTypes';
 import { isIncomplete } from '../util';
 
-export const initialState = {
+const userInfo = (state = {
   data: { isLoggedIn: false },
   overrideHide: false, // hide the user settings modal if true. Overrides overrideShow
   overrideShow: false, // show the user settings modal if true
   isVisible: false,
   saving: false,
   isFetching: false,
-};
-
-const userInfo = (state = initialState, action) => {
+}, action) => {
   switch (action.type) {
     case ActionTypes.INIT_STATE:
       return Object.assign({}, state, { data: action.data.currentUser, isFetching: false });
@@ -43,6 +41,17 @@ const userInfo = (state = initialState, action) => {
 };
 
 export const isUserInfoIncomplete = (state) => {
+  // if (!state.data.FacebookSignedUp) {
+  //   return state.data.isLoggedIn &&
+  //     (isIncomplete(state.data.major) ||
+  //     isIncomplete(state.data.class_year));
+  // }
+  // return state.data.isLoggedIn &&
+  //   (isIncomplete(state.data.social_offerings) ||
+  //     isIncomplete(state.data.social_courses) ||
+  //     isIncomplete(state.data.major) ||
+  //     isIncomplete(state.data.class_year)
+  //   );
   const fields = state.data.FacebookSignedUp ?
   ['social_offerings', 'social_courses',
     'major', 'class_year'] :

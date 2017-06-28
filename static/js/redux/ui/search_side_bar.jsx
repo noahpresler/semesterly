@@ -1,7 +1,6 @@
 import PropTypes from 'prop-types';
 import React from 'react';
 import classnames from 'classnames';
-import { getSectionTypeDisplayName } from '../util';
 import * as SemesterlyPropTypes from '../constants/semesterlyPropTypes';
 
 class SearchSideBar extends React.Component {
@@ -13,41 +12,51 @@ class SearchSideBar extends React.Component {
   lockSectionWrapper(section, event) {
     event.preventDefault();
     event.stopPropagation();
-    this.props.addCourse(this.props.hoveredResult.id, section);
+    this.props.addCourse(this.props.hovered.id, section);
   }
 
   mapSectionsToSlots(sections) {
-    return sections.map(section => section.meeting_section).sort().map(sectionCode =>
+    if (sections === undefined) {
+      return [];
+    }
+    return Object.keys(sections).sort().map(sec =>
       (<SearchResultSection
-        key={this.props.hoveredResult.id + sectionCode}
-        section={sectionCode}
-        locked={this.props.isSectionLocked(this.props.hoveredResult.id, sectionCode)}
-        isOnActiveTimetable={
-          this.props.isSectionOnActiveTimetable(this.props.hoveredResult.id, sectionCode)
-        }
-        hoverSection={() => this.props.hoverSection(this.props.hoveredResult, sectionCode)}
+        key={this.props.hovered.id + sec}
+        course={this.props.hovered}
+        section={sec}
+        locked={this.props.isSectionLocked(this.props.hovered.id, sec)}
+        isOnActiveTimetable={this.props.isSectionOnActiveTimetable(this.props.hovered.id, sec)}
+        hoverSection={() => this.props.hoverSection(this.props.hovered, sec)}
         unHoverSection={this.props.unHoverSection}
-        onMouseDown={event => this.lockSectionWrapper(sectionCode, event)}
+        onMouseDown={event => this.lockSectionWrapper(sec, event)}
       />),
-    );
+        );
   }
 
   render() {
-    const sectionGrid = Object.keys(this.props.sectionTypeToSections).sort().map((sectionType) => {
-      const sectionTitle = `${getSectionTypeDisplayName(sectionType)} Sections`;
-      return (
-        <div key={sectionType}>
-          <h4> {sectionTitle} </h4>
-          {this.mapSectionsToSlots(this.props.sectionTypeToSections[sectionType])}
-        </div>
-      );
-    });
+    const lecs = this.mapSectionsToSlots(this.props.lectureSections);
+    const tuts = this.mapSectionsToSlots(this.props.tutorialSections);
+    const pracs = this.mapSectionsToSlots(this.props.practicalSections);
+    let lectureSections = null;
+    let tutorialSections = null;
+    let practicalSections = null;
+    if (lecs.length > 0) {
+      lectureSections = <div><h4> Lecture Sections </h4>{lecs}</div>;
+    }
+    if (tuts.length > 0) {
+      tutorialSections = <div><h4> Tutorial Sections </h4>{tuts}</div>;
+    }
+    if (pracs.length > 0) {
+      practicalSections = <div><h4> Lab/Practical Sections </h4>{pracs}</div>;
+    }
     return (
       <div className="search-bar__side">
         <div className="search-bar__side-sections">
-          <h3>{this.props.hoveredResult.name}</h3>
+          <h3>{this.props.hovered.name}</h3>
           <p>Hover over a section below for a preview on your timetable! </p>
-          {sectionGrid}
+          {lectureSections}
+          {tutorialSections}
+          {practicalSections}
         </div>
       </div>
     );
@@ -55,16 +64,22 @@ class SearchSideBar extends React.Component {
 }
 
 SearchSideBar.defaultProps = {
-  hoveredResult: null,
+  hovered: null,
   tutorialSections: {},
   practicalSections: {},
 };
 
 SearchSideBar.propTypes = {
-  hoveredResult: SemesterlyPropTypes.searchResult,
-  sectionTypeToSections: PropTypes.shape({
-    '*': PropTypes.arrayOf(SemesterlyPropTypes.section),
+  hovered: SemesterlyPropTypes.searchResult,
+  lectureSections: PropTypes.shape({
+    '*': SemesterlyPropTypes.section,
   }).isRequired,
+  tutorialSections: PropTypes.shape({
+    '*': SemesterlyPropTypes.section,
+  }),
+  practicalSections: PropTypes.shape({
+    '*': SemesterlyPropTypes.section,
+  }),
   addCourse: PropTypes.func.isRequired,
   isSectionLocked: PropTypes.func.isRequired,
   isSectionOnActiveTimetable: PropTypes.func.isRequired,

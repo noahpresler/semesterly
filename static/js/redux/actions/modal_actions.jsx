@@ -1,18 +1,16 @@
 import fetch from 'isomorphic-fetch';
 import Cookie from 'js-cookie';
-import { normalize } from 'normalizr';
 import {
     getClassmatesInCourseEndpoint,
     getCourseInfoEndpoint,
     getReactToCourseEndpoint,
 } from '../constants/endpoints';
-import { courseSchema } from '../schema';
 import { getSchool, getSemester } from '../actions/school_actions';
 import * as ActionTypes from '../constants/actionTypes';
 
 export const setCourseInfo = json => ({
   type: ActionTypes.COURSE_INFO_RECEIVED,
-  response: normalize(json, courseSchema),
+  data: json,
 });
 
 export const setCourseClassmates = json => ({

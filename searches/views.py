@@ -7,7 +7,7 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 
 from analytics.views import save_analytics_course_search
-from courses.serializers import CourseSerializer
+from courses.serializers import get_detailed_course_json, get_basic_course_json
 from searches.utils import get_course_matches
 from student.models import Student
 from student.utils import get_student
@@ -16,15 +16,14 @@ from helpers.mixins import ValidateSubdomainMixin, CsrfExemptMixin
 
 
 class CourseSearchList(CsrfExemptMixin, ValidateSubdomainMixin, APIView):
+
     def get(self, request, query, sem_name, year):
         """ Return basic search results. """
-        school = request.subdomain
         sem = Semester.objects.get_or_create(name=sem_name, year=year)[0]
         course_match_objs = get_course_matches(request.subdomain, query, sem)[:4]
         save_analytics_course_search(query[:200], course_match_objs[:2], sem, request.subdomain,
                                      get_student(request))
-        course_matches = [CourseSerializer(course, context={'semester': sem, 'school': school}).data
-                          for course in course_match_objs]
+        course_matches = [get_basic_course_json(course, sem) for course in course_match_objs]
         return Response(course_matches, status=status.HTTP_200_OK)
 
     def post(self, request, query, sem_name, year):
@@ -44,15 +43,13 @@ class CourseSearchList(CsrfExemptMixin, ValidateSubdomainMixin, APIView):
         if filters.get('levels'):
             course_match_objs = course_match_objs.filter(level__in=filters.get('levels'))
         if filters.get('times'):
-            day_map = {"Monday": "M", "Tuesday": "T", "Wednesday": "W", "Thursday": "R",
-                       "Friday": "F"}
+            day_map = {"Monday": "M", "Tuesday": "T", "Wednesday": "W", "Thursday": "R", "Friday": "F"}
             course_match_objs = course_match_objs.filter(
-                reduce(operator.or_,
-                       (Q(section__offering__time_start__gte="{0:0=2d}:00".format(min_max['min']),
-                          section__offering__time_end__lte="{0:0=2d}:00".format(min_max['max']),
-                          section__offering__day=day_map[min_max['day']],
-                          section__semester=sem,
-                          section__section_type="L") for min_max in filters.get('times'))
+                reduce(operator.or_, (Q(section__offering__time_start__gte="{0:0=2d}:00".format(min_max['min']),
+                                        section__offering__time_end__lte="{0:0=2d}:00".format(min_max['max']),
+                                        section__offering__day=day_map[min_max['day']],
+                                        section__semester=sem,
+                                        section__section_type="L") for min_max in filters.get('times'))
                        )
             )
         try:
@@ -68,8 +65,7 @@ class CourseSearchList(CsrfExemptMixin, ValidateSubdomainMixin, APIView):
         logged = request.user.is_authenticated()
         if logged and Student.objects.filter(user=request.user).exists():
             student = Student.objects.get(user=request.user)
-        serializer_context = {'semester': sem, 'student': student, 'school': request.subdomain}
-        json_data = [CourseSerializer(course, context=serializer_context).data
-                     for course in course_match_objs]
+        json_data = [get_detailed_course_json(request.subdomain, course, sem, student) for course in
+                     course_match_objs]
 
         return Response(json_data, status=status.HTTP_200_OK)
