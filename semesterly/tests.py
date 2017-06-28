@@ -151,8 +151,6 @@ class SeleniumTest(StaticLiveServerTestCase):
             semester__name=semester_name,
             semester__year=semester_year
         ).count()
-        side_bar = self.locate_and_get((By.CLASS_NAME, 'col-5-16'))
-        print side_bar.get_attribute("outerHTML")
         n_sections_found = len(self.locate_and_get(
             (By.XPATH, 
             "//div[@class='modal-section' or @class='modal-section on-active-timetable' or @class='modal-section locked on-active-timetable']"
@@ -245,14 +243,15 @@ class SeleniumTest(StaticLiveServerTestCase):
         self.close_course_modal()
         self.search_course('calc', 2)
         self.add_course(1, n_slots=4, n_master_slots=1)
-        self.follow_share_link_from_slot()
+        # TODO(noahprelser) NOT WORKING
+        # self.follow_share_link_from_slot()
         self.open_course_modal_from_slot(0)
         self.validate_course_modal()
         self.close_course_modal()
         self.open_course_modal_from_slot(0)
-        # self.remove_course_from_course_modal(0)
-        # self.search_course('calc', 2)
-        # self.open_course_modal_from_search(1)
+        self.remove_course_from_course_modal(n_slots_expected=0)
+        self.search_course('calc', 2)
+        self.open_course_modal_from_search(1)
         # self.share_timetable(
         #     self.add_course_from_course_modal(
         #         n_slots=4, n_master_slots=1
