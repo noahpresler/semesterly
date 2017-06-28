@@ -70,7 +70,7 @@ export const fetchTimetables = (requestBody, removing, newActive = 0) => (dispat
           saveLocalCourseSections(json.new_c_to_s);
           saveLocalActiveIndex(newActive);
           saveLocalPreferences(requestBody.preferences);
-          saveLocalSemester(getCurrentSemester(state.semester));
+          saveLocalSemester(getCurrentSemester(state));
         }
       } else {
         // user wasn't removing or refetching for custom events
