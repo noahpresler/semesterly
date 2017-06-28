@@ -11,24 +11,28 @@ from timetable.scoring import get_tt_cost, get_num_days, get_avg_day_length, get
 
 MAX_RETURN = 60  # Max number of timetables we want to consider
 
+Slot = namedtuple('Slot', 'course section offerings is_optional is_locked')
+Timetable = namedtuple('Timetable', 'courses sections has_conflict')
+
+
 def courses_to_timetables(courses, locked_sections, semester, sort_metrics, school, custom_events, with_conflicts, optional_course_ids):
-    all_offerings = courses_to_offerings(courses, locked_sections, semester)
-    tts_by_score =  sorted(itertools.islice(
-        offerings_to_timetables(all_offerings, school, custom_events, with_conflicts,
-                                optional_course_ids),
-        MAX_RETURN
-    ), key=lambda tt_pair: get_tt_cost(tt_pair[0], sort_metrics))
+    all_offerings = courses_to_slots(courses, locked_sections, semester, optional_course_ids)
+    timetable_gen = slots_to_timetables(all_offerings, school, custom_events, with_conflicts)
+    timetables = itertools.islice(timetable_gen, MAX_RETURN)
+    tts_by_score =  sorted(timetables, key=lambda tt_pair: get_tt_cost(tt_pair[0], sort_metrics))
     return [tt for (tt, stats) in tts_by_score]
 
 
-def courses_to_offerings(courses, locked_sections, semester):
+def courses_to_slots(courses, locked_sections, semester, optional_course_ids):
     """
-    Take a list of courses and group all of the courses' offerings by section
-    type. Returns a list of lists (for each group), where each offering is represented as a
-    [course_id, section_code, [CourseOffering]] triple.
+    Return a list of lists of Slots. Each Slot sublist represents the list of possibilities
+    for a given course and section type, i.e. a valid timetable consists of any one slot from each
+    sublist.
     """
-    all_sections = []
+    slots = []
+    optional_course_ids = set(optional_course_ids)
     for course in courses:
+        is_optional = course.id in optional_course_ids
         grouped = get_sections_by_section_type(course, semester)
         for section_type, sections in grouped.iteritems():
             locked_section_code = locked_sections.get(str(course.id), {}).get(section_type)
@@ -36,16 +40,19 @@ def courses_to_offerings(courses, locked_sections, semester):
             if locked_section_code in section_codes:
                 locked_section = next(s for s in sections
                                       if s.meeting_section == locked_section_code)
-                pinned = [course, locked_section, locked_section.offering_set.all()]
-                all_sections.append([pinned])
+                locked_slot = Slot(course, locked_section, locked_section.offering_set.all(),
+                                   is_optional=is_optional, is_locked=True)
+                slots.append([locked_slot])
             else:
-                all_sections.append(
-                    [[course, section, section.offering_set.all()] for section in sections])
-    return all_sections
+                possibilities = [Slot(course, section, section.offering_set.all(),
+                                      is_optional=is_optional, is_locked=False)
+                                 for section in sections]
+                slots.append(possibilities)
+    return slots
 
 
 # TODO: use namedtuple instead of tuple
-def offerings_to_timetables(sections, school, custom_events, with_conflicts, optional_course_ids):
+def slots_to_timetables(slots, school, custom_events, with_conflicts):
     """
     Generate timetables in a depth-first manner based on a list of sections.
     sections: a list of sections, where each section is a list of offerings
@@ -57,32 +64,32 @@ def offerings_to_timetables(sections, school, custom_events, with_conflicts, opt
           [[27, 'L5101', [<CourseOffering>], [27, 'L1001', [<CourseOffering>]]]
     with_conflicts: True if you want to consider conflicts, False otherwise.
     """
-    num_offerings, num_permutations_remaining = get_xproduct_indicies(sections)
+    num_offerings, num_permutations_remaining = get_xproduct_indicies(slots)
     total_num_permutations = num_permutations_remaining.pop(0)
     for p in xrange(total_num_permutations):  # for each possible tt
         current_tt = []
         day_to_usage = get_day_to_usage(custom_events, school)
         num_conflicts = 0
         add_tt = True
-        for i in xrange(len(sections)):  # add an offering for the next section
+        for i in xrange(len(slots)):  # add an offering for the next section
             j = (p / num_permutations_remaining[i]) % num_offerings[i]
             num_added_conflicts = add_meeting_and_check_conflict(day_to_usage,
-                                                                 sections[i][j],
+                                                                 slots[i][j],
                                                                  school)
             num_conflicts += num_added_conflicts
             if num_conflicts and not with_conflicts:
                 add_tt = False
                 break
-            current_tt.append(sections[i][j])
+            current_tt.append(slots[i][j])
         if add_tt and len(current_tt) != 0:
             tt_stats = get_tt_stats(current_tt, day_to_usage)
             tt_stats['num_conflicts'] = num_conflicts
             tt_stats['has_conflict'] = bool(num_conflicts)
-            yield convert_to_model(current_tt, tt_stats, optional_course_ids, school)
+            yield convert_to_model(current_tt, tt_stats, school)
 
 
-def convert_to_model(timetable, tt_stats, optional_course_ids, school):
-    courses, sections = zip(*[(course, section) for course, section, _ in timetable])
+def convert_to_model(timetable, tt_stats, school):
+    courses, sections = zip(*[(slot.course, slot.section) for slot in timetable])
     courses = list(set(courses))
 
     tt = Timetable(courses, sections, tt_stats['has_conflict'])
@@ -241,6 +248,3 @@ def get_tt_rating(course_ids):
                    sum([0 if a == 0 else 1 for a in avgs]) if avgs else 0)
     except BaseException:
         return 0
-
-
-Timetable = namedtuple('Timetable', 'courses sections has_conflict')
