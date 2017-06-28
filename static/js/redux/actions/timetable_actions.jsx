@@ -1,7 +1,7 @@
 import fetch from 'isomorphic-fetch';
 import Cookie from 'js-cookie';
 import { normalize } from 'normalizr';
-import { timetableSchema } from '../schema';
+import { timetableSchema, courseSchema } from '../schema';
 import { getActiveTimetableCourses, getCurrentSemester } from '../reducers/root_reducer';
 import { getTimetablesEndpoint } from '../constants/endpoints';
 import {
@@ -12,6 +12,7 @@ import {
     saveLocalSemester,
 } from '../util';
 import { autoSave, fetchClassmates, lockActiveSections, getUserSavedTimetables } from './user_actions';
+import { receiveCourses } from './search_actions';
 import * as ActionTypes from '../constants/actionTypes';
 
 let customEventUpdateTimer; // keep track of user's custom event actions for autofetch
@@ -55,6 +56,7 @@ export const fetchTimetables = (requestBody, removing, newActive = 0) => (dispat
     .then((json) => {
       if (removing || json.timetables.length > 0) {
         // mark that timetables and a new courseSections have been received
+        dispatch(receiveCourses(normalize(json.courses, [courseSchema])));
         dispatch(receiveTimetables(json.timetables));
         dispatch({
           type: ActionTypes.RECEIVE_COURSE_SECTIONS,

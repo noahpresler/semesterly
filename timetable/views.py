@@ -9,6 +9,7 @@ from rest_framework.views import APIView
 
 from analytics.models import SharedTimetable
 from analytics.views import save_analytics_timetable
+from courses.serializers import CourseSerializer
 from student.utils import get_student
 from timetable.serializers import convert_tt_to_dict, DisplayTimetableSerializer
 from timetable.models import Semester, Course, Section
@@ -24,6 +25,7 @@ class TimetableView(CsrfExemptMixin, ValidateSubdomainMixin, APIView):
         """Generate best timetables given the user's selected courses"""
         school = request.subdomain
         params = request.data
+        student = get_student(request)
         
         try:
             params['semester'] = Semester.objects.get_or_create(**params['semester'])[0]
@@ -64,8 +66,13 @@ class TimetableView(CsrfExemptMixin, ValidateSubdomainMixin, APIView):
         result = [DisplayTimetableSerializer(timetable).data for opt_courses in optional_course_subsets
                   for timetable in courses_to_timetables(courses + list(opt_courses), locked_sections, params['semester'], sort_metrics, params['school'], custom_events, with_conflicts, opt_course_ids)]
 
-        # updated roster object
-        response = {'timetables': result, 'new_c_to_s': locked_sections}
+        context = {'semester': params['semester'], 'school': request.subdomain, 'student': student}
+        response = {
+            'timetables': result,
+            'new_c_to_s': locked_sections,
+            'courses': [CourseSerializer(course, context=context).data
+                        for course in courses + optional_courses]
+        }
         return Response(response, status=status.HTTP_200_OK)
 
 
