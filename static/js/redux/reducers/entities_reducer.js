@@ -59,6 +59,7 @@ export const getSectionTypeToSections = (denormCourse) => {
 // TIMETABLE SELECTORS
 export const getDenormSlot = (state, slot) => {
   return {
+    ...slot,
     course: getCourseById(state, slot.course),
     section: getSectionById(state, slot.section),
     offerings: slot.offerings.map(offering => getOfferingById(state, offering)),
