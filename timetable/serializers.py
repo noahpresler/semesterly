@@ -4,7 +4,8 @@ from rest_framework import serializers
 from courses.serializers import get_section_dict, OldCourseSerializer, SemesterSerializer
 from courses.utils import is_waitlist_only
 from student.models import PersonalTimetable
-from timetable.utils import get_tt_rating
+from timetable.utils import get_tt_rating, Slot
+from timetable.scoring import get_avg_rating
 
 
 def convert_tt_to_dict(timetable):
@@ -48,80 +49,19 @@ def convert_tt_to_dict(timetable):
     return tt_dict
 
 
-# TODO: move slots into its own field
-# TODO: validate data
-class TimetableSerializer(serializers.Serializer):
+class SlotSerializer(serializers.Serializer):
+    course = serializers.IntegerField(source='course.id')
+    section = serializers.IntegerField(source='section.id')
+    offerings = serializers.SerializerMethodField()
+    is_optional = serializers.BooleanField()
+    is_locked = serializers.BooleanField()
+
+    def get_offerings(self, obj):
+        return [offering.id for offering in obj.offerings]
+
+
+class DisplayTimetableSerializer(serializers.Serializer):
+    slots = SlotSerializer(many=True)
     has_conflict = serializers.BooleanField()
-
-    # Send full courses so that correct data can be merged with entities
-    # TODO: only need to send one set of full course data with each response
-    courses = serializers.SerializerMethodField()
-    # send slots for this specific timetable
-    slots = serializers.SerializerMethodField()
-
-    semester = serializers.SerializerMethodField()
-    school = serializers.SerializerMethodField()
-    avg_rating = serializers.SerializerMethodField()
-    events = serializers.SerializerMethodField()
-
-    # TODO: send separately, once per request
-    def get_courses(self, obj):
-        return OldCourseSerializer(obj.courses, many=True, context={
-            'school': obj.courses[0].school,
-            'courses': obj.courses,
-            'sections': obj.sections,
-            'semester': obj.sections[0].semester,
-        }).data
-
-    def get_semester(self, obj):
-        return SemesterSerializer(obj.sections[0].semester).data
-
-    def get_school(self, obj):
-        return obj.courses[0].school
-
-    def get_avg_rating(self, obj):
-        ratings_by_course = (course.get_avg_rating() for course in obj.courses)
-        # TODO remove hard coded range
-        valid_ratings = [rating for rating in ratings_by_course if 0 <= rating <= 5]
-        return float(sum(valid_ratings)) / len(valid_ratings) if valid_ratings else 0
-
-    def get_events(self, obj):
-        return self.context.get('events')
-
-    def get_slots(self, obj):
-        return [{
-            'course': section.course.id,
-            'section': section.id,
-            'offerings': [offering.id for offering in section.offering_set.all()]
-        } for section in obj.sections]
-
-#
-#
-# class SlotSerializer(serializers.Serializer):
-#     course = serializers.IntegerField()
-#     section = serializers.IntegerField()
-#     offerings = serializers.IntegerField(many=True)
-#     is_optional = serializers.BooleanField()
-#     is_locked = serializers.BooleanField()
-#
-#
-# class DisplayTimetable:
-#
-#     def __init__(self, slots, has_conflict):
-#         self.slots = slots
-#         self.has_conflict = has_conflict
-#         self.name = ''
-#
-#     @classmethod
-#     def from_personal_timetable(cls, personal_timetable):
-#         pass
-#
-#     @classmethod
-#     def from_shared_timetable(cls, shared_timetable):
-#         pass
-#
-#
-# class DisplayTimetableSerializer(serializers.Serializer):
-#     slots = SlotSerializer(many=True)
-#     has_conflict = serializers.BooleanField()
-#     name = serializers.CharField()
+    name = serializers.CharField()
+    avg_rating = serializers.FloatField()
