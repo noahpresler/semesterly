@@ -1,9 +1,9 @@
 import { connect } from 'react-redux';
-import { getActiveTT } from '../../reducers/root_reducer';
 import CreditTicker from '../credit_ticker';
 
 const mapStateToProps = (state) => {
-  const liveTimetableCourses = getActiveTT(state).courses.filter(c => !c.fake);
+  const activeTimetable = state.timetables.items[state.timetables.active];
+  const liveTimetableCourses = activeTimetable.courses.filter(c => !c.fake);
   const school = state.school.school;
   let numCredits = 0;
   if (school === 'uoft') {
