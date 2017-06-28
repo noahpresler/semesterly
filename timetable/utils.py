@@ -15,11 +15,29 @@ Slot = namedtuple('Slot', 'course section offerings is_optional is_locked')
 Timetable = namedtuple('Timetable', 'courses sections has_conflict')
 
 
+class DisplayTimetable:
+    """ Object that represents the frontend's interpretation of a timetable. """
+
+    def __init__(self, slots, has_conflict, name=''):
+        self.slots = slots
+        self.has_conflict = has_conflict
+        self.name = name
+        self.avg_rating = get_avg_rating(slots)
+
+    @classmethod
+    def from_timetable_model(cls, timetable):
+        """ Create DisplayTimetable from Timetable instance. """
+        slots = [Slot(section.course, section, section.offering_set,
+                      is_optional=False, is_locked=True)
+                 for section in timetable.sections]
+        return DisplayTimetable(slots, timetable.has_conflict, getattr(timetable, 'name', ''))
+
+
 def courses_to_timetables(courses, locked_sections, semester, sort_metrics, school, custom_events, with_conflicts, optional_course_ids):
     all_offerings = courses_to_slots(courses, locked_sections, semester, optional_course_ids)
     timetable_gen = slots_to_timetables(all_offerings, school, custom_events, with_conflicts)
     timetables = itertools.islice(timetable_gen, MAX_RETURN)
-    tts_by_score =  sorted(timetables, key=lambda tt_pair: get_tt_cost(tt_pair[0], sort_metrics))
+    tts_by_score = sorted(timetables, key=lambda tt_pair: get_tt_cost(tt_pair[0], sort_metrics))
     return [tt for (tt, stats) in tts_by_score]
 
 
@@ -85,15 +103,8 @@ def slots_to_timetables(slots, school, custom_events, with_conflicts):
             tt_stats = get_tt_stats(current_tt, day_to_usage)
             tt_stats['num_conflicts'] = num_conflicts
             tt_stats['has_conflict'] = bool(num_conflicts)
-            yield convert_to_model(current_tt, tt_stats, school)
-
-
-def convert_to_model(timetable, tt_stats, school):
-    courses, sections = zip(*[(slot.course, slot.section) for slot in timetable])
-    courses = list(set(courses))
-
-    tt = Timetable(courses, sections, tt_stats['has_conflict'])
-    return (tt, tt_stats)
+            # TODO: calculate stats and score in one step
+            yield (DisplayTimetable(current_tt, tt_stats['has_conflict']), tt_stats)
 
 
 def update_locked_sections(locked_sections, cid, locked_section):
