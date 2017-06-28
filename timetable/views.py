@@ -10,9 +10,9 @@ from rest_framework.views import APIView
 from analytics.models import SharedTimetable
 from analytics.views import save_analytics_timetable
 from student.utils import get_student
-from timetable.serializers import convert_tt_to_dict, TimetableSerializer
-from timetable.models import Semester, Course, Section
-from timetable.utils import update_locked_sections, courses_to_timetables
+from timetable.serializers import convert_tt_to_dict
+from timetable.models import Semester, Course
+from timetable.utils import update_locked_sections, TimetableGenerator
 from helpers.mixins import ValidateSubdomainMixin, FeatureFlowView, CsrfExemptMixin
 
 hashids = Hashids(salt="***REMOVED***")
@@ -55,14 +55,14 @@ class TimetableView(CsrfExemptMixin, ValidateSubdomainMixin, APIView):
                                    for subset in itertools.combinations(optional_courses, k)]
 
         custom_events = params.get('customSlots', [])
-        preferences = params['preferences']
-        with_conflicts = preferences.get('try_with_conflicts', False)
-        sort_metrics = [(m['metric'], m['order']) for m in preferences.get('sort_metrics', [])
-                        if m['selected']]
-
-        # TODO move sorting to view level so that result is sorted
-        result = [TimetableSerializer(timetable).data for opt_courses in optional_course_subsets
-                  for timetable in courses_to_timetables(courses + list(opt_courses), locked_sections, params['semester'], sort_metrics, params['school'], custom_events, with_conflicts, opt_course_ids)]
+        generator = TimetableGenerator(params['semester'],
+                                       params['school'],
+                                       locked_sections,
+                                       custom_events,
+                                       params['preferences'],
+                                       opt_course_ids)
+        result = [timetable for opt_courses in optional_course_subsets
+                  for timetable in generator.courses_to_timetables(courses + list(opt_courses))]
 
         # updated roster object
         response = {'timetables': result, 'new_c_to_s': locked_sections}
@@ -77,14 +77,14 @@ class TimetableLinkView(FeatureFlowView):
         shared_timetable_obj = get_object_or_404(SharedTimetable,
                                                  id=timetable_id,
                                                  school=request.subdomain)
-        shared_timetable = convert_tt_to_dict(shared_timetable_obj)
+        shared_timetable = convert_tt_to_dict(shared_timetable_obj, include_last_updated=False)
 
         return {'semester': shared_timetable_obj.semester, 'sharedTimetable': shared_timetable}
 
     def post(self, request):
         school = request.subdomain
-        timetable = request.data['timetable']
-        has_conflict = timetable.get('has_conflict', False)
+        courses = request.data['timetable']['courses']
+        has_conflict = request.data['timetable'].get('has_conflict', False)
         semester, _ = Semester.objects.get_or_create(**request.data['semester'])
         student = get_student(request)
         shared_timetable = SharedTimetable.objects.create(
@@ -92,16 +92,14 @@ class TimetableLinkView(FeatureFlowView):
             has_conflict=has_conflict)
         shared_timetable.save()
 
-        added_courses = set()
-        for course in timetable['courses']:
+        for course in courses:
             course_obj = Course.objects.get(id=course['id'])
             shared_timetable.courses.add(course_obj)
-            added_courses.add(course['id'])
-        for section in timetable['sections']:
-            section_obj = Section.objects.get(id=section['id'])
-            shared_timetable.sections.add(section_obj)
-            if section_obj.course.id not in added_courses:
-                return Response(status=status.HTTP_400_BAD_REQUEST)
+            enrolled_sections = course['enrolled_sections']
+            for section in enrolled_sections:
+                section_obj = course_obj.section_set.get(meeting_section=section,
+                                                         semester=semester)
+                shared_timetable.sections.add(section_obj)
         shared_timetable.save()
 
         response = {'slug': hashids.encrypt(shared_timetable.id)}

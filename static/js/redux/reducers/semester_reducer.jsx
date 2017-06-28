@@ -21,6 +21,6 @@ const semester = (state = defaultState, action) => {
   }
 };
 
-export const getCurrentSemester = state => state.all[state.current];
+export const currSem = state => state.all[state.current];
 
 export default semester;

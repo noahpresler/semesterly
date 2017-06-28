@@ -1,19 +1,17 @@
 import fetch from 'isomorphic-fetch';
-import { normalize } from 'normalizr';
-import { courseSchema } from '../schema';
-import { getActiveTimetableCourses, getCurrentSemester } from '../reducers/root_reducer';
 import { getCourseSearchEndpoint } from '../constants/endpoints';
 import { getUserSavedTimetables, saveTimetable } from './user_actions';
 import { nullifyTimetable } from './timetable_actions';
 import * as ActionTypes from '../constants/actionTypes';
 import { fetchCourseClassmates } from './modal_actions';
+import { currSem } from '../reducers/semester_reducer';
 import { getSemester } from './school_actions';
 
 export const requestCourses = () => ({ type: ActionTypes.REQUEST_COURSES });
 
-export const receiveCourses = normalizedResponse => ({
+export const receiveCourses = json => ({
   type: ActionTypes.RECEIVE_COURSES,
-  response: normalizedResponse,
+  courses: json,
 });
 
 export const setSemester = semester => (dispatch, getState) => {
@@ -29,7 +27,10 @@ export const setSemester = semester => (dispatch, getState) => {
     type: ActionTypes.SET_SEMESTER,
     semester,
   });
-  dispatch(receiveCourses({ result: [] }));
+  dispatch({
+    type: ActionTypes.RECEIVE_COURSES,
+    courses: [],
+  });
 };
 
 /*
@@ -41,12 +42,12 @@ export const maybeSetSemester = semester => (dispatch, getState) => {
   const state = getState();
 
   if (semester === state.semester.current) {
-    return null;
+    return;
   }
 
-  if (getActiveTimetableCourses(state).length > 0) {
+  if (state.timetables.items[state.timetables.active].courses.length > 0) {
     if (state.userInfo.data.isLoggedIn && !state.savingTimetable.upToDate) {
-      return dispatch(saveTimetable(false, () => dispatch(setSemester(semester))));
+      dispatch(saveTimetable(false, () => setSemester(semester)));
     } else if (state.userInfo.data.isLoggedIn) {
       dispatch(setSemester(semester));
     } else {
@@ -58,12 +59,11 @@ export const maybeSetSemester = semester => (dispatch, getState) => {
   } else {
     dispatch(setSemester(semester));
   }
-  return null;
 };
 
 export const fetchSearchResults = query => (dispatch, getState) => {
   if (query.length <= 1) {
-    dispatch(receiveCourses({ result: [] }));
+    dispatch(receiveCourses([]));
     return;
   }
 
@@ -73,10 +73,10 @@ export const fetchSearchResults = query => (dispatch, getState) => {
   fetch(getCourseSearchEndpoint(query, getSemester(getState())), {
     credentials: 'include',
   })
-  .then(response => response.json()) // TODO error-check the response
+  .then(response => response.json()) // TODO(rohan): error-check the response
   .then((json) => {
     // indicate that courses have been received
-    dispatch(receiveCourses(normalize(json, [courseSchema])));
+    dispatch(receiveCourses(json));
   });
 };
 
@@ -87,7 +87,7 @@ export const fetchAdvancedSearchResults = (query, filters) => (dispatch, getStat
   if (query.length <= 1 && [].concat(...Object.values(filters)).length === 0) {
     dispatch({
       type: ActionTypes.RECEIVE_ADVANCED_SEARCH_RESULTS,
-      response: { result: [] },
+      advancedSearchResults: [],
     });
     return;
   }
@@ -107,7 +107,7 @@ export const fetchAdvancedSearchResults = (query, filters) => (dispatch, getStat
     method: 'POST',
     body: JSON.stringify({
       filters,
-      semester: getCurrentSemester(state),
+      semester: currSem(state.semester),
       page: state.explorationModal.page,
     }),
   })
@@ -116,7 +116,7 @@ export const fetchAdvancedSearchResults = (query, filters) => (dispatch, getStat
     // indicate that courses have been received
     dispatch({
       type: ActionTypes.RECEIVE_ADVANCED_SEARCH_RESULTS,
-      response: normalize(json, [courseSchema]),
+      advancedSearchResults: json,
     });
   });
 };

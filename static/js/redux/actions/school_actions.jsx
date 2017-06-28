@@ -1,10 +1,10 @@
 import { getSchoolInfoEndpoint } from '../constants/endpoints';
 import * as ActionTypes from '../constants/actionTypes';
-import { getCurrentSemester } from '../reducers/root_reducer';
+import { currSem } from '../reducers/semester_reducer';
 
 export const getSchool = state => state.school.school;
 export const getSemester = (state) => {
-  const currSemester = getCurrentSemester(state);
+  const currSemester = currSem(state.semester);
   return `${currSemester.name}/${currSemester.year}`;
 };
 
