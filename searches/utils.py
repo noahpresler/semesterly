@@ -87,7 +87,6 @@ class Searcher():
         self.vectorizer = Vectorizer()
         self.MAX_CAPACITY = 300
         self.start_time = 0
-        # self.queries = []
 
     def load_count_vectorizer(self):
         with open('count_vectorizer.pickle', 'r') as handle:
@@ -97,15 +96,6 @@ class Searcher():
         stemmed_qry = self.vectorizer.get_stem_doc(query)
         query_vector = self.count_vectorizer.transform([stemmed_qry])
         return query_vector
-
-        # build user-relevant query
-        '''
-        self.queries.insert(0, query_vector)
-        relevant_query = query_vector
-        for i in range(1, len(self.queries)):
-            relevant_query += (self.queries[i] / (i+1))
-        return relevant_query
-        '''
 
     def get_acronym(self, name):
         name = name.replace("and", "").replace("&", "").lower()
@@ -176,8 +166,7 @@ class Searcher():
                                                 Q(section__semester=semester)
                                                 )
         courses_objs = list(title_matching_courses.all()[:self.MAX_CAPACITY]) + \
-                       list(descp_matching_courses.all()[:self.MAX_CAPACITY -
-                                          title_matching_courses.count()])
+                       list(descp_matching_courses.all()[:self.MAX_CAPACITY - title_matching_courses.count()])
         return self.get_relevant_courses(query, courses_objs)
 
     def course_desc_contains_token(self, token):
