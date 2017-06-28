@@ -11,6 +11,7 @@ import { getSemester } from './school_actions';
 
 export const requestCourses = () => ({ type: ActionTypes.REQUEST_COURSES });
 
+// TODO normalize courses here
 export const receiveCourses = normalizedResponse => ({
   type: ActionTypes.RECEIVE_COURSES,
   response: normalizedResponse,
