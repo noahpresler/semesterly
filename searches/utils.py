@@ -1,24 +1,16 @@
 from __future__ import division
 import pickle
-import re
 import numpy as np
-import time
 import math
 import operator
-import pdb
-from operator import or_
 from sklearn.feature_extraction.text import CountVectorizer
 from sklearn.feature_extraction.text import TfidfTransformer
 from sklearn import mixture
-from sklearn import decomposition
 from sklearn.decomposition import LatentDirichletAllocation
 import matplotlib.pyplot as plt
-from picklefield.fields import PickledObjectField
-from django.db import models
 from django.db.models import Q
 from timetable.models import Semester, Course
 from nltk.stem.porter import *
-from collections import defaultdict
 
 
 # Vectorizer (file writer)
@@ -133,15 +125,6 @@ class Searcher():
                             course_name_contains_query &
                             Q(section__semester=semester)
                             )
-        # test
-        '''
-        self.start_time = time.time()
-        elapsed_time = time.time() - self.start_time
-        for course in courses_objs[:10]:
-            print(course.name)
-        print("\nBaseline Model Completed Searches in %f (seconds)" (
-              %elapsed_time)
-        '''
 
     def vectorized_search(self, school, query, semester):
         if query == "":
