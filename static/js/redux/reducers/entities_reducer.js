@@ -1,5 +1,5 @@
 import merge from 'lodash/merge';
-import pick from 'lodash/pick';
+import uniq from 'lodash/uniq';
 
 // TODO: garbage collect (e.g. clear when changing semesters)
 const emptyTimetable = { courses: [], slots: [] };
@@ -79,8 +79,8 @@ export const getActiveDenormTimetable = (state, id) => {
 
 export const getTimetableCourses = (state, id) => {
   const timetable = state.timetables[id];
-  // TODO: use uniq, timetable.slots instead?
-  return timetable.courses.map(courseCode => getCourseById(state, courseCode));
+  const courseIds = uniq(timetable.slots.map(slot => slot.course));
+  return courseIds.map(courseId => getCourseById(state, courseId));
 };
 
 export const getMaxEndHour = function getLatestSlotEndHourFromTimetable(timetable) {
