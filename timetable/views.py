@@ -10,7 +10,7 @@ from rest_framework.views import APIView
 from analytics.models import SharedTimetable
 from analytics.views import save_analytics_timetable
 from student.utils import get_student
-from timetable.serializers import convert_tt_to_dict, TimetableSerializer
+from timetable.serializers import convert_tt_to_dict, DisplayTimetableSerializer
 from timetable.models import Semester, Course, Section
 from timetable.utils import update_locked_sections, courses_to_timetables
 from helpers.mixins import ValidateSubdomainMixin, FeatureFlowView, CsrfExemptMixin
@@ -61,7 +61,7 @@ class TimetableView(CsrfExemptMixin, ValidateSubdomainMixin, APIView):
                         if m['selected']]
 
         # TODO move sorting to view level so that result is sorted
-        result = [TimetableSerializer(timetable).data for opt_courses in optional_course_subsets
+        result = [DisplayTimetableSerializer(timetable).data for opt_courses in optional_course_subsets
                   for timetable in courses_to_timetables(courses + list(opt_courses), locked_sections, params['semester'], sort_metrics, params['school'], custom_events, with_conflicts, opt_course_ids)]
 
         # updated roster object
