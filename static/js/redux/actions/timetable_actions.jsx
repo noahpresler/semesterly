@@ -268,8 +268,7 @@ export const handleCreateNewTimetable = () => (dispatch, getState) => {
   if (!isLoggedIn) {
     return { type: ActionTypes.TOGGLE_SIGNUP_MODAL };
   }
-
-  const { timetables: timetablesState } = state;
+  const timetablesState = state.timetables;
 
   if (timetablesState.items[timetablesState.active].courses.length > 0
     && !state.savingTimetable.upToDate) {

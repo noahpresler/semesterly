@@ -7,7 +7,10 @@ import { Provider } from 'react-redux';
 import rootReducer from './reducers/root_reducer';
 import SemesterlyContainer from './ui/containers/semesterly_container';
 import { fetchMostClassmatesCount, handleAgreement, isRegistered } from './actions/user_actions';
-import { loadCachedTimetable, loadTimetable, lockTimetable } from './actions/timetable_actions';
+import {
+  handleCreateNewTimetable, loadCachedTimetable, loadTimetable,
+  lockTimetable,
+} from './actions/timetable_actions';
 import { fetchSchoolInfo } from './actions/school_actions';
 import { fetchCourseClassmates, setCourseInfo } from './actions/modal_actions';
 import {
@@ -92,6 +95,9 @@ const handleFlows = featureFlow => (dispatch) => {
       break;
     case 'SHARE_TIMETABLE':
       dispatch({ type: ActionTypes.CACHED_TT_LOADED });
+      if (initData.currentUser.isLoggedIn) {
+        dispatch(handleCreateNewTimetable());
+      }
       dispatch(lockTimetable(featureFlow.sharedTimetable,
         true, initData.currentUser.isLoggedIn));
       break;
