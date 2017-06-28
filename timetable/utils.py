@@ -37,8 +37,7 @@ def courses_to_timetables(courses, locked_sections, semester, sort_metrics, scho
     all_offerings = courses_to_slots(courses, locked_sections, semester, optional_course_ids)
     timetable_gen = slots_to_timetables(all_offerings, school, custom_events, with_conflicts)
     timetables = itertools.islice(timetable_gen, MAX_RETURN)
-    tts_by_score = sorted(timetables, key=lambda tt_pair: get_tt_cost(tt_pair[0], sort_metrics))
-    return [tt for (tt, stats) in tts_by_score]
+    return sorted(timetables, key=lambda tt: get_tt_cost(tt, sort_metrics))
 
 
 def courses_to_slots(courses, locked_sections, semester, optional_course_ids):
@@ -69,7 +68,6 @@ def courses_to_slots(courses, locked_sections, semester, optional_course_ids):
     return slots
 
 
-# TODO: use namedtuple instead of tuple
 def slots_to_timetables(slots, school, custom_events, with_conflicts):
     """
     Generate timetables in a depth-first manner based on a list of sections.
@@ -102,9 +100,10 @@ def slots_to_timetables(slots, school, custom_events, with_conflicts):
         if add_tt and len(current_tt) != 0:
             tt_stats = get_tt_stats(current_tt, day_to_usage)
             tt_stats['num_conflicts'] = num_conflicts
-            tt_stats['has_conflict'] = bool(num_conflicts)
-            # TODO: calculate stats and score in one step
-            yield (DisplayTimetable(current_tt, tt_stats['has_conflict']), tt_stats)
+            has_conflict = tt_stats['has_conflict'] = bool(num_conflicts)
+            current_tt = DisplayTimetable(current_tt, has_conflict)
+            current_tt.stats = tt_stats
+            yield current_tt
 
 
 def update_locked_sections(locked_sections, cid, locked_section):
