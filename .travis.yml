@@ -1,20 +1,29 @@
 os: linux
 sudo: required
 dist: trusty
-branches:
-  only:
-    - master
-    - staging
 language: node_js
 node_js:
   - "7.1.0"
 env: 
   - NODE_ENV=production
+
+branches:
+  only:
+    - master
+    - staging
+
+cache:
+  apt: true
+  directories:
+    - node_modules
+    - $HOME/.npm
+    - $HOME/.cache/pip
+
 install:
   - npm -g install webpack
   - npm -g install chromedriver
-  - npm install
   - npm -g install jest babel-jest
+  - npm install  
   - pip install --user -r requirements.txt
 addons:
   apt:
