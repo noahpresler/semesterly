@@ -1,11 +1,10 @@
 from django.forms import model_to_dict
 from rest_framework import serializers
 
-from courses.serializers import get_section_dict, OldCourseSerializer, SemesterSerializer
+from courses.serializers import get_section_dict
 from courses.utils import is_waitlist_only
 from student.models import PersonalTimetable
-from timetable.utils import get_tt_rating, Slot
-from timetable.scoring import get_avg_rating
+from timetable.utils import get_tt_rating
 
 
 def convert_tt_to_dict(timetable):
