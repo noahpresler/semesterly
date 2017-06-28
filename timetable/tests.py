@@ -1,42 +1,9 @@
-from django.test import TestCase
 from rest_framework import status
 from rest_framework.test import APITestCase
 from helpers.test.data import get_default_tt_request
 
 from timetable.models import Semester, Course, Section, Offering
 from helpers.test.test_cases import UrlTestCase
-from serializers import TimetableSerializer
-from timetable.utils import Timetable
-
-
-class Serializers(TestCase):
-
-    def test_timetable_serialization(self):
-        self.sem_name = 'Winter'
-        self.year = '1995'
-        self.cid = 1
-        self.name = 'Intro'
-        self.code = 'SEM101'
-        self.school = 'uoft'
-        sem = Semester.objects.create(name=self.sem_name, year=self.year)
-        course = Course.objects.create(
-            id=self.cid,
-            school=self.school,
-            code=self.code,
-            name=self.name)
-        section = Section.objects.create(
-            course=course, semester=sem, meeting_section='L1')
-        Offering.objects.create(
-            section=section,
-            day='M',
-            time_start='8:00',
-            time_end='10:00')
-
-        my_tt = Timetable(courses=[course], sections=[section], has_conflict=False)
-        serialized = TimetableSerializer(my_tt)
-
-        self.assertEqual(serialized.data['courses'][0]['code'], self.code)
-        self.assertEqual(serialized.data['semester']['name'], self.sem_name)
 
 
 class UrlsTest(UrlTestCase):
@@ -113,7 +80,7 @@ class TimetableLinkViewTest(APITestCase):
         course = Course.objects.create(
             id=1, school='uoft', code='SEM101', name='Intro')
         section = Section.objects.create(
-            id=1, course=course, semester=sem, meeting_section='L1')
+            course=course, semester=sem, meeting_section='L1')
         Offering.objects.create(
             section=section,
             day='M',
@@ -123,12 +90,9 @@ class TimetableLinkViewTest(APITestCase):
     def test_create_then_get_link(self):
         data = {
             'timetable': {
-                'courses': [{
-                    'id': 1,
-                }],
-                'sections': [{
-                    'id': 1
-                }],
+                'courses': [
+                    {'id': 1, 'enrolled_sections': ['L1']}
+                ],
                 'has_conflict': False
             },
             'semester': {'name': 'Fall', 'year': '2000'}

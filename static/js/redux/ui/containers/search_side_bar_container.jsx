@@ -1,19 +1,24 @@
 import { connect } from 'react-redux';
-import { getActiveTT, getSearchResult } from '../../reducers/root_reducer';
-import { getSectionTypeToSections } from '../../reducers/entities_reducer';
 import SearchSideBar from '../search_side_bar';
 import { addOrRemoveCourse, hoverSection, unHoverSection } from '../../actions/timetable_actions';
 
 const mapStateToProps = (state) => {
   const courseSections = state.courseSections.objects;
-  let hoveredResult = getSearchResult(state, state.ui.searchHover);
-  if (!hoveredResult) {
-    hoveredResult = getSearchResult(state, 0);
+  let hovered = state.searchResults.items[state.ui.searchHover];
+  if (!hovered) {
+    hovered = state.searchResults.items[0];
   }
-  const activeTimetable = getActiveTT(state);
+  const sectionTypeToSections = hovered.sections;
+  const lectureSections = sectionTypeToSections.L;
+  const tutorialSections = sectionTypeToSections.T;
+  const practicalSections = sectionTypeToSections.P;
+  const activeTimetable = state.timetables.items[state.timetables.active];
+
   return {
-    hoveredResult,
-    sectionTypeToSections: getSectionTypeToSections(hoveredResult),
+    hovered,
+    lectureSections,
+    tutorialSections,
+    practicalSections,
     isSectionLocked: (courseId, section) => {
       if (courseSections[courseId] === undefined) {
         return false;

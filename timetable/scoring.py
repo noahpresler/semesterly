@@ -18,7 +18,8 @@ def get_num_days(day_to_usage):
   return sum(got_class)
 
 def get_avg_rating(timetable):
-  avgs = [course.get_avg_rating() for course in set(c for c, _, _ in timetable)]
+  avgs = [Course.objects.get(id=cid).get_avg_rating() \
+          for cid in set([cid for cid, sid, cos in timetable])]
   try:
     return min(5, sum(avgs)/sum([ 0 if a == 0 else 1 for a in avgs]) if avgs else 0)
   except:

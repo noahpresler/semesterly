@@ -1,4 +1,3 @@
-import range from 'lodash/range';
 import COLOUR_DATA from '../constants/colours';
 import * as ActionTypes from '../constants/actionTypes';
 
@@ -32,7 +31,7 @@ const ui = (state = initialState, action) => {
         } else {
           const newUsed = Object.values(courseToColourIndex);
           // find unused colourIndex
-          courseToColourIndex[cid] = range(COLOUR_DATA.length).find(idx =>
+          courseToColourIndex[cid] = _.range(COLOUR_DATA.length).find(idx =>
             !usedColourIndices.concat(newUsed).some(x => x === idx),
           );
         }
