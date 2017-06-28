@@ -2,8 +2,6 @@ import PropTypes from 'prop-types';
 import React from 'react';
 import classNames from 'classnames';
 import ClickOutHandler from 'react-onclickout';
-import range from 'lodash/range';
-import uniqBy from 'lodash/uniqBy';
 import MasterSlot from './master_slot';
 import COLOUR_DATA from '../constants/colours';
 import TimetableNameInputContainer from './containers/timetable_name_input_container';
@@ -81,7 +79,7 @@ class SideBar extends React.Component {
       const classmates = this.props.classmates ?
         this.props.classmates.find(course => course.course_id === c.id) : [];
       if (Object.keys(this.props.courseToColourIndex).find(cid => cid === c.id) === undefined) {
-        colourIndex = range(COLOUR_DATA.length).find(i =>
+        colourIndex = _.range(COLOUR_DATA.length).find(i =>
                     !usedColourIndices.some(x => x === i),
                 );
         usedColourIndices[c.id] = colourIndex;
@@ -292,7 +290,7 @@ export const TextbookList = ({ courses }) => {
   }
   return (
     <div>
-      {uniqBy(tbs, tb => tb.isbn).map(tb => <Textbook tb={tb} key={tb.isbn} />)}
+      {_.uniq(tbs, 'isbn').map(tb => <Textbook tb={tb} key={tb.isbn} />)}
     </div>
   );
 };
