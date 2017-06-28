@@ -1,6 +1,5 @@
 import { connect } from 'react-redux';
 import FinalExamsModal from '../../modals/final_exams_modal';
-import { getActiveTT } from '../../../reducers/root_reducer';
 import { fetchFinalExamSchedule, getFinalExamShareLink } from '../../../actions/exam_actions';
 import { logFinalExamView } from '../../../util';
 import { hideFinalExamsModal, triggerAcquisitionModal } from '../../../actions/modal_actions';
@@ -40,7 +39,8 @@ const getCourseToColorIdx = (index, finalExams) => {
 };
 
 const mapStateToProps = (state) => {
-  const activeTT = getActiveTT(state);
+  const active = state.timetables.active;
+  const timetables = state.timetables.items;
   const hasFinalExams = state.finalExamsModal.finalExams !== null &&
     Object.keys(state.finalExamsModal.finalExams).length > 0;
   return {
@@ -58,8 +58,8 @@ const mapStateToProps = (state) => {
     activeLoadedTimetableName: state.finalExamsModal.fromShare ?
       'Shared Final Exam Schedule' : state.savingTimetable.activeTimetable.name,
     hasNoCourses: !hasFinalExams &&
-      activeTT.courses.length === 0,
-    courses: activeTT.courses,
+      timetables[active].courses.length === 0,
+    courses: timetables[active].courses,
     loadingCachedTT: state.timetables.loadingCachedTT,
     userInfo: state.userInfo.data,
     shareLink: state.finalExamsModal.link,

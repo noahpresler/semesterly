@@ -8,13 +8,7 @@
             "transform": "livereactload/babel-transform",
             "imports": ["react"]
           }]
-        }],
-        "transform-object-rest-spread"
-      ]
-    },
-    "production": {
-      "plugins": [
-        "transform-object-rest-spread"
+        }]
       ]
     }
   }

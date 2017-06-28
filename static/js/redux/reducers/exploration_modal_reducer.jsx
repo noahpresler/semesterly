@@ -16,19 +16,19 @@ const explorationModal = (state = {
     case ActionTypes.REQUEST_ADVANCED_SEARCH_RESULTS:
       return Object.assign({}, state, { isFetching: true });
     case ActionTypes.RECEIVE_ADVANCED_SEARCH_RESULTS: {
-      let results = action.response.result;
+      let { advancedSearchResults } = action;
       if (state.page > 1) {
-        if (results) {
-          results = [...state.advancedSearchResults].concat(results);
+        if (advancedSearchResults) {
+          advancedSearchResults = [...state.advancedSearchResults].concat(advancedSearchResults);
           return Object.assign({}, state, {
-            advancedSearchResults: results,
+            advancedSearchResults,
             isFetching: false,
           });
         }
         return Object.assign({}, state, { isFetching: false });
       }
       return Object.assign({}, state, {
-        advancedSearchResults: results,
+        advancedSearchResults,
         isFetching: false,
         active: 0,
       });
@@ -54,7 +54,5 @@ const explorationModal = (state = {
       return state;
   }
 };
-
-export const getAdvancedSearchResultIds = state => state.advancedSearchResults;
 
 export default explorationModal;

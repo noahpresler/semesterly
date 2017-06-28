@@ -11,7 +11,7 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 
 from analytics.models import SharedCourseView
-from courses.serializers import CourseSerializer
+from courses.serializers import get_detailed_course_json, get_basic_course_json
 from student.models import Student
 from student.utils import get_classmates_from_course_id
 from timetable.models import Semester, Course, Updates
@@ -67,8 +67,7 @@ def course_page(request, code):
         current_year = datetime.now().year
         semester, _ = Semester.objects.get_or_create(
             name='Fall', year=current_year)
-        course_dict = CourseSerializer(course_obj,
-                                       context={'semester': semester, 'school': school}).data
+        course_dict = get_basic_course_json(course_obj, semester)
         l = course_dict['sections'].get('L', {}).values()
         t = course_dict['sections'].get('T', {}).values()
         p = course_dict['sections'].get('P', {}).values()
@@ -104,6 +103,7 @@ def course_page(request, code):
 
 
 class CourseDetail(ValidateSubdomainMixin, APIView):
+
     def get(self, request, sem_name, year, course_id):
         school = request.subdomain
         sem, _ = Semester.objects.get_or_create(name=sem_name, year=year)
@@ -112,21 +112,19 @@ class CourseDetail(ValidateSubdomainMixin, APIView):
         is_logged_in = request.user.is_authenticated()
         if is_logged_in and Student.objects.filter(user=request.user).exists():
             student = Student.objects.get(user=request.user)
-        json_data = CourseSerializer(course,
-                                     context={'semester': sem, 'student': student,
-                                              'school': request.subdomain})
-        return Response(json_data.data, status=status.HTTP_200_OK)
+        json_data = get_detailed_course_json(school, course, sem, student)
+        return Response(json_data, status=status.HTTP_200_OK)
 
 
 class SchoolList(APIView):
+
     def get(self, request, school):
         last_updated = None
         if Updates.objects.filter(
                 school=school, update_field="Course").exists():
             update_time_obj = Updates.objects.get(school=school, update_field="Course") \
                 .last_updated.astimezone(timezone('US/Eastern'))
-            last_updated = update_time_obj.strftime(
-                '%Y-%m-%d %H:%M') + " " + update_time_obj.tzname()
+            last_updated = update_time_obj.strftime('%Y-%m-%d %H:%M') + " " + update_time_obj.tzname()
         json_data = {
             'areas': sorted(list(Course.objects.filter(school=school)
                                  .exclude(areas__exact='')
@@ -152,9 +150,8 @@ class CourseModal(FeatureFlowView):
         semester, _ = Semester.objects.get_or_create(name=sem_name, year=year)
         code = code.upper()
         course = get_object_or_404(Course, school=self.school, code=code)
-        course_json = CourseSerializer(course,
-                                       context={'semester': semester, 'school': self.school,
-                                                'student': self.student})
+        course_json = get_detailed_course_json(
+            self.school, course, semester, self.student)
 
         # analytics
         SharedCourseView.objects.create(
@@ -162,4 +159,4 @@ class CourseModal(FeatureFlowView):
             shared_course=course,
         ).save()
 
-        return {'sharedCourse': course_json.data, 'semester': semester}
+        return {'sharedCourse': course_json, 'semester': semester}

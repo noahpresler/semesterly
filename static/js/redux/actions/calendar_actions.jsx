@@ -8,7 +8,8 @@ import {
     getCourseShareLink,
 } from '../constants/endpoints';
 import { FULL_WEEK_LIST } from '../constants/constants';
-import { getCurrentSemester, getActiveTT, getFromActiveTimetable } from '../reducers/root_reducer';
+import { getActiveTimetable } from './user_actions';
+import { currSem } from '../reducers/semester_reducer';
 import * as ActionTypes from '../constants/actionTypes';
 
 const DAY_MAP = {
@@ -37,8 +38,8 @@ export const receiveShareLink = shareLink => (dispatch) => {
 
 export const fetchShareTimetableLink = () => (dispatch, getState) => {
   const state = getState();
-
-  const semester = getCurrentSemester(state);
+  const semester = currSem(state.semester);
+  const timetableState = state.timetables;
   const { shareLink, shareLinkValid } = state.calendar;
   dispatch({
     type: ActionTypes.REQUEST_SHARE_TIMETABLE_LINK,
@@ -55,12 +56,7 @@ export const fetchShareTimetableLink = () => (dispatch, getState) => {
     },
     method: 'POST',
     body: JSON.stringify({
-      timetable: getFromActiveTimetable(state, {
-        timetable: ['has_conflict'],
-        courses: ['id'],
-        sections: ['id'],
-        offerings: [],
-      }),
+      timetable: getActiveTimetable(timetableState),
       semester,
     }),
     credentials: 'include',
@@ -73,6 +69,7 @@ export const fetchShareTimetableLink = () => (dispatch, getState) => {
 
 export const addTTtoGCal = () => (dispatch, getState) => {
   const state = getState();
+  const timetableState = state.timetables;
 
   if (!state.saveCalendarModal.isUploading && !state.saveCalendarModal.hasUploaded) {
     dispatch({ type: ActionTypes.UPLOAD_CALENDAR });
@@ -84,7 +81,7 @@ export const addTTtoGCal = () => (dispatch, getState) => {
       },
       method: 'POST',
       body: JSON.stringify({
-        timetable: getActiveTT(state),
+        timetable: getActiveTimetable(timetableState),
       }),
       credentials: 'include',
     })
@@ -100,12 +97,12 @@ export const createICalFromTimetable = () => (dispatch, getState) => {
   if (!state.saveCalendarModal.isDownloading && !state.saveCalendarModal.hasDownloaded) {
     dispatch({ type: ActionTypes.DOWNLOAD_CALENDAR });
     const cal = ical({ domain: 'https://semester.ly', name: 'My Semester Schedule' });
-    const tt = getActiveTT(state);
+    const tt = getActiveTimetable(state.timetables);
 
     // TODO - MUST BE REFACTORED AFTER CODED IN TO CONFIG
     let semStart = new Date();
     let semEnd = new Date();
-    const semester = getCurrentSemester(state);
+    const semester = currSem(state.semester);
 
     if (semester.name === 'Fall') {
       // ignore year, year is set to current year
@@ -141,7 +138,7 @@ export const createICalFromTimetable = () => (dispatch, getState) => {
           summary: `${slot.name} ${slot.code}${slot.meeting_section}`,
           description: `${slot.code + slot.meeting_section}\n${instructors}${description}`,
           location: slot.location,
-          url: getCourseShareLink(slot.code, getCurrentSemester(state)),
+          url: getCourseShareLink(slot.code),
         });
 
         event.repeating({
