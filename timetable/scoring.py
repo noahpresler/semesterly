@@ -3,8 +3,8 @@
 from pprint import pprint
 from timetable.models import *
 
-def get_tt_cost(tt_stats, sort_params):
-  return tuple([metric(tt_stats) for metric in map(metric_to_stat.get, sort_params)])
+def get_tt_cost(tt, sort_params):
+  return tuple([metric(tt.stats) for metric in map(metric_to_stat.get, sort_params)])
 
 # TODO
 def get_num_friends(timetable):
