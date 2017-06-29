@@ -50,12 +50,14 @@ class SideBar extends React.Component {
         </button>
       </div>
         )) : null;
+    // TOOD: code duplication between masterslots/optionalslots
     let masterSlots = this.props.mandatoryCourses ?
       this.props.mandatoryCourses.map((course) => {
-        const colourIndex = this.props.courseToColourIndex[course.id] || 0;
-        let classmates = this.props.classmates ?
-          this.props.classmates.find(classmate => classmate.course_id === course.id) : [];
-        classmates = classmates || {};
+        const colourIndex = this.props.courseToColourIndex[course.id] ||
+                            getNextAvailableColour(this.props.courseToColourIndex);
+        // TODO: course_id is not in the proptype?
+        const classmates = this.props.classmates.filter(classmate =>
+          classmate.course_id === course.id);
         const professors = course.sections.map(section => section.instructors);
         return (<MasterSlot
           key={course.id}
@@ -71,13 +73,10 @@ class SideBar extends React.Component {
       }) : null;
 
     let optionalSlots = this.props.coursesInTimetable ? this.props.optionalCourses.map((course) => {
-      const classmates = this.props.classmates ?
-        this.props.classmates.find(classmate => classmate.course_id === course.id) : [];
-      if (!(course.id in this.props.courseToColourIndex)) {
-        this.props.courseToColourIndex[course.id] =
-          getNextAvailableColour(this.props.courseToColourIndex);
-      }
-      const colourIndex = this.props.courseToColourIndex[course.id];
+      const classmates = this.props.classmates.filter(classmate =>
+        classmate.course_id === course.id);
+      const colourIndex = this.props.courseToColourIndex[course.id] ||
+                          getNextAvailableColour(this.props.courseToColourIndex);
       return (<MasterSlot
         key={course.id}
         onTimetable={this.props.isCourseInRoster(course.id)}
@@ -195,9 +194,8 @@ class SideBar extends React.Component {
   }
 }
 
+// TODO: should be these values by default in the state
 SideBar.defaultProps = {
-  classmates: null,
-  optionalCourses: null,
   savedTimetables: null,
   avgRating: 0,
 };
