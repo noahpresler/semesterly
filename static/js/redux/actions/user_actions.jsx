@@ -53,6 +53,7 @@ export const requestFriends = () => ({
 
 const getSaveTimetablesRequestBody = (state) => {
   const tt = getActiveTimetable(state);
+  // TODO: optional courses?
   return {
     slots: tt.slots,
     events: state.customSlots,

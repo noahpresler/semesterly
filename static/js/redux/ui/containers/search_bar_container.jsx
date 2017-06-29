@@ -23,7 +23,7 @@ const mapStateToProps = (state) => {
     searchResults: getSearchResults(state),
     isFetching: state.searchResults.isFetching,
     isCourseInRoster: courseId => courseSections[courseId] !== undefined,
-    isCourseOptional: courseId => state.optionalCourses.courses.some(c => c.id === courseId),
+    isCourseOptional: courseId => state.optionalCourses.courses.some(c => c === courseId),
     hasHoveredResult: getHoveredSlots(state).length > 0,
     isHovered: position => state.ui.searchHover === position,
     hoveredPosition: state.ui.searchHover,
