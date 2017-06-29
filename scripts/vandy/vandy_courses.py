@@ -428,7 +428,7 @@ class VandyParser(CourseParser):
                     values = ["<long bn url>"]
 
                 elif key == "Hours":
-                    values[0] = safe_cast(values[0], float, default=0.)
+                    values[0] = str(safe_cast(values[0], float, default=0.))
 
                 self.update_current_course(key, ', '.join(values))
 
