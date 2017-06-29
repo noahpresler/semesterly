@@ -31,11 +31,12 @@ const mapStateToProps = (state, ownProps) => ({
   custom: state.customSlots,
   isCourseOptional: cid => state.optionalCourses.courses.some(c => c === cid),
   getOptionalCourseById: cid => getDenormCourseById(state, cid),
-  classmates: (id, sec) => {
-    const cm = state.classmates.courseToClassmates ? state.classmates.courseToClassmates
-        .find(course => course.course_id === id) : [];
-    return cm ? cm.classmates.filter(friend => friend.sections &&
-        friend.sections.find(s => s === sec) !== undefined) : [];
+  getClassmatesInSection: (courseId, sectionCode) => {
+    if (!(courseId in state.classmates.courseToClassmates)) {
+      return [];
+    }
+    const classmatesInCourse = state.classmates.courseToClassmates[courseId];
+    return classmatesInCourse.current.filter(cm => cm.sections.find(sectionCode));
   },
   days: ownProps.days,
   uses12HrTime: state.ui.uses12HrTime,
