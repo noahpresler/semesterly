@@ -1,5 +1,6 @@
 import merge from 'lodash/merge';
 import uniq from 'lodash/uniq';
+import uniqBy from 'lodash/uniqBy';
 
 // TODO: garbage collect (e.g. clear when changing semesters)
 const emptyTimetable = { courses: [], slots: [] };
@@ -57,6 +58,7 @@ export const getSectionTypeToSections = (denormCourse) => {
 };
 
 // TIMETABLE SELECTORS
+//    SLOT SELECTORS
 export const getDenormSlot = (state, slot) => {
   return {
     ...slot,
@@ -65,6 +67,10 @@ export const getDenormSlot = (state, slot) => {
     offerings: slot.offerings.map(offering => getOfferingById(state, offering)),
   }
 };
+
+export const getCourseIdsFromSlots = slots => uniq(slots.map(slot => slot.course));
+
+export const getCoursesFromDenormSlots = slots => uniqBy(slots.map(slot => slot.course), 'id');
 
 export const getActiveDenormTimetable = (state, timetable) => {
   return {

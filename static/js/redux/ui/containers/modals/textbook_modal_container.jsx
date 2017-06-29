@@ -1,11 +1,11 @@
 import { connect } from 'react-redux';
-import { getActiveTT } from '../../../reducers/root_reducer';
+import { getActiveTimetableCourses } from '../../../reducers/root_reducer';
 import TextbookModal from '../../modals/textbook_modal';
 import { toggleTextbookModal } from '../../../actions/modal_actions';
 
 const mapStateToProps = state => ({
   isVisible: state.textbookModal.isVisible,
-  courses: getActiveTT(state).courses,
+  courses: getActiveTimetableCourses(state),
   isLoading: state.timetables.isFetching,
 });
 
