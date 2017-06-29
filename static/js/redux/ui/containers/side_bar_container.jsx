@@ -1,7 +1,9 @@
 import { connect } from 'react-redux';
-import partition from 'lodash/partition';
 import SideBar from '../side_bar';
-import { getActiveDenormTimetable, getCurrentSemester } from '../../reducers/root_reducer';
+import {
+  getActiveDenormTimetable,
+  getCurrentSemester,
+  getDenormCourseById } from '../../reducers/root_reducer';
 import {
     fetchCourseInfo,
     showFinalExamsModal,
@@ -23,23 +25,22 @@ import { getCoursesFromDenormSlots } from '../../reducers/entities_reducer';
 // courses are the ones IN the timetable (both mandatory and optional)
 const mapStateToProps = (state) => {
   const timetable = getActiveDenormTimetable(state);
-  const partitioned = partition(timetable.slots, slot => slot.is_optional);
-  const [optionalCourses, mandatoryCourses] = // ALL optional courses, including not in timetable
-    partitioned.map(slots => getCoursesFromDenormSlots(slots));
+  const coursesInTimetable = getCoursesFromDenormSlots(timetable.slots);
+  const mandatoryCourses = getCoursesFromDenormSlots(timetable.slots.filter(
+    slot => !slot.is_optional));
+  const optionalCourses = state.optionalCourses.courses.map(cid => getDenormCourseById(state, cid));
   return {
     semester: getCurrentSemester(state),
     semesterIndex: state.semester.current,
     examSupportedSemesters: state.semester.exams,
-    // don't want to consider courses that are shown on timetable only
-    // because of a 'HOVER_COURSE' action (i.e. fake courses)
-    activeCourses: optionalCourses.concat(mandatoryCourses),
+    coursesInTimetable,
+    mandatoryCourses,
+    optionalCourses,
     savedTimetables: state.userInfo.data.timetables,
     courseToColourIndex: state.ui.courseToColourIndex,
     classmates: state.classmates.courseToClassmates,
     avgRating: timetable.avg_rating,
     isCourseInRoster: courseId => timetable.slots.some(s => s.course.id === courseId),
-    mandatoryCourses,
-    optionalCourses,
     hasLoaded: !state.timetables.isFetching,
     getShareLink: courseCode => getCourseShareLink(courseCode, getCurrentSemester(state)),
   };
