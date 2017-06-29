@@ -33,7 +33,6 @@ def get_student(request):
 def get_classmates_from_course_id(
         school, student, course_id, semester, friends=None, include_same_as=False):
     if not friends:
-        # All friends with social courses/sharing enabled
         friends = student.friends.filter(social_courses=True)
     course = {'course_id': course_id}
     past_ids = [course_id]
@@ -47,10 +46,10 @@ def get_classmates_from_course_id(
         .exclude(student__in=curr_ptts.values_list('student', flat=True)).filter(~Q(semester=semester)) \
         .order_by('student', 'last_updated').distinct('student')
 
-    course['classmates'] = get_classmates_from_tts(student, course_id, curr_ptts)
-    course['past_classmates'] = get_classmates_from_tts(student, course_id, past_ptts)
-
-    return course
+    return {
+        'classmates': get_classmates_from_tts(student, course_id, curr_ptts),
+        'past_classmates': get_classmates_from_tts(student, course_id, past_ptts),
+    }
 
 
 def get_classmates_from_tts(student, course_id, tts):
