@@ -20,6 +20,8 @@ from analytics.models import CalendarExport
 from student.models import Student, Reaction, RegistrationToken, PersonalEvent, PersonalTimetable
 from student.utils import next_weekday, get_classmates_from_course_id, make_token, get_student_tts
 from timetable.models import Semester, Course
+from timetable.serializers import DisplayTimetableSerializer
+from timetable.utils import DisplayTimetable
 from helpers.mixins import ValidateSubdomainMixin, RedirectToSignupMixin
 from helpers.decorators import validate_subdomain
 
@@ -170,15 +172,7 @@ class UserTimetableView(ValidateSubdomainMixin,
             duplicate.sections = sections
             duplicate.events = events
 
-            timetables = get_student_tts(student, school, semester)
-            saved_timetable = (
-                x for x in timetables if x['id'] == duplicate.id).next()
-            response = {
-                'timetables': timetables,
-                'saved_timetable': saved_timetable}
-
-            # TODO: should respond only with created object
-            return Response(response, status=status.HTTP_201_CREATED)
+            return Response(status=status.HTTP_201_CREATED)
         else:
             # TODO: use new request shape
             school = request.subdomain
@@ -210,16 +204,8 @@ class UserTimetableView(ValidateSubdomainMixin,
                 semester)
             self.update_events(personal_timetable, request.data['events'])
 
-            timetables = get_student_tts(student, school, semester)
-            saved_timetable = (
-                x for x in timetables if x['id'] == personal_timetable.id).next()
-            response = {
-                'timetables': timetables,
-                'saved_timetable': saved_timetable}
-
-            # TODO: should respond only with created object
-            return Response(response,
-                            status=status.HTTP_201_CREATED if tt_id is None else status.HTTP_200_OK)
+            return Response(status=status.HTTP_201_CREATED if tt_id is None else
+                                    status.HTTP_200_OK)
 
     def delete(self, request, sem_name, year, tt_name):
         school = request.subdomain
@@ -233,11 +219,8 @@ class UserTimetableView(ValidateSubdomainMixin,
             tt.events.all().delete()
         to_delete.delete()
 
-        timetables = get_student_tts(student, school, semester)
-        response = {'timetables': timetables}
-
         # TODO: should respond with deleted object
-        return Response(response, status=status.HTTP_200_OK)
+        return Response(status=status.HTTP_204_NO_CONTENT)
 
     def update_tt(self, tt, new_name, new_has_conflict, new_courses, semester):
         tt.name = new_name
