@@ -54,16 +54,16 @@ class MasterSlot extends React.Component {
           />);
       }
     } else {
-      friendCircles = this.props.classmates && this.props.classmates.classmates ?
-        this.props.classmates.classmates.map(c =>
-          (<div
-            className="ms-friend"
-            key={c.img_url}
-            style={{ backgroundImage: `url(${c.img_url})` }}
-          />)) : null;
+      friendCircles = this.props.classmates.map(c => (
+        <div
+          className="ms-friend"
+          key={c.img_url}
+          style={{ backgroundImage: `url(${c.img_url})` }}
+        />
+      ));
     }
 
-    if ((this.props.classmates && this.props.classmates.classmates && friendCircles.length > 4)
+    if ((this.props.classmates.length > 0 && friendCircles.length > 4)
             || (this.props.fakeFriends && this.props.fakeFriends > 4)) {
       const plusMore = `${friendCircles.length - 3}+`;
       friendCircles = [<div
@@ -150,7 +150,6 @@ MasterSlot.defaultProps = {
   course: PropTypes.shape({
     is_waitlist_only: false,
   }),
-  classmates: null,
   professors: null,
   slots: null,
   removeCourse: null,
@@ -171,11 +170,9 @@ MasterSlot.propTypes = {
     })),
   }).isRequired,
   professors: PropTypes.arrayOf(PropTypes.string),
-  classmates: PropTypes.shape({
-    classmates: PropTypes.arrayOf(PropTypes.shape({
-      img_url: PropTypes.string,
-    })),
-  }),
+  classmates: PropTypes.arrayOf(PropTypes.shape({
+    img_url: PropTypes.string,
+  })).isRequired,
   hideCloseButton: PropTypes.bool,
   onTimetable: PropTypes.bool.isRequired,
   fetchCourseInfo: PropTypes.func.isRequired,
