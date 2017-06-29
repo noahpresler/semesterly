@@ -13,6 +13,7 @@ from student.utils import get_student
 hashids = Hashids(salt="x98as7dhg&h*askdj^has!kj?xz<!9")
 
 
+# TODO: use new request shape
 class ExamView(CsrfExemptMixin, APIView):
 
     def post(self, request):

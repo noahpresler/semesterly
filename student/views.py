@@ -180,6 +180,7 @@ class UserTimetableView(ValidateSubdomainMixin,
             # TODO: should respond only with created object
             return Response(response, status=status.HTTP_201_CREATED)
         else:
+            # TODO: use new request shape
             school = request.subdomain
             has_conflict = request.data['has_conflict']
             name = request.data['name']
@@ -360,6 +361,7 @@ class ClassmateView(ValidateSubdomainMixin, RedirectToSignupMixin, APIView):
             return Response(friends, status=status.HTTP_200_OK)
 
 
+# TODO: use new request shape
 class GCalView(RedirectToSignupMixin, APIView):
 
     def post(self, request):

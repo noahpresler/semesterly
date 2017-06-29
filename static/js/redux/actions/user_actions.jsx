@@ -15,7 +15,10 @@ import {
     getSetRegistrationTokenEndpoint,
     acceptTOSEndpoint,
 } from '../constants/endpoints';
-import { getActiveTT, getActiveTimetableCourses, getCurrentSemester } from '../reducers/root_reducer';
+import {
+  getActiveTimetable,
+  getActiveTimetableCourses,
+  getCurrentSemester } from '../reducers/root_reducer';
 import { fetchCourseClassmates } from './modal_actions';
 import { getNumberedName, loadTimetable, nullifyTimetable } from './timetable_actions';
 import { MAX_TIMETABLE_NAME_LENGTH } from '../constants/constants';
@@ -49,9 +52,9 @@ export const requestFriends = () => ({
 });
 
 const getSaveTimetablesRequestBody = (state) => {
-  const tt = getActiveTT(state);
+  const tt = getActiveTimetable(state);
   return {
-    courses: tt.courses,
+    slots: tt.slots,
     events: state.customSlots,
     has_conflict: tt.has_conflict,
     semester: getCurrentSemester(state),
@@ -126,10 +129,10 @@ export const saveTimetable = (isAutoSave = false, callback = null) => (dispatch,
   if (!state.userInfo.data.isLoggedIn) {
     return dispatch({ type: ActionTypes.TOGGLE_SIGNUP_MODAL });
   }
-  const activeTimetable = getActiveTT(state);
+  const activeTimetable = getActiveTimetable(state);
 
   // if current timetable is empty or we're already in saved state, don't save this timetable
-  const numSlots = activeTimetable.courses.length + state.customSlots.length;
+  const numSlots = activeTimetable.slots.length + state.customSlots.length;
   if (numSlots === 0 || state.savingTimetable.upToDate) {
     return null;
   }
