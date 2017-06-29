@@ -13,13 +13,12 @@ export const fullCourseDetails = PropTypes.shape({
   areas: PropTypes.string,
 });
 
-export const classmates = PropTypes.arrayOf(
-  PropTypes.shape({
-    img_url: PropTypes.string,
-    first_name: PropTypes.string,
-    last_name: PropTypes.string,
-  }),
-);
+export const classmates = PropTypes.arrayOf(PropTypes.shape({
+  first_name: PropTypes.string,
+  last_name: PropTypes.stirng,
+  img_url: PropTypes.string,
+  sections: PropTypes.arrayOf(PropTypes.string), // section codes
+}));
 
 export const textbook = PropTypes.shape({
   author: PropTypes.string.isRequired,
