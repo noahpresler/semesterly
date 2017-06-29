@@ -41,14 +41,15 @@ def all_courses(request):
 
 
 # TODO: use implementation in student
+# TODO: should send along with course response
 def get_classmates_in_course(request, school, sem_name, year, course_id):
     school = school.lower()
     sem, _ = Semester.objects.get_or_create(name=sem_name, year=year)
     json_data = {}
     course = Course.objects.get(school=school, id=course_id)
     student = None
-    logged = request.user.is_authenticated()
-    if logged and Student.objects.filter(user=request.user).exists():
+    is_logged_in = request.user.is_authenticated()
+    if is_logged_in and Student.objects.filter(user=request.user).exists():
         student = Student.objects.get(user=request.user)
     if student and student.user.is_authenticated() and student.social_courses:
         json_data = get_classmates_from_course_id(
