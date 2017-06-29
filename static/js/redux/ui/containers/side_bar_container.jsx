@@ -38,7 +38,7 @@ const mapStateToProps = (state) => {
     optionalCourses,
     savedTimetables: state.userInfo.data.timetables,
     courseToColourIndex: state.ui.courseToColourIndex,
-    classmates: state.classmates.courseToClassmates,
+    courseToClassmates: state.classmates.courseToClassmates,
     avgRating: timetable.avg_rating,
     isCourseInRoster: courseId => timetable.slots.some(s => s.course.id === courseId),
     hasLoaded: !state.timetables.isFetching,
