@@ -13,7 +13,7 @@ from courses.serializers import CourseSerializer
 from student.utils import get_student
 from timetable.serializers import convert_tt_to_dict, DisplayTimetableSerializer
 from timetable.models import Semester, Course, Section
-from timetable.utils import update_locked_sections, courses_to_timetables
+from timetable.utils import update_locked_sections, courses_to_timetables, DisplayTimetable
 from helpers.mixins import ValidateSubdomainMixin, FeatureFlowView, CsrfExemptMixin
 
 hashids = Hashids(salt="***REMOVED***")
@@ -85,9 +85,12 @@ class TimetableLinkView(FeatureFlowView):
         shared_timetable_obj = get_object_or_404(SharedTimetable,
                                                  id=timetable_id,
                                                  school=request.subdomain)
-        shared_timetable = convert_tt_to_dict(shared_timetable_obj)
+        shared_timetable = DisplayTimetable.from_timetable_model(shared_timetable_obj)
 
-        return {'semester': shared_timetable_obj.semester, 'sharedTimetable': shared_timetable}
+        return {
+            'semester': shared_timetable_obj.semester,
+            'sharedTimetable': DisplayTimetableSerializer(shared_timetable).data
+        }
 
     def post(self, request):
         school = request.subdomain
