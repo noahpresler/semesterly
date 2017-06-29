@@ -47,8 +47,8 @@ def get_classmates_from_course_id(
         .order_by('student', 'last_updated').distinct('student')
 
     return {
-        'classmates': get_classmates_from_tts(student, course_id, curr_ptts),
-        'past_classmates': get_classmates_from_tts(student, course_id, past_ptts),
+        'current': get_classmates_from_tts(student, course_id, curr_ptts),
+        'past': get_classmates_from_tts(student, course_id, past_ptts),
     }
 
 
@@ -63,6 +63,8 @@ def get_classmates_from_tts(student, course_id, tts):
             friend_sections = tt.sections.filter(course__id=course_id)
             sections = list(friend_sections.values_list('meeting_section', flat=True).distinct())
             classmate['sections'] = sections
+        else:
+            classmate['sections'] = []
         classmates.append(classmate)
     return classmates
 
