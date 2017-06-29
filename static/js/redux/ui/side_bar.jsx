@@ -2,14 +2,13 @@ import PropTypes from 'prop-types';
 import React from 'react';
 import classNames from 'classnames';
 import ClickOutHandler from 'react-onclickout';
-import range from 'lodash/range';
 import uniqBy from 'lodash/uniqBy';
 import MasterSlot from './master_slot';
-import COLOUR_DATA from '../constants/colours';
 import TimetableNameInputContainer from './containers/timetable_name_input_container';
 import CreditTickerContainer from './containers/credit_ticker_container';
 import Textbook from './textbook';
 import * as SemesterlyPropTypes from '../constants/semesterlyPropTypes';
+import { getNextAvailableColour } from '../util';
 
 class SideBar extends React.Component {
   constructor(props) {
@@ -52,50 +51,41 @@ class SideBar extends React.Component {
       </div>
         )) : null;
     let masterSlots = this.props.mandatoryCourses ?
-            this.props.mandatoryCourses.map((c) => {
-              const colourIndex = this.props.courseToColourIndex[c.id] || 0;
-              let classmates = this.props.classmates ?
-                this.props.classmates.find(course => course.course_id === c.id) : [];
-              classmates = classmates || {};
-              let professors = [];
-              if (c.slots.length === 0 && c.oldSlots && c.oldSlots.length > 0) {
-                professors = [...new Set(c.oldSlots.map(s => s.instructors))];
-              } else {
-                professors = [...new Set(c.slots.map(s => s.instructors))];
-              }
-              return (<MasterSlot
-                key={c.id}
-                professors={professors}
-                colourIndex={colourIndex}
-                classmates={classmates}
-                onTimetable={this.props.isCourseInRoster(c.id)}
-                course={c}
-                fetchCourseInfo={() => this.props.fetchCourseInfo(c.id)}
-                removeCourse={() => this.props.removeCourse(c.id)}
-                getShareLink={this.props.getShareLink}
-              />);
-            }) : null;
-    const usedColourIndices = Object.values(this.props.courseToColourIndex);
-    let optionalSlots = this.props.allCourses ? this.props.optionalCourses.map((c) => {
-      let colourIndex;
+      this.props.mandatoryCourses.map((course) => {
+        const colourIndex = this.props.courseToColourIndex[course.id] || 0;
+        let classmates = this.props.classmates ?
+          this.props.classmates.find(classmate => classmate.course_id === course.id) : [];
+        classmates = classmates || {};
+        const professors = course.sections.map(section => section.instructors);
+        return (<MasterSlot
+          key={course.id}
+          professors={professors}
+          colourIndex={colourIndex}
+          classmates={classmates}
+          onTimetable={this.props.isCourseInRoster(course.id)}
+          course={course}
+          fetchCourseInfo={() => this.props.fetchCourseInfo(course.id)}
+          removeCourse={() => this.props.removeCourse(course.id)}
+          getShareLink={this.props.getShareLink}
+        />);
+      }) : null;
+
+    let optionalSlots = this.props.activeCourses ? this.props.optionalCourses.map((course) => {
       const classmates = this.props.classmates ?
-        this.props.classmates.find(course => course.course_id === c.id) : [];
-      if (Object.keys(this.props.courseToColourIndex).find(cid => cid === c.id) === undefined) {
-        colourIndex = range(COLOUR_DATA.length).find(i =>
-                    !usedColourIndices.some(x => x === i),
-                );
-        usedColourIndices[c.id] = colourIndex;
-      } else {
-        colourIndex = this.props.courseToColourIndex[c.id];
+        this.props.classmates.find(classmate => classmate.course_id === course.id) : [];
+      if (!(course.id in this.props.courseToColourIndex)) {
+        this.props.courseToColourIndex[course.id] =
+          getNextAvailableColour(this.props.courseToColourIndex);
       }
+      const colourIndex = this.props.courseToColourIndex[course.id];
       return (<MasterSlot
-        key={c.id}
-        onTimetable={this.props.isCourseInRoster(c.id)}
+        key={course.id}
+        onTimetable={this.props.isCourseInRoster(course.id)}
         colourIndex={colourIndex}
         classmates={classmates}
-        course={c}
-        fetchCourseInfo={() => this.props.fetchCourseInfo(c.id)}
-        removeCourse={() => this.props.removeOptionalCourse(c)}
+        course={course}
+        fetchCourseInfo={() => this.props.fetchCourseInfo(course.id)}
+        removeCourse={() => this.props.removeOptionalCourse(course)}
         getShareLink={this.props.getShareLink}
       />);
     }) : null;
@@ -198,7 +188,7 @@ class SideBar extends React.Component {
           </h4>
         </a>
         <div className="side-bar-section">
-          <TextbookList courses={this.props.allCourses} />
+          <TextbookList courses={this.props.activeCourses} />
         </div>
       </div>
     );
@@ -216,28 +206,13 @@ SideBar.propTypes = {
   savedTimetables: PropTypes.arrayOf(PropTypes.shape({
     name: PropTypes.string,
   })),
-  mandatoryCourses: PropTypes.arrayOf(PropTypes.shape({ // TODO
-    id: PropTypes.number,
-    slots: PropTypes.arrayOf(PropTypes.shape({
-      instructors: PropTypes.string,
-    })),
-    oldSlots: PropTypes.arrayOf(PropTypes.shape({
-      instructors: PropTypes.string,
-    })),
-  })).isRequired,
+  mandatoryCourses: PropTypes.arrayOf(SemesterlyPropTypes.course).isRequired,
+  optionalCourses: PropTypes.arrayOf(SemesterlyPropTypes.course).isRequired,
+  activeCourses: PropTypes.arrayOf(SemesterlyPropTypes.course).isRequired,
   courseToColourIndex: PropTypes.shape({
     id: PropTypes.string,
   }).isRequired,
   classmates: SemesterlyPropTypes.classmates.isRequired,
-  optionalCourses: PropTypes.arrayOf(PropTypes.shape({ // TODO
-    id: PropTypes.number,
-    slots: PropTypes.arrayOf(PropTypes.shape({
-      instructors: PropTypes.string,
-    })),
-    oldSlots: PropTypes.arrayOf(PropTypes.shape({
-      instructors: PropTypes.string,
-    })),
-  })),
   loadTimetable: PropTypes.func.isRequired,
   deleteTimetable: PropTypes.func.isRequired,
   isCourseInRoster: PropTypes.func.isRequired,
@@ -248,15 +223,6 @@ SideBar.propTypes = {
   launchFinalExamsModal: PropTypes.func.isRequired,
   launchPeerModal: PropTypes.func.isRequired,
   launchTextbookModal: PropTypes.func.isRequired,
-  allCourses: PropTypes.arrayOf(PropTypes.shape({ // TODO: wrong shape
-    id: PropTypes.number,
-    slots: PropTypes.arrayOf(PropTypes.shape({
-      instructors: PropTypes.string,
-    })),
-    oldSlots: PropTypes.arrayOf(PropTypes.shape({
-      instructors: PropTypes.string,
-    })),
-  })).isRequired,
   semester: PropTypes.shape({
     name: PropTypes.string.isRequired,
     year: PropTypes.numberisRequired,
