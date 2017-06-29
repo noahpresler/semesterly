@@ -55,15 +55,12 @@ class SideBar extends React.Component {
       this.props.mandatoryCourses.map((course) => {
         const colourIndex = this.props.courseToColourIndex[course.id] ||
                             getNextAvailableColour(this.props.courseToColourIndex);
-        // TODO: course_id is not in the proptype?
-        const classmates = this.props.classmates.filter(classmate =>
-          classmate.course_id === course.id);
         const professors = course.sections.map(section => section.instructors);
         return (<MasterSlot
           key={course.id}
           professors={professors}
           colourIndex={colourIndex}
-          classmates={classmates}
+          classmates={this.props.courseToClassmates[course.id]}
           onTimetable={this.props.isCourseInRoster(course.id)}
           course={course}
           fetchCourseInfo={() => this.props.fetchCourseInfo(course.id)}
@@ -73,15 +70,13 @@ class SideBar extends React.Component {
       }) : null;
 
     let optionalSlots = this.props.coursesInTimetable ? this.props.optionalCourses.map((course) => {
-      const classmates = this.props.classmates.filter(classmate =>
-        classmate.course_id === course.id);
       const colourIndex = this.props.courseToColourIndex[course.id] ||
                           getNextAvailableColour(this.props.courseToColourIndex);
       return (<MasterSlot
         key={course.id}
         onTimetable={this.props.isCourseInRoster(course.id)}
         colourIndex={colourIndex}
-        classmates={classmates}
+        classmates={this.props.courseToClassmates[course.id]}
         course={course}
         fetchCourseInfo={() => this.props.fetchCourseInfo(course.id)}
         removeCourse={() => this.props.removeOptionalCourse(course)}
@@ -210,7 +205,7 @@ SideBar.propTypes = {
   courseToColourIndex: PropTypes.shape({
     id: PropTypes.string,
   }).isRequired,
-  classmates: SemesterlyPropTypes.classmates.isRequired,
+  courseToClassmates: PropTypes.shape({ '*': SemesterlyPropTypes.classmates }).isRequired,
   loadTimetable: PropTypes.func.isRequired,
   deleteTimetable: PropTypes.func.isRequired,
   isCourseInRoster: PropTypes.func.isRequired,
