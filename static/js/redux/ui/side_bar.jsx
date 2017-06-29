@@ -76,7 +76,7 @@ class SideBar extends React.Component {
               />);
             }) : null;
     const usedColourIndices = Object.values(this.props.courseToColourIndex);
-    let optionalSlots = this.props.liveTimetableCourses ? this.props.optionalCourses.map((c) => {
+    let optionalSlots = this.props.allCourses ? this.props.optionalCourses.map((c) => {
       let colourIndex;
       const classmates = this.props.classmates ?
         this.props.classmates.find(course => course.course_id === c.id) : [];
@@ -198,7 +198,7 @@ class SideBar extends React.Component {
           </h4>
         </a>
         <div className="side-bar-section">
-          <TextbookList courses={this.props.liveTimetableCourses} />
+          <TextbookList courses={this.props.allCourses} />
         </div>
       </div>
     );
@@ -216,7 +216,7 @@ SideBar.propTypes = {
   savedTimetables: PropTypes.arrayOf(PropTypes.shape({
     name: PropTypes.string,
   })),
-  mandatoryCourses: PropTypes.arrayOf(PropTypes.shape({
+  mandatoryCourses: PropTypes.arrayOf(PropTypes.shape({ // TODO
     id: PropTypes.number,
     slots: PropTypes.arrayOf(PropTypes.shape({
       instructors: PropTypes.string,
@@ -229,7 +229,7 @@ SideBar.propTypes = {
     id: PropTypes.string,
   }).isRequired,
   classmates: SemesterlyPropTypes.classmates.isRequired,
-  optionalCourses: PropTypes.arrayOf(PropTypes.shape({
+  optionalCourses: PropTypes.arrayOf(PropTypes.shape({ // TODO
     id: PropTypes.number,
     slots: PropTypes.arrayOf(PropTypes.shape({
       instructors: PropTypes.string,
@@ -248,7 +248,7 @@ SideBar.propTypes = {
   launchFinalExamsModal: PropTypes.func.isRequired,
   launchPeerModal: PropTypes.func.isRequired,
   launchTextbookModal: PropTypes.func.isRequired,
-  liveTimetableCourses: PropTypes.arrayOf(PropTypes.shape({
+  allCourses: PropTypes.arrayOf(PropTypes.shape({ // TODO: wrong shape
     id: PropTypes.number,
     slots: PropTypes.arrayOf(PropTypes.shape({
       instructors: PropTypes.string,

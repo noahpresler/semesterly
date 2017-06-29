@@ -33,18 +33,19 @@ class TextbookModal extends React.Component {
 
     const tbs = {};
     let allTbs = [];
+    // TODO: stop using manual for loops
     for (let i = 0; i < this.props.courses.length; i++) {
       tbs[this.props.courses[i].name] = [];
       if (this.props.courses[i].textbooks !== undefined &&
         Object.keys(this.props.courses[i].textbooks).length > 0) {
-        for (let j = 0; j < this.props.courses[i].enrolled_sections.length; j++) {
+        for (let j = 0; j < this.props.courses[i].sections.length; j++) {
           tbs[this.props.courses[i].name] =
             tbs[this.props.courses[i].name]
               .concat(this.props.courses[i]
-                .textbooks[this.props.courses[i].enrolled_sections[j]],
+                .textbooks[this.props.courses[i].sections[j].meeting_section],
               );
           allTbs = allTbs.concat(this.props.courses[i]
-            .textbooks[this.props.courses[i].enrolled_sections[j]]);
+            .textbooks[this.props.courses[i].sections[j].meeting_section]);
         }
       }
     }
