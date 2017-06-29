@@ -290,7 +290,7 @@ export const addOrRemoveCourse = (newCourseId, lockingSection = '') => (dispatch
 
   const removing = state.courseSections.objects[newCourseId] !== undefined && lockingSection === '';
   let reqBody = getBaseReqBody(state);
-  if (state.optionalCourses.courses.some(c => c.id === newCourseId)) {
+  if (state.optionalCourses.courses.some(c => c === newCourseId)) {
     dispatch({
       type: ActionTypes.REMOVE_OPTIONAL_COURSE_BY_ID,
       courseId: newCourseId,
@@ -304,7 +304,7 @@ export const addOrRemoveCourse = (newCourseId, lockingSection = '') => (dispatch
     delete updatedCourseSections[newCourseId]; // remove it from courseSections.objects
     reqBody.courseSections = updatedCourseSections;
     Object.assign(reqBody, {
-      optionCourses: state.optionalCourses.courses.map(c => c.id),
+      optionCourses: state.optionalCourses.courses,
       numOptionCourses: state.optionalCourses.numRequired,
       customSlots: state.customSlots,
     });
@@ -319,7 +319,7 @@ export const addOrRemoveCourse = (newCourseId, lockingSection = '') => (dispatch
         course_id: newCourseId,
         section_codes: [lockingSection],
       }],
-      optionCourses: state.optionalCourses.courses.map(c => c.id),
+      optionCourses: state.optionalCourses.courses,
       numOptionCourses: state.optionalCourses.numRequired,
       customSlots: state.customSlots,
     });
@@ -338,7 +338,7 @@ const refetchTimetables = () => (dispatch, getState) => {
   const reqBody = getBaseReqBody(state);
 
   Object.assign(reqBody, {
-    optionCourses: state.optionalCourses.courses.map(c => c.id),
+    optionCourses: state.optionalCourses.courses,
     numOptionCourses: state.optionalCourses.numRequired,
     customSlots: state.customSlots,
   });
@@ -417,20 +417,20 @@ export const removeCustomSlot = id => (dispatch) => {
 };
 
 export const addOrRemoveOptionalCourse = course => (dispatch, getState) => {
-  const removing = getState().optionalCourses.courses.some(c => c.id === course.id);
+  const removing = getState().optionalCourses.courses.some(c => c === course.id);
   if (getState().timetables.isFetching) {
     return;
   }
 
   dispatch({
     type: ActionTypes.ADD_REMOVE_OPTIONAL_COURSE,
-    newCourse: course,
+    newCourseId: course.id,
   });
   const state = getState(); // the above dispatched action changes the state
   const reqBody = getBaseReqBody(state);
   const { optionalCourses } = state;
 
-  const optionCourses = optionalCourses.courses.map(c => c.id);
+  const optionCourses = optionalCourses.courses;
 
   Object.assign(reqBody, {
     optionCourses,
