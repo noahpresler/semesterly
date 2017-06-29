@@ -223,17 +223,17 @@ class CourseModalBody extends React.Component {
       className="loader"
     /></span><p>
             loading...</p></div>);
-    if (!this.props.isFetchingClassmates && this.props.classmates.classmates !== undefined) {
-      friendCircles = this.props.classmates && this.props.classmates.classmates.length > 0 ?
-        this.props.classmates.classmates.map(c =>
+    if (!this.props.isFetchingClassmates) {
+      friendCircles = this.props.classmates.current.length > 0 ?
+        this.props.classmates.current.map(c =>
           (<div className="friend" key={c.img_url}>
             <div className="ms-friend" style={{ backgroundImage: `url(${c.img_url})` }} />
             <p title={`${c.first_name} ${c.last_name}`}>{ `${c.first_name} ${c.last_name}` }</p>
           </div>)) :
         <p className="null">No Classmates Found</p>;
 
-      hasTakenCircles = this.props.classmates && this.props.classmates.past_classmates.length > 0 ?
-        this.props.classmates.past_classmates.map(c =>
+      hasTakenCircles = this.props.classmates.past.length > 0 ?
+        this.props.classmates.past.map(c =>
           (<div className="friend" key={c.img_url}>
             <div className="ms-friend" style={{ backgroundImage: `url(${c.img_url})` }} />
             <p title={`${c.first_name} ${c.last_name}`}>{ `${c.first_name} ${c.last_name}` }</p>
