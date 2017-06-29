@@ -78,7 +78,6 @@
     "style-loader": "^0.17.0",
     "twemoji": "^2.2.5",
     "url-loader": "^0.5.8",
-    "uuid": "^3.1.0",
     "vinyl-buffer": "^1.0.0",
     "vinyl-source-stream": "^1.1.0",
     "watchify": "^3.6.1",
