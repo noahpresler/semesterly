@@ -1,7 +1,7 @@
 import fetch from 'isomorphic-fetch';
 import Cookie from 'js-cookie';
 import { normalize } from 'normalizr';
-import { timetableSchema, courseSchema } from '../schema';
+import { courseSchema } from '../schema';
 import { getActiveTimetableCourses, getCurrentSemester } from '../reducers/root_reducer';
 import { getTimetablesEndpoint } from '../constants/endpoints';
 import {
@@ -22,7 +22,6 @@ export const alertConflict = () => ({ type: ActionTypes.ALERT_CONFLICT });
 export const receiveTimetables = timetables => ({
   type: ActionTypes.RECEIVE_TIMETABLES,
   timetables,
-  response: normalize(timetables, [timetableSchema]),
 });
 
 export const requestTimetables = () => ({ type: ActionTypes.REQUEST_TIMETABLES });
