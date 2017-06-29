@@ -2,6 +2,7 @@ import PropTypes from 'prop-types';
 import React from 'react';
 import ClickOutHandler from 'react-onclickout';
 import COLOUR_DATA from '../constants/colours';
+import * as SemesterlyPropTypes from '../constants/semesterlyPropTypes';
 
 class MasterSlot extends React.Component {
   constructor(props) {
@@ -54,7 +55,7 @@ class MasterSlot extends React.Component {
           />);
       }
     } else {
-      friendCircles = this.props.classmates.map(c => (
+      friendCircles = this.props.classmates.current.map(c => (
         <div
           className="ms-friend"
           key={c.img_url}
@@ -63,7 +64,7 @@ class MasterSlot extends React.Component {
       ));
     }
 
-    if ((this.props.classmates.length > 0 && friendCircles.length > 4)
+    if ((this.props.classmates.current.length > 0 && friendCircles.length > 4)
             || (this.props.fakeFriends && this.props.fakeFriends > 4)) {
       const plusMore = `${friendCircles.length - 3}+`;
       friendCircles = [<div
@@ -78,7 +79,7 @@ class MasterSlot extends React.Component {
     const numCredits = this.props.course.num_credits;
     let creditsDisplay = numCredits === 1 ? ' credit' : ' credits';
     creditsDisplay = numCredits + creditsDisplay;
-    const profDisp = this.props.professors == null ? null : <h3>{ prof }</h3>;
+    const profDisp = this.props.professors === null ? null : <h3>{ prof }</h3>;
     const shareLink = this.state.shareLinkShown ?
             (<ShareLink
               link={this.props.getShareLink(this.props.course.code)}
@@ -153,6 +154,7 @@ MasterSlot.defaultProps = {
   professors: null,
   slots: null,
   removeCourse: null,
+  classmates: { current: [], past: [] },
 };
 
 MasterSlot.propTypes = {
@@ -170,9 +172,7 @@ MasterSlot.propTypes = {
     })),
   }).isRequired,
   professors: PropTypes.arrayOf(PropTypes.string),
-  classmates: PropTypes.arrayOf(PropTypes.shape({
-    img_url: PropTypes.string,
-  })).isRequired,
+  classmates: SemesterlyPropTypes.classmates,
   hideCloseButton: PropTypes.bool,
   onTimetable: PropTypes.bool.isRequired,
   fetchCourseInfo: PropTypes.func.isRequired,
