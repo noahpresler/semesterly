@@ -1,5 +1,8 @@
 import { connect } from 'react-redux';
-import { getActiveDenormTimetable, getHoveredSlots } from '../../reducers/root_reducer';
+import {
+  getActiveDenormTimetable,
+  getHoveredSlots,
+  getDenormCourseById } from '../../reducers/root_reducer';
 import { fetchCourseInfo } from '../../actions/modal_actions';
 import {
     addCustomSlot,
@@ -26,8 +29,8 @@ const mapStateToProps = (state, ownProps) => ({
   primaryDisplayAttribute: getSchoolSpecificInfo(state.school.school).primaryDisplay,
   courseToColourIndex: state.ui.courseToColourIndex,
   custom: state.customSlots,
-  isCourseOptional: cid => state.optionalCourses.courses.findIndex(c => c.id === cid) > -1,
-  getOptionalCourseById: cid => state.optionalCourses.courses.find(c => c.id === cid),
+  isCourseOptional: cid => state.optionalCourses.courses.some(c => c === cid),
+  getOptionalCourseById: cid => getDenormCourseById(state, cid),
   classmates: (id, sec) => {
     const cm = state.classmates.courseToClassmates ? state.classmates.courseToClassmates
         .find(course => course.course_id === id) : [];
