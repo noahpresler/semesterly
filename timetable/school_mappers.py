@@ -71,7 +71,7 @@ school_to_semesters = {
     'umd': [_sem('Spring', '2017'), _sem('Fall', '2016'), _sem('Fall', '2017')],
     'rutgers': [_sem('Spring', '2017'), _sem('Fall', '2016')],
     # 'uo': [_sem('Spring', '2017'), _sem('Fall', '2016')],
-    'queens': [_sem('Winter', '2017'), _sem('Fall', '2016')],
+    'queens': [_sem('Winter', '2018'), _sem('Fall', '2017'), _sem('Winter', '2017'), _sem('Fall', '2016')],
     'vandy': [_sem('Fall', '2017'), _sem('Spring', '2017'), _sem('Fall', '2016')],
     'gw': [_sem('Fall', '2017'), _sem('Spring', '2017')],
     'umich': [_sem('Fall', '2017'), _sem('Winter', '2017'), _sem('Fall', '2016')],
