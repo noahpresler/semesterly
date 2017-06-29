@@ -13,16 +13,13 @@ export const fullCourseDetails = PropTypes.shape({
   areas: PropTypes.string,
 });
 
-export const classmates = PropTypes.oneOfType([
-  PropTypes.arrayOf(
-    PropTypes.shape({
-      img_url: PropTypes.string,
-      first_name: PropTypes.string,
-      last_name: PropTypes.string,
-    }),
-  ),
-  PropTypes.shape({}),
-]);
+export const classmates = PropTypes.arrayOf(
+  PropTypes.shape({
+    img_url: PropTypes.string,
+    first_name: PropTypes.string,
+    last_name: PropTypes.string,
+  }),
+);
 
 export const textbook = PropTypes.shape({
   author: PropTypes.string.isRequired,
