@@ -11,7 +11,7 @@ from analytics.models import SharedTimetable
 from analytics.views import save_analytics_timetable
 from courses.serializers import CourseSerializer
 from student.utils import get_student
-from timetable.serializers import convert_tt_to_dict, DisplayTimetableSerializer
+from timetable.serializers import DisplayTimetableSerializer
 from timetable.models import Semester, Course, Section
 from timetable.utils import update_locked_sections, courses_to_timetables, DisplayTimetable
 from helpers.mixins import ValidateSubdomainMixin, FeatureFlowView, CsrfExemptMixin

@@ -1,3 +1,4 @@
+from django.contrib.auth.models import User
 from django.test import TestCase
 from rest_framework import status
 from rest_framework.test import APITestCase
@@ -7,35 +8,58 @@ from analytics.models import SharedTimetable
 from timetable.models import Semester, Course, Section, Offering
 from timetable.utils import DisplayTimetable
 from timetable.serializers import DisplayTimetableSerializer
+from student.models import Student, PersonalTimetable, PersonalEvent
 from helpers.test.test_cases import UrlTestCase
 
 
 class Serializers(TestCase):
 
-    def test_timetable_serialization(self):
+    def setUp(self):
         self.sem_name = 'Winter'
         self.year = '1995'
         self.cid = 1
         self.name = 'Intro'
         self.code = 'SEM101'
         self.school = 'uoft'
-        sem = Semester.objects.create(name=self.sem_name, year=self.year)
-        course = Course.objects.create(
+        self.sem = Semester.objects.create(name=self.sem_name, year=self.year)
+        self.course = Course.objects.create(
             id=self.cid,
             school=self.school,
             code=self.code,
             name=self.name)
-        section = Section.objects.create(
-            course=course, semester=sem, meeting_section='L1')
-        Offering.objects.create(
-            section=section,
+        self.section = Section.objects.create(
+            course=self.course, semester=self.sem, meeting_section='L1')
+        self.offering = Offering.objects.create(
+            section=self.section,
             day='M',
             time_start='8:00',
             time_end='10:00')
+        self.event = PersonalEvent.objects.create(name='gym', day='T',
+                                                  time_start='7:00', time_end='8:30')
 
-        timetable = SharedTimetable.objects.create(semester=sem, school='uoft', has_conflict=False)
-        timetable.courses.add(course)
-        timetable.sections.add(section)
+        self.user = User.objects.create_user(username='jacob', password='top_secret')
+        self.student = Student.objects.create(user=self.user)
+
+    def test_shared_timetable_serialization(self):
+        timetable = SharedTimetable.objects.create(semester=self.sem, school='uoft',
+                                                   has_conflict=False)
+        timetable.courses.add(self.course)
+        timetable.sections.add(self.section)
+
+        display = DisplayTimetable.from_timetable_model(timetable)
+        self.assertEqual(len(display.slots), 1)
+        self.assertIsInstance(display.slots[0].course, Course)
+
+        serialized = DisplayTimetableSerializer(display).data
+        self.assertEqual(len(serialized['slots']), 1)
+        self.assertIsInstance(serialized['slots'][0]['course'], int)
+
+    def test_personal_timetable_serialization(self):
+        timetable = PersonalTimetable.objects.create(semester=self.sem, school='uoft',
+                                                     has_conflict=False, student=self.student)
+        timetable.courses.add(self.course)
+        timetable.sections.add(self.section)
+        timetable.events.add(self.event)
 
         display = DisplayTimetable.from_timetable_model(timetable)
         self.assertEqual(len(display.slots), 1)
