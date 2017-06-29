@@ -69,9 +69,7 @@ export const getActiveTTIndex = state => state.active;
 
 export const getAllTTs = state => state.items;
 
-export const getTimetableIds = state => state.ids;
-
-export const getActiveTimetableId = state => state.ids[state.active];
+export const getActiveTimetable = state => state.ids[state.active];
 
 export const getHoveredSlots = state => (state.hovered ? [state.hovered] : []);
 

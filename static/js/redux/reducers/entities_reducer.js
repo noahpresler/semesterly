@@ -66,20 +66,14 @@ export const getDenormSlot = (state, slot) => {
   }
 };
 
-export const getActiveTimetable = (state, id) => {
-  return state.timetables[id];
-};
-
-export const getActiveDenormTimetable = (state, id) => {
-  const timetable = getActiveTimetable(state, id);
+export const getActiveDenormTimetable = (state, timetable) => {
   return {
     ...timetable,
     slots: timetable.slots.map(slot => getDenormSlot(state, slot)),
   };
 };
 
-export const getTimetableCourses = (state, id) => {
-  const timetable = state.timetables[id];
+export const getTimetableCourses = (state, timetable) => {
   const courseIds = uniq(timetable.slots.map(slot => slot.course));
   return courseIds.map(courseId => getCourseById(state, courseId));
 };

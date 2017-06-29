@@ -71,18 +71,13 @@ export const getDenormCourseById = (state, id) =>
 
 export const getCurrentSemester = state => fromSemester.getCurrentSemester(state.semester);
 
+export const getActiveTimetable = state => fromTimetables.getActiveTimetable(state.timetables);
+
 export const getActiveDenormTimetable = state =>
-  fromEntities.getActiveDenormTimetable(state.entities,
-    fromTimetables.getActiveTimetableId(state.timetables));
+  fromEntities.getActiveDenormTimetable(state.entities, getActiveTimetable(state));
 
-export const getActiveTimetable = state =>
-  fromEntities.getActiveTimetable(state.entities,
-    fromTimetables.getActiveTimetableId(state.timetables));
-
-export const getActiveTimetableCourses = (state) => {
-  const activeId = fromTimetables.getActiveTimetableId(state.timetables);
-  return fromEntities.getTimetableCourses(state.entities, activeId);
-};
+export const getActiveTimetableCourses = state =>
+  fromEntities.getTimetableCourses(state.entities, getActiveTimetable(state));
 
 export const getActiveTT = state => fromTimetables.getActiveTT(state.timetables);
 
