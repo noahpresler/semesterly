@@ -63,6 +63,8 @@ const timetables = (state = initialState, action) => {
   }
 };
 
+export const getTimetables = state => state.items;
+
 export const getActiveTimetable = state => state.items[state.active];
 
 export const getHoveredSlots = state => (state.hovered ? [state.hovered] : []);
