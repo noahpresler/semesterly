@@ -14,8 +14,8 @@ const ui = (state = initialState, action) => {
       return Object.assign({}, state, { uses12HrTime: action.data.uses12HrTime });
     case ActionTypes.HOVER_SEARCH_RESULT:
       return Object.assign({}, state, { searchHover: action.position });
-    case ActionTypes.RECEIVE_TIMETABLES: {
-      const courses = action.timetables.length > 0 ? action.timetables[0].courses : [];
+    case ActionTypes.RECEIVE_COURSES: {
+      const courses = action.response.result;
 
       // TODO: remove one of saving/preset, using both is redundant. rename to recalculateColours?
       let courseToColourIndex = state.courseToColourIndex;
