@@ -1,5 +1,6 @@
 import * as ActionTypes from '../constants/actionTypes';
 import { getNextAvailableColour } from '../util';
+import { getCourseIdsFromSlots } from '../reducers/entities_reducer';
 
 const initialState = {
   searchHover: 0,
@@ -14,8 +15,9 @@ const ui = (state = initialState, action) => {
       return Object.assign({}, state, { uses12HrTime: action.data.uses12HrTime });
     case ActionTypes.HOVER_SEARCH_RESULT:
       return Object.assign({}, state, { searchHover: action.position });
-    case ActionTypes.RECEIVE_COURSES: {
-      const courses = action.response.result;
+    case ActionTypes.RECEIVE_TIMETABLES: {
+      const courses = action.timetables.length > 0 ?
+        getCourseIdsFromSlots(action.timetables[0].slots) : [];
 
       // TODO: remove one of saving/preset, using both is redundant. rename to recalculateColours?
       let courseToColourIndex = state.courseToColourIndex;
@@ -23,9 +25,9 @@ const ui = (state = initialState, action) => {
         courseToColourIndex = {};
       }
 
-      courses.forEach((course) => {
-        courseToColourIndex[course.id] =
-          courseToColourIndex[course.id] || getNextAvailableColour(courseToColourIndex);
+      courses.forEach((courseId) => {
+        courseToColourIndex[courseId] =
+          courseToColourIndex[courseId] || getNextAvailableColour(courseToColourIndex);
       });
 
       return { ...state, courseToColourIndex };
