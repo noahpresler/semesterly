@@ -1,4 +1,3 @@
-import { createSelector } from 'reselect';
 import { saveLocalActiveIndex } from '../util';
 import * as ActionTypes from '../constants/actionTypes';
 
@@ -64,17 +63,8 @@ const timetables = (state = initialState, action) => {
   }
 };
 
-export const getActiveTTIndex = state => state.active;
-
-export const getAllTTs = state => state.items;
-
 export const getActiveTimetable = state => state.items[state.active];
 
 export const getHoveredSlots = state => (state.hovered ? [state.hovered] : []);
-
-export const getActiveTT = createSelector(
-  [getActiveTTIndex, getAllTTs],
-  (activeIndex, allTTs) => allTTs[activeIndex],
-);
 
 export default timetables;
