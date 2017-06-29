@@ -157,7 +157,7 @@ class SlotManager extends React.Component {
             key={slot.id + i.toString() + j.toString()}
             locked={locked}
             classmates={this.props.socialSections ?
-              this.props.classmates(courseId, slot.meeting_section) : []}
+              this.props.getClassmatesInSection(courseId, slot.meeting_section) : []}
             lockOrUnlockSection={() => this.props.addOrRemoveCourse(courseId, slot.meeting_section)}
             removeCourse={() => {
               if (!isOptional) {
@@ -212,7 +212,7 @@ SlotManager.propTypes = {
   courseToColourIndex: PropTypes.shape({
     '*': PropTypes.number,
   }).isRequired,
-  classmates: PropTypes.func.isRequired,
+  getClassmatesInSection: PropTypes.func.isRequired,
   custom: PropTypes.arrayOf(PropTypes.oneOfType([SemesterlyPropTypes.customSlot,
     PropTypes.shape({})])).isRequired,
   primaryDisplayAttribute: PropTypes.string.isRequired,
