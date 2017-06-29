@@ -1,12 +1,12 @@
 import fetch from 'isomorphic-fetch';
 import Cookie from 'js-cookie';
 import * as ActionTypes from '../constants/actionTypes';
-import { getActiveTT } from '../reducers/root_reducer';
+import { getActiveTimetable } from '../reducers/root_reducer';
 import { getRequestShareExamLinkEndpoint, getFinalExamSchedulerEndpoint } from '../constants/endpoints';
 
 export const fetchFinalExamSchedule = () => (dispatch, getState) => {
   const state = getState();
-  const timetable = getActiveTT(state);
+  const timetable = getActiveTimetable(state);
   dispatch({ type: ActionTypes.FETCH_FINAL_EXAMS });
   fetch(getFinalExamSchedulerEndpoint(), {
     headers: {
@@ -26,7 +26,7 @@ export const fetchFinalExamSchedule = () => (dispatch, getState) => {
 
 export const getFinalExamShareLink = () => (dispatch, getState) => {
   const state = getState();
-  const timetable = getActiveTT(state);
+  const timetable = getActiveTimetable(state);
   fetch(getRequestShareExamLinkEndpoint(), {
     headers: {
       'X-CSRFToken': Cookie.get('csrftoken'),

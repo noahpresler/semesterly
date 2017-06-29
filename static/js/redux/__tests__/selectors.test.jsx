@@ -1,17 +1,7 @@
-import * as selectors from '../reducers/root_reducer';
 import {
   getSectionTypeToSections,
   getMaxEndHour,
 } from '../reducers/entities_reducer';
-
-describe('timetable selectors', () => {
-  describe('active TT selector', () => {
-    it('gets correct timetable', () => {
-      const state = { timetables: { items: [0, 1, 2, 3, 4], active: 2 } };
-      expect(selectors.getActiveTT(state)).toEqual(2);
-    });
-  });
-});
 
 describe('course selectors', () => {
   describe('section type to sections selector', () => {
