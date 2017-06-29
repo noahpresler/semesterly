@@ -7,7 +7,8 @@ from hashids import Hashids
 
 from student.models import Student, PersonalTimetable
 from timetable.models import Course
-from timetable.serializers import convert_tt_to_dict
+from timetable.serializers import DisplayTimetableSerializer
+from timetable.utils import DisplayTimetable
 
 DAY_LIST = ['M', 'T', 'W', 'R', 'F', 'S', 'U']
 
@@ -74,7 +75,7 @@ def make_token(student):
 
 
 def get_student_tts(student, school, semester):
-    tts = student.personaltimetable_set.filter(
+    timetables = student.personaltimetable_set.filter(
         school=school, semester=semester).order_by('-last_updated')
-    tts_list = [convert_tt_to_dict(tt) for tt in tts]
-    return tts_list
+    displayed_timetables = [DisplayTimetable.from_timetable_model(tt) for tt in timetables]
+    return DisplayTimetableSerializer(displayed_timetables, many=True).data
