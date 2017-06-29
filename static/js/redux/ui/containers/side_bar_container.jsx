@@ -24,21 +24,22 @@ import { getCoursesFromDenormSlots } from '../../reducers/entities_reducer';
 const mapStateToProps = (state) => {
   const timetable = getActiveDenormTimetable(state);
   const partitioned = partition(timetable.slots, slot => slot.is_optional);
-  const [optional, mandatory] = partitioned.map(slots => getCoursesFromDenormSlots(slots));
+  const [optionalCourses, mandatoryCourses] = // ALL optional courses, including not in timetable
+    partitioned.map(slots => getCoursesFromDenormSlots(slots));
   return {
     semester: getCurrentSemester(state),
     semesterIndex: state.semester.current,
     examSupportedSemesters: state.semester.exams,
     // don't want to consider courses that are shown on timetable only
     // because of a 'HOVER_COURSE' action (i.e. fake courses)
-    allCourses: optional + mandatory,
+    activeCourses: optionalCourses.concat(mandatoryCourses),
     savedTimetables: state.userInfo.data.timetables,
     courseToColourIndex: state.ui.courseToColourIndex,
     classmates: state.classmates.courseToClassmates,
     avgRating: timetable.avg_rating,
-    isCourseInRoster: courseId => timetable.courses.some(c => c.id === courseId),
-    mandatory,
-    optional,
+    isCourseInRoster: courseId => timetable.slots.some(s => s.course.id === courseId),
+    mandatoryCourses,
+    optionalCourses,
     hasLoaded: !state.timetables.isFetching,
     getShareLink: courseCode => getCourseShareLink(courseCode, getCurrentSemester(state)),
   };
