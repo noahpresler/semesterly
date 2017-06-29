@@ -3,40 +3,47 @@ from rest_framework import status
 from rest_framework.test import APITestCase
 from helpers.test.data import get_default_tt_request
 
+from analytics.models import SharedTimetable
 from timetable.models import Semester, Course, Section, Offering
+from timetable.utils import DisplayTimetable
+from timetable.serializers import DisplayTimetableSerializer
 from helpers.test.test_cases import UrlTestCase
 
 
 class Serializers(TestCase):
 
     def test_timetable_serialization(self):
-        # TODO: readd for DisplayTimetable
-        # self.sem_name = 'Winter'
-        # self.year = '1995'
-        # self.cid = 1
-        # self.name = 'Intro'
-        # self.code = 'SEM101'
-        # self.school = 'uoft'
-        # sem = Semester.objects.create(name=self.sem_name, year=self.year)
-        # course = Course.objects.create(
-        #     id=self.cid,
-        #     school=self.school,
-        #     code=self.code,
-        #     name=self.name)
-        # section = Section.objects.create(
-        #     course=course, semester=sem, meeting_section='L1')
-        # Offering.objects.create(
-        #     section=section,
-        #     day='M',
-        #     time_start='8:00',
-        #     time_end='10:00')
-        #
-        # my_tt = Timetable(courses=[course], sections=[section], has_conflict=False)
-        # serialized = TimetableSerializer(my_tt)
-        #
-        # self.assertEqual(serialized.data['courses'][0]['code'], self.code)
-        # self.assertEqual(serialized.data['semester']['name'], self.sem_name)
-        pass
+        self.sem_name = 'Winter'
+        self.year = '1995'
+        self.cid = 1
+        self.name = 'Intro'
+        self.code = 'SEM101'
+        self.school = 'uoft'
+        sem = Semester.objects.create(name=self.sem_name, year=self.year)
+        course = Course.objects.create(
+            id=self.cid,
+            school=self.school,
+            code=self.code,
+            name=self.name)
+        section = Section.objects.create(
+            course=course, semester=sem, meeting_section='L1')
+        Offering.objects.create(
+            section=section,
+            day='M',
+            time_start='8:00',
+            time_end='10:00')
+
+        timetable = SharedTimetable.objects.create(semester=sem, school='uoft', has_conflict=False)
+        timetable.courses.add(course)
+        timetable.sections.add(section)
+
+        display = DisplayTimetable.from_timetable_model(timetable)
+        self.assertEqual(len(display.slots), 1)
+        self.assertIsInstance(display.slots[0].course, Course)
+
+        serialized = DisplayTimetableSerializer(display).data
+        self.assertEqual(len(serialized['slots']), 1)
+        self.assertIsInstance(serialized['slots'][0]['course'], int)
 
 
 class UrlsTest(UrlTestCase):

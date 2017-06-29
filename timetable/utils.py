@@ -27,9 +27,9 @@ class DisplayTimetable:
     @classmethod
     def from_timetable_model(cls, timetable):
         """ Create DisplayTimetable from Timetable instance. """
-        slots = [Slot(section.course, section, section.offering_set,
+        slots = [Slot(section.course, section, section.offering_set.all(),
                       is_optional=False, is_locked=True)
-                 for section in timetable.sections]
+                 for section in timetable.sections.all()]
         return DisplayTimetable(slots, timetable.has_conflict, getattr(timetable, 'name', ''))
 
 
