@@ -66,6 +66,8 @@ const rootReducer = combineReducers({
 });
 
 // timetable/entity selectors
+export const getTimetables = state => fromTimetables.getTimetables(state.timetables);
+
 export const getDenormCourseById = (state, id) =>
   fromEntities.getDenormCourseById(state.entities, id);
 

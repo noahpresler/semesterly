@@ -2,7 +2,10 @@ import fetch from 'isomorphic-fetch';
 import Cookie from 'js-cookie';
 import { normalize } from 'normalizr';
 import { courseSchema } from '../schema';
-import { getActiveTimetableCourses, getCurrentSemester } from '../reducers/root_reducer';
+import {
+  getActiveTimetable,
+  getActiveTimetableCourses,
+  getCurrentSemester } from '../reducers/root_reducer';
 import { getTimetablesEndpoint } from '../constants/endpoints';
 import {
     browserSupportsLocalStorage,
@@ -254,9 +257,7 @@ export const handleCreateNewTimetable = () => (dispatch, getState) => {
     return { type: ActionTypes.TOGGLE_SIGNUP_MODAL };
   }
 
-  const { timetables: timetablesState } = state;
-
-  if (timetablesState.items[timetablesState.active].courses.length > 0
+  if (getActiveTimetable(state).slots.length > 0
     && !state.savingTimetable.upToDate) {
     return { type: ActionTypes.ALERT_NEW_TIMETABLE };
   }
