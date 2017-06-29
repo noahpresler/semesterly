@@ -63,9 +63,11 @@ class SeleniumTest(StaticLiveServerTestCase):
     def setUpClass(self):
         super(SeleniumTest, self).setUpClass()
         self.TIMEOUT = 10
-        self.driver = None
         socket.setdefaulttimeout(3 * self.TIMEOUT)
-        self.driver = webdriver.Chrome()
+        chrome_options = webdriver.ChromeOptions()
+        prefs = {"profile.default_content_setting_values.notifications" : 2}
+        chrome_options.add_experimental_option("prefs",prefs)
+        self.driver = webdriver.Chrome(chrome_options=chrome_options)
 
     @classmethod
     def tearDownClass(self):
@@ -82,15 +84,18 @@ class SeleniumTest(StaticLiveServerTestCase):
 
     def get_test_url(self, school, path = '/'):
         url = '%s%s' % (self.live_server_url, '/')
-        return url.replace('http://', 'http://%s.' % school)
+        url = url.replace('http://', 'http://%s.' % school)
+        return url.replace('localhost', 'sem.ly')
 
-    def locate_and_get(self, locator, get_all=False, root=None, clickable=False):
+    def locate_and_get(self, locator, get_all=False, root=None, clickable=False, hidden=False):
         if get_all and clickable:
             raise RuntimeError("Cannot use both get_all and clickable")
         elif get_all:
            ec = EC.presence_of_all_elements_located(locator)
         elif clickable:
             ec = EC.element_to_be_clickable(locator)
+        elif hidden:
+            ec = EC.presence_of_element_located(locator)
         else:
             ec = EC.visibility_of_element_located(locator)
         try:
@@ -152,6 +157,7 @@ class SeleniumTest(StaticLiveServerTestCase):
                 .click().move_to_element(chosen_course).perform()
         self.assert_loader_completes()
         self.assert_slot_presence(n_slots, n_master_slots)
+        self.click_off()
 
     def assert_n_elements_found(self, locator, n, root=None):
         if n == 0:
@@ -355,6 +361,17 @@ class SeleniumTest(StaticLiveServerTestCase):
         search.send_keys(query)
         if n_results:
             self.assert_n_elements_found((By.CLASS_NAME, 'exp-s-result'), n_results)
+        
+    def login_via_fb(self, email, password):
+        self.locate_and_get((By.CLASS_NAME, 'social-login'), clickable=True).click()
+        self.locate_and_get((By.CLASS_NAME, 'fb-btn'), clickable=True).click()
+        self.locate_and_get((By.XPATH, '/html[@id="facebook"]'))
+        email_input = self.locate_and_get((By.ID, 'email'))
+        email_input.send_keys(email)
+        pass_input = self.locate_and_get((By.ID, 'pass'))
+        pass_input.send_keys(password)
+        self.locate_and_get((By.ID, 'loginbutton')).click()
+        # self.locate_and_get((By.XPATH, "//button[@type='submit' and contains(text(), 'Continue as')]"), clickable=True).click()
 
     def select_nth_adv_search_result(self, n, semester):
         res = self.locate_and_get((By.CLASS_NAME, 'exp-s-result'), get_all=True)
@@ -368,6 +385,76 @@ class SeleniumTest(StaticLiveServerTestCase):
             ))
         modal = self.locate_and_get((By.CLASS_NAME, 'exp-modal'))
         self.validate_course_modal_body(course, modal, semester)
+
+    def save_user_settings(self):
+        self.locate_and_get((By.CLASS_NAME, 'signup-button')).click()
+        self.assert_invisibility((By.CLASS_NAME, 'welcome-modal'))
+    
+    def complete_user_settings_basics(self, major, class_year):
+        modal = self.locate_and_get((By.CLASS_NAME, 'welcome-modal'))
+        major_select, year_select = self.locate_and_get(
+            (By.XPATH,
+             "//div[contains(@class,'Select-input')]//input"),
+              get_all=True,
+              hidden=True
+        )
+        major_select.send_keys(major)
+        self.locate_and_get(
+            (By.XPATH,
+            "//div[contains(@id,'react-select-')]"),
+        ).click()
+        year_select.send_keys(class_year)
+        self.locate_and_get(
+            (By.XPATH,
+            "//div[contains(@id,'react-select-')]"),
+        ).click()
+        self.locate_and_get(
+            (By.XPATH,
+            "//span[contains(@class, 'switch-label') and contains(@data-off, 'CLICK TO ACCEPT')]")
+        ).click()
+        self.locate_and_get((
+            By.XPATH,
+            "//input[contains(@id, 'tos-agreed-input') and contains(@value, 'on')]"
+        ), hidden=True)
+        self.save_user_settings()
+    
+    def change_ptt_name(self, name):
+        name_input = self.locate_and_get((By.CLASS_NAME, 'timetable-name'))
+        name_input.clear()        
+        name_input.send_keys(name)
+        self.click_off()
+    
+    def save_ptt(self):
+        self.locate_and_get((By.CLASS_NAME, 'fa-floppy-o')).click()
+        self.assert_invisibility((
+            By.XPATH,
+            "//input[contains(@class, 'timetable-name) and contains(@class, 'unsaved')]")
+        )
+    
+    def assert_ptt_constant_across_refresh(self):
+        slots = self.get_elements_as_text((By.CLASS_NAME, 'slot'))
+        master_slots = self.get_elements_as_text((By.CLASS_NAME, 'master-slot'))
+        tt_name = self.get_elements_as_text((By.CLASS_NAME, 'timetable-name'))  
+        self.driver.refresh()
+        self.assertEqual(slots, self.get_elements_as_text((By.CLASS_NAME, 'slot')))
+        self.assertEqual(master_slots, self.get_elements_as_text((By.CLASS_NAME, 'master-slot')))
+        self.assertEqual(tt_name, self.get_elements_as_text((By.CLASS_NAME, 'timetable-name')))                
+
+    def get_elements_as_text(self, locator):
+        eles = self.locate_and_get(locator, get_all=True)
+        return map(lambda s: s.text, eles)
+    
+    def create_ptt(self, name):
+        self.locate_and_get((
+            By.XPATH,
+            "//button[contains(@class,'add-button')]//i[contains(@class,'fa fa-plus')]"
+        )).click()
+        name_input = self.locate_and_get((By.CLASS_NAME, 'timetable-name'))        
+        WebDriverWait(self.driver, self.TIMEOUT) \
+            .until(EC.text_to_be_present_in_element_value(
+                (By.CLASS_NAME, 'timetable-name'),
+                'Untitled Schedule'
+            ))      
 
     def test_logged_out_flow(self):
         with description("setup and clear tutorial"):
@@ -429,3 +516,39 @@ class SeleniumTest(StaticLiveServerTestCase):
             self.select_nth_adv_search_result(1, sem)
             #TODO more tests on advanced search
             #TODO have self.sem track semester
+
+    def test_logged_in_via_fb_flow(self):
+        with description("setup and clear tutorial"):
+            self.driver.set_window_size(1440, 1080)
+            self.clear_tutorial()
+        with description("succesfully signup with facebook"):
+            self.login_via_fb(
+                email='***REMOVED***', 
+                password='***REMOVED***'
+            )
+            self.complete_user_settings_basics(
+                major='Computer Science',
+                class_year=2017
+            )
+        with description("search, add, change personal timetable name and save"):
+            self.search_course('calc', 3)
+            self.add_course(0, n_slots=4, n_master_slots=1)
+            self.change_ptt_name("Testing Timetable")
+            self.save_ptt()
+            self.assert_ptt_constant_across_refresh()
+        with description("add to personal timetable, share, save"):
+            self.search_course('calc', 3)            
+            self.open_course_modal_from_search(1)
+            self.share_timetable([
+                self.add_course_from_course_modal(
+                    n_slots=8, n_master_slots=2
+                )
+            ])
+            self.save_ptt()
+            self.assert_ptt_constant_across_refresh()
+        with description("create new personal timetable, validate on reload"):
+            self.create_ptt("End To End Testing!")
+            self.search_course('calc', 3)                        
+            self.add_course(0, n_slots=4, n_master_slots=1)            
+            self.save_ptt()
+            self.assert_ptt_constant_across_refresh()
