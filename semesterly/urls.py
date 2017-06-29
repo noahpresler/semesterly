@@ -33,8 +33,6 @@ urlpatterns = patterns('',
                        url(r'^sw(.*.js)$', semesterly.views.sw_js, name='sw_js'),
                        url(r'^manifest(.*.json)$', semesterly.views.manifest_json, name='manifest_json'),
 
-                       # profiling
-                       url(r'^silk/', include('silk.urls', namespace='silk')),
 
                        # error page testing
                        url(r'^404testing/', TemplateView.as_view(template_name='404.html')),

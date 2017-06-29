@@ -141,7 +141,6 @@ INSTALLED_APPS = (
     'scripts',
     'student',
     'cachalot',
-    'silk',
     'rest_framework',
     'rest_framework_swagger',
     'webpack_loader',
@@ -162,7 +161,6 @@ MIDDLEWARE_CLASSES = (
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'semesterly.middleware.subdomain_middleware.SubdomainMiddleware',
     'social.apps.django_app.middleware.SocialAuthExceptionMiddleware',
-    'silk.middleware.SilkyMiddleware',
     'rollbar.contrib.django.middleware.RollbarNotifierMiddleware',
 )
 
@@ -204,12 +202,7 @@ DATABASES = {
     }
 }
 
-# Silk auth
-SILKY_AUTHENTICATION = True  # User must login
-SILKY_AUTHORISATION = True  # User must have permissions
-
 # Logging
-
 LOGFILE = PROJECT_DIRECTORY + '/logfile.txt'
 
 LOGGING = {
