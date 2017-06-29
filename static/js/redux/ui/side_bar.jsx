@@ -70,7 +70,7 @@ class SideBar extends React.Component {
         />);
       }) : null;
 
-    let optionalSlots = this.props.activeCourses ? this.props.optionalCourses.map((course) => {
+    let optionalSlots = this.props.coursesInTimetable ? this.props.optionalCourses.map((course) => {
       const classmates = this.props.classmates ?
         this.props.classmates.find(classmate => classmate.course_id === course.id) : [];
       if (!(course.id in this.props.courseToColourIndex)) {
@@ -188,7 +188,7 @@ class SideBar extends React.Component {
           </h4>
         </a>
         <div className="side-bar-section">
-          <TextbookList courses={this.props.activeCourses} />
+          <TextbookList courses={this.props.coursesInTimetable} />
         </div>
       </div>
     );
@@ -208,7 +208,7 @@ SideBar.propTypes = {
   })),
   mandatoryCourses: PropTypes.arrayOf(SemesterlyPropTypes.course).isRequired,
   optionalCourses: PropTypes.arrayOf(SemesterlyPropTypes.course).isRequired,
-  activeCourses: PropTypes.arrayOf(SemesterlyPropTypes.course).isRequired,
+  coursesInTimetable: PropTypes.arrayOf(SemesterlyPropTypes.course).isRequired,
   courseToColourIndex: PropTypes.shape({
     id: PropTypes.string,
   }).isRequired,
