@@ -90,6 +90,22 @@ class Command(BaseCommand):
 			tracker.start()
 
 			try:
+				# Accept json defined years_and_terms.
+				years_and_terms = json.loads(str(options.get('years_and_terms')))
+				years_and_terms = {int(year): terms for year, terms in years_and_terms.items()}
+
+				# TEMP: superficial hack to be completed once pep8 compliance is complete
+				#  in order to avoid nasty merge conflicts, must integrate into each parser
+				options['years'] = map(str, years_and_terms.keys())
+				options['terms'] = []
+				for year, terms in years_and_terms.items():
+					for term in terms:
+						options['terms'].append(term) 
+
+			except json.JSONDecodeError:
+				pass
+
+			try:
 				p.start(
 					verbosity=options['verbosity'],
 					years=options.get('years'),
