@@ -6,7 +6,9 @@ from selenium.webdriver.common.by import By
 from selenium.common.exceptions import TimeoutException, StaleElementReferenceException
 from selenium.webdriver.common.action_chains import ActionChains
 from django.test.utils import override_settings
+from django.contrib.auth.models import User
 from timetable.models import Semester, Course, Section, Offering
+from student.models import Student, PersonalTimetable
 from contextlib import contextmanager
 import socket, itertools, re
 
@@ -82,10 +84,10 @@ class SeleniumTest(StaticLiveServerTestCase):
         self.driver.execute_script('window.localStorage.clear();')
         self.driver.delete_all_cookies()
 
-    def get_test_url(self, school, path = '/'):
+    def get_test_url(self, school, path = ''):
         url = '%s%s' % (self.live_server_url, '/')
         url = url.replace('http://', 'http://%s.' % school)
-        return url.replace('localhost', 'sem.ly')
+        return url.replace('localhost', 'sem.ly') + path
 
     def locate_and_get(self, locator, get_all=False, root=None, clickable=False, hidden=False):
         if get_all and clickable:
@@ -195,9 +197,9 @@ class SeleniumTest(StaticLiveServerTestCase):
             year = url_match.group(3)
         )
         course = Course.objects.get(code=code)
-        modal = self.locate_and_get((By.CLASS_NAME, 'course-modal'))        
+        modal = self.locate_and_get((By.CLASS_NAME, 'course-modal'))
         self.validate_course_modal_body(course, modal, semester)
-    
+
     def validate_course_modal_body(self, course, modal, semester):
         modal_body = self.locate_and_get((By.CLASS_NAME, 'modal-body'), root=modal)
         modal_header = self.locate_and_get((By.CLASS_NAME, 'modal-header'), root=modal)
@@ -212,7 +214,7 @@ class SeleniumTest(StaticLiveServerTestCase):
             semester=semester
         ).count()
         self.assertEqual(n_sections, len(self.locate_and_get((By.CLASS_NAME, 'modal-section'), get_all=True)))
-        
+
     def open_course_modal_from_slot(self, course_idx):
         slot = self.locate_and_get((By.CLASS_NAME, 'slot'), clickable=True)
         slot.click()
@@ -306,7 +308,7 @@ class SeleniumTest(StaticLiveServerTestCase):
             "//div[@class='react-alerts']//div[contains(@class,'alert')]")
         )
         self.assertTrue(alert_text_contains in alert.text)
-    
+
     def take_alert_action(self):
         alert = self.locate_and_get(
             (By.XPATH,
@@ -327,14 +329,14 @@ class SeleniumTest(StaticLiveServerTestCase):
 
     def change_term(self, term, clear_alert=False):
         self.click_off()
-        self.locate_and_get((By.CLASS_NAME, 'search-bar__semester')).click() 
+        self.locate_and_get((By.CLASS_NAME, 'search-bar__semester')).click()
         self.locate_and_get((
             By.XPATH,
             "//div[contains(@class,'semester-option') " +
             "and contains(text(),'%s')]" % term
         ), clickable=True).click()
         if clear_alert:
-            self.take_alert_action()        
+            self.take_alert_action()
         search_box = self.locate_and_get((By.XPATH, '//div[@class="search-bar__input-wrapper"]/input'))
         search_box.clear()
         WebDriverWait(self.driver, self.TIMEOUT) \
@@ -343,7 +345,7 @@ class SeleniumTest(StaticLiveServerTestCase):
                 term, 'placeholder'
             )
         )
-    
+
     def open_and_query_adv_search(self, query, n_results=None):
         self.locate_and_get(
             (By.CLASS_NAME, 'show-exploration'),
@@ -361,7 +363,7 @@ class SeleniumTest(StaticLiveServerTestCase):
         search.send_keys(query)
         if n_results:
             self.assert_n_elements_found((By.CLASS_NAME, 'exp-s-result'), n_results)
-        
+
     def login_via_fb(self, email, password):
         self.locate_and_get((By.CLASS_NAME, 'social-login'), clickable=True).click()
         self.locate_and_get((By.CLASS_NAME, 'fb-btn'), clickable=True).click()
@@ -376,7 +378,7 @@ class SeleniumTest(StaticLiveServerTestCase):
     def select_nth_adv_search_result(self, n, semester):
         res = self.locate_and_get((By.CLASS_NAME, 'exp-s-result'), get_all=True)
         code = self.locate_and_get((By.TAG_NAME, 'h5'), root=res[n]).text
-        course = Course.objects.get(code=code)        
+        course = Course.objects.get(code=code)
         ActionChains(self.driver).move_to_element(res[n]).click().perform()
         WebDriverWait(self.driver, self.TIMEOUT) \
             .until(EC.text_to_be_present_in_element(
@@ -389,7 +391,7 @@ class SeleniumTest(StaticLiveServerTestCase):
     def save_user_settings(self):
         self.locate_and_get((By.CLASS_NAME, 'signup-button')).click()
         self.assert_invisibility((By.CLASS_NAME, 'welcome-modal'))
-    
+
     def complete_user_settings_basics(self, major, class_year):
         modal = self.locate_and_get((By.CLASS_NAME, 'welcome-modal'))
         major_select, year_select = self.locate_and_get(
@@ -417,44 +419,85 @@ class SeleniumTest(StaticLiveServerTestCase):
             "//input[contains(@id, 'tos-agreed-input') and contains(@value, 'on')]"
         ), hidden=True)
         self.save_user_settings()
-    
+
     def change_ptt_name(self, name):
         name_input = self.locate_and_get((By.CLASS_NAME, 'timetable-name'))
-        name_input.clear()        
+        name_input.clear()
         name_input.send_keys(name)
         self.click_off()
-    
+
     def save_ptt(self):
         self.locate_and_get((By.CLASS_NAME, 'fa-floppy-o')).click()
         self.assert_invisibility((
             By.XPATH,
             "//input[contains(@class, 'timetable-name) and contains(@class, 'unsaved')]")
         )
-    
+
     def assert_ptt_constant_across_refresh(self):
         slots = self.get_elements_as_text((By.CLASS_NAME, 'slot'))
         master_slots = self.get_elements_as_text((By.CLASS_NAME, 'master-slot'))
-        tt_name = self.get_elements_as_text((By.CLASS_NAME, 'timetable-name'))  
+        tt_name = self.get_elements_as_text((By.CLASS_NAME, 'timetable-name'))
         self.driver.refresh()
         self.assertEqual(slots, self.get_elements_as_text((By.CLASS_NAME, 'slot')))
         self.assertEqual(master_slots, self.get_elements_as_text((By.CLASS_NAME, 'master-slot')))
-        self.assertEqual(tt_name, self.get_elements_as_text((By.CLASS_NAME, 'timetable-name')))                
+        self.assertEqual(tt_name, self.get_elements_as_text((By.CLASS_NAME, 'timetable-name')))
 
     def get_elements_as_text(self, locator):
         eles = self.locate_and_get(locator, get_all=True)
         return map(lambda s: s.text, eles)
-    
+
     def create_ptt(self, name):
         self.locate_and_get((
             By.XPATH,
             "//button[contains(@class,'add-button')]//i[contains(@class,'fa fa-plus')]"
         )).click()
-        name_input = self.locate_and_get((By.CLASS_NAME, 'timetable-name'))        
+        name_input = self.locate_and_get((By.CLASS_NAME, 'timetable-name'))
         WebDriverWait(self.driver, self.TIMEOUT) \
             .until(EC.text_to_be_present_in_element_value(
                 (By.CLASS_NAME, 'timetable-name'),
                 'Untitled Schedule'
-            ))      
+            ))
+
+    def create_friend(self, first_name, last_name, **kwargs):
+        user = User.objects.create(
+            first_name=first_name,
+            last_name=last_name
+        )
+        friend = Student.objects.create(
+            user=user,
+            img_url=self.get_test_url('jhu', path="static/img/user2-160x160.jpg"),
+            **kwargs
+        )
+        friend.friends.add(Student.objects.first())
+        friend.save()
+        return friend
+
+    def create_personal_timetable_obj(self, friend, courses, semester):
+        ptt = PersonalTimetable.objects.create(
+            student=friend,
+            semester_id=semester.id
+        )
+        for course in courses:
+            ptt.courses.add(course)
+        ptt.save()
+        return ptt
+
+    def update_privacy_settings(self, social_offerings=False, social_courses=False, social_all=False):
+        pass
+
+    def assert_friend_image_found(self, friend):
+        self.assert_n_elements_found((By.CLASS_NAME, 'ms-friend'), 1)
+        self.locate_and_get((
+            By.XPATH,
+            "//div[contains(@class,'ms-friend') and contains(@style,'%s')]" % friend.img_url
+        ))
+    
+    def assert_friend_in_modal(self, friend):
+        friend_div = self.assert_n_elements_found((By.CLASS_NAME, 'friend'), 1)
+        self.locate_and_get((
+            By.XPATH,
+            "//div[contains(@class,'ms-friend') and contains(@style,'%s')]" % friend.img_url
+        ), root=friend_div)
 
     def test_logged_out_flow(self):
         with description("setup and clear tutorial"):
@@ -490,17 +533,17 @@ class SeleniumTest(StaticLiveServerTestCase):
             ])
         with description("lock course then add conflict"):
             self.remove_course(0, n_slots_expected=0)
-            self.search_course('calc', 3)                        
+            self.search_course('calc', 3)
             self.add_course(2, n_slots=4, n_master_slots=1)
             self.lock_course()
-            self.search_course('calc', 3)                        
+            self.search_course('calc', 3)
             self.execute_action_expect_alert(
                 lambda: self.add_course(1, n_slots=4, n_master_slots=1, by_section="(01)"),
                 alert_text_contains="Allow Conflicts"
             )
             self.allow_conflicts_add(n_slots=8)
         with description("switch semesters, clear alert and check search/adding"):
-            self.change_term("Spring 2017", clear_alert=True)            
+            self.change_term("Spring 2017", clear_alert=True)
             self.search_course('calc', 2)
             self.open_course_modal_from_search(1)
             self.share_timetable([
@@ -509,13 +552,11 @@ class SeleniumTest(StaticLiveServerTestCase):
                 )
             ])
         with description("advanced search basic query executes"):
-            self.change_term("Fall 2017", clear_alert=True)            
+            self.change_term("Fall 2017", clear_alert=True)
             sem = Semester.objects.get(year=2017, name='Fall')
             self.open_and_query_adv_search('ca', n_results=3)
             self.select_nth_adv_search_result(0, sem)
             self.select_nth_adv_search_result(1, sem)
-            #TODO more tests on advanced search
-            #TODO have self.sem track semester
 
     def test_logged_in_via_fb_flow(self):
         with description("setup and clear tutorial"):
@@ -523,7 +564,7 @@ class SeleniumTest(StaticLiveServerTestCase):
             self.clear_tutorial()
         with description("succesfully signup with facebook"):
             self.login_via_fb(
-                email='***REMOVED***', 
+                email='***REMOVED***',
                 password='***REMOVED***'
             )
             self.complete_user_settings_basics(
@@ -537,7 +578,7 @@ class SeleniumTest(StaticLiveServerTestCase):
             self.save_ptt()
             self.assert_ptt_constant_across_refresh()
         with description("add to personal timetable, share, save"):
-            self.search_course('calc', 3)            
+            self.search_course('calc', 3)
             self.open_course_modal_from_search(1)
             self.share_timetable([
                 self.add_course_from_course_modal(
@@ -548,7 +589,22 @@ class SeleniumTest(StaticLiveServerTestCase):
             self.assert_ptt_constant_across_refresh()
         with description("create new personal timetable, validate on reload"):
             self.create_ptt("End To End Testing!")
-            self.search_course('calc', 3)                        
-            self.add_course(0, n_slots=4, n_master_slots=1)            
+            self.search_course('AS.110.105', 1)
+            self.add_course(0, n_slots=4, n_master_slots=1)
             self.save_ptt()
             self.assert_ptt_constant_across_refresh()
+        with description("add friend with course, check for friend circles and presence in modal"):
+            friend = self.create_friend(
+                "Tester",
+                "McTestFace",
+                social_courses=True
+            )
+            self.create_personal_timetable_obj(
+                friend,
+                [Course.objects.get(code='AS.110.105')],
+                Semester.objects.get(name='Fall', year=2017)
+            )
+            self.assert_ptt_constant_across_refresh()
+            self.assert_friend_image_found(friend)
+            self.open_course_modal_from_slot(0)
+            self.assert_friend_in_modal(friend)
