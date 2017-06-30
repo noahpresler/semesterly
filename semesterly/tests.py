@@ -8,8 +8,11 @@ from selenium.webdriver.common.action_chains import ActionChains
 from django.test.utils import override_settings
 from django.contrib.auth.models import User
 from timetable.models import Semester, Course, Section, Offering
+from social.apps.django_app.default.models import UserSocialAuth
 from student.models import Student, PersonalTimetable
 from contextlib import contextmanager
+from importlib import import_module
+from django.contrib.auth import SESSION_KEY, BACKEND_SESSION_KEY, HASH_SESSION_KEY
 import socket, itertools, re, datetime, os, shutil
 
 class url_matches_regex(object):
@@ -43,6 +46,30 @@ class text_to_be_present_in_element_attribute(object):
         except StaleElementReferenceException:
                 return False       
 
+@override_settings(DEBUG=True)
+def force_login(user, driver, base_url):
+    from django.conf import settings
+    SessionStore = import_module(settings.SESSION_ENGINE).SessionStore
+    driver.get(base_url)
+
+    session = SessionStore()
+    session[SESSION_KEY] = user.id
+    session[BACKEND_SESSION_KEY] = settings.AUTHENTICATION_BACKENDS[0]
+    session[HASH_SESSION_KEY] = user.get_session_auth_hash()
+    session.save()
+
+    domain = base_url.split(':')[-2].split('/')[-1]
+    cookie = {
+        'name': settings.SESSION_COOKIE_NAME,
+        'value': session.session_key,
+        'path': '/',
+        'secure': False,
+        'domain': domain
+    }
+
+    driver.add_cookie(cookie)
+    driver.refresh()
+
 class SeleniumTest(StaticLiveServerTestCase):
 
     fixtures = [
@@ -58,8 +85,8 @@ class SeleniumTest(StaticLiveServerTestCase):
         except Exception as e:
             filename = self.img_dir + "/%s%s.png" % (descr, datetime.datetime.now())
             msg = "\n======================================================================\n"
-            msg += 'FAILED TEST CASE: "%s"\n' % descr
-            msg += 'SCREENSHOT MAY BE FOUND IN: %s\n' % self.img_dir
+            msg += "FAILED TEST CASE: '%s'\n" % descr
+            msg += "SCREENSHOT MAY BE FOUND IN: %s\n" % self.img_dir
             msg += "----------------------------------------------------------------------\n"
             self.driver.save_screenshot(filename)
             raise type(e)(e.message + msg) 
@@ -380,18 +407,35 @@ class SeleniumTest(StaticLiveServerTestCase):
         pass_input.send_keys(password)
         self.locate_and_get((By.ID, 'loginbutton')).click()
 
-    def login_via_google(self, email, password):
+    def login_via_google(self, email, password, **kwargs):
         self.locate_and_get((By.CLASS_NAME, 'social-login'), clickable=True).click()
         self.locate_and_get((By.XPATH,
             "//span[contains(text(), 'Continue with Google')]/ancestor::button[contains(@class, 'btn')]"
         ), clickable=True).click()
         email_input = self.locate_and_get((By.ID, 'identifierId'))
-        email_input.send_keys(email)
-        self.locate_and_get((By.ID, 'identifierNext')).click()
-        pass_input = self.locate_and_get((By.NAME, 'password'))
-        pass_input.send_keys(password)
-        self.locate_and_get((By.ID, 'passwordNext')).click()
-        
+        user = User.objects.create(
+            username='temporary',
+            password='temporary',
+            **kwargs
+        )
+        student = Student.objects.create(
+            user=user,
+            img_url=self.get_test_url('jhu', path="static/img/user2-160x160.jpg")
+        )
+        social_user = UserSocialAuth.objects.create(
+            user=user, 
+            uid='12345678987654321',
+            provider="google-oauth2",
+            extra_data= {
+                'access_token': '12345678987654321',
+                'expires': 'never'
+            }
+        )
+        user.save()
+        student.save()
+        social_user.save()
+        force_login(user, self.driver, self.get_test_url('jhu'))
+
     def select_nth_adv_search_result(self, n, semester):
         res = self.locate_and_get((By.CLASS_NAME, 'exp-s-result'), get_all=True)
         code = self.locate_and_get((By.TAG_NAME, 'h5'), root=res[n]).text
@@ -668,6 +712,8 @@ class SeleniumTest(StaticLiveServerTestCase):
             self.clear_tutorial()
         with self.description("login via Google, complete user settings"):
             self.login_via_google(
+                first_name="Tester",
+                last_name="McTesterFace",
                 email='e2etesterly@gmail.com',
                 password='***REMOVED***'
             )
