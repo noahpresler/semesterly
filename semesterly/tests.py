@@ -74,8 +74,6 @@ class SeleniumTest(StaticLiveServerTestCase):
         )
 
     def setUp(self):
-        from time import sleep
-        sleep(30)
         self.driver = webdriver.Chrome(chrome_options=self.chrome_options) 
         self.driver.get(self.get_test_url('jhu'))
         WebDriverWait(self.driver, self.TIMEOUT).until(lambda driver: driver.find_element_by_tag_name('body'))
