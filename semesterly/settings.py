@@ -152,6 +152,8 @@ REST_FRAMEWORK ={
     'UNICODE_JSON': False
 }
 
+SESSION_ENGINE = 'django.contrib.sessions.backends.db'
+
 MIDDLEWARE_CLASSES = (
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
