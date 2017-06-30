@@ -66,23 +66,19 @@ class SeleniumTest(StaticLiveServerTestCase):
         super(SeleniumTest, self).setUpClass()
         self.TIMEOUT = 10
         socket.setdefaulttimeout(3 * self.TIMEOUT)
-        chrome_options = webdriver.ChromeOptions()
-        prefs = {"profile.default_content_setting_values.notifications" : 2}
-        chrome_options.add_experimental_option("prefs",prefs)
-        self.driver = webdriver.Chrome(chrome_options=chrome_options)
-
-    @classmethod
-    def tearDownClass(self):
-        self.driver.quit()
-        super(SeleniumTest, self).tearDownClass()
+        self.chrome_options = webdriver.ChromeOptions()
+        self.chrome_options.add_experimental_option(
+            "prefs",
+            {"profile.default_content_setting_values.notifications" : 2}
+        )
 
     def setUp(self):
+        self.driver = webdriver.Chrome(chrome_options=self.chrome_options)        
         self.driver.get(self.get_test_url('jhu'))
         WebDriverWait(self.driver, self.TIMEOUT).until(lambda driver: driver.find_element_by_tag_name('body'))
 
     def tearDown(self):
-        self.driver.execute_script('window.localStorage.clear();')
-        self.driver.delete_all_cookies()
+        self.driver.quit()
 
     def get_test_url(self, school, path = ''):
         url = '%s%s' % (self.live_server_url, '/')
