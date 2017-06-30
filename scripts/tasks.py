@@ -41,7 +41,7 @@ def task_parse_recent(schools=None, textbooks=False):
                     school,
                     years_and_terms
                 )
-            continue
+                continue
 
         for year in years:
             term = school_to_active_semesters[school][year][0]
