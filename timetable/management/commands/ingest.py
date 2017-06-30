@@ -98,9 +98,9 @@ class Command(BaseCommand):
 				#  in order to avoid nasty merge conflicts, must integrate into each parser
 				options['years'] = map(str, years_and_terms.keys())
 				options['terms'] = []
-				for year, terms in years_and_terms.items():
+				for terms in years_and_terms.values():
 					for term in terms:
-						options['terms'].append(term) 
+						options['terms'].append(term)
 
 			except json.JSONDecodeError:
 				pass

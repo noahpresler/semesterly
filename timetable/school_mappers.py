@@ -1,5 +1,7 @@
-"""This file contains all dicts which map a school to its associated object"""
+"""This file contains all dicts which map a school to its associated object."""
 import os
+
+from collections import OrderedDict
 
 import django
 
@@ -22,7 +24,7 @@ school_to_granularity = {
     'salisbury': 5,
 }
 
-VALID_SCHOOLS = set([
+VALID_SCHOOLS = {
     "uoft",
     "jhu",
     "umd",
@@ -32,9 +34,9 @@ VALID_SCHOOLS = set([
     "umich",
     "chapman",
     "salisbury",
-])
+}
 
-AM_PM_SCHOOLS = set([
+AM_PM_SCHOOLS = {
     "jhu",
     "umd",
     "rutgers",
@@ -43,17 +45,17 @@ AM_PM_SCHOOLS = set([
     "umich",
     "chapman",
     "salisbury",
-])
+}
 
-FULL_ACADEMIC_YEAR_REGISTRATION_SCHOOLS = set([
+FULL_ACADEMIC_YEAR_REGISTRATION_SCHOOLS = {
     "queens",
-])
+}
 
 # Identifies schools that have user access restrictions so that
 #  parsing can only happen one semester/term at a time.
-SINGLE_ACCESS_SCHOOLS = set([
+SINGLE_ACCESS_SCHOOLS = {
     "gw",
-])
+}
 
 school_code_to_name = {
     'jhu': 'Johns Hopkins University',
@@ -69,15 +71,15 @@ school_code_to_name = {
     'salisbury': 'Salisbury University',
 }
 
-school_to_active_semesters = {
-    'jhu': {
+school_to_semesters = {
+    'jhu': OrderedDict({
         2017: [
             'Fall',
             'Summer',
             'Spring',
         ],
-    },
-    'uoft': {
+    }),
+    'uoft': OrderedDict({
         2018: [
             'Winter',
         ],
@@ -85,22 +87,22 @@ school_to_active_semesters = {
             'Fall',
             'Winter',
         ],
-    },
-    'umd': {
+    }),
+    'umd': OrderedDict({
         2017: [
             'Fall',
             'Spring',
         ],
-    },
-    'rutgers': {
+    }),
+    'rutgers': OrderedDict({
         2017: [
             'Spring',
         ],
         2016: [
             'Fall',
         ],
-    },
-    'queens': {
+    }),
+    'queens': OrderedDict({
         2018: [
             'Winter',
         ],
@@ -111,8 +113,8 @@ school_to_active_semesters = {
         2016: [
             'Fall',
         ],
-    },
-    'vandy': {
+    }),
+    'vandy': OrderedDict({
         2017: [
             'Fall',
             'Spring',
@@ -120,14 +122,14 @@ school_to_active_semesters = {
         2016: [
             'Fall',
         ],
-    },
-    'gw': {
+    }),
+    'gw': OrderedDict({
         2017: [
             'Fall',
             'Spring',
         ],
-    },
-    'umich': {
+    }),
+    'umich': OrderedDict({
         2017: [
             'Fall',
             'Winter',
@@ -135,8 +137,8 @@ school_to_active_semesters = {
         2016: [
             'Fall',
         ],
-    },
-    'chapman': {
+    }),
+    'chapman': OrderedDict({
         2017: [
             'Fall',
             'Spring',
@@ -144,8 +146,8 @@ school_to_active_semesters = {
         2016: [
             'Fall',
         ],
-    },
-    'salisbury': {
+    }),
+    'salisbury': OrderedDict({
         2017: [
             'Fall',
             'Summer',
@@ -156,18 +158,18 @@ school_to_active_semesters = {
         2016: [
             'Fall',
         ],
-    },
+    }),
 }
 
-school_to_semesters = {}
-for school, years in school_to_active_semesters.items():
-    school_to_semesters[school] = []
-    for year in reversed(sorted(years)):
-        for term in years[year]:
-            school_to_semesters[school].append({
-                'name': term,
-                'year': str(year)
-            })
+# school_to_semesters = {}
+# for school, years in school_to_active_semesters.items():
+#     school_to_semesters[school] = []
+#     for year in reversed(sorted(years)):
+#         for term in years[year]:
+#             school_to_semesters[school].append({
+#                 'name': term,
+#                 'year': str(year)
+#             })
 
 
 # TEMP: backwards compatibility hack - see #916
