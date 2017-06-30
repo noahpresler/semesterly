@@ -546,7 +546,7 @@ class SeleniumTest(StaticLiveServerTestCase):
             self.clear_tutorial()
         with self.description("search, add, then remove course"):
             self.search_course('calc', 3)
-            self.add_course(0, n_slots=5, n_master_slots=1)
+            self.add_course(0, n_slots=4, n_master_slots=1)
             self.remove_course(0, n_slots_expected=0)
         with self.description("open course modal from search and share"):
             self.search_course('calc', 3)
