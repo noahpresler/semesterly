@@ -432,21 +432,30 @@ class SeleniumTest(StaticLiveServerTestCase):
             By.XPATH,
             "//input[contains(@class, 'timetable-name) and contains(@class, 'unsaved')]")
         )
+        return self.ptt_to_tuple()
 
     def assert_ptt_constant_across_refresh(self):
-        slots = self.get_elements_as_text((By.CLASS_NAME, 'slot'))
-        master_slots = self.get_elements_as_text((By.CLASS_NAME, 'master-slot'))
-        tt_name = self.get_elements_as_text((By.CLASS_NAME, 'timetable-name'))
+        ptt = self.ptt_to_tuple()
         self.driver.refresh()
+        self.assert_ptt_equals(ptt)
+    
+    def assert_ptt_equals(self, ptt):
+        slots, master_slots, tt_name = ptt
         self.assertEqual(slots, self.get_elements_as_text((By.CLASS_NAME, 'slot')))
         self.assertEqual(master_slots, self.get_elements_as_text((By.CLASS_NAME, 'master-slot')))
         self.assertEqual(tt_name, self.get_elements_as_text((By.CLASS_NAME, 'timetable-name')))
+    
+    def ptt_to_tuple(self):
+        slots = self.get_elements_as_text((By.CLASS_NAME, 'slot'))
+        master_slots = self.get_elements_as_text((By.CLASS_NAME, 'master-slot'))
+        tt_name = self.get_elements_as_text((By.CLASS_NAME, 'timetable-name'))
+        return (slots, master_slots, tt_name)
 
     def get_elements_as_text(self, locator):
         eles = self.locate_and_get(locator, get_all=True)
         return map(lambda s: s.text, eles)
 
-    def create_ptt(self, name):
+    def create_ptt(self, name=None):
         self.locate_and_get((
             By.XPATH,
             "//button[contains(@class,'add-button')]//i[contains(@class,'fa fa-plus')]"
@@ -457,6 +466,9 @@ class SeleniumTest(StaticLiveServerTestCase):
                 (By.CLASS_NAME, 'timetable-name'),
                 'Untitled Schedule'
             ))
+        if name:
+            name_input.clear()
+            name_input.send_keys(name)
 
     def create_friend(self, first_name, last_name, **kwargs):
         user = User.objects.create(
@@ -498,6 +510,17 @@ class SeleniumTest(StaticLiveServerTestCase):
             By.XPATH,
             "//div[contains(@class,'ms-friend') and contains(@style,'%s')]" % friend.img_url
         ), root=friend_div)
+
+    def switch_to_ptt(self, name):
+        self.locate_and_get((By.CLASS_NAME,'timetable-drop-it-down')).click()
+        self.locate_and_get((
+            By.XPATH,
+            "//div[@class='tt-name' and contains(text(),'%s')]" % name
+        ), clickable=True).click()
+        self.locate_and_get((
+            By.XPATH,
+            "//input[contains(@class, 'timetable-name') and @value='%s']" % name
+        ))
 
     def test_logged_out_flow(self):
         with description("setup and clear tutorial"):
@@ -585,14 +608,26 @@ class SeleniumTest(StaticLiveServerTestCase):
                     n_slots=8, n_master_slots=2
                 )
             ])
-            self.save_ptt()
+            testing_ptt = self.save_ptt()
             self.assert_ptt_constant_across_refresh()
         with description("create new personal timetable, validate on reload"):
             self.create_ptt("End To End Testing!")
             self.search_course('AS.110.105', 1)
             self.add_course(0, n_slots=4, n_master_slots=1)
-            self.save_ptt()
+            e2e_ptt = self.save_ptt()
             self.assert_ptt_constant_across_refresh()
+        with description("Switch to original ptt and validate"):
+            self.switch_to_ptt("Testing Timetable")
+            self.assert_ptt_equals(testing_ptt)
+        with description("switch semester, create personal timetable, switch back"):
+            self.change_term("Spring 2017")
+            self.create_ptt("Hope ders no bugs!")
+            self.click_off()
+            self.search_course('calc', 2)
+            self.add_course(0, n_slots=4, n_master_slots=1)
+            self.save_ptt()
+            self.change_term("Fall 2017")
+            self.assert_ptt_equals(e2e_ptt)    
         with description("add friend with course, check for friend circles and presence in modal"):
             friend = self.create_friend(
                 "Tester",
@@ -608,3 +643,7 @@ class SeleniumTest(StaticLiveServerTestCase):
             self.assert_friend_image_found(friend)
             self.open_course_modal_from_slot(0)
             self.assert_friend_in_modal(friend)
+
+#TODO more tests on adv search
+#TODO track self.semester
+#TODO test all with self.assert_ptt_equals type logic
