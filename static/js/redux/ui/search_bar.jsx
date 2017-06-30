@@ -39,9 +39,6 @@ class SearchBar extends React.Component {
 
   componentWillMount() {
     $(document.body).on('keydown', (e) => {
-      if ($('.nudgespot-message textarea').is(':visible')) {
-        return;
-      } // don't "search" if Nudgespot textarea is focused
       if ($('input:focus').length === 0 && !this.props.explorationModalIsVisible && !e.ctrlKey) {
         if ((e.keyCode >= 48 && e.keyCode <= 57) || (e.keyCode >= 65 && e.keyCode <= 90)) {
           $('.search-bar input').focus();
