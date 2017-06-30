@@ -10,7 +10,7 @@ from django.contrib.auth.models import User
 from timetable.models import Semester, Course, Section, Offering
 from student.models import Student, PersonalTimetable
 from contextlib import contextmanager
-import socket, itertools, re
+import socket, itertools, re, datetime
 
 class url_matches_regex(object):
     def __init__(self, pattern):
@@ -41,17 +41,7 @@ class text_to_be_present_in_element_attribute(object):
             else:
                 return False
         except StaleElementReferenceException:
-                return False
-
-@contextmanager
-def description(descr):
-    try:
-        yield
-    except:
-        print "\n======================================================================"
-        print 'FAILED TEST CASE: "%s"' % descr
-        print "----------------------------------------------------------------------"
-        raise
+                return False       
 
 class SeleniumTest(StaticLiveServerTestCase):
 
@@ -60,6 +50,17 @@ class SeleniumTest(StaticLiveServerTestCase):
         'jhu_spring_sample.json'
     ]
     serialized_rollback = True
+
+    @contextmanager
+    def description(self, descr):
+        try:
+            yield
+        except Exception as e:
+            msg = "\n======================================================================\n"
+            msg += 'FAILED TEST CASE: "%s"\n' % descr
+            msg += "----------------------------------------------------------------------\n"
+            self.driver.save_screenshot('e2e-test-failure.png')
+            raise type(e)(e.message + msg) 
 
     @classmethod
     def setUpClass(self):
@@ -73,7 +74,8 @@ class SeleniumTest(StaticLiveServerTestCase):
         )
 
     def setUp(self):
-        self.driver = webdriver.Chrome(chrome_options=self.chrome_options)        
+        self.driver = webdriver.Chrome(chrome_options=self.chrome_options) 
+        self.driver.set_script_timeout(self.TIMEOUT * 3)       
         self.driver.get(self.get_test_url('jhu'))
         WebDriverWait(self.driver, self.TIMEOUT).until(lambda driver: driver.find_element_by_tag_name('body'))
 
@@ -369,8 +371,19 @@ class SeleniumTest(StaticLiveServerTestCase):
         pass_input = self.locate_and_get((By.ID, 'pass'))
         pass_input.send_keys(password)
         self.locate_and_get((By.ID, 'loginbutton')).click()
-        # self.locate_and_get((By.XPATH, "//button[@type='submit' and contains(text(), 'Continue as')]"), clickable=True).click()
 
+    def login_via_google(self, email, password):
+        self.locate_and_get((By.CLASS_NAME, 'social-login'), clickable=True).click()
+        self.locate_and_get((By.XPATH,
+            "//span[contains(text(), 'Continue with Google')]/ancestor::button[contains(@class, 'btn')]"
+        ), clickable=True).click()
+        email_input = self.locate_and_get((By.ID, 'identifierId'))
+        email_input.send_keys(email)
+        self.locate_and_get((By.ID, 'identifierNext')).click()
+        pass_input = self.locate_and_get((By.NAME, 'password'))
+        pass_input.send_keys(password)
+        self.locate_and_get((By.ID, 'passwordNext')).click()
+        
     def select_nth_adv_search_result(self, n, semester):
         res = self.locate_and_get((By.CLASS_NAME, 'exp-s-result'), get_all=True)
         code = self.locate_and_get((By.TAG_NAME, 'h5'), root=res[n]).text
@@ -415,6 +428,7 @@ class SeleniumTest(StaticLiveServerTestCase):
             "//input[contains(@id, 'tos-agreed-input') and contains(@value, 'on')]"
         ), hidden=True)
         self.save_user_settings()
+        self.assert_invisibility((By.CLASS_NAME, 'welcome-modal'))
 
     def change_ptt_name(self, name):
         name_input = self.locate_and_get((By.CLASS_NAME, 'timetable-name'))
@@ -437,9 +451,9 @@ class SeleniumTest(StaticLiveServerTestCase):
     
     def assert_ptt_equals(self, ptt):
         slots, master_slots, tt_name = ptt
-        self.assertEqual(slots, self.get_elements_as_text((By.CLASS_NAME, 'slot')))
-        self.assertEqual(master_slots, self.get_elements_as_text((By.CLASS_NAME, 'master-slot')))
-        self.assertEqual(tt_name, self.get_elements_as_text((By.CLASS_NAME, 'timetable-name')))
+        self.assertItemsEqual(slots, self.get_elements_as_text((By.CLASS_NAME, 'slot')))
+        self.assertItemsEqual(master_slots, self.get_elements_as_text((By.CLASS_NAME, 'master-slot')))
+        self.assertItemsEqual(tt_name, self.get_elements_as_text((By.CLASS_NAME, 'timetable-name')))
     
     def ptt_to_tuple(self):
         slots = self.get_elements_as_text((By.CLASS_NAME, 'slot'))
@@ -519,30 +533,30 @@ class SeleniumTest(StaticLiveServerTestCase):
         ))
 
     def test_logged_out_flow(self):
-        with description("setup and clear tutorial"):
+        with self.description("setup and clear tutorial"):
             self.driver.set_window_size(1440, 1080)
             self.clear_tutorial()
-        with description("search, add, then remove course"):
+        with self.description("search, add, then remove course"):
             self.search_course('calc', 3)
             self.add_course(0, n_slots=4, n_master_slots=1)
             self.remove_course(0, n_slots_expected=0)
-        with description("open course modal from search and share"):
+        with self.description("open course modal from search and share"):
             self.search_course('calc', 3)
             self.open_course_modal_from_search(1)
             self.validate_course_modal()
             self.follow_share_link_from_modal()
             self.close_course_modal()
-        with description("open course modal & follow share link from slot"):
+        with self.description("open course modal & follow share link from slot"):
             self.search_course('calc', 3)
             self.add_course(1, n_slots=4, n_master_slots=1)
             self.follow_share_link_from_slot()
             self.open_course_modal_from_slot(0)
             self.validate_course_modal()
             self.close_course_modal()
-        with description("Remove course from course modal"):
+        with self.description("Remove course from course modal"):
             self.open_course_modal_from_slot(0)
             self.remove_course_from_course_modal(0)
-        with description("Add course from modal and share timetable"):
+        with self.description("Add course from modal and share timetable"):
             self.search_course('calc', 3)
             self.open_course_modal_from_search(1)
             self.share_timetable([
@@ -550,7 +564,7 @@ class SeleniumTest(StaticLiveServerTestCase):
                     n_slots=4, n_master_slots=1
                 )
             ])
-        with description("lock course then add conflict"):
+        with self.description("lock course then add conflict"):
             self.remove_course(0, n_slots_expected=0)
             self.search_course('calc', 3)
             self.add_course(2, n_slots=4, n_master_slots=1)
@@ -561,7 +575,7 @@ class SeleniumTest(StaticLiveServerTestCase):
                 alert_text_contains="Allow Conflicts"
             )
             self.allow_conflicts_add(n_slots=8)
-        with description("switch semesters, clear alert and check search/adding"):
+        with self.description("switch semesters, clear alert and check search/adding"):
             self.change_term("Spring 2017", clear_alert=True)
             self.search_course('calc', 2)
             self.open_course_modal_from_search(1)
@@ -570,7 +584,7 @@ class SeleniumTest(StaticLiveServerTestCase):
                     n_slots=4, n_master_slots=1
                 )
             ])
-        with description("advanced search basic query executes"):
+        with self.description("advanced search basic query executes"):
             self.change_term("Fall 2017", clear_alert=True)
             sem = Semester.objects.get(year=2017, name='Fall')
             self.open_and_query_adv_search('ca', n_results=3)
@@ -578,10 +592,10 @@ class SeleniumTest(StaticLiveServerTestCase):
             self.select_nth_adv_search_result(1, sem)
 
     def test_logged_in_via_fb_flow(self):
-        with description("setup and clear tutorial"):
+        with self.description("setup and clear tutorial"):
             self.driver.set_window_size(1440, 1080)
             self.clear_tutorial()
-        with description("succesfully signup with facebook"):
+        with self.description("succesfully signup with facebook"):
             self.login_via_fb(
                 email='endtoend_edmsgmk_tester@tfbnw.net',
                 password='tester.ly'
@@ -590,13 +604,13 @@ class SeleniumTest(StaticLiveServerTestCase):
                 major='Computer Science',
                 class_year=2017
             )
-        with description("search, add, change personal timetable name and save"):
+        with self.description("search, add, change personal timetable name and save"):
             self.search_course('calc', 3)
             self.add_course(0, n_slots=4, n_master_slots=1)
             self.change_ptt_name("Testing Timetable")
             self.save_ptt()
             self.assert_ptt_constant_across_refresh()
-        with description("add to personal timetable, share, save"):
+        with self.description("add to personal timetable, share, save"):
             self.search_course('calc', 3)
             self.open_course_modal_from_search(1)
             self.share_timetable([
@@ -606,16 +620,16 @@ class SeleniumTest(StaticLiveServerTestCase):
             ])
             testing_ptt = self.save_ptt()
             self.assert_ptt_constant_across_refresh()
-        with description("create new personal timetable, validate on reload"):
+        with self.description("create new personal timetable, validate on reload"):
             self.create_ptt("End To End Testing!")
             self.search_course('AS.110.105', 1)
             self.add_course(0, n_slots=4, n_master_slots=1)
             e2e_ptt = self.save_ptt()
             self.assert_ptt_constant_across_refresh()
-        with description("Switch to original ptt and validate"):
+        with self.description("Switch to original ptt and validate"):
             self.switch_to_ptt("Testing Timetable")
             self.assert_ptt_equals(testing_ptt)
-        with description("switch semester, create personal timetable, switch back"):
+        with self.description("switch semester, create personal timetable, switch back"):
             self.change_term("Spring 2017")
             self.create_ptt("Hope ders no bugs!")
             self.click_off()
@@ -624,7 +638,7 @@ class SeleniumTest(StaticLiveServerTestCase):
             self.save_ptt()
             self.change_term("Fall 2017")
             self.assert_ptt_equals(e2e_ptt)    
-        with description("add friend with course, check for friend circles and presence in modal"):
+        with self.description("add friend with course, check for friend circles and presence in modal"):
             friend = self.create_friend(
                 "Tester",
                 "McTestFace",
@@ -639,6 +653,20 @@ class SeleniumTest(StaticLiveServerTestCase):
             self.assert_friend_image_found(friend)
             self.open_course_modal_from_slot(0)
             self.assert_friend_in_modal(friend)
+    
+    def test_logged_in_via_google_flow(self):
+        with self.description("setup and clear tutorial"):
+            self.driver.set_window_size(1440, 1080)
+            self.clear_tutorial()
+        with self.description("login via Google, complete user settings"):
+            self.login_via_google(
+                email='e2etesterly@gmail.com',
+                password='tester.ly'
+            )
+            self.complete_user_settings_basics(
+                major='Computer Science',
+                class_year=2017
+            )
 
 #TODO more tests on adv search
 #TODO track self.semester
