@@ -161,16 +161,6 @@ school_to_semesters = {
     }),
 }
 
-# school_to_semesters = {}
-# for school, years in school_to_active_semesters.items():
-#     school_to_semesters[school] = []
-#     for year in reversed(sorted(years)):
-#         for term in years[year]:
-#             school_to_semesters[school].append({
-#                 'name': term,
-#                 'year': str(year)
-#             })
-
 
 # TEMP: backwards compatibility hack - see #916
 def _sem(term, year):
