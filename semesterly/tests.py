@@ -647,3 +647,5 @@ class SeleniumTest(StaticLiveServerTestCase):
 #TODO more tests on adv search
 #TODO track self.semester
 #TODO test all with self.assert_ptt_equals type logic
+#TODO add tests for find new friends
+#TODO investigate parallel testing
