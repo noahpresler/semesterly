@@ -10,7 +10,7 @@ from django.contrib.auth.models import User
 from timetable.models import Semester, Course, Section, Offering
 from student.models import Student, PersonalTimetable
 from contextlib import contextmanager
-import socket, itertools, re, datetime
+import socket, itertools, re, datetime, os, shutil
 
 class url_matches_regex(object):
     def __init__(self, pattern):
@@ -56,10 +56,12 @@ class SeleniumTest(StaticLiveServerTestCase):
         try:
             yield
         except Exception as e:
+            filename = self.img_dir + "/%s%s.png" % (descr, datetime.datetime.now())
             msg = "\n======================================================================\n"
             msg += 'FAILED TEST CASE: "%s"\n' % descr
+            msg += 'SCREENSHOT MAY BE FOUND IN: %s\n' % self.img_dir
             msg += "----------------------------------------------------------------------\n"
-            self.driver.save_screenshot('e2e-test-failure.png')
+            self.driver.save_screenshot(filename)
             raise type(e)(e.message + msg) 
 
     @classmethod
@@ -74,12 +76,19 @@ class SeleniumTest(StaticLiveServerTestCase):
         )
 
     def setUp(self):
+        self.img_dir = os.path.dirname(os.path.realpath(__file__)) + '/test_failures'
+        self.init_screenshot_dir()
         self.driver = webdriver.Chrome(chrome_options=self.chrome_options) 
         self.driver.get(self.get_test_url('jhu'))
         WebDriverWait(self.driver, self.TIMEOUT).until(lambda driver: driver.find_element_by_tag_name('body'))
 
     def tearDown(self):
         self.driver.quit()
+    
+    def init_screenshot_dir(self):
+        if os.path.exists(self.img_dir):
+            shutil.rmtree(self.img_dir)
+        os.makedirs(self.img_dir)
 
     def get_test_url(self, school, path = ''):
         url = '%s%s' % (self.live_server_url, '/')
@@ -537,7 +546,7 @@ class SeleniumTest(StaticLiveServerTestCase):
             self.clear_tutorial()
         with self.description("search, add, then remove course"):
             self.search_course('calc', 3)
-            self.add_course(0, n_slots=4, n_master_slots=1)
+            self.add_course(0, n_slots=5, n_master_slots=1)
             self.remove_course(0, n_slots_expected=0)
         with self.description("open course modal from search and share"):
             self.search_course('calc', 3)
