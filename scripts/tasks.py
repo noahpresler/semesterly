@@ -48,7 +48,7 @@ def task_parse_current_registration_period(schools=None, textbooks=False):
                     school,
                     years_and_terms
                 )
-            continue
+                continue
 
         # Create individual parsing tasks.
         for year in years:
