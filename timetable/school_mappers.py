@@ -1,5 +1,7 @@
-"""This file contains all dicts which map a school to its associated object"""
+"""This file contains all dicts which map a school to its associated object."""
 import os
+
+from collections import OrderedDict
 
 import django
 
@@ -7,7 +9,7 @@ os.environ.setdefault("DJANGO_SETTINGS_MODULE", "semesterly.settings")
 django.setup()
 
 # the smallest block size (in minutes) needed to describe start/end times
-# e.g. uoft classes only start on the hour or half hour, so granularity is 30min
+# > uoft classes only start on the hour or half hour, so granularity is 30min
 school_to_granularity = {
     'jhu': 5,
     'uoft': 30,
@@ -22,21 +24,19 @@ school_to_granularity = {
     'salisbury': 5,
 }
 
-VALID_SCHOOLS = [
+VALID_SCHOOLS = {
     "uoft",
     "jhu",
     "umd",
-    # "uo",
-    # "rutgers",
     "queens",
     "vandy",
     "gw",
     "umich",
     "chapman",
     "salisbury",
-]
+}
 
-AM_PM_SCHOOLS = [
+AM_PM_SCHOOLS = {
     "jhu",
     "umd",
     "rutgers",
@@ -45,7 +45,17 @@ AM_PM_SCHOOLS = [
     "umich",
     "chapman",
     "salisbury",
-]
+}
+
+FULL_ACADEMIC_YEAR_REGISTRATION_SCHOOLS = {
+    "queens",
+}
+
+# Identifies schools that have user access restrictions so that
+#  parsing can only happen one semester/term at a time.
+SINGLE_ACCESS_SCHOOLS = {
+    "gw",
+}
 
 school_code_to_name = {
     'jhu': 'Johns Hopkins University',
@@ -61,26 +71,100 @@ school_code_to_name = {
     'salisbury': 'Salisbury University',
 }
 
-_sem = lambda term, year: {'name': term, 'year': year}
-
-# TODO: unhardcode - use k most recent semesters with course data
 school_to_semesters = {
-    'jhu': [_sem('Fall', '2017'), _sem('Summer', '2017'), _sem('Spring', '2017'),
-            _sem('Fall', '2016')],
-    'uoft': [_sem('Winter', '2018'), _sem('Fall', '2017'), _sem('Winter', '2017'), _sem('Fall', '2016')],
-    'umd': [_sem('Spring', '2017'), _sem('Fall', '2016'), _sem('Fall', '2017')],
-    'rutgers': [_sem('Spring', '2017'), _sem('Fall', '2016')],
-    # 'uo': [_sem('Spring', '2017'), _sem('Fall', '2016')],
-    'queens': [_sem('Winter', '2018'), _sem('Fall', '2017'), _sem('Winter', '2017'), _sem('Fall', '2016')],
-    'vandy': [_sem('Fall', '2017'), _sem('Spring', '2017'), _sem('Fall', '2016')],
-    'gw': [_sem('Fall', '2017'), _sem('Spring', '2017')],
-    'umich': [_sem('Fall', '2017'), _sem('Winter', '2017'), _sem('Fall', '2016')],
-    'chapman': [_sem('Fall', '2017'), _sem('Spring', '2017'), _sem('Fall', '2016')],
-    'salisbury': [_sem('Fall', '2017'), _sem('Spring', '2017'), _sem('Winter', '2017'),
-                  _sem('Fall', '2016'), _sem('Summer', '2017'), _sem('Interterm', '2017')],
+    'jhu': OrderedDict({
+        2017: [
+            'Fall',
+            'Summer',
+            'Spring',
+        ],
+    }),
+    'uoft': OrderedDict({
+        2018: [
+            'Winter',
+        ],
+        2017: [
+            'Fall',
+            'Winter',
+        ],
+    }),
+    'umd': OrderedDict({
+        2017: [
+            'Fall',
+            'Spring',
+        ],
+    }),
+    'rutgers': OrderedDict({
+        2017: [
+            'Spring',
+        ],
+        2016: [
+            'Fall',
+        ],
+    }),
+    'queens': OrderedDict({
+        2018: [
+            'Winter',
+        ],
+        2017: [
+            'Fall',
+            'Winter',
+        ],
+        2016: [
+            'Fall',
+        ],
+    }),
+    'vandy': OrderedDict({
+        2017: [
+            'Fall',
+            'Spring',
+        ],
+        2016: [
+            'Fall',
+        ],
+    }),
+    'gw': OrderedDict({
+        2017: [
+            'Fall',
+            'Spring',
+        ],
+    }),
+    'umich': OrderedDict({
+        2017: [
+            'Fall',
+            'Winter',
+        ],
+        2016: [
+            'Fall',
+        ],
+    }),
+    'chapman': OrderedDict({
+        2017: [
+            'Fall',
+            'Spring',
+        ],
+        2016: [
+            'Fall',
+        ],
+    }),
+    'salisbury': OrderedDict({
+        2017: [
+            'Fall',
+            'Summer',
+            'Spring',
+            'Winter',
+            'Interterm',
+        ],
+        2016: [
+            'Fall',
+        ],
+    }),
 }
 
-# temporary backwards compatibility hack - see #916
+
+# TEMP: backwards compatibility hack - see #916
+def _sem(term, year):
+    return {'name': term, 'year': year}
 old_school_to_semesters = {
     'jhu': [_sem('Fall', '2017'), _sem('Summer', '2017'), _sem('Spring', '2017'),
             _sem('Fall', '2016')],
@@ -96,6 +180,7 @@ old_school_to_semesters = {
     'salisbury': [_sem('Fall', '2017'), _sem('Spring', '2017'), _sem('Winter', '2017'),
                   _sem('Fall', '2016'), _sem('Summer', '2017'), _sem('Interterm', '2017')],
 }
+# END TEMP
 
 # do the imports: assumes all parser follow the same naming conventions:
 # schoolname_parsertype where parsertype can be courses, evals, or textbooks
