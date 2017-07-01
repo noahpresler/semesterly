@@ -30,12 +30,12 @@ def task_parse_current_registration_period(schools=None, textbooks=False):
     schools = set(schools or VALID_SCHOOLS)
     for school in set(school_to_semesters) & schools:
         # Grab the most recent year.
-        years = [school_to_semesters[school][-1]]
+        years = [school_to_semesters[school].items()[-1]]
 
         # Handle case where registration is for full academic year
         if school in FULL_ACADEMIC_YEAR_REGISTRATION_SCHOOLS:
             if len(school_to_semesters[school]) > 2:
-                years.append(school_to_semesters[school][-2])
+                years.append(school_to_semesters[school].items()[-2])
 
             # Group all semesters into single parsing call for schools that
             #  cannot support parallel parsing.
@@ -51,9 +51,8 @@ def task_parse_current_registration_period(schools=None, textbooks=False):
                 continue
 
         # Create individual parsing tasks.
-        for year in years:
-            term = school_to_semesters[school][year][0]
-            task_parse_school.delay(school, {year: [term]},
+        for year, terms in years:
+            task_parse_school.delay(school, {year: [terms[0]]},
                                     textbooks=textbooks)
 
 
