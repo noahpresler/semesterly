@@ -31,8 +31,8 @@ class Vectorizer():
         count_vectorizer = CountVectorizer(ngram_range=(1, 2),
                                            stop_words='english')
         processed_word_counts = count_vectorizer.fit_transform(raw_word_counts)
-        TFIDF_TF = TfidfTransformer(use_idf=True).fit(processed_word_counts)
-        course_vectors = TFIDF_TF.transform(processed_word_counts)
+        tfidf_tf = TfidfTransformer(use_idf=True).fit(processed_word_counts)
+        course_vectors = tfidf_tf.transform(processed_word_counts)
 
         # save course vector
         i = 0
@@ -45,12 +45,12 @@ class Vectorizer():
             pickle.dump(count_vectorizer, handle,
                         protocol=pickle.HIGHEST_PROTOCOL)
 
-    def get_stem_course(self, name, description, area, W):
+    def get_stem_course(self, name, description, area, w):
         stemmed_doc = ""
         if name:
             name_doc = name.encode('ascii', 'ignore')
             stemmed_name_doc = self.get_stem_doc(name_doc)
-            for i in range(W):
+            for i in range(w):
                 stemmed_doc += " " + stemmed_name_doc
             stemmed_doc += " "
         if description:
@@ -74,7 +74,6 @@ class Vectorizer():
 # Searcher (file reader / query performance)
 class Searcher():
     def __init__(self):
-        print("Creating Searcher Object")
         self.count_vectorizer = self.load_count_vectorizer()
         self.vectorizer = Vectorizer()
         self.MAX_CAPACITY = 300
@@ -107,8 +106,10 @@ class Searcher():
         return None
 
     def get_cosine_sim(self, sparse_vec1, sparse_vec2):
-        cross_product = np.sum(sparse_vec1.multiply(sparse_vec2))
-        return cross_product
+        if sparse_vec1 is not None and sparse_vec2 is not None:
+            return np.sum(sparse_vec1.multiply(sparse_vec2))
+        else:
+            return 0
 
     def get_similarity(self, query, course):
         query_vector = self.vectorize_query(query.lower())
@@ -121,10 +122,10 @@ class Searcher():
         course_name_contains_query = reduce(
             operator.and_, map(self.course_name_contains_token, query_tokens))
         return Course.objects.filter(
-                            Q(school=school) &
-                            course_name_contains_query &
-                            Q(section__semester=semester)
-                            )
+            Q(school=school) &
+            course_name_contains_query &
+            Q(section__semester=semester)
+        )
 
     def vectorized_search(self, school, query, semester):
         if query == "":
@@ -133,23 +134,26 @@ class Searcher():
         course_name_contains_query = reduce(
             operator.and_, map(self.course_name_contains_token, query_tokens))
         title_matching_courses = Course.objects.filter(
-                                                Q(school=school) &
-                                                course_name_contains_query &
-                                                Q(section__semester=semester)
-                                                )
-        descp_contains_query = []
+            Q(school=school) &
+            course_name_contains_query &
+            Q(section__semester=semester)
+        )
+
         if title_matching_courses.count() < self.MAX_CAPACITY:
             descp_contains_query = reduce(operator.or_,
                                           map(self.course_desc_contains_token,
                                               query.replace("and", "").split())
                                           )
             descp_matching_courses = Course.objects.filter(
-                                                Q(school=school) &
-                                                descp_contains_query &
-                                                Q(section__semester=semester)
-                                                )
-        courses_objs = list(title_matching_courses.all()[:self.MAX_CAPACITY]) + \
-                       list(descp_matching_courses.all()[:self.MAX_CAPACITY - title_matching_courses.count()])
+                Q(school=school) &
+                descp_contains_query &
+                Q(section__semester=semester)
+            )
+            courses_objs = list(title_matching_courses.all()[:self.MAX_CAPACITY]) + \
+                           list(descp_matching_courses.all()[:self.MAX_CAPACITY - title_matching_courses.count()])
+        else:
+            courses_objs = list(title_matching_courses.all()[:self.MAX_CAPACITY])
+
         return self.get_relevant_courses(query, courses_objs)
 
     def course_desc_contains_token(self, token):
@@ -179,8 +183,7 @@ class Searcher():
                 course_object.append(course)
                 course_codes[course.name] = (course.code, num_courses)
                 num_courses += 1
-            elif (course.name in course_titles and
-                  course_codes[course.name][0] > course.code):
+            elif course.name in course_titles and course_codes[course.name][0] > course.code:
                 course_object[course_codes[course.name][1]] = course
         return course_object
 
@@ -203,15 +206,15 @@ class Evaluator():
         num_relevant_courses = len(relevant_courses)
         num_retrieve_courses = len(retrieved_courses)
         prec_25, prec_50, prec_75 = 0.0, 0.0, 0.0
-        prec_25_idx = int(num_relevant_courses*(1.0/4))
-        prec_50_idx = int(num_relevant_courses*(2.0/4))
-        prec_75_idx = int(num_relevant_courses*(3.0/4))
+        prec_25_idx = int(num_relevant_courses * (1.0 / 4))
+        prec_50_idx = int(num_relevant_courses * (2.0 / 4))
+        prec_75_idx = int(num_relevant_courses * (3.0 / 4))
         precision_array = []
 
         num_retrieved = 0
         i = 1
         while num_retrieved < num_relevant_courses:
-            course_code = retrieved_courses[i-1]
+            course_code = retrieved_courses[i - 1]
             if course_code in relevant_courses:
                 num_retrieved += 1.0
                 print(query + ": " + str(num_retrieved))
@@ -223,12 +226,12 @@ class Evaluator():
         prec_100 = precision_array[-1]
         prec_mean_1 = (prec_25 + prec_50 + prec_75) / 3.0
         by_10 = np.arange(0.0, num_relevant_courses,
-                          (num_relevant_courses+0.0) / 10.0)
+                          (num_relevant_courses + 0.0) / 10.0)
         by_10 = [int(idx) for idx in by_10]
         prec_mean_2 = 0.0
         for i in by_10:
             prec_mean_2 += precision_array[i]
-        prec_mean_2 = prec_mean_2/10
+        prec_mean_2 = prec_mean_2 / 10
 
         rank_sum = 0.0
         rank_log_sum = 0.0
@@ -236,19 +239,19 @@ class Evaluator():
         k_i = 1
         for i in range(len(retrieved_courses)):
             if retrieved_courses[i] in relevant_courses:
-                rank_sum += (i+1) - (k_i)
-                rank_log_sum += math.log(i+1) - math.log(k_i)
+                rank_sum += (i + 1) - k_i
+                rank_log_sum += math.log(i + 1) - math.log(k_i)
                 k_i += 1
 
         recall_norm = 1.0 - (rank_sum / (num_relevant_courses *
-                             (num_retrieve_courses - num_relevant_courses)))
+                                         (num_retrieve_courses - num_relevant_courses)))
 
         prec_norm = 1.0 - (rank_log_sum / (num_retrieve_courses *
                                            math.log(num_retrieve_courses) -
-                           (num_retrieve_courses - num_relevant_courses) *
-                           math.log(num_retrieve_courses - num_relevant_courses) -
-                           (num_relevant_courses) *
-                           math.log(num_relevant_courses)))
+                                           (num_retrieve_courses - num_relevant_courses) *
+                                           math.log(num_retrieve_courses - num_relevant_courses) -
+                                           num_relevant_courses *
+                                           math.log(num_relevant_courses)))
 
         return (prec_25, prec_50, prec_75, prec_100, prec_mean_1, prec_mean_2,
                 prec_norm, recall_norm)
@@ -265,8 +268,8 @@ class Evaluator():
 
         for i in range(len(queries)):
             result = self.evaluate(queries[i], relevant_courses[i])
-            show = "   %2d  %.2f   %.2f   %.2f   %.2f    %.4f    %.4f    %.3f   %.3f   \n"\
-                   %(i, result[0], result[1], result[2], result[3], result[4], result[5], result[6], result[7])
+            show = "   %2d  %.2f   %.2f   %.2f   %.2f    %.4f    %.4f    %.3f   %.3f   \n" \
+                   % (i, result[0], result[1], result[2], result[3], result[4], result[5], result[6], result[7])
             for i in range(8):
                 total_scores[i] += result[i]
 
@@ -274,13 +277,14 @@ class Evaluator():
             total_scores[i] /= len(queries)
 
         averaged_results = \
-               "   ----------------------------------------------------------------\n"\
-               "                          Averaged Results                         \n"\
-               "   ----------------------------------------------------------------\n"\
-               "   **  P.25   P.50   P.75   P1.00   P_mean1   P_mean2.  P_norm  R_norm\n"\
-               "   ==  ====   ====   ====   =====   =======   ========  ======  ======\n"\
-               "   %2d  %.2f   %.2f   %.2f   %.2f    %.4f    %.4f    %.3f   %.3f   \n"\
-                   %(len(queries), total_scores[0], total_scores[1], total_scores[2], total_scores[3], total_scores[4], total_scores[5], total_scores[6], total_scores[7])
+            "   ----------------------------------------------------------------\n" \
+            "                          Averaged Results                         \n" \
+            "   ----------------------------------------------------------------\n" \
+            "   **  P.25   P.50   P.75   P1.00   P_mean1   P_mean2.  P_norm  R_norm\n" \
+            "   ==  ====   ====   ====   =====   =======   ========  ======  ======\n" \
+            "   %2d  %.2f   %.2f   %.2f   %.2f    %.4f    %.4f    %.3f   %.3f   \n" \
+            % (len(queries), total_scores[0], total_scores[1], total_scores[2], total_scores[3], total_scores[4],
+               total_scores[5], total_scores[6], total_scores[7])
         print(averaged_results)
 
 
@@ -289,7 +293,7 @@ class Experiment():
     def __init__(self):
         self._ = None
 
-    def run_LDA(self):
+    def run_lda(self):
         X = []
         for course in Course.objects.all():
             X.append(course.name + " " + course.description)
@@ -329,7 +333,7 @@ class Experiment():
             print(new_topic)
             topics.append(new_topic)
         print()
-        return(topics)
+        return topics
 
     def gmm_clustering(self, X):
         scores = []
