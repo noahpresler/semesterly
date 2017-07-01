@@ -13,12 +13,12 @@ class BasicSearchTest(APITestCase):
 
     def setUp(self):
         sem = Semester.objects.create(name='Winter', year='1995')
-        course = Course.objects.create(school=self.school, code='SEA101', name='Intro')
+        course = Course.objects.create(school=self.school, code='SEA101', name='Intro', description='AWESOME')
         section = Section.objects.create(course=course, semester=sem, meeting_section='L1', section_type='L')
         Offering.objects.create(section=section, day='M', time_start='8:00', time_end='10:00')
 
     def test_course_exists(self):
-        response =  self.client.get('/search/Winter/1995/sea/', **self.request_headers)
+        response = self.client.get('/search/Winter/1995/sea/', **self.request_headers)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertNotEqual(len(response.data),  0)
 
@@ -26,6 +26,11 @@ class BasicSearchTest(APITestCase):
         response = self.client.get('/search/Fall/2016/sea/', **self.request_headers)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(len(response.data), 0)
+
+    def test_description_exist(self):
+        response = self.client.get('/search/Winter/1995/awesome/', **self.request_headers)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertNotEqual(len(response.data), 0)
 
 
 class AdvancedSearchTest(APITestCase):
@@ -41,7 +46,7 @@ class AdvancedSearchTest(APITestCase):
         Offering.objects.create(section=section, day='M', time_start='8:00', time_end='10:00')
 
     def test_no_filter(self):
-        response =  self.client.get('/search/Winter/1995/sea/', **self.request_headers)
+        response = self.client.get('/search/Winter/1995/sea/', **self.request_headers)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertNotEqual(len(response.data),  0)
 
@@ -55,7 +60,7 @@ class AdvancedSearchTest(APITestCase):
                 }]
             }
         }
-        response =  self.client.post('/search/Winter/1995/sea/', body, format='json', **self.request_headers)
+        response = self.client.post('/search/Winter/1995/sea/', filters, format='json', **self.request_headers)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(len(response.data),  0)
 
@@ -65,7 +70,7 @@ class AdvancedSearchTest(APITestCase):
                 'levels': [100]
             }
         }
-        response =  self.client.post('/search/Winter/1995/sea/', body, format='json', **self.request_headers)
+        response = self.client.post('/search/Winter/1995/sea/', filters, format='json', **self.request_headers)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(len(response.data),  0)
 
