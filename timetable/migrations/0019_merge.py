@@ -9,7 +9,6 @@ class Migration(migrations.Migration):
 
     dependencies = [
         ('timetable', '0018_remove_section__semester'),
-        ('timetable', '0016_course_vector'),
     ]
 
     operations = [
