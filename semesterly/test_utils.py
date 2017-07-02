@@ -217,8 +217,8 @@ class SeleniumTestCase(StaticLiveServerTestCase):
         if n_elements == 0:
             self.assert_invisibility(locator)
         else:
-            n_found = len(self.find(locator, root=root, get_all=True))
-            self.assertEqual(n_found, n_elements)
+            WebDriverWait(self.driver, self.TIMEOUT) \
+                .until(n_elements_to_be_found(locator, n_elements))
 
     def remove_course(self, course_idx, from_slot=False, n_slots_expected=None):
         """Removes a course from the user's timetable, asserts master slot is removed.
@@ -399,7 +399,7 @@ class SeleniumTestCase(StaticLiveServerTestCase):
         action()
         alert = self.find(
             (By.XPATH,
-            "//div[@class='react-alerts']//div[contains(@class,'alert')]")
+             "//div[@class='react-alerts']//div[contains(@class,'alert')]")
         )
         self.assertTrue(alert_text_contains in alert.text)
 
@@ -407,16 +407,18 @@ class SeleniumTestCase(StaticLiveServerTestCase):
         """Takes the action provided by the alert by clicking the button on when visible"""
         alert = self.find(
             (By.XPATH,
-            "//div[@class='react-alerts']//div[contains(@class,'alert')]")
+             "//div[@class='react-alerts']//div[contains(@class,'alert')]")
         )
         self.find(
             (By.CLASS_NAME,
-            "conflict-alert-btn"),
+             "conflict-alert-btn"),
             root=alert,
         ).click()
 
     def allow_conflicts_add(self, n_slots):
-        """Allows conflicts via the conflict alert action then validates that the course was added"""
+        """Allows conflicts via the conflict alert action,
+        then validates that the course was added
+        """
         n_master_slots_before = len(self.find((By.CLASS_NAME, 'master-slot'), get_all=True))
         self.take_alert_action()
         self.assert_loader_completes()
@@ -721,6 +723,25 @@ class text_to_be_present_in_element_attribute(object):
             element_text = driver.find_element(*self.locator).get_attribute(self.attribute)
             if element_text:
                 return self.text in element_text
+            else:
+                return False
+        except StaleElementReferenceException:
+            return False
+
+class n_elements_to_be_found(object):
+    """
+    An expectation for checking if the n elements are found
+    locator, text
+    """
+    def __init__(self, locator, n_):
+        self.locator = locator
+        self.n_found = n_
+
+    def __call__(self, driver):
+        try:
+            eles_found = driver.find_elements(*self.locator)
+            if len(eles_found) == self.n_found:
+                return True
             else:
                 return False
         except StaleElementReferenceException:
