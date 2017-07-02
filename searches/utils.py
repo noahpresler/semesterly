@@ -3,6 +3,7 @@ import pickle
 import numpy as np
 import math
 import operator
+import os
 from sklearn.feature_extraction.text import CountVectorizer
 from sklearn.feature_extraction.text import TfidfTransformer
 from sklearn import mixture
@@ -80,8 +81,11 @@ class Searcher():
         self.start_time = 0
 
     def load_count_vectorizer(self):
-        with open('count_vectorizer.pickle', 'r') as handle:
-            return pickle.load(handle)
+        if os.path.exists('count_vectorizer.pickle'):
+            with open('count_vectorizer.pickle', 'r') as handle:
+                return pickle.load(handle)
+        print("Count Vectorizer is not yet initialized.")
+        return None
 
     def vectorize_query(self, query):
         stemmed_qry = self.vectorizer.get_stem_doc(query)
