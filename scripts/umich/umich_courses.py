@@ -1,19 +1,10 @@
-# Copyright (C) 2017 Semester.ly Technologies, LLC
-#
-# Semester.ly is free software: you can redistribute it and/or modify
-# it under the terms of the GNU General Public License as published by
-# the Free Software Foundation, either version 3 of the License, or
-# (at your option) any later version.
-#
-# Semester.ly is distributed in the hope that it will be useful,
-# but WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-# GNU General Public License for more details.
+"""
+UMich Course Parser.
 
-# @what     UMich Course Parser
-# @org      Semester.ly
-# @author   Michael N. Miller
-# @date     2/13/17
+@org      Semester.ly
+@author   Michael N. Miller
+@date     2/13/17
+"""
 
 from __future__ import absolute_import, division, print_function
 
@@ -21,15 +12,17 @@ from scripts.peoplesoft.courses import UPeoplesoftParser
 
 
 class UmichParser(UPeoplesoftParser):
+    """Course parser for University of Michigan."""
+
+    URL = 'https://csprod.dsc.umich.edu/psc/csprodpa/EMPLOYEE/HRMS/c/' \
+          'COMMUNITY_ACCESS.M_SR_SC_CLS_SRCH.GBL'
+    SCHOOL = 'umich'
 
     def __init__(self, **kwargs):
-        school = 'umich'
-        url = 'https://csprod.dsc.umich.edu/psc/csprodpa/EMPLOYEE/HRMS/c/' \
-              'COMMUNITY_ACCESS.M_SR_SC_CLS_SRCH.GBL'
+        """Construct new parsing instance."""
         base_url = 'https://csprod.dsc.umich.edu/services/schedofclasses'
-        super(UmichParser, self).__init__(school, url,
-                                          term_base_url=base_url,
-                                          **kwargs)
+        super(UmichParser, self).__init__(UmichParser.SCHOOL, UmichParser.URL,
+                                          term_base_url=base_url, **kwargs)
 
     def start(self,
               years=None,
@@ -38,8 +31,7 @@ class UmichParser(UPeoplesoftParser):
               textbooks=True,
               verbosity=3,
               **kwargs):
-
-        # Hardcoded years-term codes.
+        """Start parsing."""
         years_and_terms = {
             '2016': {
                 'Summer': '2100',

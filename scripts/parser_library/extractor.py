@@ -22,6 +22,62 @@ import dateutil.parser as dparser
 from scripts.parser_library.words import conjunctions_and_prepositions
 from scripts.parser_library.internal_exceptions import CourseParseError
 
+
+def filter_term_and_year(years_and_terms, cmd_years=None, cmd_terms=None):
+    if cmd_years is None and cmd_terms is None:
+        return years_and_terms
+    years = cmd_years if cmd_years is not None else years_and_terms
+    for year in years:
+        if year not in years_and_terms:
+            raise CourseParseError('year {} not defined'.format(year))
+        terms = cmd_terms if cmd_terms is not None else years_and_terms[year]
+        for term in terms:
+            if term not in years_and_terms[year]:
+                raise CourseParseError('term not defined for {} {}'.format(term, year))
+    return {year: {term: years_and_terms[year][term] for term in terms} for year in years}
+
+
+def filter_departments(departments, cmd_departments=None, grouped=False):
+    '''Filter department dictionary to only include those departments listed in cmd_departments, if given
+    Args:
+        department: dictionary of item <dept_code, dept_name>
+    KwArgs:
+        cmd_departments: department code list
+        grouped: if grouped is set will not throw CoureParseError
+    Return: filtered list of departments.
+    '''
+
+    # FIXME -- if groups exists, will only search current group
+    if cmd_departments is None:
+        return departments
+
+    # department list specified as cmd line arg
+    for cmd_dept_code in cmd_departments:
+        if cmd_dept_code not in departments and not grouped:
+            raise CourseParseError('invalid department code {}'.format(cmd_dept_code))
+
+    # Return dictionary of {code: name} or set {code}
+    if isinstance(departments, dict):
+        departments = {cmd_dept_code: departments[cmd_dept_code] for cmd_dept_code in cmd_departments if cmd_dept_code in departments}
+    else:
+        departments = {dept for dept in departments if dept in cmd_departments}
+
+    return departments
+
+
+def titlize(name):
+    """Title and keep roman numerals uppercase."""
+    name = name.lower()
+    titled = ''
+    for word in name.split():
+        if Extractor._ROMAN_NUMERAL.match(word) is not None:
+            titled += word.upper()
+        else:
+            titled += word.lower() if word in conjunctions_and_prepositions else word.title()
+        titled += ' '
+    return titled.strip()
+
+
 class Extractor():
 
     def time_12to24(self,time12):
@@ -151,17 +207,17 @@ class Extractor():
 
     @staticmethod
     def filter_term_and_year(years_and_terms, cmd_years=None, cmd_terms=None):
-            if cmd_years is None and cmd_terms is None:
-                return years_and_terms
-            years = cmd_years if cmd_years is not None else years_and_terms
-            for year in years:
-                if year not in years_and_terms:
-                    raise CourseParseError('year {} not defined'.format(year))
-                terms = cmd_terms if cmd_terms is not None else years_and_terms[year]
-                for term in terms:
-                    if term not in years_and_terms[year]:
-                        raise CourseParseError('term not defined for {} {}'.format(term, year))
-            return {year: {term: years_and_terms[year][term] for term in terms} for year in years}
+        if cmd_years is None and cmd_terms is None:
+            return years_and_terms
+        years = cmd_years if cmd_years is not None else years_and_terms
+        for year in years:
+            if year not in years_and_terms:
+                raise CourseParseError('year {} not defined'.format(year))
+            terms = cmd_terms if cmd_terms is not None else years_and_terms[year]
+            for term in terms:
+                if term not in years_and_terms[year]:
+                    raise CourseParseError('term not defined for {} {}'.format(term, year))
+        return {year: {term: years_and_terms[year][term] for term in terms} for year in years}
 
     @staticmethod
     def filter_departments(departments, cmd_departments=None, grouped=False):
