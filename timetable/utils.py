@@ -245,25 +245,24 @@ class TimetableGenerator:
 
 
 def get_current_semesters(school):
+    """List of semesters ordered by academic temporality.
+
+    For a given school, get the possible semesters ordered by the most recent
+    year for each semester that has course data, and return a list of
+    (semester name, year) pairs.
     """
-    For a given school, get the possible semesters and the most recent year for each
-    semester that has course data, and return a list of (semester name, year) pairs.
-    """
-    terms_ordering = {
-        'Summer': 1,
-        'Winter': 2,
-        'Spring': 3,
-        'Fall': 4,
-    }
-    semesters = school_to_semesters[school]
-    old_semesters = school_to_semesters[school]
-    # Ensure DB has all semesters.
-    all_semesters = set()
-    for semester in semesters:
-        all_semesters.add(Semester.objects.update_or_create(**semester)[0])
-    return sorted([{'name': s.name, 'year': s.year} for s in all_semesters],
-                  key=lambda s: (s['year'], terms_ordering.get(s['name'],0)),
-                  reverse=True)
+    semesters = []
+    for year, terms in reversed(school_to_semesters[school].items()):
+        for term in terms:
+            # Ensure DB has all semesters.
+            Semester.objects.update_or_create(name=term, year=year)
+
+            semesters.append({
+                'name': term,
+                'year': str(year)
+            })
+
+    return semesters
 
 
 def get_old_semesters(school):
