@@ -81,8 +81,8 @@ class CourseModalBody extends React.Component {
         secName={sec}
         instr={instructString}
         enrolled={enrolled}
-        waitlist={slots[0].waitlist}
-        size={slots[0].size}
+        waitlist={slots[0] ? slots[0].waitlist : 0}
+        size={slots[0] ? slots[0].size : 0}
         locked={this.props.isSectionLocked(this.props.data.id, sec)}
         isOnActiveTimetable={this.props.isSectionOnActiveTimetable(this.props.data.id, sec)}
         lockOrUnlock={() => this.props.addOrRemoveCourse(this.props.data.id, sec)}
