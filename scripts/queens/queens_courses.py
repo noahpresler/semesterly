@@ -1,19 +1,10 @@
-# Copyright (C) 2017 Semester.ly Technologies, LLC
-#
-# Semester.ly is free software: you can redistribute it and/or modify
-# it under the terms of the GNU General Public License as published by
-# the Free Software Foundation, either version 3 of the License, or
-# (at your option) any later version.
-#
-# Semester.ly is distributed in the hope that it will be useful,
-# but WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-# GNU General Public License for more details.
+"""
+Queens Course Parser.
 
-# @what   Queens Course Parser
-# @org    Semeseter.ly
-# @author Noah Presler & Michael N. Miller
-# @date   2/15/17
+@org    Semeseter.ly
+@author Noah Presler & Michael N. Miller
+@date   2/15/17
+"""
 
 from __future__ import absolute_import, division, print_function
 
@@ -26,6 +17,7 @@ from selenium import webdriver
 
 
 class QueensParser(QPeoplesoftParser):
+    """Course parser for Queens University."""
 
     BASE_URL = 'https://saself.ps.queensu.ca/psc/saself/EMPLOYEE/HRMS/c/'\
                'SA_LEARNER_SERVICES.CLASS_SEARCH.GBL'
@@ -35,6 +27,7 @@ class QueensParser(QPeoplesoftParser):
     }
 
     def __init__(self, **kwargs):
+        """Construct parsing object."""
         params = {
             'Page': 'SSR_CLSRCH_ENTRY',
             'Action': 'U',
@@ -45,33 +38,27 @@ class QueensParser(QPeoplesoftParser):
         self.cap["phantomjs.page.settings.resourceTimeout"] = 50000000
         self.cap["phantomjs.page.settings.loadImages"] = False
         self.cap["phantomjs.page.settings.userAgent"] = 'Mozilla/5.0 (Windows NT 6.1; Win64; x64; rv:16.0) Gecko/20121026 Firefox/16.0'
-        # self.driver = webdriver.PhantomJS(desired_capabilities=self.cap)
+        self.driver = webdriver.PhantomJS(desired_capabilities=self.cap)
         # NOTE: comment being saved in case this is important for local dev.
-        self.driver = webdriver.PhantomJS(
-            './node_modules/phantomjs-prebuilt/bin/phantomjs',
-            desired_capabilities=self.cap
-        )
+        # self.driver = webdriver.PhantomJS(
+        #     './node_modules/phantomjs-prebuilt/bin/phantomjs',
+        #     desired_capabilities=self.cap
+        # )
         # self.driver = webdriver.Chrome()  # FOR DEBUG PURPOSES ONLY
 
         super(QueensParser, self).__init__('queens', QueensParser.BASE_URL,
                                            url_params=params, **kwargs)
 
-    def seleni_run(self, code):
+    def seleni_run(self, execute):
+        """Run selenium routine."""
         while True:
             try:
-                return code()
+                return execute()
             except:
                 continue
 
-    def focus_iframe(self):
-        iframe = self.seleni_run(
-            lambda: self.driver.find_element_by_xpath(
-                "//iframe[@id='ptifrmtgtframe']"
-            )
-        )
-        self.driver.switch_to_frame(iframe)
-
     def login(self):
+        """Login to Queens course listings website."""
         socket.setdefaulttimeout(60)
         self.driver.set_page_load_timeout(30)
         self.driver.implicitly_wait(30)
@@ -87,12 +74,23 @@ class QueensParser(QPeoplesoftParser):
             )
         )
         self.seleni_run(
-            lambda: self.driver.find_element_by_class_name('form-button').click())
+            lambda: self.driver.find_element_by_class_name('form-button').click()
+        )
         self.seleni_run(
-            lambda: self.driver.find_element_by_link_text("SOLUS").click())
-        self.focus_iframe()
+            lambda: self.driver.find_element_by_link_text("SOLUS").click()
+        )
+
+        # Focus iframe
+        iframe = self.seleni_run(
+            lambda: self.driver.find_element_by_xpath(
+                "//iframe[@id='ptifrmtgtframe']"
+            )
+        )
+        self.driver.switch_to_frame(iframe)
+
         self.seleni_run(
-            lambda: self.driver.find_element_by_link_text("Search").click())
+            lambda: self.driver.find_element_by_link_text("Search").click()
+        )
 
         # transfer Selenium cookies to Requester cookies
         for cookie in self.driver.get_cookies():
@@ -101,7 +99,8 @@ class QueensParser(QPeoplesoftParser):
 
         # Close Selenium/PhantomJS process.
         # REF: http://stackoverflow.com/questions/25110624/how-to-properly-stop-phantomjs-execution
-        # NOTE: update selenium version after fix released (https://github.com/hydroshare/hydroshare/commit/f7ef2a867250aac86b3fd12821cabf5524c2cb17)
+        # NOTE: update selenium version after fix released
+        #  (https://github.com/hydroshare/hydroshare/commit/f7ef2a867250aac86b3fd12821cabf5524c2cb17)
         self.driver.close()
         self.driver.service.process.send_signal(signal.SIGTERM)
         self.driver.quit()
@@ -135,7 +134,7 @@ class QueensParser(QPeoplesoftParser):
               textbooks=True,
               verbosity=3,
               **kwargs):
-
+        """Start parse."""
         if verbosity >= 1:
             print('Logging in')
 
