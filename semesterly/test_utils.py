@@ -1,4 +1,5 @@
 import datetime
+import inspect
 import itertools
 import os
 import re
@@ -74,7 +75,12 @@ class SeleniumTestCase(StaticLiveServerTestCase):
             msg += "SCREENSHOT MAY BE FOUND IN: %s\n" % self.img_dir
             msg += "" + '-' * 70 + "\n"
             self.driver.save_screenshot(filename)
-            raise type(exc)(exc.message + msg)
+            trace = ['\n\nFull Traceback (most recent call last):']
+            for item in inspect.trace():
+                trace.append(' File "{1}", line {2}, in {3}'.format(*item))
+                for line in item[4]:
+                    trace.append(' ' + line.strip())
+            raise type(exc)(exc.message + '\n'.join(trace) + msg)
 
     def get_test_url(self, school, path=''):
         """Get's the live server testing url for a given school.
