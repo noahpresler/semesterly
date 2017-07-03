@@ -63,8 +63,10 @@ class SeleniumTestCase(StaticLiveServerTestCase):
 
     @contextmanager
     def description(self, descr):
-        """Decorates exception stacktraces with the description of the test portion which failed.
-        Aditionally takes screenshots on failures using the selenium screenshot functionality.
+        """A context manager which wraps a group of code and adds details to any exceptions thrown
+        by the enclosed lines. Upon such an exception, the context manager will also take a screenshot
+        of the current state of self.driver, writing a PNG to self.img_dir, labeled by the provided
+        description and a timetstamp.
         """
         try:
             yield
@@ -159,6 +161,7 @@ class SeleniumTestCase(StaticLiveServerTestCase):
         )
         search_box.clear()
         search_box.send_keys(query)
+        self.assert_invisibility((By.CLASS_NAME, 'results-loading-gif'))
 
     def assert_loader_completes(self):
         """Asserts that the semester.ly page loader has completed"""
@@ -175,12 +178,12 @@ class SeleniumTestCase(StaticLiveServerTestCase):
         """Searches a course and asserts n_results elements are found"""
         self.enter_search_query(query)
         search_results = self.find((By.CLASS_NAME, 'search-results'))
-        self.assertEqual(
-            len(search_results.find_elements_by_class_name('search-course')),
+        self.assert_n_elements_found(
+            (By.CLASS_NAME, 'search-course'),
             n_results
         )
 
-    def add_course(self, course_idx, n_slots, n_master_slots, by_section=''):
+    def add_course(self, course_idx, n_slots, n_master_slots, by_section='', code=None):
         """Adds a course via search results and asserts the corresponding number of slots are found
 
         Args:
@@ -188,13 +191,23 @@ class SeleniumTestCase(StaticLiveServerTestCase):
             n_slots (int): the number of slots expected after add
             n_master_slots (int): the number of master slots expected after add
             by_section (str, optional): if provided adds the specific section of the course
+            code (str, optional): the course code to add, validates presence if provided
         """
+        # Focus the search box
         search_box = self.find(
             (By.XPATH, '//div[@class="search-bar__input-wrapper"]/input')
         )
         search_box.send_keys("")
         search_results = self.find((By.CLASS_NAME, 'search-results'))
-        chosen_course = search_results.find_elements_by_class_name('search-course')[course_idx]
+        if code:
+            chosen_course = WebDriverWait(self.driver, self.TIMEOUT) \
+                    .until(text_to_be_present_in_nth_element(
+                            (By.CLASS_NAME, 'search-course'),
+                            code,
+                            course_idx)
+                        )
+        else: 
+            chosen_course = search_results.find_elements_by_class_name('search-course')[course_idx]
         if not by_section:
             add_button = self.find(
                 (By.CLASS_NAME, 'search-course-add'),
@@ -213,7 +226,7 @@ class SeleniumTestCase(StaticLiveServerTestCase):
             ), clickable=True)
             ActionChains(self.driver).move_to_element(chosen_course)\
                  .move_to_element(section) \
-                .click().move_to_element(chosen_course).perform()
+                .click().perform()
         self.assert_loader_completes()
         self.assert_slot_presence(n_slots, n_master_slots)
         self.click_off()
@@ -733,6 +746,27 @@ class text_to_be_present_in_element_attribute(object):
                 return False
         except StaleElementReferenceException:
             return False
+
+class text_to_be_present_in_nth_element(object):
+    """
+    An expectation for checking if the given text is present in the nth element's
+    locator, text
+    """
+    def __init__(self, locator, text_, index_):
+        self.locator = locator
+        self.text = text_
+        self.index = index_
+
+    def __call__(self, driver):
+        try:
+            element = driver.find_elements(*self.locator)[self.index]
+            if element.text and self.text in element.text:
+                return element
+            else:
+                return False
+        except StaleElementReferenceException:
+            return False
+
 
 class n_elements_to_be_found(object):
     """
