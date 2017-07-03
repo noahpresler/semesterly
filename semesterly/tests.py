@@ -9,9 +9,8 @@ class EndToEndTest(SeleniumTestCase):
     ]
 
     def test_logged_out_flow(self):
-        with self.description("setup and clear tutorial"):
-            self.driver.set_window_size(1440, 1080)
-            self.clear_tutorial()
+        self.driver.set_window_size(1440, 1080)
+        self.clear_tutorial()
         with self.description("search, add, then remove course"):
             self.search_course('calc', 3)
             self.add_course(0, n_slots=4, n_master_slots=1)
@@ -29,6 +28,8 @@ class EndToEndTest(SeleniumTestCase):
             self.open_course_modal_from_slot(0)
             self.validate_course_modal()
             self.close_course_modal()
+        with self.description("Lock course and ensure pagination becomes invisible"):
+            self.lock_course()
         with self.description("Remove course from course modal"):
             self.open_course_modal_from_slot(0)
             self.remove_course_from_course_modal(0)
@@ -43,11 +44,11 @@ class EndToEndTest(SeleniumTestCase):
         with self.description("add conflicting course and accept allow conflict alert"):
             self.remove_course(0, n_slots_expected=0)
             self.click_off() # click out of share link component
-            self.search_course('calc', 3)
-            self.add_course(2, n_slots=4, n_master_slots=1, by_section="(09)")
-            self.search_course('calc', 3)
+            self.search_course('AS.110.106', 1)
+            self.add_course(0, n_slots=4, n_master_slots=1, by_section="(09)")
+            self.search_course('AS.110.105', 1)
             self.execute_action_expect_alert(
-                lambda: self.add_course(1, n_slots=4, n_master_slots=1, by_section="(01)"),
+                lambda: self.add_course(0, n_slots=4, n_master_slots=1, code="AS.110.105"),
                 alert_text_contains="Allow Conflicts"
             )
             self.allow_conflicts_add(n_slots=8)
@@ -68,9 +69,8 @@ class EndToEndTest(SeleniumTestCase):
             self.select_nth_adv_search_result(1, sem)
 
     def test_logged_in_via_fb_flow(self):
-        with self.description("setup and clear tutorial"):
-            self.driver.set_window_size(1440, 1080)
-            self.clear_tutorial()
+        self.driver.set_window_size(1440, 1080)
+        self.clear_tutorial()
         with self.description("succesfully signup with facebook"):
             self.login_via_fb(
                 email='endtoend_edmsgmk_tester@tfbnw.net',
