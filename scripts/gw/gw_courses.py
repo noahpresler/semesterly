@@ -1,7 +1,10 @@
-# @what   GW Course Parser
-# @org    Semeseter.ly
-# @author Michael N. Miller
-# @date   11/26/16
+"""
+GW Course Parser.
+
+@org    Semeseter.ly
+@author Michael N. Miller
+@date   11/26/16
+"""
 
 from __future__ import absolute_import, division, print_function
 
@@ -16,48 +19,48 @@ from scripts.parser_library.internal_utils import safe_cast
 
 
 class GWParser(CourseParser):
+    """George Washington University course parser object.
+
+    NOTE: cannot support multiple login!
+    """
+
     SCHOOL = 'gw'
     URL = 'https://banweb.gwu.edu/PRODCartridge'
-    USERNAME = 'G45956511'
-    PASSWORD = '052698'
     CREDENTIALS = {
-        'sid': USERNAME,
-        'PIN': PASSWORD
-    }
-
-    SECURITY_QUESTION_CREDENTIALS = {
-        'RET_CODE': '',
-        'answer': 'Katie',
-        'SID': USERNAME,
-        'QSTN_NUM': 1,
-        'answer': 'Katie',
+        'USERNAME': 'G45956511',
+        'PASSWORD': '052698',
+        'SECURITY_QUESTION_ANSWER': 'Katie'
     }
 
     def __init__(self, **kwargs):
+        """Construct GW parser."""
         self.terms = {
             'Fall 2017': '201703',
-            # 'Fall 2016':'201603',
-            # 'Spring 2017':'201701'
+            'Fall 2016': '201603',
+            'Spring 2017': '201701'
         }
 
         super(GWParser, self).__init__(GWParser.SCHOOL, **kwargs)
 
-    def login(self):
-        print('Logging in...')
-
+    def _login(self):
         # Collect necessary cookies
-        self.requester.get(
-            GWParser.URL + '/twbkwbis.P_WWWLogin',
-            parse=False)
+        self.requester.get(GWParser.URL + '/twbkwbis.P_WWWLogin',
+                           parse=False)
 
-        self.requester.headers['Referer'] = GWParser.URL \
-            + '/twbkwbis.P_WWWLogin'
+        self.requester.headers['Referer'] = '{}/twbkwbis.P_WWWLogin'.format(
+            GWParser.URL
+        )
 
-        if self.requester.post(
+        logged_in = self.requester.post(
             GWParser.URL + '/twbkwbis.P_ValLogin',
-            form=GWParser.CREDENTIALS,
-            parse=False
-        ).status_code != 200:
+            parse=False,
+            data={
+                'sid': GWParser.CREDENTIALS['USERNAME'],
+                'PIN': GWParser.CREDENTIALS['PASSWORD']
+            }
+        )
+
+        if logged_in.status_code != 200:
             print('Unexpected error: login unsuccessful',
                   sys.exc_info()[0],
                   file=sys.stderr)
@@ -67,9 +70,15 @@ class GWParser(CourseParser):
         self.requester.post(
             '{}/twbkwbis.P_ProcSecurityAnswer'.format(GWParser.URL),
             parse=False,
-            data=GWParser.SECURITY_QUESTION_CREDENTIALS)
+            data={
+                'RET_CODE': '',
+                'SID': GWParser.CREDENTIALS['USERNAME'],
+                'QSTN_NUM': 1,
+                'answer': GWParser.CREDENTIALS['SECURITY_QUESTION_ANSWER']
+            }
+        )
 
-    def direct_to_search_page(self):
+    def _direct_to_search_page(self):
         genurl = GWParser.URL + '/twbkwbis.P_GenMenu'
         actions = ['bmenu.P_MainMnu', 'bmenu.P_StuMainMnu', 'bmenu.P_RegMnu']
         map(lambda n: self.requester.get(genurl, params={'name': n}), actions)
@@ -78,26 +87,28 @@ class GWParser(CourseParser):
                            params={'term_in': ''})
 
     def start(self, **kwargs):
-        self.login()
-        self.direct_to_search_page()
+        """Start parse."""
+        self._login()
+        self._direct_to_search_page()
 
         for term_name, term_code in self.terms.items():
-
-            print('> Parsing courses for term', term_name)
-
             self.ingestor['term'], self.ingestor['year'] = term_name.split()
 
+            # Retrieve term search page.
             soup = self.requester.get(
                 GWParser.URL + '/bwckgens.p_proc_term_date',
                 params={
                     'p_calling_proc': 'P_CrseSearch',
                     'p_term': term_code
-                })
+                }
+            )
 
             # Create search param list.
             input_options_soup = soup.find(
                 'form',
-                action='/PRODCartridge/bwskfcls.P_GetCrse').find_all('input')
+                action='/PRODCartridge/bwskfcls.P_GetCrse'
+            ).find_all('input')
+
             query = {}
             for input_option in input_options_soup:
                 query[input_option['name']] = input_option.get('value', '')
@@ -117,7 +128,10 @@ class GWParser(CourseParser):
                 depts[dept_soup.text.strip()] = dept_soup['value']
 
             for dept_name, dept_code in depts.iteritems():
-                print('>> Parsing courses in department', dept_name)
+                self.ingestor['department'] = {
+                    'name': dept_name,
+                    'code': dept_code
+                }
 
                 query['sel_subj'] = ['dummy', dept_code]
 
@@ -125,12 +139,13 @@ class GWParser(CourseParser):
                     GWParser.URL + '/bwskfcls.P_GetCrse',
                     params=query)
 
-                GWParser.check_errorpage(rows)
+                GWParser._check_errorpage(rows)
 
                 try:
                     rows = rows.find(
                         'table',
-                        class_='datadisplaytable').find_all('tr')[2:]
+                        class_='datadisplaytable'
+                    ).find_all('tr')[2:]
                 except AttributeError:
                     print('message: no results for department',
                           dept_name,
@@ -141,8 +156,6 @@ class GWParser(CourseParser):
                 for row in rows:
                     info = row.find_all('td')
                     if info[1].find('a'):
-
-                        # print '\t', info[2].text, info[3].text, info[4].text
 
                         # general info
                         self.ingestor.update({
@@ -177,11 +190,12 @@ class GWParser(CourseParser):
                                 'sel_divs': '',
                                 'sel_dept': '',
                                 'sel_attr': ''
-                            })
+                            }
+                        )
 
                         if catalog:
                             self.ingestor.update(
-                                self.parse_catalogentrypage(catalog)
+                                GWParser._parse_catalogentrypage(catalog)
                             )
 
                         course = self.ingestor.ingest_course()
@@ -195,8 +209,8 @@ class GWParser(CourseParser):
                                 'crn_in': self.ingestor['ident']
                             })
 
-                        meetings_soup = GWParser.extract_meetings(section_soup)
-                        ''' Example of a meeting entry
+                        meetings_soup = GWParser._extract_meetings(section_soup)
+                        """Example of a meeting entry
                         <tr>
                             <td class="dddefault">Class</td>
                             <td class="dddefault">4:00 pm - 6:00 pm</td>
@@ -206,17 +220,17 @@ class GWParser(CourseParser):
                             <td class="dddefault">Lecture</td>
                             <td class="dddefault">Timothy A.  McCaffrey (<abbr title="Primary">P</abbr>), David   Leitenberg </td>
                         </tr>
-                        '''
+                        """
 
-                        self.parse_instructors(meetings_soup)
+                        self._parse_instructors(meetings_soup)
 
                         if len(meetings_soup) > 0:
                             self.ingestor['section_type'] = meetings_soup[0].find_all('td')[5].text
                             section_model = self.ingestor.ingest_section(course)
 
-                        self.parse_meetings(meetings_soup, section_model)
+                        self._parse_meetings(meetings_soup, section_model)
 
-    def parse_meetings(self, meetings_soup, section_model):
+    def _parse_meetings(self, meetings_soup, section_model):
         for meeting_soup in meetings_soup:
             col = meeting_soup.find_all('td')
             time = re.match(r'(.*) - (.*)', col[1].text)
@@ -228,12 +242,11 @@ class GWParser(CourseParser):
             filtered_days = filter(lambda x: x.replace(u'\xa0', u''),
                                    self.ingestor['days'])
             if len(filtered_days) == 0:
-                # print('FILTERED DAY EMPTY DAY', file=sys.stderr)
                 break
             self.ingestor['location'] = col[3].text
             self.ingestor.ingest_meeting(section_model)
 
-    def parse_instructors(self, meetings):
+    def _parse_instructors(self, meetings):
         self.ingestor['instrs'] = []
         for meeting in meetings:
             instructors = meeting.find_all('td')[6].text.split(',')
@@ -244,20 +257,26 @@ class GWParser(CourseParser):
                 instructor = ' '.join(instructor.split())
 
                 # Remove primary tag from instructor name.
-                instructor = re.match(r'(.*?)(?: \(P\))?$', instructor).group(1)
+                instructor = re.match(
+                    r'(.*?)(?: \(P\))?$',
+                    instructor
+                ).group(1)
 
                 self.ingestor['instrs'].append(instructor)
 
-    def parse_catalogentrypage(self, soup):
+    @staticmethod
+    def _parse_catalogentrypage(soup):
         fields = {}
         meat = soup.find('body').find('table', class_='datadisplaytable')
         if meat is None:
             return {}
-        fields.update({'descr': self.extract_description(meat)})
-        fields.update(self.extract_info(meat.find('td', class_='ntdefault')))
+        fields.update({'descr': GWParser._extract_description(meat)})
+        fields.update(GWParser._extract_info(meat.find('td',
+                                                       class_='ntdefault')))
         return fields
 
-    def extract_description(self, soup):
+    @staticmethod
+    def _extract_description(soup):
         try:
             meat = soup.find_all('tr', recursive=False)[1].find('td')
             descr = re.match(r'<td .*?>\n([^<]+)<[^$]*</td>', meat.prettify())
@@ -265,7 +284,8 @@ class GWParser(CourseParser):
         except:
             return ''
 
-    def extract_info(self, soup):
+    @staticmethod
+    def _extract_info(soup):
         # Link field in <span> tag to text proceeding it.
         fields = {}
         for t in soup.find_all('span', class_='fieldlabeltext'):
@@ -294,7 +314,7 @@ class GWParser(CourseParser):
         return extracted
 
     @staticmethod
-    def extract_meetings(soup):
+    def _extract_meetings(soup):
         meetings = soup.find('table', class_='datadisplaytable')
         if meetings:
             meetings = meetings.find('table', class_='datadisplaytable')
@@ -306,7 +326,7 @@ class GWParser(CourseParser):
             return []
 
     @staticmethod
-    def check_errorpage(soup):
+    def _check_errorpage(soup):
         error = soup.find('span', class_='errortext')
         if not error:
             return

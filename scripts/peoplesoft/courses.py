@@ -17,7 +17,7 @@ from scripts.textbooks.amazon import amazon_textbook_fields
 from scripts.parser_library.base_parser import CourseParser
 from scripts.parser_library.internal_exceptions import CourseParseError
 from scripts.parser_library.extractor import filter_departments, \
-    filter_term_and_year, titlize
+    filter_term_and_year, titlize, extract_info
 
 
 class PeoplesoftParser(CourseParser):
@@ -74,7 +74,7 @@ class PeoplesoftParser(CourseParser):
         """Do parse."""
         self.verbosity = verbosity
         self.textbooks = cmd_textbooks
-        self.empty_ingestor_lists()
+        self._empty_ingestor_lists()
 
         # NOTE: umich will do nothing and return an empty dict
         soup, params = self._goto_search_page(self.url_params)
@@ -86,23 +86,19 @@ class PeoplesoftParser(CourseParser):
         for year, terms in self.years_and_terms.items():
             self.ingestor['year'] = year
             for term_name, term_code in terms.items():
-                if self.verbosity >= 1:
-                    print('Parsing courses for', term_name, year)
                 soup = self._term_update(term_code, params)
                 self.ingestor['term'] = term_name
 
-                # NOTE: Peoplesoft schools that do not use groups will
-                #  return {None: None}
+                # NOTE: schools that do not use groups will return {None: None}
                 groups = self._get_groups(soup, params)
                 for group_id, group_name in groups.items():
                     params2 = {}
-                    if group_id is not None:  # NOTE: true for umich parse
-                        if self.verbosity >= 1:
-                            print('> Parsing courses in group', group_name)
+                    if group_id is not None:
                         soup = self._group_update(group_id, params)
                         params2 = PeoplesoftParser._hidden_params(soup,
                                                                   ajax=True)
-                    else:  # Update search params to get course list.
+                    else:  # School does not use groups.
+                        # Update search params to get course list.
                         params = PeoplesoftParser._exclude_ajax_params(params)
                         params.update(
                             PeoplesoftParser._create_ic_action('class_search')
@@ -111,30 +107,33 @@ class PeoplesoftParser(CourseParser):
 
                     # extract department list info
                     dept_param_key = self._get_dept_param_key(soup)
-                    departments, department_ids = self.get_departments(soup,
-                                                                       cmd_departments)
+                    departments, department_ids = self._get_departments(
+                        soup,
+                        cmd_departments
+                    )
+
                     for dept_code, dept_name in departments.iteritems():
                         self.ingestor['dept_name'] = dept_name
                         self.ingestor['dept_code'] = dept_code
-                        if self.verbosity >= 1:
-                            print('>> Parsing courses in department {} ({})'.format(dept_name, dept_code))
 
                         # Update search payload with department code
-                        params2[dept_param_key] = dept_code if department_ids is None else department_ids[dept_code]
+                        params2[dept_param_key] = dept_code
+                        if department_ids is not None:
+                            params2[dept_param_key] = department_ids[dept_code]
 
                         # Get course listing page for department
                         soup = self.requester.post(self.base_url,
                                                    params=params2)
                         if not self._is_valid_search_page(soup):
                             continue
-                        if self.is_special_search(soup):  # too many results
-                            soup = self.handle_special_case_on_search(soup)
+                        if self._is_special_search(soup):  # too many results
+                            soup = self._handle_special_case_on_search(soup)
 
                         courses = self._get_courses(soup)
-                        course_soups = self.get_course_list_as_soup(courses,
-                                                                    soup)
+                        course_soups = self._get_course_list_as_soup(courses,
+                                                                     soup)
                         for course_soup in course_soups:
-                            self.parse_course_description(course_soup)
+                            self._parse_course_description(course_soup)
 
     @staticmethod
     def _find_all_isbns(soup):
@@ -170,18 +169,6 @@ class PeoplesoftParser(CourseParser):
                 years_terms_values[year] = {}
             years_terms_values[year][term] = term_data['value']
         return years_terms_values
-
-    def parse_term_and_years(term_and_years):
-            years = {
-                term_and_year.split()[1]: {
-                    term_and_year.split()[0]: code
-                } for term_and_year, code in term_and_years.items()
-            }
-            for year in years:
-                years[year].update({
-                    term_and_year.split()[0].title(): code for term_and_year, code in term_and_years.items() if term_and_year.split()[1] == year
-                })
-            return years
 
     def _get_courses(self, soup):
         return soup.find_all('table', class_='PSLEVEL1GRIDNBONBO')
@@ -234,42 +221,56 @@ class PeoplesoftParser(CourseParser):
         }
 
     def _get_dept_param_key(self, soup):
-        return soup.find('select', id=re.compile(r'SSR_CLSRCH_WRK_SUBJECT_SRCH\$\d'))['id']
+        return soup.find(
+            'select',
+            id=re.compile(r'SSR_CLSRCH_WRK_SUBJECT_SRCH\$\d')
+        )['id']
 
-    def get_departments(self, soup, cmd_departments=None):
-        def extract_dept_name(d):
-            return self.department_name_regex.match(d).group(1)
+    def _get_departments(self, soup, cmd_departments=None):
         dept_soups = soup.find(
             'select',
             id=re.compile(r'SSR_CLSRCH_WRK_SUBJECT_SRCH\$\d')
         ).find_all('option')[1:]
 
+        def extract_dept_name(d):
+            return self.department_name_regex.match(d).group(1)
         departments = {
             d['value']: extract_dept_name(d.text) for d in dept_soups
         }
         return filter_departments(departments, cmd_departments), None
 
-    def get_course_list_as_soup(self, courses, soup):
-        # fill payload for course description page request
+    def _get_course_list_as_soup(self, courses, soup):
+        """Fill payload for course description page request."""
         payload = PeoplesoftParser._hidden_params(soup)
         for i in range(len(courses)):
             payload.update({'ICAction': 'MTG_CLASS_NBR$' + str(i)})
             soup = self.requester.get(self.base_url, params=payload)
             yield soup
 
-    def parse_course_description(self, soup):
+    def _parse_course_description(self, soup):
         # scrape info from page
-        title = soup.find('span', id='DERIVED_CLSRCH_DESCR200').text.encode('ascii', 'ignore')
-        subtitle = soup.find('span', id='DERIVED_CLSRCH_SSS_PAGE_KEYDESCR').text.encode('ascii', 'ignore')
+        title = soup.find(
+            'span',
+            id='DERIVED_CLSRCH_DESCR200'
+        ).text.encode('ascii', 'ignore')
+
+        subtitle = soup.find(
+            'span',
+            id='DERIVED_CLSRCH_SSS_PAGE_KEYDESCR'
+        ).text.encode('ascii', 'ignore')
+
         units = soup.find('span', id='SSR_CLS_DTL_WRK_UNITS_RANGE').text
         capacity = soup.find('span', id='SSR_CLS_DTL_WRK_ENRL_CAP').text
         enrollment = soup.find('span', id='SSR_CLS_DTL_WRK_ENRL_TOT').text
-        waitlist = soup.find('span', id='SSR_CLS_DTL_WRK_WAIT_TOT').text
+        # waitlist = soup.find('span', id='SSR_CLS_DTL_WRK_WAIT_TOT').text
         descr = soup.find('span', id='DERIVED_CLSRCH_DESCRLONG')
         notes = soup.find('span', id='DERIVED_CLSRCH_SSR_CLASSNOTE_LONG')
         req = soup.find('span', id='SSR_CLS_DTL_WRK_SSR_REQUISITE_LONG')
         areas = soup.find('span', id='SSR_CLS_DTL_WRK_SSR_CRSE_ATTR_LONG')
-        components = soup.find('div', id=re.compile(r'win\ddivSSR_CLS_DTL_WRK_SSR_COMPONENT_LONG'))
+        components = soup.find(
+            'div',
+            id=re.compile(r'win\ddivSSR_CLS_DTL_WRK_SSR_COMPONENT_LONG')
+        )
 
         # parse table of times
         scheds = soup.find_all('span', id=re.compile(r'MTG_SCHED\$\d*'))
@@ -278,14 +279,9 @@ class PeoplesoftParser(CourseParser):
         dates = soup.find_all('span', id=re.compile(r'MTG_DATE\$\d*'))
 
         # parse textbooks
-        self.parse_textbooks(soup)
-
-        # Extract info from title
-        if self.verbosity >= 2:
-            print('\t' + title)
+        self._parse_textbooks(soup)
 
         rtitle = re.match(r'(.+?\s*\w+) - (\w+)\s*(\S.+)', title)
-        # self.ingestor['section_type'] = PeoplesoftParser.SECTION_MAP.get(subtitle.split('|')[2].strip(), 'L')
         self.ingestor['section_type'] = subtitle.split('|')[2].strip()
 
         # Place course info into course model
@@ -293,37 +289,41 @@ class PeoplesoftParser(CourseParser):
         self.ingestor['course_name'] = titlize(rtitle.group(3))
         self.ingestor['section_code'] = rtitle.group(2)
         self.ingestor['credits'] = float(re.match(r'(\d*).*', units).group(1))
-        self.ingestor['prereqs'] += [self.extractor.extract_info(self.ingestor, req.text)] if req else []
+        if req is not None:
+            self.ingestor['prereqs'] += [extract_info(self.ingestor, req.text)]
         self.ingestor['description'] = [
-            self.extractor.extract_info(self.ingestor, descr.text) if descr else '',
-            self.extractor.extract_info(self.ingestor, notes.text) if notes else ''
+            extract_info(self.ingestor, descr.text) if descr else '',
+            extract_info(self.ingestor, notes.text) if notes else ''
         ]
         self.ingestor['size'] = int(capacity)
         self.ingestor['enrollment'] = int(enrollment)
         instructors = []
         for instr in instrs:
             instructors += instr.text.split(', \r')
-        # NOTE: truncate instructor list to 5 instructors
-        # FIXME -- when db is changed to handle instructor objects, change this to all instructors (frontend should handle this)
+        # NOTE: truncate instructor list to 5 instructors for db
         if len(instructors) > 5:
             instructors = instructors[:5]
             instructors.append("..., ...")
-        self.ingestor['instrs']    = list(set(instructors)) # uniqueify list of instructors
+        self.ingestor['instrs'] = list(set(instructors))
 
-        self.ingestor['areas'] = [self.extractor.extract_info(self.ingestor, areas.text)] if areas else None
-            # print(self.ingestor['areas'])
-        # self.ingestor['areas'] = list(self.extractor.extract_info(self.ingestor, l) for l in re.sub(r'(<.*?>)', '\n', str(areas)).splitlines() if l.strip()) if areas else '' # FIXME -- small bug
-        # if 'geneds' in self.ingestor:
-        #   self.ingestor['areas'] = list(itertools.chain(self.ingestor['areas'], self.ingestor['geneds']))
-            # self.ingestor['areas'] += self.ingestor['geneds']
+        if areas is not None:
+            self.ingestor['areas'] = [extract_info(self.ingestor, areas.text)]
 
-        # Condition such that a laboratory (or another type) section with 0 units does not overwrite a main lecture section
         # TODO - integrate this nicer
+        # Handle condition such that a laboratory (or another type) of section
+        #  with 0 units does not overwrite a main lecture section
         create_course = True
         if components is not None:
             components = components.text.strip()
-            components = {component.replace('Required', '').strip() for component in components.split(',')}
-            if (len(components) > 1 and self.ingestor['credits'] == 0 and 'Lecture' in components and 'Lecture' != self.ingestor['section_type'] and self.ingestor['course_code'] in self.ingestor.validator.seen):
+            components = {
+                component.replace('Required', '').strip()
+                for component in components.split(',')
+            }
+            if (len(components) > 1 and
+                    self.ingestor['credits'] == 0 and
+                    'Lecture' in components and
+                    'Lecture' != self.ingestor['section_type'] and
+                    self.ingestor['course_code'] in self.ingestor.validator.seen):
                 create_course = False
                 course = {'code': self.ingestor['course_code']}
 
@@ -331,18 +331,21 @@ class PeoplesoftParser(CourseParser):
             course = self.ingestor.ingest_course()
         section = self.ingestor.ingest_section(course)
 
-        # course = self.ingestor.ingest_course()
-        # section = self.ingestor.ingest_section(course)
-
-        # offering details
+        # Parse offering details.
         for sched, loc, date in zip(scheds, locs, dates):
 
             rsched = re.match(r'([a-zA-Z]*) (.*) - (.*)', sched.text)
 
             if rsched:
-                days = map(lambda d: PeoplesoftParser._DAY_MAP[d], re.findall(r'[A-Z][^A-Z]*', rsched.group(1)))
-                time = (self.extractor.time_12to24(rsched.group(2)), self.extractor.time_12to24(rsched.group(3)))
-            else: # handle TBA classes
+                days = map(
+                    lambda d: PeoplesoftParser._DAY_MAP[d],
+                    re.findall(r'[A-Z][^A-Z]*', rsched.group(1))
+                )
+                time = (
+                    self.extractor.time_12to24(rsched.group(2)),
+                    self.extractor.time_12to24(rsched.group(3))
+                )
+            else:  # handle TBA classes
                 continue
 
             self.ingestor['time_start'] = time[0]
@@ -353,23 +356,33 @@ class PeoplesoftParser(CourseParser):
 
             self.ingestor.ingest_offerings(section)
 
-        self.empty_ingestor_lists()
+        self._empty_ingestor_lists()
 
-    def parse_textbooks(self, soup):
-        # FIXME -- potential bug with matching textbook with status b/c not sure about gaurantee offered with regex order
-        textbooks = zip(soup.find_all('span', id=re.compile(r'DERIVED_SSR_TXB_SSR_TXBDTL_ISBN\$\d*')), soup.find_all('span', id=re.compile(r'DERIVED_SSR_TXB_SSR_TXB_STATDESCR\$\d*')))
+    def _parse_textbooks(self, soup):
+        # BUG: gaurantee with regex match order and textbook status...?
+        textbooks = zip(
+            soup.find_all(
+                'span',
+                id=re.compile(r'DERIVED_SSR_TXB_SSR_TXBDTL_ISBN\$\d*')
+            ),
+            soup.find_all(
+                'span',
+                id=re.compile(r'DERIVED_SSR_TXB_SSR_TXB_STATDESCR\$\d*'))
+        )
 
         # Remove extra characters from isbn and tranform Required into boolean.
         for i in range(len(textbooks)):
             textbooks[i] = {
-                'isbn': filter(lambda x: x.isdigit(), textbooks[i][0].text), 
+                'isbn': filter(lambda x: x.isdigit(), textbooks[i][0].text),
                 'required': textbooks[i][1].text[0].upper() == 'R',
             }
 
         # Create textbooks.
         if self.textbooks:
             for textbook in textbooks:
-                if not textbook['isbn'] or (len(textbook['isbn']) != 10 and len(textbook['isbn']) != 13):
+                if (not textbook['isbn'] or
+                        (len(textbook['isbn']) != 10 and
+                            len(textbook['isbn']) != 13)):
                     continue  # NOTE: might skip some malformed-isbn values
                 amazon_fields = amazon_textbook_fields(textbook['isbn'])
                 if amazon_fields is not None:
@@ -389,7 +402,7 @@ class PeoplesoftParser(CourseParser):
                     'required': textbook['required'],
                 })
 
-    def empty_ingestor_lists(self):
+    def _empty_ingestor_lists(self):
         """
         Hard set optional ingestor fields.
 
@@ -421,12 +434,13 @@ class PeoplesoftParser(CourseParser):
 
         def find(tag):
             return soup.find(tag, id=re.compile(r'win\ddivPSHIDDENFIELDS'))
-
         hidden = find('div')
         if not hidden:
             hidden = find('field')
 
-        params.update({a['name']: a['value'] for a in hidden.find_all('input')})
+        params.update({
+            a['name']: a['value'] for a in hidden.find_all('input')
+        })
 
         if ajax:
             params.update(PeoplesoftParser._AJAX_PARAMS)
@@ -438,15 +452,15 @@ class PeoplesoftParser(CourseParser):
         if soup is None:
             # TODO - write to error.log with set handle
             raise CourseParseError('is valid search page, soup is None')
-        errmsg = soup.find('div', {'id' : 'win1divDERIVED_CLSMSG_ERROR_TEXT'})
-        if soup.find('td', {'id' : 'PTBADPAGE_' }) or errmsg:
+        errmsg = soup.find('div', id='win1divDERIVED_CLSMSG_ERROR_TEXT')
+        if soup.find('td', id='PTBADPAGE_') or errmsg:
             if errmsg:
                 if self.verbosity >= 3:
                     sys.stderr.write('Error on search: {}'.format(errmsg.text))
             return False
         return True
 
-    def is_special_search(self, soup):
+    def _is_special_search(self, soup):
         return (
             soup.find('span', class_='SSSMSGINFOTEXT') or
             soup.find('span', id='DERIVED_SSE_DSP_SSR_MSG_TEXT')
@@ -456,9 +470,14 @@ class PeoplesoftParser(CourseParser):
     def _create_ic_action(act):
         return {'ICAction': PeoplesoftParser._IC_ACTIONS[act]}
 
-    def handle_special_case_on_search(self, soup):
+    def _handle_special_case_on_search(self, soup):
         if self.verbosity >= 3:
-            sys.stderr.write('SPECIAL SEARCH MESSAGE: {}'.format(soup.find('span', {'class','SSSMSGINFOTEXT'}).text))
+            print(
+                'SPECIAL SEARCH MESSAGE: {}'.format(
+                    soup.find('span', class_='SSSMSGINFOTEXT').text
+                ),
+                file=sys.stderr
+            )
 
         query = PeoplesoftParser._hidden_params(soup, ajax=True)
         query['ICAction'] = '#ICSave'
@@ -467,45 +486,60 @@ class PeoplesoftParser(CourseParser):
 
 
 class QPeoplesoftParser(PeoplesoftParser):
-    '''Queens modification, handles situation where initially selected term departments wont load.'''
+    """Queens modification.
+
+    Handles situation where initially selected term departments wont load.
+    """
 
     def __init__(self, *args, **kwargs):
+        """Construct Queens parser."""
         super(QPeoplesoftParser, self).__init__(*args, **kwargs)
 
     def parse(self, *args, **kwargs):
         """Do parse."""
         soup, _ = self._goto_search_page(kwargs.get('url_params', {}))
-        self.intially_selected_term = self.get_selected_term(soup)
+        self.intially_selected_term = self._get_selected_term(soup)
         self.saved_dept_param_key = super(QPeoplesoftParser, self)._get_dept_param_key(soup)
-        self.saved_departments = super(QPeoplesoftParser, self).get_departments(soup)
+        self.saved_departments = super(QPeoplesoftParser, self)._get_departments(soup)
         return super(QPeoplesoftParser, self).parse(*args, **kwargs)
 
     @staticmethod
-    def get_selected_term(soup):
-        for term in soup.find('select', id='CLASS_SRCH_WRK2_STRM$35$').find_all('option'):
+    def _get_selected_term(soup):
+        terms = soup.find(
+            'select',
+            id='CLASS_SRCH_WRK2_STRM$35$'
+        ).find_all('option')
+
+        for term in terms:
             if term.get('selected') is not None:
                 return term.text
 
-    def get_departments(self, soup, cmd_departments=None):
-        if self.get_selected_term(soup) == self.intially_selected_term:
+    def _get_departments(self, soup, cmd_departments=None):
+        if self._get_selected_term(soup) == self.intially_selected_term:
             sys.stderr.write('GET DEPARTMENTS')
-            return self.extractor.filter_departments(self.saved_departments, cmd_departments), None
-        return super(QPeoplesoftParser, self).get_departments(soup, cmd_departments)
+            return self.extractor.filter_departments(
+                self.saved_departments,
+                cmd_departments
+            ), None
+        return super(QPeoplesoftParser, self)._get_departments(soup,
+                                                               cmd_departments)
 
     def _get_dept_param_key(self, soup):
-        if self.get_selected_term(soup) == self.intially_selected_term:
+        if self._get_selected_term(soup) == self.intially_selected_term:
             return self.saved_dept_param_key
         return super(QPeoplesoftParser, self)._get_dept_param_key(soup)
 
 
 class UPeoplesoftParser(PeoplesoftParser):
-    '''Modifies Peoplesoft parser to accomodate different structure (umich).'''
+    """Modifies Peoplesoft parser to accomodate different structure (umich)."""
 
     def __init__(self, school, url, term_base_url=None, **kwargs):
-        self.term_base_url = term_base_url # NOTE: each term has its own page that must be requested from base url
+        """Construct Umich parsing object."""
+        # Each term has its own page that must be requested from base url.
+        self.term_base_url = term_base_url
         super(UPeoplesoftParser, self).__init__(school, url, **kwargs)
 
-    def get_departments(self, soup, cmd_departments=None):
+    def _get_departments(self, soup, cmd_departments=None):
         # extract department query list
         departments = soup.find_all(
             'a',
@@ -515,9 +549,16 @@ class UPeoplesoftParser(PeoplesoftParser):
             'span',
             id=re.compile(r'M_SR_SS_SUBJECT_DESCR\$\d')
         )
-        depts = {dept.text: dept_name.text for dept, dept_name in zip(departments, department_names)}
+        depts = {
+            dept.text: dept_name.text
+            for dept, dept_name in zip(departments, department_names)
+        }
         dept_ids = {dept.text: dept['id'] for dept in departments}
-        return self.extractor.filter_departments(depts, cmd_departments, grouped=True), dept_ids
+        return self.extractor.filter_departments(
+            depts,
+            cmd_departments,
+            grouped=True
+        ), dept_ids
 
     def _get_dept_param_key(self, soup):
         return 'ICAction'
@@ -547,4 +588,4 @@ class UPeoplesoftParser(PeoplesoftParser):
         return None, {}
 
     def _get_courses(self, soup):
-        return soup.find_all('table', {'class' : 'PSLEVEL1GRIDROWNBO'})
+        return soup.find_all('table', class_='PSLEVEL1GRIDROWNBO')

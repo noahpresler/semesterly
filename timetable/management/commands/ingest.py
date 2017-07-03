@@ -22,7 +22,7 @@ from timetable.models import Updates
 from timetable.school_mappers import course_parsers, textbook_parsers, new_course_parsers, new_textbook_parsers
 from timetable.management.commands.args_parse import schoollist_argparser, ingestor_argparser, validator_argparser
 from scripts.parser_library.internal_exceptions import *
-from scripts.parser_library.tracker import Tracker, LogFormatted
+from scripts.parser_library.tracker import Tracker, LogFormatted, ProgressBar
 
 class Command(BaseCommand):
 	help = "Initiates specified parsers for specified schools. If no school is provided, starts parsers for all schools."
@@ -89,11 +89,15 @@ class Command(BaseCommand):
 			tracker.set_cmd_options(options)
 			tracker.add_viewer(LogFormatted(options['log_stats']))
 
+			if not options['hide_progress_bar']:
+				formatter = lambda stats: '{}/{}'.format(stats['valid'], stats['total'])
+				tracker.add_viewer(ProgressBar(school, formatter))
+
 			p = parser(school,
 				validate=options['validate'],
-				config=options['config_file'],
-				output_filepath=options['output'],
-				output_error_filepath=options['output_error'],
+				config_path=options['config_file'],
+				output_path=options['output'],
+				output_error_path=options['output_error'],
 				break_on_error=options['break_on_error'],
 				break_on_warning=options['break_on_warning'],
 				hide_progress_bar=options['hide_progress_bar'],

@@ -18,10 +18,9 @@ class SalisburyParser(PeoplesoftParser):
 
     def __init__(self, **kwargs):
         """Construct parsing object."""
-        school = 'salisbury'
-        url = 'https://gullnet.salisbury.edu/psc/csprdguest/EMPLOYEE/SA' \
-              '/c/COMMUNITY_ACCESS.CLASS_SEARCH.GBL'
-        super(SalisburyParser, self).__init__(school, url, **kwargs)
+        super(SalisburyParser, self).__init__(SalisburyParser.SCHOOL,
+                                              SalisburyParser.URL,
+                                              **kwargs)
 
     def start(self,
               years=None,

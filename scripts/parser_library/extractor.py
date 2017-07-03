@@ -1,52 +1,64 @@
-# Copyright (C) 2017 Semester.ly Technologies, LLC
-#
-# Semester.ly is free software: you can redistribute it and/or modify
-# it under the terms of the GNU General Public License as published by
-# the Free Software Foundation, either version 3 of the License, or
-# (at your option) any later version.
-#
-# Semester.ly is distributed in the hope that it will be useful,
-# but WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-# GNU General Public License for more details.
+"""
+Parsing library extractio utilities.
 
-# @what     Parsing library Extractor (info)
-# @org      Semeseter.ly
-# @author   Michael N. Miller
-# @date     11/22/16
+@org      Semeseter.ly
+@author   Michael N. Miller
+@date     11/22/16
+"""
 
-from __future__ import print_function, division, absolute_import # NOTE: slowly move toward Python3
+from __future__ import absolute_import, division, print_function
 
-import re, sys, unicodedata
+import re
+import unicodedata
 import dateutil.parser as dparser
+
 from scripts.parser_library.words import conjunctions_and_prepositions
 from scripts.parser_library.internal_exceptions import CourseParseError
 
 
-def filter_term_and_year(years_and_terms, cmd_years=None, cmd_terms=None):
+def filter_term_and_year(years_and_terms,
+                         cmd_years=None,
+                         cmd_terms=None,
+                         cmd_years_and_terms=None):
+    """Filter term and year mappings.
+
+    Args:
+        years_and_terms {dict}: mapping of valid years and terms
+        cmd_years_and_terms {dict}: mapping of wanted years and terms
+    Returns:
+        intersection of dictionaries if cmd_years_and_terms is not None.
+    """
+    # if cmd_years_and_terms is None:
+    #     return years_and_terms
+
     if cmd_years is None and cmd_terms is None:
         return years_and_terms
-    years = cmd_years if cmd_years is not None else years_and_terms
+    years = cmd_years or years_and_terms
     for year in years:
         if year not in years_and_terms:
             raise CourseParseError('year {} not defined'.format(year))
-        terms = cmd_terms if cmd_terms is not None else years_and_terms[year]
+        terms = cmd_terms or years_and_terms[year]
         for term in terms:
             if term not in years_and_terms[year]:
-                raise CourseParseError('term not defined for {} {}'.format(term, year))
-    return {year: {term: years_and_terms[year][term] for term in terms} for year in years}
+                raise CourseParseError('term undefined for {} {}'.format(term,
+                                                                         year))
+    return {
+        year: {
+            term: years_and_terms[year][term] for term in terms
+        } for year in years
+    }
 
 
 def filter_departments(departments, cmd_departments=None, grouped=False):
-    '''Filter department dictionary to only include those departments listed in cmd_departments, if given
+    """Intersect department mappings.
+
     Args:
         department: dictionary of item <dept_code, dept_name>
     KwArgs:
         cmd_departments: department code list
         grouped: if grouped is set will not throw CoureParseError
     Return: filtered list of departments.
-    '''
-
+    """
     # FIXME -- if groups exists, will only search current group
     if cmd_departments is None:
         return departments
@@ -54,13 +66,19 @@ def filter_departments(departments, cmd_departments=None, grouped=False):
     # department list specified as cmd line arg
     for cmd_dept_code in cmd_departments:
         if cmd_dept_code not in departments and not grouped:
-            raise CourseParseError('invalid department code {}'.format(cmd_dept_code))
+            raise CourseParseError('invalid dept {}'.format(cmd_dept_code))
 
     # Return dictionary of {code: name} or set {code}
     if isinstance(departments, dict):
-        departments = {cmd_dept_code: departments[cmd_dept_code] for cmd_dept_code in cmd_departments if cmd_dept_code in departments}
+        departments = {
+            cmd_dept_code: departments[cmd_dept_code]
+            for cmd_dept_code in cmd_departments
+            if cmd_dept_code in departments
+        }
     else:
-        departments = {dept for dept in departments if dept in cmd_departments}
+        departments = {
+            dept for dept in departments if dept in cmd_departments
+        }
 
     return departments
 
@@ -73,9 +91,110 @@ def titlize(name):
         if Extractor._ROMAN_NUMERAL.match(word) is not None:
             titled += word.upper()
         else:
-            titled += word.lower() if word in conjunctions_and_prepositions else word.title()
+            if word in conjunctions_and_prepositions:
+                titled += word.lower()
+            else:
+                titled += word.title()
         titled += ' '
     return titled.strip()
+
+
+def extract_info(course, text):
+    """Attempt to extract info from text and put it into course object.
+
+    Args:
+        course (dict): course object to place extracted information into
+        text (str): text to attempt to extract information from
+    Returns:
+        * modifies course object
+        str: the text trimmed of extracted information
+    """
+    text = text.encode('utf-8', 'ignore')
+    extractions = {
+        'prereqs': [
+            r'[Pp]r(?:-?)e[rR]eq(?:uisite)?(?:s?)[:,\s]\s*(.*?)(?:\.|$)\s*',
+            r'T[Aa][Kk][Ee] (.*)\.?$'
+        ],
+        'coreqs': [
+            r'[Cc]o(?:-?)[rR]eq(?:uisite)?(?:s?)[:,\s]\s*(.*?)(?:\.|$)\s*'
+        ],
+        'geneds': [
+            r'GE (.*)'
+        ],
+        'fees': [
+            r'(?:Lab )?Fees?:?\s{1,2}?\$?\s?(\d+(?:\.\d{1,2})?)'
+        ]
+    }
+
+    for key, extraction_list in extractions.items():
+        for extraction in extraction_list:
+            rex = re.compile(extraction)
+            extracted = rex.search(text)
+            if extracted:
+                course.setdefault(key, [])
+                if 'fees' == key and isinstance(course.get(key), float):
+                    continue  # NOTE: edge case if multiple fees present
+                course[key] += [extracted.group(1)]
+                # FIXME -- this library does not enforce this, unsafe!
+            if isinstance(text, str):
+                text = text.decode('utf-8')
+                text = unicodedata.normalize('NFKD', text)
+            text = rex.sub('', text).strip()
+
+    # Convert fees to float
+    # BUG: edge case, if mutliple fees have been extracted will take the first
+    if course.get('fees'):
+        try:
+            course['fees'] = float(course['fees'][0])
+        except ValueError:
+            course['fees'] = None
+        except IndexError:
+            course['fees'] = None
+
+    # NOTE: for now, combine pre and co reqs
+    requisites = []
+    corequisites = []
+    if hasattr(course.get('prereqs'), '__iter__'):
+        try:
+            for req in course['prereqs']:
+                req = req.strip()
+                if len(req) == 0:
+                    continue
+                requisites += [req]
+        except UnicodeDecodeError:
+            pass
+    if hasattr(course.get('coreqs'), '__iter__'):
+        try:
+            for req in course['coreqs']:
+                req = req.strip()
+                if len(req) == 0:
+                    continue
+                corequisites += [req]
+        except UnicodeDecodeError:
+            pass
+
+    if len(requisites) > 0:
+        if 'prereqs' in course:
+            course['prereqs'] += requisites
+            course['prereqs'] = list(set(course['prereqs']))
+        if 'coreqs' in course:
+            course['coreqs'] += corequisites
+            course['coreqs'] = list(set(course['coreqs']))
+
+    return text
+
+
+def time_12to24(time12):
+    """Convert 12hr time to 24hr time.
+
+    Args:
+        time12 (str): 12 hour time format
+
+    Returns:
+        str: 24 hr time in format hrhr:minmin
+    """
+    time24 = dparser.parse(time12)
+    return time24.strftime('%H:%M')
 
 
 class Extractor():
@@ -116,17 +235,17 @@ class Extractor():
         '''
         text = text.encode('utf-8', 'ignore')
         extractions = {
-            'prereqs' : [
+            'prereqs': [
                 r'[Pp]r(?:-?)e[rR]eq(?:uisite)?(?:s?)[:,\s]\s*(.*?)(?:\.|$)\s*',
                 r'T[Aa][Kk][Ee] (.*)\.?$'
             ],
-            'coreqs'  : [
+            'coreqs': [
                 r'[Cc]o(?:-?)[rR]eq(?:uisite)?(?:s?)[:,\s]\s*(.*?)(?:\.|$)\s*'
             ],
-            'geneds'  : [
+            'geneds': [
                 r'GE (.*)'
             ],
-            'fees'    : [
+            'fees': [
                 r'(?:Lab )?Fees?:?\s{1,2}?\$?\s?(\d+(?:\.\d{1,2})?)'
             ]
         }
@@ -139,7 +258,7 @@ class Extractor():
                     if not course.get(key):
                         course[key] = []
                     if 'fees' == key and isinstance(course.get(key), float):
-                        continue # NOTE: edge case if multiple fees present
+                        continue  # NOTE: edge case if multiple fees present
                     course[key] += [extracted.group(1)] # okay b/c of course_cleanup
                     # FIXME -- this library does not enforce this, unsafe!
                 if isinstance(text, str):
@@ -155,7 +274,7 @@ class Extractor():
             except ValueError:
                 course['fees'] = None
 
-        # TEMPORARY: combine pre and co reqs
+        # NOTE: for now, combine pre and co reqs
         requisites = []
         corequisites = []
         if hasattr(course.get('prereqs'), '__iter__'):

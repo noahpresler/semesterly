@@ -1,79 +1,76 @@
-# Copyright (C) 2017 Semester.ly Technologies, LLC
-#
-# Semester.ly is free software: you can redistribute it and/or modify
-# it under the terms of the GNU General Public License as published by
-# the Free Software Foundation, either version 3 of the License, or
-# (at your option) any later version.
-#
-# Semester.ly is distributed in the hope that it will be useful,
-# but WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-# GNU General Public License for more details.
+"""
+JHU Course Parser.
 
-# @what     JHU Course Parser
-# @org      Semeseter.parser_library
-# @author   Noah Presler
-# @date     1/24/17
+@org      Semesterly
+@author   Noah Presler & Michael Miller
+@date     7/2/2017
+"""
 
 from __future__ import absolute_import, division, print_function
 
 import re
 
 from scripts.parser_library.base_parser import CourseParser
+from scripts.parser_library.extractor import time_12to24, titlize
 
 
 class HopkinsParser(CourseParser):
+    """Hopkins course parser."""
 
+    SCHOOL = 'jhu'
     API_URL = 'https://isis.jhu.edu/api/classes/'
     KEY = 'evZgLDW987P3GofN2FLIhmvQpHASoIxO'
-    DAY_TO_LETTER_MAP = {'m': 'M',
-                         't': 'T',
-                         'w': 'W',
-                         'th': 'R',
-                         'f': 'F',
-                         'sa': 'S',
-                         's': 'U'}
+    DAY_TO_LETTER_MAP = {
+        'm': 'M',
+        't': 'T',
+        'w': 'W',
+        'th': 'R',
+        'f': 'F',
+        'sa': 'S',
+        's': 'U'
+    }
 
     def __init__(self, **kwargs):
+        """Construct hopkins parser object."""
         self.schools = []
         self.last_course = {}
-        super(HopkinsParser, self).__init__('jhu', **kwargs)
+        super(HopkinsParser, self).__init__(HopkinsParser.SCHOOL, **kwargs)
 
-    def get_schools(self):
-        url = HopkinsParser.API_URL + '/codes/schools?key=' + HopkinsParser.KEY
+    def _get_schools(self):
+        url = '{}/codes/schools?key={}'.format(HopkinsParser.API_URL,
+                                               HopkinsParser.KEY)
         self.schools = self.requester.get(url)
 
-    def get_courses(self, school):
-        if self.verbosity >= 1:
-            print("Getting courses in: " + school['Name'])
+    def _get_courses(self, school):
         url = HopkinsParser.API_URL + '/' + school['Name'] + '/' \
             + self.semester + '?key=' + HopkinsParser.KEY
         return self.requester.get(url)
 
-    def get_section(self, course):
-        return self.requester.get(self.get_section_url(course))
+    def _get_section(self, course):
+        return self.requester.get(self._get_section_url(course))
 
-    def get_section_url(self, course):
+    def _get_section_url(self, course):
         return HopkinsParser.API_URL + '/' \
             + course['OfferingName'].replace(".", "") + course['SectionName'] \
             + '/' + self.semester + '?key=' + HopkinsParser.KEY
 
-    def parse_schools(self):
+    def _parse_schools(self):
         for school in self.schools:
-            self.parse_school(school)
+            self._parse_school(school)
 
-    def parse_school(self, school):
-        courses = self.get_courses(school)
+    def _parse_school(self, school):
+        courses = self._get_courses(school)
         for course in courses:
-            section = self.get_section(course)
+            section = self._get_section(course)
             if len(section) == 0:
+                # TODO - make this less hacky
                 hacky_log_file = 'scripts/jhu/logs/section_url_tracking.log'
                 with open(hacky_log_file, 'w') as f:
-                    print(self.get_section_url(course), file=f)
+                    print(self._get_section_url(course), file=f)
                 continue
-            self.load_ingestor(course, section)
+            self._load_ingestor(course, section)
 
-    def compute_size_enrollment(self, course):
+    def _compute_size_enrollment(self, course):
         try:
             section_size = int(course['MaxSeats'])
         except:
@@ -91,7 +88,7 @@ class HopkinsParser(CourseParser):
             waitlist = -1
         return (section_size, section_enrolment, waitlist)
 
-    def load_ingestor(self, course, section):
+    def _load_ingestor(self, course, section):
         section_details = section[0]['SectionDetails']
         try:
             num_credits = float(course['Credits'])
@@ -112,11 +109,11 @@ class HopkinsParser(CourseParser):
 
         self.ingestor['level'] = re.findall(re.compile(r".+?\..+?\.(.{1}).+"),
                                             course['OfferingName'])[0] + "00"
-        self.ingestor['name'] = self.extractor.titlize(course['Title'])
+        self.ingestor['name'] = titlize(course['Title'])
         self.ingestor['description'] = section_details[0]['Description']
         self.ingestor['code'] = course['OfferingName'].strip()
         self.ingestor['num_credits'] = num_credits
-        self.ingestor['department_name'] = course['Department']
+        self.ingestor['department_name'] = ' '.join(course['Department'].split()[1:])
         self.ingestor['campus'] = 1
         self.ingestor['exclusions'] = section_details[0].get('EnrollmentRestrictedTo')
 
@@ -139,7 +136,7 @@ class HopkinsParser(CourseParser):
             self.ingestor['semester'] = self.semester.split()[0]
             self.ingestor['instrs'] = map(lambda i: i.strip(),
                                           course['Instructors'].split(','))
-            self.ingestor['size'], self.ingestor['enrollment'], self.ingestor['waitlist'] = self.compute_size_enrollment(course)
+            self.ingestor['size'], self.ingestor['enrollment'], self.ingestor['waitlist'] = self._compute_size_enrollment(course)
             self.ingestor['year'] = self.semester.split()[1]
 
             created_section = self.ingestor.ingest_section(created_course)
@@ -149,12 +146,15 @@ class HopkinsParser(CourseParser):
             for time in filter(lambda t: len(t) > 0, times.split(',')):
                 time_pieces = re.search(r'(\d\d:\d\d [AP]M) - (\d\d:\d\d [AP]M)',
                                         time)
-                self.ingestor['time_start'] = self.extractor.time_12to24(time_pieces.group(1))
-                self.ingestor['time_end'] = self.extractor.time_12to24(time_pieces.group(2))
-                if len(meeting['DOW'].strip()) > 0 and meeting['DOW'] != "TBA" and meeting['DOW'] !="None":
-                    self.ingestor['days'] = map(lambda d: HopkinsParser.DAY_TO_LETTER_MAP[d.lower()],
-                                                re.findall(r'([A-Z][a-z]*)+?',
-                                                           meeting['DOW']))
+                self.ingestor['time_start'] = time_12to24(time_pieces.group(1))
+                self.ingestor['time_end'] = time_12to24(time_pieces.group(2))
+                if (len(meeting['DOW'].strip()) > 0 and
+                        meeting['DOW'] != "TBA" and
+                        meeting['DOW'] != "None"):
+                    self.ingestor['days'] = map(
+                        lambda d: HopkinsParser.DAY_TO_LETTER_MAP[d.lower()],
+                        re.findall(r'([A-Z][a-z]*)+?', meeting['DOW'])
+                    )
                     self.ingestor['location'] = {
                         'building': meeting['Building'],
                         'room': meeting['Room']
@@ -168,7 +168,7 @@ class HopkinsParser(CourseParser):
               textbooks=True,
               verbosity=3,
               **kwargs):
-
+        """Start parse."""
         self.verbosity = verbosity
 
         # Defualt to hardcoded current year.
@@ -180,7 +180,6 @@ class HopkinsParser(CourseParser):
         # Run parser for all semesters specified.
         for year in years:
             for term in terms:
-                print('{} {}'.format(term, year))
                 self.semester = '{} {}'.format(term, str(year))
-                self.get_schools()
-                self.parse_schools()
+                self._get_schools()
+                self._parse_schools()
