@@ -40,11 +40,11 @@ class EndToEndTest(SeleniumTestCase):
                     n_slots=4, n_master_slots=1
                 )
             ])
-        with self.description("lock course then add conflict"):
+        with self.description("add conflicting course and accept allow conflict alert"):
             self.remove_course(0, n_slots_expected=0)
+            self.click_off() # click out of share link component
             self.search_course('calc', 3)
-            self.add_course(2, n_slots=4, n_master_slots=1)
-            self.lock_course()
+            self.add_course(2, n_slots=4, n_master_slots=1, by_section="(09)")
             self.search_course('calc', 3)
             self.execute_action_expect_alert(
                 lambda: self.add_course(1, n_slots=4, n_master_slots=1, by_section="(01)"),
