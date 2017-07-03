@@ -1,19 +1,10 @@
-# Copyright (C) 2017 Semester.ly Technologies, LLC
-#
-# Semester.ly is free software: you can redistribute it and/or modify
-# it under the terms of the GNU General Public License as published by
-# the Free Software Foundation, either version 3 of the License, or
-# (at your option) any later version.
-#
-# Semester.ly is distributed in the hope that it will be useful,
-# but WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-# GNU General Public License for more details.
+"""
+Parsing library - Data Validator.
 
-# @what     Parsing library - Data Validator
-# @org      Semeseter.ly
-# @author   Michael N. Miller
-# @date     1/12/17
+@org      Semeseter.ly
+@author   Michael N. Miller
+@date     1/12/17
+"""
 
 # TODO - consider something to load db field sizes
 
@@ -37,8 +28,10 @@ import simplejson as json
 
 
 class Validator:
-    def __init__(self, config, tracker=None):
+    """Validation engine in parsing data pipeline."""
 
+    def __init__(self, config, tracker=None):
+        """Construct validation engine."""
         # Cache schema definitions into memory.
         schema_directory = 'scripts/parser_library/schemas/'
         schema_directory = Validator.load_schema_directory(schema_directory)
