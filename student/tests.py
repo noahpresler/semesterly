@@ -132,7 +132,7 @@ class UserTimetableViewTest(APITestCase):
         request.subdomain = 'uoft'
         view = resolve('/user/timetables/').func
         response = view(request)
-        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+        self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
         PersonalTimetable.objects.get(name='new tt')
 
     def test_create_timetable_exists(self):
@@ -172,7 +172,7 @@ class UserTimetableViewTest(APITestCase):
         request.subdomain = 'uoft'
         view = resolve('/user/timetables/').func
         response = view(request)
-        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+        self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
         PersonalTimetable.objects.get(name='dupe tt')
 
     def test_rename_timetable(self):
@@ -202,7 +202,7 @@ class UserTimetableViewTest(APITestCase):
         request.subdomain = 'uoft'
         view = resolve('/user/timetables/').func
         response = view(request)
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
         self.assertEqual(PersonalTimetable.objects.get(id=10).name, 'renamed')
 
     def test_delete_timetable(self):
@@ -218,7 +218,7 @@ class UserTimetableViewTest(APITestCase):
         request.subdomain = 'uoft'
         view = resolve('/user/timetables/').func
         response = view(request, 'Winter', '1995', 'todelete')
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
         self.assertFalse(PersonalTimetable.objects.filter(id=20).exists())
 
 
