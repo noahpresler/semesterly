@@ -18,11 +18,12 @@ Timetable = namedtuple('Timetable', 'courses sections has_conflict')
 class DisplayTimetable:
     """ Object that represents the frontend's interpretation of a timetable. """
 
-    def __init__(self, slots, has_conflict, name=''):
+    def __init__(self, slots, has_conflict, name='', events=None):
         self.slots = slots
         self.has_conflict = has_conflict
         self.name = name
         self.avg_rating = get_avg_rating(slots)
+        self.events = events or []
 
     @classmethod
     def from_timetable_model(cls, timetable):
@@ -30,7 +31,8 @@ class DisplayTimetable:
         slots = [Slot(section.course, section, section.offering_set.all(),
                       is_optional=False, is_locked=True)
                  for section in timetable.sections.all()]
-        return DisplayTimetable(slots, timetable.has_conflict, getattr(timetable, 'name', ''))
+        return DisplayTimetable(slots, timetable.has_conflict,
+                                getattr(timetable, 'name', ''), getattr(timetable, 'events', []))
 
 
 def courses_to_timetables(courses, locked_sections, semester, sort_metrics, school, custom_events, with_conflicts, optional_course_ids):
