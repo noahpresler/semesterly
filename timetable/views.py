@@ -64,15 +64,22 @@ class TimetableView(CsrfExemptMixin, ValidateSubdomainMixin, APIView):
                         if m['selected']]
 
         # TODO move sorting to view level so that result is sorted
-        result = [DisplayTimetableSerializer(timetable).data for opt_courses in optional_course_subsets
-                  for timetable in courses_to_timetables(courses + list(opt_courses), locked_sections, params['semester'], sort_metrics, params['school'], custom_events, with_conflicts, opt_course_ids)]
+        timetables = [timetable for opt_courses in optional_course_subsets
+                                for timetable in courses_to_timetables(courses + list(opt_courses),
+                                                                       locked_sections,
+                                                                       params['semester'],
+                                                                       sort_metrics,
+                                                                       params['school'],
+                                                                       custom_events,
+                                                                       with_conflicts,
+                                                                       opt_course_ids)]
 
         context = {'semester': params['semester'], 'school': request.subdomain, 'student': student}
+        courses = [course for course in courses + optional_courses]
         response = {
-            'timetables': result,
+            'timetables': DisplayTimetableSerializer(timetables, many=True).data,
             'new_c_to_s': locked_sections,
-            'courses': [CourseSerializer(course, context=context).data
-                        for course in courses + optional_courses]
+            'courses': CourseSerializer(courses, context=context, many=True).data
         }
         return Response(response, status=status.HTTP_200_OK)
 
@@ -82,14 +89,15 @@ class TimetableLinkView(FeatureFlowView):
 
     def get_feature_flow(self, request, slug):
         timetable_id = hashids.decrypt(slug)[0]
-        shared_timetable_obj = get_object_or_404(SharedTimetable,
-                                                 id=timetable_id,
-                                                 school=request.subdomain)
-        shared_timetable = DisplayTimetable.from_timetable_model(shared_timetable_obj)
-
+        shared_timetable = get_object_or_404(SharedTimetable,
+                                             id=timetable_id,
+                                             school=request.subdomain)
+        context = {'semester': shared_timetable.semester, 'school': request.subdomain,
+                   'student': get_student(request)}
         return {
-            'semester': shared_timetable_obj.semester,
-            'sharedTimetable': DisplayTimetableSerializer(shared_timetable).data
+            'semester': shared_timetable.semester,
+            'courses': CourseSerializer(shared_timetable.courses, context=context, many=True).data,
+            'sharedTimetable': DisplayTimetableSerializer.from_model(shared_timetable).data
         }
 
     def post(self, request):
