@@ -1,10 +1,14 @@
-from django.forms import model_to_dict
 from rest_framework import serializers
 
-from courses.serializers import get_section_dict
-from courses.utils import is_waitlist_only
-from student.models import PersonalTimetable
-from timetable.utils import get_tt_rating
+from student.models import PersonalEvent
+
+
+# TODO: move to student/serializers? currently leads to circular import
+class EventSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = PersonalEvent
+        exclude = ('id',)
 
 
 class SlotSerializer(serializers.Serializer):
@@ -23,3 +27,4 @@ class DisplayTimetableSerializer(serializers.Serializer):
     has_conflict = serializers.BooleanField()
     name = serializers.CharField()
     avg_rating = serializers.FloatField()
+    events = EventSerializer(many=True)
