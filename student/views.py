@@ -280,7 +280,7 @@ class ClassmateView(ValidateSubdomainMixin, RedirectToSignupMixin, APIView):
             semester, _ = Semester.objects.get_or_create(
                 name=sem_name, year=year)
             # user opted in to sharing courses
-            course_to_classmates = []
+            course_to_classmates = {}
             if student.social_courses:
                 friends = student.friends.filter(social_courses=True)
                 for course_id in course_ids:
