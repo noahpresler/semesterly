@@ -1,9 +1,10 @@
 from rest_framework import serializers
 
 from student.models import PersonalEvent
+from timetable.utils import DisplayTimetable
 
 
-# TODO: move to student/serializers? currently leads to circular import
+# TODO: move to student/serializers after removing get_student_tts?
 class EventSerializer(serializers.ModelSerializer):
 
     class Meta:
@@ -28,3 +29,7 @@ class DisplayTimetableSerializer(serializers.Serializer):
     name = serializers.CharField()
     avg_rating = serializers.FloatField()
     events = EventSerializer(many=True)
+
+    @classmethod
+    def from_model(cls, timetable, **kwargs):
+        return DisplayTimetableSerializer(DisplayTimetable.from_model(timetable), **kwargs)
