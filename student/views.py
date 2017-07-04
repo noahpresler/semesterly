@@ -17,11 +17,11 @@ from rest_framework.views import APIView
 
 from authpipe.utils import get_google_credentials, check_student_token
 from analytics.models import CalendarExport
+from courses.serializers import CourseSerializer
 from student.models import Student, Reaction, RegistrationToken, PersonalEvent, PersonalTimetable
-from student.utils import next_weekday, get_classmates_from_course_id, make_token, get_student_tts
+from student.utils import next_weekday, get_classmates_from_course_id, make_token
 from timetable.models import Semester, Course
 from timetable.serializers import DisplayTimetableSerializer
-from timetable.utils import DisplayTimetable
 from helpers.mixins import ValidateSubdomainMixin, RedirectToSignupMixin
 from helpers.decorators import validate_subdomain
 
@@ -145,8 +145,14 @@ class UserTimetableView(ValidateSubdomainMixin,
     def get(self, request, sem_name, year):
         sem, _ = Semester.objects.get_or_create(name=sem_name, year=year)
         student = Student.objects.get(user=request.user)
-        response = get_student_tts(student, request.subdomain, sem)
-        return Response(response, status=status.HTTP_200_OK)
+        timetables = student.personaltimetable_set.filter(
+            school=request.subdomain, semester=sem).order_by('-last_updated')
+        courses = {course for timetable in timetables for course in timetable.courses.all()}
+        context = {'semester': sem, 'school': request.subdomain, 'student': student}
+        return Response({
+            'timetables': DisplayTimetableSerializer.from_model(timetables, many=True).data,
+            'courses': CourseSerializer(courses, context=context, many=True).data
+        }, status=status.HTTP_200_OK)
 
     def post(self, request):
         if 'source' in request.data:  # duplicate existing timetable
