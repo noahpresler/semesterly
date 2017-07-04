@@ -77,5 +77,5 @@ def make_token(student):
 def get_student_tts(student, school, semester):
     timetables = student.personaltimetable_set.filter(
         school=school, semester=semester).order_by('-last_updated')
-    displayed_timetables = [DisplayTimetable.from_timetable_model(tt) for tt in timetables]
+    displayed_timetables = [DisplayTimetable.from_model(tt) for tt in timetables]
     return DisplayTimetableSerializer(displayed_timetables, many=True).data

@@ -26,7 +26,7 @@ class DisplayTimetable:
         self.events = events or []
 
     @classmethod
-    def from_timetable_model(cls, timetable):
+    def from_model(cls, timetable):
         """ Create DisplayTimetable from Timetable instance. """
         slots = [Slot(section.course, section, section.offering_set.all(),
                       is_optional=False, is_locked=True)

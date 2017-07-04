@@ -46,7 +46,7 @@ class Serializers(TestCase):
         timetable.courses.add(self.course)
         timetable.sections.add(self.section)
 
-        display = DisplayTimetable.from_timetable_model(timetable)
+        display = DisplayTimetable.from_model(timetable)
         self.assertEqual(len(display.slots), 1)
         self.assertIsInstance(display.slots[0].course, Course)
 
@@ -62,7 +62,7 @@ class Serializers(TestCase):
         timetable.sections.add(self.section)
         timetable.events.add(self.event)
 
-        display = DisplayTimetable.from_timetable_model(timetable)
+        display = DisplayTimetable.from_model(timetable)
         self.assertEqual(len(display.slots), 1)
         self.assertIsInstance(display.slots[0].course, Course)
 
