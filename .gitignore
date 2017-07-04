@@ -45,4 +45,5 @@ assets/*
 static/bundles/*
 webpack-stats.json
 *.pid
+*/test_failures/
 .vscode/
