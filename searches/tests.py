@@ -46,22 +46,26 @@ class AdvancedSearchTest(APITestCase):
         self.assertNotEqual(len(response.data),  0)
 
     def test_filter_times(self):
-        filters = {
-            'times': [{
-                'min': 12,
-                'max': 20,
-                'day': 'Tuesday'
-            }]
+        body = {
+            'filters': {
+                'times': [{
+                    'min': 12,
+                    'max': 20,
+                    'day': 'Tuesday'
+                }]
+            }
         }
-        response =  self.client.post('/search/Winter/1995/sea/', filters, format='json', **self.request_headers)
+        response =  self.client.post('/search/Winter/1995/sea/', body, format='json', **self.request_headers)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(len(response.data),  0)
 
     def test_filter_levels(self):
-        filters = {
-            'levels': [100]
+        body = {
+            'filters': {
+                'levels': [100]
+            }
         }
-        response =  self.client.post('/search/Winter/1995/sea/', filters, format='json', **self.request_headers)
+        response =  self.client.post('/search/Winter/1995/sea/', body, format='json', **self.request_headers)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(len(response.data),  0)
 
