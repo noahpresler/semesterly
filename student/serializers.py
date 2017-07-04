@@ -4,6 +4,7 @@ from authpipe.utils import get_google_credentials
 from student.utils import get_student_tts, make_token, hashids
 
 
+# TODO: rewrite as serializer?
 def get_user_dict(school, student, semester):
     user_dict = {'timetables': [], 'timeAcceptedTos': None}
     if student:

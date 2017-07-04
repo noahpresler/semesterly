@@ -32,4 +32,7 @@ class DisplayTimetableSerializer(serializers.Serializer):
 
     @classmethod
     def from_model(cls, timetable, **kwargs):
+        if kwargs.get('many') is True:
+            timetables = [DisplayTimetable.from_model(tt) for tt in timetable]
+            return DisplayTimetableSerializer(timetables, **kwargs)
         return DisplayTimetableSerializer(DisplayTimetable.from_model(timetable), **kwargs)
