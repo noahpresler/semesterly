@@ -172,7 +172,7 @@ class UserTimetableView(ValidateSubdomainMixin,
             duplicate.sections = sections
             duplicate.events = events
 
-            return Response(status=status.HTTP_201_CREATED)
+            return Response(status=status.HTTP_204_NO_CONTENT)
         else:
             # TODO: use new request shape
             school = request.subdomain
@@ -204,8 +204,7 @@ class UserTimetableView(ValidateSubdomainMixin,
                 semester)
             self.update_events(personal_timetable, request.data['events'])
 
-            return Response(status=status.HTTP_201_CREATED if tt_id is None else
-                                    status.HTTP_200_OK)
+            return Response(status=status.HTTP_204_NO_CONTENT)
 
     def delete(self, request, sem_name, year, tt_name):
         school = request.subdomain
