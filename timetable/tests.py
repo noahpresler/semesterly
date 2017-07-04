@@ -53,6 +53,7 @@ class Serializers(TestCase):
         serialized = DisplayTimetableSerializer(display).data
         self.assertEqual(len(serialized['slots']), 1)
         self.assertIsInstance(serialized['slots'][0]['course'], int)
+        self.assertEqual(len(serialized['events']), 0)
 
     def test_personal_timetable_serialization(self):
         timetable = PersonalTimetable.objects.create(semester=self.sem, school='uoft',
@@ -68,6 +69,7 @@ class Serializers(TestCase):
         serialized = DisplayTimetableSerializer(display).data
         self.assertEqual(len(serialized['slots']), 1)
         self.assertIsInstance(serialized['slots'][0]['course'], int)
+        self.assertEqual(len(serialized['events']), 1)
 
 
 class UrlsTest(UrlTestCase):
