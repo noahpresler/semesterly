@@ -330,11 +330,11 @@ class ClassmateViewTest(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
         self.assertEqual(len(response.data), 1)
-        classmates = response.data[0]['classmates']
+        classmates = response.data[1]['current'] # key is course id
         self.assertEqual(len(classmates), 1)
         self.assertEqual(classmates[0]['first_name'], self.user1.first_name)
         self.assertEqual(classmates[0]['last_name'], self.user1.last_name)
-        self.assertEqual(len(response.data[0]['past_classmates']), 0)
+        self.assertEqual(len(response.data[1]['past']), 0)
 
     def test_find_friends(self):
         request = self.factory.get('/user/classmates/Fall/2000/')
