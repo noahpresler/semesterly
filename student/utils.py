@@ -1,18 +1,14 @@
 import datetime
 
-from django.core.signing import TimestampSigner
 from django.db.models import Q
 from django.forms import model_to_dict
-from hashids import Hashids
 
 from student.models import Student, PersonalTimetable
 from timetable.models import Course
 from timetable.serializers import DisplayTimetableSerializer
-from timetable.utils import DisplayTimetable
+
 
 DAY_LIST = ['M', 'T', 'W', 'R', 'F', 'S', 'U']
-
-hashids = Hashids(salt="x98as7dhg&h*askdj^has!kj?xz<!9")
 
 
 def next_weekday(d, weekday):
@@ -68,10 +64,6 @@ def get_classmates_from_tts(student, course_id, tts):
             classmate['sections'] = []
         classmates.append(classmate)
     return classmates
-
-
-def make_token(student):
-    return TimestampSigner().sign(student.id)
 
 
 def get_student_tts(student, school, semester):
