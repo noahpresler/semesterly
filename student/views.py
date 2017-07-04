@@ -15,11 +15,11 @@ from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
-from authpipe.utils import get_google_credentials, check_student_token
+from authpipe.utils import check_student_token
 from analytics.models import CalendarExport
 from courses.serializers import CourseSerializer
 from student.models import Student, Reaction, RegistrationToken, PersonalEvent, PersonalTimetable
-from student.utils import next_weekday, get_classmates_from_course_id, make_token
+from student.utils import next_weekday, get_classmates_from_course_id
 from timetable.models import Semester, Course
 from timetable.serializers import DisplayTimetableSerializer
 from helpers.mixins import ValidateSubdomainMixin, RedirectToSignupMixin
@@ -45,9 +45,8 @@ def get_friend_count_from_course_id(school, student, course_id, semester):
 
 
 def create_unsubscribe_link(student):
-    token_id, token = make_token(student).split(":", 1)
-    return reverse('student.views.unsubscribe',
-                   kwargs={'id': token_id, 'token': token})
+    token = student.get_token()
+    return reverse('student.views.unsubscribe', kwargs={'id': student.id, 'token': token})
 
 
 def unsubscribe(request, student_id, token):
@@ -355,7 +354,7 @@ class GCalView(RedirectToSignupMixin, APIView):
     def post(self, request):
         student = Student.objects.get(user=request.user)
         tt = json.loads(request.body)['timetable']
-        credentials = get_google_credentials(student)
+        credentials = student.get_google_credentials() # assumes is not None
         http = credentials.authorize(httplib2.Http(timeout=100000000))
         service = discovery.build('calendar', 'v3', http=http)
         school = request.subdomain
