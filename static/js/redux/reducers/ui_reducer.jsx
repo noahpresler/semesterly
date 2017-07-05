@@ -19,11 +19,7 @@ const ui = (state = initialState, action) => {
       const courses = action.timetables.length > 0 ?
         getCourseIdsFromSlots(action.timetables[0].slots) : [];
 
-      // TODO: remove one of saving/preset, using both is redundant. rename to recalculateColours?
-      let courseToColourIndex = state.courseToColourIndex;
-      if (!action.saving && action.preset) {
-        courseToColourIndex = {};
-      }
+      const courseToColourIndex = {};
 
       courses.forEach((courseId) => {
         courseToColourIndex[courseId] =
