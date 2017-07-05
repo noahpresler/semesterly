@@ -158,27 +158,6 @@ export const saveTimetable = (isAutoSave = false, callback = null) => (dispatch,
     .then(checkStatus)
     .then(response => response.json())
     .then((json) => {
-      // edit the state's courseSections, so that future requests to add/remove/unlock
-      // courses are handled correctly. in the new courseSections, every currently
-      // active section will be locked
-      if (!isAutoSave) {
-            // mark that the current timetable is now the only available one (since all
-            // sections are locked)
-        dispatch({
-          type: ActionTypes.RECEIVE_TIMETABLES,
-          timetables: [activeTimetable],
-          preset: true,
-          saving: true,
-        });
-        dispatch({
-          type: ActionTypes.RECEIVE_COURSE_SECTIONS,
-          courseSections: lockActiveSections(activeTimetable),
-        });
-      }
-      dispatch({
-        type: ActionTypes.CHANGE_ACTIVE_SAVED_TIMETABLE,
-        timetable: json.saved_timetable,
-      });
       dispatch({
         type: ActionTypes.RECEIVE_SAVED_TIMETABLES,
         timetables: json.timetables,
@@ -189,9 +168,6 @@ export const saveTimetable = (isAutoSave = false, callback = null) => (dispatch,
       });
       if (callback !== null) {
         callback();
-      }
-      if (!json.error && state.userInfo.data.isLoggedIn && json.timetables[0]) {
-        return dispatch(fetchClassmates(json.timetables[0].courses.map(c => c.id)));
       }
       return null;
     })
@@ -232,20 +208,6 @@ export const duplicateTimetable = timetable => (dispatch, getState) => {
   .then(response => response.json())
   .then((json) => {
     dispatch({
-      type: ActionTypes.RECEIVE_TIMETABLES,
-      timetables: [json.saved_timetable],
-      preset: true,
-      saving: true,
-    });
-    dispatch({
-      type: ActionTypes.RECEIVE_COURSE_SECTIONS,
-      courseSections: lockActiveSections(json.saved_timetable),
-    });
-    dispatch({
-      type: ActionTypes.CHANGE_ACTIVE_SAVED_TIMETABLE,
-      timetable: json.saved_timetable,
-    });
-    dispatch({
       type: ActionTypes.RECEIVE_SAVED_TIMETABLES,
       timetables: json.timetables,
     });
@@ -253,14 +215,7 @@ export const duplicateTimetable = timetable => (dispatch, getState) => {
       type: ActionTypes.RECEIVE_TIMETABLE_SAVED,
       upToDate: true,
     });
-
     return json;
-  })
-  .then((json) => {
-    if (state.userInfo.data.isLoggedIn && json.timetables[0]) {
-      return dispatch(fetchClassmates(json.timetables[0].courses.map(c => c.id)));
-    }
-    return null;
   });
 };
 
