@@ -1,0 +1,36 @@
+.. note:: Want your school on Semester.ly? We want it too! Want to see a new feature to help your peers? Let's make it happen. We want to help you make the impact you want to see.
+
+Semester.ly
+===========
+**Built for students by students.** Semester.ly is a web platform created to bring modern technology to the most difficult and archaic parts of higher education. It all started with one problem, universal across all college campuses: course registration is a pain. Spreadsheets, sticky notes, PDFs of course evaluations, and an outdated registration platform....it is all too much in the heat of classes and exams. We set out with the mission to make college more collaborative and more stress free.
+
+What We Believe In
+------------------
+
+Today, we work to solve many more exciting problems in this space across many more universities. However, our fundamental beliefs remain the same: 
+
+Course registration should be easy
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    Picking the right classes should be quick and painless. We believe high quality, centralized, and shareable information makes for better decision making. By doing the legwork for you, Semester.ly gives you more time to study for your courses, and decreases the time spent studying which classes to take.
+
+Education should be collaborative
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    Studies show the positive impact that friendship has in higher education classrooms. Having courses with friends and a tigther knit university community increases student success and retention. That's why Semester.ly helps students find courses with friends and helps new students make new friends in their classes.
+
+Logistics should be simple so you have more time to learn
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    Disjoint and disconnected systems are the core of higher education because they are less expensive to build and maintain. However, when it comes to the student, they end up being more expensive! With so many places to check, it's more likely for a student to miss when something goes wrong. That's why Semester.ly works to proactively and automatically alert students of potential issues BEFORE they happen.
+
+
+.. toctree::
+   :maxdepth: 2
+   :caption: Contents:
+
+
+
+Indices and tables
+==================
+
+* :ref:`genindex`
+* :ref:`modindex`
+* :ref:`search`
