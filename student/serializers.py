@@ -6,7 +6,7 @@ from student.models import Student
 
 
 def get_student_dict(school, student, semester):
-    user_dict = {'timeAcceptedTos': None, 'isLoggedIn': False}
+    user_dict = {'timeAcceptedTos': None, 'isLoggedIn': False, 'timetables': [], 'courses': []}
     if student is not None:
         user_dict = dict(user_dict, **StudentSerializer(student).data)
         user_dict['isLoggedIn'] = True

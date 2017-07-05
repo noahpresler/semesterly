@@ -11,10 +11,9 @@ import { getSemester } from './school_actions';
 
 export const requestCourses = () => ({ type: ActionTypes.REQUEST_COURSES });
 
-// TODO normalize courses here
-export const receiveCourses = normalizedResponse => ({
+export const receiveCourses = courses => ({
   type: ActionTypes.RECEIVE_COURSES,
-  response: normalizedResponse,
+  response: normalize(courses, [courseSchema]),
 });
 
 export const setSemester = semester => (dispatch, getState) => {
@@ -30,7 +29,7 @@ export const setSemester = semester => (dispatch, getState) => {
     type: ActionTypes.SET_SEMESTER,
     semester,
   });
-  dispatch(receiveCourses({ result: [] }));
+  dispatch(receiveCourses({ courses: [] }));
 };
 
 /*
@@ -64,7 +63,7 @@ export const maybeSetSemester = semester => (dispatch, getState) => {
 
 export const fetchSearchResults = query => (dispatch, getState) => {
   if (query.length <= 1) {
-    dispatch(receiveCourses({ result: [] }));
+    dispatch(receiveCourses({ courses: [] }));
     return;
   }
 
@@ -77,7 +76,7 @@ export const fetchSearchResults = query => (dispatch, getState) => {
   .then(response => response.json()) // TODO error-check the response
   .then((json) => {
     // indicate that courses have been received
-    dispatch(receiveCourses(normalize(json, [courseSchema])));
+    dispatch(receiveCourses(json));
   });
 };
 
