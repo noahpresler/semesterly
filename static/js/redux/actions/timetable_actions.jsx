@@ -1,7 +1,5 @@
 import fetch from 'isomorphic-fetch';
 import Cookie from 'js-cookie';
-import { normalize } from 'normalizr';
-import { courseSchema } from '../schema';
 import {
   getActiveTimetable,
   getActiveTimetableCourses,
@@ -58,7 +56,7 @@ export const fetchTimetables = (requestBody, removing, newActive = 0) => (dispat
     .then((json) => {
       if (removing || json.timetables.length > 0) {
         // mark that timetables and a new courseSections have been received
-        dispatch(receiveCourses(normalize(json.courses, [courseSchema])));
+        dispatch(receiveCourses(json.courses));
         dispatch(receiveTimetables(json.timetables));
         dispatch({
           type: ActionTypes.RECEIVE_COURSE_SECTIONS,
