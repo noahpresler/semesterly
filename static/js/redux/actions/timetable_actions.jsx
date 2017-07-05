@@ -119,7 +119,6 @@ export const lockTimetable = (timetable, created, isLoggedIn) => (dispatch) => {
   dispatch({
     type: ActionTypes.RECEIVE_TIMETABLES,
     timetables: [timetable],
-    preset: created === false,
   });
   if (isLoggedIn) { // fetch classmates for this timetable only if the user is logged in
     dispatch(fetchClassmates(timetable.courses.map(c => c.id)));

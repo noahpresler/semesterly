@@ -20,9 +20,6 @@ const savingTimetable = (state = initState, action) => {
       return Object.assign({}, state, { saving: false, upToDate });
     }
 
-    case ActionTypes.RECEIVE_TIMETABLES:
-      return Object.assign({}, state, { upToDate: action.preset === true });
-
     case ActionTypes.CHANGE_ACTIVE_SAVED_TIMETABLE:
       return Object.assign({}, state, { activeTimetable: action.timetable });
 
