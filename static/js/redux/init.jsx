@@ -93,6 +93,7 @@ const handleFlows = featureFlow => (dispatch) => {
       break;
     case 'SHARE_TIMETABLE':
       dispatch({ type: ActionTypes.CACHED_TT_LOADED });
+      dispatch(receiveCourses(featureFlow.courses));
       dispatch(lockTimetable(featureFlow.sharedTimetable,
         true, initData.currentUser.isLoggedIn));
       break;
