@@ -30,6 +30,7 @@ def filter_term_and_year(years_and_terms,
     """
     # if cmd_years_and_terms is None:
     #     return years_and_terms
+    # cmd_years_and_terms.keys()
 
     if cmd_years is None and cmd_terms is None:
         return years_and_terms
