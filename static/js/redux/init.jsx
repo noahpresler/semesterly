@@ -10,6 +10,7 @@ import { fetchMostClassmatesCount, handleAgreement, isRegistered } from './actio
 import { loadCachedTimetable, loadTimetable, lockTimetable } from './actions/timetable_actions';
 import { fetchSchoolInfo } from './actions/school_actions';
 import { fetchCourseClassmates, setCourseInfo } from './actions/modal_actions';
+import { receiveCourses } from './actions/search_actions';
 import {
     browserSupportsLocalStorage,
     setFirstVisit,
@@ -138,6 +139,7 @@ const setup = () => (dispatch) => {
 
   dispatch({ type: ActionTypes.INIT_STATE, data: initData });
 
+  dispatch(receiveCourses(initData.currentUser.courses));
   dispatch(setupTimetables(initData.currentUser.timetables, initData.allSemesters,
     initData.oldSemesters));
 
