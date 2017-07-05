@@ -87,12 +87,9 @@ class UserTimetableViewTest(APITestCase):
         course = Course.objects.create(
             id=1, school='uoft', code='SEM101', name='Intro')
         section = Section.objects.create(
-            course=course, semester=self.sem, meeting_section='L1')
+            id=1, course=course, semester=self.sem, meeting_section='L1')
         Offering.objects.create(
-            section=section,
-            day='M',
-            time_start='8:00',
-            time_end='10:00')
+            id=1, section=section, day='M', time_start='8:00', time_end='10:00')
         tt = PersonalTimetable.objects.create(
             name='tt', school='uoft', semester=self.sem, student=self.student)
         tt.courses.add(course)
@@ -119,9 +116,10 @@ class UserTimetableViewTest(APITestCase):
                 'name': 'Winter',
                 'year': '1995'
             },
-            'courses': [{
-                'id': 1,
-                'enrolled_sections': ['L1']
+            'slots': [{
+                'course': 1,
+                'section': 1,
+                'offerings': [1],
             }],
             'events': [],
             'name': 'new tt',
@@ -142,9 +140,10 @@ class UserTimetableViewTest(APITestCase):
                 'name': 'Winter',
                 'year': '1995'
             },
-            'courses': [{
-                'id': 1,
-                'enrolled_sections': ['L1']
+            'slots': [{
+                'course': 1,
+                'section': 1,
+                'offerings': [1],
             }],
             'events': [],
             'name': 'tt',
@@ -183,9 +182,10 @@ class UserTimetableViewTest(APITestCase):
                 'name': 'Winter',
                 'year': '1995'
             },
-            'courses': [{
-                'id': 1,
-                'enrolled_sections': ['L1']
+            'slots': [{
+                'course': 1,
+                'section': 1,
+                'offerings': [1],
             }],
             'events': [],
             'name': 'renamed',

@@ -20,7 +20,7 @@ from analytics.models import CalendarExport
 from courses.serializers import CourseSerializer
 from student.models import Student, Reaction, RegistrationToken, PersonalEvent, PersonalTimetable
 from student.utils import next_weekday, get_classmates_from_course_id
-from timetable.models import Semester, Course
+from timetable.models import Semester, Course, Section
 from timetable.serializers import DisplayTimetableSerializer
 from helpers.mixins import ValidateSubdomainMixin, RedirectToSignupMixin
 from helpers.decorators import validate_subdomain
@@ -183,16 +183,16 @@ class UserTimetableView(ValidateSubdomainMixin,
             school = request.subdomain
             has_conflict = request.data['has_conflict']
             name = request.data['name']
-            semester, _ = Semester.objects.get_or_create(
-                **request.data['semester'])
+            semester, _ = Semester.objects.get_or_create(**request.data['semester'])
             student = Student.objects.get(user=request.user)
             params = {
                 'school': school,
                 'name': name,
                 'semester': semester,
-                'student': student}
+                'student': student
+            }
 
-            courses = request.data['courses']
+            slots = request.data['slots']
             # id is None if this is a new timetable
             tt_id = request.data.get('id')
 
@@ -201,12 +201,7 @@ class UserTimetableView(ValidateSubdomainMixin,
 
             personal_timetable = PersonalTimetable.objects.create(**params) if tt_id is None else \
                 PersonalTimetable.objects.get(id=tt_id)
-            self.update_tt(
-                personal_timetable,
-                name,
-                has_conflict,
-                courses,
-                semester)
+            self.update_tt(personal_timetable, name, has_conflict, slots)
             self.update_events(personal_timetable, request.data['events'])
 
             return Response(status=status.HTTP_204_NO_CONTENT)
@@ -226,19 +221,21 @@ class UserTimetableView(ValidateSubdomainMixin,
         # TODO: should respond with deleted object
         return Response(status=status.HTTP_204_NO_CONTENT)
 
-    def update_tt(self, tt, new_name, new_has_conflict, new_courses, semester):
+    def update_tt(self, tt, new_name, new_has_conflict, new_slots):
         tt.name = new_name
         tt.has_conflict = new_has_conflict
 
         tt.courses.clear()
         tt.sections.clear()
-        for course in new_courses:
-            course_obj = Course.objects.get(id=course['id'])
-            tt.courses.add(course_obj)
-            enrolled_sections = course['enrolled_sections']
-            for section in enrolled_sections:
-                tt.sections.add(
-                    course_obj.section_set.get(meeting_section=section, semester=semester))
+        added_courses = set()
+        for slot in new_slots:
+            section_id = slot['section']
+            section = Section.objects.get(id=section_id)
+            tt.sections.add(section)
+            if section.course.id not in added_courses:
+                tt.courses.add(section.course)
+                added_courses.add(section.course.id)
+
         tt.save()
 
     def update_events(self, tt, events):
