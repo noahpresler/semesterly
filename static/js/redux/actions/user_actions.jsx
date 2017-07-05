@@ -21,6 +21,7 @@ import {
   getCurrentSemester } from '../reducers/root_reducer';
 import { fetchCourseClassmates } from './modal_actions';
 import { getNumberedName, loadTimetable, nullifyTimetable } from './timetable_actions';
+import { receiveCourses } from './search_actions';
 import { MAX_TIMETABLE_NAME_LENGTH } from '../constants/constants';
 import * as ActionTypes from '../constants/actionTypes';
 import { setTimeShownBanner, checkStatus, clearLocalTimetable } from '../util';
@@ -365,7 +366,9 @@ export const getUserSavedTimetables = semester => (dispatch) => {
     credentials: 'include',
   })
     .then(response => response.json())
-    .then((timetables) => {
+    .then((json) => {
+      const { timetables, courses } = json;
+      dispatch(receiveCourses(courses));
       dispatch({
         type: ActionTypes.RECEIVE_SAVED_TIMETABLES,
         timetables,
