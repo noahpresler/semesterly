@@ -1,5 +1,6 @@
 import fetch from 'isomorphic-fetch';
 import Cookie from 'js-cookie';
+import uniq from 'lodash/uniq';
 import {
     deleteRegistrationTokenEndpoint,
     getClassmatesEndpoint,
@@ -28,11 +29,7 @@ import { setTimeShownBanner, checkStatus, clearLocalTimetable } from '../util';
 
 let autoSaveTimer;
 
-export const requestUserInfo = () => ({
-  type: ActionTypes.REQUEST_USER_INFO,
-});
-
-export const getClassmates = json => dispatch => (
+export const receiveClassmates = json => dispatch => (
   dispatch({
     type: ActionTypes.CLASSMATES_RECEIVED,
     courses: json,
@@ -82,14 +79,16 @@ export const requestMostClassmates = () => ({
   type: ActionTypes.REQUEST_MOST_CLASSMATES,
 });
 
-export const fetchMostClassmatesCount = courses => (dispatch, getState) => {
+export const fetchMostClassmatesCount = timetable => (dispatch, getState) => {
   const state = getState();
+  const courseIds = uniq(timetable.slots.map(s => s.course));
+
   if (!state.userInfo.data.social_courses) {
     return;
   }
   const semester = getCurrentSemester(state);
   dispatch(requestMostClassmates());
-  fetch(getMostClassmatesCountEndpoint(semester, courses), {
+  fetch(getMostClassmatesCountEndpoint(semester, courseIds), {
     credentials: 'include',
     method: 'GET',
   })
@@ -104,22 +103,24 @@ export const fetchMostClassmatesCount = courses => (dispatch, getState) => {
       });
 };
 
-export const fetchClassmates = courses => (dispatch, getState) => {
+export const fetchClassmates = timetable => (dispatch, getState) => {
   const state = getState();
+  const courseIds = uniq(timetable.slots.map(s => s.course));
+
   if (!state.userInfo.data.social_courses) {
     return;
   }
   setTimeout(() => {
-    dispatch(fetchMostClassmatesCount(getActiveTimetableCourses(state).map(c => c.id)));
+    dispatch(fetchMostClassmatesCount(timetable));
   }, 500);
   dispatch(requestClassmates());
-  fetch(getClassmatesEndpoint(getCurrentSemester(state), courses), {
+  fetch(getClassmatesEndpoint(getCurrentSemester(state), courseIds), {
     credentials: 'include',
     method: 'GET',
   })
     .then(response => response.json())
     .then((json) => {
-      dispatch(getClassmates(json));
+      dispatch(receiveClassmates(json));
     });
 };
 
@@ -271,7 +272,7 @@ export const deleteTimetable = timetable => (dispatch, getState) => {
         })
         .then((json) => {
           if (state.userInfo.data.isLoggedIn && json.timetables[0]) {
-            dispatch(fetchClassmates(json.timetables[0].courses.map(c => c.id)));
+            dispatch(fetchClassmates(json.timetables[0]));
           }
         });
 };
@@ -293,7 +294,7 @@ export const saveSettings = callback => (dispatch, getState) => {
     .then((response) => {
       const state = getState();
       if (state.userInfo.data.social_courses) {
-        dispatch(fetchClassmates(getActiveTimetableCourses(state).map(c => c.id)));
+        dispatch(fetchClassmates(getActiveTimetable(state)));
         if (state.courseInfo.id) {
           dispatch(fetchCourseClassmates(state.courseInfo.id));
         }
