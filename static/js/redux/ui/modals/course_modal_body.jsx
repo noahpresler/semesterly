@@ -1,5 +1,6 @@
 import PropTypes from 'prop-types';
 import React from 'react';
+import isEmpty from 'lodash/isEmpty';
 import Reaction from '../reaction';
 import REACTION_MAP from '../../constants/reactions';
 import MasterSlot from '../master_slot';
@@ -86,7 +87,7 @@ class CourseModalBody extends React.Component {
   }
 
   render() {
-    if (this.props.isFetching) {
+    if (this.props.isFetching || isEmpty(this.props.data)) {
       return (
         <div className="modal-body">
           <div className="cf">
