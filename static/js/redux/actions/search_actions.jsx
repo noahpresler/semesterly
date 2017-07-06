@@ -29,7 +29,7 @@ export const setSemester = semester => (dispatch, getState) => {
     type: ActionTypes.SET_SEMESTER,
     semester,
   });
-  dispatch(receiveCourses({ courses: [] }));
+  dispatch(receiveCourses([]));
 };
 
 /*
@@ -63,7 +63,7 @@ export const maybeSetSemester = semester => (dispatch, getState) => {
 
 export const fetchSearchResults = query => (dispatch, getState) => {
   if (query.length <= 1) {
-    dispatch(receiveCourses({ courses: [] }));
+    dispatch(receiveCourses([]));
     return;
   }
 

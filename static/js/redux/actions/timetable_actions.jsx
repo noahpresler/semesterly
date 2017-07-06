@@ -1,7 +1,5 @@
 import fetch from 'isomorphic-fetch';
 import Cookie from 'js-cookie';
-import { normalize } from 'normalizr';
-import { timetableSchema } from '../schema';
 import {
   getActiveTimetable,
   getActiveTimetableCourses,
@@ -26,7 +24,6 @@ export const alertConflict = () => ({ type: ActionTypes.ALERT_CONFLICT });
 export const receiveTimetables = timetables => ({
   type: ActionTypes.RECEIVE_TIMETABLES,
   timetables,
-  response: normalize(timetables, [timetableSchema]),
 });
 
 export const requestTimetables = () => ({ type: ActionTypes.REQUEST_TIMETABLES });
@@ -158,7 +155,7 @@ export const createNewTimetable = (ttName = 'Untitled Schedule') => (dispatch) =
 export const nullifyTimetable = () => (dispatch) => {
   dispatch({
     type: ActionTypes.RECEIVE_TIMETABLES,
-    timetables: [{ courses: [], has_conflict: false }],
+    timetables: [{ slots: [], has_conflict: false }],
   });
   dispatch({
     type: ActionTypes.RECEIVE_COURSE_SECTIONS,
@@ -166,7 +163,7 @@ export const nullifyTimetable = () => (dispatch) => {
   });
   dispatch({
     type: ActionTypes.CHANGE_ACTIVE_SAVED_TIMETABLE,
-    timetable: { name: 'Untitled Schedule', courses: [], events: [], has_conflict: false },
+    timetable: { name: 'Untitled Schedule', slots: [], events: [], has_conflict: false },
   });
   dispatch({
     type: ActionTypes.CLEAR_OPTIONAL_COURSES,
