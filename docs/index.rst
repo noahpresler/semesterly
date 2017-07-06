@@ -21,10 +21,9 @@ Students know best
 ~~~~~~~~~~~~~~~~~~
     Universities can't keep up with technology. Most university systems aren't even mobile responsive! Forget about using social media. That's why Semester.ly is built by students, and always will be. That's why we are open source. Oh, and it's why we use emojis 👍.
 
-Table of Contents
------------------
+
 .. toctree::
+   :hidden:
    :maxdepth: 2
 
-   index
    setup
