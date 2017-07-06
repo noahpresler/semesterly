@@ -1,11 +1,9 @@
-import re
 import os
+
 os.environ['DJANGO_SETTINGS_MODULE'] = 'semesterly.settings'
-from operator import itemgetter
 
 from django.forms.models import model_to_dict
 from django.db import models
-from django.db.models import Count
 
 
 class Semester(models.Model):
@@ -50,12 +48,13 @@ class Course(models.Model):
     areas = models.CharField(max_length=600, default='', null=True)
     department = models.CharField(max_length=250, default='', null=True)
     level = models.CharField(max_length=30, default='', null=True)
+    # TODO generalize core/gened/breadth field
     cores = models.CharField(max_length=50, null=True, blank=True)
     geneds = models.CharField(max_length=300, null=True, blank=True)
     related_courses = models.ManyToManyField("self", blank=True)
     same_as = models.ForeignKey('self', null=True)
 
-    def __unicode__(self):
+    def __str__(self):
         return self.code + ": " + self.name
 
     def get_reactions(self, student=None):
@@ -75,119 +74,57 @@ class Course(models.Model):
                                                             title=reaction['title']).exists()
         return result
 
-    def get_related_course_info(self, semester=None, limit=None):
-        info = []
-        related = self.related_courses.all()
-        if semester:
-            related = related.filter(section__semester=semester).distinct()
-        if limit and limit > 0:
-            related = related[:limit]
-        for course in related:
-            info.append(model_to_dict(course, exclude=['related_courses', 'unstopped_description']))
-        return info
-
-    def get_eval_info(self):
-        eval_info = map(model_to_dict, Evaluation.objects.filter(course=self))
-        return sorted(eval_info, key=itemgetter('year'))
-
     def get_avg_rating(self):
         ratings_sum, ratings_count = self._get_ratings_sum_count()
-        if self.same_as: # include ratings for equivalent courses in the average
+        if self.same_as:  # include ratings for equivalent courses in the average
             eq_sum, eq_count = self.same_as._get_ratings_sum_count()
             ratings_sum += eq_sum
             ratings_count += eq_count
-        return (ratings_sum / ratings_count) if ratings_count else 0
+        return (ratings_sum / ratings_count) if ratings_count else -1
 
     def _get_ratings_sum_count(self):
         """ Return the sum and count of ratings of this course not counting equivalent courses. """
         ratings = Evaluation.objects.only('course', 'score').filter(course=self)
         return sum([rating.score for rating in ratings]), len(ratings)
 
-    def get_textbooks(self, semester):
-        textbooks = []
-        isbns = set()
-        for section in self.section_set.filter(semester=semester):
-            for textbook in section.textbooks.all():
-                if textbook.isbn not in isbns:
-                    textbooks.append(textbook.get_info())
-                    isbns.add(textbook.isbn)
-
-        return textbooks
-
-    def get_course_integrations(self):
-        ids = CourseIntegration.objects.filter(course__id=self.id).values_list("integration",
-                                                                               flat=True)
-        return Integration.objects.filter(id__in=ids).values_list("name", flat=True)
-
-    def eval_add_unique_term_year_flag(self):
-        """
-        Flag all eval instances s.t. there exists repeated term+year values.
-        Return:
-          List of modified evaluation dictionaries (added flag 'unique_term_year')
-        """
-        evals = self.get_eval_info()
-        years = Evaluation.objects.filter(course=self).values('year').annotate(Count('id'))\
-            .filter(id__count__gt=1).values_list('year')
-        years = {e[0] for e in years}
-        for course_eval in evals:
-            course_eval['unique_term_year'] = not course_eval['year'] in years
-        return evals
-
-    def get_percentage_enrolled(self, sem):
-        """ Return percentage of course capacity that is filled. """
-        tts_with_course = self.personaltimetable_set.filter(semester=sem)
-        num_students_in_course = tts_with_course.values('student').distinct().count()
-        sections = self.section_set.filter(semester=sem)
-        course_capacity = sum(sections.values_list('size', flat=True)) if sections else 0
-        return num_students_in_course / float(course_capacity) if course_capacity else 0
-
-    def get_regexed_courses(self, school):
-        """
-        Given course data, search for all occurrences of a course code in the course description and
-        prereq info and return a map from course code to course name for each course code.
-        """
-        school_to_course_regex = {
-            'jhu': r'([A-Z]{2}\.\d{3}\.\d{3})',
-            'uoft': r'([A-Z]{3}[A-Z0-9]\d{2}[HY]\d)',
-            'vandy': r'([A-Z-&]{2,7}\s\d{4}[W]?)',
-            'gw': r'([A-Z]{2,5}\s\d{4}[W]?)',
-            'umich': r'([A-Z]{2,8}\s\d{3})',
-            'chapman': r'([A-Z]{2,4}\s\d{3})',
-            'salisbury': r'([A-Z]{3,4} \d{2,3})',
-        }
-        course_code_to_name = {}
-        if school in school_to_course_regex:
-            course_code_matches = re.findall(school_to_course_regex[school],
-                                             self.description + self.prerequisites)
-            # TODO: get all course objects in one db access
-            for course_code in course_code_matches:
-                try:
-                    course = Course.objects.get(school=school, code__icontains=course_code)
-                    course_code_to_name[course_code] = course.name
-                except (Course.DoesNotExist, Course.MultipleObjectsReturned):
-                    pass
-        return course_code_to_name
-
 
 class Section(models.Model):
-  course = models.ForeignKey(Course)
-  meeting_section = models.CharField(max_length=50)
-  size = models.IntegerField(default=-1)
-  enrolment = models.IntegerField(default=-1)
-  waitlist = models.IntegerField(default=-1)
-  waitlist_size = models.IntegerField(default=-1)
-  section_type = models.CharField(max_length=50, default='L')
-  instructors = models.CharField(max_length=500, default='TBA')
-  semester = models.ForeignKey(Semester)
-  _semester = models.CharField(max_length=2)  # deprecated
-  textbooks = models.ManyToManyField(Textbook, through='TextbookLink')
-  was_full = models.BooleanField(default=False)
+    """
+    Represents a possible lecture/tutorial/etc. of a Course.
+    Attributes:
+        course: Course that this Section belongs to
+        meeting_section: an ID unique among other Sections for this Section's Course
+        size: max number of students that can be enrolled in this Section
+        enrolment: number of students currently enrolled
+        waitlist: number of students currently on the waitlist (should be 0 if size <= enrolment)
+        waitlist_size: max number of students that can be on the waitlist
+        section_type: category of this section, e.g. lecture, tutorial, practical, etc.
+        instructors: comma separated list of instructors
+        semester: Semester that this section is offered in
+        textbooks: Textbooks required for this section
+        was_full: True if this section was full at some point. Used for the mailing list
+    """
+    course = models.ForeignKey(Course)
+    meeting_section = models.CharField(max_length=50)
+    size = models.IntegerField(default=-1)
+    enrolment = models.IntegerField(default=-1)
+    waitlist = models.IntegerField(default=-1)
+    waitlist_size = models.IntegerField(default=-1)
+    section_type = models.CharField(max_length=50, default='L')
+    instructors = models.CharField(max_length=500, default='TBA')
+    semester = models.ForeignKey(Semester)
+    textbooks = models.ManyToManyField(Textbook, through='TextbookLink')
+    was_full = models.BooleanField(default=False)
 
-  def get_textbooks(self):
-    return [tb.get_info() for tb in self.textbooks.all()]
+    def get_textbooks(self):
+        return [tb.get_info() for tb in self.textbooks.all()]
 
-  def __unicode__(self):
-    return "Course: %s; Section: %s; Semester: %s" % (str(self.course), self.meeting_section, str(self.semester))
+    def is_full(self):
+        return self.enrolment >= 0 and self.size >= 0 and self.enrolment >= self.size
+
+    def __str__(self):
+        return "Course: {0}; Section: {0}; Semester: {0}".format(self.course, self.meeting_section,
+                                                                 self.semester)
 
 
 class Offering(models.Model):
@@ -224,3 +161,13 @@ class CourseIntegration(models.Model):
     course = models.ForeignKey(Course)
     integration = models.ForeignKey(Integration)
     json = models.TextField()
+
+
+class Timetable(models.Model):
+    courses = models.ManyToManyField(Course)
+    sections = models.ManyToManyField(Section)
+    semester = models.ForeignKey(Semester)
+    school = models.CharField(max_length=50)
+
+    class Meta:
+        abstract = True
