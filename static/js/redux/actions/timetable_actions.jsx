@@ -1,9 +1,11 @@
 import fetch from 'isomorphic-fetch';
 import Cookie from 'js-cookie';
+import uniq from 'lodash/uniq';
 import {
   getActiveTimetable,
   getActiveTimetableCourses,
-  getCurrentSemester } from '../reducers/root_reducer';
+  getCurrentSemester,
+  getDenormTimetable } from '../reducers/root_reducer';
 import { getTimetablesEndpoint } from '../constants/endpoints';
 import {
     browserSupportsLocalStorage,
@@ -108,20 +110,21 @@ export const fetchStateTimetables = (activeIndex = 0) => (dispatch, getState) =>
   dispatch(fetchTimetables(requestBody, false, activeIndex));
 };
 
-export const lockTimetable = (timetable, created, isLoggedIn) => (dispatch) => {
+// locks denormalized timetable
+export const lockTimetable = (timetable, created, isLoggedIn) => (dispatch, getState) => {
   if (timetable.has_conflict) { // turn conflicts on if necessary
     dispatch({ type: ActionTypes.TURN_CONFLICTS_ON });
   }
   dispatch({
     type: ActionTypes.RECEIVE_COURSE_SECTIONS,
-    courseSections: lockActiveSections(timetable),
+    courseSections: lockActiveSections(getDenormTimetable(getState(), timetable)),
   });
   dispatch({
     type: ActionTypes.RECEIVE_TIMETABLES,
     timetables: [timetable],
   });
   if (isLoggedIn) { // fetch classmates for this timetable only if the user is logged in
-    dispatch(fetchClassmates(timetable.courses.map(c => c.id)));
+    dispatch(fetchClassmates(uniq(timetable.slots.map(s => s.course))));
   }
 };
 
