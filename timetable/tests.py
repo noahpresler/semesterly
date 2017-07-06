@@ -157,8 +157,8 @@ class TimetableLinkViewTest(APITestCase):
         data = {
             'timetable': {
                 'slots': [{
-                    'course': {'id': 1},
-                    'section': {'id': 1},
+                    'course': 1,
+                    'section': 1,
                     'offerings': []
                 }],
                 'has_conflict': False
