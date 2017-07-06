@@ -1,5 +1,3 @@
-.. setup:
-
 Setup Guide
 -----------
 
