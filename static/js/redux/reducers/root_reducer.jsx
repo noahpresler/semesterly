@@ -75,8 +75,11 @@ export const getCurrentSemester = state => fromSemester.getCurrentSemester(state
 
 export const getActiveTimetable = state => fromTimetables.getActiveTimetable(state.timetables);
 
+export const getDenormTimetable = (state, timetable) =>
+  fromEntities.getDenormTimetable(state.entities, timetable);
+
 export const getActiveDenormTimetable = state =>
-  fromEntities.getActiveDenormTimetable(state.entities, getActiveTimetable(state));
+  getDenormTimetable(state, getActiveTimetable(state));
 
 export const getActiveTimetableCourses = state =>
   fromEntities.getTimetableCourses(state.entities, getActiveTimetable(state));
