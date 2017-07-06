@@ -183,14 +183,11 @@
   }
 }
 
-#final-exam-day-empty {
-  min-height: 70px;
-}
-
 .mobile .final-exam-day { // mobile styles
   border: 0;
   min-height: 0;
   width: 100%;
+  min-width: 83px;
 }
 
 .final-exam-modal .mobile .master-slot-content h3 {
