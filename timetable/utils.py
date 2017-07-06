@@ -7,6 +7,7 @@ from timetable.school_mappers import school_to_granularity, school_to_semesters,
     old_school_to_semesters
 from timetable.scoring import get_tt_cost, get_num_days, get_avg_day_length, get_num_friends, \
     get_avg_rating
+from student.models import PersonalTimetable
 
 
 MAX_RETURN = 60  # Max number of timetables we want to consider
@@ -18,12 +19,13 @@ Timetable = namedtuple('Timetable', 'courses sections has_conflict')
 class DisplayTimetable:
     """ Object that represents the frontend's interpretation of a timetable. """
 
-    def __init__(self, slots, has_conflict, name='', events=None):
+    def __init__(self, slots, has_conflict, name='', events=None, id=None):
         self.slots = slots
         self.has_conflict = has_conflict
         self.name = name
         self.avg_rating = get_avg_rating(slots)
         self.events = events or []
+        self.id = id
 
     @classmethod
     def from_model(cls, timetable):
@@ -31,8 +33,9 @@ class DisplayTimetable:
         slots = [Slot(section.course, section, section.offering_set.all(),
                       is_optional=False, is_locked=True)
                  for section in timetable.sections.all()]
-        return DisplayTimetable(slots, timetable.has_conflict,
-                                getattr(timetable, 'name', ''), getattr(timetable, 'events', []))
+        id = timetable.id if isinstance(timetable, PersonalTimetable) else None
+        return DisplayTimetable(slots, timetable.has_conflict, getattr(timetable, 'name', ''),
+                                getattr(timetable, 'events', []), id)
 
 
 def courses_to_timetables(courses, locked_sections, semester, sort_metrics, school, custom_events, with_conflicts, optional_course_ids):
