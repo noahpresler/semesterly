@@ -72,7 +72,7 @@ export const getCourseIdsFromSlots = slots => uniq(slots.map(slot => slot.course
 
 export const getCoursesFromDenormSlots = slots => uniqBy(slots.map(slot => slot.course), 'id');
 
-export const getActiveDenormTimetable = (state, timetable) => {
+export const getDenormTimetable = (state, timetable) => {
   return {
     ...timetable,
     slots: timetable.slots.map(slot => getDenormSlot(state, slot)),
