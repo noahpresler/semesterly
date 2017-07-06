@@ -86,7 +86,7 @@ export default class FinalExamsModal extends React.Component {
 
   static renderEmpty() {
     const weekHeadersHtml = (
-      <div id="final-exam-calender-days" className="cf">
+      <div className="final-exam-calender-days" /* className="cf"*/>
         <h3><span className="day">Sun</span></h3>
         <h3><span className="day">Mon</span></h3>
         <h3><span className="day">Tue</span></h3>
@@ -97,14 +97,14 @@ export default class FinalExamsModal extends React.Component {
       </div>
       );
     const weekDaysHtml = (
-      <div className="final-exam-days-ctn">
-        <div className="final-exam-day" id="final-exam-day-empty" />
-        <div className="final-exam-day" id="final-exam-day-empty" />
-        <div className="final-exam-day" id="final-exam-day-empty" />
-        <div className="final-exam-day" id="final-exam-day-empty" />
-        <div className="final-exam-day" id="final-exam-day-empty" />
-        <div className="final-exam-day" id="final-exam-day-empty" />
-        <div className="final-exam-day" id="final-exam-day-empty" />
+      <div className="final-exam-days-ctn" style={{ float: 'left' }}>
+        <div className="final-exam-day" style={{ minWidth: '85px' }} />
+        <div className="final-exam-day" style={{ minWidth: '85px' }} />
+        <div className="final-exam-day" style={{ minWidth: '85px' }} />
+        <div className="final-exam-day" style={{ minWidth: '85px' }} />
+        <div className="final-exam-day" style={{ minWidth: '85px' }} />
+        <div className="final-exam-day" style={{ minWidth: '85px' }} />
+        <div className="final-exam-day" style={{ minWidth: '85px' }} />
       </div>
       );
     return (
@@ -114,10 +114,8 @@ export default class FinalExamsModal extends React.Component {
           { weekDaysHtml }
         </div>
         <div className="final-exam-week">
-          <div id="final-exam-calender-days" className="cf">
-            { weekHeadersHtml }
-            { weekDaysHtml }
-          </div>
+          { weekHeadersHtml }
+          { weekDaysHtml }
         </div>
       </div>);
   }
@@ -280,7 +278,7 @@ export default class FinalExamsModal extends React.Component {
     const finalsWeeks = [];
     const finalList = this.finalListHTML();
     if (Object.keys(this.finalsToRender).length === 0) {
-      finalsWeeks.push(this.renderEmpty());
+      finalsWeeks.push(FinalExamsModal.renderEmpty());
     } else {
       while (Object.keys(this.finalsToRender).length > 0) {
         finalsWeeks.push(<div key={day}>{ this.renderWeek(day, days) }</div>);
