@@ -32,7 +32,7 @@ const mapStateToProps = (state) => {
     id: state.courseInfo.id,
     isFetching: state.courseInfo.isFetching,
     hasHoveredResult: activeTimetable.courses.some(course => course.fake),
-    inRoster: courseSections[state.courseInfo.id] !== undefined,
+    inRoster: courseSections[denormCourseInfo.id] !== undefined,
     getShareLink: courseCode => getCourseShareLink(courseCode, getCurrentSemester(state)),
     getShareLinkFromModal: courseCode =>
       getCourseShareLinkFromModal(courseCode, getCurrentSemester(state)),
