@@ -24,6 +24,7 @@ class SlotSerializer(serializers.Serializer):
 
 
 class DisplayTimetableSerializer(serializers.Serializer):
+    id = serializers.IntegerField(allow_null=True) # should only be defined for PersonalTimetables
     slots = SlotSerializer(many=True)
     has_conflict = serializers.BooleanField()
     name = serializers.CharField()
