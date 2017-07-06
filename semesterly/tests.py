@@ -1,63 +1,149 @@
-from django.contrib.staticfiles.testing import StaticLiveServerTestCase
-from selenium import webdriver
-from selenium.webdriver.support.wait import WebDriverWait
-from selenium.webdriver.support import expected_conditions as EC
-from selenium.webdriver.common.by import By
-from django.test.utils import override_settings
-import socket, itertools
+from semesterly.test_utils import SeleniumTestCase
+from timetable.models import Semester, Course
 
-class SeleniumTest(StaticLiveServerTestCase):
+class EndToEndTest(SeleniumTestCase):
 
-    fixtures = ['jhu_fall_sample.json']
-    serialized_rollback = True
-    
-    @classmethod
-    def setUpClass(self):
-        super(SeleniumTest, self).setUpClass()
-        self.TIMEOUT = 10
-        self.driver = None
-        socket.setdefaulttimeout(self.TIMEOUT) 
-        self.driver = webdriver.Chrome()        
-    
-    @classmethod
-    def tearDownClass(self):
-        self.driver.quit()        
-        super(SeleniumTest, self).tearDownClass()
+    fixtures = [
+        'jhu_fall_sample.json',
+        'jhu_spring_sample.json'
+    ]
 
-    def setUp(self):
-        self.driver.get(self.get_test_url('jhu'))
-        WebDriverWait(self.driver, self.TIMEOUT).until(lambda driver: driver.find_element_by_tag_name('body'))
-    
-    def tearDown(self):
-        self.driver.execute_script('window.localStorage.clear();')
-        self.driver.delete_all_cookies()     
-
-    @classmethod
-    def get_test_url(self, school, path = '/'):
-        url = '%s%s' % (self.live_server_url, '/')
-        return url.replace('http://', 'http://%s.' % school)
-
-    @classmethod
-    def clear_tutorial(self):
-        for _ in range(4):
-            arrow = WebDriverWait(self.driver, self.TIMEOUT).until(
-                EC.element_to_be_clickable((By.XPATH, '//div[@class="tut-modal__nav"]/i[@class="action fa fa-chevron-right"] | //div[@class="tut-modal__nav"]/h4'))
+    def test_logged_out_flow(self):
+        self.driver.set_window_size(1440, 1080)
+        self.clear_tutorial()
+        with self.description("search, add, then remove course"):
+            self.search_course('calc', 3)
+            self.add_course(0, n_slots=4, n_master_slots=1)
+            self.remove_course(0, n_slots_expected=0)
+        with self.description("open course modal from search and share"):
+            self.search_course('calc', 3)
+            self.open_course_modal_from_search(1)
+            self.validate_course_modal()
+            self.follow_share_link_from_modal()
+            self.close_course_modal()
+        with self.description("open course modal & follow share link from slot"):
+            self.search_course('calc', 3)
+            self.add_course(1, n_slots=4, n_master_slots=1)
+            self.follow_share_link_from_slot()
+            self.open_course_modal_from_slot(0)
+            self.validate_course_modal()
+            self.close_course_modal()
+        with self.description("Lock course and ensure pagination becomes invisible"):
+            self.lock_course()
+        with self.description("Remove course from course modal"):
+            self.open_course_modal_from_slot(0)
+            self.remove_course_from_course_modal(0)
+        with self.description("Add course from modal and share timetable"):
+            self.search_course('calc', 3)
+            self.open_course_modal_from_search(1)
+            self.share_timetable([
+                self.add_course_from_course_modal(
+                    n_slots=4, n_master_slots=1
+                )
+            ])
+        with self.description("add conflicting course and accept allow conflict alert"):
+            self.remove_course(0, n_slots_expected=0)
+            self.click_off() # click out of share link component
+            self.search_course('AS.110.106', 1)
+            self.add_course(0, n_slots=4, n_master_slots=1, by_section="(09)")
+            self.search_course('AS.110.105', 1)
+            self.execute_action_expect_alert(
+                lambda: self.add_course(0, n_slots=4, n_master_slots=1, code="AS.110.105"),
+                alert_text_contains="Allow Conflicts"
             )
-            arrow.click()
+            self.allow_conflicts_add(n_slots=8)
+        with self.description("switch semesters, clear alert and check search/adding"):
+            self.change_term("Spring 2017", clear_alert=True)
+            self.search_course('calc', 2)
+            self.open_course_modal_from_search(1)
+            self.share_timetable([
+                self.add_course_from_course_modal(
+                    n_slots=4, n_master_slots=1
+                )
+            ])
+        with self.description("advanced search basic query executes"):
+            self.change_term("Fall 2017", clear_alert=True)
+            sem = Semester.objects.get(year=2017, name='Fall')
+            self.open_and_query_adv_search('ca', n_results=3)
+            self.select_nth_adv_search_result(0, sem)
+            self.select_nth_adv_search_result(1, sem)
 
-    def test_can_clear_tutorial(self):
+    def test_logged_in_via_fb_flow(self):
+        self.driver.set_window_size(1440, 1080)
         self.clear_tutorial()
-        WebDriverWait(self.driver, self.TIMEOUT).until(
-            EC.invisibility_of_element_located((By.CLASS_NAME, 'tut-modal__nav'))
-        )
+        with self.description("succesfully signup with facebook"):
+            self.login_via_fb(
+                email='***REMOVED***',
+                password='***REMOVED***'
+            )
+            self.complete_user_settings_basics(
+                major='Computer Science',
+                class_year=2017
+            )
+        with self.description("search, add, change personal timetable name and save"):
+            self.search_course('calc', 3)
+            self.add_course(0, n_slots=4, n_master_slots=1)
+            self.change_ptt_name("Testing Timetable")
+            self.save_ptt()
+            self.assert_ptt_const_across_refresh()
+        with self.description("add to personal timetable, share, save"):
+            self.search_course('calc', 3)
+            self.open_course_modal_from_search(1)
+            self.share_timetable([
+                self.add_course_from_course_modal(
+                    n_slots=8, n_master_slots=2
+                )
+            ])
+            testing_ptt = self.save_ptt()
+            self.assert_ptt_const_across_refresh()
+        with self.description("create new personal timetable, validate on reload"):
+            self.create_ptt("End To End Testing!")
+            self.search_course('AS.110.105', 1)
+            self.add_course(0, n_slots=4, n_master_slots=1)
+            e2e_ptt = self.save_ptt()
+            self.assert_ptt_const_across_refresh()
+        with self.description("Switch to original ptt and validate"):
+            self.switch_to_ptt("Testing Timetable")
+            self.assert_ptt_equals(testing_ptt)
+        with self.description("switch semester, create personal timetable, switch back"):
+            self.change_term("Spring 2017")
+            self.create_ptt("Hope ders no bugs!")
+            self.click_off()
+            self.search_course('calc', 2)
+            self.add_course(0, n_slots=4, n_master_slots=1)
+            self.save_ptt()
+            self.change_term("Fall 2017")
+            self.assert_ptt_equals(e2e_ptt)
+        with self.description(("add friend with course,"
+                               "check for friend circles"
+                               "and presence in modal")):
+            friend = self.create_friend(
+                "Tester",
+                "McTestFace",
+                social_courses=True
+            )
+            self.create_personal_timetable_obj(
+                friend,
+                [Course.objects.get(code='AS.110.105')],
+                Semester.objects.get(name='Fall', year=2017)
+            )
+            self.assert_ptt_const_across_refresh()
+            self.assert_friend_image_found(friend)
+            self.open_course_modal_from_slot(0)
+            self.assert_friend_in_modal(friend)
 
-    def test_search_does_execute(self):
-        self.clear_tutorial()
-        search_box = WebDriverWait(self.driver, self.TIMEOUT).until(
-            EC.visibility_of_element_located((By.XPATH, '//div[@class="search-bar__input-wrapper"]/input'))
-        )
-        search_box.send_keys("calc")
-        search_results = WebDriverWait(self.driver, self.TIMEOUT).until(
-            EC.visibility_of_element_located((By.CLASS_NAME, 'search-results'))
-        )
-        self.assertEqual(len(search_results.find_elements_by_class_name('search-course')), 2)
+    def test_logged_in_via_google_flow(self):
+        with self.description("setup and clear tutorial"):
+            self.driver.set_window_size(1440, 1080)
+            self.clear_tutorial()
+        with self.description("login via Google, complete user settings"):
+            self.login_via_google(
+                first_name="Tester",
+                last_name="McTesterFace",
+                email='e2etesterly@gmail.com',
+                password='***REMOVED***'
+            )
+            self.complete_user_settings_basics(
+                major='Computer Science',
+                class_year=2017
+            )
