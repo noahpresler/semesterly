@@ -1,6 +1,5 @@
 import fetch from 'isomorphic-fetch';
 import Cookie from 'js-cookie';
-import uniq from 'lodash/uniq';
 import {
   getActiveTimetable,
   getActiveTimetableCourses,
@@ -89,7 +88,7 @@ export const fetchTimetables = (requestBody, removing, newActive = 0) => (dispat
     .then((json) => {
       if (state.userInfo.data.isLoggedIn && json.timetables[0]) {
         if (state.userInfo.data.social_courses !== null) {
-          dispatch(fetchClassmates(json.timetables[0].courses.map(c => c.id)));
+          dispatch(fetchClassmates(json.timetables[0]));
         }
       }
     });
@@ -124,7 +123,7 @@ export const lockTimetable = (timetable, created, isLoggedIn) => (dispatch, getS
     timetables: [timetable],
   });
   if (isLoggedIn) { // fetch classmates for this timetable only if the user is logged in
-    dispatch(fetchClassmates(uniq(timetable.slots.map(s => s.course))));
+    dispatch(fetchClassmates(timetable));
   }
 };
 
