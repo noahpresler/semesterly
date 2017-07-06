@@ -65,19 +65,16 @@ const getSaveTimetablesRequestBody = (state) => {
   };
 };
 
-/* Returns the updated courseSections, after locking all sections */
-export const lockActiveSections = (activeTimetable) => {
+// returns the course to sections of a timetable
+// TODO: when removing course to sections state, this should become the selector
+export const lockActiveSections = (timetable) => {
   const courseSections = {};
-  const courses = activeTimetable.courses;
-  for (let i = 0; i < courses.length; i++) {
-    const course = courses[i];
-    const slots = course.slots;
-    courseSections[course.id] = {};
-    for (let j = 0; j < slots.length; j++) {
-      const slot = slots[j];
-      courseSections[course.id][slot.section_type] = slot.meeting_section;
+  timetable.slots.forEach((slot) => {
+    if (!(slot.course.id in courseSections)) {
+      courseSections[slot.course.id] = {};
     }
-  }
+    courseSections[slot.course.id][slot.section.section_type] = slot.section.meeting_section;
+  });
   return courseSections;
 };
 
