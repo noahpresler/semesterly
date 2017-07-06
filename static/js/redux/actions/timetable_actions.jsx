@@ -1,5 +1,7 @@
 import fetch from 'isomorphic-fetch';
 import Cookie from 'js-cookie';
+import { normalize } from 'normalizr';
+import { timetableSchema } from '../schema';
 import {
   getActiveTimetable,
   getActiveTimetableCourses,
@@ -24,6 +26,7 @@ export const alertConflict = () => ({ type: ActionTypes.ALERT_CONFLICT });
 export const receiveTimetables = timetables => ({
   type: ActionTypes.RECEIVE_TIMETABLES,
   timetables,
+  response: normalize(timetables, [timetableSchema]),
 });
 
 export const requestTimetables = () => ({ type: ActionTypes.REQUEST_TIMETABLES });
@@ -256,8 +259,7 @@ export const handleCreateNewTimetable = () => (dispatch, getState) => {
     return { type: ActionTypes.TOGGLE_SIGNUP_MODAL };
   }
 
-  if (getActiveTimetable(state).slots.length > 0
-    && !state.savingTimetable.upToDate) {
+  if (getActiveTimetable(state).slots.length > 0 && !state.savingTimetable.upToDate) {
     return { type: ActionTypes.ALERT_NEW_TIMETABLE };
   }
 
