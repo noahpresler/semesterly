@@ -2,6 +2,7 @@ import PropTypes from 'prop-types';
 import React from 'react';
 import classNames from 'classnames';
 import Modal from 'boron/WaveModal';
+import isEmpty from 'lodash/isEmpty';
 import CourseModalBodyContainer from '../containers/modals/course_modal_body_container';
 import { ShareLink } from '../master_slot';
 import { fullCourseDetails } from '../../constants/semesterlyPropTypes';
@@ -21,7 +22,7 @@ class CourseModal extends React.Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    if (nextProps.id !== null) {
+    if (!isEmpty(nextProps.data)) {
       const { data } = nextProps;
       if (data.code) {
         history.replaceState({}, 'Semester.ly', this.props.getShareLinkFromModal(data.code));
@@ -80,7 +81,7 @@ class CourseModal extends React.Component {
       })}
       onClick={() => {
         this.setState({ addBtnIsHover: false });
-        this.addOrRemoveCourse(this.props.id);
+        this.addOrRemoveCourse(this.props.data.id);
       }}
       onMouseEnter={
                 () => {
@@ -146,7 +147,6 @@ CourseModal.defaultProps = {
 };
 
 CourseModal.propTypes = {
-  id: PropTypes.number,
   data: fullCourseDetails,
   inRoster: PropTypes.bool.isRequired,
   hasHoveredResult: PropTypes.bool.isRequired,
