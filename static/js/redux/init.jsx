@@ -4,7 +4,6 @@ import { render } from 'react-dom';
 import { applyMiddleware, createStore } from 'redux';
 import thunkMiddleware from 'redux-thunk';
 import { Provider } from 'react-redux';
-import uniq from 'lodash/uniq';
 import rootReducer from './reducers/root_reducer';
 import SemesterlyContainer from './ui/containers/semesterly_container';
 import { fetchMostClassmatesCount, handleAgreement, isRegistered } from './actions/user_actions';
@@ -34,7 +33,7 @@ const setupTimetables = (userTimetables, allSemesters, oldSemesters) => (dispatc
     dispatch(loadTimetable(activeTimetable));
     dispatch({ type: ActionTypes.RECEIVE_TIMETABLE_SAVED, upToDate: true });
     setTimeout(() => {
-      dispatch(fetchMostClassmatesCount(uniq(activeTimetable.slots.map(s => s.course))));
+      dispatch(fetchMostClassmatesCount(activeTimetable));
     }, 500);
   } else if (browserSupportsLocalStorage()) {
     dispatch(loadCachedTimetable(allSemesters, oldSemesters));
