@@ -17,20 +17,14 @@ Education should be collaborative
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     Studies show the positive impact that friendship has in higher education classrooms. Having courses with friends and a tigther knit university community increases student success and retention. That's why Semester.ly helps students find courses with friends and helps new students make new friends in their classes.
 
-Logistics should be simple so you have more time to learn
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    Disjoint and disconnected systems are the core of higher education because they are less expensive to build and maintain. However, when it comes to the student, they end up being more expensive! With so many places to check, it's more likely for a student to miss when something goes wrong. That's why Semester.ly works to proactively and automatically alert students of potential issues BEFORE they happen.
+Students know best
+~~~~~~~~~~~~~~~~~~
+    Universities can't keep up with technology. Most university systems aren't even mobile responsive! Forget about using social media. That's why Semester.ly is built by students, and always will be. That's why we are open source. Oh, and it's why we use emojis 👍.
 
-
+Table of Contents
+-----------------
 .. toctree::
    :maxdepth: 2
-   :caption: Contents:
 
-
-
-Indices and tables
-==================
-
-* :ref:`genindex`
-* :ref:`modindex`
-* :ref:`search`
+   index
+   setup
