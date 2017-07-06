@@ -34,6 +34,17 @@ class StudentSerializer(serializers.ModelSerializer):
     class Meta:
         model = Student
         fields = (
+            'class_year',
+            'img_url',
+            'fbook_uid',
+            'gender',
+            'major',
+            'social_courses',
+            'social_offerings',
+            'social_all',
+            'emails_enabled',
+            'school',
+            'integrations',
             'userFirstName',
             'userLastName',
             'FacebookSignedUp',
