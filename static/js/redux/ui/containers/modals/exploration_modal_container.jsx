@@ -1,4 +1,9 @@
 import { connect } from 'react-redux';
+import {
+  getActiveTT,
+  getCurrentSemester,
+  getDenormAdvancedSearchResults,
+} from '../../../reducers/root_reducer';
 import ExplorationModal from '../../modals/exploration_modal';
 import {
     clearAdvancedSearchPagination,
@@ -9,37 +14,30 @@ import {
 import {
     addOrRemoveCourse,
     addOrRemoveOptionalCourse,
-    hoverSection,
     unHoverSection,
 } from '../../../actions/timetable_actions';
-import { saveSettings } from '../../../actions/user_actions';
 import { getSchoolSpecificInfo } from '../../../constants/schools';
 import {
     fetchCourseClassmates,
     hideExplorationModal,
-    openSignUpModal,
-    react,
-    changeUserInfo,
-    fetchCourseInfo,
 } from '../../../actions/modal_actions';
-import { getCourseShareLink } from '../../../constants/endpoints';
-import { currSem } from '../../../reducers/semester_reducer';
+import { getCourseShareLinkFromModal } from '../../../constants/endpoints';
 
 
 const mapStateToProps = (state) => {
-  const { isVisible, advancedSearchResults, isFetching, active, page } = state.explorationModal;
+  const { isVisible, isFetching, active, page } = state.explorationModal;
+  const advancedSearchResults = getDenormAdvancedSearchResults(state);
   const courseSections = state.courseSections.objects;
   const course = advancedSearchResults[active];
   const inRoster = course && (courseSections[course.id] !== undefined);
-  const activeTimetable = state.timetables.items[state.timetables.active];
+  const activeTimetable = getActiveTT(state);
   const { areas, departments, levels } = state.school;
-  const semester = currSem(state.semester);
+  const semester = getCurrentSemester(state);
   return {
     isVisible,
     isFetching,
     advancedSearchResults,
     active,
-    course,
     inRoster,
     areas,
     departments,
@@ -47,24 +45,8 @@ const mapStateToProps = (state) => {
     page,
     semesterName: `${semester.name} ${semester.year}`,
     schoolSpecificInfo: getSchoolSpecificInfo(state.school.school),
-    userInfo: state.userInfo.data,
-    isLoggedIn: state.userInfo.data.isLoggedIn,
     hasHoveredResult: activeTimetable.courses.some(c => c.fake),
-    classmates: state.courseInfo.classmates,
-    isFetchingClassmates: state.courseInfo.isFetching,
-    getShareLink: courseCode => getCourseShareLink(courseCode, currSem(state.semester)),
-    isSectionLocked: (courseId, section) => {
-      if (courseSections[courseId] === undefined) {
-        return false;
-      }
-      return Object.keys(courseSections[courseId]).some(
-                type => courseSections[courseId][type] === section,
-            );
-    },
-    isSectionOnActiveTimetable: (courseId, section) => activeTimetable.courses.some(
-                c => c.id === courseId &&
-                c.enrolled_sections.some(sec => sec === section),
-            ),
+    getShareLink: courseCode => getCourseShareLinkFromModal(courseCode, getCurrentSemester(state)),
   };
 };
 
@@ -72,20 +54,14 @@ const ExplorationModalContainer = connect(
     mapStateToProps,
   {
     hideExplorationModal,
-    openSignUpModal,
     fetchAdvancedSearchResults,
     fetchCourseClassmates,
     addOrRemoveOptionalCourse,
-    hoverSection,
     unHoverSection,
     addOrRemoveCourse,
-    react,
     paginate: paginateAdvancedSearchResults,
     clearPagination: clearAdvancedSearchPagination,
     setAdvancedSearchResultIndex,
-    changeUserInfo,
-    saveSettings,
-    fetchCourseInfo,
   },
 )(ExplorationModal);
 
