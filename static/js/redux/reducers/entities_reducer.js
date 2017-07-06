@@ -3,8 +3,7 @@ import uniq from 'lodash/uniq';
 import uniqBy from 'lodash/uniqBy';
 
 // TODO: garbage collect (e.g. clear when changing semesters)
-const emptyTimetable = { courses: [], slots: [] };
-const entities = (state = { timetables: { empty: emptyTimetable } }, action) => {
+const entities = (state = {}, action) => {
   if (action.response && action.response.entities) {
     return merge(state, action.response.entities);
   }

@@ -4,7 +4,8 @@ import { render } from 'react-dom';
 import { applyMiddleware, createStore } from 'redux';
 import thunkMiddleware from 'redux-thunk';
 import { Provider } from 'react-redux';
-import rootReducer, { getDenormTimetable } from './reducers/root_reducer';
+import uniq from 'lodash/uniq';
+import rootReducer from './reducers/root_reducer';
 import SemesterlyContainer from './ui/containers/semesterly_container';
 import { fetchMostClassmatesCount, handleAgreement, isRegistered } from './actions/user_actions';
 import { loadCachedTimetable, loadTimetable, lockTimetable } from './actions/timetable_actions';
@@ -27,13 +28,13 @@ const store = createStore(rootReducer,
 );
 
 // load initial timetable from user data if logged in or local storage
-const setupTimetables = (userTimetables, allSemesters, oldSemesters) => (dispatch, getState) => {
+const setupTimetables = (userTimetables, allSemesters, oldSemesters) => (dispatch) => {
   if (userTimetables.length > 0) {
-    const activeTimetable = getDenormTimetable(getState(), userTimetables[0]);
+    const activeTimetable = userTimetables[0];
     dispatch(loadTimetable(activeTimetable));
     dispatch({ type: ActionTypes.RECEIVE_TIMETABLE_SAVED, upToDate: true });
     setTimeout(() => {
-      dispatch(fetchMostClassmatesCount(userTimetables[0].courses.map(c => c.id)));
+      dispatch(fetchMostClassmatesCount(uniq(activeTimetable.slots.map(s => s.course))));
     }, 500);
   } else if (browserSupportsLocalStorage()) {
     dispatch(loadCachedTimetable(allSemesters, oldSemesters));
@@ -94,6 +95,7 @@ const handleFlows = featureFlow => (dispatch) => {
       break;
     case 'SHARE_TIMETABLE':
       dispatch({ type: ActionTypes.CACHED_TT_LOADED });
+      // TODO: replace course objects in userInfo with course ids after storing in entities
       dispatch(receiveCourses(featureFlow.courses));
       dispatch(lockTimetable(featureFlow.sharedTimetable,
         true, initData.currentUser.isLoggedIn));
