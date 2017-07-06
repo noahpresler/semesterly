@@ -113,7 +113,7 @@ class TimetableLinkView(FeatureFlowView):
 
         added_courses = set()
         for slot in timetable['slots']:
-            course_id, section_id = slot['course']['id'], slot['section']['id']
+            course_id, section_id = slot['course'], slot['section']
             if course_id not in added_courses:
                 course_obj = Course.objects.get(id=course_id)
                 shared_timetable.courses.add(course_obj)
