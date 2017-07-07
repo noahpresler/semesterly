@@ -5,7 +5,7 @@ import Modal from 'boron/WaveModal';
 import isEmpty from 'lodash/isEmpty';
 import CourseModalBodyContainer from '../containers/modals/course_modal_body_container';
 import { ShareLink } from '../master_slot';
-import { fullCourseDetails } from '../../constants/semesterlyPropTypes';
+import { normalizedCourse } from '../../constants/semesterlyPropTypes';
 
 class CourseModal extends React.Component {
   constructor(props) {
@@ -147,7 +147,7 @@ CourseModal.defaultProps = {
 };
 
 CourseModal.propTypes = {
-  data: fullCourseDetails,
+  data: PropTypes.oneOfType([normalizedCourse, PropTypes.shape({})]),
   inRoster: PropTypes.bool.isRequired,
   hasHoveredResult: PropTypes.bool.isRequired,
   addOrRemoveOptionalCourse: PropTypes.func.isRequired,

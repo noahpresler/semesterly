@@ -239,7 +239,7 @@ class PeerModal extends React.Component {
 PeerModal.propTypes = {
   userInfo: SemesterlyPropTypes.userInfo.isRequired,
   peers: PropTypes.arrayOf(SemesterlyPropTypes.peer).isRequired,
-  courses: PropTypes.arrayOf(SemesterlyPropTypes.course).isRequired,
+  courses: PropTypes.arrayOf(SemesterlyPropTypes.denormalizedCourse).isRequired,
   courseToColourIndex: PropTypes.shape({
     '*': PropTypes.number,
   }).isRequired,
