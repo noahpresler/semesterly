@@ -23,7 +23,6 @@ const ui = (state = initialState, action) => {
 
       courses.forEach((courseId) => {
         // if this course already had a colour, use that. Otherwise get a new one
-        console.log(courseId, state.courseToColourIndex[courseId]);
         courseToColourIndex[courseId] =
           state.courseToColourIndex[courseId] || getNextAvailableColour(courseToColourIndex);
       });
