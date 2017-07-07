@@ -213,7 +213,7 @@ SlotManager.propTypes = {
     '*': PropTypes.number,
   }).isRequired,
   getClassmatesInSection: PropTypes.func.isRequired,
-  custom: PropTypes.arrayOf(PropTypes.oneOfType([SemesterlyPropTypes.customSlot,
+  custom: PropTypes.arrayOf(PropTypes.oneOfType([SemesterlyPropTypes.customEvent,
     PropTypes.shape({})])).isRequired,
   primaryDisplayAttribute: PropTypes.string.isRequired,
   socialSections: PropTypes.bool,
