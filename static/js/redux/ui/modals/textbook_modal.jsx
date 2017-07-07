@@ -33,7 +33,7 @@ class TextbookModal extends React.Component {
 
     const tbs = {};
     let allTbs = [];
-    // TODO: stop using manual for loops
+    // TODO: use forEach instead
     for (let i = 0; i < this.props.courses.length; i++) {
       tbs[this.props.courses[i].name] = [];
       if (this.props.courses[i].textbooks !== undefined &&
