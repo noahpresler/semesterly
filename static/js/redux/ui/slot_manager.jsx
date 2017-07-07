@@ -101,7 +101,6 @@ class SlotManager extends React.Component {
     };
     const slots = this.props.slots;
 
-    // TODO: don't render slot of the save section type and course as the hovered slot
     slots.forEach((slot) => {
       const { course, section, offerings } = slot;
       offerings.forEach((offering) => {
