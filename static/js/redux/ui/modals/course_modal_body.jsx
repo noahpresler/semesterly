@@ -412,7 +412,7 @@ CourseModalBody.propTypes = {
   isFetchingClassmates: PropTypes.bool.isRequired,
   classmates: SemesterlyPropTypes.classmates.isRequired,
   sectionTypeToSections: PropTypes.shape({
-    '*': PropTypes.arrayOf(SemesterlyPropTypes.section),
+    '*': PropTypes.arrayOf(SemesterlyPropTypes.denormalizedSection),
   }).isRequired,
   popularityPercent: PropTypes.number,
   isLoggedIn: PropTypes.bool,
@@ -430,7 +430,7 @@ CourseModalBody.propTypes = {
 
   // props provided by parent
   inRoster: PropTypes.bool.isRequired,
-  data: SemesterlyPropTypes.fullCourseDetails,
+  data: SemesterlyPropTypes.normalizedCourse,
   addOrRemoveCourse: PropTypes.func.isRequired,
   hideModal: PropTypes.func.isRequired,
   isFetching: PropTypes.bool.isRequired,
