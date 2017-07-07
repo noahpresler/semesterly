@@ -8,7 +8,7 @@ from rest_framework.views import APIView
 
 from analytics.views import save_analytics_course_search
 from courses.serializers import get_detailed_course_json, get_basic_course_json
-from searches.utils import get_course_matches
+from searches.utils import *
 from student.models import Student
 from student.utils import get_student
 from timetable.models import Semester
@@ -22,7 +22,7 @@ class CourseSearchList(CsrfExemptMixin, ValidateSubdomainMixin, APIView):
     def get(self, request, query, sem_name, year):
         """ Return basic search results. """
         sem = Semester.objects.get_or_create(name=sem_name, year=year)[0]
-        course_match_objs = get_course_matches(request.subdomain, query, sem)[:4]
+        course_match_objs = SEARCHER.vectorized_search(request.subdomain, query, sem)[:4]
         save_analytics_course_search(query[:200], course_match_objs[:2], sem, request.subdomain,
                                      get_student(request))
         course_matches = [get_basic_course_json(course, sem) for course in course_match_objs]
@@ -34,7 +34,7 @@ class CourseSearchList(CsrfExemptMixin, ValidateSubdomainMixin, APIView):
         page = int(request.query_params.get('page', 1))
         sem, _ = Semester.objects.get_or_create(name=sem_name, year=year)
         # Filter first by the user's search query.
-        course_match_objs = get_course_matches(school, query, sem)
+        course_match_objs = SEARCHER.baseline_search(school, query, sem)
 
         # Filter now by departments, areas, levels, or times if provided.
         filters = request.data.get('filters', {})
