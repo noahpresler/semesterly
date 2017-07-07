@@ -73,7 +73,7 @@ export const fetchSearchResults = query => (dispatch, getState) => {
   fetch(getCourseSearchEndpoint(query, getSemester(getState())), {
     credentials: 'include',
   })
-  .then(response => response.json()) // TODO error-check the response
+  .then(response => response.json())
   .then((json) => {
     // indicate that courses have been received
     dispatch(receiveCourses(json));

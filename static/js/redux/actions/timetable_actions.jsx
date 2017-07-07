@@ -64,7 +64,7 @@ export const fetchTimetables = (requestBody, removing, newActive = 0) => (dispat
         return localStorage.clear();
       }
       return null;
-    }) // TODO(Rohan): maybe log somewhere if errors?
+    })
     .then((json) => {
       if (removing || json.timetables.length > 0) {
         // receive new info into state
