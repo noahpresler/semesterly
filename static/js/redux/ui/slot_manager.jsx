@@ -106,8 +106,10 @@ class SlotManager extends React.Component {
       const { course, section, offerings } = slot;
       offerings.forEach((offering) => {
         // will only be undefined for hovered slot
-        const colourId = this.props.courseToColourIndex[course.id] ||
-                         getNextAvailableColour(this.props.courseToColourIndex);
+        const colourId = (course.id in this.props.courseToColourIndex) ?
+          this.props.courseToColourIndex[course.id] :
+          getNextAvailableColour(this.props.courseToColourIndex);
+
         const displayOffering = {
           ...offering,
           colourId,
