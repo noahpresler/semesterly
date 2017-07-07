@@ -69,7 +69,9 @@ export const getDenormSlot = (state, slot) => {
 
 export const getCourseIdsFromSlots = slots => uniq(slots.map(slot => slot.course));
 
-export const getCoursesFromDenormSlots = slots => uniqBy(slots.map(slot => slot.course), 'id');
+export const getCoursesFromSlots = (state, slots) => {
+  return getCourseIdsFromSlots(slots).map(cid => getDenormCourseById(state, cid));
+};
 
 export const getDenormTimetable = (state, timetable) => {
   return {
@@ -81,6 +83,11 @@ export const getDenormTimetable = (state, timetable) => {
 export const getTimetableCourses = (state, timetable) => {
   const courseIds = uniq(timetable.slots.map(slot => slot.course));
   return courseIds.map(courseId => getCourseById(state, courseId));
+};
+
+export const getTimetableDenormCourses = (state, timetable) => {
+  const courseIds = uniq(timetable.slots.map(slot => slot.course));
+  return courseIds.map(courseId => getDenormCourseById(state, courseId));
 };
 
 export const getMaxEndHour = function getLatestSlotEndHourFromTimetable(timetable) {
