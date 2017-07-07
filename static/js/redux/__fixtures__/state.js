@@ -15,9 +15,9 @@ export const offering = {
 };
 
 export const entities = {
-  courses: {'1': course},
-  sections: {'1': section},
-  offering_set: {'1': offering},
+  courses: { 1: course },
+  sections: { 1: section },
+  offering_set: { 1: offering },
 };
 
 export const slot = {
