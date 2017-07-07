@@ -26,6 +26,16 @@ export const receiveTimetables = timetables => ({
   timetables,
 });
 
+export const changeActiveTimetable = newActive => ({
+  type: ActionTypes.CHANGE_ACTIVE_TIMETABLE,
+  newActive,
+});
+
+export const setActiveTimetable = newActive => (dispatch) => {
+  dispatch(changeActiveTimetable(newActive));
+  dispatch(autoSave());
+};
+
 export const requestTimetables = () => ({ type: ActionTypes.REQUEST_TIMETABLES });
 
 export const fetchTimetables = (requestBody, removing, newActive = 0) => (dispatch, getState) => {
@@ -56,19 +66,16 @@ export const fetchTimetables = (requestBody, removing, newActive = 0) => (dispat
     }) // TODO(Rohan): maybe log somewhere if errors?
     .then((json) => {
       if (removing || json.timetables.length > 0) {
-        // mark that timetables and a new courseSections have been received
+        // receive new info into state
         dispatch(receiveCourses(json.courses));
         dispatch(receiveTimetables(json.timetables));
         dispatch({
           type: ActionTypes.RECEIVE_COURSE_SECTIONS,
           courseSections: json.new_c_to_s,
         });
-        if (newActive > 0) {
-          dispatch({
-            type: ActionTypes.CHANGE_ACTIVE_TIMETABLE,
-            newActive,
-          });
-        }
+        dispatch(changeActiveTimetable(newActive));
+
+        // cache new info into local storage
         if (!state.userInfo.data.isLoggedIn) {
           saveLocalCourseSections(json.new_c_to_s);
           saveLocalActiveIndex(newActive);
@@ -78,18 +85,16 @@ export const fetchTimetables = (requestBody, removing, newActive = 0) => (dispat
       } else {
         // user wasn't removing or refetching for custom events
         // (i.e. was adding a course/section), but we got no timetables back.
-        // course added by the user resulted in a conflict, so no timetables
-        // were received
+        // therefore course added by the user resulted in a conflict
         dispatch({ type: ActionTypes.CLEAR_CONFLICTING_EVENTS });
         dispatch(alertConflict());
       }
       return json;
     })
     .then((json) => {
-      if (state.userInfo.data.isLoggedIn && json.timetables[0]) {
-        if (state.userInfo.data.social_courses !== null) {
-          dispatch(fetchClassmates(json.timetables[0]));
-        }
+      const userData = state.userInfo.data;
+      if (userData.isLoggedIn && json.timetables.length > 0 && userData.social_courses !== null) {
+        dispatch(fetchClassmates(json.timetables[0]));
       }
     });
 };
@@ -109,54 +114,47 @@ export const fetchStateTimetables = (activeIndex = 0) => (dispatch, getState) =>
   dispatch(fetchTimetables(requestBody, false, activeIndex));
 };
 
-// locks denormalized timetable
-export const lockTimetable = (timetable, created, isLoggedIn) => (dispatch, getState) => {
-  if (timetable.has_conflict) { // turn conflicts on if necessary
+// load a single timetable into the calendar and lock all of its sections (used for personal and
+// shared timetables)
+// accepts a normalized timetable as input
+export const lockTimetable = timetable => (dispatch, getState) => {
+  const state = getState();
+
+  if (timetable.has_conflict) {
     dispatch({ type: ActionTypes.TURN_CONFLICTS_ON });
   }
   dispatch({
     type: ActionTypes.RECEIVE_COURSE_SECTIONS,
-    courseSections: lockActiveSections(getDenormTimetable(getState(), timetable)),
+    courseSections: lockActiveSections(getDenormTimetable(state, timetable)),
   });
-  dispatch({
-    type: ActionTypes.RECEIVE_TIMETABLES,
-    timetables: [timetable],
-  });
-  if (isLoggedIn) { // fetch classmates for this timetable only if the user is logged in
+  dispatch(receiveTimetables([timetable]));
+  if (state.userInfo.data.isLoggedIn) {
     dispatch(fetchClassmates(timetable));
   }
 };
 
-
-// loads @timetable into the state.
-// @created is true if the user is creating a new timetable
-export const loadTimetable = (timetable, created = false) => (dispatch, getState) => {
+// load a personal timetable into state
+export const loadTimetable = timetable => (dispatch, getState) => {
   const state = getState();
   const isLoggedIn = state.userInfo.data.isLoggedIn;
   if (!isLoggedIn) {
     return dispatch({ type: ActionTypes.TOGGLE_SIGNUP_MODAL });
   }
 
-  // store the 'saved timetable' (handled by the saving_timetable reducer)
   dispatch({
     type: ActionTypes.CHANGE_ACTIVE_SAVED_TIMETABLE,
     timetable,
-    created,
   });
 
-  // lock sections for this timetable; and mark it as the only available one
-  return dispatch(lockTimetable(timetable, created, isLoggedIn));
+  return dispatch(lockTimetable(timetable));
 };
 
 export const createNewTimetable = (ttName = 'Untitled Schedule') => (dispatch) => {
-  dispatch(loadTimetable({ name: ttName, courses: [], events: [], has_conflict: false }, true));
+  dispatch(loadTimetable({ name: ttName, slots: [], events: [], has_conflict: false }, true));
 };
 
 export const nullifyTimetable = () => (dispatch) => {
-  dispatch({
-    type: ActionTypes.RECEIVE_TIMETABLES,
-    timetables: [{ slots: [], has_conflict: false }],
-  });
+  dispatch(receiveTimetables([{ slots: [], has_conflict: false }]));
   dispatch({
     type: ActionTypes.RECEIVE_COURSE_SECTIONS,
     courseSections: {},
@@ -435,16 +433,6 @@ export const addOrRemoveOptionalCourse = course => (dispatch, getState) => {
     numOptionCourses: state.optionalCourses.numRequired,
   });
   dispatch(fetchTimetables(reqBody, removing));
-};
-
-export const changeActiveTimetable = newActive => ({
-  type: ActionTypes.CHANGE_ACTIVE_TIMETABLE,
-  newActive,
-});
-
-export const setActiveTimetable = newActive => (dispatch) => {
-  dispatch(changeActiveTimetable(newActive));
-  dispatch(autoSave());
 };
 
 export const toggleConflicts = () => ({ type: ActionTypes.TOGGLE_CONFLICTS });
