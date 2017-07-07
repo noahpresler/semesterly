@@ -177,7 +177,7 @@ SearchBar.propTypes = {
   isCourseOptional: PropTypes.func.isRequired,
   isFetching: PropTypes.bool.isRequired,
   maybeSetSemester: PropTypes.func.isRequired,
-  searchResults: PropTypes.arrayOf(SemesterlyPropTypes.searchResult).isRequired,
+  searchResults: PropTypes.arrayOf(SemesterlyPropTypes.denormalizedCourse).isRequired,
   semester: SemesterlyPropTypes.semester.isRequired,
   showExplorationModal: PropTypes.func.isRequired,
   allSemesters: PropTypes.arrayOf(SemesterlyPropTypes.semester).isRequired,

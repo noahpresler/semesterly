@@ -53,6 +53,7 @@ class CourseSerializer(serializers.ModelSerializer):
                                                                                  flat=True)
         return list(Integration.objects.filter(id__in=ids).values_list("name", flat=True))
 
+    # TODO: use course serializer but only recurse one level
     def get_related_courses(self, course):
         info = []
         related = course.related_courses.filter(
@@ -133,6 +134,7 @@ class CourseSerializer(serializers.ModelSerializer):
             'sections',
             'prerequisites',
             'exclusions',
+            'corequisites',
             'areas',
             'is_waitlist_only'
         )

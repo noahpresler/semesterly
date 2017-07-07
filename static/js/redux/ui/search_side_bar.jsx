@@ -62,9 +62,9 @@ SearchSideBar.defaultProps = {
 };
 
 SearchSideBar.propTypes = {
-  hoveredResult: SemesterlyPropTypes.searchResult,
+  hoveredResult: SemesterlyPropTypes.denormalizedCourse,
   sectionTypeToSections: PropTypes.shape({
-    '*': PropTypes.arrayOf(SemesterlyPropTypes.section),
+    '*': PropTypes.arrayOf(SemesterlyPropTypes.denormalizedSection),
   }).isRequired,
   addCourse: PropTypes.func.isRequired,
   isSectionLocked: PropTypes.func.isRequired,
