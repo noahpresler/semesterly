@@ -8,6 +8,7 @@ from scripts.parser_library.validator import Validator
 from scripts.parser_library.digestor import Digestor
 from scripts.parser_library.internal_exceptions import JsonException, DigestionError
 from scripts.parser_library.tracker import Tracker, LogFormatted
+from searches.utils import Vectorizer
 
 class Command(BaseCommand):
 	def add_arguments(self, parser):
@@ -80,6 +81,7 @@ class Command(BaseCommand):
 					hide_progress_bar=options['hide_progress_bar'],
 					tracker=tracker,
 				).digest()
+				Vectorizer().vectorize()
 
 			except DigestionError as e:
 				self.stderr.write(self.style.ERROR('FAILED: digestion'))
