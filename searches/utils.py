@@ -14,7 +14,7 @@ from timetable.models import Semester, Course
 from nltk.stem.porter import *
 
 
-# Vectorizer (file writer)
+# Vectorizer class creates a dictionary over courses and build course vectorizer pickle object
 class Vectorizer():
     def __init__(self):
         self.TITLE_WEIGHT = 3
@@ -72,7 +72,7 @@ class Vectorizer():
         course_object.save()
 
 
-# Searcher (file reader / query performance)
+# Searcher class implements baseline search and vectorized search based on information retrieval techniques.
 class Searcher():
     def __init__(self):
         self.count_vectorizer = self.load_count_vectorizer()
@@ -99,9 +99,8 @@ class Searcher():
     def match_title(self, query, course_name):
         query_tokens = query.lower().split(' ')
         course_name = course_name.lower()
-        # if len(query_tokens) is 1 and self.get_acronym(course_name) == query:
-        #    return 1
-        return 1 if all(map(lambda q: q in course_name, query_tokens)) else 0
+        return 1 if all(map(lambda q: q in course_name, query_tokens)) and \
+                    len(query_tokens) is len(course_name.split()) else 0
 
     def get_course(self, code):
         for course in Course.objects.all():
@@ -122,7 +121,7 @@ class Searcher():
     def baseline_search(self, school, query, semester):
         if query == "":
             return Course.objects.filter(school=school)
-        query_tokens = query.split()
+        query_tokens = query.lower().split()
         course_name_contains_query = reduce(
             operator.and_, map(self.course_name_contains_token, query_tokens))
         return Course.objects.filter(
@@ -134,7 +133,7 @@ class Searcher():
     def vectorized_search(self, school, query, semester):
         if query == "":
             return Course.objects.filter(school=school)
-        query_tokens = query.split()
+        query_tokens = query.lower().split()
         course_name_contains_query = reduce(
             operator.and_, map(self.course_name_contains_token, query_tokens))
         title_matching_courses = Course.objects.filter(
@@ -172,7 +171,7 @@ class Searcher():
         query_vector = self.vectorize_query(query.lower())
         scores = []
         for course in course_filtered:
-            score = self.get_cosine_sim(query_vector, course.vector)
+            score = self.get_cosine_sim(query_vector, course.vector) + self.match_title(query, course.name)
             scores.append((course, score))
         scores.sort(key=lambda tup: -tup[1])
         # duplicate handling
