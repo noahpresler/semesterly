@@ -199,9 +199,9 @@ SideBar.propTypes = {
   savedTimetables: PropTypes.arrayOf(PropTypes.shape({
     name: PropTypes.string,
   })),
-  mandatoryCourses: PropTypes.arrayOf(SemesterlyPropTypes.course).isRequired,
-  optionalCourses: PropTypes.arrayOf(SemesterlyPropTypes.course).isRequired,
-  coursesInTimetable: PropTypes.arrayOf(SemesterlyPropTypes.course).isRequired,
+  mandatoryCourses: PropTypes.arrayOf(SemesterlyPropTypes.denormalizedCourse).isRequired,
+  optionalCourses: PropTypes.arrayOf(SemesterlyPropTypes.denormalizedCourse).isRequired,
+  coursesInTimetable: PropTypes.arrayOf(SemesterlyPropTypes.denormalizedCourse).isRequired,
   courseToColourIndex: PropTypes.shape({
     id: PropTypes.string,
   }).isRequired,
