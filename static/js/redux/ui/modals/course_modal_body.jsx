@@ -430,7 +430,7 @@ CourseModalBody.propTypes = {
 
   // props provided by parent
   inRoster: PropTypes.bool.isRequired,
-  data: SemesterlyPropTypes.normalizedCourse,
+  data: PropTypes.oneOfType([SemesterlyPropTypes.normalizedCourse, PropTypes.shape({})]),
   addOrRemoveCourse: PropTypes.func.isRequired,
   hideModal: PropTypes.func.isRequired,
   isFetching: PropTypes.bool.isRequired,
