@@ -53,8 +53,9 @@ class SideBar extends React.Component {
     // TOOD: code duplication between masterslots/optionalslots
     let masterSlots = this.props.mandatoryCourses ?
       this.props.mandatoryCourses.map((course) => {
-        const colourIndex = this.props.courseToColourIndex[course.id] ||
-                            getNextAvailableColour(this.props.courseToColourIndex);
+        const colourIndex = (course.id in this.props.courseToColourIndex) ?
+          this.props.courseToColourIndex[course.id] :
+          getNextAvailableColour(this.props.courseToColourIndex);
         const professors = course.sections.map(section => section.instructors);
         return (<MasterSlot
           key={course.id}
@@ -70,8 +71,9 @@ class SideBar extends React.Component {
       }) : null;
 
     let optionalSlots = this.props.coursesInTimetable ? this.props.optionalCourses.map((course) => {
-      const colourIndex = this.props.courseToColourIndex[course.id] ||
-                          getNextAvailableColour(this.props.courseToColourIndex);
+      const colourIndex = (course.id in this.props.courseToColourIndex) ?
+          this.props.courseToColourIndex[course.id] :
+          getNextAvailableColour(this.props.courseToColourIndex);
       return (<MasterSlot
         key={course.id}
         onTimetable={this.props.isCourseInRoster(course.id)}
