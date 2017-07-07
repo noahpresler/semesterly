@@ -6,6 +6,7 @@ import isEmpty from 'lodash/isEmpty';
 import CourseModalBodyContainer from '../containers/modals/course_modal_body_container';
 import { ShareLink } from '../master_slot';
 import { normalizedCourse } from '../../constants/semesterlyPropTypes';
+import * as SemesterlyPropTypes from '../../constants/semesterlyPropTypes';
 
 class CourseModal extends React.Component {
   constructor(props) {
@@ -22,7 +23,8 @@ class CourseModal extends React.Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    if (!isEmpty(nextProps.data)) {
+    // wait for both classmates and course info to be finished fetching
+    if (!(isEmpty(nextProps.data) || isEmpty(nextProps.classmates))) {
       const { data } = nextProps;
       if (data.code) {
         history.replaceState({}, 'Semester.ly', this.props.getShareLinkFromModal(data.code));
@@ -147,6 +149,7 @@ CourseModal.defaultProps = {
 };
 
 CourseModal.propTypes = {
+  classmates: SemesterlyPropTypes.classmates.isRequired,
   data: PropTypes.oneOfType([normalizedCourse, PropTypes.shape({})]),
   inRoster: PropTypes.bool.isRequired,
   hasHoveredResult: PropTypes.bool.isRequired,
