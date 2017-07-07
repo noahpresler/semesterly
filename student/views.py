@@ -332,8 +332,7 @@ class ClassmateView(ValidateSubdomainMixin, RedirectToSignupMixin, APIView):
                         'course': model_to_dict(course,
                                                 exclude=['unstopped_description', 'description',
                                                          'credits']),
-                        # is there a section for this course that is in both
-                        # timetables?
+                        # is there a section for this course that is in both timetables?
                         'in_section': (sections_in_common & course.section_set.all()).exists()
                     })
 
@@ -347,10 +346,7 @@ class ClassmateView(ValidateSubdomainMixin, RedirectToSignupMixin, APIView):
                                  '/picture?width=700&height=700'
                 })
 
-            friends.sort(
-                key=lambda friend: len(
-                    friend['shared_courses']),
-                reverse=True)
+            friends.sort(key=lambda friend: len(friend['shared_courses']), reverse=True)
             return Response(friends, status=status.HTTP_200_OK)
 
 
