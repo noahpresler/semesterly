@@ -19,10 +19,6 @@ import {
 import { deleteTimetable, duplicateTimetable } from '../../actions/user_actions';
 import { getCourseShareLink } from '../../constants/endpoints';
 
-// TODO: timeable reducers needs to have its own optionalCourses field with courseIds, since
-// getting optionaCourses from slots only get the ones that are actually in the timetable.
-// it needs to be more clear that optionalCourses here are ALL optional courses, and livetimetable
-// courses are the ones IN the timetable (both mandatory and optional)
 const mapStateToProps = (state) => {
   const timetable = getActiveTimetable(state);
   const coursesInTimetable = getCoursesFromSlots(state, timetable.slots);
