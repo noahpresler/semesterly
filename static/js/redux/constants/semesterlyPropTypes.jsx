@@ -113,56 +113,11 @@ export const denormalizedCourse = PropTypes.shape({
 });
 
 // should match EventSerializer
-const eventFields = {
+export const customEvent = PropTypes.shape({
   name: PropTypes.string.isRequired,
   day: PropTypes.string.isRequired,
   time_end: PropTypes.string.isRequired,
   time_start: PropTypes.string.isRequired,
-};
-
-export const customSlot = PropTypes.shape(eventFields);
-
-export const calendarEventFields = {
-  ...eventFields,
-  // display info
-  key: PropTypes.string.isRequired,
-  depth_level: PropTypes.number.isRequired,
-  num_conflicts: PropTypes.number.isRequired,
-  shift_index: PropTypes.number.isRequired,
-  uses12HrTime: PropTypes.bool.isRequired,
-  // functions
-  connectDragTarget: PropTypes.func.isRequired,
-  connectCreateTarget: PropTypes.func.isRequired,
-};
-
-export const courseEvent = PropTypes.shape({
-  ...calendarEventFields,
-  // course info
-  courseId: PropTypes.number.isRequired,
-  classmates: classmatesArray.isRequired,
-  // section info
-  locked: PropTypes.bool.isRequired,
-  meeting_section: PropTypes.string.isRequired,
-  // offering info
-  location: PropTypes.string.isRequired,
-  // display info
-  colourId: PropTypes.number.isRequired,
-  primaryDisplayAttribute: PropTypes.string.isRequired,
-  // functions
-  fetchCourseInfo: PropTypes.func.isRequired,
-  removeCourse: PropTypes.func.isRequired,
-  lockOrUnlockSection: PropTypes.func.isRequired,
-});
-
-export const customEvent = PropTypes.shape({
-  ...calendarEventFields,
-  // display info
-  preview: PropTypes.bool.isRequired,
-  isDragging: PropTypes.bool.isRequired,
-  // functions
-  updateCustomSlot: PropTypes.func.isRequired,
-  removeCustomSlot: PropTypes.func.isRequired,
-  connectDragSource: PropTypes.func.isRequired,
 });
 
 // should match SlotSerializer

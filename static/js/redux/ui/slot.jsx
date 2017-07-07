@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import React from 'react';
 import Radium, { StyleRoot } from 'radium';
 import { DropTarget } from 'react-dnd';
@@ -264,7 +265,27 @@ class Slot extends React.Component {
 // eslint-disable-next-line no-class-assign
 Slot = Radium(Slot);
 
-Slot.propTypes = SemesterlyPropTypes.courseEvent;
+Slot.propTypes = {
+  classmates: SemesterlyPropTypes.classmatesArray.isRequired,
+  colourId: PropTypes.number.isRequired,
+  courseId: PropTypes.number.isRequired,
+  depth_level: PropTypes.number.isRequired,
+  fetchCourseInfo: PropTypes.func.isRequired,
+  id: PropTypes.number.isRequired,
+  location: PropTypes.string.isRequired,
+  locked: PropTypes.bool.isRequired,
+  meeting_section: PropTypes.string.isRequired,
+  num_conflicts: PropTypes.number.isRequired,
+  primaryDisplayAttribute: PropTypes.string.isRequired,
+  removeCourse: PropTypes.func.isRequired,
+  shift_index: PropTypes.number.isRequired,
+  time_end: PropTypes.string.isRequired,
+  time_start: PropTypes.string.isRequired,
+  lockOrUnlockSection: PropTypes.func.isRequired,
+  connectCreateTarget: PropTypes.func.isRequired,
+  connectDragTarget: PropTypes.func.isRequired,
+  uses12HrTime: PropTypes.bool.isRequired,
+};
 
 export default DropTarget(DRAG_TYPES.CREATE, createSlotTarget, collectCreateDrop)(
     DropTarget(DRAG_TYPES.DRAG, dragSlotTarget, collectDragDrop)(Slot),
