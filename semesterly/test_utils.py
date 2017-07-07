@@ -628,7 +628,7 @@ class SeleniumTestCase(StaticLiveServerTestCase):
         """Asserts equivalency between the provided ptt tuple and the current ptt"""
         slots, master_slots, tt_name = ptt
         self.assertItemsEqual(slots, self.get_elements_as_text((By.CLASS_NAME, 'slot')))
-        self.assertItemsEqual(master_slots, \
+        self.assertItemsEqual(master_slots,
             self.get_elements_as_text((By.CLASS_NAME, 'master-slot')))
         self.assertItemsEqual(tt_name, self.get_elements_as_text((By.CLASS_NAME, 'timetable-name')))
 
