@@ -1,6 +1,7 @@
 import React from 'react';
 import { DragSource, DropTarget } from 'react-dnd';
 import { DRAG_TYPES } from '../constants/constants';
+import { generateCustomEventId } from '../util';
 
 function convertToHalfHours(str) {
   const start = parseInt(str.split(':')[0], 10);
@@ -49,7 +50,7 @@ function collectDragDrop(connect) { // inject props as drop target
 // ----------------- create source:
 const createSource = {
   beginDrag(props) {
-    const newSlotId = new Date().getTime();
+    const newSlotId = generateCustomEventId();
     props.addCustomSlot(
             props.time,
             props.time,
