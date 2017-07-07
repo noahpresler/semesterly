@@ -1,6 +1,6 @@
+import PropTypes from 'prop-types';
 import React from 'react';
 import { DragSource, DropTarget } from 'react-dnd';
-import * as SemesterlyPropTypes from '../constants/semesterlyPropTypes';
 import { DRAG_TYPES, HALF_HOUR_HEIGHT } from '../constants/constants';
 
 
@@ -235,7 +235,23 @@ class CustomSlot extends React.Component {
   }
 }
 
-CustomSlot.propTypes = SemesterlyPropTypes.customEvent;
+CustomSlot.propTypes = {
+  connectDragSource: PropTypes.func.isRequired,
+  connectDragTarget: PropTypes.func.isRequired,
+  isDragging: PropTypes.bool.isRequired,
+  time_start: PropTypes.string.isRequired,
+  time_end: PropTypes.string.isRequired,
+  depth_level: PropTypes.number.isRequired,
+  num_conflicts: PropTypes.number.isRequired,
+  shift_index: PropTypes.number.isRequired,
+  name: PropTypes.string.isRequired,
+  id: PropTypes.number.isRequired,
+  uses12HrTime: PropTypes.bool.isRequired,
+  preview: PropTypes.bool.isRequired,
+  updateCustomSlot: PropTypes.func.isRequired,
+  removeCustomSlot: PropTypes.func.isRequired,
+  connectCreateTarget: PropTypes.func.isRequired,
+};
 
 export default DropTarget(DRAG_TYPES.DRAG, dragSlotTarget, collectDragDrop)(
     DropTarget(DRAG_TYPES.CREATE, createSlotTarget, collectCreateDrop)(
