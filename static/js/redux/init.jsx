@@ -34,7 +34,6 @@ const setupTimetables = (userTimetables, allSemesters, oldSemesters) => (dispatc
   if (userTimetables.length > 0) {
     const activeTimetable = userTimetables[0];
     dispatch(loadTimetable(activeTimetable));
-    dispatch({ type: ActionTypes.RECEIVE_TIMETABLE_SAVED, upToDate: true });
     setTimeout(() => {
       dispatch(fetchMostClassmatesCount(activeTimetable));
     }, 500);
@@ -102,8 +101,7 @@ const handleFlows = featureFlow => (dispatch) => {
       if (initData.currentUser.isLoggedIn) {
         dispatch(handleCreateNewTimetable());
       }
-      dispatch(lockTimetable(featureFlow.sharedTimetable,
-        true, initData.currentUser.isLoggedIn));
+      dispatch(lockTimetable(featureFlow.sharedTimetable));
       break;
     case 'SHARE_EXAM':
       dispatch({ type: ActionTypes.SET_FINAL_EXAMS_SHARED });
