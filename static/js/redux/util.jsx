@@ -154,3 +154,5 @@ export const isIncomplete = prop => prop === undefined || prop === '' || prop ==
 
 export const getNextAvailableColour = courseToColourIndex =>
   range(COLOUR_DATA.length).find(i => !Object.values(courseToColourIndex).some(x => x === i));
+
+export const generateCustomEventId = () => new Date().getTime();
