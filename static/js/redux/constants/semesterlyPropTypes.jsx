@@ -137,46 +137,28 @@ export const denormalizedSlot = PropTypes.shape({
   is_locked: PropTypes.bool.isRequired,
 });
 
-
-// should match DisplayTimetableSerializer
-export const timetable = PropTypes.shape({
-  id: PropTypes.number,
-  slots: PropTypes.arrayOf(normalizedSlot),
-  has_conflict: PropTypes.bool.isRequired,
-  name: PropTypes.string.isRequired, // should be empty string for shared/generated tts
-  avg_rating: PropTypes.number,
-});
-
-export const NormalizedTimetable = PropTypes.shape({
-  id: PropTypes.number,
-  slots: arrayOfIds,
-  has_conflict: PropTypes.bool.isRequired,
-  name: PropTypes.string.isRequired, // should be empty string for shared/generated tts
-  avg_rating: PropTypes.number,
-});
-
 // should match StudentSerializer + isLoggedIn
 export const userInfo = PropTypes.shape({
   isLoggedIn: PropTypes.bool.isRequired,
-  class_year: PropTypes.number.isRequired,
-  img_url: PropTypes.string.isRequired,
-  fbook_uid: PropTypes.string.isRequired,
-  gender: PropTypes.string.isRequired,
-  major: PropTypes.string.isRequired,
-  social_courses: PropTypes.bool.isRequired,
-  social_offerings: PropTypes.bool.isRequired,
-  social_all: PropTypes.bool.isRequired,
-  emails_enabled: PropTypes.bool.isRequired,
-  school: PropTypes.string.isRequired,
-  integrations: PropTypes.arrayOf(PropTypes.shape({})).isRequired,
-  userFirstName: PropTypes.string.isRequired,
-  userLastName: PropTypes.string.isRequired,
-  FacebookSignedUp: PropTypes.bool.isRequired,
-  GoogleSignedUp: PropTypes.bool.isRequired,
-  GoogleLoggedIn: PropTypes.bool.isRequired,
-  LoginToken: PropTypes.string.isRequired,
-  LoginHash: PropTypes.string.isRequired,
-  timeAcceptedTos: PropTypes.string.isRequired,
+  class_year: PropTypes.number,
+  img_url: PropTypes.string,
+  fbook_uid: PropTypes.string,
+  gender: PropTypes.string,
+  major: PropTypes.string,
+  social_courses: PropTypes.bool,
+  social_offerings: PropTypes.bool,
+  social_all: PropTypes.bool,
+  emails_enabled: PropTypes.bool,
+  school: PropTypes.string,
+  integrations: PropTypes.arrayOf(PropTypes.shape({})),
+  userFirstName: PropTypes.string,
+  userLastName: PropTypes.string,
+  FacebookSignedUp: PropTypes.bool,
+  GoogleSignedUp: PropTypes.bool,
+  GoogleLoggedIn: PropTypes.bool,
+  LoginToken: PropTypes.string,
+  LoginHash: PropTypes.string,
+  timeAcceptedTos: PropTypes.string,
 });
 
 export const schoolSpecificInfo = PropTypes.shape({

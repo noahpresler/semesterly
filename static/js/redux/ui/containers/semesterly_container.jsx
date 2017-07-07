@@ -16,12 +16,14 @@ const mapStateToProps = (state) => {
     alertTimetableExists: state.alerts.alertTimetableExists,
     alertChangeSemester: state.alerts.alertChangeSemester,
     alertNewTimetable: state.alerts.alertNewTimetable,
-    alertFacebookFriends: state.alerts.alertFacebookFriends
+    // some of these values are not required so this could evaluate to undefined which leads to
+    // proptype warning
+    alertFacebookFriends: Boolean(state.alerts.alertFacebookFriends
         && state.userInfo.data.FacebookSignedUp
         && (!state.userInfo.data.social_courses || state.alerts.facebookAlertIsOn)
         && !state.userInfo.overrideShow
         && state.alerts.mostFriendsCount >= 2
-        && activeTTLength >= 1,
+        && activeTTLength >= 1),
     explorationModalIsVisible: state.explorationModal.isVisible,
     dataLastUpdated: state.school.dataLastUpdated,
     PgCount: timetables.length,
