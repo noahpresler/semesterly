@@ -8,6 +8,7 @@ import {
 import { getTimetablesEndpoint } from '../constants/endpoints';
 import {
     browserSupportsLocalStorage,
+    generateCustomEventId,
     saveLocalActiveIndex,
     saveLocalCourseSections,
     saveLocalPreferences,
@@ -141,12 +142,18 @@ export const loadTimetable = timetable => (dispatch, getState) => {
     return dispatch({ type: ActionTypes.TOGGLE_SIGNUP_MODAL });
   }
 
+  const displayTimetable = {
+    ...timetable,
+    events: timetable.events.map(event =>
+      ({ ...event, id: generateCustomEventId(), preview: false })),
+  };
+
   dispatch({
     type: ActionTypes.CHANGE_ACTIVE_SAVED_TIMETABLE,
-    timetable,
+    displayTimetable,
   });
 
-  return dispatch(lockTimetable(timetable));
+  return dispatch(lockTimetable(displayTimetable));
 };
 
 export const createNewTimetable = (ttName = 'Untitled Schedule') => (dispatch) => {
