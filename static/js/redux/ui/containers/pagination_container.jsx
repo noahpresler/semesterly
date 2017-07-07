@@ -1,10 +1,10 @@
 import { connect } from 'react-redux';
 import Pagination from '../pagination';
-import { getActiveTimetableCourses } from '../../reducers/root_reducer';
+import { getTimetables } from '../../reducers/root_reducer';
 import { setActiveTimetable } from '../../actions/timetable_actions';
 
 const mapStateToProps = state => ({
-  count: getActiveTimetableCourses(state).length,
+  count: getTimetables(state).length,
   active: state.timetables.active,
 });
 

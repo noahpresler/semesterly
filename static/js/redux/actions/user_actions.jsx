@@ -124,6 +124,7 @@ export const fetchClassmates = timetable => (dispatch, getState) => {
     });
 };
 
+// TODO: for save/duplicate/delete timetable, replace multiple dispatches with loadTimetable
 export const saveTimetable = (isAutoSave = false, callback = null) => (dispatch, getState) => {
   const state = getState();
   if (!state.userInfo.data.isLoggedIn) {
@@ -156,13 +157,10 @@ export const saveTimetable = (isAutoSave = false, callback = null) => (dispatch,
     .then(checkStatus)
     .then(response => response.json())
     .then((json) => {
+      dispatch(loadTimetable(json.saved_timetable));
       dispatch({
         type: ActionTypes.RECEIVE_SAVED_TIMETABLES,
         timetables: json.timetables,
-      });
-      dispatch({
-        type: ActionTypes.RECEIVE_TIMETABLE_SAVED,
-        upToDate: !json.error,
       });
       if (callback !== null) {
         callback();
@@ -205,13 +203,10 @@ export const duplicateTimetable = timetable => (dispatch, getState) => {
   })
   .then(response => response.json())
   .then((json) => {
+    dispatch(loadTimetable(json.saved_timetable));
     dispatch({
       type: ActionTypes.RECEIVE_SAVED_TIMETABLES,
       timetables: json.timetables,
-    });
-    dispatch({
-      type: ActionTypes.RECEIVE_TIMETABLE_SAVED,
-      upToDate: true,
     });
     return json;
   });
@@ -236,45 +231,19 @@ export const deleteTimetable = timetable => (dispatch, getState) => {
     method: 'DELETE',
     credentials: 'include',
   })
-        .then(response => response.json())
-        .then((json) => {
-          dispatch({
-            type: ActionTypes.RECEIVE_SAVED_TIMETABLES,
-            timetables: json.timetables,
-          });
-          if (json.timetables.length > 0) {
-            dispatch({
-              type: ActionTypes.RECEIVE_TIMETABLES,
-              timetables: [json.timetables[0]],
-              preset: true,
-              saving: true,
-            });
-            dispatch({
-              type: ActionTypes.RECEIVE_COURSE_SECTIONS,
-              courseSections: lockActiveSections(json.timetables[0]),
-            });
-            dispatch({
-              type: ActionTypes.CHANGE_ACTIVE_SAVED_TIMETABLE,
-              timetable: json.timetables[0],
-            });
-            dispatch({
-              type: ActionTypes.RECEIVE_SAVED_TIMETABLES,
-              timetables: json.timetables,
-            });
-            dispatch({
-              type: ActionTypes.RECEIVE_TIMETABLE_SAVED,
-              upToDate: true,
-            });
-          } else {
-            nullifyTimetable(dispatch);
-          }
-          return json;
-        })
-        .then((json) => {
-          if (state.userInfo.data.isLoggedIn && json.timetables[0]) {
-            dispatch(fetchClassmates(json.timetables[0]));
-          }
-        });
+    .then(response => response.json())
+    .then((json) => {
+      dispatch({
+        type: ActionTypes.RECEIVE_SAVED_TIMETABLES,
+        timetables: json.timetables,
+      });
+      if (json.timetables.length > 0) {
+        dispatch(loadTimetable(json.timetables[0]));
+      } else {
+        nullifyTimetable(dispatch);
+      }
+      return json;
+    });
 };
 
 export const saveSettings = callback => (dispatch, getState) => {
