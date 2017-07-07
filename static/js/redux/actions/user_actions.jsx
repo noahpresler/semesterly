@@ -124,7 +124,6 @@ export const fetchClassmates = timetable => (dispatch, getState) => {
     });
 };
 
-// TODO: for save/duplicate/delete timetable, replace multiple dispatches with loadTimetable
 export const saveTimetable = (isAutoSave = false, callback = null) => (dispatch, getState) => {
   const state = getState();
   if (!state.userInfo.data.isLoggedIn) {

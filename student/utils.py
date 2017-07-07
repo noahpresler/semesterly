@@ -31,7 +31,6 @@ def get_classmates_from_course_id(
         school, student, course_id, semester, friends=None, include_same_as=False):
     if not friends:
         friends = student.friends.filter(social_courses=True)
-    course = {'course_id': course_id}
     past_ids = [course_id]
     if include_same_as:
         c = Course.objects.get(id=course_id)
