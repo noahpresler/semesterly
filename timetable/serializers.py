@@ -4,7 +4,6 @@ from student.models import PersonalEvent
 from timetable.utils import DisplayTimetable
 
 
-# TODO: move to student/serializers after removing get_student_tts?
 class EventSerializer(serializers.ModelSerializer):
 
     class Meta:
