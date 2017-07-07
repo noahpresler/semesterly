@@ -150,7 +150,7 @@ export const loadTimetable = timetable => (dispatch, getState) => {
 
   dispatch({
     type: ActionTypes.CHANGE_ACTIVE_SAVED_TIMETABLE,
-    displayTimetable,
+    timetable: displayTimetable,
   });
 
   return dispatch(lockTimetable(displayTimetable));

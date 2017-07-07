@@ -1,6 +1,7 @@
 import PropTypes from 'prop-types';
 import React from 'react';
 import ClickOutHandler from 'react-onclickout';
+import uniq from 'lodash/uniq';
 import COLOUR_DATA from '../constants/colours';
 import * as SemesterlyPropTypes from '../constants/semesterlyPropTypes';
 
@@ -73,7 +74,7 @@ class MasterSlot extends React.Component {
       >{plusMore}</div>].concat(friendCircles.slice(0, 3));
     }
     let masterSlotClass = `master-slot slot-${this.props.course.id}`;
-    const validProfs = this.props.professors ? this.props.professors.filter(p => p) : false;
+    const validProfs = this.props.professors ? uniq(this.props.professors.filter(p => p)) : false;
     const prof = !validProfs || validProfs.length === 0 || validProfs[0] === '' ? 'Professor Unlisted' : validProfs.join(', ');
     masterSlotClass = this.props.onTimetable ? masterSlotClass : `${masterSlotClass} optional`;
     const numCredits = this.props.course.num_credits;
