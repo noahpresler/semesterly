@@ -176,7 +176,7 @@ class SearchResult extends React.Component {
 }
 
 SearchResult.propTypes = {
-  course: SemesterlyPropTypes.searchResult.isRequired,
+  course: SemesterlyPropTypes.denormalizedCourse.isRequired,
   inRoster: PropTypes.bool.isRequired,
   inOptionRoster: PropTypes.bool.isRequired,
   position: PropTypes.number.isRequired,

@@ -84,6 +84,12 @@ export const getActiveDenormTimetable = state =>
 export const getActiveTimetableCourses = state =>
   fromEntities.getTimetableCourses(state.entities, getActiveTimetable(state));
 
+export const getActiveTimetableDenormCourses = state =>
+  fromEntities.getTimetableDenormCourses(state.entities, getActiveTimetable(state));
+
+export const getCoursesFromSlots = (state, slots) =>
+  fromEntities.getCoursesFromSlots(state.entities, slots);
+
 export const getMaxTTEndHour = createSelector([getActiveDenormTimetable],
   fromEntities.getMaxEndHour);
 

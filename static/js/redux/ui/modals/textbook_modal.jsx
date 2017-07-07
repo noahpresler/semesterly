@@ -185,7 +185,7 @@ TextbookModal.propTypes = {
   isVisible: PropTypes.bool.isRequired,
   isLoading: PropTypes.bool.isRequired,
   toggleTextbookModal: PropTypes.func.isRequired,
-  courses: PropTypes.arrayOf(SemesterlyPropTypes.course).isRequired,
+  courses: PropTypes.arrayOf(SemesterlyPropTypes.denormalizedCourse).isRequired,
 };
 
 export default TextbookModal;
