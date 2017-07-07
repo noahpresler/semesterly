@@ -1,6 +1,5 @@
 import merge from 'lodash/merge';
 import uniq from 'lodash/uniq';
-import uniqBy from 'lodash/uniqBy';
 
 // TODO: garbage collect (e.g. clear when changing semesters)
 const entities = (state = {}, action) => {
@@ -58,27 +57,22 @@ export const getSectionTypeToSections = (denormCourse) => {
 
 // TIMETABLE SELECTORS
 //    SLOT SELECTORS
-export const getDenormSlot = (state, slot) => {
-  return {
-    ...slot,
-    course: getCourseById(state, slot.course),
-    section: getSectionById(state, slot.section),
-    offerings: slot.offerings.map(offering => getOfferingById(state, offering)),
-  }
-};
+export const getDenormSlot = (state, slot) => ({
+  ...slot,
+  course: getCourseById(state, slot.course),
+  section: getSectionById(state, slot.section),
+  offerings: slot.offerings.map(offering => getOfferingById(state, offering)),
+});
 
 export const getCourseIdsFromSlots = slots => uniq(slots.map(slot => slot.course));
 
-export const getCoursesFromSlots = (state, slots) => {
-  return getCourseIdsFromSlots(slots).map(cid => getDenormCourseById(state, cid));
-};
+export const getCoursesFromSlots = (state, slots) =>
+  getCourseIdsFromSlots(slots).map(cid => getDenormCourseById(state, cid));
 
-export const getDenormTimetable = (state, timetable) => {
-  return {
-    ...timetable,
-    slots: timetable.slots.map(slot => getDenormSlot(state, slot)),
-  };
-};
+export const getDenormTimetable = (state, timetable) => ({
+  ...timetable,
+  slots: timetable.slots.map(slot => getDenormSlot(state, slot)),
+});
 
 export const getTimetableCourses = (state, timetable) => {
   const courseIds = uniq(timetable.slots.map(slot => slot.course));
