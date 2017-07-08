@@ -26,7 +26,8 @@ def amazon_textbook_fields(isbn):
         pass
 
     if response is None:
-        return {}
+        return None
+
     return {
         'detail_url': eval_field(response, "response.Items.Item.DetailPageURL"),
         'image_url' : eval_field(response, "response.Items.Item.MediumImage.URL"),

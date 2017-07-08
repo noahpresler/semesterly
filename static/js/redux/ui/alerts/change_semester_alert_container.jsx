@@ -1,23 +1,23 @@
 import { connect } from 'react-redux';
-import { setSemester } from '../../actions/search_actions.jsx'
-import ChangeSemesterAlert from './change_semester_alert.jsx';
+import { setSemester } from '../../actions/search_actions';
+import ChangeSemesterAlert from './change_semester_alert';
+import * as ActionTypes from '../../constants/actionTypes';
+
 
 const mapStateToProps = (state) => {
-	let msg = "Switching semesters will clear your current timetable!";
-	return {
-		desiredSemester: state.alerts.desiredSemester,
-		msg,
-	}
-}
-const mapDispatchToProps = (dispatch) => {
-	return {
-    	dismissSelf: () => dispatch({type: "DISMISS_ALERT_CHANGE_SEMESTER"}),
-    	setSemester,
-	}
-}
+  const msg = 'Switching semesters will clear your current timetable!';
+  return {
+    desiredSemester: state.alerts.desiredSemester,
+    msg,
+  };
+};
+const mapDispatchToProps = dispatch => ({
+  dismissSelf: () => dispatch({ type: ActionTypes.DISMISS_ALERT_CHANGE_SEMESTER }),
+  setSemester: semester => dispatch(setSemester(semester)),
+});
 
 const ChangeSemesterAlertContainer = connect(
-	mapStateToProps,
-	mapDispatchToProps
+    mapStateToProps,
+    mapDispatchToProps,
 )(ChangeSemesterAlert);
 export default ChangeSemesterAlertContainer;

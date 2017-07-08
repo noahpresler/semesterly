@@ -66,12 +66,16 @@ class HopkinsParser(CourseParser):
                 section_enrolment = 0
         except:
             section_enrolment = 0
-        return (section_size,section_enrolment)
+        try:
+            waitlist = int(course.get('Waitlisted', -1))
+        except ValueError:
+            waitlist = -1
+        return (section_size,section_enrolment, waitlist)
 
     def load_ingestor(self,course,section):
         SectionDetails = section[0]['SectionDetails']
         try:
-            num_credits=int(float(course['Credits']))
+            num_credits=float(course['Credits'])
         except:
             num_credits=0
 
@@ -109,7 +113,7 @@ class HopkinsParser(CourseParser):
             self.ingestor['section'] = "(" + section[0]['SectionName'] + ")"
             self.ingestor['semester'] = self.semester.split()[0]
             self.ingestor['instructors'] = map(lambda i: i.strip(), course['Instructors'].split(','))
-            self.ingestor['size'], self.ingestor['enrollment'] = self.compute_size_enrollment(course)
+            self.ingestor['size'], self.ingestor['enrollment'], self.ingestor['waitlist'] = self.compute_size_enrollment(course)
             self.ingestor['year'] = self.semester.split()[1]
 
             created_section = self.ingestor.ingest_section(created_course)
@@ -144,7 +148,7 @@ class HopkinsParser(CourseParser):
         if not years:
             years = ['2017', '2016']
         if not terms:
-            terms = ['Spring', 'Fall']
+            terms = ['Spring', 'Fall', 'Summer']
 
         # Run parser for all semesters specified.
         for year in years:

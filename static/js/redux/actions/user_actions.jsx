@@ -1,585 +1,599 @@
 import fetch from 'isomorphic-fetch';
-import { getUserInfoEndpoint,
-	getSaveTimetableEndpoint,
-	getCloneTimetableEndpoint,
-	getDeleteTimetableEndpoint,
-	getSaveSettingsEndpoint,
-	getClassmatesEndpoint,
-	getLoadSavedTimetablesEndpoint,
-	getSetRegistrationTokenEndpoint,
-	deleteRegistrationTokenEndpoint,
-	getFriendsEndpoint,
-	getIntegrationGetEndpoint,
-	getIntegrationDelEndpoint,
-	getIntegrationAddEndpoint,
-	getSchoolSpecificInfo,
-  getFinalExamSchedulerEndpoint,
-  getLogFacebookAlertViewEndpoint,
-  getLogFacebookAlertClickEndpoint,
-  getMostClassmatesCountEndpoint} from '../constants.jsx';
-import { fetchCourseClassmates } from './modal_actions.jsx'
-import { store } from '../init.jsx';
-import { loadTimetable, nullifyTimetable, getNumberedName } from './timetable_actions.jsx';
-import { browserSupportsLocalStorage, setDeclinedNotifications } from '../util.jsx';
+import Cookie from 'js-cookie';
+import {
+    deleteRegistrationTokenEndpoint,
+    getClassmatesEndpoint,
+    getDeleteTimetableEndpoint,
+    getFriendsEndpoint,
+    getIntegrationEndpoint,
+    getLoadSavedTimetablesEndpoint,
+    getLogFacebookAlertClickEndpoint,
+    getLogFacebookAlertViewEndpoint,
+    getMostClassmatesCountEndpoint,
+    getSaveSettingsEndpoint,
+    getSaveTimetableEndpoint,
+    getSetRegistrationTokenEndpoint,
+    acceptTOSEndpoint,
+} from '../constants/endpoints';
+import { getActiveTT, getActiveTimetableCourses, getCurrentSemester } from '../reducers/root_reducer';
+import { fetchCourseClassmates } from './modal_actions';
+import { getNumberedName, loadTimetable, nullifyTimetable } from './timetable_actions';
+import { MAX_TIMETABLE_NAME_LENGTH } from '../constants/constants';
+import * as ActionTypes from '../constants/actionTypes';
+import { setTimeShownBanner, checkStatus, clearLocalTimetable } from '../util';
 
 let autoSaveTimer;
 
-export function getUserInfo(json) {
-	return {
-		type: "USER_INFO_RECEIVED",
-		data: json
-	};
-}
+export const requestUserInfo = () => ({
+  type: ActionTypes.REQUEST_USER_INFO,
+});
 
-export function requestUserInfo(id) {
+export const getClassmates = json => dispatch => (
+  dispatch({
+    type: ActionTypes.CLASSMATES_RECEIVED,
+    courses: json,
+  })
+);
+
+export const getFriends = json => ({
+  type: ActionTypes.FRIENDS_RECEIVED,
+  peers: json,
+});
+
+export const requestClassmates = () => ({
+  type: ActionTypes.REQUEST_CLASSMATES,
+});
+
+export const requestFriends = () => ({
+  type: ActionTypes.REQUEST_FRIENDS,
+});
+
+const getSaveTimetablesRequestBody = (state) => {
+  const tt = getActiveTT(state);
   return {
-	type: "REQUEST_USER_INFO",
-  }
-}
+    courses: tt.courses,
+    events: state.customSlots,
+    has_conflict: tt.has_conflict,
+    semester: getCurrentSemester(state),
+    name: state.savingTimetable.activeTimetable.name,
+    id: state.savingTimetable.activeTimetable.id,
+  };
+};
 
-export function getClassmates(json) {
-	return {
-		type: "CLASSMATES_RECEIVED",
-		courses: json
-	};
-}
-
-export function getFriends(json) {
-	return {
-		type: "FRIENDS_RECEIVED",
-		peers: json
-	};
-}
-
-export function requestClassmates() {
-  return {
-    type: "REQUEST_CLASSMATES",
-  }
-}
-
-export function requestFriends() {
-  return {
-    type: "REQUEST_FRIENDS",
-  }
-}
-
-function getSaveTimetablesRequestBody() {
-	let state = store.getState();
-	let timetableState = state.timetables;
-	let name = state.savingTimetable.activeTimetable.name;
-	let id = state.savingTimetable.activeTimetable.id || 0;
-	return {
-		timetable: getActiveTimetable(timetableState),
-		semester: allSemesters[state.semesterIndex],
-		name,
-		id,
-	}
-}
-
-/* Returns the currently active timetable */
-export function getActiveTimetable(timetableState) {
-	return timetableState.items[timetableState.active];
-}
 /* Returns the updated courseSections, after locking all sections */
-export function lockActiveSections(activeTimetable) {
-	let courseSections = {};
-	let courses = activeTimetable.courses;
-	for (let i = 0; i < courses.length; i++) {
-		let course = courses[i];
-		let slots = course.slots;
-		courseSections[course.id] = {}
-		for (let j = 0; j < slots.length; j++) {
-			let slot = slots[j];
-			courseSections[course.id][slot.section_type] = slot.meeting_section
-		}
-	}
-	return courseSections;
-}
-export function saveTimetable(isAutoSave=false, callback=null) {
-	return (dispatch) => {
-		let state = store.getState();
-		if (!state.userInfo.data.isLoggedIn) {
-			return dispatch({type: 'TOGGLE_SIGNUP_MODAL'})
-		}
-		let activeTimetable = getActiveTimetable(state.timetables);
-		// if current timetable is empty or we're already in saved state, don't save this timetable
-		if (activeTimetable.courses.length === 0 || state.savingTimetable.upToDate) {
-			return;
-		}
-		// mark that we're now trying to save this timetable
-		dispatch({
-			type: "REQUEST_SAVE_TIMETABLE"
-		});
-		fetch(getSaveTimetableEndpoint(), {
-			method: 'POST',
-			body: JSON.stringify(getSaveTimetablesRequestBody()),
-			credentials: 'include',
-		})
-		.then(response => response.json())
-		.then(json => {
-			if (json.error) {
-				dispatch({
-					type: "ALERT_TIMETABLE_EXISTS"
-				});
-			}
-			else {
-				// edit the state's courseSections, so that future requests to add/remove/unlock
-				// courses are handled correctly. in the new courseSections, every currently active
-				// section will be locked
-				if (!isAutoSave) {
-					// mark that the current timetable is now the only available one (since all sections are locked)
-					dispatch({
-						type: "RECEIVE_TIMETABLES",
-						timetables: [activeTimetable],
-						preset: true,
-						saving: true
-					});
-					dispatch({
-						type: "RECEIVE_COURSE_SECTIONS",
-						courseSections: lockActiveSections(activeTimetable)
-					});
-				}
-				dispatch({
-					type: "CHANGE_ACTIVE_SAVED_TIMETABLE",
-					timetable: json.saved_timetable
-				});
-				dispatch({
-					type: "RECEIVE_SAVED_TIMETABLES",
-					timetables: json.timetables
-				});
-			}
-			dispatch({
-				type: "RECEIVE_TIMETABLE_SAVED",
-				upToDate: !json.error
-			});
-
-			return json;
-		})
-		.then(json => {
-			if (callback) {
-				callback();
-				return;
-			}
-			if (!json.error && state.userInfo.data.isLoggedIn && json.timetables[0]) {
-				dispatch(fetchClassmates(json.timetables[0].courses.map( c => c['id'])))
-			}
-		});
-	}
-}
-
-export function duplicateTimetable(timetable) {
-	return (dispatch) => {
-		let state = store.getState();
-		if (!state.userInfo.data.isLoggedIn) {
-			return dispatch({type: 'TOGGLE_SIGNUP_MODAL'})
-		}
-		// mark that we're now trying to save this timetable
-		dispatch({
-			type: "REQUEST_SAVE_TIMETABLE"
-		});
-		fetch(getCloneTimetableEndpoint(), {
-			method: 'POST',
-			body: JSON.stringify({
-				timetable: timetable,
-				name: getNumberedName(timetable.name)
-			}),
-			credentials: 'include',
-		})
-		.then(response => response.json())
-		.then(json => {
-			dispatch({
-				type: "RECEIVE_TIMETABLES",
-				timetables: [json.saved_timetable],
-				preset: true,
-				saving: true
-			});
-			dispatch({
-				type: "RECEIVE_COURSE_SECTIONS",
-				courseSections: lockActiveSections(json.saved_timetable)
-			});
-			dispatch({
-				type: "CHANGE_ACTIVE_SAVED_TIMETABLE",
-				timetable: json.saved_timetable
-			});
-			dispatch({
-				type: "RECEIVE_SAVED_TIMETABLES",
-				timetables: json.timetables
-			});
-			dispatch({
-				type: "RECEIVE_TIMETABLE_SAVED",
-				upToDate: true
-			});
-
-			return json;
-		})
-		.then(json => {
-			if (state.userInfo.data.isLoggedIn && json.timetables[0]) {
-				dispatch(fetchClassmates(json.timetables[0].courses.map( c => c['id'])))
-			}
-		});
-	}
-}
-
-
-export function deleteTimetable(timetable) {
-	return (dispatch) => {
-		let state = store.getState();
-		if (!state.userInfo.data.isLoggedIn) {
-			return dispatch({type: 'TOGGLE_SIGNUP_MODAL'})
-		}
-		// mark that we're now trying to save this timetable
-		dispatch({
-			type: "REQUEST_SAVE_TIMETABLE"
-		});
-		fetch(getDeleteTimetableEndpoint(), {
-			method: 'POST',
-			body: JSON.stringify(timetable),
-			credentials: 'include',
-		})
-		.then(response => response.json())
-		.then(json => {
-			dispatch({
-				type: "RECEIVE_SAVED_TIMETABLES",
-				timetables: json.timetables
-			});
-			if (json.timetables.length > 0) {
-				dispatch({
-					type: "RECEIVE_TIMETABLES",
-					timetables: [json.timetables[0]],
-					preset: true,
-					saving: true
-				});
-				dispatch({
-					type: "RECEIVE_COURSE_SECTIONS",
-					courseSections: lockActiveSections(json.timetables[0])
-				});
-				dispatch({
-					type: "CHANGE_ACTIVE_SAVED_TIMETABLE",
-					timetable: json.timetables[0]
-				});
-				dispatch({
-					type: "RECEIVE_SAVED_TIMETABLES",
-					timetables: json.timetables
-				});
-				dispatch({
-					type: "RECEIVE_TIMETABLE_SAVED",
-					upToDate: true
-				});
-			} else { 
-				nullifyTimetable(dispatch);
-			}
-			return json;
-		})
-		.then(json => {
-			if (state.userInfo.data.isLoggedIn && json.timetables[0]) {
-				dispatch(fetchClassmates(json.timetables[0].courses.map( c => c['id'])))
-			}
-		});
-	}
-}
-
-function getSaveSettingsRequestBody() {
-	return {
-		userInfo: store.getState().userInfo.data
-	}
-}
-
-export function saveSettings(callback) {
-	return (dispatch) => {
-		dispatch({
-			type: "REQUEST_SAVE_USER_INFO"
-		});
-		fetch(getSaveSettingsEndpoint(), {
-			method: 'POST',
-			body: JSON.stringify(getSaveSettingsRequestBody()),
-			credentials: 'include',
-		})
-		.then(response => {
-			let state = store.getState();
-			let timetables = state.timetables.items;
-			let active = state.timetables.active;
-			let active_tt = timetables[active];
-
-			if (state.userInfo.data.social_courses) {
-				dispatch(fetchClassmates(active_tt.courses.map( c => c['id'])));
-				if (state.courseInfo.id) {
-					dispatch(fetchCourseClassmates(state.courseInfo.id));
-				}
-			}
-			dispatch({
-				type: "RECEIVE_USER_INFO_SAVED"
-			})
-			return response;
-		})
-		.then(response => {
-				if(callback){callback()}
-		});
-	}
-}	
-
-export function getUserSavedTimetables(semester) {
-	return (dispatch) => {
-		dispatch({
-			type: "REQUEST_SAVE_USER_INFO"
-		});
-		fetch(getLoadSavedTimetablesEndpoint(semester), {
-			credentials: 'include',
-		})
-		.then(response => response.json())
-		.then(timetables => {
-				dispatch({
-				type: "RECEIVE_SAVED_TIMETABLES",
-				timetables,
-			});
-			if (timetables[0]) {
-				loadTimetable(timetables[0]);
-			}
-			else {
-				nullifyTimetable(dispatch);
-			}
-		})
-
-	}
-}
-
-export function fetchFinalExamSchedule() {
-	return (dispatch) => 
-	{		
-		let state = store.getState();
-		let timetable = getActiveTimetable(state.timetables);
-		dispatch({type: 'FETCH_FINAL_EXAMS'})
-		fetch(getFinalExamSchedulerEndpoint(),{
-			credentials: 'include',
-			method: 'POST',
-			body: JSON.stringify(timetable)
-		})
-		.then(response => response.json())
-	    .then(json => {
-	    	dispatch({type: 'RECIEVE_FINAL_EXAMS', json: json})
-	    });
-	}
-}
-
-export function fetchClassmates(courses) {
-	return (dispatch) => {		
-		let state = store.getState();
-		let semesterIndex = state.semesterIndex !== undefined ? state.semesterIndex : currentSemester;
-
-    	setTimeout(() => {
-	        dispatch(fetchMostClassmatesCount(getActiveTimetable(state.timetables).courses.map(c => c['id'])));
-	      }, 500);
-		dispatch(requestClassmates());
-		fetch(getClassmatesEndpoint(), {
-			credentials: 'include',
-			method: 'POST',
-			body: JSON.stringify({ course_ids: courses, semester: allSemesters[semesterIndex] })
-		})
-	    .then(response => response.json())
-	    .then(json => {
-	    	dispatch(getClassmates(json))
-	    });
-	}
-}
-
-export function fetchFriends() {
-	let state = store.getState();
-	let semesterIndex = state.semesterIndex !== undefined ? state.semesterIndex : currentSemester;
-	return (dispatch) => {
-		dispatch(requestFriends());
-		dispatch({
-			type: "PEER_MODAL_LOADING"
-		});
-		fetch(getFriendsEndpoint(), {
-			credentials: 'include',
-			method: 'POST',
-			body: JSON.stringify({ semester: allSemesters[semesterIndex] })
-		})
-	    .then(response => response.json())
-	    .then(json => {
-	    	dispatch(getFriends(json))
-	    	dispatch({
-				type: "PEER_MODAL_LOADED"
-			});
-	    });
-	}
-}
-
-export function autoSave(delay=4000) {
-	let state = store.getState();
-	clearTimeout(autoSaveTimer)
-	autoSaveTimer = setTimeout(() => {
-		if (state.userInfo.data.isLoggedIn && state.timetables.items[state.timetables.active].courses.length > 0)
-			store.dispatch(saveTimetable(true))
-	}, delay);
-}
-
-export function setARegistrationToken() {
-	if ('serviceWorker' in navigator) {
-	    navigator.serviceWorker.register('/sw.js').then(function(reg) {
-	        reg.pushManager.subscribe({
-	            userVisibleOnly: true
-	        }).then(function(sub) {
-	        	// console.log(sub);
-	            sendRegistrationToken(sub.toJSON());
-	        });
-	    }).catch(function(error) {
-	        // console.log(':^(', error);
-	    });
-	}
-}
-
-export function isRegistered() {
-	if ('serviceWorker' in navigator) {
-	    navigator.serviceWorker.register('/sw.js').then(function(reg) {
-			return reg.pushManager.getSubscription().then(function(sub) {
-				if (!sub) {
-					return;
-				} else {
-					store.dispatch({
-			        	type: "TOKEN_REGISTERED"
-		        	});
-					return true;
-				}
-			})
-	    }).catch(function(error) {
-	        // console.log(':^(', error);
-	    });
-	}
-}
-
-export function sendRegistrationToken(token) {
-	return fetch(getSetRegistrationTokenEndpoint(), {
-		method: 'POST',
-		body: JSON.stringify({
-			token
-		}),
-		credentials: 'include',
-	})
-    .then(response => response.json()) // TODO(rohan): error-check the response
-    .then(json => {
-    	if (!json.error) {
-	      	store.dispatch({
-	        	type: "TOKEN_REGISTERED"
-        	});
-    	}
-	});
-}
-
-export function unregisterAToken() {
-    if ('serviceWorker' in navigator) {
-	    navigator.serviceWorker.register('/sw.js').then(function(reg) {
-	        reg.pushManager.subscribe({
-	            userVisibleOnly: true
-	        }).then(function(sub) {
-	        	// TODO: unregister token on client side
-	            sendRegistrationTokenForDeletion(sub.toJSON())
-	        });
-	    }).catch(function(error) {
-	        // console.log(':^(', error);
-	    });
-	}
-}
-
-export function sendRegistrationTokenForDeletion(token) {
-    return fetch(deleteRegistrationTokenEndpoint(), {
-        method: 'POST',
-        body: JSON.stringify({
-            token
-        }),
-        credentials: 'include',
-    })
-    .then(response => response.json()) // TODO(rohan): error-check the response
-    .then(json => {
-        if (!json.error) {
-            // console.log("token deleted: " + token);
-            store.dispatch({
-                type: "UNREGISTER_TOKEN"
-            });
-        } else {
-            // console.log("token not deleted: " + token);
-        }
-    });
-}
-
-export function openIntegrationModal(integrationID, courseID) {
-	return fetch(getIntegrationGetEndpoint(integrationID, courseID), {
-			credentials: 'include',
-			method: 'GET'
-		})
-		.then(response => response.json())
-		.then(json => {
-			store.dispatch({
-				type: 'OPEN_INTEGRATION_MODAL',
-				enabled: json['integration_enabled'],
-				id: courseID,
-				integration_id: integrationID
-			})
-		});
-}
-
-export function delIntegration(integrationID, courseID) {
-	return fetch(getIntegrationDelEndpoint(integrationID, courseID), {
-			credentials: 'include',
-			method: 'GET'
-		})
-		.then(response => response.json());
-}
-
-export function addIntegration(integrationID, courseID, json) {
-	return fetch(getIntegrationAddEndpoint(integrationID, courseID), {
-			credentials: 'include',
-			method: 'POST',
-			body: JSON.stringify({ json: json })
-		})
-		.then(response => response.json());
-}
-
-export function createiCal(timetable) {
-	console.log(timetable)
-}
-
-export function requestMostClassmates() {
-  return {
-    type: "REQUEST_MOST_CLASSMATES",
+export const lockActiveSections = (activeTimetable) => {
+  const courseSections = {};
+  const courses = activeTimetable.courses;
+  for (let i = 0; i < courses.length; i++) {
+    const course = courses[i];
+    const slots = course.slots;
+    courseSections[course.id] = {};
+    for (let j = 0; j < slots.length; j++) {
+      const slot = slots[j];
+      courseSections[course.id][slot.section_type] = slot.meeting_section;
+    }
   }
-}
+  return courseSections;
+};
 
-export function fetchMostClassmatesCount(courses) {
-  return (dispatch) => 
-{   let state = store.getState();
-    let semesterIndex = state.semesterIndex !== undefined ? state.semesterIndex : currentSemester;
-    let semester = allSemesters[semesterIndex];
-    dispatch(requestMostClassmates());
-    fetch(getMostClassmatesCountEndpoint(), {
-      credentials: 'include',
-      method: 'POST',
-      body: JSON.stringify({ course_ids: courses, semester: semester })
-    })
+export const requestMostClassmates = () => ({
+  type: ActionTypes.REQUEST_MOST_CLASSMATES,
+});
+
+export const fetchMostClassmatesCount = courses => (dispatch, getState) => {
+  const state = getState();
+  if (!state.userInfo.data.social_courses) {
+    return;
+  }
+  const semester = getCurrentSemester(state);
+  dispatch(requestMostClassmates());
+  fetch(getMostClassmatesCountEndpoint(semester, courses), {
+    credentials: 'include',
+    method: 'GET',
+  })
       .then(response => response.json())
-      .then(json => {
-      	dispatch({
-			type: "CHANGE_MOST_FRIENDS_CLASS",
-			classId: json.id,
-			count: json.count,
-			total: json.total_count
-		});
-		// dispatch({
-		// 	type: "ALERT_FACEBOOK_FRIENDS",
-		// });
+      .then((json) => {
+        dispatch({
+          type: ActionTypes.CHANGE_MOST_FRIENDS_CLASS,
+          classId: json.id,
+          count: json.count,
+          total: json.total_count,
+        });
       });
+};
+
+export const fetchClassmates = courses => (dispatch, getState) => {
+  const state = getState();
+  if (!state.userInfo.data.social_courses) {
+    return;
   }
-}
+  setTimeout(() => {
+    dispatch(fetchMostClassmatesCount(getActiveTimetableCourses(state).map(c => c.id)));
+  }, 500);
+  dispatch(requestClassmates());
+  fetch(getClassmatesEndpoint(getCurrentSemester(state), courses), {
+    credentials: 'include',
+    method: 'GET',
+  })
+    .then(response => response.json())
+    .then((json) => {
+      dispatch(getClassmates(json));
+    });
+};
 
-export function logFacebookAlertView() {
-	fetch(getLogFacebookAlertViewEndpoint(), {
-		method: 'POST',
-		credentials: 'include',
-	})
-}
+export const saveTimetable = (isAutoSave = false, callback = null) => (dispatch, getState) => {
+  const state = getState();
+  if (!state.userInfo.data.isLoggedIn) {
+    return dispatch({ type: ActionTypes.TOGGLE_SIGNUP_MODAL });
+  }
+  const activeTimetable = getActiveTT(state);
 
-export function LogFacebookAlertClick() {
-	fetch(getLogFacebookAlertClickEndpoint(), {
-		method: 'POST',
-		credentials: 'include',
-	})
-}
+  // if current timetable is empty or we're already in saved state, don't save this timetable
+  const numSlots = activeTimetable.courses.length + state.customSlots.length;
+  if (numSlots === 0 || state.savingTimetable.upToDate) {
+    return null;
+  }
+
+  // mark that we're now trying to save this timetable
+  dispatch({
+    type: ActionTypes.REQUEST_SAVE_TIMETABLE,
+  });
+
+  const body = getSaveTimetablesRequestBody(state);
+  return fetch(getSaveTimetableEndpoint(), {
+    headers: {
+      'X-CSRFToken': Cookie.get('csrftoken'),
+      Accept: 'application/json',
+      'Content-Type': 'application/json',
+    },
+    method: 'POST',
+    body: JSON.stringify(body),
+    credentials: 'include',
+  })
+    .then(checkStatus)
+    .then(response => response.json())
+    .then((json) => {
+      // edit the state's courseSections, so that future requests to add/remove/unlock
+      // courses are handled correctly. in the new courseSections, every currently
+      // active section will be locked
+      if (!isAutoSave) {
+            // mark that the current timetable is now the only available one (since all
+            // sections are locked)
+        dispatch({
+          type: ActionTypes.RECEIVE_TIMETABLES,
+          timetables: [activeTimetable],
+          preset: true,
+          saving: true,
+        });
+        dispatch({
+          type: ActionTypes.RECEIVE_COURSE_SECTIONS,
+          courseSections: lockActiveSections(activeTimetable),
+        });
+      }
+      dispatch({
+        type: ActionTypes.CHANGE_ACTIVE_SAVED_TIMETABLE,
+        timetable: json.saved_timetable,
+      });
+      dispatch({
+        type: ActionTypes.RECEIVE_SAVED_TIMETABLES,
+        timetables: json.timetables,
+      });
+      dispatch({
+        type: ActionTypes.RECEIVE_TIMETABLE_SAVED,
+        upToDate: !json.error,
+      });
+      if (callback !== null) {
+        callback();
+      }
+      if (!json.error && state.userInfo.data.isLoggedIn && json.timetables[0]) {
+        return dispatch(fetchClassmates(json.timetables[0].courses.map(c => c.id)));
+      }
+      return null;
+    })
+    .catch((error) => {
+      if (error.response && error.response.status === 409) {
+        dispatch({
+          type: ActionTypes.ALERT_TIMETABLE_EXISTS,
+        });
+      }
+      return null;
+    });
+};
+
+export const duplicateTimetable = timetable => (dispatch, getState) => {
+  const state = getState();
+  if (!state.userInfo.data.isLoggedIn) {
+    dispatch({ type: ActionTypes.TOGGLE_SIGNUP_MODAL });
+  }
+  // mark that we're now trying to save this timetable
+  dispatch({
+    type: ActionTypes.REQUEST_SAVE_TIMETABLE,
+  });
+
+  fetch(getSaveTimetableEndpoint(), {
+    headers: {
+      'X-CSRFToken': Cookie.get('csrftoken'),
+      Accept: 'application/json',
+      'Content-Type': 'application/json',
+    },
+    method: 'POST',
+    body: JSON.stringify({
+      semester: getCurrentSemester(state),
+      source: timetable.name,
+      name: getNumberedName(timetable.name, state.userInfo.data.timetables),
+    }),
+    credentials: 'include',
+  })
+  .then(response => response.json())
+  .then((json) => {
+    dispatch({
+      type: ActionTypes.RECEIVE_TIMETABLES,
+      timetables: [json.saved_timetable],
+      preset: true,
+      saving: true,
+    });
+    dispatch({
+      type: ActionTypes.RECEIVE_COURSE_SECTIONS,
+      courseSections: lockActiveSections(json.saved_timetable),
+    });
+    dispatch({
+      type: ActionTypes.CHANGE_ACTIVE_SAVED_TIMETABLE,
+      timetable: json.saved_timetable,
+    });
+    dispatch({
+      type: ActionTypes.RECEIVE_SAVED_TIMETABLES,
+      timetables: json.timetables,
+    });
+    dispatch({
+      type: ActionTypes.RECEIVE_TIMETABLE_SAVED,
+      upToDate: true,
+    });
+
+    return json;
+  })
+  .then((json) => {
+    if (state.userInfo.data.isLoggedIn && json.timetables[0]) {
+      return dispatch(fetchClassmates(json.timetables[0].courses.map(c => c.id)));
+    }
+    return null;
+  });
+};
+
+
+export const deleteTimetable = timetable => (dispatch, getState) => {
+  const state = getState();
+  if (!state.userInfo.data.isLoggedIn) {
+    dispatch({ type: ActionTypes.TOGGLE_SIGNUP_MODAL });
+  }
+    // mark that we're now trying to save this timetable
+  dispatch({
+    type: ActionTypes.REQUEST_SAVE_TIMETABLE,
+  });
+  fetch(getDeleteTimetableEndpoint(getCurrentSemester(state), timetable.name), {
+    headers: {
+      'X-CSRFToken': Cookie.get('csrftoken'),
+      Accept: 'application/json',
+      'Content-Type': 'application/json',
+    },
+    method: 'DELETE',
+    credentials: 'include',
+  })
+        .then(response => response.json())
+        .then((json) => {
+          dispatch({
+            type: ActionTypes.RECEIVE_SAVED_TIMETABLES,
+            timetables: json.timetables,
+          });
+          if (json.timetables.length > 0) {
+            dispatch({
+              type: ActionTypes.RECEIVE_TIMETABLES,
+              timetables: [json.timetables[0]],
+              preset: true,
+              saving: true,
+            });
+            dispatch({
+              type: ActionTypes.RECEIVE_COURSE_SECTIONS,
+              courseSections: lockActiveSections(json.timetables[0]),
+            });
+            dispatch({
+              type: ActionTypes.CHANGE_ACTIVE_SAVED_TIMETABLE,
+              timetable: json.timetables[0],
+            });
+            dispatch({
+              type: ActionTypes.RECEIVE_SAVED_TIMETABLES,
+              timetables: json.timetables,
+            });
+            dispatch({
+              type: ActionTypes.RECEIVE_TIMETABLE_SAVED,
+              upToDate: true,
+            });
+          } else {
+            nullifyTimetable(dispatch);
+          }
+          return json;
+        })
+        .then((json) => {
+          if (state.userInfo.data.isLoggedIn && json.timetables[0]) {
+            dispatch(fetchClassmates(json.timetables[0].courses.map(c => c.id)));
+          }
+        });
+};
+
+export const saveSettings = callback => (dispatch, getState) => {
+  dispatch({
+    type: ActionTypes.REQUEST_SAVE_USER_INFO,
+  });
+  fetch(getSaveSettingsEndpoint(), {
+    headers: {
+      'X-CSRFToken': Cookie.get('csrftoken'),
+      Accept: 'application/json',
+      'Content-Type': 'application/json',
+    },
+    method: 'PATCH',
+    body: JSON.stringify(getState().userInfo.data),
+    credentials: 'include',
+  })
+    .then((response) => {
+      const state = getState();
+      if (state.userInfo.data.social_courses) {
+        dispatch(fetchClassmates(getActiveTimetableCourses(state).map(c => c.id)));
+        if (state.courseInfo.id) {
+          dispatch(fetchCourseClassmates(state.courseInfo.id));
+        }
+      }
+      dispatch({
+        type: ActionTypes.RECEIVE_USER_INFO_SAVED,
+      });
+      return response;
+    })
+    .then(() => {
+      if (callback) {
+        callback();
+      }
+    });
+};
+
+export const getUserSavedTimetables = semester => (dispatch) => {
+  dispatch({
+    type: ActionTypes.REQUEST_SAVE_USER_INFO,
+  });
+  fetch(getLoadSavedTimetablesEndpoint(semester), {
+    credentials: 'include',
+  })
+    .then(response => response.json())
+    .then((timetables) => {
+      dispatch({
+        type: ActionTypes.RECEIVE_SAVED_TIMETABLES,
+        timetables,
+      });
+      if (timetables[0]) {
+        dispatch(loadTimetable(timetables[0]));
+      } else {
+        dispatch(nullifyTimetable(dispatch));
+      }
+    });
+};
+
+export const fetchFriends = () => (dispatch, getState) => {
+  const state = getState();
+  if (!state.userInfo.data.social_courses) {
+    return;
+  }
+  dispatch(requestFriends());
+  dispatch({
+    type: ActionTypes.PEER_MODAL_LOADING,
+  });
+  fetch(getFriendsEndpoint(getCurrentSemester(state)), {
+    credentials: 'include',
+    method: 'GET',
+  })
+    .then(response => response.json())
+    .then((json) => {
+      dispatch(getFriends(json));
+      dispatch({
+        type: ActionTypes.PEER_MODAL_LOADED,
+      });
+    });
+};
+
+export const autoSave = (delay = 2000) => (dispatch, getState) => {
+  const state = getState();
+  clearTimeout(autoSaveTimer);
+  const numTimetables = getActiveTimetableCourses(state).length;
+  const numEvents = state.customSlots.length;
+  autoSaveTimer = setTimeout(() => {
+    if (state.userInfo.data.isLoggedIn && numTimetables + numEvents > 0) {
+      dispatch(saveTimetable(true));
+      clearLocalTimetable();
+    }
+  }, delay);
+};
+
+export const sendRegistrationToken = token => (dispatch) => {
+  fetch(getSetRegistrationTokenEndpoint(), {
+    headers: {
+      'X-CSRFToken': Cookie.get('csrftoken'),
+      Accept: 'application/json',
+      'Content-Type': 'application/json',
+    },
+    method: 'POST',
+    body: JSON.stringify({
+      token,
+    }),
+    credentials: 'include',
+  })
+    .then((response) => {
+      if (response.status === 201) {
+        dispatch({
+          type: ActionTypes.TOKEN_REGISTERED,
+        });
+      }
+    });
+};
+
+export const setARegistrationToken = () => (dispatch) => {
+  if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.register('/sw.js').then((reg) => {
+      reg.pushManager.subscribe({
+        userVisibleOnly: true,
+      }).then((sub) => {
+        dispatch(sendRegistrationToken(sub.toJSON()));
+      });
+    }).catch(() => {
+    });
+  }
+};
+
+export const isRegistered = () => (dispatch) => {
+  if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.register('/sw.js')
+      .then(reg => reg.pushManager.getSubscription().then((sub) => {
+        if (sub) {
+          dispatch({
+            type: ActionTypes.TOKEN_REGISTERED,
+          });
+          return true;
+        }
+        return null;
+      })).catch(() => null);
+  }
+};
+
+export const sendRegistrationTokenForDeletion = token => (dispatch) => {
+  fetch(deleteRegistrationTokenEndpoint(token.endpoint), {
+    headers: {
+      'X-CSRFToken': Cookie.get('csrftoken'),
+      Accept: 'application/json',
+      'Content-Type': 'application/json',
+    },
+    method: 'DELETE',
+    credentials: 'include',
+  })
+    .then((response) => {
+      if (response.status === 204) {
+        dispatch({
+          type: ActionTypes.UNREGISTER_TOKEN,
+        });
+      }
+    });
+};
+
+export const unRegisterAToken = () => (dispatch) => {
+  if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.register('/sw.js').then((reg) => {
+      reg.pushManager.subscribe({
+        userVisibleOnly: true,
+      }).then((sub) => {
+        dispatch(sendRegistrationTokenForDeletion(sub.toJSON()));
+      });
+    }).catch(() => {
+    });
+  }
+};
+
+export const openIntegrationModal = (integrationID, courseID) => (dispatch) => {
+  fetch(getIntegrationEndpoint(integrationID, courseID), {
+    credentials: 'include',
+    method: 'GET',
+  })
+    .then((response) => {
+      dispatch({
+        type: ActionTypes.OPEN_INTEGRATION_MODAL,
+        enabled: response.status === 200,
+        id: courseID,
+        integration_id: integrationID,
+      });
+    });
+};
+
+export const delIntegration = (integrationID, courseID) => {
+  fetch(getIntegrationEndpoint(integrationID, courseID), {
+    headers: {
+      'X-CSRFToken': Cookie.get('csrftoken'),
+      Accept: 'application/json',
+      'Content-Type': 'application/json',
+    },
+    credentials: 'include',
+    method: 'DELETE',
+  });
+};
+
+export const addIntegration = (integrationID, courseID, json) => {
+  fetch(getIntegrationEndpoint(integrationID, courseID), {
+    headers: {
+      'X-CSRFToken': Cookie.get('csrftoken'),
+      Accept: 'application/json',
+      'Content-Type': 'application/json',
+    },
+    credentials: 'include',
+    method: 'POST',
+    body: JSON.stringify({ json }),
+  });
+};
+
+export const logFacebookAlertView = () => {
+  fetch(getLogFacebookAlertViewEndpoint(), {
+    method: 'POST',
+    credentials: 'include',
+  });
+};
+
+export const LogFacebookAlertClick = () => {
+  fetch(getLogFacebookAlertClickEndpoint(), {
+    method: 'POST',
+    credentials: 'include',
+  });
+};
+
+export const changeUserInfo = info => ({
+  type: ActionTypes.CHANGE_USER_INFO,
+  data: info,
+});
+
+export const changeTimetableName = name => (dispatch) => {
+  if (name.length === 0 || name.length > MAX_TIMETABLE_NAME_LENGTH) {
+    return;
+  }
+  dispatch({
+    type: ActionTypes.CHANGE_ACTIVE_SAVED_TIMETABLE_NAME,
+    name,
+  });
+  dispatch(saveTimetable());
+};
+
+export const acceptTOS = () => (dispatch) => {
+  fetch(acceptTOSEndpoint(), {
+    headers: {
+      'X-CSRFToken': Cookie.get('csrftoken'),
+      Accept: 'application/json',
+      'Content-Type': 'application/json',
+    },
+    credentials: 'include',
+    method: 'POST',
+    body: '',
+  })
+    .then((response) => {
+      if (response.status === 204) {
+        dispatch({
+          type: ActionTypes.CLOSE_TOS_MODAL,
+        });
+      }
+    });
+};
+
+// Show the TOS and privacy policy agreement if the user has not seen the latest version.
+// The modal is used for logged in users and the banner is used for anonymous users.
+export const handleAgreement = (currentUser, timeUpdatedTos) => (dispatch) => {
+  if (currentUser.isLoggedIn) {
+    const timeAcceptedTos = currentUser.timeAcceptedTos;
+    if (!timeAcceptedTos || Date.parse(timeAcceptedTos) < timeUpdatedTos) {
+      dispatch({ type: ActionTypes.TRIGGER_TOS_MODAL });
+    }
+  } else {
+    const timeShownBanner = localStorage.getItem('timeShownBanner');
+    if (!timeShownBanner || timeShownBanner < timeUpdatedTos) {
+      setTimeShownBanner(Date.now());
+      dispatch({ type: ActionTypes.TRIGGER_TOS_BANNER });
+    }
+  }
+};

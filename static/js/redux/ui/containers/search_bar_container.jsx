@@ -1,51 +1,48 @@
 import { connect } from 'react-redux';
-import { fetchSearchResults, maybeSetSemester } from '../../actions/search_actions.jsx';
-import { addOrRemoveCourse, addOrRemoveOptionalCourse } from '../../actions/timetable_actions.jsx';
-import { SearchBar } from '../search_bar.jsx';
-import { fetchCourseInfo } from '../../actions/modal_actions.jsx';
-import { getSchoolSpecificInfo } from '../../constants.jsx';
-import { openIntegrationModal } from '../../actions/user_actions.jsx';
+import {
+    fetchSearchResults,
+    hoverSearchResult,
+    maybeSetSemester,
+} from '../../actions/search_actions';
+import { getActiveTT, getCurrentSemester, getSearchResults } from '../../reducers/root_reducer';
+import { addOrRemoveCourse, addOrRemoveOptionalCourse } from '../../actions/timetable_actions';
+import SearchBar from '../search_bar';
+import { fetchCourseInfo, showExplorationModal } from '../../actions/modal_actions';
+import { getSchoolSpecificInfo } from '../../constants/schools';
+import { openIntegrationModal } from '../../actions/user_actions';
 
 const mapStateToProps = (state) => {
-	let { isVisible } = state.explorationModal;
-	let courseSections = state.courseSections.objects;
-	let schoolSpecificInfo = getSchoolSpecificInfo(state.school.school);
-	let schoolSpecificCampuses = schoolSpecificInfo.campuses;
-	return {
-		semester: allSemesters[state.semesterIndex],
-		campuses: schoolSpecificCampuses,
-  	searchResults: state.searchResults.items,
-  	isFetching: state.searchResults.isFetching,
-  	isCourseInRoster: (course_id) => courseSections[course_id] !== undefined,
-  	isCourseOptional: (course_id) => state.optionalCourses.courses.some(c => c.id === course_id),
-		hasHoveredResult: state.timetables.items[state.timetables.active].courses.some(course => course.fake),
-		isHovered: (position) => state.ui.searchHover === position,
-		hoveredPosition: state.ui.searchHover,
-		explorationModalIsVisible: isVisible
-	}
-}
-
-const mapDispatchToProps = (dispatch) => {
-	return {
-  	fetchCourses: (query) => dispatch(fetchSearchResults(query)),
-  	addCourse: addOrRemoveCourse,
-  	addRemoveOptionalCourse: (course) => dispatch(addOrRemoveOptionalCourse(course)),
-		fetchCourseInfo: (id) => dispatch(fetchCourseInfo(id)), 
-		showExplorationModal: () => dispatch({type: 'SHOW_EXPLORATION_MODAL'}),
-		showIntegrationModal: (id, integrationID) => openIntegrationModal(integrationID, id),
-		hoverSearchResult: (position) => {
-			dispatch({
-				type: "HOVER_SEARCH_RESULT",
-				position
-			});
-		},
-		maybeSetSemester
-	}
-}
+  const { isVisible } = state.explorationModal;
+  const courseSections = state.courseSections.objects;
+  const schoolSpecificInfo = getSchoolSpecificInfo(state.school.school);
+  const schoolSpecificCampuses = schoolSpecificInfo.campuses;
+  return {
+    semester: getCurrentSemester(state),
+    allSemesters: state.semester.all,
+    campuses: schoolSpecificCampuses,
+    searchResults: getSearchResults(state),
+    isFetching: state.searchResults.isFetching,
+    isCourseInRoster: courseId => courseSections[courseId] !== undefined,
+    isCourseOptional: courseId => state.optionalCourses.courses.some(c => c.id === courseId),
+    hasHoveredResult: getActiveTT(state).courses.some(course => course.fake),
+    isHovered: position => state.ui.searchHover === position,
+    hoveredPosition: state.ui.searchHover,
+    explorationModalIsVisible: isVisible,
+  };
+};
 
 const SearchBarContainer = connect(
-	mapStateToProps,
-	mapDispatchToProps
+    mapStateToProps,
+  {
+    fetchCourses: fetchSearchResults,
+    addCourse: addOrRemoveCourse,
+    addRemoveOptionalCourse: addOrRemoveOptionalCourse,
+    fetchCourseInfo,
+    showExplorationModal,
+    showIntegrationModal: openIntegrationModal,
+    hoverSearchResult,
+    maybeSetSemester,
+  },
 )(SearchBar);
 
 export default SearchBarContainer;

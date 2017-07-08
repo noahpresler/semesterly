@@ -272,7 +272,7 @@ class BNParser(BaseParser):
             return
         sections = Section.objects.filter(course = course, meeting_section = section_code)
         textbook_data = amazon_textbook_fields(str(isbn_number))
-        if not len(textbook_data):
+        if textbook_data is None or len(textbook_data) == 0:
             print ("No such textbook on Amazon")
             return
         # update/create textbook
