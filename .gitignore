@@ -41,3 +41,8 @@ scripts/*/logs/*.json
 *.swp
 .idea/
 .coverage
+assets/*
+static/bundles/*
+webpack-stats.json
+*.pid
+npm-debug.log.*

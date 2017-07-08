@@ -1,24 +1,24 @@
 import { connect } from 'react-redux';
-import { SortMenu } from '../sort_menu.jsx';
+import SortMenu from '../sort_menu';
+import {
+    addMetric,
+    changeMetric,
+    removeMetric,
+    toggleMetricOrder,
+} from '../../actions/timetable_actions';
 
-const mapStateToProps = (state) => {
-  return {
-    metrics: state.preferences.sort_metrics,
-  }
-}
-
-const mapDispatchToProps = (dispatch) => {
-  return {
-    addMetric: (metric) => dispatch({type: "ADD_METRIC", metric: metric}),
-    removeMetric: (metric) => dispatch({type: "REMOVE_METRIC", metric: metric}),
-    changeMetric: (add, del) => dispatch({type: "SWITCH_METRIC", add: add, del: del}),
-    toggleMetricOrder: (metric) => dispatch({type: "TOGGLE_METRIC_ORDER", metric: metric})
-  }
-}
+const mapStateToProps = state => ({
+  metrics: state.preferences.sort_metrics,
+});
 
 const SortMenuContainer = connect(
-  mapStateToProps,
-  mapDispatchToProps
+    mapStateToProps,
+  {
+    addMetric,
+    removeMetric,
+    changeMetric,
+    toggleMetricOrder,
+  },
 )(SortMenu);
 
 export default SortMenuContainer;

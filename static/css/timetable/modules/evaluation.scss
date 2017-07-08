@@ -1,0 +1,166 @@
+.modal-entry {
+  .eval-item {
+    background-color: $gfff;
+    border: 1px solid $gd4d4d4;
+    display: inline-block;
+    margin: 3px;
+    text-align: center;
+    transition: width .3s;
+  }
+}
+
+.eval-item {
+  p {
+    text-align: left;
+  }
+
+  .eval-item__details {
+    font-size: 15px;
+    margin: 5px;
+  }
+
+  &.mini {
+    background-color: $gfff;
+    cursor: pointer;
+    font-size: 12px;
+    height: 45px;
+    padding-top: 2px;
+    width: 31.9%;
+
+    .numeric-rating {
+      color: $ga1a1a1;
+      font-weight: 500;
+    }
+  }
+}
+
+.nav-item-active {
+  .eval-item {
+    border: 1px solid $primary-navy;
+  }
+}
+
+.spacious-entry {
+  padding-bottom: 20px;
+}
+
+.last-updated {
+  font-size: 12px;
+  margin-left: 40px;
+}
+
+.selected {
+  width: 99%;
+
+  .year {
+    float: left;
+    font-size: 15px;
+    margin: 10px;
+    text-align: left;
+  }
+
+  .rating-wrapper {
+    display: inline-block;
+    float: right;
+    margin: 10px;
+    text-align: right;
+  }
+
+  .eval-item__prof {
+    font-size: 15px;
+  }
+
+  .numeric-rating {
+    font-size: 15px;
+  }
+}
+
+.empty-intro {
+  padding-top: 15px;
+}
+
+.eval-stars {
+  margin-right: 5px;
+}
+
+.eval-wrapper {
+  margin-bottom: 10px;
+
+  .eval-item__prof {
+    display: inline-block;
+    margin: 0 auto;
+    margin-top: 10px;
+    overflow: hidden;
+    text-align: center;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    width: 40%;
+  }
+}
+
+.numeric-rating {
+  float: left;
+  margin-left: 8px;
+  position: relative;
+  text-decoration: none;
+  top: 1px;
+}
+
+.rating-wrapper {
+  display: inline-block;
+  text-align: center;
+}
+
+.scroll-nav {
+  margin: 0 auto;
+  text-align: center;
+}
+
+.star-ratings-sprite {
+  background: url("../../img/star.png") repeat-x;
+  float: left;
+  font-size: 0;
+  height: 18px;
+  line-height: 0;
+  margin: 0 auto;
+  overflow: hidden;
+  text-indent: -999em;
+  width: 90px;
+}
+
+.col-3-16 {
+  .star-ratings-sprite {
+    margin-left: 50%;
+    transform: translateX(-50%);
+  }
+}
+
+.rating {
+  background: url("../../img/rating.png") 0 100% repeat-x;
+  display: block;
+  float: left;
+  height: 18px;
+}
+
+.trans {
+  .course-evaluations {
+    display: none;
+  }
+}
+
+@media (max-width: 910px) {
+  .eval-item {
+    &.mini {
+      width: 48.2%;
+    }
+  }
+}
+
+// Deal with long instr names on one line.
+.year {
+  &.truncate {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+}

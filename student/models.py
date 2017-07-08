@@ -32,6 +32,7 @@ class Student(models.Model):
                                           blank=True)
     time_created = models.DateTimeField(auto_now_add=True)
     school = models.CharField(max_length=100, null=True)
+    time_accepted_tos = models.DateTimeField(null=True)
 
 
 class Reaction(models.Model):
@@ -56,21 +57,23 @@ class Reaction(models.Model):
     time_created = models.DateTimeField(auto_now_add=True)
 
 
-class PersonalTimetable(models.Model):
+class PersonalEvent(models.Model):
+    name = models.CharField(max_length=50)
+    day = models.CharField(max_length=1)
+    time_start = models.CharField(max_length=15)
+    time_end = models.CharField(max_length=15)
+
+
+class PersonalTimetable(timetable_models.Timetable):
     """ Database object representing a timetable created (and saved) by a user.
 
         A PersonalTimetable belongs to a Student, and contains a list of
         Courses and Sections that it represents.
     """
-    courses = models.ManyToManyField(timetable_models.Course)
-    school = models.CharField(max_length=50)
     name = models.CharField(max_length=100)
-    _semester = models.CharField(max_length=2) # deprecated
-    semester = models.ForeignKey('timetable.Semester')
-    time_updated = models.DateTimeField(auto_now_add=True)
     student = models.ForeignKey(Student)
     last_updated = models.DateTimeField(auto_now=True)
-    sections = models.ManyToManyField(timetable_models.Section)
+    events = models.ManyToManyField(PersonalEvent)
     has_conflict = models.BooleanField(blank=True, default=False)
 
 

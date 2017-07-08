@@ -1,129 +1,144 @@
 import fetch from 'isomorphic-fetch';
-import { getCourseSearchEndpoint, 
-				getAdvancedSearchEndpoint,
-				getSchoolSpecificInfo } from '../constants.jsx';
-import { store } from '../init.jsx';
-import { getUserSavedTimetables, saveTimetable } from './user_actions.jsx';
-import { nullifyTimetable } from './timetable_actions.jsx';
+import { normalize } from 'normalizr';
+import { courseSchema } from '../schema';
+import { getActiveTimetableCourses, getCurrentSemester } from '../reducers/root_reducer';
+import { getCourseSearchEndpoint } from '../constants/endpoints';
+import { getUserSavedTimetables, saveTimetable } from './user_actions';
+import { nullifyTimetable } from './timetable_actions';
+import * as ActionTypes from '../constants/actionTypes';
+import { fetchCourseClassmates } from './modal_actions';
+import { getSemester } from './school_actions';
 
-export function requestCourses() {
-  return {
-    type: "REQUEST_COURSES",
+export const requestCourses = () => ({ type: ActionTypes.REQUEST_COURSES });
+
+export const receiveCourses = normalizedResponse => ({
+  type: ActionTypes.RECEIVE_COURSES,
+  response: normalizedResponse,
+});
+
+export const setSemester = semester => (dispatch, getState) => {
+  const state = getState();
+
+  if (state.userInfo.data.isLoggedIn) {
+    dispatch(getUserSavedTimetables(state.semester.all[semester]));
+  } else {
+    dispatch(nullifyTimetable(dispatch));
   }
-}
 
-export function receiveCourses(json) {
-  return {
-    type: "RECEIVE_COURSES",
-    courses: json.results,
-  }
-}
-
-export function setSemester(semester) {
-	let state = store.getState();
-	let dispatch = store.dispatch;
-
-	if (state.userInfo.data.isLoggedIn) {
-		dispatch(getUserSavedTimetables(allSemesters[semester]));
-	}
-	else {
-		nullifyTimetable(dispatch);
-	}
-
-	dispatch({
-		type: "SET_SEMESTER",
-		semester
-	});
-	dispatch({
-		type: "RECEIVE_COURSES",
-		courses: []
-	});
-}
+  dispatch({
+    type: ActionTypes.SET_SEMESTER,
+    semester,
+  });
+  dispatch(receiveCourses({ result: [] }));
+};
 
 /*
  * Check whether the user is logged in and whether their timetable is up to date
  * and set semester if appropriate. Otherwise show an alert modal and save the
  * semester they were trying to switch to in the modal state.
  */
-export function maybeSetSemester(semester) {
-	let state = store.getState();
-	let dispatch = store.dispatch;
+export const maybeSetSemester = semester => (dispatch, getState) => {
+  const state = getState();
 
-	if (semester === state.semesterIndex) { return; }
+  if (semester === state.semester.current) {
+    return null;
+  }
 
-	if (state.timetables.items[state.timetables.active].courses.length > 0) {
-		if (state.userInfo.data.isLoggedIn && !state.savingTimetable.upToDate) {
-			dispatch(saveTimetable(false, () => setSemester(semester)));
-		}
-		else if (state.userInfo.data.isLoggedIn) {
-			setSemester(semester);
-		}
-		else {
-			dispatch({
-				type: "ALERT_CHANGE_SEMESTER",
-				semester,
-			});
-		}
-	} else {
-		setSemester(semester);
-	}		
-}
+  if (getActiveTimetableCourses(state).length > 0) {
+    if (state.userInfo.data.isLoggedIn && !state.savingTimetable.upToDate) {
+      return dispatch(saveTimetable(false, () => dispatch(setSemester(semester))));
+    } else if (state.userInfo.data.isLoggedIn) {
+      dispatch(setSemester(semester));
+    } else {
+      dispatch({
+        type: ActionTypes.ALERT_CHANGE_SEMESTER,
+        semester,
+      });
+    }
+  } else {
+    dispatch(setSemester(semester));
+  }
+  return null;
+};
 
-export function fetchSearchResults(query) {
-	return (dispatch) => {
-		if (query.length <= 1) {
-			dispatch(receiveCourses({results: []}));
-			return;
-		}
-		// indicate that we are now requesting courses
-		dispatch(requestCourses());
-		// send a request (via fetch) to the appropriate endpoint to get courses
-		fetch(getCourseSearchEndpoint(query), {
-			credentials: 'include'
-		})
-		.then(response => response.json()) // TODO(rohan): error-check the response
-		.then(json => {
-			// indicate that courses have been received
-			dispatch(receiveCourses(json));
-		});
-	}
-}
+export const fetchSearchResults = query => (dispatch, getState) => {
+  if (query.length <= 1) {
+    dispatch(receiveCourses({ result: [] }));
+    return;
+  }
 
-export function fetchAdvancedSearchResults(query, filters) {
-	return (dispatch) => {
+  // indicate that we are now requesting courses
+  dispatch(requestCourses());
+  // send a request (via fetch) to the appropriate endpoint to get courses
+  fetch(getCourseSearchEndpoint(query, getSemester(getState())), {
+    credentials: 'include',
+  })
+  .then(response => response.json()) // TODO error-check the response
+  .then((json) => {
+    // indicate that courses have been received
+    dispatch(receiveCourses(normalize(json, [courseSchema])));
+  });
+};
 
-		// if too small a query AND no filters; don't make request.
-		// we'll allow small query strings if some filters (departments, or breadths, or levels) are chosen.
-		if (query.length <= 1 && [].concat(...Object.values(filters)).length === 0) {
-			dispatch({  
-				type: "RECEIVE_ADVANCED_SEARCH_RESULTS",
-				advancedSearchResults: []
-			});
-			return;
-		}
-		// indicate that we are now requesting courses
-		dispatch({  
-			type: "REQUEST_ADVANCED_SEARCH_RESULTS",
-		});
-		// send a request (via fetch) to the appropriate endpoint to get courses
-		let state = store.getState()
-		fetch(getAdvancedSearchEndpoint(), {
-			credentials: 'include',
-			method: 'POST',
-			body: JSON.stringify({
-				query,
-				filters,
-				semester: allSemesters[state.semesterIndex],
-				page: state.explorationModal.page
-			})
-		})
-		.then(response => response.json()) // TODO(rohan): error-check the response
-		.then(json => {
-			// indicate that courses have been received
-			dispatch({  
-				type: "RECEIVE_ADVANCED_SEARCH_RESULTS",
-				advancedSearchResults: json
-			});
-		});
-	}
-}
+export const fetchAdvancedSearchResults = (query, filters) => (dispatch, getState) => {
+  // if too small a query AND no filters; don't make request.
+  // we'll allow small query strings if some filters
+  // (departments, or breadths, or levels) are chosen.
+  if (query.length <= 1 && [].concat(...Object.values(filters)).length === 0) {
+    dispatch({
+      type: ActionTypes.RECEIVE_ADVANCED_SEARCH_RESULTS,
+      response: { result: [] },
+    });
+    return;
+  }
+
+  // indicate that we are now requesting courses
+  dispatch({
+    type: ActionTypes.REQUEST_ADVANCED_SEARCH_RESULTS,
+  });
+  // send a request (via fetch) to the appropriate endpoint to get courses
+  const state = getState();
+  fetch(getCourseSearchEndpoint(query, getSemester(getState())), {
+    headers: {
+      Accept: 'application/json',
+      'Content-Type': 'application/json',
+    },
+    credentials: 'include',
+    method: 'POST',
+    body: JSON.stringify({
+      filters,
+      semester: getCurrentSemester(state),
+      page: state.explorationModal.page,
+    }),
+  })
+  .then(response => response.json()) // TODO(rohan): error-check the response
+  .then((json) => {
+    // indicate that courses have been received
+    dispatch({
+      type: ActionTypes.RECEIVE_ADVANCED_SEARCH_RESULTS,
+      response: normalize(json, [courseSchema]),
+    });
+  });
+};
+
+export const hoverSearchResult = position => ({
+  type: ActionTypes.HOVER_SEARCH_RESULT,
+  position,
+});
+
+export const paginateAdvancedSearchResults = () => (
+  { type: ActionTypes.PAGINATE_ADVANCED_SEARCH_RESULTS }
+);
+
+export const clearAdvancedSearchPagination = () => (
+  { type: ActionTypes.CLEAR_ADVANCED_SEARCH_PAGINATION }
+);
+
+export const setActiveAdvancedSearchResult = idx => (
+  { type: ActionTypes.SET_ACTIVE_ADV_SEARCH_RESULT, active: idx }
+);
+
+export const setAdvancedSearchResultIndex = (idx, courseId) => (dispatch) => {
+  dispatch(setActiveAdvancedSearchResult(idx));
+  dispatch(fetchCourseClassmates(courseId));
+};

@@ -9,8 +9,9 @@ import os, sys, re, jsonschema, argparse, httplib, simplejson as json
 from scripts.parser_library.logger import Logger
 from scripts.parser_library.internal_utils import *
 from scripts.parser_library.internal_exceptions import JsonValidationError, JsonValidationWarning, JsonDuplicationWarning
-# from scripts.parser_library.Updater import ProgressBar, Counter
 from scripts.parser_library.tracker import *
+
+# TODO - consider something to load db field sizes
 
 class Validator:
 	def __init__(self, config, tracker=None):
@@ -165,8 +166,8 @@ class Validator:
 			raise JsonValidationError('course object must be of kind course', course)
 
 		if self.course_code_regex.match(course.code) is None:
-			raise JsonValidationError('course code "%s" does not match regex \'%s\''
-			 %(course.code, self.config.course_code_regex), course)
+			raise JsonValidationError("course code {} does not match r'{}'".format(
+				course.code, self.config.course_code_regex), course)
 
 		if 'department' in course and 'code' in course.department and 'departments' in self.config:
 			if course.department.code not in {d.code for d in self.config.departments}:
@@ -209,6 +210,11 @@ class Validator:
 
 		if 'term' in section and section.term not in self.config.terms:
 			raise JsonValidationError('term "%s" not in config.json term list' % (section.term), section)
+
+		if 'instructors' in section:
+			db_instructor_textfield_size = 500
+			if len(', '.join(instructor['name'] for instructor in section.instructors)) > db_instructor_textfield_size:
+				raise JsonValidationError('db field too small for comma-joined instructor names', section)
 
 		for instructor in section.get('instructors', []):
 			self.validate_instructor(instructor)
@@ -392,7 +398,7 @@ class Validator:
 		# NOTE: do this check after the others to give Errors higher priorities than Warnings 
 		for time in [start, end]:
 			hour, minute = int(rtime.group(1)), int(rtime.group(2))
-			if hour < 8 or hour > 20:
+			if hour < 8 or hour > 21:
 				raise JsonValidationWarning('time range will not land on timetable', time_range)
 
 
