@@ -1,17 +1,15 @@
 import { connect } from 'react-redux';
-import TimetableExistsAlert from './timetable_exists_alert.jsx';
+import TimetableExistsAlert from './timetable_exists_alert';
+import * as ActionTypes from '../../constants/actionTypes';
 
-const mapStateToProps = (state) => {
-	return {}
-}
-const mapDispatchToProps = (dispatch) => {
-	return {
-    	dismissSelf: () => dispatch({type: "DISMISS_TIMETABLE_EXISTS"}),
-	}
-}
+
+const mapStateToProps = () => ({});
+const mapDispatchToProps = dispatch => ({
+  dismissSelf: () => dispatch({ type: ActionTypes.DISMISS_TIMETABLE_EXISTS }),
+});
 
 const TimetableExistsAlertContainer = connect(
-	mapStateToProps,
-	mapDispatchToProps
+    mapStateToProps,
+    mapDispatchToProps,
 )(TimetableExistsAlert);
 export default TimetableExistsAlertContainer;

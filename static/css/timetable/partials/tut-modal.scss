@@ -1,0 +1,76 @@
+.tut-modal__wrapper {
+  height: 100%;
+  width: 100%;
+
+  .fa-chevron-right {
+    color: $gfff;
+    float: right;
+  }
+
+  .fa-chevron-left {
+    color: $gfff;
+    float: left;
+  }
+
+  p {
+    color: $gfff;
+    display: inline-block;
+    font-weight: 600;
+    left: 50%;
+    margin: 0 auto;
+    position: absolute;
+    text-align: center;
+    transform: translateX(-50%);
+    user-select: none;
+  }
+
+  h4 {
+    color: $gfff;
+    font-size: 20px;
+    position: absolute;
+    right: 20px;
+    top: 7px;
+    user-select: none;
+  }
+
+  .tut-img {
+    transition: all .1s linear;
+    user-select: none;
+  }
+
+  .action {
+	  transition: all .1s linear;
+
+    &:hover {
+      color: $gbdc3c7;
+      cursor: pointer;
+      transform: scale(1.1);
+    }
+  }
+}
+
+.tut-modal__nav {
+  border-bottom: 1px solid $gfff;
+  height: 50px;
+  padding: 20px 20px 40px;
+  width: 100%;
+}
+
+.tut-modal {
+  max-height: 550px;
+  max-width: 500px;
+}
+
+.tut-modal > div {
+  outline: none;
+}
+
+@media(max-width: 500px) {
+  .tut-modal {
+    width: 100% !important;
+  }
+
+  .tut-modal__wrapper p {
+    font-size: 14px;
+  }
+}

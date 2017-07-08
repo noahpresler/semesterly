@@ -1,54 +1,60 @@
-import update from 'react/lib/update';
+import * as ActionTypes from '../constants/actionTypes';
 
-export const explorationModal = (state = { 
-	isVisible: false, 
-	advancedSearchResults: [], 
-	isFetching: false, 
-	active: 0, 
-	schoolInfoLoaded: false ,
-	page: 1
+const explorationModal = (state = {
+  isVisible: false,
+  advancedSearchResults: [],
+  isFetching: false,
+  active: 0,
+  schoolInfoLoaded: false,
+  page: 1,
 }, action) => {
-	switch (action.type) {
-		case 'SHOW_EXPLORATION_MODAL':
-			return Object.assign({}, state, { isVisible: true });
-		case 'HIDE_EXPLORATION_MODAL':
-			return Object.assign({}, state, { isVisible: false });
-		case 'REQUEST_ADVANCED_SEARCH_RESULTS':
-			return Object.assign({}, state, { isFetching: true });
-		case 'RECEIVE_ADVANCED_SEARCH_RESULTS':
-			let { advancedSearchResults } = action;
-			if (state.page > 1) {
-				if(advancedSearchResults) {
-					advancedSearchResults = [...state.advancedSearchResults].concat(advancedSearchResults);
-					return Object.assign({}, state, { 
-						advancedSearchResults,
-						isFetching: false
-					});
-				} else {
-					return Object.assign({}, state, {isFetching: false });
-				}
-			} else {
-				return Object.assign({}, state, { advancedSearchResults, isFetching: false,
-					active:0 });
-			}
-		case 'SET_ACTIVE_RESULT':
-			return Object.assign({}, state, { active: action.active });
-		case 'SET_COURSE_REACTIONS':
-			if (state.isVisible) {
-				let advancedSearchResults = [...state.advancedSearchResults];
-				advancedSearchResults[state.active]['reactions'] = action.reactions;
-				return Object.assign({}, state, { advancedSearchResults });
-			}
-			return state;
-		case 'REQUEST_SCHOOL_INFO':
-			return Object.assign({}, state, { schoolInfoLoaded: true });
-		case 'RECEIVE_SCHOOL_INFO':
-			return Object.assign({}, state, { schoolInfoLoaded: false });
-		case 'PAGINATE_ADVANCED_SEARCH_RESULTS':
-			return Object.assign({}, state, { page: state.page + 1 });
-		case 'CLEAR_ADVANCED_SEARCH_PAGINATION':
-			return Object.assign({}, state, { page: 1});
-		default:
-			return state;
-	}
-}
+  switch (action.type) {
+    case ActionTypes.SHOW_EXPLORATION_MODAL:
+      return Object.assign({}, state, { isVisible: true });
+    case ActionTypes.HIDE_EXPLORATION_MODAL:
+      return Object.assign({}, state, { isVisible: false });
+    case ActionTypes.REQUEST_ADVANCED_SEARCH_RESULTS:
+      return Object.assign({}, state, { isFetching: true });
+    case ActionTypes.RECEIVE_ADVANCED_SEARCH_RESULTS: {
+      let results = action.response.result;
+      if (state.page > 1) {
+        if (results) {
+          results = [...state.advancedSearchResults].concat(results);
+          return Object.assign({}, state, {
+            advancedSearchResults: results,
+            isFetching: false,
+          });
+        }
+        return Object.assign({}, state, { isFetching: false });
+      }
+      return Object.assign({}, state, {
+        advancedSearchResults: results,
+        isFetching: false,
+        active: 0,
+      });
+    }
+    case ActionTypes.SET_ACTIVE_ADV_SEARCH_RESULT:
+      return Object.assign({}, state, { active: action.active });
+    case ActionTypes.SET_COURSE_REACTIONS:
+      if (state.isVisible) {
+        const searchResults = [...state.advancedSearchResults];
+        searchResults[state.active].reactions = action.reactions;
+        return Object.assign({}, state, { advancedSearchResults: searchResults });
+      }
+      return state;
+    case ActionTypes.REQUEST_SCHOOL_INFO:
+      return Object.assign({}, state, { schoolInfoLoaded: true });
+    case ActionTypes.RECEIVE_SCHOOL_INFO:
+      return Object.assign({}, state, { schoolInfoLoaded: false });
+    case ActionTypes.PAGINATE_ADVANCED_SEARCH_RESULTS:
+      return Object.assign({}, state, { page: state.page + 1 });
+    case ActionTypes.CLEAR_ADVANCED_SEARCH_PAGINATION:
+      return Object.assign({}, state, { page: 1 });
+    default:
+      return state;
+  }
+};
+
+export const getAdvancedSearchResultIds = state => state.advancedSearchResults;
+
+export default explorationModal;

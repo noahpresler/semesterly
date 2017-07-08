@@ -1,0 +1,25 @@
+approvals:
+  # at least 1 reviewer
+  minimum: 1
+  pattern: "^(:\\+1:|👍|lgtm)" # must start with thumbs up or lgtm
+  ignore: pr_opener # do not count approval from PR opener
+  from:
+    users:
+      - noahpresler
+      - felixzhuologist 
+specification:
+  # title requirements AND body AND template requirements have to match
+  title:
+    # PR title is at least this many characters long
+    minimum-length:
+      enabled: true
+      length: 8
+  body:
+    # either of these verifications has to be true
+    # PR body is at least this many characters long
+    minimum-length:
+      enabled: true
+      length: 8
+    template:
+      # is different from pull request body
+      differs-from-body: true

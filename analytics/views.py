@@ -3,14 +3,16 @@ import urllib2
 import heapq
 from dateutil import tz
 from datetime import timedelta, datetime
-from django.shortcuts import render_to_response, render
-from django.http import HttpResponse, HttpResponseRedirect, Http404
+from django.shortcuts import render_to_response, get_object_or_404
+from django.http import HttpResponse
 from django.template import RequestContext
 from django.views.decorators.csrf import csrf_exempt
-from django.db.models import Q
 from django.http import Http404
 
-from student.views import get_student
+from analytics.models import FinalExamModalView
+from student.models import Student
+
+from student.utils import get_student
 from student.models import *
 from analytics.models import *
 from timetable.models import Semester
@@ -52,6 +54,8 @@ def view_analytics_dashboard(request):
 
         total_final_exam_views = number_timetables(Timetable=FinalExamModalView)
         unique_users_final_exam_views = number_timetables(Timetable=FinalExamModalView, distinct="student")
+        total_shared_timetable_views = number_timetables(Timetable=SharedTimetableView)
+        total_shared_course_views = number_timetables(Timetable=SharedCourseView)
 
         fb_alert_views = number_timetables(Timetable=FacebookAlertView)
         unique_users_fb_alert_views = number_timetables(Timetable=FacebookAlertView, distinct="student")
@@ -82,6 +86,8 @@ def view_analytics_dashboard(request):
                 "unique_users_fb_alert_views": unique_users_fb_alert_views,
                 "fb_alert_clicks": fb_alert_clicks,
                 "unique_users_fb_alert_clicks": unique_users_fb_alert_clicks,
+                "total_shared_timetable_views":total_shared_timetable_views,
+                "total_shared_course_views":total_shared_course_views,
                 "calendar_exports_by_type": json.dumps({"ics": ics_calendar_exports, "google": google_calendar_exports}),
                 "jhu_most_popular_courses": [], # needs to be refactored; was causing timeout on server because too slow
                 "uoft_most_popular_courses": [], # needs to be refactored; was causing timeout on server because too slow
@@ -240,3 +246,12 @@ def log_facebook_alert_click(request):
   ).save()
   return HttpResponse(json.dumps({}), content_type="application/json")
 
+
+@csrf_exempt
+def log_final_exam_view(request):
+    student = get_object_or_404(Student, user=request.user)
+    FinalExamModalView.objects.create(
+        student=student,
+        school=request.subdomain
+    ).save()
+    return HttpResponse(json.dumps({}), content_type="application/json")

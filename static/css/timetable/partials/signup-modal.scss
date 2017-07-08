@@ -1,0 +1,135 @@
+.signup-modal {
+  height: 588px;
+  max-width: 500px;
+  overflow: auto;
+
+  > div {
+    outline: none;
+  }
+
+  .modal-header {
+    background-color: $geee;
+    border-bottom: 1px solid $gddd;
+    padding: 25px;
+    position: relative;
+  }
+
+  .features{
+    font-size: 17px;
+    padding: 40px 20px 20px;
+    width: 100%;
+  }
+
+  h1 {
+    font-style: italic;
+  }
+
+  [class^="col-"] {
+    float: left;
+    width: 50%;
+  }
+}
+
+.pro-pic {
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  border: 1px solid $gddd;
+  border-radius: 100%;
+  bottom: -30px;
+  height: 80px;
+  position: absolute;
+  right: 10%;
+  width: 80px;
+}
+
+.feature-highlight {
+  font-size: 14px;
+  margin-top: 25px;
+
+  .fa-check {
+    color: $textbook;
+  }
+
+  h1 {
+    color: $gddd;
+    font-size: 30px;
+    text-align: center;
+  }
+}
+
+.emoji {
+  float: left;
+  height: 20px;
+  margin-right: 10px;
+  width: 20px;
+}
+
+.sample-slot {
+  margin: 15px;
+  width: 85%;
+}
+
+.row {
+  clear: both;
+  padding: 5px 10px 10px 20px;
+}
+
+.call-to-action {
+  text-align: center;
+}
+
+.disclaimer {
+  color: $g777;
+  font-size: 12px;
+}
+
+.signup-button {
+  background-color: $textbook;
+  border: 0;
+  border-bottom: 2px solid $confirm-green-darker;
+  box-shadow: inset 0 -2px $confirm-green-darker;
+  color: $gfff;
+  cursor: pointer;
+  display: inline-block;
+  margin-top: 18px;
+  padding: 8px 20px;
+  text-align: center;
+  text-shadow: 0 1px 2px $black-transparent-25;
+
+  &:hover {
+    background-color: $confirm-green-darker;
+    border-bottom: 2px solid $confirm-green-darkest;
+    box-shadow: inset 0 -2px $confirm-green-darkest;
+  }
+}
+
+@media(max-width: 776px) {
+  .signup-modal {
+    height: 85%;
+    max-height: 900px;
+    max-width: 1200px;
+
+    .features {
+      font-size: 17px;
+      padding: 0 10px 10px;
+      width: 100%;
+    }
+  }
+
+  .pro-pic {
+    display: none;
+  }
+
+  .welcome-modal {
+    .modal-body {
+      padding: 22px 0 20px;
+    }
+  }
+
+  .feature-highlight {
+    h1 {
+      font-size: 21px;
+    }
+  }
+}
