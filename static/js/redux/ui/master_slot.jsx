@@ -100,7 +100,7 @@ class MasterSlot extends React.Component {
     let creditsDisplay = numCredits === 1 ? ' credit' : ' credits';
     creditsDisplay = numCredits + creditsDisplay;
     const profDisp = this.props.professors == null ? null : <h3>{ prof }</h3>;
-    const shareLinkText = this.getShareLink(this.props.course.code);
+    const shareLinkText = this.props.getShareLink(this.props.course.code);
     const shareLink = this.state.shareLinkShown ?
             (<ShareLink
               link={this.props.getShareLink(this.props.course.code)}
