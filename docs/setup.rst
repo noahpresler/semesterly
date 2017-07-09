@@ -48,6 +48,7 @@ Before installing the python requirements, you must make sure to have PostgreSQL
 .. code-block:: bash
 
     brew install postgres
+    pg_ctl -D /usr/local/var/postgres start && brew services start postgresql
 
 **On Ubuntu** use apt:
 
