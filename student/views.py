@@ -355,7 +355,7 @@ class GCalView(RedirectToSignupMixin, APIView):
 
     def post(self, request):
         student = Student.objects.get(user=request.user)
-        tt = json.loads(request.body)['timetable']
+        tt = request.data['timetable']
         credentials = student.get_google_credentials() # assumes is not None
         http = credentials.authorize(httplib2.Http(timeout=100000000))
         service = discovery.build('calendar', 'v3', http=http)
@@ -371,7 +371,7 @@ class GCalView(RedirectToSignupMixin, APIView):
         calendar = {'summary': tt_name, 'timeZone': 'America/New_York'}
         created_calendar = service.calendars().insert(body=calendar).execute()
 
-        semester_name = tt['semester']['name']
+        semester_name = request.data['semester']['name']
         if semester_name == 'Fall':
             # ignore year, year is set to current year
             sem_start = datetime(2017, 8, 30, 17, 0, 0)
@@ -382,24 +382,26 @@ class GCalView(RedirectToSignupMixin, APIView):
             sem_end = datetime(2017, 5, 5, 17, 0, 0)
 
         # add events
-        for course in tt['courses']:
-            for slot in course['slots']:
-                start = next_weekday(sem_start, slot['day'])
-                start = start.replace(hour=int(slot['time_start'].split(':')[0]),
-                                      minute=int(slot['time_start'].split(':')[1]))
-                end = next_weekday(sem_start, slot['day'])
-                end = end.replace(hour=int(slot['time_end'].split(':')[0]),
-                                  minute=int(slot['time_end'].split(':')[1]))
-                until = next_weekday(sem_end, slot['day'])
+        for slot in tt['slots']:
+            course = slot['course']
+            section = slot['section']
+            for offering in slot['offerings']:
+                start = next_weekday(sem_start, offering['day'])
+                start = start.replace(hour=int(offering['time_start'].split(':')[0]),
+                                      minute=int(offering['time_start'].split(':')[1]))
+                end = next_weekday(sem_start, offering['day'])
+                end = end.replace(hour=int(offering['time_end'].split(':')[0]),
+                                  minute=int(offering['time_end'].split(':')[1]))
+                until = next_weekday(sem_end, offering['day'])
 
                 description = course.get('description', '')
-                instructors = 'Taught by: ' + slot['instructors'] + '\n' if len(
-                    slot.get('instructors', '')) > 0 else ''
+                instructors = 'Taught by: ' + section['instructors'] + '\n' if len(
+                    section.get('instructors', '')) > 0 else ''
 
                 res = {
-                    'summary': course['name'] + " " + course['code'] + slot['meeting_section'],
-                    'location': slot['location'],
-                    'description': course['code'] + slot['meeting_section'] + '\n' + instructors +
+                    'summary': course['name'] + " " + course['code'] + section['meeting_section'],
+                    'location': offering['location'],
+                    'description': course['code'] + section['meeting_section'] + '\n' + instructors +
                     description + '\n\n' + 'Created by Semester.ly',
                     'start': {
                         'dateTime': start.strftime("%Y-%m-%dT%H:%M:%S"),
@@ -411,7 +413,7 @@ class GCalView(RedirectToSignupMixin, APIView):
                     },
                     'recurrence': [
                         'RRULE:FREQ=WEEKLY;UNTIL=' + until.strftime("%Y%m%dT%H%M%SZ") + ';BYDAY=' +
-                        DAY_MAP[slot['day']]
+                        DAY_MAP[offering['day']]
                     ],
                 }
                 service.events().insert(
