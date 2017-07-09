@@ -27,3 +27,4 @@ Students know best
    :maxdepth: 2
 
    setup
+   environment
