@@ -1,7 +1,5 @@
 import PropTypes from 'prop-types';
 
-const arrayOfIds = PropTypes.arrayOf(PropTypes.number).isRequired;
-
 export const semester = PropTypes.shape({
   name: PropTypes.string.isRequired,
   year: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
