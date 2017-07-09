@@ -27,7 +27,7 @@ const mapStateToProps = (state, ownProps) => {
     sectionTypeToSections,
     popularityPercent: denormCourseInfo.popularity_percent * 100,
     isLoggedIn: state.userInfo.data.isLoggedIn,
-    hasSocial: state.userInfo.data.social_courses && state.userInfo.data.social_offerings,
+    hasSocial: state.userInfo.data.social_courses,
     userInfo: state.userInfo.data,
     isSectionLocked: (courseId, section) => {
       if (courseSections[courseId] === undefined) {
