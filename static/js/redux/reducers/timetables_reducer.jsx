@@ -23,7 +23,7 @@ const timetables = (state = initialState, action) => {
       return Object.assign({}, state, { isFetching: true });
 
     case ActionTypes.SET_SEMESTER:
-      return Object.assign({}, state, { isFetching: true });
+      return Object.assign({}, state, { isFetching: false });
 
     case ActionTypes.RECEIVE_TIMETABLES: {
       const actionTimetables = action.timetables.length > 0 ? action.timetables : [{
