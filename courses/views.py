@@ -45,7 +45,7 @@ def all_courses(request):
 def get_classmates_in_course(request, school, sem_name, year, course_id):
     school = school.lower()
     sem, _ = Semester.objects.get_or_create(name=sem_name, year=year)
-    json_data = {}
+    json_data = {'current': [], 'past': []}
     course = Course.objects.get(school=school, id=course_id)
     student = None
     is_logged_in = request.user.is_authenticated()
