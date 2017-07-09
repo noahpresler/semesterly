@@ -59,7 +59,7 @@ Before installing the python requirements, you must make sure to have PostgreSQL
 Install Python Requirements
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-.. note:: **If you are a mac user**, you must install the xcode command line tools via ``xcode-select --install`` before proceeding.
+.. note:: **ATTENTION MAC USERS:**, you must install the xcode command line tools via ``xcode-select --install`` before proceeding. You may also need to update openssl. If so, please `follow this guide <https://medium.com/@katopz/how-to-upgrade-openssl-8d005554401>`_. 
 
 All python dependencies are kept in a file called ``requirements.txt``. Anytime a dependency is added or changed, we update it in this file. To bring your virutal environment up to date with all of these requirements easily, simply execute:
 
