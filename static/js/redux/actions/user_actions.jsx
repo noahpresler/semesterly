@@ -134,9 +134,11 @@ export const saveTimetable = (isAutoSave = false, callback = null) => (dispatch,
   // if current timetable is empty or we're already in saved state, don't save this timetable
   const numSlots = activeTimetable.slots.length + state.customSlots.length;
   if (numSlots === 0 || state.savingTimetable.upToDate) {
+    console.log('bad');
     return null;
   }
 
+  console.log('good');
   // mark that we're now trying to save this timetable
   dispatch({
     type: ActionTypes.REQUEST_SAVE_TIMETABLE,
@@ -325,12 +327,12 @@ export const fetchFriends = () => (dispatch, getState) => {
 };
 
 export const autoSave = (delay = 2000) => (dispatch, getState) => {
-  const state = getState();
   clearTimeout(autoSaveTimer);
-  const numTimetables = getActiveTimetableCourses(state).length;
-  const numEvents = state.customSlots.length;
   autoSaveTimer = setTimeout(() => {
-    if (state.userInfo.data.isLoggedIn && numTimetables + numEvents > 0) {
+    const state = getState();
+    const existsSlots = getActiveTimetable(state).slots.length > 0;
+    const existsCustomEvents = state.customSlots.length > 0;
+    if (state.userInfo.data.isLoggedIn && (existsSlots || existsCustomEvents)) {
       dispatch(saveTimetable(true));
       clearLocalTimetable();
     }
