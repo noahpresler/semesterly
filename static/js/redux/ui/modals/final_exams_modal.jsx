@@ -84,6 +84,42 @@ export default class FinalExamsModal extends React.Component {
     return week;
   }
 
+  static renderEmpty() {
+    const weekHeadersHtml = (
+      <div className="final-exam-calender-days cf">
+        <h3><span className="day">Sun</span></h3>
+        <h3><span className="day">Mon</span></h3>
+        <h3><span className="day">Tue</span></h3>
+        <h3><span className="day">Wed</span></h3>
+        <h3><span className="day">Thu</span></h3>
+        <h3><span className="day">Fri</span></h3>
+        <h3><span className="day">Sat</span></h3>
+      </div>
+      );
+    const weekDaysHtml = (
+      <div className="final-exam-days-ctn" >
+        <div className="final-exam-day" />
+        <div className="final-exam-day" />
+        <div className="final-exam-day" />
+        <div className="final-exam-day" />
+        <div className="final-exam-day" />
+        <div className="final-exam-day" />
+        <div className="final-exam-day" />
+      </div>
+      );
+    return (
+      <div>
+        <div className="final-exam-week">
+          { weekHeadersHtml }
+          { weekDaysHtml }
+        </div>
+        <div className="final-exam-week">
+          { weekHeadersHtml }
+          { weekDaysHtml }
+        </div>
+      </div>);
+  }
+
   constructor(props) {
     super(props);
     this.hide = this.hide.bind(this);
@@ -241,9 +277,13 @@ export default class FinalExamsModal extends React.Component {
 
     const finalsWeeks = [];
     const finalList = this.finalListHTML();
-    while (Object.keys(this.finalsToRender).length > 0) {
-      finalsWeeks.push(<div key={day}>{ this.renderWeek(day, days) }</div>);
-      day = new Date(day.getTime() + (7 * 24 * 60 * 60 * 1000));
+    if (Object.keys(this.finalsToRender).length === 0) {
+      finalsWeeks.push(FinalExamsModal.renderEmpty());
+    } else {
+      while (Object.keys(this.finalsToRender).length > 0) {
+        finalsWeeks.push(<div key={day}>{ this.renderWeek(day, days) }</div>);
+        day = new Date(day.getTime() + (7 * 24 * 60 * 60 * 1000));
+      }
     }
 
     const disclaimer = (<p className="final-exam-disclaimer">
@@ -301,6 +341,7 @@ export default class FinalExamsModal extends React.Component {
       });
       finalExamDays.push(<div key={d} className="final-exam-day">{ html }</div>);
     });
+
     return (<div className="final-exam-week">
       { weekHeadersHtml }
       <div className="final-exam-days-ctn">{ finalExamDays }</div>
