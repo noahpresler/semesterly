@@ -3,6 +3,7 @@ import pickle
 import numpy as np
 import operator
 import os
+import sys
 from sklearn.feature_extraction.text import CountVectorizer
 from sklearn.feature_extraction.text import TfidfTransformer
 from django.db.models import Q
@@ -18,12 +19,18 @@ class Vectorizer():
 
     def vectorize(self):
         # get names (titles) and descriptions for creating vocabulary.
+        current_count = 0
+        total_count = Course.objects.count()
         raw_word_counts = []
         for course in Course.objects.all():
             raw_word_counts.append(self.get_stem_course(course.name,
                                                         course.description,
                                                         course.areas,
                                                         self.TITLE_WEIGHT))
+            current_count+=1
+            sys.stdout.write("\rVectorizing all courses: %d%%" % int(current_count / total_count * 100))
+            sys.stdout.flush()
+
         # vectorize course objects.
         count_vectorizer = CountVectorizer(ngram_range=(1, 2), stop_words='english')
         processed_word_counts = count_vectorizer.fit_transform(raw_word_counts)
@@ -31,13 +38,16 @@ class Vectorizer():
         course_vectors = tfidf_tf.transform(processed_word_counts)
 
         # save course vector to model.
-        i = 0
+        current_count = 0
         for course in Course.objects.all():
-            self.picklify(course, course_vectors[i])
-            i += 1
+            self.picklify(course, course_vectors[current_count])
+            current_count += 1
+            sys.stdout.write("\rPicklifying all courses: %d%%" % int(current_count / total_count * 100))
+            sys.stdout.flush()
 
         # export CountVectorizer.pickle.
         with open('count_vectorizer.pickle', 'wb') as handle:
+            print("\nSaving count_vectorizer.pickle...")
             pickle.dump(count_vectorizer, handle,
                         protocol=pickle.HIGHEST_PROTOCOL)
 
@@ -79,7 +89,10 @@ class Searcher():
         if os.path.exists('count_vectorizer.pickle'):
             with open('count_vectorizer.pickle', 'r') as handle:
                 return pickle.load(handle)
-        return None
+        else:
+            Vectorizer().vectorize()
+            with open('count_vectorizer.pickle', 'r') as handle:
+                return pickle.load(handle)
 
     def vectorize_query(self, query):
         stemmed_qry = self.vectorizer.get_stem_doc(query)
@@ -168,22 +181,7 @@ class Searcher():
             score = self.get_cosine_sim(query_vector, course.vector) + self.match_title(query, course.name)
             scores.append((course, score))
         scores.sort(key=lambda tup: -tup[1])
-
-        # duplicate handling
-        course_titles = set()
-        course_object = []
-        course_codes = {}
-        num_courses = 0
-        while scores:
-            (course, score) = scores.pop(0)
-            if course.name not in course_titles:
-                course_titles.add(course.name)
-                course_object.append(course)
-                course_codes[course.name] = (course.code, num_courses)
-                num_courses += 1
-            elif course.name in course_titles and course_codes[course.name][0] > course.code:
-                course_object[course_codes[course.name][1]] = course
-        return course_object
+        return [course[0] for course in scores]
 
     def get_all_relevant_courses(self, query):
         return self.get_relevant_courses(query, Course.objects.all())
