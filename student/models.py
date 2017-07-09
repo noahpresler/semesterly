@@ -68,7 +68,7 @@ class Student(models.Model):
         if social_user is None:
             return None
         access_token = social_user.extra_data["access_token"]
-        refresh_token = social_user.extra_data["refresh_token"]
+        refresh_token = social_user.extra_data.get("refresh_token")
         expires_at = social_user.extra_data["expires"]
         return GoogleCredentials(access_token, settings.SOCIAL_AUTH_GOOGLE_OAUTH2_KEY,
                                  settings.SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET, refresh_token,
