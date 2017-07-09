@@ -22,7 +22,6 @@ export const setCourseClassmates = json => ({
 
 export const requestCourseInfo = id => ({
   type: ActionTypes.REQUEST_COURSE_INFO,
-  id,
 });
 
 export const setCourseId = id => ({
