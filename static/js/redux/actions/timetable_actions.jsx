@@ -277,6 +277,8 @@ export const hoverSection = (denormCourse, section) => ({
     course: denormCourse,
     section,
     offerings: section.offering_set,
+    is_optional: false,
+    is_locked: true,
   },
 });
 

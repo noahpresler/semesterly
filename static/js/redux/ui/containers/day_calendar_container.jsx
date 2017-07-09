@@ -3,7 +3,6 @@ import DayCalendar from '../day_calendar';
 import { saveTimetable } from '../../actions/user_actions';
 import { handleCreateNewTimetable } from '../../actions/timetable_actions';
 import {
-    addTTtoGCal,
     createICalFromTimetable,
     fetchShareTimetableLink,
 } from '../../actions/calendar_actions';
@@ -31,7 +30,6 @@ const DayCalendarContainer = connect(
     saveTimetable: () => saveTimetable(),
     fetchShareTimetableLink,
     togglePreferenceModal,
-    addTTtoGCal,
     triggerSaveCalendarModal,
     createICalFromTimetable,
     handleCreateNewTimetable,
