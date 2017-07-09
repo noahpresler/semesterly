@@ -8,7 +8,7 @@ import {
     getCourseShareLink,
 } from '../constants/endpoints';
 import { FULL_WEEK_LIST } from '../constants/constants';
-import { getCurrentSemester, getActiveTimetable } from '../reducers/root_reducer';
+import { getCurrentSemester, getActiveDenormTimetable } from '../reducers/root_reducer';
 import * as ActionTypes from '../constants/actionTypes';
 
 const DAY_MAP = {
@@ -79,7 +79,8 @@ export const addTTtoGCal = () => (dispatch, getState) => {
       },
       method: 'POST',
       body: JSON.stringify({
-        timetable: getActiveTimetable(state),
+        timetable: getActiveDenormTimetable(state),
+        semester: getCurrentSemester(state),
       }),
       credentials: 'include',
     })
@@ -95,7 +96,7 @@ export const createICalFromTimetable = () => (dispatch, getState) => {
   if (!state.saveCalendarModal.isDownloading && !state.saveCalendarModal.hasDownloaded) {
     dispatch({ type: ActionTypes.DOWNLOAD_CALENDAR });
     const cal = ical({ domain: 'https://semester.ly', name: 'My Semester Schedule' });
-    const tt = getActiveTimetable(state);
+    const tt = getActiveDenormTimetable(state);
 
     // TODO - MUST BE REFACTORED AFTER CODED IN TO CONFIG
     let semStart = new Date();

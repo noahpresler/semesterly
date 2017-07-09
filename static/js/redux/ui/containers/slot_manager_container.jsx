@@ -36,7 +36,7 @@ const mapStateToProps = (state, ownProps) => ({
       return [];
     }
     const classmatesInCourse = state.classmates.courseToClassmates[courseId];
-    return classmatesInCourse.current.filter(cm => cm.sections.find(sectionCode));
+    return classmatesInCourse.current.filter(cm => cm.sections.find(s => s === sectionCode));
   },
   days: ownProps.days,
   uses12HrTime: state.ui.uses12HrTime,
