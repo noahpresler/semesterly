@@ -1,7 +1,7 @@
 .. note:: Want your school on Semester.ly? We want it too! Want to see a new feature to help your peers? Let's make it happen. We want to help you make the impact you want to see.
 
-Semester.ly
-===========
+About Semester.ly
+=================
 **Built for students by students.** Semester.ly is a web platform created to bring modern technology to the most difficult and archaic parts of higher education. It all started with one problem, universal across all college campuses: course registration is a pain. Spreadsheets, sticky notes, PDFs of course evaluations, and an outdated registration platform....it is all too much in the heat of classes and exams. We set out with the mission to make college more collaborative and more stress free.
 
 What We Believe In
@@ -26,5 +26,7 @@ Students know best
    :hidden:
    :maxdepth: 2
 
+   self
    setup
    environment
+   learning
