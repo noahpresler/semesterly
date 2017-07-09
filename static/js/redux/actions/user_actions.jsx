@@ -134,11 +134,9 @@ export const saveTimetable = (isAutoSave = false, callback = null) => (dispatch,
   // if current timetable is empty or we're already in saved state, don't save this timetable
   const numSlots = activeTimetable.slots.length + state.customSlots.length;
   if (numSlots === 0 || state.savingTimetable.upToDate) {
-    console.log('bad');
     return null;
   }
 
-  console.log('good');
   // mark that we're now trying to save this timetable
   dispatch({
     type: ActionTypes.REQUEST_SAVE_TIMETABLE,
