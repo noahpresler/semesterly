@@ -71,17 +71,17 @@ export const fetchSearchResults = query => (dispatch, getState) => {
     dispatch(receiveSearchResults([]));
     return;
   }
-
-  // indicate that we are now requesting courses
   dispatch(requestCourses());
-  // send a request (via fetch) to the appropriate endpoint to get courses
-  fetch(getCourseSearchEndpoint(query, getSemester(getState())), {
+  const state = getState();
+  const seqNumber = state.searchResults.seqNumber;
+  fetch(getCourseSearchEndpoint(query, getSemester(state)), {
     credentials: 'include',
   })
   .then(response => response.json())
   .then((json) => {
-    // indicate that courses have been received
-    dispatch(receiveSearchResults(json));
+    if (getState().searchResults.seqNumber === seqNumber) { // this is most recent request
+      dispatch(receiveSearchResults(json));
+    }
   });
 };
 
