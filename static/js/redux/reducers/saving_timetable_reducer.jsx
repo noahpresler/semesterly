@@ -18,7 +18,7 @@ const savingTimetable = (state = initState, action) => {
         ...state,
         activeTimetable: action.timetable,
         saving: false,
-        upToDate: true,
+        upToDate: action.upToDate,
       };
 
     case ActionTypes.ALERT_TIMETABLE_EXISTS:

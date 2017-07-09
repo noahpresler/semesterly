@@ -135,7 +135,7 @@ export const lockTimetable = timetable => (dispatch, getState) => {
 };
 
 // load a personal timetable into state
-export const loadTimetable = timetable => (dispatch, getState) => {
+export const loadTimetable = (timetable, isLoadingNewTimetable = false) => (dispatch, getState) => {
   const state = getState();
   const isLoggedIn = state.userInfo.data.isLoggedIn;
   if (!isLoggedIn) {
@@ -151,6 +151,7 @@ export const loadTimetable = timetable => (dispatch, getState) => {
   dispatch({
     type: ActionTypes.CHANGE_ACTIVE_SAVED_TIMETABLE,
     timetable: displayTimetable,
+    upToDate: !isLoadingNewTimetable,
   });
 
   return dispatch(lockTimetable(displayTimetable));
@@ -169,6 +170,7 @@ export const nullifyTimetable = () => (dispatch) => {
   dispatch({
     type: ActionTypes.CHANGE_ACTIVE_SAVED_TIMETABLE,
     timetable: { name: 'Untitled Schedule', slots: [], events: [], has_conflict: false },
+    upToDate: false,
   });
   dispatch({
     type: ActionTypes.CLEAR_OPTIONAL_COURSES,
