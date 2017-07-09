@@ -12,9 +12,9 @@ const initialState = {
 const ui = (state = initialState, action) => {
   switch (action.type) {
     case ActionTypes.INIT_STATE:
-      return Object.assign({}, state, { uses12HrTime: action.data.uses12HrTime });
+      return {...state, uses12HrTime: action.data.uses12HrTime };
     case ActionTypes.HOVER_SEARCH_RESULT:
-      return Object.assign({}, state, { searchHover: action.position });
+      return {...state, searchHover: action.position };
     case ActionTypes.RECEIVE_TIMETABLES: {
       const courses = action.timetables.length > 0 ?
         getCourseIdsFromSlots(action.timetables[0].slots) : [];
@@ -30,7 +30,9 @@ const ui = (state = initialState, action) => {
       return { ...state, courseToColourIndex };
     }
     case ActionTypes.SET_HIGHLIGHT_NOTIFS:
-      return Object.assign({}, state, { highlightNotifs: action.highlightNotifs });
+      return {...state, highlightNotifs: action.highlightNotifs };
+    case ActionTypes.REQUEST_COURSES:
+      return {...state, searchHover: 0};
     default:
       return state;
   }
