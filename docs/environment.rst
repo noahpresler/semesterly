@@ -86,6 +86,23 @@ For development purposes, we map http://sem.ly:8000 to http://localhost:8000. To
 .. note:: If you add a school, be sure to add it to this file!
 
 
+Set your Environment Type
+~~~~~~~~~~~~~~~~~~~~~~~~~
+Add the following line to either your ``~/.bash.rc`` or ``~/.zshrc`` which tells webpack you are running a development environment:
+
+.. code-block:: bash
+
+    export NODE_ENV=development
+
+Then ``source ~/.bash.rc`` or ``source ~/.zshrc``
+
+And make sure the following line returns "development"
+
+.. code-block:: bash
+
+    echo $NODE_ENV
+
+
 Install & Run Webpack
 ~~~~~~~~~~~~~~~~~~~~~
 
