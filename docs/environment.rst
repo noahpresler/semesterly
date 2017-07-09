@@ -1,6 +1,6 @@
 .. _environment:
 
-Setup a Dev Environment
+Setup Your Dev Environment
 ===========================
 
 Now that all of the requirements are installed, its time to get your environment up and running.
