@@ -2,7 +2,7 @@ import * as ActionTypes from '../constants/actionTypes';
 
 const searchResults = (state = { isFetching: false, items: [] }, action) => {
   switch (action.type) {
-    case ActionTypes.RECEIVE_COURSES:
+    case ActionTypes.RECEIVE_SEARCH_RESULTS:
       return {
         isFetching: false,
         items: action.response.result,
