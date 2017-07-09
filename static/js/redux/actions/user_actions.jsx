@@ -107,7 +107,7 @@ export const fetchClassmates = timetable => (dispatch, getState) => {
   const state = getState();
   const courseIds = uniq(timetable.slots.map(s => s.course));
 
-  if (!state.userInfo.data.social_courses) {
+  if (!state.userInfo.data.social_courses || courseIds.length === 0) {
     return;
   }
   setTimeout(() => {
