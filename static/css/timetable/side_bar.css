@@ -19,6 +19,15 @@
     width: 100%;
     font-family: "Palanquin",Arial,sans-serif;
 }
+.share-course-link-wrapper {
+     display: inline-block;
+    background-color: #3895db;
+    margin-top: 8px;
+    padding: 3px 7px;
+    font-size: 12px;
+    border-radius: 3px;
+    position: absolute;
+}
 .share-course-link-wrapper input {
     border: 1px solid #fff;
     transition: border .3s;
@@ -36,29 +45,42 @@
 .share-course-link-wrapper .share-course-link {
     cursor:text;
 }
-.slot-clipboard-success {
-    position: absolute;
-    top: 0px;
-    left: -215px;
-    background-color: #F8F6F7;
-    padding: 0 5px;
-    color: #555;
-    display: none;
+.share-course-link-wrapper h5 {
+    font-size: 16px;
+    color: black;
+    font-weight: 700;
+    text-align: left;
+    margin: 0 4px;
 }
-.master-slot-actions .slot-clipboard-success i {
-    display: inline-block;
-    vertical-align: middle;
+.share-course-link-wrapper h6 {
     font-size: 12px;
-    margin-right: 5px;
-    opacity: 1;
+    color: black;
+    text-align: left;
+    margin: 10px 4px 0;
 }
-.slot-clipboard-success p {
-    display: inline-block;
-    vertical-align: middle;
-    font-size: 12px;
-    margin-bottom: 1px;
-    margin-right: 5px;
-}
+/*.slot-clipboard-success {*/
+    /*position: absolute;*/
+    /*top: 0px;*/
+    /*left: -215px;*/
+    /*background-color: #F8F6F7;*/
+    /*padding: 0 5px;*/
+    /*color: #555;*/
+    /*display: none;*/
+/*}*/
+/*.master-slot-actions .slot-clipboard-success i {*/
+    /*display: inline-block;*/
+    /*vertical-align: middle;*/
+    /*font-size: 12px;*/
+    /*margin-right: 5px;*/
+    /*opacity: 1;*/
+/*}*/
+/*.slot-clipboard-success p {*/
+    /*display: inline-block;*/
+    /*vertical-align: middle;*/
+    /*font-size: 12px;*/
+    /*margin-bottom: 1px;*/
+    /*margin-right: 5px;*/
+/*}*/
 #side-bar .unsaved { 
     font-style: italic;
 }

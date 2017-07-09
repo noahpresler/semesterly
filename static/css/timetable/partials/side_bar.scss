@@ -241,7 +241,6 @@
   color: $gfff;
   cursor: pointer;
   margin-bottom: 5px;
-  overflow: hidden;
   padding: 5px 5px 5px 10px;
   position: relative;
   transition: color .3s, background-color .3s;
@@ -259,12 +258,13 @@
   .share-course-link-wrapper {
     background-color: $gf9f9f9;
     border-radius: 2px;
-    height: 38px;
     max-width: 250px;
-    padding: 0 5px;
+    padding: 5px;
     position: absolute;
     right: 5px;
     top: 20px;
+    z-index: 1;
+    box-shadow: 0 0 12px rgba(0, 0, 0, 0.5), 0 0 1px rgba(0, 0, 0, 0.15);
 
     .tip {
       right: 12px;
@@ -284,6 +284,27 @@
       margin-top: 7px;
       max-width: 240px;
       width: auto;
+    }
+
+    h5 {
+      font-size: 16px;
+      color: black;
+      font-weight: 700;
+      text-align: left;
+      margin: 0 4px;
+    }
+    h6 {
+      font-size: 12px;
+      color: black;
+      text-align: left;
+      margin: 10px 4px 0;
+    }
+    h7 {
+      background-color: #3895db;
+      margin-top: 8px;
+      padding: 3px 7px;
+      font-size: 12px;
+      border-radius: 3px;
     }
   }
 }
