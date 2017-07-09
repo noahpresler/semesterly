@@ -8,7 +8,10 @@ import {
     getCourseShareLink,
 } from '../constants/endpoints';
 import { FULL_WEEK_LIST } from '../constants/constants';
-import { getCurrentSemester, getActiveDenormTimetable } from '../reducers/root_reducer';
+import {
+  getCurrentSemester,
+  getActiveDenormTimetable,
+  getActiveTimetable } from '../reducers/root_reducer';
 import * as ActionTypes from '../constants/actionTypes';
 
 const DAY_MAP = {
@@ -116,18 +119,18 @@ export const createICalFromTimetable = () => (dispatch, getState) => {
     semStart.setYear(new Date().getFullYear());
     semEnd.setYear(new Date().getFullYear());
 
-    tt.slots.forEach(slot => {
+    tt.slots.forEach((slot) => {
       const { course, section, offerings } = slot;
       const description = course.description || '';
-      offerings.forEach(offering => {
+      offerings.forEach((offering) => {
         const instructors = section.instructors && section.instructors.length > 0 ? `Taught by: ${section.instructors}\n` : '';
         const start = getNextDayOfWeek(semStart, offering.day);
         const [startHours, startMinutes] = offering.time_start.split(':');
-        start.setHours(parseInt(startHours), parseInt(startMinutes));
+        start.setHours(parseInt(startHours, 10), parseInt(startMinutes, 10));
 
         const end = getNextDayOfWeek(semStart, offering.day);
         const [endHours, endMinutes] = offering.time_end.split(':');
-        end.setHours(parseInt(endHours), parseInt(endMinutes));
+        end.setHours(parseInt(endHours, 10), parseInt(endMinutes, 10));
 
         const event = cal.createEvent({
           start,
@@ -143,7 +146,7 @@ export const createICalFromTimetable = () => (dispatch, getState) => {
           byDay: DAY_MAP[offering.day],
           until: getNextDayOfWeek(semEnd, offering.day),
         });
-      })
+      });
     });
 
     const file = new Blob([cal.toString()], { type: 'data:text/calendar;charset=utf8,' });
