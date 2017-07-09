@@ -16,6 +16,11 @@ export const receiveCourses = courses => ({
   response: normalize(courses, [courseSchema]),
 });
 
+export const receiveSearchResults = courses => ({
+  type: ActionTypes.RECEIVE_SEARCH_RESULTS,
+  response: normalize(courses, [courseSchema]),
+});
+
 export const setSemester = semester => (dispatch, getState) => {
   const state = getState();
 
@@ -29,7 +34,7 @@ export const setSemester = semester => (dispatch, getState) => {
     type: ActionTypes.SET_SEMESTER,
     semester,
   });
-  dispatch(receiveCourses([]));
+  dispatch(receiveSearchResults([]));
 };
 
 /*
@@ -63,7 +68,7 @@ export const maybeSetSemester = semester => (dispatch, getState) => {
 
 export const fetchSearchResults = query => (dispatch, getState) => {
   if (query.length <= 1) {
-    dispatch(receiveCourses([]));
+    dispatch(receiveSearchResults([]));
     return;
   }
 
@@ -76,7 +81,7 @@ export const fetchSearchResults = query => (dispatch, getState) => {
   .then(response => response.json())
   .then((json) => {
     // indicate that courses have been received
-    dispatch(receiveCourses(json));
+    dispatch(receiveSearchResults(json));
   });
 };
 
