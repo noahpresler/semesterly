@@ -36,8 +36,7 @@ class SeleniumTestCase(StaticLiveServerTestCase):
     @classmethod
     def setUpClass(cls):
         super(SeleniumTestCase, cls).setUpClass()
-        cls.TIMEOUT = 10
-        socket.setdefaulttimeout(3 * cls.TIMEOUT)
+        cls.TIMEOUT = 10        
         cls.chrome_options = webdriver.ChromeOptions()
         cls.chrome_options.add_experimental_option(
             "prefs",
@@ -68,6 +67,7 @@ class SeleniumTestCase(StaticLiveServerTestCase):
         of the current state of self.driver, writing a PNG to self.img_dir, labeled by the provided
         description and a timetstamp.
         """
+        socket.setdefaulttimeout(10 * self.TIMEOUT)                            
         try:
             yield
         except Exception as exc:
@@ -626,11 +626,21 @@ class SeleniumTestCase(StaticLiveServerTestCase):
 
     def assert_ptt_equals(self, ptt):
         """Asserts equivalency between the provided ptt tuple and the current ptt"""
+        try:
+            WebDriverWait(self.driver, self.TIMEOUT) \
+                .until(function_returns_true(lambda: self.ptt_equals(ptt)))
+        except TimeoutException:
+            #ptt equivalency check failed. Run check one final time for useful debug info
+            self.ptt_equals(ptt)
+            raise RuntimeError("PTTs are not equal.")
+
+    def ptt_equals(self, ptt):
         slots, master_slots, tt_name = ptt
         self.assertItemsEqual(slots, self.get_elements_as_text((By.CLASS_NAME, 'slot')))
         self.assertItemsEqual(master_slots,
             self.get_elements_as_text((By.CLASS_NAME, 'master-slot')))
         self.assertItemsEqual(tt_name, self.get_elements_as_text((By.CLASS_NAME, 'timetable-name')))
+        return True
 
     def ptt_to_tuple(self):
         """Converts personal timetable to a tuple representation"""
@@ -785,6 +795,19 @@ class n_elements_to_be_found(object):
             else:
                 return False
         except StaleElementReferenceException:
+            return False
+
+class function_returns_true(object):
+    """
+    An expectation for checking if the provided function returns true
+    """
+    def __init__(self, func):
+        self.function = func
+
+    def __call__(self, driver):
+        try:
+            return self.function()
+        except:
             return False
 
 def force_login(user, driver, base_url):
