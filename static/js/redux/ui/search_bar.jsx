@@ -45,12 +45,15 @@ class SearchBar extends React.Component {
           this.setState({ focused: true });
         }
       } else if ($('input:focus').length !== 0) {
-        if (e.key === 'Enter' && this.props.searchResults.length > 0) {
+        const numSearchResults = this.props.searchResults.length;
+        if (e.key === 'Enter' && numSearchResults > 0) {
           this.props.addCourse(this.props.searchResults[this.props.hoveredPosition].id);
-        } else if (e.key === 'ArrowDown' && parseInt(this.props.hoveredPosition, 10) < 3) {
-          this.props.hoverSearchResult(this.props.hoveredPosition + 1);
-        } else if (e.key === 'ArrowUp' && parseInt(this.props.hoveredPosition, 10) > 0) {
-          this.props.hoverSearchResult(this.props.hoveredPosition - 1);
+        } else if (e.key === 'ArrowDown') {
+          this.props.hoverSearchResult((this.props.hoveredPosition + 1) % numSearchResults);
+        } else if (e.key === 'ArrowUp') {
+          let newHoveredPosition = this.props.hoveredPosition - 1;
+          newHoveredPosition = newHoveredPosition < 0 ? numSearchResults - 1 : newHoveredPosition;
+          this.props.hoverSearchResult(newHoveredPosition);
         } else if (e.key === 'Escape') {
           this.setState({ focused: false });
           $('.search-bar input').blur();
