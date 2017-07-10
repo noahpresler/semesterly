@@ -7,14 +7,14 @@ Learning The Stack
 
 Our Stack
 ~~~~~~~~~~
-=================== =========== =================
-Component           Technology  Style/Methodology
-=================== =========== =================
-Database            PostgreSQL  Django ORM
-Backend Framework   Django      PEP8
-Frontend Framework  React       Redux/Airbnb
-CSS Framework       SASS        BEM/Airbnb
-=================== =========== =================
+=================== =========== ================= =====================================================================================================================================
+Component           Technology  Style/Methodology Tutorials
+=================== =========== ================= =====================================================================================================================================
+Database            PostgreSQL  Django ORM        `Making Queries with Django <https://docs.djangoproject.com/en/1.11/topics/db/queries/>`_
+Backend Framework   Django      PEP8              `Writing your first Django app <https://docs.djangoproject.com/en/1.11/intro/tutorial01/>`_
+Frontend Framework  React       Redux/Airbnb      `React Basics <https://github.com/noahpresler/React-Tutorial>`_, `React <https://egghead.io/courses/react-fundamentals>`_, `Redux <https://egghead.io/courses/getting-started-with-redux>`_.
+CSS Framework       SASS        BEM/Airbnb        `CSS Basics <https://www.w3schools.com/css/>`_, `SASS <http://sass-lang.com/guide>`_, `BEM <http://getbem.com/introduction/>`_
+=================== =========== ================= =====================================================================================================================================
 
 Tutorials and Resources
 ~~~~~~~~~~~~~~~~~~~~~~~
