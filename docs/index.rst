@@ -1,4 +1,4 @@
-.. note:: Want your school on Semester.ly? We want it too! Want to see a new feature to help your peers? Let's make it happen. We want to help you make the impact you want to see.
+.. note:: Want your school on Semester.ly? We want it too! Want to see a new feature to help your peers? Let's make it happen. We want to help you make the impact you want to see. We'll even find you something impactful to work on if you're not sure where to start.
 
 About Semester.ly
 =================
@@ -29,6 +29,6 @@ Students know best
    self
    setup
    environment
+   howitworks   
    learning
-   howitworks
    contributing
