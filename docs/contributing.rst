@@ -56,14 +56,13 @@ Make Some Changes, Add and Commit
         git commit -a
         git push origin mybranchname
 
-What If Upstream Has Changed
-#############################
-    Just pull and rebase onto those changes and push. You may find conflicts, that's to be expected!
+    .. note:: 
+        **What If Upstream Has Changed?** Just pull and rebase onto those changes and push. You may find conflicts, that's to be expected!
 
-    .. code-block:: bash
+        .. code-block:: bash
 
-        git pull --rebase upstream master
-        git push origin mybranchname
+            git pull --rebase upstream master
+            git push origin mybranchname
 
 Open a Pull Request (and see your code go live!)
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -72,10 +71,7 @@ So you've made your changes, and you've pushed them to your branch. To open a PR
 
 Awesome! You've made a PR. Once its merged, your code will be a part of the Semester.ly open source GitHub repository and will be deployed for tens of thousands of students to use/benefit from. 
 
-PR Requirements/Code Review
-############################
-
-A PR must pass a few checks before it can be merged.
+.. note:: A PR must pass a few checks before it can be merged.
 
     ✅ **LGTM:** Before your PR is merged, you'll need to pass a peer review to ensure that all the changes are clean and high quality. Usually, you'll get an "lgtm" (the comment which triggers this check to pass) or a few minor edits will be requested. This helps us maintain a quality code base and helps contrbutors learn and grow as engineers! 
 
