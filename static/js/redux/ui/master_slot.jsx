@@ -43,7 +43,7 @@ class MasterSlot extends React.Component {
   showShareLink() {
     this.setState({ shareLinkShown: true });
     const idEventTarget = `#clipboard-btn-${this.props.course.id}`;
-    const clipboard = new Clipboard(idEventTarget); // eslint-disable-line no-unused-vars
+    const clipboard = new Clipboard(idEventTarget);
     clipboard.on('success', () => {
       $(idEventTarget).addClass('clipboardSuccess').text('Copied!');
     });
@@ -87,11 +87,10 @@ class MasterSlot extends React.Component {
     let creditsDisplay = numCredits === 1 ? ' credit' : ' credits';
     creditsDisplay = numCredits + creditsDisplay;
     const profDisp = this.props.professors == null ? null : <h3>{ prof }</h3>;
-    const shareLinkText = this.props.getShareLink(this.props.course.code);
     const shareLink = this.state.shareLinkShown ?
             (<ShareLink
               courseId={this.props.course.id}
-              link={shareLinkText}
+              link={this.props.getShareLink(this.props.course.code)}
               onClickOut={this.hideShareLink}
             />) :
             null;
@@ -206,7 +205,6 @@ export const ShareLink = ({ link, onClickOut, courseId }) => (
         className="share-course-link"
         size={link.length}
         value={link}
-        // id={`clipboard-btn-${courseId}`}
         onClick={e => e.stopPropagation()}
         readOnly
       />
