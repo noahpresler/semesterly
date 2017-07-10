@@ -14,10 +14,6 @@ class MasterSlot extends React.Component {
     this.hideShareLink = this.hideShareLink.bind(this);
     this.state = { shareLinkShown: false };
   }
-  componentWillMount() {
-    const idEventTarget = `#clipboard-btn-${this.props.course.id}`;
-    const clipboard = new Clipboard(idEventTarget); // eslint-disable-line no-unused-vars
-  }
   onMasterSlotHover() {
     this.setState({ hovered: true });
     this.updateColours(COLOUR_DATA[this.props.colourIndex].highlight);
@@ -46,6 +42,11 @@ class MasterSlot extends React.Component {
   }
   showShareLink() {
     this.setState({ shareLinkShown: true });
+    const idEventTarget = `#clipboard-btn-${this.props.course.id}`;
+    const clipboard = new Clipboard(idEventTarget); // eslint-disable-line no-unused-vars
+    clipboard.on('success', () => {
+      $(idEventTarget).addClass('clipboardSuccess').text('Copied!');
+    });
   }
 
   render() {
@@ -89,7 +90,7 @@ class MasterSlot extends React.Component {
     const shareLinkText = this.props.getShareLink(this.props.course.code);
     const shareLink = this.state.shareLinkShown ?
             (<ShareLink
-              clipboardId={`clipboard-btn-${this.props.course.id}`}
+              courseId={this.props.course.id}
               link={shareLinkText}
               onClickOut={this.hideShareLink}
             />) :
@@ -192,7 +193,7 @@ MasterSlot.propTypes = {
   getShareLink: PropTypes.func.isRequired,
 };
 
-export const ShareLink = ({ link, onClickOut, clipboardId }) => (
+export const ShareLink = ({ link, onClickOut, courseId }) => (
   <ClickOutHandler onClickOut={onClickOut}>
     <div className="share-course-link-wrapper" onClick={e => e.stopPropagation()}>
       <h5>Share Course</h5>
@@ -205,13 +206,13 @@ export const ShareLink = ({ link, onClickOut, clipboardId }) => (
         className="share-course-link"
         size={link.length}
         value={link}
-        id={clipboardId}
+        // id={`clipboard-btn-${courseId}`}
         onClick={e => e.stopPropagation()}
         readOnly
       />
-      <button className="clipboardBtn" id={clipboardId} data-clipboard-text={link}>
+      <div className="clipboardBtn" id={`clipboard-btn-${courseId}`} data-clipboard-text={link}>
         Copy to Clipboard
-      </button>
+      </div>
     </div>
   </ClickOutHandler>
 );
@@ -219,7 +220,7 @@ export const ShareLink = ({ link, onClickOut, clipboardId }) => (
 ShareLink.propTypes = {
   link: PropTypes.string.isRequired,
   onClickOut: PropTypes.func.isRequired,
-  clipboardId: PropTypes.string.isRequired,
+  courseId: PropTypes.string.isRequired,
 };
 
 export default MasterSlot;
