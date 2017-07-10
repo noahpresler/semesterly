@@ -30,3 +30,4 @@ Students know best
    setup
    environment
    learning
+   howitworks
