@@ -14,6 +14,10 @@ class MasterSlot extends React.Component {
     this.hideShareLink = this.hideShareLink.bind(this);
     this.state = { shareLinkShown: false };
   }
+  componentWillMount() {
+    const idEventTarget = `#clipboard-btn-${this.props.course.id}`;
+    const clipboard = new Clipboard(idEventTarget); // eslint-disable-line no-unused-vars
+  }
   onMasterSlotHover() {
     this.setState({ hovered: true });
     this.updateColours(COLOUR_DATA[this.props.colourIndex].highlight);
@@ -42,10 +46,7 @@ class MasterSlot extends React.Component {
   }
   showShareLink() {
     this.setState({ shareLinkShown: true });
-    const idEventTarget = `#ms-share-icon-${this.props.course.id}`;
-    const clipboard = new Clipboard(idEventTarget); // eslint-disable-line no-unused-vars
   }
-
 
   render() {
     let friendCircles = null;
@@ -88,7 +89,8 @@ class MasterSlot extends React.Component {
     const shareLinkText = this.props.getShareLink(this.props.course.code);
     const shareLink = this.state.shareLinkShown ?
             (<ShareLink
-              link={this.props.getShareLink(this.props.course.code)}
+              clipboardId={`clipboard-btn-${this.props.course.id}`}
+              link={shareLinkText}
               onClickOut={this.hideShareLink}
             />) :
             null;
@@ -132,8 +134,6 @@ class MasterSlot extends React.Component {
       <div className="master-slot-actions">
         <i
           className="fa fa-share-alt /*slot-share-icon*/"
-          data-clipboard-text={shareLinkText}
-          id={`ms-share-icon-${this.props.course.id}`}
           onClick={event => this.stopPropagation(this.showShareLink, event)}
         />
         {shareLink}
@@ -192,9 +192,9 @@ MasterSlot.propTypes = {
   getShareLink: PropTypes.func.isRequired,
 };
 
-export const ShareLink = ({ link, onClickOut }) => (
+export const ShareLink = ({ link, onClickOut, clipboardId }) => (
   <ClickOutHandler onClickOut={onClickOut}>
-    <div className="share-course-link-wrapper">
+    <div className="share-course-link-wrapper" onClick={e => e.stopPropagation()}>
       <h5>Share Course</h5>
       <h6>
         Copy the link below and send it to a friend/advisor!
@@ -205,12 +205,13 @@ export const ShareLink = ({ link, onClickOut }) => (
         className="share-course-link"
         size={link.length}
         value={link}
+        id={clipboardId}
         onClick={e => e.stopPropagation()}
         readOnly
       />
-      <h7>
+      <button className="clipboardBtn" id={clipboardId} data-clipboard-text={link}>
         Copy to Clipboard
-      </h7>
+      </button>
     </div>
   </ClickOutHandler>
 );
@@ -218,6 +219,7 @@ export const ShareLink = ({ link, onClickOut }) => (
 ShareLink.propTypes = {
   link: PropTypes.string.isRequired,
   onClickOut: PropTypes.func.isRequired,
+  clipboardId: PropTypes.string.isRequired,
 };
 
 export default MasterSlot;
