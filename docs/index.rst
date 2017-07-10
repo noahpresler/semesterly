@@ -31,3 +31,4 @@ Students know best
    environment
    learning
    howitworks
+   contributing
