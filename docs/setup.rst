@@ -5,13 +5,20 @@ Installation
 
 This guide will bring you through the steps of creating a local Semester.ly server and development environment. It will walk through the setup of the core ecosystems we work within: Django/Python and React/Node/JS. It will additionally require the setup of a PostgreSQL database.
 
-Clone The Repository
-~~~~~~~~~~~~~~~~~~~~
-Cloning Semester.ly will create a directory with all of the code required to run your own local development server. Navigate to the directory you wish to work from, then execute: 
+Fork/Clone The Repository
+~~~~~~~~~~~~~~~~~~~~~~~~~
+Forking Semester.ly will create your own version of Semester.ly listed on your GitHub! 
+Cloning your Semester.ly fork will create a directory with all of the code required to run your own local development server. Navigate to the directory you wish to work from, then execute: 
 
-.. code-block:: bash
+1. **Fork** navigate to our `GitHub repository <https://github.com/noahpresler/semesterly>`_ then, in the top-right corner of the page, click Fork.
 
-   git clone https://github.com/noahpresler/semesterly.git
+2. **Clone** by executing this line on the command line:
+
+    .. note:: **ATTENTION:** Be sure to replace [YOUR-USERNAME] with your own git username 
+
+    .. code-block:: bash
+
+         git clone https://github.com/[YOUR-USERNAME]/semesterly
 
 
 Setup a Python Virtual Enviroment
