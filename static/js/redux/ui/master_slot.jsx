@@ -27,10 +27,6 @@ class MasterSlot extends React.Component {
     this.onMasterSlotUnhover();
     callback();
   }
-  hideShareLink() {
-    this.setState({ shareLinkShown: false });
-    // $('.slot-clipboard-success').removeClass('show');
-  }
   updateColours(colour) {
         // no updating when hovering over a masterslot in the course modal (i.e. related course)
     if (this.props.inModal) {
@@ -48,7 +44,9 @@ class MasterSlot extends React.Component {
       $(idEventTarget).addClass('clipboardSuccess').text('Copied!');
     });
   }
-
+  hideShareLink() {
+    this.setState({ shareLinkShown: false });
+  }
   render() {
     let friendCircles = null;
     if (this.props.fakeFriends) {
@@ -133,7 +131,7 @@ class MasterSlot extends React.Component {
       </div>
       <div className="master-slot-actions">
         <i
-          className="fa fa-share-alt /*slot-share-icon*/"
+          className="fa fa-share-alt"
           onClick={event => this.stopPropagation(this.showShareLink, event)}
         />
         {shareLink}
