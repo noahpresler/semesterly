@@ -1,5 +1,5 @@
-Timetable Documentation
-=======================
+Timetable App
+=============
 
 Models
 ~~~~~~
