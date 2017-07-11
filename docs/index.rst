@@ -33,3 +33,6 @@ Students know best
    learning
    contributing
    documentation
+   flows
+   frontend   
+   sass

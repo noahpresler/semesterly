@@ -7,6 +7,9 @@ Backend Documentation
    modules/timetable
    modules/course
    modules/student
-   modules/e2e
-   modules/helpers
    modules/searches
+   modules/exams
+   modules/agreement
+   modules/e2e   
+   modules/helpers   
+   modules/authpipe
