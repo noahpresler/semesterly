@@ -9,27 +9,27 @@ from sklearn.feature_extraction.text import TfidfTransformer
 from django.db.models import Q
 from timetable.models import Course
 from nltk.stem.porter import *
+import progressbar
 
 
-# Vectorizer class creates a dictionary over courses and build course vectorizer pickle object.
 class Vectorizer():
+    """ Vectorizer class creates a dictionary over courses and build course vectorizer pickle object. """
     def __init__(self):
         self.TITLE_WEIGHT = 3
         self.stemmer = PorterStemmer()
 
     def vectorize(self):
         # get names (titles) and descriptions for creating vocabulary.
-        current_count = 0
         total_count = Course.objects.count()
         raw_word_counts = []
-        for course in Course.objects.all():
+        bar = progressbar.ProgressBar(max_value=Course.objects.count())
+        print("Vectorizing all courses...")
+        for current_count, course in enumerate(Course.objects.all().iterator()):
             raw_word_counts.append(self.get_stem_course(course.name,
                                                         course.description,
                                                         course.areas,
                                                         self.TITLE_WEIGHT))
-            current_count+=1
-            sys.stdout.write("\rVectorizing all courses: %d%%" % int(current_count / total_count * 100))
-            sys.stdout.flush()
+            bar.update(current_count)
 
         # vectorize course objects.
         count_vectorizer = CountVectorizer(ngram_range=(1, 2), stop_words='english')
@@ -37,13 +37,12 @@ class Vectorizer():
         tfidf_tf = TfidfTransformer(use_idf=True).fit(processed_word_counts)
         course_vectors = tfidf_tf.transform(processed_word_counts)
 
+        bar.update(0)
+        print("Picklifying all courses...")
         # save course vector to model.
-        current_count = 0
-        for course in Course.objects.all():
+        for current_count, course in enumerate(Course.objects.all().iterator()):
             self.picklify(course, course_vectors[current_count])
-            current_count += 1
-            sys.stdout.write("\rPicklifying all courses: %d%%" % int(current_count / total_count * 100))
-            sys.stdout.flush()
+            bar.update(current_count)
 
         # export CountVectorizer.pickle.
         with open('count_vectorizer.pickle', 'wb') as handle:
@@ -51,22 +50,18 @@ class Vectorizer():
             pickle.dump(count_vectorizer, handle,
                         protocol=pickle.HIGHEST_PROTOCOL)
 
-    def get_stem_course(self, name, description, area, w):
+    def get_stem_course(self, name, description, area, weight):
         stemmed_doc = ""
         if name:
             name_doc = name.encode('ascii', 'ignore')
             stemmed_name_doc = self.get_stem_doc(name_doc)
-            for i in range(w):
-                stemmed_doc += " " + stemmed_name_doc
-            stemmed_doc += " "
+            stemmed_doc += (' ' + stemmed_name_doc) * weight + " "
         if description:
             desc_doc = description.encode('ascii', 'ignore')
-            stemmed_desc_doc = self.get_stem_doc(desc_doc)
-            stemmed_doc += stemmed_desc_doc
+            stemmed_doc += self.get_stem_doc(desc_doc)
         if area:
             area_doc = area.encode('ascii', 'ignore')
-            stemmed_area_doc = self.get_stem_doc(area_doc)
-            stemmed_doc += stemmed_area_doc
+            stemmed_doc += self.get_stem_doc(area_doc)
         return stemmed_doc
 
     def get_stem_doc(self, doc):
@@ -77,8 +72,8 @@ class Vectorizer():
         course_object.save()
 
 
-# Searcher class implements baseline search and vectorized search based on information retrieval techniques.
 class Searcher():
+    """ Searcher class implements baseline search and vectorized search based on information retrieval techniques. """
     def __init__(self):
         self.count_vectorizer = self.load_count_vectorizer()
         self.vectorizer = Vectorizer()
@@ -101,19 +96,19 @@ class Searcher():
 
     def get_acronym(self, name):
         name = name.replace("and", "").replace("&", "").lower()
-        return ''.join([i[:1] for i in name.split(' ')])
+        return ''.join([i[0] for i in name.split(' ')])
 
-    def match_title(self, query, course_name):
+    def matches_title(self, query, course_name):
         query_tokens = query.lower().split(' ')
         course_name = course_name.lower()
-        return 1 if all(map(lambda q: q in course_name, query_tokens)) and \
-                    len(query_tokens) is len(course_name.split()) else 0
+        return all(map(lambda q: q in course_name, query_tokens)) and \
+               len(query_tokens) is len(course_name.split())
 
     def get_course(self, code):
-        for course in Course.objects.all():
-            if course.code == code:
-                return course
-        return None
+        try:
+            return Course.objects.get(code=code)
+        except:
+            return None
 
     def get_cosine_sim(self, sparse_vec1, sparse_vec2):
         if sparse_vec1 is not None and sparse_vec2 is not None:
@@ -164,7 +159,7 @@ class Searcher():
         else:
             courses_objs = list(title_matching_courses.all()[:self.MAX_CAPACITY])
 
-        return self.get_relevant_courses(query, courses_objs)
+        return self.get_most_relevant_filtered_courses(query, courses_objs)
 
     def course_desc_contains_token(self, token):
         return Q(description__icontains=token)
@@ -174,17 +169,12 @@ class Searcher():
                 Q(name__icontains=token.replace("&", "and")) |
                 Q(name__icontains=token.replace("and", "&")))
 
-    def get_relevant_courses(self, query, course_filtered):
+    def get_most_relevant_filtered_courses(self, query, course_filtered):
         query_vector = self.vectorize_query(query.lower())
-        scores = []
-        for course in course_filtered:
-            score = self.get_cosine_sim(query_vector, course.vector) + self.match_title(query, course.name)
-            scores.append((course, score))
-        scores.sort(key=lambda tup: -tup[1])
-        return [course[0] for course in scores]
+        return sorted(course_filtered, key=lambda course: -self.get_score(course, query, query_vector))
 
-    def get_all_relevant_courses(self, query):
-        return self.get_relevant_courses(query, Course.objects.all())
+    def get_score(self, course, query, query_vector):
+        return self.get_cosine_sim(query_vector, course.vector) + self.matches_title(query, course.name)
 
     def wordify(self, course_vector):
         print(self.count_vectorizer.inverse_transform(course_vector))
