@@ -262,6 +262,8 @@ class DigestionAdapter:
 			'Lecture': 'L',
 			'Laboratory': 'P',
 			'Discussion': 'T',
+			'Seminar': 'T',
+			'Tutorial': 'T',
 		}
 		if 'type' in section:
 			adapted['section_type'] = section_type_map.get(section.type, 'L')
