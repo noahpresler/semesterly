@@ -34,7 +34,7 @@ class CourseSearchList(CsrfExemptMixin, ValidateSubdomainMixin, APIView):
         page = int(request.query_params.get('page', 1))
         sem, _ = Semester.objects.get_or_create(name=sem_name, year=year)
         # Filter first by the user's search query.
-        course_match_objs = SEARCHER.baseline_search(school, query, sem)
+        course_match_objs = SEARCHER.vectorized_search(school, query, sem)
 
         # Filter now by departments, areas, levels, or times if provided.
         filters = request.data.get('filters', {})
