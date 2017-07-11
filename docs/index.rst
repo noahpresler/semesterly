@@ -34,6 +34,7 @@ Students know best
    contributing
    documentation
    flows
+   pipeline
    frontend   
    sass
    design
