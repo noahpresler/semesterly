@@ -32,3 +32,4 @@ Students know best
    howitworks   
    learning
    contributing
+   modules/timetable
