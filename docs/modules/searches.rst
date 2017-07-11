@@ -1,11 +1,6 @@
 Searches App
 =============
 
-Models
-~~~~~~
-.. automodule:: searches.models
-    :members:
-
 Views
 ~~~~~
 .. automodule:: searches.views
