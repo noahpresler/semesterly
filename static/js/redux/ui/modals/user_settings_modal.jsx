@@ -80,11 +80,10 @@ class UserSettingsModal extends React.Component {
 
   render() {
     const modalStyle = {
-      width: '100%',
+      width: '100%'
     };
-    const tos = this.state.isSigningUp ? (<div
-      className="preference cf"
-    >
+    const tos = this.state.isSigningUp
+        ? (<div className="preference cf">
       <label className="switch switch-slide" htmlFor="tos-agreed-input">
         <input
           ref={(c) => { this.tosAgreed = c; }} id="tos-agreed-input"
@@ -109,7 +108,7 @@ class UserSettingsModal extends React.Component {
           By agreeing, you accept our <a>terms and conditions</a> & <a>privacy policy</a>.
         </p>
       </div>
-    </div>) : null;
+  </div>) : null;
     const notificationsButton = this.props.tokenRegistered
         ? (<a onClick={this.props.unsubscribeToNotifications}><h3>Turn Off Notifications</h3></a>)
         : (<a onClick={this.props.subscribeToNotifications}><h3>Turn On Notifications</h3></a>);
@@ -218,6 +217,19 @@ class UserSettingsModal extends React.Component {
                     information is never
                     shared with any other party.</p>
         </div>) : null;
+    const firstTimeSetup = this.state.isSigningUp
+        ? null
+        : (
+            <div className="modal-close" onClick={() => {
+                  if (!this.props.isUserInfoIncomplete) {
+                    this.modal.hide();
+                    this.props.setHidden();
+                    this.props.closeUserSettings();
+                  }
+              }}>
+                <i className="fa fa-times" />
+            </div>
+        )
     return (
       <Modal
         ref={(c) => { this.modal = c; }}
@@ -230,6 +242,7 @@ class UserSettingsModal extends React.Component {
           <div className="modal-header">
             <div className="pro-pic" style={{ backgroundImage: propic }} />
             <h1>Welcome!</h1>
+            {firstTimeSetup}
           </div>
           <div className="modal-body">
             <div className="preference cf">
@@ -300,4 +313,3 @@ UserSettingsModal.propTypes = {
 };
 
 export default UserSettingsModal;
-
