@@ -354,7 +354,7 @@ class PeoplesoftParser(CourseParser):
             self.ingestor['location'] = loc.text
             self.ingestor['days'] = days
 
-            self.ingestor.ingest_offerings(section)
+            self.ingestor.ingest_meeting(section)
 
         self._empty_ingestor_lists()
 

@@ -159,7 +159,7 @@ class HopkinsParser(CourseParser):
                         'building': meeting['Building'],
                         'room': meeting['Room']
                     }
-                    self.ingestor.ingest_offerings(created_section)
+                    self.ingestor.ingest_meeting(created_section)
 
     def start(self,
               years=None,
