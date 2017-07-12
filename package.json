@@ -84,7 +84,9 @@
   },
   "jest": {
     "setupTestFrameworkScriptFile": "./test_env.jsx",
-    "transformIgnorePatterns": [ "node_modules/(?!react)" ],
+    "transformIgnorePatterns": [
+      "node_modules/(?!react)"
+    ],
     "transform": {
       "^.+\\.jsx?$": "babel-jest"
     }
