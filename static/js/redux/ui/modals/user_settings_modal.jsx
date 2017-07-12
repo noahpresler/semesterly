@@ -23,7 +23,7 @@ class UserSettingsModal extends React.Component {
     this.changeMajor = this.changeMajor.bind(this);
     this.changeClassYear = this.changeClassYear.bind(this);
     this.shouldShow = this.shouldShow.bind(this);
-    this.hide - this.hide.bind(this);
+    this.hide = this.hide.bind(this);
   }
 
   componentDidMount() {
@@ -227,9 +227,9 @@ class UserSettingsModal extends React.Component {
                     information is never
                     shared with any other party.</p>
         </div>) : null;
-    const cancelButton = this.state.isSigningUp ? null : (<div
+    const cancelButton = (<div
       className="modal-close"
-      onClick={() => this.hide()}
+      onClick={this.hide}
     >
       <i className="fa fa-times" />
     </div>
@@ -283,7 +283,7 @@ class UserSettingsModal extends React.Component {
             { tos }
             <div className="button-wrapper">
               <button
-                className="signup-button" onClick={() => this.hide()}
+                className="signup-button" onClick={this.hide}
               >Save
               </button>
             </div>
