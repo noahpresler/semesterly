@@ -1,6 +1,9 @@
 import re
 
 class FinalExamScheduler:
+	"""
+	Example docstring
+	"""
 
 	def __init__(self):
 		self.list_of_rules = []
