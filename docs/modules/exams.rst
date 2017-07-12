@@ -11,10 +11,6 @@ Views
 .. automodule:: exams.views
     :members:
 
-Views
-~~~~~
-.. automodule:: exams.views
-    :members:
 
 Final Exam Scheduler
 ~~~~~~~~~~~~~~~~~~~~~
