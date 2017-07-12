@@ -134,11 +134,11 @@ class Ingestor(dict):
         """
         # support nested and non-nested department ingestion
         department = self.get('department')
-        if ('department' not in self) or
+        if ('department' not in self or
                 ('department_name' in self or
                     'department_code' in self or
                     'dept_name' in self or
-                    'dept_code' in self):
+                    'dept_code' in self)):
             # if not isinstance(self.getchain('department', 'dept'), dict):
             department = {
                 'name': self.getchain('department_name', 'dept_name'),
