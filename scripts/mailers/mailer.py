@@ -54,7 +54,6 @@ class Mailer(object):
             # Perform operations via server
             # TODO: Ping their email address to make sure it's fine
             self.server.sendmail(self.sender, [recipient], msg.as_string())
-            # print("SENT: DEBUG MODE!")
         except:
             e = sys.exc_info()[0]
             print("skipped " + str(student.user.email))
