@@ -318,7 +318,23 @@ class Section(models.Model):
 
 
 class Offering(models.Model):
-    
+    """
+    An Offering is the most granular part of the Course heirarchy. An offering 
+    may be looked at as the backend equivalent of a single slot on a timetable.
+    For each day/time which a section meets, an offering is created.abs
+
+    Attributes:
+        section (:obj:`ForeignKey` to :obj:`Section`):
+            the section which is the parent of this offering
+        day (:obj:`CharField`): 
+            the day the course is offered (single character M,T,W,R,F,S,U)
+        time_start (:obj:`CharField`): 
+            the time the slot starts in 24hrs time in the format (HH:MM) or (H:MM)
+        time_end (:obj:`CharField`): 
+            the time it ends in 24hrs time in the format (HH:MM) or (H:MM)
+        location (:obj:`CharField`, optional):
+            the location the course takes place, defaulting to TBA if not provided
+    """
     section = models.ForeignKey(Section)
     day = models.CharField(max_length=1)
     time_start = models.CharField(max_length=15)
