@@ -48,6 +48,16 @@ class Textbook(models.Model):
 
 
 class Updates(models.Model):
+    """
+    Stores the date/time that the school's data was last updated.
+    This is updated when digestion into the database completes.
+
+    Attributes: 
+        school (CharField): the school code that was updated (e.g. jhu)
+        update_field (CharField): which field was updated
+        last_updated (DateTimeField): the datetime last updated
+        reason (Charfield): the reason it was updated (default Scheduled Update)
+    """
     school = models.CharField(max_length=100)
     update_field = models.CharField(max_length=100)  # e.g. 'textbook', 'course'
     last_updated = models.DateTimeField(auto_now=True)
