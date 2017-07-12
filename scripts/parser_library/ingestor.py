@@ -235,9 +235,6 @@ class Ingestor(dict):
         self.tracker.track_term(section['term'])
         return section
 
-    def ingest_offering(self, section):
-        self.ingest_meeting(section)
-
     def ingest_meeting(self, section):
         """Create meeting ingested json map.
 
