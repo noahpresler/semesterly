@@ -9,6 +9,14 @@ from django.db.models import Count
 
 
 class Semester(models.Model):
+    """
+    Represents a semester which is composed of a name (e.g. Spring, Fall)
+    and a year (e.g. 2017). 
+
+    Attributes:
+        name (CharField): the name (e.g. Spring, Fall)
+        year (CharField): the year (e.g. 2017, 2018)
+    """
     name = models.CharField(max_length=50)
     year = models.CharField(max_length=4)
 
@@ -17,6 +25,18 @@ class Semester(models.Model):
 
 
 class Textbook(models.Model):
+    """
+    A textbook which is associated with sections of courses. Stores 
+    information from the Amazon product API including a detail url
+    and ISBN.
+
+    Attributes:
+        isbn (BigIntegerField): the primary (unique) key ISBN number
+        detail_url (URLField): url to the detail page on Amazon.com
+        image_url (URLField): url to product image hosted on Amazon.com
+        author (CharField): authors first and last name
+        title (CharField): the title of the book
+    """
     isbn = models.BigIntegerField(primary_key=True)
     detail_url = models.URLField(max_length=1000)
     image_url = models.URLField(max_length=1000)
