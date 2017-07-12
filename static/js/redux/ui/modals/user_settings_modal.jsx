@@ -23,6 +23,7 @@ class UserSettingsModal extends React.Component {
     this.changeMajor = this.changeMajor.bind(this);
     this.changeClassYear = this.changeClassYear.bind(this);
     this.shouldShow = this.shouldShow.bind(this);
+    this.hide = this.hide.bind(this);
   }
 
   componentDidMount() {
@@ -76,6 +77,14 @@ class UserSettingsModal extends React.Component {
         props.showOverrided ||
         this.props.isUserInfoIncomplete)
       );
+  }
+
+  hide() {
+    if (!this.props.isUserInfoIncomplete) {
+      this.modal.hide();
+      this.props.setHidden();
+      this.props.closeUserSettings();
+    }
   }
 
   render() {
@@ -218,6 +227,13 @@ class UserSettingsModal extends React.Component {
                     information is never
                     shared with any other party.</p>
         </div>) : null;
+    const cancelButton = (<div
+      className="modal-close"
+      onClick={this.hide}
+    >
+      <i className="fa fa-times" />
+    </div>
+    );
     return (
       <Modal
         ref={(c) => { this.modal = c; }}
@@ -230,6 +246,7 @@ class UserSettingsModal extends React.Component {
           <div className="modal-header">
             <div className="pro-pic" style={{ backgroundImage: propic }} />
             <h1>Welcome!</h1>
+            { !this.state.isSigningUp ? cancelButton : null }
           </div>
           <div className="modal-body">
             <div className="preference cf">
@@ -266,13 +283,7 @@ class UserSettingsModal extends React.Component {
             { tos }
             <div className="button-wrapper">
               <button
-                className="signup-button" onClick={() => {
-                  if (!this.props.isUserInfoIncomplete) {
-                    this.modal.hide();
-                    this.props.setHidden();
-                    this.props.closeUserSettings();
-                  }
-                }}
+                className="signup-button" onClick={this.hide}
               >Save
               </button>
             </div>
@@ -300,4 +311,3 @@ UserSettingsModal.propTypes = {
 };
 
 export default UserSettingsModal;
-
