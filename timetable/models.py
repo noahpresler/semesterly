@@ -65,6 +65,36 @@ class Updates(models.Model):
 
 
 class Course(models.Model):
+    """
+    Represents a course at a school, made unique by its course code.
+    Courses persist across semesters and years. Their presence in a semester or year
+    is indicated by the existence of sections assigned to that course for that semester
+    or year. This is why a course does not have fields like professor, those varies.abs
+
+    The course model maintains only attributes which tend not to vary across semesters
+    or years
+
+    Attributes:
+        school (:obj:`CharField`): the school code corresponding to the school for the course
+        code (:obj:`CharField`): the course code without indication of section (E.g. EN.600.100)
+        name (:obj:`CharField`): the general name of the course (E.g. Calculus I)
+        description (:obj:`TextField`): the explanation of the content of the courzse
+        notes (:obj:`TextField`, optional): usually notes pertaining to registration (e.g. Lab Fees)
+        info (:obj:`TextField`, optional): similar to notes
+        unstopped_description (:obj:`TextField`): automatically generated description without stopwords 
+        campus (:obj:`CharField`, optional): an indicator for which campus the course is taught on
+        prerequisites (:obj:`TextField`, optional): courses required before taking this course
+        corequisites (:obj:`TextField`, optional): courses required concurrently with this course
+        exclusions (:obj:`TextField`, optional): reasons why a student would not be able to take this
+        num_credits (:obj:`FloatField`): the number of credit hours this course is worth
+        areas (:obj:`CharField`): comma seperated list of all degree areas this course satisfies
+        department (:obj:`CharField`): department offering course (e.g. Computer Science)
+        level (:obj:`CharField`): indicator of level of course (e.g. 100, 200, Upper, Lower, Grad)
+        cores (:obj:`CharField`): core areas satisfied by this course
+        geneds (:obj:`CharField`): geneds satisfied by this course
+        related_courses (:obj:`ManyToManyField` of :obj:`Course`, optional): courses computed similar to this course
+        same_as (:obj:`ForeignKey`): If this course is the same as another course, provide Foreign key
+    """
     school = models.CharField(db_index=True, max_length=100)
     code = models.CharField(max_length=20)
     name = models.CharField(max_length=250)
@@ -91,9 +121,12 @@ class Course(models.Model):
     def get_reactions(self, student=None):
         """
         Return a list of dicts for each type of reaction (by title) for this course. Each dict has:
-        title: the title of the reaction
-        count: number of reactions with this title that this course has received
-        reacted: True if the student provided has given a reaction with this title
+
+        **title**: the title of the reaction
+
+        **count:** number of reactions with this title that this course has received
+
+        **reacted:** True if the student provided has given a reaction with this title
         """
         result = list(self.reaction_set.values('title') \
                       .annotate(count=models.Count('title')).distinct().all())
@@ -106,6 +139,17 @@ class Course(models.Model):
         return result
 
     def get_related_course_info(self, semester=None, limit=None):
+        """
+        Returns a list of dictionaries representing courses which are related to the 
+        given course as judged by recommender.py. This is used on the course modal
+        side bar to display slots for related courses.abs
+
+        Args: 
+            semester (Semester, optional): if provided, filters by courses offered that semester
+            limit (int, optional): limits the number of related courses if provided
+        Returns:
+            (:obj:`list` of :obj:`dict`): list of dictionaries of courses
+        """
         info = []
         related = self.related_courses.all()
         if semester:
@@ -117,10 +161,21 @@ class Course(models.Model):
         return info
 
     def get_eval_info(self):
+        """
+        Returns:
+            (:obj:`list` of :obj:`dict`): list of dictionaries representing evaluations for a course, sorted by year.
+        """
         eval_info = map(model_to_dict, Evaluation.objects.filter(course=self))
         return sorted(eval_info, key=itemgetter('year'))
 
     def get_avg_rating(self):
+        """
+        Calculates the avg rating for a course, 0 if no ratings. Includes all courses
+        that are marked as the same by the self.same_as field on the model nstance.
+
+        Returns:
+            (:obj:`float`): the average course rating
+        """
         ratings_sum, ratings_count = self._get_ratings_sum_count()
         if self.same_as: # include ratings for equivalent courses in the average
             eq_sum, eq_count = self.same_as._get_ratings_sum_count()
@@ -134,6 +189,11 @@ class Course(models.Model):
         return sum([rating.score for rating in ratings]), len(ratings)
 
     def get_textbooks(self, semester):
+        """
+        Returns:
+            (:obj:`list` of :obj:`dict` representing :obj:`Textbook`): 
+                list of dictionaries representing the textbooks for the course for a given semester
+        """
         textbooks = []
         isbns = set()
         for section in self.section_set.filter(semester=semester):
@@ -145,6 +205,9 @@ class Course(models.Model):
         return textbooks
 
     def get_course_integrations(self):
+        """
+        Returns: List of Integration names associated with this course
+        """
         ids = CourseIntegration.objects.filter(course__id=self.id).values_list("integration",
                                                                                flat=True)
         return Integration.objects.filter(id__in=ids).values_list("name", flat=True)
