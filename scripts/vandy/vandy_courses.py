@@ -208,7 +208,7 @@ class VandyParser(CourseParser):
                 self.ingestor['time_start'] = self.course.get('time_start')
                 self.ingestor['time_end'] = self.course.get('time_end')
                 self.ingestor['location'] = self.course.get('Location')
-                self.ingestor.ingest_offerings(created_section)
+                self.ingestor.ingest_meeting(created_section)
 
     def print_course(self):
         for label in self.course:
