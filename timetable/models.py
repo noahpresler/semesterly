@@ -69,10 +69,12 @@ class Course(models.Model):
     Represents a course at a school, made unique by its course code.
     Courses persist across semesters and years. Their presence in a semester or year
     is indicated by the existence of sections assigned to that course for that semester
-    or year. This is why a course does not have fields like professor, those varies.abs
+    or year. This is why a course does not have fields like professor, those varies.
 
     The course model maintains only attributes which tend not to vary across semesters
-    or years
+    or years.
+
+    A course has many :obj:`Section` which a student can enroll in.
 
     Attributes:
         school (:obj:`CharField`): the school code corresponding to the school for the course
@@ -263,27 +265,60 @@ class Course(models.Model):
 
 
 class Section(models.Model):
-  course = models.ForeignKey(Course)
-  meeting_section = models.CharField(max_length=50)
-  size = models.IntegerField(default=-1)
-  enrolment = models.IntegerField(default=-1)
-  waitlist = models.IntegerField(default=-1)
-  waitlist_size = models.IntegerField(default=-1)
-  section_type = models.CharField(max_length=50, default='L')
-  instructors = models.CharField(max_length=500, default='TBA')
-  semester = models.ForeignKey(Semester)
-  _semester = models.CharField(max_length=2)  # deprecated
-  textbooks = models.ManyToManyField(Textbook, through='TextbookLink')
-  was_full = models.BooleanField(default=False)
+    """
+    Represents one (of possibly many) choice(s) for a student to enroll in a :obj:`Course` 
+    for a specific semester. Since this model is specific to a semester, it contains 
+    enrollment data, instructor information, textbooks, etc.
 
-  def get_textbooks(self):
-    return [tb.get_info() for tb in self.textbooks.all()]
+    A section can come in different forms. For example, a lecture which is required
+    for every student. However, it can also be a tutorial or practical. During
+    timetable generation we allow a user to select one of each, and we can automatically 
+    choose the best combonation for a user as well.
 
-  def __unicode__(self):
-    return "Course: %s; Section: %s; Semester: %s" % (str(self.course), self.meeting_section, str(self.semester))
+    A section has many offerings related to it. For example, section 1 of a :obj:`Course` could
+    have 3 offerings (one that meets each day: Monday, Wednesday, Friday). Section 2 of 
+    a :obj:`Course` could have 3 other offerings (one that meets each: Tuesday, Thursday).
+
+    Attributes:
+        course (:obj:`Course`): The course this section belongs to
+        meeting_section (:obj:`CharField`): the name of the section (e.g. 001, L01, LAB2)
+        size (:obj:`IntegerField`): the capacity of the course (the enrollment cap)
+        enrolment (:obj:`IntegerField`): the number of students registered so far
+        waitlist (:obj:`IntegerField`): the number of students waitlisted so far
+        waitlist_size (:obj:`IntegerField`): the max size of the waitlist
+        section_type (:obj:`CharField`): 
+            the section type, example 'L' is lecture, 'T' is tutorial, `P` is practical
+        instructors (:obj:`CharField`): comma seperated list of instructors
+        semester (:obj:`ForeignKey` to :obj:`Semester`): the semester for the section
+        textbooks (:obj:`ManyToManyField` of :obj:`Textbook`): textbooks for this section
+        was_full (:obj:`BooleanField`): whether the course was full during the last parse
+    """
+
+    course = models.ForeignKey(Course)
+    meeting_section = models.CharField(max_length=50)
+    size = models.IntegerField(default=-1)
+    enrolment = models.IntegerField(default=-1)
+    waitlist = models.IntegerField(default=-1)
+    waitlist_size = models.IntegerField(default=-1)
+    section_type = models.CharField(max_length=50, default='L')
+    instructors = models.CharField(max_length=500, default='TBA')
+    semester = models.ForeignKey(Semester)
+    _semester = models.CharField(max_length=2)  # deprecated
+    textbooks = models.ManyToManyField(Textbook, through='TextbookLink')
+    was_full = models.BooleanField(default=False)
+
+    def get_textbooks(self):
+        """
+        Returns the textbook info using `tb.get_info()` for each textbook
+        """
+        return [tb.get_info() for tb in self.textbooks.all()]
+
+    def __unicode__(self):
+        return "Course: %s; Section: %s; Semester: %s" % (str(self.course), self.meeting_section, str(self.semester))
 
 
 class Offering(models.Model):
+    
     section = models.ForeignKey(Section)
     day = models.CharField(max_length=1)
     time_start = models.CharField(max_length=15)
