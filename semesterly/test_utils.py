@@ -30,6 +30,21 @@ from timetable.models import Section
 from timetable.models import Semester
 
 class SeleniumTestCase(StaticLiveServerTestCase):
+    """
+    This test case extends the Django StaticLiveServerTestCase.
+    It creates a selenium ChromeDriver instance on setUp of each
+    test. It navigates to the live url for the static live server.
+    It also provides utilities and assertions for navigating and 
+    testing presence of elements or behavior.
+
+    Attributes:
+        img_dir (str): Directory to save screenshots on failure.
+
+        driver (WebDriver): Chrome WebDriver instance.
+
+        timeout (int): Socket default timeout.
+
+    """
 
     serialized_rollback = True
 
