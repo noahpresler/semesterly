@@ -151,6 +151,7 @@ class Slot extends React.Component {
     return {
       '@media print': {
         boxShadow: `inset 0 0 0 1000px ${COLOUR_DATA[this.props.colourId].background}`,
+        backgroundColor: `${COLOUR_DATA[this.props.colourId].background}`,
       },
       top,
       bottom: -bottom,
