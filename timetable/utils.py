@@ -111,6 +111,30 @@ def get_tt_stats(timetable, day_to_usage):
 
 
 class TimetableGenerator:
+    """
+    Creates timetables based on provided courses and selected sections. 
+    Takes into account user preferences, sorting, events blocking times 
+    as busy, and optional courses.
+
+    Args:
+        semester (:obj:`Semester`): the semester for which to generate timetables
+        school (:obj:`str`): the school code for which to generate (e.g. 'jhu')
+        locked_sections (:obj:`list`):
+            if a section is locked, the section type for that course will not be 
+            permuted. Only timetables with that exact section for the corresponding
+            section_type will be considered.
+        custom_events (:obj:`list`):
+            a list of custom events which the timetable generator will schedule
+            around.
+        preferences (:obj:`dict`):
+            a dictionary of sorting metrics by which the generator will order 
+            timetable. (E.g. least time on classes)
+        optional_course_ids (:obj:`list`, optional):
+            a list of course ids considered optional, meaning that the timetable
+            generator will attempt to fit them if possible, and will not fail 
+            if not.
+    """
+    
     def __init__(self,
                  semester,
                  school,
@@ -129,13 +153,21 @@ class TimetableGenerator:
         self.custom_events = custom_events
         self.optional_course_ids = optional_course_ids or []
 
+
     def courses_to_timetables(self, courses):
+        """
+        Converts courses to many possible :obj:`Timetable` and converts 
+        those timetables to dictionaries. 
+        """
         all_offerings = self.courses_to_offerings(courses)
         timetables = self.create_timetable_from_offerings(all_offerings)
         timetables.sort(key=lambda tt: get_tt_cost(tt[1], self.sort_metrics))
         return map(self.convert_tt_to_dict, timetables)
 
     def convert_tt_to_dict(self, timetable):
+        """
+        Convert :obj:`Timetable` to :obj:`dict``
+        """
         tt_obj = {}
         tt, tt_stats = timetable
         # get a course dict -> sections dictionary
@@ -145,6 +177,9 @@ class TimetableGenerator:
         return dict(tt_obj, **tt_stats)
 
     def get_basic_course_dict(self, section):
+        """
+        Creates a basic course dictionary from a section
+        """
         model = Course.objects.get(id=section[0])
         course_dict = model_to_dict(model, fields='code name id num_credits department'.split())
         if section[0] in self.optional_course_ids:  # mark optional courses
@@ -178,6 +213,7 @@ class TimetableGenerator:
               [[27, 'L5101', [<CourseOffering>], [27, 'L1001', [<CourseOffering>]]]
         with_conflicts: True if you want to consider conflicts, False otherwise.
         """
+        
         num_offerings, num_permutations_remaining = get_xproduct_indicies(sections)
         total_num_permutations = num_permutations_remaining.pop(0)
         for p in xrange(total_num_permutations):  # for each possible tt
