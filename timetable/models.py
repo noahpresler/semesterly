@@ -290,7 +290,8 @@ class Section(models.Model):
             the section type, example 'L' is lecture, 'T' is tutorial, `P` is practical
         instructors (:obj:`CharField`): comma seperated list of instructors
         semester (:obj:`ForeignKey` to :obj:`Semester`): the semester for the section
-        textbooks (:obj:`ManyToManyField` of :obj:`Textbook`): textbooks for this section
+        textbooks (:obj:`ManyToManyField` of :obj:`Textbook`):
+            textbooks for this section via the :obj:`TextbookLink` model
         was_full (:obj:`BooleanField`): whether the course was full during the last parse
     """
 
@@ -346,6 +347,18 @@ class Offering(models.Model):
 
 
 class Evaluation(models.Model):
+    """
+    A review of a course represented as a score out of 5, a summary/comment, along
+    with the professor and year the review is in subject of.
+
+    course (:obj:`ForeignKey` to :obj:`Course`):
+        the course this evaluation belongs to
+    score (:obj:`FloatField`): score out of 5.0
+    summary (:obj:`TextField`): text with information about why the rating was given
+    professor (:obj:`CharField`): the professor(s) this review pertains to
+    year (:obj:`CharField`): the year of the review
+    course_code (:obj:`Charfield`): a string of the course code, along with section indicator
+    """
     course = models.ForeignKey(Course)
     score = models.FloatField(default=5.0)
     summary = models.TextField()
@@ -355,6 +368,18 @@ class Evaluation(models.Model):
 
 
 class TextbookLink(models.Model):
+    """
+    This model serves as a ManyToMany link betwen a :obj:`Section`
+    anda textbook. The reason for this additional model is because 
+    the edge that connects a :obj:`Section` has a label which is 
+    whether that textbook is required. Thus, a seperate model/table
+    exists to link the two with this label.abs
+
+    Attributes:
+        textbook (:obj:`ForeignKey` to :obj:`Textbook`): the textbook
+        is_required (:obj:`BooleanField`): whether or not the textbook is required
+        section (:obj:`Section`): the section the textbook is linked to
+    """
     textbook = models.ForeignKey(Textbook)
     is_required = models.BooleanField(default=False)
     section = models.ForeignKey(Section)
