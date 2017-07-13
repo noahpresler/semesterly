@@ -292,13 +292,12 @@ class SeleniumTestCase(StaticLiveServerTestCase):
         self.assertTrue(course.code in modal_header.text)
         self.assertTrue(course.prerequisites in modal_body.text)
         self.assertTrue(course.areas in modal_body.text)
-        n_sections = Section.objects.filter(
-            course=course,
-            semester=semester
-        ).count()
-        n_sect_found = len(self.find((By.CLASS_NAME, 'modal-section'), get_all=True))
-        WebDriverWait(self.driver, self.TIMEOUT) \
-                .until(n_elements_to_be_found((By.CLASS_NAME, 'modal-section'), n_sections))
+        # n_sections = Section.objects.filter(
+        #     course=course,
+        #     semester=semester
+        # ).count()
+        # WebDriverWait(self.driver, self.TIMEOUT) \
+        #         .until(n_elements_to_be_found((By.CLASS_NAME, 'modal-section'), n_sections))
 
     def open_course_modal_from_slot(self, course_idx):
         """Opens the course modal from the nth slot"""
