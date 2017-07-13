@@ -18,7 +18,6 @@ import {
 } from '../constants/endpoints';
 import {
   getActiveTimetable,
-  getActiveTimetableCourses,
   getCurrentSemester } from '../reducers/root_reducer';
 import { fetchCourseClassmates } from './modal_actions';
 import { getNumberedName, loadTimetable, nullifyTimetable } from './timetable_actions';
