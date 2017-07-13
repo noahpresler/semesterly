@@ -2,6 +2,7 @@ import {
   getSectionTypeToSections,
   getMaxEndHour,
 } from '../reducers/entities_reducer';
+import { revert } from '../actions/exam_actions';
 
 describe('course selectors', () => {
   describe('section type to sections selector', () => {
@@ -30,6 +31,7 @@ describe('timetable selectors', () => {
       },
       section: {
         id: 'S1',
+        code: 'SSS',
         name: 'section',
       },
       offerings: [{
@@ -47,4 +49,22 @@ describe('timetable selectors', () => {
       expect(getMaxEndHour(timetable)).toEqual(19);
     });
   });
+
+  describe('revert timetable', () => {
+    it('works for single offering timetable', () => {
+      expect(revert(timetable)).toEqual({
+        courses: [{
+          id: 'C1',
+          name: 'course',
+          slots: [{ // this is using the old definition of a slot
+            id: 'O1',
+            code: 'SSS',
+            name: 'section',
+            thing: 'thing',
+            time_end: '18:30',
+          }],
+        }]
+      })
+    })
+  })
 });
