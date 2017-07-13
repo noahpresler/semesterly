@@ -23,11 +23,11 @@ describe('timetable selectors', () => {
   const timetable = {
     name: 'tt_name',
     has_conflict: false,
-    courses: [{
-      id: 'C1',
-      name: 'course',
-    }],
     slots: [{
+      course: {
+        id: 'C1',
+        name: 'course',
+      },
       section: {
         id: 'S1',
         name: 'section',
