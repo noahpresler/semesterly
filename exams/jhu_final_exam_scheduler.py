@@ -2,7 +2,9 @@ from final_exam_scheduler import FinalExamScheduler, Rule
 import json
 
 class JHUFinalExamScheduler(FinalExamScheduler):
-
+	"""
+	Database Object that has a list of JHU's Rules
+	"""
 	def __init__(self):
 
 		# FALL 2016
