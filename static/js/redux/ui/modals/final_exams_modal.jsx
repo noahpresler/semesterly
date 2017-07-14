@@ -167,7 +167,7 @@ export default class FinalExamsModal extends React.Component {
     if (this.props.isVisible && !nextProps.isVisible) {
       this.hide();
     }
-    if (this.props.courses !== nextProps.courses && this.props.isVisible && !this.props.isShare) {
+    if (this.props.slots !== nextProps.slots && this.props.isVisible && !this.props.isShare) {
       this.props.fetchFinalExamSchedule();
     }
     if (this.props.isVisible && !nextProps.isVisible) {
@@ -465,7 +465,7 @@ FinalExamsModal.propTypes = {
   }).isRequired,
   activeLoadedTimetableName: PropTypes.string.isRequired,
   hasNoCourses: PropTypes.bool.isRequired,
-  courses: PropTypes.arrayOf(SemesterlyPropTypes.course).isRequired,
+  slots: PropTypes.arrayOf(SemesterlyPropTypes.normalizedSlot).isRequired,
   loadingCachedTT: PropTypes.bool.isRequired,
   userInfo: SemesterlyPropTypes.userInfo.isRequired,
   shareLink: PropTypes.string,

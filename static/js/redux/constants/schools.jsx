@@ -46,6 +46,7 @@ export const getSchoolSpecificInfo = (school) => {
         departmentsName: 'Departments',
         levelsName: 'Levels',
         timesName: 'Times',
+        courseRegex: '([A-Z]{2}\\.\\d{3}\\.\\d{3})',
         campuses: {
           1: '',
         },
@@ -57,6 +58,7 @@ export const getSchoolSpecificInfo = (school) => {
         departmentsName: 'Departments',
         levelsName: 'Levels',
         timesName: 'Times',
+        courseRegex: '([A-Z]{2,4}\\d{3})',
         campuses: {
           1: '',
         },
@@ -80,8 +82,8 @@ export const getSchoolSpecificInfo = (school) => {
         departmentsName: 'Departments',
         levelsName: 'Levels',
         timesName: 'Times',
-                // course codes have dashes, in desciprtions dashes are spaces
-                // courseRegex: "([A-Z-&]{2,7}\\s\\d{4}[W]?)",
+        // course codes have dashes, in desciprtions dashes are spaces
+        courseRegex: '([A-Z-&]{2,7}\\s\\d{4}[W]?)',
         campuses: {
           1: '',
         },

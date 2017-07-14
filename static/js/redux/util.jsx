@@ -1,4 +1,6 @@
+import range from 'lodash/range';
 import { getLogFinalExamViewEndpoint } from './constants/endpoints';
+import COLOUR_DATA from './constants/colours';
 
 export const browserSupportsLocalStorage = () => {
   try {
@@ -150,3 +152,7 @@ export const strPropertyCmp = prop => (first, second) => (first[prop] > second[p
 
 export const isIncomplete = prop => prop === undefined || prop === '' || prop === null;
 
+export const getNextAvailableColour = courseToColourIndex =>
+  range(COLOUR_DATA.length).find(i => !Object.values(courseToColourIndex).some(x => x === i));
+
+export const generateCustomEventId = () => new Date().getTime();

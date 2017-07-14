@@ -1,14 +1,8 @@
-import * as selectors from '../reducers/root_reducer';
-import { getSectionTypeToSections, getFromTimetable } from '../reducers/entities_reducer';
-
-describe('timetable selectors', () => {
-  describe('active TT selector', () => {
-    it('gets correct timetable', () => {
-      const state = { timetables: { items: [0, 1, 2, 3, 4], active: 2 } };
-      expect(selectors.getActiveTT(state)).toEqual(2);
-    });
-  });
-});
+import {
+  getSectionTypeToSections,
+  getMaxEndHour,
+} from '../reducers/entities_reducer';
+import { revert } from '../actions/exam_actions';
 
 describe('course selectors', () => {
   describe('section type to sections selector', () => {
@@ -30,38 +24,47 @@ describe('timetable selectors', () => {
   const timetable = {
     name: 'tt_name',
     has_conflict: false,
-    courses: [{
-      id: 'C1',
-      name: 'course',
-    }],
-    sections: [{
-      id: 'S1',
-      name: 'section',
-      offering_set: [{
+    slots: [{
+      course: {
+        id: 'C1',
+        name: 'course',
+      },
+      section: {
+        id: 'S1',
+        code: 'SSS',
+        name: 'section',
+      },
+      offerings: [{
         id: 'O1',
         thing: 'thing',
+        time_end: '18:30',
       }],
     }],
   };
-  describe('getfromTimetable', () => {
-    it('returns correct shape', () => {
-      const fields = {
-        timetables: ['name'],
-        courses: ['id'],
-        sections: ['id'],
-        offerings: [],
-      };
-
-      const result = getFromTimetable(timetable, fields);
-      expect('courses' in result).toBeTruthy();
-      expect('sections' in result).toBeTruthy();
-      expect('offerings' in result.sections[0]).toBeTruthy();
+  describe('getMaxEndHour', () => {
+    it('returns 17 for empty timetable', () => {
+      expect(getMaxEndHour({ courses: [], slots: [] })).toEqual(17);
     });
-    it('only returns specified fields', () => {
-      const fields = { timetables: ['name'], sections: [], offerings: [] };
-      const result = getFromTimetable(timetable, fields);
-      expect('name' in result).toBeTruthy();
-      expect('has_conflict' in result).toBeFalsy();
+    it('returns correct end hour', () => {
+      expect(getMaxEndHour(timetable)).toEqual(19);
+    });
+  });
+
+  describe('revert timetable', () => {
+    it('works for single offering timetable', () => {
+      expect(revert(timetable)).toEqual({
+        courses: [{
+          id: 'C1',
+          name: 'course',
+          slots: [{ // this is using the old definition of a slot
+            id: 'O1',
+            code: 'SSS',
+            name: 'section',
+            thing: 'thing',
+            time_end: '18:30',
+          }],
+        }],
+      });
     });
   });
 });

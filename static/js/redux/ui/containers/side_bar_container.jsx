@@ -1,6 +1,10 @@
 import { connect } from 'react-redux';
 import SideBar from '../side_bar';
-import { getActiveTT, getCurrentSemester } from '../../reducers/root_reducer';
+import {
+  getActiveTimetable,
+  getCurrentSemester,
+  getDenormCourseById,
+  getCoursesFromSlots } from '../../reducers/root_reducer';
 import {
     fetchCourseInfo,
     showFinalExamsModal,
@@ -16,24 +20,23 @@ import { deleteTimetable, duplicateTimetable } from '../../actions/user_actions'
 import { getCourseShareLink } from '../../constants/endpoints';
 
 const mapStateToProps = (state) => {
-  const activeTimetable = getActiveTT(state);
-  const mandatoryCourses = activeTimetable.courses.filter(c => !c.is_optional && !c.fake);
-  const optionalCourses = state.optionalCourses.courses;
-
+  const timetable = getActiveTimetable(state);
+  const coursesInTimetable = getCoursesFromSlots(state, timetable.slots);
+  const mandatoryCourses = getCoursesFromSlots(state, timetable.slots.filter(
+    slot => !slot.is_optional));
+  const optionalCourses = state.optionalCourses.courses.map(cid => getDenormCourseById(state, cid));
   return {
     semester: getCurrentSemester(state),
     semesterIndex: state.semester.current,
     examSupportedSemesters: state.semester.exams,
-    // don't want to consider courses that are shown on timetable only
-    // because of a 'HOVER_COURSE' action (i.e. fake courses)
-    liveTimetableCourses: activeTimetable.courses.filter(c => !c.fake),
-    savedTimetables: state.userInfo.data.timetables,
-    courseToColourIndex: state.ui.courseToColourIndex,
-    classmates: state.classmates.courseToClassmates,
-    avgRating: activeTimetable.avg_rating,
-    isCourseInRoster: courseId => activeTimetable.courses.some(c => c.id === courseId),
+    coursesInTimetable,
     mandatoryCourses,
     optionalCourses,
+    savedTimetables: state.userInfo.data.timetables,
+    courseToColourIndex: state.ui.courseToColourIndex,
+    courseToClassmates: state.classmates.courseToClassmates,
+    avgRating: timetable.avg_rating,
+    isCourseInRoster: courseId => timetable.slots.some(s => s.course === courseId),
     hasLoaded: !state.timetables.isFetching,
     getShareLink: courseCode => getCourseShareLink(courseCode, getCurrentSemester(state)),
   };

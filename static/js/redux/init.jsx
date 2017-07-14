@@ -7,9 +7,13 @@ import { Provider } from 'react-redux';
 import rootReducer from './reducers/root_reducer';
 import SemesterlyContainer from './ui/containers/semesterly_container';
 import { fetchMostClassmatesCount, handleAgreement, isRegistered } from './actions/user_actions';
-import { loadCachedTimetable, loadTimetable, lockTimetable } from './actions/timetable_actions';
+import {
+  handleCreateNewTimetable, loadCachedTimetable, loadTimetable,
+  lockTimetable,
+} from './actions/timetable_actions';
 import { fetchSchoolInfo } from './actions/school_actions';
 import { fetchCourseClassmates, setCourseInfo } from './actions/modal_actions';
+import { receiveCourses } from './actions/search_actions';
 import {
     browserSupportsLocalStorage,
     setFirstVisit,
@@ -28,10 +32,10 @@ const store = createStore(rootReducer,
 // load initial timetable from user data if logged in or local storage
 const setupTimetables = (userTimetables, allSemesters, oldSemesters) => (dispatch) => {
   if (userTimetables.length > 0) {
-    dispatch(loadTimetable(userTimetables[0]));
-    dispatch({ type: ActionTypes.RECEIVE_TIMETABLE_SAVED, upToDate: true });
+    const activeTimetable = userTimetables[0];
+    dispatch(loadTimetable(activeTimetable));
     setTimeout(() => {
-      dispatch(fetchMostClassmatesCount(userTimetables[0].courses.map(c => c.id)));
+      dispatch(fetchMostClassmatesCount(activeTimetable));
     }, 500);
   } else if (browserSupportsLocalStorage()) {
     dispatch(loadCachedTimetable(allSemesters, oldSemesters));
@@ -92,8 +96,12 @@ const handleFlows = featureFlow => (dispatch) => {
       break;
     case 'SHARE_TIMETABLE':
       dispatch({ type: ActionTypes.CACHED_TT_LOADED });
-      dispatch(lockTimetable(featureFlow.sharedTimetable,
-        true, initData.currentUser.isLoggedIn));
+      // TODO: replace course objects in userInfo with course ids after storing in entities
+      dispatch(receiveCourses(featureFlow.courses));
+      if (initData.currentUser.isLoggedIn) {
+        dispatch(handleCreateNewTimetable());
+      }
+      dispatch(lockTimetable(featureFlow.sharedTimetable));
       break;
     case 'SHARE_EXAM':
       dispatch({ type: ActionTypes.SET_FINAL_EXAMS_SHARED });
@@ -138,6 +146,7 @@ const setup = () => (dispatch) => {
 
   dispatch({ type: ActionTypes.INIT_STATE, data: initData });
 
+  dispatch(receiveCourses(initData.currentUser.courses));
   dispatch(setupTimetables(initData.currentUser.timetables, initData.allSemesters,
     initData.oldSemesters));
 

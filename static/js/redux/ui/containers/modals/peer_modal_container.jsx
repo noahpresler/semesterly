@@ -1,5 +1,5 @@
 import { connect } from 'react-redux';
-import { getActiveTT } from '../../../reducers/root_reducer';
+import { getActiveTimetableDenormCourses } from '../../../reducers/root_reducer';
 import { changeUserInfo, fetchFriends, saveSettings } from '../../../actions/user_actions';
 import PeerModal from '../../modals/peer_modal';
 import { openSignUpModal, togglePeerModal } from '../../../actions/modal_actions';
@@ -7,7 +7,7 @@ import { openSignUpModal, togglePeerModal } from '../../../actions/modal_actions
 const mapStateToProps = state => ({
     // don't want to consider courses that are shown on timetable only
     // because of a 'HOVER_COURSE' action (i.e. fake courses)
-  liveTimetableCourses: getActiveTT(state).courses.filter(c => !c.fake),
+  courses: getActiveTimetableDenormCourses(state),
   courseToColourIndex: state.ui.courseToColourIndex,
   peers: state.friends.peers,
   userInfo: state.userInfo.data,

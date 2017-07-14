@@ -15,11 +15,13 @@ from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
-from authpipe.utils import get_google_credentials, check_student_token
+from authpipe.utils import check_student_token
 from analytics.models import CalendarExport
+from courses.serializers import CourseSerializer
 from student.models import Student, Reaction, RegistrationToken, PersonalEvent, PersonalTimetable
-from student.utils import next_weekday, get_classmates_from_course_id, make_token, get_student_tts
-from timetable.models import Semester, Course
+from student.utils import next_weekday, get_classmates_from_course_id, get_student_tts
+from timetable.models import Semester, Course, Section
+from timetable.serializers import DisplayTimetableSerializer
 from helpers.mixins import ValidateSubdomainMixin, RedirectToSignupMixin
 from helpers.decorators import validate_subdomain
 
@@ -43,9 +45,8 @@ def get_friend_count_from_course_id(school, student, course_id, semester):
 
 
 def create_unsubscribe_link(student):
-    token_id, token = make_token(student).split(":", 1)
-    return reverse('student.views.unsubscribe',
-                   kwargs={'id': token_id, 'token': token})
+    token = student.get_token()
+    return reverse('student.views.unsubscribe', kwargs={'id': student.id, 'token': token})
 
 
 def unsubscribe(request, student_id, token):
@@ -60,18 +61,6 @@ def unsubscribe(request, student_id, token):
 
     # Link is invalid. Redirect to homepage.
     return HttpResponseRedirect("/")
-
-
-def get_semester_name_from_tt(tt):
-    try:
-        return Semester.objects.get(id=tt['semester']).name
-    except KeyError:
-        semester = 'Fall'
-        for course in tt['courses']:
-            for slot in course['slots']:
-                semester_id = slot['semester']
-                return Semester.objects.get(id=semester_id).name
-        return semester
 
 
 @csrf_exempt
@@ -155,8 +144,14 @@ class UserTimetableView(ValidateSubdomainMixin,
     def get(self, request, sem_name, year):
         sem, _ = Semester.objects.get_or_create(name=sem_name, year=year)
         student = Student.objects.get(user=request.user)
-        response = get_student_tts(student, request.subdomain, sem)
-        return Response(response, status=status.HTTP_200_OK)
+        timetables = student.personaltimetable_set.filter(
+            school=request.subdomain, semester=sem).order_by('-last_updated')
+        courses = {course for timetable in timetables for course in timetable.courses.all()}
+        context = {'semester': sem, 'school': request.subdomain, 'student': student}
+        return Response({
+            'timetables': DisplayTimetableSerializer.from_model(timetables, many=True).data,
+            'courses': CourseSerializer(courses, context=context, many=True).data
+        }, status=status.HTTP_200_OK)
 
     def post(self, request):
         if 'source' in request.data:  # duplicate existing timetable
@@ -182,29 +177,25 @@ class UserTimetableView(ValidateSubdomainMixin,
             duplicate.sections = sections
             duplicate.events = events
 
-            timetables = get_student_tts(student, school, semester)
-            saved_timetable = (
-                x for x in timetables if x['id'] == duplicate.id).next()
             response = {
-                'timetables': timetables,
-                'saved_timetable': saved_timetable}
-
-            # TODO: should respond only with created object
+                'timetables': get_student_tts(student, school, semester),
+                'saved_timetable': DisplayTimetableSerializer.from_model(duplicate).data
+            }
             return Response(response, status=status.HTTP_201_CREATED)
         else:
             school = request.subdomain
             has_conflict = request.data['has_conflict']
             name = request.data['name']
-            semester, _ = Semester.objects.get_or_create(
-                **request.data['semester'])
+            semester, _ = Semester.objects.get_or_create(**request.data['semester'])
             student = Student.objects.get(user=request.user)
             params = {
                 'school': school,
                 'name': name,
                 'semester': semester,
-                'student': student}
+                'student': student
+            }
 
-            courses = request.data['courses']
+            slots = request.data['slots']
             # id is None if this is a new timetable
             tt_id = request.data.get('id')
 
@@ -213,24 +204,15 @@ class UserTimetableView(ValidateSubdomainMixin,
 
             personal_timetable = PersonalTimetable.objects.create(**params) if tt_id is None else \
                 PersonalTimetable.objects.get(id=tt_id)
-            self.update_tt(
-                personal_timetable,
-                name,
-                has_conflict,
-                courses,
-                semester)
+            self.update_tt(personal_timetable, name, has_conflict, slots)
             self.update_events(personal_timetable, request.data['events'])
 
-            timetables = get_student_tts(student, school, semester)
-            saved_timetable = (
-                x for x in timetables if x['id'] == personal_timetable.id).next()
             response = {
-                'timetables': timetables,
-                'saved_timetable': saved_timetable}
-
-            # TODO: should respond only with created object
-            return Response(response,
-                            status=status.HTTP_201_CREATED if tt_id is None else status.HTTP_200_OK)
+                'timetables': get_student_tts(student, school, semester),
+                'saved_timetable': DisplayTimetableSerializer.from_model(personal_timetable).data
+            }
+            response_status = status.HTTP_201_CREATED if tt_id is None else status.HTTP_200_OK
+            return Response(response, status=response_status)
 
     def delete(self, request, sem_name, year, tt_name):
         school = request.subdomain
@@ -244,25 +226,25 @@ class UserTimetableView(ValidateSubdomainMixin,
             tt.events.all().delete()
         to_delete.delete()
 
-        timetables = get_student_tts(student, school, semester)
-        response = {'timetables': timetables}
-
         # TODO: should respond with deleted object
-        return Response(response, status=status.HTTP_200_OK)
+        return Response({'timetables': get_student_tts(student,school, semester)},
+                        status=status.HTTP_200_OK)
 
-    def update_tt(self, tt, new_name, new_has_conflict, new_courses, semester):
+    def update_tt(self, tt, new_name, new_has_conflict, new_slots):
         tt.name = new_name
         tt.has_conflict = new_has_conflict
 
         tt.courses.clear()
         tt.sections.clear()
-        for course in new_courses:
-            course_obj = Course.objects.get(id=course['id'])
-            tt.courses.add(course_obj)
-            enrolled_sections = course['enrolled_sections']
-            for section in enrolled_sections:
-                tt.sections.add(
-                    course_obj.section_set.get(meeting_section=section, semester=semester))
+        added_courses = set()
+        for slot in new_slots:
+            section_id = slot['section']
+            section = Section.objects.get(id=section_id)
+            tt.sections.add(section)
+            if section.course.id not in added_courses:
+                tt.courses.add(section.course)
+                added_courses.add(section.course.id)
+
         tt.save()
 
     def update_events(self, tt, events):
@@ -309,14 +291,14 @@ class ClassmateView(ValidateSubdomainMixin, RedirectToSignupMixin, APIView):
             semester, _ = Semester.objects.get_or_create(
                 name=sem_name, year=year)
             # user opted in to sharing courses
+            course_to_classmates = {}
             if student.social_courses:
-                courses = []
                 friends = student.friends.filter(social_courses=True)
                 for course_id in course_ids:
-                    courses.append(
+                    course_to_classmates[course_id] = \
                         get_classmates_from_course_id(school, student, course_id, semester,
-                                                      friends=friends))
-                return Response(courses, status=status.HTTP_200_OK)
+                                                      friends=friends)
+            return Response(course_to_classmates, status=status.HTTP_200_OK)
         else:
             school = request.subdomain
             student = Student.objects.get(user=request.user)
@@ -350,8 +332,7 @@ class ClassmateView(ValidateSubdomainMixin, RedirectToSignupMixin, APIView):
                         'course': model_to_dict(course,
                                                 exclude=['unstopped_description', 'description',
                                                          'credits']),
-                        # is there a section for this course that is in both
-                        # timetables?
+                        # is there a section for this course that is in both timetables?
                         'in_section': (sections_in_common & course.section_set.all()).exists()
                     })
 
@@ -365,19 +346,17 @@ class ClassmateView(ValidateSubdomainMixin, RedirectToSignupMixin, APIView):
                                  '/picture?width=700&height=700'
                 })
 
-            friends.sort(
-                key=lambda friend: len(
-                    friend['shared_courses']),
-                reverse=True)
+            friends.sort(key=lambda friend: len(friend['shared_courses']), reverse=True)
             return Response(friends, status=status.HTTP_200_OK)
 
 
+# TODO: use new request shape
 class GCalView(RedirectToSignupMixin, APIView):
 
     def post(self, request):
         student = Student.objects.get(user=request.user)
-        tt = json.loads(request.body)['timetable']
-        credentials = get_google_credentials(student)
+        tt = request.data['timetable']
+        credentials = student.get_google_credentials() # assumes is not None
         http = credentials.authorize(httplib2.Http(timeout=100000000))
         service = discovery.build('calendar', 'v3', http=http)
         school = request.subdomain
@@ -392,7 +371,7 @@ class GCalView(RedirectToSignupMixin, APIView):
         calendar = {'summary': tt_name, 'timeZone': 'America/New_York'}
         created_calendar = service.calendars().insert(body=calendar).execute()
 
-        semester_name = get_semester_name_from_tt(tt)
+        semester_name = request.data['semester']['name']
         if semester_name == 'Fall':
             # ignore year, year is set to current year
             sem_start = datetime(2017, 8, 30, 17, 0, 0)
@@ -403,24 +382,26 @@ class GCalView(RedirectToSignupMixin, APIView):
             sem_end = datetime(2017, 5, 5, 17, 0, 0)
 
         # add events
-        for course in tt['courses']:
-            for slot in course['slots']:
-                start = next_weekday(sem_start, slot['day'])
-                start = start.replace(hour=int(slot['time_start'].split(':')[0]),
-                                      minute=int(slot['time_start'].split(':')[1]))
-                end = next_weekday(sem_start, slot['day'])
-                end = end.replace(hour=int(slot['time_end'].split(':')[0]),
-                                  minute=int(slot['time_end'].split(':')[1]))
-                until = next_weekday(sem_end, slot['day'])
+        for slot in tt['slots']:
+            course = slot['course']
+            section = slot['section']
+            for offering in slot['offerings']:
+                start = next_weekday(sem_start, offering['day'])
+                start = start.replace(hour=int(offering['time_start'].split(':')[0]),
+                                      minute=int(offering['time_start'].split(':')[1]))
+                end = next_weekday(sem_start, offering['day'])
+                end = end.replace(hour=int(offering['time_end'].split(':')[0]),
+                                  minute=int(offering['time_end'].split(':')[1]))
+                until = next_weekday(sem_end, offering['day'])
 
                 description = course.get('description', '')
-                instructors = 'Taught by: ' + slot['instructors'] + '\n' if len(
-                    slot.get('instructors', '')) > 0 else ''
+                instructors = 'Taught by: ' + section['instructors'] + '\n' if len(
+                    section.get('instructors', '')) > 0 else ''
 
                 res = {
-                    'summary': course['name'] + " " + course['code'] + slot['meeting_section'],
-                    'location': slot['location'],
-                    'description': course['code'] + slot['meeting_section'] + '\n' + instructors +
+                    'summary': course['name'] + " " + course['code'] + section['meeting_section'],
+                    'location': offering['location'],
+                    'description': course['code'] + section['meeting_section'] + '\n' + instructors +
                     description + '\n\n' + 'Created by Semester.ly',
                     'start': {
                         'dateTime': start.strftime("%Y-%m-%dT%H:%M:%S"),
@@ -432,7 +413,7 @@ class GCalView(RedirectToSignupMixin, APIView):
                     },
                     'recurrence': [
                         'RRULE:FREQ=WEEKLY;UNTIL=' + until.strftime("%Y%m%dT%H%M%SZ") + ';BYDAY=' +
-                        DAY_MAP[slot['day']]
+                        DAY_MAP[offering['day']]
                     ],
                 }
                 service.events().insert(
