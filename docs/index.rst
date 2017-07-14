@@ -34,10 +34,10 @@ Students know best
    learning
    contributing
    addaschool
+   testing   
    documentation
    flows
    pipeline
    frontend   
    sass
-   testing
    design
