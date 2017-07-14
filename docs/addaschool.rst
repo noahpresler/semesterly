@@ -1,7 +1,7 @@
 .. _addaschool:
 
 Add a School
-*************
+************
 
 Adding a new school is easy and can be done in a few simple steps:
 
@@ -71,7 +71,7 @@ As shown by the code sample above, filling the ingestor is as easy as filling a 
 The answer is by pulling it from the internet of course! Luckily we have a tool called the **Requester** which helps developers like you to *request* information from a web course catalogue or API. 
 
 Using the Requester
-####################
+###################
 Your parser comes with its own requester that can be accessed like this::
 
     markup = self.requester.get('www.siteorapi.com/')
