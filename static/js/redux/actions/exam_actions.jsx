@@ -1,6 +1,6 @@
 import fetch from 'isomorphic-fetch';
 import Cookie from 'js-cookie';
-import groupby from 'lodash/groupby';
+import groupBy from 'lodash/groupBy';
 import flatMap from 'lodash/flatMap';
 import * as ActionTypes from '../constants/actionTypes';
 import { getActiveTimetable } from '../reducers/root_reducer';
@@ -11,7 +11,7 @@ import { getRequestShareExamLinkEndpoint, getFinalExamSchedulerEndpoint } from '
 // with its section data. Since exams are no longer actively supported/updated after #934,
 // this function exists as the minimum change necessary to keep exam functionality alive
 export const revert = function revertTimetableFormat(denormTimetable) {
-  const groupedByCourse = groupby(denormTimetable.slots, (slot) => slot.course.id);
+  const groupedByCourse = groupBy(denormTimetable.slots, (slot) => slot.course.id);
   const courses = Object.keys(groupedByCourse).map((courseId) => {
     const slots = groupedByCourse[courseId];
     return {
