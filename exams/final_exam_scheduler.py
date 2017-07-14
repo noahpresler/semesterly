@@ -2,8 +2,8 @@ import re
 
 class FinalExamScheduler:
 	"""
-	Puts a timetable through a list of rules that determine when the final exam is 
-	and returns a final exam schedule specific to that timetable.
+	Puts a timetable through a list of rules. If the rule matches, a final
+	exam schedule specific to that timetable will be returned.
 	"""
 	def __init__(self):
 		self.list_of_rules = []
@@ -43,17 +43,27 @@ class FinalExamScheduler:
 
 class Rule:
 	"""
-	Represents a rule that determines when the final exam is scheduled.
+	Represents a rule that can be matched based on several criteria: the day and time of the course, regex, or the course code.
+	When a Rule matches, it will return result (the final exam time and day). Each Rule can only match one of these criterua, the 
+	others are absent from the args list. If you want to have the day and time determine the Rule then start_time, start_only, 
+	list_of_days, end-time (optional depending on whether start_only is true or not), and result should be filled. If you want to have Regex
+	determine the final exam time then only regex and result need to be filled. If you want to use course code, then only course
+	code and result need to be present.
 
 	Args:
-		list_of_days(array): The rule applies to classes that meet on this day. Can be multiple or just one.
-		start_time(str): The rule applies to classes that start at or after this time
+		list_of_days(array): The rule applies to classes that meet on this day or days.
+		    Enables flexibility so that if your school schedules their final exams based solely on
+		    whether a class meets on Monday, then you can only have 'M' in this array. On the other hand,
+		    if your school schedules final exams based on whether a class meets Monday and Wednesday, then you
+		    can have both 'M' and 'W' in this array. Each day is represented by a capital letter::
+		        Monday = M, Tuesday = T, Wednesday = W, Thursday = R, Friday = F
+		start_time(str): The rule applies to classes that start at or after this time.
 		end_time(str): The rule applies to classes that end at or before this time (Provided this is not a 'start-only' rule i.e. that
 			only the time at which the class starts matters to whether the final exam matches or not.)
-		result(str): The final exam time.
-		start_only(bool): The rule only needs to match the course's start time, not the start and end time.
-		list_of_codes(str): The rule applies to these 'special' classes. Only need to check whether the course code matches for the rule to apply.
-		code_regex(str): The rule applies to this wide range of courses that has a common pattern.
+		result(str): The final exam time formatted as a string such as: "Monday, May 5th 12pm"
+		start_only(bool): If true, the rule only needs to match the course's start time, not the start and end time.
+		list_of_codes(str): The rule applies to classes with these course codes.
+		code_regex(str): The rule applies if the course code matches a regex.
 	
 	"""
 	def __init__(self, list_of_days=None, start_time=None, result=None, end_time="24:00", start_only=False, list_of_codes=None, code_regex=None):
@@ -67,8 +77,8 @@ class Rule:
 		
 	def check_times(self,slot):
 		"""
-		If the final exam depends on both the start and end time and the start 
-		and end time match up with the rule then returns true
+		If the final exam depends on both the start and end time (i.e. start_only is false) 
+		and the start and end time do match up then returns true
 		"""
 		return (not self.start_only and (int(slot['time_start'].split(':')[0]) >= int(self.start_time.split(':')[0]) and int(slot['time_end'].split(':')[0]) <= int(self.end_time.split(':')[0]))) | (self.start_only and (int(slot['time_start'].split(':')[0]) == int(self.start_time.split(':')[0])))
 		
