@@ -63,8 +63,8 @@ describe('timetable selectors', () => {
             thing: 'thing',
             time_end: '18:30',
           }],
-        }]
-      })
-    })
-  })
+        }],
+      });
+    });
+  });
 });
