@@ -140,4 +140,4 @@ Don't forget: **whenever you are working on Semester.ly** you should have one te
 
 .. note:: Don't forget to always work from your virtual environment! From the root directory, just execute ``source /venv/bin/activate`` to enter it. 
 
-Happy hacking!
+Happy hacking! To fill up your database, be sure to checkout :ref:`parsing`.
