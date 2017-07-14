@@ -1,5 +1,6 @@
 import PropTypes from 'prop-types';
 import React from 'react';
+import isEmpty from 'lodash/isEmpty';
 import Reaction from '../reaction';
 import REACTION_MAP from '../../constants/reactions';
 import MasterSlot from '../master_slot';
@@ -68,11 +69,12 @@ class CourseModalBody extends React.Component {
         waitlist={section.waitlist === -1 ? 0 : section.waitlist}
         size={section.size === -1 ? 0 : section.size}
         locked={this.props.isSectionLocked(this.props.data.id, section.meeting_section)}
-        isOnActiveTimetable={this.props.isSectionOnActiveTimetable(this.props.data.id,
-          section.meeting_section)}
+        isOnActiveTimetable={
+          this.props.isSectionOnActiveTimetable(this.props.data.id, section.id)
+        }
         lockOrUnlock={() => this.props.addOrRemoveCourse(this.props.data.id,
           section.meeting_section)}
-        hoverSection={() => this.props.hoverSection(this.props.data, section.meeting_section)}
+        hoverSection={() => this.props.hoverSection(this.props.data, section)}
         unHoverSection={this.props.unHoverSection}
         inRoster={this.props.inRoster}
       />),
@@ -86,7 +88,7 @@ class CourseModalBody extends React.Component {
   }
 
   render() {
-    if (this.props.isFetching) {
+    if (this.props.isFetching || isEmpty(this.props.data)) {
       return (
         <div className="modal-body">
           <div className="cf">
@@ -222,17 +224,17 @@ class CourseModalBody extends React.Component {
       className="loader"
     /></span><p>
             loading...</p></div>);
-    if (!this.props.isFetchingClassmates && this.props.classmates.classmates !== undefined) {
-      friendCircles = this.props.classmates && this.props.classmates.classmates.length > 0 ?
-        this.props.classmates.classmates.map(c =>
+    if (!this.props.isFetchingClassmates) {
+      friendCircles = this.props.classmates.current.length > 0 ?
+        this.props.classmates.current.map(c =>
           (<div className="friend" key={c.img_url}>
             <div className="ms-friend" style={{ backgroundImage: `url(${c.img_url})` }} />
             <p title={`${c.first_name} ${c.last_name}`}>{ `${c.first_name} ${c.last_name}` }</p>
           </div>)) :
         <p className="null">No Classmates Found</p>;
 
-      hasTakenCircles = this.props.classmates && this.props.classmates.past_classmates.length > 0 ?
-        this.props.classmates.past_classmates.map(c =>
+      hasTakenCircles = this.props.classmates.past.length > 0 ?
+        this.props.classmates.past.map(c =>
           (<div className="friend" key={c.img_url}>
             <div className="ms-friend" style={{ backgroundImage: `url(${c.img_url})` }} />
             <p title={`${c.first_name} ${c.last_name}`}>{ `${c.first_name} ${c.last_name}` }</p>
@@ -410,7 +412,7 @@ CourseModalBody.propTypes = {
   isFetchingClassmates: PropTypes.bool.isRequired,
   classmates: SemesterlyPropTypes.classmates.isRequired,
   sectionTypeToSections: PropTypes.shape({
-    '*': PropTypes.arrayOf(SemesterlyPropTypes.section),
+    '*': PropTypes.arrayOf(SemesterlyPropTypes.denormalizedSection),
   }).isRequired,
   popularityPercent: PropTypes.number,
   isLoggedIn: PropTypes.bool,
@@ -428,7 +430,7 @@ CourseModalBody.propTypes = {
 
   // props provided by parent
   inRoster: PropTypes.bool.isRequired,
-  data: SemesterlyPropTypes.fullCourseDetails,
+  data: PropTypes.oneOfType([SemesterlyPropTypes.normalizedCourse, PropTypes.shape({})]),
   addOrRemoveCourse: PropTypes.func.isRequired,
   hideModal: PropTypes.func.isRequired,
   isFetching: PropTypes.bool.isRequired,

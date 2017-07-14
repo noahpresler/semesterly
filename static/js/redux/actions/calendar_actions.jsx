@@ -8,7 +8,10 @@ import {
     getCourseShareLink,
 } from '../constants/endpoints';
 import { FULL_WEEK_LIST } from '../constants/constants';
-import { getCurrentSemester, getActiveTT, getFromActiveTimetable } from '../reducers/root_reducer';
+import {
+  getCurrentSemester,
+  getActiveDenormTimetable,
+  getActiveTimetable } from '../reducers/root_reducer';
 import * as ActionTypes from '../constants/actionTypes';
 
 const DAY_MAP = {
@@ -55,12 +58,7 @@ export const fetchShareTimetableLink = () => (dispatch, getState) => {
     },
     method: 'POST',
     body: JSON.stringify({
-      timetable: getFromActiveTimetable(state, {
-        timetable: ['has_conflict'],
-        courses: ['id'],
-        sections: ['id'],
-        offerings: [],
-      }),
+      timetable: getActiveTimetable(state),
       semester,
     }),
     credentials: 'include',
@@ -84,7 +82,8 @@ export const addTTtoGCal = () => (dispatch, getState) => {
       },
       method: 'POST',
       body: JSON.stringify({
-        timetable: getActiveTT(state),
+        timetable: getActiveDenormTimetable(state),
+        semester: getCurrentSemester(state),
       }),
       credentials: 'include',
     })
@@ -100,7 +99,7 @@ export const createICalFromTimetable = () => (dispatch, getState) => {
   if (!state.saveCalendarModal.isDownloading && !state.saveCalendarModal.hasDownloaded) {
     dispatch({ type: ActionTypes.DOWNLOAD_CALENDAR });
     const cal = ical({ domain: 'https://semester.ly', name: 'My Semester Schedule' });
-    const tt = getActiveTT(state);
+    const tt = getActiveDenormTimetable(state);
 
     // TODO - MUST BE REFACTORED AFTER CODED IN TO CONFIG
     let semStart = new Date();
@@ -120,37 +119,36 @@ export const createICalFromTimetable = () => (dispatch, getState) => {
     semStart.setYear(new Date().getFullYear());
     semEnd.setYear(new Date().getFullYear());
 
-    for (let cIdx = 0; cIdx < tt.courses.length; cIdx++) {
-      for (let slotIdx = 0; slotIdx < tt.courses[cIdx].slots.length; slotIdx++) {
-        const course = tt.courses[cIdx];
-        const slot = course.slots[slotIdx];
-        const instructors = slot.instructors && slot.instructors.length > 0 ? `Taught by: ${slot.instructors}\n` : '';
-        const start = getNextDayOfWeek(semStart, slot.day);
-        const end = getNextDayOfWeek(semStart, slot.day);
-        const until = getNextDayOfWeek(semEnd, slot.day);
+    tt.slots.forEach((slot) => {
+      const { course, section, offerings } = slot;
+      const description = course.description || '';
+      offerings.forEach((offering) => {
+        const instructors = section.instructors && section.instructors.length > 0 ? `Taught by: ${section.instructors}\n` : '';
+        const start = getNextDayOfWeek(semStart, offering.day);
+        const [startHours, startMinutes] = offering.time_start.split(':');
+        start.setHours(parseInt(startHours, 10), parseInt(startMinutes, 10));
 
-        let times = slot.time_start.split(':');
-        start.setHours(parseInt(times[0], 10), parseInt(times[1], 10));
-        times = slot.time_end.split(':');
-        end.setHours(parseInt(times[0], 10), parseInt(times[1], 10));
-        const description = course.description ? course.description : '';
+        const end = getNextDayOfWeek(semStart, offering.day);
+        const [endHours, endMinutes] = offering.time_end.split(':');
+        end.setHours(parseInt(endHours, 10), parseInt(endMinutes, 10));
 
         const event = cal.createEvent({
           start,
           end,
-          summary: `${slot.name} ${slot.code}${slot.meeting_section}`,
-          description: `${slot.code + slot.meeting_section}\n${instructors}${description}`,
-          location: slot.location,
+          summary: `${course.name} ${course.code}${section.meeting_section}`,
+          description: `${course.code + section.meeting_section}\n${instructors}${description}`,
+          location: offering.location,
           url: getCourseShareLink(slot.code, getCurrentSemester(state)),
         });
 
         event.repeating({
           freq: 'WEEKLY',
-          byDay: DAY_MAP[slot.day],
-          until,
+          byDay: DAY_MAP[offering.day],
+          until: getNextDayOfWeek(semEnd, offering.day),
         });
-      }
-    }
+      });
+    });
+
     const file = new Blob([cal.toString()], { type: 'data:text/calendar;charset=utf8,' });
     FileSaver.saveAs(file, 'my_semester.ics');
     fetch(getLogiCalEndpoint(), {

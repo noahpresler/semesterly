@@ -13,6 +13,7 @@ from student.utils import get_student
 hashids = Hashids(salt="***REMOVED***")
 
 
+# TODO: use new request shape
 class ExamView(CsrfExemptMixin, APIView):
 
     def post(self, request):

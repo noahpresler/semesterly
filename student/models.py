@@ -1,8 +1,18 @@
 """ Models pertaining to Students. """
 
+import json
+
+from django.conf import settings
+from django.core.signing import TimestampSigner
 from django.db import models
 from django.contrib.auth.models import User
+from hashids import Hashids
+from oauth2client.client import GoogleCredentials
+
 from timetable import models as timetable_models
+
+# TODO: put hashids salt into config/settings file
+hashids = Hashids(salt="***REMOVED***")
 
 
 class Student(models.Model):
@@ -33,6 +43,37 @@ class Student(models.Model):
     time_created = models.DateTimeField(auto_now_add=True)
     school = models.CharField(max_length=100, null=True)
     time_accepted_tos = models.DateTimeField(null=True)
+
+    def get_token(self):
+        return TimestampSigner().sign(self.id).split(':', 1)[1]
+
+    def get_hash(self):
+        return hashids.encrypt(self.id)
+
+    def is_signed_up_through_fb(self):
+        return self.provider_exists('facebook')
+
+    def is_signed_up_through_google(self):
+        return self.provider_exists('google-oauth2')
+
+    def provider_exists(self, provider):
+        return self.user.social_auth.filter(provider=provider).exists()
+
+    def is_logged_in_google(self):
+        credentials = self.get_google_credentials()
+        return credentials is not None and (not credentials.invalid)
+
+    def get_google_credentials(self):
+        social_user = self.user.social_auth.filter(provider='google-oauth2').first()
+        if social_user is None:
+            return None
+        access_token = social_user.extra_data["access_token"]
+        refresh_token = social_user.extra_data.get("refresh_token")
+        expires_at = social_user.extra_data["expires"]
+        return GoogleCredentials(access_token, settings.SOCIAL_AUTH_GOOGLE_OAUTH2_KEY,
+                                 settings.SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET, refresh_token,
+                                 expires_at,
+                                 "https://accounts.google.com/o/oauth2/token", 'my-user-agent/1.0')
 
 
 class Reaction(models.Model):
