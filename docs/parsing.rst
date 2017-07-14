@@ -1,7 +1,7 @@
 .. _parsing:
 
 Loading the Database
-*********************
+********************
 
 To load the database you must ingest (create the course JSON), and digest (enter the JSON into the database). You can do so using the following commands:
 

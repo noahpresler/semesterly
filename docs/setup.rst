@@ -1,7 +1,7 @@
 .. _setup:
 
 Installation
-=============
+============
 
 This guide will bring you through the steps of creating a local Semester.ly server and development environment. It will walk through the setup of the core ecosystems we work within: Django/Python and React/Node/JS. It will additionally require the setup of a PostgreSQL database.
 
@@ -64,7 +64,7 @@ Before installing the python requirements, you must make sure to have PostgreSQL
     sudo apt-get install postgresql
 
 Install Python Requirements
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 .. note:: **ATTENTION MAC USERS:**, you must install the xcode command line tools via ``xcode-select --install`` before proceeding. You may also need to update openssl. If so, please `follow this guide <https://medium.com/@katopz/how-to-upgrade-openssl-8d005554401>`_. 
 
