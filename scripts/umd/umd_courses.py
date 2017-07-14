@@ -112,10 +112,12 @@ class UMDParser(CourseParser):
       course_div = soup.findAll(class_="course")
       for c in course_div:
         cid = self.find_content("course-id", c)
-        partial_url = self.find_url("toggle-sections-link", c)
-        if (partial_url == ''):
-          continue
-
+        section_url = self.find_url("toggle-sections-link", c)
+        if (section_url == ''):
+          # Fix for soup returning partially-complete course div
+          section_url = department_url + '/' + cid
+        else:
+          section_url = "http://ntst.umd.edu" + section_url
         name = self.find_content("course-title", c)
         credits = int(self.find_content("course-min-credits", c))
         description = self.get_desc_from_course(c)
@@ -141,12 +143,15 @@ class UMDParser(CourseParser):
 
         course_model = self.ingestor.ingest_course()
 
-        section_url = "http://ntst.umd.edu" + partial_url
+        
         sections = self.get_sections(section_url, course_model)
 
   def get_sections(self, section_url, course_model):
     soup = self.requester.get(url=section_url)
     container = soup.find(class_="sections-container")
+    if not container:
+      print(section_url + " has no sections-container")
+      return
     section_divs = container.findAll(class_="section")
     for div in section_divs:
       sid = self.find_content("section-id", div)
