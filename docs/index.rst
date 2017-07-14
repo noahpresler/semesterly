@@ -29,6 +29,7 @@ Students know best
    self
    setup
    environment
+   parsing
    howitworks   
    learning
    contributing
