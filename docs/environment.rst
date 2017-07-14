@@ -1,12 +1,12 @@
 .. _environment:
 
 Setup Your Dev Environment
-===========================
+==========================
 
 Now that all of the requirements are installed, its time to get your environment up and running.
 
 Setup Your Database
-~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~
 
 Semester.ly stores objects like courses, timetables, and students in a Postgres database. Let's get one setup for you.
 

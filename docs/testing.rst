@@ -12,7 +12,7 @@ Our frontend tests can be run through node via the following command::
     npm run test
 
 Backend
-~~~~~~~~
+~~~~~~~
 
 Our backend tests can be run through Django's test runners via::
 
@@ -25,7 +25,7 @@ Frontend
 ~~~~~~~~
 
 Unit Tests
-##############
+##########
 
 Snapshot Tests
 ##############

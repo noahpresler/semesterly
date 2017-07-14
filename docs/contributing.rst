@@ -11,14 +11,14 @@ Contributing to Semester.ly follows the following simple workflow:
    
 
 Fork the Repository
-~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~
 Follow the instructions in the installation portion of the documentation, see :ref:`setup`
 
 Make Changes (fix a bug, create a feature)
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Add the Upstream Repo
-######################
+#####################
 
     You're going to want to add the original project repo as an upstream repo in your forked project:
 
@@ -40,7 +40,7 @@ Syncing With Upstream
         git push origin master
 
 Create a Working Branch
-########################
+#######################
     Now you'll want to checkout a branch off master to work on. This is the branch you will merge into upstream when you are done. Just do: 
 
     .. code-block:: bash
@@ -48,7 +48,7 @@ Create a Working Branch
         git checkout -b mybranchname
 
 Make Some Changes, Add and Commit
-##################################
+#################################
     After you've made edits, git add your files, then commit. One way to do this: 
 
     .. code-block:: bash
@@ -65,7 +65,7 @@ Make Some Changes, Add and Commit
             git push origin mybranchname
 
 Open a Pull Request (and see your code go live!)
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 So you've made your changes, and you've pushed them to your branch. To open a PR, simply head over to your fork at: https://github.com/YOURGITHUBUSERNAME/semesterly. Click on "Pull Request", choose the upstream repo "master" as the destination, and your forked repo's branch (the one you've been working on) as the soruce!
 
