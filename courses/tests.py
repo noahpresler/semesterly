@@ -6,7 +6,7 @@ from rest_framework.test import APITestCase
 
 from timetable.models import Semester, Course, Section, Offering, Updates
 from helpers.test.test_cases import UrlTestCase
-from serializers import FlatCourseSerializer
+from serializers import CourseSerializer
 
 
 class Serializers(TestCase):
@@ -31,7 +31,7 @@ class Serializers(TestCase):
             time_start='8:00',
             time_end='10:00')
 
-        serialized = FlatCourseSerializer(course, context={
+        serialized = CourseSerializer(course, context={
             'semester': sem,
             'school': self.school,
             'sections': [section],

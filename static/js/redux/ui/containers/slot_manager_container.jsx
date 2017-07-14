@@ -1,5 +1,8 @@
 import { connect } from 'react-redux';
-import { getActiveTT } from '../../reducers/root_reducer';
+import {
+  getActiveDenormTimetable,
+  getHoveredSlots,
+  getDenormCourseById } from '../../reducers/root_reducer';
 import { fetchCourseInfo } from '../../actions/modal_actions';
 import {
     addCustomSlot,
@@ -13,7 +16,7 @@ import SlotManager from '../slot_manager';
 
 
 const mapStateToProps = (state, ownProps) => ({
-  timetable: getActiveTT(state) || [],
+  slots: getActiveDenormTimetable(state).slots.concat(getHoveredSlots(state)),
   isLocked: (courseId, section) => {
       // check the courseSections state variable, which tells us
       // precisely which courses have which sections locked, if any
@@ -26,13 +29,14 @@ const mapStateToProps = (state, ownProps) => ({
   primaryDisplayAttribute: getSchoolSpecificInfo(state.school.school).primaryDisplay,
   courseToColourIndex: state.ui.courseToColourIndex,
   custom: state.customSlots,
-  isCourseOptional: cid => state.optionalCourses.courses.findIndex(c => c.id === cid) > -1,
-  getOptionalCourseById: cid => state.optionalCourses.courses.find(c => c.id === cid),
-  classmates: (id, sec) => {
-    const cm = state.classmates.courseToClassmates ? state.classmates.courseToClassmates
-        .find(course => course.course_id === id) : [];
-    return cm ? cm.classmates.filter(friend => friend.sections &&
-        friend.sections.find(s => s === sec) !== undefined) : [];
+  isCourseOptional: cid => state.optionalCourses.courses.some(c => c === cid),
+  getOptionalCourseById: cid => getDenormCourseById(state, cid),
+  getClassmatesInSection: (courseId, sectionCode) => {
+    if (!(courseId in state.classmates.courseToClassmates)) {
+      return [];
+    }
+    const classmatesInCourse = state.classmates.courseToClassmates[courseId];
+    return classmatesInCourse.current.filter(cm => cm.sections.find(s => s === sectionCode));
   },
   days: ownProps.days,
   uses12HrTime: state.ui.uses12HrTime,

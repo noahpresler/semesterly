@@ -60,22 +60,22 @@ class PeerModal extends React.Component {
     const modalStyle = {
       width: '100%',
     };
-    const sideSlots = this.props.liveTimetableCourses.map((c) => {
-      const professors = [...new Set(c.slots.map(s => s.instructors))];
-      const colourIndex = this.props.courseToColourIndex[c.id] || 0;
+    const sideSlots = this.props.courses.map((course) => {
+      const professors = [...new Set(course.sections.map(s => s.instructors))];
+      const colourIndex = this.props.courseToColourIndex[course.id] || 0;
       return (
         <div
           className="pm-side-bar-slot"
           style={{ backgroundColor: COLOUR_DATA[colourIndex].background }}
-          key={c.id}
+          key={course.id}
         >
           <div
             className="slot-bar"
             style={{ backgroundColor: COLOUR_DATA[colourIndex].border }}
           />
           <div className="master-slot-content">
-            <h3>{ c.code }</h3>
-            <h3>{ c.name }</h3>
+            <h3>{ course.code }</h3>
+            <h3>{ course.name }</h3>
             <h3>{professors.length === 0 ? 'No Professor Listed' : professors}</h3>
           </div>
         </div>);
@@ -239,7 +239,7 @@ class PeerModal extends React.Component {
 PeerModal.propTypes = {
   userInfo: SemesterlyPropTypes.userInfo.isRequired,
   peers: PropTypes.arrayOf(SemesterlyPropTypes.peer).isRequired,
-  liveTimetableCourses: PropTypes.arrayOf(SemesterlyPropTypes.course).isRequired,
+  courses: PropTypes.arrayOf(SemesterlyPropTypes.denormalizedCourse).isRequired,
   courseToColourIndex: PropTypes.shape({
     '*': PropTypes.number,
   }).isRequired,
