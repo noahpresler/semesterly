@@ -1,8 +1,8 @@
 import { connect } from 'react-redux';
 import {
-  getActiveTT,
   getCurrentSemester,
   getDenormAdvancedSearchResults,
+  getHoveredSlots,
 } from '../../../reducers/root_reducer';
 import ExplorationModal from '../../modals/exploration_modal';
 import {
@@ -30,7 +30,6 @@ const mapStateToProps = (state) => {
   const courseSections = state.courseSections.objects;
   const course = advancedSearchResults[active];
   const inRoster = course && (courseSections[course.id] !== undefined);
-  const activeTimetable = getActiveTT(state);
   const { areas, departments, levels } = state.school;
   const semester = getCurrentSemester(state);
   return {
@@ -45,7 +44,7 @@ const mapStateToProps = (state) => {
     page,
     semesterName: `${semester.name} ${semester.year}`,
     schoolSpecificInfo: getSchoolSpecificInfo(state.school.school),
-    hasHoveredResult: activeTimetable.courses.some(c => c.fake),
+    hasHoveredResult: getHoveredSlots(state).length > 0,
     getShareLink: courseCode => getCourseShareLinkFromModal(courseCode, getCurrentSemester(state)),
   };
 };

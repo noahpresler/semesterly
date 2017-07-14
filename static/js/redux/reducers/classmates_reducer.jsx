@@ -1,6 +1,6 @@
 import * as ActionTypes from '../constants/actionTypes';
 
-const classmates = (state = { courseToClassmates: [], isFetching: false }, action) => {
+const classmates = (state = { courseToClassmates: {}, isFetching: false }, action) => {
   switch (action.type) {
     case ActionTypes.CLASSMATES_RECEIVED:
       return Object.assign({}, state, {

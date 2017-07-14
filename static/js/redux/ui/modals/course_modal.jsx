@@ -2,10 +2,9 @@ import PropTypes from 'prop-types';
 import React from 'react';
 import classNames from 'classnames';
 import Modal from 'boron/WaveModal';
-import isEmpty from 'lodash/isEmpty';
 import CourseModalBodyContainer from '../containers/modals/course_modal_body_container';
 import { ShareLink } from '../master_slot';
-import { fullCourseDetails } from '../../constants/semesterlyPropTypes';
+import { normalizedCourse } from '../../constants/semesterlyPropTypes';
 
 class CourseModal extends React.Component {
   constructor(props) {
@@ -22,7 +21,10 @@ class CourseModal extends React.Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    if (!isEmpty(nextProps.data)) {
+    const wasFetching = this.props.isFetching || this.props.isFetchingClasmates;
+    const isFetching = nextProps.isFetching || nextProps.isFetchingClasmates;
+    // wait for both classmates and course info to be finished fetching
+    if (wasFetching && !isFetching) {
       const { data } = nextProps;
       if (data.code) {
         history.replaceState({}, 'Semester.ly', this.props.getShareLinkFromModal(data.code));
@@ -147,7 +149,8 @@ CourseModal.defaultProps = {
 };
 
 CourseModal.propTypes = {
-  data: fullCourseDetails,
+  isFetchingClasmates: PropTypes.bool.isRequired,
+  data: PropTypes.oneOfType([normalizedCourse, PropTypes.shape({})]),
   inRoster: PropTypes.bool.isRequired,
   hasHoveredResult: PropTypes.bool.isRequired,
   addOrRemoveOptionalCourse: PropTypes.func.isRequired,
