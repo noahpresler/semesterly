@@ -1,7 +1,7 @@
 .. _learning:
 
 Learning The Stack
-===================
+==================
 
 .. note:: Learning a new thing can be scary. Especially when all you have are some docs and a massive code base to learn from. That's why we are here to help you learn, build, and contribute. Ask us questions! contact@semester.ly
 
@@ -27,7 +27,7 @@ Learning the Backend
 `Writing your first Django app <https://docs.djangoproject.com/en/1.11/intro/tutorial01/>`_ is the official Django tutorial. It is top notch! The official documentation can be found at the same url and provides high quality information about how to build with this modern web framework.
 
 Learning React/Redux
-#####################
+####################
 
 React is a Javascript library created by Facebook for "building user interfaces". It allows developers to make encapsulated components that can be written once and used anywhere. 
 
