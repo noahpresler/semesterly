@@ -14,7 +14,7 @@ Course registration should be easy
     Picking the right classes should be quick and painless. We believe high quality, centralized, and shareable information makes for better decision making. By doing the legwork for you, Semester.ly gives you more time to study for your courses, and decreases the time spent studying which classes to take.
 
 Education should be collaborative
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     Studies show the positive impact that friendship has in higher education classrooms. Having courses with friends and a tigther knit university community increases student success and retention. That's why Semester.ly helps students find courses with friends and helps new students make new friends in their classes.
 
 Students know best
