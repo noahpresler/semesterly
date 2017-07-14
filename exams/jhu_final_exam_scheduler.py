@@ -3,7 +3,10 @@ import json
 
 class JHUFinalExamScheduler(FinalExamScheduler):
 	"""
-	Database Object that has a list of JHU's Rules
+	Database Object that has a list of JHU's rules for the current semester. 
+	Should be updated every semester. Initialize each Rule with select fields
+	depening on what determines whether the Rule is valid for. See Final Exam Scheduler
+	for more information
 	"""
 	def __init__(self):
 
