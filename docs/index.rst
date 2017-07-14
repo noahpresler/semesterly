@@ -32,6 +32,7 @@ Students know best
    howitworks   
    learning
    contributing
+   addaschool
    documentation
    flows
    pipeline
