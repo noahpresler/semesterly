@@ -3,7 +3,7 @@ import Cookie from 'js-cookie';
 import groupBy from 'lodash/groupBy';
 import flatMap from 'lodash/flatMap';
 import * as ActionTypes from '../constants/actionTypes';
-import { getActiveTimetable } from '../reducers/root_reducer';
+import { getActiveDenormTimetable } from '../reducers/root_reducer';
 import { getRequestShareExamLinkEndpoint, getFinalExamSchedulerEndpoint } from '../constants/endpoints';
 
 // this is a function introduced in #934 to a revert a timetable into the timetable shape from
@@ -11,7 +11,7 @@ import { getRequestShareExamLinkEndpoint, getFinalExamSchedulerEndpoint } from '
 // with its section data. Since exams are no longer actively supported/updated after #934,
 // this function exists as the minimum change necessary to keep exam functionality alive
 export const revert = function revertTimetableFormat(denormTimetable) {
-  const groupedByCourse = groupBy(denormTimetable.slots, (slot) => slot.course.id);
+  const groupedByCourse = groupBy(denormTimetable.slots, slot => slot.course.id);
   const courses = Object.keys(groupedByCourse).map((courseId) => {
     const slots = groupedByCourse[courseId];
     return {
@@ -19,8 +19,8 @@ export const revert = function revertTimetableFormat(denormTimetable) {
       slots: flatMap(slots, slot => slot.offerings.map(offering => ({
         ...slot.section,
         ...offering,
-      })))
-    }
+      }))),
+    };
   });
 
   return { courses };
@@ -28,7 +28,6 @@ export const revert = function revertTimetableFormat(denormTimetable) {
 
 export const fetchFinalExamSchedule = () => (dispatch, getState) => {
   const state = getState();
-  const timetable = getActiveTimetable(state);
   dispatch({ type: ActionTypes.FETCH_FINAL_EXAMS });
   fetch(getFinalExamSchedulerEndpoint(), {
     headers: {
@@ -38,7 +37,7 @@ export const fetchFinalExamSchedule = () => (dispatch, getState) => {
     },
     credentials: 'include',
     method: 'POST',
-    body: JSON.stringify(timetable),
+    body: JSON.stringify(revert(getActiveDenormTimetable(state))),
   })
     .then(response => response.json())
     .then((json) => {
@@ -48,7 +47,6 @@ export const fetchFinalExamSchedule = () => (dispatch, getState) => {
 
 export const getFinalExamShareLink = () => (dispatch, getState) => {
   const state = getState();
-  const timetable = getActiveTimetable(state);
   fetch(getRequestShareExamLinkEndpoint(), {
     headers: {
       'X-CSRFToken': Cookie.get('csrftoken'),
@@ -57,7 +55,7 @@ export const getFinalExamShareLink = () => (dispatch, getState) => {
     },
     credentials: 'include',
     method: 'POST',
-    body: JSON.stringify(timetable),
+    body: JSON.stringify(revert(getActiveDenormTimetable(state))),
   })
   .then(response => response.json())
   .then((json) => {
