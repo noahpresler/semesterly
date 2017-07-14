@@ -1,5 +1,5 @@
 import merge from 'lodash/merge';
-import pick from 'lodash/pick';
+import uniq from 'lodash/uniq';
 
 // TODO: garbage collect (e.g. clear when changing semesters)
 const entities = (state = {}, action) => {
@@ -9,10 +9,14 @@ const entities = (state = {}, action) => {
   return state;
 };
 
+// OFFERING SELECTORS
+const getOfferingById = (state, id) => state.offering_set[id];
+
+// SECTION SELECTORS
 const getSectionById = (state, id) => state.sections[id];
 
 const getSlotsForSection = (state, section) =>
-  section.offering_set.map(slotId => state.offering_set[slotId]);
+  section.offering_set.map(offering => getOfferingById(state, offering));
 
 // TODO use denormalize from normalizr
 const getDenormSectionById = (state, id) => {
@@ -21,6 +25,7 @@ const getDenormSectionById = (state, id) => {
   return { ...section, offering_set: offerings };
 };
 
+// COURSE SELECTORS
 const getCourseById = (state, id) => state.courses[id];
 
 const getDenormSectionsForCourse = (state, course) =>
@@ -50,37 +55,44 @@ export const getSectionTypeToSections = (denormCourse) => {
   return sectionTypeToSections;
 };
 
-export const getTimetable = (state, id) => {
-  const timetable = state.timetables[id];
-  return {
-    ...timetable,
-    courses: timetable.courses.map(courseCode => getCourseById(state, courseCode)),
-    sections: timetable.sections.map(sectionId => getDenormSectionById(state, sectionId)),
-  };
+// TIMETABLE SELECTORS
+//    SLOT SELECTORS
+export const getDenormSlot = (state, slot) => ({
+  ...slot,
+  course: getCourseById(state, slot.course),
+  section: getSectionById(state, slot.section),
+  offerings: slot.offerings.map(offering => getOfferingById(state, offering)),
+});
+
+export const getCourseIdsFromSlots = slots => uniq(slots.map(slot => slot.course));
+
+export const getCoursesFromSlots = (state, slots) =>
+  getCourseIdsFromSlots(slots).map(cid => getDenormCourseById(state, cid));
+
+export const getDenormTimetable = (state, timetable) => ({
+  ...timetable,
+  slots: timetable.slots.map(slot => getDenormSlot(state, slot)),
+});
+
+export const getTimetableCourses = (state, timetable) => {
+  const courseIds = uniq(timetable.slots.map(slot => slot.course));
+  return courseIds.map(courseId => getCourseById(state, courseId));
 };
 
-export const getTimetableCourses = (state, id) => {
-  const timetable = state.timetables[id];
-  return timetable.courses.map(courseCode => getCourseById(state, courseCode));
+export const getTimetableDenormCourses = (state, timetable) => {
+  const courseIds = uniq(timetable.slots.map(slot => slot.course));
+  return courseIds.map(courseId => getDenormCourseById(state, courseId));
 };
 
-export const getFromTimetable = (timetable, fields) => {
-  if (!('sections' in timetable) || !('offering_set' in timetable.sections[0])) {
-    throw new Error('input timetable to getFromTimetable must be denormalized');
-  }
-
-  return {
-    ...pick(timetable, fields.timetables),
-    courses: timetable.courses.map(course => ({
-      ...pick(course, fields.courses),
-    })),
-    sections: timetable.sections.map(section => ({
-      ...pick(section, fields.sections),
-      offerings: section.offering_set.map(offering => ({
-        ...pick(offering, fields.offerings),
-      })),
-    })),
-  };
+export const getMaxEndHour = function getLatestSlotEndHourFromTimetable(timetable) {
+  let maxEndHour = 17;
+  timetable.slots.forEach((slot) => {
+    slot.offerings.forEach((offering) => {
+      const endHour = parseInt(offering.time_end.split(':')[0], 10) + 1;
+      maxEndHour = Math.max(maxEndHour, endHour);
+    });
+  });
+  return maxEndHour;
 };
 
 export default entities;

@@ -87,12 +87,9 @@ class UserTimetableViewTest(APITestCase):
         course = Course.objects.create(
             id=1, school='uoft', code='SEM101', name='Intro')
         section = Section.objects.create(
-            course=course, semester=self.sem, meeting_section='L1')
+            id=1, course=course, semester=self.sem, meeting_section='L1')
         Offering.objects.create(
-            section=section,
-            day='M',
-            time_start='8:00',
-            time_end='10:00')
+            id=1, section=section, day='M', time_start='8:00', time_end='10:00')
         tt = PersonalTimetable.objects.create(
             name='tt', school='uoft', semester=self.sem, student=self.student)
         tt.courses.add(course)
@@ -110,7 +107,8 @@ class UserTimetableViewTest(APITestCase):
         view = resolve('/user/timetables/Winter/1995/').func
         response = view(request, 'Winter', '1995')
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual(len(response.data), 1)
+        self.assertEqual(len(response.data['timetables']), 1)
+        self.assertEqual(len(response.data['courses']), 1)
 
     def test_create_timetable(self):
         data = {
@@ -118,9 +116,10 @@ class UserTimetableViewTest(APITestCase):
                 'name': 'Winter',
                 'year': '1995'
             },
-            'courses': [{
-                'id': 1,
-                'enrolled_sections': ['L1']
+            'slots': [{
+                'course': 1,
+                'section': 1,
+                'offerings': [1],
             }],
             'events': [],
             'name': 'new tt',
@@ -141,9 +140,10 @@ class UserTimetableViewTest(APITestCase):
                 'name': 'Winter',
                 'year': '1995'
             },
-            'courses': [{
-                'id': 1,
-                'enrolled_sections': ['L1']
+            'slots': [{
+                'course': 1,
+                'section': 1,
+                'offerings': [1],
             }],
             'events': [],
             'name': 'tt',
@@ -182,9 +182,10 @@ class UserTimetableViewTest(APITestCase):
                 'name': 'Winter',
                 'year': '1995'
             },
-            'courses': [{
-                'id': 1,
-                'enrolled_sections': ['L1']
+            'slots': [{
+                'course': 1,
+                'section': 1,
+                'offerings': [1],
             }],
             'events': [],
             'name': 'renamed',
@@ -330,11 +331,11 @@ class ClassmateViewTest(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
         self.assertEqual(len(response.data), 1)
-        classmates = response.data[0]['classmates']
+        classmates = response.data[1]['current'] # key is course id
         self.assertEqual(len(classmates), 1)
         self.assertEqual(classmates[0]['first_name'], self.user1.first_name)
         self.assertEqual(classmates[0]['last_name'], self.user1.last_name)
-        self.assertEqual(len(response.data[0]['past_classmates']), 0)
+        self.assertEqual(len(response.data[1]['past']), 0)
 
     def test_find_friends(self):
         request = self.factory.get('/user/classmates/Fall/2000/')

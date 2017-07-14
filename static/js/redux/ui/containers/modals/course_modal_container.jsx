@@ -1,15 +1,14 @@
 import { connect } from 'react-redux';
 import CourseModal from '../../modals/course_modal';
 import {
-  getActiveTT,
   getCurrentSemester,
   getDenormCourseById,
   getCourseInfoId,
+  getHoveredSlots,
 } from '../../../reducers/root_reducer';
 import {
     addOrRemoveCourse,
     addOrRemoveOptionalCourse,
-    hoverSection,
     unHoverSection,
 } from '../../../actions/timetable_actions';
 import {
@@ -24,15 +23,16 @@ import { getCourseShareLink, getCourseShareLinkFromModal } from '../../../consta
 
 const mapStateToProps = (state) => {
   const courseSections = state.courseSections.objects;
-  const activeTimetable = getActiveTT(state);
   const courseInfoId = getCourseInfoId(state);
   const denormCourseInfo = !courseInfoId ? {} : getDenormCourseById(state, courseInfoId);
   return {
+    isFetchingClasmates: state.courseInfo.isFetchingClassmates,
+    classmates: state.courseInfo.classmates,
     data: denormCourseInfo,
     id: state.courseInfo.id,
     isFetching: state.courseInfo.isFetching,
-    hasHoveredResult: activeTimetable.courses.some(course => course.fake),
-    inRoster: courseSections[denormCourseInfo.id] !== undefined,
+    hasHoveredResult: getHoveredSlots(state).length > 0,
+    inRoster: courseSections[state.courseInfo.id] !== undefined,
     getShareLink: courseCode => getCourseShareLink(courseCode, getCurrentSemester(state)),
     getShareLinkFromModal: courseCode =>
       getCourseShareLinkFromModal(courseCode, getCurrentSemester(state)),
@@ -45,7 +45,6 @@ const CourseModalContainer = connect(
     hideModal: () => setCourseId(null),
     openSignUpModal,
     fetchCourseInfo,
-    hoverSection,
     unHoverSection,
     addOrRemoveOptionalCourse,
     addOrRemoveCourse,

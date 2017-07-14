@@ -1,4 +1,4 @@
-# @what     Parsing library HTTP Requester
+# what     Parsing library HTTP Requester
 # @org      Semeseter.ly
 # @author   Michael N. Miller
 # @date     3/5/17
@@ -88,7 +88,7 @@ class Requester:
                 params = params if params else '',
                 cookies = self.cookies,
                 headers = self.headers,
-                verify = True,
+                verify = False,
             )
 
         return self.http_request(request, 'GET', **kwargs)
