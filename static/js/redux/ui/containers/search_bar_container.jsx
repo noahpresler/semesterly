@@ -4,7 +4,7 @@ import {
     hoverSearchResult,
     maybeSetSemester,
 } from '../../actions/search_actions';
-import { getActiveTT, getCurrentSemester, getSearchResults } from '../../reducers/root_reducer';
+import { getCurrentSemester, getSearchResults, getHoveredSlots } from '../../reducers/root_reducer';
 import { addOrRemoveCourse, addOrRemoveOptionalCourse } from '../../actions/timetable_actions';
 import SearchBar from '../search_bar';
 import { fetchCourseInfo, showExplorationModal } from '../../actions/modal_actions';
@@ -23,8 +23,8 @@ const mapStateToProps = (state) => {
     searchResults: getSearchResults(state),
     isFetching: state.searchResults.isFetching,
     isCourseInRoster: courseId => courseSections[courseId] !== undefined,
-    isCourseOptional: courseId => state.optionalCourses.courses.some(c => c.id === courseId),
-    hasHoveredResult: getActiveTT(state).courses.some(course => course.fake),
+    isCourseOptional: courseId => state.optionalCourses.courses.some(c => c === courseId),
+    hasHoveredResult: getHoveredSlots(state).length > 0,
     isHovered: position => state.ui.searchHover === position,
     hoveredPosition: state.ui.searchHover,
     explorationModalIsVisible: isVisible,

@@ -1,259 +1,149 @@
-from django.contrib.staticfiles.testing import StaticLiveServerTestCase
-from selenium import webdriver
-from selenium.webdriver.support.wait import WebDriverWait
-from selenium.webdriver.support import expected_conditions as EC
-from selenium.webdriver.common.by import By
-from selenium.common.exceptions import TimeoutException
-from django.test.utils import override_settings
-from timetable.models import Semester, Course, Section, Offering
-import socket, itertools, re
+from semesterly.test_utils import SeleniumTestCase
+from timetable.models import Semester, Course
 
-class url_matches_regex(object):
-    def __init__(self, pattern):
-        self.pattern = re.compile(pattern)
+class EndToEndTest(SeleniumTestCase):
 
-    def __call__(self, driver):
-        res = self.pattern.search(driver.current_url)
-        if res:
-            return res
-        else:
-            return False
-
-class SeleniumTest(StaticLiveServerTestCase):
-
-    fixtures = ['jhu_fall_sample.json']
-    serialized_rollback = True
-
-    @classmethod
-    def setUpClass(self):
-        super(SeleniumTest, self).setUpClass()
-        self.TIMEOUT = 10
-        self.driver = None
-        socket.setdefaulttimeout(3 * self.TIMEOUT)
-        self.driver = webdriver.Chrome()
-
-    @classmethod
-    def tearDownClass(self):
-        self.driver.quit()
-        super(SeleniumTest, self).tearDownClass()
-
-    def setUp(self):
-        self.driver.get(self.get_test_url('jhu'))
-        WebDriverWait(self.driver, self.TIMEOUT).until(lambda driver: driver.find_element_by_tag_name('body'))
-
-    def tearDown(self):
-        self.driver.execute_script('window.localStorage.clear();')
-        self.driver.delete_all_cookies()
-
-    def get_test_url(self, school, path = '/'):
-        url = '%s%s' % (self.live_server_url, '/')
-        return url.replace('http://', 'http://%s.' % school)
-
-    def locate_and_get(self, locator, get_all=False, root=None, clickable=False):
-        if get_all and clickable:
-            raise RuntimeError("Cannot use both get_all and clickable")
-        elif get_all:
-           ec = EC.presence_of_all_elements_located(locator)
-        elif clickable:
-            ec = EC.element_to_be_clickable(locator)
-        else:
-            ec = EC.visibility_of_element_located(locator)
-        try:
-            return WebDriverWait(root if root else self.driver, self.TIMEOUT).until(ec)
-        except TimeoutException:
-            raise RuntimeError('Failed to locate visible element "%s" by %s' % locator[::-1])
-
-    def assert_invisibility(self, locator, root=None):
-        try:
-            WebDriverWait(root if root else self.driver, self.TIMEOUT).until(
-                EC.invisibility_of_element_located(locator)
-            )
-        except TimeoutException:
-            raise RuntimeError('Failed to assert invisibility of element "%s" by %s' % locator[::-1])
-
-    def clear_tutorial(self):
-        for _ in range(4):
-            arrow = self.locate_and_get((By.XPATH, '//div[@class="tut-modal__nav"]/i[@class="action fa fa-chevron-right"] | //div[@class="tut-modal__nav"]/h4'), clickable = True)
-            arrow.click()
-
-    def enter_search_query(self, query):
-        search_box = self.locate_and_get((By.XPATH, '//div[@class="search-bar__input-wrapper"]/input'))
-        search_box.clear()
-        search_box.send_keys(query)
-
-    def assert_loader_completes(self):
-        self.assert_invisibility((By.CLASS_NAME, 'la-ball-clip-rotate-multiple'))
-
-    def assert_slot_presence(self, n_slots, n_master_slots):
-        slots = self.locate_and_get((By.CLASS_NAME, 'slot'), get_all=True)
-        self.assertEqual(len(slots), n_slots)
-        master_slots = self.locate_and_get((By.CLASS_NAME, 'master-slot'), get_all=True)
-        self.assertEqual(len(master_slots), n_master_slots)
-
-    def search_course(self, query, n_results):
-        self.enter_search_query(query)
-        search_results = self.locate_and_get((By.CLASS_NAME, 'search-results'))
-        self.assertEqual(len(search_results.find_elements_by_class_name('search-course')), n_results)
-
-    def add_course(self, course_idx, n_slots, n_master_slots):
-        search_results = self.locate_and_get((By.CLASS_NAME, 'search-results'))
-        chosen_course = search_results.find_elements_by_class_name('search-course')[course_idx]
-        add_button = self.locate_and_get((By.CLASS_NAME, 'search-course-add'), root=chosen_course, clickable=True)
-        add_button.click()
-        self.assert_loader_completes()
-        self.assert_slot_presence(n_slots, n_master_slots)
-
-    def assert_n_elements_found(self, locator, n, root=None):
-        if n == 0:
-            self.assert_invisibility(locator)
-        else:
-            n_found = len(self.locate_and_get(locator, root=root, get_all=True))
-            self.assertEqual(n_found, n)
-
-    def remove_course(self, course_idx, from_slot=False, n_slots_expected=None):
-        n_master_slots_before = len(self.locate_and_get((By.CLASS_NAME, 'master-slot'), get_all=True))
-        if from_slot:
-            if n_master_slots_before > 0:
-                raise RuntimeError('Cannot remove via slot button unless n_courses = 1')
-            slot = self.locate_and_get((By.CLASS_NAME, 'slot'), get_all=True)[0]
-            del_button = self.locate_and_get((By.CLASS_NAME,'fa-times'), root=slot, clickable=True)
-        else:
-            master_slot = self.locate_and_get((By.CLASS_NAME, 'master-slot'), get_all=True)[course_idx]
-            del_button = self.locate_and_get((By.CLASS_NAME,'fa-times'), root=master_slot, clickable=True)
-        del_button.click()
-        self.assert_loader_completes()
-        self.assert_n_elements_found((By.CLASS_NAME, 'master-slot'), n_master_slots_before - 1)
-        if n_slots_expected:
-            self.assert_n_elements_found((By.CLASS_NAME, 'slot'), n_slots_expected)
-
-    def open_course_modal_from_search(self, course_idx):
-        search_results = self.locate_and_get((By.CLASS_NAME, 'search-results'))
-        chosen_course = search_results.find_elements_by_class_name('search-course')[course_idx]
-        chosen_course.click()
-
-    def validate_course_modal(self):
-        url_match = WebDriverWait(self.driver, self.TIMEOUT).until(url_matches_regex(r'\/course\/(.*)\/(.*)\/(20..)'))
-        code = url_match.group(1)
-        semester_name = url_match.group(2)
-        semester_year = url_match.group(3)
-        course = Course.objects.get(code=code)
-        modal = self.locate_and_get((By.CLASS_NAME, 'course-modal'))
-        modal_body = self.locate_and_get((By.CLASS_NAME, 'modal-body'), root=modal)
-        modal_header = self.locate_and_get((By.CLASS_NAME, 'modal-header'), root=modal)
-        credit_count = self.locate_and_get((By.CLASS_NAME, 'credits'), root=modal_body)
-        self.assertTrue(str(int(course.num_credits)) in credit_count.text or str(course.num_credits) in credit_count.text)
-        self.assertTrue(course.name in modal_header.text)
-        self.assertTrue(code in modal_header.text)
-        self.assertTrue(course.description in modal_body.text)
-        self.assertTrue(course.prerequisites in modal_body.text)
-        self.assertTrue(course.areas in modal_body.text)
-        n_sections = Section.objects.filter(course=course,
-            semester__name=semester_name,
-            semester__year=semester_year
-        ).count()
-        n_sections_found = len(self.locate_and_get(
-            (By.XPATH, 
-            "//div[@class='modal-section' or @class='modal-section on-active-timetable' or @class='modal-section locked on-active-timetable']"
-        ), get_all=True))
-        self.assertEqual(n_sections, n_sections_found)
-
-    def open_course_modal_from_slot(self, course_idx):
-        slot = self.locate_and_get((By.CLASS_NAME, 'slot'), clickable=True)
-        slot.click()
-
-    def close_course_modal(self):
-        modal = self.locate_and_get((By.CLASS_NAME, 'course-modal'))
-        modal_header = self.locate_and_get((By.CLASS_NAME, 'modal-header'), root=modal)
-        self.locate_and_get((By.CLASS_NAME, 'fa-times'), root=modal_header).click()
-        self.assert_invisibility((By.CLASS_NAME, 'course-modal'))
-
-    def follow_and_validate_url(self, url, validate):
-        self.driver.execute_script("window.open()")
-        self.driver.switch_to_window(self.driver.window_handles[1])
-        self.driver.get(url)
-        validate()
-        self.driver.close()
-        self.driver.switch_to_window(self.driver.window_handles[0])
-
-    def follow_share_link_from_modal(self):
-        modal = self.locate_and_get((By.CLASS_NAME, 'course-modal'))
-        modal_header = self.locate_and_get((By.CLASS_NAME, 'modal-header'), root=modal)
-        self.locate_and_get((By.CLASS_NAME, 'fa-share-alt'), root=modal_header).click()
-        url = self.locate_and_get((By.CLASS_NAME, 'share-course-link'), root=modal_header).get_attribute('value')
-        self.follow_and_validate_url(url, self.validate_course_modal)
-
-    def follow_share_link_from_slot(self):
-        master_slot = self.locate_and_get((By.CLASS_NAME, 'master-slot'), clickable=True)
-        share = self.locate_and_get((By.CLASS_NAME,'fa-share-alt'), root=master_slot, clickable=True)
-        share.click()
-        url = self.locate_and_get((By.CLASS_NAME, 'share-course-link'), root=master_slot).get_attribute('value')
-        self.follow_and_validate_url(url, self.validate_course_modal)
-
-    def remove_course_from_course_modal(self, n_slots_expected=None):
-        n_master_slots_before = len(self.locate_and_get((By.CLASS_NAME, 'master-slot'), get_all=True))
-        modal = self.locate_and_get((By.CLASS_NAME, 'course-modal'))
-        modal_header = self.locate_and_get((By.CLASS_NAME, 'modal-header'), root=modal)
-        remove = self.locate_and_get((By.CLASS_NAME, 'fa-check'), root=modal_header, clickable=True)
-        remove.click()
-        self.assert_loader_completes()
-        self.assert_invisibility((By.CLASS_NAME, 'course-modal'))
-        self.assert_n_elements_found((By.CLASS_NAME, 'master-slot'), n_master_slots_before - 1)
-        if n_slots_expected:
-            self.assert_n_elements_found((By.CLASS_NAME, 'slot'), n_slots_expected)
-
-    def add_course_from_course_modal(self, n_slots, n_master_slots):
-        modal = self.locate_and_get((By.CLASS_NAME, 'course-modal'))
-        modal_header = self.locate_and_get((By.CLASS_NAME, 'modal-header'), root=modal)
-        url_match = WebDriverWait(self.driver, self.TIMEOUT).until(url_matches_regex(r'\/course\/(.*)\/(.*)\/(20..)'))
-        course = Course.objects.get(code=url_match.group(1))
-        self.locate_and_get((By.CLASS_NAME, 'fa-plus'), root=modal_header).click()
-        self.assert_loader_completes()
-        self.assert_invisibility((By.CLASS_NAME, 'course-modal'))
-        self.assert_slot_presence(n_slots, n_master_slots)
-        return course
-
-    def validate_timeable(self, courses):
-        slots = self.locate_and_get((By.CLASS_NAME, 'slot'), get_all=True)
-        for course in courses:
-            any([course.name in course.text and course.code in slot.text for slot in slots])
-
-    def share_timetable(self, courses):
-        top_bar_actions = self.locate_and_get((By.CLASS_NAME, 'fc-right'))
-        self.locate_and_get(
-            (By.CLASS_NAME, 'fa-share-alt'),
-             clickable=True,
-             root=top_bar_actions
-        ).click()
-        url = self.locate_and_get(
-            (By.CLASS_NAME, 'share-course-link'),
-            root=top_bar_actions
-        ).get_attribute('value')
-        self.follow_and_validate_url(lambda: self.validate_timeable(courses))
+    fixtures = [
+        'jhu_fall_sample.json',
+        'jhu_spring_sample.json'
+    ]
 
     def test_logged_out_flow(self):
         self.driver.set_window_size(1440, 1080)
         self.clear_tutorial()
-        self.search_course('calc', 2)
-        self.add_course(0, n_slots=4, n_master_slots=1)
-        self.remove_course(0, n_slots_expected=0)
-        self.search_course('calc', 2)
-        self.open_course_modal_from_search(1)
-        self.validate_course_modal()
-        self.follow_share_link_from_modal()
-        self.close_course_modal()
-        self.search_course('calc', 2)
-        self.add_course(1, n_slots=4, n_master_slots=1)
-        # TODO(noahprelser) NOT WORKING
-        # self.follow_share_link_from_slot()
-        self.open_course_modal_from_slot(0)
-        self.validate_course_modal()
-        self.close_course_modal()
-        self.open_course_modal_from_slot(0)
-        self.remove_course_from_course_modal(n_slots_expected=0)
-        self.search_course('calc', 2)
-        self.open_course_modal_from_search(1)
-        # self.share_timetable(
-        #     self.add_course_from_course_modal(
-        #         n_slots=4, n_master_slots=1
-        #     )
-        # )
+        with self.description("search, add, then remove course"):
+            self.search_course('calc', 3)
+            self.add_course(0, n_slots=4, n_master_slots=1)
+            self.remove_course(0, n_slots_expected=0)
+        with self.description("open course modal from search and share"):
+            self.search_course('calc', 3)
+            self.open_course_modal_from_search(1)
+            self.validate_course_modal()
+            self.follow_share_link_from_modal()
+            self.close_course_modal()
+        with self.description("open course modal & follow share link from slot"):
+            self.search_course('calc', 3)
+            self.add_course(1, n_slots=4, n_master_slots=1)
+            self.follow_share_link_from_slot()
+            self.open_course_modal_from_slot(0)
+            self.validate_course_modal()
+            self.close_course_modal()
+        with self.description("Lock course and ensure pagination becomes invisible"):
+            self.lock_course()
+        with self.description("Remove course from course modal"):
+            self.open_course_modal_from_slot(0)
+            self.remove_course_from_course_modal(0)
+        with self.description("Add course from modal and share timetable"):
+            self.search_course('calc', 3)
+            self.open_course_modal_from_search(1)
+            self.share_timetable([
+                self.add_course_from_course_modal(
+                    n_slots=4, n_master_slots=1
+                )
+            ])
+        with self.description("add conflicting course and accept allow conflict alert"):
+            self.remove_course(0, n_slots_expected=0)
+            self.click_off() # click out of share link component
+            self.search_course('AS.110.106', 1)
+            self.add_course(0, n_slots=4, n_master_slots=1, by_section="(09)")
+            self.search_course('AS.110.105', 1)
+            self.execute_action_expect_alert(
+                lambda: self.add_course(0, n_slots=4, n_master_slots=1, code="AS.110.105"),
+                alert_text_contains="Allow Conflicts"
+            )
+            self.allow_conflicts_add(n_slots=8)
+        with self.description("switch semesters, clear alert and check search/adding"):
+            self.change_term("Spring 2017", clear_alert=True)
+            self.search_course('calc', 2)
+            self.open_course_modal_from_search(1)
+            self.share_timetable([
+                self.add_course_from_course_modal(
+                    n_slots=4, n_master_slots=1
+                )
+            ])
+        with self.description("advanced search basic query executes"):
+            self.change_term("Fall 2017", clear_alert=True)
+            sem = Semester.objects.get(year=2017, name='Fall')
+            self.open_and_query_adv_search('ca', n_results=3)
+            self.select_nth_adv_search_result(0, sem)
+            self.select_nth_adv_search_result(1, sem)
+
+    def test_logged_in_via_fb_flow(self):
+        self.driver.set_window_size(1440, 1080)
+        self.clear_tutorial()
+        with self.description("succesfully signup with facebook"):
+            self.login_via_fb(
+                email='endtoend_edmsgmk_tester@tfbnw.net',
+                password='tester.ly'
+            )
+            self.complete_user_settings_basics(
+                major='Computer Science',
+                class_year=2017
+            )
+        with self.description("search, add, change personal timetable name and save"):
+            self.search_course('calc', 3)
+            self.add_course(0, n_slots=4, n_master_slots=1)
+            self.change_ptt_name("Testing Timetable")
+            self.save_ptt()
+            self.assert_ptt_const_across_refresh()
+        with self.description("add to personal timetable, share, save"):
+            self.search_course('calc', 3)
+            self.open_course_modal_from_search(1)
+            self.share_timetable([
+                self.add_course_from_course_modal(
+                    n_slots=8, n_master_slots=2
+                )
+            ])
+            testing_ptt = self.save_ptt()
+            self.assert_ptt_const_across_refresh()
+        with self.description("create new personal timetable, validate on reload"):
+            self.create_ptt("End To End Testing!")
+            self.search_course('AS.110.105', 1)
+            self.add_course(0, n_slots=4, n_master_slots=1)
+            e2e_ptt = self.save_ptt()
+            self.assert_ptt_const_across_refresh()
+        with self.description("Switch to original ptt and validate"):
+            self.switch_to_ptt("Testing Timetable")
+            self.assert_ptt_equals(testing_ptt)
+        with self.description("switch semester, create personal timetable, switch back"):
+            self.change_term("Spring 2017")
+            self.create_ptt("Hope ders no bugs!")
+            self.click_off()
+            self.search_course('calc', 2)
+            self.add_course(0, n_slots=4, n_master_slots=1)
+            self.save_ptt()
+            self.change_term("Fall 2017")
+            self.assert_ptt_equals(e2e_ptt)
+        with self.description(("add friend with course,"
+                               "check for friend circles"
+                               "and presence in modal")):
+            friend = self.create_friend(
+                "Tester",
+                "McTestFace",
+                social_courses=True
+            )
+            self.create_personal_timetable_obj(
+                friend,
+                [Course.objects.get(code='AS.110.105')],
+                Semester.objects.get(name='Fall', year=2017)
+            )
+            self.assert_ptt_const_across_refresh()
+            self.assert_friend_image_found(friend)
+            self.open_course_modal_from_slot(0)
+            self.assert_friend_in_modal(friend)
+
+    def test_logged_in_via_google_flow(self):
+        with self.description("setup and clear tutorial"):
+            self.driver.set_window_size(1440, 1080)
+            self.clear_tutorial()
+        with self.description("login via Google, complete user settings"):
+            self.login_via_google(
+                first_name="Tester",
+                last_name="McTesterFace",
+                email='e2etesterly@gmail.com',
+                password='tester.ly'
+            )
+            self.complete_user_settings_basics(
+                major='Computer Science',
+                class_year=2017
+            )

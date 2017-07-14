@@ -447,7 +447,7 @@ ExplorationModal.propTypes = {
   inRoster: PropTypes.bool,
   addOrRemoveCourse: PropTypes.func.isRequired,
   addOrRemoveOptionalCourse: PropTypes.func.isRequired,
-  advancedSearchResults: PropTypes.arrayOf(SemesterlyPropTypes.searchResult).isRequired,
+  advancedSearchResults: PropTypes.arrayOf(SemesterlyPropTypes.denormalizedCourse).isRequired,
   clearPagination: PropTypes.func.isRequired,
   active: PropTypes.number.isRequired,
   fetchAdvancedSearchResults: PropTypes.func.isRequired,

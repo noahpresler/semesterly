@@ -20,11 +20,6 @@ export const setCourseClassmates = json => ({
   data: json,
 });
 
-export const requestCourseInfo = id => ({
-  type: ActionTypes.REQUEST_COURSE_INFO,
-  id,
-});
-
 export const setCourseId = id => ({
   type: ActionTypes.SET_COURSE_ID,
   id,
@@ -42,7 +37,7 @@ export const fetchCourseClassmates = courseId => (dispatch, getState) => {
 };
 
 export const fetchCourseInfo = courseId => (dispatch, getState) => {
-  dispatch(requestCourseInfo(courseId));
+  dispatch({ type: ActionTypes.REQUEST_COURSE_INFO });
   fetch(getCourseInfoEndpoint(courseId, getSemester(getState())), {
     credentials: 'include',
   })

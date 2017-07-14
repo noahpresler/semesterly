@@ -11,9 +11,14 @@ import { getSemester } from './school_actions';
 
 export const requestCourses = () => ({ type: ActionTypes.REQUEST_COURSES });
 
-export const receiveCourses = normalizedResponse => ({
+export const receiveCourses = courses => ({
   type: ActionTypes.RECEIVE_COURSES,
-  response: normalizedResponse,
+  response: normalize(courses, [courseSchema]),
+});
+
+export const receiveSearchResults = courses => ({
+  type: ActionTypes.RECEIVE_SEARCH_RESULTS,
+  response: normalize(courses, [courseSchema]),
 });
 
 export const setSemester = semester => (dispatch, getState) => {
@@ -29,7 +34,7 @@ export const setSemester = semester => (dispatch, getState) => {
     type: ActionTypes.SET_SEMESTER,
     semester,
   });
-  dispatch(receiveCourses({ result: [] }));
+  dispatch(receiveSearchResults([]));
 };
 
 /*
@@ -63,20 +68,20 @@ export const maybeSetSemester = semester => (dispatch, getState) => {
 
 export const fetchSearchResults = query => (dispatch, getState) => {
   if (query.length <= 1) {
-    dispatch(receiveCourses({ result: [] }));
+    dispatch(receiveSearchResults([]));
     return;
   }
-
-  // indicate that we are now requesting courses
   dispatch(requestCourses());
-  // send a request (via fetch) to the appropriate endpoint to get courses
-  fetch(getCourseSearchEndpoint(query, getSemester(getState())), {
+  const state = getState();
+  const seqNumber = state.searchResults.seqNumber;
+  fetch(getCourseSearchEndpoint(query, getSemester(state)), {
     credentials: 'include',
   })
-  .then(response => response.json()) // TODO error-check the response
+  .then(response => response.json())
   .then((json) => {
-    // indicate that courses have been received
-    dispatch(receiveCourses(normalize(json, [courseSchema])));
+    if (getState().searchResults.seqNumber === seqNumber) { // this is most recent request
+      dispatch(receiveSearchResults(json));
+    }
   });
 };
 
