@@ -51,6 +51,7 @@ def ingestor_argparser(parser):
 		help='parse for term(s)')
 	parser.add_argument('--year', nargs='+', type=str, dest='years',
 		help='parse for year(s)')
+	parser.add_argument('--years-and-terms', type=str, dest='years_and_terms')
 	parser.add_argument('--department', nargs='+', type=str, dest='departments',
 		help='parse specific departments by code')
 	parser.add_argument('--course',

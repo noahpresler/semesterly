@@ -33,78 +33,71 @@ import finalExamsModal from './final_exams_modal_reducer';
 import entities, * as fromEntities from './entities_reducer';
 
 const rootReducer = combineReducers({
-  school,
-  semester,
-  searchResults,
-  timetables,
-  calendar,
-  courseSections,
-  preferences,
-  courseInfo,
   alerts,
-  ui,
-  userInfo,
-  savingTimetable,
+  calendar,
   classmates,
-  optionalCourses,
-  explorationModal,
+  courseInfo,
+  courseSections,
   customSlots,
-  signupModal,
-  preferenceModal,
+  entities,
+  explorationModal,
+  finalExamsModal,
   friends,
-  peerModal,
-  notificationToken,
   integrationModal,
   integrations,
+  notificationToken,
+  optionalCourses,
+  peerModal,
+  preferenceModal,
+  preferences,
   saveCalendarModal,
-  userAcquisitionModal,
-  termsOfServiceModal,
+  savingTimetable,
+  school,
+  searchResults,
+  semester,
+  signupModal,
   termsOfServiceBanner,
+  termsOfServiceModal,
   textbookModal,
-  finalExamsModal,
-  entities,
+  timetables,
+  ui,
+  userAcquisitionModal,
+  userInfo,
 });
 
 // timetable/entity selectors
+export const getTimetables = state => fromTimetables.getTimetables(state.timetables);
+
 export const getDenormCourseById = (state, id) =>
   fromEntities.getDenormCourseById(state.entities, id);
 
 export const getCurrentSemester = state => fromSemester.getCurrentSemester(state.semester);
 
-export const getActiveTimetable = state =>
-  fromEntities.getTimetable(state.entities, fromTimetables.getActiveTimetableId(state.timetables));
+export const getActiveTimetable = state => fromTimetables.getActiveTimetable(state.timetables);
 
-export const getActiveTimetableCourses = (state) => {
-  const activeId = fromTimetables.getActiveTimetableId(state.timetables);
-  return activeId === undefined ? [] : fromEntities.getTimetableCourses(state.entities, activeId);
-};
+export const getDenormTimetable = (state, timetable) =>
+  fromEntities.getDenormTimetable(state.entities, timetable);
 
-export const getFromActiveTimetable = (state, fields) =>
-  fromEntities.getFromTimetable(getActiveTimetable(state), fields);
+export const getActiveDenormTimetable = state =>
+  getDenormTimetable(state, getActiveTimetable(state));
 
-export const getActiveTT = state => fromTimetables.getActiveTT(state.timetables);
+export const getActiveTimetableCourses = state =>
+  fromEntities.getTimetableCourses(state.entities, getActiveTimetable(state));
 
-export const getMaxEndHour = createSelector([getActiveTT], (timetable) => {
-  let maxEndHour = 17;
-  const hasCourses = timetable.courses.length > 0;
-  if (!hasCourses) {
-    return maxEndHour;
-  }
-  getMaxHourBasedOnWindowHeight();
+export const getActiveTimetableDenormCourses = state =>
+  fromEntities.getTimetableDenormCourses(state.entities, getActiveTimetable(state));
 
-      // TODO: rewrite using new entities
-  const courses = timetable.courses;
-  for (let courseIndex = 0; courseIndex < courses.length; courseIndex++) {
-    const course = courses[courseIndex];
-    for (let slotIndex = 0; slotIndex < course.slots.length; slotIndex++) {
-      const slot = course.slots[slotIndex];
-      const endHour = parseInt(slot.time_end.split(':')[0], 10);
-      maxEndHour = Math.max(maxEndHour, endHour);
-    }
-  }
-  return Math.max(maxEndHour, getMaxHourBasedOnWindowHeight());
-},
-);
+export const getCoursesFromSlots = (state, slots) =>
+  fromEntities.getCoursesFromSlots(state.entities, slots);
+
+export const getMaxTTEndHour = createSelector([getActiveDenormTimetable],
+  fromEntities.getMaxEndHour);
+
+export const getHoveredSlots = state => fromTimetables.getHoveredSlots(state.timetables);
+
+// Don't use createSelector to memoize getMaxEndHour
+export const getMaxEndHour = state =>
+  Math.max(getMaxTTEndHour(state), getMaxHourBasedOnWindowHeight());
 
 // search selectors
 const getSearchResultId = (state, index) =>

@@ -1,6 +1,6 @@
-import range from 'lodash/range';
-import COLOUR_DATA from '../constants/colours';
 import * as ActionTypes from '../constants/actionTypes';
+import { getNextAvailableColour } from '../util';
+import { getCourseIdsFromSlots } from '../reducers/entities_reducer';
 
 const initialState = {
   searchHover: 0,
@@ -12,35 +12,27 @@ const initialState = {
 const ui = (state = initialState, action) => {
   switch (action.type) {
     case ActionTypes.INIT_STATE:
-      return Object.assign({}, state, { uses12HrTime: action.data.uses12HrTime });
+      return { ...state, uses12HrTime: action.data.uses12HrTime };
     case ActionTypes.HOVER_SEARCH_RESULT:
-      return Object.assign({}, state, { searchHover: action.position });
+      return { ...state, searchHover: action.position };
     case ActionTypes.RECEIVE_TIMETABLES: {
-      // update slot colours based on new timetables
-      const timetables = action.timetables.length > 0 ? action.timetables : [{
-        courses: [],
-        has_conflict: false,
-      }];
-      const existingCourseToColour = !action.saving && action.preset
-        ? {} : state.courseToColourIndex;
+      const courses = action.timetables.length > 0 ?
+        getCourseIdsFromSlots(action.timetables[0].slots) : [];
+
       const courseToColourIndex = {};
-      const usedColourIndices = Object.values(existingCourseToColour);
-      for (let i = 0; i < timetables[0].courses.length; i++) {
-        const cid = timetables[0].courses[i].id;
-        if (cid in existingCourseToColour) { // course already has a colour
-          courseToColourIndex[cid] = existingCourseToColour[cid];
-        } else {
-          const newUsed = Object.values(courseToColourIndex);
-          // find unused colourIndex
-          courseToColourIndex[cid] = range(COLOUR_DATA.length).find(idx =>
-            !usedColourIndices.concat(newUsed).some(x => x === idx),
-          );
-        }
-      }
-      return Object.assign({}, state, { courseToColourIndex });
+
+      courses.forEach((courseId) => {
+        // if this course already had a colour, use that. Otherwise get a new one
+        courseToColourIndex[courseId] = (courseId in state.courseToColourIndex) ?
+          state.courseToColourIndex[courseId] : getNextAvailableColour(courseToColourIndex);
+      });
+
+      return { ...state, courseToColourIndex };
     }
     case ActionTypes.SET_HIGHLIGHT_NOTIFS:
-      return Object.assign({}, state, { highlightNotifs: action.highlightNotifs });
+      return { ...state, highlightNotifs: action.highlightNotifs };
+    case ActionTypes.REQUEST_COURSES:
+      return { ...state, searchHover: 0 };
     default:
       return state;
   }

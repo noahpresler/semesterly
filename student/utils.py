@@ -1,17 +1,14 @@
 import datetime
 
-from django.core.signing import TimestampSigner
 from django.db.models import Q
 from django.forms import model_to_dict
-from hashids import Hashids
 
 from student.models import Student, PersonalTimetable
 from timetable.models import Course
-from timetable.serializers import convert_tt_to_dict
+from timetable.serializers import DisplayTimetableSerializer
+
 
 DAY_LIST = ['M', 'T', 'W', 'R', 'F', 'S', 'U']
-
-hashids = Hashids(salt="x98as7dhg&h*askdj^has!kj?xz<!9")
 
 
 def next_weekday(d, weekday):
@@ -33,9 +30,7 @@ def get_student(request):
 def get_classmates_from_course_id(
         school, student, course_id, semester, friends=None, include_same_as=False):
     if not friends:
-        # All friends with social courses/sharing enabled
         friends = student.friends.filter(social_courses=True)
-    course = {'course_id': course_id}
     past_ids = [course_id]
     if include_same_as:
         c = Course.objects.get(id=course_id)
@@ -47,10 +42,10 @@ def get_classmates_from_course_id(
         .exclude(student__in=curr_ptts.values_list('student', flat=True)).filter(~Q(semester=semester)) \
         .order_by('student', 'last_updated').distinct('student')
 
-    course['classmates'] = get_classmates_from_tts(student, course_id, curr_ptts)
-    course['past_classmates'] = get_classmates_from_tts(student, course_id, past_ptts)
-
-    return course
+    return {
+        'current': get_classmates_from_tts(student, course_id, curr_ptts),
+        'past': get_classmates_from_tts(student, course_id, past_ptts),
+    }
 
 
 def get_classmates_from_tts(student, course_id, tts):
@@ -64,16 +59,13 @@ def get_classmates_from_tts(student, course_id, tts):
             friend_sections = tt.sections.filter(course__id=course_id)
             sections = list(friend_sections.values_list('meeting_section', flat=True).distinct())
             classmate['sections'] = sections
+        else:
+            classmate['sections'] = []
         classmates.append(classmate)
     return classmates
 
 
-def make_token(student):
-    return TimestampSigner().sign(student.id)
-
-
 def get_student_tts(student, school, semester):
-    tts = student.personaltimetable_set.filter(
+    timetables = student.personaltimetable_set.filter(
         school=school, semester=semester).order_by('-last_updated')
-    tts_list = [convert_tt_to_dict(tt) for tt in tts]
-    return tts_list
+    return DisplayTimetableSerializer.from_model(timetables, many=True).data
