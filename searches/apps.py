@@ -8,6 +8,10 @@ class SearchesConfig(AppConfig):
     searcher = None
 
     def ready(self):
+        """ Constructs Searcher object to be used if it can be built using course.vector field """
         from searches.utils import Searcher
         if not self.searcher:
-            self.searcher = Searcher()
+            try:
+                self.searcher = Searcher()
+            except:
+                self.searcher = None
