@@ -2,9 +2,7 @@
 HTML/SCSS Documentation
 ***********************
 
-.. note:: We write in SCSS syntax and not SASS.  SCSS is technically the newer version of SASS, `you can read about it here briefly here. <https://stackoverflow.com/questions/5654447/whats-the-difference-between-scss-and-sass/>`_ But SCSS and SASS are both compiled by the SASS precompiler.  We use SASSLint and SASSLoader to check our codestyle and work with Webpack since SCSSLint is written for ruby projects.  With all the confusion surrounding CSS, not sure why the tools that make CSS better also have to be confusing.
-
-.. note:: From now on, I will refer to us as writing SCSS not SASS.
+.. note:: Although we write SCSS, you'll notice we use the SassLint tool and Sassloader.  SASS is an older version of SCSS and SCSS still uses the old SASS compiler.  Please don't write SASS, we're a SCSS shop.  `You can read about it briefly here. <https://stackoverflow.com/questions/5654447/whats-the-difference-between-scss-and-sass/>`_
 
 What's in SCSS, What's not?
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -37,8 +35,10 @@ Partials   component specific styles
 
 All of the other CSS files in the ``static/css`` folder is either used for various purposes outlined above.
 
-SASSLint
-~~~~~~~~
+Linting and Codestyle
+~~~~~~~~~~~~~~~~~~~~~
+
+.. note:: Although we write SCSS, you'll notice we use the SassLint tool and Sassloader.  SASS is an older version of SCSS and SCSS still uses the old SASS compiler.  Please don't write SASS, we're a SCSS shop.  `You can read about it briefly here. <https://stackoverflow.com/questions/5654447/whats-the-difference-between-scss-and-sass/>`_
 
 We use SASSLint with Airbnb's ``.scss-lint.yml`` file converted into ``.sass-lint.yml``.  Some things to take note of are
 
