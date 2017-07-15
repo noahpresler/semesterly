@@ -45,7 +45,7 @@ class TimetableView(CsrfExemptMixin, ValidateSubdomainMixin, APIView):
                 courses.append(Course.objects.get(id=int(cid)))
 
             for locked_section in filter(bool, updated_course['section_codes']):
-                update_locked_sections(locked_sections, cid, locked_section)
+                update_locked_sections(locked_sections, cid, locked_section, params['semester'])
 
         # temp optional course implementation
         opt_course_ids = params.get('optionCourses', [])
