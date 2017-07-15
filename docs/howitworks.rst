@@ -10,7 +10,7 @@ We manipulate and access this same data using Django **views** to respond to any
 
 The browser knows when and how to make these requests, as well as how to generate the UI based on the responses using React and Redux. **React and Redux** maintain application state and use **Javascript** to render **HTML** based on that state.
 
-Finally, this HTML is styled with **SASS** for an appealing, cohesively styled user experience!
+Finally, this HTML is styled with **SCSS** for an appealing, cohesively styled user experience!
 
 The Apps that Make Semester.ly
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

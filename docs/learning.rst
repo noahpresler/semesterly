@@ -13,7 +13,7 @@ Component           Technology  Style/Methodology Tutorials
 Database            PostgreSQL  Django ORM        `Making Queries with Django <https://docs.djangoproject.com/en/1.11/topics/db/queries/>`_
 Backend Framework   Django      PEP8              `Writing your first Django app <https://docs.djangoproject.com/en/1.11/intro/tutorial01/>`_
 Frontend Framework  React       Redux/Airbnb      `React Basics <https://github.com/noahpresler/React-Tutorial>`_, `React <https://egghead.io/courses/react-fundamentals>`_, `Redux <https://egghead.io/courses/getting-started-with-redux>`_.
-CSS Framework       SASS        BEM/Airbnb        `CSS Basics <https://www.w3schools.com/css/>`_, `SASS <http://sass-lang.com/guide>`_, `BEM <http://getbem.com/introduction/>`_
+CSS Framework       SCSS        BEM/Airbnb        `CSS Basics <https://www.w3schools.com/css/>`_, `SCSS <http://sass-lang.com/guide>`_, `BEM <http://getbem.com/introduction/>`_
 =================== =========== ================= =====================================================================================================================================
 
 Tutorials and Resources
@@ -39,12 +39,12 @@ We highly recommend continuing with React via `EggHead's React Fundamentals vide
 
 Finally, finish off with `EggHead's Redux tutorial <https://egghead.io/courses/getting-started-with-redux>`_. You'll be a pro after that! 
 
-Learning CSS/SASS
+Learning CSS/SCSS
 #################
 
-The most important step is to `learn the css basics <https://www.w3schools.com/css/>`_. 
+The most important step is to `learn the CSS basics <https://www.w3schools.com/css/>`_.
 
-With that, you can `dive into SASS <http://sass-lang.com/guide>`_, a css preprocesor.
+With that, you can `dive into SCSS <http://sass-lang.com/guide>`_, a css preprocesor.
 
 For development, we use the BEM methedology (`learn about BEM here!  <http://getbem.com/introduction/>`_) and the `Airbnb style guide <https://github.com/airbnb/css>`_. 
 

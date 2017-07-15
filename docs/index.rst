@@ -39,6 +39,6 @@ Students know best
    flows
    pipeline
    frontend   
-   sass
+   scss
    design
    editing
