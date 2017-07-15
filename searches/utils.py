@@ -3,7 +3,6 @@ import pickle
 import numpy as np
 import operator
 import os
-import sys
 from sklearn.feature_extraction.text import CountVectorizer
 from sklearn.feature_extraction.text import TfidfTransformer
 from django.db.models import Q
@@ -20,7 +19,6 @@ class Vectorizer():
 
     def vectorize(self):
         # get names (titles) and descriptions for creating vocabulary.
-        total_count = Course.objects.count()
         raw_word_counts = []
         bar = progressbar.ProgressBar(max_value=Course.objects.count())
         print("Vectorizing all courses...")
