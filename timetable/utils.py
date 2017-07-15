@@ -204,6 +204,7 @@ class TimetableGenerator:
     def offerings_to_timetables(self, sections):
         """
         Generate timetables in a depth-first manner based on a list of sections.
+        
         sections: a list of sections, where each section is a list of offerings
               corresponding to that section. Each offering consists of three
               elements: the course id (the key in the course table), the meeting
@@ -211,6 +212,7 @@ class TimetableGenerator:
               list of courseoffering objects which specify the times that the
               offering in question meets. An example section:
               [[27, 'L5101', [<CourseOffering>], [27, 'L1001', [<CourseOffering>]]]
+
         with_conflicts: True if you want to consider conflicts, False otherwise.
         """
         
