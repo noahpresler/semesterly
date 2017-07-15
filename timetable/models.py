@@ -353,6 +353,7 @@ class Evaluation(models.Model):
 
     course (:obj:`ForeignKey` to :obj:`Course`):
         the course this evaluation belongs to
+        
     score (:obj:`FloatField`): score out of 5.0
     summary (:obj:`TextField`): text with information about why the rating was given
     professor (:obj:`CharField`): the professor(s) this review pertains to
