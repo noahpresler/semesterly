@@ -11,6 +11,21 @@ from nltk.stem.porter import *
 import progressbar
 
 
+
+def baseline_search(self, school, query, semester):
+    """Baseline search is a legacy search method that does not depend on Searcher object"""
+    if query == "":
+        return Course.objects.filter(school=school)
+    query_tokens = query.lower().split()
+    course_name_contains_query = reduce(
+        operator.and_, map(self.course_name_contains_token, query_tokens))
+    return Course.objects.filter(
+        Q(school=school) &
+        course_name_contains_query &
+        Q(section__semester=semester)
+    )
+
+
 class Vectorizer():
     """ Vectorizer class creates a dictionary over courses and build course vectorizer pickle object. """
     def __init__(self):
@@ -73,8 +88,8 @@ class Vectorizer():
 class Searcher():
     """ Searcher class implements baseline search and vectorized search based on information retrieval techniques. """
     def __init__(self):
-        self.count_vectorizer = self.load_count_vectorizer()
         self.vectorizer = Vectorizer()
+        self.count_vectorizer = self.load_count_vectorizer()
         self.MAX_CAPACITY = 300
         self.start_time = 0
 
@@ -83,7 +98,7 @@ class Searcher():
             with open('count_vectorizer.pickle', 'r') as handle:
                 return pickle.load(handle)
         else:
-            Vectorizer().vectorize()
+            self.vectorizer.vectorize()
             with open('count_vectorizer.pickle', 'r') as handle:
                 return pickle.load(handle)
 
@@ -117,18 +132,6 @@ class Searcher():
     def get_similarity(self, query, course):
         query_vector = self.vectorize_query(query.lower())
         return self.get_cosine_sim(query_vector, course.vector)
-
-    def baseline_search(self, school, query, semester):
-        if query == "":
-            return Course.objects.filter(school=school)
-        query_tokens = query.lower().split()
-        course_name_contains_query = reduce(
-            operator.and_, map(self.course_name_contains_token, query_tokens))
-        return Course.objects.filter(
-            Q(school=school) &
-            course_name_contains_query &
-            Q(section__semester=semester)
-        )
 
     def vectorized_search(self, school, query, semester):
         if query == "":
