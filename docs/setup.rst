@@ -1,7 +1,7 @@
 .. _setup:
 
 Installation
-============
+=============
 
 This guide will bring you through the steps of creating a local Semester.ly server and development environment. It will walk through the setup of the core ecosystems we work within: Django/Python and React/Node/JS. It will additionally require the setup of a PostgreSQL database.
 
@@ -23,7 +23,7 @@ Cloning your Semester.ly fork will create a directory with all of the code requi
 
 Setup a Python Virtual Enviroment
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-Make sure you have installed Python 2.7. If you have not you can `follow this guide <https://wiki.python.org/moin/BeginnersGuide/Download>`_. Please also download the python installer, `PIP (install guide) <https://pip.pypa.io/en/stable/installing/>`_. We will now install and setup a python virtual environment. This keeps your dependencies for other projects and classes seperate from those required for Semester.ly.
+Make sure you have installed Python 2.7. If you have not you can `follow this <https://wiki.python.org/moin/BeginnersGuide/Download>`_. Please also download the python installer, `PIP (install guide) <https://pip.pypa.io/en/stable/installing/>`_. We will now install and setup a python virtual environment. This keeps your dependencies for other projects and classes seperate from those required for Semester.ly.
 
 Install virtualenv: 
 
