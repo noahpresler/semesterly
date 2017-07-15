@@ -41,3 +41,4 @@ Students know best
    frontend   
    sass
    design
+   editing
