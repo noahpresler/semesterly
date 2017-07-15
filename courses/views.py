@@ -71,7 +71,7 @@ def course_page(request, code):
     """
     Generates a static course page for the provided course code and
     school (via subdomain). Completely outside of the React framework
-     purely via Django templates.
+    purely via Django templates.
     """
     school = request.subdomain
     try:
