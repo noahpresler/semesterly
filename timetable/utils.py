@@ -14,12 +14,12 @@ from timetable.scoring import get_tt_cost, get_num_days, get_avg_day_length, get
 MAX_RETURN = 60  # Max number of timetables we want to consider
 
 
-def update_locked_sections(locked_sections, cid, locked_section):
+def update_locked_sections(locked_sections, cid, locked_section, section):
     """
     Take cid of new course, and locked section for that course
     and toggle its locked status (ie if was locked, unlock and vice versa.
     """
-    section_type = Section.objects.filter(
+    section_type = Section.objects.filter(section=section,
         course=cid, meeting_section=locked_section)[0].section_type
     if locked_sections[cid].get(section_type, '') == locked_section:  # already locked
         locked_sections[cid][section_type] = ''  # unlock that section_type
