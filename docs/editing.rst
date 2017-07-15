@@ -24,3 +24,5 @@ Editing the Docs
 All Django modules are documented via `Sphinx AutoDoc <http://www.sphinx-doc.org/en/stable/ext/autodoc.html>`_. To edit this documentation, update the docstrings on the relevant functions/classes.
 
 To update the handwritten docs, edit the relevant `.rst` files which are included by filename from `index.rst`. 
+
+.. note:: Be sure no warnings or errors are printed as output during the build process. Travis will build these docs and the build will fail on error.

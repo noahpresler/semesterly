@@ -51,7 +51,7 @@ def get_classmates_from_course_id(
 
     Args:
         school (:obj:`str`): the school code (e.g. 'jhu')
-        student (:obj:`Student): the student for whom to find classmates
+        student (:obj:`Student`): the student for whom to find classmates
         course_id (:obj:`int`): the database id for the course 
         semester (:obj:`Semester`): the semester that is current (to check for)
         friends (:obj:`list` of :obj:`Students`):
