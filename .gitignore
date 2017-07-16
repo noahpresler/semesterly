@@ -48,3 +48,4 @@ webpack-stats.json
 */test_failures/
 .vscode/
 Vagrantfile
+.vagrant/
