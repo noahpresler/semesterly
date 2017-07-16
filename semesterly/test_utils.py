@@ -29,6 +29,7 @@ from timetable.models import Offering
 from timetable.models import Section
 from timetable.models import Semester
 
+
 class SeleniumTestCase(StaticLiveServerTestCase):
 
     serialized_rollback = True

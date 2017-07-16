@@ -3,7 +3,7 @@ from rest_framework.test import APITestCase
 
 from timetable.models import Course, Section, Offering, Semester
 from helpers.test.test_cases import UrlTestCase
-
+from searches.utils import Vectorizer
 
 class BasicSearchTest(APITestCase):
     school = 'uoft'
@@ -13,7 +13,7 @@ class BasicSearchTest(APITestCase):
 
     def setUp(self):
         sem = Semester.objects.create(name='Winter', year='1995')
-        course = Course.objects.create(school=self.school, code='SEA101', name='Intro')
+        course = Course.objects.create(school=self.school, code='SEA101', name='Intro', description="awesome")
         section = Section.objects.create(course=course, semester=sem, meeting_section='L1', section_type='L')
         Offering.objects.create(section=section, day='M', time_start='8:00', time_end='10:00')
 
@@ -26,6 +26,11 @@ class BasicSearchTest(APITestCase):
         response = self.client.get('/search/Fall/2016/sea/', **self.request_headers)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(len(response.data), 0)
+
+    def test_description_exist(self):
+        response = self.client.get('/search/Winter/1995/awesome/', **self.request_headers)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertNotEqual(len(response.data), 0)
 
 
 class AdvancedSearchTest(APITestCase):
