@@ -11,18 +11,26 @@ from nltk.stem.porter import *
 import progressbar
 
 
-def baseline_search(self, school, query, semester):
+def baseline_search(school, query, semester):
     """Baseline search is a legacy search method that does not depend on Searcher object"""
     if query == "":
         return Course.objects.filter(school=school)
     query_tokens = query.strip().lower().split()
     course_name_contains_query = reduce(
-        operator.and_, map(self.course_name_contains_token, query_tokens))
+        operator.and_, map(course_name_contains_token, query_tokens))
     return Course.objects.filter(
         Q(school=school) &
         course_name_contains_query &
         Q(section__semester=semester)
     )
+
+def course_desc_contains_token(token):
+    return Q(description__icontains=token)
+
+def course_name_contains_token(token):
+    return (Q(code__icontains=token) |
+            Q(name__icontains=token.replace("&", "and")) |
+            Q(name__icontains=token.replace("and", "&")))
 
 
 class Vectorizer():
@@ -142,7 +150,7 @@ class Searcher():
             return Course.objects.filter(school=school)
         query_tokens = query.strip().lower().split()
         course_name_contains_query = reduce(
-            operator.and_, map(self.course_name_contains_token, query_tokens))
+            operator.and_, map(course_name_contains_token, query_tokens))
         title_matching_courses = Course.objects.filter(
             Q(school=school) &
             course_name_contains_query &
@@ -151,7 +159,7 @@ class Searcher():
 
         if title_matching_courses.count() < self.MAX_CAPACITY:
             descp_contains_query = reduce(operator.or_,
-                                          map(self.course_desc_contains_token,
+                                          map(course_desc_contains_token,
                                               query.replace("and", "").split())
                                           )
             descp_matching_courses = Course.objects.filter(
@@ -165,14 +173,6 @@ class Searcher():
             courses_objs = list(title_matching_courses.all()[:self.MAX_CAPACITY])
 
         return self.get_most_relevant_filtered_courses(query, courses_objs)
-
-    def course_desc_contains_token(self, token):
-        return Q(description__icontains=token)
-
-    def course_name_contains_token(self, token):
-        return (Q(code__icontains=token) |
-                Q(name__icontains=token.replace("&", "and")) |
-                Q(name__icontains=token.replace("and", "&")))
 
     def get_most_relevant_filtered_courses(self, query, course_filtered):
         query_vector = self.vectorize_query(query.lower())
