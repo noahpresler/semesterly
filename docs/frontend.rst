@@ -43,15 +43,67 @@ Let's break down this file structure a bit by exploring what lives in each secti
 
     ``util.jsx``: utility functions useful to the entire application.
 
+Init.jsx
+~~~~~~~~
+This file is responsible for the initialization of the application. It creates a Redux store from the root reducer, then takes care of all initialization. Only in ``init.jsx`` do we reference JSON passed from the backend via ``timetable.html``. 
+
+It is this JSON, called ``initData`` which we read into state as our initial state for the redux application. However, sometimes there are special `flows` that a user could follow that might change the initial state of the application at page load. For this we use flows which are documented more thoroughly at the following link: :ref:`flows`.
+
+Other actions required for page initialization are also dispatched from ``init.jsx`` including those which load cached timetables from the browser, alerts that show on page load, the loading of user's timetables if logged in, and the triggering of the user agreement modal when appropriate. 
+
+Finally, ``init.jsx`` renders ``<SemesterlyContainer />`` to the DOM. This is the root of the application.
+
 Actions
 ~~~~~~~~
+
+The actions directory follows this structure::
+
+    static/js/redux/actions
+    ├── calendar_actions.jsx ── exporting the calendar (ical, google)
+    ├── exam_actions.jsx ── final exam scheduling/sharing
+    ├── modal_actions.jsx ── openning/closing/manipulating all modals
+    ├── school_actions.jsx ── getting school info
+    ├── search_actions.jsx ── search/adv search 
+    ├── timetable_actions.jsx ── fetching/loading/manipulating timetables
+    └── user_actions.jsx ── user settings/friends/logged in functionality
 
 Reducers
 ~~~~~~~~
 
-Init.jsx
-~~~~~~~~
-Mention flows
+The reducers directory follows this structure::
+
+    static/js/redux/reducers
+    ├── alerts_reducer.jsx ── visibility of alerts
+    ├── calendar_reducer.jsx
+    ├── classmates_reducer.jsx
+    ├── course_info_reducer.jsx
+    ├── course_sections_reducer.jsx
+    ├── custom_slots_reducer.jsx
+    ├── exploration_modal_reducer.jsx
+    ├── final_exams_modal_reducer.jsx
+    ├── friends_reducer.jsx
+    ├── integration_modal_reducer.jsx
+    ├── integrations_reducer.jsx
+    ├── notification_token_reducer.jsx
+    ├── optional_courses_reducer.jsx
+    ├── peer_modal_reducer.jsx
+    ├── preference_modal_reducer.jsx
+    ├── preferences_reducer.jsx
+    ├── root_reducer.jsx
+    ├── save_calendar_modal_reducer.jsx
+    ├── saving_timetable_reducer.jsx
+    ├── school_reducer.jsx
+    ├── search_results_reducer.jsx
+    ├── semester_reducer.jsx
+    ├── signup_modal_reducer.jsx
+    ├── terms_of_service_banner_reducer.jsx
+    ├── terms_of_service_modal_reducer.jsx
+    ├── textbook_modal_reducer.jsx
+    ├── timetables_reducer.jsx
+    ├── ui_reducer.jsx
+    ├── user_acquisition_modal_reducer.jsx
+    └── user_info_reducer.jsx
+
 
 What Components Live Where
 ===========================
