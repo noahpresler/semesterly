@@ -57,8 +57,7 @@ def get_classmates_in_course(request, school, sem_name, year, course_id):
     student = None
     logged = request.user.is_authenticated()
     if logged and Student.objects.filter(user=request.user).exists():
-        student = Stud
-        ent.objects.get(user=request.user)
+        student = Student.objects.get(user=request.user)
     if student and student.user.is_authenticated() and student.social_courses:
         json_data = get_classmates_from_course_id(
             school, student, course.id, sem)
