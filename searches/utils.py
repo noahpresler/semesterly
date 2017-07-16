@@ -11,12 +11,11 @@ from nltk.stem.porter import *
 import progressbar
 
 
-
 def baseline_search(self, school, query, semester):
     """Baseline search is a legacy search method that does not depend on Searcher object"""
     if query == "":
         return Course.objects.filter(school=school)
-    query_tokens = query.lower().split()
+    query_tokens = query.strip().lower().split()
     course_name_contains_query = reduce(
         operator.and_, map(self.course_name_contains_token, query_tokens))
     return Course.objects.filter(
@@ -112,10 +111,15 @@ class Searcher():
         return ''.join([i[0] for i in name.split(' ')])
 
     def matches_title(self, query, course_name):
-        query_tokens = query.lower().split(' ')
+        query_tokens = query.strip().lower().split(' ')
         course_name = course_name.lower()
-        return all(map(lambda q: q in course_name, query_tokens)) and \
-               len(query_tokens) is len(course_name.split())
+        title_contains_query = all(map(lambda q: q in course_name, query_tokens))
+        if title_contains_query and len(query_tokens) is len(course_name.split()):
+            return 2
+        elif title_contains_query:
+            return 1
+        else:
+            return 0
 
     def get_course(self, code):
         try:
@@ -136,7 +140,7 @@ class Searcher():
     def vectorized_search(self, school, query, semester):
         if query == "":
             return Course.objects.filter(school=school)
-        query_tokens = query.lower().split()
+        query_tokens = query.strip().lower().split()
         course_name_contains_query = reduce(
             operator.and_, map(self.course_name_contains_token, query_tokens))
         title_matching_courses = Course.objects.filter(
