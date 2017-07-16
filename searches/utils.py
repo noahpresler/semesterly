@@ -59,6 +59,7 @@ class Vectorizer():
 
         bar.update(0)
         print("Picklifying all courses...")
+
         # save course vector to model.
         for current_count, course in enumerate(Course.objects.all().iterator()):
             self.picklify(course, course_vectors[current_count])
@@ -149,8 +150,7 @@ class Searcher():
         if query == "":
             return Course.objects.filter(school=school)
         query_tokens = query.strip().lower().split()
-        course_name_contains_query = reduce(
-            operator.and_, map(course_name_contains_token, query_tokens))
+        course_name_contains_query = reduce(operator.and_, map(course_name_contains_token, query_tokens))
         title_matching_courses = Course.objects.filter(
             Q(school=school) &
             course_name_contains_query &
@@ -158,24 +158,22 @@ class Searcher():
         )
 
         if title_matching_courses.count() < self.MAX_CAPACITY:
-            descp_contains_query = reduce(operator.or_,
-                                          map(course_desc_contains_token,
-                                              query.replace("and", "").split())
-                                          )
-            descp_matching_courses = Course.objects.filter(
-                Q(school=school) &
-                descp_contains_query &
-                Q(section__semester=semester)
-            )
-            courses_objs = list(title_matching_courses.all()[:self.MAX_CAPACITY]) + \
-                           list(descp_matching_courses.all()[:self.MAX_CAPACITY - title_matching_courses.count()])
+            descp_contains_query = reduce(operator.or_, map(course_desc_contains_token, query.replace("and", "").split()))
+            descp_matching_courses = Course.objects.filter(Q(school=school) &
+                                                           descp_contains_query &
+                                                           Q(section__semester=semester))\
+                .exclude(reduce(operator.and_, map(course_name_contains_token, query_tokens)))
+            courses_objs = list(title_matching_courses.all().distinct('code')[:self.MAX_CAPACITY]) + \
+                           list(descp_matching_courses.all().distinct('code')[:self.MAX_CAPACITY - title_matching_courses.count()])
         else:
-            courses_objs = list(title_matching_courses.all()[:self.MAX_CAPACITY])
+            courses_objs = list(title_matching_courses.all().distinct('code')[:self.MAX_CAPACITY])
 
         return self.get_most_relevant_filtered_courses(query, courses_objs)
 
     def get_most_relevant_filtered_courses(self, query, course_filtered):
         query_vector = self.vectorize_query(query.lower())
+        # for course in sorted(course_filtered, key=lambda course: -self.get_score(course, query, query_vector))[:10]:
+        #     print(course.name + ":" + str(self.get_score(course, query, query_vector)) + "\n")
         return sorted(course_filtered, key=lambda course: -self.get_score(course, query, query_vector))
 
     def get_score(self, course, query, query_vector):
