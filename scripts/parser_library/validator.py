@@ -1,7 +1,7 @@
 """
-Parsing library - Data Validator.
+Data Pipeline - Validator.
 
-@org      Semeseter.ly
+@org      Semesterly
 @author   Michael N. Miller
 @date     1/12/17
 """
@@ -10,21 +10,20 @@ Parsing library - Data Validator.
 
 from __future__ import absolute_import, division, print_function
 
-import httplib
-
 import os
+import httplib
 import re
 import sys
-
 import jsonschema
+import simplejson as json
+
+from django.conf import settings
 
 from scripts.parser_library.internal_exceptions import \
     JsonDuplicationWarning, JsonValidationError, JsonValidationWarning
 from scripts.parser_library.internal_utils import dotdict, make_list, update
 from scripts.parser_library.logger import Logger
 from scripts.parser_library.tracker import LogFormatted, ProgressBar, Tracker
-
-import simplejson as json
 
 
 class Validator:
@@ -33,8 +32,9 @@ class Validator:
     def __init__(self, config, tracker=None):
         """Construct validation engine."""
         # Cache schema definitions into memory.
-        schema_directory = 'scripts/parser_library/schemas/'
-        schema_directory = Validator.load_schema_directory(schema_directory)
+        schema_directory_path = 'scripts/parser_library/schemas/'
+        schema_directory = '{}/{}'.format(settings.BASE_DIR,
+                                          schema_directory_path)
         self.schemas = Validator.initiate_schemas(schema_directory)
 
         self.config = self.validate_config(config)
@@ -46,21 +46,20 @@ class Validator:
 
         if tracker is not None:
             self.tracker = tracker
-        else:
-            # Used during self-contained validation.
+        else:  # Used during self-contained validation.
             self.tracker = Tracker(self.config.school.code)
             self.tracker.set_mode('validating')
 
     @staticmethod
-    def load_schema_directory(directory):
-        try:
-            return os.environ['SEMESTERLY_HOME'] + '/' + directory
-        except KeyError:
-            raise KeyError('environment variable "SEMESTERLY_HOME" unset; \
-                            try running: export SEMESTERLY_HOME=$(pwd)')
-
-    @staticmethod
     def initiate_schemas(directory):
+        """Initiate and load relevant json schema definitions.
+
+        Args:
+            directory (str): Directory of schema definitions.
+
+        Returns:
+            :obj:`dotdict`: json schema definitions
+        """
         def load(file):
             return Validator.filepath_to_json(directory + file,
                                               allow_duplicates=True)
@@ -84,6 +83,10 @@ class Validator:
             'meeting': schema_and_resolver(load('meeting_only.json')),
             'directory': schema_and_resolver(load('directory.json'))
         })
+
+    # SCHEMA_DIRECTORY_PATH = 'scripts/parser_library/schemas/'
+    # SCHEMA_DIRECTORY = load_schema_directory.__func__(SCHEMA_DIRECTORY_PATH)
+    # SCHEMAS = initiate_schemas.__func__(SCHEMA_DIRECTORY)
 
     @staticmethod
     def validate_schema(subject, schema, resolver=None):
@@ -125,6 +128,11 @@ class Validator:
         }[kind]
 
     def validate(self, data):
+        """Validation entry/dispatcher.
+
+        Args:
+            data (list, dict): Data to validate.
+        """
         # Convert to dotdict for `easy-on-the-eyes` element access
         data = [dotdict(d) for d in make_list(data)]
         for obj in data:
@@ -552,29 +560,16 @@ class Validator:
                                             time_range)
 
     def validate_directory(self, directory):
-        if directory is None:
-            # FIXME -- wrong type of error
-            raise JsonValidationError('cannot validate None directory')
         if isinstance(directory, str):
             try:
                 name = directory
-                directory = Validator.dir_to_dict(directory)
+                directory = dir_to_dict(directory)
                 directory['name'] = name
             except IOError as e:
                 print('ERROR: invalid directory path\n' + str(e),
                       file=sys.stderr)
                 raise e
         Validator.validate_schema(directory, *self.schemas.directory)
-
-    @staticmethod
-    def dir_to_dict(path):
-        d = {'name': os.path.basename(path)}
-        if os.path.isdir(path):
-            d['kind'] = "directory"
-            d['children'] = [Validator.dir_to_dict(os.path.join(path, x)) for x in os.listdir(path)]
-        else:
-            d['kind'] = "file"
-        return d
 
     @staticmethod
     def dict_raise_on_duplicates(ordered_pairs):
@@ -587,8 +582,44 @@ class Validator:
                 d[k] = v
         return d
 
-    @staticmethod
-    def json_is_equal(a, b):
-        a = json.dumps(a, sort_keys=True)
-        b = json.dumps(b, sort_keys=True)
-        return a == b
+
+def dir_to_dict(path):
+    """Recursively create nested dictionary representing directory contents.
+
+    Args:
+        path (str): The path of the directory.
+
+    Returns:
+        dict: Dictionary representation of the directory.
+
+        Example::
+            {
+                "name": ""
+                "kind": "directory",
+                "children": [
+                    {
+                        "name": "child_dir_a",
+                        "kind": "directory",
+                        "children": [
+                            {
+                                "name": "file0",
+                                "kind": "file"
+                            }
+                        ]
+                    },
+                    {
+                        "name": "file1.txt",
+                        "kind": "file"
+                    }
+                ]
+            }
+    """
+    d = {'name': os.path.basename(path)}
+    if os.path.isdir(path):
+        d['kind'] = "directory"
+        d['children'] = [
+            dir_to_dict(os.path.join(path, x)) for x in os.listdir(path)
+        ]
+    else:
+        d['kind'] = "file"
+    return d

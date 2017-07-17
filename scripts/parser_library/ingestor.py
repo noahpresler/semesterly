@@ -3,19 +3,19 @@ Data Pipeline - Ingestor.
 
 @org      Semesterly
 @author   Michael N. Miller
-@date     1/13/17
+@date     07/17/2017
 """
 
 from __future__ import absolute_import, division, print_function
 
+import re
 import jsonschema
 
 from scripts.parser_library.internal_exceptions import IngestorError, \
     IngestorWarning
 from scripts.parser_library.internal_exceptions import JsonValidationError, \
     JsonValidationWarning, JsonDuplicationWarning
-from scripts.parser_library.internal_utils import cleandict, deep_clean, \
-    make_list
+from scripts.parser_library.internal_utils import make_list
 from scripts.parser_library.logger import JsonListLogger
 from scripts.parser_library.tracker import NullTracker
 from scripts.parser_library.validator import Validator
@@ -27,17 +27,21 @@ class Ingestor(dict):
     Mimics functionality of dict.
 
     Attributes:
-        break_on_error (bool): Break on errors?
-        break_on_warning (bool): Break on warnings?
+        ALL_KEYS (set): Set of keys supported by Ingestor.
+        break_on_error (bool): Break/cont on errors.
+        break_on_warning (bool): Break/cont on warnings.
         logger (parser_library.logger): Logger object.
         school (str): School code (e.g. jhu, gw, umich).
-        skip_shallow_duplicates (bool): Description
+        skip_shallow_duplicates (bool): Hide warnings for repeated definitions.
         tracker (parser_library.tracker): Tracker object.
-        validate (bool): Flag to enable/disable validation.
+        UNICODE_WHITESPACE (TYPE): regex that matches Unicode whitespace.
+        validate (bool): Enable/disable validation.
         validator (parser_library.validator): Validator instance.
     """
 
-    _ALL_KEYS = {
+    UNICODE_WHITESPACE = re.compile(r'(?:\u00a0)|(?:\xc2\xa0)', re.IGNORECASE)
+
+    ALL_KEYS = {
         'school',
         'kind',
         'department',
@@ -164,12 +168,12 @@ class Ingestor(dict):
             The value of the key in the Ingestor instance.
 
         Raises:
-            IngestorError: Enforce Ingestor._ALL_KEYS
+            IngestorError: Enforce Ingestor.ALL_KEYS
         """
         default = kwargs.get('default')
         for key in keys:
-            if key not in Ingestor._ALL_KEYS:
-                raise IngestorError('{} not in Ingestor._ALL_KEYS'.format(key))
+            if key not in Ingestor.ALL_KEYS:
+                raise IngestorError('{} not in Ingestor.ALL_KEYS'.format(key))
             if key not in self:
                 continue
             return self[key]
@@ -203,23 +207,19 @@ class Ingestor(dict):
             'name': self._get('name', 'course_name'),
             'department': department,
             'credits': self._get('credits', 'num_credits'),
-            'prerequisites': deep_clean(make_list(
-                self._get('prerequisites',
-                          'prereqs')
-            )),
-            'corequisites': deep_clean(make_list(self._get('corequisites',
-                                                           'coreqs'))),
-            'exclusions': deep_clean(make_list(self._get('exclusions'))),
-            'description': deep_clean(make_list(self._get('description',
-                                                          'descr'))),
-            'areas': deep_clean(self._get('areas')),
+            'prerequisites': make_list(self._get('prerequisites', 'prereqs')),
+            'corequisites': make_list(self._get('corequisites', 'coreqs')),
+            'exclusions': make_list(self._get('exclusions')),
+            'description': make_list(self._get('description', 'descr')),
+            'areas': self._get('areas'),
             'level': self._get('level'),
-            'cores': deep_clean(make_list(self._get('cores'))),
-            'geneds': deep_clean(make_list(self._get('geneds'))),
+            'cores': make_list(self._get('cores')),
+            'geneds': make_list(self._get('geneds')),
             'sections': self._get('sections'),
             'homepage': self._get('homepage', 'website'),
         }
-        course = cleandict(course)
+
+        course = Ingestor._clean(course)
         self._validate_and_log(course)
         if 'department' in course:
             self.tracker.track_department(course['department'])
@@ -254,7 +254,7 @@ class Ingestor(dict):
 
         if len(instr_keys) == 1:
             instructors = self[list(instr_keys)[0]]
-            instructors = deep_clean(make_list(instructors))
+            instructors = Ingestor._clean(make_list(instructors))
             if instructors is not None:
                 for i in range(len(instructors)):
                     if isinstance(instructors[i], basestring):
@@ -290,7 +290,7 @@ class Ingestor(dict):
             'meetings': self._get('offerings')
         }
 
-        section = cleandict(section)
+        section = Ingestor._clean(section)
         self._validate_and_log(section)
         self.tracker.track_year(section['year'])
         self.tracker.track_term(section['term'])
@@ -326,13 +326,13 @@ class Ingestor(dict):
                 'year': self._get('year'),
                 'term': self._get('term', 'semester')
             },
-            'days': deep_clean(make_list(self._get('days', 'day'))),
-            'dates': deep_clean(make_list(self._get('dates', 'date'))),
+            'days': make_list(self._get('days', 'day')),
+            'dates': make_list(self._get('dates', 'date')),
             'time': time,
             'location': location
         }
 
-        meeting = cleandict(meeting)
+        meeting = Ingestor._clean(meeting)
         self._validate_and_log(meeting)
         return meeting
 
@@ -361,7 +361,7 @@ class Ingestor(dict):
             'required': self._get('required')
         }
 
-        textbook_link = cleandict(textbook_link)
+        textbook_link = Ingestor._clean(textbook_link)
         self._validate_and_log(textbook_link)
         self.tracker.track_year(textbook_link['section']['year'])
         self.tracker.track_term(textbook_link['section']['term'])
@@ -384,7 +384,7 @@ class Ingestor(dict):
             'title': self._get('title')
         }
 
-        textbook = cleandict(textbook)
+        textbook = Ingestor._clean(textbook)
         self._validate_and_log(textbook)
         if 'department' in self:
             self.tracker.track_department(self['department'])
@@ -408,7 +408,7 @@ class Ingestor(dict):
             self.logger.log(obj)
         try:
             for key in self:
-                if key in Ingestor._ALL_KEYS:
+                if key in Ingestor.ALL_KEYS:
                     continue
                 raise IngestorWarning(
                     'ingestor does not support key {}'.format(key),
@@ -450,3 +450,49 @@ class Ingestor(dict):
                     raise e
 
         return is_valid, full_skip
+
+    @staticmethod
+    def _clean(dirt):
+        """Recursively clean json-like object.
+
+        `list`::
+            - remove `None` elements
+            - `None` on empty list
+
+        `dict`::
+            - filter out None valued key, value pairs
+            - `None` on empty dict
+
+        `basestring`::
+            - convert unicode whitespace to ascii
+            - strip extra whitespace
+            - None on empty string
+
+        Args:
+            dirt: the object to clean
+
+        Returns:
+            Cleaned `dict`, cleaned `list`, cleaned `string`, or pass-through.
+        """
+        cleaned = None
+
+        if isinstance(dirt, dict):
+            cleaned = {}
+            for k, v in dirt.items():
+                cleaned_value = Ingestor._clean(v)
+                if cleaned_value is None:
+                    continue
+                cleaned[k] = cleaned_value
+        elif isinstance(dirt, list):
+            cleaned = filter(
+                lambda x: x is not None,
+                map(Ingestor._clean, dirt)
+            )
+        elif isinstance(dirt, basestring):
+            cleaned = Ingestor.UNICODE_WHITESPACE.sub(' ', dirt).strip()
+        else:
+            return dirt
+
+        if len(cleaned) == 0:
+            return None
+        return cleaned
