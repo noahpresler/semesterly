@@ -40,7 +40,7 @@ class MasterSlot extends React.Component {
   }
   showShareLink() {
     this.setState({ shareLinkShown: true });
-    const idEventTarget = `#clipboard-btn-${this.props.course.id}`;
+    const idEventTarget = this.props.onTimetable ? `#clipboard-btn-${this.props.course.id}` : '#clipboard-btn-toolbar';
     const clipboard = new Clipboard(idEventTarget);
     clipboard.on('success', () => {
       $(idEventTarget).addClass('clipboardSuccess').text('Copied!');
@@ -89,7 +89,7 @@ class MasterSlot extends React.Component {
     const profDisp = this.props.professors === null ? null : <h3>{ prof }</h3>;
     const shareLink = this.state.shareLinkShown ?
             (<ShareLink
-              courseId={this.props.course.id}
+              uniqueId={this.props.onTimetable ? this.props.course.id : 'toolbar'}
               link={this.props.getShareLink(this.props.course.code)}
               onClickOut={this.hideShareLink}
             />) :
@@ -188,7 +188,7 @@ MasterSlot.propTypes = {
   getShareLink: PropTypes.func.isRequired,
 };
 
-export const ShareLink = ({ link, onClickOut, courseId }) => (
+export const ShareLink = ({ link, onClickOut, uniqueId }) => (
   <ClickOutHandler onClickOut={onClickOut}>
     <div className="share-course-link-wrapper" onClick={e => e.stopPropagation()}>
       <h5>Share Course</h5>
@@ -204,7 +204,7 @@ export const ShareLink = ({ link, onClickOut, courseId }) => (
         onClick={e => e.stopPropagation()}
         readOnly
       />
-      <div className="clipboardBtn" id={`clipboard-btn-${courseId}`} data-clipboard-text={link}>
+      <div className="clipboardBtn" id={`clipboard-btn-${uniqueId}`} data-clipboard-text={link}>
         Copy to Clipboard
       </div>
     </div>
@@ -214,7 +214,7 @@ export const ShareLink = ({ link, onClickOut, courseId }) => (
 ShareLink.propTypes = {
   link: PropTypes.string.isRequired,
   onClickOut: PropTypes.func.isRequired,
-  courseId: PropTypes.string.isRequired,
+  uniqueId: PropTypes.string.isRequired,
 };
 
 export default MasterSlot;
