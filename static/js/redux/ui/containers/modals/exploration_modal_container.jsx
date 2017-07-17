@@ -44,7 +44,7 @@ const mapStateToProps = (state) => {
     page,
     semesterName: `${semester.name} ${semester.year}`,
     schoolSpecificInfo: getSchoolSpecificInfo(state.school.school),
-    hasHoveredResult: getHoveredSlots(state).length > 0,
+    hasHoveredResult: getHoveredSlots(state) !== null,
     getShareLink: courseCode => getCourseShareLinkFromModal(courseCode, getCurrentSemester(state)),
   };
 };
