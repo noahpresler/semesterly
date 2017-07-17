@@ -91,7 +91,6 @@ class MasterSlot extends React.Component {
             (<ShareLink
               courseId={this.props.course.id}
               link={this.props.getShareLink(this.props.course.code)}
-              courseId={this.props.course.id}
               onClickOut={this.hideShareLink}
             />) :
             null;
