@@ -92,6 +92,7 @@ class MasterSlot extends React.Component {
               uniqueId={`course-${this.props.course.id}`}
               link={this.props.getShareLink(this.props.course.code)}
               onClickOut={this.hideShareLink}
+              type="Course"
             />) :
             null;
     let waitlistOnlyFlag = null;
@@ -188,10 +189,10 @@ MasterSlot.propTypes = {
   getShareLink: PropTypes.func.isRequired,
 };
 
-export const ShareLink = ({ link, onClickOut, uniqueId }) => (
+export const ShareLink = ({ link, onClickOut, uniqueId, type }) => (
   <ClickOutHandler onClickOut={onClickOut}>
     <div className="share-course-link-wrapper" onClick={e => e.stopPropagation()}>
-      <h5>Share Course</h5>
+      <h5>Share {type}</h5>
       <h6>
         Copy the link below and send it to a friend/advisor!
       </h6>
@@ -215,6 +216,7 @@ ShareLink.propTypes = {
   link: PropTypes.string.isRequired,
   onClickOut: PropTypes.func.isRequired,
   uniqueId: PropTypes.string.isRequired,
+  type: PropTypes.string.isRequired,
 };
 
 export default MasterSlot;

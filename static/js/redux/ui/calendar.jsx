@@ -2,10 +2,10 @@ import PropTypes from 'prop-types';
 import React from 'react';
 import classnames from 'classnames';
 import ReactTooltip from 'react-tooltip';
+import Clipboard from 'clipboard';
 import PaginationContainer from './containers/pagination_container';
 import SlotManagerContainer from './containers/slot_manager_container';
 import CellContainer from './containers/cell_container';
-import Clipboard from 'clipboard';
 import { DAYS } from '../constants/constants';
 import { ShareLink } from './master_slot';
 
@@ -118,12 +118,9 @@ class Calendar extends React.Component {
   }
 
   showShareLink() {
-    // this.setState({ shareLinkShown: true });
     const idEventTarget = `#clipboard-btn-timetable`;
-    console.log('here');
     const clipboard = new Clipboard(idEventTarget);
     clipboard.on('success', () => {
-      console.log("success");
       $(idEventTarget).addClass('clipboardSuccess').text('Copied!');
     });
   }
@@ -162,6 +159,7 @@ class Calendar extends React.Component {
             (<ShareLink
               link={this.props.shareLink}
               uniqueId="timetable"
+              type="Calendar"
               onClickOut={this.hideShareLink}
             />) :
             null;

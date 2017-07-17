@@ -1,6 +1,7 @@
 import PropTypes from 'prop-types';
 import React from 'react';
 import classNames from 'classnames';
+import Clipboard from 'clipboard';
 import Modal from 'boron/WaveModal';
 import CourseModalBodyContainer from '../containers/modals/course_modal_body_container';
 import { ShareLink } from '../master_slot';
@@ -45,6 +46,11 @@ class CourseModal extends React.Component {
 
   showShareLink() {
     this.setState({ shareLinkShown: true });
+    const idEventTarget = `#clipboard-btn-modal`;
+    const clipboard = new Clipboard(idEventTarget);
+    clipboard.on('success', () => {
+      $(idEventTarget).addClass('clipboardSuccess').text('Copied!');
+    });
   }
 
   hideShareLink() {
@@ -70,6 +76,8 @@ class CourseModal extends React.Component {
     const shareLink = this.state.shareLinkShown ?
             (<ShareLink
               link={this.props.getShareLink(data.code)}
+              uniqueId="modal"
+              type="Course"
               onClickOut={this.hideShareLink}
             />) :
             null;
