@@ -3,7 +3,7 @@ import React from 'react';
 import { index as IntervalTree, matches01 as getIntersections } from 'static-interval-tree';
 import Slot from './slot';
 import CustomSlot from './custom_slot';
-import { getNextAvailableColour } from '../util';
+import { getNextAvailableColour, slotToDisplayOffering } from '../util';
 import * as SemesterlyPropTypes from '../constants/semesterlyPropTypes';
 
 class SlotManager extends React.Component {
@@ -100,52 +100,30 @@ class SlotManager extends React.Component {
       M: [], T: [], W: [], R: [], F: [],
     };
 
-    const hoveredSlot = this.props.hoveredSlot || { course: { id: null }, section: { section_type: null } };
-    // don't show slot with same section code & section type as hovered (since they are alternatives)
-    const slots = this.props.slots.filter(slot => {
-      return hoveredSlot.course.id !== slot.course.id ||
-      hoveredSlot.section.section_type !== slot.section.section_type
-    })
+    const hoveredSlot = this.props.hoveredSlot ||
+      { course: { id: null }, section: { section_type: null } };
+    // don't show slot if an alternative is being hovered
+    const slots = this.props.slots.filter(slot => hoveredSlot.course.id !== slot.course.id ||
+      hoveredSlot.section.section_type !== slot.section.section_type);
 
     slots.forEach((slot) => {
       const { course, section, offerings } = slot;
-      offerings.forEach((offering) => {
-        const displayOffering = {
-          ...offering,
-          colourId: this.props.courseToColourIndex[course.id],
-          courseId: course.id,
-          code: course.code,
-          name: course.name,
-          custom: false,
-          meeting_section: section.meeting_section,
-        };
-        if (displayOffering.day in slotsByDay) { // some offerings have a weekend day (sat or sun)
-          slotsByDay[displayOffering.day].push(displayOffering);
-        }
+      // ignore offerings that occur on weekends or have invalid days
+      offerings.filter(offering => offering.day in slotsByDay).forEach((offering) => {
+        const colourId = this.props.courseToColourIndex[course.id];
+        slotsByDay[offering.day].push(slotToDisplayOffering(course, section, offering, colourId));
       });
     });
 
     if (this.props.hoveredSlot !== null) {
       const { course, section, offerings } = this.props.hoveredSlot;
-      offerings.forEach((offering) => {
+      offerings.filter(offering => offering.day in slotsByDay).forEach((offering) => {
         const colourId = (course.id in this.props.courseToColourIndex) ?
           this.props.courseToColourIndex[course.id] :
           getNextAvailableColour(this.props.courseToColourIndex);
-
-        const displayOffering = {
-          ...offering,
-          colourId,
-          courseId: course.id,
-          code: course.code,
-          name: course.name,
-          custom: false,
-          meeting_section: section.meeting_section,
-        };
-        if (displayOffering.day in slotsByDay) { // some offerings have a weekend day (sat or sun)
-          slotsByDay[displayOffering.day].push(displayOffering);
-        }
+        slotsByDay[offering.day].push(slotToDisplayOffering(course, section, offering, colourId));
       });
-    };
+    }
 
     // custom slots
     for (let i = 0; i < this.props.custom.length; i++) {
