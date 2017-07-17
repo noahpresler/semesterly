@@ -11,41 +11,13 @@
 # GNU General Public License for more details.
 
 import re, collections
-
-def cleandict(dirt):
-	if not isinstance(dirt, dict):
-		return deep_clean(dirt)
-	return { k: cleandict(v) for k,v in dirt.iteritems() if deep_clean(v) is not None }
+import sys
 
 def make_list(l):
 	if not isinstance(l, list) or isinstance(l, basestring):
 		l = [l]
 	return l
 
-# FIXME -- 
-# NOTE: mutates text, unicode whitspace removal should be part of extractor
-def deep_clean(dirt):
-	if dirt is None:
-		return None
-	whitespace = re.compile(r'(?:\u00a0)|(?:\xc2\xa0)', re.IGNORECASE)
-	if isinstance(dirt, basestring):
-		return whitespace.sub(' ', dirt).strip()
-	if isinstance(dirt, dict):
-		dirt = cleandict(dirt) # recursively remove nested empty dictionaries
-	elif isinstance(dirt, list):
-		for i in range(len(dirt)):
-			if isinstance(dirt[i], basestring):
-				dirt[i] = whitespace.sub(' ', dirt[i]).strip()
-	elif isinstance(dirt, basestring):
-		dirt = whitespace.sub(' ', dirt).strip()
-	try:
-		b = filter(None, dirt)
-		if len(dirt) == 0:
-			return None
-		dirt = b
-	except TypeError:
-		pass
-	return dirt
 
 def update(d, u):
 	'''Recursive update to dictionary w/o overwriting upper levels.

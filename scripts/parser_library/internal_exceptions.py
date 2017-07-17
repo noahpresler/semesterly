@@ -64,6 +64,8 @@ class IngestorWarning(JsonException, UserWarning):
 	def __str__(self):
 		return 'warning: ' + super(IngestorWarning, self).__str__()
 
+class IngestorError(Exception): pass
+
 import simplejson as json
 from pygments import highlight, lexers, formatters, filters
 def pretty_colored_json(j):
