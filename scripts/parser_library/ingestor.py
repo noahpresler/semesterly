@@ -1,7 +1,7 @@
 """
-Parsing library Ingestor.
+Data Pipeline - Ingestor.
 
-@org      Semeseterly
+@org      Semesterly
 @author   Michael N. Miller
 @date     1/13/17
 """
@@ -10,20 +10,34 @@ from __future__ import absolute_import, division, print_function
 
 import jsonschema
 
-from scripts.parser_library.internal_utils import *
-
-from scripts.parser_library.internal_exceptions import IngestorWarning
+from scripts.parser_library.internal_exceptions import IngestorError, \
+    IngestorWarning
 from scripts.parser_library.internal_exceptions import JsonValidationError, \
     JsonValidationWarning, JsonDuplicationWarning
+from scripts.parser_library.internal_utils import cleandict, deep_clean, \
+    make_list
 from scripts.parser_library.logger import JsonListLogger
 from scripts.parser_library.tracker import NullTracker
 from scripts.parser_library.validator import Validator
 
 
 class Ingestor(dict):
-    """Ingest parsing data into formatted json."""
+    """Ingest parsing data into formatted json.
 
-    ALL_KEYS = {
+    Mimics functionality of dict.
+
+    Attributes:
+        break_on_error (bool): Break on errors?
+        break_on_warning (bool): Break on warnings?
+        logger (parser_library.logger): Logger object.
+        school (str): School code (e.g. jhu, gw, umich).
+        skip_shallow_duplicates (bool): Description
+        tracker (parser_library.tracker): Tracker object.
+        validate (bool): Flag to enable/disable validation.
+        validator (parser_library.validator): Validator instance.
+    """
+
+    _ALL_KEYS = {
         'school',
         'kind',
         'department',
@@ -32,8 +46,7 @@ class Ingestor(dict):
         'department_code',
         'dept_name',
         'dept_code',
-        'code',
-        'course_code',
+        'code', 'course_code', 'course',
         'name',
         'course_name',
         'prerequisites',
@@ -90,20 +103,36 @@ class Ingestor(dict):
                  skip_shallow_duplicates=True,
                  hide_progress_bar=False,
                  tracker=NullTracker()):
-        """Construct ingestor object and resolve kwargs."""
+        """Construct ingestor object and resolve options.
+
+        Also validates school directory.
+
+        Args:
+            school (string): The school code (e.g. jhu, gw, umich).
+            validate (bool, optional): Perform validation?
+            config_path (None, optional): Configuration file path.
+            output_path (None, optional): Json output path.
+            output_error_path (None, optional): Pipeline error path.
+            break_on_error (bool, optional): Stop ingesting on error.
+            break_on_warning (bool, optional): Stop ingesting on warning.
+            skip_shallow_duplicates (bool, optional): Skip ingesting courses
+                that have already been seen.
+            hide_progress_bar (bool, optional): Hide ingestion progress bar?
+            tracker (parser_library.tracker, optional): tracker object
+        """
         self.school = school
         self.validate = validate
         self.break_on_error = break_on_error
         self.break_on_warning = break_on_warning
         self.skip_shallow_duplicates = skip_shallow_duplicates
 
-        # TODO - validate that this directory actually exists and is correct
         directory = 'scripts/{}'.format(school)
-        if not config_path:
+        # Validator.validate_school_directory(directory)
+        if config_path is None:
             config_path = '{}/config.json'.format(directory)
-        if not output_path:
+        if output_path is None:
             output_path = '{}/data/courses.json'.format(directory)
-        if not output_error_path:
+        if output_error_path is None:
             output_error_path = '{}/logs/error.log'.format(directory)
 
         # Initialize loggers for json and errors.
@@ -111,38 +140,58 @@ class Ingestor(dict):
                                      errorfile=output_error_path)
         self.logger.open()
 
-        # Setup tracker for digestion and progress bar.
         self.tracker = tracker
         self.tracker.set_mode('ingesting')
 
         self.validator = Validator(config_path, tracker=self.tracker)
 
-        super(Ingestor, self).__init__()  # Adds dictionary functionality.
+        # Inherit dictionary functionality.
+        super(Ingestor, self).__init__()
 
-    def getchain(self, *keys):
-        """Match the first key found in self dictionary."""
+    def _get(self, *keys, **kwargs):
+        """Match the first key found in self dictionary.
+
+        Note that this is purposefully not an override to __get__.
+        This allows the Ingestor to maintain dictionary-like
+        functionality for the API user while internally checking itself.
+
+        Args:
+            *keys: The list of keys.
+            **kwargs: default return option
+                TODO - Change on update to Python3
+
+        Returns:
+            The value of the key in the Ingestor instance.
+
+        Raises:
+            IngestorError: Enforce Ingestor._ALL_KEYS
+        """
+        default = kwargs.get('default')
         for key in keys:
-            if key in self:
-                return self[key]
-        return None
+            if key not in Ingestor._ALL_KEYS:
+                raise IngestorError('{} not in Ingestor._ALL_KEYS'.format(key))
+            if key not in self:
+                continue
+            return self[key]
+        return default
 
     def ingest_course(self):
         """Create course json from info in model map.
 
         Returns:
-            json object model for a course
+            dict: course
         """
         # support nested and non-nested department ingestion
-        department = self.get('department')
+        department = self._get('department')
         if ('department' not in self or
                 ('department_name' in self or
                     'department_code' in self or
                     'dept_name' in self or
                     'dept_code' in self)):
-            # if not isinstance(self.getchain('department', 'dept'), dict):
+            # if not isinstance(self._get('department', 'dept'), dict):
             department = {
-                'name': self.getchain('department_name', 'dept_name'),
-                'code': self.getchain('department_code', 'dept_code')
+                'name': self._get('department_name', 'dept_name'),
+                'code': self._get('department_code', 'dept_code')
             }
 
         course = {
@@ -150,20 +199,25 @@ class Ingestor(dict):
             'school': {
                 'code': self.school
             },
-            'code': self.getchain('code', 'course_code'),
-            'name': self.getchain('name', 'course_name'),
+            'code': self._get('course_code', 'code', 'course'),
+            'name': self._get('name', 'course_name'),
             'department': department,
-            'credits': self.getchain('credits', 'num_credits'),
-            'prerequisites': deep_clean(make_list(self.getchain('prerequisites', 'prereqs'))),
-            'corequisites': deep_clean(make_list(self.getchain('corequisites', 'coreqs'))),
-            'exclusions': deep_clean(make_list(self.get('exclusions'))),
-            'description': deep_clean(make_list(self.getchain('description', 'descr'))),
-            'areas': deep_clean(self.get('areas')),
-            'level': self.get('level'),
-            'cores': deep_clean(make_list(self.get('cores'))),
-            'geneds': deep_clean(make_list(self.get('geneds'))),
-            'sections': self.get('sections'),
-            'homepage': self.getchain('homepage', 'website'),
+            'credits': self._get('credits', 'num_credits'),
+            'prerequisites': deep_clean(make_list(
+                self._get('prerequisites',
+                          'prereqs')
+            )),
+            'corequisites': deep_clean(make_list(self._get('corequisites',
+                                                           'coreqs'))),
+            'exclusions': deep_clean(make_list(self._get('exclusions'))),
+            'description': deep_clean(make_list(self._get('description',
+                                                          'descr'))),
+            'areas': deep_clean(self._get('areas')),
+            'level': self._get('level'),
+            'cores': deep_clean(make_list(self._get('cores'))),
+            'geneds': deep_clean(make_list(self._get('geneds'))),
+            'sections': self._get('sections'),
+            'homepage': self._get('homepage', 'website'),
         }
         course = cleandict(course)
         self._validate_and_log(course)
@@ -175,10 +229,13 @@ class Ingestor(dict):
         """Create section json object from info in model map.
 
         Args:
-            course: course info mapping
+            course (dict): mapping
 
         Returns:
-            json object model for a section
+            dict: section
+
+        Raises:
+            IngestorWarning: cannot resolve key
         """
         # handle nested instructor definition and resolution
         instructors = None
@@ -195,38 +252,42 @@ class Ingestor(dict):
                 'instructors'
             ]) & set(self)
 
-        if len(instr_keys) == 0:
-            pass
-        elif len(instr_keys) > 1:
-            raise IngestorWarning('cannot resolve instructors data ({})'.format(','.join(instr_keys)), self)
-        else:  # len(instr_keys) == 1
+        if len(instr_keys) == 1:
             instructors = self[list(instr_keys)[0]]
             instructors = deep_clean(make_list(instructors))
             if instructors is not None:
                 for i in range(len(instructors)):
                     if isinstance(instructors[i], basestring):
                         instructors[i] = {'name': instructors[i]}
+        elif len(instr_keys) > 1:
+            raise IngestorWarning(
+                'cannot resolve instructors from keys: {}'.format(
+                    ','.join(instr_keys)
+                ),
+                self
+            )
 
         section = {
             'kind': 'section',
             'course': {
                 'code': course['code']
             },
-            'code': self.getchain('section_code', 'section', 'meeting_section'), # NOTE: design conflict with code in course
-            'name': self.get('section_name'),
-            'term': self.getchain('term', 'semester'),
-            'year': self.get('year'),
+            'code': self._get('section_code', 'section',
+                              'meeting_section'),
+            'name': self._get('section_name'),
+            'term': self._get('term', 'semester'),
+            'year': self._get('year'),
             'instructors': instructors,
-            'capacity': self.getchain('capacity', 'size'),
-            'enrollment': self.getchain('enrollment', 'enrolment'),
-            'waitlist': self.get('waitlist'),
-            'waitlist_size': self.get('waitlist_size'),
-            'remaining_seats': self.get('remaining_seats'),
-            'type': self.getchain('type', 'section_type'),
-            'fees': self.getchain('fees', 'fee'),
-            'final_exam': self.get('final_exam'),
-            'textbooks': self.get('textbooks'),
-            'meetings': self.get('offerings')
+            'capacity': self._get('capacity', 'size'),
+            'enrollment': self._get('enrollment', 'enrolment'),
+            'waitlist': self._get('waitlist'),
+            'waitlist_size': self._get('waitlist_size'),
+            'remaining_seats': self._get('remaining_seats'),
+            'type': self._get('type', 'section_type'),
+            'fees': self._get('fees', 'fee'),
+            'final_exam': self._get('final_exam'),
+            'textbooks': self._get('textbooks'),
+            'meetings': self._get('offerings')
         }
 
         section = cleandict(section)
@@ -239,33 +300,34 @@ class Ingestor(dict):
         """Create meeting ingested json map.
 
         Args:
-            section: section info mapping
+            section (dict): section info
+
         Returns:
-            json object model for a meeting
+            dict: meeting
         """
-        # Handle nested time definition.
-        time = self.get('time')
+        # Nested time definition.
+        time = self._get('time')
         if 'time' not in self:
             time = {
-                'start': self.getchain('time_start', 'start_time'),
-                'end': self.getchain('time_end', 'end_time')
+                'start': self._get('time_start', 'start_time'),
+                'end': self._get('time_end', 'end_time')
             }
 
-        # handle nested location definition
-        location = self.get('location')
-        if isinstance(self.getchain('location', 'loc', 'where'), basestring):
-            location = {'where': self.getchain('location', 'loc', 'where')}
+        # Nested location definition.
+        location = self._get('location')
+        if isinstance(self._get('location', 'loc', 'where'), basestring):
+            location = {'where': self._get('location', 'loc', 'where')}
 
         meeting = {
             'kind': 'meeting',
             'course': section['course'],
             'section': {
                 'code': section['code'],
-                'year': self.get('year'),
-                'term': self.getchain('term', 'semester')
+                'year': self._get('year'),
+                'term': self._get('term', 'semester')
             },
-            'days': deep_clean(make_list(self.getchain('days', 'day'))),
-            'dates': deep_clean(make_list(self.getchain('dates', 'date'))),
+            'days': deep_clean(make_list(self._get('days', 'day'))),
+            'dates': deep_clean(make_list(self._get('dates', 'date'))),
             'time': time,
             'location': location
         }
@@ -278,25 +340,25 @@ class Ingestor(dict):
         """Create textbook link json object.
 
         Args:
-            section{dict}: valid section definition
+            section (None, :obj:`dict`, optional): Description
         Returns:
-            the textbook_link as a json object
+            dict: textbook link.
         """
         textbook_link = {
             'kind': 'textbook_link',
             'school': {
-                'code': self.getchain('school', 'school_code')
+                'code': self._get('school', 'school_code')
             },
             'course': {
-                'code': self.get('course_code')
+                'code': self._get('course_code')
             },
             'section': {
-                'code': self.get('section_code'),
-                'year': self.get('year'),
-                'term': self.getchain('term', 'semester')
+                'code': self._get('section_code'),
+                'year': self._get('year'),
+                'term': self._get('term', 'semester')
             },
-            'isbn': self.get('isbn'),
-            'required': self.get('required')
+            'isbn': self._get('isbn'),
+            'required': self._get('required')
         }
 
         textbook_link = cleandict(textbook_link)
@@ -311,15 +373,15 @@ class Ingestor(dict):
         """Create textbook json object.
 
         Returns:
-            json object model for textbook
+            dict: textbook
         """
         textbook = {
             'kind': 'textbook',
-            'isbn': self.get('isbn'),
-            'detail_url': self.get('detail_url'),
-            'image_url': self.get('image_url'),
-            'author': self.get('author'),
-            'title': self.get('title')
+            'isbn': self._get('isbn'),
+            'detail_url': self._get('detail_url'),
+            'image_url': self._get('image_url'),
+            'author': self._get('author'),
+            'title': self._get('title')
         }
 
         textbook = cleandict(textbook)
@@ -334,31 +396,35 @@ class Ingestor(dict):
         self.clear()
 
     def _validate_and_log(self, obj):
-        if self.validate:
-            is_valid, skip = self._run_validator(obj)
-            if skip:
-                return
-            if is_valid:
-                self.logger.log(obj)
-            # Ingestor warning
-            try:
-                for key in self:
-                    if key not in Ingestor.ALL_KEYS:
-                        raise IngestorWarning(
-                            'ingestor does not support key {}'.format(key),
-                            self
-                        )
-            except IngestorWarning as e:
-                is_valid = True
-                self.logger.log(e)
-                if self.break_on_warning:
-                    raise e
-        else:
+        if self.validate is False:
             self.logger.log(obj)
+            self.tracker.track_count(obj['kind'], 'total')
+            return
+
+        is_valid, skip = self._run_validator(obj)
+        if skip:
+            return
+        if is_valid:
+            self.logger.log(obj)
+        try:
+            for key in self:
+                if key in Ingestor._ALL_KEYS:
+                    continue
+                raise IngestorWarning(
+                    'ingestor does not support key {}'.format(key),
+                    self
+                )
+        except IngestorWarning as e:
+            is_valid = True
+            self.logger.log(e)
+            if self.break_on_warning:
+                raise e
         self.tracker.track_count(obj['kind'], 'total')
 
     def _run_validator(self, data):
-        is_valid, full_skip = False, False
+        is_valid = False
+        full_skip = False
+
         try:
             self.validator.validate(data)
             self.tracker.track_count(data['kind'], 'valid')
@@ -382,4 +448,5 @@ class Ingestor(dict):
                 self.logger.log(e)
                 if self.break_on_warning:
                     raise e
+
         return is_valid, full_skip
