@@ -89,6 +89,7 @@ class MasterSlot extends React.Component {
     const profDisp = this.props.professors === null ? null : <h3>{ prof }</h3>;
     const shareLink = this.state.shareLinkShown ?
             (<ShareLink
+              courseId={this.props.course.id}
               link={this.props.getShareLink(this.props.course.code)}
               courseId={this.props.course.id}
               onClickOut={this.hideShareLink}
