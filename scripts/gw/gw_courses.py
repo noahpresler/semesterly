@@ -229,6 +229,7 @@ class GWParser(CourseParser):
         self.requester.get(GWParser.URL + '/bwskfcls.P_CrseSearch',
                            parse=False,
                            params={'term_in': ''})
+
     def _parse_meetings(self, meetings_soup, section_model):
         for meeting_soup in meetings_soup:
             col = meeting_soup.find_all('td')
