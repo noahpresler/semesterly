@@ -21,7 +21,7 @@ from scripts.parser_library.internal_utils import safe_cast
 class GWParser(CourseParser):
     """George Washington University course parser object.
 
-    NOTE: cannot support multiple login!
+    NOTE: GW cannot support multiple login!
     """
 
     SCHOOL = 'gw'
@@ -41,50 +41,6 @@ class GWParser(CourseParser):
         }
 
         super(GWParser, self).__init__(GWParser.SCHOOL, **kwargs)
-
-    def _login(self):
-        # Collect necessary cookies
-        self.requester.get(GWParser.URL + '/twbkwbis.P_WWWLogin',
-                           parse=False)
-
-        self.requester.headers['Referer'] = '{}/twbkwbis.P_WWWLogin'.format(
-            GWParser.URL
-        )
-
-        logged_in = self.requester.post(
-            GWParser.URL + '/twbkwbis.P_ValLogin',
-            parse=False,
-            data={
-                'sid': GWParser.CREDENTIALS['USERNAME'],
-                'PIN': GWParser.CREDENTIALS['PASSWORD']
-            }
-        )
-
-        if logged_in.status_code != 200:
-            print('Unexpected error: login unsuccessful',
-                  sys.exc_info()[0],
-                  file=sys.stderr)
-            raise Exception('GW Parser, failed login')
-
-        # Deal with security question page.
-        self.requester.post(
-            '{}/twbkwbis.P_ProcSecurityAnswer'.format(GWParser.URL),
-            parse=False,
-            data={
-                'RET_CODE': '',
-                'SID': GWParser.CREDENTIALS['USERNAME'],
-                'QSTN_NUM': 1,
-                'answer': GWParser.CREDENTIALS['SECURITY_QUESTION_ANSWER']
-            }
-        )
-
-    def _direct_to_search_page(self):
-        genurl = GWParser.URL + '/twbkwbis.P_GenMenu'
-        actions = ['bmenu.P_MainMnu', 'bmenu.P_StuMainMnu', 'bmenu.P_RegMnu']
-        map(lambda n: self.requester.get(genurl, params={'name': n}), actions)
-        self.requester.get(GWParser.URL + '/bwskfcls.P_CrseSearch',
-                           parse=False,
-                           params={'term_in': ''})
 
     def start(self, **kwargs):
         """Start parse."""
@@ -230,6 +186,49 @@ class GWParser(CourseParser):
 
                         self._parse_meetings(meetings_soup, section_model)
 
+    def _login(self):
+        # Collect necessary cookies
+        self.requester.get(GWParser.URL + '/twbkwbis.P_WWWLogin',
+                           parse=False)
+
+        self.requester.headers['Referer'] = '{}/twbkwbis.P_WWWLogin'.format(
+            GWParser.URL
+        )
+
+        logged_in = self.requester.post(
+            GWParser.URL + '/twbkwbis.P_ValLogin',
+            parse=False,
+            data={
+                'sid': GWParser.CREDENTIALS['USERNAME'],
+                'PIN': GWParser.CREDENTIALS['PASSWORD']
+            }
+        )
+
+        if logged_in.status_code != 200:
+            print('Unexpected error: login unsuccessful',
+                  sys.exc_info()[0],
+                  file=sys.stderr)
+            raise Exception('GW Parser, failed login')
+
+        # Deal with security question page.
+        self.requester.post(
+            '{}/twbkwbis.P_ProcSecurityAnswer'.format(GWParser.URL),
+            parse=False,
+            data={
+                'RET_CODE': '',
+                'SID': GWParser.CREDENTIALS['USERNAME'],
+                'QSTN_NUM': 1,
+                'answer': GWParser.CREDENTIALS['SECURITY_QUESTION_ANSWER']
+            }
+        )
+
+    def _direct_to_search_page(self):
+        genurl = GWParser.URL + '/twbkwbis.P_GenMenu'
+        actions = ['bmenu.P_MainMnu', 'bmenu.P_StuMainMnu', 'bmenu.P_RegMnu']
+        map(lambda n: self.requester.get(genurl, params={'name': n}), actions)
+        self.requester.get(GWParser.URL + '/bwskfcls.P_CrseSearch',
+                           parse=False,
+                           params={'term_in': ''})
     def _parse_meetings(self, meetings_soup, section_model):
         for meeting_soup in meetings_soup:
             col = meeting_soup.find_all('td')
