@@ -99,12 +99,35 @@ class SlotManager extends React.Component {
     const slotsByDay = {
       M: [], T: [], W: [], R: [], F: [],
     };
-    const slots = this.props.slots;
+
+    const hoveredSlot = this.props.hoveredSlot || { course: { id: null }, section: { section_type: null } };
+    // don't show slot with same section code & section type as hovered (since they are alternatives)
+    const slots = this.props.slots.filter(slot => {
+      return hoveredSlot.course.id !== slot.course.id ||
+      hoveredSlot.section.section_type !== slot.section.section_type
+    })
 
     slots.forEach((slot) => {
       const { course, section, offerings } = slot;
       offerings.forEach((offering) => {
-        // will only be undefined for hovered slot
+        const displayOffering = {
+          ...offering,
+          colourId: this.props.courseToColourIndex[course.id],
+          courseId: course.id,
+          code: course.code,
+          name: course.name,
+          custom: false,
+          meeting_section: section.meeting_section,
+        };
+        if (displayOffering.day in slotsByDay) { // some offerings have a weekend day (sat or sun)
+          slotsByDay[displayOffering.day].push(displayOffering);
+        }
+      });
+    });
+
+    if (this.props.hoveredSlot !== null) {
+      const { course, section, offerings } = this.props.hoveredSlot;
+      offerings.forEach((offering) => {
         const colourId = (course.id in this.props.courseToColourIndex) ?
           this.props.courseToColourIndex[course.id] :
           getNextAvailableColour(this.props.courseToColourIndex);
@@ -122,7 +145,7 @@ class SlotManager extends React.Component {
           slotsByDay[displayOffering.day].push(displayOffering);
         }
       });
-    });
+    };
 
     // custom slots
     for (let i = 0; i < this.props.custom.length; i++) {
@@ -196,6 +219,7 @@ class SlotManager extends React.Component {
 
 SlotManager.defaultProps = {
   socialSections: false,
+  hoveredSlot: null,
 };
 
 SlotManager.propTypes = {
@@ -210,6 +234,7 @@ SlotManager.propTypes = {
   fetchCourseInfo: PropTypes.func.isRequired,
   days: PropTypes.arrayOf(PropTypes.string).isRequired,
   slots: PropTypes.arrayOf(SemesterlyPropTypes.denormalizedSlot).isRequired,
+  hoveredSlot: SemesterlyPropTypes.denormalizedSlot,
   courseToColourIndex: PropTypes.shape({
     '*': PropTypes.number,
   }).isRequired,

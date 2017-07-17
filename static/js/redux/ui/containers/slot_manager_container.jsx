@@ -16,7 +16,8 @@ import SlotManager from '../slot_manager';
 
 
 const mapStateToProps = (state, ownProps) => ({
-  slots: getActiveDenormTimetable(state).slots.concat(getHoveredSlots(state)),
+  slots: getActiveDenormTimetable(state).slots,
+  hoveredSlot: getHoveredSlots(state),
   isLocked: (courseId, section) => {
       // check the courseSections state variable, which tells us
       // precisely which courses have which sections locked, if any
