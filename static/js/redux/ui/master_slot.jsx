@@ -2,6 +2,7 @@ import PropTypes from 'prop-types';
 import React from 'react';
 import ClickOutHandler from 'react-onclickout';
 import uniq from 'lodash/uniq';
+import Clipboard from 'clipboard';
 import COLOUR_DATA from '../constants/colours';
 import * as SemesterlyPropTypes from '../constants/semesterlyPropTypes';
 
@@ -189,7 +190,11 @@ MasterSlot.propTypes = {
 
 export const ShareLink = ({ link, onClickOut, courseId }) => (
   <ClickOutHandler onClickOut={onClickOut}>
-    <div className="share-course-link-wrapper">
+    <div className="share-course-link-wrapper" onClick={e => e.stopPropagation()}>
+      <h5>Share Course</h5>
+      <h6>
+        Copy the link below and send it to a friend/advisor!
+      </h6>
       <div className="tip-border" />
       <div className="tip" />
       <input
