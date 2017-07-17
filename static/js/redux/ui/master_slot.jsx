@@ -187,7 +187,6 @@ MasterSlot.propTypes = {
   getShareLink: PropTypes.func.isRequired,
 };
 
-
 export const ShareLink = ({ link, onClickOut, courseId }) => (
   <ClickOutHandler onClickOut={onClickOut}>
     <div className="share-course-link-wrapper">
