@@ -17,7 +17,7 @@ from scripts.textbooks.amazon import amazon_textbook_fields
 from scripts.parser_library.base_parser import CourseParser
 from scripts.parser_library.internal_exceptions import CourseParseError
 from scripts.parser_library.extractor import filter_departments, \
-    filter_term_and_year, titlize, extract_info
+    filter_years_and_terms, titlize, extract_info
 
 
 class PeoplesoftParser(CourseParser):
@@ -25,7 +25,7 @@ class PeoplesoftParser(CourseParser):
 
     __metaclass__ = ABCMeta
 
-    _DAY_MAP = {
+    DAY_MAP = {
         'Mo': 'M',
         'Tu': 'T',
         'We': 'W',
@@ -35,12 +35,12 @@ class PeoplesoftParser(CourseParser):
         'Su': 'U'
     }
 
-    _AJAX_PARAMS = {
+    AJAX_PARAMS = {
         'ICAJAX': '1',
         'ICNAVTYPEDROPDOWN': '0'
     }
 
-    _IC_ACTIONS = {
+    IC_ACTIONS = {
         'adv_search': 'DERIVED_CLSRCH_SSR_EXPAND_COLLAPS$149$$1',
         'save': '#ICSave',
         'term': 'CLASS_SRCH_WRK2_STRM$35$',
@@ -80,9 +80,9 @@ class PeoplesoftParser(CourseParser):
         soup, params = self._goto_search_page(self.url_params)
         if years_and_terms is None:
             years_and_terms = PeoplesoftParser._get_years_and_terms(soup)
-        self.years_and_terms = filter_term_and_year(years_and_terms,
-                                                    cmd_years,
-                                                    cmd_terms)
+        self.years_and_terms = filter_years_and_terms(years_and_terms,
+                                                      cmd_years,
+                                                      cmd_terms)
         for year, terms in self.years_and_terms.items():
             self.ingestor['year'] = year
             for term_name, term_code in terms.items():
@@ -207,9 +207,9 @@ class PeoplesoftParser(CourseParser):
 
     def _term_update(self, term_code, params):
         """Update search page with term as parameter."""
-        params[PeoplesoftParser._IC_ACTIONS['term']] = term_code
+        params[PeoplesoftParser.IC_ACTIONS['term']] = term_code
         params.update(PeoplesoftParser._create_ic_action('term'))
-        params.update(PeoplesoftParser._AJAX_PARAMS)
+        params.update(PeoplesoftParser.AJAX_PARAMS)
         return self.requester.post(self.base_url, params=params)
 
     @staticmethod
@@ -217,7 +217,7 @@ class PeoplesoftParser(CourseParser):
         """Filter out params related to ajax."""
         return {
             k: v for k, v in params.items()
-            if k not in PeoplesoftParser._AJAX_PARAMS.keys()
+            if k not in PeoplesoftParser.AJAX_PARAMS.keys()
         }
 
     def _get_dept_param_key(self, soup):
@@ -303,7 +303,7 @@ class PeoplesoftParser(CourseParser):
         # NOTE: truncate instructor list to 5 instructors for db
         if len(instructors) > 5:
             instructors = instructors[:5]
-            instructors.append("..., ...")
+            instructors.append('..., ...')
         self.ingestor['instrs'] = list(set(instructors))
 
         if areas is not None:
@@ -338,7 +338,7 @@ class PeoplesoftParser(CourseParser):
 
             if rsched:
                 days = map(
-                    lambda d: PeoplesoftParser._DAY_MAP[d],
+                    lambda d: PeoplesoftParser.DAY_MAP[d],
                     re.findall(r'[A-Z][^A-Z]*', rsched.group(1))
                 )
                 time = (
@@ -443,7 +443,7 @@ class PeoplesoftParser(CourseParser):
         })
 
         if ajax:
-            params.update(PeoplesoftParser._AJAX_PARAMS)
+            params.update(PeoplesoftParser.AJAX_PARAMS)
 
         return params
 
@@ -468,7 +468,7 @@ class PeoplesoftParser(CourseParser):
 
     @staticmethod
     def _create_ic_action(act):
-        return {'ICAction': PeoplesoftParser._IC_ACTIONS[act]}
+        return {'ICAction': PeoplesoftParser.IC_ACTIONS[act]}
 
     def _handle_special_case_on_search(self, soup):
         if self.verbosity >= 3:
