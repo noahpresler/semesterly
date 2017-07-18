@@ -85,7 +85,8 @@ class PeoplesoftParser(CourseParser):
                                                       cmd_terms)
         for year, terms in self.years_and_terms.items():
             self.ingestor['year'] = year
-            for term_name, term_code in terms.items():
+            for term_name in terms:
+                term_code = years_and_terms[year][term_name]
                 soup = self._term_update(term_code, params)
                 self.ingestor['term'] = term_name
 
