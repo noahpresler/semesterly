@@ -1,5 +1,4 @@
-"""
-Parser Library: Base (course) Parser.
+"""Parser Library: Base (course) Parser.
 
 @org    Semeseterly
 @author Michael N. Miller
@@ -51,17 +50,19 @@ class BaseParser:
             validate (bool, optional): Description
             tracker (None, parser_library.tracker, optional): Description
         """
+        # NOTE: handle line to long in pep8... :'(
+        ssd = skip_shallow_duplicates
+
         self.school = school
         self.requester = Requester()
         self.extractor = Extractor()
-
         self.ingestor = Ingestor(school,
                                  config_path,
                                  output_path,
                                  output_error_path,
                                  break_on_error=break_on_error,
                                  break_on_warning=break_on_warning,
-                                 skip_shallow_duplicates=skip_shallow_duplicates,
+                                 skip_shallow_duplicates=ssd,
                                  hide_progress_bar=hide_progress_bar,
                                  validate=validate,
                                  tracker=tracker)
