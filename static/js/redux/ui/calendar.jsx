@@ -115,6 +115,7 @@ class Calendar extends React.Component {
 
   hideShareLink() {
     this.setState({ shareLinkShown: false });
+    this.setState({ isFetchingShareLink: false });
   }
 
   showShareLink() {
