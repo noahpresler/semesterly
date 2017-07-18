@@ -8,7 +8,7 @@ Data Pipeline - Ingestor.
 
 from __future__ import absolute_import, division, print_function
 
-import re, sys
+import re
 import jsonschema
 
 from scripts.parser_library.internal_exceptions import IngestorError, \
