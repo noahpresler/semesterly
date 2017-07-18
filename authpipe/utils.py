@@ -14,6 +14,9 @@ hashids = Hashids(salt="x98as7dhg&h*askdj^has!kj?xz<!9")
 
 
 def get_google_credentials(student):
+    """
+    Creates a google credentials object for a student for use with Google APIs. 
+    """
     social_user = student.user.social_auth.filter(
         provider='google-oauth2',
     ).first()
@@ -31,6 +34,10 @@ def get_google_credentials(student):
 
 
 def check_student_token(student, token):
+    """
+    Validates a token: checks that it is at most 2 days old and that it 
+    matches the currently authenticated student.
+    """
     try:
         key = '%s:%s' % (student.id, token)
         TimestampSigner().unsign(key, max_age=60 * 60 * 48)  # Valid for 2 days
@@ -40,6 +47,11 @@ def check_student_token(student, token):
 
 
 def associate_students(strategy, details, response, user, *args, **kwargs):
+    """
+    Part of our custom Python Social Auth authentication pipeline. If a user
+    already has an account associated with an email, associates that user with 
+    the new backend. 
+    """
     try:
         email = kwargs['details']['email']
         kwargs['user'] = User.objects.get(email=email)
@@ -57,6 +69,13 @@ def associate_students(strategy, details, response, user, *args, **kwargs):
 
 
 def create_student(strategy, details, response, user, *args, **kwargs):
+    """
+    Part of the Python Social Auth pipeline which creates a student upon
+    signup. If student already exists, updates information from Facebook
+    or Google (depending on the backend).
+
+    Saves friends and other information to fill database.
+    """
     backend_name = kwargs['backend'].name
     if Student.objects.filter(user=user).exists():
         new_student = Student.objects.get(user=user)

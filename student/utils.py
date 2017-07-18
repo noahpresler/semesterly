@@ -15,6 +15,13 @@ hashids = Hashids(salt="x98as7dhg&h*askdj^has!kj?xz<!9")
 
 
 def next_weekday(d, weekday):
+    """
+    Given a current date, d, and a target weekday, calculate 
+    the next occurence (moving in the future) of that weekday.
+
+    Returns: 
+        (:obj:`datetime.datetime`): the next weekday of the given type
+    """
     d = d - datetime.timedelta(days=1)
     days_ahead = DAY_LIST.index(weekday) - d.weekday()
     if days_ahead <= 0:  # Target day already happened this week
@@ -23,6 +30,10 @@ def next_weekday(d, weekday):
 
 
 def get_student(request):
+    """
+    Returns:
+        (:obj:`Student`): the student belonging to the authenticated user
+    """
     logged = request.user.is_authenticated()
     if logged and Student.objects.filter(user=request.user).exists():
         return Student.objects.get(user=request.user)
@@ -32,6 +43,23 @@ def get_student(request):
 
 def get_classmates_from_course_id(
         school, student, course_id, semester, friends=None, include_same_as=False):
+    """
+    Get's current and past classmates (students with timetables containing
+    the provided course ID). Classmates must have social_courses enabled 
+    to be included. If social_sections is enabled, info about what section 
+    they are in is also passed. 
+
+    Args:
+        school (:obj:`str`): the school code (e.g. 'jhu')
+        student (:obj:`Student`): the student for whom to find classmates
+        course_id (:obj:`int`): the database id for the course 
+        semester (:obj:`Semester`): the semester that is current (to check for)
+        friends (:obj:`list` of :obj:`Students`):
+            if provided, does not re-query for friends list, uses provided list.
+        include_same_as (:obj:`bool`):
+            If provided as true, searches for classmates in any courses marked 
+            as "same as" in the database.
+    """
     if not friends:
         # All friends with social courses/sharing enabled
         friends = student.friends.filter(social_courses=True)
@@ -54,6 +82,16 @@ def get_classmates_from_course_id(
 
 
 def get_classmates_from_tts(student, course_id, tts):
+    """
+    Returns a list of classmates a student has from a list 
+    of other user's timetables. This utility does the leg work 
+    for :meth:`get_classmates_from_course_id` by taking either a list 
+    of current or past timetables and finding classmates relevant to
+    that list. 
+
+    If both students have social_offerings enabled, adds information about 
+    what sections the student is enrolled in on each classmate.
+    """
     classmates = []
     for tt in tts:
         friend = tt.student
@@ -69,10 +107,18 @@ def get_classmates_from_tts(student, course_id, tts):
 
 
 def make_token(student):
+    """
+    Creates a timestamped token signed by the student ID
+    """
     return TimestampSigner().sign(student.id)
 
 
 def get_student_tts(student, school, semester):
+    """
+    Returns list of a student's :obj:`PersonalTimetable` objects
+    ordered by last updated and structured as dictionaries for 
+    passing to the frontend.
+    """
     tts = student.personaltimetable_set.filter(
         school=school, semester=semester).order_by('-last_updated')
     tts_list = [convert_tt_to_dict(tt) for tt in tts]
