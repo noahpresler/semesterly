@@ -6,6 +6,10 @@ from timetable.school_mappers import VALID_SCHOOLS
 
 
 def validate_subdomain(view_func):
+    """
+    Validates subdomain, redirecting user to 
+    index iof the school is invalid.
+    """
     @wraps(view_func)
     def wrapper(request, *args, **kwargs):
         if request.subdomain not in VALID_SCHOOLS:
