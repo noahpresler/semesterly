@@ -142,12 +142,12 @@ class Validator:
                                 break_on_error=False,
                                 break_on_warning=False,
                                 output_error=None,
-                                hide_progress_bar=False):
+                                display_progress_bar=True):
 
         # Add functionality to tracker.
         # FIXME -- hardcoded master log file
         self.tracker.add_viewer(LogFormatted('scripts/logs/master.log'))
-        if not hide_progress_bar:
+        if display_progress_bar:
             def formatter(stats):
                 return '{}/{}'.format(stats['valid'], stats['total'])
             self.tracker.add_viewer(

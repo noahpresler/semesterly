@@ -118,12 +118,12 @@ def task_parse_school(school, years_and_terms, textbooks=False):
     management.call_command('ingest', school,
                             years_and_terms=json.dumps(years_and_terms),
                             textbooks=textbooks,
-                            hide_progress_bar=True,
+                            display_progress_bar=False,
                             verbosity=0,
                             output=filename)
     management.call_command('digest', school,
                             textbooks=textbooks,
-                            hide_progress_bar=True,
+                            display_progress_bar=True,
                             verbosity=0,
                             data=filename)
     print('Parsed {} {}'.format(school, years_and_terms))

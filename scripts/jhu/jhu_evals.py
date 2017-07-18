@@ -15,7 +15,6 @@ from scripts.parser_library.base_parser import BaseParser
 
 class HopkinsEvalParser(BaseParser):
 
-    SCHOOL = 'jhu'
     CODE_PATTERN = re.compile(r'^.*\..*\..*\..*$')
     SCORE_PATTERN = re.compile(r'.*(\d\.\d\d).*')
     SUMMARY_PATTERN = re.compile(r'Summary:.*|This class had 5 or fewer comments\.')
@@ -28,8 +27,7 @@ class HopkinsEvalParser(BaseParser):
         Args:
             **kwargs: pass-through
         """
-        super(HopkinsEvalParser, self).__init__(HopkinsEvalParser.SCHOOL,
-                                                **kwargs)
+        super(HopkinsEvalParser, self).__init__('jhu', **kwargs)
 
     def start(self, **kwargs):
         for fn in os.listdir('./scripts/jhu/HopkinsEvaluations'):

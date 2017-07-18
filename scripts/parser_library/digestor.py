@@ -35,7 +35,7 @@ class Digestor:
                  output=None,
                  diff=True,
                  load=True,
-                 hide_progress_bar=False,
+                 display_progress_bar=True,
                  tracker=NullTracker()):
 
         # TODO - extrapolate datafile/dict/string resolution to another manager
@@ -63,7 +63,7 @@ class Digestor:
         # Setup tracker for digestion and progress bar.
         self.tracker = tracker
         self.tracker.set_mode('digesting')
-        if not hide_progress_bar:
+        if display_progress_bar:
             def formatter(stats):
                 return '{}'.format(stats['total'])
             self.tracker.add_viewer(ProgressBar(school, formatter))

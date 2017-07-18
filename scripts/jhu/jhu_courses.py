@@ -38,10 +38,11 @@ class HopkinsParser(CourseParser):
         super(HopkinsParser, self).__init__(HopkinsParser.SCHOOL, **kwargs)
 
     def _get_schools(self):
-        url = '{}/codes/schools?key={}'.format(HopkinsParser.API_URL,
-                                               HopkinsParser.KEY)
-        self.schools = self.requester.get(url)
-        print(self.schools, file=sys.stderr)
+        url = '{}/codes/schools'.format(HopkinsParser.API_URL)
+        params = {
+            'key': HopkinsParser.KEY
+        }
+        self.schools = self.requester.get(url, params=params)
 
     def _get_courses(self, school):
         url = '{}/{}/{}'.format(HopkinsParser.API_URL,
@@ -65,7 +66,6 @@ class HopkinsParser(CourseParser):
             self._parse_school(school)
 
     def _parse_school(self, school):
-        print(school, file=sys.stderr)
         courses = self._get_courses(school)
         for course in courses:
             section = self._get_section(course)
