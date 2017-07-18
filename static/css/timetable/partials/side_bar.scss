@@ -11,6 +11,26 @@
 }
 
 .side-bar {
+  input {
+    border: 1px solid $gfff;
+    font-family: $font-body;
+    font-size: 18px;
+    font-weight: 700;
+    line-height: 25px;
+    outline: 0;
+    padding: 5px;
+    transition: border .3s;
+    width: 100%;
+
+    &:focus {
+      border: 1px solid $blue-alt;
+    }
+
+    &:hover {
+      border: 1px solid $gddd;
+    }
+  }
+
   .unsaved {
     font-style: italic;
   }
