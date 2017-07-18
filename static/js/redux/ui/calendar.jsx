@@ -2,6 +2,7 @@ import PropTypes from 'prop-types';
 import React from 'react';
 import classnames from 'classnames';
 import ReactTooltip from 'react-tooltip';
+import Clipboard from 'clipboard';
 import PaginationContainer from './containers/pagination_container';
 import SlotManagerContainer from './containers/slot_manager_container';
 import CellContainer from './containers/cell_container';
@@ -45,6 +46,7 @@ class Calendar extends React.Component {
     super(props);
     this.fetchShareTimetableLink = this.fetchShareTimetableLink.bind(this);
     this.hideShareLink = this.hideShareLink.bind(this);
+    this.showShareLink = this.showShareLink.bind(this);
     this.getTimelineStyle = this.getTimelineStyle.bind(this);
     this.state = {
       shareLinkShown: false,
@@ -115,6 +117,14 @@ class Calendar extends React.Component {
     this.setState({ shareLinkShown: false });
   }
 
+  showShareLink() {
+    const idEventTarget = `#clipboard-btn-timetable`;
+    const clipboard = new Clipboard(idEventTarget);
+    clipboard.on('success', () => {
+      $(idEventTarget).addClass('clipboardSuccess').text('Copied!');
+    });
+  }
+
   render() {
     const saveIcon = this.props.saving ? <i className="fa fa-spin fa-circle-o-notch" /> :
     <i className="fa fa-floppy-o" />;
@@ -131,6 +141,7 @@ class Calendar extends React.Component {
             className={classnames('fa',
                             { 'fa-share-alt': !this.props.isFetchingShareLink },
                             { 'fa-spin fa-circle-o-notch': this.props.isFetchingShareLink })}
+            onClick={this.showShareLink}
           />
         </button>
         <ReactTooltip
@@ -147,6 +158,8 @@ class Calendar extends React.Component {
     const shareLink = this.state.shareLinkShown ?
             (<ShareLink
               link={this.props.shareLink}
+              uniqueId="timetable"
+              type="Calendar"
               onClickOut={this.hideShareLink}
             />) :
             null;
