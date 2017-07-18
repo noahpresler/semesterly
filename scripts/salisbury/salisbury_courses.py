@@ -28,7 +28,6 @@ class SalisburyParser(PeoplesoftParser):
               departments=None,
               textbooks=True,
               verbosity=3,
-              skip_shallow_duplicates=False,
               **kwargs):
         """Start parsing."""
         if years is None:

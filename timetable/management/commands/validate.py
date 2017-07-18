@@ -41,15 +41,15 @@ class Command(BaseCommand):
 				break_on_error=options.get('break_on_error'), # Do not allow digestion if error present
 				break_on_warning=options.get('break_on_warning'),
 				output_error=options.get('output_error'),
-				hide_progress_bar=options['hide_progress_bar'])
+				display_progress_bar=options['display_progress_bar'])
 		except JsonException as e:
 			self.stdout.write(self.style.ERROR('FAILED VALIDATION.'))
 			self.stderr.write(str(e))
-			tracker.see_error('FAILED VALIDATION for {}\n'.format(school) + str(e))			
+			tracker.see_error('FAILED VALIDATION for {}\n'.format(school) + str(e))
 		except Exception as e:
 			self.stdout.write(self.style.ERROR('FAILED VALIDATION.'))
 			self.stderr.write(str(e))
 			tracker.see_error('FAILED VALIDATION for {}\n'.format(school) + str(e))
-		
+
 		self.stdout.write(self.style.SUCCESS("Validation Finished!"))
 		# TODO - add success to master logger using tracker
