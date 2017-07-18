@@ -1,68 +1,60 @@
 import fetch from 'isomorphic-fetch';
+import Cookie from 'js-cookie';
+import { normalize } from 'normalizr';
 import {
     getClassmatesInCourseEndpoint,
     getCourseInfoEndpoint,
     getReactToCourseEndpoint,
 } from '../constants/endpoints';
-import { store } from '../init';
+import { courseSchema } from '../schema';
+import { getSchool, getSemester } from '../actions/school_actions';
 import * as ActionTypes from '../constants/actionTypes';
 
-export function setCourseInfo(json) {
-  return {
-    type: ActionTypes.COURSE_INFO_RECEIVED,
-    data: json,
-  };
-}
+export const setCourseInfo = json => ({
+  type: ActionTypes.COURSE_INFO_RECEIVED,
+  response: normalize(json, courseSchema),
+});
 
-export function setCourseClassmates(json) {
-  return {
-    type: ActionTypes.COURSE_CLASSMATES_RECEIVED,
-    data: json,
-  };
-}
+export const setCourseClassmates = json => ({
+  type: ActionTypes.COURSE_CLASSMATES_RECEIVED,
+  data: json,
+});
 
-export function requestCourseInfo(id) {
-  return {
-    type: ActionTypes.REQUEST_COURSE_INFO,
-    id,
-  };
-}
+export const setCourseId = id => ({
+  type: ActionTypes.SET_COURSE_ID,
+  id,
+});
 
-export function setCourseId(id) {
-  return {
-    type: ActionTypes.SET_COURSE_ID,
-    id,
-  };
-}
+export const fetchCourseClassmates = courseId => (dispatch, getState) => {
+  const state = getState();
+  fetch(getClassmatesInCourseEndpoint(getSchool(state), getSemester(state), courseId), {
+    credentials: 'include',
+  })
+    .then(response => response.json())
+    .then((json) => {
+      dispatch(setCourseClassmates(json));
+    });
+};
 
-export function fetchCourseInfo(courseId) {
-  return (dispatch) => {
-    dispatch(requestCourseInfo(courseId));
-    fetch(getCourseInfoEndpoint(courseId), {
-      credentials: 'include',
-    })
-            .then(response => response.json()) // TODO(rohan): error-check the response
-            .then((json) => {
-              dispatch(setCourseInfo(json));
-            });
-    dispatch(fetchCourseClassmates(courseId));
-  };
-}
+export const fetchCourseInfo = courseId => (dispatch, getState) => {
+  dispatch({ type: ActionTypes.REQUEST_COURSE_INFO });
+  fetch(getCourseInfoEndpoint(courseId, getSemester(getState())), {
+    credentials: 'include',
+  })
+  .then(response => response.json())
+  .then((json) => {
+    dispatch(setCourseInfo(json));
+  });
+  dispatch(fetchCourseClassmates(courseId));
+};
 
-export function fetchCourseClassmates(courseId) {
-  return (dispatch) => {
-    fetch(getClassmatesInCourseEndpoint(courseId), {
-      credentials: 'include',
-    })
-            .then(response => response.json()) // TODO(rohan): error-check the response
-            .then((json) => {
-              dispatch(setCourseClassmates(json));
-            });
-  };
-}
-
-export function react(cid, title) {
+export const react = (cid, title) => (dispatch) => {
   fetch(getReactToCourseEndpoint(), {
+    headers: {
+      'X-CSRFToken': Cookie.get('csrftoken'),
+      Accept: 'application/json',
+      'Content-Type': 'application/json',
+    },
     method: 'POST',
     body: JSON.stringify({
       cid,
@@ -70,55 +62,39 @@ export function react(cid, title) {
     }),
     credentials: 'include',
   })
-        .then(response => response.json()) // TODO(rohan): error-check the response
-        .then((json) => {
-          if (!json.error) {
-            store.dispatch({
-              type: ActionTypes.SET_COURSE_REACTIONS,
-              reactions: json.reactions,
-            });
-          }
-        });
-}
+  .then(response => response.json())
+  .then((json) => {
+    if (!json.error) {
+      dispatch({
+        type: ActionTypes.SET_COURSE_REACTIONS,
+        reactions: json.reactions,
+      });
+    }
+  });
+};
 
-export function togglePreferenceModal() {
-  return { type: ActionTypes.TOGGLE_PREFERENCE_MODAL };
-}
+export const togglePreferenceModal = () => ({ type: ActionTypes.TOGGLE_PREFERENCE_MODAL });
 
-export function triggerSaveCalendarModal() {
-  return { type: ActionTypes.TRIGGER_SAVE_CALENDAR_MODAL };
-}
+export const triggerSaveCalendarModal = () => ({ type: ActionTypes.TRIGGER_SAVE_CALENDAR_MODAL });
 
-export function toggleSaveCalendarModal() {
-  return { type: ActionTypes.TRIGGER_SAVE_CALENDAR_MODAL };
-}
+export const toggleSaveCalendarModal = () => ({ type: ActionTypes.TRIGGER_SAVE_CALENDAR_MODAL });
 
-export function openSignUpModal() {
-  return { type: ActionTypes.TOGGLE_SIGNUP_MODAL };
-}
+export const openSignUpModal = () => ({ type: ActionTypes.TOGGLE_SIGNUP_MODAL });
 
-export function changeUserInfo(info) {
-  return {
-    type: ActionTypes.CHANGE_USER_INFO,
-    data: info,
-  };
-}
+export const changeUserInfo = info => ({
+  type: ActionTypes.CHANGE_USER_INFO,
+  data: info,
+});
 
-export function hideExplorationModal() {
-  return { type: ActionTypes.HIDE_EXPLORATION_MODAL };
-}
+export const hideExplorationModal = () => ({ type: ActionTypes.HIDE_EXPLORATION_MODAL });
 
-export function showExplorationModal() {
-  return { type: ActionTypes.SHOW_EXPLORATION_MODAL };
-}
+export const showExplorationModal = () => ({ type: ActionTypes.SHOW_EXPLORATION_MODAL });
 
-export function hideFinalExamsModal() {
-  return { type: ActionTypes.HIDE_FINAL_EXAMS_MODAL };
-}
+export const hideFinalExamsModal = () => ({ type: ActionTypes.HIDE_FINAL_EXAMS_MODAL });
 
-export function triggerAcquisitionModal() {
-  return { type: ActionTypes.TRIGGER_ACQUISITION_MODAL };
-}
+export const triggerAcquisitionModal = () => ({ type: ActionTypes.TRIGGER_ACQUISITION_MODAL });
+
+export const toggleAcquisitionModal = () => ({ type: ActionTypes.TOGGLE_ACQUISITION_MODAL });
 
 export const toggleIntegrationModal = () => ({ type: ActionTypes.TOGGLE_INTEGRATION_MODAL });
 
@@ -134,3 +110,23 @@ export const overrideSettingsShow = data => ({
 });
 
 export const toggleTextbookModal = () => ({ type: ActionTypes.TOGGLE_TEXTBOOK_MODAL });
+
+export const triggerTermsOfServiceBanner = () => ({
+  type: ActionTypes.TRIGGER_TOS_BANNER,
+});
+
+export const dismissTermsOfServiceBanner = () => ({
+  type: ActionTypes.DISMISS_TOS_BANNER,
+});
+
+export const triggerTermsOfServiceModal = () => ({
+  type: ActionTypes.TRIGGER_TOS_MODAL,
+});
+
+export const setUserSettingsModalVisible = () => ({
+  type: ActionTypes.SET_SETTINGS_MODAL_VISIBLE,
+});
+
+export const setUserSettingsModalHidden = () => ({
+  type: ActionTypes.SET_SETTINGS_MODAL_HIDDEN,
+});

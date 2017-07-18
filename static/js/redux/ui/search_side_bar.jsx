@@ -1,7 +1,10 @@
+import PropTypes from 'prop-types';
 import React from 'react';
 import classnames from 'classnames';
+import { getSectionTypeDisplayName, strPropertyCmp } from '../util';
+import * as SemesterlyPropTypes from '../constants/semesterlyPropTypes';
 
-export class SearchSideBar extends React.Component {
+class SearchSideBar extends React.Component {
   constructor(props) {
     super(props);
     this.lockSectionWrapper = this.lockSectionWrapper.bind(this);
@@ -10,73 +13,104 @@ export class SearchSideBar extends React.Component {
   lockSectionWrapper(section, event) {
     event.preventDefault();
     event.stopPropagation();
-    this.props.addCourse(this.props.hovered.id, section);
+    this.props.addCourse(this.props.hoveredResult.id, section);
   }
 
   mapSectionsToSlots(sections) {
-    if (sections === undefined) {
-      return [];
-    }
-    return Object.keys(sections).sort().map(sec =>
-      <SearchResultSection
-        key={this.props.hovered.id + sec} course={this.props.hovered} section={sec}
-        locked={this.props.isSectionLocked(this.props.hovered.id, sec)}
-        isOnActiveTimetable={this.props.isSectionOnActiveTimetable(this.props.hovered.id, sec)}
-        hoverSection={() => this.props.hoverSection(this.props.hovered, sec)}
-        unhoverSection={this.props.unHoverSection}
-        onMouseDown={event => this.lockSectionWrapper(sec, event)}
-      />,
-        );
+    return sections.sort(strPropertyCmp('meeting_section')).map(section =>
+      (<SearchResultSection
+        key={this.props.hoveredResult.id + section.meeting_section}
+        section={section.meeting_section}
+        locked={this.props.isSectionLocked(this.props.hoveredResult.id, section.meeting_section)}
+        isOnActiveTimetable={
+          this.props.isSectionOnActiveTimetable(this.props.hoveredResult, section)
+        }
+        hoverSection={() => this.props.hoverSection(this.props.hoveredResult,
+          section)}
+        unHoverSection={this.props.unHoverSection}
+        onMouseDown={event => this.lockSectionWrapper(section.meeting_section, event)}
+      />),
+    );
   }
 
   render() {
-    const lecs = this.mapSectionsToSlots(this.props.lectureSections);
-    const tuts = this.mapSectionsToSlots(this.props.tutorialSections);
-    const pracs = this.mapSectionsToSlots(this.props.practicalSections);
-    let lectureSections = null;
-    let tutorialSections = null;
-    let practicalSections = null;
-    if (lecs.length > 0) {
-      lectureSections = <div><h4> Lecture Sections </h4>{lecs}</div>;
-    }
-    if (tuts.length > 0) {
-      tutorialSections = <div><h4> Tutorial Sections </h4>{tuts}</div>;
-    }
-    if (pracs.length > 0) {
-      practicalSections = <div><h4> Lab/Practical Sections </h4>{pracs}</div>;
-    }
+    const sectionGrid = Object.keys(this.props.sectionTypeToSections).sort().map((sectionType) => {
+      const sectionTitle = `${getSectionTypeDisplayName(sectionType)} Sections`;
+      return (
+        <div key={sectionType}>
+          <h4> {sectionTitle} </h4>
+          {this.mapSectionsToSlots(this.props.sectionTypeToSections[sectionType])}
+        </div>
+      );
+    });
     return (
-      <div id="search-bar-side">
-        <div id="search-bar-side-sections">
-          <h3>{this.props.hovered.name}</h3>
+      <div className="search-bar__side">
+        <div className="search-bar__side-sections">
+          <h3>{this.props.hoveredResult.name}</h3>
           <p>Hover over a section below for a preview on your timetable! </p>
-          {lectureSections}
-          {tutorialSections}
-          {practicalSections}
+          {sectionGrid}
         </div>
       </div>
     );
   }
 }
-const SearchResultSection = ({ section, locked, hoverSection, unhoverSection, onMouseDown, isOnActiveTimetable }) => {
-  let rosterIndicator = null;
-  if (isOnActiveTimetable) {
-    rosterIndicator = <i title="Lock this section" className="fa fa-calendar-check-o" />;
-  }
-  if (locked) {
-    rosterIndicator = <i title="Unlock this section" className="fa fa-lock" />;
-  }
 
-  return (
-    <h5
-      className={classnames('sb-side-sections', { 'on-active-timetable': isOnActiveTimetable })}
-
-      onMouseDown={onMouseDown}
-      onMouseEnter={hoverSection}
-      onMouseLeave={unhoverSection}
-      title={locked ? 'Unlock this section' : 'Lock this section'}
-    >
-      {`${section} `}
-      {rosterIndicator}
-    </h5>);
+SearchSideBar.defaultProps = {
+  hoveredResult: null,
+  tutorialSections: {},
+  practicalSections: {},
 };
+
+SearchSideBar.propTypes = {
+  hoveredResult: SemesterlyPropTypes.denormalizedCourse,
+  sectionTypeToSections: PropTypes.shape({
+    '*': PropTypes.arrayOf(SemesterlyPropTypes.denormalizedSection),
+  }).isRequired,
+  addCourse: PropTypes.func.isRequired,
+  isSectionLocked: PropTypes.func.isRequired,
+  isSectionOnActiveTimetable: PropTypes.func.isRequired,
+  hoverSection: PropTypes.func.isRequired,
+  unHoverSection: PropTypes.func.isRequired,
+};
+
+export default SearchSideBar;
+
+const SearchResultSection =
+  ({ section, locked, hoverSection, unHoverSection, onMouseDown, isOnActiveTimetable }) => {
+    let rosterIndicator = null;
+    if (isOnActiveTimetable) {
+      rosterIndicator = (<i
+        title="Lock this section"
+        className="fa fa-calendar-check-o"
+      />);
+    }
+    if (locked) {
+      rosterIndicator = (<i
+        title="Unlock this section"
+        className="fa fa-lock"
+      />);
+    }
+
+    return (
+      <h5
+        className={classnames('sb-side-sections', { 'on-active-timetable': isOnActiveTimetable })}
+
+        onMouseDown={onMouseDown}
+        onMouseEnter={hoverSection}
+        onMouseLeave={unHoverSection}
+        title={locked ? 'Unlock this section' : 'Lock this section'}
+      >
+        {`${section} `}
+        {rosterIndicator}
+      </h5>);
+  };
+
+SearchResultSection.propTypes = {
+  unHoverSection: PropTypes.func.isRequired,
+  onMouseDown: PropTypes.func.isRequired,
+  isOnActiveTimetable: PropTypes.bool.isRequired,
+  section: PropTypes.string.isRequired,
+  hoverSection: PropTypes.func.isRequired,
+  locked: PropTypes.bool.isRequired,
+};
+

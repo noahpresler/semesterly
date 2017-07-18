@@ -1,17 +1,144 @@
+import PropTypes from 'prop-types';
 import React from 'react';
-import { renderCourseModal } from './course_modal';
+import { index as IntervalTree, matches01 as getIntersections } from 'static-interval-tree';
 import Slot from './slot';
 import CustomSlot from './custom_slot';
-import { index as IntervalTree, matches01 as getIntersections } from 'static-interval-tree';
-import { COLOUR_DATA, HALF_HOUR_HEIGHT } from '../constants/colours';
+import { getNextAvailableColour } from '../util';
+import * as SemesterlyPropTypes from '../constants/semesterlyPropTypes';
 
 class SlotManager extends React.Component {
 
+  static getMinutes(timeString) {
+    const l = timeString.split(':');
+    return ((+l[0]) * 60) + (+l[1]);
+  }
+
+  static getConflictStyles(slotsByDay) {
+    const styledSlotsByDay = slotsByDay;
+    Object.keys(styledSlotsByDay).forEach((day) => {
+      const daySlots = styledSlotsByDay[day];
+      // sort by start time
+      daySlots.sort((a, b) => SlotManager.getMinutes(a.time_start)
+        - SlotManager.getMinutes(b.time_start));
+
+      // build interval tree corresponding to entire slot
+      const intervals = daySlots.map((slot, index) => ({
+        start: SlotManager.getMinutes(slot.time_start),
+        end: SlotManager.getMinutes(slot.time_end),
+        id: index, // use day_slot index to map back to the slot object
+      }));
+      // build interval tree with part of slot that should not be overlayed (first hour)
+      const infoIntervals = intervals.map(s => ({
+        start: s.start,
+        end: Math.min(s.start + 59, s.end),
+        id: s.id,
+      }));
+      const infoSlots = IntervalTree(infoIntervals);
+
+      // bit map to store if slot has already been processed
+      const seen = daySlots.map(() => false);
+
+      // bit map to store if slot has already been added to queue
+      const added = daySlots.map(() => false);
+
+      // get num_conflicts
+      for (let i = 0; i < infoIntervals.length; i++) {
+        if (!seen[i]) { // if not seen, perform dfs search on conflicts
+          const directConflicts = [];
+          const frontier = [infoIntervals[i]];
+          while (frontier.length > 0) {
+            const next = frontier.pop();
+            seen[next.id] = true;
+            added[next.id] = true;
+            directConflicts.push(next);
+            const neighbors = getIntersections(infoSlots, next);
+            for (let k = 0; k < neighbors.length; k++) {
+              if (!seen[neighbors[k].id] && !added[neighbors[k].id]) {
+                frontier.push(neighbors[k]);
+                added[neighbors[k].id] = true;
+              }
+            }
+          }
+          directConflicts.sort((a, b) => (intervals[b.id].end - intervals[b.id].start) -
+          (intervals[a.id].end - intervals[a.id].start));
+          for (let j = 0; j < directConflicts.length; j++) {
+            const slotId = directConflicts[j].id;
+            daySlots[slotId].num_conflicts = directConflicts.length;
+            daySlots[slotId].shift_index = j;
+          }
+        }
+      }
+
+      // get shift index
+      // build interval tree with part of slot that should not be overlayed
+      const overSlots = IntervalTree(intervals.filter(s => s.end - s.start > 60).map(s => ({
+        start: s.start + 60,
+        end: s.end,
+        id: s.id,
+      })));
+      // get depth_level
+      for (let i = 0; i < infoIntervals.length; i++) {
+        const conflicts = getIntersections(overSlots, infoIntervals[i]);
+        conflicts.sort((a, b) => (b.start - a.start));
+        daySlots[i].depth_level = conflicts.length > 0 ?
+          daySlots[conflicts[0].id].depth_level + 1 : 0;
+      }
+
+      // get exists_conflict
+      const completeSlots = IntervalTree(intervals);
+      for (let i = 0; i < intervals.length; i++) {
+        daySlots[i].exists_conflict = getIntersections(completeSlots, intervals[i]).length > 1;
+      }
+
+      styledSlotsByDay[day] = daySlots;
+    });
+    return styledSlotsByDay;
+  }
+
+  getSlotsByDay() {
+    const slotsByDay = {
+      M: [], T: [], W: [], R: [], F: [],
+    };
+    const slots = this.props.slots;
+
+    slots.forEach((slot) => {
+      const { course, section, offerings } = slot;
+      offerings.forEach((offering) => {
+        // will only be undefined for hovered slot
+        const colourId = (course.id in this.props.courseToColourIndex) ?
+          this.props.courseToColourIndex[course.id] :
+          getNextAvailableColour(this.props.courseToColourIndex);
+
+        const displayOffering = {
+          ...offering,
+          colourId,
+          courseId: course.id,
+          code: course.code,
+          name: course.name,
+          custom: false,
+          meeting_section: section.meeting_section,
+        };
+        if (displayOffering.day in slotsByDay) { // some offerings have a weekend day (sat or sun)
+          slotsByDay[displayOffering.day].push(displayOffering);
+        }
+      });
+    });
+
+    // custom slots
+    for (let i = 0; i < this.props.custom.length; i++) {
+      const customSlot = this.props.custom[i];
+      customSlot.custom = true;
+      customSlot.key = customSlot.id;
+      slotsByDay[customSlot.day].push(customSlot);
+    }
+    return SlotManager.getConflictStyles(slotsByDay);
+  }
+
   render() {
-    const slots_by_day = this.getSlotsByDay();
-    const all_slots = this.props.days.map((day, i) => {
-      const day_slots = slots_by_day[day].map((slot, j) => {
-        const courseId = slot.course;
+    const slotsByDay = this.getSlotsByDay();
+    const allSlots = this.props.days.map((day, i) => {
+      const daySlots = slotsByDay[day].map((slot, j) => {
+        const courseId = slot.courseId;
         const locked = this.props.isLocked(courseId, slot.meeting_section);
         const isOptional = this.props.isCourseOptional(courseId);
         const optionalCourse = isOptional ? this.props.getOptionalCourseById(courseId) : null;
@@ -22,25 +149,33 @@ class SlotManager extends React.Component {
             removeCustomSlot={() => this.props.removeCustomSlot(slot.id)}
             updateCustomSlot={this.props.updateCustomSlot}
             addCustomSlot={this.props.addCustomSlot}
+            uses12HrTime={this.props.uses12HrTime}
           />
-                    :
+          :
           <Slot
             {...slot}
             fetchCourseInfo={() => this.props.fetchCourseInfo(courseId)}
-            key={slot.fake ? -slot.id : slot.id + i.toString() + j.toString()}
+            key={slot.id + i.toString() + j.toString()}
             locked={locked}
-            classmates={this.props.socialSections ? this.props.classmates(courseId, slot.meeting_section) : []}
+            classmates={this.props.socialSections ?
+              this.props.getClassmatesInSection(courseId, slot.meeting_section) : []}
             lockOrUnlockSection={() => this.props.addOrRemoveCourse(courseId, slot.meeting_section)}
-            removeCourse={() => !isOptional ? (this.props.addOrRemoveCourse(courseId)) : (this.props.addOrRemoveOptionalCourse(optionalCourse))}
+            removeCourse={() => {
+              if (!isOptional) {
+                return this.props.addOrRemoveCourse(courseId);
+              }
+              return this.props.addOrRemoveOptionalCourse(optionalCourse);
+            }}
             primaryDisplayAttribute={this.props.primaryDisplayAttribute}
             updateCustomSlot={this.props.updateCustomSlot}
             addCustomSlot={this.props.addCustomSlot}
+            uses12HrTime={this.props.uses12HrTime}
           />;
       });
       return (
         <td key={day}>
           <div className="fc-content-col">
-            {day_slots}
+            {daySlots}
           </div>
         </td>
       );
@@ -50,133 +185,41 @@ class SlotManager extends React.Component {
         <tbody>
           <tr>
             <td className="fc-axis" style={{ width: 49 }} />
-            {all_slots}
+            {allSlots}
           </tr>
         </tbody>
       </table>
 
     );
   }
-
-  getSlotsByDay() {
-    const slots_by_day = {
-      M: [], T: [], W: [], R: [], F: [],
-    };
-    const courses = this.props.timetable.courses;
-
-        // course slots
-    for (const i in courses) {
-      const crs = courses[i];
-      for (const slotId in crs.slots) {
-        const slotObj = crs.slots[slotId];
-                // first assume this course already has a colour (was added previously)
-        const colourIndex = _.range(COLOUR_DATA.length).find(i =>
-                    !Object.values(this.props.courseToColourIndex).some(x => x === i),
-                );
-        const colourId = this.props.courseToColourIndex[slotObj.course] === undefined ? colourIndex : this.props.courseToColourIndex[slotObj.course];
-        const slot = Object.assign(slotObj, {
-          colourId, code: crs.code, name: crs.name,
-        });
-        if (slots_by_day[slot.day]) {
-          slot.custom = false;
-          slots_by_day[slot.day].push(slot);
-        }
-      }
-    }
-
-        // custom slots
-    for (const i in this.props.custom) {
-      const custom_slot = this.props.custom[i];
-      custom_slot.custom = true;
-      custom_slot.key = custom_slot.id;
-      slots_by_day[custom_slot.day].push(custom_slot);
-    }
-    return this.getConflictStyles(slots_by_day);
-  }
-
-    getConflictStyles(slots_by_day) {
-        for (let day in slots_by_day) {
-            let day_slots = slots_by_day[day]
-            // sort by start time
-            day_slots.sort((a, b) => this.getMinutes(a.time_start) - this.getMinutes(b.time_start))
-
-            // build interval tree corresponding to entire slot
-            let intervals = day_slots.map((slot, index) => {
-                return {
-                    start: this.getMinutes(slot.time_start),
-                    end: this.getMinutes(slot.time_end),
-                    id: index // use day_slot index to map back to the slot object
-                }
-            })
-            let tree = IntervalTree(intervals)
-
-            // build interval tree with part of slot that should not be overlayed (first hour)
-            let info_intervals = intervals.map((s) => {
-                return {
-                    start: s.start,
-                    end: Math.min(s.start + 60, s.end),
-                    id: s.id
-                }
-            })
-            let info_slots = IntervalTree(info_intervals)
-
-            // bit map to store if slot has already been processed
-            let seen = day_slots.map(() => false)
-
-            // bit map to store if slot has already been added to queue
-            let added = day_slots.map(() => false)
-
-            // get num_conflicts + shift_index
-            for (let i = 0; i < info_intervals.length; i++) {
-                if (!seen[i]) { // if not seen, perform dfs search on conflicts
-                    let direct_conflicts = [];
-                    let frontier = [info_intervals[i]];
-                    while (frontier.length > 0) {
-                        let next = frontier.pop()
-                        seen[next.id] = true
-                        added[next.id] = true
-                        direct_conflicts.push(next)
-                        let neighbors = getIntersections(info_slots, next)
-                        for (let k = 0; k < neighbors.length; k++) {
-                            if (!seen[neighbors[k].id] && !added[neighbors[k].id]) {
-                                frontier.push(neighbors[k])
-                                added[neighbors[k].id] = true
-                            }
-                        }
-                    }
-                    direct_conflicts.sort((a, b) => (intervals[b.id].end - intervals[b.id].start) - (intervals[a.id].end - intervals[a.id].start))
-                    for (let j = 0; j < direct_conflicts.length; j++) {
-                        let slotId = direct_conflicts[j].id
-                        day_slots[slotId]['num_conflicts'] = direct_conflicts.length
-                        day_slots[slotId]['shift_index'] = j
-                    }
-                }
-            }
-
-            // build interval tree with part of slot that should not be overlayed
-            let over_slots = IntervalTree(intervals.filter((s) => s.end - s.start > 60).map((s) => {
-                return {
-                    start: s.start + 60,
-                    end: s.end,
-                    id: s.id
-                }
-            }))
-
-            // get depth_level
-            for (let i = 0; i < info_intervals.length; i++) {
-                let conflicts = getIntersections(over_slots, info_intervals[i])
-                conflicts.sort((a, b) => (b.start - a.start))
-                day_slots[i]['depth_level'] = conflicts.length > 0 ? day_slots[conflicts[0].id].depth_level + 1 : 0
-            }
-            slots_by_day[day] = day_slots
-        }
-        return slots_by_day
-    }
-
-  getMinutes(time_string) {
-    const l = time_string.split(':');
-    return (+l[0]) * 60 + (+l[1]);
-  }
 }
 
+SlotManager.defaultProps = {
+  socialSections: false,
+};
+
+SlotManager.propTypes = {
+  isLocked: PropTypes.func.isRequired,
+  isCourseOptional: PropTypes.func.isRequired,
+  getOptionalCourseById: PropTypes.func.isRequired,
+  removeCustomSlot: PropTypes.func.isRequired,
+  addOrRemoveCourse: PropTypes.func.isRequired,
+  addOrRemoveOptionalCourse: PropTypes.func.isRequired,
+  updateCustomSlot: PropTypes.func.isRequired,
+  addCustomSlot: PropTypes.func.isRequired,
+  fetchCourseInfo: PropTypes.func.isRequired,
+  days: PropTypes.arrayOf(PropTypes.string).isRequired,
+  slots: PropTypes.arrayOf(SemesterlyPropTypes.denormalizedSlot).isRequired,
+  courseToColourIndex: PropTypes.shape({
+    '*': PropTypes.number,
+  }).isRequired,
+  getClassmatesInSection: PropTypes.func.isRequired,
+  custom: PropTypes.arrayOf(PropTypes.oneOfType([SemesterlyPropTypes.customEvent,
+    PropTypes.shape({})])).isRequired,
+  primaryDisplayAttribute: PropTypes.string.isRequired,
+  socialSections: PropTypes.bool,
+  uses12HrTime: PropTypes.bool.isRequired,
+};
+
 export default SlotManager;
+

@@ -20,18 +20,9 @@ $ python manage.py runserver
 ```
 Your local version of Semesterly will be available at [127.0.0.1:8000](http://127.0.0.1:8000/).
 
-### Gulp
-[Gulp](http://gulpjs.com/) will combine all our CSS files into one CSS file. Keep a terminal
-tab or window open and run 
-```sh
-$ gulp
-```
-Gulp will wait for changes in the JSX files, and update the CSS accordingly. If you find that
-it has stopped transforming, restart the process.
-
 ### Webpack
 #### Build
-Building will compile your javascript. Do this via: 
+Building will compile your javascript and scss. Do this via: 
 ```sh
 $ npm run build
 ```
@@ -87,7 +78,9 @@ Here are the style conventions we follow:
     * **Docstrings**: we use [Google style docstrings](https://google.github.io/styleguide/pyguide.html?showone=Comments#Comments) since they are both human readable and interpretable by [Sphinx](http://www.sphinx-doc.org/en/stable/)
 * Javascript - https://github.com/airbnb/javascript
 * React/Redux- https://github.com/airbnb/javascript/tree/master/react
-* CSS - None yet???
+* CSS - https://github.com/airbnb/css
+    * `npm run lint` will not allow warnings
+    * precommits will allow warnings
 
 Unless there's an explicit reason not to, you should write tests for code you commit.
 * Python/Django - doctests, or unittests. For tests touching our db, django has their own module based on unites.

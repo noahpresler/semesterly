@@ -1,15 +1,16 @@
 import React from 'react';
-import { DRAGTYPES } from '../constants/constants';
 import { DragSource, DropTarget } from 'react-dnd';
+import { DRAG_TYPES } from '../constants/constants';
+import { generateCustomEventId } from '../util';
 
 function convertToHalfHours(str) {
-  const start = parseInt(str.split(':')[0]);
-  return str.split(':')[1] == '30' ? start * 2 + 1 : start * 2;
+  const start = parseInt(str.split(':')[0], 10);
+  return str.split(':')[1] === '30' ? (start * 2) + 1 : start * 2;
 }
 
 function convertToStr(halfHours) {
-  const num_hours = Math.floor(halfHours / 2);
-  return halfHours % 2 ? `${num_hours}:30` : `${num_hours}:00`;
+  const numHour = Math.floor(halfHours / 2);
+  return halfHours % 2 ? `${numHour}:30` : `${numHour}:00`;
 }
 
 // ---------------  drag target:
@@ -30,13 +31,17 @@ const dragTarget = {
     };
     props.updateCustomSlot(newValues, id);
   },
-    // TODO:
-    // canDrop(props, monitor) {
-    //   return Math.floor(convertToHalfHours(monitor.getItem().timeEnd)/2) < props.endHour
-    // }
+  canDrop(props, monitor) {
+    const { timeStart, timeEnd } = monitor.getItem();
+    const duration = convertToHalfHours(timeEnd) - convertToHalfHours(timeStart);
+    const desiredStart = convertToHalfHours(props.time);
+    const desiredEnd = desiredStart + duration;
+
+    return (Math.floor(desiredEnd) / 2) < props.endHour + 1;
+  },
 };
 
-function collectDragDrop(connect, monitor) { // inject props as drop target
+function collectDragDrop(connect) { // inject props as drop target
   return {
     connectDragTarget: connect.dropTarget(),
   };
@@ -45,7 +50,7 @@ function collectDragDrop(connect, monitor) { // inject props as drop target
 // ----------------- create source:
 const createSource = {
   beginDrag(props) {
-    const newSlotId = new Date().getTime();
+    const newSlotId = generateCustomEventId();
     props.addCustomSlot(
             props.time,
             props.time,
@@ -64,7 +69,7 @@ const createSource = {
   },
 };
 
-function collectCreateBegin(connect, monitor) { // inject props as drag target
+function collectCreateBegin(connect) { // inject props as drag target
   return {
     connectCreateSource: connect.dragSource(),
     connectCreatePreview: connect.dragPreview(),
@@ -75,23 +80,21 @@ function collectCreateBegin(connect, monitor) { // inject props as drag target
 let lastPreview = null;
 const createTarget = {
   drop(props, monitor) {
-    let { timeStart, id } = monitor.getItem();
+    let { timeStart } = monitor.getItem();
+    const { id } = monitor.getItem();
+
     let timeEnd = props.time;
     if (timeStart > timeEnd) {
       [timeStart, timeEnd] = [timeEnd, timeStart];
     }
-        // props.addCustomSlot(timeStart, timeEnd, props.day, false, new Date().getTime())
     props.updateCustomSlot({ preview: false }, id);
   },
-  canDrop(props, monitor) { // new custom slot must start and end on the same day
-    const { day } = monitor.getItem();
-    return day == props.day;
-  },
   hover(props, monitor) {
-    if (props.time == lastPreview) {
+    if (props.time === lastPreview) {
       return;
     }
-    let { timeStart, id } = monitor.getItem();
+    let { timeStart } = monitor.getItem();
+    const { id } = monitor.getItem();
     let timeEnd = props.time;
     if (convertToHalfHours(timeStart) > convertToHalfHours(timeEnd)) {
       [timeStart, timeEnd] = [timeEnd, timeStart];
@@ -101,7 +104,7 @@ const createTarget = {
   },
 };
 
-function collectCreateDrop(connect, monitor) {
+function collectCreateDrop(connect) {
   return {
     connectCreateTarget: connect.dropTarget(),
   };
@@ -115,9 +118,9 @@ const Cell = props => props.connectDragTarget(
     ),
 );
 
-export default DragSource(DRAGTYPES.CREATE, createSource, collectCreateBegin)(
-    DropTarget(DRAGTYPES.CREATE, createTarget, collectCreateDrop)(
-        DropTarget(DRAGTYPES.DRAG, dragTarget, collectDragDrop)(Cell),
+export default DragSource(DRAG_TYPES.CREATE, createSource, collectCreateBegin)(
+    DropTarget(DRAG_TYPES.CREATE, createTarget, collectCreateDrop)(
+        DropTarget(DRAG_TYPES.DRAG, dragTarget, collectDragDrop)(Cell),
     ),
 );
 

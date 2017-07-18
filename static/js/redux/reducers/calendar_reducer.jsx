@@ -1,6 +1,6 @@
 import * as ActionTypes from '../constants/actionTypes';
 
-export const calendar = (state = {
+const calendar = (state = {
   shareLink: null,
   isFetchingShareLink: false,
   shareLinkValid: false,
@@ -21,3 +21,5 @@ export const calendar = (state = {
       return state;
   }
 };
+
+export default calendar;

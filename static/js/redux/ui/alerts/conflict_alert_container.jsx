@@ -1,25 +1,20 @@
-import {connect} from "react-redux";
-import ConflictAlert from "./conflict_alert";
-import {addLastAddedCourse} from "../../actions/timetable_actions";
-import * as ActionTypes from "../../constants/actionTypes";
+import { connect } from 'react-redux';
+import ConflictAlert from './conflict_alert';
+import { addLastAddedCourse } from '../../actions/timetable_actions';
+import * as ActionTypes from '../../constants/actionTypes';
 
+const mapStateToProps = state => ({
+  message: (typeof state.timetables.lastSlotAdded === 'string') ? 'course' : 'event',
+});
 
-const mapStateToProps = (state) => {
-    return {}
-}
-const mapDispatchToProps = (dispatch) => {
-
-    return {
-        dismissSelf: () => {
-            dispatch({type: ActionTypes.DISMISS_ALERT_CONFLICT})
-            addLastAddedCourse()
-        },
-        turnConflictsOn: () => dispatch({type: ActionTypes.TOGGLE_CONFLICTS}),
-    }
-}
+const mapDispatchToProps = dispatch => ({
+  dismissSelf: () => dispatch({ type: ActionTypes.DISMISS_ALERT_CONFLICT }),
+  turnConflictsOn: () => dispatch({ type: ActionTypes.TOGGLE_CONFLICTS }),
+  addLastAddedCourse: () => dispatch(addLastAddedCourse()),
+});
 
 const ConflictAlertContainer = connect(
     mapStateToProps,
-    mapDispatchToProps
+    mapDispatchToProps,
 )(ConflictAlert);
 export default ConflictAlertContainer;

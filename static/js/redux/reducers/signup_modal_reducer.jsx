@@ -1,6 +1,6 @@
 import * as ActionTypes from '../constants/actionTypes';
 
-export const signupModal = (state = { isVisible: false }, action) => {
+const signupModal = (state = { isVisible: false }, action) => {
   switch (action.type) {
     case ActionTypes.TOGGLE_SIGNUP_MODAL:
       return { isVisible: !state.isVisible };
@@ -10,3 +10,5 @@ export const signupModal = (state = { isVisible: false }, action) => {
       return state;
   }
 };
+
+export default signupModal;

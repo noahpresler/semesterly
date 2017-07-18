@@ -1,4 +1,4 @@
-export const COLOUR_DATA = [
+const COLOUR_DATA = [
     // red
     { background: '#FD7473', highlight: '#e36867', border: '#b15150', font: '#222' },
     // blue
@@ -36,3 +36,5 @@ export const COLOUR_DATA = [
     { background: '#4c7fd8', highlight: '#6598f1', border: '#375994', font: '#222' },
 
 ]; // consider #CF000F, #e8fac3, #C8F7C5
+
+export default COLOUR_DATA;

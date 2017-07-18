@@ -1,18 +1,19 @@
 import React from 'react';
+import * as SemesterlyPropTypes from '../constants/semesterlyPropTypes';
 
 const Textbook = ({ tb }) => {
-  const exists = x => x && x.length > 0 && x != 'Cannot be found';
+  const exists = x => x && x.length > 0 && x !== 'Cannot be found';
 
   let image = null;
   if (exists(tb.image_url)) {
-    image = <img src={tb.image_url} />;
+    image = <img alt="textbook" src={tb.image_url} />;
   } else {
-    const empty_image_uri = '/static/img/emptystates/single_textbook.png';
-    image = <img src={empty_image_uri} style={{ opacity: 0.5 }} />;
+    const emptyImageUri = '/static/img/emptystates/single_textbook.png';
+    image = <img alt="" src={emptyImageUri} style={{ opacity: 0.5 }} />;
   }
 
   const linked = children => (
-    <a href={tb.detail_url} target="_blank">
+    <a href={tb.detail_url} target="_blank" rel="noopener noreferrer">
       {children}
     </a>
     );
@@ -40,6 +41,10 @@ const Textbook = ({ tb }) => {
       {exists(tb.detail_url) ? linked(textbook) : textbook}
     </div>
   );
+};
+
+Textbook.propTypes = {
+  tb: SemesterlyPropTypes.textbook.isRequired,
 };
 
 export default Textbook;

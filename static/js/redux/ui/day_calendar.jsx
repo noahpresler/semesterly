@@ -1,20 +1,21 @@
+import PropTypes from 'prop-types';
 import React from 'react';
 import classnames from 'classnames';
+import Swipeable from 'react-swipeable';
 import PaginationContainer from './containers/pagination_container';
 import SlotManagerContainer from './containers/slot_manager_container';
 import CellContainer from './containers/cell_container';
 import { DAYS } from '../constants/constants';
 import { ShareLink } from './master_slot';
-import Swipeable from 'react-swipeable';
 
 const Row = (props) => {
   const timeText = props.displayTime ? <span>{props.displayTime}</span> : null;
-  const dayCells = props.days.map(day => <CellContainer
+  const dayCells = props.days.map(day => (<CellContainer
     day={day}
     time={props.time}
     key={day + props.time}
     loggedIn={props.isLoggedIn}
-  />);
+  />));
   return (
     <tr key={props.time}>
       <td className="fc-axis fc-time fc-widget-content cal-row">
@@ -27,6 +28,17 @@ const Row = (props) => {
       </td>
     </tr>
   );
+};
+
+Row.defaultProps = {
+  displayTime: '',
+};
+
+Row.propTypes = {
+  displayTime: PropTypes.string,
+  isLoggedIn: PropTypes.bool.isRequired,
+  time: PropTypes.string.isRequired,
+  days: PropTypes.arrayOf(PropTypes.string).isRequired,
 };
 
 class DayCalendar extends React.Component {
@@ -45,6 +57,19 @@ class DayCalendar extends React.Component {
     this.getTimelineStyle = this.getTimelineStyle.bind(this);
   }
 
+  componentDidMount() {
+    $('.all-cols').scroll(() => {
+      const pos = $('.all-cols').scrollTop();
+      if (pos > 30) {
+        $('.fc-toolbar').addClass('up');
+        $('#calendar').addClass('up');
+      } else {
+        $('.fc-toolbar').removeClass('up');
+        $('#calendar').removeClass('up');
+      }
+    });
+  }
+
   componentWillReceiveProps(nextProps) {
     if (this.props.isFetchingShareLink && !nextProps.isFetchingShareLink) {
       this.setState({ shareLinkShown: true });
@@ -57,21 +82,30 @@ class DayCalendar extends React.Component {
     }
     const diff = Math.abs(new Date() - new Date().setHours(8, 0, 0));
     const mins = Math.ceil((diff / 1000) / 60);
-    const top = mins / 15.0 * 13 + 65;
+    const top = ((mins / 15.0) * 13) + 65;
     return { top };
   }
 
-  componentDidMount() {
-    $('#all-cols').scroll(() => {
-      const pos = $('#all-cols').scrollTop();
-      if (pos > 30) {
-        $('.fc-toolbar').addClass('up');
-        $('#calendar').addClass('up');
-      } else {
-        $('.fc-toolbar').removeClass('up');
-        $('#calendar').removeClass('up');
-      }
-    });
+  getCalendarRows() {
+    const rows = [];
+    for (let i = 8; i <= this.props.endHour; i++) { // one row for each hour, starting from 8am
+      const hour = this.props.uses12HrTime && i > 12 ? i - 12 : i;
+      rows.push(<Row
+        displayTime={`${hour}:00`}
+        time={`${i}:00`}
+        isLoggedIn={this.props.isLoggedIn}
+        key={i}
+        days={[DAYS[this.state.day]]}
+      />);
+      rows.push(<Row
+        time={`${i}:30`}
+        isLoggedIn={this.props.isLoggedIn}
+        key={i + 0.5}
+        days={[DAYS[this.state.day]]}
+      />);
+    }
+
+    return rows;
   }
 
   swipedLeft() {
@@ -90,23 +124,6 @@ class DayCalendar extends React.Component {
     this.setState({ day: d });
   }
 
-  getCalendarRows() {
-    const rows = [];
-    for (let i = 8; i <= this.props.endHour; i++) { // one row for each hour, starting from 8am
-      const hour = uses12HrTime && i > 12 ? i - 12 : i;
-      rows.push(<Row
-        displayTime={`${hour}:00`} time={`${i}:00`} isLoggedIn={this.props.isLoggedIn}
-        key={i}
-        days={[DAYS[this.state.day]]}
-      />);
-      rows.push(<Row
-        time={`${i}:30`} isLoggedIn={this.props.isLoggedIn} key={i + 0.5}
-        days={[DAYS[this.state.day]]}
-      />);
-    }
-
-    return rows;
-  }
 
   fetchShareTimetableLink() {
     if (this.props.shareLinkValid) {
@@ -164,24 +181,25 @@ class DayCalendar extends React.Component {
         <i className="fa fa-cog" />
       </button>
         );
-    const dayPills = DAYS.map((day, i) => <div
-      key={i} className="day-pill"
+    const dayPills = DAYS.map((day, i) => (<div
+      key={day}
+      className="day-pill"
       onClick={() => this.setState({ day: i })}
     >
       <div className={classnames('day-circle', { selected: i === this.state.day })}>
         {day === 'R' ? 'T' : day}
       </div>
-    </div>);
+    </div>));
     const saveToCalendarButton = (
       <button
         onClick={() => this.props.triggerSaveCalendarModal()}
         className="save-timetable"
       >
-        <img src="static/img/addtocalendar.png" />
+        <img alt="add" src="static/img/addtocalendar.png" />
       </button>
         );
     return (
-      <div id="calendar" className="fc fc-ltr fc-unthemed day-calendar">
+      <div className="calendar fc fc-ltr fc-unthemed day-calendar">
         <div className="fc-toolbar no-print">
           <div className="fc-left">
             <PaginationContainer />
@@ -196,8 +214,8 @@ class DayCalendar extends React.Component {
           </div>
           <div className="fc-center" />
           <div className="fc-clear cf">
-            <div id="day-pills-wrapper">
-              <div id="day-pills">
+            <div className="day-pills">
+              <div className="day-pills__wrapper">
                 {dayPills}
               </div>
             </div>
@@ -253,15 +271,31 @@ class DayCalendar extends React.Component {
                 </tbody>
               </table>
             </div>
-            <p className="data-last-updated no-print">Data last
-                            updated: { this.props.dataLastUpdated && this.props.dataLastUpdated.length && this.props.dataLastUpdated !== 'null' ? this.props.dataLastUpdated : null }</p>
           </div>
         </Swipeable>
       </div>
     );
   }
-
-
 }
 
+DayCalendar.defaultProps = {
+  shareLink: '',
+};
+
+DayCalendar.propTypes = {
+  togglePreferenceModal: PropTypes.func.isRequired,
+  triggerSaveCalendarModal: PropTypes.func.isRequired,
+  isFetchingShareLink: PropTypes.bool.isRequired,
+  endHour: PropTypes.number.isRequired,
+  handleCreateNewTimetable: PropTypes.func.isRequired,
+  shareLinkValid: PropTypes.bool.isRequired,
+  fetchShareTimetableLink: PropTypes.func.isRequired,
+  saveTimetable: PropTypes.func.isRequired,
+  isLoggedIn: PropTypes.bool.isRequired,
+  saving: PropTypes.bool.isRequired,
+  shareLink: PropTypes.string,
+  uses12HrTime: PropTypes.bool.isRequired,
+};
+
 export default DayCalendar;
+

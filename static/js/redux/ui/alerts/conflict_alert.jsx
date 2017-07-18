@@ -1,31 +1,37 @@
-import React from "react";
+import PropTypes from 'prop-types';
+import React from 'react';
 
 class ConflictAlert extends React.Component {
-    constructor(props) {
-        super(props);
-    }
+  componentWillUnmount() {
+    this.props.dismissSelf();
+  }
 
-    componentWillUnmount() {
-        this.props.dismissSelf();
-    }
+  handleClick() {
+    this.props.turnConflictsOn();
+    this.props.addLastAddedCourse();
+    this.props.dismissSelf();
+  }
 
-    handleClick() {
-        this.props.turnConflictsOn();
-        this.props.dismissSelf();
-    }
-
-    render() {
-        return (
-            <div className="conflict-alert">
-                Adding that course causes a conflict!
+  render() {
+    return (
+      <div className="conflict-alert">
+                Adding that {this.props.message} causes a conflict!
                 <button
-                    onClick={() => this.handleClick()}
-                    className="conflict-alert-btn">
+                  onClick={() => this.handleClick()}
+                  className="conflict-alert-btn"
+                >
                     Allow Conflicts!
                 </button>
-            </div>);
-    }
+      </div>);
+  }
 }
-;
+
+ConflictAlert.propTypes = {
+  addLastAddedCourse: PropTypes.func.isRequired,
+  dismissSelf: PropTypes.func.isRequired,
+  turnConflictsOn: PropTypes.func.isRequired,
+  message: PropTypes.string.isRequired,
+};
 
 export default ConflictAlert;
+

@@ -1,89 +1,51 @@
-import Carousel from '../../modules/nuka-carousel/carousel';
+import PropTypes from 'prop-types';
 import React from 'react';
 
-const SideScroller = React.createClass({
-  mixins: [Carousel.ControllerMixin],
+class SideScroller extends React.Component {
 
-  getInitialState() {
-    return { slidesShownCount: 1 };
-  },
-    // updateNumItems: function() {
-    //   if (!this.props.slidesToShow || $(".slider").length == 0 || !this.isMounted()) {
-    //     return;
-    //   }
-    //   let width = $(".slider").width();
-    //   let section_width = $(".section-wrapper").width() + 15;
-    //   let count = Math.max(2, parseInt(width/section_width));
-    //   this.setState({slidesShownCount: count});
-
-    //   // move slider list left (so that first item is centered).
-    //   // currently only done for sections: (".sec-0").parent().parent()
-    //   // so any other items using a slider element are ignored
-    //   let slider_list_left = "35";
-    //   if ($(window).width() < 540) {
-    //     slider_list_left = "20";
-    //   }
-    //   $(".sec-0").parent().parent()
-    //             .css("margin-left", slider_list_left + "%");
-    //   return count;
-    // },
-
+  constructor(props) {
+    super(props);
+    this.state = {
+      activeSlide: 0,
+    };
+  }
 
   render() {
     if (this.props.content.length <= 2) {
       return <div style={{ marginBottom: '-30px !important' }}>{this.props.content}</div>;
     }
     let navItems = null;
-    if (this.props.navItems && this.state.carousels.carousel) {
+    if (this.props.navItems) {
       const navs = [];
 
       for (let i = 0; i < this.props.navItems.length; i++) {
-        const cls = this.state.carousels.carousel.state.currentSlide == i ? ' nav-item-active' : '';
+        const cls = this.state.activeSlide === i ?
+          ' nav-item-active' : '';
         navs.push(
           <span
-            key={i} className={`nav-item${cls}`}
-            onClick={this.changeSlide(i)}
+            key={i}
+            className={`nav-item${cls}`}
+            onClick={() => this.setState({ activeSlide: i })}
           >{this.props.navItems[i]}</span>,
                 );
       }
       navItems = <div className="scroll-nav">{navs}</div>;
     }
-    const slideIndex = this.props.slideIndex ? this.props.slideIndex : 0;
     return (
       <div>
         {navItems}
-        <Carousel
-          ref="carousel" data={this.setCarouselData.bind(this, 'carousel')}
-          slidesToShow={this.state.slidesShownCount}
-          slideIndex={slideIndex}
-          dragging
-          cellSpacing={30}
-          id={this.props.id}
-        >
-          {this.props.content}
-        </Carousel>
+        {this.props.content[this.state.activeSlide]}
       </div>
     );
-  },
-    // changes the currently selected slide to slide i (indexed starting at 0)
-  changeSlide(i) {
-    return function () {
-      this.state.carousels.carousel.goToSlide(i);
-    }.bind(this);
-  },
+  }
+}
 
-  componentDidMount() {
-        // let length = this.props.content.length;
-        // if (length > 1) {
-        //   this.updateNumItems();
-        // }
 
-        // $(window).resize(function() {
-        //   if (length <= 1) {return;}
-        //   this.updateNumItems();
-        // }.bind(this));
-  },
+SideScroller.propTypes = {
+  content: PropTypes.arrayOf(PropTypes.element).isRequired,
+  navItems: PropTypes.arrayOf(PropTypes.element).isRequired,
+};
 
-});
 
 export default SideScroller;
+

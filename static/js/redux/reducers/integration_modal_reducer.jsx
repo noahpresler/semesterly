@@ -1,11 +1,14 @@
 import * as ActionTypes from '../constants/actionTypes';
 
-export const integrationModal = (state = {
+const initialState = {
   isVisible: false,
   id: null,
   enabled: false,
   integration_id: null,
-}, action) => {
+  studentIntegrations: [],
+};
+
+const integrationModal = (state = initialState, action) => {
   switch (action.type) {
     case ActionTypes.TOGGLE_INTEGRATION_MODAL:
       return Object.assign({}, state, { isVisible: !state.isVisible, id: action.id });
@@ -20,3 +23,5 @@ export const integrationModal = (state = {
       return state;
   }
 };
+
+export default integrationModal;

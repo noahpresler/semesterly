@@ -3,14 +3,16 @@ import urllib2
 import heapq
 from dateutil import tz
 from datetime import timedelta, datetime
-from django.shortcuts import render_to_response, render
-from django.http import HttpResponse, HttpResponseRedirect, Http404
+from django.shortcuts import render_to_response, get_object_or_404
+from django.http import HttpResponse
 from django.template import RequestContext
 from django.views.decorators.csrf import csrf_exempt
-from django.db.models import Q
 from django.http import Http404
 
-from student.views import get_student
+from analytics.models import FinalExamModalView
+from student.models import Student
+
+from student.utils import get_student
 from student.models import *
 from analytics.models import *
 from timetable.models import Semester
@@ -244,3 +246,12 @@ def log_facebook_alert_click(request):
   ).save()
   return HttpResponse(json.dumps({}), content_type="application/json")
 
+
+@csrf_exempt
+def log_final_exam_view(request):
+    student = get_object_or_404(Student, user=request.user)
+    FinalExamModalView.objects.create(
+        student=student,
+        school=request.subdomain
+    ).save()
+    return HttpResponse(json.dumps({}), content_type="application/json")

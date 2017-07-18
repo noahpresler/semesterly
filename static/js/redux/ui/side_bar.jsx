@@ -1,11 +1,14 @@
+import PropTypes from 'prop-types';
 import React from 'react';
 import classNames from 'classnames';
-import MasterSlot from './master_slot';
-import { COLOUR_DATA } from '../constants/colours';
 import ClickOutHandler from 'react-onclickout';
+import uniqBy from 'lodash/uniqBy';
+import MasterSlot from './master_slot';
 import TimetableNameInputContainer from './containers/timetable_name_input_container';
 import CreditTickerContainer from './containers/credit_ticker_container';
 import Textbook from './textbook';
+import * as SemesterlyPropTypes from '../constants/semesterlyPropTypes';
+import { getNextAvailableColour } from '../util';
 
 class SideBar extends React.Component {
   constructor(props) {
@@ -47,78 +50,79 @@ class SideBar extends React.Component {
         </button>
       </div>
         )) : null;
+    // TOOD: code duplication between masterslots/optionalslots
     let masterSlots = this.props.mandatoryCourses ?
-            this.props.mandatoryCourses.map((c) => {
-              const colourIndex = this.props.courseToColourIndex[c.id] || 0;
-              let classmates = this.props.classmates ? this.props.classmates.find(course => course.course_id === c.id) : [];
-              classmates = classmates || [];
-              let professors = [];
-              if (c.slots.length == 0 && c.oldSlots && c.oldSlots.length > 0) {
-                professors = [...new Set(c.oldSlots.map(s => s.instructors))];
-              } else {
-                professors = [...new Set(c.slots.map(s => s.instructors))];
-              }
-              return (<MasterSlot
-                key={c.id}
-                professors={professors}
-                colourIndex={colourIndex}
-                classmates={classmates}
-                onTimetable={this.props.isCourseInRoster(c.id)}
-                course={c}
-                fetchCourseInfo={() => this.props.fetchCourseInfo(c.id)}
-                removeCourse={() => this.props.removeCourse(c.id)}
-              />);
-            }) : null;
-    const usedColourIndices = Object.values(this.props.courseToColourIndex);
-    let optionalSlots = this.props.liveTimetableCourses ? this.props.optionalCourses.map((c) => {
-      let colourIndex;
-      const classmates = this.props.classmates ? this.props.classmates.find(course => course.course_id === c.id) : [];
-      if (Object.keys(this.props.courseToColourIndex).find(cid => cid == c.id) === undefined) {
-        colourIndex = _.range(COLOUR_DATA.length).find(i =>
-                    !usedColourIndices.some(x => x === i),
-                );
-        usedColourIndices[c.id] = colourIndex;
-      } else {
-        colourIndex = this.props.courseToColourIndex[c.id];
-      }
+      this.props.mandatoryCourses.map((course) => {
+        const colourIndex = (course.id in this.props.courseToColourIndex) ?
+          this.props.courseToColourIndex[course.id] :
+          getNextAvailableColour(this.props.courseToColourIndex);
+        const professors = course.sections.map(section => section.instructors);
+        return (<MasterSlot
+          key={course.id}
+          professors={professors}
+          colourIndex={colourIndex}
+          classmates={this.props.courseToClassmates[course.id]}
+          onTimetable={this.props.isCourseInRoster(course.id)}
+          course={course}
+          fetchCourseInfo={() => this.props.fetchCourseInfo(course.id)}
+          removeCourse={() => this.props.removeCourse(course.id)}
+          getShareLink={this.props.getShareLink}
+        />);
+      }) : null;
+
+    let optionalSlots = this.props.coursesInTimetable ? this.props.optionalCourses.map((course) => {
+      const colourIndex = (course.id in this.props.courseToColourIndex) ?
+          this.props.courseToColourIndex[course.id] :
+          getNextAvailableColour(this.props.courseToColourIndex);
       return (<MasterSlot
-        key={c.id}
-        onTimetable={this.props.isCourseInRoster(c.id)}
+        key={course.id}
+        onTimetable={this.props.isCourseInRoster(course.id)}
         colourIndex={colourIndex}
-        course={c}
-        fetchCourseInfo={() => this.props.fetchCourseInfo(c.id)}
-        removeCourse={() => this.props.removeOptionalCourse(c)}
+        classmates={this.props.courseToClassmates[course.id]}
+        course={course}
+        fetchCourseInfo={() => this.props.fetchCourseInfo(course.id)}
+        removeCourse={() => this.props.removeOptionalCourse(course)}
+        getShareLink={this.props.getShareLink}
       />);
     }) : null;
     const dropItDown = savedTimetables && savedTimetables.length !== 0 ?
             (<div
-              id="timetable-drop-it-down"
-              onMouseDown={this.toggleDropdown.bind(this)}
+              className="timetable-drop-it-down"
+              onMouseDown={this.toggleDropdown}
             >
               <span className={classNames('tip-down', { down: this.state.showDropdown })} />
             </div>) : null;
     if (masterSlots.length === 0) {
       masterSlots = (
         <div className="empty-state">
-          <img src="/static/img/emptystates/masterslots.png" />
-          <h4>Looks like you don't have any courses yet!</h4>
+          <img src="/static/img/emptystates/masterslots.png" alt="No courses added." />
+          <h4>Looks like you don&#39;t have any courses yet!</h4>
           <h3>Your selections will appear here along with credits, professors and friends
                         in the class</h3>
         </div>);
     }
-    if (optionalSlots.length === 0) {
-      const img = (parseInt(masterSlots) != NaN && (masterSlots.length >= 4)) ? null :
-      <img src="/static/img/emptystates/optionalslots.png" />;
+    const optionalSlotsHeader = (optionalSlots.length === 0 && masterSlots.length > 3) ? null :
+    <h4 className="sb-header">Optional Courses</h4>;
+    if (optionalSlots.length === 0 && masterSlots.length > 3) {
+      optionalSlots = null;
+    } else if (optionalSlots.length === 0) {
+      const img = (
+        <img
+          src="/static/img/emptystates/optionalslots.png"
+          alt="No optional courses added."
+        />);
       optionalSlots = (
         <div className="empty-state">
           { img }
           <h4>Give Optional Courses a Spin!</h4>
-          <h3>Load this list with courses you aren't 100% sure you want to take - we'll
+          <h3>Load this list with courses you aren&#39;t 100% sure you want to take - we&#39;ll
                         fit as many as
                         possible, automatically</h3>
         </div>);
     }
-    const finalScheduleLink = (masterSlots.length > 0 && finalExamsSupportedSemesters.indexOf(this.props.semesterIndex) >= 0) ?
+    const finalScheduleLink = (masterSlots.length > 0 &&
+      this.props.examSupportedSemesters.indexOf(this.props.semesterIndex) >= 0
+      && this.props.hasLoaded) ?
             (<div
               className="final-schedule-link"
               onClick={this.props.launchFinalExamsModal}
@@ -128,14 +132,13 @@ class SideBar extends React.Component {
             </div>)
             : null;
     return (
-      <div id="side-bar" className="no-print">
-        <div id="sb-name">
+      <div className="side-bar no-print">
+        <div className="sb-name">
           <TimetableNameInputContainer />
           <ClickOutHandler onClickOut={this.hideDropdown}>
             {dropItDown}
             <div
-              id="timetable-names-dropdown"
-              className={classNames({ down: this.state.showDropdown })}
+              className={classNames('timetable-names-dropdown', { down: this.state.showDropdown })}
             >
               <div className="tip-border" />
               <div className="tip" />
@@ -145,39 +148,86 @@ class SideBar extends React.Component {
           </ClickOutHandler>
         </div>
         <CreditTickerContainer />
-        <div id="sb-rating" className="col-2-3">
+        <div className="col-2-3 sb-rating">
           <h3>Average Course Rating</h3>
           <div className="sub-rating-wrapper">
             <div className="star-ratings-sprite">
               <span
-                style={{ width: `${100 * this.props.avgRating / 5}%` }}
+                style={{ width: `${(100 * this.props.avgRating) / 5}%` }}
                 className="rating"
               />
             </div>
           </div>
         </div>
-        <h4 onClick={this.props.launchPeerModal} className="sb-header">Current Courses
-                    <div id="find-friends"><i className="fa fa-users" />&nbsp;Find new friends</div>
+        <a onClick={this.props.launchPeerModal}>
+          <h4 className="sb-header">
+            Current Courses
+            <div className="sb-header-link">
+              <i className="fa fa-users" />&nbsp;Find new friends
+            </div>
+          </h4>
+        </a>
+        <h4 className="sb-tip">
+          <b>ProTip:</b> use <i className="fa fa-lock" />
+          to lock a section in place.
         </h4>
-        <h4 className="sb-tip"><b>ProTip:</b> use <i className="fa fa-lock" /> to lock a
-                    section in place.</h4>
-        <div id="sb-master-slots">
+        <div className="sb-master-slots">
           { masterSlots }
           { finalScheduleLink }
         </div>
-        <h4 className="sb-header">Optional Courses</h4>
+        { optionalSlotsHeader }
         { optionalSlots }
         <div id="sb-optional-slots" />
-        <h4 className="sb-header" onClick={this.props.launchTextbookModal}> Textbooks
-                    <div id="find-friends"><i className="fa fa-external-link" />&nbsp;See all</div>
-        </h4>
+        <a onClick={this.props.launchTextbookModal}>
+          <h4 className="sb-header"> Textbooks
+            <div className="sb-header-link"><i className="fa fa-external-link" />&nbsp;See all</div>
+          </h4>
+        </a>
         <div className="side-bar-section">
-          <TextbookList courses={this.props.liveTimetableCourses} />
+          <TextbookList courses={this.props.coursesInTimetable} />
         </div>
       </div>
     );
   }
 }
+
+// TODO: should be these values by default in the state
+SideBar.defaultProps = {
+  savedTimetables: null,
+  avgRating: 0,
+};
+
+SideBar.propTypes = {
+  savedTimetables: PropTypes.arrayOf(PropTypes.shape({
+    name: PropTypes.string,
+  })),
+  mandatoryCourses: PropTypes.arrayOf(SemesterlyPropTypes.denormalizedCourse).isRequired,
+  optionalCourses: PropTypes.arrayOf(SemesterlyPropTypes.denormalizedCourse).isRequired,
+  coursesInTimetable: PropTypes.arrayOf(SemesterlyPropTypes.denormalizedCourse).isRequired,
+  courseToColourIndex: PropTypes.shape({
+    id: PropTypes.string,
+  }).isRequired,
+  courseToClassmates: PropTypes.shape({ '*': SemesterlyPropTypes.classmates }).isRequired,
+  loadTimetable: PropTypes.func.isRequired,
+  deleteTimetable: PropTypes.func.isRequired,
+  isCourseInRoster: PropTypes.func.isRequired,
+  duplicateTimetable: PropTypes.func.isRequired,
+  fetchCourseInfo: PropTypes.func.isRequired,
+  removeCourse: PropTypes.func.isRequired,
+  removeOptionalCourse: PropTypes.func.isRequired,
+  launchFinalExamsModal: PropTypes.func.isRequired,
+  launchPeerModal: PropTypes.func.isRequired,
+  launchTextbookModal: PropTypes.func.isRequired,
+  semester: PropTypes.shape({
+    name: PropTypes.string.isRequired,
+    year: PropTypes.numberisRequired,
+  }).isRequired,
+  semesterIndex: PropTypes.number.isRequired,
+  avgRating: PropTypes.number,
+  examSupportedSemesters: PropTypes.arrayOf(PropTypes.number).isRequired,
+  hasLoaded: PropTypes.bool.isRequired,
+  getShareLink: PropTypes.func.isRequired,
+};
 
 export default SideBar;
 
@@ -190,8 +240,8 @@ export const TextbookList = ({ courses }) => {
       }
     }
   }
-  const img = (parseInt(courses) != NaN && (courses.length >= 5)) ? null :
-  <img src="/static/img/emptystates/textbooks.png" />;
+  const img = (!isNaN(parseInt(courses, 0)) && (courses.length >= 5)) ? null :
+  <img src="/static/img/emptystates/textbooks.png" alt="No textbooks found." />;
   if (tbs.length === 0) {
     return (<div className="empty-state">
       { img }
@@ -203,8 +253,20 @@ export const TextbookList = ({ courses }) => {
   }
   return (
     <div>
-      {_.uniq(tbs, 'isbn').map(tb => <Textbook tb={tb} key={tb.isbn} />)}
+      {uniqBy(tbs, tb => tb.isbn).map(tb => <Textbook tb={tb} key={tb.isbn} />)}
     </div>
   );
+};
+
+TextbookList.defaultProps = {
+  courses: null,
+};
+
+TextbookList.propTypes = {
+  courses: PropTypes.arrayOf(PropTypes.shape({
+    textbooks: PropTypes.arrayOf(PropTypes.shape({
+      isbn: PropTypes.string,
+    })),
+  })),
 };
 

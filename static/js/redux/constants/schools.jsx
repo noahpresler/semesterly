@@ -46,6 +46,7 @@ export const getSchoolSpecificInfo = (school) => {
         departmentsName: 'Departments',
         levelsName: 'Levels',
         timesName: 'Times',
+        courseRegex: '([A-Z]{2}\\.\\d{3}\\.\\d{3})',
         campuses: {
           1: '',
         },
@@ -57,6 +58,7 @@ export const getSchoolSpecificInfo = (school) => {
         departmentsName: 'Departments',
         levelsName: 'Levels',
         timesName: 'Times',
+        courseRegex: '([A-Z]{2,4}\\d{3})',
         campuses: {
           1: '',
         },
@@ -80,8 +82,8 @@ export const getSchoolSpecificInfo = (school) => {
         departmentsName: 'Departments',
         levelsName: 'Levels',
         timesName: 'Times',
-                // course codes have dashes, in desciprtions dashes are spaces
-                // courseRegex: "([A-Z-&]{2,7}\\s\\d{4}[W]?)",
+        // course codes have dashes, in desciprtions dashes are spaces
+        courseRegex: '([A-Z-&]{2,7}\\s\\d{4}[W]?)',
         campuses: {
           1: '',
         },
@@ -93,7 +95,8 @@ export const getSchoolSpecificInfo = (school) => {
         departmentsName: 'Departments',
         levelsName: 'Levels',
         timesName: 'Times',
-                // course codes in descriptions have lowercase department names, but I don't want to change the regex to include lowercase
+        // course codes in descriptions have lowercase department names,
+        // but I don't want to change the regex to include lowercase
         courseRegex: '([A-Z]{2,5}\\s\\d{4}[W]?)',
         campuses: {
           1: '',
@@ -106,7 +109,8 @@ export const getSchoolSpecificInfo = (school) => {
         departmentsName: 'Departments',
         levelsName: 'Levels',
         timesName: 'Times',
-                // some classes are just numbers, not included in this regex, cuz some descrpitions have years
+        // some classes are just numbers, not included in this regex,
+        // as some descrpitions have years
         courseRegex: '([A-Z]{2,8}\\s\\d{3})',
         campuses: {
           1: '',
@@ -119,7 +123,8 @@ export const getSchoolSpecificInfo = (school) => {
         departmentsName: 'Departments',
         levelsName: 'Levels',
         timesName: 'Times',
-                // some classes are just numbers, not included in this regex, cuz some descrpitions have years
+        // some classes are just numbers, not included in this regex,
+        // as some descrpitions have years
         courseRegex: '([A-Z]{3,4} \\d{2,3})',
         semesters: {
           F: 'Fall 2016',

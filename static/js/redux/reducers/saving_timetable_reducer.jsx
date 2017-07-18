@@ -1,39 +1,45 @@
 import * as ActionTypes from '../constants/actionTypes';
 
-const init_state = {
+const initState = {
   activeTimetable: { name: String('Untitled Schedule') },
-  saving: false,
+  saving: false, // true if we are currently waiting for a response from the backend
   upToDate: false,
 };
 
-export const savingTimetable = (state = init_state, action) => {
+const savingTimetable = (state = initState, action) => {
   switch (action.type) {
-    case ActionTypes.REQUEST_SAVE_TIMETABLE:
+    case ActionTypes.REQUEST_SAVE_TIMETABLE: {
       const saving = !state.upToDate;
-      return Object.assign({}, state, { saving });
-
-    case ActionTypes.RECEIVE_TIMETABLE_SAVED:
-            // action.upToDate will be false if the user tried saving
-            // a timetable with a name that already exists
-      const { upToDate } = action;
-      return Object.assign({}, state, { saving: false, upToDate });
-
-    case ActionTypes.RECEIVE_TIMETABLES:
-      return Object.assign({}, state, { upToDate: action.preset === true });
+      return { ...state, saving };
+    }
 
     case ActionTypes.CHANGE_ACTIVE_SAVED_TIMETABLE:
-      return Object.assign({}, state, { activeTimetable: action.timetable });
+      return {
+        ...state,
+        activeTimetable: action.timetable,
+        saving: false,
+        upToDate: action.upToDate,
+      };
+
+    case ActionTypes.ALERT_TIMETABLE_EXISTS:
+      return { ...state, saving: false };
 
     case ActionTypes.CHANGE_ACTIVE_SAVED_TIMETABLE_NAME:
-      return Object.assign({}, state, {
-        activeTimetable: Object.assign({}, state.activeTimetable, { name: action.name }),
+      return {
+        ...state,
+        activeTimetable: { ...state.activeTimetable, name: action.name },
         upToDate: false,
-      });
+      };
+
+    case ActionTypes.ADD_CUSTOM_SLOT:
+    case ActionTypes.UPDATE_CUSTOM_SLOT:
+    case ActionTypes.REMOVE_CUSTOM_SLOT:
     case ActionTypes.CHANGE_ACTIVE_TIMETABLE:
-      return Object.assign({}, state, {
-        upToDate: false,
-      });
+      return Object.assign({}, state, { upToDate: false });
+
     default:
       return state;
   }
 };
+
+export default savingTimetable;

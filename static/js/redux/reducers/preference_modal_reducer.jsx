@@ -1,6 +1,6 @@
 import * as ActionTypes from '../constants/actionTypes';
 
-export const preferenceModal = (state = { isVisible: false }, action) => {
+const preferenceModal = (state = { isVisible: false }, action) => {
   switch (action.type) {
     case ActionTypes.TOGGLE_PREFERENCE_MODAL:
       return { isVisible: !state.isVisible };
@@ -8,3 +8,5 @@ export const preferenceModal = (state = { isVisible: false }, action) => {
       return state;
   }
 };
+
+export default preferenceModal;

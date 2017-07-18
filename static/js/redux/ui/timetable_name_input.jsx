@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import React from 'react';
 import classnames from 'classnames';
 
@@ -14,28 +15,28 @@ class TimetableNameInput extends React.Component {
     this.setState({ name: nextProps.activeLoadedTimetableName });
   }
 
-  alterTimetableName(event) {
-    this.setState({ name: event.target.value });
-  }
-
-  showSignupModal() {
-    if (!this.props.isLoggedIn) {
-      return this.props.openSignUpModal();
-    }
-  }
-
   setTimetableName() {
     const newName = this.state.name;
     if (newName.length === 0) {
       this.setState({ name: this.props.activeLoadedTimetableName });
-    } else if (newName != this.props.activeLoadedTimetableName) {
+    } else if (newName !== this.props.activeLoadedTimetableName) {
       this.props.changeTimetableName(newName);
     }
   }
 
+  showSignupModal() {
+    if (!this.props.isLoggedIn) {
+      this.props.openSignUpModal();
+    }
+  }
+
+  alterTimetableName(event) {
+    this.setState({ name: event.target.value });
+  }
+
   render() {
     return (<input
-      ref="input" className={classnames('timetable-name', { unsaved: !this.props.upToDate })}
+      className={classnames('timetable-name', { unsaved: !this.props.upToDate })}
       value={this.state.name}
       onChange={this.alterTimetableName}
       onBlur={this.setTimetableName}
@@ -44,4 +45,14 @@ class TimetableNameInput extends React.Component {
   }
 }
 
+TimetableNameInput.propTypes = {
+  activeLoadedTimetableName: PropTypes.string.isRequired,
+  openSignUpModal: PropTypes.func.isRequired,
+  upToDate: PropTypes.bool.isRequired,
+  isLoggedIn: PropTypes.bool.isRequired,
+  changeTimetableName: PropTypes.func.isRequired,
+};
+
+
 export default TimetableNameInput;
+

@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import React from 'react';
 import classnames from 'classnames';
 import ReactTooltip from 'react-tooltip';
@@ -9,12 +10,12 @@ import { ShareLink } from './master_slot';
 
 const Row = (props) => {
   const timeText = props.displayTime ? <span>{props.displayTime}</span> : null;
-  const dayCells = DAYS.map(day => <CellContainer
+  const dayCells = DAYS.map(day => (<CellContainer
     day={day}
     time={props.time}
     key={day + props.time}
     loggedIn={props.isLoggedIn}
-  />);
+  />));
   return (
     <tr key={props.time}>
       <td className="fc-axis fc-time fc-widget-content cal-row">
@@ -29,6 +30,16 @@ const Row = (props) => {
   );
 };
 
+Row.defaultProps = {
+  displayTime: '',
+};
+
+Row.propTypes = {
+  displayTime: PropTypes.string,
+  isLoggedIn: PropTypes.bool.isRequired,
+  time: PropTypes.string.isRequired,
+};
+
 class Calendar extends React.Component {
   constructor(props) {
     super(props);
@@ -41,6 +52,19 @@ class Calendar extends React.Component {
     };
   }
 
+  componentDidMount() {
+    // Here, we set an interval so that the timeline position is updated once
+    // every minute. (Note: 60 * 1000 milliseconds = 1 minute.)
+    setInterval(() => {
+      this.setState({ timelineStyle: this.getTimelineStyle() });
+    }, 60000);
+
+    // let days = {1: 'mon', 2: 'tue', 3: 'wed', 4: 'thu', 5: 'fri'};
+    // let d = new Date("October 13, 2014 11:13:00");
+    // let selector = ".fc-" + days[d.getDay()];
+    // $(selector).addClass("fc-today");
+  }
+
   componentWillReceiveProps(nextProps) {
     if (this.props.isFetchingShareLink && !nextProps.isFetchingShareLink) {
       this.setState({ shareLinkShown: true });
@@ -49,27 +73,28 @@ class Calendar extends React.Component {
 
   getTimelineStyle() {
     const now = new Date();
-    if (
-            now.getHours() > this.props.endHour ||  // if the current time is before
-            now.getHours() < 8 ||  // 8am or after the schedule end
-            now.getDay() == 0 ||  // time or if the current day is
-            now.getDay() == 6 										// Saturday or Sunday, then
-        ) {																				// display no line
+    if (now.getHours() > this.props.endHour ||  // if the current time is before
+        now.getHours() < 8 ||// 8am or after the schedule end
+        now.getDay() === 0 || // time or if the current day is
+        now.getDay() === 6    // Saturday or Sunday, then
+        ) { // display no line
       return { display: 'none' };
     }
     const diff = Math.abs(new Date() - new Date().setHours(8, 0, 0));
     const mins = Math.ceil((diff / 1000) / 60);
-    const top = mins / 15.0 * 13;
+    const top = (mins / 15.0) * 13;
     return { top, zIndex: 1 };
   }
 
   getCalendarRows() {
     const rows = [];
     for (let i = 8; i <= this.props.endHour; i++) { // one row for each hour, starting from 8am
-      const hour = uses12HrTime && i > 12 ? i - 12 : i;
+      const hour = this.props.uses12HrTime && i > 12 ? i - 12 : i;
       rows.push(<Row
-        displayTime={`${hour}:00`} time={`${i}:00`}
-        isLoggedIn={this.props.isLoggedIn} key={i}
+        displayTime={`${hour}:00`}
+        time={`${i}:00`}
+        isLoggedIn={this.props.isLoggedIn}
+        key={i}
       />);
       rows.push(<Row time={`${i}:30`} isLoggedIn={this.props.isLoggedIn} key={i + 0.5} />);
     }
@@ -99,7 +124,8 @@ class Calendar extends React.Component {
         <button
           onClick={this.fetchShareTimetableLink}
           className="save-timetable add-button"
-          data-tip data-for="share-btn-tooltip"
+          data-tip
+          data-for="share-btn-tooltip"
         >
           <i
             className={classnames('fa',
@@ -108,7 +134,10 @@ class Calendar extends React.Component {
           />
         </button>
         <ReactTooltip
-          id="share-btn-tooltip" class="tooltip" type="dark" place="bottom"
+          id="share-btn-tooltip"
+          class="tooltip"
+          type="dark"
+          place="bottom"
           effect="solid"
         >
           <span>Share Calendar</span>
@@ -126,12 +155,16 @@ class Calendar extends React.Component {
         <button
           onClick={this.props.handleCreateNewTimetable}
           className="save-timetable add-button"
-          data-tip data-for="add-btn-tooltip"
+          data-tip
+          data-for="add-btn-tooltip"
         >
           <i className="fa fa-plus" />
         </button>
         <ReactTooltip
-          id="add-btn-tooltip" class="tooltip" type="dark" place="bottom"
+          id="add-btn-tooltip"
+          class="tooltip"
+          type="dark"
+          place="bottom"
           effect="solid"
         >
           <span>New Timetable</span>
@@ -143,12 +176,16 @@ class Calendar extends React.Component {
         <button
           className="save-timetable add-button"
           onMouseDown={this.props.saveTimetable}
-          data-tip data-for="save-btn-tooltip"
+          data-tip
+          data-for="save-btn-tooltip"
         >
           {saveIcon}
         </button>
         <ReactTooltip
-          id="save-btn-tooltip" class="tooltip" type="dark" place="bottom"
+          id="save-btn-tooltip"
+          class="tooltip"
+          type="dark"
+          place="bottom"
           effect="solid"
         >
           <span>Save Timetable</span>
@@ -160,12 +197,16 @@ class Calendar extends React.Component {
         <button
           onClick={() => this.props.triggerSaveCalendarModal()}
           className="save-timetable"
-          data-tip data-for="saveToCal-btn-tooltip"
+          data-tip
+          data-for="saveToCal-btn-tooltip"
         >
-          <img src="/static/img/addtocalendar.png" />
+          <img src="/static/img/addtocalendar.png" alt="Add to Calendar" />
         </button>
         <ReactTooltip
-          id="saveToCal-btn-tooltip" class="tooltip" type="dark" place="bottom"
+          id="saveToCal-btn-tooltip"
+          class="tooltip"
+          type="dark"
+          place="bottom"
           effect="solid"
         >
           <span>Save to Calendar</span>
@@ -177,12 +218,16 @@ class Calendar extends React.Component {
         <button
           onClick={this.props.togglePreferenceModal}
           className="save-timetable"
-          data-tip data-for="pref-btn-tooltip"
+          data-tip
+          data-for="pref-btn-tooltip"
         >
           <i className="fa fa-cog" />
         </button>
         <ReactTooltip
-          id="pref-btn-tooltip" class="tooltip" type="dark" place="bottom"
+          id="pref-btn-tooltip"
+          class="tooltip"
+          type="dark"
+          place="bottom"
           effect="solid"
         >
           <span>Preferences</span>
@@ -190,7 +235,7 @@ class Calendar extends React.Component {
       </div>
         );
     return (
-      <div id="calendar" className="fc fc-ltr fc-unthemed week-calendar">
+      <div className="calendar fc fc-ltr fc-unthemed week-calendar">
         <div className="fc-toolbar no-print">
           <div className="fc-left">
             <PaginationContainer />
@@ -292,26 +337,31 @@ class Calendar extends React.Component {
               </tbody>
             </table>
           </div>
-          <p className="data-last-updated no-print">Data last
-                        updated: { this.props.dataLastUpdated && this.props.dataLastUpdated.length && this.props.dataLastUpdated !== 'null' ? this.props.dataLastUpdated : null }</p>
         </div>
       </div>
     );
   }
 
-  componentDidMount() {
-        // Here, we set an interval so that the timeline position is updated once
-        // every minute. (Note: 60 * 1000 milliseconds = 1 minute.)
-    setInterval(() => {
-      this.setState({ timelineStyle: this.getTimelineStyle() });
-    }, 60000);
-
-        // let days = {1: 'mon', 2: 'tue', 3: 'wed', 4: 'thu', 5: 'fri'};
-        // let d = new Date("October 13, 2014 11:13:00");
-        // let selector = ".fc-" + days[d.getDay()];
-        // $(selector).addClass("fc-today");
-  }
-
 }
 
+Calendar.defaultProps = {
+  shareLink: '',
+};
+
+Calendar.propTypes = {
+  togglePreferenceModal: PropTypes.func.isRequired,
+  triggerSaveCalendarModal: PropTypes.func.isRequired,
+  isFetchingShareLink: PropTypes.bool.isRequired,
+  endHour: PropTypes.number.isRequired,
+  handleCreateNewTimetable: PropTypes.func.isRequired,
+  shareLinkValid: PropTypes.bool.isRequired,
+  fetchShareTimetableLink: PropTypes.func.isRequired,
+  saveTimetable: PropTypes.func.isRequired,
+  isLoggedIn: PropTypes.bool.isRequired,
+  saving: PropTypes.bool.isRequired,
+  shareLink: PropTypes.string,
+  uses12HrTime: PropTypes.bool.isRequired,
+};
+
 export default Calendar;
+

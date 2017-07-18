@@ -1,7 +1,6 @@
 import * as ActionTypes from '../constants/actionTypes';
 
-
-export const explorationModal = (state = {
+const explorationModal = (state = {
   isVisible: false,
   advancedSearchResults: [],
   isFetching: false,
@@ -16,31 +15,31 @@ export const explorationModal = (state = {
       return Object.assign({}, state, { isVisible: false });
     case ActionTypes.REQUEST_ADVANCED_SEARCH_RESULTS:
       return Object.assign({}, state, { isFetching: true });
-    case ActionTypes.RECEIVE_ADVANCED_SEARCH_RESULTS:
-      let { advancedSearchResults } = action;
+    case ActionTypes.RECEIVE_ADVANCED_SEARCH_RESULTS: {
+      let results = action.response.result;
       if (state.page > 1) {
-        if (advancedSearchResults) {
-          advancedSearchResults = [...state.advancedSearchResults].concat(advancedSearchResults);
+        if (results) {
+          results = [...state.advancedSearchResults].concat(results);
           return Object.assign({}, state, {
-            advancedSearchResults,
+            advancedSearchResults: results,
             isFetching: false,
           });
         }
         return Object.assign({}, state, { isFetching: false });
       }
       return Object.assign({}, state, {
-        advancedSearchResults,
+        advancedSearchResults: results,
         isFetching: false,
         active: 0,
       });
-
+    }
     case ActionTypes.SET_ACTIVE_ADV_SEARCH_RESULT:
       return Object.assign({}, state, { active: action.active });
     case ActionTypes.SET_COURSE_REACTIONS:
       if (state.isVisible) {
-        const advancedSearchResults = [...state.advancedSearchResults];
-        advancedSearchResults[state.active].reactions = action.reactions;
-        return Object.assign({}, state, { advancedSearchResults });
+        const searchResults = [...state.advancedSearchResults];
+        searchResults[state.active].reactions = action.reactions;
+        return Object.assign({}, state, { advancedSearchResults: searchResults });
       }
       return state;
     case ActionTypes.REQUEST_SCHOOL_INFO:
@@ -55,3 +54,7 @@ export const explorationModal = (state = {
       return state;
   }
 };
+
+export const getAdvancedSearchResultIds = state => state.advancedSearchResults;
+
+export default explorationModal;

@@ -1,32 +1,43 @@
 from django.conf.urls import patterns, url
 from django.contrib import admin
+from django.http import HttpResponseRedirect
+from django.views.generic.base import RedirectView
 
-import student.views
 import timetable.views
+from helpers.mixins import FeatureFlowView
 
 admin.autodiscover()
 
 urlpatterns = patterns('',
-                       # marketing urls
-                       url(r'^signup/*', timetable.views.launch_user_acq_modal),
-                       url(r'^textbooks/*$', timetable.views.view_textbooks),
-                       url(r'^export_calendar/*$', timetable.views.export_calendar),
-                       url(r'^notifyme/*$', timetable.views.enable_notifs),
-                       url(r'^find_friends/$', timetable.views.find_friends),
-                       url(r'^react/*', student.views.react_to_course),
-                       url(r'^jhu/countdown/*$', timetable.views.jhu_timer),
-                       url(r'^callback/google_calendar/*$', timetable.views.google_calendar_callback),
-                       url(r'^user/log_final_exam/*$', timetable.views.log_final_exam_view),
+                       url(r'^signin/*$',
+                           FeatureFlowView.as_view(feature_name='USER_ACQ')),
+                       url(r'^signup/*$',
+                           FeatureFlowView.as_view(feature_name='SIGNUP')),
+                       url(r'^textbooks/*$',
+                           FeatureFlowView.as_view(feature_name='VIEW_TEXTBOOKS')),
+                       url(r'^export_calendar/*$',
+                           FeatureFlowView.as_view(feature_name='EXPORT_CALENDAR')),
+                       url(r'^notifyme/*$',
+                           FeatureFlowView.as_view(feature_name='ENABLE_NOTIFS')),
+                       url(r'^find_friends/$',
+                           FeatureFlowView.as_view(feature_name='FIND_FRIENDS')),
+                       url(r'^callback/google_calendar/*$',
+                           FeatureFlowView.as_view(feature_name='GCAL_CALLBACK')),
 
-                       # redirects
-                       url(r'^timetable/*$', timetable.views.redirect_to_home),
-                       url(r'^timetable/.+$', timetable.views.redirect_to_home),
-                       url(r'^complete/facebook/.*$', timetable.views.view_timetable),
+                       url(r'^timetable/.*$', RedirectView.as_view(url="/")),
+
+                       url(r'^complete/facebook/.*$', FeatureFlowView.as_view()),
 
                        # timetables
-                       url(r'^get_timetables/$', timetable.views.get_timetables),
+                       url(r'^timetables/?$', timetable.views.TimetableView.as_view()),
 
-                       # timetable sharing
-                       url(r'share/link/*$', timetable.views.create_share_link),
-                       url(r'share/(?P<ref>.+)/*$', timetable.views.share_timetable),
+                       # sharing
+                       url(r'^timetables/links/$', timetable.views.TimetableLinkView.as_view()),
+                       url(r'^timetables/links/(?P<slug>.+)/$',
+                           timetable.views.TimetableLinkView.as_view()),
+
+                       # maintain backwards compatibility TODO: change to redirect
+                       url(r'share/(?P<slug>.+)/$',
+                           lambda request, slug:
+                           HttpResponseRedirect('/timetables/links/{0}/'.format(slug)))
                        )

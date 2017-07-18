@@ -5,7 +5,9 @@ export const DAYS = ['M', 'T', 'W', 'R', 'F'];
 
 export const FULL_WEEK_LIST = ['U', 'M', 'T', 'W', 'R', 'F', 'S'];
 
-export const DRAGTYPES = {
+export const VERBOSE_DAYS = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'];
+
+export const DRAG_TYPES = {
   DRAG: 'drag', // drag a custom slot to a new location
   EXTEND: 'extend', // extend the length of a custom slot
   CREATE: 'create', // create a new custom slot

@@ -1,140 +1,71 @@
-from social import *
-from student.models import *
-import urllib2, json, pprint, datetime
-from django.conf import settings
-from django.db import models
-import json, requests, httplib2
-from googleapiclient import discovery
-from oauth2client import client
-from oauth2client import tools
-from oauth2client.file import Storage
-from hashids import Hashids
-from django.core.signing import TimestampSigner, BadSignature, SignatureExpired
-from googleapiclient.discovery import build
-from oauth2client.client import GoogleCredentials
+import datetime
+
+from django.db.models import Q
+from django.forms import model_to_dict
+
+from student.models import Student, PersonalTimetable
+from timetable.models import Course
+from timetable.serializers import DisplayTimetableSerializer
 
 
-DAY_LIST = ['M','T','W','R','F','S','U'];
-hashids = Hashids(salt="***REMOVED***")
+DAY_LIST = ['M', 'T', 'W', 'R', 'F', 'S', 'U']
 
-def get_google_credentials(student):
-  social_user = student.user.social_auth.filter(
-      provider='google-oauth2',
-  ).first()
-  try:
-      access_token = social_user.extra_data["access_token"]
-      expires_at = social_user.extra_data["expires"]
-      refresh_token = social_user.extra_data.get("refresh_token",None)
-  except TypeError:
-    access_token = json.loads(social_user.extra_data)["access_token"]
-    refresh_token = json.loads(social_user.extra_data)["refresh_token"]
-    expires_at = json.loads(social_user.extra_data)["expires"]
-  return GoogleCredentials(access_token,settings.SOCIAL_AUTH_GOOGLE_OAUTH2_KEY,settings.SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET,refresh_token,expires_at,"https://accounts.google.com/o/oauth2/token",'my-user-agent/1.0')
-
-def check_student_token(student, token):
-  try:
-    key = '%s:%s' % (student.id, token)
-    TimestampSigner().unsign(key, max_age=60 * 60 * 48) # Valid for 2 days
-  except (BadSignature, SignatureExpired):
-    return False
-  return True
-
-def associate_students(strategy, details, response, user, *args, **kwargs):
-    try:
-        email = kwargs['details']['email']
-        kwargs['user'] = User.objects.get(email=email)
-    except:
-        pass
-    try: 
-        token = strategy.session_get('student_token')
-        ref = strategy.session_get('login_hash')
-        student = Student.objects.get(id=hashids.decrypt(ref)[0])
-        if check_student_token(student,token):
-          kwargs['user'] = student.user
-    except: 
-      pass
-    return kwargs
 
 def next_weekday(d, weekday):
     d = d - datetime.timedelta(days=1)
     days_ahead = DAY_LIST.index(weekday) - d.weekday()
-    if days_ahead <= 0: # Target day already happened this week
+    if days_ahead <= 0:  # Target day already happened this week
         days_ahead += 7
     return d + datetime.timedelta(days_ahead)
 
-def create_student(strategy, details, response, user, *args, **kwargs):
-    backend_name = kwargs['backend'].name
-    if Student.objects.filter(user=user).exists():
-    	new_student = Student.objects.get(user=user)
+
+def get_student(request):
+    logged = request.user.is_authenticated()
+    if logged and Student.objects.filter(user=request.user).exists():
+        return Student.objects.get(user=request.user)
     else:
-        new_student = Student(user=user)
-        new_student.save()
-    social_user = user.social_auth.filter(
-        provider=backend_name,
-    ).first()
+        return None
 
-    if backend_name == 'google-oauth2' and not user.social_auth.filter(provider='facebook').exists():
-      try:
-        access_token = social_user.extra_data["access_token"]
-      except TypeError:
-        access_token = json.loads(social_user.extra_data)["access_token"]
-      response = requests.get(
-          'https://www.googleapis.com/plus/v1/people/me'.format(
-            social_user.uid,
-            settings.GOOGLE_API_KEY),
-          params={'access_token': access_token}
-      )
-      new_student.img_url = response.json()['image'].get('url','')
-      new_student.gender = response.json().get('gender','')
-      new_student.save()
 
-    elif backend_name == 'facebook':
+def get_classmates_from_course_id(
+        school, student, course_id, semester, friends=None, include_same_as=False):
+    if not friends:
+        friends = student.friends.filter(social_courses=True)
+    past_ids = [course_id]
+    if include_same_as:
+        c = Course.objects.get(id=course_id)
+        if c.same_as:
+            past_ids.append(c.same_as.id)
+    curr_ptts = PersonalTimetable.objects.filter(student__in=friends, courses__id__exact=course_id) \
+        .filter(Q(semester=semester)).order_by('student', 'last_updated').distinct('student')
+    past_ptts = PersonalTimetable.objects.filter(student__in=friends, courses__id__in=past_ids) \
+        .exclude(student__in=curr_ptts.values_list('student', flat=True)).filter(~Q(semester=semester)) \
+        .order_by('student', 'last_updated').distinct('student')
 
-      try:
-        access_token = social_user.extra_data["access_token"]
-      except TypeError:
-        access_token = json.loads(social_user.extra_data)["access_token"]
+    return {
+        'current': get_classmates_from_tts(student, course_id, curr_ptts),
+        'past': get_classmates_from_tts(student, course_id, past_ptts),
+    }
 
-      if social_user:
-          url = u'https://graph.facebook.com/{0}/' \
-                u'?fields=picture&type=large' \
-                u'&access_token={1}'.format(
-                    social_user.uid,
-                    access_token,
-                )
-          request = urllib2.Request(url)
-          data = json.loads(urllib2.urlopen(request).read())
-          new_student.img_url = data['picture']['data']['url']
-          url = u'https://graph.facebook.com/{0}/' \
-                u'?fields=gender' \
-                u'&access_token={1}'.format(
-                    social_user.uid,
-                    access_token,
-                )
-          request = urllib2.Request(url)
-          data = json.loads(urllib2.urlopen(request).read())
-          try:
-            new_student.gender = data.get('gender','')
-          except:
-            pass
-          new_student.fbook_uid = social_user.uid
-          new_student.save()
-          url = u'https://graph.facebook.com/{0}/' \
-                u'friends?fields=id' \
-                u'&access_token={1}'.format(
-                    social_user.uid,
-                    access_token,
-                )
-          request = urllib2.Request(url)
-          friends = json.loads(urllib2.urlopen(request).read()).get('data')
-          
-          for friend in friends:
-            if Student.objects.filter(fbook_uid=friend['id']).exists():
-              friend_student = Student.objects.get(fbook_uid=friend['id'])
-              if not new_student.friends.filter(user=friend_student.user).exists():
-                new_student.friends.add(friend_student)
-                new_student.save()
-                friend_student.save()
 
-    return kwargs
-    
+def get_classmates_from_tts(student, course_id, tts):
+    classmates = []
+    for tt in tts:
+        friend = tt.student
+        classmate = model_to_dict(friend, exclude=['user', 'id', 'fbook_uid', 'friends', 'time_accepted_tos'])
+        classmate['first_name'] = friend.user.first_name
+        classmate['last_name'] = friend.user.last_name
+        if student.social_offerings and friend.social_offerings:
+            friend_sections = tt.sections.filter(course__id=course_id)
+            sections = list(friend_sections.values_list('meeting_section', flat=True).distinct())
+            classmate['sections'] = sections
+        else:
+            classmate['sections'] = []
+        classmates.append(classmate)
+    return classmates
+
+
+def get_student_tts(student, school, semester):
+    timetables = student.personaltimetable_set.filter(
+        school=school, semester=semester).order_by('-last_updated')
+    return DisplayTimetableSerializer.from_model(timetables, many=True).data

@@ -1,34 +1,30 @@
-from django.db import models
 from timetable.models import *
 from student.models import Student
 
 
-class SharedTimetable(models.Model):
+class SharedTimetable(Timetable):
     """
     A timetable for which a user generated a share link.
     Not necessarily tied to a Student object, since logged out users
     can also generate links to share a timetable. But if a logged-in user
     does generate it, this information will be recorded.
     """
-    courses = models.ManyToManyField(Course)
-    sections = models.ManyToManyField(Section)
-    _semester = models.CharField(max_length=2) # deprecated
-    semester = models.ForeignKey('timetable.Semester')
-    school = models.CharField(max_length=50)
-    name = models.CharField(max_length=100, null=True)
     has_conflict = models.BooleanField(blank=True, default=False)
     time_created = models.DateTimeField(auto_now_add=True)
     student = models.ForeignKey(Student, null=True, default=None)
+
 
 class SharedTimetableView(models.Model):
     shared_timetable = models.ForeignKey(SharedTimetable)
     time_created = models.DateTimeField(auto_now_add=True)
     student = models.ForeignKey(Student, null=True, default=None)
 
+
 class SharedCourseView(models.Model):
     shared_course = models.ForeignKey(Course)
     time_created = models.DateTimeField(auto_now_add=True)
     student = models.ForeignKey(Student, null=True, default=None)
+
 
 class AnalyticsTimetable(models.Model):
     """
@@ -37,7 +33,6 @@ class AnalyticsTimetable(models.Model):
     when they are not saved.
     """
     courses = models.ManyToManyField(Course)
-    _semester = models.CharField(max_length=2) # deprecated
     semester = models.ForeignKey('timetable.Semester')
     school = models.CharField(max_length=50)
     has_conflict = models.BooleanField(blank=True, default=False)
@@ -53,7 +48,6 @@ class AnalyticsCourseSearch(models.Model):
     query = models.CharField(max_length=200)
     courses = models.ManyToManyField(Course)
     is_advanced = models.BooleanField(blank=True, default=False)
-    _semester = models.CharField(max_length=2) # deprecated
     semester = models.ForeignKey('timetable.Semester')
     school = models.CharField(max_length=50)
     student = models.ForeignKey(Student, null=True, default=None)
@@ -91,6 +85,7 @@ class FinalExamModalView(models.Model):
     time_created = models.DateTimeField(auto_now_add=True)
     school = models.CharField(max_length=50)
 
+
 class FacebookAlertView(models.Model):
     """
     Logs that a continue with Facebook alert has been viewed
@@ -98,6 +93,7 @@ class FacebookAlertView(models.Model):
     student = models.ForeignKey(Student, null=True, default=None)
     time_created = models.DateTimeField(auto_now_add=True)
     school = models.CharField(max_length=50)
+
 
 class FacebookAlertClick(models.Model):
     """

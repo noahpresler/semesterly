@@ -1,16 +1,17 @@
-import React, { PropTypes } from 'react';
+import PropTypes from 'prop-types';
+import React from 'react';
 import { DragSource, DropTarget } from 'react-dnd';
-import { DRAGTYPES, HALF_HOUR_HEIGHT } from '../constants/constants';
+import { DRAG_TYPES, HALF_HOUR_HEIGHT } from '../constants/constants';
 
 
 function convertToHalfHours(str) {
-  const start = parseInt(str.split(':')[0]);
-  return str.split(':')[1] == '30' ? start * 2 + 1 : start * 2;
+  const start = parseInt(str.split(':')[0], 10);
+  return str.split(':')[1] === '30' ? (start * 2) + 1 : start * 2;
 }
 
 function convertToStr(halfHours) {
-  const num_hours = Math.floor(halfHours / 2);
-  return halfHours % 2 ? `${num_hours}:30` : `${num_hours}:00`;
+  const numHours = Math.floor(halfHours / 2);
+  return halfHours % 2 ? `${numHours}:30` : `${numHours}:00`;
 }
 
 const dragSlotSource = {
@@ -21,7 +22,7 @@ const dragSlotSource = {
       id: props.id,
     };
   },
-  endDrag(props, monitor) {
+  endDrag() {
   },
 };
 
@@ -40,7 +41,6 @@ const dragSlotTarget = {
     const startHalfhour = convertToHalfHours(timeStart);
     const endHalfhour = convertToHalfHours(timeEnd);
 
-    const slotStart = props.time_start;
     const slotTop = $(`#${props.id}`).offset().top;
         // number half hours from slot start
     const n = Math.floor((monitor.getClientOffset().y - slotTop) / HALF_HOUR_HEIGHT);
@@ -57,7 +57,7 @@ const dragSlotTarget = {
   },
 };
 
-function collectDragDrop(connect, monitor) { // inject props as drop target
+function collectDragDrop(connect) { // inject props as drop target
   return {
     connectDragTarget: connect.dropTarget(),
   };
@@ -66,10 +66,10 @@ function collectDragDrop(connect, monitor) { // inject props as drop target
 let lastPreview = null;
 const createSlotTarget = {
   drop(props, monitor) { // move it to current location on drop
-    let { timeStart, id } = monitor.getItem();
+    let { timeStart } = monitor.getItem();
+    const { id } = monitor.getItem();
 
         // get the time that the mouse dropped on
-    const slotStart = props.time_start;
     const slotTop = $(`#${props.id}`).offset().top;
     const n = Math.floor((monitor.getClientOffset().y - slotTop) / HALF_HOUR_HEIGHT);
     let timeEnd = convertToStr(convertToHalfHours(props.time_start) + n);
@@ -82,16 +82,16 @@ const createSlotTarget = {
   },
   canDrop(props, monitor) { // new custom slot must start and end on the same day
     const { day } = monitor.getItem();
-    return day == props.day;
+    return day === props.day;
   },
   hover(props, monitor) {
-    let { timeStart, id } = monitor.getItem();
+    let { timeStart } = monitor.getItem();
+    const { id } = monitor.getItem();
 
         // get the time that the mouse dropped on
-    const slotStart = props.time_start;
     const slotTop = $(`#${props.id}`).offset().top;
     const n = Math.floor((monitor.getClientOffset().y - slotTop) / HALF_HOUR_HEIGHT);
-    if (n == lastPreview) {
+    if (n === lastPreview) {
       return;
     }
     let timeEnd = convertToStr(convertToHalfHours(props.time_start) + n);
@@ -103,7 +103,7 @@ const createSlotTarget = {
   },
 };
 
-function collectCreateDrop(connect, monitor) { // inject props as drop target
+function collectCreateDrop(connect) { // inject props as drop target
   return {
     connectCreateTarget: connect.dropTarget(),
   };
@@ -111,16 +111,17 @@ function collectCreateDrop(connect, monitor) { // inject props as drop target
 
 // TODO: set connectDragPreview or update state as preview
 class CustomSlot extends React.Component {
+
+  static stopPropagation(callback, event) {
+    event.stopPropagation();
+    callback();
+  }
+
   constructor(props) {
     super(props);
     this.state = { hovered: false };
     this.onSlotHover = this.onSlotHover.bind(this);
     this.onSlotUnhover = this.onSlotUnhover.bind(this);
-  }
-
-  stopPropagation(callback, event) {
-    event.stopPropagation();
-    callback();
   }
 
   onSlotHover() {
@@ -131,6 +132,50 @@ class CustomSlot extends React.Component {
     this.setState({ hovered: false });
   }
 
+  getSlotStyles() {
+    const startHour = parseInt(this.props.time_start.split(':')[0], 10);
+    const startMinute = parseInt(this.props.time_start.split(':')[1], 10);
+    const endHour = parseInt(this.props.time_end.split(':')[0], 10);
+    const endMinute = parseInt(this.props.time_end.split(':')[1], 10);
+
+    const top = ((startHour - 8) * ((HALF_HOUR_HEIGHT * 2) + 2)) +
+      ((startMinute) * (HALF_HOUR_HEIGHT / 30));
+    const bottom = ((endHour - 8) * ((HALF_HOUR_HEIGHT * 2) + 2)) +
+      (((endMinute) * (HALF_HOUR_HEIGHT / 30)) - 1);
+    if (this.props.preview) { // don't take into account conflicts, reduce opacity, increase z-index
+      return {
+        top,
+        bottom: -bottom,
+        zIndex: 10,
+        right: '0%',
+        backgroundColor: '#F8F6F7',
+        color: '#222',
+        width: '100%',
+        left: 0,
+        opacity: 0.5,
+      };
+    }
+    // the cumulative width of this slot and all of the slots it is conflicting with
+    const totalSlotsWidth = 100 - (5 * this.props.depth_level);
+    // the width of this particular slot
+    const slotWidthPercentage = totalSlotsWidth / this.props.num_conflicts;
+    // the amount of left margin of this particular slot, in percentage
+    let pushLeft = (this.props.shift_index * slotWidthPercentage) + (5 * this.props.depth_level);
+    if (pushLeft === 50) {
+      pushLeft += 0.5;
+    }
+    return {
+      top,
+      bottom: -bottom,
+      right: '0%',
+      backgroundColor: '#F8F6F7',
+      width: `${slotWidthPercentage}%`,
+      left: `${pushLeft}%`,
+      zIndex: 10 * this.props.depth_level,
+      opacity: this.props.isDragging ? 0 : 1, // hide while dragging
+    };
+  }
+
   updateName(event) {
     this.props.updateCustomSlot({ name: event.target.value }, this.props.id);
   }
@@ -139,11 +184,19 @@ class CustomSlot extends React.Component {
     const removeButton = this.state.hovered ?
             (<i
               className="fa fa-times"
-              onClick={event => this.stopPropagation(this.props.removeCustomSlot, event)}
+              onClick={event => CustomSlot.stopPropagation(this.props.removeCustomSlot, event)}
             />) : null;
 
-    const converted_start = uses12HrTime && parseInt(this.props.time_start.split(':')[0]) > 12 ? `${parseInt(this.props.time_start.split(':')[0]) - 12}:${this.props.time_start.split(':')[1]}` : this.props.time_start;
-    const converted_end = uses12HrTime && parseInt(this.props.time_end.split(':')[0]) > 12 ? `${parseInt(this.props.time_end.split(':')[0]) - 12}:${this.props.time_end.split(':')[1]}` : this.props.time_end;
+    const convertedStart = this.props.uses12HrTime &&
+    parseInt(this.props.time_start.split(':')[0], 10) > 12 ?
+    `${parseInt(this.props.time_start.split(':')[0], 10) - 12}:${this.props.time_start.split(':')[1]}`
+    : this.props.time_start;
+
+    const convertedEnd = this.props.uses12HrTime &&
+    parseInt(this.props.time_end.split(':')[0], 10) > 12 ?
+    `${parseInt(this.props.time_end.split(':')[0], 10) - 12} :${this.props.time_end.split(':')[1]}`
+    : this.props.time_end;
+
     return this.props.connectCreateTarget(this.props.connectDragTarget(this.props.connectDragSource(
       <div className="fc-event-container">
         <div
@@ -157,7 +210,7 @@ class CustomSlot extends React.Component {
           {removeButton}
           <div className="fc-content">
             <div className="fc-time">
-              <span>{ converted_start } – { converted_end }</span>
+              <span>{ convertedStart } – { convertedEnd }</span>
             </div>
             <div className="fc-time">
               <input
@@ -179,53 +232,6 @@ class CustomSlot extends React.Component {
       </div>,
         )));
   }
-
-    // TODO: move this out
-  getSlotStyles() {
-    let start_hour = parseInt(this.props.time_start.split(':')[0]),
-      start_minute = parseInt(this.props.time_start.split(':')[1]),
-      end_hour = parseInt(this.props.time_end.split(':')[0]),
-      end_minute = parseInt(this.props.time_end.split(':')[1]);
-
-    const top = (start_hour - 8) * (HALF_HOUR_HEIGHT * 2 + 2) + (start_minute) * (HALF_HOUR_HEIGHT / 30);
-    const bottom = (end_hour - 8) * (HALF_HOUR_HEIGHT * 2 + 2) + (end_minute) * (HALF_HOUR_HEIGHT / 30) - 1;
-    const height = bottom - top - 2;
-    if (this.props.preview) { // don't take into account conflicts, reduce opacity, increase z-index
-      return {
-        top,
-        bottom: -bottom,
-        zIndex: 10,
-        left: '0%',
-        right: '0%',
-        backgroundColor: '#F8F6F7',
-        color: '#222',
-        width: '100%',
-        left: 0,
-        opacity: 0.5,
-      };
-    }
-        // the cumulative width of this slot and all of the slots it is conflicting with
-    const total_slot_widths = 100 - (5 * this.props.depth_level);
-        // the width of this particular slot
-    const slot_width_percentage = total_slot_widths / this.props.num_conflicts;
-        // the amount of left margin of this particular slot, in percentage
-    let push_left = (this.props.shift_index * slot_width_percentage) + 5 * this.props.depth_level;
-    if (push_left == 50) {
-      push_left += 0.5;
-    }
-    return {
-      top,
-      bottom: -bottom,
-      zIndex: 1,
-      left: '0%',
-      right: '0%',
-      backgroundColor: '#F8F6F7',
-      width: `${slot_width_percentage}%`,
-      left: `${push_left}%`,
-      zIndex: 10 * this.props.depth_level,
-      opacity: this.props.isDragging ? 0 : 1, // hide while dragging
-    };
-  }
 }
 
 CustomSlot.propTypes = {
@@ -239,11 +245,16 @@ CustomSlot.propTypes = {
   shift_index: PropTypes.number.isRequired,
   name: PropTypes.string.isRequired,
   id: PropTypes.number.isRequired,
+  uses12HrTime: PropTypes.bool.isRequired,
+  preview: PropTypes.bool.isRequired,
+  updateCustomSlot: PropTypes.func.isRequired,
+  removeCustomSlot: PropTypes.func.isRequired,
+  connectCreateTarget: PropTypes.func.isRequired,
 };
 
-export default DropTarget(DRAGTYPES.DRAG, dragSlotTarget, collectDragDrop)(
-    DropTarget(DRAGTYPES.CREATE, createSlotTarget, collectCreateDrop)(
-        DragSource(DRAGTYPES.DRAG, dragSlotSource, collectDragSource)(CustomSlot),
+export default DropTarget(DRAG_TYPES.DRAG, dragSlotTarget, collectDragDrop)(
+    DropTarget(DRAG_TYPES.CREATE, createSlotTarget, collectCreateDrop)(
+        DragSource(DRAG_TYPES.DRAG, dragSlotSource, collectDragSource)(CustomSlot),
     ),
 );
-// export default CustomSlot
+

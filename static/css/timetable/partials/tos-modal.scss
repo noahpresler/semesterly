@@ -1,0 +1,46 @@
+.terms-of-service-modal {
+  max-width: 450px;
+  text-align: center;
+
+  h1 {
+    font-size: 25px;
+    margin: 8px auto 33px;
+  }
+
+  h3 {
+    color: $g555;
+    font-size: 14px;
+    margin: 20px 10px;
+  }
+
+  .legal-links {
+    color: $blue;
+    display: block;
+    font-size: 15px;
+    margin: 3px 20px;
+
+    i {
+      font-size: 13px;
+      margin-left: 3px;
+    }
+  }
+
+}
+
+.tos-modal-container {
+  padding: 30px 20px;
+}
+
+
+.accept-tos-btn {
+  background-color: $green;
+  border: 0;
+  border-radius: 3px;
+  color: $gfff;
+  margin: 20px auto;
+  padding: 10px 20px;
+
+  i {
+    margin-right: 10px;
+  }
+}

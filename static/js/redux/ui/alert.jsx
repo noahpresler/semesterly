@@ -1,28 +1,25 @@
+import PropTypes from 'prop-types';
 import React from 'react';
-import ReactDOM from 'react-dom';
 import classnames from 'classnames';
 
 class Alert extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {
-      closeButtonStyle: {},
-    };
+    this.handleCloseClick = this.handleCloseClick.bind(this);
+    this.showIcon = this.showIcon.bind(this);
   }
 
-    /**
-     * Handle the close button click
-     * @return {void}
-     */
-  _handleCloseClick() {
-    this._removeSelf();
+  componentDidMount() {
+    if (this.props.time > 0) {
+      this.countdown();
+    }
   }
 
     /**
      * Include the given icon or use the default one
      * @return {React.Component}
      */
-  _showIcon() {
+  showIcon() {
     const icon = this.props.icon || <div className={`${this.props.type}-icon`} />;
     return icon;
   }
@@ -31,9 +28,9 @@ class Alert extends React.Component {
      * Remove the alert after the given time
      * @return {void}
      */
-  _countdown() {
+  countdown() {
     setTimeout(() => {
-      this._removeSelf();
+      this.removeSelf();
     }, this.props.time);
   }
 
@@ -41,23 +38,16 @@ class Alert extends React.Component {
      * Emit a event to AlertContainer remove this alert from page
      * @return {void}
      */
-  _removeSelf() {
+  removeSelf() {
     reactAlertEvents.emit('ALERT.REMOVE', this);
   }
 
-  componentDidMount() {
-    this.domNode = ReactDOM.findDOMNode(this);
-    this.setState({
-      closeButtonStyle: {
-        height: `${this.domNode.offsetHeight}px`,
-        lineHeight: `${this.domNode.offsetHeight}px`,
-        backgroundColor: this.props.style.closeButton.bg,
-      },
-    });
-
-    if (this.props.time > 0) {
-      this._countdown();
-    }
+  /**
+   * Handle the close button click
+   * @return {void}
+   */
+  handleCloseClick() {
+    this.removeSelf();
   }
 
   render() {
@@ -67,13 +57,16 @@ class Alert extends React.Component {
         className={classnames('alert', this.props.type, this.props.additionalClass)}
       >
         <div className="content icon">
-          {this._showIcon.bind(this)()}
+          {this.showIcon()}
         </div>
         <div className="content message">
           {this.props.message}
         </div>
         <div
-          onClick={this._handleCloseClick.bind(this)} style={this.state.closeButtonStyle}
+          onClick={this.handleCloseClick}
+          style={{
+            backgroundColor: this.props.style.closeButton.bg,
+          }}
           className="content close"
         >
           <div className={this.props.closeIconClass} />
@@ -88,10 +81,24 @@ Alert.defaultProps = {
   icon: '',
   message: '',
   type: 'info',
+  style: {
+    alert: {},
+    closeButton: {},
+  },
 };
 
 Alert.propTypes = {
-  type: React.PropTypes.oneOf(['info', 'success', 'error']),
+  type: PropTypes.oneOf(['info', 'success', 'error']),
+  closeIconClass: PropTypes.string.isRequired,
+  additionalClass: PropTypes.string.isRequired,
+  style: PropTypes.shape({
+    alert: PropTypes.style,
+    closeButton: PropTypes.style,
+  }),
+  message: PropTypes.oneOfType([PropTypes.string, PropTypes.element]),
+  time: PropTypes.number.isRequired,
+  icon: PropTypes.oneOfType([PropTypes.string, PropTypes.element]),
 };
 
 export default Alert;
+

@@ -1,51 +1,47 @@
-import {connect} from "react-redux";
-import {setDeclinedNotifications} from "../../util";
-import {fetchClassmates, logFacebookAlertView, saveSettings} from "../../actions/user_actions";
-import FriendsInClassAlert from "./friends_in_class_alert";
-import * as ActionTypes from "../../constants/actionTypes";
+import { connect } from 'react-redux';
+import { getActiveTimetable } from '../../reducers/root_reducer';
+import { setDeclinedNotifications } from '../../util';
+import { logFacebookAlertView, saveSettings } from '../../actions/user_actions';
+import FriendsInClassAlert from './friends_in_class_alert';
+import * as ActionTypes from '../../constants/actionTypes';
 
 const mapStateToProps = (state) => {
-    let timetables = state.timetables.items;
-    let active = state.timetables.active;
-    let active_tt = timetables[active];
-    let msg = state.alerts.mostFriendsCount + " friends are also taking this class!";
-    return {
-        msg,
-        active_tt,
-        mostFriendsClass: active_tt.courses.filter((c) => c.id == state.alerts.mostFriendsClassId)[0],
-        mostFriendsCount: state.alerts.mostFriendsCount,
-        mostFriendsKey: state.ui.courseToColourIndex[state.alerts.mostFriendsClassId],
-        totalFriendsCount: state.alerts.totalFriendsCount,
-        userInfo: state.userInfo.data,
-        alertFacebookFriends: state.alerts.alertFacebookFriends
+  const activeTT = getActiveTimetable(state);
+  const msg = `${state.alerts.mostFriendsCount} friends are also taking this class!`;
+  return {
+    msg,
+    mostFriendsClass: activeTT.slots.find(slot =>
+      slot.course.id === state.alerts.mostFriendsClassId),
+    mostFriendsCount: state.alerts.mostFriendsCount,
+    mostFriendsKey: state.ui.courseToColourIndex[state.alerts.mostFriendsClassId],
+    totalFriendsCount: state.alerts.totalFriendsCount,
+    userInfo: state.userInfo.data,
+    alertFacebookFriends: state.alerts.alertFacebookFriends
         && state.userInfo.data.FacebookSignedUp
         && (!state.userInfo.data.social_courses || state.alerts.facebookAlertIsOn)
         && !state.userInfo.overrideShow
-        && state.alerts.mostFriendsCount >= 2
-    }
-}
-const mapDispatchToProps = (dispatch) => {
-    return {
-        dismissSelf: () => {
-            dispatch({type: ActionTypes.DISMISS_FACEBOOK_FRIENDS});
-        },
-        showNotification: () => {
-            logFacebookAlertView();
-            dispatch({type: ActionTypes.SHOW_FACEBOOK_ALERT});
-        },
-        declineNotifications: () => setDeclinedNotifications(true),
-        enableNotifications: () => setDeclinedNotifications(false),
-        saveSettings: () => dispatch(saveSettings()),
-        changeUserInfo: (info) => dispatch({
-            type: ActionTypes.CHANGE_USER_INFO,
-            data: info,
-        }),
-        fetchClassmates: (c) => dispatch(fetchClassmates(c)),
-    }
-}
+        && state.alerts.mostFriendsCount >= 2,
+  };
+};
+const mapDispatchToProps = dispatch => ({
+  dismissSelf: () => {
+    dispatch({ type: ActionTypes.DISMISS_FACEBOOK_FRIENDS });
+  },
+  showNotification: () => {
+    logFacebookAlertView();
+    dispatch({ type: ActionTypes.SHOW_FACEBOOK_ALERT });
+  },
+  declineNotifications: () => setDeclinedNotifications(true),
+  enableNotifications: () => setDeclinedNotifications(false),
+  saveSettings: () => dispatch(saveSettings()),
+  changeUserInfo: info => dispatch({
+    type: ActionTypes.CHANGE_USER_INFO,
+    data: info,
+  }),
+});
 
 const FriendsInClassAlertContainer = connect(
     mapStateToProps,
-    mapDispatchToProps
+    mapDispatchToProps,
 )(FriendsInClassAlert);
 export default FriendsInClassAlertContainer;
