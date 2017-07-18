@@ -58,6 +58,12 @@ class Reaction(models.Model):
 
 
 class PersonalEvent(models.Model):
+    """
+    A custom event that has been saved to a user's PersonalTimetable
+    so that it persists across refresh, device, and session. Marks 
+    when a user is not free. Courses are scheduled around it.abs
+
+    """
     name = models.CharField(max_length=50)
     day = models.CharField(max_length=1)
     time_start = models.CharField(max_length=15)
@@ -84,7 +90,10 @@ class PersonalTimetable(models.Model):
 
 
 class RegistrationToken(models.Model):
-    """ Database object used during signup. """
+    """
+    A push notification token for Chrome noitification via 
+    Google Cloud Messaging
+    """
     auth = models.TextField(default='')
     p256dh = models.TextField(default='')
     endpoint = models.TextField(default='')
