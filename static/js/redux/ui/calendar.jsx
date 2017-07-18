@@ -108,14 +108,13 @@ class Calendar extends React.Component {
     if (this.props.shareLinkValid) {
       this.setState({ shareLinkShown: true });
     }
-    if (!this.props.isFetchingShareLink) {
+    else if (!this.props.isFetchingShareLink) {
       this.props.fetchShareTimetableLink();
     }
   }
 
   hideShareLink() {
     this.setState({ shareLinkShown: false });
-    this.setState({ isFetchingShareLink: false });
   }
 
   showShareLink() {
