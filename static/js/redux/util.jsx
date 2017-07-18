@@ -156,3 +156,14 @@ export const getNextAvailableColour = courseToColourIndex =>
   range(COLOUR_DATA.length).find(i => !Object.values(courseToColourIndex).some(x => x === i));
 
 export const generateCustomEventId = () => new Date().getTime();
+
+export const slotToDisplayOffering = (course, section, offering, colourId) => ({
+  ...offering,
+  colourId,
+  courseId: course.id,
+  code: course.code,
+  name: course.name,
+  custom: false,
+  meeting_section: section.meeting_section,
+});
+
