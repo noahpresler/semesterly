@@ -64,7 +64,7 @@ FULL_ACADEMIC_YEAR_REGISTRATION_SCHOOLS = {
 }
 
 # Identifies schools that have user access restrictions so that
-#  parsing can only happen one semester/term at a time.
+#  parsing can only happen one request at a time.
 SINGLE_ACCESS_SCHOOLS = {
     "gw",
 }
