@@ -1,9 +1,9 @@
 .. _flows:
 
 
-*****
-Flows
-*****
+*******************
+Flows Documentation
+*******************
 
 Initalization
 -------------

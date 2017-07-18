@@ -37,18 +37,34 @@ hashids = Hashids(salt="***REMOVED***")
 
 
 def get_friend_count_from_course_id(school, student, course_id, semester):
+    """
+    Computes the number of friends a user has in a given course for a given semester.
+
+    Ignores whether or not those friends have social courses enabled. Never exposes
+    those user's names or infromation. This count is used purely to upsell user's to
+    enable social courses.
+    """
     return PersonalTimetable.objects.filter(student__in=student.friends.all(),
                                             courses__id__exact=course_id) \
         .filter(Q(semester=semester)).distinct('student').count()
 
 
 def create_unsubscribe_link(student):
+    """
+    Generates a unsubscribe link which directs to the student
+    unsubscribe view.
+    """
     token_id, token = make_token(student).split(":", 1)
     return reverse('student.views.unsubscribe',
                    kwargs={'id': token_id, 'token': token})
 
 
 def unsubscribe(request, student_id, token):
+    """
+    If the student matches the token and the tokens is valid ,
+    unsubscribes user from emails marking student.emails_enabled
+    to false. Redirects to index.
+    """
     student = Student.objects.get(id=student_id)
 
     if student and check_student_token(student, token):
@@ -63,6 +79,9 @@ def unsubscribe(request, student_id, token):
 
 
 def get_semester_name_from_tt(tt):
+    """
+    Returns semester name from timetable
+    """
     try:
         return Semester.objects.get(id=tt['semester']).name
     except KeyError:
@@ -77,6 +96,10 @@ def get_semester_name_from_tt(tt):
 @csrf_exempt
 @validate_subdomain
 def log_ical_export(request):
+    """
+    Logs that a calendar was exported on the frotnend and indicates
+    it was downloaded rather than exported to Google calendar.
+    """
     try:
         student = Student.objects.get(user=request.user)
     except BaseException:
@@ -92,6 +115,10 @@ def log_ical_export(request):
 
 
 def accept_tos(request):
+    """
+    Accepts the terms of services for a user, saving the :obj:`datetime` the
+    terms were accepted.
+    """
     student = Student.objects.get(user=request.user)
     student.time_accepted_tos = datetime.today()
     student.save()
@@ -99,8 +126,16 @@ def accept_tos(request):
 
 
 class UserView(RedirectToSignupMixin, APIView):
+    """
+    Handles the accessing and mutating of user information and preferences.
+    """
 
     def get(self, request):
+        """
+        Renders the user profile/stats page which indicates all of a student's
+        reviews of courses, what social they have connected, whether notificaitons
+        are enabled, etc.
+        """
         student = Student.objects.get(user=request.user)
         reactions = Reaction.objects.filter(student=student).values('title').annotate(
             count=Count('title'))
@@ -138,6 +173,10 @@ class UserView(RedirectToSignupMixin, APIView):
                                   context_instance=RequestContext(request))
 
     def patch(self, request):
+        """
+        Updates a user settings to match the corresponding values passed in the
+        request body. (e.g. social_courses, class_year, major)
+        """
         student = get_object_or_404(Student, user=request.user)
         settings = 'social_offerings social_courses social_all major class_year ' \
                    'emails_enabled'.split()
@@ -151,14 +190,26 @@ class UserView(RedirectToSignupMixin, APIView):
 
 class UserTimetableView(ValidateSubdomainMixin,
                         RedirectToSignupMixin, APIView):
+    """
+    Responsible for the viewing and managing of all Student's
+    :obj:`PersonalTimetable`.
+    """
 
     def get(self, request, sem_name, year):
+        """
+        Returns student's personal timetables
+        """
         sem, _ = Semester.objects.get_or_create(name=sem_name, year=year)
         student = Student.objects.get(user=request.user)
         response = get_student_tts(student, request.subdomain, sem)
         return Response(response, status=status.HTTP_200_OK)
 
     def post(self, request):
+        """
+        Duplicates a personal timetable if a 'source' is provided. Else, creates
+        a personal timetable based on the courses, custom events, preferences, etc.
+        which are provided.
+        """
         if 'source' in request.data:  # duplicate existing timetable
             school = request.subdomain
             name = request.data['source']
@@ -233,6 +284,9 @@ class UserTimetableView(ValidateSubdomainMixin,
                             status=status.HTTP_201_CREATED if tt_id is None else status.HTTP_200_OK)
 
     def delete(self, request, sem_name, year, tt_name):
+        """
+        Deletes a PersonalTimetable by name/year/term.
+        """
         school = request.subdomain
         name = tt_name
         semester = Semester.objects.get(name=sem_name, year=year)
@@ -251,6 +305,9 @@ class UserTimetableView(ValidateSubdomainMixin,
         return Response(response, status=status.HTTP_200_OK)
 
     def update_tt(self, tt, new_name, new_has_conflict, new_courses, semester):
+        """
+        Updates a personal timetable's fields with the provided data.
+        """
         tt.name = new_name
         tt.has_conflict = new_has_conflict
 
@@ -266,6 +323,10 @@ class UserTimetableView(ValidateSubdomainMixin,
         tt.save()
 
     def update_events(self, tt, events):
+        """
+        Updates :obj:`PersonalEvent` for a give PersonalTimetable.
+        Clears/deletes all old events, recreates based on provided list.
+        """
         to_delete = tt.events.all()
         tt.events.clear()
         to_delete.delete()
@@ -279,8 +340,44 @@ class UserTimetableView(ValidateSubdomainMixin,
 
 
 class ClassmateView(ValidateSubdomainMixin, RedirectToSignupMixin, APIView):
+    """
+    Handles the computation of classmates for a given course, timetable, or simply
+    the count of all classmates for a given timetable.
+    """
 
     def get(self, request, sem_name, year):
+        """
+        Returns:
+            **If the query parameter 'count' is present**
+            Information regarding the number of friends only::
+
+                {
+                    "id": Course with the most friends,
+                    "count": The maximum # of friends in a course,
+                    "total_count": the total # in all classes on timetable,
+                }
+
+            **If the query parameter course_ids is present** a list of dictionaries representing past classmates and current classmates. These are students who the authenticated user is friends
+            with and who has social courses enabled.::
+
+                [{
+                    "course_id":6137,
+                    "past_classmates":[...],
+                    "classmates":[...]
+                }, ...]
+
+            **Otherwise** a list of friends and non-friends alike who have social_all enabled to
+            be dispalyed in the "find-friends" modal. Sorted by the number courses
+            the authenticated user shares.::
+            
+                [{
+                    "name": "...",
+                    "is_friend": Whether or not the user is current user's friend,
+                    "profile_url": link to FB profile,
+                    "shared_courses": [...],
+                    "peer": Info about the user,
+                }, ...]
+        """
         if request.query_params.get('count'):
             school = request.subdomain
             student = Student.objects.get(user=request.user)
@@ -373,8 +470,18 @@ class ClassmateView(ValidateSubdomainMixin, RedirectToSignupMixin, APIView):
 
 
 class GCalView(RedirectToSignupMixin, APIView):
+    """
+    Handles interactions with the Google Calendar API V3 for pulling
+    and/or sending calendars and calendar events.
+    """
 
     def post(self, request):
+        """
+        Takes the timetable in request.body and creates a weekly
+        recurring event on Google calendar for each slot in a given week.
+        Names the Google Calendar "Semester.ly Schedule" if unnamed, otherwise
+        "[Timetable Name] - Semester.ly".
+        """
         student = Student.objects.get(user=request.user)
         tt = json.loads(request.body)['timetable']
         credentials = get_google_credentials(student)
@@ -450,8 +557,15 @@ class GCalView(RedirectToSignupMixin, APIView):
 
 
 class ReactionView(ValidateSubdomainMixin, RedirectToSignupMixin, APIView):
+    """
+    Manages the creation of Reactions to courses.
+    """
 
     def post(self, request):
+        """
+        Create a Reaction for the given course id, with the given title matching
+        one of the possible emojis. If already present, remove that reaction.
+        """
         cid = request.data['cid']
         title = request.data['title']
         student = get_object_or_404(Student, user=request.user)
