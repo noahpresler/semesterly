@@ -32,7 +32,7 @@ class Ingestor(dict):
         break_on_warning (bool): Break/cont on warnings.
         logger (parser_library.logger): Logger object.
         school (str): School code (e.g. jhu, gw, umich).
-        skip_shallow_duplicates (bool): Hide warnings for repeated definitions.
+        skip_duplicates (bool): Skip ingestion for repeated definitions.
         tracker (parser_library.tracker): Tracker object.
         UNICODE_WHITESPACE (TYPE): regex that matches Unicode whitespace.
         validate (bool): Enable/disable validation.
@@ -98,8 +98,8 @@ class Ingestor(dict):
     def __init__(self, school, config_path, output_path, output_error_path,
                  break_on_error=True,
                  break_on_warning=False,
-                 hide_progress_bar=False,
-                 skip_shallow_duplicates=True,
+                 display_progress_bar=True,
+                 skip_duplicates=True,
                  validate=True,
                  tracker=NullTracker()):
         """Construct ingestor object and resolve options.
@@ -111,8 +111,8 @@ class Ingestor(dict):
             output_error_path (str): Error output path.
             break_on_error (bool, optional): Stop ingesting on error.
             break_on_warning (bool, optional): Stop ingesting on warning.
-            hide_progress_bar (bool, optional): Hide ingestion progress bar?
-            skip_shallow_duplicates (bool, optional): Skip ingesting courses
+            display_progress_bar (bool, optional): display progress bar
+            skip_duplicates (bool, optional): Skip ingesting courses
                 that have already been seen.
             validate (bool, optional): Perform validation?
             tracker (parser_library.tracker, optional): tracker object
@@ -121,7 +121,7 @@ class Ingestor(dict):
         self.validate = validate
         self.break_on_error = break_on_error
         self.break_on_warning = break_on_warning
-        self.skip_shallow_duplicates = skip_shallow_duplicates
+        self.skip_duplicates = skip_duplicates
         self.tracker = tracker
 
         # Initialize loggers for json and errors.
@@ -422,7 +422,7 @@ class Ingestor(dict):
                 raise e
         except (JsonValidationWarning, JsonDuplicationWarning) as e:
             if (isinstance(e, JsonDuplicationWarning) and
-                    self.skip_shallow_duplicates):
+                    self.skip_duplicates):
                 full_skip = True
             else:
                 is_valid = True

@@ -14,7 +14,7 @@ import traceback
 
 from django.core.management.base import BaseCommand
 from timetable.school_mappers import course_parsers, textbook_parsers, \
-    new_course_parsers, new_textbook_parsers
+    new_course_parsers, new_textbook_parsers, new_eval_parsers, eval_parsers
 from timetable.management.commands.args_parse import schoollist_argparser, \
     ingestor_argparser, validator_argparser
 from scripts.parser_library.internal_exceptions import CourseParseError, \
@@ -65,31 +65,32 @@ class Command(BaseCommand):
 
         Args:
             *args: command args
-            **options: command kwargs
+            **options: command options
         """
         logging.basicConfig(level=logging.ERROR, filename='parse_errors.log')
 
+        # NOTE: TODO - hacky until school_mappers is deprecated
+        new_map = {
+            'textbook': new_textbook_parsers,
+            'course': new_course_parsers,
+            'eval': new_eval_parsers,
+        }
+        old_map = {
+            'textbook': textbook_parsers,
+            'course': course_parsers,
+            'eval': eval_parsers,
+        }
+
         for school in options['schools']:
 
-            # Use old parser framework if no new parser available
-            if options['textbooks'] and school not in new_textbook_parsers:
-                do_parse = textbook_parsers[school]
-                self.old_parser(do_parse, school)
-                continue
-            elif not options['textbooks'] and school not in new_course_parsers:
-                do_parse = course_parsers[school]
+            parsers = new_map[options['type']]
+            if school not in parsers:
+                do_parse = old_map[options['type']]
                 self.old_parser(do_parse, school)
                 continue
 
-            parser, parser_type = None, ''
-            if options['textbooks']:
-                parser = new_textbook_parsers[school]
-                parser_type = 'textbooks'
-            else:
-                parser = new_course_parsers[school]
-                parser_type = 'courses'
-
-            message = 'Ingesting {} {}.\n'.format(school, parser_type)
+            parser = parsers[school]
+            message = 'Ingesting {} {}.\n'.format(school, options['type'])
             self.stdout.write(self.style.SUCCESS(message))
             logging.exception(message)  # TODO - WHY IS THIS an exception?
 
@@ -98,11 +99,11 @@ class Command(BaseCommand):
                 options['config_file'] = '{}/config.json'.format(directory)
             if options.get('output') is None:
                 options['output'] = '{}/data/{}.json'.format(directory,
-                                                             parser_type)
+                                                             options['type'])
             if options.get('output_error') is None:
                 options['output_error'] = '{}/logs/error_{}.log'.format(
                     directory,
-                    parser_type
+                    options['type']
                 )
             if options.get('master_log') is None:
                 options['log_stats'] = 'scripts/logs/master.log'
@@ -120,7 +121,7 @@ class Command(BaseCommand):
             tracker.add_viewer(LogFormatted(options['log_stats']))
             tracker.set_mode('ingesting')
 
-            if not options['hide_progress_bar']:
+            if options['display_progress_bar']:
                 def formatter(stats):
                     return '{}/{}'.format(stats['valid'], stats['total'])
                 tracker.add_viewer(ProgressBar(school, formatter))
@@ -131,8 +132,7 @@ class Command(BaseCommand):
                        output_error_path=options['output_error'],
                        break_on_error=options['break_on_error'],
                        break_on_warning=options['break_on_warning'],
-                       hide_progress_bar=options['hide_progress_bar'],
-                       skip_shallow_duplicates=options['skip_shallow_duplicates'],
+                       display_progress_bar=options['display_progress_bar'],
                        validate=options['validate'],
                        tracker=tracker)
             tracker.start()
@@ -148,7 +148,7 @@ class Command(BaseCommand):
                     terms=options.get('terms'),
                     years_and_terms=years_and_terms,
                     departments=options.get('departments'),
-                    textbooks=options['textbooks']
+                    textbooks=options['type'] == 'textbook'
                 )
 
                 # Close up json files.

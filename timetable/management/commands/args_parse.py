@@ -50,24 +50,17 @@ def masterlog_argparser(parser):
 
 
 def validate_switch_argparser(parser):
-    validation = parser.add_mutually_exclusive_group()
-    validation.add_argument('--validate',
-                            dest='validate',
-                            action='store_true',
-                            help='validate parser output (default)')
-    validation.add_argument('--no-validate',
-                            dest='validate',
-                            action='store_false',
-                            help='do not validate parser output')
-    validation.set_defaults(validate=True)
+    # NOTE: name and dest are logical inverses
+    parser.add_argument('--no-validate',
+                        dest='validate',
+                        action='store_false')
 
 
 def progressbar_argparser(parser):
-    parser.add_argument('--hide-progress-bar',
-                        dest='hide_progress_bar',
-                        action='store_true',
-                        default=False,
-                        help='flag to hide progress bar (default is visible)')
+    # NOTE: name and dest are logical inverses
+    parser.add_argument('--no-display-progress-bar',
+                        dest='display_progress_bar',
+                        action='store_false')
 
 
 def ingestor_argparser(parser):
@@ -77,36 +70,25 @@ def ingestor_argparser(parser):
                         help='parse for term(s)')
     parser.add_argument('--year', nargs='+', type=str, dest='years',
                         help='parse for year(s)')
-    parser.add_argument('--years-and-terms', type=str, dest='years_and_terms')
+    parser.add_argument('--years-and-terms', type=str, dest='years_and_terms',
+                        help='json formatted (year, term) dictionary')
     parser.add_argument('--department', nargs='+', type=str,
                         dest='departments',
                         help='parse specific departments by code')
     parser.add_argument('-o', '--output', action=WritableFileAction,
                         help='(default:  scripts/[school]/data/courses.json)')
-    textbooks_argparser(parser)
-    evals_argparser(parser)
     validate_switch_argparser(parser)
     progressbar_argparser(parser)
+    parser_type_argparser(parser)
 
 
-def textbooks_argparser(parser):
-    textbooks = parser.add_mutually_exclusive_group()
-    textbooks.add_argument('--textbooks',
-                           dest='textbooks',
-                           action='store_true',
-                           help='parse textbooks (may parse courses as well)')
-    textbooks.add_argument('--no-textbooks',
-                           dest='textbooks',
-                           action='store_false',
-                           help="don't parse textbooks")
-    textbooks.set_defaults(textbooks=False)
-
-
-def evals_argparser(parser):
-    evals = parser.add_argument('--evals',
-                                action='store_true',
-                                help='parse evals')
-    evals.set_defaults(evals=False)
+def parser_type_argparser(parser):
+    parser.add_argument('--type',
+                        default='course',
+                        const='course',
+                        nargs='?',
+                        choices=['course', 'textbook', 'eval'],
+                        help='type of parser to run (default: %(default)s)')
 
 
 def validate_argparser(parser):
@@ -118,40 +100,22 @@ def validate_argparser(parser):
 def validator_argparser(parser):
     parser.add_argument('--output-error',
                         action=ConfigFileAction,
-                        help='(default: /scripts/[school]/logs/error_<ptype>.log)')
+                        help='(default: scripts/[school]/logs/error_[ptype].log)')
     parser.add_argument('--config-file',
                         action=ConfigFileAction,
-                        help='load config file from this path (default: [school]/config.json)')
+                        help='config file path (default: [school]/config.json)')
+    parser.add_argument('--no-break-on-error',
+                        dest='break_on_error',
+                        action='store_false')
 
-    break_error = parser.add_mutually_exclusive_group()
-    break_error.add_argument('--break-on-error',
-                             dest='break_on_error',
-                             action='store_true',
-                             help='(default)')
-    break_error.add_argument('--no-break-on-error',
-                             dest='break_on_error',
-                             action='store_false')
-    break_error.set_defaults(break_on_error=True)
-
-    break_warning = parser.add_mutually_exclusive_group()
-    break_warning.add_argument('--break-on-warning',
-                               dest='break_on_warning',
-                               action='store_true')
-    break_warning.add_argument('--no-break-on-warning',
-                               dest='break_on_warning',
-                               action='store_false',
-                               help='(default)')
-    break_warning.set_defaults(break_on_warning=False)
-
-    duplicate = parser.add_mutually_exclusive_group()
-    duplicate.add_argument('--skip-shallow-duplicates',
-                           dest='skip_shallow_duplicates',
-                           action='store_true',
-                           help='(default) hide duplicate course/section ingestions')
-    duplicate.add_argument('--no-skip-shallow-duplicates',
-                           dest='skip_shallow_duplicates',
-                           action='store_false')
-    duplicate.set_defaults(skip_shallow_duplicates=True)
+    break_on_warning = parser.add_mutually_exclusive_group()
+    break_on_warning.add_argument('--no-break-on-warning',
+                                  dest='break_on_warning',
+                                  action='store_false')
+    break_on_warning.add_argument('--break-on-warning',
+                                  dest='break_on_warning',
+                                  action='store_true')
+    break_on_warning.set_defaults(break_on_warning=False)
 
 
 def digestor_argparser(parser):

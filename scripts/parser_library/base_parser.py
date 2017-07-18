@@ -28,12 +28,12 @@ class BaseParser:
 
     def __init__(self, school,
                  config_path=None,
-                 output_path=None,  # TODO - support stdout
+                 output_path=None,
                  output_error_path=None,
                  break_on_error=True,
                  break_on_warning=False,
-                 skip_shallow_duplicates=True,
-                 hide_progress_bar=True,
+                 skip_duplicates=True,
+                 display_progress_bar=False,
                  validate=True,
                  tracker=None):
         """Create base parser instance.
@@ -45,13 +45,13 @@ class BaseParser:
             output_error_path (None, str, optional): Description
             break_on_error (bool, optional): Description
             break_on_warning (bool, optional): Description
-            skip_shallow_duplicates (bool, optional): Description
-            hide_progress_bar (bool, optional): Description
+            skip_duplicates (bool, optional): Description
+            display_progress_bar (bool, optional): Description
             validate (bool, optional): Description
-            tracker (None, parser_library.tracker, optional): Description
+            tracker (None, optional): Description
         """
         # NOTE: handle line to long in pep8... :'(
-        ssd = skip_shallow_duplicates
+        ssd = skip_duplicates
 
         self.school = school
         self.requester = Requester()
@@ -62,8 +62,8 @@ class BaseParser:
                                  output_error_path,
                                  break_on_error=break_on_error,
                                  break_on_warning=break_on_warning,
-                                 skip_shallow_duplicates=ssd,
-                                 hide_progress_bar=hide_progress_bar,
+                                 skip_duplicates=ssd,
+                                 display_progress_bar=display_progress_bar,
                                  validate=validate,
                                  tracker=tracker)
 

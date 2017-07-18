@@ -32,7 +32,8 @@ class Command(BaseCommand):
 		validator_argparser(parser)
 		progressbar_argparser(parser)
 		masterlog_argparser(parser)
-		textbooks_argparser(parser)
+		# textbooks_argparser(parser)
+		# TODO - replace with --type option
 
 	def handle(self, *args, **options):
 		# TODO - design better file path scheme.
@@ -71,7 +72,7 @@ class Command(BaseCommand):
 						break_on_error=True, # Do not allow digestion if error present
 						break_on_warning=options['break_on_warning'],
 						output_error=options.get('output_error'),
-						hide_progress_bar=options['hide_progress_bar'])
+						display_progress_bar=options['display_progress_bar'])
 					end_time = timer()
 					self.stdout.write('\n')
 				except (JsonException, JSONDecodeError) as e:
@@ -92,7 +93,7 @@ class Command(BaseCommand):
 					output=options['output_diff'],
 					diff=options['diff'],
 					load=options['load'],
-					hide_progress_bar=options['hide_progress_bar'],
+					display_progress_bar=options['display_progress_bar'],
 					tracker=tracker,
 				).digest()
 				Vectorizer().vectorize()
