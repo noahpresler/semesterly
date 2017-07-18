@@ -5,6 +5,10 @@ from student.utils import get_student_tts, make_token, hashids
 
 
 def get_user_dict(school, student, semester):
+    """
+    Givne a school, student, and semester, returns a dictionary 
+    for a student including their timetables for that semester.
+    """
     user_dict = {'timetables': [], 'timeAcceptedTos': None}
     if student:
         user_dict = model_to_dict(student, exclude="user id friends time_accepted_tos".split())
