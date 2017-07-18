@@ -16,6 +16,7 @@ from bs4 import NavigableString, Tag
 from scripts.parser_library.base_parser import CourseParser
 from scripts.parser_library.internal_exceptions import CourseParseError
 from scripts.parser_library.internal_utils import safe_cast
+from scripts.parser_library.extractor import filter_years_and_terms
 
 
 class GWParser(CourseParser):
@@ -31,160 +32,183 @@ class GWParser(CourseParser):
         'PASSWORD': '052698',
         'SECURITY_QUESTION_ANSWER': 'Katie'
     }
+    YEARS_AND_TERMS = {
+        2017: {
+            'Fall': '201703',
+            'Spring': '201701',
+        },
+        2016: {
+            'Fall': '201603',
+        }
+    }
 
     def __init__(self, **kwargs):
-        """Construct GW parser."""
-        self.terms = {
-            'Fall 2017': '201703',
-            'Fall 2016': '201603',
-            'Spring 2017': '201701'
-        }
+        """Construct GW parser.
 
+        Args:
+            **kwargs: pass-through
+        """
         super(GWParser, self).__init__(GWParser.SCHOOL, **kwargs)
 
-    def start(self, **kwargs):
+    def start(self,
+              years=None,
+              terms=None,
+              years_and_terms=None,
+              departments=None,
+              verbosity=3,
+              **kwargs):
         """Start parse."""
         self._login()
         self._direct_to_search_page()
 
-        for term_name, term_code in self.terms.items():
-            self.ingestor['term'], self.ingestor['year'] = term_name.split()
+        years_and_terms = filter_years_and_terms(
+            GWParser.YEARS_AND_TERMS,
+            years_filter=years,
+            terms_filter=terms,
+            years_and_terms_filter=years_and_terms
+        )
 
-            # Retrieve term search page.
-            soup = self.requester.get(
-                GWParser.URL + '/bwckgens.p_proc_term_date',
-                params={
-                    'p_calling_proc': 'P_CrseSearch',
-                    'p_term': term_code
-                }
-            )
+        for year, terms in years_and_terms.items():
+            self.ingestor['year'] = year
+            for term_name in terms:
+                term_code = GWParser.YEARS_AND_TERMS[year][term_name]
+                self.ingestor['term'] = term_name
 
-            # Create search param list.
-            input_options_soup = soup.find(
-                'form',
-                action='/PRODCartridge/bwskfcls.P_GetCrse'
-            ).find_all('input')
+                # Retrieve term search page.
+                soup = self.requester.get(
+                    GWParser.URL + '/bwckgens.p_proc_term_date',
+                    params={
+                        'p_calling_proc': 'P_CrseSearch',
+                        'p_term': term_code
+                    }
+                )
 
-            query = {}
-            for input_option in input_options_soup:
-                query[input_option['name']] = input_option.get('value', '')
-            query.update({
-                'begin_hh': '0',
-                'begin_mi': '0',
-                'end_hh': '0',
-                'end_mi': '0',
-                'sel_ptrm': '%',
-                'SUB_BTN': 'Section Search'
-            })
+                # Create search param list.
+                input_options_soup = soup.find(
+                    'form',
+                    action='/PRODCartridge/bwskfcls.P_GetCrse'
+                ).find_all('input')
 
-            # Construct list of departments.
-            depts = {}
-            depts_soup = soup.find('select', id='subj_id').find_all('option')
-            for dept_soup in depts_soup:
-                depts[dept_soup.text.strip()] = dept_soup['value']
+                query = {}
+                for input_option in input_options_soup:
+                    query[input_option['name']] = input_option.get('value', '')
+                query.update({
+                    'begin_hh': '0',
+                    'begin_mi': '0',
+                    'end_hh': '0',
+                    'end_mi': '0',
+                    'sel_ptrm': '%',
+                    'SUB_BTN': 'Section Search'
+                })
 
-            for dept_name, dept_code in depts.iteritems():
-                self.ingestor['department'] = {
-                    'name': dept_name,
-                    'code': dept_code
-                }
+                # Construct list of departments.
+                depts = {}
+                depts_soup = soup.find('select', id='subj_id').find_all('option')
+                for dept_soup in depts_soup:
+                    depts[dept_soup.text.strip()] = dept_soup['value']
 
-                query['sel_subj'] = ['dummy', dept_code]
+                for dept_name, dept_code in depts.iteritems():
+                    self.ingestor['department'] = {
+                        'name': dept_name,
+                        'code': dept_code
+                    }
 
-                rows = self.requester.post(
-                    GWParser.URL + '/bwskfcls.P_GetCrse',
-                    params=query)
+                    query['sel_subj'] = ['dummy', dept_code]
 
-                GWParser._check_errorpage(rows)
+                    rows = self.requester.post(
+                        GWParser.URL + '/bwskfcls.P_GetCrse',
+                        params=query)
 
-                try:
-                    rows = rows.find(
-                        'table',
-                        class_='datadisplaytable'
-                    ).find_all('tr')[2:]
-                except AttributeError:
-                    print('message: no results for department',
-                          dept_name,
-                          file=sys.stderr)
-                    continue  # no results for department
+                    GWParser._check_errorpage(rows)
 
-                # collect offered courses in department
-                for row in rows:
-                    info = row.find_all('td')
-                    if info[1].find('a'):
+                    try:
+                        rows = rows.find(
+                            'table',
+                            class_='datadisplaytable'
+                        ).find_all('tr')[2:]
+                    except AttributeError:
+                        print('message: no results for department',
+                              dept_name,
+                              file=sys.stderr)
+                        continue  # no results for department
 
-                        # general info
-                        self.ingestor.update({
-                            'ident': info[1].text,
-                            'code': info[2].text + ' ' + info[3].text,
-                            'href': info[1].find('a')['href'],
-                            'dept': dept_name,
-                            'selec': info[3].text,
-                            'section': info[4].text,
-                            'credits': safe_cast(info[6].text, float,
-                                                 default=0.),
-                            'name': info[7].text,
-                            'size': int(info[10].text),
-                            'enrollment': int(info[11].text),
-                            'waitlist': safe_cast(info[14].text, int,
-                                                  default=-1),
-                            'attr': '; '.join(info[22].text.split(' and ')) if len(info) == 23 else ''  # FIXME - hacky fix
-                        })
+                    # collect offered courses in department
+                    for row in rows:
+                        info = row.find_all('td')
+                        if info[1].find('a'):
 
-                        # Query course catalog to obtain description.
-                        catalog = self.requester.get(
-                            GWParser.URL + '/bwckctlg.p_display_courses',
-                            params={
-                                'term_in': term_code,
-                                'one_subj': dept_code,
-                                'sel_crse_strt': self.ingestor['selec'],
-                                'sel_crse_end': self.ingestor['selec'],
-                                'sel_subj': '',
-                                'sel_levl': '',
-                                'sel_schd': '',
-                                'sel_coll': '',
-                                'sel_divs': '',
-                                'sel_dept': '',
-                                'sel_attr': ''
-                            }
-                        )
-
-                        if catalog:
-                            self.ingestor.update(
-                                GWParser._parse_catalogentrypage(catalog)
-                            )
-
-                        course = self.ingestor.ingest_course()
-
-                        section_soup = self.requester.get(
-                            GWParser.URL + '/bwckschd.p_disp_listcrse',
-                            params={
-                                'term_in': term_code,
-                                'subj_in': dept_code,
-                                'crse_in': self.ingestor['selec'],
-                                'crn_in': self.ingestor['ident']
+                            # general info
+                            self.ingestor.update({
+                                'ident': info[1].text,
+                                'code': info[2].text + ' ' + info[3].text,
+                                'href': info[1].find('a')['href'],
+                                'dept': dept_name,
+                                'selec': info[3].text,
+                                'section': info[4].text,
+                                'credits': safe_cast(info[6].text, float,
+                                                     default=0.),
+                                'name': info[7].text,
+                                'size': int(info[10].text),
+                                'enrollment': int(info[11].text),
+                                'waitlist': safe_cast(info[14].text, int,
+                                                      default=-1),
+                                'attr': '; '.join(info[22].text.split(' and ')) if len(info) == 23 else ''  # FIXME - hacky fix
                             })
 
-                        meetings_soup = GWParser._extract_meetings(section_soup)
-                        """Example of a meeting entry
-                        <tr>
-                            <td class="dddefault">Class</td>
-                            <td class="dddefault">4:00 pm - 6:00 pm</td>
-                            <td class="dddefault">T</td>
-                            <td class="dddefault">See Department DEPT</td>
-                            <td class="dddefault">08/28/17 - 12/11/17</td>
-                            <td class="dddefault">Lecture</td>
-                            <td class="dddefault">Timothy A.  McCaffrey (<abbr title="Primary">P</abbr>), David   Leitenberg </td>
-                        </tr>
-                        """
+                            # Query course catalog to obtain description.
+                            catalog = self.requester.get(
+                                GWParser.URL + '/bwckctlg.p_display_courses',
+                                params={
+                                    'term_in': term_code,
+                                    'one_subj': dept_code,
+                                    'sel_crse_strt': self.ingestor['selec'],
+                                    'sel_crse_end': self.ingestor['selec'],
+                                    'sel_subj': '',
+                                    'sel_levl': '',
+                                    'sel_schd': '',
+                                    'sel_coll': '',
+                                    'sel_divs': '',
+                                    'sel_dept': '',
+                                    'sel_attr': ''
+                                }
+                            )
 
-                        self._parse_instructors(meetings_soup)
+                            if catalog:
+                                self.ingestor.update(
+                                    GWParser._parse_catalogentrypage(catalog)
+                                )
 
-                        if len(meetings_soup) > 0:
-                            self.ingestor['section_type'] = meetings_soup[0].find_all('td')[5].text
-                            section_model = self.ingestor.ingest_section(course)
+                            course = self.ingestor.ingest_course()
 
-                        self._parse_meetings(meetings_soup, section_model)
+                            section_soup = self.requester.get(
+                                GWParser.URL + '/bwckschd.p_disp_listcrse',
+                                params={
+                                    'term_in': term_code,
+                                    'subj_in': dept_code,
+                                    'crse_in': self.ingestor['selec'],
+                                    'crn_in': self.ingestor['ident']
+                                })
+
+                            meetings_soup = GWParser._extract_meetings(section_soup)
+                            """Example of a meeting entry
+                            <tr>
+                                <td class="dddefault">Class</td>
+                                <td class="dddefault">4:00 pm - 6:00 pm</td>
+                                <td class="dddefault">T</td>
+                                <td class="dddefault">See Department DEPT</td>
+                                <td class="dddefault">08/28/17 - 12/11/17</td>
+                                <td class="dddefault">Lecture</td>
+                                <td class="dddefault">Timothy A.  McCaffrey (<abbr title="Primary">P</abbr>), David   Leitenberg </td>
+                            </tr>
+                            """
+
+                            self._parse_instructors(meetings_soup)
+
+                            if len(meetings_soup) > 0:
+                                self.ingestor['section_type'] = meetings_soup[0].find_all('td')[5].text
+                                section_model = self.ingestor.ingest_section(course)
+
+                            self._parse_meetings(meetings_soup, section_model)
 
     def _login(self):
         # Collect necessary cookies

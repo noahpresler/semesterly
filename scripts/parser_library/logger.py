@@ -101,18 +101,20 @@ class Logger(object):
 		l = lexers.JsonLexer()
 		l.add_filter('whitespace')
 		colorful_json = highlight(unicode(j, 'UTF-8'), l, formatters.TerminalFormatter())
-		return colorful_json		
+		return colorful_json
 
 class JsonListLogger(Logger):
 	def __init__(self, logfile=None, errorfile=None):
 		self.first = True # unset after open entry added
 		super(JsonListLogger, self).__init__(logfile, errorfile)
+		self.open()
 
 	def open(self):
 		self.logfile.write('[\n')
 
 	def close(self):
 		self.logfile.write(']\n')
+		self.logfile.close()
 
 	def log(self, entry):
 		if isinstance(entry, Exception):

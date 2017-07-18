@@ -8,46 +8,81 @@ Parsing library extractio utilities.
 
 from __future__ import absolute_import, division, print_function
 
+import sys
 import re
 import unicodedata
 import dateutil.parser as dparser
 
 from scripts.parser_library.words import conjunctions_and_prepositions
-from scripts.parser_library.internal_exceptions import CourseParseError
+from scripts.parser_library.internal_exceptions import CourseParseError, CourseParseWarning
 
 
-def filter_term_and_year(years_and_terms,
-                         cmd_years=None,
-                         cmd_terms=None,
-                         cmd_years_and_terms=None):
+# NOTE: changed from _reset_options_for_new_school
+
+def filter_years_and_terms(base_years_and_terms,
+                           years_filter=None,
+                           terms_filter=None,
+                           years_and_terms_filter=None):
     """Filter term and year mappings.
 
     Args:
-        years_and_terms {dict}: mapping of valid years and terms
-        cmd_years_and_terms {dict}: mapping of wanted years and terms
-    Returns:
-        intersection of dictionaries if cmd_years_and_terms is not None.
-    """
-    # if cmd_years_and_terms is None:
-    #     return years_and_terms
-    # cmd_years_and_terms.keys()
+        base_years_and_terms (dict): Mapping of valid years and terms.
+        years_filter (None, list, optional): Use as filter if not None.
+        terms_filter (None, list, optional): Use as filter if not None.
+        years_and_terms_filter (None, dict, optional): Use as filter
+            if not None.
 
-    if cmd_years is None and cmd_terms is None:
-        return years_and_terms
-    years = cmd_years or years_and_terms
-    for year in years:
-        if year not in years_and_terms:
-            raise CourseParseError('year {} not defined'.format(year))
-        terms = cmd_terms or years_and_terms[year]
-        for term in terms:
-            if term not in years_and_terms[year]:
-                raise CourseParseError('term undefined for {} {}'.format(term,
-                                                                         year))
-    return {
-        year: {
-            term: years_and_terms[year][term] for term in terms
-        } for year in years
-    }
+    Returns:
+        dict: Filtered subset of base_years_and_terms.
+
+    Raises:
+        CourseParseWarning: Invalid year/term specified in cmd args
+    """
+    def intersect(a, b):
+        intersected = {}
+        for y in a:
+            if y not in b:
+                continue
+            for t in a[y]:
+                if t not in b[y]:
+                    continue
+                intersected.setdefault(y, [])
+                intersected[y].append(t)
+        return intersected
+
+    def pick_not_none(a, b):
+        if a is None:
+            return b
+        return a
+
+    filtered_years_and_terms = None
+    if terms_filter is not None:
+        terms_filter = set(terms_filter)
+        filtered_years_and_terms = {
+            year: [
+                term for term in terms if term in terms_filter
+            ] for year, terms in base_years_and_terms.items()
+        }
+    if years_filter is not None:
+        years_filter = set(years_filter)
+        filtered_years = {
+            year: terms for year, terms in base_years_and_terms.items()
+            if year in years_filter
+        }
+        filtered_years_and_terms = intersect(
+            filtered_years,
+            pick_not_none(filtered_years_and_terms, base_years_and_terms)
+        )
+    if years_and_terms_filter is not None:
+        filtered_years_and_terms = intersect(
+            years_and_terms_filter,
+            pick_not_none(filtered_years_and_terms, base_years_and_terms)
+        )
+
+    filtered = pick_not_none(filtered_years_and_terms, base_years_and_terms)
+    if not filtered:
+        raise CourseParseWarning('no years and terms to parse')
+    return filtered
 
 
 def filter_departments(departments, cmd_departments=None, grouped=False):
