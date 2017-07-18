@@ -9,6 +9,7 @@ JHU Course Parser.
 from __future__ import absolute_import, division, print_function
 
 import re
+import sys
 
 from scripts.parser_library.base_parser import CourseParser
 from scripts.parser_library.extractor import time_12to24, titlize
@@ -40,11 +41,16 @@ class HopkinsParser(CourseParser):
         url = '{}/codes/schools?key={}'.format(HopkinsParser.API_URL,
                                                HopkinsParser.KEY)
         self.schools = self.requester.get(url)
+        print(self.schools, file=sys.stderr)
 
     def _get_courses(self, school):
-        url = HopkinsParser.API_URL + '/' + school['Name'] + '/' \
-            + self.semester + '?key=' + HopkinsParser.KEY
-        return self.requester.get(url)
+        url = '{}/{}/{}'.format(HopkinsParser.API_URL,
+                                school['Name'],
+                                self.semester)
+        params = {
+            'key': HopkinsParser.KEY
+        }
+        return self.requester.get(url, params=params)
 
     def _get_section(self, course):
         return self.requester.get(self._get_section_url(course))
@@ -59,6 +65,7 @@ class HopkinsParser(CourseParser):
             self._parse_school(school)
 
     def _parse_school(self, school):
+        print(school, file=sys.stderr)
         courses = self._get_courses(school)
         for course in courses:
             section = self._get_section(course)
@@ -180,6 +187,6 @@ class HopkinsParser(CourseParser):
         # Run parser for all semesters specified.
         for year in years:
             for term in terms:
-                self.semester = '{} {}'.format(term, str(year))
+                self.semester = '{} {}'.format(term, year)
                 self._get_schools()
                 self._parse_schools()

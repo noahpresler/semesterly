@@ -1,60 +1,58 @@
-# Copyright (C) 2017 Semester.ly Technologies, LLC
-#
-# Semester.ly is free software: you can redistribute it and/or modify
-# it under the terms of the GNU General Public License as published by
-# the Free Software Foundation, either version 3 of the License, or
-# (at your option) any later version.
-#
-# Semester.ly is distributed in the hope that it will be useful,
-# but WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-# GNU General Public License for more details.
+"""JHU Evaluation Parser."""
+
+from __future__ import absolute_import, division, print_function
 
 import os
 import re
+import sys
 
 import urllib
 
 from bs4 import BeautifulSoup
 
-
-import django
-
-from timetable.models import *
-
-os.environ.setdefault("DJANGO_SETTINGS_MODULE", "semesterly.settings")
-django.setup()
+from scripts.parser_library.base_parser import BaseParser
 
 
-class HopkinsEvalParser:
-    def __init__(self):
-        self.code_pattern = re.compile(r"^.*\..*\..*\..*$")
-        self.score_pattern = re.compile(r".*(\d\.\d\d).*")
-        self.summary_pattern = re.compile(r"Summary:.*|This class had 5 or fewer comments\.")
-        self.thresh_pattern = re.compile(r"This class had 5 or fewer comments\.")
-        self.code_cap_pattern = re.compile(r"^.*\.(.*\..*)\..*$")
-        self.current_year = None
+class HopkinsEvalParser(BaseParser):
 
-    def parse_evals(self):
+    SCHOOL = 'jhu'
+    CODE_PATTERN = re.compile(r'^.*\..*\..*\..*$')
+    SCORE_PATTERN = re.compile(r'.*(\d\.\d\d).*')
+    SUMMARY_PATTERN = re.compile(r'Summary:.*|This class had 5 or fewer comments\.')
+    THRESH_PATTERN = re.compile(r'This class had 5 or fewer comments\.')
+    CODE_CAP_PATTERN = re.compile(r'^.*\.(.*\..*)\..*$')
+
+    def __init__(self, **kwargs):
+        """Create Hopkins eval parser instance.
+
+        Args:
+            **kwargs: pass-through
+        """
+        super(HopkinsEvalParser, self).__init__(HopkinsEvalParser.SCHOOL,
+                                                **kwargs)
+
+    def start(self, **kwargs):
         for fn in os.listdir('./scripts/jhu/HopkinsEvaluations'):
-            print "PARSING DATA FOR: " + os.path.splitext(fn)[0]
+            print('PARSING DATA FOR:', os.path.splitext(fn)[0], file=sys.stderr)
             self.current_year = os.path.splitext(fn)[0]
-            html = self.get_eval_html(os.getcwd() + '/scripts/jhu/HopkinsEvaluations/' + fn)
-            soup = BeautifulSoup(html,"html.parser")
-            self.process_soup(soup)
+            html = self._get_eval_html(
+                '{}/scripts/jhu/HopkinsEvaluations/{}'.format(os.getcwd(), fn)
+            )
+            soup = BeautifulSoup(html, 'html.parser')
+            self._process_soup(soup)
 
-    def process_soup(self,soup):
-        course_codes = list(set(soup.find_all('b',text=self.code_pattern)))
+    def _process_soup(self, soup):
+        course_codes = list(set(soup.find_all('b', text=HopkinsEvalParser.CODE_PATTERN)))
         for cc in course_codes:
             code = cc.contents[0]
             title = cc.find_next('b').contents[0]
             prof = title.find_next('b').contents[0]
-            score = self.get_score(prof.find_next(text=self.score_pattern))
-            summary = self.get_summary(title.find_next("p",text=self.summary_pattern))
-            self.make_review_item(code,prof,score,summary,self.current_year)
+            score = self._get_score(prof.find_next(text=HopkinsEvalParser.SCORE_PATTERN))
+            summary = self._get_summary(title.find_next('p', text=HopkinsEvalParser.SUMMARY_PATTERN))
+            self._make_review_item(code, prof, score, summary, self.current_year)
 
-    def get_summary(self,summary_header):
-        if re.match(self.thresh_pattern,summary_header.text):
+    def _get_summary(self, summary_header):
+        if re.match(HopkinsEvalParser.THRESH_PATTERN, summary_header.text):
             return summary_header.text
         summary = []
         curr_tag = summary_header.find_next()
@@ -62,44 +60,48 @@ class HopkinsEvalParser:
             if curr_tag.name == "p":
                 if curr_tag.text.find("write-in") != -1:
                     break
-                elif 'left:450px;' not in curr_tag['style'] and len(curr_tag.find_all()) == 0:
+                elif ('left:450px;' not in curr_tag['style'] and
+                        len(curr_tag.find_all()) == 0):
                     summary.append(curr_tag.text)
-                elif "left:108px" in curr_tag['style'] and re.match(self.code_pattern, curr_tag.text):
+                elif ("left:108px" in curr_tag['style'] and
+                        re.match(HopkinsEvalParser.CODE_PATTERN, curr_tag.text)):
                     break
             curr_tag = curr_tag.find_next()
         return "".join(summary)
 
-    def get_score(self,raw):
-        match = re.search(self.score_pattern,raw)
+    def _get_score(self, raw):
+        match = re.search(HopkinsEvalParser.SCORE_PATTERN, raw)
         return match.group(1)
 
-    def make_review_item(self,code,prof,score,summary,year):
-        courses = Course.objects.filter(code__contains = self.get_code_partial(code), school = "jhu")
-        if len(courses) == 0:
-            return
-        else:
-            course = courses[0]
-            obj, created = Evaluation.objects.get_or_create(
-                course=course,
-                score=score,
-                summary=summary,
-                course_code=code[:20],
-                professor=prof,
-                year=year)
-            if created:
-                print "Evaluation Object CREATED for: " + code[:20]
-            else:
-                print "Evaluation Object FOUND for: " + code[:20]
-        return
+    def _make_review_item(self, code, prof, score, summary, year):
+        print(code, prof, score, summary, year, file=sys.stderr)
+        # courses = Course.objects.filter(code__contains=self._get_code_partial(code),
+        #                                 school="jhu")
+        # if len(courses) == 0:
+        #     return
+        # else:
+        #     course = courses[0]
+        #     obj, created = Evaluation.objects.get_or_create(
+        #         course=course,
+        #         score=score,
+        #         summary=summary,
+        #         course_code=code[:20],
+        #         professor=prof,
+        #         year=year)
+        #     if created:
+        #         print("Evaluation Object CREATED for: " + code[:20], file=sys.stderr)
+        #     else:
+        #         print("Evaluation Object FOUND for: " + code[:20], file=sys.stderr)
+        # return
 
-    def get_code_partial(self, code):
-        matches = re.search(self.code_cap_pattern,code)
+    def _get_code_partial(self, code):
+        matches = re.search(HopkinsEvalParser.CODE_CAP_PATTERN, code)
         return str(matches.group(1))
 
-    def get_eval_html(self, file_name):
+    def _get_eval_html(self, file_name):
         html = urllib.urlopen(file_name).read()
         return html
 
 if __name__ == '__main__':
     ep = HopkinsEvalParser()
-    ep.parse_evals()
+    ep.start()
