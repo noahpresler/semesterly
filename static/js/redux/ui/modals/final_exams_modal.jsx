@@ -2,6 +2,7 @@ import PropTypes from 'prop-types';
 import React from 'react';
 import Modal from 'boron/WaveModal';
 import classNames from 'classnames';
+import Clipboard from 'clipboard';
 import COLOUR_DATA from '../../constants/colours';
 import { ShareLink } from '../master_slot';
 import { getExamShareLink } from '../../constants/endpoints';
@@ -142,6 +143,11 @@ export default class FinalExamsModal extends React.Component {
       if (!$('.search-bar__input-wrapper input').is(':focus')) {
         this.updateOrientation();
       }
+    });
+    const idEventTarget = `#clipboard-btn-final-exams`;
+    const clipboard = new Clipboard(idEventTarget);
+    clipboard.on('success', () => {
+      $(idEventTarget).addClass('clipboardSuccess').text('Copied!');
     });
   }
 
@@ -353,6 +359,8 @@ export default class FinalExamsModal extends React.Component {
     const shareLink = this.state.shareLinkShown && this.props.shareLink ?
       (<ShareLink
         link={getExamShareLink(this.props.shareLink)}
+        uniqueId="final-exams"
+        type="Final Exam Schedule"
         onClickOut={this.toggleShareLink}
       />) :
       null;
