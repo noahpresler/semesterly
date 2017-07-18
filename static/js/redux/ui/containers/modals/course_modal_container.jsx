@@ -31,7 +31,7 @@ const mapStateToProps = (state) => {
     data: denormCourseInfo,
     id: state.courseInfo.id,
     isFetching: state.courseInfo.isFetching,
-    hasHoveredResult: getHoveredSlots(state).length > 0,
+    hasHoveredResult: getHoveredSlots(state) !== null,
     inRoster: courseSections[state.courseInfo.id] !== undefined,
     getShareLink: courseCode => getCourseShareLink(courseCode, getCurrentSemester(state)),
     getShareLinkFromModal: courseCode =>
