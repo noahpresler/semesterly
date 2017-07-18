@@ -100,7 +100,7 @@ def validator_argparser(parser):
 	break_error.set_defaults(break_on_error=True)
 	break_warning = parser.add_mutually_exclusive_group()
 	break_warning.add_argument('--break-on-warning', dest='break_on_warning', action='store_true')
-	break_warning.add_argument('--no-break-on-warning', dest='break_on_warning', action='store_false', 
+	break_warning.add_argument('--no-break-on-warning', dest='break_on_warning', action='store_false',
 		help='(default)')
 	break_warning.set_defaults(break_on_warning=False)
 	duplicate = parser.add_mutually_exclusive_group()
@@ -124,7 +124,7 @@ def digestor_argparser(parser):
 
 	parser.add_argument('--output-diff', type=str, action=config_file_action)
 	diff = parser.add_mutually_exclusive_group()
-	diff.add_argument('--diff', dest='diff', action='store_true', 
+	diff.add_argument('--diff', dest='diff', action='store_true',
 		help='output diff between input and django db')
 	diff.add_argument('--no-diff', dest='diff', nargs=0,
 		action=set_false_error_on_no_diff_no_load_action)

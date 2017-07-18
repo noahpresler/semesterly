@@ -8,7 +8,7 @@ Data Pipeline - Ingestor.
 
 from __future__ import absolute_import, division, print_function
 
-import re
+import re, sys
 import jsonschema
 
 from scripts.parser_library.internal_exceptions import IngestorError, \
@@ -80,13 +80,11 @@ class Ingestor(dict):
         'enrollment', 'enrolment',
         'waitlist', 'waitlist_size',
         'remaining_seats',
-        'fees', 'fee',
+        'fees', 'fee', 'cost',
         'final_exam',
         'offerings',
-        'time_start',
-        'start_time',
-        'time_end',
-        'end_time',
+        'time_start', 'start_time',
+        'time_end', 'end_time',
         'location',
         'loc', 'where',
         'days', 'day', 'dates', 'date',
@@ -97,31 +95,26 @@ class Ingestor(dict):
         'detail_url', 'image_url', 'author', 'title',
     }
 
-    def __init__(self, school,
-                 validate=True,
-                 config_path=None,
-                 output_path=None,
-                 output_error_path=None,
+    def __init__(self, school, config_path, output_path, output_error_path,
                  break_on_error=True,
                  break_on_warning=False,
-                 skip_shallow_duplicates=True,
                  hide_progress_bar=False,
+                 skip_shallow_duplicates=True,
+                 validate=True,
                  tracker=NullTracker()):
         """Construct ingestor object and resolve options.
 
-        Also validates school directory.
-
         Args:
             school (string): The school code (e.g. jhu, gw, umich).
-            validate (bool, optional): Perform validation?
-            config_path (None, optional): Configuration file path.
-            output_path (None, optional): Json output path.
-            output_error_path (None, optional): Pipeline error path.
+            config_path (str): Configuration file path.
+            output_path (str): Output path.
+            output_error_path (str): Error output path.
             break_on_error (bool, optional): Stop ingesting on error.
             break_on_warning (bool, optional): Stop ingesting on warning.
+            hide_progress_bar (bool, optional): Hide ingestion progress bar?
             skip_shallow_duplicates (bool, optional): Skip ingesting courses
                 that have already been seen.
-            hide_progress_bar (bool, optional): Hide ingestion progress bar?
+            validate (bool, optional): Perform validation?
             tracker (parser_library.tracker, optional): tracker object
         """
         self.school = school
@@ -129,25 +122,13 @@ class Ingestor(dict):
         self.break_on_error = break_on_error
         self.break_on_warning = break_on_warning
         self.skip_shallow_duplicates = skip_shallow_duplicates
-
-        directory = 'scripts/{}'.format(school)
-        # Validator.validate_school_directory(directory)
-        if config_path is None:
-            config_path = '{}/config.json'.format(directory)
-        if output_path is None:
-            output_path = '{}/data/courses.json'.format(directory)
-        if output_error_path is None:
-            output_error_path = '{}/logs/error.log'.format(directory)
+        self.tracker = tracker
 
         # Initialize loggers for json and errors.
         self.logger = JsonListLogger(logfile=output_path,
                                      errorfile=output_error_path)
-        self.logger.open()
-
-        self.tracker = tracker
-        self.tracker.set_mode('ingesting')
-
-        self.validator = Validator(config_path, tracker=self.tracker)
+        if self.validate:
+            self.validator = Validator(config_path, tracker=self.tracker)
 
         # Inherit dictionary functionality.
         super(Ingestor, self).__init__()
@@ -229,7 +210,7 @@ class Ingestor(dict):
         """Create section json object from info in model map.
 
         Args:
-            course (dict): mapping
+            course (dict): validated course object
 
         Returns:
             dict: section
@@ -276,7 +257,7 @@ class Ingestor(dict):
                               'meeting_section'),
             'name': self._get('section_name'),
             'term': self._get('term', 'semester'),
-            'year': self._get('year'),
+            'year': str(self._get('year')),
             'instructors': instructors,
             'capacity': self._get('capacity', 'size'),
             'enrollment': self._get('enrollment', 'enrolment'),
@@ -284,7 +265,7 @@ class Ingestor(dict):
             'waitlist_size': self._get('waitlist_size'),
             'remaining_seats': self._get('remaining_seats'),
             'type': self._get('type', 'section_type'),
-            'fees': self._get('fees', 'fee'),
+            'fees': self._get('fees', 'fee', 'cost'),
             'final_exam': self._get('final_exam'),
             'textbooks': self._get('textbooks'),
             'meetings': self._get('offerings')
@@ -300,7 +281,7 @@ class Ingestor(dict):
         """Create meeting ingested json map.
 
         Args:
-            section (dict): section info
+            section (dict): validated section object
 
         Returns:
             dict: meeting
@@ -323,7 +304,7 @@ class Ingestor(dict):
             'course': section['course'],
             'section': {
                 'code': section['code'],
-                'year': self._get('year'),
+                'year': str(self._get('year')),
                 'term': self._get('term', 'semester')
             },
             'days': make_list(self._get('days', 'day')),
@@ -354,7 +335,7 @@ class Ingestor(dict):
             },
             'section': {
                 'code': self._get('section_code'),
-                'year': self._get('year'),
+                'year': str(self._get('year')),
                 'term': self._get('term', 'semester')
             },
             'isbn': self._get('isbn'),
