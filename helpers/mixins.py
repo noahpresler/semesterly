@@ -14,6 +14,10 @@ from timetable.utils import get_current_semesters, get_old_semesters
 
 
 class ValidateSubdomainMixin(object):
+    """
+    Mixin which validates subdomain, redirecting user to index if the school
+    is not in :obj:`VALID_SCHOOLS`.
+    """
 
     def dispatch(self, request, *args, **kwargs):
         if request.subdomain not in VALID_SCHOOLS:
@@ -81,7 +85,6 @@ class FeatureFlowView(ValidateSubdomainMixin, APIView):
 
 
 class CsrfExemptSessionAuthentication(SessionAuthentication):
-
     def enforce_csrf(self, request):
         return
 
