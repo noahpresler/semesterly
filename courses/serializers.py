@@ -7,12 +7,21 @@ from timetable.models import Course
 
 
 class CourseSerializer(serializers.ModelSerializer):
+    """
+    Serializer which generates a representation of a course including:
+    code, name, id, description, department, num_credits, areas, campus
+    """
     class Meta:
         model = Course
         fields = ('code', 'name', 'id', 'description', 'department', 'num_credits', 'areas', 'campus')
 
 
 def get_detailed_course_json(school, course, sem, student=None):
+    """
+    Generates a detailed course json by adding to the basic course json. 
+    Adds evaluations, related courses, reactions, textbooks, integrations, 
+    regexed courses, and popularity percentage.
+    """
     json_data = get_basic_course_json(course, sem, ['prerequisites', 'exclusions', 'areas'])
     json_data['eval_info'] = course.eval_add_unique_term_year_flag()
     json_data['related_courses'] = course.get_related_course_info(sem, limit=5)
@@ -25,6 +34,14 @@ def get_detailed_course_json(school, course, sem, student=None):
 
 
 def get_basic_course_json(course, sem, extra_model_fields=None):
+    """
+    Converts course to dictionary using only basic fields unless 
+    additional fields are provided. 
+
+    Basic fields: code, name, id, description, department, num_credits, areas, campus
+
+    Includes mapping from section type (L, T, P) to the sections of that type.
+    """
     extra_model_fields = extra_model_fields or []
     basic_fields = 'code name id description department num_credits areas campus'.split()
     course_json = model_to_dict(course, basic_fields + extra_model_fields)
@@ -50,12 +67,18 @@ def get_section_offerings(section):
 
 
 def get_section_dict(section):
+    """
+    Returns a dictionary of a section including indicator of whether that section is filled
+    """
     section_data = model_to_dict(section)
     section_data['is_section_filled'] = section.enrolment >= section.size
     return section_data
 
 
 def augment_course_dict(course_dict, sections):
+    """
+    Augments a course dictioanry with enrolled sections, textbooks and slots.
+    """
     sections = list(sections)
     slot_objects = [dict(get_section_dict(section), **model_to_dict(co))
                     for _, section, course_offerings in sections

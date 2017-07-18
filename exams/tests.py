@@ -3,7 +3,7 @@ import unittest
 from rest_framework import status
 from rest_framework.test import APITestCase
 
-from timetable.jhu_final_exam_scheduler import *
+from jhu_final_exam_scheduler import *
 from helpers.test.test_cases import UrlTestCase
 
 SCHEDULER = JHUFinalExamScheduler()
