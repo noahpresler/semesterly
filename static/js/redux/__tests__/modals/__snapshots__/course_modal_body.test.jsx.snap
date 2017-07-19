@@ -14,10 +14,10 @@ exports[`CourseModalBody correctly renders 1`] = `
         className="credits"
       >
         <h3>
-          4
+          1
         </h3>
         <h4>
-           credits
+           credit
         </h4>
       </div>
       <div
@@ -36,7 +36,7 @@ exports[`CourseModalBody correctly renders 1`] = `
               className="rating"
               style={
                 Object {
-                  "width": "75.46666666666667%",
+                  "width": "NaN%",
                 }
               }
             />
@@ -64,7 +64,366 @@ exports[`CourseModalBody correctly renders 1`] = `
           Prerequisites
         </h3>
         <p>
-          None
+          <span
+            className="textItem"
+          >
+            
+          </span>
+          <a
+            className="course-link"
+            href={null}
+          >
+            <span>
+              ECO100Y1
+            </span>
+            <span
+              className="course-link-tip"
+              style={
+                Object {
+                  "backgroundColor": "#FD7473",
+                }
+              }
+            >
+              <span
+                className="slot-bar"
+                style={
+                  Object {
+                    "backgroundColor": "#b15150",
+                  }
+                }
+              />
+              <span
+                className="course-link-content"
+              >
+                <span>
+                  ECO100Y1
+                </span>
+                <span>
+                  Introduction to Economics
+                </span>
+              </span>
+            </span>
+          </a>
+          <span
+            className="textItem"
+          >
+            (67%)/(
+          </span>
+          <a
+            className="course-link"
+            href={null}
+          >
+            <span>
+              ECO101H1
+            </span>
+            <span
+              className="course-link-tip"
+              style={
+                Object {
+                  "backgroundColor": "#36DEBB",
+                }
+              }
+            >
+              <span
+                className="slot-bar"
+                style={
+                  Object {
+                    "backgroundColor": "#259b82",
+                  }
+                }
+              />
+              <span
+                className="course-link-content"
+              >
+                <span>
+                  ECO101H1
+                </span>
+                <span>
+                  Principles of Microeconomics
+                </span>
+              </span>
+            </span>
+          </a>
+          <span
+            className="textItem"
+          >
+            (63%), 
+          </span>
+          <a
+            className="course-link"
+            href={null}
+          >
+            <span>
+              ECO102H1
+            </span>
+            <span
+              className="course-link-tip"
+              style={
+                Object {
+                  "backgroundColor": "#C585DE",
+                }
+              }
+            >
+              <span
+                className="slot-bar"
+                style={
+                  Object {
+                    "backgroundColor": "#895d9b",
+                  }
+                }
+              />
+              <span
+                className="course-link-content"
+              >
+                <span>
+                  ECO102H1
+                </span>
+                <span>
+                  Principles of Macroeconomics
+                </span>
+              </span>
+            </span>
+          </a>
+          <span
+            className="textItem"
+          >
+            (63%))/
+          </span>
+          <a
+            className="course-link"
+            href={null}
+          >
+            <span>
+              ECO105Y1
+            </span>
+            <span
+              className="course-link-tip"
+              style={
+                Object {
+                  "backgroundColor": "#D4DBC8",
+                }
+              }
+            >
+              <span
+                className="slot-bar"
+                style={
+                  Object {
+                    "backgroundColor": "#97A086",
+                  }
+                }
+              />
+              <span
+                className="course-link-content"
+              >
+                <span>
+                  ECO105Y1
+                </span>
+                <span>
+                  Principles of Economics for Non-Specialists
+                </span>
+              </span>
+            </span>
+          </a>
+          <span
+            className="textItem"
+          >
+            (80%); 
+          </span>
+          <a
+            className="course-link"
+            href={null}
+          >
+            <span>
+              MAT133Y1
+            </span>
+            <span
+              className="course-link-tip"
+              style={
+                Object {
+                  "backgroundColor": "#A3F5F2",
+                }
+              }
+            >
+              <span
+                className="slot-bar"
+                style={
+                  Object {
+                    "backgroundColor": "#53ABA8",
+                  }
+                }
+              />
+              <span
+                className="course-link-content"
+              >
+                <span>
+                  MAT133Y1
+                </span>
+                <span>
+                  Calculus and Linear Algebra for Commerce
+                </span>
+              </span>
+            </span>
+          </a>
+          <span
+            className="textItem"
+          >
+            /(
+          </span>
+          <a
+            className="course-link"
+            href={null}
+          >
+            <span>
+              MAT135H1
+            </span>
+            <span
+              className="course-link-tip"
+              style={
+                Object {
+                  "backgroundColor": "#E7F76D",
+                }
+              }
+            >
+              <span
+                className="slot-bar"
+                style={
+                  Object {
+                    "backgroundColor": "#6C7A89",
+                  }
+                }
+              />
+              <span
+                className="course-link-content"
+              >
+                <span>
+                  MAT135H1
+                </span>
+                <span>
+                  Calculus 1(A)
+                </span>
+              </span>
+            </span>
+          </a>
+          <span
+            className="textItem"
+          >
+            , 
+          </span>
+          <a
+            className="course-link"
+            href={null}
+          >
+            <span>
+              MAT136H1
+            </span>
+            <span
+              className="course-link-tip"
+              style={
+                Object {
+                  "backgroundColor": "#4c7fd8",
+                }
+              }
+            >
+              <span
+                className="slot-bar"
+                style={
+                  Object {
+                    "backgroundColor": "#375994",
+                  }
+                }
+              />
+              <span
+                className="course-link-content"
+              >
+                <span>
+                  MAT136H1
+                </span>
+                <span>
+                  Calculus 1(B)
+                </span>
+              </span>
+            </span>
+          </a>
+          <span
+            className="textItem"
+          >
+            )/
+          </span>
+          <a
+            className="course-link"
+            href={null}
+          >
+            <span>
+              MAT137Y1
+            </span>
+            <span
+              className="course-link-tip"
+              style={
+                Object {
+                  "backgroundColor": "#5CCCF2",
+                }
+              }
+            >
+              <span
+                className="slot-bar"
+                style={
+                  Object {
+                    "backgroundColor": "#408ea9",
+                  }
+                }
+              />
+              <span
+                className="course-link-content"
+              >
+                <span>
+                  MAT137Y1
+                </span>
+                <span>
+                  Calculus
+                </span>
+              </span>
+            </span>
+          </a>
+          <span
+            className="textItem"
+          >
+            /
+          </span>
+          <a
+            className="course-link"
+            href={null}
+          >
+            <span>
+              MAT157Y1
+            </span>
+            <span
+              className="course-link-tip"
+              style={
+                Object {
+                  "backgroundColor": "#FFD462",
+                }
+              }
+            >
+              <span
+                className="slot-bar"
+                style={
+                  Object {
+                    "backgroundColor": "#b29444",
+                  }
+                }
+              />
+              <span
+                className="course-link-content"
+              >
+                <span>
+                  MAT157Y1
+                </span>
+                <span>
+                  Analysis I
+                </span>
+              </span>
+            </span>
+          </a>
         </p>
       </div>
       <div
@@ -73,10 +432,10 @@ exports[`CourseModalBody correctly renders 1`] = `
         <h3
           className="modal-module-header"
         >
-          Areas
+          Breadths
         </h3>
         <p>
-          Q
+          (3)
         </p>
       </div>
       <div
@@ -663,10 +1022,7 @@ exports[`CourseModalBody correctly renders 1`] = `
           Course Description
         </h3>
         <p>
-          Differential and integral calculus. Includes analytic geometry, functions, limits, integrals and
-          derivatives, introduction to differential equations, functions of several variables, linear systems,
-          applications for systems of linear differential equations, probability distributions. Many
-          applications to the biological and social sciences will be discussed.
+          The use of microeconomics to analyze a variety of issues from marketing and finance to organizational structure. Consumer preferences and behavior; demand, cost analysis and estimation; allocation of inputs, pricing and firm behavior under perfect and imperfect competition; game theory and public policy, including competition policy. Business cases are used to connect theory and practice and to highlight differences and similarities between economics and accounting, marketing and finance. This course is restricted to students in the Commerce programs.
         </p>
       </div>
       <div
@@ -678,325 +1034,13 @@ exports[`CourseModalBody correctly renders 1`] = `
           Course Evaluations
         </h3>
         <div
-          className="modal-entry course-evaluations spacious-entry"
+          className="modal-entry course-evaluations "
         >
-          <div>
-            <div
-              className="scroll-nav"
-            >
-              <span
-                className="nav-item nav-item-active"
-                onClick={[Function]}
-              >
-                <div
-                  className="eval-item mini"
-                >
-                  <div
-                    className="eval-wrapper"
-                  >
-                    <div
-                      className="year truncate"
-                    >
-                      <b>
-                        Spring 2015
-                      </b>
-                    </div>
-                    <div
-                      className="rating-wrapper"
-                    >
-                      <div
-                        className="star-ratings-sprite eval-stars"
-                      >
-                        <span
-                          className="rating"
-                          style={
-                            Object {
-                              "width": "73.4%",
-                            }
-                          }
-                        />
-                      </div>
-                      <div
-                        className="numeric-rating"
-                      >
-                        <b>
-                          (3.67)
-                        </b>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </span>
-              <span
-                className="nav-item"
-                onClick={[Function]}
-              >
-                <div
-                  className="eval-item mini"
-                >
-                  <div
-                    className="eval-wrapper"
-                  >
-                    <div
-                      className="year truncate"
-                    >
-                      <b>
-                        Fall 2014
-                      </b>
-                    </div>
-                    <div
-                      className="rating-wrapper"
-                    >
-                      <div
-                        className="star-ratings-sprite eval-stars"
-                      >
-                        <span
-                          className="rating"
-                          style={
-                            Object {
-                              "width": "71.4%",
-                            }
-                          }
-                        />
-                      </div>
-                      <div
-                        className="numeric-rating"
-                      >
-                        <b>
-                          (3.57)
-                        </b>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </span>
-              <span
-                className="nav-item"
-                onClick={[Function]}
-              >
-                <div
-                  className="eval-item mini"
-                >
-                  <div
-                    className="eval-wrapper"
-                  >
-                    <div
-                      className="year truncate"
-                    >
-                      <b>
-                        Spring 2014
-                      </b>
-                    </div>
-                    <div
-                      className="rating-wrapper"
-                    >
-                      <div
-                        className="star-ratings-sprite eval-stars"
-                      >
-                        <span
-                          className="rating"
-                          style={
-                            Object {
-                              "width": "83.2%",
-                            }
-                          }
-                        />
-                      </div>
-                      <div
-                        className="numeric-rating"
-                      >
-                        <b>
-                          (4.16)
-                        </b>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </span>
-              <span
-                className="nav-item"
-                onClick={[Function]}
-              >
-                <div
-                  className="eval-item mini"
-                >
-                  <div
-                    className="eval-wrapper"
-                  >
-                    <div
-                      className="year truncate"
-                    >
-                      <b>
-                        Fall 2013
-                      </b>
-                    </div>
-                    <div
-                      className="rating-wrapper"
-                    >
-                      <div
-                        className="star-ratings-sprite eval-stars"
-                      >
-                        <span
-                          className="rating"
-                          style={
-                            Object {
-                              "width": "76.8%",
-                            }
-                          }
-                        />
-                      </div>
-                      <div
-                        className="numeric-rating"
-                      >
-                        <b>
-                          (3.84)
-                        </b>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </span>
-              <span
-                className="nav-item"
-                onClick={[Function]}
-              >
-                <div
-                  className="eval-item mini"
-                >
-                  <div
-                    className="eval-wrapper"
-                  >
-                    <div
-                      className="year truncate"
-                    >
-                      <b>
-                        Spring 2013
-                      </b>
-                    </div>
-                    <div
-                      className="rating-wrapper"
-                    >
-                      <div
-                        className="star-ratings-sprite eval-stars"
-                      >
-                        <span
-                          className="rating"
-                          style={
-                            Object {
-                              "width": "82.79999999999998%",
-                            }
-                          }
-                        />
-                      </div>
-                      <div
-                        className="numeric-rating"
-                      >
-                        <b>
-                          (4.14)
-                        </b>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </span>
-              <span
-                className="nav-item"
-                onClick={[Function]}
-              >
-                <div
-                  className="eval-item mini"
-                >
-                  <div
-                    className="eval-wrapper"
-                  >
-                    <div
-                      className="year truncate"
-                    >
-                      <b>
-                        Fall 2012
-                      </b>
-                    </div>
-                    <div
-                      className="rating-wrapper"
-                    >
-                      <div
-                        className="star-ratings-sprite eval-stars"
-                      >
-                        <span
-                          className="rating"
-                          style={
-                            Object {
-                              "width": "65.2%",
-                            }
-                          }
-                        />
-                      </div>
-                      <div
-                        className="numeric-rating"
-                      >
-                        <b>
-                          (3.26)
-                        </b>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </span>
-            </div>
-            <div
-              className="eval-item selected"
-            >
-              <div
-                className="eval-wrapper"
-              >
-                <div
-                  className="year truncate"
-                >
-                  <b>
-                    Spring 2015
-                  </b>
-                </div>
-                <div
-                  className="eval-item__prof"
-                >
-                  <b>
-                    Professor: 
-                    Zhan Li 
-                  </b>
-                </div>
-                <div
-                  className="rating-wrapper"
-                >
-                  <div
-                    className="star-ratings-sprite eval-stars"
-                  >
-                    <span
-                      className="rating"
-                      style={
-                        Object {
-                          "width": "73.4%",
-                        }
-                      }
-                    />
-                  </div>
-                  <div
-                    className="numeric-rating"
-                  >
-                    <b>
-                      (3.67)
-                    </b>
-                  </div>
-                </div>
-              </div>
-              <div
-                className="eval-item__details"
-              >
-                <p>
-                  The best aspects of this class were the structured lectures and relatively smal  class size.  Many students agreed that the professor was very approachable and helpful, and that he made an effort to ensure that students understood the material.  Some students found that the class moved too quickly through material and that there were occasional disconnects between lecture topics and TA sections.  This class could be improved by better matching the difficulty of homework to exams.  Prospective students should have a strong background in trigonometry. 
-                </p>
-              </div>
-            </div>
-          </div>
+          <p
+            className="empty-intro"
+          >
+            No course evaluations for this course yet.
+          </p>
         </div>
       </div>
     </div>
@@ -1008,10 +1052,13 @@ exports[`CourseModalBody correctly renders 1`] = `
         <h3
           className="modal-module-header"
         >
+           
           Lecture Sections
+           
           <small>
             (Hover to see the section on your timetable)
           </small>
+           
         </h3>
         <div
           className="modal-section"
@@ -1021,20 +1068,20 @@ exports[`CourseModalBody correctly renders 1`] = `
         >
           <h4>
             <span>
-              (01)
+              L0101
             </span>
             <i
               className="fa fa-calendar-check-o"
             />
           </h4>
           <h5>
-            R. Brown
+            S Hussain
           </h5>
           <h6>
             <span
               className="green"
             >
-              30 open
+              140 open
             </span>
             <span>
                / 
@@ -1042,7 +1089,7 @@ exports[`CourseModalBody correctly renders 1`] = `
             <span
               className="total-seats"
             >
-              30
+              140
                seats
             </span>
           </h6>
@@ -1058,20 +1105,20 @@ exports[`CourseModalBody correctly renders 1`] = `
         >
           <h4>
             <span>
-              (02)
+              L0201
             </span>
             <i
               className="fa fa-calendar-check-o"
             />
           </h4>
           <h5>
-            R. Brown
+            S Hussain
           </h5>
           <h6>
             <span
               className="green"
             >
-              30 open
+              130 open
             </span>
             <span>
                / 
@@ -1079,7 +1126,7 @@ exports[`CourseModalBody correctly renders 1`] = `
             <span
               className="total-seats"
             >
-              30
+              130
                seats
             </span>
           </h6>
@@ -1095,20 +1142,20 @@ exports[`CourseModalBody correctly renders 1`] = `
         >
           <h4>
             <span>
-              (03)
+              L0301
             </span>
             <i
               className="fa fa-calendar-check-o"
             />
           </h4>
           <h5>
-            R. Brown
+            S Hussain
           </h5>
           <h6>
             <span
               className="green"
             >
-              30 open
+              140 open
             </span>
             <span>
                / 
@@ -1116,7 +1163,7 @@ exports[`CourseModalBody correctly renders 1`] = `
             <span
               className="total-seats"
             >
-              30
+              140
                seats
             </span>
           </h6>
@@ -1132,20 +1179,20 @@ exports[`CourseModalBody correctly renders 1`] = `
         >
           <h4>
             <span>
-              (04)
+              L0401
             </span>
             <i
               className="fa fa-calendar-check-o"
             />
           </h4>
           <h5>
-            R. Brown
+            S Hussain
           </h5>
           <h6>
             <span
               className="green"
             >
-              30 open
+              130 open
             </span>
             <span>
                / 
@@ -1153,7 +1200,7 @@ exports[`CourseModalBody correctly renders 1`] = `
             <span
               className="total-seats"
             >
-              30
+              130
                seats
             </span>
           </h6>
@@ -1169,20 +1216,20 @@ exports[`CourseModalBody correctly renders 1`] = `
         >
           <h4>
             <span>
-              (05)
+              L0501
             </span>
             <i
               className="fa fa-calendar-check-o"
             />
           </h4>
           <h5>
-            R. Brown
+            P Foltin
           </h5>
           <h6>
             <span
               className="green"
             >
-              30 open
+              130 open
             </span>
             <span>
                / 
@@ -1190,7 +1237,7 @@ exports[`CourseModalBody correctly renders 1`] = `
             <span
               className="total-seats"
             >
-              30
+              130
                seats
             </span>
           </h6>
@@ -1206,20 +1253,20 @@ exports[`CourseModalBody correctly renders 1`] = `
         >
           <h4>
             <span>
-              (06)
+              L5101
             </span>
             <i
               className="fa fa-calendar-check-o"
             />
           </h4>
           <h5>
-            R. Brown
+            P Blanchenay
           </h5>
           <h6>
             <span
               className="green"
             >
-              30 open
+              140 open
             </span>
             <span>
                / 
@@ -1227,118 +1274,7 @@ exports[`CourseModalBody correctly renders 1`] = `
             <span
               className="total-seats"
             >
-              30
-               seats
-            </span>
-          </h6>
-          <i
-            className="fa fa-lock"
-          />
-        </div>
-        <div
-          className="modal-section"
-          onMouseDown={[Function]}
-          onMouseEnter={[Function]}
-          onMouseLeave={[Function]}
-        >
-          <h4>
-            <span>
-              (07)
-            </span>
-            <i
-              className="fa fa-calendar-check-o"
-            />
-          </h4>
-          <h5>
-            R. Brown
-          </h5>
-          <h6>
-            <span
-              className="green"
-            >
-              30 open
-            </span>
-            <span>
-               / 
-            </span>
-            <span
-              className="total-seats"
-            >
-              30
-               seats
-            </span>
-          </h6>
-          <i
-            className="fa fa-lock"
-          />
-        </div>
-        <div
-          className="modal-section"
-          onMouseDown={[Function]}
-          onMouseEnter={[Function]}
-          onMouseLeave={[Function]}
-        >
-          <h4>
-            <span>
-              (08)
-            </span>
-            <i
-              className="fa fa-calendar-check-o"
-            />
-          </h4>
-          <h5>
-            R. Brown
-          </h5>
-          <h6>
-            <span
-              className="green"
-            >
-              30 open
-            </span>
-            <span>
-               / 
-            </span>
-            <span
-              className="total-seats"
-            >
-              30
-               seats
-            </span>
-          </h6>
-          <i
-            className="fa fa-lock"
-          />
-        </div>
-        <div
-          className="modal-section"
-          onMouseDown={[Function]}
-          onMouseEnter={[Function]}
-          onMouseLeave={[Function]}
-        >
-          <h4>
-            <span>
-              (09)
-            </span>
-            <i
-              className="fa fa-calendar-check-o"
-            />
-          </h4>
-          <h5>
-            R. Brown
-          </h5>
-          <h6>
-            <span
-              className="green"
-            >
-              30 open
-            </span>
-            <span>
-               / 
-            </span>
-            <span
-              className="total-seats"
-            >
-              30
+              140
                seats
             </span>
           </h6>

@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "description": "A Timetable Generator",
   "dependencies": {
+    "autoprefixer": "^7.1.1",
     "babel": "^6.23.0",
     "babel-core": "^6.24.1",
     "babel-jest": "^20.0.3",
@@ -35,9 +36,12 @@
     "js": "^0.1.0",
     "js-cookie": "^2.1.4",
     "livereactload": "^3.2.0",
+    "lodash": "^4.17.4",
     "loose-envify": "^1.1.0",
     "moment": "^2.11.2",
+    "nock": "^9.0.13",
     "node-sass": "^4.5.2",
+    "normalizr": "^3.2.3",
     "phantom": "^4.0.0",
     "phantomjs": "^2.1.7",
     "postcss-loader": "^2.0.5",
@@ -64,7 +68,9 @@
     "react-tooltip": "^3.2.6",
     "reactify": "^1.1.1",
     "redux": "^3.3.1",
+    "redux-mock-store": "^1.2.3",
     "redux-thunk": "^2.0.1",
+    "reselect": "^3.0.1",
     "sass-lint": "^1.10.2",
     "sass-loader": "^6.0.3",
     "static-interval-tree": "^1.3.0",
@@ -81,18 +87,23 @@
   },
   "jest": {
     "setupTestFrameworkScriptFile": "./test_env.jsx",
+    "transformIgnorePatterns": [
+      "node_modules/(?!react)"
+    ],
     "transform": {
       "^.+\\.jsx?$": "babel-jest"
     }
   },
   "scripts": {
-    "test": "jest --notify",
+    "test": "NODE_ENV=production jest",
+    "test:watch": "npm test -- --watch",
     "build": "./node_modules/.bin/webpack --config webpack.config.js --progress --colors",
     "watch": "node server.js",
     "lint-staged": "lint-staged",
-    "lint": "./node_modules/.bin/eslint \"static/js/redux/**\"; ./node_modules/.bin/sass-lint -c .scss-lint.yml 'static/css/timetable/*.scss, static/css/timetable/base/*.scss' -v -q",
+    "lint": "./node_modules/.bin/eslint \"static/js/redux/**\"; ./node_modules/.bin/sass-lint -c .sass-lint.yml 'static/css/timetable/*.scss, static/css/timetable/**/*.scss' -v -q",
     "lint-fix": "./node_modules/.bin/eslint --fix \"static/js/redux/**\" ",
-    "lint-scss-staged": "./node_modules/.bin/sass-lint -c .sass-lint-precommit.yml -v -q"
+    "lint-scss-staged": "./node_modules/.bin/sass-lint -c .sass-lint-precommit.yml -v -q",
+    "validate": "npm ls"
   },
   "repository": {
     "type": "git",
@@ -111,6 +122,7 @@
     "babel-jest": "^20.0.1",
     "jest": "^20.0.1",
     "lint-staged": "^3.4.0",
+    "nock": "^9.0.13",
     "node-sass": "^4.5.2",
     "precommit-hook": "^3.0.0",
     "react-test-utils": "0.0.1",
@@ -119,7 +131,10 @@
     "webpack": "^2.4.1"
   },
   "lint-staged": {
-    "*.jsx": "eslint",
+    "*.jsx?": [
+      "eslint --fix",
+      "git add"
+    ],
     "*.scss": "lint-scss-staged"
   },
   "sasslintConfig": "sass-lint"

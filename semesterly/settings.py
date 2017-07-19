@@ -1,4 +1,18 @@
 """
+Copyright (C) 2017 Semester.ly Technologies, LLC
+
+Semester.ly is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+Semester.ly is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+"""
+
+"""
 Django settings for the semesterly project.
 
 For more information on this file, see
@@ -141,16 +155,18 @@ INSTALLED_APPS = (
     'scripts',
     'student',
     'cachalot',
-    'silk',
     'rest_framework',
     'rest_framework_swagger',
     'webpack_loader',
     'djcelery',
+    'agreement'
 )
 
 REST_FRAMEWORK ={
     'UNICODE_JSON': False
 }
+
+SESSION_ENGINE = 'django.contrib.sessions.backends.db'
 
 MIDDLEWARE_CLASSES = (
     'django.contrib.sessions.middleware.SessionMiddleware',
@@ -161,7 +177,6 @@ MIDDLEWARE_CLASSES = (
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'semesterly.middleware.subdomain_middleware.SubdomainMiddleware',
     'social.apps.django_app.middleware.SocialAuthExceptionMiddleware',
-    'silk.middleware.SilkyMiddleware',
     'rollbar.contrib.django.middleware.RollbarNotifierMiddleware',
 )
 
@@ -203,12 +218,7 @@ DATABASES = {
     }
 }
 
-# Silk auth
-SILKY_AUTHENTICATION = True  # User must login
-SILKY_AUTHORISATION = True  # User must have permissions
-
 # Logging
-
 LOGFILE = PROJECT_DIRECTORY + '/logfile.txt'
 
 LOGGING = {
@@ -287,7 +297,7 @@ USE_TZ = True
 
 APPEND_SLASH = True
 
-TEST_RUNNER = 'test_utils.test_runners.FastTestRunner'
+TEST_RUNNER = 'helpers.test.test_runners.FastTestRunner'
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.6/howto/static-files/

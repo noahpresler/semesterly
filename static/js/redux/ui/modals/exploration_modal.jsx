@@ -1,9 +1,23 @@
+/**
+Copyright (C) 2017 Semester.ly Technologies, LLC
+
+Semester.ly is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+Semester.ly is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+**/
+
 import PropTypes from 'prop-types';
 import React from 'react';
 import Modal from 'boron/DropModal';
+import isEqual from 'lodash/isEqual';
 import classNames from 'classnames';
-import CourseModalBody from './course_modal_body';
-import { getCourseShareLink } from '../../helpers/timetable_helpers';
+import CourseModalBodyContainer from '../containers/modals/course_modal_body_container';
 import { ShareLink } from '../master_slot';
 import {
   Filter, SelectedFilter, SelectedFilterSection,
@@ -69,13 +83,13 @@ class ExplorationModal extends React.Component {
       times: prevState.times,
       levels: prevState.levels,
     };
-    if (!_.isEqual(filters, prevFilters) && this.props.page > 1) {
+    if (!isEqual(filters, prevFilters) && this.props.page > 1) {
       this.props.clearPagination();
     }
     $('.exp-search-results').scroll(() => {
       const expSearchResultsDiv = $('.exp-search-results');
-      const scrollPercent = ((100 * expSearchResultsDiv.scrollTop()) / ($(document).height()))
-        - expSearchResultsDiv.height();
+      const scrollPercent = (100 * expSearchResultsDiv.scrollTop()) / (($(document).height())
+        - expSearchResultsDiv.height());
       if (scrollPercent > 40 && !prevState.hasUpdatedCourses && this.state.hasUpdatedCourses) {
         this.setState({ hasUpdatedCourses: false });
         this.props.paginate();
@@ -237,8 +251,7 @@ class ExplorationModal extends React.Component {
       width: '100%',
       backgroundColor: 'transparent',
     };
-    const { advancedSearchResults, course, inRoster } = this.props;
-
+    const { advancedSearchResults, active, inRoster } = this.props;
     const numSearchResults = advancedSearchResults.length > 0 ?
       <p>returned { advancedSearchResults.length } Search Results</p> : null;
     const searchResults = advancedSearchResults.map((c, i) => (<ExplorationSearchResult
@@ -246,71 +259,52 @@ class ExplorationModal extends React.Component {
       onClick={() => this.props.setAdvancedSearchResultIndex(i, c.id)}
     />));
     let courseModal = null;
-    if (course) {
-      let lectureSections = {};
-      let tutorialSections = {};
-      let practicalSections = {};
-      if (course.sections) {
-        lectureSections = course.sections.L;
-        tutorialSections = course.sections.T;
-        practicalSections = course.sections.P;
-      }
+    if (active >= 0 && active < advancedSearchResults.length) {
+      const selectedCourse = advancedSearchResults[active];
       const shareLink = this.state.shareLinkShown ?
                 (<ShareLink
-                  link={getCourseShareLink(course.code)}
+                  link={this.props.getShareLink(selectedCourse.code)}
                   onClickOut={this.hideShareLink}
                 />) :
                 null;
-      courseModal = (<div className="modal-content">
-        <div className="modal-header">
-          <h1>{ course.name }</h1>
-          <h2>{ course.code }</h2>
-          <div className="modal-share" onClick={this.showShareLink}>
-            <i className="fa fa-share-alt" />
+      courseModal = (
+        <div className="modal-content">
+          <div className="modal-header">
+            <h1>{ selectedCourse.name }</h1>
+            <h2>{ selectedCourse.code }</h2>
+            <div className="modal-share" onClick={this.showShareLink}>
+              <i className="fa fa-share-alt" />
+            </div>
+            { shareLink }
+            {
+                          inRoster ? null :
+                          <div
+                            className="modal-save"
+                            onClick={() => this.addOrRemoveOptionalCourse(selectedCourse)}
+                          >
+                            <i className="fa fa-bookmark" />
+                          </div>
+                      }
+            <div className="modal-add" onClick={() => this.addOrRemoveCourse(selectedCourse.id)}>
+              <i
+                className={classNames('fa', {
+                  'fa-plus': !inRoster,
+                  'fa-check': inRoster,
+                })}
+              />
+            </div>
           </div>
-          { shareLink }
-          {
-                        inRoster ? null :
-                        <div
-                          className="modal-save"
-                          onClick={() => this.addOrRemoveOptionalCourse(course)}
-                        >
-                          <i className="fa fa-bookmark" />
-                        </div>
-                    }
-          <div className="modal-add" onClick={() => this.addOrRemoveCourse(course.id)}>
-            <i
-              className={classNames('fa', {
-                'fa-plus': !inRoster,
-                'fa-check': inRoster,
-              })}
-            />
-          </div>
+          <CourseModalBodyContainer
+            data={selectedCourse}
+            addOrRemoveCourse={this.addOrRemoveCourse}
+            schoolSpecificInfo={this.props.schoolSpecificInfo}
+            unHoverSection={this.props.unHoverSection}
+            hideModal={this.props.hideExplorationModal}
+            isFetching={false}
+            getShareLink={this.props.getShareLink}
+          />
         </div>
-        <CourseModalBody
-          {...course}
-          lectureSections={lectureSections}
-          tutorialSections={tutorialSections}
-          practicalSections={practicalSections}
-          data={course}
-          classmates={this.props.classmates}
-          addOrRemoveCourse={this.addOrRemoveCourse}
-          isSectionLocked={this.props.isSectionLocked}
-          isSectionOnActiveTimetable={this.props.isSectionOnActiveTimetable}
-          schoolSpecificInfo={this.props.schoolSpecificInfo}
-          hoverSection={this.props.hoverSection}
-          unHoverSection={this.props.unHoverSection}
-          react={this.props.react}
-          openSignUpModal={this.props.openSignUpModal}
-          hideModal={this.props.hideExplorationModal}
-          changeUserInfo={this.props.changeUserInfo}
-          saveSettings={this.props.saveSettings}
-          isFetching={false}
-          isFetchingClassmates={this.props.isFetchingClassmates}
-          fetchCourseInfo={this.props.fetchCourseInfo}
-          userInfo={this.props.userInfo}
-        />
-      </div>);
+      );
     }
     const filterTypes = ['departments', 'areas', 'levels'];
     const filters = filterTypes.map(filterType => (
@@ -459,7 +453,6 @@ ExplorationSearchResult.propTypes = {
 };
 
 ExplorationModal.defaultProps = {
-  course: null,
   classmates: null,
   inRoster: false,
 };
@@ -468,33 +461,10 @@ ExplorationModal.propTypes = {
   inRoster: PropTypes.bool,
   addOrRemoveCourse: PropTypes.func.isRequired,
   addOrRemoveOptionalCourse: PropTypes.func.isRequired,
-  advancedSearchResults: PropTypes.arrayOf(
-    PropTypes.shape({
-      areas: PropTypes.string.isRequired,
-      campus: PropTypes.string.isRequired,
-      code: PropTypes.string.isRequired,
-      department: PropTypes.string.isRequired,
-      description: PropTypes.string.isRequired,
-      evals: PropTypes.arrayOf(
-        PropTypes.shape({
-          score: PropTypes.number.isRequired,
-          summary: PropTypes.string.isRequired,
-          year: PropTypes.string.isRequired,
-        }),
-      ).isRequired,
-      exclusions: PropTypes.string.isRequired,
-      id: PropTypes.number.isRequired,
-      name: PropTypes.string.isRequired,
-      num_credits: PropTypes.number.isRequired,
-      prerequisites: PropTypes.string.isRequired,
-    }),
-  ).isRequired,
-  changeUserInfo: PropTypes.func.isRequired,
-  classmates: SemesterlyPropTypes.classmates,
+  advancedSearchResults: PropTypes.arrayOf(SemesterlyPropTypes.denormalizedCourse).isRequired,
   clearPagination: PropTypes.func.isRequired,
-  course: SemesterlyPropTypes.course,
+  active: PropTypes.number.isRequired,
   fetchAdvancedSearchResults: PropTypes.func.isRequired,
-  fetchCourseInfo: PropTypes.func.isRequired,
   fetchCourseClassmates: PropTypes.func.isRequired,
   hasHoveredResult: PropTypes.bool.isRequired,
   paginate: PropTypes.func.isRequired,
@@ -504,16 +474,9 @@ ExplorationModal.propTypes = {
   hideExplorationModal: PropTypes.func.isRequired,
   schoolSpecificInfo: SemesterlyPropTypes.schoolSpecificInfo.isRequired,
   unHoverSection: PropTypes.func.isRequired,
-  hoverSection: PropTypes.func.isRequired,
   setAdvancedSearchResultIndex: PropTypes.func.isRequired,
-  isSectionLocked: PropTypes.func.isRequired,
-  isSectionOnActiveTimetable: PropTypes.func.isRequired,
-  react: PropTypes.func.isRequired,
-  openSignUpModal: PropTypes.func.isRequired,
-  saveSettings: PropTypes.func.isRequired,
-  isFetchingClassmates: PropTypes.bool.isRequired,
-  userInfo: SemesterlyPropTypes.userInfo.isRequired,
   semesterName: PropTypes.string.isRequired,
+  getShareLink: PropTypes.func.isRequired,
 };
 
 export default ExplorationModal;

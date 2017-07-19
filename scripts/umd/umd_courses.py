@@ -1,3 +1,17 @@
+"""
+Copyright (C) 2017 Semester.ly Technologies, LLC
+
+Semester.ly is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+Semester.ly is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+"""
+
 from __future__ import print_function # NOTE: slowly move toward Python3
 import sys, re
 from scripts.parser_library.base_parser import CourseParser
@@ -29,6 +43,8 @@ class UMDParser(CourseParser):
     self.last_course = {}
     self.last_section = {}
     self.base_url = "http://ntst.umd.edu/soc/"
+    self.prereq_pattern = re.compile(r'Prerequisite:.*')  
+    self.restr_pattern = re.compile(r'Restriction: :.*')            
     super(UMDParser, self).__init__('umd',**kwargs)
 
   def find_content(self, div_class, parent):
@@ -64,6 +80,12 @@ class UMDParser(CourseParser):
     except:
       return []
 
+  def get_desc_from_course(self, course):
+    try:
+      return course.find_all(class_='approved-course-text')[-1].contents[0].strip()
+    except:
+      return ''
+
   def get_departments(self):
     """Get department in the specified semester in specified year."""
     # HARD CODED
@@ -86,6 +108,16 @@ class UMDParser(CourseParser):
         partial_url = str(self.year) + semester_month + "/" + department_url
       departments[self.base_url + partial_url] = department_name
     return departments
+  
+  def get_prerequisites(self, course):
+    prereq_match = course.find('strong', text=self.prereq_pattern)
+    prereq=''
+    if prereq_match:
+      prereq = prereq_match.parent.get_text().strip().replace('Prerequisite:', '')
+    restr_match = course.find('strong', text=self.restr_pattern)
+    if restr_match:
+      prereq +=  " " + restr_match.parent.get_text().strip().replace('Restriction: ', '')
+    return prereq
 
   def get_courses(self, departments):
     num_created, num_updated = 0, 0
@@ -94,13 +126,15 @@ class UMDParser(CourseParser):
       course_div = soup.findAll(class_="course")
       for c in course_div:
         cid = self.find_content("course-id", c)
-        partial_url = self.find_url("toggle-sections-link", c)
-        if (partial_url == ''):
-          continue
-
+        section_url = self.find_url("toggle-sections-link", c)
+        if (section_url == ''):
+          # Fix for soup returning partially-complete course div
+          section_url = department_url + '/' + cid
+        else:
+          section_url = "http://ntst.umd.edu" + section_url
         name = self.find_content("course-title", c)
         credits = int(self.find_content("course-min-credits", c))
-        description = self.find_content("approved-course-text", c)
+        description = self.get_desc_from_course(c)
 
         cores = []
         cores = self.find_cores("span", c)
@@ -119,15 +153,19 @@ class UMDParser(CourseParser):
         self.ingestor['num_credits'] = credits
         self.ingestor['department_name'] = department_name
         self.ingestor['campus'] = 1
+        self.ingestor['prerequisites'] = self.get_prerequisites(c)
 
         course_model = self.ingestor.ingest_course()
 
-        section_url = "http://ntst.umd.edu" + partial_url
+        
         sections = self.get_sections(section_url, course_model)
 
   def get_sections(self, section_url, course_model):
     soup = self.requester.get(url=section_url)
     container = soup.find(class_="sections-container")
+    if not container:
+      print(section_url + " has no sections-container")
+      return
     section_divs = container.findAll(class_="section")
     for div in section_divs:
       sid = self.find_content("section-id", div)

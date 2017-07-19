@@ -1,5 +1,20 @@
+/**
+Copyright (C) 2017 Semester.ly Technologies, LLC
+
+Semester.ly is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+Semester.ly is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+**/
+
 import { connect } from 'react-redux';
 import FinalExamsModal from '../../modals/final_exams_modal';
+import { getActiveTimetable } from '../../../reducers/root_reducer';
 import { fetchFinalExamSchedule, getFinalExamShareLink } from '../../../actions/exam_actions';
 import { logFinalExamView } from '../../../util';
 import { hideFinalExamsModal, triggerAcquisitionModal } from '../../../actions/modal_actions';
@@ -39,8 +54,7 @@ const getCourseToColorIdx = (index, finalExams) => {
 };
 
 const mapStateToProps = (state) => {
-  const active = state.timetables.active;
-  const timetables = state.timetables.items;
+  const slots = getActiveTimetable(state).slots;
   const hasFinalExams = state.finalExamsModal.finalExams !== null &&
     Object.keys(state.finalExamsModal.finalExams).length > 0;
   return {
@@ -57,9 +71,8 @@ const mapStateToProps = (state) => {
       remapCourseDetails(state.finalExamsModal.finalExams) : {},
     activeLoadedTimetableName: state.finalExamsModal.fromShare ?
       'Shared Final Exam Schedule' : state.savingTimetable.activeTimetable.name,
-    hasNoCourses: !hasFinalExams &&
-      timetables[active].courses.length === 0,
-    courses: timetables[active].courses,
+    hasNoCourses: !hasFinalExams && slots.length === 0,
+    slots,
     loadingCachedTT: state.timetables.loadingCachedTT,
     userInfo: state.userInfo.data,
     shareLink: state.finalExamsModal.link,

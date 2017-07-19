@@ -1,3 +1,17 @@
+"""
+Copyright (C) 2017 Semester.ly Technologies, LLC
+
+Semester.ly is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+Semester.ly is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+"""
+
 from __future__ import print_function, division, absolute_import # NOTE: slowly move toward Python3
 
 import os, django, datetime, logging, sys, argparse, simplejson as json, logging, traceback
@@ -88,6 +102,22 @@ class Command(BaseCommand):
 			)
 
 			tracker.start()
+
+			try:
+				# Accept json defined years_and_terms.
+				years_and_terms = json.loads(str(options.get('years_and_terms')))
+				years_and_terms = {int(year): terms for year, terms in years_and_terms.items()}
+
+				# TEMP: superficial hack to be completed once pep8 compliance is complete
+				#  in order to avoid nasty merge conflicts, must integrate into each parser
+				options['years'] = map(str, years_and_terms.keys())
+				options['terms'] = []
+				for terms in years_and_terms.values():
+					for term in terms:
+						options['terms'].append(term)
+
+			except json.JSONDecodeError:
+				pass
 
 			try:
 				p.start(

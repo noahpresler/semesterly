@@ -1,3 +1,17 @@
+"""
+Copyright (C) 2017 Semester.ly Technologies, LLC
+
+Semester.ly is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+Semester.ly is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+"""
+
 # @what     argparse parse modification functions for manage.py.
 # @org      Semeseter.ly
 # @author   Michael N. Miller
@@ -51,6 +65,7 @@ def ingestor_argparser(parser):
 		help='parse for term(s)')
 	parser.add_argument('--year', nargs='+', type=str, dest='years',
 		help='parse for year(s)')
+	parser.add_argument('--years-and-terms', type=str, dest='years_and_terms')
 	parser.add_argument('--department', nargs='+', type=str, dest='departments',
 		help='parse specific departments by code')
 	parser.add_argument('--course',
