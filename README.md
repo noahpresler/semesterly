@@ -2,8 +2,8 @@
 
 <p align="center">
 
-  [![Build Status](https://travis-ci.com/noahpresler/semesterly.svg?token=4y9SYQsb7pCqAsUpdN2F&branch=master)](https://travis-ci.com/noahpresler/semesterly)
-  [![License: GPL v3](https://img.shields.io/badge/License-GPL%20v3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
+  <a href="https://travis-ci.com/noahpresler/semesterly"><img src="https://travis-ci.com/noahpresler/semesterly.svg?token=4y9SYQsb7pCqAsUpdN2F&branch=master"></a>
+  <a href="https://www.gnu.org/licenses/gpl-3.0"><img src="https://img.shields.io/badge/License-GPL%20v3-blue.svg"/></a>
 
 </p>
 
