@@ -20,7 +20,6 @@ module.exports = {
 	},
 	"globals": {
 	  "$": true,
-		"_": true,
 		"initData": true, // homepage context data passed from backend
 		"reactAlertEvents": true,
 	},

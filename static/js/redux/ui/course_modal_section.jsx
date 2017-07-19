@@ -16,10 +16,10 @@ import PropTypes from 'prop-types';
 import React from 'react';
 import classnames from 'classnames';
 
-const CourseModalSection = ({ secName, instr, enrolled, waitlist, size, hoverSection,
+const CourseModalSection = ({ secName, instr, enrolment, waitlist, size, hoverSection,
                                unHoverSection, locked, lockOrUnlock,
                                isOnActiveTimetable }) => {
-  const seats = size - enrolled;
+  const seats = size - enrolment;
   let seatStatus = waitlist > 0 ? (`${waitlist} waitlist`) : (`${seats} open`);
   if (seats === -1 || size === -1) {
     seatStatus = 'Unknown';
@@ -66,7 +66,7 @@ CourseModalSection.defaultProps = {
 CourseModalSection.propTypes = {
   secName: PropTypes.string.isRequired,
   instr: PropTypes.string.isRequired,
-  enrolled: PropTypes.number.isRequired,
+  enrolment: PropTypes.number.isRequired,
   waitlist: PropTypes.number.isRequired,
   size: PropTypes.number.isRequired,
   hoverSection: PropTypes.func.isRequired,

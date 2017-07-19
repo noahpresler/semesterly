@@ -21,7 +21,7 @@ from rest_framework.views import APIView
 
 from agreement.models import Agreement
 from student.utils import get_student
-from student.serializers import get_user_dict
+from student.serializers import get_student_dict
 from timetable.models import Semester
 from timetable.school_mappers import VALID_SCHOOLS, AM_PM_SCHOOLS, final_exams_available
 from timetable.utils import get_current_semesters, get_old_semesters
@@ -82,7 +82,7 @@ class FeatureFlowView(ValidateSubdomainMixin, APIView):
 
         init_data = {
             'school': self.school,
-            'currentUser': get_user_dict(self.school, self.student, sem),
+            'currentUser': get_student_dict(self.school, self.student, sem),
             'currentSemester': curr_sem_index,
             'allSemesters': all_semesters,
             'oldSemesters': get_old_semesters(self.school),

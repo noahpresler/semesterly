@@ -23,3 +23,4 @@ it('CourseModalBody correctly renders', () => {
   ).toJSON();
   expect(tree).toMatchSnapshot();
 });
+

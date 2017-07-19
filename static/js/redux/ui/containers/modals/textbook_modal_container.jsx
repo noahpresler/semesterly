@@ -13,17 +13,15 @@ GNU General Public License for more details.
 **/
 
 import { connect } from 'react-redux';
+import { getActiveTimetableDenormCourses } from '../../../reducers/root_reducer';
 import TextbookModal from '../../modals/textbook_modal';
 import { toggleTextbookModal } from '../../../actions/modal_actions';
 
-const mapStateToProps = (state) => {
-  const activeTimetable = state.timetables.items[state.timetables.active];
-  return {
-    isVisible: state.textbookModal.isVisible,
-    liveTimetableCourses: activeTimetable.courses.filter(c => !c.fake),
-    isLoading: state.timetables.isFetching,
-  };
-};
+const mapStateToProps = state => ({
+  isVisible: state.textbookModal.isVisible,
+  courses: getActiveTimetableDenormCourses(state),
+  isLoading: state.timetables.isFetching,
+});
 
 
 const TextbookModalContainer = connect(
