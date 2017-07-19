@@ -1,19 +1,7 @@
-# Copyright (C) 2017 Semester.ly Technologies, LLC
-#
-# Semester.ly is free software: you can redistribute it and/or modify
-# it under the terms of the GNU General Public License as published by
-# the Free Software Foundation, either version 3 of the License, or
-# (at your option) any later version.
-#
-# Semester.ly is distributed in the hope that it will be useful,
-# but WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-# GNU General Public License for more details.
-
-# @what	Vanderbilt Eval Parser
-# @org	Semeseter.ly
-# @author	Michael N. Miller
-# @updated	9/19/16
+# @what Vanderbilt Eval Parser
+# @org  Semeseter.ly
+# @author   Michael N. Miller
+# @updated  9/19/16
 
 import django, os, datetime
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "semesterly.settings")
@@ -25,321 +13,321 @@ import requests, cookielib, re, sys
 
 class VandyEvalParser:
 
-	def __init__(self, sem="Fall 2016"):
-		self.session = requests.Session()
-		self.headers = {'User-Agent' : 'My User Agent 1.0'}
-		self.cookies = cookielib.CookieJar()
-		self.school = 'vandy'
-		self.semester = sem
-		self.departments = {}
-		self.course = {}
-		self.base_url = 'https://www.sds.vanderbilt.edu/perl/voiceview.pl'
-
-	def get_html(self, url, payload=''):
-		html = None
-		while html is None:
-			try:
-				r = self.session.get(
-					url,
-					params = payload,
-					cookies = self.cookies,
-					headers = self.headers,
-					verify = True
-				)
-
-				if r.status_code == 200:
-					html = r.text
-
-				# print 'GET: ' + r.url
-
-			except (requests.exceptions.Timeout,
-				requests.exceptions.ConnectionError):
-				print "Unexpected error: ", sys.exc_info()[0]
-				continue
-
-		return html.encode('utf-8')
-
-	def post_http(self, url, form, payload = ''):
-
-		html = ''
-
-		try:
-			r = self.session.post(
-				url,
-				data = form,
-				params = payload,
-				cookies = self.cookies,
-				headers = self.headers,
-				verify = True
-			)
-
-			if r.status_code == 200:
-				html = r.text
-
-			# print "POST: " + r.url
-
-		except (requests.exceptions.Timeout,
-			requests.exceptions.ConnectionError):
-			sys.stderr.write("Unexpected error: " + str(sys.exc_info()[0]))
+    def __init__(self, sem="Fall 2016"):
+        self.session = requests.Session()
+        self.headers = {'User-Agent' : 'My User Agent 1.0'}
+        self.cookies = cookielib.CookieJar()
+        self.school = 'vandy'
+        self.semester = sem
+        self.departments = {}
+        self.course = {}
+        self.base_url = 'https://www.sds.vanderbilt.edu/perl/voiceview.pl'
+
+    def get_html(self, url, payload=''):
+        html = None
+        while html is None:
+            try:
+                r = self.session.get(
+                    url,
+                    params = payload,
+                    cookies = self.cookies,
+                    headers = self.headers,
+                    verify = True
+                )
+
+                if r.status_code == 200:
+                    html = r.text
+
+                # print 'GET: ' + r.url
+
+            except (requests.exceptions.Timeout,
+                requests.exceptions.ConnectionError):
+                print "Unexpected error: ", sys.exc_info()[0]
+                continue
+
+        return html.encode('utf-8')
+
+    def post_http(self, url, form, payload = ''):
+
+        html = ''
+
+        try:
+            r = self.session.post(
+                url,
+                data = form,
+                params = payload,
+                cookies = self.cookies,
+                headers = self.headers,
+                verify = True
+            )
+
+            if r.status_code == 200:
+                html = r.text
 
-		return html
-
-	def login(self):
-
-		# Login Page
-		soup = BeautifulSoup(
-			self.get_html(self.base_url), 
-			'html.parser'
-		)
-
-		# FIXME -- security checkpoints might not all be necessary
-		# Security checkpoint
-		sec_block = soup.find('input', {'name': 'VSASM_ASVBlock'})['value']
+            # print "POST: " + r.url
 
-		form = {
-			'VSASM_ASVBlock': sec_block,
-			'VSASM_user': '***REMOVED***',
-			'VSASM_pw': 'Gainz!23',
-			'VSASM_Login': 'Login'
-		}
-
-		# Accept Terms and Conditions page
-		soup = BeautifulSoup(
-			self.post_http(self.base_url, form),
-			'html.parser'
-		)
+        except (requests.exceptions.Timeout,
+            requests.exceptions.ConnectionError):
+            sys.stderr.write("Unexpected error: " + str(sys.exc_info()[0]))
 
-		# Security checkpoint
-		vsasm_block = soup.find('input', {'name': 'VSASM_BLOCK'})['value']
+        return html
 
-		form = {
-			'VSASM_BLOCK': vsasm_block,
-			'VoiceViewUserType': 'ActiveStudent',
-			'TermsAccepted': 'OK'
-		}
+    def login(self):
 
-		# Search page
-		soup = BeautifulSoup(
-			self.post_http(self.base_url, form),
-			'html.parser'
-		)
+        # Login Page
+        soup = BeautifulSoup(
+            self.get_html(self.base_url),
+            'html.parser'
+        )
 
-	def parse(self):
+        # FIXME -- security checkpoints might not all be necessary
+        # Security checkpoint
+        sec_block = soup.find('input', {'name': 'VSASM_ASVBlock'})['value']
 
-		print "Logging in..."
-		self.login()
+        form = {
+            'VSASM_ASVBlock': sec_block,
+            'VSASM_user': '***REMOVED***',
+            'VSASM_pw': 'Gainz!23',
+            'VSASM_Login': 'Login'
+        }
 
-		for school in self.parse_list_of_schools():
+        # Accept Terms and Conditions page
+        soup = BeautifulSoup(
+            self.post_http(self.base_url, form),
+            'html.parser'
+        )
 
-			for area in self.parse_list_of_areas(school):
+        # Security checkpoint
+        vsasm_block = soup.find('input', {'name': 'VSASM_BLOCK'})['value']
 
-				print "Parsing evals for school:area " + area
+        form = {
+            'VSASM_BLOCK': vsasm_block,
+            'VoiceViewUserType': 'ActiveStudent',
+            'TermsAccepted': 'OK'
+        }
 
-				for course in self.parse_list_of_courses(school, area):
+        # Search page
+        soup = BeautifulSoup(
+            self.post_http(self.base_url, form),
+            'html.parser'
+        )
 
-					# Don't parse evals for courses not offered
-					code = re.match(r'.*:(.*)', area).group(1) + '-' + course
-					if len(Course.objects.filter(code__contains = code, school = self.school)) == 0:
-						continue
+    def parse(self):
 
-					self.parse_eval_results(school, area, course)
+        print "Logging in..."
+        self.login()
 
-	def parse_eval_results(self, school, area, course):
+        for school in self.parse_list_of_schools():
 
-		# Search selection criteria
-		select = {
-			'ViewSchool'	: school,
-			'ViewArea'		: area,
-			'ViewCourse'	: course
-		}
+            for area in self.parse_list_of_areas(school):
 
-		# Soupify post response
-		soup = BeautifulSoup(
-			self.post_http(self.base_url, select),
-			'html.parser'
-		)
+                print "Parsing evals for school:area " + area
 
-		# Course review overview table
-		overview_table = soup.find_all('table')
+                for course in self.parse_list_of_courses(school, area):
 
-		# Make sure that table exists on page
-		if len(overview_table) > 3:
+                    # Don't parse evals for courses not offered
+                    code = re.match(r'.*:(.*)', area).group(1) + '-' + course
+                    if len(Course.objects.filter(code__contains = code, school = self.school)) == 0:
+                        continue
 
-			# Fun way to extract Score link
-			for row in overview_table[3].find_all('tr'):
+                    self.parse_eval_results(school, area, course)
 
-				cells = row.find_all('td')
+    def parse_eval_results(self, school, area, course):
 
-				# Parse scores if available
-				link = cells[len(cells) - 1].find('a')
-				
-				if link:
+        # Search selection criteria
+        select = {
+            'ViewSchool'    : school,
+            'ViewArea'      : area,
+            'ViewCourse'    : course
+        }
 
-					# Parse single evaluations score page
-					url = link['href'].replace('&amp;', '&')
-					questions = self.parse_eval_score_page(url)
+        # Soupify post response
+        soup = BeautifulSoup(
+            self.post_http(self.base_url, select),
+            'html.parser'
+        )
 
-	def parse_eval_score_page(self, url):
+        # Course review overview table
+        overview_table = soup.find_all('table')
 
-		# Soupify single course eval page
-		html = BeautifulSoup(
-			self.get_html(url),
-			'html.parser'
-		)
+        # Make sure that table exists on page
+        if len(overview_table) > 3:
 
-		body = html.find('table').find('body')
+            # Fun way to extract Score link
+            for row in overview_table[3].find_all('tr'):
 
-		# Review title
-		title = body.find('title').text
+                cells = row.find_all('td')
 
-		code, prof, sem = self.extract_info_from_title(title)
+                # Parse scores if available
+                link = cells[len(cells) - 1].find('a')
 
-		# reformat semester and course code
-		rsem = re.match(r'([a-zA-Z]*)(\d*)', sem)
-		rcode = re.match(r'([a-zA-Z]*)(\d*)', code)
-		sem = {'FALL' : 'Fall', 'SPR' : 'Spring', 'SUM' : 'Summer'}[rsem.group(1)] + ' ' + rsem.group(2)
-		code = rcode.group(1) + '-' + rcode.group(2)
+                if link:
 
-		# List of all questions in review
-		questions = body.find('table').find('table').find_all('td', {'valign' : 'top', 'width' : '200'})
+                    # Parse single evaluations score page
+                    url = link['href'].replace('&amp;', '&')
+                    questions = self.parse_eval_score_page(url)
 
-		all_questions = ''
+    def parse_eval_score_page(self, url):
 
-		# track number of responses
-		total_votes = 0
-		total_score = 0
+        # Soupify single course eval page
+        html = BeautifulSoup(
+            self.get_html(url),
+            'html.parser'
+        )
 
-		# Iterate through questions
-		for question in questions:
+        body = html.find('table').find('body')
 
-			# extract table of results for question
-			table = question.find_next('table')
+        # Review title
+        title = body.find('title').text
 
-			search_tags = {
-				'align' : 'right',
-				'nowrap' : '',
-				'rowspan' : '20',
-				'valign' : 'center',
-				'width' : '250'
-			}
+        code, prof, sem = self.extract_info_from_title(title)
 
-			# Adjectives to describe scores
-			adjs = table.find_all('td', search_tags)
+        # reformat semester and course code
+        rsem = re.match(r'([a-zA-Z]*)(\d*)', sem)
+        rcode = re.match(r'([a-zA-Z]*)(\d*)', code)
+        sem = {'FALL' : 'Fall', 'SPR' : 'Spring', 'SUM' : 'Summer'}[rsem.group(1)] + ' ' + rsem.group(2)
+        code = rcode.group(1) + '-' + rcode.group(2)
 
-			search_tags.clear()
+        # List of all questions in review
+        questions = body.find('table').find('table').find_all('td', {'valign' : 'top', 'width' : '200'})
 
-			search_tags = {
-				'align' : 'right',
-				'rowspan' : '20',
-				'style' : 'font-size:75%',
-				'valign' : 'center',
-				'width' : '24'
-			}
+        all_questions = ''
 
-			all_questions += 'Q: ' + question.text.strip() + '\n'
+        # track number of responses
+        total_votes = 0
+        total_score = 0
 
-			# Iterate over adjectives
-			for adj, i in zip(adjs, range(len(adjs))):
+        # Iterate through questions
+        for question in questions:
 
-				# Label (adjective) to describe numeric score
-				label = adj.contents[0].strip()
+            # extract table of results for question
+            table = question.find_next('table')
 
-				# Number of votes for label
-				votes = adj.find_next('td', search_tags).text.strip()
+            search_tags = {
+                'align' : 'right',
+                'nowrap' : '',
+                'rowspan' : '20',
+                'valign' : 'center',
+                'width' : '250'
+            }
 
-				# if question.text.strip() == 'Give an overall rating of the course': print question.text.strip() 
-				if label != 'No response' and question.text.strip() == 'Give an overall rating of the course':
-					total_votes += int(votes)
-					total_score += int(votes) * (i+1)
+            # Adjectives to describe scores
+            adjs = table.find_all('td', search_tags)
 
-				all_questions += label + ':' + votes + '\n'
+            search_tags.clear()
 
-			all_questions += '\n'
+            search_tags = {
+                'align' : 'right',
+                'rowspan' : '20',
+                'style' : 'font-size:75%',
+                'valign' : 'center',
+                'width' : '24'
+            }
 
-		stars = (float(total_score) / total_votes) if total_votes > 0 else 0
-		self.create_review_item(code, prof, stars, all_questions, sem)
+            all_questions += 'Q: ' + question.text.strip() + '\n'
 
-	def extract_info_from_title(self, title):
-		match = re.match("Course Evaluation for (.*)-.* (.*, .*) (.*)", title);
-		return match.group(1), match.group(2), match.group(3)
+            # Iterate over adjectives
+            for adj, i in zip(adjs, range(len(adjs))):
 
-	def parse_list_of_courses(self, school, area):
+                # Label (adjective) to describe numeric score
+                label = adj.contents[0].strip()
 
-		# Search selection criteria
-		select = {
-			'ViewSchool' : school,
-			'ViewArea' : area
-		}
+                # Number of votes for label
+                votes = adj.find_next('td', search_tags).text.strip()
 
-		# Soupify post response
-		soup = BeautifulSoup(
-			self.post_http(self.base_url, select),
-			'html.parser'
-		)
+                # if question.text.strip() == 'Give an overall rating of the course': print question.text.strip()
+                if label != 'No response' and question.text.strip() == 'Give an overall rating of the course':
+                    total_votes += int(votes)
+                    total_score += int(votes) * (i+1)
 
-		# Extract courses from html
-		courses = soup.find('select', {'name' : 'ViewCourse'}).find_all('option')
+                all_questions += label + ':' + votes + '\n'
 
-		# Return list of courses within school and area
-		return [c['value'].strip() for c in courses if c['value'].strip()]		
+            all_questions += '\n'
 
-	def parse_list_of_areas(self, school):
+        stars = (float(total_score) / total_votes) if total_votes > 0 else 0
+        self.create_review_item(code, prof, stars, all_questions, sem)
 
-		# Search selection criteria
-		select = {
-			'ViewSchool' : school
-		}
+    def extract_info_from_title(self, title):
+        match = re.match("Course Evaluation for (.*)-.* (.*, .*) (.*)", title);
+        return match.group(1), match.group(2), match.group(3)
 
-		# Soupify post response
-		soup = BeautifulSoup(
-			self.post_http(self.base_url, select),
-			'html.parser'
-		)
+    def parse_list_of_courses(self, school, area):
 
-		# Extract area list from html
-		areas = soup.find('select', {'name' : 'ViewArea'}).find_all('option')
+        # Search selection criteria
+        select = {
+            'ViewSchool' : school,
+            'ViewArea' : area
+        }
 
-		# Return list of school codes
-		return [a['value'] for a in areas if a['value']]		
+        # Soupify post response
+        soup = BeautifulSoup(
+            self.post_http(self.base_url, select),
+            'html.parser'
+        )
 
-	def parse_list_of_schools(self):
+        # Extract courses from html
+        courses = soup.find('select', {'name' : 'ViewCourse'}).find_all('option')
 
-		# Soupify post response
-		soup = BeautifulSoup(
-			self.get_html(self.base_url),
-			'html.parser'
-		)
+        # Return list of courses within school and area
+        return [c['value'].strip() for c in courses if c['value'].strip()]
 
-		# Extract school list from html
-		schools = soup.find('select', {'name' : 'ViewSchool'}).find_all('option')
+    def parse_list_of_areas(self, school):
 
-		# Return list of school codes
-		return [s['value'] for s in schools if s['value']]
+        # Search selection criteria
+        select = {
+            'ViewSchool' : school
+        }
 
-	def create_review_item(self, code, prof, score, summary, year):
+        # Soupify post response
+        soup = BeautifulSoup(
+            self.post_http(self.base_url, select),
+            'html.parser'
+        )
 
-	 	courses = Course.objects.filter(code__contains = code, school = self.school)
-	 	if len(courses) == 0:
-	 		print '\t' + code + ' not found'
-	 		return
-	 	else:
-	 		course = courses[0]
-	 		obj, created = Evaluation.objects.get_or_create(
-	 			course=course,
-	 			score=round(score,2),
-	 			summary=summary,
-	 			course_code=code,
-	 			professor=prof,
-	 			year=year)
-	 		if created:
-				print '\tEval Object CREATED for: ' + code, prof, year
-	 		else:
-	 			print '\tEval Object FOUND for: ' + code, prof, year
-		return
+        # Extract area list from html
+        areas = soup.find('select', {'name' : 'ViewArea'}).find_all('option')
+
+        # Return list of school codes
+        return [a['value'] for a in areas if a['value']]
+
+    def parse_list_of_schools(self):
+
+        # Soupify post response
+        soup = BeautifulSoup(
+            self.get_html(self.base_url),
+            'html.parser'
+        )
+
+        # Extract school list from html
+        schools = soup.find('select', {'name' : 'ViewSchool'}).find_all('option')
+
+        # Return list of school codes
+        return [s['value'] for s in schools if s['value']]
+
+    def create_review_item(self, code, prof, score, summary, year):
+
+        courses = Course.objects.filter(code__contains = code, school = self.school)
+        if len(courses) == 0:
+            print '\t' + code + ' not found'
+            return
+        else:
+            course = courses[0]
+            obj, created = Evaluation.objects.get_or_create(
+                course=course,
+                score=round(score,2),
+                summary=summary,
+                course_code=code,
+                professor=prof,
+                year=year)
+            if created:
+                print '\tEval Object CREATED for: ' + code, prof, year
+            else:
+                print '\tEval Object FOUND for: ' + code, prof, year
+        return
 
 def main():
-	vep = VandyEvalParser()
-	vep.parse()
+    vep = VandyEvalParser()
+    vep.parse()
 
 if __name__ == "__main__":
-	main()
+    main()

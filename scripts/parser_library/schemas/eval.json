@@ -5,7 +5,7 @@
   "type": "object",
   "properties": {
     "kind": {
-      "enum": [ "eval", "eval_course", "eval_instr" ]
+      "enum": [ "eval", "course_eval", "instr_eval" ]
     },
     "course": {
       "allOf": [
@@ -58,5 +58,5 @@
       ]
     }
   },
-  "_comment": "TODO (singular) instructor is to allow instr specific evals"
+  "$comment": "TODO (singular) instructor is to allow instr specific evals"
 }

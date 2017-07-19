@@ -39,7 +39,7 @@ class Ingestor(dict):
         validator (parser_library.validator): Validator instance.
     """
 
-    UNICODE_WHITESPACE = re.compile(r'(?:\u00a0)|(?:\xc2\xa0)', re.IGNORECASE)
+    UNICODE_WHITESPACE = re.compile(r'(?:\u00a0)|(?:\xc2)|(?:\xa0)', re.IGNORECASE)
 
     ALL_KEYS = {
         'school',
@@ -93,6 +93,8 @@ class Ingestor(dict):
         'campus',  # NOTE: not really
         'textbooks', 'isbn', 'required',
         'detail_url', 'image_url', 'author', 'title',
+        'score',
+        'summary',
     }
 
     def __init__(self, school, config_path, output_path, output_error_path,
@@ -370,6 +372,28 @@ class Ingestor(dict):
         if 'department' in self:
             self.tracker.track_department(self['department'])
         return textbook
+
+    def ingest_course_eval(self):
+        instructors = self._get('instrs')
+        if instructors:
+            instructors = [{'name': name} for name in instructors]
+
+        evaluation = {
+            'kind': 'course_eval',
+            'year': str(self._get('year')),
+            'term': self._get('term'),
+            'score': float(self._get('score')),
+            'instructors': instructors,
+            'course': {
+                'code': self._get('course_code')
+            }
+        }
+
+        evaluation = Ingestor._clean(evaluation)
+        self._validate_and_log(evaluation)
+        self.tracker.track_year(evaluation['year'])
+        self.tracker.track_term(evaluation['term'])
+        return evaluation
 
     def wrap_up(self):
         """Finish ingesting by closing i/o and clearing internal state."""
