@@ -15,6 +15,7 @@ GNU General Public License for more details.
 import PropTypes from 'prop-types';
 import React from 'react';
 import classNames from 'classnames';
+import { getSectionTypeToSections } from '../reducers/entities_reducer';
 import * as SemesterlyPropTypes from '../constants/semesterlyPropTypes';
 
 
@@ -77,17 +78,18 @@ class SearchResult extends React.Component {
    * @returns {boolean}
    */
   hasOnlyWaitlistedSections() {
-    const sections = this.props.searchResults[this.props.position].sections;
-    const sectionTypes = Object.keys(sections);
+    const sectionTypeToSections = getSectionTypeToSections(this.props.course);
+    const sectionTypes = Object.keys(sectionTypeToSections);
     for (let i = 0; i < sectionTypes.length; i++) {
       const sectionType = sectionTypes[i];
       let sectionTypeHasOpenSections = false;
-      const currSections = Object.keys(sections[sectionType]);
+      const currSections = Object.keys(sectionTypeToSections[sectionType]);
       for (let j = 0; j < currSections.length; j++) {
         const section = currSections[j];
-        if (sections[sectionType][section].length > 0) {
-          if (sections[sectionType][section][0].enrolment <
-            sections[sectionType][section][0].size) {
+        if (sectionTypeToSections[sectionType][section].length > 0) {
+          const currSection = sectionTypeToSections[sectionType][section][0];
+          const hasEnrolmentData = currSection.enrolment >= 0;
+          if (!hasEnrolmentData || currSection.enrolment < currSection.size) {
             sectionTypeHasOpenSections = true;
             break;
           }
@@ -101,6 +103,7 @@ class SearchResult extends React.Component {
     }
     return false;
   }
+
   render() {
     const { course, inRoster, inOptionRoster } = this.props;
     const addRemoveButton =
@@ -142,7 +145,7 @@ class SearchResult extends React.Component {
       (<div className="label integration">
         <span className="has-pilot" style={integrationLogoImageUrl} />
       </div>) : null;
-    const pilotIntegration = this.props.studentIntegrations.indexOf('Pilot') > -1 ?
+    const pilotIntegration = course.integrations.indexOf('Pilot') > -1 ?
       (<div className="label integration">
         <a
           onMouseDown={(event) => {
@@ -187,21 +190,19 @@ class SearchResult extends React.Component {
 }
 
 SearchResult.propTypes = {
-  course: SemesterlyPropTypes.course.isRequired,
+  course: SemesterlyPropTypes.denormalizedCourse.isRequired,
   inRoster: PropTypes.bool.isRequired,
   inOptionRoster: PropTypes.bool.isRequired,
   position: PropTypes.number.isRequired,
   hoverSearchResult: PropTypes.func.isRequired,
   fetchCourseInfo: PropTypes.func.isRequired,
   showIntegrationModal: PropTypes.func.isRequired,
-  searchResults: PropTypes.arrayOf(SemesterlyPropTypes.searchResult).isRequired,
   campuses: PropTypes.shape({
     '*': PropTypes.string,
   }).isRequired,
   addCourse: PropTypes.func.isRequired,
   isHovered: PropTypes.func.isRequired,
   addRemoveOptionalCourse: PropTypes.func.isRequired,
-  studentIntegrations: PropTypes.arrayOf(SemesterlyPropTypes.integration).isRequired,
 };
 
 export default SearchResult;

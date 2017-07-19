@@ -14,27 +14,24 @@ GNU General Public License for more details.
 
 import fetch from 'isomorphic-fetch';
 import Cookie from 'js-cookie';
+import { normalize } from 'normalizr';
 import {
     getClassmatesInCourseEndpoint,
     getCourseInfoEndpoint,
     getReactToCourseEndpoint,
 } from '../constants/endpoints';
+import { courseSchema } from '../schema';
 import { getSchool, getSemester } from '../actions/school_actions';
 import * as ActionTypes from '../constants/actionTypes';
 
 export const setCourseInfo = json => ({
   type: ActionTypes.COURSE_INFO_RECEIVED,
-  data: json,
+  response: normalize(json, courseSchema),
 });
 
 export const setCourseClassmates = json => ({
   type: ActionTypes.COURSE_CLASSMATES_RECEIVED,
   data: json,
-});
-
-export const requestCourseInfo = id => ({
-  type: ActionTypes.REQUEST_COURSE_INFO,
-  id,
 });
 
 export const setCourseId = id => ({
@@ -54,7 +51,7 @@ export const fetchCourseClassmates = courseId => (dispatch, getState) => {
 };
 
 export const fetchCourseInfo = courseId => (dispatch, getState) => {
-  dispatch(requestCourseInfo(courseId));
+  dispatch({ type: ActionTypes.REQUEST_COURSE_INFO });
   fetch(getCourseInfoEndpoint(courseId, getSemester(getState())), {
     credentials: 'include',
   })

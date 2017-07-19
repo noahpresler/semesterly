@@ -47,5 +47,6 @@ webpack-stats.json
 *.pid
 */test_failures/
 .vscode/
+npm-debug.log.*
 Vagrantfile
 .vagrant/

@@ -14,18 +14,17 @@ GNU General Public License for more details.
 
 import re
 import os
+
 os.environ['DJANGO_SETTINGS_MODULE'] = 'semesterly.settings'
-from operator import itemgetter
 
 from django.forms.models import model_to_dict
 from django.db import models
-from django.db.models import Count
 
 
 class Semester(models.Model):
     """
     Represents a semester which is composed of a name (e.g. Spring, Fall)
-    and a year (e.g. 2017). 
+    and a year (e.g. 2017).
 
     Attributes:
         name (CharField): the name (e.g. Spring, Fall)
@@ -40,7 +39,7 @@ class Semester(models.Model):
 
 class Textbook(models.Model):
     """
-    A textbook which is associated with sections of courses. Stores 
+    A textbook which is associated with sections of courses. Stores
     information from the Amazon product API including a detail url
     and ISBN.
 
@@ -66,7 +65,7 @@ class Updates(models.Model):
     Stores the date/time that the school's data was last updated.
     This is updated when digestion into the database completes.
 
-    Attributes: 
+    Attributes:
         school (CharField): the school code that was updated (e.g. jhu)
         update_field (CharField): which field was updated
         last_updated (DateTimeField): the datetime last updated
@@ -97,7 +96,7 @@ class Course(models.Model):
         description (:obj:`TextField`): the explanation of the content of the courzse
         notes (:obj:`TextField`, optional): usually notes pertaining to registration (e.g. Lab Fees)
         info (:obj:`TextField`, optional): similar to notes
-        unstopped_description (:obj:`TextField`): automatically generated description without stopwords 
+        unstopped_description (:obj:`TextField`): automatically generated description without stopwords
         campus (:obj:`CharField`, optional): an indicator for which campus the course is taught on
         prerequisites (:obj:`TextField`, optional): courses required before taking this course
         corequisites (:obj:`TextField`, optional): courses required concurrently with this course
@@ -126,12 +125,13 @@ class Course(models.Model):
     areas = models.CharField(max_length=600, default='', null=True)
     department = models.CharField(max_length=250, default='', null=True)
     level = models.CharField(max_length=30, default='', null=True)
+    # TODO generalize core/gened/breadth field
     cores = models.CharField(max_length=50, null=True, blank=True)
     geneds = models.CharField(max_length=300, null=True, blank=True)
     related_courses = models.ManyToManyField("self", blank=True)
     same_as = models.ForeignKey('self', null=True)
 
-    def __unicode__(self):
+    def __str__(self):
         return self.code + ": " + self.name
 
     def get_reactions(self, student=None):
@@ -154,143 +154,40 @@ class Course(models.Model):
                                                             title=reaction['title']).exists()
         return result
 
-    def get_related_course_info(self, semester=None, limit=None):
-        """
-        Returns a list of dictionaries representing courses which are related to the 
-        given course as judged by recommender.py. This is used on the course modal
-        side bar to display slots for related courses.abs
-
-        Args: 
-            semester (Semester, optional): if provided, filters by courses offered that semester
-            limit (int, optional): limits the number of related courses if provided
-        Returns:
-            (:obj:`list` of :obj:`dict`): list of dictionaries of courses
-        """
-        info = []
-        related = self.related_courses.all()
-        if semester:
-            related = related.filter(section__semester=semester).distinct()
-        if limit and limit > 0:
-            related = related[:limit]
-        for course in related:
-            info.append(model_to_dict(course, exclude=['related_courses', 'unstopped_description']))
-        return info
-
-    def get_eval_info(self):
-        """
-        Returns:
-            (:obj:`list` of :obj:`dict`): list of dictionaries representing evaluations for a course, sorted by year.
-        """
-        eval_info = map(model_to_dict, Evaluation.objects.filter(course=self))
-        return sorted(eval_info, key=itemgetter('year'))
-
     def get_avg_rating(self):
         """
-        Calculates the avg rating for a course, 0 if no ratings. Includes all courses
+        Calculates the avg rating for a course, -1 if no ratings. Includes all courses
         that are marked as the same by the self.same_as field on the model nstance.
 
         Returns:
             (:obj:`float`): the average course rating
         """
         ratings_sum, ratings_count = self._get_ratings_sum_count()
-        if self.same_as: # include ratings for equivalent courses in the average
+        if self.same_as:  # include ratings for equivalent courses in the average
             eq_sum, eq_count = self.same_as._get_ratings_sum_count()
             ratings_sum += eq_sum
             ratings_count += eq_count
-        return (ratings_sum / ratings_count) if ratings_count else 0
+        return (ratings_sum / ratings_count) if ratings_count else -1
 
     def _get_ratings_sum_count(self):
         """ Return the sum and count of ratings of this course not counting equivalent courses. """
         ratings = Evaluation.objects.only('course', 'score').filter(course=self)
         return sum([rating.score for rating in ratings]), len(ratings)
 
-    def get_textbooks(self, semester):
-        """
-        Returns:
-            (:obj:`list` of :obj:`dict` representing :obj:`Textbook`): 
-                list of dictionaries representing the textbooks for the course for a given semester
-        """
-        textbooks = []
-        isbns = set()
-        for section in self.section_set.filter(semester=semester):
-            for textbook in section.textbooks.all():
-                if textbook.isbn not in isbns:
-                    textbooks.append(textbook.get_info())
-                    isbns.add(textbook.isbn)
-
-        return textbooks
-
-    def get_course_integrations(self):
-        """
-        Returns: List of Integration names associated with this course
-        """
-        ids = CourseIntegration.objects.filter(course__id=self.id).values_list("integration",
-                                                                               flat=True)
-        return Integration.objects.filter(id__in=ids).values_list("name", flat=True)
-
-    def eval_add_unique_term_year_flag(self):
-        """
-        Flag all eval instances s.t. there exists repeated term+year values.
-        Return:
-          List of modified evaluation dictionaries (added flag 'unique_term_year')
-        """
-        evals = self.get_eval_info()
-        years = Evaluation.objects.filter(course=self).values('year').annotate(Count('id'))\
-            .filter(id__count__gt=1).values_list('year')
-        years = {e[0] for e in years}
-        for course_eval in evals:
-            course_eval['unique_term_year'] = not course_eval['year'] in years
-        return evals
-
-    def get_percentage_enrolled(self, sem):
-        """ Return percentage of course capacity that is filled. """
-        tts_with_course = self.personaltimetable_set.filter(semester=sem)
-        num_students_in_course = tts_with_course.values('student').distinct().count()
-        sections = self.section_set.filter(semester=sem)
-        course_capacity = sum(sections.values_list('size', flat=True)) if sections else 0
-        return num_students_in_course / float(course_capacity) if course_capacity else 0
-
-    def get_regexed_courses(self, school):
-        """
-        Given course data, search for all occurrences of a course code in the course description and
-        prereq info and return a map from course code to course name for each course code.
-        """
-        school_to_course_regex = {
-            'jhu': r'([A-Z]{2}\.\d{3}\.\d{3})',
-            'uoft': r'([A-Z]{3}[A-Z0-9]\d{2}[HY]\d)',
-            'vandy': r'([A-Z-&]{2,7}\s\d{4}[W]?)',
-            'gw': r'([A-Z]{2,5}\s\d{4}[W]?)',
-            'umich': r'([A-Z]{2,8}\s\d{3})',
-            'chapman': r'([A-Z]{2,4}\s\d{3})',
-            'salisbury': r'([A-Z]{3,4} \d{2,3})',
-        }
-        course_code_to_name = {}
-        if school in school_to_course_regex:
-            course_code_matches = re.findall(school_to_course_regex[school],
-                                             self.description + self.prerequisites)
-            # TODO: get all course objects in one db access
-            for course_code in course_code_matches:
-                try:
-                    course = Course.objects.get(school=school, code__icontains=course_code)
-                    course_code_to_name[course_code] = course.name
-                except (Course.DoesNotExist, Course.MultipleObjectsReturned):
-                    pass
-        return course_code_to_name
-
 
 class Section(models.Model):
     """
-    Represents one (of possibly many) choice(s) for a student to enroll in a :obj:`Course` 
-    for a specific semester. Since this model is specific to a semester, it contains 
+    Represents one (of possibly many) choice(s) for a student to enroll in a :obj:`Course`
+    for a specific semester. Since this model is specific to a semester, it contains
     enrollment data, instructor information, textbooks, etc.
 
     A section can come in different forms. For example, a lecture which is required
     for every student. However, it can also be a tutorial or practical. During
-    timetable generation we allow a user to select one of each, and we can automatically 
+    timetable generation we allow a user to select one of each, and we can automatically
     choose the best combonation for a user as well.
 
     A section has many offerings related to it. For example, section 1 of a :obj:`Course` could
-    have 3 offerings (one that meets each day: Monday, Wednesday, Friday). Section 2 of 
+    have 3 offerings (one that meets each day: Monday, Wednesday, Friday). Section 2 of
     a :obj:`Course` could have 3 other offerings (one that meets each: Tuesday, Thursday).
 
     Attributes:
@@ -300,7 +197,7 @@ class Section(models.Model):
         enrolment (:obj:`IntegerField`): the number of students registered so far
         waitlist (:obj:`IntegerField`): the number of students waitlisted so far
         waitlist_size (:obj:`IntegerField`): the max size of the waitlist
-        section_type (:obj:`CharField`): 
+        section_type (:obj:`CharField`):
             the section type, example 'L' is lecture, 'T' is tutorial, `P` is practical
         instructors (:obj:`CharField`): comma seperated list of instructors
         semester (:obj:`ForeignKey` to :obj:`Semester`): the semester for the section
@@ -308,7 +205,6 @@ class Section(models.Model):
             textbooks for this section via the :obj:`TextbookLink` model
         was_full (:obj:`BooleanField`): whether the course was full during the last parse
     """
-
     course = models.ForeignKey(Course)
     meeting_section = models.CharField(max_length=50)
     size = models.IntegerField(default=-1)
@@ -318,34 +214,35 @@ class Section(models.Model):
     section_type = models.CharField(max_length=50, default='L')
     instructors = models.CharField(max_length=500, default='TBA')
     semester = models.ForeignKey(Semester)
-    _semester = models.CharField(max_length=2)  # deprecated
     textbooks = models.ManyToManyField(Textbook, through='TextbookLink')
     was_full = models.BooleanField(default=False)
 
     def get_textbooks(self):
-        """
-        Returns the textbook info using `tb.get_info()` for each textbook
-        """
+        """ Returns the textbook info using `tb.get_info()` for each textbook """
         return [tb.get_info() for tb in self.textbooks.all()]
 
-    def __unicode__(self):
-        return "Course: %s; Section: %s; Semester: %s" % (str(self.course), self.meeting_section, str(self.semester))
+    def is_full(self):
+        return self.enrolment >= 0 and self.size >= 0 and self.enrolment >= self.size
+
+    def __str__(self):
+        return "Course: {0}; Section: {0}; Semester: {0}".format(self.course, self.meeting_section,
+                                                                 self.semester)
 
 
 class Offering(models.Model):
     """
-    An Offering is the most granular part of the Course heirarchy. An offering 
+    An Offering is the most granular part of the Course heirarchy. An offering
     may be looked at as the backend equivalent of a single slot on a timetable.
     For each day/time which a section meets, an offering is created.abs
 
     Attributes:
         section (:obj:`ForeignKey` to :obj:`Section`):
             the section which is the parent of this offering
-        day (:obj:`CharField`): 
+        day (:obj:`CharField`):
             the day the course is offered (single character M,T,W,R,F,S,U)
-        time_start (:obj:`CharField`): 
+        time_start (:obj:`CharField`):
             the time the slot starts in 24hrs time in the format (HH:MM) or (H:MM)
-        time_end (:obj:`CharField`): 
+        time_end (:obj:`CharField`):
             the time it ends in 24hrs time in the format (HH:MM) or (H:MM)
         location (:obj:`CharField`, optional):
             the location the course takes place, defaulting to TBA if not provided
@@ -367,7 +264,7 @@ class Evaluation(models.Model):
 
     course (:obj:`ForeignKey` to :obj:`Course`):
         the course this evaluation belongs to
-        
+
     score (:obj:`FloatField`): score out of 5.0
     summary (:obj:`TextField`): text with information about why the rating was given
     professor (:obj:`CharField`): the professor(s) this review pertains to
@@ -385,8 +282,8 @@ class Evaluation(models.Model):
 class TextbookLink(models.Model):
     """
     This model serves as a ManyToMany link betwen a :obj:`Section`
-    anda textbook. The reason for this additional model is because 
-    the edge that connects a :obj:`Section` has a label which is 
+    anda textbook. The reason for this additional model is because
+    the edge that connects a :obj:`Section` has a label which is
     whether that textbook is required. Thus, a seperate model/table
     exists to link the two with this label.abs
 
@@ -408,3 +305,13 @@ class CourseIntegration(models.Model):
     course = models.ForeignKey(Course)
     integration = models.ForeignKey(Integration)
     json = models.TextField()
+
+
+class Timetable(models.Model):
+    courses = models.ManyToManyField(Course)
+    sections = models.ManyToManyField(Section)
+    semester = models.ForeignKey(Semester)
+    school = models.CharField(max_length=50)
+
+    class Meta:
+        abstract = True

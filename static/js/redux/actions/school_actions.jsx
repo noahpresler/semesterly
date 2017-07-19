@@ -14,11 +14,11 @@ GNU General Public License for more details.
 
 import { getSchoolInfoEndpoint } from '../constants/endpoints';
 import * as ActionTypes from '../constants/actionTypes';
-import { currSem } from '../reducers/semester_reducer';
+import { getCurrentSemester } from '../reducers/root_reducer';
 
 export const getSchool = state => state.school.school;
 export const getSemester = (state) => {
-  const currSemester = currSem(state.semester);
+  const currSemester = getCurrentSemester(state);
   return `${currSemester.name}/${currSemester.year}`;
 };
 
