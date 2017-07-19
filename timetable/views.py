@@ -1,3 +1,17 @@
+"""
+Copyright (C) 2017 Semester.ly Technologies, LLC
+
+Semester.ly is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+Semester.ly is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+"""
+
 import itertools
 import logging
 
@@ -21,6 +35,11 @@ logger = logging.getLogger(__name__)
 
 
 class TimetableView(CsrfExemptMixin, ValidateSubdomainMixin, APIView):
+    """
+    This view is responsible for responding to any requests dealing with the 
+    generation of timetables and the satisfaction of constraits provided by
+    the frontend/user.
+    """
     def post(self, request):
         """Generate best timetables given the user's selected courses"""
         school = request.subdomain
@@ -47,7 +66,7 @@ class TimetableView(CsrfExemptMixin, ValidateSubdomainMixin, APIView):
                 courses.append(Course.objects.get(id=int(cid)))
 
             for locked_section in filter(bool, updated_course['section_codes']):
-                update_locked_sections(locked_sections, cid, locked_section)
+                update_locked_sections(locked_sections, cid, locked_section, params['semester'])
 
         # temp optional course implementation
         opt_course_ids = params.get('optionCourses', [])
@@ -85,9 +104,25 @@ class TimetableView(CsrfExemptMixin, ValidateSubdomainMixin, APIView):
 
 
 class TimetableLinkView(FeatureFlowView):
+    """
+    A subclass of :obj:`FeatureFlowView` (see :ref:`flows`) for the 
+    viewing of shared timetable links. Provides the logic for preloading 
+    the shared timetable into initData when a user hits the corresponding
+    url. The frontend can then act on this data to load the shared timetable
+    for viewing.
+
+    Additionally, on POST provides the functionality for the creation of
+    shared timetables. 
+    """
+
     feature_name = 'SHARE_TIMETABLE'
 
     def get_feature_flow(self, request, slug):
+        """
+        Overrides :obj:`FeatureFlowView` *get_feature_flow* method. Takes the slug,
+        decrypts the hashed database id, and either retrieves the corresponding 
+        timetable or hits a 404. 
+        """
         timetable_id = hashids.decrypt(slug)[0]
         shared_timetable = get_object_or_404(SharedTimetable,
                                              id=timetable_id,
@@ -101,6 +136,10 @@ class TimetableLinkView(FeatureFlowView):
         }
 
     def post(self, request):
+        """
+        Creates a :obj:`SharedTimetable` and returns the hashed database id 
+        as the slug for the url which students then share and access.
+        """
         school = request.subdomain
         timetable = request.data['timetable']
         has_conflict = timetable.get('has_conflict', False)
