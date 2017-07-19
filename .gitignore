@@ -47,4 +47,3 @@ webpack-stats.json
 *.pid
 */test_failures/
 .vscode/
-count_vectorizer.pickle
