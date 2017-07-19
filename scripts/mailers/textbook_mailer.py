@@ -34,15 +34,13 @@ class TextbookMailer(Mailer):
                 order_by('last_updated').last()
 
             try:
-                textbook_json = map(lambda c:
-                                {
-                                    "textbooks": map(
-                                        lambda t: model_to_dict(Textbook.objects.get(isbn=t)),
-                                        tt.sections.filter(~Q(textbooks=None), course=c)\
-                                            .values_list("textbooks", flat=True).distinct()),
-                                    "course_name": c.name,
-                                    "course_code": c.code,
-                                }, tt.courses.all())
+                textbook_json = [{
+                    "textbooks": [model_to_dict(Textbook.objects.get(isbn=t))
+                                  for t in tt.sections.filter(~Q(textbooks=None), course=c)\
+                                            .values_list("textbooks", flat=True).distinct()],
+                    "course_name": c.name,
+                    "course_code": c.code,
+                } for c in tt.courses.all()]
             except AttributeError:
                 # The student does not have any timetable
                 print("Student " + str(student.id) + " does not have any valid timetable.")
