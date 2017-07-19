@@ -1,3 +1,17 @@
+"""
+Copyright (C) 2017 Semester.ly Technologies, LLC
+
+Semester.ly is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+Semester.ly is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+"""
+
 import json
 import urllib2
 
@@ -13,6 +27,10 @@ hashids = Hashids(salt="***REMOVED***")
 
 
 def check_student_token(student, token):
+    """
+    Validates a token: checks that it is at most 2 days old and that it
+    matches the currently authenticated student.
+    """
     try:
         key = '%s:%s' % (student.id, token)
         TimestampSigner().unsign(key, max_age=60 * 60 * 48)  # Valid for 2 days
@@ -22,6 +40,11 @@ def check_student_token(student, token):
 
 
 def associate_students(strategy, details, response, user, *args, **kwargs):
+    """
+    Part of our custom Python Social Auth authentication pipeline. If a user
+    already has an account associated with an email, associates that user with
+    the new backend.
+    """
     try:
         email = kwargs['details']['email']
         kwargs['user'] = User.objects.get(email=email)
@@ -39,6 +62,13 @@ def associate_students(strategy, details, response, user, *args, **kwargs):
 
 
 def create_student(strategy, details, response, user, *args, **kwargs):
+    """
+    Part of the Python Social Auth pipeline which creates a student upon
+    signup. If student already exists, updates information from Facebook
+    or Google (depending on the backend).
+
+    Saves friends and other information to fill database.
+    """
     backend_name = kwargs['backend'].name
     if Student.objects.filter(user=user).exists():
         new_student = Student.objects.get(user=user)
