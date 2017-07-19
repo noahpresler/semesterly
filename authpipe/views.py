@@ -1,3 +1,17 @@
+"""
+Copyright (C) 2017 Semester.ly Technologies, LLC
+
+Semester.ly is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+Semester.ly is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+"""
+
 from django.forms import model_to_dict
 from rest_framework.views import APIView
 from rest_framework.response import Response
@@ -5,12 +19,19 @@ from rest_framework import status
 
 from student.models import RegistrationToken
 from student.utils import get_student
-from timetable.utils import ValidateSubdomainMixin
+from helpers.mixins import ValidateSubdomainMixin
 
 
 class RegistrationTokenView(ValidateSubdomainMixin, APIView):
+    """
+    Handles registration and deletion of tokens for maintaining
+    chrome notifications for users who choose to enable the feature.
+    """
 
     def put(self, request):
+        """
+        Creates a notification token for the user.
+        """
         token = request.data
         school = request.subdomain
         student = get_student(request)

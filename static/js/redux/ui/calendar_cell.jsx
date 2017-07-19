@@ -1,6 +1,21 @@
+/**
+Copyright (C) 2017 Semester.ly Technologies, LLC
+
+Semester.ly is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+Semester.ly is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+**/
+
 import React from 'react';
 import { DragSource, DropTarget } from 'react-dnd';
 import { DRAG_TYPES } from '../constants/constants';
+import { generateCustomEventId } from '../util';
 
 function convertToHalfHours(str) {
   const start = parseInt(str.split(':')[0], 10);
@@ -49,7 +64,7 @@ function collectDragDrop(connect) { // inject props as drop target
 // ----------------- create source:
 const createSource = {
   beginDrag(props) {
-    const newSlotId = new Date().getTime();
+    const newSlotId = generateCustomEventId();
     props.addCustomSlot(
             props.time,
             props.time,

@@ -1,8 +1,22 @@
-from rest_framework.test import APITestCase
+"""
+Copyright (C) 2017 Semester.ly Technologies, LLC
+
+Semester.ly is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+Semester.ly is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+"""
+
 from rest_framework import status
+from rest_framework.test import APITestCase
 
 from timetable.models import Course, Section, Offering, Semester
-from test_utils.test_cases import UrlTestCase
+from helpers.test.test_cases import UrlTestCase
 
 
 class BasicSearchTest(APITestCase):
@@ -46,8 +60,8 @@ class AdvancedSearchTest(APITestCase):
         self.assertNotEqual(len(response.data),  0)
 
     def test_filter_times(self):
-        filters = {
-            'filters' : {
+        body = {
+            'filters': {
                 'times': [{
                     'min': 12,
                     'max': 20,
@@ -55,17 +69,17 @@ class AdvancedSearchTest(APITestCase):
                 }]
             }
         }
-        response =  self.client.post('/search/Winter/1995/sea/', filters, format='json', **self.request_headers)
+        response =  self.client.post('/search/Winter/1995/sea/', body, format='json', **self.request_headers)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(len(response.data),  0)
 
     def test_filter_levels(self):
-        filters = {
-            'filters' : {
+        body = {
+            'filters': {
                 'levels': [100]
             }
         }
-        response =  self.client.post('/search/Winter/1995/sea/', filters, format='json', **self.request_headers)
+        response =  self.client.post('/search/Winter/1995/sea/', body, format='json', **self.request_headers)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(len(response.data),  0)
 

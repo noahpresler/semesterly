@@ -1,7 +1,23 @@
+/**
+Copyright (C) 2017 Semester.ly Technologies, LLC
+
+Semester.ly is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+Semester.ly is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+**/
+
 import PropTypes from 'prop-types';
 import React from 'react';
 import ClickOutHandler from 'react-onclickout';
+import uniq from 'lodash/uniq';
 import COLOUR_DATA from '../constants/colours';
+import * as SemesterlyPropTypes from '../constants/semesterlyPropTypes';
 
 class MasterSlot extends React.Component {
   constructor(props) {
@@ -54,16 +70,16 @@ class MasterSlot extends React.Component {
           />);
       }
     } else {
-      friendCircles = this.props.classmates && this.props.classmates.classmates ?
-        this.props.classmates.classmates.map(c =>
-          (<div
-            className="ms-friend"
-            key={c.img_url}
-            style={{ backgroundImage: `url(${c.img_url})` }}
-          />)) : null;
+      friendCircles = this.props.classmates.current.map(c => (
+        <div
+          className="ms-friend"
+          key={c.img_url}
+          style={{ backgroundImage: `url(${c.img_url})` }}
+        />
+      ));
     }
 
-    if ((this.props.classmates && this.props.classmates.classmates && friendCircles.length > 4)
+    if ((this.props.classmates.current.length > 0 && friendCircles.length > 4)
             || (this.props.fakeFriends && this.props.fakeFriends > 4)) {
       const plusMore = `${friendCircles.length - 3}+`;
       friendCircles = [<div
@@ -72,13 +88,13 @@ class MasterSlot extends React.Component {
       >{plusMore}</div>].concat(friendCircles.slice(0, 3));
     }
     let masterSlotClass = `master-slot slot-${this.props.course.id}`;
-    const validProfs = this.props.professors ? this.props.professors.filter(p => p) : false;
+    const validProfs = this.props.professors ? uniq(this.props.professors.filter(p => p)) : false;
     const prof = !validProfs || validProfs.length === 0 || validProfs[0] === '' ? 'Professor Unlisted' : validProfs.join(', ');
     masterSlotClass = this.props.onTimetable ? masterSlotClass : `${masterSlotClass} optional`;
     const numCredits = this.props.course.num_credits;
     let creditsDisplay = numCredits === 1 ? ' credit' : ' credits';
     creditsDisplay = numCredits + creditsDisplay;
-    const profDisp = this.props.professors == null ? null : <h3>{ prof }</h3>;
+    const profDisp = this.props.professors === null ? null : <h3>{ prof }</h3>;
     const shareLink = this.state.shareLinkShown ?
             (<ShareLink
               link={this.props.getShareLink(this.props.course.code)}
@@ -150,10 +166,10 @@ MasterSlot.defaultProps = {
   course: PropTypes.shape({
     is_waitlist_only: false,
   }),
-  classmates: null,
   professors: null,
   slots: null,
   removeCourse: null,
+  classmates: { current: [], past: [] },
 };
 
 MasterSlot.propTypes = {
@@ -171,11 +187,7 @@ MasterSlot.propTypes = {
     })),
   }).isRequired,
   professors: PropTypes.arrayOf(PropTypes.string),
-  classmates: PropTypes.shape({
-    classmates: PropTypes.arrayOf(PropTypes.shape({
-      img_url: PropTypes.string,
-    })),
-  }),
+  classmates: SemesterlyPropTypes.classmates,
   hideCloseButton: PropTypes.bool,
   onTimetable: PropTypes.bool.isRequired,
   fetchCourseInfo: PropTypes.func.isRequired,

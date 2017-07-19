@@ -1,14 +1,30 @@
+"""
+Copyright (C) 2017 Semester.ly Technologies, LLC
+
+Semester.ly is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+Semester.ly is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+"""
+
 import json
 import urllib2
 import heapq
 from dateutil import tz
 from datetime import timedelta, datetime
-from django.shortcuts import render_to_response, render
-from django.http import HttpResponse, HttpResponseRedirect, Http404
+from django.shortcuts import render_to_response, get_object_or_404
+from django.http import HttpResponse
 from django.template import RequestContext
 from django.views.decorators.csrf import csrf_exempt
-from django.db.models import Q
 from django.http import Http404
+
+from analytics.models import FinalExamModalView
+from student.models import Student
 
 from student.utils import get_student
 from student.models import *
@@ -244,3 +260,12 @@ def log_facebook_alert_click(request):
   ).save()
   return HttpResponse(json.dumps({}), content_type="application/json")
 
+
+@csrf_exempt
+def log_final_exam_view(request):
+    student = get_object_or_404(Student, user=request.user)
+    FinalExamModalView.objects.create(
+        student=student,
+        school=request.subdomain
+    ).save()
+    return HttpResponse(json.dumps({}), content_type="application/json")

@@ -1,5 +1,24 @@
+/**
+Copyright (C) 2017 Semester.ly Technologies, LLC
+
+Semester.ly is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+Semester.ly is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+**/
+
 import { connect } from 'react-redux';
 import SideBar from '../side_bar';
+import {
+  getActiveTimetable,
+  getCurrentSemester,
+  getDenormCourseById,
+  getCoursesFromSlots } from '../../reducers/root_reducer';
 import {
     fetchCourseInfo,
     showFinalExamsModal,
@@ -12,30 +31,28 @@ import {
     loadTimetable,
 } from '../../actions/timetable_actions';
 import { deleteTimetable, duplicateTimetable } from '../../actions/user_actions';
-import { currSem } from '../../reducers/semester_reducer';
-import { getCourseShareLink } from '../../helpers/timetable_helpers';
+import { getCourseShareLink } from '../../constants/endpoints';
 
 const mapStateToProps = (state) => {
-  const activeTimetable = state.timetables.items[state.timetables.active];
-  const mandatoryCourses = activeTimetable.courses.filter(c => !c.is_optional && !c.fake);
-  const optionalCourses = state.optionalCourses.courses;
-
+  const timetable = getActiveTimetable(state);
+  const coursesInTimetable = getCoursesFromSlots(state, timetable.slots);
+  const mandatoryCourses = getCoursesFromSlots(state, timetable.slots.filter(
+    slot => !slot.is_optional));
+  const optionalCourses = state.optionalCourses.courses.map(cid => getDenormCourseById(state, cid));
   return {
-    semester: currSem(state.semester),
+    semester: getCurrentSemester(state),
     semesterIndex: state.semester.current,
     examSupportedSemesters: state.semester.exams,
-    // don't want to consider courses that are shown on timetable only
-    // because of a 'HOVER_COURSE' action (i.e. fake courses)
-    liveTimetableCourses: activeTimetable.courses.filter(c => !c.fake),
-    savedTimetables: state.userInfo.data.timetables,
-    courseToColourIndex: state.ui.courseToColourIndex,
-    classmates: state.classmates.courseToClassmates,
-    avgRating: activeTimetable.avg_rating,
-    isCourseInRoster: courseId => activeTimetable.courses.some(c => c.id === courseId),
+    coursesInTimetable,
     mandatoryCourses,
     optionalCourses,
+    savedTimetables: state.userInfo.data.timetables,
+    courseToColourIndex: state.ui.courseToColourIndex,
+    courseToClassmates: state.classmates.courseToClassmates,
+    avgRating: timetable.avg_rating,
+    isCourseInRoster: courseId => timetable.slots.some(s => s.course === courseId),
     hasLoaded: !state.timetables.isFetching,
-    getShareLink: getCourseShareLink,
+    getShareLink: courseCode => getCourseShareLink(courseCode, getCurrentSemester(state)),
   };
 };
 

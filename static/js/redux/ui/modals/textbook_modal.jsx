@@ -1,5 +1,21 @@
+/**
+Copyright (C) 2017 Semester.ly Technologies, LLC
+
+Semester.ly is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+Semester.ly is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+**/
+
 import PropTypes from 'prop-types';
 import React from 'react';
+import uniqBy from 'lodash/uniqBy';
+import range from 'lodash/range';
 import Modal from 'boron/WaveModal';
 import Textbook from '../textbook';
 import * as SemesterlyPropTypes from '../../constants/semesterlyPropTypes';
@@ -31,18 +47,19 @@ class TextbookModal extends React.Component {
 
     const tbs = {};
     let allTbs = [];
-    for (let i = 0; i < this.props.liveTimetableCourses.length; i++) {
-      tbs[this.props.liveTimetableCourses[i].name] = [];
-      if (this.props.liveTimetableCourses[i].textbooks !== undefined &&
-        Object.keys(this.props.liveTimetableCourses[i].textbooks).length > 0) {
-        for (let j = 0; j < this.props.liveTimetableCourses[i].enrolled_sections.length; j++) {
-          tbs[this.props.liveTimetableCourses[i].name] =
-            tbs[this.props.liveTimetableCourses[i].name]
-              .concat(this.props.liveTimetableCourses[i]
-                .textbooks[this.props.liveTimetableCourses[i].enrolled_sections[j]],
+    // TODO: use forEach instead
+    for (let i = 0; i < this.props.courses.length; i++) {
+      tbs[this.props.courses[i].name] = [];
+      if (this.props.courses[i].textbooks !== undefined &&
+        Object.keys(this.props.courses[i].textbooks).length > 0) {
+        for (let j = 0; j < this.props.courses[i].sections.length; j++) {
+          tbs[this.props.courses[i].name] =
+            tbs[this.props.courses[i].name]
+              .concat(this.props.courses[i]
+                .textbooks[this.props.courses[i].sections[j].meeting_section],
               );
-          allTbs = allTbs.concat(this.props.liveTimetableCourses[i]
-            .textbooks[this.props.liveTimetableCourses[i].enrolled_sections[j]]);
+          allTbs = allTbs.concat(this.props.courses[i]
+            .textbooks[this.props.courses[i].sections[j].meeting_section]);
         }
       }
     }
@@ -52,7 +69,7 @@ class TextbookModal extends React.Component {
       (<div key={courseName} className="tb-list-entry">
         <h3 className="modal-module-header">{courseName}</h3>
         {
-                    tbs[courseName].length > 0 ? _.uniq(tbs[courseName], 'isbn').map(tb =>
+                    tbs[courseName].length > 0 ? uniqBy(tbs[courseName], tb => tb.isbn).map(tb =>
                       <Textbook tb={tb} key={tb.isbn} />) :
                     <p className="no-tbs">No textbooks found for this course.</p>
                 }
@@ -97,7 +114,7 @@ class TextbookModal extends React.Component {
         <div className="tb-list-container">
           {textbookList}
           {
-                        _.range(allTbs.length).map((idx) => {
+                        range(allTbs.length).map((idx) => {
                           const tb = allTbs[idx];
                           if (!exists(tb.detail_url)) {
                             return null;
@@ -182,7 +199,7 @@ TextbookModal.propTypes = {
   isVisible: PropTypes.bool.isRequired,
   isLoading: PropTypes.bool.isRequired,
   toggleTextbookModal: PropTypes.func.isRequired,
-  liveTimetableCourses: PropTypes.arrayOf(SemesterlyPropTypes.course).isRequired,
+  courses: PropTypes.arrayOf(SemesterlyPropTypes.denormalizedCourse).isRequired,
 };
 
 export default TextbookModal;

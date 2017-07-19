@@ -1,3 +1,17 @@
+/**
+Copyright (C) 2017 Semester.ly Technologies, LLC
+
+Semester.ly is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+Semester.ly is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+**/
+
 import PropTypes from 'prop-types';
 import React from 'react';
 import DayCalendarContainer from './containers/day_calendar_container';
@@ -21,7 +35,10 @@ import IntegrationModalContainer from './containers/modals/integration_modal_con
 import SaveCalendarModalContainer from './containers/modals/save_calendar_modal_container';
 import FinalExamsModalContainer from './containers/modals/final_exams_modal_container';
 import UserAcquisitionModalContainer from './containers/modals/user_acquisition_modal_container';
+import TermsOfServiceModalContainer from './containers/terms_of_service_modal_container';
+import TermsOfServiceBannerContainer from './containers/terms_of_service_banner_container';
 import TextbookModalContainer from './containers/modals/textbook_modal_container';
+
 
 class Semesterly extends React.Component {
   constructor(props) {
@@ -141,13 +158,23 @@ class Semesterly extends React.Component {
         <SaveCalendarModalContainer />
         <FinalExamsModalContainer />
         <UserAcquisitionModalContainer />
+        <TermsOfServiceModalContainer />
+        <TermsOfServiceBannerContainer />
         <TextbookModalContainer />
         <AlertBox ref={(a) => { this.msg = a; }} {...this.alertOptions} />
         <div className="all-cols">
           <div className="main-bar">
             {cal}
             <footer className="footer navbar no-print">
+              <p className="data-last-updated no-print">Data last
+                updated: { this.props.dataLastUpdated && this.props.dataLastUpdated.length && this.props.dataLastUpdated !== 'null' ? this.props.dataLastUpdated : null }</p>
               <ul className="nav nav-pills no-print">
+                <li className="footer-button" role="presentation"><a
+                  href="/termsofservice"
+                >Terms</a></li>
+                <li className="footer-button" role="presentation"><a
+                  href="/privacypolicy"
+                >Privacy</a></li>
                 <li className="footer-button" role="presentation"><a
                   href="mailto:contact@semester.ly?Subject=Semesterly"
                 >Contact us</a></li>
@@ -187,6 +214,7 @@ class Semesterly extends React.Component {
 }
 
 Semesterly.propTypes = {
+  dataLastUpdated: PropTypes.string.isRequired,
   PgActive: PropTypes.number.isRequired,
   PgCount: PropTypes.number.isRequired,
   alertChangeSemester: PropTypes.bool.isRequired,

@@ -1,10 +1,24 @@
+/**
+Copyright (C) 2017 Semester.ly Technologies, LLC
+
+Semester.ly is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+Semester.ly is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+**/
+
 import PropTypes from 'prop-types';
 import React from 'react';
 import Modal from 'boron/WaveModal';
 import classNames from 'classnames';
 import COLOUR_DATA from '../../constants/colours';
 import { ShareLink } from '../master_slot';
-import getExamShareLink from '../../helpers/exam_helpers';
+import { getExamShareLink } from '../../constants/endpoints';
 import * as SemesterlyPropTypes from '../../constants/semesterlyPropTypes';
 
 const InSlot = (props) => {
@@ -84,6 +98,42 @@ export default class FinalExamsModal extends React.Component {
     return week;
   }
 
+  static renderEmpty() {
+    const weekHeadersHtml = (
+      <div className="final-exam-calender-days cf">
+        <h3><span className="day">Sun</span></h3>
+        <h3><span className="day">Mon</span></h3>
+        <h3><span className="day">Tue</span></h3>
+        <h3><span className="day">Wed</span></h3>
+        <h3><span className="day">Thu</span></h3>
+        <h3><span className="day">Fri</span></h3>
+        <h3><span className="day">Sat</span></h3>
+      </div>
+      );
+    const weekDaysHtml = (
+      <div className="final-exam-days-ctn" >
+        <div className="final-exam-day" />
+        <div className="final-exam-day" />
+        <div className="final-exam-day" />
+        <div className="final-exam-day" />
+        <div className="final-exam-day" />
+        <div className="final-exam-day" />
+        <div className="final-exam-day" />
+      </div>
+      );
+    return (
+      <div>
+        <div className="final-exam-week">
+          { weekHeadersHtml }
+          { weekDaysHtml }
+        </div>
+        <div className="final-exam-week">
+          { weekHeadersHtml }
+          { weekDaysHtml }
+        </div>
+      </div>);
+  }
+
   constructor(props) {
     super(props);
     this.hide = this.hide.bind(this);
@@ -131,7 +181,7 @@ export default class FinalExamsModal extends React.Component {
     if (this.props.isVisible && !nextProps.isVisible) {
       this.hide();
     }
-    if (this.props.courses !== nextProps.courses && this.props.isVisible && !this.props.isShare) {
+    if (this.props.slots !== nextProps.slots && this.props.isVisible && !this.props.isShare) {
       this.props.fetchFinalExamSchedule();
     }
     if (this.props.isVisible && !nextProps.isVisible) {
@@ -241,9 +291,13 @@ export default class FinalExamsModal extends React.Component {
 
     const finalsWeeks = [];
     const finalList = this.finalListHTML();
-    while (Object.keys(this.finalsToRender).length > 0) {
-      finalsWeeks.push(<div key={day}>{ this.renderWeek(day, days) }</div>);
-      day = new Date(day.getTime() + (7 * 24 * 60 * 60 * 1000));
+    if (Object.keys(this.finalsToRender).length === 0) {
+      finalsWeeks.push(FinalExamsModal.renderEmpty());
+    } else {
+      while (Object.keys(this.finalsToRender).length > 0) {
+        finalsWeeks.push(<div key={day}>{ this.renderWeek(day, days) }</div>);
+        day = new Date(day.getTime() + (7 * 24 * 60 * 60 * 1000));
+      }
     }
 
     const disclaimer = (<p className="final-exam-disclaimer">
@@ -301,6 +355,7 @@ export default class FinalExamsModal extends React.Component {
       });
       finalExamDays.push(<div key={d} className="final-exam-day">{ html }</div>);
     });
+
     return (<div className="final-exam-week">
       { weekHeadersHtml }
       <div className="final-exam-days-ctn">{ finalExamDays }</div>
@@ -339,7 +394,7 @@ export default class FinalExamsModal extends React.Component {
     };
     let display =
       (<div className="final-exam__loader-wrapper">
-        <span className="img-icon">
+        <span className="final-exam__loader">
           <div className="loader" />
         </span>
       </div>);
@@ -424,7 +479,7 @@ FinalExamsModal.propTypes = {
   }).isRequired,
   activeLoadedTimetableName: PropTypes.string.isRequired,
   hasNoCourses: PropTypes.bool.isRequired,
-  courses: PropTypes.arrayOf(SemesterlyPropTypes.course).isRequired,
+  slots: PropTypes.arrayOf(SemesterlyPropTypes.normalizedSlot).isRequired,
   loadingCachedTT: PropTypes.bool.isRequired,
   userInfo: SemesterlyPropTypes.userInfo.isRequired,
   shareLink: PropTypes.string,
