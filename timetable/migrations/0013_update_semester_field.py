@@ -19,7 +19,7 @@ from operator import attrgetter
 
 from django.db import migrations
 
-from update_semester_field import get_update_operation
+from timetable.update_semester_field import get_update_operation
 
 tables_to_update = [
   'Section',
