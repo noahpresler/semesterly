@@ -6,6 +6,8 @@
   <a href="https://www.gnu.org/licenses/gpl-3.0"><img src="https://img.shields.io/badge/License-GPL%20v3-blue.svg"/></a>
 </p>
 
+<p align="center"><img src="http://i.imgur.com/G543QPJ.jpg"></p>
+
 ## License
 
 Copyright 2017, Semester.ly Technologies, LLC
