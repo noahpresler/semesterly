@@ -146,7 +146,6 @@ class CustomSlot extends React.Component {
     this.setState({ hovered: false });
   }
 
-  // TODO: move this out
   getSlotStyles() {
     const startHour = parseInt(this.props.time_start.split(':')[0], 10);
     const startMinute = parseInt(this.props.time_start.split(':')[1], 10);

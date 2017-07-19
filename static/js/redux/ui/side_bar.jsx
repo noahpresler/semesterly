@@ -16,12 +16,13 @@ import PropTypes from 'prop-types';
 import React from 'react';
 import classNames from 'classnames';
 import ClickOutHandler from 'react-onclickout';
+import uniqBy from 'lodash/uniqBy';
 import MasterSlot from './master_slot';
-import COLOUR_DATA from '../constants/colours';
 import TimetableNameInputContainer from './containers/timetable_name_input_container';
 import CreditTickerContainer from './containers/credit_ticker_container';
 import Textbook from './textbook';
 import * as SemesterlyPropTypes from '../constants/semesterlyPropTypes';
+import { getNextAvailableColour } from '../util';
 
 class SideBar extends React.Component {
   constructor(props) {
@@ -63,51 +64,38 @@ class SideBar extends React.Component {
         </button>
       </div>
         )) : null;
+    // TOOD: code duplication between masterslots/optionalslots
     let masterSlots = this.props.mandatoryCourses ?
-            this.props.mandatoryCourses.map((c) => {
-              const colourIndex = this.props.courseToColourIndex[c.id] || 0;
-              let classmates = this.props.classmates ?
-                this.props.classmates.find(course => course.course_id === c.id) : [];
-              classmates = classmates || {};
-              let professors = [];
-              if (c.slots.length === 0 && c.oldSlots && c.oldSlots.length > 0) {
-                professors = [...new Set(c.oldSlots.map(s => s.instructors))];
-              } else {
-                professors = [...new Set(c.slots.map(s => s.instructors))];
-              }
-              return (<MasterSlot
-                key={c.id}
-                professors={professors}
-                colourIndex={colourIndex}
-                classmates={classmates}
-                onTimetable={this.props.isCourseInRoster(c.id)}
-                course={c}
-                fetchCourseInfo={() => this.props.fetchCourseInfo(c.id)}
-                removeCourse={() => this.props.removeCourse(c.id)}
-                getShareLink={this.props.getShareLink}
-              />);
-            }) : null;
-    const usedColourIndices = Object.values(this.props.courseToColourIndex);
-    let optionalSlots = this.props.liveTimetableCourses ? this.props.optionalCourses.map((c) => {
-      let colourIndex;
-      const classmates = this.props.classmates ?
-        this.props.classmates.find(course => course.course_id === c.id) : [];
-      if (Object.keys(this.props.courseToColourIndex).find(cid => cid === c.id) === undefined) {
-        colourIndex = _.range(COLOUR_DATA.length).find(i =>
-                    !usedColourIndices.some(x => x === i),
-                );
-        usedColourIndices[c.id] = colourIndex;
-      } else {
-        colourIndex = this.props.courseToColourIndex[c.id];
-      }
+      this.props.mandatoryCourses.map((course) => {
+        const colourIndex = (course.id in this.props.courseToColourIndex) ?
+          this.props.courseToColourIndex[course.id] :
+          getNextAvailableColour(this.props.courseToColourIndex);
+        const professors = course.sections.map(section => section.instructors);
+        return (<MasterSlot
+          key={course.id}
+          professors={professors}
+          colourIndex={colourIndex}
+          classmates={this.props.courseToClassmates[course.id]}
+          onTimetable={this.props.isCourseInRoster(course.id)}
+          course={course}
+          fetchCourseInfo={() => this.props.fetchCourseInfo(course.id)}
+          removeCourse={() => this.props.removeCourse(course.id)}
+          getShareLink={this.props.getShareLink}
+        />);
+      }) : null;
+
+    let optionalSlots = this.props.coursesInTimetable ? this.props.optionalCourses.map((course) => {
+      const colourIndex = (course.id in this.props.courseToColourIndex) ?
+          this.props.courseToColourIndex[course.id] :
+          getNextAvailableColour(this.props.courseToColourIndex);
       return (<MasterSlot
-        key={c.id}
-        onTimetable={this.props.isCourseInRoster(c.id)}
+        key={course.id}
+        onTimetable={this.props.isCourseInRoster(course.id)}
         colourIndex={colourIndex}
-        classmates={classmates}
-        course={c}
-        fetchCourseInfo={() => this.props.fetchCourseInfo(c.id)}
-        removeCourse={() => this.props.removeOptionalCourse(c)}
+        classmates={this.props.courseToClassmates[course.id]}
+        course={course}
+        fetchCourseInfo={() => this.props.fetchCourseInfo(course.id)}
+        removeCourse={() => this.props.removeOptionalCourse(course)}
         getShareLink={this.props.getShareLink}
       />);
     }) : null;
@@ -210,16 +198,15 @@ class SideBar extends React.Component {
           </h4>
         </a>
         <div className="side-bar-section">
-          <TextbookList courses={this.props.liveTimetableCourses} />
+          <TextbookList courses={this.props.coursesInTimetable} />
         </div>
       </div>
     );
   }
 }
 
+// TODO: should be these values by default in the state
 SideBar.defaultProps = {
-  classmates: null,
-  optionalCourses: null,
   savedTimetables: null,
   avgRating: 0,
 };
@@ -228,28 +215,13 @@ SideBar.propTypes = {
   savedTimetables: PropTypes.arrayOf(PropTypes.shape({
     name: PropTypes.string,
   })),
-  mandatoryCourses: PropTypes.arrayOf(PropTypes.shape({
-    id: PropTypes.number,
-    slots: PropTypes.arrayOf(PropTypes.shape({
-      instructors: PropTypes.string,
-    })),
-    oldSlots: PropTypes.arrayOf(PropTypes.shape({
-      instructors: PropTypes.string,
-    })),
-  })).isRequired,
+  mandatoryCourses: PropTypes.arrayOf(SemesterlyPropTypes.denormalizedCourse).isRequired,
+  optionalCourses: PropTypes.arrayOf(SemesterlyPropTypes.denormalizedCourse).isRequired,
+  coursesInTimetable: PropTypes.arrayOf(SemesterlyPropTypes.denormalizedCourse).isRequired,
   courseToColourIndex: PropTypes.shape({
     id: PropTypes.string,
   }).isRequired,
-  classmates: SemesterlyPropTypes.classmates.isRequired,
-  optionalCourses: PropTypes.arrayOf(PropTypes.shape({
-    id: PropTypes.number,
-    slots: PropTypes.arrayOf(PropTypes.shape({
-      instructors: PropTypes.string,
-    })),
-    oldSlots: PropTypes.arrayOf(PropTypes.shape({
-      instructors: PropTypes.string,
-    })),
-  })),
+  courseToClassmates: PropTypes.shape({ '*': SemesterlyPropTypes.classmates }).isRequired,
   loadTimetable: PropTypes.func.isRequired,
   deleteTimetable: PropTypes.func.isRequired,
   isCourseInRoster: PropTypes.func.isRequired,
@@ -260,15 +232,6 @@ SideBar.propTypes = {
   launchFinalExamsModal: PropTypes.func.isRequired,
   launchPeerModal: PropTypes.func.isRequired,
   launchTextbookModal: PropTypes.func.isRequired,
-  liveTimetableCourses: PropTypes.arrayOf(PropTypes.shape({
-    id: PropTypes.number,
-    slots: PropTypes.arrayOf(PropTypes.shape({
-      instructors: PropTypes.string,
-    })),
-    oldSlots: PropTypes.arrayOf(PropTypes.shape({
-      instructors: PropTypes.string,
-    })),
-  })).isRequired,
   semester: PropTypes.shape({
     name: PropTypes.string.isRequired,
     year: PropTypes.numberisRequired,
@@ -304,7 +267,7 @@ export const TextbookList = ({ courses }) => {
   }
   return (
     <div>
-      {_.uniq(tbs, 'isbn').map(tb => <Textbook tb={tb} key={tb.isbn} />)}
+      {uniqBy(tbs, tb => tb.isbn).map(tb => <Textbook tb={tb} key={tb.isbn} />)}
     </div>
   );
 };
