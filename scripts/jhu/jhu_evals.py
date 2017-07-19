@@ -15,7 +15,7 @@ from scripts.parser_library.base_parser import BaseParser
 
 class HopkinsEvalParser(BaseParser):
 
-    CODE_PATTERN = re.compile(r'^.*\..*\..*\..*$')
+    CODE_PATTERN = re.compile(r'^[A-Z]{2}\.\d{3}\.\d{3}\..*$')
     SCORE_PATTERN = re.compile(r'.*(\d\.\d\d).*')
     SUMMARY_PATTERN = re.compile(r'Summary:.*|This class had 5 or fewer comments\.')
     THRESH_PATTERN = re.compile(r'This class had 5 or fewer comments\.')
@@ -30,24 +30,23 @@ class HopkinsEvalParser(BaseParser):
         super(HopkinsEvalParser, self).__init__('jhu', **kwargs)
 
     def start(self, **kwargs):
+        directory = '{}/scripts/jhu/HopkinsEvaluations'.format(os.getcwd())
         for fn in os.listdir('./scripts/jhu/HopkinsEvaluations'):
-            print('PARSING DATA FOR:', os.path.splitext(fn)[0], file=sys.stderr)
-            self.current_year = os.path.splitext(fn)[0]
-            html = self._get_eval_html(
-                '{}/scripts/jhu/HopkinsEvaluations/{}'.format(os.getcwd(), fn)
-            )
-            soup = BeautifulSoup(html, 'html.parser')
-            self._process_soup(soup)
+            term, year = os.path.splitext(fn)[0].split(':')
+            eval_file_path = '{}/{}'.format(directory, fn)
+            soup = BeautifulSoup(urllib.urlopen(eval_file_path).read(),
+                                 'html.parser')
+            self._process_soup(soup, term, year)
 
-    def _process_soup(self, soup):
+    def _process_soup(self, soup, term, year):
         course_codes = list(set(soup.find_all('b', text=HopkinsEvalParser.CODE_PATTERN)))
         for cc in course_codes:
             code = cc.contents[0]
             title = cc.find_next('b').contents[0]
-            prof = title.find_next('b').contents[0]
-            score = self._get_score(prof.find_next(text=HopkinsEvalParser.SCORE_PATTERN))
+            profs = title.find_next('b').contents[0]
+            score = self._get_score(profs.find_next(text=HopkinsEvalParser.SCORE_PATTERN))
             summary = self._get_summary(title.find_next('p', text=HopkinsEvalParser.SUMMARY_PATTERN))
-            self._make_review_item(code, prof, score, summary, self.current_year)
+            self._make_review_item(code, profs.split(','), score, summary, term, year)
 
     def _get_summary(self, summary_header):
         if re.match(HopkinsEvalParser.THRESH_PATTERN, summary_header.text):
@@ -65,41 +64,17 @@ class HopkinsEvalParser(BaseParser):
                         re.match(HopkinsEvalParser.CODE_PATTERN, curr_tag.text)):
                     break
             curr_tag = curr_tag.find_next()
-        return "".join(summary)
+        return ''.join(summary)
 
     def _get_score(self, raw):
         match = re.search(HopkinsEvalParser.SCORE_PATTERN, raw)
         return match.group(1)
 
-    def _make_review_item(self, code, prof, score, summary, year):
-        print(code, prof, score, summary, year, file=sys.stderr)
-        # courses = Course.objects.filter(code__contains=self._get_code_partial(code),
-        #                                 school="jhu")
-        # if len(courses) == 0:
-        #     return
-        # else:
-        #     course = courses[0]
-        #     obj, created = Evaluation.objects.get_or_create(
-        #         course=course,
-        #         score=score,
-        #         summary=summary,
-        #         course_code=code[:20],
-        #         professor=prof,
-        #         year=year)
-        #     if created:
-        #         print("Evaluation Object CREATED for: " + code[:20], file=sys.stderr)
-        #     else:
-        #         print("Evaluation Object FOUND for: " + code[:20], file=sys.stderr)
-        # return
-
-    def _get_code_partial(self, code):
-        matches = re.search(HopkinsEvalParser.CODE_CAP_PATTERN, code)
-        return str(matches.group(1))
-
-    def _get_eval_html(self, file_name):
-        html = urllib.urlopen(file_name).read()
-        return html
-
-if __name__ == '__main__':
-    ep = HopkinsEvalParser()
-    ep.start()
+    def _make_review_item(self, code, profs, score, summary, term, year):
+        self.ingestor['year'] = year
+        self.ingestor['term'] = term
+        self.ingestor['summary'] = summary
+        self.ingestor['score'] = min(5, float(score))
+        self.ingestor['instrs'] = profs
+        self.ingestor['course_code'] = code.strip()[:10]
+        self.ingestor.ingest_course_eval()
