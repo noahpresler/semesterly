@@ -81,7 +81,8 @@ class Validator:
             'course': schema_and_resolver(load('course_only.json')),
             'section': schema_and_resolver(load('section_only.json')),
             'meeting': schema_and_resolver(load('meeting_only.json')),
-            'directory': schema_and_resolver(load('directory.json'))
+            'directory': schema_and_resolver(load('directory.json')),
+            'eval': schema_and_resolver(load('eval.json')),
         })
 
     # SCHEMA_DIRECTORY_PATH = 'scripts/parser_library/schemas/'
@@ -124,7 +125,9 @@ class Validator:
             'textbook': lambda x, schema=False:
                 self.validate_textbook(x, schema=schema),
             'textbook_link': lambda x, schema=False:
-                self.validate_textbook_link(x, schema=schema)
+                self.validate_textbook_link(x, schema=schema),
+            'course_eval': lambda x, schema=False:
+                self.validate_course_eval(x, schema=schema),
         }[kind]
 
     def validate(self, data):
@@ -420,6 +423,20 @@ class Validator:
                     'section {} isnt defined'.format(meeting.section.code),
                     meeting
                 )
+
+    def validate_course_eval(self, course_eval, schema=True):
+        if not isinstance(course_eval, dotdict):
+            course_eval = dotdict(course_eval)
+        if schema:
+            Validator.validate_schema(course_eval, *self.schemas.eval)
+        if self.course_code_regex.match(course_eval.course.code) is None:
+            raise JsonValidationError(
+                "course code {} does not match r'{}'".format(
+                    course_eval.course.code,
+                    self.config.course_code_regex
+                ),
+                course_eval
+            )
 
     def validate_instructor(self, instructor, schema=False, relative=True):
         if not isinstance(instructor, dotdict):

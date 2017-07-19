@@ -156,7 +156,8 @@ class Counters(dict):
             'textbook',
             'evaluation',
             'offering',
-            'textbook_link'
+            'textbook_link',
+            'course_eval',
         ]
 
         stats = ['valid', 'created', 'new', 'updated', 'total']
