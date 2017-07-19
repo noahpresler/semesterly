@@ -126,8 +126,8 @@ class Validator:
                 self.validate_textbook(x, schema=schema),
             'textbook_link': lambda x, schema=False:
                 self.validate_textbook_link(x, schema=schema),
-            'course_eval': lambda x, schema=False:
-                self.validate_course_eval(x, schema=schema),
+            'eval': lambda x, schema=False:
+                self.validate_eval(x, schema=schema),
         }[kind]
 
     def validate(self, data):
@@ -424,7 +424,7 @@ class Validator:
                     meeting
                 )
 
-    def validate_course_eval(self, course_eval, schema=True):
+    def validate_eval(self, course_eval, schema=True):
         if not isinstance(course_eval, dotdict):
             course_eval = dotdict(course_eval)
         if schema:

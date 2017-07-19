@@ -85,7 +85,7 @@ class Command(BaseCommand):
 
             parsers = new_map[options['type']]
             if school not in parsers:
-                do_parse = old_map[options['type']]
+                do_parse = old_map[options['type']][school]
                 self.old_parser(do_parse, school)
                 continue
 

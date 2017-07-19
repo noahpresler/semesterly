@@ -227,6 +227,7 @@ new_textbook_parsers = {
 
 new_eval_parsers = {
     'jhu': lambda *args, **kwargs: HopkinsEvalParser(**kwargs),
+    'vandy': lambda *args, **kwargs: VandyEvalParser(**kwargs),
 }
 
 eval_parsers = {

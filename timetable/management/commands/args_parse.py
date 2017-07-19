@@ -1,4 +1,4 @@
-"""Argparse for data-pipeline django commands."""
+"""Filler."""
 
 # TODO - https://github.com/kislyuk/argcomplete
 # FIXME --no-validate and validator conflict without resolutoin
