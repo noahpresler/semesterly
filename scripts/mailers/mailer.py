@@ -16,11 +16,11 @@ import django, os, json, traceback, sys, smtplib
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "semesterly.settings")
 django.setup()
 from email.mime.text import MIMEText
-from django.template.loader import render_to_string
+from django.template import loader, Context
 from student.models import *
 from student.views import create_unsubscribe_link
 
-class Mailer():
+class Mailer(object):
     def __init__(self):
         # Create server object with SSL option
         self.server = smtplib.SMTP_SSL('email-smtp.us-east-1.amazonaws.com')
@@ -32,7 +32,7 @@ class Mailer():
     def cleanup(self):
         self.server.quit()
 
-    def send_mail(self, student, subject, template, params={}):
+    def send(self, student, subject, template, params={}):
         '''
         Sends email to a student
         Parameters:
@@ -48,12 +48,8 @@ class Mailer():
         student.user.first_name = student.user.first_name.encode('utf-8')
         student.user.last_name = student.user.last_name.encode('utf-8')
 
-        params.update({
-            'user': student,
-            'unsub_link': unsub_link,
-        })
-
-        msg_html = render_to_string(template, params)
+        params.update({'template_file': template, 'unsub_link': unsub_link, 'user': student})
+        msg_html = loader.render_to_string("email_wrapper.html", params)
 
         # Create message
         recipient = student.user.email
