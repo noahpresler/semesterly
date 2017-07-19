@@ -1,3 +1,17 @@
+"""
+Copyright (C) 2017 Semester.ly Technologies, LLC
+
+Semester.ly is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+Semester.ly is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+"""
+
 from __future__ import print_function # NOTE: slowly move toward Python3
 import sys, re
 from scripts.parser_library.base_parser import CourseParser
@@ -112,10 +126,12 @@ class UMDParser(CourseParser):
       course_div = soup.findAll(class_="course")
       for c in course_div:
         cid = self.find_content("course-id", c)
-        partial_url = self.find_url("toggle-sections-link", c)
-        if (partial_url == ''):
-          continue
-
+        section_url = self.find_url("toggle-sections-link", c)
+        if (section_url == ''):
+          # Fix for soup returning partially-complete course div
+          section_url = department_url + '/' + cid
+        else:
+          section_url = "http://ntst.umd.edu" + section_url
         name = self.find_content("course-title", c)
         credits = int(self.find_content("course-min-credits", c))
         description = self.get_desc_from_course(c)
@@ -141,12 +157,15 @@ class UMDParser(CourseParser):
 
         course_model = self.ingestor.ingest_course()
 
-        section_url = "http://ntst.umd.edu" + partial_url
+        
         sections = self.get_sections(section_url, course_model)
 
   def get_sections(self, section_url, course_model):
     soup = self.requester.get(url=section_url)
     container = soup.find(class_="sections-container")
+    if not container:
+      print(section_url + " has no sections-container")
+      return
     section_divs = container.findAll(class_="section")
     for div in section_divs:
       sid = self.find_content("section-id", div)
