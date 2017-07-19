@@ -1,3 +1,17 @@
+"""
+Copyright (C) 2017 Semester.ly Technologies, LLC
+
+Semester.ly is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+Semester.ly is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+"""
+
 import itertools
 from collections import namedtuple
 
@@ -111,12 +125,12 @@ def slots_to_timetables(slots, school, custom_events, with_conflicts):
             yield current_tt
 
 
-def update_locked_sections(locked_sections, cid, locked_section):
+def update_locked_sections(locked_sections, cid, locked_section, semester):
     """
     Take cid of new course, and locked section for that course
     and toggle its locked status (ie if was locked, unlock and vice versa.
     """
-    section_type = Section.objects.filter(
+    section_type = Section.objects.filter(semester=semester,
         course=cid, meeting_section=locked_section)[0].section_type
     if locked_sections[cid].get(section_type, '') == locked_section:  # already locked
         locked_sections[cid][section_type] = ''  # unlock that section_type
@@ -251,14 +265,3 @@ def get_old_semesters(school):
     for semester in semesters:
         Semester.objects.update_or_create(**semester)
     return semesters
-
-
-# TODO: delete after deleting convert_tt_to_dict
-def get_tt_rating(course_ids):
-    avgs = [Course.objects.get(id=cid).get_avg_rating()
-            for cid in set([cid for cid in course_ids])]
-    try:
-        return min(5, sum(avgs) /
-                   sum([0 if a == 0 else 1 for a in avgs]) if avgs else 0)
-    except BaseException:
-        return 0

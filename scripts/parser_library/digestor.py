@@ -1,3 +1,17 @@
+"""
+Copyright (C) 2017 Semester.ly Technologies, LLC
+
+Semester.ly is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+Semester.ly is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+"""
+
 # @what     Parsing Digestor (db adapter)
 # @org      Semeseter.ly
 # @author   Michael N. Miller
@@ -262,6 +276,8 @@ class DigestionAdapter:
 			'Lecture': 'L',
 			'Laboratory': 'P',
 			'Discussion': 'T',
+			'Seminar': 'T',
+			'Tutorial': 'T',
 		}
 		if 'type' in section:
 			adapted['section_type'] = section_type_map.get(section.type, 'L')
