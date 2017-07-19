@@ -86,7 +86,7 @@
     "webpack-dev-server": "^2.4.2"
   },
   "jest": {
-    "setupTestFrameworkScriptFile": "./test_env.jsx",
+    "setupTestFrameworkScriptFile": "./misc/test_env.jsx",
     "transformIgnorePatterns": [
       "node_modules/(?!react)"
     ],
@@ -97,8 +97,8 @@
   "scripts": {
     "test": "NODE_ENV=production jest",
     "test:watch": "npm test -- --watch",
-    "build": "./node_modules/.bin/webpack --config webpack.config.js --progress --colors",
-    "watch": "node server.js",
+    "build": "./node_modules/.bin/webpack --config ./misc/config/webpack.config.js --progress --colors",
+    "watch": "node misc/server.js",
     "lint-staged": "lint-staged",
     "lint": "./node_modules/.bin/eslint \"static/js/redux/**\"; ./node_modules/.bin/sass-lint -c .sass-lint.yml 'static/css/timetable/*.scss, static/css/timetable/**/*.scss' -v -q",
     "lint-fix": "./node_modules/.bin/eslint --fix \"static/js/redux/**\" ",
