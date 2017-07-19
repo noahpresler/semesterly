@@ -1,3 +1,17 @@
+"""
+Copyright (C) 2017 Semester.ly Technologies, LLC
+
+Semester.ly is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+Semester.ly is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+"""
+
 """ Models pertaining to Students. """
 
 import json
@@ -99,6 +113,12 @@ class Reaction(models.Model):
 
 
 class PersonalEvent(models.Model):
+    """
+    A custom event that has been saved to a user's PersonalTimetable
+    so that it persists across refresh, device, and session. Marks 
+    when a user is not free. Courses are scheduled around it.abs
+
+    """
     name = models.CharField(max_length=50)
     day = models.CharField(max_length=1)
     time_start = models.CharField(max_length=15)
@@ -119,7 +139,10 @@ class PersonalTimetable(timetable_models.Timetable):
 
 
 class RegistrationToken(models.Model):
-    """ Database object used during signup. """
+    """
+    A push notification token for Chrome noitification via 
+    Google Cloud Messaging
+    """
     auth = models.TextField(default='')
     p256dh = models.TextField(default='')
     endpoint = models.TextField(default='')
