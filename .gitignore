@@ -13,7 +13,7 @@ timetable/courses_json/*.json
 TextbookParserOutput.txt
 workfile.html
 semes/
-documentation/build
+docs/_build
 parse_errors.log
 static/js/gulp/*
 static/css/gulp/*
@@ -48,3 +48,5 @@ webpack-stats.json
 */test_failures/
 .vscode/
 npm-debug.log.*
+Vagrantfile
+.vagrant/
