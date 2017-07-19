@@ -1,9 +1,8 @@
 from __future__ import division
-import pickle
+import cPickle as pickle
 import numpy as np
 import operator
 import os
-from sklearn.feature_extraction.text import CountVectorizer
 from sklearn.feature_extraction.text import TfidfTransformer
 from django.db.models import Q
 from timetable.models import Course
@@ -16,16 +15,17 @@ def baseline_search(school, query, semester):
     if query == "":
         return Course.objects.filter(school=school)
     query_tokens = query.strip().lower().split()
-    course_name_contains_query = reduce(
-        operator.and_, map(course_name_contains_token, query_tokens))
+    course_name_contains_query = reduce(operator.and_, map(course_name_contains_token, query_tokens))
     return Course.objects.filter(
         Q(school=school) &
         course_name_contains_query &
         Q(section__semester=semester)
     )
 
+
 def course_desc_contains_token(token):
     return Q(description__icontains=token)
+
 
 def course_name_contains_token(token):
     return (Q(code__icontains=token) |
@@ -33,7 +33,7 @@ def course_name_contains_token(token):
             Q(name__icontains=token.replace("and", "&")))
 
 
-class Vectorizer():
+class Vectorizer:
     """ Vectorizer class creates a dictionary over courses and build course vectorizer pickle object. """
     def __init__(self):
         self.TITLE_WEIGHT = 3
@@ -52,8 +52,9 @@ class Vectorizer():
             bar.update(current_count)
 
         # vectorize course objects.
-        count_vectorizer = CountVectorizer(ngram_range=(1, 2), stop_words='english')
-        processed_word_counts = count_vectorizer.fit_transform(raw_word_counts)
+        with open('dictionary.pickle', 'r') as handle:
+            count_vectorizer = pickle.load(handle)
+        processed_word_counts = count_vectorizer.transform(raw_word_counts)
         tfidf_tf = TfidfTransformer(use_idf=True).fit(processed_word_counts)
         course_vectors = tfidf_tf.transform(processed_word_counts)
 
@@ -65,11 +66,6 @@ class Vectorizer():
             self.picklify(course, course_vectors[current_count])
             bar.update(current_count)
 
-        # export CountVectorizer.pickle.
-        with open('count_vectorizer.pickle', 'wb') as handle:
-            print("\nSaving count_vectorizer.pickle...")
-            pickle.dump(count_vectorizer, handle,
-                        protocol=pickle.HIGHEST_PROTOCOL)
 
     def get_stem_course(self, name, description, area, weight):
         stemmed_doc = ""
@@ -93,7 +89,7 @@ class Vectorizer():
         course_object.save()
 
 
-class Searcher():
+class Searcher:
     """ Searcher class implements baseline search and vectorized search based on information retrieval techniques. """
     def __init__(self):
         self.vectorizer = Vectorizer()
@@ -102,13 +98,8 @@ class Searcher():
         self.start_time = 0
 
     def load_count_vectorizer(self):
-        if os.path.exists('count_vectorizer.pickle'):
-            with open('count_vectorizer.pickle', 'r') as handle:
-                return pickle.load(handle)
-        else:
-            self.vectorizer.vectorize()
-            with open('count_vectorizer.pickle', 'r') as handle:
-                return pickle.load(handle)
+        with open('dictionary.pickle', 'r') as handle:
+            return pickle.load(handle)
 
     def vectorize_query(self, query):
         stemmed_qry = self.vectorizer.get_stem_doc(query)
