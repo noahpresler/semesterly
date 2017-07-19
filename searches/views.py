@@ -30,6 +30,7 @@ from helpers.mixins import ValidateSubdomainMixin, CsrfExemptMixin
 
 
 class CourseSearchList(CsrfExemptMixin, ValidateSubdomainMixin, APIView):
+    """View responsible for handling all searching"""
 
     def get(self, request, query, sem_name, year):
         """ Return basic search results. """
