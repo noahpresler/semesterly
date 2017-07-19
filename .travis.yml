@@ -23,7 +23,7 @@ install:
   - npm -g install webpack
   - npm -g install chromedriver
   - npm -g install jest babel-jest
-  - npm install  
+  - npm install
   - pip install --user -r requirements.txt
 addons:
   apt:
@@ -42,3 +42,4 @@ script:
   - npm run lint
   - npm run test
   - python manage.py test
+  - make html -C docs
