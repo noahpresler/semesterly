@@ -7,8 +7,6 @@
 
 </p>
 
-![top bar](http://i.imgur.com/oSLGPxT.png)
-
 ## License
 
 Copyright 2017, Semester.ly Technologies, LLC
