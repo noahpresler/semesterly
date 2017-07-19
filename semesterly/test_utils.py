@@ -1,3 +1,17 @@
+"""
+Copyright (C) 2017 Semester.ly Technologies, LLC
+
+Semester.ly is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+Semester.ly is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+"""
+
 import datetime
 import inspect
 import itertools
@@ -30,6 +44,21 @@ from timetable.models import Section
 from timetable.models import Semester
 
 class SeleniumTestCase(StaticLiveServerTestCase):
+    """
+    This test case extends the Django StaticLiveServerTestCase.
+    It creates a selenium ChromeDriver instance on setUp of each
+    test. It navigates to the live url for the static live server.
+    It also provides utilities and assertions for navigating and 
+    testing presence of elements or behavior.
+
+    Attributes:
+        img_dir (str): Directory to save screenshots on failure.
+
+        driver (WebDriver): Chrome WebDriver instance.
+
+        timeout (int): Socket default timeout.
+
+    """
 
     serialized_rollback = True
 

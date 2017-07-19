@@ -1,3 +1,17 @@
+"""
+Copyright (C) 2017 Semester.ly Technologies, LLC
+
+Semester.ly is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+Semester.ly is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+"""
+
 import collections
 import json
 from datetime import datetime
@@ -23,6 +37,10 @@ from helpers.decorators import validate_subdomain
 # TODO: use CBV
 @validate_subdomain
 def all_courses(request):
+    """
+    Generates the full course directory page. Includes links to all courses
+    and is sorted by department.
+    """
     school = request.subdomain
     school_name = school_code_to_name[school]  # TODO: use single groupby query
     dep_to_courses = collections.OrderedDict()
@@ -43,6 +61,10 @@ def all_courses(request):
 # TODO: use implementation in student
 # TODO: should send along with course response
 def get_classmates_in_course(request, school, sem_name, year, course_id):
+    """
+    Finds all classmates for the authenticated user who also have a
+    timetable with the given course.
+    """
     school = school.lower()
     sem, _ = Semester.objects.get_or_create(name=sem_name, year=year)
     json_data = {'current': [], 'past': []}
@@ -60,6 +82,11 @@ def get_classmates_in_course(request, school, sem_name, year, course_id):
 # TODO delete or rewrite as CBV
 @validate_subdomain
 def course_page(request, code):
+    """
+    Generates a static course page for the provided course code and
+    school (via subdomain). Completely outside of the React framework
+    purely via Django templates.
+    """
     school = request.subdomain
     try:
         school_name = school_code_to_name[school]
@@ -105,7 +132,10 @@ def course_page(request, code):
 
 
 class CourseDetail(ValidateSubdomainMixin, APIView):
+    """ View that handles individual course entities. """
+
     def get(self, request, sem_name, year, course_id):
+        """ Return detailed data about a single course. Currently used for course modals. """
         school = request.subdomain
         sem, _ = Semester.objects.get_or_create(name=sem_name, year=year)
         course = get_object_or_404(Course, school=school, id=course_id)
@@ -121,6 +151,10 @@ class CourseDetail(ValidateSubdomainMixin, APIView):
 
 class SchoolList(APIView):
     def get(self, request, school):
+        """
+        Provides the basic school information including the schools
+        areas, departments, levels, and the time the data was last updated
+        """
         last_updated = None
         if Updates.objects.filter(
                 school=school, update_field="Course").exists():
@@ -147,6 +181,15 @@ class SchoolList(APIView):
 
 
 class CourseModal(FeatureFlowView):
+    """
+    A :obj:`FeatureFlowView` for loading a course share link
+    which directly opens the course modal on the frontend. Therefore,
+    this view overrides the *get_feature_flow* method to fill intData
+    with the detailed course json for the modal.abs
+
+    Saves a :obj:`SharedCourseView` for analytics purposes.
+    """
+
     feature_name = "SHARE_COURSE"
 
     def get_feature_flow(self, request, code, sem_name, year):
