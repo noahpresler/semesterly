@@ -373,13 +373,38 @@ class Ingestor(dict):
             self.tracker.track_department(self['department'])
         return textbook
 
-    def ingest_course_eval(self):
-        instructors = self._get('instrs')
-        if instructors:
-            instructors = [{'name': name} for name in instructors]
+    def ingest_eval(self):
+        instructors = None
+        instr_keys = set(
+            [
+                'instructors',
+                'instructor',
+                'instr',
+                'instrs',
+                'instr_name',
+                'instr_names',
+                'instructor',
+                'instructor_name',
+                'instructors'
+            ]) & set(self)
+
+        if len(instr_keys) == 1:
+            instructors = self[list(instr_keys)[0]]
+            instructors = Ingestor._clean(make_list(instructors))
+            if instructors is not None:
+                for i in range(len(instructors)):
+                    if isinstance(instructors[i], basestring):
+                        instructors[i] = {'name': instructors[i]}
+        elif len(instr_keys) > 1:
+            raise IngestorWarning(
+                'cannot resolve instructors from keys: {}'.format(
+                    ','.join(instr_keys)
+                ),
+                self
+            )
 
         evaluation = {
-            'kind': 'course_eval',
+            'kind': 'eval',
             'year': str(self._get('year')),
             'term': self._get('term'),
             'score': float(self._get('score')),

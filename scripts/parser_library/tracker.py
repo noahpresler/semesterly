@@ -139,10 +139,10 @@ class NullTracker(Tracker):
         super(NullTracker, self).__init__('null', *args, **kwargs)
 
     def broadcast_update(self):
-        pass  # Do nothing.
+        """Do nothing."""
 
     def report(self):
-        pass  # Do nothing.
+        """Do nothing."""
 
 
 class Counters(dict):
@@ -157,7 +157,7 @@ class Counters(dict):
             'evaluation',
             'offering',
             'textbook_link',
-            'course_eval',
+            'eval',
         ]
 
         stats = ['valid', 'created', 'new', 'updated', 'total']

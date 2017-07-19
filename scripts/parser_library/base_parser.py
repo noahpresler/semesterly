@@ -1,9 +1,4 @@
-"""Parser Library: Base (course) Parser.
-
-@org    Semeseterly
-@author Michael N. Miller
-@date   2/01/2017
-"""
+"""Filler."""
 
 from __future__ import absolute_import, division, print_function
 
@@ -15,7 +10,7 @@ from scripts.parser_library.requester import Requester
 
 
 class BaseParser:
-    """Abstract base parser for data pipeline.
+    """Abstract base parser for data pipeline parsers.
 
     Attributes:
         extractor (parser_library.extractor): pipeline extractor
@@ -50,9 +45,6 @@ class BaseParser:
             validate (bool, optional): Description
             tracker (None, optional): Description
         """
-        # NOTE: handle line to long in pep8... :'(
-        ssd = skip_duplicates
-
         self.school = school
         self.requester = Requester()
         self.extractor = Extractor()
@@ -62,7 +54,7 @@ class BaseParser:
                                  output_error_path,
                                  break_on_error=break_on_error,
                                  break_on_warning=break_on_warning,
-                                 skip_duplicates=ssd,
+                                 skip_duplicates=skip_duplicates,
                                  display_progress_bar=display_progress_bar,
                                  validate=validate,
                                  tracker=tracker)
