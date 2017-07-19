@@ -1,5 +1,5 @@
 <p align="center"><a href="https://semester.ly" target="_blank"><img width="100"src="https://semester.ly/static/img/logo2.0-32x32.png"></a></p>
-<p align="center"><a href="https://semester.ly" target="_blank"><img width="400" src="http://i.imgur.com/9mMP9bY.png"/></a></p>
+<p align="center"><a href="https://semester.ly" target="_blank"><img width="200" src="http://i.imgur.com/9mMP9bY.png"/></a></p>
 
 <p align="center">
   <a href="https://travis-ci.com/noahpresler/semesterly"><img src="https://travis-ci.com/noahpresler/semesterly.svg?token=4y9SYQsb7pCqAsUpdN2F&branch=master"></a>
