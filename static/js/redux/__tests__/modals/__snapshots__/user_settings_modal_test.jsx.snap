@@ -391,6 +391,14 @@ exports[`User Setting Modal Renders As Expected VISIBLE if settings filled but s
           <h1>
             Welcome!
           </h1>
+          <div
+            className="modal-close"
+            onClick={[Function]}
+          >
+            <i
+              className="fa fa-times"
+            />
+          </div>
         </div>
         <div
           className="modal-body"
