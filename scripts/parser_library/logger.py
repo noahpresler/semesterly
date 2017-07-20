@@ -1,22 +1,90 @@
-# Copyright (C) 2017 Semester.ly Technologies, LLC
-#
-# Semester.ly is free software: you can redistribute it and/or modify
-# it under the terms of the GNU General Public License as published by
-# the Free Software Foundation, either version 3 of the License, or
-# (at your option) any later version.
-#
-# Semester.ly is distributed in the hope that it will be useful,
-# but WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-# GNU General Public License for more details.
+"""Filler."""
 
-from __future__ import print_function, division, absolute_import # NOTE: slowly move toward Python3
+from __future__ import absolute_import, division, print_function
 
-import sys, pipes, simplejson as json
-from datetime import datetime
-from pygments import highlight, lexers, formatters, filters
-from scripts.parser_library.internal_utils import *
-from scripts.parser_library.internal_exceptions import JsonValidationError, JsonValidationWarning, DigestionError
+import sys
+import pipes
+import simplejson as json
+import logging
+
+# from pygments import highlight, lexers, formatters, filters
+from pygments import highlight, lexers, formatters
+
+from scripts.parser_library.internal_exceptions import JsonValidationError, \
+    JsonValidationWarning, DigestionError
+
+from scripts.parser_library.utils import pretty_json_string
+
+
+class JSONWriter(object):
+    """Context to stream JSON list to file.
+
+    Attributes:
+        obj (dict): Current object being JSONified and streamed.
+    """
+
+    def __init__(self, obj):
+        """Contruct JSONWriter instance.
+
+        Args:
+            obj (file, str): file or filepath to write to.
+        """
+        if isinstance(obj, file):
+            self.obj = obj
+        else:
+            self.obj = open(obj, 'wb')
+
+    def __enter__(self):
+        """Open JSON list."""
+        print('[', file=self.obj)
+        return self
+
+    def __exit__(self, exc_type, exc_value, traceback):
+        """Close JSON list and file object.
+
+        Will not close stdout or stderr.
+        """
+        print('\n]', file=self.obj)
+        if self.obj == sys.stdout or self.obj == sys.stderr:
+            return
+        self.obj.close()
+
+    def write(self, obj):
+        """Write obj as JSON to file.
+
+        Args:
+            obj (dict): Serializable obj to write to file.
+        """
+        print(pretty_json_string(obj), file=self.obj, sep='\n', end='')
+
+        # After first pass, all write will be delimited with comma.
+        setattr(self, 'write', self._delimited_write)
+
+    def _delimited_write(self, obj):
+        print(',', pretty_json_string(obj), file=self.obj, sep='\n', end='')
+
+
+# class JSONFormatter(logging.Formatter):
+#     """Simple JSON extension of Python logging.Formatter."""
+
+#     def format(self, record):
+#         """Format record message.
+
+#         Args:
+#             record (logging.LogRecord): Description
+
+#         Returns:
+#             str: Prettified JSON string.
+#         """
+#         return pretty_json_string(record.msg)
+
+# logging.basicConfig(level=logging.INFO)
+# handler = logging.StreamHandler(sys.stdout)
+# handler.setFormatter(JSONFormatter())
+# log = logging.getLogger()
+# log.addHandler(handler)
+# log.info({'foo': 'bar', 'bar': 'baz', 'num': 123, 'fnum': 123.456})
+
 
 # TODO - look at logging library and integrate into Logger
 #        might be able to remove all of this!!! :'(
