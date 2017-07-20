@@ -20,7 +20,6 @@ import simplejson as json
 
 from timetable.models import *
 
-from scripts.parser_library.internal_utils import *
 from scripts.parser_library.utils import DotDict, make_list
 from scripts.parser_library.logger import Logger, JsonListLogger
 from scripts.parser_library.internal_exceptions import DigestionError
