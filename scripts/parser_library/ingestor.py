@@ -8,17 +8,17 @@ Data Pipeline - Ingestor.
 
 from __future__ import absolute_import, division, print_function
 
-import re
 import jsonschema
 
-from scripts.parser_library.internal_exceptions import IngestorError, \
-    IngestorWarning
 from scripts.parser_library.internal_exceptions import JsonValidationError, \
-    JsonValidationWarning, JsonDuplicationWarning
-from scripts.parser_library.internal_utils import make_list
+    JsonValidationWarning, JsonDuplicationWarning, IngestorError, \
+    IngestorWarning
 from scripts.parser_library.logger import JsonListLogger
 from scripts.parser_library.tracker import NullTracker
 from scripts.parser_library.validator import Validator
+
+from scripts.parser_library.exception import IngesterError, IngesterWarning
+from scripts.parser_library.utils import clean, make_list
 
 
 class Ingestor(dict):
@@ -39,7 +39,99 @@ class Ingestor(dict):
         validator (parser_library.validator): Validator instance.
     """
 
-    UNICODE_WHITESPACE = re.compile(r'(?:\u00a0)|(?:\xc2)|(?:\xa0)', re.IGNORECASE)
+    # INSTRUCTOR = (
+    #     'instr',
+    #     'instrs',
+    # )
+
+    # DEPARTMENT = (
+    #     'dept',
+    #     ('dept_code', 'dept_name')
+    # )
+
+    # LOCATION = (
+    #     'loc',
+    # )
+
+    # TIME = (
+    #     'time',
+    #     ('time_start', 'time_end')
+    # )
+
+    # def _resolve(self, *args, **kwargs):
+    #     unique = kwargs.get('unique', True)
+    #     keys = set()
+    #     groups = filter(lambda x: isinstance(x, tuple), args)
+    #     for group in groups:
+    #         keys |= set(self._resolve(group, unique=False))
+    #     more_keys |= set(filter(lambda x: isinstance(x, basestring), args)) & set(self)
+    #     if more_keys is None:
+    #         unique = False
+    #     keys |= more_keys
+    #     if len(keys) == 0:
+    #         return
+    #     elif unique and len(keys) > 1:
+    #         raise IngestorError('Cannot resolve {}'.format(keys))
+    #     if unique:
+    #         return list(keys)[0]
+    #     return keys
+
+    # def _resolve_instructors(self):
+    #     key = self._resolve(*Ingestor.INSTRUCTOR)
+    #     if key is None:
+    #         return
+
+    #     instructors = make_list(self._get(key))
+    #     for idx, instructor in enumerate(instructors):
+    #         if not isinstance(instructors[i], basestring):
+    #             continue
+    #         instructors[idx] = {'name': instructors[idx]}
+    #     return instructors
+
+    # def _resolve_department(self):
+    #     # key = self._resolve('dept_code', 'dept_name', unique=False)
+    #     # if key is not None:
+    #     #     return {
+    #     #         'code': self._get('dept_code'),
+    #     #         'dept': self._get('dept_name')
+    #     #     }
+    #     # key = self._resolve('time')
+    #     # if key is None:
+    #     #     return
+    #     # return self._get(key)
+
+    #     key = self._resolve(*Ingestor.DEPARTMENT)
+    #     if key is None:
+    #         return
+
+    #     department = self_get(key)
+    #     if isinstance(department, basestring):
+    #         department = {'name': department}
+    #     return department
+
+    # def _location(self):
+    #     location = self._resolve(*Ingestor.LOCATION)
+    #     if location is None:
+    #         return
+
+    #     if isinstance(location, basestring):
+    #         location = {'where': location}
+    #     return location
+
+    # def _time(self):
+    #     key = self._resolve('time')
+    #     keys = self._resolve('time_start', 'time_end', unique=False)
+    #     if keys is not None:
+    #         if key is not None:
+    #             raise IngestorError('Cannot resolve {}'.format(set(keys) | set([key])))
+    #         return {
+    #             'start': self._get('time_start'),
+    #             'end': self._get('time_end')
+    #         }
+    #     key = self._resolve('time')
+    #     if key is None:
+    #         return
+    #     return self._get(key)
 
     ALL_KEYS = {
         'school',
@@ -145,7 +237,7 @@ class Ingestor(dict):
         Args:
             *keys: The list of keys.
             **kwargs: default return option
-                TODO - Change on update to Python3
+                TODO - Change if update to Python3
 
         Returns:
             The value of the key in the Ingestor instance.
@@ -162,13 +254,7 @@ class Ingestor(dict):
             return self[key]
         return default
 
-    def ingest_course(self):
-        """Create course json from info in model map.
-
-        Returns:
-            dict: course
-        """
-        # support nested and non-nested department ingestion
+    def _resolve_department(self):
         department = self._get('department')
         if ('department' not in self or
                 ('department_name' in self or
@@ -180,47 +266,9 @@ class Ingestor(dict):
                 'name': self._get('department_name', 'dept_name'),
                 'code': self._get('department_code', 'dept_code')
             }
+        return department
 
-        course = {
-            'kind': 'course',
-            'school': {
-                'code': self.school
-            },
-            'code': self._get('course_code', 'code', 'course'),
-            'name': self._get('name', 'course_name'),
-            'department': department,
-            'credits': self._get('credits', 'num_credits'),
-            'prerequisites': make_list(self._get('prerequisites', 'prereqs')),
-            'corequisites': make_list(self._get('corequisites', 'coreqs')),
-            'exclusions': make_list(self._get('exclusions')),
-            'description': make_list(self._get('description', 'descr')),
-            'areas': self._get('areas'),
-            'level': self._get('level'),
-            'cores': make_list(self._get('cores')),
-            'geneds': make_list(self._get('geneds')),
-            'sections': self._get('sections'),
-            'homepage': self._get('homepage', 'website'),
-        }
-
-        course = Ingestor._clean(course)
-        self._validate_and_log(course)
-        if 'department' in course:
-            self.tracker.track_department(course['department'])
-        return course
-
-    def ingest_section(self, course):
-        """Create section json object from info in model map.
-
-        Args:
-            course (dict): validated course object
-
-        Returns:
-            dict: section
-
-        Raises:
-            IngestorWarning: cannot resolve key
-        """
-        # handle nested instructor definition and resolution
+    def _resolve_instructors(self):
         instructors = None
         instr_keys = set(
             [
@@ -237,7 +285,7 @@ class Ingestor(dict):
 
         if len(instr_keys) == 1:
             instructors = self[list(instr_keys)[0]]
-            instructors = Ingestor._clean(make_list(instructors))
+            instructors = clean(make_list(instructors))
             if instructors is not None:
                 for i in range(len(instructors)):
                     if isinstance(instructors[i], basestring):
@@ -249,7 +297,68 @@ class Ingestor(dict):
                 ),
                 self
             )
+        return instructors
 
+    def _resolve_time(self):
+        time = self._get('time')
+        if 'time' not in self:
+            time = {
+                'start': self._get('time_start', 'start_time'),
+                'end': self._get('time_end', 'end_time')
+            }
+        return time
+
+    def _resolve_location(self):
+        location = self._get('location')
+        if isinstance(self._get('location', 'loc', 'where'), basestring):
+            location = {'where': self._get('location', 'loc', 'where')}
+        return location
+
+    def ingest_course(self):
+        """Create course json from info in model map.
+
+        Returns:
+            dict: course
+        """
+        course = {
+            'kind': 'course',
+            'school': {
+                'code': self.school
+            },
+            'code': self._get('course_code', 'code', 'course'),
+            'name': self._get('name', 'course_name'),
+            'department': self._resolve_department(),
+            'credits': self._get('credits', 'num_credits'),
+            'prerequisites': make_list(self._get('prerequisites', 'prereqs')),
+            'corequisites': make_list(self._get('corequisites', 'coreqs')),
+            'exclusions': make_list(self._get('exclusions')),
+            'description': make_list(self._get('description', 'descr')),
+            'areas': self._get('areas'),
+            'level': self._get('level'),
+            'cores': make_list(self._get('cores')),
+            'geneds': make_list(self._get('geneds')),
+            'sections': self._get('sections'),
+            'homepage': self._get('homepage', 'website'),
+        }
+
+        course = clean(course)
+        self._validate_and_log(course)
+        if 'department' in course:
+            self.tracker.track_resolve_department(course['department'])
+        return course
+
+    def ingest_section(self, course):
+        """Create section json object from info in model map.
+
+        Args:
+            course (dict): validated course object
+
+        Returns:
+            dict: section
+
+        Raises:
+            IngestorWarning: cannot resolve key
+        """
         section = {
             'kind': 'section',
             'course': {
@@ -260,7 +369,7 @@ class Ingestor(dict):
             'name': self._get('section_name'),
             'term': self._get('term', 'semester'),
             'year': str(self._get('year')),
-            'instructors': instructors,
+            'instructors': self._resolve_instructors(),
             'capacity': self._get('capacity', 'size'),
             'enrollment': self._get('enrollment', 'enrolment'),
             'waitlist': self._get('waitlist'),
@@ -273,7 +382,7 @@ class Ingestor(dict):
             'meetings': self._get('offerings')
         }
 
-        section = Ingestor._clean(section)
+        section = clean(section)
         self._validate_and_log(section)
         self.tracker.track_year(section['year'])
         self.tracker.track_term(section['term'])
@@ -288,19 +397,6 @@ class Ingestor(dict):
         Returns:
             dict: meeting
         """
-        # Nested time definition.
-        time = self._get('time')
-        if 'time' not in self:
-            time = {
-                'start': self._get('time_start', 'start_time'),
-                'end': self._get('time_end', 'end_time')
-            }
-
-        # Nested location definition.
-        location = self._get('location')
-        if isinstance(self._get('location', 'loc', 'where'), basestring):
-            location = {'where': self._get('location', 'loc', 'where')}
-
         meeting = {
             'kind': 'meeting',
             'course': section['course'],
@@ -311,11 +407,11 @@ class Ingestor(dict):
             },
             'days': make_list(self._get('days', 'day')),
             'dates': make_list(self._get('dates', 'date')),
-            'time': time,
-            'location': location
+            'time': self._resolve_time(),
+            'location': self._resolve_location()
         }
 
-        meeting = Ingestor._clean(meeting)
+        meeting = clean(meeting)
         self._validate_and_log(meeting)
         return meeting
 
@@ -344,12 +440,12 @@ class Ingestor(dict):
             'required': self._get('required')
         }
 
-        textbook_link = Ingestor._clean(textbook_link)
+        textbook_link = clean(textbook_link)
         self._validate_and_log(textbook_link)
         self.tracker.track_year(textbook_link['section']['year'])
         self.tracker.track_term(textbook_link['section']['term'])
         if 'department' in self:
-            self.tracker.track_department(self['department'])
+            self.tracker.track_resolve_department(self['department'])
         return textbook_link
 
     def ingest_textbook(self):
@@ -367,54 +463,30 @@ class Ingestor(dict):
             'title': self._get('title')
         }
 
-        textbook = Ingestor._clean(textbook)
+        textbook = clean(textbook)
         self._validate_and_log(textbook)
         if 'department' in self:
-            self.tracker.track_department(self['department'])
+            self.tracker.track_resolve_department(self['department'])
         return textbook
 
     def ingest_eval(self):
-        instructors = None
-        instr_keys = set(
-            [
-                'instructors',
-                'instructor',
-                'instr',
-                'instrs',
-                'instr_name',
-                'instr_names',
-                'instructor',
-                'instructor_name',
-                'instructors'
-            ]) & set(self)
+        """Create evaluation json object.
 
-        if len(instr_keys) == 1:
-            instructors = self[list(instr_keys)[0]]
-            instructors = Ingestor._clean(make_list(instructors))
-            if instructors is not None:
-                for i in range(len(instructors)):
-                    if isinstance(instructors[i], basestring):
-                        instructors[i] = {'name': instructors[i]}
-        elif len(instr_keys) > 1:
-            raise IngestorWarning(
-                'cannot resolve instructors from keys: {}'.format(
-                    ','.join(instr_keys)
-                ),
-                self
-            )
-
+        Returns:
+            dict: eval
+        """
         evaluation = {
             'kind': 'eval',
             'year': str(self._get('year')),
             'term': self._get('term'),
             'score': float(self._get('score')),
-            'instructors': instructors,
+            'instructors': self._resolve_instructors(),
             'course': {
                 'code': self._get('course_code')
             }
         }
 
-        evaluation = Ingestor._clean(evaluation)
+        evaluation = clean(evaluation)
         self._validate_and_log(evaluation)
         self.tracker.track_year(evaluation['year'])
         self.tracker.track_term(evaluation['term'])
@@ -480,49 +552,3 @@ class Ingestor(dict):
                     raise e
 
         return is_valid, full_skip
-
-    @staticmethod
-    def _clean(dirt):
-        """Recursively clean json-like object.
-
-        `list`::
-            - remove `None` elements
-            - `None` on empty list
-
-        `dict`::
-            - filter out None valued key, value pairs
-            - `None` on empty dict
-
-        `basestring`::
-            - convert unicode whitespace to ascii
-            - strip extra whitespace
-            - None on empty string
-
-        Args:
-            dirt: the object to clean
-
-        Returns:
-            Cleaned `dict`, cleaned `list`, cleaned `string`, or pass-through.
-        """
-        cleaned = None
-
-        if isinstance(dirt, dict):
-            cleaned = {}
-            for k, v in dirt.items():
-                cleaned_value = Ingestor._clean(v)
-                if cleaned_value is None:
-                    continue
-                cleaned[k] = cleaned_value
-        elif isinstance(dirt, list):
-            cleaned = filter(
-                lambda x: x is not None,
-                map(Ingestor._clean, dirt)
-            )
-        elif isinstance(dirt, basestring):
-            cleaned = Ingestor.UNICODE_WHITESPACE.sub(' ', dirt).strip()
-        else:
-            return dirt
-
-        if len(cleaned) == 0:
-            return None
-        return cleaned
