@@ -13,7 +13,7 @@ from pygments import highlight, lexers, formatters
 from scripts.parser_library.internal_exceptions import JsonValidationError, \
     JsonValidationWarning, DigestionError
 
-from scripts.parser_library.utils import pretty_json_string
+from scripts.parser_library.utils import pretty_json
 
 
 class JSONWriter(object):
@@ -55,13 +55,13 @@ class JSONWriter(object):
         Args:
             obj (dict): Serializable obj to write to file.
         """
-        print(pretty_json_string(obj), file=self.obj, sep='\n', end='')
+        print(pretty_json(obj), file=self.obj, sep='\n', end='')
 
         # After first pass, all write will be delimited with comma.
         setattr(self, 'write', self._delimited_write)
 
     def _delimited_write(self, obj):
-        print(',', pretty_json_string(obj), file=self.obj, sep='\n', end='')
+        print(',', pretty_json(obj), file=self.obj, sep='\n', end='')
 
 
 # class JSONFormatter(logging.Formatter):
@@ -76,7 +76,7 @@ class JSONWriter(object):
 #         Returns:
 #             str: Prettified JSON string.
 #         """
-#         return pretty_json_string(record.msg)
+#         return pretty_json(record.msg)
 
 # logging.basicConfig(level=logging.INFO)
 # handler = logging.StreamHandler(sys.stdout)

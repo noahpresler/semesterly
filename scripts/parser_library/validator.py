@@ -23,7 +23,17 @@ from scripts.parser_library.internal_exceptions import \
     JsonDuplicationWarning, JsonValidationError, JsonValidationWarning
 from scripts.parser_library.utils import DotDict, make_list, update
 from scripts.parser_library.logger import Logger
-from scripts.parser_library.tracker import LogFormatted, ProgressBar, Tracker
+from scripts.parser_library.tracker import Tracker
+from scripts.parser_library.viewer import LogFormatted, ProgressBar
+from scripts.parser_library.exceptions import PipelineError, PipelineWarning
+
+
+class ValidationError(PipelineError, jsonschema.exceptions.ValidationError):
+    """Validator error class."""
+
+
+class ValidationWarning(PipelineWarning):
+    """Validator warning class."""
 
 
 class Validator:
@@ -44,11 +54,11 @@ class Validator:
         self.seen = {}
         # TODO - move to tracker
 
-        if tracker is not None:
-            self.tracker = tracker
-        else:  # Used during self-contained validation.
+        if tracker is None:  # Used during self-contained validation.
             self.tracker = Tracker(self.config.school.code)
-            self.tracker.set_mode('validating')
+            self.tracker.mode = 'validating'
+        else:
+            self.tracker = tracker
 
     @staticmethod
     def initiate_schemas(directory):
@@ -174,7 +184,7 @@ class Validator:
         for obj in data:
             try:
                 self.kind_to_validation_function(obj.kind)(obj, schema=False)
-                self.tracker.track_count(obj.kind, 'valid')
+                self.tracker.track_count(dict(kind=obj.kind, status='valid'))
             except JsonValidationError as e:
                 self.logger.log(e)
                 if break_on_error:
@@ -183,10 +193,10 @@ class Validator:
                 self.logger.log(e)
                 if break_on_warning:
                     raise e
-            self.tracker.track_count(obj.kind, 'total')
+            self.tracker.track_count(dict(kind=obj.kind, status='total'))
             # TODO - delay tracker update to progress bar
 
-        self.tracker.finish()
+        self.tracker.end()
 
     def validate_config(self, config):
         if not isinstance(config, dict):
@@ -551,7 +561,6 @@ class Validator:
             hour, minute = int(rtime.group(1)), int(rtime.group(2))
             if hour > 23 or minute > 59:
                 raise JsonValidationError('{} isnt a valid time'.format(time))
-            self.tracker.track_time(hour, minute)
             # self.update_time_granularity(hour, minute)
 
         # Check interaction between times

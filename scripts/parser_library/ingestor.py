@@ -17,8 +17,16 @@ from scripts.parser_library.logger import JsonListLogger
 from scripts.parser_library.tracker import NullTracker
 from scripts.parser_library.validator import Validator
 
-from scripts.parser_library.exceptions import IngesterError, IngesterWarning
+from scripts.parser_library.exceptions import PipelineError, PipelineWarning
 from scripts.parser_library.utils import clean, make_list
+
+
+class IngesterError(PipelineError):
+    """Ingester error class."""
+
+
+class IngesterWarning(PipelineWarning):
+    """Ingester warning class."""
 
 
 class Ingestor(dict):
@@ -344,7 +352,7 @@ class Ingestor(dict):
         course = clean(course)
         self._validate_and_log(course)
         if 'department' in course:
-            self.tracker.track_department(course['department'])
+            self.tracker.department = course['department']
         return course
 
     def ingest_section(self, course):
@@ -384,8 +392,10 @@ class Ingestor(dict):
 
         section = clean(section)
         self._validate_and_log(section)
-        self.tracker.track_year(section['year'])
-        self.tracker.track_term(section['term'])
+        if 'year' in section:
+            self.tracker.year = section['year']
+        if 'term' in section:
+            self.tracker.term = section['term']
         return section
 
     def ingest_meeting(self, section):
@@ -413,6 +423,9 @@ class Ingestor(dict):
 
         meeting = clean(meeting)
         self._validate_and_log(meeting)
+        if 'time' in meeting:
+            self.tracker.time = meeting['time']['start']
+            self.tracker.time = meeting['time']['end']
         return meeting
 
     def ingest_textbook_link(self, section=None):
@@ -442,10 +455,10 @@ class Ingestor(dict):
 
         textbook_link = clean(textbook_link)
         self._validate_and_log(textbook_link)
-        self.tracker.track_year(textbook_link['section']['year'])
-        self.tracker.track_term(textbook_link['section']['term'])
+        self.tracker.year = textbook_link['section']['year']
+        self.tracker.term = textbook_link['section']['term']
         if 'department' in self:
-            self.tracker.track_resolve_department(self['department'])
+            self.tracker.department = self['department']
         return textbook_link
 
     def ingest_textbook(self):
@@ -466,7 +479,7 @@ class Ingestor(dict):
         textbook = clean(textbook)
         self._validate_and_log(textbook)
         if 'department' in self:
-            self.tracker.track_resolve_department(self['department'])
+            self.tracker.department = self['department']
         return textbook
 
     def ingest_eval(self):
@@ -488,8 +501,8 @@ class Ingestor(dict):
 
         evaluation = clean(evaluation)
         self._validate_and_log(evaluation)
-        self.tracker.track_year(evaluation['year'])
-        self.tracker.track_term(evaluation['term'])
+        self.tracker.year = evaluation['year']
+        self.tracker.term = evaluation['term']
         return evaluation
 
     def wrap_up(self):
@@ -500,7 +513,7 @@ class Ingestor(dict):
     def _validate_and_log(self, obj):
         if self.validate is False:
             self.logger.log(obj)
-            self.tracker.track_count(obj['kind'], 'total')
+            self.tracker.track_count(dict(kind=obj['kind'], status='total'))
             return
 
         is_valid, skip = self._run_validator(obj)
@@ -521,7 +534,7 @@ class Ingestor(dict):
             self.logger.log(e)
             if self.break_on_warning:
                 raise e
-        self.tracker.track_count(obj['kind'], 'total')
+        self.tracker.track_count(dict(kind=obj['kind'], status='total'))
 
     def _run_validator(self, data):
         is_valid = False
@@ -529,7 +542,7 @@ class Ingestor(dict):
 
         try:
             self.validator.validate(data)
-            self.tracker.track_count(data['kind'], 'valid')
+            self.tracker.track_count(dict(kind=data['kind'], status='valid'))
             is_valid = True
         except jsonschema.exceptions.ValidationError as e:
             # Wrap error along with json object in another error

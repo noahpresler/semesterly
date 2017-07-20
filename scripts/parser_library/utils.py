@@ -89,7 +89,7 @@ class DotDict(dict):
             self[key] = value
 
 
-def pretty_json_string(obj):
+def pretty_json(obj):
     """Prettify object as JSON.
 
     Args:

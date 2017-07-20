@@ -58,11 +58,10 @@ class Digestor:
         self.school = school
         self.adapter = DigestionAdapter(school, self.cached)
         self.strategy = self.set_strategy(diff, load, output)
-        self.counter = Counters()
 
         # Setup tracker for digestion and progress bar.
         self.tracker = tracker
-        self.tracker.set_mode('digesting')
+        self.tracker = 'digesting'
         if display_progress_bar:
             def formatter(stats):
                 return '{}'.format(stats['total'])
@@ -98,7 +97,7 @@ class Digestor:
 
     def update_progress(self, key, exists):
         if exists:
-            self.tracker.track_count(key, 'total')
+            self.tracker.track_count(dict(kind=key, status='total'))
         # TODO - add more stats including newly created and the like
 
     def digest_course(self, course):
