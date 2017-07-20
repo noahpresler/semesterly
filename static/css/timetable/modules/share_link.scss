@@ -32,6 +32,7 @@
     width: auto;
     cursor: text;
     border: 1px solid $gddd;
+    padding: 0 5px;
   }
   .clipboardBtn {
     text-align: center;
@@ -41,6 +42,7 @@
     font-size: 12px;
     border-radius: 3px;
     cursor: pointer;
+    color: white;
   }
   .clipboardSuccess {
     background: grey;
