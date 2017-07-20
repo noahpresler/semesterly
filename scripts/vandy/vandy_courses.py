@@ -10,7 +10,7 @@ import sys
 
 from scripts.parser_library.base_parser import CourseParser
 from scripts.parser_library.internal_exceptions import CourseParseError
-from scripts.parser_library.internal_utils import safe_cast
+from scripts.parser_library.utils import safe_cast
 
 
 class ParseException(Exception):

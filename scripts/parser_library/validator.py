@@ -21,7 +21,7 @@ from django.conf import settings
 
 from scripts.parser_library.internal_exceptions import \
     JsonDuplicationWarning, JsonValidationError, JsonValidationWarning
-from scripts.parser_library.internal_utils import dotdict, make_list, update
+from scripts.parser_library.utils import DotDict, make_list, update
 from scripts.parser_library.logger import Logger
 from scripts.parser_library.tracker import LogFormatted, ProgressBar, Tracker
 
@@ -58,7 +58,7 @@ class Validator:
             directory (str): Directory of schema definitions.
 
         Returns:
-            :obj:`dotdict`: json schema definitions
+            :obj:`DotDict`: json schema definitions
         """
         def load(file):
             return Validator.filepath_to_json(directory + file,
@@ -75,7 +75,7 @@ class Validator:
         #       successive calls without introducing complications of caching
         #       already read json. Schemas are not expected to exceed a
         #       reasonable size.
-        return dotdict({
+        return DotDict({
             'config': schema_and_resolver(load('config.json')),
             'datalist': schema_and_resolver(load('datalist.json')),
             'course': schema_and_resolver(load('course_only.json')),
@@ -136,8 +136,8 @@ class Validator:
         Args:
             data (list, dict): Data to validate.
         """
-        # Convert to dotdict for `easy-on-the-eyes` element access
-        data = [dotdict(d) for d in make_list(data)]
+        # Convert to DotDict for `easy-on-the-eyes` element access
+        data = [DotDict(d) for d in make_list(data)]
         for obj in data:
             self.kind_to_validation_function(obj.kind)(obj, schema=True)
 
@@ -168,7 +168,7 @@ class Validator:
             self.logger.log(e)
             raise e  # fatal error, cannot continue
 
-        data = [dotdict(d) for d in data]
+        data = [DotDict(d) for d in data]
 
         # TODO - iter errors and catch exceptions within method
         for obj in data:
@@ -195,12 +195,12 @@ class Validator:
             except IOError as e:
                 e.message += '\nconfig.json not defined'
                 raise e
-        return dotdict(config)  # FIXME - dotdict should work here
+        return DotDict(config)  # FIXME - DotDict should work here
         # Validator.validate_schema(config, *self.schemas.config)
 
     def validate_course(self, course, schema=True, relative=True):
-        if not isinstance(course, dotdict):
-            course = dotdict(course)
+        if not isinstance(course, DotDict):
+            course = DotDict(course)
 
         if schema:
             Validator.validate_schema(course, *self.schemas.course)
@@ -256,8 +256,8 @@ class Validator:
                 self.seen[course.code] = {}
 
     def validate_section(self, section, schema=True, relative=True):
-        if not isinstance(section, dotdict):
-            section = dotdict(section)
+        if not isinstance(section, DotDict):
+            section = DotDict(section)
 
         if schema:
             Validator.validate_schema(section, *self.schemas.section)
@@ -378,8 +378,8 @@ class Validator:
                 update(self.seen[section.course.code], section_essence)
 
     def validate_meeting(self, meeting, schema=True, relative=True):
-        if not isinstance(meeting, dotdict):
-            meeting = dotdict(meeting)
+        if not isinstance(meeting, DotDict):
+            meeting = DotDict(meeting)
         if schema:
             Validator.validate_schema(meeting, *self.schemas.meeting)
         if 'kind' in meeting and meeting.kind != 'meeting':
@@ -425,8 +425,8 @@ class Validator:
                 )
 
     def validate_eval(self, course_eval, schema=True):
-        if not isinstance(course_eval, dotdict):
-            course_eval = dotdict(course_eval)
+        if not isinstance(course_eval, DotDict):
+            course_eval = DotDict(course_eval)
         if schema:
             Validator.validate_schema(course_eval, *self.schemas.eval)
         if self.course_code_regex.match(course_eval.course.code) is None:
@@ -439,8 +439,8 @@ class Validator:
             )
 
     def validate_instructor(self, instructor, schema=False, relative=True):
-        if not isinstance(instructor, dotdict):
-            instructor = dotdict(instructor)
+        if not isinstance(instructor, DotDict):
+            instructor = DotDict(instructor)
         if 'kind' in instructor and instructor.kind != 'instructor':
             raise JsonValidationError(
                 'instructor object must be of kind instructor',
@@ -488,8 +488,8 @@ class Validator:
                 raise e
 
     def validate_final_exam(self, final_exam, schema=False, relative=True):
-        if not isinstance(final_exam, dotdict):
-            final_exam = dotdict(final_exam)
+        if not isinstance(final_exam, DotDict):
+            final_exam = DotDict(final_exam)
         if 'kind' in final_exam and final_exam.kind != 'final_exam':
             raise JsonValidationError(
                 'final_exam object must be of kind "final_exam"',
@@ -502,14 +502,14 @@ class Validator:
             raise e
 
     def validate_textbook(self, textbook, schema=False, relative=True):
-        if not isinstance(textbook, dotdict):
-            textbook = dotdict(textbook)
+        if not isinstance(textbook, DotDict):
+            textbook = DotDict(textbook)
 
     def validate_textbook_link(self, textbook_link,
                                schema=False,
                                relative=True):
-        if not isinstance(textbook_link, dotdict):
-            textbook_link = dotdict(textbook_link)
+        if not isinstance(textbook_link, DotDict):
+            textbook_link = DotDict(textbook_link)
         if ('course' in textbook_link and
                 self.course_code_regex.match(textbook_link.course.code) is None):
             raise JsonValidationError(

@@ -21,6 +21,7 @@ import simplejson as json
 from timetable.models import *
 
 from scripts.parser_library.internal_utils import *
+from scripts.parser_library.utils import DotDict, make_list
 from scripts.parser_library.logger import Logger, JsonListLogger
 from scripts.parser_library.internal_exceptions import DigestionError
 from scripts.parser_library.tracker import ProgressBar, NullTracker
@@ -48,9 +49,9 @@ class Digestor:
         else:
             data = json.load(sys.stdin)
 
-        self.data = [dotdict(obj) for obj in data]
+        self.data = [DotDict(obj) for obj in data]
 
-        self.cached = dotdict({
+        self.cached = DotDict({
             'course': {'code': '_'},
             'section': {'code': '_'}
         })
@@ -141,7 +142,7 @@ class Digestor:
             for meeting in section.get('meetings', []):
                 self.digest_meeting(meeting, section_model)
             for textbook_link in section.get('textbooks', []):
-                self.digest_textbook_link(dotdict(textbook_link),
+                self.digest_textbook_link(DotDict(textbook_link),
                                           section_model=section_model)
         self.update_progress('section', bool(section_model))
 

@@ -17,8 +17,6 @@ from scripts.parser_library.words import conjunctions_and_prepositions
 from scripts.parser_library.internal_exceptions import CourseParseError, CourseParseWarning
 
 
-# NOTE: changed from _reset_options_for_new_school
-
 def filter_years_and_terms(base_years_and_terms,
                            years_filter=None,
                            terms_filter=None,
