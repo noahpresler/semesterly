@@ -11,10 +11,7 @@ import sys
 from scripts.parser_library.base_parser import CourseParser
 from scripts.parser_library.internal_exceptions import CourseParseError
 from scripts.parser_library.utils import safe_cast
-
-
-class ParseException(Exception):
-    pass
+from scripts.parser_library.exceptions import ParseError
 
 
 class VandyParser(CourseParser):
@@ -328,7 +325,7 @@ class VandyParser(CourseParser):
             # Clear course map for next pass
             self.course.clear()
 
-        except ParseException:
+        except ParseError:
             print('invalid course, parse exception')
 
         return course_number
@@ -344,7 +341,7 @@ class VandyParser(CourseParser):
         title = re.match("(\S*)-(\S*)-(\S*)", abbr)
 
         if not title:
-            raise ParseException()
+            raise ParseError()
 
         department_code = title.group(1)
         catalog_id = title.group(2)
