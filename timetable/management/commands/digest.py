@@ -107,7 +107,7 @@ class Command(BaseCommand):
 				self.stderr.write(traceback.format_exc())
 				tracker.see_error(traceback.format_exc())
 
-			tracker.finish()
+			tracker.end()
 			Command.reset_for_next_school(options)
 
 		self.stdout.write(self.style.SUCCESS("Digestion Finished!"))

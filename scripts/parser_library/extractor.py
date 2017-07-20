@@ -229,8 +229,8 @@ def time_12to24(time12):
     Returns:
         str: 24 hr time in format hrhr:minmin
     """
-    time24 = dparser.parse(time12)
-    return time24.strftime('%H:%M')
+    time = dparser.parse(time12)
+    return time.strftime('%H:%M')
 
 
 class Extractor():
