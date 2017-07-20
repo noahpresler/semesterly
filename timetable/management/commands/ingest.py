@@ -19,7 +19,8 @@ from timetable.management.commands.args_parse import schoollist_argparser, \
     ingestor_argparser, validator_argparser
 from scripts.parser_library.internal_exceptions import CourseParseError, \
     JsonValidationError, JsonValidationWarning, IngestorWarning
-from scripts.parser_library.tracker import Tracker, LogFormatted, ProgressBar
+from scripts.parser_library.tracker import Tracker
+from scripts.parser_library.viewer import LogFormatted, ProgressBar
 
 
 class Command(BaseCommand):
@@ -119,7 +120,7 @@ class Command(BaseCommand):
             tracker = Tracker(school)
             tracker.set_cmd_options(options)
             tracker.add_viewer(LogFormatted(options['log_stats']))
-            tracker.set_mode('ingesting')
+            tracker.mode = 'ingesting'
 
             if options['display_progress_bar']:
                 def formatter(stats):
@@ -179,7 +180,7 @@ class Command(BaseCommand):
                 tracker.see_error(traceback.format_exc())
                 tracker.see_error('INGESTOR DUMP\n' + dict_pp(p.ingestor))
 
-            tracker.finish()
+            tracker.end()
 
             # Reset some options for parse of next school.
             Command._reset_options_for_new_school(options)
