@@ -17,7 +17,7 @@ from scripts.parser_library.logger import JsonListLogger
 from scripts.parser_library.tracker import NullTracker
 from scripts.parser_library.validator import Validator
 
-from scripts.parser_library.exception import IngesterError, IngesterWarning
+from scripts.parser_library.exceptions import IngesterError, IngesterWarning
 from scripts.parser_library.utils import clean, make_list
 
 
@@ -344,7 +344,7 @@ class Ingestor(dict):
         course = clean(course)
         self._validate_and_log(course)
         if 'department' in course:
-            self.tracker.track_resolve_department(course['department'])
+            self.tracker.track_department(course['department'])
         return course
 
     def ingest_section(self, course):
