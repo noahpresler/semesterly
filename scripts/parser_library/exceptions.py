@@ -1,6 +1,6 @@
 """Filler."""
 
-import jsonschema.exception
+import jsonschema.exceptions
 
 
 class PipelineError(Exception):
@@ -19,7 +19,7 @@ class IngesterWarning(PipelineWarning):
     """Ingester warning class."""
 
 
-class ValidationError(PipelineError, jsonschema.exception.ValidationError):
+class ValidationError(PipelineError, jsonschema.exceptions.ValidationError):
     """Validator error class."""
 
 
@@ -29,3 +29,11 @@ class ValidationWarning(PipelineWarning):
 
 class JsonDuplicationWarning(ValidationWarning):
     """JSON definition has non-unique keys."""
+
+
+class ParseError(PipelineError):
+    """Parser error class."""
+
+
+class ParseException(PipelineWarning):
+    """Parser warning class."""
