@@ -6,6 +6,8 @@ Parsing library extractio utilities.
 @date     11/22/16
 """
 
+# TODO - consider moving much functionality to scripts.parser_library.utils
+
 from __future__ import absolute_import, division, print_function
 
 import sys
