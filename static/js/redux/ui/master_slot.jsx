@@ -203,6 +203,7 @@ export const ShareLink = ({ link, onClickOut, uniqueId, type }) => (
         size={link.length}
         value={link}
         onClick={e => e.stopPropagation()}
+        onFocus={e => e.target.select()}
         readOnly
       />
       <div className="clipboardBtn" id={`clipboard-btn-${uniqueId}`} data-clipboard-text={link}>
