@@ -17,16 +17,16 @@ from scripts.parser_library.logger import JsonListLogger
 from scripts.parser_library.tracker import NullTracker
 from scripts.parser_library.validator import Validator
 
-from scripts.parser_library.exceptions import PipelineError, PipelineWarning
+# from scripts.parser_library.exceptions import PipelineError, PipelineWarning
 from scripts.parser_library.utils import clean, make_list
 
 
-class IngesterError(PipelineError):
-    """Ingester error class."""
+# class IngestorError(PipelineError):
+#     """Ingestor error class."""
 
 
-class IngesterWarning(PipelineWarning):
-    """Ingester warning class."""
+# class IngestorWarning(PipelineWarning):
+#     """Ingestor warning class."""
 
 
 class Ingestor(dict):
@@ -513,7 +513,7 @@ class Ingestor(dict):
     def _validate_and_log(self, obj):
         if self.validate is False:
             self.logger.log(obj)
-            self.tracker.track_count(dict(kind=obj['kind'], status='total'))
+            self.tracker.status = dict(kind=obj['kind'], status='total')
             return
 
         is_valid, skip = self._run_validator(obj)
@@ -534,7 +534,7 @@ class Ingestor(dict):
             self.logger.log(e)
             if self.break_on_warning:
                 raise e
-        self.tracker.track_count(dict(kind=obj['kind'], status='total'))
+        self.tracker.status = dict(kind=obj['kind'], status='total')
 
     def _run_validator(self, data):
         is_valid = False
@@ -542,7 +542,7 @@ class Ingestor(dict):
 
         try:
             self.validator.validate(data)
-            self.tracker.track_count(dict(kind=data['kind'], status='valid'))
+            self.tracker.status = dict(kind=data['kind'], status='valid')
             is_valid = True
         except jsonschema.exceptions.ValidationError as e:
             # Wrap error along with json object in another error

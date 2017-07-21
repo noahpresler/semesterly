@@ -20,7 +20,7 @@ class TrackerWarning(PipelineWarning):
 
 
 class Tracker(object):
-    """Tracks the state of a parse."""
+    """Tracks specified attributes and broadcasts to viewers."""
 
     BROADCAST_TYPES = {
         'YEAR',
@@ -118,9 +118,6 @@ class Tracker(object):
 
     def set_cmd_options(self, cmd_options):
         self.cmd_options = cmd_options
-
-    def track_count(self, status):
-        self.status = status
 
     def broadcast(self, broadcast_type):
         """Broadcast tracker update to viewers.
