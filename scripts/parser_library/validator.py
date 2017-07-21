@@ -41,7 +41,7 @@ class Validator:
     """Validation engine in parsing data pipeline.
     """
 
-    SCHEMA_DIRECTORY = '{}/scripts/parser_library/schemas'.format(settings.BASE_DIR)
+    SCHEMA_PATH = '{}/scripts/parser_library/schemas'.format(settings.BASE_DIR)
     KINDS = {
         'config',
         'datalist',
@@ -53,9 +53,8 @@ class Validator:
     }
 
     def __init__(self, config, tracker=None):
-        """Construct validation engine."""
-        # Cache schema definitions into memory.
-        self.schemas = Validator.initiate_schemas(Validator.SCHEMA_DIRECTORY)
+        """Construct validator instance."""
+        Validator.load_schemas()
 
         self.config = self.validate_config(config)
         self.course_code_regex = re.compile(self.config.course_code_regex)
@@ -70,32 +69,26 @@ class Validator:
         else:
             self.tracker = tracker
 
-    @staticmethod
-    def initiate_schemas(absolute_path):
-        """Initiate and load relevant json schema definitions.
+    @classmethod
+    def load_schemas(cls):
+        if hasattr(cls, 'SCHEMAS'):
+            return
 
-        Args:
-            absolute_path (TYPE): Path to json schema definitions.
-
-        Returns:
-            :obj:`DotDict`:
-        """
         def load(kind):
-            filepath = '{}/{}.json'.format(absolute_path, kind)
+            filepath = '{}/{}.json'.format(cls.SCHEMA_PATH, kind)
             with open(filepath, 'r') as file:
                 schema = json.load(file)
-            resolved = jsonschema.RefResolver('file://' + absolute_path + '/',
-                                              schema)
+            resolved = jsonschema.RefResolver(
+                'file://{}/'.format(cls.SCHEMA_PATH),
+                schema
+            )
             return (schema, resolved)
 
-        # NOTE: it can be argued that in init loading all schemas directly to
-        #       json is inefficient. However, it eliminates i/o overhead for
-        #       successive calls without introducing complications of caching
-        #       already read json. Schemas are not expected to exceed a
-        #       reasonable size.
-        return DotDict({
-            kind: load(kind) for kind in Validator.KINDS
+        cls.SCHEMAS = DotDict({
+            kind: load(kind) for kind in cls.KINDS
         })
+
+        return cls.SCHEMAS
 
     @staticmethod
     def schema_validate(data, schema, resolver=None):
@@ -147,6 +140,7 @@ class Validator:
         # Convert to DotDict for `easy-on-the-eyes` element access
         data = [DotDict(d) for d in make_list(data)]
         for obj in data:
+
             self.kind_to_validation_function(obj.kind)(obj, schema=True)
 
     def validate_self_contained(self, datafile,
@@ -171,7 +165,7 @@ class Validator:
         try:
             # self.validate_directory(directory)
             data = Validator.filepath_to_json(datafile)
-            Validator.schema_validate(data, *self.schemas.datalist)
+            Validator.schema_validate(data, *Validator.SCHEMAS.datalist)
         except (JsonValidationError, json.scanner.JSONDecodeError) as e:
             self.logger.log(e)
             raise e  # fatal error, cannot continue
@@ -204,14 +198,14 @@ class Validator:
                 e.message += '\nconfig.json not defined'
                 raise e
         return DotDict(config)  # FIXME - DotDict should work here
-        # Validator.schema_validate(config, *self.schemas.config)
+        # Validator.schema_validate(config, *Validator.SCHEMAS.config)
 
     def validate_course(self, course, schema=True, relative=True):
         if not isinstance(course, DotDict):
             course = DotDict(course)
 
         if schema:
-            Validator.schema_validate(course, *self.schemas.course)
+            Validator.schema_validate(course, *Validator.SCHEMAS.course)
 
         if 'kind' in course and course.kind != 'course':
             raise JsonValidationError('course object must be of kind course',
@@ -268,7 +262,7 @@ class Validator:
             section = DotDict(section)
 
         if schema:
-            Validator.schema_validate(section, *self.schemas.section)
+            Validator.schema_validate(section, *Validator.SCHEMAS.section)
 
         if 'course' not in section:
             raise JsonValidationError('section doesnt define a parent course',
@@ -389,7 +383,7 @@ class Validator:
         if not isinstance(meeting, DotDict):
             meeting = DotDict(meeting)
         if schema:
-            Validator.schema_validate(meeting, *self.schemas.meeting)
+            Validator.schema_validate(meeting, *Validator.SCHEMAS.meeting)
         if 'kind' in meeting and meeting.kind != 'meeting':
             raise JsonValidationError('meeting object must be kind instructor',
                                       meeting)
@@ -436,7 +430,7 @@ class Validator:
         if not isinstance(course_eval, DotDict):
             course_eval = DotDict(course_eval)
         if schema:
-            Validator.schema_validate(course_eval, *self.schemas.eval)
+            Validator.schema_validate(course_eval, *Validator.SCHEMAS.eval)
         if self.course_code_regex.match(course_eval.course.code) is None:
             raise JsonValidationError(
                 "course code {} does not match r'{}'".format(
@@ -593,7 +587,7 @@ class Validator:
                 print('ERROR: invalid directory path\n' + str(e),
                       file=sys.stderr)
                 raise e
-        Validator.schema_validate(directory, *self.schemas.directory)
+        Validator.schema_validate(directory, *Validator.SCHEMAS.directory)
 
     @staticmethod
     def dict_raise_on_duplicates(ordered_pairs):
