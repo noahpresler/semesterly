@@ -22,7 +22,7 @@ class Viewer:
         """Incremental updates of tracking info.
 
         Args:
-            tracker (scripts.parser_library.tracker.Tracker): Instance of tracker.
+            tracker (scripts.parser_library.tracker.Tracker): Tracker instance.
             broadcast_type (str): Broadcast type emitted by tracker.
         """
 
@@ -31,7 +31,7 @@ class Viewer:
         """Report all tracked info.
 
         Args:
-            tracker (scripts.parser_library.tracker.Tracker): Instance of tracker.
+            tracker (scripts.parser_library.tracker.Tracker): Tracker instance.
         """
 
 
@@ -123,8 +123,17 @@ class LogFormatted(Viewer):
 
 
 class StatView(Viewer):
+    """Keeps dictionary view of statistics of objects in pipeline.
+
+    Attributes:
+        KINDS (tuple): The kinds of objects that can be tracked.
+            TODO - move this to a shared space w/Validator
+        stats (dict): The view itself of the stats.
+        STATUSES (tuple): The statuses of objects that can be tracked.
+    """
+
     # TODO - move to central location w/Validator/schema kinds
-    KINDS = [
+    KINDS = (
         'course',
         'section',
         'meeting',
@@ -133,13 +142,14 @@ class StatView(Viewer):
         'offering',
         'textbook_link',
         'eval',
-    ]
+    )
 
-    STATUSES = ['valid', 'created', 'new', 'updated', 'total']
+    STATUSES = ('valid', 'created', 'new', 'updated', 'total')
 
     report = None
 
     def __init__(self):
+        """Construct StatView instance."""
         self.stats = {
             subject: {
                 stat: 0 for stat in StatView.STATUSES
@@ -147,28 +157,57 @@ class StatView(Viewer):
         }
 
     def __iter__(self):
+        """Create iterator for StatView dictionary.
+
+        Returns:
+            iterator: Iterator over internal dictionary.
+        """
         return iter(self.stats)
 
     def __getitem__(self, key):
+        """Get item from stat dictionary.
+
+        Args:
+            key (str): One of kinds.
+
+        Returns:
+            TYPE: Description
+        """
         return self.stats[key]
 
     def receive(self, tracker, broadcast_type):
+        """Receive an update from a tracker.
+
+        Ignore all broadcasts that are not STATUS.
+
+        Args:
+            tracker (scripts.parsing_library.tracker.Tracker):
+                Tracker receiving update from.
+            broadcast_type (str): Broadcast message from tracker.
+        """
         if broadcast_type != 'STATUS':
             return
         self.increment(tracker.status['kind'], tracker.status['status'])
 
-    def increment(self, kind, status):
-        self.stats[kind][status] += 1
+    def report(self, tracker):
+        """Do nothing."""
 
-    def clear(self):
-        for subject in self.counts:
-            for stat in subject:
-                subject[stat] = 0
+    def _increment(self, kind, status):
+        self.stats[kind][status] += 1
 
 
 class TimeDistributionView(Viewer):
+    """Viewer to analyze time distribution.
+
+    Calculates granularity and holds report and 12, 24hr distribution.
+
+    Attributes:
+        distribution (dict): Contains counts of 12 and 24hr sightings.
+        granularity (int): Time granularity of viewed times.
+    """
 
     def __init__(self):
+        """Construct TimeDistributionView."""
         self.distribution = {
             12: 0,
             24: 0
@@ -177,6 +216,18 @@ class TimeDistributionView(Viewer):
         self.granularity = 60
 
     def receive(self, tracker, broadcast_type):
+        """Receive an update from a tracker.
+
+        Ignore all broadcasts that are not TIME.
+
+        Args:
+            tracker (scripts.parsing_library.tracker.Tracker):
+                Tracker receiving update from.
+            broadcast_type (str): Broadcast message from tracker.
+
+        Returns:
+            TYPE: Description
+        """
         if broadcast_type != 'TIME':
             return
 

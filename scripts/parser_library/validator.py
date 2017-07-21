@@ -184,7 +184,7 @@ class Validator:
         for obj in data:
             try:
                 self.kind_to_validation_function(obj.kind)(obj, schema=False)
-                self.tracker.track_count(dict(kind=obj.kind, status='valid'))
+                self.tracker.status = dict(kind=obj.kind, status='valid')
             except JsonValidationError as e:
                 self.logger.log(e)
                 if break_on_error:
@@ -193,7 +193,7 @@ class Validator:
                 self.logger.log(e)
                 if break_on_warning:
                     raise e
-            self.tracker.track_count(dict(kind=obj.kind, status='total'))
+            self.tracker.status = dict(kind=obj.kind, status='total')
             # TODO - delay tracker update to progress bar
 
         self.tracker.end()

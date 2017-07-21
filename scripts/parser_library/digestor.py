@@ -97,7 +97,7 @@ class Digestor:
 
     def update_progress(self, key, exists):
         if exists:
-            self.tracker.track_count(dict(kind=key, status='total'))
+            self.tracker.status = dict(kind=key, status='total')
         # TODO - add more stats including newly created and the like
 
     def digest_course(self, course):
