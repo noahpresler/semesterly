@@ -2,9 +2,7 @@
 
 from __future__ import absolute_import, division, print_function
 
-import sys
 import datetime
-import dateutil.parser as dparser
 
 from timeit import default_timer as timer
 
@@ -38,9 +36,6 @@ class Tracker(object):
         self.school = school
         self.saw_error = False
         self.error = ''
-
-        # TODO - should be moved to a viewer
-        self.time_distribution = dict(_12=0, _24=0)
 
         # Consumers.
         self.viewers = []
