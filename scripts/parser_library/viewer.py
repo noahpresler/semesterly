@@ -187,7 +187,7 @@ class StatView(Viewer):
         """
         if broadcast_type != 'STATUS':
             return
-        self.increment(tracker.status['kind'], tracker.status['status'])
+        self._increment(tracker.status['kind'], tracker.status['status'])
 
     def report(self, tracker):
         """Do nothing."""
