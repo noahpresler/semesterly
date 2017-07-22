@@ -1,10 +1,57 @@
+"""
+Copyright (C) 2017 Semester.ly Technologies, LLC
+
+Semester.ly is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+Semester.ly is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+"""
+
 from datetime import datetime
 
+from django.test import TestCase
 from rest_framework import status
 from rest_framework.test import APITestCase
 
 from timetable.models import Semester, Course, Section, Offering, Updates
 from helpers.test.test_cases import UrlTestCase
+from serializers import CourseSerializer
+
+
+class Serializers(TestCase):
+    def test_course_serialization(self):
+        self.sem_name = 'Winter'
+        self.year = '1995'
+        self.cid = 1
+        self.name = 'Intro'
+        self.code = 'SEM101'
+        self.school = 'uoft'
+        sem = Semester.objects.create(name=self.sem_name, year=self.year)
+        course = Course.objects.create(
+            id=self.cid,
+            school=self.school,
+            code=self.code,
+            name=self.name)
+        section = Section.objects.create(
+            course=course, semester=sem, meeting_section='L1')
+        Offering.objects.create(
+            section=section,
+            day='M',
+            time_start='8:00',
+            time_end='10:00')
+
+        serialized = CourseSerializer(course, context={
+            'semester': sem,
+            'school': self.school,
+            'sections': [section],
+        })
+
+        self.assertTrue(serialized.data['code'] == self.code)
 
 
 class CourseDetail(APITestCase):

@@ -1,3 +1,17 @@
+/**
+Copyright (C) 2017 Semester.ly Technologies, LLC
+
+Semester.ly is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+Semester.ly is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+**/
+
 import PropTypes from 'prop-types';
 import React from 'react';
 import Modal from 'boron/WaveModal';
@@ -60,22 +74,22 @@ class PeerModal extends React.Component {
     const modalStyle = {
       width: '100%',
     };
-    const sideSlots = this.props.liveTimetableCourses.map((c) => {
-      const professors = [...new Set(c.slots.map(s => s.instructors))];
-      const colourIndex = this.props.courseToColourIndex[c.id] || 0;
+    const sideSlots = this.props.courses.map((course) => {
+      const professors = [...new Set(course.sections.map(s => s.instructors))];
+      const colourIndex = this.props.courseToColourIndex[course.id] || 0;
       return (
         <div
           className="pm-side-bar-slot"
           style={{ backgroundColor: COLOUR_DATA[colourIndex].background }}
-          key={c.id}
+          key={course.id}
         >
           <div
             className="slot-bar"
             style={{ backgroundColor: COLOUR_DATA[colourIndex].border }}
           />
           <div className="master-slot-content">
-            <h3>{ c.code }</h3>
-            <h3>{ c.name }</h3>
+            <h3>{ course.code }</h3>
+            <h3>{ course.name }</h3>
             <h3>{professors.length === 0 ? 'No Professor Listed' : professors}</h3>
           </div>
         </div>);
@@ -239,7 +253,7 @@ class PeerModal extends React.Component {
 PeerModal.propTypes = {
   userInfo: SemesterlyPropTypes.userInfo.isRequired,
   peers: PropTypes.arrayOf(SemesterlyPropTypes.peer).isRequired,
-  liveTimetableCourses: PropTypes.arrayOf(SemesterlyPropTypes.course).isRequired,
+  courses: PropTypes.arrayOf(SemesterlyPropTypes.denormalizedCourse).isRequired,
   courseToColourIndex: PropTypes.shape({
     '*': PropTypes.number,
   }).isRequired,
