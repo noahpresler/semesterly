@@ -4,6 +4,9 @@
   "description": "Semesterly school config.json definition",
   "type": "object",
   "properties": {
+    "kind": {
+      "enum": ["config"]
+    },
     "school": {
       "allOf": [
         {
