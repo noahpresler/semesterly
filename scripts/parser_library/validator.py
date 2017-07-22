@@ -1,31 +1,28 @@
-"""
-Data Pipeline - Validator.
+"""Filler."""
 
-@org      Semesterly
-@author   Michael N. Miller
-@date     1/12/17
-"""
-
-# TODO - consider something to load db field sizes
+# TODO - consider something to load db field sizes into validator
+#        However, that would ruin the purity of the adapter.
 
 from __future__ import absolute_import, division, print_function
 
-import os
 import httplib
 import re
 import sys
 import jsonschema
 import simplejson as json
 
-# Contains BASE_DIR for absolute path.
+import dateutil.parser as dparser
+
+# Contains BASE_DIR and PARSING_DIR.
 from django.conf import settings
 
 from scripts.parser_library.internal_exceptions import \
     JsonDuplicationWarning, JsonValidationError, JsonValidationWarning
-from scripts.parser_library.utils import DotDict, make_list, update
+from scripts.parser_library.utils import DotDict, make_list, update, \
+    dir_to_dict
 from scripts.parser_library.logger import Logger
 from scripts.parser_library.tracker import Tracker
-from scripts.parser_library.viewer import LogFormatted, ProgressBar
+from scripts.parser_library.viewer import ProgressBar
 from scripts.parser_library.exceptions import PipelineError, PipelineWarning
 
 
@@ -39,9 +36,18 @@ class ValidationWarning(PipelineWarning):
 
 class Validator:
     """Validation engine in parsing data pipeline.
+
+    Attributes:
+        config (DotDict): Loaded config.json.
+        course_code_regex (re): Regex to match course code.
+        kind_to_validation_function (dict):
+            Map kind to validation function defined within this class.
+        KINDS (set): Kinds of objects that validator validates.
+        relative (bool): Enforce relative ordering in validation.
+        seen (dict): Running monitor of seen courses and sections
+        tracker (scripts.parsing_library.tracker.Tracker): Tracker.
     """
 
-    SCHEMA_PATH = '{}/scripts/parser_library/schemas'.format(settings.BASE_DIR)
     KINDS = {
         'config',
         'datalist',
@@ -50,18 +56,37 @@ class Validator:
         'meeting',
         'directory',
         'eval',
+        'instructor',
+        'final_exam',
+        'textbook',
+        'textbook_link',
     }
 
-    def __init__(self, config, tracker=None):
-        """Construct validator instance."""
+    def __init__(self, config_path, tracker=None, relative=True):
+        """Construct validator instance.
+
+        Args:
+            config_path (str): School config file path.
+            tracker (None, optional): Description
+            relative (bool, optional): Enforce relative ordering in validation.
+        """
         Validator.load_schemas()
 
-        self.config = self.validate_config(config)
-        self.course_code_regex = re.compile(self.config.course_code_regex)
+        self.kind_to_validation_function = {
+            kind: getattr(self, 'validate_' + kind)
+            if hasattr(self, 'validate_' + kind) else lambda *_, **__: None
+            for kind in Validator.KINDS
+        }
 
-        # Running tracker of validated course and section codes
+        self.config = DotDict(Validator.file_to_json(config_path))
+        self.config['kind'] = 'config'
+        self.validate(self.config)
+
+        self.course_code_regex = re.compile(self.config.course_code_regex)
+        self.relative = relative
+
+        # Running monitor of validated course and section codes.
         self.seen = {}
-        # TODO - move to tracker
 
         if tracker is None:  # Used during self-contained validation.
             self.tracker = Tracker(self.config.school.code)
@@ -70,16 +95,30 @@ class Validator:
             self.tracker = tracker
 
     @classmethod
-    def load_schemas(cls):
-        if hasattr(cls, 'SCHEMAS'):
+    def load_schemas(cls, schema_path=None):
+        """Load JSON validation schemas.
+
+        NOTE: Will load schemas as static variable (i.e. once per definition),
+              unless schema_path is specifically defined.
+
+        Args:
+            schema_path (None, str, optional): Override default schema_path
+        """
+        if hasattr(cls, 'SCHEMAS') and schema_path is None:
             return
 
+        if schema_path is None:
+            schema_path = '{}/{}/parser_library/schemas'.format(
+                settings.BASE_DIR,
+                settings.PARSING_DIR
+            )
+
         def load(kind):
-            filepath = '{}/{}.json'.format(cls.SCHEMA_PATH, kind)
+            filepath = '{}/{}.json'.format(schema_path, kind)
             with open(filepath, 'r') as file:
                 schema = json.load(file)
             resolved = jsonschema.RefResolver(
-                'file://{}/'.format(cls.SCHEMA_PATH),
+                'file://{}/'.format(schema_path),
                 schema
             )
             return (schema, resolved)
@@ -88,48 +127,48 @@ class Validator:
             kind: load(kind) for kind in cls.KINDS
         })
 
-        return cls.SCHEMAS
-
     @staticmethod
     def schema_validate(data, schema, resolver=None):
+        """Validate data object with JSON schema alone.
+
+        Args:
+            data (dict): Data object to validate
+            schema (TYPE): JSON schema to validate against.
+            resolver (None, optional): JSON Schema reference resolution.
+
+        Raises:
+            jsonschema.exceptions.ValidationError: Invalid object.
+        """
         jsonschema.Draft4Validator(schema, resolver=resolver).validate(data)
         # TODO - Create iter_errors from jsonschema validator
-        # except jsonschema.exceptions.SchemaError as e:
-        #   raise e
-        # except jsonschema.exceptions.RefResolutionError as e:
-        #   raise e
+        # NOTE: if modifying schemas it may be prudent to catch:
+        #       jsonschema.exceptions.SchemaError
+        #       jsonschema.exceptions.RefResolutionError
 
     @staticmethod
-    def filepath_to_json(file, allow_duplicates=False):
-        '''Load file pointed to by path into json object dictionary.'''
-        with open(file, 'r') as f:
+    def file_to_json(path, allow_duplicates=False):
+        """Load file pointed to by path into json object dictionary.
+
+        Args:
+            path (str):
+            allow_duplicates (bool, optional): Allow duplicate keys in JSON.
+
+        Returns:
+            dict: JSON-compliant dictionary.
+        """
+        def raise_on_duplicates(ordered_pairs):
+            """Reject duplicate keys in dictionary."""
+            d = {}
+            for k, v in ordered_pairs:
+                if k in d:
+                    raise JsonValidationError("duplicate key: %r" % (k,))
+                d[k] = v
+            return d
+
+        with open(path, 'r') as f:
             if allow_duplicates:
                 return json.load(f)
-            else:
-                return json.loads(
-                    f.read(),
-                    object_pairs_hook=Validator.dict_raise_on_duplicates
-                )
-
-    def kind_to_validation_function(self, kind):
-        return {
-            'course': lambda x, schema=False:
-                self.validate_course(x, schema=schema),
-            'section': lambda x, schema=False:
-                self.validate_section(x, schema=schema),
-            'meeting': lambda x, schema=False:
-                self.validate_meeting(x, schema=schema),
-            'instructor': lambda x, schema=False:
-                self.validate_instructor(x, schema=schema),
-            'final_exam': lambda x, schema=False:
-                self.validate_final_exam(x, schema=schema),
-            'textbook': lambda x, schema=False:
-                self.validate_textbook(x, schema=schema),
-            'textbook_link': lambda x, schema=False:
-                self.validate_textbook_link(x, schema=schema),
-            'eval': lambda x, schema=False:
-                self.validate_eval(x, schema=schema),
-        }[kind]
+            return json.load(f, object_pairs_hook=raise_on_duplicates)
 
     def validate(self, data):
         """Validation entry/dispatcher.
@@ -137,11 +176,10 @@ class Validator:
         Args:
             data (list, dict): Data to validate.
         """
-        # Convert to DotDict for `easy-on-the-eyes` element access
-        data = [DotDict(d) for d in make_list(data)]
-        for obj in data:
-
-            self.kind_to_validation_function(obj.kind)(obj, schema=True)
+        for obj in make_list(data):
+            obj = DotDict(obj)
+            Validator.schema_validate(obj, *Validator.SCHEMAS[obj.kind])
+            self.kind_to_validation_function[obj.kind](obj)
 
     def validate_self_contained(self, datafile,
                                 break_on_error=False,
@@ -150,8 +188,8 @@ class Validator:
                                 display_progress_bar=True):
 
         # Add functionality to tracker.
-        # FIXME -- hardcoded master log file
-        self.tracker.add_viewer(LogFormatted('scripts/logs/master.log'))
+        # TODO -- fix hardcoded master log file
+        self.tracker.add_viewer(settings.PARSING_DIR + '/logs/master.log')
         if display_progress_bar:
             def formatter(stats):
                 return '{}/{}'.format(stats['valid'], stats['total'])
@@ -160,29 +198,28 @@ class Validator:
             )
         self.tracker.start()
 
-        self.logger = Logger(errorfile=output_error)
+        logger = Logger(errorfile=output_error)
 
         try:
             # self.validate_directory(directory)
-            data = Validator.filepath_to_json(datafile)
+            data = Validator.file_to_json(datafile)
             Validator.schema_validate(data, *Validator.SCHEMAS.datalist)
         except (JsonValidationError, json.scanner.JSONDecodeError) as e:
-            self.logger.log(e)
+            logger.log(e)
             raise e  # fatal error, cannot continue
-
-        data = [DotDict(d) for d in data]
 
         # TODO - iter errors and catch exceptions within method
         for obj in data:
+            obj = DotDict(obj)
             try:
-                self.kind_to_validation_function(obj.kind)(obj, schema=False)
+                self.kind_to_validation_function[obj.kind](obj)
                 self.tracker.status = dict(kind=obj.kind, status='valid')
             except JsonValidationError as e:
-                self.logger.log(e)
+                logger.log(e)
                 if break_on_error:
                     raise e
             except JsonValidationWarning as e:
-                self.logger.log(e)
+                logger.log(e)
                 if break_on_warning:
                     raise e
             self.tracker.status = dict(kind=obj.kind, status='total')
@@ -190,23 +227,16 @@ class Validator:
 
         self.tracker.end()
 
-    def validate_config(self, config):
-        if not isinstance(config, dict):
-            try:
-                config = Validator.filepath_to_json(config)
-            except IOError as e:
-                e.message += '\nconfig.json not defined'
-                raise e
-        return DotDict(config)  # FIXME - DotDict should work here
-        # Validator.schema_validate(config, *Validator.SCHEMAS.config)
+    def validate_course(self, course):
+        """Validate course.
 
-    def validate_course(self, course, schema=True, relative=True):
-        if not isinstance(course, DotDict):
-            course = DotDict(course)
+        Args:
+            course (DotDict): Course object to validate.
 
-        if schema:
-            Validator.schema_validate(course, *Validator.SCHEMAS.course)
-
+        Raises:
+            JsonDuplicationWarning: TODO
+            JsonValidationError: Invalid course.
+        """
         if 'kind' in course and course.kind != 'course':
             raise JsonValidationError('course object must be of kind course',
                                       course)
@@ -246,24 +276,28 @@ class Validator:
 
             # NOTE: mutating dictionary
             section.course = {'code': course.code}
-            self.validate_section(section, schema=False)
+            self.validate_section(section)
 
-        if relative:
-            if course.code in self.seen:
-                raise JsonDuplicationWarning(
-                    'multiple definitions of course {}'.format(course.code),
-                    course
-                )
-            if course.code not in self.seen:
-                self.seen[course.code] = {}
+        if not self.relative:
+            return
 
-    def validate_section(self, section, schema=True, relative=True):
-        if not isinstance(section, DotDict):
-            section = DotDict(section)
+        if course.code in self.seen:
+            raise JsonDuplicationWarning(
+                'multiple definitions of course {}'.format(course.code),
+                course
+            )
+        self.seen.setdefault(course.code, {})
 
-        if schema:
-            Validator.schema_validate(section, *Validator.SCHEMAS.section)
+    def validate_section(self, section):
+        """Validate section object.
 
+        Args:
+            section (DotDict): Section object to validate.
+
+        Raises:
+            JsonDuplicationWarning: TODO
+            JsonValidationError: Invalid section.
+        """
         if 'course' not in section:
             raise JsonValidationError('section doesnt define a parent course',
                                       section)
@@ -343,47 +377,48 @@ class Validator:
                     section
                 )
 
-            # NOTE: mutating dictionary
+            # NOTE: mutating obj
             meeting.course = section.course
             meeting.section = {'code': section.code}
-            self.validate_meeting(meeting, schema=False)
+            self.validate_meeting(meeting)
 
         if 'textbooks' in section:
             for textbook in section.textbooks:
                 self.validate_textbook_link(textbook)
 
-        if relative:
-            if section.course.code not in self.seen:
-                raise JsonValidationError(
-                    'course code {} isnt defined'.format(section.course.code),
-                    section
-                )
-            elif (section.code in self.seen[section.course.code] and
-                    section.year in self.seen[section.course.code][section.code] and
-                    section.term in self.seen[section.course.code][section.code][section.year]):
-                raise JsonDuplicationWarning(
-                    'multiple defs for {} {} - {} already defined'.format(
-                        section.course.code,
-                        section.code, section.year
-                    ),
-                    section
-                )
-            else:
-                section_essence = {
-                    section.code: {
-                        section.year: {
-                            section.term
-                        }
-                    }
-                }
+        if not self.relative:
+            return
 
-                update(self.seen[section.course.code], section_essence)
+        if section.course.code not in self.seen:
+            raise JsonValidationError(
+                'course code {} isnt defined'.format(section.course.code),
+                section
+            )
+        elif (section.code in self.seen[section.course.code] and
+                section.year in self.seen[section.course.code][section.code] and
+                section.term in self.seen[section.course.code][section.code][section.year]):
+            raise JsonDuplicationWarning(
+                'multiple defs for {} {} - {} already defined'.format(
+                    section.course.code,
+                    section.code,
+                    section.year
+                ),
+                section
+            )
 
-    def validate_meeting(self, meeting, schema=True, relative=True):
-        if not isinstance(meeting, DotDict):
-            meeting = DotDict(meeting)
-        if schema:
-            Validator.schema_validate(meeting, *Validator.SCHEMAS.meeting)
+        update(self.seen[section.course.code],
+               {section.code: {section.year: section.term}})
+
+    def validate_meeting(self, meeting):
+        """Validate meeting object.
+
+        Args:
+            meeting (DotDict): Meeting object to validate.
+
+        Raises:
+            e: TODO
+            JsonValidationError: Invalid meeting.
+        """
         if 'kind' in meeting and meeting.kind != 'meeting':
             raise JsonValidationError('meeting object must be kind instructor',
                                       meeting)
@@ -398,7 +433,7 @@ class Validator:
             )
         if 'time' in meeting:
             try:
-                self.validate_time_range(meeting.time)
+                self.validate_time_range(meeting.time.start, meeting.time.end)
             except (JsonValidationError, JsonValidationWarning) as e:
                 e.message = 'meeting for {} {}, '.format(
                     meeting.course.code,
@@ -414,23 +449,30 @@ class Validator:
                     meeting.section.code
                 ) + e.message
                 raise e
-        if relative:
-            if meeting.course.code not in self.seen:
-                raise JsonValidationError(
-                    'course code {} isnt defined'.format(meeting.course.code),
-                    meeting
-                )
-            if meeting.section.code not in self.seen[meeting.course.code]:
-                raise JsonValidationError(
-                    'section {} isnt defined'.format(meeting.section.code),
-                    meeting
-                )
+        if not self.relative:
+            return
+        if meeting.course.code not in self.seen:
+            raise JsonValidationError(
+                'course code {} isnt defined'.format(meeting.course.code),
+                meeting
+            )
+        if meeting.section.code not in self.seen[meeting.course.code]:
+            raise JsonValidationError(
+                'section {} isnt defined'.format(meeting.section.code),
+                meeting
+            )
 
-    def validate_eval(self, course_eval, schema=True):
+    def validate_eval(self, course_eval):
+        """Validate evaluation object.
+
+        Args:
+            course_eval (DotDict): Evaluation to validate.
+
+        Raises:
+            JsonValidationError: Invalid evaulation.
+        """
         if not isinstance(course_eval, DotDict):
             course_eval = DotDict(course_eval)
-        if schema:
-            Validator.schema_validate(course_eval, *Validator.SCHEMAS.eval)
         if self.course_code_regex.match(course_eval.course.code) is None:
             raise JsonValidationError(
                 "course code {} does not match r'{}'".format(
@@ -440,9 +482,16 @@ class Validator:
                 course_eval
             )
 
-    def validate_instructor(self, instructor, schema=False, relative=True):
-        if not isinstance(instructor, DotDict):
-            instructor = DotDict(instructor)
+    def validate_instructor(self, instructor):
+        """Validate instructor object.
+
+        Args:
+            instructor (DotDict): Instructor object to validate.
+
+        Raises:
+            e: TODO
+            JsonValidationError: Invalid instructor.
+        """
         if 'kind' in instructor and instructor.kind != 'instructor':
             raise JsonValidationError(
                 'instructor object must be of kind instructor',
@@ -489,9 +538,16 @@ class Validator:
                                                                e.message)
                 raise e
 
-    def validate_final_exam(self, final_exam, schema=False, relative=True):
-        if not isinstance(final_exam, DotDict):
-            final_exam = DotDict(final_exam)
+    def validate_final_exam(self, final_exam):
+        """Validate final exam.
+
+        Args:
+            final_exam (DotDict): Final Exam object to validate.
+
+        Raises:
+            e: TODO
+            JsonValidationError: Invalid Final Exam.
+        """
         if 'kind' in final_exam and final_exam.kind != 'final_exam':
             raise JsonValidationError(
                 'final_exam object must be of kind "final_exam"',
@@ -503,37 +559,58 @@ class Validator:
             e.message = '@final_exam ' + e.message
             raise e
 
-    def validate_textbook(self, textbook, schema=False, relative=True):
-        if not isinstance(textbook, DotDict):
-            textbook = DotDict(textbook)
+    def validate_textbook_link(self, textbook_link):
+        """Validate textbook link.
 
-    def validate_textbook_link(self, textbook_link,
-                               schema=False,
-                               relative=True):
-        if not isinstance(textbook_link, DotDict):
-            textbook_link = DotDict(textbook_link)
-        if ('course' in textbook_link and
-                self.course_code_regex.match(textbook_link.course.code) is None):
-            raise JsonValidationError(
-                'textbook_link course code doent match course code regex',
-                textbook_link
-            )
+        Args:
+            textbook_link (DotDict): Textbook link object to validate.
+
+        Raises:
+            JsonValidationError: Invalid textbook link.
+        """
+        if 'course' not in textbook_link:
+            return
+        if self.course_code_regex.match(textbook_link.course.code) is not None:
+            return
+        raise JsonValidationError(
+            'textbook_link course code doent match course code regex',
+            textbook_link
+        )
 
     def validate_location(self, location):
+        """Validate location.
+
+        Args:
+            location (DotDict): Location object to validate.
+
+        Raises:
+            JsonValidationWarning: Invalid location.
+        """
         if 'campus' in location and 'campuses' in self.config:
             if location.campus not in self.config.campuses:
                 raise JsonValidationWarning(
-                    'location at campus {} not defined in config.json campuses'.format(location.campus), location)
+                    'campus {} not in config'.format(location.campus),
+                    location
+                )
         if 'building' in location and 'buildings' in self.config:
             if location.building not in self.config.buildings:
                 raise JsonValidationWarning(
-                    'location at building {} not defined in config.json buildings'.format(location.building), location)
+                    'building {} not in config'.format(location.building),
+                    location
+                )
 
     @staticmethod
     def validate_website(url):
-        '''Validate url by sending HEAD request and analyzing response.'''
+        """Validate url by sending HEAD request and analyzing response.
+
+        Args:
+            url (str): URL to validate.
+
+        Raises:
+            JsonValidationError: If URL is invalid.
+        """
         c = httplib.HTTPConnection(url)
-        c.request("HEAD", '')
+        c.request('HEAD', '')
         # NOTE: 200 - good status
         #       301 - redirected
         if c.getresponse().status == 200 or c.getresponse().status == 301:
@@ -541,43 +618,37 @@ class Validator:
         raise JsonValidationError('invalid website w/url "%s"'.format(url),
                                   {'url': url})
 
-    def validate_time_range(self, time_range):
-        start, end = time_range.start, time_range.end
+    def validate_time_range(self, start, end):
+        """Validate start time is less than end time.
 
-        def extract(x):
-            return re.match(r'(\d{1,2}):(\d{2})', x)
+        There exists an unhandled case if the end time is midnight.
 
-        # Check individual time bounds
-        for time in [start, end]:
-            rtime = extract(time)
-            hour, minute = int(rtime.group(1)), int(rtime.group(2))
-            if hour > 23 or minute > 59:
-                raise JsonValidationError('{} isnt a valid time'.format(time))
-            # self.update_time_granularity(hour, minute)
+        Args:
+            start (str): Start time.
+            end (str): End time.
 
-        # Check interaction between times
-        rstart = extract(start)
-        rend = extract(end)
-        start_hour, start_minute = int(rstart.group(1)), int(rstart.group(2))
-        end_hour, end_minute = int(rend.group(1)), int(rend.group(2))
-        for i in [start_hour, start_minute, end_hour, end_minute]:
-            i = int(i)
+        Raises:
+            JsonValidationError: If time range invalid.
+        """
+        try:
+            start, end = map(dparser.parse, [start, end])
+        except ValueError:
+            raise JsonValidationError('invalid time range {}-{}', start, end)
 
-        # NOTE: edge case if class going till midnight
-        if ((end_hour != 0 and start_hour > end_hour) or
-                (start_hour == end_hour and start_minute > end_minute)):
-            raise JsonValidationError('start time is greater than end time',
-                                      time_range)
-
-        # NOTE: this check is done after the others to give errors higher
-        # priorities than warnings
-        for time in [start, end]:
-            hour, minute = int(rtime.group(1)), int(rtime.group(2))
-            if hour < 8 or hour > 21:
-                raise JsonValidationWarning('time will not land on timetable',
-                                            time_range)
+        if start >= end:
+            raise JsonValidationError('start {} >= end {}', start, end)
+        # NOTE: there exists an unhandled case if the end time is midnight.
 
     def validate_directory(self, directory):
+        """Validate directory.
+
+        Args:
+            directory (str, dict): Directory to validate.
+                May be either path or object.
+
+        Raises:
+            e: TODO
+        """
         if isinstance(directory, str):
             try:
                 name = directory
@@ -588,56 +659,3 @@ class Validator:
                       file=sys.stderr)
                 raise e
         Validator.schema_validate(directory, *Validator.SCHEMAS.directory)
-
-    @staticmethod
-    def dict_raise_on_duplicates(ordered_pairs):
-        """Reject duplicate keys in dictionary."""
-        d = {}
-        for k, v in ordered_pairs:
-            if k in d:
-                raise JsonValidationError("duplicate key: %r" % (k,))
-            else:
-                d[k] = v
-        return d
-
-
-def dir_to_dict(path):
-    """Recursively create nested dictionary representing directory contents.
-
-    Args:
-        path (str): The path of the directory.
-
-    Returns:
-        dict: Dictionary representation of the directory.
-
-        Example::
-            {
-                "name": ""
-                "kind": "directory",
-                "children": [
-                    {
-                        "name": "child_dir_a",
-                        "kind": "directory",
-                        "children": [
-                            {
-                                "name": "file0",
-                                "kind": "file"
-                            }
-                        ]
-                    },
-                    {
-                        "name": "file1.txt",
-                        "kind": "file"
-                    }
-                ]
-            }
-    """
-    d = {'name': os.path.basename(path)}
-    if os.path.isdir(path):
-        d['kind'] = "directory"
-        d['children'] = [
-            dir_to_dict(os.path.join(path, x)) for x in os.listdir(path)
-        ]
-    else:
-        d['kind'] = "file"
-    return d

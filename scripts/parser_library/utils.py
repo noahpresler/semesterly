@@ -2,6 +2,7 @@
 
 import collections
 import re
+import os
 import simplejson as json
 
 UNICODE_WHITESPACE = re.compile(r'(?:\u00a0)|(?:\xc2)|(?:\xa0)', re.IGNORECASE)
@@ -70,7 +71,7 @@ def make_list(x):
 class DotDict(dict):
     """Dot notation access for dictionary.
 
-    TODO - add example(s) here
+    TODO - add example(s)
     """
 
     __getattr__ = dict.get
@@ -87,6 +88,16 @@ class DotDict(dict):
             if hasattr(value, 'keys'):
                 value = DotDict(value)
             self[key] = value
+
+    def as_dict(self):
+        """Return pure dictionary representation of self."""
+        def rec(d):
+            if isinstance(d, DotDict):
+                return d.as_dict()
+            return d
+        return {
+            key: rec(value) for key, value in self.items()
+        }
 
 
 def pretty_json(obj):
@@ -152,3 +163,45 @@ def iterrify(x):
         return x
     else:
         return (x,)
+
+
+def dir_to_dict(path):
+    """Recursively create nested dictionary representing directory contents.
+
+    Args:
+        path (str): The path of the directory.
+
+    Returns:
+        dict: Dictionary representation of the directory.
+
+        Example::
+            {
+                "name": ""
+                "kind": "directory",
+                "children": [
+                    {
+                        "name": "child_dir_a",
+                        "kind": "directory",
+                        "children": [
+                            {
+                                "name": "file0",
+                                "kind": "file"
+                            }
+                        ]
+                    },
+                    {
+                        "name": "file1.txt",
+                        "kind": "file"
+                    }
+                ]
+            }
+    """
+    d = {'name': os.path.basename(path)}
+    if os.path.isdir(path):
+        d['kind'] = "directory"
+        d['children'] = [
+            dir_to_dict(os.path.join(path, x)) for x in os.listdir(path)
+        ]
+    else:
+        d['kind'] = "file"
+    return d
