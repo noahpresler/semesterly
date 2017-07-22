@@ -1,26 +1,37 @@
+/**
+Copyright (C) 2017 Semester.ly Technologies, LLC
+
+Semester.ly is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+Semester.ly is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+**/
+
 import fetch from 'isomorphic-fetch';
 import Cookie from 'js-cookie';
+import { normalize } from 'normalizr';
 import {
     getClassmatesInCourseEndpoint,
     getCourseInfoEndpoint,
     getReactToCourseEndpoint,
 } from '../constants/endpoints';
+import { courseSchema } from '../schema';
 import { getSchool, getSemester } from '../actions/school_actions';
 import * as ActionTypes from '../constants/actionTypes';
 
 export const setCourseInfo = json => ({
   type: ActionTypes.COURSE_INFO_RECEIVED,
-  data: json,
+  response: normalize(json, courseSchema),
 });
 
 export const setCourseClassmates = json => ({
   type: ActionTypes.COURSE_CLASSMATES_RECEIVED,
   data: json,
-});
-
-export const requestCourseInfo = id => ({
-  type: ActionTypes.REQUEST_COURSE_INFO,
-  id,
 });
 
 export const setCourseId = id => ({
@@ -40,7 +51,7 @@ export const fetchCourseClassmates = courseId => (dispatch, getState) => {
 };
 
 export const fetchCourseInfo = courseId => (dispatch, getState) => {
-  dispatch(requestCourseInfo(courseId));
+  dispatch({ type: ActionTypes.REQUEST_COURSE_INFO });
   fetch(getCourseInfoEndpoint(courseId, getSemester(getState())), {
     credentials: 'include',
   })

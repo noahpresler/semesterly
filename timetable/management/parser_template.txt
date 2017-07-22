@@ -1,0 +1,24 @@
+from __future__ import print_function, division, absolute_import
+from scripts.parser_library.base_parser import CourseParser
+
+class {}Parser(CourseParser):
+
+    def __init__(self, **kwargs):
+        super({}Parser, self).__init__('{}',**kwargs)
+
+    def start(self,
+            years=None,
+            terms=None,
+            departments=None,
+            textbooks=False,
+            verbosity=3,
+            **kwargs):
+
+        self.verbosity = verbosity
+
+        for year in years:
+            for term in terms:
+                print('{{}} {{}}'.format(term, year))
+                self.semester = '{{}} {{}}'.format(term, str(year))
+                self.get_schools()
+                self.parse_schools()

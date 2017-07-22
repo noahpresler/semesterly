@@ -1,59 +1,53 @@
+"""
+Copyright (C) 2017 Semester.ly Technologies, LLC
+
+Semester.ly is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+Semester.ly is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+"""
+
 import itertools
+from rest_framework import serializers
 
-from django.forms import model_to_dict
-
-from student.models import PersonalTimetable
-from timetable.utils import get_tt_rating
-from courses.utils import sections_are_filled
-from courses.serializers import get_section_dict
+from student.models import PersonalEvent
+from timetable.utils import DisplayTimetable
 
 
-def convert_tt_to_dict(timetable, include_last_updated=True):
-    """
-    Converts @timetable, which is expected to be an instance of PersonalTimetable or SharedTimetable, to a dictionary representation of itself.
-    This dictionary representation corresponds to the JSON sent back to the frontend when timetables are generated.
-    """
-    courses = []
-    course_ids = []
-    tt_dict = model_to_dict(timetable)
-    # include the 'last_updated' property by default; won't be included for
-    # SharedTimetables (since they don't have the property)
-    if include_last_updated:
-        tt_dict['last_updated'] = str(timetable.last_updated)
+class EventSerializer(serializers.ModelSerializer):
 
-    for section_obj in timetable.sections.all():
-        c = section_obj.course  # get the section's course
-        c_dict = model_to_dict(c)
+    class Meta:
+        model = PersonalEvent
+        exclude = ('id',)
 
-        if c.id not in course_ids:  # if not in courses, add to course dictionary with co
-            c_dict = model_to_dict(c)
-            courses.append(c_dict)
-            course_ids.append(c.id)
-            courses[-1]['slots'] = []
-            courses[-1]['enrolled_sections'] = []
-            courses[-1]['textbooks'] = {}
-            courses[-1]['is_waitlist_only'] = False
 
-        index = course_ids.index(c.id)
-        courses[index]['slots'].extend(
-            [dict(get_section_dict(section_obj), **model_to_dict(co)) for co in section_obj.offering_set.all()])
-        courses[index]['textbooks'][section_obj.meeting_section] = section_obj.get_textbooks()
+class SlotSerializer(serializers.Serializer):
+    course = serializers.IntegerField(source='course.id')
+    section = serializers.IntegerField(source='section.id')
+    offerings = serializers.SerializerMethodField()
+    is_optional = serializers.BooleanField()
+    is_locked = serializers.BooleanField()
 
-        courses[index]['enrolled_sections'].append(section_obj.meeting_section)
+    def get_offerings(self, obj):
+        return [offering.id for offering in obj.offerings]
 
-    for course_obj in timetable.courses.all():
-        course_section_list = sorted(course_obj.section_set.filter(semester=timetable.semester),
-                                     key=lambda s: s.section_type)
-        section_type_to_sections = itertools.groupby(
-            course_section_list, lambda s: s.section_type)
-        if course_obj.id in course_ids:
-            index = course_ids.index(course_obj.id)
-            courses[index]['is_waitlist_only'] = any(
-                sections_are_filled(sections) for _, sections in section_type_to_sections)
 
-    tt_dict['courses'] = courses
-    tt_dict['avg_rating'] = get_tt_rating(course_ids)
-    if isinstance(timetable, PersonalTimetable):
-        tt_dict['events'] = [dict(model_to_dict(event), preview=False)
-                             for event in timetable.events.all()]
-    return tt_dict
+class DisplayTimetableSerializer(serializers.Serializer):
+    id = serializers.IntegerField(allow_null=True) # should only be defined for PersonalTimetables
+    slots = SlotSerializer(many=True)
+    has_conflict = serializers.BooleanField()
+    name = serializers.CharField()
+    avg_rating = serializers.FloatField()
+    events = EventSerializer(many=True)
+
+    @classmethod
+    def from_model(cls, timetable, **kwargs):
+        if kwargs.get('many') is True:
+            timetables = [DisplayTimetable.from_model(tt) for tt in timetable]
+            return DisplayTimetableSerializer(timetables, **kwargs)
+        return DisplayTimetableSerializer(DisplayTimetable.from_model(timetable), **kwargs)

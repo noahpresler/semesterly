@@ -1,10 +1,24 @@
+/**
+Copyright (C) 2017 Semester.ly Technologies, LLC
+
+Semester.ly is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+Semester.ly is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+**/
+
 import PropTypes from 'prop-types';
 import React from 'react';
 import classNames from 'classnames';
 import Modal from 'boron/WaveModal';
-import CourseModalBody from './course_modal_body';
+import CourseModalBodyContainer from '../containers/modals/course_modal_body_container';
 import { ShareLink } from '../master_slot';
-import { fullCourseDetails } from '../../constants/semesterlyPropTypes';
+import { normalizedCourse } from '../../constants/semesterlyPropTypes';
 
 class CourseModal extends React.Component {
   constructor(props) {
@@ -21,7 +35,10 @@ class CourseModal extends React.Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    if (nextProps.id !== null) {
+    const wasFetching = this.props.isFetching || this.props.isFetchingClasmates;
+    const isFetching = nextProps.isFetching || nextProps.isFetchingClasmates;
+    // wait for both classmates and course info to be finished fetching
+    if (wasFetching && !isFetching) {
       const { data } = nextProps;
       if (data.code) {
         history.replaceState({}, 'Semester.ly', this.props.getShareLinkFromModal(data.code));
@@ -80,7 +97,7 @@ class CourseModal extends React.Component {
       })}
       onClick={() => {
         this.setState({ addBtnIsHover: false });
-        this.addOrRemoveCourse(this.props.id);
+        this.addOrRemoveCourse(this.props.data.id);
       }}
       onMouseEnter={
                 () => {
@@ -116,9 +133,15 @@ class CourseModal extends React.Component {
                 { addOptional }
                 { add }
               </div>
-              <CourseModalBody
-                {...this.props} hideModal={this.hide}
-                addOrRemoveCourse={this.addOrRemoveCourse}
+              <CourseModalBodyContainer
+                inRoster={this.props.inRoster}
+                data={this.props.data}
+                addOrRemoveCourse={this.props.addOrRemoveCourse}
+                hideModal={this.props.hideModal}
+                isFetching={this.props.isFetching}
+                unHoverSection={this.props.unHoverSection}
+                getShareLink={this.props.getShareLink}
+                getShareLinkFromModal={this.props.getShareLinkFromModal}
               />
             </div>);
     return (
@@ -140,8 +163,8 @@ CourseModal.defaultProps = {
 };
 
 CourseModal.propTypes = {
-  id: PropTypes.number,
-  data: fullCourseDetails,
+  isFetchingClasmates: PropTypes.bool.isRequired,
+  data: PropTypes.oneOfType([normalizedCourse, PropTypes.shape({})]),
   inRoster: PropTypes.bool.isRequired,
   hasHoveredResult: PropTypes.bool.isRequired,
   addOrRemoveOptionalCourse: PropTypes.func.isRequired,
@@ -150,6 +173,9 @@ CourseModal.propTypes = {
   unHoverSection: PropTypes.func.isRequired,
   getShareLink: PropTypes.func.isRequired,
   getShareLinkFromModal: PropTypes.func.isRequired,
+  // Must be included to be passed down into CourseModalBody, which needs to either refer to
+  // state.courseInfo.isFetching or state.explorationModal.isFetching depending on its parent
+  isFetching: PropTypes.bool.isRequired,
 };
 
 export default CourseModal;
